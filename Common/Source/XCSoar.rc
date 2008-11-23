@@ -270,6 +270,7 @@ IDR_XML_TARGET_L        XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgTarget_L.
 IDR_XML_WEATHER_L       XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgWeather_L.xml"
 IDR_XML_FLARMTRAFFIC    XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgFlarmTraffic.xml"
 IDR_XML_FLARMTRAFFIC_L  XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgFlarmTraffic_L.xml"
+IDR_XML_VARIO_L         XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgVario_L.xml"
 
 /////////////////////////////////////////////////////////////////////////////
 //

@@ -1,0 +1,506 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<PMML version="3.0"
+  xmlns="http://www.dmg.org/PMML-3-0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema_instance" >
+  <Header copyright="VADIS">
+     <Application name="RANK For &lt;you>" version="1.99beta" />
+  </Header>
+  <Extension extender="RANKF" name="keys"><Key name="urn"></Key></Extension>
+
+<WndForm Name="frmVario" Type="Dialog" X=0 Y=0 Width=320 Height=240 Caption="Vario Configuration" Font=2  BackColor=0xDADBAB>
+
+  <WndButton Name="cmdNext"  Caption="&gt;" X=35 Y=160 Width=35  Height=28 Font=3 OnClickNotify="OnNextClicked" Tag=1 />
+  <WndButton Name="cmdPrev"  Caption="&lt;" X=0 Y=160 Width=35  Height=28 Font=3 OnClickNotify="OnPrevClicked" Tag=0/>
+  <WndButton Name="cmdClose" Caption="Close" X=5 Y=190 Width=60  Height=28 Font=2 Tag=3 />
+
+  <WndButton Name="cmdDemo"  Caption="Demo" X=5 Y=60 Width=60  Height=28 Font=2 OnClickNotify="OnDemoClicked" Tag=2 />
+
+  <WndButton Name="cmdSave"  Caption="Save" X=5 Y=90 Width=60  Height=28 Font=2 OnClickNotify="OnSaveClicked" Tag=1 />
+
+  <WndFrame Name="frmHardware" X=70 Y=0 Width=246 Height=222 Font=2>
+
+  <WndProperty Name="prpHasPressureTE" Caption="TE port"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 Help="Whether the Total Energy port is connected.">
+    <DataField name="" DataType="boolean"/>
+  </WndProperty>
+
+  <WndProperty Name="prpHasPressurePitot" Caption="Pitot port"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 Help="Whether the Pitot port is connected.">
+    <DataField name="" DataType="boolean"/>
+  </WndProperty>
+
+  <WndProperty Name="prpHasPressureStatic" Caption="Static port"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 Help="Whether the Static port is connected.">
+    <DataField name="" DataType="boolean"/>
+  </WndProperty>
+
+  <WndProperty Name="prpHasPressureStall" Caption="Stall port"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 Help="Whether the Stall pressure port is connected.">
+    <DataField name="" DataType="boolean"/>
+  </WndProperty>
+
+  <WndProperty Name="prpHasAccelerometer" Caption="Accelerometer"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 Help="Whether the internal accelerometer is used.  Only change this if the accelerometer has malfunctioned or the instrument cannot be installed with correct alignment.">
+    <DataField name="" DataType="boolean"/>
+  </WndProperty>
+
+  <WndProperty Name="prpHasTemperature" Caption="Temperature"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 Help="Whether a temperature and humidity sensor is installed.  Set to 0 to disable, 255 to enable auto-detect; otherwise the 1Wire device ID can be specified.">
+    <DataField name="" DataType="enum"  Min=0 Max=2 Step=1/>
+  </WndProperty>
+
+  <WndProperty Name="prpBaudRateA" Caption="Baud Rate Vega"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 Help="Baud rate of serial device connected to Vega port X1.  Use this as necessary when using a third party GPS or data-logger instead of FLARM.  If FLARM is connected the baud rate will be fixed at 38400.  For OzFLARM, the value can be set to 19200.">
+    <DataField name="" DataType="enum"  Min=0 Max=2 Step=1/>
+  </WndProperty>
+
+  <WndProperty Name="prpFlarmConnected" Caption="FLARM connected"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 Help="Enable detection of FLARM.  Disable only if FLARM is not used or disconnected.">
+    <DataField name="" DataType="boolean"/>
+  </WndProperty>
+
+  <WndProperty Name="prpEnablePDASupply" Caption="PDA power"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 Help="Enable output of +5V power supply for PDA etc. at Vega connector~X2.  If Vega is connected to Altair, this should be set to FALSE.">
+    <DataField name="" DataType="boolean"/>
+  </WndProperty>
+
+  </WndFrame>
+
+  <WndFrame Name="frmCalibration" X=70 Y=0 Width=246 Height=222 Font=2>
+
+  <WndProperty Name="prpCalibrationTEProbe" Caption="TE probe cal"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 Help="Calibration factor applied to total energy probe to obtain TE vario.">
+    <DataField name="" DataType="double" DisplayFormat="%.0f %%" EditFormat="%.0f" Min=50 Max=150 Step=1/>
+  </WndProperty>
+
+  <WndProperty Name="prpTotalEnergyMixingRatio" Caption="TE mixing"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 Help="Proportion of TE probe value used in total energy mixing with pitot/static total energy.">
+    <DataField name="" DataType="double" DisplayFormat="%.0f/8" EditFormat="%.0f" Min=0 Max=8 Step=1/>
+  </WndProperty>
+
+  <WndProperty Name="prpCalibrationAirSpeed" Caption="ASI cal"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 Help="Calibration factor applied to measured airspeed to obtain indicated airspeed.">
+    <DataField name="" DataType="double" DisplayFormat="%.0f %%" EditFormat="%.0f" Min=0 Max=200 Step=1/>
+  </WndProperty>
+
+  <WndProperty Name="prpCalibrationTEStatic" Caption="TE static cal"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 Help="Calibration factor applied to static pressure used in total energy calculation. ">
+    <DataField name="" DataType="double" DisplayFormat="%.0f %%" EditFormat="%.0f" Min=0 Max=200 Step=1/>
+  </WndProperty>
+
+  <WndProperty Name="prpCalibrationTEDynamic" Caption="TE dynamic cal"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 Help="Calibration factor applied to dynamic pressure used in total energy calculation. ">
+    <DataField name="" DataType="double" DisplayFormat="%.0f %%" EditFormat="%.0f" Min=0 Max=200 Step=1/>
+  </WndProperty>
+
+  </WndFrame>
+
+  <WndFrame Name="frmAudioModes" X=70 Y=0 Width=246 Height=222 Font=2>
+
+    <WndProperty Name="prpToneClimbComparisonType" Caption="Climb fast trigger"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=150 Font=2 Help="Comparison method used to detect climb states (HIGH/LOW).
+[NONE]: State LOW disabled
+[MACCREADY]: State High if gross vario is greater than MacCready setting.
+[AVERAGE]: State HIGH if gross vario value is greater than average gross vario value.">
+      <DataField name="" DataType="enum"  Min=0 Max=10 Step=1/>
+    </WndProperty>
+
+    <WndProperty Name="prpToneCruiseLiftDetectionType" Caption="Cruise lift trigger"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=150 Font=2 Help="Comparison method used to detect cruise states for switching to lift tones during cruise.
+[NONE]: LIFT tone disabled in cruise
+[RELATIVE ZERO] LIFT tone when relative vario greater than zero.
+[GROSS ZERO] LIFT tone when glider is climbing.
+[RELATIVE MC/2] LIFT tone when relative vario greater than half MC.
+[NET MC/2] LIFT tone when airmass velocity greater than half MC.
+ ">
+      <DataField name="" DataType="enum"  Min=0 Max=10 Step=1/>
+    </WndProperty>
+
+    <WndProperty Name="prpToneAveragerVarioTimeScale" Caption="Climb averager scale"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=150 Font=2 Help="Time scale used for vario averager.">
+      <DataField name="" DataType="enum"  Min=0 Max=10 Step=1/>
+    </WndProperty>
+
+    <WndProperty Name="prpToneAveragerCruiseTimeScale" Caption="Cruise averager scale"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=150 Font=2 Help="Time scale used for cruise speed command averager.">
+      <DataField name="" DataType="enum"  Min=0 Max=10 Step=1/>
+    </WndProperty>
+
+  <WndProperty Name="prpToneMeanVolumeCircling" Caption="Circling volume"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 Help="Mean volume level in circling modes.">
+    <DataField name="" DataType="double" DisplayFormat="%.0f/8" EditFormat="%.0f" Min=0 Max=8 Step=1/>
+  </WndProperty>
+
+  <WndProperty Name="prpToneMeanVolumeCruise" Caption="Cruise volume"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 Help="Mean volume level in cruise modes.  If set to zero, scales with airspeed.">
+    <DataField name="" DataType="double" DisplayFormat="%.0f/8" EditFormat="%.0f" Min=0 Max=8 Step=1/>
+  </WndProperty>
+
+  <WndProperty Name="prpToneBaseFrequencyOffset" Caption="Base frequency"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 Help="Adjustment to base frequency of tones in all modes.">
+    <DataField name="" DataType="double" DisplayFormat="%.0f" EditFormat="%.0f" Min=-30 Max=30 Step=1/>
+  </WndProperty>
+
+    <WndProperty Name="prpVarioTimeConstantCircling" Caption="Filter circling"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=150 Font=2 Help="Variometer low pass filter time constant in circling mode.">
+      <DataField name="" DataType="enum"  Min=0 Max=10 Step=1/>
+    </WndProperty>
+
+    <WndProperty Name="prpVarioTimeConstantCruise" Caption="Filter cruise"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=150 Font=2 Help="Variometer low pass filter time constant in cruise mode.">
+      <DataField name="" DataType="enum"  Min=0 Max=10 Step=1/>
+    </WndProperty>
+
+  <WndProperty Name="prpTonePitchScale" Caption="Tone pitch scale"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 Help="Adjustment to base pitch scale of tones in all modes.">
+    <DataField name="" DataType="double" DisplayFormat="%.0f" EditFormat="%.0f" Min=32 Max=100 Step=1/>
+  </WndProperty>
+
+  </WndFrame>
+
+  <WndFrame Name="frmAudioDeadband" X=70 Y=0 Width=246 Height=222 Font=2>
+
+    <WndProperty Name="prpToneDeadbandCirclingType" Caption="Circling deadband type"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=150 Font=2 Help="Type of dead band used in circling mode.">
+      <DataField name="" DataType="enum"  Min=0 Max=10 Step=1/>
+    </WndProperty>
+
+  <WndProperty Name="prpToneDeadbandCirclingHigh" Caption="Circling hi cutoff"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 Help="High limit of circling dead band">
+    <DataField name="" DataType="double" DisplayFormat="%.0f %%" EditFormat="%.0f" Min=0 Max=100 Step=1/>
+  </WndProperty>
+
+  <WndProperty Name="prpToneDeadbandCirclingLow" Caption="Circling low cutoff"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 Help="Low limit of circling dead band">
+    <DataField name="" DataType="double" DisplayFormat="%.0f %%" EditFormat="%.0f" Min=0 Max=100 Step=1/>
+  </WndProperty>
+
+  <WndProperty Name="prpToneDeadbandCruiseType" Caption="Cruise deadband type"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=150 Font=2 Help="Type of dead band used in cruise mode.">
+      <DataField name="" DataType="enum"  Min=0 Max=10 Step=1/>
+  </WndProperty>
+
+  <WndProperty Name="prpToneDeadbandCruiseHigh" Caption="Cruise hi cutoff"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 Help="High limit of cruise dead band">
+    <DataField name="" DataType="double" DisplayFormat="%.0f %%" EditFormat="%.0f" Min=0 Max=100 Step=1/>
+  </WndProperty>
+
+  <WndProperty Name="prpToneDeadbandCruiseLow" Caption="Cruise low cutoff"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 Help="Low limit of cruise dead band">
+    <DataField name="" DataType="double" DisplayFormat="%.0f %%" EditFormat="%.0f" Min=0 Max=100 Step=1/>
+  </WndProperty>
+
+  </WndFrame>
+
+  <WndFrame Name="frmCruiseFaster" X=70 Y=0 Width=246 Height=222 Font=2>
+
+    <WndProperty Name="prpToneCruiseFasterBeepType" Caption="Beep type"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=150 Font=2>
+      <DataField name="" DataType="enum"  Min=0 Max=10 Step=1/>
+    </WndProperty>
+
+    <WndProperty Name="prpToneCruiseFasterPitchScheme" Caption="Pitch Scheme"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=150 Font=2>
+      <DataField name="" DataType="enum"  Min=0 Max=10 Step=1/>
+    </WndProperty>
+
+    <WndProperty Name="prpToneCruiseFasterPitchScale" Caption="Pitch Scale"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=150 Font=2>
+      <DataField name="" DataType="enum"  Min=0 Max=10 Step=1/>
+    </WndProperty>
+
+    <WndProperty Name="prpToneCruiseFasterPeriodScheme" Caption="Period Scheme"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=150 Font=2>
+      <DataField name="" DataType="enum"  Min=0 Max=10 Step=1/>
+    </WndProperty>
+
+    <WndProperty Name="prpToneCruiseFasterPeriodScale" Caption="Period Scale"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=150 Font=2>
+      <DataField name="" DataType="enum"  Min=0 Max=10 Step=1/>
+    </WndProperty>
+
+  </WndFrame>
+
+  <WndFrame Name="frmCruiseSlower" X=70 Y=0 Width=246 Height=222 Font=2>
+
+    <WndProperty Name="prpToneCruiseSlowerBeepType" Caption="Beep type"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=150 Font=2>
+      <DataField name="" DataType="enum"  Min=0 Max=10 Step=1/>
+    </WndProperty>
+
+    <WndProperty Name="prpToneCruiseSlowerPitchScheme" Caption="Pitch Scheme"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=150 Font=2>
+      <DataField name="" DataType="enum"  Min=0 Max=10 Step=1/>
+    </WndProperty>
+
+    <WndProperty Name="prpToneCruiseSlowerPitchScale" Caption="Pitch Scale"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=150 Font=2>
+      <DataField name="" DataType="enum"  Min=0 Max=10 Step=1/>
+    </WndProperty>
+
+    <WndProperty Name="prpToneCruiseSlowerPeriodScheme" Caption="Period Scheme"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=150 Font=2>
+      <DataField name="" DataType="enum"  Min=0 Max=10 Step=1/>
+    </WndProperty>
+
+    <WndProperty Name="prpToneCruiseSlowerPeriodScale" Caption="Period Scale"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=150 Font=2>
+      <DataField name="" DataType="enum"  Min=0 Max=10 Step=1/>
+    </WndProperty>
+
+  </WndFrame>
+
+  <WndFrame Name="frmCruiseLift" X=70 Y=0 Width=246 Height=222 Font=2>
+
+    <WndProperty Name="prpToneCruiseLiftBeepType" Caption="Beep type"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=150 Font=2>
+      <DataField name="" DataType="enum"  Min=0 Max=10 Step=1/>
+    </WndProperty>
+
+    <WndProperty Name="prpToneCruiseLiftPitchScheme" Caption="Pitch Scheme"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=150 Font=2>
+      <DataField name="" DataType="enum"  Min=0 Max=10 Step=1/>
+    </WndProperty>
+
+    <WndProperty Name="prpToneCruiseLiftPitchScale" Caption="Pitch Scale"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=150 Font=2>
+      <DataField name="" DataType="enum"  Min=0 Max=10 Step=1/>
+    </WndProperty>
+
+    <WndProperty Name="prpToneCruiseLiftPeriodScheme" Caption="Period Scheme"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=150 Font=2>
+      <DataField name="" DataType="enum"  Min=0 Max=10 Step=1/>
+    </WndProperty>
+
+    <WndProperty Name="prpToneCruiseLiftPeriodScale" Caption="Period Scale"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=150 Font=2>
+      <DataField name="" DataType="enum"  Min=0 Max=10 Step=1/>
+    </WndProperty>
+
+  </WndFrame>
+
+  <WndFrame Name="frmCirclingClimbingHi" X=70 Y=0 Width=246 Height=222 Font=2>
+
+    <WndProperty Name="prpToneCirclingClimbingHiBeepType" Caption="Beep type"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=150 Font=2>
+      <DataField name="" DataType="enum"  Min=0 Max=10 Step=1/>
+    </WndProperty>
+
+    <WndProperty Name="prpToneCirclingClimbingHiPitchScheme" Caption="Pitch Scheme"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=150 Font=2>
+      <DataField name="" DataType="enum"  Min=0 Max=10 Step=1/>
+    </WndProperty>
+
+    <WndProperty Name="prpToneCirclingClimbingHiPitchScale" Caption="Pitch Scale"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=150 Font=2>
+      <DataField name="" DataType="enum"  Min=0 Max=10 Step=1/>
+    </WndProperty>
+
+    <WndProperty Name="prpToneCirclingClimbingHiPeriodScheme" Caption="Period Scheme"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=150 Font=2>
+      <DataField name="" DataType="enum"  Min=0 Max=10 Step=1/>
+    </WndProperty>
+
+    <WndProperty Name="prpToneCirclingClimbingHiPeriodScale" Caption="Period Scale"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=150 Font=2>
+      <DataField name="" DataType="enum"  Min=0 Max=10 Step=1/>
+    </WndProperty>
+
+  </WndFrame>
+
+  <WndFrame Name="frmCirclingClimbingLow" X=70 Y=0 Width=246 Height=222 Font=2>
+
+    <WndProperty Name="prpToneCirclingClimbingLowBeepType" Caption="Beep type"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=150 Font=2>
+      <DataField name="" DataType="enum"  Min=0 Max=10 Step=1/>
+    </WndProperty>
+
+    <WndProperty Name="prpToneCirclingClimbingLowPitchScheme" Caption="Pitch Scheme"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=150 Font=2>
+      <DataField name="" DataType="enum"  Min=0 Max=10 Step=1/>
+    </WndProperty>
+
+    <WndProperty Name="prpToneCirclingClimbingLowPitchScale" Caption="Pitch Scale"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=150 Font=2>
+      <DataField name="" DataType="enum"  Min=0 Max=10 Step=1/>
+    </WndProperty>
+
+    <WndProperty Name="prpToneCirclingClimbingLowPeriodScheme" Caption="Period Scheme"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=150 Font=2>
+      <DataField name="" DataType="enum"  Min=0 Max=10 Step=1/>
+    </WndProperty>
+
+    <WndProperty Name="prpToneCirclingClimbingLowPeriodScale" Caption="Period Scale"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=150 Font=2>
+      <DataField name="" DataType="enum"  Min=0 Max=10 Step=1/>
+    </WndProperty>
+
+  </WndFrame>
+
+  <WndFrame Name="frmCirclingDescending" X=70 Y=0 Width=246 Height=222 Font=2>
+
+    <WndProperty Name="prpToneCirclingDescendingBeepType" Caption="Beep type"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=150 Font=2>
+      <DataField name="" DataType="enum"  Min=0 Max=10 Step=1/>
+    </WndProperty>
+
+    <WndProperty Name="prpToneCirclingDescendingPitchScheme" Caption="Pitch Scheme"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=150 Font=2>
+      <DataField name="" DataType="enum"  Min=0 Max=10 Step=1/>
+    </WndProperty>
+
+    <WndProperty Name="prpToneCirclingDescendingPitchScale" Caption="Pitch Scale"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=150 Font=2>
+      <DataField name="" DataType="enum"  Min=0 Max=10 Step=1/>
+    </WndProperty>
+
+    <WndProperty Name="prpToneCirclingDescendingPeriodScheme" Caption="Period Scheme"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=150 Font=2>
+      <DataField name="" DataType="enum"  Min=0 Max=10 Step=1/>
+    </WndProperty>
+
+    <WndProperty Name="prpToneCirclingDescendingPeriodScale" Caption="Period Scale"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=150 Font=2>
+      <DataField name="" DataType="enum"  Min=0 Max=10 Step=1/>
+    </WndProperty>
+
+  </WndFrame>
+
+  <WndFrame Name="frmLogger" X=70 Y=0 Width=246 Height=222 Font=2>
+
+  <WndProperty Name="prpUTCOffset" Caption="UTC Offset"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+    <DataField name="" DataType="double" DisplayFormat="%.0f" EditFormat="%.0f" Min=-13 Max=13 Step=1/>
+  </WndProperty>
+
+  <WndProperty Name="prpIGCLoging" Caption="IGC logging"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+    <DataField name="" DataType="boolean"/>
+  </WndProperty>
+
+  <WndProperty Name="prpIGCLoggerInterval" Caption="Logger interval"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+    <DataField name="" DataType="double" DisplayFormat="%.0f" EditFormat="%.0f" Min=1 Max=12 Step=1/>
+  </WndProperty>
+
+  </WndFrame>
+
+  <WndFrame Name="frmMixer" X=70 Y=0 Width=246 Height=222 Font=2>
+
+  <WndProperty Name="prpMuteVarioOnPlay" Caption="Mute vario on voice"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+    <DataField name="" DataType="boolean"/>
+  </WndProperty>
+
+  <WndProperty Name="prpMuteVarioOnCom" Caption="Mute vario on radio"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+    <DataField name="" DataType="boolean"/>
+  </WndProperty>
+
+  <WndProperty Name="prpVarioRelativeMuteVol" Caption="Vario muting"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+    <DataField name="" DataType="double" DisplayFormat="%.0f/255" EditFormat="%.0f" Min=0 Max=254 Step=1/>
+  </WndProperty>
+
+  <WndProperty Name="prpVoiceRelativeMuteVol" Caption="Voice muting"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+    <DataField name="" DataType="double" DisplayFormat="%.0f/255" EditFormat="%.0f" Min=0 Max=254 Step=1/>
+  </WndProperty>
+
+  <WndProperty Name="prpMuteComSpkThreshold" Caption="Speaker threshold"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+    <DataField name="" DataType="double" DisplayFormat="%.0f/255" EditFormat="%.0f" Min=0 Max=254 Step=1/>
+  </WndProperty>
+
+  <WndProperty Name="prpMuteComPhnThreshold" Caption="Headset threshold"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+    <DataField name="" DataType="double" DisplayFormat="%.0f/255" EditFormat="%.0f" Min=0 Max=254 Step=1/>
+  </WndProperty>
+
+  <WndProperty Name="prpMinUrgentVolume" Caption="Urgent min volume"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+    <DataField name="" DataType="double" DisplayFormat="%.0f/255" EditFormat="%.0f" Min=0 Max=250 Step=1/>
+  </WndProperty>
+
+  </WndFrame>
+
+  <WndFrame Name="frmFlarmAlerts" X=70 Y=0 Width=246 Height=222 Font=2>
+
+  <WndProperty Name="prpFlarmMaxObjectsReported" Caption="Max objects reported"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+    <DataField name="" DataType="double" DisplayFormat="%.0f" EditFormat="%.0f" Min=1 Max=15 Step=1/>
+  </WndProperty>
+
+  <WndProperty Name="prpFlarmMaxObjectsReportedOnCircling" Caption="Max reported circling"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+    <DataField name="" DataType="double" DisplayFormat="%.0f" EditFormat="%.0f" Min=1 Max=4 Step=1/>
+  </WndProperty>
+
+    <WndProperty Name="prpFlarmUserInterface" Caption="Flarm interface"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=150 Font=2>
+      <DataField name="" DataType="enum"  Min=0 Max=10 Step=1/>
+    </WndProperty>
+
+  <WndProperty Name="prpKeepOnStraightFlightMode" Caption="Disable circling"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+    <DataField name="" DataType="boolean"/>
+  </WndProperty>
+
+  <WndProperty Name="prpDontReportTraficModeChanges" Caption="No mode reports"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+    <DataField name="" DataType="boolean"/>
+  </WndProperty>
+
+  <WndProperty Name="prpDontReportGliderType" Caption="No aircraft type"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+    <DataField name="" DataType="boolean"/>
+  </WndProperty>
+
+  </WndFrame>
+
+  <WndFrame Name="frmFlarmIdentification" X=70 Y=0 Width=246 Height=222 Font=2>
+
+  <WndProperty Name="prpFlarmPrivacyFlag" Caption="Privacy"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+    <DataField name="" DataType="boolean"/>
+  </WndProperty>
+
+  <WndProperty Name="prpFlarmAircraftType" Caption="Aircraft type"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+      <DataField name="" DataType="enum"  Min=0 Max=20 Step=1/>
+  </WndProperty>
+
+  </WndFrame>
+
+  <WndFrame Name="frmFlarmRepeats" X=70 Y=0 Width=246 Height=222 Font=2>
+
+  <WndProperty Name="prpFlarmInfoRepeatTime" Caption="Interval, Info"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+    <DataField name="" DataType="double" DisplayFormat="%.0f ms" EditFormat="%.0f" Min=1 Max=2000 Step=100/>
+  </WndProperty>
+
+  <WndProperty Name="prpFlarmCautionRepeatTime" Caption="Interval, Caution"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+    <DataField name="" DataType="double" DisplayFormat="%.0f ms" EditFormat="%.0f" Min=1 Max=2000 Step=100/>
+  </WndProperty>
+
+  <WndProperty Name="prpFlarmWarningRepeatTime" Caption="Interval, Warning"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+    <DataField name="" DataType="double" DisplayFormat="%.0f ms" EditFormat="%.0f" Min=1 Max=2000 Step=100/>
+  </WndProperty>
+
+  </WndFrame>
+
+  <WndFrame Name="frmAlerts" X=70 Y=0 Width=246 Height=222 Font=2>
+
+  <WndProperty Name="prpGearOnDelay" Caption="Gear on delay"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+    <DataField name="" DataType="double" DisplayFormat="%.0f ms" EditFormat="%.0f" Min=1 Max=2000 Step=50/>
+  </WndProperty>
+
+  <WndProperty Name="prpGearOffDelay" Caption="Gear off delay"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+    <DataField name="" DataType="double" DisplayFormat="%.0f ms" EditFormat="%.0f" Min=1 Max=2000 Step=50/>
+  </WndProperty>
+
+  <WndProperty Name="prpGearRepeatTime" Caption="Interval, gear"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+    <DataField name="" DataType="double" DisplayFormat="%.0f s" EditFormat="%.0f" Min=1 Max=100 Step=1/>
+  </WndProperty>
+
+  <WndProperty Name="prpPlyMaxComDelay" Caption="Radio com max delay"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+    <DataField name="" DataType="double" DisplayFormat="%.0f s" EditFormat="%.0f" Min=0 Max=100 Step=1/>
+  </WndProperty>
+
+  <WndProperty Name="prpBatLowDelay" Caption="Battery low delay"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+    <DataField name="" DataType="double" DisplayFormat="%.0f s" EditFormat="%.0f" Min=0 Max=100 Step=1/>
+  </WndProperty>
+
+  <WndProperty Name="prpBatEmptyDelay" Caption="Battery empty delay"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+    <DataField name="" DataType="double" DisplayFormat="%.0f s" EditFormat="%.0f" Min=0 Max=100 Step=1/>
+  </WndProperty>
+
+  <WndProperty Name="prpBatRepeatTime" Caption="Interval, battery"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+    <DataField name="" DataType="double" DisplayFormat="%.0f s" EditFormat="%.0f" Min=0 Max=100 Step=1/>
+  </WndProperty>
+
+  </WndFrame>
+
+  <WndFrame Name="frmLimits" X=70 Y=0 Width=246 Height=222 Font=2>
+
+  <WndProperty Name="prpVelocityNeverExceed" Caption="VNE"
+    X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+   <DataField name="" DataType="double" DisplayFormat="%.0f (0.1 m/s)" EditFormat="%.0f" Min=0 Max=2000 Step=10/>
+  </WndProperty>
+
+  <WndProperty Name="prpVelocitySafeTerrain" Caption="V Terrain"
+    X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+   <DataField name="" DataType="double" DisplayFormat="%.0f (0.1 m/s)" EditFormat="%.0f" Min=0 Max=2000 Step=10/>
+  </WndProperty>
+
+  <WndProperty Name="prpTerrainSafetyHeight" Caption="Height terrain"
+    X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+   <DataField name="" DataType="double" DisplayFormat="%.0f m" EditFormat="%.0f" Min=0 Max=2000 Step=10/>
+  </WndProperty>
+
+  <WndProperty Name="prpVelocityManoeuvering" Caption="V Manoeuvering"
+    X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+   <DataField name="" DataType="double" DisplayFormat="%.0f (0.1 m/s)" EditFormat="%.0f" Min=0 Max=2000 Step=10/>
+  </WndProperty>
+
+  <WndProperty Name="prpVelocityAirbrake" Caption="V Airbrake"
+    X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+   <DataField name="" DataType="double" DisplayFormat="%.0f (0.1 m/s)" EditFormat="%.0f" Min=0 Max=2000 Step=10/>
+  </WndProperty>
+
+  <WndProperty Name="prpVelocityFlap" Caption="V Flap"
+    X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+   <DataField name="" DataType="double" DisplayFormat="%.0f (0.1 m/s)" EditFormat="%.0f" Min=0 Max=2000 Step=10/>
+  </WndProperty>
+
+  </WndFrame>
+
+  <WndFrame Name="frmSchemes" X=70 Y=0 Width=246 Height=222 Font=2>
+
+    <WndButton Name="cmdSchemeVega"  Caption="Vega" X=50 Y=-1 Width=90  Height=28 Font=2 OnClickNotify="OnSchemeVegaClicked" />
+
+    <WndButton Name="cmdSchemeBorgelt"  Caption="Borgelt" X=50 Y=-1 Width=90  Height=28 Font=2 OnClickNotify="OnSchemeBorgeltClicked" />
+
+    <WndButton Name="cmdSchemeCambridge"  Caption="Cambridge" X=50 Y=-1 Width=90  Height=28 Font=2 OnClickNotify="OnSchemeCambridgeClicked" />
+
+    <WndButton Name="cmdSchemeZander"  Caption="Zander" X=50 Y=-1 Width=90  Height=28 Font=2 OnClickNotify="OnSchemeZanderClicked" />
+
+  </WndFrame>
+
+  <WndFrame Name="frmDisplay" X=70 Y=0 Width=246 Height=222 Font=2>
+
+  <WndProperty Name="prpNeedleGaugeType" Caption="Needle gauge type"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=150 Font=2>
+      <DataField name="" DataType="enum"  Min=0 Max=10 Step=1/>
+    </WndProperty>
+
+  <WndProperty Name="prpLedBrightness" Caption="LED Bright"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=150 Font=2>
+    <DataField name="" DataType="double" DisplayFormat="%.0f/15" EditFormat="%.0f" Min=1 Max=15 Step=1/>
+  </WndProperty>
+
+  </WndFrame>
+
+
+</WndForm>
+
+</PMML>

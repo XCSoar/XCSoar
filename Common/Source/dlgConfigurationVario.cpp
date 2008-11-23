@@ -38,6 +38,7 @@ Copyright_License {
 #include "Dialogs.h"
 #include "dlgTools.h"
 #include "device.h"
+#include "InfoBoxLayout.h"
 
 extern void dlgVegaDemoShowModal(void);
 
@@ -1005,13 +1006,21 @@ bool dlgConfigurationVarioShowModal(void){
   }
 #endif
 
-  char filename[MAX_PATH];
-  LocalPathS(filename, TEXT("dlgVario.xml"));
-  wf = dlgLoadFromXML(CallBackTable,
-
+  if (!InfoBoxLayout::landscape) {
+    char filename[MAX_PATH];
+    LocalPathS(filename, TEXT("dlgVario_L.xml"));
+    wf = dlgLoadFromXML(CallBackTable,
+                        filename,
+                        hWndMainWindow,
+                        TEXT("IDR_XML_VARIO_L"));
+  } else {
+    char filename[MAX_PATH];
+    LocalPathS(filename, TEXT("dlgVario.xml"));
+    wf = dlgLoadFromXML(CallBackTable,
                       filename,
 		      hWndMainWindow,
 		      TEXT("IDR_XML_VARIO"));
+  }
 
   if (!wf) return false;
 
