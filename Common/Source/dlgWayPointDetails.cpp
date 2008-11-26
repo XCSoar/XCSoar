@@ -44,7 +44,9 @@ Copyright_License {
 extern void DrawJPG(HDC hdc, RECT rc);
 
 #ifndef CECORE
+#ifndef GNAV
 #include "VOIMAGE.h"
+#endif
 #endif
 
 static int page=0;
@@ -58,8 +60,10 @@ static BOOL hasimage1 = false;
 static BOOL hasimage2 = false;
 
 #ifndef CECORE
+#ifndef GNAV
 static CVOImage jpgimage1;
 static CVOImage jpgimage2;
+#endif
 #endif
 
 static TCHAR path_modis[MAX_PATH];
@@ -274,12 +278,14 @@ static void OnImagePaint(WindowControl * Sender, HDC hDC){
   (void)Sender;
 
 #ifndef CECORE
+#ifndef GNAV
   if (page == 3)
     jpgimage1.Draw(hDC, 0, 0, -1, -1);
 
   if (page == 4)
     jpgimage2.Draw(hDC, 0, 0, -1, -1);
 
+#endif
 #endif
 }
 
@@ -503,8 +509,10 @@ void dlgWayPointDetailsShowModal(void){
     wb->SetOnClickNotify(OnRemoveFromTaskClicked);
 
 #ifndef CECORE
+#ifndef GNAV
   hasimage1 = jpgimage1.Load(wImage->GetDeviceContext() ,path_modis );
   hasimage2 = jpgimage2.Load(wImage->GetDeviceContext() ,path_google );
+#endif
 #endif
 
   page = 0;

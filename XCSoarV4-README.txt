@@ -30,6 +30,8 @@ Changes from 5.1.9beta2:
 - added Ventus CM17.6 polar
 - added duo discus XT polars courtesy Derrek Ruddock
 - added option to set 800x480 resolution for ipaq 310 testing
+- mods to allow configuration of Vega in portrait mode (work in progress)
+
 
 Changes from 5.1.9beta1:
 - Added Flymaster F1 device

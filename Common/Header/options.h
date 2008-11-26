@@ -39,7 +39,9 @@
 // disable internally generated sounds
 #define DISABLEAUDIO
 #else
+#ifndef BIGDISPLAY
 #define BIGDISPLAY
+#endif
 #endif
 
 
