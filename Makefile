@@ -56,6 +56,11 @@ CPU		:=i586
 else
 TCPATH		:=arm-mingw32ce-
 CPU		:=xscale
+
+ifeq ($(TARGET),PNA)
+CPU		:=arm1136j-s
+endif
+
 endif
 endif
 
@@ -138,7 +143,7 @@ endif
 CPPFLAGS	:= $(INCLUDES) $(CE_DEFS) 
 CPPFLAGS	+= -DNDEBUG -Wuninitialized
 ifeq ($(CONFIG_PNA),y)
-CPPFLAGS	+= -DBIGDISPLAY -DCECORE 
+CPPFLAGS	+= -DBIGDISPLAY -DCECORE -DPNA
 endif
 
 ifeq ($(CONFIG_PC),y)
@@ -184,7 +189,13 @@ endif
 ifeq ($(CONFIG_PC),y)
 TARGET_ARCH	:=-mwindows -march=i586 -mms-bitfields
 else
+
+
 TARGET_ARCH	:=-mwin32 -mcpu=$(CPU) 
+ifeq ($(TARGET),PNA)
+TARGET_ARCH	:=-mwin32
+endif
+
 endif
 WINDRESFLAGS	:=-I$(HDR) -I$(SRC) $(CE_DEFS) -D_MINGW32_
 ifeq ($(CONFIG_ALTAIR),y)

@@ -3554,14 +3554,13 @@ CSIDL_PROGRAM_FILES 0x0026   The program files folder.
     SHGetSpecialFolderPath(hWndMainWindow, buffer, loc, false);
     _tcscat(buffer,TEXT("\\XCSoarData"));
   }
+#elif (defined(PNA))
+  _tcscpy(buffer,TEXT("\\SDMMC\\XCSoarData"));
 #else
-  // JMW TODO, when compiling with MINGW, may need to set path here for PNA 
-#ifndef PNA
+  // everything else that's not special
+
   SHGetSpecialFolderPath(hWndMainWindow, buffer, loc, false);
   _tcscat(buffer,TEXT("\\XCSoarData"));
-#else
-  _tcscpy(buffer,TEXT("\\SDMMC\\XCSoarData"));
-#endif
 #endif
   if (_tcslen(file)>0) {
     wcsncat(buffer, TEXT("\\"), MAX_PATH);    
