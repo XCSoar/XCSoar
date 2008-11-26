@@ -31,8 +31,10 @@ Copyright_License {
 
 #include "StdAfx.h"
 
+#ifndef __MINGW32__
 #if defined(CECORE)
 #include "winbase.h"
+#endif
 #if (WINDOWSPC<1)
 #include "projects.h"
 #endif
@@ -3513,7 +3515,8 @@ CSIDL_PROGRAM_FILES 0x0026   The program files folder.
 #if defined(GNAV) && !defined(PCGNAV)
   _tcscpy(buffer,TEXT("\\NOR Flash"));
   //  _tcscpy(buffer,TEXT("\\USB HD\\Altair"));
-#elif defined(CECORE) && (WINDOWSPC<1)
+#elif (WINDOWSPC<1) && (!defined(__MINGW32__))
+  // JMW was defined(CECORE) && ...
   // return the first flash card with a XCSoarData directory on it
   // code copied from DataFieldFileReader::ScanDirectoryTop and adapted
 
@@ -3552,8 +3555,13 @@ CSIDL_PROGRAM_FILES 0x0026   The program files folder.
     _tcscat(buffer,TEXT("\\XCSoarData"));
   }
 #else
+  // JMW TODO, when compiling with MINGW, may need to set path here for PNA 
+#ifndef PNA
   SHGetSpecialFolderPath(hWndMainWindow, buffer, loc, false);
   _tcscat(buffer,TEXT("\\XCSoarData"));
+#else
+  _tcscpy(buffer,TEXT("\\SDMMC\\XCSoarData"));
+#endif
 #endif
   if (_tcslen(file)>0) {
     wcsncat(buffer, TEXT("\\"), MAX_PATH);    

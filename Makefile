@@ -12,6 +12,8 @@ CONFIG_ALTAIR	:=n
 CONFIG_PC	:=n
 CONFIG_WINE	:=n
 ALTAIR_PORTRAIT :=n
+CONFIG_PNA	:=n
+MINIMAL		:=n
 
 ifeq ($(TARGET),PPC2002)
   CONFIG_PPC2002	:=y
@@ -27,11 +29,18 @@ else
       else
         ifeq ($(TARGET),ALTAIR)
           CONFIG_ALTAIR	:=y
+	  MINIMAL       :=y
         endif
         ifeq ($(TARGET),ALTAIRPORTRAIT)
           CONFIG_ALTAIR	:=y
 	  ALTAIR_PORTRAIT :=y
+	  MINIMAL       :=y
         endif
+	ifeq ($(TARGET),PNA)
+	  CONFIG_PNA := y
+	  CONFIG_PPC2003 := y
+	  MINIMAL       :=n
+	endif
       endif
     endif
   endif
@@ -60,7 +69,11 @@ ifeq ($(CONFIG_PPC2003),y)
 CE_MAJOR	:=4
 CE_MINOR	:=00
 CE_PLATFORM	:=400
+ifeq ($(CONFIG_PNA),y)
+TARGET		:=PNA
+else
 TARGET		:=PPC2003
+endif
 endif
 ifeq ($(CONFIG_ALTAIR),y)
 # armv4i
@@ -114,13 +127,20 @@ CE_DEFS		:=-D_WIN32_WCE=$(CE_VERSION) -D_WIN32_IE=$(CE_VERSION)
 CE_DEFS		+=-DWIN32_PLATFORM_PSPC=$(CE_PLATFORM)
 endif
 
-INCLUDES	:= -I$(HDR)/mingw32compat -I$(HDR) -I$(SRC) 
+UNICODE		:= -DUNICODE -D_UNICODE
+
 ifeq ($(CONFIG_WINE),y)
 INCLUDES	:= -I$(HDR)/mingw32compat -I$(HDR) -I$(SRC) 
+else
+INCLUDES	:= -I$(HDR)/mingw32compat -I$(HDR) -I$(SRC) 
 endif
+
 CPPFLAGS	:= $(INCLUDES) $(CE_DEFS) 
 CPPFLAGS	+= -DNDEBUG -Wuninitialized
-UNICODE		:= -DUNICODE -D_UNICODE
+ifeq ($(CONFIG_PNA),y)
+CPPFLAGS	+= -DBIGDISPLAY -DCECORE 
+endif
+
 ifeq ($(CONFIG_PC),y)
 CPPFLAGS	+= -D_WINDOWS -D_MBCS -DWIN32 -DCECORE -DUNDER_CE=300 
   ifeq ($(CONFIG_WINE),y)
@@ -152,10 +172,13 @@ LDFLAGS		+=$(PROFILE)
 ifeq ($(CONFIG_PC),y)
 LDLIBS		:= -lmingw32 -lcomctl32 -lkernel32 -luser32 -lgdi32 -ladvapi32 -lwinmm -lmsimg32 -lstdc++
 else
-LDLIBS		:= -lcommctrl -lstdc++
-ifeq ($(CONFIG_ALTAIR),n)
-LDLIBS		+= -laygshell -limgdecmp
-endif
+  LDLIBS		:= -lcommctrl -lstdc++
+  ifeq ($(MINIMAL),n)
+    LDLIBS		+= -laygshell 
+    ifneq ($(TARGET),PNA)
+      LDLIBS		+= -limgdecmp
+    endif
+  endif
 endif
 
 ifeq ($(CONFIG_PC),y)

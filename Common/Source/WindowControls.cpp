@@ -150,15 +150,6 @@ int DataFieldFileReader::SetAsInteger(int Value){
 }
 
 
-// On older Ipaqs:
-// "Carte de stockage"
-// "Storage Card"
-// "SD-MMC Card"
-// "SD Karte"
-// "CF Karte"
-// "SD Card"
-// "CF Card"
-// "Speicherkarte"
 
 void DataFieldFileReader::ScanDirectoryTop(const TCHAR* filter) {
   
@@ -206,9 +197,20 @@ void DataFieldFileReader::ScanDirectoryTop(const TCHAR* filter) {
 
   first = false;
 #endif
-#endif
-#endif
-#endif
+#else
+#if (WINDOWSPC<1)
+  ScanDirectories(TEXT("\\Carte de stockage"),filter);
+  ScanDirectories(TEXT("\\Storage Card"),filter);
+  ScanDirectories(TEXT("\\SD-MMC Card"),filter);
+  ScanDirectories(TEXT("\\SD Karte"),filter);
+  ScanDirectories(TEXT("\\CF Karte"),filter);
+  ScanDirectories(TEXT("\\SD Card"),filter);
+  ScanDirectories(TEXT("\\CF Card"),filter);
+  ScanDirectories(TEXT("\\Speicherkarte"),filter);
+#endif // WINDOWSPC<1
+#endif // MINGW
+#endif // NOT OLDPPC
+#endif // NOT ALTAIRSYNC
   Sort();
 
 }
