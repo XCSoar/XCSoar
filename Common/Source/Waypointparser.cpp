@@ -335,7 +335,7 @@ void WaypointAltitudeFromTerrain(WAYPOINT* Temp) {
 
 int ParseWayPointString(TCHAR *String,WAYPOINT *Temp)
 {
-  TCHAR ctemp[80];
+  TCHAR ctemp[80]; // must be bigger than COMMENT_SIZE!
   TCHAR *Zoom;
   TCHAR *pWClast = NULL;
   TCHAR *pToken;
@@ -408,7 +408,7 @@ int ParseWayPointString(TCHAR *String,WAYPOINT *Temp)
 
   //ExtractParameter(TempString,ctemp,6); // Comment
   if ((pToken = strtok_r(NULL, TEXT("\n\r"), &pWClast)) != NULL){
-    _tcscpy(ctemp, pToken);
+    _tcsncpy(ctemp, pToken, COMMENT_SIZE); // JMW prevent buffer overrun
     ctemp[COMMENT_SIZE] = '\0';
 
     Temp->Zoom = 0;
