@@ -16,6 +16,7 @@ if (!length($pf)) {
   $gcc = 1;
 }
 
+my $nobuild = 0;
 
 my %execs = (
 	     'EVC3' => {
@@ -44,6 +45,26 @@ my %platforms = (
 	'PPC2003' => {
 		'exec' => "EVC4",
 		'proc' => [qw/ARMV4/],
+		'cab' => 1,
+		'sim' => 1
+	},
+	'PNA' => {
+		'exec' => "EVC4",
+		'proc' => [qw/ARMV4/],
+		'cab' => 0,
+		'sim' => 0
+	},
+	'ALTAIRPORTRAIT' => {
+		'exec' => "EVC4",
+		'proc' => [qw/ARMV4/],
+		'cab' => 0,
+		'sim' => 0
+	},
+	'ALTAIR' => {
+		'exec' => "EVC4",
+		'proc' => [qw/ARMV4/],
+		'cab' => 0,
+		'sim' => 0
 	},
 #	'PPC2002' => {
 #		'exec' => "EVC3",
@@ -71,7 +92,11 @@ if ($user) {
 		}
 		@platforms_all = ($user);
 	} else {
-		die "ERROR: Invalid platform. Select from:\n\t" . join(",", keys %platforms) .  "\n";
+	  if ($user eq "nobuild") {
+	    $nobuild = 1;
+	  } else {
+	    die "ERROR: Invalid platform. Select from:\n\t" . join(",", keys %platforms) .  "\n";
+	  }
 	}
 }
 print STDERR "Building platforms: " . join(",", keys %platforms) . "\n";
@@ -91,7 +116,9 @@ my $month = qw/Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec/[$mon];
 $version =~ s/__DATE__/$month $mday $year/g;
 my $version_file = $version;
 $version_file =~ s/ /_/g;
-print STDERR "Version = ",$version_file, "\n";
+my $version_num = $version;
+$version_num =~ s/(\d)\.(\d)\.(\d).*/$1$2$3/g;
+print STDERR "Version = ",$version_file, "  num $version_num\n";
 
 # ------------------------------------------------------------------------------
 # BUILD ALL via EVC3&4
@@ -127,17 +154,24 @@ if (!$gcc) {
 # ------------------------------------------------------------------------------
 # EXEs - via EZSetup
 # ------------------------------------------------------------------------------
-foreach my $platform (@platforms_all) {
-  if (!$gcc) {
-    my $cmd = q{} . $exec_ezsetup . q{ -l english -i }
-      . qq{XCSoar$platform.ini -r installmsg.txt -e gpl.txt -o InstallXCSoar-$platform.exe};
-    print STDERR "EZSetup for $platform\n";
-    print STDERR "\t$cmd\n" if ($debug);
-    system($cmd) and error("Executing Command - $?\n\t$cmd\n");
-  } else {
-    print "Making cab files with gcc\n";
-    system("make -j 2 TARGET=$platform clean");
-    system("make -j 2 TARGET=$platform cab");
+
+if (!$nobuild) {
+  foreach my $platform (@platforms_all) {
+    if (!$gcc) {
+      my $cmd = q{} . $exec_ezsetup . q{ -l english -i }
+	. qq{XCSoar$platform.ini -r installmsg.txt -e gpl.txt -o InstallXCSoar-$platform.exe};
+      print STDERR "EZSetup for $platform\n";
+      print STDERR "\t$cmd\n" if ($debug);
+      system($cmd) and error("Executing Command - $?\n\t$cmd\n");
+    } else {
+      print "Making cab files with gcc\n";
+      system("make -j 2 TARGET=$platform clean");
+      if ($platforms{$platform}{cab}) {
+	system("make -j 2 TARGET=$platform cab");
+      } else {
+	system("make -j 2 TARGET=$platform all");
+      }
+    }
   }
 }
 
@@ -145,18 +179,63 @@ foreach my $platform (@platforms_all) {
 # RENAME for Distribution
 # ------------------------------------------------------------------------------
 # Rename CAB files
+
 mkdir "dist";
 foreach my $platform (keys %platforms) {
-	foreach my $proc (@{$platforms{$platform}{'proc'}}) {
-		rename "XCSoar$platform.$proc.CAB", "dist/XCSoar$platform.$proc.$version_file.cab"
-			or error("Unable to move CAB file $!\n\tXCSoar$platform.$proc.cab\n");
-	}
+  print "Cab files for $platform\n";
+  foreach my $proc (@{$platforms{$platform}{'proc'}}) {
+    if ($platforms{$platform}{cab}) {
+      print "XCSoar$platform.$proc.CAB\n";
+      rename "XCSoar$platform.$proc.CAB", "dist/XCSoar$platform.$proc.$version_file.cab"
+	or error("Unable to move CAB file $!\n\tXCSoar$platform.$proc.cab\n");
+    }
+  }
 }
 
 # Rename EXE files
 foreach my $platform (@platforms_all) {
-	rename "InstallXCSoar-$platform.exe", "dist/InstallXCSoar-$platform.$version_file.exe"
-		or error("Unable to move EXE file $!\n\tInstallXCSoar-$platform.exe\n");
+  if ($platforms{$platform}{cab}) {
+    if (!$gcc) {
+      rename "InstallXCSoar-$platform.exe", "dist/InstallXCSoar-$platform.$version_file.exe"
+	or error("Unable to move EXE file $!\n\tInstallXCSoar-$platform.exe\n");
+    } else {
+      rename "XCSoar-$platform.exe", "dist/XCSoar-$platform.$version_file.exe"
+	or error("Unable to move EXE file $!\n\tXCSoar-$platform.exe\n");
+      if ($platforms{$platform}{sim}) {
+	rename "XCSoarSimulator-$platform.exe", "dist/XCSoarSimulator-$platform.$version_file.exe"
+	  or error("Unable to move EXE file $!\n\tXCSoarSimulator-$platform.exe\n");
+      }
+    }
+  } else {
+    if ($platform eq "ALTAIR") {
+      rename "XCSoar-$platform.exe","XCSoarAltair-$version_num-CRC3E.exe";
+      system("zip -r XCSoarAltair-$version_file.zip XCSoarAltair-$version_num-CRC3E.exe");
+      rename "XCSoarAltair-$version_file.zip","dist/XCSoarAltair-$version_file.zip";
+    } elsif ($platform eq "ALTAIRPORTRAIT") {
+      rename "XCSoar-$platform.exe","XCSoarAltair-$version_num-CRC3E.exe";
+      system("zip -r XCSoarAltairPortrait-$version_file.zip XCSoarAltair-$version_num-CRC3E.exe");
+      rename "XCSoarAltairPortrait-$version_file.zip","dist/XCSoarAltairPortrait-$version_file.zip";
+    } else {
+      if ($platforms{$platform}{sim}) {
+	if ($platform eq "PC") {
+	  system("zip -r XCSoar$platform-$version_file.zip XCSoar-PC.exe XCSoarSimulator-PC.exe");
+	  rename "XCSoar$platform-$version_file.zip","dist/XCSoar$platform-$version_file.zip";
+	} else {
+	  rename "XCSoarSimulator-$platform.exe", "XCSoarSimulator.exe"
+	    or error("Unable to move EXE file $!\n\tXCSoarSimulator-$platform.exe\n");
+	  rename "XCSoar-$platform.exe","XCSoar.exe"
+	    or error("Unable to move EXE file $!\n\tXCSoar-$platform.exe\n");
+	  system("zip -r XCSoar$platform-$version_file.zip XCSoar.exe XCSoarSimulator.exe");
+	  rename "XCSoar$platform-$version_file.zip","dist/XCSoar$platform-$version_file.zip";
+	}
+      } else {
+	rename "XCSoar-$platform.exe","XCSoar.exe"
+	  or error("Unable to move EXE file $!\n\tXCSoar-$platform.exe\n");
+	system("zip -r XCSoar$platform-$version_file.zip XCSoar.exe");
+	rename "XCSoar$platform-$version_file.zip","dist/XCSoar$platform-$version_file.zip";
+      }
+    }
+  }
 }
 
 # ------------------------------------------------------------------------------
