@@ -113,6 +113,12 @@ OUTPUTS 	:= XCSoar-$(TARGET).exe XCSoarSimulator-$(TARGET).exe
 ifeq ($(CONFIG_ALTAIR),y)
 OUTPUTS 	:= XCSoar-$(TARGET).exe
 endif
+ifeq ($(ALTAIR_PORTRAIT),y)
+OUTPUTS 	:= XCSoar-$(TARGET).exe
+endif
+ifeq ($(CONFIG_PNA),y)
+OUTPUTS 	:= XCSoar-$(TARGET).exe
+endif
 
 EXE		:=$(findstring .exe,$(MAKE))
 AR		:=$(TCPATH)ar$(EXE)
@@ -399,7 +405,8 @@ cab:	XCSoar-$(TARGET).exe XCSoarSimulator-$(TARGET).exe
 	cp XCSoarSimulator-$(TARGET).exe $(TARGET)/XCSoarSimulator/gcc/XCSoarSimulator.exe
 	wine $(TARGET)/Cabwiz.exe XCSoar$(TARGET)-gcc.inf /cpu ARMV4
 	mv XCSoar$(TARGET)-gcc.ARMV4.CAB XCSoar$(TARGET).ARMV4.CAB
-	wine ezsetup.exe -l english -i XCSoar$(TARGET).ini -r installmsg.txt -e gpl.txt -o InstallXCSoar-$(TARGET).exe
+
+#	wine ezsetup.exe -l english -i XCSoar$(TARGET).ini -r installmsg.txt -e gpl.txt -o InstallXCSoar-$(TARGET).exe
 
 XCSoar-$(TARGET).exe: XCSoar-$(TARGET)-ns.exe
 	@$(NQ)echo "  STRIP   $@"

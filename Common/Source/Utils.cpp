@@ -1549,10 +1549,12 @@ bool AngleInRange(double Angle0, double Angle1, double x, bool is_signed) {
   return false;
 }
 
+// Use only for AAT bisector calculations!
 double HalfAngle(double Angle0, double Angle1) {
   Angle0 = AngleLimit360(Angle0);
   Angle1 = AngleLimit360(Angle1);
 
+  // JMW TODO test this? thankfully only occurs in one spot in AAT
   if (Angle1>= Angle0) {
     return (Angle0+Angle1)/2;
   } else {
@@ -3361,15 +3363,21 @@ void LoadRegistryFromFile(const TCHAR *szFile)
   int j;
 
   while (_fgetts(inval, nMaxValueValueSize, fp)) {
-	  if (_stscanf(inval, TEXT("%[^#=]=\"%[^\r\n\"]\"[\r\n]"), name, value) == 2) {
-		SetRegistryString(name, value);
-	  } else if (_stscanf(inval, TEXT("%[^#=]=%d[\r\n]"), name, &j) == 2) {
-		SetToRegistry(name, j);
-	  } else if (_stscanf(inval, TEXT("%[^#=]=\"\"[\r\n]"), name) == 1) {
-		SetRegistryString(name, TEXT(""));
-	  } else {
-//		ASSERT(false);	// Invalid line reached
-	  }
+    if (_stscanf(inval, TEXT("%[^#=\r\n ]=\"%[^\r\n\"]\"[\r\n]"), name, value) == 2) {
+      if (_tcslen(name)>0) {
+	SetRegistryString(name, value);
+      }
+    } else if (_stscanf(inval, TEXT("%[^#=\r\n ]=%d[\r\n]"), name, &j) == 2) {
+      if (_tcslen(name)>0) {
+	SetToRegistry(name, j);
+      }
+    } else if (_stscanf(inval, TEXT("%[^#=\r\n ]=\"\"[\r\n]"), name) == 1) {
+      if (_tcslen(name)>0) {
+	SetRegistryString(name, TEXT(""));
+      }
+    } else {
+      //		ASSERT(false);	// Invalid line reached
+    }
   }
 
   fclose(fp);
@@ -3412,6 +3420,8 @@ void SaveRegistryToFile(const TCHAR *szFile)
     DWORD nNameSize = nMaxKeyNameSize;
 //    DWORD nClassSize = nMaxClassSize;
 
+    lpstrName[0] = _T('\0'); // null terminate, just in case
+
     LONG res = ::RegEnumValue(hkFrom, i, lpstrName,
 			      &nNameSize, 0,
 #ifdef __MINGW32__
@@ -3424,39 +3434,60 @@ void SaveRegistryToFile(const TCHAR *szFile)
     if (ERROR_NO_MORE_ITEMS == res) {
       break;
     }
+    if ((nNameSize<=0)||(nNameSize>nMaxKeyNameSize)) {
+      continue; // in case things get wierd
+    }
 
     lpstrName[nNameSize] = _T('\0'); // null terminate, just in case
 
-    // type 1 text
-    // type 4 integer (valuesize 4)
-    TCHAR outval[nMaxValueValueSize];
+    if (_tcslen(lpstrName)>0) {
 
-    if (nType==4) { // data
+      // type 1 text
+      // type 4 integer (valuesize 4)
+      TCHAR outval[nMaxValueValueSize];
+
+      if (nType==4) { // data
 #ifdef __MINGW32__
-      _stprintf(outval,TEXT("%s=%d\r\n"), lpstrName, uValue.dValue);
+	_stprintf(outval,TEXT("%s=%d\r\n"), lpstrName, uValue.dValue);
 #else
-      _stprintf(outval,TEXT("%s=%d\r\n"), lpstrName, *((DWORD*)pValue));
+	_stprintf(outval,TEXT("%s=%d\r\n"), lpstrName, *((DWORD*)pValue));
 #endif
-      _fputts(outval, fp);
-    }
-	// XXX SCOTT - Check that the output data (lpstrName and pValue) do not contain \r or \n
-    if (nType==1) { // text
+	_fputts(outval, fp);
+      } else
+      // XXX SCOTT - Check that the output data (lpstrName and pValue) do not contain \r or \n
+      if (nType==1) { // text
+	if (nValueSize>0) {
 #ifdef __MINGW32__
-      uValue.pValue[nValueSize]= 0; // null terminate, just in case
-      uValue.pValue[nValueSize+1]= 0; // null terminate, just in case
-      _stprintf(outval,TEXT("%s=\"%s\"\r\n"), lpstrName, uValue.pValue);
+	  uValue.pValue[nValueSize]= 0; // null terminate, just in case
+	  uValue.pValue[nValueSize+1]= 0; // null terminate, just in case
+	  if (_tcslen((TCHAR*)uValue.pValue)>0) {
+	    _stprintf(outval,TEXT("%s=\"%s\"\r\n"), lpstrName, uValue.pValue);
+	  } else {
+	    _stprintf(outval,TEXT("%s=\"\"\r\n"), lpstrName);
+	  }
 #else
-      pValue[nValueSize]= 0; // null terminate, just in case
-      pValue[nValueSize+1]= 0; // null terminate, just in case
-      _stprintf(outval,TEXT("%s=\"%s\"\r\n"), lpstrName, pValue);
+	  if (_tcslen(pValue)>0) {
+	    pValue[nValueSize]= 0; // null terminate, just in case
+	    pValue[nValueSize+1]= 0; // null terminate, just in case
+	    _stprintf(outval,TEXT("%s=\"%s\"\r\n"), lpstrName, pValue);
+	  } else {
+	    _stprintf(outval,TEXT("%s=\"\"\r\n"), lpstrName);
+	  }
 #endif
-      _fputts(outval, fp);
+	} else {
+	  _stprintf(outval,TEXT("%s=\"\"\r\n"), lpstrName);
+	}
+	_fputts(outval, fp);
+      }
     }
+
 
 #ifdef __MINGW32__
     fflush(fp);
 #endif
   }
+
+  _fputts(TEXT("\r\n"), fp);
 
   fclose(fp);
 
