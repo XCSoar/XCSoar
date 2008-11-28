@@ -24,7 +24,8 @@
 #include <zzip/fetch.h>
 #include <zzip/__debug.h>
 
-#if (WINDOWSPC>0)&&defined(__MINGW32__)
+#if defined(__MINGW32__)
+//(WINDOWSPC>0)&&
 // JMW needed otherwise seek/tell won't work!
 #undef _fmode
 int _fmode = _O_BINARY;

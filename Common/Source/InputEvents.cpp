@@ -193,12 +193,12 @@ void InputEvents::readFile() {
   if (!InitONCE) {
 #if (WINDOWSPC>0)
 #include "InputEvents_pc.cpp"
-#else
-#ifdef GNAV
+#elif GNAV
 #include "InputEvents_altair.cpp"
+#elif PNA
+#include "InputEvents_pna.cpp"
 #else
 #include "InputEvents_defaults.cpp"
-#endif
 #endif
 
 #include "InputEvents_Text2Event.cpp"

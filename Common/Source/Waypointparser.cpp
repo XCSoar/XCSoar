@@ -930,7 +930,7 @@ void WriteWayPointFileWayPoint(FILE *fp, WAYPOINT* wpt) {
     }
   }
 
-  _stprintf(String,TEXT("%d,%s,%s,%dM,%s,%s,%s\n"),
+  fprintf(fp,"%d,%S,%S,%dM,%S,%S,%S\r\n",
             wpt->Number,
             Latitude,
             Longitude,
@@ -938,9 +938,6 @@ void WriteWayPointFileWayPoint(FILE *fp, WAYPOINT* wpt) {
             Flags,
             wpt->Name,
             wpt->Comment);
-
-  _fputts(String, fp);
-
 }
 
 
@@ -984,16 +981,17 @@ void WaypointWriteFiles(void) {
   ExpandLocalPath(szFile1);
 
   if (_tcslen(szFile1)>0) {
-    fp = _tfopen(szFile1, TEXT("wt"));
+    fp = _tfopen(szFile1, TEXT("wb"));
   } else {
     LocalPath(szFile1);
     _tcscat(szFile1,TEXT("\\waypoints1.dat"));
-    fp = _tfopen(szFile1, TEXT("wt"));
+    fp = _tfopen(szFile1, TEXT("wb"));
   }
 
   if(fp != NULL) {
     globalFileNum = 0;
     WriteWayPointFile(fp);
+    fprintf(fp,"\r\n");
     fclose(fp);
     fp = NULL;
   }
@@ -1002,16 +1000,17 @@ void WaypointWriteFiles(void) {
   ExpandLocalPath(szFile2);
 
   if (_tcslen(szFile2)>0) {
-    fp = _tfopen(szFile2, TEXT("wt"));
+    fp = _tfopen(szFile2, TEXT("wb"));
   } else {
     LocalPath(szFile2);
     _tcscat(szFile2,TEXT("\\waypoints2.dat"));
-    fp = _tfopen(szFile2, TEXT("wt"));
+    fp = _tfopen(szFile2, TEXT("wb"));
   }
 
   if(fp != NULL) {
     globalFileNum = 1;
     WriteWayPointFile(fp);
+    fprintf(fp,"\r\n");
     fclose(fp);
     fp = NULL;
   }

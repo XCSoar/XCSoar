@@ -63,8 +63,10 @@ FlarmIdFile file;
 
 // JMW not required in newer systems?
 #ifdef __MINGW32__
+#ifndef max
 #define max(x, y)   (x > y ? x : y)
 #define min(x, y)   (x < y ? x : y)
+#endif
 #endif
 
 bool EnableAnimation=false;
@@ -2548,19 +2550,17 @@ void ReadFileRegistryString(HANDLE hFile, TCHAR *instring) {
 
 void ReadProfile(const TCHAR *szFile)
 {
-
   LoadRegistryFromFile(szFile);
 
-    WAYPOINTFILECHANGED = TRUE;
-    TERRAINFILECHANGED = TRUE;
-    TOPOLOGYFILECHANGED = TRUE;
-    AIRSPACEFILECHANGED = TRUE;
-    AIRFIELDFILECHANGED = TRUE;
-    POLARFILECHANGED = TRUE;
+  WAYPOINTFILECHANGED = TRUE;
+  TERRAINFILECHANGED = TRUE;
+  TOPOLOGYFILECHANGED = TRUE;
+  AIRSPACEFILECHANGED = TRUE;
+  AIRFIELDFILECHANGED = TRUE;
+  POLARFILECHANGED = TRUE;
 
-    // assuming all is ok, we can...
-    ReadRegistrySettings();
-
+  // assuming all is ok, we can...
+  ReadRegistrySettings();
 }
 
 
@@ -3348,41 +3348,81 @@ const static int nMaxValueValueSize = 4096;
 const static int nMaxClassSize = MAX_PATH;
 const static int nMaxKeyNameSize = MAX_PATH;
 
-void LoadRegistryFromFile(const TCHAR *szFile)
+static bool LoadRegistryFromFile_inner(const TCHAR *szFile, bool wide=true)
 {
+  bool found = false;
   FILE *fp=NULL;
   if (_tcslen(szFile)>0)
-    fp = _tfopen(szFile, TEXT("r"));    //20060515:sgi add b
+    fp = _tfopen(szFile, TEXT("rb"));    //20060515:sgi add b
   if(fp == NULL) {
     // error
-    return;
+    return false;
   }
-  TCHAR inval[nMaxValueValueSize];
-  TCHAR name[nMaxValueValueSize];
-  TCHAR value[nMaxValueValueSize];
+  TCHAR winval[nMaxValueValueSize];
+  char inval[nMaxValueValueSize];
+  TCHAR wname[nMaxValueValueSize];
+  TCHAR wvalue[nMaxValueValueSize];
+  char name[nMaxValueValueSize];
+  char value[nMaxValueValueSize];
   int j;
 
-  while (_fgetts(inval, nMaxValueValueSize, fp)) {
-    if (_stscanf(inval, TEXT("%[^#=\r\n ]=\"%[^\r\n\"]\"[\r\n]"), name, value) == 2) {
-      if (_tcslen(name)>0) {
-	SetRegistryString(name, value);
+  if (wide) {
+    while (_fgetts(winval, nMaxValueValueSize, fp)) {
+      if (_stscanf(winval, TEXT("%[^#=\r\n ]=\"%[^\r\n\"]\"[\r\n]"), wname, wvalue) == 2) {
+	if (_tcslen(wname)>0) {
+	  SetRegistryString(wname, wvalue);
+	  found = true;
+	}
+      } else if (_stscanf(winval, TEXT("%[^#=\r\n ]=%d[\r\n]"), wname, &j) == 2) {
+	if (_tcslen(wname)>0) {
+	  SetToRegistry(wname, j);
+	  found = true;
+	}
+      } else if (_stscanf(winval, TEXT("%[^#=\r\n ]=\"\"[\r\n]"), wname) == 1) {
+	if (_tcslen(wname)>0) {
+	  SetRegistryString(wname, TEXT(""));
+	  found = true;
+	}
+      } else {
+	//		ASSERT(false);	// Invalid line reached
       }
-    } else if (_stscanf(inval, TEXT("%[^#=\r\n ]=%d[\r\n]"), name, &j) == 2) {
-      if (_tcslen(name)>0) {
-	SetToRegistry(name, j);
+    }
+  } else {
+    while (fgets(inval, nMaxValueValueSize, fp)) {
+      if (sscanf(inval, "%[^#=\r\n ]=\"%[^\r\n\"]\"[\r\n]", name, value) == 2) {
+	if (strlen(name)>0) {
+	  mbstowcs(wname, name, strlen(name)+1);
+	  mbstowcs(wvalue, value, strlen(value)+1);
+	  SetRegistryString(wname, wvalue);
+	  found = true;
+	}
+      } else if (sscanf(inval, "%[^#=\r\n ]=%d[\r\n]", name, &j) == 2) {
+	if (strlen(name)>0) {
+	  mbstowcs(wname, name, strlen(name)+1);
+	  SetToRegistry(wname, j);
+	  found = true;
+	}
+      } else if (sscanf(inval, "%[^#=\r\n ]=\"\"[\r\n]", name) == 1) {
+	if (strlen(name)>0) {
+	  mbstowcs(wname, name, strlen(name)+1);
+	  SetRegistryString(wname, TEXT(""));
+	  found = true;
+	}
+      } else {
+	//		ASSERT(false);	// Invalid line reached
       }
-    } else if (_stscanf(inval, TEXT("%[^#=\r\n ]=\"\"[\r\n]"), name) == 1) {
-      if (_tcslen(name)>0) {
-	SetRegistryString(name, TEXT(""));
-      }
-    } else {
-      //		ASSERT(false);	// Invalid line reached
     }
   }
 
   fclose(fp);
+  return found;
 }
 
+void LoadRegistryFromFile(const TCHAR *szFile) {
+  if (!LoadRegistryFromFile_inner(szFile,false)) { // new, non-wide chars
+    LoadRegistryFromFile_inner(szFile,true);       // legacy, wide chars
+  }
+}
 
 void SaveRegistryToFile(const TCHAR *szFile)
 {
@@ -3407,7 +3447,7 @@ void SaveRegistryToFile(const TCHAR *szFile)
 
   FILE *fp=NULL;
   if (_tcslen(szFile)>0)
-    fp = _tfopen(szFile, TEXT("w"));  //20060515:sgi add b
+    fp = _tfopen(szFile, TEXT("wb"));  //20060515:sgi add b
   if(fp == NULL) {
     // error
     ::RegCloseKey(hkFrom);
@@ -3444,15 +3484,13 @@ void SaveRegistryToFile(const TCHAR *szFile)
 
       // type 1 text
       // type 4 integer (valuesize 4)
-      TCHAR outval[nMaxValueValueSize];
 
       if (nType==4) { // data
 #ifdef __MINGW32__
-	_stprintf(outval,TEXT("%s=%d\r\n"), lpstrName, uValue.dValue);
+	fprintf(fp,"%S=%d\r\n", lpstrName, uValue.dValue);
 #else
-	_stprintf(outval,TEXT("%s=%d\r\n"), lpstrName, *((DWORD*)pValue));
+	_ftprintf(fp,TEXT("%s=%d\r\n"), lpstrName, *((DWORD*)pValue));
 #endif
-	_fputts(outval, fp);
       } else
       // XXX SCOTT - Check that the output data (lpstrName and pValue) do not contain \r or \n
       if (nType==1) { // text
@@ -3461,33 +3499,37 @@ void SaveRegistryToFile(const TCHAR *szFile)
 	  uValue.pValue[nValueSize]= 0; // null terminate, just in case
 	  uValue.pValue[nValueSize+1]= 0; // null terminate, just in case
 	  if (_tcslen((TCHAR*)uValue.pValue)>0) {
-	    _stprintf(outval,TEXT("%s=\"%s\"\r\n"), lpstrName, uValue.pValue);
+	    fprintf(fp,"%S=\"%S\"\r\n", lpstrName, uValue.pValue);
 	  } else {
-	    _stprintf(outval,TEXT("%s=\"\"\r\n"), lpstrName);
+	    fprintf(fp,"%S=\"\"\r\n", lpstrName);
 	  }
 #else
 	  if (_tcslen(pValue)>0) {
 	    pValue[nValueSize]= 0; // null terminate, just in case
 	    pValue[nValueSize+1]= 0; // null terminate, just in case
-	    _stprintf(outval,TEXT("%s=\"%s\"\r\n"), lpstrName, pValue);
+	    _ftprintf(fp,TEXT("%s=\"%s\"\r\n"), lpstrName, pValue);
 	  } else {
-	    _stprintf(outval,TEXT("%s=\"\"\r\n"), lpstrName);
+	    _ftprintf(fp,TEXT("%s=\"\"\r\n"), lpstrName);
 	  }
 #endif
 	} else {
-	  _stprintf(outval,TEXT("%s=\"\"\r\n"), lpstrName);
+#ifdef __MINGW32__
+	  fprintf(fp,"%S=\"\"\r\n", lpstrName);
+#else
+	  _ftprintf(fp,TEXT("%s=\"\"\r\n"), lpstrName);
+#endif
 	}
-	_fputts(outval, fp);
       }
     }
-
 
 #ifdef __MINGW32__
     fflush(fp);
 #endif
   }
 
-  _fputts(TEXT("\r\n"), fp);
+#ifdef __MINGW32__
+  fprintf(fp,"\r\n"); // end of file
+#endif
 
   fclose(fp);
 
