@@ -31,6 +31,9 @@ Changes from 5.1.9beta2:
 - added duo discus XT polars courtesy Derrek Ruddock
 - added option to set 800x480 resolution for ipaq 310 testing
 - mods to allow configuration of Vega in portrait mode (work in progress)
+- robustness enhancements (avoid buffer overrun in long waypoint comments)
+- build script
+- version bump
 
 
 Changes from 5.1.9beta1:

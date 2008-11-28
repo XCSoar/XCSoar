@@ -46,7 +46,7 @@ FlarmIdFile::FlarmIdFile(void)
       itemCount++;
     };
 
-  wsprintf(text,TEXT("%d FlarmNet ids found\r\n"), itemCount);
+  wsprintf(text,TEXT("%d FlarmNet ids found\n"), itemCount);
   StartupStore(text);
 
   fclose(hFile);

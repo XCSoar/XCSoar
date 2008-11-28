@@ -3096,15 +3096,15 @@ void StartupStore(const TCHAR *Str)
 #else
     LocalPath(szFileName, TEXT("xcsoar-startup.log"));
 #endif
-    startupStoreFile = _tfopen(szFileName, TEXT("w"));
+    startupStoreFile = _tfopen(szFileName, TEXT("wb"));
     if (startupStoreFile) {
       fclose(startupStoreFile);
     }
     initialised = true;
   } 
-  startupStoreFile = _tfopen(szFileName, TEXT("a+"));
+  startupStoreFile = _tfopen(szFileName, TEXT("ab+"));
   if (startupStoreFile != NULL) {
-    _ftprintf(startupStoreFile, Str);
+    fprintf(startupStoreFile, "%S", Str);
     fclose(startupStoreFile);
   }
   if (csFlightDataInitialized) {

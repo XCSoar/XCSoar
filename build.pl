@@ -66,6 +66,12 @@ my %platforms = (
 		'cab' => 0,
 		'sim' => 0
 	},
+	'PC' => {
+		'exec' => "EVC4",
+		'proc' => [qw/ARMV4/],
+		'cab' => 0,
+		'sim' => 1
+	},
 #	'PPC2002' => {
 #		'exec' => "EVC3",
 #		'proc' => [qw/ARM MIPS/],
@@ -199,12 +205,14 @@ foreach my $platform (@platforms_all) {
       rename "InstallXCSoar-$platform.exe", "dist/InstallXCSoar-$platform.$version_file.exe"
 	or error("Unable to move EXE file $!\n\tInstallXCSoar-$platform.exe\n");
     } else {
-      rename "XCSoar-$platform.exe", "dist/XCSoar-$platform.$version_file.exe"
-	or error("Unable to move EXE file $!\n\tXCSoar-$platform.exe\n");
-      if ($platforms{$platform}{sim}) {
-	rename "XCSoarSimulator-$platform.exe", "dist/XCSoarSimulator-$platform.$version_file.exe"
-	  or error("Unable to move EXE file $!\n\tXCSoarSimulator-$platform.exe\n");
-      }
+
+#      rename "XCSoar-$platform.exe", "dist/XCSoar-$platform.$version_file.exe"
+#	or error("Unable to move EXE file $!\n\tXCSoar-$platform.exe\n");
+#      if ($platforms{$platform}{sim}) {
+#	rename "XCSoarSimulator-$platform.exe", "dist/XCSoarSimulator-$platform.$version_file.exe"
+#	  or error("Unable to move EXE file $!\n\tXCSoarSimulator-$platform.exe\n");
+#      }
+
     }
   } else {
     if ($platform eq "ALTAIR") {
