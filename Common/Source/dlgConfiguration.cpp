@@ -253,7 +253,7 @@ static void OnSetupDeviceAClicked(WindowControl * Sender){
 // this is a hack, devices dont jet support device dependant setup dialogs
 
 #ifndef _SIM_
-    if ((devA() != NULL) ||
+    if ((devA() == NULL) ||
 	(_tcscmp(devA()->Name,TEXT("Vega")) != 0)) {
       return;
     }
