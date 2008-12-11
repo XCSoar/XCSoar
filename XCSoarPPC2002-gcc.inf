@@ -1,0 +1,135 @@
+[Version]
+Signature   = "$Windows NT$"    ; required as-is
+Provider    = "OpenSource"      ; full app name will be "<Provider> <AppName>"
+CESignature = "$Windows CE$"    ; required as-is
+
+[CEStrings]
+AppName     = "XCSoar"          ; full app name will be "<Provider> <AppName>"
+InstallDir  = %CE1%\%AppName%
+
+
+[Strings]
+reg_path = Software\OpenSource\XCSoar
+LinkFilename1 = "XCSoar FLY"
+LinkFilename2 = "XCSoar SIM"
+
+[CEDevice.ARMV4]
+ProcessorType=2577
+VersionMin = 3.0
+VersionMax = 32767.0
+
+[CEDevice.x86]
+ProcessorType = 0
+VersionMin = 3.0
+VersionMax = 32767.0
+
+[CEDevice.mips]
+ProcessorType = 4000
+VersionMin = 3.0
+VersionMax = 32767.0
+
+[CEDevice.sh3]
+ProcessorType = 10003
+VersionMin = 3.0
+VersionMax = 32767.0
+
+[SourceDisksNames.arm]           ; CPU-dependent files
+1 = ,"ARM Files",,PPC2002\XCSoar\gcc
+2 = ,"ARM Files",,PPC2002\XCSoarSimulator\gcc
+3 = ,"ARM Files",,PPC2002\XCSoarLaunch\gcc
+4 = ,"ARM Files",,PPC2002\XCSoarSetup\gcc
+5 = ,"Font Files",,Common\Data\Fonts
+6 = ,"Input Files",,Common\Data\Input
+7 = ,"Language Files",,Common\Data\Language
+8 = ,"Polar Files",,Common\Data\Polar
+
+[SourceDisksNames.mips]           ; CPU-dependent files
+1 = ,"MIPS Files",,PPC2002\XCSoar\MIPSRel
+2 = ,"MIPS Files",,PPC2002\XCSoarSimulator\MIPSRel
+3 = ,"MIPS Files",,PPC2002\XCSoarLaunch\MIPSRel
+4 = ,"MIPS Files",,PPC2002\XCSoarSetup\MIPSRel
+5 = ,"Font Files",,Common\Data\Fonts
+6 = ,"Input Files",,Common\Data\Input
+7 = ,"Language Files",,Common\Data\Language
+8 = ,"Polar Files",,Common\Data\Polar
+
+[SourceDisksNames.x86]
+1 = ,"PPC30 X86 Files",,X86EMDbg
+
+[SourceDisksNames.sh3]
+;1 = ,"PPC30 SH3 Files",,SH3Rel
+
+[SourceDisksFiles]
+XCSoar.exe = 1
+XCSoarSimulator.exe = 2
+XCSoarLaunch.dll = 3 
+XCSoarSetup.dll = 4
+DejaVuSansCondensed-BoldOblique2.ttf = 5
+DejaVuSansCondensed2.ttf = 5
+DejaVuSansCondensed-Bold2.ttf = 5
+DejaVuSansCondensed-Oblique2.ttf = 5
+standard.xci = 6
+legacy.xci = 6
+english.xcl = 7
+italian.xcl = 7
+german.xcl = 7
+astircs.plr = 8
+cobra.plr = 8
+GRecordDll.dll = 9
+
+[DefaultInstall]
+CopyFiles   = TheFiles,Files.Windows,Files.Fonts,Files.Input,Files.Language,Files.Polar
+AddReg = AddRegistry
+CEShortcuts = Links
+CESetupDLL=XCSoarSetup.dll
+
+[DestinationDirs]
+Files.Windows       = 0,%CE2%           ; "\Windows" directory
+Files.Fonts	    = 0,%CE15%		; "\Windows\Fonts" directory
+TheFiles    = 0,%InstallDir%
+Files.Language    = 0,"%CE5%\XCSoarData"
+Files.Input    = 0,"%CE5%\XCSoarData"
+Files.Polar    = 0,"%CE5%\XCSoarData"
+Links	=	0,"%CE11%
+
+;File copy list.
+
+[TheFiles]
+XCSoar.exe
+XCSoarSimulator.exe
+XCSoarSetup.dll
+GRecordDll.dll
+
+[Files.Windows]
+XCSoarLaunch.dll, XCSoarLaunch.dll,,0x40000000
+
+[Files.Fonts]
+DejaVuSansCondensed-Bold2.ttf,,,0x00000010
+DejaVuSansCondensed-BoldOblique2.ttf,,,0x00000010
+DejaVuSansCondensed-Oblique2.ttf,,,0x00000010
+DejaVuSansCondensed2.ttf,,,0x00000010
+
+[Files.Input]
+standard.xci
+legacy.xci
+
+[Files.Language]
+english.xcl
+italian.xcl
+german.xcl
+
+[Files.Polar]
+astircs.plr
+cobra.plr
+
+[AddRegistry]
+HKLM,\Software\Microsoft\Today\Items\%AppName%,Type,0x00010001,4
+HKLM,\Software\Microsoft\Today\Items\%AppName%,Enabled,0x00010001,1
+HKLM,\Software\Microsoft\Today\Items\%AppName%,Options,0x00010001,0
+HKLM,\Software\Microsoft\Today\Items\%AppName%,DLL,0x00000002,"\Windows\XCSoarLaunch.dll"
+HKLM,%reg_path%,InstallDir,0x00000002,%InstallDir%
+
+[Links]
+%LinkFilename1%,0,"XCSoar.exe"    
+%LinkFilename2%,0,"XCSoarSimulator.exe"       
+;; shortcut to a file, created in the standard destination path %CE14%

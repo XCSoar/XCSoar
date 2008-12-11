@@ -72,10 +72,12 @@ my %platforms = (
 		'cab' => 0,
 		'sim' => 1
 	},
-#	'PPC2002' => {
-#		'exec' => "EVC3",
-#		'proc' => [qw/ARM MIPS/],
-#	},
+	'PPC2002' => {
+		'exec' => "EVC3",
+		'proc' => [qw/ARM MIPS/],
+		'cab' => 1,
+		'sim' => 1
+	},
 	# XXX adding MIPS ARM for PPC but using PPC2002 project files !
 #	'PPC' => {	# Also known as PPC 2000
 #		'exec' => "EVC3",
