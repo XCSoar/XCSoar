@@ -3588,7 +3588,7 @@ CSIDL_PROGRAM_FILES 0x0026   The program files folder.
 #if defined(GNAV) && !defined(PCGNAV)
   _tcscpy(buffer,TEXT("\\NOR Flash"));
   //  _tcscpy(buffer,TEXT("\\USB HD\\Altair"));
-#elif (WINDOWSPC<1) && (!defined(__MINGW32__))
+#elif (WINDOWSPC<1) && (!defined(__MINGW32__)) && (!defined(OLDPPC))
   // JMW was defined(CECORE) && ...
   // return the first flash card with a XCSoarData directory on it
   // code copied from DataFieldFileReader::ScanDirectoryTop and adapted
