@@ -26,9 +26,9 @@
     <DataField name="" DataType="filereader" Min=0 Max=200 Step=1/>
   </WndProperty>
 
-  <WndButton  Name="cmdLoad" Caption="Load"    X=2 Y=50 Width=45  Height=22 Font=2 OnClickNotify="OnLoadClicked"/>
-  <WndButton  Name="cmdSave" Caption="Save"    X=47 Y=50 Width=45  Height=22 Font=2 OnClickNotify="OnSaveClicked"/>
-  </WndFrame>
+ <WndButton  Name="cmdLoad" Caption="Load"    X=2 Y=50 Width=43  Height=22 Font=2 OnClickNotify="OnLoadClicked"/>
+  <WndButton  Name="cmdSave" Caption="Save"    X=45 Y=50 Width=43  Height=22 Font=2 OnClickNotify="OnSaveClicked"/>
+  <WndButton  Name="cmdClear" Caption="Clear"    X=89 Y=50 Width=43  Height=22 Font=2 OnClickNotify="OnClearClicked"/>
 
   <WndListFrame Name="frmTaskList" X=0 Y=-1 Width=230 Height=220 Font=2 OnListInfo="OnTaskListInfo">
     <WndOwnerDrawFrame Name="frmTaskListEntry" X=2 Y=2 Width=220 Height=18 Font=2  OnPaint="OnTaskPaintListItem"/>
