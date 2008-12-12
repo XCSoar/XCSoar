@@ -7,17 +7,20 @@ Todo:
 - Quick fgtt by polygon interior fit from airspace (possible performance improvement)
 - Next wpt infobox
 
+Changes from 5.1.9beta6:
+- added clear button to
+
 Changes from 5.1.9beta2:
 - Alternate text entry methods
-- Can now use flarm database
+- Can now use flarm database, courtesy Lars H
 - Added copy/paste to infoboxes in configuration dialog
 - Flymaster F1 bug fix (vario units)
-- Porting to cegcc
+- Porting to cegcc with Russell King
 - Task/leg times to go etc only shown if task is completeable at current Mc
 - Infobox selector has items sorted alphabetically
 - Multiple start points ensure the current start is in the list.
 - Draw cross in final glide bar if unreachable at current MC
-- Initial support for XCOM760
+- Initial support for XCOM760 radio
 - Added input event to add temporary landable waypoint
 - Goto function now allows tasks to be resumed
 - Bug fix in DD.dddd waypoint edit format
@@ -26,11 +29,11 @@ Changes from 5.1.9beta2:
 - added support for declarations to IGC approved FLARM devices
 - added missing help for new infoboxes
 - added control of circling zoom to input events
-- battery voltage infobox
+- battery voltage infobox for Altair (others to follow)
 - added Ventus CM17.6 polar
 - added duo discus XT polars courtesy Derrek Ruddock
 - added option to set 800x480 resolution for ipaq 310 testing
-- mods to allow configuration of Vega in portrait mode (work in progress)
+- mods to allow configuration of Vega in portrait mode
 - robustness enhancements (avoid buffer overrun in long waypoint comments)
 - build script
 - version bump
