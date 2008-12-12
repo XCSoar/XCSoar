@@ -49,7 +49,7 @@ extern bool TargetDialogOpen;
 
 extern AATDistance aatdistance;
 
-static int Task_saved[MAXTASKPOINTS];
+static int Task_saved[MAXTASKPOINTS+1];
 static int active_waypoint_saved= -1;
 static bool aat_enabled_saved= false;
 
@@ -99,7 +99,9 @@ void FlyDirectTo(int index) {
   */
 
   Task[0].Index = index;
-  Task[1].Index = -1; 
+  for (int i=1; i<=MAXTASKPOINTS; i++) {
+    Task[i].Index = -1;
+  }
   ActiveWayPoint = 0;
   RefreshTask();
   UnlockTaskData();
@@ -1575,7 +1577,7 @@ bool TaskIsTemporary(void) {
 
 static void BackupTask(void) {
   LockTaskData();
-  for (int i=0; i<MAXTASKPOINTS; i++) {
+  for (int i=0; i<=MAXTASKPOINTS; i++) {
     Task_saved[i]= Task[i].Index;
   }
   active_waypoint_saved = ActiveWayPoint;
@@ -1628,7 +1630,7 @@ void ResumeAbortTask(int set) {
       
       // reload backup task and clear it
       
-      for (i=0; i<MAXTASKPOINTS; i++) {
+      for (i=0; i<=MAXTASKPOINTS; i++) {
         Task[i].Index = Task_saved[i];
 	Task_saved[i] = -1;
       }
