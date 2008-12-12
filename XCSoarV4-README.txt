@@ -8,7 +8,8 @@ Todo:
 - Next wpt infobox
 
 Changes from 5.1.9beta6:
-- added clear button to
+- added clear button to task editor dialog in portrait mode,
+  courtesy Jacques Fournier
 
 Changes from 5.1.9beta2:
 - Alternate text entry methods
