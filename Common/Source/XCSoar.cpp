@@ -3682,7 +3682,9 @@ bool ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size){
                         TEXT("$(FinalForceToggleActionName)"), 
                         TEXT("Unforce"), 
                         TEXT("Force"), Size);
-    invalid = AutoForceFinalGlide || !ValidTaskPoint(ActiveWayPoint);
+    if (AutoForceFinalGlide) {
+      invalid = true;
+    }
   }
 
   CondReplaceInString(MapWindow::IsMapFullScreen(), OutBuffer, TEXT("$(FullScreenToggleActionName)"), TEXT("Off"), TEXT("On"), Size);
