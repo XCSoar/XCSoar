@@ -3621,8 +3621,8 @@ bool ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size){
   }
   if (_tcsstr(OutBuffer, TEXT("$(CheckAutoMc)"))) {
     if (!ValidTaskPoint(ActiveWayPoint) 
-        && (AutoMcMode==0)
-        && (AutoMcMode==2)) {
+        && ((AutoMcMode==0)
+	    || (AutoMcMode==2))) {
       invalid = true;
     }
     ReplaceInString(OutBuffer, TEXT("$(CheckAutoMc)"), TEXT(""), Size);
@@ -3682,7 +3682,7 @@ bool ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size){
                         TEXT("$(FinalForceToggleActionName)"), 
                         TEXT("Unforce"), 
                         TEXT("Force"), Size);
-    invalid = AutoForceFinalGlide;
+    invalid = AutoForceFinalGlide || !ValidTaskPoint(ActiveWayPoint);
   }
 
   CondReplaceInString(MapWindow::IsMapFullScreen(), OutBuffer, TEXT("$(FullScreenToggleActionName)"), TEXT("Off"), TEXT("On"), Size);
