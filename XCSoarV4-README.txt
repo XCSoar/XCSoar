@@ -8,6 +8,7 @@ Todo:
 - Next wpt infobox
 - Drag target for non-Altair
 - Configuration wizard?
+- Use soft keyboard for text filters
 
 Changes from 5.1.9beta6:
 - added clear button to task editor dialog in portrait mode,

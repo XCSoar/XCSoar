@@ -3353,7 +3353,11 @@ static bool LoadRegistryFromFile_inner(const TCHAR *szFile, bool wide=true)
   bool found = false;
   FILE *fp=NULL;
   if (_tcslen(szFile)>0)
+#ifndef __MINGW32__
+    fp = _tfopen(szFile, TEXT("rt"));
+#else
     fp = _tfopen(szFile, TEXT("rb"));    //20060515:sgi add b
+#endif
   if(fp == NULL) {
     // error
     return false;
@@ -3419,9 +3423,15 @@ static bool LoadRegistryFromFile_inner(const TCHAR *szFile, bool wide=true)
 }
 
 void LoadRegistryFromFile(const TCHAR *szFile) {
+#ifndef __MINGW32__
+  if (!LoadRegistryFromFile_inner(szFile,true)) { // legacy, wide chars
+    LoadRegistryFromFile_inner(szFile,false);       // new, non-wide chars
+  }
+#else
   if (!LoadRegistryFromFile_inner(szFile,false)) { // new, non-wide chars
     LoadRegistryFromFile_inner(szFile,true);       // legacy, wide chars
   }
+#endif
 }
 
 void SaveRegistryToFile(const TCHAR *szFile)
@@ -3504,7 +3514,7 @@ void SaveRegistryToFile(const TCHAR *szFile)
 	    fprintf(fp,"%S=\"\"\r\n", lpstrName);
 	  }
 #else
-	  if (_tcslen(pValue)>0) {
+	  if (_tcslen((TCHAR*)pValue)>0) {
 	    pValue[nValueSize]= 0; // null terminate, just in case
 	    pValue[nValueSize+1]= 0; // null terminate, just in case
 	    _ftprintf(fp,TEXT("%s=\"%s\"\r\n"), lpstrName, pValue);
