@@ -45,6 +45,7 @@
     <WndButton   Caption="W"    X="80" Y="185" Width="40"  Height="40" Font="2" OnClickNotify="OnKey"/>
     <WndButton   Caption="X"    X="120" Y="185" Width="40"  Height="40" Font="2" OnClickNotify="OnKey"/>
     <WndButton   Caption="Y"    X="160" Y="185" Width="40"  Height="40" Font="2" OnClickNotify="OnKey"/>
+    <WndButton   Caption="Z"    X="200" Y="185" Width="40"  Height="40" Font="2" OnClickNotify="OnKey"/>
 
     <WndButton   Caption="9"    X="200" Y="65" Width="40"  Height="40" Font="2" OnClickNotify="OnKey"/>
     <WndButton   Caption="8"    X="240" Y="65" Width="40"  Height="40" Font="2" OnClickNotify="OnKey"/>
@@ -58,7 +59,6 @@
     <WndButton   Caption="2"    X="240" Y="145" Width="40"  Height="40" Font="2" OnClickNotify="OnKey"/>
     <WndButton   Caption="3"    X="280" Y="145" Width="40"  Height="40" Font="2" OnClickNotify="OnKey"/>
 
-    <WndButton   Caption="Z"    X="200" Y="185" Width="40"  Height="40" Font="2" OnClickNotify="OnKey"/>
     <WndButton   Caption="0"    X="240" Y="185" Width="40"  Height="40" Font="2" OnClickNotify="OnKey"/>
     <WndButton   Caption="."    X="280" Y="185" Width="40"  Height="40" Font="2" OnClickNotify="OnKey"/>
 
