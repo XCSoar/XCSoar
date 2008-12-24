@@ -1820,8 +1820,15 @@ void CalculateNewPolarCoef(void)
                                              {70,527,303},
                                              {0,0,0}
   };
+  static double WingAreas[7] = {
+    12.4,  // Ka6
+    11.0,  // ASW19
+    10.5,  // LS8
+    9.0,   // ASW27
+    11.4,  // LS6C-18
+    16.31, // ASW22
+    0};
   int i;
-
 
   ASSERT(sizeof(Polars)/sizeof(Polars[0]) == sizeof(Weights)/sizeof(Weights[0]));
 
@@ -1830,6 +1837,7 @@ void CalculateNewPolarCoef(void)
       POLAR[i] = Polars[POLARID][i];
       WEIGHTS[i] = Weights[POLARID][i];
     }
+    GlidePolar::WingArea = WingAreas[POLARID];
   }
   if (POLARID==POLARUSEWINPILOTFILE) {
     if (ReadWinPilotPolar())
@@ -1845,7 +1853,6 @@ void CalculateNewPolarCoef(void)
 
   if (POLARID<POLARUSEWINPILOTFILE){
     // polar data get from historical table
-    GlidePolar::WingArea=0;
     return;
   }
 
@@ -1853,7 +1860,6 @@ void CalculateNewPolarCoef(void)
   // error reading winpilot file
 
   POLARID = 2;              // do it again with default polar (LS8)
-  GlidePolar::WingArea=0;
 
   CalculateNewPolarCoef();
   MessageBoxX(NULL,
