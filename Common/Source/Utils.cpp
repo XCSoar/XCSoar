@@ -1843,15 +1843,11 @@ void CalculateNewPolarCoef(void)
     if (ReadWinPilotPolar())
     // polar data gets from winpilot file
       return;
-  }
-
-  if (POLARID>POLARUSEWINPILOTFILE){
+  } else if (POLARID>POLARUSEWINPILOTFILE){
     if (ReadWinPilotPolarInternal(POLARID-7))
       // polar data get from build in table
       return;
-  }
-
-  if (POLARID<POLARUSEWINPILOTFILE){
+  } else if (POLARID<POLARUSEWINPILOTFILE){
     // polar data get from historical table
     return;
   }
