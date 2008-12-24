@@ -7,7 +7,7 @@
   </Header>
   <Extension extender="RANKF" name="keys"><Key name="urn"></Key></Extension>
 
-<WndForm Name="frmBasicSettingRegular" Type="Dialog" X=5 Y=5 Width=163 Height=190 Caption="Basic Settings" Font=2 BackColor=0xDADBAB>
+<WndForm Name="frmBasicSettingRegular" Type="Dialog" X=5 Y=5 Width=163 Height=220 Caption="Basic Settings" Font=2 BackColor=0xDADBAB>
 
   <WndButton   Caption="Close"    X=78 Y=2 Width=70  Height=22 Font=2 OnClickNotify="OnCloseClicked">
   </WndButton> 
@@ -18,6 +18,10 @@
   <WndProperty Name="prpBallastLitres" Caption="Volume" X=2 Y=-1  Width=155 Height=22 CaptionWidth=78 Font=2 ReadOnly=1>
     <DataField name="" DataType="double" DisplayFormat="%.0f l" EditFormat="%.0f" ReadOnly=1 />
   </WndProperty>
+  <WndProperty Name="prpWingLoading" Caption="Wing loading" X=2 Y=-1  Width=155 Height=22 CaptionWidth=78 Font=2 ReadOnly=1>
+    <DataField name="" DataType="double" DisplayFormat="%.1f kg/m2" EditFormat="%.1f" ReadOnly=1 />
+  </WndProperty>
+
   <WndProperty Caption="Clean"     X=2 Y=-1  Width=155 Height=22 CaptionWidth=78 Font=2 Help="How clean the glider is. Set to 100% for clean, lower numbers as the wings pick up bugs or get wet.  50% indicates the glider's sink rate is doubled.">
     <DataField name="" DataType="double" DisplayFormat="%.0f%%" EditFormat="%.0f" Min=50 Max=100 Step=1  OnDataAccess="OnBugsData"/>
   </WndProperty>

@@ -56,6 +56,8 @@ double GlidePolar::sinkratecache[MAXSAFETYSPEED];
 double GlidePolar::bestld = 0.0;
 double GlidePolar::minsink = 10000.0;
 double GlidePolar::BallastLitres = 0.0;
+double GlidePolar::WingArea = 0.0;
+double GlidePolar::WingLoading = 0.0;
 
 double GlidePolar::SafetyMacCready= 0.0;
 bool GlidePolar::AbortSafetyUseCurrent = false;
@@ -80,6 +82,11 @@ void GlidePolar::SetBallast() {
   double BallastWeight;
   BallastLitres = WEIGHTS[2] * BALLAST;
   BallastWeight = GetAUW();
+  if (WingArea>0.1) {
+    WingLoading = BallastWeight/WingArea;
+  } else {
+    WingLoading = 0;
+  }
   BallastWeight = (double)sqrt(BallastWeight);
   double bugfactor = 1.0/BUGS;
   polar_a = POLAR[0] / BallastWeight*bugfactor;

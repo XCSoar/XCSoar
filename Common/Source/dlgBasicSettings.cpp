@@ -115,6 +115,12 @@ static void SetBallast(void) {
       SetAsFloat(GlidePolar::BallastLitres);
     wp->RefreshDisplay();
   }
+  wp = (WndProperty*)wf->FindByName(TEXT("prpWingLoading"));
+  if (wp) {
+    wp->GetDataField()->
+      SetAsFloat(GlidePolar::WingLoading);
+    wp->RefreshDisplay();
+  }
 }
 
 int BallastSecsToEmpty = 120;
@@ -264,6 +270,16 @@ void dlgBasicSettingsShowModal(void){
     if (wp) {
       wp->GetDataField()->
 	SetAsFloat(GlidePolar::BallastLitres);
+      wp->RefreshDisplay();
+    }
+    wp = (WndProperty*)wf->FindByName(TEXT("prpWingLoading"));
+    if (wp) {
+      if (GlidePolar::WingLoading>0.1) {
+	wp->GetDataField()->
+	  SetAsFloat(GlidePolar::WingLoading);
+      } else {
+	wp->SetVisible(false);
+      }
       wp->RefreshDisplay();
     }
 

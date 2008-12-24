@@ -41,6 +41,8 @@ class GlidePolar {
   static double bestld;
   static double minsink;
   static double BallastLitres;
+  static double WingArea;
+  static double WingLoading;
   
   static double sinkratecache[MAXSAFETYSPEED];
 
