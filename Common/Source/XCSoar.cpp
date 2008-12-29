@@ -1202,9 +1202,9 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   // experimental CVS 
 
 #ifdef __MINGW32__
-  wcscat(XCSoar_Version, TEXT("5.1.9 gccB6 "));
+  wcscat(XCSoar_Version, TEXT("5.1.9 gccB7 "));
 #else
-  wcscat(XCSoar_Version, TEXT("5.1.9 Beta6 "));
+  wcscat(XCSoar_Version, TEXT("5.1.9 Beta7 "));
 #endif
 
   wcscat(XCSoar_Version, TEXT(__DATE__));
@@ -3519,7 +3519,7 @@ bool ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size){
                             TEXT("$(WaypointPrevious)"), 
                             TEXT("StartPoint\nCycle"), TEXT("Waypoint\nPrevious"), Size);
       } else {
-        invalid = (ActiveWayPoint==0);
+        invalid = (ActiveWayPoint<=0);
         ReplaceInString(OutBuffer, TEXT("$(WaypointPrevious)"), TEXT("Waypoint\nPrevious"), Size);
       }
     }
