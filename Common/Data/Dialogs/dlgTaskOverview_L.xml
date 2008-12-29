@@ -9,7 +9,8 @@
 
 <WndForm Name="frmTaskOverview" Type="Dialog" X=0 Y=0 Width=240 Height=320 Caption="Task Overview" Font=2  BackColor=0xDADBAB>
 
-  <WndButton   Name="cmdClose" Caption="Close"    X=2 Y=2 Width=98  Height=22 Font=2 OnClickNotify="OnCloseClicked"/>
+  <WndButton   Name="cmdClose" Caption="Close"    X=2 Y=2 Width=49  Height=22 Font=2 OnClickNotify="OnCloseClicked"/>
+  <WndButton  Name="cmdClear" Caption="Clear"    X=51 Y=2 Width=49  Height=22 Font=2 OnClickNotify="OnClearClicked"/>
 
   <WndProperty Name="prpAATEst" Caption="ETE" X=2 Y=-1  Width=98 Height=22 CaptionWidth=35 Font=2 ReadOnly=1 min=0 max=600 step=10>
     <DataField name="" DataType="double" DisplayFormat="%.0f min" EditFormat="%.0f" readonly=1/>
@@ -17,18 +18,18 @@
 
   <WndButton   Name="cmdFile" Caption="Advanced.."    X=2 Y=-1 Width=98  Height=22 Font=2 OnClickNotify="OnAdvancedClicked"/>
 
-  <WndFrame Name="frmAdvanced" X=100 Y=0 Width=130 Height=75 Font=2 >
+  <WndFrame Name="frmAdvanced" X=104 Y=0 Width=130 Height=68 Font=2 >
 
-  <WndButton  Name="cmdCalc"  Caption="Calc" X=2 Y=0 Width=60  Height=22 Font=2 OnClickNotify="OnCalcClicked" Tag=4 />
-  <WndButton  Name="cmdDeclare" Caption="Declare"    X=65 Y=0 Width=60  Height=22 Font=2 OnClickNotify="OnDeclareClicked"/>
+  <WndButton  Name="cmdCalc"  Caption="Calc" X=2 Y=2 Width=60  Height=22 Font=2 OnClickNotify="OnCalcClicked" Tag=4 />
+  <WndButton  Name="cmdDeclare" Caption="Declare"    X=65 Y=2 Width=60  Height=22 Font=2 OnClickNotify="OnDeclareClicked"/>
 
-  <WndProperty Name="prpFile" Caption="File"   X=2 Y=25  Width=98 Height=22 CaptionWidth=30 Font=2 Help="The file number sets the number of the task to be loaded/saved.  Up to 20 tasks may be defined.   These files are stored under the filename XX.tsk where XX is the file number.">
+ <WndProperty Name="prpFile" Caption="File"   X=2 Y=24  Width=123 Height=22 CaptionWidth=30 Font=2 Help="The file number sets the number of the task to be loaded/saved.  Up to 20 tasks may be defined.   These files are stored under the filename XX.tsk where XX is the file number.">
     <DataField name="" DataType="filereader" Min=0 Max=200 Step=1/>
-  </WndProperty>
+ </WndProperty>
 
- <WndButton  Name="cmdLoad" Caption="Load"    X=2 Y=50 Width=43  Height=22 Font=2 OnClickNotify="OnLoadClicked"/>
-  <WndButton  Name="cmdSave" Caption="Save"    X=45 Y=50 Width=43  Height=22 Font=2 OnClickNotify="OnSaveClicked"/>
-  <WndButton  Name="cmdClear" Caption="Clear"    X=89 Y=50 Width=43  Height=22 Font=2 OnClickNotify="OnClearClicked"/>
+ <WndButton  Name="cmdLoad" Caption="Load"    X=2 Y=46 Width=60  Height=22 Font=2 OnClickNotify="OnLoadClicked"/>
+ <WndButton  Name="cmdSave" Caption="Save"    X=65 Y=46 Width=60  Height=22 Font=2 OnClickNotify="OnSaveClicked"/>
+ </WndFrame>
 
   <WndListFrame Name="frmTaskList" X=0 Y=-1 Width=230 Height=220 Font=2 OnListInfo="OnTaskListInfo">
     <WndOwnerDrawFrame Name="frmTaskListEntry" X=2 Y=2 Width=220 Height=18 Font=2  OnPaint="OnTaskPaintListItem"/>
