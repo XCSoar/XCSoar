@@ -11,7 +11,7 @@
 **   This file is distributed under the terms of the General Public
 **   Licence. See the file COPYING for more information.
 **
-**   $Id: windmeasurementlist.cpp,v 1.13 2008/08/18 15:01:40 jwharington Exp $
+**   $Id: windmeasurementlist.cpp,v 1.14 2008/12/30 03:31:53 jwharington Exp $
 **
 ***********************************************************************/
 /*
@@ -20,7 +20,7 @@ NOTE: Some portions copyright as above
 Copyright_License {
 
   XCSoar Glide Computer - http://xcsoar.sourceforge.net/
-  Copyright (C) 2000 - 2005  
+  Copyright (C) 2000 - 2008  
 
   	M Roberts (original release)
 	Robin Birch <robinb@ruffnready.co.uk>
@@ -28,7 +28,10 @@ Copyright_License {
 	Jeff Goodenough <jeff@enborne.f2s.com>
 	Alastair Harrison <aharrison@magic.force9.co.uk>
 	Scott Penrose <scottp@dd.com.au>
-	John Wharington <jwharington@bigfoot.com>
+	John Wharington <jwharington@gmail.com>
+	Lars H <lars_hn@hotmail.com>
+	Rob Dunning <rob@raspberryridgesheepfarm.com>
+	Russell King <rmk@arm.linux.org.uk>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License

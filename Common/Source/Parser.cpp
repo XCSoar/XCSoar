@@ -1,10 +1,10 @@
 /*
-  $Id: Parser.cpp,v 1.86 2008/11/11 22:44:48 robin-birch Exp $
+  $Id: Parser.cpp,v 1.87 2008/12/30 03:31:30 jwharington Exp $
 
 Copyright_License {
 
   XCSoar Glide Computer - http://xcsoar.sourceforge.net/
-  Copyright (C) 2000 - 2005  
+  Copyright (C) 2000 - 2008  
 
   	M Roberts (original release)
 	Robin Birch <robinb@ruffnready.co.uk>
@@ -12,7 +12,10 @@ Copyright_License {
 	Jeff Goodenough <jeff@enborne.f2s.com>
 	Alastair Harrison <aharrison@magic.force9.co.uk>
 	Scott Penrose <scottp@dd.com.au>
-	John Wharington <jwharington@bigfoot.com>
+	John Wharington <jwharington@gmail.com>
+	Lars H <lars_hn@hotmail.com>
+	Rob Dunning <rob@raspberryridgesheepfarm.com>
+	Russell King <rmk@arm.linux.org.uk>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
