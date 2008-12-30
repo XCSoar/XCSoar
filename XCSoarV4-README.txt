@@ -18,8 +18,8 @@ Changes from 5.1.9beta6:
 - added GRecord stuff to Altair
 - updated copyright text to source code
 - moved close button in basic settings to left to improve usability on PNA
-- FLARM targets display of average climb rate
-- Team code position shown on map
+- FLARM targets display of average climb rate courtesy Lars H
+- Team code position shown on map courtesy Lars H
 
 Changes from 5.1.9beta2:
 - Alternate text entry methods

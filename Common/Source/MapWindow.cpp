@@ -2145,7 +2145,7 @@ void MapWindow::UpdateCaches(bool force) {
   // (unless we haven't done it for 2000 ms)
   DWORD fpsTimeThis = ::GetTickCount();
   static double lastTime = 0;
-  static DWORD fpsTimeMapCenter;
+  static DWORD fpsTimeMapCenter = 0;
 
   if (MapWindow::ForceVisibilityScan) {
     force = true;
@@ -2163,6 +2163,7 @@ void MapWindow::UpdateCaches(bool force) {
   if (lastTime>DrawInfo.Time) {
     lastTime = DrawInfo.Time;
   }
+
   if (force || (fpsTimeThis - fpsTimeMapCenter > 5000)) {
 
     fpsTimeThis = fpsTimeMapCenter;
@@ -2172,6 +2173,7 @@ void MapWindow::UpdateCaches(bool force) {
   
   fpsTimeThis = ::GetTickCount();
   static DWORD fpsTimeLast_terrain=0;
+
   if (RenderTimeAvailable() ||
       (fpsTimeThis-fpsTimeLast_terrain>5000) || force) {
     // have some time, do graphics terrain cache update if necessary

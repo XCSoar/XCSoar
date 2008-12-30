@@ -72,7 +72,7 @@ Copyright_License {
 #endif
 
 extern HWND hWndCDIWindow;
-extern HFONT TitleSmallWindowFont;
+extern HFONT TitleWindowFont;
 
 
 void MapWindow::DrawCDI() {
@@ -349,10 +349,11 @@ void MapWindow::DrawFLARMTraffic(HDC hDC, RECT rc) {
       }
       
       // TODO: draw direction, height?
-      POINT sc;
+      POINT sc, sc2;
       LatLon2Screen(target_lon, 
                     target_lat, 
                     sc);
+      sc2 = sc;
 
 #ifndef FLARM_AVERAGE
       if (DrawInfo.FLARM_Traffic[i].Name) {
@@ -365,11 +366,16 @@ void MapWindow::DrawFLARMTraffic(HDC hDC, RECT rc) {
 #else
       TCHAR label1[100];
       TCHAR label2[100];
+
+      sc2.x += IBLSCALE(3);
+
       if (DrawInfo.FLARM_Traffic[i].Name) 
 	{
-	  wsprintf(label1, TEXT("%s"), DrawInfo.FLARM_Traffic[i].Name);
-	  if (DrawInfo.FLARM_Traffic[i].Average30s>0) {
-	    wsprintf(label2, TEXT("%.1lf"), DrawInfo.FLARM_Traffic[i].Average30s);
+	  sc2.y += IBLSCALE(8);
+	  _stprintf(label1, TEXT("%s"), DrawInfo.FLARM_Traffic[i].Name);
+	  if (DrawInfo.FLARM_Traffic[i].Average30s>=0.1) {
+	    _stprintf(label2, TEXT("%.1f"), 
+		     LIFTMODIFY*DrawInfo.FLARM_Traffic[i].Average30s);
 	  } else {
 	    label2[0]= _T('\0');
 	  }
@@ -377,8 +383,9 @@ void MapWindow::DrawFLARMTraffic(HDC hDC, RECT rc) {
       else
 	{
 	  label1[0]= _T('\0');
-	  if (DrawInfo.FLARM_Traffic[i].Average30s>0) {
-	    wsprintf(label2, TEXT("%.1lf"), DrawInfo.FLARM_Traffic[i].Average30s);
+	  if (DrawInfo.FLARM_Traffic[i].Average30s>=0.1) {
+	    _stprintf(label2, TEXT("%.1f"), 
+		      LIFTMODIFY*DrawInfo.FLARM_Traffic[i].Average30s);
 	  } else {
 	    label2[0]= _T('\0');
 	  }
@@ -395,17 +402,19 @@ void MapWindow::DrawFLARMTraffic(HDC hDC, RECT rc) {
       }
       
       int colourIndex = fSnailColour(cv);
-            
-      HGDIOBJ oldFont = SelectObject(hDC, TitleSmallWindowFont);	
+
+      // JMW TODO: decluttering of FLARM altitudes (sort by max lift)
+
+      HGDIOBJ oldFont = SelectObject(hDC, TitleWindowFont);	
       COLORREF oldTextColor = SetTextColor(hDC, hSnailColours[colourIndex]);
       
-      if (wcslen(label2)>0) {
-	ExtTextOut(hDC, sc.x+IBLSCALE(3),sc.y+IBLSCALE(8), ETO_OPAQUE, NULL, label2, 
-		   wcslen(label2), NULL); 
+      if (_tcslen(label2)>0) {
+	ExtTextOut(hDC, sc2.x,sc2.y, ETO_OPAQUE, NULL, label2, 
+		   _tcslen(label2), NULL); 
       }
       SetTextColor(hDC, RGB(255,0,0));
-      if (wcslen(label1)>0) {
-	ExtTextOut(hDC, sc.x+IBLSCALE(3),sc.y, ETO_OPAQUE, NULL, label1, wcslen(label1), NULL); 
+      if (_tcslen(label1)>0) {
+	ExtTextOut(hDC, sc2.x, sc.y, ETO_OPAQUE, NULL, label1, _tcslen(label1), NULL); 
       }
             
       SelectObject(hDC, oldFont);

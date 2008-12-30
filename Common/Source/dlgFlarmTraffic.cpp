@@ -89,7 +89,11 @@ static void OnPaintDetailsListItem(WindowControl * Sender, HDC hDC){
     wsprintf(tmp, TEXT("%3s %3ld %+3.1lf %5ld"),	
 	     GPS_INFO.FLARM_Traffic[DrawListIndex].Name,
 	     (int)(SPEEDMODIFY * GPS_INFO.FLARM_Traffic[DrawListIndex].Speed),
+#ifdef FLARM_AVERAGE
 	     LIFTMODIFY * GPS_INFO.FLARM_Traffic[DrawListIndex].Average30s,
+#else
+	     0.0,
+#endif
 	     (int)(ALTITUDEMODIFY * GPS_INFO.FLARM_Traffic[DrawListIndex].Altitude)
 	     );
     wsprintf(text, TEXT("%s %3.0lf %2.1lf"),
