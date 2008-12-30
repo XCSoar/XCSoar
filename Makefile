@@ -147,7 +147,7 @@ INCLUDES	:= -I$(HDR)/mingw32compat -I$(HDR) -I$(SRC)
 endif
 
 CPPFLAGS	:= $(INCLUDES) $(CE_DEFS)
-CPPFLAGS	+= -DNDEBUG -Wuninitialized
+CPPFLAGS	+= -DNDEBUG -Wuninitialized -DFLARM_AVERAGE
 ifeq ($(CONFIG_PNA),y)
 CPPFLAGS	+= -DBIGDISPLAY -DCECORE -DPNA
 endif
@@ -302,8 +302,10 @@ OBJS	:=\
 	$(SRC)/Airspace.o 		$(SRC)/AirspaceColourDlg.o \
 	$(SRC)/AirspaceWarning.o 	$(SRC)/Atmosphere.o \
 	$(SRC)/Calculations.o 		$(SRC)/Calculations2.o \
+	$(SRC)/ClimbAverageCalculator.o \
 	$(SRC)/ConditionMonitor.o 	$(SRC)/device.o \
-	$(SRC)/Dialogs.o 		$(SRC)/FlarmIdFile.o \
+	$(SRC)/Dialogs.o 		\
+	$(SRC)/FlarmIdFile.o 		$(SRC)/FlarmCalculations.o \
 	$(SRC)/GaugeCDI.o 		$(SRC)/GaugeFLARM.o \
 	$(SRC)/GaugeVarioAltA.o 	$(SRC)/Geoid.o \
 	$(SRC)/InfoBox.o 		$(SRC)/InfoBoxLayout.o \

@@ -72,7 +72,7 @@ Copyright_License {
 #endif
 
 extern HWND hWndCDIWindow;
-
+extern HFONT TitleSmallWindowFont;
 
 
 void MapWindow::DrawCDI() {
@@ -298,6 +298,8 @@ void MapWindow::DrawSpeedToFly(HDC hDC, RECT rc) {
 }
 */
 
+#define fSnailColour(cv) max(0,min((short)(NUMSNAILCOLORS-1), (short)((cv+1.0)/2.0*NUMSNAILCOLORS)))
+
 void MapWindow::DrawFLARMTraffic(HDC hDC, RECT rc) {
 
   if (!EnableFLARMDisplay) return;
@@ -351,6 +353,8 @@ void MapWindow::DrawFLARMTraffic(HDC hDC, RECT rc) {
       LatLon2Screen(target_lon,
                     target_lat,
                     sc);
+
+#ifndef FLARM_AVERAGE
       if (DrawInfo.FLARM_Traffic[i].Name) {
         TextInBox(hDC, DrawInfo.FLARM_Traffic[i].Name, sc.x+IBLSCALE(3),
                   sc.y, 0, displaymode,
@@ -358,6 +362,57 @@ void MapWindow::DrawFLARMTraffic(HDC hDC, RECT rc) {
       }
 
       DrawBitmapIn(hDC, sc, hFLARMTraffic);
+#else
+      TCHAR label1[100];
+      TCHAR label2[100];
+      if (DrawInfo.FLARM_Traffic[i].Name)
+	{
+	  wsprintf(label1, TEXT("%s"), DrawInfo.FLARM_Traffic[i].Name);
+	  if (DrawInfo.FLARM_Traffic[i].Average30s>0) {
+	    wsprintf(label2, TEXT("%.1lf"), DrawInfo.FLARM_Traffic[i].Average30s);
+	  } else {
+	    label2[0]= _T('\0');
+	  }
+	}
+      else
+	{
+	  label1[0]= _T('\0');
+	  if (DrawInfo.FLARM_Traffic[i].Average30s>0) {
+	    wsprintf(label2, TEXT("%.1lf"), DrawInfo.FLARM_Traffic[i].Average30s);
+	  } else {
+	    label2[0]= _T('\0');
+	  }
+	}
+
+      float vmax = (float)(1.5*min(5.0, max(MACCREADY,0.5)));
+      float vmin = (float)(-1.5*min(5.0, max(MACCREADY,2.0)));
+
+      float cv = DrawInfo.FLARM_Traffic[i].Average30s;
+      if (cv<0) {
+        cv /= (-vmin); // JMW fixed bug here
+      } else {
+        cv /= vmax;
+      }
+
+      int colourIndex = fSnailColour(cv);
+
+      HGDIOBJ oldFont = SelectObject(hDC, TitleSmallWindowFont);
+      COLORREF oldTextColor = SetTextColor(hDC, hSnailColours[colourIndex]);
+
+      if (wcslen(label2)>0) {
+	ExtTextOut(hDC, sc.x+IBLSCALE(3),sc.y+IBLSCALE(8), ETO_OPAQUE, NULL, label2,
+		   wcslen(label2), NULL);
+      }
+      SetTextColor(hDC, RGB(255,0,0));
+      if (wcslen(label1)>0) {
+	ExtTextOut(hDC, sc.x+IBLSCALE(3),sc.y, ETO_OPAQUE, NULL, label1, wcslen(label1), NULL);
+      }
+
+      SelectObject(hDC, oldFont);
+      SetTextColor(hDC, oldTextColor);
+
+      DrawBitmapIn(hDC, sc, hFLARMTraffic);
+#endif
 
       Arrow[0].x = -4;
       Arrow[0].y = 5;
@@ -1392,8 +1447,7 @@ double MapWindow::DrawTrail( HDC hdc, const POINT Orig, const RECT rc)
 	} else {
 	  cv /= vmax;
 	}
-	P1.Colour = max(0,min((short)(NUMSNAILCOLORS-1),
-			      (short)((cv+1.0)/2.0*NUMSNAILCOLORS)));
+	P1.Colour = fSnailColour(cv);
       }
       SelectObject(hdc, hSnailPens[P1.Colour]);
     }

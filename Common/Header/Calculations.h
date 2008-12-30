@@ -181,9 +181,10 @@ typedef struct _DERIVED_INFO
   double GliderSinkRate;
   double Gload;
   double Essing;
+  double TerrainBase; // lowest height within glide range
+  double TermikLigaPoints;
   double Experimental;
 
-  double TerrainBase; // lowest height within glide range
 } DERIVED_INFO;
 
 

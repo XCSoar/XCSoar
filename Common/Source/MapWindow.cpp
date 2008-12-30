@@ -99,6 +99,7 @@ HBITMAP MapWindow::hBmpFieldReachable;
 HBITMAP MapWindow::hBmpFieldUnReachable;
 HBITMAP MapWindow::hBmpThermalSource;
 HBITMAP MapWindow::hBmpTarget;
+HBITMAP MapWindow::hBmpTeammatePosition;
 HBITMAP MapWindow::hAboveTerrainBitmap;
 HBRUSH  MapWindow::hAboveTerrainBrush;
 
@@ -193,6 +194,7 @@ HBITMAP MapWindow::hLogger;
 HBITMAP MapWindow::hLoggerOff;
 
 HPEN MapWindow::hSnailPens[NUMSNAILCOLORS];
+COLORREF MapWindow::hSnailColours[NUMSNAILCOLORS];
 
 POINT MapWindow::Groundline[NUMTERRAINSWEEPS+1];
 
@@ -1209,6 +1211,7 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
     hGPSStatus2=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_GPSSTATUS2));
     hLogger=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_LOGGER));
     hLoggerOff=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_LOGGEROFF));
+    hBmpTeammatePosition = LoadBitmap(hInst, MAKEINTRESOURCE(IDB_TEAMMATE_POS));
 
     if (Appearance.FlightModeIcon == apFlightModeIconAltA){
       //hCruise=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_CRUISE_B));
@@ -1262,8 +1265,9 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
                     *IBLSCALE(SnailWidthScale)/NUMSNAILCOLORS);
       }
 
-      hSnailPens[i] = (HPEN)CreatePen(PS_SOLID, iwidth,
-                                      RGB((BYTE)Red,(BYTE)Green,(BYTE)Blue));
+      hSnailColours[i] = RGB((BYTE)Red,(BYTE)Green,(BYTE)Blue);
+      hSnailPens[i] = (HPEN)CreatePen(PS_SOLID, iwidth, hSnailColours[i]);
+
     }
 
     /* JMW created all re-used pens here */
@@ -1450,6 +1454,7 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
     DeleteObject(hBmpFieldUnReachable);
     DeleteObject(hBmpThermalSource);
     DeleteObject(hBmpTarget);
+    DeleteObject(hBmpTeammatePosition);
 
     for(i=0;i<NUMAIRSPACEBRUSHES;i++)
     {
@@ -2018,6 +2023,7 @@ void MapWindow::RenderMapWindowBg(HDC hdc, const RECT rc,
   }
 
   DrawWaypoints(hdc,rc);
+  DrawTeammate(hdc, rc);
 
   if ((EnableTerrain && (DerivedDrawInfo.TerrainValid))
       || RasterTerrain::render_weather) {
@@ -4724,6 +4730,35 @@ void DrawDotLine(HDC hdc, POINT ptStart, POINT ptEnd, COLORREF cr)
   SelectObject(hdc, hpOld);
   DeleteObject((HPEN)hpDot);
   */
+}
+
+
+
+
+void MapWindow::DrawTeammate(HDC hdc, RECT rc)
+{
+  POINT point;
+
+  if (TeammateCodeValid)
+    {
+      if(PointVisible(TeammateLongitude, TeammateLatitude) )
+	{
+	  LatLon2Screen(TeammateLongitude, TeammateLatitude, point);
+
+	  SelectObject(hDCTemp,hBmpTeammatePosition);
+	  DrawBitmapX(hdc,
+		      point.x-IBLSCALE(10),
+		      point.y-IBLSCALE(10),
+		      20,20,
+		      hDCTemp,0,0,SRCPAINT);
+
+	  DrawBitmapX(hdc,
+		      point.x-IBLSCALE(10),
+		      point.y-IBLSCALE(10),
+		      20,20,
+		      hDCTemp,20,0,SRCAND);
+	}
+    }
 }
 
 

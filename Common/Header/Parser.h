@@ -39,7 +39,9 @@ typedef struct _FLARM_TRAFFIC
   unsigned short AlarmLevel;
   double Time_Fix;
   unsigned short Type;
+#ifdef FLARM_AVERAGE
   double Average30s;
+#endif
 } FLARM_TRAFFIC;
 
 

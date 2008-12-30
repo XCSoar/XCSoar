@@ -2740,7 +2740,8 @@ BOOL ReadString(HANDLE hFile, int Max, TCHAR *String)
   if (hFile == INVALID_HANDLE_VALUE)
     return(FALSE);
 
-  if (ReadFile(hFile, FileBuffer, sizeof(FileBuffer), &dwNumBytesRead, (OVERLAPPED *)NULL) == 0)
+  if (ReadFile(hFile, FileBuffer, sizeof(FileBuffer),
+	       &dwNumBytesRead, (OVERLAPPED *)NULL) == 0)
     return(FALSE);
 
   int i = 0;
@@ -3541,10 +3542,11 @@ void SaveRegistryToFile(const TCHAR *szFile)
       }
     }
 
-#ifdef __MINGW32__
-    fflush(fp);
-#endif
   }
+#ifdef __MINGW32__
+  // JMW why flush agressively?
+  fflush(fp);
+#endif
 
 #ifdef __MINGW32__
   fprintf(fp,"\r\n"); // end of file
