@@ -219,11 +219,13 @@ foreach my $platform (@platforms_all) {
   } else {
     if ($platform eq "ALTAIR") {
       rename "XCSoar-$platform.exe","XCSoarAltair-$version_num-CRC3E.exe";
-      system("zip -r XCSoarAltair-$version_file.zip XCSoarAltair-$version_num-CRC3E.exe");
+      system("cp PPC2003/GRecordDll.dll GRecordDLL.dat");
+      system("zip -r XCSoarAltair-$version_file.zip XCSoarAltair-$version_num-CRC3E.exe GRecordDLL.dat");
       rename "XCSoarAltair-$version_file.zip","dist/XCSoarAltair-$version_file.zip";
     } elsif ($platform eq "ALTAIRPORTRAIT") {
       rename "XCSoar-$platform.exe","XCSoarAltair-$version_num-CRC3E.exe";
-      system("zip -r XCSoarAltairPortrait-$version_file.zip XCSoarAltair-$version_num-CRC3E.exe");
+      system("cp PPC2003/GRecordDll.dll GRecordDLL.dat");
+      system("zip -r XCSoarAltairPortrait-$version_file.zip XCSoarAltair-$version_num-CRC3E.exe GRecordDLL.dat");
       rename "XCSoarAltairPortrait-$version_file.zip","dist/XCSoarAltairPortrait-$version_file.zip";
     } else {
       if ($platforms{$platform}{sim}) {

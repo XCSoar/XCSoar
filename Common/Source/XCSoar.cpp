@@ -1220,6 +1220,14 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   // 
   StartupLogFreeRamAndStorage();
 
+#ifdef GNAV
+  if FileExistsW(TEXT("GRecordDLL.dat")) {
+    StartupStore(TEXT("Updating GRecordDLL.DLL\n"));
+    DeleteFile(TEXT("GRecordDLL.DLL"));
+    MoveFile(TEXT("GRecordDLL.dat"),TEXT("GRecordDLL.DLL"));
+  }
+#endif
+
   XCSoarGetOpts(lpCmdLine);
 
   icc.dwSize = sizeof(INITCOMMONCONTROLSEX);
