@@ -170,7 +170,8 @@ int RasterTile::CheckTileVisibility(int view_x, int view_y) {
 
 
 bool RasterTile::VisibilityChanged(int view_x, int view_y) {
-  request = (IsDisabled() && CheckTileVisibility(view_x, view_y));
+  request = (CheckTileVisibility(view_x, view_y) && IsDisabled());
+  // JMW note: order of these is important!
   return request;
 }
 
