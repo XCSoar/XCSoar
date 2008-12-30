@@ -65,6 +65,9 @@ Copyright_License {
 #include "Calculations2.h"
 #include "Port.h"
 #include "WindZigZag.h"
+#ifdef NEWCLIMBAV
+#include "ClimbAverageCalculator.h" // JMW new
+#endif
 
 WindAnalyser *windanalyser = NULL;
 OLCOptimizer olc;
@@ -1030,6 +1033,15 @@ void Vario(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   }
 }
 
+#ifdef NEWCLIMBAV
+ClimbAverageCalculator climbAverageCalculator;
+void Average30s(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
+{
+	Calculated->Average30s = climbAverageCalculator.GetAverage(Basic->Time, Basic->Altitude, 30);	
+	Calculated->NettoAverage30s = Calculated->Average30s;
+}
+
+#endif
 
 void Average30s(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 {
@@ -2651,6 +2663,20 @@ void TaskSpeed(NMEA_INFO *Basic, DERIVED_INFO *Calculated, const double maccread
     v2 = d2/t2;
     
     Calculated->TaskSpeed = max(v1,v2);
+
+    double konst = 1.1;
+    if (TaskModified)
+      {
+	konst = 1.0;
+      }
+    
+    double termikLigaPoints = 0;	
+    if (d1 > 0)
+      {
+	termikLigaPoints = konst*(0.015*0.001*d1-(400.0/(0.001*d1))+12.0)*v1*3.6*100.0/(double)Handicap;
+      }
+    
+    Calculated->TermikLigaPoints = termikLigaPoints;
 
     if(Basic->Time < LastTime) {
       LastTime = Basic->Time;

@@ -125,6 +125,7 @@ class MapWindow {
   // 12 is number of airspace types
   static HPEN hAirspacePens[AIRSPACECLASSCOUNT];
   static HPEN hSnailPens[NUMSNAILCOLORS];
+  static COLORREF hSnailColours[NUMSNAILCOLORS];
   static HBRUSH hAirspaceBrushes[NUMAIRSPACEBRUSHES];
   static HBITMAP hAirspaceBitmap[NUMAIRSPACEBRUSHES];
   static HBITMAP hAboveTerrainBitmap;
@@ -233,6 +234,7 @@ class MapWindow {
   static void DrawFlightMode(HDC hdc, RECT rc);
   static void DrawGPSStatus(HDC hdc, RECT rc);
   static double DrawTrail(HDC hdc, const POINT Orig, const RECT rc);
+  static void DrawTeammate(HDC hdc, const RECT rc);
   static void DrawTrailFromTask(HDC hdc, const RECT rc, const double);
   static void DrawOffTrackIndicator(HDC hdc);
   static void DrawProjectedTrack(HDC hdc, POINT Orig);
@@ -382,6 +384,7 @@ class MapWindow {
   static HBITMAP hBmpFieldUnReachable;
   static HBITMAP hBmpThermalSource;
   static HBITMAP hBmpTarget;
+  static HBITMAP hBmpTeammatePosition;
 
 #define MAXLABELBLOCKS 100
   static int nLabelBlocks;

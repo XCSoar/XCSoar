@@ -503,7 +503,7 @@ void CalculateOwnTeamCode(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 {
   if (!WayPointList) return;
   if (TeamCodeRefWaypoint < 0) return;
-  //if (lastTeamCodeUpdateTime + 10000 > GetTickCount()) return;
+  if (lastTeamCodeUpdateTime + 10000 > GetTickCount()) return;
 
 	
   double distance = 0;

@@ -9,7 +9,7 @@
 
 <WndForm Name="frmBasicSettingRegular" Type="Dialog" X=5 Y=5 Width=163 Height=220 Caption="Basic Settings" Font=2 BackColor=0xDADBAB>
 
-  <WndButton   Caption="Close"    X=78 Y=2 Width=70  Height=22 Font=2 OnClickNotify="OnCloseClicked">
+  <WndButton   Caption="Close"    X=2 Y=2 Width=70  Height=22 Font=2 OnClickNotify="OnCloseClicked">
   </WndButton> 
 
   <WndProperty Name="prpBallastPercent" Caption="Ballast"  X=2 Y=-1  Width=155 Height=22 CaptionWidth=78 Font=2 Help="Ballast of the glider.  Increase this value if the pilot/cockpit load is greater than the reference pilot weight of the glide polar (typically 75kg).">

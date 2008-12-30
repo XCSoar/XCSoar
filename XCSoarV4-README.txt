@@ -17,6 +17,9 @@ Changes from 5.1.9beta6:
 - added display of wing loadings for built in polars
 - added GRecord stuff to Altair
 - updated copyright text to source code
+- moved close button in basic settings to left to improve usability on PNA
+- FLARM targets display of average climb rate
+- Team code position shown on map
 
 Changes from 5.1.9beta2:
 - Alternate text entry methods

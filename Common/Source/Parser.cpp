@@ -1,5 +1,5 @@
 /*
-  $Id: Parser.cpp,v 1.87 2008/12/30 03:31:30 jwharington Exp $
+  $Id: Parser.cpp,v 1.88 2008/12/30 12:37:51 jwharington Exp $
 
 Copyright_License {
 
@@ -46,6 +46,20 @@ Copyright_License {
 #include "Parser.h"
 #include "device.h"
 #include "Geoid.h"
+#include "FlarmIdFile.h"
+#include "TeamCodeCalculation.h"
+
+#ifdef FLARM_AVERAGE
+#include "FlarmCalculations.h"
+FlarmCalculations flarmCalculations;
+#endif
+
+#ifdef __MINGW32__
+#ifndef max
+#define max(x, y)   (x > y ? x : y)
+#define min(x, y)   (x < y ? x : y)
+#endif
+#endif
 
 extern bool EnableCalibration;
 
@@ -60,6 +74,8 @@ static int NAVWarn(TCHAR c);
 
 NMEAParser nmeaParser1;
 NMEAParser nmeaParser2;
+
+
 int NMEAParser::StartDay = -1;
 
 NMEAParser::NMEAParser() {
@@ -611,7 +627,7 @@ BOOL NMEAParser::GGA(TCHAR *String, TCHAR **params, size_t nparams, NMEA_INFO *G
 
   GGAAvailable = TRUE;
 
-  nSatellites = (int)(min(16,StrToDouble(params[6], NULL)));
+  nSatellites = (int)(min(16.0, StrToDouble(params[6], NULL)));
   if (nSatellites==0) {
     gpsValid = false;
   }
@@ -772,7 +788,7 @@ BOOL NMEAParser::PTAS1(TCHAR *String, TCHAR **params, size_t nparams, NMEA_INFO 
   double wnet,baralt,vtas;
 
   wnet = (StrToDouble(params[0],NULL)-200)/(10*TOKNOTS);
-  baralt = max(0,(StrToDouble(params[2],NULL)-2000)/TOFEET);
+  baralt = max(0.0, (StrToDouble(params[2],NULL)-2000)/TOFEET);
   vtas = StrToDouble(params[3],NULL)/TOKNOTS;
   
   GPS_INFO->AirspeedAvailable = TRUE;
@@ -955,6 +971,14 @@ BOOL NMEAParser::PFLAA(TCHAR *String, TCHAR **params, size_t nparams, NMEA_INFO 
     GPS_INFO->FLARM_Traffic[flarm_slot].RelativeAltitude +
     GPS_INFO->Altitude;
 
+
+#ifdef FLARM_AVERAGE
+  GPS_INFO->FLARM_Traffic[flarm_slot].Average30s = flarmCalculations.Average30s(
+	  GPS_INFO->FLARM_Traffic[flarm_slot].ID,
+	  GPS_INFO->Time,
+	  GPS_INFO->FLARM_Traffic[flarm_slot].Altitude);
+#endif
+
   TCHAR *name = GPS_INFO->FLARM_Traffic[flarm_slot].Name;
   if (!_tcslen(name)) {
     // need to lookup name for this target
@@ -964,6 +988,24 @@ BOOL NMEAParser::PFLAA(TCHAR *String, TCHAR **params, size_t nparams, NMEA_INFO 
     } else {
       name[0]=0;
     }
+  }
+
+  if ((GPS_INFO->FLARM_Traffic[flarm_slot].ID == TeamFlarmIdTarget) 
+      && ValidWayPoint(TeamCodeRefWaypoint)) {
+    double bearing;
+    double distance;
+    
+    TeammateLatitude = GPS_INFO->FLARM_Traffic[flarm_slot].Latitude;
+    TeammateLongitude = GPS_INFO->FLARM_Traffic[flarm_slot].Longitude;
+    DistanceBearing(WayPointList[TeamCodeRefWaypoint].Latitude, 
+		    WayPointList[TeamCodeRefWaypoint].Longitude,
+		    GPS_INFO->FLARM_Traffic[flarm_slot].Latitude, 
+		    GPS_INFO->FLARM_Traffic[flarm_slot].Longitude,
+		    &distance,
+		    &bearing);
+
+    GetTeamCode(TeammateCode, bearing, distance);
+    TeammateCodeValid = true;		  
   }
 
   return FALSE;
