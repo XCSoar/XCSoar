@@ -15,6 +15,8 @@ Changes from 5.1.9beta6:
   courtesy Jacques Fournier
 - added missing infobox copy/paste buttons in portrait mode
 - added display of wing loadings for built in polars
+- added GRecord stuff to Altair
+- updated copyright text to source code
 
 Changes from 5.1.9beta2:
 - Alternate text entry methods
