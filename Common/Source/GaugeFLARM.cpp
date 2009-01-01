@@ -113,15 +113,16 @@ void GaugeFLARM::RenderTraffic(NMEA_INFO  *gps_info) {
     if (gps_info->FLARM_Traffic[i].ID>0) {
 
       switch (gps_info->FLARM_Traffic[i].AlarmLevel) {
-      case 0:
-	  SelectObject(hdcDrawWindow, greenBrush);
-	  break;
       case 1:
 	  SelectObject(hdcDrawWindow, yellowBrush);
 	  break;
       case 2:
       case 3:
 	  SelectObject(hdcDrawWindow, redBrush);
+	  break;
+      case 0:
+      case 4:
+	  SelectObject(hdcDrawWindow, greenBrush);
 	  break;
       }
    

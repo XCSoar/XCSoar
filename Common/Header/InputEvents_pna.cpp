@@ -975,36 +975,36 @@ Key2Event[mode_id]['0'] = event_id;
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventMode, TEXT("Menu"), event_id);
 mode_id = InputEvents::mode2int(TEXT("infobox"), true);
-makeLabel(mode_id,TEXT("\nMENU"),1,event_id);
+makeLabel(mode_id,TEXT("\nMenu"),1,event_id);
 Key2Event[mode_id][VK_APP1] = event_id;
 
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventWaypointDetails, TEXT("select"), event_id);
 mode_id = InputEvents::mode2int(TEXT("infobox"), true);
-makeLabel(mode_id,TEXT("\nWP"),2,event_id);
+makeLabel(mode_id,TEXT("Waypoint\nLookup$(CheckWaypointFile)"),2,event_id);
 Key2Event[mode_id][VK_APP2] = event_id;
 
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventZoom, TEXT("in"), event_id);
 mode_id = InputEvents::mode2int(TEXT("infobox"), true);
-makeLabel(mode_id,TEXT("\nZOOM+"),3,event_id);
+makeLabel(mode_id,TEXT("\nZoom+"),3,event_id);
 Key2Event[mode_id][VK_APP3] = event_id;
 
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventZoom, TEXT("out"), event_id);
 mode_id = InputEvents::mode2int(TEXT("infobox"), true);
-makeLabel(mode_id,TEXT("\nZOOM--"),4,event_id);
+makeLabel(mode_id,TEXT("\nZoom--"),4,event_id);
 Key2Event[mode_id]['5'] = event_id;
-
-event_id = 0;
-event_id = InputEvents::makeEvent(&eventScreenModes, TEXT("toggleauxiliary"), event_id);
-mode_id = InputEvents::mode2int(TEXT("infobox"), true);
-makeLabel(mode_id,TEXT("\nScreenMode"),5,event_id);
-Key2Event[mode_id]['6'] = event_id;
 
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventPan, TEXT("supertoggle"), event_id);
 mode_id = InputEvents::mode2int(TEXT("infobox"), true);
 makeLabel(mode_id,TEXT("\nPan"),6,event_id);
 Key2Event[mode_id]['7'] = event_id;
+
+event_id = 0;
+event_id = InputEvents::makeEvent(&eventScreenModes, TEXT("toggleauxiliary"), event_id);
+mode_id = InputEvents::mode2int(TEXT("infobox"), true);
+makeLabel(mode_id,TEXT("\nScreenMode"),7,event_id);
+Key2Event[mode_id]['8'] = event_id;
 

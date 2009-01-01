@@ -21,6 +21,10 @@ Changes from 5.1.9beta6:
 - FLARM targets display of average climb rate courtesy Lars H
 - Team code position shown on map courtesy Lars H
 
+- GRecord updates for Altair, PNA
+- FLARM on-map display updates
+- Button labels update for PNA
+
 Changes from 5.1.9beta2:
 - Alternate text entry methods
 - Can now use flarm database, courtesy Lars H

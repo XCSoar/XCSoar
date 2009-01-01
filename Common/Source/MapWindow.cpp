@@ -2046,7 +2046,7 @@ void MapWindow::RenderMapWindowBg(HDC hdc, const RECT rc,
   }
   
   // Draw traffic
-  DrawFLARMTraffic(hdc, rc);
+  DrawFLARMTraffic(hdc, rc, Orig_Aircraft);
   
   // finally, draw you!
   

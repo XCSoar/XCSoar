@@ -257,7 +257,7 @@ class MapWindow {
   static void DrawTerrainAbove(HDC hDC, RECT rc);
   static void DrawCDI();
   //  static void DrawSpeedToFly(HDC hDC, RECT rc);
-  static void DrawFLARMTraffic(HDC hDC, RECT rc);
+  static void DrawFLARMTraffic(HDC hDC, RECT rc, POINT Orig_Aircraft);
     
   static void DrawSolidLine(const HDC&hdc , const POINT&start , const POINT&end );
   static void TextInBox(HDC hDC, TCHAR* Value, int x, int y, int size, TextInBoxMode_t Mode, bool noOverlap=false);

@@ -72,7 +72,7 @@ Copyright_License {
 #endif
 
 extern HWND hWndCDIWindow;
-extern HFONT TitleWindowFont;
+extern HFONT MapLabelFont;
 
 
 void MapWindow::DrawCDI() {
@@ -300,16 +300,17 @@ void MapWindow::DrawSpeedToFly(HDC hDC, RECT rc) {
 
 #define fSnailColour(cv) max(0,min((short)(NUMSNAILCOLORS-1), (short)((cv+1.0)/2.0*NUMSNAILCOLORS)))
 
-void MapWindow::DrawFLARMTraffic(HDC hDC, RECT rc) {
+void MapWindow::DrawFLARMTraffic(HDC hDC, RECT rc, POINT Orig_Aircraft) {
 
   if (!EnableFLARMDisplay) return;
 
   if (!DrawInfo.FLARM_Available) return;
 
   HPEN hpOld;
+  HPEN thinBlackPen = CreatePen(PS_SOLID, IBLSCALE(1), RGB(0,0,0));
   POINT Arrow[5];
 
-  hpOld = (HPEN)SelectObject(hDC, hpBestCruiseTrack);
+  hpOld = (HPEN)SelectObject(hDC, thinBlackPen);
 
   int i;
 //  double dX, dY;
@@ -318,6 +319,10 @@ void MapWindow::DrawFLARMTraffic(HDC hDC, RECT rc) {
 
   double screenrange = GetApproxScreenRange();
   double scalefact = screenrange/6000.0;
+
+  HBRUSH redBrush = CreateSolidBrush(RGB(0xFF,0x00,0x00));
+  HBRUSH yellowBrush = CreateSolidBrush(RGB(0xFF,0xFF,0x00));
+  HBRUSH greenBrush = CreateSolidBrush(RGB(0x00,0xFF,0x00));
 
   for (i=0; i<FLARM_MAX_TRAFFIC; i++) {
     if (DrawInfo.FLARM_Traffic[i].ID!=0) {
@@ -348,12 +353,16 @@ void MapWindow::DrawFLARMTraffic(HDC hDC, RECT rc) {
 
       }
       
-      // TODO: draw direction, height?
-      POINT sc, sc2;
+      // TODO: draw direction, rel height?
+      POINT sc, sc_name, sc_av;
       LatLon2Screen(target_lon, 
                     target_lat, 
                     sc);
-      sc2 = sc;
+
+      sc_name = sc;
+
+      sc_name.y -= IBLSCALE(16);
+      sc_av = sc_name;
 
 #ifndef FLARM_AVERAGE
       if (DrawInfo.FLARM_Traffic[i].Name) {
@@ -361,17 +370,15 @@ void MapWindow::DrawFLARMTraffic(HDC hDC, RECT rc) {
                   sc.y, 0, displaymode, 
                   true);
       }
-
-      DrawBitmapIn(hDC, sc, hFLARMTraffic);
 #else
       TCHAR label1[100];
       TCHAR label2[100];
 
-      sc2.x += IBLSCALE(3);
+      sc_av.x += IBLSCALE(3);
 
       if (DrawInfo.FLARM_Traffic[i].Name) 
 	{
-	  sc2.y += IBLSCALE(8);
+	  sc_name.y -= IBLSCALE(8);
 	  _stprintf(label1, TEXT("%s"), DrawInfo.FLARM_Traffic[i].Name);
 	  if (DrawInfo.FLARM_Traffic[i].Average30s>=0.1) {
 	    _stprintf(label2, TEXT("%.1f"), 
@@ -405,23 +412,43 @@ void MapWindow::DrawFLARMTraffic(HDC hDC, RECT rc) {
 
       // JMW TODO: decluttering of FLARM altitudes (sort by max lift)
 
-      HGDIOBJ oldFont = SelectObject(hDC, TitleWindowFont);	
-      COLORREF oldTextColor = SetTextColor(hDC, hSnailColours[colourIndex]);
-      
-      if (_tcslen(label2)>0) {
-	ExtTextOut(hDC, sc2.x,sc2.y, ETO_OPAQUE, NULL, label2, 
-		   _tcslen(label2), NULL); 
+      int dx = (sc_av.x-Orig_Aircraft.x);
+      int dy = (sc_av.y-Orig_Aircraft.y);
+
+      if (dx*dx+dy*dy > IBLSCALE(30)*IBLSCALE(30)) {
+	// only draw labels if not close to aircraft
+
+	HGDIOBJ oldFont = SelectObject(hDC, MapLabelFont);	
+	COLORREF oldTextColor = SetTextColor(hDC, RGB(0,0,0));
+
+	if (_tcslen(label2)>0) {
+	  ExtTextOut(hDC, sc_av.x+1,sc_av.y+1, ETO_OPAQUE, NULL, label2, 
+		     _tcslen(label2), NULL);
+	}
+	if (_tcslen(label1)>0) {
+	  ExtTextOut(hDC, sc_name.x+1, sc_name.y+1, ETO_OPAQUE, NULL, label1, _tcslen(label1), NULL); 
+	}
+	
+	SetTextColor(hDC, hSnailColours[colourIndex]);
+	
+	if (_tcslen(label2)>0) {
+	  ExtTextOut(hDC, sc_av.x, sc_av.y, ETO_OPAQUE, NULL, label2, 
+		     _tcslen(label2), NULL);
+	}
+	if (_tcslen(label1)>0) {
+	  ExtTextOut(hDC, sc_name.x, sc_name.y, ETO_OPAQUE, NULL, label1, _tcslen(label1), NULL); 
+	}
+
+	SelectObject(hDC, oldFont);
+	SetTextColor(hDC, oldTextColor);
+
       }
-      SetTextColor(hDC, RGB(255,0,0));
-      if (_tcslen(label1)>0) {
-	ExtTextOut(hDC, sc2.x, sc.y, ETO_OPAQUE, NULL, label1, _tcslen(label1), NULL); 
-      }
-            
-      SelectObject(hDC, oldFont);
-      SetTextColor(hDC, oldTextColor);
-      
-      DrawBitmapIn(hDC, sc, hFLARMTraffic);
+
 #endif
+      if ((DrawInfo.FLARM_Traffic[i].AlarmLevel>0) 
+	  && (DrawInfo.FLARM_Traffic[i].AlarmLevel<4)) {
+	DrawBitmapIn(hDC, sc, hFLARMTraffic);
+      }
 
       Arrow[0].x = -4;
       Arrow[0].y = 5;
@@ -436,6 +463,20 @@ void MapWindow::DrawFLARMTraffic(HDC hDC, RECT rc) {
 
       //      double vmag = max(1.0,min(15.0,DrawInfo.FLARM_Traffic[i].Speed/5.0))*2;
 
+      switch (DrawInfo.FLARM_Traffic[i].AlarmLevel) {
+      case 1:
+	  SelectObject(hDC, yellowBrush);
+	  break;
+      case 2:
+      case 3:
+	  SelectObject(hDC, redBrush);
+	  break;
+      case 0:
+      case 4:
+	  SelectObject(hDC, greenBrush);
+	  break;
+      }
+
       PolygonRotateShift(Arrow, 5, sc.x, sc.y, 
                          DrawInfo.FLARM_Traffic[i].TrackBearing - DisplayAngle);
       Polygon(hDC,Arrow,5);
@@ -444,6 +485,11 @@ void MapWindow::DrawFLARMTraffic(HDC hDC, RECT rc) {
   }
 
   SelectObject(hDC, hpOld);
+
+  DeleteObject((HPEN)thinBlackPen);
+  DeleteObject(greenBrush);
+  DeleteObject(yellowBrush);
+  DeleteObject(redBrush);
 
 }
 
