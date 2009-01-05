@@ -20,7 +20,6 @@ Changes from 5.1.9beta6:
 - moved close button in basic settings to left to improve usability on PNA
 - FLARM targets display of average climb rate courtesy Lars H
 - Team code position shown on map courtesy Lars H
-
 - GRecord updates for Altair, PNA
 - FLARM on-map display updates
 - Button labels update for PNA
