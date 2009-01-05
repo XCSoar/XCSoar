@@ -2288,7 +2288,7 @@ static void CheckStart(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
 
 static BOOL CheckRestart(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
                          int *LastStartSector) {
-  if((Basic->Time - Calculated->TaskStartTime < 600)
+  if((Basic->Time - Calculated->TaskStartTime < 3600)
      &&(ActiveWayPoint<=1)) {
 
     /*
