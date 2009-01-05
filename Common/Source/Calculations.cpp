@@ -1001,7 +1001,7 @@ void Vario(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
     LastTime = Basic->Time;
   } else {
     double Gain = Calculated->NavAltitude - LastAlt;
-    double GainTE = Calculated->EnergyHeight+Basic->Altitude - LastAltTE;
+    double GainTE = (Calculated->EnergyHeight+Basic->Altitude) - LastAltTE;
     double dT = (Basic->Time - LastTime);
     // estimate value from GPS
     Calculated->GPSVario = Gain / dT;
@@ -2925,7 +2925,7 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
   double w0lon;
       
   if (AATEnabled && (ActiveWayPoint>0) && 
-      !TaskIsTemporary()) {
+      !TaskIsTemporary() && (ValidTaskPoint(ActiveWayPoint+1))) {
     w1lat = Task[ActiveWayPoint].AATTargetLat;
     w1lon = Task[ActiveWayPoint].AATTargetLon;
   } else {
@@ -3030,8 +3030,8 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
   // double FinalAltitude = 0;
   int FinalWayPoint = getFinalWaypoint();
 
-  double height_above_finish = Calculated->NavAltitude-
-    FAIFinishHeight(Basic, Calculated, -1);
+  double height_above_finish = Calculated->NavAltitude+
+    Calculated->EnergyHeight-FAIFinishHeight(Basic, Calculated, -1);
 
   CheckTransitionFinalGlide(Basic, Calculated);
 
@@ -3075,7 +3075,9 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
   if (LegTime0>= 0.9*ERROR_TIME) {
     // can't make it, so assume flying at current mc
     LegAltitude0 = LegAltitude;
-  }      
+  }
+
+  height_above_finish-= LegAltitude;
   
   double TaskAltitudeRequired = LegAltitude;
   double TaskAltitudeRequired0 = LegAltitude0;
@@ -3139,7 +3141,7 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
 	// can't make it, so assume flying at current mc
 	LegAltitude0 = LegAltitude;
       }          
-      
+
       TaskAltitudeRequired += LegAltitude;
       TaskAltitudeRequired0 += LegAltitude0;
       
@@ -3179,6 +3181,8 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
 	  Calculated->TaskTimeToGoTurningNow += this_LegTimeToGo;
 	}
       }
+      
+      height_above_finish-= LegAltitude;
       
       task_index++;
     }

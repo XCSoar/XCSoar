@@ -244,7 +244,6 @@ double GlidePolar::MacCreadyAltitude_internal(double emcready,
   }
 
   double TimeToDestTotal = ERROR_TIME; // initialise to error value
-  double Time_cruise, Time_climb;
   TimeToDestCruise = -1; // initialise to error value
 
   for(i=Vminsink;i<iSAFETYSPEED;i++) {
@@ -282,14 +281,10 @@ double GlidePolar::MacCreadyAltitude_internal(double emcready,
 
     // can't advance at this speed
     if (vtot<=0) continue;
-        
-    // time spent in cruise
-    Time_cruise = (tc/vtot)*Distance;
-    
+            
     bool bestfound = false;
 
     if (isFinalGlide) {
-      Time_climb = 0.0;
       // inverse glide ratio relative to ground
       Glide = sinkrate/vtot;
 
@@ -297,10 +292,13 @@ double GlidePolar::MacCreadyAltitude_internal(double emcready,
       if (Glide <= BestGlide) {
 	bestfound = true;
 	BestGlide = Glide;
-	TimeToDestTotal = Time_cruise;
+	TimeToDestTotal = Distance/vtot;
       }
     } else {
-      Time_climb = sinkrate*(Time_cruise/emcready);
+      // time spent in cruise
+      double Time_cruise = (tc/vtot)*Distance;
+      double Time_climb = sinkrate*(Time_cruise/emcready);
+
       // total time to destination
       TimeToDestTotal = max(Time_cruise+Time_climb,0.0001);
       // best average speed when in maintaining height mode
@@ -423,22 +421,21 @@ double GlidePolar::MacCreadyAltitude_heightadjust(double emcready,
       double h_f = AltitudeAboveTarget; 
       // fraction of leg that can be final glided
       double f = min(1.0,max(0.0,h_f/h_t));
-      //      double d_f = Distance*f;
-      double d_c = Distance*(1.0 - f);
-
-        double t_c;
-        double h_c = MacCreadyAltitude_internal(emcready,
-                                                d_c, Bearing,
-                                                WindSpeed, WindBearing,
-                                                BestCruiseTrack,
-                                                VMacCready,
-                                                false,
-                                                &t_c,
-						cruise_efficiency);
 
       if (f<1.0) {
-
         // if need to climb-cruise part of the way
+
+	double d_c = Distance*(1.0 - f);
+	
+	double t_c;
+	double h_c = MacCreadyAltitude_internal(emcready,
+						d_c, Bearing,
+						WindSpeed, WindBearing,
+						BestCruiseTrack,
+						VMacCready,
+						false,
+						&t_c,
+						cruise_efficiency);
 
         if (h_c<0) {
           // impossible at this Mc, so must be final glided
