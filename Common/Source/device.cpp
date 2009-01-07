@@ -42,8 +42,8 @@ Copyright_License {
 #include "Utils.h"
 #include "Parser.h"
 #include "Port.h"
-
 #include "device.h"
+#include "MapWindow.h"
 
 // A note about locking.
 //  The ComPort RX threads lock using FlightData critical section.

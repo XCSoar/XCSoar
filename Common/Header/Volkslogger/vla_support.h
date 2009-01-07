@@ -12,7 +12,7 @@
 **   This file is distributed under the terms of the General Public
 **   Licence. See the file COPYING for more information.
 **
-**   $Id: vla_support.h,v 1.1 2007/10/10 00:51:18 jwharington Exp $
+**   $Id: vla_support.h,v 1.2 2009/01/07 00:08:37 jwharington Exp $
 **
 ***********************************************************************/
 
@@ -22,7 +22,6 @@
 #include "device.h" // XCSoar
 
 #include "vlapityp.h"
-
 #include "vlapierr.h"
 
 /*

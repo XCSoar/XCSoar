@@ -896,7 +896,7 @@ TCHAR *DataFieldFloat::SetAsString(const TCHAR *Value){
 
 void DataFieldFloat::Inc(void){
   // no keypad, allow user to scroll small values
-  if((mValue < 0.95) && (mStep>=0.5) && (mMin>=0.0))
+  if(mFine && (mValue < 0.95) && (mStep>=0.5) && (mMin>=0.0))
     {
       SetAsFloat(mValue + 0.1);
     }
@@ -906,7 +906,7 @@ void DataFieldFloat::Inc(void){
 
 void DataFieldFloat::Dec(void){
   // no keypad, allow user to scroll small values
-  if((mValue <= 1.0) && (mStep>=0.5) && (mMin>=0.0))
+  if(mFine && (mValue <= 1.0) && (mStep>=0.5) && (mMin>=0.0))
     {
       SetAsFloat(mValue - 0.1);
     }
