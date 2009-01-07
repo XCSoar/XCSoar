@@ -771,7 +771,7 @@ In all modes, the color of the target indicates the threat level.
   </WndProperty>
 
   <WndProperty Name="prpTaskStartRadius" Caption="Start radius"      X=2 Y=-1   Width=235 Height=22 CaptionWidth=100 Font=2 Help="Radius of the start cylinder/sector or half-length of the start line.">
-    <DataField name="" DataType="double" DisplayFormat="%.1f %s" EditFormat="%.1f" Min=0 Max=100 Step="0.5"/>
+    <DataField name="" DataType="double" DisplayFormat="%.1f %s" EditFormat="%.1f" Min=0 Max=100 Step="0.5" Fine=1/>
 
   </WndProperty>
 
@@ -785,7 +785,7 @@ In all modes, the color of the target indicates the threat level.
 
   <WndProperty Name="prpTaskSectorRadius" Caption="Sector radius"      X=2 Y=-1   Width=235 Height=22 CaptionWidth=100 Font=2
   Help="Radius of the turnpoint observation area for non-AAT tasks.">
-    <DataField name="" DataType="double" DisplayFormat="%.1f %s" EditFormat="%.1f" Min=0 Max=100 Step="0.5"/>
+    <DataField name="" DataType="double" DisplayFormat="%.1f %s" EditFormat="%.1f" Min=0 Max=100 Step="0.5" Fine=1/>
   </WndProperty>
 
   <WndProperty Name="prpTaskFinishLine" Caption="Finish type"      X=2 Y=-1   Width=235 Height=22 CaptionWidth=100 Font=2 Help="Type of the finish.
@@ -796,7 +796,7 @@ In all modes, the color of the target indicates the threat level.
   </WndProperty>
 
   <WndProperty Name="prpTaskFinishRadius" Caption="Finish radius"      X=2 Y=-1   Width=235 Height=22 CaptionWidth=100 Font=2 Help="Radius of the finish cylinder or half length of the finish line.">
-    <DataField name="" DataType="double" DisplayFormat="%.1f %s" EditFormat="%.1f" Min=0 Max=100 Step="0.5"/>
+    <DataField name="" DataType="double" DisplayFormat="%.1f %s" EditFormat="%.1f" Min=0 Max=100 Step="0.5" Fine=1/>
 
   </WndProperty>
 

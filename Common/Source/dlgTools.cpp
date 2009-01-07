@@ -668,6 +668,7 @@ void LoadChildsFromXML(WindowControl *Parent,
         TCHAR EditFormat[32];
         TCHAR OnDataAccess[64];
         double Min, Max, Step;
+	int Fine;
 
         XMLNode dataFieldNode =
           childNode.getChildNode(TEXT("DataField"), 0);
@@ -697,6 +698,9 @@ void LoadChildsFromXML(WindowControl *Parent,
         Step = StringToFloatDflt(dataFieldNode.
                                  getAttribute(TEXT("Step")), 1);
 
+	Fine = StringToIntDflt(dataFieldNode.
+			       getAttribute(TEXT("Fine")), 0);
+
         if (_tcsicmp(DataType, TEXT("enum"))==0){
           W->SetDataField(
                           new DataFieldEnum(EditFormat, DisplayFmt, false,
@@ -721,7 +725,7 @@ void LoadChildsFromXML(WindowControl *Parent,
         }
         if (_tcsicmp(DataType, TEXT("double"))==0){
           W->SetDataField(
-            new DataFieldFloat(EditFormat, DisplayFmt, Min, Max, 0, Step,
+			  new DataFieldFloat(EditFormat, DisplayFmt, Min, Max, 0, Step, Fine,
               (DataField::DataAccessCallback_t) CallBackLookup(LookUpTable, OnDataAccess))
           );
         }

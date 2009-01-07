@@ -4,8 +4,8 @@
 
 #include <windows.h>
 #include "Sizes.h"
-#include "MapWindow.h"
 #include "Port.h"
+#include "MapWindow.h"
 
 #define DEVNAMESIZE  32
 #define	NUMDEV		 2

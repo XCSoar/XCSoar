@@ -765,6 +765,7 @@ void StartTask(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
   Calculated->TaskStartAltitude = Calculated->NavAltitude;
   Calculated->LegStartTime = Basic->Time;
   flightstats.LegStartTime[0] = Basic->Time;
+  flightstats.LegStartTime[1] = Basic->Time;
 
   Calculated->CruiseStartLat = Basic->Latitude;
   Calculated->CruiseStartLong = Basic->Longitude;
@@ -2624,6 +2625,7 @@ void TaskSpeed(NMEA_INFO *Basic, DERIVED_INFO *Calculated, const double maccread
     if ((t1<=0) || (d1<=0) || (d0<=0) || (t0<=0) || (h0<=0)) {
       // haven't started yet or not a real task
       Calculated->TaskSpeedInstantaneous = 0;
+      //?      Calculated->TaskSpeed = 0;
       goto OnExit;
     }
 
@@ -2636,6 +2638,7 @@ void TaskSpeed(NMEA_INFO *Basic, DERIVED_INFO *Calculated, const double maccread
     } else {
       Calculated->TaskSpeedAchieved = d1/t1;
     }
+    Calculated->TaskSpeed = Calculated->TaskSpeedAchieved;
 
     if (Vfinal<=0) {
       // can't reach target at current mc
@@ -2644,11 +2647,18 @@ void TaskSpeed(NMEA_INFO *Basic, DERIVED_INFO *Calculated, const double maccread
 
     // distance that can be usefully final glided from here
     // (assumes average task glide angle of d0/h0)
-    dFinal = min(dr, d0*min(1.0,h1/h0));
+    // JMW TODO: make this more accurate by working out final glide
+    // through remaining turnpoints.  This will more correctly account
+    // for wind.
+
+    dFinal = min(dr, d0*min(1.0,max(0.0,h1/h0)));
 
     if (Calculated->ValidFinish) {
       dFinal = 0;
     }
+
+    double dc = max(0,dr-dFinal);
+    // amount of extra distance to travel in cruise/climb before final glide
 
     // equivalent distance to end of final glide
     d2 = d1+dFinal;
@@ -2659,10 +2669,27 @@ void TaskSpeed(NMEA_INFO *Basic, DERIVED_INFO *Calculated, const double maccread
     // actual task speed achieved so far
     v1 = d1/t1;
 
+#ifdef OLDTASKSPEED
     // average speed to end of final glide from here
     v2 = d2/t2;
-
     Calculated->TaskSpeed = max(v1,v2);
+#else
+    // average speed to end of final glide from here, weighted
+    // according to how much extra time would be spent in cruise/climb
+    // the closer dc (the difference between remaining distance and
+    // final glidable distance) gets to zero, the closer v2 approaches
+    // the average speed to end of final glide from here
+    // in other words, the more we consider the final glide part to have
+    // been earned.
+
+    // this will be bogus at fast starts though...
+    if (v1>0) {
+      v2 = (d1+dc+dFinal)/(t1+dc/v1+dFinal/Vfinal);
+    } else {
+      v2 = (d1+dFinal)/(t1+dFinal/Vfinal);
+    }
+    Calculated->TaskSpeed = v2;
+#endif
 
     double konst = 1.1;
     if (TaskModified)
@@ -3021,78 +3048,34 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
     }
   }
 
-  //////////////////////
+  ///////////////////////////////////////////////////////////
 
-  // Calculate Final Glide To Finish
+  CheckTransitionFinalGlide(Basic, Calculated);
+
+  // accumulators
+  double TaskAltitudeRequired = 0;
+  double TaskAltitudeRequired0 = 0;
   Calculated->TaskDistanceToGo = 0;
   Calculated->TaskTimeToGo = 0;
+  Calculated->TaskTimeToGoTurningNow = 0;
 
-  // double FinalAltitude = 0;
+  double LegTime0;
+
+  // Calculate Final Glide To Finish
+
   int FinalWayPoint = getFinalWaypoint();
 
   double height_above_finish = Calculated->NavAltitude+
     Calculated->EnergyHeight-FAIFinishHeight(Basic, Calculated, -1);
 
-  CheckTransitionFinalGlide(Basic, Calculated);
-
-  if (AATEnabled && !TaskIsTemporary()
-      && (ActiveWayPoint>0) &&
-      ValidTaskPoint(ActiveWayPoint+1) && Calculated->IsInSector) {
-    if (Calculated->WaypointDistance<AATCloseDistance()*3.0) {
-      LegBearing = AATCloseBearing(Basic, Calculated);
-    }
-  }
-
-  // JMW TODO: use mc based on risk? no!
-  double LegAltitude =
-    GlidePolar::MacCreadyAltitude(maccready,
-                                  LegToGo,
-                                  LegBearing,
-                                  Calculated->WindSpeed,
-                                  Calculated->WindBearing,
-                                  &(Calculated->BestCruiseTrack),
-                                  &(Calculated->VMacCready),
-                                  (Calculated->FinalGlide==1),
-                                  &(Calculated->LegTimeToGo),
-                                  height_above_finish, CRUISE_EFFICIENCY);
-
-  double LegTime0;
-  double LegAltitude0 =
-    GlidePolar::MacCreadyAltitude(0,
-                                  LegToGo,
-                                  LegBearing,
-                                  Calculated->WindSpeed,
-                                  Calculated->WindBearing,
-                                  0,
-                                  0,
-                                  true,
-                                  &LegTime0, 1.0e6, CRUISE_EFFICIENCY
-                                  );
-  // JMW XXX TODO: Use safetymc
-
-  LDNext(Basic, Calculated, LegToGo, LegAltitude);
-
-  if (LegTime0>= 0.9*ERROR_TIME) {
-    // can't make it, so assume flying at current mc
-    LegAltitude0 = LegAltitude;
-  }
-
-  height_above_finish-= LegAltitude;
-
-  double TaskAltitudeRequired = LegAltitude;
-  double TaskAltitudeRequired0 = LegAltitude0;
-  Calculated->TaskDistanceToGo = LegToGo;
-  Calculated->TaskTimeToGo = Calculated->LegTimeToGo;
-
   //////////////////
   // Now add it for remaining waypoints
-  int task_index= ActiveWayPoint+1;
+  int task_index= FinalWayPoint;
 
-  Calculated->TaskTimeToGoTurningNow = 0;
+  double StartBestCruiseTrack = 0;
 
   if (!TaskIsTemporary()) {
-    while(ValidTaskPoint(task_index)) {
-
+    while ((task_index>ActiveWayPoint) && (ValidTaskPoint(task_index))) {
       double this_LegTimeToGo;
       bool this_is_final = (task_index==FinalWayPoint)
 	|| ForceFinalGlide;
@@ -3117,7 +3100,7 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
 		      w1lon,
 		      &NextLegDistance, &NextLegBearing);
 
-      LegAltitude = GlidePolar::
+      double LegAltitude = GlidePolar::
 	MacCreadyAltitude(maccready,
 			  NextLegDistance, NextLegBearing,
 			  Calculated->WindSpeed,
@@ -3127,7 +3110,7 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
 			  &this_LegTimeToGo,
 			  height_above_finish, CRUISE_EFFICIENCY);
 
-      LegAltitude0 = GlidePolar::
+      double LegAltitude0 = GlidePolar::
 	MacCreadyAltitude(0,
 			  NextLegDistance, NextLegBearing,
 			  Calculated->WindSpeed,
@@ -3148,9 +3131,8 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
       Calculated->TaskDistanceToGo += NextLegDistance;
       Calculated->TaskTimeToGo += this_LegTimeToGo;
 
-      if (Calculated->IsInSector && (ActiveWayPoint==0) && (task_index==1)) {
-	// set best cruise track to first leg bearing when in start sector
-	Calculated->BestCruiseTrack = NextLegBearing;
+      if (task_index==1) {
+	StartBestCruiseTrack = NextLegBearing;
       }
 
       if (calc_turning_now) {
@@ -3184,9 +3166,68 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
 
       height_above_finish-= LegAltitude;
 
-      task_index++;
+      task_index--;
     }
   }
+  ////////////////
+
+
+  /////// current waypoint, do this last!
+
+  if (AATEnabled && !TaskIsTemporary()
+      && (ActiveWayPoint>0) &&
+      ValidTaskPoint(ActiveWayPoint+1) && Calculated->IsInSector) {
+    if (Calculated->WaypointDistance<AATCloseDistance()*3.0) {
+      LegBearing = AATCloseBearing(Basic, Calculated);
+    }
+  }
+
+  // JMW TODO: use mc based on risk? no!
+  double LegAltitude =
+    GlidePolar::MacCreadyAltitude(maccready,
+                                  LegToGo,
+                                  LegBearing,
+                                  Calculated->WindSpeed,
+                                  Calculated->WindBearing,
+                                  &(Calculated->BestCruiseTrack),
+                                  &(Calculated->VMacCready),
+                                  (Calculated->FinalGlide==1),
+                                  &(Calculated->LegTimeToGo),
+                                  height_above_finish, CRUISE_EFFICIENCY);
+
+  double LegAltitude0 =
+    GlidePolar::MacCreadyAltitude(0,
+                                  LegToGo,
+                                  LegBearing,
+                                  Calculated->WindSpeed,
+                                  Calculated->WindBearing,
+                                  0,
+                                  0,
+                                  true,
+                                  &LegTime0, 1.0e6, CRUISE_EFFICIENCY
+                                  );
+
+  if (Calculated->IsInSector && (ActiveWayPoint==0) && !TaskIsTemporary()) {
+    // set best cruise track to first leg bearing when in start sector
+    Calculated->BestCruiseTrack = StartBestCruiseTrack;
+  }
+
+  // JMW XXX TODO: Use safetymc where appropriate
+
+  LDNext(Basic, Calculated, LegToGo, LegAltitude);
+
+  if (LegTime0>= 0.9*ERROR_TIME) {
+    // can't make it, so assume flying at current mc
+    LegAltitude0 = LegAltitude;
+  }
+
+  TaskAltitudeRequired += LegAltitude;
+  TaskAltitudeRequired0 += LegAltitude0;
+  Calculated->TaskDistanceToGo += LegToGo;
+  Calculated->TaskTimeToGo += Calculated->LegTimeToGo;
+
+  height_above_finish-= LegAltitude;
+
   ////////////////
 
   if (calc_turning_now) {

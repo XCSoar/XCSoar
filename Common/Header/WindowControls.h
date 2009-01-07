@@ -385,6 +385,7 @@ class DataFieldFloat:public DataField{
     double mStep;
     DWORD mTmLastStep;
     int mSpeedup;
+    int mFine;
     TCHAR mOutBuf[OUTBUFFERSIZE+1];
 
   protected:
@@ -392,12 +393,13 @@ class DataFieldFloat:public DataField{
 
 
   public:
-    DataFieldFloat(TCHAR *EditFormat, TCHAR *DisplayFormat, double Min, double Max, double Default, double Step, void(*OnDataAccess)(DataField *Sender, DataAccessKind_t Mode)):
+    DataFieldFloat(TCHAR *EditFormat, TCHAR *DisplayFormat, double Min, double Max, double Default, double Step, int Fine, void(*OnDataAccess)(DataField *Sender, DataAccessKind_t Mode)):
       DataField(EditFormat, DisplayFormat, OnDataAccess){
       mMin = Min;
       mMax = Max;
       mValue = Default;
       mStep = Step;
+      mFine = Fine;
 
      (mOnDataAccess)(this, daGet);
 

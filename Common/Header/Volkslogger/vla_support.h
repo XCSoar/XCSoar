@@ -22,7 +22,6 @@
 #include "device.h" // XCSoar
 
 #include "vlapityp.h"
-
 #include "vlapierr.h"
 
 /*

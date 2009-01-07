@@ -3500,7 +3500,7 @@ void MapWindow::DrawBearing(HDC hdc)
   double targetLat;
   double targetLon;
 
-  if (AATEnabled && ValidTaskPoint(ActiveWayPoint+1)) {
+  if (AATEnabled && (ActiveWayPoint>0) && ValidTaskPoint(ActiveWayPoint+1)) {
     targetLat = Task[ActiveWayPoint].AATTargetLat;
     targetLon = Task[ActiveWayPoint].AATTargetLon;
   } else {
