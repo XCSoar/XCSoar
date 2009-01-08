@@ -11,6 +11,9 @@ Todo:
 - Use soft keyboard for text filters
 - Task abort, when many airfields available, sort along task direction
 
+- Pilot weight correction
+- Unballasted weight display
+
 Changes from 5.1.9beta6:
 - added clear button to task editor dialog in portrait mode,
   courtesy Jacques Fournier
@@ -24,11 +27,11 @@ Changes from 5.1.9beta6:
 - GRecord updates for Altair, PNA
 - FLARM on-map display updates
 - Button labels update for PNA
-
 - Fixed minor bugs in calculator re ete (energy height not used in fractional calculations)
 - Restart time now one hour
 - Fixed bug in display of start in analysis page (barograph)
 - Selective fine control of float attributes
+- Added LAK17-15, Lak17-18, ASG29-15 (mod from ASW27-W)
 
 Changes from 5.1.9beta2:
 - Alternate text entry methods
