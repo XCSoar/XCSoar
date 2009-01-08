@@ -597,10 +597,10 @@ BOOL devDeclare(PDeviceDescriptor_t d, Declaration_t *decl)
   if (fSimMode)
     return TRUE;
   LockComm();
-  if (d != NULL && d->Declare != NULL)
+  if ((d != NULL) && (d->Declare != NULL))
     result = d->Declare(d, decl);
 
-  if (d != NULL && NMEAParser::PortIsFlarm(d->Port)) {
+  if ((d != NULL) && NMEAParser::PortIsFlarm(d->Port)) {
     result |= FlarmDeclare(d, decl);
   }
 
@@ -616,9 +616,9 @@ BOOL devIsLogger(PDeviceDescriptor_t d)
   LockComm();
   if ((d != NULL) && (d->IsLogger != NULL)) {
     result = d->IsLogger(d);
-    if (!result) {
-      result |= NMEAParser::PortIsFlarm(d->Port);
-    }
+  }
+  if ((d != NULL) && !result) {
+    result |= NMEAParser::PortIsFlarm(d->Port);
   }
   UnlockComm();
 
