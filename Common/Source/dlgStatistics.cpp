@@ -810,6 +810,23 @@ void Statistics::RenderGlidePolar(HDC hdc, RECT rc)
 
   DrawXLabel(hdc, rc, TEXT("V"));
   DrawYLabel(hdc, rc, TEXT("w"));
+
+  TCHAR text[80];
+  SetBkMode(hdc, OPAQUE);
+
+  _stprintf(text,TEXT("Weight %.0f kg"),
+	    GlidePolar::GetAUW());
+  ExtTextOut(hdc, rc.left+IBLSCALE(30),
+	     rc.bottom-IBLSCALE(55),
+	     ETO_OPAQUE, NULL, text, _tcslen(text), NULL);
+
+  _stprintf(text,TEXT("Wing loading %.1f kg/m2"),
+	    GlidePolar::WingLoading);
+  ExtTextOut(hdc, rc.left+IBLSCALE(30),
+	     rc.bottom-IBLSCALE(40),
+	     ETO_OPAQUE, NULL, text, _tcslen(text), NULL);
+
+  SetBkMode(hdc, TRANSPARENT);
 }
 
 
