@@ -33,6 +33,7 @@ Changes from 5.1.9beta6:
 - Selective fine control of float attributes
 - Added LAK17-15, Lak17-18, ASG29-15 (mod from ASW27-W)
 - Display weight info on glide polar page
+- FLARM declaration bug fix
 
 Changes from 5.1.9beta2:
 - Alternate text entry methods
