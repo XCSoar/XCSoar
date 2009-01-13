@@ -13,6 +13,7 @@ Todo:
 
 - Pilot weight correction
 - Unballasted weight display
+- Av climb version
 
 Changes from 5.1.9beta6:
 - added clear button to task editor dialog in portrait mode,

@@ -148,6 +148,10 @@ rectObj MapWindow::screenbounds_latlon;
 double MapWindow::PanLatitude = 0.0;
 double MapWindow::PanLongitude = 0.0;
 
+int MapWindow::TargetDrag_State = 0;
+double MapWindow::TargetDrag_Latitude = 0;
+double MapWindow::TargetDrag_Longitude = 0;
+
 bool MapWindow::EnablePan = false;
 bool MapWindow::TargetPan = false;
 int MapWindow::TargetPanIndex = 0;
@@ -1122,7 +1126,6 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
                                         LPARAM lParam)
 {
   int i;
-  //  TCHAR szMessageBuffer[1024];
   static double Xstart, Ystart;
   static int XstartScreen, YstartScreen;
   int X,Y;
@@ -1488,11 +1491,31 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
     dwDownTime = GetTickCount();
     XstartScreen = LOWORD(lParam); YstartScreen = HIWORD(lParam);
     Screen2LatLon(XstartScreen, YstartScreen, Xstart, Ystart);
+
+    LockTaskData();
+    if (AATEnabled && TargetPan) {
+      if (ValidTaskPoint(TargetPanIndex)) {
+	POINT tscreen;
+	LatLon2Screen(Task[TargetPanIndex].AATTargetLon, 
+		      Task[TargetPanIndex].AATTargetLat, 
+		      tscreen);
+	distance = isqrt4((long)((XstartScreen-tscreen.x)
+				 *(XstartScreen-tscreen.x)+
+				 (YstartScreen-tscreen.y)
+				 *(YstartScreen-tscreen.y)))
+	  /InfoBoxLayout::scale;
+
+	if (distance<10) {
+	  TargetDrag_State = 1;
+	}
+      }
+    }
+    UnlockTaskData();
+
     FullScreen();
     break;
     
   case WM_LBUTTONUP:
-    X = LOWORD(lParam); Y = HIWORD(lParam);                     
     if(InfoWindowActive)
     {
       dwDownTime= 0;
@@ -1505,54 +1528,59 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
 
     dwUpTime = GetTickCount(); dwDownTime = dwUpTime - dwDownTime;
     
+    X = LOWORD(lParam); Y = HIWORD(lParam);                     
     distance = isqrt4((long)((XstartScreen-X)*(XstartScreen-X)+
                              (YstartScreen-Y)*(YstartScreen-Y)))
       /InfoBoxLayout::scale;
 
     Screen2LatLon(X, Y, Xlat, Ylat);
     
-    if (EnablePan && (distance>IBLSCALE(36))) {
+    if (AATEnabled && TargetPan && (TargetDrag_State>0)) {
+      LockTaskData();
+      TargetDrag_State = 2;
+      TargetDrag_Latitude = Ylat;
+      TargetDrag_Longitude = Xlat;
+      UnlockTaskData();
+      break;
+    } else if (!TargetPan && EnablePan && (distance>36)) {
       PanLongitude += Xstart-Xlat;
       PanLatitude  += Ystart-Ylat;
       RefreshMap();
       break; // disable picking when in pan mode
-    } else {
+    } 
 #ifdef _SIM_
-      if (distance>IBLSCALE(36)) {
-	// This drag moves the aircraft (changes speed and direction)
-        double newbearing;
-	double oldbearing = GPS_INFO.TrackBearing;
-	double minspeed = 1.1*GlidePolar::Vminsink;
-        DistanceBearing(Ystart, Xstart, Ylat, Xlat, NULL, &newbearing);
-	if ((fabs(AngleLimit180(newbearing-oldbearing))<30) 
-	    || (GPS_INFO.Speed<minspeed)) {
-	  GPS_INFO.Speed = min(100.0,max(minspeed,distance/3));
-	  // 20080817 JMW change speed only if in direction
-	} 
-	GPS_INFO.TrackBearing = newbearing;
-	// change bearing without changing speed if direction change > 30
-	// 20080815 JMW prevent dragging to stop glider
-
-	// JMW trigger recalcs immediately
-	TriggerGPSUpdate();
-
-        break;
-      }
+    else if (!TargetPan && (distance>IBLSCALE(36))) {
+      // This drag moves the aircraft (changes speed and direction)
+      double newbearing;
+      double oldbearing = GPS_INFO.TrackBearing;
+      double minspeed = 1.1*GlidePolar::Vminsink;
+      DistanceBearing(Ystart, Xstart, Ylat, Xlat, NULL, &newbearing);
+      if ((fabs(AngleLimit180(newbearing-oldbearing))<30) 
+	  || (GPS_INFO.Speed<minspeed)) {
+	GPS_INFO.Speed = min(100.0,max(minspeed,distance/3));
+	// 20080817 JMW change speed only if in direction
+      } 
+      GPS_INFO.TrackBearing = newbearing;
+      // change bearing without changing speed if direction change > 30
+      // 20080815 JMW prevent dragging to stop glider
+      
+      // JMW trigger recalcs immediately
+      TriggerGPSUpdate();
+      
+      break;
+    }
 #endif
-    }
-    
-    if(dwDownTime < 1000)
-    {
-      if (Event_NearestWaypointDetails(Xstart, Ystart, 500*MapScale, false)) {
-        dwDownTime= 0;
-        break;
-      }
-    }
-    else
-    {
-      if (Event_InteriorAirspaceDetails(Xstart, Ystart)) {
-        dwDownTime= 0;
-        break;
+    if (!TargetPan) {
+      if(dwDownTime < 1000) {
+	if (Event_NearestWaypointDetails(Xstart, Ystart, 500*MapScale, false)) {
+	  dwDownTime= 0;
+	  break;
+	}
+      } else {
+	if (Event_InteriorAirspaceDetails(Xstart, Ystart)) {
+	  dwDownTime= 0;
+	  break;
+	}
       }
     }
     break;
