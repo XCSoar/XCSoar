@@ -3531,6 +3531,10 @@ void AATStats_Time(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   double aat_tasktime_elapsed = Basic->Time - Calculated->TaskStartTime;
   double aat_tasklength_seconds = AATTaskLength*60;
 
+  if (!AATEnabled || !ValidTaskPoint(0)) {
+    Calculated->AATTimeToGo = 0;
+  }
+
   if (ActiveWayPoint==0) {
     if (Calculated->AATTimeToGo==0) {
       Calculated->AATTimeToGo = aat_tasklength_seconds;
