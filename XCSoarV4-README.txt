@@ -35,7 +35,11 @@ Changes from 5.1.9beta6:
 - Added LAK17-15, Lak17-18, ASG29-15 (mod from ASW27-W)
 - Display weight info on glide polar page
 - FLARM declaration bug fix
+
 - Draggable targets on touchscreen version
+- Cursor toggle mode in landscape target dialog
+- AAT Time to go resets to zero on cleared task
+- AAT Time to go never negative
 
 Changes from 5.1.9beta2:
 - Alternate text entry methods

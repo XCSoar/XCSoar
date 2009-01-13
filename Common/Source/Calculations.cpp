@@ -2900,6 +2900,10 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
     Calculated->LegDistanceCovered = 0;
     Calculated->LegTimeToGo = 0;
 
+    if (!AATEnabled) {
+      Calculated->AATTimeToGo = 0;
+    }
+
     //    Calculated->TaskSpeed = 0;
 
     Calculated->TaskDistanceToGo = 0;
@@ -3531,16 +3535,14 @@ void AATStats_Time(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   double aat_tasktime_elapsed = Basic->Time - Calculated->TaskStartTime;
   double aat_tasklength_seconds = AATTaskLength*60;
 
-  if (!AATEnabled || !ValidTaskPoint(0)) {
-    Calculated->AATTimeToGo = 0;
-  }
-
   if (ActiveWayPoint==0) {
     if (Calculated->AATTimeToGo==0) {
       Calculated->AATTimeToGo = aat_tasklength_seconds;
     }
   } else if (aat_tasktime_elapsed>=0) {
-    Calculated->AATTimeToGo = aat_tasklength_seconds - aat_tasktime_elapsed;
+    Calculated->AATTimeToGo = max(0,
+				  aat_tasklength_seconds 
+				  - aat_tasktime_elapsed);
   }
 
   if(ValidTaskPoint(ActiveWayPoint) && (Calculated->AATTimeToGo>0)) {
