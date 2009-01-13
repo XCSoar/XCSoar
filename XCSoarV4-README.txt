@@ -35,6 +35,7 @@ Changes from 5.1.9beta6:
 - Added LAK17-15, Lak17-18, ASG29-15 (mod from ASW27-W)
 - Display weight info on glide polar page
 - FLARM declaration bug fix
+- Draggable targets on touchscreen version
 
 Changes from 5.1.9beta2:
 - Alternate text entry methods

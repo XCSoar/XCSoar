@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<PMML version="3.0"
+  xmlns="http://www.dmg.org/PMML-3-0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema_instance" >
+  <Header copyright="VADIS">
+     <Application name="RANK For &lt;you>" version="1.99beta" />
+  </Header>
+  <Extension extender="RANKF" name="keys"><Key name="urn"></Key></Extension>
+
+<WndForm Name="frmBasicSettingBig" Type="Dialog" X=5 Y=5 Width=230 Height=220 Caption="Basic Settings" Font=2 BackColor=0xDADBAB>
+
+  <WndProperty Caption="QNH"      X=2 Y=2   Width=222 Height=38 CaptionWidth=100 Font=4>
+    <DataField name="" DataType="double" DisplayFormat="%.1fhPa" EditFormat="%.1f" Min=850 Max=1300 Step=0.1 OnDataAccess="OnQnhData"/>
+  </WndProperty>
+  <WndProperty Caption="Altitude" X=2 Y=-1  Width=222 Height=38 CaptionWidth=100 Font=4 ReadOnly=1>
+    <DataField name="" DataType="integer" DisplayFormat="%.0f" EditFormat="%.0f" ReadOnly=1  OnDataAccess="OnAltitudeData"/>
+  </WndProperty>
+  <WndProperty Caption="Ballast"  X=2 Y=-1  Width=222 Height=38 CaptionWidth=100 Font=4>
+    <DataField name="" DataType="double" DisplayFormat="%.0f%%" EditFormat="%.0f" Min=0 Max=100 Step=5  OnDataAccess="OnBallastData"/>
+  </WndProperty>
+  <WndProperty Caption="Bugs"     X=2 Y=-1  Width=222 Height=38 CaptionWidth=100 Font=4>
+    <DataField name="" DataType="double" DisplayFormat="%.0f%%" EditFormat="%.0f" Min=50 Max=100 Step=1  OnDataAccess="OnBugsData"/>
+  </WndProperty>
+  <WndProperty Caption="Max Temp"     X=2 Y=-1  Width=222 Height=38 CaptionWidth=100 Font=4>
+    <DataField name="" DataType="double" DisplayFormat="%.0f" EditFormat="%.0f" Min=0 Max=50 Step=1  OnDataAccess="OnTempData"/>
+  </WndProperty>
+  <WndButton   Caption="Close"    X=102 Y=-1 Width=60  Height=38 Font=4 OnClickNotify="OnCloseClicked">
+  </WndButton>                                                                                        
+</WndForm>    
+
+</PMML>

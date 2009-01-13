@@ -7,55 +7,33 @@
   </Header>
   <Extension extender="RANKF" name="keys"><Key name="urn"></Key></Extension>
 
-<WndForm Name="frmBasicSettingRegular" Type="Dialog" X=5 Y=5 Width=163 Height=220 Caption="Basic Settings" Font=2 BackColor=0xDADBAB>
+<WndForm Name="frmBasicSettingRegular" Type="Dialog" X=5 Y=5 Width=173 Height=220 Caption="Basic Settings" Font=2 BackColor=0xDADBAB>
 
   <WndButton   Caption="Close"    X=2 Y=2 Width=70  Height=22 Font=2 OnClickNotify="OnCloseClicked">
   </WndButton> 
 
-  <WndProperty Name="prpBallastPercent" Caption="Ballast"  X=2 Y=-1  Width=155 Height=22 CaptionWidth=78 Font=2 Help="Ballast of the glider.  Increase this value if the pilot/cockpit load is greater than the reference pilot weight of the glide polar (typically 75kg).">
+  <WndProperty Name="prpBallastPercent" Caption="Ballast"  X=2 Y=-1  Width=165 Height=22 CaptionWidth=78 Font=2 Help="Ballast of the glider.  Increase this value if the pilot/cockpit load is greater than the reference pilot weight of the glide polar (typically 75kg).">
     <DataField name="" DataType="double" DisplayFormat="%.0f%%" EditFormat="%.0f" Min=0 Max=100 Step=5  OnDataAccess="OnBallastData" />
   </WndProperty>
-  <WndProperty Name="prpBallastLitres" Caption="Volume" X=2 Y=-1  Width=155 Height=22 CaptionWidth=78 Font=2 ReadOnly=1>
+  <WndProperty Name="prpBallastLitres" Caption="Volume" X=2 Y=-1  Width=165 Height=22 CaptionWidth=78 Font=2 ReadOnly=1>
     <DataField name="" DataType="double" DisplayFormat="%.0f l" EditFormat="%.0f" ReadOnly=1 />
   </WndProperty>
-  <WndProperty Name="prpWingLoading" Caption="Wing loading" X=2 Y=-1  Width=155 Height=22 CaptionWidth=78 Font=2 ReadOnly=1>
+  <WndProperty Name="prpWingLoading" Caption="Wing loading" X=2 Y=-1  Width=165 Height=22 CaptionWidth=78 Font=2 ReadOnly=1>
     <DataField name="" DataType="double" DisplayFormat="%.1f kg/m2" EditFormat="%.1f" ReadOnly=1 />
   </WndProperty>
 
-  <WndProperty Caption="Clean"     X=2 Y=-1  Width=155 Height=22 CaptionWidth=78 Font=2 Help="How clean the glider is. Set to 100% for clean, lower numbers as the wings pick up bugs or get wet.  50% indicates the glider's sink rate is doubled.">
+  <WndProperty Caption="Clean"     X=2 Y=-1  Width=165 Height=22 CaptionWidth=78 Font=2 Help="How clean the glider is. Set to 100% for clean, lower numbers as the wings pick up bugs or get wet.  50% indicates the glider's sink rate is doubled.">
     <DataField name="" DataType="double" DisplayFormat="%.0f%%" EditFormat="%.0f" Min=50 Max=100 Step=1  OnDataAccess="OnBugsData"/>
   </WndProperty>
-  <WndProperty Caption="QNH"      X=2 Y=-1   Width=155 Height=22 CaptionWidth=78 Font=2 Help="Area pressure for barometric altimeter calibration.  This is set automatically if Vega connected.">
+  <WndProperty Caption="QNH"      X=2 Y=-1   Width=165 Height=22 CaptionWidth=78 Font=2 Help="Area pressure for barometric altimeter calibration.  This is set automatically if Vega connected.">
     <DataField name="" DataType="double" DisplayFormat="%.1fhPa" EditFormat="%.1f" Min=850 Max=1300 Step=0.1 OnDataAccess="OnQnhData"/>
   </WndProperty>
-  <WndProperty Name="prpAltitude" Caption="Altitude" X=2 Y=-1  Width=155 Height=22 CaptionWidth=78 Font=2 ReadOnly=1>
+  <WndProperty Name="prpAltitude" Caption="Altitude" X=2 Y=-1  Width=165 Height=22 CaptionWidth=78 Font=2 ReadOnly=1>
     <DataField name="" DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" ReadOnly=1  OnDataAccess="OnAltitudeData"/>
   </WndProperty>
-  <WndProperty Caption="Max Temp"     X=2 Y=-1  Width=155 Height=22 CaptionWidth=78 Font=2 Help="Set to forecast ground temperature.  Used by convection estimator (temperature trace page of Analysis dialog)">
+  <WndProperty Caption="Max Temp"     X=2 Y=-1  Width=165 Height=22 CaptionWidth=78 Font=2 Help="Set to forecast ground temperature.  Used by convection estimator (temperature trace page of Analysis dialog)">
     <DataField name="" DataType="double" DisplayFormat="%.0f°" EditFormat="%.0f" Min=0 Max=50 Step=1  OnDataAccess="OnTempData"/>
   </WndProperty>
-  
-</WndForm>    
-
-<WndForm Name="frmBasicSettingBig" Type="Dialog" X=5 Y=5 Width=230 Height=220 Caption="Basic Settings" Font=2 BackColor=0xDADBAB>
-
-  <WndProperty Caption="QNH"      X=2 Y=2   Width=222 Height=38 CaptionWidth=100 Font=4>
-    <DataField name="" DataType="double" DisplayFormat="%.1fhPa" EditFormat="%.1f" Min=850 Max=1300 Step=0.1 OnDataAccess="OnQnhData"/>
-  </WndProperty>
-  <WndProperty Caption="Altitude" X=2 Y=-1  Width=222 Height=38 CaptionWidth=100 Font=4 ReadOnly=1>
-    <DataField name="" DataType="integer" DisplayFormat="%.0f" EditFormat="%.0f" ReadOnly=1  OnDataAccess="OnAltitudeData"/>
-  </WndProperty>
-  <WndProperty Caption="Ballast"  X=2 Y=-1  Width=222 Height=38 CaptionWidth=100 Font=4>
-    <DataField name="" DataType="double" DisplayFormat="%.0f%%" EditFormat="%.0f" Min=0 Max=100 Step=5  OnDataAccess="OnBallastData"/>
-  </WndProperty>
-  <WndProperty Caption="Bugs"     X=2 Y=-1  Width=222 Height=38 CaptionWidth=100 Font=4>
-    <DataField name="" DataType="double" DisplayFormat="%.0f%%" EditFormat="%.0f" Min=50 Max=100 Step=1  OnDataAccess="OnBugsData"/>
-  </WndProperty>
-  <WndProperty Caption="Max Temp"     X=2 Y=-1  Width=222 Height=38 CaptionWidth=100 Font=4>
-    <DataField name="" DataType="double" DisplayFormat="%.0f" EditFormat="%.0f" Min=0 Max=50 Step=1  OnDataAccess="OnTempData"/>
-  </WndProperty>
-  <WndButton   Caption="Close"    X=102 Y=-1 Width=60  Height=38 Font=4 OnClickNotify="OnCloseClicked">
-  </WndButton>                                                                                        
   
 </WndForm>    
 

@@ -9,7 +9,9 @@
 
 <WndForm Name="frmTarget" Type="Dialog" X=200 Y=0 Width=119 Height=240 Caption="Target" Font=2  BackColor=0xDADBAB>
 
-  <WndButton   Caption="OK"    X=2 Y=2 Width=50  Height=22 Font=2 OnClickNotify="OnOKClicked" Tag=1/>
+  <WndButton  Name="btnOK" Caption="OK"    X=2 Y=2 Width=50  Height=22 Font=2 OnClickNotify="OnOKClicked" Tag=1/>
+
+  <WndButton  Name="btnMove" Caption="Move"    X=34 Y=-1 Width=50  Height=22 Font=2 OnClickNotify="OnMoveClicked" Tag=1/>
 
   <WndProperty Name="prpTaskPoint" Caption="Tp" X=2 Y=-1   Width=115 Height=22 CaptionWidth=30 Font=2 
   Help="This sets the task point for review.">
@@ -47,3 +49,4 @@
 </WndForm>    
 
 </PMML>
+

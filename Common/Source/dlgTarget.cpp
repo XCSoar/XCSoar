@@ -47,24 +47,24 @@ Copyright_License {
 
 extern HWND   hWndMainWindow;
 static WndForm *wf=NULL;
-
+static WindowControl *btnMove = NULL;
 static int ActiveWayPointOnEntry = 0;
-
-
 
 
 static double Range = 0;
 static double Radial = 0;
 static int target_point = 0;
+static bool TargetMoveMode = false;
 
 bool TargetDialogOpen = false;
-
 
 
 static void OnOKClicked(WindowControl * Sender){
   (void)Sender;
   wf->SetModalResult(mrOK);
 }
+
+
 
 
 static void MoveTarget(double adjust_angle) {
@@ -255,6 +255,23 @@ static int FormKeyDown(WindowControl * Sender, WPARAM wParam, LPARAM lParam){
       MoveTarget(90);
     return(0);
   }
+  if (TargetMoveMode) {
+    StartupStore(TEXT("moving\n"));
+    switch(wParam & 0xffff){
+    case VK_UP:
+      MoveTarget(0);
+      return(0);
+    case VK_DOWN:
+      MoveTarget(180);
+      return(0);
+    case VK_LEFT:
+      MoveTarget(270);
+      return(0);
+    case VK_RIGHT:
+      MoveTarget(90);
+      return(0);
+    }
+  }
   return(1);
 }
 
@@ -267,11 +284,44 @@ static void RefreshCalculator(void) {
   RefreshTaskStatistics();
   target_point = max(target_point,ActiveWayPoint);
 
+  bool nodisplay = !AATEnabled 
+    || (target_point==0) 
+    || !ValidTaskPoint(target_point+1);
+
+  if (btnMove) {
+    if (nodisplay) {
+      btnMove->SetVisible(false);
+      TargetMoveMode = false;
+    } else {
+      btnMove->SetVisible(true);
+    }
+  } 
+
+  nodisplay = nodisplay || TargetMoveMode;
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpTaskPoint"));
+  if (wp) {
+    if (TargetMoveMode) {
+      wp->SetVisible(false);
+    } else {
+      wp->SetVisible(true);
+    }
+  }
+
+  WindowControl* wc = (WindowControl*)wf->FindByName(TEXT("btnOK"));
+  if (wc) {
+    if (TargetMoveMode) {
+      wc->SetVisible(false);
+    } else {
+      wc->SetVisible(true);
+    }
+  }
+
   wp = (WndProperty*)wf->FindByName(TEXT("prpAATTargetLocked"));
   if (wp) {
     wp->GetDataField()->Set(Task[target_point].AATTargetLocked);
     wp->RefreshDisplay();
-    if (!AATEnabled || (target_point==0) || !ValidTaskPoint(target_point+1)) {
+    if (nodisplay) {
       wp->SetVisible(false);
     } else {
       wp->SetVisible(true);
@@ -282,7 +332,7 @@ static void RefreshCalculator(void) {
   if (wp) {
     wp->GetDataField()->SetAsFloat(Range*100.0);
     wp->RefreshDisplay();
-    if (!AATEnabled || (target_point==0) || !ValidTaskPoint(target_point+1)) {
+    if (nodisplay) {
       wp->SetVisible(false);
     } else {
       wp->SetVisible(true);
@@ -293,7 +343,7 @@ static void RefreshCalculator(void) {
   if (wp) {
     wp->GetDataField()->SetAsFloat(Radial);
     wp->RefreshDisplay();
-    if (!AATEnabled || (target_point==0) || !ValidTaskPoint(target_point+1)) {
+    if (nodisplay) {
       wp->SetVisible(false);
     } else {
       wp->SetVisible(true);
@@ -358,6 +408,18 @@ static int OnTimerNotify(WindowControl * Sender) {
     TargetModified = false;
   }
   return 0;
+}
+
+
+static void OnMoveClicked(WindowControl * Sender){
+  (void)Sender;
+  TargetMoveMode = !TargetMoveMode;
+  if (TargetMoveMode) {
+    btnMove->SetCaption(TEXT("Cursor"));
+  } else {
+    btnMove->SetCaption(TEXT("Move"));
+  }
+  RefreshCalculator();
 }
 
 
@@ -495,6 +557,7 @@ static CallBackTableEntry_t CallBackTable[]={
   DeclareCallBackEntry(OnRadialData), 
   DeclareCallBackEntry(OnLockedData), 
   DeclareCallBackEntry(OnOKClicked),
+  DeclareCallBackEntry(OnMoveClicked),
   DeclareCallBackEntry(NULL)
 };
 
@@ -525,6 +588,9 @@ void dlgTarget(void) {
   if (!wf) return;
 
   TargetDialogOpen = true;
+  TargetMoveMode = false;
+
+  btnMove = (WindowControl*)wf->FindByName(TEXT("btnMove"));
 
   wf->SetKeyDownNotify(FormKeyDown);
 
