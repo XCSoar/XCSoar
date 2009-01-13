@@ -1178,6 +1178,10 @@ bool MapWindow::SetTargetPan(bool do_pan, int target_point) {
   static bool old_pan=false;
   static bool old_fullscreen=false;
 
+  if (!TargetPan || (TargetPanIndex != target_point)) {
+    TargetDrag_State = 0;
+  }
+
   TargetPanIndex = target_point;
 
   if (do_pan && !TargetPan) {
@@ -1798,4 +1802,18 @@ void MapWindow::DrawProjectedTrack(HDC hdc, POINT Orig) {
 		       bearing-DisplayAngle);
   }
   DrawDashLine(hdc, 2, pt[0], pt[1], RGB(0,0,0));
+}
+
+
+bool MapWindow::TargetDragged(double *longitude, double *latitude) {
+  bool retval = false;
+  LockTaskData();
+  if (TargetDrag_State==2) {
+    *longitude = TargetDrag_Longitude;
+    *latitude = TargetDrag_Latitude;
+    TargetDrag_State = 0;
+    retval = true;
+  }
+  UnlockTaskData();
+  return retval;
 }

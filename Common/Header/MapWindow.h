@@ -423,6 +423,8 @@ class MapWindow {
   static bool BigZoom;
   static int SnailWidthScale;
   static int WindArrowStyle;
+  static bool TargetDragged(double *longitude, double *latitude);
+
  private:
   static NMEA_INFO DrawInfo;
   static DERIVED_INFO DerivedDrawInfo;
@@ -431,6 +433,10 @@ class MapWindow {
   static void CalculateOrientationNormal(void);
 
   static POINT Groundline[NUMTERRAINSWEEPS+1];
+
+  static int TargetDrag_State;
+  static double TargetDrag_Latitude;
+  static double TargetDrag_Longitude;
 };
 
 void PolygonRotateShift(POINT* poly, int n, int x, int y,

@@ -157,6 +157,81 @@ static void MoveTarget(double adjust_angle) {
 }
 
 
+static void DragTarget(double target_longitude, double target_latitude) {
+  if (!AATEnabled) return;
+  if (target_point==0) return;
+  if (!ValidTaskPoint(target_point)) return;
+  if (!ValidTaskPoint(target_point+1)) return;
+  if (target_point < ActiveWayPoint) return;
+
+  LockTaskData();
+
+  double distance, bearing;
+
+  if (InAATTurnSector(target_longitude, target_latitude, target_point)) {
+    if (CALCULATED_INFO.IsInSector && (target_point == ActiveWayPoint)) {
+      // TODO set range/radial for inside sector
+      double course_bearing, target_bearing;
+      DistanceBearing(Task[target_point-1].AATTargetLat,
+                      Task[target_point-1].AATTargetLon,
+                      GPS_INFO.Latitude,
+                      GPS_INFO.Longitude,
+                      NULL, &course_bearing);
+
+      DistanceBearing(GPS_INFO.Latitude,
+                      GPS_INFO.Longitude,
+                      target_latitude,
+                      target_longitude,
+                      &distance, &target_bearing);
+      bearing = AngleLimit180(target_bearing-course_bearing);
+
+      if (fabs(bearing)<90.0) {
+        Task[target_point].AATTargetLat = target_latitude;
+        Task[target_point].AATTargetLon = target_longitude;
+        Radial = bearing;
+        Task[target_point].AATTargetOffsetRadial = Radial;
+        Range =
+          FindInsideAATSectorRange(GPS_INFO.Latitude,
+                                   GPS_INFO.Longitude,
+                                   target_point,
+                                   target_bearing,
+                                   distance);
+        Task[target_point].AATTargetOffsetRadius = Range;
+        TaskModified = true;
+        TargetModified = true;
+      }
+    } else {
+      // OK to change it..
+      Task[target_point].AATTargetLat = target_latitude;
+      Task[target_point].AATTargetLon = target_longitude;
+
+      // TODO set range/radial for outside sector
+      DistanceBearing(WayPointList[Task[target_point].Index].Latitude,
+                      WayPointList[Task[target_point].Index].Longitude,
+                      Task[target_point].AATTargetLat,
+                      Task[target_point].AATTargetLon,
+                      &distance, &bearing);
+      bearing = AngleLimit180(bearing-Task[target_point].Bisector);
+      if(Task[target_point].AATType == SECTOR) {
+        Range = (fabs(distance)/Task[target_point].AATSectorRadius)*2-1;
+      } else {
+        if (fabs(bearing)>90.0) {
+          distance = -distance;
+          bearing = AngleLimit180(bearing+180);
+        }
+        Range = distance/Task[target_point].AATCircleRadius;
+      }
+      Task[target_point].AATTargetOffsetRadius = Range;
+      Task[target_point].AATTargetOffsetRadial = bearing;
+      Radial = bearing;
+      TaskModified = true;
+      TargetModified = true;
+    }
+  }
+  UnlockTaskData();
+}
+
+
 static int FormKeyDown(WindowControl * Sender, WPARAM wParam, LPARAM lParam){
 	(void)lParam;
 	(void)Sender;
@@ -272,9 +347,12 @@ static void RefreshCalculator(void) {
 }
 
 
-
 static int OnTimerNotify(WindowControl * Sender) {
   (void)Sender;
+  double lon, lat;
+  if (MapWindow::TargetDragged(&lon, &lat)) {
+    DragTarget(lon, lat);
+  }
   if (TargetModified) {
     RefreshCalculator();
     TargetModified = false;

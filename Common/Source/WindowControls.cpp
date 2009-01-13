@@ -1917,6 +1917,7 @@ void WndForm::SetToForeground(void)
 }
 
 
+extern HWND hWndMapWindow;  // MapWindow
 
 
 int WndForm::ShowModal(void){
@@ -1968,10 +1969,17 @@ int WndForm::ShowModal(void){
     if ((msg.message == WM_KEYDOWN
         || msg.message == WM_KEYUP
         || msg.message == WM_KEYDOWN
-        || msg.message == WM_LBUTTONDOWN
+	|| msg.message == WM_LBUTTONDOWN
         || msg.message == WM_LBUTTONUP
         || msg.message == WM_LBUTTONDBLCLK
-        ) && (msg.hwnd != GetHandle() && !IsChild(GetHandle(), msg.hwnd)))
+        ) && (msg.hwnd != GetHandle() && !IsChild(GetHandle(), msg.hwnd)
+#ifndef GNAV
+	      && !((msg.hwnd == hWndMapWindow)
+		   && ((msg.message == WM_LBUTTONDOWN)
+		       || (msg.message == WM_LBUTTONUP)))
+#endif
+	      )
+	)
       continue;   // make it modal
 
     if (!TranslateAccelerator(GetHandle(), mhAccelTable, &msg)){
