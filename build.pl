@@ -219,17 +219,21 @@ foreach my $platform (@platforms_all) {
   } else {
     if ($platform eq "ALTAIR") {
       rename "XCSoar-$platform.exe","XCSoarAltair-$version_num-CRC3E.exe";
+      system("/opt/upx-3.03-amd64_linux/upx XCSoarAltair-$version_num-CRC3E.exe");
       system("cp PPC2003/GRecordDll.dll GRecordDLL.dat");
       system("zip -r XCSoarAltair-$version_file.zip XCSoarAltair-$version_num-CRC3E.exe GRecordDLL.dat");
       rename "XCSoarAltair-$version_file.zip","dist/XCSoarAltair-$version_file.zip";
     } elsif ($platform eq "ALTAIRPORTRAIT") {
       rename "XCSoar-$platform.exe","XCSoarAltair-$version_num-CRC3E.exe";
+      system("/opt/upx-3.03-amd64_linux/upx XCSoarAltair-$version_num-CRC3E.exe");
       system("cp PPC2003/GRecordDll.dll GRecordDLL.dat");
       system("zip -r XCSoarAltairPortrait-$version_file.zip XCSoarAltair-$version_num-CRC3E.exe GRecordDLL.dat");
       rename "XCSoarAltairPortrait-$version_file.zip","dist/XCSoarAltairPortrait-$version_file.zip";
     } else {
       if ($platforms{$platform}{sim}) {
 	if ($platform eq "PC") {
+          system("/opt/upx-3.03-amd64_linux/upx XCSoarSimulator-PC.exe");
+          system("/opt/upx-3.03-amd64_linux/upx XCSoar-PC.exe");
 	  system("zip -r XCSoar$platform-$version_file.zip XCSoar-PC.exe XCSoarSimulator-PC.exe");
 	  rename "XCSoar$platform-$version_file.zip","dist/XCSoar$platform-$version_file.zip";
 	} else {
