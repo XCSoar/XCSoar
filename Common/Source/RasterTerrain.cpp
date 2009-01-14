@@ -881,7 +881,7 @@ bool RasterTerrain::WaypointIsInTerrainRange(double latitude,
     if ((latitude<= TerrainMap->TerrainInfo.Top)&&
         (latitude>= TerrainMap->TerrainInfo.Bottom)&&
         (longitude<= TerrainMap->TerrainInfo.Right)&&
-        (latitude>= TerrainMap->TerrainInfo.Left)) {
+        (longitude>= TerrainMap->TerrainInfo.Left)) {
       return true;
     } else {
       return false;
