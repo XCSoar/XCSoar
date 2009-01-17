@@ -40,6 +40,7 @@ Changes from 5.1.9beta6:
 - Cursor toggle mode in landscape target dialog
 - AAT Time to go resets to zero on cleared task
 - AAT Time to go never negative
+- Fixed bug in waypoint exclude outside terrain checking
 
 Changes from 5.1.9beta2:
 - Alternate text entry methods

@@ -1,5 +1,5 @@
 /*
-  $Id: Parser.cpp,v 1.88 2008/12/30 12:37:51 jwharington Exp $
+  $Id: Parser.cpp,v 1.89 2009/01/17 01:44:33 jwharington Exp $
 
 Copyright_License {
 
@@ -46,7 +46,7 @@ Copyright_License {
 #include "Parser.h"
 #include "device.h"
 #include "Geoid.h"
-#include "FlarmIdFile.h"
+//#include "FlarmIdFile.h"
 #include "TeamCodeCalculation.h"
 
 #ifdef FLARM_AVERAGE
