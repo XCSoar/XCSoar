@@ -46,7 +46,7 @@ Copyright_License {
 #include "Parser.h"
 #include "device.h"
 #include "Geoid.h"
-#include "FlarmIdFile.h"
+//#include "FlarmIdFile.h"
 #include "TeamCodeCalculation.h"
 
 #ifdef FLARM_AVERAGE
