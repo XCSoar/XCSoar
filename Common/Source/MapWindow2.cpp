@@ -1311,32 +1311,29 @@ int MapWindow::iSnailNext=0;
 // This function is slow...
 double MapWindow::DrawTrail( HDC hdc, const POINT Orig, const RECT rc)
 {
-  int i, j;
+  int i, snail_index;
   SNAIL_POINT P1;
-#ifdef NOLINETO
-  SNAIL_POINT P2;
-#endif
-  static BOOL lastCircling = FALSE;
-  static float vmax= 5.0;
-  static float vmin= -5.0;
-  static bool needcolour = true;
-  bool first = true;
+  static BOOL last_circling = FALSE;
+  static float vario_max= 5.0;
+  static float vario_min= -5.0;
+  static bool need_colour = true;
+
   double TrailFirstTime = -1;
 
   if(!TrailActive)
     return -1;
 
-  if ((DisplayMode == dmCircling) != lastCircling) {
-    needcolour = true;
+  if ((DisplayMode == dmCircling) != last_circling) {
+    need_colour = true;
   }
-  lastCircling = (DisplayMode == dmCircling);
+  last_circling = (DisplayMode == dmCircling);
+
+  //////////// Trail drift calculations
 
   double traildrift_lat = 0.0;
   double traildrift_lon = 0.0;
 
-  const bool dotraildrift = EnableTrailDrift && (DisplayMode == dmCircling);
-
-  if (dotraildrift) {
+  if (EnableTrailDrift && (DisplayMode == dmCircling)) {
     double tlat1, tlon1;
 
     FindLatitudeLongitude(DrawInfo.Latitude,
@@ -1346,51 +1343,80 @@ double MapWindow::DrawTrail( HDC hdc, const POINT Orig, const RECT rc)
                           &tlat1, &tlon1);
     traildrift_lat = (DrawInfo.Latitude-tlat1);
     traildrift_lon = (DrawInfo.Longitude-tlon1);
+  } else {
+    traildrift_lat = 0.0;
+    traildrift_lon = 0.0;
   }
 
   // JMW don't draw first bit from home airport
 
-  int ntrail;
+  /////////////  Trail size
+
+  int num_trail_max;
   if (TrailActive!=2) {
-    ntrail = TRAILSIZE;
+    num_trail_max = TRAILSIZE;
   } else {
-    ntrail = TRAILSIZE/TRAILSHRINK;
+    num_trail_max = TRAILSIZE/TRAILSHRINK;
   }
   if ((DisplayMode == dmCircling)) {
-    ntrail /= TRAILSHRINK;
+    num_trail_max /= TRAILSHRINK;
   }
 
-  float this_vmax = (float)(1.5*min(5.0, max(MACCREADY,0.5)));
-  float this_vmin = (float)(-1.5*min(5.0, max(MACCREADY,2.0)));
-  vmax = this_vmax;
-  vmin = this_vmin;
+  ///////////// Vario colour scaling
 
-  const int skipdivisor = ntrail/5;
-  int skipborder = skipdivisor;
-  int skiplevel= 3; // JMW TODO, try lower level?
-  POINT lastdrawn;
+  float this_vario_max = (float)(1.5*min(5.0, max(MACCREADY,0.5)));
+  float this_vario_min = (float)(-1.5*min(5.0, max(MACCREADY,2.0)));
+  vario_max = this_vario_max;
+  vario_min = this_vario_min;
 
-  lastdrawn.x = 0;
-  lastdrawn.y = 0;
-  int kd = TRAILSIZE+iSnailNext-ntrail;
-  while (kd>= TRAILSIZE) {
-    kd -= TRAILSIZE;
+  ///////////// Snail skipping
+
+  const int skip_divisor = num_trail_max/5;
+  int skip_border = skip_divisor;
+  int skip_level= 3; // JMW TODO, try lower level?
+
+  int snail_offset = TRAILSIZE+iSnailNext-num_trail_max;
+  while (snail_offset>= TRAILSIZE) {
+    snail_offset -= TRAILSIZE;
   }
-  while (kd< 0) {
-    kd += TRAILSIZE;
+  while (snail_offset< 0) {
+    snail_offset += TRAILSIZE;
   }
-  const int zerooffset = (TRAILSIZE-kd);
-  skipborder += zerooffset % skiplevel;
-  // TODO: Divide by time step cruise/circling for zerooffset
+  const int zero_offset = (TRAILSIZE-snail_offset);
+  skip_border += zero_offset % skip_level;
 
-  bool thisvisible = true;
-  bool lastvisible = false;
-  float vclose = 0;
-  int nclose = 0;
-  int is = ((int)DrawInfo.Time)%skiplevel;
+  int index_skip = ((int)DrawInfo.Time)%skip_level;
+
+  // TODO: Divide by time step cruise/circling for zero_offset
+
+  ///////////// Keep track of what's drawn
+
+  bool this_visible = true;
+  bool last_visible = false;
+  POINT point_lastdrawn;
+  point_lastdrawn.x = 0;
+  point_lastdrawn.y = 0;
+
+  ///////////// Average colour display for skipped points
+  float vario_av = 0;
+  int vario_av_num = 0;
+
+  ///////////// Constants for speedups
+
   const bool display_circling = DisplayMode == dmCircling;
-  const double dtime = DrawInfo.Time;
-  const rectObj bounds = screenbounds_latlon;
+  const double display_time = DrawInfo.Time;
+
+  // expand bounds so in strong winds the appropriate snail points are
+  // still visible (since they are being tested before drift is applied)
+  // this expands them by one minute
+
+  rectObj bounds_thermal = screenbounds_latlon;
+  screenbounds_latlon.minx -= fabs(60.0*traildrift_lon);
+  screenbounds_latlon.maxx += fabs(60.0*traildrift_lon);
+  screenbounds_latlon.miny -= fabs(60.0*traildrift_lat);
+  screenbounds_latlon.maxy += fabs(60.0*traildrift_lat);
+
+  const rectObj bounds = bounds_thermal;
 
   const int deg = DEG_TO_INT(AngleLimit360(DisplayAngle));
   const int cost = ICOSTABLE[deg];
@@ -1401,72 +1427,84 @@ double MapWindow::DrawTrail( HDC hdc, const POINT Orig, const RECT rc)
   const double mPanLongitude = PanLongitude;
   const double mPanLatitude = PanLatitude;
 
-  for(i=1;i< ntrail; ++i)
+  ////////////// Main loop
+
+  for(i=1;i< num_trail_max; ++i)
   {
-    if (i>=skipborder) {
-      skiplevel= max(1,skiplevel-1);
-      skipborder= i+2*(zerooffset % skiplevel)+skipdivisor;
-      is = skiplevel;
+    ///// Handle skipping
+
+    if (i>=skip_border) {
+      skip_level= max(1,skip_level-1);
+      skip_border= i+2*(zero_offset % skip_level)+skip_divisor;
+      index_skip = skip_level;
     }
 
-    is++;
-    if ((i<ntrail-1) && (is < skiplevel)) {
+    index_skip++;
+    if ((i<num_trail_max-10) && (index_skip < skip_level)) {
       continue;
     } else {
-      is=0;
+      index_skip=0;
     }
 
-    j= kd+i;
-    while (j>=TRAILSIZE) {
-      j-= TRAILSIZE;
+    ////// Find the snail point
+
+    snail_index = snail_offset+i;
+    while (snail_index>=TRAILSIZE) {
+      snail_index-= TRAILSIZE;
     }
 
-    P1 = SnailTrail[j];
+    P1 = SnailTrail[snail_index];
+
+    /////// Mark first time of display point
 
     if (((TrailFirstTime<0) || (P1.Time<TrailFirstTime)) && (P1.Time>=0)) {
       TrailFirstTime = P1.Time;
     }
 
-    if (display_circling) {
-      if ((!P1.Circling)&&( i<ntrail-60 )) {
-        // ignore cruise mode lines unless very recent
+    //////// Ignoring display elements for modes
 
-	first = true;
-	lastvisible = false;
+    if (display_circling) {
+      if ((!P1.Circling)&&( i<num_trail_max-60 )) {
+        // ignore cruise mode lines unless very recent
+	last_visible = false;
         continue;
       }
     } else {
-      //  if ((P1.Circling)&&( j%5 != 0 )) {
+      //  if ((P1.Circling)&&( snail_index % 5 != 0 )) {
         // JMW TODO: This won't work properly!
         // draw only every 5 points from circling when in cruise mode
 	//        continue;
       //      }
     }
 
+    ///////// Filter if far visible
+
     if (!P1.FarVisible) {
-      first = true;
-      lastvisible = false;
+      last_visible = false;
       continue;
     }
 
-    thisvisible =   ((P1.Longitude> bounds.minx) &&
+    ///////// Determine if this is visible
+
+    this_visible =   ((P1.Longitude> bounds.minx) &&
 		     (P1.Longitude< bounds.maxx) &&
 		     (P1.Latitude> bounds.miny) &&
 		     (P1.Latitude< bounds.maxy)) ;
 
-    // now we know both points are visible, better get screen coords
+    if (!this_visible && !last_visible) {
+      last_visible = false;
+      continue;
+    }
+
+    ////////// Find coordinates on screen after applying trail drift
+
+    // now we know either point is visible, better get screen coords
     // if we don't already.
 
-    double this_lon, this_lat;
-    if (dotraildrift) {
-      double dt;
-      dt = max(0,(dtime-P1.Time)*P1.DriftFactor);
-      this_lon = P1.Longitude+traildrift_lon*dt;
-      this_lat = P1.Latitude+traildrift_lat*dt;
-    } else {
-      this_lon = P1.Longitude;
-      this_lat = P1.Latitude;
-    }
+    double dt = max(0,(display_time-P1.Time)*P1.DriftFactor);
+    double this_lon = P1.Longitude+traildrift_lon*dt;
+    double this_lat = P1.Latitude+traildrift_lat*dt;
+
 #if 1
     // this is faster since many parameters are const
     int Y = Real2Int((mPanLatitude-this_lat)*mDrawScale);
@@ -1479,76 +1517,63 @@ double MapWindow::DrawTrail( HDC hdc, const POINT Orig, const RECT rc)
 		  P1.Screen);
 #endif
 
-    if (lastvisible && thisvisible) {
-      if (abs(P1.Screen.y-lastdrawn.y)
-	  +abs(P1.Screen.x-lastdrawn.x)<IBLSCALE(4)) {
-	vclose += P1.Vario;
-	nclose ++;
+    ////////// Determine if we should skip if close to previous point
+
+    if (last_visible && this_visible) {
+      // only average what's visible
+
+      if (abs(P1.Screen.y-point_lastdrawn.y)
+	  +abs(P1.Screen.x-point_lastdrawn.x)<IBLSCALE(4)) {
+	vario_av += P1.Vario;
+	vario_av_num ++;
 	continue;
 	// don't draw if very short line
       }
     }
 
-    // ok, we got this far, so draw the line
-    // get the colour if it doesn't exist
+    ////////// Lookup the colour if it's not already set
 
-    if (thisvisible || lastvisible) {
-      if ((P1.Colour<0)||(P1.Colour>=NUMSNAILCOLORS)) {
-	float cv = P1.Vario;
-	if (nclose) {
-	  // set color to average if skipped
-	  cv = (cv+vclose)/(nclose+1);
-	  nclose= 0;
-	  vclose= 0;
-	}
-	if (cv<0) {
-	  cv /= (-vmin); // JMW fixed bug here
-	} else {
-	  cv /= vmax;
-	}
-	P1.Colour = fSnailColour(cv);
+    if ((P1.Colour<0)||(P1.Colour>=NUMSNAILCOLORS)) {
+      float colour_vario = P1.Vario;
+      if (vario_av_num) {
+	// set color to average if skipped
+	colour_vario = (colour_vario+vario_av)/(vario_av_num+1);
+	vario_av_num= 0;
+	vario_av= 0;
       }
-      SelectObject(hdc, hSnailPens[P1.Colour]);
-    }
-
-#ifdef NOLINETO
-    if (lastvisible) {     // draw set cursor at P1
-      if (dotraildrift) {
-        double dt;
-        dt = max(0,(dtime-P2.Time));
-        LatLon2Screen(P2.Longitude+traildrift_lon*dt,
-                      P2.Latitude+traildrift_lat*dt,
-                      P2.Screen);
+      if (colour_vario<0) {
+	colour_vario /= (-vario_min); // JMW fixed bug here
       } else {
-        LatLon2Screen(P2.Longitude,
-                      P2.Latitude,
-                      P2.Screen);
+	colour_vario /= vario_max;
       }
+      P1.Colour = fSnailColour(colour_vario);
     }
-    if (!first) {
-      DrawSolidLine(hdc, P1.Screen, P2.Screen);
-      lastdrawn = P1.Screen;
-    } else {
-      first = false;
-    }
-    P2 = P1;
-#else
-    if (!lastvisible) { // draw set cursor at P1
+    SelectObject(hdc, hSnailPens[P1.Colour]);
+
+    if (!last_visible) { // draw set cursor at P1
+#ifndef NOLINETO
       MoveToEx(hdc, P1.Screen.x, P1.Screen.y, NULL);
-    } else {
-      LineTo(hdc, P1.Screen.x, P1.Screen.y);
-      lastdrawn = P1.Screen;
-    }
 #endif
-    lastvisible = thisvisible;
+    } else {
+#ifndef NOLINETO
+      LineTo(hdc, P1.Screen.x, P1.Screen.y);
+#else
+      DrawSolidLine(hdc, P1.Screen, point_lastdrawn);
+#endif
+    }
+    point_lastdrawn = P1.Screen;
+    last_visible = this_visible;
   }
 
   // draw final point to glider
+  if (last_visible) {
 #ifndef NOLINETO
-  if (lastvisible) {
     LineTo(hdc, Orig.x, Orig.y);
-  }
+#else
+    DrawSolidLine(hdc, Orig, point_lastdrawn);
 #endif
+  }
+
   return TrailFirstTime;
 }
 

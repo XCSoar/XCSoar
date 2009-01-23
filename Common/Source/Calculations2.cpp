@@ -639,6 +639,7 @@ void CalculateTeammateBearingRange(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 
 static TCHAR szCalculationsPersistFileName[MAX_PATH]= TEXT("\0");
 static TCHAR szCalculationsPersistDirectory[MAX_PATH]= TEXT("\0");
+extern double CRUISE_EFFICIENCY;
 
 void DeleteCalculationsPersist(void) {
   DeleteFile(szCalculationsPersistFileName);
@@ -691,13 +692,20 @@ void LoadCalculationsPersist(DERIVED_INFO *Calculated) {
     ReadFile(hFile,&BALLAST,size,&dwBytesWritten,(OVERLAPPED*)NULL);
     ReadFile(hFile,&CuSonde::maxGroundTemperature,
              size,&dwBytesWritten,(OVERLAPPED*)NULL);
+    //    ReadFile(hFile,&CRUISE_EFFICIENCY,
+    //             size,&dwBytesWritten,(OVERLAPPED*)NULL);
 
     MACCREADY = min(10.0,max(MACCREADY,0));
     QNH = min(1113.2, max(QNH,913.2));
     BUGS = min(1.0, max(BUGS,0.0));
     BALLAST = min(1.0, max(BALLAST,0.0));
+    //   CRUISE_EFFICIENCY = min(1.5, max(CRUISE_EFFICIENCY,0.75));
+
+    StartupStore(TEXT("LoadCalculationsPersist OK\n"));
 
     CloseHandle(hFile);
+  } else {
+    StartupStore(TEXT("LoadCalculationsPersist file not found\n"));
   }
 }
 
@@ -706,14 +714,24 @@ void SaveCalculationsPersist(DERIVED_INFO *Calculated) {
   HANDLE hFile;
   DWORD dwBytesWritten;
   DWORD size;
-  if (FindFreeSpace(szCalculationsPersistDirectory)<MINFREESTORAGE) return;
+
+  LoggerClearFreeSpace();
+
+  if (FindFreeSpace(szCalculationsPersistDirectory)<MINFREESTORAGE) {
+    if (!LoggerClearFreeSpace()) {
+      StartupStore(TEXT("SaveCalculationsPersist insufficient storage\n"));
+      return;
+    } else {
+      StartupStore(TEXT("SaveCalculationsPersist cleared logs to free storage\n"));
+    }
+  }
 
   StartupStore(TEXT("SaveCalculationsPersist\n"));
 
   hFile = CreateFile(szCalculationsPersistFileName,
                      GENERIC_WRITE,0,(LPSECURITY_ATTRIBUTES)NULL,
                      CREATE_ALWAYS,FILE_ATTRIBUTE_NORMAL,NULL);
-  if(hFile!=INVALID_HANDLE_VALUE ) {
+  if (hFile!=INVALID_HANDLE_VALUE ) {
     size = sizeof(DERIVED_INFO);
     WriteFile(hFile,&size,sizeof(DWORD),&dwBytesWritten,(OVERLAPPED*)NULL);
     WriteFile(hFile,Calculated,size,&dwBytesWritten,(OVERLAPPED*)NULL);
@@ -732,8 +750,14 @@ void SaveCalculationsPersist(DERIVED_INFO *Calculated) {
     WriteFile(hFile,&BALLAST,size,&dwBytesWritten,(OVERLAPPED*)NULL);
     WriteFile(hFile,&CuSonde::maxGroundTemperature,
               size,&dwBytesWritten,(OVERLAPPED*)NULL);
+    //    WriteFile(hFile,&CRUISE_EFFICIENCY,
+    //              size,&dwBytesWritten,(OVERLAPPED*)NULL);
+
+    StartupStore(TEXT("SaveCalculationsPersist ok\n"));
 
     CloseHandle(hFile);
+  } else {
+    StartupStore(TEXT("SaveCalculationsPersist can't create file\n"));
   }
 
 }
