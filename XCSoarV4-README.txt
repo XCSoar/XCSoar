@@ -10,10 +10,27 @@ Todo:
 - Configuration wizard?
 - Use soft keyboard for text filters
 - Task abort, when many airfields available, sort along task direction
-
+- Nearest airspace scan logic
 - Pilot weight correction
 - Unballasted weight display
 - Av climb version
+- Fix to tasman
+- Persist on Altair
+- Force landscape setting in config
+
+Changes from 5.1.9beta8:
+- Info on persist load/save in startup log
+- Clear logs if not enough space for persist
+- Persist save of cruise efficiency
+- Fixed mc speed bug when cruise efficiency modified
+
+Changes from 5.1.9beta7:
+- Draggable targets on touchscreen version
+- Cursor toggle mode in landscape target dialog
+- AAT Time to go resets to zero on cleared task
+- AAT Time to go never negative
+- Fixed bug in waypoint exclude outside terrain checking
+- Fixed bug in time calculations with short final legs in task (final glide around multiple points).
 
 Changes from 5.1.9beta6:
 - added clear button to task editor dialog in portrait mode,
@@ -35,12 +52,6 @@ Changes from 5.1.9beta6:
 - Added LAK17-15, Lak17-18, ASG29-15 (mod from ASW27-W)
 - Display weight info on glide polar page
 - FLARM declaration bug fix
-
-- Draggable targets on touchscreen version
-- Cursor toggle mode in landscape target dialog
-- AAT Time to go resets to zero on cleared task
-- AAT Time to go never negative
-- Fixed bug in waypoint exclude outside terrain checking
 
 Changes from 5.1.9beta2:
 - Alternate text entry methods

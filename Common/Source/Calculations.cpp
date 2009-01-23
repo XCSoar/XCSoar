@@ -1766,25 +1766,28 @@ void AltitudeRequired(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
   LockTaskData();
   if(ValidTaskPoint(ActiveWayPoint))
     {
+      double wp_alt = FAIFinishHeight(Basic, Calculated, ActiveWayPoint);
+      double height_above_wp = 
+	Calculated->NavAltitude + Calculated->EnergyHeight
+	- wp_alt;
+
       Calculated->NextAltitudeRequired = 
         GlidePolar::MacCreadyAltitude(maccready,
                         Calculated->WaypointDistance,
                         Calculated->WaypointBearing, 
                         Calculated->WindSpeed, Calculated->WindBearing, 
-                        0, 0, (ActiveWayPoint == getFinalWaypoint()),
-				      NULL, 1.0e6, CRUISE_EFFICIENCY
-                        // ||  
-                        // (Calculated->TaskAltitudeDifference>30)
-                        // JMW TODO!!!!!!!!!
+                        0, 0, 
+			true,
+			NULL, height_above_wp, CRUISE_EFFICIENCY
                         );
+      // JMW CHECK FGAMT
 
-      Calculated->NextAltitudeRequired += 
-        FAIFinishHeight(Basic, Calculated, ActiveWayPoint);
+      Calculated->NextAltitudeRequired += wp_alt;
 
       Calculated->NextAltitudeDifference = 
         Calculated->NavAltitude 
-        - Calculated->NextAltitudeRequired
-        + Calculated->EnergyHeight;            
+        + Calculated->EnergyHeight
+        - Calculated->NextAltitudeRequired;
     }
   else
     {
@@ -2452,8 +2455,15 @@ static bool TaskAltitudeRequired(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
   double TotalAltitude = 0;
   *TotalTime = 0; *TotalDistance = 0;
   *ifinal = 0;
+
   LockTaskData();
+
+  double height_above_finish = FAIFinishHeight(Basic, Calculated, 0)-
+    FAIFinishHeight(Basic, Calculated, -1);
+
   for(i=MAXTASKPOINTS-2;i>=0;i--) {
+
+
     if (!ValidTaskPoint(i) || !ValidTaskPoint(i+1)) continue;
     
     w1lat = WayPointList[Task[i].Index].Latitude;
@@ -2484,10 +2494,14 @@ static bool TaskAltitudeRequired(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
                                     Calculated->WindBearing,
                                     0,
                                     0,
-                                    isfinal,
+                                    true,
                                     &LegTime,
-				    1.0e6, CRUISE_EFFICIENCY
+				    height_above_finish, 
+				    CRUISE_EFFICIENCY
                                     );
+
+    // JMW CHECK FGAMT
+    height_above_finish-= LegAltitude;
 
     TotalAltitude += LegAltitude;
 
@@ -2875,13 +2889,9 @@ void LDNext(NMEA_INFO *Basic, DERIVED_INFO *Calculated, const double LegToGo,
             const double LegAltitude) {
   double height_above_leg = Calculated->NavAltitude 
     - LegAltitude;
+  // JMW TODO THIS IS BUGGY
 
-  if (Calculated->FinalGlide) {
-    height_above_leg -= FAIFinishHeight(Basic, Calculated, -1);
-  } else {
-    height_above_leg -= FAIFinishHeight(Basic, Calculated, ActiveWayPoint);
-  }
-  
+  height_above_leg -= FAIFinishHeight(Basic, Calculated, ActiveWayPoint);
   Calculated->LDNext = UpdateLD(Calculated->LDNext,
                                 LegToGo,
                                 height_above_leg,
@@ -3083,6 +3093,8 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
       double this_LegTimeToGo;
       bool this_is_final = (task_index==FinalWayPoint)
 	|| ForceFinalGlide;
+
+      this_is_final = true; // JMW CHECK FGAMT
       
       if (AATEnabled) {
 	w1lat = Task[task_index].AATTargetLat;
@@ -3195,7 +3207,10 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
                                   Calculated->WindBearing,
                                   &(Calculated->BestCruiseTrack),
                                   &(Calculated->VMacCready),
-                                  (Calculated->FinalGlide==1),
+
+				  // (Calculated->FinalGlide==1),
+				  true,  // JMW CHECK FGAMT
+
                                   &(Calculated->LegTimeToGo),
                                   height_above_finish, CRUISE_EFFICIENCY);
   

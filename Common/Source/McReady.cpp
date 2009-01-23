@@ -247,7 +247,9 @@ double GlidePolar::MacCreadyAltitude_internal(double emcready,
   TimeToDestCruise = -1; // initialise to error value
 
   for(i=Vminsink;i<iSAFETYSPEED;i++) {
-    double vtrack = ((double)i)*cruise_efficiency; // TAS along bearing in cruise
+    double vtrack_real = ((double)i); // actual airspeed
+    double vtrack = vtrack_real*cruise_efficiency; 
+    // TAS along bearing in cruise
 	    
     // glide angle = velocity projected along path / sink rate
     // need to work out best velocity along path given wind vector
@@ -309,7 +311,7 @@ double GlidePolar::MacCreadyAltitude_internal(double emcready,
     }
    
     if (bestfound) {
-      BestSpeed = vtrack;
+      BestSpeed = min(SAFTEYSPEED, vtrack_real);
       if (BestCruiseTrack) {
 	// best track bearing is the track along cruise that
 	// compensates for the drift during climb
@@ -318,9 +320,9 @@ double GlidePolar::MacCreadyAltitude_internal(double emcready,
 		+HeadWind*(1-tc))*RAD_TO_DEG+Bearing;
       }
       if (VMacCready) {
-	*VMacCready = min(SAFTEYSPEED,vtrack);
+	*VMacCready = BestSpeed;
       }
-	
+
       // speed along track during cruise component
       TimeToDestCruise = Distance*tc/vtot;
     } else {
