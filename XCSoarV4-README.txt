@@ -6,7 +6,6 @@ Todo:
 - Start status message
 - Quick fgtt by polygon interior fit from airspace (possible performance improvement)
 - Next wpt infobox
-- Drag target for non-Altair
 - Configuration wizard?
 - Use soft keyboard for text filters
 - Task abort, when many airfields available, sort along task direction
@@ -14,9 +13,11 @@ Todo:
 - Pilot weight correction
 - Unballasted weight display
 - Av climb version
-- Fix to tasman
-- Persist on Altair
 - Force landscape setting in config
+
+Changes from 5.1.9beta9:
+- Fixed bug in tasman vario gauge display
+- Clearer display of flarm target climb rate
 
 Changes from 5.1.9beta8:
 - Info on persist load/save in startup log

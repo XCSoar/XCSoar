@@ -371,32 +371,30 @@ void MapWindow::DrawFLARMTraffic(HDC hDC, RECT rc, POINT Orig_Aircraft) {
                   true);
       }
 #else
-      TCHAR label1[100];
-      TCHAR label2[100];
+      TCHAR label_name[100];
+      TCHAR label_avg[100];
 
       sc_av.x += IBLSCALE(3);
 
-      if (DrawInfo.FLARM_Traffic[i].Name) 
-	{
-	  sc_name.y -= IBLSCALE(8);
-	  _stprintf(label1, TEXT("%s"), DrawInfo.FLARM_Traffic[i].Name);
-	  if (DrawInfo.FLARM_Traffic[i].Average30s>=0.1) {
-	    _stprintf(label2, TEXT("%.1f"), 
-		     LIFTMODIFY*DrawInfo.FLARM_Traffic[i].Average30s);
-	  } else {
-	    label2[0]= _T('\0');
-	  }
-	}
-      else
-	{
-	  label1[0]= _T('\0');
-	  if (DrawInfo.FLARM_Traffic[i].Average30s>=0.1) {
-	    _stprintf(label2, TEXT("%.1f"), 
-		      LIFTMODIFY*DrawInfo.FLARM_Traffic[i].Average30s);
-	  } else {
-	    label2[0]= _T('\0');
-	  }
-	}
+      if (DrawInfo.FLARM_Traffic[i].Name) {
+	sc_name.y -= IBLSCALE(8);
+	_stprintf(label_name, TEXT("%s"), DrawInfo.FLARM_Traffic[i].Name);
+      } else {
+	label_name[0]= _T('\0');
+      }
+
+      if (DrawInfo.FLARM_Traffic[i].Average30s>=0.1) {
+	_stprintf(label_avg, TEXT("%.1f"), 
+		  LIFTMODIFY*DrawInfo.FLARM_Traffic[i].Average30s);
+      } else {
+	label_avg[0]= _T('\0');
+      }
+
+#ifdef DEBUG
+      // for testing only!
+      _stprintf(label_avg, TEXT("2.3"));
+      _stprintf(label_name, TEXT("WUE"));
+#endif
 
       float vmax = (float)(1.5*min(5.0, max(MACCREADY,0.5)));
       float vmin = (float)(-1.5*min(5.0, max(MACCREADY,2.0)));
@@ -421,22 +419,38 @@ void MapWindow::DrawFLARMTraffic(HDC hDC, RECT rc, POINT Orig_Aircraft) {
 	HGDIOBJ oldFont = SelectObject(hDC, MapLabelFont);	
 	COLORREF oldTextColor = SetTextColor(hDC, RGB(0,0,0));
 
-	if (_tcslen(label2)>0) {
-	  ExtTextOut(hDC, sc_av.x+1,sc_av.y+1, ETO_OPAQUE, NULL, label2, 
-		     _tcslen(label2), NULL);
+	if (_tcslen(label_name)>0) {
+	  ExtTextOut(hDC, sc_name.x, sc_name.y, ETO_OPAQUE, NULL, label_name, _tcslen(label_name), NULL); 
 	}
-	if (_tcslen(label1)>0) {
-	  ExtTextOut(hDC, sc_name.x+1, sc_name.y+1, ETO_OPAQUE, NULL, label1, _tcslen(label1), NULL); 
-	}
-	
-	SetTextColor(hDC, hSnailColours[colourIndex]);
-	
-	if (_tcslen(label2)>0) {
-	  ExtTextOut(hDC, sc_av.x, sc_av.y, ETO_OPAQUE, NULL, label2, 
-		     _tcslen(label2), NULL);
-	}
-	if (_tcslen(label1)>0) {
-	  ExtTextOut(hDC, sc_name.x, sc_name.y, ETO_OPAQUE, NULL, label1, _tcslen(label1), NULL); 
+
+	if (_tcslen(label_avg)>0) {
+	  int size = _tcslen(label_avg);
+	  SIZE tsize;
+	  RECT brect;
+
+	  GetTextExtentPoint(hDC, label_avg, size, &tsize);
+	  brect.left = sc_av.x-2;
+	  brect.right = brect.left+tsize.cx+6;
+	  brect.top = sc_av.y+((tsize.cy+4)>>3)-2;
+	  brect.bottom = brect.top+3+tsize.cy-((tsize.cy+4)>>3);
+
+	  HPEN hpOld = (HPEN)SelectObject(hDC, hSnailPens[colourIndex]);
+	  HBRUSH hVarioBrush = CreateSolidBrush(hSnailColours[colourIndex]);
+	  HBRUSH hbOld = (HBRUSH)SelectObject(hDC, hVarioBrush);
+
+	  RoundRect(hDC, brect.left, brect.top, brect.right, brect.bottom, 
+		    IBLSCALE(8), IBLSCALE(8));
+
+#if (WINDOWSPC>0)
+      SetBkMode(hDC,TRANSPARENT);
+      ExtTextOut(hDC, sc_av.x, sc_av.y, 0, NULL, label_avg, size, NULL);
+#else
+      ExtTextOut(hDC, sc_av.x, sc_av.y, ETO_OPAQUE, NULL, label_avg, size, NULL);
+#endif
+	  SelectObject(hDC, hpOld);
+	  SelectObject(hDC, hbOld);
+	  DeleteObject(hVarioBrush);
+
 	}
 
 	SelectObject(hDC, oldFont);
