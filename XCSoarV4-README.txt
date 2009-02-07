@@ -13,7 +13,8 @@ Todo:
 - Pilot weight correction
 - Unballasted weight display
 - Av climb version
-- Force landscape setting in config
+- "Force landscape" setting in config
+- Fix OLC distance further calcs
 
 Changes from 5.1.9beta9:
 - Fixed bug in tasman vario gauge display
