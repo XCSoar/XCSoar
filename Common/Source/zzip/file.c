@@ -720,9 +720,6 @@ zzip_open_ext_io(zzip_char_t* filename, int o_flags, int o_modes,
  * This function returns a new zzip-handle (use => zzip_close to return
  * it). On error this function will return null setting => errno(3).
  */
-#ifdef __MINGW32__
-extern char jmw_filename[1024]; // JMW
-#endif
 
 
 ZZIP_FILE*
