@@ -72,8 +72,8 @@ void DumpAirspaceFile(void);
 
 static bool StartsWith(TCHAR *Text, const TCHAR *LookFor);
 static bool ReadCoords(TCHAR *Text, double *X, double *Y);
-static void AddAirspaceCircle(AIRSPACE_AREA *Temp, double aCenterX, double aCenterY, double Radius);
-static void AddPoint(AIRSPACE_POINT *Temp, unsigned *AeraPointCount);
+static void AddAirspaceCircle(AIRSPACE_AREA *Temp, const double aCenterX, const double aCenterY, const double Radius);
+static void AddPoint(AIRSPACE_POINT *Temp, unsigned *AreaPointCount);
 static void AddArea(AIRSPACE_AREA *Temp);
 static void ReadAltitude(TCHAR *Text, AIRSPACE_ALT *Alt);
 static void CalculateArc(TCHAR *Text);
@@ -91,7 +91,6 @@ static TCHAR TempString[READLINE_LENGTH+1];
 static AIRSPACE_AREA TempArea;
 static AIRSPACE_POINT TempPoint;
 static int Rotation = 1;
-//static float Radius = 0;
 static double CenterX = 0;
 static double CenterY = 0;
 static int LineCount;
@@ -496,8 +495,8 @@ static bool ParseLine(int nLineType)
     case k_nLtDC:
       if (bFillMode)
         {
-          double Radius = (float)StrToDouble(&TempString[2],NULL);
-          Radius = (float)(Radius * NAUTICALMILESTOMETRES);
+          double Radius = StrToDouble(&TempString[2],NULL);
+          Radius = (Radius * NAUTICALMILESTOMETRES);
           AddAirspaceCircle(&TempArea, CenterX, CenterY, Radius);
         }
       else
@@ -813,7 +812,9 @@ static void AirspaceAGLLookup(AIRSPACE_ALT *Top, AIRSPACE_ALT *Base,
 
 
 static void AddAirspaceCircle(AIRSPACE_AREA *Temp, 
-                              double aCenterX, double aCenterY, double aRadius)
+                              const double aCenterX, 
+			      const double aCenterY, 
+			      const double aRadius)
 {
   AIRSPACE_CIRCLE *NewCircle = NULL;
 

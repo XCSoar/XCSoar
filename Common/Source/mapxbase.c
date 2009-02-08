@@ -767,22 +767,24 @@ int msDBFWriteStringAttribute( DBFHandle psDBF, int iRecord, int iField, const c
 }
 
 int m_strcasecmp(const char *s1, const char*s2) {
-	unsigned int i;
+  unsigned int i;
 
-	for (i = 0; s1[i] != 0 && s2[i] != 0; i++) {
-		unsigned char x1 = tolower(s1[i]);
-		unsigned char x2 = tolower(s2[i]);
-		if (x1 > x2) {
-			return 1;
-		} else if (x1 < x2) {
-			return -1;
-		}
-	}
-	if (0 == s1[i] && 0 == s2[i]) {
-		return 0;
-	}
-	if (s1[i] != 0) return 1;
-	return -1;
+  for (i = 0; s1[i] != 0 && s2[i] != 0; i++) {
+    unsigned char x1 = tolower(s1[i]);
+    unsigned char x2 = tolower(s2[i]);
+    if (x1 > x2) {
+      return 1;
+    } else if (x1 < x2) {
+      return -1;
+    }
+  }
+  if ((0 == s1[i]) && (0 == s2[i])) {
+    return 0;
+  }
+  if (s1[i] != 0) {
+    return 1;
+  }
+  return -1;
 }
 
 /*

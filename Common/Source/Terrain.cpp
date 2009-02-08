@@ -1353,8 +1353,9 @@ void OpenTopology() {
         if (iswalnum(ctemp[0])) {
           ShapeField = _tcstol(ctemp, &Stop, 10);
           ShapeField--;
-        } else
+        } else {
           ShapeField = -1;
+	}
         
         // Red component of line / shading colour
         PExtractParameter(TempString, ctemp, 4);

@@ -105,28 +105,6 @@ int IGCCharToNum(TCHAR c) {
 
 
 /*
-  problems with current IGC:
-
-  must have unique serial number, make and type, version number
-
-  must mark where declaration is changed in-flight
-
-  header: HF TAKEOFF
-
-  Pilot Event Marker: PEV
-
-  should be on for a while prior to takeoff and off for a while after
-  landing, to mark the ground level.
-
-  PEVs should also activate fast-fix (for how long?)
-
-  add C lines at waypoint events: START, TURN, TURN AREA, FINISH
-
-  C lines are causing problems when blank, as reported by Deniz
-
-*/
-
-/*
 
 HFDTE141203  <- should be UTC, same as time in filename
 HFFXA100

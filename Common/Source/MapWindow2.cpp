@@ -34,6 +34,8 @@ Copyright_License {
 
 #include "StdAfx.h"
 #include "compatibility.h"
+#include "options.h"
+
 #include "MapWindow.h"
 #include "OnLineContest.h"
 #include "Utils.h"
@@ -52,9 +54,10 @@ Copyright_License {
 
 #include <tchar.h>
 
-#include "Terrain.h"
-#include "options.h"
 #include "Task.h"
+
+#include "Terrain.h"
+#include "RasterTerrain.h"
 
 #include "GaugeVarioAltA.h"
 #include "GaugeCDI.h"
@@ -68,11 +71,15 @@ Copyright_License {
 #ifdef DEBUG
 #if (WINDOWSPC<1)
 #define DRAWLOAD
+extern HFONT  MapWindowFont;
+extern int timestats_av;
+extern int misc_tick_count;
 #endif
 #endif
 
 extern HWND hWndCDIWindow;
 extern HFONT MapLabelFont;
+extern HFONT  MapWindowBoldFont;
 
 
 void MapWindow::DrawCDI() {
@@ -1855,4 +1862,923 @@ bool MapWindow::TargetDragged(double *longitude, double *latitude) {
   }
   UnlockTaskData();
   return retval;
+}
+
+
+
+
+
+void MapWindow::DrawTeammate(HDC hdc, RECT rc)
+{
+  POINT point;
+
+  if (TeammateCodeValid)
+    {
+      if(PointVisible(TeammateLongitude, TeammateLatitude) )
+	{
+	  LatLon2Screen(TeammateLongitude, TeammateLatitude, point);
+
+	  SelectObject(hDCTemp,hBmpTeammatePosition);
+	  DrawBitmapX(hdc,
+		      point.x-IBLSCALE(10), 
+		      point.y-IBLSCALE(10),
+		      20,20,
+		      hDCTemp,0,0,SRCPAINT);
+	
+	  DrawBitmapX(hdc,
+		      point.x-IBLSCALE(10), 
+		      point.y-IBLSCALE(10),
+		      20,20,
+		      hDCTemp,20,0,SRCAND);
+	}
+    }
+}
+
+
+
+void MapWindow::DrawThermalBand(HDC hDC,RECT rc)
+{
+  POINT GliderBand[5] = { {0,0},{23,0},{22,0},{24,0},{0,0} };
+  
+  if ((DerivedDrawInfo.TaskAltitudeDifference>50)
+      &&(DisplayMode == dmFinalGlide)) {
+    return;
+  }
+
+  // JMW TODO: gather proper statistics
+  // note these should/may also be relative to ground
+  int i;
+  double mth = DerivedDrawInfo.MaxThermalHeight;
+  double maxh, minh;
+  double h;
+  double Wt[NUMTHERMALBUCKETS];
+  double ht[NUMTHERMALBUCKETS];
+  double Wmax=0.0;
+  int TBSCALEY = ( (rc.bottom - rc.top )/2)-IBLSCALE(30);
+#define TBSCALEX 20
+  
+  // calculate height above safety altitude
+  double hoffset = SAFETYALTITUDEBREAKOFF+DerivedDrawInfo.TerrainBase;
+  h = DerivedDrawInfo.NavAltitude-hoffset;
+
+  bool draw_start_height = ((ActiveWayPoint==0) && (ValidTaskPoint(0)) 
+			    && (StartMaxHeight!=0)
+			    && (DerivedDrawInfo.TerrainValid));
+  double hstart=0;
+  if (draw_start_height) {
+    if (StartHeightRef == 0) {
+      hstart = StartMaxHeight+DerivedDrawInfo.TerrainAlt;
+    } else {
+      hstart = StartMaxHeight;
+    }
+    hstart -= hoffset;
+  }
+
+  // calculate top/bottom height
+  maxh = max(h, mth);
+  minh = min(h, 0);
+
+  if (draw_start_height) {
+    maxh = max(maxh, hstart);
+    minh = min(minh, hstart);
+  }
+  
+  // no thermalling has been done above safety altitude
+  if (mth<=1) {
+    return;
+  }
+  if (maxh-minh<=0) {
+    return;
+  }
+
+  // normalised heights
+  double hglider = (h-minh)/(maxh-minh);
+  hstart = (hstart-minh)/(maxh-minh);
+
+  // calculate averages
+  int numtherm = 0;
+
+  double mc = MACCREADY;
+  Wmax = max(0.5,mc);
+
+  for (i=0; i<NUMTHERMALBUCKETS; i++) {
+    double wthis = 0;
+    // height of this thermal point [0,mth]
+    double hi = i*mth/NUMTHERMALBUCKETS;
+    double hp = ((hi-minh)/(maxh-minh));
+
+    if (DerivedDrawInfo.ThermalProfileN[i]>5) {
+      // now requires 10 items in bucket before displaying,
+      // to eliminate kinks
+      wthis = DerivedDrawInfo.ThermalProfileW[i]
+                 /DerivedDrawInfo.ThermalProfileN[i];
+    }
+    if (wthis>0.0) {
+      ht[numtherm]= hp;
+      Wt[numtherm]= wthis;
+      Wmax = max(Wmax,wthis/1.5);
+      numtherm++;
+    }
+  }
+
+  if ((!draw_start_height) && (numtherm<=1)) {
+    return; // don't display if insufficient statistics
+    // but do draw if start height needs to be drawn
+  }
+  
+  // drawing info
+  HPEN hpOld;
+  
+  // position of thermal band
+  if (numtherm>1) {
+    hpOld = (HPEN)SelectObject(hDC, hpThermalBand);
+    HBRUSH hbOld = (HBRUSH)SelectObject(hDC, hbThermalBand);
+  
+    POINT ThermalProfile[NUMTHERMALBUCKETS+2];
+    for (i=0; i<numtherm; i++) {    
+      ThermalProfile[1+i].x = 
+	(iround((Wt[i]/Wmax)*IBLSCALE(TBSCALEX)))+rc.left;
+      
+      ThermalProfile[1+i].y = 
+	IBLSCALE(4)+iround(TBSCALEY*(1.0-ht[i]))+rc.top;
+    }
+    ThermalProfile[0].x = rc.left;
+    ThermalProfile[0].y = ThermalProfile[1].y;
+    ThermalProfile[numtherm+1].x = rc.left;
+    ThermalProfile[numtherm+1].y = ThermalProfile[numtherm].y;
+
+    Polygon(hDC,ThermalProfile,numtherm+2);
+    SelectObject(hDC, hbOld);
+  }
+    
+  // position of thermal band
+
+  GliderBand[0].y = IBLSCALE(4)+iround(TBSCALEY*(1.0-hglider))+rc.top;
+  GliderBand[1].y = GliderBand[0].y;
+  GliderBand[1].x = max(iround((mc/Wmax)*IBLSCALE(TBSCALEX)),IBLSCALE(4))
+    +rc.left;
+
+  GliderBand[2].x = GliderBand[1].x-IBLSCALE(4);
+  GliderBand[2].y = GliderBand[0].y-IBLSCALE(4);
+  GliderBand[3].x = GliderBand[1].x;
+  GliderBand[3].y = GliderBand[1].y;
+  GliderBand[4].x = GliderBand[1].x-IBLSCALE(4);
+  GliderBand[4].y = GliderBand[0].y+IBLSCALE(4);
+
+  hpOld = (HPEN)SelectObject(hDC, hpThermalBandGlider);
+  
+  Polyline(hDC,GliderBand, 2);
+  Polyline(hDC,GliderBand+2, 3); // arrow head
+
+  if (draw_start_height) {
+    SelectObject(hDC, hpFinalGlideBelow);
+    GliderBand[0].y = IBLSCALE(4)+iround(TBSCALEY*(1.0-hstart))+rc.top;
+    GliderBand[1].y = GliderBand[0].y;
+    Polyline(hDC, GliderBand, 2);
+  }
+
+  SelectObject(hDC, hpOld);
+  
+}
+
+
+void MapWindow::DrawFinalGlide(HDC hDC,RECT rc)
+{
+
+  /*
+  POINT Scale[18] = {
+    {5,-50 }, {14,-60 }, {23, -50},
+    {5,-40 }, {14,-50 }, {23, -40},
+    {5,-30 }, {14,-40 }, {23, -30},
+    {5,-20 }, {14,-30 }, {23, -20},
+    {5,-10 }, {14,-20 }, {23, -10},
+    {5, 0  }, {14,-10 }, {23,   0},
+  };*/
+
+  POINT GlideBar[6] =
+    { {0,0},{9,-9},{18,0},{18,0},{9,0},{0,0} };
+  POINT GlideBar0[6] =
+    { {0,0},{9,-9},{18,0},{18,0},{9,0},{0,0} };
+  
+  HPEN hpOld;
+  HBRUSH hbOld;
+  
+  TCHAR Value[10];
+  
+  int Offset;
+  int Offset0;
+  int i;
+  
+  LockTaskData();  // protect from external task changes
+  #ifdef HAVEEXCEPTIONS
+  __try{
+  #endif
+
+    if (ValidTaskPoint(ActiveWayPoint)){
+    // if (ActiveWayPoint >= 0) {
+
+      const int y0 = ( (rc.bottom - rc.top )/2)+rc.top;
+
+      // 60 units is size, div by 8 means 60*8 = 480 meters.
+
+      Offset = ((int)DerivedDrawInfo.TaskAltitudeDifference)/8; 
+      Offset0 = ((int)DerivedDrawInfo.TaskAltitudeDifference0)/8; 
+      // JMW TODO: should be an angle if in final glide mode
+
+      if(Offset > 60) Offset = 60;
+      if(Offset < -60) Offset = -60;
+      Offset = IBLSCALE(Offset);
+      if(Offset<0) {
+        GlideBar[1].y = IBLSCALE(9);
+      }
+      
+      if(Offset0 > 60) Offset0 = 60;
+      if(Offset0 < -60) Offset0 = -60;
+      Offset0 = IBLSCALE(Offset0);
+      if(Offset0<0) {
+        GlideBar0[1].y = IBLSCALE(9);
+      }
+      
+      for(i=0;i<6;i++)
+        {
+          GlideBar[i].y += y0;
+          GlideBar[i].x = IBLSCALE(GlideBar[i].x)+rc.left;
+        }
+      GlideBar[0].y -= Offset;
+      GlideBar[1].y -= Offset;
+      GlideBar[2].y -= Offset;
+
+      for(i=0;i<6;i++)
+        {
+          GlideBar0[i].y += y0;
+          GlideBar0[i].x = IBLSCALE(GlideBar0[i].x)+rc.left;
+        }
+      GlideBar0[0].y -= Offset0;
+      GlideBar0[1].y -= Offset0;
+      GlideBar0[2].y -= Offset0;
+
+      if ((Offset<0)&&(Offset0<0)) {
+        // both below
+        if (Offset0!= Offset) {
+          int dy = (GlideBar0[0].y-GlideBar[0].y)
+            +(GlideBar0[0].y-GlideBar0[3].y);
+          dy = max(IBLSCALE(3), dy);
+          GlideBar[3].y = GlideBar0[0].y-dy;
+          GlideBar[4].y = GlideBar0[1].y-dy;
+          GlideBar[5].y = GlideBar0[2].y-dy;
+          
+          GlideBar0[0].y = GlideBar[3].y;
+          GlideBar0[1].y = GlideBar[4].y;
+          GlideBar0[2].y = GlideBar[5].y;
+        } else {
+          Offset0 = 0;
+        }
+
+      } else if ((Offset>0)&&(Offset0>0)) {
+        // both above
+        GlideBar0[3].y = GlideBar[0].y;
+        GlideBar0[4].y = GlideBar[1].y;
+        GlideBar0[5].y = GlideBar[2].y;
+
+        if (abs(Offset0-Offset)<IBLSCALE(4)) {
+          Offset= Offset0;
+        } 
+      }
+
+      // draw actual glide bar
+      if (Offset<=0) {
+        if (LandableReachable) {
+          hpOld = (HPEN)SelectObject(hDC, hpFinalGlideBelowLandable);
+          hbOld = (HBRUSH)SelectObject(hDC, hbFinalGlideBelowLandable);
+        } else {
+          hpOld = (HPEN)SelectObject(hDC, hpFinalGlideBelow);
+          hbOld = (HBRUSH)SelectObject(hDC, hbFinalGlideBelow);
+        }
+      } else {
+        hpOld = (HPEN)SelectObject(hDC, hpFinalGlideAbove);
+        hbOld = (HBRUSH)SelectObject(hDC, hbFinalGlideAbove);
+      }
+      Polygon(hDC,GlideBar,6);
+
+      // draw glide bar at mc 0
+      if (Offset0<=0) {
+        if (LandableReachable) {
+          SelectObject(hDC, hpFinalGlideBelowLandable);
+          SelectObject(hDC, GetStockObject(HOLLOW_BRUSH));
+        } else {
+          SelectObject(hDC, hpFinalGlideBelow);
+          SelectObject(hDC, GetStockObject(HOLLOW_BRUSH));
+        }
+      } else {
+        SelectObject(hDC, hpFinalGlideAbove);
+        SelectObject(hDC, GetStockObject(HOLLOW_BRUSH));
+      }
+      if (Offset!=Offset0) {
+        Polygon(hDC,GlideBar0,6);
+      }
+
+      // JMW draw x on final glide bar if unreachable at current Mc
+      // hpAircraftBorder
+      if ((DerivedDrawInfo.TaskTimeToGo>0.9*ERROR_TIME)
+	  || ((MACCREADY<0.01) && (DerivedDrawInfo.TaskAltitudeDifference<0))) {
+	SelectObject(hDC, hpAircraftBorder);
+	POINT Cross[4] = { {-5, -5},
+			   { 5,  5},
+			   {-5,  5},
+			   { 5, -5} };
+	for (i=0; i<4; i++) {
+	  Cross[i].x = IBLSCALE(Cross[i].x+9);
+	  Cross[i].y = IBLSCALE(Cross[i].y+9)+y0;
+	}
+        Polygon(hDC,Cross,2);
+        Polygon(hDC,&Cross[2],2);
+      }
+
+      if (Appearance.IndFinalGlide == fgFinalGlideDefault){
+
+        _stprintf(Value,TEXT("%1.0f "), 
+                  ALTITUDEMODIFY*DerivedDrawInfo.TaskAltitudeDifference);
+
+        if (Offset>=0) {
+          Offset = GlideBar[2].y+Offset+IBLSCALE(5);
+        } else {
+          if (Offset0>0) {
+            Offset = GlideBar0[1].y-IBLSCALE(15);
+          } else {
+            Offset = GlideBar[2].y+Offset-IBLSCALE(15);
+          }
+        }
+        
+        TextInBoxMode_t TextInBoxMode = {1|8};
+        TextInBox(hDC, Value, 0, (int)Offset, 0, TextInBoxMode);
+
+      } else
+        if (Appearance.IndFinalGlide == fgFinalGlideAltA){
+
+          SIZE  TextSize;
+          HFONT oldFont;
+          int y = GlideBar[3].y;
+          // was ((rc.bottom - rc.top )/2)-rc.top-
+          //            Appearance.MapWindowBoldFont.CapitalHeight/2-1;
+          int x = GlideBar[2].x+IBLSCALE(1);
+          HBITMAP Bmp;
+          POINT  BmpPos;
+          POINT  BmpSize;
+
+          _stprintf(Value, TEXT("%1.0f"), 
+                    Units::ToUserAltitude(DerivedDrawInfo.TaskAltitudeDifference));
+          
+          oldFont = (HFONT)SelectObject(hDC, MapWindowBoldFont);
+          GetTextExtentPoint(hDC, Value, _tcslen(Value), &TextSize);
+          
+          SelectObject(hDC, GetStockObject(WHITE_BRUSH));
+          SelectObject(hDC, GetStockObject(WHITE_PEN));
+          Rectangle(hDC, x, y, 
+                    x+IBLSCALE(1)+TextSize.cx, 
+                    y+Appearance.MapWindowBoldFont.CapitalHeight+IBLSCALE(2));
+          
+          ExtTextOut(hDC, x+IBLSCALE(1), 
+                     y+Appearance.MapWindowBoldFont.CapitalHeight
+                     -Appearance.MapWindowBoldFont.AscentHeight+IBLSCALE(1), 
+                     0, NULL, Value, _tcslen(Value), NULL);
+          
+          if (Units::GetUnitBitmap(Units::GetUserAltitudeUnit(), &Bmp, &BmpPos, &BmpSize, 0)){
+            HBITMAP oldBitMap = (HBITMAP)SelectObject(hDCTemp, Bmp);
+            DrawBitmapX(hDC, x+TextSize.cx+IBLSCALE(1), y, BmpSize.x, BmpSize.y, 
+                        hDCTemp, BmpPos.x, BmpPos.y, SRCCOPY);
+            SelectObject(hDCTemp, oldBitMap);
+          }
+          
+          SelectObject(hDC, oldFont);
+          
+        }
+
+      SelectObject(hDC, hbOld);
+      SelectObject(hDC, hpOld);
+    }
+#ifdef HAVEEXCEPTIONS
+  }__finally
+#endif
+     {
+       UnlockTaskData();
+     }
+  
+}
+
+
+void MapWindow::DrawCompass(HDC hDC,RECT rc)
+{
+  POINT Start;
+  HPEN hpOld;
+  HBRUSH hbOld; 
+
+  if (Appearance.CompassAppearance == apCompassDefault){
+
+    Start.y = IBLSCALE(19)+rc.top;
+    Start.x = rc.right - IBLSCALE(19);
+
+    if (EnableVarioGauge && MapRectBig.right == rc.right)
+        Start.x -= InfoBoxLayout::ControlWidth;
+
+    POINT Arrow[5] = { {0,-18}, {-6,10}, {0,0}, {6,10}, {0,-18}};
+
+    hpOld = (HPEN)SelectObject(hDC, hpCompass);
+    hbOld = (HBRUSH)SelectObject(hDC, hbCompass);
+
+    // North arrow
+    PolygonRotateShift(Arrow, 5, Start.x, Start.y, -DisplayAngle);
+    Polygon(hDC,Arrow,5);
+
+    SelectObject(hDC, hbOld);
+    SelectObject(hDC, hpOld);
+
+  } else
+  if (Appearance.CompassAppearance == apCompassAltA){
+
+    static double lastDisplayAngle = 9999.9;
+    static int lastRcRight = 0;
+    static POINT Arrow[5] = { {0,-11}, {-5,9}, {0,3}, {5,9}, {0,-11}};
+    extern bool EnableVarioGauge;
+
+    if (lastDisplayAngle != DisplayAngle || lastRcRight != rc.right){
+
+      Arrow[0].x  = 0;
+      Arrow[0].y  = -11;
+      Arrow[1].x  = -5;
+      Arrow[1].y  = 9;
+      Arrow[2].x  = 0;
+      Arrow[2].y  = 3;
+      Arrow[3].x  = 5;
+      Arrow[3].y  = 9;
+      Arrow[4].x  = 0;
+      Arrow[4].y  = -11;
+
+      Start.y = rc.top + IBLSCALE(10);
+      Start.x = rc.right - IBLSCALE(11);
+
+      if (EnableVarioGauge && MapRectBig.right == rc.right) {
+        Start.x -= InfoBoxLayout::ControlWidth;
+      }
+
+      // North arrow
+      PolygonRotateShift(Arrow, 5, Start.x, Start.y, 
+                         -DisplayAngle);
+
+      lastDisplayAngle = DisplayAngle;
+      lastRcRight = rc.right;
+    }
+
+    hpOld = (HPEN)SelectObject(hDC, hpCompassBorder);
+    hbOld = (HBRUSH)SelectObject(hDC, hbCompass);
+    Polygon(hDC,Arrow,5);
+
+    SelectObject(hDC, hpCompass);
+    Polygon(hDC,Arrow,5);
+
+    SelectObject(hDC, hbOld);
+    SelectObject(hDC, hpOld);
+
+  }
+
+}
+
+void MapWindow::ClearAirSpace(bool fill) {
+  COLORREF whitecolor = RGB(0xff,0xff,0xff);
+
+  SetTextColor(hDCTemp, whitecolor);
+  SetBkMode(hDCTemp, TRANSPARENT);	  
+  SelectObject(hDCTemp, (HBITMAP)hDrawBitMapTmp);
+  SetBkColor(hDCTemp, whitecolor);	  
+  SelectObject(hDCTemp, GetStockObject(WHITE_PEN));
+  SelectObject(hDCTemp, GetStockObject(WHITE_BRUSH));
+  Rectangle(hDCTemp,MapRect.left,MapRect.top,MapRect.right,MapRect.bottom);
+  if (fill) {
+    SelectObject(hDCTemp, GetStockObject(WHITE_PEN));
+  }
+}
+
+// TODO: optimise!
+void MapWindow::DrawAirSpace(HDC hdc, RECT rc)
+{
+  COLORREF whitecolor = RGB(0xff,0xff,0xff);
+  unsigned int i;
+  
+  bool found = false;
+
+  if (AirspaceCircle) {
+    // draw without border
+    for(i=0;i<NumberOfAirspaceCircles;i++) {
+      if (AirspaceCircle[i].Visible==2) {
+	if (!found) {
+	  ClearAirSpace(true);
+	  found = true;
+	}
+        // this color is used as the black bit
+        SetTextColor(hDCTemp,
+                     Colours[iAirspaceColour[AirspaceCircle[i].Type]]);
+        // get brush, can be solid or a 1bpp bitmap
+        SelectObject(hDCTemp,
+                     hAirspaceBrushes[iAirspaceBrush[AirspaceCircle[i].Type]]);
+        Circle(hDCTemp,
+               AirspaceCircle[i].Screen.x ,
+               AirspaceCircle[i].Screen.y ,
+               AirspaceCircle[i].ScreenR ,rc, true, true);
+      }
+    }
+  }
+
+  if (AirspaceArea) {
+    for(i=0;i<NumberOfAirspaceAreas;i++) {
+      if(AirspaceArea[i].Visible ==2) {
+	if (!found) {
+	  ClearAirSpace(true);
+	  found = true;
+	}
+        // this color is used as the black bit
+        SetTextColor(hDCTemp, 
+                     Colours[iAirspaceColour[AirspaceArea[i].Type]]);
+        SelectObject(hDCTemp,
+                     hAirspaceBrushes[iAirspaceBrush[AirspaceArea[i].Type]]);         
+        ClipPolygon(hDCTemp,
+                    AirspaceScreenPoint+AirspaceArea[i].FirstPoint,
+                    AirspaceArea[i].NumPoints, rc, true);
+      }      
+    }
+  }
+  
+  ////////// draw it again, just the outlines
+
+  if (found) {
+    SelectObject(hDCTemp, GetStockObject(HOLLOW_BRUSH));
+    SelectObject(hDCTemp, GetStockObject(WHITE_PEN));
+  }
+
+  if (AirspaceCircle) {
+    for(i=0;i<NumberOfAirspaceCircles;i++) {
+      if (AirspaceCircle[i].Visible) {
+	if (!found) {
+	  ClearAirSpace(false);
+	  found = true;
+	}
+        if (bAirspaceBlackOutline) {
+          SelectObject(hDCTemp, GetStockObject(BLACK_PEN));
+        } else {
+          SelectObject(hDCTemp, hAirspacePens[AirspaceCircle[i].Type]);
+        }
+        Circle(hDCTemp,
+               AirspaceCircle[i].Screen.x ,
+               AirspaceCircle[i].Screen.y ,
+               AirspaceCircle[i].ScreenR ,rc, true, false);
+      }
+    }
+  }
+
+  if (AirspaceArea) {
+    for(i=0;i<NumberOfAirspaceAreas;i++) {
+      if(AirspaceArea[i].Visible) {
+	if (!found) {
+	  ClearAirSpace(false);
+	  found = true;
+	}
+        if (bAirspaceBlackOutline) {
+          SelectObject(hDCTemp, GetStockObject(BLACK_PEN));
+        } else {
+          SelectObject(hDCTemp, hAirspacePens[AirspaceArea[i].Type]);
+        }
+
+	POINT *pstart = AirspaceScreenPoint+AirspaceArea[i].FirstPoint;
+        ClipPolygon(hDCTemp, pstart,
+                    AirspaceArea[i].NumPoints, rc, false);
+
+	if (AirspaceArea[i].NumPoints>2) {
+	  // JMW close if open
+	  if ((pstart[0].x != pstart[AirspaceArea[i].NumPoints-1].x) ||
+	      (pstart[0].y != pstart[AirspaceArea[i].NumPoints-1].y)) {
+	    POINT ps[2];
+	    ps[0] = pstart[0];
+	    ps[1] = pstart[AirspaceArea[i].NumPoints-1];
+	    Polyline(hDCTemp, ps, 2);
+	  }
+	}
+
+      }      
+    }
+  }
+
+  if (found) {
+    // need to do this to prevent drawing of colored outline
+    SelectObject(hDCTemp, GetStockObject(WHITE_PEN));
+#if (WINDOWSPC<1)
+    TransparentImage(hdc,
+                     rc.left, rc.top,
+                     rc.right-rc.left,rc.bottom-rc.top,
+                     hDCTemp,
+                     rc.left, rc.top,
+                     rc.right-rc.left,rc.bottom-rc.top,
+                     whitecolor
+                     );
+    
+#else
+    TransparentBlt(hdc,
+                   rc.left,rc.top,
+                   rc.right-rc.left,rc.bottom-rc.top,
+                   hDCTemp,
+                   rc.left,rc.top,
+                   rc.right-rc.left,rc.bottom-rc.top,
+                   whitecolor
+                   );
+  #endif
+    // restore original color
+    //    SetTextColor(hDCTemp, origcolor);
+    SetBkMode(hDCTemp,OPAQUE);
+  }
+}
+
+
+void MapWindow::DrawMapScale(HDC hDC, RECT rc /* the Map Rect*/, 
+                             bool ScaleChangeFeedback)
+{
+
+
+  if (Appearance.MapScale == apMsDefault){
+
+    TCHAR Scale[80];
+    POINT Start, End;
+    HPEN hpOld;
+    hpOld = (HPEN)SelectObject(hDC, hpMapScale);
+
+    Start.x = rc.right-IBLSCALE(6); End.x = rc.right-IBLSCALE(6);
+    Start.y = rc.bottom-IBLSCALE(30); End.y = Start.y - IBLSCALE(30);
+    DrawSolidLine(hDC,Start,End);
+
+    Start.x = rc.right-IBLSCALE(11); End.x = rc.right-IBLSCALE(6);
+    End.y = Start.y;
+    DrawSolidLine(hDC,Start,End);
+
+    Start.y = Start.y - IBLSCALE(30); End.y = Start.y;
+    DrawSolidLine(hDC,Start,End);
+
+    SelectObject(hDC, hpOld);
+
+    if(MapScale <0.1)
+    {
+      _stprintf(Scale,TEXT("%1.2f"),MapScale);
+    }
+    else if(MapScale <3)
+    {
+      _stprintf(Scale,TEXT("%1.1f"),MapScale);
+    }
+    else
+    {
+      _stprintf(Scale,TEXT("%1.0f"),MapScale);
+    }
+
+    _tcscat(Scale, Units::GetDistanceName());
+
+    if (AutoZoom) {
+      _tcscat(Scale,TEXT(" A"));
+    }
+    if (EnablePan) {
+      _tcscat(Scale,TEXT(" PAN"));
+    }
+    if (EnableAuxiliaryInfo) {
+      _tcscat(Scale,TEXT(" AUX"));
+    }
+    if (ReplayLogger::IsEnabled()) {
+      _tcscat(Scale,TEXT(" REPLAY"));
+    }
+    TCHAR Buffer[20];
+    RASP.ItemLabel(RasterTerrain::render_weather, Buffer);
+    if (_tcslen(Buffer)) {
+      _tcscat(Scale,TEXT(" "));
+      _tcscat(Scale, Buffer);
+    }
+
+    SIZE tsize;
+    GetTextExtentPoint(hDC, Scale, _tcslen(Scale), &tsize);
+
+    COLORREF whitecolor = RGB(0xd0,0xd0, 0xd0);
+    COLORREF blackcolor = RGB(0x20,0x20, 0x20);
+    COLORREF origcolor = SetTextColor(hDC, whitecolor);
+
+    SetTextColor(hDC, whitecolor);
+    ExtTextOut(hDC, rc.right-IBLSCALE(11)-tsize.cx, End.y+IBLSCALE(8), 0, 
+               NULL, Scale, _tcslen(Scale), NULL);
+
+    SetTextColor(hDC, blackcolor);
+    ExtTextOut(hDC, rc.right-IBLSCALE(10)-tsize.cx, End.y+IBLSCALE(7), 0, 
+               NULL, Scale, _tcslen(Scale), NULL);
+
+    #ifdef DRAWLOAD
+    SelectObject(hDC, MapWindowFont);
+    wsprintf(Scale,TEXT("            %d %d ms"), timestats_av,
+             misc_tick_count);
+    ExtTextOut(hDC, rc.left, rc.top, 0, NULL, Scale, _tcslen(Scale), NULL);
+    #endif
+
+    // restore original color
+    SetTextColor(hDC, origcolor);
+
+    SelectObject(hDC, hpOld);
+
+  }
+  if (Appearance.MapScale == apMsAltA){
+
+    static int LastMapWidth = 0;
+    double MapWidth;
+    TCHAR ScaleInfo[80];
+
+    HFONT          oldFont;
+    int            Height;
+    SIZE           TextSize;
+    HBRUSH         oldBrush;
+    HPEN           oldPen;
+    COLORREF       oldTextColor;
+    HBITMAP        oldBitMap;
+    Units_t        Unit;
+
+    if (ScaleChangeFeedback)
+      MapWidth = (RequestMapScale * rc.right)/DISTANCEMODIFY/GetMapResolutionFactor();
+    else
+      MapWidth = (MapScale * rc.right)/DISTANCEMODIFY/GetMapResolutionFactor();
+
+    oldFont = (HFONT)SelectObject(hDC, MapWindowBoldFont);
+    Units::FormatUserMapScale(&Unit, MapWidth, ScaleInfo, 
+                              sizeof(ScaleInfo)/sizeof(TCHAR));
+    GetTextExtentPoint(hDC, ScaleInfo, _tcslen(ScaleInfo), &TextSize);
+    LastMapWidth = (int)MapWidth;
+
+    Height = Appearance.MapWindowBoldFont.CapitalHeight+IBLSCALE(2);  
+    // 2: add 1pix border
+
+    oldBrush = (HBRUSH)SelectObject(hDC, GetStockObject(WHITE_BRUSH));
+    oldPen = (HPEN)SelectObject(hDC, GetStockObject(WHITE_PEN));
+    Rectangle(hDC, 0, rc.bottom-Height, 
+              TextSize.cx + IBLSCALE(21), rc.bottom);
+    if (ScaleChangeFeedback){
+      SetBkMode(hDC, TRANSPARENT);
+      oldTextColor = SetTextColor(hDC, RGB(0xff,0,0));
+    }else
+      oldTextColor = SetTextColor(hDC, RGB(0,0,0));
+
+    ExtTextOut(hDC, IBLSCALE(7), 
+               rc.bottom-Appearance.MapWindowBoldFont.AscentHeight-IBLSCALE(1), 
+               0, NULL, ScaleInfo, _tcslen(ScaleInfo), NULL);
+
+    oldBitMap = (HBITMAP)SelectObject(hDCTemp, hBmpMapScale);
+
+    DrawBitmapX(hDC, 0, rc.bottom-Height, 6, 11, hDCTemp, 0, 0, SRCCOPY);
+    DrawBitmapX(hDC, 
+           IBLSCALE(14)+TextSize.cx, 
+           rc.bottom-Height, 8, 11, hDCTemp, 6, 0, SRCCOPY);
+
+    if (!ScaleChangeFeedback){
+      HBITMAP Bmp;
+      POINT   BmpPos, BmpSize;
+
+      if (Units::GetUnitBitmap(Unit, &Bmp, &BmpPos, &BmpSize, 0)){
+        HBITMAP oldBitMapa = (HBITMAP)SelectObject(hDCTemp, Bmp);
+
+        DrawBitmapX(hDC, 
+                    IBLSCALE(8)+TextSize.cx, rc.bottom-Height, 
+                    BmpSize.x, BmpSize.y, 
+                    hDCTemp, BmpPos.x, BmpPos.y, SRCCOPY);
+        SelectObject(hDCTemp, oldBitMapa);
+      }
+    }
+
+    int y = rc.bottom-Height-
+      (Appearance.TitleWindowFont.AscentHeight+IBLSCALE(2));
+    if (!ScaleChangeFeedback){
+      // bool FontSelected = false;
+      // JMW TODO gettext these
+      ScaleInfo[0] = 0;
+      if (AutoZoom) {
+        _tcscat(ScaleInfo, TEXT("AUTO "));
+      }
+      if (TargetPan) {
+        _tcscat(ScaleInfo, TEXT("TARGET "));
+      } else if (EnablePan) {
+        _tcscat(ScaleInfo, TEXT("PAN "));
+      }
+      if (EnableAuxiliaryInfo) {
+        _tcscat(ScaleInfo, TEXT("AUX "));
+      }
+      if (ReplayLogger::IsEnabled()) {
+        _tcscat(ScaleInfo, TEXT("REPLAY "));
+      }
+      TCHAR Buffer[20];
+      RASP.ItemLabel(RasterTerrain::render_weather, Buffer);
+      if (_tcslen(Buffer)) {
+        _tcscat(ScaleInfo, Buffer);
+      }
+
+      if (ScaleInfo[0]) {
+        SelectObject(hDC, TitleWindowFont);
+        // FontSelected = true;
+        ExtTextOut(hDC, IBLSCALE(1), y, 0, NULL, ScaleInfo, 
+                   _tcslen(ScaleInfo), NULL);
+        y -= (Appearance.TitleWindowFont.CapitalHeight+IBLSCALE(1));
+      }
+    }
+
+    #ifdef DRAWLOAD
+    SelectObject(hDC, MapWindowFont);
+    wsprintf(ScaleInfo,TEXT("    %d %d ms"), 
+             timestats_av,
+             misc_tick_count);
+
+    ExtTextOut(hDC, rc.left, rc.top, 0, NULL, ScaleInfo, 
+               _tcslen(ScaleInfo), NULL);
+    #endif
+
+    SetTextColor(hDC, oldTextColor);
+    SelectObject(hDC, oldPen);
+    SelectObject(hDC, oldFont);
+    SelectObject(hDC, oldBrush);
+    SelectObject(hDCTemp, oldBitMap);
+
+  }
+
+}
+
+
+void MapWindow::DrawGlideThroughTerrain(HDC hDC, RECT rc) {
+  HPEN hpOld;
+
+  hpOld = (HPEN)SelectObject(hDC, 
+                             hpTerrainLineBg);  //sjt 02feb06 added bg line
+
+  SelectObject(hDC,hpTerrainLineBg);
+  Polyline(hDC,Groundline,NUMTERRAINSWEEPS+1);
+  if ((FinalGlideTerrain==1) || 
+      ((!EnableTerrain || !DerivedDrawInfo.Flying) && (FinalGlideTerrain==2))) {
+    SelectObject(hDC,hpTerrainLine);
+    Polyline(hDC,Groundline,NUMTERRAINSWEEPS+1);
+  }
+
+  if (DerivedDrawInfo.Flying && ValidTaskPoint(ActiveWayPoint)) {
+    if ((DerivedDrawInfo.TerrainWarningLatitude != 0.0)
+        &&(DerivedDrawInfo.TerrainWarningLongitude != 0.0)) {
+      
+      POINT sc;
+      if (PointVisible(DerivedDrawInfo.TerrainWarningLongitude,
+                       DerivedDrawInfo.TerrainWarningLatitude)) {
+        LatLon2Screen(DerivedDrawInfo.TerrainWarningLongitude,
+                      DerivedDrawInfo.TerrainWarningLatitude, sc);
+        DrawBitmapIn(hDC, sc, hTerrainWarning);
+      }
+    }
+  }
+
+  SelectObject(hDC, hpOld);
+
+}
+
+void MapWindow::DrawBestCruiseTrack(HDC hdc, POINT Orig)
+{
+  HPEN hpOld;
+  HBRUSH hbOld;
+
+  if (ActiveWayPoint<0) {
+    return; // nothing to draw..
+  }
+  if (!ValidTaskPoint(ActiveWayPoint)) {
+    return;
+  }
+
+  if (DerivedDrawInfo.WaypointDistance < 0.010)
+    return;
+
+  hpOld = (HPEN)SelectObject(hdc, hpBestCruiseTrack);
+  hbOld = (HBRUSH)SelectObject(hdc, hbBestCruiseTrack);
+
+  if (Appearance.BestCruiseTrack == ctBestCruiseTrackDefault){
+
+    int dy = (long)(70); 
+    POINT Arrow[7] = { {-1,-40}, {1,-40}, {1,0}, {6,8}, {-6,8}, {-1,0}, {-1,-40}};
+
+    Arrow[2].y -= dy;
+    Arrow[3].y -= dy;
+    Arrow[4].y -= dy;
+    Arrow[5].y -= dy;
+
+    PolygonRotateShift(Arrow, 7, Orig.x, Orig.y, 
+                       DerivedDrawInfo.BestCruiseTrack-DisplayAngle);
+
+    Polygon(hdc,Arrow,7);
+
+  } else
+  if (Appearance.BestCruiseTrack == ctBestCruiseTrackAltA){
+
+    POINT Arrow[] = { {-1,-40}, {-1,-62}, {-6,-62}, {0,-70}, {6,-62}, {1,-62}, {1,-40}, {-1,-40}};
+
+    PolygonRotateShift(Arrow, sizeof(Arrow)/sizeof(Arrow[0]),
+                       Orig.x, Orig.y, 
+                       DerivedDrawInfo.BestCruiseTrack-DisplayAngle);
+    Polygon(hdc, Arrow, (sizeof(Arrow)/sizeof(Arrow[0])));
+  }
+
+  SelectObject(hdc, hpOld);
+  SelectObject(hdc, hbOld);
 }

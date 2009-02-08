@@ -2,6 +2,20 @@
 SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
+IGC Logger:
+  must have unique serial number, make and type, version number
+  must mark where declaration is changed in-flight
+  header: HF TAKEOFF
+  Pilot Event Marker: PEV
+  should be on for a while prior to takeoff and off for a while after
+  landing, to mark the ground level.
+  PEVs should also activate fast-fix (for how long?)
+  add C lines at waypoint events: START, TURN, TURN AREA, FINISH
+  C lines are causing problems when blank, as reported by Deniz
+- put globals into their own class
+- check all TODOs / check
+
+
 Todo:
 - Start status message
 - Quick fgtt by polygon interior fit from airspace (possible performance improvement)
@@ -19,6 +33,7 @@ Todo:
 Changes from 5.1.9beta9:
 - Fixed bug in tasman vario gauge display
 - Clearer display of flarm target climb rate
+- renamed variables to improve readibility
 
 Changes from 5.1.9beta8:
 - Info on persist load/save in startup log
@@ -83,6 +98,8 @@ Changes from 5.1.9beta2:
 - build script
 - version bump
 
+
+- More porting to cegcc; allow O3 optimisation, variable initialisation
 
 Changes from 5.1.9beta1:
 - Added Flymaster F1 device

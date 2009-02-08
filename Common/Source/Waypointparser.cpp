@@ -907,7 +907,6 @@ void WaypointLatitudeToString(double Latitude,
 
 
 void WriteWayPointFileWayPoint(FILE *fp, WAYPOINT* wpt) {
-  TCHAR String[MAX_PATH];
   TCHAR Flags[MAX_PATH];
   TCHAR Latitude[MAX_PATH];
   TCHAR Longitude[MAX_PATH];

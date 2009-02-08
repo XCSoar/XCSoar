@@ -375,8 +375,10 @@ void XShapeLabel::renderSpecial(HDC hDC, int x, int y) {
     TCHAR Temp[100];
     wsprintf(Temp,TEXT("%S"),label);
     SetBkMode(hDC,TRANSPARENT);
-    if (ispunct(Temp[0])){
-      DOUBLE dTemp;
+
+    // JMW TODO what does this do?
+    if (ispunct(Temp[0])) {
+      double dTemp;
       
       Temp[0]='0';
       dTemp = StrToDouble(Temp,NULL);
@@ -386,6 +388,7 @@ void XShapeLabel::renderSpecial(HDC hDC, int x, int y) {
       else
 	wsprintf(Temp,TEXT("%d"),int(dTemp));
     }
+
     int size = _tcslen(Temp);
 
     SIZE tsize;
