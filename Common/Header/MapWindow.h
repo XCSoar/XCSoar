@@ -268,15 +268,9 @@ class MapWindow {
  private:
   static int iSnailNext;
   static HBITMAP hDrawBitMap;
-#ifdef BGBITMAP
-  static HBITMAP hDrawBitMapBg;
-#endif
   static HBITMAP hDrawBitMapTmp;
   static HBITMAP hMaskBitMap;
   static HDC hdcDrawWindow;
-#ifdef BGBITMAP
-  static HDC hdcDrawWindowBg;
-#endif
   static HDC hdcScreen;
   static HDC hDCTemp;
   static HDC hDCMask;

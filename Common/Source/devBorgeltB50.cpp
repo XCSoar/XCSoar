@@ -163,7 +163,7 @@ BOOL PBB50(TCHAR *String, NMEA_INFO *GPS_INFO) {
   JMW disabled bugs/ballast due to problems with test b50
 
   NMEAParser::ExtractParameter(String,ctemp,4);
-  GPS_INFO->Bugs = 1.0-max(0,min(30,StrToDouble(ctemp,NULL)))/100;
+  GPS_INFO->Bugs = 1.0-max(0,min(30,StrToDouble(ctemp,NULL)))/100.0;
   BUGS = GPS_INFO->Bugs;
 
   // for Borgelt it's % of empty weight,

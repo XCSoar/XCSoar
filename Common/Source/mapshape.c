@@ -41,7 +41,6 @@ Copyright_License {
 #include "maperror.h"
 #include "maptree.h"
 
-//typedef unsigned char uchar;
 #include <limits.h>
 
 #if UINT_MAX == 65535

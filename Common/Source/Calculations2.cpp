@@ -231,41 +231,41 @@ void DoLogging(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
 
 
 
-double FinalGlideThroughTerrain(const double bearing,
+double FinalGlideThroughTerrain(const double this_bearing,
 				NMEA_INFO *Basic,
                                 DERIVED_INFO *Calculated,
                                 double *retlat, double *retlon,
-                                const double maxrange,
-				bool *outofrange,
+                                const double max_range,
+				bool *out_of_range,
 				double *TerrainBase)
 {
   double irange = GlidePolar::MacCreadyAltitude(MACCREADY,
-						1.0, bearing,
+						1.0, this_bearing,
 						Calculated->WindSpeed,
 						Calculated->WindBearing,
 						0, 0, true, 0);
-  const double mylat = Basic->Latitude;
-  const double mylon = Basic->Longitude;
+  const double start_lat = Basic->Latitude;
+  const double start_lon = Basic->Longitude;
   if (retlat && retlon) {
-    *retlat = mylat;
-    *retlon = mylon;
+    *retlat = start_lat;
+    *retlon = start_lon;
   }
-  *outofrange = false;
+  *out_of_range = false;
 
   if ((irange<=0.0)||(Calculated->NavAltitude<=0)) {
     // can't make progress in this direction at the current windspeed/mc
     return 0;
   }
 
-  const double glidemaxrange = Calculated->NavAltitude/irange;
+  const double glide_max_range = Calculated->NavAltitude/irange;
 
   // returns distance one would arrive at altitude in straight glide
   // first estimate max range at this altitude
   double lat, lon;
-  double latlast, lonlast;
+  double last_lat, last_lon;
   double h=0.0, dh=0.0;
 //  int imax=0;
-  double dhlast=0;
+  double last_dh=0;
   double altitude;
 
   RasterTerrain::Lock();
@@ -275,20 +275,20 @@ double FinalGlideThroughTerrain(const double bearing,
 
   // calculate terrain rounding factor
 
-  FindLatitudeLongitude(mylat, mylon, 0,
-                        glidemaxrange/NUMFINALGLIDETERRAIN, &lat, &lon);
+  FindLatitudeLongitude(start_lat, start_lon, 0,
+                        glide_max_range/NUMFINALGLIDETERRAIN, &lat, &lon);
 
-  double Xrounding = fabs(lon-mylon)/2;
-  double Yrounding = fabs(lat-mylat)/2;
+  double Xrounding = fabs(lon-start_lon)/2;
+  double Yrounding = fabs(lat-start_lat)/2;
   RasterTerrain::SetTerrainRounding(Xrounding, Yrounding);
 
-  lat = latlast = mylat;
-  lon = lonlast = mylon;
+  lat = last_lat = start_lat;
+  lon = last_lon = start_lon;
 
   altitude = Calculated->NavAltitude;
   h =  max(0, RasterTerrain::GetTerrainHeight(lat, lon));
   dh = altitude - h - SAFETYALTITUDETERRAIN;
-  dhlast = dh;
+  last_dh = dh;
   if (dh<0) {
     start_under = true;
     // already below safety terrain height
@@ -299,13 +299,13 @@ double FinalGlideThroughTerrain(const double bearing,
   // find grid
   double dlat, dlon;
 
-  FindLatitudeLongitude(lat, lon, bearing, glidemaxrange, &dlat, &dlon);
-  dlat -= mylat;
-  dlon -= mylon;
+  FindLatitudeLongitude(lat, lon, this_bearing, glide_max_range, &dlat, &dlon);
+  dlat -= start_lat;
+  dlon -= start_lon;
 
   double f_scale = 1.0/NUMFINALGLIDETERRAIN;
-  if ((maxrange>0) && (maxrange<glidemaxrange)) {
-    f_scale *= maxrange/glidemaxrange;
+  if ((max_range>0) && (max_range<glide_max_range)) {
+    f_scale *= max_range/glide_max_range;
   }
 
   double delta_alt = -f_scale*Calculated->NavAltitude;
@@ -317,12 +317,12 @@ double FinalGlideThroughTerrain(const double bearing,
     double f;
     bool solution_found = false;
     double fi = i*f_scale;
-    // fraction of glidemaxrange
+    // fraction of glide_max_range
 
-    if ((maxrange>0)&&(fi>=1.0)) {
+    if ((max_range>0)&&(fi>=1.0)) {
       // early exit
-      *outofrange = true;
-      retval = maxrange;
+      *out_of_range = true;
+      retval = max_range;
       goto OnExit;
     }
 
@@ -347,7 +347,7 @@ double FinalGlideThroughTerrain(const double bearing,
     }
 
     if (start_under) {
-      if (dh>dhlast) {
+      if (dh>last_dh) {
 	// better solution found, ok to continue...
 	if (dh>0) {
 	  // we've now found a terrain point above safety altitude,
@@ -359,8 +359,8 @@ double FinalGlideThroughTerrain(const double bearing,
 	solution_found = true;
       }
     } else if (dh<=0) {
-      if ((dh<dhlast) && (dhlast>0)) {
-        f = max(0,min(1,(-dhlast)/(dh-dhlast)));
+      if ((dh<last_dh) && (last_dh>0)) {
+        f = max(0,min(1,(-last_dh)/(dh-last_dh)));
       } else {
 	f = 0.0;
       }
@@ -368,23 +368,23 @@ double FinalGlideThroughTerrain(const double bearing,
     }
     if (solution_found) {
       double distance;
-      lat = latlast*(1.0-f)+lat*f;
-      lon = lonlast*(1.0-f)+lon*f;
+      lat = last_lat*(1.0-f)+lat*f;
+      lon = last_lon*(1.0-f)+lon*f;
       if (retlat && retlon) {
         *retlat = lat;
         *retlon = lon;
       }
-      DistanceBearing(mylat, mylon, lat, lon, &distance, NULL);
+      DistanceBearing(start_lat, start_lon, lat, lon, &distance, NULL);
       retval = distance;
       goto OnExit;
     }
-    dhlast = dh;
-    latlast = lat;
-    lonlast = lon;
+    last_dh = dh;
+    last_lat = lat;
+    last_lon = lon;
   }
 
-  *outofrange = true;
-  retval = glidemaxrange;
+  *out_of_range = true;
+  retval = glide_max_range;
 
  OnExit:
   RasterTerrain::Unlock();
@@ -393,105 +393,105 @@ double FinalGlideThroughTerrain(const double bearing,
 
 
 double PirkerAnalysis(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
-                      const double bearing,
+                      const double this_bearing,
                       const double GlideSlope) {
 
 
 //  bool maxfound = false;
 //  bool first = true;
-  double pmc = 0.0;
-  double htarget = GlideSlope;
+  double pirker_mc = 0.0;
+  double h_target = GlideSlope;
   double h;
   double dh= 1.0;
-  double pmclast = 5.0;
-  double dhlast = -1.0;
-  double pmczero = 0.0;
+  double last_pirker_mc = 5.0;
+  double last_dh = -1.0;
+  double pirker_mc_zero = 0.0;
 
   (void)Basic;
 
-  while (pmc<10.0) {
+  while (pirker_mc<10.0) {
 
-    h = GlidePolar::MacCreadyAltitude(pmc,
+    h = GlidePolar::MacCreadyAltitude(pirker_mc,
                                       1.0, // unit distance
-				      bearing,
+				      this_bearing,
                                       Calculated->WindSpeed,
                                       Calculated->WindBearing,
                                       0, 0, true, 0);
 
-    dh = (htarget-h);
+    dh = (h_target-h);
     // height difference, how much we have compared to
     // how much we need at that speed.
     //   dh>0, we can afford to speed up
 
-    if (dh==dhlast) {
+    if (dh==last_dh) {
       // same height, must have hit max speed.
       if (dh>0) {
-        return pmclast;
+        return last_pirker_mc;
       } else {
         return 0.0;
       }
     }
 
-    if ((dh<=0)&&(dhlast>0)) {
-      if (dh-dhlast < 0) {
-	double f = (-dhlast)/(dh-dhlast);
-	pmczero = pmclast*(1.0-f)+f*pmc;
+    if ((dh<=0)&&(last_dh>0)) {
+      if (dh-last_dh < 0) {
+	double f = (-last_dh)/(dh-last_dh);
+	pirker_mc_zero = last_pirker_mc*(1.0-f)+f*pirker_mc;
       } else {
-	pmczero = pmc;
+	pirker_mc_zero = pirker_mc;
       }
-      return pmczero;
+      return pirker_mc_zero;
     }
-    dhlast = dh;
-    pmclast = pmc;
+    last_dh = dh;
+    last_pirker_mc = pirker_mc;
 
-    pmc += 0.5;
+    pirker_mc += 0.5;
   }
   if (dh>=0) {
-    return pmc;
+    return pirker_mc;
   }
   return -1.0; // no solution found, unreachable without further climb
 }
 
 
 double MacCreadyTimeLimit(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
-			  const double bearing,
-			  const double timeremaining,
-			  const double hfinal) {
+			  const double this_bearing,
+			  const double time_remaining,
+			  const double h_final) {
 
   // find highest Mc to achieve greatest distance in remaining time and height
   (void)Basic;
 
-  double timetogo;
+  double time_to_go;
   double mc;
-  double mcbest = 0.0;
-  double dbest = 0.0;
+  double mc_best = 0.0;
+  double d_best = 0.0;
   const double windspeed =   Calculated->WindSpeed;
   const double windbearing = Calculated->WindBearing;
   const double navaltitude = Calculated->NavAltitude;
 
   for (mc=0; mc<10.0; mc+= 0.1) {
 
-    double hunit = GlidePolar::MacCreadyAltitude(mc,
+    double h_unit = GlidePolar::MacCreadyAltitude(mc,
 						 1.0, // unit distance
-						 bearing,
+						 this_bearing,
 						 windspeed,
 						 windbearing,
 						 NULL,
 						 NULL,
 						 1, // final glide
-						 &timetogo);
-    if (timetogo>0) {
-      double p = timeremaining/timetogo;
-      double hspent = hunit*p;
-      double dh = navaltitude-hspent-hfinal;
+						 &time_to_go);
+    if (time_to_go>0) {
+      double p = time_remaining/time_to_go;
+      double h_spent = h_unit*p;
+      double dh = navaltitude-h_spent-h_final;
       double d = 1.0*p;
 
-      if ((d>dbest) && (dh>=0)) {
-	mcbest = mc;
+      if ((d>d_best) && (dh>=0)) {
+	mc_best = mc;
       }
     }
   }
-  return mcbest;
+  return mc_best;
 }
 
 

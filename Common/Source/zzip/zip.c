@@ -560,8 +560,12 @@ zzip_dir_free(ZZIP_DIR * dir)
         return (dir->refcount); /* still open files attached */
     }
 
+#ifdef __MINGW32__
     if (dir->fd != -1)      dir->io->fd.close(dir->fd);
-    // JMW fix was fd >=0
+#else
+    if (dir->fd >= 0)       dir->io->fd.close(dir->fd);
+#endif
+
     if (dir->hdr0)         free(dir->hdr0);
     if (dir->cache.fp)     free(dir->cache.fp);
     if (dir->cache.buf32k) free(dir->cache.buf32k);

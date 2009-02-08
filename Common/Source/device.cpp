@@ -611,11 +611,13 @@ BOOL devDeclare(PDeviceDescriptor_t d, Declaration_t *decl)
 
 BOOL devIsLogger(PDeviceDescriptor_t d)
 {
-  BOOL result = FALSE;
+  bool result = false;
 
   LockComm();
   if ((d != NULL) && (d->IsLogger != NULL)) {
-    result = d->IsLogger(d);
+    if (d->IsLogger(d)) {
+      result = true;
+    }
   }
   if ((d != NULL) && !result) {
     result |= NMEAParser::PortIsFlarm(d->Port);
