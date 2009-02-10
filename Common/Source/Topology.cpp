@@ -360,7 +360,7 @@ void TopologyLabel::setField(int i) {
   field = i;
 }
 
-XShape* TopologyLabel::addShape(int i) {
+XShape* TopologyLabel::addShape(const int i) {
 
   XShapeLabel* theshape = new XShapeLabel();
   theshape->load(&shpfile,i);
@@ -655,7 +655,7 @@ static bool ClipEdge(const bool &s_inside,
 		     const POINT *s,
 		     const POINT *p,
 		     unsigned int *outLength,
-		     const bool &fill) {
+		     const bool fill) {
 
   if (fill) {
     if (p_inside && !s_inside) {
@@ -676,8 +676,8 @@ static unsigned int SutherlandHodgmanPolygoClip (POINT* inVertexArray,
 						 POINT* outVertexArray,
 						 const unsigned int inLength,
 						 const POINT *clipBoundary,
-						 const bool &fill,
-						 const int &mode)
+						 const bool fill,
+						 const int mode)
 {
   POINT *s, *p; /*Start, end point of current polygon edge*/
   unsigned int j;       /*Vertex loop counter*/
