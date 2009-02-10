@@ -99,7 +99,7 @@ class TopologyLabel: public Topology {
  public:
   TopologyLabel(const char* shpname, COLORREF thecolor, INT field1);
   ~TopologyLabel();
-  virtual XShape* addShape(int i);
+  virtual XShape* addShape(const int i);
   void setField(int i);
   int field;
 
