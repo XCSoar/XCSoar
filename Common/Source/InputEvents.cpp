@@ -88,11 +88,10 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #define MAX_LABEL NUMBUTTONLABELS
 
 /*
-  TODO - All of this input_Errors code needs to be removed and replaced with standard logger.
+  TODO code - All of this input_Errors code needs to be removed and replaced with standard logger.
   The logger can then display messages through Message:: if ncessary and log to files etc
   This code, and baddly written #ifdef should be moved to Macros in the Log class.
 */
-
 
 #ifdef _INPUTDEBUG_
 // Log first NN input event errors for display in simulator mode
@@ -224,7 +223,7 @@ void InputEvents::readFile() {
   if (fp == NULL)
     return;
 
-  // TODO - Safer sizes, strings etc - use C++ (can scanf restrict length?)
+  // TODO code - Safer sizes, strings etc - use C++ (can scanf restrict length?)
   TCHAR buffer[2049];	// Buffer for all
   TCHAR key[2049];	// key from scanf
   TCHAR value[2049];	// value from scanf
@@ -247,8 +246,8 @@ void InputEvents::readFile() {
   /* Read from the file */
   while (
 	 _fgetts(buffer, 2048, fp)
-	 // TODO What about \r - as in \r\n ?
-	 // TODO Note that ^# does not allow # in key - might be required (probably not)
+	 // TODO code: What about \r - as in \r\n ?
+	 // TODO code: Note that ^# does not allow # in key - might be required (probably not)
 	 //		Better way is to separate the check for # and the scanf
 	 && ((found = _stscanf(buffer, TEXT("%[^#=]=%[^\r\n][\r\n]"), key, value)) != EOF)
 	 ) {
@@ -299,7 +298,7 @@ void InputEvents::readFile() {
 	  ASSERT(mode_id >= 0);
 
 	  // Make label event
-	  // TODO Consider Reuse existing entries...
+	  // TODO code: Consider Reuse existing entries...
 	  if (d_location > 0) {
 	    // Only copy this once per object - save string space
 	    if (!new_label) {
@@ -398,7 +397,7 @@ void InputEvents::readFile() {
 	  }
 #endif
 
-	  // TODO Can't use token here - breaks
+	  // TODO code: Can't use token here - breaks
 	  // other token - damn C - how about
 	  // C++ String class ?
 
@@ -409,9 +408,7 @@ void InputEvents::readFile() {
 
 	  if ((ef == 1) || (ef == 2)) {
 
-	    // TODO - Consider reusing
-	    // existing identical events
-	    // (not worth it right now)
+	    // TODO code: Consider reusing existing identical events
 
 	    pt2Event event = findEvent(d_event);
 	    if (event) {
@@ -630,11 +627,11 @@ void InputEvents::setMode(const TCHAR *mode) {
   thismode = mode2int(mode,false);
   if (thismode < 0)	// Technically an error in config (eg
 			// event=Mode DoesNotExist)
-    return;	// TODO Add debugging here
+    return;	// TODO enhancement: Add debugging here
 
   if (thismode == lastmode) return;
 
-  // TODO Enable this in debug modes
+  // TODO code: Enable this in debug modes
   // for debugging at least, set mode indicator on screen
   /*
      if (thismode==0) {
@@ -918,7 +915,7 @@ bool InputEvents::processGlideComputer_real(int gce_id) {
   if (!(ProgramStarted==3)) return false;
   int event_id = 0;
 
-  // TODO: Log to IGC file
+  // TODO feature: Log glide computer events to IGC file
 
   // Valid input ?
   if ((gce_id < 0) || (gce_id >= GCE_COUNT))
@@ -949,7 +946,7 @@ void InputEvents::processGo(int eventid) {
   if (!(ProgramStarted==3)) return;
 
   //
-  // JMW TODO: event/macro recorder
+  // TODO feature: event/macro recorder
   /*
     if (LoggerActive) {
     LoggerNoteEvent(Events[eventid].);
@@ -973,7 +970,7 @@ void InputEvents::processGo(int eventid) {
 // Execution - list of things you can do
 // -----------------------------------------------------------------------
 
-// TODO Keep marker text for log file etc.
+// TODO code: Keep marker text for use in log file etc.
 void InputEvents::eventMarkLocation(const TCHAR *misc) {
   if (_tcscmp(misc, TEXT("reset")) == 0) {
     reset_marks = true;
@@ -1163,9 +1160,9 @@ void InputEvents::eventZoom(const TCHAR* misc) {
 //	down	Pan down
 //	left	Pan left
 //	right	Pan right
-//	TODO n,n	Go that direction - +/-
-//	TODO ???	Go to particular point
-//	TODO ???	Go to waypoint (eg: next, named)
+//	TODO feature: n,n	Go that direction - +/-
+//	TODO feature: ???	Go to particular point
+//	TODO feature: ???	Go to waypoint (eg: next, named)
 void InputEvents::eventPan(const TCHAR *misc) {
   if (_tcscmp(misc, TEXT("toggle")) == 0)
     MapWindow::Event_Pan(-1);
@@ -1255,7 +1252,7 @@ void InputEvents::eventClearAirspaceWarnings(const TCHAR *misc) {
 void InputEvents::eventClearStatusMessages(const TCHAR *misc) {
 	(void)misc;
   ClearStatusMessages();
-  // TODO: allow selection of specific messages (here we are acknowledging all)
+  // TODO enhancement: allow selection of specific messages (here we are acknowledging all)
   Message::Acknowledge(0);
 }
 
@@ -1555,7 +1552,7 @@ void InputEvents::eventFlightMode(const TCHAR *misc) {
 //  right: rotates wind direction clockwise
 //   save: saves wind value, so it is used at next startup
 //
-// TODO Increase wind by larger amounts ? Set wind to specific amount ?
+// TODO feature: Increase wind by larger amounts ? Set wind to specific amount ?
 //	(may sound silly - but future may get SMS event that then sets wind)
 void InputEvents::eventWind(const TCHAR *misc) {
   if (_tcscmp(misc, TEXT("up")) == 0) {
@@ -1744,7 +1741,7 @@ void InputEvents::eventAudioDeadband(const TCHAR *misc) {
   */
   SaveSoundSettings(); // save to registry
 
-  // JMW TODO send to vario if available
+  // TODO feature: send to vario if available
 
 }
 
@@ -1896,7 +1893,7 @@ void InputEvents::eventAutoLogger(const TCHAR *misc) {
 // nmea: turns on and off NMEA logging
 // note: the text following the 'note' characters is added to the log file
 void InputEvents::eventLogger(const TCHAR *misc) {
-  // TODO - start logger without asking
+  // TODO feature: start logger without requiring feedback
   // start stop toggle addnote
   if (_tcscmp(misc, TEXT("start ask")) == 0) {
     guiStartLogger();
@@ -1942,7 +1939,7 @@ void InputEvents::eventLogger(const TCHAR *misc) {
 void InputEvents::eventRepeatStatusMessage(const TCHAR *misc) {
   (void)misc;
 	// new interface
-  // TODO: display only by type specified in misc field
+  // TODO enhancement: display only by type specified in misc field
   Message::Repeat(0);
 }
 
@@ -2042,7 +2039,7 @@ void InputEvents::eventNearestAirspaceDetails(const TCHAR *misc) {
   // clear previous warning if any
   Message::Acknowledge(MSG_AIRSPACE);
 
-  // TODO No control via status data (ala DoStatusMEssage)
+  // TODO code: No control via status data (ala DoStatusMEssage)
   // - can we change this?
   Message::Lock();
   Message::AddMessage(5000, MSG_AIRSPACE, text);
@@ -2232,7 +2229,7 @@ void InputEvents::eventDLLExecute(const TCHAR *misc) {
 }
 
 // Load a DLL (only once, keep a cache of the handle)
-//	TODO FreeLibrary - it would be nice to call FreeLibrary
+//	TODO code: FreeLibrary - it would be nice to call FreeLibrary
 //      before exit on each of these
 HINSTANCE _loadDLL(TCHAR *name) {
   int i;
@@ -2429,14 +2426,14 @@ void InputEvents::eventOrientation(const TCHAR *misc){
 
 
 
-// JMW TODO: have all inputevents return bool, indicating whether
+// JMW TODO enhancement: have all inputevents return bool, indicating whether
 // the button should after processing be hilit or not.
 // this allows the buttons to indicate whether things are enabled/disabled
-// SDP TODO: maybe instead do conditional processing ?
+// SDP TODO enhancement: maybe instead do conditional processing ?
 //     I like this idea; if one returns false, then don't execute the
 //     remaining events.
 
-// JMW TODO: make sure when we change things here we also set registry values...
+// JMW TODO enhancement: make sure when we change things here we also set registry values...
 // or maybe have special tag "save" which indicates it should be saved (notice that
 // the wind adjustment uses this already, see in Process.cpp)
 
@@ -2449,10 +2446,7 @@ eventProfileSave		- Save profile to a file (misc = filename)
 
 */
 
-/* TODO
-
-eventMainMenu
-eventMenu
+/* TODO feature: - new events
 
 eventPanWaypoint		                - Set pan to a waypoint
 - Waypoint could be "next", "first", "last", "previous", or named

@@ -444,7 +444,7 @@ static void OnSaveClicked(WindowControl * Sender, WndListFrame::ListInfo_t *List
 
   if (file_index==0) {
 
-    // new file... TODO: find a good name not already in the list
+    // TODO enhancement: suggest a good new name not already in the list
     _tcscpy(task_name,TEXT("0"));
     dlgTextEntryShowModal(task_name, 10); // max length
 
@@ -465,7 +465,7 @@ static void OnSaveClicked(WindowControl * Sender, WndListFrame::ListInfo_t *List
       }
 
     } else {
-      // TODO error, task not saved since no name was given
+      // TODO code: report error, task not saved since no name was given
       return;
     }
   }

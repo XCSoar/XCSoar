@@ -94,7 +94,7 @@ BOOL caiGpsNavClose(PDeviceDescriptor_t d){
 BOOL caiGpsNavIsLogger(PDeviceDescriptor_t d){
   // There is currently no support for task declaration
   // from XCSoar
-	(void)d; // TODO
+	(void)d; // TODO feature: CAI GPS NAV declaration
   return(FALSE);
 }
 

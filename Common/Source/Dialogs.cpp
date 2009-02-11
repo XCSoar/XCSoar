@@ -264,7 +264,7 @@ LRESULT CALLBACK StatusMsgWndTimerProc(HWND hwnd, UINT message,
 //	- Sound to play - What sound to play
 //	- Log - Keep the message on the log/history window (goes to log file and history)
 //
-// TODO (need to discuss) Consider moving almost all this functionality into AddMessage ?
+// TODO code: (need to discuss) Consider moving almost all this functionality into AddMessage ?
 
 void DoStatusMessage(const TCHAR* text, const TCHAR *data) {
   Message::Lock();
@@ -284,7 +284,7 @@ void DoStatusMessage(const TCHAR* text, const TCHAR *data) {
   if (EnableSoundModes && LocalMessage.doSound)
     PlayResource(LocalMessage.sound);
 
-  // TODO consider what is a sensible size?
+  // TODO code: consider what is a sensible size?
   TCHAR msgcache[1024];
   if (LocalMessage.doStatus) {
 
@@ -366,7 +366,7 @@ void WriteMissingTranslations() {
 	- qsort/bsearch good idea
 	- cache misses in data structure for future use
 
-   TODO - Fast search
+   TODO enhancement: Fast search of text strings
 
 */
 
@@ -393,7 +393,7 @@ TCHAR* gettext(const TCHAR* text) {
 }
 
 // Set the window text value, by passing through gettext
-// TODO - Review if this needs to be done every time?
+// TODO code: Review if this needs to be done every time?
 void SetWindowText_gettext(HWND hDlg, int entry) {
   TCHAR strTemp[1024];
   GetWindowText(GetDlgItem(hDlg,entry),strTemp, 1023);
@@ -423,7 +423,7 @@ void ReadLanguageFile() {
   if (fp == NULL)
     return;
 
-  // TODO - Safer sizes, strings etc - use C++ (can scanf restrict length?)
+  // TODO code: Safer sizes, strings etc - use C++ (can scanf restrict length?)
   TCHAR buffer[2049];	// key from scanf
   TCHAR key[2049];	// key from scanf
   TCHAR value[2049];	// value from scanf

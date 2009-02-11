@@ -103,7 +103,7 @@ void GaugeFLARM::RenderTraffic(NMEA_INFO  *gps_info) {
   HBRUSH redBrush = CreateSolidBrush(RGB(0xFF,0x00,0x00));
   HBRUSH yellowBrush = CreateSolidBrush(RGB(0xFF,0xFF,0x00));
   HBRUSH greenBrush = CreateSolidBrush(RGB(0x00,0xFF,0x00));
-  // JMW TODO red/green Color blind
+  // TODO enhancement: support red/green Color blind pilots
 
   SelectObject(hdcDrawWindow, TitleWindowFont);
   SetTextColor(hdcDrawWindow, RGB(0x0,0x0,0x0));

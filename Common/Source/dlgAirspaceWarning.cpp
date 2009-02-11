@@ -166,7 +166,7 @@ static int OnKeyDown(WindowControl * Sender, WPARAM wParam, LPARAM lParam){
 /*
 static void OnDistroy(WindowControl * Sender){
   (void)Sender;
-  // TODO: This currently isn't called!
+  // TODO code: This currently isn't called!
 
   AirspaceWarnListRemoveNotifier(AirspaceWarningNotify);
   DeleteObject(hBrushInsideBk);

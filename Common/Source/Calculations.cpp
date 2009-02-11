@@ -454,7 +454,7 @@ void NettoVario(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
 					       Basic->IndicatedAirspeed), n);
   } else {
     // assume zero wind (Speed=Airspeed, very bad I know)
-    // JMW TODO: adjust for estimated airspeed
+    // JMW TODO accuracy: adjust for estimated airspeed
     glider_sink_rate= GlidePolar::SinkRate(max(GlidePolar::Vminsink,
 					       Basic->Speed), n);
   }
@@ -772,7 +772,8 @@ void StartTask(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
   Calculated->CruiseStartAlt = Calculated->NavAltitude;
   Calculated->CruiseStartTime = Basic->Time;
 
-  // JMW TODO: Get time from aatdistance module since this is more accurate
+  // JMW TODO accuracy: Get time from aatdistance module since this is
+  // more accurate
 
   // JMW clear thermal climb average on task start
   flightstats.ThermalAverage.Reset();
@@ -833,8 +834,8 @@ void InitCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   if (!windanalyser) {
     windanalyser = new WindAnalyser();
 
-    // seed initial wind store with current conditions
-    //JMW TODO SetWindEstimate(Calculated->WindSpeed,Calculated->WindBearing, 1);
+    //JMW TODO enhancement: seed initial wind store with start conditions
+    // SetWindEstimate(Calculated->WindSpeed,Calculated->WindBearing, 1);
 
   }
   UnlockFlightData();
@@ -1484,7 +1485,7 @@ void Turning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
                                  StartAlt);
         }
 
-        // TODO InputEvents GCE - Move this to InputEvents
+        // consider code: InputEvents GCE - Move this to InputEvents
         // Consider a way to take the CircleZoom and other logic
         // into InputEvents instead?
         // JMW: NO.  Core functionality must be built into the
@@ -2249,7 +2250,7 @@ static void CheckStart(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
     if (ValidStartSpeed(Basic, Calculated)) {
       ReadyToAdvance(Calculated, false, true);
     }
-    // TODO monitor start speed throughout time in start sector
+    // TODO accuracy: monitor start speed throughout time in start sector
   }
   if (StartCrossed) {
     if(!IsFinalWaypoint() && ValidStartSpeed(Basic, Calculated)) {
@@ -2265,7 +2266,7 @@ static void CheckStart(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
       if (Calculated->Flying) {
         Calculated->ValidFinish = false;
       }
-      // JMW TODO: This causes Vaverage to go bonkers
+      // JMW TODO accuracy: This causes Vaverage to go bonkers
       // if the user has already passed the start
       // but selects the start
 
@@ -2661,7 +2662,7 @@ void TaskSpeed(NMEA_INFO *Basic, DERIVED_INFO *Calculated, const double this_mac
 
     // distance that can be usefully final glided from here
     // (assumes average task glide angle of d0/h0)
-    // JMW TODO: make this more accurate by working out final glide
+    // JMW TODO accuracy: make this more accurate by working out final glide
     // through remaining turnpoints.  This will more correctly account
     // for wind.
 
@@ -2889,7 +2890,7 @@ void LDNext(NMEA_INFO *Basic, DERIVED_INFO *Calculated, const double LegToGo,
             const double LegAltitude) {
   double height_above_leg = Calculated->NavAltitude
     - LegAltitude;
-  // JMW TODO THIS IS BUGGY
+  // JMW TODO bug: fix LDNext
 
   height_above_leg -= FAIFinishHeight(Basic, Calculated, ActiveWayPoint);
   Calculated->LDNext = UpdateLD(Calculated->LDNext,
@@ -2992,7 +2993,7 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
     LegCovered = 0;
   } else {
     if (AATEnabled) {
-      // TODO: Get best range point to here...
+      // TODO accuracy: Get best range point to here...
       w0lat = Task[ActiveWayPoint-1].AATTargetLat;
       w0lon = Task[ActiveWayPoint-1].AATTargetLon;
     } else {
@@ -3013,7 +3014,7 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
 
     if ((StartLine==0) && (ActiveWayPoint==1)) {
       // Correct speed calculations for radius
-      // JMW TODO: replace this with more accurate version
+      // JMW TODO accuracy: legcovered replace this with more accurate version
       // LegDistance -= StartRadius;
       LegCovered = max(0,LegCovered-StartRadius);
     }
@@ -3198,7 +3199,7 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
     }
   }
 
-  // JMW TODO: use mc based on risk? no!
+  // JMW TODO accuracy: use mc based on risk? no!
   double LegAltitude =
     GlidePolar::MacCreadyAltitude(this_maccready,
                                   LegToGo,
@@ -3231,7 +3232,7 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
     Calculated->BestCruiseTrack = StartBestCruiseTrack;
   }
 
-  // JMW XXX TODO: Use safetymc where appropriate
+  // JMW TODO accuracy: Use safetymc where appropriate
 
   LDNext(Basic, Calculated, LegToGo, LegAltitude);
 
@@ -3497,7 +3498,7 @@ void AirspaceWarning(NMEA_INFO *Basic, DERIVED_INFO *Calculated){
     lon = Basic->Longitude;
   }
 
-  // JMW TODO: FindAirspaceCircle etc should sort results, return
+  // JMW TODO enhancement: FindAirspaceCircle etc should sort results, return
   // the most critical or closest.
 
   if (AirspaceCircle) {
@@ -3642,7 +3643,7 @@ void AATStats_Distance(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
           i++;
         }
 
-      // JMW TODO: make these calculations more accurate, because
+      // JMW TODO accuracy: make these calculations more accurate, because
       // currently they are very approximate.
 
       Calculated->AATMaxDistance = MaxDistance;
@@ -3677,7 +3678,7 @@ void ThermalBand(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
     }
   LastTime = Basic->Time;
 
-  // JMW TODO: Should really work out dt here,
+  // JMW TODO accuracy: Should really work out dt here,
   //           but i'm assuming constant time steps
   double dheight = Calculated->NavAltitude
     -SAFETYALTITUDEBREAKOFF
@@ -4132,7 +4133,7 @@ void TakeoffLanding(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   //
   //   detect landing when below threshold speed for 30 seconds
   //
-  // TODO: make this more robust by making use of terrain height data
+  // TODO accuracy: make this more robust by making use of terrain height data
   // if available
 
   if ((time_on_ground<=10)||(ReplayLogger::IsEnabled())) {

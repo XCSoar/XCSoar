@@ -75,8 +75,6 @@ void FlyDirectTo(int index) {
   if (!CheckDeclaration())
     return;
 
-  // JMW TODO: unabort if aborted
-
   LockTaskData();
 
   if (TaskAborted) {
@@ -578,7 +576,7 @@ double AdjustAATTargets(double desired) {
     goto OnExit;
   }
 
-  // JMW TODO: Check here for true minimum distance between
+  // TODO accuracy: Check here for true minimum distance between
   // successive points (especially second last to final point)
 
   // Do this with intersection tests
@@ -714,7 +712,7 @@ void CalculateAATTaskSectors()
           *Task[i].AATCircleRadius;
       }
 
-      // TODO: if i=awp and in sector, range parameter needs to
+      // TODO accuracy: if i=awp and in sector, range parameter needs to
       // go from current aircraft position to projection of target
       // out to the edge of the sector
 
@@ -907,6 +905,7 @@ void RefreshTaskWaypoint(int i) {
 }
 
 
+/* No longer required
 void ReadNewTask(HWND hDlg)
 {
   int i;
@@ -936,7 +935,7 @@ void ReadNewTask(HWND hDlg)
 
           RefreshTaskWaypoint(i);
 
-          // JMW TODO: do this for next and previous waypoint also
+          // TODO accuracy: do this for next and previous waypoint also
 
           TaskLength += Task[i].Leg;
         }
@@ -949,7 +948,7 @@ void ReadNewTask(HWND hDlg)
   if(Task[0].Index != -1)
     ActiveWayPoint = 0;
 }
-
+*/
 
 static int FindOrAddWaypoint(WAYPOINT *read_waypoint) {
   // this is an invalid pointer!
@@ -960,7 +959,7 @@ static int FindOrAddWaypoint(WAYPOINT *read_waypoint) {
   if (waypoint_index == -1) {
     // waypoint not found, so add it!
 
-    // TODO: Set WAYPOINTFILECHANGED so waypoints get saved?
+    // TODO bug: Set WAYPOINTFILECHANGED so waypoints get saved?
 
     WAYPOINT* new_waypoint = GrowWaypointList();
     if (!new_waypoint) {

@@ -360,7 +360,7 @@ void MapWindow::DrawFLARMTraffic(HDC hDC, RECT rc, POINT Orig_Aircraft) {
 
       }
 
-      // TODO: draw direction, rel height?
+      // TODO feature: draw direction, rel height?
       POINT sc, sc_name, sc_av;
       LatLon2Screen(target_lon,
                     target_lat,
@@ -415,7 +415,7 @@ void MapWindow::DrawFLARMTraffic(HDC hDC, RECT rc, POINT Orig_Aircraft) {
 
       int colourIndex = fSnailColour(cv);
 
-      // JMW TODO: decluttering of FLARM altitudes (sort by max lift)
+      // JMW TODO enhancement: decluttering of FLARM altitudes (sort by max lift)
 
       int dx = (sc_av.x-Orig_Aircraft.x);
       int dy = (sc_av.y-Orig_Aircraft.y);
@@ -646,7 +646,7 @@ void MapWindow::ScanVisibility(rectObj *bounds_active) {
     WAYPOINT *wv = WayPointList;
     const WAYPOINT *we = WayPointList+NumberOfWayPoints;
     while (wv<we) {
-      // TODO optimise
+      // TODO code: optimise waypoint visibility
       wv->FarVisible = ((wv->Longitude> bounds.minx) &&
 			(wv->Longitude< bounds.maxx) &&
 			(wv->Latitude> bounds.miny) &&
@@ -801,8 +801,8 @@ void MapWindow::CalculateScreenPositions(POINT Orig, RECT rc,
       if (DerivedDrawInfo.ThermalEstimate_R>0) {
         PanLongitude = DerivedDrawInfo.ThermalEstimate_Longitude;
         PanLatitude = DerivedDrawInfo.ThermalEstimate_Latitude;
-        // JMW TODO: only pan if distance of center to aircraft is smaller
-        // than one third screen width
+        // TODO enhancement: only pan if distance of center to
+        // aircraft is smaller than one third screen width
 
         POINT screen;
         LatLon2Screen(PanLongitude,
@@ -1394,7 +1394,7 @@ double MapWindow::DrawTrail( HDC hdc, const POINT Orig, const RECT rc)
 
   const int skip_divisor = num_trail_max/5;
   int skip_border = skip_divisor;
-  int skip_level= 3; // JMW TODO, try lower level?
+  int skip_level= 3; // TODO code: try lower level?
 
   int snail_offset = TRAILSIZE+iSnailNext-num_trail_max;
   while (snail_offset>= TRAILSIZE) {
@@ -1408,7 +1408,7 @@ double MapWindow::DrawTrail( HDC hdc, const POINT Orig, const RECT rc)
 
   int index_skip = ((int)DrawInfo.Time)%skip_level;
 
-  // TODO: Divide by time step cruise/circling for zero_offset
+  // TODO code: Divide by time step cruise/circling for zero_offset
 
   ///////////// Keep track of what's drawn
 
@@ -1492,7 +1492,7 @@ double MapWindow::DrawTrail( HDC hdc, const POINT Orig, const RECT rc)
       }
     } else {
       //  if ((P1.Circling)&&( snail_index % 5 != 0 )) {
-        // JMW TODO: This won't work properly!
+        // JMW TODO code: This won't work properly!
         // draw only every 5 points from circling when in cruise mode
 	//        continue;
       //      }
@@ -1791,8 +1791,8 @@ void MapWindow::DrawProjectedTrack(HDC hdc, POINT Orig) {
     return;
   }
 
-  // TODO: maybe have this work even if no task?
-  // TODO: draw this also when in target pan mode
+  // TODO feature: maybe have this work even if no task?
+  // TODO feature: draw this also when in target pan mode
 
   LockTaskData();  // protect from external task changes
 
@@ -1905,7 +1905,7 @@ void MapWindow::DrawThermalBand(HDC hDC,RECT rc)
     return;
   }
 
-  // JMW TODO: gather proper statistics
+  // JMW TODO accuracy: gather proper statistics
   // note these should/may also be relative to ground
   int i;
   double mth = DerivedDrawInfo.MaxThermalHeight;
@@ -2083,7 +2083,7 @@ void MapWindow::DrawFinalGlide(HDC hDC,RECT rc)
 
       Offset = ((int)DerivedDrawInfo.TaskAltitudeDifference)/8;
       Offset0 = ((int)DerivedDrawInfo.TaskAltitudeDifference0)/8;
-      // JMW TODO: should be an angle if in final glide mode
+      // TODO feature: should be an angle if in final glide mode
 
       if(Offset > 60) Offset = 60;
       if(Offset < -60) Offset = -60;
@@ -2357,7 +2357,7 @@ void MapWindow::ClearAirSpace(bool fill) {
   }
 }
 
-// TODO: optimise!
+// TODO code: optimise airspace drawing
 void MapWindow::DrawAirSpace(HDC hdc, RECT rc)
 {
   COLORREF whitecolor = RGB(0xff,0xff,0xff);
@@ -2651,7 +2651,7 @@ void MapWindow::DrawMapScale(HDC hDC, RECT rc /* the Map Rect*/,
       (Appearance.TitleWindowFont.AscentHeight+IBLSCALE(2));
     if (!ScaleChangeFeedback){
       // bool FontSelected = false;
-      // JMW TODO gettext these
+      // TODO code: gettext these
       ScaleInfo[0] = 0;
       if (AutoZoom) {
         _tcscat(ScaleInfo, TEXT("AUTO "));

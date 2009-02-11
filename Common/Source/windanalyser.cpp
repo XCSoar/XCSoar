@@ -161,8 +161,8 @@ void WindAnalyser::slot_newSample(NMEA_INFO *nmeaInfo,
   if (numwindsamples<MAXWINDSAMPLES-1) {
     numwindsamples++;
   } else {
-
-    // TODO give error...
+    // TODO code: give error, too many wind samples
+    // or use circular buffer
   }
 
   if ((nmeaInfo->Speed< Magnitude(minVector))||first)

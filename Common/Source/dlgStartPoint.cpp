@@ -105,7 +105,7 @@ static void OnStartPointListEnter(WindowControl * Sender,
     int res;
     res = dlgWayPointSelect();
     if (res>=0) {
-      // TODO: don't add it if it's already present!
+      // TODO bug: don't add it if it's already present!
       LockTaskData();
       StartPoints[ItemIndex].Index = res;
       StartPoints[ItemIndex].Active = true;
@@ -230,7 +230,6 @@ void dlgStartPointShowModal(void) {
     TaskModified = true;
     RefreshTask();
     UnlockTaskData();
-    /// TODO do something...
   };
 
   delete wf;

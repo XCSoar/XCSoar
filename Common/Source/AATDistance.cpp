@@ -394,7 +394,7 @@ void AATDistance::ShiftTargetFromBehind(double longitude, double latitude,
   }
 
   //  if ((!t_in_sector) && (d_diff_total>1.0)) {
-    // JMW AAT TODO: this is too short now so need to lengthen the
+    // JMW TODO enhancement: this is too short now so need to lengthen the
     // next waypoint if possible
     // (re discussion with paul mander)
   //  }

@@ -514,7 +514,7 @@ void LoggerHeader(void)
 
 void StartDeclaration(int ntp)
 {
-  // JMW TODO: this is causing problems with some analysis software
+  // TODO bug: this is causing problems with some analysis software
   // maybe it's because the date and location fields are bogus
   char start[] = "C0000000N00000000ETAKEOFF\r\n";
   char temp[100];
@@ -554,7 +554,7 @@ void StartDeclaration(int ntp)
 
 void EndDeclaration(void)
 {
-  // JMW TODO: this is causing problems with some analysis software
+  // TODO bug: this is causing problems with some analysis software
   // maybe it's because the date and location fields are bogus
   char start[] = "C0000000N00000000ELANDING\r\n";
   IGCWriteRecord(start);
@@ -609,7 +609,7 @@ void AddDeclaration(double Latitude, double Longitude, TCHAR *ID)
 }
 
 
-// JMW TODO: make this thread-safe, since it could happen in the middle
+// TODO code: make this thread-safe, since it could happen in the middle
 // of the calculations doing LogPoint or something else!
 
 void LoggerNote(const TCHAR *text) {
@@ -1144,7 +1144,6 @@ void ReplayLogger::Start(void) {
   NumLoggerBuffered = 0;
   flightstats.Reset();
   if (!UpdateInternal()) {
-    // TODO couldn't start, give error dialog
     MessageBoxX(hWndMapWindow,
 		gettext(TEXT("Could not open IGC file!")),
 		gettext(TEXT("Flight replay")),
@@ -1189,6 +1188,7 @@ FILETIME LogFileDate(TCHAR* filename) {
   SYSTEMTIME st;
   unsigned short year, month, day, num;
   int matches;
+  // scan for long filename
   matches = swscanf(filename,
                     TEXT("%hu-%hu-%hu-%7s-%hu.IGC"),
                     &year,
@@ -1209,6 +1209,7 @@ FILETIME LogFileDate(TCHAR* filename) {
   }
 
   TCHAR cyear, cmonth, cday, cflight;
+  // scan for short filename
   matches = _stscanf(filename,
 		     TEXT("%c%c%c%4s%c.IGC"),
 		     &cyear,
@@ -1233,7 +1234,6 @@ FILETIME LogFileDate(TCHAR* filename) {
     st.wMilliseconds = 0;
     SystemTimeToFileTime(&st,&ft);
     return ft;
-    // JMW TODO: scan for short filename
     /*
       YMDCXXXF.IGC
       Y: Year, 0 to 9 cycling every 10 years

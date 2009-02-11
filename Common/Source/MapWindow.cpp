@@ -1301,7 +1301,7 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
     hpFinalGlideBelow = (HPEN)CreatePen(PS_SOLID, IBLSCALE(1), RGB(0xFF,0xA0,0xA0));
     hpFinalGlideBelowLandable = (HPEN)CreatePen(PS_SOLID, IBLSCALE(1), RGB(255,196,0));
 
-    // JMW TODO red/green Color blind
+    // TODO enhancement: support red/green Color blind
     hpFinalGlideAbove = (HPEN)CreatePen(PS_SOLID, IBLSCALE(1), RGB(0xA0,0xFF,0xA0));
 
     hpSpeedSlow=(HPEN)CreatePen(PS_SOLID, IBLSCALE(1),
@@ -1601,13 +1601,13 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
 
     if (!DialogActive) { // JMW prevent keys being trapped if dialog is active
       if (InputEvents::processKey(wParam)) {
-        // TODO - change to debugging DoStatusMessage(TEXT("Event in default"));
+        // TODO code: change to debugging DoStatusMessage(TEXT("Event in default"));
       }
       // XXX Should we only do this if it IS processed above ?
       dwDownTime= 0;
       return TRUE; // don't go to default handler
     } else {
-      // TODO - debugging DoStatusMessage(TEXT("Event in dialog"));
+      // TODO code: debugging DoStatusMessage(TEXT("Event in dialog"));
       if (InputEvents::processKey(wParam)) {
       }
       dwDownTime= 0;
@@ -1720,7 +1720,7 @@ void MapWindow::UpdateMapScale()
           // reset starting map scale
 
 
-          ////?JMW TODO for frank          StartingAutoMapScale = MapScale;
+          ////?TODO enhancement: for frank          StartingAutoMapScale = MapScale;
         }
 
       }
@@ -1983,7 +1983,7 @@ void MapWindow::RenderMapWindowBg(HDC hdc, const RECT rc,
   DrawAirSpace(hdc, rc);
 
   if(TrailActive) {
-    // TODO: For some reason, the shadow drawing of the
+    // TODO enhancement: For some reason, the shadow drawing of the
     // trail doesn't work in portrait mode.  No idea why.
     if (1) {
       double TrailFirstTime =
@@ -2038,7 +2038,7 @@ void MapWindow::RenderMapWindowBg(HDC hdc, const RECT rc,
   }
 
   if (extGPSCONNECT) {
-    // TODO don't draw offtrack indicator if showing spot heights
+    // TODO enhancement: don't draw offtrack indicator if showing spot heights
     DrawProjectedTrack(hdc, Orig_Aircraft);
     DrawOffTrackIndicator(hdc);
     DrawBestCruiseTrack(hdc, Orig_Aircraft);
@@ -3509,7 +3509,6 @@ void MapWindow::DrawBearing(HDC hdc)
 
   if (TargetPan) {
     // Draw all of task if in target pan mode
-    // TODO: draw inbound/outbound arrows?
     startLat = targetLat;
     startLon = targetLon;
 

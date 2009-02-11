@@ -223,8 +223,10 @@ void Topology::Paint(HDC hdc, RECT rc) {
   if (MapWindow::MapScale > scaleThreshold)
     return;
 
-  // TODO: only draw inside screen!
+  // TODO code: only draw inside screen!
   // this will save time with rendering pixmaps especially
+  // we already do an outer visibility test, but may need a test
+  // in screen coords
 
   HPEN  hpOld;
   HBRUSH hbOld;
@@ -376,7 +378,7 @@ void XShapeLabel::renderSpecial(HDC hDC, int x, int y) {
     wsprintf(Temp,TEXT("%S"),label);
     SetBkMode(hDC,TRANSPARENT);
 
-    // JMW TODO what does this do?
+    // TODO code: JMW asks, what does this do?
     if (ispunct(Temp[0])) {
       double dTemp;
 

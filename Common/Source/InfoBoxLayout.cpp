@@ -643,8 +643,8 @@ void ButtonLabel::CreateButtonLabels(RECT rc) {
 		   |SS_CENTER|SS_NOTIFY
 		   |WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_BORDER,
 		   rc.left, rc.top,
-		   // TODO need to have these passed in too as some buttons
-		   // may actually be a different shape.
+		   // TODO code: need to have these passed in too as
+		   // some buttons may actually be a different shape.
 		   buttonWidth, buttonHeight,
 		   hWndMainWindow, NULL, hInst, NULL);
     GetButtonPosition(i, rc, &x, &y, &xsize, &ysize);
@@ -692,7 +692,7 @@ void ButtonLabel::Destroy() {
 
 
 void ButtonLabel::SetLabelText(int index, const TCHAR *text) {
-  // error! TODO Add debugging
+  // error! TODO enhancement: Add debugging
   if (index>= NUMBUTTONLABELS)
     return;
 

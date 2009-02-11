@@ -307,7 +307,6 @@ static void OnCruiseEfficiencyData(DataField *Sender, DataField::DataAccessKind_
   case DataField::daChange:
     cruise_efficiency = Sender->GetAsFloat()/100.0;
     CRUISE_EFFICIENCY = cruise_efficiency;
-    // JMW TODO: allow setting!
     if (fabs(cruise_efficiency-clast)>0.01) {
       RefreshCalculator();
     }

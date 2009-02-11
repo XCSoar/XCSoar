@@ -147,7 +147,7 @@ void WindStore::newWind(NMEA_INFO *nmeaInfo, DERIVED_INFO *derivedInfo,
     }
     derivedInfo->WindBearing = bearing;
   } else {
-    // JMW TODO: give warning
+    // TODO code: give warning, wind estimate bogus or very strong!
   }
 
 #ifdef DEBUG_WIND

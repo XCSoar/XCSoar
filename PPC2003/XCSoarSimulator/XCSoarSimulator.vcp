@@ -223,21 +223,21 @@ LINK32=link.exe
 # PROP Platform_ID "{8A9A2F80-6887-11D3-842E-005004848CBA}"
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
-LINK32=link.exe
-# ADD BASE LINK32 commctrl.lib coredll.lib /nologo /base:"0x00010000" /stack:0x10000,0x1000 /entry:"WinMainCRTStartup" /debug /nodefaultlib:"$(CENoDefaultLib)" /subsystem:$(CESubsystem) /align:"4096" /MACHINE:ARM
-# ADD LINK32 commctrl.lib coredll.lib /nologo /base:"0x00010000" /stack:0x10000,0x1000 /entry:"WinMainCRTStartup" /debug /nodefaultlib:"$(CENoDefaultLib)" /subsystem:$(CESubsystem) /align:"4096" /MACHINE:ARM
-BSC32=bscmake.exe
-# ADD BASE BSC32 /nologo
-# ADD BSC32 /nologo
-MTL=midl.exe
-# ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /o "NUL" /win32
-# ADD MTL /nologo /D "_DEBUG" /mktyplib203 /o "NUL" /win32
-CPP=clarm.exe
-# ADD BASE CPP /nologo /W3 /GX- /Zi /Od /D "DEBUG" /D "ARM" /D "_ARM_" /D UNDER_CE=$(CEVersion) /D _WIN32_WCE=$(CEVersion) /D "$(CePlatform)" /D "UNICODE" /D "_UNICODE" /YX /M$(CECrtMTDebug) /c
-# ADD CPP /nologo /W3 /GX- /Zi /Od /I "..\..\..\Header" /D "DEBUG" /D "ARM" /D "_ARM_" /D UNDER_CE=$(CEVersion) /D _WIN32_WCE=$(CEVersion) /D "$(CePlatform)" /D "UNICODE" /D "_UNICODE" /D "_SIM_" /YX /M$(CECrtMTDebug) /c
 RSC=rc.exe
 # ADD BASE RSC /l 0x409 /d UNDER_CE=$(CEVersion) /d _WIN32_WCE=$(CEVersion) /d "UNICODE" /d "_UNICODE" /d "DEBUG" /d "$(CePlatform)" /d "ARM" /d "_ARM_" /r
 # ADD RSC /l 0x409 /d UNDER_CE=$(CEVersion) /d _WIN32_WCE=$(CEVersion) /d "UNICODE" /d "_UNICODE" /d "DEBUG" /d "$(CePlatform)" /d "ARM" /d "_ARM_" /r
+CPP=clarm.exe
+# ADD BASE CPP /nologo /W3 /GX- /Zi /Od /D "DEBUG" /D "ARM" /D "_ARM_" /D UNDER_CE=$(CEVersion) /D _WIN32_WCE=$(CEVersion) /D "$(CePlatform)" /D "UNICODE" /D "_UNICODE" /YX /M$(CECrtMTDebug) /c
+# ADD CPP /nologo /W3 /GX- /Zi /Od /I "..\..\..\Header" /D "DEBUG" /D "ARM" /D "_ARM_" /D UNDER_CE=$(CEVersion) /D _WIN32_WCE=$(CEVersion) /D "$(CePlatform)" /D "UNICODE" /D "_UNICODE" /D "_SIM_" /YX /M$(CECrtMTDebug) /c
+MTL=midl.exe
+# ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /o "NUL" /win32
+# ADD MTL /nologo /D "_DEBUG" /mktyplib203 /o "NUL" /win32
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LINK32=link.exe
+# ADD BASE LINK32 commctrl.lib coredll.lib /nologo /base:"0x00010000" /stack:0x10000,0x1000 /entry:"WinMainCRTStartup" /debug /nodefaultlib:"$(CENoDefaultLib)" /subsystem:$(CESubsystem) /align:"4096" /MACHINE:ARM
+# ADD LINK32 commctrl.lib coredll.lib /nologo /base:"0x00010000" /stack:0x10000,0x1000 /entry:"WinMainCRTStartup" /debug /nodefaultlib:"$(CENoDefaultLib)" /subsystem:$(CESubsystem) /align:"4096" /MACHINE:ARM
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARM) Release"
 
@@ -256,21 +256,21 @@ RSC=rc.exe
 # PROP Platform_ID "{8A9A2F80-6887-11D3-842E-005004848CBA}"
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
-LINK32=link.exe
-# ADD BASE LINK32 commctrl.lib coredll.lib /nologo /base:"0x00010000" /stack:0x10000,0x1000 /entry:"WinMainCRTStartup" /nodefaultlib:"$(CENoDefaultLib)" /subsystem:$(CESubsystem) /align:"4096" /MACHINE:ARM
-# ADD LINK32 commctrl.lib coredll.lib /nologo /base:"0x00010000" /stack:0x10000,0x1000 /entry:"WinMainCRTStartup" /nodefaultlib:"$(CENoDefaultLib)" /subsystem:$(CESubsystem) /align:"4096" /MACHINE:ARM
-BSC32=bscmake.exe
-# ADD BASE BSC32 /nologo
-# ADD BSC32 /nologo
-MTL=midl.exe
-# ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /o "NUL" /win32
-# ADD MTL /nologo /D "NDEBUG" /mktyplib203 /o "NUL" /win32
-CPP=clarm.exe
-# ADD BASE CPP /nologo /W3 /GX- /D _WIN32_WCE=$(CEVersion) /D "$(CePlatform)" /D "ARM" /D "_ARM_" /D UNDER_CE=$(CEVersion) /D "UNICODE" /D "_UNICODE" /D "NDEBUG" /YX /Oxs /M$(CECrtMT) /c
-# ADD CPP /nologo /W3 /GX- /I "..\..\..\Header" /D _WIN32_WCE=$(CEVersion) /D "$(CePlatform)" /D "ARM" /D "_ARM_" /D UNDER_CE=$(CEVersion) /D "UNICODE" /D "_UNICODE" /D "NDEBUG" /D "_SIM_" /YX /Oxs /M$(CECrtMT) /c
 RSC=rc.exe
 # ADD BASE RSC /l 0x409 /d UNDER_CE=$(CEVersion) /d _WIN32_WCE=$(CEVersion) /d "UNICODE" /d "_UNICODE" /d "NDEBUG" /d "$(CePlatform)" /d "ARM" /d "_ARM_" /r
 # ADD RSC /l 0x409 /d UNDER_CE=$(CEVersion) /d _WIN32_WCE=$(CEVersion) /d "UNICODE" /d "_UNICODE" /d "NDEBUG" /d "$(CePlatform)" /d "ARM" /d "_ARM_" /r
+CPP=clarm.exe
+# ADD BASE CPP /nologo /W3 /GX- /D _WIN32_WCE=$(CEVersion) /D "$(CePlatform)" /D "ARM" /D "_ARM_" /D UNDER_CE=$(CEVersion) /D "UNICODE" /D "_UNICODE" /D "NDEBUG" /YX /Oxs /M$(CECrtMT) /c
+# ADD CPP /nologo /W3 /GX- /I "..\..\..\Header" /D _WIN32_WCE=$(CEVersion) /D "$(CePlatform)" /D "ARM" /D "_ARM_" /D UNDER_CE=$(CEVersion) /D "UNICODE" /D "_UNICODE" /D "NDEBUG" /D "_SIM_" /YX /Oxs /M$(CECrtMT) /c
+MTL=midl.exe
+# ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /o "NUL" /win32
+# ADD MTL /nologo /D "NDEBUG" /mktyplib203 /o "NUL" /win32
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LINK32=link.exe
+# ADD BASE LINK32 commctrl.lib coredll.lib /nologo /base:"0x00010000" /stack:0x10000,0x1000 /entry:"WinMainCRTStartup" /nodefaultlib:"$(CENoDefaultLib)" /subsystem:$(CESubsystem) /align:"4096" /MACHINE:ARM
+# ADD LINK32 commctrl.lib coredll.lib /nologo /base:"0x00010000" /stack:0x10000,0x1000 /entry:"WinMainCRTStartup" /nodefaultlib:"$(CENoDefaultLib)" /subsystem:$(CESubsystem) /align:"4096" /MACHINE:ARM
 
 !ENDIF 
 
@@ -572,7 +572,7 @@ DEP_CPP_AIRFI=\
 	{$(INCLUDE)}"winuserm.h"\
 	
 NODEP_CPP_AIRFI=\
-	"..\..\..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
+	"..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -770,7 +770,7 @@ DEP_CPP_AIRSP=\
 	{$(INCLUDE)}"winuserm.h"\
 	
 NODEP_CPP_AIRSP=\
-	"..\..\..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
+	"..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -963,7 +963,7 @@ DEP_CPP_AIRSPA=\
 	{$(INCLUDE)}"winuserm.h"\
 	
 NODEP_CPP_AIRSPA=\
-	"..\..\..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
+	"..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -1522,6 +1522,7 @@ DEP_CPP_CALCU=\
 	"..\..\Common\Header\Atmosphere.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Calculations2.h"\
+	"..\..\Common\Header\ClimbAverageCalculator.h"\
 	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
@@ -5334,7 +5335,7 @@ DEP_CPP_DIALO=\
 	{$(INCLUDE)}"winuserm.h"\
 	
 NODEP_CPP_DIALO=\
-	"..\..\..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
+	"..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -5551,7 +5552,7 @@ DEP_CPP_DLGAI=\
 	{$(INCLUDE)}"winuserm.h"\
 	
 NODEP_CPP_DLGAI=\
-	"..\..\..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
+	"..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -5752,7 +5753,7 @@ DEP_CPP_DLGAIR=\
 	{$(INCLUDE)}"winuserm.h"\
 	
 NODEP_CPP_DLGAIR=\
-	"..\..\..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
+	"..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -5878,7 +5879,7 @@ DEP_CPP_DLGAIRS=\
 	"..\..\Common\Header\zzip\zzip.h"\
 	
 NODEP_CPP_DLGAIRS=\
-	"..\..\..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\emulator\vibrate.h"\
+	"..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\emulator\vibrate.h"\
 	".\inuserm.h"\
 	".\ipapi.h"\
 	".\ygshell.h"\
@@ -5917,7 +5918,7 @@ DEP_CPP_DLGAIRS=\
 	"..\..\Common\Header\zzip\zzip.h"\
 	
 NODEP_CPP_DLGAIRS=\
-	"..\..\..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\emulator\vibrate.h"\
+	"..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\emulator\vibrate.h"\
 	".\inuserm.h"\
 	".\ipapi.h"\
 	".\ygshell.h"\
@@ -5960,7 +5961,7 @@ DEP_CPP_DLGAIRS=\
 	{$(INCLUDE)}"winuserm.h"\
 	
 NODEP_CPP_DLGAIRS=\
-	"..\..\..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
+	"..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -5996,7 +5997,7 @@ DEP_CPP_DLGAIRS=\
 	"..\..\Common\Header\zzip\zzip.h"\
 	
 NODEP_CPP_DLGAIRS=\
-	"..\..\..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
+	"..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
 	".\inuserm.h"\
 	".\ipapi.h"\
 	".\ygshell.h"\
@@ -6035,7 +6036,7 @@ DEP_CPP_DLGAIRS=\
 	"..\..\Common\Header\zzip\zzip.h"\
 	
 NODEP_CPP_DLGAIRS=\
-	"..\..\..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
+	"..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
 	".\inuserm.h"\
 	".\ipapi.h"\
 	".\ygshell.h"\
@@ -6160,7 +6161,7 @@ DEP_CPP_DLGAIRSP=\
 	{$(INCLUDE)}"winuserm.h"\
 	
 NODEP_CPP_DLGAIRSP=\
-	"..\..\..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
+	"..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -6376,7 +6377,7 @@ DEP_CPP_DLGAIRSPA=\
 	{$(INCLUDE)}"winuserm.h"\
 	
 NODEP_CPP_DLGAIRSPA=\
-	"..\..\..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
+	"..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -6582,7 +6583,7 @@ DEP_CPP_DLGAIRSPAC=\
 	{$(INCLUDE)}"winuserm.h"\
 	
 NODEP_CPP_DLGAIRSPAC=\
-	"..\..\..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
+	"..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -7148,7 +7149,7 @@ DEP_CPP_DLGCH=\
 	{$(INCLUDE)}"winuserm.h"\
 	
 NODEP_CPP_DLGCH=\
-	"..\..\..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
+	"..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -7363,7 +7364,7 @@ DEP_CPP_DLGCO=\
 	{$(INCLUDE)}"winuserm.h"\
 	
 NODEP_CPP_DLGCO=\
-	"..\..\..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
+	"..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -7586,7 +7587,7 @@ DEP_CPP_DLGCON=\
 	{$(INCLUDE)}"winuserm.h"\
 	
 NODEP_CPP_DLGCON=\
-	"..\..\..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
+	"..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -7773,6 +7774,7 @@ DEP_CPP_DLGCONF=\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\InfoBoxLayout.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -7801,7 +7803,7 @@ DEP_CPP_DLGCONF=\
 	{$(INCLUDE)}"winuserm.h"\
 	
 NODEP_CPP_DLGCONF=\
-	"..\..\..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
+	"..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -7927,12 +7929,12 @@ DEP_CPP_DLGFL=\
 	"..\..\Common\Header\zzip\stdint.h"\
 	"..\..\Common\Header\zzip\types.h"\
 	"..\..\Common\Header\zzip\zzip.h"\
-	{$(INCLUDE)}"aygshell.h"\
-	{$(INCLUDE)}"sipapi.h"\
-	{$(INCLUDE)}"winuserm.h"\
 	
 NODEP_CPP_DLGFL=\
-	"..\..\..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\emulator\vibrate.h"\
+	"..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\emulator\vibrate.h"\
+	".\inuserm.h"\
+	".\ipapi.h"\
+	".\ygshell.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Debug"
@@ -7966,12 +7968,12 @@ DEP_CPP_DLGFL=\
 	"..\..\Common\Header\zzip\stdint.h"\
 	"..\..\Common\Header\zzip\types.h"\
 	"..\..\Common\Header\zzip\zzip.h"\
-	{$(INCLUDE)}"aygshell.h"\
-	{$(INCLUDE)}"sipapi.h"\
-	{$(INCLUDE)}"winuserm.h"\
 	
 NODEP_CPP_DLGFL=\
-	"..\..\..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\emulator\vibrate.h"\
+	"..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\emulator\vibrate.h"\
+	".\inuserm.h"\
+	".\ipapi.h"\
+	".\ygshell.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Release"
@@ -8010,7 +8012,7 @@ DEP_CPP_DLGFL=\
 	{$(INCLUDE)}"winuserm.h"\
 	
 NODEP_CPP_DLGFL=\
-	"..\..\..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
+	"..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -8044,12 +8046,12 @@ DEP_CPP_DLGFL=\
 	"..\..\Common\Header\zzip\stdint.h"\
 	"..\..\Common\Header\zzip\types.h"\
 	"..\..\Common\Header\zzip\zzip.h"\
-	{$(INCLUDE)}"aygshell.h"\
-	{$(INCLUDE)}"sipapi.h"\
-	{$(INCLUDE)}"winuserm.h"\
 	
 NODEP_CPP_DLGFL=\
-	"..\..\..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
+	"..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
+	".\inuserm.h"\
+	".\ipapi.h"\
+	".\ygshell.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
@@ -8083,12 +8085,12 @@ DEP_CPP_DLGFL=\
 	"..\..\Common\Header\zzip\stdint.h"\
 	"..\..\Common\Header\zzip\types.h"\
 	"..\..\Common\Header\zzip\zzip.h"\
-	{$(INCLUDE)}"aygshell.h"\
-	{$(INCLUDE)}"sipapi.h"\
-	{$(INCLUDE)}"winuserm.h"\
 	
 NODEP_CPP_DLGFL=\
-	"..\..\..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
+	"..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
+	".\inuserm.h"\
+	".\ipapi.h"\
+	".\ygshell.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARM) Debug"
@@ -8581,7 +8583,7 @@ DEP_CPP_DLGST=\
 	{$(INCLUDE)}"winuserm.h"\
 	
 NODEP_CPP_DLGST=\
-	"..\..\..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
+	"..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -10289,7 +10291,7 @@ DEP_CPP_DLGTASK=\
 	{$(INCLUDE)}"winuserm.h"\
 	
 NODEP_CPP_DLGTASK=\
-	"..\..\..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
+	"..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -10416,7 +10418,7 @@ DEP_CPP_DLGTASKR=\
 	"..\..\Common\Header\zzip\zzip.h"\
 	
 NODEP_CPP_DLGTASKR=\
-	"..\..\..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\emulator\vibrate.h"\
+	"..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\emulator\vibrate.h"\
 	"..\..\Common\Source\XCSoarProcess.h"\
 	".\inuserm.h"\
 	".\ipapi.h"\
@@ -10455,7 +10457,7 @@ DEP_CPP_DLGTASKR=\
 	"..\..\Common\Header\zzip\zzip.h"\
 	
 NODEP_CPP_DLGTASKR=\
-	"..\..\..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\emulator\vibrate.h"\
+	"..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\emulator\vibrate.h"\
 	"..\..\Common\Source\XCSoarProcess.h"\
 	".\inuserm.h"\
 	".\ipapi.h"\
@@ -10498,7 +10500,7 @@ DEP_CPP_DLGTASKR=\
 	{$(INCLUDE)}"winuserm.h"\
 	
 NODEP_CPP_DLGTASKR=\
-	"..\..\..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
+	"..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -10533,7 +10535,7 @@ DEP_CPP_DLGTASKR=\
 	"..\..\Common\Header\zzip\zzip.h"\
 	
 NODEP_CPP_DLGTASKR=\
-	"..\..\..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
+	"..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
 	"..\..\Common\Source\XCSoarProcess.h"\
 	".\inuserm.h"\
 	".\ipapi.h"\
@@ -10572,7 +10574,7 @@ DEP_CPP_DLGTASKR=\
 	"..\..\Common\Header\zzip\zzip.h"\
 	
 NODEP_CPP_DLGTASKR=\
-	"..\..\..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
+	"..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
 	"..\..\Common\Source\XCSoarProcess.h"\
 	".\inuserm.h"\
 	".\ipapi.h"\
@@ -10701,7 +10703,7 @@ DEP_CPP_DLGTASKW=\
 	{$(INCLUDE)}"winuserm.h"\
 	
 NODEP_CPP_DLGTASKW=\
-	"..\..\..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
+	"..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -11932,7 +11934,7 @@ DEP_CPP_DLGWA=\
 	{$(INCLUDE)}"winuserm.h"\
 	
 NODEP_CPP_DLGWA=\
-	"..\..\..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
+	"..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -12503,7 +12505,7 @@ DEP_CPP_DLGWAYPO=\
 	{$(INCLUDE)}"winuserm.h"\
 	
 NODEP_CPP_DLGWAYPO=\
-	"..\..\..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
+	"..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -14001,6 +14003,7 @@ DEP_CPP_INPUT=\
 	"..\..\Common\Header\InputEvents_altair.cpp"\
 	"..\..\Common\Header\InputEvents_defaults.cpp"\
 	"..\..\Common\Header\InputEvents_pc.cpp"\
+	"..\..\Common\Header\InputEvents_pna.cpp"\
 	"..\..\Common\Header\InputEvents_Text2Event.cpp"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\Logger.h"\
@@ -14036,7 +14039,7 @@ DEP_CPP_INPUT=\
 	{$(INCLUDE)}"winuserm.h"\
 	
 NODEP_CPP_INPUT=\
-	"..\..\..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
+	"..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -15140,6 +15143,7 @@ DEP_CPP_MAPWIN=\
 	"..\..\Common\Header\GaugeVarioAltA.h"\
 	"..\..\Common\Header\InfoBoxLayout.h"\
 	"..\..\Common\Header\InputEvents.h"\
+	"..\..\Common\Header\jasper\RasterTile.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\Logger.h"\
 	"..\..\Common\Header\mapprimitive.h"\
@@ -15148,6 +15152,7 @@ DEP_CPP_MAPWIN=\
 	"..\..\Common\Header\McReady.h"\
 	"..\..\Common\Header\OnLineContest.h"\
 	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\Statistics.h"\
 	"..\..\Common\Header\stdAfx.h"\
@@ -15953,11 +15958,13 @@ NODEP_CPP_PARSE=\
 DEP_CPP_PARSE=\
 	"..\..\Common\Header\Airspace.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\ClimbAverageCalculator.h"\
 	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\FlarmCalculations.h"\
 	"..\..\Common\Header\GaugeFLARM.h"\
 	"..\..\Common\Header\Geoid.h"\
 	"..\..\Common\Header\InputEvents.h"\
@@ -15972,6 +15979,7 @@ DEP_CPP_PARSE=\
 	"..\..\Common\Header\Statistics.h"\
 	"..\..\Common\Header\stdAfx.h"\
 	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\TeamCodeCalculation.h"\
 	"..\..\Common\Header\Units.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\VarioSound.h"\
@@ -16236,181 +16244,6 @@ DEP_CPP_PORT_=\
 	"..\..\Common\Header\XCSoar.h"\
 	
 NODEP_CPP_PORT_=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
-	
-
-!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARM) Debug"
-
-!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARM) Release"
-
-!ENDIF 
-
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\Common\Source\Port2.cpp
-
-!IF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Release"
-
-DEP_CPP_PORT2=\
-	"..\..\Common\Header\Airspace.h"\
-	"..\..\Common\Header\Calculations.h"\
-	"..\..\Common\Header\compatibility.h"\
-	"..\..\Common\Header\Dialogs.h"\
-	"..\..\Common\Header\dlgTools.h"\
-	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\leastsqs.h"\
-	"..\..\Common\Header\mapprimitive.h"\
-	"..\..\Common\Header\mapshape.h"\
-	"..\..\Common\Header\MapWindow.h"\
-	"..\..\Common\Header\options.h"\
-	"..\..\Common\Header\Port.h"\
-	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\Statistics.h"\
-	"..\..\Common\Header\stdAfx.h"\
-	"..\..\Common\Header\Task.h"\
-	"..\..\Common\Header\Units.h"\
-	"..\..\Common\Header\Utils.h"\
-	"..\..\Common\Header\WindowControls.h"\
-	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_PORT2=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
-	
-
-!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Debug"
-
-DEP_CPP_PORT2=\
-	"..\..\Common\Header\Airspace.h"\
-	"..\..\Common\Header\Calculations.h"\
-	"..\..\Common\Header\compatibility.h"\
-	"..\..\Common\Header\Dialogs.h"\
-	"..\..\Common\Header\dlgTools.h"\
-	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\leastsqs.h"\
-	"..\..\Common\Header\mapprimitive.h"\
-	"..\..\Common\Header\mapshape.h"\
-	"..\..\Common\Header\MapWindow.h"\
-	"..\..\Common\Header\options.h"\
-	"..\..\Common\Header\Port.h"\
-	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\Statistics.h"\
-	"..\..\Common\Header\stdAfx.h"\
-	"..\..\Common\Header\Task.h"\
-	"..\..\Common\Header\Units.h"\
-	"..\..\Common\Header\Utils.h"\
-	"..\..\Common\Header\WindowControls.h"\
-	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_PORT2=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
-	
-
-!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Release"
-
-DEP_CPP_PORT2=\
-	"..\..\Common\Header\Airspace.h"\
-	"..\..\Common\Header\Calculations.h"\
-	"..\..\Common\Header\compatibility.h"\
-	"..\..\Common\Header\Dialogs.h"\
-	"..\..\Common\Header\dlgTools.h"\
-	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\leastsqs.h"\
-	"..\..\Common\Header\mapprimitive.h"\
-	"..\..\Common\Header\mapshape.h"\
-	"..\..\Common\Header\MapWindow.h"\
-	"..\..\Common\Header\options.h"\
-	"..\..\Common\Header\Port.h"\
-	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\Statistics.h"\
-	"..\..\Common\Header\stdAfx.h"\
-	"..\..\Common\Header\Task.h"\
-	"..\..\Common\Header\Units.h"\
-	"..\..\Common\Header\Utils.h"\
-	"..\..\Common\Header\WindowControls.h"\
-	"..\..\Common\Header\XCSoar.h"\
-	"..\..\Common\Header\zzip\_gnuc.h"\
-	"..\..\Common\Header\zzip\_msvc.h"\
-	"..\..\Common\Header\zzip\conf.h"\
-	"..\..\Common\Header\zzip\lib.h"\
-	"..\..\Common\Header\zzip\plugin.h"\
-	"..\..\Common\Header\zzip\stdint.h"\
-	"..\..\Common\Header\zzip\types.h"\
-	"..\..\Common\Header\zzip\zzip.h"\
-	
-
-!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
-
-DEP_CPP_PORT2=\
-	"..\..\Common\Header\Airspace.h"\
-	"..\..\Common\Header\Calculations.h"\
-	"..\..\Common\Header\compatibility.h"\
-	"..\..\Common\Header\Dialogs.h"\
-	"..\..\Common\Header\dlgTools.h"\
-	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\leastsqs.h"\
-	"..\..\Common\Header\mapprimitive.h"\
-	"..\..\Common\Header\mapshape.h"\
-	"..\..\Common\Header\MapWindow.h"\
-	"..\..\Common\Header\options.h"\
-	"..\..\Common\Header\Port.h"\
-	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\Statistics.h"\
-	"..\..\Common\Header\stdAfx.h"\
-	"..\..\Common\Header\Task.h"\
-	"..\..\Common\Header\Units.h"\
-	"..\..\Common\Header\Utils.h"\
-	"..\..\Common\Header\WindowControls.h"\
-	"..\..\Common\Header\XCSoar.h"\
-	"..\..\Common\Header\zzip\_msvc.h"\
-	"..\..\Common\Header\zzip\conf.h"\
-	"..\..\Common\Header\zzip\lib.h"\
-	"..\..\Common\Header\zzip\plugin.h"\
-	"..\..\Common\Header\zzip\stdint.h"\
-	"..\..\Common\Header\zzip\types.h"\
-	"..\..\Common\Header\zzip\zzip.h"\
-	
-NODEP_CPP_PORT2=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
-	
-
-!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
-
-DEP_CPP_PORT2=\
-	"..\..\Common\Header\Airspace.h"\
-	"..\..\Common\Header\Calculations.h"\
-	"..\..\Common\Header\compatibility.h"\
-	"..\..\Common\Header\Dialogs.h"\
-	"..\..\Common\Header\dlgTools.h"\
-	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\leastsqs.h"\
-	"..\..\Common\Header\mapprimitive.h"\
-	"..\..\Common\Header\mapshape.h"\
-	"..\..\Common\Header\MapWindow.h"\
-	"..\..\Common\Header\options.h"\
-	"..\..\Common\Header\Port.h"\
-	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\Statistics.h"\
-	"..\..\Common\Header\stdAfx.h"\
-	"..\..\Common\Header\Task.h"\
-	"..\..\Common\Header\Units.h"\
-	"..\..\Common\Header\Utils.h"\
-	"..\..\Common\Header\WindowControls.h"\
-	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_PORT2=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\gsm_pduconv.h"\
@@ -18591,7 +18424,7 @@ DEP_CPP_WAYPO=\
 	{$(INCLUDE)}"winuserm.h"\
 	
 NODEP_CPP_WAYPO=\
-	"..\..\..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
+	"..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -19517,7 +19350,7 @@ DEP_CPP_XCSOA=\
 	{$(INCLUDE)}"winuserm.h"\
 	
 NODEP_CPP_XCSOA=\
-	"..\..\..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
+	"..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -23653,6 +23486,7 @@ DEP_CPP_RASTER=\
 	"..\..\Common\Header\jasper\jas_version.h"\
 	"..\..\Common\Header\jasper\jasper.h"\
 	"..\..\Common\Header\jasper\RasterTile.h"\
+	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\

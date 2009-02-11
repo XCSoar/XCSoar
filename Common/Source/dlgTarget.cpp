@@ -95,7 +95,7 @@ static void MoveTarget(double adjust_angle) {
 
   if (InAATTurnSector(target_longitude, target_latitude, target_point)) {
     if (CALCULATED_INFO.IsInSector && (target_point == ActiveWayPoint)) {
-      // TODO set range/radial for inside sector
+      // set range/radial for inside sector
       double course_bearing, target_bearing;
       DistanceBearing(Task[target_point-1].AATTargetLat,
                       Task[target_point-1].AATTargetLon,
@@ -130,7 +130,7 @@ static void MoveTarget(double adjust_angle) {
       Task[target_point].AATTargetLat = target_latitude;
       Task[target_point].AATTargetLon = target_longitude;
 
-      // TODO set range/radial for outside sector
+      // set range/radial for outside sector
       DistanceBearing(WayPointList[Task[target_point].Index].Latitude,
                       WayPointList[Task[target_point].Index].Longitude,
                       Task[target_point].AATTargetLat,
@@ -170,7 +170,7 @@ static void DragTarget(double target_longitude, double target_latitude) {
 
   if (InAATTurnSector(target_longitude, target_latitude, target_point)) {
     if (CALCULATED_INFO.IsInSector && (target_point == ActiveWayPoint)) {
-      // TODO set range/radial for inside sector
+      // set range/radial for inside sector
       double course_bearing, target_bearing;
       DistanceBearing(Task[target_point-1].AATTargetLat,
                       Task[target_point-1].AATTargetLon,
@@ -205,7 +205,7 @@ static void DragTarget(double target_longitude, double target_latitude) {
       Task[target_point].AATTargetLat = target_latitude;
       Task[target_point].AATTargetLon = target_longitude;
 
-      // TODO set range/radial for outside sector
+      // set range/radial for outside sector
       DistanceBearing(WayPointList[Task[target_point].Index].Latitude,
                       WayPointList[Task[target_point].Index].Longitude,
                       Task[target_point].AATTargetLat,

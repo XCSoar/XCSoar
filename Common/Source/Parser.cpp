@@ -891,7 +891,7 @@ BOOL NMEAParser::PFLAU(TCHAR *String, TCHAR **params, size_t nparams, NMEA_INFO 
     // traffic has disappeared..
     InputEvents::processGlideComputer(GCE_FLARM_NOTRAFFIC);
   }
-  // XX: TODO also another event for new traffic.
+  // TODO feature: add another event for new traffic.
 
   old_flarm_rx = GPS_INFO->FLARM_RX;
 

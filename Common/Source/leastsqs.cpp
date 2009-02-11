@@ -118,7 +118,7 @@ void LeastSquares::least_squares_add(double x, double y, double weight) {
       x_min = x;
     }
 
-    // TODO: really should have a circular buffer here
+    // TODO code: really should have a circular buffer here
     if (sum_n<MAX_STATISTICS) {
       xstore[sum_n] = (float)x;
       ystore[sum_n] = (float)y;

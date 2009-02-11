@@ -173,7 +173,7 @@ void TopologyInitialiseMarks() {
 
   LockTerrainDataGraphics();
 
-  // TODO - This convert to non-unicode will not support all languages
+  // TODO code: - This convert to non-unicode will not support all languages
   //		(some may use more complicated PATH names, containing Unicode)
   //  char buffer[MAX_PATH];
   //  ConvertTToC(buffer, LocalPath(TEXT("xcsoar-marks")));
@@ -814,7 +814,7 @@ public:
 
     misc_tick_count = GetTickCount();
 
-    //JMW TODO    RasterTerrain::SetCacheTime();
+    // TODO code: not needed   RasterTerrain::SetCacheTime();
 
     // set resolution
 
@@ -1156,7 +1156,7 @@ void CloseTerrainRenderer() {
 void DrawTerrain( const HDC hdc, const RECT rc,
                   const double sunazimuth, const double sunelevation)
 {
-  (void)sunelevation; // unused TODO
+  (void)sunelevation; // TODO feature: sun-based rendering option
   (void)rc;
 
   if (!RasterTerrain::isTerrainLoaded()) {
@@ -1244,7 +1244,7 @@ void DrawSpotHeights(const HDC hdc) {
 ///////////////
 
 #include "wcecompat/ts_string.h"
-// JMW TODO: check ts_string does the right thing
+// TODO code: check ts_string does the right thing
 
 void OpenTopology() {
   StartupStore(TEXT("OpenTopology\n"));

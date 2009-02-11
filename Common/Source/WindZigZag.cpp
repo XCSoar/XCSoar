@@ -584,7 +584,7 @@ int WindZigZagUpdate(NMEA_INFO* Basic, DERIVED_INFO* Calculated,
 #endif
 #endif
 
-  // TODO: correct TAS for vertical speed
+  // TODO accuracy: correct TAS for vertical speed if dynamic pullup
 
   if ((Basic->Time<= tLastEstimate)||(tLastEstimate==-1)) {
     tLastEstimate = Basic->Time-UPDATE_RATE;

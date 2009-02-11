@@ -146,7 +146,7 @@ class SunEphemeris {
     h = ((int)GPS_INFO.Time)/3600;
     h = (h % 24);
 
-    // TODO: use TimeLocal function from Process here
+    // TODO code: use TimeLocal function from Process here?
     /*
     TIME_ZONE_INFORMATION TimeZoneInformation;
     GetTimeZoneInformation(&TimeZoneInformation);

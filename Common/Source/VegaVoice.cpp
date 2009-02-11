@@ -266,8 +266,8 @@ void VegaVoiceMessage::SendNullMessage() {
 
 
 // Called when the Vega Ack button is pressed
-// TODO: prevent the message coming up again unless it becomes inactive
-// for a while and then active again
+// TODO enhancement: prevent the message coming up again unless it
+// becomes inactive for a while and then active again
 void VegaVoiceMessage::Acknowledge(double time) {
   if (active) {
     active = false;
@@ -340,7 +340,7 @@ bool VegaVoiceMessage::Update(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
 
   switch(id) {
   case VV_GENERAL:
-    // TODO: Allow this to be triggered to give generic alert
+    // TODO feature: Allow this to be triggered to give generic alert
     // "INFO"
     break;
   case VV_CLIMBRATE:
@@ -360,7 +360,7 @@ bool VegaVoiceMessage::Update(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
     break;
   case VV_TERRAIN:
     if (!EnableVoiceTerrain) return false;
-    // TODO final glide with terrain warning
+    // TODO feature: final glide with terrain warning
     // CAUTION TERRAIN
     break;
   case VV_WAYPOINTDISTANCE:
@@ -392,7 +392,7 @@ bool VegaVoiceMessage::Update(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
 
 	        if (!EnableVoiceTaskAltitudeDifference) return false;
 
-	        // TODO: BELOW FOUR HUNDRED
+	        // TODO feature: BELOW FOUR HUNDRED
 	        double tad = Calculated->TaskAltitudeDifference*ALTITUDEMODIFY;
 	        if (fabs(tad)>100) {
 	          if (tad>0) {
@@ -411,7 +411,7 @@ bool VegaVoiceMessage::Update(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
     break;
   case VV_MACCREADY:
     if (!EnableVoiceMacCready) return false;
-    // TODO: report when not in auto maccready mode, if
+    // TODO feature: report when not in auto maccready mode, if
     // vario has changed in last 3 seconds but hasn't changed
     // for more than one second
     //
