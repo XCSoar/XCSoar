@@ -652,11 +652,11 @@ void HideMenu() {
 
 void ShowMenu() {
 #if !defined(GNAV) && !defined(PCGNAV)
+  // Popup exit button if in .xci
   InputEvents::setMode(TEXT("Exit"));
 #endif
   MenuTimeOut = 0;
   DisplayTimeOut = 0;
-  // TODO: Popup exit button?
 }
 
 
@@ -1198,7 +1198,7 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   wcscat(XCSoar_Version, TEXT("PC "));
 #else
   wcscat(XCSoar_Version, TEXT("PPC "));
-  // TODO consider adding PPC, 2002, 2003
+  // TODO code: consider adding PPC, 2002, 2003 (not enough room now)
 #endif
 #endif
 
@@ -1677,7 +1677,7 @@ static void InitialiseFonts(RECT rc) {
   propGetFontSettings(TEXT("MapWindowBoldFont"), &logfont);
   MapWindowBoldFont = CreateFontIndirect (&logfont);
 
-  //  JMW TODO create font settings for this one...
+  // TODO code: create font settings for this one...
   memset((char *)&logfont, 0, sizeof (logfont));
   _tcscpy(logfont.lfFaceName, _T(GLOBALFONT));
   
@@ -1762,7 +1762,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
     }
 
 #if defined(GNAV) && !defined(PCGNAV)
-  // TODO: release the handle?
+  // TODO code: release the handle?
   HANDLE hTmp = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_XCSOARSWIFT));
   SendMessage(hWndMainWindow, WM_SETICON,
 	      (WPARAM)ICON_BIG, (LPARAM)hTmp);
@@ -2241,11 +2241,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	}
       }
       break;
-      // TODO Capture KEYDOWN time
+      // TODO enhancement: Capture KEYDOWN time
       // 	- Pass that (otpionally) to processKey, allowing
       // 	  processKey to handle long events - at any length
       // 	- Not sure how to do double click... (need timer call back
       // 	process unless reset etc... tricky)
+      // we do this in WindowControls
 #if defined(GNAV) || defined(PCGNAV)
     case WM_KEYDOWN: // JMW was keyup
 #else
@@ -2817,7 +2818,7 @@ int ConnectionProcessTimer(int itimeout) {
     // If GPS connected but no lock, must be in hangar 
     if (InterfaceTimeoutCheck()) {
 #ifdef GNAV
-      // TODO: ask question about shutdown or give warning
+      // TODO feature: ask question about shutdown or give warning
       // then shutdown if no activity.
       //     Shutdown();
 #endif
@@ -3330,10 +3331,10 @@ void BlankDisplay(bool doblank) {
     vpm.Length = sizeof(VIDEO_POWER_MANAGEMENT);
     vpm.DPMSVersion = 0x0001;
 
-    // TODO - Trigger a GCE (Glide Computer Event) when switching
-	// to battery mode // This can be used to warn users that
-	// power has been lost and you are now // on battery power -
-	// ie: something else is wrong
+    // TODO feature: Trigger a GCE (Glide Computer Event) when
+    // switching to battery mode This can be used to warn users that
+    // power has been lost and you are now on battery power - ie:
+    // something else is wrong
 
     if (doblank) {
 
@@ -3348,7 +3349,7 @@ void BlankDisplay(bool doblank) {
 #ifdef _SIM_
         if ((PDABatteryPercent < BATTERY_EXIT) && !ForceShutdown) {
           StartupStore(TEXT("Battery low exit...\n"));
-          // TODO - Debugging and warning message	  
+          // TODO feature: Warning message on battery shutdown
 	  ForceShutdown = true;
           SendMessage(hWndMainWindow, WM_CLOSE, 0, 0);
         } else
@@ -3357,7 +3358,7 @@ void BlankDisplay(bool doblank) {
             DWORD LocalWarningTime = ::GetTickCount();
             if ((LocalWarningTime - BatteryWarningTime) > BATTERY_REMINDER) {
               BatteryWarningTime = LocalWarningTime;
-              // TODO - Show the user what the status is.
+              // TODO feature: Show the user what the batt status is.
               DoStatusMessage(TEXT("Organiser Battery Low"));
             }
           } else {
@@ -3441,7 +3442,7 @@ void Event_ChangeInfoBoxType(int i) {
     j = Data_Options[k].prev_screen;
   }
 
-  // TODO: if i==0, go to default or reset
+  // TODO code: if i==0, go to default or reset
 
   setInfoType(InfoFocus, j);
   DisplayText();
@@ -3568,7 +3569,7 @@ bool ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size){
         ReplaceInString(OutBuffer, TEXT("$(AdvanceArmed)"), TEXT("(auto)"), Size);
         invalid = true;
       }
-      // JMW TODO: no need to arm finish
+      // TODO bug: no need to arm finish
     default:
       break;
     }
@@ -3597,7 +3598,7 @@ bool ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size){
   }
   if (_tcsstr(OutBuffer, TEXT("$(CheckTaskResumed)"))) {
     if (TaskAborted) {
-      // JMW TODO: does this need to be set with temporary task?
+      // TODO code: check, does this need to be set with temporary task?
       invalid = true;
     }
     ReplaceInString(OutBuffer, TEXT("$(CheckTaskResumed)"), TEXT(""), Size);

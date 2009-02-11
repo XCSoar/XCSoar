@@ -19,7 +19,7 @@
 // Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 // Boston, MA  02111-1307, USA.
 //
-// $Id: leastsqs.cpp,v 1.11 2008/12/30 03:31:53 jwharington Exp $
+// $Id: leastsqs.cpp,v 1.12 2009/02/11 10:50:13 jwharington Exp $
 //
 /*
 NOTE: Sompe portions copyright as above
@@ -118,7 +118,7 @@ void LeastSquares::least_squares_add(double x, double y, double weight) {
       x_min = x;
     }
 
-    // TODO: really should have a circular buffer here
+    // TODO code: really should have a circular buffer here
     if (sum_n<MAX_STATISTICS) {
       xstore[sum_n] = (float)x;
       ystore[sum_n] = (float)y;

@@ -426,7 +426,7 @@ bool DataFieldFileReader::checkFilter(const TCHAR *filename,
 
 void DataFieldFileReader::addFile(const TCHAR *Text, 
 				  const TCHAR *PText) {
-  // TODO remove duplicates?
+  // TODO enhancement: remove duplicates?
   if (nFiles<DFE_MAX_FILES) {
     fields[nFiles].mTextFile = (TCHAR*)malloc((_tcslen(Text)+1)*sizeof(TCHAR));
     _tcscpy(fields[nFiles].mTextFile, Text);
@@ -1234,8 +1234,7 @@ void WindowControl::AddClient(WindowControl *Client){
   }
 
   /*
-  // TODO: also allow autosizing of height/width to 
-  // maximum of parent
+  // TODO code: also allow autosizing of height/width to maximum of parent
 
   if (Client->mHeight == -1){
     // maximum height
@@ -1699,7 +1698,7 @@ int WindowControl::WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam){
         DisplayTimeOut = 0;
         return(0);
       }
-      // JMW TODO: need to be able to focus list items here...
+      // TODO enhancement: need to be able to focus list items here...
     break;
 
     case WM_LBUTTONUP:
@@ -2086,8 +2085,8 @@ int WndForm::ShowModal(void){
 
 
     // hack to stop exiting immediately
-    // TODO: maybe this should block all key handlers
-    // to avoid accidental key presses
+    // TODO code: maybe this should block all key handlers to avoid 
+    // accidental key presses
     if (!hastimed) {
 #if !defined(GNAV) && !defined(NOKEYDEBONCE)
       if (::GetTickCount()-enterTime<1000) {
@@ -3608,7 +3607,7 @@ void WndListFrame::SelectItemFromScreen(int xPos, int yPos,
 
   if ((xPos>= w) && (mListInfo.ItemCount > mListInfo.ItemInViewCount)
       && (mListInfo.ItemCount>0)) {
-    // JMW TODO: scroll!
+    // TODO code: scroll!
 
     mListInfo.ScrollIndex = mListInfo.ItemCount*yPos/h;
     RecalculateIndices(true);

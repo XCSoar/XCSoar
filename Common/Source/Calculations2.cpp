@@ -595,7 +595,7 @@ void CalculateTeammateBearingRange(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
                                TeammateCode, 
                                &mateBearing, &mateDistance);
 
-      // TODO ....change the result of CalcTeammateBearingRange to do this !
+      // TODO code ....change the result of CalcTeammateBearingRange to do this !
       if (mateBearing > 180)
         {
           mateBearing -= 180;
@@ -918,7 +918,7 @@ static double EffectiveMacCready_internal(NMEA_INFO *Basic, DERIVED_INFO *Calcul
     }
     if ((StartLine==0) && (i==0)) {
       // Correct speed calculations for radius
-      // JMW TODO: replace this with more accurate version
+      // JMW TODO accuracy: leg distance replace this with more accurate version
       // leg_distance -= StartRadius;
       LegDistances[0] = max(0.1,LegDistances[0]-StartRadius);
     }

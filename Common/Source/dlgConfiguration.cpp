@@ -936,8 +936,6 @@ static void setVariables(void) {
 
   ///////////////////
   
-  // TODO: all appearance variables
-
     const TCHAR *COMMPort[] = {TEXT("COM1"),TEXT("COM2"),TEXT("COM3"),TEXT("COM4"),
 			       TEXT("COM5"),TEXT("COM6"),TEXT("COM7"),TEXT("COM8"),
 			       TEXT("COM9"),TEXT("COM10"),TEXT("COM0")};
@@ -2048,10 +2046,6 @@ void dlgConfigurationShowModal(void){
   UpdateDeviceSetupButton(0, devA()->Name);
   UpdateDeviceSetupButton(1, devB()->Name);
 
-  ////////
-  // TODO: configuration of Appearance
-  ////////
-
   NextPage(0); // just to turn proper pages on/off
 
   changed = false;
@@ -2063,7 +2057,8 @@ void dlgConfigurationShowModal(void){
   StopHourglassCursor();
   wf->ShowModal();
 
-  // TODO: implement a cancel button that skips all this below after exit.
+  // TODO enhancement: implement a cancel button that skips all this
+  // below after exit.
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpAbortSafetyUseCurrent"));
   if (wp) {

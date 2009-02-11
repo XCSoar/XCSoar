@@ -336,8 +336,8 @@ void NextUpDown(int UpDown)
       if(Task[ActiveWayPoint+1].Index >= 0) {
 	if(ActiveWayPoint == 0)	{
 	  // manual start
-	  // JMW: TODO allow restart
-	  // JMW: make this work only for manual
+	  // TODO bug: allow restart
+	  // TODO bug: make this work only for manual
 	  if (CALCULATED_INFO.TaskStartTime==0) {
 	    CALCULATED_INFO.TaskStartTime = GPS_INFO.Time;
 	  }
@@ -351,10 +351,10 @@ void NextUpDown(int UpDown)
         if((UpDown == 2) && (Task[0].Index >= 0)) {
           /* ****DISABLED****
           if(ActiveWayPoint == 0)	{
-            // JMW: TODO allow restart
-            // JMW: make this work only for manual
+            // TODO bug: allow restart
+            // TODO bug: make this work only for manual
             
-            // TODO: This should trigger reset of flight stats, but 
+            // TODO bug: This should trigger reset of flight stats, but 
             // should ask first...
             if (CALCULATED_INFO.TaskStartTime==0) {
               CALCULATED_INFO.TaskStartTime = GPS_INFO.Time ;
@@ -382,8 +382,7 @@ void NextUpDown(int UpDown)
         RotateStartPoints();
 
 	// restarted task..
-	// JMW TODO: ask if user wants to restart task?
-	//	CALCULATED_INFO.TaskStartTime = 0;
+	//	TODO bug: not required? CALCULATED_INFO.TaskStartTime = 0;
       }
     }
     aatdistance.ResetEnterTrigger(ActiveWayPoint);    
@@ -583,7 +582,7 @@ void FormatterAATTime::AssignValue(int i) {
   }
 }
 
-// TODO crop long text or provide alternate
+// TODO enhancement: crop long text or provide alternate
 // e.g. 10300 ft ==> 10,3
 // e.g. "Ardlethan" => "Ardl."
 
@@ -883,7 +882,7 @@ void InfoBoxFormatter::AssignValue(int i) {
     Valid = true;
     break;
   case 67:
-    /* JMW TODO add extra infoboxes from Lars
+    /* TODO feature: add extra infoboxes from Lars
   case 66: // distance flown
     if (CALCULATED_INFO.TaskDistanceCovered != 0)
       {

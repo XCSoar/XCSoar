@@ -2,6 +2,15 @@
 SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
+TODO items in code are marked as:
+- enhancement
+- bug
+- accuracy
+- feature
+- code cleanup/robustness
+
+
+
 IGC Logger:
   must have unique serial number, make and type, version number
   must mark where declaration is changed in-flight
@@ -12,8 +21,6 @@ IGC Logger:
   PEVs should also activate fast-fix (for how long?)
   add C lines at waypoint events: START, TURN, TURN AREA, FINISH
   C lines are causing problems when blank, as reported by Deniz
-- put globals into their own class
-- check all TODOs / check
 
 
 Todo:
@@ -26,9 +33,12 @@ Todo:
 - Nearest airspace scan logic
 - Pilot weight correction
 - Unballasted weight display
-- Av climb version
 - "Force landscape" setting in config
 - Fix OLC distance further calcs
+- put globals into their own class
+- check all TODOs / check
+- FLARM gauge disable separate from FLARM map
+- Time-penalty based scaling of speed command errors 
 
 Changes from 5.1.9beta9:
 - Fixed bug in tasman vario gauge display

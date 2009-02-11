@@ -32,7 +32,7 @@ Copyright_License {
 }
 */
 
-// TODO
+// TODO code: units stuff
 // - check buffer size in LongitudeToString and LattiditudeToString
 // - convertion function
 // - fill up UnitDescriptors with convertion factors

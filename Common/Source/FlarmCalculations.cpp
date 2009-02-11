@@ -41,7 +41,7 @@ FlarmCalculations::FlarmCalculations(void)
 
 FlarmCalculations::~FlarmCalculations(void)
 {
-  // TODO: delete on exit
+  // TODO code: delete on exit
 }
 
 

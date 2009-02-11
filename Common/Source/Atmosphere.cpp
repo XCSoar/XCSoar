@@ -49,7 +49,7 @@ double CuSonde::maxGroundTemperature = 25.0;
 CuSondeLevel CuSonde::cslevels[CUSONDE_NUMLEVELS];
 
 
-// TODO: recalculate thermal index etc if maxGroundTemp changes
+// TODO accuracy: recalculate thermal index etc if maxGroundTemp changes
 
 void CuSonde::test() {
   CALCULATED_INFO.Flying= true;

@@ -221,7 +221,7 @@ double GlidePolar::MacCreadyAltitude_internal(double emcready,
   double sinkrate;
   double tc; // time spent in cruise
 
-  // JMW TODO this should be modified to incorporate:
+  // TODO accuracy: extensions to Mc to incorporate real-life issues
   // - [done] best cruise track and bearing (final glide and for waypoint)
   // - climb before or after turning waypoints.
   // - mcready ring changes with height allowing for risk and decreased rate

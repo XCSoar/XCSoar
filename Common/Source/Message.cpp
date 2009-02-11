@@ -226,7 +226,7 @@ void Message::Resize() {
       rthis.left = 0;
       rthis.bottom = height;
       rthis.right = 206*InfoBoxLayout::scale; 
-      // TODO: this shouldn't be hard-coded
+      // TODO code: this shouldn't be hard-coded
     } else {
       rthis.left = midx-width/2;
       rthis.right = midx+width/2;
@@ -266,7 +266,7 @@ void Message::BlockRender(bool doblock) {
   } else {
     block_ref--;
   }
-  // TODO: add blocked time to messages' timers so they come
+  // TODO code: add blocked time to messages' timers so they come
   // up once unblocked.
   //Unlock();
 }

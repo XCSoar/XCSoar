@@ -1629,7 +1629,7 @@ extern "C" {
 
     audio_deadband_hi = 100+v/2;
     audio_deadband_low = 100-v/2;
-    // TODO
+    // TODO feature: set sound deadband
 
     LeaveCriticalSection(&CritSec_VarioSound);
   }

@@ -610,7 +610,7 @@ void GaugeVario::RenderNeedle(int i, bool average, bool clear) {
 }
 
 
-// TODO: Optimise, this is slow
+// TODO code: Optimise vario rendering, this is slow
 void GaugeVario::RenderValue(int x, int y, 
 			     DrawInfo_t *diValue, 
 			     DrawInfo_t *diLabel, double Value, 

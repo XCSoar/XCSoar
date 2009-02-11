@@ -436,7 +436,7 @@ BOOL devParseNMEA(int portNum, TCHAR *String, NMEA_INFO *GPS_INFO){
 
     if (d->pDevPipeTo && d->pDevPipeTo->Com) {
       // stream pipe, pass nmea to other device (NmeaOut)
-      // TODO ToDo check TX buffer usage and skip it if buffer is full (outbaudrate < inbaudrate)
+      // TODO code: check TX buffer usage and skip it if buffer is full (outbaudrate < inbaudrate)
       d->pDevPipeTo->Com->WriteString(String);
     }
 
@@ -905,7 +905,7 @@ BOOL FlarmDeclare(PDeviceDescriptor_t d, Declaration_t *decl){
   // PFLAC,,NEWTASK:
   // PFLAC,,ADDWP:
 
-  // JMW TODO: FLARM Declaration checks
+  // TODO bug: JMW, FLARM Declaration checks
   // Note: FLARM must be power cycled to activate a declaration!
   // Only works on IGC approved devices
   // Total data size must not surpass 183 bytes

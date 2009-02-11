@@ -610,12 +610,8 @@ int OLCOptimizer::optimize_internal() {
 
 
 /*
-  TODO:
+  TODO accuracy: OLC handicap, estimated score
 
-  handicap in glide polar?  
-
-  Estimate score?
-    
   Rotary buffer, and save previous best when doing optimisation.
   This means we only need a buffer large enough for 2.5 hours,
   so we can plan on update every one minute seconds for 200 samples max 
@@ -868,10 +864,10 @@ int OLCOptimizer::scan_sprint_inprogress() {
   double Vopt;
   int dfurther;
 
-  // TODO: Adjust for wind!
+  // TODO accuracy: Adjust for wind!
   if (sinkrate>=GlidePolar::minsink) {
     // no need to climb to make it
-    // (TODO: later work out time adjustment for climb here, but for 
+    // (TODO accuracy: later work out time adjustment for climb here, but for 
     // now we just assume we won't be climbing again)
     
     Vopt = GlidePolar::FindSpeedForSinkRate(sinkrate);      
@@ -884,7 +880,7 @@ int OLCOptimizer::scan_sprint_inprogress() {
     dt = iround(dh/sinkrate);
   }
   dfurther = (int)(Vopt*dt/DISTANCEUNITS); // neglects wind speed!  we can correct this
-  // JMW TODO
+  // TODO accuracy: OLC further
 
   // we can calculate the optimal instantaneous
   // MC value for this given the netto velocity
@@ -919,8 +915,7 @@ int OLCOptimizer::scan_sprint_inprogress() {
 	i3best = i3;
 	i4best = i4;
 	i5best = i5; 
-	// TODO: find equivalent Mc value?
-	// Command Vopt?
+	// TODO accuracy: find equivalent Mc value?, Command Vopt?
       }
     }   
   }
@@ -963,7 +958,8 @@ int OLCOptimizer::scan_classic() {
 
   for (i6=i1+5; i6<pnts; i6++) {
     
-    // TODO: eliminate this or reduce it to search across i6, since i1 is given
+    // TODO code: eliminate this or reduce it to search across i6,
+    // since i1 is given
     i7 = ibestendclassic[sindex(i1,i6)];
     
     if (i7>=i6) { // valid end point found

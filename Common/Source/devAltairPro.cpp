@@ -91,7 +91,7 @@ BOOL atrDeclare(PDeviceDescriptor_t d, Declaration_t *decl){
   (void) d;
   (void) decl;
 
-  // ToDo TODO
+  // TODO feature: Altair declaration
 
   return(TRUE);
 
@@ -116,7 +116,7 @@ BOOL atrIsBaroSource(PDeviceDescriptor_t d){
 }
 
 BOOL atrPutQNH(DeviceDescriptor_t *d, double NewQNH){
-  (void)NewQNH; // TODO JMW check this
+  (void)NewQNH; // TODO code: JMW check sending QNH to Altair
   if (d == pDevPrimaryBaroSource){
     GPS_INFO.BaroAltitude = AltitudeToQNHAltitude(lastAlt);
   }

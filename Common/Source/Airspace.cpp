@@ -805,7 +805,7 @@ static void AirspaceAGLLookup(AIRSPACE_ALT *Top, AIRSPACE_ALT *Base,
 	Top->Altitude = 0;
       }
     }
-    // JMW TODO: complain if out of terrain range (th<0)
+    // JMW TODO enhancement: complain if out of terrain range (th<0)
     RasterTerrain::Unlock();
   }
 }
@@ -1943,7 +1943,7 @@ int FindNearestAirspaceArea(double longitude,
 // Otherwise, returns index of the circle or area that is closest to the specified point.
 //
 // Also returns the distance and bearing to the boundary of the airspace,
-// (and the vertical separation TODO).  
+// (TODO enhancement: return also the vertical separation).  
 //
 // Distance <0 means interior.
 //

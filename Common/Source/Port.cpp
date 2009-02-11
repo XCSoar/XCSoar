@@ -101,7 +101,7 @@ BOOL ComPort::Initialize(LPCTSTR lpszPortName, DWORD dwPortSpeed)
     dwError = GetLastError();
 
     // Could not open the port.
-    // TODO SCOTT I18N - Fix this to sep the TEXT from PORT, TEXT can be
+    // TODO code: SCOTT I18N - Fix this to sep the TEXT from PORT, TEXT can be
     // gettext(), port added on new line
     ComPort_StatusMessage(MB_OK|MB_ICONINFORMATION, NULL, TEXT("%s %s"),
               gettext(TEXT("Unable to open port")), sPortName);
@@ -148,7 +148,7 @@ BOOL ComPort::Initialize(LPCTSTR lpszPortName, DWORD dwPortSpeed)
 #if (WINDOWSPC>0)
     Sleep(2000); // needed for windows bug
 #endif
-    // TODO SCOTT I18N - Fix this to sep the TEXT from PORT, TEXT can be
+    // TODO code: SCOTT I18N - Fix this to sep the TEXT from PORT, TEXT can be
     // gettext(), port added on new line
     ComPort_StatusMessage(MB_OK, TEXT("Error"), TEXT("%s %s"), 
               gettext(TEXT("Unable to Change Settings on Port")), sPortName);

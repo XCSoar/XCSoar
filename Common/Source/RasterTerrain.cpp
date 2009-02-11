@@ -577,8 +577,8 @@ void RasterTerrain::OpenTerrain(void)
     unicode2ascii(szFile, zfilename, MAX_PATH);
   }
 
-  // TODO: Check locking, especially when reloading a file.
-  // Fix cache method
+  // TODO code: Check locking, especially when reloading a file.
+  // TODO bug: Fix cache method
 
   if (CreateTerrainMap(zfilename)) {
     SetRegistryString(szRegistryTerrainFile, szOrigFile);
@@ -773,7 +773,7 @@ void RasterTerrain::CloseTerrain(void)
 
   render_weather = 0;
 
-  // TODO: lock it first?
+  // TODO code: lock it first?
 
   if (terrain_initialised) {
 

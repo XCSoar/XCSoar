@@ -11,7 +11,7 @@
 **   This file is distributed under the terms of the General Public
 **   Licence. See the file COPYING for more information.
 **
-**   $Id: windanalyser.cpp,v 1.30 2008/12/30 03:31:53 jwharington Exp $
+**   $Id: windanalyser.cpp,v 1.31 2009/02/11 10:50:13 jwharington Exp $
 **
 ***********************************************************************/
 /*
@@ -161,8 +161,8 @@ void WindAnalyser::slot_newSample(NMEA_INFO *nmeaInfo,
   if (numwindsamples<MAXWINDSAMPLES-1) {
     numwindsamples++;
   } else {
-
-    // TODO give error...
+    // TODO code: give error, too many wind samples
+    // or use circular buffer
   }
 
   if ((nmeaInfo->Speed< Magnitude(minVector))||first) 

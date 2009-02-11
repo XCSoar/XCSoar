@@ -63,7 +63,7 @@ static void OnRulesActiveData(DataField *Sender,
     break;
     case DataField::daPut:
     case DataField::daChange:
-      // TODO: hide/show fields
+      // TODO enhancement: hide/show fields as appropriate
     break;
   }
 }
@@ -161,7 +161,7 @@ bool dlgTaskRules(void){
 
   wf->ShowModal();
 
-  // TODO: implement a cancel button that skips all this below after exit.
+  // TODO enhancement: implement a cancel button that skips all this below after exit.
 
   int ival;
 

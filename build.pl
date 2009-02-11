@@ -14,14 +14,19 @@ my $gcc = 0;
 my $pf = $ENV{ProgramFiles};
 if (!length($pf)) {
   $gcc = 1;
+} else {
+  if (! -s "$pf/Microsoft eMbedded C++ 4.0/Common/EVC/Bin/EVC.EXE") {
+    $pf = "D:/Program Files";
+  }
 }
 
 my $nobuild = 0;
+my $noclean = 1;
 
 my %execs = (
 	     'EVC3' => {
-			'evc' => "$pf/Microsoft eMbedded Tools/Common/EVC/Bin/EVC.EXE",
-			'cabwiz' => "/Windows CE Tools/wce300/Pocket PC 2002/support/ActiveSync/windows ce application installation/cabwiz/Cabwiz.exe",
+			'evc' => "$pf/Microsoft eMbedded C++ 3.0/Common/EVC/Bin/EVC.EXE",
+			'cabwiz' => "$pf/Windows CE Tools/wce300/Pocket PC 2002/support/ActiveSync/windows ce application installation/cabwiz/Cabwiz.exe",
 		       },
 	     'EVC4' => {
 			'evc' => "$pf/Microsoft eMbedded C++ 4.0/Common/EVC/Bin/EVC.EXE",
@@ -74,7 +79,7 @@ my %platforms = (
 	},
 	'PPC2002' => {
 		'exec' => "EVC3",
-		'proc' => [qw/ARM MIPS/],
+		'proc' => [qw/ARM/], # was and MIPS
 		'cab' => 1,
 		'sim' => 1
 	},
@@ -92,6 +97,7 @@ my @platforms_all = keys %platforms;
 # ------------------------------------------------------------------------------
 # User Input (primative)
 # ------------------------------------------------------------------------------
+
 my $user = shift;
 if ($user) {
 	if (exists($platforms{$user}) || $user eq "ALL") {
@@ -132,7 +138,7 @@ print STDERR "Version = ",$version_file, "  num $version_num\n";
 # BUILD ALL via EVC3&4
 # ------------------------------------------------------------------------------
 
-if (!$gcc) {
+if (!$gcc && !$nobuild) {
   foreach my $platform (keys %platforms) {
     foreach my $project (@projects) {
       foreach my $proc (@{$platforms{$platform}{'proc'}}) {
@@ -157,21 +163,22 @@ if (!$gcc) {
     print STDERR "\t$cmd\n" if ($debug);
     system($cmd) and error("Executing Command - $?\n\t$cmd\n");
   }
+
 }
 
 # ------------------------------------------------------------------------------
 # EXEs - via EZSetup
 # ------------------------------------------------------------------------------
 
-if (!$nobuild) {
-  foreach my $platform (@platforms_all) {
-    if (!$gcc) {
-      my $cmd = q{} . $exec_ezsetup . q{ -l english -i }
-	. qq{XCSoar$platform.ini -r installmsg.txt -e gpl.txt -o InstallXCSoar-$platform.exe};
-      print STDERR "EZSetup for $platform\n";
-      print STDERR "\t$cmd\n" if ($debug);
-      system($cmd) and error("Executing Command - $?\n\t$cmd\n");
-    } else {
+foreach my $platform (@platforms_all) {
+  if (!$gcc) {
+    my $cmd = q{} . $exec_ezsetup . q{ -l english -i }
+      . qq{XCSoar$platform.ini -r installmsg.txt -e gpl.txt -o InstallXCSoar-$platform.exe};
+    print STDERR "EZSetup for $platform\n";
+    print STDERR "\t$cmd\n" if ($debug);
+    system($cmd) and error("Executing Command - $?\n\t$cmd\n");
+  } else {
+    if (!$nobuild) {
       print "Making cab files with gcc\n";
       system("make -j 2 TARGET=$platform clean");
       if ($platforms{$platform}{cab}) {
@@ -249,6 +256,23 @@ foreach my $platform (@platforms_all) {
 	  or error("Unable to move EXE file $!\n\tXCSoar-$platform.exe\n");
 	system("zip -r XCSoar$platform-$version_file.zip XCSoar.exe");
 	rename "XCSoar$platform-$version_file.zip","dist/XCSoar$platform-$version_file.zip";
+      }
+    }
+  }
+}
+
+# --------------
+# Clean after build
+
+if (!$gcc && !$noclean) {
+  foreach my $platform (keys %platforms) {
+    foreach my $project (@projects) {
+      foreach my $proc (@{$platforms{$platform}{'proc'}}) {
+	my $cmd = q{"} . $execs{$platforms{$platform}{'exec'}}{evc} . q{" }
+	  . qq{$platform/$project/$project.vcp /MAKE "$project - Win32 (WCE $proc) Release" /CLEAN};
+	print STDERR "Clean $project for $platform/$proc\n";
+	print STDERR "\t$cmd\n" if ($debug);
+	system($cmd) and error("Executing Command - $?\n\t$cmd\n");
       }
     }
   }

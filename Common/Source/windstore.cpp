@@ -11,7 +11,7 @@
 **   This file is distributed under the terms of the General Public
 **   Licence. See the file COPYING for more information.
 **
-**   $Id: windstore.cpp,v 1.17 2008/12/30 03:31:53 jwharington Exp $
+**   $Id: windstore.cpp,v 1.18 2009/02/11 10:50:13 jwharington Exp $
 **
 ***********************************************************************/
 
@@ -147,7 +147,7 @@ void WindStore::newWind(NMEA_INFO *nmeaInfo, DERIVED_INFO *derivedInfo,
     }
     derivedInfo->WindBearing = bearing;
   } else {
-    // JMW TODO: give warning
+    // TODO code: give warning, wind estimate bogus or very strong!
   }
 
 #ifdef DEBUG_WIND

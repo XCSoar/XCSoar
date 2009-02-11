@@ -467,7 +467,7 @@ void dlgWayPointDetailsShowModal(void){
 				 LineOffsets,
 				 MAXLINES);
 
-  /* TODO
+  /* TODO enhancement: wpdetails
   wp = ((WndProperty *)wf->FindByName(TEXT("prpWpDetails")));
   wp->SetText(WayPointList[SelectedWaypoint].Details);
   */

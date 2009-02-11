@@ -142,7 +142,7 @@ int WINAPI MessageBoxX(HWND hWnd, LPCTSTR lpText, LPCTSTR lpCaption, UINT uType)
         //      | DT_VCENTER
   );
 
-  /* TODO, dont work
+  /* TODO code: this doesnt work to set font height 
   dY = wText->GetLastDrawTextHeight() - Height;
   */
   dY = -40*ISCALE;
@@ -270,7 +270,8 @@ void GetDefaultWindowControlProps(XMLNode *Node, TCHAR *Name, int *X, int *Y, in
   *Font = StringToIntDflt(Node->getAttribute(TEXT("Font")), -1);
   _tcscpy(Name, StringToStringDflt(Node->getAttribute(TEXT("Name")), TEXT("")));
   _tcscpy(Caption, StringToStringDflt(Node->getAttribute(TEXT("Caption")), TEXT("")));
-  /* TODO - Temporary double handling to fix "const unsigned short *" to "unsigned short *" problem */
+  // TODO code: Temporary double handling to fix "const unsigned short
+  // *" to "unsigned short *" problem
   _tcscpy(Caption,gettext(Caption));
 
 }
@@ -482,7 +483,7 @@ WndForm *dlgLoadFromXML(CallBackTableEntry_t *LookUpTable, const char *FileName,
     }
   }
 
-  // JMW TODO: put in error checking here and get rid of exits in xmlParser
+  // TODO code: put in error checking here and get rid of exits in xmlParser
   if (xMainNode.isEmpty()) {
 
     MessageBoxX(hWndMainWindow,
@@ -641,7 +642,8 @@ void LoadChildsFromXML(WindowControl *Parent,
 		  Caption, 
 			StringToStringDflt(childNode.getAttribute(TEXT("Caption")), TEXT(""))
 		);
-		/* TODO - Temporary double handling to fix "const unsigned short *" to "unsigned short *" problem */
+      // TODO code: Temporary double handling to fix "const unsigned
+      // short *" to "unsigned short *" problem
 	  _tcscpy(Caption, gettext(Caption));
 
       WC = W = 

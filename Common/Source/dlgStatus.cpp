@@ -568,7 +568,7 @@ static void UpdateValuesTask(void) {
   double d1 = 
     (CALCULATED_INFO.TaskDistanceToGo
      +CALCULATED_INFO.TaskDistanceCovered)/dd;
-  // JMW TODO: this fails for OLC
+  // TODO bug: this fails for OLC
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpEstimatedSpeed"));
   if (wp) {

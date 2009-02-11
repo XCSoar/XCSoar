@@ -254,7 +254,7 @@ void LoadChecklist(void) {
 	// append text to details string
 	wcsncat(Details,TempString,MAXDETAILS-2);
 	wcscat(Details,TEXT("\r\n"));
-	// TODO: check the string is not too long
+	// TODO code: check the string is not too long
       }
     }
 

@@ -240,7 +240,6 @@ static void GetWaypointValues(void) {
 static void SetWaypointValues(bool first=false) {
   WndProperty* wp;
 
-  // TODO: handle change
   wp = (WndProperty*)wf->FindByName(TEXT("prpAATType"));
   if (wp) {
     DataFieldEnum* dfe;
@@ -589,8 +588,6 @@ void dlgTaskWaypointShowModal(int itemindex, int tasktype, bool addonly){
   wf->ShowModal();
 
   // now retrieve changes
-
-  // TODO: handle change
 
   GetWaypointValues();
 

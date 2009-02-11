@@ -376,17 +376,17 @@ BOOL vgaParseNMEA(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO){
       return PDVVT(d, &String[7], GPS_INFO);
     }
   if(_tcsncmp(TEXT("$PDVSD"), String, 6)==0)
-	  {
-	    TCHAR cptext[80];
-	    wsprintf(cptext,TEXT("%s"), &String[7]);
-	    // TODO - JMW (from Scott)
-	    // 	Either use something like
-	    // 		DoStatusMessage(TEXT("Vario Message"), cptext);
-	    // 		(then you can assign time and sound to Vario Message)
-	    // 	or	Message::AddMessage
-	    DoStatusMessage(cptext);
-	    return FALSE;
-	  }
+    {
+      TCHAR cptext[80];
+      wsprintf(cptext,TEXT("%s"), &String[7]);
+      // TODO code: JMW (from Scott)
+      // 	Either use something like
+      // 		DoStatusMessage(TEXT("Vario Message"), cptext);
+      // 		(then you can assign time and sound to Vario Message)
+      // 	or	Message::AddMessage
+      DoStatusMessage(cptext);
+      return FALSE;
+    }
   if(_tcsncmp(TEXT("$PDTSM"), String, 6)==0)
     {
       return PDTSM(d, &String[7], GPS_INFO);

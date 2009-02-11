@@ -1559,7 +1559,7 @@ double HalfAngle(double Angle0, double Angle1) {
   Angle0 = AngleLimit360(Angle0);
   Angle1 = AngleLimit360(Angle1);
 
-  // JMW TODO test this? thankfully only occurs in one spot in AAT
+  // TODO code: check/test this? thankfully only occurs in one spot in AAT
   if (Angle1>= Angle0) {
     return (Angle0+Angle1)/2;
   } else {
@@ -2107,7 +2107,7 @@ void ConvertFlightLevels(void)
 {
   unsigned i;
 
-  // JMW TODO: This is inaccurate!
+  // TODO accuracy: Convert flightlevels is inaccurate!
 
   for(i=0;i<NumberOfAirspaceCircles;i++)
     {
@@ -3219,7 +3219,7 @@ cont:
 
   INTERFACE FILE SECTION
 
-  TODO - All this code, loading, searching, return etc will
+  TODO code: All this code, loading, searching, return etc will
   be moved into a CPP class very soon. This will allow better
   handling of the array, and a better place to swap in performance
   critical search, sort etc.
@@ -3268,7 +3268,7 @@ void ReadStatusFile() {
   if (fp == NULL)
     return;
   
-  // TODO - Safer sizes, strings etc - use C++ (can scanf restrict length?)
+  // TODO code: Safer sizes, strings etc - use C++ (can scanf restrict length?)
   TCHAR buffer[2049];	// Buffer for all
   TCHAR key[2049];	// key from scanf
   TCHAR value[2049];	// value from scanf
@@ -3317,7 +3317,7 @@ void ReadStatusFile() {
       
       // Do we have somewhere to put this && is it currently empty ? (prevent lost at startup)
       if (location && (wcscmp(*location, TEXT("")) == 0)) {
-	// TODO - this picks up memory lost from no entry, but not duplicates - fix.
+	// TODO code: this picks up memory lost from no entry, but not duplicates - fix.
 	if (*location) {
 	  // JMW fix memory leak
 	  free(*location);
@@ -4632,7 +4632,7 @@ BOOL PlayResource (const TCHAR* lpName)
   LPTSTR lpRes;
   HANDLE hResInfo, hRes;
 
-  // TODO Modify to allow use of WAV Files and/or Embedded files
+  // TODO code: Modify to allow use of WAV Files and/or Embedded files
 
   if (wcsstr(lpName, TEXT(".wav"))) {
     bRtn = sndPlaySound (lpName, SND_ASYNC | SND_NODEFAULT ); 
