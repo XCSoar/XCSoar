@@ -48,8 +48,6 @@ endif
 
 ifeq ($(CONFIG_PC),y)
 TCPATH		:=i586-mingw32msvc-
-TCPATH		:=d:/mingw/bin/
-TCPATH :=	mingw32-
 CPU		:=i586
 else
 ifeq ($(CONFIG_WINE),y)
@@ -158,6 +156,7 @@ ifeq ($(CONFIG_PC),y)
 CPPFLAGS	+= -D_WINDOWS -D_MBCS -DWIN32 -DCECORE -DUNDER_CE=300 $(UNICODE)
   ifeq ($(CONFIG_WINE),y)
 CPPFLAGS	+= -D__MINGW32__ 
+# -mno-cygwin 
   else
 CPPFLAGS	+= $(UNICODE)
   endif
@@ -228,7 +227,7 @@ endif
 
 
 ifeq ($(CONFIG_PC),n)
-CPPFLAGS_Common_Source_ :=-Werror
+#CPPFLAGS_Common_Source_ :=-Werror
 endif
 
 DEVS	:=\
@@ -521,9 +520,9 @@ cleani: FORCE
 .PHONY: FORCE
 
 ifneq ($(wildcard $(SRC)/.*.d),)
-#include $(wildcard $(SRC)/.*.d)
+include $(wildcard $(SRC)/.*.d)
 endif
 ifneq ($(wildcard $(SRC)/*/.*.d),)
-#include $(wildcard $(SRC)/*/.*.d)
+include $(wildcard $(SRC)/*/.*.d)
 endif
 
