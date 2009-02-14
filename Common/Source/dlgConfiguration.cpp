@@ -1109,24 +1109,20 @@ static void setVariables(void) {
     wp->RefreshDisplay();
   }
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpEnableFLARMDisplay"));
+  wp = (WndProperty*)wf->FindByName(TEXT("prpEnableFLARMMap"));
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
     dfe->addEnumText(gettext(TEXT("OFF")));
     dfe->addEnumText(gettext(TEXT("ON/Fixed")));
     dfe->addEnumText(gettext(TEXT("ON/Scaled")));
-    dfe->Set(EnableFLARMDisplay);
+    dfe->Set(EnableFLARMMap);
     wp->RefreshDisplay();
   }
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpFLARMGaugeBearing"));
+  wp = (WndProperty*)wf->FindByName(TEXT("prpEnableFLARMGauge"));
   if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(gettext(TEXT("Relative Altitude")));
-    dfe->addEnumText(gettext(TEXT("Bearing")));
-    dfe->Set(FLARMGaugeBearing);
+    wp->GetDataField()->Set(EnableFLARMGauge);
     wp->RefreshDisplay();
   }
 
@@ -2195,24 +2191,24 @@ void dlgConfigurationShowModal(void){
     }
   }
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpEnableFLARMDisplay"));
+  wp = (WndProperty*)wf->FindByName(TEXT("prpEnableFLARMMap"));
   if (wp) {
-    if ((int)EnableFLARMDisplay != 
+    if ((int)EnableFLARMMap != 
 	wp->GetDataField()->GetAsInteger()) {
-      EnableFLARMDisplay = wp->GetDataField()->GetAsInteger();
-      SetToRegistry(szRegistryEnableFLARMDisplay,
-		    EnableFLARMDisplay);
+      EnableFLARMMap = wp->GetDataField()->GetAsInteger();
+      SetToRegistry(szRegistryEnableFLARMMap,
+		    EnableFLARMMap);
       changed = true;
     }
   }
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpFLARMGaugeBearing"));
+  wp = (WndProperty*)wf->FindByName(TEXT("prpEnableFLARMGauge"));
   if (wp) {
-    if ((int)FLARMGaugeBearing != 
-	wp->GetDataField()->GetAsInteger()) {
-      FLARMGaugeBearing = wp->GetDataField()->GetAsInteger();
-      SetToRegistry(szRegistryFLARMGaugeBearing,
-		    FLARMGaugeBearing);
+    if (EnableFLARMGauge != 
+	wp->GetDataField()->GetAsBoolean()) {
+      EnableFLARMGauge = wp->GetDataField()->GetAsInteger();
+      SetToRegistry(szRegistryEnableFLARMGauge,
+		    EnableFLARMGauge);
       changed = true;
     }
   }

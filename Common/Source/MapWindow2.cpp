@@ -309,7 +309,7 @@ void MapWindow::DrawSpeedToFly(HDC hDC, RECT rc) {
 
 void MapWindow::DrawFLARMTraffic(HDC hDC, RECT rc, POINT Orig_Aircraft) {
 
-  if (!EnableFLARMDisplay) return;
+  if (!EnableFLARMMap) return;
 
   if (!DrawInfo.FLARM_Available) return;
 
@@ -340,7 +340,7 @@ void MapWindow::DrawFLARMTraffic(HDC hDC, RECT rc, POINT Orig_Aircraft) {
       target_lon = DrawInfo.FLARM_Traffic[i].Longitude;
       target_lat = DrawInfo.FLARM_Traffic[i].Latitude;
 
-      if ((EnableFLARMDisplay==2)&&(scalefact>1.0)) {
+      if ((EnableFLARMMap==2)&&(scalefact>1.0)) {
         double distance;
         double bearing;
 

@@ -12,7 +12,7 @@
   <WndButton   Caption="Close"    X=2 Y=2 Width=70  Height=22 Font=2 OnClickNotify="OnCloseClicked">
   </WndButton> 
 
-  <WndProperty Name="prpBallastPercent" Caption="Ballast"  X=2 Y=-1  Width=165 Height=22 CaptionWidth=78 Font=2 Help="Ballast of the glider.  Increase this value if the pilot/cockpit load is greater than the reference pilot weight of the glide polar (typically 75kg).">
+  <WndProperty Name="prpBallastPercent" Caption="Ballast"  X=2 Y=-1  Width=165 Height=22 CaptionWidth=78 Font=2 Help="Ballast of the glider.  Increase this value if the pilot/cockpit load is greater than the reference pilot weight of the glide polar (typically 75kg).  Press ENTER on this field to toggle count-down of the ballast volume according to the dump rate specified in the configuration settings.">
     <DataField name="" DataType="double" DisplayFormat="%.0f%%" EditFormat="%.0f" Min=0 Max=100 Step=5  OnDataAccess="OnBallastData" />
   </WndProperty>
   <WndProperty Name="prpBallastLitres" Caption="Volume" X=2 Y=-1  Width=165 Height=22 CaptionWidth=78 Font=2 ReadOnly=1>

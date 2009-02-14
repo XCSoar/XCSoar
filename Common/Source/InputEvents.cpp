@@ -1262,7 +1262,7 @@ void InputEvents::eventFLARMRadar(const TCHAR *misc) {
 
   if (_tcscmp(misc, TEXT("ForceToggle")) == 0) {
     GaugeFLARM::ForceVisible = !GaugeFLARM::ForceVisible;
-    EnableFLARMDisplay = GaugeFLARM::ForceVisible;
+    EnableFLARMGauge = GaugeFLARM::ForceVisible;
   } else
 
   GaugeFLARM::Suppress = !GaugeFLARM::Suppress;

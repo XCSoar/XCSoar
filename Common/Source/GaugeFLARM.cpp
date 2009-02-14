@@ -40,8 +40,8 @@ Copyright_License {
 
 extern HFONT  TitleWindowFont;
 
-DWORD EnableFLARMDisplay = 1;
-DWORD FLARMGaugeBearing = 0;
+bool EnableFLARMGauge = true;
+DWORD EnableFLARMMap = 1;
 
 HWND hWndFLARMWindow = NULL; //FLARM Window
 
@@ -52,7 +52,7 @@ HBITMAP GaugeFLARM::hRoseBitMap = NULL;
 HDC GaugeFLARM::hdcScreen = NULL;
 HDC GaugeFLARM::hdcTemp = NULL;
 HDC GaugeFLARM::hdcDrawWindow = NULL;
-bool GaugeFLARM::Enable;
+bool GaugeFLARM::Visible= false;
 bool GaugeFLARM::Traffic= false;
 bool GaugeFLARM::ForceVisible= false;
 RECT GaugeFLARM::rc;
@@ -161,89 +161,62 @@ void GaugeFLARM::RenderTraffic(NMEA_INFO  *gps_info) {
         Polygon(hdcDrawWindow, tl, 2);
       }
 
-      if (FLARMGaugeBearing) {
-
-        POINT Arrow[5];
-
-        Arrow[0].x = -3;
-        Arrow[0].y = 4;
-        Arrow[1].x = 0;
-        Arrow[1].y = -5;
-        Arrow[2].x = 3;
-        Arrow[2].y = 4;
-        Arrow[3].x = 0;
-        Arrow[3].y = 1;
-        Arrow[4].x = -3;
-        Arrow[4].y = 4;
-
-        short relalt = 
-          iround(gps_info->FLARM_Traffic[i].RelativeAltitude*ALTITUDEMODIFY/100);
-
-        if (relalt != 0) {
-          TCHAR Buffer[10];
-          _stprintf(Buffer, TEXT("%d"), abs(relalt));
-          short size = _tcslen(Buffer);
-          SIZE tsize;
-          GetTextExtentPoint(hdcDrawWindow, Buffer, size, &tsize);
-          tsize.cx = (tsize.cx+IBLSCALE(6))/2;
-          ExtTextOut(hdcDrawWindow, sc.x-tsize.cx+IBLSCALE(7), 
-                     sc.y-tsize.cy-IBLSCALE(5),
-                     ETO_OPAQUE, NULL, Buffer, size, NULL);
-          HBRUSH oldBrush = (HBRUSH)SelectObject(hdcDrawWindow, 
-                                                 GetStockObject(BLACK_BRUSH));
-          POINT triangle[4];
-          triangle[0].x = 3;  // was  2
-          triangle[0].y = -3; // was -2
-          triangle[1].x = 6;  // was 4
-          triangle[1].y = 1;
-          triangle[2].x = 0;
-          triangle[2].y = 1;
-          short flip = 1;
-          if (relalt<0) {
-            flip = -1;
+      POINT Arrow[5];
+      
+      Arrow[0].x = -3;
+      Arrow[0].y = 4;
+      Arrow[1].x = 0;
+      Arrow[1].y = -5;
+      Arrow[2].x = 3;
+      Arrow[2].y = 4;
+      Arrow[3].x = 0;
+      Arrow[3].y = 1;
+      Arrow[4].x = -3;
+      Arrow[4].y = 4;
+      
+      short relalt = 
+	iround(gps_info->FLARM_Traffic[i].RelativeAltitude*ALTITUDEMODIFY/100);
+      
+      if (relalt != 0) {
+	TCHAR Buffer[10];
+	_stprintf(Buffer, TEXT("%d"), abs(relalt));
+	short size = _tcslen(Buffer);
+	SIZE tsize;
+	GetTextExtentPoint(hdcDrawWindow, Buffer, size, &tsize);
+	tsize.cx = (tsize.cx+IBLSCALE(6))/2;
+	ExtTextOut(hdcDrawWindow, sc.x-tsize.cx+IBLSCALE(7), 
+		   sc.y-tsize.cy-IBLSCALE(5),
+		   ETO_OPAQUE, NULL, Buffer, size, NULL);
+	HBRUSH oldBrush = (HBRUSH)SelectObject(hdcDrawWindow, 
+					       GetStockObject(BLACK_BRUSH));
+	POINT triangle[4];
+	triangle[0].x = 3;  // was  2
+	triangle[0].y = -3; // was -2
+	triangle[1].x = 6;  // was 4
+	triangle[1].y = 1;
+	triangle[2].x = 0;
+	triangle[2].y = 1;
+	short flip = 1;
+	if (relalt<0) {
+	  flip = -1;
+	}
+	for (int j=0; j<3; j++) {
+	  triangle[j].x = sc.x+IBLSCALE(triangle[j].x)-tsize.cx;
+	  triangle[j].y = sc.y+flip*IBLSCALE(triangle[j].y)
+	    -tsize.cy/2-IBLSCALE(5);
           }
-          for (int j=0; j<3; j++) {
-            triangle[j].x = sc.x+IBLSCALE(triangle[j].x)-tsize.cx;
-            triangle[j].y = sc.y+flip*IBLSCALE(triangle[j].y)
-              -tsize.cy/2-IBLSCALE(5);
-          }
-          triangle[3].x = triangle[0].x;
-          triangle[3].y = triangle[0].y;
-          Polygon(hdcDrawWindow, triangle, 4);
-          SelectObject(hdcDrawWindow, oldBrush);
-
-        }
-
-        PolygonRotateShift(Arrow, 5, sc.x, sc.y, 
-                           gps_info->FLARM_Traffic[i].TrackBearing 
-                           + DisplayAngle);
-        Polygon(hdcDrawWindow, Arrow, 5);
-
-      } else {
-        POINT shape[5];
-        
-        shape[0].y = sc.y-targetsize;
-        shape[1].y = sc.y-targetsize;
-        shape[2].y = sc.y+targetsize;
-        shape[3].y = sc.y+targetsize;
-        if (slope>=0) {
-          // target aircraft is higher
-          shape[0].x = sc.x-iround((1.0-slope)*targetsize);	
-          shape[1].x = sc.x+iround((1.0-slope)*targetsize);	
-          shape[2].x = sc.x+targetsize;	
-          shape[3].x = sc.x-targetsize;	
-        } else {
-          // target aircraft is lower
-          shape[0].x = sc.x-targetsize;	
-          shape[1].x = sc.x+targetsize;	
-          shape[2].x = sc.x+iround((1.0+slope)*targetsize);	
-          shape[3].x = sc.x-iround((1.0+slope)*targetsize);	
-        }
-        shape[4].x = shape[0].x;
-        shape[4].y = shape[0].y;
-
-        Polygon(hdcDrawWindow, shape, 5);
+	triangle[3].x = triangle[0].x;
+	triangle[3].y = triangle[0].y;
+	Polygon(hdcDrawWindow, triangle, 4);
+	SelectObject(hdcDrawWindow, oldBrush);
+	
       }
+      
+      PolygonRotateShift(Arrow, 5, sc.x, sc.y, 
+			 gps_info->FLARM_Traffic[i].TrackBearing 
+			 + DisplayAngle);
+      Polygon(hdcDrawWindow, Arrow, 5);
+
     }
   }
   DeleteObject(greenBrush);
@@ -253,7 +226,7 @@ void GaugeFLARM::RenderTraffic(NMEA_INFO  *gps_info) {
 
 
 void GaugeFLARM::Render(NMEA_INFO *gps_info) {
-  if (Enable) {
+  if (Visible) {
     RenderBg();
 
     RenderTraffic(gps_info);
@@ -321,7 +294,7 @@ void GaugeFLARM::Create() {
   RenderBg();
   BitBlt(hdcScreen, 0, 0, rc.right, rc.bottom, hdcDrawWindow, 0, 0, SRCCOPY);
 
-  Enable = false;
+  Visible = false;
   Traffic = false;
   Show();
 }
@@ -333,15 +306,15 @@ void GaugeFLARM::TrafficPresent(bool present) {
 
 
 void GaugeFLARM::Show() {
-  Enable = ForceVisible || (Traffic && EnableFLARMDisplay && !Suppress);
+  Visible = ForceVisible || (Traffic && EnableFLARMGauge && !Suppress);
   static bool lastvisible = true;
-  if (Enable && !lastvisible) {
+  if (Visible && !lastvisible) {
     ShowWindow(hWndFLARMWindow, SW_SHOW);
   }
-  if (!Enable && lastvisible) {
+  if (!Visible && lastvisible) {
     ShowWindow(hWndFLARMWindow, SW_HIDE);
   }
-  lastvisible = Enable;
+  lastvisible = Visible;
 }
 
 
@@ -370,7 +343,7 @@ LRESULT CALLBACK GaugeFLARMWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l
     return TRUE;
 
     case WM_PAINT:
-      if (GlobalRunning && GaugeFLARM::Enable) {
+      if (GlobalRunning && GaugeFLARM::Visible) {
 	hDC = BeginPaint(hwnd, &ps);
 	GaugeFLARM::Repaint(hDC);
 	DeleteDC(hDC);
