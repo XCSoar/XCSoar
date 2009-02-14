@@ -44,6 +44,9 @@ Changes from 5.1.9beta9:
 - Fixed bug in tasman vario gauge display
 - Clearer display of flarm target climb rate
 - renamed variables to improve readibility
+- Added option to enable/disable FLARM radar separately from map
+- Removed option to display trapezoidal relative altitude on FLARM radar
+- Fixed LDNext bug
 
 Changes from 5.1.9beta8:
 - Info on persist load/save in startup log

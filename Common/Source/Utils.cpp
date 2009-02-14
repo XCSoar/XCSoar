@@ -272,7 +272,8 @@ const TCHAR szRegistryLockSettingsInFlight[] = TEXT("LockSettingsInFlight");
 const TCHAR szRegistryTerrainContrast[] = TEXT("TerrainContrast");
 const TCHAR szRegistryTerrainBrightness[] = TEXT("TerrainBrightness");
 const TCHAR szRegistryTerrainRamp[] = TEXT("TerrainRamp");
-const TCHAR szRegistryEnableFLARMDisplay[] = TEXT("EnableFLARMDisplay");
+const TCHAR szRegistryEnableFLARMMap[] = TEXT("EnableFLARMDisplay");
+const TCHAR szRegistryEnableFLARMGauge[] = TEXT("EnableFLARMGauge");
 const TCHAR szRegistryFLARMGaugeBearing[] = TEXT("FLARMGaugeBearing");
 const TCHAR szRegistryGliderScreenPosition[] = TEXT("GliderScreenPosition");
 const TCHAR szRegistrySetSystemTimeFromGPS[] = TEXT("SetSystemTimeFromGPS");
@@ -881,13 +882,13 @@ void ReadRegistrySettings(void)
   GetFromRegistry(szRegistryLoggerShort,&Temp);
   LoggerShortName = (Temp == 1);
 
-  Temp = EnableFLARMDisplay;
-  GetFromRegistry(szRegistryEnableFLARMDisplay,&Temp);
-  EnableFLARMDisplay = Temp;
+  Temp = EnableFLARMMap;
+  GetFromRegistry(szRegistryEnableFLARMMap,&Temp);
+  EnableFLARMMap = Temp;
 
-  Temp = FLARMGaugeBearing;
-  GetFromRegistry(szRegistryFLARMGaugeBearing,&Temp);
-  FLARMGaugeBearing = Temp;
+  Temp = EnableFLARMGauge;
+  GetFromRegistry(szRegistryEnableFLARMGauge,&Temp);
+  EnableFLARMGauge = (Temp==1);
 
   Temp = TerrainContrast;
   GetFromRegistry(szRegistryTerrainContrast,&Temp);

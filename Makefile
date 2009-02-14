@@ -69,11 +69,13 @@ CE_MAJOR	:=3
 CE_MINOR	:=00
 CE_PLATFORM	:=310
 TARGET		:=PPC2002
+PCPU		:=ARM
 endif
 ifeq ($(CONFIG_PPC2003),y)
 CE_MAJOR	:=4
 CE_MINOR	:=00
 CE_PLATFORM	:=400
+PCPU		:=ARMV4
 ifeq ($(CONFIG_PNA),y)
 TARGET		:=PNA
 else
@@ -407,8 +409,8 @@ cab:	XCSoar-$(TARGET).exe XCSoarSimulator-$(TARGET).exe
 	@echo Making cabs
 	cp XCSoar-$(TARGET).exe $(TARGET)/XCSoar/gcc/XCSoar.exe
 	cp XCSoarSimulator-$(TARGET).exe $(TARGET)/XCSoarSimulator/gcc/XCSoarSimulator.exe
-	wine $(TARGET)/Cabwiz.exe XCSoar$(TARGET)-gcc.inf /cpu ARMV4
-	mv XCSoar$(TARGET)-gcc.ARMV4.CAB XCSoar$(TARGET).ARMV4.CAB
+	wine $(TARGET)/Cabwiz.exe XCSoar$(TARGET)-gcc.inf /cpu $(PCPU)
+	mv XCSoar$(TARGET)-gcc.ARMV4.CAB XCSoar$(TARGET).$(PCPU).CAB
 
 #	wine ezsetup.exe -l english -i XCSoar$(TARGET).ini -r installmsg.txt -e gpl.txt -o InstallXCSoar-$(TARGET).exe
 

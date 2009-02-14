@@ -729,24 +729,24 @@ other languages.  If this field is left blank, then XCSoar uses English.
     <DataField name="" DataType="boolean"/>
   </WndProperty>
 
-  <WndProperty Name="prpEnableFLARMDisplay" Caption="FLARM display"      X=2 Y=-1   Width=235 Height=22 CaptionWidth=100 Font=2
-  Help="This enables the display of FLARM traffic on the map window as well as the pop-up radar-like display.
-[OFF] FLARM radar and map display disabled
-[ON/Fixed] FLARM radar enabled, map display enabled with fixed scale.
-[ON/Scaled] FLARM radar enabled, map display enabled and auto scaled.
+  <WndProperty Name="prpEnableFLARMMap" Caption="FLARM map"      X=2 Y=-1   Width=235 Height=22 CaptionWidth=100 Font=2
+  Help="This enables the display of FLARM traffic on the map window.
+[OFF] FLARM map display disabled
+[ON/Fixed] FLARM map display enabled with fixed scale.
+[ON/Scaled] FLARM map display enabled and auto scaled.
 When auto scaling is enabled, the FLARM targets on the map display are scaled so that when the map is at large zoom levels, targets are still visible.
 ">
     <DataField name="" DataType="enum" Min=0 Max=50 Step=1/>
   </WndProperty>
 
-  <WndProperty Name="prpFLARMGaugeBearing" Caption="FLARM symbols"      X=2 Y=-1   Width=235 Height=22 CaptionWidth=100 Font=2
-  Help="This controls the symbols used to display FLARM targets on the radar display.
-[Relative altitude] The relative altitude of the target is represented as a shape that becomes triangular for extreme above/below heights, square at the same altitude.  An arrow pointing up indicates the target is above the aircraft.
-[Bearing] The track bearing of the target relative to the track bearing of the aircraft
-is displayed as an arrow head.
+  <WndProperty Name="prpEnableFLARMGauge" Caption="FLARM radar"      X=2 Y=-1   Width=235 Height=22 CaptionWidth=100 Font=2
+  Help="This enables the display of the FLARM radar gauge.
+The track bearing of the target relative to the track bearing of the aircraft
+is displayed as an arrow head, and a triangle pointing up or down shows the
+relative altitude of the target relative to you.
 In all modes, the color of the target indicates the threat level.
 ">
-    <DataField name="" DataType="enum" Min=0 Max=50 Step=1/>
+    <DataField name="" DataType="boolean"/>
   </WndProperty>
 
   </WndFrame>

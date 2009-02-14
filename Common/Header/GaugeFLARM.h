@@ -15,7 +15,7 @@ class GaugeFLARM {
   static void RenderBg();
   static void Repaint(HDC hDC);
   static void Show();
-  static bool Enable;
+  static bool Visible;
   static bool Suppress;
   static void TrafficPresent(bool traffic);
   static bool ForceVisible;
@@ -32,7 +32,7 @@ class GaugeFLARM {
   static int RangeScale(double d);
 };
 
-extern DWORD EnableFLARMDisplay;
-extern DWORD FLARMGaugeBearing;
+extern bool EnableFLARMGauge;
+extern DWORD EnableFLARMMap;
 
 #endif
