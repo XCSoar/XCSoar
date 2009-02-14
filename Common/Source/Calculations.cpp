@@ -121,7 +121,7 @@ static void TaskSpeed(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
                       const double this_maccready);
 static void AltitudeRequired(NMEA_INFO *Basic, DERIVED_INFO *Calculated, 
 			     const double this_maccready);
-static void LDNext(NMEA_INFO *Basic, DERIVED_INFO *Calculated, const double LegToGo, const double LegAltitude);
+static void LDNext(NMEA_INFO *Basic, DERIVED_INFO *Calculated, const double LegToGo);
 
 static void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated, const double this_maccready);
 static void InSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
@@ -2886,13 +2886,10 @@ static void CheckFinalGlideThroughTerrain(NMEA_INFO *Basic,
 }
 
 
-void LDNext(NMEA_INFO *Basic, DERIVED_INFO *Calculated, const double LegToGo,
-            const double LegAltitude) {
-  double height_above_leg = Calculated->NavAltitude 
-    - LegAltitude;
-  // JMW TODO bug: fix LDNext
+void LDNext(NMEA_INFO *Basic, DERIVED_INFO *Calculated, const double LegToGo) {
+  double height_above_leg = Calculated->NavAltitude+Calculated->EnergyHeight
+    - FAIFinishHeight(Basic, Calculated, ActiveWayPoint);
 
-  height_above_leg -= FAIFinishHeight(Basic, Calculated, ActiveWayPoint);
   Calculated->LDNext = UpdateLD(Calculated->LDNext,
                                 LegToGo,
                                 height_above_leg,
@@ -3234,7 +3231,7 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
 
   // JMW TODO accuracy: Use safetymc where appropriate
 
-  LDNext(Basic, Calculated, LegToGo, LegAltitude);
+  LDNext(Basic, Calculated, LegToGo);
 
   if (LegTime0>= 0.9*ERROR_TIME) {
     // can't make it, so assume flying at current mc
