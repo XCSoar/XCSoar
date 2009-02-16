@@ -391,7 +391,7 @@ type=key
 data=APP2
 event=AddWaypoint landable
 event=Mode default
-label=Add Landpt
+label=Add Land
 location=2
 
 mode=Preview

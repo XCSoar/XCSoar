@@ -31,13 +31,12 @@ Todo:
 - Use soft keyboard for text filters
 - Task abort, when many airfields available, sort along task direction
 - Nearest airspace scan logic
+- Airspace below display on final glide
 - Pilot weight correction
 - Unballasted weight display
 - "Force landscape" setting in config
 - Fix OLC distance further calcs
 - put globals into their own class
-- check all TODOs / check
-- FLARM gauge disable separate from FLARM map
 - Time-penalty based scaling of speed command errors 
 
 Changes from 5.1.9beta9:
