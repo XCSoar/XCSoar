@@ -268,9 +268,8 @@ type=key
 data=F2
 event=AddWaypoint landable
 event=Mode default
-label=Add Landpt
+label=Add Land
 location=2
-
 
 mode=Preview
 type=key
