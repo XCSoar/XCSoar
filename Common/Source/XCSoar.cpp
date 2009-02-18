@@ -1,4 +1,4 @@
-/*
+/*  
 Copyright_License {
 
   XCSoar Glide Computer - http://xcsoar.sourceforge.net/
@@ -173,6 +173,10 @@ Appearance_t Appearance = {
   gvnsLongNeedle,
   true,
   apIbBox,
+#ifdef PNA  // VENTA-ADDON Model type
+  apIg0,  // VENTA-ADDON GEOM
+  apImPnaGeneric,
+#endif
   false,
   true,
   false
@@ -191,6 +195,8 @@ HWND hWndMainWindow; // Main Windows
 HWND hWndMapWindow;  // MapWindow
 
 int numInfoWindows = 8;
+
+
 
 InfoBox *InfoBoxes[MAXINFOWINDOWS];
 
@@ -263,6 +269,13 @@ bool                                            AdvanceArmed = false;
 bool EnableBlockSTF = false;
 
 bool GlobalRunning = false; 
+
+#ifdef PNA  // VENTA-ADDON we call it model and not PNA for possible future usage even for custom PDAs
+int		GlobalModelType=0;	// see XCSoar.h for modeltype definitions
+TCHAR	GlobalModelName[MAX_PATH]; // there are currently no checks.. TODO check it fits here
+#endif
+
+
 // this controls all displays, to make sure everything is
 // properly initialised.
 
@@ -436,7 +449,7 @@ DWORD BatteryWarningTime = 0;
 // Groups:
 //   Altitude 0,1,20,33
 //   Aircraft info 3,6,23,32,37,47,54
-//   LD 4,5,19,38,53
+//   LD 4,5,19,38,53, 66    VENTA-ADDON added 66 for GR final
 //   Vario 2,7,8,9,21,22,24,44
 //   Wind 25,26,48,49,50
 //   Mcready 10,34,35,43
@@ -482,7 +495,7 @@ SCREEN_INFO Data_Options[] = {
 	  // 18
 	  {ugDistance,        TEXT("Final Distance"), TEXT("Fin Dis"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 27, 17},
 	  // 19
-	  {ugNone,            TEXT("Final L/D"), TEXT("Fin L/D"), new InfoBoxFormatter(TEXT("%1.0f")), NoProcessing, 38, 5},
+	  {ugNone,            TEXT("Final LD"), TEXT("Fin LD"), new InfoBoxFormatter(TEXT("%1.0f")), NoProcessing, 38, 5},
 	  // 20
 	  {ugAltitude,        TEXT("Terrain Elevation"), TEXT("H Gnd"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 33, 1},
 	  // 21
@@ -520,7 +533,7 @@ SCREEN_INFO Data_Options[] = {
 	  // 37
 	  {ugNone,            TEXT("G load"), TEXT("G"), new InfoBoxFormatter(TEXT("%2.2f")), AccelerometerProcessing, 47, 32},
 	  // 38
-	  {ugNone,            TEXT("Next L/D"), TEXT("WP L/D"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 53, 19},
+	  {ugNone,            TEXT("Next LD"), TEXT("WP LD"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 53, 19},
 	  // 39
 	  {ugNone,            TEXT("Time local"), TEXT("Time loc"), new FormatterTime(TEXT("%04.0f")), NoProcessing, 40, 36},
 	  // 40
@@ -579,11 +592,14 @@ SCREEN_INFO Data_Options[] = {
 #else
 	  {ugNone,            TEXT("Battery Voltage"), TEXT("Battery"), new InfoBoxFormatter(TEXT("%2.1fV")), NoProcessing, 49, 26},
 #endif
-          // 66
+	  // 66  VENTA-ADDON added Final GR
+	  // VENTA-TODO: fix those 38,5 numbers to point correctly menu items
+	  {ugNone,            TEXT("Final GR"), TEXT("Fin GR"), new InfoBoxFormatter(TEXT("%1.1f")), NoProcessing, 38, 5},
+	  // 67 // VENTA-ADDON modified 66 to 67 
 	  {ugNone,   TEXT("Experimental"), TEXT("Exp"), new InfoBoxFormatter(TEXT("%-2.1f")), NoProcessing, 8, 2},
 	};
 
-const int NUMSELECTSTRINGS = 67;
+const int NUMSELECTSTRINGS = 68; // VENTA-ADDON 67 mod to 68
 
 
 CRITICAL_SECTION  CritSec_FlightData;
@@ -1193,6 +1209,8 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   // Version String
 #ifdef GNAV
   wcscat(XCSoar_Version, TEXT("Altair "));
+#elif PNA  // VENTA-ADDON
+wcscat(XCSoar_Version, TEXT("PNA "));
 #else
 #if (WINDOWSPC>0)
   wcscat(XCSoar_Version, TEXT("PC "));
@@ -1337,6 +1355,54 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   CalculateNewPolarCoef();
   StartupStore(TEXT("GlidePolar::SetBallast\n"));
   GlidePolar::SetBallast();
+
+// VENTA-ADDON
+#ifdef VENTA_DEBUG_KEY
+CreateProgressDialog(gettext(TEXT("DEBUG KEY MODE ACTIVE")));
+ Sleep(2000);
+#endif
+#ifdef VENTA_DEBUG_EVENT
+CreateProgressDialog(gettext(TEXT("DEBUG EVENT MODE ACTIVE")));
+ Sleep(2000);
+#endif
+#ifdef VENTA_NOREGFONT
+CreateProgressDialog(gettext(TEXT("NO REGISTRY FONT LOAD")));
+ Sleep(2000);
+#endif
+
+
+#ifdef PNA // VENTA-ADDON 
+
+	TCHAR sTmp[MAX_PATH];
+
+	wsprintf(sTmp,TEXT("Path=%s"), gmfpathname() );
+	CreateProgressDialog(sTmp); Sleep(4000);
+
+	// LocalPath(sTmp,_T("")); // This can be removed, but doesnt hurt
+	/*
+		LocalPath is called at the beginning of WinMain, and sets GlobalModelType if
+		a "smartname" is found. In this case, we assume this smart model name is
+		to be used, ignoring any other previous config setup.
+		Otherwise we call SetModelType that retrieves from the registry any previous value and
+		performs checks on that / maybe user did change it by hand in the registry with an 
+		erroneous one..
+	*/
+/*
+	if (  !wcscmp(GlobalModelName, _T("UNKNOWN")) ) SetModelType();
+*/
+	wsprintf(sTmp, TEXT("PNA MODEL=%s (%d)"), GlobalModelName, GlobalModelType);
+	CreateProgressDialog(sTmp); Sleep(4000);
+	
+#else
+	TCHAR sTmpA[MAX_PATH], sTmpB[MAX_PATH];
+	LocalPath(sTmpA,_T(""));
+	wsprintf(sTmpB, TEXT("Path=%s"),sTmpA);
+	CreateProgressDialog(sTmpB); Sleep(4000);
+#endif // PNA
+
+#ifdef _SIM_	// VENTA-ADDON
+	CreateProgressDialog(TEXT("SIMULATION")); Sleep(2000);
+#endif
 
   RasterTerrain::OpenTerrain();
 
@@ -1563,7 +1629,13 @@ static void InitialiseFonts(RECT rc) {
 
   memset ((char *)&logfont, 0, sizeof (logfont));
 
+#ifdef PNA  // VENTA-ADDON
+	_tcscpy(logfont.lfFaceName, _T("Tahoma")); // VENTA-TEST for PNA should be tahoma
+												// btw: MS Tahoma now DOES HAVE italics!
+#else
   _tcscpy(logfont.lfFaceName, _T("DejaVu Sans Condensed"));
+#endif
+
 
   logfont.lfPitchAndFamily = VARIABLE_PITCH | FF_DONTCARE  ;
   logfont.lfHeight = iFontHeight;
@@ -1633,7 +1705,7 @@ static void InitialiseFonts(RECT rc) {
   logfont.lfHeight = (int)(FontHeight*MAPFONTHEIGHTRATIO);
   logfont.lfWidth =  (int)(FontWidth*MAPFONTWIDTHRATIO);
   logfont.lfWeight = FW_MEDIUM;
-  logfont.lfItalic = TRUE; // JMW
+  logfont.lfItalic = TRUE; 
   ApplyClearType(&logfont);
 
   propGetFontSettings(TEXT("MapLabelFont"), &logfont);
@@ -2252,10 +2324,25 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 #else
     case WM_KEYUP: // JMW was keyup
 #endif
+
       InterfaceTimeoutReset();
 
       /* DON'T PROCESS KEYS HERE WITH NEWINFOBOX, IT CAUSES CRASHES! */
       break;
+	  //VENTA DBG
+#ifdef VENTA_DEBUG_EVENT
+	case WM_KEYDOWN:	
+
+		DoStatusMessage(TEXT("DBG KDOWN 1")); // VENTA
+		InterfaceTimeoutReset();
+	      break;
+	case WM_SYSKEYDOWN:	
+		DoStatusMessage(TEXT("DBG SYSKDOWN 1")); // VENTA
+		InterfaceTimeoutReset();
+	      break;
+#endif
+	//END VENTA DBG
+
     case WM_TIMER:
       //      ASSERT(hWnd==hWndMainWindow);
       if (ProgramStarted > psInitInProgress) {
@@ -3259,6 +3346,14 @@ DWORD GetBatteryInfo(BATTERYINFO* pBatteryInfo)
         pBatteryInfo->acStatus = sps.ACLineStatus;
         pBatteryInfo->chargeStatus = sps.BatteryFlag;
         pBatteryInfo->BatteryLifePercent = sps.BatteryLifePercent;
+		// VENTA-TEST BATTERY
+		pBatteryInfo->BatteryVoltage = sps.BatteryVoltage;
+		pBatteryInfo->BatteryAverageCurrent = sps.BatteryAverageCurrent;
+		pBatteryInfo->BatteryCurrent = sps.BatteryCurrent;
+		pBatteryInfo->BatterymAHourConsumed = sps.BatterymAHourConsumed;
+		pBatteryInfo->BatteryTemperature = sps.BatteryTemperature;
+// VENTA-TEST END 
+
     }
 
     return result;
@@ -3309,6 +3404,19 @@ void BlankDisplay(bool doblank) {
 
   if (GetBatteryInfo(&BatteryInfo)) {
     PDABatteryPercent = BatteryInfo.BatteryLifePercent;
+/*
+	//VENTA-TEST BAT
+	// All you need to display extra Battery informations...
+
+	TCHAR vtemp[1000];
+	_stprintf(vtemp,_T("Battpercent=%d Volt=%d Curr=%d AvCurr=%d mAhC=%d Temp=%d Lifetime=%d Fulllife-%d\n"),
+ 		BatteryInfo.BatteryLifePercent, BatteryInfo.BatteryVoltage, 
+ 		BatteryInfo.BatteryCurrent, BatteryInfo.BatteryAverageCurrent,
+ 		BatteryInfo.BatterymAHourConsumed,
+		BatteryInfo.BatteryTemperature, BatteryInfo.BatteryLifeTime, BatteryInfo.BatteryFullLifeTime);
+	StartupStore( vtemp );
+*/
+	// END VENTA TEST BAT
   } 
 
   if (!EnableAutoBlank) {

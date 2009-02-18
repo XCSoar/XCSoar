@@ -1456,7 +1456,7 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
 
     break;
 
-  case WM_LBUTTONDBLCLK:
+  case WM_LBUTTONDBLCLK: // VENTA-TODO use this to make something useful on a PNA
     // Added by ARH to show menu button when mapwindow is
     // double clicked.
     ShowMenu();
@@ -1569,13 +1569,63 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
       break;
     }
    */
-#ifdef GNAV
+
+
+
+
+#if defined(GNAV) || defined(PNA) // VENTA-ADDON  FIXED PNA SCROLL WHEEL 
     case WM_KEYDOWN: // JMW was keyup
 #else
     case WM_KEYUP: // JMW was keyup
 #endif
+// VENTA-TODO careful here, keyup no more trapped for PNA!
+
+#ifdef VENTA_DEBUG_KEY
+	TCHAR ventabuffer[80];
+	wsprintf(ventabuffer,TEXT("MAPWND uMsg %d wParam %d"), uMsg, wParam);
+	DoStatusMessage(ventabuffer);
+#endif
     DisplayTimeOut = 0;
     InterfaceTimeoutReset();
+
+#if defined(PNA) // VENTA-ADDON HARDWARE KEYS TRANSCODING
+
+	if ( GlobalModelType == MODELTYPE_PNA_HP31X )
+	{
+//		if (wParam == 0x7b) wParam=0xc1;  // VK_APP1 	
+		if (wParam == 0x7b) wParam=0x1b;  // VK_ESCAPE
+//		if (wParam == 0x7b) wParam=0x27;  // VK_RIGHT
+//		if (wParam == 0x7b) wParam=0x25;  // VK_LEFT
+	} else
+	if ( GlobalModelType == MODELTYPE_PNA_PN6000 )
+	{
+		switch(wParam) {
+		case 0x79:					// Upper Silver key short press
+					wParam = 0xc1;	// F10 -> APP1
+					break;
+		case 0x7b:					// Lower Silver key short press
+					wParam = 0xc2;	// F12 -> APP2
+					break;
+		case 0x72:					// Back key plus
+					wParam = 0xc3;	// F3  -> APP3
+					break;
+		case 0x71:					// Back key minus
+					wParam = 0xc4;	// F2  -> APP4
+					break;
+		case 0x7a:					// Upper silver key LONG press
+					wParam = 0x70;	// F11 -> F1
+					break;
+		case 0x7c:					// Lower silver key LONG press
+					wParam = 0x71;	// F13 -> F2
+					break;
+		}
+	}
+
+
+// VENTA-TEST
+
+#endif
+
 
       #if defined(GNAV)
         if (wParam == 0xF5){

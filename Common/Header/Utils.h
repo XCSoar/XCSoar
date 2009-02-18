@@ -12,6 +12,7 @@
 #include "Airspace.h"
 #include <zzip/lib.h>
 
+
 #define  POLARUSEWINPILOTFILE  6    // if this polat is selected use the winpilot file
 
 extern const TCHAR szRegistryKey[];
@@ -87,6 +88,10 @@ extern const TCHAR szRegistryAppCompassAppearance[];
 extern const TCHAR szRegistryAppStatusMessageAlignment[];
 extern const TCHAR szRegistryAppTextInputStyle[];
 extern const TCHAR szRegistryAppInfoBoxBorder[];
+#ifdef PNA
+extern const TCHAR szRegistryAppInfoBoxGeom[];   // VENTA-ADDON GEOM CHANGE
+extern const TCHAR szRegistryAppInfoBoxModel[]; // VENTA-ADDON MODEL CHANGE
+#endif
 extern const TCHAR szRegistryAppAveNeedle[];
 extern const TCHAR szRegistryAutoAdvance[];
 extern const TCHAR szRegistryUTCOffset[];
@@ -200,6 +205,10 @@ int Segment(HDC hdc, long x, long y, int radius, RECT rc,
 void ReadAssetNumber(void);
 void WriteProfile(const TCHAR *szFile);
 void ReadProfile(const TCHAR *szFile);
+#ifdef PNA  // VENTA-ADDON
+void SetModelType();
+bool SetModelName(DWORD Temp);
+#endif
 double ScreenAngle(int x1, int y1, int x2, int y2);
 void ReadCompaqID(void);
 void ReadUUID(void);

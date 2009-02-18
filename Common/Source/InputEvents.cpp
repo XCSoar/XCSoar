@@ -197,8 +197,10 @@ void InputEvents::readFile() {
 #include "InputEvents_pc.cpp"
 #elif GNAV
 #include "InputEvents_altair.cpp"
-#elif PNA
-#include "InputEvents_pna.cpp"
+// VENTA- REMOVED CUSTOM PNA EVENTS 
+// #elif PNA
+// #include "InputEvents_pna.cpp"
+//
 #else
 #include "InputEvents_defaults.cpp"
 #endif
@@ -462,6 +464,7 @@ void InputEvents::showErrors() {
 #endif
 
 int InputEvents::findKey(const TCHAR *data) {
+
   if (_tcscmp(data, TEXT("APP1")) == 0)
     return VK_APP1;
   else if (_tcscmp(data, TEXT("APP2")) == 0)
@@ -494,22 +497,34 @@ int InputEvents::findKey(const TCHAR *data) {
     return VK_F9;
   else if (_tcscmp(data, TEXT("F10")) == 0)
     return VK_F10;
+// VENTA-TEST HANDLING EXTRA HW KEYS ON HX4700 and HP31X
+//  else if (_tcscmp(data, TEXT("F11")) == 0)
+//  return VK_F11;
+// else if (_tcscmp(data, TEXT("F12")) == 0)
+//    return VK_F12;
+  // END VENTA
   else if (_tcscmp(data, TEXT("LEFT")) == 0)
     return VK_LEFT;
   else if (_tcscmp(data, TEXT("RIGHT")) == 0)
     return VK_RIGHT;
   else if (_tcscmp(data, TEXT("UP")) == 0)
     return VK_UP;
-  else if (_tcscmp(data, TEXT("DOWN")) == 0)
+  else if (_tcscmp(data, TEXT("DOWN")) == 0) {
+#ifdef VENTA_DEBUG_EVENT
+	   DoStatusMessage(TEXT("DBG InputEvents VK DOWN 1")); // VENTA-
+#endif
     return VK_DOWN;
+		}
   else if (_tcscmp(data, TEXT("RETURN")) == 0)
     return VK_RETURN;
   else if (_tcscmp(data, TEXT("ESCAPE")) == 0)
     return VK_ESCAPE;
+
   else if (_tcslen(data) == 1)
     return towupper(data[0]);
   else
     return 0;
+  
 }
 
 pt2Event InputEvents::findEvent(const TCHAR *data) {
@@ -755,8 +770,17 @@ bool InputEvents::processKey(int dWord) {
   // get current mode
   int mode = InputEvents::getModeID();
   
+
+
   // Which key - can be defined locally or at default (fall back to default)
   event_id = Key2Event[mode][dWord];
+
+// VENTA- DEBUG HARDWARE KEY PRESSED   
+#ifdef VENTA_DEBUG_KEY
+	TCHAR ventabuffer[80];
+	wsprintf(ventabuffer,TEXT("PRCKEY %d MODE %d EVENT %d"), dWord, mode,event_id);
+	DoStatusMessage(ventabuffer);
+#endif
   if (event_id == 0) {
     // go with default key..
     event_id = Key2Event[0][dWord];
@@ -1067,17 +1091,104 @@ void InputEvents::eventScreenModes(const TCHAR *misc) {
   } else if (_tcscmp(misc, TEXT("togglebiginfo")) == 0) {
     InfoBoxLayout::fullscreen = !InfoBoxLayout::fullscreen;
   } else {
-    // toggle?
+
+
+
+	//
+    // VENTA-ADDON TOGGLE SCROLLWHEEL as INPUT on the HP31X
+	//
+    
+#ifdef PNA
+
+	if ( GlobalModelType == MODELTYPE_PNA_HP31X ) {
+		// 1 normal > 2 aux > 3 biginfo > 4 fullscreen
+		short pnascrollstatus; 
+		pnascrollstatus=1;
+		if ( InfoBoxLayout::fullscreen == true ) pnascrollstatus=3;
+		if ( MapWindow::IsMapFullScreen() ) pnascrollstatus=4;
+		if ( EnableAuxiliaryInfo == true ) pnascrollstatus=2;
+
+		switch (pnascrollstatus) {
+		case 1:
+#ifndef DISABLEAUDIO
+				if (EnableSoundModes) PlayResource(TEXT("IDR_WAV_CLICK"));
+#endif
+				EnableAuxiliaryInfo = true;
+				break;
+		case 2:
+			//	EnableAuxiliaryInfo = false;		// Disable BigInfo until it is useful
+			//	InfoBoxLayout::fullscreen = true;
+			//	break;
+		case 3:
+			//	InfoBoxLayout::fullscreen = false;
+#ifndef DISABLEAUDIO
+				if (EnableSoundModes) PlayResource(TEXT("IDR_WAV_CLICK"));
+#endif
+				EnableAuxiliaryInfo = false;
+				MapWindow::RequestOnFullScreen();
+				break;
+		case 4:
+			//	InfoBoxLayout::fullscreen = false;
+				EnableAuxiliaryInfo = false;
+				MapWindow::RequestOffFullScreen();
+#ifndef DISABLEAUDIO
+				if (EnableSoundModes) PlayResource(TEXT("IDR_WAV_BELL"));
+#endif 
+				break;
+		default:
+				break;
+		} // switch pnascrollstatus
+	  } // not a PNA_HP31X
+	  else
+	  {
     if (EnableAuxiliaryInfo) {
+#ifndef DISABLEAUDIO
+			if (EnableSoundModes) PlayResource(TEXT("IDR_WAV_CLICK"));
+#endif
       MapWindow::RequestToggleFullScreen();
       EnableAuxiliaryInfo = false;
+
     } else {
       if (MapWindow::IsMapFullScreen()) {
 	MapWindow::RequestToggleFullScreen();		    
+#ifndef DISABLEAUDIO 
+						if (EnableSoundModes) PlayResource(TEXT("IDR_WAV_BELL"));
+#endif 
       } else {
+#ifndef DISABLEAUDIO
+						if (EnableSoundModes) PlayResource(TEXT("IDR_WAV_CLICK"));
+#endif
 	EnableAuxiliaryInfo = true;
       }
     }
+
+	  } // fallback for other PNAs
+
+#else // UNDEFINED PNA
+	if (EnableAuxiliaryInfo) {
+
+#ifndef DISABLEAUDIO
+		if (EnableSoundModes) PlayResource(TEXT("IDR_WAV_CLICK"));
+#endif
+		MapWindow::RequestToggleFullScreen();
+	    EnableAuxiliaryInfo = false;
+
+	  } else {
+			  if (MapWindow::IsMapFullScreen()) {
+     				  MapWindow::RequestToggleFullScreen();
+
+#ifndef DISABLEAUDIO  // VENTA-ADDON SOUND CYCLING SCREENS
+					if (EnableSoundModes) PlayResource(TEXT("IDR_WAV_BELL"));
+#endif
+			  } else {
+#ifndef DISABLEAUDIO
+				if (EnableSoundModes) PlayResource(TEXT("IDR_WAV_CLICK"));
+#endif
+				  EnableAuxiliaryInfo = true;
+			  }
+	  }
+#endif // def/undef PNA      
+	
   }
 }
 
@@ -1172,10 +1283,18 @@ void InputEvents::eventPan(const TCHAR *misc) {
     MapWindow::Event_Pan(1);
   else if (_tcscmp(misc, TEXT("off")) == 0) 
     MapWindow::Event_Pan(0);
+
+#ifdef PNA   // VENTA-ADDON  let pan mode scroll wheel zooming with HP31X. VENTA-TODO: make it different for other PNAs
+ else if (_tcscmp(misc, TEXT("up")) == 0)
+			MapWindow::Event_ScaleZoom(1);
+else if (_tcscmp(misc, TEXT("down")) == 0)
+			MapWindow::Event_ScaleZoom(-1); // fixed v58
+#else
   else if (_tcscmp(misc, TEXT("up")) == 0)
     MapWindow::Event_PanCursor(0,1);
   else if (_tcscmp(misc, TEXT("down")) == 0)
     MapWindow::Event_PanCursor(0,-1);
+#endif   // END VENTA
   else if (_tcscmp(misc, TEXT("left")) == 0)
     MapWindow::Event_PanCursor(1,0);
   else if (_tcscmp(misc, TEXT("right")) == 0)

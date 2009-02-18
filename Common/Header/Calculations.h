@@ -183,8 +183,10 @@ typedef struct _DERIVED_INFO
   double Essing;
   double TerrainBase; // lowest height within glide range
   double TermikLigaPoints;
+  double GRFinish;	// VENTA- Glide Ratio to final destination, 3/2/09
   double Experimental;
 
+  // JMW note, new items should go at the bottom of this struct!
 } DERIVED_INFO;
 
 
