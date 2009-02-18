@@ -262,6 +262,9 @@ static int FormKeyDown(WindowControl * Sender, WPARAM wParam, LPARAM lParam){
       MoveTarget(0);
       return(0);
     case VK_DOWN:
+#ifdef VENTA_DEBUG_EVENT
+		 DoStatusMessage(TEXT("DBG dlgTarget VK DOWN 1")); // VENTA
+#endif
       MoveTarget(180);
       return(0);
     case VK_LEFT:

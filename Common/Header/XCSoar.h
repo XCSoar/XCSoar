@@ -176,6 +176,15 @@ typedef struct
   // 255 unknown
   BYTE BatteryLifePercent;
   // 0-100 or 255 if unknown
+  // VENTA-TEST BATTERY
+  DWORD BatteryVoltage;
+  DWORD BatteryCurrent;
+  DWORD BatteryAverageCurrent;
+  DWORD BatterymAHourConsumed;
+  DWORD BatteryTemperature;
+  DWORD BatteryLifeTime;
+  DWORD BatteryFullLifeTime;
+// END VENTA-TEST
 
 } BATTERYINFO;
 
@@ -189,6 +198,49 @@ void DoInfoKey(int keycode);
 void SwitchToMapWindow(void);
 
 
+/*
+    Here we declare Model Types for embedded custom versions. Initially for PNAs only.
+	We don't need a "type" and a "model" such as "pna" and "hp310". Instead we use a
+	single int value with subsets made of ranges.
+
+    types     0 -    99 are reserved and 0 is generic/unknown
+    types   100 -   999 are special devices running embedded XCSoar
+    types  1000 -  9999 are PDAs
+    types 10000 - 99999 are PNAs, each brand with 200 units slots for inner types
+                                 (initially we try to stay below 32767 within a short var)
+    types over 100000	are reserved and should not be used
+ */
+
+#ifdef PNA // VENTA
+#define MODELTYPE_UNKNOWN		0
+#define MODELTYPE_GENERIC		0
+
+#define MODELTYPE_EMBEDDED		 100	// generic embedded
+#define MODELTYPE_ALTAIR		 101
+
+#define MODELTYPE_PDA_PDA		1000	// generic PDA
+#define MODELTYPE_PDA			1000
+
+#define MODELTYPE_PNA_PNA		10000	// generic PNA
+#define MODELTYPE_PNA			10000
+#define MODELTYPE_PNA_HP		10200	// Generic HP
+#define MODELTYPE_PNA_HP31X		10201	// HP310, 312, 314, 316
+
+#define MODELTYPE_PNA_DAYTON	10400	// Generic VDO Dayton
+#define MODELTYPE_PNA_PN6000	10401
+
+#define MODELTYPE_PNA_MIO		10600	// Generic definitions
+#define MODELTYPE_PNA_MIO520	10601
+#define	MODELTYPE_PNA_MIOP350	10602
+
+#define MODELTYPE_PNA_NAVMAN	10800
+#define MODELTYPE_PNA_GARMIN	11000
+#define MODELTYPE_PNA_CLARION	11200
+#define MODELTYPE_PNA_MEDION	11400
+#define MODELTYPE_PNA_SAMSUNG	11600
+#define MODELTYPE_PNA_NAVIGO	11800
+
+#endif
 
 typedef enum{
   apMsDefault=0,
@@ -259,6 +311,27 @@ typedef enum{
   apIbTab
 }InfoBoxBorderAppearance_t;
 
+// VENTA-ADDON GEOM
+typedef enum{
+  apIg0=0,
+  apIg1,
+  apIg2,
+  apIg3,
+  apIg4,
+  apIg5,
+  apIg6,
+  apIg7
+}InfoBoxGeomAppearance_t;
+
+#ifdef PNA
+// VENTA-ADDON MODEL
+typedef enum{
+	apImPnaGeneric=0,
+	apImPnaHp31x,
+	apImPnaPn6000,
+	apImPnaMio
+}InfoBoxModelAppearance_t;
+#endif
 
 typedef struct{
   MapScaleAppearance_t MapScale;
@@ -292,6 +365,10 @@ typedef struct{
   GaugeVarioNeedleStyle_t GaugeVarioNeedleStyle;
   bool InfoBoxColors;
   InfoBoxBorderAppearance_t InfoBoxBorder;
+#ifdef PNA
+  InfoBoxGeomAppearance_t InfoBoxGeom; // VENTA-ADDON
+  InfoBoxModelAppearance_t InfoBoxModel; // VENTA-ADDON model change
+#endif
   bool InverseAircraft;
   bool GaugeVarioGross;
   bool GaugeVarioAveNeedle;

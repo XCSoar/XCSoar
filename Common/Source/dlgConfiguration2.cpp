@@ -266,6 +266,9 @@ void OnInfoBoxHelp(WindowControl * Sender){
   case 65:
     dlgHelpShowModal(caption, TEXT("[Battery]\r\nSupply battery voltage for Altair systems, for PDA systems, this gives the percent battery capacity available."));
     break;
+  case 66:
+    dlgHelpShowModal(caption, TEXT("[Final GR]\r\nGeometric gradient to the arrival height above the final waypoint.  This is not adjusted for total energy."));
+    break;
   default:
     dlgHelpShowModal(caption, TEXT("No help available on this item!"));
   };

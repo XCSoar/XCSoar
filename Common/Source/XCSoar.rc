@@ -30,6 +30,7 @@ LANGUAGE LANG_NEUTRAL, SUBLANG_DEFAULT
 // WAVE
 //
 
+// VENTA-ADDON
 #ifndef GNAV
 IDR_WAV_TASKTURNPOINT   WAVE    DISCARDABLE     "bitmaps\\task-turnpoint.wav"
 IDR_WAV_DRIP            WAVE    DISCARDABLE     "bitmaps\\beep-drip.wav"
@@ -37,6 +38,8 @@ IDR_WAV_GREEN           WAVE    DISCARDABLE     "bitmaps\\green.wav"
 IDR_WAV_RED             WAVE    DISCARDABLE     "bitmaps\\red.wav"
 IDR_WAV_BEEPBWEEP       WAVE    DISCARDABLE     "bitmaps\\beep-bweep.wav"
 IDR_WAV_CLEAR           WAVE    DISCARDABLE     "bitmaps\\beep-clear.wav"
+IDR_WAV_CLICK			WAVE	DISCARDABLE		"bitmaps\\coolwindclick.wav"
+IDR_WAV_BELL			WAVE	DISCARDABLE		"bitmaps\\bell.wav"
 #endif
 
 /////////////////////////////////////////////////////////////////////////////

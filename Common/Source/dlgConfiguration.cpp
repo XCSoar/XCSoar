@@ -1688,6 +1688,62 @@ static void setVariables(void) {
     wp->RefreshDisplay();
   }
 
+#ifdef PNA
+// VENTA-ADDON Geometry change config menu 11
+  wp = (WndProperty*)wf->FindByName(TEXT("prpAppInfoBoxGeom"));
+  if (wp) {
+    DataFieldEnum* dfe;
+    dfe = (DataFieldEnum*)wp->GetDataField();
+    dfe->addEnumText(gettext(TEXT("0")));
+    dfe->addEnumText(gettext(TEXT("1")));
+    dfe->addEnumText(gettext(TEXT("2")));
+    dfe->addEnumText(gettext(TEXT("3")));
+    dfe->addEnumText(gettext(TEXT("4")));
+    dfe->addEnumText(gettext(TEXT("5")));
+    dfe->addEnumText(gettext(TEXT("6")));
+    dfe->addEnumText(gettext(TEXT("7")));
+    dfe->Set(Appearance.InfoBoxGeom);
+    wp->RefreshDisplay();
+  }
+//
+#endif
+
+#ifdef PNA
+// VENTA-ADDON Model change config menu 11
+  wp = (WndProperty*)wf->FindByName(TEXT("prpAppInfoBoxModel"));
+  if (wp) {
+    DataFieldEnum* dfe;
+    dfe = (DataFieldEnum*)wp->GetDataField();
+    dfe->addEnumText(gettext(TEXT("Generic")));
+    dfe->addEnumText(gettext(TEXT("HP31x")));
+    dfe->addEnumText(gettext(TEXT("PN6000")));
+    dfe->addEnumText(gettext(TEXT("MIO")));
+
+	int iTmp;
+	switch (GlobalModelType) {
+		case MODELTYPE_PNA_PNA:
+				iTmp=(InfoBoxModelAppearance_t)apImPnaGeneric;
+				break;
+		case MODELTYPE_PNA_HP31X:
+				iTmp=(InfoBoxModelAppearance_t)apImPnaHp31x;
+				break;
+		case MODELTYPE_PNA_PN6000:
+				iTmp=(InfoBoxModelAppearance_t)apImPnaPn6000;
+				break;
+		case MODELTYPE_PNA_MIO:
+				iTmp=(InfoBoxModelAppearance_t)apImPnaMio;
+				break;
+		default:
+				iTmp=(InfoBoxModelAppearance_t)apImPnaGeneric;
+				break;
+	}
+
+    dfe->Set(iTmp);
+    wp->RefreshDisplay();
+  }
+  // JMW removed else clause here because no need to have this parameter for non PDA
+#endif
+
   wp = (WndProperty*)wf->FindByName(TEXT("prpAppCompassAppearance"));
   if (wp) {
     DataFieldEnum* dfe;
@@ -2032,6 +2088,18 @@ void dlgConfigurationShowModal(void){
   ASSERT(wConfig20!=NULL);
 
   wf->FilterAdvanced(UserLevel>0);
+
+#ifndef PNA
+  // JMW we don't want these for non-PDA platforms yet
+  wp = (WndProperty*)wf->FindByName(TEXT("prpAppInfoBoxGeom"));
+  if (wp) {
+    wp->SetVisible(false);
+  }
+  wp = (WndProperty*)wf->FindByName(TEXT("prpAppInfoBoxModel"));
+  if (wp) {
+    wp->SetVisible(false);
+  }
+#endif
 
   for (int item=0; item<10; item++) {
     cpyInfoBox[item] = -1;
@@ -2839,6 +2907,59 @@ void dlgConfigurationShowModal(void){
     }
   }
 
+#ifdef PNA
+// VENTA-ADDON GEOM
+  wp = (WndProperty*)wf->FindByName(TEXT("prpAppInfoBoxGeom"));
+  if (wp) {
+    if (Appearance.InfoBoxGeom != (InfoBoxGeomAppearance_t)
+        (wp->GetDataField()->GetAsInteger())) {
+      Appearance.InfoBoxGeom = (InfoBoxGeomAppearance_t)
+        (wp->GetDataField()->GetAsInteger());
+      SetToRegistry(szRegistryAppInfoBoxGeom,
+                    (DWORD)(Appearance.InfoBoxGeom));
+      changed = true;
+      requirerestart = true;
+    }
+  }
+//
+#endif
+
+#ifdef PNA
+// VENTA-ADDON MODEL CHANGE
+  wp = (WndProperty*)wf->FindByName(TEXT("prpAppInfoBoxModel"));
+  if (wp) {
+    if (Appearance.InfoBoxModel != (InfoBoxModelAppearance_t)
+        (wp->GetDataField()->GetAsInteger())) {
+      Appearance.InfoBoxModel = (InfoBoxModelAppearance_t)
+        (wp->GetDataField()->GetAsInteger());
+
+      switch (Appearance.InfoBoxModel) {
+      case apImPnaGeneric:
+	GlobalModelType = MODELTYPE_PNA_PNA;
+	break;
+      case apImPnaHp31x:
+	GlobalModelType = MODELTYPE_PNA_HP31X;
+	break;
+      case apImPnaPn6000:
+	GlobalModelType = MODELTYPE_PNA_PN6000;
+	break;
+      case apImPnaMio:
+	GlobalModelType = MODELTYPE_PNA_MIO;
+	break;
+      default:
+	GlobalModelType = MODELTYPE_UNKNOWN; // Can't happen, troubles ..
+	break;
+
+      }
+      SetToRegistry(szRegistryAppInfoBoxModel,
+                    GlobalModelType);
+      changed = true;
+      requirerestart = true;
+    }
+  }
+//
+#endif
+
   wp = (WndProperty*)wf->FindByName(TEXT("prpAppStatusMessageAlignment"));
   if (wp) {
     if (Appearance.StateMessageAlligne != (StateMessageAlligne_t)
@@ -2854,12 +2975,12 @@ void dlgConfigurationShowModal(void){
   wp = (WndProperty*)wf->FindByName(TEXT("prpTextInput"));
   if (wp)
   {
-		if (Appearance.TextInputStyle != (TextInputStyle_t)(wp->GetDataField()->GetAsInteger()))
-		{
-			Appearance.TextInputStyle = (TextInputStyle_t)(wp->GetDataField()->GetAsInteger());
-			SetToRegistry(szRegistryAppTextInputStyle, (DWORD)(Appearance.TextInputStyle));
-			changed = true;
-		}
+    if (Appearance.TextInputStyle != (TextInputStyle_t)(wp->GetDataField()->GetAsInteger()))
+      {
+	Appearance.TextInputStyle = (TextInputStyle_t)(wp->GetDataField()->GetAsInteger());
+	SetToRegistry(szRegistryAppTextInputStyle, (DWORD)(Appearance.TextInputStyle));
+	changed = true;
+      }
   }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpAppIndLandable"));

@@ -39,6 +39,17 @@ extern StartupState_t ProgramStarted;
 
 extern int UTCOffset;
 
+#ifdef PNA  // VENTA
+extern int		GlobalModelType;
+extern TCHAR	GlobalModelName[];
+extern TCHAR *	gmfpathname();
+extern TCHAR *	gmfbasename();
+extern int		GetGlobalModelName();
+extern void		SmartGlobalModelType();
+extern void		ConvToUpper( TCHAR *);
+
+#endif
+
 
 // asset/registration data
 extern TCHAR strAssetNumber[];
@@ -76,6 +87,7 @@ extern unsigned int NumberOfAirspaceAreas;
 extern unsigned int NumberOfAirspaceCircles;
 
 extern bool GlobalRunning;
+
 
 // task data
 extern START_POINT StartPoints[];

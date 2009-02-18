@@ -877,13 +877,32 @@ void InfoBoxFormatter::AssignValue(int i) {
     Valid = false;
 #endif
     break;
-  case 66:
+  case 66: // VENTA-ADDON added GR Final
+    if (CALCULATED_INFO.GRFinish== 999) {
+      Valid = false;
+    } else {
+      Valid = ValidTaskPoint(ActiveWayPoint);
+      if (CALCULATED_INFO.ValidFinish) {
+	Value = 0;
+      } else {
+	Value = CALCULATED_INFO.GRFinish;
+	if (Value >100 )
+	  {
+	    _tcscpy(Format, _T("%1,0f"));
+	  }
+	else
+	  {
+	    _tcscpy(Format, _T("%1.1f"));
+	  }
+      }
+    }
+    break;
+  case 67:
     Value = CALCULATED_INFO.Experimental;
     Valid = true;
     break;
-  case 67:
     /* TODO feature: add extra infoboxes from Lars
-  case 66: // distance flown
+  case 68: // distance flown
     if (CALCULATED_INFO.TaskDistanceCovered != 0)
       {
 	Value = DISTANCEMODIFY*CALCULATED_INFO.TaskDistanceCovered;

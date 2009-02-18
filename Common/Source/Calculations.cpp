@@ -691,6 +691,7 @@ void ResetFlightStats(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
     Calculated->ClimbStartTime = -1;
 
     Calculated->LDFinish = 999;
+    Calculated->GRFinish = 999;  // VENTA-ADDON Glide Ratio to final destination
     Calculated->CruiseLD = 999;
     Calculated->LDNext = 999;
     Calculated->LD = 999;
@@ -2927,6 +2928,7 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
     Calculated->TerrainWarningLongitude = 0.0;
 
     Calculated->LDFinish = 999;
+    Calculated->GRFinish = 999; // VENTA-ADDON
     Calculated->LDNext = 999;
 
     Calculated->FinalGlide = 0;
@@ -3273,6 +3275,26 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
                                   Calculated->TaskDistanceToGo,
                                   total_energy_height-final_height,
                                   0.5);
+
+  // VENTA-ADDON Classic geometric GR calculation without Total Energy
+  /*
+   * Paolo Ventafridda> adding a classic standard glide ratio
+   * computation based on a geometric path with no total energy and
+   * wind. This value is auto limited to a reasonable level which can
+   * be useful during flight, currently 200. Over 200, you are no more
+   * gliding to the final destination I am afraid, even on an ETA
+   * . The infobox value has a decimal point if it is between 1 and
+   * 99, otherwise it's a simple integer.
+   */
+  double GRsafecalc = Calculated->NavAltitude - final_height;
+  if (GRsafecalc <=0) Calculated->GRFinish = 999;
+  else {
+    Calculated->GRFinish = Calculated->TaskDistanceToGo / GRsafecalc;
+    if ( Calculated->GRFinish >200 || Calculated->GRFinish <0 ) Calculated->GRFinish = 999;
+    else
+      if ( Calculated->GRFinish <1 ) Calculated->GRFinish = 1;
+  }
+  // END VENTA-ADDON
 
   CheckFinalGlideThroughTerrain(Basic, Calculated,
                                 LegToGo, LegBearing);

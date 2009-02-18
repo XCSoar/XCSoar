@@ -209,12 +209,26 @@ void InfoBoxLayout::GetInfoBoxPosition(int i, RECT rc,
 }
 
 
+//
+// Paolo Ventafridda, VENTA-ADDON Geometry change in Config menu 11
+//
 void InfoBoxLayout::ScreenGeometry(RECT rc) {
 
   TCHAR szRegistryInfoBoxGeometry[]=  TEXT("InfoBoxGeometry");
+  TCHAR szRegistryInfoBoxGeom[]=  TEXT("AppInfoBoxGeom");
+
   DWORD Temp=0;
   GetFromRegistry(szRegistryInfoBoxGeometry,&Temp);
   InfoBoxGeometry = Temp;
+
+#ifdef PNA
+// VENTA-ADDON GEOM
+  GetFromRegistry(szRegistryInfoBoxGeom,&Temp);
+  if (InfoBoxGeometry != Temp) {
+    StartupStore(_T("Geometry was changed in config, applying\n"));
+    InfoBoxGeometry=Temp;
+  }
+#endif
 
   // JMW testing only
   geometrychanged = true;

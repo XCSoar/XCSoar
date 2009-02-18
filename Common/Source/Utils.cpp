@@ -261,6 +261,12 @@ const TCHAR szRegistryAppInfoBoxColors[] = TEXT("AppInfoBoxColors");
 const TCHAR szRegistryAppDefaultMapWidth[] = TEXT("AppDefaultMapWidth");
 const TCHAR szRegistryTeamcodeRefWaypoint[] = TEXT("TeamcodeRefWaypoint");
 const TCHAR szRegistryAppInfoBoxBorder[] = TEXT("AppInfoBoxBorder");
+
+#ifdef PNA
+const TCHAR szRegistryAppInfoBoxGeom[] = TEXT("AppInfoBoxGeom"); // VENTA-ADDON GEOMETRY CONFIG
+const TCHAR szRegistryAppInfoBoxModel[] = TEXT("AppInfoBoxModel"); // VENTA-ADDON MODEL CONFIG
+#endif
+
 const TCHAR szRegistryAppAveNeedle[] = TEXT("AppAveNeedle");
 
 const TCHAR szRegistryAutoAdvance[] = TEXT("AutoAdvance");
@@ -374,10 +380,16 @@ void ResetInfoBoxes(void) {
 
 void SetRegistryStringIfAbsent(const TCHAR* name,
 			       const TCHAR* value) {
+
+  // VENTA-ADDON TEST force fonts registry rewrite in PNAs
+#ifdef PNA // VENTA-TEST  // WARNING should really delete the key before creating it TODO
+  SetRegistryString(name, value);
+#else
   TCHAR temp[MAX_PATH];
   if (!GetRegistryString(name, temp, MAX_PATH)) {
     SetRegistryString(name, value);
   }
+#endif
 }
 
 void DefaultRegistrySettingsAltair(void)
@@ -410,6 +422,154 @@ void DefaultRegistrySettingsAltair(void)
 #endif
 }
 
+/*
+ * VENTA-ADDON 2/2/08
+ * Adding custom font settings for PNAs
+ *
+ * InfoWindowFont	= values inside infoboxes  like numbers, etc.
+ * TitleWindowFont	= Titles of infoboxes like Next, WP L/D etc.
+ * TitleSmallWindowFont =
+ * CDIWindowFont	= vario display, runway informations
+ * MapLabelFont		= Flarm Traffic draweing and stats, map labels in italic
+ * StatisticsFont
+ * MapWindowFont	= text names on the map
+ * MapWindowBoldFont = menu buttons, waypoint selection, messages, etc.
+ *
+ *
+ */
+#ifdef PNA
+
+
+void DefaultRegistrySettingsHP31X(void)
+{
+  SetRegistryStringIfAbsent(TEXT("InfoWindowFont"),
+   TEXT("60,0,0,0,600,0,0,0,0,0,0,3,2,TahomaBD"));
+  SetRegistryStringIfAbsent(TEXT("TitleWindowFont"),
+   TEXT("24,0,0,0,300,0,0,0,0,0,0,3,2,Tahoma"));
+ SetRegistryStringIfAbsent(TEXT("TitleSmallWindowFont"),
+   TEXT("16,0,0,0,100,1,0,0,0,0,0,3,2,Tahoma"));
+  SetRegistryStringIfAbsent(TEXT("CDIWindowFont"),
+   TEXT("36,0,0,0,400,0,0,0,0,0,0,3,2,Tahoma"));
+  SetRegistryStringIfAbsent(TEXT("MapLabelFont"),
+   TEXT("28,0,0,0,100,1,0,0,0,0,0,3,2,Tahoma"));
+  SetRegistryStringIfAbsent(TEXT("StatisticsFont"),
+   TEXT("48,0,0,0,400,0,0,0,0,0,0,3,2,Tahoma"));
+  SetRegistryStringIfAbsent(TEXT("MapWindowFont"),
+   TEXT("36,0,0,0,400,0,0,0,0,0,0,3,2,Tahoma"));
+  SetRegistryStringIfAbsent(TEXT("MapWindowBoldFont"),
+   TEXT("32,0,0,0,600,0,0,0,0,0,0,3,2,TahomaBD"));
+
+#if 0
+  SetRegistryStringIfAbsent(TEXT("ScaleList"),
+   TEXT("0.5,1,2,5,10,20,50,100,150,200,500,1000"));
+#endif
+}
+
+// VDO Dayton PN 6000  480x272
+void DefaultRegistrySettingsPN6000(void)
+{
+  SetRegistryStringIfAbsent(TEXT("InfoWindowFont"),
+   TEXT("28,0,0,0,800,0,0,0,0,0,0,3,2,TahomaBD"));
+  SetRegistryStringIfAbsent(TEXT("TitleWindowFont"),
+   TEXT("16,0,0,0,500,0,0,0,0,0,0,3,2,Tahoma"));
+ SetRegistryStringIfAbsent(TEXT("TitleSmallWindowFont"),
+   TEXT("16,0,0,0,100,1,0,0,0,0,0,3,2,Tahoma"));
+  SetRegistryStringIfAbsent(TEXT("CDIWindowFont"),
+   TEXT("28,0,0,0,400,0,0,0,0,0,0,3,2,TahomaBD"));
+  SetRegistryStringIfAbsent(TEXT("MapLabelFont"),
+   TEXT("14,0,0,0,100,1,0,0,0,0,0,3,2,Tahoma"));
+  SetRegistryStringIfAbsent(TEXT("StatisticsFont"),
+   TEXT("20,0,0,0,400,0,0,0,0,0,0,3,2,Tahoma"));
+  SetRegistryStringIfAbsent(TEXT("MapWindowFont"),
+   TEXT("18,0,0,0,400,0,0,0,0,0,0,3,2,Tahoma"));
+  SetRegistryStringIfAbsent(TEXT("MapWindowBoldFont"),
+   TEXT("16,0,0,0,500,0,0,0,0,0,0,3,2,TahomaBD"));
+
+#if 0
+  SetRegistryStringIfAbsent(TEXT("ScaleList"),
+   TEXT("0.5,1,2,5,10,20,50,100,150,200,500,1000"));
+#endif
+}
+
+// MIO C 310 480x272 like the Dayton
+void DefaultRegistrySettingsMIO(void)
+{
+  SetRegistryStringIfAbsent(TEXT("InfoWindowFont"),
+   TEXT("28,0,0,0,800,0,0,0,0,0,0,3,2,TahomaBD"));
+  SetRegistryStringIfAbsent(TEXT("TitleWindowFont"),
+   TEXT("16,0,0,0,500,0,0,0,0,0,0,3,2,Tahoma"));
+ SetRegistryStringIfAbsent(TEXT("TitleSmallWindowFont"),
+   TEXT("16,0,0,0,100,1,0,0,0,0,0,3,2,Tahoma"));
+  SetRegistryStringIfAbsent(TEXT("CDIWindowFont"),
+   TEXT("28,0,0,0,400,0,0,0,0,0,0,3,2,TahomaBD"));
+  SetRegistryStringIfAbsent(TEXT("MapLabelFont"),
+   TEXT("14,0,0,0,100,1,0,0,0,0,0,3,2,Tahoma"));
+  SetRegistryStringIfAbsent(TEXT("StatisticsFont"),
+   TEXT("20,0,0,0,400,0,0,0,0,0,0,3,2,Tahoma"));
+  SetRegistryStringIfAbsent(TEXT("MapWindowFont"),
+   TEXT("18,0,0,0,400,0,0,0,0,0,0,3,2,Tahoma"));
+  SetRegistryStringIfAbsent(TEXT("MapWindowBoldFont"),
+   TEXT("16,0,0,0,500,0,0,0,0,0,0,3,2,TahomaBD"));
+
+#if 0
+  SetRegistryStringIfAbsent(TEXT("ScaleList"),
+   TEXT("0.5,1,2,5,10,20,50,100,150,200,500,1000"));
+#endif
+}
+
+// This is a default fontset for a generic PNA
+// we keep it small in order to be able to test
+void DefaultRegistrySettingsPNA(void)
+{
+ SetRegistryStringIfAbsent(TEXT("InfoWindowFont"),
+   TEXT("28,0,0,0,800,0,0,0,0,0,0,3,2,TahomaBD"));
+  SetRegistryStringIfAbsent(TEXT("TitleWindowFont"),
+   TEXT("16,0,0,0,500,0,0,0,0,0,0,3,2,Tahoma"));
+ SetRegistryStringIfAbsent(TEXT("TitleSmallWindowFont"),
+   TEXT("16,0,0,0,100,1,0,0,0,0,0,3,2,Tahoma"));
+  SetRegistryStringIfAbsent(TEXT("CDIWindowFont"),
+   TEXT("28,0,0,0,400,0,0,0,0,0,0,3,2,TahomaBD"));
+  SetRegistryStringIfAbsent(TEXT("MapLabelFont"),
+   TEXT("14,0,0,0,100,1,0,0,0,0,0,3,2,Tahoma"));
+  SetRegistryStringIfAbsent(TEXT("StatisticsFont"),
+   TEXT("20,0,0,0,400,0,0,0,0,0,0,3,2,Tahoma"));
+  SetRegistryStringIfAbsent(TEXT("MapWindowFont"),
+   TEXT("18,0,0,0,400,0,0,0,0,0,0,3,2,Tahoma"));
+  SetRegistryStringIfAbsent(TEXT("MapWindowBoldFont"),
+   TEXT("16,0,0,0,500,0,0,0,0,0,0,3,2,TahomaBD"));
+
+#if 0
+  SetRegistryStringIfAbsent(TEXT("ScaleList"),
+   TEXT("0.5,1,2,5,10,20,50,100,150,200,500,1000"));
+#endif
+}
+
+#endif // PNA
+
+// VENTA-TEST HP4700 font settings
+void DefaultRegistrySettingsHP4700(void)
+{
+  SetRegistryStringIfAbsent(TEXT("InfoWindowFont"),
+   TEXT("28,0,0,0,800,0,0,0,0,0,0,3,2,TahomaBD")); // ok
+  SetRegistryStringIfAbsent(TEXT("TitleWindowFont"),
+   TEXT("16,0,0,0,500,0,0,0,0,0,0,3,2,Tahoma")); // ok
+  SetRegistryStringIfAbsent(TEXT("TitleSmallWindowFont"),
+   TEXT("16,0,0,0,100,1,0,0,0,0,0,3,2,Tahoma"));
+  SetRegistryStringIfAbsent(TEXT("CDIWindowFont"),
+   TEXT("28,0,0,0,400,0,0,0,0,0,0,3,2,TahomaBD")); // ok
+  SetRegistryStringIfAbsent(TEXT("MapLabelFont"),
+   TEXT("18,0,0,0,400,1,0,0,0,0,0,3,2,Tahoma"));
+  SetRegistryStringIfAbsent(TEXT("StatisticsFont"),
+   TEXT("18,0,0,0,400,0,0,0,0,0,0,3,2,Tahoma"));
+  SetRegistryStringIfAbsent(TEXT("MapWindowFont"),
+   TEXT("18,0,0,0,400,0,0,0,0,0,0,3,2,Tahoma"));  // ok
+  SetRegistryStringIfAbsent(TEXT("MapWindowBoldFont"),
+   TEXT("16,0,0,0,500,0,0,0,0,0,0,3,2,TahomaBD")); // ok
+
+}
+
+// end test
+
 
 void SaveRegistryAirspacePriority() {
   for (int i=0; i<AIRSPACECLASSCOUNT; i++) {
@@ -434,6 +594,30 @@ void ReadRegistrySettings(void)
 #if defined(GNAV) || defined(PCGNAV)
   DefaultRegistrySettingsAltair();
 #endif
+
+// VENTA-ADDON PNA custom font settings
+#ifdef PNA
+
+  if (GlobalModelType == MODELTYPE_PNA_HP31X ) {
+			StartupStore(TEXT("Loading HP31X settings\n"));
+			DefaultRegistrySettingsHP31X();
+	}
+	else
+	if (GlobalModelType == MODELTYPE_PNA_PN6000 ) {
+			StartupStore(TEXT("Loading PN6000 settings\n"));
+			DefaultRegistrySettingsPN6000();
+	}
+	else
+	if (GlobalModelType == MODELTYPE_PNA_MIO ) {
+			StartupStore(TEXT("Loading MIO settings\n"));
+			DefaultRegistrySettingsMIO();
+	}
+	else {
+		StartupStore(TEXT("Loading default PNA settings\n"));
+		DefaultRegistrySettingsPNA(); // fallback to default
+	}
+#endif
+
 
   for (i=0; i<AIRSPACECLASSCOUNT; i++) {
     Temp=0;
@@ -792,6 +976,22 @@ void ReadRegistrySettings(void)
   Temp = Appearance.InfoBoxBorder;
   GetFromRegistry(szRegistryAppInfoBoxBorder, &Temp);
   Appearance.InfoBoxBorder = (InfoBoxBorderAppearance_t)Temp;
+
+// VENTA-ADDON Geometry change
+#ifdef PNA
+  Temp = Appearance.InfoBoxGeom;
+  GetFromRegistry(szRegistryAppInfoBoxGeom, &Temp);
+  Appearance.InfoBoxGeom = (InfoBoxGeomAppearance_t)Temp;
+#endif
+//
+
+#ifdef PNA
+// VENTA-ADDON Model change
+  Temp = Appearance.InfoBoxModel;
+  GetFromRegistry(szRegistryAppInfoBoxModel, &Temp);
+  Appearance.InfoBoxModel = (InfoBoxModelAppearance_t)Temp;
+//
+#endif
 
   Temp = Appearance.StateMessageAlligne;
   GetFromRegistry(szRegistryAppStatusMessageAlignment, &Temp);
@@ -3241,8 +3441,12 @@ void StatusFileInit() {
   StatusMessageData[0].doStatus = true;
   StatusMessageData[0].doSound = true;
   StatusMessageData[0].sound = TEXT("IDR_WAV_DRIP");
-  StatusMessageData[0].delay_ms = 2500; // 2.5 s
   StatusMessageData_Size=1;
+#ifdef VENTA_DEBUG_EVENT // VENTA- longer statusmessage delay in event debug mode
+	StatusMessageData[0].delay_ms = 10000;  // 10 s
+#else
+    StatusMessageData[0].delay_ms = 2500; // 2.5 s
+#endif
 
   // Load up other defaults - allow overwrite in config file
 #include "Status_defaults.cpp"
@@ -3354,10 +3558,10 @@ void _init_Status(int num) {
 // Registry file handling
 /////////////////
 
-const static int nMaxValueNameSize = MAX_PATH;
-const static int nMaxValueValueSize = 4096;
-const static int nMaxClassSize = MAX_PATH;
-const static int nMaxKeyNameSize = MAX_PATH;
+const static int nMaxValueNameSize = MAX_PATH + 6; //255 + 1 + /r/n
+const static int nMaxValueValueSize = MAX_PATH * 2 + 6; // max regkey name is 256 chars + " = "
+const static int nMaxClassSize = MAX_PATH + 6;
+const static int nMaxKeyNameSize = MAX_PATH + 6;
 
 static bool LoadRegistryFromFile_inner(const TCHAR *szFile, bool wide=true)
 {
@@ -3365,7 +3569,11 @@ static bool LoadRegistryFromFile_inner(const TCHAR *szFile, bool wide=true)
   FILE *fp=NULL;
   if (_tcslen(szFile)>0)
 #ifndef __MINGW32__
-    fp = _tfopen(szFile, TEXT("rt"));
+    if (wide) {
+      fp = _tfopen(szFile, TEXT("rb"));
+    } else {
+      fp = _tfopen(szFile, TEXT("rt"));
+    }
 #else
     fp = _tfopen(szFile, TEXT("rb"));    //20060515:sgi add b
 #endif
@@ -3374,62 +3582,71 @@ static bool LoadRegistryFromFile_inner(const TCHAR *szFile, bool wide=true)
     return false;
   }
   TCHAR winval[nMaxValueValueSize];
-  char inval[nMaxValueValueSize];
   TCHAR wname[nMaxValueValueSize];
   TCHAR wvalue[nMaxValueValueSize];
-  char name[nMaxValueValueSize];
-  char value[nMaxValueValueSize];
   int j;
 
-  if (wide) {
-    while (_fgetts(winval, nMaxValueValueSize, fp)) {
-      if (_stscanf(winval, TEXT("%[^#=\r\n ]=\"%[^\r\n\"]\"[\r\n]"), wname, wvalue) == 2) {
-	if (_tcslen(wname)>0) {
-	  SetRegistryString(wname, wvalue);
-	  found = true;
-	}
-      } else if (_stscanf(winval, TEXT("%[^#=\r\n ]=%d[\r\n]"), wname, &j) == 2) {
-	if (_tcslen(wname)>0) {
-	  SetToRegistry(wname, j);
-	  found = true;
-	}
-      } else if (_stscanf(winval, TEXT("%[^#=\r\n ]=\"\"[\r\n]"), wname) == 1) {
-	if (_tcslen(wname)>0) {
-	  SetRegistryString(wname, TEXT(""));
-	  found = true;
-	}
-      } else {
-	//		ASSERT(false);	// Invalid line reached
+#ifdef __MINGW32__
+  char inval[nMaxValueValueSize];
+  char name [nMaxValueValueSize];
+  char value [nMaxValueValueSize];
+    if (wide) {
+#endif
+      while (_fgetts(winval, nMaxValueValueSize, fp)) {
+        if (winval[0] > 255) { // not reading corectly, probably narrow file.
+          break;
+        }
+        if (_stscanf(winval, TEXT("%[^#=\r\n ]=\"%[^\r\n\"]\"[\r\n]"), wname, wvalue) == 2) {
+	  if (_tcslen(wname)>0) {
+	    SetRegistryString(wname, wvalue);
+	    found = true;
+	  }
+        } else if (_stscanf(winval, TEXT("%[^#=\r\n ]=%d[\r\n]"), wname, &j) == 2) {
+	  if (_tcslen(wname)>0) {
+	    SetToRegistry(wname, j);
+	    found = true;
+	  }
+        } else if (_stscanf(winval, TEXT("%[^#=\r\n ]=\"\"[\r\n]"), wname) == 1) {
+	  if (_tcslen(wname)>0) {
+	    SetRegistryString(wname, TEXT(""));
+	    found = true;
+	  }
+        } else {
+	  //		ASSERT(false);	// Invalid line reached
+        }
+      }
+
+#ifdef __MINGW32__
+    } else {
+      while (fgets(inval, nMaxValueValueSize, fp)) {
+        if (sscanf(inval, "%[^#=\r\n ]=\"%[^\r\n\"]\"[\r\n]", name, value) == 2) {
+	  if (strlen(name)>0) {
+	    mbstowcs(wname, name, strlen(name)+1);
+	    mbstowcs(wvalue, value, strlen(value)+1);
+	    SetRegistryString(wname, wvalue);
+	    found = true;
+	  }
+        } else if (sscanf(inval, "%[^#=\r\n ]=%d[\r\n]", name, &j) == 2) {
+	  if (strlen(name)>0) {
+	    mbstowcs(wname, name, strlen(name)+1);
+	    SetToRegistry(wname, j);
+	    found = true;
+	  }
+        } else if (sscanf(inval, "%[^#=\r\n ]=\"\"[\r\n]", name) == 1) {
+	  if (strlen(name)>0) {
+	    mbstowcs(wname, name, strlen(name)+1);
+	    SetRegistryString(wname, TEXT(""));
+	    found = true;
+	  }
+        } else {
+	  //		ASSERT(false);	// Invalid line reached
+        }
       }
     }
-  } else {
-    while (fgets(inval, nMaxValueValueSize, fp)) {
-      if (sscanf(inval, "%[^#=\r\n ]=\"%[^\r\n\"]\"[\r\n]", name, value) == 2) {
-	if (strlen(name)>0) {
-	  mbstowcs(wname, name, strlen(name)+1);
-	  mbstowcs(wvalue, value, strlen(value)+1);
-	  SetRegistryString(wname, wvalue);
-	  found = true;
-	}
-      } else if (sscanf(inval, "%[^#=\r\n ]=%d[\r\n]", name, &j) == 2) {
-	if (strlen(name)>0) {
-	  mbstowcs(wname, name, strlen(name)+1);
-	  SetToRegistry(wname, j);
-	  found = true;
-	}
-      } else if (sscanf(inval, "%[^#=\r\n ]=\"\"[\r\n]", name) == 1) {
-	if (strlen(name)>0) {
-	  mbstowcs(wname, name, strlen(name)+1);
-	  SetRegistryString(wname, TEXT(""));
-	  found = true;
-	}
-      } else {
-	//		ASSERT(false);	// Invalid line reached
-      }
-    }
-  }
+#endif
 
   fclose(fp);
+
   return found;
 }
 
@@ -3448,6 +3665,8 @@ void LoadRegistryFromFile(const TCHAR *szFile) {
 void SaveRegistryToFile(const TCHAR *szFile)
 {
   TCHAR lpstrName[nMaxKeyNameSize+1];
+  char sName[nMaxKeyNameSize+1];
+  char sValue[nMaxValueValueSize+1];
   //  TCHAR lpstrClass[nMaxClassSize+1];
 #ifdef __MINGW32__
   union {
@@ -3510,7 +3729,8 @@ void SaveRegistryToFile(const TCHAR *szFile)
 #ifdef __MINGW32__
 	fprintf(fp,"%S=%d\r\n", lpstrName, uValue.dValue);
 #else
-	_ftprintf(fp,TEXT("%s=%d\r\n"), lpstrName, *((DWORD*)pValue));
+	wcstombs(sName,lpstrName,nMaxKeyNameSize+1);
+	fprintf(fp,"%s=%d\r\n", sName, *((DWORD*)pValue));
 #endif
       } else
       // XXX SCOTT - Check that the output data (lpstrName and pValue) do not contain \r or \n
@@ -3528,16 +3748,19 @@ void SaveRegistryToFile(const TCHAR *szFile)
 	  if (_tcslen((TCHAR*)pValue)>0) {
 	    pValue[nValueSize]= 0; // null terminate, just in case
 	    pValue[nValueSize+1]= 0; // null terminate, just in case
-	    _ftprintf(fp,TEXT("%s=\"%s\"\r\n"), lpstrName, pValue);
+	    wcstombs(sName,lpstrName,nMaxKeyNameSize+1);
+	    wcstombs(sValue,(TCHAR*)pValue,nMaxKeyNameSize+1);
+	    fprintf(fp,"%s=\"%s\"\r\n", sName, sValue);
 	  } else {
-	    _ftprintf(fp,TEXT("%s=\"\"\r\n"), lpstrName);
+	    wcstombs(sName,lpstrName,nMaxKeyNameSize+1);
+	    fprintf(fp,"%s=\"\"\r\n", sName);
 	  }
 #endif
 	} else {
 #ifdef __MINGW32__
 	  fprintf(fp,"%S=\"\"\r\n", lpstrName);
 #else
-	  _ftprintf(fp,TEXT("%s=\"\"\r\n"), lpstrName);
+	  fprintf(fp,"%s=\"\"\r\n", lpstrName);
 #endif
 	}
       }
@@ -3609,9 +3832,58 @@ CSIDL_PROGRAM_FILES 0x0026   The program files folder.
 */
 #if defined(GNAV) && !defined(PCGNAV)
   _tcscpy(buffer,TEXT("\\NOR Flash"));
-  //  _tcscpy(buffer,TEXT("\\USB HD\\Altair"));
-#elif (defined(PNA))
-  _tcscpy(buffer,TEXT("\\SDMMC\\XCSoarData"));
+#elif defined (PNA)
+ /*
+  * VENTA-ADDON "smartpath" for PNA only
+  *
+  * (moved up elif from bottom to here to prevent messy behaviour if a
+  * PNA exec is loaded on a PPC)
+  *
+  * For PNAs the localpath is taken from the application exec path
+  * example> \sdmmc\bin\Program.exe  results in localpath=\sdmmc\XCSoarData
+  *
+  * Then the basename is searched for an underscore char, which is
+  * used as a separator for getting the model type.  example>
+  * program_pna.exe results in GlobalModelType=pna
+  *
+  */
+
+  /*
+   * Force LOCALPATH to be the same of the executing program
+   */
+  _stprintf(buffer,TEXT("%sXCSoarData"),gmfpathname() );
+
+  /*
+    GlobalModelType=MODELTYPE_PNA;	// default for ifdef PNA by now!
+
+    *
+    * GlobalModelName is a global variable, shown during startup and used for printouts only.
+    * In order to know what model you are using, GlobalModelType is used.
+    *
+    * This "smartname" facility is used to override the registry/config Model setup to force
+    * a model type to be used, just in case. The model types may not follow strictly those in
+    * config menu, nor be updated. Does'nt hurt though.
+    *
+
+    if ( GetGlobalModelName() )
+    {
+    ConvToUpper(GlobalModelName);
+
+    if ( !_tcscmp(GlobalModelName,_T("PNA"))) {
+ 					GlobalModelType=MODELTYPE_PNA_PNA;
+ 					_tcscpy(GlobalModelName,_T("GENERIC") );
+ 		}
+ 		else
+ 		if ( !_tcscmp(GlobalModelName,_T("HP31X")))		GlobalModelType=MODELTYPE_PNA_HP31X;
+ 		else
+ 		if ( !_tcscmp(GlobalModelName,_T("PN6000")))	GlobalModelType=MODELTYPE_PNA_PN6000;
+ 		else
+ 			_tcscpy(GlobalModelName,_T("UNKNOWN") );
+ 	} else
+ 		_tcscpy(GlobalModelName, _T("UNKNOWN") );
+ */
+  // END VENTA ADDON for PNA
+  // JMW was  _tcscpy(buffer,TEXT("\\SDMMC\\XCSoarData"));
 #else
   // everything else that's not special
   SHGetSpecialFolderPath(hWndMainWindow, buffer, loc, false);
@@ -3707,6 +3979,9 @@ void propGetFontSettings(TCHAR *Name, LOGFONT* lplf) {
   return;
 #endif
 
+#ifdef VENTA_NOREGFONT
+  return; // VENTA-TEST disabled no registry loading
+#endif
   if (GetRegistryString(Name, Buffer, sizeof(Buffer)/sizeof(TCHAR)) == 0) {
 
     // typical font entry
@@ -4817,3 +5092,256 @@ Calculated
 >180        1.965
 >190        2.209
 */
+
+#ifdef PNA
+// VENTA-ADDON MODELTYPE
+
+//
+//	Check if the model type is encoded in the executable file name
+//
+//  GlobalModelName is a global variable, shown during startup and used for printouts only.
+//  In order to know what model you are using, GlobalModelType is used.
+//
+//  This "smartname" facility is used to override the registry/config Model setup to force
+//  a model type to be used, just in case. The model types may not follow strictly those in
+//  config menu, nor be updated. Does'nt hurt though.
+//
+void SmartGlobalModelType() {
+
+	GlobalModelType=MODELTYPE_PNA;	// default for ifdef PNA by now!
+
+	if ( GetGlobalModelName() )
+	{
+		ConvToUpper(GlobalModelName);
+
+		if ( !_tcscmp(GlobalModelName,_T("PNA"))) {
+					GlobalModelType=MODELTYPE_PNA_PNA;
+					_tcscpy(GlobalModelName,_T("GENERIC") );
+		}
+		else
+			if ( !_tcscmp(GlobalModelName,_T("HP31X")))	{
+					GlobalModelType=MODELTYPE_PNA_HP31X;
+			}
+		else
+			if ( !_tcscmp(GlobalModelName,_T("PN6000"))) {
+					GlobalModelType=MODELTYPE_PNA_PN6000;
+			}
+		else
+			if ( !_tcscmp(GlobalModelName,_T("MIO"))) {
+					GlobalModelType=MODELTYPE_PNA_MIO;
+			}
+		else
+			_tcscpy(GlobalModelName,_T("UNKNOWN") );
+	} else
+		_tcscpy(GlobalModelName, _T("UNKNOWN") );
+}
+
+
+//
+// Retrieve from the registry the previous set model type
+// This value is defined in xcsoar.h , example> MODELTYPE_PNA_HP31X
+// is equivalent to a value=10201 (defined in the header file)
+//
+void SetModelType() {
+
+  TCHAR sTmp[100];
+  TCHAR szRegistryInfoBoxModel[]= TEXT("AppInfoBoxModel");
+  DWORD Temp=0;
+
+  GetFromRegistry(szRegistryInfoBoxModel, &Temp);
+
+  if ( SetModelName(Temp) != true ) {
+
+    _stprintf(sTmp,_T("SetModelType ERROR! ModelName returned invalid value <%d> from Registry!\n"), Temp);
+    StartupStore(sTmp);
+    GlobalModelType=MODELTYPE_PNA_PNA;
+
+  } else {
+
+    GlobalModelType = Temp;
+  }
+
+  _stprintf(sTmp,_T("SetModelType: Name=<%s> Type=%d\n"),GlobalModelName, GlobalModelType);
+  StartupStore(sTmp);
+}
+
+// Parse a MODELTYPE value and set the equivalent model name.
+// If the modeltype is invalid or not yet handled, assume that
+// the user changed it in the registry or in the profile, and
+// correct the error returning false: this will force a Generic Type.
+
+bool SetModelName(DWORD Temp) {
+  switch (Temp) {
+  case MODELTYPE_PNA_PNA:
+    _tcscpy(GlobalModelName,_T("GENERIC"));
+    return true;
+    break;
+  case MODELTYPE_PNA_HP31X:
+    _tcscpy(GlobalModelName,_T("HP31X"));
+    return true;
+    break;
+  case MODELTYPE_PNA_PN6000:
+    _tcscpy(GlobalModelName,_T("PN6000"));
+    return true;
+  case MODELTYPE_PNA_MIO:
+    _tcscpy(GlobalModelName,_T("MIO"));
+    return true;
+  default:
+    _tcscpy(GlobalModelName,_T("UNKNOWN"));
+    return false;
+  }
+
+}
+
+#endif
+
+
+#ifdef PNA  // VENTA-ADDON gmfpathname & C.
+
+/*
+	Paolo Ventafridda 1 feb 08
+	Get pathname & c. from GetModuleFilename (gmf)
+	In case of problems, always return \ERRORxx\  as path name
+	It will be displayed at startup and users will know that
+	something is wrong reporting the error code to us.
+	Approach not followed: It works but we don't know why
+	Approach followed: It doesn't work and we DO know why
+
+	These are temporary solutions to be improved
+ */
+
+#define MAXPATHBASENAME MAX_PATH
+
+/*
+ * gmfpathname returns the pathname of the current executed program, with leading and trailing slash
+ * example:  \sdmmc\   \SD CARD\
+ * In case of double slash, it is assumed currently as a single "\" .
+ */
+TCHAR * gmfpathname ()
+{
+  static TCHAR gmfpathname_buffer[MAXPATHBASENAME];
+  TCHAR  *p;
+
+  if (GetModuleFileName(NULL, gmfpathname_buffer, MAXPATHBASENAME) <= 0) {
+    StartupStore(TEXT("CRITIC- gmfpathname returned null GetModuleFileName\n"));
+    return(_T("\\ERROR_01\\") );
+  }
+  if (gmfpathname_buffer[0] != '\\' ) {
+    StartupStore(TEXT("CRITIC- gmfpathname starting without a leading backslash\n"));
+    return(_T("\\ERROR_02\\"));
+  }
+  gmfpathname_buffer[MAXPATHBASENAME-1] = '\0';	// truncate for safety
+
+  for (p=gmfpathname_buffer+1; *p != '\0'; p++)
+    if ( *p == '\\' ) break;	// search for the very first "\"
+
+  if ( *p == '\0') {
+    StartupStore(TEXT("CRITIC- gmfpathname no backslash found\n"));
+    return(_T("\\ERROR_03\\"));
+  }
+  *++p = '\0';
+
+  return (TCHAR *) gmfpathname_buffer;
+}
+
+/*
+ * gmfbasename returns the filename of the current executed program, without leading path.
+ * Example:  xcsoar.exe
+ */
+TCHAR * gmfbasename ()
+{
+  static TCHAR gmfbasename_buffer[MAXPATHBASENAME];
+  TCHAR *p, *lp;
+
+  if (GetModuleFileName(NULL, gmfbasename_buffer, MAXPATHBASENAME) <= 0) {
+    StartupStore(TEXT("CRITIC- gmfbasename returned null GetModuleFileName\n"));
+    return(_T("ERROR_04") );
+  }
+  if (gmfbasename_buffer[0] != '\\' ) {
+    StartupStore(TEXT("CRITIC- gmfbasename starting without a leading backslash\n"));
+    return(_T("ERROR_05"));
+  }
+  for (p=gmfbasename_buffer+1, lp=NULL; *p != '\0'; p++)
+    {
+      if ( *p == '\\' ) {
+	lp=++p;
+	continue;
+      }
+    }
+  return  lp;
+}
+
+/*
+ *	A little hack in the executable filename: if it contains an
+ *	underscore, then the following chars up to the .exe is
+ *	considered a modelname
+ *  Returns 0 if failed, 1 if name found
+ */
+int GetGlobalModelName ()
+{
+  TCHAR modelname_buffer[MAXPATHBASENAME];
+  TCHAR *p, *lp, *np;
+
+  _tcscpy(GlobalModelName, _T(""));
+
+  if (GetModuleFileName(NULL, modelname_buffer, MAXPATHBASENAME) <= 0) {
+    StartupStore(TEXT("CRITIC- GetGlobalFileName returned NULL\n"));
+    return 0;
+  }
+  if (modelname_buffer[0] != '\\' ) {
+    StartupStore(TEXT("CRITIC- GetGlobalFileName starting without a leading backslash\n"));
+    return 0;
+  }
+  for (p=modelname_buffer+1, lp=NULL; *p != '\0'; p++)
+    {
+      if ( *p == '\\' ) {
+	lp=++p;
+	continue;
+      }
+    } // assuming \sd\path\xcsoar_pna.exe  we are now at \xcsoar..
+
+  for (p=lp, np=NULL; *p != '\0'; p++)
+    {
+      if (*p == '_' ) {
+	np=++p;
+	break;
+      }
+    } // assuming xcsoar_pna.exe we are now at _pna..
+
+  if ( np == NULL ) {
+    return NULL;
+  }
+
+  for ( p=np, lp=NULL; *p != '\0'; p++)
+    {
+      if (*p == '.' ) {
+	lp=p;
+	break;
+      }
+    } // we found the . in pna.exe
+
+  if (lp == NULL) return NULL;
+  *lp='\0'; // we cut .exe
+
+  _tcscpy(GlobalModelName, np);
+
+  return 1;  // we say ok
+
+}
+
+/*
+ * Convert to uppercase a TCHAR array
+ */
+void ConvToUpper( TCHAR *str )
+{
+	if ( str )
+	{
+		for ( ; *str; ++str )
+		*str = towupper(*str);
+
+	}
+
+	return ;
+}
+
+#endif   // PNA

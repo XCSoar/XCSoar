@@ -168,6 +168,9 @@ static int FormKeyDown(WindowControl * Sender, WPARAM wParam, LPARAM lParam) {
     case VK_DOWN:
       lettercursor++;
       UpdateCursor();
+#ifdef VENTA_DEBUG_EVENT
+	  DoStatusMessage(TEXT("DBG dlgTxtEntry VK DOWN 2")); // VENTA
+#endif
       return(0);
     case VK_RETURN:
       wf->SetModalResult(mrOK);
@@ -202,6 +205,9 @@ static void OnUpClicked(WindowControl * Sender){
 static void OnDownClicked(WindowControl * Sender){
   (void)Sender;
   FormKeyDown(Sender, VK_DOWN, 0);
+#ifdef VENTA_DEBUG_EVENT
+   DoStatusMessage(TEXT("DBG dlgTxtEntry VK DOWN 1")); // VENTA
+#endif
 }
 
 
