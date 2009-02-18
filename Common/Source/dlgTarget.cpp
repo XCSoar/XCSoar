@@ -593,6 +593,15 @@ void dlgTarget(void) {
   TargetDialogOpen = true;
   TargetMoveMode = false;
 
+  if (InfoBoxLayout::landscape)
+  {// make flush right in landscape mode (at top in portrait mode)
+    WndFrame *wf2 = (WndFrame*)wf->FindByName(TEXT("frmTarget"));
+    if (wf2)
+    {
+      wf->SetLeft(MapWindow::MapRectBig.right- wf2->GetWidth());
+    }
+  }
+
   btnMove = (WindowControl*)wf->FindByName(TEXT("btnMove"));
 
   wf->SetKeyDownNotify(FormKeyDown);

@@ -25,6 +25,8 @@ class GaugeFLARM {
   static HDC hdcTemp;
   static HBITMAP hDrawBitMap;
   static HBITMAP hRoseBitMap;
+  static int hRoseBitMapWidth;
+  static int hRoseBitMapHeight;
   static RECT rc;
   static int radius;
   static POINT center;

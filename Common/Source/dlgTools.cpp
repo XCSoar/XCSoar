@@ -45,11 +45,14 @@ Copyright_License {
 
 
 
-#ifdef ALTAIRSYNC
-#define ISCALE 1
-#else
-#define ISCALE InfoBoxLayout::scale
+int DLGSCALE(int x) {
+  int iRetVal = x;
+
+#ifndef ALTAIRSYNC
+    iRetVal = (int) ((x)*InfoBoxLayout::dscale);
 #endif
+  return iRetVal;
+}
 
 extern HWND   hWndMainWindow;
 extern HWND   hWndMapWindow;
@@ -106,19 +109,19 @@ int WINAPI MessageBoxX(HWND hWnd, LPCTSTR lpText, LPCTSTR lpCaption, UINT uType)
   GetClientRect(hWnd, &rc);
 
 #ifdef ALTAIRSYNC
-  Width = 220*ISCALE;
-  Height = 160*ISCALE;
+  Width = DLGSCALE(220);
+  Height = DLGSCALE(160);
 #else
-  Width = 200*ISCALE;
-  Height = 160*ISCALE;
+  Width = DLGSCALE(200);
+  Height = DLGSCALE(160);
 #endif
 
   X = ((rc.right-rc.left) - Width)/2;
   Y = ((rc.bottom-rc.top) - Height)/2;
 
-  y = 100*ISCALE;
-  w = 60*ISCALE;
-  h = 32*ISCALE;
+  y = DLGSCALE(100);
+  w = DLGSCALE(60);
+  h = DLGSCALE(32);
 
   wf = new WndForm(hWnd, TEXT("frmXcSoarMessageDlg"),
                    (TCHAR*)lpCaption, X, Y, Width, Height);
@@ -129,7 +132,7 @@ int WINAPI MessageBoxX(HWND hWnd, LPCTSTR lpText, LPCTSTR lpCaption, UINT uType)
   wText = new WndFrame(wf,
                        TEXT("frmMessageDlgText"),
                        0,
-                       5*ISCALE,
+                       DLGSCALE(5),
                        Width,
                        Height);
   wText->SetCaption((TCHAR*)lpText);
@@ -145,7 +148,7 @@ int WINAPI MessageBoxX(HWND hWnd, LPCTSTR lpText, LPCTSTR lpCaption, UINT uType)
   /* TODO code: this doesnt work to set font height
   dY = wText->GetLastDrawTextHeight() - Height;
   */
-  dY = -40*ISCALE;
+  dY = DLGSCALE(-40);
   // wText->SetHeight(wText->GetLastDrawTextHeight()+5);
   wf->SetHeight(wf->GetHeight() + dY);
 
@@ -255,17 +258,15 @@ const TCHAR *StringToStringDflt(const TCHAR *String, TCHAR *Default){
 
 void GetDefaultWindowControlProps(XMLNode *Node, TCHAR *Name, int *X, int *Y, int *Width, int *Height, int *Font, TCHAR *Caption){
 
-  *X = StringToIntDflt(Node->getAttribute(TEXT("X")), 0)
-    *ISCALE;
+  *X = DLGSCALE(StringToIntDflt(Node->getAttribute(TEXT("X")), 0));
   *Y = StringToIntDflt(Node->getAttribute(TEXT("Y")), 0);
-  if (*Y>=0) {
-    (*Y) *= ISCALE;
+  if (*Y>=0) { // not -1
+    (*Y) = DLGSCALE(*Y);
   }
-  *Width = StringToIntDflt(Node->getAttribute(TEXT("Width")), 50)
-    *ISCALE;
+  *Width = DLGSCALE(StringToIntDflt(Node->getAttribute(TEXT("Width")), 50));
   *Height = StringToIntDflt(Node->getAttribute(TEXT("Height")), 50);
   if (*Height>=0) {
-    (*Height) *= ISCALE;
+    (*Height) = DLGSCALE(*Height);
   }
   *Font = StringToIntDflt(Node->getAttribute(TEXT("Font")), -1);
   _tcscpy(Name, StringToStringDflt(Node->getAttribute(TEXT("Name")), TEXT("")));
@@ -621,8 +622,8 @@ void LoadChildsFromXML(WindowControl *Parent,
       int MultiLine;
 
       CaptionWidth =
-        StringToIntDflt(childNode.getAttribute(TEXT("CaptionWidth")),
-                        0)*ISCALE;
+        DLGSCALE(StringToIntDflt(childNode.getAttribute(TEXT("CaptionWidth")),
+                        0));
       MultiLine =
         StringToIntDflt(childNode.getAttribute(TEXT("MultiLine")),
                         0);
