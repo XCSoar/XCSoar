@@ -9,8 +9,6 @@ TODO items in code are marked as:
 - feature
 - code cleanup/robustness
 
-
-
 IGC Logger:
   must have unique serial number, make and type, version number
   must mark where declaration is changed in-flight
@@ -46,6 +44,8 @@ Changes from 5.1.9beta9:
 - Added option to enable/disable FLARM radar separately from map
 - Removed option to display trapezoidal relative altitude on FLARM radar
 - Fixed LDNext bug
+- Compatibility for widescreen displays courtesy of Rob Dunning
+- PNA port work courtesy of Paul Coolwind
 
 Changes from 5.1.9beta8:
 - Info on persist load/save in startup log
