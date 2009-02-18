@@ -1230,6 +1230,23 @@ wcscat(XCSoar_Version, TEXT("PNA "));
 
   wcscat(XCSoar_Version, TEXT(__DATE__));
 
+#ifdef PNA // VENTA-ADDON MODEL TYPE
+/*
+  LocalPath is called for the very first time by CreateDirectoryIfAbsent.
+  In order to be able in the future to behave differently for each PNA device
+  and maybe also for common PDAs, we need to know the PNA/PDA Model Type 
+  BEFORE calling LocalPath. This was critical.
+*/
+ 
+  SmartGlobalModelType(); // First we check the exec filename, which
+			  // has priority over registry values
+  
+  if (  !wcscmp(GlobalModelName, _T("UNKNOWN")) ) // Then ff there is
+						  // no smart name...
+    SetModelType(); // get the modeltype from the registry as usual
+#endif
+
+
   CreateDirectoryIfAbsent(TEXT("persist"));
   CreateDirectoryIfAbsent(TEXT("logs"));
   CreateDirectoryIfAbsent(TEXT("config"));
