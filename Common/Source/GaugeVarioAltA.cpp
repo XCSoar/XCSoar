@@ -282,7 +282,7 @@ void GaugeVario::Render() {
 
     oldBmp = (HBITMAP)SelectObject(hdcTemp, (HBITMAP)hDrawBitMap); 
     // copy scale bitmap to memory DC
-    if (InfoBoxLayout::scale>1) {
+    if (InfoBoxLayout::dscale>1) {
       if (Appearance.InverseInfoBox)
 	StretchBlt(hdcDrawWindow, 0, 0, rc.right, rc.bottom, 
 		   hdcTemp,
@@ -499,7 +499,7 @@ void GaugeVario::RenderClimb() {
 	      x+IBLSCALE(12),y+IBLSCALE(12));
   } else {
     HBITMAP oldBmp = (HBITMAP)SelectObject(hdcTemp, hBitmapClimb);
-    if (InfoBoxLayout::scale>1) {
+    if (InfoBoxLayout::dscale>1) {
       StretchBlt(hdcDrawWindow,
 		 x,
 		 y,
@@ -697,7 +697,7 @@ void GaugeVario::RenderValue(int x, int y,
     HBITMAP oldBmp;
     
     oldBmp = (HBITMAP)SelectObject(hdcTemp, hBitmapUnit);
-    if (InfoBoxLayout::scale>1) {
+    if (InfoBoxLayout::dscale>1) {
       StretchBlt(hdcDrawWindow,
 		 x-IBLSCALE(5), 
 		 diValue->recBkg.top,

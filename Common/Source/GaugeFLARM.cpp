@@ -49,6 +49,8 @@ extern HWND hWndMainWindow; // Main Windows
 extern HINSTANCE hInst;      // The current instance
 HBITMAP GaugeFLARM::hDrawBitMap = NULL;
 HBITMAP GaugeFLARM::hRoseBitMap = NULL;
+int GaugeFLARM::hRoseBitMapWidth = 0;
+int GaugeFLARM::hRoseBitMapHeight= 0;
 HDC GaugeFLARM::hdcScreen = NULL;
 HDC GaugeFLARM::hdcTemp = NULL;
 HDC GaugeFLARM::hdcDrawWindow = NULL;
@@ -83,17 +85,21 @@ int GaugeFLARM::RangeScale(double d) {
 void GaugeFLARM::RenderBg() {
 
   SelectObject(hdcTemp, hRoseBitMap);
-#if (WINDOWSPC>0) 
-  StretchBlt(hdcDrawWindow, 0, 0,
-	     IBLSCALE(InfoBoxLayout::ControlWidth*2),
-	     IBLSCALE(InfoBoxLayout::ControlHeight*2-1),
+  if ( hRoseBitMapWidth != IBLSCALE(InfoBoxLayout::ControlWidth*2)
+      || hRoseBitMapHeight != IBLSCALE(InfoBoxLayout::ControlHeight*2-1) )
+  {
+    StretchBlt(hdcDrawWindow, 0, 0,
+	     (InfoBoxLayout::ControlWidth*2),
+	     (InfoBoxLayout::ControlHeight*2-1),
 	     hdcTemp,
-	     0, 0, InfoBoxLayout::ControlWidth*2, InfoBoxLayout::ControlHeight*2-1,
+	     0, 0, hRoseBitMapWidth, hRoseBitMapHeight,
 	     SRCCOPY);
-#else
-  BitBlt(hdcDrawWindow, 0, 0, InfoBoxLayout::ControlWidth*2, InfoBoxLayout::ControlHeight*2-1,
-	 hdcTemp, 0, 0, SRCCOPY);
-#endif
+  }
+  else
+  {
+    BitBlt(hdcDrawWindow, 0, 0, InfoBoxLayout::ControlWidth*2, InfoBoxLayout::ControlHeight*2-1,
+	   hdcTemp, 0, 0, SRCCOPY);
+  }
 
 }
 
@@ -265,6 +271,12 @@ void GaugeFLARM::Create() {
   hdcTemp = CreateCompatibleDC(hdcDrawWindow);
 
   hRoseBitMap = LoadBitmap(hInst, MAKEINTRESOURCE(IDB_FLARMROSE));
+
+  BITMAP bm;
+  ::GetObject( hRoseBitMap, sizeof( bm ), &bm );
+  hRoseBitMapWidth = bm.bmWidth;
+  hRoseBitMapHeight = bm.bmHeight;
+
 
   hDrawBitMap =
     CreateCompatibleBitmap (hdcScreen, rc.right-rc.left, rc.bottom-rc.top);

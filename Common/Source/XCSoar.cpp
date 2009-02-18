@@ -42,7 +42,7 @@ Copyright_License {
 #include "Task.h"
 #include "Dialogs.h"
 
-#ifdef OLDPPC
+#ifdef OLDPPCx
 #include "XCSoarProcess.h"
 #else
 #include "Process.h"
@@ -1612,11 +1612,18 @@ static void InitialiseFonts(RECT rc) {
   int fontsz1 = (rc.bottom - rc.top );
   int fontsz2 = (rc.right - rc.left );
 
-  if (fontsz1>fontsz2) {
-    FontHeight = (int)(fontsz1/FONTHEIGHTRATIO);
+  if (fontsz1<fontsz2) { // portrait
+    FontHeight = (int)(fontsz1/FONTHEIGHTRATIO*1.33);  // use small dimension, to work for widscreens and adjust so it works for 4x3 screens too.
     FontWidth = (int)(FontHeight*0.4);
-  } else {
+  } 
+  else if (fontsz1==fontsz2)
+  {  // square
     FontHeight = (int)(fontsz2/FONTHEIGHTRATIO);
+    FontWidth = (int)(FontHeight*0.4);
+  }
+  else 
+  { // landscape 
+    FontHeight = (int)(fontsz2/FONTHEIGHTRATIO*1.33);
     FontWidth = (int)(FontHeight*0.4);
   }
 

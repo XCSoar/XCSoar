@@ -46,7 +46,8 @@
 
 
 #ifdef BIGDISPLAY
-#define IBLSCALE(x) ((x)*InfoBoxLayout::scale)
+#define IBLSCALE(x) (   (InfoBoxLayout::IntScaleFlag) ? ((x)*InfoBoxLayout::scale) : ((int)((x)*InfoBoxLayout::dscale)))
+
 #else
 #define IBLSCALE(x) (x)
 #endif

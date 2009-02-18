@@ -9,6 +9,8 @@ class InfoBoxLayout {
   static bool fullscreen;
   static bool landscape;
   static bool square;
+  static double dscale;
+  static bool IntScaleFlag;
   static int scale;
   static void CreateInfoBoxes(RECT rc);
   static void DestroyInfoBoxes(void);

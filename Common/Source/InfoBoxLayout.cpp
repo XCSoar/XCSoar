@@ -82,6 +82,8 @@ int InfoBoxLayout::ControlWidth;
 int InfoBoxLayout::ControlHeight;
 int InfoBoxLayout::TitleHeight;
 int InfoBoxLayout::scale = 1;
+double InfoBoxLayout::dscale=1.0;
+bool InfoBoxLayout::IntScaleFlag=false;
 
 bool gnav = false;
 
@@ -237,11 +239,19 @@ void InfoBoxLayout::ScreenGeometry(RECT rc) {
   int minsize=0;
   maxsize = max(rc.right-rc.left,rc.bottom-rc.top);
   minsize = min(rc.right-rc.left,rc.bottom-rc.top);
-  if (maxsize==minsize) {
-    scale = max(1,minsize/240);
-  } else {
-    scale = max(1,maxsize/320);
+
+  dscale = max(1,minsize/240.0); // always start w/ shortest dimension
+
+  if (maxsize == minsize)  // square should be shrunk
+  {
+    dscale *= 240.0 / 320.0;  
   }
+
+  scale = (int)dscale;
+  if ( ((double)scale) == dscale)
+    IntScaleFlag=true;
+  else
+    IntScaleFlag=false;
 
   if (rc.bottom<rc.right) {
     // landscape mode
@@ -298,7 +308,6 @@ void InfoBoxLayout::GetInfoBoxSizes(RECT rc) {
   switch (InfoBoxGeometry) {
   case 0: // portrait
     // calculate control dimensions
-    
     ControlWidth = 2*(rc.right - rc.left) / numInfoWindows;
     ControlHeight = (int)((rc.bottom - rc.top) / CONTROLHEIGHTRATIO);
     TitleHeight = (int)(ControlHeight/TITLEHEIGHTRATIO); 
@@ -311,7 +320,7 @@ void InfoBoxLayout::GetInfoBoxSizes(RECT rc) {
     MapWindow::MapRect.right = rc.right;
     break;
 
-  case 1:
+  case 1: // not used
     // calculate control dimensions
     
     ControlWidth = 2*(rc.right - rc.left) / numInfoWindows;
@@ -326,7 +335,7 @@ void InfoBoxLayout::GetInfoBoxSizes(RECT rc) {
     MapWindow::MapRect.right = rc.right;
     break;
 
-  case 2:
+  case 2: // not used
     // calculate control dimensions
     
     ControlWidth = 2*(rc.right - rc.left) / numInfoWindows;
@@ -341,7 +350,7 @@ void InfoBoxLayout::GetInfoBoxSizes(RECT rc) {
     MapWindow::MapRect.right = rc.right;
     break;
 
-  case 3:
+  case 3: // not used
     // calculate control dimensions
     
     ControlWidth = (int)((rc.right - rc.left) / CONTROLHEIGHTRATIO*1.3);
@@ -371,7 +380,7 @@ void InfoBoxLayout::GetInfoBoxSizes(RECT rc) {
     MapWindow::MapRect.right = rc.right;
     break;
 
-  case 5:
+  case 5: // not used
     // calculate control dimensions
     
     ControlWidth = (int)((rc.right - rc.left) / CONTROLHEIGHTRATIO*1.3);
@@ -389,8 +398,8 @@ void InfoBoxLayout::GetInfoBoxSizes(RECT rc) {
   case 6: // landscape
     // calculate control dimensions
     
-    ControlWidth = (int)((rc.right - rc.left)*0.18);
     ControlHeight = (int)((rc.bottom - rc.top)/6);
+    ControlWidth=(int)(ControlHeight*1.44); // preserve relative shape
     TitleHeight = (int)(ControlHeight/TITLEHEIGHTRATIO); 
     
     // calculate small map screen size
@@ -402,7 +411,7 @@ void InfoBoxLayout::GetInfoBoxSizes(RECT rc) {
 
     break;
 
-  case 7:
+  case 7: // square
     // calculate control dimensions
     
     ControlWidth = (int)((rc.right - rc.left)*0.2);
