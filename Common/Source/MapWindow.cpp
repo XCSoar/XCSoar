@@ -2092,7 +2092,7 @@ void MapWindow::RenderMapWindowBg(HDC hdc, const RECT rc,
     DrawProjectedTrack(hdc, Orig_Aircraft);
     DrawOffTrackIndicator(hdc);
     DrawBestCruiseTrack(hdc, Orig_Aircraft);
-    DrawBearing(hdc);
+    DrawBearing(hdc, rc);
   }
 
   // draw wind vector at aircraft
@@ -3531,7 +3531,7 @@ void MapWindow::DrawWindAtAircraft2(HDC hdc, POINT Orig, RECT rc) {
 }
 
 
-void MapWindow::DrawBearing(HDC hdc)
+void MapWindow::DrawBearing(HDC hdc, RECT rc)
 {
 
   if (!ValidTaskPoint(ActiveWayPoint)) {
@@ -3555,7 +3555,7 @@ void MapWindow::DrawBearing(HDC hdc)
   UnlockTaskData();
 
   DrawGreatCircle(hdc, startLon, startLat,
-                  targetLon, targetLat);
+                  targetLon, targetLat, rc);
 
   if (TargetPan) {
     // Draw all of task if in target pan mode
@@ -3575,7 +3575,7 @@ void MapWindow::DrawBearing(HDC hdc)
         }
        
         DrawGreatCircle(hdc, startLon, startLat,
-                        targetLon, targetLat);
+                        targetLon, targetLat, rc);
 
         startLat = targetLat;
         startLon = targetLon;

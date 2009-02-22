@@ -79,7 +79,8 @@ class SunEphemeris {
   double f0(double lat, double declin) {
     double fo,dfo;
     // Correction: different sign at S HS
-    dfo = DEG_TO_RAD*(0.5*SUN_DIAMETER + AIR_REFRACTION); if (lat < 0.0) dfo = -dfo;
+    dfo = DEG_TO_RAD*(0.5*SUN_DIAMETER + AIR_REFRACTION); 
+    if (lat < 0.0) dfo = -dfo;
     fo = tan(declin + dfo) * tan(lat*DEG_TO_RAD);
     if (fo>0.99999) fo=1.0; // to avoid overflow //
     fo = asin(fo) + PI/2.0;
@@ -138,8 +139,9 @@ class SunEphemeris {
 
     // testing
 
-// JG Removed simulator conditional code, since GPS_INFO now set up
-// from system time.
+    // JG Removed simulator conditional code, since GPS_INFO now set up
+    // from system time.
+
     m = GPS_INFO.Month;
     y = GPS_INFO.Year;
     day = GPS_INFO.Day;
@@ -147,21 +149,6 @@ class SunEphemeris {
     h = (h % 24);
 
     // TODO code: use TimeLocal function from Process here?
-    /*
-    TIME_ZONE_INFORMATION TimeZoneInformation;
-    GetTimeZoneInformation(&TimeZoneInformation);
-
-    if (GetTimeZoneInformation(&TimeZoneInformation)==TIME_ZONE_ID_DAYLIGHT) {
-      sunsethours += 1;
-    }
-    
-    // bias is in minutes
-
-    int localtime = ((int)GPS_INFO.Time-TimeZoneInformation.Bias*60);
-    tzone = -TimeZoneInformation.Bias/60.0;
-    */
-
-//    int localtime = (int)(GPS_INFO.Time+GetUTCOffset());
     tzone = GetUTCOffset()/3600.0;
 
     d = FNday(y, m, day, (float)h);
