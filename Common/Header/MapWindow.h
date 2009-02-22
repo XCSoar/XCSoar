@@ -244,10 +244,11 @@ class MapWindow {
   static void DrawThermalEstimate(HDC hdc, RECT rc);
   static void DrawTaskAAT(HDC hdc, RECT rc);
   static void DrawAbortedTask(HDC hdc, RECT rc, POINT Orig);
-  static void DrawBearing(HDC hdc);
+  static void DrawBearing(HDC hdc, RECT rc);
   static void DrawGreatCircle(HDC hdc,
                               double lon_start, double lat_start,
-                              double lon_end, double lat_end);
+                              double lon_end, double lat_end,
+			      const RECT rc);
   // static void DrawMapScale(HDC hDC,RECT rc);
   static void DrawMapScale(HDC hDC, RECT rc /* the Map Rect*/ , bool ScaleChangeFeedback);
   static void DrawMapScale2(HDC hDC,RECT rc, POINT Orig_Aircraft);

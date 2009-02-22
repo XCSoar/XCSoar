@@ -1254,8 +1254,13 @@ bool MapWindow::SetTargetPan(bool do_pan, int target_point) {
 
 void MapWindow::DrawGreatCircle(HDC hdc,
                                 double startLon, double startLat,
-                                double targetLon, double targetLat) {
+                                double targetLon, double targetLat,
+				const RECT rc) {
 
+
+#if 0
+  // TODO accuracy: this is actually wrong, it should recalculate the
+  // bearing each step
   double distance=0;
   double distanceTotal=0;
   double Bearing;
@@ -1322,6 +1327,20 @@ void MapWindow::DrawGreatCircle(HDC hdc,
 
     }
   }
+#else
+  // Simple and this should work for PNA with display bug
+
+  HPEN hpOld = (HPEN)SelectObject(hdc, hpBearing);
+  POINT pt[2];
+  LatLon2Screen(startLon,
+                startLat,
+                pt[0]);
+  LatLon2Screen(targetLon,
+                targetLat,
+                pt[1]);
+  ClipPolygon(hdc, pt, 2, rc, false);
+
+#endif
   SelectObject(hdc, hpOld);
 }
 
