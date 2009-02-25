@@ -85,7 +85,7 @@ void Statistics::Reset() {
 }
 
 
-void Statistics::ScaleYFromData(RECT rc, LeastSquares* lsdata) 
+void Statistics::ScaleYFromData(const RECT rc, LeastSquares* lsdata) 
 {
   if (!lsdata->sum_n) {
     return;
@@ -120,7 +120,7 @@ void Statistics::ScaleYFromData(RECT rc, LeastSquares* lsdata)
 }
 
 
-void Statistics::ScaleXFromData(RECT rc, LeastSquares* lsdata) 
+void Statistics::ScaleXFromData(const RECT rc, LeastSquares* lsdata) 
 {
   if (!lsdata->sum_n) {
     return;
@@ -141,7 +141,7 @@ void Statistics::ScaleXFromData(RECT rc, LeastSquares* lsdata)
 }
 
 
-void Statistics::ScaleYFromValue(RECT rc, double value) 
+void Statistics::ScaleYFromValue(const RECT rc, const double value) 
 {
   if (unscaled_y) {
     y_min = value;
@@ -159,7 +159,7 @@ void Statistics::ScaleYFromValue(RECT rc, double value)
 }
 
 
-void Statistics::ScaleXFromValue(RECT rc, double value) 
+void Statistics::ScaleXFromValue(const RECT rc, const double value) 
 {
   if (unscaled_x) {
     x_min = value;
@@ -178,8 +178,8 @@ void Statistics::ScaleXFromValue(RECT rc, double value)
 }
 
 
-void Statistics::StyleLine(HDC hdc, POINT l1, POINT l2,
-                           int Style) {
+void Statistics::StyleLine(HDC hdc, const POINT l1, const POINT l2,
+                           const int Style, const RECT rc) {
   int minwidth = 1;
 #ifndef GNAV
   minwidth = 2;
@@ -189,33 +189,33 @@ void Statistics::StyleLine(HDC hdc, POINT l1, POINT l2,
   line[1] = l2;
   switch (Style) {
   case STYLE_BLUETHIN:
-    DrawDashLine(hdc, 
-                 minwidth, 
-                 l1, 
-                 l2, 
-                 RGB(0,50,255));
+    MapWindow::DrawDashLine(hdc, 
+			    minwidth, 
+			    l1, 
+			    l2, 
+			    RGB(0,50,255), rc);
     break;
   case STYLE_REDTHICK:
-    DrawDashLine(hdc, 3, 
-                 l1, 
-                 l2, 
-                 RGB(200,50,50));
+    MapWindow::DrawDashLine(hdc, 3, 
+			    l1, 
+			    l2, 
+			    RGB(200,50,50), rc);
     break;
   case STYLE_DASHGREEN:
-    DrawDashLine(hdc, 2, 
-                 line[0], 
-                 line[1], 
-                 RGB(0,255,0));
+    MapWindow::DrawDashLine(hdc, 2, 
+			    line[0], 
+			    line[1], 
+			    RGB(0,255,0), rc);
     break;
   case STYLE_MEDIUMBLACK:
     SelectObject(hdc, penThinSignal /*GetStockObject(BLACK_PEN)*/);
-    Polyline(hdc, line, 2);
+    MapWindow::_Polyline(hdc, line, 2, rc);
     break;
   case STYLE_THINDASHPAPER:
-    DrawDashLine(hdc, 1, 
-                 l1, 
-                 l2, 
-                 RGB(0x60,0x60,0x60));    
+    MapWindow::DrawDashLine(hdc, 1, 
+			    l1, 
+			    l2, 
+			    RGB(0x60,0x60,0x60), rc);    
     break;
 
   default:
@@ -225,8 +225,8 @@ void Statistics::StyleLine(HDC hdc, POINT l1, POINT l2,
 }
 
 
-void Statistics::DrawLabel(HDC hdc, RECT rc, const TCHAR *text, 
-			   double xv, double yv) {
+void Statistics::DrawLabel(HDC hdc, const RECT rc, const TCHAR *text, 
+			   const double xv, const double yv) {
 
   SIZE tsize;
   GetTextExtentPoint(hdc, text, _tcslen(text), &tsize);
@@ -255,7 +255,7 @@ void Statistics::DrawNoData(HDC hdc, RECT rc) {
 extern HFONT MapLabelFont;
 
 
-void Statistics::DrawXLabel(HDC hdc, RECT rc, const TCHAR *text) {
+void Statistics::DrawXLabel(HDC hdc, const RECT rc, const TCHAR *text) {
   SIZE tsize;
   HFONT hfOld = (HFONT)SelectObject(hdc, MapLabelFont);
   GetTextExtentPoint(hdc, text, _tcslen(text), &tsize);
@@ -266,7 +266,7 @@ void Statistics::DrawXLabel(HDC hdc, RECT rc, const TCHAR *text) {
 }
 
 
-void Statistics::DrawYLabel(HDC hdc, RECT rc, const TCHAR *text) {
+void Statistics::DrawYLabel(HDC hdc, const RECT rc, const TCHAR *text) {
   SIZE tsize;
   HFONT hfOld = (HFONT)SelectObject(hdc, MapLabelFont);
   GetTextExtentPoint(hdc, text, _tcslen(text), &tsize);
@@ -277,7 +277,8 @@ void Statistics::DrawYLabel(HDC hdc, RECT rc, const TCHAR *text) {
 }
 
 
-void Statistics::DrawTrend(HDC hdc, RECT rc, LeastSquares* lsdata, int Style) 
+void Statistics::DrawTrend(HDC hdc, const RECT rc, LeastSquares* lsdata, 
+			   const int Style) 
 {
   if (lsdata->sum_n<2) {
     return;
@@ -303,13 +304,14 @@ void Statistics::DrawTrend(HDC hdc, RECT rc, LeastSquares* lsdata, int Style)
   line[1].x = (int)xmax;
   line[1].y = (int)ymax;
 
-  StyleLine(hdc, line[0], line[1], Style);
+  StyleLine(hdc, line[0], line[1], Style, rc);
 
 }
 
 
-void Statistics::DrawTrendN(HDC hdc, RECT rc, LeastSquares* lsdata, 
-                            int Style) 
+void Statistics::DrawTrendN(HDC hdc, const RECT rc, 
+			    LeastSquares* lsdata, 
+                            const int Style) 
 {
   if (lsdata->sum_n<2) {
     return;
@@ -335,35 +337,31 @@ void Statistics::DrawTrendN(HDC hdc, RECT rc, LeastSquares* lsdata,
   line[1].x = (int)xmax;
   line[1].y = (int)ymax;
 
-  StyleLine(hdc, line[0], line[1], Style);
+  StyleLine(hdc, line[0], line[1], Style, rc);
 
 }
 
 
-void Statistics::DrawLine(HDC hdc, RECT rc, double xmin, double ymin,
-                          double xmax, double ymax,
-                          int Style) {
+void Statistics::DrawLine(HDC hdc, const RECT rc, 
+			  const double xmin, const double ymin,
+                          const double xmax, const double ymax,
+                          const int Style) {
 
   if (unscaled_x || unscaled_y) {
     return;
   }
-  
-  xmin = (int)((xmin-x_min)*xscale)+rc.left+BORDER_X;
-  xmax = (int)((xmax-x_min)*xscale)+rc.left+BORDER_X;
-  ymin = (int)((y_max-ymin)*yscale)+rc.top;
-  ymax = (int)((y_max-ymax)*yscale)+rc.top;
   POINT line[2];
-  line[0].x = (int)xmin;
-  line[0].y = (int)ymin;
-  line[1].x = (int)xmax;
-  line[1].y = (int)ymax;
+  line[0].x = (int)((xmin-x_min)*xscale)+rc.left+BORDER_X;
+  line[0].y = (int)((y_max-ymin)*yscale)+rc.top;
+  line[1].x = (int)((xmax-x_min)*xscale)+rc.left+BORDER_X;
+  line[1].y = (int)((y_max-ymax)*yscale)+rc.top;
 
-  StyleLine(hdc, line[0], line[1], Style);
+  StyleLine(hdc, line[0], line[1], Style, rc);
 
 }
 
 
-void Statistics::DrawBarChart(HDC hdc, RECT rc, LeastSquares* lsdata) {
+void Statistics::DrawBarChart(HDC hdc, const RECT rc, LeastSquares* lsdata) {
   int i;
 
   if (unscaled_x || unscaled_y) {
@@ -390,8 +388,9 @@ void Statistics::DrawBarChart(HDC hdc, RECT rc, LeastSquares* lsdata) {
 }
 
 
-void Statistics::DrawFilledLineGraph(HDC hdc, RECT rc, LeastSquares* lsdata,
-				     COLORREF color) {
+void Statistics::DrawFilledLineGraph(HDC hdc, const RECT rc, 
+				     LeastSquares* lsdata,
+				     const COLORREF color) {
 
   POINT line[4];
 
@@ -423,12 +422,12 @@ void Statistics::DrawLineGraph(HDC hdc, RECT rc, LeastSquares* lsdata,
 
     // STYLE_DASHGREEN
     // STYLE_MEDIUMBLACK
-    StyleLine(hdc, line[0], line[1], Style);
+    StyleLine(hdc, line[0], line[1], Style, rc);
   }
 }
 
 
-void Statistics::FormatTicText(TCHAR *text, double val, double step) {
+void Statistics::FormatTicText(TCHAR *text, const double val, const double step) {
   if (step<1.0) {
     _stprintf(text, TEXT("%.1f"), val);
   } else {
@@ -437,8 +436,11 @@ void Statistics::FormatTicText(TCHAR *text, double val, double step) {
 }
 
 
-void Statistics::DrawXGrid(HDC hdc, RECT rc, double tic_step, double zero,
-                           int Style, double unit_step, bool draw_units) {
+void Statistics::DrawXGrid(HDC hdc, const RECT rc, 
+			   const double tic_step, 
+			   const double zero,
+                           const int Style, 
+			   const double unit_step, bool draw_units) {
 
   POINT line[2];
 
@@ -463,7 +465,7 @@ void Statistics::DrawXGrid(HDC hdc, RECT rc, double tic_step, double zero,
     // STYLE_THINDASHPAPER
     if ((xval< x_max) 
         && (xmin>=rc.left+BORDER_X) && (xmin<=rc.right)) {
-      StyleLine(hdc, line[0], line[1], Style);
+      StyleLine(hdc, line[0], line[1], Style, rc);
 
       if (draw_units) {
 	TCHAR unit_text[MAX_PATH];
@@ -493,7 +495,7 @@ void Statistics::DrawXGrid(HDC hdc, RECT rc, double tic_step, double zero,
     if ((xval> x_min) 
         && (xmin>=rc.left+BORDER_X) && (xmin<=rc.right)) {
 
-      StyleLine(hdc, line[0], line[1], Style);
+      StyleLine(hdc, line[0], line[1], Style, rc);
 
       if (draw_units) {
 	TCHAR unit_text[MAX_PATH];
@@ -509,8 +511,11 @@ void Statistics::DrawXGrid(HDC hdc, RECT rc, double tic_step, double zero,
 
 }
 
-void Statistics::DrawYGrid(HDC hdc, RECT rc, double tic_step, double zero,
-                           int Style, double unit_step, bool draw_units) {
+void Statistics::DrawYGrid(HDC hdc, const RECT rc, 
+			   const double tic_step, 
+			   const double zero,
+                           const int Style, 
+			   const double unit_step, bool draw_units) {
 
   POINT line[2];
 
@@ -535,7 +540,7 @@ void Statistics::DrawYGrid(HDC hdc, RECT rc, double tic_step, double zero,
     if ((yval< y_max) && 
         (ymin>=rc.top) && (ymin<=rc.bottom-BORDER_Y)) {
 
-      StyleLine(hdc, line[0], line[1], Style);
+      StyleLine(hdc, line[0], line[1], Style, rc);
 
       if (draw_units) {
 	TCHAR unit_text[MAX_PATH];
@@ -563,7 +568,7 @@ void Statistics::DrawYGrid(HDC hdc, RECT rc, double tic_step, double zero,
     if ((yval> y_min) &&
         (ymin>=rc.top) && (ymin<=rc.bottom-BORDER_Y)) {
 
-      StyleLine(hdc, line[0], line[1], Style);
+      StyleLine(hdc, line[0], line[1], Style, rc);
 
       if (draw_units) {
 	TCHAR unit_text[MAX_PATH];
@@ -587,7 +592,7 @@ extern OLCOptimizer olc;
 static bool olcvalid=false;
 static bool olcfinished=false;
 
-void Statistics::RenderBarograph(HDC hdc, RECT rc)
+void Statistics::RenderBarograph(HDC hdc, const RECT rc)
 {
 
   if (flightstats.Altitude.sum_n<2) {
@@ -654,7 +659,7 @@ void Statistics::RenderBarograph(HDC hdc, RECT rc)
 }
 
 
-void Statistics::RenderSpeed(HDC hdc, RECT rc)
+void Statistics::RenderSpeed(HDC hdc, const RECT rc)
 {
 
   if ((flightstats.Task_Speed.sum_n<2)
@@ -705,7 +710,7 @@ void Statistics::RenderSpeed(HDC hdc, RECT rc)
 
 
 
-void Statistics::RenderClimb(HDC hdc, RECT rc) 
+void Statistics::RenderClimb(HDC hdc, const RECT rc) 
 {
 
   if (flightstats.ThermalAverage.sum_n<1) {
@@ -747,7 +752,7 @@ void Statistics::RenderClimb(HDC hdc, RECT rc)
 }
 
 
-void Statistics::RenderGlidePolar(HDC hdc, RECT rc)
+void Statistics::RenderGlidePolar(HDC hdc, const RECT rc)
 {
   int i;
 
@@ -830,7 +835,7 @@ void Statistics::RenderGlidePolar(HDC hdc, RECT rc)
 }
 
 
-void Statistics::ScaleMakeSquare(RECT rc) {
+void Statistics::ScaleMakeSquare(const RECT rc) {
   if (y_max-y_min<=0) return;
   if (rc.bottom-rc.top-BORDER_Y<=0) return;
   double ar = ((double)(rc.right-rc.left-BORDER_X))
@@ -863,7 +868,7 @@ void Statistics::ScaleMakeSquare(RECT rc) {
 }
 
 
-void Statistics::RenderTask(HDC hdc, RECT rc, bool olcmode)
+void Statistics::RenderTask(HDC hdc, const RECT rc, const bool olcmode)
 {
   int i;
 
@@ -1180,7 +1185,7 @@ void Statistics::RenderTask(HDC hdc, RECT rc, bool olcmode)
 }
 
 
-void Statistics::RenderTemperature(HDC hdc, RECT rc)
+void Statistics::RenderTemperature(HDC hdc, const RECT rc)
 {
   ResetScale();
 
@@ -1273,7 +1278,7 @@ void Statistics::RenderTemperature(HDC hdc, RECT rc)
 #include "windanalyser.h"
 extern WindAnalyser *windanalyser;
 
-void Statistics::RenderWind(HDC hdc, RECT rc) 
+void Statistics::RenderWind(HDC hdc, const RECT rc) 
 {
   int numsteps=10;
   int i;
@@ -1352,14 +1357,14 @@ void Statistics::RenderWind(HDC hdc, RECT rc)
     rotate(dX,dY,angle);
     wv[1].x = (int)(wv[0].x + dX);
     wv[1].y = (int)(wv[0].y + dY);
-    StyleLine(hdc, wv[0], wv[1], STYLE_MEDIUMBLACK);
+    StyleLine(hdc, wv[0], wv[1], STYLE_MEDIUMBLACK, rc);
 
     dX = (mag*WINDVECTORMAG-5);
     dY = -3;
     rotate(dX,dY,angle);
     wv[2].x = (int)(wv[0].x + dX);
     wv[2].y = (int)(wv[0].y + dY);
-    StyleLine(hdc, wv[1], wv[2], STYLE_MEDIUMBLACK);
+    StyleLine(hdc, wv[1], wv[2], STYLE_MEDIUMBLACK, rc);
 
     dX = (mag*WINDVECTORMAG-5);
     dY = 3;
@@ -1367,7 +1372,7 @@ void Statistics::RenderWind(HDC hdc, RECT rc)
     wv[3].x = (int)(wv[0].x + dX);
     wv[3].y = (int)(wv[0].y + dY);
 
-    StyleLine(hdc, wv[1], wv[3], STYLE_MEDIUMBLACK);
+    StyleLine(hdc, wv[1], wv[3], STYLE_MEDIUMBLACK, rc);
 
   }
 
@@ -1380,7 +1385,7 @@ void Statistics::RenderWind(HDC hdc, RECT rc)
 ////////////////////////////////////////////////////////////////
 
 
-void Statistics::RenderAirspace(HDC hdc, RECT rc) {
+void Statistics::RenderAirspace(HDC hdc, const RECT rc) {
   double range = 50.0*1000; // km
   double aclat, aclon, ach, acb;
   double fi, fj;
@@ -1499,7 +1504,7 @@ void Statistics::RenderAirspace(HDC hdc, RECT rc) {
     line[0].y = (int)(fh*(rc.top-rc.bottom+BORDER_Y)+y0)-1;
     line[1].x = rc.right;
     line[1].y = (int)(gfh*(rc.top-rc.bottom+BORDER_Y)+y0)-1;
-    StyleLine(hdc, line[0], line[1], STYLE_BLUETHIN);
+    StyleLine(hdc, line[0], line[1], STYLE_BLUETHIN, rc);
   }
 
   SelectObject(hdc, GetStockObject(WHITE_PEN));

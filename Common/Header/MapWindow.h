@@ -75,9 +75,6 @@ typedef struct _SNAIL_POINT
 } SNAIL_POINT;
 
 
-void DrawDashLine(HDC , INT ,POINT , POINT , COLORREF );
-void DrawDotLine(HDC, POINT , POINT , COLORREF );
-void _DrawLine(HDC hdc, int PenStyle, int width, POINT ptStart, POINT ptEnd, COLORREF cr);
 
 typedef union{
   unsigned int AsInt;
@@ -162,12 +159,24 @@ class MapWindow {
   static bool isAutoZoom();
   static bool isPan();
 
+  // Drawing primitives
+  static void DrawDashLine(HDC , const int , const POINT , const POINT , 
+			   const COLORREF , 
+			   const RECT rc);
+  static void DrawDotLine(HDC, const POINT , const POINT , const COLORREF , 
+			  const RECT rc);
+  static void _DrawLine(HDC hdc, const int PenStyle, const int width, 
+	       const POINT ptStart, const POINT ptEnd, 
+	       const COLORREF cr, const RECT rc);
+  static void _Polyline(HDC hdc, POINT* pt, const int npoints, const RECT rc);
   static void DrawBitmapIn(const HDC hdc, const POINT &sc, const HBITMAP h);
   static void DrawBitmapX(HDC hdc, int top, int right,
 		     int sizex, int sizey,
 		     HDC source,
 		     int offsetx, int offsety,
 		     DWORD mode);
+
+  // ...
   static void RequestToggleFullScreen();
   static void RequestOnFullScreen();
   static void RequestOffFullScreen();
@@ -221,46 +230,51 @@ class MapWindow {
   static bool PointInRect(const double &lon, const double &lat,
 			  const rectObj &bounds);
 
-  static void DrawAircraft(HDC hdc, POINT Orig);
-  static void DrawCrossHairs(HDC hdc, POINT Orig);
-  static void DrawBestCruiseTrack(HDC hdc, POINT Orig);
-  static void DrawCompass(HDC hdc, RECT rc);
-  static void DrawHorizon(HDC hdc, RECT rc);
+  static void DrawAircraft(HDC hdc, const POINT Orig);
+  static void DrawCrossHairs(HDC hdc, const POINT Orig, const RECT rc);
+  static void DrawBestCruiseTrack(HDC hdc, const POINT Orig);
+  static void DrawCompass(HDC hdc, const RECT rc);
+  static void DrawHorizon(HDC hdc, const RECT rc);
   //  static void DrawWind(HDC hdc, POINT Orig, RECT rc);
   //  static void DrawWindAtAircraft(HDC hdc, POINT Orig, RECT rc);
   static void DrawWindAtAircraft2(HDC hdc, POINT Orig, RECT rc);
-  static void DrawAirSpace(HDC hdc, RECT rc);
-  static void DrawWaypoints(HDC hdc, RECT rc);
-  static void DrawFlightMode(HDC hdc, RECT rc);
-  static void DrawGPSStatus(HDC hdc, RECT rc);
+  static void DrawAirSpace(HDC hdc, const RECT rc);
+  static void DrawWaypoints(HDC hdc, const RECT rc);
+  static void DrawFlightMode(HDC hdc, const RECT rc);
+  static void DrawGPSStatus(HDC hdc, const RECT rc);
   static double DrawTrail(HDC hdc, const POINT Orig, const RECT rc);
   static void DrawTeammate(HDC hdc, const RECT rc);
   static void DrawTrailFromTask(HDC hdc, const RECT rc, const double);
-  static void DrawOffTrackIndicator(HDC hdc);
-  static void DrawProjectedTrack(HDC hdc, POINT Orig);
-  static void DrawStartSector(HDC hdc, RECT rc, POINT &Start,
+  static void DrawOffTrackIndicator(HDC hdc, const RECT rc);
+  static void DrawProjectedTrack(HDC hdc, const RECT rc, const POINT Orig);
+  static void DrawStartSector(HDC hdc, const RECT rc, POINT &Start,
                               POINT &End, int Index);
   static void DrawTask(HDC hdc, RECT rc, const POINT &Orig_Aircraft);
-  static void DrawThermalEstimate(HDC hdc, RECT rc);
-  static void DrawTaskAAT(HDC hdc, RECT rc);
-  static void DrawAbortedTask(HDC hdc, RECT rc, POINT Orig);
-  static void DrawBearing(HDC hdc, RECT rc);
+  static void DrawThermalEstimate(HDC hdc, const RECT rc);
+  static void DrawTaskAAT(HDC hdc, const RECT rc);
+  static void DrawAbortedTask(HDC hdc, const RECT rc, const POINT Orig);
+  static void DrawBearing(HDC hdc, const RECT rc);
   static void DrawGreatCircle(HDC hdc,
                               double lon_start, double lat_start,
                               double lon_end, double lat_end,
 			      const RECT rc);
   // static void DrawMapScale(HDC hDC,RECT rc);
-  static void DrawMapScale(HDC hDC, RECT rc /* the Map Rect*/ , bool ScaleChangeFeedback);
-  static void DrawMapScale2(HDC hDC,RECT rc, POINT Orig_Aircraft);
-  static void DrawFinalGlide(HDC hDC,RECT rc);
-  static void DrawThermalBand(HDC hDC,RECT rc);
-  static void DrawGlideThroughTerrain(HDC hDC, RECT rc);
-  static void DrawTerrainAbove(HDC hDC, RECT rc);
+  static void DrawMapScale(HDC hDC, const RECT rc, 
+			   const bool ScaleChangeFeedback);
+  static void DrawMapScale2(HDC hDC, const RECT rc, 
+			    const POINT Orig_Aircraft);
+  static void DrawFinalGlide(HDC hDC, const RECT rc);
+  static void DrawThermalBand(HDC hDC, const RECT rc);
+  static void DrawGlideThroughTerrain(HDC hDC, const RECT rc);
+  static void DrawTerrainAbove(HDC hDC, const RECT rc);
   static void DrawCDI();
   //  static void DrawSpeedToFly(HDC hDC, RECT rc);
   static void DrawFLARMTraffic(HDC hDC, RECT rc, POINT Orig_Aircraft);
     
-  static void DrawSolidLine(const HDC&hdc , const POINT&start , const POINT&end );
+  static void DrawSolidLine(const HDC&hdc, 
+			    const POINT&start, 
+			    const POINT&end ,
+			    const RECT rc);
   static void TextInBox(HDC hDC, TCHAR* Value, int x, int y, int size, TextInBoxMode_t Mode, bool noOverlap=false);
   static void ToggleFullScreenStart();
   static void RefreshMap();
@@ -352,7 +366,7 @@ class MapWindow {
   static void DisplayAirspaceWarning(int Type, TCHAR *Name , AIRSPACE_ALT Base, AIRSPACE_ALT Top );
 
   static void UpdateMapScale();
-  static void CalculateOrigin(RECT rc, POINT *Orig);
+  static void CalculateOrigin(const RECT rc, POINT *Orig);
 
   static DWORD DrawThread (LPVOID);
 
@@ -361,7 +375,7 @@ class MapWindow {
 				const POINT &Orig,
 				const POINT &Orig_Aircraft);
   static void UpdateCaches(bool force=false);
-  static double findMapScaleBarSize(RECT rc);
+  static double findMapScaleBarSize(const RECT rc);
 
   #define SCALELISTSIZE  30
   static int ScaleListCount;
