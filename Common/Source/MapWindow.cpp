@@ -1887,7 +1887,7 @@ void MapWindow::CalculateOrientationTargetPan(void) {
 }
 
 
-void MapWindow::CalculateOrigin(RECT rc, POINT *Orig)
+void MapWindow::CalculateOrigin(const RECT rc, POINT *Orig)
 {
   if (TargetPan) {
     CalculateOrientationTargetPan();
@@ -1919,7 +1919,7 @@ bool MapWindow::RenderTimeAvailable() {
 }
 
 
-void MapWindow::DrawThermalEstimate(HDC hdc, RECT rc) {
+void MapWindow::DrawThermalEstimate(HDC hdc, const RECT rc) {
   POINT screen;
   if (!EnableThermalLocator)
     return;
@@ -2089,8 +2089,8 @@ void MapWindow::RenderMapWindowBg(HDC hdc, const RECT rc,
 
   if (extGPSCONNECT) {
     // TODO enhancement: don't draw offtrack indicator if showing spot heights
-    DrawProjectedTrack(hdc, Orig_Aircraft);
-    DrawOffTrackIndicator(hdc);
+    DrawProjectedTrack(hdc, rc, Orig_Aircraft);
+    DrawOffTrackIndicator(hdc, rc);
     DrawBestCruiseTrack(hdc, Orig_Aircraft);
     DrawBearing(hdc, rc);
   }
@@ -2108,7 +2108,7 @@ void MapWindow::RenderMapWindowBg(HDC hdc, const RECT rc,
   // finally, draw you!
 
   if (EnablePan && !TargetPan) {
-    DrawCrossHairs(hdc, Orig);
+    DrawCrossHairs(hdc, Orig, rc);
   }
 
   if (extGPSCONNECT) {
@@ -2119,6 +2119,7 @@ void MapWindow::RenderMapWindowBg(HDC hdc, const RECT rc,
   SelectObject(hdcDrawWindow, hfOld);
 
 }
+
 
 void MapWindow::RenderMapWindow(  RECT rc)
 {
@@ -2339,7 +2340,8 @@ DWORD MapWindow::DrawThread (LPVOID lpvoid)
 }
 
 
-void MapWindow::DrawCrossHairs(HDC hdc, POINT Orig)
+void MapWindow::DrawCrossHairs(HDC hdc, const POINT Orig,
+			       const RECT rc)
 {
   POINT o1, o2;
 
@@ -2349,7 +2351,7 @@ void MapWindow::DrawCrossHairs(HDC hdc, POINT Orig)
   o2.y = Orig.y;
 
   DrawDashLine(hdc, 1, o1, o2,
-               RGB(50,50,50));
+               RGB(50,50,50), rc);
 
   o1.x = Orig.x;
   o2.x = Orig.x;
@@ -2357,7 +2359,7 @@ void MapWindow::DrawCrossHairs(HDC hdc, POINT Orig)
   o2.y = Orig.y-20;
 
   DrawDashLine(hdc, 1, o1, o2,
-               RGB(50,50,50));
+               RGB(50,50,50), rc);
 
 }
 
@@ -2387,7 +2389,7 @@ void PolygonRotateShift(POINT* poly, const int n, const int xs, const int ys, co
 }
 
 
-void MapWindow::DrawAircraft(HDC hdc, POINT Orig)
+void MapWindow::DrawAircraft(HDC hdc, const POINT Orig)
 {
 
   if (Appearance.Aircraft == afAircraftDefault){
@@ -2551,7 +2553,7 @@ void MapWindow::DrawBitmapIn(const HDC hdc, const POINT &sc, const HBITMAP h) {
 }
 
 
-void MapWindow::DrawGPSStatus(HDC hDC, RECT rc)
+void MapWindow::DrawGPSStatus(HDC hDC, const RECT rc)
 {
 
   if (extGPSCONNECT && !(DrawInfo.NAVWarning) && (DrawInfo.SatellitesUsed != 0))
@@ -2597,7 +2599,7 @@ void MapWindow::DrawGPSStatus(HDC hDC, RECT rc)
 
 }
 
-void MapWindow::DrawFlightMode(HDC hdc, RECT rc)
+void MapWindow::DrawFlightMode(HDC hdc, const RECT rc)
 {
   static bool flip= true;
   static double LastTime = 0;
@@ -2801,7 +2803,7 @@ bool MapWindow::WaypointInRange(int i) {
     && (MapScale <= 10);
 }
 
-void MapWindow::DrawWaypoints(HDC hdc, RECT rc)
+void MapWindow::DrawWaypoints(HDC hdc, const RECT rc)
 {
   unsigned int i;
   TCHAR Buffer[32];
@@ -3078,7 +3080,7 @@ static void MapWaypointLabelAdd(TCHAR *Name, int X, int Y,
 }
 
 
-void MapWindow::DrawAbortedTask(HDC hdc, RECT rc, POINT me)
+void MapWindow::DrawAbortedTask(HDC hdc, const RECT rc, const POINT me)
 {
   int i;
   if (!WayPointList) return;
@@ -3093,9 +3095,9 @@ void MapWindow::DrawAbortedTask(HDC hdc, RECT rc, POINT me)
     if(ValidWayPoint(index))
     {
       DrawDashLine(hdc, 1,
-        WayPointList[index].Screen,
-        me,
-        taskcolor);
+		   WayPointList[index].Screen,
+		   me,
+		   taskcolor, rc);
     }
     }
   #ifdef HAVEEXCEPTIONS
@@ -3107,20 +3109,20 @@ void MapWindow::DrawAbortedTask(HDC hdc, RECT rc, POINT me)
 }
 
 
-void MapWindow::DrawStartSector(HDC hdc, RECT rc,
+void MapWindow::DrawStartSector(HDC hdc, const RECT rc,
                                 POINT &Start,
                                 POINT &End, int Index) {
   double tmp;
 
   if(StartLine) {
     _DrawLine(hdc, PS_SOLID, IBLSCALE(5), WayPointList[Index].Screen,
-              Start, taskcolor);
+              Start, taskcolor, rc);
     _DrawLine(hdc, PS_SOLID, IBLSCALE(5), WayPointList[Index].Screen,
-              End, taskcolor);
+              End, taskcolor, rc);
     _DrawLine(hdc, PS_SOLID, IBLSCALE(1), WayPointList[Index].Screen,
-              Start, RGB(255,0,0));
+              Start, RGB(255,0,0), rc);
     _DrawLine(hdc, PS_SOLID, IBLSCALE(1), WayPointList[Index].Screen,
-              End, RGB(255,0,0));
+              End, RGB(255,0,0), rc);
   } else {
     tmp = StartRadius*ResMapScaleOverDistanceModify;
     SelectObject(hdc, GetStockObject(HOLLOW_BRUSH));
@@ -3175,16 +3177,16 @@ void MapWindow::DrawTask(HDC hdc, RECT rc, const POINT &Orig_Aircraft)
         if(FinishLine) {
           _DrawLine(hdc, PS_SOLID, IBLSCALE(5),
                     WayPointList[Task[i].Index].Screen,
-                    Task[i].Start, taskcolor);
+                    Task[i].Start, taskcolor, rc);
           _DrawLine(hdc, PS_SOLID, IBLSCALE(5),
                     WayPointList[Task[i].Index].Screen,
-                    Task[i].End, taskcolor);
+                    Task[i].End, taskcolor, rc);
           _DrawLine(hdc, PS_SOLID, IBLSCALE(1),
                     WayPointList[Task[i].Index].Screen,
-                    Task[i].Start, RGB(255,0,0));
+                    Task[i].Start, RGB(255,0,0), rc);
           _DrawLine(hdc, PS_SOLID, IBLSCALE(1),
                     WayPointList[Task[i].Index].Screen,
-                    Task[i].End, RGB(255,0,0));
+                    Task[i].End, RGB(255,0,0), rc);
         } else {
           tmp = FinishRadius*ResMapScaleOverDistanceModify;
           SelectObject(hdc, GetStockObject(HOLLOW_BRUSH));
@@ -3205,10 +3207,10 @@ void MapWindow::DrawTask(HDC hdc, RECT rc, const POINT &Orig_Aircraft)
       if(AATEnabled != TRUE) {
         DrawDashLine(hdc, 2,
                      WayPointList[Task[i].Index].Screen,
-                     Task[i].Start, RGB(127,127,127));
+                     Task[i].Start, RGB(127,127,127), rc);
         DrawDashLine(hdc, 2,
                      WayPointList[Task[i].Index].Screen,
-                     Task[i].End, RGB(127,127,127));
+                     Task[i].End, RGB(127,127,127), rc);
 
         SelectObject(hdc, GetStockObject(HOLLOW_BRUSH));
         SelectObject(hdc, GetStockObject(BLACK_PEN));
@@ -3262,7 +3264,7 @@ void MapWindow::DrawTask(HDC hdc, RECT rc, const POINT &Orig_Aircraft)
 		_DrawLine(hdc, PS_SOLID, IBLSCALE(2),
 			  TaskStats[i].IsoLine_Screen[j],
 			  TaskStats[i].IsoLine_Screen[j+1],
-			  RGB(0,0,255));
+			  RGB(0,0,255), rc);
 	      }
 	    }
           }
@@ -3296,7 +3298,7 @@ void MapWindow::DrawTask(HDC hdc, RECT rc, const POINT &Orig_Aircraft)
         DrawDashLine(hdc, 1,
                      WayPointList[imin].Screen,
                      WayPointList[imax].Screen,
-                     taskcolor);
+                     taskcolor, rc);
       } else {
 	sct1 = WayPointList[Task[i].Index].Screen;
 	sct2 = WayPointList[Task[i+1].Index].Screen;
@@ -3306,12 +3308,12 @@ void MapWindow::DrawTask(HDC hdc, RECT rc, const POINT &Orig_Aircraft)
 	DrawDashLine(hdc, 3,
 		     sct1,
 		     sct2,
-		     taskcolor);
+		     taskcolor, rc);
       } else {
 	DrawDashLine(hdc, 3,
 		     sct2,
 		     sct1,
-		     taskcolor);
+		     taskcolor, rc);
       }
 
       // draw small arrow along task direction
@@ -3322,8 +3324,8 @@ void MapWindow::DrawTask(HDC hdc, RECT rc, const POINT &Orig_Aircraft)
       PolygonRotateShift(Arrow, 2, p_p.x, p_p.y,
             bearing-DisplayAngle);
 
-      _DrawLine(hdc, PS_SOLID, IBLSCALE(2), Arrow[0], p_p, taskcolor);
-      _DrawLine(hdc, PS_SOLID, IBLSCALE(2), Arrow[1], p_p, taskcolor);
+      _DrawLine(hdc, PS_SOLID, IBLSCALE(2), Arrow[0], p_p, taskcolor, rc);
+      _DrawLine(hdc, PS_SOLID, IBLSCALE(2), Arrow[1], p_p, taskcolor, rc);
     }
   }
 #ifdef HAVEEXCEPTIONS
@@ -3339,7 +3341,7 @@ void MapWindow::DrawTask(HDC hdc, RECT rc, const POINT &Orig_Aircraft)
 }
 
 
-void MapWindow::DrawTaskAAT(HDC hdc, RECT rc)
+void MapWindow::DrawTaskAAT(HDC hdc, const RECT rc)
 {
   int i;
   double tmp;
@@ -3415,9 +3417,11 @@ void MapWindow::DrawTaskAAT(HDC hdc, RECT rc)
                   Task[i].AATFinishRadial-DisplayAngle);
 
           DrawSolidLine(hDCTemp,
-                        WayPointList[Task[i].Index].Screen, Task[i].AATStart);
+                        WayPointList[Task[i].Index].Screen, Task[i].AATStart,
+			rc);
           DrawSolidLine(hDCTemp,
-                        WayPointList[Task[i].Index].Screen, Task[i].AATFinish);
+                        WayPointList[Task[i].Index].Screen, Task[i].AATFinish,
+			rc);
 
         }
 
@@ -3459,7 +3463,7 @@ void MapWindow::DrawTaskAAT(HDC hdc, RECT rc)
 }
 
 
-void MapWindow::DrawWindAtAircraft2(HDC hdc, POINT Orig, RECT rc) {
+void MapWindow::DrawWindAtAircraft2(HDC hdc, const POINT Orig, const RECT rc) {
   int i;
   POINT Start;
   HPEN hpOld;
@@ -3512,7 +3516,7 @@ void MapWindow::DrawWindAtAircraft2(HDC hdc, POINT Orig, RECT rc) {
     }
 
     // optionally draw dashed line
-    _DrawLine(hdc, PS_DASH, 1, Tail[0], Tail[1], RGB(0,0,0));
+    _DrawLine(hdc, PS_DASH, 1, Tail[0], Tail[1], RGB(0,0,0), rc);
   }
 
   _itot(iround(DerivedDrawInfo.WindSpeed * SPEEDMODIFY), sTmp, 10);
@@ -3531,7 +3535,7 @@ void MapWindow::DrawWindAtAircraft2(HDC hdc, POINT Orig, RECT rc) {
 }
 
 
-void MapWindow::DrawBearing(HDC hdc, RECT rc)
+void MapWindow::DrawBearing(HDC hdc, const RECT rc)
 {
 
   if (!ValidTaskPoint(ActiveWayPoint)) {
@@ -3794,11 +3798,17 @@ void MapWindow::LatLon2Screen(pointObj *ptin, POINT *ptout, const int n,
 
 ////////////////////////////////////////////////////////////////////////
 
+void MapWindow::_Polyline(HDC hdc, POINT* pt, const int npoints,
+			  const RECT rc) {
+#ifdef PNA
+  ClipPolygon(hdc, pt, npoints, rc, false);
+#else
+  Polyline(hdc, pt, npoints);
+#endif
+}
 
-
-#define NUMPOINTS 2
 void MapWindow::DrawSolidLine(const HDC& hdc, const POINT &ptStart,
-                              const POINT &ptEnd)
+                              const POINT &ptEnd, const RECT rc)
 {
   POINT pt[2];
 
@@ -3806,11 +3816,15 @@ void MapWindow::DrawSolidLine(const HDC& hdc, const POINT &ptStart,
   pt[0]= ptStart;
   pt[1]= ptEnd;
   pt[1]= ptEnd;
-  Polyline(hdc, pt, NUMPOINTS);
+
+  _Polyline(hdc, pt, 2, rc);
 }
 
-void _DrawLine(HDC hdc, int PenStyle, int width,
-               POINT ptStart, POINT ptEnd, COLORREF cr){
+
+void MapWindow::_DrawLine(HDC hdc, const int PenStyle, const int width,
+			  const POINT ptStart, const POINT ptEnd,
+			  const COLORREF cr,
+			  const RECT rc) {
 
   HPEN hpDash,hpOld;
   POINT pt[2];
@@ -3823,15 +3837,16 @@ void _DrawLine(HDC hdc, int PenStyle, int width,
   pt[1].x = ptEnd.x;
   pt[1].y = ptEnd.y;
 
-  Polyline(hdc, pt, NUMPOINTS);
+  _Polyline(hdc, pt, 2, rc);
 
   SelectObject(hdc, hpOld);
   DeleteObject((HPEN)hpDash);
-
 }
 
-void DrawDashLine(HDC hdc, INT width,
-                  POINT ptStart, POINT ptEnd, COLORREF cr)
+
+void MapWindow::DrawDashLine(HDC hdc, const int width,
+                  const POINT ptStart, const POINT ptEnd, const COLORREF cr,
+		  const RECT rc)
 {
   int i;
   HPEN hpDash,hpOld;
@@ -3850,13 +3865,13 @@ void DrawDashLine(HDC hdc, INT width,
     for (i = 0; i < width; i++){
       pt[0].x += 1;
       pt[1].x += 1;
-      Polyline(hdc, pt, NUMPOINTS);
+      _Polyline(hdc, pt, 2, rc);
     }
   } else {
     for (i = 0; i < width; i++){
       pt[0].y += 1;
       pt[1].y += 1;
-      Polyline(hdc, pt, NUMPOINTS);
+      _Polyline(hdc, pt, 2, rc);
     }
   }
 
@@ -3866,7 +3881,8 @@ void DrawDashLine(HDC hdc, INT width,
 }
 
 
-void DrawDotLine(HDC hdc, POINT ptStart, POINT ptEnd, COLORREF cr)
+void DrawDotLine(HDC hdc, POINT ptStart, POINT ptEnd, COLORREF cr,
+		 const RECT rc)
 {
   /*
   HPEN hpDot, hpOld;
@@ -3886,7 +3902,7 @@ void DrawDotLine(HDC hdc, POINT ptStart, POINT ptEnd, COLORREF cr)
   pt[1].x = ptEnd.x;
   pt[1].y = ptEnd.y;
 
-  Polyline(hdc, pt, NUMPOINTS);
+  Polyline(hdc, pt, 2);
 
   SelectObject(hdc, hpOld);
   DeleteObject((HPEN)hpDot);

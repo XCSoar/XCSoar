@@ -32,28 +32,32 @@ class Statistics {
 
   void Reset();
 
-  static void DrawBarChart(HDC hdc, RECT rc, LeastSquares* lsdata);
+  static void DrawBarChart(HDC hdc, const RECT rc, LeastSquares* lsdata);
 
-  static void DrawFilledLineGraph(HDC hdc, RECT rc, LeastSquares* lsdata,
-				  COLORREF thecolor);
+  static void DrawFilledLineGraph(HDC hdc, const RECT rc,
+				  LeastSquares* lsdata,
+				  const COLORREF thecolor);
 
-  static void DrawLineGraph(HDC hdc, RECT rc, LeastSquares* lsdata,
-                            int Style);
-  static void DrawTrend(HDC hdc, RECT rc, LeastSquares* lsdata,
-                        int Style);
-  static void DrawTrendN(HDC hdc, RECT rc, LeastSquares* lsdata,
-                         int Style);
+  static void DrawLineGraph(HDC hdc, const RECT rc, LeastSquares* lsdata,
+                            const int Style);
+  static void DrawTrend(HDC hdc, const RECT rc, LeastSquares* lsdata,
+                        const int Style);
+  static void DrawTrendN(HDC hdc, const RECT rc, LeastSquares* lsdata,
+                         const int Style);
 
-  static void DrawLine(HDC hdc, RECT rc, double xmin, double ymin,
-                       double xmax, double ymax, int Style);
+  static void DrawLine(HDC hdc, RECT rc,
+		       const double xmin,
+		       const double ymin,
+                       const double xmax,
+		       const double ymax, const int Style);
 
-  static void ScaleYFromData(RECT rc, LeastSquares* lsdata);
-  static void ScaleXFromData(RECT rc, LeastSquares* lsdata);
-  static void ScaleYFromValue(RECT rc, double val);
-  static void ScaleXFromValue(RECT rc, double val);
-  static void ScaleMakeSquare(RECT rc);
+  static void ScaleYFromData(const RECT rc, LeastSquares* lsdata);
+  static void ScaleXFromData(const RECT rc, LeastSquares* lsdata);
+  static void ScaleYFromValue(const RECT rc, const double val);
+  static void ScaleXFromValue(const RECT rc, const double val);
+  static void ScaleMakeSquare(const RECT rc);
 
-  static void StyleLine(HDC hdc, POINT l1, POINT l2, int Style);
+  static void StyleLine(HDC hdc, const POINT l1, const POINT l2, const int Style, const RECT rc);
 
   static double yscale;
   static double xscale;
@@ -63,27 +67,35 @@ class Statistics {
   static bool unscaled_y;
   static void ResetScale();
 
-  static void FormatTicText(TCHAR *text, double val, double step);
-  static void DrawXGrid(HDC hdc, RECT rc, double tic_step, double zero,
-                        int Style, double unit_step, bool draw_units=false);
-  static void DrawYGrid(HDC hdc, RECT rc, double tic_step, double zero,
-                        int Style, double unit_step, bool draw_units=false);
+  static void FormatTicText(TCHAR *text, const double val, const double step);
+  static void DrawXGrid(HDC hdc, const RECT rc,
+			const double tic_step,
+			const double zero,
+                        const int Style,
+			const double unit_step,
+			bool draw_units=false);
+  static void DrawYGrid(HDC hdc, const RECT rc,
+			const double tic_step,
+			const double zero,
+                        const int Style,
+			const double unit_step, bool draw_units=false);
 
-  static void DrawXLabel(HDC hdc, RECT rc, const TCHAR *text);
-  static void DrawYLabel(HDC hdc, RECT rc, const TCHAR *text);
-  static void DrawLabel(HDC hdc, RECT rc, const TCHAR *text, double xv, double yv);
-  static void DrawNoData(HDC hdc, RECT rc);
+  static void DrawXLabel(HDC hdc, const RECT rc, const TCHAR *text);
+  static void DrawYLabel(HDC hdc, const RECT rc, const TCHAR *text);
+  static void DrawLabel(HDC hdc, const RECT rc, const TCHAR *text,
+			const double xv, const double yv);
+  static void DrawNoData(HDC hdc, const RECT rc);
 
   ///
 
-    static void RenderAirspace(HDC hdc, RECT rc);
-    static void RenderBarograph(HDC hdc, RECT rc);
-    static void RenderClimb(HDC hdc, RECT rc);
-    static void RenderGlidePolar(HDC hdc, RECT rc);
-    static void RenderWind(HDC hdc, RECT rc);
-    static void RenderTemperature(HDC hdc, RECT rc);
-    static void RenderTask(HDC hdc, RECT rc, bool olcmode);
-    static void RenderSpeed(HDC hdc, RECT rc);
+    static void RenderAirspace(HDC hdc, const RECT rc);
+    static void RenderBarograph(HDC hdc, const RECT rc);
+    static void RenderClimb(HDC hdc, const RECT rc);
+    static void RenderGlidePolar(HDC hdc, const RECT rc);
+    static void RenderWind(HDC hdc, const RECT rc);
+    static void RenderTemperature(HDC hdc, const RECT rc);
+    static void RenderTask(HDC hdc, const RECT rc, const bool olcmode);
+    static void RenderSpeed(HDC hdc, const RECT rc);
 
 };
 
