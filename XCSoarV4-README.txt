@@ -46,6 +46,7 @@ Changes from 5.1.9beta9:
 - Fixed LDNext bug
 - Compatibility for widescreen displays courtesy of Rob Dunning
 - PNA port work courtesy of Paul Coolwind
+- Fixed SZD55 polar (more accurate) courtesy Luke Szczepaniak
 
 Changes from 5.1.9beta8:
 - Info on persist load/save in startup log
@@ -59,7 +60,8 @@ Changes from 5.1.9beta7:
 - AAT Time to go resets to zero on cleared task
 - AAT Time to go never negative
 - Fixed bug in waypoint exclude outside terrain checking
-- Fixed bug in time calculations with short final legs in task (final glide around multiple points).
+- Fixed bug in time calculations with short final legs in task
+  (final glide around multiple points).
 
 Changes from 5.1.9beta6:
 - added clear button to task editor dialog in portrait mode,
@@ -109,8 +111,6 @@ Changes from 5.1.9beta2:
 - robustness enhancements (avoid buffer overrun in long waypoint comments)
 - build script
 - version bump
-
-
 - More porting to cegcc; allow O3 optimisation, variable initialisation
 
 Changes from 5.1.9beta1:
@@ -222,7 +222,7 @@ Changes from 5.1.6:
 - Fixed initialisation of AAT properties when adding waypoints from
   waypoint dialog
 
------------------------
+-------------------------------------------------------
 
 Changes from 5.1.5 beta 6:
 - Snail trail rendering improvements:
@@ -435,6 +435,8 @@ Changes from 5.1.2 stable to 5.1.3 beta2
 - Marks files deleted on exit
 - Enabled display of battery % for PDAs in status dialog,
   and warning on low battery
+
+---------------------------------------------------------------------
 
 Changes from 5.1.1 beta 7
 - Allow for new or edited waypoints if the primary waypoint file is

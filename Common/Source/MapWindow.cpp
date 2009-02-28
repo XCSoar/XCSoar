@@ -3800,7 +3800,7 @@ void MapWindow::LatLon2Screen(pointObj *ptin, POINT *ptout, const int n,
 
 void MapWindow::_Polyline(HDC hdc, POINT* pt, const int npoints,
 			  const RECT rc) {
-#ifdef PNA
+#ifdef BUG_IN_CLIPPING
   ClipPolygon(hdc, pt, npoints, rc, false);
 #else
   Polyline(hdc, pt, npoints);
@@ -3812,10 +3812,10 @@ void MapWindow::DrawSolidLine(const HDC& hdc, const POINT &ptStart,
 {
   POINT pt[2];
 
-  pt[0]= ptStart;
-  pt[0]= ptStart;
-  pt[1]= ptEnd;
-  pt[1]= ptEnd;
+  pt[0].x= ptStart.x;
+  pt[0].y= ptStart.y;
+  pt[1].x= ptEnd.x;
+  pt[1].y= ptEnd.y;
 
   _Polyline(hdc, pt, 2, rc);
 }
@@ -3881,10 +3881,10 @@ void MapWindow::DrawDashLine(HDC hdc, const int width,
 }
 
 
+/* Not used
 void DrawDotLine(HDC hdc, POINT ptStart, POINT ptEnd, COLORREF cr,
 		 const RECT rc)
 {
-  /*
   HPEN hpDot, hpOld;
   LOGPEN dashLogPen;
   POINT pt[2];
@@ -3906,6 +3906,7 @@ void DrawDotLine(HDC hdc, POINT ptStart, POINT ptEnd, COLORREF cr,
 
   SelectObject(hdc, hpOld);
   DeleteObject((HPEN)hpDot);
-  */
 }
+
+*/
 
