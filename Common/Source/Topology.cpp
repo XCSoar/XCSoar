@@ -751,6 +751,35 @@ static unsigned int SutherlandHodgmanPolygoClip (POINT* inVertexArray,
 static POINT clip_ptout[MAXCLIPPOLYGON];
 static POINT clip_ptin[MAXCLIPPOLYGON];
 
+#ifdef BUG_IN_CLIPPING
+
+#include "mapprimitive.h"
+extern "C" int clipLine(double *, double *, double *, double *, rectObj );
+
+void ClipLineHP314(HDC hdc, POINT *m_ptin, RECT rc) {
+  // workaround for bug in ipaq314 by Paolo
+  rectObj vRect;
+  vRect.minx = rc.left;
+  vRect.maxx = rc.right;
+  vRect.miny = rc.top;
+  vRect.maxy = rc.bottom;
+  double sx = m_ptin[0].x;
+  double sy = m_ptin[0].y;
+  double ex = m_ptin[1].x;
+  double ey = m_ptin[1].y;
+  
+  clipLine(&sx, &sy, &ex, &ey, vRect);
+  POINT pt[2];
+  
+  pt[0].x = (long) sx;
+  pt[0].y = (long) sy;
+  pt[1].x   = (long) ex;
+  pt[1].y   = (long) ey;
+  Polyline(hdc, pt, 2);
+}
+#endif
+
+
 void ClipPolygon(HDC hdc, POINT *m_ptin, unsigned int inLength, 
                  RECT rc, bool fill) {
   unsigned int outLength = 0;
@@ -761,6 +790,14 @@ void ClipPolygon(HDC hdc, POINT *m_ptin, unsigned int inLength,
   if (inLength<2) {
     return;
   }
+
+#ifdef BUG_IN_CLIPPING
+  if (inLength==2) {
+    // workaround for bug in ipaq314
+    ClipLineHP314(hdc, m_ptin, rc);
+    return;
+  }
+#endif
 
   memcpy((void*)clip_ptin, (void*)m_ptin, inLength*sizeof(POINT));
 
@@ -775,11 +812,14 @@ void ClipPolygon(HDC hdc, POINT *m_ptin, unsigned int inLength,
     }
   }
 
+  // PAOLO NOTE: IF CLIPPING WITH N>2 DOESN'T WORK,
+  // TRY IFDEF'ing out THE FOLLOWING ADJUSTMENT TO THE CLIPPING RECTANGLE
   rc.top--;
   rc.bottom++;
   rc.left--;
   rc.right++;
 
+  // OK, do the clipping
   POINT edge[5] = {{rc.left, rc.top}, 
 		   {rc.left, rc.bottom},
 		   {rc.right, rc.bottom},
@@ -799,6 +839,16 @@ void ClipPolygon(HDC hdc, POINT *m_ptin, unsigned int inLength,
     }
   } else {
     if (outLength>1) {
+
+#ifdef BUG_IN_CLIPPING
+      // Do this once more in case clipping has reduced it to one line
+      if (outLength==2) {
+	// workaround for bug in ipaq314
+	ClipLineHP314(hdc, clip_ptout, rc);
+	return;
+      }
+#endif
+
       Polyline(hdc, clip_ptout, outLength);
     }
   }

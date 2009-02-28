@@ -58,4 +58,9 @@
 #endif
 #endif
 
+#ifdef PNA
+#define BUG_IN_CLIPPING
+#define NOLINETO
+#endif
+
 #endif

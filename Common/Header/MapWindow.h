@@ -163,8 +163,11 @@ class MapWindow {
   static void DrawDashLine(HDC , const int , const POINT , const POINT , 
 			   const COLORREF , 
 			   const RECT rc);
+  /* Not used
   static void DrawDotLine(HDC, const POINT , const POINT , const COLORREF , 
 			  const RECT rc);
+  */
+
   static void _DrawLine(HDC hdc, const int PenStyle, const int width, 
 	       const POINT ptStart, const POINT ptEnd, 
 	       const COLORREF cr, const RECT rc);
