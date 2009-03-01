@@ -15,8 +15,8 @@
 
   <WndFrame Name="frmStatusFlight" X=0 Y=32 Width=230 Height=200 Font=2>
 
-  <WndProperty Name="prpLongitude" Caption="Longitude" X=2 Y=-1  Width=235 Height=22 CaptionWidth=120 Font=2 ReadOnly=1 />
   <WndProperty Name="prpLatitude"  Caption="Latitude"  X=2 Y=-1 Width=235 Height=22 CaptionWidth=120 Font=2 ReadOnly=1 />
+  <WndProperty Name="prpLongitude" Caption="Longitude" X=2 Y=-1  Width=235 Height=22 CaptionWidth=120 Font=2 ReadOnly=1 />
   <WndProperty Name="prpAltitude"  Caption="Altitude"  X=2 Y=-1 Width=235 Height=22 CaptionWidth=120 Font=2 ReadOnly=1 />
   <WndProperty Name="prpMaxHeightGain"  Caption="Max height gain"  X=2 Y=-1 Width=235 Height=22 CaptionWidth=120 Font=2 ReadOnly=1 />
   <WndProperty Name="prpNear"      Caption="Near"      X=2 Y=-1 Width=235 Height=22 CaptionWidth=120 Font=2 ReadOnly=1 />
