@@ -29,6 +29,7 @@ Copyright_License {
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
+  $Id: Utils.cpp,v 1.197 2009/03/04 15:25:18 jwharington Exp $
 }
 */
 
@@ -4399,6 +4400,7 @@ WinPilotPolarInternal WinPilotPolars[] =
   {TEXT("Lak17A-18"), 298,	180,	115,	-0.680,	158,	-1.379,	200,	-2.975, 9.80},
   {TEXT("Lak17A-15"), 285,	180,	95,	-0.574,	148,	-1.310,	200,	-2.885, 9.06},
   {TEXT("ASG29-15"), 362,	165,	108.8,	-0.635,	156.4,	-1.182,	211.13,	-2.540, 9.20},
+  {TEXT("DG-300"), 310,	190,	95.0,	-0.66,	140.0,	-1.28,	160.0,	-1.70, 10.27},
 
   // {TEXT("LS-6 (15m)"), 325, 140,  90, -0.59, 100, -0.66, 212.72, -3.4, 0}, // BestLD42
   // {TEXT("H304cz"), 310, 115,    115.03, -0.86, 174.04, -1.76, 212.72, -3.4, 0}, // BestLD42@102
