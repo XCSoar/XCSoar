@@ -47,6 +47,7 @@ Changes from 5.1.9beta9:
 - Compatibility for widescreen displays courtesy of Rob Dunning
 - PNA port work courtesy of Paul Coolwind
 - Fixed SZD55 polar (more accurate) courtesy Luke Szczepaniak
+- Added DG-300 polar courtesy Paul Coolwind
 
 Changes from 5.1.9beta8:
 - Info on persist load/save in startup log
