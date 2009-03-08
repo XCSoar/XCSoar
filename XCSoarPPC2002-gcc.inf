@@ -42,6 +42,7 @@ VersionMax = 32767.0
 6 = ,"Input Files",,Common\Data\Input
 7 = ,"Language Files",,Common\Data\Language
 8 = ,"Polar Files",,Common\Data\Polar
+9 = ,"ARM Files",,PPC2003
 
 [SourceDisksNames.mips]           ; CPU-dependent files
 1 = ,"MIPS Files",,PPC2002\XCSoar\MIPSRel
