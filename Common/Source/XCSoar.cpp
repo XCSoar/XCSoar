@@ -29,6 +29,7 @@ Copyright_License {
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
+  $Id$
 }
 */
 #include "StdAfx.h"
@@ -173,7 +174,7 @@ Appearance_t Appearance = {
   gvnsLongNeedle,
   true,
   apIbBox,
-#ifdef PNA  // VENTA-ADDON Model type
+#if defined(PNA) || defined(FIVV)  // VENTA-ADDON Model type
   apIg0,  // VENTA-ADDON GEOM
   apImPnaGeneric,
 #endif
@@ -270,9 +271,13 @@ bool EnableBlockSTF = false;
 
 bool GlobalRunning = false;
 
-#ifdef PNA  // VENTA-ADDON we call it model and not PNA for possible future usage even for custom PDAs
-int		GlobalModelType=0;	// see XCSoar.h for modeltype definitions
-TCHAR	GlobalModelName[MAX_PATH]; // there are currently no checks.. TODO check it fits here
+#if defined(PNA) || defined(FIVV)  // VENTA-ADDON we call it model and
+				   // not PNA for possible future
+				   // usage even for custom PDAs
+int	GlobalModelType=0;	   // see XCSoar.h for modeltype definitions
+TCHAR	GlobalModelName[MAX_PATH]; // there are currently no
+				   // checks.. TODO check it fits here
+float	GlobalEllipse=1.1;	// default ellipse type VENTA2-ADDON
 #endif
 
 
@@ -1222,7 +1227,9 @@ wcscat(XCSoar_Version, TEXT("PNA "));
 
   // experimental CVS
 
-#ifdef __MINGW32__
+#ifdef FIVV
+  wcscat(XCSoar_Version, TEXT("5.2.2F "));
+#elif defined(__MINGW32__)
   wcscat(XCSoar_Version, TEXT("5.2.2 "));
 #else
   wcscat(XCSoar_Version, TEXT("5.2.2 "));
@@ -1230,7 +1237,14 @@ wcscat(XCSoar_Version, TEXT("PNA "));
 
   wcscat(XCSoar_Version, TEXT(__DATE__));
 
-#ifdef PNA // VENTA-ADDON MODEL TYPE
+// VENTA2- delete registries at startup, but not on PC!
+#if defined(FIVV) && ( !defined(WINDOWSPC) || WINDOWSPC==0 )
+#ifndef PNA
+  RegDeleteKey(HKEY_CURRENT_USER, _T("Software\\MPSR\\XCSoar"));
+#endif
+#endif
+
+#ifdef PNA // VENTA2-ADDON MODEL TYPE
 /*
   LocalPath is called for the very first time by CreateDirectoryIfAbsent.
   In order to be able in the future to behave differently for each PNA device
@@ -1241,12 +1255,30 @@ wcscat(XCSoar_Version, TEXT("PNA "));
   SmartGlobalModelType(); // First we check the exec filename, which
 			  // has priority over registry values
 
-  if (  !wcscmp(GlobalModelName, _T("UNKNOWN")) ) // Then ff there is
-						  // no smart name...
-    SetModelType(); // get the modeltype from the registry as usual
+  if (  !wcscmp(GlobalModelName, _T("UNKNOWN")) ) // Then if there is no smart name...
+    SetModelType();                         // get the modeltype from
+					    // the registry as usual
+#endif
+
+// VENTA2-ADDON install fonts on PDAs and check XCSoarData existance
+#if defined(FIVV) && ( !defined(WINDOWSPC) || WINDOWSPC==0 )
+#ifndef PNA
+
+  BOOL datadir=CheckDataDir();
+  if (datadir) StartupStore(TEXT("XCSoarData directory found.\n"));
+  else StartupStore(TEXT("ERROR: NO XCSOARDATA DIRECTORY FOUND!\n"));
+
+  StartupStore(TEXT("Check for installing fonts\n"));
+  short didfonts=InstallFonts();  // check if really did it, and maybe restart
+  TCHAR nTmp[100];
+  _stprintf(nTmp,TEXT("InstallFonts() result=%d (0=installed >0 not installed)\n"), didfonts);
+  StartupStore(nTmp);
+
+#endif
 #endif
 
 
+// VENTA2- TODO fix these directories are not used always!
   CreateDirectoryIfAbsent(TEXT("persist"));
   CreateDirectoryIfAbsent(TEXT("logs"));
   CreateDirectoryIfAbsent(TEXT("config"));
@@ -1375,50 +1407,66 @@ wcscat(XCSoar_Version, TEXT("PNA "));
 
 // VENTA-ADDON
 #ifdef VENTA_DEBUG_KEY
-CreateProgressDialog(gettext(TEXT("DEBUG KEY MODE ACTIVE")));
- Sleep(2000);
+  CreateProgressDialog(gettext(TEXT("DEBUG KEY MODE ACTIVE")));
+  Sleep(2000);
 #endif
 #ifdef VENTA_DEBUG_EVENT
-CreateProgressDialog(gettext(TEXT("DEBUG EVENT MODE ACTIVE")));
- Sleep(2000);
+  CreateProgressDialog(gettext(TEXT("DEBUG EVENT MODE ACTIVE")));
+  Sleep(2000);
 #endif
 #ifdef VENTA_NOREGFONT
-CreateProgressDialog(gettext(TEXT("NO REGISTRY FONT LOAD")));
- Sleep(2000);
+  CreateProgressDialog(gettext(TEXT("NO REGISTRY FONT LOAD")));
+  Sleep(2000);
 #endif
 
-
+// VENTA2 - togliere per la distribuzione ufficiale
+#ifdef CREDITS_FIVV
+  CreateProgressDialog(gettext(TEXT("Custom ITA version")));
+  Sleep(1000);
+#endif
+#ifdef CONDOR
+  CreateProgressDialog(gettext(TEXT(">CONDOR SIM VERSION<")));
+  Sleep(1000);
+#endif
 #ifdef PNA // VENTA-ADDON
 
-	TCHAR sTmp[MAX_PATH];
+  TCHAR sTmp[MAX_PATH];
+  wsprintf(sTmp,TEXT("Conf=%sXCsoarData"), gmfpathname() ); // VENTA2 FIX double backslash
+  CreateProgressDialog(sTmp); Sleep(3000);
 
-	wsprintf(sTmp,TEXT("Path=%s"), gmfpathname() );
-	CreateProgressDialog(sTmp); Sleep(4000);
-
-	// LocalPath(sTmp,_T("")); // This can be removed, but doesnt hurt
-	/*
-		LocalPath is called at the beginning of WinMain, and sets GlobalModelType if
-		a "smartname" is found. In this case, we assume this smart model name is
-		to be used, ignoring any other previous config setup.
-		Otherwise we call SetModelType that retrieves from the registry any previous value and
-		performs checks on that / maybe user did change it by hand in the registry with an
-		erroneous one..
-	*/
-/*
-	if (  !wcscmp(GlobalModelName, _T("UNKNOWN")) ) SetModelType();
-*/
-	wsprintf(sTmp, TEXT("PNA MODEL=%s (%d)"), GlobalModelName, GlobalModelType);
-	CreateProgressDialog(sTmp); Sleep(4000);
-
+  /*
+    if (  !wcscmp(GlobalModelName, _T("UNKNOWN")) ) SetModelType();
+  */
+  wsprintf(sTmp, TEXT("PNA MODEL=%s (%d)"), GlobalModelName, GlobalModelType);
+  CreateProgressDialog(sTmp); Sleep(3000);
 #else
-	TCHAR sTmpA[MAX_PATH], sTmpB[MAX_PATH];
-	LocalPath(sTmpA,_T(""));
-	wsprintf(sTmpB, TEXT("Path=%s"),sTmpA);
-	CreateProgressDialog(sTmpB); Sleep(4000);
-#endif // PNA
-
+#if defined(FIVV) && ( !defined(WINDOWSPC) || WINDOWSPC==0 )
+  if ( didfonts == 0 ) {
+    CreateProgressDialog(TEXT("NEW FONTS INSTALLED!")); Sleep(3000);
+  } else
+    if ( didfonts == 5 ) {
+      CreateProgressDialog(TEXT("ERROR NO FONTS!")); Sleep(3000);
+    }
+#endif
+  TCHAR sTmpA[MAX_PATH], sTmpB[MAX_PATH];
+  LocalPath(sTmpA,_T(""));
+#if defined(FIVV) && ( !defined(WINDOWSPC) || WINDOWSPC==0 )
+  if ( !datadir ) {
+    CreateProgressDialog(TEXT("ERROR NO DIRECTORY:"));
+    Sleep(3000);
+  }
+#endif
+  wsprintf(sTmpB, TEXT("Conf=%s"),sTmpA);
+  CreateProgressDialog(sTmpB); Sleep(3000);
+#if defined(FIVV) && ( !defined(WINDOWSPC) || WINDOWSPC==0 )
+  if ( !datadir ) {
+    CreateProgressDialog(TEXT("CHECK INSTALLATION!"));
+    Sleep(3000);
+  }
+#endif
+#endif // non PNA
 #ifdef _SIM_	// VENTA-ADDON
-	CreateProgressDialog(TEXT("SIMULATION")); Sleep(2000);
+  CreateProgressDialog(TEXT("SIMULATION")); Sleep(2000);
 #endif
 
   RasterTerrain::OpenTerrain();
@@ -1821,6 +1869,9 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
       return 0;
     }
 
+#ifdef PNA
+	CleanRegistry(); // VENTA2-FIX for PNA we can't delete all registries..by now
+#endif
   PreloadInitialisation(true);
 
   MyRegisterClass(hInst, szWindowClass);
