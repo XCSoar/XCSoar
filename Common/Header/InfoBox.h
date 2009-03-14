@@ -29,6 +29,7 @@ Copyright_License {
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
+  $Id$
 }
 */
 
@@ -53,6 +54,12 @@ class InfoBox{
     static COLORREF blueColor;
     static COLORREF inv_redColor;
     static COLORREF inv_blueColor;
+    static COLORREF yellowColor;
+    static COLORREF greenColor;
+    static COLORREF magentaColor;
+    static COLORREF inv_yellowColor;
+    static COLORREF inv_greenColor;
+    static COLORREF inv_magentaColor;
   private:
 
     int mX;
