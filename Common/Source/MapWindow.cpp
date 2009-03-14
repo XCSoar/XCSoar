@@ -29,6 +29,7 @@ Copyright_License {
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
+  $Id$
 }
 */
 
@@ -3802,6 +3803,12 @@ void MapWindow::_Polyline(HDC hdc, POINT* pt, const int npoints,
 			  const RECT rc) {
 #ifdef BUG_IN_CLIPPING
   ClipPolygon(hdc, pt, npoints, rc, false);
+//VENTA2
+#elif defined(PNA)
+  if (GlobalModelType == MODELTYPE_PNA_HP31X)
+  	ClipPolygon(hdc, pt, npoints, rc, false);
+  else
+  	Polyline(hdc, pt, npoints);
 #else
   Polyline(hdc, pt, npoints);
 #endif
