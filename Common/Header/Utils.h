@@ -1,3 +1,37 @@
+/*
+Copyright_License {
+
+  XCSoar Glide Computer - http://xcsoar.sourceforge.net/
+  Copyright (C) 2000 - 2008
+
+  	M Roberts (original release)
+	Robin Birch <robinb@ruffnready.co.uk>
+	Samuel Gisiger <samuel.gisiger@triadis.ch>
+	Jeff Goodenough <jeff@enborne.f2s.com>
+	Alastair Harrison <aharrison@magic.force9.co.uk>
+	Scott Penrose <scottp@dd.com.au>
+	John Wharington <jwharington@gmail.com>
+	Lars H <lars_hn@hotmail.com>
+	Rob Dunning <rob@raspberryridgesheepfarm.com>
+	Russell King <rmk@arm.linux.org.uk>
+
+  This program is free software; you can redistribute it and/or
+  modify it under the terms of the GNU General Public License
+  as published by the Free Software Foundation; either version 2
+  of the License, or (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+
+  $Id$
+}
+*/
 #if !defined(AFX_UTILS_H__695AAC30_F401_4CFF_9BD9_FE62A2A2D0D2__INCLUDED_)
 #define AFX_UTILS_H__695AAC30_F401_4CFF_9BD9_FE62A2A2D0D2__INCLUDED_
 
@@ -88,7 +122,7 @@ extern const TCHAR szRegistryAppCompassAppearance[];
 extern const TCHAR szRegistryAppStatusMessageAlignment[];
 extern const TCHAR szRegistryAppTextInputStyle[];
 extern const TCHAR szRegistryAppInfoBoxBorder[];
-#ifdef PNA
+#if defined(PNA) || defined(FIVV)
 extern const TCHAR szRegistryAppInfoBoxGeom[];   // VENTA-ADDON GEOM CHANGE
 extern const TCHAR szRegistryAppInfoBoxModel[]; // VENTA-ADDON MODEL CHANGE
 #endif
@@ -153,6 +187,14 @@ extern bool LockSettingsInFlight;
 extern bool LoggerShortName;
 
 BOOL GetFromRegistry(const TCHAR *szRegValue, DWORD *pPos);
+
+#ifdef FIVV
+BOOL DelRegistryKey(const TCHAR *szRegistryKey); // VENTA2-ADDON delregistrykey
+#endif
+#ifdef PNA
+void CleanRegistry(); // VENTA2-ADDON cleanregistrykey
+#endif
+
 HRESULT SetToRegistry(const TCHAR *szRegValue, DWORD Pos);
 HRESULT SetToRegistry(const TCHAR *szRegValue, bool bVal);	// JG
 HRESULT SetToRegistry(const TCHAR *szRegValue, int nVal);	// JG
@@ -205,7 +247,7 @@ int Segment(HDC hdc, long x, long y, int radius, RECT rc,
 void ReadAssetNumber(void);
 void WriteProfile(const TCHAR *szFile);
 void ReadProfile(const TCHAR *szFile);
-#ifdef PNA  // VENTA-ADDON
+#if defined(PNA) || defined(FIVV)  // VENTA-ADDON
 void SetModelType();
 bool SetModelName(DWORD Temp);
 #endif

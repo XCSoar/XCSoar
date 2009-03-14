@@ -65,6 +65,11 @@ Copyright_License {
 FlarmIdFile file;
 #endif
 
+// VENTA2 added portrait settings in fontsettings for pnas
+#if defined(PNA) || defined(FIVV)
+#include "InfoBoxLayout.h"
+#endif
+
 // JMW not required in newer systems?
 #ifdef __MINGW32__
 #ifndef max
@@ -263,7 +268,7 @@ const TCHAR szRegistryAppDefaultMapWidth[] = TEXT("AppDefaultMapWidth");
 const TCHAR szRegistryTeamcodeRefWaypoint[] = TEXT("TeamcodeRefWaypoint");
 const TCHAR szRegistryAppInfoBoxBorder[] = TEXT("AppInfoBoxBorder");
 
-#ifdef PNA
+#if defined(PNA) || defined(FIVV)
 const TCHAR szRegistryAppInfoBoxGeom[] = TEXT("AppInfoBoxGeom"); // VENTA-ADDON GEOMETRY CONFIG
 const TCHAR szRegistryAppInfoBoxModel[] = TEXT("AppInfoBoxModel"); // VENTA-ADDON MODEL CONFIG
 #endif
@@ -383,7 +388,7 @@ void SetRegistryStringIfAbsent(const TCHAR* name,
 			       const TCHAR* value) {
 
   // VENTA-ADDON TEST force fonts registry rewrite in PNAs
-#ifdef PNA // VENTA-TEST  // WARNING should really delete the key before creating it TODO
+#if defined(PNA) || defined(FIVV) // VENTA-TEST  // WARNING should really delete the key before creating it TODO
   SetRegistryString(name, value);
 #else
   TCHAR temp[MAX_PATH];
@@ -438,116 +443,188 @@ void DefaultRegistrySettingsAltair(void)
  *
  *
  */
-#ifdef PNA
+#if defined(PNA) || defined(FIVV)
 
+// VENTA2-ADDON  different infobox fonts for different geometries on HP31X.
+// VENTA2-ADDON	 different ELLIPSE values for different geometries!
+// VENTA2-ADDON  do not load fonts if xcsoar-registry.prf is found.
+//		 but keep loading ellipse or other key settings for custom devices
+//		 Sorry I prefer to call CheckRegistryProfile each time and be sure
+//		 that everything goes well, than split.
+//		 TODO> check inside CheckRegistry if geometry was changed , if so
+//		 force font settings all the way.
 
 void DefaultRegistrySettingsHP31X(void)
 {
-  SetRegistryStringIfAbsent(TEXT("InfoWindowFont"),
-   TEXT("60,0,0,0,600,0,0,0,0,0,0,3,2,TahomaBD"));
-  SetRegistryStringIfAbsent(TEXT("TitleWindowFont"),
-   TEXT("24,0,0,0,300,0,0,0,0,0,0,3,2,Tahoma"));
- SetRegistryStringIfAbsent(TEXT("TitleSmallWindowFont"),
-   TEXT("16,0,0,0,100,1,0,0,0,0,0,3,2,Tahoma"));
-  SetRegistryStringIfAbsent(TEXT("CDIWindowFont"),
-   TEXT("36,0,0,0,400,0,0,0,0,0,0,3,2,Tahoma"));
-  SetRegistryStringIfAbsent(TEXT("MapLabelFont"),
-   TEXT("28,0,0,0,100,1,0,0,0,0,0,3,2,Tahoma"));
-  SetRegistryStringIfAbsent(TEXT("StatisticsFont"),
-   TEXT("48,0,0,0,400,0,0,0,0,0,0,3,2,Tahoma"));
-  SetRegistryStringIfAbsent(TEXT("MapWindowFont"),
-   TEXT("36,0,0,0,400,0,0,0,0,0,0,3,2,Tahoma"));
-  SetRegistryStringIfAbsent(TEXT("MapWindowBoldFont"),
-   TEXT("32,0,0,0,600,0,0,0,0,0,0,3,2,TahomaBD"));
+  switch (Appearance.InfoBoxGeom) {
+	case 0:
+	case 1:
+	case 2:
+	case 3:
+	case 6:
+		if ( !CheckRegistryProfile() ) {
+			SetRegistryStringIfAbsent(TEXT("InfoWindowFont"),
+			TEXT("56,0,0,0,600,0,0,0,0,0,0,3,2,TahomaBD"));
 
-#if 0
-  SetRegistryStringIfAbsent(TEXT("ScaleList"),
-   TEXT("0.5,1,2,5,10,20,50,100,150,200,500,1000"));
-#endif
+			SetRegistryStringIfAbsent(TEXT("TitleWindowFont"),
+			TEXT("20,0,0,0,200,0,0,0,0,0,0,3,2,Tahoma"));
+		}
+
+		GlobalEllipse=1.1;	// standard VENTA2-addon
+		break;
+	case 4:
+	case 5:
+		if ( !CheckRegistryProfile() ) {
+			SetRegistryStringIfAbsent(TEXT("InfoWindowFont"),
+			TEXT("64,0,0,0,600,0,0,0,0,0,0,3,2,TahomaBD"));
+
+			SetRegistryStringIfAbsent(TEXT("TitleWindowFont"),
+			TEXT("26,0,0,0,600,0,0,0,0,0,0,3,2,Tahoma"));
+		}
+
+		GlobalEllipse=1.32;	// VENTA2-addon
+		break;
+	case 7:
+		if ( !CheckRegistryProfile() ) {
+			SetRegistryStringIfAbsent(TEXT("InfoWindowFont"),
+			TEXT("66,0,0,0,600,0,0,0,0,0,0,3,2,TahomaBD"));
+
+			SetRegistryStringIfAbsent(TEXT("TitleWindowFont"),
+			TEXT("23,0,0,0,400,0,0,0,0,0,0,3,2,Tahoma"));
+		}
+		break;
+
+	// This is a failsafe with an impossible setting so that you know
+	// something is going very wrong.
+	default:
+		if ( !CheckRegistryProfile() ) {
+			SetRegistryStringIfAbsent(TEXT("InfoWindowFont"),
+			TEXT("30,0,0,0,600,0,0,0,0,0,0,3,2,TahomaBD"));
+
+			SetRegistryStringIfAbsent(TEXT("TitleWindowFont"),
+			TEXT("10,0,0,0,200,0,0,0,0,0,0,3,2,Tahoma"));
+		}
+		break;
+   }
+
+
+  if ( !CheckRegistryProfile() ) {
+	  SetRegistryStringIfAbsent(TEXT("TitleSmallWindowFont"),
+	   TEXT("16,0,0,0,100,1,0,0,0,0,0,3,2,Tahoma"));
+	  SetRegistryStringIfAbsent(TEXT("CDIWindowFont"),
+	   TEXT("36,0,0,0,400,0,0,0,0,0,0,3,2,Tahoma"));
+	  SetRegistryStringIfAbsent(TEXT("MapLabelFont"),
+	   TEXT("28,0,0,0,100,1,0,0,0,0,0,3,2,Tahoma"));
+	  SetRegistryStringIfAbsent(TEXT("StatisticsFont"),
+	   TEXT("48,0,0,0,400,0,0,0,0,0,0,3,2,Tahoma"));
+	  SetRegistryStringIfAbsent(TEXT("MapWindowFont"),
+	   TEXT("36,0,0,0,400,0,0,0,0,0,0,3,2,Tahoma"));
+	  SetRegistryStringIfAbsent(TEXT("MapWindowBoldFont"),
+	   TEXT("32,0,0,0,600,0,0,0,0,0,0,3,2,TahomaBD"));
+  }
+
 }
 
 // VDO Dayton PN 6000  480x272
 void DefaultRegistrySettingsPN6000(void)
 {
-  SetRegistryStringIfAbsent(TEXT("InfoWindowFont"),
-   TEXT("28,0,0,0,800,0,0,0,0,0,0,3,2,TahomaBD"));
-  SetRegistryStringIfAbsent(TEXT("TitleWindowFont"),
-   TEXT("16,0,0,0,500,0,0,0,0,0,0,3,2,Tahoma"));
- SetRegistryStringIfAbsent(TEXT("TitleSmallWindowFont"),
-   TEXT("16,0,0,0,100,1,0,0,0,0,0,3,2,Tahoma"));
-  SetRegistryStringIfAbsent(TEXT("CDIWindowFont"),
-   TEXT("28,0,0,0,400,0,0,0,0,0,0,3,2,TahomaBD"));
-  SetRegistryStringIfAbsent(TEXT("MapLabelFont"),
-   TEXT("14,0,0,0,100,1,0,0,0,0,0,3,2,Tahoma"));
-  SetRegistryStringIfAbsent(TEXT("StatisticsFont"),
-   TEXT("20,0,0,0,400,0,0,0,0,0,0,3,2,Tahoma"));
-  SetRegistryStringIfAbsent(TEXT("MapWindowFont"),
-   TEXT("18,0,0,0,400,0,0,0,0,0,0,3,2,Tahoma"));
-  SetRegistryStringIfAbsent(TEXT("MapWindowBoldFont"),
-   TEXT("16,0,0,0,500,0,0,0,0,0,0,3,2,TahomaBD"));
+  if ( !CheckRegistryProfile() ) {
+	  SetRegistryStringIfAbsent(TEXT("InfoWindowFont"),
+	   TEXT("28,0,0,0,800,0,0,0,0,0,0,3,2,TahomaBD"));
+	  SetRegistryStringIfAbsent(TEXT("TitleWindowFont"),
+	   TEXT("16,0,0,0,500,0,0,0,0,0,0,3,2,Tahoma"));
+	 SetRegistryStringIfAbsent(TEXT("TitleSmallWindowFont"),
+	   TEXT("16,0,0,0,100,1,0,0,0,0,0,3,2,Tahoma"));
+	  SetRegistryStringIfAbsent(TEXT("CDIWindowFont"),
+	   TEXT("28,0,0,0,400,0,0,0,0,0,0,3,2,TahomaBD"));
+	  SetRegistryStringIfAbsent(TEXT("MapLabelFont"),
+ 	   TEXT("14,0,0,0,100,1,0,0,0,0,0,3,2,Tahoma"));
+	  SetRegistryStringIfAbsent(TEXT("StatisticsFont"),
+	   TEXT("20,0,0,0,400,0,0,0,0,0,0,3,2,Tahoma"));
+	  SetRegistryStringIfAbsent(TEXT("MapWindowFont"),
+	   TEXT("18,0,0,0,400,0,0,0,0,0,0,3,2,Tahoma"));
+	  SetRegistryStringIfAbsent(TEXT("MapWindowBoldFont"),
+  	   TEXT("16,0,0,0,500,0,0,0,0,0,0,3,2,TahomaBD"));
+  }
 
-#if 0
-  SetRegistryStringIfAbsent(TEXT("ScaleList"),
-   TEXT("0.5,1,2,5,10,20,50,100,150,200,500,1000"));
-#endif
+// VENTA2-ADDON ellipse for VDO
+  if (Appearance.InfoBoxGeom == 5) GlobalEllipse=1.32;
+	else GlobalEllipse=1.1;
+
 }
 
 // MIO C 310 480x272 like the Dayton
 void DefaultRegistrySettingsMIO(void)
 {
-  SetRegistryStringIfAbsent(TEXT("InfoWindowFont"),
-   TEXT("28,0,0,0,800,0,0,0,0,0,0,3,2,TahomaBD"));
-  SetRegistryStringIfAbsent(TEXT("TitleWindowFont"),
-   TEXT("16,0,0,0,500,0,0,0,0,0,0,3,2,Tahoma"));
- SetRegistryStringIfAbsent(TEXT("TitleSmallWindowFont"),
-   TEXT("16,0,0,0,100,1,0,0,0,0,0,3,2,Tahoma"));
-  SetRegistryStringIfAbsent(TEXT("CDIWindowFont"),
-   TEXT("28,0,0,0,400,0,0,0,0,0,0,3,2,TahomaBD"));
-  SetRegistryStringIfAbsent(TEXT("MapLabelFont"),
-   TEXT("14,0,0,0,100,1,0,0,0,0,0,3,2,Tahoma"));
-  SetRegistryStringIfAbsent(TEXT("StatisticsFont"),
-   TEXT("20,0,0,0,400,0,0,0,0,0,0,3,2,Tahoma"));
-  SetRegistryStringIfAbsent(TEXT("MapWindowFont"),
-   TEXT("18,0,0,0,400,0,0,0,0,0,0,3,2,Tahoma"));
-  SetRegistryStringIfAbsent(TEXT("MapWindowBoldFont"),
-   TEXT("16,0,0,0,500,0,0,0,0,0,0,3,2,TahomaBD"));
-
-#if 0
-  SetRegistryStringIfAbsent(TEXT("ScaleList"),
-   TEXT("0.5,1,2,5,10,20,50,100,150,200,500,1000"));
-#endif
+  if ( !CheckRegistryProfile() ) {
+	  SetRegistryStringIfAbsent(TEXT("InfoWindowFont"),
+	   TEXT("28,0,0,0,800,0,0,0,0,0,0,3,2,TahomaBD"));
+	  SetRegistryStringIfAbsent(TEXT("TitleWindowFont"),
+	   TEXT("16,0,0,0,500,0,0,0,0,0,0,3,2,Tahoma"));
+	 SetRegistryStringIfAbsent(TEXT("TitleSmallWindowFont"),
+	   TEXT("16,0,0,0,100,1,0,0,0,0,0,3,2,Tahoma"));
+	  SetRegistryStringIfAbsent(TEXT("CDIWindowFont"),
+	   TEXT("28,0,0,0,400,0,0,0,0,0,0,3,2,TahomaBD"));
+	  SetRegistryStringIfAbsent(TEXT("MapLabelFont"),
+	   TEXT("14,0,0,0,100,1,0,0,0,0,0,3,2,Tahoma"));
+	  SetRegistryStringIfAbsent(TEXT("StatisticsFont"),
+	   TEXT("20,0,0,0,400,0,0,0,0,0,0,3,2,Tahoma"));
+	  SetRegistryStringIfAbsent(TEXT("MapWindowFont"),
+	   TEXT("18,0,0,0,400,0,0,0,0,0,0,3,2,Tahoma"));
+	  SetRegistryStringIfAbsent(TEXT("MapWindowBoldFont"),
+	   TEXT("16,0,0,0,500,0,0,0,0,0,0,3,2,TahomaBD"));
+  }
 }
 
 // This is a default fontset for a generic PNA
 // we keep it small in order to be able to test
 void DefaultRegistrySettingsPNA(void)
 {
- SetRegistryStringIfAbsent(TEXT("InfoWindowFont"),
-   TEXT("28,0,0,0,800,0,0,0,0,0,0,3,2,TahomaBD"));
-  SetRegistryStringIfAbsent(TEXT("TitleWindowFont"),
-   TEXT("16,0,0,0,500,0,0,0,0,0,0,3,2,Tahoma"));
- SetRegistryStringIfAbsent(TEXT("TitleSmallWindowFont"),
-   TEXT("16,0,0,0,100,1,0,0,0,0,0,3,2,Tahoma"));
-  SetRegistryStringIfAbsent(TEXT("CDIWindowFont"),
-   TEXT("28,0,0,0,400,0,0,0,0,0,0,3,2,TahomaBD"));
-  SetRegistryStringIfAbsent(TEXT("MapLabelFont"),
-   TEXT("14,0,0,0,100,1,0,0,0,0,0,3,2,Tahoma"));
-  SetRegistryStringIfAbsent(TEXT("StatisticsFont"),
-   TEXT("20,0,0,0,400,0,0,0,0,0,0,3,2,Tahoma"));
-  SetRegistryStringIfAbsent(TEXT("MapWindowFont"),
-   TEXT("18,0,0,0,400,0,0,0,0,0,0,3,2,Tahoma"));
-  SetRegistryStringIfAbsent(TEXT("MapWindowBoldFont"),
-   TEXT("16,0,0,0,500,0,0,0,0,0,0,3,2,TahomaBD"));
-
-#if 0
-  SetRegistryStringIfAbsent(TEXT("ScaleList"),
-   TEXT("0.5,1,2,5,10,20,50,100,150,200,500,1000"));
-#endif
+  if ( InfoBoxLayout::landscape ) {
+  	if ( !CheckRegistryProfile() ) {
+		 SetRegistryStringIfAbsent(TEXT("InfoWindowFont"),
+		   TEXT("28,0,0,0,800,0,0,0,0,0,0,3,2,TahomaBD"));
+		  SetRegistryStringIfAbsent(TEXT("TitleWindowFont"),
+		   TEXT("16,0,0,0,500,0,0,0,0,0,0,3,2,Tahoma"));
+		 SetRegistryStringIfAbsent(TEXT("TitleSmallWindowFont"),
+		   TEXT("16,0,0,0,100,1,0,0,0,0,0,3,2,Tahoma"));
+		  SetRegistryStringIfAbsent(TEXT("CDIWindowFont"),
+		   TEXT("28,0,0,0,400,0,0,0,0,0,0,3,2,TahomaBD"));
+		  SetRegistryStringIfAbsent(TEXT("MapLabelFont"),
+		   TEXT("14,0,0,0,100,1,0,0,0,0,0,3,2,Tahoma"));
+		  SetRegistryStringIfAbsent(TEXT("StatisticsFont"),
+		   TEXT("20,0,0,0,400,0,0,0,0,0,0,3,2,Tahoma"));
+		  SetRegistryStringIfAbsent(TEXT("MapWindowFont"),
+		   TEXT("18,0,0,0,400,0,0,0,0,0,0,3,2,Tahoma"));
+		  SetRegistryStringIfAbsent(TEXT("MapWindowBoldFont"),
+		   TEXT("16,0,0,0,500,0,0,0,0,0,0,3,2,TahomaBD"));
+  	}
+  } else  // portrait mode
+  {
+  	if ( !CheckRegistryProfile() ) {
+		 SetRegistryStringIfAbsent(TEXT("InfoWindowFont"),
+		   TEXT("28,0,0,0,800,0,0,0,0,0,0,3,2,TahomaBD"));
+		  SetRegistryStringIfAbsent(TEXT("TitleWindowFont"),
+		   TEXT("16,0,0,0,500,0,0,0,0,0,0,3,2,Tahoma"));
+		 SetRegistryStringIfAbsent(TEXT("TitleSmallWindowFont"),
+		   TEXT("16,0,0,0,100,1,0,0,0,0,0,3,2,Tahoma"));
+		  SetRegistryStringIfAbsent(TEXT("CDIWindowFont"),
+		   TEXT("28,0,0,0,400,0,0,0,0,0,0,3,2,TahomaBD"));
+		  SetRegistryStringIfAbsent(TEXT("MapLabelFont"),
+		   TEXT("14,0,0,0,100,1,0,0,0,0,0,3,2,Tahoma"));
+		  SetRegistryStringIfAbsent(TEXT("StatisticsFont"),
+		   TEXT("20,0,0,0,400,0,0,0,0,0,0,3,2,Tahoma"));
+		  SetRegistryStringIfAbsent(TEXT("MapWindowFont"),
+		   TEXT("18,0,0,0,400,0,0,0,0,0,0,3,2,Tahoma"));
+		  SetRegistryStringIfAbsent(TEXT("MapWindowBoldFont"),
+		   TEXT("16,0,0,0,500,0,0,0,0,0,0,3,2,TahomaBD"));
+  	}
+  }
 }
 
 #endif // PNA
 
-// VENTA-TEST HP4700 font settings
+// VENTA-TEST HP4700 font settings - NOT USED
 void DefaultRegistrySettingsHP4700(void)
 {
   SetRegistryStringIfAbsent(TEXT("InfoWindowFont"),
@@ -595,30 +672,6 @@ void ReadRegistrySettings(void)
 #if defined(GNAV) || defined(PCGNAV)
   DefaultRegistrySettingsAltair();
 #endif
-
-// VENTA-ADDON PNA custom font settings
-#ifdef PNA
-
-  if (GlobalModelType == MODELTYPE_PNA_HP31X ) {
-			StartupStore(TEXT("Loading HP31X settings\n"));
-			DefaultRegistrySettingsHP31X();
-	}
-	else
-	if (GlobalModelType == MODELTYPE_PNA_PN6000 ) {
-			StartupStore(TEXT("Loading PN6000 settings\n"));
-			DefaultRegistrySettingsPN6000();
-	}
-	else
-	if (GlobalModelType == MODELTYPE_PNA_MIO ) {
-			StartupStore(TEXT("Loading MIO settings\n"));
-			DefaultRegistrySettingsMIO();
-	}
-	else {
-		StartupStore(TEXT("Loading default PNA settings\n"));
-		DefaultRegistrySettingsPNA(); // fallback to default
-	}
-#endif
-
 
   for (i=0; i<AIRSPACECLASSCOUNT; i++) {
     Temp=0;
@@ -978,20 +1031,41 @@ void ReadRegistrySettings(void)
   GetFromRegistry(szRegistryAppInfoBoxBorder, &Temp);
   Appearance.InfoBoxBorder = (InfoBoxBorderAppearance_t)Temp;
 
-// VENTA-ADDON Geometry change
-#ifdef PNA
+// VENTA2-ADDON Geometry change and PNA custom font settings
+// depending on infobox geometry and model type
+// I had to move here the font setting because I needed first to
+// know the screen geometry, in the registry!
+#if defined(PNA) || defined(FIVV)
   Temp = Appearance.InfoBoxGeom;
   GetFromRegistry(szRegistryAppInfoBoxGeom, &Temp);
   Appearance.InfoBoxGeom = (InfoBoxGeomAppearance_t)Temp;
-#endif
-//
 
-#ifdef PNA
+  if (GlobalModelType == MODELTYPE_PNA_HP31X ) {
+			StartupStore(TEXT("Loading HP31X settings\n"));
+			DefaultRegistrySettingsHP31X();
+	}
+	else
+	if (GlobalModelType == MODELTYPE_PNA_PN6000 ) {
+			StartupStore(TEXT("Loading PN6000 settings\n"));
+			DefaultRegistrySettingsPN6000();
+	}
+	else
+	if (GlobalModelType == MODELTYPE_PNA_MIO ) {
+			StartupStore(TEXT("Loading MIO settings\n"));
+			DefaultRegistrySettingsMIO();
+	}
+	else
+	if (GlobalModelType == MODELTYPE_PNA_PNA ) {
+		StartupStore(TEXT("Loading default PNA settings\n"));
+		DefaultRegistrySettingsPNA(); // fallback to default
+	}
+	else
+		StartupStore(TEXT("No special regsets for this PDA\n")); // VENTA2
+
 // VENTA-ADDON Model change
   Temp = Appearance.InfoBoxModel;
   GetFromRegistry(szRegistryAppInfoBoxModel, &Temp);
   Appearance.InfoBoxModel = (InfoBoxModelAppearance_t)Temp;
-//
 #endif
 
   Temp = Appearance.StateMessageAlligne;
@@ -3853,38 +3927,9 @@ CSIDL_PROGRAM_FILES 0x0026   The program files folder.
    * Force LOCALPATH to be the same of the executing program
    */
   _stprintf(buffer,TEXT("%sXCSoarData"),gmfpathname() );
-
-  /*
-    GlobalModelType=MODELTYPE_PNA;	// default for ifdef PNA by now!
-
-    *
-    * GlobalModelName is a global variable, shown during startup and used for printouts only.
-    * In order to know what model you are using, GlobalModelType is used.
-    *
-    * This "smartname" facility is used to override the registry/config Model setup to force
-    * a model type to be used, just in case. The model types may not follow strictly those in
-    * config menu, nor be updated. Does'nt hurt though.
-    *
-
-    if ( GetGlobalModelName() )
-    {
-    ConvToUpper(GlobalModelName);
-
-    if ( !_tcscmp(GlobalModelName,_T("PNA"))) {
- 					GlobalModelType=MODELTYPE_PNA_PNA;
- 					_tcscpy(GlobalModelName,_T("GENERIC") );
- 		}
- 		else
- 		if ( !_tcscmp(GlobalModelName,_T("HP31X")))		GlobalModelType=MODELTYPE_PNA_HP31X;
- 		else
- 		if ( !_tcscmp(GlobalModelName,_T("PN6000")))	GlobalModelType=MODELTYPE_PNA_PN6000;
- 		else
- 			_tcscpy(GlobalModelName,_T("UNKNOWN") );
- 	} else
- 		_tcscpy(GlobalModelName, _T("UNKNOWN") );
- */
-  // END VENTA ADDON for PNA
-  // JMW was  _tcscpy(buffer,TEXT("\\SDMMC\\XCSoarData"));
+// VENTA2 FIX PC BUG
+#elif defined (FIVV) && (!defined(WINDOWSPC) || (WINDOWSPC <=0) )
+  _stprintf(buffer,TEXT("%sXCSoarData"),gmfpathname() );
 #else
   // everything else that's not special
   SHGetSpecialFolderPath(hWndMainWindow, buffer, loc, false);
@@ -5198,7 +5243,7 @@ bool SetModelName(DWORD Temp) {
 #endif
 
 
-#ifdef PNA  // VENTA-ADDON gmfpathname & C.
+#if defined(PNA) || defined(FIVV)  // VENTA-ADDON gmfpathname & C.
 
 /*
 	Paolo Ventafridda 1 feb 08
@@ -5311,7 +5356,7 @@ int GetGlobalModelName ()
     } // assuming xcsoar_pna.exe we are now at _pna..
 
   if ( np == NULL ) {
-    return NULL;
+    return 0;	// VENTA2-bugfix , null deleted
   }
 
   for ( p=np, lp=NULL; *p != '\0'; p++)
@@ -5322,7 +5367,7 @@ int GetGlobalModelName ()
       }
     } // we found the . in pna.exe
 
-  if (lp == NULL) return NULL;
+  if (lp == NULL) return 0; // VENTA2-bugfix null return
   *lp='\0'; // we cut .exe
 
   _tcscpy(GlobalModelName, np);
@@ -5347,3 +5392,120 @@ void ConvToUpper( TCHAR *str )
 }
 
 #endif   // PNA
+
+#ifdef FIVV
+BOOL DelRegistryKey(const TCHAR *szDelKey)
+{
+   HKEY tKey;
+   RegOpenKeyEx(HKEY_CURRENT_USER, _T("Software\\MPSR\\XCSoar"),0,0,&tKey);
+   if ( RegDeleteValue(tKey, szDelKey) != ERROR_SUCCESS ) {
+	return false;
+   }
+   RegCloseKey(tKey);
+   return true;
+}
+#endif
+
+#ifdef PNA
+void CleanRegistry()
+{
+   HKEY tKey;
+   RegOpenKeyEx(HKEY_CURRENT_USER, szRegistryKey ,0,0,&tKey);
+
+	RegDeleteValue(tKey,_T("CDIWindowFont"));
+	RegDeleteValue(tKey,_T("InfoWindowFont"));
+	RegDeleteValue(tKey,_T("MapLabelFont"));
+	RegDeleteValue(tKey,_T("MapWindowBoldFont"));
+	RegDeleteValue(tKey,_T("MapWindowFont"));
+	RegDeleteValue(tKey,_T("StatisticsFont"));
+	RegDeleteValue(tKey,_T("TitleSmallWindowFont"));
+	RegDeleteValue(tKey,_T("TitleWindowFont"));
+	RegDeleteValue(tKey,_T("BugsBallastFont"));
+	RegDeleteValue(tKey,_T("TeamCodeFont"));
+
+   RegCloseKey(tKey);
+}
+#endif
+
+#if defined(FIVV) || defined(PNA)
+// VENTA2-ADDON fonts install
+/*
+ * Get the localpath, enter XCSoarData/Config, see if there are fonts to copy,
+ * check that they have not already been copied in \Windows\Fonts,
+ * and eventually copy everything in place.
+ *
+ * Returns: 0 if OK .
+ * 1 - n other errors not really needed to handle. See below
+ *
+ * These are currently fonts used by PDA:
+ *
+	DejaVuSansCondensed2.ttf
+	DejaVuSansCondensed-Bold2.ttf
+	DejaVuSansCondensed-BoldOblique2.ttf
+	DejaVuSansCondensed-Oblique2.ttf
+ *
+ *
+ */
+short InstallFonts() {
+
+TCHAR srcdir[MAX_PATH];
+TCHAR dstdir[MAX_PATH];
+TCHAR srcfile[MAX_PATH];
+TCHAR dstfile[MAX_PATH];
+
+_stprintf(srcdir,TEXT("%sXCSoarData\\Fonts"),gmfpathname() );
+_stprintf(dstdir,TEXT("\\Windows\\Fonts"),gmfpathname() );
+
+
+if (  GetFileAttributes(srcdir) != FILE_ATTRIBUTE_DIRECTORY) return 1;
+if (  GetFileAttributes(dstdir) != FILE_ATTRIBUTE_DIRECTORY) return 2;
+
+_stprintf(srcfile,TEXT("%s\\DejaVuSansCondensed2.ttf"),srcdir);
+_stprintf(dstfile,TEXT("%s\\DejaVuSansCondensed2.ttf"),dstdir);
+//if (  GetFileAttributes(srcfile) != FILE_ATTRIBUTE_NORMAL) return 3;
+if (  GetFileAttributes(dstfile) != 0xffffffff ) return 4;
+if ( !CopyFile(srcfile, dstfile, TRUE)) return 5;
+
+// From now on we attempt to copy without overwriting
+_stprintf(srcfile,TEXT("%s\\DejaVuSansCondensed-Bold2.ttf"),srcdir);
+_stprintf(dstfile,TEXT("%s\\DejaVuSansCondensed-Bold2.ttf"),dstdir);
+CopyFile(srcfile,dstfile,TRUE);
+
+_stprintf(srcfile,TEXT("%s\\DejaVuSansCondensed-BoldOblique2.ttf"),srcdir);
+_stprintf(dstfile,TEXT("%s\\DejaVuSansCondensed-BoldOblique2.ttf"),dstdir);
+CopyFile(srcfile,dstfile,TRUE);
+
+_stprintf(srcfile,TEXT("%s\\DejaVuSansCondensed-Oblique2.ttf"),srcdir);
+_stprintf(dstfile,TEXT("%s\\DejaVuSansCondensed-Oblique2.ttf"),dstdir);
+CopyFile(srcfile,dstfile,TRUE);
+
+return 0;
+
+}
+
+/*
+ * Check that XCSoarData exist where it should be
+ * Return FALSE if error, TRUE if Ok
+ */
+BOOL CheckDataDir() {
+	TCHAR srcdir[MAX_PATH];
+
+	_stprintf(srcdir,TEXT("%sXCSoarData"),gmfpathname() );
+	if (  GetFileAttributes(srcdir) != FILE_ATTRIBUTE_DIRECTORY) return FALSE;
+	return TRUE;
+}
+
+/*
+ * Check for xcsoar-registry.prf  existance
+ * Should really check if geometry has changed.. in 5.2.3!
+ * Currently we disable it for HP31X which is the only PNA with different settings
+ * for different geometries
+ */
+BOOL CheckRegistryProfile() {
+	TCHAR srcpath[MAX_PATH];
+	if ( GlobalModelType == MODELTYPE_PNA_HP31X ) return FALSE;
+	_stprintf(srcpath,TEXT("%sXCSoarData\\xcsoar-registry.prf"),gmfpathname() );
+	if (  GetFileAttributes(srcpath) == 0xffffffff) return FALSE;
+	return TRUE;
+}
+#endif
