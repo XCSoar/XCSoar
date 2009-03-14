@@ -29,6 +29,7 @@ Copyright_License {
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
+  $Id$
 }
 */
 
@@ -45,7 +46,7 @@ Copyright_License {
 #include "compatibility.h"
 
 #ifndef ALTAIRSYNC
-#include "externs.h" // VENTA-ADDON for using DoStatusMessage
+#include "externs.h"
 
 extern int DisplayTimeOut;
 #ifndef GNAV
@@ -167,6 +168,7 @@ void DataFieldFileReader::ScanDirectoryTop(const TCHAR* filter) {
 #ifndef GNAV
 #if (WINDOWSPC<1) && !defined(__MINGW32__)
 #ifndef OLDPPC
+// non altair, (non windowspc e non mingw32) e non ppc2002
   static bool first = true;
 
   BOOL bContinue = TRUE;     // If TRUE, continue searching
@@ -202,8 +204,18 @@ void DataFieldFileReader::ScanDirectoryTop(const TCHAR* filter) {
 
   first = false;
 #endif
-#else
+#else // mingw32 and PC
 #if (WINDOWSPC<1)
+// VENTA2-FIVV SDCARD FIX
+#ifdef FIVV
+  // Scan only XCSoarData in the root directory where the xcsoar.exe is placed!
+  // In large SD card this was leading great confusion since .dat files are ALSO
+  // used by other software, namely TOMTOM!
+  TCHAR tBuffer[MAX_PATH];
+  _stprintf(tBuffer,TEXT("%sXCSoarData"),gmfpathname() );
+  ScanDirectories(tBuffer,filter);
+#else
+ // I really doubt this is still useful.. it would be better to use gmfpathname
   ScanDirectories(TEXT("\\Carte de stockage"),filter);
   ScanDirectories(TEXT("\\Storage Card"),filter);
   ScanDirectories(TEXT("\\SD-MMC Card"),filter);
@@ -212,6 +224,7 @@ void DataFieldFileReader::ScanDirectoryTop(const TCHAR* filter) {
   ScanDirectories(TEXT("\\SD Card"),filter);
   ScanDirectories(TEXT("\\CF Card"),filter);
   ScanDirectories(TEXT("\\Speicherkarte"),filter);
+#endif // FIVV
 #endif // WINDOWSPC<1
 #endif // MINGW
 #endif // NOT OLDPPC
@@ -1713,9 +1726,6 @@ int WindowControl::WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam){
 
     case WM_KEYDOWN:
       InterfaceTimeoutReset();
-#ifdef VENTA_DEBUG_EVENT
-	   DoStatusMessage(TEXT("DBG DOWNWM 11")); // VENTA-  CI SIAMO LAVORARE QUI!
-#endif
       // JMW: HELP
       KeyTimer(true, wParam & 0xffff);
 
@@ -1893,21 +1903,6 @@ int WndForm::OnCommand(WPARAM wParam, LPARAM lParam){
      mModalResult = mrCancle;
      return(0);
    }
-   /*
- // VENTA- TEST
-#ifdef PNA_HP31X
-
-//  if ((wParam & 0xffff) == VK_RETURN){
-  if ((wParam ) == VK_RETURN){
-TCHAR ventabuffer[80];
-	wsprintf(ventabuffer,TEXT("OnComm VK_RET"));
-	DoStatusMessage(ventabuffer);
-     mModalResult = mrOK;
-     return(0);
-   }
-
-#endif
-  */
    return(1);
 
 };
@@ -1977,30 +1972,14 @@ int WndForm::ShowModal(void){
     */
 
     if (msg.message == WM_KEYDOWN) {
-#ifdef VENTA_DEBUG_EVENT
- DoStatusMessage(TEXT("DBG DOWNWM 12")); // VENTA
-#endif
       InterfaceTimeoutReset();
     }
 
     if ((msg.message == WM_KEYDOWN) && ((msg.wParam & 0xffff) == VK_ESCAPE))
       mModalResult = mrCancle;
 
-	/* VENTA-TEST FORCE mrCancle  everywhere !
-#ifdef VENTA_DEBUG_EVENT
-	if ((msg.message == WM_KEYDOWN) && ((msg.wParam & 0xffff) == VK_RETURN)) {
-	DoStatusMessage(TEXT("DBG DOWNWM12 ffVKRET")); // VEN
-      mModalResult = mrCancle;
-	}
-	  if ((msg.message == WM_KEYDOWN) && (msg.wParam == VK_RETURN)) {
-	DoStatusMessage(TEXT("DBG DOWNWM12 VKRET")); // VEN
-      mModalResult = mrCancle;
-	  }
-#endif
-*/
     if ((msg.message == WM_KEYDOWN
         || msg.message == WM_KEYUP
-        || msg.message == WM_KEYDOWN  // VENTA-TEST CHECK bug repetition VENTA?
 	|| msg.message == WM_LBUTTONDOWN
         || msg.message == WM_LBUTTONUP
         || msg.message == WM_LBUTTONDBLCLK
@@ -2047,9 +2026,6 @@ int WndForm::ShowModal(void){
           }
         }
 */
-#ifdef VENTA_DEBUG_EVENT
- DoStatusMessage(TEXT("DBG keyt 1")); // VENTA
-#endif
         if (mOnKeyDownNotify != NULL)
           if (!(mOnKeyDownNotify)(this, msg.wParam, msg.lParam))
             continue;
@@ -2277,7 +2253,7 @@ bool WndForm::SetFocused(bool Value, HWND FromTo){
 }
 
 
-int WndForm::OnUnhandledMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam){ // VENTA- lavorarci qui per i tasti
+int WndForm::OnUnhandledMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam){
 
   MSG msg;
   msg.hwnd = hwnd;
@@ -2301,9 +2277,6 @@ int WndForm::OnUnhandledMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
   }
   if (msg.message == WM_KEYDOWN){
     InterfaceTimeoutReset();
-#ifdef VENTA_DEBUG_EVENT
-	 DoStatusMessage(TEXT("DBG wc 2")); // VENTA
-#endif
     if (mOnKeyDownNotify != NULL)
       if (!(mOnKeyDownNotify)(this, msg.wParam, msg.lParam))
         return(0);
@@ -2332,9 +2305,6 @@ int WndForm::OnUnhandledMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 
   if (uMsg == WM_KEYDOWN){
     InterfaceTimeoutReset();
-#ifdef VENTA_DEBUG_EVENT
-   DoStatusMessage(TEXT("DBG DOWNWM 2")); // VENTA selezione successivo tasto down dentro waypoint select
-#endif
     if (ActiveControl != NULL){
       switch(wParam & 0xffff){
         case VK_UP:
@@ -2342,9 +2312,6 @@ int WndForm::OnUnhandledMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
             ActiveControl->GetOwner()->FocusPrev(ActiveControl);
         return(0);
         case VK_DOWN:
-#ifdef VENTA_DEBUG_EVENT
-			DoStatusMessage(TEXT("DBG VK_DOWN 3")); // VENTA
-#endif
           if (ActiveControl->GetOwner() != NULL)
             ActiveControl->GetOwner()->FocusNext(ActiveControl);
         return(0);
@@ -2363,9 +2330,6 @@ int WndForm::OnUnhandledMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     }
 
     */
-#ifdef VENTA_DEBUG_EVENT
-DoStatusMessage(TEXT("DBG WMLBUTTONDOWN1")); // VENTA-  attivo con CLOSE da dentro menu, selezione con pennino waypoint
-#endif
   }
 
   return(1);
@@ -2808,9 +2772,6 @@ int WndProperty::WndProcEditControl(HWND hwnd, UINT uMsg,
   switch (uMsg){
 
     case WM_KEYDOWN:
-#ifdef VENTA_DEBUG_EVENT
-		DoStatusMessage(TEXT("DBG WPEC 1")); // VENTA CONTROLLARE DI NON AVER FATTO CASINO
-#endif
       // tmep hack, do not process nav keys
       if (KeyTimer(true, wParam & 0xffff)) {
 	// activate tool tips if hit return for long time
@@ -2820,9 +2781,6 @@ int WndProperty::WndProcEditControl(HWND hwnd, UINT uMsg,
       }
 
       if (wParam == VK_UP || wParam == VK_DOWN){
-#ifdef VENTA_DEBUG_EVENT
-		  DoStatusMessage(TEXT("DBG VK_DOWN 2")); // VENTA
-#endif
         PostMessage(GetParent(), uMsg, wParam, lParam);
 	// pass the message to the parent window;
         return(0);
@@ -3583,9 +3541,6 @@ int WndListFrame::OnItemKeyDown(WindowControl *Sender, WPARAM wParam, LPARAM lPa
 
 
     mListInfo.ItemIndex++;
-#ifdef VENTA_DEBUG_EVENT
-	DoStatusMessage(TEXT("DBG VK_DOWN 1")); // VENTA tasto down selezione waypoints
-#endif
     return RecalculateIndices(false);
   case VK_UP:
     mListInfo.ItemIndex--;
