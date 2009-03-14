@@ -29,6 +29,7 @@ Copyright_License {
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
+  $Id$
 }
 */
 
@@ -78,6 +79,14 @@ HPEN GaugeVario::bluePen;
 HPEN GaugeVario::redThickPen;
 HPEN GaugeVario::blueThickPen;
 HPEN GaugeVario::blankThickPen;
+
+HBRUSH GaugeVario::yellowBrush;
+HBRUSH GaugeVario::greenBrush;
+HBRUSH GaugeVario::magentaBrush;
+HPEN GaugeVario::yellowPen;
+HPEN GaugeVario::greenPen;
+HPEN GaugeVario::magentaPen;
+
 
 DrawInfo_t GaugeVario::diValueTop = {false};
 DrawInfo_t GaugeVario::diValueMiddle = {false};
@@ -150,20 +159,38 @@ void GaugeVario::Create() {
 
   COLORREF theredColor;
   COLORREF theblueColor;
+  COLORREF theyellowColor; // VENTA2
+  COLORREF thegreenColor; // VENTA2
+  COLORREF themagentaColor; // VENTA2
+
   if (Appearance.InverseInfoBox) {
     theredColor = InfoBox::inv_redColor;
     theblueColor = InfoBox::inv_blueColor;
+    theyellowColor = InfoBox::inv_yellowColor;
+    thegreenColor = InfoBox::inv_greenColor;
+    themagentaColor = InfoBox::inv_magentaColor;
   } else {
     theredColor = InfoBox::redColor;
     theblueColor = InfoBox::blueColor;
+    theyellowColor = InfoBox::yellowColor;
+    thegreenColor = InfoBox::greenColor;
+    themagentaColor = InfoBox::magentaColor;
   }
   redBrush = CreateSolidBrush(theredColor);
   blueBrush = CreateSolidBrush(theblueColor);
-
+  yellowBrush = CreateSolidBrush(theyellowColor);
+  greenBrush = CreateSolidBrush(thegreenColor);
+  magentaBrush = CreateSolidBrush(themagentaColor);
   redPen = CreatePen(PS_SOLID, 1,
                      theredColor);
   bluePen = CreatePen(PS_SOLID, 1,
                       theblueColor);
+  yellowPen = CreatePen(PS_SOLID, 1,
+                      theyellowColor);
+  greenPen = CreatePen(PS_SOLID, 1,
+                      thegreenColor);
+  magentaPen = CreatePen(PS_SOLID, 1,
+                      themagentaColor);
   redThickPen = CreatePen(PS_SOLID, IBLSCALE(5),
                      theredColor);
   blueThickPen = CreatePen(PS_SOLID, IBLSCALE(5),
@@ -438,6 +465,26 @@ void GaugeVario::MakePolygon(const int i) {
     InitDone = true;
   }
 
+// VENTA2 ELLIPSE for geometry 5= 1.32
+#ifdef PNA
+
+  dx = -xoffset+nlength0; dy = nwidth;
+  rotate(dx, dy, i);
+  bit[0].x = lround(dx+xoffset); bit[0].y = lround(dy*GlobalEllipse+yoffset+1);
+
+  dx = -xoffset+nlength0; dy = -nwidth;
+  rotate(dx, dy, i);
+  bit[2].x = lround(dx+xoffset); bit[2].y = lround(dy*GlobalEllipse+yoffset+1);
+
+  dx = -xoffset+nlength1; dy = 0;
+  rotate(dx, dy, i);
+  bit[1].x = lround(dx+xoffset); bit[1].y = lround(dy*GlobalEllipse+yoffset+1);
+
+  dx = -xoffset+nline; dy = 0;
+  rotate(dx, dy, i);
+  bline->x = lround(dx+xoffset); bline->y = lround(dy*GlobalEllipse+yoffset+1);
+
+#else
 #define ELLIPSE 1.1
 
   dx = -xoffset+nlength0; dy = nwidth;
@@ -455,6 +502,7 @@ void GaugeVario::MakePolygon(const int i) {
   dx = -xoffset+nline; dy = 0;
   rotate(dx, dy, i);
   bline->x = lround(dx+xoffset); bline->y = lround(dy*ELLIPSE+yoffset+1);
+#endif
 }
 
 
@@ -591,17 +639,60 @@ void GaugeVario::RenderVarioLine(int i, int sink, bool clear) {
   }
 }
 
-
 void GaugeVario::RenderNeedle(int i, bool average, bool clear) {
   dirty = true;
+  bool colorfull = false;
 
-  if (clear ^ Appearance.InverseInfoBox) {
-    SelectObject(hdcDrawWindow, GetStockObject(WHITE_BRUSH));
-    SelectObject(hdcDrawWindow, GetStockObject(WHITE_PEN));
+#ifdef FIVV
+  colorfull = Appearance.InfoBoxColors;
+#endif
+
+  if (clear || !colorfull) {
+    // legacy behaviour
+    if (clear ^ Appearance.InverseInfoBox) {
+      SelectObject(hdcDrawWindow, GetStockObject(WHITE_BRUSH));
+      SelectObject(hdcDrawWindow, GetStockObject(WHITE_PEN));
+    } else {
+      SelectObject(hdcDrawWindow, GetStockObject(BLACK_BRUSH));
+      SelectObject(hdcDrawWindow, GetStockObject(BLACK_PEN));
+    }
   } else {
-    SelectObject(hdcDrawWindow, GetStockObject(BLACK_BRUSH));
-    SelectObject(hdcDrawWindow, GetStockObject(BLACK_PEN));
+    // VENTA2-ADDON Colorful needles
+    // code reorganised by JMW
+    if (Appearance.InverseInfoBox) {
+      if (average) {
+	// Average Needle
+	if ( i >= 0) {
+	  SelectObject(hdcDrawWindow, greenBrush);
+	  SelectObject(hdcDrawWindow, GetStockObject(WHITE_PEN));
+	} else {
+	  SelectObject(hdcDrawWindow, redBrush);
+	  SelectObject(hdcDrawWindow, GetStockObject(WHITE_PEN));
+	}
+      } else {
+	// varioline needle: b&w as usual, could also change aspect..
+	SelectObject(hdcDrawWindow, yellowBrush );
+	SelectObject(hdcDrawWindow, GetStockObject(WHITE_PEN));
+      }
+    } else {
+      // Non inverse infoboxes
+      if (average) {
+	// Average Needle
+	if ( i >= 0) {
+	  SelectObject(hdcDrawWindow, greenBrush);
+	  SelectObject(hdcDrawWindow, GetStockObject(BLACK_PEN));
+	} else {
+	  SelectObject(hdcDrawWindow, redBrush);
+	  SelectObject(hdcDrawWindow, GetStockObject(BLACK_PEN) );
+	}
+      } else {
+	// varioline needle: b&w as usual, could also change aspect..
+	SelectObject(hdcDrawWindow, GetStockObject(BLACK_BRUSH));
+	SelectObject(hdcDrawWindow, GetStockObject(BLACK_PEN));
+      }
+    }
   }
+
   if (average) {
     Polyline(hdcDrawWindow, getPolygon(i), 3);
   } else {
