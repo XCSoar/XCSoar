@@ -29,6 +29,8 @@ Copyright_License {
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
+  $Id$
+
 }
 */
 
@@ -57,6 +59,17 @@ COLORREF InfoBox::redColor = RGB(0xff,0x00,0x00);
 COLORREF InfoBox::blueColor = RGB(0x00,0x00,0xff);
 COLORREF InfoBox::inv_redColor = RGB(0xff,0x70,0x70);
 COLORREF InfoBox::inv_blueColor = RGB(0x90,0x90,0xff);
+#ifdef FIVV
+COLORREF InfoBox::yellowColor = RGB(0xff,0xff,0x00);//VENTA2
+COLORREF InfoBox::greenColor = RGB(0x00,0xff,0x00);//VENTA2
+COLORREF InfoBox::magentaColor = RGB(0xff,0x00,0xff);//VENTA2
+COLORREF InfoBox::inv_yellowColor = RGB(0xff,0xff,0x00); //VENTA2
+COLORREF InfoBox::inv_greenColor = RGB(0x00,0xff,0x00); //VENTA2
+COLORREF InfoBox::inv_magentaColor = RGB(0xff,0x00,0xff); //VENTA2
+#endif
+
+
+
 
 static COLORREF fgColor = RGB(0x0,0x0,0x0);
 static COLORREF bkColor = RGB(0xff,0xff,0xff);
