@@ -1689,22 +1689,46 @@ static void setVariables(void) {
     wp->RefreshDisplay();
   }
 
-#ifdef PNA
+#if defined(PNA) || defined(FIVV)
 // VENTA-ADDON Geometry change config menu 11
   wp = (WndProperty*)wf->FindByName(TEXT("prpAppInfoBoxGeom"));
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(gettext(TEXT("0")));
-    dfe->addEnumText(gettext(TEXT("1")));
-    dfe->addEnumText(gettext(TEXT("2")));
-    dfe->addEnumText(gettext(TEXT("3")));
-    dfe->addEnumText(gettext(TEXT("4")));
-    dfe->addEnumText(gettext(TEXT("5")));
-    dfe->addEnumText(gettext(TEXT("6")));
-    dfe->addEnumText(gettext(TEXT("7")));
-    dfe->Set(Appearance.InfoBoxGeom);
-    wp->RefreshDisplay();
+
+    if (InfoBoxLayout::landscape) {
+
+
+	dfe->addEnumText(gettext(TEXT("vario+9box"))); // 0
+	dfe->addEnumText(gettext(TEXT("(empty) A")));  // 1
+	dfe->addEnumText(gettext(TEXT("(empty) B")));  // 2
+	dfe->addEnumText(gettext(TEXT("(empty) C")));  // 3
+	dfe->addEnumText(gettext(TEXT("8box left")));  // 4
+	dfe->addEnumText(gettext(TEXT("vario+5box"))); // 5
+	dfe->addEnumText(gettext(TEXT("(empty) D")));  // 6
+	dfe->addEnumText(gettext(TEXT("5box right"))); // 7
+	dfe->Set(Appearance.InfoBoxGeom);
+	wp->RefreshDisplay();
+
+    } else {
+// VENTA2 FIX portrait mode selection geometry
+	dfe->addEnumText(gettext(TEXT("top+bottom"))); // 0
+	dfe->addEnumText(gettext(TEXT("bottom")));     // 1
+	dfe->addEnumText(gettext(TEXT("top")));        // 2
+	dfe->addEnumText(gettext(TEXT("3 free"))); // 3
+	dfe->addEnumText(gettext(TEXT("4 free")));       // 4
+	dfe->addEnumText(gettext(TEXT("5 free")));      // 5
+	dfe->addEnumText(gettext(TEXT("6 free")));      // 6
+
+	//dfe->addEnumText(gettext(TEXT("left+right"))); // 3
+	//dfe->addEnumText(gettext(TEXT("left")));       // 4
+	//dfe->addEnumText(gettext(TEXT("right")));      // 5
+	//dfe->addEnumText(gettext(TEXT("vario")));      // 6
+	dfe->addEnumText(gettext(TEXT("7")));          // 7
+	dfe->Set(Appearance.InfoBoxGeom);
+	wp->RefreshDisplay();
+
+    }
   }
 //
 #endif
@@ -1742,7 +1766,20 @@ static void setVariables(void) {
     dfe->Set(iTmp);
     wp->RefreshDisplay();
   }
-  // JMW removed else clause here because no need to have this parameter for non PDA
+#elif defined FIVV
+  wp = (WndProperty*)wf->FindByName(TEXT("prpAppInfoBoxModel"));
+  if (wp) {
+    DataFieldEnum* dfe;
+    dfe = (DataFieldEnum*)wp->GetDataField();
+// VENTA2- PC model
+#if (WINDOWSPC>0)
+    dfe->addEnumText(gettext(TEXT("PC/normal")));
+#else
+    dfe->addEnumText(gettext(TEXT("PDA/normal")));
+#endif
+        dfe->Set(0);
+    wp->RefreshDisplay();
+  }
 #endif
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpAppCompassAppearance"));
@@ -2090,7 +2127,8 @@ void dlgConfigurationShowModal(void){
 
   wf->FilterAdvanced(UserLevel>0);
 
-#ifndef PNA
+// VENTA2- FIVV special version
+#if !defined(PNA) && !defined(FIVV)
   // JMW we don't want these for non-PDA platforms yet
   wp = (WndProperty*)wf->FindByName(TEXT("prpAppInfoBoxGeom"));
   if (wp) {
@@ -2908,7 +2946,7 @@ void dlgConfigurationShowModal(void){
     }
   }
 
-#ifdef PNA
+#if defined(PNA) || defined(FIVV)
 // VENTA-ADDON GEOM
   wp = (WndProperty*)wf->FindByName(TEXT("prpAppInfoBoxGeom"));
   if (wp) {
@@ -2925,7 +2963,7 @@ void dlgConfigurationShowModal(void){
 //
 #endif
 
-#ifdef PNA
+#if defined(PNA)
 // VENTA-ADDON MODEL CHANGE
   wp = (WndProperty*)wf->FindByName(TEXT("prpAppInfoBoxModel"));
   if (wp) {
