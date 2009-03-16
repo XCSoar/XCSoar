@@ -55,6 +55,14 @@ class FormatterWaypoint: public InfoBoxFormatter {
   virtual TCHAR *Render(int *color);
 };
 
+// VENTA3 / alternates
+class FormatterAlternate: public InfoBoxFormatter {
+ public:
+  FormatterAlternate(TCHAR *theformat):InfoBoxFormatter(theformat) {};
+
+  virtual TCHAR *Render(int *color);
+};
+
 class FormatterLowWarning: public InfoBoxFormatter {
  public:
   FormatterLowWarning(TCHAR *theformat, double the_minimum)
@@ -211,7 +219,7 @@ void SwitchToMapWindow(void);
     types over 100000	are reserved and should not be used
  */
 
-#ifdef PNA // VENTA
+#if defined(PNA) || defined(FIVV) // VENTA
 #define MODELTYPE_UNKNOWN		0
 #define MODELTYPE_GENERIC		0
 
@@ -323,7 +331,7 @@ typedef enum{
   apIg7
 }InfoBoxGeomAppearance_t;
 
-#ifdef PNA
+#if defined(PNA) || defined(FIVV)
 // VENTA-ADDON MODEL
 typedef enum{
 	apImPnaGeneric=0,
@@ -365,7 +373,7 @@ typedef struct{
   GaugeVarioNeedleStyle_t GaugeVarioNeedleStyle;
   bool InfoBoxColors;
   InfoBoxBorderAppearance_t InfoBoxBorder;
-#ifdef PNA
+#if defined(PNA) || defined(FIVV)
   InfoBoxGeomAppearance_t InfoBoxGeom; // VENTA-ADDON
   InfoBoxModelAppearance_t InfoBoxModel; // VENTA-ADDON model change
 #endif
