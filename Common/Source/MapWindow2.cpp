@@ -2523,6 +2523,7 @@ void MapWindow::DrawMapScale(HDC hDC, const RECT rc /* the Map Rect*/,
   if (Appearance.MapScale == apMsDefault){
 
     TCHAR Scale[80];
+    TCHAR TEMP[20];
     POINT Start, End;
     HPEN hpOld;
     hpOld = (HPEN)SelectObject(hDC, hpMapScale);
@@ -2567,6 +2568,10 @@ void MapWindow::DrawMapScale(HDC hDC, const RECT rc /* the Map Rect*/,
     if (ReplayLogger::IsEnabled()) {
       _tcscat(Scale,TEXT(" REPLAY"));
     }
+    if (BallastTimerActive) {
+      _stprintf(TEMP,TEXT(" BALLAST %3.0f LITERS"), WEIGHTS[2]*BALLAST);
+      _tcscat(Scale, TEMP);
+    }
     TCHAR Buffer[20];
     RASP.ItemLabel(RasterTerrain::render_weather, Buffer);
     if (_tcslen(Buffer)) {
@@ -2607,6 +2612,7 @@ void MapWindow::DrawMapScale(HDC hDC, const RECT rc /* the Map Rect*/,
     static int LastMapWidth = 0;
     double MapWidth;
     TCHAR ScaleInfo[80];
+    TCHAR TEMP[20];
 
     HFONT          oldFont;
     int            Height;
@@ -2686,6 +2692,10 @@ void MapWindow::DrawMapScale(HDC hDC, const RECT rc /* the Map Rect*/,
       }
       if (ReplayLogger::IsEnabled()) {
         _tcscat(ScaleInfo, TEXT("REPLAY "));
+      }
+      if (BallastTimerActive) {
+        _stprintf(TEMP,TEXT("BALLAST %3.0f LITERS"), WEIGHTS[2]*BALLAST);
+        _tcscat(ScaleInfo, TEMP);
       }
       TCHAR Buffer[20];
       RASP.ItemLabel(RasterTerrain::render_weather, Buffer);

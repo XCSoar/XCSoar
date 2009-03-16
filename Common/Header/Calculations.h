@@ -227,6 +227,8 @@ double FinalGlideThroughTerrain(const double bearing, NMEA_INFO *Basic,
 				bool *outofrange,
 				double *TerrainBase = NULL);
 
+void BallastDump();
+
 #define TAKEOFFSPEEDTHRESHOLD (0.5*GlidePolar::Vminsink)
 
 int FindFlarmSlot(const int flarmId);

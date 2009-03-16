@@ -46,12 +46,19 @@ Copyright_License {
 extern HWND   hWndMainWindow;
 static WndForm *wf=NULL;
 
-static bool BallastTimerActive = false;
+// static bool BallastTimerActive = false;
 
 static void OnCloseClicked(WindowControl * Sender){
 (void)Sender;
 	wf->SetModalResult(mrOK);
 }
+
+static void OnBallastDump(WindowControl *Sender){
+(void)Sender;
+        BallastTimerActive=!BallastTimerActive;
+	wf->SetModalResult(mrOK);
+}
+
 
 static double INHg=0;
 
@@ -126,10 +133,11 @@ static void SetBallast(void) {
   }
 }
 
-int BallastSecsToEmpty = 120;
+//int BallastSecsToEmpty = 120;
 
 static int OnTimerNotify(WindowControl * Sender) {
   (void)Sender;
+/*
   static double BallastTimeLast = -1;
 
   if (BallastTimerActive) {
@@ -150,6 +158,9 @@ static int OnTimerNotify(WindowControl * Sender) {
   } else {
     BallastTimeLast = GPS_INFO.Time;
   }
+*/
+
+  SetBallast();
 
   static double altlast = GPS_INFO.BaroAltitude;
   if (fabs(GPS_INFO.BaroAltitude-altlast)>1) {
@@ -177,6 +188,8 @@ static void OnBallastData(DataField *Sender, DataField::DataAccessKind_t Mode){
     } else {
       BallastTimerActive = false;
     }
+    ((WndButton *)wf->FindByName(TEXT("buttonDumpBallast")))->SetVisible(!BallastTimerActive);
+    ((WndButton *)wf->FindByName(TEXT("buttonStopDump")))->SetVisible(BallastTimerActive);
     break;
   case DataField::daGet:
     lastRead = BALLAST;
@@ -241,6 +254,7 @@ static CallBackTableEntry_t CallBackTable[]={
   DeclareCallBackEntry(OnAltitudeData),
   DeclareCallBackEntry(OnQnhData),
   DeclareCallBackEntry(OnCloseClicked),
+  DeclareCallBackEntry(OnBallastDump),
   DeclareCallBackEntry(NULL)
 };
 
@@ -256,11 +270,14 @@ void dlgBasicSettingsShowModal(void){
 
   WndProperty* wp;
 
-  BallastTimerActive = false;
+//  BallastTimerActive = false;
 
   if (wf) {
 
     wf->SetTimerNotify(OnTimerNotify);
+
+    ((WndButton *)wf->FindByName(TEXT("buttonDumpBallast")))->SetVisible(!BallastTimerActive);
+    ((WndButton *)wf->FindByName(TEXT("buttonStopDump")))->SetVisible(BallastTimerActive);
 
     wp = (WndProperty*)wf->FindByName(TEXT("prpAltitude"));
     if (wp) {

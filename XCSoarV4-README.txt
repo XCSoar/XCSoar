@@ -41,6 +41,9 @@ Changes from 5.2.2:
 PAOLO:
 - colorful vario gauge by Paolo (for FIVV only)
 - (minor) infobox config layout in configuration
+TOBIAS
+- ballast dump works outside task calculator
+- start task info
 
 Changes from 5.1.9beta9:
 - Fixed bug in tasman vario gauge display

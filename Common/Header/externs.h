@@ -178,6 +178,7 @@ extern int POLARID;
 extern double POLAR[POLARSIZE];
 extern double WEIGHTS[POLARSIZE];
 extern int BallastSecsToEmpty;
+extern bool BallastTimerActive;
 
 extern bool InfoWindowActive;
 
