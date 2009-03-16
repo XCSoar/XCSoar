@@ -733,6 +733,59 @@ are really available.">
 
   </WndFrame>
 
+
+
+  <WndFrame Name="frmFonts" X=70 Y=0 Width=246 Height=222 Font=2>
+
+  <WndProperty Name="prpUseCustomFonts" Caption="Customize Fonts"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2
+  Help="Defines the location of the glider drawn on the screen in percent from the bottom.">
+    <DataField name="" DataType="boolean" Min=0 Max=50 Step=1  OnDataAccess="OnUseCustomFontData"/>
+  </WndProperty>
+
+  <WndProperty Name="prpTitleWindowFont" Caption="Info box titles" X=2 Y=25  Width=180 Height=22 CaptionWidth=180 Font=2 ReadOnly=1>
+  </WndProperty>
+  <WndButton   Name="cmdTitleWindowFont" Caption="Edit"    X=180 Y=25 Width=50  Height=22 Font=2 OnClickNotify="OnEditTitleWindowFontClicked">
+  </WndButton>
+
+  <WndProperty Name="prpInfoWindowFont" Caption="Info box values" X=2 Y=49  width=180 Height=22 Captionwidth=180 Font=2 ReadOnly=1>
+  </WndProperty>
+  <WndButton   Name="cmdInfoWindowFont" Caption="Edit"    X=180 Y=49 Width=50  Height=22 Font=2 OnClickNotify="OnEditInfoWindowFontClicked">
+  </WndButton>
+
+  <WndProperty Name="prpMapWindowFont" Caption="Map waypoints" X=2 Y=73  width=180 Height=22 Captionwidth=180 Font=2 ReadOnly=1>
+  </WndProperty>
+  <WndButton   Name="cmdMapWindowFont" Caption="Edit"    X=180 Y=73 Width=50  Height=22 Font=2 OnClickNotify="OnEditMapWindowFontClicked">
+  </WndButton>
+
+  <WndProperty Name="prpMapLabelFont" Caption="Topology labels" X=2 Y=97  width=180 Height=22 Captionwidth=180 Font=2 ReadOnly=1>
+  </WndProperty>
+  <WndButton   Name="cmdMapLabelFont" Caption="Edit"    X=180 Y=97 Width=50  Height=22 Font=2 OnClickNotify="OnEditMapLabelFontClicked">
+  </WndButton>
+
+  <WndProperty Name="prpMapWindowBoldFont" Caption="Dialog boxes" X=2 Y=121  width=180 Height=22 Captionwidth=180 Font=2 ReadOnly=1>
+  </WndProperty>
+  <WndButton   Name="cmdMapWindowBoldFont" Caption="Edit"    X=180 Y=121 Width=50  Height=22 Font=2 OnClickNotify="OnEditMapWindowBoldFontClicked">
+  </WndButton>
+
+  <WndProperty Name="prpStatisticsFont" Caption="Statistics screens" X=2 Y=145  width=180 Height=22 Captionwidth=180 Font=2 ReadOnly=1>
+  </WndProperty>
+  <WndButton Name="cmdStatisticsFont"   Caption="Edit"    X=180 Y=145 Width=50  Height=22 Font=2 OnClickNotify="OnEditStatisticsFontClicked">
+  </WndButton>
+
+  <WndProperty Name="prpCDIWindowFont" Caption="Gauges" X=2 Y=169  width=180 Height=22 Captionwidth=180 Font=2 ReadOnly=1>
+  </WndProperty>
+  <WndButton Name="cmdCDIWindowFont" Caption="Edit"    X=180 Y=169 Width=50  Height=22 Font=2 OnClickNotify="OnEditCDIWindowFontClicked">
+  </WndButton>
+
+  <WndProperty Name="prpTitleSmallWindowFont" Caption="Info box values small" X=2 Y=192  width=180 Height=22 CaptionWidth=180 Font=2 ReadOnly=1>
+  </WndProperty>
+  <WndButton   Name="cmdTitleSmallWindowFont" Caption="Edit"    X=180 Y=192 Width=50  Height=22 Font=2 OnClickNotify="OnEditTitleSmallWindowFontClicked">
+  </WndButton>
+
+  </WndFrame>
+
+
+
   <WndFrame Name="frmVarioAppearance" X=70 Y=0 Width=246 Height=222 Font=2>
 
   <WndProperty Name="prpAppGaugeVarioSpeedToFly" Caption="Speed arrows"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2

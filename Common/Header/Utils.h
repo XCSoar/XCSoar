@@ -184,6 +184,15 @@ extern const TCHAR szRegistryDisableAutoLogger[];
 extern const TCHAR szRegistryMapFile[];
 extern const TCHAR szRegistryBallastSecsToEmpty[];
 extern const TCHAR szRegistryAccelerometerZero[];
+extern const TCHAR szRegistryUseCustomFonts[];
+extern const TCHAR szRegistryFontInfoWindowFont[];
+extern const TCHAR szRegistryFontTitleWindowFont[];
+extern const TCHAR szRegistryFontMapWindowFont[];
+extern const TCHAR szRegistryFontTitleSmallWindowFont[];
+extern const TCHAR szRegistryFontMapWindowBoldFont[];
+extern const TCHAR szRegistryFontCDIWindowFont[];
+extern const TCHAR szRegistryFontMapLabelFont[];
+extern const TCHAR szRegistryFontStatisticsFont[];
 
 extern bool LockSettingsInFlight;
 extern bool LoggerShortName;
@@ -352,6 +361,7 @@ void ConvertTToC(CHAR* pszDest, const TCHAR* pszSrc);
 void ConvertCToT(TCHAR* pszDest, const CHAR* pszSrc);
 
 void propGetFontSettings(TCHAR *Name, LOGFONT* lplf);
+void propGetFontSettingsFromString(TCHAR *Buffer, LOGFONT* lplf);
 int propGetScaleList(double *List, size_t Size);
 
 long GetUTCOffset(void);

@@ -326,6 +326,15 @@ const TCHAR szRegistryWindArrowStyle[] = TEXT("WindArrowStyle");
 const TCHAR szRegistryDisableAutoLogger[] = TEXT("DisableAutoLogger");
 const TCHAR szRegistryMapFile[]=	 TEXT("MapFile"); // pL
 const TCHAR szRegistryBallastSecsToEmpty[]=	 TEXT("BallastSecsToEmpty");
+const TCHAR szRegistryUseCustomFonts[]=	 TEXT("UseCustomFonts");
+const TCHAR szRegistryFontInfoWindowFont[]=	 TEXT("InfoWindowFont");
+const TCHAR szRegistryFontTitleWindowFont[]=	 TEXT("TitleWindowFont");
+const TCHAR szRegistryFontMapWindowFont[]=	 TEXT("MapWindowFont");
+const TCHAR szRegistryFontTitleSmallWindowFont[]=	 TEXT("TeamCodeFont");
+const TCHAR szRegistryFontMapWindowBoldFont[]=	 TEXT("MapWindowBoldFont");
+const TCHAR szRegistryFontCDIWindowFont[]=	 TEXT("CDIWindowFont");
+const TCHAR szRegistryFontMapLabelFont[]=	 TEXT("MapLabelFont");
+const TCHAR szRegistryFontStatisticsFont[]=	 TEXT("StatisticsFont");
 
 int UTCOffset = 0; // used for Altair
 bool LockSettingsInFlight = true;
@@ -394,14 +403,15 @@ void SetRegistryStringIfAbsent(const TCHAR* name,
   SetRegistryString(name, value);
 #else
   TCHAR temp[MAX_PATH];
-  if (!GetRegistryString(name, temp, MAX_PATH)) {
+  if (GetRegistryString(name, temp, MAX_PATH)) {  // 0==ERROR_SUCCESS
     SetRegistryString(name, value);
   }
 #endif
 }
 
 void DefaultRegistrySettingsAltair(void)
-{
+{  // RLD left GNAV Altair settings untouched.
+   // these are redundant b/c they're also added to "InitialiseFontsHardCoded"
   SetRegistryStringIfAbsent(TEXT("InfoWindowFont"),
    TEXT("24,0,0,0,700,0,0,0,0,0,0,3,2,RasterGothicTwentyFourCond"));
   SetRegistryStringIfAbsent(TEXT("TitleWindowFont"),
@@ -430,226 +440,6 @@ void DefaultRegistrySettingsAltair(void)
 #endif
 }
 
-/*
- * VENTA-ADDON 2/2/08
- * Adding custom font settings for PNAs
- *
- * InfoWindowFont	= values inside infoboxes  like numbers, etc.
- * TitleWindowFont	= Titles of infoboxes like Next, WP L/D etc.
- * TitleSmallWindowFont =
- * CDIWindowFont	= vario display, runway informations
- * MapLabelFont		= Flarm Traffic draweing and stats, map labels in italic
- * StatisticsFont
- * MapWindowFont	= text names on the map
- * MapWindowBoldFont = menu buttons, waypoint selection, messages, etc.
- *
- *
- */
-#if defined(PNA) || defined(FIVV)
-
-// VENTA2-ADDON  different infobox fonts for different geometries on HP31X.
-// VENTA2-ADDON	 different ELLIPSE values for different geometries!
-// VENTA2-ADDON  do not load fonts if xcsoar-registry.prf is found.
-//		 but keep loading ellipse or other key settings for custom devices
-//		 Sorry I prefer to call CheckRegistryProfile each time and be sure
-//		 that everything goes well, than split.
-//		 TODO> check inside CheckRegistry if geometry was changed , if so
-//		 force font settings all the way.
-
-void DefaultRegistrySettingsHP31X(void)
-{
-  switch (Appearance.InfoBoxGeom) {
-	case 0:
-	case 1:
-	case 2:
-	case 3:
-	case 6:
-		if ( !CheckRegistryProfile() ) {
-			SetRegistryStringIfAbsent(TEXT("InfoWindowFont"),
-			TEXT("56,0,0,0,600,0,0,0,0,0,0,3,2,TahomaBD"));
-
-			SetRegistryStringIfAbsent(TEXT("TitleWindowFont"),
-			TEXT("20,0,0,0,200,0,0,0,0,0,0,3,2,Tahoma"));
-		}
-
-		GlobalEllipse=1.1;	// standard VENTA2-addon
-		break;
-	case 4:
-	case 5:
-		if ( !CheckRegistryProfile() ) {
-			SetRegistryStringIfAbsent(TEXT("InfoWindowFont"),
-			TEXT("64,0,0,0,600,0,0,0,0,0,0,3,2,TahomaBD"));
-
-			SetRegistryStringIfAbsent(TEXT("TitleWindowFont"),
-			TEXT("26,0,0,0,600,0,0,0,0,0,0,3,2,Tahoma"));
-		}
-
-		GlobalEllipse=1.32;	// VENTA2-addon
-		break;
-	case 7:
-		if ( !CheckRegistryProfile() ) {
-			SetRegistryStringIfAbsent(TEXT("InfoWindowFont"),
-			TEXT("66,0,0,0,600,0,0,0,0,0,0,3,2,TahomaBD"));
-
-			SetRegistryStringIfAbsent(TEXT("TitleWindowFont"),
-			TEXT("23,0,0,0,400,0,0,0,0,0,0,3,2,Tahoma"));
-		}
-		break;
-
-	// This is a failsafe with an impossible setting so that you know
-	// something is going very wrong.
-	default:
-		if ( !CheckRegistryProfile() ) {
-			SetRegistryStringIfAbsent(TEXT("InfoWindowFont"),
-			TEXT("30,0,0,0,600,0,0,0,0,0,0,3,2,TahomaBD"));
-
-			SetRegistryStringIfAbsent(TEXT("TitleWindowFont"),
-			TEXT("10,0,0,0,200,0,0,0,0,0,0,3,2,Tahoma"));
-		}
-		break;
-   }
-
-
-  if ( !CheckRegistryProfile() ) {
-	  SetRegistryStringIfAbsent(TEXT("TitleSmallWindowFont"),
-	   TEXT("16,0,0,0,100,1,0,0,0,0,0,3,2,Tahoma"));
-	  SetRegistryStringIfAbsent(TEXT("CDIWindowFont"),
-	   TEXT("36,0,0,0,400,0,0,0,0,0,0,3,2,Tahoma"));
-	  SetRegistryStringIfAbsent(TEXT("MapLabelFont"),
-	   TEXT("28,0,0,0,100,1,0,0,0,0,0,3,2,Tahoma"));
-	  SetRegistryStringIfAbsent(TEXT("StatisticsFont"),
-	   TEXT("48,0,0,0,400,0,0,0,0,0,0,3,2,Tahoma"));
-	  SetRegistryStringIfAbsent(TEXT("MapWindowFont"),
-	   TEXT("36,0,0,0,400,0,0,0,0,0,0,3,2,Tahoma"));
-	  SetRegistryStringIfAbsent(TEXT("MapWindowBoldFont"),
-	   TEXT("32,0,0,0,600,0,0,0,0,0,0,3,2,TahomaBD"));
-  }
-
-}
-
-// VDO Dayton PN 6000  480x272
-void DefaultRegistrySettingsPN6000(void)
-{
-  if ( !CheckRegistryProfile() ) {
-	  SetRegistryStringIfAbsent(TEXT("InfoWindowFont"),
-	   TEXT("28,0,0,0,800,0,0,0,0,0,0,3,2,TahomaBD"));
-	  SetRegistryStringIfAbsent(TEXT("TitleWindowFont"),
-	   TEXT("16,0,0,0,500,0,0,0,0,0,0,3,2,Tahoma"));
-	 SetRegistryStringIfAbsent(TEXT("TitleSmallWindowFont"),
-	   TEXT("16,0,0,0,100,1,0,0,0,0,0,3,2,Tahoma"));
-	  SetRegistryStringIfAbsent(TEXT("CDIWindowFont"),
-	   TEXT("28,0,0,0,400,0,0,0,0,0,0,3,2,TahomaBD"));
-	  SetRegistryStringIfAbsent(TEXT("MapLabelFont"),
- 	   TEXT("14,0,0,0,100,1,0,0,0,0,0,3,2,Tahoma"));
-	  SetRegistryStringIfAbsent(TEXT("StatisticsFont"),
-	   TEXT("20,0,0,0,400,0,0,0,0,0,0,3,2,Tahoma"));
-	  SetRegistryStringIfAbsent(TEXT("MapWindowFont"),
-	   TEXT("18,0,0,0,400,0,0,0,0,0,0,3,2,Tahoma"));
-	  SetRegistryStringIfAbsent(TEXT("MapWindowBoldFont"),
-  	   TEXT("16,0,0,0,500,0,0,0,0,0,0,3,2,TahomaBD"));
-  }
-
-// VENTA2-ADDON ellipse for VDO
-  if (Appearance.InfoBoxGeom == 5) GlobalEllipse=1.32;
-	else GlobalEllipse=1.1;
-
-}
-
-// MIO C 310 480x272 like the Dayton
-void DefaultRegistrySettingsMIO(void)
-{
-  if ( !CheckRegistryProfile() ) {
-	  SetRegistryStringIfAbsent(TEXT("InfoWindowFont"),
-	   TEXT("28,0,0,0,800,0,0,0,0,0,0,3,2,TahomaBD"));
-	  SetRegistryStringIfAbsent(TEXT("TitleWindowFont"),
-	   TEXT("16,0,0,0,500,0,0,0,0,0,0,3,2,Tahoma"));
-	 SetRegistryStringIfAbsent(TEXT("TitleSmallWindowFont"),
-	   TEXT("16,0,0,0,100,1,0,0,0,0,0,3,2,Tahoma"));
-	  SetRegistryStringIfAbsent(TEXT("CDIWindowFont"),
-	   TEXT("28,0,0,0,400,0,0,0,0,0,0,3,2,TahomaBD"));
-	  SetRegistryStringIfAbsent(TEXT("MapLabelFont"),
-	   TEXT("14,0,0,0,100,1,0,0,0,0,0,3,2,Tahoma"));
-	  SetRegistryStringIfAbsent(TEXT("StatisticsFont"),
-	   TEXT("20,0,0,0,400,0,0,0,0,0,0,3,2,Tahoma"));
-	  SetRegistryStringIfAbsent(TEXT("MapWindowFont"),
-	   TEXT("18,0,0,0,400,0,0,0,0,0,0,3,2,Tahoma"));
-	  SetRegistryStringIfAbsent(TEXT("MapWindowBoldFont"),
-	   TEXT("16,0,0,0,500,0,0,0,0,0,0,3,2,TahomaBD"));
-  }
-}
-
-// This is a default fontset for a generic PNA
-// we keep it small in order to be able to test
-void DefaultRegistrySettingsPNA(void)
-{
-  if ( InfoBoxLayout::landscape ) {
-  	if ( !CheckRegistryProfile() ) {
-		 SetRegistryStringIfAbsent(TEXT("InfoWindowFont"),
-		   TEXT("28,0,0,0,800,0,0,0,0,0,0,3,2,TahomaBD"));
-		  SetRegistryStringIfAbsent(TEXT("TitleWindowFont"),
-		   TEXT("16,0,0,0,500,0,0,0,0,0,0,3,2,Tahoma"));
-		 SetRegistryStringIfAbsent(TEXT("TitleSmallWindowFont"),
-		   TEXT("16,0,0,0,100,1,0,0,0,0,0,3,2,Tahoma"));
-		  SetRegistryStringIfAbsent(TEXT("CDIWindowFont"),
-		   TEXT("28,0,0,0,400,0,0,0,0,0,0,3,2,TahomaBD"));
-		  SetRegistryStringIfAbsent(TEXT("MapLabelFont"),
-		   TEXT("14,0,0,0,100,1,0,0,0,0,0,3,2,Tahoma"));
-		  SetRegistryStringIfAbsent(TEXT("StatisticsFont"),
-		   TEXT("20,0,0,0,400,0,0,0,0,0,0,3,2,Tahoma"));
-		  SetRegistryStringIfAbsent(TEXT("MapWindowFont"),
-		   TEXT("18,0,0,0,400,0,0,0,0,0,0,3,2,Tahoma"));
-		  SetRegistryStringIfAbsent(TEXT("MapWindowBoldFont"),
-		   TEXT("16,0,0,0,500,0,0,0,0,0,0,3,2,TahomaBD"));
-  	}
-  } else  // portrait mode
-  {
-  	if ( !CheckRegistryProfile() ) {
-		 SetRegistryStringIfAbsent(TEXT("InfoWindowFont"),
-		   TEXT("28,0,0,0,800,0,0,0,0,0,0,3,2,TahomaBD"));
-		  SetRegistryStringIfAbsent(TEXT("TitleWindowFont"),
-		   TEXT("16,0,0,0,500,0,0,0,0,0,0,3,2,Tahoma"));
-		 SetRegistryStringIfAbsent(TEXT("TitleSmallWindowFont"),
-		   TEXT("16,0,0,0,100,1,0,0,0,0,0,3,2,Tahoma"));
-		  SetRegistryStringIfAbsent(TEXT("CDIWindowFont"),
-		   TEXT("28,0,0,0,400,0,0,0,0,0,0,3,2,TahomaBD"));
-		  SetRegistryStringIfAbsent(TEXT("MapLabelFont"),
-		   TEXT("14,0,0,0,100,1,0,0,0,0,0,3,2,Tahoma"));
-		  SetRegistryStringIfAbsent(TEXT("StatisticsFont"),
-		   TEXT("20,0,0,0,400,0,0,0,0,0,0,3,2,Tahoma"));
-		  SetRegistryStringIfAbsent(TEXT("MapWindowFont"),
-		   TEXT("18,0,0,0,400,0,0,0,0,0,0,3,2,Tahoma"));
-		  SetRegistryStringIfAbsent(TEXT("MapWindowBoldFont"),
-		   TEXT("16,0,0,0,500,0,0,0,0,0,0,3,2,TahomaBD"));
-  	}
-  }
-}
-
-#endif // PNA
-
-// VENTA-TEST HP4700 font settings - NOT USED
-void DefaultRegistrySettingsHP4700(void)
-{
-  SetRegistryStringIfAbsent(TEXT("InfoWindowFont"),
-   TEXT("28,0,0,0,800,0,0,0,0,0,0,3,2,TahomaBD")); // ok
-  SetRegistryStringIfAbsent(TEXT("TitleWindowFont"),
-   TEXT("16,0,0,0,500,0,0,0,0,0,0,3,2,Tahoma")); // ok
-  SetRegistryStringIfAbsent(TEXT("TitleSmallWindowFont"),
-   TEXT("16,0,0,0,100,1,0,0,0,0,0,3,2,Tahoma"));
-  SetRegistryStringIfAbsent(TEXT("CDIWindowFont"),
-   TEXT("28,0,0,0,400,0,0,0,0,0,0,3,2,TahomaBD")); // ok
-  SetRegistryStringIfAbsent(TEXT("MapLabelFont"),
-   TEXT("18,0,0,0,400,1,0,0,0,0,0,3,2,Tahoma"));
-  SetRegistryStringIfAbsent(TEXT("StatisticsFont"),
-   TEXT("18,0,0,0,400,0,0,0,0,0,0,3,2,Tahoma"));
-  SetRegistryStringIfAbsent(TEXT("MapWindowFont"),
-   TEXT("18,0,0,0,400,0,0,0,0,0,0,3,2,Tahoma"));  // ok
-  SetRegistryStringIfAbsent(TEXT("MapWindowBoldFont"),
-   TEXT("16,0,0,0,500,0,0,0,0,0,0,3,2,TahomaBD")); // ok
-
-}
-
-// end test
-
 
 void SaveRegistryAirspacePriority() {
   for (int i=0; i<AIRSPACECLASSCOUNT; i++) {
@@ -671,7 +461,7 @@ void ReadRegistrySettings(void)
 
   StartupStore(TEXT("Read registry settings\n"));
 
-#if defined(GNAV) || defined(PCGNAV)
+#if defined(GNAV) || defined(PCGNAV) || defined(GNAV_FONTEST)
   DefaultRegistrySettingsAltair();
 #endif
 
@@ -1044,22 +834,18 @@ void ReadRegistrySettings(void)
 
   if (GlobalModelType == MODELTYPE_PNA_HP31X ) {
 			StartupStore(TEXT("Loading HP31X settings\n"));
-			DefaultRegistrySettingsHP31X();
 	}
 	else
 	if (GlobalModelType == MODELTYPE_PNA_PN6000 ) {
 			StartupStore(TEXT("Loading PN6000 settings\n"));
-			DefaultRegistrySettingsPN6000();
 	}
 	else
 	if (GlobalModelType == MODELTYPE_PNA_MIO ) {
 			StartupStore(TEXT("Loading MIO settings\n"));
-			DefaultRegistrySettingsMIO();
 	}
 	else
 	if (GlobalModelType == MODELTYPE_PNA_PNA ) {
 		StartupStore(TEXT("Loading default PNA settings\n"));
-		DefaultRegistrySettingsPNA(); // fallback to default
 	}
 	else
 		StartupStore(TEXT("No special regsets for this PDA\n")); // VENTA2
@@ -1195,6 +981,13 @@ void ReadRegistrySettings(void)
   GetFromRegistry(szRegistryAutoForceFinalGlide,&Temp);
   AutoForceFinalGlide = (Temp!=0);
 
+
+  Temp = 0; // fonts
+  GetFromRegistry(szRegistryUseCustomFonts,&Temp);
+  UseCustomFonts = (Temp == 0 ? 0 : 1);
+  SetToRegistry(szRegistryUseCustomFonts, UseCustomFonts);
+
+
   ////
 
   Temp = EnableVoiceClimbRate;
@@ -1298,7 +1091,7 @@ void ReadRegistrySettings(void)
 // NOTE: all registry variables are unsigned!
 //
 BOOL GetFromRegistry(const TCHAR *szRegValue, DWORD *pPos)
-{
+{  // returns 0 on SUCCESS, else the non-zero error code
   HKEY    hKey;
   DWORD    dwSize, dwType;
   long    hRes;
@@ -3453,6 +3246,8 @@ void *bsearch(void *key, void *base0, size_t nmemb, size_t size, int (*compar)(c
 
 
 TCHAR *strtok_r(TCHAR *s, TCHAR *delim, TCHAR **lasts){
+// "s" MUST be a pointer to an array, not to a string!!!
+// (ARM92, Win emulator cause access violation if not)
 
   TCHAR *spanp;
 	int   c, sc;
@@ -3491,7 +3286,7 @@ cont:
 				if (c == 0)
 					s = NULL;
 				else
-					s[-1] = 0;
+					s[-1] = 0;  // causes access violation in some configs if s is a pointer instead of an array
 				*lasts = s;
 				return (tok);
 			}
@@ -4020,11 +3815,77 @@ void ConvertCToT(TCHAR* pszDest, const CHAR* pszSrc)
 }
 
 
+void propGetFontSettingsFromString(TCHAR *Buffer1, LOGFONT* lplf)
+{
+#define propGetFontSettingsMAX_SIZE 128
+  TCHAR Buffer[propGetFontSettingsMAX_SIZE]; // RLD need a buffer (not sz) for strtok_r w/ gcc optimized ARM920
+
+  TCHAR *pWClast, *pToken;
+  LOGFONT lfTmp;
+  _tcsncpy(Buffer, Buffer1, propGetFontSettingsMAX_SIZE);
+    // FontDescription of format:
+    // typical font entry
+    // 26,0,0,0,700,1,0,0,0,0,0,4,2,<fontname>
+
+    //FW_THIN   100
+    //FW_NORMAL 400
+    //FW_MEDIUM 500
+    //FW_BOLD   700
+    //FW_HEAVY  900
+
+  ASSERT(lplf != NULL);
+  memset ((void *)&lfTmp, 0, sizeof (LOGFONT));
+
+  if ((pToken = strtok_r(Buffer, TEXT(","), &pWClast)) == NULL) return;
+  lfTmp.lfHeight = _tcstol(pToken, NULL, 10);
+  if ((pToken = strtok_r(NULL, TEXT(","), &pWClast)) == NULL) return;
+  lfTmp.lfWidth = _tcstol(pToken, NULL, 10);
+  if ((pToken = strtok_r(NULL, TEXT(","), &pWClast)) == NULL) return;
+  lfTmp.lfEscapement = _tcstol(pToken, NULL, 10);
+  if ((pToken = strtok_r(NULL, TEXT(","), &pWClast)) == NULL) return;
+  lfTmp.lfOrientation = _tcstol(pToken, NULL, 10);
+  if ((pToken = strtok_r(NULL, TEXT(","), &pWClast)) == NULL) return;
+  lfTmp.lfWeight = _tcstol(pToken, NULL, 10);
+  if ((pToken = strtok_r(NULL, TEXT(","), &pWClast)) == NULL) return;
+  lfTmp.lfItalic = (unsigned char)_tcstol(pToken, NULL, 10);
+  if ((pToken = strtok_r(NULL, TEXT(","), &pWClast)) == NULL) return;
+  lfTmp.lfUnderline = (unsigned char)_tcstol(pToken, NULL, 10);
+  if ((pToken = strtok_r(NULL, TEXT(","), &pWClast)) == NULL) return;
+  lfTmp.lfStrikeOut = (unsigned char)_tcstol(pToken, NULL, 10);
+  if ((pToken = strtok_r(NULL, TEXT(","), &pWClast)) == NULL) return;
+  lfTmp.lfCharSet = (unsigned char)_tcstol(pToken, NULL, 10);
+  if ((pToken = strtok_r(NULL, TEXT(","), &pWClast)) == NULL) return;
+  lfTmp.lfOutPrecision = (unsigned char)_tcstol(pToken, NULL, 10);
+  if ((pToken = strtok_r(NULL, TEXT(","), &pWClast)) == NULL) return;
+  lfTmp.lfClipPrecision = (unsigned char)_tcstol(pToken, NULL, 10);
+
+  // DEFAULT_QUALITY			   0
+  // RASTER_FONTTYPE			   0x0001
+  // DRAFT_QUALITY			     1
+  // NONANTIALIASED_QUALITY  3
+  // ANTIALIASED_QUALITY     4
+  // CLEARTYPE_QUALITY       5
+  // CLEARTYPE_COMPAT_QUALITY 6
+
+  if ((pToken = strtok_r(NULL, TEXT(","), &pWClast)) == NULL) return;
+  lfTmp.lfQuality = (unsigned char)_tcstol(pToken, NULL, 10);
+
+  if ((pToken = strtok_r(NULL, TEXT(","), &pWClast)) == NULL) return;
+  lfTmp.lfPitchAndFamily = (unsigned char)_tcstol(pToken, NULL, 10);
+
+  if ((pToken = strtok_r(NULL, TEXT(","), &pWClast)) == NULL) return;
+
+  _tcscpy(lfTmp.lfFaceName, pToken);
+
+  memcpy((void *)lplf, (void *)&lfTmp, sizeof (LOGFONT));
+
+  return;
+}
+
+
 void propGetFontSettings(TCHAR *Name, LOGFONT* lplf) {
 
   TCHAR Buffer[128];
-  TCHAR *pWClast, *pToken;
-  LOGFONT lfTmp;
 
   ASSERT(Name != NULL);
   ASSERT(Name[0] != '\0');
@@ -4035,67 +3896,9 @@ void propGetFontSettings(TCHAR *Name, LOGFONT* lplf) {
   return;
 #endif
 
-#ifdef VENTA_NOREGFONT
-  return; // VENTA-TEST disabled no registry loading
-#endif
   if (GetRegistryString(Name, Buffer, sizeof(Buffer)/sizeof(TCHAR)) == 0) {
-
-    // typical font entry
-    // 26,0,0,0,700,1,0,0,0,0,0,4,2,<fontname>
-
-    //FW_THIN   100
-    //FW_NORMAL 400
-    //FW_MEDIUM 500
-    //FW_BOLD   700
-    //FW_HEAVY  900
-
-    memset ((void *)&lfTmp, 0, sizeof (LOGFONT));
-
-    if ((pToken = strtok_r(Buffer, TEXT(","), &pWClast)) == NULL) return;
-    lfTmp.lfHeight = _tcstol(pToken, NULL, 10);
-    if ((pToken = strtok_r(NULL, TEXT(","), &pWClast)) == NULL) return;
-    lfTmp.lfWidth = _tcstol(pToken, NULL, 10);
-    if ((pToken = strtok_r(NULL, TEXT(","), &pWClast)) == NULL) return;
-    lfTmp.lfEscapement = _tcstol(pToken, NULL, 10);
-    if ((pToken = strtok_r(NULL, TEXT(","), &pWClast)) == NULL) return;
-    lfTmp.lfOrientation = _tcstol(pToken, NULL, 10);
-    if ((pToken = strtok_r(NULL, TEXT(","), &pWClast)) == NULL) return;
-    lfTmp.lfWeight = _tcstol(pToken, NULL, 10);
-    if ((pToken = strtok_r(NULL, TEXT(","), &pWClast)) == NULL) return;
-    lfTmp.lfItalic = (unsigned char)_tcstol(pToken, NULL, 10);
-    if ((pToken = strtok_r(NULL, TEXT(","), &pWClast)) == NULL) return;
-    lfTmp.lfUnderline = (unsigned char)_tcstol(pToken, NULL, 10);
-    if ((pToken = strtok_r(NULL, TEXT(","), &pWClast)) == NULL) return;
-    lfTmp.lfStrikeOut = (unsigned char)_tcstol(pToken, NULL, 10);
-    if ((pToken = strtok_r(NULL, TEXT(","), &pWClast)) == NULL) return;
-    lfTmp.lfCharSet = (unsigned char)_tcstol(pToken, NULL, 10);
-    if ((pToken = strtok_r(NULL, TEXT(","), &pWClast)) == NULL) return;
-    lfTmp.lfOutPrecision = (unsigned char)_tcstol(pToken, NULL, 10);
-    if ((pToken = strtok_r(NULL, TEXT(","), &pWClast)) == NULL) return;
-    lfTmp.lfClipPrecision = (unsigned char)_tcstol(pToken, NULL, 10);
-
-    // DEFAULT_QUALITY			   0
-    // RASTER_FONTTYPE			   0x0001
-    // DRAFT_QUALITY			     1
-    // NONANTIALIASED_QUALITY  3
-    // ANTIALIASED_QUALITY     4
-    // CLEARTYPE_QUALITY       5
-    // CLEARTYPE_COMPAT_QUALITY 6
-
-    if ((pToken = strtok_r(NULL, TEXT(","), &pWClast)) == NULL) return;
-    lfTmp.lfQuality = (unsigned char)_tcstol(pToken, NULL, 10);
-
-    if ((pToken = strtok_r(NULL, TEXT(","), &pWClast)) == NULL) return;
-    lfTmp.lfPitchAndFamily = (unsigned char)_tcstol(pToken, NULL, 10);
-
-    if ((pToken = strtok_r(NULL, TEXT(","), &pWClast)) == NULL) return;
-
-    _tcscpy(lfTmp.lfFaceName, pToken);
-
-    memcpy((void *)lplf, (void *)&lfTmp, sizeof (LOGFONT));
-
+    propGetFontSettingsFromString(Buffer, lplf);
   }
-  return;
 }
 
 

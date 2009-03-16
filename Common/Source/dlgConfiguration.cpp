@@ -61,6 +61,35 @@ Copyright_License {
 #include "InfoBoxLayout.h"
 #include "Waypointparser.h"
 
+
+static HFONT TempInfoWindowFont;
+static HFONT TempTitleWindowFont;
+static HFONT TempMapWindowFont;
+static HFONT TempTitleSmallWindowFont;
+static HFONT TempMapWindowBoldFont;
+static HFONT TempCDIWindowFont; // New
+static HFONT TempMapLabelFont;
+static HFONT TempStatisticsFont;
+static HFONT TempUseCustomFontsFont;
+
+extern LOGFONT autoInfoWindowLogFont;
+extern LOGFONT autoTitleWindowLogFont;
+extern LOGFONT autoMapWindowLogFont;
+extern LOGFONT autoTitleSmallWindowLogFont;
+extern LOGFONT autoMapWindowBoldLogFont;
+extern LOGFONT autoCDIWindowLogFont; // New
+extern LOGFONT autoMapLabelLogFont;
+extern LOGFONT autoStatisticsLogFont;
+
+extern void InitializeOneFont (HFONT * theFont,
+                               const TCHAR FontRegKey[] ,
+                               LOGFONT autoLogFont,
+                               LOGFONT * LogFontUsed);
+
+extern bool dlgFontEditShowModal(const TCHAR * FontDescription,
+                          const TCHAR * FontRegKey,
+                          LOGFONT autoLogFont);
+
 int UserLevel = 0;
 
 static bool changed = false;
@@ -68,6 +97,7 @@ static bool taskchanged = false;
 static bool requirerestart = false;
 static bool utcchanged = false;
 static bool waypointneedsave = false;
+static bool FontRegistryChanged=false;
 int config_page=0;
 static WndForm *wf=NULL;
 static WndFrame *wConfig1=NULL;
@@ -90,6 +120,7 @@ static WndFrame *wConfig17=NULL;
 static WndFrame *wConfig18=NULL;
 static WndFrame *wConfig19=NULL;
 static WndFrame *wConfig20=NULL;
+static WndFrame *wConfig21=NULL;
 static WndButton *buttonPilotName=NULL;
 static WndButton *buttonAircraftType=NULL;
 static WndButton *buttonAircraftRego=NULL;
@@ -97,7 +128,7 @@ static WndButton *buttonLoggerID=NULL;
 static WndButton *buttonCopy=NULL;
 static WndButton *buttonPaste=NULL;
 
-#define NUMPAGES 20
+#define NUMPAGES 21
 
 
 
@@ -180,34 +211,37 @@ static void NextPage(int Step){
     wf->SetCaption(gettext(TEXT("11 Appearance")));
     break;
   case 11:
-    wf->SetCaption(gettext(TEXT("12 Vario Gauge and FLARM")));
+    wf->SetCaption(gettext(TEXT("12 Fonts")));
     break;
   case 12:
-    wf->SetCaption(gettext(TEXT("13 Task")));
+    wf->SetCaption(gettext(TEXT("13 Vario Gauge and FLARM")));
     break;
   case 13:
-    wf->SetCaption(gettext(TEXT("14 Task rules")));
+    wf->SetCaption(gettext(TEXT("14 Task")));
     break;
   case 14:
-    wf->SetCaption(gettext(TEXT("15 InfoBox Cruise")));
+    wf->SetCaption(gettext(TEXT("15 Task rules")));
     break;
   case 15:
-    wf->SetCaption(gettext(TEXT("16 InfoBox Circling")));
+    wf->SetCaption(gettext(TEXT("16 InfoBox Cruise")));
     break;
   case 16:
-    wf->SetCaption(gettext(TEXT("17 InfoBox Final Glide")));
+    wf->SetCaption(gettext(TEXT("17 InfoBox Circling")));
     break;
   case 17:
-    wf->SetCaption(gettext(TEXT("18 InfoBox Auxiliary")));
+    wf->SetCaption(gettext(TEXT("18 InfoBox Final Glide")));
     break;
   case 18:
-    wf->SetCaption(gettext(TEXT("19 Logger")));
+    wf->SetCaption(gettext(TEXT("19 InfoBox Auxiliary")));
     break;
   case 19:
-    wf->SetCaption(gettext(TEXT("20 Waypoint Edit")));
+    wf->SetCaption(gettext(TEXT("20 Logger")));
+    break;
+  case 20:
+    wf->SetCaption(gettext(TEXT("21 Waypoint Edit")));
     break;
   }
-  if ((config_page>=14) && (config_page<=17)) {
+  if ((config_page>=15) && (config_page<=18)) { // RLD upped by 1
     if (buttonCopy) {
       buttonCopy->SetVisible(true);
     }
@@ -242,6 +276,7 @@ static void NextPage(int Step){
   wConfig18->SetVisible(config_page == 17);
   wConfig19->SetVisible(config_page == 18);
   wConfig20->SetVisible(config_page == 19);
+  wConfig21->SetVisible(config_page == 20);
 }
 
 
@@ -377,6 +412,296 @@ static void OnDeviceBData(DataField *Sender, DataField::DataAccessKind_t Mode){
 }
 
 
+static void ResetFonts(bool bUseCustom) {
+// resest fonts when UseCustomFonts is turned off
+
+  int UseCustomFontsold = UseCustomFonts;
+  UseCustomFonts=bUseCustom;
+
+
+
+  InitializeOneFont (&TempUseCustomFontsFont,
+                        TEXT("THIS FONT IS NOT CUSTOMIZABLE"),
+                        autoMapWindowLogFont,
+                        NULL);
+
+
+
+  InitializeOneFont (&TempInfoWindowFont,
+                        szRegistryFontInfoWindowFont,
+                        autoInfoWindowLogFont,
+                        NULL);
+
+  InitializeOneFont (&TempTitleWindowFont,
+                        szRegistryFontTitleWindowFont,
+                        autoTitleWindowLogFont,
+                        NULL);
+
+  InitializeOneFont (&TempMapWindowFont,
+                        szRegistryFontMapWindowFont,
+                        autoMapWindowLogFont,
+                        NULL);
+
+  InitializeOneFont (&TempTitleSmallWindowFont,
+                        szRegistryFontTitleSmallWindowFont,
+                        autoTitleSmallWindowLogFont,
+                        NULL);
+
+  InitializeOneFont (&TempMapWindowBoldFont,
+                        szRegistryFontMapWindowBoldFont,
+                        autoMapWindowBoldLogFont,
+                        NULL);
+
+  InitializeOneFont (&TempCDIWindowFont,
+                        szRegistryFontCDIWindowFont,
+                        autoCDIWindowLogFont,
+                        NULL);
+
+  InitializeOneFont (&TempMapLabelFont,
+                        szRegistryFontMapLabelFont,
+                        autoMapLabelLogFont,
+                        NULL);
+
+  InitializeOneFont (&TempStatisticsFont,
+                        szRegistryFontStatisticsFont,
+                        autoStatisticsLogFont,
+                        NULL);
+
+  UseCustomFonts=UseCustomFontsold;
+}
+
+static void ShowFontEditButtons(bool bVisible) {
+  WndProperty * wp;
+  wp = (WndProperty*)wf->FindByName(TEXT("cmdInfoWindowFont"));
+  if (wp) {
+    wp->SetVisible(bVisible);
+  }
+  wp = (WndProperty*)wf->FindByName(TEXT("cmdTitleWindowFont"));
+  if (wp) {
+    wp->SetVisible(bVisible);
+  }
+  wp = (WndProperty*)wf->FindByName(TEXT("cmdMapWindowFont"));
+  if (wp) {
+    wp->SetVisible(bVisible);
+  }
+  wp = (WndProperty*)wf->FindByName(TEXT("cmdTitleSmallWindowFont"));
+  if (wp) {
+    wp->SetVisible(bVisible);
+  }
+  wp = (WndProperty*)wf->FindByName(TEXT("cmdMapWindowBoldFont"));
+  if (wp) {
+    wp->SetVisible(bVisible);
+  }
+  wp = (WndProperty*)wf->FindByName(TEXT("cmdCDIWindowFont"));
+  if (wp) {
+    wp->SetVisible(bVisible);
+  }
+  wp = (WndProperty*)wf->FindByName(TEXT("cmdMapLabelFont"));
+  if (wp) {
+    wp->SetVisible(bVisible);
+  }
+  wp = (WndProperty*)wf->FindByName(TEXT("cmdStatisticsFont"));
+  if (wp) {
+    wp->SetVisible(bVisible);
+  }
+}
+
+
+static void RefreshFonts(void) {
+
+  WndProperty * wp;
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpUseCustomFonts"));
+  if (wp) {
+    bool bUseCustomFonts= ((DataFieldBoolean*)(wp->GetDataField()))->GetAsBoolean();
+    ResetFonts(bUseCustomFonts);
+    wp->SetFont(TempUseCustomFontsFont); // this font is never customized
+    wp->SetVisible(false);
+    wp->SetVisible(true);
+    ShowFontEditButtons(bUseCustomFonts);
+
+  }
+
+// now set SampleTexts on the Fonts frame
+  wp = (WndProperty*)wf->FindByName(TEXT("prpInfoWindowFont"));
+  if (wp) {
+    wp->SetFont(TempInfoWindowFont);
+    wp->SetVisible(false);
+    wp->SetVisible(true);
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpTitleWindowFont"));
+  if (wp) {
+    wp->SetFont(TempTitleWindowFont);
+    wp->SetVisible(false);
+    wp->SetVisible(true);
+  }
+  wp = (WndProperty*)wf->FindByName(TEXT("prpMapWindowFont"));
+  if (wp) {
+    wp->SetFont(TempMapWindowFont);
+    wp->SetVisible(false);
+    wp->SetVisible(true);
+  }
+
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpTitleSmallWindowFont"));
+  if (wp) {
+    wp->SetFont(TempTitleSmallWindowFont);
+    wp->SetVisible(false);
+    wp->SetVisible(true);
+  }
+  wp = (WndProperty*)wf->FindByName(TEXT("prpMapWindowBoldFont"));
+  if (wp) {
+    wp->SetFont(TempMapWindowBoldFont);
+    wp->SetVisible(false);
+    wp->SetVisible(true);
+  }
+  wp = (WndProperty*)wf->FindByName(TEXT("prpCDIWindowFont"));
+  if (wp) {
+    wp->SetFont(TempCDIWindowFont);
+    wp->SetVisible(false);
+    wp->SetVisible(true);
+  }
+  wp = (WndProperty*)wf->FindByName(TEXT("prpMapLabelFont"));
+  if (wp) {
+    wp->SetFont(TempMapLabelFont);
+    wp->SetVisible(false);
+    wp->SetVisible(true);
+  }
+  wp = (WndProperty*)wf->FindByName(TEXT("prpStatisticsFont"));
+  if (wp) {
+    wp->SetFont(TempStatisticsFont);
+    wp->SetVisible(false);
+    wp->SetVisible(true);
+  }
+
+  // now fix the rest of the dlgConfiguration fonts:
+  wf->SetFont(TempMapWindowBoldFont);
+  wf->SetTitleFont(TempMapWindowBoldFont);
+
+  wp = (WndProperty*)wf->FindByName(TEXT("cmdNext"));
+  if (wp) {
+    wp->SetFont(TempCDIWindowFont);
+  }
+  wp = (WndProperty*)wf->FindByName(TEXT("cmdPrev"));
+  if (wp) {
+    wp->SetFont(TempCDIWindowFont);
+  }
+
+}
+
+
+
+static void OnUseCustomFontData(DataField *Sender, DataField::DataAccessKind_t Mode) {
+
+  switch(Mode){
+    case DataField::daGet:
+    break;
+
+    case DataField::daPut:
+    break;
+
+    case DataField::daChange:
+      RefreshFonts();
+
+    break;
+  }
+}
+
+static void GetFontDescription(TCHAR Description[], TCHAR * prpName, int iMaxLen)
+{
+  WndProperty * wp;
+  wp = (WndProperty*)wf->FindByName(prpName);
+  if (wp) {
+    _tcsncpy(Description, wp->GetCaption(), iMaxLen-1);
+  }
+}
+
+static void OnEditInfoWindowFontClicked(WindowControl *Sender) {
+  // updates registry for font info and updates LogFont values
+#define MAX_EDITFONT_DESC_LEN 100
+  TCHAR FontDesc[MAX_EDITFONT_DESC_LEN];
+  GetFontDescription(FontDesc, TEXT("prpInfoWindowFont"), MAX_EDITFONT_DESC_LEN);
+  if (dlgFontEditShowModal(FontDesc,
+                            szRegistryFontInfoWindowFont,
+                            autoInfoWindowLogFont)) {
+    FontRegistryChanged=true;
+    RefreshFonts();
+  }
+}
+
+static void OnEditTitleWindowFontClicked(WindowControl *Sender) {
+  TCHAR FontDesc[MAX_EDITFONT_DESC_LEN];
+  GetFontDescription(FontDesc, TEXT("prpTitleWindowFont"), MAX_EDITFONT_DESC_LEN);
+  if (dlgFontEditShowModal(FontDesc,
+                            szRegistryFontTitleWindowFont,
+                            autoTitleWindowLogFont)) {
+    FontRegistryChanged=true;
+    RefreshFonts();
+  }
+}
+static void OnEditMapWindowFontClicked(WindowControl *Sender) {
+  TCHAR FontDesc[MAX_EDITFONT_DESC_LEN];
+  GetFontDescription(FontDesc, TEXT("prpMapWindowFont"), MAX_EDITFONT_DESC_LEN);
+  if (dlgFontEditShowModal(FontDesc,
+                            szRegistryFontMapWindowFont,
+                            autoMapWindowLogFont)) {
+    FontRegistryChanged=true;
+    RefreshFonts();
+  }
+}
+static void OnEditTitleSmallWindowFontClicked(WindowControl *Sender) {
+  TCHAR FontDesc[MAX_EDITFONT_DESC_LEN];
+  GetFontDescription(FontDesc, TEXT("prpTitleSmallWindowFont"), MAX_EDITFONT_DESC_LEN);
+  if (dlgFontEditShowModal(FontDesc,
+                            szRegistryFontTitleSmallWindowFont,
+                            autoTitleSmallWindowLogFont)) {
+    FontRegistryChanged=true;
+    RefreshFonts();
+  }
+}
+static void OnEditMapWindowBoldFontClicked(WindowControl *Sender) {
+  TCHAR FontDesc[MAX_EDITFONT_DESC_LEN];
+  GetFontDescription(FontDesc, TEXT("prpMapWindowBoldFont"), MAX_EDITFONT_DESC_LEN);
+  if (dlgFontEditShowModal(FontDesc,
+                            szRegistryFontMapWindowBoldFont,
+                            autoMapWindowBoldLogFont)) {
+    FontRegistryChanged=true;
+    RefreshFonts();
+  }
+}
+static void OnEditCDIWindowFontClicked(WindowControl *Sender) {
+  TCHAR FontDesc[MAX_EDITFONT_DESC_LEN];
+  GetFontDescription(FontDesc, TEXT("prpCDIWindowFont"), MAX_EDITFONT_DESC_LEN);
+  if (dlgFontEditShowModal(FontDesc,
+                            szRegistryFontCDIWindowFont,
+                            autoCDIWindowLogFont)) {
+    FontRegistryChanged=true;
+    RefreshFonts();
+  }
+}
+static void OnEditMapLabelFontClicked(WindowControl *Sender) {
+  TCHAR FontDesc[MAX_EDITFONT_DESC_LEN];
+  GetFontDescription(FontDesc, TEXT("prpMapLabelFont"), MAX_EDITFONT_DESC_LEN);
+  if (dlgFontEditShowModal(FontDesc,
+                            szRegistryFontMapLabelFont,
+                            autoMapLabelLogFont)) {
+    FontRegistryChanged=true;
+    RefreshFonts();
+  }
+}
+static void OnEditStatisticsFontClicked(WindowControl *Sender) {
+  TCHAR FontDesc[MAX_EDITFONT_DESC_LEN];
+  GetFontDescription(FontDesc, TEXT("prpStatisticsFont"), MAX_EDITFONT_DESC_LEN);
+  if (dlgFontEditShowModal(FontDesc,
+                            szRegistryFontStatisticsFont,
+                            autoStatisticsLogFont)) {
+    FontRegistryChanged=true;
+    RefreshFonts();
+  }
+}
+
+
 static void OnAircraftRegoClicked(WindowControl *Sender) {
 	(void)Sender;
   TCHAR Temp[100];
@@ -458,7 +783,7 @@ static void OnCloseClicked(WindowControl * Sender){
 static int cpyInfoBox[10];
 
 static int page2mode(void) {
-  return config_page-14;
+  return config_page-15;  // RLD upped by 1
 }
 
 
@@ -745,6 +1070,16 @@ static CallBackTableEntry_t CallBackTable[]={
   DeclareCallBackEntry(OnDeviceAData),
   DeclareCallBackEntry(OnDeviceBData),
 
+  DeclareCallBackEntry(OnUseCustomFontData),
+  DeclareCallBackEntry(OnEditInfoWindowFontClicked),
+  DeclareCallBackEntry(OnEditTitleWindowFontClicked),
+  DeclareCallBackEntry(OnEditMapWindowFontClicked),
+  DeclareCallBackEntry(OnEditTitleSmallWindowFontClicked),
+  DeclareCallBackEntry(OnEditMapWindowBoldFontClicked),
+  DeclareCallBackEntry(OnEditCDIWindowFontClicked),
+  DeclareCallBackEntry(OnEditMapLabelFontClicked),
+  DeclareCallBackEntry(OnEditStatisticsFontClicked),
+
   DeclareCallBackEntry(OnUserLevel),
 
   DeclareCallBackEntry(NULL)
@@ -844,6 +1179,9 @@ static void GetInfoBoxSelector(int item, int mode)
     }
   }
 }
+
+
+
 
 //////////
 
@@ -1782,6 +2120,22 @@ static void setVariables(void) {
   }
 #endif
 
+
+
+// Fonts
+  wp = (WndProperty*)wf->FindByName(TEXT("prpUseCustomFonts"));
+  if (wp) {
+    DataFieldBoolean * dfb = (DataFieldBoolean*) wp->GetDataField();
+    dfb->Set(UseCustomFonts);
+    ShowFontEditButtons(dfb->GetAsBoolean());
+    wp->RefreshDisplay();
+    RefreshFonts();
+  }
+  FontRegistryChanged=false;
+
+
+// end fonts
+
   wp = (WndProperty*)wf->FindByName(TEXT("prpAppCompassAppearance"));
   if (wp) {
     DataFieldEnum* dfe;
@@ -2108,15 +2462,16 @@ void dlgConfigurationShowModal(void){
   wConfig9    = ((WndFrame *)wf->FindByName(TEXT("frmUnits")));
   wConfig10    = ((WndFrame *)wf->FindByName(TEXT("frmInterface")));
   wConfig11    = ((WndFrame *)wf->FindByName(TEXT("frmAppearance")));
-  wConfig12    = ((WndFrame *)wf->FindByName(TEXT("frmVarioAppearance")));
-  wConfig13    = ((WndFrame *)wf->FindByName(TEXT("frmTask")));
-  wConfig14    = ((WndFrame *)wf->FindByName(TEXT("frmTaskRules")));
-  wConfig15    = ((WndFrame *)wf->FindByName(TEXT("frmInfoBoxCircling")));
-  wConfig16    = ((WndFrame *)wf->FindByName(TEXT("frmInfoBoxCruise")));
-  wConfig17    = ((WndFrame *)wf->FindByName(TEXT("frmInfoBoxFinalGlide")));
-  wConfig18    = ((WndFrame *)wf->FindByName(TEXT("frmInfoBoxAuxiliary")));
-  wConfig19    = ((WndFrame *)wf->FindByName(TEXT("frmLogger")));
-  wConfig20    = ((WndFrame *)wf->FindByName(TEXT("frmWaypointEdit")));
+  wConfig12    = ((WndFrame *)wf->FindByName(TEXT("frmFonts")));
+  wConfig13    = ((WndFrame *)wf->FindByName(TEXT("frmVarioAppearance")));
+  wConfig14    = ((WndFrame *)wf->FindByName(TEXT("frmTask")));
+  wConfig15    = ((WndFrame *)wf->FindByName(TEXT("frmTaskRules")));
+  wConfig16    = ((WndFrame *)wf->FindByName(TEXT("frmInfoBoxCircling")));
+  wConfig17    = ((WndFrame *)wf->FindByName(TEXT("frmInfoBoxCruise")));
+  wConfig18    = ((WndFrame *)wf->FindByName(TEXT("frmInfoBoxFinalGlide")));
+  wConfig19    = ((WndFrame *)wf->FindByName(TEXT("frmInfoBoxAuxiliary")));
+  wConfig20    = ((WndFrame *)wf->FindByName(TEXT("frmLogger")));
+  wConfig21    = ((WndFrame *)wf->FindByName(TEXT("frmWaypointEdit")));
 
   ASSERT(wConfig1!=NULL);
   ASSERT(wConfig2!=NULL);
@@ -2138,6 +2493,7 @@ void dlgConfigurationShowModal(void){
   ASSERT(wConfig18!=NULL);
   ASSERT(wConfig19!=NULL);
   ASSERT(wConfig20!=NULL);
+  ASSERT(wConfig21!=NULL);
 
   wf->FilterAdvanced(UserLevel>0);
 
@@ -2327,7 +2683,7 @@ void dlgConfigurationShowModal(void){
   if (wp) {
     if (EnableFLARMGauge !=
 	wp->GetDataField()->GetAsBoolean()) {
-      EnableFLARMGauge = wp->GetDataField()->GetAsInteger();
+      EnableFLARMGauge = wp->GetDataField()->GetAsBoolean();
       SetToRegistry(szRegistryEnableFLARMGauge,
 		    EnableFLARMGauge);
       changed = true;
@@ -3012,6 +3368,33 @@ void dlgConfigurationShowModal(void){
   }
 //
 #endif
+
+  //Fonts
+  int UseCustomFontsold = UseCustomFonts;
+  wp = (WndProperty*)wf->FindByName(TEXT("prpUseCustomFonts"));
+  if (wp) {
+    DataFieldBoolean * dfb = (DataFieldBoolean*) wp->GetDataField();
+    if (dfb) {
+      SetToRegistry(szRegistryUseCustomFonts, dfb->GetAsInteger());
+      UseCustomFonts = dfb->GetAsInteger(); // global var
+    }
+  }
+  if ( (UseCustomFontsold != UseCustomFonts) ||
+    (UseCustomFonts && FontRegistryChanged) ) {
+      changed = true;
+      requirerestart = true;
+  }
+  DeleteObject(TempUseCustomFontsFont);
+
+  DeleteObject (TempInfoWindowFont);
+  DeleteObject (TempTitleWindowFont);
+  DeleteObject (TempMapWindowFont);
+  DeleteObject (TempTitleSmallWindowFont);
+  DeleteObject (TempMapWindowBoldFont);
+  DeleteObject (TempCDIWindowFont);
+  DeleteObject (TempMapLabelFont);
+  DeleteObject (TempStatisticsFont);
+
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpAppStatusMessageAlignment"));
   if (wp) {

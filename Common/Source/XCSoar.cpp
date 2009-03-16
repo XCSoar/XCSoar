@@ -246,16 +246,25 @@ COLORREF ColorOK = RGB(0x00,0x00,0xFF);
 COLORREF ColorButton = RGB(0xA0,0xE0,0xA0);
 
 // Display Gobals
-HFONT                                   InfoWindowFont;
+HFONT                                   InfoWindowFont;  // these are the active fonts
 HFONT                                   TitleWindowFont;
 HFONT                                   MapWindowFont;
 HFONT                                   TitleSmallWindowFont;
 HFONT                                   MapWindowBoldFont;
-
 HFONT                                   CDIWindowFont; // New
 HFONT                                   MapLabelFont;
 HFONT                                   StatisticsFont;
 
+LOGFONT                                   autoInfoWindowLogFont; // these are the non-custom parameters
+LOGFONT                                   autoTitleWindowLogFont;
+LOGFONT                                   autoMapWindowLogFont;
+LOGFONT                                   autoTitleSmallWindowLogFont;
+LOGFONT                                   autoMapWindowBoldLogFont;
+LOGFONT                                   autoCDIWindowLogFont; // New
+LOGFONT                                   autoMapLabelLogFont;
+LOGFONT                                   autoStatisticsLogFont;
+
+int  UseCustomFonts;
 int                                             CurrentInfoType;
 int                                             InfoFocus = 0;
 int                                             DisplayOrientation = TRACKUP;
@@ -277,7 +286,7 @@ bool GlobalRunning = false;
 int	GlobalModelType=0;	   // see XCSoar.h for modeltype definitions
 TCHAR	GlobalModelName[MAX_PATH]; // there are currently no
 				   // checks.. TODO check it fits here
-float	GlobalEllipse=1.1;	// default ellipse type VENTA2-ADDON
+float	GlobalEllipse=1.1f;	// default ellipse type VENTA2-ADDON
 #endif
 
 
@@ -1672,12 +1681,218 @@ void ApplyClearType(LOGFONT *logfont) {
   }
 }
 
+bool IsNullLogFont(LOGFONT logfont) {
+  bool bRetVal=false;
 
-static void InitialiseFonts(RECT rc) {
+  LOGFONT LogFontBlank;
+  memset ((char *)&LogFontBlank, 0, sizeof (LOGFONT));
+
+  if ( memcmp(&logfont, &LogFontBlank, sizeof(LOGFONT)) == 0) {
+    bRetVal=true;
+  }
+  return bRetVal;
+}
+
+void InitializeOneFont (HFONT * theFont,
+                               const TCHAR FontRegKey[] ,
+                               LOGFONT autoLogFont,
+                               LOGFONT * LogFontUsed)
+{
+  LOGFONT logfont;
+  int iDelStatus = 0;
+  if (GetObjectType(*theFont) == OBJ_FONT) {
+    iDelStatus=DeleteObject(*theFont); // RLD the EditFont screens use the Delete
+  }
+
+  memset ((char *)&logfont, 0, sizeof (LOGFONT));
+
+  if (UseCustomFonts) {
+    propGetFontSettings((TCHAR * )FontRegKey, &logfont);
+    if (!IsNullLogFont(logfont)) {
+      *theFont = CreateFontIndirect (&logfont);
+      if (GetObjectType(*theFont) == OBJ_FONT) {
+        if (LogFontUsed != NULL) *LogFontUsed = logfont; // RLD save for custom font GUI
+      }
+    }
+  }
+
+  if (GetObjectType(*theFont) != OBJ_FONT) {
+    if (!IsNullLogFont(autoLogFont)) {
+      ApplyClearType(&autoLogFont);
+      *theFont = CreateFontIndirect (&autoLogFont);
+      if (GetObjectType(*theFont) == OBJ_FONT) {
+        if (LogFontUsed != NULL) *LogFontUsed = autoLogFont; // RLD save for custom font GUI
+      }
+    }
+  }
+}
+
+void InitialiseFontsHardCoded(RECT rc,
+                        LOGFONT * ptrhardInfoWindowLogFont,
+                        LOGFONT * ptrhardTitleWindowLogFont,
+                        LOGFONT * ptrhardMapWindowLogFont,
+                        LOGFONT * ptrhardTitleSmallWindowLogFont,
+                        LOGFONT * ptrhardMapWindowBoldLogFont,
+                        LOGFONT * ptrhardCDIWindowLogFont, // New
+                        LOGFONT * ptrhardMapLabelLogFont,
+                        LOGFONT * ptrhardStatisticsLogFont) {
+
+
+
+  memset ((char *)ptrhardInfoWindowLogFont, 0, sizeof (LOGFONT));
+  memset ((char *)ptrhardTitleWindowLogFont, 0, sizeof (LOGFONT));
+  memset ((char *)ptrhardMapWindowLogFont, 0, sizeof (LOGFONT));
+  memset ((char *)ptrhardTitleSmallWindowLogFont, 0, sizeof (LOGFONT));
+  memset ((char *)ptrhardMapWindowBoldLogFont, 0, sizeof (LOGFONT));
+  memset ((char *)ptrhardCDIWindowLogFont, 0, sizeof (LOGFONT));
+  memset ((char *)ptrhardMapLabelLogFont, 0, sizeof (LOGFONT));
+  memset ((char *)ptrhardStatisticsLogFont, 0, sizeof (LOGFONT));
+
+
+/*
+ * VENTA-ADDON 2/2/08
+ * Adding custom font settings for PNAs
+ *
+ * InfoWindowFont	= values inside infoboxes  like numbers, etc.
+ * TitleWindowFont	= Titles of infoboxes like Next, WP L/D etc.
+ * TitleSmallWindowFont =
+ * CDIWindowFont	= vario display, runway informations
+ * MapLabelFont		= Flarm Traffic draweing and stats, map labels in italic
+ * StatisticsFont
+ * MapWindowFont	= text names on the map
+ * MapWindowBoldFont = menu buttons, waypoint selection, messages, etc.
+ *
+ *
+ */
+// VENTA2-ADDON  different infobox fonts for different geometries on HP31X.
+// VENTA2-ADDON	 different ELLIPSE values for different geometries!
+// RLD this loads the elipses each time and handles the fonts with the new font system
+#if defined(PNA) || defined(FIVV)
+
+  int iWidth = rc.right-rc.left;
+  int iHeight=rc.bottom-rc.top;
+
+  if (iWidth == 480 && iHeight == 272) { // e.g. MIO
+    propGetFontSettingsFromString(TEXT("28,0,0,0,800,0,0,0,0,0,0,3,2,TahomaBD"), ptrhardInfoWindowLogFont);
+    propGetFontSettingsFromString(TEXT("16,0,0,0,500,0,0,0,0,0,0,3,2,Tahoma"), ptrhardTitleWindowLogFont);
+    propGetFontSettingsFromString(TEXT("16,0,0,0,100,1,0,0,0,0,0,3,2,Tahoma"), ptrhardTitleSmallWindowLogFont);
+    propGetFontSettingsFromString(TEXT("28,0,0,0,400,0,0,0,0,0,0,3,2,TahomaBD"), ptrhardCDIWindowLogFont);
+    propGetFontSettingsFromString(TEXT("14,0,0,0,100,1,0,0,0,0,0,3,2,Tahoma"), ptrhardMapLabelLogFont); // RLD 16 works well too
+    propGetFontSettingsFromString(TEXT("20,0,0,0,400,0,0,0,0,0,0,3,2,Tahoma"), ptrhardStatisticsLogFont);//  (RLD is this used?)
+    propGetFontSettingsFromString(TEXT("18,0,0,0,400,0,0,0,0,0,0,3,2,Tahoma"), ptrhardMapWindowLogFont);
+    propGetFontSettingsFromString(TEXT("16,0,0,0,500,0,0,0,0,0,0,3,2,TahomaBD"), ptrhardMapWindowBoldLogFont);
+    if (Appearance.InfoBoxGeom == 5) {
+      GlobalEllipse=1.32f;
+    }
+    else {
+      GlobalEllipse=1.1f;
+    }
+  }
+
+  else if (iWidth == 800 && iHeight == 480) {// e.g. ipaq 31x {
+
+    switch (Appearance.InfoBoxGeom) {
+      case 0:
+      case 1:
+      case 2:
+      case 3:
+      case 6: // standard landscape
+            propGetFontSettingsFromString(TEXT("56,0,0,0,600,0,0,0,0,0,0,3,2,TahomaBD"), ptrhardInfoWindowLogFont);
+            propGetFontSettingsFromString(TEXT("20,0,0,0,200,0,0,0,0,0,0,3,2,Tahoma"), ptrhardTitleWindowLogFont);
+            GlobalEllipse=1.1f;	// standard VENTA2-addon
+            break;
+      case 4:
+      case 5:
+            propGetFontSettingsFromString(TEXT("64,0,0,0,600,0,0,0,0,0,0,3,2,TahomaBD"), ptrhardInfoWindowLogFont);
+            propGetFontSettingsFromString(TEXT("26,0,0,0,600,0,0,0,0,0,0,3,2,Tahoma"), ptrhardTitleWindowLogFont);
+            GlobalEllipse=1.32f;	// VENTA2-addon
+            break;
+      case 7:
+            propGetFontSettingsFromString(TEXT("66,0,0,0,600,0,0,0,0,0,0,3,2,TahomaBD"), ptrhardInfoWindowLogFont);
+            propGetFontSettingsFromString(TEXT("23,0,0,0,400,0,0,0,0,0,0,3,2,Tahoma"), ptrhardTitleWindowLogFont);
+		  break;
+
+       // This is a failsafe with an impossible setting so that you know
+      // something is going very wrong.
+       default:
+            propGetFontSettingsFromString(TEXT("30,0,0,0,600,0,0,0,0,0,0,3,2,TahomaBD"), ptrhardInfoWindowLogFont);
+            propGetFontSettingsFromString(TEXT("10,0,0,0,200,0,0,0,0,0,0,3,2,Tahoma"), ptrhardTitleWindowLogFont);
+          //}
+            break;
+    } // special geometry cases for 31x
+
+
+    propGetFontSettingsFromString(TEXT("16,0,0,0,100,1,0,0,0,0,0,3,2,Tahoma"), ptrhardTitleSmallWindowLogFont);
+    propGetFontSettingsFromString(TEXT("36,0,0,0,400,0,0,0,0,0,0,3,2,Tahoma"), ptrhardCDIWindowLogFont);
+    propGetFontSettingsFromString(TEXT("28,0,0,0,100,1,0,0,0,0,0,3,2,Tahoma"), ptrhardMapLabelLogFont);
+    propGetFontSettingsFromString(TEXT("48,0,0,0,400,0,0,0,0,0,0,3,2,Tahoma"), ptrhardStatisticsLogFont);
+    propGetFontSettingsFromString(TEXT("36,0,0,0,400,0,0,0,0,0,0,3,2,Tahoma"), ptrhardMapWindowLogFont);
+    propGetFontSettingsFromString(TEXT("32,0,0,0,600,0,0,0,0,0,0,3,2,TahomaBD"), ptrhardMapWindowBoldLogFont);
+  }
+  else if (InfoBoxLayout::landscape) {
+
+    propGetFontSettingsFromString(TEXT("28,0,0,0,800,0,0,0,0,0,0,3,2,TahomaBD"), ptrhardInfoWindowLogFont);
+    propGetFontSettingsFromString(TEXT("16,0,0,0,500,0,0,0,0,0,0,3,2,Tahoma"), ptrhardTitleWindowLogFont);
+    propGetFontSettingsFromString(TEXT("16,0,0,0,100,1,0,0,0,0,0,3,2,Tahoma"), ptrhardTitleSmallWindowLogFont);
+    propGetFontSettingsFromString(TEXT("28,0,0,0,400,0,0,0,0,0,0,3,2,TahomaBD"), ptrhardCDIWindowLogFont);
+    propGetFontSettingsFromString(TEXT("14,0,0,0,100,1,0,0,0,0,0,3,2,Tahoma"), ptrhardMapLabelLogFont);
+    propGetFontSettingsFromString(TEXT("20,0,0,0,400,0,0,0,0,0,0,3,2,Tahoma"), ptrhardStatisticsLogFont);
+    propGetFontSettingsFromString(TEXT("18,0,0,0,400,0,0,0,0,0,0,3,2,Tahoma"), ptrhardMapWindowLogFont);
+    propGetFontSettingsFromString(TEXT("16,0,0,0,500,0,0,0,0,0,0,3,2,TahomaBD"), ptrhardMapWindowBoldLogFont);
+  }
+  else { // portrait
+
+    propGetFontSettingsFromString(TEXT("28,0,0,0,800,0,0,0,0,0,0,3,2,TahomaBD"), ptrhardInfoWindowLogFont);
+    propGetFontSettingsFromString(TEXT("16,0,0,0,500,0,0,0,0,0,0,3,2,Tahoma"), ptrhardTitleWindowLogFont);
+    propGetFontSettingsFromString(TEXT("16,0,0,0,100,1,0,0,0,0,0,3,2,Tahoma"), ptrhardTitleSmallWindowLogFont);
+    propGetFontSettingsFromString(TEXT("28,0,0,0,400,0,0,0,0,0,0,3,2,TahomaBD"), ptrhardCDIWindowLogFont);
+    propGetFontSettingsFromString(TEXT("14,0,0,0,100,1,0,0,0,0,0,3,2,Tahoma"), ptrhardMapLabelLogFont);
+    propGetFontSettingsFromString(TEXT("20,0,0,0,400,0,0,0,0,0,0,3,2,Tahoma"), ptrhardStatisticsLogFont);
+    propGetFontSettingsFromString(TEXT("18,0,0,0,400,0,0,0,0,0,0,3,2,Tahoma"), ptrhardMapWindowLogFont);
+    propGetFontSettingsFromString(TEXT("16,0,0,0,500,0,0,0,0,0,0,3,2,TahomaBD"), ptrhardMapWindowBoldLogFont);
+  }
+
+#endif //PNA
+
+#if defined(GNAV) || defined(PCGNAV) || defined(GNAV_FONTEST)  // RLD Altair also loads these in registry and by default, uses the registry
+   propGetFontSettingsFromString(TEXT("24,0,0,0,700,0,0,0,0,0,0,3,2,RasterGothicTwentyFourCond"), ptrhardInfoWindowLogFont);
+   propGetFontSettingsFromString(TEXT("10,0,0,0,500,0,0,0,0,0,0,3,2,RasterGothicNineCond"), ptrhardTitleWindowLogFont);
+   propGetFontSettingsFromString(TEXT("19,0,0,0,700,0,0,0,0,0,0,3,2,RasterGothicEighteenCond"), ptrhardCDIWindowLogFont);
+   propGetFontSettingsFromString(TEXT("13,0,0,0,500,0,0,0,0,0,0,3,2,RasterGothicTwelveCond"), ptrhardMapLabelLogFont);
+   propGetFontSettingsFromString(TEXT("15,0,0,0,500,0,0,0,0,0,0,3,2,RasterGothicFourteenCond"), ptrhardStatisticsLogFont);
+   propGetFontSettingsFromString(TEXT("15,0,0,0,500,0,0,0,0,0,0,3,2,RasterGothicFourteenCond"), ptrhardMapWindowLogFont);
+   propGetFontSettingsFromString(TEXT("15,0,0,0,700,0,0,0,0,0,0,3,2,RasterGothicFourteenCond"), ptrhardMapWindowBoldLogFont);
+   propGetFontSettingsFromString(TEXT("19,0,0,0,700,0,0,0,0,0,0,3,2,RasterGothicEighteenCond"), ptrhardTitleSmallWindowLogFont);
+
+#endif //Altair
+
+
+
+
+}
+
+void InitialiseFontsAuto(RECT rc,
+                        LOGFONT * ptrautoInfoWindowLogFont,
+                        LOGFONT * ptrautoTitleWindowLogFont,
+                        LOGFONT * ptrautoMapWindowLogFont,
+                        LOGFONT * ptrautoTitleSmallWindowLogFont,
+                        LOGFONT * ptrautoMapWindowBoldLogFont,
+                        LOGFONT * ptrautoCDIWindowLogFont, // New
+                        LOGFONT * ptrautoMapLabelLogFont,
+                        LOGFONT * ptrautoStatisticsLogFont) {
   LOGFONT logfont;
   int FontHeight, FontWidth;
   int fontsz1 = (rc.bottom - rc.top );
   int fontsz2 = (rc.right - rc.left );
+
+  memset ((char *)ptrautoInfoWindowLogFont, 0, sizeof (LOGFONT));
+  memset ((char *)ptrautoTitleWindowLogFont, 0, sizeof (LOGFONT));
+  memset ((char *)ptrautoMapWindowLogFont, 0, sizeof (LOGFONT));
+  memset ((char *)ptrautoTitleSmallWindowLogFont, 0, sizeof (LOGFONT));
+  memset ((char *)ptrautoMapWindowBoldLogFont, 0, sizeof (LOGFONT));
+  memset ((char *)ptrautoCDIWindowLogFont, 0, sizeof (LOGFONT));
+  memset ((char *)ptrautoMapLabelLogFont, 0, sizeof (LOGFONT));
+  memset ((char *)ptrautoStatisticsLogFont, 0, sizeof (LOGFONT));
 
   if (fontsz1<fontsz2) { // portrait
     FontHeight = (int)(fontsz1/FONTHEIGHTRATIO*1.33);  // use small dimension, to work for widscreens and adjust so it works for 4x3 screens too.
@@ -1703,7 +1918,8 @@ static void InitialiseFonts(RECT rc) {
 
   memset ((char *)&logfont, 0, sizeof (logfont));
 
-#ifdef PNA  // VENTA-ADDON
+#if defined(PNA) || defined(FIVV)
+  // VENTA-ADDON
 	_tcscpy(logfont.lfFaceName, _T("Tahoma")); // VENTA-TEST for PNA should be tahoma
 												// btw: MS Tahoma now DOES HAVE italics!
 #else
@@ -1724,20 +1940,27 @@ static void InitialiseFonts(RECT rc) {
   SIZE tsize;
   HDC iwhdc = GetDC(hWndMainWindow);
   do {
+    HFONT TempWindowFont;
+    HFONT hfOld;
+
     iFontHeight--;
     logfont.lfHeight = iFontHeight;
-    InfoWindowFont = CreateFontIndirect (&logfont);
-    SelectObject(iwhdc, InfoWindowFont);
+
+    TempWindowFont = CreateFontIndirect (&logfont);
+    hfOld=(HFONT)SelectObject(iwhdc, TempWindowFont);
+
     GetTextExtentPoint(iwhdc, TEXT("00:00"), 5, &tsize);
-    DeleteObject(InfoWindowFont);
+
+    SelectObject(iwhdc, hfOld); // unselect it before deleting it
+    DeleteObject(TempWindowFont);
+
   } while (tsize.cx>InfoBoxLayout::ControlWidth);
   ReleaseDC(hWndMainWindow, iwhdc);
 
   iFontHeight++;
   logfont.lfHeight = iFontHeight;
 
-  propGetFontSettings(TEXT("InfoWindowFont"), &logfont);
-  InfoWindowFont = CreateFontIndirect (&logfont);
+  memcpy ((void *)ptrautoInfoWindowLogFont, &logfont, sizeof (LOGFONT));
 
   // next font..
 
@@ -1753,23 +1976,22 @@ static void InitialiseFonts(RECT rc) {
   logfont.lfHeight = (int)(FontHeight/TITLEFONTHEIGHTRATIO);
   logfont.lfWidth =  (int)(FontWidth/TITLEFONTWIDTHRATIO);
   logfont.lfWeight = FW_BOLD;
-  //  ApplyClearType(&logfont);
+  // RLD this was the only auto font to not have "ApplyClearType()".  It does not apply to very small fonts
+  // we now apply ApplyClearType to all fonts in CreateOneFont().
 
-  propGetFontSettings(TEXT("TitleWindowFont"), &logfont);
-  TitleWindowFont = CreateFontIndirect (&logfont);
+  memcpy ((void *)ptrautoTitleWindowLogFont, &logfont, sizeof (LOGFONT));
 
   memset ((char *)&logfont, 0, sizeof (logfont));
 
   // new font for CDI Scale
 
+  _tcscpy(logfont.lfFaceName, _T(GLOBALFONT));
   logfont.lfPitchAndFamily = FIXED_PITCH | FF_DONTCARE  ;
   logfont.lfHeight = (int)(FontHeight*CDIFONTHEIGHTRATIO);
   logfont.lfWidth =  (int)(FontWidth*CDIFONTWIDTHRATIO);
   logfont.lfWeight = FW_MEDIUM;
-  ApplyClearType(&logfont);
 
-  propGetFontSettings(TEXT("CDIWindowFont"), &logfont);
-  CDIWindowFont = CreateFontIndirect (&logfont);
+  memcpy ((void *)ptrautoCDIWindowLogFont, &logfont, sizeof (LOGFONT));
 
   // new font for map labels
   memset ((char *)&logfont, 0, sizeof (logfont));
@@ -1780,10 +2002,8 @@ static void InitialiseFonts(RECT rc) {
   logfont.lfWidth =  (int)(FontWidth*MAPFONTWIDTHRATIO);
   logfont.lfWeight = FW_MEDIUM;
   logfont.lfItalic = TRUE;
-  ApplyClearType(&logfont);
 
-  propGetFontSettings(TEXT("MapLabelFont"), &logfont);
-  MapLabelFont = CreateFontIndirect (&logfont);
+  memcpy ((void *)ptrautoMapLabelLogFont, &logfont, sizeof (LOGFONT));
 
 
   // Font for map other text
@@ -1794,10 +2014,8 @@ static void InitialiseFonts(RECT rc) {
   logfont.lfHeight = (int)(FontHeight*STATISTICSFONTHEIGHTRATIO);
   logfont.lfWidth =  (int)(FontWidth*STATISTICSFONTWIDTHRATIO);
   logfont.lfWeight = FW_MEDIUM;
-  ApplyClearType(&logfont);
 
-  propGetFontSettings(TEXT("StatisticsFont"), &logfont);
-  StatisticsFont = CreateFontIndirect (&logfont);
+  memcpy ((void *)ptrautoStatisticsLogFont, &logfont, sizeof (LOGFONT));
 
   // new font for map labels
 
@@ -1806,13 +2024,8 @@ static void InitialiseFonts(RECT rc) {
   logfont.lfHeight = (int)(FontHeight*MAPFONTHEIGHTRATIO*1.3);
   logfont.lfWidth =  (int)(FontWidth*MAPFONTWIDTHRATIO*1.3);
   logfont.lfWeight = FW_MEDIUM;
-  ApplyClearType(&logfont);
 
-  propGetFontSettings(TEXT("MapWindowFont"), &logfont);
-  MapWindowFont = CreateFontIndirect (&logfont);
-
-  SendMessage(hWndMapWindow,WM_SETFONT,
-              (WPARAM)MapWindowFont,MAKELPARAM(TRUE,0));
+  memcpy ((void *)ptrautoMapWindowLogFont, &logfont, sizeof (LOGFONT));
 
   // Font for map bold text
 
@@ -1820,8 +2033,7 @@ static void InitialiseFonts(RECT rc) {
   logfont.lfWeight = FW_BOLD;
   logfont.lfWidth =  0; // JMW (int)(FontWidth*MAPFONTWIDTHRATIO*1.3) +2;
 
-  propGetFontSettings(TEXT("MapWindowBoldFont"), &logfont);
-  MapWindowBoldFont = CreateFontIndirect (&logfont);
+  memcpy ((void *)ptrautoMapWindowBoldLogFont, &logfont, sizeof (LOGFONT));
 
   // TODO code: create font settings for this one...
   memset((char *)&logfont, 0, sizeof (logfont));
@@ -1832,10 +2044,140 @@ static void InitialiseFonts(RECT rc) {
   logfont.lfWidth =  IBLSCALE(8);
   logfont.lfWeight = FW_MEDIUM;
 
-  propGetFontSettings(TEXT("TeamCodeFont"), &logfont);
-  TitleSmallWindowFont = CreateFontIndirect (&logfont);
-
+  memcpy ((void *)ptrautoTitleSmallWindowLogFont, &logfont, sizeof (LOGFONT));
 }
+
+void InitialiseFonts(RECT rc)
+{ //this routine must be called only at start/restart of XCSoar b/c there are many pointers to these fonts
+
+  DeleteObject(InfoWindowFont);
+  DeleteObject(TitleWindowFont);
+  DeleteObject(MapWindowFont);
+  DeleteObject(TitleSmallWindowFont);
+  DeleteObject(MapWindowBoldFont);
+  DeleteObject(CDIWindowFont);
+  DeleteObject(MapLabelFont);
+  DeleteObject(StatisticsFont);
+
+  memset ((char *)&autoInfoWindowLogFont, 0, sizeof (LOGFONT));
+  memset ((char *)&autoTitleWindowLogFont, 0, sizeof (LOGFONT));
+  memset ((char *)&autoMapWindowLogFont, 0, sizeof (LOGFONT));
+  memset ((char *)&autoTitleSmallWindowLogFont, 0, sizeof (LOGFONT));
+  memset ((char *)&autoMapWindowBoldLogFont, 0, sizeof (LOGFONT));
+  memset ((char *)&autoCDIWindowLogFont, 0, sizeof (LOGFONT));
+  memset ((char *)&autoMapLabelLogFont, 0, sizeof (LOGFONT));
+  memset ((char *)&autoStatisticsLogFont, 0, sizeof (LOGFONT));
+
+
+  InitialiseFontsAuto(rc,
+                        &autoInfoWindowLogFont,
+                        &autoTitleWindowLogFont,
+                        &autoMapWindowLogFont,
+                        &autoTitleSmallWindowLogFont,
+                        &autoMapWindowBoldLogFont,
+                        &autoCDIWindowLogFont, // New
+                        &autoMapLabelLogFont,
+                        &autoStatisticsLogFont);
+
+
+  LOGFONT hardInfoWindowLogFont;
+  LOGFONT hardTitleWindowLogFont;
+  LOGFONT hardMapWindowLogFont;
+  LOGFONT hardTitleSmallWindowLogFont;
+  LOGFONT hardMapWindowBoldLogFont;
+  LOGFONT hardCDIWindowLogFont;
+  LOGFONT hardMapLabelLogFont;
+  LOGFONT hardStatisticsLogFont;
+
+  memset ((char *)&hardInfoWindowLogFont, 0, sizeof (LOGFONT));
+  memset ((char *)&hardTitleWindowLogFont, 0, sizeof (LOGFONT));
+  memset ((char *)&hardMapWindowLogFont, 0, sizeof (LOGFONT));
+  memset ((char *)&hardTitleSmallWindowLogFont, 0, sizeof (LOGFONT));
+  memset ((char *)&hardMapWindowBoldLogFont, 0, sizeof (LOGFONT));
+  memset ((char *)&hardCDIWindowLogFont, 0, sizeof (LOGFONT));
+  memset ((char *)&hardMapLabelLogFont, 0, sizeof (LOGFONT));
+  memset ((char *)&hardStatisticsLogFont, 0, sizeof (LOGFONT));
+
+  InitialiseFontsHardCoded(rc,
+                        &hardInfoWindowLogFont,
+                        &hardTitleWindowLogFont,
+                        &hardMapWindowLogFont,
+                        &hardTitleSmallWindowLogFont,
+                        &hardMapWindowBoldLogFont,
+                        &hardCDIWindowLogFont, // New
+                        &hardMapLabelLogFont,
+                        &hardStatisticsLogFont);
+
+// for PNA & GNAV, merge the "hard" into the "auto" if one exists
+  if (!IsNullLogFont(hardInfoWindowLogFont))
+    autoInfoWindowLogFont = hardInfoWindowLogFont;
+
+  if (!IsNullLogFont(hardTitleWindowLogFont))
+    autoTitleWindowLogFont = hardTitleWindowLogFont;
+
+  if (!IsNullLogFont(hardMapWindowLogFont))
+    autoMapWindowLogFont = hardMapWindowLogFont;
+
+  if (!IsNullLogFont(hardTitleSmallWindowLogFont))
+    autoTitleSmallWindowLogFont = hardTitleSmallWindowLogFont;
+
+  if (!IsNullLogFont(hardMapWindowBoldLogFont))
+    autoMapWindowBoldLogFont = hardMapWindowBoldLogFont;
+
+  if (!IsNullLogFont(hardCDIWindowLogFont))
+    autoCDIWindowLogFont = hardCDIWindowLogFont;
+
+  if (!IsNullLogFont(hardMapLabelLogFont))
+    autoMapLabelLogFont = hardMapLabelLogFont;
+
+  if (!IsNullLogFont(hardStatisticsLogFont))
+    autoStatisticsLogFont = hardStatisticsLogFont;
+
+/////////////////////////////////////////////////////////
+
+  InitializeOneFont (&InfoWindowFont,
+                        szRegistryFontInfoWindowFont,
+                        autoInfoWindowLogFont,
+                        NULL);
+
+  InitializeOneFont (&TitleWindowFont,
+                        szRegistryFontTitleWindowFont,
+                        autoTitleWindowLogFont,
+                        NULL);
+
+  InitializeOneFont (&CDIWindowFont,
+                        szRegistryFontCDIWindowFont,
+                        autoCDIWindowLogFont,
+                        NULL);
+
+  InitializeOneFont (&MapLabelFont,
+                        szRegistryFontMapLabelFont,
+                        autoMapLabelLogFont,
+                        NULL);
+
+  InitializeOneFont (&StatisticsFont,
+                        szRegistryFontStatisticsFont,
+                        autoStatisticsLogFont,
+                        NULL);
+
+  InitializeOneFont (&MapWindowFont,
+                        szRegistryFontMapWindowFont,
+                        autoMapWindowLogFont,
+                        NULL);
+  SendMessage(hWndMapWindow,WM_SETFONT,
+              (WPARAM)MapWindowFont,MAKELPARAM(TRUE,0));
+
+  InitializeOneFont (&MapWindowBoldFont,
+                        szRegistryFontMapWindowBoldFont,
+                        autoMapWindowBoldLogFont,
+                        NULL);
+
+  InitializeOneFont (&TitleSmallWindowFont,
+                        szRegistryFontTitleSmallWindowFont,
+                        autoTitleSmallWindowLogFont,
+                        NULL);
+}
+
 
 #if (WINDOWSPC>0)
 int SCREENWIDTH=640;
