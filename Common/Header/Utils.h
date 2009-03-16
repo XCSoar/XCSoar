@@ -157,7 +157,9 @@ extern const TCHAR szRegistryVoiceAirspace[];
 
 extern const TCHAR szRegistryFinishMinHeight[];
 extern const TCHAR szRegistryStartMaxHeight[];
+extern const TCHAR szRegistryStartMaxHeightMargin[];
 extern const TCHAR szRegistryStartMaxSpeed[];
+extern const TCHAR szRegistryStartMaxSpeedMargin[];
 extern const TCHAR szRegistryStartHeightRef[];
 
 extern const TCHAR szRegistryEnableNavBaroAltitude[];

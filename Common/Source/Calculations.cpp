@@ -325,7 +325,23 @@ extern int FastLogNum; // number of points to log at high rate
 
 void AnnounceWayPointSwitch(DERIVED_INFO *Calculated, bool do_advance) {
   if (ActiveWayPoint == 0) {
-    InputEvents::processGlideComputer(GCE_TASK_START);
+//    InputEvents::processGlideComputer(GCE_TASK_START);
+    TCHAR TempTime[40];
+    TCHAR TempAlt[40];
+    TCHAR TempSpeed[40];
+    Units::TimeToText(TempTime, (int)TimeLocal((int)Calculated->TaskStartTime));
+    _stprintf(TempAlt, TEXT("%.0f %s"),
+              Calculated->TaskStartAltitude*ALTITUDEMODIFY,
+              Units::GetAltitudeName());
+    _stprintf(TempSpeed, TEXT("%.0f %s"),
+             Calculated->TaskStartSpeed*TASKSPEEDMODIFY,
+             Units::GetTaskSpeedName());
+
+    TCHAR TempAll[120];
+    _stprintf(TempAll, TEXT("\r\nAltitude: %s\r\nSpeed:%s\r\nTime: %s"), TempAlt, TempSpeed, TempTime);
+
+    DoStatusMessage(TEXT("Task Start"), TempAll);
+
   } else if (Calculated->ValidFinish && IsFinalWaypoint()) {
     InputEvents::processGlideComputer(GCE_TASK_FINISH);
   } else {
@@ -1992,34 +2008,41 @@ bool InFinishSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
 
 */
 
-bool ValidStartSpeed(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
+bool ValidStartSpeed(NMEA_INFO *Basic, DERIVED_INFO *Calculated, DWORD Margin) {
   bool valid = true;
   if (StartMaxSpeed!=0) {
     if (Basic->AirspeedAvailable) {
-      if (Basic->IndicatedAirspeed>StartMaxSpeed)
+      if (Basic->IndicatedAirspeed>(StartMaxSpeed+Margin))
         valid = false;
     } else {
-      if (Basic->Speed>StartMaxSpeed)
+      if (Basic->Speed>(StartMaxSpeed+Margin))
         valid = false;
+    }
+  }
+  return valid;
+}
+
+bool ValidStartSpeed(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
+  return ValidStartSpeed(Basic, Calculated, 0);
+}
+
+bool InsideStartHeight(NMEA_INFO *Basic, DERIVED_INFO *Calculated, DWORD Margin) {
+  bool valid = true;
+  if ((StartMaxHeight!=0)&&(Calculated->TerrainValid)) {
+    if (StartHeightRef == 0) {
+      if (Calculated->AltitudeAGL>(StartMaxHeight+Margin))
+	valid = false;
+    } else {
+      if (Calculated->NavAltitude>(StartMaxHeight+Margin))
+	valid = false;
     }
   }
   return valid;
 }
 
 bool InsideStartHeight(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
-  bool valid = true;
-  if ((StartMaxHeight!=0)&&(Calculated->TerrainValid)) {
-    if (StartHeightRef == 0) {
-      if (Calculated->AltitudeAGL>StartMaxHeight)
-	valid = false;
-    } else {
-      if (Calculated->NavAltitude>StartMaxHeight)
-	valid = false;
-    }
-  }
-  return valid;
+  return InsideStartHeight(Basic, Calculated, 0);
 }
-
 
 bool InStartSector_Internal(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
                            int Index,
@@ -2099,7 +2122,8 @@ static bool InStartSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated, int &index
     goto OnExit;
   }
 
-  in_height = InsideStartHeight(Basic, Calculated);
+// ToLo: do "soft" check for height only
+  in_height = InsideStartHeight(Basic, Calculated, StartMaxHeightMargin);
 
   if ((Task[0].Index != EntryStartSector) && (EntryStartSector>=0)) {
     LastInSector = false;
@@ -2248,13 +2272,15 @@ static void CheckStart(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
                            Basic->Latitude,
                            0);
     }
-    if (ValidStartSpeed(Basic, Calculated)) {
+    // ToLo: we are ready to start even when outside start rules but within margin
+    if (ValidStartSpeed(Basic, Calculated, StartMaxSpeedMargin)) {
       ReadyToAdvance(Calculated, false, true);
     }
     // TODO accuracy: monitor start speed throughout time in start sector
   }
   if (StartCrossed) {
-    if(!IsFinalWaypoint() && ValidStartSpeed(Basic, Calculated)) {
+    // ToLo: Check weather speed and height are within the rules or not (zero margin)
+    if(!IsFinalWaypoint() && ValidStartSpeed(Basic, Calculated) && InsideStartHeight(Basic, Calculated)) {
 
       // This is set whether ready to advance or not, because it will
       // appear in the flight log, so if it's valid, it's valid.
@@ -2273,6 +2299,8 @@ static void CheckStart(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
 
       // Note: pilot must have armed advance
       // for the start to be registered
+
+    // ToLo: If speed and height are outside the rules they must be within the margin...
     } else {
 
       if ((ActiveWayPoint<=1)
@@ -2284,7 +2312,29 @@ static void CheckStart(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
         // in case the bad start is the best available, or the user
         // manually started
         StartTask(Basic, Calculated, false, false);
-        Calculated->ValidStart = false;
+//        Calculated->ValidStart = false;
+
+        bool startTaskAnyway = false;
+
+        if (ReadyToAdvance(Calculated, true, true)) {
+          //DoStatusMessage(TEXT("Start Anyway?"));
+          dlgStartTaskShowModal(&startTaskAnyway,
+                                Calculated->TaskStartTime,
+                                Calculated->TaskStartSpeed,
+                                Calculated->TaskStartAltitude);
+          if (startTaskAnyway) {
+            ActiveWayPoint=0; // enforce this since it may be 1
+            StartTask(Basic,Calculated, true, true);
+          }
+        }
+
+        Calculated->ValidStart = startTaskAnyway;
+
+        if (Calculated->Flying) {
+          Calculated->ValidFinish = false;
+        }
+
+	// TODO: Display infobox when only a bit over start rules
       }
 
     }

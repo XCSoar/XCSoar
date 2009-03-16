@@ -32,6 +32,7 @@ my $header = q{
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
+  $Id$
 };
 
 foreach my $file (@ARGV) {
@@ -56,4 +57,5 @@ foreach my $file (@ARGV) {
 		or die("Unable to open original input file $file for output - $!");
 	print OUT $buffer;
 	close OUT;
+	unlink($file.".tmp");
 }

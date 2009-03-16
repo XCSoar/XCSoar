@@ -423,6 +423,8 @@ BOOL AATEnabled = FALSE;
 DWORD FinishMinHeight = 0;
 DWORD StartMaxHeight = 0;
 DWORD StartMaxSpeed = 0;
+DWORD StartMaxHeightMargin = 0;
+DWORD StartMaxSpeedMargin = 0;
 
 
 // Statistics

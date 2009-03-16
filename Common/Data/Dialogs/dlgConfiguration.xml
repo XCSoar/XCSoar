@@ -532,8 +532,18 @@ Disable when flying paragliders.">
     <DataField name="" DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min=0 Max=300 Step=5/>
   </WndProperty>
 
+  <WndProperty Name="prpStartMaxSpeedMargin" Caption="Start max speed margin"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2
+  Help="Maximum speed to above maximum start speed to tolerate.  Set to 0 for no tolerance.">
+    <DataField name="" DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min=0 Max=300 Step=5/>
+  </WndProperty>
+
   <WndProperty Name="prpStartMaxHeight" Caption="Start max height"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2
    Help="Maximum height above ground while starting the task.  Set to 0 for no limit.">
+    <DataField name="" DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min=0 Max=10000 Step=50/>
+  </WndProperty>
+
+  <WndProperty Name="prpStartMaxHeightMargin" Caption="Start max height margin"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2
+   Help="Maximum height above maximum start height to tolerate.  Set to 0 for no tolerance.">
     <DataField name="" DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min=0 Max=10000 Step=50/>
   </WndProperty>
 

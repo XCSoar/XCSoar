@@ -292,6 +292,7 @@ DLGS	:=\
 	$(SRC)/dlgWaypointOutOfTerrain.o \
 	$(SRC)/dlgWeather.o \
 	$(SRC)/dlgWindSettings.o \
+	$(SRC)/dlgStartTask.o \
 
 VOLKS	:=\
 	$(SRC)/Volkslogger/dbbconv.cpp \

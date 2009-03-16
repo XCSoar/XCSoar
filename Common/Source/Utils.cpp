@@ -303,6 +303,8 @@ const TCHAR szRegistryVoiceAirspace[]= TEXT("VoiceAirspace");
 const TCHAR szRegistryFinishMinHeight[]= TEXT("FinishMinHeight");
 const TCHAR szRegistryStartMaxHeight[]= TEXT("StartMaxHeight");
 const TCHAR szRegistryStartMaxSpeed[]= TEXT("StartMaxSpeed");
+const TCHAR szRegistryStartMaxHeightMargin[]= TEXT("StartMaxHeightMargin");
+const TCHAR szRegistryStartMaxSpeedMargin[]= TEXT("StartMaxSpeedMargin");
 const TCHAR szRegistryStartHeightRef[] = TEXT("StartHeightRef");
 const TCHAR szRegistryEnableNavBaroAltitude[] = TEXT("EnableNavBaroAltitude");
 
@@ -1239,9 +1241,17 @@ void ReadRegistrySettings(void)
   GetFromRegistry(szRegistryStartMaxHeight,&Temp);
   StartMaxHeight = Temp;
 
+  Temp = StartMaxHeightMargin;
+  GetFromRegistry(szRegistryStartMaxHeightMargin,&Temp);
+  StartMaxHeightMargin = Temp;
+
   Temp = StartMaxSpeed;
   GetFromRegistry(szRegistryStartMaxSpeed,&Temp);
   StartMaxSpeed = Temp;
+
+  Temp = StartMaxSpeedMargin;
+  GetFromRegistry(szRegistryStartMaxSpeedMargin,&Temp);
+  StartMaxSpeedMargin = Temp;
 
   Temp = EnableNavBaroAltitude;
   GetFromRegistry(szRegistryEnableNavBaroAltitude,&Temp);

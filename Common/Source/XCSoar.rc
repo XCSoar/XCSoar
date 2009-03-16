@@ -232,6 +232,7 @@ IDR_XML_VEGADEMO        XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgVegaDemo.
 IDR_XML_WAYPOINTDETAILS XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgWayPointDetails.xml"
 IDR_XML_WAYPOINTSELECT  XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgWayPointSelect.xml"
 IDR_XML_WINDSETTINGS    XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgWindSettings.xml"
+IDR_XML_STARTTASK       XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgStartTask.xml"
 IDR_XML_FILESELECT      XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgFileSelect.xml"
 IDR_XML_SWITCHES        XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgSwitches.xml"
 IDR_XML_VOICE           XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgVoice.xml"

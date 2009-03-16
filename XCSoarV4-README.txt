@@ -37,6 +37,11 @@ Todo:
 - put globals into their own class
 - Time-penalty based scaling of speed command errors
 
+Changes from 5.2.2:
+PAOLO:
+- colorful vario gauge by Paolo (for FIVV only)
+- (minor) infobox config layout in configuration
+
 Changes from 5.1.9beta9:
 - Fixed bug in tasman vario gauge display
 - Clearer display of flarm target climb rate
@@ -130,6 +135,9 @@ Changes from 5.1.8:
 - Fixed IAS of Zander (km/h -> m/s)
 - Fixed bug in declaration to EW micro
 - Added ASG29E-18 polar
+
+--------------------
+
 
 Changes from 5.1.7 beta6:
 - Projected track line in AAT mode when track from last turn >10 degrees off target

@@ -319,6 +319,7 @@ public:
   ConditionMonitorStartRules() {
     Interval_Notification = 60;
     Interval_Check = 1;
+    withinMargin = false;
   }
 protected:
 
@@ -330,18 +331,28 @@ protected:
     if (Calculated->LegDistanceToGo>StartRadius) {
       return false;
     }
+    if (ValidStartSpeed(Basic, Calculated, StartMaxSpeedMargin) && InsideStartHeight(Basic, Calculated, StartMaxHeightMargin))
+    {
+      withinMargin = true;
+    } else {
+      withinMargin = false;
+    }
     return !(ValidStartSpeed(Basic, Calculated)
 	     && InsideStartHeight(Basic, Calculated));
   };
 
   void Notify(void) {
-    DoStatusMessage(TEXT("Start rules violated"));
+    if (withinMargin)
+      DoStatusMessage(TEXT("Start rules slightly violated\r\nbut within margin"));
+    else
+      DoStatusMessage(TEXT("Start rules violated"));
   };
 
   void SaveLast(void) {
   };
 
 private:
+  bool withinMargin;
 };
 
 
