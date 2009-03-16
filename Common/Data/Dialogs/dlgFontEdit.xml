@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<PMML version="3.0"
+  xmlns="http://www.dmg.org/PMML-3-0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema_instance" >
+  <Header copyright="VADIS">
+     <Application name="RANK For &lt;you>" version="1.99beta" />
+  </Header>
+  <Extension extender="RANKF" name="keys"><Key name="urn"></Key></Extension>
+
+<WndForm Name="frmEditFont" Type="Dialog" X=5 Y=5 Width=235 Height=230 Caption="Edit Font" Font=2 BackColor=0xDADBAB>
+
+  <WndProperty Name="prpFontName" Caption="Font Face" X=2 Y=-1  Width=235 Height=22 CaptionWidth=78 Font=2  Help="Standard names of fonts available">
+    <DataField name="" DataType="enum" Min=0 Max=50 Step=1 OnDataAccess="OnFontNameData"/>
+  </WndProperty>
+  <WndProperty Name="prpFontHeight" Caption="Height" X=2 Y=-1  Width=235 Height=22 CaptionWidth=78 Font=2 Help="Height of font.  65 is large, 20 is very small.">
+    <DataField name="" DataType="double" DisplayFormat="%.0f" Min=1 Max=200 EditFormat="%.0f" OnDataAccess="OnFontHeightData"/>
+  </WndProperty>
+  <WndProperty Name="prpFontWeight" Caption="Weight" X=2 Y=-1  Width=235 Height=22 CaptionWidth=78 Font=2 Help="Weight of the font.  700 is heavy bold, 100 normal.>
+    <DataField name="" DataType="double" DisplayFormat="%.0f" EditFormat="%.0f" Min=100 Max=900 Step=100 OnDataAccess="OnFontWeightData"/>
+  </WndProperty>
+  <WndProperty Name="prpFontItalic" Caption="Italic"     X=2 Y=-1  Width=235 Height=22 CaptionWidth=78 Font=2 Help="Italic font">
+  <DataField name="" DataType="boolean"  OnDataAccess="OnFontItalicData"/>
+  </WndProperty>
+
+  <WndProperty Name="prpFontPitchAndFamily" Caption="Pitch"     X=2 Y=-1  Width=235 Height=22 CaptionWidth=78 Font=2 Help="Variable or fixed pitch">
+  <DataField name="" DataType="enum"  OnDataAccess="OnFontPitchAndFamilyData"/>
+  </WndProperty>
+
+  <WndProperty Name="prpFontTrueType" Caption="True Type"     X=2 Y=-1  Width=235 Height=22 CaptionWidth=78 Font=2 Help="Use True type font">
+  <DataField name="" DataType="boolean"  OnDataAccess="OnFontTrueTypeData"/>
+  </WndProperty>
+
+  <WndProperty Name="prpFontSample" Caption="my sample"  X=2 Y=-1  Width=235 Height=40 CaptionWidth=235 Font=2 readonly=1 Help="">
+  </WndProperty>
+
+
+  <WndButton   Caption="Ok"    X=2 Y=185 Width=70  Height=22 Font=2 OnClickNotify="OnCloseClicked">
+  </WndButton>
+  <WndButton   Caption="Reset"    X=77 Y=185 Width=70  Height=22 Font=2 OnClickNotify="OnResetClicked">
+  </WndButton>
+  <WndButton   Caption="Cancel"    X=154 Y=185 Width=70  Height=22 Font=2 OnClickNotify="OnCancelClicked">
+  </WndButton>
+
+</WndForm>
+
+</PMML>
