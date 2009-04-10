@@ -14,6 +14,7 @@ CONFIG_WINE	:=n
 ALTAIR_PORTRAIT :=n
 CONFIG_PNA	:=n
 MINIMAL		:=n
+XSCALE		:=n
 
 ifeq ($(TARGET),PPC2002)
   CONFIG_PPC2002	:=y
@@ -21,25 +22,32 @@ else
   ifeq ($(TARGET),PPC2003)
     CONFIG_PPC2003	:=y
   else
-    ifeq ($(TARGET),PC)
-      CONFIG_PC	:=y
+    ifeq ($(TARGET),PPC2003X)
+      CONFIG_PPC2003	:=y
+      XSCALE :=y
     else
-      ifeq ($(TARGET),WINE)
-        CONFIG_WINE :=y
+      ifeq ($(TARGET),PC)
+        CONFIG_PC	:=y
       else
-        ifeq ($(TARGET),ALTAIR)
-          CONFIG_ALTAIR	:=y
-	  MINIMAL       :=y
-        endif
-        ifeq ($(TARGET),ALTAIRPORTRAIT)
-          CONFIG_ALTAIR	:=y
-	  ALTAIR_PORTRAIT :=y
-	  MINIMAL       :=y
-        endif
-	ifeq ($(TARGET),PNA)
-	  CONFIG_PNA := y
-	  CONFIG_PPC2003 := y
-	  MINIMAL       :=n
+        ifeq ($(TARGET),WINE)
+          CONFIG_WINE :=y
+        else
+          ifeq ($(TARGET),ALTAIR)
+            CONFIG_ALTAIR	:=y
+	    MINIMAL       :=y
+	    XSCALE	:=y
+          endif
+          ifeq ($(TARGET),ALTAIRPORTRAIT)
+            CONFIG_ALTAIR	:=y
+	    ALTAIR_PORTRAIT :=y
+	    MINIMAL       :=y
+	    XSCALE	:=y
+          endif
+	  ifeq ($(TARGET),PNA)
+	    CONFIG_PNA := y
+	    CONFIG_PPC2003 := y
+	    MINIMAL       :=n
+	  endif
 	endif
       endif
     endif
@@ -55,7 +63,12 @@ TCPATH		:=wine
 CPU		:=i586
 else
 TCPATH		:=arm-mingw32ce-
+
+ifeq ($(XSCALE),y)
 CPU		:=xscale
+else
+CPU		:=
+endif
 
 ifeq ($(TARGET),PNA)
 CPU		:=arm1136j-s
@@ -79,11 +92,14 @@ CE_MAJOR	:=4
 CE_MINOR	:=00
 CE_PLATFORM	:=400
 PCPU		:=ARMV4
-ifeq ($(CONFIG_PNA),y)
-TARGET		:=PNA
-else
-TARGET		:=PPC2003
-endif
+
+# JMW this shouldn't be required
+#ifeq ($(CONFIG_PNA),y)
+#TARGET		:=PNA
+#else
+#TARGET		:=PPC2003
+#endif
+
 endif
 ifeq ($(CONFIG_ALTAIR),y)
 # armv4i
