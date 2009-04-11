@@ -49,6 +49,7 @@ typedef	struct DeviceDescriptor_t{
   BOOL (*PutQNH)(DeviceDescriptor_t *d, double NewQNH);
   BOOL (*OnSysTicker)(DeviceDescriptor_t *d);
   BOOL (*PutVoice)(DeviceDescriptor_t *d, TCHAR *Sentence);
+  BOOL (*IsCondor)(DeviceDescriptor_t	*d);
   DeviceDescriptor_t *pDevPipeTo;
 
   int PortNumber;
@@ -103,6 +104,7 @@ BOOL devIsLogger(PDeviceDescriptor_t d);
 BOOL devIsGPSSource(PDeviceDescriptor_t	d);
 BOOL devIsBaroSource(PDeviceDescriptor_t d);
 BOOL devIsRadio(PDeviceDescriptor_t d);
+BOOL devIsCondor(PDeviceDescriptor_t d);
 BOOL devOpenLog(PDeviceDescriptor_t d, TCHAR *FileName);
 BOOL devCloseLog(PDeviceDescriptor_t d);
 

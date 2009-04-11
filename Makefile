@@ -283,6 +283,7 @@ DEVS	:=\
 	$(SRC)/devBorgeltB50.o \
 	$(SRC)/devCAI302.o \
 	$(SRC)/devCaiGpsNav.o \
+	$(SRC)/devCondor.o \
 	$(SRC)/devEW.o \
 	$(SRC)/devEWMicroRecorder.o \
 	$(SRC)/devFlymasterF1.o \

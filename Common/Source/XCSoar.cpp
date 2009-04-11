@@ -83,6 +83,7 @@ Copyright_License {
 #include "devZander.h"
 #include "devFlymasterF1.h"
 #include "devXCOM760.h"
+#include "devCondor.h"
 
 #include "externs.h"
 #include "Units.h"
@@ -1530,6 +1531,7 @@ wcscat(XCSoar_Version, TEXT("PNA "));
   zanderRegister();
   flymasterf1Register();
   xcom760Register();
+  condorRegister();
 
   //JMW disabled  devInit(lpCmdLine);
 

@@ -197,6 +197,7 @@ BOOL devInit(LPTSTR CommandLine){
     DeviceList[i].PutVolume = NULL;
     DeviceList[i].PutFreqActive = NULL;
     DeviceList[i].PutFreqStandby = NULL;
+    DeviceList[i].IsCondor = devIsFalseReturn;
   }
 
   pDevPrimaryBaroSource = NULL;
@@ -662,6 +663,20 @@ BOOL devIsRadio(PDeviceDescriptor_t d)
 
   return result;
 }
+
+
+BOOL devIsCondor(PDeviceDescriptor_t d)
+{
+  BOOL result = FALSE;
+
+  LockComm();
+  if ((d != NULL) && (d->IsCondor != NULL))
+    result = d->IsCondor(d);
+  UnlockComm();
+
+  return result;
+}
+
 
 
 BOOL devOpenLog(PDeviceDescriptor_t d, TCHAR *FileName){

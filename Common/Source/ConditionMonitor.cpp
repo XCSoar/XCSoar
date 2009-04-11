@@ -38,6 +38,7 @@ Copyright_License {
 #include "Calculations.h"
 #include "Dialogs.h"
 #include "Task.h"
+#include "device.h"
 #include "externs.h"
 
 #include "compatibility.h"
@@ -258,7 +259,7 @@ protected:
 
     bool past_sunset = (d1>sunsettime) && (d0<sunsettime);
 
-    if (past_sunset) {
+    if (past_sunset && !devIsCondor(devA())) {
       // notify on change only
       return true;
     } else {

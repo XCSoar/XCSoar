@@ -96,12 +96,6 @@ int dlgWaypointOutOfTerrain(TCHAR *Message);
 
 static bool WaypointInTerrainRange(WAYPOINT *List) {
 
-  /*
-  #if defined(DEBUG)
-    return(true);
-  #endif
-  */
-
   if (WaypointOutOfTerrainRangeDontAskAgain == 1){
     return(true);
   }
@@ -162,7 +156,7 @@ static int ParseWayPointError(int LineNumber, TCHAR *FileName, TCHAR *String){
 
   if (_tcslen(FileName)> 0) {
     _stprintf(szTemp,
-              TEXT("%s\r\n%s %s Line %d\r\n%s"),
+              TEXT("%s\r\n%s %s %s %d\r\n%s"),
               gettext(TEXT("Waypointfile Parse Error")),
               gettext(TEXT("File")),
               FileName,
@@ -170,7 +164,7 @@ static int ParseWayPointError(int LineNumber, TCHAR *FileName, TCHAR *String){
               LineNumber, String);
   } else {
     _stprintf(szTemp,
-              TEXT("%s\r\n%s Line %d\r\n%s"),
+              TEXT("%s\r\n%s %s %d\r\n%s"),
               gettext(TEXT("Waypointfile Parse Error")),
               gettext(TEXT("(Map file)")),
               gettext(TEXT("Line")),
