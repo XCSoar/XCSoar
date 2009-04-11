@@ -15,6 +15,7 @@ ALTAIR_PORTRAIT :=n
 CONFIG_PNA	:=n
 MINIMAL		:=n
 XSCALE		:=n
+GTARGET		:=$(TARGET)
 
 ifeq ($(TARGET),PPC2002)
   CONFIG_PPC2002	:=y
@@ -25,6 +26,7 @@ else
     ifeq ($(TARGET),PPC2003X)
       CONFIG_PPC2003	:=y
       XSCALE :=y
+      GTARGET := PPC2003
     else
       ifeq ($(TARGET),PC)
         CONFIG_PC	:=y
@@ -54,31 +56,41 @@ else
   endif
 endif
 
+############# build and CPU info
+
 ifeq ($(CONFIG_PC),y)
 TCPATH		:=i586-mingw32msvc-
 CPU		:=i586
+MCPU		:= -mcpu=$(CPU)
 else
 ifeq ($(CONFIG_WINE),y)
 TCPATH		:=wine
 CPU		:=i586
+MCPU		:= -mcpu=$(CPU)
 else
 TCPATH		:=arm-mingw32ce-
 
 ifeq ($(XSCALE),y)
 CPU		:=xscale
+MCPU		:= -mcpu=$(CPU)
 else
 CPU		:=
+MCPU		:=
 endif
 
 ifeq ($(TARGET),PNA)
 CPU		:=arm1136j-s
+MCPU		:=
 endif
 ifeq ($(CONFIG_PPC2002),y)
 CPU		:=strongarm1110
+MCPU		:= -mcpu=$(CPU)
 endif
 
 endif
 endif
+
+############# platform info
 
 ifeq ($(CONFIG_PPC2002),y)
 CE_MAJOR	:=3
@@ -129,6 +141,7 @@ TARGET		:=WINE
 CONFIG_PC	:=y
 endif
 
+######## output files
 
 OUTPUTS 	:= XCSoar-$(TARGET).exe XCSoarSimulator-$(TARGET).exe
 ifeq ($(CONFIG_ALTAIR),y)
@@ -141,6 +154,8 @@ ifeq ($(CONFIG_PNA),y)
 OUTPUTS 	:= XCSoar-$(TARGET).exe
 endif
 
+######## tools
+
 EXE		:=$(findstring .exe,$(MAKE))
 AR		:=$(TCPATH)ar$(EXE)
 CXX		:=$(TCPATH)g++$(EXE)
@@ -150,6 +165,8 @@ STRIP		:=$(TCPATH)strip$(EXE)
 WINDRES		:=$(TCPATH)windres$(EXE)
 CE_VERSION	:=0x0$(CE_MAJOR)$(CE_MINOR)
 ARFLAGS		:=r
+
+######## windows definitions
 
 ifeq ($(CONFIG_PC),y)
 CE_DEFS		:=-D_WIN32_WINDOWS=$(CE_VERSION) -DWINVER=$(CE_VERSION)
@@ -161,11 +178,15 @@ endif
 
 UNICODE		:= -DUNICODE -D_UNICODE
 
+######## paths
+
 ifeq ($(CONFIG_WINE),y)
 INCLUDES	:= -I$(HDR)/mingw32compat -I$(HDR) -I$(SRC)
 else
 INCLUDES	:= -I$(HDR)/mingw32compat -I$(HDR) -I$(SRC)
 endif
+
+######## compiler flags
 
 CPPFLAGS	:= $(INCLUDES) $(CE_DEFS)
 CPPFLAGS	+= -DNDEBUG -Wuninitialized -DFLARM_AVERAGE
@@ -194,6 +215,8 @@ endif
 CXXFLAGS	:=$(OPTIMIZE) -fno-exceptions $(PROFILE)
 CFLAGS		:=$(OPTIMIZE) $(PROFILE)
 
+####### linker configuration
+
 LDFLAGS		:=-Wl,--major-subsystem-version=$(CE_MAJOR)
 LDFLAGS		+=-Wl,--minor-subsystem-version=$(CE_MINOR)
 ifeq ($(CONFIG_PC),y)
@@ -213,12 +236,13 @@ else
   endif
 endif
 
+####### compiler target
+
 ifeq ($(CONFIG_PC),y)
 TARGET_ARCH	:=-mwindows -march=i586 -mms-bitfields
 else
 
-
-TARGET_ARCH	:=-mwin32 -mcpu=$(CPU)
+TARGET_ARCH	:=-mwin32 $(MCPU)
 ifeq ($(TARGET),PNA)
 TARGET_ARCH	:=-mwin32
 endif
@@ -229,6 +253,8 @@ ifeq ($(CONFIG_ALTAIR),y)
 WINDRESFLAGS	+=-DGNAV
 endif
 MAKEFLAGS	+=-r
+
+####### build verbosity
 
 # Internal - Control verbosity
 #  make V=0 - quiet
@@ -246,6 +272,7 @@ NQ		:=
 endif
 endif
 
+####### sources
 
 ifeq ($(CONFIG_PC),n)
 #CPPFLAGS_Common_Source_ :=-Werror
@@ -419,6 +446,8 @@ COMPAT	:=\
 
 all:	$(OUTPUTS)
 
+####### products
+
 install: XCSoar-$(TARGET).exe XCSoarSimulator-$(TARGET).exe
 	@echo Copying to device...
 	synce-prm ':/Program Files/XCSoar/XCSoar.exe'
@@ -428,9 +457,9 @@ install: XCSoar-$(TARGET).exe XCSoarSimulator-$(TARGET).exe
 
 cab:	XCSoar-$(TARGET).exe XCSoarSimulator-$(TARGET).exe
 	@echo Making cabs
-	cp XCSoar-$(TARGET).exe $(TARGET)/XCSoar/gcc/XCSoar.exe
-	cp XCSoarSimulator-$(TARGET).exe $(TARGET)/XCSoarSimulator/gcc/XCSoarSimulator.exe
-	wine $(TARGET)/Cabwiz.exe XCSoar$(TARGET)-gcc.inf /cpu $(PCPU)
+	cp XCSoar-$(TARGET).exe $(GTARGET)/XCSoar/gcc/XCSoar.exe
+	cp XCSoarSimulator-$(TARGET).exe $(GTARGET)/XCSoarSimulator/gcc/XCSoarSimulator.exe
+	wine $(GTARGET)/Cabwiz.exe XCSoar$(TARGET)-gcc.inf /cpu $(PCPU)
 	mv XCSoar$(TARGET)-gcc.$(PCPU).CAB XCSoar$(TARGET).$(PCPU).CAB
 
 #	wine ezsetup.exe -l english -i XCSoar$(TARGET).ini -r installmsg.txt -e gpl.txt -o InstallXCSoar-$(TARGET).exe
@@ -475,6 +504,7 @@ $(SRC)/compat.a: $(patsubst %.cpp,%.o,$(COMPAT:.c=.o))
 	@$(NQ)echo "  AR      $@"
 	$(Q)$(AR) $(ARFLAGS) $@ $^
 
+####### shared objects
 #
 # Tell make how to create a compiled resource object (rsc)
 #
@@ -487,6 +517,8 @@ $(SRC)/compat.a: $(patsubst %.cpp,%.o,$(COMPAT:.c=.o))
 	@$(NQ)echo "  WINDRES $@"
 	$(Q)$(WINDRES) $(WINDRESFLAGS) $<.tmp $@
 	@$(RM) $<.tmp
+
+####### dependency handling
 
 DEPFILE		=$(dir $@).$(notdir $@).d
 DEPFLAGS	=-Wp,-MD,$(DEPFILE)
@@ -505,6 +537,8 @@ cxx-flags	=$(DEPFLAGS) $(CXXFLAGS) $(CPPFLAGS) $(CPPFLAGS_$(dirtarget)) $(TARGET
 
 %.i: %.c FORCE
 	$(CC) $(cc-flags) -E $(OUTPUT_OPTION) $<
+
+####### build rules
 
 #
 # Provide our own rules for building...
