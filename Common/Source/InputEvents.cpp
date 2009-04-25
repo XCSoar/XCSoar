@@ -2287,8 +2287,7 @@ void InputEvents::eventSetup(const TCHAR *misc) {
 void InputEvents::eventDLLExecute(const TCHAR *misc) {
   // LoadLibrary(TEXT("test.dll"));
 
-  StartupStore(misc);
-  StartupStore(TEXT("\n"));
+  StartupStore(TEXT("%s\n"), misc);
 
   TCHAR data[MAX_PATH];
   TCHAR* dll_name;

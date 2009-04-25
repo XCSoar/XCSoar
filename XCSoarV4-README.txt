@@ -41,9 +41,18 @@ Changes from 5.2.2:
 PAOLO:
 - colorful vario gauge by Paolo (for FIVV only)
 - (minor) infobox config layout in configuration
-TOBIAS
+TOBIAS:
 - ballast dump works outside task calculator
 - start task info
+ROB DUNNING:
+- Font editing patch
+- Allow DebugStore to use varargs and convert all ca
+- Allow StartupStore to use varargs and convert all.patch
+- Fix font in checklist dialog
+- Allow synce pcp to be overridden via make
+
+JMW:
+- Added Condor device
 
 Changes from 5.1.9beta9:
 - Fixed bug in tasman vario gauge display

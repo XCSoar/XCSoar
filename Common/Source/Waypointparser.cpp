@@ -605,9 +605,7 @@ void ReadWayPoints(void)
       unicode2ascii(szMapFile, zfilename, MAX_PATH);
       fp  = zzip_fopen(zfilename, "rt");
       if (fp != NULL) {
-	StartupStore(TEXT("Waypoint file from xcm\n"));
-	StartupStore(szMapFile);
-	StartupStore(TEXT("\n"));
+	StartupStore(TEXT("Waypoint file from xcm\n%s\n"), szMapFile);
       }
     }
 

@@ -164,10 +164,10 @@ extern bool Debounce();
 #define M_2PI 6.28318530718
 
 extern "C" {
-void DebugStore(char *Str);
+void DebugStore(const char *Str, ...);
 }
 
-void StartupStore(const TCHAR *Str);
+void StartupStore(const TCHAR *Str, ...);
 
 typedef struct
 {

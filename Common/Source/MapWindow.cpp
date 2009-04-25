@@ -304,9 +304,7 @@ void MapWindow::UpdateTimeStats(bool start) {
       cpuload=0;
 #ifdef DEBUG_MEM
       cpuload= MeasureCPULoad();
-      char tmptext[100];
-      sprintf(tmptext,"%d # mem\n%d # latency\n", CheckFreeRam()/1024, timestats_av);
-      DebugStore(tmptext);
+      DebugStore("%d # mem\n%d # latency\n", CheckFreeRam()/1024, timestats_av);
 #endif
     }
     timestats_dirty = false;

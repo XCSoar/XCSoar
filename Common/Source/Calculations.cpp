@@ -901,10 +901,9 @@ void DebugTaskCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   if ((Calculated->TaskStartTime>0)
       && (Basic->Time-Calculated->TaskStartTime>0)) {
       if (Calculated->Flying) {
-        char buffer[200];
 
         double effective_mc = EffectiveMacCready(Basic, Calculated);
-        sprintf(buffer,"%g %g %g %g %g %g %g %g %g %g %d %g %g # taskspeed\r\n",
+        DebugStore("%g %g %g %g %g %g %g %g %g %g %d %g %g # taskspeed\r\n",
                 Basic->Time-Calculated->TaskStartTime,
                 Calculated->TaskDistanceCovered,
                 Calculated->TaskDistanceToGo,
@@ -918,7 +917,6 @@ void DebugTaskCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
                 ActiveWayPoint,
                 Calculated->DistanceVario,
                 Calculated->GPSVario);
-        DebugStore(buffer);
       }
     }
 #endif
@@ -1145,12 +1143,10 @@ void Average30s(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 
 #ifdef DEBUGAVERAGER
       if (Calculated->Flying) {
-        char buffer[200];
-        sprintf(buffer,"%d %g %g %g # averager\r\n",
+        DebugStore("%d %g %g %g # averager\r\n",
                 num_samples,
                 Calculated->Vario,
                 Calculated->Average30s, Calculated->NettoAverage30s);
-        DebugStore(buffer);
       }
 #endif
 
@@ -1681,12 +1677,10 @@ static void LastThermalStats(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
                 least_squares_update(Calculated->LastThermalAverage);
 
 #ifdef DEBUG_STATS
-              char Temp[100];
-              sprintf(Temp,"%f %f # thermal stats\n",
+              DebugStore("%f %f # thermal stats\n",
                       flightstats.ThermalAverage.m,
                       flightstats.ThermalAverage.b
                       );
-              DebugStore(Temp);
 #endif
               if (EnableThermalLocator) {
                 ThermalSources(Basic, Calculated);

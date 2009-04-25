@@ -658,10 +658,6 @@ void                                                    PopUpSelect(int i);
 
 //HWND CreateRpCommandBar(HWND hwnd);
 
-#ifdef DEBUG
-void                                            DebugStore(char *Str);
-#endif
-
 
 void TriggerGPSUpdate()
 {
@@ -1195,14 +1191,11 @@ void AfterStartup() {
 extern int testmain();
 
 void StartupLogFreeRamAndStorage() {
-  TCHAR temp[100];
   int freeram = CheckFreeRam()/1024;
   TCHAR buffer[MAX_PATH];
   LocalPath(buffer);
   int freestorage = FindFreeSpace(buffer);
-  _stprintf(temp,TEXT("Free ram %d\nFree storage %d\n"),
-            freeram, freestorage);
-  StartupStore(temp);
+  StartupStore(TEXT("Free ram %d\nFree storage %d\n"), freeram, freestorage);
 }
 
 
@@ -1295,9 +1288,7 @@ wcscat(XCSoar_Version, TEXT("PNA "));
   CreateDirectoryIfAbsent(TEXT("logs"));
   CreateDirectoryIfAbsent(TEXT("config"));
 
-  StartupStore(TEXT("Starting XCSoar "));
-  StartupStore(XCSoar_Version);
-  StartupStore(TEXT("\n"));
+  StartupStore(TEXT("Starting XCSoar %s\n"), XCSoar_Version);
 
   //
   StartupLogFreeRamAndStorage();
@@ -3576,9 +3567,17 @@ void PopUpSelect(int Index)
 
 #include <stdio.h>
 
-void DebugStore(char *Str)
+void DebugStore(const char *Str, ...)
 {
 #if defined(DEBUG) && !defined(GNAV)
+  char buf[200];
+  va_list ap;
+  int len;
+
+  va_start(ap, Str);
+  len = _vsprintf(buf, Str, ap);
+  va_end(ap);
+
   LockFlightData();
   FILE *stream;
   TCHAR szFileName[] = TEXT("xcsoar-debug.log");
@@ -3590,7 +3589,7 @@ void DebugStore(char *Str)
     stream = _wfopen(szFileName,TEXT("a+"));
   }
 
-  fwrite(Str,strlen(Str),1,stream);
+  fwrite(buf,len,1,stream);
 
   fclose(stream);
   UnlockFlightData();
@@ -3598,8 +3597,15 @@ void DebugStore(char *Str)
 }
 
 
-void StartupStore(const TCHAR *Str)
+void StartupStore(const TCHAR *Str, ...)
 {
+  TCHAR buf[160];
+  va_list ap;
+
+  va_start(ap, Str);
+  _vstprintf(buf, Str, ap);
+  va_end(ap);
+
   if (csFlightDataInitialized) {
     LockFlightData();
   }
@@ -3620,7 +3626,7 @@ void StartupStore(const TCHAR *Str)
   }
   startupStoreFile = _tfopen(szFileName, TEXT("ab+"));
   if (startupStoreFile != NULL) {
-    fprintf(startupStoreFile, "%S", Str);
+    fprintf(startupStoreFile, "%S", buf);
     fclose(startupStoreFile);
   }
   if (csFlightDataInitialized) {

@@ -151,9 +151,7 @@ void WindStore::newWind(NMEA_INFO *nmeaInfo, DERIVED_INFO *derivedInfo,
   }
 
 #ifdef DEBUG_WIND
-  char Temp[100];
-  sprintf(Temp,"%f %f 0 # wind estimate\n",wind.x,wind.y);
-  DebugStore(Temp);
+  DebugStore("%f %f 0 # wind estimate\n",wind.x,wind.y);
 #endif
 
 }

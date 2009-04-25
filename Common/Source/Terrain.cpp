@@ -158,9 +158,7 @@ void SetTopologyBounds(const RECT rcin, const bool force) {
       }
     }
 #ifdef DEBUG_GRAPHICS
-    char tmptext[100];
-    sprintf(tmptext,"%d # shapes\n", total_shapes_visible);
-    DebugStore(tmptext);
+    DebugStore("%d # shapes\n", total_shapes_visible);
 #endif
 
   }
@@ -1299,9 +1297,7 @@ void OpenTopology() {
   zFile = zzip_fopen(zfilename, "rt");
   if (!zFile) {
     UnlockTerrainDataGraphics();
-    StartupStore(TEXT("No topology file\n"));
-    StartupStore(szFile);
-    StartupStore(TEXT("\n"));
+    StartupStore(TEXT("No topology file\n%s\n"), szFile);
     return;
   }
 

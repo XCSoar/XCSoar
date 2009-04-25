@@ -173,12 +173,10 @@ void ThermalLocator::Update(double t_0,
     // big shift detected
 
 #ifdef DEBUG_THERMAL_LOCATOR
-    char buffer[100];
-    sprintf(buffer,"%f %f %f %f %f # center2 \n",
+    DebugStore("%f %f %f %f %f # center2 \n",
 	    *Thermal_Longitude, *Thermal_Latitude,
             Thermal_Longitude0, Thermal_Latitude0,
             d);
-    DebugStore(buffer);
 #endif
 
     //    }

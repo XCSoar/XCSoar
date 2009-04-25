@@ -397,20 +397,14 @@ void WindAnalyser::slot_newEstimate(NMEA_INFO *nmeaInfo,
 {
 
 #ifdef DEBUG_WIND
-  char Temp[100];
-#endif
+  const char *type;
 
   if (quality>=6) {
-#ifdef DEBUG_WIND
-    sprintf(Temp,"%f %f %d # external wind\n",a.x,a.y, quality);
-#endif
+    type = "external wind";
   } else {
-#ifdef DEBUG_WIND
-    sprintf(Temp,"%f %f %d # wind circling\n",a.x,a.y, quality);
-#endif
+    type = "wind circling";
   }
-#ifdef DEBUG_WIND
-  DebugStore(Temp);
+  DebugStore("%f %f %d # %s\n", a.x, a.y, quality, type);
 #endif
 
   windstore.slot_measurement(nmeaInfo, derivedInfo, a, quality);

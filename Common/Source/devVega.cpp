@@ -293,15 +293,13 @@ static BOOL PDVDS(PDeviceDescriptor_t d, const TCHAR *String, NMEA_INFO *GPS_INF
   }
 
   if (EnableCalibration) {
-    char buffer[200];
-    sprintf(buffer,"%g %g %g %g %g %g #te net\r\n",
+    DebugStore("%g %g %g %g %g %g #te net\r\n",
 	    GPS_INFO->IndicatedAirspeed,
 	    GPS_INFO->BaroAltitude,
 	    GPS_INFO->Vario,
 	    GPS_INFO->NettoVario,
 	    GPS_INFO->AccelX,
 	    GPS_INFO->AccelZ);
-    DebugStore(buffer);
   }
   GPS_INFO->VarioAvailable = TRUE;
   //hasVega = true;

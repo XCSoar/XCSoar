@@ -185,8 +185,7 @@ void DataFieldFileReader::ScanDirectoryTop(const TCHAR* filter) {
   _stprintf(FlashPath,TEXT("/%s/XCSoarData"),FlashCardTmp.cFileName);
   ScanDirectories(FlashPath,filter);
   if (first) {
-    StartupStore(FlashPath);
-    StartupStore(TEXT("\n"));
+    StartupStore(TEXT("%s\n"), FlashPath);
   }
   while (bContinue) {
       // Search for the next storage card.
@@ -195,8 +194,7 @@ void DataFieldFileReader::ScanDirectoryTop(const TCHAR* filter) {
         _stprintf(FlashPath,TEXT("/%s/XCSoarData"),FlashCardTmp.cFileName);
         ScanDirectories(FlashPath,filter);
         if (first) {
-          StartupStore(FlashPath);
-          StartupStore(TEXT("\n"));
+          StartupStore(TEXT("%s\n"), FlashPath);
         }
       }
   }

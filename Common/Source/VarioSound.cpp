@@ -1895,9 +1895,7 @@ void VarioSound_sndparam_int() {
     kaverage++;
     dtave+= dt;
     if (kaverage % 100 == 0) {
-      char message[100];
-      sprintf(message,"sound delay %d ms\r\n", dtave/kaverage);
-      DebugStore(message);
+      DebugStore("sound delay %d ms\r\n", dtave/kaverage);
       dtave=0;
       kaverage=0;
     }

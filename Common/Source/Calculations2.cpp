@@ -790,7 +790,6 @@ void CalibrationInit(void) {
 
 
 void CalibrationSave(void) {
-  TCHAR sTmp[MAX_PATH];
   int i, j;
   double v, w = 0, wav;
   StartupStore(TEXT("Calibration data for TE vario\n"));
@@ -800,9 +799,8 @@ void CalibrationSave(void) {
         v = i*2.0+20.0;
         w = (j-50.0)/10.0;
         wav = calibration_tevario_val[i][j]/calibration_tevario_num[i][j];
-        _stprintf(sTmp, TEXT("%g %g %g %d\n"), v, w, wav,
+        StartupStore(TEXT("%g %g %g %d\n"), v, w, wav,
                   calibration_tevario_num[i][j]);
-        StartupStore(sTmp);
       }
     }
   }
@@ -811,9 +809,8 @@ void CalibrationSave(void) {
     if (calibration_speed_num[i]>0) {
       v = i+20.0;
       wav = calibration_speed_val[i]/calibration_speed_num[i];
-      _stprintf(sTmp, TEXT("%g %g %g %d\n"), v, w, wav,
+      StartupStore(TEXT("%g %g %g %d\n"), v, w, wav,
                 calibration_speed_num[i]);
-      StartupStore(sTmp);
     }
   }
 }

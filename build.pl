@@ -53,6 +53,12 @@ my %platforms = (
 		'cab' => 1,
 		'sim' => 1
 	},
+	'PPC2003X' => {
+		'exec' => "EVC4",
+		'proc' => [qw/ARMV4/],
+		'cab' => 1,
+		'sim' => 1
+	},
 	'PNA' => {
 		'exec' => "EVC4",
 		'proc' => [qw/ARMV4/],

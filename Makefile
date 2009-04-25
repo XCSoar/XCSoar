@@ -163,6 +163,8 @@ CC		:=$(TCPATH)gcc$(EXE)
 SIZE		:=$(TCPATH)size$(EXE)
 STRIP		:=$(TCPATH)strip$(EXE)
 WINDRES		:=$(TCPATH)windres$(EXE)
+SYNCE_PCP	:=synce-pcp
+SYNCE_PRM	:=synce-prm
 CE_VERSION	:=0x0$(CE_MAJOR)$(CE_MINOR)
 ARFLAGS		:=r
 
@@ -451,10 +453,10 @@ all:	$(OUTPUTS)
 
 install: XCSoar-$(TARGET).exe XCSoarSimulator-$(TARGET).exe
 	@echo Copying to device...
-	synce-prm ':/Program Files/XCSoar/XCSoar.exe'
-	synce-prm ':/Program Files/XCSoar/XCSoarSimulator.exe'
-	synce-pcp XCSoar-$(TARGET).exe ':/Program Files/XCSoar/XCSoar.exe'
-	synce-pcp XCSoarSimulator-$(TARGET).exe ':/Program Files/XCSoar/XCSoarSimulator.exe'
+	$(SYNCE_PRM) ':/Program Files/XCSoar/XCSoar.exe'
+	$(SYNCE_PRM) ':/Program Files/XCSoar/XCSoarSimulator.exe'
+	$(SYNCE_PCP) XCSoar-$(TARGET).exe ':/Program Files/XCSoar/XCSoar.exe'
+	$(SYNCE_PCP) XCSoarSimulator-$(TARGET).exe ':/Program Files/XCSoar/XCSoarSimulator.exe'
 
 cab:	XCSoar-$(TARGET).exe XCSoarSimulator-$(TARGET).exe
 	@echo Making cabs

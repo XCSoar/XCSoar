@@ -283,9 +283,7 @@ public:
     if ((spread>360.0)||(spread< minspread)) {
       // invalid if really circling or if not enough zig-zag
 #ifdef DEBUG_ZIGZAG_A
-      char atext[100];
-      sprintf(atext,"zigzag spread invalid %03.1f\n", spread);
-      DebugStore(atext);
+      DebugStore("zigzag spread invalid %03.1f\n", spread);
 #endif
       return false;
     }
@@ -499,15 +497,13 @@ void TestZigZag(double V_wind, double theta_wind) {
     percent_error = myzigzag.StartSearch(V_wind_estimate, theta_wind_estimate);
     myzigzag.Estimate(&V_wind_estimate, &theta_wind_estimate, &percent_error);
 
-    char text[100];
-    sprintf(text,"%2.1f %2.1f %03.0f %03.0f %2.1f # test zigzag\n",
+    DebugStore("%2.1f %2.1f %03.0f %03.0f %2.1f # test zigzag\n",
             V_wind,
             V_wind_estimate,
             theta_wind/DEGTORAD,
             theta_wind_estimate/DEGTORAD,
             percent_error
             );
-    DebugStore(text);
   }
 }
 
@@ -600,13 +596,11 @@ int WindZigZagUpdate(NMEA_INFO* Basic, DERIVED_INFO* Calculated,
 		    Basic->Speed, Basic->TrackBearing*DEGTORAD);
 
 #ifdef DEBUG_ZIGZAG_A
-    char atext[100];
-    sprintf(atext,"%f %03.0f %03.0f %03.0f # zigpoint\n",
+    DebugStore("%f %03.0f %03.0f %03.0f # zigpoint\n",
             Basic->Time,
             Basic->TrueAirspeed,
             Basic->Speed,
             Basic->TrackBearing);
-    DebugStore(atext);
 #endif
 
   // don't update wind from zigzag more often than
@@ -632,10 +626,8 @@ int WindZigZagUpdate(NMEA_INFO* Basic, DERIVED_INFO* Calculated,
     // don't refine search if error is small
 
 #ifdef DEBUG_ZIGZAG
-    char xtext[100];
-    sprintf(xtext,"zigzag error small %02.0f %03.1f\n",
+    DebugStore("zigzag error small %02.0f %03.1f\n",
             percent_error, v_error);
-    DebugStore(xtext);
 #endif
     return 0;
   }
@@ -662,8 +654,7 @@ int WindZigZagUpdate(NMEA_INFO* Basic, DERIVED_INFO* Calculated,
     }
 
 #ifdef DEBUG_ZIGZAG
-    char text[100];
-    sprintf(text,"%f %3.1f %03.0f %3.1f %03.0f %f %d # zigzag\n",
+    DebugStore("%f %3.1f %03.0f %3.1f %03.0f %f %d # zigzag\n",
             Basic->Time,
             V_wind_estimate,
             theta_wind_estimate,
@@ -671,7 +662,6 @@ int WindZigZagUpdate(NMEA_INFO* Basic, DERIVED_INFO* Calculated,
             Calculated->WindBearing,
             percent_error,
             quality);
-    DebugStore(text);
 #endif
     return quality;
   } else {
