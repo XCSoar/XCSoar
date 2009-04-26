@@ -444,8 +444,7 @@ JASPER	:=\
 COMPATSRC:=$(SRC)/wcecompat
 COMPAT	:=\
 	$(COMPATSRC)/errno.cpp 		$(COMPATSRC)/string_extras.c \
-	$(COMPATSRC)/ts_string.cpp 	$(COMPATSRC)/wtoi.c \
-	$(COMPATSRC)/debug.cpp
+	$(COMPATSRC)/ts_string.cpp 	$(COMPATSRC)/wtoi.c
 
 all:	$(OUTPUTS)
 
