@@ -89,7 +89,7 @@ typedef struct{
   unsigned char  result[3];
   char           PilotName[24];
   unsigned char  OldUnit;                                       // old unit
-  unsigned char  OldTemperaturUnit;
+  unsigned char  OldTemperaturUnit;                             //0=Celcius 1=Farenheight
   unsigned char  SinkTone;
   unsigned char  TotalEnergyFinalGlide;
   unsigned char  ShowFinalGlideAltitude;
@@ -100,8 +100,8 @@ typedef struct{
   unsigned short CloseTpLoggingInterval;
   unsigned short TimeBetweenFlightLogs;                     // [Minutes]
   unsigned short MinimumSpeedToForceFlightLogging;          // (Knots)
-  unsigned char  StfDeadBand;                                // (M/S)
-  unsigned char  Reserved;
+  unsigned char  StfDeadBand;                                // (10ths M/S)
+  unsigned char  ReservedVario;                           // multiplexed w/ vario mode:  Tot Energy, SuperNeto, Netto
   unsigned short UnitWord;
   unsigned short Reserved2;
   unsigned short MarginHeight;                              // (10ths of Meters)
@@ -125,7 +125,8 @@ typedef struct{
   unsigned short WeightInLiters;
   unsigned short BallastCapacity;
   unsigned short Reserved2;
-  unsigned short ConfigWord;
+  unsigned short ConfigWord;                                //locked(1) = FF FE.  unlocked(0) = FF FF
+  unsigned short WingArea;                                  // 100ths square meters
   unsigned char  Spare[60];                                 // 302 expect more data than the documented filed
                                                             // be shure there is space to hold the data
 }cai302_Gdata_t;
@@ -323,8 +324,9 @@ BOOL cai302Declare(PDeviceDescriptor_t d, Declaration_t *decl){
     return(FALSE);
   }
 
-  d->Com->WriteString(TEXT("O 128\r"));
-  d->Com->Read(&cai302_OdataPilot, cai302_OdataNoArgs.PilotRecordSize + 3);
+  d->Com->WriteString(TEXT("O 0\r"));  // 0=active pilot
+  Sleep(1000); // some params come up 0 if we don't wait!
+  d->Com->Read(&cai302_OdataPilot, min(sizeof(cai302_OdataPilot),cai302_OdataNoArgs.PilotRecordSize+3));
   if (!ExpectString(d, TEXT("up>"))){
     nDeclErrorCode = 1;
     return(FALSE);
@@ -347,6 +349,7 @@ BOOL cai302Declare(PDeviceDescriptor_t d, Declaration_t *decl){
   }
 
   d->Com->WriteString(TEXT("G 0\r"));
+  Sleep(1000);
   d->Com->Read(&cai302_Gdata, cai302_GdataNoArgs.GliderRecordSize + 3);
   if (!ExpectString(d, TEXT("up>"))){
     nDeclErrorCode = 1;
@@ -356,6 +359,7 @@ BOOL cai302Declare(PDeviceDescriptor_t d, Declaration_t *decl){
   swap(cai302_Gdata.WeightInLiters);
   swap(cai302_Gdata.BallastCapacity);
   swap(cai302_Gdata.ConfigWord);
+  swap(cai302_Gdata.WingArea);
 
   d->Com->SetRxTimeout(1500);
 
@@ -393,7 +397,7 @@ BOOL cai302Declare(PDeviceDescriptor_t d, Declaration_t *decl){
     cai302_OdataPilot.TimeBetweenFlightLogs,
     cai302_OdataPilot.MinimumSpeedToForceFlightLogging,
     cai302_OdataPilot.StfDeadBand,
-    255,
+    cai302_OdataPilot.ReservedVario,
     cai302_OdataPilot.UnitWord,
     cai302_OdataPilot.MarginHeight
   );
@@ -405,7 +409,7 @@ BOOL cai302Declare(PDeviceDescriptor_t d, Declaration_t *decl){
     return(FALSE);
   }
 
-  _stprintf(szTmp, TEXT("G,%-12s,%-12s,%d,%d,%d,%d,%d,%d,%d\r"),
+  _stprintf(szTmp, TEXT("G,%-12s,%-12s,%d,%d,%d,%d,%d,%d,%d,%d\r"),
     GliderType,
     GliderID,
     cai302_Gdata.bestLD,
@@ -414,7 +418,8 @@ BOOL cai302Declare(PDeviceDescriptor_t d, Declaration_t *decl){
     cai302_Gdata.WeightInLiters,
     cai302_Gdata.BallastCapacity,
     0,
-    cai302_Gdata.ConfigWord
+    cai302_Gdata.ConfigWord,
+    cai302_Gdata.WingArea
   );
 
   d->Com->WriteString(szTmp);

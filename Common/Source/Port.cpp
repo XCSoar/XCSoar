@@ -347,10 +347,10 @@ void ComPort::WriteString(const TCHAR *Text)
 
    len = WideCharToMultiByte(CP_ACP, 0, Text, len + 1, tmp, sizeof(tmp), NULL, NULL);
 
-   if (!len || !WriteFile(hPort, tmp, len, &written, NULL))
+   // don't write trailing '\0' to device
+   if (--len<=0 || !WriteFile(hPort, tmp, len, &written, NULL))
      // WriteFile failed, report error
      error = GetLastError();
-
 }
 
 
