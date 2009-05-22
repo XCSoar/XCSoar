@@ -843,7 +843,17 @@ BOOL devPutFreqStandby(PDeviceDescriptor_t d, double Freq)
 
 static BOOL
 FlarmDeclareSetGet(PDeviceDescriptor_t d, TCHAR *Buffer) {
-  devWriteNMEAString(d, Buffer);
+  //devWriteNMEAString(d, Buffer);
+
+  TCHAR tmp[512];
+
+  _sntprintf(tmp, 512, TEXT("$%s\r\n"), Buffer);
+
+  LockComm();
+  if (d->Com)
+    d->Com->WriteString(tmp);
+  UnlockComm();
+
   Buffer[6]= _T('A');
   if (!ExpectString(d, Buffer)){
     return FALSE;
