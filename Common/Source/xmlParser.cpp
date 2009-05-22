@@ -302,7 +302,7 @@ static inline TCHAR getNextChar(XML *pXML)
 // Find next non-white space character.
 static TCHAR FindNonWhiteSpace(XML *pXML)
 {
-    TCHAR ch;
+    TCHAR ch=0; // VENTA3 fix initialize
     int nExit = FALSE;
 
     ASSERT(pXML);
