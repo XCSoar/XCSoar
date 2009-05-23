@@ -1,6 +1,4 @@
 /*
-   $Id$
-
 
 Copyright_License {
 
@@ -17,6 +15,8 @@ Copyright_License {
 	Lars H <lars_hn@hotmail.com>
 	Rob Dunning <rob@raspberryridgesheepfarm.com>
 	Russell King <rmk@arm.linux.org.uk>
+	Paolo Ventafridda <coolwind@email.it>
+	Tobias Lohner <tobias@lohner-net.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -32,6 +32,7 @@ Copyright_License {
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
+  $Id$
 }
 
 */
@@ -99,6 +100,10 @@ void CloseAirfieldDetails() {
 };
 
 
+/*
+ * VENTA3: Home and Preferred landing points for BestAlternate
+ * Paolo Ventafridda
+ */
 void LookupAirfieldDetail(TCHAR *Name, TCHAR *Details) {
   int i;
   TCHAR UName[100];
@@ -106,6 +111,11 @@ void LookupAirfieldDetail(TCHAR *Name, TCHAR *Details) {
   TCHAR NameB[100];
   TCHAR NameC[100];
   TCHAR NameD[100];
+  TCHAR TmpName[100];
+
+  TCHAR ventabuffer[200];
+
+  BOOL isHome, isPreferred, isAvoid;
 
   if (!WayPointList) return;
 
@@ -114,30 +124,58 @@ void LookupAirfieldDetail(TCHAR *Name, TCHAR *Details) {
       if (((WayPointList[i].Flags & AIRPORT) == AIRPORT) ||
 	  ((WayPointList[i].Flags & LANDPOINT) == LANDPOINT)) {
 	_tcscpy(UName, WayPointList[i].Name);
-	CharUpper(UName);
+
+	CharUpper(UName); // WP name
+	CharUpper(Name);  // AIR name
+	                  // VENTA3 fix: If airfields name
+			  // was not uppercase it was not recon
+
+	/*
+	  wsprintf(ventabuffer,TEXT("Name=<%s>"), UName );
+	  if ((fp=_tfopen(_T("DEBUG.TXT"),_T("a")))!= NULL){;fprintf(fp,"%S\n",ventabuffer);fclose(fp);}
+	*/
 
 	_stprintf(NameA,TEXT("%s A/F"),Name);
 	_stprintf(NameB,TEXT("%s AF"),Name);
 	_stprintf(NameC,TEXT("%s A/D"),Name);
 	_stprintf(NameD,TEXT("%s AD"),Name);
 
-	if ((_tcscmp(UName, Name)==0)
-	  ||(_tcscmp(UName, NameA)==0)
-	  ||(_tcscmp(UName, NameB)==0)
-	  ||(_tcscmp(UName, NameC)==0)
-	  ||(_tcscmp(UName, NameD)==0)
-	    ){
+	isHome=FALSE;
+	isPreferred=FALSE;
+	isAvoid=FALSE;
 
-	  if (WayPointList[i].Details) {
-	    free(WayPointList[i].Details);
-	  }
-	  WayPointList[i].Details =
-	    (TCHAR*)malloc((_tcslen(Details)+1)*sizeof(TCHAR));
-	  _tcscpy(WayPointList[i].Details, Details);
+	_stprintf(TmpName,TEXT("%s=HOME"),UName);
+	if ( (_tcscmp(Name, TmpName)==0) )  isHome=TRUE;
+	_stprintf(TmpName,TEXT("%s=PREF"),UName);
+	if ( (_tcscmp(Name, TmpName)==0) )  isPreferred=TRUE;
+	_stprintf(TmpName,TEXT("%s=PREFERRED"),UName);
+	if ( (_tcscmp(Name, TmpName)==0) )  isPreferred=TRUE;
 
-	  return;
-
+	if ( isHome==TRUE ) {
+	  WayPointCalc[i].Preferred = TRUE;
+	  HomeWaypoint = i;
+	  AirfieldsHomeWaypoint = i; // make it survive a reset..
 	}
+	if ( isPreferred==TRUE ) {
+	  WayPointCalc[i].Preferred = TRUE;
+	}
+
+	if ((_tcscmp(UName, Name)==0)
+	    ||(_tcscmp(UName, NameA)==0)
+	    ||(_tcscmp(UName, NameB)==0)
+	    ||(_tcscmp(UName, NameC)==0)
+	    ||(_tcscmp(UName, NameD)==0)
+	    || isHome || isPreferred )
+	  {
+	    if (_tcslen(Details) >0 ) { // VENTA3 avoid setting empty details
+	      if (WayPointList[i].Details) {
+		free(WayPointList[i].Details);
+	      }
+	      WayPointList[i].Details = (TCHAR*)malloc((_tcslen(Details)+1)*sizeof(TCHAR));
+	      _tcscpy(WayPointList[i].Details, Details);
+	    }
+	    return;
+	  }
       }
     }
 }
@@ -145,21 +183,28 @@ void LookupAirfieldDetail(TCHAR *Name, TCHAR *Details) {
 
 #define DETAILS_LENGTH 5000
 
+/*
+ * VENTA3 fix: if empty lines, do not set details for the waypoint
+ *        fix: remove CR from text appearing as a spurious char in waypoint details
+ */
 void ParseAirfieldDetails() {
 
   if(zAirfieldDetails == NULL)
     return;
 
   TCHAR TempString[READLINE_LENGTH+1];
+  TCHAR CleanString[READLINE_LENGTH+1];
   TCHAR Details[DETAILS_LENGTH+1];
   TCHAR Name[201];
 
   Details[0]= 0;
   Name[0]= 0;
   TempString[0]=0;
+  CleanString[0]=0;
 
   BOOL inDetails = FALSE;
-  int i;
+  BOOL hasDetails = FALSE; // VENTA3
+  int i, j, n;
   int k=0;
 
   while(ReadString(zAirfieldDetails,READLINE_LENGTH,TempString))
@@ -170,6 +215,7 @@ void ParseAirfieldDetails() {
 	  LookupAirfieldDetail(Name, Details);
 	  Details[0]= 0;
 	  Name[0]= 0;
+	  hasDetails=FALSE;
 	}
 
 	// extract name
@@ -189,11 +235,28 @@ void ParseAirfieldDetails() {
         k++;
 
       } else {
-	// append text to details string
-        if (_tcslen(Details)+_tcslen(TempString)+3<DETAILS_LENGTH) {
-          wcscat(Details,TempString);
-          wcscat(Details,TEXT("\r\n"));
-        }
+	// VENTA3: append text to details string
+	for (j=0; j<_tcslen(TempString); j++ ) {
+	  if ( TempString[j] > 0x20 ) {
+	    hasDetails = TRUE;
+	    break;
+	  }
+	}
+	// first hasDetails set TRUE for rest of details
+	if (hasDetails==TRUE) {
+
+	  // Remove carriage returns
+	  for (j=0, n=0; j<_tcslen(TempString); j++) {
+	    if ( TempString[j] == 0x0d ) continue;
+	    CleanString[n++]=TempString[j];
+	  }
+	  CleanString[n]='\0';
+
+	  if (_tcslen(Details)+_tcslen(CleanString)+3<DETAILS_LENGTH) {
+	    wcscat(Details,CleanString);
+	    wcscat(Details,TEXT("\r\n"));
+	  }
+	}
       }
     }
 

@@ -15,6 +15,8 @@ Copyright_License {
 	Lars H <lars_hn@hotmail.com>
 	Rob Dunning <rob@raspberryridgesheepfarm.com>
 	Russell King <rmk@arm.linux.org.uk>
+	Paolo Ventafridda <coolwind@email.it>
+	Tobias Lohner <tobias@lohner-net.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -31,7 +33,6 @@ Copyright_License {
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   $Id$
-
 }
 
 */
@@ -667,11 +668,12 @@ BOOL NMEAParser::GGA(TCHAR *String, TCHAR **params, size_t nparams, NMEA_INFO *G
       GPS_INFO->BaroAltitude = RMAAltitude;
     }
 
-// VENTA2- CONDOR ALTITUDE
-// JMW TODO: add new device to handle condor specifically!
-
+// VENTA3 CONDOR ALTITUDE
   // "Altitude" should always be GPS Altitude.
   GPS_INFO->Altitude = ParseAltitude(params[8], params[9]);
+#ifdef FIVV
+  GPS_INFO->Altitude += GPSAltitudeOffset;
+#endif
 
   //
   double GeoidSeparation;

@@ -15,6 +15,8 @@ Copyright_License {
 	Lars H <lars_hn@hotmail.com>
 	Rob Dunning <rob@raspberryridgesheepfarm.com>
 	Russell King <rmk@arm.linux.org.uk>
+	Paolo Ventafridda <coolwind@email.it>
+	Tobias Lohner <tobias@lohner-net.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -30,6 +32,7 @@ Copyright_License {
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
+  $Id$
 }
 */
 
@@ -168,9 +171,6 @@ static int FormKeyDown(WindowControl * Sender, WPARAM wParam, LPARAM lParam) {
     case VK_DOWN:
       lettercursor++;
       UpdateCursor();
-#ifdef VENTA_DEBUG_EVENT
-	  DoStatusMessage(TEXT("DBG dlgTxtEntry VK DOWN 2")); // VENTA
-#endif
       return(0);
     case VK_RETURN:
       wf->SetModalResult(mrOK);
@@ -205,9 +205,6 @@ static void OnUpClicked(WindowControl * Sender){
 static void OnDownClicked(WindowControl * Sender){
   (void)Sender;
   FormKeyDown(Sender, VK_DOWN, 0);
-#ifdef VENTA_DEBUG_EVENT
-   DoStatusMessage(TEXT("DBG dlgTxtEntry VK DOWN 1")); // VENTA
-#endif
 }
 
 

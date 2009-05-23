@@ -14,6 +14,8 @@ Copyright_License {
 	Lars H <lars_hn@hotmail.com>
 	Rob Dunning <rob@raspberryridgesheepfarm.com>
 	Russell King <rmk@arm.linux.org.uk>
+	Paolo Ventafridda <coolwind@email.it>
+	Tobias Lohner <tobias@lohner-net.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -29,6 +31,7 @@ Copyright_License {
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
+  $Id$
 }
 */
 #include "StdAfx.h"
@@ -223,7 +226,7 @@ void InfoBoxLayout::ScreenGeometry(RECT rc) {
   GetFromRegistry(szRegistryInfoBoxGeometry,&Temp);
   InfoBoxGeometry = Temp;
 
-#ifdef PNA
+#if defined(PNA) || defined(FIVV)
 // VENTA-ADDON GEOM
   GetFromRegistry(szRegistryInfoBoxGeom,&Temp);
   if (InfoBoxGeometry != Temp) {
@@ -659,6 +662,19 @@ void ButtonLabel::CreateButtonLabels(RECT rc) {
   }
 
   for (i=0; i<NUMBUTTONLABELS; i++) {
+// VENTA3 added THICKFRAME
+#ifdef PNA // VENTA3 FIX  better borders
+ if (GlobalModelType == MODELTYPE_PNA_HP31X )
+    hWndButtonWindow[i] =
+      CreateWindowEx( WS_EX_CLIENTEDGE,
+		   TEXT("STATIC"), TEXT("\0"),
+		   WS_CHILD|WS_TABSTOP|WS_THICKFRAME
+		   |SS_CENTER|SS_NOTIFY
+		   |WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_BORDER,
+		   rc.left, rc.top,
+		   buttonWidth, buttonHeight,
+		   hWndMainWindow, NULL, hInst, NULL);
+ else
     hWndButtonWindow[i] =
       CreateWindow(
 		   TEXT("STATIC"), TEXT("\0"),
@@ -670,6 +686,21 @@ void ButtonLabel::CreateButtonLabels(RECT rc) {
 		   // some buttons may actually be a different shape.
 		   buttonWidth, buttonHeight,
 		   hWndMainWindow, NULL, hInst, NULL);
+
+#else
+    hWndButtonWindow[i] =
+      CreateWindow(
+		   TEXT("STATIC"), TEXT("\0"),
+		   /*WS_VISIBLE|*/ WS_CHILD|WS_TABSTOP
+		   |SS_CENTER|SS_NOTIFY
+		   |WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_BORDER,
+		   rc.left, rc.top,
+		   // TODO code: need to have these passed in too as
+		   // some buttons may actually be a different shape.
+		   buttonWidth, buttonHeight,
+		   hWndMainWindow, NULL, hInst, NULL);
+#endif
+
     GetButtonPosition(i, rc, &x, &y, &xsize, &ysize);
 
     SetWindowPos(hWndButtonWindow[i],HWND_TOP,
@@ -684,8 +715,14 @@ void ButtonLabel::CreateButtonLabels(RECT rc) {
 
   //
 
+// VENTA3 disable gauge vario for geometry 5 in landscape mode, use 8 box right instead
+// beside those boxes were painted and overwritten by the gauge already and gauge was
+// graphically too much stretched, requiring a restyle!
   if (gnav) {
-    EnableVarioGauge = true;
+      if ( ( InfoBoxLayout::landscape == true) && ( InfoBoxLayout::InfoBoxGeometry == 5 ) )
+      	EnableVarioGauge = false;
+      else
+      	EnableVarioGauge = true;
   } else {
     EnableVarioGauge = false;
   }

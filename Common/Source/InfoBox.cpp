@@ -14,6 +14,8 @@ Copyright_License {
 	Lars H <lars_hn@hotmail.com>
 	Rob Dunning <rob@raspberryridgesheepfarm.com>
 	Russell King <rmk@arm.linux.org.uk>
+	Paolo Ventafridda <coolwind@email.it>
+	Tobias Lohner <tobias@lohner-net.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -30,11 +32,11 @@ Copyright_License {
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   $Id$
-
 }
 */
 
 #include "StdAfx.h"
+#include "Defines.h" // VENTA3
 #include "XCSoar.h"
 #include "Sizes.h"
 #include "MapWindow.h"
@@ -368,6 +370,28 @@ void InfoBox::PaintTitle(void){
       SetTextColor(mHdcBuf, blueColor);
     }
     break;
+// VENTA3 added colors
+  case 3:
+    if (Appearance.InverseInfoBox){
+      SetTextColor(mHdcBuf, inv_greenColor);
+    } else {
+      SetTextColor(mHdcBuf, greenColor);
+    }
+    break;
+  case 4:
+    if (Appearance.InverseInfoBox){
+      SetTextColor(mHdcBuf, inv_yellowColor);
+    } else {
+      SetTextColor(mHdcBuf, yellowColor);
+    }
+    break;
+  case 5:
+    if (Appearance.InverseInfoBox){
+      SetTextColor(mHdcBuf, inv_magentaColor);
+    } else {
+      SetTextColor(mHdcBuf, magentaColor);
+    }
+    break;
   }
 
   SelectObject(mHdcBuf, *mphFontTitle);
@@ -444,6 +468,28 @@ void InfoBox::PaintValue(void){
       SetTextColor(mHdcBuf, inv_blueColor);
     } else {
       SetTextColor(mHdcBuf, blueColor);
+    }
+    break;
+// VENTA3 more colors
+  case 3:
+    if (Appearance.InverseInfoBox){
+      SetTextColor(mHdcBuf, inv_greenColor);
+    } else {
+      SetTextColor(mHdcBuf, greenColor);
+    }
+    break;
+  case 4:
+    if (Appearance.InverseInfoBox){
+      SetTextColor(mHdcBuf, inv_yellowColor);
+    } else {
+      SetTextColor(mHdcBuf, yellowColor);
+    }
+    break;
+  case 5:
+    if (Appearance.InverseInfoBox){
+      SetTextColor(mHdcBuf, inv_magentaColor);
+    } else {
+      SetTextColor(mHdcBuf, magentaColor);
     }
     break;
   }
@@ -532,6 +578,28 @@ void InfoBox::PaintComment(void){
       SetTextColor(mHdcBuf, inv_blueColor);
     } else {
       SetTextColor(mHdcBuf, blueColor);
+    }
+    break;
+// VENTA3 more colors
+  case 3:
+    if (Appearance.InverseInfoBox){
+      SetTextColor(mHdcBuf, inv_greenColor);
+    } else {
+      SetTextColor(mHdcBuf, greenColor);
+    }
+    break;
+  case 4:
+    if (Appearance.InverseInfoBox){
+      SetTextColor(mHdcBuf, inv_yellowColor);
+    } else {
+      SetTextColor(mHdcBuf, yellowColor);
+    }
+    break;
+  case 5:
+    if (Appearance.InverseInfoBox){
+      SetTextColor(mHdcBuf, inv_magentaColor);
+    } else {
+      SetTextColor(mHdcBuf, magentaColor);
     }
     break;
   }
@@ -771,6 +839,9 @@ extern void ShowMenu();
 LRESULT CALLBACK InfoBoxWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam){
   InfoBox *ib;
 
+static long tpassed=0L;
+long tnow;
+
   switch (uMsg){
 
     case WM_ERASEBKGND:
@@ -807,14 +878,38 @@ LRESULT CALLBACK InfoBoxWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     case WM_LBUTTONDBLCLK:
 #ifndef GNAV
       // JMW capture double click, so infoboxes double clicked also bring up menu
+      // VENTA3: apparently this is working only on PC ! Disable it to let PC work
+      // with same timeout of PDA and PNA versions with synthetic DBLCLK
+#ifdef DEBUG_DBLCLK
+      DoStatusMessage(_T("DBLCLK InfoBox")); // VENTA3
+#endif
       ShowMenu();
       break;
 #endif
 
     case WM_LBUTTONDOWN:
-      ib = (InfoBox *)GetWindowLong(hwnd, GWL_USERDATA);
-      if (ib)
-              SendMessage(ib->GetParent(), WM_COMMAND, (WPARAM)0, (LPARAM)ib->GetHandle());
+      /*
+       * VENTA3 SYNTHETIC DOUBLE CLICK ON INFOBOXES
+       * Paolo Ventafridda
+       * synthetic double click detection with no proximity , good for infoboxes
+       */
+
+	tnow=GetTickCount();
+	if ( (tnow - tpassed) < DOUBLECLICKINTERVAL ) {
+#ifdef DEBUG_DBLCLK
+	  DoStatusMessage(_T("synth DBLCLK InfoBox!")); // VENTA3
+#endif
+	  tpassed = tnow;
+	  ShowMenu();
+	  return(0);
+	}
+	tpassed = tnow;
+#ifdef DEBUG_DBLCLK
+        DoStatusMessage(_T("BDOWN InfoBox")); // VENTA3
+#endif
+        ib = (InfoBox *)GetWindowLong(hwnd, GWL_USERDATA);
+        if (ib)
+	  SendMessage(ib->GetParent(), WM_COMMAND, (WPARAM)0, (LPARAM)ib->GetHandle());
     return(0);
 
     case WM_LBUTTONUP:

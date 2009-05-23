@@ -726,14 +726,8 @@ are really available.">
     <DataField name="" DataType="enum" Min=0 Max=50 Step=1/>
   </WndProperty>
 
- <WndProperty Name="prpAppInfoBoxModel" Caption="Device model"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2
-  Help="Choose your model.">
-    <DataField name="" DataType="enum" Min=0 Max=50 Step=1/>
-  </WndProperty>
 
-  </WndFrame>
-
-
+</WndFrame>
 
   <WndFrame Name="frmFonts" X=70 Y=0 Width=246 Height=222 Font=2>
 
@@ -936,6 +930,39 @@ Example short name (81HXABC1.IGC), long name (2008-01-18-XXX-ABC-01.IGC).
   <WndButton Name="cmdWaypointDelete" Caption="Delete" X=50 Y=-1 Width=100  Height=28 Font=2 Tag=4 OnClickNotify="OnWaypointDeleteClicked" />
 
   </WndFrame>
+
+  <WndFrame Name="frmSpecials" X=70 Y=0 Width=246 Height=222 Font=2>
+
+  <WndProperty Name="prpAppInfoBoxModel" Caption="Device model"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2
+  Help="Choose your model.">
+    <DataField name="" DataType="enum" Min=0 Max=50 Step=1/>
+  </WndProperty>
+
+  <WndProperty Name="prpAircraftCategory" Caption="Aircraft Category"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2
+  Help="">
+    <DataField name="" DataType="enum" Min=0 Max=10 Step=1/>
+  </WndProperty>
+
+  <WndProperty Name="prpGPSAltitudeOffset" Caption="GPS Altitude Offset*"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2
+  Help="">
+    <DataField name="" DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min=-1000 Max=1000 Step=1/>
+  </WndProperty>
+
+  <WndProperty Name="prpAutoBacklight" Caption="Auto Backlight"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 Help="">
+    <DataField name="" DataType="boolean"/>
+  </WndProperty>
+
+  <WndProperty Name="prpAutoSoundVolume" Caption="Auto SoundVolume"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 Help="">
+    <DataField name="" DataType="boolean"/>
+  </WndProperty>
+
+  <WndProperty Name="prpExtendedVisualGlide" Caption="Extended VisualGlide"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 Help="">
+    <DataField name="" DataType="boolean"/>
+  </WndProperty>
+
+  <WndProperty Name="prpLook8000" Caption="LXc8000 Map Mode"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 Help="">
+    <DataField name="" DataType="boolean"/>
+  </WndProperty>
 
 </WndForm>
 

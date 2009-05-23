@@ -14,6 +14,8 @@ Copyright_License {
 	Lars H <lars_hn@hotmail.com>
 	Rob Dunning <rob@raspberryridgesheepfarm.com>
 	Russell King <rmk@arm.linux.org.uk>
+	Paolo Ventafridda <coolwind@email.it>
+	Tobias Lohner <tobias@lohner-net.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -83,8 +85,8 @@ extern TCHAR *	gmfbasename();
 extern int		GetGlobalModelName();
 extern void		SmartGlobalModelType();
 extern short		InstallFonts();
-extern BOOL		CheckDataDir();
-extern BOOL		CheckRegistryProfile();
+extern bool		CheckDataDir();
+extern bool		CheckRegistryProfile();
 extern void		ConvToUpper( TCHAR *);
 
 #endif
@@ -112,9 +114,36 @@ extern int numInfoWindows;
 
 // waypoint data
 extern int HomeWaypoint;
+extern int AirfieldsHomeWaypoint; // VENTA3
+extern int Alternate1; // VENTA3
+extern int Alternate2;
+extern int BestAlternate;
+extern int ActiveAlternate;
+extern bool  OnBestAlternate;
+extern bool  OnAlternate1;
+extern bool  OnAlternate2;
+
 extern WAYPOINT *WayPointList;
+extern WPCALC   *WayPointCalc; // VENTA3 additional calculated infos on WPs
 extern unsigned int NumberOfWayPoints;
 extern int WaypointsOutOfRange;
+
+// Specials
+#ifdef FIVV
+extern double GPSAltitudeOffset; 	// VENTA3
+#endif
+extern double QFEAltitudeOffset; // VENTA3
+extern int OnAirSpace; // VENTA3 toggle DrawAirSpace
+extern bool WasFlying; // used by auto QFE..
+extern double LastFlipBoxTime; // used by XCSoar and Calculations
+#if defined(PNA) || defined(FIVV)
+extern bool needclipping;
+#endif
+extern bool EnableAutoBacklight; // VENTA4
+extern bool EnableAutoSoundVolume; // VENTA4
+extern short AircraftCategory; // VENTA4
+extern bool ExtendedVisualGlide;
+extern bool Look8000;
 
 // airspace data
 extern AIRSPACE_AREA *AirspaceArea;
@@ -216,6 +245,7 @@ extern bool AutoForceFinalGlide;
 // user interface options
 extern bool bAirspaceBlackOutline;
 extern int TrailActive;
+extern int VisualGlide; // VENTA3
 extern bool CircleZoom;
 extern bool EnableTopology;
 extern bool EnableTerrain;

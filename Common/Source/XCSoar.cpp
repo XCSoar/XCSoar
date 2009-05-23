@@ -14,6 +14,8 @@ Copyright_License {
 	Lars H <lars_hn@hotmail.com>
 	Rob Dunning <rob@raspberryridgesheepfarm.com>
 	Russell King <rmk@arm.linux.org.uk>
+	Paolo Ventafridda <coolwind@email.it>
+	Tobias Lohner <tobias@lohner-net.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -34,6 +36,7 @@ Copyright_License {
 */
 #include "StdAfx.h"
 #include "compatibility.h"
+#include "Defines.h" // VENTA3
 
 #include "XCSoar.h"
 #include "MapWindow.h"
@@ -247,7 +250,7 @@ COLORREF ColorOK = RGB(0x00,0x00,0xFF);
 COLORREF ColorButton = RGB(0xA0,0xE0,0xA0);
 
 // Display Gobals
-HFONT                                   InfoWindowFont;  // these are the active fonts
+HFONT                                   InfoWindowFont;
 HFONT                                   TitleWindowFont;
 HFONT                                   MapWindowFont;
 HFONT                                   TitleSmallWindowFont;
@@ -281,12 +284,9 @@ bool EnableBlockSTF = false;
 
 bool GlobalRunning = false;
 
-#if defined(PNA) || defined(FIVV)  // VENTA-ADDON we call it model and
-				   // not PNA for possible future
-				   // usage even for custom PDAs
-int	GlobalModelType=0;	   // see XCSoar.h for modeltype definitions
-TCHAR	GlobalModelName[MAX_PATH]; // there are currently no
-				   // checks.. TODO check it fits here
+#if defined(PNA) || defined(FIVV)  // VENTA-ADDON we call it model and not PNA for possible future usage even for custom PDAs
+int	GlobalModelType=0;	// see XCSoar.h for modeltype definitions
+TCHAR	GlobalModelName[MAX_PATH]; // there are currently no checks.. TODO check it fits here
 float	GlobalEllipse=1.1f;	// default ellipse type VENTA2-ADDON
 #endif
 
@@ -352,6 +352,7 @@ bool TeammateCodeValid = false;
 
 // Waypoint Database
 WAYPOINT *WayPointList = NULL;
+WPCALC *WayPointCalc = NULL; // VENTA3 additional infos calculated, parallel to WPs
 unsigned int NumberOfWayPoints = 0;
 int SectorType = 1; // FAI sector
 DWORD SectorRadius = 500;
@@ -359,6 +360,35 @@ int StartLine = TRUE;
 DWORD StartRadius = 3000;
 
 int HomeWaypoint = -1;
+int AirfieldsHomeWaypoint = -1; // VENTA3 force Airfields home to be HomeWaypoint if
+                                // an H flag in waypoints file is not available..
+// Alternates
+int Alternate1 = -1; // VENTA3
+int Alternate2 = -1; // VENTA3
+int BestAlternate = -1; // VENTA3
+int ActiveAlternate = -1; // VENTA3
+bool OnBestAlternate=false;
+bool OnAlternate1=false;
+bool OnAlternate2=false;
+
+// Specials
+#ifdef FIVV
+double GPSAltitudeOffset = 0; // VENTA3
+#endif
+double QFEAltitudeOffset = 0;
+int OnAirSpace=1; // VENTA3 toggle DrawAirSpace, normal behaviour is "true"
+bool WasFlying = false; // VENTA3 used by auto QFE: do not reset QFE if previously in flight. So you can check QFE
+			//   on the ground, otherwise it turns to zero at once!
+double LastFlipBoxTime = 0; // VENTA3 need this global for slowcalculations cycle
+#if defined(PNA) || defined(FIVV)
+bool needclipping=false; // flag to activate extra clipping for some PNAs
+#endif
+bool EnableAutoBacklight=true;
+bool EnableAutoSoundVolume=true;
+short AircraftCategory=0;
+bool ExtendedVisualGlide=false;
+bool Look8000=false;
+
 
 // Airspace Database
 AIRSPACE_AREA *AirspaceArea = NULL;
@@ -612,11 +642,22 @@ SCREEN_INFO Data_Options[] = {
 	  // 66  VENTA-ADDON added Final GR
 	  // VENTA-TODO: fix those 38,5 numbers to point correctly menu items
 	  {ugNone,            TEXT("Final GR"), TEXT("Fin GR"), new InfoBoxFormatter(TEXT("%1.1f")), NoProcessing, 38, 5},
-	  // 67 // VENTA-ADDON modified 66 to 67
-	  {ugNone,   TEXT("Experimental"), TEXT("Exp"), new InfoBoxFormatter(TEXT("%-2.1f")), NoProcessing, 8, 2},
+
+	  // 67 VENTA3-ADDON Alternate1 destinations infoboxes  TODO> fix 36 46 to something correct
+	  {ugNone,            TEXT("Alternate1 GR"), TEXT("Altern 1"), new FormatterAlternate(TEXT("\0")), Alternate1Processing, 36, 46},
+	  // 68 Alternate 2
+	  {ugNone,            TEXT("Alternate2 GR"), TEXT("Altern 2"), new FormatterAlternate(TEXT("\0")), Alternate2Processing, 36, 46},
+	  // 69 BestAlternate aka BestLanding
+	  {ugNone,            TEXT("Best Alternate"), TEXT("BestAltr"), new FormatterAlternate(TEXT("\0")), BestAlternateProcessing, 36, 46},
+          // 70
+	  {ugAltitude,        TEXT("QFE GPS"), TEXT("QFE GPS"), new InfoBoxFormatter(TEXT("%2.0f")), QFEAltitudeProcessing, 1, 33},
+	  // 71 //
+	  {ugNone,   TEXT("Experimental1"), TEXT("Exp1"), new InfoBoxFormatter(TEXT("%-2.1f")), NoProcessing, 8, 2},
+	  // 72 //
+	  {ugNone,   TEXT("Experimental2"), TEXT("Exp2"), new InfoBoxFormatter(TEXT("%-2.1f")), NoProcessing, 8, 2},
 	};
 
-const int NUMSELECTSTRINGS = 68; // VENTA-ADDON 67 mod to 68
+const int NUMSELECTSTRINGS = 73;
 
 
 CRITICAL_SECTION  CritSec_FlightData;
@@ -658,6 +699,10 @@ void                                                    PopUpSelect(int i);
 
 //HWND CreateRpCommandBar(HWND hwnd);
 
+#ifdef DEBUG
+void                                            DebugStore(char *Str);
+#endif
+
 
 void TriggerGPSUpdate()
 {
@@ -682,7 +727,8 @@ void HideMenu() {
 void ShowMenu() {
 #if !defined(GNAV) && !defined(PCGNAV)
   // Popup exit button if in .xci
-  InputEvents::setMode(TEXT("Exit"));
+  //InputEvents::setMode(TEXT("Exit"));
+  InputEvents::setMode(TEXT("Menu")); // VENTA3
 #endif
   MenuTimeOut = 0;
   DisplayTimeOut = 0;
@@ -747,6 +793,7 @@ void SettingsLeave() {
 
       // re-load waypoints
       ReadWayPoints();
+      InitWayPointCalc(); // VENTA3
       ReadAirfieldFile();
 
       // re-set home
@@ -1057,7 +1104,11 @@ DWORD CalculationThread (LPVOID lpvoid) {
 
     if (MapWindow::CLOSETHREAD) break; // drop out on exit
 
+#if defined(_SIM_)
+    if (needcalculationsslow || ( (OnBestAlternate == true) && (ReplayLogger::IsEnabled()) )) { // VENTA3, needed for BestAlternate SIM
+#else
     if (needcalculationsslow) {
+#endif
       DoCalculationsSlow(&tmp_GPS_INFO,&tmp_CALCULATED_INFO);
       needcalculationsslow = false;
     }
@@ -1233,11 +1284,11 @@ wcscat(XCSoar_Version, TEXT("PNA "));
   // experimental CVS
 
 #ifdef FIVV
-  wcscat(XCSoar_Version, TEXT("5.2.2F "));
+  wcscat(XCSoar_Version, TEXT("5.2.3Fb6 "));
 #elif defined(__MINGW32__)
-  wcscat(XCSoar_Version, TEXT("5.2.2 "));
+  wcscat(XCSoar_Version, TEXT("5.2.3b6 "));
 #else
-  wcscat(XCSoar_Version, TEXT("5.2.2 "));
+  wcscat(XCSoar_Version, TEXT("5.2.3b6 "));
 #endif
 
   wcscat(XCSoar_Version, TEXT(__DATE__));
@@ -1245,7 +1296,7 @@ wcscat(XCSoar_Version, TEXT("PNA "));
 // VENTA2- delete registries at startup, but not on PC!
 #if defined(FIVV) && ( !defined(WINDOWSPC) || WINDOWSPC==0 )
 #ifndef PNA
-  RegDeleteKey(HKEY_CURRENT_USER, _T("Software\\MPSR\\XCSoar"));
+RegDeleteKey(HKEY_CURRENT_USER, _T(REGKEYNAME));
 #endif
 #endif
 
@@ -1269,15 +1320,15 @@ wcscat(XCSoar_Version, TEXT("PNA "));
 #if defined(FIVV) && ( !defined(WINDOWSPC) || WINDOWSPC==0 )
 #ifndef PNA
 
-  BOOL datadir=CheckDataDir();
-  if (datadir) StartupStore(TEXT("XCSoarData directory found.\n"));
-  else StartupStore(TEXT("ERROR: NO XCSOARDATA DIRECTORY FOUND!\n"));
+bool datadir=CheckDataDir(); // VENTA3 changed to bool
+if (datadir) StartupStore(TEXT("XCSoarData directory found.\n"));
+else StartupStore(TEXT("ERROR: NO XCSOARDATA DIRECTORY FOUND!\n"));
 
-  StartupStore(TEXT("Check for installing fonts\n"));
-  short didfonts=InstallFonts();  // check if really did it, and maybe restart
-  TCHAR nTmp[100];
-  _stprintf(nTmp,TEXT("InstallFonts() result=%d (0=installed >0 not installed)\n"), didfonts);
-  StartupStore(nTmp);
+StartupStore(TEXT("Check for installing fonts\n"));
+short didfonts=InstallFonts();  // check if really did it, and maybe restart
+TCHAR nTmp[100];
+_stprintf(nTmp,TEXT("InstallFonts() result=%d (0=installed >0 not installed)\n"), didfonts);
+StartupStore(nTmp);
 
 #endif
 #endif
@@ -1285,7 +1336,7 @@ wcscat(XCSoar_Version, TEXT("PNA "));
 
 // VENTA2- TODO fix these directories are not used always!
   CreateDirectoryIfAbsent(TEXT("persist"));
-  CreateDirectoryIfAbsent(TEXT("logs"));
+  CreateDirectoryIfAbsent(TEXT("logs")); // VENTA3 we use this one for logging
   CreateDirectoryIfAbsent(TEXT("config"));
 
   StartupStore(TEXT("Starting XCSoar %s\n"), XCSoar_Version);
@@ -1422,26 +1473,21 @@ wcscat(XCSoar_Version, TEXT("PNA "));
   Sleep(2000);
 #endif
 
-// VENTA2 - togliere per la distribuzione ufficiale
 #ifdef CREDITS_FIVV
-  CreateProgressDialog(gettext(TEXT("Custom ITA version")));
-  Sleep(1000);
-#endif
-#ifdef CONDOR
-  CreateProgressDialog(gettext(TEXT(">CONDOR SIM VERSION<")));
-  Sleep(1000);
+CreateProgressDialog(gettext(TEXT("Special ITA version")));
+ Sleep(1000);
 #endif
 #ifdef PNA // VENTA-ADDON
 
-  TCHAR sTmp[MAX_PATH];
-  wsprintf(sTmp,TEXT("Conf=%sXCsoarData"), gmfpathname() ); // VENTA2 FIX double backslash
-  CreateProgressDialog(sTmp); Sleep(3000);
+	TCHAR sTmp[MAX_PATH];
+	wsprintf(sTmp,TEXT("Conf=%s%S"), gmfpathname(),XCSDATADIR ); // VENTA2 FIX double backslash
+	CreateProgressDialog(sTmp); Sleep(3000);
 
-  /*
-    if (  !wcscmp(GlobalModelName, _T("UNKNOWN")) ) SetModelType();
-  */
-  wsprintf(sTmp, TEXT("PNA MODEL=%s (%d)"), GlobalModelName, GlobalModelType);
-  CreateProgressDialog(sTmp); Sleep(3000);
+/*
+	if (  !wcscmp(GlobalModelName, _T("UNKNOWN")) ) SetModelType();
+*/
+	wsprintf(sTmp, TEXT("PNA MODEL=%s (%d)"), GlobalModelName, GlobalModelType);
+	CreateProgressDialog(sTmp); Sleep(3000);
 #else
 #if defined(FIVV) && ( !defined(WINDOWSPC) || WINDOWSPC==0 )
   if ( didfonts == 0 ) {
@@ -1468,13 +1514,38 @@ wcscat(XCSoar_Version, TEXT("PNA "));
   }
 #endif
 #endif // non PNA
+
+  if ( AircraftCategory == (AircraftCategory_t)umParaglider )
+	CreateProgressDialog(TEXT("PARAGLIDING MODE")); Sleep(2000);
+
 #ifdef _SIM_	// VENTA-ADDON
-  CreateProgressDialog(TEXT("SIMULATION")); Sleep(2000);
+	CreateProgressDialog(TEXT("SIMULATION")); Sleep(2000);
+#endif
+
+#ifdef PNA
+  if ( SetBacklight() == true )
+	CreateProgressDialog(TEXT("AUTOMATIC BACKLIGHT CONTROL"));
+  else
+	CreateProgressDialog(TEXT("NO BACKLIGHT CONTROL"));
+  Sleep(3000);
+
+  // this should work ok for all pdas as well
+  if ( SetSoundVolume() == true )
+	CreateProgressDialog(TEXT("AUTOMATIC SOUND LEVEL CONTROL"));
+  else
+	CreateProgressDialog(TEXT("NO SOUND LEVEL CONTROL"));
+  Sleep(3000);
 #endif
 
   RasterTerrain::OpenTerrain();
 
   ReadWayPoints();
+  InitWayPointCalc(); // VENTA3
+/*
+  for (int i=0; i< NumberOfWayPoints; i++) WayPointList[i].Preferred = false;
+*/
+
+
   ReadAirfieldFile();
   SetHome(false);
 
@@ -1619,7 +1690,8 @@ ATOM MyRegisterClass(HINSTANCE hInstance, LPTSTR szWindowClass)
 
   GetClassInfo(hInstance,TEXT("DIALOG"),&dc);
 
-  wc.style                      = CS_HREDRAW | CS_VREDRAW;
+   wc.style                      = CS_HREDRAW | CS_VREDRAW;
+//  wc.style                      = CS_HREDRAW | CS_VREDRAW | CS_DBLCLKS; // VENTA3 NO USE
   wc.lpfnWndProc                = (WNDPROC) WndProc;
   wc.cbClsExtra                 = 0;
 #if (WINDOWSPC>0)
@@ -1760,12 +1832,16 @@ void InitialiseFontsHardCoded(RECT rc,
 // VENTA2-ADDON  different infobox fonts for different geometries on HP31X.
 // VENTA2-ADDON	 different ELLIPSE values for different geometries!
 // RLD this loads the elipses each time and handles the fonts with the new font system
-#if defined(PNA) || defined(FIVV)
+// VENTA4  ok but should apply only for PNAs, not for PC and PDAs..  For PDA there was a font registry problem,
+//         but RLD fontsystem should have fixed it once forever.
+//
+//#if defined(PNA) || defined(FIVV)
+#if defined(PNA)  // VENTA4
 
   int iWidth = rc.right-rc.left;
   int iHeight=rc.bottom-rc.top;
 
-  if (iWidth == 480 && iHeight == 272) { // e.g. MIO
+  if (iWidth == 480 && iHeight == 272) { // WQVGA  e.g. MIO
     propGetFontSettingsFromString(TEXT("28,0,0,0,800,0,0,0,0,0,0,3,2,TahomaBD"), ptrhardInfoWindowLogFont);
     propGetFontSettingsFromString(TEXT("16,0,0,0,500,0,0,0,0,0,0,3,2,Tahoma"), ptrhardTitleWindowLogFont);
     propGetFontSettingsFromString(TEXT("16,0,0,0,100,1,0,0,0,0,0,3,2,Tahoma"), ptrhardTitleSmallWindowLogFont);
@@ -1775,11 +1851,23 @@ void InitialiseFontsHardCoded(RECT rc,
     propGetFontSettingsFromString(TEXT("18,0,0,0,400,0,0,0,0,0,0,3,2,Tahoma"), ptrhardMapWindowLogFont);
     propGetFontSettingsFromString(TEXT("16,0,0,0,500,0,0,0,0,0,0,3,2,TahomaBD"), ptrhardMapWindowBoldLogFont);
     if (Appearance.InfoBoxGeom == 5) {
-      GlobalEllipse=1.32f;
+      GlobalEllipse=1.32f; // We don't use vario gauge in landscape geo5 anymore.. but doesn't hurt.
     }
     else {
       GlobalEllipse=1.1f;
     }
+  }
+
+  else if (iWidth == 480 && iHeight == 234) { // e.g. Messada 2440
+    propGetFontSettingsFromString(TEXT("22,0,0,0,400,0,0,0,0,0,0,3,2,TahomaBD"), ptrhardInfoWindowLogFont);
+    propGetFontSettingsFromString(TEXT("18,0,0,0,500,0,0,0,0,0,0,3,2,Tahoma"), ptrhardTitleWindowLogFont);
+    propGetFontSettingsFromString(TEXT("20,0,0,0,400,1,0,0,0,0,0,3,2,Tahoma"), ptrhardTitleSmallWindowLogFont);
+    propGetFontSettingsFromString(TEXT("28,0,0,0,400,0,0,0,0,0,0,3,2,TahomaBD"), ptrhardCDIWindowLogFont);
+    propGetFontSettingsFromString(TEXT("14,0,0,0,100,1,0,0,0,0,0,3,2,Tahoma"), ptrhardMapLabelLogFont); // RLD 16 works well too
+    propGetFontSettingsFromString(TEXT("20,0,0,0,400,0,0,0,0,0,0,3,2,Tahoma"), ptrhardStatisticsLogFont);//  (RLD is this used?)
+    propGetFontSettingsFromString(TEXT("18,0,0,0,400,0,0,0,0,0,0,3,2,Tahoma"), ptrhardMapWindowLogFont);
+    propGetFontSettingsFromString(TEXT("16,0,0,0,500,0,0,0,0,0,0,3,2,TahomaBD"), ptrhardMapWindowBoldLogFont);
+    GlobalEllipse=1.1f; // to be checked, TODO
   }
 
   else if (iWidth == 800 && iHeight == 480) {// e.g. ipaq 31x {
@@ -1822,6 +1910,9 @@ void InitialiseFontsHardCoded(RECT rc,
     propGetFontSettingsFromString(TEXT("36,0,0,0,400,0,0,0,0,0,0,3,2,Tahoma"), ptrhardMapWindowLogFont);
     propGetFontSettingsFromString(TEXT("32,0,0,0,600,0,0,0,0,0,0,3,2,TahomaBD"), ptrhardMapWindowBoldLogFont);
   }
+
+/* VENTA5 TEST automatic fallback for 320x240,640x480 and unusual resolutions
+  // Fallback for any other resolution
   else if (InfoBoxLayout::landscape) {
 
     propGetFontSettingsFromString(TEXT("28,0,0,0,800,0,0,0,0,0,0,3,2,TahomaBD"), ptrhardInfoWindowLogFont);
@@ -1844,6 +1935,7 @@ void InitialiseFontsHardCoded(RECT rc,
     propGetFontSettingsFromString(TEXT("18,0,0,0,400,0,0,0,0,0,0,3,2,Tahoma"), ptrhardMapWindowLogFont);
     propGetFontSettingsFromString(TEXT("16,0,0,0,500,0,0,0,0,0,0,3,2,TahomaBD"), ptrhardMapWindowBoldLogFont);
   }
+*/
 
 #endif //PNA
 
@@ -1911,10 +2003,10 @@ void InitialiseFontsAuto(RECT rc,
 
   memset ((char *)&logfont, 0, sizeof (logfont));
 
-#if defined(PNA) || defined(FIVV)
-  // VENTA-ADDON
-	_tcscpy(logfont.lfFaceName, _T("Tahoma")); // VENTA-TEST for PNA should be tahoma
-												// btw: MS Tahoma now DOES HAVE italics!
+// #if defined(PNA) || defined(FIVV)  // Only for PNA, since we still do not copy Fonts in their Windows memory.
+				      // though we could already do it automatically.
+#if defined(PNA)
+	_tcscpy(logfont.lfFaceName, _T("Tahoma")); // VENTA TODO copy DejaVu fonts also for PNA like for PDAs in SD version
 #else
   _tcscpy(logfont.lfFaceName, _T("DejaVu Sans Condensed"));
 #endif
@@ -1938,12 +2030,15 @@ void InitialiseFontsAuto(RECT rc,
 
     iFontHeight--;
     logfont.lfHeight = iFontHeight;
+//    InfoWindowFont = CreateFontIndirect (&logfont);
+//    SelectObject(iwhdc, InfoWindowFont);
 
     TempWindowFont = CreateFontIndirect (&logfont);
     hfOld=(HFONT)SelectObject(iwhdc, TempWindowFont);
 
-    GetTextExtentPoint(iwhdc, TEXT("00:00"), 5, &tsize);
 
+    GetTextExtentPoint(iwhdc, TEXT("00:00"), 5, &tsize);
+//    DeleteObject(InfoWindowFont);
     SelectObject(iwhdc, hfOld); // unselect it before deleting it
     DeleteObject(TempWindowFont);
 
@@ -1953,7 +2048,10 @@ void InitialiseFontsAuto(RECT rc,
   iFontHeight++;
   logfont.lfHeight = iFontHeight;
 
-  memcpy ((void *)ptrautoInfoWindowLogFont, &logfont, sizeof (LOGFONT));
+//  propGetFontSettings(TEXT("InfoWindowFont"), &logfont);
+//  InfoWindowFont = CreateFontIndirect (&logfont);
+ memcpy ((void *)ptrautoInfoWindowLogFont, &logfont, sizeof (LOGFONT));
+
 
   // next font..
 
@@ -1969,9 +2067,12 @@ void InitialiseFontsAuto(RECT rc,
   logfont.lfHeight = (int)(FontHeight/TITLEFONTHEIGHTRATIO);
   logfont.lfWidth =  (int)(FontWidth/TITLEFONTWIDTHRATIO);
   logfont.lfWeight = FW_BOLD;
+  //  ApplyClearType(&logfont);
   // RLD this was the only auto font to not have "ApplyClearType()".  It does not apply to very small fonts
   // we now apply ApplyClearType to all fonts in CreateOneFont().
 
+//  propGetFontSettings(TEXT("TitleWindowFont"), &logfont);
+//  TitleWindowFont = CreateFontIndirect (&logfont);
   memcpy ((void *)ptrautoTitleWindowLogFont, &logfont, sizeof (LOGFONT));
 
   memset ((char *)&logfont, 0, sizeof (logfont));
@@ -1983,7 +2084,10 @@ void InitialiseFontsAuto(RECT rc,
   logfont.lfHeight = (int)(FontHeight*CDIFONTHEIGHTRATIO);
   logfont.lfWidth =  (int)(FontWidth*CDIFONTWIDTHRATIO);
   logfont.lfWeight = FW_MEDIUM;
+//  ApplyClearType(&logfont);
 
+//  propGetFontSettings(TEXT("CDIWindowFont"), &logfont);
+//  CDIWindowFont = CreateFontIndirect (&logfont);
   memcpy ((void *)ptrautoCDIWindowLogFont, &logfont, sizeof (LOGFONT));
 
   // new font for map labels
@@ -1995,7 +2099,10 @@ void InitialiseFontsAuto(RECT rc,
   logfont.lfWidth =  (int)(FontWidth*MAPFONTWIDTHRATIO);
   logfont.lfWeight = FW_MEDIUM;
   logfont.lfItalic = TRUE;
+//  ApplyClearType(&logfont);
 
+//  propGetFontSettings(TEXT("MapLabelFont"), &logfont);
+//  MapLabelFont = CreateFontIndirect (&logfont);
   memcpy ((void *)ptrautoMapLabelLogFont, &logfont, sizeof (LOGFONT));
 
 
@@ -2007,7 +2114,10 @@ void InitialiseFontsAuto(RECT rc,
   logfont.lfHeight = (int)(FontHeight*STATISTICSFONTHEIGHTRATIO);
   logfont.lfWidth =  (int)(FontWidth*STATISTICSFONTWIDTHRATIO);
   logfont.lfWeight = FW_MEDIUM;
+//  ApplyClearType(&logfont);
 
+//  propGetFontSettings(TEXT("StatisticsFont"), &logfont);
+//  StatisticsFont = CreateFontIndirect (&logfont);
   memcpy ((void *)ptrautoStatisticsLogFont, &logfont, sizeof (LOGFONT));
 
   // new font for map labels
@@ -2017,7 +2127,13 @@ void InitialiseFontsAuto(RECT rc,
   logfont.lfHeight = (int)(FontHeight*MAPFONTHEIGHTRATIO*1.3);
   logfont.lfWidth =  (int)(FontWidth*MAPFONTWIDTHRATIO*1.3);
   logfont.lfWeight = FW_MEDIUM;
+//  ApplyClearType(&logfont);
 
+//  propGetFontSettings(TEXT("MapWindowFont"), &logfont);
+//  MapWindowFont = CreateFontIndirect (&logfont);
+
+//  SendMessage(hWndMapWindow,WM_SETFONT,
+//        (WPARAM)MapWindowFont,MAKELPARAM(TRUE,0));
   memcpy ((void *)ptrautoMapWindowLogFont, &logfont, sizeof (LOGFONT));
 
   // Font for map bold text
@@ -2026,6 +2142,8 @@ void InitialiseFontsAuto(RECT rc,
   logfont.lfWeight = FW_BOLD;
   logfont.lfWidth =  0; // JMW (int)(FontWidth*MAPFONTWIDTHRATIO*1.3) +2;
 
+//  propGetFontSettings(TEXT("MapWindowBoldFont"), &logfont);
+//  MapWindowBoldFont = CreateFontIndirect (&logfont);
   memcpy ((void *)ptrautoMapWindowBoldLogFont, &logfont, sizeof (LOGFONT));
 
   // TODO code: create font settings for this one...
@@ -2039,6 +2157,11 @@ void InitialiseFontsAuto(RECT rc,
 
   memcpy ((void *)ptrautoTitleSmallWindowLogFont, &logfont, sizeof (LOGFONT));
 }
+
+//  propGetFontSettings(TEXT("TeamCodeFont"), &logfont);
+//  TitleSmallWindowFont = CreateFontIndirect (&logfont);
+
+//}  FIX DA TOGLIERE??
 
 void InitialiseFonts(RECT rc)
 { //this routine must be called only at start/restart of XCSoar b/c there are many pointers to these fonts
@@ -2910,7 +3033,7 @@ void    AssignValues(void)
   // nothing to do here now!
 }
 
-
+extern int PDABatteryTemperature;
 void DisplayText(void)
 {
   if (InfoBoxesHidden)
@@ -2921,6 +3044,25 @@ void DisplayText(void)
   static bool first=true;
   static int InfoFocusLast = -1;
   static int DisplayTypeLast[MAXINFOWINDOWS];
+// static double LastFlipBoxTime = 0; //  now global for SlowCalculations
+  static bool FlipBoxValue = false;
+
+
+  // VENTA3 - Dynamic box values
+  if ( GPS_INFO.Time > LastFlipBoxTime + DYNABOXTIME ) {
+/*
+	static TCHAR ventabuffer[200];
+	FILE *fp;
+        wsprintf(ventabuffer,TEXT("GPS_INFO.Time=%d LastFlipBoxTime=%d Flip=%d"),(int)GPS_INFO.Time, (int)LastFlipBoxTime,
+	FlipBoxValue == true ? 1 : 0);
+        if ((fp=_tfopen(_T("DEBUG.TXT"),_T("a")))!= NULL){;fprintf(fp,"%S\n",ventabuffer);fclose(fp)
+;}
+*/
+	FlipBoxValue = ( FlipBoxValue == false );
+	LastFlipBoxTime = GPS_INFO.Time;
+  }
+
+
 
   LockNavBox();
 
@@ -2936,6 +3078,10 @@ void DisplayText(void)
 
   for(i=0;i<numInfoWindows;i++) {
 
+    // VENTA3
+    // All calculations are made in a separate thread. Slow calculations should apply to
+    // the function DoCalculationsSlow() . Do not put calculations here!
+
     DisplayType[i] = getInfoType(i);
     Data_Options[DisplayType[i]].Formatter->AssignValue(DisplayType[i]);
 
@@ -2950,8 +3096,38 @@ void DisplayText(void)
       theactive = -1;
     }
 
-    // set values, title
+    //
+    // Set Infobox title and middle value. Bottom line comes next
+    //
     switch (DisplayType[i]) {
+
+    case 67: // VENTA3 alternate1 and 2
+    case 68:
+    case 69:
+	if (DisplayType[i]==67) ActiveAlternate=Alternate1; else
+	if (DisplayType[i]==68) ActiveAlternate=Alternate2;
+		else ActiveAlternate=BestAlternate;
+	InfoBoxes[i]->SetSmallerFont(false);
+	if ( ActiveAlternate != -1 ) {
+		InfoBoxes[i]->SetTitle(Data_Options[DisplayType[i]].Formatter->
+			   RenderTitle(&color));
+		InfoBoxes[i]->SetColor(color);
+		InfoBoxes[i]->SetValue(Data_Options[DisplayType[i]].Formatter->
+			   Render(&color));
+		InfoBoxes[i]->SetColor(color);
+	} else {
+		if ( DisplayType[i]==67 )
+			InfoBoxes[i]->SetTitle(TEXT("Altern1"));
+		else if ( DisplayType[i]==68 )
+			InfoBoxes[i]->SetTitle(TEXT("Altern2"));
+		else	InfoBoxes[i]->SetTitle(TEXT("BestAltr"));
+		InfoBoxes[i]->SetValue(TEXT("---"));
+		InfoBoxes[i]->SetColor(-1);
+	}
+      if (needupdate)
+	InfoBoxes[i]->SetValueUnit(Units::GetUserUnitByGroup(
+          Data_Options[DisplayType[i]].UnitGroup));
+	break;
     case 55:
       InfoBoxes[i]->SetSmallerFont(true);
       if (needupdate)
@@ -3005,6 +3181,9 @@ void DisplayText(void)
       InfoBoxes[i]->SetColor(color);
     };
 
+    //
+    // Infobox bottom line
+    //
     switch (DisplayType[i]) {
     case 14: // Next waypoint
 
@@ -3164,6 +3343,75 @@ void DisplayText(void)
 	}
 
       break;
+	// VENTA3 wind speed + bearing bottom line
+	case 25:
+		if ( CALCULATED_INFO.WindBearing == 0 )
+		wsprintf(sTmp,_T("0%s"),_T(DEG)); else
+		wsprintf(sTmp,_T("%1.0d%s"),(int)CALCULATED_INFO.WindBearing,_T(DEG));
+		InfoBoxes[i]->SetComment(sTmp);
+		break;
+
+	// VENTA3 radial
+	case 60:
+		if ( HomeWaypoint == -1 ) {  // should be redundant
+      			InfoBoxes[i]->SetComment(TEXT(""));
+			break;
+		}
+		if ( CALCULATED_INFO.HomeRadial == 0 )
+		wsprintf(sTmp,_T("0%s"),_T(DEG)); else
+		wsprintf(sTmp,_T("%1.0d%s"),(int)CALCULATED_INFO.HomeRadial,_T(DEG));
+		InfoBoxes[i]->SetComment(sTmp);
+		break;
+
+	// VENTA3 battery temperature under voltage. There is a good reason to see the temperature,
+	// if available: many PNA/PDA will switch OFF during flight under direct sunlight for several
+	// hours due to battery temperature too high!! The 314 does!
+
+	// TODO: check temperature too high and set a warning flag to be used by an event or something
+	#if (WINDOWSPC<1)
+	case 65:
+		if ( PDABatteryTemperature >0 ) {
+			wsprintf(sTmp,_T("%1.0d%SC"),(int)PDABatteryTemperature,_T(DEG));
+			InfoBoxes[i]->SetComment(sTmp);
+		} else
+      			InfoBoxes[i]->SetComment(TEXT(""));
+		break;
+	#endif
+
+	// VENTA3 alternates
+	case 67:
+	case 68:
+	case 69:
+		if ( ActiveAlternate == -1 ) {  // should be redundant
+      			InfoBoxes[i]->SetComment(TEXT(""));
+			break;
+		}
+		if (FlipBoxValue == true) {
+			Units::FormatUserDistance(WayPointCalc[ActiveAlternate].Distance,
+					 sTmp, sizeof(sTmp)/sizeof(sTmp[0]));
+			InfoBoxes[i]->SetComment(sTmp);
+		} else {
+			Units::FormatUserArrival(WayPointCalc[ActiveAlternate].AltArriv,
+					 sTmp, sizeof(sTmp)/sizeof(sTmp[0]));
+			InfoBoxes[i]->SetComment(sTmp);
+		}
+		break;
+	case 70: // QFE
+		/*
+		 // Showing the diff value offset was just interesting ;-)
+		if (FlipBoxValue == true) {
+			//Units::FormatUserArrival(QFEAltitudeOffset,
+			Units::FormatUserAltitude(QFEAltitudeOffset,
+				 sTmp, sizeof(sTmp)/sizeof(sTmp[0]));
+			InfoBoxes[i]->SetComment(sTmp);
+		} else {
+		*/
+		//Units::FormatUserArrival(GPS_INFO.Altitude,
+		Units::FormatUserAltitude(GPS_INFO.Altitude,
+			 sTmp, sizeof(sTmp)/sizeof(sTmp[0]));
+		InfoBoxes[i]->SetComment(sTmp);
+		break;
+
     default:
       InfoBoxes[i]->SetComment(TEXT(""));
     };
@@ -3773,14 +4021,12 @@ DWORD GetBatteryInfo(BATTERYINFO* pBatteryInfo)
         pBatteryInfo->acStatus = sps.ACLineStatus;
         pBatteryInfo->chargeStatus = sps.BatteryFlag;
         pBatteryInfo->BatteryLifePercent = sps.BatteryLifePercent;
-		// VENTA-TEST BATTERY
-		pBatteryInfo->BatteryVoltage = sps.BatteryVoltage;
-		pBatteryInfo->BatteryAverageCurrent = sps.BatteryAverageCurrent;
-		pBatteryInfo->BatteryCurrent = sps.BatteryCurrent;
-		pBatteryInfo->BatterymAHourConsumed = sps.BatterymAHourConsumed;
-		pBatteryInfo->BatteryTemperature = sps.BatteryTemperature;
-// VENTA-TEST END
-
+	// VENTA get everything ready for PNAs battery control
+	pBatteryInfo->BatteryVoltage = sps.BatteryVoltage;
+	pBatteryInfo->BatteryAverageCurrent = sps.BatteryAverageCurrent;
+	pBatteryInfo->BatteryCurrent = sps.BatteryCurrent;
+	pBatteryInfo->BatterymAHourConsumed = sps.BatterymAHourConsumed;
+	pBatteryInfo->BatteryTemperature = sps.BatteryTemperature;
     }
 
     return result;
@@ -3815,6 +4061,7 @@ typedef struct _VIDEO_POWER_MANAGEMENT {
 } VIDEO_POWER_MANAGEMENT, *PVIDEO_POWER_MANAGEMENT;
 
 int PDABatteryPercent = 100;
+int PDABatteryTemperature = 0;
 
 void BlankDisplay(bool doblank) {
 
@@ -3831,19 +4078,18 @@ void BlankDisplay(bool doblank) {
 
   if (GetBatteryInfo(&BatteryInfo)) {
     PDABatteryPercent = BatteryInfo.BatteryLifePercent;
+    PDABatteryTemperature = BatteryInfo.BatteryTemperature; // VENTA3
 /*
-	//VENTA-TEST BAT
 	// All you need to display extra Battery informations...
 
 	TCHAR vtemp[1000];
-	_stprintf(vtemp,_T("Battpercent=%d Volt=%d Curr=%d AvCurr=%d mAhC=%d Temp=%d Lifetime=%d Fulllife-%d\n"),
+	_stprintf(vtemp,_T("Battpercent=%d Volt=%d Curr=%d AvCurr=%d mAhC=%d Temp=%d Lifetime=%d Fulllife=%d\n"),
  		BatteryInfo.BatteryLifePercent, BatteryInfo.BatteryVoltage,
  		BatteryInfo.BatteryCurrent, BatteryInfo.BatteryAverageCurrent,
  		BatteryInfo.BatterymAHourConsumed,
 		BatteryInfo.BatteryTemperature, BatteryInfo.BatteryLifeTime, BatteryInfo.BatteryFullLifeTime);
 	StartupStore( vtemp );
-*/
-	// END VENTA TEST BAT
+ */
   }
 
   if (!EnableAutoBlank) {
@@ -4189,6 +4435,36 @@ bool ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size){
       break;
     }
   }
+// VENTA3 VisualGlide
+  if (_tcsstr(OutBuffer, TEXT("$(VisualGlideToggleName)"))) {
+    switch(VisualGlide) {
+    case 0:
+      ReplaceInString(OutBuffer, TEXT("$(VisualGlideToggleName)"), TEXT("Steady"), Size);
+      break;
+    case 1:
+	if (ExtendedVisualGlide)
+		ReplaceInString(OutBuffer, TEXT("$(VisualGlideToggleName)"), TEXT("Moving"), Size);
+	else
+		ReplaceInString(OutBuffer, TEXT("$(VisualGlideToggleName)"), TEXT("Off"), Size);
+      break;
+    case 2:
+      ReplaceInString(OutBuffer, TEXT("$(VisualGlideToggleName)"), TEXT("Off"), Size);
+      break;
+    }
+  }
+
+// VENTA3 AirSpace event
+  if (_tcsstr(OutBuffer, TEXT("$(AirSpaceToggleName)"))) {
+    switch(OnAirSpace) {
+    case 0:
+      ReplaceInString(OutBuffer, TEXT("$(AirSpaceToggleName)"), TEXT("ON"), Size);
+      break;
+    case 1:
+      ReplaceInString(OutBuffer, TEXT("$(AirSpaceToggleName)"), TEXT("OFF"), Size);
+      break;
+    }
+  }
+
   if (_tcsstr(OutBuffer, TEXT("$(TerrainTopologyToggleName)"))) {
     char val;
     val = 0;
@@ -4270,6 +4546,14 @@ bool ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size){
   CondReplaceInString(TrailActive == 2, OutBuffer, TEXT("$(SnailTrailShortShortIndicator)"), TEXT("(*)"), TEXT(""), Size);
   CondReplaceInString(TrailActive == 1, OutBuffer, TEXT("$(SnailTrailLongShortIndicator)"), TEXT("(*)"), TEXT(""), Size);
   CondReplaceInString(TrailActive == 3, OutBuffer, TEXT("$(SnailTrailFullShortIndicator)"), TEXT("(*)"), TEXT(""), Size);
+
+// VENTA3 VisualGlide
+  CondReplaceInString(VisualGlide == 0, OutBuffer, TEXT("$(VisualGlideOffShortIndicator)"), TEXT("(*)"), TEXT(""), Size);
+  CondReplaceInString(VisualGlide == 1, OutBuffer, TEXT("$(VisualGlideLightShortIndicator)"), TEXT("(*)"), TEXT(""), Size);
+  CondReplaceInString(VisualGlide == 2, OutBuffer, TEXT("$(VisualGlideHeavyShortIndicator)"), TEXT("(*)"), TEXT(""), Size);
+// VENTA3 AirSpace
+  CondReplaceInString(OnAirSpace  == 0, OutBuffer, TEXT("$(AirSpaceOffShortIndicator)"), TEXT("(*)"), TEXT(""), Size);
+  CondReplaceInString(OnAirSpace  == 1, OutBuffer, TEXT("$(AirSpaceOnShortIndicator)"), TEXT("(*)"), TEXT(""), Size);
 
   CondReplaceInString(EnableFLARMGauge != 0, OutBuffer, TEXT("$(FlarmDispToggleActionName)"), TEXT("Off"), TEXT("On"), Size);
 

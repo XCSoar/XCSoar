@@ -14,6 +14,8 @@ Copyright_License {
 	Lars H <lars_hn@hotmail.com>
 	Rob Dunning <rob@raspberryridgesheepfarm.com>
 	Russell King <rmk@arm.linux.org.uk>
+	Paolo Ventafridda <coolwind@email.it>
+	Tobias Lohner <tobias@lohner-net.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -29,6 +31,7 @@ Copyright_License {
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
+  $Id$
 }
 */
 
@@ -193,14 +196,12 @@ void InputEvents::readFile() {
 
   // Get defaults
   if (!InitONCE) {
-#if (WINDOWSPC>0)
+#ifdef FIVV
+#include "InputEvents_fivv.cpp"   // VENTA3
+#elif (WINDOWSPC>0)
 #include "InputEvents_pc.cpp"
 #elif GNAV
 #include "InputEvents_altair.cpp"
-// VENTA- REMOVED CUSTOM PNA EVENTS
-// #elif PNA
-// #include "InputEvents_pna.cpp"
-//
 #else
 #include "InputEvents_defaults.cpp"
 #endif
@@ -502,7 +503,6 @@ int InputEvents::findKey(const TCHAR *data) {
 //  return VK_F11;
 // else if (_tcscmp(data, TEXT("F12")) == 0)
 //    return VK_F12;
-  // END VENTA
   else if (_tcscmp(data, TEXT("LEFT")) == 0)
     return VK_LEFT;
   else if (_tcscmp(data, TEXT("RIGHT")) == 0)
@@ -510,9 +510,6 @@ int InputEvents::findKey(const TCHAR *data) {
   else if (_tcscmp(data, TEXT("UP")) == 0)
     return VK_UP;
   else if (_tcscmp(data, TEXT("DOWN")) == 0) {
-#ifdef VENTA_DEBUG_EVENT
-	   DoStatusMessage(TEXT("DBG InputEvents VK DOWN 1")); // VENTA-
-#endif
     return VK_DOWN;
 		}
   else if (_tcscmp(data, TEXT("RETURN")) == 0)
@@ -1057,6 +1054,63 @@ void InputEvents::eventSnailTrail(const TCHAR *misc) {
   }
 }
 
+// VENTA3
+void InputEvents::eventVisualGlide(const TCHAR *misc) {
+
+  if (_tcscmp(misc, TEXT("toggle")) == 0) {
+    VisualGlide ++;
+    if (VisualGlide==2 && !ExtendedVisualGlide) VisualGlide=0;
+    if (VisualGlide>2) {
+      VisualGlide=0;
+    }
+  }
+  else if (_tcscmp(misc, TEXT("off")) == 0)
+    VisualGlide = 0;
+  else if (_tcscmp(misc, TEXT("steady")) == 0)
+    VisualGlide = 1;
+  else if (_tcscmp(misc, TEXT("moving")) == 0)
+    VisualGlide = 2;
+
+  else if (_tcscmp(misc, TEXT("show")) == 0) {
+    if (VisualGlide==0)
+      DoStatusMessage(TEXT("VisualGlide OFF"));
+    if (VisualGlide==1)
+      DoStatusMessage(TEXT("VisualGlide Steady"));
+    if (VisualGlide==2)
+      DoStatusMessage(TEXT("VisualGlide Moving"));
+  }
+}
+
+// VENTA3
+/*
+ * This even currently toggles DrawAirSpace() and does nothing else.
+ * But since we use an int and not a bool, it is easy to expand it.
+ * Note that XCSoar.cpp init OnAirSpace always to 1, and this value
+ * is never saved to the registry actually. It is intended to be used
+ * as a temporary choice during flight, does not affect configuration.
+ * Note also that in MapWindow DrawAirSpace() is accomplished for
+ * every OnAirSpace value >0 .  We can use negative numbers also,
+ * but 0 should mean OFF all the way.
+ */
+void InputEvents::eventAirSpace(const TCHAR *misc) {
+  if (_tcscmp(misc, TEXT("toggle")) == 0) {
+    OnAirSpace ++;
+    if (OnAirSpace>1) {
+      OnAirSpace=0;
+    }
+  }
+  else if (_tcscmp(misc, TEXT("off")) == 0)
+    OnAirSpace = 0;
+  else if (_tcscmp(misc, TEXT("on")) == 0)
+    OnAirSpace = 1;
+  else if (_tcscmp(misc, TEXT("show")) == 0) {
+    if (OnAirSpace==0)
+      DoStatusMessage(TEXT("Show AirSpace OFF"));
+    if (OnAirSpace==1)
+      DoStatusMessage(TEXT("Show AirSpace ON"));
+  }
+}
+
 void InputEvents::eventScreenModes(const TCHAR *misc) {
   // toggle switches like this:
   //  -- normal infobox
@@ -1284,7 +1338,7 @@ void InputEvents::eventPan(const TCHAR *misc) {
   else if (_tcscmp(misc, TEXT("off")) == 0)
     MapWindow::Event_Pan(0);
 
-#ifdef PNA   // VENTA-ADDON  let pan mode scroll wheel zooming with HP31X. VENTA-TODO: make it different for other PNAs
+#if defined(PNA) || defined(FIVV)   // VENTA-ADDON  let pan mode scroll wheel zooming with HP31X. VENTA-TODO: make it different for other PNAs
  else if (_tcscmp(misc, TEXT("up")) == 0)
 			MapWindow::Event_ScaleZoom(1);
 else if (_tcscmp(misc, TEXT("down")) == 0)

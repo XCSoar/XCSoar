@@ -24,6 +24,7 @@ void WaypointWriteFiles(void);
 void WaypointAltitudeFromTerrain(WAYPOINT* wpt);
 WAYPOINT* GrowWaypointList();
 int FindMatchingWaypoint(WAYPOINT *waypoint);
+void InitWayPointCalc(void); // VENTA3
 
 #endif
 

@@ -14,6 +14,8 @@ Copyright_License {
 	Lars H <lars_hn@hotmail.com>
 	Rob Dunning <rob@raspberryridgesheepfarm.com>
 	Russell King <rmk@arm.linux.org.uk>
+	Paolo Ventafridda <coolwind@email.it>
+	Tobias Lohner <tobias@lohner-net.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -29,11 +31,13 @@ Copyright_License {
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
+  $Id$
 }
 */
 #include "StdAfx.h"
 #include <windows.h>
 
+#include "Defines.h" // VENTA3
 #include "compatibility.h"
 #ifdef OLDPPC
 #include "XCSoarProcess.h"
@@ -155,6 +159,51 @@ void	AltitudeProcessing(int UpDown)
 	}
 #endif
 	return;
+}
+
+// VENTA3 QFE
+void	QFEAltitudeProcessing(int UpDown)
+{
+	short step;
+	if ( ( GPS_INFO.Altitude - QFEAltitudeOffset ) <10 ) step=1; else step=10;
+	if(UpDown==1) {
+	   QFEAltitudeOffset -= (step/ALTITUDEMODIFY);
+	}	else if (UpDown==-1)
+	  {
+	    QFEAltitudeOffset += (step/ALTITUDEMODIFY);
+/*
+	    if(QFEAltitudeOffset < 0)
+	      QFEAltitudeOffset = 0;
+*/
+	  } else if (UpDown==-2) {
+	  DirectionProcessing(-1);
+	} else if (UpDown==2) {
+	  DirectionProcessing(1);
+	}
+	return;
+}
+
+// VENTA3 Alternates processing updown
+void Alternate1Processing(int UpDown)
+{
+   if (UpDown==0) {
+	if ( Alternate1 <0 ) return;
+	LockTaskData(); SelectedWaypoint = Alternate1; PopupWaypointDetails(); UnlockTaskData();
+  }
+}
+void Alternate2Processing(int UpDown)
+{
+   if (UpDown==0) {
+	if ( Alternate2 <0 ) return;
+	LockTaskData(); SelectedWaypoint = Alternate2; PopupWaypointDetails(); UnlockTaskData();
+  }
+}
+void BestAlternateProcessing(int UpDown)
+{
+   if (UpDown==0) {
+	if ( BestAlternate <0 ) return;
+	LockTaskData(); SelectedWaypoint = BestAlternate; PopupWaypointDetails(); UnlockTaskData();
+  }
 }
 
 void	SpeedProcessing(int UpDown)
@@ -897,7 +946,11 @@ void InfoBoxFormatter::AssignValue(int i) {
       }
     }
     break;
-  case 67:
+  case 70:	// VENTA3 QFE
+//    Valid = GPS_INFO.Altitude;
+    Value = ALTITUDEMODIFY* (GPS_INFO.Altitude-QFEAltitudeOffset);
+    break;
+  case 71:
     Value = CALCULATED_INFO.Experimental;
     Valid = true;
     break;
@@ -949,6 +1002,18 @@ void InfoBoxFormatter::RenderInvalid(int *color) {
 
 
 TCHAR *InfoBoxFormatter::Render(int *color) {
+  if (Valid) {
+    _stprintf(Text,
+              Format,
+              Value );
+    *color = 0;
+  } else {
+    RenderInvalid(color);
+  }
+  return(Text);
+}
+
+TCHAR *InfoBoxFormatter::RenderTitle(int *color) { // VENTA3
   if (Valid) {
     _stprintf(Text,
               Format,
@@ -1119,6 +1184,141 @@ TCHAR *FormatterWaypoint::Render(int *color) {
   return(Text);
 }
 
+// VENTA3 Alternate destinations
+TCHAR *FormatterAlternate::RenderTitle(int *color) {
+
+  LockTaskData();
+  if(ValidWayPoint(ActiveAlternate))
+    {
+      if ( DisplayTextType == DISPLAYFIRSTTHREE)
+        {
+          _tcsncpy(Text,WayPointList[ActiveAlternate].Name,3);
+          Text[3] = '\0';
+        }
+      else if( DisplayTextType == DISPLAYNUMBER)
+        {
+          _stprintf(Text,TEXT("%d"),
+		    WayPointList[ActiveAlternate].Number );
+        }
+      else
+        {
+          _tcsncpy(Text,WayPointList[ActiveAlternate].Name,
+                   (sizeof(Text)/sizeof(TCHAR))-1);
+          Text[(sizeof(Text)/sizeof(TCHAR))-1] = '\0';
+        }
+    }
+  else
+    {
+      Valid = false;
+      RenderInvalid(color);
+    }
+  UnlockTaskData();
+
+  return(Text);
+}
+
+/*
+ * Currently even if set for FIVV, colors are not used.
+ */
+TCHAR *FormatterAlternate::Render(int *color) {
+ int active=ActiveAlternate;
+  LockTaskData();
+  if(Valid && ValidWayPoint(ActiveAlternate)) {
+	switch (WayPointCalc[ActiveAlternate].VGR ) {
+		case 0:
+			// impossible, give a magenta debug color;
+			*color = 5;
+			break;
+		case 1:
+#ifdef FIVV
+			*color = 0; // green
+#else
+			*color = 0; // blue
+#endif
+			break;
+		case 2:
+#ifdef FIVV
+			*color = 0; // yellow 4
+#else
+			*color = 0; // normale white
+#endif
+			break;
+		case 3:
+			*color = 1; // red
+			break;
+		default:
+			// even more impossible, give debug color magenta
+			*color = 5;
+			break;
+	}
+
+	Value=WayPointCalc[ActiveAlternate].GR;
+
+	_stprintf(Text,Format,Value);
+  } else {
+	Valid = false;
+	RenderInvalid(color);
+  }
+   UnlockTaskData();
+   return(Text);
+}
+
+
+void FormatterAlternate::AssignValue(int i) {
+  LockTaskData();
+   switch (i) {
+	case 67:
+		if (OnAlternate1 == false ) { // first run, activate calculations
+			OnAlternate1 = true;
+        		Value=INVALID_GR;
+		} else {
+			if ( ValidWayPoint(Alternate1) ) Value=WayPointCalc[Alternate1].GR;
+			else Value=INVALID_GR;
+		}
+		break;
+/*
+		if ( ValidWayPoint(Alternate1) ) Value=WayPointCalc[Alternate1].GR;
+		else Value=INVALID_GR;
+		break;
+*/
+	case 68:
+		if (OnAlternate2 == false ) { // first run, activate calculations
+			OnAlternate2 = true;
+        		Value=INVALID_GR;
+		} else {
+			if ( ValidWayPoint(Alternate2) ) Value=WayPointCalc[Alternate2].GR;
+			else Value=INVALID_GR;
+		}
+		break;
+	case 69:
+		if (OnBestAlternate == false ) { // first run, waiting for slowcalculation loop
+			OnBestAlternate = true;		// activate it
+        		Value=INVALID_GR;
+		} else {
+			if ( ValidWayPoint(BestAlternate)) Value=WayPointCalc[BestAlternate].GR;
+			else Value=INVALID_GR;
+		}
+		break;
+	default:
+		Value=66.6; // something evil to notice..
+		break;
+   }
+
+   Valid=false;
+   if (Value < INVALID_GR) {
+    	Valid = true;
+	if (Value >= 100 )
+	  {
+	    _tcscpy(Format, _T("%1.0f"));
+	  }
+	else
+	  {
+	    _tcscpy(Format, _T("%1.1f"));
+	  }
+   }
+
+   UnlockTaskData();
+}
 
 TCHAR *FormatterDiffBearing::Render(int *color) {
 

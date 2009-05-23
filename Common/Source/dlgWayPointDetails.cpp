@@ -14,6 +14,8 @@ Copyright_License {
 	Lars H <lars_hn@hotmail.com>
 	Rob Dunning <rob@raspberryridgesheepfarm.com>
 	Russell King <rmk@arm.linux.org.uk>
+	Paolo Ventafridda <coolwind@email.it>
+	Tobias Lohner <tobias@lohner-net.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -29,6 +31,7 @@ Copyright_License {
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
+  $Id$
 }
 */
 
@@ -58,6 +61,7 @@ static WndListFrame *wDetails=NULL;
 static WndOwnerDrawFrame *wDetailsEntry = NULL;
 static WndFrame *wInfo=NULL;
 static WndFrame *wCommand=NULL;
+static WndFrame *wSpecial=NULL; // VENTA3
 static WndOwnerDrawFrame *wImage=NULL;
 static BOOL hasimage1 = false;
 static BOOL hasimage2 = false;
@@ -84,9 +88,9 @@ static void NextPage(int Step){
   page += Step;
   do {
     if (page<0) {
-      page = 4;
+      page = 5;
     }
-    if (page>4) {
+    if (page>5) {
       page = 0;
     }
     switch(page) {
@@ -103,14 +107,17 @@ static void NextPage(int Step){
     case 2:
       page_ok = true;
       break;
-    case 3:
+    case 3: // VENTA3
+      page_ok = true;
+      break;
+    case 4:
       if (!hasimage1) {
         page += Step;
       } else {
         page_ok = true;
       }
       break;
-    case 4:
+    case 5:
       if (!hasimage2) {
         page += Step;
       } else {
@@ -128,7 +135,8 @@ static void NextPage(int Step){
   wInfo->SetVisible(page == 0);
   wDetails->SetVisible(page == 1);
   wCommand->SetVisible(page == 2);
-  wImage->SetVisible(page > 3);
+  wSpecial->SetVisible(page == 3);
+  wImage->SetVisible(page > 4);
 
   if (page==1) {
     wDetails->ResetList();
@@ -235,6 +243,39 @@ static void OnNewHomeClicked(WindowControl * Sender){
   LockTaskData();
   HomeWaypoint = SelectedWaypoint;
   SetToRegistry(szRegistryHomeWaypoint, HomeWaypoint);
+  RefreshTask();
+  UnlockTaskData();
+  wf->SetModalResult(mrOK);
+}
+
+// VENTA3
+static void OnSetAlternate1Clicked(WindowControl * Sender){
+	(void)Sender;
+  LockTaskData();
+  Alternate1 = SelectedWaypoint;
+  SetToRegistry(szRegistryAlternate1, Alternate1);
+  RefreshTask();
+  UnlockTaskData();
+  wf->SetModalResult(mrOK);
+}
+
+static void OnSetAlternate2Clicked(WindowControl * Sender){
+	(void)Sender;
+  LockTaskData();
+  Alternate2 = SelectedWaypoint;
+  SetToRegistry(szRegistryAlternate2, Alternate2);
+  RefreshTask();
+  UnlockTaskData();
+  wf->SetModalResult(mrOK);
+}
+
+static void OnClearAlternatesClicked(WindowControl * Sender){
+	(void)Sender;
+  LockTaskData();
+  Alternate1 = -1; OnAlternate1=false;
+  Alternate2 = -1; OnAlternate2=false;
+  SetToRegistry(szRegistryAlternate1, Alternate1);
+  SetToRegistry(szRegistryAlternate2, Alternate2);
   RefreshTask();
   UnlockTaskData();
   wf->SetModalResult(mrOK);
@@ -450,11 +491,13 @@ void dlgWayPointDetailsShowModal(void){
 
   wInfo    = ((WndFrame *)wf->FindByName(TEXT("frmInfos")));
   wCommand = ((WndFrame *)wf->FindByName(TEXT("frmCommands")));
+  wSpecial = ((WndFrame *)wf->FindByName(TEXT("frmSpecial"))); // VENTA3
   wImage   = ((WndOwnerDrawFrame *)wf->FindByName(TEXT("frmImage")));
   wDetails = (WndListFrame*)wf->FindByName(TEXT("frmDetails"));
 
   ASSERT(wInfo!=NULL);
   ASSERT(wCommand!=NULL);
+  ASSERT(wSpecial!=NULL); // VENTA3
   ASSERT(wImage!=NULL);
   ASSERT(wDetails!=NULL);
 
@@ -474,10 +517,12 @@ void dlgWayPointDetailsShowModal(void){
 
   wInfo->SetBorderKind(BORDERLEFT);
   wCommand->SetBorderKind(BORDERLEFT);
+  wSpecial->SetBorderKind(BORDERLEFT);
   wImage->SetBorderKind(BORDERLEFT | BORDERTOP | BORDERBOTTOM | BORDERRIGHT);
   wDetails->SetBorderKind(BORDERLEFT);
 
   wCommand->SetVisible(false);
+  wSpecial->SetVisible(false);
   wImage->SetCaption(gettext(TEXT("Blank!")));
   wImage->SetOnPaintNotify(OnImagePaint);
 
@@ -494,6 +539,18 @@ void dlgWayPointDetailsShowModal(void){
   wb = ((WndButton *)wf->FindByName(TEXT("cmdNewHome")));
   if (wb)
     wb->SetOnClickNotify(OnNewHomeClicked);
+
+  wb = ((WndButton *)wf->FindByName(TEXT("cmdSetAlternate1")));
+  if (wb)
+    wb->SetOnClickNotify(OnSetAlternate1Clicked);
+
+  wb = ((WndButton *)wf->FindByName(TEXT("cmdSetAlternate2")));
+  if (wb)
+    wb->SetOnClickNotify(OnSetAlternate2Clicked);
+
+  wb = ((WndButton *)wf->FindByName(TEXT("cmdClearAlternates")));
+  if (wb)
+    wb->SetOnClickNotify(OnClearAlternatesClicked);
 
   wb = ((WndButton *)wf->FindByName(TEXT("cmdTeamCode")));
   if (wb)

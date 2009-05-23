@@ -14,6 +14,8 @@ Copyright_License {
 	Lars H <lars_hn@hotmail.com>
 	Rob Dunning <rob@raspberryridgesheepfarm.com>
 	Russell King <rmk@arm.linux.org.uk>
+	Paolo Ventafridda <coolwind@email.it>
+	Tobias Lohner <tobias@lohner-net.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -121,6 +123,7 @@ static WndFrame *wConfig18=NULL;
 static WndFrame *wConfig19=NULL;
 static WndFrame *wConfig20=NULL;
 static WndFrame *wConfig21=NULL;
+static WndFrame *wConfig22=NULL; // VENTA
 static WndButton *buttonPilotName=NULL;
 static WndButton *buttonAircraftType=NULL;
 static WndButton *buttonAircraftRego=NULL;
@@ -128,7 +131,7 @@ static WndButton *buttonLoggerID=NULL;
 static WndButton *buttonCopy=NULL;
 static WndButton *buttonPaste=NULL;
 
-#define NUMPAGES 21
+#define NUMPAGES 22
 
 
 
@@ -240,8 +243,11 @@ static void NextPage(int Step){
   case 20:
     wf->SetCaption(gettext(TEXT("21 Waypoint Edit")));
     break;
+  case 21:
+    wf->SetCaption(gettext(TEXT("22 Specials")));
+    break;
   }
-  if ((config_page>=15) && (config_page<=18)) { // RLD upped by 1
+  if ((config_page>=15) && (config_page<=18)) {
     if (buttonCopy) {
       buttonCopy->SetVisible(true);
     }
@@ -277,6 +283,7 @@ static void NextPage(int Step){
   wConfig19->SetVisible(config_page == 18);
   wConfig20->SetVisible(config_page == 19);
   wConfig21->SetVisible(config_page == 20);
+  wConfig22->SetVisible(config_page == 21);  // VENTA4
 }
 
 
@@ -1809,6 +1816,18 @@ static void setVariables(void) {
     wp->RefreshDisplay();
   }
 
+  // VENTA3 VisualGlide
+  wp = (WndProperty*)wf->FindByName(TEXT("prpVGlide"));
+  if (wp) {
+    DataFieldEnum* dfe;
+    dfe = (DataFieldEnum*)wp->GetDataField();
+    dfe->addEnumText(gettext(TEXT("Off")));
+    dfe->addEnumText(gettext(TEXT("Steady")));
+    dfe->addEnumText(gettext(TEXT("Moving")));
+    dfe->Set(VisualGlide);
+    wp->RefreshDisplay();
+  }
+
   wp = (WndProperty*)wf->FindByName(TEXT("prpMaxManoeuveringSpeed"));
   if (wp) {
     wp->GetDataField()->SetAsFloat(iround(SPEEDMODIFY*SAFTEYSPEED));
@@ -2042,7 +2061,7 @@ static void setVariables(void) {
 	dfe->addEnumText(gettext(TEXT("(empty) B")));  // 2
 	dfe->addEnumText(gettext(TEXT("(empty) C")));  // 3
 	dfe->addEnumText(gettext(TEXT("8box left")));  // 4
-	dfe->addEnumText(gettext(TEXT("vario+5box"))); // 5
+	dfe->addEnumText(gettext(TEXT("8box right"))); // 5 VENTA3
 	dfe->addEnumText(gettext(TEXT("(empty) D")));  // 6
 	dfe->addEnumText(gettext(TEXT("5box right"))); // 7
 	dfe->Set(Appearance.InfoBoxGeom);
@@ -2079,8 +2098,10 @@ static void setVariables(void) {
     dfe = (DataFieldEnum*)wp->GetDataField();
     dfe->addEnumText(gettext(TEXT("Generic")));
     dfe->addEnumText(gettext(TEXT("HP31x")));
-    dfe->addEnumText(gettext(TEXT("PN6000")));
+    dfe->addEnumText(gettext(TEXT("MedionP5")));
     dfe->addEnumText(gettext(TEXT("MIO")));
+    dfe->addEnumText(gettext(TEXT("Nokia500"))); // VENTA3
+    dfe->addEnumText(gettext(TEXT("PN6000")));
 
 	int iTmp;
 	switch (GlobalModelType) {
@@ -2095,6 +2116,12 @@ static void setVariables(void) {
 				break;
 		case MODELTYPE_PNA_MIO:
 				iTmp=(InfoBoxModelAppearance_t)apImPnaMio;
+				break;
+		case MODELTYPE_PNA_NOKIA_500:
+				iTmp=(InfoBoxModelAppearance_t)apImPnaNokia500;
+				break;
+		case MODELTYPE_PNA_MEDION_P5:
+				iTmp=(InfoBoxModelAppearance_t)apImPnaMedionP5;
 				break;
 		default:
 				iTmp=(InfoBoxModelAppearance_t)apImPnaGeneric;
@@ -2112,15 +2139,48 @@ static void setVariables(void) {
 // VENTA2- PC model
 #if (WINDOWSPC>0)
     dfe->addEnumText(gettext(TEXT("PC/normal")));
+    wp->SetVisible(false); // currently no need to display default
 #else
     dfe->addEnumText(gettext(TEXT("PDA/normal")));
+    wp->SetVisible(false);
 #endif
         dfe->Set(0);
     wp->RefreshDisplay();
   }
 #endif
 
+  wp = (WndProperty*)wf->FindByName(TEXT("prpAircraftCategory"));
+  if (wp) {
+    DataFieldEnum* dfe;
+    dfe = (DataFieldEnum*)wp->GetDataField();
+    dfe->addEnumText(gettext(TEXT("Glider")));
+    dfe->addEnumText(gettext(TEXT("Paraglider")));
+    dfe = (DataFieldEnum*)wp->GetDataField();
+    dfe->Set(AircraftCategory);
+    wp->RefreshDisplay();
+  }
 
+  wp = (WndProperty*)wf->FindByName(TEXT("prpExtendedVisualGlide"));
+  if (wp) {
+    DataFieldEnum* dfe;
+    dfe = (DataFieldEnum*)wp->GetDataField();
+    dfe->addEnumText(gettext(TEXT("Normal")));
+    dfe->addEnumText(gettext(TEXT("Extended")));
+    dfe = (DataFieldEnum*)wp->GetDataField();
+    dfe->Set(ExtendedVisualGlide);
+    wp->RefreshDisplay();
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpLook8000"));
+  if (wp) {
+    DataFieldEnum* dfe;
+    dfe = (DataFieldEnum*)wp->GetDataField();
+    dfe->addEnumText(gettext(TEXT("Enabled")));
+    dfe->addEnumText(gettext(TEXT("Disabled")));
+    dfe = (DataFieldEnum*)wp->GetDataField();
+    dfe->Set(Look8000);
+    wp->RefreshDisplay();
+  }
 
 // Fonts
   wp = (WndProperty*)wf->FindByName(TEXT("prpUseCustomFonts"));
@@ -2282,6 +2342,27 @@ static void setVariables(void) {
     wp->RefreshDisplay();
   }
 
+  wp = (WndProperty*)wf->FindByName(TEXT("prpAutoBacklight")); // VENTA4
+  if (wp) {
+    wp->SetVisible(false);
+#ifdef PNA
+    if (GlobalModelType == MODELTYPE_PNA_HP31X )
+    	wp->SetVisible(true);
+#endif
+    wp->GetDataField()->Set(EnableAutoBacklight);
+    wp->RefreshDisplay();
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpAutoSoundVolume")); // VENTA4
+  if (wp) {
+    wp->SetVisible(false);
+#if ( !defined(WINDOWSPC) || WINDOWSPC==0 )
+    	wp->SetVisible(true);
+#endif
+    wp->GetDataField()->Set(EnableAutoSoundVolume);
+    wp->RefreshDisplay();
+  }
+
   wp = (WndProperty*)wf->FindByName(TEXT("prpTaskFinishLine"));
   if (wp) {
     DataFieldEnum* dfe;
@@ -2411,6 +2492,15 @@ static void setVariables(void) {
     wp->RefreshDisplay();
   }
 
+#ifdef FIVV
+  wp = (WndProperty*)wf->FindByName(TEXT("prpGPSAltitudeOffset")); // VENTA3 GPSAltitudeOffset
+  if (wp) {
+    wp->GetDataField()->SetAsFloat(GPSAltitudeOffset);
+    wp->GetDataField()->SetUnits(Units::GetAltitudeName());
+    wp->RefreshDisplay();
+  }
+#endif
+
   ////
   for (i=0; i<4; i++) {
     for (int j=0; j<numInfoWindows; j++) {
@@ -2472,6 +2562,7 @@ void dlgConfigurationShowModal(void){
   wConfig19    = ((WndFrame *)wf->FindByName(TEXT("frmInfoBoxAuxiliary")));
   wConfig20    = ((WndFrame *)wf->FindByName(TEXT("frmLogger")));
   wConfig21    = ((WndFrame *)wf->FindByName(TEXT("frmWaypointEdit")));
+  wConfig22    = ((WndFrame *)wf->FindByName(TEXT("frmSpecials")));
 
   ASSERT(wConfig1!=NULL);
   ASSERT(wConfig2!=NULL);
@@ -2494,6 +2585,7 @@ void dlgConfigurationShowModal(void){
   ASSERT(wConfig19!=NULL);
   ASSERT(wConfig20!=NULL);
   ASSERT(wConfig21!=NULL);
+  ASSERT(wConfig22!=NULL);
 
   wf->FilterAdvanced(UserLevel>0);
 
@@ -2625,6 +2717,8 @@ void dlgConfigurationShowModal(void){
       changed = true;
     }
   }
+
+// VENTA3: do not save VisualGlide to registry or profile
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpPolarType"));
   if (wp) {
@@ -3316,6 +3410,45 @@ void dlgConfigurationShowModal(void){
     }
   }
 
+  wp = (WndProperty*)wf->FindByName(TEXT("prpAircraftCategory")); // VENTA4
+  if (wp) {
+    if (AircraftCategory != (AircraftCategory_t)
+	(wp->GetDataField()->GetAsInteger())) {
+      AircraftCategory = (AircraftCategory_t)
+	(wp->GetDataField()->GetAsInteger());
+      SetToRegistry(szRegistryAircraftCategory,
+		    (DWORD)(AircraftCategory));
+      changed = true;
+     // requirerestart = true;
+    }
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpExtendedVisualGlide")); // VENTA4
+  if (wp) {
+    if (ExtendedVisualGlide != (ExtendedVisualGlide_t)
+	(wp->GetDataField()->GetAsInteger())) {
+      ExtendedVisualGlide = (ExtendedVisualGlide_t)
+	(wp->GetDataField()->GetAsInteger());
+      SetToRegistry(szRegistryExtendedVisualGlide,
+		    (DWORD)(ExtendedVisualGlide));
+      changed = true;
+     // requirerestart = true;
+    }
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpLook8000")); // VENTA4
+  if (wp) {
+    if (Look8000 != (Look8000_t)
+	(wp->GetDataField()->GetAsInteger())) {
+      Look8000 = (Look8000_t)
+	(wp->GetDataField()->GetAsInteger());
+      SetToRegistry(szRegistryLook8000,
+		    (DWORD)(Look8000));
+      changed = true;
+     // requirerestart = true;
+    }
+  }
+
 #if defined(PNA) || defined(FIVV)
 // VENTA-ADDON GEOM
   wp = (WndProperty*)wf->FindByName(TEXT("prpAppInfoBoxGeom"));
@@ -3354,6 +3487,12 @@ void dlgConfigurationShowModal(void){
 	break;
       case apImPnaMio:
 	GlobalModelType = MODELTYPE_PNA_MIO;
+	break;
+      case apImPnaNokia500:
+	GlobalModelType = MODELTYPE_PNA_NOKIA_500;
+	break;
+      case apImPnaMedionP5:
+	GlobalModelType = MODELTYPE_PNA_MEDION_P5;
 	break;
       default:
 	GlobalModelType = MODELTYPE_UNKNOWN; // Can't happen, troubles ..
@@ -3560,6 +3699,25 @@ void dlgConfigurationShowModal(void){
     }
   }
 
+  wp = (WndProperty*)wf->FindByName(TEXT("prpAutoBacklight")); // VENTA4
+  if (wp) {
+    if (EnableAutoBacklight != (wp->GetDataField()->GetAsInteger()!=0)) {
+      EnableAutoBacklight = (wp->GetDataField()->GetAsInteger() != 0);
+      SetToRegistry(szRegistryAutoBacklight, EnableAutoBacklight);
+      changed = true;
+    }
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpAutoSoundVolume")); // VENTA4
+  if (wp) {
+    if (EnableAutoSoundVolume != (wp->GetDataField()->GetAsInteger()!=0)) {
+      EnableAutoSoundVolume = (wp->GetDataField()->GetAsInteger() != 0);
+      SetToRegistry(szRegistryAutoSoundVolume, EnableAutoSoundVolume);
+      changed = true;
+    }
+  }
+
+
   wp = (WndProperty*)wf->FindByName(TEXT("prpTerrainContrast"));
   if (wp) {
     if (iround(TerrainContrast*100/255) !=
@@ -3743,6 +3901,13 @@ void dlgConfigurationShowModal(void){
       requirerestart = true;
     }
   }
+
+#ifdef FIVV
+//  if ( CALCULATED_INFO.OnGround == TRUE ) { // was != bug
+	  wp = (WndProperty*)wf->FindByName(TEXT("prpGPSAltitudeOffset")); // VENTA3
+	  if (wp) GPSAltitudeOffset = wp->GetDataField()->GetAsInteger();
+//  }
+#endif
 
   if (COMPORTCHANGED) {
     WritePort1Settings(dwPortIndex1,dwSpeedIndex1);

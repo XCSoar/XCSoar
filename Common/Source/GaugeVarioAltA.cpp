@@ -14,6 +14,8 @@ Copyright_License {
 	Lars H <lars_hn@hotmail.com>
 	Rob Dunning <rob@raspberryridgesheepfarm.com>
 	Russell King <rmk@arm.linux.org.uk>
+	Paolo Ventafridda <coolwind@email.it>
+	Tobias Lohner <tobias@lohner-net.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -239,6 +241,9 @@ void GaugeVario::Show(bool doshow) {
 #ifdef GNAV
   gaugeVarioInPortrait = true;
 #endif
+
+ // Disable vario gauge in geometry 5 landscape mode, leave 8 boxes on the right
+ if ( ( InfoBoxLayout::landscape == true) && ( InfoBoxLayout::InfoBoxGeometry == 5 ) ) return; // VENTA3
 
   if (gaugeVarioInPortrait || InfoBoxLayout::landscape) {
     EnableVarioGauge = doshow;
@@ -970,6 +975,12 @@ void GaugeVario::RenderBallast(void){
   static POINT orgLabel  = {-1,-1};
   static POINT orgValue  = {-1,-1};
 
+  if (Appearance.InverseInfoBox){
+    SelectObject(hdcDrawWindow, GetStockObject(WHITE_PEN));
+  } else {
+    SelectObject(hdcDrawWindow, GetStockObject(BLACK_PEN));
+  }
+
   if (recLabelBk.left == -1){                               // ontime init, origin and background rect
 
     SIZE tSize;
@@ -1058,6 +1069,12 @@ void GaugeVario::RenderBugs(void){
   static RECT  recValueBk = {-1,-1,-1,-1};
   static POINT orgLabel  = {-1,-1};
   static POINT orgValue  = {-1,-1};
+
+  if (Appearance.InverseInfoBox){
+    SelectObject(hdcDrawWindow, GetStockObject(WHITE_PEN));
+  } else {
+    SelectObject(hdcDrawWindow, GetStockObject(BLACK_PEN));
+  }
 
   if (recLabelBk.left == -1){
 

@@ -14,6 +14,8 @@ Copyright_License {
 	Lars H <lars_hn@hotmail.com>
 	Rob Dunning <rob@raspberryridgesheepfarm.com>
 	Russell King <rmk@arm.linux.org.uk>
+	Paolo Ventafridda <coolwind@email.it>
+	Tobias Lohner <tobias@lohner-net.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -29,6 +31,7 @@ Copyright_License {
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
+  $Id$
 }
 */
 
@@ -465,6 +468,31 @@ bool Units::FormatAlternateUserAltitude(double Altitude, TCHAR *Buffer, size_t s
 
 }
 
+// JMW, what does this do?
+bool Units::FormatUserArrival(double Altitude, TCHAR *Buffer, size_t size){
+
+  int prec;
+  TCHAR sTmp[32];
+  UnitDescriptor_t *pU = &UnitDescriptors[UserAltitudeUnit];
+
+  Altitude = Altitude * pU->ToUserFact; // + pU->ToUserOffset;
+
+//  prec = 4-log10(Altitude);
+//  prec = max(prec, 0);
+  prec = 0;
+
+  _stprintf(sTmp, TEXT("%+.*f%s"), prec, Altitude, pU->Name);
+
+  if (_tcslen(sTmp) < size-1){
+    _tcscpy(Buffer, sTmp);
+    return(true);
+  } else {
+    _tcsncpy(Buffer, sTmp, size);
+    Buffer[size-1] = '\0';
+    return(false);
+  }
+
+}
 
 bool Units::FormatUserDistance(double Distance, TCHAR *Buffer, size_t size){
 

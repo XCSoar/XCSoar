@@ -14,6 +14,8 @@ Copyright_License {
 	Lars H <lars_hn@hotmail.com>
 	Rob Dunning <rob@raspberryridgesheepfarm.com>
 	Russell King <rmk@arm.linux.org.uk>
+	Paolo Ventafridda <coolwind@email.it>
+	Tobias Lohner <tobias@lohner-net.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -36,6 +38,7 @@ Copyright_License {
 #ifndef OPTIONS_H
 #define OPTIONS_H
 
+#include "Debug.h"				// DEBUG OPTIONS FOR EVERYONE
 #define   MONOCHROME_SCREEN     1             // optimize for monochrom screen
 #define   EXPERIMENTAL          0             // ????
 
@@ -97,4 +100,30 @@ Copyright_License {
 #define NOLINETO
 #endif
 
+// VENTA2 - FIVV and PNA new inner setups
+#ifdef FIVV
+#define CREDITS_FIVV
+#define LOOK8000
 #endif
+
+#endif
+
+/*
+ * Put here special settings
+
+#define VENTA_NOREGFONT 	// don't load font settings from registry values
+#define LOOK8000		// Make it lookalike an LX8000 whenever possible
+
+ */
+
+
+/*
+ * Put here debug defines, so that other developers can activate them if needed.
+
+#define DRAWLOAD		// show cpu load (set also by DEBUG mode)
+#define DEBUG_DBLCLK		// show double click is being pressed
+#define VENTA_DEBUG_EVENT	// show key events, actually very few.
+#define VENTA_DEBUG_KEY		// activates scan key codes, so you know what an hardware key is mapped to
+
+ */
+

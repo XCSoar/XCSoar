@@ -14,6 +14,8 @@ Copyright_License {
 	Lars H <lars_hn@hotmail.com>
 	Rob Dunning <rob@raspberryridgesheepfarm.com>
 	Russell King <rmk@arm.linux.org.uk>
+	Paolo Ventafridda <coolwind@email.it>
+	Tobias Lohner <tobias@lohner-net.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -44,6 +46,8 @@ Copyright_License {
 #endif
 #endif
 
+#include "Defines.h" // VENTA3
+
 #include "Utils.h"
 
 #include "resource.h"
@@ -59,6 +63,7 @@ Copyright_License {
 #include "VegaVoice.h"
 #include "McReady.h"
 #include "NavFunctions.h"
+#include "WaveThread.h" // VENTA4
 
 #ifdef NEWFLARMDB
 #include "FlarmIdFile.h"
@@ -82,7 +87,7 @@ bool EnableAnimation=false;
 
 bool ReadWinPilotPolarInternal(int i);
 
-const TCHAR szRegistryKey[] = TEXT("Software\\MPSR\\XCSoar");
+const TCHAR szRegistryKey[] = TEXT(REGKEYNAME);
 const TCHAR *szRegistryDisplayType[MAXINFOWINDOWS] =     { TEXT("Info0"),
 				       TEXT("Info1"),
 				       TEXT("Info2"),
@@ -186,6 +191,8 @@ const TCHAR szRegistryFAISector[] = TEXT("FAISector");
 const TCHAR szRegistryFinalGlideTerrain[]= TEXT("FinalGlideTerrain");
 const TCHAR szRegistryAutoWind[]= TEXT("AutoWind");
 const TCHAR szRegistryHomeWaypoint[]= TEXT("HomeWaypoint");
+const TCHAR szRegistryAlternate1[]= TEXT("Alternate1"); // VENTA3
+const TCHAR szRegistryAlternate2[]= TEXT("Alternate2");
 const TCHAR szRegistryLiftUnitsValue[] = TEXT("Lift");
 const TCHAR szRegistryLatLonUnits[] = TEXT("LatLonUnits");
 const TCHAR szRegistryPolarID[] = TEXT("Polar"); // pL
@@ -247,6 +254,11 @@ const TCHAR szRegistryDeviceB[]= TEXT("DeviceB");
 const TCHAR szRegistryDeviceC[]= TEXT("DeviceC");
 
 const TCHAR szRegistryAutoBlank[]= TEXT("AutoBlank");
+const TCHAR szRegistryAutoBacklight[]= TEXT("AutoBacklight");
+const TCHAR szRegistryAutoSoundVolume[]= TEXT("AutoSoundVolume");
+const TCHAR szRegistryAircraftCategory[]= TEXT("AircraftCategory");
+const TCHAR szRegistryExtendedVisualGlide[]= TEXT("ExtVisualGlide");
+const TCHAR szRegistryLook8000[]= TEXT("Look8000");
 const TCHAR szRegistryVarioGauge[]= TEXT("VarioGauge");
 
 const TCHAR szRegistryDebounceTimeout[]= TEXT("DebounceTimeout");
@@ -398,8 +410,8 @@ void ResetInfoBoxes(void) {
 void SetRegistryStringIfAbsent(const TCHAR* name,
 			       const TCHAR* value) {
 
-  // VENTA-ADDON TEST force fonts registry rewrite in PNAs
-#if defined(PNA) || defined(FIVV) // VENTA-TEST  // WARNING should really delete the key before creating it TODO
+  // VENTA force fonts registry rewrite in PNAs
+#if defined(PNA) || defined(FIVV) // VENTA TODO WARNING should really delete the key before creating it TODO
   SetRegistryString(name, value);
 #else
   TCHAR temp[MAX_PATH];
@@ -677,6 +689,22 @@ void ReadRegistrySettings(void)
     HomeWaypoint = -1;
   }
 
+// VENTA3
+  Temp = Alternate1;
+  if (GetFromRegistry(szRegistryAlternate1,&Temp)==ERROR_SUCCESS) {
+    Alternate1 = Temp;
+  } else {
+    Alternate1 = -1;
+  }
+
+  Temp = Alternate2;
+  if (GetFromRegistry(szRegistryAlternate2,&Temp)==ERROR_SUCCESS) {
+    Alternate2 = Temp;
+  } else {
+    Alternate2 = -1;
+  }
+
+
   Temp = MapWindow::SnailWidthScale;
   GetFromRegistry(szRegistrySnailWidthScale,&Temp);
   MapWindow::SnailWidthScale = Temp;
@@ -753,6 +781,26 @@ void ReadRegistrySettings(void)
   Temp = 0;
   GetFromRegistry(szRegistryAutoBlank,&Temp);
   EnableAutoBlank = (Temp == 1);
+
+  Temp = 0;
+  GetFromRegistry(szRegistryAutoBacklight,&Temp); // VENTA4
+  EnableAutoBacklight = (Temp == 1);
+
+  Temp = 0;
+  GetFromRegistry(szRegistryAutoSoundVolume,&Temp); // VENTA4
+  EnableAutoSoundVolume = (Temp == 1);
+
+  Temp = 0;
+  GetFromRegistry(szRegistryAircraftCategory,&Temp); // VENTA4
+  AircraftCategory = Temp;
+
+  Temp = 0;
+  GetFromRegistry(szRegistryExtendedVisualGlide,&Temp); // VENTA4
+  ExtendedVisualGlide = Temp;
+
+  Temp = 1; // enabled by default
+  GetFromRegistry(szRegistryLook8000,&Temp); // VENTA4
+  Look8000 = Temp;
 
   /*
   Temp = 0;
@@ -833,15 +881,29 @@ void ReadRegistrySettings(void)
   Appearance.InfoBoxGeom = (InfoBoxGeomAppearance_t)Temp;
 
   if (GlobalModelType == MODELTYPE_PNA_HP31X ) {
+			needclipping=true;
+			// key transcoding for this one
 			StartupStore(TEXT("Loading HP31X settings\n"));
 	}
 	else
 	if (GlobalModelType == MODELTYPE_PNA_PN6000 ) {
 			StartupStore(TEXT("Loading PN6000 settings\n"));
+			// key transcoding for this one
 	}
 	else
 	if (GlobalModelType == MODELTYPE_PNA_MIO ) {
 			StartupStore(TEXT("Loading MIO settings\n"));
+			// currently no special settings from MIO but need to handle hw keys
+	}
+	else
+	if (GlobalModelType == MODELTYPE_PNA_NOKIA_500 ) {
+			StartupStore(TEXT("Loading Nokia500 settings\n"));
+			// key transcoding is made
+	}
+	else
+	if (GlobalModelType == MODELTYPE_PNA_MEDION_P5 ) {
+			StartupStore(TEXT("Loading Medion settings\n"));
+			needclipping=true;
 	}
 	else
 	if (GlobalModelType == MODELTYPE_PNA_PNA ) {
@@ -2098,9 +2160,24 @@ int Circle(HDC hdc, long x, long y, int radius, RECT rc, bool clip, bool fill)
     ClipPolygon(hdc,pt,step+1,rc, fill);
   } else {
     if (fill) {
+#ifdef PNA
+      if (needclipping==true)
+      	ClipPolygon(hdc,pt,step+1,rc, false); // VENTA4: CHECK FIX AIRSPACE CLIPPING PROBLEM
+      else
+        Polygon(hdc,pt,step+1);
+#else
       Polygon(hdc,pt,step+1);
+#endif
     } else {
+// VENTA3 FIX HP clipping bug
+#ifdef PNA
+      if (needclipping==true)
+      	MapWindow::_Polyline(hdc,pt,step+1,rc);
+      else
+        Polyline(hdc,pt,step+1);
+#else
       Polyline(hdc,pt,step+1);
+#endif
     }
   }
   return TRUE;
@@ -2176,6 +2253,70 @@ int Segment(HDC hdc, long x, long y, int radius, RECT rc,
   }
   if (npoly) {
     Polygon(hdc,pt,npoly);
+  }
+
+  return TRUE;
+}
+
+/*
+ * VENTA3 This is a modified Segment()
+ */
+int DrawArc(HDC hdc, long x, long y, int radius, RECT rc,
+	    double start,
+	    double end)
+{
+  POINT pt[66];
+  int i;
+  int istart;
+  int iend;
+
+  rectObj rect;
+  rect.minx = x-radius;
+  rect.maxx = x+radius;
+  rect.miny = y-radius;
+  rect.maxy = y+radius;
+  rectObj rcrect;
+  rcrect.minx = rc.left;
+  rcrect.maxx = rc.right;
+  rcrect.miny = rc.top;
+  rcrect.maxy = rc.bottom;
+
+  if (msRectOverlap(&rect, &rcrect)!=MS_TRUE) {
+    return FALSE;
+  }
+
+  // JMW added faster checking...
+
+  start = AngleLimit360(start);
+  end = AngleLimit360(end);
+
+  istart = iround(start/360.0*64);
+  iend = iround(end/360.0*64);
+
+  int npoly = 0;
+
+  if (istart>iend) {
+    iend+= 64;
+  }
+  istart++;
+  iend--;
+
+  pt[npoly].x = x + (long) (radius * fastsine(start));
+  pt[npoly].y = y - (long) (radius * fastcosine(start));
+  npoly++;
+
+  for(i=0;i<64;i++) {
+    if (i<=iend-istart) {
+      pt[npoly].x = x + (long) (radius * xcoords[(i+istart)%64]);
+      pt[npoly].y = y - (long) (radius * ycoords[(i+istart)%64]);
+      npoly++;
+    }
+  }
+  pt[npoly].x = x + (long) (radius * fastsine(end));
+  pt[npoly].y = y - (long) (radius * fastcosine(end));
+  npoly++;
+  if (npoly) {
+    Polyline(hdc,pt,npoly); // TODO check ClipPolygon for HP31X
   }
 
   return TRUE;
@@ -3731,14 +3872,15 @@ CSIDL_PROGRAM_FILES 0x0026   The program files folder.
   /*
    * Force LOCALPATH to be the same of the executing program
    */
-  _stprintf(buffer,TEXT("%sXCSoarData"),gmfpathname() );
+  _stprintf(buffer,TEXT("%s%S"),gmfpathname(), XCSDATADIR );
 // VENTA2 FIX PC BUG
 #elif defined (FIVV) && (!defined(WINDOWSPC) || (WINDOWSPC <=0) )
-  _stprintf(buffer,TEXT("%sXCSoarData"),gmfpathname() );
+  _stprintf(buffer,TEXT("%s%S"),gmfpathname(), XCSDATADIR );
 #else
   // everything else that's not special
   SHGetSpecialFolderPath(hWndMainWindow, buffer, loc, false);
-  _tcscat(buffer,TEXT("\\XCSoarData"));
+  _tcscat(buffer,TEXT("\\"));
+  _tcscat(buffer,TEXT(XCSDATADIR));
 #endif
   if (_tcslen(file)>0) {
     wcsncat(buffer, TEXT("\\"), MAX_PATH);
@@ -4028,9 +4170,11 @@ void XCSoarGetOpts(LPTSTR CommandLine) {
 #ifdef GNAV
   LocalPath(defaultProfileFile,TEXT("config/xcsoar-registry.prf"));
 #else
-  LocalPath(defaultProfileFile,TEXT("xcsoar-registry.prf"));
+  //LocalPath(defaultProfileFile,TEXT("xcsoar-registry.prf"));
+  LocalPath(defaultProfileFile,TEXT(XCSPROFILE)); // VENTA4
 #endif
-  LocalPath(failsafeProfileFile,TEXT("xcsoar-registry.prf"));
+  // LocalPath(failsafeProfileFile,TEXT("xcsoar-registry.prf")); VENTA4
+  LocalPath(failsafeProfileFile,TEXT(XCSPROFILE));
   _tcscpy(startProfileFile, defaultProfileFile);
 
 #if (WINDOWSPC>0)
@@ -4090,6 +4234,11 @@ void XCSoarGetOpts(LPTSTR CommandLine) {
     if (pC != NULL){
       SCREENWIDTH/= 2;
       SCREENHEIGHT/= 2;
+    }
+    pC = _tcsstr(MyCommandLine, TEXT("-320x240"));
+    if (pC != NULL){
+      SCREENWIDTH=240;
+      SCREENHEIGHT=320;
     }
 #endif
   }
@@ -5046,6 +5195,12 @@ bool SetModelName(DWORD Temp) {
   case MODELTYPE_PNA_MIO:
     _tcscpy(GlobalModelName,_T("MIO"));
     return true;
+  case  MODELTYPE_PNA_MEDION_P5:
+    _tcscpy(GlobalModelName,_T("MEDION P5"));
+    return true;
+  case MODELTYPE_PNA_NOKIA_500:
+    _tcscpy(GlobalModelName,_T("NOKIA500"));
+    return true;
   default:
     _tcscpy(GlobalModelName,_T("UNKNOWN"));
     return false;
@@ -5083,11 +5238,11 @@ TCHAR * gmfpathname ()
   TCHAR  *p;
 
   if (GetModuleFileName(NULL, gmfpathname_buffer, MAXPATHBASENAME) <= 0) {
-    StartupStore(TEXT("CRITIC- gmfpathname returned null GetModuleFileName\n"));
+//    StartupStore(TEXT("CRITIC- gmfpathname returned null GetModuleFileName\n")); // rob bughunt
     return(_T("\\ERROR_01\\") );
   }
   if (gmfpathname_buffer[0] != '\\' ) {
-    StartupStore(TEXT("CRITIC- gmfpathname starting without a leading backslash\n"));
+//   StartupStore(TEXT("CRITIC- gmfpathname starting without a leading backslash\n"));
     return(_T("\\ERROR_02\\"));
   }
   gmfpathname_buffer[MAXPATHBASENAME-1] = '\0';	// truncate for safety
@@ -5096,7 +5251,7 @@ TCHAR * gmfpathname ()
     if ( *p == '\\' ) break;	// search for the very first "\"
 
   if ( *p == '\0') {
-    StartupStore(TEXT("CRITIC- gmfpathname no backslash found\n"));
+//    StartupStore(TEXT("CRITIC- gmfpathname no backslash found\n"));
     return(_T("\\ERROR_03\\"));
   }
   *++p = '\0';
@@ -5210,7 +5365,7 @@ void ConvToUpper( TCHAR *str )
 BOOL DelRegistryKey(const TCHAR *szDelKey)
 {
    HKEY tKey;
-   RegOpenKeyEx(HKEY_CURRENT_USER, _T("Software\\MPSR\\XCSoar"),0,0,&tKey);
+   RegOpenKeyEx(HKEY_CURRENT_USER, _T(REGKEYNAME),0,0,&tKey);
    if ( RegDeleteValue(tKey, szDelKey) != ERROR_SUCCESS ) {
 	return false;
    }
@@ -5240,6 +5395,98 @@ void CleanRegistry()
 }
 #endif
 
+#ifdef PNA
+/* Paolo Ventafridda Apr 23th 2009 VENTA4
+ * SetBacklight for PNA devices. There is no standard way of managing backlight on CE,
+ * and every device may have different value names and settings. Microsoft did not set
+ * a standard and thus we need a custom solution for each device.
+ * But the approach is always the same: change a value and call an event.
+ * We do this in XCSoar.cpp at the beginning, no need to make these settings configurable:
+ * max brightness and no timeout if on power is the rule. Otherwise, do it manually..
+ */
+bool SetBacklight() // VENTA4
+{
+  HKEY    hKey;
+  DWORD   Disp=0;
+  HRESULT hRes;
+  bool doevent=false;
+
+  if (EnableAutoBacklight == false ) return false;
+
+  hRes = RegOpenKeyEx(HKEY_CURRENT_USER, _T("ControlPanel\\Backlight"), 0,  0, &hKey);
+  if (hRes != ERROR_SUCCESS) return false;
+
+  switch (GlobalModelType)
+  {
+	case MODELTYPE_PNA_HP31X:
+
+		Disp=20; // max backlight
+		// currently we ignore hres, if registry entries are spoiled out user is already in deep troubles
+		hRes = RegSetValueEx(hKey, _T("BackLightCurrentACLevel"),0,REG_DWORD, (LPBYTE)&Disp, sizeof(DWORD));
+		hRes = RegSetValueEx(hKey, _T("BackLightCurrentBatteryLevel"),0,REG_DWORD, (LPBYTE)&Disp, sizeof(DWORD));
+		hRes = RegSetValueEx(hKey, _T("TotalLevels"),0,REG_DWORD, (LPBYTE)&Disp, sizeof(DWORD));
+		Disp=0;
+		hRes = RegSetValueEx(hKey, _T("UseExt"),0,REG_DWORD, (LPBYTE)&Disp, sizeof(DWORD));
+		RegDeleteValue(hKey,_T("ACTimeout"));
+		doevent=true;
+		break;
+
+	default:
+		doevent=false;
+		break;
+  }
+
+  RegCloseKey(hKey); if (doevent==false) return false;
+
+  HANDLE BLEvent = CreateEvent(NULL, FALSE, FALSE, TEXT("BacklightChangeEvent"));
+  if ( SetEvent(BLEvent) == 0) doevent=false;
+  	else CloseHandle(BLEvent);
+  return doevent;
+}
+
+bool SetSoundVolume() // VENTA4
+{
+
+  if (EnableAutoSoundVolume == false ) return false;
+
+/*
+ * This does not work, dunno why
+ *
+  HKEY    hKey;
+  DWORD   Disp=0;
+  HRESULT hRes;
+
+  hRes = RegOpenKeyEx(HKEY_CURRENT_USER, _T("ControlPanel\\Volume"), 0,  0, &hKey);
+  if (hRes != ERROR_SUCCESS) return false;
+  switch (GlobalModelType)
+  {
+	case MODELTYPE_PNA_HP31X:
+		Disp=0xFFFFFFFF; // max volume
+		hRes = RegSetValueEx(hKey, _T("Volume"),0,REG_DWORD, (LPBYTE)&Disp, sizeof(DWORD));
+		Disp=65538;
+		hRes = RegSetValueEx(hKey, _T("Screen"),0,REG_DWORD, (LPBYTE)&Disp, sizeof(DWORD));
+		Disp=0;
+		hRes = RegSetValueEx(hKey, _T("Key"),0,REG_DWORD, (LPBYTE)&Disp, sizeof(DWORD));
+		Disp=7;
+		hRes = RegSetValueEx(hKey, _T("Mute"),0,REG_DWORD, (LPBYTE)&Disp, sizeof(DWORD));
+		SendMessage(HWND_BROADCAST, WM_WININICHANGE, 0xF2, 0);
+	        RegCloseKey(hKey);
+		break;
+
+	default:
+		break;
+  }
+ */
+
+  // should we enter critical section ?  probably...
+  waveOutSetVolume(0, 0xffff); // this is working for all platforms
+
+  return true;
+}
+
+
+#endif
+
 #if defined(FIVV) || defined(PNA)
 // VENTA2-ADDON fonts install
 /*
@@ -5266,7 +5513,7 @@ TCHAR dstdir[MAX_PATH];
 TCHAR srcfile[MAX_PATH];
 TCHAR dstfile[MAX_PATH];
 
-_stprintf(srcdir,TEXT("%sXCSoarData\\Fonts"),gmfpathname() );
+_stprintf(srcdir,TEXT("%s%S\\Fonts"),gmfpathname(), XCSDATADIR );
 _stprintf(dstdir,TEXT("\\Windows\\Fonts"),gmfpathname() );
 
 
@@ -5298,14 +5545,14 @@ return 0;
 
 /*
  * Check that XCSoarData exist where it should be
- * Return FALSE if error, TRUE if Ok
+ * Return false if error, true if Ok
  */
-BOOL CheckDataDir() {
+bool CheckDataDir() {
 	TCHAR srcdir[MAX_PATH];
 
-	_stprintf(srcdir,TEXT("%sXCSoarData"),gmfpathname() );
-	if (  GetFileAttributes(srcdir) != FILE_ATTRIBUTE_DIRECTORY) return FALSE;
-	return TRUE;
+	_stprintf(srcdir,TEXT("%s%S"),gmfpathname(), XCSDATADIR );
+	if (  GetFileAttributes(srcdir) != FILE_ATTRIBUTE_DIRECTORY) return false;
+	return true;
 }
 
 /*
@@ -5313,12 +5560,14 @@ BOOL CheckDataDir() {
  * Should really check if geometry has changed.. in 5.2.3!
  * Currently we disable it for HP31X which is the only PNA with different settings
  * for different geometries
+ * 5.2.3 BOOL changed to bool
+ * TODO: VENTA4 now that Rob fonts is used, should return false all the way
  */
-BOOL CheckRegistryProfile() {
+bool CheckRegistryProfile() {
 	TCHAR srcpath[MAX_PATH];
-	if ( GlobalModelType == MODELTYPE_PNA_HP31X ) return FALSE;
-	_stprintf(srcpath,TEXT("%sXCSoarData\\xcsoar-registry.prf"),gmfpathname() );
-	if (  GetFileAttributes(srcpath) == 0xffffffff) return FALSE;
-	return TRUE;
+	if ( GlobalModelType == MODELTYPE_PNA_HP31X ) return false;
+	_stprintf(srcpath,TEXT("%s%S\\%S"),gmfpathname(), XCSDATADIR , XCSPROFILE);
+	if (  GetFileAttributes(srcpath) == 0xffffffff) return false;
+	return true;
 }
 #endif

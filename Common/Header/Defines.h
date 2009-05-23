@@ -47,7 +47,7 @@ Copyright_License {
  * Some of these values could be good candidates for system config menus
  */
 
-#define INVALIDVALUE	999
+#define INVALID_GR	999
 
 /*
  * Over this GR value, alternates and Final GR are not showing numbers anymore and

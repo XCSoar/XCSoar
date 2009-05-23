@@ -923,7 +923,7 @@ Example short name (81HXABC1.IGC), long name (2008-01-18-XXX-ABC-01.IGC).
     <DataField name="" DataType="enum" Min=0 Max=50 Step=1/>
   </WndProperty>
 
-  <WndProperty Name="prpUsageMode" Caption="Usage Mode"      X=2 Y=-1   Width=235 Height=22 CaptionWidth=150 Font=2
+  <WndProperty Name="prpAircraftCategory" Caption="Aircraft Category"      X=2 Y=-1   Width=235 Height=22 CaptionWidth=150 Font=2
   Help="">
     <DataField name="" DataType="enum" Min=0 Max=10 Step=1/>
   </WndProperty>

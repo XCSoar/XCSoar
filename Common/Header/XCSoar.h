@@ -1,3 +1,39 @@
+/*
+Copyright_License {
+
+  XCSoar Glide Computer - http://xcsoar.sourceforge.net/
+  Copyright (C) 2000 - 2008
+
+  	M Roberts (original release)
+	Robin Birch <robinb@ruffnready.co.uk>
+	Samuel Gisiger <samuel.gisiger@triadis.ch>
+	Jeff Goodenough <jeff@enborne.f2s.com>
+	Alastair Harrison <aharrison@magic.force9.co.uk>
+	Scott Penrose <scottp@dd.com.au>
+	John Wharington <jwharington@gmail.com>
+	Lars H <lars_hn@hotmail.com>
+	Rob Dunning <rob@raspberryridgesheepfarm.com>
+	Russell King <rmk@arm.linux.org.uk>
+	Paolo Ventafridda <coolwind@email.it>
+	Tobias Lohner <tobias@lohner-net.de>
+
+  This program is free software; you can redistribute it and/or
+  modify it under the terms of the GNU General Public License
+  as published by the Free Software Foundation; either version 2
+  of the License, or (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+
+  $Id$
+}
+*/
 
 #if !defined(AFX_XCSOAR_H__695AAC30_F401_4CFF_9BD9_FE62A2A2D0D2__INCLUDED_)
 #define AFX_XCSOAR_H__695AAC30_F401_4CFF_9BD9_FE62A2A2D0D2__INCLUDED_
@@ -19,6 +55,7 @@ class InfoBoxFormatter {
   InfoBoxFormatter(TCHAR *theformat);
 
   virtual TCHAR *Render(int *color);
+  virtual TCHAR *RenderTitle(int *color); // VENTA3
   void RenderInvalid(int *color);
   BOOL Valid;
   double Value;
@@ -61,8 +98,19 @@ class FormatterAlternate: public InfoBoxFormatter {
   FormatterAlternate(TCHAR *theformat):InfoBoxFormatter(theformat) {};
 
   virtual TCHAR *Render(int *color);
+  virtual TCHAR *RenderTitle(int *color);
+  virtual void AssignValue(int i);
 };
-
+// VENTA3 bestlanding
+/*
+class FormatterBestLanding: public InfoBoxFormatter {
+ public:
+  FormatterBestLanding(TCHAR *theformat):InfoBoxFormatter(theformat) {};
+  virtual TCHAR *Render(int *color);
+  virtual TCHAR *RenderTitle(int *color);
+  virtual void AssignValue(int i);
+};
+*/
 class FormatterLowWarning: public InfoBoxFormatter {
  public:
   FormatterLowWarning(TCHAR *theformat, double the_minimum)
@@ -210,6 +258,8 @@ void SwitchToMapWindow(void);
     Here we declare Model Types for embedded custom versions. Initially for PNAs only.
 	We don't need a "type" and a "model" such as "pna" and "hp310". Instead we use a
 	single int value with subsets made of ranges.
+	We use modeltypes currently for extraclipping, hardware key transcoding, and we should
+	also handle embedded gps com ports and adjustments (TODO)
 
     types     0 -    99 are reserved and 0 is generic/unknown
     types   100 -   999 are special devices running embedded XCSoar
@@ -245,8 +295,12 @@ void SwitchToMapWindow(void);
 #define MODELTYPE_PNA_GARMIN	11000
 #define MODELTYPE_PNA_CLARION	11200
 #define MODELTYPE_PNA_MEDION	11400
+#define MODELTYPE_PNA_MEDION_P5	11401	// clipping problems for P5430 and P5 family
 #define MODELTYPE_PNA_SAMSUNG	11600
 #define MODELTYPE_PNA_NAVIGO	11800
+#define MODELTYPE_PNA_NOKIA	12000
+#define MODELTYPE_PNA_NOKIA_500	12001 // 480x272
+
 
 #endif
 
@@ -336,10 +390,29 @@ typedef enum{
 typedef enum{
 	apImPnaGeneric=0,
 	apImPnaHp31x,
+	apImPnaMedionP5,
+	apImPnaMio,
+	apImPnaNokia500,
 	apImPnaPn6000,
-	apImPnaMio
 }InfoBoxModelAppearance_t;
 #endif
+
+// VENTA4 AircraftCategory
+typedef enum{
+	umGlider=0,
+	umParaglider,
+} AircraftCategory_t;
+
+typedef enum{
+	evgNormal=0,
+	evgExtended,
+} ExtendedVisualGlide_t;
+
+typedef enum{
+	lxcEnabled=0,
+	lxcDisabled,
+} Look8000_t;
+
 
 typedef struct{
   MapScaleAppearance_t MapScale;

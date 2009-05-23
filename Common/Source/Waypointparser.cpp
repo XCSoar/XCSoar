@@ -14,6 +14,8 @@ Copyright_License {
 	Lars H <lars_hn@hotmail.com>
 	Rob Dunning <rob@raspberryridgesheepfarm.com>
 	Russell King <rmk@arm.linux.org.uk>
+	Paolo Ventafridda <coolwind@email.it>
+	Tobias Lohner <tobias@lohner-net.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -29,6 +31,7 @@ Copyright_License {
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
+  $Id$
 }
 */
 #include "StdAfx.h"
@@ -86,6 +89,8 @@ void CloseWayPoints() {
   if(WayPointList != NULL) {
     LocalFree((HLOCAL)WayPointList);
     WayPointList = NULL;
+    LocalFree((HLOCAL)WayPointCalc); // VENTA3
+    WayPointCalc = NULL;
   }
   WaypointOutOfTerrainRangeDontAskAgain = WaypointsOutOfRange;
 }
@@ -176,7 +181,7 @@ static int ParseWayPointError(int LineNumber, TCHAR *FileName, TCHAR *String){
   return(1);
 }
 
-
+// VENTA3 added additional WP calculated list
 bool AllocateWaypointList(void) {
   if (!WayPointList) {
     NumberOfWayPoints = 0;
@@ -185,6 +190,15 @@ bool AllocateWaypointList(void) {
       {
         MessageBoxX(hWndMainWindow,
                     gettext(TEXT("Not Enough Memory For Waypoints")),
+                    gettext(TEXT("Error")),MB_OK|MB_ICONSTOP);
+        return 0;
+      }
+    // VENTA3
+    WayPointCalc = (WPCALC *)LocalAlloc(LPTR, 50 * sizeof(WPCALC));
+    if(WayPointCalc == NULL)
+      {
+        MessageBoxX(hWndMainWindow,
+                    gettext(TEXT("Not Enough Memory For CalcWaypoints")),
                     gettext(TEXT("Error")),MB_OK|MB_ICONSTOP);
         return 0;
       }
@@ -218,6 +232,26 @@ WAYPOINT* GrowWaypointList() {
 
     if (p != WayPointList){
       WayPointList = p;
+    }
+
+    // Additional calculated WP values, VENTA3
+    WPCALC *q;
+
+    if ((q =
+         (WPCALC *)LocalReAlloc(WayPointCalc,
+                                  (((NumberOfWayPoints+1)/50)+1)
+                                  * 50 * sizeof(WPCALC),
+                                  LMEM_MOVEABLE | LMEM_ZEROINIT)) == NULL){
+
+      MessageBoxX(hWndMainWindow,
+                  gettext(TEXT("Not Enough Memory For CalcWaypoints")),
+                  gettext(TEXT("Error")),MB_OK|MB_ICONSTOP);
+
+      return 0; // failed to allocate
+    }
+
+    if (q != WayPointCalc){
+      WayPointCalc = q;
     }
   }
 
@@ -408,7 +442,7 @@ int ParseWayPointString(TCHAR *String,WAYPOINT *Temp)
     ctemp[COMMENT_SIZE] = '\0';
 
     Temp->Zoom = 0;
-    Zoom = _tcschr(ctemp,'*');
+    Zoom = _tcschr(ctemp,'*'); // if it is a home waypoint raise zoom level .. VENTA
     if(Zoom)
       {
         *Zoom = '\0';
@@ -698,14 +732,24 @@ void SetHome(bool reset)
   unsigned int i;
 
   // check invalid home waypoint or forced reset due to file change
-  if (reset || !ValidWayPoint(0) || !ValidWayPoint(HomeWaypoint)) {
-    HomeWaypoint = -1;
+  // VENTA3 make AirfieldsHomeWaypoint survive a Waypoint reset
+  if (reset || !ValidWayPoint(0) || !ValidWayPoint(HomeWaypoint) ) {
+	    HomeWaypoint = -1;
+  }
+  // VENTA3 -- reset Alternates
+  if (reset || !ValidWayPoint(Alternate1) || !ValidWayPoint(Alternate2) ) {
+      Alternate1= -1; Alternate2= -1;
   }
   // check invalid task ref waypoint or forced reset due to file change
   if (reset || !ValidWayPoint(TeamCodeRefWaypoint)) {
     TeamCodeRefWaypoint = -1;
   }
 
+// VENTA3 NOTE: this should be pointed out to the users, many of them already used to
+// set back manually home after a wp reset, and not very happy!
+  if ( ValidWayPoint(AirfieldsHomeWaypoint) ) {
+	HomeWaypoint = AirfieldsHomeWaypoint;
+  }
   if (!ValidWayPoint(HomeWaypoint)) {
     // search for home in waypoint list, if we don't have a home
     HomeWaypoint = -1;
@@ -743,7 +787,11 @@ void SetHome(bool reset)
   //
   // Save the home waypoint number in the resgistry
   //
+  // VENTA3> this is probably useless, since HomeWayPoint &c were currently
+  //         just loaded from registry.
   SetToRegistry(szRegistryHomeWaypoint,HomeWaypoint);
+  SetToRegistry(szRegistryAlternate1,Alternate1);
+  SetToRegistry(szRegistryAlternate2,Alternate2);
   SetToRegistry(szRegistryTeamcodeRefWaypoint,TeamCodeRefWaypoint);
 }
 
@@ -1034,3 +1082,18 @@ int FindMatchingWaypoint(WAYPOINT *waypoint) {
 
   return -1;
 }
+
+// VENTA3
+void InitWayPointCalc() {
+  for (int i=0; i< NumberOfWayPoints; i++) {
+	WayPointCalc[i].Preferred = false;
+	WayPointCalc[i].Distance=-1;
+	WayPointCalc[i].AltArriv=-1;
+	WayPointCalc[i].AltReqd=-1;
+	WayPointCalc[i].Bearing=-1;
+	WayPointCalc[i].GR=-1;
+	WayPointCalc[i].VGR=-1;
+  }
+}
+
+

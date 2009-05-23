@@ -14,6 +14,8 @@
 	Lars H <lars_hn@hotmail.com>
 	Rob Dunning <rob@raspberryridgesheepfarm.com>
 	Russell King <rmk@arm.linux.org.uk>
+	Paolo Ventafridda <coolwind@email.it>
+	Tobias Lohner <tobias@lohner-net.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -29,6 +31,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
+  $Id$
 }
 */
 #include "StdAfx.h"
@@ -398,7 +401,8 @@ void StartLogger(TCHAR *astrAssetNumber)
   HANDLE hFile;
   int i;
   TCHAR path[MAX_PATH];
-#ifdef GNAV
+// VENTA3 use logs subdirectory when not in main memory (true for FIVV and PNA)
+#if defined(GNAV) || defined(FIVV) || defined(PNA)
   LocalPath(path,TEXT("logs"));
 #else
   LocalPath(path);
@@ -1431,6 +1435,12 @@ bool IGCWriteRecord(char *szIn)
 
 }
 
+// VENTA3 TODO: if ifdef PPC2002 load correct dll. Put the dll inside
+// XCSoarData, so users can place their executable XCS wherever they
+// want.
+//
+// JMW: not sure that would work, I think dll has to be in OS
+// directory or same directory as exe
 
 void LinkGRecordDLL(void)
 {

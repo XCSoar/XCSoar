@@ -1,3 +1,39 @@
+/*
+Copyright_License {
+
+  XCSoar Glide Computer - http://xcsoar.sourceforge.net/
+  Copyright (C) 2000 - 2008
+
+  	M Roberts (original release)
+	Robin Birch <robinb@ruffnready.co.uk>
+	Samuel Gisiger <samuel.gisiger@triadis.ch>
+	Jeff Goodenough <jeff@enborne.f2s.com>
+	Alastair Harrison <aharrison@magic.force9.co.uk>
+	Scott Penrose <scottp@dd.com.au>
+	John Wharington <jwharington@gmail.com>
+	Lars H <lars_hn@hotmail.com>
+	Rob Dunning <rob@raspberryridgesheepfarm.com>
+	Russell King <rmk@arm.linux.org.uk>
+	Paolo Ventafridda <coolwind@email.it>
+	Tobias Lohner <tobias@lohner-net.de>
+
+  This program is free software; you can redistribute it and/or
+  modify it under the terms of the GNU General Public License
+  as published by the Free Software Foundation; either version 2
+  of the License, or (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+
+  $Id$
+}
+*/
 #if !defined(AFX_MAPWINDOW_H__695AAC30_F401_4CFF_9BD9_FE62A2A2D0D2__INCLUDED_)
 #define AFX_MAPWINDOW_H__695AAC30_F401_4CFF_9BD9_FE62A2A2D0D2__INCLUDED_
 
@@ -40,6 +76,11 @@ extern DisplayMode_t UserForceDisplayMode;
 extern DisplayMode_t DisplayMode;
 
 
+// VENTA3 note> probably it would be a good idea to separate static WP data to dynamic values,
+// by moving things like Reachable, AltArival , etc to WPCALC
+// Currently at 5.2.2 the whole structure is saved into the task file, so everytime we
+// change the struct all old taks files become invalid... (there's a bug, btw, in this case)
+
 typedef struct _WAYPOINT_INFO
 {
   int Number;
@@ -60,6 +101,22 @@ typedef struct _WAYPOINT_INFO
   int FileNum; // which file it is in, or -1 to delete
 } WAYPOINT;
 
+// VENTA3
+// This struct is separated from _WAYPOINT_INFO and will not be used in task files.
+// It is managed by the same functions that manage WayPointList, only add variables here
+// and use them like  WayPointCalc[n].Distance  for example.
+typedef struct _WAYPOINT_CALCULATED
+{
+//  long timeslot;
+  double GR;       // GR from current position
+  short VGR;       // Visual GR
+  double Distance; // distance from current position
+  double Bearing;  // used for radial
+  double AltReqd;  // comes free from CalculateWaypointArrivalAltitude
+  double AltArriv; // Arrival Altitude
+  bool Preferred;  // Flag to be used by Preferred quick selection WP page (todo) and
+		   // by BestAlternate
+} WPCALC;
 
 typedef struct _SNAIL_POINT
 {
@@ -86,6 +143,7 @@ typedef union{
     unsigned AlligneCenter:1;
     unsigned WhiteBorder:1;
     unsigned WhiteBold:1;
+    unsigned NoSetFont:1;  // VENTA5
   }AsFlag;
 }TextInBoxMode_t;
   // mode are flags
@@ -235,6 +293,7 @@ class MapWindow {
 
   static void DrawAircraft(HDC hdc, const POINT Orig);
   static void DrawCrossHairs(HDC hdc, const POINT Orig, const RECT rc);
+  static void DrawGlideCircle(HDC hdc, const POINT Orig, const RECT rc); // VENTA3
   static void DrawBestCruiseTrack(HDC hdc, const POINT Orig);
   static void DrawCompass(HDC hdc, const RECT rc);
   static void DrawHorizon(HDC hdc, const RECT rc);
@@ -243,6 +302,8 @@ class MapWindow {
   static void DrawWindAtAircraft2(HDC hdc, POINT Orig, RECT rc);
   static void DrawAirSpace(HDC hdc, const RECT rc);
   static void DrawWaypoints(HDC hdc, const RECT rc);
+  static void DrawWaypoints8000(HDC hdc, const RECT rc); // VENTA5
+  static void DrawLook8000(HDC hdc, const RECT rc); // VENTA5
   static void DrawFlightMode(HDC hdc, const RECT rc);
   static void DrawGPSStatus(HDC hdc, const RECT rc);
   static double DrawTrail(HDC hdc, const POINT Orig, const RECT rc);
@@ -278,7 +339,7 @@ class MapWindow {
 			    const POINT&start,
 			    const POINT&end ,
 			    const RECT rc);
-  static void TextInBox(HDC hDC, TCHAR* Value, int x, int y, int size, TextInBoxMode_t Mode, bool noOverlap=false);
+  static bool TextInBox(HDC hDC, TCHAR* Value, int x, int y, int size, TextInBoxMode_t Mode, bool noOverlap=false);
   static void ToggleFullScreenStart();
   static void RefreshMap();
   static bool WaypointInTask(int ind);
@@ -346,6 +407,11 @@ class MapWindow {
   static      HPEN hpMapScale;
   static      HPEN hpTerrainLine;
   static      HPEN hpTerrainLineBg;
+  static      HPEN hpVisualGlideLightRed; // VENTA3
+  static      HPEN hpVisualGlideHeavyRed; //
+  static      HPEN hpVisualGlideLightBlack; // VENTA3
+  static      HPEN hpVisualGlideHeavyBlack; //
+  static      HPEN hpVisualGlideExtra; // future use
   static      HPEN hpSpeedFast;
   static      HPEN hpSpeedSlow;
   static      HPEN hpStartFinishThick;

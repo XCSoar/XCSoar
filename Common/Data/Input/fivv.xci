@@ -1,0 +1,936 @@
+#CLEAR
+
+# DEFAULT.XCI for XCSOAR 5.2.3F by Paolo Ventafridda
+# Release 1B , May, 7th 2009
+
+# -------------------
+# GlideComputerEvents
+# -------------------
+
+mode=default
+type=gce
+data=TASK_START
+event=Beep 1
+event=StatusMessage Task start
+
+mode=default
+type=gce
+data=TASK_FINISH
+event=Beep 1
+event=StatusMessage Task finish
+
+mode=default
+type=gce
+data=TASK_NEXTWAYPOINT
+event=Beep 1
+event=StatusMessage Next turnpoint
+
+mode=default
+type=gce
+data=ARM_READY
+event=Beep 1
+event=StatusMessage In sector, arm advance when ready
+
+mode=default
+type=gce
+data=GPS_CONNECTION_WAIT
+event=StatusMessage Waiting for GPS Connection
+
+mode=default
+type=gce
+data=COMMPORT_RESTART
+event=StatusMessage Restarting Comm Ports
+
+mode=default
+type=gce
+data=GPS_FIX_WAIT
+event=StatusMessage Waiting for GPS Fix
+
+mode=default
+type=gce
+data=STARTUP_SIMULATOR
+event=StatusMessage SIMULATOR MODE
+event=TaskLoad Default.tsk
+
+mode=default
+type=gce
+data=STARTUP_REAL
+event=StatusMessage Maintain effective\r\nLOOKOUT at all times
+event=TaskLoad Default.tsk
+
+mode=default
+type=gce
+data=TAKEOFF
+event=AutoLogger start
+event=StatusMessage Takeoff
+
+mode=default
+type=gce
+data=LANDING
+event=StatusMessage Landing
+event=AutoLogger stop
+
+mode=default
+type=gce
+data=FLIGHTMODE_FINALGLIDE_ABOVE
+event=StatusMessage Above Final Glide
+
+mode=default
+type=gce
+data=FLIGHTMODE_FINALGLIDE_BELOW
+event=StatusMessage Below Final Glide
+
+mode=default
+type=gce
+data=FLIGHTMODE_FINALGLIDE_TERRAIN
+event=StatusMessage Final Glide Through Terrain
+
+
+# ------------
+# mode=default
+# ------------
+
+# clear main entry buttons
+
+
+mode=default Display1 Display2 Config1 Config2 Info1 Info2 Bugs Ballast Wind pan Exit
+type=key
+data=APP1
+label=
+location=1
+
+mode=default Nav1 Nav2 Config1 Config2 Info1 Info2 Bugs Ballast Wind pan Exit
+type=key
+data=APP2
+label=
+location=2
+
+mode=default Nav1 Nav2 Display1 Display2 Info1 Info2 pan Exit
+type=key
+data=APP3
+label=
+location=3
+
+mode=default Nav1 Nav2 Display1 Display2 Config1 Config2 Bugs Ballast Wind pan Exit
+type=key
+data=APP4
+label=
+location=4
+
+mode=default
+type=key
+data=6
+label=
+event=Null
+location=5
+
+mode=default
+type=key
+data=7
+label=
+event=Null
+location=6
+
+mode=default
+type=key
+data=8
+label=
+event=Null
+location=7
+
+mode=default
+type=key
+data=9
+label=
+event=Null
+location=8
+
+mode=default
+type=key
+data=0
+label=
+event=Null
+location=9
+
+###### pan mode ##########
+
+### Hardware keys first
+
+mode=pan
+type=key
+data=DOWN
+event=Pan down
+
+mode=pan
+type=key
+data=UP
+event=Pan up
+
+mode=pan
+type=key
+data=LEFT
+event=Pan left
+
+mode=pan
+type=key
+data=RIGHT
+event=Pan right
+
+### Soft buttons
+
+mode=pan
+type=key
+data=6
+event=Pan supertoggle
+label=Pan\nOff
+location=5
+
+mode=pan
+type=key
+data=7
+event=Zoom in
+label=Zoom\nin
+location=6
+
+mode=pan
+type=key
+data=8
+event=Zoom out
+label=Zoom\nout
+location=7
+
+mode=pan
+type=key
+data=9
+event=NearestWaypointDetails pan
+label=Nearest\nWaypoint
+location=8
+
+mode=pan
+type=key
+data=0
+event=StatusMessage Marks cleared
+event=MarkLocation reset
+label=Marks\nclear
+location=9
+
+#
+# These are the hardware keys pressed anytime
+#
+# Buttons ..
+
+mode=default
+type=key
+data=APP1
+event=Mode Nav1
+label=
+location=1
+
+mode=default
+type=key
+data=APP2
+event=Mode Display1
+label=
+location=2
+
+mode=default
+type=key
+data=APP3
+event=Mode Config1
+label=
+location=3
+
+mode=default
+type=key
+data=APP4
+event=Mode Info1
+label=
+location=4
+
+# Jog, wheel, rocker etc.
+# Scroll wheel for HP31X doesn't have left and right,
+# but a long press produces an ESCAPE keycode
+
+mode=default
+type=key
+data=DOWN
+event=Zoom out
+
+mode=default
+type=key
+data=UP
+event=Zoom in
+
+mode=default
+type=key
+data=RETURN
+event=ScreenModes toggle
+
+mode=default
+type=key
+data=LEFT
+event=MarkLocation
+
+mode=default
+type=key
+data=RIGHT
+event=ScreenModes toggle
+
+mode=default
+type=key
+data=ESCAPE
+event=VisualGlide show
+event=VisualGlide toggle
+
+
+
+# ------------
+# mode=infobox
+# ------------
+#
+# Do not modify these settings
+
+mode=infobox
+type=key
+data=APP1
+event=Null
+label=
+location=1
+
+mode=infobox
+type=key
+data=APP2
+event=Null
+label=
+location=2
+
+mode=infobox
+type=key
+data=APP3
+event=Null
+label=
+location=3
+
+mode=infobox
+type=key
+data=APP4
+event=Null
+label=
+location=4
+
+mode=infobox
+type=key
+data=UP
+event=DoInfoKey up
+
+mode=infobox
+type=key
+data=DOWN
+event=DoInfoKey down
+
+mode=infobox
+type=key
+data=LEFT
+event=DoInfoKey left
+
+mode=infobox
+type=key
+data=RIGHT
+event=DoInfoKey right
+
+mode=infobox
+type=key
+data=RETURN
+event=DoInfoKey return
+
+mode=infobox
+type=key
+data=6
+label=
+location=5
+
+mode=infobox
+type=key
+data=7
+label=
+location=6
+
+mode=infobox
+type=key
+data=8
+label=
+location=7
+
+mode=infobox
+type=key
+data=9
+label=
+location=8
+
+mode=infobox
+type=key
+data=0
+label=
+location=9
+
+# -----------------------------------------------------------------------
+
+# -------------
+# mode=Nav1
+# -------------
+
+mode=Nav1
+type=key
+data=APP1
+event=Mode Nav2
+label=Nav
+location=1
+
+mode=Nav1
+type=key
+data=6
+event=Calculator
+event=Mode default
+label=$(CheckTaskResumed)Task\nCalc$(CheckTask)
+location=5
+
+mode=Nav1
+type=key
+data=7
+event=ArmAdvance show
+event=ArmAdvance toggle
+event=Mode default
+label=$(CheckTaskResumed)$(CheckTask)Advance\n$(AdvanceArmed)
+location=6
+
+mode=Nav1
+type=key
+data=8
+event=AdjustWaypoint previous
+label=$(WaypointPrevious)
+location=7
+
+mode=Nav1
+type=key
+data=9
+event=AdjustWaypoint next
+label=$(WaypointNext)
+location=8
+
+mode=Nav1
+type=key
+data=0
+event=Mode default
+event=WaypointDetails select
+label=Waypoint\nLookup$(CheckWaypointFile)
+location=9
+
+# -------------
+# mode=Nav2
+# -------------
+
+mode=Nav2
+type=key
+data=APP1
+event=Mode default
+label=Nav
+location=1
+
+
+mode=Nav2
+type=key
+data=6
+event=Setup Task
+event=Mode default
+label=$(CheckTaskResumed)Task\nEdit$(CheckWaypointFile)
+location=5
+
+mode=Nav2
+type=key
+data=7
+event=StatusMessage Task saved
+event=TaskSave Default.tsk
+label=$(CheckTaskResumed)Task\nSave
+location=6
+
+mode=Nav2
+type=key
+data=8
+event=Mode default
+event=AbortTask toggle
+label=Task\n$(TaskAbortToggleActionName)$(CheckWaypointFile)
+location=7
+
+mode=Nav2
+type=key
+data=9
+event=FlightMode finalglide toggle
+label=$(CheckTaskResumed)$(CheckTask)Final\n$(FinalForceToggleActionName)
+location=8
+
+mode=Nav2
+type=key
+data=0
+event=Setup Target
+event=Mode default
+label=$(CheckTask)Target
+location=9
+
+# -------------
+# mode=Display1
+# -------------
+
+mode=Display1
+type=key
+data=APP2
+event=Mode Display2
+label=Display
+location=2
+
+mode=Display1
+type=key
+data=6
+event=Zoom in
+label=Zoom\nIn
+location=5
+
+mode=Display1
+type=key
+data=7
+event=Zoom out
+label=Zoom\nOut
+location=6
+
+mode=Display1
+type=key
+data=8
+event=ScreenModes toggleauxiliary
+label=Aux Info\n$(AuxInfoToggleActionName)
+location=7
+
+mode=Display1
+type=key
+data=9
+event=ScreenModes togglefull
+event=Mode default
+label=Full Scrn\n$(FullScreenToggleActionName)
+location=8
+
+mode=Display1
+type=key
+data=0
+event=Pan show
+event=Pan supertoggle
+label=Pan\nOn
+location=9
+
+# -------------
+# mode=Display2
+# -------------
+
+mode=Display2
+type=key
+data=APP2
+event=Mode Display3
+label=Display
+location=2
+
+mode=Display2
+type=key
+data=6
+event=Zoom auto show
+event=Zoom auto toggle
+label=Zoom\n$(ZoomAutoToggleActionName)
+location=5
+
+mode=Display2
+type=key
+data=7
+event=SnailTrail show
+event=SnailTrail toggle
+label=Trail\n$(SnailTrailToggleName)
+location=6
+
+mode=Display2
+type=key
+data=8
+event=TerrainTopology show
+event=TerrainTopology toggle
+label=$(TerrainTopologyToggleName)
+location=7
+
+mode=Display2
+type=key
+data=9
+event=VisualGlide show
+event=VisualGlide toggle
+label=VisualGld\n$(VisualGlideToggleName)
+location=8
+
+
+mode=Display2
+type=key
+data=0
+event=AirSpace show
+event=AirSpace toggle
+label=AirSpace\n$(AirSpaceToggleName)
+location=9
+
+
+# -------------
+# mode=Display3
+# -------------
+# To use Display 3 (you can customize it) change to Display3
+# event=Mode default at the beginning of Display2 config
+#
+mode=Display3
+type=key
+data=APP2
+event=Mode default
+label=Display
+location=2
+
+mode=Display3
+type=key
+data=6
+event=Mode default
+event=DeclutterLabels show
+event=DeclutterLabels toggle
+label=Labels\n$(MapLabelsToggleActionName)
+location=5
+
+mode=Display3
+type=key
+data=7
+event=Mode default
+event=StatusMessage Dropped marker
+event=Logger note Mark
+event=MarkLocation
+label=Mark\nDrop
+location=6
+
+mode=Display3
+type=key
+label=
+data=8
+location=7
+
+mode=Display3
+type=key
+data=9
+location=8
+
+mode=Display3
+type=key
+data=0
+location=9
+
+
+
+# -------------
+# mode=Config1
+# -------------
+mode=Config1
+type=key
+data=APP3
+event=Mode Config2
+label=Config
+location=3
+
+
+mode=Config1
+type=key
+data=6
+event=MacCready up
+label=MacCready\n+
+location=5
+
+mode=Config1
+type=key
+data=7
+event=MacCready down
+label=MacCready\n-
+location=6
+
+mode=Config1
+type=key
+data=8
+event=MacCready auto show
+event=MacCready auto toggle
+label=$(CheckAutoMc)MacCready\n$(MacCreadyToggleActionName)
+location=7
+
+mode=Config1
+type=key
+data=9
+event=Setup Basic
+event=Mode default
+label=Setup\nBasic
+location=8
+
+mode=Config1
+type=key
+data=0
+event=Setup Wind
+event=Mode default
+label=Setup\nWind
+location=9
+
+# -------------
+# mode=Config2
+# -------------
+mode=Config2
+type=key
+data=APP3
+event=Mode default
+label=Config
+location=3
+
+mode=Config2
+type=key
+data=6
+event=Setup System
+event=Mode default
+label=Setup\nSystem$(CheckSettingsLockout)
+location=5
+
+mode=Config2
+type=key
+data=7
+event=Setup Airspace
+event=Mode default
+label=Settings\nAirspace$(CheckAirspace)
+location=6
+
+mode=Config2
+type=key
+data=8
+event=Logger show
+event=Logger toggle ask
+label=Logger\n$(LoggerActive)
+location=7
+
+mode=Config2
+type=key
+data=9
+event=Setup Replay
+event=Mode default
+label=Logger\nReplay$(CheckReplay)
+location=8
+
+mode=Config2
+type=key
+data=0
+location=9
+
+# -------------
+# mode=Info1
+# -------------
+mode=Info1
+type=key
+data=APP4
+event=Mode Info2
+label=Info
+location=4
+
+mode=Info1
+type=key
+data=6
+event=Mode default
+event=WaypointDetails current
+event=Mode default
+label=$(CheckTask)Waypoint\nDetails
+location=5
+
+mode=Info1
+type=key
+data=7
+event=Mode default
+event=NearestWaypointDetails aircraft
+label=$(CheckWaypointFile)Nearest\nWaypoint
+location=6
+
+mode=Info1
+type=key
+data=8
+event=Mode default
+event=NearestAirspaceDetails
+label=Nearest\nAirspace$(CheckAirspace)
+location=7
+
+mode=Info1
+type=key
+data=9
+event=Checklist
+event=Mode default
+label=Check\nlist
+location=8
+
+mode=Info1
+type=key
+data=0
+event=Analysis
+event=Mode default
+label=Analysis
+location=9
+
+# -------------
+# mode=Info2
+# -------------
+mode=Info2
+type=key
+data=APP4
+event=Mode default
+label=Info
+location=4
+
+mode=Info2
+type=key
+data=6
+event=Status all
+label=Status
+location=5
+
+mode=Info2
+type=key
+data=7
+event=Setup Weather
+event=Mode default
+label=Weather
+location=6
+
+mode=Info2
+type=key
+data=8
+event=Setup Teamcode
+event=Mode default
+label=Team\nCode
+location=7
+
+mode=Info2
+type=key
+data=9
+event=ScreenModes toggleauxiliary
+label=Aux Info\n$(AuxInfoToggleActionName)
+location=8
+
+mode=Info2
+type=key
+data=0
+event=RepeatStatusMessage
+label=Message\nRepeat
+location=9
+
+
+# ----------------------------------
+# mode=Exit UNUSED BUT DO NOT MODIFY
+# ----------------------------------
+
+mode=Exit
+type=key
+data=APP1
+event=Mode Menu
+label=Menu
+location=1
+
+mode=Exit
+type=key
+data=6
+label=
+location=5
+
+mode=Exit
+type=key
+data=7
+label=
+location=6
+
+mode=Exit
+type=key
+data=8
+label=
+location=7
+
+mode=Exit
+type=key
+data=9
+label=
+location=8
+
+mode=Exit
+type=key
+data=0
+label=
+location=9
+
+
+
+# ----------------------------------------------------------
+# mode=Menu
+#
+# This is the menu appearing when you double-click on screen
+# Do not remove the EXIT button on location 9!
+# ----------------------------------------------------------
+
+mode=Menu
+type=key
+data=APP1
+event=Mode Nav1
+label=Nav
+location=1
+
+mode=Menu
+type=key
+data=APP2
+event=Mode Display1
+label=Display
+location=2
+
+mode=Menu
+type=key
+data=APP3
+event=Mode Config1
+label=Config
+location=3
+
+mode=Menu
+type=key
+data=APP4
+event=Mode Info1
+label=Info
+location=4
+
+
+mode=Menu
+type=key
+data=6
+label=
+location=5
+
+mode=Menu
+type=key
+data=7
+label=
+location=6
+
+mode=Menu
+type=key
+data=8
+label=
+location=7
+
+mode=Menu
+type=key
+data=9
+event=Mode default
+label=Cancel
+location=8
+
+mode=Menu
+type=key
+data=0
+event=Exit system
+event=Mode default
+label=Exit
+location=9
+

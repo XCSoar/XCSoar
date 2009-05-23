@@ -27,11 +27,11 @@ sound=IDR_REMOVE
 delay=1500
 
 key=Simulation\r\nNothing is real!
-sound=\My Documents\XCSoarData\Start_Real.wav
+sound=/My Documents/XCSoarData/Start_Real.wav
 delay=1500
 
 key=Maintain effective\r\nLOOKOUT at all times
-sound=\My Documents\XCSoarData\Start_Simulator.wav
+sound=/My Documents/XCSoarData/Start_Simulator.wav
 delay=1500
 
 key=Closest Airfield Changed!
@@ -47,6 +47,18 @@ sound=IDR_INSERT
 delay=1500
 
 key=SnailTrail ON Short
+sound=IDR_INSERT
+delay=1500
+
+key=VisualGlide OFF
+sound=IDR_REMOVE
+delay=1500
+
+key=VisualGlide Light
+sound=IDR_INSERT
+delay=1500
+
+key=VisualGlide Heavy
 sound=IDR_INSERT
 delay=1500
 
@@ -137,19 +149,19 @@ key=Screen Mode Normal
 delay=1000
 
 key=Above Final Glide
-sound=\My Documents\XCSoarData\FinalGlide.wav
+sound=FinalGlide.wav
 delay=5000
 
 key=Marginal Final Glide
-sound=\My Documents\XCSoarData\Tiptoe.wav
+sound=Tiptoe.wav
 delay=5000
 
 key=TAKEOFF\r\nLog Started
-sound=\My Documents\XCSoarData\Takeoff.wav
+sound=Takeoff.wav
 delay=1000
 
 key=LANDING\r\nLog Stopped
-sound=\My Documents\XCSoarData\Landing.wav
+sound=Landing.wav
 delay=1000
 
 # Always leave dummy entry for now (work around issue in parser)

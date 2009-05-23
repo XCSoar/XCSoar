@@ -14,6 +14,8 @@ Copyright_License {
 	Lars H <lars_hn@hotmail.com>
 	Rob Dunning <rob@raspberryridgesheepfarm.com>
 	Russell King <rmk@arm.linux.org.uk>
+	Paolo Ventafridda <coolwind@email.it>
+	Tobias Lohner <tobias@lohner-net.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -95,6 +97,8 @@ extern const TCHAR szRegistryAcknowledgementTime[];
 extern const TCHAR szRegistryCircleZoom[];
 extern const TCHAR szRegistryWindUpdateMode[];
 extern const TCHAR szRegistryHomeWaypoint[];
+extern const TCHAR szRegistryAlternate1[];         // VENTA3
+extern const TCHAR szRegistryAlternate2[];
 extern const TCHAR szRegistryTeamcodeRefWaypoint[];
 extern const TCHAR szRegistryPilotName[];
 extern const TCHAR szRegistryAircraftType[];
@@ -105,6 +109,11 @@ extern const TCHAR szRegistryNettoSpeed[];
 extern const TCHAR szRegistryCDICruise[];
 extern const TCHAR szRegistryCDICircling[];
 extern const TCHAR szRegistryAutoBlank[];
+extern const TCHAR szRegistryAutoBacklight[]; // VENTA4
+extern const TCHAR szRegistryAutoSoundVolume[]; // VENTA4
+extern const TCHAR szRegistryAircraftCategory[]; // VENTA4
+extern const TCHAR szRegistryExtendedVisualGlide[]; // VENTA4
+extern const TCHAR szRegistryLook8000[]; // VENTA5
 extern const TCHAR szRegistryVarioGauge[];
 extern const TCHAR szRegistryDebounceTimeout[];
 extern const TCHAR szRegistryAppDefaultMapWidth[];
@@ -203,7 +212,9 @@ BOOL GetFromRegistry(const TCHAR *szRegValue, DWORD *pPos);
 BOOL DelRegistryKey(const TCHAR *szRegistryKey); // VENTA2-ADDON delregistrykey
 #endif
 #ifdef PNA
-void CleanRegistry(); // VENTA2-ADDON cleanregistrykey
+void CleanRegistry(); // VENTA2-ADDON cleanregistrykeyA
+bool SetBacklight(); // VENTA4-ADDON for PNA
+bool SetSoundVolume(); // VENTA4-ADDON for PNA
 #endif
 
 HRESULT SetToRegistry(const TCHAR *szRegValue, DWORD Pos);
@@ -255,6 +266,10 @@ int Segment(HDC hdc, long x, long y, int radius, RECT rc,
 	    double start,
 	    double end,
             bool horizon= false);
+// VENTA3 DrawArc
+int DrawArc(HDC hdc, long x, long y, int radius, RECT rc,
+	    double start,
+	    double end);
 void ReadAssetNumber(void);
 void WriteProfile(const TCHAR *szFile);
 void ReadProfile(const TCHAR *szFile);

@@ -14,6 +14,8 @@ Copyright_License {
 	Lars H <lars_hn@hotmail.com>
 	Rob Dunning <rob@raspberryridgesheepfarm.com>
 	Russell King <rmk@arm.linux.org.uk>
+	Paolo Ventafridda <coolwind@email.it>
+	Tobias Lohner <tobias@lohner-net.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -36,6 +38,7 @@ Copyright_License {
 #include "StdAfx.h"
 #include "tchar.h"
 #include <stdio.h>
+#include "Defines.h" // VENTA3
 #include "WindowControls.h"
 #ifndef ALTAIRSYNC
 #include "Message.h"
@@ -182,7 +185,7 @@ void DataFieldFileReader::ScanDirectoryTop(const TCHAR* filter) {
   if (hFlashCard == INVALID_HANDLE_VALUE) {
     return;
   }
-  _stprintf(FlashPath,TEXT("/%s/XCSoarData"),FlashCardTmp.cFileName);
+  _stprintf(FlashPath,TEXT("/%s/%S"),FlashCardTmp.cFileName, XCSDATADIR); // VENTA3 CHECK should it be double //??
   ScanDirectories(FlashPath,filter);
   if (first) {
     StartupStore(TEXT("%s\n"), FlashPath);
@@ -191,7 +194,7 @@ void DataFieldFileReader::ScanDirectoryTop(const TCHAR* filter) {
       // Search for the next storage card.
       bContinue = FindNextFlashCard (hFlashCard, &FlashCardTmp);
       if (bContinue) {
-        _stprintf(FlashPath,TEXT("/%s/XCSoarData"),FlashCardTmp.cFileName);
+        _stprintf(FlashPath,TEXT("/%s/%S"),FlashCardTmp.cFileName, XCSDATADIR);
         ScanDirectories(FlashPath,filter);
         if (first) {
           StartupStore(TEXT("%s\n"), FlashPath);
@@ -210,7 +213,7 @@ void DataFieldFileReader::ScanDirectoryTop(const TCHAR* filter) {
   // In large SD card this was leading great confusion since .dat files are ALSO
   // used by other software, namely TOMTOM!
   TCHAR tBuffer[MAX_PATH];
-  _stprintf(tBuffer,TEXT("%sXCSoarData"),gmfpathname() );
+  _stprintf(tBuffer,TEXT("%s%S"),gmfpathname(), XCSDATADIR );
   ScanDirectories(tBuffer,filter);
 #else
  // I really doubt this is still useful.. it would be better to use gmfpathname
@@ -1739,6 +1742,7 @@ int WindowControl::WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam){
       DisplayTimeOut = 0;
       InterfaceTimeoutReset();
       // JMW: detect long enter release
+      // VENTA4: PNAs don't have Enter, so it should be better to find an alternate solution
 	if (KeyTimer(false, wParam & 0xffff)) {
 	  // activate tool tips if hit return for long time
 	  if ((wParam & 0xffff) == VK_RETURN) {
@@ -2603,6 +2607,19 @@ WndProperty::WndProperty(WindowControl *Parent,
   UpdateButtonData(mBitmapSize);
 
   if (MultiLine) {
+// VENTA3 better borders on PNA HP31X
+#ifdef PNA // VENTA3 FIX
+    if (GlobalModelType == MODELTYPE_PNA_HP31X )
+    mhEdit = CreateWindowEx(WS_EX_CLIENTEDGE,TEXT("EDIT"), TEXT("\0"),
+			  WS_BORDER | WS_VISIBLE | WS_CHILD
+			  | ES_LEFT // | ES_AUTOHSCROLL
+			  | WS_CLIPCHILDREN
+			  | WS_CLIPSIBLINGS
+			  | ES_MULTILINE, // JMW added MULTILINE
+			  mEditPos.x, mEditPos.y,
+			  mEditSize.x, mEditSize.y,
+			  GetHandle(), NULL, hInst, NULL);
+   else
     mhEdit = CreateWindow(TEXT("EDIT"), TEXT("\0"),
 			  WS_BORDER | WS_VISIBLE | WS_CHILD
 			  | ES_LEFT // | ES_AUTOHSCROLL
@@ -2612,7 +2629,30 @@ WndProperty::WndProperty(WindowControl *Parent,
 			  mEditPos.x, mEditPos.y,
 			  mEditSize.x, mEditSize.y,
 			  GetHandle(), NULL, hInst, NULL);
+
+#else
+    mhEdit = CreateWindow(TEXT("EDIT"), TEXT("\0"),
+			  WS_BORDER | WS_VISIBLE | WS_CHILD
+			  | ES_LEFT // | ES_AUTOHSCROLL
+			  | WS_CLIPCHILDREN
+			  | WS_CLIPSIBLINGS
+			  | ES_MULTILINE, // JMW added MULTILINE
+			  mEditPos.x, mEditPos.y,
+			  mEditSize.x, mEditSize.y,
+			  GetHandle(), NULL, hInst, NULL);
+#endif
   } else {
+#ifdef PNA // VENTA3 FIX
+    if (GlobalModelType == MODELTYPE_PNA_HP31X )
+    mhEdit = CreateWindowEx(WS_EX_CLIENTEDGE,TEXT("EDIT"), TEXT("\0"),
+			  WS_BORDER | WS_VISIBLE | WS_CHILD
+			  | ES_LEFT | ES_AUTOHSCROLL
+			  | WS_CLIPCHILDREN
+			  | WS_CLIPSIBLINGS,
+			  mEditPos.x, mEditPos.y,
+			  mEditSize.x, mEditSize.y,
+			  GetHandle(), NULL, hInst, NULL);
+    else
     mhEdit = CreateWindow(TEXT("EDIT"), TEXT("\0"),
 			  WS_BORDER | WS_VISIBLE | WS_CHILD
 			  | ES_LEFT | ES_AUTOHSCROLL
@@ -2621,6 +2661,16 @@ WndProperty::WndProperty(WindowControl *Parent,
 			  mEditPos.x, mEditPos.y,
 			  mEditSize.x, mEditSize.y,
 			  GetHandle(), NULL, hInst, NULL);
+#else
+    mhEdit = CreateWindow(TEXT("EDIT"), TEXT("\0"),
+			  WS_BORDER | WS_VISIBLE | WS_CHILD
+			  | ES_LEFT | ES_AUTOHSCROLL
+			  | WS_CLIPCHILDREN
+			  | WS_CLIPSIBLINGS,
+			  mEditPos.x, mEditPos.y,
+			  mEditSize.x, mEditSize.y,
+			  GetHandle(), NULL, hInst, NULL);
+#endif
   }
 
   SetWindowLong(mhEdit, GWL_USERDATA, (long)this);

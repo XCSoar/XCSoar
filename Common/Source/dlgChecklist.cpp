@@ -14,6 +14,8 @@ Copyright_License {
 	Lars H <lars_hn@hotmail.com>
 	Rob Dunning <rob@raspberryridgesheepfarm.com>
 	Russell King <rmk@arm.linux.org.uk>
+	Paolo Ventafridda <coolwind@email.it>
+	Tobias Lohner <tobias@lohner-net.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -29,6 +31,7 @@ Copyright_License {
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
+  $Id$
 }
 */
 
@@ -36,6 +39,7 @@ Copyright_License {
 #include "StdAfx.h"
 #include <aygshell.h>
 
+#include "Defines.h"
 #include "XCSoar.h"
 #include "externs.h"
 #include "dlgTools.h"
@@ -197,7 +201,7 @@ void LoadChecklist(void) {
   }
 
   TCHAR filename[MAX_PATH];
-  LocalPath(filename, TEXT("xcsoar-checklist.txt"));
+  LocalPath(filename, TEXT(XCSCHKLIST));
 
   hChecklist = INVALID_HANDLE_VALUE;
   hChecklist = CreateFile(filename,
