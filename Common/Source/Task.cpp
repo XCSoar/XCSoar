@@ -837,7 +837,14 @@ void guiStartLogger(bool noAsk) {
 	    }
 	  EndDeclaration();
 	  ResetFRecord(); // reset timer & lastRecord string so if logger is restarted, FRec appears at top of file
-	}
+	  }
+      else {
+
+        MessageBoxX(hWndMapWindow,
+          gettext(TEXT("Logger inactive, insufficient storage!")),
+          gettext(TEXT("Logger Error")), MB_OK| MB_ICONERROR);
+        StartupStore(TEXT("Logger not started: Insufficient Storage\r\n"));
+	  }
       }
     FullScreen();
   }

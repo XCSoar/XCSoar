@@ -1335,6 +1335,7 @@ StartupStore(nTmp);
 
 
 // VENTA2- TODO fix these directories are not used always!
+  CreateDirectoryIfAbsent(TEXT(""));  // RLD make sure the LocalPath folder actually exists
   CreateDirectoryIfAbsent(TEXT("persist"));
   CreateDirectoryIfAbsent(TEXT("logs")); // VENTA3 we use this one for logging
   CreateDirectoryIfAbsent(TEXT("config"));
@@ -3818,7 +3819,7 @@ void PopUpSelect(int Index)
 void DebugStore(const char *Str, ...)
 {
 #if defined(DEBUG) && !defined(GNAV)
-  char buf[200];
+  char buf[MAX_PATH];
   va_list ap;
   int len;
 
@@ -3847,7 +3848,7 @@ void DebugStore(const char *Str, ...)
 
 void StartupStore(const TCHAR *Str, ...)
 {
-  TCHAR buf[160];
+  TCHAR buf[MAX_PATH];
   va_list ap;
 
   va_start(ap, Str);

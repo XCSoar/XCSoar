@@ -128,6 +128,7 @@ HFCCLCOMPETITIONCLASS:15M
 
 static TCHAR szLoggerFileName[MAX_PATH] = TEXT("\0");
 static TCHAR szFLoggerFileName[MAX_PATH] = TEXT("\0");
+static TCHAR szFLoggerFileNameRoot[MAX_PATH] = TEXT("\0");
 static double FRecordLastTime = 0;
 static char szLastFRecord[MAX_IGC_BUFF];
 
@@ -172,13 +173,16 @@ LoggerBuffer_T LoggerBuffer[MAX_LOGGER_BUFFER];
 
 
 void StopLogger(void) {
+  TCHAR szMessage[MAX_PATH] = TEXT("\0");
+  TCHAR szLogMessage[MAX_PATH] = TEXT("\0");
+  int iLoggerError=0;  // see switch statement for error handler
   if (LoggerActive) {
     LoggerActive = false;
     if (LoggerClearFreeSpace()) {
 
 
 #ifndef _SIM_
-      if (LoggerGActive())
+    if (LoggerGActive())
 	{
 	  BOOL bFileValid = true;
 	  TCHAR OldGRecordBuff[MAX_IGC_BUFF];
@@ -204,9 +208,84 @@ void StopLogger(void) {
 
 #endif
 
-      MoveFile(szLoggerFileName, szFLoggerFileName);
+      int imCount=0;
+      const int imMax=3;
+      for (imCount=0; imCount < imMax; imCount++) {
+        // MoveFile() nonzero==Success
+        if (0 != MoveFile( szLoggerFileName, szFLoggerFileName)) {
+          iLoggerError=0;
+          break; // success
+        }
+        Sleep(750); // wait for file system cache to fix itself?
+      }
+      if (imCount == imMax) { // MoveFile() failed all attempts
+
+        if (0 == MoveFile( szLoggerFileName, szFLoggerFileNameRoot)) { // try rename it and leave in root
+          iLoggerError=1; //Fail.  NoMoveNoRename
+        }
+        else {
+          iLoggerError=2; //NoMoveYesRename
+        }
+      }
 
     }
+    else { // Insufficient disk space.  // MoveFile() nonzero==Success
+      if (0 == MoveFile( szLoggerFileName, szFLoggerFileNameRoot)) { // try rename it and leave in root
+        iLoggerError=3; //Fail.  Insufficient Disk Space, NoRename
+      }
+      else {
+        iLoggerError=4; //Success.  Insufficient Disk Space, YesRename
+      }
+    }
+
+    switch (iLoggerError) { //0=Success 1=NoMoveNoRename 2=NoMoveYesRename 3=NoSpaceNoRename 4=NoSpaceYesRename
+    case 0:
+      StartupStore(TEXT("Logger file successfully moved\r\n"));
+      break;
+
+    case 1: // NoMoveNoRename
+      _tcsncpy(szMessage,TEXT("Logger file not copied.  It is in the root folder of your device and called "),MAX_PATH);
+      _tcsncat(szMessage,szLoggerFileName,MAX_PATH);
+
+      MessageBoxX(hWndMapWindow,
+		gettext(szMessage),
+		gettext(TEXT("Logger Error")), MB_OK| MB_ICONERROR);
+      _tcsncat(szMessage,TEXT("\r\n"),MAX_PATH);
+      StartupStore(szMessage);
+      break;
+
+    case 2: // NoMoveYesRename
+      _tcsncpy(szMessage,TEXT("Logger file not copied.  It is in the root folder of your device"),MAX_PATH);
+
+      MessageBoxX(hWndMapWindow,
+		gettext(szMessage),
+		gettext(TEXT("Logger Error")), MB_OK| MB_ICONERROR);
+      _tcsncat(szMessage,TEXT("\r\n"),MAX_PATH);
+      StartupStore(szMessage);
+      break;
+
+    case 3: // Insufficient Storage.  NoRename
+      _tcsncpy(szMessage,TEXT("Insuff. storage. Logger file in device's root folder, called "),MAX_PATH);
+      _tcsncat(szMessage,szLoggerFileName,MAX_PATH);
+
+      MessageBoxX(hWndMapWindow,
+		gettext(szMessage),
+		gettext(TEXT("Logger Error")), MB_OK| MB_ICONERROR);
+      _tcsncat(szMessage,TEXT("\r\n"),MAX_PATH);
+      StartupStore(szMessage);
+      break;
+
+    case 4: // Insufficient Storage.  YesRename
+      _tcsncpy(szMessage,TEXT("Insufficient storage.  Logger file is in the root folder of your device"),MAX_PATH);
+
+      MessageBoxX(hWndMapWindow,
+		gettext(szMessage),
+		gettext(TEXT("Logger Error")), MB_OK| MB_ICONERROR);
+      _tcsncat(szMessage,TEXT("\r\n"),MAX_PATH);
+      StartupStore(szMessage);
+      break;
+} // error handler
+
     NumLoggerBuffered = 0;
   }
 }
@@ -323,6 +402,9 @@ void LogPoint(double Latitude, double Longitude, double Altitude,
 bool LogFRecordToFile(int SatelliteIDs[], short Hour, short Minute, short Second, bool bAlways)
 { // bAlways forces write when completing header for restart
   // only writes record if constallation has changed unless bAlways set
+
+#if !defined(_SIM_)
+
   char szFRecord[MAX_IGC_BUFF];
   static bool bFirst = true;
   int eof=0;
@@ -382,6 +464,9 @@ bool LogFRecordToFile(int SatelliteIDs[], short Hour, short Minute, short Second
 
   }
   return bRetVal;
+#else
+  return true;
+#endif
 }
 
 
@@ -396,11 +481,26 @@ bool LogFRecord(int SatelliteIDs[], bool bAlways )
     return false;  // track whether we succussfully write it, else we retry
 }
 
+bool IsAlphaNum (TCHAR c) {
+  if (((c >= _T('A'))&&(c <= _T('Z')))
+      ||((c >= _T('a'))&&(c <= _T('z')))
+      ||((c >= _T('0'))&&(c <= _T('9')))) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
 void StartLogger(TCHAR *astrAssetNumber)
 {
   HANDLE hFile;
   int i;
   TCHAR path[MAX_PATH];
+  TCHAR cAsset[3];
+  for (i=0; i < 3; i++) { // chars must be legal in file names
+    cAsset[i] = IsAlphaNum(strAssetNumber[i]) ? strAssetNumber[i] : _T('A');
+  }
+
 // VENTA3 use logs subdirectory when not in main memory (true for FIVV and PNA)
 #if defined(GNAV) || defined(FIVV) || defined(PNA)
   LocalPath(path,TEXT("logs"));
@@ -436,9 +536,20 @@ void StartLogger(TCHAR *astrAssetNumber)
                  GPS_INFO.Year,
                  GPS_INFO.Month,
                  GPS_INFO.Day,
-                 astrAssetNumber[0],
-                 astrAssetNumber[1],
-                 astrAssetNumber[2],
+                 cAsset[0],
+                 cAsset[1],
+                 cAsset[2],
+                 i);
+
+        wsprintf(szFLoggerFileNameRoot,
+                 TEXT("%s\\%04d-%02d-%02d-XCS-%c%c%c-%02d.IGC"),
+                 TEXT(""), // this creates it in root if MoveFile() fails
+                 GPS_INFO.Year,
+                 GPS_INFO.Month,
+                 GPS_INFO.Day,
+                 cAsset[0],
+                 cAsset[1],
+                 cAsset[2],
                  i);
       } else {
         // Short file name
@@ -453,11 +564,22 @@ void StartLogger(TCHAR *astrAssetNumber)
                  cyear,
                  cmonth,
                  cday,
-                 astrAssetNumber[0],
-                 astrAssetNumber[1],
-                 astrAssetNumber[2],
+                 cAsset[0],
+                 cAsset[1],
+                 cAsset[2],
                  cflight);
-      }
+
+        wsprintf(szFLoggerFileNameRoot,
+                 TEXT("%s\\%c%c%cX%c%c%c%c.IGC"),
+                 TEXT(""), // this creates it in root if MoveFile() fails
+                 cyear,
+                 cmonth,
+                 cday,
+                 cAsset[0],
+                 cAsset[1],
+                 cAsset[2],
+                 cflight);
+      } // end if
 
       hFile = CreateFile(szFLoggerFileName, GENERIC_WRITE,
 			 FILE_SHARE_WRITE, NULL, CREATE_NEW,
@@ -465,11 +587,20 @@ void StartLogger(TCHAR *astrAssetNumber)
       if(hFile!=INVALID_HANDLE_VALUE )
 	{
           // file already exists
-	  CloseHandle(hFile);
-          DeleteFile(szFLoggerFileName);
-	  return;
+      CloseHandle(hFile);
+      DeleteFile(szFLoggerFileName);
+      break;
 	}
-    }
+  } // end while
+
+  TCHAR szMessage[MAX_PATH] = TEXT("\0");
+
+  _tcsncpy(szMessage,TEXT("Logger Started: "),MAX_PATH);
+  _tcsncat(szMessage,szFLoggerFileName,MAX_PATH);
+  _tcsncat(szMessage,TEXT("\r\n"),MAX_PATH);
+  StartupStore(szMessage);
+
+  return;
 }
 
 
@@ -628,7 +759,7 @@ void LoggerNote(const TCHAR *text) {
 
 
 
-
+/* never used -- ToDo Delete DoLogger() completely
 void DoLogger(TCHAR *astrAssetNumber)
 {
   TCHAR TaskMessage[1024];
@@ -709,7 +840,7 @@ void DoLogger(TCHAR *astrAssetNumber)
 	}
     }
 }
-
+*/
 
 bool DeclaredToDevice = false;
 
@@ -1356,7 +1487,13 @@ bool LoggerClearFreeSpace(void) {
       found = DeleteOldIGCFile(subpathname);
     }
   }
-  return (kbfree>=LOGGER_MINFREESTORAGE);
+  if (kbfree>=LOGGER_MINFREESTORAGE) {
+    StartupStore(TEXT("LoggerFreeSpace returned: true\r\n"));
+    return true;
+  } else {
+    StartupStore(TEXT("LoggerFreeSpace returned: false\r\n"));
+    return false;
+  }
 }
 
 bool IsValidIGCChar(char c) //returns 1 if valid char for IGC files
