@@ -1286,11 +1286,11 @@ wcscat(XCSoar_Version, TEXT("PNA "));
   // experimental CVS
 
 #ifdef FIVV
-  wcscat(XCSoar_Version, TEXT("5.2.3Fb6 "));
+  wcscat(XCSoar_Version, TEXT("5.2.3Fb7 "));
 #elif defined(__MINGW32__)
-  wcscat(XCSoar_Version, TEXT("5.2.3b6 "));
+  wcscat(XCSoar_Version, TEXT("5.2.3b7 "));
 #else
-  wcscat(XCSoar_Version, TEXT("5.2.3b6 "));
+  wcscat(XCSoar_Version, TEXT("5.2.3b7 "));
 #endif
 
   wcscat(XCSoar_Version, TEXT(__DATE__));
