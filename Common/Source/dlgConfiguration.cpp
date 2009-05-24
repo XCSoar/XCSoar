@@ -2182,6 +2182,39 @@ static void setVariables(void) {
     wp->RefreshDisplay();
   }
 
+  wp = (WndProperty*)wf->FindByName(TEXT("prpNewMap"));
+  if (wp) {
+    DataFieldEnum* dfe;
+    dfe = (DataFieldEnum*)wp->GetDataField();
+    dfe->addEnumText(gettext(TEXT("Enabled")));
+    dfe->addEnumText(gettext(TEXT("Disabled")));
+    dfe = (DataFieldEnum*)wp->GetDataField();
+    dfe->Set(NewMap);
+    wp->RefreshDisplay();
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpHideUnits"));
+  if (wp) {
+    DataFieldEnum* dfe;
+    dfe = (DataFieldEnum*)wp->GetDataField();
+    dfe->addEnumText(gettext(TEXT("Enabled")));
+    dfe->addEnumText(gettext(TEXT("Disabled")));
+    dfe = (DataFieldEnum*)wp->GetDataField();
+    dfe->Set(HideUnits);
+    wp->RefreshDisplay();
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpOutlinedTp"));
+  if (wp) {
+    DataFieldEnum* dfe;
+    dfe = (DataFieldEnum*)wp->GetDataField();
+    dfe->addEnumText(gettext(TEXT("Enabled")));
+    dfe->addEnumText(gettext(TEXT("Disabled")));
+    dfe = (DataFieldEnum*)wp->GetDataField();
+    dfe->Set(OutlinedTp);
+    wp->RefreshDisplay();
+  }
+
 // Fonts
   wp = (WndProperty*)wf->FindByName(TEXT("prpUseCustomFonts"));
   if (wp) {
@@ -3432,7 +3465,6 @@ void dlgConfigurationShowModal(void){
       SetToRegistry(szRegistryExtendedVisualGlide,
 		    (DWORD)(ExtendedVisualGlide));
       changed = true;
-     // requirerestart = true;
     }
   }
 
@@ -3445,9 +3477,42 @@ void dlgConfigurationShowModal(void){
       SetToRegistry(szRegistryLook8000,
 		    (DWORD)(Look8000));
       changed = true;
-     // requirerestart = true;
     }
   }
+  wp = (WndProperty*)wf->FindByName(TEXT("prpNewMap")); // VENTA4
+  if (wp) {
+    if (NewMap != (NewMap_t)
+	(wp->GetDataField()->GetAsInteger())) {
+      NewMap = (NewMap_t)
+	(wp->GetDataField()->GetAsInteger());
+      SetToRegistry(szRegistryNewMap,
+		    (DWORD)(NewMap));
+      changed = true;
+    }
+  }
+  wp = (WndProperty*)wf->FindByName(TEXT("prpHideUnits")); // VENTA4
+  if (wp) {
+    if (HideUnits != (HideUnits_t)
+	(wp->GetDataField()->GetAsInteger())) {
+      HideUnits = (HideUnits_t)
+	(wp->GetDataField()->GetAsInteger());
+      SetToRegistry(szRegistryHideUnits,
+		    (DWORD)(HideUnits));
+      changed = true;
+    }
+  }
+  wp = (WndProperty*)wf->FindByName(TEXT("prpOutlinedTp")); // VENTA4
+  if (wp) {
+    if (OutlinedTp != (OutlinedTp_t)
+	(wp->GetDataField()->GetAsInteger())) {
+      OutlinedTp = (OutlinedTp_t)
+	(wp->GetDataField()->GetAsInteger());
+      SetToRegistry(szRegistryOutlinedTp,
+		    (DWORD)(OutlinedTp));
+      changed = true;
+    }
+  }
+
 
 #if defined(PNA) || defined(FIVV)
 // VENTA-ADDON GEOM

@@ -259,6 +259,9 @@ const TCHAR szRegistryAutoSoundVolume[]= TEXT("AutoSoundVolume");
 const TCHAR szRegistryAircraftCategory[]= TEXT("AircraftCategory");
 const TCHAR szRegistryExtendedVisualGlide[]= TEXT("ExtVisualGlide");
 const TCHAR szRegistryLook8000[]= TEXT("Look8000");
+const TCHAR szRegistryNewMap[]= TEXT("NewMap");
+const TCHAR szRegistryHideUnits[]= TEXT("HideUnits");
+const TCHAR szRegistryOutlinedTp[]= TEXT("OutlinedTp");
 const TCHAR szRegistryVarioGauge[]= TEXT("VarioGauge");
 
 const TCHAR szRegistryDebounceTimeout[]= TEXT("DebounceTimeout");
@@ -782,11 +785,11 @@ void ReadRegistrySettings(void)
   GetFromRegistry(szRegistryAutoBlank,&Temp);
   EnableAutoBlank = (Temp == 1);
 
-  Temp = 0;
+  Temp = 1;
   GetFromRegistry(szRegistryAutoBacklight,&Temp); // VENTA4
   EnableAutoBacklight = (Temp == 1);
 
-  Temp = 0;
+  Temp = 1;
   GetFromRegistry(szRegistryAutoSoundVolume,&Temp); // VENTA4
   EnableAutoSoundVolume = (Temp == 1);
 
@@ -798,9 +801,21 @@ void ReadRegistrySettings(void)
   GetFromRegistry(szRegistryExtendedVisualGlide,&Temp); // VENTA4
   ExtendedVisualGlide = Temp;
 
-  Temp = 1; // enabled by default
+  Temp = 0;
   GetFromRegistry(szRegistryLook8000,&Temp); // VENTA4
   Look8000 = Temp;
+
+  Temp = 0; // enabled by default; JMW, not yet...
+  GetFromRegistry(szRegistryNewMap,&Temp);
+  NewMap = Temp;
+
+  Temp = 0;
+  GetFromRegistry(szRegistryOutlinedTp,&Temp);
+  OutlinedTp = Temp;
+
+  Temp = 0;
+  GetFromRegistry(szRegistryHideUnits,&Temp);
+  HideUnits = Temp;
 
   /*
   Temp = 0;

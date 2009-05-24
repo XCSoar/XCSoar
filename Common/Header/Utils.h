@@ -114,6 +114,9 @@ extern const TCHAR szRegistryAutoSoundVolume[]; // VENTA4
 extern const TCHAR szRegistryAircraftCategory[]; // VENTA4
 extern const TCHAR szRegistryExtendedVisualGlide[]; // VENTA4
 extern const TCHAR szRegistryLook8000[]; // VENTA5
+extern const TCHAR szRegistryNewMap[]; // VENTA5
+extern const TCHAR szRegistryHideUnits[]; // VENTA5
+extern const TCHAR szRegistryOutlinedTp[]; // VENTA5
 extern const TCHAR szRegistryVarioGauge[];
 extern const TCHAR szRegistryDebounceTimeout[];
 extern const TCHAR szRegistryAppDefaultMapWidth[];

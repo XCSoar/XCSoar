@@ -412,6 +412,18 @@ typedef enum{
 	lxcEnabled=0,
 	lxcDisabled,
 } Look8000_t;
+typedef enum{
+	nmEnabled=0,
+	nmDisabled,
+} NewMap_t;
+typedef enum{
+	otEnabled=0,
+	otDisabled,
+} OutlinedTp_t;
+typedef enum{
+	huEnabled=0,
+	huDisabled,
+} HideUnits_t;
 
 
 typedef struct{

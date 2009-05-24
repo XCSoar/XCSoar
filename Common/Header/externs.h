@@ -144,6 +144,9 @@ extern bool EnableAutoSoundVolume; // VENTA4
 extern short AircraftCategory; // VENTA4
 extern bool ExtendedVisualGlide;
 extern bool Look8000;
+extern bool NewMap;
+extern bool HideUnits;
+extern bool OutlinedTp;
 
 // airspace data
 extern AIRSPACE_AREA *AirspaceArea;

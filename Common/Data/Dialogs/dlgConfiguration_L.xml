@@ -942,7 +942,16 @@ Example short name (81HXABC1.IGC), long name (2008-01-18-XXX-ABC-01.IGC).
   <WndProperty Name="prpExtendedVisualGlide" Caption="Extended VisualGlide"      X=2 Y=-1   Width=235 Height=22 CaptionWidth=150 Font=2 Help="">
     <DataField name="" DataType="boolean"/>
   </WndProperty>
-  <WndProperty Name="prpLook8000" Caption="LXc8000 Map Mode"      X=2 Y=-1   Width=235 Height=22 CaptionWidth=150 Font=2 Help="">
+  <WndProperty Name="prpNewMap" Caption="New Map Mode"      X=2 Y=-1   Width=235 Height=22 CaptionWidth=150 Font=2 Help="">
+    <DataField name="" DataType="boolean"/>
+  </WndProperty>
+  <WndProperty Name="prpLook8000" Caption="Map looklike 8000"      X=2 Y=-1   Width=235 Height=22 CaptionWidth=150 Font=2 Help="">
+    <DataField name="" DataType="boolean"/>
+  </WndProperty>
+  <WndProperty Name="prpOutlinedTp" Caption="Outlined map labels"      X=2 Y=-1   Width=235 Height=22 CaptionWidth=150 Font=2 Help="">
+    <DataField name="" DataType="boolean"/>
+  </WndProperty>
+  <WndProperty Name="prpHideUnits" Caption="Hide units in infobox"      X=2 Y=-1   Width=235 Height=22 CaptionWidth=150 Font=2 Help="">
     <DataField name="" DataType="boolean"/>
   </WndProperty>
   </WndFrame>

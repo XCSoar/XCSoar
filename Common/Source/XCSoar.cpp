@@ -388,7 +388,9 @@ bool EnableAutoSoundVolume=true;
 short AircraftCategory=0;
 bool ExtendedVisualGlide=false;
 bool Look8000=false;
-
+bool HideUnits=false;
+bool NewMap=true;
+bool OutlinedTp=false;
 
 // Airspace Database
 AIRSPACE_AREA *AirspaceArea = NULL;
@@ -3451,7 +3453,8 @@ void CommonProcessTimer()
   SystemIdleTimerReset();
 #endif
 
-  if(InfoWindowActive)
+  if(InfoWindowActive && !(AircraftCategory == (AircraftCategory_t)umParaglider))
+    // VNT let paraglider maplock working forever
     {
       if (!dlgAirspaceWarningVisible()) {
 	// JMW prevent switching to map window if in airspace warning dialog

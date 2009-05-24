@@ -144,6 +144,7 @@ typedef union{
     unsigned WhiteBorder:1;
     unsigned WhiteBold:1;
     unsigned NoSetFont:1;  // VENTA5
+    unsigned Color:3;
   }AsFlag;
 }TextInBoxMode_t;
   // mode are flags
@@ -302,7 +303,7 @@ class MapWindow {
   static void DrawWindAtAircraft2(HDC hdc, POINT Orig, RECT rc);
   static void DrawAirSpace(HDC hdc, const RECT rc);
   static void DrawWaypoints(HDC hdc, const RECT rc);
-  static void DrawWaypoints8000(HDC hdc, const RECT rc); // VENTA5
+  static void DrawWaypointsNew(HDC hdc, const RECT rc); // VENTA5
   static void DrawLook8000(HDC hdc, const RECT rc); // VENTA5
   static void DrawFlightMode(HDC hdc, const RECT rc);
   static void DrawGPSStatus(HDC hdc, const RECT rc);
