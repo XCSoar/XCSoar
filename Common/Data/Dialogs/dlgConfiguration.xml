@@ -943,7 +943,7 @@ Example short name (81HXABC1.IGC), long name (2008-01-18-XXX-ABC-01.IGC).
     <DataField name="" DataType="enum" Min=0 Max=10 Step=1/>
   </WndProperty>
 
-  <WndProperty Name="prpGPSAltitudeOffset" Caption="GPS Altitude Offset*"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2
+  <WndProperty Name="prpGPSAltitudeOffset" Caption="GPS alt offset*"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2
   Help="Adjust GPS altitude with a fixed offset.">
     <DataField name="" DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min=-1000 Max=1000 Step=1/>
   </WndProperty>
@@ -952,26 +952,26 @@ Example short name (81HXABC1.IGC), long name (2008-01-18-XXX-ABC-01.IGC).
     <DataField name="" DataType="boolean"/>
   </WndProperty>
 
-  <WndProperty Name="prpAutoSoundVolume" Caption="Auto SoundVolume"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 Help="Set maximum sound volume automatically.">
+  <WndProperty Name="prpAutoSoundVolume" Caption="Auto Sound Volume"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 Help="Set maximum sound volume automatically.">
     <DataField name="" DataType="boolean"/>
   </WndProperty>
 
-  <WndProperty Name="prpExtendedVisualGlide" Caption="Extended VisualGlide"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 Help="If you want Visual Glide to display also moving circles or arcs, in addition to the steady mode then selext Extended.">
+  <WndProperty Name="prpExtendedVisualGlide" Caption="Extended Visual Glide*"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 Help="If you want Visual Glide to display also moving circles or arcs, in addition to the steady mode then selext Extended.">
     <DataField name="" DataType="boolean"/>
   </WndProperty>
 
-  <WndProperty Name="prpNewMap" Caption="New Map Mode"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 Help="New moving map label drawing. A different algorithm is applied when deciding what label should be displayed, which airport or landing field, and if arrival altitude should appear too.">
+  <WndProperty Name="prpNewMap" Caption="Alternate map labels*"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 Help="New moving map label drawing. A different algorithm is applied when deciding what label should be displayed, which airport or landing field, and if arrival altitude should appear too.">
     <DataField name="" DataType="boolean"/>
   </WndProperty>
-  <WndProperty Name="prpOutlinedTp" Caption="Outlined map labels"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 Help="Apply outlined labels to all waypoints on the map, also turnpoints.">
-    <DataField name="" DataType="boolean"/>
-  </WndProperty>
-
-  <WndProperty Name="prpLook8000" Caption="Map looklike 8000"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 Help="not available">
+  <WndProperty Name="prpOutlinedTp" Caption="Outlined map labels*"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 Help="Apply outlined labels to all waypoints on the map, also turnpoints.">
     <DataField name="" DataType="boolean"/>
   </WndProperty>
 
-  <WndProperty Name="prpHideUnits" Caption="Hide units in infobox"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 Help="Do not display units like Km, Ft, etc. in the infoboxes">
+  <WndProperty Name="prpLook8000" Caption="Map looklike 8000*"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 Help="not available">
+    <DataField name="" DataType="boolean"/>
+  </WndProperty>
+
+  <WndProperty Name="prpHideUnits" Caption="Hide units in infobox*"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 Help="Do not display units like Km, Ft, etc. in the infoboxes">
     <DataField name="" DataType="boolean"/>
   </WndProperty>
 
