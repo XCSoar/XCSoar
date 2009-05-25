@@ -4644,7 +4644,7 @@ void MapWindow::DrawGlideCircle(HDC hdc, POINT Orig, RECT rc )
 	{
 	  //sprintf(text,"%3.1f nmi", i*100*cruise / 1852);
 	  sprintf(text,"%3.0fnm", i*100*cruise / 1852);
-	} else  if ( Units::GetUserDistanceUnit() == unNauticalMiles )
+	} else  if ( Units::GetUserDistanceUnit() == unStatuteMiles )
 	{
 	  //sprintf(text,"%3.1f mi", i*100*cruise / 1609);
 	  sprintf(text,"%3.0fm", i*100*cruise / 1609);
@@ -4697,6 +4697,9 @@ void MapWindow::DrawGlideCircle(HDC hdc, POINT Orig, RECT rc )
 
 }
 
+/*
+ * Had no time to even try to complete this part. Maybe in the next few days...
+ */
 void MapWindow::DrawLook8000(HDC hdc,  RECT rc )
 {
   TCHAR gtext[100];
@@ -4730,6 +4733,7 @@ void MapWindow::DrawLook8000(HDC hdc,  RECT rc )
 
 	wsprintf(Buffer, TEXT("TO: %s"),  WayPointList[index].Name);
 	// JMW undefined...	ConvToUpper(Buffer);
+	// VNT it's really inside Utils.cpp ...but only for PNA or fivv... I'll fix it when it becomes usable
 	TextDisplayMode.AsFlag.WhiteBold = 1;
 	TextInBox(hdc, Buffer, rcx,rcy, 0, TextDisplayMode, false);
       }

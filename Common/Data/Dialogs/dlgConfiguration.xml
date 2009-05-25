@@ -934,44 +934,44 @@ Example short name (81HXABC1.IGC), long name (2008-01-18-XXX-ABC-01.IGC).
   <WndFrame Name="frmSpecials" X=70 Y=0 Width=246 Height=222 Font=2>
 
   <WndProperty Name="prpAppInfoBoxModel" Caption="Device model"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2
-  Help="Choose your model.">
+  Help="Select your PNA model to make full use of its hardware capabilities. If it is not included, use Generic type.">
     <DataField name="" DataType="enum" Min=0 Max=50 Step=1/>
   </WndProperty>
 
   <WndProperty Name="prpAircraftCategory" Caption="Aircraft Category"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2
-  Help="">
+  Help="Paragliders will benefit of screen lock selecting an infobox, double click to unlock. ">
     <DataField name="" DataType="enum" Min=0 Max=10 Step=1/>
   </WndProperty>
 
   <WndProperty Name="prpGPSAltitudeOffset" Caption="GPS Altitude Offset*"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2
-  Help="">
+  Help="Adjust GPS altitude with a fixed offset.">
     <DataField name="" DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min=-1000 Max=1000 Step=1/>
   </WndProperty>
 
-  <WndProperty Name="prpAutoBacklight" Caption="Auto Backlight"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 Help="">
+  <WndProperty Name="prpAutoBacklight" Caption="Auto Backlight"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 Help="Set automatic backlight for this device. Max brightness and no timeout if on external power, otherwise max brightneess and a 5 minutes timeout on batteries. After timeout screen blanks to save energy.">
     <DataField name="" DataType="boolean"/>
   </WndProperty>
 
-  <WndProperty Name="prpAutoSoundVolume" Caption="Auto SoundVolume"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 Help="">
+  <WndProperty Name="prpAutoSoundVolume" Caption="Auto SoundVolume"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 Help="Set maximum sound volume automatically.">
     <DataField name="" DataType="boolean"/>
   </WndProperty>
 
-  <WndProperty Name="prpExtendedVisualGlide" Caption="Extended VisualGlide"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 Help="">
+  <WndProperty Name="prpExtendedVisualGlide" Caption="Extended VisualGlide"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 Help="If you want Visual Glide to display also moving circles or arcs, in addition to the steady mode then selext Extended.">
     <DataField name="" DataType="boolean"/>
   </WndProperty>
 
-  <WndProperty Name="prpNewMap" Caption="New Map Mode"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 Help="">
+  <WndProperty Name="prpNewMap" Caption="New Map Mode"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 Help="New moving map label drawing. A different algorithm is applied when deciding what label should be displayed, which airport or landing field, and if arrival altitude should appear too.">
     <DataField name="" DataType="boolean"/>
   </WndProperty>
-  <WndProperty Name="prpOutlinedTp" Caption="Outlined map labels"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 Help="">
-    <DataField name="" DataType="boolean"/>
-  </WndProperty>
-
-  <WndProperty Name="prpLook8000" Caption="Map looklike 8000"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 Help="">
+  <WndProperty Name="prpOutlinedTp" Caption="Outlined map labels"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 Help="Apply outlined labels to all waypoints on the map, also turnpoints.">
     <DataField name="" DataType="boolean"/>
   </WndProperty>
 
-  <WndProperty Name="prpHideUnits" Caption="Hide units in infobox"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 Help="">
+  <WndProperty Name="prpLook8000" Caption="Map looklike 8000"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 Help="not available">
+    <DataField name="" DataType="boolean"/>
+  </WndProperty>
+
+  <WndProperty Name="prpHideUnits" Caption="Hide units in infobox"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 Help="Do not display units like Km, Ft, etc. in the infoboxes">
     <DataField name="" DataType="boolean"/>
   </WndProperty>
 
