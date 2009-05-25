@@ -975,7 +975,6 @@ Example short name (81HXABC1.IGC), long name (2008-01-18-XXX-ABC-01.IGC).
     <DataField name="" DataType="boolean"/>
   </WndProperty>
 
-
 </WndForm>
 
 </PMML>

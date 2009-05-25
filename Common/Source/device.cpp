@@ -849,10 +849,8 @@ FlarmDeclareSetGet(PDeviceDescriptor_t d, TCHAR *Buffer) {
 
   _sntprintf(tmp, 512, TEXT("$%s\r\n"), Buffer);
 
-  LockComm();
   if (d->Com)
     d->Com->WriteString(tmp);
-  UnlockComm();
 
   Buffer[6]= _T('A');
   if (!ExpectString(d, Buffer)){
@@ -864,24 +862,27 @@ FlarmDeclareSetGet(PDeviceDescriptor_t d, TCHAR *Buffer) {
 
 
 BOOL FlarmDeclare(PDeviceDescriptor_t d, Declaration_t *decl){
+  BOOL result = TRUE;
+
   TCHAR Buffer[256];
 
+  d->Com->StopRxThread();
+  d->Com->SetRxTimeout(500);                     // set RX timeout to 500[ms]
+
   _stprintf(Buffer,TEXT("PFLAC,S,PILOT,%s"),decl->PilotName);
-  if (!FlarmDeclareSetGet(d,Buffer)) return FALSE;
+  if (!FlarmDeclareSetGet(d,Buffer)) result = FALSE;
 
   _stprintf(Buffer,TEXT("PFLAC,S,GLIDERID,%s"),decl->AircraftRego);
-  if (!FlarmDeclareSetGet(d,Buffer)) return FALSE;
+  if (!FlarmDeclareSetGet(d,Buffer)) result = FALSE;
 
   _stprintf(Buffer,TEXT("PFLAC,S,GLIDERTYPE,%s"),decl->AircraftType);
-  if (!FlarmDeclareSetGet(d,Buffer)) return FALSE;
+  if (!FlarmDeclareSetGet(d,Buffer)) result = FALSE;
 
-  _stprintf(Buffer,TEXT("PFLAC,S,NEWTASK,"));
-  if (!FlarmDeclareSetGet(d,Buffer)) return TRUE;
-  // JMW return true on this one in case it's not an IGC approved
-  // device
+  _stprintf(Buffer,TEXT("PFLAC,S,NEWTASK,Task"));
+  if (!FlarmDeclareSetGet(d,Buffer)) result = FALSE;
 
   _stprintf(Buffer,TEXT("PFLAC,S,ADDWP,0000000N,00000000E,TAKEOFF"));
-  if (!FlarmDeclareSetGet(d,Buffer)) return FALSE;
+  if (!FlarmDeclareSetGet(d,Buffer)) result = FALSE;
 
   for (int i = 0; i < decl->num_waypoints; i++) {
     int DegLat, DegLon;
@@ -914,11 +915,11 @@ BOOL FlarmDeclare(PDeviceDescriptor_t d, Declaration_t *decl){
 	      TEXT("PFLAC,S,ADDWP,%02d%05.0f%c,%03d%05.0f%c,%s"),
 	      DegLat, MinLat, NoS, DegLon, MinLon, EoW,
 	      decl->waypoint[i]->Name);
-    if (!FlarmDeclareSetGet(d,Buffer)) return FALSE;
+    if (!FlarmDeclareSetGet(d,Buffer)) result = FALSE;
   }
 
   _stprintf(Buffer,TEXT("PFLAC,S,ADDWP,0000000N,00000000E,LANDING"));
-  if (!FlarmDeclareSetGet(d,Buffer)) return FALSE;
+  if (!FlarmDeclareSetGet(d,Buffer)) result = FALSE;
 
   // PFLAC,S,KEY,VALUE
   // Expect
@@ -936,5 +937,8 @@ BOOL FlarmDeclare(PDeviceDescriptor_t d, Declaration_t *decl){
   // Total data size must not surpass 183 bytes
   // probably will issue PFLAC,ERROR if a problem?
 
-  return TRUE;
+  d->Com->SetRxTimeout(0);                       // clear timeout
+  d->Com->StartRxThread();                       // restart RX thread
+
+  return result;
 }
