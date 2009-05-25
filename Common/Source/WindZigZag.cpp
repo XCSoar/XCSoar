@@ -508,7 +508,7 @@ void TestZigZag(double V_wind, double theta_wind) {
 }
 
 void TestZigZagLoop() {
-  static first = true;
+  static bool first = true;
   if (!first) return;
   first = false;
   for (double V_wind=2.0; V_wind<=10.0; V_wind+= 1.0) {

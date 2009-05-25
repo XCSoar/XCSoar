@@ -753,7 +753,7 @@ BOOL NMEAParser::NMEAChecksum(const TCHAR *String)
   unsigned char v1 = 0,v2 = 0;
   TCHAR *pEnd;
 
-  pEnd = _tcschr(String,'*');
+  pEnd = _tcschr((TCHAR*)String,'*');
   if(pEnd == NULL)
     return FALSE;
 

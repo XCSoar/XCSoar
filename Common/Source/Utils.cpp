@@ -4910,8 +4910,8 @@ unsigned long FindFreeSpace(const TCHAR *path) {
 
 bool MatchesExtension(const TCHAR *filename, const TCHAR* extension) {
   TCHAR *ptr;
-  ptr = _tcsstr(filename, extension);
-  if (ptr != filename+_tcslen(filename)-_tcslen(extension)) {
+  ptr = _tcsstr((TCHAR*)filename, extension);
+  if (ptr != filename+_tcslen((TCHAR*)filename)-_tcslen((TCHAR*)extension)) {
     return false;
   } else {
     return true;

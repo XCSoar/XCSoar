@@ -79,6 +79,7 @@ static void OnResetClicked(WindowControl * Sender){
 }
 
 
+
 static void RedrawSampleFont(void)
 {
   if (!IsInitialized) {
@@ -96,6 +97,7 @@ static void RedrawSampleFont(void)
     NewLogFont.lfHeight = wp->GetDataField()->GetAsInteger();
   }
   wp = (WndProperty*)wf->FindByName(TEXT("prpFontWeight"));
+
   if(wp) {
     NewLogFont.lfWeight= wp->GetDataField()->GetAsInteger();
   }
@@ -178,6 +180,7 @@ static void OnFontWeightData(DataField *Sender, DataField::DataAccessKind_t Mode
     break;
 
     case DataField::daChange:
+
       RedrawSampleFont();
 
     break;
@@ -452,4 +455,5 @@ bool dlgFontEditShowModal(const TCHAR * FontDescription,
 
   return bRetVal;
 }
+
 
