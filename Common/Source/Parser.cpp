@@ -220,7 +220,11 @@ BOOL NMEAParser::ParseNMEAString_Internal(TCHAR *String, NMEA_INFO *GPS_INFO)
           return PFLAU(&String[7], params + 1, n_params, GPS_INFO);
         }
 
-    return FALSE;
+      if(_tcscmp(params[0] + 1,TEXT("PGRMZ"))==0)
+	{
+	  return RMZ(&String[7], params + 1, n_params, GPS_INFO);
+	}
+      return FALSE;
     }
 
   if(_tcscmp(params[0] + 3,TEXT("GSA"))==0)
@@ -245,10 +249,7 @@ BOOL NMEAParser::ParseNMEAString_Internal(TCHAR *String, NMEA_INFO *GPS_INFO)
     {
       return GGA(&String[7], params + 1, n_params, GPS_INFO);
     }
-  if(_tcscmp(params[0] + 3,TEXT("RMZ"))==0)
-    {
-      return RMZ(&String[7], params + 1, n_params, GPS_INFO);
-    }
+
   return FALSE;
 }
 
