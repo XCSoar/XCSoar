@@ -16,6 +16,7 @@ Copyright_License {
 	Russell King <rmk@arm.linux.org.uk>
 	Paolo Ventafridda <coolwind@email.it>
 	Tobias Lohner <tobias@lohner-net.de>
+	Mirek Jezek <mjezek@ipplc.cz>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -197,8 +198,9 @@ static void AirspaceWarnListCalcDistance(NMEA_INFO *Basic, bool IsCircle, int As
                                           AsIdx);
     if (*hDistance < 0)
       *hDistance = 0;
-    vDistanceBase = (int)AirspaceCircle[AsIdx].Base.Altitude - alt;
-    vDistanceTop  = (int)AirspaceCircle[AsIdx].Top.Altitude - alt;
+
+    vDistanceBase = alt - (int)AirspaceCircle[AsIdx].Base.Altitude;
+    vDistanceTop  = alt - (int)AirspaceCircle[AsIdx].Top.Altitude;
     // EntryTime = ToDo
   } else {
     if (!InsideAirspaceArea(Basic->Longitude, Basic->Latitude, AsIdx)){
@@ -220,7 +222,7 @@ static void AirspaceWarnListCalcDistance(NMEA_INFO *Basic, bool IsCircle, int As
     *vDistance  = 0;
   }
   else if (-vDistanceBase > vDistanceTop)
-    *vDistance = vDistanceBase;
+    *vDistance = -vDistanceBase;
   else
     *vDistance = vDistanceTop;
 }

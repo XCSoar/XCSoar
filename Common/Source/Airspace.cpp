@@ -15,6 +15,9 @@ Copyright_License {
 	Lars H <lars_hn@hotmail.com>
 	Rob Dunning <rob@raspberryridgesheepfarm.com>
 	Russell King <rmk@arm.linux.org.uk>
+	Paolo Ventafridda <coolwind@email.it>
+	Tobias Lohner <tobias@lohner-net.de>
+	Mirek Jezek <mjezek@ipplc.cz>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -30,6 +33,7 @@ Copyright_License {
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
+  $Id$
 }
 
 */
@@ -115,10 +119,10 @@ static const TCHAR* k_strAreaStart[k_nAreaCount] = {
 					_T("R"),
 					_T("Q"),
 					_T("P"),
+					_T("CTR"),
 					_T("A"),
 					_T("B"),
 					_T("C"),
-					_T("CTR"),
 					_T("D"),
 					_T("GP"),
 					_T("W"),
@@ -129,10 +133,10 @@ static const int k_nAreaType[k_nAreaCount] = {
 					RESTRICT,
 					DANGER,
 					PROHIBITED,
+					CTR,
 					CLASSA,
 					CLASSB,
 					CLASSC,
-					CTR,
 					CLASSD,
 					NOGLIDER,
 					WAVE,
