@@ -222,7 +222,7 @@ static void AirspaceWarnListCalcDistance(NMEA_INFO *Basic, bool IsCircle, int As
     *vDistance  = 0;
   }
   else if (-vDistanceBase > vDistanceTop)
-    *vDistance = -vDistanceBase;
+    *vDistance = vDistanceBase;
   else
     *vDistance = vDistanceTop;
 }
