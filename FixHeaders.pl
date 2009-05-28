@@ -19,6 +19,7 @@ my $header = q{
 	Russell King <rmk@arm.linux.org.uk>
 	Paolo Ventafridda <coolwind@email.it>
 	Tobias Lohner <tobias@lohner-net.de>
+	Mirek Jezek <mjezek@ipplc.cz>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
