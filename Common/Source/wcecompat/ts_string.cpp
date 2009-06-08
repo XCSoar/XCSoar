@@ -55,7 +55,7 @@ void ascii2unicode(const char* ascii, WCHAR* unicode)
 
 void unicode2ascii(const WCHAR* unicode, char* ascii)
 {
-  if (_tcslen(unicode)==0) {
+  if (wcslen(unicode)==0) {
     ascii[0] = 0;
     return;
   }
@@ -105,7 +105,7 @@ void ascii2unicode(const char* ascii, WCHAR* unicode, int maxChars)
 
 void unicode2ascii(const WCHAR* unicode, char* ascii, int maxChars)
 {
-  if (_tcslen(unicode)==0) {
+  if (wcslen(unicode)==0) {
     ascii[0] = 0;
     return;
   }
