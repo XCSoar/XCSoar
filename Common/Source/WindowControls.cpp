@@ -745,9 +745,12 @@ void DataFieldEnum::Set(int Value){
     if (mEntries[i].index == (unsigned int) Value) {
       int lastValue = mValue;
       mValue = i;
+
+      /* This causing problems! Reported and found by Mirek
       if (mValue != (unsigned int) lastValue){
         (mOnDataAccess)(this, daChange);
       }
+      */
       return;
     }
   }
