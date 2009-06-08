@@ -732,7 +732,7 @@ int XMLNode::ParseClearTag(void *px, void *pa)
     LPCTSTR lpszXML = &pXML->lpXML[pXML->nIndex];
 
     // Find the closing tag
-    lpszTemp = _tcsstr((wchar_t*)lpszXML, pClear->lpszClose);
+    lpszTemp = _tcsstr(lpszXML, pClear->lpszClose);
 
     // Iterate through the tokens until we find the closing tag.
     if (lpszTemp)

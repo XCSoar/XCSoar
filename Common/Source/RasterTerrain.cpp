@@ -573,7 +573,7 @@ void RasterTerrain::OpenTerrain(void)
     GetRegistryString(szRegistryMapFile, szMapFile, MAX_PATH);
     ExpandLocalPath(szMapFile);
     _tcscpy(szFile,szMapFile);
-    wcscat(szFile,TEXT("/terrain.jp2"));
+    _tcscat(szFile,TEXT("/terrain.jp2"));
     unicode2ascii(szFile, zfilename, MAX_PATH);
   }
 

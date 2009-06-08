@@ -237,7 +237,7 @@ void LoadChecklist(void) {
       if(TempString[0]=='[') { // Look for start
 
 	if (inDetails) {
-	  wcscat(Details,TEXT("\r\n"));
+	  _tcscat(Details,TEXT("\r\n"));
 	  addChecklist(Name, Details);
 	  Details[0]= 0;
 	  Name[0]= 0;
@@ -256,14 +256,14 @@ void LoadChecklist(void) {
 
       } else {
 	// append text to details string
-	wcsncat(Details,TempString,MAXDETAILS-2);
-	wcscat(Details,TEXT("\r\n"));
+	_tcsncat(Details,TempString,MAXDETAILS-2);
+	_tcscat(Details,TEXT("\r\n"));
 	// TODO code: check the string is not too long
       }
     }
 
   if (inDetails) {
-    wcscat(Details,TEXT("\r\n"));
+    _tcscat(Details,TEXT("\r\n"));
     addChecklist(Name, Details);
   }
 

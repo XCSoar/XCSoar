@@ -101,7 +101,7 @@ static void OnPaintDetailsListItem(WindowControl * Sender, HDC hDC){
 	     bear,
 	     (DISTANCEMODIFY * range));
 
-    int txtLen = wcslen(text);
+    int txtLen = _tcslen(text);
     if (txtLen>0 && GPS_INFO.FLARM_Traffic[DrawListIndex].ID != 0)
       {
 	ExtTextOut(hDC, 2*InfoBoxLayout::scale, 2*InfoBoxLayout::scale,

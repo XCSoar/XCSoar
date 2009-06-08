@@ -112,7 +112,7 @@ void	TeamCodeProcessing(int UpDown)
 	{
 		TeamFlarmIdTarget = GPS_INFO.FLARM_Traffic[newFlarmSlot].ID;
 
-		if (wcslen(GPS_INFO.FLARM_Traffic[newFlarmSlot].Name) != 0)
+		if (_tcslen(GPS_INFO.FLARM_Traffic[newFlarmSlot].Name) != 0)
 		{
 			// copy the 3 first chars from the name to TeamFlarmCNTarget
 			for (int z = 0; z < 3; z++)

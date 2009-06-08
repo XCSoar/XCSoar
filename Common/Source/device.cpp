@@ -779,12 +779,12 @@ void VarioWriteSettings(void)
   if (GPS_INFO.VarioAvailable) {
     // JMW experimental
     TCHAR mcbuf[100];
-    wsprintf(mcbuf, TEXT("PDVMC,%d,%d,%d,%d,%d"),
-	     iround(MACCREADY*10),
-	     iround(CALCULATED_INFO.VOpt*10),
-	     CALCULATED_INFO.Circling,
-	     iround(CALCULATED_INFO.TerrainAlt),
-	     iround(QNH*10));
+    _stprintf(mcbuf, TEXT("PDVMC,%d,%d,%d,%d,%d"),
+              iround(MACCREADY*10),
+              iround(CALCULATED_INFO.VOpt*10),
+              CALCULATED_INFO.Circling,
+              iround(CALCULATED_INFO.TerrainAlt),
+              iround(QNH*10));
     VarioWriteNMEA(mcbuf);
   }
 }

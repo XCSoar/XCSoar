@@ -83,6 +83,8 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "GaugeFLARM.h"
 #include "Waypointparser.h"
 
+#include <ctype.h>
+
 // Sensible maximums
 #define MAX_MODE 100
 #define MAX_MODE_STRING 25
@@ -518,7 +520,7 @@ int InputEvents::findKey(const TCHAR *data) {
     return VK_ESCAPE;
 
   else if (_tcslen(data) == 1)
-    return towupper(data[0]);
+    return _totupper(data[0]);
   else
     return 0;
 

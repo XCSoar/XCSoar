@@ -880,7 +880,7 @@ BOOL NMEAParser::PFLAU(TCHAR *String, TCHAR **params, size_t nparams, NMEA_INFO 
     FLARM_EastingToLongitude=0.0;
   }
 
-  swscanf(String,
+  _stscanf(String,
 	  TEXT("%hu,%hu,%hu,%hu"),
 	  &GPS_INFO->FLARM_RX, // number of received FLARM devices
 	  &GPS_INFO->FLARM_TX, // Transmit status
@@ -945,7 +945,7 @@ BOOL NMEAParser::PFLAA(TCHAR *String, TCHAR **params, size_t nparams, NMEA_INFO 
 
   // 5 id, 6 digit hex
   long ID;
-  swscanf(params[5],TEXT("%lx"), &ID);
+  _stscanf(params[5],TEXT("%lx"), &ID);
 //  unsigned long uID = ID;
 
   flarm_slot = FLARM_FindSlot(GPS_INFO, ID);
@@ -957,7 +957,7 @@ BOOL NMEAParser::PFLAA(TCHAR *String, TCHAR **params, size_t nparams, NMEA_INFO 
   // set time of fix to current time
   GPS_INFO->FLARM_Traffic[flarm_slot].Time_Fix = GPS_INFO->Time;
 
-  swscanf(String,
+  _stscanf(String,
 	  TEXT("%hu,%lf,%lf,%lf,%hu,%lx,%lf,%lf,%lf,%lf,%hu"),
 	  &GPS_INFO->FLARM_Traffic[flarm_slot].AlarmLevel, // unsigned short 0
 	  &GPS_INFO->FLARM_Traffic[flarm_slot].RelativeNorth, // double?     1

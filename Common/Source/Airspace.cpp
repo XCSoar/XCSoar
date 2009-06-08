@@ -519,10 +519,10 @@ OnError:
 
   if (!bFillMode){
     TCHAR sTmp[MAX_PATH];
-    wsprintf(sTmp, TEXT("%s: %d\r\n\"%s\"\r\n%s."),
-             gettext(TEXT("Parse Error at Line")),
-             LineCount, TempString,
-             gettext(TEXT("Line skipped.")));
+    _stprintf(sTmp, TEXT("%s: %d\r\n\"%s\"\r\n%s."),
+              gettext(TEXT("Parse Error at Line")),
+              LineCount, TempString,
+              gettext(TEXT("Line skipped.")));
     if (MessageBoxX(hWndMainWindow, sTmp, gettext(TEXT("Airspace")),
                     MB_OKCANCEL) == IDCANCEL){
       return(false);
@@ -588,10 +588,10 @@ static int GetNextLine(ZZIP_FILE *fp, TCHAR *Text)
 
           default:
             if (bFillMode){
-              wsprintf(sTmp, TEXT("%s: %d\r\n\"%s\"\r\n%s."),
-                       gettext(TEXT("Parse Error at Line")),
-                       LineCount, TempString,
-                       gettext(TEXT("Line skipped.")));
+              _stprintf(sTmp, TEXT("%s: %d\r\n\"%s\"\r\n%s."),
+                        gettext(TEXT("Parse Error at Line")),
+                        LineCount, TempString,
+                        gettext(TEXT("Line skipped.")));
               if (MessageBoxX(NULL, sTmp,
                               gettext(TEXT("Airspace")),
                               MB_OKCANCEL) == IDCANCEL)
@@ -626,10 +626,10 @@ static int GetNextLine(ZZIP_FILE *fp, TCHAR *Text)
 
           default:
             if (bFillMode){
-              wsprintf(sTmp, TEXT("%s: %d\r\n\"%s\"\r\n%s."),
-                       gettext(TEXT("Parse Error at Line")),
-                       LineCount, TempString,
-                       gettext(TEXT("Line skipped.")));
+              _stprintf(sTmp, TEXT("%s: %d\r\n\"%s\"\r\n%s."),
+                        gettext(TEXT("Parse Error at Line")),
+                        LineCount, TempString,
+                        gettext(TEXT("Line skipped.")));
               if (MessageBoxX(NULL, sTmp,
                               gettext(TEXT("Airspace")),
                               MB_OKCANCEL) == IDCANCEL)
@@ -652,10 +652,10 @@ static int GetNextLine(ZZIP_FILE *fp, TCHAR *Text)
 
       default:
         if (bFillMode){
-          wsprintf(sTmp, TEXT("%s: %d\r\n\"%s\"\r\n%s."),
-                   gettext(TEXT("Parse Error at Line")),
-                   LineCount, TempString,
-                   gettext(TEXT("Line skipped.")));
+          _stprintf(sTmp, TEXT("%s: %d\r\n\"%s\"\r\n%s."),
+                    gettext(TEXT("Parse Error at Line")),
+                    LineCount, TempString,
+                    gettext(TEXT("Line skipped.")));
           if (MessageBoxX(NULL, sTmp, gettext(TEXT("Airspace")),
                           MB_OKCANCEL) == IDCANCEL)
             return(-1);

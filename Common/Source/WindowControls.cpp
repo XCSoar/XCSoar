@@ -426,7 +426,7 @@ bool DataFieldFileReader::checkFilter(const TCHAR *filename,
   _tcscpy(upfilter,filter+1);
 
   // check if trailing part of filter (*.exe => .exe) matches end
-  ptr = _tcsstr((wchar_t*)filename, upfilter);
+  ptr = _tcsstr(filename, upfilter);
   if (ptr) {
     if (_tcslen(ptr)==_tcslen(upfilter)) {
       return true;
@@ -434,7 +434,7 @@ bool DataFieldFileReader::checkFilter(const TCHAR *filename,
   }
 
   _tcsupr(upfilter);
-  ptr = _tcsstr((wchar_t*)filename, upfilter);
+  ptr = _tcsstr(filename, upfilter);
   if (ptr) {
     if (_tcslen(ptr)==_tcslen(upfilter)) {
       return true;

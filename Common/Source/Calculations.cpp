@@ -4379,7 +4379,7 @@ int FindFlarmSlot(TCHAR *flarmCN)
 {
   for(int z = 0; z < FLARM_MAX_TRAFFIC; z++)
     {
-      if (wcscmp(GPS_INFO.FLARM_Traffic[z].Name, flarmCN) == 0)
+      if (_tcscmp(GPS_INFO.FLARM_Traffic[z].Name, flarmCN) == 0)
 	{
 	  return z;
 	}

@@ -67,7 +67,7 @@ static BOOL PDSWC(PDeviceDescriptor_t d, const TCHAR *String, NMEA_INFO *GPS_INF
   static long last_switchoutputs;
   (void)d;
   unsigned long uswitchinputs, uswitchoutputs;
-  swscanf(String,
+  _stscanf(String,
 	  TEXT("%lf,%lx,%lx,%lf"),
 	  &MACCREADY,
 	  &uswitchinputs,

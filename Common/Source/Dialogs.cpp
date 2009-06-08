@@ -275,7 +275,7 @@ void DoStatusMessage(const TCHAR* text, const TCHAR *data) {
   int i;
   // Search from end of list (allow overwrites by user)
   for (i=StatusMessageData_Size - 1; i>0; i--) {
-    if (wcscmp(text, StatusMessageData[i].key) == 0) {
+    if (_tcscmp(text, StatusMessageData[i].key) == 0) {
       LocalMessage = StatusMessageData[i];
       break;
     }
@@ -288,10 +288,10 @@ void DoStatusMessage(const TCHAR* text, const TCHAR *data) {
   TCHAR msgcache[1024];
   if (LocalMessage.doStatus) {
 
-    wcscpy(msgcache, gettext(text));
+    _tcscpy(msgcache, gettext(text));
     if (data != NULL) {
-      wcscat(msgcache, TEXT(" "));
-      wcscat(msgcache, data);
+      _tcscat(msgcache, TEXT(" "));
+      _tcscat(msgcache, data);
     }
 
     Message::AddMessage(LocalMessage.delay_ms, 1, msgcache);
@@ -373,12 +373,12 @@ void WriteMissingTranslations() {
 TCHAR* gettext(const TCHAR* text) {
   int i;
   // return if nothing to do
-  if (wcscmp(text, L"") == 0) return (TCHAR*)text;
+  if (_tcscmp(text, _T("")) == 0) return (TCHAR*)text;
 
   //find a translation
   for (i=0; i<GetTextData_Size; i++) {
     if (!text || !GetTextData[i].key) continue;
-    if (wcscmp(text, GetTextData[i].key) == 0)
+    if (_tcscmp(text, GetTextData[i].key) == 0)
       return GetTextData[i].text;
   }
 
@@ -432,8 +432,8 @@ void ReadLanguageFile() {
   /* Read from the file */
   while (
   	 (GetTextData_Size < MAXSTATUSMESSAGECACHE)
-	 && fgetws(buffer, 2048, fp)
-	 && ((found = swscanf(buffer, TEXT("%[^#=]=%[^\r\n][\r\n]"), key, value)) != EOF)
+	 && _fgetts(buffer, 2048, fp)
+	 && ((found = _stscanf(buffer, TEXT("%[^#=]=%[^\r\n][\r\n]"), key, value)) != EOF)
          ) {
     // Check valid line?
     if ((found != 2) || !key || !value) continue;

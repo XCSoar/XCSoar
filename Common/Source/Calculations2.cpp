@@ -544,7 +544,7 @@ void CalculateOwnTeamCode(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 
   //Calculated->TeammateLongitude = FindLongitude(
 
-  wcsncpy(Calculated->OwnTeamCode, code, 5);
+  _tcsncpy(Calculated->OwnTeamCode, code, 5);
 }
 
 

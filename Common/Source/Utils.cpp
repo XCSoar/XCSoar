@@ -3537,8 +3537,8 @@ void ReadStatusFile() {
   /* Read from the file */
   while (
 	 (StatusMessageData_Size < MAXSTATUSMESSAGECACHE)
-	 && fgetws(buffer, 2048, fp)
-	 && ((found = swscanf(buffer, TEXT("%[^#=]=%[^\n]\n"), key, value)) != EOF)
+	 && _fgetts(buffer, 2048, fp)
+	 && ((found = _stscanf(buffer, TEXT("%[^#=]=%[^\n]\n"), key, value)) != EOF)
 	 ) {
     // Check valid line? If not valid, assume next record (primative, but works ok!)
     if ((found != 2) || !key || !value) {
@@ -3554,22 +3554,22 @@ void ReadStatusFile() {
 
       location = NULL;
 
-      if (wcscmp(key, TEXT("key")) == 0) {
+      if (_tcscmp(key, TEXT("key")) == 0) {
 	some_data = true;	// Success, we have a real entry
 	location = &StatusMessageData[StatusMessageData_Size].key;
-      } else if (wcscmp(key, TEXT("sound")) == 0) {
+      } else if (_tcscmp(key, TEXT("sound")) == 0) {
 	StatusMessageData[StatusMessageData_Size].doSound = true;
 	location = &StatusMessageData[StatusMessageData_Size].sound;
-      } else if (wcscmp(key, TEXT("delay")) == 0) {
-	if (swscanf(value, TEXT("%d"), &ms) == 1)
+      } else if (_tcscmp(key, TEXT("delay")) == 0) {
+	if (_stscanf(value, TEXT("%d"), &ms) == 1)
 	  StatusMessageData[StatusMessageData_Size].delay_ms = ms;
-      } else if (wcscmp(key, TEXT("hide")) == 0) {
-	if (wcscmp(value, TEXT("yes")) == 0)
+      } else if (_tcscmp(key, TEXT("hide")) == 0) {
+	if (_tcscmp(value, TEXT("yes")) == 0)
 	  StatusMessageData[StatusMessageData_Size].doStatus = false;
       }
 
       // Do we have somewhere to put this && is it currently empty ? (prevent lost at startup)
-      if (location && (wcscmp(*location, TEXT("")) == 0)) {
+      if (location && (_tcscmp(*location, TEXT("")) == 0)) {
 	// TODO code: this picks up memory lost from no entry, but not duplicates - fix.
 	if (*location) {
 	  // JMW fix memory leak
@@ -3847,7 +3847,7 @@ TCHAR* StringMallocParse(TCHAR* old_string) {
   TCHAR* new_string;
   unsigned int used = 0;
   unsigned int i;
-  for (i = 0; i < wcslen(old_string); i++) {
+  for (i = 0; i < _tcslen(old_string); i++) {
     if (used < 2045) {
       if (old_string[i] == '\\' ) {
         if (old_string[i + 1] == 'r') {
@@ -3869,8 +3869,8 @@ TCHAR* StringMallocParse(TCHAR* old_string) {
   };
   buffer[used++] =_T('\0');
 
-  new_string = (TCHAR *)malloc((wcslen(buffer)+1)*sizeof(TCHAR));
-  wcscpy(new_string, buffer);
+  new_string = (TCHAR *)malloc((_tcslen(buffer)+1)*sizeof(TCHAR));
+  _tcscpy(new_string, buffer);
 
   return new_string;
 }
@@ -3923,8 +3923,8 @@ CSIDL_PROGRAM_FILES 0x0026   The program files folder.
   _tcscat(buffer,TEXT(XCSDATADIR));
 #endif
   if (_tcslen(file)>0) {
-    wcsncat(buffer, TEXT("\\"), MAX_PATH);
-    wcsncat(buffer, file, MAX_PATH);
+    _tcsncat(buffer, TEXT("\\"), MAX_PATH);
+    _tcsncat(buffer, file, MAX_PATH);
   }
 }
 
@@ -4702,7 +4702,7 @@ int LookupSecondaryFLARMId(TCHAR *cn)
 {
   for (int i=0; i<NumberOfFLARMNames; i++)
     {
-      if (wcscmp(FLARM_Names[i].Name, cn) == 0)
+      if (_tcscmp(FLARM_Names[i].Name, cn) == 0)
 	{
 	  return i;
 	}
@@ -4973,7 +4973,7 @@ BOOL PlayResource (const TCHAR* lpName)
 
   // TODO code: Modify to allow use of WAV Files and/or Embedded files
 
-  if (wcsstr(lpName, TEXT(".wav"))) {
+  if (_tcsstr(lpName, TEXT(".wav"))) {
     bRtn = sndPlaySound (lpName, SND_ASYNC | SND_NODEFAULT );
 
   } else {
@@ -5045,7 +5045,7 @@ bool InterfaceTimeoutCheck(void) {
 
 bool FileExistsW(TCHAR *FileName){
 
-  HANDLE hFile = CreateFileW(FileName, GENERIC_READ, 0, NULL,
+  HANDLE hFile = CreateFile(FileName, GENERIC_READ, 0, NULL,
                  OPEN_EXISTING,FILE_ATTRIBUTE_NORMAL,NULL);
 
   if( hFile == INVALID_HANDLE_VALUE)

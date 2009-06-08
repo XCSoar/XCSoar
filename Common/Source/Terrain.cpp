@@ -47,6 +47,8 @@ Copyright_License {
 #include "InfoBoxLayout.h"
 #include "Sizes.h"
 
+#include <ctype.h>
+
 //////////////////////////////////////////////////
 
 
@@ -242,7 +244,7 @@ void MarkLocation(const double lon, const double lat)
   FILE *stream;
   TCHAR fname[MAX_PATH];
   LocalPath(fname,TEXT("xcsoar-marks.txt"));
-  stream = _wfopen(fname,TEXT("a+"));
+  stream = _tfopen(fname,TEXT("a+"));
   if (stream != NULL){
     fwrite(message,strlen(message),1,stream);
     fclose(stream);
@@ -1280,10 +1282,10 @@ void OpenTopology() {
 
     // Look for the file within the map zip file...
     _tcscpy(Directory,szMapFile);
-    wcscat(Directory,TEXT("/"));
+    _tcscat(Directory,TEXT("/"));
     szFile[0]=0;
-    wcscat(szFile,Directory);
-    wcscat(szFile,TEXT("topology.tpl"));
+    _tcscat(szFile,Directory);
+    _tcscat(szFile,TEXT("topology.tpl"));
 
   } else {
     ExtractDirectory(Directory,szFile);
@@ -1326,8 +1328,8 @@ void OpenTopology() {
 
         _tcscpy(wShapeFilename, Directory);
 
-        wcscat(wShapeFilename,ShapeName);
-        wcscat(wShapeFilename,TEXT(".shp"));
+        _tcscat(wShapeFilename,ShapeName);
+        _tcscat(wShapeFilename,TEXT(".shp"));
 
 #ifdef _UNICODE
         WideCharToMultiByte( CP_ACP, 0, wShapeFilename,
@@ -1350,7 +1352,7 @@ void OpenTopology() {
 
         // sjt 02NOV05 - field parameter enabled
         PExtractParameter(TempString, ctemp, 3);
-        if (iswalnum(ctemp[0])) {
+        if (_istalnum(ctemp[0])) {
           ShapeField = _tcstol(ctemp, &Stop, 10);
           ShapeField--;
         } else {

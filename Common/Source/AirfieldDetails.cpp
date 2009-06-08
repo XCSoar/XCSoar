@@ -75,7 +75,7 @@ void OpenAirfieldDetails() {
     if (_tcslen(szMapFile)>0) {
       ExpandLocalPath(szMapFile);
       _tcscpy(szFile,szMapFile);
-      wcscat(szFile,TEXT("/airfields.txt"));
+      _tcscat(szFile,TEXT("/airfields.txt"));
       unicode2ascii(szFile, zfilename, MAX_PATH);
     } else {
       zfilename[0]= 0;
@@ -254,8 +254,8 @@ void ParseAirfieldDetails() {
 	  CleanString[n]='\0';
 
 	  if (_tcslen(Details)+_tcslen(CleanString)+3<DETAILS_LENGTH) {
-	    wcscat(Details,CleanString);
-	    wcscat(Details,TEXT("\r\n"));
+	    _tcscat(Details,CleanString);
+	    _tcscat(Details,TEXT("\r\n"));
 	  }
 	}
       }
