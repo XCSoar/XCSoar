@@ -204,7 +204,8 @@ void ParseAirfieldDetails() {
 
   BOOL inDetails = FALSE;
   BOOL hasDetails = FALSE; // VENTA3
-  int i, j, n;
+  int i, n;
+  unsigned j;
   int k=0;
 
   while(ReadString(zAirfieldDetails,READLINE_LENGTH,TempString))
