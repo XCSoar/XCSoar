@@ -32,6 +32,11 @@ void unicode2ascii(const WCHAR* unicode, char* ascii);
 void ascii2unicode(const char* ascii, WCHAR* unicode, int maxChars);
 void unicode2ascii(const WCHAR* unicode, char* ascii, int maxChars);
 
+#ifndef _UNICODE
+void unicode2ascii(const char *unicode, char *ascii, int maxChars);
+void ascii2unicode(const char *ascii, char *unicode);
+#endif
+
 
 //
 // ascii/unicode typesafe versions of strlen

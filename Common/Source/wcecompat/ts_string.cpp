@@ -126,6 +126,19 @@ void unicode2ascii(const WCHAR* unicode, char* ascii, int maxChars)
 	}
 }
 
+#ifndef _UNICODE
+void unicode2ascii(const char *unicode, char *ascii, int maxChars)
+{
+  strncpy(ascii, unicode, maxChars - 1);
+  ascii[maxChars - 1] = 0;
+}
+
+void ascii2unicode(const char *ascii, char *unicode)
+{
+  strcpy(unicode, ascii);
+}
+#endif /* _UNICODE */
+
 
 //
 // ascii/unicode typesafe versions of strcat
