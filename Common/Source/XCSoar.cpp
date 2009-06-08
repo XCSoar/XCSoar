@@ -3827,7 +3827,7 @@ void DebugStore(const char *Str, ...)
   int len;
 
   va_start(ap, Str);
-  len = _vsprintf(buf, Str, ap);
+  len = vsprintf(buf, Str, ap);
   va_end(ap);
 
   LockFlightData();
