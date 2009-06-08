@@ -756,7 +756,8 @@ void DataFieldEnum::Set(int Value){
 
 int DataFieldEnum::SetAsInteger(int Value){
   Set(Value);
-  return mEntries[Value].index;  // this returns incorrect value RLD
+  return mEntries[mValue].index;  // this returns incorrect value RLD
+  // JMW fixed (was Value, should be mValue)
 }
 
 void DataFieldEnum::Inc(void){
