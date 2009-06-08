@@ -1384,6 +1384,8 @@ bool InsideAirspaceCircle(const double &longitude,
 int FindAirspaceCircle(double Longitude,double Latitude, bool visibleonly)
 {
   unsigned i;
+  double basealt;
+  double topalt;
  // int NearestIndex = 0;
 
   if(NumberOfAirspaceCircles == 0)
@@ -1397,11 +1399,21 @@ int FindAirspaceCircle(double Longitude,double Latitude, bool visibleonly)
       continue;
     }
     if(AirspaceCircle[i].Visible || (!visibleonly)) {
-      if(CheckAirspaceAltitude(AirspaceCircle[i].Base.Altitude,
-			       AirspaceCircle[i].Top.Altitude)) {
-	if (InsideAirspaceCircle(Longitude,Latitude,i)) {
+
+      if (AirspaceCircle[i].Base.Base != abAGL) {
+          basealt = AirspaceCircle[i].Base.Altitude;
+        } else {
+          basealt = AirspaceCircle[i].Base.AGL + CALCULATED_INFO.TerrainAlt;
+        }
+      if (AirspaceCircle[i].Top.Base != abAGL) {
+          topalt = AirspaceCircle[i].Top.Altitude;
+        } else {
+          topalt = AirspaceCircle[i].Top.AGL + CALCULATED_INFO.TerrainAlt;
+        }
+      if(CheckAirspaceAltitude(basealt, topalt)) {
+        if (InsideAirspaceCircle(Longitude,Latitude,i)) {
 	  return i;
-	}
+        }
       }
     }
   }
@@ -1581,6 +1593,8 @@ bool InsideAirspaceArea(const double &longitude,
 int FindAirspaceArea(double Longitude,double Latitude, bool visibleonly)
 {
   unsigned i;
+  double basealt;
+  double topalt;
 
   if(NumberOfAirspaceAreas == 0)
     {
@@ -1592,11 +1606,21 @@ int FindAirspaceArea(double Longitude,double Latitude, bool visibleonly)
       continue;
     }
     if(AirspaceArea[i].Visible || (!visibleonly)) {
-      if(CheckAirspaceAltitude(AirspaceArea[i].Base.Altitude,
-			       AirspaceArea[i].Top.Altitude)) {
-	if (InsideAirspaceArea(Longitude,Latitude,i)) {
-	  return i;
-	}
+
+      if (AirspaceArea[i].Base.Base != abAGL) {
+          basealt = AirspaceArea[i].Base.Altitude;
+      } else {
+          basealt = AirspaceArea[i].Base.AGL + CALCULATED_INFO.TerrainAlt;
+      }
+      if (AirspaceArea[i].Top.Base != abAGL) {
+          topalt = AirspaceArea[i].Top.Altitude;
+      } else {
+          topalt = AirspaceArea[i].Top.AGL + CALCULATED_INFO.TerrainAlt;
+      }
+      if(CheckAirspaceAltitude(basealt, topalt)) {
+        if (InsideAirspaceArea(Longitude,Latitude,i)) {
+          return i;
+        }
       }
     }
   }
@@ -1629,6 +1653,8 @@ int FindNearestAirspaceCircle(double longitude, double latitude,
   for(i=0;i<NumberOfAirspaceCircles;i++) {
     bool iswarn;
     bool isdisplay;
+    double basealt;
+    double topalt;
 
     iswarn = (MapWindow::iAirspaceMode[AirspaceCircle[i].Type]>=2);
     isdisplay = ((MapWindow::iAirspaceMode[AirspaceCircle[i].Type]%2)>0);
@@ -1638,13 +1664,22 @@ int FindNearestAirspaceCircle(double longitude, double latitude,
       continue;
     }
 
+    if (AirspaceCircle[i].Base.Base != abAGL) {
+      basealt = AirspaceCircle[i].Base.Altitude;
+    } else {
+      basealt = AirspaceCircle[i].Base.AGL + CALCULATED_INFO.TerrainAlt;
+    }
+    if (AirspaceCircle[i].Top.Base != abAGL) {
+      topalt = AirspaceCircle[i].Top.Altitude;
+    } else {
+      topalt = AirspaceCircle[i].Top.AGL + CALCULATED_INFO.TerrainAlt;
+    }
+
     bool altok;
     if (height) {
-      altok = ((*height>AirspaceCircle[i].Base.Altitude)&&
-	       (*height<AirspaceCircle[i].Top.Altitude));
+      altok = ((*height > basealt) && (*height < topalt));
     } else {
-      altok = CheckAirspaceAltitude(AirspaceCircle[i].Base.Altitude,
-				    AirspaceCircle[i].Top.Altitude)==TRUE;
+      altok = CheckAirspaceAltitude(basealt, topalt)==TRUE;
     }
     if(altok) {
 
@@ -1898,6 +1933,8 @@ int FindNearestAirspaceArea(double longitude,
   for(i=0;i<NumberOfAirspaceAreas;i++) {
     bool iswarn;
     bool isdisplay;
+    double basealt;
+    double topalt;
 
     iswarn = (MapWindow::iAirspaceMode[AirspaceArea[i].Type]>=2);
     isdisplay = ((MapWindow::iAirspaceMode[AirspaceArea[i].Type]%2)>0);
@@ -1907,13 +1944,22 @@ int FindNearestAirspaceArea(double longitude,
       continue;
     }
 
+    if (AirspaceArea[i].Base.Base != abAGL) {
+      basealt = AirspaceArea[i].Base.Altitude;
+    } else {
+      basealt = AirspaceArea[i].Base.AGL + CALCULATED_INFO.TerrainAlt;
+    }
+    if (AirspaceArea[i].Top.Base != abAGL) {
+      topalt = AirspaceArea[i].Top.Altitude;
+    } else {
+      topalt = AirspaceArea[i].Top.AGL + CALCULATED_INFO.TerrainAlt;
+    }
+
     bool altok;
     if (!height) {
-      altok = CheckAirspaceAltitude(AirspaceArea[i].Base.Altitude,
-				    AirspaceArea[i].Top.Altitude)==TRUE;
+      altok = CheckAirspaceAltitude(basealt, topalt)==TRUE;
     } else {
-      altok = ((*height<AirspaceArea[i].Top.Altitude)&&
-	       (*height>AirspaceArea[i].Base.Altitude));
+      altok = ((*height < topalt) && (*height > basealt));
     }
     if(altok) {
       inside = InsideAirspaceArea(longitude, latitude, i);

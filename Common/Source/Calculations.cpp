@@ -16,6 +16,7 @@ Copyright_License {
 	Russell King <rmk@arm.linux.org.uk>
 	Paolo Ventafridda <coolwind@email.it>
 	Tobias Lohner <tobias@lohner-net.de>
+	Mirek Jezek <mjezek@ipplc.cz>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -3576,6 +3577,9 @@ void PredictNextPosition(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
           Calculated->NavAltitude + Calculated->Average30s * WarningTime;
       }
     }
+    // MJJ TODO Predict terrain altitude
+    Calculated->NextAltitudeAGL = Calculated->NextAltitude - Calculated->TerrainAlt;
+
 }
 
 
@@ -3636,11 +3640,13 @@ void AirspaceWarning(NMEA_INFO *Basic, DERIVED_INFO *Calculated){
   // current position
 
   double alt;
+  double agl;
   double lat;
   double lon;
 
   if (position_is_predicted) {
     alt = Calculated->NextAltitude;
+    agl = Calculated->NextAltitudeAGL;
     lat = Calculated->NextLatitude;
     lon = Calculated->NextLongitude;
   } else {
@@ -3649,6 +3655,7 @@ void AirspaceWarning(NMEA_INFO *Basic, DERIVED_INFO *Calculated){
     } else {
       alt = Basic->Altitude;
     }
+    agl = Calculated->AltitudeAGL;
     lat = Basic->Latitude;
     lon = Basic->Longitude;
   }
@@ -3659,14 +3666,15 @@ void AirspaceWarning(NMEA_INFO *Basic, DERIVED_INFO *Calculated){
   if (AirspaceCircle) {
     for (i=0; i<NumberOfAirspaceCircles; i++) {
 
-      if ((alt >= AirspaceCircle[i].Base.Altitude )
-          && (alt < AirspaceCircle[i].Top.Altitude)) {
-
+      if ((((AirspaceCircle[i].Base.Base != abAGL) && (alt >= AirspaceCircle[i].Base.Altitude))
+           || ((AirspaceCircle[i].Base.Base == abAGL) && (agl >= AirspaceCircle[i].Base.AGL)))
+          && (((AirspaceCircle[i].Top.Base != abAGL) && (alt < AirspaceCircle[i].Top.Altitude))
+           || ((AirspaceCircle[i].Top.Base == abAGL) && (agl < AirspaceCircle[i].Top.AGL)))) {
 
         if ((MapWindow::iAirspaceMode[AirspaceCircle[i].Type] >= 2) &&
 	    InsideAirspaceCircle(lon, lat, i)) {
 
-          AirspaceWarnListAdd(Basic, position_is_predicted, 1, i, false);
+          AirspaceWarnListAdd(Basic, Calculated, position_is_predicted, 1, i, false);
         }
 
       }
@@ -3679,20 +3687,22 @@ void AirspaceWarning(NMEA_INFO *Basic, DERIVED_INFO *Calculated){
   if (AirspaceArea) {
     for (i=0; i<NumberOfAirspaceAreas; i++) {
 
-      if ((alt >= AirspaceArea[i].Base.Altitude )
-          && (alt < AirspaceArea[i].Top.Altitude)) {
+      if ((((AirspaceArea[i].Base.Base != abAGL) && (alt >= AirspaceArea[i].Base.Altitude))
+           || ((AirspaceArea[i].Base.Base == abAGL) && (agl >= AirspaceArea[i].Base.AGL)))
+          && (((AirspaceArea[i].Top.Base != abAGL) && (alt < AirspaceArea[i].Top.Altitude))
+           || ((AirspaceArea[i].Top.Base == abAGL) && (agl < AirspaceArea[i].Top.AGL)))) {
 
         if ((MapWindow::iAirspaceMode[AirspaceArea[i].Type] >= 2)
             && InsideAirspaceArea(lon, lat, i)){
 
-          AirspaceWarnListAdd(Basic, position_is_predicted, 0, i, false);
+          AirspaceWarnListAdd(Basic, Calculated, position_is_predicted, 0, i, false);
         }
 
       }
     }
   }
 
-  AirspaceWarnListProcess(Basic);
+  AirspaceWarnListProcess(Basic, Calculated);
 
   //  UnlockFlightData();
 

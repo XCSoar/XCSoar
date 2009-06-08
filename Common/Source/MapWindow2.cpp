@@ -14,6 +14,9 @@ Copyright_License {
 	Lars H <lars_hn@hotmail.com>
 	Rob Dunning <rob@raspberryridgesheepfarm.com>
 	Russell King <rmk@arm.linux.org.uk>
+	Paolo Ventafridda <coolwind@email.it>
+	Tobias Lohner <tobias@lohner-net.de>
+	Mirek Jezek <mjezek@ipplc.cz>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -29,6 +32,7 @@ Copyright_License {
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
+  $Id$
 }
 */
 
@@ -717,9 +721,20 @@ void MapWindow::CalculateScreenPositionsThermalSources() {
 void MapWindow::CalculateScreenPositionsAirspaceCircle(AIRSPACE_CIRCLE &circ) {
   circ.Visible = false;
   if (!circ.FarVisible) return;
-  if (iAirspaceMode[circ.Type]%2 == 1)
-    if(CheckAirspaceAltitude(circ.Base.Altitude,
-                             circ.Top.Altitude)) {
+  if (iAirspaceMode[circ.Type]%2 == 1) {
+    double basealt;
+    double topalt;
+    if (circ.Base.Base != abAGL) {
+      basealt = circ.Base.Altitude;
+    } else {
+      basealt = circ.Base.AGL + CALCULATED_INFO.TerrainAlt;
+    }
+    if (circ.Top.Base != abAGL) {
+      topalt = circ.Top.Altitude;
+    } else {
+      topalt = circ.Top.AGL + CALCULATED_INFO.TerrainAlt;
+    }
+    if(CheckAirspaceAltitude(basealt, topalt)) {
       if (msRectOverlap(&circ.bounds, &screenbounds_latlon)
           || msRectContained(&screenbounds_latlon, &circ.bounds)) {
 
@@ -736,14 +751,26 @@ void MapWindow::CalculateScreenPositionsAirspaceCircle(AIRSPACE_CIRCLE &circ) {
         circ.ScreenR = iround(circ.Radius*ResMapScaleOverDistanceModify);
       }
     }
+  }
 }
 
 void MapWindow::CalculateScreenPositionsAirspaceArea(AIRSPACE_AREA &area) {
   area.Visible = false;
   if (!area.FarVisible) return;
-  if (iAirspaceMode[area.Type]%2 == 1)
-    if(CheckAirspaceAltitude(area.Base.Altitude,
-                             area.Top.Altitude)) {
+  if (iAirspaceMode[area.Type]%2 == 1) {
+    double basealt;
+    double topalt;
+    if (area.Base.Base != abAGL) {
+      basealt = area.Base.Altitude;
+    } else {
+      basealt = area.Base.AGL + CALCULATED_INFO.TerrainAlt;
+    }
+    if (area.Top.Base != abAGL) {
+      topalt = area.Top.Altitude;
+    } else {
+      topalt = area.Top.AGL + CALCULATED_INFO.TerrainAlt;
+    }
+    if(CheckAirspaceAltitude(basealt, topalt)) {
       if (msRectOverlap(&area.bounds, &screenbounds_latlon)
           || msRectContained(&screenbounds_latlon, &area.bounds)) {
         AIRSPACE_POINT *ap= AirspacePoint+area.FirstPoint;
@@ -766,6 +793,7 @@ void MapWindow::CalculateScreenPositionsAirspaceArea(AIRSPACE_AREA &area) {
 	}
       }
     }
+  }
 }
 
 void MapWindow::CalculateScreenPositionsAirspace() {

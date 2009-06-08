@@ -14,6 +14,9 @@ Copyright_License {
 	Lars H <lars_hn@hotmail.com>
 	Rob Dunning <rob@raspberryridgesheepfarm.com>
 	Russell King <rmk@arm.linux.org.uk>
+	Paolo Ventafridda <coolwind@email.it>
+	Tobias Lohner <tobias@lohner-net.de>
+	Mirek Jezek <mjezek@ipplc.cz>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -29,6 +32,7 @@ Copyright_License {
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
+  $Id$
 }
 */
 
@@ -63,20 +67,20 @@ static void OnAcknowledgeClicked(WindowControl * Sender){
 			 MB_YESNOCANCEL|MB_ICONQUESTION);
     if (answer == IDYES) {
       if (index_circle>=0) {
-	AirspaceWarnListAdd(&GPS_INFO, false, true,
+	AirspaceWarnListAdd(&GPS_INFO, &CALCULATED_INFO, false, true,
 			    index_circle, true);
       } else if (index_area>=0) {
-	AirspaceWarnListAdd(&GPS_INFO, false, false,
+	AirspaceWarnListAdd(&GPS_INFO, &CALCULATED_INFO, false, false,
 			    index_area, true);
       }
       wf->SetModalResult(mrOK);
     } else if (answer == IDNO) {
       // this will cancel a daily ack
       if (index_circle>=0) {
-	AirspaceWarnListAdd(&GPS_INFO, true, true,
+	AirspaceWarnListAdd(&GPS_INFO, &CALCULATED_INFO, true, true,
 			    index_circle, true);
       } else if (index_area>=0) {
-	AirspaceWarnListAdd(&GPS_INFO, true, false,
+	AirspaceWarnListAdd(&GPS_INFO, &CALCULATED_INFO, true, false,
 			    index_area, true);
       }
       wf->SetModalResult(mrOK);

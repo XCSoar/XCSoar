@@ -180,17 +180,19 @@ static void AirspaceWarnListDoNotify(AirspaceWarningNotifyAction_t Action, Airsp
 }
 
 
-static void AirspaceWarnListCalcDistance(NMEA_INFO *Basic, bool IsCircle, int AsIdx, int *hDistance, int *Bearing, int *vDistance){
+static void AirspaceWarnListCalcDistance(NMEA_INFO *Basic, DERIVED_INFO *Calculated, bool IsCircle, int AsIdx, int *hDistance, int *Bearing, int *vDistance){
 
   int vDistanceBase;
   int vDistanceTop;
   int alt;
+  int agl;
 
   if (Basic->BaroAltitudeAvailable) {
     alt = (int)Basic->BaroAltitude;
   } else {
     alt = (int)Basic->Altitude;
   }
+  agl = (int)Calculated->AltitudeAGL;
 
   if (IsCircle){
     *hDistance = (int)RangeAirspaceCircle(Basic->Longitude,
@@ -198,9 +200,16 @@ static void AirspaceWarnListCalcDistance(NMEA_INFO *Basic, bool IsCircle, int As
                                           AsIdx);
     if (*hDistance < 0)
       *hDistance = 0;
-
-    vDistanceBase = alt - (int)AirspaceCircle[AsIdx].Base.Altitude;
-    vDistanceTop  = alt - (int)AirspaceCircle[AsIdx].Top.Altitude;
+    if (AirspaceCircle[AsIdx].Base.Base != abAGL) {
+      vDistanceBase = alt - (int)AirspaceCircle[AsIdx].Base.Altitude;
+    } else {
+      vDistanceBase = agl - (int)AirspaceCircle[AsIdx].Base.AGL;
+    }
+    if (AirspaceCircle[AsIdx].Top.Base != abAGL) {
+      vDistanceTop  = alt - (int)AirspaceCircle[AsIdx].Top.Altitude;
+    } else {
+      vDistanceTop  = agl - (int)AirspaceCircle[AsIdx].Top.AGL;
+    }
     // EntryTime = ToDo
   } else {
     if (!InsideAirspaceArea(Basic->Longitude, Basic->Latitude, AsIdx)){
@@ -213,8 +222,16 @@ static void AirspaceWarnListCalcDistance(NMEA_INFO *Basic, bool IsCircle, int As
     } else {
       *hDistance = 0;
     }
-    vDistanceBase = alt - (int)AirspaceArea[AsIdx].Base.Altitude;
-    vDistanceTop  = alt - (int)AirspaceArea[AsIdx].Top.Altitude;
+    if (AirspaceArea[AsIdx].Base.Base != abAGL) {
+      vDistanceBase = alt - (int)AirspaceArea[AsIdx].Base.Altitude;
+    } else {
+      vDistanceBase = agl - (int)AirspaceArea[AsIdx].Base.AGL;
+    }
+    if (AirspaceArea[AsIdx].Top.Base != abAGL) {
+      vDistanceTop  = alt - (int)AirspaceArea[AsIdx].Top.Altitude;
+    } else {
+      vDistanceTop  = agl - (int)AirspaceArea[AsIdx].Top.AGL;
+    }
     // EntryTime = ToDo
   }
 
@@ -258,8 +275,9 @@ static bool calcWarnLevel(AirspaceInfo_c *asi){
 
 }
 
-void AirspaceWarnListAdd(NMEA_INFO *Basic, bool Predicted,
-			 bool IsCircle, int AsIdx, bool ackDay){
+void AirspaceWarnListAdd(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
+                         bool Predicted, bool IsCircle, int AsIdx,
+                         bool ackDay){
 
   static int  Sequence = 0;
 
@@ -275,7 +293,7 @@ void AirspaceWarnListAdd(NMEA_INFO *Basic, bool Predicted,
   bool  FoundInList = false;
 
   if (Predicted){  // ToDo calculate predicted data
-    AirspaceWarnListCalcDistance(Basic, IsCircle, AsIdx, &hDistance,
+    AirspaceWarnListCalcDistance(Basic, Calculated, IsCircle, AsIdx, &hDistance,
 				 &Bearing, &vDistance);
   }
   LockList();
@@ -426,7 +444,7 @@ void AirspaceWarnListSort(void){
 }
 
 
-void AirspaceWarnListProcess(NMEA_INFO *Basic){
+void AirspaceWarnListProcess(NMEA_INFO *Basic, DERIVED_INFO *Calculated){
 
   if (!InitDone) return;
 
@@ -447,7 +465,7 @@ void AirspaceWarnListProcess(NMEA_INFO *Basic){
         int vDistance = 0;
         int Bearing = 0;
 
-        AirspaceWarnListCalcDistance(Basic,
+        AirspaceWarnListCalcDistance(Basic, Calculated,
 				     it->data.IsCircle,
 				     it->data.AirspaceIndex,
 				     &hDistance, &Bearing, &vDistance);
