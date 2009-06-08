@@ -55,6 +55,8 @@ Copyright_License {
 #include "windstore.h"
 #include "XCSoar.h"
 
+#include <math.h>
+
 WindStore::WindStore() {
   //create the lists
   windlist = new WindMeasurementList();
