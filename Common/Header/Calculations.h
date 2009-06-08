@@ -237,8 +237,8 @@ typedef struct _DERIVED_INFO
 } DERIVED_INFO;
 
 
-int DoCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
-int DoCalculationsVario(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
+BOOL DoCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
+BOOL DoCalculationsVario(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 void DoCalculationsSlow(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 void SearchBestAlternate(NMEA_INFO *Basic, DERIVED_INFO *Calculated); // VENTA3
 double CalculateWaypointArrivalAltitude(NMEA_INFO *Basic, DERIVED_INFO *Calculated, int thepoint); // VENTA3
