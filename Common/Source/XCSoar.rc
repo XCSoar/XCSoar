@@ -207,6 +207,10 @@ IDB_AIRSPACE7           BITMAP  DISCARDABLE     "bitmaps\\airspace7.bmp"
 IDB_TARGET              BITMAP  DISCARDABLE     "Bitmaps\\target.bmp"
 IDB_ABOVETERRAIN        BITMAP  DISCARDABLE     "Bitmaps\\aboveterrain.bmp"
 IDB_TEAMMATE_POS        BITMAP  DISCARDABLE     "Bitmaps\\TeammatePosition.bmp"
+IDB_SCROLLBARTOP        BITMAP  DISCARDABLE     "Bitmaps\\scrollbarTop.bmp"
+IDB_SCROLLBARMID        BITMAP  DISCARDABLE     "Bitmaps\\scrollbarMid.bmp"
+IDB_SCROLLBARBOT        BITMAP  DISCARDABLE     "Bitmaps\\scrollbarBot.bmp"
+IDB_SCROLLBARFILL       BITMAP  DISCARDABLE     "Bitmaps\\scrollbarFill.bmp"
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -276,6 +280,8 @@ IDR_XML_WEATHER_L       XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgWeather_L
 IDR_XML_FLARMTRAFFIC    XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgFlarmTraffic.xml"
 IDR_XML_FLARMTRAFFIC_L  XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgFlarmTraffic_L.xml"
 IDR_XML_VARIO_L         XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgVario_L.xml"
+IDR_XML_COMBOPICKER_L   XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgComboPicker_L.xml"
+IDR_XML_COMBOPICKER     XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgComboPicker.xml"
 
 /////////////////////////////////////////////////////////////////////////////
 //

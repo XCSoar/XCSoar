@@ -110,7 +110,8 @@ void DrawLine2(const HDC&hdc, int x1, int y1, int x2, int y2, int x3, int y3) {
 #endif
 }
 
-
+extern int dlgComboPicker(WndProperty* theProperty);
+#define ENABLECOMBO true // master on/off for combo popup
 
 
 // returns true if it is a long press,
@@ -498,6 +499,7 @@ void DataFieldFileReader::Dec(void){
   }
 }
 
+
 static int _cdecl DataFieldFileReaderCompare(const void *elem1,
                                              const void *elem2 ){
   return _tcscmp(((DataFieldFileReaderEntry*)elem1)->mTextFile,
@@ -510,6 +512,21 @@ void DataFieldFileReader::Sort(void){
         DataFieldFileReaderCompare);
 }
 
+int DataFieldFileReader::CreateComboList(void) {
+  unsigned int i=0;
+  for (i=0; i < nFiles; i++){
+    mComboList.ComboPopupItemList[i] = mComboList.CreateItem(
+                                          i,
+                                          i,
+                                          fields[i].mTextFile,
+                                          fields[i].mTextFile);
+    if (i == mValue) {
+      mComboList.ComboPopupItemSavedIndex=i;
+    }
+  }
+  mComboList.ComboPopupItemCount=i;
+  return mComboList.ComboPopupItemCount;
+}
 
 /////////
 
@@ -544,6 +561,8 @@ DataField::DataField(const TCHAR *EditFormat, const TCHAR *DisplayFormat,
   mOnDataAccess = OnDataAccess;
   _tcscpy(mEditFormat, EditFormat);
   _tcscpy(mDisplayFormat, DisplayFormat);
+  SetDisableSpeedUp(false);
+  SetDetachGUI(false); // disable dispaly of inc/dec/change values
 
   if (mOnDataAccess == NULL){
     mOnDataAccess = __Dummy;
@@ -557,10 +576,48 @@ void DataField::SetDisplayFormat(TCHAR *Value){
   _tcscpy(mDisplayFormat, Value);
 }
 
+void DataField::CopyString(TCHAR * szbuffOut, bool bFormatted) {
+  int iLen=0;
+  if (!bFormatted)
+  {
+    if (GetAsString() != NULL) // null leaves iLen=0
+    {
+      iLen = _tcslen(GetAsString());
+      _tcsncpy(szbuffOut, GetAsString(), min(iLen, ComboPopupITEMMAX-1));
+    }
+  }
+  else
+  {
+    if (GetAsDisplayString() != NULL)
+    {
+      iLen = _tcslen(GetAsDisplayString());
+      _tcsncpy(szbuffOut, GetAsDisplayString(), min(iLen, ComboPopupITEMMAX-1));
+    }
+  }
+  szbuffOut[min(iLen, ComboPopupITEMMAX-1)] = '\0';
+}
+
+
 
 //----------------------------------------------------------
 // DataField boolean
 //----------------------------------------------------------
+int DataFieldBoolean::CreateComboList(void) {
+  int i=0;
+  mComboList.ComboPopupItemList[i] = mComboList.CreateItem(i,
+                                                  i,
+                                                  mTextFalse,
+                                                  mTextFalse);
+
+  i=1;
+  mComboList.ComboPopupItemList[i] = mComboList.CreateItem(i,
+                                                  i,
+                                                  mTextTrue,
+                                                  mTextTrue);
+  mComboList.ComboPopupItemCount=2;
+  mComboList.ComboPopupItemSavedIndex=GetAsInteger();
+  return mComboList.ComboPopupItemCount;
+}
 
 bool DataFieldBoolean::GetAsBoolean(void){
   return(mValue);
@@ -685,7 +742,7 @@ void DataFieldEnum::Set(int Value){
       int lastValue = mValue;
       mValue = i;
       if (mValue != (unsigned int) lastValue){
-	(mOnDataAccess)(this, daChange);
+        (mOnDataAccess)(this, daChange);
       }
       return;
     }
@@ -695,20 +752,20 @@ void DataFieldEnum::Set(int Value){
 
 int DataFieldEnum::SetAsInteger(int Value){
   Set(Value);
-  return mEntries[Value].index;
+  return mEntries[Value].index;  // this returns incorrect value RLD
 }
 
 void DataFieldEnum::Inc(void){
   if (mValue<nEnums-1) {
     mValue++;
-   (mOnDataAccess)(this, daChange);
+    (mOnDataAccess)(this, daChange);
   }
 }
 
 void DataFieldEnum::Dec(void){
   if (mValue>0) {
     mValue--;
-   (mOnDataAccess)(this, daChange);
+    (mOnDataAccess)(this, daChange);
   }
 }
 
@@ -722,11 +779,175 @@ void DataFieldEnum::Sort(int startindex){
   qsort(mEntries+startindex, nEnums-startindex, sizeof(DataFieldEnumEntry),
         DataFieldEnumCompare);
 }
+int DataFieldEnum::CreateComboList(void) {
+  unsigned int i=0;
+  for (i=0; i < nEnums; i++){
+    mComboList.ComboPopupItemList[i] = mComboList.CreateItem(
+                                          i,
+                                          mEntries[i].index,
+                                          mEntries[i].mText,
+                                          mEntries[i].mText);
+//    if (mEntries[i].index == mValue) {
+//      mComboList.ComboPopupItemSavedIndex=i;
+//    }
+  }
+  mComboList.ComboPopupItemSavedIndex=mValue;
+  mComboList.ComboPopupItemCount=i;
+  return mComboList.ComboPopupItemCount;
+}
 
 //----------------------------------------------------------
 // DataField Integer
 //----------------------------------------------------------
+int DataField::CreateComboListStepping(void) { // for DataFieldInteger and DataFieldFloat
+// builds ComboPopupItemList[] by calling CreateItem for each item in list
+// sets ComboPopupItemSavedIndex (global)
+// returns ComboPopupItemCount
+#define ComboListInitValue -99999
+#define ComboFloatPrec 0.0000001 //rounds float errors to this precision
 
+  double fNext=ComboListInitValue;
+  double fCurrent=ComboListInitValue;
+  double fLast=ComboListInitValue;
+  TCHAR sTemp[ComboPopupITEMMAX];
+
+  int iCurrentDataFieldIndex=-1;
+  mComboList.ComboPopupItemIndex =-1;
+
+  int iListCount=0;
+  int iDataReaderIndex = -1;
+  int iSelectedIndex = -1;
+  int i = 0, iLen=0;
+  bool bValid=true;
+  int iStepDirection = 1; // for integer & float step may be negative
+  double fBeforeDec=0.0, fAfterDec=0.0, fSavedValue=0.0;
+
+  fNext=ComboListInitValue;
+  fCurrent=ComboListInitValue;
+  fLast=ComboListInitValue;
+
+  SetDisableSpeedUp(true);
+  SetDetachGUI(true); // disable display of inc/dec/change values
+
+  // get step direction for int & float so we can detect if we skipped the value while iterating later
+  CopyString(mComboList.PropertyValueSaved,false);
+  CopyString(mComboList.PropertyValueSavedFormatted,true);
+
+  fSavedValue=GetAsFloat();
+  Inc();
+  fBeforeDec = GetAsFloat();
+  Dec();
+  fAfterDec = GetAsFloat();
+
+  if (fAfterDec < fBeforeDec) {
+    iStepDirection = 1;
+  } else {
+    iStepDirection = -1;
+  }
+
+  // reset datafield to top of list (or for large floats, away from selected item so it will be in the middle)
+  for ( iListCount = 0; iListCount < ComboPopupLISTMAX /2  ; iListCount++) // for floats, go half way down only
+  {
+    Dec();
+    fNext=GetAsFloat();
+
+    if (fNext == fCurrent) // we're at start of the list
+      break;
+    if (fNext == fLast)  // don't repeat Yes/No/etc  (is this needed w/out Bool?)
+      break;
+
+    fLast = fCurrent;
+    fCurrent = fNext;
+  } // loop
+
+  fNext=ComboListInitValue;
+  fCurrent=ComboListInitValue;
+  fLast=ComboListInitValue;
+
+  ////////////////////////////////////////
+  fCurrent=GetAsFloat();
+  mComboList.ComboPopupItemCount=0;
+
+  // if we stopped before hitting start of list create <<Less>> value at top of list
+  if ( iListCount == ComboPopupLISTMAX /2 )
+  { // this data index item is checked on close of dialog
+    mComboList.ComboPopupItemList[mComboList.ComboPopupItemCount] = mComboList.CreateItem(
+                                                  mComboList.ComboPopupItemCount,
+                                                  (int)ComboPopupReopenLESSDataIndex,
+                                                  TEXT("<<More Items>>"),
+                                                  TEXT("<<More Items>>"));
+    mComboList.ComboPopupItemCount += 1;
+  }
+
+  // now we're at the beginning of the list, so load forward until end
+  for (iListCount = 0; iListCount < ComboPopupLISTMAX-3; iListCount++)
+  { // stop at LISTMAX-3 b/c it may make an additional item if it's "off step", and
+    // potentially two more items for <<More>> and << Less>>
+
+    // test if we've stepped over the selected value which was not a multiple of the "step"
+    if (iSelectedIndex == -1) // not found yet
+    {
+      if ( ((double)iStepDirection) * GetAsFloat() > (fSavedValue + ComboFloatPrec * iStepDirection))
+      { // step was too large, we skipped the selected value, so add it now
+        mComboList.ComboPopupItemList[mComboList.ComboPopupItemCount] = mComboList.CreateItem(
+                                                      mComboList.ComboPopupItemCount,
+                                                      ComboPopupNULL,
+                                                      mComboList.PropertyValueSaved,
+                                                      mComboList.PropertyValueSavedFormatted);
+        iSelectedIndex = mComboList.ComboPopupItemCount;
+        mComboList.ComboPopupItemCount += 1;
+      }
+
+    } // endif iSelectedIndex == -1
+
+    if (iSelectedIndex == -1 && fabs(fCurrent-fSavedValue) < ComboFloatPrec) {// selected item index
+      iSelectedIndex = mComboList.ComboPopupItemCount;
+    }
+
+    CopyString(sTemp,true); // can't call GetAsString & GetAsStringFormatted together (same output buffer)
+    mComboList.ComboPopupItemList[mComboList.ComboPopupItemCount] = mComboList.CreateItem(
+                                                  mComboList.ComboPopupItemCount,
+                                                  ComboPopupNULL,
+                                                  GetAsString(),
+                                                  sTemp);
+    mComboList.ComboPopupItemCount += 1;
+
+    Inc();
+    fNext = GetAsFloat();
+
+    if (fNext == fCurrent) {// we're at start of the list
+      break;
+    }
+
+    if (fNext == fLast && mComboList.ComboPopupItemCount > 0) { //we're at the end of the range
+      break;
+    }
+
+    fLast = fCurrent;
+    fCurrent = fNext;
+  }
+
+  // if we stopped before hitting end of list create <<More>> value at end of list
+  if ( iListCount == ComboPopupLISTMAX-3 )
+  { // this data index item is checked on close of dialog
+    mComboList.ComboPopupItemList[mComboList.ComboPopupItemCount] = mComboList.CreateItem(
+                                                  mComboList.ComboPopupItemCount,
+                                                  (int)ComboPopupReopenMOREDataIndex,
+                                                  TEXT("<<More Items>>"),
+                                                  TEXT("<<More Items>>"));
+    mComboList.ComboPopupItemCount += 1;
+  }
+
+  SetDisableSpeedUp(false);
+  SetDetachGUI(false); // disable dispaly of inc/dec/change values
+
+  if (iSelectedIndex >=0) {
+    SetAsFloat(fSavedValue);
+  }
+  mComboList.ComboPopupItemSavedIndex = iSelectedIndex;
+
+  return mComboList.ComboPopupItemCount;
+}
 
 bool DataFieldInteger::GetAsBoolean(void){
   return(mValue != 0);
@@ -772,7 +993,7 @@ int DataFieldInteger::SetAsInteger(int Value){
     Value = mMax;
   if (mValue != Value){
     mValue = Value;
-    (mOnDataAccess)(this, daChange);
+    if (!GetDetachGUI()) (mOnDataAccess)(this, daChange);
   }
   return(res);
 }
@@ -806,6 +1027,9 @@ int DataFieldInteger::SpeedUp(bool keyup){
   return res;
 #endif
 
+  if (GetDisableSpeedUp() == true)
+    return 1;
+
   if (keyup != DataFieldKeyUp) {
     mSpeedup = 0;
     DataFieldKeyUp = keyup;
@@ -830,12 +1054,13 @@ int DataFieldInteger::SpeedUp(bool keyup){
 
   return(res);
 }
-
+int DataFieldInteger::CreateComboList(void) {
+  return CreateComboListStepping();
+}
 
 //----------------------------------------------------------
 // DataField Float
 //----------------------------------------------------------
-
 
 bool DataFieldFloat::GetAsBoolean(void){
   return(mValue != 0.0);
@@ -899,7 +1124,7 @@ double DataFieldFloat::SetAsFloat(double Value){
     Value = mMax;
   if (res != Value){
     mValue = Value;
-    (mOnDataAccess)(this, daChange);
+    if (!GetDetachGUI()) (mOnDataAccess)(this, daChange);
   }
   return(res);
 }
@@ -937,6 +1162,9 @@ double DataFieldFloat::SpeedUp(bool keyup){
   return res;
 #endif
 
+  if (GetDisableSpeedUp() == true)
+    return 1;
+
   if (keyup != DataFieldKeyUp) {
     mSpeedup = 0;
     DataFieldKeyUp = keyup;
@@ -962,6 +1190,15 @@ double DataFieldFloat::SpeedUp(bool keyup){
   return(res);
 }
 
+int DataFieldFloat::SetFromCombo(int iDataFieldIndex, TCHAR *sValue) {
+  SetAsString(sValue);
+  return 0;
+}
+
+int DataFieldFloat::CreateComboList(void) {
+  return CreateComboListStepping();
+}
+
 
 //----------------------------------------------------------
 // DataField String
@@ -985,6 +1222,81 @@ TCHAR *DataFieldString::GetAsDisplayString(void){
   return(mValue);
 }
 
+
+//----------------------------------------------------------
+// ComboList Class
+//----------------------------------------------------------
+ComboListEntry_t * ComboList::CreateItem(int ItemIndex,
+                                        int DataFieldIndex,
+                                        TCHAR *StringValue,
+                                        TCHAR *StringValueFormatted)
+{
+  int iLen = -1;
+  ComboListEntry_t * theItem;
+
+  // Copy current strings into structure
+  theItem = (ComboListEntry_t*) malloc(sizeof(ComboListEntry_t));
+  theItem->DataFieldIndex=0;  // NULL is same as 0, so it fails to set it if index value is 0
+  theItem->ItemIndex=0;
+
+  ASSERT(theItem!= NULL);
+
+  theItem->ItemIndex=ItemIndex;
+
+  if (DataFieldIndex != ComboPopupNULL) { // optional
+    theItem->DataFieldIndex=DataFieldIndex;
+  }
+
+  if (StringValue == NULL)
+  {
+    theItem->StringValue = (TCHAR*)malloc((1) * sizeof(TCHAR));
+    ASSERT(theItem->StringValue != NULL);
+    theItem->StringValue[0]='\0';
+  }
+  else
+  {
+    iLen = _tcslen(StringValue);
+    theItem->StringValue = (TCHAR*)malloc((iLen + 1) * sizeof(TCHAR));
+    ASSERT(theItem->StringValue != NULL);
+    _tcscpy(theItem->StringValue, StringValue);
+  }
+
+
+  // copy formatted display string
+  if (StringValueFormatted == NULL)
+  {
+    theItem->StringValueFormatted = (TCHAR*)malloc((1) * sizeof(TCHAR));
+    ASSERT(theItem->StringValueFormatted != NULL);
+    theItem->StringValueFormatted[0]='\0';
+  }
+  else
+  {
+    iLen = _tcslen(StringValueFormatted);
+    theItem->StringValueFormatted = (TCHAR*)malloc((iLen + 1) * sizeof(TCHAR));
+    ASSERT(theItem->StringValueFormatted != NULL);
+    _tcscpy(theItem->StringValueFormatted, StringValueFormatted);
+  }
+
+  return theItem;
+}
+void ComboList::FreeComboPopupItemList(void)
+{
+  for (int i = 0; i < ComboPopupItemCount && i < ComboPopupLISTMAX; i++)
+  {
+    if (ComboPopupItemList[i] != NULL)
+    {
+      free (ComboPopupItemList[i]->StringValue);
+      ComboPopupItemList[i]->StringValue=NULL;
+
+      free (ComboPopupItemList[i]->StringValueFormatted);
+      ComboPopupItemList[i]->StringValueFormatted=NULL;
+
+      free (ComboPopupItemList[i]);
+      ComboPopupItemList[i]=NULL;
+
+    }
+  }
+}
 
 //----------------------------------------------------------
 // WindowControl Classes
@@ -1757,6 +2069,11 @@ int WindowControl::WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam){
         }
       break;
 
+    case WM_MOUSEMOVE:
+      OnMouseMove(wParam, lParam);
+      return (0);
+      break;
+
     case WM_SETFOCUS:
       SetFocused(true, (HWND) wParam);
     return(0);
@@ -1807,7 +2124,7 @@ void InitWindowControlModule(void){
 
 }
 
-
+unsigned int WndForm::timeAnyOpenClose=0;
 ACCEL  WndForm::mAccel[] = {
   {0, VK_ESCAPE,  VK_ESCAPE},
   {0, VK_RETURN,  VK_RETURN},
@@ -1822,6 +2139,7 @@ WndForm::WndForm(HWND Parent, const TCHAR *Name, const TCHAR *Caption,
   mOnKeyUpNotify = NULL;
   mOnLButtonUpNotify = NULL;
   mOnTimerNotify = NULL;
+  bLButtonDown= false;
 
   mhAccelTable = CreateAcceleratorTable(mAccel, sizeof(mAccel)/sizeof(mAccel[0]));
 
@@ -1935,6 +2253,7 @@ extern HWND hWndMapWindow;  // MapWindow
 
 
 int WndForm::ShowModal(void){
+#define OPENCLOSESUPPRESSTIME 1000
   MSG msg;
   HWND oldFocusHwnd;
 
@@ -1959,8 +2278,10 @@ int WndForm::ShowModal(void){
   FocusNext(NULL);
 
   bool hastimed = false;
+  WndForm::timeAnyOpenClose = GetTickCount(); // when current dlg opens or child closes
 
   while ((mModalResult == 0) && GetMessage(&msg, NULL, 0, 0)) {
+    unsigned int timeMsg = GetTickCount();
 
 //hack!
 
@@ -2039,6 +2360,14 @@ int WndForm::ShowModal(void){
             continue;
       }
       if (msg.message == WM_LBUTTONUP){
+        if ((timeMsg - WndForm::timeAnyOpenClose) > OPENCLOSESUPPRESSTIME) // prevents parent click from being repeat-handled by current dialog if buttons overlap
+        {
+          if (mOnLButtonUpNotify != NULL)
+            if (!(mOnLButtonUpNotify)(this, msg.wParam, msg.lParam))
+              continue;
+        }
+      }
+      if (msg.message == WM_LBUTTONUP){
         if (mOnLButtonUpNotify != NULL)
           if (!(mOnLButtonUpNotify)(this, msg.wParam, msg.lParam))
             continue;
@@ -2054,48 +2383,48 @@ int WndForm::ShowModal(void){
       }
 
       TranslateMessage(&msg);
-      if (DispatchMessage(&msg)){
+      if (((timeMsg - WndForm::timeAnyOpenClose) > OPENCLOSESUPPRESSTIME) ) // prevents child click from being repeat-handled by parent if buttons overlap
+      {
+        if (DispatchMessage(&msg)){
 
-        /*
-        // navigation messages are moved to unhandled messages, duto nav events handling changes in event loop
-        if (msg.message == WM_KEYDOWN){
-          if (ActiveControl != NULL){
-            switch(msg.wParam & 0xffff){
-              case VK_UP:
-                if (ActiveControl->GetOwner() != NULL)
-                  ActiveControl->GetOwner()->FocusPrev(ActiveControl);
-              continue;
-              case VK_DOWN:
-                if (ActiveControl->GetOwner() != NULL)
-                  ActiveControl->GetOwner()->FocusNext(ActiveControl);
-              continue;
+          /*
+          // navigation messages are moved to unhandled messages, duto nav events handling changes in event loop
+          if (msg.message == WM_KEYDOWN){
+            if (ActiveControl != NULL){
+              switch(msg.wParam & 0xffff){
+                case VK_UP:
+                  if (ActiveControl->GetOwner() != NULL)
+                    ActiveControl->GetOwner()->FocusPrev(ActiveControl);
+                continue;
+                case VK_DOWN:
+                  if (ActiveControl->GetOwner() != NULL)
+                    ActiveControl->GetOwner()->FocusNext(ActiveControl);
+                continue;
+              }
+            }
+          } */
+
+        } else {
+
+          /*
+          if (msg.message == WM_KEYDOWN){
+            if (ActiveControl != NULL){
+              switch(msg.wParam & 0xffff){
+                case VK_UP:
+                  if (ActiveControl->GetOwner() != NULL)
+                    ActiveControl->GetOwner()->FocusPrev(ActiveControl);
+                continue;
+                case VK_DOWN:
+                  if (ActiveControl->GetOwner() != NULL)
+                    ActiveControl->GetOwner()->FocusNext(ActiveControl);
+                continue;
+              }
             }
           }
-        } */
-
-      } else {
-
-        /*
-        if (msg.message == WM_KEYDOWN){
-          if (ActiveControl != NULL){
-            switch(msg.wParam & 0xffff){
-              case VK_UP:
-                if (ActiveControl->GetOwner() != NULL)
-                  ActiveControl->GetOwner()->FocusPrev(ActiveControl);
-              continue;
-              case VK_DOWN:
-                if (ActiveControl->GetOwner() != NULL)
-                  ActiveControl->GetOwner()->FocusNext(ActiveControl);
-              continue;
-            }
-          }
-        }
-        */
-
-      }
-
-    }
-
+          */
+        } // DispatchMessage
+      } // timeMsg
+  }
 
     // hack to stop exiting immediately
     // TODO code: maybe this should block all key handlers to avoid
@@ -2109,7 +2438,8 @@ int WndForm::ShowModal(void){
       }
 #endif
     }
-  }
+  } // End Modal Loop
+  WndForm::timeAnyOpenClose = GetTickCount(); // static.  this is current open/close or child open/close
 
   //  SetSourceRectangle(mRc);
   //  DrawWireRects(&aniRect, 5);
@@ -2290,6 +2620,7 @@ int WndForm::OnUnhandledMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
         return(0);
   }
   if (msg.message == WM_LBUTTONUP){
+    bLButtonDown=false;
     InterfaceTimeoutReset();
     if (mOnLButtonUpNotify != NULL)
       if (!(mOnLButtonUpNotify)(this, msg.wParam, msg.lParam))
@@ -2321,6 +2652,7 @@ int WndForm::OnUnhandledMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     }
   }
   else if (uMsg == WM_LBUTTONDOWN){
+    bLButtonDown=true;
 
     /*
 
@@ -2589,6 +2921,7 @@ WndProperty::WndProperty(WindowControl *Parent,
   _tcscpy(mCaption, Caption);
   mhEdit = NULL;
   mDataField = NULL;
+  mDialogStyle=false; // this is set by ::SetDataField()
 
   mhValueFont = GetFont();
   mCaptionWidth = CaptionWidth;
@@ -2604,6 +2937,9 @@ WndProperty::WndProperty(WindowControl *Parent,
     else
       mBitmapSize = 32;
   }
+  if (mDialogStyle)
+    mBitmapSize = 0;
+
   UpdateButtonData(mBitmapSize);
 
   if (MultiLine) {
@@ -2615,8 +2951,9 @@ WndProperty::WndProperty(WindowControl *Parent,
 			  | ES_LEFT // | ES_AUTOHSCROLL
 			  | WS_CLIPCHILDREN
 			  | WS_CLIPSIBLINGS
+			  | WS_VSCROLL // RLD Added HSSCROLL
 			  | ES_MULTILINE, // JMW added MULTILINE
-			  mEditPos.x, mEditPos.y,
+        mEditPos.x, mEditPos.y,
 			  mEditSize.x, mEditSize.y,
 			  GetHandle(), NULL, hInst, NULL);
    else
@@ -2625,6 +2962,7 @@ WndProperty::WndProperty(WindowControl *Parent,
 			  | ES_LEFT // | ES_AUTOHSCROLL
 			  | WS_CLIPCHILDREN
 			  | WS_CLIPSIBLINGS
+			  | WS_VSCROLL // RLD Added HSSCROLL
 			  | ES_MULTILINE, // JMW added MULTILINE
 			  mEditPos.x, mEditPos.y,
 			  mEditSize.x, mEditSize.y,
@@ -2636,6 +2974,7 @@ WndProperty::WndProperty(WindowControl *Parent,
 			  | ES_LEFT // | ES_AUTOHSCROLL
 			  | WS_CLIPCHILDREN
 			  | WS_CLIPSIBLINGS
+			  | WS_VSCROLL // RLD Added HSSCROLL
 			  | ES_MULTILINE, // JMW added MULTILINE
 			  mEditPos.x, mEditPos.y,
 			  mEditSize.x, mEditSize.y,
@@ -2763,7 +3102,9 @@ HFONT WndProperty::SetFont(HFONT Value){
 
 void WndProperty::UpdateButtonData(int Value){
 
-  if (Value < 32)
+  if (Value == 0) // if combo is enabled
+    mBitmapSize = 0;
+  else if (Value < 32)  // normal settings
     mBitmapSize = 16;
   else
     mBitmapSize = 32;
@@ -2799,9 +3140,9 @@ int WndProperty::SetButtonSize(int Value){
 
     UpdateButtonData(Value);
 
-    SetWindowPos(mhEdit, 0, 0, 0,
+    SetWindowPos(mhEdit, 0, mEditPos.x, mEditPos.y,
       mEditSize.x, mEditSize.y,
-      SWP_NOMOVE | SWP_NOREPOSITION | SWP_NOACTIVATE
+      /*SWP_NOMOVE |*/  SWP_NOREPOSITION | SWP_NOACTIVATE // need to MOVE to enlarge/shift left for combopicker (no arrows)
                  | SWP_NOOWNERZORDER | SWP_NOZORDER
     );
 
@@ -2823,7 +3164,7 @@ int WndProperty::WndProcEditControl(HWND hwnd, UINT uMsg,
       // tmep hack, do not process nav keys
       if (KeyTimer(true, wParam & 0xffff)) {
 	// activate tool tips if hit return for long time
-	if ((wParam & 0xffff) == VK_RETURN) {
+        if ((wParam & 0xffff) == VK_RETURN || (wParam & 0xffff) == VK_F23) { // Compaq uses VKF23
 	  if (OnHelp()) return (0);
 	}
       }
@@ -2841,13 +3182,24 @@ int WndProperty::WndProcEditControl(HWND hwnd, UINT uMsg,
     case WM_KEYUP:
 	if (KeyTimer(false, wParam & 0xffff)) {
 	  // activate tool tips if hit return for long time
-	  if ((wParam & 0xffff) == VK_RETURN) {
+    if ((wParam & 0xffff) == VK_RETURN || (wParam & 0xffff) == VK_F23) { // Compaq uses VKF23
 	    if (OnHelp()) return (0);
 	  }
 	} else if ((wParam & 0xffff) == VK_RETURN) {
 	  if (CallSpecial()) return (0);
 	}
     break;
+
+    case WM_LBUTTONDOWN:
+      // if it's an Combopicker field, then call the combopicker routine
+      if (this->mDialogStyle) {
+        InterfaceTimeoutReset();
+        if (!OnLButtonDown(wParam, lParam)) {
+          DisplayTimeOut = 0;
+          return(0);
+        }
+      } //end combopicker
+      break;
 
     case WM_SETFOCUS:
       KeyTimer(true, 0);
@@ -2900,18 +3252,18 @@ bool WndProperty::SetFocused(bool Value, HWND FromTo){
   if (!Value && (FromTo == mhEdit))
     Value = true;
 
-  if (Value != GetFocused()){
-    if (Value){
-      if (mDataField != NULL){
-        mDataField->GetData();
-        SetWindowText(mhEdit, mDataField->GetAsString());
-      }
-    } else {
-      if (mDataField != NULL){
-        GetWindowText(mhEdit, sTmp, (sizeof(sTmp)/sizeof(TCHAR))-1);
-        mDataField->SetAsString(sTmp);
-        mDataField->SetData();
-        SetWindowText(mhEdit, mDataField->GetAsDisplayString());
+    if (Value != GetFocused()){
+      if (Value){
+        if (mDataField != NULL){
+          mDataField->GetData();
+          SetWindowText(mhEdit, mDataField->GetAsString());
+        }
+      } else {
+        if (mDataField != NULL){
+          GetWindowText(mhEdit, sTmp, (sizeof(sTmp)/sizeof(TCHAR))-1);
+          mDataField->SetAsString(sTmp);
+          mDataField->SetData();
+          SetWindowText(mhEdit, mDataField->GetAsDisplayString());
       }
     }
   }
@@ -2957,33 +3309,42 @@ int WndProperty::OnLButtonDown(WPARAM wParam, LPARAM lParam){
   (void)wParam;
   POINT Pos;
 
-  if (!GetFocused()){
-    SetFocus(GetHandle());
-    return(0);
+  if (mDialogStyle)
+  {
+    if (!GetReadOnly())  // when they click on the label
+    {
+      dlgComboPicker(this);
+    }
   }
+  else
+  {
 
-  Pos.x = lParam & 0x0000ffff;
-  Pos.y = (lParam >> 16)& 0x0000ffff;
-  //POINTSTOPOINT(Pos, MAKEPOINTS(lParam));
+    if (!GetFocused()){
+      SetFocus(GetHandle());
+      return(0);
+    }
 
-  mDownDown = (PtInRect(&mHitRectDown, Pos) != 0);
+    Pos.x = lParam & 0x0000ffff;
+    Pos.y = (lParam >> 16)& 0x0000ffff;
+    //POINTSTOPOINT(Pos, MAKEPOINTS(lParam));
 
-  if (mDownDown) {
-    DecValue();
-    InvalidateRect(GetHandle(), &mHitRectDown, false);
-    UpdateWindow(GetHandle());
+    mDownDown = (PtInRect(&mHitRectDown, Pos) != 0);
+
+    if (mDownDown) {
+      DecValue();
+      InvalidateRect(GetHandle(), &mHitRectDown, false);
+      UpdateWindow(GetHandle());
+    }
+
+    mUpDown = (PtInRect(&mHitRectUp, Pos) != 0);
+
+    if (mUpDown) {
+      IncValue();
+      InvalidateRect(GetHandle(), &mHitRectUp, false);
+      UpdateWindow(GetHandle());
+    }
+    SetCapture(GetHandle());
   }
-
-  mUpDown = (PtInRect(&mHitRectUp, Pos) != 0);
-
-  if (mUpDown) {
-    IncValue();
-    InvalidateRect(GetHandle(), &mHitRectUp, false);
-    UpdateWindow(GetHandle());
-  }
-
-  SetCapture(GetHandle());
-
   return(0);
 };
 
@@ -2996,19 +3357,26 @@ int WndProperty::OnLButtonDoubleClick(WPARAM wParam, LPARAM lParam){
 int WndProperty::OnLButtonUp(WPARAM wParam, LPARAM lParam){
 	(void)lParam;
 	(void)wParam;
-  if (mDownDown){
-    mDownDown = false;
-    InvalidateRect(GetHandle(), &mHitRectDown, false);
-    UpdateWindow(GetHandle());
-  }
-  if (mUpDown){
-    mUpDown = false;
-    InvalidateRect(GetHandle(), &mHitRectUp, false);
-    UpdateWindow(GetHandle());
-  }
 
+  if (mDialogStyle)
+  {
+  }
+  else
+  {
+
+    if (mDownDown){
+      mDownDown = false;
+      InvalidateRect(GetHandle(), &mHitRectDown, false);
+      UpdateWindow(GetHandle());
+    }
+    if (mUpDown){
+      mUpDown = false;
+      InvalidateRect(GetHandle(), &mHitRectUp, false);
+      UpdateWindow(GetHandle());
+    }
+
+  }
   ReleaseCapture();
-
   return(0);
 }
 
@@ -3083,33 +3451,40 @@ void WndProperty::Paint(HDC hDC){
   ExtTextOut(hDC, org.x, org.y,
     ETO_OPAQUE, NULL, mCaption, _tcslen(mCaption), NULL);
 
-  if (GetFocused() && !GetReadOnly()){
-
-    if (mBitmapSize == 16)
-      oldBmp = (HBITMAP)SelectObject(GetTempDeviceContext(), hBmpLeft16);
+    if (mDialogStyle) // can't but dlgComboPicker here b/c it calls paint when combopicker closes too
+    {     // so it calls dlgCombopicker on the click/focus handlers for the wndproperty & label
+    }
     else
-      oldBmp = (HBITMAP)SelectObject(GetTempDeviceContext(), hBmpLeft32);
+    {
 
-    if (mDownDown)
-      BitBlt(hDC, mHitRectDown.left, mHitRectDown.top, mBitmapSize, mBitmapSize,
-        GetTempDeviceContext(), mBitmapSize, 0, SRCCOPY);
-    else
-      BitBlt(hDC, mHitRectDown.left, mHitRectDown.top, mBitmapSize, mBitmapSize,
-        GetTempDeviceContext(), 0, 0, SRCCOPY);
+      if (GetFocused() && !GetReadOnly()){
 
-    if (mBitmapSize == 16)
-      SelectObject(GetTempDeviceContext(), hBmpRight16);
-    else
-      SelectObject(GetTempDeviceContext(), hBmpRight32);
+      if (mBitmapSize == 16)
+        oldBmp = (HBITMAP)SelectObject(GetTempDeviceContext(), hBmpLeft16);
+      else
+        oldBmp = (HBITMAP)SelectObject(GetTempDeviceContext(), hBmpLeft32);
 
-    if (mUpDown)
-      BitBlt(hDC, mHitRectUp.left, mHitRectUp.top, mBitmapSize, mBitmapSize,
-        GetTempDeviceContext(), mBitmapSize, 0, SRCCOPY);
-    else
-      BitBlt(hDC, mHitRectUp.left, mHitRectUp.top, mBitmapSize, mBitmapSize,
-        GetTempDeviceContext(), 0, 0, SRCCOPY);
+      if (mDownDown)
+        BitBlt(hDC, mHitRectDown.left, mHitRectDown.top, mBitmapSize, mBitmapSize,
+          GetTempDeviceContext(), mBitmapSize, 0, SRCCOPY);
+      else
+        BitBlt(hDC, mHitRectDown.left, mHitRectDown.top, mBitmapSize, mBitmapSize,
+          GetTempDeviceContext(), 0, 0, SRCCOPY);
 
-    SelectObject(GetTempDeviceContext(), oldBmp);
+      if (mBitmapSize == 16)
+        SelectObject(GetTempDeviceContext(), hBmpRight16);
+      else
+        SelectObject(GetTempDeviceContext(), hBmpRight32);
+
+      if (mUpDown)
+        BitBlt(hDC, mHitRectUp.left, mHitRectUp.top, mBitmapSize, mBitmapSize,
+          GetTempDeviceContext(), mBitmapSize, 0, SRCCOPY);
+      else
+        BitBlt(hDC, mHitRectUp.left, mHitRectUp.top, mBitmapSize, mBitmapSize,
+          GetTempDeviceContext(), 0, 0, SRCCOPY);
+
+      SelectObject(GetTempDeviceContext(), oldBmp);
+    }
   }
   SelectObject(hDC, oldFont);
 }
@@ -3146,6 +3521,24 @@ DataField *WndProperty::SetDataField(DataField *Value){
     mDataField = Value;
 
     mDataField->GetData();
+
+
+
+    mDialogStyle=ENABLECOMBO;
+
+    if (mDataField->SupportCombo == false )
+      mDialogStyle=false;
+
+
+    if (mDialogStyle)
+    {
+      this->SetButtonSize(0);
+      this->SetCanFocus(false);
+    }
+    else
+    {
+      this->SetButtonSize(16);
+    }
 
     RefreshDisplay();
 
@@ -3275,7 +3668,7 @@ WndListFrame::WndListFrame(WindowControl *Owner, TCHAR *Name, int X, int Y,
   mListInfo.ItemInPageCount = 0;
   mListInfo.TopIndex = 0;
   mListInfo.BottomIndex = 0;
-  mListInfo.SelectedIndex = 0;
+//  mListInfo.SelectedIndex = 0;
   mListInfo.ItemCount = 0;
   mListInfo.ItemInViewCount = 0;
 
@@ -3284,6 +3677,8 @@ WndListFrame::WndListFrame(WindowControl *Owner, TCHAR *Name, int X, int Y,
   mOnListEnterCallback = NULL;
   SetForeColor(GetOwner()->GetForeColor());
   SetBackColor(GetOwner()->GetBackColor());
+  mMouseDown = false;
+  LastMouseMoveTime=0;
 
 };
 
@@ -3355,7 +3750,6 @@ void WndListFrame::Paint(HDC hDC){
     DeleteDC(HdcTemp);
 
     DrawScrollBar(hDC);
-
   }
 }
 
@@ -3365,40 +3759,58 @@ void WndListFrame::Redraw(void){
 }
 
 void WndListFrame::DrawScrollBar(HDC hDC) {
+#define SCROLLBARTOP 25
 
+  static HBITMAP hScrollBarBitmapTop = NULL;
+  static HBITMAP hScrollBarBitmapMid = NULL;
+  static HBITMAP hScrollBarBitmapBot = NULL;
+  static HBITMAP hScrollBarBitmapFill = NULL;
   RECT rc;
-  HPEN hP;
+  HPEN hP, hP3;
   HBRUSH hB;
-  int w = 1+GetWidth()- 2*SELECTORWIDTH;
-  int h = GetHeight()- SELECTORWIDTH;
+  HBITMAP oldBmp;
+  int w = GetWidth()- (SCROLLBARWIDTH * ISCALE);
+  int h = GetHeight() - SCROLLBARTOP;
 
-  rc.left = w;
-  rc.top = 0;
-  rc.right = w + 2*SELECTORWIDTH - 2;
-  rc.bottom = h;
+  if (hScrollBarBitmapTop == NULL)
+    hScrollBarBitmapTop=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_SCROLLBARTOP));
+  if (hScrollBarBitmapMid == NULL)
+    hScrollBarBitmapMid=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_SCROLLBARMID));
+  if (hScrollBarBitmapBot == NULL)
+    hScrollBarBitmapBot=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_SCROLLBARBOT));
+  if (hScrollBarBitmapFill == NULL)
+    hScrollBarBitmapFill=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_SCROLLBARFILL));
 
-  if (mListInfo.ItemCount <= mListInfo.ItemInViewCount){
-    hB = (HBRUSH)CreateSolidBrush(GetBackColor());
-    FillRect(hDC, &rc, hB);
-    DeleteObject(hB);
-    return;
-  }
 
+
+
+
+  hB =(HBRUSH)CreateSolidBrush(0xFFFFFF);
   hP = (HPEN)CreatePen(PS_SOLID, DEFAULTBORDERPENWIDTH, GetForeColor());
-
   SelectObject(hDC, hP);
-  SelectObject(hDC, GetBackBrush());
 
-  Rectangle(hDC, rc.left, rc.top, rc.right, rc.bottom);
+  // ENTIRE SCROLLBAR AREA
+  rc.left = w;
+  rc.top = SCROLLBARTOP;
+  rc.right = w + (SCROLLBARWIDTH * ISCALE) - 1;
+  rc.bottom = h + SCROLLBARTOP;
 
-  DeleteObject(hP);
+  // draw recangle around entire scrollbar area
+  DrawLine2(hDC, rc.left, rc.top, rc.left, rc.bottom, rc.right, rc.bottom);
+  DrawLine2(hDC, rc.right, rc.bottom, rc.right, rc.top, rc.left, rc.top);
 
-  hB = (HBRUSH)CreateSolidBrush(GetForeColor());
+  // save scrollbar size for mouse events
+  rcScrollBar.left=rc.left;
+  rcScrollBar.right=rc.right;
+  rcScrollBar.top=rc.top;
+  rcScrollBar.bottom=rc.bottom;
 
-  rc.left = 1+w;
-  rc.top = 1+(h * mListInfo.ScrollIndex) / mListInfo.ItemCount;
-  rc.right = w + 2*SELECTORWIDTH - 1;
-  rc.bottom = rc.top + iround((h * mListInfo.ItemInViewCount) / mListInfo.ItemCount)-1;
+
+  // Just Scroll Bar Slider button
+  rc.left = w;
+  rc.top = GetScrollBarTopFromScrollIndex()-1;
+  rc.right = w + (SCROLLBARWIDTH * ISCALE) - 1; // -2 if use 3x pen.  -1 if 2x pen
+  rc.bottom = rc.top + GetScrollBarHeight()+2;  // +2 for 3x pen, +1 for 2x pen
 
   if (rc.bottom >= h){
     int d;
@@ -3407,62 +3819,109 @@ void WndListFrame::DrawScrollBar(HDC hDC) {
     rc.top += d;
   }
 
-  FillRect(hDC, &rc, hB);
 
+unsigned long ctUpDown =0;
+unsigned long ctScroll =0;
+
+bool bTransparentUpDown = false;
+bool bTransparentScroll = true;
+
+if (bTransparentUpDown)
+  ctUpDown=SRCAND;  //Combines the colors of the source and destination rectangles by using the Boolean AND operator.
+else
+  ctUpDown=SRCCOPY;  //Copies the source rectangle directly to the destination rectangle.
+
+if (bTransparentScroll)
+  ctScroll=SRCAND;  //Combines the colors of the source and destination rectangles by using the Boolean AND operator.
+else
+  ctScroll=SRCCOPY;  //Copies the source rectangle directly to the destination rectangle.
+
+
+  // TOP Dn Button 32x32
+  if (ISCALE==1)
+  {
+    oldBmp = (HBITMAP)SelectObject(GetTempDeviceContext(), hScrollBarBitmapTop);
+    BitBlt(hDC, w, SCROLLBARTOP, SCROLLBARWIDTH, SCROLLBARWIDTH,
+      GetTempDeviceContext(), 0, 0, ctUpDown);
+
+    // BOT Up Button 32x32
+    SelectObject(GetTempDeviceContext(), hScrollBarBitmapBot);
+    BitBlt(hDC, w, h-SCROLLBARWIDTH+SCROLLBARTOP, SCROLLBARWIDTH, SCROLLBARWIDTH,
+      GetTempDeviceContext(), 0, 0, ctUpDown);
+  }
+  else
+  {
+    oldBmp = (HBITMAP)SelectObject(GetTempDeviceContext(), hScrollBarBitmapTop);
+    //BitBlt(hDC, w, SCROLLBARTOP, SCROLLBARWIDTH, SCROLLBARWIDTH,
+    //  GetTempDeviceContext(), 0, 0, ctUpDown);
+
+    StretchBlt(hDC, w, SCROLLBARTOP,
+        (SCROLLBARWIDTH * ISCALE),
+        (SCROLLBARWIDTH * ISCALE),
+	     GetTempDeviceContext(),
+	     0, 0, SCROLLBARWIDTH, SCROLLBARWIDTH,
+	     ctUpDown);
+
+
+    // BOT Up Button 32x32
+    SelectObject(GetTempDeviceContext(), hScrollBarBitmapBot);
+    //BitBlt(hDC, w, h-SCROLLBARWIDTH+SCROLLBARTOP, SCROLLBARWIDTH, SCROLLBARWIDTH,
+    //  GetTempDeviceContext(), 0, 0, ctUpDown);
+
+    StretchBlt(hDC, w, h-(SCROLLBARWIDTH * ISCALE)+SCROLLBARTOP,
+        (SCROLLBARWIDTH * ISCALE),
+        (SCROLLBARWIDTH * ISCALE),
+	     GetTempDeviceContext(),
+	     0, 0, SCROLLBARWIDTH, SCROLLBARWIDTH,
+	     ctUpDown);
+  }
+
+  // Middle Slider Button 30x12
+  if (mListInfo.ItemCount > mListInfo.ItemInViewCount){
+
+    // handle on slider
+    SelectObject(GetTempDeviceContext(), hScrollBarBitmapMid);
+    if (ISCALE==1)
+    {
+      BitBlt(hDC, w+1, rc.top + GetScrollBarHeight()/2 - 14, 30, 28,
+        GetTempDeviceContext(), 0, 0,
+        SRCAND); // always SRCAND b/c on top of scrollbutton texture
+    }
+    else
+    {
+      StretchBlt(hDC, w+1, rc.top + GetScrollBarHeight()/2 - 14*ISCALE, 30*ISCALE, 28*ISCALE,
+        GetTempDeviceContext(), 0, 0,
+        30, 28,
+        SRCAND); // always SRCAND b/c on top of scrollbutton texture
+/*
+      StretchBlt(hDC, w+1, rc.top + GetScrollBarHeight()/2 - 14,
+          (SCROLLBARWIDTH * ISCALE),
+          (SCROLLBARWIDTH * ISCALE),
+         GetTempDeviceContext(),
+         0, 0, SCROLLBARWIDTH, SCROLLBARWIDTH,
+         ctUpDown);
+*/
+    }
+
+    // box around slider rect
+    hP3 = (HPEN)CreatePen(PS_SOLID, DEFAULTBORDERPENWIDTH * 2, GetForeColor());
+    int iBorderOffset = 1;  // set to 1 if BORDERWIDTH >2, else 0
+    SelectObject(hDC, hP3);
+    DrawLine2(hDC, rc.left+iBorderOffset, rc.top, rc.left+iBorderOffset, rc.bottom, rc.right, rc.bottom); // just left line of scrollbar
+    DrawLine2(hDC, rc.right, rc.bottom, rc.right, rc.top, rc.left+iBorderOffset, rc.top); // just left line of scrollbar
+    DeleteObject(hP3);
+
+  } // more items than fit on screen
+
+  SelectObject(GetTempDeviceContext(), oldBmp);
+
+  rcScrollBarButton.left=rc.left;
+  rcScrollBarButton.right=rc.right;
+  rcScrollBarButton.top=rc.top;
+  rcScrollBarButton.bottom=rc.bottom;
+
+  DeleteObject(hP);
   DeleteObject(hB);
-
-  /*
-
-  // Draw scroll line if necessary
-  int l = SELECTORWIDTH*2;
-
-  int bottom_percent = min(h, h*(mListInfo.BottomIndex + mListInfo.ScrollIndex + 1) / max(1,mListInfo.ItemCount));
-  int top_percent = h*(mListInfo.ScrollIndex)/max(1,mListInfo.ItemCount);
-
-  if ((top_percent==0)&&(bottom_percent==h)) {
-    return;
-  }
-
-  HPEN oldPen = (HPEN)SelectObject(hDC, GetSelectorPen());
-
-  DrawLine(hDC,
-    w, top_percent+SELECTORWIDTH,
-    w, bottom_percent-SELECTORWIDTH);
-
-  if (top_percent>0) {
-
-    DrawLine2(hDC,
-       w, l,
-       w-l, 0,
-       w-l, l);
-
-  } else {
-
-    DrawLine2(hDC,
-        w-2*l, 0,
-        w, 0,
-        w, l);
-
-  }
-  if (bottom_percent<h) {
-
-    DrawLine2(hDC,
-        w, h-l,
-        w-l, h,
-        w-l, h-l);
-
-  } else {
-
-    DrawLine2(hDC,
-       w-2*l, h,
-       w, h,
-       w, h-l);
-
-  }
-
-  SelectObject(hDC,oldPen);
-
-  */
 
 }
 
@@ -3509,9 +3968,11 @@ void WndListFrame::RedrawScrolled(bool all) {
 
 int WndListFrame::RecalculateIndices(bool bigscroll) {
 
+// scroll to smaller of current scroll or to last page
   mListInfo.ScrollIndex = max(0,min(mListInfo.ScrollIndex,
 				    mListInfo.ItemCount-mListInfo.ItemInPageCount));
 
+// if we're off end of list, move scroll to last page and select 1st item in last page, return
   if (mListInfo.ItemIndex+mListInfo.ScrollIndex >= mListInfo.ItemCount) {
     mListInfo.ItemIndex = max(0,mListInfo.ItemCount-mListInfo.ScrollIndex-1);
     mListInfo.ScrollIndex = max(0,
@@ -3520,6 +3981,7 @@ int WndListFrame::RecalculateIndices(bool bigscroll) {
     return(1);
   }
 
+// again, check to see if we're too far off end of list
   mListInfo.ScrollIndex = max(0,
 			      min(mListInfo.ScrollIndex,
 				  mListInfo.ItemCount-mListInfo.ItemIndex-1));
@@ -3594,6 +4056,7 @@ int WndListFrame::OnItemKeyDown(WindowControl *Sender, WPARAM wParam, LPARAM lPa
     mListInfo.ItemIndex--;
     return RecalculateIndices(false);
   }
+  mMouseDown=false;
   return(1);
 
 }
@@ -3607,7 +4070,7 @@ void WndListFrame::ResetList(void){
 			       /mClients[0]->GetHeight())-1;
   mListInfo.TopIndex = 0;
   mListInfo.BottomIndex = 0;
-  mListInfo.SelectedIndex = 0;
+//  mListInfo.SelectedIndex = 0;
   mListInfo.ItemCount = 0;
   mListInfo.ItemInViewCount = (GetHeight()+mClients[0]->GetHeight()-1)
     /mClients[0]->GetHeight()-1;
@@ -3636,7 +4099,16 @@ int WndListFrame::PrepareItemDraw(void){
   return(1);
 }
 
+int WndListFrame::OnLButtonUp(WPARAM wParam, LPARAM lParam) {
+    mMouseDown=false;
+    return 1;
+}
+
 static bool isselect = false;
+
+int WndFrame::OnLButtonUp(WPARAM wParam, LPARAM lParam) {
+  return 1;
+}
 
 // JMW needed to support mouse/touchscreen
 int WndFrame::OnLButtonDown(WPARAM wParam, LPARAM lParam) {
@@ -3646,11 +4118,12 @@ int WndFrame::OnLButtonDown(WPARAM wParam, LPARAM lParam) {
 
     if (!GetFocused()) {
       SetFocus(GetHandle());
-      return(1);
-    } else {
+      //return(1);
+    }
+    //else {  // always doing this allows selected item in list to remain selected.
       InvalidateRect(GetHandle(), GetBoundRect(), false);
       UpdateWindow(GetHandle());
-    }
+    //}
 
     int xPos = LOWORD(lParam);  // horizontal position of cursor
     int yPos = HIWORD(lParam);  // vertical position of cursor
@@ -3664,10 +4137,29 @@ int WndFrame::OnLButtonDown(WPARAM wParam, LPARAM lParam) {
 }
 
 
+void WndListFrame::SetItemIndex(int iValue){
+
+
+  mListInfo.ItemIndex=0;  // usually leaves selected item as first in screen
+  mListInfo.ScrollIndex=iValue;
+
+  int iTail = mListInfo.ItemCount - iValue; // if within 1 page of end
+  if ( iTail < mListInfo.ItemInPageCount)
+  {
+    int iDiff = mListInfo.ItemInPageCount - iTail;
+    int iShrinkBy = min(iValue, iDiff); // don't reduce by
+
+    mListInfo.ItemIndex += iShrinkBy;
+    mListInfo.ScrollIndex -= iShrinkBy;
+  }
+
+  RecalculateIndices(false);
+}
+
 void WndListFrame::SelectItemFromScreen(int xPos, int yPos,
                                         RECT *rect) {
   (void)xPos;
-  int w = GetWidth()- 4*SELECTORWIDTH;
+/*  int w = GetWidth()- 4*SELECTORWIDTH;
   int h = GetHeight()- SELECTORWIDTH;
 
   if ((xPos>= w) && (mListInfo.ItemCount > mListInfo.ItemInViewCount)
@@ -3679,10 +4171,10 @@ void WndListFrame::SelectItemFromScreen(int xPos, int yPos,
 
     return;
   }
-
+*/
   int index;
   GetClientRect(GetHandle(), rect);
-  index = yPos/mClients[0]->GetHeight();
+  index = yPos/mClients[0]->GetHeight(); // yPos is offset within ListEntry item!
 
   if ((index>=0)&&(index<mListInfo.BottomIndex)) {
     if (!isselect) {
@@ -3698,12 +4190,124 @@ void WndListFrame::SelectItemFromScreen(int xPos, int yPos,
 }
 
 
+int WndListFrame::OnMouseMove(WPARAM wParam, LPARAM lParam) {
+  static bool bMoving = false;
+
+  int dT = GetTickCount()-LastMouseMoveTime;
+  if (dT > -1 && !bMoving)
+  {
+    bMoving=true;
+
+    POINT Pos;
+    Pos.x = LOWORD(lParam);
+    Pos.y = HIWORD(lParam);
+
+    if (mMouseDown && PtInRect(&rcScrollBar, Pos))
+    {
+      int iScrollBarTop = max(1, Pos.y - mMouseScrollBarYOffset);
+
+      int iScrollIndex = GetScrollIndexFromScrollBarTop(iScrollBarTop);
+
+      if(iScrollIndex !=mListInfo.ScrollIndex)
+      {
+        int iScrollAmount = iScrollIndex - mListInfo.ScrollIndex;
+        mListInfo.ScrollIndex = mListInfo.ScrollIndex + iScrollAmount;
+        Redraw();
+      }
+    }
+    else //not in scrollbar
+    {
+      mMouseDown = false; // force re-click of scroll bar
+    }
+    LastMouseMoveTime = GetTickCount();
+    bMoving=false;
+  } // Tickcount
+  return(1);
+}
+
 int WndListFrame::OnLButtonDown(WPARAM wParam, LPARAM lParam) {
-  if (mClientCount > 0){
+
+  POINT Pos;
+  Pos.x = LOWORD(lParam);
+  Pos.y = HIWORD(lParam);
+  mMouseDown=false;
+
+  if (PtInRect(&rcScrollBarButton, Pos))  // see if click is on scrollbar handle
+  {
+    mMouseScrollBarYOffset = max(0, Pos.y - rcScrollBarButton.top);  // start mouse drag
+    mMouseDown=true;
+
+  }
+  else if (PtInRect(&rcScrollBar, Pos)) // clicked in scroll bar up/down/pgup/pgdn
+  {
+    if (Pos.y - rcScrollBar.top < (SCROLLBARWIDTH * ISCALE)) // up arrow
+      mListInfo.ScrollIndex = max(0, mListInfo.ScrollIndex- 1);
+
+    else if (rcScrollBar.bottom -Pos.y < (SCROLLBARWIDTH * ISCALE)  ) //down arrow
+      mListInfo.ScrollIndex = max(0,min(mListInfo.ItemCount- mListInfo.ItemInViewCount, mListInfo.ScrollIndex+ 1));
+
+    else if (Pos.y < rcScrollBarButton.top) // page up
+      mListInfo.ScrollIndex = max(0, mListInfo.ScrollIndex- mListInfo.ItemInViewCount);
+
+    else // page down
+      if (mListInfo.ItemCount > mListInfo.ScrollIndex+ mListInfo.ItemInViewCount)
+          mListInfo.ScrollIndex = min ( mListInfo.ItemCount- mListInfo.ItemInViewCount, mListInfo.ScrollIndex +mListInfo.ItemInViewCount);
+
+    Redraw();
+
+  }
+  else
+  if (mClientCount > 0)
+  {
     isselect = true;
     ((WndFrame *)mClients[0])->OnLButtonDown(wParam, lParam);
   }
+
   return(1);
+}
+
+inline int WndListFrame::GetScrollBarHeight (void)
+{
+  int WidthScaled=(SCROLLBARWIDTH * ISCALE);
+  int h = GetHeight() - SCROLLBARTOP;
+  if(mListInfo.ItemCount ==0)
+    return h-2*WidthScaled;
+  else
+    return max(WidthScaled,((h-2*WidthScaled)*mListInfo.ItemInViewCount)/mListInfo.ItemCount);
+}
+
+inline int WndListFrame::GetScrollIndexFromScrollBarTop(int iScrollBarTop)
+{
+  int h = GetHeight() - SCROLLBARTOP;
+  if (h-2*(SCROLLBARWIDTH * ISCALE) - GetScrollBarHeight() == 0)
+    return 0;
+  else
+
+    return max(0,
+              min(mListInfo.ItemCount - mListInfo.ItemInPageCount,
+              max(0,
+                  ( 0 +
+                    (mListInfo.ItemCount-mListInfo.ItemInViewCount)
+                    * (iScrollBarTop - (SCROLLBARWIDTH * ISCALE)-SCROLLBARTOP)
+                  )
+                    / ( h-2*(SCROLLBARWIDTH * ISCALE) - GetScrollBarHeight() ) /*-SCROLLBARTOP(*/
+              )
+           ));
+}
+
+inline int WndListFrame::GetScrollBarTopFromScrollIndex()
+{
+  int h = GetHeight() - SCROLLBARTOP;
+  if (mListInfo.ItemCount - mListInfo.ItemInViewCount ==0)
+    return h + (SCROLLBARWIDTH * ISCALE);
+  else
+
+  return
+      ( (SCROLLBARWIDTH * ISCALE)+SCROLLBARTOP +
+        (mListInfo.ScrollIndex) *(h-2*(SCROLLBARWIDTH * ISCALE)-GetScrollBarHeight() ) /*-SCROLLBARTOP*/
+      /(mListInfo.ItemCount - mListInfo.ItemInViewCount)
+      );
+
 }
 
 

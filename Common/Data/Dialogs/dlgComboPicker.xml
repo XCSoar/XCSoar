@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<PMML version="3.0"
+  xmlns="http://www.dmg.org/PMML-3-0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema_instance" >
+  <Header copyright="VADIS">
+     <Application name="RANK For &lt;you>" version="1.99beta" />
+  </Header>
+  <Extension extender="RANKF" name="keys"><Key name="urn"></Key></Extension>
+
+<WndForm Name="frmComboPopup" Type="Dialog" X=0 Y=0 Width=320 Height=240 Caption="Picker" Font=2 BackColor=0xDADBAB>
+  <WndButton Name="cmdClose"  Caption="Select"    X=5 Y=100 Width=70  Height=35 Font=2 OnClickNotify="OnCloseClicked"/>
+  <WndButton  Name="cmdCancel"  Caption="Cancel"    X=5 Y=140 Width=70  Height=35 Font=2 OnClickNotify="OnCancelClicked"/>
+  <WndButton  Name="cmdHelp"  Caption="Help"    X=5 Y=180 Width=70  Height=35 Font=2 OnClickNotify="OnHelpClicked"/>
+
+  <WndListFrame Name=frmComboPopupList X=80 Y=0 Width=235 Height=222 Font=2 OnListInfo="OnComboPopupListInfo">
+    <WndOwnerDrawFrame Name=frmComboPopupListEntry X=2 Y=2 Width=200 Height=25 Font=2  OnPaint="OnPaintComboPopupListItem"/>
+  </WndListFrame>
+
+
+</WndForm>
+
+</PMML>

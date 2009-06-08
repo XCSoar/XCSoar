@@ -4439,6 +4439,16 @@ WinPilotPolarInternal WinPilotPolars[] =
 
 // asg29-15 9.2 m^2 winglets, empty 290, 375 pilot, max 550kg.
 
+/* Need more paragliders!
+
+This is for a Gradient Golden from here:
+http://www.paraglidingforum.com/viewtopic.php?t=23106
+
+*1-26E WinPilot POLAR file: MassDryGross[kg], MaxWaterBallast[liters], Speed1[km/h], Sink1[m/s], Speed2, Sink2, Speed3, Sink3
+110, 10, 29, -1.09, 37, -1.39, 49, -2.99
+
+*/
+
 };
 
 TCHAR* GetWinPilotPolarInternalName(int i) {

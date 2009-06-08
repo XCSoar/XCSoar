@@ -308,6 +308,7 @@ DLGS	:=\
 	$(SRC)/dlgBasicSettings.cpp \
 	$(SRC)/dlgBrightness.o \
 	$(SRC)/dlgChecklist.o \
+	$(SRC)/dlgComboPicker.o \
 	$(SRC)/dlgConfiguration.o \
 	$(SRC)/dlgConfiguration2.o \
 	$(SRC)/dlgConfigurationVario.o \

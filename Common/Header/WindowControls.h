@@ -38,7 +38,7 @@ Copyright_License {
 #include <malloc.h>
 #include "Units.h"
 #include "XCSoar.h"
-
+#include "Utils.h"
 #define IsEmptyString(x)        ((x==NULL) || (x[0]=='\0'))
 
 #define BORDERTOP    (1<<bkTop)
@@ -70,6 +70,48 @@ Copyright_License {
 #define FORMATSIZE 32
 #define UNITSIZE 10
 
+    typedef struct {
+      int ItemIndex;
+      int DataFieldIndex;
+      TCHAR *StringValue;
+      TCHAR *StringValueFormatted;
+    } ComboListEntry_t;
+
+class ComboList{
+
+  public:
+
+    ComboList(void) {
+      ComboPopupDrawListIndex=0;
+      ComboPopupItemIndex=-1;
+      ComboPopupItemSavedIndex=-1;
+    }
+
+#define ComboPopupLISTMAX 300
+#define ComboPopupITEMMAX 100
+#define ComboPopupReopenMOREDataIndex -800001
+#define ComboPopupReopenLESSDataIndex -800002
+#define ComboPopupNULL -800003
+
+    ComboListEntry_t * CreateItem(  int ItemIndex, int DataFieldIndex,TCHAR *StringValue,TCHAR *StringValueFormatted);
+    void FreeComboPopupItemList(void);
+
+    int ComboPopupDrawListIndex;
+    int ComboPopupItemIndex;
+    int ComboPopupItemSavedIndex;
+    int ComboPopupItemCount;
+    ComboListEntry_t * ComboPopupItemList[ComboPopupLISTMAX]; // RLD make this dynamic later
+
+    int PropertyDataFieldIndexSaved;
+    TCHAR PropertyValueSaved[ComboPopupITEMMAX];
+    TCHAR PropertyValueSavedFormatted[ComboPopupITEMMAX];
+
+
+  private:
+
+};
+
+
 class DataField{
 
   public:
@@ -88,6 +130,7 @@ class DataField{
     DataField(const TCHAR *EditFormat, const TCHAR *DisplayFormat,
 	      void(*OnDataAccess)(DataField *Sender, DataAccessKind_t Mode)=NULL);
     virtual ~DataField(void){};
+
 
   virtual void Special(void);
   virtual void Inc(void);
@@ -132,16 +175,28 @@ class DataField{
   }
 
   void SetDisplayFormat(TCHAR *Value);
-
+  void SetDisableSpeedUp(bool bDisable) {mDisableSpeedup=bDisable;}  // allows combolist to iterate all values
+  bool GetDisableSpeedUp(void) {return mDisableSpeedup;}
+  void SetDetachGUI(bool bDetachGUI) {mDetachGUI=bDetachGUI;}  // allows combolist to iterate all values w/out triggering external events
+  bool GetDetachGUI(void) {return mDetachGUI;}
+  virtual int CreateComboList(void) {return 0;};
+  ComboList* GetCombo(void) { return &mComboList;}
+  virtual int SetFromCombo(int iDataFieldIndex, TCHAR *sValue) {return SetAsInteger(iDataFieldIndex);};
+  void CopyString(TCHAR * szStringOut, bool bFormatted);
+  bool SupportCombo;  // all Types dataField support combolist except DataFieldString.
   protected:
     void (*mOnDataAccess)(DataField *Sender, DataAccessKind_t Mode);
     TCHAR mEditFormat[FORMATSIZE+1];
     TCHAR mDisplayFormat[FORMATSIZE+1];
     TCHAR mUnits[UNITSIZE+1];
+    ComboList mComboList;
+    int CreateComboListStepping(void);
 
   private:
 
     int mUsageCounter;
+    bool mDisableSpeedup;
+    bool mDetachGUI;
 
 };
 
@@ -158,6 +213,7 @@ class DataFieldBoolean:public DataField{
 		  if (Default) {mValue=true;} else {mValue=false;}
       _tcscpy(mTextTrue, TextTrue);
       _tcscpy(mTextFalse, TextFalse);
+      SupportCombo=true;
 
      (mOnDataAccess)(this, daGet);
 
@@ -165,6 +221,7 @@ class DataFieldBoolean:public DataField{
 
   void Inc(void);
   void Dec(void);
+  int CreateComboList(void);
 
   bool GetAsBoolean(void);
   int GetAsInteger(void);
@@ -216,6 +273,8 @@ class DataFieldEnum: public DataField {
 		  void(*OnDataAccess)(DataField *Sender,
 				      DataAccessKind_t Mode)):
       DataField(EditFormat, DisplayFormat, OnDataAccess){
+      SupportCombo=true;
+
       if (Default>=0)
 	{ mValue = Default; }
       else
@@ -229,6 +288,7 @@ class DataFieldEnum: public DataField {
 
   void Inc(void);
   void Dec(void);
+  int CreateComboList(void);
 
   void addEnumText(const TCHAR *Text);
 
@@ -273,6 +333,7 @@ class DataFieldFileReader: public DataField {
       fields[0].mTextPathFile= NULL; // first entry always exists and is blank
       nFiles = 1;
 
+      SupportCombo=true;
       (mOnDataAccess)(this, daGet);
 
     };
@@ -292,6 +353,7 @@ class DataFieldFileReader: public DataField {
 
   void Inc(void);
   void Dec(void);
+  int CreateComboList(void);
 
   void addFile(const TCHAR *fname, const TCHAR *fpname);
   bool checkFilter(const TCHAR *fname, const TCHAR* filter);
@@ -338,7 +400,6 @@ class DataFieldInteger:public DataField{
 
   protected:
     int SpeedUp(bool keyup);
-
   public:
     DataFieldInteger(TCHAR *EditFormat, TCHAR *DisplayFormat, int Min, int Max, int Default, int Step, void(*OnDataAccess)(DataField *Sender, DataAccessKind_t Mode)):
       DataField(EditFormat, DisplayFormat, OnDataAccess){
@@ -347,12 +408,14 @@ class DataFieldInteger:public DataField{
       mValue = Default;
       mStep = Step;
 
+      SupportCombo=true;
      (mOnDataAccess)(this, daGet);
 
     };
 
   void Inc(void);
   void Dec(void);
+  int CreateComboList(void);
 
   bool GetAsBoolean(void);
   int GetAsInteger(void);
@@ -388,6 +451,7 @@ class DataFieldFloat:public DataField{
     int mFine;
     TCHAR mOutBuf[OUTBUFFERSIZE+1];
 
+
   protected:
     double SpeedUp(bool keyup);
 
@@ -401,12 +465,15 @@ class DataFieldFloat:public DataField{
       mStep = Step;
       mFine = Fine;
 
+      SupportCombo=true;
      (mOnDataAccess)(this, daGet);
 
     };
 
   void Inc(void);
   void Dec(void);
+  int CreateComboList(void);
+  int SetFromCombo(int iDataFieldIndex, TCHAR *sValue);
 
   bool GetAsBoolean(void);
   int GetAsInteger(void);
@@ -443,6 +510,7 @@ class DataFieldString:public DataField{
     DataFieldString(TCHAR *EditFormat, TCHAR *DisplayFormat, TCHAR *Default, void(*OnDataAccess)(DataField *Sender, DataAccessKind_t Mode)):
       DataField(EditFormat, DisplayFormat, OnDataAccess){
       _tcscpy(mValue, Default);
+      SupportCombo=false;
     };
 
   TCHAR *SetAsString(const TCHAR *Value);
@@ -561,6 +629,10 @@ class WindowControl {
 		(void)wParam; (void)lParam;
       return(1);
     };
+    virtual int OnMouseMove(WPARAM wParam, LPARAM lParam){
+		(void)wParam; (void)lParam;
+      return(1);
+    };
     virtual int OnUnhandledMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam){
 		(void)hwnd; (void)uMsg; (void)wParam; (void)lParam;
       return(1);
@@ -671,6 +743,11 @@ class WndFrame:public WindowControl{
 
     virtual void Destroy(void);
 
+    virtual int OnMouseMove(WPARAM wParam, LPARAM lParam){
+		(void)wParam; (void)lParam;
+      return(1);
+    };
+
     void SetCaption(const TCHAR *Value);
     TCHAR *GetCaption(void){return(mCaption);};
 
@@ -683,6 +760,7 @@ class WndFrame:public WindowControl{
 
 
     int OnLButtonDown(WPARAM wParam, LPARAM lParam);
+    int OnLButtonUp(WPARAM wParam, LPARAM lParam);
 
   protected:
 
@@ -706,7 +784,7 @@ class WndListFrame:public WndFrame{
       int BottomIndex;
       int ItemIndex;
       int DrawIndex;
-      int SelectedIndex;
+//      int SelectedIndex;
       int ScrollIndex;
       int ItemCount;
       int ItemInViewCount;
@@ -722,6 +800,7 @@ class WndListFrame:public WndFrame{
 
     virtual void Destroy(void);
 
+    int OnMouseMove(WPARAM wParam, LPARAM lParam);
     int OnItemKeyDown(WindowControl *Sender, WPARAM wParam, LPARAM lParam);
     int PrepareItemDraw(void);
     void ResetList(void);
@@ -731,16 +810,27 @@ class WndListFrame:public WndFrame{
     int RecalculateIndices(bool bigscroll);
     void Redraw(void);
     int GetItemIndex(void){return(mListInfo.ItemIndex);}
+    void SetItemIndex(int iValue);
     void SelectItemFromScreen(int xPos, int yPos, RECT *rect);
+    int GetScrollBarHeight (void);
+    int GetScrollIndexFromScrollBarTop(int iScrollBarTop);
+    int GetScrollBarTopFromScrollIndex();
 
   protected:
+#define SCROLLBARWIDTH 32
 
     int OnLButtonDown(WPARAM wParam, LPARAM lParam);
+    int OnLButtonUp(WPARAM wParam, LPARAM lParam);
 
     OnListCallback_t mOnListCallback;
     OnListCallback_t mOnListEnterCallback;
     ListInfo_t mListInfo;
     void Paint(HDC hDC);
+	  RECT rcScrollBarButton;
+	  RECT rcScrollBar;
+    int mMouseScrollBarYOffset; // where in the scrollbar button was mouse down at
+    bool mMouseDown;
+    int LastMouseMoveTime;
 };
 
 class WndOwnerDrawFrame:public WndFrame{
@@ -811,6 +901,7 @@ class WndForm:public WindowControl{
     ~WndForm(void);
     virtual void Destroy(void);
 
+    bool bLButtonDown; //RLD
     HWND GetClientAreaHandle(void);
     void AddClient(WindowControl *Client);
 
@@ -854,6 +945,8 @@ class WndForm:public WindowControl{
     void SetTimerNotify(int (*OnTimerNotify)(WindowControl * Sender));
 
     void SetUserMsgNotify(int (*OnUserMsgNotify)(WindowControl * Sender, MSG *msg));
+private:
+    static unsigned int timeAnyOpenClose; // when any dlg opens or child closes
 
 };
 
@@ -928,8 +1021,10 @@ class WndProperty:public WindowControl{
     DataField *mDataField;
 
     void UpdateButtonData(int Value);
+    bool mDialogStyle;
 
   public:
+
 
     typedef int (*DataChangeCallback_t)(WindowControl * Sender, int Mode, int Value);
 
