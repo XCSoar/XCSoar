@@ -52,16 +52,16 @@ void OnInfoBoxHelp(WindowControl * Sender){
   TCHAR caption[100];
   TCHAR mode[100];
   switch (config_page) {
-  case 14:
+  case 15:
     _tcscpy(mode,gettext(TEXT("circling")));
     break;
-  case 15:
+  case 16:
     _tcscpy(mode,gettext(TEXT("cruise")));
     break;
-  case 16:
+  case 17:
     _tcscpy(mode,gettext(TEXT("final glide")));
     break;
-  case 17:
+  case 18:
     _tcscpy(mode,gettext(TEXT("auxiliary")));
     break;
   default:
@@ -129,7 +129,7 @@ void OnInfoBoxHelp(WindowControl * Sender){
     dlgHelpShowModal(caption, TEXT("[Final Distance]\r\nDistance to finish around remaining turn points."));
     break;
   case 19:
-    dlgHelpShowModal(caption, TEXT("[Final L/D]\r\nThe required glide ratio to finish the task, given by the distance to go divided by the height required to arrive at the safety arrival altitude.  Negative values indicate a climb is necessary to finish. If the height required is close to zero, the displayed value is '---'."));
+    dlgHelpShowModal(caption, TEXT("[Final L/D]\r\nThe required glide ratio to finish the task, given by the distance to go divided by the height required to arrive at the safety arrival altitude.  Negative values indicate a climb is necessary to finish. If the height required is close to zero, the displayed value is '---'.  Note that this calculation may be optimistic because it reduces the height required to finish by the excess energy height of the glider if its true airspeed is greater than the MacCready and best LD speeds."));
     break;
   case 20:
     dlgHelpShowModal(caption, TEXT("[Terrain Elevation]\r\nThis is the elevation of the terrain above mean sea level, obtained from the terrain file at the current GPS location."));
@@ -186,7 +186,7 @@ void OnInfoBoxHelp(WindowControl * Sender){
     dlgHelpShowModal(caption, TEXT("[G load]\r\nMagnitude of G loading reported by a supported external intelligent vario.  This value is negative for pitch-down manoeuvres."));
     break;
   case 38:
-    dlgHelpShowModal(caption, TEXT("[Next L/D]\r\nThe required glide ratio to reach the next waypoint, given by the distance to next waypoint divided by the height required to arrive at the safety arrival altitude.  Negative values indicate a climb is necessary to reach the waypoint.  If the height required is close to zero, the displayed value is '---'."));
+    dlgHelpShowModal(caption, TEXT("[Next L/D]\r\nThe required glide ratio to reach the next waypoint, given by the distance to next waypoint divided by the height required to arrive at the safety arrival altitude.  Negative values indicate a climb is necessary to reach the waypoint.  If the height required is close to zero, the displayed value is '---'.    Note that this calculation may be optimistic because it reduces the height required to reach the waypoint by the excess energy height of the glider if its true airspeed is greater than the MacCready and best LD speeds."));
     break;
   case 39:
     dlgHelpShowModal(caption, TEXT("[Time local]\r\nGPS time expressed in local time zone."));
