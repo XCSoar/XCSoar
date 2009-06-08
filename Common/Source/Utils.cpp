@@ -2758,10 +2758,14 @@ void WriteFileRegistryString(HANDLE hFile, TCHAR *instring) {
       tempFile[i]= 0;
     }
     GetRegistryString(instring, tempFile, MAX_PATH);
+#ifdef _UNICODE
     WideCharToMultiByte( CP_ACP, 0, tempFile,
 			 _tcslen(tempFile)+1,
 			 ctempFile,
 			 MAX_PATH, NULL, NULL);
+#else
+    strcpy(ctempFile, tempFile);
+#endif
     for (i=0; i<MAX_PATH; i++) {
       if (ctempFile[i]=='\?') {
 	ctempFile[i]=0;
@@ -2942,7 +2946,11 @@ BOOL ReadString(ZZIP_FILE *zFile, int Max, TCHAR *String)
   sTmp[i] = 0;
   zzip_seek(zFile, dwFilePos+j, SEEK_SET);
   sTmp[Max-1] = '\0';
+#ifdef _UNICODE
   mbstowcs(String, sTmp, strlen(sTmp)+1);
+#else
+  strcpy(String, sTmp);
+#endif
   return (dwTotalNumBytesRead>0);
 }
 
@@ -2999,7 +3007,11 @@ BOOL ReadString(HANDLE hFile, int Max, TCHAR *String)
   sTmp[i] = 0;
   SetFilePointer(hFile, dwFilePos+j, NULL, FILE_BEGIN);
   sTmp[Max-1] = '\0';
+#ifdef _UNICODE
   mbstowcs(String, sTmp, strlen(sTmp)+1);
+#else
+  strcpy(String, sTmp);
+#endif
   return (dwTotalNumBytesRead>0);
 
 }
@@ -3657,20 +3669,33 @@ static bool LoadRegistryFromFile_inner(const TCHAR *szFile, bool wide=true)
       while (fgets(inval, nMaxValueValueSize, fp)) {
         if (sscanf(inval, "%[^#=\r\n ]=\"%[^\r\n\"]\"[\r\n]", name, value) == 2) {
 	  if (strlen(name)>0) {
+#ifdef _UNICODE
 	    mbstowcs(wname, name, strlen(name)+1);
 	    mbstowcs(wvalue, value, strlen(value)+1);
+#else
+            strcpy(wname, name);
+            strcpy(wvalue, value);
+#endif
 	    SetRegistryString(wname, wvalue);
 	    found = true;
 	  }
         } else if (sscanf(inval, "%[^#=\r\n ]=%d[\r\n]", name, &j) == 2) {
 	  if (strlen(name)>0) {
+#ifdef _UNICODE
 	    mbstowcs(wname, name, strlen(name)+1);
+#else
+            strcpy(wname, name);
+#endif
 	    SetToRegistry(wname, j);
 	    found = true;
 	  }
         } else if (sscanf(inval, "%[^#=\r\n ]=\"\"[\r\n]", name) == 1) {
 	  if (strlen(name)>0) {
+#ifdef _UNICODE
 	    mbstowcs(wname, name, strlen(name)+1);
+#else
+            strcpy(wname, name);
+#endif
 	    SetRegistryString(wname, TEXT(""));
 	    found = true;
 	  }
@@ -4646,10 +4671,14 @@ void SaveFLARMDetails(void)
     {
       wsprintf(wsline, TEXT("%lx=%s\r\n"), FLARM_Names[z].ID,FLARM_Names[z].Name);
 
+#ifdef _UNICODE
       WideCharToMultiByte( CP_ACP, 0, wsline,
 			   _tcslen(wsline)+1,
 			   cline,
 			   READLINE_LENGTH, NULL, NULL);
+#else
+      strcpy(cline, wsline);
+#endif
 
       WriteFile(hFile, cline, strlen(cline), &bytesWritten, NULL);
     }

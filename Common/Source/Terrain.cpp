@@ -1329,10 +1329,14 @@ void OpenTopology() {
         wcscat(wShapeFilename,ShapeName);
         wcscat(wShapeFilename,TEXT(".shp"));
 
+#ifdef _UNICODE
         WideCharToMultiByte( CP_ACP, 0, wShapeFilename,
                              _tcslen(wShapeFilename)+1,
                              ShapeFilename,
                              200, NULL, NULL);
+#else
+        strcpy(ShapeFilename, wShapeFilename);
+#endif
 
         // Shape range
         PExtractParameter(TempString, ctemp, 1);
