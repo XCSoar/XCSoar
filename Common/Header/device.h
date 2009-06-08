@@ -18,9 +18,9 @@
 typedef	enum {dfGPS, dfLogger, dfSpeed,	dfVario, dfBaroAlt,	dfWind, dfVoice, dfNmeaOut, dfRadio} DeviceFlags_t;
 
 typedef struct Declaration {
-  WCHAR PilotName[64];
-  WCHAR AircraftType[32];
-  WCHAR AircraftRego[32];
+  TCHAR PilotName[64];
+  TCHAR AircraftType[32];
+  TCHAR AircraftRego[32];
   int num_waypoints;
   const WAYPOINT *waypoint[MAXTASKPOINTS];
 } Declaration_t;
