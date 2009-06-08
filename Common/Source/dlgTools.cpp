@@ -44,6 +44,11 @@ Copyright_License {
 #include "Dialogs.h"
 
 
+static inline int
+mmin(const int t1, const int t2)
+{
+  return t1 < t2 ? t1 : t2;
+}
 
 int DLGSCALE(int x) {
   int iRetVal = x;
