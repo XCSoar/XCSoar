@@ -158,7 +158,7 @@ BOOL devRegisterGetName(int Index, TCHAR *Name){
 }
 
 
-static int devIsFalseReturn(PDeviceDescriptor_t d){
+static BOOL devIsFalseReturn(PDeviceDescriptor_t d){
   (void)d;
   return(FALSE);
 
@@ -188,7 +188,7 @@ BOOL devInit(LPTSTR CommandLine){
     DeviceList[i].IsBaroSource = devIsFalseReturn;
     DeviceList[i].IsRadio = devIsFalseReturn;
 
-    DeviceList[i].PutVoice = (int (*)(struct DeviceDescriptor_t *,TCHAR *))devIsFalseReturn;
+    DeviceList[i].PutVoice = (BOOL (*)(struct DeviceDescriptor_t *,TCHAR *))devIsFalseReturn;
     DeviceList[i].PortNumber = i;
     DeviceList[i].PutQNH = NULL;
     DeviceList[i].OnSysTicker = NULL;
