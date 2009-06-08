@@ -995,8 +995,8 @@ BOOL InfoBoxFormatter::isValid(void) {
 }
 
 void InfoBoxFormatter::RenderInvalid(int *color) {
-  _stprintf(CommentText,TEXT(""));
-  _stprintf(Text,TEXT("---"));
+  _tcscpy(CommentText, TEXT(""));
+  _tcscpy(Text, TEXT("---"));
   *color = -1;
 }
 
@@ -1062,14 +1062,12 @@ TCHAR *FormatterTime::Render(int *color) {
         _stprintf(Text,
                   TEXT("%02d:%02d"),
                   mins, seconds );
-        _stprintf(CommentText,
-                  TEXT(""));
+        _tcscpy(CommentText, TEXT(""));
       } else {
         _stprintf(Text,
                   TEXT("-00:%02d"),
                   abs(seconds));
-        _stprintf(CommentText,
-                  TEXT(""));
+        _tcscpy(CommentText, TEXT(""));
       }
     } else {
       // Time is positive
@@ -1085,8 +1083,7 @@ TCHAR *FormatterTime::Render(int *color) {
         _stprintf(Text,
                   TEXT("%02d:%02d"),
                   mins, seconds );
-        _stprintf(CommentText,
-                  TEXT(""));
+        _tcscpy(CommentText, TEXT(""));
       }
     }
   }
@@ -1115,14 +1112,12 @@ TCHAR *FormatterAATTime::Render(int *color) {
         _stprintf(Text,
                   TEXT("%02d:%02d"),
                   mins, seconds );
-        _stprintf(CommentText,
-                  TEXT(""));
+        _tcscpy(CommentText, TEXT(""));
       } else {
         _stprintf(Text,
                   TEXT("-00:%02d"),
                   abs(seconds));
-        _stprintf(CommentText,
-                  TEXT(""));
+        _tcscpy(CommentText, TEXT(""));
       }
     } else {
       // Time is positive
@@ -1137,8 +1132,7 @@ TCHAR *FormatterAATTime::Render(int *color) {
         _stprintf(Text,
                   TEXT("%02d:%02d"),
                   mins, seconds );
-        _stprintf(CommentText,
-                  TEXT(""));
+        _tcscpy(CommentText, TEXT(""));
       }
     }
   }
