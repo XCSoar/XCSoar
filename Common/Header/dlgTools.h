@@ -51,8 +51,8 @@ int
 WINAPI
 MessageBoxX(
     HWND hWnd ,
-    LPCWSTR lpText,
-    LPCWSTR lpCaption,
+    LPCTSTR lpText,
+    LPCTSTR lpCaption,
     UINT uType);
 
 #endif
