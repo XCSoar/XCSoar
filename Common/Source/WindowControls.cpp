@@ -2261,7 +2261,7 @@ extern HWND hWndMapWindow;  // MapWindow
 
 
 int WndForm::ShowModal(void){
-#define OPENCLOSESUPPRESSTIME 1000
+#define OPENCLOSESUPPRESSTIME 300
   MSG msg;
   HWND oldFocusHwnd;
 
