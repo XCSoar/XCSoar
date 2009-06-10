@@ -3127,7 +3127,10 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
 
   if ((ActiveWayPoint<1) || TaskIsTemporary()) {
     LegCovered = 0;
-  } else {
+    if (!TaskIsTemporary()) { // RLD if task not started, exclude distance to start point
+      LegToGo=0;
+    }
+   } else {
     if (AATEnabled) {
       // TODO accuracy: Get best range point to here...
       w0lat = Task[ActiveWayPoint-1].AATTargetLat;
@@ -3751,62 +3754,95 @@ void AATStats_Distance(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
     {
       i=ActiveWayPoint;
 
-      double LegToGo, TargetLegToGo;
+      double LegToGo=0, TargetLegToGo=0;
 
-      DistanceBearing(Basic->Latitude , Basic->Longitude ,
-                      WayPointList[Task[i].Index].Latitude,
-                      WayPointList[Task[i].Index].Longitude,
-                      &LegToGo, NULL);
+      if (i > 0 ) { //RLD only include distance from glider to next leg if we've started the task
+        DistanceBearing(Basic->Latitude , Basic->Longitude ,
+                        WayPointList[Task[i].Index].Latitude,
+                        WayPointList[Task[i].Index].Longitude,
+                        &LegToGo, NULL);
 
-      DistanceBearing(Basic->Latitude , Basic->Longitude ,
-                      Task[i].AATTargetLat,
-                      Task[i].AATTargetLon,
-                      &TargetLegToGo, NULL);
+        DistanceBearing(Basic->Latitude , Basic->Longitude ,
+                        Task[i].AATTargetLat,
+                        Task[i].AATTargetLon,
+                        &TargetLegToGo, NULL);
 
-      if(Task[i].AATType == CIRCLE)
+        if(Task[i].AATType == CIRCLE)
         {
-          MaxDistance = LegToGo + (Task[i].AATCircleRadius * 2);
-          MinDistance = LegToGo - (Task[i].AATCircleRadius * 2);
+          MaxDistance = LegToGo + (Task[i].AATCircleRadius );  // ToDo: should be adjusted for angle of max target and for national rules
+          MinDistance = LegToGo - (Task[i].AATCircleRadius );
         }
-      else
+        else
         {
-          MaxDistance = LegToGo + (Task[i].AATSectorRadius * 2);
+          MaxDistance = LegToGo + (Task[i].AATSectorRadius );  // ToDo: should be adjusted for angle of max target.
           MinDistance = LegToGo;
         }
 
-      TargetDistance = TargetLegToGo;
+        TargetDistance = TargetLegToGo;
+      }
 
       i++;
-      while(ValidTaskPoint(i))
-        {
-          double LegDistance, TargetLegDistance;
+      while(ValidTaskPoint(i)) {
+	double LegDistance, TargetLegDistance;
 
-          DistanceBearing(WayPointList[Task[i].Index].Latitude,
-                          WayPointList[Task[i].Index].Longitude,
-                          WayPointList[Task[i-1].Index].Latitude,
-                          WayPointList[Task[i-1].Index].Longitude,
-                          &LegDistance, NULL);
+	DistanceBearing(WayPointList[Task[i].Index].Latitude,
+			WayPointList[Task[i].Index].Longitude,
+			WayPointList[Task[i-1].Index].Latitude,
+			WayPointList[Task[i-1].Index].Longitude,
+			&LegDistance, NULL);
 
-          DistanceBearing(Task[i].AATTargetLat,
-                          Task[i].AATTargetLon,
-                          Task[i-1].AATTargetLat,
-                          Task[i-1].AATTargetLon,
-                          &TargetLegDistance, NULL);
+	DistanceBearing(Task[i].AATTargetLat,
+			Task[i].AATTargetLon,
+			Task[i-1].AATTargetLat,
+			Task[i-1].AATTargetLon,
+			&TargetLegDistance, NULL);
 
-          if(Task[ActiveWayPoint].AATType == CIRCLE)
-            {
-              MaxDistance += LegDistance + (Task[i].AATCircleRadius * 2);
-              MinDistance += LegDistance- (Task[i].AATCircleRadius * 2);
-            }
-          else
-            {
-              MaxDistance += LegDistance +
-                Task[ActiveWayPoint].AATSectorRadius * 2;
-              MinDistance += LegDistance;
-            }
-          TargetDistance += TargetLegDistance;
-          i++;
-        }
+	MaxDistance += LegDistance;
+	MinDistance += LegDistance;
+
+	if(Task[ActiveWayPoint].AATType == CIRCLE) {
+	  // breaking out single Areas increases accuracy for start
+	  // and finish
+
+	  // sector at start of (i)th leg
+	  if (i-1 == 0) {// first leg of task
+	    // add nothing
+	    MaxDistance -= StartRadius; // e.g. Sports 2009 US Rules A116.3.2.  To Do: This should be configured multiple countries
+	    MinDistance -= StartRadius;
+	  } else { // not first leg of task
+	    MaxDistance += (Task[i-1].AATCircleRadius);  //ToDo: should be adjusted for angle of max target
+	    MinDistance -= (Task[i-1].AATCircleRadius);  //ToDo: should be adjusted for angle of max target
+	  }
+
+	  // sector at end of ith leg
+	  if (!ValidTaskPoint(i+1)) {// last leg of task
+	    // add nothing
+	    MaxDistance -= FinishRadius; // To Do: This can be configured for finish rules
+	    MinDistance -= FinishRadius;
+	  } else { // not last leg of task
+	    MaxDistance += (Task[i].AATCircleRadius);  //ToDo: should be adjusted for angle of max target
+	    MinDistance -= (Task[i].AATCircleRadius);  //ToDo: should be adjusted for angle of max target
+	  }
+	} else { // not circle (pie slice)
+	  // sector at start of (i)th leg
+	  if (i-1 == 0) {// first leg of task
+	    // add nothing
+	    MaxDistance += 0; // To Do: This can be configured for start rules
+	  } else { // not first leg of task
+	    MaxDistance += (Task[i-1].AATCircleRadius);  //ToDo: should be adjusted for angle of max target
+	  }
+
+	  // sector at end of ith leg
+	  if (!ValidTaskPoint(i+1)) {// last leg of task
+	    // add nothing
+	    MaxDistance += 0; // To Do: This can be configured for finish rules
+	  } else { // not last leg of task
+	    MaxDistance += (Task[i].AATCircleRadius);  //ToDo: should be adjusted for angle of max target
+	  }
+	}
+	TargetDistance += TargetLegDistance;
+	i++;
+      }
 
       // JMW TODO accuracy: make these calculations more accurate, because
       // currently they are very approximate.
