@@ -3456,6 +3456,8 @@ void WndProperty::Paint(HDC hDC){
   if (org.x < 1)
     org.x = 1;
 
+  // JMW TODO: use stretch functions for bigger displays, since these icons are too small for them.
+
   ExtTextOut(hDC, org.x, org.y,
     ETO_OPAQUE, NULL, mCaption, _tcslen(mCaption), NULL);
 
@@ -3767,6 +3769,53 @@ void WndListFrame::Redraw(void){
 }
 
 void WndListFrame::DrawScrollBar(HDC hDC) {
+#ifndef GNAV
+  RECT rc;
+  HPEN hP;
+  HBRUSH hB;
+  int w = 1+GetWidth()- 2*SELECTORWIDTH;
+  int h = GetHeight()- SELECTORWIDTH;
+
+  rc.left = w;
+  rc.top = 0;
+  rc.right = w + 2*SELECTORWIDTH - 2;
+  rc.bottom = h;
+
+  if (mListInfo.ItemCount <= mListInfo.ItemInViewCount){
+    hB = (HBRUSH)CreateSolidBrush(GetBackColor());
+    FillRect(hDC, &rc, hB);
+    DeleteObject(hB);
+    return;
+  }
+
+  hP = (HPEN)CreatePen(PS_SOLID, DEFAULTBORDERPENWIDTH, GetForeColor());
+
+  SelectObject(hDC, hP);
+  SelectObject(hDC, GetBackBrush());
+
+  Rectangle(hDC, rc.left, rc.top, rc.right, rc.bottom);
+
+  DeleteObject(hP);
+
+  hB = (HBRUSH)CreateSolidBrush(GetForeColor());
+
+  rc.left = 1+w;
+  rc.top = 1+(h * mListInfo.ScrollIndex) / mListInfo.ItemCount;
+  rc.right = w + 2*SELECTORWIDTH - 1;
+  rc.bottom = rc.top + iround((h * mListInfo.ItemInViewCount)
+			      / mListInfo.ItemCount)-1;
+
+  if (rc.bottom >= h){
+    int d;
+    d= (h - rc.bottom) - 1;
+    rc.bottom += d;
+    rc.top += d;
+  }
+
+  FillRect(hDC, &rc, hB);
+
+  DeleteObject(hB);
+#else
 #define SCROLLBARTOP 25
 
   static HBITMAP hScrollBarBitmapTop = NULL;
@@ -3788,10 +3837,6 @@ void WndListFrame::DrawScrollBar(HDC hDC) {
     hScrollBarBitmapBot=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_SCROLLBARBOT));
   if (hScrollBarBitmapFill == NULL)
     hScrollBarBitmapFill=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_SCROLLBARFILL));
-
-
-
-
 
   hB =(HBRUSH)CreateSolidBrush(0xFFFFFF);
   hP = (HPEN)CreatePen(PS_SOLID, DEFAULTBORDERPENWIDTH, GetForeColor());
@@ -3828,61 +3873,61 @@ void WndListFrame::DrawScrollBar(HDC hDC) {
   }
 
 
-unsigned long ctUpDown =0;
-unsigned long ctScroll =0;
+  unsigned long ctUpDown =0;
+  unsigned long ctScroll =0;
 
-bool bTransparentUpDown = false;
-bool bTransparentScroll = true;
+  bool bTransparentUpDown = false;
+  bool bTransparentScroll = true;
 
-if (bTransparentUpDown)
-  ctUpDown=SRCAND;  //Combines the colors of the source and destination rectangles by using the Boolean AND operator.
-else
-  ctUpDown=SRCCOPY;  //Copies the source rectangle directly to the destination rectangle.
+  if (bTransparentUpDown)
+    ctUpDown=SRCAND;  //Combines the colors of the source and destination rectangles by using the Boolean AND operator.
+  else
+    ctUpDown=SRCCOPY;  //Copies the source rectangle directly to the destination rectangle.
 
-if (bTransparentScroll)
-  ctScroll=SRCAND;  //Combines the colors of the source and destination rectangles by using the Boolean AND operator.
-else
-  ctScroll=SRCCOPY;  //Copies the source rectangle directly to the destination rectangle.
+  if (bTransparentScroll)
+    ctScroll=SRCAND;  //Combines the colors of the source and destination rectangles by using the Boolean AND operator.
+  else
+    ctScroll=SRCCOPY;  //Copies the source rectangle directly to the destination rectangle.
 
 
   // TOP Dn Button 32x32
   if (ISCALE==1)
-  {
-    oldBmp = (HBITMAP)SelectObject(GetTempDeviceContext(), hScrollBarBitmapTop);
-    BitBlt(hDC, w, SCROLLBARTOP, SCROLLBARWIDTH, SCROLLBARWIDTH,
-      GetTempDeviceContext(), 0, 0, ctUpDown);
+    {
+      oldBmp = (HBITMAP)SelectObject(GetTempDeviceContext(), hScrollBarBitmapTop);
+      BitBlt(hDC, w, SCROLLBARTOP, SCROLLBARWIDTH, SCROLLBARWIDTH,
+	     GetTempDeviceContext(), 0, 0, ctUpDown);
 
-    // BOT Up Button 32x32
-    SelectObject(GetTempDeviceContext(), hScrollBarBitmapBot);
-    BitBlt(hDC, w, h-SCROLLBARWIDTH+SCROLLBARTOP, SCROLLBARWIDTH, SCROLLBARWIDTH,
-      GetTempDeviceContext(), 0, 0, ctUpDown);
-  }
+      // BOT Up Button 32x32
+      SelectObject(GetTempDeviceContext(), hScrollBarBitmapBot);
+      BitBlt(hDC, w, h-SCROLLBARWIDTH+SCROLLBARTOP, SCROLLBARWIDTH, SCROLLBARWIDTH,
+	     GetTempDeviceContext(), 0, 0, ctUpDown);
+    }
   else
-  {
-    oldBmp = (HBITMAP)SelectObject(GetTempDeviceContext(), hScrollBarBitmapTop);
-    //BitBlt(hDC, w, SCROLLBARTOP, SCROLLBARWIDTH, SCROLLBARWIDTH,
-    //  GetTempDeviceContext(), 0, 0, ctUpDown);
+    {
+      oldBmp = (HBITMAP)SelectObject(GetTempDeviceContext(), hScrollBarBitmapTop);
+      //BitBlt(hDC, w, SCROLLBARTOP, SCROLLBARWIDTH, SCROLLBARWIDTH,
+      //  GetTempDeviceContext(), 0, 0, ctUpDown);
 
-    StretchBlt(hDC, w, SCROLLBARTOP,
-        (SCROLLBARWIDTH * ISCALE),
-        (SCROLLBARWIDTH * ISCALE),
-	     GetTempDeviceContext(),
-	     0, 0, SCROLLBARWIDTH, SCROLLBARWIDTH,
-	     ctUpDown);
+      StretchBlt(hDC, w, SCROLLBARTOP,
+		 (SCROLLBARWIDTH * ISCALE),
+		 (SCROLLBARWIDTH * ISCALE),
+		 GetTempDeviceContext(),
+		 0, 0, SCROLLBARWIDTH, SCROLLBARWIDTH,
+		 ctUpDown);
 
 
-    // BOT Up Button 32x32
-    SelectObject(GetTempDeviceContext(), hScrollBarBitmapBot);
-    //BitBlt(hDC, w, h-SCROLLBARWIDTH+SCROLLBARTOP, SCROLLBARWIDTH, SCROLLBARWIDTH,
-    //  GetTempDeviceContext(), 0, 0, ctUpDown);
+      // BOT Up Button 32x32
+      SelectObject(GetTempDeviceContext(), hScrollBarBitmapBot);
+      //BitBlt(hDC, w, h-SCROLLBARWIDTH+SCROLLBARTOP, SCROLLBARWIDTH, SCROLLBARWIDTH,
+      //  GetTempDeviceContext(), 0, 0, ctUpDown);
 
-    StretchBlt(hDC, w, h-(SCROLLBARWIDTH * ISCALE)+SCROLLBARTOP,
-        (SCROLLBARWIDTH * ISCALE),
-        (SCROLLBARWIDTH * ISCALE),
-	     GetTempDeviceContext(),
-	     0, 0, SCROLLBARWIDTH, SCROLLBARWIDTH,
-	     ctUpDown);
-  }
+      StretchBlt(hDC, w, h-(SCROLLBARWIDTH * ISCALE)+SCROLLBARTOP,
+		 (SCROLLBARWIDTH * ISCALE),
+		 (SCROLLBARWIDTH * ISCALE),
+		 GetTempDeviceContext(),
+		 0, 0, SCROLLBARWIDTH, SCROLLBARWIDTH,
+		 ctUpDown);
+    }
 
   // Middle Slider Button 30x12
   if (mListInfo.ItemCount > mListInfo.ItemInViewCount){
@@ -3890,26 +3935,26 @@ else
     // handle on slider
     SelectObject(GetTempDeviceContext(), hScrollBarBitmapMid);
     if (ISCALE==1)
-    {
-      BitBlt(hDC, w+1, rc.top + GetScrollBarHeight()/2 - 14, 30, 28,
-        GetTempDeviceContext(), 0, 0,
-        SRCAND); // always SRCAND b/c on top of scrollbutton texture
-    }
+      {
+	BitBlt(hDC, w+1, rc.top + GetScrollBarHeight()/2 - 14, 30, 28,
+	       GetTempDeviceContext(), 0, 0,
+	       SRCAND); // always SRCAND b/c on top of scrollbutton texture
+      }
     else
-    {
-      StretchBlt(hDC, w+1, rc.top + GetScrollBarHeight()/2 - 14*ISCALE, 30*ISCALE, 28*ISCALE,
-        GetTempDeviceContext(), 0, 0,
-        30, 28,
-        SRCAND); // always SRCAND b/c on top of scrollbutton texture
-/*
-      StretchBlt(hDC, w+1, rc.top + GetScrollBarHeight()/2 - 14,
+      {
+	StretchBlt(hDC, w+1, rc.top + GetScrollBarHeight()/2 - 14*ISCALE, 30*ISCALE, 28*ISCALE,
+		   GetTempDeviceContext(), 0, 0,
+		   30, 28,
+		   SRCAND); // always SRCAND b/c on top of scrollbutton texture
+	/*
+	  StretchBlt(hDC, w+1, rc.top + GetScrollBarHeight()/2 - 14,
           (SCROLLBARWIDTH * ISCALE),
           (SCROLLBARWIDTH * ISCALE),
-         GetTempDeviceContext(),
-         0, 0, SCROLLBARWIDTH, SCROLLBARWIDTH,
-         ctUpDown);
-*/
-    }
+	  GetTempDeviceContext(),
+	  0, 0, SCROLLBARWIDTH, SCROLLBARWIDTH,
+	  ctUpDown);
+	*/
+      }
 
     // box around slider rect
     hP3 = (HPEN)CreatePen(PS_SOLID, DEFAULTBORDERPENWIDTH * 2, GetForeColor());
@@ -3930,7 +3975,7 @@ else
 
   DeleteObject(hP);
   DeleteObject(hB);
-
+#endif
 }
 
 
