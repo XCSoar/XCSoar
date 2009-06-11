@@ -818,7 +818,9 @@ class WndListFrame:public WndFrame{
     int GetScrollBarTopFromScrollIndex();
 
   protected:
-#define SCROLLBARWIDTH 32
+#define SCROLLBARWIDTH_INITIAL 32
+    int ScrollbarTop;
+    int ScrollbarWidth;
 
     int OnLButtonDown(WPARAM wParam, LPARAM lParam);
     int OnLButtonUp(WPARAM wParam, LPARAM lParam);

@@ -426,7 +426,7 @@ bool DataFieldFileReader::checkFilter(const TCHAR *filename,
   _tcscpy(upfilter,filter+1);
 
   // check if trailing part of filter (*.exe => .exe) matches end
-  ptr = _tcsstr(filename, upfilter);
+  ptr = _tcsstr((TCHAR*)filename, upfilter);
   if (ptr) {
     if (_tcslen(ptr)==_tcslen(upfilter)) {
       return true;
@@ -434,7 +434,7 @@ bool DataFieldFileReader::checkFilter(const TCHAR *filename,
   }
 
   _tcsupr(upfilter);
-  ptr = _tcsstr(filename, upfilter);
+  ptr = _tcsstr((TCHAR*)filename, upfilter);
   if (ptr) {
     if (_tcslen(ptr)==_tcslen(upfilter)) {
       return true;
@@ -2261,7 +2261,7 @@ extern HWND hWndMapWindow;  // MapWindow
 
 
 int WndForm::ShowModal(void){
-#define OPENCLOSESUPPRESSTIME 300
+#define OPENCLOSESUPPRESSTIME 500
   MSG msg;
   HWND oldFocusHwnd;
 
@@ -3169,6 +3169,15 @@ int WndProperty::WndProcEditControl(HWND hwnd, UINT uMsg,
   switch (uMsg){
 
     case WM_KEYDOWN:
+      if ((wParam & 0xffff) == VK_RETURN || (wParam & 0xffff) == VK_F23) { // Compaq uses VKF23
+        if (this->mDialogStyle) {
+          InterfaceTimeoutReset();
+          if (!OnLButtonDown(wParam, lParam)) {
+            DisplayTimeOut = 0;
+            return(0);
+          }
+        } //end combopicker
+      }
       // tmep hack, do not process nav keys
       if (KeyTimer(true, wParam & 0xffff)) {
 	// activate tool tips if hit return for long time
@@ -3322,6 +3331,10 @@ int WndProperty::OnLButtonDown(WPARAM wParam, LPARAM lParam){
     if (!GetReadOnly())  // when they click on the label
     {
       dlgComboPicker(this);
+    }
+    else
+    {
+      OnHelp(); // this would display xml file help on a read-only wndproperty if it exists
     }
   }
   else
@@ -3543,7 +3556,7 @@ DataField *WndProperty::SetDataField(DataField *Value){
     if (mDialogStyle)
     {
       this->SetButtonSize(0);
-      this->SetCanFocus(false);
+      this->SetCanFocus(true);
     }
     else
     {
@@ -3689,6 +3702,8 @@ WndListFrame::WndListFrame(WindowControl *Owner, TCHAR *Name, int X, int Y,
   SetBackColor(GetOwner()->GetBackColor());
   mMouseDown = false;
   LastMouseMoveTime=0;
+  ScrollbarWidth=-1;
+  ScrollbarTop=-1;
 
 };
 
@@ -3768,8 +3783,10 @@ void WndListFrame::Redraw(void){
   mClients[0]->Redraw();    // redraw the current
 }
 
+
 void WndListFrame::DrawScrollBar(HDC hDC) {
-#ifndef GNAV
+#ifdef GNAVxxx  // Johnny, I think this GNAVxxx section can be removed entirely in place of the adjustment to the width below. - RLD
+
   RECT rc;
   HPEN hP;
   HBRUSH hB;
@@ -3815,8 +3832,7 @@ void WndListFrame::DrawScrollBar(HDC hDC) {
   FillRect(hDC, &rc, hB);
 
   DeleteObject(hB);
-#else
-#define SCROLLBARTOP 25
+#else   // GNAVxxx
 
   static HBITMAP hScrollBarBitmapTop = NULL;
   static HBITMAP hScrollBarBitmapMid = NULL;
@@ -3826,8 +3842,27 @@ void WndListFrame::DrawScrollBar(HDC hDC) {
   HPEN hP, hP3;
   HBRUSH hB;
   HBITMAP oldBmp;
-  int w = GetWidth()- (SCROLLBARWIDTH * ISCALE);
-  int h = GetHeight() - SCROLLBARTOP;
+
+  if ( ScrollbarWidth == -1) {  // resize height for each dialog so top button is below 1st item (to avoid initial highlighted overlap)
+#define SHRINKSBFACTOR 0.75  // shrink width factor.  Range .1 to 1 where 1 is very "fat"
+#ifdef GNAV
+    ScrollbarWidth = (int) (SELECTORWIDTH * 2);  // thin for GNAV b/c no touch screen
+    ScrollbarTop = 1;
+#else
+    ScrollbarWidth = (int) (SCROLLBARWIDTH_INITIAL * InfoBoxLayout::dscale * SHRINKSBFACTOR);
+    if (mClientCount > 0) {
+      ScrollbarTop = mClients[0]->GetHeight() + 2;
+    }
+    else {
+      ScrollbarTop = (int)(18.0 * InfoBoxLayout::dscale + 2);
+    }
+
+#endif
+  }
+
+
+  int w = GetWidth()- (ScrollbarWidth);
+  int h = GetHeight() - ScrollbarTop;
 
   if (hScrollBarBitmapTop == NULL)
     hScrollBarBitmapTop=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_SCROLLBARTOP));
@@ -3844,13 +3879,9 @@ void WndListFrame::DrawScrollBar(HDC hDC) {
 
   // ENTIRE SCROLLBAR AREA
   rc.left = w;
-  rc.top = SCROLLBARTOP;
-  rc.right = w + (SCROLLBARWIDTH * ISCALE) - 1;
-  rc.bottom = h + SCROLLBARTOP;
-
-  // draw recangle around entire scrollbar area
-  DrawLine2(hDC, rc.left, rc.top, rc.left, rc.bottom, rc.right, rc.bottom);
-  DrawLine2(hDC, rc.right, rc.bottom, rc.right, rc.top, rc.left, rc.top);
+  rc.top = ScrollbarTop;
+  rc.right = w + (ScrollbarWidth) - 1;
+  rc.bottom = h + ScrollbarTop;
 
   // save scrollbar size for mouse events
   rcScrollBar.left=rc.left;
@@ -3858,25 +3889,31 @@ void WndListFrame::DrawScrollBar(HDC hDC) {
   rcScrollBar.top=rc.top;
   rcScrollBar.bottom=rc.bottom;
 
+  if (mListInfo.BottomIndex == mListInfo.ItemCount) { // don't need scroll bar if one page only
+    return;
+  }
+
+  // draw rectangle around entire scrollbar area
+  DrawLine2(hDC, rc.left, rc.top, rc.left, rc.bottom, rc.right, rc.bottom);
+  DrawLine2(hDC, rc.right, rc.bottom, rc.right, rc.top, rc.left, rc.top);
 
   // Just Scroll Bar Slider button
   rc.left = w;
   rc.top = GetScrollBarTopFromScrollIndex()-1;
-  rc.right = w + (SCROLLBARWIDTH * ISCALE) - 1; // -2 if use 3x pen.  -1 if 2x pen
+  rc.right = w + (ScrollbarWidth) - 1; // -2 if use 3x pen.  -1 if 2x pen
   rc.bottom = rc.top + GetScrollBarHeight()+2;  // +2 for 3x pen, +1 for 2x pen
 
-  if (rc.bottom >= h){
+  if (rc.bottom >= GetHeight() - ScrollbarWidth){
     int d;
-    d= (h - rc.bottom) - 1;
+    d= (GetHeight() - ScrollbarWidth - rc.bottom) - 1;
     rc.bottom += d;
     rc.top += d;
   }
 
-
   unsigned long ctUpDown =0;
   unsigned long ctScroll =0;
 
-  bool bTransparentUpDown = false;
+  bool bTransparentUpDown = true;
   bool bTransparentScroll = true;
 
   if (bTransparentUpDown)
@@ -3891,69 +3928,65 @@ void WndListFrame::DrawScrollBar(HDC hDC) {
 
 
   // TOP Dn Button 32x32
-  if (ISCALE==1)
+  // BOT Up Button 32x32
+  if (ScrollbarWidth == SCROLLBARWIDTH_INITIAL)
     {
       oldBmp = (HBITMAP)SelectObject(GetTempDeviceContext(), hScrollBarBitmapTop);
-      BitBlt(hDC, w, SCROLLBARTOP, SCROLLBARWIDTH, SCROLLBARWIDTH,
+      BitBlt(hDC, w, ScrollbarTop, SCROLLBARWIDTH_INITIAL, SCROLLBARWIDTH_INITIAL,
 	     GetTempDeviceContext(), 0, 0, ctUpDown);
 
-      // BOT Up Button 32x32
       SelectObject(GetTempDeviceContext(), hScrollBarBitmapBot);
-      BitBlt(hDC, w, h-SCROLLBARWIDTH+SCROLLBARTOP, SCROLLBARWIDTH, SCROLLBARWIDTH,
+      BitBlt(hDC, w, h-SCROLLBARWIDTH_INITIAL+ScrollbarTop, SCROLLBARWIDTH_INITIAL, SCROLLBARWIDTH_INITIAL,
 	     GetTempDeviceContext(), 0, 0, ctUpDown);
     }
   else
     {
       oldBmp = (HBITMAP)SelectObject(GetTempDeviceContext(), hScrollBarBitmapTop);
-      //BitBlt(hDC, w, SCROLLBARTOP, SCROLLBARWIDTH, SCROLLBARWIDTH,
-      //  GetTempDeviceContext(), 0, 0, ctUpDown);
 
-      StretchBlt(hDC, w, SCROLLBARTOP,
-		 (SCROLLBARWIDTH * ISCALE),
-		 (SCROLLBARWIDTH * ISCALE),
+      StretchBlt(hDC, w, ScrollbarTop,
+		 (ScrollbarWidth),
+		 (ScrollbarWidth),
 		 GetTempDeviceContext(),
-		 0, 0, SCROLLBARWIDTH, SCROLLBARWIDTH,
+		 0, 0, SCROLLBARWIDTH_INITIAL, SCROLLBARWIDTH_INITIAL,
 		 ctUpDown);
 
 
       // BOT Up Button 32x32
       SelectObject(GetTempDeviceContext(), hScrollBarBitmapBot);
-      //BitBlt(hDC, w, h-SCROLLBARWIDTH+SCROLLBARTOP, SCROLLBARWIDTH, SCROLLBARWIDTH,
-      //  GetTempDeviceContext(), 0, 0, ctUpDown);
 
-      StretchBlt(hDC, w, h-(SCROLLBARWIDTH * ISCALE)+SCROLLBARTOP,
-		 (SCROLLBARWIDTH * ISCALE),
-		 (SCROLLBARWIDTH * ISCALE),
+      StretchBlt(hDC, w, h-(ScrollbarWidth)+ScrollbarTop,
+		 (ScrollbarWidth),
+		 (ScrollbarWidth),
 		 GetTempDeviceContext(),
-		 0, 0, SCROLLBARWIDTH, SCROLLBARWIDTH,
+		 0, 0, SCROLLBARWIDTH_INITIAL, SCROLLBARWIDTH_INITIAL,
 		 ctUpDown);
     }
 
-  // Middle Slider Button 30x12
+  // Middle Slider Button 30x28
   if (mListInfo.ItemCount > mListInfo.ItemInViewCount){
 
     // handle on slider
     SelectObject(GetTempDeviceContext(), hScrollBarBitmapMid);
-    if (ISCALE==1)
+    if (ScrollbarWidth == SCROLLBARWIDTH_INITIAL)
       {
-	BitBlt(hDC, w+1, rc.top + GetScrollBarHeight()/2 - 14, 30, 28,
-	       GetTempDeviceContext(), 0, 0,
-	       SRCAND); // always SRCAND b/c on top of scrollbutton texture
+	  BitBlt(hDC, w+1, rc.top + GetScrollBarHeight()/2 - 14, 30, 28,
+	         GetTempDeviceContext(), 0, 0,
+	         SRCAND); // always SRCAND b/c on top of scrollbutton texture
       }
     else
       {
-	StretchBlt(hDC, w+1, rc.top + GetScrollBarHeight()/2 - 14*ISCALE, 30*ISCALE, 28*ISCALE,
+        static int SCButtonW = -1;
+        static int SCButtonH = -1;
+        static int SCButtonY = -1;
+        if (SCButtonW == -1) {
+          SCButtonW = (int) (30.0 * (float)ScrollbarWidth / (float)SCROLLBARWIDTH_INITIAL);
+          SCButtonH = (int) (28.0 * (float)ScrollbarWidth / (float)SCROLLBARWIDTH_INITIAL);
+          SCButtonY = (int) (14.0 * (float)ScrollbarWidth / (float)SCROLLBARWIDTH_INITIAL);
+        }
+       StretchBlt(hDC, w+1, rc.top + GetScrollBarHeight()/2 - SCButtonY, SCButtonW, SCButtonH,
 		   GetTempDeviceContext(), 0, 0,
 		   30, 28,
 		   SRCAND); // always SRCAND b/c on top of scrollbutton texture
-	/*
-	  StretchBlt(hDC, w+1, rc.top + GetScrollBarHeight()/2 - 14,
-          (SCROLLBARWIDTH * ISCALE),
-          (SCROLLBARWIDTH * ISCALE),
-	  GetTempDeviceContext(),
-	  0, 0, SCROLLBARWIDTH, SCROLLBARWIDTH,
-	  ctUpDown);
-	*/
       }
 
     // box around slider rect
@@ -3975,7 +4008,7 @@ void WndListFrame::DrawScrollBar(HDC hDC) {
 
   DeleteObject(hP);
   DeleteObject(hB);
-#endif
+#endif // GNAVxxx
 }
 
 
@@ -4293,10 +4326,10 @@ int WndListFrame::OnLButtonDown(WPARAM wParam, LPARAM lParam) {
   }
   else if (PtInRect(&rcScrollBar, Pos)) // clicked in scroll bar up/down/pgup/pgdn
   {
-    if (Pos.y - rcScrollBar.top < (SCROLLBARWIDTH * ISCALE)) // up arrow
+    if (Pos.y - rcScrollBar.top < (ScrollbarWidth)) // up arrow
       mListInfo.ScrollIndex = max(0, mListInfo.ScrollIndex- 1);
 
-    else if (rcScrollBar.bottom -Pos.y < (SCROLLBARWIDTH * ISCALE)  ) //down arrow
+    else if (rcScrollBar.bottom -Pos.y < (ScrollbarWidth)  ) //down arrow
       mListInfo.ScrollIndex = max(0,min(mListInfo.ItemCount- mListInfo.ItemInViewCount, mListInfo.ScrollIndex+ 1));
 
     else if (Pos.y < rcScrollBarButton.top) // page up
@@ -4321,18 +4354,17 @@ int WndListFrame::OnLButtonDown(WPARAM wParam, LPARAM lParam) {
 
 inline int WndListFrame::GetScrollBarHeight (void)
 {
-  int WidthScaled=(SCROLLBARWIDTH * ISCALE);
-  int h = GetHeight() - SCROLLBARTOP;
+  int h = GetHeight() - ScrollbarTop;
   if(mListInfo.ItemCount ==0)
-    return h-2*WidthScaled;
+    return h-2*ScrollbarWidth;
   else
-    return max(WidthScaled,((h-2*WidthScaled)*mListInfo.ItemInViewCount)/mListInfo.ItemCount);
+    return max(ScrollbarWidth,((h-2*ScrollbarWidth)*mListInfo.ItemInViewCount)/mListInfo.ItemCount);
 }
 
 inline int WndListFrame::GetScrollIndexFromScrollBarTop(int iScrollBarTop)
 {
-  int h = GetHeight() - SCROLLBARTOP;
-  if (h-2*(SCROLLBARWIDTH * ISCALE) - GetScrollBarHeight() == 0)
+  int h = GetHeight() - ScrollbarTop;
+  if (h-2*(ScrollbarWidth) - GetScrollBarHeight() == 0)
     return 0;
   else
 
@@ -4341,26 +4373,28 @@ inline int WndListFrame::GetScrollIndexFromScrollBarTop(int iScrollBarTop)
               max(0,
                   ( 0 +
                     (mListInfo.ItemCount-mListInfo.ItemInViewCount)
-                    * (iScrollBarTop - (SCROLLBARWIDTH * ISCALE)-SCROLLBARTOP)
+                    * (iScrollBarTop - (ScrollbarWidth)-ScrollbarTop)
                   )
-                    / ( h-2*(SCROLLBARWIDTH * ISCALE) - GetScrollBarHeight() ) /*-SCROLLBARTOP(*/
+                    / ( h-2*(ScrollbarWidth) - GetScrollBarHeight() ) /*-ScrollbarTop(*/
               )
            ));
 }
 
 inline int WndListFrame::GetScrollBarTopFromScrollIndex()
 {
-  int h = GetHeight() - SCROLLBARTOP;
-  if (mListInfo.ItemCount - mListInfo.ItemInViewCount ==0)
-    return h + (SCROLLBARWIDTH * ISCALE);
-  else
-
-  return
-      ( (SCROLLBARWIDTH * ISCALE)+SCROLLBARTOP +
-        (mListInfo.ScrollIndex) *(h-2*(SCROLLBARWIDTH * ISCALE)-GetScrollBarHeight() ) /*-SCROLLBARTOP*/
+  int iRetVal=0;
+  int h = GetHeight() - ScrollbarTop;
+  if (mListInfo.ItemCount - mListInfo.ItemInViewCount ==0) {
+    iRetVal= h + (ScrollbarWidth);
+  }
+  else {
+    iRetVal =
+      ( (ScrollbarWidth)+ScrollbarTop +
+        (mListInfo.ScrollIndex) *(h-2*(ScrollbarWidth)-GetScrollBarHeight() ) /*-ScrollbarTop*/
       /(mListInfo.ItemCount - mListInfo.ItemInViewCount)
       );
-
+  }
+  return iRetVal;
 }
 
 
