@@ -2391,7 +2391,7 @@ int WndForm::ShowModal(void){
       }
 
       TranslateMessage(&msg);
-      if (((timeMsg - WndForm::timeAnyOpenClose) > OPENCLOSESUPPRESSTIME) ) // prevents child click from being repeat-handled by parent if buttons overlap
+      if (msg.message != WM_LBUTTONUP || ((timeMsg - WndForm::timeAnyOpenClose) > OPENCLOSESUPPRESSTIME) ) // prevents child click from being repeat-handled by parent if buttons overlap
       {
         if (DispatchMessage(&msg)){
 
