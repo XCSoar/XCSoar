@@ -638,7 +638,7 @@ void dlgTarget(void) {
 
   wf->SetTimerNotify(OnTimerNotify);
 
-  wf->ShowModal();
+  wf->ShowModal(true); // enable map
 
   MapWindow::SetTargetPan(false, 0);
 

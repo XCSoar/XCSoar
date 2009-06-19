@@ -930,6 +930,7 @@ class WndForm:public WindowControl{
 
     HFONT SetTitleFont(HFONT Value);
 
+    int ShowModal(bool bEnableMap);
     int ShowModal(void);
     void Show(void);
 

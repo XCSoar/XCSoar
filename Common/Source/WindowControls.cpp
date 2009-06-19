@@ -219,7 +219,9 @@ void DataFieldFileReader::ScanDirectoryTop(const TCHAR* filter) {
   // used by other software, namely TOMTOM!
   TCHAR tBuffer[MAX_PATH];
   _stprintf(tBuffer,TEXT("%s%S"),gmfpathname(), XCSDATADIR );
-  ScanDirectories(tBuffer,filter);
+  if (_tcscmp(buffer,tBuffer) != 0) {
+    ScanDirectories(tBuffer,filter);
+  }
 #else
  // I really doubt this is still useful.. it would be better to use gmfpathname
   ScanDirectories(TEXT("\\Carte de stockage"),filter);
@@ -2259,8 +2261,11 @@ void WndForm::SetToForeground(void)
 
 extern HWND hWndMapWindow;  // MapWindow
 
-
 int WndForm::ShowModal(void){
+  return ShowModal(false);
+}
+
+int WndForm::ShowModal(bool bEnableMap) {
 #define OPENCLOSESUPPRESSTIME 500
   MSG msg;
   HWND oldFocusHwnd;
@@ -2309,19 +2314,26 @@ int WndForm::ShowModal(void){
     if ((msg.message == WM_KEYDOWN) && ((msg.wParam & 0xffff) == VK_ESCAPE))
       mModalResult = mrCancle;
 
-    if ((msg.message == WM_KEYDOWN
-        || msg.message == WM_KEYUP
-	|| msg.message == WM_LBUTTONDOWN
-        || msg.message == WM_LBUTTONUP
-        || msg.message == WM_LBUTTONDBLCLK
-        ) && (msg.hwnd != GetHandle() && !IsChild(GetHandle(), msg.hwnd)
+    if (
+        (msg.message == WM_KEYDOWN
+          || msg.message == WM_KEYUP
+	    || msg.message == WM_LBUTTONDOWN
+          || msg.message == WM_LBUTTONUP
+          || msg.message == WM_LBUTTONDBLCLK
+        )  // screen event
+        && msg.hwnd != GetHandle() && !IsChild(GetHandle(), msg.hwnd)  // not current window or child
 #ifndef GNAV
-	      && !((msg.hwnd == hWndMapWindow)
-		   && ((msg.message == WM_LBUTTONDOWN)
-		       || (msg.message == WM_LBUTTONUP)))
+        &&  !( // exception
+              bEnableMap
+              && msg.hwnd == hWndMapWindow
+              && (
+                msg.message == WM_LBUTTONDOWN
+                || msg.message == WM_LBUTTONUP
+                || msg.message == WM_MOUSEMOVE
+              )
+         )
 #endif
-	      )
-	)
+    )
       continue;   // make it modal
 
     if (!TranslateAccelerator(GetHandle(), mhAccelTable, &msg)){
@@ -2366,14 +2378,6 @@ int WndForm::ShowModal(void){
         if (mOnKeyUpNotify != NULL)
           if (!(mOnKeyUpNotify)(this, msg.wParam, msg.lParam))
             continue;
-      }
-      if (msg.message == WM_LBUTTONUP){
-        if ((timeMsg - WndForm::timeAnyOpenClose) > OPENCLOSESUPPRESSTIME) // prevents parent click from being repeat-handled by current dialog if buttons overlap
-        {
-          if (mOnLButtonUpNotify != NULL)
-            if (!(mOnLButtonUpNotify)(this, msg.wParam, msg.lParam))
-              continue;
-        }
       }
       if (msg.message == WM_LBUTTONUP){
         if (mOnLButtonUpNotify != NULL)
@@ -3844,11 +3848,16 @@ void WndListFrame::DrawScrollBar(HDC hDC) {
   HBITMAP oldBmp;
 
   if ( ScrollbarWidth == -1) {  // resize height for each dialog so top button is below 1st item (to avoid initial highlighted overlap)
-#define SHRINKSBFACTOR 0.75  // shrink width factor.  Range .1 to 1 where 1 is very "fat"
 #ifdef GNAV
     ScrollbarWidth = (int) (SELECTORWIDTH * 2);  // thin for GNAV b/c no touch screen
     ScrollbarTop = 1;
 #else
+
+#if defined (PNA)
+  #define SHRINKSBFACTOR 1.0 // shrink width factor.  Range .1 to 1 where 1 is very "fat"
+#else
+  #define SHRINKSBFACTOR 0.75  // shrink width factor.  Range .1 to 1 where 1 is very "fat"
+#endif
     ScrollbarWidth = (int) (SCROLLBARWIDTH_INITIAL * InfoBoxLayout::dscale * SHRINKSBFACTOR);
     if (mClientCount > 0) {
       ScrollbarTop = mClients[0]->GetHeight() + 2;
