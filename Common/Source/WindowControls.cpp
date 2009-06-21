@@ -188,6 +188,7 @@ void DataFieldFileReader::ScanDirectoryTop(const TCHAR* filter) {
 
   hFlashCard = FindFirstFlashCard (&FlashCardTmp);
   if (hFlashCard == INVALID_HANDLE_VALUE) {
+    Sort();
     return;
   }
   _stprintf(FlashPath,TEXT("/%s/%S"),FlashCardTmp.cFileName, XCSDATADIR); // VENTA3 CHECK should it be double //??
@@ -223,15 +224,17 @@ void DataFieldFileReader::ScanDirectoryTop(const TCHAR* filter) {
     ScanDirectories(tBuffer,filter);
   }
 #else
- // I really doubt this is still useful.. it would be better to use gmfpathname
-  ScanDirectories(TEXT("\\Carte de stockage"),filter);
-  ScanDirectories(TEXT("\\Storage Card"),filter);
-  ScanDirectories(TEXT("\\SD-MMC Card"),filter);
-  ScanDirectories(TEXT("\\SD Karte"),filter);
-  ScanDirectories(TEXT("\\CF Karte"),filter);
-  ScanDirectories(TEXT("\\SD Card"),filter);
-  ScanDirectories(TEXT("\\CF Card"),filter);
-  ScanDirectories(TEXT("\\Speicherkarte"),filter);
+ // To Do: RLD appending "XCSoarData" to card names is a "quick fix" for the upcoming stable release 5.2.3? and
+ // the better solution involves changing multiple files, and will remove this list altogether
+  ScanDirectories(TEXT("\\Carte de stockage\\XCSoarData"),filter);
+  ScanDirectories(TEXT("\\Storage Card\\XCSoarData"),filter);
+  ScanDirectories(TEXT("\\SD-MMC Card\\XCSoarData"),filter);
+  ScanDirectories(TEXT("\\SD Karte\\XCSoarData"),filter);
+  ScanDirectories(TEXT("\\CF Karte\\XCSoarData"),filter);
+  ScanDirectories(TEXT("\\SD Card\\XCSoarData"),filter);
+  ScanDirectories(TEXT("\\CF Card\\XCSoarData"),filter);
+  ScanDirectories(TEXT("\\Speicherkarte\\XCSoarData"),filter);
+  ScanDirectories(TEXT("\\SDMMC\\XCSoarData"),filter);
 #endif // FIVV
 #endif // WINDOWSPC<1
 #endif // MINGW
