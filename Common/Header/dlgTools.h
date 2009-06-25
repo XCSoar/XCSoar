@@ -38,6 +38,7 @@ Copyright_License {
 #include "WindowControls.h"
 
 #define DeclareCallBackEntry(x)        {TEXT(#x), (void *)x}
+int DLGSCALE(int x);
 
 typedef struct{
   const TCHAR *Name;

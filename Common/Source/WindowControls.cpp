@@ -2907,9 +2907,7 @@ void WndButton::Paint(HDC hDC){
 
 
 HBITMAP WndProperty::hBmpLeft32=NULL;
-HBITMAP WndProperty::hBmpLeft16=NULL;
 HBITMAP WndProperty::hBmpRight32=NULL;
-HBITMAP WndProperty::hBmpRight16=NULL;
 
 int     WndProperty::InstCount=0;
 
@@ -2942,15 +2940,9 @@ WndProperty::WndProperty(WindowControl *Parent,
   mCaptionWidth = CaptionWidth;
 
   if (mCaptionWidth != 0){
-    if (GetHeight() < 32)
-      mBitmapSize = 16;
-    else
-      mBitmapSize = 32;
+    mBitmapSize = DLGSCALE(32)/2;
   } else {
-    if ((GetHeight()/2) < 32)
-      mBitmapSize = 16;
-    else
-      mBitmapSize = 32;
+    mBitmapSize = DLGSCALE(32)/2;
   }
   if (mDialogStyle)
     mBitmapSize = 0;
@@ -3042,8 +3034,6 @@ WndProperty::WndProperty(WindowControl *Parent,
   if (InstCount == 0){
     hBmpLeft32 = LoadBitmap(hInst, MAKEINTRESOURCE(IDB_DLGBUTTONLEFT32));
     hBmpRight32 = LoadBitmap(hInst, MAKEINTRESOURCE(IDB_DLGBUTTONRIGHT32));
-    hBmpLeft16 = LoadBitmap(hInst, MAKEINTRESOURCE(IDB_DLGBUTTONLEFT16));
-    hBmpRight16 = LoadBitmap(hInst, MAKEINTRESOURCE(IDB_DLGBUTTONRIGHT16));
   }
   InstCount++;
 
@@ -3062,8 +3052,6 @@ void WndProperty::Destroy(void){
   if (InstCount == 0){
     DeleteObject(hBmpLeft32);
     DeleteObject(hBmpRight32);
-    DeleteObject(hBmpLeft16);
-    DeleteObject(hBmpRight16);
   }
 
   if (mDataField != NULL){
@@ -3119,10 +3107,8 @@ void WndProperty::UpdateButtonData(int Value){
 
   if (Value == 0) // if combo is enabled
     mBitmapSize = 0;
-  else if (Value < 32)  // normal settings
-    mBitmapSize = 16;
   else
-    mBitmapSize = 32;
+    mBitmapSize = DLGSCALE(32)/2;
 
   if (mCaptionWidth != 0){
     mEditSize.x = GetWidth()- mCaptionWidth - (DEFAULTBORDERPENWIDTH+1) - mBitmapSize;
@@ -3489,29 +3475,52 @@ void WndProperty::Paint(HDC hDC){
 
       if (GetFocused() && !GetReadOnly()){
 
-      if (mBitmapSize == 16)
-        oldBmp = (HBITMAP)SelectObject(GetTempDeviceContext(), hBmpLeft16);
-      else
-        oldBmp = (HBITMAP)SelectObject(GetTempDeviceContext(), hBmpLeft32);
+      oldBmp = (HBITMAP)SelectObject(GetTempDeviceContext(), hBmpLeft32);
 
       if (mDownDown)
-        BitBlt(hDC, mHitRectDown.left, mHitRectDown.top, mBitmapSize, mBitmapSize,
-          GetTempDeviceContext(), mBitmapSize, 0, SRCCOPY);
+	        StretchBlt(hDC,
+          mHitRectDown.left,
+          mHitRectDown.top,
+          mBitmapSize,
+          mBitmapSize,
+		        GetTempDeviceContext(),
+		        32, 0,
+		        32,32,
+		        SRCCOPY);
       else
-        BitBlt(hDC, mHitRectDown.left, mHitRectDown.top, mBitmapSize, mBitmapSize,
-          GetTempDeviceContext(), 0, 0, SRCCOPY);
+	        StretchBlt(hDC,
+          mHitRectDown.left,
+          mHitRectDown.top,
+          mBitmapSize,
+          mBitmapSize,
+		        GetTempDeviceContext(),
+		        0, 0,
+		        32,32,
+		        SRCCOPY);
 
-      if (mBitmapSize == 16)
-        SelectObject(GetTempDeviceContext(), hBmpRight16);
-      else
-        SelectObject(GetTempDeviceContext(), hBmpRight32);
+      SelectObject(GetTempDeviceContext(), hBmpRight32);
 
       if (mUpDown)
-        BitBlt(hDC, mHitRectUp.left, mHitRectUp.top, mBitmapSize, mBitmapSize,
-          GetTempDeviceContext(), mBitmapSize, 0, SRCCOPY);
+	        StretchBlt(hDC,
+          mHitRectUp.left,
+          mHitRectUp.top,
+          mBitmapSize,
+          mBitmapSize,
+		        GetTempDeviceContext(),
+		        32, 0,
+		        32,32,
+		        SRCCOPY);
+
       else
-        BitBlt(hDC, mHitRectUp.left, mHitRectUp.top, mBitmapSize, mBitmapSize,
-          GetTempDeviceContext(), 0, 0, SRCCOPY);
+	        StretchBlt(hDC,
+          mHitRectUp.left,
+          mHitRectUp.top,
+          mBitmapSize,
+          mBitmapSize,
+		        GetTempDeviceContext(),
+		        0, 0,
+		        32,32,
+		        SRCCOPY);
 
       SelectObject(GetTempDeviceContext(), oldBmp);
     }

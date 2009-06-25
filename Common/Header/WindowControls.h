@@ -994,9 +994,7 @@ class WndProperty:public WindowControl{
   private:
 
     static HBITMAP hBmpLeft32;
-    static HBITMAP hBmpLeft16;
     static HBITMAP hBmpRight32;
-    static HBITMAP hBmpRight16;
     static int InstCount;
 
     HWND mhEdit;
