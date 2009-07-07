@@ -245,9 +245,8 @@ static void NextPage(int Step){
     wf->SetCaption(gettext(TEXT("21 Waypoint Edit")));
     break;
   case 21:
-    wf->SetCaption(gettext(TEXT("22 Temporary")));
+    wf->SetCaption(gettext(TEXT("22 Experimental features")));
     break;
-
   }
   if ((config_page>=15) && (config_page<=18)) {
     if (buttonCopy) {
