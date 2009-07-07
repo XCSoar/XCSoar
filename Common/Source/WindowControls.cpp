@@ -2137,7 +2137,7 @@ void InitWindowControlModule(void){
 
 }
 
-unsigned int WndForm::timeAnyOpenClose=0;
+DWORD WndForm::timeAnyOpenClose=0;
 ACCEL  WndForm::mAccel[] = {
   {0, VK_ESCAPE,  VK_ESCAPE},
   {0, VK_RETURN,  VK_RETURN},
@@ -2297,7 +2297,7 @@ int WndForm::ShowModal(bool bEnableMap) {
   WndForm::timeAnyOpenClose = GetTickCount(); // when current dlg opens or child closes
 
   while ((mModalResult == 0) && GetMessage(&msg, NULL, 0, 0)) {
-    unsigned int timeMsg = GetTickCount();
+    DWORD timeMsg = GetTickCount();
 
 //hack!
 
@@ -3720,6 +3720,16 @@ WndListFrame::WndListFrame(WindowControl *Owner, TCHAR *Name, int X, int Y,
   LastMouseMoveTime=0;
   ScrollbarWidth=-1;
   ScrollbarTop=-1;
+
+  rcScrollBarButton.top=0; // make sure this rect is initialized so we don't "loose" random lbuttondown events if scrollbar not drawn
+  rcScrollBarButton.bottom=0;
+  rcScrollBarButton.left=0;
+  rcScrollBarButton.right=0;
+
+  rcScrollBar.left=0;  // don't need to initialize this rect, but it's good practice
+  rcScrollBar.right=0;
+  rcScrollBar.top=0;
+  rcScrollBar.bottom=0;
 
 };
 

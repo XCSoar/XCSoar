@@ -950,7 +950,7 @@ class WndForm:public WindowControl{
 
     void SetUserMsgNotify(int (*OnUserMsgNotify)(WindowControl * Sender, MSG *msg));
 private:
-    static unsigned int timeAnyOpenClose; // when any dlg opens or child closes
+    static DWORD timeAnyOpenClose; // when any dlg opens or child closes
 
 };
 
