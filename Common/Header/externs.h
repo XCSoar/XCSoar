@@ -141,13 +141,12 @@ extern bool needclipping;
 #endif
 extern bool EnableAutoBacklight; // VENTA4
 extern bool EnableAutoSoundVolume; // VENTA4
-extern short AircraftCategory; // VENTA4
 extern bool ExtendedVisualGlide;
-extern bool Look8000;
-extern bool NewMap;
-extern bool HideUnits;
-extern bool OutlinedTp;
+extern bool VirtualKeys;
+extern short ArrivalValue;
+extern short AverEffTime;
 
+extern ldrotary_s rotaryLD;
 // airspace data
 extern AIRSPACE_AREA *AirspaceArea;
 extern AIRSPACE_POINT *AirspacePoint;
@@ -159,6 +158,7 @@ extern unsigned int NumberOfAirspaceCircles;
 
 extern bool GlobalRunning;
 
+extern short ScreenSize; // VENTA6
 
 // task data
 extern START_POINT StartPoints[];

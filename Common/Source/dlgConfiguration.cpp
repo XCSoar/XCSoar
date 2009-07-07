@@ -40,6 +40,7 @@ Copyright_License {
 #include <aygshell.h>
 
 #include "XCSoar.h"
+#include "Utils2.h"
 #include "MapWindow.h"
 #include "Terrain.h"
 #include "GaugeFLARM.h"
@@ -123,7 +124,7 @@ static WndFrame *wConfig18=NULL;
 static WndFrame *wConfig19=NULL;
 static WndFrame *wConfig20=NULL;
 static WndFrame *wConfig21=NULL;
-static WndFrame *wConfig22=NULL; // VENTA
+static WndFrame *wConfig22=NULL;
 static WndButton *buttonPilotName=NULL;
 static WndButton *buttonAircraftType=NULL;
 static WndButton *buttonAircraftRego=NULL;
@@ -244,8 +245,9 @@ static void NextPage(int Step){
     wf->SetCaption(gettext(TEXT("21 Waypoint Edit")));
     break;
   case 21:
-    wf->SetCaption(gettext(TEXT("22 Specials")));
+    wf->SetCaption(gettext(TEXT("22 Temporary")));
     break;
+
   }
   if ((config_page>=15) && (config_page<=18)) {
     if (buttonCopy) {
@@ -283,7 +285,7 @@ static void NextPage(int Step){
   wConfig19->SetVisible(config_page == 18);
   wConfig20->SetVisible(config_page == 19);
   wConfig21->SetVisible(config_page == 20);
-  wConfig22->SetVisible(config_page == 21);  // VENTA4
+  wConfig22->SetVisible(config_page == 21);
 }
 
 
@@ -2139,26 +2141,23 @@ static void setVariables(void) {
 // VENTA2- PC model
 #if (WINDOWSPC>0)
     dfe->addEnumText(gettext(TEXT("PC/normal")));
+    #ifdef FIVV
+   	 wp->SetVisible(true); // no more gaps in menus
+    #else
     wp->SetVisible(false); // currently no need to display default
+    #endif
 #else
     dfe->addEnumText(gettext(TEXT("PDA/normal")));
+    #ifdef FIVV
+    wp->SetVisible(true);
+    #else
     wp->SetVisible(false);
+    #endif
 #endif
         dfe->Set(0);
     wp->RefreshDisplay();
   }
 #endif
-
-  wp = (WndProperty*)wf->FindByName(TEXT("prpAircraftCategory"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(gettext(TEXT("Glider")));
-    dfe->addEnumText(gettext(TEXT("Paraglider")));
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->Set(AircraftCategory);
-    wp->RefreshDisplay();
-  }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpExtendedVisualGlide"));
   if (wp) {
@@ -2171,47 +2170,29 @@ static void setVariables(void) {
     wp->RefreshDisplay();
   }
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpLook8000"));
+  wp = (WndProperty*)wf->FindByName(TEXT("prpVirtualKeys"));
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(gettext(TEXT("Enabled")));
     dfe->addEnumText(gettext(TEXT("Disabled")));
+    dfe->addEnumText(gettext(TEXT("Enabled")));
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->Set(Look8000);
+    dfe->Set(VirtualKeys);
     wp->RefreshDisplay();
   }
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpNewMap"));
+  wp = (WndProperty*)wf->FindByName(TEXT("prpAverEffTime"));
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(gettext(TEXT("Enabled")));
-    dfe->addEnumText(gettext(TEXT("Disabled")));
+    dfe->addEnumText(gettext(TEXT("15 seconds")));
+    dfe->addEnumText(gettext(TEXT("30 seconds")));
+    dfe->addEnumText(gettext(TEXT("60 seconds")));
+    dfe->addEnumText(gettext(TEXT("90 seconds")));
+    dfe->addEnumText(gettext(TEXT("2 minutes")));
+    dfe->addEnumText(gettext(TEXT("3 minutes")));
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->Set(NewMap);
-    wp->RefreshDisplay();
-  }
-
-  wp = (WndProperty*)wf->FindByName(TEXT("prpHideUnits"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(gettext(TEXT("Enabled")));
-    dfe->addEnumText(gettext(TEXT("Disabled")));
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->Set(HideUnits);
-    wp->RefreshDisplay();
-  }
-
-  wp = (WndProperty*)wf->FindByName(TEXT("prpOutlinedTp"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(gettext(TEXT("Enabled")));
-    dfe->addEnumText(gettext(TEXT("Disabled")));
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->Set(OutlinedTp);
+    dfe->Set(AverEffTime);
     wp->RefreshDisplay();
   }
 
@@ -2533,6 +2514,7 @@ static void setVariables(void) {
     wp->RefreshDisplay();
   }
 #endif
+
 
   ////
   for (i=0; i<4; i++) {
@@ -3443,19 +3425,6 @@ void dlgConfigurationShowModal(void){
     }
   }
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpAircraftCategory")); // VENTA4
-  if (wp) {
-    if (AircraftCategory != (AircraftCategory_t)
-	(wp->GetDataField()->GetAsInteger())) {
-      AircraftCategory = (AircraftCategory_t)
-	(wp->GetDataField()->GetAsInteger());
-      SetToRegistry(szRegistryAircraftCategory,
-		    (DWORD)(AircraftCategory));
-      changed = true;
-     // requirerestart = true;
-    }
-  }
-
   wp = (WndProperty*)wf->FindByName(TEXT("prpExtendedVisualGlide")); // VENTA4
   if (wp) {
     if (ExtendedVisualGlide != (ExtendedVisualGlide_t)
@@ -3467,49 +3436,28 @@ void dlgConfigurationShowModal(void){
       changed = true;
     }
   }
+  wp = (WndProperty*)wf->FindByName(TEXT("prpVirtualKeys")); // VENTA6
+  if (wp) {
+    if (VirtualKeys != (VirtualKeys_t)
+	(wp->GetDataField()->GetAsInteger())) {
+      VirtualKeys = (VirtualKeys_t)
+	(wp->GetDataField()->GetAsInteger());
+      SetToRegistry(szRegistryVirtualKeys,
+		    (DWORD)(VirtualKeys));
+      changed = true;
+    }
+  }
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpLook8000")); // VENTA4
+  wp = (WndProperty*)wf->FindByName(TEXT("prpAverEffTime")); // VENTA6
   if (wp) {
-    if (Look8000 != (Look8000_t)
+    if (AverEffTime !=
 	(wp->GetDataField()->GetAsInteger())) {
-      Look8000 = (Look8000_t)
+      AverEffTime =
 	(wp->GetDataField()->GetAsInteger());
-      SetToRegistry(szRegistryLook8000,
-		    (DWORD)(Look8000));
+      SetToRegistry(szRegistryAverEffTime,
+		    (DWORD)(AverEffTime));
       changed = true;
-    }
-  }
-  wp = (WndProperty*)wf->FindByName(TEXT("prpNewMap")); // VENTA4
-  if (wp) {
-    if (NewMap != (NewMap_t)
-	(wp->GetDataField()->GetAsInteger())) {
-      NewMap = (NewMap_t)
-	(wp->GetDataField()->GetAsInteger());
-      SetToRegistry(szRegistryNewMap,
-		    (DWORD)(NewMap));
-      changed = true;
-    }
-  }
-  wp = (WndProperty*)wf->FindByName(TEXT("prpHideUnits")); // VENTA4
-  if (wp) {
-    if (HideUnits != (HideUnits_t)
-	(wp->GetDataField()->GetAsInteger())) {
-      HideUnits = (HideUnits_t)
-	(wp->GetDataField()->GetAsInteger());
-      SetToRegistry(szRegistryHideUnits,
-		    (DWORD)(HideUnits));
-      changed = true;
-    }
-  }
-  wp = (WndProperty*)wf->FindByName(TEXT("prpOutlinedTp")); // VENTA4
-  if (wp) {
-    if (OutlinedTp != (OutlinedTp_t)
-	(wp->GetDataField()->GetAsInteger())) {
-      OutlinedTp = (OutlinedTp_t)
-	(wp->GetDataField()->GetAsInteger());
-      SetToRegistry(szRegistryOutlinedTp,
-		    (DWORD)(OutlinedTp));
-      changed = true;
+      InitLDRotary(&rotaryLD);
     }
   }
 
@@ -3968,11 +3916,12 @@ void dlgConfigurationShowModal(void){
   }
 
 #ifdef FIVV
-//  if ( CALCULATED_INFO.OnGround == TRUE ) { // was != bug
+//  if ( CALCULATED_INFO.OnGround == TRUE ) {
 	  wp = (WndProperty*)wf->FindByName(TEXT("prpGPSAltitudeOffset")); // VENTA3
 	  if (wp) GPSAltitudeOffset = wp->GetDataField()->GetAsInteger();
 //  }
 #endif
+
 
   if (COMPORTCHANGED) {
     WritePort1Settings(dwPortIndex1,dwSpeedIndex1);

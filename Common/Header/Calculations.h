@@ -67,6 +67,7 @@ typedef struct _DERIVED_INFO
   double Vario;
   double LD;
   double CruiseLD;
+  int	 AverageLD;
   double VMacCready;
   double Average30s;
   double NettoAverage30s;
@@ -96,7 +97,9 @@ typedef struct _DERIVED_INFO
   int    AutoMacCready;
   int    Flying;
   double NextAltitudeRequired;
+  double NextAltitudeRequired0; // mc=0
   double NextAltitudeDifference;
+  double NextAltitudeDifference0; // difference with mc=0
   double FinalAltitudeRequired;
   double FinalAltitudeDifference;
   double TaskDistanceToGo;
@@ -196,7 +199,7 @@ typedef struct _DERIVED_INFO
   long AverageClimbRateN[200];
 
   double HomeDistance;
-  double HomeRadial; // VENTA3
+  double HomeRadial;
 
 
   double ZoomDistance;
@@ -224,23 +227,19 @@ typedef struct _DERIVED_INFO
   double Essing;
   double TerrainBase; // lowest height within glide range
   double TermikLigaPoints;
-  double GRFinish;	// VENTA- GRadient to final destination, 090203
-//  double GRAltern1;	// VENTA3 - GR to alternate1 destination 090316
-//  double GRAltern2;	//
-//  double GRBestLanding; //
-//  double DistAltern1;	//
-//  double DistAltern2;
-//  double DistBestLanding; //
+  double GRFinish;	// GRadient to final destination, 090203
+			// Note: we don't need GRNext since this value is used when going to a landing
+			// point, which is always a final glide.
 
   double Experimental;
   // JMW note, new items should go at the bottom of this struct before experimental!
 } DERIVED_INFO;
 
 
-BOOL DoCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
-BOOL DoCalculationsVario(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
+int DoCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
+int DoCalculationsVario(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 void DoCalculationsSlow(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
-void SearchBestAlternate(NMEA_INFO *Basic, DERIVED_INFO *Calculated); // VENTA3
+void SearchBestAlternate(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 double CalculateWaypointArrivalAltitude(NMEA_INFO *Basic, DERIVED_INFO *Calculated, int thepoint); // VENTA3
 
 
@@ -283,6 +282,6 @@ void BallastDump();
 int FindFlarmSlot(const int flarmId);
 int FindFlarmSlot(const TCHAR *flarmCN);
 bool IsFlarmTargetCNInRange(void);
-void AlertBestAlternate(short soundmode); // VENTA3
+void AlertBestAlternate(short soundmode);
 
 #endif

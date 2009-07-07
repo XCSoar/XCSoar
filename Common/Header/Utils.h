@@ -31,7 +31,6 @@ Copyright_License {
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-  $Id$
 }
 */
 #if !defined(AFX_UTILS_H__695AAC30_F401_4CFF_9BD9_FE62A2A2D0D2__INCLUDED_)
@@ -111,12 +110,9 @@ extern const TCHAR szRegistryCDICircling[];
 extern const TCHAR szRegistryAutoBlank[];
 extern const TCHAR szRegistryAutoBacklight[]; // VENTA4
 extern const TCHAR szRegistryAutoSoundVolume[]; // VENTA4
-extern const TCHAR szRegistryAircraftCategory[]; // VENTA4
 extern const TCHAR szRegistryExtendedVisualGlide[]; // VENTA4
-extern const TCHAR szRegistryLook8000[]; // VENTA5
-extern const TCHAR szRegistryNewMap[]; // VENTA5
-extern const TCHAR szRegistryHideUnits[]; // VENTA5
-extern const TCHAR szRegistryOutlinedTp[]; // VENTA5
+extern const TCHAR szRegistryVirtualKeys[]; // VENTA5
+extern const TCHAR szRegistryAverEffTime[]; // VENTA6
 extern const TCHAR szRegistryVarioGauge[];
 extern const TCHAR szRegistryDebounceTimeout[];
 extern const TCHAR szRegistryAppDefaultMapWidth[];

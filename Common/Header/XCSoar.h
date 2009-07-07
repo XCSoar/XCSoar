@@ -31,7 +31,6 @@ Copyright_License {
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-  $Id$
 }
 */
 
@@ -43,7 +42,7 @@ Copyright_License {
 #endif // _MSC_VER > 1000
 
 #include "StdAfx.h"
-
+#include "Defines.h"
 #include "resource.h"
 #include "Sizes.h"
 #include "Units.h"
@@ -304,6 +303,20 @@ void SwitchToMapWindow(void);
 
 #endif
 
+// This could be also used for PDA in landscape..
+typedef enum{
+  ssnone=0,
+  ss240x320,
+  ss480x640,
+  ss480x800,
+  sslandscape, //  <landscape=portrait modes, >landscape=landscape modes
+  ss320x240,
+  ss480x234,
+  ss480x272,
+  ss640x480,
+  ss800x480
+}ScreenSize_t;
+
 typedef enum{
   apMsDefault=0,
   apMsNone,
@@ -373,7 +386,6 @@ typedef enum{
   apIbTab
 }InfoBoxBorderAppearance_t;
 
-// VENTA-ADDON GEOM
 typedef enum{
   apIg0=0,
   apIg1,
@@ -397,33 +409,38 @@ typedef enum{
 }InfoBoxModelAppearance_t;
 #endif
 
-// VENTA4 AircraftCategory
-typedef enum{
-	umGlider=0,
-	umParaglider,
-} AircraftCategory_t;
-
 typedef enum{
 	evgNormal=0,
 	evgExtended,
 } ExtendedVisualGlide_t;
 
 typedef enum{
-	lxcEnabled=0,
-	lxcDisabled,
-} Look8000_t;
+	vkDisabled=0,
+	vkEnabled,
+} VirtualKeys_t;
 typedef enum{
-	nmEnabled=0,
-	nmDisabled,
-} NewMap_t;
-typedef enum{
-	otEnabled=0,
-	otDisabled,
-} OutlinedTp_t;
-typedef enum{
-	huEnabled=0,
-	huDisabled,
-} HideUnits_t;
+	ae15seconds=0,
+	ae30seconds,
+	ae60seconds,
+	ae90seconds,
+	ae2minutes,
+	ae3minutes,
+} AverEffTime_t;
+
+typedef struct {
+        int     array[RASIZE]; // rotary array with a predefined max capacity
+        short   start;          // pointer to current first item in rotarybuf if used
+        short   size;           // real size of rotary buffer (0-size)
+} ifilter_s;
+
+typedef struct {
+        int     distance[MAXLDROTARYSIZE]; // rotary array with a predefined max capacity
+        int     altitude[MAXLDROTARYSIZE];
+	int	totaldistance;
+        short   start;          // pointer to current first item in rotarybuf if used
+        short   size;           // real size of rotary buffer (0-size)
+	bool	valid;
+} ldrotary_s;
 
 
 typedef struct{
@@ -440,6 +457,9 @@ typedef struct{
   FontHeightInfo_t MapWindowBoldFont;
   FontHeightInfo_t InfoWindowFont;
   FontHeightInfo_t CDIWindowFont;
+  FontHeightInfo_t StatisticsFont;
+  FontHeightInfo_t MapLabelFont; // VENTA6 added
+  FontHeightInfo_t TitleSmallWindowFont;
   BestCruiseTrack_t BestCruiseTrack;
   Aircraft_t Aircraft;
   bool DontShowSpeedToFly;

@@ -49,6 +49,7 @@ Copyright_License {
 #include "Process.h"
 #endif
 #include "Utils.h"
+#include "Utils2.h"
 #include "externs.h"
 #include "McReady.h"
 #include "Airspace.h"
@@ -682,9 +683,9 @@ void DoCalculationsSlow(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
 
  // VENTA3 best landing slow calculation
 #if (WINDOWSPC>0)
-  if ( (OnBestAlternate == true) && (Basic->Time > LastSearchBestTime+10.0) ) // VENTA3
+  if ( (OnBestAlternate == true ) && (Basic->Time > LastSearchBestTime+10.0) ) // VENTA3
 #else
-  if ( (OnBestAlternate == true) && (Basic->Time > LastSearchBestTime+BESTALTERNATEINTERVAL) ) // VENTA3
+  if ( (OnBestAlternate == true ) && (Basic->Time > LastSearchBestTime+BESTALTERNATEINTERVAL) ) // VENTA3
 #endif
     {
       LastSearchBestTime = Basic->Time;
@@ -794,6 +795,7 @@ void ResetFlightStats(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
     Calculated->LDFinish = INVALID_GR;
     Calculated->GRFinish = INVALID_GR;  // VENTA-ADDON GR to final destination
     Calculated->CruiseLD = INVALID_GR;
+    Calculated->AverageLD = INVALID_GR;
     Calculated->LDNext = INVALID_GR;
     Calculated->LD = INVALID_GR;
     Calculated->LDvario = INVALID_GR;
@@ -880,7 +882,8 @@ void StartTask(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
   // JMW clear thermal climb average on task start
   flightstats.ThermalAverage.Reset();
   flightstats.Task_Speed.Reset();
-  Calculated->AverageThermal = 0;
+  Calculated->AverageThermal = 0; // VNT for some reason looked uninitialised
+  Calculated->WaypointBearing=0; // VNT TEST
 
   // JMW reset time cruising/time circling stats on task start
   Calculated->timeCircling = 0;
@@ -915,7 +918,9 @@ void InitCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   StartupStore(TEXT("InitCalculations\n"));
   CalibrationInit();
   ResetFlightStats(Basic, Calculated, true);
-  LoadCalculationsPersist(Calculated);
+#ifndef FIVV
+  LoadCalculationsPersist(Calculated); // VNT  not for fivv, confusing people
+#endif
   DeleteCalculationsPersist();
   // required to allow fail-safe operation
   // if the persistent file is corrupt and causes a crash
@@ -930,7 +935,12 @@ void InitCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   }
   Calculated->TerrainWarningLatitude = 0.0;
   Calculated->TerrainWarningLongitude = 0.0;
-  Calculated->WindBearing = 0.0; // VENTA3
+/*
+ If you load persistent values, you need at least these reset:
+//  Calculated->WindBearing = 0.0; // VENTA3
+//  Calculated->LastThermalAverage=0.0; // VENTA7
+//  Calculated->ThermalGain=0.0; // VENTA7
+ */
 
   LockFlightData();
 
@@ -1037,6 +1047,7 @@ BOOL DoCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   Turning(Basic, Calculated);
   LD(Basic,Calculated);
   CruiseLD(Basic,Calculated);
+  Calculated->AverageLD=CalculateLDRotary(&rotaryLD); // AverageLD
   Average30s(Basic,Calculated);
   AverageThermal(Basic,Calculated);
   AverageClimbRate(Basic,Calculated);
@@ -1350,6 +1361,8 @@ void LD(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
                                 DistanceFlown,
                                 LastAlt - Calculated->NavAltitude, 0.1);
 
+      InsertLDRotary(&rotaryLD,(int)DistanceFlown, (int)Calculated->NavAltitude);
+
       LastLat = Basic->Latitude;
       LastLon = Basic->Longitude;
       LastAlt = Calculated->NavAltitude;
@@ -1641,6 +1654,8 @@ void Turning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
         Calculated->CruiseStartAlt = StartAlt;
         Calculated->CruiseStartTime = StartTime;
 
+ 	InitLDRotary(&rotaryLD);
+
         flightstats.Altitude_Ceiling.
           least_squares_update(max(0,Calculated->CruiseStartTime
                                    - Calculated->TakeOffTime)/3600.0,
@@ -1887,17 +1902,39 @@ void AltitudeRequired(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
                         );
       // JMW CHECK FGAMT
 
+	// VENTA6
+	if (this_maccready==0 ) Calculated->NextAltitudeRequired0=Calculated->NextAltitudeRequired;
+        else
+	      Calculated->NextAltitudeRequired0 =
+		GlidePolar::MacCreadyAltitude(0,
+				Calculated->WaypointDistance,
+				Calculated->WaypointBearing,
+				Calculated->WindSpeed, Calculated->WindBearing,
+				0, 0,
+				true,
+				NULL, height_above_wp, CRUISE_EFFICIENCY
+				);
+
+
+
       Calculated->NextAltitudeRequired += wp_alt;
+      Calculated->NextAltitudeRequired0 += wp_alt; // VENTA6
 
       Calculated->NextAltitudeDifference =
         Calculated->NavAltitude
         + Calculated->EnergyHeight
         - Calculated->NextAltitudeRequired;
+
+      Calculated->NextAltitudeDifference0 =
+        Calculated->NavAltitude
+        + Calculated->EnergyHeight
+        - Calculated->NextAltitudeRequired0;
     }
   else
     {
       Calculated->NextAltitudeRequired = 0;
       Calculated->NextAltitudeDifference = 0;
+      Calculated->NextAltitudeDifference0 = 0; // VENTA6
     }
   UnlockTaskData();
   //  UnlockFlightData();
@@ -3411,6 +3448,10 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
   Calculated->TaskAltitudeDifference0 = total_energy_height
     - TaskAltitudeRequired0;
 
+  // VENTA6
+  Calculated->NextAltitudeDifference0 = total_energy_height
+    - Calculated->NextAltitudeRequired0;
+
   Calculated->LDFinish = UpdateLD(Calculated->LDFinish,
                                   Calculated->TaskDistanceToGo,
                                   total_energy_height-final_height,
@@ -4415,7 +4456,7 @@ int FindFlarmSlot(TCHAR *flarmCN)
 {
   for(int z = 0; z < FLARM_MAX_TRAFFIC; z++)
     {
-      if (_tcscmp(GPS_INFO.FLARM_Traffic[z].Name, flarmCN) == 0)
+      if (wcscmp(GPS_INFO.FLARM_Traffic[z].Name, flarmCN) == 0)
 	{
 	  return z;
 	}

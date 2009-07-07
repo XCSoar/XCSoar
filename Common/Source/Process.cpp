@@ -112,7 +112,7 @@ void	TeamCodeProcessing(int UpDown)
 	{
 		TeamFlarmIdTarget = GPS_INFO.FLARM_Traffic[newFlarmSlot].ID;
 
-		if (_tcslen(GPS_INFO.FLARM_Traffic[newFlarmSlot].Name) != 0)
+		if (wcslen(GPS_INFO.FLARM_Traffic[newFlarmSlot].Name) != 0)
 		{
 			// copy the 3 first chars from the name to TeamFlarmCNTarget
 			for (int z = 0; z < 3; z++)
@@ -937,7 +937,7 @@ void InfoBoxFormatter::AssignValue(int i) {
 	Value = CALCULATED_INFO.GRFinish;
 	if (Value >100 )
 	  {
-	    _tcscpy(Format, _T("%1,0f"));
+	    _tcscpy(Format, _T("%1.0f"));
 	  }
 	else
 	  {
@@ -951,6 +951,21 @@ void InfoBoxFormatter::AssignValue(int i) {
     Value = ALTITUDEMODIFY* (GPS_INFO.Altitude-QFEAltitudeOffset);
     break;
   case 71:
+    if ( CALCULATED_INFO.AverageLD == 0) {
+      Valid = false;
+    } else {
+      Valid = true;
+      Value = CALCULATED_INFO.AverageLD;
+      if (Value<0)
+	    _tcscpy(Format, _T("^^^"));
+      else if (Value>=999)
+	    _tcscpy(Format, _T("+++"));
+      else
+	    _tcscpy(Format, _T("%2.0f"));
+
+    }
+    break;
+  case 72:
     Value = CALCULATED_INFO.Experimental;
     Valid = true;
     break;
@@ -995,8 +1010,8 @@ BOOL InfoBoxFormatter::isValid(void) {
 }
 
 void InfoBoxFormatter::RenderInvalid(int *color) {
-  _tcscpy(CommentText, TEXT(""));
-  _tcscpy(Text, TEXT("---"));
+  _stprintf(CommentText,TEXT(""));
+  _stprintf(Text,TEXT("---"));
   *color = -1;
 }
 
@@ -1062,12 +1077,14 @@ TCHAR *FormatterTime::Render(int *color) {
         _stprintf(Text,
                   TEXT("%02d:%02d"),
                   mins, seconds );
-        _tcscpy(CommentText, TEXT(""));
+        _stprintf(CommentText,
+                  TEXT(""));
       } else {
         _stprintf(Text,
                   TEXT("-00:%02d"),
                   abs(seconds));
-        _tcscpy(CommentText, TEXT(""));
+        _stprintf(CommentText,
+                  TEXT(""));
       }
     } else {
       // Time is positive
@@ -1083,7 +1100,8 @@ TCHAR *FormatterTime::Render(int *color) {
         _stprintf(Text,
                   TEXT("%02d:%02d"),
                   mins, seconds );
-        _tcscpy(CommentText, TEXT(""));
+        _stprintf(CommentText,
+                  TEXT(""));
       }
     }
   }
@@ -1112,12 +1130,14 @@ TCHAR *FormatterAATTime::Render(int *color) {
         _stprintf(Text,
                   TEXT("%02d:%02d"),
                   mins, seconds );
-        _tcscpy(CommentText, TEXT(""));
+        _stprintf(CommentText,
+                  TEXT(""));
       } else {
         _stprintf(Text,
                   TEXT("-00:%02d"),
                   abs(seconds));
-        _tcscpy(CommentText, TEXT(""));
+        _stprintf(CommentText,
+                  TEXT(""));
       }
     } else {
       // Time is positive
@@ -1132,7 +1152,8 @@ TCHAR *FormatterAATTime::Render(int *color) {
         _stprintf(Text,
                   TEXT("%02d:%02d"),
                   mins, seconds );
-        _tcscpy(CommentText, TEXT(""));
+        _stprintf(CommentText,
+                  TEXT(""));
       }
     }
   }

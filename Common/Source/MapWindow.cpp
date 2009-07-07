@@ -37,6 +37,7 @@ Copyright_License {
 
 #include "StdAfx.h"
 #include "compatibility.h"
+#include "Defines.h"
 #include "MapWindow.h"
 #include "OnLineContest.h"
 #include "Utils.h"
@@ -65,6 +66,7 @@ Copyright_License {
 #include "GaugeFLARM.h"
 #include "InfoBoxLayout.h"
 #include "RasterTerrain.h"
+#include "Utils2.h"
 
 #if (WINDOWSPC>0)
 #include <wingdi.h>
@@ -74,6 +76,7 @@ int misc_tick_count=0;
 
 #ifdef DEBUG
 #define DRAWLOAD
+#define DEBUG_VIRTUALKEYS
 #endif
 
 int TrailActive = TRUE;
@@ -170,9 +173,9 @@ unsigned char MapWindow::DeclutterLabels = 0;
 DWORD  MapWindow::dwDrawThreadID;
 HANDLE MapWindow::hDrawThread;
 
-double MapWindow::RequestMapScale = 5;
-double MapWindow::MapScale = 5;
-double MapWindow::MapScaleOverDistanceModify = 5/DISTANCEMODIFY;
+double MapWindow::RequestMapScale=5;
+double MapWindow::MapScale=5;
+double MapWindow::MapScaleOverDistanceModify=5/DISTANCEMODIFY;
 double MapWindow::ResMapScaleOverDistanceModify = 0.0;
 double MapWindow::DisplayAngle = 0.0;
 double MapWindow::DisplayAircraftAngle = 0.0;
@@ -291,7 +294,8 @@ extern HFONT  MapWindowBoldFont;
 extern HFONT  InfoWindowFont;
 extern HFONT  CDIWindowFont;
 extern HFONT  StatisticsFont;
-extern HFONT  InfoWindowFont;
+extern HFONT  MapLabelFont; // VENTA6
+extern HFONT  TitleSmallWindowFont; // VENTA6
 
 
 ///////////////////
@@ -406,8 +410,10 @@ bool MapWindow::Event_InteriorAirspaceDetails(double lon, double lat) {
 
 void MapWindow::SwitchZoomClimb(void) {
 
-  static double CruiseMapScale = 10;
-  static double ClimbMapScale = 0.25;
+  //static double CruiseMapScale = 10;
+  static double CruiseMapScale = MapWindow::RequestMapScale*2; // VNT 090621
+  //static double ClimbMapScale = 0.25;
+  static double ClimbMapScale = MapWindow::RequestMapScale/20;
   static bool last_isclimb = false;
   static bool last_targetpan = false;
   bool isclimb = (DisplayMode == dmCircling);
@@ -682,9 +688,6 @@ bool MapWindow::TextInBox(HDC hDC, TCHAR* Value, int x, int y,
     notoverlapping = checkLabelBlock(brect);
 
     if (!noOverlap || notoverlapping) {
-      if (NewMap||OutlinedTp)
-	SetTextColor(hDC,RGB(0x00,0x00,0x00));
-      else
 	SetTextColor(hDC,RGB(0xff,0xff,0xff));
 
 #if (WINDOWSPC>0)
@@ -695,76 +698,20 @@ bool MapWindow::TextInBox(HDC hDC, TCHAR* Value, int x, int y,
       ExtTextOut(hDC, x-2, y, 0, NULL, Value, size, NULL);
       ExtTextOut(hDC, x, y+1, 0, NULL, Value, size, NULL);
       ExtTextOut(hDC, x, y-1, 0, NULL, Value, size, NULL);
-      if (NewMap||OutlinedTp) {
-	ExtTextOut(hDC, x, y+2, 0, NULL, Value, size, NULL); // make it bolder to look like an LX8000
-	ExtTextOut(hDC, x, y-2, 0, NULL, Value, size, NULL);
-	ExtTextOut(hDC, x-3, y, 0, NULL, Value, size, NULL); // fix add bolder
-	ExtTextOut(hDC, x+3, y, 0, NULL, Value, size, NULL); // fix add
-	ExtTextOut(hDC, x, y+3, 0, NULL, Value, size, NULL); // make it bolder to look like an LX8000
-	ExtTextOut(hDC, x, y-3, 0, NULL, Value, size, NULL);
-
-	switch (Mode.AsFlag.Color) {
-	case 0:
-	  SetTextColor(hDC,RGB(0xff,0xff,0xff));
-	  break;
-	case 1:
-	  SetTextColor(hDC,RGB(0x00,0xff,0x00));  // green
-	  break;
-	case 2:
-	  SetTextColor(hDC,RGB(0xff,0x00,0x00));  // red
-	  break;
-	case 3:
-	  SetTextColor(hDC,RGB(0x00,0x00,0xff));  // blue
-	  break;
-	default:
-	  SetTextColor(hDC,RGB(0xff,0xff,0xff));
-	  break;
-	}
-      } else
 	SetTextColor(hDC,RGB(0x00,0x00,0x00));
 
       ExtTextOut(hDC, x, y, 0, NULL, Value, size, NULL);
-      if (NewMap||OutlinedTp)
-	SetTextColor(hDC,RGB(0x00,0x00,0x00)); // TODO somewhere else text color is not set correctly
 
 #else
-      ExtTextOut(hDC, x+3, y, ETO_OPAQUE, NULL, Value, size, NULL);
       ExtTextOut(hDC, x+2, y, ETO_OPAQUE, NULL, Value, size, NULL);
       ExtTextOut(hDC, x+1, y, ETO_OPAQUE, NULL, Value, size, NULL);
       ExtTextOut(hDC, x-1, y, ETO_OPAQUE, NULL, Value, size, NULL);
       ExtTextOut(hDC, x-2, y, ETO_OPAQUE, NULL, Value, size, NULL);
-      ExtTextOut(hDC, x-3, y, ETO_OPAQUE, NULL, Value, size, NULL);
       ExtTextOut(hDC, x, y+1, ETO_OPAQUE, NULL, Value, size, NULL);
       ExtTextOut(hDC, x, y-1, ETO_OPAQUE, NULL, Value, size, NULL);
-      ExtTextOut(hDC, x, y+2, ETO_OPAQUE, NULL, Value, size, NULL);
-      ExtTextOut(hDC, x, y-2, ETO_OPAQUE, NULL, Value, size, NULL);
-      ExtTextOut(hDC, x, y+3, ETO_OPAQUE, NULL, Value, size, NULL);
-      ExtTextOut(hDC, x, y-3, ETO_OPAQUE, NULL, Value, size, NULL);
-      if (NewMap||OutlinedTp) {
-
-	switch (Mode.AsFlag.Color) {
-	case 0:
-	  SetTextColor(hDC,RGB(0xff,0xff,0xff));
-	  break;
-	case 1:
-	  SetTextColor(hDC,RGB(0x00,0xff,0x00));  // green
-	  break;
-	case 2:
-	  SetTextColor(hDC,RGB(0xff,0x00,0x00));  // red
-	  break;
-	case 3:
-	  SetTextColor(hDC,RGB(0x00,0x00,0xff));  // blue
-	  break;
-	default:
-	  SetTextColor(hDC,RGB(0xff,0xff,0xff));
-	  break;
-	}
-      } else
 	SetTextColor(hDC,RGB(0x00,0x00,0x00));
 
       ExtTextOut(hDC, x, y, ETO_OPAQUE, NULL, Value, size, NULL);
-      if (NewMap||OutlinedTp)
-	SetTextColor(hDC,RGB(0x00,0x00,0x00));
 #endif
       drawn=true;
     }
@@ -790,7 +737,6 @@ bool MapWindow::TextInBox(HDC hDC, TCHAR* Value, int x, int y,
 
   }
 
-  if (!Mode.AsFlag.NoSetFont) SelectObject(hDC, oldFont); // VENTA5
   SelectObject(hDC, hbOld);
 
   return drawn;
@@ -1019,23 +965,17 @@ void MapWindow::Event_Pan(int vswitch) {
   RefreshMap();
 }
 
-// VENTA4 TODO someone please fix more zoom for para (how?)
-// JMW you've done it!
 double MapWindow::LimitMapScale(double value) {
 
   double minreasonable;
 
-  if ( AircraftCategory == (AircraftCategory_t)umParaglider ) // VENTA4
-    minreasonable = 0.01;
-  else
     minreasonable = 0.05;
 
   if (AutoZoom && DisplayMode != dmCircling) {
     if (AATEnabled && (ActiveWayPoint>0)) {
       minreasonable = 0.88;
     } else {
-      if ( AircraftCategory == (AircraftCategory_t)umParaglider ) minreasonable = 0.14;
-      else minreasonable = 0.44;
+      minreasonable = 0.44;
     }
   }
 
@@ -1219,7 +1159,7 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
   int width = (int) LOWORD(lParam);
   int height = (int) HIWORD(lParam);
 
-  static DWORD dwDownTime= 0, dwUpTime= 0;
+  static DWORD dwDownTime= 0L, dwUpTime= 0L, dwInterval= 0L;
 
   switch (uMsg)
     {
@@ -1267,6 +1207,15 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
 
 	SelectObject(hDCTemp, CDIWindowFont);
 	SetFontInfo(hDCTemp, &Appearance.CDIWindowFont);
+//VENTA6
+	SelectObject(hDCTemp, StatisticsFont);
+	SetFontInfo(hDCTemp, &Appearance.StatisticsFont);
+
+	SelectObject(hDCTemp, MapLabelFont);
+	SetFontInfo(hDCTemp, &Appearance.MapLabelFont);
+
+	SelectObject(hDCTemp, TitleSmallWindowFont);
+	SetFontInfo(hDCTemp, &Appearance.TitleSmallWindowFont);
 
 	SelectObject(hDCTemp, oldFont);
       }
@@ -1293,18 +1242,11 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
       hLoggerOff=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_LOGGEROFF));
       hBmpTeammatePosition = LoadBitmap(hInst, MAKEINTRESOURCE(IDB_TEAMMATE_POS));
 
-      if (Appearance.FlightModeIcon == apFlightModeIconAltA){
-	//hCruise=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_CRUISE_B));
-	//hClimb=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_CLIMB_B));
-	//hFinalGlide=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_FINALGLIDE_B));
-	//hAbort=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_FINALGLIDE_ABORT_B));
-	//hBmpClimbeAbort=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_CLIMB_ABORT_B));
-      } else {
+      //if (Appearance.FlightModeIcon == apFlightModeIconAltA){
 	hCruise=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_CRUISE));
 	hClimb=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_CLIMB));
 	hFinalGlide=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_FINALGLIDE));
 	hAbort=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_ABORT));
-      }
 
       //hBmpCompassBg = LoadBitmap(hInst, MAKEINTRESOURCE(IDB_COMPASSBG));
 
@@ -1560,35 +1502,30 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
       break;
 
     case WM_LBUTTONDBLCLK:
-      // Added by ARH to show menu button when mapwindow is
-      // double clicked.
-      // VENTA3 TODO: do not handle this event and remove CS_DBLCLKS in register class.
-      // Only handle timed clicks in BUTTONDOWN with no proximity and allow triple clicks
-      // and less CPU hogging.
-      // UPDATE> I think there is an event pending and that's why dblclk on infoboxes does not work
-      //         as it should.
-#ifdef DEBUG_DBLCLK
-      DoStatusMessage(_T("DBLCLK MapWindow")); // VENTA3
-#endif
-      if ((AircraftCategory == (AircraftCategory_t)umParaglider) && InfoWindowActive )
-	// VENTA4 TODO make use of map doubleclick for anything else than ShowMenu in the near future
-	{
-	  DoStatusMessage(_T("MAP UNLOCKED"));
-	  dwDownTime= 0;
-	  DefocusInfoBox();
-	  SetFocus(hWnd);
-	  break;
-	}
+      // Added by ARH to show menu button when mapwindow is double clicked.
+      //
+      // VNT TODO: do not handle this event and remove CS_DBLCLKS in register class.
+      // Only handle timed clicks in BUTTONDOWN with no proximity.
+      //
+      static bool ignorenext=true;
+      dwDownTime = GetTickCount();
+
+      #ifndef DISABLEAUDIO
+      if (EnableSoundModes) PlayResource(TEXT("IDR_WAV_CLICK"));
+      #endif
       ShowMenu();
       break;
 
     case WM_LBUTTONDOWN:
-#ifdef DEBUG_DBLCLK
-      DoStatusMessage(_T("BUTTONDOWN MapWindow")); // VENTA3
-#endif
+      #ifdef DEBUG_DBLCLK
+      DoStatusMessage(_T("BUTTONDOWN MapWindow"));
+      #endif
       DisplayTimeOut = 0;
       dwDownTime = GetTickCount();
+      if (ignorenext) break;
       XstartScreen = LOWORD(lParam); YstartScreen = HIWORD(lParam);
+      // TODO VNT move Screen2LatLon in LBUTTONUP after making sure we really need Xstart and Ystart
+      // so we save precious milliseconds waiting for BUTTONUP GetTickCount
       Screen2LatLon(XstartScreen, YstartScreen, Xstart, Ystart);
 
       LockTaskData();
@@ -1615,26 +1552,53 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
       break;
 
     case WM_LBUTTONUP:
-      //if ( (AircraftCategory == (AircraftCategory_t)umParaglider) && !InfoBoxLayout::fullscreen )
-      if(InfoWindowActive)
-	{
-	  if ( AircraftCategory == (AircraftCategory_t)umParaglider ) break;
-	  // VENTA4 use doubleclick to defocus
 
-	  dwDownTime= 0;
-	  DefocusInfoBox();
-	  SetFocus(hWnd);
+      if (ignorenext||dwDownTime==0) {
+		ignorenext=false;
 	  break;
 	}
-      if (dwDownTime== 0)
-	break;
-
-      dwUpTime = GetTickCount(); dwDownTime = dwUpTime - dwDownTime;
+      RECT rc;
+      dwUpTime = GetTickCount();
+      dwInterval=dwUpTime-dwDownTime;
+      dwDownTime=0; // do it once forever
+/*
+	TCHAR buf[80];
+	wsprintf(buf,_T("Interval %ldms"),dwInterval);
+        DoStatusMessage(buf);
+*/
+      GetClientRect(hWnd,&rc);
 
       X = LOWORD(lParam); Y = HIWORD(lParam);
+
+      if (dwInterval == 0) {
+		DoStatusMessage(_T("dwInterval==0 impossible!"));
+		break; // should be impossible
+      }
+
+
       distance = isqrt4((long)((XstartScreen-X)*(XstartScreen-X)+
 			       (YstartScreen-Y)*(YstartScreen-Y)))
 	/InfoBoxLayout::scale;
+
+	#ifdef DEBUG_VIRTUALKEYS
+	TCHAR buf[80]; char sbuf[80];
+	sprintf(sbuf,"%.0f",distance);
+	wsprintf(buf,_T("XY=%d,%d dist=%S Up=%ld Down=%ld Int=%ld"),X,Y,sbuf,dwUptime,dwDownTime,dwInterval);
+        DoStatusMessage(buf);
+	#endif
+
+	// Caution, timed clicks from PC with a mouse are different from real touchscreen devices
+
+      if ((VirtualKeys==(VirtualKeys_t)vkEnabled) && distance<50 && (dwInterval>= DOUBLECLICKINTERVAL)) {
+		wParam=ProcessVirtualKey(X,Y,dwInterval,0);
+		if (wParam==0) {
+			#ifdef DEBUG_VIRTUALKEYS
+			DoStatusMessage(_T("E02 INVALID Virtual Key!"));
+			#endif
+			break;
+		}
+		goto Wirth;
+      }
 
       Screen2LatLon(X, Y, Xlat, Ylat);
 
@@ -1645,11 +1609,11 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
 	TargetDrag_Longitude = Xlat;
 	UnlockTaskData();
 	break;
-      } else if (!TargetPan && EnablePan && (distance>36)) {
+      } else if (!TargetPan && EnablePan && (distance>36)) { // TODO FIX should be IBLSCALE 36 instead?
 	PanLongitude += Xstart-Xlat;
 	PanLatitude  += Ystart-Ylat;
 	RefreshMap();
-	break; // disable picking when in pan mode
+	break;
       }
 #ifdef _SIM_
       else if (!TargetPan && (distance>IBLSCALE(36))) {
@@ -1674,18 +1638,38 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
       }
 #endif
       if (!TargetPan) {
-	if(dwDownTime < 1000) {
+		if ( InfoFocus>=0) { //
+			DefocusInfoBox();
+			SetFocus(hWnd);
+			#ifndef DISABLEAUDIO
+			 if (EnableSoundModes) PlayResource(TEXT("IDR_WAV_CLICK"));
+			#endif
+			break;
+		}
+
+		if (VirtualKeys==(VirtualKeys_t)vkEnabled) {
+			if(dwInterval < VKSHORTCLICK) { //100ms is NOT  enough for a short click since GetTickCount is OEM custom!
 	  if (Event_NearestWaypointDetails(Xstart, Ystart, 500*MapScale, false)) {
-	    dwDownTime= 0;
 	    break;
 	  }
 	} else {
 	  if (Event_InteriorAirspaceDetails(Xstart, Ystart)) {
-	    dwDownTime= 0;
 	    break;
 	  }
 	}
+		} else {
+			if(dwInterval < AIRSPACECLICK) { // original and untouched interval
+			  if (Event_NearestWaypointDetails(Xstart, Ystart, 500*MapScale, false)) {
+			    break;
+			  }
+			} else {
+			  if (Event_InteriorAirspaceDetails(Xstart, Ystart)) {
+			    break;
+			  }
       }
+		} // VK enabled
+      } // !TargetPan
+
       break;
       /*
 	case WM_PAINT:
@@ -1705,11 +1689,12 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
 #else
     case WM_KEYUP: // JMW was keyup
 #endif
-      // VENTA-TODO careful here, keyup no more trapped for PNA!
+      // VENTA-TODO careful here, keyup no more trapped for PNA.
+      // Forbidden usage of keypress timing.
 
 #ifdef VENTA_DEBUG_KEY
       TCHAR ventabuffer[80];
-      wsprintf(ventabuffer,TEXT("MAPWND uMsg %d wParam %d"), uMsg, wParam);
+      wsprintf(ventabuffer,TEXT("WMKEY uMsg=%d wParam=%ld lParam=%ld"), uMsg, wParam,lParam);
       DoStatusMessage(ventabuffer);
 #endif
       DisplayTimeOut = 0;
@@ -1798,21 +1783,21 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
 
       }
 #endif
-
-      dwDownTime= 0;
+Wirth:
+      dwDownTime= 0L;
 
       if (!DialogActive) { // JMW prevent keys being trapped if dialog is active
 	if (InputEvents::processKey(wParam)) {
 	  // TODO code: change to debugging DoStatusMessage(TEXT("Event in default"));
 	}
 	// XXX Should we only do this if it IS processed above ?
-	dwDownTime= 0;
+	dwDownTime= 0L;
 	return TRUE; // don't go to default handler
       } else {
 	// TODO code: debugging DoStatusMessage(TEXT("Event in dialog"));
 	if (InputEvents::processKey(wParam)) {
 	}
-	dwDownTime= 0;
+	dwDownTime= 0L;
 	return TRUE; // don't go to default handler
       }
       // break; unreachable!
@@ -2231,8 +2216,7 @@ void MapWindow::RenderMapWindowBg(HDC hdc, const RECT rc,
     DrawGlideThroughTerrain(hdc, rc);
   }
 
-  if (NewMap) DrawWaypointsNew(hdc,rc);
-  else DrawWaypoints(hdc,rc);
+  DrawWaypoints(hdc,rc);
 
   DrawTeammate(hdc, rc);
 
@@ -2256,8 +2240,6 @@ void MapWindow::RenderMapWindowBg(HDC hdc, const RECT rc,
     DrawWindAtAircraft2(hdc, Orig, rc);
   }
 
-  if ( Look8000 ) DrawLook8000(hdc,rc);
-
   // Draw traffic
   DrawFLARMTraffic(hdc, rc, Orig_Aircraft);
 
@@ -2271,10 +2253,7 @@ void MapWindow::RenderMapWindowBg(HDC hdc, const RECT rc,
     DrawAircraft(hdc, Orig_Aircraft);
   }
 
-  // VENTA3 VisualGlide
   if ( (!TargetPan) && (!EnablePan) && (VisualGlide>0) ) {
-    // VENTA TODO check other cases to exclude VG
-    // JMW added one of those cases..
     DrawGlideCircle(hdc, Orig, rc);
   }
 
@@ -2332,7 +2311,6 @@ void MapWindow::RenderMapWindow(  RECT rc)
 
   DrawThermalBand(hdcDrawWindow, rc);
 
-  // VENTA5 FIX make it redundant
   DrawFinalGlide(hdcDrawWindow,rc);
 
   //  DrawSpeedToFly(hdcDrawWindow, rc);
@@ -2963,9 +2941,12 @@ bool MapWindow::WaypointInTask(int ind) {
 //FIX
 //static void MapWaypointLabelAdd(TCHAR *Name, int X, int Y, TextInBoxMode_t Mode, int AltArivalAGL, bool inTask=false, bool isLandable=false, bool isAirport=false, bool isExcluded=false);
 void MapWaypointLabelAdd(TCHAR *Name, int X, int Y, TextInBoxMode_t Mode, int AltArivalAGL, bool inTask, bool isLandable, bool isAirport, bool isExcluded);
-static int _cdecl MapWaypointLabelListCompare(const void *elem1, const void *elem2 );
-static MapWaypointLabel_t MapWaypointLabelList[50];
-static int MapWaypointLabelListCount=0;
+//static int _cdecl MapWaypointLabelListCompare(const void *elem1, const void *elem2 );
+int _cdecl MapWaypointLabelListCompare(const void *elem1, const void *elem2 );
+//static MapWaypointLabel_t MapWaypointLabelList[50];
+MapWaypointLabel_t MapWaypointLabelList[50];
+//static int MapWaypointLabelListCount=0;
+int MapWaypointLabelListCount=0;
 
 bool MapWindow::WaypointInRange(int i) {
   return ((WayPointList[i].Zoom >= MapScale*10)
@@ -3051,7 +3032,7 @@ void MapWindow::DrawWaypoints(HDC hdc, const RECT rc)
 	      }
 	    }
 
-	    if (intask||OutlinedTp) { // VNT
+	    if (intask) { // VNT
 	      TextDisplayMode.AsFlag.WhiteBold = 1;
 	    }
 
@@ -3202,420 +3183,9 @@ void MapWindow::DrawWaypoints(HDC hdc, const RECT rc)
 
 }
 
-//
-// VENTA5 modified to declutter boxed outlandings and turnpoints symbols with no names and
-// to make airport names visible in middle zoom levels. Also supposed to be smarter in deciding
-// if an airport or outlanding need to be fully visible with arrival height or not.
-//
-void MapWindow::DrawWaypointsNew(HDC hdc, const RECT rc)
-{
-  unsigned int i;
-  int bestwp=-1;
-  TCHAR Buffer[32];
-  TCHAR Buffer2[32];
-  TCHAR sAltUnit[4];
-  TextInBoxMode_t TextDisplayMode;
 
-  // if pan mode, show full names
-  int pDisplayTextType = DisplayTextType;
-  if (EnablePan) {
-    pDisplayTextType = DISPLAYNAME;
-  }
-
-  if (!WayPointList) return;
-
-  _tcscpy(sAltUnit, Units::GetAltitudeName());
-
-  MapWaypointLabelListCount = 0;
-
-  // VENTA5 Preliminar check to exclude boxed outlandings
-  // hopefully the time we spend here is compensated by the time saved painting unnecessary outlandings
-
-  int arrivalcutoff=0, foundairport=0;
-  bool isairport;
-  bool islandpoint;
-
-  if (MapScale <=20) for(i=0;i<NumberOfWayPoints;i++)
-    {
-      if (WayPointList[i].Visible == false )	continue;
-      if ( (WayPointList[i].Flags & LANDPOINT) != LANDPOINT) continue;
-
-      if ((WayPointList[i].Flags & AIRPORT) == AIRPORT) {
-	if (WayPointList[i].Reachable == false)	{
-	  SelectObject(hDCTemp,hBmpAirportUnReachable);
-	} else
-	  {
-	    SelectObject(hDCTemp,hBmpAirportReachable);
-	    if ( arrivalcutoff < (int)(WayPointList[i].AltArivalAGL)) {
-	      arrivalcutoff = (int)(WayPointList[i].AltArivalAGL);
-	      bestwp=i; foundairport++;
-	    }
-	  }
-      } else { // outlanding
-	if (WayPointList[i].Reachable == false)
-	  SelectObject(hDCTemp,hBmpFieldUnReachable);
-	else {
-	  SelectObject(hDCTemp,hBmpFieldReachable);
-	  if (foundairport == 0) { // get the outlanding as bestwp only if no other choice
-	    // do not set arrivalcutoff: any next reachable airport is better than an outlanding
-	    if ( arrivalcutoff < (int)(WayPointList[i].AltArivalAGL)) bestwp=i;
-	  }
-	}
-      }
-
-      DrawBitmapX(hdc,
-		  WayPointList[i].Screen.x-IBLSCALE(10),
-		  WayPointList[i].Screen.y-IBLSCALE(10),
-		  20,20,
-		  hDCTemp,0,0,SRCPAINT);
-
-      DrawBitmapX(hdc,
-		  WayPointList[i].Screen.x-IBLSCALE(10),
-		  WayPointList[i].Screen.y-IBLSCALE(10),
-		  20,20,
-		  hDCTemp,20,0,SRCAND);
-
-    }
-  if (foundairport==0 && bestwp>=0)  arrivalcutoff = (int)WayPointList[bestwp].AltArivalAGL;
-
-
-
-  for(i=0;i<NumberOfWayPoints;i++)
-    {
-      if(WayPointList[i].Visible )
-	{
-
-#ifdef HAVEEXCEPTIONS
-	  __try{
-#endif
-
-	    bool irange = false;
-	    bool intask = false;
-	    bool islandable;	// isairport+islandpoint
-	    bool excluded=false;
-	    bool dowrite;
-
-	    intask = WaypointInTask(i);
-	    dowrite = intask; // initially set only for intask
-	    TextDisplayMode.AsInt = 0;
-
-	    // airports are also landpoints. should be better handled
-	    isairport=((WayPointList[i].Flags & AIRPORT) == AIRPORT);
-	    islandpoint=((WayPointList[i].Flags & LANDPOINT) == LANDPOINT);
-
-	    if (isairport || islandpoint) islandable=true; else islandable=false;
-
-	    irange = WaypointInRange(i); // always in range if MapScale <=10  since no zoom in waypoints is documented
-	    // and .Zoom is always 0.
-
-	    if(MapScale > 20) {
-	      SelectObject(hDCTemp,hSmall);
-	      irange=false;
-	      goto NiklausWirth; // with compliments
-	    }
-
-	    if( islandable ) {
-
-	      if(WayPointList[i].Reachable){
-
-		TextDisplayMode.AsFlag.Reachable = 1;
-
-		if ( isairport )
-		  SelectObject(hDCTemp,hBmpAirportReachable);
-		else
-		  SelectObject(hDCTemp,hBmpFieldReachable);
-
-		if ((DeclutterLabels<2)||intask) {
-
-		  dowrite = true;
-
-		  // exclude outlandings worst than visible airports, only when there are visible reachable airports!
-		  if ( isairport==false && islandpoint==true ) {
-		    if ( (int)WayPointList[i].AltArivalAGL >=2000 ) { // more filter
-		      excluded=true;
-		    } else {
-		      if ( i==bestwp && foundairport==0 ) { // this outlanding is the best option
-			isairport=true;
-			islandpoint=false; // make it an airport TODO paint it as best
-		      } else
-			{
-			  if ( foundairport >0 ) {
-			    if ( (int)WayPointList[i].AltArivalAGL <= arrivalcutoff ) {
-			      excluded=true;
-			    }
-			    /*
-			      if (MapScale >3 && MapScale <10 ) {
-			      if ( (i!=bestwp)  && (arrivalcutoff>600) ) {
-			      if ( (arrivalcutoff / ((int)WayPointList[i].AltArivalAGL+1))<4) {
-			      excluded=true;
-			      }
-			      if (foundairport>2) excluded=true;
-			      }
-			      } else {
-			      if ( (int)WayPointList[i].AltArivalAGL <= arrivalcutoff ) {
-			      excluded=true;
-			      }
-			      }
-			    */
-			  }
-			}
-		    }
-
-		  }  else
-		    // do not display airport arrival if close to the best so far.
-		    // ex: best arrival is 1200m, include onlye below 1200/4  (prevent division by zero)
-		    // This way we only display far points, and skip closer points
-		    // WE NEED MORE INFO ABOUT LANDING POINTS: THE .CUP FORMAT WILL LET US KNOW WHAT IS
-		    // BEST TO SHOW AND WHAT IS NOT. Winpilot format is useless here.
-		    {
-		      dowrite=true;// TEST FIX not necessary probably
-		      // it's an airport
-		      if ( (i != bestwp) && (arrivalcutoff>600) ) {
-			if ( (arrivalcutoff / ((int)WayPointList[i].AltArivalAGL+1))<4 ) {
-			  excluded=true;
-			}
-		      }
-		    }
-		}
-
-
-	      } else  // landable waypoint is unreachable
-		{
-		  dowrite=true;
-		  if ( isairport ) {
-		    SelectObject(hDCTemp,hBmpAirportUnReachable);
-		  } else {
-		    SelectObject(hDCTemp,hBmpFieldUnReachable);
-		  }
-		}
-	    } else { // waypoint is an ordinary turnpoint
-	      if(MapScale > 4) {
-		SelectObject(hDCTemp,hSmall);
-	      } else {
-		SelectObject(hDCTemp,hTurnPoint);
-	      }
-
-	    } // end landable-not landable
-
-	  NiklausWirth:
-
-	    if (intask||OutlinedTp) {
-	      TextDisplayMode.AsFlag.WhiteBold = 1;
-	    }
-
-	    // here come both turnpoints and landables..
-	    if( intask || irange || dowrite) {  // irange almost always set when MapScale <=10
-
-	      bool draw_alt = TextDisplayMode.AsFlag.Reachable && ((DeclutterLabels<1) || intask); // reachable landing point!
-
-	      if (excluded==true) draw_alt=false; // exclude close outlandings
-
-	      switch(pDisplayTextType) {
-
-	      case DISPLAYNAMEIFINTASK:
-		dowrite = intask;
-		if (intask) {
-		  if (draw_alt) {
-		    wsprintf(Buffer, TEXT("%s:%d%s"),
-			     WayPointList[i].Name,
-			     (int)(WayPointList[i].AltArivalAGL*ALTITUDEMODIFY),
-			     sAltUnit);
-		  }
-		  else {
-		    wsprintf(Buffer, TEXT("%s"),WayPointList[i].Name);
-		  }
-		}
-		break;
-	      case DISPLAYNAME:
-		dowrite = (DeclutterLabels<2) || intask || islandable;
-		if ( (islandable && !isairport) && MapScale >=10 ) dowrite=0; // FIX then no need to go further
-
-		if (draw_alt) {
-		  wsprintf(Buffer, TEXT("%s:%d%s"), WayPointList[i].Name, (int)(WayPointList[i].AltArivalAGL*ALTITUDEMODIFY), sAltUnit);
-		  //wsprintf(Buffer, TEXT("%s:%d:%d"), WayPointList[i].Name, (int)(WayPointList[i].AltArivalAGL*ALTITUDEMODIFY), (int)MapScale);
-		  TextDisplayMode.AsFlag.Border = 1;
-		  TextDisplayMode.AsFlag.WhiteBold = 0;
-		} else {
-		  wsprintf(Buffer, TEXT("%s"),WayPointList[i].Name);
-		  //wsprintf(Buffer, TEXT("%s%d"),WayPointList[i].Name,(int)MapScale);
-		  if (islandable && isairport) {
-		    TextDisplayMode.AsFlag.WhiteBold = 1; // outlined
-		  }
-		}
-
-		break;
-	      case DISPLAYNUMBER:
-		dowrite = (DeclutterLabels<2) || intask || islandable;
-		if ( (islandable && !isairport) && MapScale >=10 ) dowrite=0; // FIX then no need to go further
-
-		if (draw_alt) {
-		  wsprintf(Buffer, TEXT("%d:%d%s"), WayPointList[i].Number, (int)(WayPointList[i].AltArivalAGL*ALTITUDEMODIFY), sAltUnit);
-		  TextDisplayMode.AsFlag.Border = 1;
-		  TextDisplayMode.AsFlag.WhiteBold = 0;
-		} else {
-		  wsprintf(Buffer, TEXT("%d"),WayPointList[i].Number);
-		  if (islandable && isairport) {
-		    TextDisplayMode.AsFlag.WhiteBold = 1; // outlined
-		  }
-		}
-		break;
-	      case DISPLAYFIRSTFIVE:
-		dowrite = (DeclutterLabels<2) || intask || islandable;
-		_tcsncpy(Buffer2, WayPointList[i].Name, 5);
-		Buffer2[5] = '\0';
-		if (draw_alt) {
-		  wsprintf(Buffer, TEXT("%s:%d%s"),
-			   Buffer2,
-			   (int)(WayPointList[i].AltArivalAGL*ALTITUDEMODIFY),
-			   sAltUnit);
-		  TextDisplayMode.AsFlag.Border = 1;
-		  TextDisplayMode.AsFlag.WhiteBold = 0;
-		}
-		else {
-		  wsprintf(Buffer, TEXT("%s"),Buffer2);
-		  if (islandable && isairport) {
-		    TextDisplayMode.AsFlag.WhiteBold = 1; // outlined
-		  }
-
-		}
-
-		break;
-	      case DISPLAYFIRSTTHREE:
-		dowrite = (DeclutterLabels<2) || intask || islandable;
-		_tcsncpy(Buffer2, WayPointList[i].Name, 3);
-		Buffer2[3] = '\0';
-		if (draw_alt) {
-		  wsprintf(Buffer, TEXT("%s:%d%s"),
-			   Buffer2,
-			   (int)(WayPointList[i].AltArivalAGL*ALTITUDEMODIFY),
-			   sAltUnit);
-		  TextDisplayMode.AsFlag.Border = 1;
-		  TextDisplayMode.AsFlag.WhiteBold = 0;
-		}
-		else {
-		  wsprintf(Buffer, TEXT("%s"),Buffer2);
-		  if (islandable && isairport) {
-		    TextDisplayMode.AsFlag.WhiteBold = 1; // outlined
-		  }
-
-		}
-
-
-		break;
-	      case DISPLAYNONE:
-		dowrite = (DeclutterLabels<2) || intask || islandable;
-		if (draw_alt) {
-		  wsprintf(Buffer, TEXT("%d%s"),
-			   (int)(WayPointList[i].AltArivalAGL*ALTITUDEMODIFY),
-			   sAltUnit);
-		  TextDisplayMode.AsFlag.Border = 1;
-		  TextDisplayMode.AsFlag.WhiteBold = 0;
-		}
-		else {
-		  Buffer[0]= '\0';
-		  dowrite=false;
-		}
-	      default:
-#if (WINDOWSPC<1)
-		ASSERT(0);
-#endif
-		break;
-
-	      } // end intask/irange/dowrite
-
-	      if (MapScale>=3 && MapScale<10 && islandable && dowrite) { // can't find a better solution for this
-		if (isairport)
-		  TextInBox(hdc, Buffer, WayPointList[i].Screen.x+5, WayPointList[i].Screen.y, 0, TextDisplayMode, false);
-		else
-		  TextInBox(hdc, Buffer, WayPointList[i].Screen.x+5, WayPointList[i].Screen.y, 0, TextDisplayMode, true);
-		dowrite=false; // do not pass it along
-	      }
-	      if (MapScale<3 && islandable && dowrite) { // damned irange problems
-		TextInBox(hdc, Buffer, WayPointList[i].Screen.x+5,
-			  WayPointList[i].Screen.y, 0, TextDisplayMode, false);
-		dowrite=false; // do not pass it along
-	      }
-	      if (MapScale>=10 && MapScale<20 && islandable && dowrite) { // damned irange problems
-		TextInBox(hdc, Buffer, WayPointList[i].Screen.x+5,
-			  WayPointList[i].Screen.y, 0, TextDisplayMode, true);
-		dowrite=false; // do not pass it along
-	      }
-
-	      if (dowrite) {
-		MapWaypointLabelAdd(
-				    Buffer,
-				    WayPointList[i].Screen.x+5,
-				    WayPointList[i].Screen.y,
-				    TextDisplayMode,
-				    (int)(WayPointList[i].AltArivalAGL*ALTITUDEMODIFY),
-				    intask,islandable,isairport,excluded);
-	      }
-	    } // end if intask
-
-#ifdef HAVEEXCEPTIONS
-	  }__finally
-#endif
-	     { ; }
-	} // if visible
-    } // for all waypoints
-
-  qsort(&MapWaypointLabelList, MapWaypointLabelListCount, sizeof(MapWaypointLabel_t), MapWaypointLabelListCompare);
-
-  int j;
-
-  // now draw task/landable waypoints in order of range (closest last)
-  // writing unconditionally
-
-  for (j=MapWaypointLabelListCount-1; j>=0; j--){
-
-    MapWaypointLabel_t *E = &MapWaypointLabelList[j];
-
-    // draws if they are in task unconditionally,
-    // otherwise, does comparison
-    if ( E->inTask || (E->isLandable && !E->isExcluded) ) {
-      TextInBox(hdc, E->Name, E->Pos.x,
-		E->Pos.y, 0, E->Mode,
-		false);
-    }
-  }
-
-  // now draw normal waypoints in order of range (furthest away last)
-  // without writing over each other (or the task ones)
-  for (j=0; j<MapWaypointLabelListCount; j++) {
-
-    MapWaypointLabel_t *E = &MapWaypointLabelList[j];
-
-    if (!E->inTask && !E->isLandable ) {
-
-      if ( TextInBox(hdc, E->Name, E->Pos.x, E->Pos.y, 0, E->Mode, true) == true) {
-	if(MapScale > 4) {
-	  SelectObject(hDCTemp,hSmall);
-	} else {
-	  SelectObject(hDCTemp,hTurnPoint);
-	}
-
-	DrawBitmapX(hdc,
-		    E->Pos.x-IBLSCALE(10),
-		    E->Pos.y-IBLSCALE(10),
-		    20,20,
-		    hDCTemp,0,0,SRCPAINT);
-
-	DrawBitmapX(hdc,
-		    E->Pos.x-IBLSCALE(10),
-		    E->Pos.y-IBLSCALE(10),
-		    20,20,
-		    hDCTemp,20,0,SRCAND);
-      }
-
-
-    }
-  }
-
-} // end DrawWaypoint
-
-
-
-static int _cdecl MapWaypointLabelListCompare(const void *elem1, const void *elem2 ){
+//static int _cdecl MapWaypointLabelListCompare(const void *elem1, const void *elem2 ){
+int _cdecl MapWaypointLabelListCompare(const void *elem1, const void *elem2 ){
 
   // Now sorts elements in task preferentially.
   /*
@@ -4106,6 +3676,7 @@ void MapWindow::DrawWindAtAircraft2(HDC hdc, const POINT Orig, const RECT rc) {
     _DrawLine(hdc, PS_DASH, 1, Tail[0], Tail[1], RGB(0,0,0), rc);
   }
 
+
   _itot(iround(DerivedDrawInfo.WindSpeed * SPEEDMODIFY), sTmp, 10);
 
   TextInBoxMode_t TextInBoxMode = { 16 | 32 }; // JMW test {2 | 16};
@@ -4504,281 +4075,3 @@ void MapWindow::DrawDashLine(HDC hdc, const int width,
 
 */
 
-// VENTA3
-/*
- * The VisualGlide by Paolo Ventafridda
- * Sort of a Stockmar dynamic chart!
- *
- * VisualGlide=1 : Steady sector/circle
- *             2 : Moving sector/circle   TODO: either comment this or improve it, seems useless..
- */
-void MapWindow::DrawGlideCircle(HDC hdc, POINT Orig, RECT rc )
-{
-  double tmp=0;
-  TCHAR gtext[100];
-  char text[20]; // TODO size it
-
-  double cruise= CALCULATED_INFO.CruiseLD;
-  // VENTA3 TODO: use maxcruise with tail wind with a better checking. Otherwise use only bestLD for safety
-  // VENTA3 TODO: make maxcruise dynamic
-  // static double maxcruise=(GlidePolar::bestld*1.2); // max bestLD + 20% (max tail wind benefit)
-  static double maxcruise=(GlidePolar::bestld);
-  static double mincruise=(GlidePolar::bestld/4);
-  int i;
-  double gunit;
-  COLORREF oldcolor=0;
-  HFONT oldfont;
-  static int spread=0;
-  //static short rcx=rc.left+rc.right/2-30;
-  //static short rcy=rc.top+rc.bottom-35;
-  short rcx=rc.left+rc.right/2-IBLSCALE(20);
-  short rcy=rc.bottom-IBLSCALE(15); // 35
-
-  if ( cruise < 0 ) cruise = GlidePolar::bestld;
-  if ( cruise < mincruise ) return;
-  if ( cruise >maxcruise ) cruise=maxcruise;
-
-  // Spread from
-  static short turn=1;
-  static short count=0;
-  spread += (10 * turn);
-  if ( spread <-25 || spread >25 ) turn*=-1;
-  if ( ++count >6) count=-1;
-
-  SelectObject(hdc, GetStockObject(HOLLOW_BRUSH));
-  // SetBkMode(hdc,TRANSPARENT);
-
-  oldfont = (HFONT)SelectObject(hdc, MapWindowBoldFont);
-
-  // 100m or 300ft scale
-  if ( Units::GetUserAltitudeUnit() == unMeter ) gunit=100; else gunit = 91.44;
-
-  for (i=1; i<9; i++) {
-
-    if (turn>0 ) {
-      if ( (i==2 || i==4 || i==6 || i == 8) ) SelectObject(hdc, hpVisualGlideHeavyRed);
-      else SelectObject(hdc, hpVisualGlideLightRed);
-    } else {
-      if ( (i==2 || i==4 || i==6 || i == 8) ) SelectObject(hdc, hpVisualGlideHeavyBlack);
-      else SelectObject(hdc, hpVisualGlideLightBlack);
-    }
-
-    /*
-     * TRACKUP, NORTHUP, NORTHCIRCLE, TRACKCIRCLE, NORTHTRACK
-     */
-    if ( ( DisplayOrientation == TRACKUP) || (DisplayOrientation == NORTHCIRCLE)
-	 || (DisplayOrientation == TRACKCIRCLE)
-	 && (DisplayMode != dmCircling) )
-      {
-	if ( VisualGlide == 1 ) {
-	  tmp = i*gunit*cruise*ResMapScaleOverDistanceModify;
-	  DrawArc(hdc, Orig.x, Orig.y,(int)tmp, rc, 315, 45);
-	} else
-	  {
-	    tmp = i*gunit*cruise*ResMapScaleOverDistanceModify;
-	    DrawArc(hdc, Orig.x, Orig.y,(int)tmp, rc, 330+spread, 30+spread);
-	  }
-      } else
-      {
-	tmp = i*gunit*cruise*ResMapScaleOverDistanceModify;
-	Circle(hdc, Orig.x,Orig.y,(int)tmp, rc, true, false);
-      }
-
-    //		if (count > 0) {
-
-    if (turn>0) oldcolor=SetTextColor(hdc, RGB(0x0,0x0,0x0));
-    else oldcolor=SetTextColor(hdc, RGB(0xff,0x00,0x00)); // red
-    /*
-      switch (count) {
-      case 1:
-      case 3:
-      case 5:
-      case 7:
-      oldcolor=SetTextColor(hdc, RGB(0xff,0xff,0xff)); // white
-      break;
-      case 2:
-      case 4:
-      case 6:
-      case 8:
-      oldcolor=SetTextColor(hdc, RGB(0xff,0x00,0x20));
-      break;
-      default:
-      oldcolor=SetTextColor(hdc, RGB(0x00,0x00,0xff)); // blue
-      break;
-      }
-    */
-    if ( i==2 || i==4 || i==6 || i==8 ) {
-      if ( Units::GetUserAltitudeUnit() == unMeter ) wsprintf(gtext,_T("-%dm"),i*100); else
-	wsprintf(gtext,_T("-%dft"),i*300);
-      if (count<5)
-	ExtTextOut( hdc, Orig.x+35, Orig.y-5 - (int) tmp, 0, NULL, gtext , _tcslen(gtext), NULL );
-    }
-    SetTextColor(hdc,oldcolor);
-    //		}
-    //		if (count >0) {
-    if (turn>0) oldcolor=SetTextColor(hdc, RGB(0x0,0x0,0x0)); // dark grey
-    else oldcolor=SetTextColor(hdc, RGB(0xff,0x00,0x00)); // red
-    /*
-      switch (count) {
-      case 1:
-      case 3:
-      case 5:
-      oldcolor=SetTextColor(hdc, RGB(0x00,0x00,0xff)); // blue
-      break;
-      case 2:
-      case 4:
-      case 6:
-      oldcolor=SetTextColor(hdc, RGB(0xff,0x00,0x20));
-      break;
-      default:
-      oldcolor=SetTextColor(hdc, RGB(0x00,0x00,0xff)); // blue
-      break;
-      }
-    */
-    if ( i==2 || i==4 || i==6 || i==8 ) {
-      if ( Units::GetUserDistanceUnit() == unKiloMeter )
-	{
-	  //sprintf(text,"%3.1f Km",i*100*cruise /1000);
-	  sprintf(text,"%3.0fkm",i*100*cruise /1000);
-	} else  if ( Units::GetUserDistanceUnit() == unNauticalMiles )
-	{
-	  //sprintf(text,"%3.1f nmi", i*100*cruise / 1852);
-	  sprintf(text,"%3.0fnm", i*100*cruise / 1852);
-	} else  if ( Units::GetUserDistanceUnit() == unStatuteMiles )
-	{
-	  //sprintf(text,"%3.1f mi", i*100*cruise / 1609);
-	  sprintf(text,"%3.0fm", i*100*cruise / 1609);
-	}
-
-      wsprintf(gtext,_T("%S"),text);;
-      if (count<5)
-	ExtTextOut( hdc, Orig.x-100, Orig.y-5 - (int) tmp, 0, NULL, gtext , _tcslen(gtext), NULL );
-    }
-    SetTextColor(hdc,oldcolor);
-    //		}
-
-  }
-
-  SelectObject(hdc, oldfont);
-  if (NewMap||OutlinedTp)
-    oldcolor=SetTextColor(hdc, RGB(0x0,0x0,0x0)); // dark grey 0x50
-  else {
-    if (turn>0)
-      oldcolor=SetTextColor(hdc, RGB(0x0,0x0,0x0)); // dark grey 0x50
-    else
-      oldcolor=SetTextColor(hdc, RGB(0xff,0x00,0x00)); // red
-  }
-
-  wsprintf(gtext,_T("L/D:%d"),(int)cruise);
-
-  //ExtTextOut( hdc, Orig.x+30, Orig.y +20 , 0, NULL, gtext , _tcslen(gtext), NULL );
-  //ExtTextOut( hdc, Orig.x-30, Orig_Aircraft.y +50 , 0, NULL, gtext , _tcslen(gtext), NULL );
-  //ExtTextOut( hdc, (rc.left+rc.right)/2, rc.top+rc.bottom-20 , 0, NULL, gtext , _tcslen(gtext), NULL );
-
-  if (NewMap||OutlinedTp) {
-    ExtTextOut( hdc, rcx+3, rcy , 0, NULL, gtext , _tcslen(gtext), NULL );
-    ExtTextOut( hdc, rcx+2, rcy , 0, NULL, gtext , _tcslen(gtext), NULL );
-    ExtTextOut( hdc, rcx+1, rcy , 0, NULL, gtext , _tcslen(gtext), NULL );
-    ExtTextOut( hdc, rcx-1, rcy , 0, NULL, gtext , _tcslen(gtext), NULL );
-    ExtTextOut( hdc, rcx-2, rcy , 0, NULL, gtext , _tcslen(gtext), NULL );
-    ExtTextOut( hdc, rcx-3, rcy , 0, NULL, gtext , _tcslen(gtext), NULL );
-    ExtTextOut( hdc, rcx, rcy+1 , 0, NULL, gtext , _tcslen(gtext), NULL );
-    ExtTextOut( hdc, rcx, rcy+2 , 0, NULL, gtext , _tcslen(gtext), NULL );
-    ExtTextOut( hdc, rcx, rcy+3 , 0, NULL, gtext , _tcslen(gtext), NULL );
-    ExtTextOut( hdc, rcx, rcy-1 , 0, NULL, gtext , _tcslen(gtext), NULL );
-    ExtTextOut( hdc, rcx, rcy-2 , 0, NULL, gtext , _tcslen(gtext), NULL );
-    ExtTextOut( hdc, rcx, rcy-3 , 0, NULL, gtext , _tcslen(gtext), NULL );
-    SetTextColor(hdc,RGB(0xff,0xff,0xff));
-  }
-  ExtTextOut( hdc, rcx, rcy , 0, NULL, gtext , _tcslen(gtext), NULL );
-
-
-  SetTextColor(hdc,oldcolor);
-
-}
-
-/*
- * Had no time to even try to complete this part. Maybe in the next few days...
- */
-void MapWindow::DrawLook8000(HDC hdc,  RECT rc )
-{
-  TCHAR gtext[100];
-  TCHAR Buffer[100];
-  int wpgoto=-1;
-  COLORREF	oldcolor=0;
-  HFONT		oldfont;
-  TextInBoxMode_t TextDisplayMode;
-
-
-  //if (!InfoBoxLayout::landscape) return;
-  //if (!IsMapFullScreen()) return;
-
-  TextDisplayMode.AsInt = 0;
-
-  //static short rcx=rc.left+IBLSCALE(50);
-  //static short rcy=rc.top+rc.bottom-IBLSCALE(10);
-  short rcx=rc.left+IBLSCALE(1);
-  short rcy=rc.top+IBLSCALE(1);
-
-  if (DisplayMode != dmCircling)  {
-    wpgoto=ActiveWayPoint;
-    if (ValidTaskPoint(wpgoto)) {
-      int index = Task[wpgoto].Index;
-      if ( index >=0 ) {
-	if (WayPointList[index].Reachable) {
-	  TextDisplayMode.AsFlag.Color = 1; // 1 green 2 red 0 none
-	} else {
-	  TextDisplayMode.AsFlag.Color = 2;
-	}
-
-	wsprintf(Buffer, TEXT("TO: %s"),  WayPointList[index].Name);
-	// JMW undefined...	ConvToUpper(Buffer);
-	// VNT it's really inside Utils.cpp ...but only for PNA or fivv... I'll fix it when it becomes usable
-	TextDisplayMode.AsFlag.WhiteBold = 1;
-	TextInBox(hdc, Buffer, rcx,rcy, 0, TextDisplayMode, false);
-      }
-    }
-  }
-
-
-
-
-
-  /*
-
-  short rcx=rc.right-IBLSCALE(30);
-  short rcy=rc.top+ IBLSCALE(80);
-
-  //if (EnableVarioGauge && MapRectBig.right == rc.right)  rcx -= InfoBoxLayout::ControlWidth;
-
-
-  SelectObject(hdc, GetStockObject(HOLLOW_BRUSH));
-  // SetBkMode(hdc,TRANSPARENT);
-
-
-  TextDisplayMode.AsFlag.WhiteBold = 1; // outlined
-  TextDisplayMode.AsFlag.NoSetFont = 1;
-  TextDisplayMode.AsFlag.AlligneRight = 1;
-  //oldfont = (HFONT)SelectObject(hdc, StatisticsFont);
-  //oldfont = (HFONT)SelectObject(hdc, StatisticsFont);
-  oldfont = (HFONT)SelectObject(hdc, InfoWindowFont);
-
-  wsprintf(Buffer, TEXT("0.0"));
-
-  TextInBox(hdc, Buffer, rcx,rcy, 0, TextDisplayMode, false);
-
-  wsprintf(Buffer, TEXT("+803"));
-
-  TextInBox(hdc, Buffer, rcx,rcy+IBLSCALE(25), 0, TextDisplayMode, false);
-
-
-  //rcx=(rc.right-rc.left)/2 - IBLSCALE(10);
-  //rcy=rc.top+ IBLSCALE(15);
-  TextDisplayMode.AsFlag.AlligneRight = 0;
-  TextDisplayMode.AsFlag.AlligneCenter = 1;
-  wsprintf(Buffer, TEXT("<<145%S"),_T(DEG));
-  TextInBox(hdc, Buffer, (rc.right-rc.left)/2 - IBLSCALE(10),rc.top+IBLSCALE(15), 0, TextDisplayMode, false);
-
-  SelectObject(hdc, oldfont);
-  */
-}

@@ -36,8 +36,6 @@ Copyright_License {
 */
 #include "StdAfx.h"
 #include "compatibility.h"
-#include "Defines.h" // VENTA3
-
 #include "XCSoar.h"
 #include "MapWindow.h"
 #include "Parser.h"
@@ -53,6 +51,7 @@ Copyright_License {
 #endif
 
 #include "Utils.h"
+#include "Utils2.h"
 #include "Port.h"
 #include "Waypointparser.h"
 #include "Airspace.h"
@@ -160,6 +159,9 @@ Appearance_t Appearance = {
   {0,0,0},
   {0,0,0},
   {0,0,0},
+  {0,0,0},
+  {0,0,0},
+  {0,0,0},
   ctBestCruiseTrackAltA,
   afAircraftAltA,
   true, // don't show speed to fly
@@ -259,6 +261,7 @@ HFONT                                   CDIWindowFont; // New
 HFONT                                   MapLabelFont;
 HFONT                                   StatisticsFont;
 
+
 LOGFONT                                   autoInfoWindowLogFont; // these are the non-custom parameters
 LOGFONT                                   autoTitleWindowLogFont;
 LOGFONT                                   autoMapWindowLogFont;
@@ -280,7 +283,10 @@ int                                             AltWarningMargin = 100;
 int                                             AutoAdvance = 1;
 bool                                            AdvanceArmed = false;
 
+
 bool EnableBlockSTF = false;
+
+short   ScreenSize=0;
 
 bool GlobalRunning = false;
 
@@ -385,12 +391,11 @@ bool needclipping=false; // flag to activate extra clipping for some PNAs
 #endif
 bool EnableAutoBacklight=true;
 bool EnableAutoSoundVolume=true;
-short AircraftCategory=0;
 bool ExtendedVisualGlide=false;
-bool Look8000=false;
-bool HideUnits=false;
-bool NewMap=true;
-bool OutlinedTp=false;
+bool VirtualKeys=false;
+short AverEffTime=0;
+
+ldrotary_s rotaryLD;
 
 // Airspace Database
 AIRSPACE_AREA *AirspaceArea = NULL;
@@ -512,7 +517,11 @@ SCREEN_INFO Data_Options[] = {
 	  // 2
 	  {ugVerticalSpeed,   TEXT("Thermal last 30 sec"), TEXT("TC 30s"), new FormatterLowWarning(TEXT("%-2.1f"),0.0), NoProcessing, 7, 44},
 	  // 3
+#ifdef FIVV
+	  {ugNone,            TEXT("Bearing"), TEXT("Bearing"), new InfoBoxFormatter(TEXT("%2.0f")TEXT(DEG)), NoProcessing, 6, 54},
+#else
 	  {ugNone,            TEXT("Bearing"), TEXT("Bearing"), new InfoBoxFormatter(TEXT("%2.0f")TEXT(DEG)TEXT("T")), NoProcessing, 6, 54},
+#endif
 	  // 4
 	  {ugNone,            TEXT("L/D instantaneous"), TEXT("L/D Inst"), new InfoBoxFormatter(TEXT("%2.0f")), PopupBugsBallast, 5, 38},
 	  // 5
@@ -552,13 +561,21 @@ SCREEN_INFO Data_Options[] = {
 	  // 22
 	  {ugAltitude,        TEXT("Thermal Gain"), TEXT("TC Gain"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 24, 21},
 	  // 23
+#ifdef FIVV
+	  {ugNone,            TEXT("Track"), TEXT("Track"), new InfoBoxFormatter(TEXT("%2.0f")TEXT(DEG)), DirectionProcessing, 32, 6},
+#else
 	  {ugNone,            TEXT("Track"), TEXT("Track"), new InfoBoxFormatter(TEXT("%2.0f")TEXT(DEG)TEXT("T")), DirectionProcessing, 32, 6},
+#endif
 	  // 24
 	  {ugVerticalSpeed,   TEXT("Vario"), TEXT("Vario"), new InfoBoxFormatter(TEXT("%-2.1f")), NoProcessing, 44, 22},
 	  // 25
 	  {ugWindSpeed,       TEXT("Wind Speed"), TEXT("Wind V"), new InfoBoxFormatter(TEXT("%2.0f")), WindSpeedProcessing, 26, 50},
 	  // 26
+#ifdef FIVV
+	  {ugNone,            TEXT("Wind Bearing"), TEXT("Wind B"), new InfoBoxFormatter(TEXT("%2.0f")TEXT(DEG)), WindDirectionProcessing, 48, 25},
+#else
 	  {ugNone,            TEXT("Wind Bearing"), TEXT("Wind B"), new InfoBoxFormatter(TEXT("%2.0f")TEXT(DEG)TEXT("T")), WindDirectionProcessing, 48, 25},
+#endif
 	  // 27
 	  {ugNone,            TEXT("AA Time"), TEXT("AA Time"), new FormatterAATTime(TEXT("%2.0f")), NoProcessing, 28, 18},
 	  // 28
@@ -618,7 +635,11 @@ SCREEN_INFO Data_Options[] = {
 	  // 55
 	  {ugNone,            TEXT("Own Team Code"), TEXT("TeamCode"), new FormatterTeamCode(TEXT("\0")), TeamCodeProcessing, 56, 54},
 	  // 56
+#ifdef FIVV
+	  {ugNone,            TEXT("Team Bearing"), TEXT("Tm Brng"), new InfoBoxFormatter(TEXT("%2.0f")TEXT(DEG)), NoProcessing, 57, 55},
+#else
 	  {ugNone,            TEXT("Team Bearing"), TEXT("Tm Brng"), new InfoBoxFormatter(TEXT("%2.0f")TEXT(DEG)TEXT("T")), NoProcessing, 57, 55},
+#endif
 	  // 57
 	  {ugNone,            TEXT("Team Bearing Diff"), TEXT("Team Bd"), new FormatterDiffTeamBearing(TEXT("")), NoProcessing, 58, 56},
 	  // 58
@@ -653,13 +674,15 @@ SCREEN_INFO Data_Options[] = {
 	  {ugNone,            TEXT("Best Alternate"), TEXT("BestAltr"), new FormatterAlternate(TEXT("\0")), BestAlternateProcessing, 36, 46},
           // 70
 	  {ugAltitude,        TEXT("QFE GPS"), TEXT("QFE GPS"), new InfoBoxFormatter(TEXT("%2.0f")), QFEAltitudeProcessing, 1, 33},
-	  // 71 //
-	  {ugNone,   TEXT("Experimental1"), TEXT("Exp1"), new InfoBoxFormatter(TEXT("%-2.1f")), NoProcessing, 8, 2},
+          // 71 TODO FIX those 19,4 values
+	  {ugNone,            TEXT("L/D Average"), TEXT("L/D Avg"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 19, 4},
 	  // 72 //
+	  {ugNone,   TEXT("Experimental1"), TEXT("Exp1"), new InfoBoxFormatter(TEXT("%-2.1f")), NoProcessing, 8, 2},
+	  // 73 //
 	  {ugNone,   TEXT("Experimental2"), TEXT("Exp2"), new InfoBoxFormatter(TEXT("%-2.1f")), NoProcessing, 8, 2},
 	};
 
-const int NUMSELECTSTRINGS = 73;
+const int NUMSELECTSTRINGS = 74;
 
 
 CRITICAL_SECTION  CritSec_FlightData;
@@ -1271,14 +1294,14 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 
   // Version String
 #ifdef GNAV
-  _tcscat(XCSoar_Version, TEXT("Altair "));
+  wcscat(XCSoar_Version, TEXT("Altair "));
 #elif PNA  // VENTA-ADDON
-  _tcscat(XCSoar_Version, TEXT("PNA "));
+wcscat(XCSoar_Version, TEXT("PNA "));
 #else
 #if (WINDOWSPC>0)
-  _tcscat(XCSoar_Version, TEXT("PC "));
+  wcscat(XCSoar_Version, TEXT("PC "));
 #else
-  _tcscat(XCSoar_Version, TEXT("PPC "));
+  wcscat(XCSoar_Version, TEXT("PPC "));
   // TODO code: consider adding PPC, 2002, 2003 (not enough room now)
 #endif
 #endif
@@ -1286,14 +1309,14 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   // experimental CVS
 
 #ifdef FIVV
-  _tcscat(XCSoar_Version, TEXT("5.2.3Fb7 "));
+  wcscat(XCSoar_Version, TEXT("5.2.3Fb7 "));
 #elif defined(__MINGW32__)
-  _tcscat(XCSoar_Version, TEXT("5.2.3b7 "));
+  wcscat(XCSoar_Version, TEXT("5.2.3b7 "));
 #else
-  _tcscat(XCSoar_Version, TEXT("5.2.3b7 "));
+  wcscat(XCSoar_Version, TEXT("5.2.3b7 "));
 #endif
 
-  _tcscat(XCSoar_Version, TEXT(__DATE__));
+  wcscat(XCSoar_Version, TEXT(__DATE__));
 
 // VENTA2- delete registries at startup, but not on PC!
 #if defined(FIVV) && ( !defined(WINDOWSPC) || WINDOWSPC==0 )
@@ -1313,14 +1336,14 @@ RegDeleteKey(HKEY_CURRENT_USER, _T(REGKEYNAME));
   SmartGlobalModelType(); // First we check the exec filename, which
 			  // has priority over registry values
 
-  if (!_tcscmp(GlobalModelName, _T("UNKNOWN"))) // Then if there is no smart name...
+  if (  !wcscmp(GlobalModelName, _T("UNKNOWN")) ) // Then if there is no smart name...
     SetModelType();                         // get the modeltype from
 					    // the registry as usual
 #endif
 
 // VENTA2-ADDON install fonts on PDAs and check XCSoarData existance
 #if defined(FIVV) && ( !defined(WINDOWSPC) || WINDOWSPC==0 )
-#ifndef PNA
+//#ifndef PNA
 
 bool datadir=CheckDataDir(); // VENTA3 changed to bool
 if (datadir) StartupStore(TEXT("XCSoarData directory found.\n"));
@@ -1332,7 +1355,7 @@ TCHAR nTmp[100];
 _stprintf(nTmp,TEXT("InstallFonts() result=%d (0=installed >0 not installed)\n"), didfonts);
 StartupStore(nTmp);
 
-#endif
+//#endif
 #endif
 
 
@@ -1480,6 +1503,7 @@ StartupStore(nTmp);
 CreateProgressDialog(gettext(TEXT("Special ITA version")));
  Sleep(1000);
 #endif
+
 #ifdef PNA // VENTA-ADDON
 
 	TCHAR sTmp[MAX_PATH];
@@ -1518,10 +1542,7 @@ CreateProgressDialog(gettext(TEXT("Special ITA version")));
 #endif
 #endif // non PNA
 
-  if ( AircraftCategory == (AircraftCategory_t)umParaglider )
-	CreateProgressDialog(TEXT("PARAGLIDING MODE")); Sleep(2000);
-
-#ifdef _SIM_	// VENTA-ADDON
+#ifdef _SIM_
 	CreateProgressDialog(TEXT("SIMULATION")); Sleep(2000);
 #endif
 
@@ -1544,6 +1565,7 @@ CreateProgressDialog(gettext(TEXT("Special ITA version")));
 
   ReadWayPoints();
   InitWayPointCalc(); // VENTA3
+  InitLDRotary(&rotaryLD);
 /*
   for (int i=0; i< NumberOfWayPoints; i++) WayPointList[i].Preferred = false;
 */
@@ -1741,9 +1763,10 @@ ATOM MyRegisterClass(HINSTANCE hInstance, LPTSTR szWindowClass)
 void ApplyClearType(LOGFONT *logfont) {
   logfont->lfQuality = ANTIALIASED_QUALITY;
   if (0) {
+    logfont->lfQuality = CLEARTYPE_COMPAT_QUALITY; // VENTA TODO FIX HERE. WHY NOT LANDSCAPE? cleartype is not native, but better than nothing!
 #ifndef NOCLEARTYPE
   if (!InfoBoxLayout::landscape) {
-    logfont->lfQuality = CLEARTYPE_COMPAT_QUALITY;
+    logfont->lfQuality = CLEARTYPE_COMPAT_QUALITY; // VENTA TODO FIX HERE. WHY NOT LANDSCAPE? cleartype is not native, but better than nothing!
   }
 #endif
   }
@@ -1839,12 +1862,30 @@ void InitialiseFontsHardCoded(RECT rc,
 //         but RLD fontsystem should have fixed it once forever.
 //
 //#if defined(PNA) || defined(FIVV)
-#if defined(PNA)  // VENTA4
 
-  int iWidth = rc.right-rc.left;
+
+  int iWidth=rc.right-rc.left;
   int iHeight=rc.bottom-rc.top;
 
-  if (iWidth == 480 && iHeight == 272) { // WQVGA  e.g. MIO
+  if (iWidth == 240 && iHeight == 320) ScreenSize=(ScreenSize_t)ss240x320; // QVGA	portrait
+  if (iWidth == 480 && iHeight == 640) ScreenSize=(ScreenSize_t)ss480x640; //  VGA
+  if (iWidth == 480 && iHeight == 800) ScreenSize=(ScreenSize_t)ss480x800;
+
+  if (iWidth == 480 && iHeight == 272) ScreenSize=(ScreenSize_t)ss480x272; // WQVGA	landscape
+  if (iWidth == 320 && iHeight == 240) ScreenSize=(ScreenSize_t)ss320x240; //  QVGA
+  if (iWidth == 480 && iHeight == 234) ScreenSize=(ScreenSize_t)ss480x234; //   iGo
+  if (iWidth == 640 && iHeight == 480) ScreenSize=(ScreenSize_t)ss640x480; //   VGA
+  if (iWidth == 800 && iHeight == 480) ScreenSize=(ScreenSize_t)ss800x480; //  WVGA
+
+  TCHAR tbuf[80];
+  if (ScreenSize==0) {
+	wsprintf(tbuf,_T("--- ERROR UNKNOWN RESOLUTION %dx%d !\r\n"),iWidth,iHeight);
+	StartupStore(tbuf);
+  }
+
+#if defined(PNA)  // VENTA4
+
+  if (ScreenSize==(ScreenSize_t)ss480x272) { // WQVGA  e.g. MIO
     propGetFontSettingsFromString(TEXT("28,0,0,0,800,0,0,0,0,0,0,3,2,TahomaBD"), ptrhardInfoWindowLogFont);
     propGetFontSettingsFromString(TEXT("16,0,0,0,500,0,0,0,0,0,0,3,2,Tahoma"), ptrhardTitleWindowLogFont);
     propGetFontSettingsFromString(TEXT("16,0,0,0,100,1,0,0,0,0,0,3,2,Tahoma"), ptrhardTitleSmallWindowLogFont);
@@ -1861,7 +1902,7 @@ void InitialiseFontsHardCoded(RECT rc,
     }
   }
 
-  else if (iWidth == 480 && iHeight == 234) { // e.g. Messada 2440
+  else if (ScreenSize==(ScreenSize_t)ss480x234) { // e.g. Messada 2440
     propGetFontSettingsFromString(TEXT("22,0,0,0,400,0,0,0,0,0,0,3,2,TahomaBD"), ptrhardInfoWindowLogFont);
     propGetFontSettingsFromString(TEXT("18,0,0,0,500,0,0,0,0,0,0,3,2,Tahoma"), ptrhardTitleWindowLogFont);
     propGetFontSettingsFromString(TEXT("20,0,0,0,400,1,0,0,0,0,0,3,2,Tahoma"), ptrhardTitleSmallWindowLogFont);
@@ -1873,7 +1914,7 @@ void InitialiseFontsHardCoded(RECT rc,
     GlobalEllipse=1.1f; // to be checked, TODO
   }
 
-  else if (iWidth == 800 && iHeight == 480) {// e.g. ipaq 31x {
+  else if (ScreenSize==(ScreenSize_t)ss800x480) {// e.g. ipaq 31x {
 
     switch (Appearance.InfoBoxGeom) {
       case 0:
@@ -1912,6 +1953,8 @@ void InitialiseFontsHardCoded(RECT rc,
     propGetFontSettingsFromString(TEXT("48,0,0,0,400,0,0,0,0,0,0,3,2,Tahoma"), ptrhardStatisticsLogFont);
     propGetFontSettingsFromString(TEXT("36,0,0,0,400,0,0,0,0,0,0,3,2,Tahoma"), ptrhardMapWindowLogFont);
     propGetFontSettingsFromString(TEXT("32,0,0,0,600,0,0,0,0,0,0,3,2,TahomaBD"), ptrhardMapWindowBoldLogFont);
+
+
   }
 
 /* VENTA5 TEST automatic fallback for 320x240,640x480 and unusual resolutions
@@ -1982,6 +2025,7 @@ void InitialiseFontsAuto(RECT rc,
   memset ((char *)ptrautoMapLabelLogFont, 0, sizeof (LOGFONT));
   memset ((char *)ptrautoStatisticsLogFont, 0, sizeof (LOGFONT));
 
+  // VENTA TODO : reconsider all algorithms for unconventional screen resolutions, expecially wide screens where 1.66 and 2.03 multipliers apply
   if (fontsz1<fontsz2) { // portrait
     FontHeight = (int)(fontsz1/FONTHEIGHTRATIO*1.33);  // use small dimension, to work for widscreens and adjust so it works for 4x3 screens too.
     FontWidth = (int)(FontHeight*0.4);
@@ -2164,7 +2208,6 @@ void InitialiseFontsAuto(RECT rc,
 //  propGetFontSettings(TEXT("TeamCodeFont"), &logfont);
 //  TitleSmallWindowFont = CreateFontIndirect (&logfont);
 
-//}  FIX DA TOGLIERE??
 
 void InitialiseFonts(RECT rc)
 { //this routine must be called only at start/restart of XCSoar b/c there are many pointers to these fonts
@@ -2346,6 +2389,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
   WindowSize.right = GetSystemMetrics(SM_CXSCREEN);
   WindowSize.bottom = GetSystemMetrics(SM_CYSCREEN);
 
+
 #if (WINDOWSPC>0)
   WindowSize.right = SCREENWIDTH
     + 2*GetSystemMetrics( SM_CXFIXEDFRAME);
@@ -2516,6 +2560,8 @@ void DoInfoKey(int keycode) {
 
 
 // Debounce input buttons (does not matter which button is pressed)
+// VNT 090702 FIX Careful here: synthetic double clicks and virtual keys require some timing.
+//				See Defines.h DOUBLECLICKINTERVAL . Not sure they are 100% independent.
 
 int debounceTimeout=200;
 
@@ -3268,7 +3314,7 @@ void DisplayText(void)
 
       if (TeamFlarmIdTarget != 0)
 	{
-	  if (_tcslen(TeamFlarmCNTarget) != 0)
+	  if (wcslen(TeamFlarmCNTarget) != 0)
 	    {
 	      InfoBoxes[i]->SetComment(TeamFlarmCNTarget);
 	    }
@@ -3296,7 +3342,7 @@ void DisplayText(void)
 
       if (TeamFlarmIdTarget != 0)
 	{
-	  if (_tcslen(TeamFlarmCNTarget) != 0)
+	  if (wcslen(TeamFlarmCNTarget) != 0)
 	    {
 	      InfoBoxes[i]->SetComment(TeamFlarmCNTarget);
 	    }
@@ -3323,7 +3369,7 @@ void DisplayText(void)
 
       if (TeamFlarmIdTarget != 0)
 	{
-	  if (_tcslen(TeamFlarmCNTarget) != 0)
+	  if (wcslen(TeamFlarmCNTarget) != 0)
 	    {
 	      InfoBoxes[i]->SetComment(TeamFlarmCNTarget);
 	    }
@@ -3453,8 +3499,7 @@ void CommonProcessTimer()
   SystemIdleTimerReset();
 #endif
 
-  if(InfoWindowActive && !(AircraftCategory == (AircraftCategory_t)umParaglider))
-    // VNT let paraglider maplock working forever
+  if(InfoWindowActive)
     {
       if (!dlgAirspaceWarningVisible()) {
 	// JMW prevent switching to map window if in airspace warning dialog

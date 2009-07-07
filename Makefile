@@ -366,6 +366,7 @@ OBJS	:=\
 	$(SRC)/InputEvents.o 		$(SRC)/leastsqs.o \
 	$(SRC)/Logger.o 		\
 	$(SRC)/MapWindow.o 		$(SRC)/MapWindow2.o \
+	$(SRC)/MapWindow3.o 		\
 	$(SRC)/McReady.o 		$(SRC)/Message.o \
 	$(SRC)/NavFunctions.o		$(SRC)/OnLineContest.o \
 	$(SRC)/Parser.o			$(SRC)/Port.o \
@@ -375,7 +376,7 @@ OBJS	:=\
 	$(SRC)/Task.o			$(SRC)/TeamCodeCalculation.o \
 	$(SRC)/Terrain.o		$(SRC)/ThermalLocator.o \
 	$(SRC)/Topology.o		$(SRC)/units.o \
-	$(SRC)/Utils.o			\
+	$(SRC)/Utils.o			$(SRC)/Utils2.o \
 	$(SRC)/VegaVoice.o		$(SRC)/VOIMAGE.o \
 	$(SRC)/Waypointparser.o \
 	$(SRC)/windanalyser.o		$(SRC)/windmeasurementlist.o \

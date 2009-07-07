@@ -69,7 +69,30 @@ Copyright_License {
 #define ALTERNATE_OVERSAFETY  100 // meters
 #define ALTERNATE_MAXRANGE    100 // km - bestalternate search is within this maximum limit
 #define DYNABOXTIME 3.0  // seconds between infobox dynamic flipping
-#define DOUBLECLICKINTERVAL 350 // ms max interval between two clicks for getting a double click
+
+/*
+ * DOUBLECLICKINTERVAL is a general purpouse timing, used by both VK and synthetic double click
+ *
+ * No miracles. Couldn't do it any better.
+ *
+ * Max interval in ms between two clicks for getting a double click
+ * Very careful changing this value. It is used by virtual keys also!
+ * This is the timing sequence for virtual keys:
+ *
+ * 0 - VKSHORTCLICK   single click on the waypoint
+ * 0 - DCI/2+30		double click detected and VK disabled
+ * DCI/2+30 - DCI        airspace click and double click conflict?
+ * <DCI			possible double click
+ * >DCI 		virtual key
+ *
+ */
+
+#define DOUBLECLICKINTERVAL 350
+#define VKSHORTCLICK 120 // must be < than DCI/2 to have a chance to make airspace click recon!!!
+#define VKLONGCLICK 1500  // triggers circling/cruis switch on aircraft icon
+#define AIRSPACECLICK 1000 // interval to look only for airspace and not WP (IF NOT USING VK)
+
+
 #define BESTALTERNATEINTERVAL 60.0 // interval in seconds between BA search (slow)
 
 /*
@@ -80,5 +103,16 @@ Copyright_License {
 #define XCSDATADIR	"XCSoarData"
 #define XCSCHKLIST	"xcsoar-checklist.txt"
 #define XCSPROFILE	"xcsoar-registry.prf"
+
+// Rotary buffers and filters
+
+#define RASIZE 180	 // MAX ITEMS IN ANY ROTARY BUFFER (used in filters)
+
+#define MAXITERFILTER 10 // Max number of iterations during a filter convergence search
+			 // just for safety, it should stop at 3-4 automatically
+
+#define MAXLDROTARYSIZE 180 // max size of rotary buffer for LD calculation
+
+#define MAXEFFICIENCYSHOW 200  // over this, show INVALID_GR
 
 #endif

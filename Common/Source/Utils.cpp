@@ -256,12 +256,9 @@ const TCHAR szRegistryDeviceC[]= TEXT("DeviceC");
 const TCHAR szRegistryAutoBlank[]= TEXT("AutoBlank");
 const TCHAR szRegistryAutoBacklight[]= TEXT("AutoBacklight");
 const TCHAR szRegistryAutoSoundVolume[]= TEXT("AutoSoundVolume");
-const TCHAR szRegistryAircraftCategory[]= TEXT("AircraftCategory");
 const TCHAR szRegistryExtendedVisualGlide[]= TEXT("ExtVisualGlide");
-const TCHAR szRegistryLook8000[]= TEXT("Look8000");
-const TCHAR szRegistryNewMap[]= TEXT("NewMap");
-const TCHAR szRegistryHideUnits[]= TEXT("HideUnits");
-const TCHAR szRegistryOutlinedTp[]= TEXT("OutlinedTp");
+const TCHAR szRegistryVirtualKeys[]= TEXT("VirtualKeys");
+const TCHAR szRegistryAverEffTime[]= TEXT("AverEffTime");
 const TCHAR szRegistryVarioGauge[]= TEXT("VarioGauge");
 
 const TCHAR szRegistryDebounceTimeout[]= TEXT("DebounceTimeout");
@@ -657,7 +654,8 @@ void ReadRegistrySettings(void)
   GetFromRegistry(szRegistryThermalLocator,&Temp);
   EnableThermalLocator = Temp;
 
-  Temp = EnableAnimation;
+  //Temp = EnableAnimation;
+  Temp=0; // disabled by default VNT9
   GetFromRegistry(szRegistryAnimation,&Temp);
   EnableAnimation = (Temp==1);
 
@@ -696,15 +694,21 @@ void ReadRegistrySettings(void)
   Temp = Alternate1;
   if (GetFromRegistry(szRegistryAlternate1,&Temp)==ERROR_SUCCESS) {
     Alternate1 = Temp;
+    // TODO: for portrait no need to force alternate calculations here.
+    // Infobox will trigger them on if visible..
+    OnAlternate1=true;
   } else {
     Alternate1 = -1;
+    OnAlternate1=false;
   }
 
   Temp = Alternate2;
   if (GetFromRegistry(szRegistryAlternate2,&Temp)==ERROR_SUCCESS) {
     Alternate2 = Temp;
+    OnAlternate2=true;
   } else {
     Alternate2 = -1;
+    OnAlternate2=false;
   }
 
 
@@ -794,28 +798,21 @@ void ReadRegistrySettings(void)
   EnableAutoSoundVolume = (Temp == 1);
 
   Temp = 0;
-  GetFromRegistry(szRegistryAircraftCategory,&Temp); // VENTA4
-  AircraftCategory = Temp;
-
-  Temp = 0;
   GetFromRegistry(szRegistryExtendedVisualGlide,&Temp); // VENTA4
   ExtendedVisualGlide = Temp;
 
-  Temp = 0;
-  GetFromRegistry(szRegistryLook8000,&Temp); // VENTA4
-  Look8000 = Temp;
 
-  Temp = 0; // enabled by default; JMW, not yet...
-  GetFromRegistry(szRegistryNewMap,&Temp);
-  NewMap = Temp;
-
+#ifdef PNA
+  Temp = 1;
+#else
   Temp = 0;
-  GetFromRegistry(szRegistryOutlinedTp,&Temp);
-  OutlinedTp = Temp;
+#endif
+  GetFromRegistry(szRegistryVirtualKeys,&Temp);
+  VirtualKeys = Temp;
 
-  Temp = 0;
-  GetFromRegistry(szRegistryHideUnits,&Temp);
-  HideUnits = Temp;
+  Temp = (AverEffTime_t)ae2minutes;
+  GetFromRegistry(szRegistryAverEffTime,&Temp);
+  AverEffTime = Temp;
 
   /*
   Temp = 0;
@@ -842,7 +839,8 @@ void ReadRegistrySettings(void)
 
   // new appearance variables
 
-  Temp = Appearance.IndFinalGlide;
+  //Temp = Appearance.IndFinalGlide;
+  Temp=(IndFinalGlide_t)fgFinalGlideDefault; // VNT9 default
   GetFromRegistry(szRegistryAppIndFinalGlide, &Temp);
   Appearance.IndFinalGlide = (IndFinalGlide_t)Temp;
 
@@ -882,7 +880,8 @@ void ReadRegistrySettings(void)
   GetFromRegistry(szRegistryAppCompassAppearance, &Temp);
   Appearance.CompassAppearance = (CompassAppearance_t)Temp;
 
-  Temp = Appearance.InfoBoxBorder;
+  //Temp = Appearance.InfoBoxBorder;
+  Temp=(InfoBoxBorderAppearance_t)apIbBox; // VNT9 default
   GetFromRegistry(szRegistryAppInfoBoxBorder, &Temp);
   Appearance.InfoBoxBorder = (InfoBoxBorderAppearance_t)Temp;
 
@@ -945,7 +944,8 @@ void ReadRegistrySettings(void)
   GetFromRegistry(szRegistryAppDefaultMapWidth, &Temp);
   Appearance.DefaultMapWidth = Temp;
 
-  Temp = Appearance.InfoBoxColors;
+  //Temp = Appearance.InfoBoxColors;
+  Temp=1; // true as default VNT9
   GetFromRegistry(szRegistryAppInfoBoxColors, &Temp);
   Appearance.InfoBoxColors = (Temp != 0);
 
@@ -1152,7 +1152,8 @@ void ReadRegistrySettings(void)
   GetFromRegistry(szRegistryRiskGamma,&Temp);
   GlidePolar::RiskGamma = Temp/10.0;
 
-  Temp = MapWindow::WindArrowStyle;
+  //Temp = MapWindow::WindArrowStyle;
+  Temp=(CompassAppearance_t)apCompassAltA; // VNT9 default
   GetFromRegistry(szRegistryWindArrowStyle,&Temp);
   MapWindow::WindArrowStyle = Temp;
 
@@ -2758,14 +2759,10 @@ void WriteFileRegistryString(HANDLE hFile, TCHAR *instring) {
       tempFile[i]= 0;
     }
     GetRegistryString(instring, tempFile, MAX_PATH);
-#ifdef _UNICODE
     WideCharToMultiByte( CP_ACP, 0, tempFile,
 			 _tcslen(tempFile)+1,
 			 ctempFile,
 			 MAX_PATH, NULL, NULL);
-#else
-    strcpy(ctempFile, tempFile);
-#endif
     for (i=0; i<MAX_PATH; i++) {
       if (ctempFile[i]=='\?') {
 	ctempFile[i]=0;
@@ -2946,11 +2943,7 @@ BOOL ReadString(ZZIP_FILE *zFile, int Max, TCHAR *String)
   sTmp[i] = 0;
   zzip_seek(zFile, dwFilePos+j, SEEK_SET);
   sTmp[Max-1] = '\0';
-#ifdef _UNICODE
   mbstowcs(String, sTmp, strlen(sTmp)+1);
-#else
-  strcpy(String, sTmp);
-#endif
   return (dwTotalNumBytesRead>0);
 }
 
@@ -3007,11 +3000,7 @@ BOOL ReadString(HANDLE hFile, int Max, TCHAR *String)
   sTmp[i] = 0;
   SetFilePointer(hFile, dwFilePos+j, NULL, FILE_BEGIN);
   sTmp[Max-1] = '\0';
-#ifdef _UNICODE
   mbstowcs(String, sTmp, strlen(sTmp)+1);
-#else
-  strcpy(String, sTmp);
-#endif
   return (dwTotalNumBytesRead>0);
 
 }
@@ -3537,8 +3526,8 @@ void ReadStatusFile() {
   /* Read from the file */
   while (
 	 (StatusMessageData_Size < MAXSTATUSMESSAGECACHE)
-	 && _fgetts(buffer, 2048, fp)
-	 && ((found = _stscanf(buffer, TEXT("%[^#=]=%[^\n]\n"), key, value)) != EOF)
+	 && fgetws(buffer, 2048, fp)
+	 && ((found = swscanf(buffer, TEXT("%[^#=]=%[^\n]\n"), key, value)) != EOF)
 	 ) {
     // Check valid line? If not valid, assume next record (primative, but works ok!)
     if ((found != 2) || !key || !value) {
@@ -3554,22 +3543,22 @@ void ReadStatusFile() {
 
       location = NULL;
 
-      if (_tcscmp(key, TEXT("key")) == 0) {
+      if (wcscmp(key, TEXT("key")) == 0) {
 	some_data = true;	// Success, we have a real entry
 	location = &StatusMessageData[StatusMessageData_Size].key;
-      } else if (_tcscmp(key, TEXT("sound")) == 0) {
+      } else if (wcscmp(key, TEXT("sound")) == 0) {
 	StatusMessageData[StatusMessageData_Size].doSound = true;
 	location = &StatusMessageData[StatusMessageData_Size].sound;
-      } else if (_tcscmp(key, TEXT("delay")) == 0) {
-	if (_stscanf(value, TEXT("%d"), &ms) == 1)
+      } else if (wcscmp(key, TEXT("delay")) == 0) {
+	if (swscanf(value, TEXT("%d"), &ms) == 1)
 	  StatusMessageData[StatusMessageData_Size].delay_ms = ms;
-      } else if (_tcscmp(key, TEXT("hide")) == 0) {
-	if (_tcscmp(value, TEXT("yes")) == 0)
+      } else if (wcscmp(key, TEXT("hide")) == 0) {
+	if (wcscmp(value, TEXT("yes")) == 0)
 	  StatusMessageData[StatusMessageData_Size].doStatus = false;
       }
 
       // Do we have somewhere to put this && is it currently empty ? (prevent lost at startup)
-      if (location && (_tcscmp(*location, TEXT("")) == 0)) {
+      if (location && (wcscmp(*location, TEXT("")) == 0)) {
 	// TODO code: this picks up memory lost from no entry, but not duplicates - fix.
 	if (*location) {
 	  // JMW fix memory leak
@@ -3669,33 +3658,20 @@ static bool LoadRegistryFromFile_inner(const TCHAR *szFile, bool wide=true)
       while (fgets(inval, nMaxValueValueSize, fp)) {
         if (sscanf(inval, "%[^#=\r\n ]=\"%[^\r\n\"]\"[\r\n]", name, value) == 2) {
 	  if (strlen(name)>0) {
-#ifdef _UNICODE
 	    mbstowcs(wname, name, strlen(name)+1);
 	    mbstowcs(wvalue, value, strlen(value)+1);
-#else
-            strcpy(wname, name);
-            strcpy(wvalue, value);
-#endif
 	    SetRegistryString(wname, wvalue);
 	    found = true;
 	  }
         } else if (sscanf(inval, "%[^#=\r\n ]=%d[\r\n]", name, &j) == 2) {
 	  if (strlen(name)>0) {
-#ifdef _UNICODE
 	    mbstowcs(wname, name, strlen(name)+1);
-#else
-            strcpy(wname, name);
-#endif
 	    SetToRegistry(wname, j);
 	    found = true;
 	  }
         } else if (sscanf(inval, "%[^#=\r\n ]=\"\"[\r\n]", name) == 1) {
 	  if (strlen(name)>0) {
-#ifdef _UNICODE
 	    mbstowcs(wname, name, strlen(name)+1);
-#else
-            strcpy(wname, name);
-#endif
 	    SetRegistryString(wname, TEXT(""));
 	    found = true;
 	  }
@@ -3847,7 +3823,7 @@ TCHAR* StringMallocParse(TCHAR* old_string) {
   TCHAR* new_string;
   unsigned int used = 0;
   unsigned int i;
-  for (i = 0; i < _tcslen(old_string); i++) {
+  for (i = 0; i < wcslen(old_string); i++) {
     if (used < 2045) {
       if (old_string[i] == '\\' ) {
         if (old_string[i + 1] == 'r') {
@@ -3869,8 +3845,8 @@ TCHAR* StringMallocParse(TCHAR* old_string) {
   };
   buffer[used++] =_T('\0');
 
-  new_string = (TCHAR *)malloc((_tcslen(buffer)+1)*sizeof(TCHAR));
-  _tcscpy(new_string, buffer);
+  new_string = (TCHAR *)malloc((wcslen(buffer)+1)*sizeof(TCHAR));
+  wcscpy(new_string, buffer);
 
   return new_string;
 }
@@ -3893,7 +3869,7 @@ CSIDL_PROGRAM_FILES 0x0026   The program files folder.
 */
 #if defined(GNAV) && !defined(PCGNAV)
   _tcscpy(buffer,TEXT("\\NOR Flash"));
-#elif defined (PNA)
+#elif defined (PNA) && (!defined(WINDOWSPC) || (WINDOWSPC <=0) )
  /*
   * VENTA-ADDON "smartpath" for PNA only
   *
@@ -3923,8 +3899,8 @@ CSIDL_PROGRAM_FILES 0x0026   The program files folder.
   _tcscat(buffer,TEXT(XCSDATADIR));
 #endif
   if (_tcslen(file)>0) {
-    _tcsncat(buffer, TEXT("\\"), MAX_PATH);
-    _tcsncat(buffer, file, MAX_PATH);
+    wcsncat(buffer, TEXT("\\"), MAX_PATH);
+    wcsncat(buffer, file, MAX_PATH);
   }
 }
 
@@ -4260,6 +4236,16 @@ void XCSoarGetOpts(LPTSTR CommandLine) {
       SCREENWIDTH=800;
       SCREENHEIGHT=480;
     }
+    pC = _tcsstr(MyCommandLine, TEXT("-480x272"));
+    if (pC != NULL){
+      SCREENWIDTH=480;
+      SCREENHEIGHT=272;
+    }
+    pC = _tcsstr(MyCommandLine, TEXT("-480x234"));
+    if (pC != NULL){
+      SCREENWIDTH=480;
+      SCREENHEIGHT=234;
+    }
     pC = _tcsstr(MyCommandLine, TEXT("-portrait"));
     if (pC != NULL){
       SCREENWIDTH=480;
@@ -4277,9 +4263,15 @@ void XCSoarGetOpts(LPTSTR CommandLine) {
     }
     pC = _tcsstr(MyCommandLine, TEXT("-320x240"));
     if (pC != NULL){
+      SCREENWIDTH=320;
+      SCREENHEIGHT=240;
+    }
+    pC = _tcsstr(MyCommandLine, TEXT("-240x320"));
+    if (pC != NULL){
       SCREENWIDTH=240;
       SCREENHEIGHT=320;
     }
+
 #endif
   }
 }
@@ -4448,6 +4440,7 @@ WinPilotPolarInternal WinPilotPolars[] =
   {TEXT("Lak17A-15"), 285,	180,	95,	-0.574,	148,	-1.310,	200,	-2.885, 9.06},
   {TEXT("ASG29-15"), 362,	165,	108.8,	-0.635,	156.4,	-1.182,	211.13,	-2.540, 9.20},
   {TEXT("DG-300"), 310,	190,	95.0,	-0.66,	140.0,	-1.28,	160.0,	-1.70, 10.27},
+  {TEXT("Para EN C/DHV2"), 110,	4.19,	33.0,	-1.0,	39.0,	-1.2,	56.0,	-2.30, 0},
 
   // {TEXT("LS-6 (15m)"), 325, 140,  90, -0.59, 100, -0.66, 212.72, -3.4, 0}, // BestLD42
   // {TEXT("H304cz"), 310, 115,    115.03, -0.86, 174.04, -1.76, 212.72, -3.4, 0}, // BestLD42@102
@@ -4463,16 +4456,6 @@ WinPilotPolarInternal WinPilotPolars[] =
 
 
 // asg29-15 9.2 m^2 winglets, empty 290, 375 pilot, max 550kg.
-
-/* Need more paragliders!
-
-This is for a Gradient Golden from here:
-http://www.paraglidingforum.com/viewtopic.php?t=23106
-
-*1-26E WinPilot POLAR file: MassDryGross[kg], MaxWaterBallast[liters], Speed1[km/h], Sink1[m/s], Speed2, Sink2, Speed3, Sink3
-110, 10, 29, -1.09, 37, -1.39, 49, -2.99
-
-*/
 
 };
 
@@ -4671,14 +4654,10 @@ void SaveFLARMDetails(void)
     {
       wsprintf(wsline, TEXT("%lx=%s\r\n"), FLARM_Names[z].ID,FLARM_Names[z].Name);
 
-#ifdef _UNICODE
       WideCharToMultiByte( CP_ACP, 0, wsline,
 			   _tcslen(wsline)+1,
 			   cline,
 			   READLINE_LENGTH, NULL, NULL);
-#else
-      strcpy(cline, wsline);
-#endif
 
       WriteFile(hFile, cline, strlen(cline), &bytesWritten, NULL);
     }
@@ -4702,7 +4681,7 @@ int LookupSecondaryFLARMId(TCHAR *cn)
 {
   for (int i=0; i<NumberOfFLARMNames; i++)
     {
-      if (_tcscmp(FLARM_Names[i].Name, cn) == 0)
+      if (wcscmp(FLARM_Names[i].Name, cn) == 0)
 	{
 	  return i;
 	}
@@ -4950,7 +4929,7 @@ unsigned long FindFreeSpace(const TCHAR *path) {
 bool MatchesExtension(const TCHAR *filename, const TCHAR* extension) {
   TCHAR *ptr;
   ptr = _tcsstr((TCHAR*)filename, extension);
-  if (ptr != filename+_tcslen((TCHAR*)filename)-_tcslen((TCHAR*)extension)) {
+  if (ptr != filename+_tcslen(filename)-_tcslen(extension)) {
     return false;
   } else {
     return true;
@@ -4973,7 +4952,7 @@ BOOL PlayResource (const TCHAR* lpName)
 
   // TODO code: Modify to allow use of WAV Files and/or Embedded files
 
-  if (_tcsstr(lpName, TEXT(".wav"))) {
+  if (wcsstr(lpName, TEXT(".wav"))) {
     bRtn = sndPlaySound (lpName, SND_ASYNC | SND_NODEFAULT );
 
   } else {
@@ -5045,7 +5024,7 @@ bool InterfaceTimeoutCheck(void) {
 
 bool FileExistsW(TCHAR *FileName){
 
-  HANDLE hFile = CreateFile(FileName, GENERIC_READ, 0, NULL,
+  HANDLE hFile = CreateFileW(FileName, GENERIC_READ, 0, NULL,
                  OPEN_EXISTING,FILE_ATTRIBUTE_NORMAL,NULL);
 
   if( hFile == INVALID_HANDLE_VALUE)
@@ -5398,6 +5377,8 @@ int GetGlobalModelName ()
 
 }
 
+#endif   // PNA
+
 /*
  * Convert to uppercase a TCHAR array
  */
@@ -5412,8 +5393,6 @@ void ConvToUpper( TCHAR *str )
 
 	return ;
 }
-
-#endif   // PNA
 
 #ifdef FIVV
 BOOL DelRegistryKey(const TCHAR *szDelKey)
@@ -5592,6 +5571,7 @@ CopyFile(srcfile,dstfile,TRUE);
 _stprintf(srcfile,TEXT("%s\\DejaVuSansCondensed-Oblique2.ttf"),srcdir);
 _stprintf(dstfile,TEXT("%s\\DejaVuSansCondensed-Oblique2.ttf"),dstdir);
 CopyFile(srcfile,dstfile,TRUE);
+
 
 return 0;
 

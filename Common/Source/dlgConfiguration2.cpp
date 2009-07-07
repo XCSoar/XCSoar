@@ -269,16 +269,19 @@ void OnInfoBoxHelp(WindowControl * Sender){
   case 66:
     dlgHelpShowModal(caption, TEXT("[Final GR]\r\nGeometric gradient to the arrival height above the final waypoint.  This is not adjusted for total energy."));
     break;
+  case 67:
   case 68:
-    dlgHelpShowModal(caption, TEXT("[Alternate GR]\r\nGeometric gradient to the arrival height above the selected alternate waypoint.  This is not adjusted for total energy.\r\nFor values over 200, nothing is shown, for values between 100 and 200 an integer number is shown, and for values between 1 and 99 a decimal value is shown.\r\nThe alternate value is RED if:\r\n- above the best LD or unreachable (terrain, wind, arrival altitude is less than 100m over the safety altitude)\r\nThe bottom line changes every 3 seconds showing distance or arrival altitude over safety.\r\n All values are calculated in real-time\r\nPress the ENTER key with the infobox selected to bring up the relative waypoint info page: here you can perform actions on the alternate such as goto, insert in task etc."));
+    dlgHelpShowModal(caption, TEXT("[Alternate GR]\r\nGeometric gradient to the arrival height above the selected alternate waypoint.  This is not adjusted for total energy.\r\nOver 200 nothing is shown, between 100 and 200 an integer number is shown, between 1 and 99 a decimal value is shown.\r\nThe Alternate value is RED if:\r\n- above the best LD or unreachable (terrain, wind, arrival altitude is less than 100m OVER safety altitude)\r\nThe bottom line is changing every 3 seconds showing distance or arrival altitude over safety.\r\n All values are calculated in real-time\r\nPRESS the ENTER key to make the relative waypoint info page come up: here you can perform actions on the alternate such as goto, insert in task etc."));
     break;
   case 69:
-    dlgHelpShowModal(caption, TEXT("[Best Alternate]\r\nThis automatically searches for the best landing option available. The top line is the name of the landpoint, the middle value is the LD required, and the bottom line displays the distance and arrival altitude over safety (cycled every few seconds). Please refer to the manual to see how the Best Alternate works and how you can customise its behaviour."));
+    dlgHelpShowModal(caption, TEXT("[BestAlternate]\r\nAutomatic search for the best landing option available. Top line is name of landpoint, middle is LD required, bottom line hold distance and arrival altitude over safety, swapped every few seconds. Please read the full manual document about the BestAlternate and how you can customise its behaviour. This is still experimental so be careful. If you select BestAlternate by clicking on the infobox and the PRESS ENTER either with a real key or virtual key then the waypoint detail page will come up and you will be able to perform actions on this Alternate such as goto, inserti in task etc."));
     break;
   case 70:
-    dlgHelpShowModal(caption, TEXT("[QFE]\r\nAutomatic QFE altitude based on GPS altitude. This altitude value is constantly reset to 0 on ground before taking off. After takeoff, it no longer is reset automatically.  During flight you can adjust the QFE value with the up and down keys. The bottom line shows QNH altitude. \r\nChanging QFE does not affect QNH altitude or any other glide calculation."));
+    dlgHelpShowModal(caption, TEXT("[QFE]\r\nAutomatic QFE. This altitude value is constantly reset to 0 on ground BEFORE taking off. After takeoff, it is no more reset automatically even if on ground. During flight you can change QFE with up and down keys. Bottom line shows QNH altitude. \r\nChanging QFE does not affect QNH altitude."));
     break;
-  case 67:
+  case 71:
+    dlgHelpShowModal(caption, TEXT("[L/D average]\r\nThe distance made in the configured period of time , divided by the altitude lost since then.  Negative values are shown as ^^^ and indicate climbing cruise (height gain). Over 200 of LD the value is shown as +++ .\r\nYou can configure the period of averaging in the Special config menu. Suggested values for this configuration are 60, 90 or 120: lower values will be closed to LD INST, and higher values will be closed to LD Cruise. \r\nNotice that the distance is NOT the straight line between you old and current position: it's exactly the distance you have made even in a zigzag glide.\r\nThis value is not calculated while circling. "));
+    break;
   default:
     dlgHelpShowModal(caption, TEXT("No help available on this item!"));
   };

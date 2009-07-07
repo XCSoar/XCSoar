@@ -938,13 +938,21 @@ Example short name (81HXABC1.IGC), long name (2008-01-18-XXX-ABC-01.IGC).
     <DataField name="" DataType="enum" Min=0 Max=50 Step=1/>
   </WndProperty>
 
-  <WndProperty Name="prpAircraftCategory" Caption="Aircraft Category"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2
-  Help="Paragliders will benefit of screen lock selecting an infobox, double click to unlock. ">
+ <WndProperty Name="prpVirtualKeys" Caption="Virtual Keys"  X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 Help="Virtual Keys see manual">
+    <DataField name="" DataType="boolean"/>
+  </WndProperty>
+
+  <WndProperty Name="prpAverEffTime" Caption="L/D Average period"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2
+  Help="Average efficiency is always calculated in REAL TIME. Here you can decide on how many seconds of flight this calculation must be done. The real distance covered second by second in this period is divided by the final difference of altitude.  So if for example you go and return back to the same point after 2 minutes, and you have set 2 minutes as period, averageLD will consider the total distance covered in those two minutes , and NOT the distance between your position 2 minutes before and your current position, that in this case could be almost zero! Normally for gliders a good value is 90-120 seconds, and for paragliders 15 seconds. Lower values will give as a result pretty much the same as LD Instant , while higher values will look like LD Cruise. Other commercial instruments and software use 2 minutes. ">
     <DataField name="" DataType="enum" Min=0 Max=10 Step=1/>
   </WndProperty>
 
-  <WndProperty Name="prpGPSAltitudeOffset" Caption="GPS alt offset*"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2
-  Help="Adjust GPS altitude with a fixed offset.">
+ <WndProperty Name="prpExtendedVisualGlide" Caption="Extended VisualGlide"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 Help="If you want Visual Glide to display also moving circles or arcs, in addition to the steady mode then select Extended.">
+    <DataField name="" DataType="boolean"/>
+  </WndProperty>
+
+<WndProperty Name="prpGPSAltitudeOffset" Caption="GPS Height Offset*"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2
+  Help="Adjust GPS height with a fixed offset. Be careful with this setting: your offset will modify gps height permanently during the flight!  This value will NOT be saved to the registry, so you should manually set it each time.">
     <DataField name="" DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min=-1000 Max=1000 Step=1/>
   </WndProperty>
 
@@ -956,9 +964,7 @@ Example short name (81HXABC1.IGC), long name (2008-01-18-XXX-ABC-01.IGC).
     <DataField name="" DataType="boolean"/>
   </WndProperty>
 
-  <WndProperty Name="prpExtendedVisualGlide" Caption="Extended Visual Glide*"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 Help="If you want Visual Glide to display also moving circles or arcs, in addition to the steady mode then selext Extended.">
-    <DataField name="" DataType="boolean"/>
-  </WndProperty>
+  </WndFrame>
 
   <WndProperty Name="prpNewMap" Caption="Alternate map labels*"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 Help="New moving map label drawing. A different algorithm is applied when deciding what label should be displayed, which airport or landing field, and if arrival altitude should appear too.">
     <DataField name="" DataType="boolean"/>
