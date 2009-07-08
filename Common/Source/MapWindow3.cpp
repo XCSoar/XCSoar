@@ -260,3 +260,4 @@ void MapWindow::DrawGlideCircle(HDC hdc, POINT Orig, RECT rc )
   SetTextColor(hdc,oldcolor);
 
 }
+

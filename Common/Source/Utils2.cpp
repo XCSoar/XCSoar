@@ -175,6 +175,7 @@ FILE *fp;
 
 /*
  * returns 0 if invalid, 999 if too high
+
  */
 int CalculateLDRotary(ldrotary_s *buf ) {
 
@@ -195,6 +196,7 @@ int CalculateLDRotary(ldrotary_s *buf ) {
 	}
 
 	if ( buf->start <0) {
+
 #ifdef DEBUG_ROTARY
 		sprintf(ventabuffer,"Calculate: invalid buf start<0\r\n");
 		if ((fp=fopen("DEBUG.TXT","a"))!= NULL)
@@ -373,6 +375,7 @@ int ProcessVirtualKey(int X, int Y, long keytime, short vkmode) {
 		if (keytime>=VKTIMELONG)
 			return 0xc2;
 		else
+
 			return 40;
 	}
 
@@ -390,4 +393,5 @@ int ProcessVirtualKey(int X, int Y, long keytime, short vkmode) {
 	DoStatusMessage(_T("VirtualKey Error"));
 	return 0;
 }
+
 
