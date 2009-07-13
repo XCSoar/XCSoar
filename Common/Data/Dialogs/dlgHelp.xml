@@ -10,7 +10,7 @@
 <WndForm Name="frmHelp" Type="Dialog" X=0 Y=0 Width=320 Height=240 Caption="Help" Font=2 BackColor=0xDADBAB>
   <WndButton   Caption="Close"    X=2 Y=2 Width=60  Height=22 Font=2 OnClickNotify="OnCloseClicked"/>
 
-  <WndProperty Name="prpHelpText"  Caption="" X=60 Y=5 Width=255 Height=210 CaptionWidth=10 Font=2 ReadOnly=1 MultiLine="1"/>
+  <WndProperty Name="prpHelpText"  Caption="" X=62 Y=5 Width=255 Height=210 CaptionWidth=10 Font=2 ReadOnly=1 MultiLine="1"/>
 
 </WndForm>
 

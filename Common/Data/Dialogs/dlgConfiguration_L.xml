@@ -923,7 +923,14 @@ Example short name (81HXABC1.IGC), long name (2008-01-18-XXX-ABC-01.IGC).
     <DataField name="" DataType="enum" Min=0 Max=50 Step=1/>
   </WndProperty>
 
-<WndProperty Name="prpVirtualKeys" Caption="Virtual Keys"  X=2 Y=-1   Width=235 Height=22 CaptionWidth=150 Font=2 Help="Virtual Keys see manual">
+<WndProperty Name="prpVirtualKeys" Caption="Virtual Keys"  X=2 Y=-1   Width=235 Height=22 CaptionWidth=150 Font=2
+             Help="Creates virtual UP, DOWN and ENTER keys for devices with no hardware buttons.
+When enabled, the map screen is divided into three virtual parts.
+Pressing the map for one second on the upper part will result in a UP key, in the lower part a DOWN key, and in the middle part into an ENTER key.
+These UP, DOWN and ENTER keys may be applied to change infobox values such as MC, destination waypoint in a task, etc. once an infobox has been selected.
+
+To select a waypoint on the map, click it quickly, as short as possible. Remember than longer clicks may be interpreted as a virtual key!
+To select an airspace on the map, press for about half a second on it.  If you do an ENTER key on the map, you will normally switch between full screen and infoboxes: the same will happen with a virtual ENTER.">
     <DataField name="" DataType="boolean"/>
   </WndProperty>
 
