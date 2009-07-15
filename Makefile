@@ -35,12 +35,12 @@ else
           CONFIG_WINE :=y
         else
           ifeq ($(TARGET),ALTAIR)
-            CONFIG_ALTAIR	:=y
-	    MINIMAL       :=y
-	    XSCALE	:=y
+            CONFIG_ALTAIR :=y
+	    MINIMAL :=y
+	    XSCALE :=y
           endif
           ifeq ($(TARGET),ALTAIRPORTRAIT)
-            CONFIG_ALTAIR	:=y
+            CONFIG_ALTAIR :=y
 	    ALTAIR_PORTRAIT :=y
 	    MINIMAL       :=y
 	    XSCALE	:=y
@@ -63,11 +63,13 @@ TCPATH		:=i586-mingw32msvc-
 CPU		:=i586
 MCPU		:= -mcpu=$(CPU)
 else
+
 ifeq ($(CONFIG_WINE),y)
 TCPATH		:=wine
 CPU		:=i586
 MCPU		:= -mcpu=$(CPU)
 else
+
 TCPATH		:=arm-mingw32ce-
 
 ifeq ($(XSCALE),y)
@@ -88,6 +90,7 @@ MCPU		:= -mcpu=$(CPU)
 endif
 
 endif
+
 endif
 
 ############# platform info
@@ -104,17 +107,10 @@ CE_MAJOR	:=4
 CE_MINOR	:=00
 CE_PLATFORM	:=400
 PCPU		:=ARMV4
-
-# JMW this shouldn't be required
-#ifeq ($(CONFIG_PNA),y)
-#TARGET		:=PNA
-#else
-#TARGET		:=PPC2003
-#endif
-
 endif
-ifeq ($(CONFIG_ALTAIR),y)
+
 # armv4i
+ifeq ($(CONFIG_ALTAIR),y)
 CE_MAJOR	:=5
 CE_MINOR	:=00
 CE_PLATFORM	:=500
@@ -122,7 +118,6 @@ TARGET		:=ALTAIR
 ifeq ($(ALTAIR_PORTRAIT),y)
 TARGET          :=ALTAIRPORTRAIT
 endif
-
 endif
 
 ifeq ($(CONFIG_PC),y)
@@ -193,7 +188,7 @@ endif
 CPPFLAGS	:= $(INCLUDES) $(CE_DEFS)
 CPPFLAGS	+= -DNDEBUG -Wuninitialized -DFLARM_AVERAGE
 ifeq ($(CONFIG_PNA),y)
-CPPFLAGS	+= -DBIGDISPLAY -DCECORE -DPNA -DNOLINETO
+CPPFLAGS	+= -DBIGDISPLAY -DCECORE -DPNA
 endif
 
 ifeq ($(CONFIG_PC),y)
