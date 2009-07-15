@@ -112,7 +112,9 @@ static void SetValues(bool first=false) {
       dfe->addEnumText(gettext(TEXT("Line")));
       dfe->addEnumText(gettext(TEXT("FAI Sector")));
     }
+    dfe->SetDetachGUI(true); // disable call to OnAATEnabled
     dfe->Set(StartLine);
+    dfe->SetDetachGUI(false);
     wp->RefreshDisplay();
   }
 
@@ -133,7 +135,9 @@ static void SetValues(bool first=false) {
       dfe->addEnumText(gettext(TEXT("FAI Sector")));
       dfe->addEnumText(gettext(TEXT("DAe 0.5/10")));
     }
+    dfe->SetDetachGUI(true); // disable call to OnAATEnabled
     dfe->Set(SectorType);
+    dfe->SetDetachGUI(false);
     wp->RefreshDisplay();
   }
 
@@ -248,7 +252,9 @@ static void SetWaypointValues(bool first=false) {
       dfe->addEnumText(gettext(TEXT("Cylinder")));
       dfe->addEnumText(gettext(TEXT("Sector")));
     }
+    dfe->SetDetachGUI(true); // disable call to OnAATEnabled
     dfe->Set(Task[twItemIndex].AATType);
+    dfe->SetDetachGUI(false);
     wp->RefreshDisplay();
   }
 

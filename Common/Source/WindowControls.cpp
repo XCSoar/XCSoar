@@ -662,7 +662,7 @@ bool DataFieldBoolean::SetAsBoolean(bool Value){
   bool res = mValue;
   if (mValue != Value){
     mValue = Value;
-    (mOnDataAccess)(this, daChange);
+    if (!GetDetachGUI()) (mOnDataAccess)(this, daChange);
   }
   return(res);
 }
@@ -751,11 +751,9 @@ void DataFieldEnum::Set(int Value){
       int lastValue = mValue;
       mValue = i;
 
-      /* This causing problems! Reported and found by Mirek
       if (mValue != (unsigned int) lastValue){
-        (mOnDataAccess)(this, daChange);
+        if (!GetDetachGUI()) (mOnDataAccess)(this, daChange);
       }
-      */
       return;
     }
   }
@@ -771,14 +769,14 @@ int DataFieldEnum::SetAsInteger(int Value){
 void DataFieldEnum::Inc(void){
   if (mValue<nEnums-1) {
     mValue++;
-    (mOnDataAccess)(this, daChange);
+    if (!GetDetachGUI()) (mOnDataAccess)(this, daChange);
   }
 }
 
 void DataFieldEnum::Dec(void){
   if (mValue>0) {
     mValue--;
-    (mOnDataAccess)(this, daChange);
+    if (!GetDetachGUI()) (mOnDataAccess)(this, daChange);
   }
 }
 
