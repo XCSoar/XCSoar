@@ -1294,14 +1294,14 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 
   // Version String
 #ifdef GNAV
-  wcscat(XCSoar_Version, TEXT("Altair "));
+  _tcscat(XCSoar_Version, TEXT("Altair "));
 #elif PNA  // VENTA-ADDON
-wcscat(XCSoar_Version, TEXT("PNA "));
+  _tcscat(XCSoar_Version, TEXT("PNA "));
 #else
 #if (WINDOWSPC>0)
-  wcscat(XCSoar_Version, TEXT("PC "));
+  _tcscat(XCSoar_Version, TEXT("PC "));
 #else
-  wcscat(XCSoar_Version, TEXT("PPC "));
+  _tcscat(XCSoar_Version, TEXT("PPC "));
   // TODO code: consider adding PPC, 2002, 2003 (not enough room now)
 #endif
 #endif
@@ -1309,14 +1309,14 @@ wcscat(XCSoar_Version, TEXT("PNA "));
   // experimental CVS
 
 #ifdef FIVV
-  wcscat(XCSoar_Version, TEXT("5.2.3Fb7 "));
+  _tcscat(XCSoar_Version, TEXT("5.2.3Fb7 "));
 #elif defined(__MINGW32__)
-  wcscat(XCSoar_Version, TEXT("5.2.3b7 "));
+  _tcscat(XCSoar_Version, TEXT("5.2.3b7 "));
 #else
-  wcscat(XCSoar_Version, TEXT("5.2.3b7 "));
+  _tcscat(XCSoar_Version, TEXT("5.2.3b7 "));
 #endif
 
-  wcscat(XCSoar_Version, TEXT(__DATE__));
+  _tcscat(XCSoar_Version, TEXT(__DATE__));
 
 // VENTA2- delete registries at startup, but not on PC!
 #if defined(FIVV) && ( !defined(WINDOWSPC) || WINDOWSPC==0 )
@@ -1336,7 +1336,7 @@ RegDeleteKey(HKEY_CURRENT_USER, _T(REGKEYNAME));
   SmartGlobalModelType(); // First we check the exec filename, which
 			  // has priority over registry values
 
-  if (  !wcscmp(GlobalModelName, _T("UNKNOWN")) ) // Then if there is no smart name...
+  if (!_tcscmp(GlobalModelName, _T("UNKNOWN"))) // Then if there is no smart name...
     SetModelType();                         // get the modeltype from
 					    // the registry as usual
 #endif
@@ -3314,7 +3314,7 @@ void DisplayText(void)
 
       if (TeamFlarmIdTarget != 0)
 	{
-	  if (wcslen(TeamFlarmCNTarget) != 0)
+	  if (_tcslen(TeamFlarmCNTarget) != 0)
 	    {
 	      InfoBoxes[i]->SetComment(TeamFlarmCNTarget);
 	    }
@@ -3342,7 +3342,7 @@ void DisplayText(void)
 
       if (TeamFlarmIdTarget != 0)
 	{
-	  if (wcslen(TeamFlarmCNTarget) != 0)
+	  if (_tcslen(TeamFlarmCNTarget) != 0)
 	    {
 	      InfoBoxes[i]->SetComment(TeamFlarmCNTarget);
 	    }
@@ -3369,7 +3369,7 @@ void DisplayText(void)
 
       if (TeamFlarmIdTarget != 0)
 	{
-	  if (wcslen(TeamFlarmCNTarget) != 0)
+	  if (_tcslen(TeamFlarmCNTarget) != 0)
 	    {
 	      InfoBoxes[i]->SetComment(TeamFlarmCNTarget);
 	    }
