@@ -4027,12 +4027,16 @@ void MapWindow::DrawDashLine(HDC hdc, const int width,
 
   //increment on smallest variance
   if(abs(ptStart.x - ptEnd.x) < abs(ptStart.y - ptEnd.y)){
+    pt[0].x -= width / 2;
+    pt[1].x -= width / 2;
     for (i = 0; i < width; i++){
       pt[0].x += 1;
       pt[1].x += 1;
       _Polyline(hdc, pt, 2, rc);
     }
   } else {
+    pt[0].y -= width / 2;
+    pt[1].y -= width / 2;
     for (i = 0; i < width; i++){
       pt[0].y += 1;
       pt[1].y += 1;
