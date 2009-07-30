@@ -151,6 +151,18 @@ BOOL EWMicroRecorderTryConnect(PDeviceDescriptor_t d) {
 }
 
 
+static void EWMicroRecorderPrintf(PDeviceDescriptor_t d, const TCHAR *fmt, ...)
+{
+  TCHAR EWStr[128];
+  va_list ap;
+
+  va_start(ap, fmt);
+  _vstprintf(EWStr, fmt, ap);
+  va_end(ap);
+
+  d->Com->WriteString(EWStr);
+}
+
 static void EWMicroRecorderWriteWayPoint(PDeviceDescriptor_t d,
                                          const WAYPOINT *wp,
                                          TCHAR* EWType) {
@@ -183,13 +195,12 @@ static void EWMicroRecorderWriteWayPoint(PDeviceDescriptor_t d,
   DegLon = (int)tmp;
   MinLon = (tmp - DegLon) * 60 * 1000;
 
-  _stprintf(EWRecord,
-            TEXT("%s%02d%05d%c%03d%05d%c %s\r\n"),
+  EWMicroRecorderPrintf(d,
+            TEXT("%-17s %02d%05d%c%03d%05d%c %s\r\n"),
             EWType,
             DegLat, (int)MinLat, NoS,
             DegLon, (int)MinLon, EoW,
             wp->Name);
-  d->Com->WriteString(EWRecord);                 // put it to the logger
 }
 
 
@@ -212,23 +223,30 @@ BOOL EWMicroRecorderDeclare(PDeviceDescriptor_t d, Declaration_t *decl)
 
   d->Com->WriteString(TEXT("\x18"));         // start to upload file
   d->Com->WriteString(user_data);
+  EWMicroRecorderPrintf(d, TEXT("%-15s %s\r\n"),
+               TEXT("Pilot Name:"), decl->PilotName);
+  EWMicroRecorderPrintf(d, TEXT("%-15s %s\r\n"),
+               TEXT("Competition ID:"), decl->AircraftRego);
+  EWMicroRecorderPrintf(d, TEXT("%-15s %s\r\n"),
+               TEXT("Aircraft Type:"), decl->AircraftType);
   d->Com->WriteString(TEXT("Description:      Declaration\r\n"));
 
   for (int i = 0; i < 11; i++) {
     wp = decl->waypoint[i];
     if (i == 0) {
-      EWMicroRecorderWriteWayPoint(d, wp, TEXT("Take Off LatLong: "));
-      EWMicroRecorderWriteWayPoint(d, wp, TEXT("Start LatLon:     "));
+      EWMicroRecorderWriteWayPoint(d, wp, TEXT("Take Off LatLong:"));
+      EWMicroRecorderWriteWayPoint(d, wp, TEXT("Start LatLon:"));
     } else if (i + 1 < decl->num_waypoints) {
-      EWMicroRecorderWriteWayPoint(d, wp, TEXT("TP LatLon:        "));
+      EWMicroRecorderWriteWayPoint(d, wp, TEXT("TP LatLon:"));
     } else {
-      d->Com->WriteString(TEXT("TP LatLon:        0000000N00000000E TURN POINT\r\n"));
+      EWMicroRecorderPrintf(d, TEXT("%-17s %s\r\n"),
+               TEXT("TP LatLon:"), TEXT("0000000N00000000E TURN POINT\r\n"));
     }
   }
 
   wp = decl->waypoint[decl->num_waypoints - 1];
-  EWMicroRecorderWriteWayPoint(d, wp, TEXT("Finish LatLon:    "));
-  EWMicroRecorderWriteWayPoint(d, wp, TEXT("Land LatLon:      "));
+  EWMicroRecorderWriteWayPoint(d, wp, TEXT("Finish LatLon:"));
+  EWMicroRecorderWriteWayPoint(d, wp, TEXT("Land LatLon:"));
 
   d->Com->WriteString(TEXT("\x03"));         // finish sending user file
 
