@@ -3059,7 +3059,7 @@ void InitSineTable(void)
 }
 
 
-double StrToDouble(TCHAR *Source, TCHAR **Stop)
+double StrToDouble(const TCHAR *Source, TCHAR **Stop)
 {
   int index = 0;
   int StringLength        = 0;
@@ -3109,7 +3109,7 @@ double StrToDouble(TCHAR *Source, TCHAR **Stop)
 	}
     }
   if(Stop != NULL)
-    *Stop = &Source[index];
+    *Stop = (TCHAR *)&Source[index];
 
   if (neg) {
     return -Sum;

@@ -325,7 +325,7 @@ int NAVWarn(TCHAR c)
     return TRUE;
 }
 
-double NMEAParser::ParseAltitude(TCHAR *value, const TCHAR *format)
+double NMEAParser::ParseAltitude(const TCHAR *value, const TCHAR *format)
 {
   double alt = StrToDouble(value, NULL);
 

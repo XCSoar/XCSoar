@@ -309,7 +309,7 @@ double AngleLimit360(double theta);
 #define fastcosine(x) COSTABLE[DEG_TO_INT(x)]
 #define fastsine(x) SINETABLE[DEG_TO_INT(x)]
 
-double StrToDouble(TCHAR *Source, TCHAR **Stop);
+double StrToDouble(const TCHAR *Source, TCHAR **Stop);
 void PExtractParameter(TCHAR *Source, TCHAR *Destination, int DesiredFieldNumber);
 void SaveWindToRegistry();
 void LoadWindFromRegistry();

@@ -152,7 +152,7 @@ class NMEAParser {
   static void TestRoutine(NMEA_INFO *GPS_INFO);
 
   // these routines can be used by other parsers.
-  static double ParseAltitude(TCHAR *, const TCHAR *);
+  static double ParseAltitude(const TCHAR *, const TCHAR *);
   static size_t ValidateAndExtract(const TCHAR *src, TCHAR *dst, size_t dstsz, TCHAR **arr, size_t arrsz);
   static size_t ExtractParameters(const TCHAR *src, TCHAR *dst, TCHAR **arr, size_t sz);
   static BOOL NMEAChecksum(const TCHAR *String);
