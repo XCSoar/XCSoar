@@ -724,10 +724,6 @@ void                                                    PopUpSelect(int i);
 
 //HWND CreateRpCommandBar(HWND hwnd);
 
-#ifdef DEBUG
-void                                            DebugStore(char *Str);
-#endif
-
 
 void TriggerGPSUpdate()
 {
