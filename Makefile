@@ -449,8 +449,8 @@ all:	$(OUTPUTS)
 
 install: XCSoar-$(TARGET).exe XCSoarSimulator-$(TARGET).exe
 	@echo Copying to device...
-	$(SYNCE_PRM) ':/Program Files/XCSoar/XCSoar.exe'
-	$(SYNCE_PRM) ':/Program Files/XCSoar/XCSoarSimulator.exe'
+	-$(SYNCE_PRM) ':/Program Files/XCSoar/XCSoar.exe'
+	-$(SYNCE_PRM) ':/Program Files/XCSoar/XCSoarSimulator.exe'
 	$(SYNCE_PCP) XCSoar-$(TARGET).exe ':/Program Files/XCSoar/XCSoar.exe'
 	$(SYNCE_PCP) XCSoarSimulator-$(TARGET).exe ':/Program Files/XCSoar/XCSoarSimulator.exe'
 
