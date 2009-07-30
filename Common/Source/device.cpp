@@ -886,30 +886,28 @@ BOOL FlarmDeclare(PDeviceDescriptor_t d, Declaration_t *decl){
 
   for (int i = 0; i < decl->num_waypoints; i++) {
     int DegLat, DegLon;
-    double MinLat, MinLon;
+    double tmp, MinLat, MinLon;
     char NoS, EoW;
 
-    DegLat = (int)decl->waypoint[i]->Latitude;
-    MinLat = decl->waypoint[i]->Latitude - DegLat;
+    tmp = decl->waypoint[i]->Latitude;
     NoS = 'N';
-    if((MinLat<0) || ((MinLat-DegLat==0) && (DegLat<0)))
+    if(tmp < 0)
       {
 	NoS = 'S';
-	DegLat *= -1; MinLat *= -1;
+	tmp = -tmp;
       }
-    MinLat *= 60;
-    MinLat *= 1000;
+    DegLat = (int)tmp;
+    MinLat = (tmp - DegLat) * 60 * 1000;
 
-    DegLon = (int)decl->waypoint[i]->Longitude;
-    MinLon = decl->waypoint[i]->Longitude - DegLon;
+    tmp = decl->waypoint[i]->Longitude;
     EoW = 'E';
-    if((MinLon<0) || ((MinLon-DegLon==0) && (DegLon<0)))
+    if(tmp < 0)
       {
 	EoW = 'W';
-	DegLon *= -1; MinLon *= -1;
+	tmp = -tmp;
       }
-    MinLon *=60;
-    MinLon *= 1000;
+    DegLon = (int)tmp;
+    MinLon = (tmp - DegLon) * 60 * 1000;
 
     _stprintf(Buffer,
 	      TEXT("PFLAC,S,ADDWP,%02d%05.0f%c,%03d%05.0f%c,%s"),

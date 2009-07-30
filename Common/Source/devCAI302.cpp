@@ -467,7 +467,7 @@ BOOL cai302DeclAddWayPoint(PDeviceDescriptor_t d, const WAYPOINT *wp){
   TCHAR Name[13];
   TCHAR  szTmp[128];
   int DegLat, DegLon;
-  double MinLat, MinLon;
+  double tmp, MinLat, MinLon;
   char NoS, EoW;
 
   if (nDeclErrorCode != 0)
@@ -476,28 +476,26 @@ BOOL cai302DeclAddWayPoint(PDeviceDescriptor_t d, const WAYPOINT *wp){
   _tcsncpy(Name, wp->Name, 12);
   Name[12] = '\0';
 
-  DegLat = (int)wp->Latitude;
-  MinLat = wp->Latitude - DegLat;
+  tmp = wp->Latitude;
   NoS = 'N';
-  if(MinLat<0)
+  if (tmp < 0)
     {
       NoS = 'S';
-      DegLat *= -1;
-      MinLat *= -1;
+      tmp = -tmp;
     }
-  MinLat *= 60;
+  DegLat = (int)tmp;
+  MinLat = (tmp - DegLat) * 60;
 
 
-  DegLon = (int)wp->Longitude ;
-  MinLon = wp->Longitude  - DegLon;
+  tmp = wp->Longitude;
   EoW = 'E';
-  if(MinLon<0)
+  if (tmp < 0)
     {
       EoW = 'W';
-      DegLon *= -1;
-      MinLon *= -1;
+      tmp = -tmp;
     }
-  MinLon *=60;
+  DegLon = (int)tmp;
+  MinLon = (tmp - DegLon) * 60;
 
   _stprintf(szTmp, TEXT("D,%d,%02d%07.4f%c,%03d%07.4f%c,%s,%d\r"),
     DeclIndex,

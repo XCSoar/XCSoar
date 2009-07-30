@@ -226,7 +226,7 @@ BOOL EWDeclAddWayPoint(PDeviceDescriptor_t d, const WAYPOINT *wp){
   TCHAR EWRecord[100];
   TCHAR IDString[12];
   int DegLat, DegLon;
-  double MinLat, MinLon;
+  double tmp, MinLat, MinLon;
   char NoS, EoW;
   short EoW_Flag, NoS_Flag, EW_Flags;
 
@@ -246,28 +246,28 @@ BOOL EWDeclAddWayPoint(PDeviceDescriptor_t d, const WAYPOINT *wp){
     _tcscpy(&IDString[3], TEXT("   "));           // truncate to short name
   #endif
 
-  DegLat = (int)wp->Latitude;                    // preparte lat
-  MinLat = wp->Latitude - DegLat;
+  // prepare lat
+  tmp = wp->Latitude;
   NoS = 'N';
-  if(MinLat<0)
+  if (tmp < 0)
     {
       NoS = 'S';
-      DegLat *= -1; MinLat *= -1;
+      tmp = -tmp;
     }
-  MinLat *= 60;
-  MinLat *= 1000;
+  DegLat = (int)tmp;
+  MinLat = (tmp - DegLat) * 60 * 1000;
 
 
-  DegLon = (int)wp->Longitude ;                  // prepare long
-  MinLon = wp->Longitude  - DegLon;
+  // prepare long
+  tmp = wp->Longitude;
   EoW = 'E';
-  if(MinLon<0)
+  if (tmp < 0)
     {
       EoW = 'W';
-      DegLon *= -1; MinLon *= -1;
+      tmp = -tmp;
     }
-  MinLon *=60;
-  MinLon *= 1000;
+  DegLon = (int)tmp;
+  MinLon = (tmp - DegLon) * 60 * 1000;
 
   //	Calc E/W and N/S flags
 

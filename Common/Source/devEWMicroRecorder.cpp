@@ -156,30 +156,32 @@ static void EWMicroRecorderWriteWayPoint(PDeviceDescriptor_t d,
                                          TCHAR* EWType) {
   TCHAR EWRecord[128];
   int DegLat, DegLon;
-  double MinLat, MinLon;
+  double tmp, MinLat, MinLon;
   TCHAR NoS, EoW;
 
-  DegLat = (int)wp->Latitude;                    // prepare lat
-  MinLat = wp->Latitude - DegLat;
+  // prepare latitude
+  tmp = wp->Latitude;
   NoS = _T('N');
-  if(MinLat<0)
+  if (tmp < 0)
     {
       NoS = _T('S');
-      DegLat *= -1; MinLat *= -1;
+      tmp = -tmp;
     }
-  MinLat *= 60;
-  MinLat *= 1000;
 
-  DegLon = (int)wp->Longitude ;                  // prepare long
-  MinLon = wp->Longitude  - DegLon;
+  DegLat = (int)tmp;
+  MinLat = (tmp - DegLat) * 60 * 1000;
+
+  // prepare long
+  tmp = wp->Longitude;
   EoW = _T('E');
-  if(MinLon<0)
+  if (tmp < 0)
     {
       EoW = _T('W');
-      DegLon *= -1; MinLon *= -1;
+      tmp = -tmp;
     }
-  MinLon *= 60;
-  MinLon *= 1000;
+
+  DegLon = (int)tmp;
+  MinLon = (tmp - DegLon) * 60 * 1000;
 
   _stprintf(EWRecord,
             TEXT("%s%02d%05d%c%03d%05d%c %s\r\n"),
