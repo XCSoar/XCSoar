@@ -1305,11 +1305,11 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   // experimental CVS
 
 #ifdef FIVV
-  _tcscat(XCSoar_Version, TEXT("5.2.4Frc1 "));
+  _tcscat(XCSoar_Version, TEXT("5.2.4F "));
 #elif defined(__MINGW32__)
-  _tcscat(XCSoar_Version, TEXT("5.2.4rc1 "));
+  _tcscat(XCSoar_Version, TEXT("5.2.4 "));
 #else
-  _tcscat(XCSoar_Version, TEXT("5.2.4rc1 "));
+  _tcscat(XCSoar_Version, TEXT("5.2.4 "));
 #endif
 
   _tcscat(XCSoar_Version, TEXT(__DATE__));
