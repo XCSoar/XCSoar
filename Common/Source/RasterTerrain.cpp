@@ -274,10 +274,7 @@ void RasterMapCache::ServiceCache(void) {
   Lock();
 
   if (terraincachemisses > 0){
-    DWORD tm =GetTickCount();
     OptimizeCash();
-    tm = GetTickCount()-tm;
-    tm = GetTickCount();
   }
   SetCacheTime();
 
