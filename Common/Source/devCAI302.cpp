@@ -543,17 +543,14 @@ BOOL cai302Install(PDeviceDescriptor_t d){
 }
 
 
+static const DeviceRegister_t cai302Device = {
+  TEXT("CAI 302"),
+  drfGPS | drfLogger | drfSpeed | drfVario | drfBaroAlt | drfWind,
+  cai302Install
+};
+
 BOOL cai302Register(void){
-  return(devRegister(
-    TEXT("CAI 302"),
-    (1l << dfGPS)
-      | (1l << dfLogger)
-      | (1l << dfSpeed)
-      | (1l << dfVario)
-      | (1l << dfBaroAlt)
-      | (1l << dfWind),
-    cai302Install
-  ));
+  return devRegister(&cai302Device);
 }
 
 // local stuff

@@ -100,11 +100,13 @@ BOOL nmoInstall(PDeviceDescriptor_t d){
 }
 
 
+static const DeviceRegister_t nmoDevice = {
+  TEXT("NmeaOut"),
+  drfNmeaOut,
+  nmoInstall
+};
+
 BOOL nmoRegister(void){
-  return(devRegister(
-    TEXT("NmeaOut"),
-    (1l << dfNmeaOut),
-    nmoInstall
-  ));
+  return devRegister(&nmoDevice);
 }
 

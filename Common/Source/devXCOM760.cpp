@@ -83,12 +83,14 @@ static BOOL XCOM760Install(PDeviceDescriptor_t d){
 }
 
 
+static const DeviceRegister_t xcom760Device = {
+  TEXT("XCOM760"),
+  drfRadio,
+  XCOM760Install
+};
+
 BOOL xcom760Register(void){
-  return(devRegister(
-    TEXT("XCOM760"),
-    (1l << dfRadio),
-    XCOM760Install
-  ));
+  return devRegister(&xcom760Device);
 }
 
 

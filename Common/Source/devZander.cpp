@@ -99,15 +99,14 @@ static BOOL zanderInstall(PDeviceDescriptor_t d){
 }
 
 
+static const DeviceRegister_t zanderDevice = {
+  TEXT("Zander"),
+  drfGPS | drfBaroAlt | drfSpeed | drfVario,
+  zanderInstall
+};
+
 BOOL zanderRegister(void){
-  return(devRegister(
-    TEXT("Zander"),
-    (1l << dfGPS)
-    | (1l << dfBaroAlt)
-    | (1l << dfSpeed)
-    | (1l << dfVario),
-    zanderInstall
-  ));
+  return devRegister(&zanderDevice);
 }
 
 

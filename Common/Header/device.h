@@ -15,7 +15,18 @@
 #define	devB()	    (&DeviceList[1])
 #define devAll()    (NULL)
 
-typedef	enum {dfGPS, dfLogger, dfSpeed,	dfVario, dfBaroAlt,	dfWind, dfVoice, dfNmeaOut, dfRadio} DeviceFlags_t;
+typedef	enum {dfGPS, dfLogger, dfSpeed,	dfVario, dfBaroAlt,	dfWind, dfVoice, dfNmeaOut, dfRadio, dfCondor } DeviceFlags_t;
+
+#define drfGPS		(1l << dfGPS)
+#define drfLogger	(1l << dfLogger)
+#define drfSpeed	(1l << dfSpeed)
+#define drfVario	(1l << dfVario)
+#define drfBaroAlt	(1l << dfBaroAlt)
+#define drfWind		(1l << dfWind)
+#define drfVoice	(1l << dfVoice)
+#define drfNmeaOut	(1l << dfNmeaOut)
+#define drfRadio	(1l << dfRadio)
+#define drfCondor	(1l << dfCondor)
 
 typedef struct Declaration {
   TCHAR PilotName[64];
@@ -76,7 +87,7 @@ extern int DeviceRegisterCount;
 extern DeviceDescriptor_t *pDevPrimaryBaroSource;
 extern DeviceDescriptor_t *pDevSecondaryBaroSource;
 
-BOOL devRegister(const TCHAR *Name,	int	Flags, BOOL (*Installer)(PDeviceDescriptor_t d));
+BOOL devRegister(const DeviceRegister_t *devReg);
 BOOL devRegisterGetName(int Index, TCHAR *Name);
 
 BOOL devInit(LPTSTR CommandLine);

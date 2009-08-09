@@ -85,12 +85,14 @@ BOOL b50Install(PDeviceDescriptor_t d){
 }
 
 
+static const DeviceRegister_t b50Device = {
+  TEXT("Borgelt B50"),
+  drfGPS,
+  b50Install
+};
+
 BOOL b50Register(void){
-  return(devRegister(
-    TEXT("Borgelt B50"),
-    (1l << dfGPS),
-    b50Install
-  ));
+  return devRegister(&b50Device);
 }
 
 

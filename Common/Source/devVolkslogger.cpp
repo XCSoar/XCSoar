@@ -313,13 +313,13 @@ BOOL vlInstall(PDeviceDescriptor_t d){
 }
 
 
+static const DeviceRegister_t vlDevice = {
+  TEXT("Volkslogger"),
+  drfGPS | drfBaroAlt | drfLogger,
+  vlInstall
+};
+
 BOOL vlRegister(void){
-  return(devRegister(
-    TEXT("Volkslogger"),
-    (1l << dfGPS)
-    | (1l << dfBaroAlt)
-    | (1l << dfLogger),
-    vlInstall
-  ));
+  return devRegister(&vlDevice);
 }
 

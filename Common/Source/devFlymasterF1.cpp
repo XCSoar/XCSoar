@@ -91,14 +91,14 @@ static BOOL flymasterf1Install(PDeviceDescriptor_t d){
 }
 
 
+static const DeviceRegister_t flymasterf1Device = {
+  TEXT("FlymasterF1"),
+  drfGPS | drfBaroAlt | drfVario,
+  flymasterf1Install
+};
+
 BOOL flymasterf1Register(void){
-  return(devRegister(
-    TEXT("FlymasterF1"),
-    (1l << dfGPS)
-    | (1l << dfBaroAlt)
-    | (1l << dfVario),
-    flymasterf1Install
-  ));
+  return devRegister(&flymasterf1Device);
 }
 
 

@@ -103,15 +103,14 @@ static BOOL lxInstall(PDeviceDescriptor_t d){
 }
 
 
+static const DeviceRegister_t lxDevice = {
+  TEXT("LX"),
+  drfGPS | drfBaroAlt | drfSpeed | drfVario,
+  lxInstall
+};
+
 BOOL lxRegister(void){
-  return(devRegister(
-    TEXT("LX"),
-    (1l << dfGPS)
-    | (1l << dfBaroAlt)
-    | (1l << dfSpeed)
-    | (1l << dfVario),
-    lxInstall
-  ));
+  return devRegister(&lxDevice);
 }
 
 

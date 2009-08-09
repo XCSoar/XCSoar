@@ -151,14 +151,13 @@ BOOL atrInstall(PDeviceDescriptor_t d){
 }
 
 
+static const DeviceRegister_t atrDevice = {
+  TEXT("Altair Pro"),
+  drfGPS | drfBaroAlt, // drfLogger - ToDo
+  atrInstall
+};
+
 BOOL atrRegister(void){
-  return(devRegister(
-    TEXT("Altair Pro"),
-      (1l << dfGPS)
-    | (1l << dfBaroAlt)
-//      | 1l << dfLogger  // ToDo
-    ,
-    atrInstall
-  ));
+  return devRegister(&atrDevice);
 }
 

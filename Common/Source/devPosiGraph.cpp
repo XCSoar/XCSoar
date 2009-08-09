@@ -117,14 +117,14 @@ BOOL pgInstall(PDeviceDescriptor_t d){
 }
 
 
+static const DeviceRegister_t pgDevice = {
+  TEXT("PosiGraph Logger"),
+  drfGPS | drfBaroAlt | drfLogger,
+  pgInstall
+};
+
 BOOL pgRegister(void){
-  return(devRegister(
-    TEXT("PosiGraph Logger"),
-      1l << dfGPS
-      | (1l << dfBaroAlt)
-      | 1l << dfLogger,
-    pgInstall
-  ));
+  return devRegister(&pgDevice);
 }
 
 

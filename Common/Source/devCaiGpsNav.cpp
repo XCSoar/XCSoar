@@ -117,11 +117,13 @@ BOOL caiGpsNavInstall(PDeviceDescriptor_t d){
 }
 
 
+static const DeviceRegister_t caiGpsNavDevice = {
+  TEXT("CAI GPS-NAV"),
+  drfGPS,
+  caiGpsNavInstall
+};
+
 BOOL caiGpsNavRegister(void){
-  return(devRegister(
-    TEXT("CAI GPS-NAV"),
-    (1l << dfGPS),
-    caiGpsNavInstall
-  ));
+  return devRegister(&caiGpsNavDevice);
 }
 

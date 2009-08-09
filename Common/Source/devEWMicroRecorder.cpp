@@ -288,14 +288,14 @@ BOOL ewMicroRecorderInstall(PDeviceDescriptor_t d){
 }
 
 
+static const DeviceRegister_t ewMicroRecorderDevice = {
+  TEXT("EW MicroRecorder"),
+  drfGPS | drfLogger | drfBaroAlt,
+  ewMicroRecorderInstall
+};
+
 BOOL ewMicroRecorderRegister(void){
-  return(devRegister(
-    TEXT("EW MicroRecorder"),
-    1l << dfGPS
-      | 1l << dfLogger
-      | 1l << dfBaroAlt,
-    ewMicroRecorderInstall
-  ));
+  return devRegister(&ewMicroRecorderDevice);
 }
 
 

@@ -102,15 +102,14 @@ static BOOL condorInstall(PDeviceDescriptor_t d){
 }
 
 
+static const DeviceRegister_t condorDevice = {
+  TEXT("Condor"),
+  drfGPS | drfBaroAlt | drfSpeed | drfVario | drfCondor,
+  condorInstall
+};
+
 BOOL condorRegister(void){
-  return(devRegister(
-    TEXT("Condor"),
-    (1l << dfGPS)
-    | (1l << dfBaroAlt)
-    | (1l << dfSpeed)
-    | (1l << dfVario),
-    condorInstall
-  ));
+  return devRegister(&condorDevice);
 }
 
 

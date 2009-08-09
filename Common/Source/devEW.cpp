@@ -362,12 +362,13 @@ BOOL ewInstall(PDeviceDescriptor_t d){
 }
 
 
+static const DeviceRegister_t ewDevice = {
+  TEXT("EW Logger"),
+  drfGPS | drfLogger,
+  ewInstall
+};
+
 BOOL ewRegister(void){
-  return(devRegister(
-    TEXT("EW Logger"),
-    1l << dfGPS
-      | 1l << dfLogger,
-    ewInstall
-  ));
+  return devRegister(&ewDevice);
 }
 

@@ -483,17 +483,13 @@ BOOL vgaInstall(PDeviceDescriptor_t d){
 }
 
 
-BOOL vgaRegister(void){
-  return(devRegister(
-    TEXT("Vega"),
-      (1l << dfGPS)
-    | (1l << dfBaroAlt)
-    | (1l << dfSpeed)
-    | (1l << dfVario)
+static const DeviceRegister_t vgaDevice = {
+  TEXT("Vega"),
+  drfGPS | drfBaroAlt | drfSpeed | drfVario, // drfLogger if FLARM connected
+  vgaInstall
+};
 
-//      | 1l << dfLogger     // if FLARM connected
-    ,
-    vgaInstall
-  ));
+BOOL vgaRegister(void){
+  return devRegister(&vgaDevice);
 }
 

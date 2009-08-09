@@ -138,13 +138,10 @@ BOOL ExpectString(PDeviceDescriptor_t d, const TCHAR *token){
 }
 
 
-BOOL devRegister(const TCHAR *Name, int Flags,
-                 BOOL (*Installer)(PDeviceDescriptor_t d)) {
+BOOL devRegister(const DeviceRegister_t *devReg) {
   if (DeviceRegisterCount >= NUMREGDEV)
     return(FALSE);
-  DeviceRegister[DeviceRegisterCount].Name = Name;
-  DeviceRegister[DeviceRegisterCount].Flags = Flags;
-  DeviceRegister[DeviceRegisterCount].Installer = Installer;
+  DeviceRegister[DeviceRegisterCount] = *devReg;
   DeviceRegisterCount++;
   return(TRUE);
 }

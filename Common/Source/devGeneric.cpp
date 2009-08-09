@@ -63,12 +63,13 @@ BOOL genInstall(PDeviceDescriptor_t d){
 }
 
 
+static const DeviceRegister_t genDevice = {
+  TEXT("Generic"),
+  drfGPS,
+  genInstall
+};
+
 BOOL genRegister(void){
-  return(devRegister(
-    TEXT("Generic"),
-      (1l << dfGPS)
-    ,
-    genInstall
-  ));
+  return devRegister(&genDevice);
 }
 
