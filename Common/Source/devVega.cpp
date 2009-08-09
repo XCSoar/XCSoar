@@ -424,7 +424,6 @@ static void _VarioWriteSettings(DeviceDescriptor_t *d) {
 	     //	     iround(QNH*10));
 
     devWriteNMEAString(d, mcbuf);
-
 }
 
 
@@ -439,7 +438,8 @@ BOOL vgaPutQNH(DeviceDescriptor_t *d, double NewQNH){
 
 BOOL vgaOnSysTicker(DeviceDescriptor_t *d){
 
-  _VarioWriteSettings(d);
+  if (GPS_INFO.VarioAvailable)
+    _VarioWriteSettings(d);
 
   return(TRUE);
 }

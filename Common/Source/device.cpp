@@ -655,25 +655,23 @@ BOOL devPutQNH(DeviceDescriptor_t *d, double NewQNH)
   return FALSE;
 }
 
-BOOL devOnSysTicker(DeviceDescriptor_t *d)
+void devTick()
 {
-  BOOL result = FALSE;
+  int i;
 
   LockComm();
-  if (d == NULL){
-    for (int i=0; i<NUMDEV; i++){
-      d = &DeviceList[i];
-      if (d->Driver && d->Driver->OnSysTicker)
-        d->Driver->OnSysTicker(d);
-    }
-    result = TRUE;
-  } else {
-    if (d->Driver && d->Driver->OnSysTicker)
-      result = d->Driver->OnSysTicker(d);
+  for (i = 0; i < NUMDEV; i++) {
+    DeviceDescriptor_t *d = &DeviceList[i];
+    if (!d->Driver)
+      continue;
+
+    d->ticker = !d->ticker;
+
+    // write settings to vario every second
+    if (d->ticker && d->Driver->OnSysTicker)
+      d->Driver->OnSysTicker(d);
   }
   UnlockComm();
-
-  return result;
 }
 
 static void devFormatNMEAString(TCHAR *dst, size_t sz, const TCHAR *text)
@@ -711,21 +709,6 @@ void VarioWriteNMEA(const TCHAR *text)
       if (DeviceList[i].Com)
         DeviceList[i].Com->WriteString(tmp);
   UnlockComm();
-}
-
-void VarioWriteSettings(void)
-{
-  if (GPS_INFO.VarioAvailable) {
-    // JMW experimental
-    TCHAR mcbuf[100];
-    _stprintf(mcbuf, TEXT("PDVMC,%d,%d,%d,%d,%d"),
-              iround(MACCREADY*10),
-              iround(CALCULATED_INFO.VOpt*10),
-              CALCULATED_INFO.Circling,
-              iround(CALCULATED_INFO.TerrainAlt),
-              iround(QNH*10));
-    VarioWriteNMEA(mcbuf);
-  }
 }
 
 PDeviceDescriptor_t devVarioFindVega(void)

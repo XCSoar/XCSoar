@@ -3728,14 +3728,10 @@ void ProcessTimer(void)
   CommonProcessTimer();
 
   // now check GPS status
+  devTick();
 
   static int itimeout = -1;
   itimeout++;
-
-  // write settings to vario every second
-  if (itimeout % 2==0) {
-    VarioWriteSettings();
-  }
 
   // also service replay logger
   ReplayLogger::Update();
@@ -3802,8 +3798,6 @@ void SIMProcessTimer(void)
 #endif
 
   TriggerGPSUpdate();
-
-  VarioWriteSettings();
 }
 #endif
 

@@ -45,6 +45,7 @@ typedef	struct DeviceDescriptor_t{
   TCHAR	Name[DEVNAMESIZE+1];
   DeviceDescriptor_t *pDevPipeTo;
   struct DeviceRegister *Driver;
+  bool ticker;
 }DeviceDescriptor_t;
 
 typedef	DeviceDescriptor_t *PDeviceDescriptor_t;
@@ -54,7 +55,6 @@ typedef	DeviceDescriptor_t *PDeviceDescriptor_t;
 
 void devWriteNMEAString(PDeviceDescriptor_t d, const TCHAR *Text);
 void VarioWriteNMEA(const TCHAR *Text);
-void VarioWriteSettings(void);
 PDeviceDescriptor_t devVarioFindVega(void);
 
 typedef	struct DeviceRegister {
@@ -115,7 +115,7 @@ BOOL devOpenLog(PDeviceDescriptor_t d, TCHAR *FileName);
 BOOL devCloseLog(PDeviceDescriptor_t d);
 
 BOOL devPutQNH(DeviceDescriptor_t *d, double NewQNH);
-BOOL devOnSysTicker(DeviceDescriptor_t *d);
+void devTick(void);
 
 BOOL devGetBaroAltitude(double *Value);
 
