@@ -46,13 +46,6 @@ Copyright_License {
 extern HWND   hWndMainWindow;
 static WndForm *wf=NULL;
 
-
-
-
-static void OnComboPopupListInfo(WindowControl * Sender, WndListFrame::ListInfo_t *ListInfo);
-static void OnPaintComboPopupListItem(WindowControl * Sender, HDC hDC);
-
-
 WndProperty * wComboPopupWndProperty;
 WindowControl * wComboPopupListEntry;//RLD DEBUG
 WndListFrame *wComboPopupListFrame; // RLD used to iterate datafield options
