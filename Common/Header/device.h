@@ -81,11 +81,10 @@ BOOL devRegisterGetName(int Index, TCHAR *Name);
 
 BOOL devInit(LPTSTR CommandLine);
 BOOL devCloseAll(void);
-PDeviceDescriptor_t devGetDeviceOnPort(int Port);
 BOOL ExpectString(PDeviceDescriptor_t d, const TCHAR *token);
 BOOL devHasBaroSource(void);
 
-BOOL devParseNMEA(int portNum, TCHAR *String,	NMEA_INFO	*GPS_INFO);
+BOOL devParseNMEA(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO);
 BOOL devPutMacCready(PDeviceDescriptor_t d,	double MacCready);
 BOOL devPutBugs(PDeviceDescriptor_t	d, double	Bugs);
 BOOL devPutBallast(PDeviceDescriptor_t d,	double Ballast);

@@ -60,7 +60,7 @@ static void ComPort_StatusMessage(UINT type, const TCHAR *caption, const TCHAR *
     DoStatusMessage(tmp);
 }
 
-ComPort::ComPort(int the_dev_idx)
+ComPort::ComPort(struct DeviceDescriptor_t *d)
 {
   hReadThread = NULL;
   CloseThread = 0;
@@ -69,7 +69,7 @@ ComPort::ComPort(int the_dev_idx)
   hPort = INVALID_HANDLE_VALUE;
   BuildingString[0] = 0;
   bi = 0;
-  devIdx = the_dev_idx;
+  dev = d;
 }
 
 BOOL ComPort::Initialize(LPCTSTR lpszPortName, DWORD dwPortSpeed)
@@ -554,7 +554,7 @@ void ComPort::ProcessChar(char c) {
     if(c=='\n') {
       BuildingString[bi] = '\0';
       LockFlightData();
-      devParseNMEA(devIdx, BuildingString, &GPS_INFO);
+      devParseNMEA(dev, BuildingString, &GPS_INFO);
       UnlockFlightData();
     } else {
       return;

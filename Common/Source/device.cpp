@@ -186,7 +186,7 @@ BOOL devInitOne(PDeviceDescriptor_t dev, int index, const TCHAR *port,
   DeviceRegister_t *Driver = devGetDriver(DeviceName);
 
   if (Driver) {
-    ComPort *Com = new ComPort(index);
+    ComPort *Com = new ComPort(dev);
 
     if (!Com->Initialize(port, speed))
       return FALSE;
@@ -361,25 +361,9 @@ BOOL devCloseAll(void){
 }
 
 
-PDeviceDescriptor_t devGetDeviceOnPort(int Port){
+BOOL devParseNMEA(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO){
 
-  int i;
-
-  for (i=0; i<NUMDEV; i++){
-    if (DeviceList[i].Port == Port)
-      return(&DeviceList[i]);
-  }
-  return(NULL);
-}
-
-
-
-BOOL devParseNMEA(int portNum, TCHAR *String, NMEA_INFO *GPS_INFO){
-  PDeviceDescriptor_t d;
-  d = devGetDeviceOnPort(portNum);
-
-  if ((d != NULL) &&
-      (d->fhLogFile != NULL) &&
+  if ((d->fhLogFile != NULL) &&
       (String != NULL) && (_tcslen(String) > 0)) {
     char  sTmp[500];  // temp multibyte buffer
     TCHAR *pWC = String;
@@ -406,22 +390,19 @@ BOOL devParseNMEA(int portNum, TCHAR *String, NMEA_INFO *GPS_INFO){
   }
 
 
-  if (d != NULL){
-
-    if (d->pDevPipeTo && d->pDevPipeTo->Com) {
-      // stream pipe, pass nmea to other device (NmeaOut)
-      // TODO code: check TX buffer usage and skip it if buffer is full (outbaudrate < inbaudrate)
-      d->pDevPipeTo->Com->WriteString(String);
-    }
-
-    if (d->ParseNMEA != NULL)
-      if ((d->ParseNMEA)(d, String, GPS_INFO))
-        return(TRUE);
+  if (d->pDevPipeTo && d->pDevPipeTo->Com) {
+    // stream pipe, pass nmea to other device (NmeaOut)
+    // TODO code: check TX buffer usage and skip it if buffer is full (outbaudrate < inbaudrate)
+    d->pDevPipeTo->Com->WriteString(String);
   }
+
+  if (d->ParseNMEA != NULL)
+    if ((d->ParseNMEA)(d, String, GPS_INFO))
+      return(TRUE);
 
   if(String[0]=='$')  // Additional "if" to find GPS strings
     {
-      if(NMEAParser::ParseNMEAString(portNum, String, GPS_INFO))
+      if(NMEAParser::ParseNMEAString(d->Port, String, GPS_INFO))
         {
           GPSCONNECT  = TRUE;
           return(TRUE);

@@ -10,9 +10,12 @@
 
 #define NMEA_BUF_SIZE 100
 
+// Forward declaration
+struct DeviceDescriptor_t;
+
 class ComPort {
  public:
-	ComPort(int the_devIdx);
+	ComPort(struct DeviceDescriptor_t *d);
 	~ComPort() { };
 
 	void PutChar(BYTE);
@@ -45,7 +48,7 @@ class ComPort {
 
 	TCHAR BuildingString[NMEA_BUF_SIZE];
 	int bi;
-	int devIdx;
+	struct DeviceDescriptor_t *dev;
 };
 
 #endif
