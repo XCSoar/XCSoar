@@ -76,7 +76,6 @@ static const DeviceRegister_t b50Device = {
   NULL,				// IsLogger
   NULL,				// IsGPSSource
   NULL,				// IsBaroSource
-  NULL,				// IsRadio
   NULL				// OnSysTicker
 };
 

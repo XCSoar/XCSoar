@@ -61,7 +61,6 @@ static const DeviceRegister_t genDevice = {
   NULL,				// IsLogger
   NULL,				// IsGPSSource
   NULL,				// IsBaroSource
-  NULL,				// IsRadio
   NULL				// OnSysTicker
 };
 

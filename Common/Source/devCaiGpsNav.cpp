@@ -103,7 +103,6 @@ static const DeviceRegister_t caiGpsNavDevice = {
   NULL,				// IsLogger - TODO feature: CAI GPS NAV declaration
   NULL,				// IsGPSSource
   NULL,				// IsBaroSource
-  NULL,				// IsRadio
   NULL				// OnSysTicker
 };
 

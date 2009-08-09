@@ -532,7 +532,6 @@ static const DeviceRegister_t cai302Device = {
   NULL,				// IsLogger
   NULL,				// IsGPSSource
   devIsFalseReturn,		// IsBaroSource: shouldn't this be true? --rmk
-  NULL,				// IsRadio
   NULL				// OnSysTicker
 };
 

@@ -464,7 +464,6 @@ static const DeviceRegister_t vgaDevice = {
   NULL,				// IsLogger
   NULL,				// IsGPSSource: only if GPS source connected to Vega.NmeaIn
   NULL,				// IsBaroSource
-  NULL,				// IsRadio
   vgaOnSysTicker		// OnSysTicker
 };
 

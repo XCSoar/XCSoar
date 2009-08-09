@@ -86,7 +86,6 @@ static const DeviceRegister_t lxDevice = {
   NULL,				// IsLogger
   devIsTrueReturn,		// IsGPSSource: ? is this true
   NULL,				// IsBaroSource
-  NULL,				// IsRadio
   NULL				// OnSysTicker
 };
 

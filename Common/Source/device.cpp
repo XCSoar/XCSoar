@@ -594,11 +594,8 @@ BOOL devIsRadio(PDeviceDescriptor_t d)
   BOOL result = FALSE;
 
   LockComm();
-  if (d != NULL) {
-    if (d->Driver->IsRadio)
-      result = d->Driver->IsRadio(d);
-    else if (d->Driver)
-      result = d->Driver->Flags & drfRadio ? TRUE : FALSE;
+  if (d && d->Driver) {
+    result = d->Driver->Flags & drfRadio ? TRUE : FALSE;
   }
   UnlockComm();
 

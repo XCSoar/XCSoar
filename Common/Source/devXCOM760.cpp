@@ -85,7 +85,6 @@ static const DeviceRegister_t xcom760Device = {
   NULL,				// IsLogger
   NULL,				// IsGPSSource
   NULL,				// IsBaroSource
-  NULL,				// IsRadio
   NULL,				// OnSysTicker
 };
 
