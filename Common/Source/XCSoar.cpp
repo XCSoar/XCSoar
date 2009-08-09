@@ -1486,13 +1486,13 @@ CreateProgressDialog(gettext(TEXT("Special ITA version")));
 #ifdef PNA // VENTA-ADDON
 
 	TCHAR sTmp[MAX_PATH];
-	wsprintf(sTmp,TEXT("Conf=%s%S"), gmfpathname(),XCSDATADIR ); // VENTA2 FIX double backslash
+        _stprintf(sTmp,TEXT("Conf=%s%S"), gmfpathname(),XCSDATADIR ); // VENTA2 FIX double backslash
 	CreateProgressDialog(sTmp); Sleep(3000);
 
 /*
 	if (  !wcscmp(GlobalModelName, _T("UNKNOWN")) ) SetModelType();
 */
-	wsprintf(sTmp, TEXT("PNA MODEL=%s (%d)"), GlobalModelName, GlobalModelType);
+	_stprintf(sTmp, TEXT("PNA MODEL=%s (%d)"), GlobalModelName, GlobalModelType);
 	CreateProgressDialog(sTmp); Sleep(3000);
 #else
 #if defined(FIVV) && ( !defined(WINDOWSPC) || WINDOWSPC==0 )
@@ -1511,7 +1511,7 @@ CreateProgressDialog(gettext(TEXT("Special ITA version")));
     Sleep(3000);
   }
 #endif
-  wsprintf(sTmpB, TEXT("Conf=%s"),sTmpA);
+  _stprintf(sTmpB, TEXT("Conf=%s"),sTmpA);
   CreateProgressDialog(sTmpB); Sleep(3000);
 #if defined(FIVV) && ( !defined(WINDOWSPC) || WINDOWSPC==0 )
   if ( !datadir ) {
@@ -3352,8 +3352,8 @@ void DisplayText(void)
 	// VENTA3 wind speed + bearing bottom line
 	case 25:
 		if ( CALCULATED_INFO.WindBearing == 0 )
-		wsprintf(sTmp,_T("0%s"),_T(DEG)); else
-		wsprintf(sTmp,_T("%1.0d%s"),(int)CALCULATED_INFO.WindBearing,_T(DEG));
+                  _stprintf(sTmp,_T("0%s"),_T(DEG)); else
+                  _stprintf(sTmp,_T("%1.0d%s"),(int)CALCULATED_INFO.WindBearing,_T(DEG));
 		InfoBoxes[i]->SetComment(sTmp);
 		break;
 
@@ -3364,8 +3364,8 @@ void DisplayText(void)
 			break;
 		}
 		if ( CALCULATED_INFO.HomeRadial == 0 )
-		wsprintf(sTmp,_T("0%s"),_T(DEG)); else
-		wsprintf(sTmp,_T("%1.0d%s"),(int)CALCULATED_INFO.HomeRadial,_T(DEG));
+                  _stprintf(sTmp,_T("0%s"),_T(DEG)); else
+                  _stprintf(sTmp,_T("%1.0d%s"),(int)CALCULATED_INFO.HomeRadial,_T(DEG));
 		InfoBoxes[i]->SetComment(sTmp);
 		break;
 
@@ -3377,7 +3377,7 @@ void DisplayText(void)
 	#if (WINDOWSPC<1)
 	case 65:
 		if ( PDABatteryTemperature >0 ) {
-			wsprintf(sTmp,_T("%1.0d%SC"),(int)PDABatteryTemperature,_T(DEG));
+                  _stprintf(sTmp,_T("%1.0d%SC"),(int)PDABatteryTemperature,_T(DEG));
 			InfoBoxes[i]->SetComment(sTmp);
 		} else
       			InfoBoxes[i]->SetComment(TEXT(""));

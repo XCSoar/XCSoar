@@ -1583,7 +1583,7 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
 	#ifdef DEBUG_VIRTUALKEYS
 	TCHAR buf[80]; char sbuf[80];
 	sprintf(sbuf,"%.0f",distance);
-	wsprintf(buf,_T("XY=%d,%d dist=%S Up=%ld Down=%ld Int=%ld"),X,Y,sbuf,dwUptime,dwDownTime,dwInterval);
+	_stprintf(buf,_T("XY=%d,%d dist=%S Up=%ld Down=%ld Int=%ld"),X,Y,sbuf,dwUptime,dwDownTime,dwInterval);
         DoStatusMessage(buf);
 	#endif
 
@@ -1694,7 +1694,7 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
 
 #ifdef VENTA_DEBUG_KEY
       TCHAR ventabuffer[80];
-      wsprintf(ventabuffer,TEXT("WMKEY uMsg=%d wParam=%ld lParam=%ld"), uMsg, wParam,lParam);
+      _stprintf(ventabuffer,TEXT("WMKEY uMsg=%d wParam=%ld lParam=%ld"), uMsg, wParam,lParam);
       DoStatusMessage(ventabuffer);
 #endif
       DisplayTimeOut = 0;
@@ -3060,34 +3060,34 @@ void MapWindow::DrawWaypoints(HDC hdc, const RECT rc)
 		dowrite = intask;
 		if (intask) {
 		  if (draw_alt)
-		    wsprintf(Buffer, TEXT("%s:%d%s"),
-			     WayPointList[i].Name,
-			     (int)(WayPointList[i].AltArivalAGL*ALTITUDEMODIFY),
-			     sAltUnit);
+                    _stprintf(Buffer, TEXT("%s:%d%s"),
+                              WayPointList[i].Name,
+                              (int)(WayPointList[i].AltArivalAGL*ALTITUDEMODIFY),
+                              sAltUnit);
 		  else
-		    wsprintf(Buffer, TEXT("%s"),WayPointList[i].Name);
+                    _stprintf(Buffer, TEXT("%s"),WayPointList[i].Name);
 		}
 		break;
 	      case DISPLAYNAME:
 		dowrite = (DeclutterLabels<2) || intask;
 		if (draw_alt)
-		  wsprintf(Buffer, TEXT("%s:%d%s"),
-			   WayPointList[i].Name,
-			   (int)(WayPointList[i].AltArivalAGL*ALTITUDEMODIFY),
-			   sAltUnit);
+                  _stprintf(Buffer, TEXT("%s:%d%s"),
+                            WayPointList[i].Name,
+                            (int)(WayPointList[i].AltArivalAGL*ALTITUDEMODIFY),
+                            sAltUnit);
 		else
-		  wsprintf(Buffer, TEXT("%s"),WayPointList[i].Name);
+                  _stprintf(Buffer, TEXT("%s"),WayPointList[i].Name);
 
 		break;
 	      case DISPLAYNUMBER:
 		dowrite = (DeclutterLabels<2) || intask;
 		if (draw_alt)
-		  wsprintf(Buffer, TEXT("%d:%d%s"),
-			   WayPointList[i].Number,
-			   (int)(WayPointList[i].AltArivalAGL*ALTITUDEMODIFY),
-			   sAltUnit);
+                  _stprintf(Buffer, TEXT("%d:%d%s"),
+                            WayPointList[i].Number,
+                            (int)(WayPointList[i].AltArivalAGL*ALTITUDEMODIFY),
+                            sAltUnit);
 		else
-		  wsprintf(Buffer, TEXT("%d"),WayPointList[i].Number);
+                  _stprintf(Buffer, TEXT("%d"),WayPointList[i].Number);
 
 		break;
 	      case DISPLAYFIRSTFIVE:
@@ -3095,12 +3095,12 @@ void MapWindow::DrawWaypoints(HDC hdc, const RECT rc)
 		_tcsncpy(Buffer2, WayPointList[i].Name, 5);
 		Buffer2[5] = '\0';
 		if (draw_alt)
-		  wsprintf(Buffer, TEXT("%s:%d%s"),
-			   Buffer2,
-			   (int)(WayPointList[i].AltArivalAGL*ALTITUDEMODIFY),
-			   sAltUnit);
+                  _stprintf(Buffer, TEXT("%s:%d%s"),
+                            Buffer2,
+                            (int)(WayPointList[i].AltArivalAGL*ALTITUDEMODIFY),
+                            sAltUnit);
 		else
-		  wsprintf(Buffer, TEXT("%s"),Buffer2);
+                  _stprintf(Buffer, TEXT("%s"),Buffer2);
 
 		break;
 	      case DISPLAYFIRSTTHREE:
@@ -3108,20 +3108,20 @@ void MapWindow::DrawWaypoints(HDC hdc, const RECT rc)
 		_tcsncpy(Buffer2, WayPointList[i].Name, 3);
 		Buffer2[3] = '\0';
 		if (draw_alt)
-		  wsprintf(Buffer, TEXT("%s:%d%s"),
-			   Buffer2,
-			   (int)(WayPointList[i].AltArivalAGL*ALTITUDEMODIFY),
-			   sAltUnit);
+                  _stprintf(Buffer, TEXT("%s:%d%s"),
+                            Buffer2,
+                            (int)(WayPointList[i].AltArivalAGL*ALTITUDEMODIFY),
+                            sAltUnit);
 		else
-		  wsprintf(Buffer, TEXT("%s"),Buffer2);
+                  _stprintf(Buffer, TEXT("%s"),Buffer2);
 
 		break;
 	      case DISPLAYNONE:
 		dowrite = (DeclutterLabels<2) || intask;
 		if (draw_alt)
-		  wsprintf(Buffer, TEXT("%d%s"),
-			   (int)(WayPointList[i].AltArivalAGL*ALTITUDEMODIFY),
-			   sAltUnit);
+                  _stprintf(Buffer, TEXT("%d%s"),
+                            (int)(WayPointList[i].AltArivalAGL*ALTITUDEMODIFY),
+                            sAltUnit);
 		else
 		  Buffer[0]= '\0';
 	      default:

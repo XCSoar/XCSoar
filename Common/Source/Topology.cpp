@@ -376,7 +376,7 @@ void XShapeLabel::renderSpecial(HDC hDC, int x, int y) {
   if (label && (MapWindow::DeclutterLabels<2)) {
 
     TCHAR Temp[100];
-    wsprintf(Temp,TEXT("%S"),label);
+    _stprintf(Temp,TEXT("%S"),label);
     SetBkMode(hDC,TRANSPARENT);
 
     // TODO code: JMW asks, what does this do?
@@ -387,9 +387,9 @@ void XShapeLabel::renderSpecial(HDC hDC, int x, int y) {
       dTemp = StrToDouble(Temp,NULL);
       dTemp = ALTITUDEMODIFY*dTemp;
       if (dTemp > 999)
-	wsprintf(Temp,TEXT("%.1f"),(dTemp/1000));
+        _stprintf(Temp,TEXT("%.1f"),(dTemp/1000));
       else
-	wsprintf(Temp,TEXT("%d"),int(dTemp));
+        _stprintf(Temp,TEXT("%d"),int(dTemp));
     }
 
     int size = _tcslen(Temp);

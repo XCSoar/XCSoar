@@ -105,10 +105,10 @@ void InfoBoxLayout::GetInfoBoxPosition(int i, RECT rc,
   TCHAR reggeomsy[50];
   DWORD Temp=0;
 
-  wsprintf(reggeompx, TEXT("InfoBoxPositionPosX%d"), i);
-  wsprintf(reggeompy, TEXT("InfoBoxPositionPosY%d"), i);
-  wsprintf(reggeomsx, TEXT("InfoBoxPositionSizeX%d"), i);
-  wsprintf(reggeomsy, TEXT("InfoBoxPositionSizeY%d"), i);
+  _stprintf(reggeompx, TEXT("InfoBoxPositionPosX%d"), i);
+  _stprintf(reggeompy, TEXT("InfoBoxPositionPosY%d"), i);
+  _stprintf(reggeomsx, TEXT("InfoBoxPositionSizeX%d"), i);
+  _stprintf(reggeomsy, TEXT("InfoBoxPositionSizeY%d"), i);
 
   GetFromRegistry(reggeompx,&Temp); *x = Temp;
   GetFromRegistry(reggeompy,&Temp); *y = Temp;
@@ -559,10 +559,10 @@ void ButtonLabel::GetButtonPosition(int i, RECT rc,
   TCHAR reggeomsy[50];
   DWORD Temp=0;
 
-  wsprintf(reggeompx, TEXT("ScreenButtonPosX%d"), i);
-  wsprintf(reggeompy, TEXT("ScreenButtonPosY%d"), i);
-  wsprintf(reggeomsx, TEXT("ScreenButtonSizeX%d"), i);
-  wsprintf(reggeomsy, TEXT("ScreenButtonSizeY%d"), i);
+  _stprintf(reggeompx, TEXT("ScreenButtonPosX%d"), i);
+  _stprintf(reggeompy, TEXT("ScreenButtonPosY%d"), i);
+  _stprintf(reggeomsx, TEXT("ScreenButtonSizeX%d"), i);
+  _stprintf(reggeomsy, TEXT("ScreenButtonSizeY%d"), i);
 
   GetFromRegistry(reggeompx,&Temp); *x = Temp;
   GetFromRegistry(reggeompy,&Temp); *y = Temp;

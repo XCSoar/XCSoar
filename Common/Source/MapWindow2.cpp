@@ -2624,8 +2624,8 @@ void MapWindow::DrawMapScale(HDC hDC, const RECT rc /* the Map Rect*/,
 
     #ifdef DRAWLOAD
     SelectObject(hDC, MapWindowFont);
-    wsprintf(Scale,TEXT("            %d %d ms"), timestats_av,
-             misc_tick_count);
+    _stprintf(Scale,TEXT("            %d %d ms"), timestats_av,
+              misc_tick_count);
     ExtTextOut(hDC, rc.left, rc.top, 0, NULL, Scale, _tcslen(Scale), NULL);
     #endif
 
@@ -2742,9 +2742,9 @@ void MapWindow::DrawMapScale(HDC hDC, const RECT rc /* the Map Rect*/,
 
     #ifdef DRAWLOAD
     SelectObject(hDC, MapWindowFont);
-    wsprintf(ScaleInfo,TEXT("    %d %d ms"),
-             timestats_av,
-             misc_tick_count);
+    _stprintf(ScaleInfo,TEXT("    %d %d ms"),
+              timestats_av,
+              misc_tick_count);
 
     ExtTextOut(hDC, rc.left, rc.top, 0, NULL, ScaleInfo,
                _tcslen(ScaleInfo), NULL);

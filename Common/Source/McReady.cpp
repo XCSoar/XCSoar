@@ -141,13 +141,13 @@ void GlidePolar::SetBallast() {
   if (GPS_INFO.VarioAvailable) {
 
     TCHAR nmeabuf[100];
-    wsprintf(nmeabuf,TEXT("PDVGP,%d,%d,%d,%d,%d,%d,0"),
-	     polar_ai,
-	     polar_bi,
-	     polar_ci,
-	     minsinki,
-	     vbestldi,
-	     bestldi);
+    _stprintf(nmeabuf,TEXT("PDVGP,%d,%d,%d,%d,%d,%d,0"),
+              polar_ai,
+              polar_bi,
+              polar_ci,
+              minsinki,
+              vbestldi,
+              bestldi);
 
     VarioWriteNMEA(nmeabuf);
   }

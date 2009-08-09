@@ -186,8 +186,10 @@ void MapWindow::DrawGlideCircle(HDC hdc, POINT Orig, RECT rc )
     if (turn>0||true) oldcolor=SetTextColor(hdc, RGB(0x0,0x0,0x0));
     else oldcolor=SetTextColor(hdc, RGB(0xff,0x00,0x00)); // red
     if ( i==2 || i==4 || i==6 || i==8 ) {
-      if ( Units::GetUserAltitudeUnit() == unMeter ) wsprintf(gtext,_T("-%dm"),i*100); else
-	wsprintf(gtext,_T("-%dft"),i*300);
+      if (Units::GetUserAltitudeUnit() == unMeter)
+        _stprintf(gtext, _T("-%dm"), i * 100);
+      else
+        _stprintf(gtext, _T("-%dft"), i * 300);
       if (count<5)
 	ExtTextOut( hdc, Orig.x+35, Orig.y-5 - (int) tmp, 0, NULL, gtext , _tcslen(gtext), NULL );
     }
@@ -207,7 +209,7 @@ void MapWindow::DrawGlideCircle(HDC hdc, POINT Orig, RECT rc )
 	  sprintf(text,"%3.0fm", i*100*cruise / 1609);
 	}
 
-      wsprintf(gtext,_T("%S"),text);;
+      _stprintf(gtext, _T("%S"), text);
       if (count<5)
 	ExtTextOut( hdc, Orig.x-100, Orig.y-5 - (int) tmp, 0, NULL, gtext , _tcslen(gtext), NULL );
     }
@@ -226,7 +228,7 @@ void MapWindow::DrawGlideCircle(HDC hdc, POINT Orig, RECT rc )
     else
       oldcolor=SetTextColor(hdc, RGB(0xff,0x00,0x00)); // red
   }
-  wsprintf(gtext,_T("L/D:%d"),(int)cruise);
+  _stprintf(gtext,_T("L/D:%d"),(int)cruise);
 
   //ExtTextOut( hdc, Orig.x+30, Orig.y +20 , 0, NULL, gtext , _tcslen(gtext), NULL );
   //ExtTextOut( hdc, Orig.x-30, Orig_Aircraft.y +50 , 0, NULL, gtext , _tcslen(gtext), NULL );
@@ -260,4 +262,3 @@ void MapWindow::DrawGlideCircle(HDC hdc, POINT Orig, RECT rc )
   SetTextColor(hdc,oldcolor);
 
 }
-

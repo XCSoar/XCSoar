@@ -512,8 +512,7 @@ void StartLogger(TCHAR *astrAssetNumber)
     SaveDefaultTask();
   }
 
-  wsprintf(szLoggerFileName,
-           TEXT("\\tmp.IGC"));
+  _stprintf(szLoggerFileName, TEXT("\\tmp.IGC"));
   DeleteFile(szLoggerFileName);
 
 #ifndef _SIM_
@@ -530,7 +529,7 @@ void StartLogger(TCHAR *astrAssetNumber)
 
       if (!LoggerShortName) {
         // Long file name
-        wsprintf(szFLoggerFileName,
+        _stprintf(szFLoggerFileName,
                  TEXT("%s\\%04d-%02d-%02d-XCS-%c%c%c-%02d.IGC"),
                  path,
                  GPS_INFO.Year,
@@ -541,7 +540,7 @@ void StartLogger(TCHAR *astrAssetNumber)
                  cAsset[2],
                  i);
 
-        wsprintf(szFLoggerFileNameRoot,
+        _stprintf(szFLoggerFileNameRoot,
                  TEXT("%s\\%04d-%02d-%02d-XCS-%c%c%c-%02d.IGC"),
                  TEXT(""), // this creates it in root if MoveFile() fails
                  GPS_INFO.Year,
@@ -558,7 +557,7 @@ void StartLogger(TCHAR *astrAssetNumber)
         cmonth = NumToIGCChar(GPS_INFO.Month);
         cday = NumToIGCChar(GPS_INFO.Day);
         cflight = NumToIGCChar(i);
-        wsprintf(szFLoggerFileName,
+        _stprintf(szFLoggerFileName,
                  TEXT("%s\\%c%c%cX%c%c%c%c.IGC"),
                  path,
                  cyear,
@@ -569,7 +568,7 @@ void StartLogger(TCHAR *astrAssetNumber)
                  cAsset[2],
                  cflight);
 
-        wsprintf(szFLoggerFileNameRoot,
+        _stprintf(szFLoggerFileNameRoot,
                  TEXT("%s\\%c%c%cX%c%c%c%c.IGC"),
                  TEXT(""), // this creates it in root if MoveFile() fails
                  cyear,
@@ -1715,12 +1714,12 @@ void LinkGRecordDLL(void)
 
 	  if (!bLoadOK) // all need to link, or disable entire library.
             {
-	      wsprintf(szLoadResults,TEXT("Found GRecordDLL %s but incomplete\n"), szGRecordVersion);
+              _stprintf(szLoadResults,TEXT("Found GRecordDLL %s but incomplete\n"), szGRecordVersion);
 	      FreeLibrary(GRecordDLLHandle);
 	      GRecordDLLHandle = NULL;
             }
 	  else {
-	    wsprintf(szLoadResults,TEXT("Loaded GRecordDLL %s \n"), szGRecordVersion);
+            _stprintf(szLoadResults,TEXT("Loaded GRecordDLL %s \n"), szGRecordVersion);
 	  }
 	}
       else {
