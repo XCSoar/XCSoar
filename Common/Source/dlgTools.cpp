@@ -152,7 +152,7 @@ int WINAPI MessageBoxX(LPCTSTR lpText, LPCTSTR lpCaption, UINT uType){
   dY = wText->GetLastDrawTextHeight() - Height;
   */
   dY = DLGSCALE(-40);
-  // wText->SetHeight(wText->GetLastDrawTextHeight()+5);
+  wText->SetHeight(wText->GetTextHeight() + 5);
   wf->SetHeight(wf->GetHeight() + dY);
 
   y += dY;

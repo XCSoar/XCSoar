@@ -3602,8 +3602,6 @@ void WndFrame::Paint(HDC hDC){
       mCaptionStyle // | DT_CALCRECT
     );
 
-    mLastDrawTextHeight = rc.bottom - rc.top;
-
     SelectObject(hDC, oldFont);
   }
 
@@ -3633,6 +3631,20 @@ UINT WndFrame::SetCaptionStyle(UINT Value){
   return(res);
 }
 
+unsigned
+WndFrame::GetTextHeight()
+{
+  RECT rc;
+  ::CopyRect(&rc, GetBoundRect());
+  ::InflateRect(&rc, -2, -2); // todo border width
+
+  HDC hDC = GetDeviceContext();
+  HFONT old_font = (HFONT)::SelectObject(hDC, GetFont());
+  ::DrawText(hDC, mCaption, -1, &rc, mCaptionStyle | DT_CALCRECT);
+  ::SelectObject(hDC, old_font);
+
+  return rc.bottom - rc.top;
+}
 
 WndListFrame::WndListFrame(WindowControl *Owner, TCHAR *Name, int X, int Y,
                            int Width, int Height,

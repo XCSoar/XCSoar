@@ -726,8 +726,6 @@ class WndFrame:public WindowControl{
              int X, int Y, int Width, int Height):
       WindowControl(Owner, NULL, Name, X, Y, Width, Height)
     {
-
-      mLastDrawTextHeight = 0;
       mIsListItem = false;
 
       SetForeColor(GetOwner()->GetForeColor());
@@ -750,7 +748,7 @@ class WndFrame:public WindowControl{
     UINT GetCaptionStyle(void){return(mCaptionStyle);};
     UINT SetCaptionStyle(UINT Value);
 
-    int GetLastDrawTextHeight(void){return(mLastDrawTextHeight);};
+    unsigned GetTextHeight();
 
     void SetIsListItem(bool Value){mIsListItem = Value;};
 
@@ -764,7 +762,6 @@ class WndFrame:public WindowControl{
 
     bool mIsListItem;
 
-    int mLastDrawTextHeight;
     UINT mCaptionStyle;
 
     void Paint(HDC hDC);
