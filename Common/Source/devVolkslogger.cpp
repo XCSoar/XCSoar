@@ -297,12 +297,6 @@ BOOL VLIsGPSSource(PDeviceDescriptor_t d){
 }
 
 
-BOOL VLLinkTimeout(PDeviceDescriptor_t d){
-  (void)d;
-  return(TRUE);
-}
-
-
 BOOL vlInstall(PDeviceDescriptor_t d){
   _tcscpy(d->Name, TEXT("Volkslogger"));
   d->ParseNMEA = VLParseNMEA;
@@ -311,7 +305,6 @@ BOOL vlInstall(PDeviceDescriptor_t d){
   d->PutBallast = NULL;
   d->Open = NULL;
   d->Close = NULL;
-  d->LinkTimeout = VLLinkTimeout;
   d->Declare = VLDeclare;
   d->IsLogger = VLIsLogger;
   d->IsGPSSource = VLIsGPSSource;

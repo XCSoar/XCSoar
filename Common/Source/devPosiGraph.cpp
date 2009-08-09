@@ -99,12 +99,6 @@ BOOL PGIsBaroSource(PDeviceDescriptor_t d){
   return(TRUE);
 }
 
-BOOL PGLinkTimeout(PDeviceDescriptor_t d){
-  (void)d;
-  return(TRUE);
-}
-
-
 BOOL pgInstall(PDeviceDescriptor_t d){
 
   _tcscpy(d->Name, TEXT("PosiGraph Logger"));
@@ -114,7 +108,6 @@ BOOL pgInstall(PDeviceDescriptor_t d){
   d->PutBallast = NULL;
   d->Open = NULL;
   d->Close = NULL;
-  d->LinkTimeout = PGLinkTimeout;
   d->Declare = PGDeclare;
   d->IsLogger = PGIsLogger;
   d->IsGPSSource = PGIsGPSSource;

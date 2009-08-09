@@ -86,12 +86,6 @@ static BOOL LXIsBaroSource(PDeviceDescriptor_t d){
 }
 
 
-static BOOL LXLinkTimeout(PDeviceDescriptor_t d){
-  (void)d;
-  return(TRUE);
-}
-
-
 static BOOL lxInstall(PDeviceDescriptor_t d){
 
   _tcscpy(d->Name, TEXT("LX"));
@@ -101,7 +95,6 @@ static BOOL lxInstall(PDeviceDescriptor_t d){
   d->PutBallast = NULL;
   d->Open = NULL;
   d->Close = NULL;
-  d->LinkTimeout = LXLinkTimeout;
   d->Declare = NULL;
   d->IsGPSSource = LXIsGPSSource;
   d->IsBaroSource = LXIsBaroSource;

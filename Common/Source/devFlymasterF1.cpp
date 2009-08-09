@@ -74,12 +74,6 @@ static BOOL FlymasterF1IsBaroSource(PDeviceDescriptor_t d){
 }
 
 
-static BOOL FlymasterF1LinkTimeout(PDeviceDescriptor_t d){
-  (void)d;
-  return(TRUE);
-}
-
-
 static BOOL flymasterf1Install(PDeviceDescriptor_t d){
 
   _tcscpy(d->Name, TEXT("FlymasterF1"));
@@ -89,7 +83,6 @@ static BOOL flymasterf1Install(PDeviceDescriptor_t d){
   d->PutBallast = NULL;
   d->Open = NULL;
   d->Close = NULL;
-  d->LinkTimeout = FlymasterF1LinkTimeout;
   d->Declare = NULL;
   d->IsGPSSource = FlymasterF1IsGPSSource;
   d->IsBaroSource = FlymasterF1IsBaroSource;

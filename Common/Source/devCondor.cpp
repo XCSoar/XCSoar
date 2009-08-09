@@ -84,12 +84,6 @@ static BOOL CondorIsBaroSource(PDeviceDescriptor_t d){
 }
 
 
-static BOOL CondorLinkTimeout(PDeviceDescriptor_t d){
-  (void)d;
-  return(TRUE);
-}
-
-
 static BOOL condorInstall(PDeviceDescriptor_t d){
 
   _tcscpy(d->Name, TEXT("Condor"));
@@ -99,7 +93,6 @@ static BOOL condorInstall(PDeviceDescriptor_t d){
   d->PutBallast = NULL;
   d->Open = NULL;
   d->Close = NULL;
-  d->LinkTimeout = CondorLinkTimeout;
   d->Declare = NULL;
   d->IsGPSSource = CondorIsGPSSource;
   d->IsBaroSource = CondorIsBaroSource;

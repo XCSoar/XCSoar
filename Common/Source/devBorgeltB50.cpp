@@ -69,12 +69,6 @@ BOOL B50IsGPSSource(PDeviceDescriptor_t d){
 }
 
 
-BOOL B50LinkTimeout(PDeviceDescriptor_t d){
-  (void)d;
-  return(TRUE);
-}
-
-
 BOOL b50Install(PDeviceDescriptor_t d){
 
   _tcscpy(d->Name, TEXT("Borgelt B50"));
@@ -84,7 +78,6 @@ BOOL b50Install(PDeviceDescriptor_t d){
   d->PutBallast = NULL;
   d->Open = NULL;
   d->Close = NULL;
-  d->LinkTimeout = B50LinkTimeout;
   d->Declare = NULL;
   d->IsGPSSource = B50IsGPSSource;
 
