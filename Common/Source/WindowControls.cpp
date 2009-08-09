@@ -3473,50 +3473,21 @@ void WndProperty::Paint(HDC hDC){
 
       oldBmp = (HBITMAP)SelectObject(GetTempDeviceContext(), hBmpLeft32);
 
-      if (mDownDown)
-	        StretchBlt(hDC,
-          mHitRectDown.left,
-          mHitRectDown.top,
-          mBitmapSize,
-          mBitmapSize,
-		        GetTempDeviceContext(),
-		        32, 0,
-		        32,32,
-		        SRCCOPY);
-      else
-	        StretchBlt(hDC,
-          mHitRectDown.left,
-          mHitRectDown.top,
-          mBitmapSize,
-          mBitmapSize,
-		        GetTempDeviceContext(),
-		        0, 0,
-		        32,32,
-		        SRCCOPY);
+      StretchBlt(hDC,
+                 mHitRectDown.left, mHitRectDown.top,
+                 mBitmapSize, mBitmapSize,
+                 GetTempDeviceContext(),
+                 mDownDown ? 32 : 0, 0, 32, 32,
+                 SRCCOPY);
 
       SelectObject(GetTempDeviceContext(), hBmpRight32);
 
-      if (mUpDown)
-	        StretchBlt(hDC,
-          mHitRectUp.left,
-          mHitRectUp.top,
-          mBitmapSize,
-          mBitmapSize,
-		        GetTempDeviceContext(),
-		        32, 0,
-		        32,32,
-		        SRCCOPY);
-
-      else
-	        StretchBlt(hDC,
-          mHitRectUp.left,
-          mHitRectUp.top,
-          mBitmapSize,
-          mBitmapSize,
-		        GetTempDeviceContext(),
-		        0, 0,
-		        32,32,
-		        SRCCOPY);
+      StretchBlt(hDC,
+                 mHitRectUp.left, mHitRectUp.top,
+                 mBitmapSize, mBitmapSize,
+                 GetTempDeviceContext(),
+                 mUpDown ? 32 : 0, 0, 32, 32,
+                 SRCCOPY);
 
       SelectObject(GetTempDeviceContext(), oldBmp);
     }
