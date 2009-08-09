@@ -1553,8 +1553,6 @@ void WindowControl::AddClient(WindowControl *Client){
   mClientCount++;
 
   Client->SetOwner(this);
-  // dont work propertly
-//  Client->SetParentHandle(GetHandle());
   Client->SetFont(GetFont());
 
   if (Client->mY == -1){
@@ -1607,12 +1605,6 @@ WindowControl *WindowControl::FindByName(const TCHAR *Name){
       return(W);
   }
   return(NULL);
-}
-
-
-void WindowControl::SetParentHandle(HWND hwnd){
-  mParent = hwnd;
-  SetParent(GetHandle(), hwnd);
 }
 
 

@@ -691,8 +691,6 @@ class WindowControl {
     HDC  GetTempDeviceContext(void){return(mHdcTemp);};
     WindowControl *GetOwner(void){return(mOwner);};
 
-    void SetParentHandle(HWND hwnd);
-
     int GetTag(void){return(mTag);};
     int SetTag(int Value){mTag = Value; return(mTag);};
 
