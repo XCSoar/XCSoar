@@ -196,25 +196,6 @@ BOOL devInitOne(PDeviceDescriptor_t dev, int index, const TCHAR *port,
     _tcsncpy(dev->Name, Driver->Name, DEVNAMESIZE);
 
     dev->Driver = Driver;
-    dev->ParseNMEA = Driver->ParseNMEA;
-    dev->PutMacCready = Driver->PutMacCready;
-    dev->PutBugs = Driver->PutBugs;
-    dev->PutBallast = Driver->PutBallast;
-    dev->PutQNH = Driver->PutQNH;
-    dev->PutVoice = Driver->PutVoice;
-    dev->PutVolume = Driver->PutVolume;
-    dev->PutFreqActive = Driver->PutFreqActive;
-    dev->PutFreqStandby = Driver->PutFreqStandby;
-    dev->Open = Driver->Open;
-    dev->Close = Driver->Close;
-    dev->LinkTimeout = Driver->LinkTimeout;
-    dev->Declare = Driver->Declare;
-    dev->IsLogger = Driver->IsLogger;
-    dev->IsGPSSource = Driver->IsGPSSource;
-    dev->IsBaroSource = Driver->IsBaroSource;
-    dev->IsRadio = Driver->IsRadio;
-    dev->IsCondor = Driver->IsCondor;
-    dev->OnSysTicker = Driver->OnSysTicker;
 
     dev->Com = Com;
 
@@ -244,28 +225,7 @@ BOOL devInit(LPTSTR CommandLine){
     DeviceList[i].fhLogFile = NULL;
     DeviceList[i].Name[0] = '\0';
     DeviceList[i].Driver = NULL;
-    DeviceList[i].ParseNMEA = NULL;
-    DeviceList[i].PutMacCready = NULL;
-    DeviceList[i].PutBugs = NULL;
-    DeviceList[i].PutBallast = NULL;
-    DeviceList[i].Open = NULL;
-    DeviceList[i].Close = NULL;
-    DeviceList[i].LinkTimeout = NULL;
-    DeviceList[i].Declare = NULL;
-    DeviceList[i].IsLogger = devIsFalseReturn;
-    DeviceList[i].IsGPSSource = devIsFalseReturn;
-    DeviceList[i].IsBaroSource = devIsFalseReturn;
-    DeviceList[i].IsRadio = devIsFalseReturn;
-
-    DeviceList[i].PutVoice = (BOOL (*)(struct DeviceDescriptor_t *,TCHAR *))devIsFalseReturn;
-    DeviceList[i].PutQNH = NULL;
-    DeviceList[i].OnSysTicker = NULL;
-
     DeviceList[i].pDevPipeTo = NULL;
-    DeviceList[i].PutVolume = NULL;
-    DeviceList[i].PutFreqActive = NULL;
-    DeviceList[i].PutFreqStandby = NULL;
-    DeviceList[i].IsCondor = devIsFalseReturn;
   }
 
   pDevPrimaryBaroSource = NULL;
@@ -420,8 +380,8 @@ BOOL devParseNMEA(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO){
     d->pDevPipeTo->Com->WriteString(String);
   }
 
-  if (d->ParseNMEA != NULL)
-    if ((d->ParseNMEA)(d, String, GPS_INFO))
+  if (d->Driver && d->Driver->ParseNMEA)
+    if ((d->Driver->ParseNMEA)(d, String, GPS_INFO))
       return(TRUE);
 
   if(String[0]=='$')  // Additional "if" to find GPS strings
@@ -445,8 +405,8 @@ BOOL devPutMacCready(PDeviceDescriptor_t d, double MacCready)
   if (fSimMode)
     return TRUE;
   LockComm();
-  if (d != NULL && d->PutMacCready != NULL)
-    result = d->PutMacCready(d, MacCready);
+  if (d && d->Driver && d->Driver->PutMacCready)
+    result = d->Driver->PutMacCready(d, MacCready);
   UnlockComm();
 
   return result;
@@ -459,8 +419,8 @@ BOOL devPutBugs(PDeviceDescriptor_t d, double Bugs)
   if (fSimMode)
     return TRUE;
   LockComm();
-  if (d != NULL && d->PutBugs != NULL)
-    result = d->PutBugs(d, Bugs);
+  if (d && d->Driver && d->Driver->PutBugs)
+    result = d->Driver->PutBugs(d, Bugs);
   UnlockComm();
 
   return result;
@@ -473,8 +433,8 @@ BOOL devPutBallast(PDeviceDescriptor_t d, double Ballast)
   if (fSimMode)
     return TRUE;
   LockComm();
-  if (d != NULL && d->PutBallast != NULL)
-    result = d->PutBallast(d, Ballast);
+  if (d && d->Driver && d->Driver->PutBallast)
+    result = d->Driver->PutBallast(d, Ballast);
   UnlockComm();
 
   return result;
@@ -485,8 +445,8 @@ BOOL devPutBallast(PDeviceDescriptor_t d, double Ballast)
 BOOL devOpen(PDeviceDescriptor_t d, int Port){
   BOOL res = TRUE;
 
-  if (d != NULL && d->Open != NULL)
-    res = d->Open(d, Port);
+  if (d && d->Driver && d->Driver->Open)
+    res = d->Driver->Open(d, Port);
 
   if (res == TRUE)
     d->Port = Port;
@@ -500,8 +460,8 @@ BOOL devOpen(PDeviceDescriptor_t d, int Port){
 BOOL devClose(PDeviceDescriptor_t d)
 {
   if (d != NULL) {
-    if (d->Close != NULL)
-      d->Close(d);
+    if (d->Driver && d->Driver->Close)
+      d->Driver->Close(d);
 
     ComPort *Com = d->Com;
     d->Com = NULL;
@@ -525,13 +485,13 @@ BOOL devLinkTimeout(PDeviceDescriptor_t d)
   if (d == NULL){
     for (int i=0; i<NUMDEV; i++){
       d = &DeviceList[i];
-      if (d->LinkTimeout != NULL)
-        (d->LinkTimeout)(d);
+      if (d->Driver && d->Driver->LinkTimeout != NULL)
+        (d->Driver->LinkTimeout)(d);
     }
     result = TRUE;
   } else {
-    if (d->LinkTimeout != NULL)
-      result = d->LinkTimeout(d);
+    if (d->Driver && d->Driver->LinkTimeout != NULL)
+      result = d->Driver->LinkTimeout(d);
   }
   UnlockComm();
 
@@ -547,13 +507,13 @@ BOOL devPutVoice(PDeviceDescriptor_t d, TCHAR *Sentence)
   if (d == NULL){
     for (int i=0; i<NUMDEV; i++){
       d = &DeviceList[i];
-      if (d->PutVoice != NULL)
-        d->PutVoice(d, Sentence);
+      if (d->Driver && d->Driver->PutVoice)
+        d->Driver->PutVoice(d, Sentence);
     }
     result = TRUE;
   } else {
-    if (d->PutVoice != NULL)
-      result = d->PutVoice(d, Sentence);
+    if (d->Driver && d->Driver->PutVoice)
+      result = d->Driver->PutVoice(d, Sentence);
   }
   UnlockComm();
 
@@ -567,13 +527,13 @@ BOOL devDeclare(PDeviceDescriptor_t d, Declaration_t *decl)
   if (fSimMode)
     return TRUE;
   LockComm();
-  if ((d != NULL) && (d->Declare != NULL))
-    result = d->Declare(d, decl);
+  if (d) {
+    if ((d->Driver) && (d->Driver->Declare != NULL))
+      result = d->Driver->Declare(d, decl);
 
-  if ((d != NULL) && NMEAParser::PortIsFlarm(d->Port)) {
-    result |= FlarmDeclare(d, decl);
+    if (NMEAParser::PortIsFlarm(d->Port))
+      result |= FlarmDeclare(d, decl);
   }
-
   UnlockComm();
 
   return result;
@@ -584,10 +544,10 @@ BOOL devIsLogger(PDeviceDescriptor_t d)
   bool result = false;
 
   LockComm();
-  if (d != NULL) {
-    if (d->IsLogger)
-      result = d->IsLogger(d);
-    else if (d->Driver)
+  if (d && d->Driver) {
+    if (d->Driver->IsLogger)
+      result = d->Driver->IsLogger(d);
+    else
       result = d->Driver->Flags & drfLogger ? TRUE : FALSE;
     if (!result)
       result |= NMEAParser::PortIsFlarm(d->Port);
@@ -602,10 +562,10 @@ BOOL devIsGPSSource(PDeviceDescriptor_t d)
   BOOL result = FALSE;
 
   LockComm();
-  if (d != NULL) {
-    if (d->IsGPSSource)
-      result = d->IsGPSSource(d);
-    else if (d->Driver)
+  if (d && d->Driver) {
+    if (d->Driver->IsGPSSource)
+      result = d->Driver->IsGPSSource(d);
+    else
       result = d->Driver->Flags & drfGPS ? TRUE : FALSE;
   }
   UnlockComm();
@@ -618,10 +578,10 @@ BOOL devIsBaroSource(PDeviceDescriptor_t d)
   BOOL result = FALSE;
 
   LockComm();
-  if (d != NULL) {
-    if (d->IsBaroSource)
-      result = d->IsBaroSource(d);
-    else if (d->Driver)
+  if (d && d->Driver) {
+    if (d->Driver->IsBaroSource)
+      result = d->Driver->IsBaroSource(d);
+    else
       result = d->Driver->Flags & drfBaroAlt ? TRUE : FALSE;
   }
   UnlockComm();
@@ -635,8 +595,8 @@ BOOL devIsRadio(PDeviceDescriptor_t d)
 
   LockComm();
   if (d != NULL) {
-    if (d->IsRadio)
-      result = d->IsRadio(d);
+    if (d->Driver->IsRadio)
+      result = d->Driver->IsRadio(d);
     else if (d->Driver)
       result = d->Driver->Flags & drfRadio ? TRUE : FALSE;
   }
@@ -651,10 +611,10 @@ BOOL devIsCondor(PDeviceDescriptor_t d)
   BOOL result = FALSE;
 
   LockComm();
-  if (d != NULL) {
-    if (d->IsCondor != NULL)
-      result = d->IsCondor(d);
-    else if (d->Driver)
+  if (d && d->Driver) {
+    if (d->Driver->IsCondor != NULL)
+      result = d->Driver->IsCondor(d);
+    else
       result = d->Driver->Flags & drfCondor ? TRUE : FALSE;
   }
   UnlockComm();
@@ -688,13 +648,13 @@ BOOL devPutQNH(DeviceDescriptor_t *d, double NewQNH)
   if (d == NULL){
     for (int i=0; i<NUMDEV; i++){
       d = &DeviceList[i];
-      if (d->PutQNH != NULL)
-        d->PutQNH(d, NewQNH);
+      if (d->Driver && d->Driver->PutQNH)
+        d->Driver->PutQNH(d, NewQNH);
     }
     result = TRUE;
   } else {
-    if (d->PutQNH != NULL)
-      result = d->PutQNH(d, NewQNH);
+    if (d->Driver && d->Driver->PutQNH)
+      result = d->Driver->PutQNH(d, NewQNH);
   }
   UnlockComm();
 
@@ -709,13 +669,13 @@ BOOL devOnSysTicker(DeviceDescriptor_t *d)
   if (d == NULL){
     for (int i=0; i<NUMDEV; i++){
       d = &DeviceList[i];
-      if (d->OnSysTicker != NULL)
-        d->OnSysTicker(d);
+      if (d->Driver && d->Driver->OnSysTicker)
+        d->Driver->OnSysTicker(d);
     }
     result = TRUE;
   } else {
-    if (d->OnSysTicker != NULL)
-      result = d->OnSysTicker(d);
+    if (d->Driver && d->Driver->OnSysTicker)
+      result = d->Driver->OnSysTicker(d);
   }
   UnlockComm();
 
@@ -790,8 +750,8 @@ BOOL devPutVolume(PDeviceDescriptor_t d, int Volume)
   if (fSimMode)
     return TRUE;
   LockComm();
-  if (d != NULL && d->PutVolume != NULL)
-    result = d->PutVolume(d, Volume);
+  if (d && d->Driver && d->Driver->PutVolume != NULL)
+    result = d->Driver->PutVolume(d, Volume);
   UnlockComm();
 
   return result;
@@ -804,8 +764,8 @@ BOOL devPutFreqActive(PDeviceDescriptor_t d, double Freq)
   if (fSimMode)
     return TRUE;
   LockComm();
-  if (d != NULL && d->PutFreqActive != NULL)
-    result = d->PutFreqActive(d, Freq);
+  if (d && d->Driver && d->Driver->PutFreqActive != NULL)
+    result = d->Driver->PutFreqActive(d, Freq);
   UnlockComm();
 
   return result;
@@ -818,8 +778,8 @@ BOOL devPutFreqStandby(PDeviceDescriptor_t d, double Freq)
   if (fSimMode)
     return TRUE;
   LockComm();
-  if (d != NULL && d->PutFreqStandby != NULL)
-    result = d->PutFreqStandby(d, Freq);
+  if (d && d->Driver && d->Driver->PutFreqStandby != NULL)
+    result = d->Driver->PutFreqStandby(d, Freq);
   UnlockComm();
 
   return result;
