@@ -2150,7 +2150,8 @@ void MapWindow::RenderMapWindowBg(HDC hdc, const RECT rc,
     LockTerrainDataGraphics();
     DrawTerrain(hdc, rc, sunazimuth, sunelevation);
     if ((FinalGlideTerrain==2) && DerivedDrawInfo.TerrainValid) {
-      DrawTerrainAbove(hdc, rc);
+      SelectObject(hDCTemp, (HBITMAP)hDrawBitMapTmp);
+      DrawTerrainAbove(hdc, rc, hDCTemp);
     }
     UnlockTerrainDataGraphics();
   }
@@ -2163,11 +2164,16 @@ void MapWindow::RenderMapWindowBg(HDC hdc, const RECT rc,
   nLabelBlocks = 0;
 
   if (!TaskIsTemporary()) {
-    DrawTaskAAT(hdc, rc);
+    SelectObject(hDCTemp, (HBITMAP)hDrawBitMapTmp);
+    DrawTaskAAT(hdc, rc, hDCTemp);
   }
 
   // then airspace..
-  if ( OnAirSpace >0 ) DrawAirSpace(hdc, rc); // VENTA3 default is true, always true at startup no regsave
+  if (OnAirSpace > 0) {
+    // VENTA3 default is true, always true at startup no regsave
+    SelectObject(hDCTemp, (HBITMAP)hDrawBitMapTmp);
+    DrawAirSpace(hdc, rc, hDCTemp);
+  }
 
   if(TrailActive) {
     // TODO enhancement: For some reason, the shadow drawing of the
@@ -2264,7 +2270,7 @@ void MapWindow::RenderMapWindowBg(HDC hdc, const RECT rc,
 }
 
 
-void MapWindow::RenderMapWindow(  RECT rc)
+void MapWindow::RenderMapWindow(HDC hdc, const RECT rc)
 {
   bool drawmap = false;
   HFONT hfOld;
@@ -2285,39 +2291,39 @@ void MapWindow::RenderMapWindow(  RECT rc)
 
   CalculateScreenPositions(Orig, rc, &Orig_Aircraft);
 
-  RenderMapWindowBg(hdcDrawWindow, rc, Orig, Orig_Aircraft);
+  RenderMapWindowBg(hdc, rc, Orig, Orig_Aircraft);
 
   // overlays
   DrawCDI();
 
-  hfOld = (HFONT)SelectObject(hdcDrawWindow, MapWindowFont);
+  hfOld = (HFONT)SelectObject(hdc, MapWindowFont);
 
-  DrawMapScale(hdcDrawWindow,rc, BigZoom);
+  DrawMapScale(hdc,rc, BigZoom);
 
-  DrawMapScale2(hdcDrawWindow,rc, Orig_Aircraft);
+  DrawMapScale2(hdc,rc, Orig_Aircraft);
 
-  DrawCompass(hdcDrawWindow, rc);
+  DrawCompass(hdc, rc);
 
   // JMW Experimental only! EXPERIMENTAL
 #if 0
   //  #ifdef GNAV
   if (EnableAuxiliaryInfo) {
-    DrawHorizon(hdcDrawWindow, rc);
+    DrawHorizon(hdc, rc);
   }
   //  #endif
 #endif
 
-  DrawFlightMode(hdcDrawWindow, rc);
+  DrawFlightMode(hdc, rc);
 
-  DrawThermalBand(hdcDrawWindow, rc);
+  DrawThermalBand(hdc, rc);
 
   DrawFinalGlide(hdcDrawWindow,rc);
 
-  //  DrawSpeedToFly(hdcDrawWindow, rc);
+  //  DrawSpeedToFly(hdc, rc);
 
-  DrawGPSStatus(hdcDrawWindow, rc);
+  DrawGPSStatus(hdc, rc);
 
-  SelectObject(hdcDrawWindow, hfOld);
+  SelectObject(hdc, hfOld);
 
 }
 
@@ -2458,7 +2464,7 @@ DWORD MapWindow::DrawThread (LPVOID lpvoid)
 
       GaugeFLARM::Render(&DrawInfo);
 
-      RenderMapWindow(MapRect);
+      RenderMapWindow(hdcDrawWindow, MapRect);
 
       if (!first) {
 	BitBlt(hdcScreen, 0, 0,
@@ -3498,7 +3504,7 @@ void MapWindow::DrawTask(HDC hdc, RECT rc, const POINT &Orig_Aircraft)
 }
 
 
-void MapWindow::DrawTaskAAT(HDC hdc, const RECT rc)
+void MapWindow::DrawTaskAAT(HDC hdc, const RECT rc, HDC buffer)
 {
   int i;
   double tmp;
@@ -3512,13 +3518,11 @@ void MapWindow::DrawTaskAAT(HDC hdc, const RECT rc)
 #endif
 
     COLORREF whitecolor = RGB(0xff,0xff, 0xff);
-    COLORREF origcolor = SetTextColor(hDCTemp, whitecolor);
+    COLORREF origcolor = SetTextColor(buffer, whitecolor);
 
-    SelectObject(hDCTemp, (HBITMAP)hDrawBitMapTmp);
-
-    SelectObject(hDCTemp, GetStockObject(WHITE_PEN));
-    SelectObject(hDCTemp, GetStockObject(WHITE_BRUSH));
-    Rectangle(hDCTemp,rc.left,rc.top,rc.right,rc.bottom);
+    SelectObject(buffer, GetStockObject(WHITE_PEN));
+    SelectObject(buffer, GetStockObject(WHITE_BRUSH));
+    Rectangle(buffer,rc.left,rc.top,rc.right,rc.bottom);
 
     for(i=MAXTASKPOINTS-2;i>0;i--)
       {
@@ -3528,21 +3532,21 @@ void MapWindow::DrawTaskAAT(HDC hdc, const RECT rc)
 	      tmp = Task[i].AATCircleRadius*ResMapScaleOverDistanceModify;
 
 	      // this color is used as the black bit
-	      SetTextColor(hDCTemp,
+              SetTextColor(buffer,
 			   Colours[iAirspaceColour[AATASK]]);
 
 	      // this color is the transparent bit
-	      SetBkColor(hDCTemp,
+              SetBkColor(buffer,
 			 whitecolor);
 
 	      if (i<ActiveWayPoint) {
-		SelectObject(hDCTemp, GetStockObject(HOLLOW_BRUSH));
+                SelectObject(buffer, GetStockObject(HOLLOW_BRUSH));
 	      } else {
-		SelectObject(hDCTemp, hAirspaceBrushes[iAirspaceBrush[AATASK]]);
+                SelectObject(buffer, hAirspaceBrushes[iAirspaceBrush[AATASK]]);
 	      }
-	      SelectObject(hDCTemp, GetStockObject(BLACK_PEN));
+              SelectObject(buffer, GetStockObject(BLACK_PEN));
 
-	      Circle(hDCTemp,
+              Circle(buffer,
 		     WayPointList[Task[i].Index].Screen.x,
 		     WayPointList[Task[i].Index].Screen.y,
 		     (int)tmp, rc, true, true);
@@ -3551,32 +3555,32 @@ void MapWindow::DrawTaskAAT(HDC hdc, const RECT rc)
 	    {
 
 	      // this color is used as the black bit
-	      SetTextColor(hDCTemp,
+              SetTextColor(buffer,
 			   Colours[iAirspaceColour[AATASK]]);
 
 	      // this color is the transparent bit
-	      SetBkColor(hDCTemp,
+              SetBkColor(buffer,
 			 whitecolor);
 
 	      if (i<ActiveWayPoint) {
-		SelectObject(hDCTemp, GetStockObject(HOLLOW_BRUSH));
+                SelectObject(buffer, GetStockObject(HOLLOW_BRUSH));
 	      } else {
-		SelectObject(hDCTemp, hAirspaceBrushes[iAirspaceBrush[AATASK]]);
+                SelectObject(buffer, hAirspaceBrushes[iAirspaceBrush[AATASK]]);
 	      }
-	      SelectObject(hDCTemp, GetStockObject(BLACK_PEN));
+              SelectObject(buffer, GetStockObject(BLACK_PEN));
 
 	      tmp = Task[i].AATSectorRadius*ResMapScaleOverDistanceModify;
 
-	      Segment(hDCTemp,
+              Segment(buffer,
 		      WayPointList[Task[i].Index].Screen.x,
 		      WayPointList[Task[i].Index].Screen.y,(int)tmp, rc,
 		      Task[i].AATStartRadial-DisplayAngle,
 		      Task[i].AATFinishRadial-DisplayAngle);
 
-	      DrawSolidLine(hDCTemp,
+              DrawSolidLine(buffer,
 			    WayPointList[Task[i].Index].Screen, Task[i].AATStart,
 			    rc);
-	      DrawSolidLine(hDCTemp,
+              DrawSolidLine(buffer,
 			    WayPointList[Task[i].Index].Screen, Task[i].AATFinish,
 			    rc);
 
@@ -3586,7 +3590,7 @@ void MapWindow::DrawTaskAAT(HDC hdc, const RECT rc)
       }
 
     // restore original color
-    SetTextColor(hDCTemp, origcolor);
+    SetTextColor(buffer, origcolor);
 
     //////
 
@@ -3594,7 +3598,7 @@ void MapWindow::DrawTaskAAT(HDC hdc, const RECT rc)
     TransparentImage(hdc,
 		     rc.left,rc.top,
 		     rc.right-rc.left,rc.bottom-rc.top,
-		     hDCTemp,
+                     buffer,
 		     rc.left,rc.top,
 		     rc.right-rc.left,rc.bottom-rc.top,
 		     whitecolor
@@ -3604,7 +3608,7 @@ void MapWindow::DrawTaskAAT(HDC hdc, const RECT rc)
     TransparentBlt(hdc,
                    rc.left,rc.top,
                    rc.right-rc.left,rc.bottom-rc.top,
-                   hDCTemp,
+                   buffer,
                    rc.left,rc.top,
                    rc.right-rc.left,rc.bottom-rc.top,
                    whitecolor

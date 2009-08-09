@@ -301,7 +301,7 @@ class MapWindow {
   //  static void DrawWind(HDC hdc, POINT Orig, RECT rc);
   //  static void DrawWindAtAircraft(HDC hdc, POINT Orig, RECT rc);
   static void DrawWindAtAircraft2(HDC hdc, POINT Orig, RECT rc);
-  static void DrawAirSpace(HDC hdc, const RECT rc);
+  static void DrawAirSpace(HDC hdc, const RECT rc, HDC buffer);
   static void DrawWaypoints(HDC hdc, const RECT rc);
   static void DrawWaypointsNew(HDC hdc, const RECT rc); // VENTA5
   static void DrawLook8000(HDC hdc, const RECT rc); // VENTA5
@@ -316,7 +316,7 @@ class MapWindow {
                               POINT &End, int Index);
   static void DrawTask(HDC hdc, RECT rc, const POINT &Orig_Aircraft);
   static void DrawThermalEstimate(HDC hdc, const RECT rc);
-  static void DrawTaskAAT(HDC hdc, const RECT rc);
+  static void DrawTaskAAT(HDC hdc, const RECT rc, HDC buffer);
   static void DrawAbortedTask(HDC hdc, const RECT rc, const POINT Orig);
   static void DrawBearing(HDC hdc, const RECT rc);
   static void DrawGreatCircle(HDC hdc,
@@ -331,7 +331,7 @@ class MapWindow {
   static void DrawFinalGlide(HDC hDC, const RECT rc);
   static void DrawThermalBand(HDC hDC, const RECT rc);
   static void DrawGlideThroughTerrain(HDC hDC, const RECT rc);
-  static void DrawTerrainAbove(HDC hDC, const RECT rc);
+  static void DrawTerrainAbove(HDC hDC, const RECT rc, HDC buffer);
   static void DrawCDI();
   //  static void DrawSpeedToFly(HDC hDC, RECT rc);
   static void DrawFLARMTraffic(HDC hDC, RECT rc, POINT Orig_Aircraft);
@@ -440,7 +440,7 @@ class MapWindow {
 
   static DWORD DrawThread (LPVOID);
 
-  static void RenderMapWindow(  RECT rc);
+  static void RenderMapWindow(HDC hdc, const RECT rc);
   static void RenderMapWindowBg(HDC hdc, const RECT rc,
 				const POINT &Orig,
 				const POINT &Orig_Aircraft);
@@ -492,7 +492,7 @@ class MapWindow {
   static bool TargetPan;
   static double TargetZoomDistance;
   static int TargetPanIndex;
-  static void ClearAirSpace(bool fill);
+  static void ClearAirSpace(HDC dc, bool fill);
 
  public:
   static bool isTargetPan(void);

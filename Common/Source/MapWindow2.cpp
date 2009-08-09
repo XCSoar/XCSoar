@@ -1778,35 +1778,34 @@ void MapWindow::CalculateScreenPositionsGroundline(void) {
 }
 
 
-void MapWindow::DrawTerrainAbove(HDC hDC, const RECT rc) {
+void MapWindow::DrawTerrainAbove(HDC hDC, const RECT rc, HDC buffer) {
 
   if (!DerivedDrawInfo.Flying) return;
 
   COLORREF whitecolor = RGB(0xff,0xff,0xff);
   COLORREF graycolor = RGB(0xf0,0xf0,0xf0);
-  COLORREF origcolor = SetTextColor(hDCTemp, whitecolor);
+  COLORREF origcolor = SetTextColor(buffer, whitecolor);
 
-  SetBkMode(hDCTemp, TRANSPARENT);
+  SetBkMode(buffer, TRANSPARENT);
 
-  SelectObject(hDCTemp, (HBITMAP)hDrawBitMapTmp);
-  SetBkColor(hDCTemp, whitecolor);
+  SetBkColor(buffer, whitecolor);
 
-  SelectObject(hDCTemp, GetStockObject(WHITE_PEN));
-  SetTextColor(hDCTemp, graycolor);
-  SelectObject(hDCTemp, hAboveTerrainBrush); // hAirspaceBrushes[3] or 6
-  Rectangle(hDCTemp,rc.left,rc.top,rc.right,rc.bottom);
+  SelectObject(buffer, GetStockObject(WHITE_PEN));
+  SetTextColor(buffer, graycolor);
+  SelectObject(buffer, hAboveTerrainBrush); // hAirspaceBrushes[3] or 6
+  Rectangle(buffer,rc.left,rc.top,rc.right,rc.bottom);
 
-  SelectObject(hDCTemp, GetStockObject(WHITE_PEN));
-  SelectObject(hDCTemp, GetStockObject(WHITE_BRUSH));
-  Polygon(hDCTemp,Groundline,NUMTERRAINSWEEPS+1);
+  SelectObject(buffer, GetStockObject(WHITE_PEN));
+  SelectObject(buffer, GetStockObject(WHITE_BRUSH));
+  Polygon(buffer,Groundline,NUMTERRAINSWEEPS+1);
 
   // need to do this to prevent drawing of colored outline
-  SelectObject(hDCTemp, GetStockObject(WHITE_PEN));
+  SelectObject(buffer, GetStockObject(WHITE_PEN));
 #if (WINDOWSPC<1)
     TransparentImage(hDC,
                      rc.left, rc.top,
                      rc.right-rc.left,rc.bottom-rc.top,
-                     hDCTemp,
+                     buffer,
                      rc.left, rc.top,
                      rc.right-rc.left,rc.bottom-rc.top,
                      whitecolor
@@ -1816,7 +1815,7 @@ void MapWindow::DrawTerrainAbove(HDC hDC, const RECT rc) {
     TransparentBlt(hDC,
                    rc.left,rc.top,
                    rc.right-rc.left,rc.bottom-rc.top,
-                   hDCTemp,
+                   buffer,
                    rc.left,rc.top,
                    rc.right-rc.left,rc.bottom-rc.top,
                    whitecolor
@@ -1824,8 +1823,8 @@ void MapWindow::DrawTerrainAbove(HDC hDC, const RECT rc) {
   #endif
 
   // restore original color
-  SetTextColor(hDCTemp, origcolor);
-  SetBkMode(hDCTemp,OPAQUE);
+  SetTextColor(buffer, origcolor);
+  SetBkMode(buffer, OPAQUE);
 
 }
 
@@ -2390,23 +2389,22 @@ void MapWindow::DrawCompass(HDC hDC, const RECT rc)
 
 }
 
-void MapWindow::ClearAirSpace(bool fill) {
+void MapWindow::ClearAirSpace(HDC dc, bool fill) {
   COLORREF whitecolor = RGB(0xff,0xff,0xff);
 
-  SetTextColor(hDCTemp, whitecolor);
-  SetBkMode(hDCTemp, TRANSPARENT);
-  SelectObject(hDCTemp, (HBITMAP)hDrawBitMapTmp);
-  SetBkColor(hDCTemp, whitecolor);
-  SelectObject(hDCTemp, GetStockObject(WHITE_PEN));
-  SelectObject(hDCTemp, GetStockObject(WHITE_BRUSH));
-  Rectangle(hDCTemp,MapRect.left,MapRect.top,MapRect.right,MapRect.bottom);
+  SetTextColor(dc, whitecolor);
+  SetBkMode(dc, TRANSPARENT);
+  SetBkColor(dc, whitecolor);
+  SelectObject(dc, GetStockObject(WHITE_PEN));
+  SelectObject(dc, GetStockObject(WHITE_BRUSH));
+  Rectangle(dc, MapRect.left, MapRect.top, MapRect.right, MapRect.bottom);
   if (fill) {
-    SelectObject(hDCTemp, GetStockObject(WHITE_PEN));
+    SelectObject(dc, GetStockObject(WHITE_PEN));
   }
 }
 
 // TODO code: optimise airspace drawing
-void MapWindow::DrawAirSpace(HDC hdc, const RECT rc)
+void MapWindow::DrawAirSpace(HDC hdc, const RECT rc, HDC buffer)
 {
   COLORREF whitecolor = RGB(0xff,0xff,0xff);
   unsigned int i;
@@ -2418,16 +2416,16 @@ void MapWindow::DrawAirSpace(HDC hdc, const RECT rc)
     for(i=0;i<NumberOfAirspaceCircles;i++) {
       if (AirspaceCircle[i].Visible==2) {
 	if (!found) {
-	  ClearAirSpace(true);
+          ClearAirSpace(buffer, true);
 	  found = true;
 	}
         // this color is used as the black bit
-        SetTextColor(hDCTemp,
+        SetTextColor(buffer,
                      Colours[iAirspaceColour[AirspaceCircle[i].Type]]);
         // get brush, can be solid or a 1bpp bitmap
-        SelectObject(hDCTemp,
+        SelectObject(buffer,
                      hAirspaceBrushes[iAirspaceBrush[AirspaceCircle[i].Type]]);
-        Circle(hDCTemp,
+        Circle(buffer,
                AirspaceCircle[i].Screen.x ,
                AirspaceCircle[i].Screen.y ,
                AirspaceCircle[i].ScreenR ,rc, true, true);
@@ -2439,15 +2437,15 @@ void MapWindow::DrawAirSpace(HDC hdc, const RECT rc)
     for(i=0;i<NumberOfAirspaceAreas;i++) {
       if(AirspaceArea[i].Visible ==2) {
 	if (!found) {
-	  ClearAirSpace(true);
+	  ClearAirSpace(buffer, true);
 	  found = true;
 	}
         // this color is used as the black bit
-        SetTextColor(hDCTemp,
+        SetTextColor(buffer,
                      Colours[iAirspaceColour[AirspaceArea[i].Type]]);
-        SelectObject(hDCTemp,
+        SelectObject(buffer,
                      hAirspaceBrushes[iAirspaceBrush[AirspaceArea[i].Type]]);
-        ClipPolygon(hDCTemp,
+        ClipPolygon(buffer,
                     AirspaceScreenPoint+AirspaceArea[i].FirstPoint,
                     AirspaceArea[i].NumPoints, rc, true);
       }
@@ -2457,23 +2455,23 @@ void MapWindow::DrawAirSpace(HDC hdc, const RECT rc)
   ////////// draw it again, just the outlines
 
   if (found) {
-    SelectObject(hDCTemp, GetStockObject(HOLLOW_BRUSH));
-    SelectObject(hDCTemp, GetStockObject(WHITE_PEN));
+    SelectObject(buffer, GetStockObject(HOLLOW_BRUSH));
+    SelectObject(buffer, GetStockObject(WHITE_PEN));
   }
 
   if (AirspaceCircle) {
     for(i=0;i<NumberOfAirspaceCircles;i++) {
       if (AirspaceCircle[i].Visible) {
 	if (!found) {
-	  ClearAirSpace(false);
+	  ClearAirSpace(buffer, false);
 	  found = true;
 	}
         if (bAirspaceBlackOutline) {
-          SelectObject(hDCTemp, GetStockObject(BLACK_PEN));
+          SelectObject(buffer, GetStockObject(BLACK_PEN));
         } else {
-          SelectObject(hDCTemp, hAirspacePens[AirspaceCircle[i].Type]);
+          SelectObject(buffer, hAirspacePens[AirspaceCircle[i].Type]);
         }
-        Circle(hDCTemp,
+        Circle(buffer,
                AirspaceCircle[i].Screen.x ,
                AirspaceCircle[i].Screen.y ,
                AirspaceCircle[i].ScreenR ,rc, true, false);
@@ -2485,17 +2483,17 @@ void MapWindow::DrawAirSpace(HDC hdc, const RECT rc)
     for(i=0;i<NumberOfAirspaceAreas;i++) {
       if(AirspaceArea[i].Visible) {
 	if (!found) {
-	  ClearAirSpace(false);
+	  ClearAirSpace(buffer, false);
 	  found = true;
 	}
         if (bAirspaceBlackOutline) {
-          SelectObject(hDCTemp, GetStockObject(BLACK_PEN));
+          SelectObject(buffer, GetStockObject(BLACK_PEN));
         } else {
-          SelectObject(hDCTemp, hAirspacePens[AirspaceArea[i].Type]);
+          SelectObject(buffer, hAirspacePens[AirspaceArea[i].Type]);
         }
 
 	POINT *pstart = AirspaceScreenPoint+AirspaceArea[i].FirstPoint;
-        ClipPolygon(hDCTemp, pstart,
+        ClipPolygon(buffer, pstart,
                     AirspaceArea[i].NumPoints, rc, false);
 
 	if (AirspaceArea[i].NumPoints>2) {
@@ -2505,7 +2503,7 @@ void MapWindow::DrawAirSpace(HDC hdc, const RECT rc)
 	    POINT ps[2];
 	    ps[0] = pstart[0];
 	    ps[1] = pstart[AirspaceArea[i].NumPoints-1];
-	    _Polyline(hDCTemp, ps, 2, rc);
+	    _Polyline(buffer, ps, 2, rc);
 	  }
 	}
 
@@ -2515,12 +2513,12 @@ void MapWindow::DrawAirSpace(HDC hdc, const RECT rc)
 
   if (found) {
     // need to do this to prevent drawing of colored outline
-    SelectObject(hDCTemp, GetStockObject(WHITE_PEN));
+    SelectObject(buffer, GetStockObject(WHITE_PEN));
 #if (WINDOWSPC<1)
     TransparentImage(hdc,
                      rc.left, rc.top,
                      rc.right-rc.left,rc.bottom-rc.top,
-                     hDCTemp,
+                     buffer,
                      rc.left, rc.top,
                      rc.right-rc.left,rc.bottom-rc.top,
                      whitecolor
@@ -2530,7 +2528,7 @@ void MapWindow::DrawAirSpace(HDC hdc, const RECT rc)
     TransparentBlt(hdc,
                    rc.left,rc.top,
                    rc.right-rc.left,rc.bottom-rc.top,
-                   hDCTemp,
+                   buffer,
                    rc.left,rc.top,
                    rc.right-rc.left,rc.bottom-rc.top,
                    whitecolor
@@ -2538,7 +2536,7 @@ void MapWindow::DrawAirSpace(HDC hdc, const RECT rc)
   #endif
     // restore original color
     //    SetTextColor(hDCTemp, origcolor);
-    SetBkMode(hDCTemp,OPAQUE);
+    SetBkMode(buffer, OPAQUE);
   }
 }
 
