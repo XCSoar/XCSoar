@@ -58,9 +58,9 @@ static const DeviceRegister_t genDevice = {
   NULL,				// Close
   NULL,				// LinkTimeout
   NULL,				// Declare
-  NULL,				// IsLogger
-  NULL,				// IsGPSSource
-  NULL,				// IsBaroSource
+  devIsFalseReturn,		// IsLogger
+  devIsTrueReturn,		// IsGPSSource
+  devIsFalseReturn,		// IsBaroSource
   NULL,				// IsRadio
   NULL,				// IsCondor
   NULL				// OnSysTicker

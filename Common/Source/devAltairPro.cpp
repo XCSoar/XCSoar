@@ -98,23 +98,6 @@ BOOL atrDeclare(PDeviceDescriptor_t d, Declaration_t *decl){
 }
 
 
-BOOL atrIsLogger(PDeviceDescriptor_t d){
-//  return(TRUE);
-  (void)d;
-  return(FALSE);
-}
-
-
-BOOL atrIsGPSSource(PDeviceDescriptor_t d){
-	(void)d;
-  return(TRUE);
-}
-
-BOOL atrIsBaroSource(PDeviceDescriptor_t d){
-	(void)d;
-  return(TRUE);
-}
-
 BOOL atrPutQNH(DeviceDescriptor_t *d, double NewQNH){
   (void)NewQNH; // TODO code: JMW check sending QNH to Altair
   if (d == pDevPrimaryBaroSource){
@@ -147,9 +130,9 @@ static const DeviceRegister_t atrDevice = {
   NULL,				// Close
   NULL,				// LinkTimeout
   atrDeclare,			// Declare
-  atrIsLogger,			// IsLogger
-  atrIsGPSSource,		// IsGPSSource
-  atrIsBaroSource,		// IsBaroSource
+  devIsFalseReturn,		// IsLogger
+  devIsTrueReturn,		// IsGPSSource
+  devIsTrueReturn,		// IsBaroSource
   NULL,				// IsRadio
   NULL,				// IsCondor
   atrOnSysTicker		// OnSysTicker

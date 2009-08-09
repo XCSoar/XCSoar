@@ -140,4 +140,7 @@ BOOL devGetBaroAltitude(double *Value);
 BOOL devPutVoice(PDeviceDescriptor_t d, TCHAR *Sentence);
 
 
+BOOL devIsFalseReturn(PDeviceDescriptor_t d);
+BOOL devIsTrueReturn(PDeviceDescriptor_t d);
+
 #endif

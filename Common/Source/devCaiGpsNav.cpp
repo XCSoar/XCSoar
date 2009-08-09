@@ -84,21 +84,6 @@ BOOL caiGpsNavOpen(PDeviceDescriptor_t d, int Port){
 }
 
 
-
-BOOL caiGpsNavIsLogger(PDeviceDescriptor_t d){
-  // There is currently no support for task declaration
-  // from XCSoar
-	(void)d; // TODO feature: CAI GPS NAV declaration
-  return(FALSE);
-}
-
-
-BOOL caiGpsNavIsGPSSource(PDeviceDescriptor_t d){
-	(void)d;
-  return(TRUE);
-}
-
-
 static const DeviceRegister_t caiGpsNavDevice = {
   TEXT("CAI GPS-NAV"),
   drfGPS,
@@ -115,9 +100,9 @@ static const DeviceRegister_t caiGpsNavDevice = {
   NULL,				// Close
   NULL,				// LinkTimeout
   NULL,				// Declare
-  caiGpsNavIsLogger,		// IsLogger
-  caiGpsNavIsGPSSource,		// IsGPSSource
-  NULL,				// IsBaroSource
+  devIsFalseReturn,		// IsLogger - TODO feature: CAI GPS NAV declaration
+  devIsTrueReturn,		// IsGPSSource
+  devIsFalseReturn,		// IsBaroSource
   NULL,				// IsRadio
   NULL,				// IsCondor
   NULL				// OnSysTicker

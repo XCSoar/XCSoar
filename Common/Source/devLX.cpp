@@ -67,25 +67,6 @@ static BOOL LXParseNMEA(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INF
 }
 
 
-/*
-static BOOL LXIsLogger(PDeviceDescriptor_t d){
-  (void)d;
-  return(FALSE);
-}
-*/
-
-static BOOL LXIsGPSSource(PDeviceDescriptor_t d){
-  (void)d;
-  return(TRUE); // ? is this true
-}
-
-
-static BOOL LXIsBaroSource(PDeviceDescriptor_t d){
-	(void)d;
-  return(TRUE);
-}
-
-
 static const DeviceRegister_t lxDevice = {
   TEXT("LX"),
   drfGPS | drfBaroAlt | drfSpeed | drfVario,
@@ -102,9 +83,9 @@ static const DeviceRegister_t lxDevice = {
   NULL,				// Close
   NULL,				// LinkTimeout
   NULL,				// Declare
-  NULL,				// IsLogger
-  LXIsGPSSource,		// IsGPSSource
-  LXIsBaroSource,		// IsBaroSource
+  devIsFalseReturn,		// IsLogger
+  devIsTrueReturn,		// IsGPSSource: ? is this true
+  devIsTrueReturn,		// IsBaroSource
   NULL,				// IsRadio
   NULL,				// IsCondor
   NULL				// OnSysTicker

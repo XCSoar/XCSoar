@@ -83,22 +83,6 @@ BOOL PGDeclare(PDeviceDescriptor_t d, Declaration_t *decl){
 }
 
 
-BOOL PGIsLogger(PDeviceDescriptor_t d){
-  (void)d;
-  return(TRUE);
-}
-
-
-BOOL PGIsGPSSource(PDeviceDescriptor_t d){
-  (void)d;
-  return(TRUE);
-}
-
-BOOL PGIsBaroSource(PDeviceDescriptor_t d){
-  (void)d;
-  return(TRUE);
-}
-
 static const DeviceRegister_t pgDevice = {
   TEXT("PosiGraph Logger"),
   drfGPS | drfBaroAlt | drfLogger,
@@ -115,9 +99,9 @@ static const DeviceRegister_t pgDevice = {
   NULL,				// Close
   NULL,				// LinkTimeout
   PGDeclare,			// Declare
-  PGIsLogger,			// IsLogger
-  PGIsGPSSource,		// IsGPSSource
-  PGIsBaroSource,		// IsBaroSource
+  devIsTrueReturn,		// IsLogger
+  devIsTrueReturn,		// IsGPSSource
+  devIsTrueReturn,		// IsBaroSource
   NULL,				// IsRadio
   NULL,				// IsCondor
   NULL				// OnSysTicker

@@ -264,12 +264,6 @@ BOOL EWMicroRecorderDeclare(PDeviceDescriptor_t d, Declaration_t *decl)
 
 
 
-BOOL EWMicroRecorderIsTrue(PDeviceDescriptor_t d){
-  (void)d;
-  return(TRUE);
-}
-
-
 static const DeviceRegister_t ewMicroRecorderDevice = {
   TEXT("EW MicroRecorder"),
   drfGPS | drfLogger | drfBaroAlt,
@@ -286,9 +280,9 @@ static const DeviceRegister_t ewMicroRecorderDevice = {
   NULL,				// Close
   NULL,				// LinkTimeout
   EWMicroRecorderDeclare,	// Declare
-  EWMicroRecorderIsTrue,	// IsLogger
-  EWMicroRecorderIsTrue,	// IsGPSSource
-  EWMicroRecorderIsTrue,	// IsBaroSource
+  devIsTrueReturn,		// IsLogger
+  devIsTrueReturn,		// IsGPSSource
+  devIsTrueReturn,		// IsBaroSource
   NULL,				// IsRadio
   NULL,				// IsCondor
   NULL				// OnSysTicker

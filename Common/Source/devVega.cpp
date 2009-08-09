@@ -406,22 +406,6 @@ BOOL vgaDeclare(PDeviceDescriptor_t d, Declaration_t *decl){
 }
 
 
-BOOL vgaIsLogger(PDeviceDescriptor_t d){
-//  return(TRUE);
-  (void)d;
-	return(FALSE);
-}
-
-BOOL vgaIsGPSSource(PDeviceDescriptor_t d){
-	(void)d;
-  return(TRUE);  // this is only true if GPS source is connected on VEGA.NmeaIn
-}
-
-BOOL vgaIsBaroSource(PDeviceDescriptor_t d){
-	(void)d;
-  return(TRUE);
-}
-
 BOOL vgaPutVoice(PDeviceDescriptor_t d, TCHAR *Sentence){
   devWriteNMEAString(d, Sentence);
   return(TRUE);
@@ -477,9 +461,9 @@ static const DeviceRegister_t vgaDevice = {
   NULL,				// Close
   NULL,				// LinkTimeout
   vgaDeclare,			// Declare
-  vgaIsLogger,			// IsLogger
-  vgaIsGPSSource,		// IsGPSSource
-  vgaIsBaroSource,		// IsBaroSource
+  devIsFalseReturn,		// IsLogger
+  devIsTrueReturn,		// IsGPSSource: only if GPS source connected to Vega.NmeaIn
+  devIsTrueReturn,		// IsBaroSource
   NULL,				// IsRadio
   NULL,				// IsCondor
   vgaOnSysTicker		// OnSysTicker

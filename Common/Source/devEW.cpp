@@ -324,18 +324,6 @@ BOOL EWDeclAddWayPoint(PDeviceDescriptor_t d, const WAYPOINT *wp){
 }
 
 
-BOOL EWIsLogger(PDeviceDescriptor_t d){
-  (void)d;
-  return(TRUE);
-}
-
-
-BOOL EWIsGPSSource(PDeviceDescriptor_t d){
-  (void)d;
-  return(TRUE);
-}
-
-
 BOOL EWLinkTimeout(PDeviceDescriptor_t d){
   (void)d;
   if (!fDeclarationPending)
@@ -361,9 +349,9 @@ static const DeviceRegister_t ewDevice = {
   NULL,				// Close
   EWLinkTimeout,		// LinkTimeout
   EWDeclare,			// Declare
-  EWIsLogger,			// IsLogger
-  EWIsGPSSource,		// IsGPSSource
-  NULL,				// IsBaroSource
+  devIsTrueReturn,		// IsLogger
+  devIsTrueReturn,		// IsGPSSource
+  devIsFalseReturn,		// IsBaroSource
   NULL,				// IsRadio
   NULL,				// IsCondor
   NULL				// OnSysTicker

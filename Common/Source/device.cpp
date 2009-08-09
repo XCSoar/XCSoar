@@ -155,10 +155,14 @@ BOOL devRegisterGetName(int Index, TCHAR *Name){
 }
 
 
-static BOOL devIsFalseReturn(PDeviceDescriptor_t d){
+BOOL devIsFalseReturn(PDeviceDescriptor_t d){
   (void)d;
-  return(FALSE);
+  return FALSE;
+}
 
+BOOL devIsTrueReturn(PDeviceDescriptor_t d){
+  (void)d;
+  return TRUE;
 }
 
 

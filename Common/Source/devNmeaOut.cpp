@@ -54,19 +54,9 @@ BOOL nmoParseNMEA(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO){
 }
 
 
-BOOL nmoIsLogger(PDeviceDescriptor_t d){
-  (void)d;
-  return(FALSE);
-}
-
 BOOL nmoIsGPSSource(PDeviceDescriptor_t d){
   (void)d;
   return(FALSE);  // this is only true if GPS source is connected on VEGA.NmeaIn
-}
-
-BOOL nmoIsBaroSource(PDeviceDescriptor_t d){
-  (void)d;
-  return(FALSE);
 }
 
 BOOL nmoPutVoice(PDeviceDescriptor_t d, TCHAR *Sentence){
@@ -95,9 +85,9 @@ static const DeviceRegister_t nmoDevice = {
   NULL,				// Close
   NULL,				// LinkTimeout
   NULL,				// Declare
-  nmoIsLogger,			// IsLogger
+  devIsFalseReturn,		// IsLogger
   nmoIsGPSSource,		// IsGPSSource
-  nmoIsBaroSource,		// IsBaroSource
+  devIsFalseReturn,		// IsBaroSource
   NULL,				// IsRadio
   NULL,				// IsCondor
   NULL				// OnSysTicker

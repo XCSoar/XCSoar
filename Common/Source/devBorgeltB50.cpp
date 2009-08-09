@@ -57,17 +57,6 @@ BOOL B50ParseNMEA(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO){
 }
 
 
-BOOL B50IsLogger(PDeviceDescriptor_t d){
-  (void)d;
-  return(FALSE);
-}
-
-
-BOOL B50IsGPSSource(PDeviceDescriptor_t d){
-  (void)d;
-  return(TRUE); // ? is this true
-}
-
 static const DeviceRegister_t b50Device = {
   TEXT("Borgelt B50"),
   drfGPS,
@@ -84,9 +73,9 @@ static const DeviceRegister_t b50Device = {
   NULL,				// Close
   NULL,				// LinkTimeout
   NULL,				// Declare
-  NULL,				// IsLogger
-  B50IsGPSSource,		// IsGPSSource
-  NULL,				// IsBaroSource
+  devIsFalseReturn,		// IsLogger
+  devIsTrueReturn,		// IsGPSSource - is this true
+  devIsFalseReturn,		// IsBaroSource
   NULL,				// IsRadio
   NULL,				// IsCondor
   NULL				// OnSysTicker

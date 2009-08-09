@@ -513,18 +513,6 @@ BOOL cai302DeclAddWayPoint(PDeviceDescriptor_t d, const WAYPOINT *wp){
 }
 
 
-BOOL cai302IsLogger(PDeviceDescriptor_t d){
-	 (void)d;
-  return(TRUE);
-}
-
-
-BOOL cai302IsGPSSource(PDeviceDescriptor_t d){
-	(void)d;
-  return(TRUE);
-}
-
-
 static const DeviceRegister_t cai302Device = {
   TEXT("CAI 302"),
   drfGPS | drfLogger | drfSpeed | drfVario | drfBaroAlt | drfWind,
@@ -541,9 +529,9 @@ static const DeviceRegister_t cai302Device = {
   NULL,				// Close
   NULL,				// LinkTimeout
   cai302Declare,		// Declare
-  cai302IsLogger,		// IsLogger
-  cai302IsGPSSource,		// IsGPSSource
-  NULL,				// IsBaroSource
+  devIsTrueReturn,		// IsLogger
+  devIsTrueReturn,		// IsGPSSource
+  devIsFalseReturn,		// IsBaroSource: shouldn't this be true? --rmk
   NULL,				// IsRadio
   NULL,				// IsCondor
   NULL				// OnSysTicker

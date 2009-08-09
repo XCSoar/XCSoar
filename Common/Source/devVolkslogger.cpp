@@ -284,19 +284,6 @@ BOOL VLDeclAddWayPoint(PDeviceDescriptor_t d, const WAYPOINT *wp){
 
 }
 
-
-BOOL VLIsLogger(PDeviceDescriptor_t d){
-  (void)d;
-  return(TRUE);
-}
-
-
-BOOL VLIsGPSSource(PDeviceDescriptor_t d){
-  (void)d;
-  return(TRUE);
-}
-
-
 static const DeviceRegister_t vlDevice = {
   TEXT("Volkslogger"),
   drfGPS | drfBaroAlt | drfLogger,
@@ -313,9 +300,9 @@ static const DeviceRegister_t vlDevice = {
   NULL,				// Close
   NULL,				// LinkTimeout
   VLDeclare,			// Declare
-  VLIsLogger,			// IsLogger
-  VLIsGPSSource,		// IsGPSSource
-  NULL,				// IsBaroSource
+  devIsTrueReturn,		// IsLogger
+  devIsTrueReturn,		// IsGPSSource
+  devIsFalseReturn,		// IsBaroSource: devIsTrueReturn? -- rmk
   NULL,				// IsRadio
   NULL,				// IsCondor
   NULL				// OnSysTicker

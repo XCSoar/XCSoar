@@ -55,24 +55,6 @@ static BOOL FlymasterF1ParseNMEA(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO
 
 }
 
-/*
-static BOOL FlymasterF1IsLogger(PDeviceDescriptor_t d){
-  (void)d;
-  return(FALSE);
-}
-*/
-
-static BOOL FlymasterF1IsGPSSource(PDeviceDescriptor_t d){
-  (void)d;
-  return(TRUE);
-}
-
-
-static BOOL FlymasterF1IsBaroSource(PDeviceDescriptor_t d){
-	(void)d;
-  return(TRUE);
-}
-
 
 static const DeviceRegister_t flymasterf1Device = {
   TEXT("FlymasterF1"),
@@ -90,9 +72,9 @@ static const DeviceRegister_t flymasterf1Device = {
   NULL,				// Close
   NULL,				// LinkTimeout
   NULL,				// Declare
-  NULL,				// IsLogger
-  FlymasterF1IsGPSSource,	// IsGPSSource
-  FlymasterF1IsBaroSource,	// IsBaroSource
+  devIsFalseReturn,		// IsLogger
+  devIsTrueReturn,		// IsGPSSource
+  devIsTrueReturn,		// IsBaroSource
   NULL,				// IsRadio
   NULL,				// IsCondor
   NULL				// OnSysTicker

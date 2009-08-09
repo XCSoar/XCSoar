@@ -66,23 +66,6 @@ static BOOL CondorParseNMEA(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS
 
 }
 
-static BOOL CondorIsCondor(PDeviceDescriptor_t d){
-  (void)d;
-  return(TRUE);
-}
-
-
-static BOOL CondorIsGPSSource(PDeviceDescriptor_t d){
-  (void)d;
-  return(TRUE);
-}
-
-
-static BOOL CondorIsBaroSource(PDeviceDescriptor_t d){
-	(void)d;
-  return(TRUE);
-}
-
 
 static const DeviceRegister_t condorDevice = {
   TEXT("Condor"),
@@ -101,10 +84,10 @@ static const DeviceRegister_t condorDevice = {
   NULL,				// LinkTimeout
   NULL,				// Declare
   NULL,				// IsLogger
-  CondorIsGPSSource,		// IsGPSSource
-  CondorIsBaroSource,		// IsBaroSource
+  devIsTrueReturn,		// IsGPSSource
+  devIsTrueReturn,		// IsBaroSource
   NULL,				// IsRadio
-  CondorIsCondor,		// IsCondor
+  devIsTrueReturn,		// IsCondor
   NULL				// OnSysTicker
 };
 

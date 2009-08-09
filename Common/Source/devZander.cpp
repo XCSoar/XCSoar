@@ -62,26 +62,6 @@ static BOOL ZanderParseNMEA(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *aGP
 }
 
 
-/*
-static BOOL ZanderIsLogger(PDeviceDescriptor_t d){
-  (void)d;
-  return(FALSE);
-}
-*/
-
-
-static BOOL ZanderIsGPSSource(PDeviceDescriptor_t d){
-  (void)d;
-  return(TRUE);
-}
-
-
-static BOOL ZanderIsBaroSource(PDeviceDescriptor_t d){
-	(void)d;
-  return(TRUE);
-}
-
-
 static const DeviceRegister_t zanderDevice = {
   TEXT("Zander"),
   drfGPS | drfBaroAlt | drfSpeed | drfVario,
@@ -98,9 +78,9 @@ static const DeviceRegister_t zanderDevice = {
   NULL,				// Close
   NULL,				// LinkTimeout
   NULL,				// Declare
-  NULL,				// IsLogger
-  ZanderIsGPSSource,		// IsGPSSource
-  ZanderIsBaroSource,		// IsBaroSource
+  devIsFalseReturn,		// IsLogger
+  devIsTrueReturn,		// IsGPSSource
+  devIsTrueReturn,		// IsBaroSource
   NULL,				// IsRadio
   NULL,				// IsCondor
   NULL				// OnSysTicker

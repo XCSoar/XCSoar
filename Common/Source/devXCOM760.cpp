@@ -42,12 +42,6 @@ Copyright_License {
 #include "devXCOM760.h"
 
 
-static BOOL XCOM760IsRadio(PDeviceDescriptor_t d){
-  (void)d;
-  return(TRUE);
-}
-
-
 static BOOL XCOM760PutVolume(PDeviceDescriptor_t d, int Volume) {
   TCHAR  szTmp[32];
   _stprintf(szTmp, TEXT("$RVOL=%d\r\n"), Volume);
@@ -91,7 +85,7 @@ static const DeviceRegister_t xcom760Device = {
   NULL,				// IsLogger
   NULL,				// IsGPSSource
   NULL,				// IsBaroSource
-  XCOM760IsRadio,		// IsRadio
+  devIsTrueReturn,		// IsRadio
   NULL,				// IsCondor
   NULL,				// OnSysTicker
 };
