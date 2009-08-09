@@ -99,12 +99,9 @@ extern HWND hWndCB;
 // infoboxes
 extern int  CurrentInfoType;          // Used for Popup Menu Select
 extern int  InfoType[MAXINFOWINDOWS]; //
-extern HWND hWndInfoWindow[MAXINFOWINDOWS];
 extern int  InfoFocus;
-extern bool DisplayLocked; // if infoboxes are locked
 extern SCREEN_INFO Data_Options[];
 extern const int NUMSELECTSTRINGS;
-extern BOOL InfoBoxesHidden;
 extern int numInfoWindows;
 
 // waypoint data

@@ -177,7 +177,7 @@ Appearance_t Appearance = {
 
 TCHAR XCSoar_Version[256] = TEXT("");
 
-bool ForceShutdown = false;
+static bool ForceShutdown = false;
 
 HINSTANCE hInst; // The current instance
 //HWND hWndCB; // The command bar handle
@@ -216,7 +216,7 @@ int                                     InfoType[MAXINFOWINDOWS] =
 
 bool RequestAirspaceWarningDialog= false;
 bool RequestAirspaceWarningForce=false;
-bool                                    DisplayLocked = true;
+static bool DisplayLocked = true;
 bool                                    InfoWindowActive = true;
 bool                                    EnableAuxiliaryInfo = false;
 int                                     InfoBoxFocusTimeOut = 0;
@@ -465,7 +465,7 @@ Statistics flightstats;
 static SHACTIVATEINFO s_sai;
 #endif
 
-BOOL InfoBoxesHidden = false;
+static BOOL InfoBoxesHidden = false;
 
 void PopupBugsBallast(int updown);
 
