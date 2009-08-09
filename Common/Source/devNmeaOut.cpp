@@ -78,10 +78,6 @@ BOOL nmoPutQNH(DeviceDescriptor_t *d, double NewQNH){
   return(FALSE);
 }
 
-BOOL nmoOnSysTicker(DeviceDescriptor_t *d){
-  return(FALSE);
-}
-
 
 BOOL nmoInstall(PDeviceDescriptor_t d){
 
@@ -99,7 +95,6 @@ BOOL nmoInstall(PDeviceDescriptor_t d){
   d->IsBaroSource = nmoIsBaroSource;
   d->PutVoice = nmoPutVoice;
   d->PutQNH = nmoPutQNH;
-  d->OnSysTicker = nmoOnSysTicker;
 
   return(TRUE);
 
