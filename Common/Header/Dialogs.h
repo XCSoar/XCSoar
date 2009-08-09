@@ -69,7 +69,7 @@ void dlgFlarmTrafficShowModal(void);
 
 
 #if (WINDOWSPC>0)
-#ifdef DEBUG
+#ifndef NDEBUG
 //#define DEBUG_TRANSLATIONS
 #pragma warning( disable : 4786 )
 #endif

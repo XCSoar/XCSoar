@@ -72,7 +72,7 @@ Copyright_License {
 #include <wingdi.h>
 #endif
 
-#ifdef DEBUG
+#ifndef NDEBUG
 #if (WINDOWSPC<1)
 #define DRAWLOAD
 extern HFONT  MapWindowFont;
@@ -402,7 +402,7 @@ void MapWindow::DrawFLARMTraffic(HDC hDC, RECT rc, POINT Orig_Aircraft) {
 	label_avg[0]= _T('\0');
       }
 
-#ifdef DEBUG
+#ifndef NDEBUG
       // for testing only!
       _stprintf(label_avg, TEXT("2.3"));
       _stprintf(label_name, TEXT("WUE"));

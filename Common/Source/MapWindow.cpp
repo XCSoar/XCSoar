@@ -74,7 +74,7 @@ Copyright_License {
 
 int misc_tick_count=0;
 
-#ifdef DEBUG
+#ifndef NDEBUG
 #define DRAWLOAD
 #define DEBUG_VIRTUALKEYS
 #endif

@@ -219,7 +219,7 @@ LPTSTR fromXMLString(LPCTSTR s, int lo)
                 ASSERT(d);
                 d[ll]=0;
                 while(ll--) d[ll]=s[ll];
-#ifdef DEBUG
+#ifndef NDEBUG
 #ifdef _UNICODE
                     printf("unknown escape character: '&%S'",d);
 #else
@@ -1378,7 +1378,7 @@ XMLNode XMLNode::openFileHelper(const char *lpszXML, LPCTSTR tag)
     XMLNode xnode=XMLNode::parseFile(lpszXML, tag, &pResults);
     if (pResults.error != eXMLErrorNone)
     {
-#ifdef DEBUG
+#ifndef NDEBUG
         printf(
             "XML Parsing error inside file '%s'.\n"
 #ifdef _UNICODE

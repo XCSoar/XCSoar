@@ -377,7 +377,7 @@ void ReadAirspace(ZZIP_FILE *fp)
 
   }
 
-#ifdef DEBUG
+#ifndef NDEBUG
   // only do this if debugging
   DumpAirspaceFile();
 #endif
@@ -2349,7 +2349,7 @@ void ScanAirspaceLine_old(double *lats, double *lons, double *heights,
 #endif
 
 
-#ifdef DEBUG
+#ifndef NDEBUG
 void DumpAirspaceFile(void){
 
   FILE * fp;

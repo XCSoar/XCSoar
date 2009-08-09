@@ -1455,7 +1455,7 @@ StartupStore(nTmp);
   #endif
 #endif
 
-#ifdef DEBUG
+#ifndef NDEBUG
   DebugStore("# Start\r\n");
 #endif
 
@@ -2740,7 +2740,7 @@ void Shutdown(void) {
   StartupStore(TEXT("Finished shutdown\n"));
   StopHourglassCursor();
 
-#ifdef DEBUG
+#ifndef NDEBUG
   TCHAR foop[80];
   TASK_POINT wp;
   TASK_POINT *wpr = &wp;
@@ -3751,7 +3751,7 @@ void SIMProcessTimer(void)
 
   if (i%2==0) return;
 
-#ifdef DEBUG
+#ifndef NDEBUG
   // use this to test FLARM parsing/display
 #ifndef GNAV
   NMEAParser::TestRoutine(&GPS_INFO);

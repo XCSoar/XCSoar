@@ -1029,7 +1029,7 @@ BOOL NMEAParser::PFLAA(TCHAR *String, TCHAR **params, size_t nparams, NMEA_INFO 
 //////
 
 void NMEAParser::TestRoutine(NMEA_INFO *GPS_INFO) {
-#ifdef DEBUG
+#ifndef NDEBUG
 #ifndef GNAV
   static int i=90;
   static TCHAR t1[] = TEXT("1,1,1,1");

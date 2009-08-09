@@ -66,7 +66,7 @@ Copyright_License {
 //////////
 #define DEGTORAD (M_PI/180.0)
 
-#ifdef DEBUG
+#ifndef NDEBUG
 #define DEBUG_ZIGZAG
 #endif
 

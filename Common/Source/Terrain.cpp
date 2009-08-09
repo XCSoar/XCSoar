@@ -506,7 +506,7 @@ void ColorRampLookup(const short h,
 
   /* Monochrome
 
-#ifdef DEBUG
+#ifndef NDEBUG
   r = 0xDA;
   g = 0xDA;
   b = 0xDA;
@@ -852,7 +852,7 @@ public:
 
   void ScanSpotHeights(const int X0, const int Y0, const int X1, const int Y1) {
     unsigned short* myhbuf = hBuf;
-#ifdef DEBUG
+#ifndef NDEBUG
     unsigned short* hBufTop = hBuf+ixs*iys;
 #endif
 
@@ -896,7 +896,7 @@ public:
   void FillHeightBuffer(const int X0, const int Y0, const int X1, const int Y1) {
     // fill the buffer
     unsigned short* myhbuf = hBuf;
-#ifdef DEBUG
+#ifndef NDEBUG
     unsigned short* hBufTop = hBuf+ixs*iys;
 #endif
 
@@ -969,7 +969,7 @@ public:
 
     short h;
 
-#ifdef DEBUG
+#ifndef NDEBUG
     unsigned short* hBufTop = hBuf+cixs*ciys;
 #endif
 
