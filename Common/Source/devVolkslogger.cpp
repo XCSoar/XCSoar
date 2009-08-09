@@ -297,26 +297,28 @@ BOOL VLIsGPSSource(PDeviceDescriptor_t d){
 }
 
 
-BOOL vlInstall(PDeviceDescriptor_t d){
-  d->ParseNMEA = VLParseNMEA;
-  d->PutMacCready = NULL;
-  d->PutBugs = NULL;
-  d->PutBallast = NULL;
-  d->Open = NULL;
-  d->Close = NULL;
-  d->Declare = VLDeclare;
-  d->IsLogger = VLIsLogger;
-  d->IsGPSSource = VLIsGPSSource;
-
-  return(TRUE);
-
-}
-
-
 static const DeviceRegister_t vlDevice = {
   TEXT("Volkslogger"),
   drfGPS | drfBaroAlt | drfLogger,
-  vlInstall
+  VLParseNMEA,			// ParseNMEA
+  NULL,				// PutMacCready
+  NULL,				// PutBugs
+  NULL,				// PutBallast
+  NULL,				// PutQNH
+  NULL,				// PutVoice
+  NULL,				// PutVolume
+  NULL,				// PutFreqActive
+  NULL,				// PutFreqStandby
+  NULL,				// Open
+  NULL,				// Close
+  NULL,				// LinkTimeout
+  VLDeclare,			// Declare
+  VLIsLogger,			// IsLogger
+  VLIsGPSSource,		// IsGPSSource
+  NULL,				// IsBaroSource
+  NULL,				// IsRadio
+  NULL,				// IsCondor
+  NULL				// OnSysTicker
 };
 
 BOOL vlRegister(void){

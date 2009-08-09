@@ -270,28 +270,28 @@ BOOL EWMicroRecorderIsTrue(PDeviceDescriptor_t d){
 }
 
 
-BOOL ewMicroRecorderInstall(PDeviceDescriptor_t d){
-  d->ParseNMEA = EWMicroRecorderParseNMEA;
-  d->PutMacCready = NULL;
-  d->PutBugs = NULL;
-  d->PutBallast = NULL;
-  d->Open = NULL;
-  d->Close = NULL;
-  d->LinkTimeout = NULL;
-  d->Declare = EWMicroRecorderDeclare;
-  d->IsLogger = EWMicroRecorderIsTrue;
-  d->IsGPSSource = EWMicroRecorderIsTrue;
-  d->IsBaroSource = EWMicroRecorderIsTrue;
-
-  return(TRUE);
-
-}
-
-
 static const DeviceRegister_t ewMicroRecorderDevice = {
   TEXT("EW MicroRecorder"),
   drfGPS | drfLogger | drfBaroAlt,
-  ewMicroRecorderInstall
+  EWMicroRecorderParseNMEA,	// ParseNMEA
+  NULL,				// PutMacCready
+  NULL,				// PutBugs
+  NULL,				// PutBallast
+  NULL,				// PutQNH
+  NULL,				// PutVoice
+  NULL,				// PutVolume
+  NULL,				// PutFreqActive
+  NULL,				// PutFreqStandby
+  NULL,				// Open
+  NULL,				// Close
+  NULL,				// LinkTimeout
+  EWMicroRecorderDeclare,	// Declare
+  EWMicroRecorderIsTrue,	// IsLogger
+  EWMicroRecorderIsTrue,	// IsGPSSource
+  EWMicroRecorderIsTrue,	// IsBaroSource
+  NULL,				// IsRadio
+  NULL,				// IsCondor
+  NULL				// OnSysTicker
 };
 
 BOOL ewMicroRecorderRegister(void){

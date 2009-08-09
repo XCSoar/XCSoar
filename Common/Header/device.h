@@ -73,10 +73,28 @@ void VarioWriteNMEA(const TCHAR *Text);
 void VarioWriteSettings(void);
 PDeviceDescriptor_t devVarioFindVega(void);
 
-typedef	struct{
-  const TCHAR	         *Name;
-  unsigned int		 Flags;
-  BOOL   (*Installer)(PDeviceDescriptor_t d);
+typedef	struct {
+  const TCHAR	*Name;
+  unsigned int	Flags;
+  BOOL (*ParseNMEA)(DeviceDescriptor_t *d, TCHAR *String, NMEA_INFO *GPS_INFO);
+  BOOL (*PutMacCready)(DeviceDescriptor_t *d, double McReady);
+  BOOL (*PutBugs)(DeviceDescriptor_t *d, double	Bugs);
+  BOOL (*PutBallast)(DeviceDescriptor_t	*d, double Ballast);
+  BOOL (*PutQNH)(DeviceDescriptor_t *d, double NewQNH);
+  BOOL (*PutVoice)(DeviceDescriptor_t *d, TCHAR *Sentence);
+  BOOL (*PutVolume)(DeviceDescriptor_t *d, int Volume);
+  BOOL (*PutFreqActive)(DeviceDescriptor_t *d, double Freq);
+  BOOL (*PutFreqStandby)(DeviceDescriptor_t *d, double Standby);
+  BOOL (*Open)(DeviceDescriptor_t *d, int Port);
+  BOOL (*Close)(DeviceDescriptor_t *d);
+  BOOL (*LinkTimeout)(DeviceDescriptor_t *d);
+  BOOL (*Declare)(DeviceDescriptor_t *d, Declaration_t *decl);
+  BOOL (*IsLogger)(DeviceDescriptor_t *d);
+  BOOL (*IsGPSSource)(DeviceDescriptor_t *d);
+  BOOL (*IsBaroSource)(DeviceDescriptor_t *d);
+  BOOL (*IsRadio)(DeviceDescriptor_t *d);
+  BOOL (*IsCondor)(DeviceDescriptor_t	*d);
+  BOOL (*OnSysTicker)(DeviceDescriptor_t *d);
 } DeviceRegister_t;
 
 

@@ -191,7 +191,25 @@ BOOL devInitOne(PDeviceDescriptor_t dev, int index, const TCHAR *port,
     memset(dev->Name, 0, sizeof(dev->Name));
     _tcsncpy(dev->Name, Driver->Name, DEVNAMESIZE);
 
-    Driver->Installer(dev);
+    dev->ParseNMEA = Driver->ParseNMEA;
+    dev->PutMacCready = Driver->PutMacCready;
+    dev->PutBugs = Driver->PutBugs;
+    dev->PutBallast = Driver->PutBallast;
+    dev->PutQNH = Driver->PutQNH;
+    dev->PutVoice = Driver->PutVoice;
+    dev->PutVolume = Driver->PutVolume;
+    dev->PutFreqActive = Driver->PutFreqActive;
+    dev->PutFreqStandby = Driver->PutFreqStandby;
+    dev->Open = Driver->Open;
+    dev->Close = Driver->Close;
+    dev->LinkTimeout = Driver->LinkTimeout;
+    dev->Declare = Driver->Declare;
+    dev->IsLogger = Driver->IsLogger;
+    dev->IsGPSSource = Driver->IsGPSSource;
+    dev->IsBaroSource = Driver->IsBaroSource;
+    dev->IsRadio = Driver->IsRadio;
+    dev->IsCondor = Driver->IsCondor;
+    dev->OnSysTicker = Driver->OnSysTicker;
 
     dev->Com = Com;
 

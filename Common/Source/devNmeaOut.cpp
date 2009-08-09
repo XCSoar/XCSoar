@@ -79,31 +79,28 @@ BOOL nmoPutQNH(DeviceDescriptor_t *d, double NewQNH){
 }
 
 
-BOOL nmoInstall(PDeviceDescriptor_t d){
-
-  d->ParseNMEA = nmoParseNMEA;
-  d->PutMacCready = NULL;
-  d->PutBugs = NULL;
-  d->PutBallast = NULL;
-  d->Open = NULL;
-  d->Close = NULL;
-  d->LinkTimeout = NULL;
-  d->Declare = NULL;
-  d->IsLogger = nmoIsLogger;
-  d->IsGPSSource = nmoIsGPSSource;
-  d->IsBaroSource = nmoIsBaroSource;
-  d->PutVoice = nmoPutVoice;
-  d->PutQNH = nmoPutQNH;
-
-  return(TRUE);
-
-}
-
-
 static const DeviceRegister_t nmoDevice = {
   TEXT("NmeaOut"),
   drfNmeaOut,
-  nmoInstall
+  nmoParseNMEA,			// ParseNMEA
+  NULL,				// PutMacCready
+  NULL,				// PutBugs
+  NULL,				// PutBallast
+  nmoPutQNH,			// PutQNH
+  nmoPutVoice,			// PutVoice
+  NULL,				// PutVolume
+  NULL,				// PutFreqActive
+  NULL,				// PutFreqStandby
+  NULL,				// Open
+  NULL,				// Close
+  NULL,				// LinkTimeout
+  NULL,				// Declare
+  nmoIsLogger,			// IsLogger
+  nmoIsGPSSource,		// IsGPSSource
+  nmoIsBaroSource,		// IsBaroSource
+  NULL,				// IsRadio
+  NULL,				// IsCondor
+  NULL				// OnSysTicker
 };
 
 BOOL nmoRegister(void){

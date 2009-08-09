@@ -84,28 +84,28 @@ static BOOL CondorIsBaroSource(PDeviceDescriptor_t d){
 }
 
 
-static BOOL condorInstall(PDeviceDescriptor_t d){
-
-  d->ParseNMEA = CondorParseNMEA;
-  d->PutMacCready = NULL;
-  d->PutBugs = NULL;
-  d->PutBallast = NULL;
-  d->Open = NULL;
-  d->Close = NULL;
-  d->Declare = NULL;
-  d->IsGPSSource = CondorIsGPSSource;
-  d->IsBaroSource = CondorIsBaroSource;
-  d->IsCondor = CondorIsCondor;
-
-  return(TRUE);
-
-}
-
-
 static const DeviceRegister_t condorDevice = {
   TEXT("Condor"),
   drfGPS | drfBaroAlt | drfSpeed | drfVario | drfCondor,
-  condorInstall
+  CondorParseNMEA,		// ParseNMEA
+  NULL,				// PutMacCready
+  NULL,				// PutBugs
+  NULL,				// PutBallast
+  NULL,				// PutQNH
+  NULL,				// PutVoice
+  NULL,				// PutVolume
+  NULL,				// PutFreqActive
+  NULL,				// PutFreqStandby
+  NULL,				// Open
+  NULL,				// Close
+  NULL,				// LinkTimeout
+  NULL,				// Declare
+  NULL,				// IsLogger
+  CondorIsGPSSource,		// IsGPSSource
+  CondorIsBaroSource,		// IsBaroSource
+  NULL,				// IsRadio
+  CondorIsCondor,		// IsCondor
+  NULL				// OnSysTicker
 };
 
 BOOL condorRegister(void){

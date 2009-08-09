@@ -131,30 +131,28 @@ BOOL atrOnSysTicker(DeviceDescriptor_t *d){
   return(TRUE);
 }
 
-BOOL atrInstall(PDeviceDescriptor_t d){
-  d->ParseNMEA = atrParseNMEA;
-  d->PutMacCready = NULL;
-  d->PutBugs = NULL;
-  d->PutBallast = NULL;
-  d->Open = NULL;
-  d->Close = NULL;
-  d->LinkTimeout = NULL;
-  d->Declare = atrDeclare;
-  d->IsLogger = atrIsLogger;
-  d->IsGPSSource = atrIsGPSSource;
-  d->IsBaroSource = atrIsBaroSource;
-  d->PutQNH = atrPutQNH;
-  d->OnSysTicker = atrOnSysTicker;
-
-  return(TRUE);
-
-}
-
-
 static const DeviceRegister_t atrDevice = {
   TEXT("Altair Pro"),
   drfGPS | drfBaroAlt, // drfLogger - ToDo
-  atrInstall
+  atrParseNMEA,			// ParseNMEA
+  NULL,				// PutMacCready
+  NULL,				// PutBugs
+  NULL,				// PutBallast
+  atrPutQNH,			// PutQNH
+  NULL,				// PutVoice
+  NULL,				// PutVolume
+  NULL,				// PutFreqActive
+  NULL,				// PutFreqStandby
+  NULL,				// Open
+  NULL,				// Close
+  NULL,				// LinkTimeout
+  atrDeclare,			// Declare
+  atrIsLogger,			// IsLogger
+  atrIsGPSSource,		// IsGPSSource
+  atrIsBaroSource,		// IsBaroSource
+  NULL,				// IsRadio
+  NULL,				// IsCondor
+  atrOnSysTicker		// OnSysTicker
 };
 
 BOOL atrRegister(void){

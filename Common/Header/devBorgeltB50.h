@@ -2,14 +2,9 @@
 #define DEVB50_H
 
 #include <windows.h>
-
 #include "Sizes.h"
-
 #include "MapWindow.h"
-
 #include "device.h"
-
-BOOL b50Install(PDeviceDescriptor_t d);
 
 BOOL b50Register(void);
 

@@ -4,12 +4,9 @@
 #include <windows.h>
 #include "Sizes.h"
 #include "MapWindow.h"
-
 #include "device.h"
 
-BOOL caiGpsNavInstall(PDeviceDescriptor_t d);
 BOOL caiGpsNavRegister(void);
-
 
 #endif
 

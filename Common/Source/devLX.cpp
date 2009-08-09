@@ -86,27 +86,28 @@ static BOOL LXIsBaroSource(PDeviceDescriptor_t d){
 }
 
 
-static BOOL lxInstall(PDeviceDescriptor_t d){
-
-  d->ParseNMEA = LXParseNMEA;
-  d->PutMacCready = NULL;
-  d->PutBugs = NULL;
-  d->PutBallast = NULL;
-  d->Open = NULL;
-  d->Close = NULL;
-  d->Declare = NULL;
-  d->IsGPSSource = LXIsGPSSource;
-  d->IsBaroSource = LXIsBaroSource;
-
-  return(TRUE);
-
-}
-
-
 static const DeviceRegister_t lxDevice = {
   TEXT("LX"),
   drfGPS | drfBaroAlt | drfSpeed | drfVario,
-  lxInstall
+  LXParseNMEA,			// ParseNMEA
+  NULL,				// PutMacCready
+  NULL,				// PutBugs
+  NULL,				// PutBallast
+  NULL,				// PutQNH
+  NULL,				// PutVoice
+  NULL,				// PutVolume
+  NULL,				// PutFreqActive
+  NULL,				// PutFreqStandby
+  NULL,				// Open
+  NULL,				// Close
+  NULL,				// LinkTimeout
+  NULL,				// Declare
+  NULL,				// IsLogger
+  LXIsGPSSource,		// IsGPSSource
+  LXIsBaroSource,		// IsBaroSource
+  NULL,				// IsRadio
+  NULL,				// IsCondor
+  NULL				// OnSysTicker
 };
 
 BOOL lxRegister(void){

@@ -99,28 +99,28 @@ BOOL PGIsBaroSource(PDeviceDescriptor_t d){
   return(TRUE);
 }
 
-BOOL pgInstall(PDeviceDescriptor_t d){
-
-  d->ParseNMEA = PGParseNMEA;
-  d->PutMacCready = NULL;
-  d->PutBugs = NULL;
-  d->PutBallast = NULL;
-  d->Open = NULL;
-  d->Close = NULL;
-  d->Declare = PGDeclare;
-  d->IsLogger = PGIsLogger;
-  d->IsGPSSource = PGIsGPSSource;
-  d->IsBaroSource = PGIsBaroSource;
-
-  return(TRUE);
-
-}
-
-
 static const DeviceRegister_t pgDevice = {
   TEXT("PosiGraph Logger"),
   drfGPS | drfBaroAlt | drfLogger,
-  pgInstall
+  PGParseNMEA,			// ParseNMEA
+  NULL,				// PutMacCready
+  NULL,				// PutBugs
+  NULL,				// PutBallast
+  NULL,				// PutQNH
+  NULL,				// PutVoice
+  NULL,				// PutVolume
+  NULL,				// PutFreqActive
+  NULL,				// PutFreqStandby
+  NULL,				// Open
+  NULL,				// Close
+  NULL,				// LinkTimeout
+  PGDeclare,			// Declare
+  PGIsLogger,			// IsLogger
+  PGIsGPSSource,		// IsGPSSource
+  PGIsBaroSource,		// IsBaroSource
+  NULL,				// IsRadio
+  NULL,				// IsCondor
+  NULL				// OnSysTicker
 };
 
 BOOL pgRegister(void){

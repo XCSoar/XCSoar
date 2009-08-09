@@ -1,4 +1,3 @@
-
 #ifndef	DEVGENERIC_H
 #define	DEVGENERIC_H
 
@@ -7,7 +6,6 @@
 #include "MapWindow.h"
 #include "device.h"
 
-BOOL genInstall(PDeviceDescriptor_t d);
 BOOL genRegister(void);
 
 #endif

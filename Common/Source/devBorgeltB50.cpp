@@ -68,27 +68,28 @@ BOOL B50IsGPSSource(PDeviceDescriptor_t d){
   return(TRUE); // ? is this true
 }
 
-
-BOOL b50Install(PDeviceDescriptor_t d){
-
-  d->ParseNMEA = B50ParseNMEA;
-  d->PutMacCready = NULL;
-  d->PutBugs = NULL;
-  d->PutBallast = NULL;
-  d->Open = NULL;
-  d->Close = NULL;
-  d->Declare = NULL;
-  d->IsGPSSource = B50IsGPSSource;
-
-  return(TRUE);
-
-}
-
-
 static const DeviceRegister_t b50Device = {
   TEXT("Borgelt B50"),
   drfGPS,
-  b50Install
+  B50ParseNMEA,			// ParseNMEA
+  NULL,				// PutMacCready
+  NULL,				// PutBugs
+  NULL,				// PutBallast
+  NULL,				// PutQNH
+  NULL,				// PutVoice
+  NULL,				// PutVolume
+  NULL,				// PutFreqActive
+  NULL,				// PutFreqStandby
+  NULL,				// Open
+  NULL,				// Close
+  NULL,				// LinkTimeout
+  NULL,				// Declare
+  NULL,				// IsLogger
+  B50IsGPSSource,		// IsGPSSource
+  NULL,				// IsBaroSource
+  NULL,				// IsRadio
+  NULL,				// IsCondor
+  NULL				// OnSysTicker
 };
 
 BOOL b50Register(void){

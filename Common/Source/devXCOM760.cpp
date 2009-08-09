@@ -72,21 +72,28 @@ static BOOL XCOM760PutFreqStandby(PDeviceDescriptor_t d, double Freq) {
 }
 
 
-static BOOL XCOM760Install(PDeviceDescriptor_t d){
-
-  d->IsRadio = XCOM760IsRadio;
-  d->PutVolume = XCOM760PutVolume;
-  d->PutFreqActive = XCOM760PutFreqActive;
-  d->PutFreqStandby = XCOM760PutFreqStandby;
-  return(TRUE);
-
-}
-
-
 static const DeviceRegister_t xcom760Device = {
   TEXT("XCOM760"),
   drfRadio,
-  XCOM760Install
+  NULL,				// ParseNMEA
+  NULL,				// PutMacCready
+  NULL,				// PutBugs
+  NULL,				// PutBallast
+  NULL,				// PutQNH
+  NULL,				// PutVoice
+  XCOM760PutVolume,		// PutVolume
+  XCOM760PutFreqActive,		// PutFreqActive
+  XCOM760PutFreqStandby,	// PutFreqStandby
+  NULL,				// Open
+  NULL,				// Close
+  NULL,				// LinkTimeout
+  NULL,				// Declare
+  NULL,				// IsLogger
+  NULL,				// IsGPSSource
+  NULL,				// IsBaroSource
+  XCOM760IsRadio,		// IsRadio
+  NULL,				// IsCondor
+  NULL,				// OnSysTicker
 };
 
 BOOL xcom760Register(void){

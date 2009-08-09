@@ -82,27 +82,28 @@ static BOOL ZanderIsBaroSource(PDeviceDescriptor_t d){
 }
 
 
-static BOOL zanderInstall(PDeviceDescriptor_t d){
-
-  d->ParseNMEA = ZanderParseNMEA;
-  d->PutMacCready = NULL;
-  d->PutBugs = NULL;
-  d->PutBallast = NULL;
-  d->Open = NULL;
-  d->Close = NULL;
-  d->Declare = NULL;
-  d->IsGPSSource = ZanderIsGPSSource;
-  d->IsBaroSource = ZanderIsBaroSource;
-
-  return(TRUE);
-
-}
-
-
 static const DeviceRegister_t zanderDevice = {
   TEXT("Zander"),
   drfGPS | drfBaroAlt | drfSpeed | drfVario,
-  zanderInstall
+  ZanderParseNMEA,		// ParseNMEA
+  NULL,				// PutMacCready
+  NULL,				// PutBugs
+  NULL,				// PutBallast
+  NULL,				// PutQNH
+  NULL,				// PutVoice
+  NULL,				// PutVolume
+  NULL,				// PutFreqActive
+  NULL,				// PutFreqStandby
+  NULL,				// Open
+  NULL,				// Close
+  NULL,				// LinkTimeout
+  NULL,				// Declare
+  NULL,				// IsLogger
+  ZanderIsGPSSource,		// IsGPSSource
+  ZanderIsBaroSource,		// IsBaroSource
+  NULL,				// IsRadio
+  NULL,				// IsCondor
+  NULL				// OnSysTicker
 };
 
 BOOL zanderRegister(void){

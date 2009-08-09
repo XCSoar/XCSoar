@@ -74,27 +74,28 @@ static BOOL FlymasterF1IsBaroSource(PDeviceDescriptor_t d){
 }
 
 
-static BOOL flymasterf1Install(PDeviceDescriptor_t d){
-
-  d->ParseNMEA = FlymasterF1ParseNMEA;
-  d->PutMacCready = NULL;
-  d->PutBugs = NULL;
-  d->PutBallast = NULL;
-  d->Open = NULL;
-  d->Close = NULL;
-  d->Declare = NULL;
-  d->IsGPSSource = FlymasterF1IsGPSSource;
-  d->IsBaroSource = FlymasterF1IsBaroSource;
-
-  return(TRUE);
-
-}
-
-
 static const DeviceRegister_t flymasterf1Device = {
   TEXT("FlymasterF1"),
   drfGPS | drfBaroAlt | drfVario,
-  flymasterf1Install
+  FlymasterF1ParseNMEA,		// ParseNMEA
+  NULL,				// PutMacCready
+  NULL,				// PutBugs
+  NULL,				// PutBallast
+  NULL,				// PutQNH
+  NULL,				// PutVoice
+  NULL,				// PutVolume
+  NULL,				// PutFreqActive
+  NULL,				// PutFreqStandby
+  NULL,				// Open
+  NULL,				// Close
+  NULL,				// LinkTimeout
+  NULL,				// Declare
+  NULL,				// IsLogger
+  FlymasterF1IsGPSSource,	// IsGPSSource
+  FlymasterF1IsBaroSource,	// IsBaroSource
+  NULL,				// IsRadio
+  NULL,				// IsCondor
+  NULL				// OnSysTicker
 };
 
 BOOL flymasterf1Register(void){

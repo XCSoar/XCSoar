@@ -99,28 +99,28 @@ BOOL caiGpsNavIsGPSSource(PDeviceDescriptor_t d){
 }
 
 
-BOOL caiGpsNavInstall(PDeviceDescriptor_t d){
-
-  d->ParseNMEA = NULL;
-  d->PutMacCready = NULL;
-  d->PutBugs = NULL;
-  d->PutBallast = NULL;
-  d->Open = caiGpsNavOpen;
-  d->Close = NULL;
-  d->LinkTimeout = NULL;
-  d->Declare = NULL;
-  d->IsLogger = caiGpsNavIsLogger;
-  d->IsGPSSource = caiGpsNavIsGPSSource;
-
-  return(TRUE);
-
-}
-
-
 static const DeviceRegister_t caiGpsNavDevice = {
   TEXT("CAI GPS-NAV"),
   drfGPS,
-  caiGpsNavInstall
+  NULL,				// ParseNMEA
+  NULL,				// PutMacCready
+  NULL,				// PutBugs
+  NULL,				// PutBallast
+  NULL,				// PutQNH
+  NULL,				// PutVoice
+  NULL,				// PutVolume
+  NULL,				// PutFreqActive
+  NULL,				// PutFreqStandby
+  caiGpsNavOpen,		// Open
+  NULL,				// Close
+  NULL,				// LinkTimeout
+  NULL,				// Declare
+  caiGpsNavIsLogger,		// IsLogger
+  caiGpsNavIsGPSSource,		// IsGPSSource
+  NULL,				// IsBaroSource
+  NULL,				// IsRadio
+  NULL,				// IsCondor
+  NULL				// OnSysTicker
 };
 
 BOOL caiGpsNavRegister(void){

@@ -525,28 +525,28 @@ BOOL cai302IsGPSSource(PDeviceDescriptor_t d){
 }
 
 
-BOOL cai302Install(PDeviceDescriptor_t d){
-
-  d->ParseNMEA = cai302ParseNMEA;
-  d->PutMacCready = cai302PutMacCready;
-  d->PutBugs = cai302PutBugs;
-  d->PutBallast = cai302PutBallast;
-  d->Open = cai302Open;
-  d->Close = NULL;
-  d->LinkTimeout = NULL;
-  d->Declare = cai302Declare;
-  d->IsLogger = cai302IsLogger;
-  d->IsGPSSource = cai302IsGPSSource;
-
-  return(TRUE);
-
-}
-
-
 static const DeviceRegister_t cai302Device = {
   TEXT("CAI 302"),
   drfGPS | drfLogger | drfSpeed | drfVario | drfBaroAlt | drfWind,
-  cai302Install
+  cai302ParseNMEA,		// ParseNMEA
+  cai302PutMacCready,		// PutMacCready
+  cai302PutBugs,		// PutBugs
+  cai302PutBallast,		// PutBallast
+  NULL,				// PutQNH
+  NULL,				// PutVoice
+  NULL,				// PutVolume
+  NULL,				// PutFreqActive
+  NULL,				// PutFreqStandby
+  cai302Open,			// Open
+  NULL,				// Close
+  NULL,				// LinkTimeout
+  cai302Declare,		// Declare
+  cai302IsLogger,		// IsLogger
+  cai302IsGPSSource,		// IsGPSSource
+  NULL,				// IsBaroSource
+  NULL,				// IsRadio
+  NULL,				// IsCondor
+  NULL				// OnSysTicker
 };
 
 BOOL cai302Register(void){

@@ -461,32 +461,28 @@ BOOL vgaOnSysTicker(DeviceDescriptor_t *d){
 }
 
 
-BOOL vgaInstall(PDeviceDescriptor_t d){
-
-  d->ParseNMEA = vgaParseNMEA;
-  d->PutMacCready = NULL;
-  d->PutBugs = NULL;
-  d->PutBallast = NULL;
-  d->Open = NULL;
-  d->Close = NULL;
-  d->LinkTimeout = NULL;
-  d->Declare = vgaDeclare;
-  d->IsLogger = vgaIsLogger;
-  d->IsGPSSource = vgaIsGPSSource;
-  d->IsBaroSource = vgaIsBaroSource;
-  d->PutVoice = vgaPutVoice;
-  d->PutQNH = vgaPutQNH;
-  d->OnSysTicker = vgaOnSysTicker;
-
-  return(TRUE);
-
-}
-
-
 static const DeviceRegister_t vgaDevice = {
   TEXT("Vega"),
   drfGPS | drfBaroAlt | drfSpeed | drfVario, // drfLogger if FLARM connected
-  vgaInstall
+  vgaParseNMEA,			// ParseNMEA
+  NULL,				// PutMacCready
+  NULL,				// PutBugs
+  NULL,				// PutBallast
+  vgaPutQNH,			// PutQNH
+  vgaPutVoice,			// PutVoice
+  NULL,				// PutVolume
+  NULL,				// PutFreqActive
+  NULL,				// PutFreqStandby
+  NULL,				// Open
+  NULL,				// Close
+  NULL,				// LinkTimeout
+  vgaDeclare,			// Declare
+  vgaIsLogger,			// IsLogger
+  vgaIsGPSSource,		// IsGPSSource
+  vgaIsBaroSource,		// IsBaroSource
+  NULL,				// IsRadio
+  NULL,				// IsCondor
+  vgaOnSysTicker		// OnSysTicker
 };
 
 BOOL vgaRegister(void){
