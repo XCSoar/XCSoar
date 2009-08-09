@@ -3,9 +3,6 @@
 #include "StdAfx.h"
 #include "Parser.h"
 
-extern HWND hWndFLARMWindow;
-
-
 class GaugeFLARM {
  public:
   static void Create();
@@ -20,6 +17,7 @@ class GaugeFLARM {
   static void TrafficPresent(bool traffic);
   static bool ForceVisible;
  private:
+  static HWND hWndFLARMWindow;
   static HDC hdcScreen;
   static HDC hdcDrawWindow;
   static HDC hdcTemp;

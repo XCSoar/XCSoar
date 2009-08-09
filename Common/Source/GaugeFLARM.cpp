@@ -43,7 +43,7 @@ extern HFONT  TitleWindowFont;
 bool EnableFLARMGauge = true;
 DWORD EnableFLARMMap = 1;
 
-HWND hWndFLARMWindow = NULL; //FLARM Window
+HWND GaugeFLARM::hWndFLARMWindow = NULL; //FLARM Window
 
 extern HWND hWndMainWindow; // Main Windows
 extern HINSTANCE hInst;      // The current instance
