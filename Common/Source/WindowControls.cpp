@@ -1357,7 +1357,6 @@ WindowControl::WindowControl(WindowControl *Owner,
   mY = Y;
   mWidth = Width;
   mHeight = Height;
-  mParent = Parent;
   mOwner = Owner;
   // setup Master Window (the owner of all)
   mTopOwner = Owner;
@@ -1370,8 +1369,8 @@ WindowControl::WindowControl(WindowControl *Owner,
   mCaption[0] = '\0';
   mDontPaintSelector = false;
 
-  if ((mParent == NULL) && (mOwner != NULL))
-    mParent = mOwner->GetClientAreaHandle();
+  if ((Parent == NULL) && (mOwner != NULL))
+    Parent = mOwner->GetClientAreaHandle();
 
   if (Name != NULL)
     _tcscpy(mName, Name);  // todo size check
@@ -1392,14 +1391,14 @@ WindowControl::WindowControl(WindowControl *Owner,
 
   Style = WS_CHILD | WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
 
-  if (mParent == NULL)
+  if (Parent == NULL)
     Style |= WS_POPUP;
 
   mHWnd = CreateWindow(TEXT("STATIC"), TEXT("\0"),
 		     Style,
 		     mX, mY,
 		     mWidth, mHeight,
-		     mParent, NULL, hInst, NULL);
+		     Parent, NULL, hInst, NULL);
 
   SetWindowPos(mHWnd, HWND_TOP,
 		     mX, mY,
@@ -3154,7 +3153,9 @@ int WndProperty::WndProcEditControl(HWND hwnd, UINT uMsg,
       }
 
       if (wParam == VK_UP || wParam == VK_DOWN){
-        PostMessage(GetParent(), uMsg, wParam, lParam);
+        WindowControl *owner = GetOwner();
+        if (owner != NULL)
+          PostMessage(owner->GetClientAreaHandle(), uMsg, wParam, lParam);
 	// pass the message to the parent window;
         return(0);
         // return(1);

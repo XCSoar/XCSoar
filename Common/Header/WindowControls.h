@@ -546,7 +546,6 @@ class WindowControl {
     int mWidth;
     int mHeight;
 
-    HWND mParent;
     WindowControl *mOwner;
     WindowControl *mTopOwner;
     HDC  mHdc;
@@ -686,7 +685,6 @@ class WindowControl {
 
     HWND GetHandle(void){return(mHWnd);};
     virtual HWND GetClientAreaHandle(void){return(mHWnd);};
-    HWND GetParent(void){return(mParent);};
     HDC  GetDeviceContext(void){return(mHdc);};
     HDC  GetTempDeviceContext(void){return(mHdcTemp);};
     WindowControl *GetOwner(void){return(mOwner);};
