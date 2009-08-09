@@ -77,10 +77,6 @@ BOOL ComPort::Initialize(LPCTSTR lpszPortName, DWORD dwPortSpeed)
   DWORD dwError;
   DCB PortDCB;
 
-#ifdef _SIM_
-  return FALSE;
-#endif
-
   if (lpszPortName) {
     _tcscpy(sPortName, lpszPortName);
   }

@@ -56,29 +56,20 @@ Copyright_License {
 
 #include "devCaiGpsNav.h"
 
-#ifdef _SIM_
-static BOOL fSimMode = TRUE;
-#else
-static BOOL fSimMode = FALSE;
-#endif
-
-
 #define  CtrlC  0x03
 #define  swap(x)      x = ((((x<<8) & 0xff00) | ((x>>8) & 0x00ff)) & 0xffff)
 
 
 BOOL caiGpsNavOpen(PDeviceDescriptor_t d, int Port){
 
-  if (!fSimMode){
-	  d->Com->WriteString(TEXT("\x03"));
-	  Sleep(50);
-	  d->Com->WriteString(TEXT("NMEA\r"));
+  d->Com->WriteString(TEXT("\x03"));
+  Sleep(50);
+  d->Com->WriteString(TEXT("NMEA\r"));
 
-	  // This is for a slightly different mode, that
-	  // apparently outputs pressure info too...
-	  //(d->Com.WriteString)(TEXT("PNP\r\n"));
-	  //(d->Com.WriteString)(TEXT("LOG 0\r\n"));
-  }
+  // This is for a slightly different mode, that
+  // apparently outputs pressure info too...
+  //(d->Com.WriteString)(TEXT("PNP\r\n"));
+  //(d->Com.WriteString)(TEXT("LOG 0\r\n"));
 
   return(TRUE);
 }

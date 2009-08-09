@@ -182,6 +182,9 @@ BOOL devInitOne(PDeviceDescriptor_t dev, int index, const TCHAR *port,
 {
   TCHAR DeviceName[DEVNAMESIZE];
 
+  if (fSimMode)
+    return FALSE;
+
   ReadDeviceSettings(index, DeviceName);
 
   DeviceRegister_t *Driver = devGetDriver(DeviceName);
