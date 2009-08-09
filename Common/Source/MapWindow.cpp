@@ -3681,7 +3681,7 @@ void MapWindow::DrawWindAtAircraft2(HDC hdc, const POINT Orig, const RECT rc) {
   }
 
 
-  _itot(iround(DerivedDrawInfo.WindSpeed * SPEEDMODIFY), sTmp, 10);
+  _stprintf(sTmp, TEXT("%i"), iround(DerivedDrawInfo.WindSpeed * SPEEDMODIFY));
 
   TextInBoxMode_t TextInBoxMode = { 16 | 32 }; // JMW test {2 | 16};
   if (Arrow[5].y>=Arrow[6].y) {
