@@ -133,6 +133,11 @@ void unicode2ascii(const char *unicode, char *ascii, int maxChars)
   ascii[maxChars - 1] = 0;
 }
 
+void unicode2ascii(const char *unicode, char *ascii)
+{
+  strcpy(ascii, unicode);
+}
+
 void ascii2unicode(const char *ascii, char *unicode)
 {
   strcpy(unicode, ascii);
