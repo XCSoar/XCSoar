@@ -363,7 +363,7 @@ BOOL devParseNMEA(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO){
     char  *pC  = sTmp;
     //    static DWORD lastFlush = 0;
 
-    sprintf(pC, "%9d <", GetTickCount());
+    sprintf(pC, "%9u <", (unsigned)GetTickCount());
     pC = sTmp + strlen(sTmp);
 
     while (*pWC){
