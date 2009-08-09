@@ -746,7 +746,6 @@ class WndFrame:public WindowControl{
     };
 
     void SetCaption(const TCHAR *Value);
-    TCHAR *GetCaption(void){return(mCaption);};
 
     UINT GetCaptionStyle(void){return(mCaptionStyle);};
     UINT SetCaptionStyle(UINT Value);
@@ -933,7 +932,6 @@ class WndForm:public WindowControl{
     void Show(void);
 
     void SetCaption(const TCHAR *Value);
-    TCHAR *GetCaption(void){return(mCaption);};
 
     virtual int OnCommand(WPARAM wParam, LPARAM lParam);
 
@@ -1033,8 +1031,6 @@ class WndProperty:public WindowControl{
     virtual void Destroy(void);
 
     int WndProcEditControl(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
-
-    TCHAR *GetCaption(void){return(mCaption);};
 
     bool SetFocused(bool Value, HWND FromTo);
 
