@@ -235,7 +235,7 @@ bool dlgTaskRules(void){
   if (changed) {
     StoreRegistry();
 
-    MessageBoxX (hWndMainWindow,
+    MessageBoxX (
 		 gettext(TEXT("Changes to configuration saved.")),
 		 TEXT(""), MB_OK);
   }

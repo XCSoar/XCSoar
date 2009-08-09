@@ -331,7 +331,7 @@ VEGA_SCHEME VegaSchemes[4]= {
 
 static void SetParametersScheme(int schemetype) {
 
-  if(MessageBoxX(hWndMapWindow,
+  if(MessageBoxX(
 		 gettext(TEXT("Set new audio scheme?  Old values will be lost.")),
 		 gettext(TEXT("Vega Audio")),
 		 MB_YESNO|MB_ICONQUESTION) != IDYES)
@@ -409,7 +409,7 @@ static void SetParametersScheme(int schemetype) {
   VegaConfigurationUpdated(TEXT("ToneCirclingDescendingPeriodScale"), false, true,
 			   VegaSchemes[schemetype].ToneCirclingDescendingPeriodScale);
 
-  MessageBoxX (hWndMainWindow,
+  MessageBoxX (
 	       gettext(TEXT("Audio scheme updated.")),
 	       gettext(TEXT("Vega Audio")), MB_OK);
 
@@ -1002,7 +1002,7 @@ bool dlgConfigurationVarioShowModal(void){
 
 #else
   if (devVarioFindVega() == NULL) {
-    MessageBoxX (hWndMainWindow,
+    MessageBoxX (
 		 gettext(TEXT("No communication with Vega.")),
 		 gettext(TEXT("Vega error")), MB_OK);
     return false;

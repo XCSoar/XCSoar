@@ -842,8 +842,7 @@ static void OnPaste(WindowControl *Sender) {
     return;
   }
 
-  if(MessageBoxX(hWndMapWindow,
-		 gettext(TEXT("Overwrite?")),
+  if(MessageBoxX(gettext(TEXT("Overwrite?")),
 		 gettext(TEXT("InfoBox paste")),
 		 MB_YESNO|MB_ICONQUESTION) == IDYES) {
 
@@ -1010,8 +1009,7 @@ static void OnWaypointEditClicked(WindowControl * Sender){
 static void AskWaypointSave(void) {
   if (WaypointsOutOfRange==2) {
 
-    if(MessageBoxX(hWndMapWindow,
-                   gettext(TEXT("Waypoints excluded, save anyway?")),
+    if(MessageBoxX(gettext(TEXT("Waypoints excluded, save anyway?")),
                    gettext(TEXT("Waypoints outside terrain")),
                    MB_YESNO|MB_ICONQUESTION) == IDYES) {
 
@@ -1044,8 +1042,7 @@ static void OnWaypointDeleteClicked(WindowControl * Sender){
   int res;
   res = dlgWayPointSelect();
   if (res != -1){
-    if(MessageBoxX(hWndMapWindow,
-                   WayPointList[res].Name,
+    if(MessageBoxX(WayPointList[res].Name,
                    gettext(TEXT("Delete Waypoint?")),
                    MB_YESNO|MB_ICONQUESTION) == IDYES) {
 
@@ -3935,8 +3932,7 @@ void dlgConfigurationShowModal(void){
   }
 
   if (waypointneedsave) {
-    if(MessageBoxX(hWndMapWindow,
-                   gettext(TEXT("Save changes to waypoint file?")),
+    if(MessageBoxX(gettext(TEXT("Save changes to waypoint file?")),
                    gettext(TEXT("Waypoints edited")),
                    MB_YESNO|MB_ICONQUESTION) == IDYES) {
 
@@ -3959,12 +3955,12 @@ void dlgConfigurationShowModal(void){
     StoreRegistry();
 
     if (!requirerestart) {
-      MessageBoxX (hWndMainWindow,
+      MessageBoxX (
 		   gettext(TEXT("Changes to configuration saved.")),
 		   TEXT(""), MB_OK);
     } else {
 
-      MessageBoxX (hWndMainWindow,
+      MessageBoxX (
 		   gettext(TEXT("Changes to configuration saved.  Restart XCSoar to apply changes.")),
 		   TEXT(""), MB_OK);
     }

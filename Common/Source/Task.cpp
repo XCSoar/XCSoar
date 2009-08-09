@@ -158,7 +158,7 @@ void InsertWaypoint(int index, bool append) {
 
   if (ValidTaskPoint(MAXTASKPOINTS-1)) {
     // No room for any more task points!
-    MessageBoxX(hWndMapWindow,
+    MessageBoxX(
       gettext(TEXT("Too many waypoints in task!")),
       gettext(TEXT("Insert Waypoint")),
       MB_OK|MB_ICONEXCLAMATION);
@@ -307,7 +307,7 @@ void RemoveWaypoint(int index) {
       // WP not found, so ask user if they want to
       // remove the active WP
       UnlockTaskData();
-      int ret = MessageBoxX(hWndMapWindow,
+      int ret = MessageBoxX(
         gettext(TEXT("Chosen Waypoint not in current task.\nRemove active WayPoint?")),
         gettext(TEXT("Remove Waypoint")),
         MB_YESNO|MB_ICONQUESTION);
@@ -806,7 +806,7 @@ void guiStartLogger(bool noAsk) {
       }
 
     if(noAsk ||
-       (MessageBoxX(hWndMapWindow,TaskMessage,gettext(TEXT("Start Logger")),
+       (MessageBoxX(TaskMessage,gettext(TEXT("Start Logger")),
 		   MB_YESNO|MB_ICONQUESTION) == IDYES))
       {
 
@@ -840,7 +840,7 @@ void guiStartLogger(bool noAsk) {
 	  }
       else {
 
-        MessageBoxX(hWndMapWindow,
+        MessageBoxX(
           gettext(TEXT("Logger inactive, insufficient storage!")),
           gettext(TEXT("Logger Error")), MB_OK| MB_ICONERROR);
         StartupStore(TEXT("Logger not started: Insufficient Storage\r\n"));
@@ -854,7 +854,7 @@ void guiStartLogger(bool noAsk) {
 void guiStopLogger(bool noAsk) {
   if (LoggerActive) {
     if(noAsk ||
-       (MessageBoxX(hWndMapWindow,gettext(TEXT("Stop Logger")),
+       (MessageBoxX(gettext(TEXT("Stop Logger")),
 		    gettext(TEXT("Stop Logger")),
 		    MB_YESNO|MB_ICONQUESTION) == IDYES)) {
       StopLogger();
@@ -1160,7 +1160,7 @@ void LoadNewTask(TCHAR *szFileName)
   UnlockTaskData();
 
   if (TaskInvalid && TaskLoaded) {
-    MessageBoxX(hWndMapWindow,
+    MessageBoxX(
       gettext(TEXT("Error in task file!")),
       gettext(TEXT("Load task")),
       MB_OK|MB_ICONEXCLAMATION);
@@ -1280,7 +1280,7 @@ void SaveTask(TCHAR *szFileName)
 
   } else {
 
-    MessageBoxX(hWndMapWindow,
+    MessageBoxX(
                 gettext(TEXT("Error in saving task!")),
                 gettext(TEXT("Save task")),
                 MB_OK|MB_ICONEXCLAMATION);

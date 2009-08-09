@@ -203,8 +203,7 @@ void dlgVoiceShowModal(void){
   if (changed) {
     StoreRegistry();
 
-    MessageBoxX (hWndMainWindow,
-		 gettext(TEXT("Changes to configuration saved.")),
+    MessageBoxX(gettext(TEXT("Changes to configuration saved.")),
 		 TEXT(""), MB_OK);
   }
 

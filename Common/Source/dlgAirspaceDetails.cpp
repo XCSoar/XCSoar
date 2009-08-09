@@ -61,8 +61,7 @@ static void OnAcknowledgeClicked(WindowControl * Sender){
   }
   if (Name) {
     UINT answer;
-    answer = MessageBoxX(hWndMapWindow,
-			 Name,
+    answer = MessageBoxX(Name,
 			 gettext(TEXT("Acknowledge for day?")),
 			 MB_YESNOCANCEL|MB_ICONQUESTION);
     if (answer == IDYES) {

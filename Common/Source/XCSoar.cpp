@@ -2920,8 +2920,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 #ifndef GNAV
       ASSERT(hWnd==hWndMainWindow);
       if(ForceShutdown || ((hWnd==hWndMainWindow) &&
-         (MessageBoxX(hWndMainWindow,
-                      gettext(TEXT("Quit program?")),
+         (MessageBoxX(gettext(TEXT("Quit program?")),
                       gettext(TEXT("XCSoar")),
                       MB_YESNO|MB_ICONQUESTION) == IDYES)))
 #endif

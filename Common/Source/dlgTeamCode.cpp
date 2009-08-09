@@ -142,8 +142,7 @@ static void OnFlarmLockClicked(WindowControl * Sender)
 
   if (flarmId == 0)
     {
-      MessageBoxX(hWndMapWindow,
-		  gettext(TEXT("Unknown Competition Number")),
+      MessageBoxX(gettext(TEXT("Unknown Competition Number")),
 		  gettext(TEXT("Not Found")),
 		  MB_OK|MB_ICONINFORMATION);
 

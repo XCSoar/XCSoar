@@ -175,7 +175,7 @@ static int ParseWayPointError(int LineNumber, TCHAR *FileName, TCHAR *String){
               gettext(TEXT("Line")),
               LineNumber, String);
   }
-  MessageBoxX(hWndMainWindow,szTemp,
+  MessageBoxX(szTemp,
               gettext(TEXT("Error")),
               MB_OK | MB_ICONWARNING);
   return(1);
@@ -188,8 +188,7 @@ bool AllocateWaypointList(void) {
     WayPointList = (WAYPOINT *)LocalAlloc(LPTR, 50 * sizeof(WAYPOINT));
     if(WayPointList == NULL)
       {
-        MessageBoxX(hWndMainWindow,
-                    gettext(TEXT("Not Enough Memory For Waypoints")),
+        MessageBoxX(gettext(TEXT("Not Enough Memory For Waypoints")),
                     gettext(TEXT("Error")),MB_OK|MB_ICONSTOP);
         return 0;
       }
@@ -197,8 +196,7 @@ bool AllocateWaypointList(void) {
     WayPointCalc = (WPCALC *)LocalAlloc(LPTR, 50 * sizeof(WPCALC));
     if(WayPointCalc == NULL)
       {
-        MessageBoxX(hWndMainWindow,
-                    gettext(TEXT("Not Enough Memory For CalcWaypoints")),
+        MessageBoxX(gettext(TEXT("Not Enough Memory For CalcWaypoints")),
                     gettext(TEXT("Error")),MB_OK|MB_ICONSTOP);
         return 0;
       }
@@ -223,8 +221,7 @@ WAYPOINT* GrowWaypointList() {
                                   * 50 * sizeof(WAYPOINT),
                                   LMEM_MOVEABLE | LMEM_ZEROINIT)) == NULL){
 
-      MessageBoxX(hWndMainWindow,
-                  gettext(TEXT("Not Enough Memory For Waypoints")),
+      MessageBoxX(gettext(TEXT("Not Enough Memory For Waypoints")),
                   gettext(TEXT("Error")),MB_OK|MB_ICONSTOP);
 
       return 0; // failed to allocate
@@ -243,8 +240,7 @@ WAYPOINT* GrowWaypointList() {
                                   * 50 * sizeof(WPCALC),
                                   LMEM_MOVEABLE | LMEM_ZEROINIT)) == NULL){
 
-      MessageBoxX(hWndMainWindow,
-                  gettext(TEXT("Not Enough Memory For CalcWaypoints")),
+      MessageBoxX(gettext(TEXT("Not Enough Memory For CalcWaypoints")),
                   gettext(TEXT("Error")),MB_OK|MB_ICONSTOP);
 
       return 0; // failed to allocate
@@ -660,8 +656,7 @@ void ReadWayPoints(void)
 #ifdef HAVEEXCEPTIONS
   }__except(EXCEPTION_EXECUTE_HANDLER){
     CloseWayPoints();
-    MessageBoxX(hWndMainWindow,
-                gettext(TEXT("Unhandled Error in first Waypoint file\r\nNo Wp's loaded from that File!")),
+    MessageBoxX(gettext(TEXT("Unhandled Error in first Waypoint file\r\nNo Wp's loaded from that File!")),
                 gettext(TEXT("Error")),
                 MB_OK|MB_ICONSTOP);
     SetRegistryString(szRegistryWayPointFile, TEXT("\0"));
@@ -711,8 +706,7 @@ void ReadWayPoints(void)
         }
       }
     }
-    MessageBoxX(hWndMainWindow,
-                gettext(TEXT("Unhandled Error in second Waypoint file\r\nNo Wp's loaded from that File!")),
+    MessageBoxX(gettext(TEXT("Unhandled Error in second Waypoint file\r\nNo Wp's loaded from that File!")),
                 gettext(TEXT("Error")),
                 MB_OK|MB_ICONSTOP);
     SetRegistryString(szRegistryAdditionalWayPointFile, TEXT("\0"));

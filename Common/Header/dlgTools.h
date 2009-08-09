@@ -51,7 +51,6 @@ WndForm *dlgLoadFromXML(CallBackTableEntry_t *LookUpTable, const char *FileName,
 int
 WINAPI
 MessageBoxX(
-    HWND hWnd ,
     LPCTSTR lpText,
     LPCTSTR lpCaption,
     UINT uType);

@@ -93,8 +93,9 @@ static void OnButtonClick(WindowControl * Sender){
   ((WndForm *)Sender->GetOwner()->GetOwner())->SetModalResult(Sender->GetTag());
 }
 
-int WINAPI MessageBoxX(HWND hWnd, LPCTSTR lpText, LPCTSTR lpCaption, UINT uType){
+int WINAPI MessageBoxX(LPCTSTR lpText, LPCTSTR lpCaption, UINT uType){
 
+  const HWND hWnd = hWndMainWindow;
   WndForm *wf=NULL;
   WndFrame *wText=NULL;
   int X, Y, Width, Height;
@@ -104,9 +105,6 @@ int WINAPI MessageBoxX(HWND hWnd, LPCTSTR lpText, LPCTSTR lpCaption, UINT uType)
   RECT rc;
 
   // todo
-
-  hWnd = hWndMainWindow;
-  ASSERT(hWnd == hWndMainWindow);
 
   ASSERT(lpText != NULL);
   ASSERT(lpCaption != NULL);
@@ -325,7 +323,7 @@ XMLNode xmlLoadFromResource(const TCHAR* lpName,
   hResInfo = FindResource (hInst, lpName, TEXT("XMLDialog"));
 
   if (hResInfo == NULL) {
-    MessageBoxX(hWndMainWindow,
+    MessageBoxX(
       gettext(TEXT("Can't find resource")),
       gettext(TEXT("Dialog error")),
       MB_OK|MB_ICONEXCLAMATION);
@@ -338,7 +336,7 @@ XMLNode xmlLoadFromResource(const TCHAR* lpName,
   hRes = LoadResource (hInst, hResInfo);
 
   if (hRes == NULL) {
-    MessageBoxX(hWndMainWindow,
+    MessageBoxX(
       gettext(TEXT("Can't load resource")),
       gettext(TEXT("Dialog error")),
       MB_OK|MB_ICONEXCLAMATION);
@@ -355,8 +353,7 @@ XMLNode xmlLoadFromResource(const TCHAR* lpName,
     if (l>0) {
       char *buf= (char*)malloc(l+2);
       if (!buf) {
-        MessageBoxX(hWndMainWindow,
-                    gettext(TEXT("Can't allocate memory")),
+        MessageBoxX(gettext(TEXT("Can't allocate memory")),
                     gettext(TEXT("Dialog error")),
                     MB_OK|MB_ICONEXCLAMATION);
         // unable to allocate memory
@@ -413,8 +410,7 @@ XMLNode xmlLoadFromResource(const TCHAR* lpName,
       return x;
     }
   }
-  MessageBoxX(hWndMainWindow,
-              gettext(TEXT("Can't lock resource")),
+  MessageBoxX(gettext(TEXT("Can't lock resource")),
               gettext(TEXT("Dialog error")),
               MB_OK|MB_ICONEXCLAMATION);
   return XMLNode::emptyXMLNode;
@@ -436,8 +432,7 @@ static XMLNode xmlOpenResourceHelper(const TCHAR *lpszXML, LPCTSTR tag)
       _stprintf(errortext,TEXT("%s %i %i"), XMLNode::getError(pResults.error),
                 pResults.nLine, pResults.nColumn);
 
-      MessageBoxX(hWndMainWindow,
-                  errortext,
+      MessageBoxX(errortext,
                   gettext(TEXT("Dialog error")),
                   MB_OK|MB_ICONEXCLAMATION);
         // was exit(255);
@@ -492,7 +487,7 @@ WndForm *dlgLoadFromXML(CallBackTableEntry_t *LookUpTable, const char *FileName,
   // TODO code: put in error checking here and get rid of exits in xmlParser
   if (xMainNode.isEmpty()) {
 
-    MessageBoxX(hWndMainWindow,
+    MessageBoxX(
       gettext(TEXT("Error in loading XML dialog")),
       gettext(TEXT("Dialog error")),
       MB_OK|MB_ICONEXCLAMATION);
@@ -547,7 +542,7 @@ WndForm *dlgLoadFromXML(CallBackTableEntry_t *LookUpTable, const char *FileName,
     LoadChildsFromXML(theForm, LookUpTable, &xNode, Font);
 
     if (XMLNode::GlobalError) {
-      MessageBoxX(hWndMainWindow,
+      MessageBoxX(
                  gettext(TEXT("Error in loading XML dialog")),
                  gettext(TEXT("Dialog error")),
                  MB_OK|MB_ICONEXCLAMATION);
@@ -557,7 +552,7 @@ WndForm *dlgLoadFromXML(CallBackTableEntry_t *LookUpTable, const char *FileName,
     }
 
   } else {
-    MessageBoxX(hWndMainWindow,
+    MessageBoxX(
       gettext(TEXT("Error in loading XML dialog")),
       gettext(TEXT("Dialog error")),
       MB_OK|MB_ICONEXCLAMATION);

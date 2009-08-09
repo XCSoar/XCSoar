@@ -55,7 +55,7 @@ static void ComPort_StatusMessage(UINT type, const TCHAR *caption, const TCHAR *
   tmp[126] = _T('\0');
 
   if (caption)
-    MessageBoxX(hWndMainWindow, tmp, gettext(caption), type);
+    MessageBoxX(tmp, gettext(caption), type);
   else
     DoStatusMessage(tmp);
 }

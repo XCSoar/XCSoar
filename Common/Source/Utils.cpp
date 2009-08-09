@@ -2018,8 +2018,7 @@ void CalculateNewPolarCoef(void)
   POLARID = 2;              // do it again with default polar (LS8)
 
   CalculateNewPolarCoef();
-  MessageBoxX(NULL,
-              gettext(TEXT("Error loading Polar file!\r\nUse LS8 Polar.")),
+  MessageBoxX(gettext(TEXT("Error loading Polar file!\r\nUse LS8 Polar.")),
               gettext(TEXT("Warning")),
               MB_OK|MB_ICONERROR);
 

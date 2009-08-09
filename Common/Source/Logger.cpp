@@ -250,8 +250,7 @@ void StopLogger(void) {
       _tcsncpy(szMessage,TEXT("Logger file not copied.  It is in the root folder of your device and called "),MAX_PATH);
       _tcsncat(szMessage,szLoggerFileName,MAX_PATH);
 
-      MessageBoxX(hWndMapWindow,
-		gettext(szMessage),
+      MessageBoxX(gettext(szMessage),
 		gettext(TEXT("Logger Error")), MB_OK| MB_ICONERROR);
       _tcsncat(szMessage,TEXT("\r\n"),MAX_PATH);
       StartupStore(szMessage);
@@ -260,8 +259,7 @@ void StopLogger(void) {
     case 2: // NoMoveYesRename
       _tcsncpy(szMessage,TEXT("Logger file not copied.  It is in the root folder of your device"),MAX_PATH);
 
-      MessageBoxX(hWndMapWindow,
-		gettext(szMessage),
+      MessageBoxX(gettext(szMessage),
 		gettext(TEXT("Logger Error")), MB_OK| MB_ICONERROR);
       _tcsncat(szMessage,TEXT("\r\n"),MAX_PATH);
       StartupStore(szMessage);
@@ -271,8 +269,7 @@ void StopLogger(void) {
       _tcsncpy(szMessage,TEXT("Insuff. storage. Logger file in device's root folder, called "),MAX_PATH);
       _tcsncat(szMessage,szLoggerFileName,MAX_PATH);
 
-      MessageBoxX(hWndMapWindow,
-		gettext(szMessage),
+      MessageBoxX(gettext(szMessage),
 		gettext(TEXT("Logger Error")), MB_OK| MB_ICONERROR);
       _tcsncat(szMessage,TEXT("\r\n"),MAX_PATH);
       StartupStore(szMessage);
@@ -281,8 +278,7 @@ void StopLogger(void) {
     case 4: // Insufficient Storage.  YesRename
       _tcsncpy(szMessage,TEXT("Insufficient storage.  Logger file is in the root folder of your device"),MAX_PATH);
 
-      MessageBoxX(hWndMapWindow,
-		gettext(szMessage),
+      MessageBoxX(gettext(szMessage),
 		gettext(TEXT("Logger Error")), MB_OK| MB_ICONERROR);
       _tcsncat(szMessage,TEXT("\r\n"),MAX_PATH);
       StartupStore(szMessage);
@@ -852,15 +848,14 @@ static bool LoggerDeclare(PDeviceDescriptor_t dev, Declaration_t *decl)
   if (!devIsLogger(dev))
     return FALSE;
 
-  if (MessageBoxX(hWndMapWindow, gettext(TEXT("Declare Task?")),
+  if (MessageBoxX(gettext(TEXT("Declare Task?")),
                   dev->Name, MB_YESNO| MB_ICONQUESTION) == IDYES) {
     if (devDeclare(dev, decl)) {
-      MessageBoxX(hWndMapWindow, gettext(TEXT("Task Declared!")),
+      MessageBoxX(gettext(TEXT("Task Declared!")),
                   dev->Name, MB_OK| MB_ICONINFORMATION);
       DeclaredToDevice = true;
     } else {
-      MessageBoxX(hWndMapWindow,
-                  gettext(TEXT("Error occured,\r\nTask NOT Declared!")),
+      MessageBoxX(gettext(TEXT("Error occured,\r\nTask NOT Declared!")),
                   dev->Name, MB_OK| MB_ICONERROR);
       DeclaredToDevice = false;
     }
@@ -893,7 +888,7 @@ void LoggerDeviceDeclare() {
     found_logger = true;
 
   if (!found_logger) {
-    MessageBoxX(hWndMapWindow, gettext(TEXT("No logger connected")),
+    MessageBoxX(gettext(TEXT("No logger connected")),
 		devB()->Name, MB_OK| MB_ICONINFORMATION);
     DeclaredToDevice = true; // testing only
   }
@@ -905,8 +900,7 @@ bool CheckDeclaration(void) {
   if (!DeclaredToDevice) {
     return true;
   } else {
-    if(MessageBoxX(hWndMapWindow,
-		   gettext(TEXT("OK to invalidate declaration?")),
+    if(MessageBoxX(gettext(TEXT("OK to invalidate declaration?")),
 		   gettext(TEXT("Task declared")),
 		   MB_YESNO| MB_ICONQUESTION) == IDYES){
       DeclaredToDevice = false;
@@ -1281,8 +1275,7 @@ void ReplayLogger::Start(void) {
   NumLoggerBuffered = 0;
   flightstats.Reset();
   if (!UpdateInternal()) {
-    MessageBoxX(hWndMapWindow,
-		gettext(TEXT("Could not open IGC file!")),
+    MessageBoxX(gettext(TEXT("Could not open IGC file!")),
 		gettext(TEXT("Flight replay")),
 		MB_OK| MB_ICONINFORMATION);
   }

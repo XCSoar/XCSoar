@@ -301,8 +301,7 @@ static void OnTaskListEnter(WindowControl * Sender,
     if (CheckDeclaration()) {
 
       if (ItemIndex>0) {
-        if (MessageBoxX(hWndMapWindow,
-                        gettext(TEXT("Will this be the finish?")),
+        if (MessageBoxX(gettext(TEXT("Will this be the finish?")),
                         gettext(TEXT("Add Waypoint")),
                         MB_YESNO|MB_ICONQUESTION) == IDYES) {
           isfinish = true;
@@ -380,8 +379,7 @@ static void OnCloseClicked(WindowControl * Sender){
 
 static void OnClearClicked(WindowControl * Sender, WndListFrame::ListInfo_t *ListInfo){
 	(void)ListInfo; (void)Sender;
-  if (MessageBoxX(hWndMapWindow,
-                  gettext(TEXT("Clear the task?")),
+  if (MessageBoxX(gettext(TEXT("Clear the task?")),
                   gettext(TEXT("Clear task")),
                   MB_YESNO|MB_ICONQUESTION) == IDYES) {
     if (CheckDeclaration()) {
@@ -476,8 +474,7 @@ static void OnSaveClicked(WindowControl * Sender, WndListFrame::ListInfo_t *List
     _stprintf(file_name, TEXT("%s: '%s'"),
               gettext(TEXT("Task file already exists")),
               dfe->GetAsString());
-    if(MessageBoxX(hWndMapWindow,
-                   file_name,
+    if(MessageBoxX(file_name,
                    gettext(TEXT("Overwrite?")),
                    MB_YESNO|MB_ICONQUESTION) != IDYES) {
       return;

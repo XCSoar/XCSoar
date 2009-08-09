@@ -370,8 +370,7 @@ void ReadAirspace(ZZIP_FILE *fp)
       || NumberOfAirspaceAreasPass[0] != NumberOfAirspaceAreasPass[1]
       || NumberOfAirspaceCirclesPass[0] != NumberOfAirspaceCirclesPass[1]){
 
-    if (MessageBoxX(NULL,
-                    gettext(TEXT("Internal Airspace Parser Error!\r\nPlease send this Airspacefile to Support")),
+    if (MessageBoxX(gettext(TEXT("Internal Airspace Parser Error!\r\nPlease send this Airspacefile to Support")),
                     gettext(TEXT("Airspace")), MB_OKCANCEL) == IDCANCEL) {
     }
 
@@ -523,7 +522,7 @@ OnError:
               gettext(TEXT("Parse Error at Line")),
               LineCount, TempString,
               gettext(TEXT("Line skipped.")));
-    if (MessageBoxX(hWndMainWindow, sTmp, gettext(TEXT("Airspace")),
+    if (MessageBoxX(sTmp, gettext(TEXT("Airspace")),
                     MB_OKCANCEL) == IDCANCEL){
       return(false);
     }
@@ -592,7 +591,7 @@ static int GetNextLine(ZZIP_FILE *fp, TCHAR *Text)
                         gettext(TEXT("Parse Error at Line")),
                         LineCount, TempString,
                         gettext(TEXT("Line skipped.")));
-              if (MessageBoxX(NULL, sTmp,
+              if (MessageBoxX(sTmp,
                               gettext(TEXT("Airspace")),
                               MB_OKCANCEL) == IDCANCEL)
                 return(-1);
@@ -630,7 +629,7 @@ static int GetNextLine(ZZIP_FILE *fp, TCHAR *Text)
                         gettext(TEXT("Parse Error at Line")),
                         LineCount, TempString,
                         gettext(TEXT("Line skipped.")));
-              if (MessageBoxX(NULL, sTmp,
+              if (MessageBoxX(sTmp,
                               gettext(TEXT("Airspace")),
                               MB_OKCANCEL) == IDCANCEL)
                 return(-1);
@@ -656,7 +655,7 @@ static int GetNextLine(ZZIP_FILE *fp, TCHAR *Text)
                     gettext(TEXT("Parse Error at Line")),
                     LineCount, TempString,
                     gettext(TEXT("Line skipped.")));
-          if (MessageBoxX(NULL, sTmp, gettext(TEXT("Airspace")),
+          if (MessageBoxX(sTmp, gettext(TEXT("Airspace")),
                           MB_OKCANCEL) == IDCANCEL)
             return(-1);
         }
