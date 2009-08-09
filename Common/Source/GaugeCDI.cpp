@@ -49,9 +49,6 @@ void GaugeCDI::Create() {
   // start of new code for displaying CDI window
   StartupStore(TEXT("Create CDI\n"));
 
-  RECT rc;
-
-  GetClientRect(hWndMainWindow, &rc);
   hWndCDIWindow = CreateWindow(TEXT("STATIC"),TEXT(" "),
 			       WS_VISIBLE|WS_CHILD | WS_CLIPCHILDREN
 			       | WS_CLIPSIBLINGS,
