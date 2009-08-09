@@ -275,12 +275,6 @@ BOOL cai302Open(PDeviceDescriptor_t d, int Port){
   return(TRUE);
 }
 
-BOOL cai302Close(PDeviceDescriptor_t d){
-  (void)d;
-  return(TRUE);
-}
-
-
 static int DeclIndex = 128;
 static int nDeclErrorCode;
 
@@ -539,7 +533,7 @@ BOOL cai302Install(PDeviceDescriptor_t d){
   d->PutBugs = cai302PutBugs;
   d->PutBallast = cai302PutBallast;
   d->Open = cai302Open;
-  d->Close = cai302Close;
+  d->Close = NULL;
   d->LinkTimeout = NULL;
   d->Declare = cai302Declare;
   d->IsLogger = cai302IsLogger;

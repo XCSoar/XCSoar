@@ -83,12 +83,6 @@ BOOL caiGpsNavOpen(PDeviceDescriptor_t d, int Port){
   return(TRUE);
 }
 
-BOOL caiGpsNavClose(PDeviceDescriptor_t d){
-  (void)d;
-  return(TRUE);
-}
-
-
 
 
 BOOL caiGpsNavIsLogger(PDeviceDescriptor_t d){
@@ -113,7 +107,7 @@ BOOL caiGpsNavInstall(PDeviceDescriptor_t d){
   d->PutBugs = NULL;
   d->PutBallast = NULL;
   d->Open = caiGpsNavOpen;
-  d->Close = caiGpsNavClose;
+  d->Close = NULL;
   d->LinkTimeout = NULL;
   d->Declare = NULL;
   d->IsLogger = caiGpsNavIsLogger;
