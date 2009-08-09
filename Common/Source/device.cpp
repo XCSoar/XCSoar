@@ -188,7 +188,6 @@ BOOL devInit(LPTSTR CommandLine){
     DeviceList[i].IsRadio = devIsFalseReturn;
 
     DeviceList[i].PutVoice = (BOOL (*)(struct DeviceDescriptor_t *,TCHAR *))devIsFalseReturn;
-    DeviceList[i].PortNumber = i;
     DeviceList[i].PutQNH = NULL;
     DeviceList[i].OnSysTicker = NULL;
 

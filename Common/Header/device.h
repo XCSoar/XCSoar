@@ -50,8 +50,6 @@ typedef	struct DeviceDescriptor_t{
   BOOL (*PutVoice)(DeviceDescriptor_t *d, TCHAR *Sentence);
   BOOL (*IsCondor)(DeviceDescriptor_t	*d);
   DeviceDescriptor_t *pDevPipeTo;
-
-  int PortNumber;
 }DeviceDescriptor_t;
 
 typedef	DeviceDescriptor_t *PDeviceDescriptor_t;
