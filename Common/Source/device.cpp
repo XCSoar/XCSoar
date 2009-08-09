@@ -45,6 +45,23 @@ Copyright_License {
 #include "device.h"
 #include "MapWindow.h"
 
+#include "devCAI302.h"
+#include "devCaiGpsNav.h"
+#include "devEW.h"
+#include "devAltairPro.h"
+#include "devGeneric.h"
+#include "devVega.h"
+#include "devNmeaOut.h"
+#include "devPosiGraph.h"
+#include "devBorgeltB50.h"
+#include "devVolkslogger.h"
+#include "devEWMicroRecorder.h"
+#include "devLX.h"
+#include "devZander.h"
+#include "devFlymasterF1.h"
+#include "devXCOM760.h"
+#include "devCondor.h"
+
 // A note about locking.
 //  The ComPort RX threads lock using FlightData critical section.
 //  ComPort::StopRxThread and ComPort::Close both wait for these threads to
@@ -337,17 +354,6 @@ BOOL devInit(LPTSTR CommandLine){
 }
 
 
-BOOL devCloseAll(void){
-  int i;
-
-  for (i=0; i<NUMDEV; i++){
-    devClose(&DeviceList[i]);
-    devCloseLog(&DeviceList[i]);
-  }
-  return(TRUE);
-}
-
-
 BOOL devParseNMEA(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO){
 
   if ((d->fhLogFile != NULL) &&
@@ -459,7 +465,7 @@ BOOL devOpen(PDeviceDescriptor_t d, int Port){
 
 // Tear down methods should always succeed.
 // Called from devInit() above under LockComm
-// Also called when shutting down via devCloseAll()
+// Also called when shutting down via devShutdown()
 BOOL devClose(PDeviceDescriptor_t d)
 {
   if (d != NULL) {
@@ -864,4 +870,43 @@ BOOL FlarmDeclare(PDeviceDescriptor_t d, Declaration_t *decl){
   d->Com->StartRxThread();                       // restart RX thread
 
   return result;
+}
+
+void devStartup(LPTSTR lpCmdLine)
+{
+  StartupStore(TEXT("Register serial devices\n"));
+
+  // ... register all supported devices
+  // IMPORTANT: ADD NEW ONES TO BOTTOM OF THIS LIST
+  genRegister(); // MUST BE FIRST
+  cai302Register();
+  ewRegister();
+  atrRegister();
+  vgaRegister();
+  caiGpsNavRegister();
+  nmoRegister();
+  pgRegister();
+  b50Register();
+  vlRegister();
+  ewMicroRecorderRegister();
+  lxRegister();
+  zanderRegister();
+  flymasterf1Register();
+  xcom760Register();
+  condorRegister();
+
+  //JMW disabled  devInit(lpCmdLine);
+}
+
+void devShutdown()
+{
+  int i;
+
+  // Stop COM devices
+  StartupStore(TEXT("Stop COM devices\n"));
+
+  for (i=0; i<NUMDEV; i++){
+    devClose(&DeviceList[i]);
+    devCloseLog(&DeviceList[i]);
+  }
 }

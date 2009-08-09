@@ -70,23 +70,6 @@ Copyright_License {
 #include "VarioSound.h"
 #include "device.h"
 
-#include "devCAI302.h"
-#include "devCaiGpsNav.h"
-#include "devEW.h"
-#include "devAltairPro.h"
-#include "devGeneric.h"
-#include "devVega.h"
-#include "devNmeaOut.h"
-#include "devPosiGraph.h"
-#include "devBorgeltB50.h"
-#include "devVolkslogger.h"
-#include "devEWMicroRecorder.h"
-#include "devLX.h"
-#include "devZander.h"
-#include "devFlymasterF1.h"
-#include "devXCOM760.h"
-#include "devCondor.h"
-
 #include "externs.h"
 #include "Units.h"
 #include "InputEvents.h"
@@ -1595,28 +1578,8 @@ CreateProgressDialog(gettext(TEXT("Special ITA version")));
   */
 #endif
 
-  // ... register all supported devices
-  // IMPORTANT: ADD NEW ONES TO BOTTOM OF THIS LIST
   CreateProgressDialog(gettext(TEXT("Starting devices")));
-  StartupStore(TEXT("Register serial devices\n"));
-  genRegister(); // MUST BE FIRST
-  cai302Register();
-  ewRegister();
-  atrRegister();
-  vgaRegister();
-  caiGpsNavRegister();
-  nmoRegister();
-  pgRegister();
-  b50Register();
-  vlRegister();
-  ewMicroRecorderRegister();
-  lxRegister();
-  zanderRegister();
-  flymasterf1Register();
-  xcom760Register();
-  condorRegister();
-
-  //JMW disabled  devInit(lpCmdLine);
+  devStartup(lpCmdLine);
 
 #ifndef _SIM_
   StartupStore(TEXT("RestartCommPorts\n"));
@@ -2666,9 +2629,7 @@ void Shutdown(void) {
 
   CloseTerrainRenderer();
 
-  // Stop COM devices
-  StartupStore(TEXT("Stop COM devices\n"));
-  devCloseAll();
+  devShutdown();
 
   SaveCalculationsPersist(&CALCULATED_INFO);
 #if (EXPERIMENTAL > 0)

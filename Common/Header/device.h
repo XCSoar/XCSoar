@@ -91,7 +91,6 @@ BOOL devRegister(const DeviceRegister_t *devReg);
 BOOL devRegisterGetName(int Index, TCHAR *Name);
 
 BOOL devInit(LPTSTR CommandLine);
-BOOL devCloseAll(void);
 BOOL ExpectString(PDeviceDescriptor_t d, const TCHAR *token);
 BOOL devHasBaroSource(void);
 
@@ -124,5 +123,8 @@ BOOL devPutVoice(PDeviceDescriptor_t d, TCHAR *Sentence);
 
 BOOL devIsFalseReturn(PDeviceDescriptor_t d);
 BOOL devIsTrueReturn(PDeviceDescriptor_t d);
+
+void devStartup(LPTSTR lpCmdLine);
+void devShutdown();
 
 #endif
