@@ -1,11 +1,6 @@
 #if !defined(AFX_SIZES_H__695AAC30_F401_4CFF_9BD9_FE62A2A2D0D2__INCLUDED_)
 #define AFX_SIZES_H__695AAC30_F401_4CFF_9BD9_FE62A2A2D0D2__INCLUDED_
 
-#if _MSC_VER > 1000
-#pragma once
-#endif // _MSC_VER > 1000
-
-
 #define DISTANCE_ROUNDING 10.0
 // Rounding of task distances for entry (sector radius etc)
 // 10.0 means rounding to 0.1 user units
