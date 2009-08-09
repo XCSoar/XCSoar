@@ -311,7 +311,6 @@ BOOL vlInstall(PDeviceDescriptor_t d){
   d->PutBallast = NULL;
   d->Open = NULL;
   d->Close = NULL;
-  d->Init = NULL;
   d->LinkTimeout = VLLinkTimeout;
   d->Declare = VLDeclare;
   d->IsLogger = VLIsLogger;

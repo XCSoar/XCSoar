@@ -180,7 +180,6 @@ BOOL devInit(LPTSTR CommandLine){
     DeviceList[i].PutBallast = NULL;
     DeviceList[i].Open = NULL;
     DeviceList[i].Close = NULL;
-    DeviceList[i].Init = NULL;
     DeviceList[i].LinkTimeout = NULL;
     DeviceList[i].Declare = NULL;
     DeviceList[i].IsLogger = devIsFalseReturn;
@@ -230,7 +229,6 @@ BOOL devInit(LPTSTR CommandLine){
 
       devA()->Com = Com;
 
-      devInit(devA());
       devOpen(devA(), 0);
 
       if (devIsBaroSource(devA())) {
@@ -273,7 +271,6 @@ BOOL devInit(LPTSTR CommandLine){
 
       devB()->Com = Com;
 
-      devInit(devB());
       devOpen(devB(), 1);
 
       if (devIsBaroSource(devB())) {
@@ -535,15 +532,6 @@ BOOL devClose(PDeviceDescriptor_t d)
   }
 
   return TRUE;
-}
-
-// Only called from devInit() above which
-// is in turn called with LockComm
-BOOL devInit(PDeviceDescriptor_t d){
-  if (d != NULL && d->Init != NULL)
-    return ((d->Init)(d));
-  else
-    return(TRUE);
 }
 
 BOOL devLinkTimeout(PDeviceDescriptor_t d)

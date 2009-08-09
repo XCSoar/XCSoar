@@ -114,7 +114,6 @@ BOOL caiGpsNavInstall(PDeviceDescriptor_t d){
   d->PutBallast = NULL;
   d->Open = caiGpsNavOpen;
   d->Close = caiGpsNavClose;
-  d->Init = NULL;
   d->LinkTimeout = NULL;
   d->Declare = NULL;
   d->IsLogger = caiGpsNavIsLogger;

@@ -139,7 +139,6 @@ BOOL atrInstall(PDeviceDescriptor_t d){
   d->PutBallast = NULL;
   d->Open = NULL;
   d->Close = NULL;
-  d->Init = NULL;
   d->LinkTimeout = NULL;
   d->Declare = atrDeclare;
   d->IsLogger = atrIsLogger;

@@ -353,7 +353,6 @@ BOOL ewInstall(PDeviceDescriptor_t d){
   d->PutBallast = NULL;
   d->Open = NULL;
   d->Close = NULL;
-  d->Init = NULL;
   d->LinkTimeout = EWLinkTimeout;
   d->Declare = EWDeclare;
   d->IsLogger = EWIsLogger;

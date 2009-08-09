@@ -470,7 +470,6 @@ BOOL vgaInstall(PDeviceDescriptor_t d){
   d->PutBallast = NULL;
   d->Open = NULL;
   d->Close = NULL;
-  d->Init = NULL;
   d->LinkTimeout = NULL;
   d->Declare = vgaDeclare;
   d->IsLogger = vgaIsLogger;

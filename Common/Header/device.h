@@ -39,7 +39,6 @@ typedef	struct DeviceDescriptor_t{
   BOOL (*PutFreqStandby)(DeviceDescriptor_t	*d,	double Standby);
   BOOL (*Open)(DeviceDescriptor_t	*d,	int	Port);
   BOOL (*Close)(DeviceDescriptor_t *d);
-  BOOL (*Init)(DeviceDescriptor_t	*d);
   BOOL (*LinkTimeout)(DeviceDescriptor_t *d);
   BOOL (*Declare)(DeviceDescriptor_t *d, Declaration_t *decl);
   BOOL (*IsLogger)(DeviceDescriptor_t	*d);
@@ -97,7 +96,6 @@ BOOL devPutFreqActive(PDeviceDescriptor_t d,	double Freq);
 BOOL devPutFreqStandby(PDeviceDescriptor_t d,	double Freq);
 BOOL devOpen(PDeviceDescriptor_t d,	int	Port);
 BOOL devClose(PDeviceDescriptor_t	d);
-BOOL devInit(PDeviceDescriptor_t d);
 BOOL devLinkTimeout(PDeviceDescriptor_t	d);
 BOOL devDeclare(PDeviceDescriptor_t	d, Declaration_t *decl);
 BOOL devIsLogger(PDeviceDescriptor_t d);

@@ -540,7 +540,6 @@ BOOL cai302Install(PDeviceDescriptor_t d){
   d->PutBallast = cai302PutBallast;
   d->Open = cai302Open;
   d->Close = cai302Close;
-  d->Init = NULL;
   d->LinkTimeout = NULL;
   d->Declare = cai302Declare;
   d->IsLogger = cai302IsLogger;

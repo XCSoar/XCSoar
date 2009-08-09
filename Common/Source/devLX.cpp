@@ -101,7 +101,6 @@ static BOOL lxInstall(PDeviceDescriptor_t d){
   d->PutBallast = NULL;
   d->Open = NULL;
   d->Close = NULL;
-  d->Init = NULL;
   d->LinkTimeout = LXLinkTimeout;
   d->Declare = NULL;
   d->IsGPSSource = LXIsGPSSource;

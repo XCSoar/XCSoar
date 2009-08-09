@@ -99,7 +99,6 @@ static BOOL condorInstall(PDeviceDescriptor_t d){
   d->PutBallast = NULL;
   d->Open = NULL;
   d->Close = NULL;
-  d->Init = NULL;
   d->LinkTimeout = CondorLinkTimeout;
   d->Declare = NULL;
   d->IsGPSSource = CondorIsGPSSource;
