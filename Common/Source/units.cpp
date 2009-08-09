@@ -253,7 +253,7 @@ const TCHAR *Units::GetUnitName(Units_t Unit){
   return(UnitDescriptors[Unit].Name);
 }
 
-const Units_t Units::GetUserDistanceUnit(void){
+Units_t Units::GetUserDistanceUnit(void){
   return(UserDistanceUnit);
 }
 
@@ -266,7 +266,7 @@ Units_t Units::SetUserDistanceUnit(Units_t NewUnit){
   return(last);
 }
 
-const Units_t Units::GetUserAltitudeUnit(void){
+Units_t Units::GetUserAltitudeUnit(void){
   return(UserAltitudeUnit);
 }
 
@@ -279,7 +279,7 @@ Units_t Units::SetUserAltitudeUnit(Units_t NewUnit){
   return(last);
 }
 
-const Units_t Units::GetUserHorizontalSpeedUnit(void){
+Units_t Units::GetUserHorizontalSpeedUnit(void){
   return(UserHorizontalSpeedUnit);
 }
 
@@ -292,7 +292,7 @@ Units_t Units::SetUserHorizontalSpeedUnit(Units_t NewUnit){
   return(last);
 }
 
-const Units_t Units::GetUserTaskSpeedUnit(void){
+Units_t Units::GetUserTaskSpeedUnit(void){
   return(UserTaskSpeedUnit);
 }
 
@@ -305,7 +305,7 @@ Units_t Units::SetUserTaskSpeedUnit(Units_t NewUnit){
   return(last);
 }
 
-const Units_t Units::GetUserVerticalSpeedUnit(void){
+Units_t Units::GetUserVerticalSpeedUnit(void){
   return(UserVerticalSpeedUnit);
 }
 
@@ -318,7 +318,7 @@ Units_t Units::SetUserVerticalSpeedUnit(Units_t NewUnit){
   return(last);
 }
 
-const Units_t Units::GetUserWindSpeedUnit(void){
+Units_t Units::GetUserWindSpeedUnit(void){
   return(UserWindSpeedUnit);
 }
 
@@ -331,7 +331,7 @@ Units_t Units::SetUserWindSpeedUnit(Units_t NewUnit){
   return(last);
 }
 
-const Units_t Units::GetUserUnitByGroup(UnitGroup_t UnitGroup){
+Units_t Units::GetUserUnitByGroup(UnitGroup_t UnitGroup){
   switch(UnitGroup){
     case ugNone:
     return(unUndef);

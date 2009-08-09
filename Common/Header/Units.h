@@ -106,25 +106,25 @@ public:
 
   static const TCHAR *GetUnitName(Units_t Unit);
 
-  static const  Units_t GetUserDistanceUnit(void);
+  static Units_t GetUserDistanceUnit(void);
   static Units_t SetUserDistanceUnit(Units_t NewUnit);
 
-  static const Units_t GetUserAltitudeUnit(void);
+  static Units_t GetUserAltitudeUnit(void);
   static Units_t SetUserAltitudeUnit(Units_t NewUnit);
 
-  static const Units_t GetUserHorizontalSpeedUnit(void);
+  static Units_t GetUserHorizontalSpeedUnit(void);
   static Units_t SetUserHorizontalSpeedUnit(Units_t NewUnit);
 
-  static const Units_t GetUserTaskSpeedUnit(void);
+  static Units_t GetUserTaskSpeedUnit(void);
   static Units_t SetUserTaskSpeedUnit(Units_t NewUnit);
 
-  static const Units_t GetUserVerticalSpeedUnit(void);
+  static Units_t GetUserVerticalSpeedUnit(void);
   static Units_t SetUserVerticalSpeedUnit(Units_t NewUnit);
 
-  static const Units_t GetUserWindSpeedUnit(void);
+  static Units_t GetUserWindSpeedUnit(void);
   static Units_t SetUserWindSpeedUnit(Units_t NewUnit);
 
-  static const Units_t GetUserUnitByGroup(UnitGroup_t UnitGroup);
+  static Units_t GetUserUnitByGroup(UnitGroup_t UnitGroup);
 
   static void LongitudeToDMS(double Longitude,
                              int *dd,
