@@ -101,7 +101,6 @@ BOOL PGIsBaroSource(PDeviceDescriptor_t d){
 
 BOOL pgInstall(PDeviceDescriptor_t d){
 
-  _tcscpy(d->Name, TEXT("PosiGraph Logger"));
   d->ParseNMEA = PGParseNMEA;
   d->PutMacCready = NULL;
   d->PutBugs = NULL;

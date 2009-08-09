@@ -132,7 +132,6 @@ BOOL atrOnSysTicker(DeviceDescriptor_t *d){
 }
 
 BOOL atrInstall(PDeviceDescriptor_t d){
-  _tcscpy(d->Name, TEXT("Altair Pro"));
   d->ParseNMEA = atrParseNMEA;
   d->PutMacCready = NULL;
   d->PutBugs = NULL;

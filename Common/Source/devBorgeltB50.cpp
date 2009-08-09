@@ -71,7 +71,6 @@ BOOL B50IsGPSSource(PDeviceDescriptor_t d){
 
 BOOL b50Install(PDeviceDescriptor_t d){
 
-  _tcscpy(d->Name, TEXT("Borgelt B50"));
   d->ParseNMEA = B50ParseNMEA;
   d->PutMacCready = NULL;
   d->PutBugs = NULL;

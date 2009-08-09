@@ -191,6 +191,9 @@ BOOL devInitOne(PDeviceDescriptor_t dev, int index, const TCHAR *port,
     if (!Com->Initialize(port, speed))
       return FALSE;
 
+    memset(dev->Name, 0, sizeof(dev->Name));
+    _tcsncpy(dev->Name, Driver->Name, DEVNAMESIZE);
+
     Driver->Installer(dev);
 
     dev->Com = Com;

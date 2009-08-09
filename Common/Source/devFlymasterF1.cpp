@@ -76,7 +76,6 @@ static BOOL FlymasterF1IsBaroSource(PDeviceDescriptor_t d){
 
 static BOOL flymasterf1Install(PDeviceDescriptor_t d){
 
-  _tcscpy(d->Name, TEXT("FlymasterF1"));
   d->ParseNMEA = FlymasterF1ParseNMEA;
   d->PutMacCready = NULL;
   d->PutBugs = NULL;

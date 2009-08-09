@@ -44,7 +44,6 @@ Copyright_License {
 
 
 BOOL genInstall(PDeviceDescriptor_t d){
-  _tcscpy(d->Name, TEXT("Generic"));
   d->ParseNMEA = NULL;
   d->PutMacCready = NULL;
   d->PutBugs = NULL;

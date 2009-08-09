@@ -298,7 +298,6 @@ BOOL VLIsGPSSource(PDeviceDescriptor_t d){
 
 
 BOOL vlInstall(PDeviceDescriptor_t d){
-  _tcscpy(d->Name, TEXT("Volkslogger"));
   d->ParseNMEA = VLParseNMEA;
   d->PutMacCready = NULL;
   d->PutBugs = NULL;

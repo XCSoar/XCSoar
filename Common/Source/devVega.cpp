@@ -463,7 +463,6 @@ BOOL vgaOnSysTicker(DeviceDescriptor_t *d){
 
 BOOL vgaInstall(PDeviceDescriptor_t d){
 
-  _tcscpy(d->Name, TEXT("Vega"));
   d->ParseNMEA = vgaParseNMEA;
   d->PutMacCready = NULL;
   d->PutBugs = NULL;

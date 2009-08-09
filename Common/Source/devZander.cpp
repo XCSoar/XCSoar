@@ -84,7 +84,6 @@ static BOOL ZanderIsBaroSource(PDeviceDescriptor_t d){
 
 static BOOL zanderInstall(PDeviceDescriptor_t d){
 
-  _tcscpy(d->Name, TEXT("Zander"));
   d->ParseNMEA = ZanderParseNMEA;
   d->PutMacCready = NULL;
   d->PutBugs = NULL;

@@ -88,7 +88,6 @@ static BOOL LXIsBaroSource(PDeviceDescriptor_t d){
 
 static BOOL lxInstall(PDeviceDescriptor_t d){
 
-  _tcscpy(d->Name, TEXT("LX"));
   d->ParseNMEA = LXParseNMEA;
   d->PutMacCready = NULL;
   d->PutBugs = NULL;

@@ -81,7 +81,6 @@ BOOL nmoPutQNH(DeviceDescriptor_t *d, double NewQNH){
 
 BOOL nmoInstall(PDeviceDescriptor_t d){
 
-  _tcscpy(d->Name, TEXT("NmeaOut"));
   d->ParseNMEA = nmoParseNMEA;
   d->PutMacCready = NULL;
   d->PutBugs = NULL;

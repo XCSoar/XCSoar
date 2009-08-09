@@ -527,7 +527,6 @@ BOOL cai302IsGPSSource(PDeviceDescriptor_t d){
 
 BOOL cai302Install(PDeviceDescriptor_t d){
 
-  _tcscpy(d->Name, TEXT("CAI 302"));
   d->ParseNMEA = cai302ParseNMEA;
   d->PutMacCready = cai302PutMacCready;
   d->PutBugs = cai302PutBugs;

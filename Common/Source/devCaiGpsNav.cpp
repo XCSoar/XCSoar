@@ -101,7 +101,6 @@ BOOL caiGpsNavIsGPSSource(PDeviceDescriptor_t d){
 
 BOOL caiGpsNavInstall(PDeviceDescriptor_t d){
 
-  _tcscpy(d->Name, TEXT("CAI GPS-NAV"));
   d->ParseNMEA = NULL;
   d->PutMacCready = NULL;
   d->PutBugs = NULL;

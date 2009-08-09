@@ -86,7 +86,6 @@ static BOOL CondorIsBaroSource(PDeviceDescriptor_t d){
 
 static BOOL condorInstall(PDeviceDescriptor_t d){
 
-  _tcscpy(d->Name, TEXT("Condor"));
   d->ParseNMEA = CondorParseNMEA;
   d->PutMacCready = NULL;
   d->PutBugs = NULL;
