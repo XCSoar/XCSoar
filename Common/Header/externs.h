@@ -38,6 +38,8 @@ Copyright_License {
 #ifndef EXTERNS_H
 #define EXTERNS_H
 
+#include <tchar.h>
+
 extern TCHAR XCSoar_Version[256];
 
 #if !defined(AFX_EXTERNS_H__695AAC30_F401_4CFF_9BD9_FE62A2A2D0D2__INCLUDED_)

@@ -84,6 +84,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Waypointparser.h"
 
 #include <ctype.h>
+#include <tchar.h>
 
 // Sensible maximums
 #define MAX_MODE 100
