@@ -842,7 +842,9 @@ class WndOwnerDrawFrame:public WndFrame{
 
     typedef void (*OnPaintCallback_t)(WindowControl * Sender, HDC hDC);
 
-    WndOwnerDrawFrame(WindowControl *Owner, TCHAR *Name, int X, int Y, int Width, int Height, void(*OnPaintCallback)(WindowControl * Sender, HDC hDC)):
+    WndOwnerDrawFrame(WindowControl *Owner, TCHAR *Name, int X, int Y,
+                      int Width, int Height,
+                      OnPaintCallback_t OnPaintCallback):
       WndFrame(Owner, Name, X, Y, Width, Height)
     {
       mCaption[0] = '\0';
@@ -854,7 +856,7 @@ class WndOwnerDrawFrame:public WndFrame{
 
     virtual void Destroy(void);
 
-    void SetOnPaintNotify(void (*OnPaintCallback)(WindowControl * Sender, HDC hDC)){
+    void SetOnPaintNotify(OnPaintCallback_t OnPaintCallback){
       mOnPaintCallback = OnPaintCallback;
     }
 
