@@ -3698,46 +3698,33 @@ void WndListFrame::Paint(HDC hDC){
   WndFrame::Paint(hDC);
 
   if (mClientCount > 0){
-
-    HDC HdcTemp = CreateCompatibleDC(hDC);
-    HBITMAP BmpMem = CreateCompatibleBitmap(hDC,
-               mClients[0]->GetWidth(),
-               mClients[0]->GetHeight());
-
-    HBITMAP oldBmp = (HBITMAP)SelectObject(HdcTemp, BmpMem);
+    POINT old_viewport;
+    ::OffsetViewportOrgEx(hDC, mClients[0]->GetLeft(),
+                          -mClients[0]->GetHeight(), &old_viewport);
 
     for (i=0; i<mListInfo.ItemInViewCount; i++){
+      ::OffsetViewportOrgEx(hDC, 0, mClients[0]->GetHeight(), NULL);
 
-      HFONT oldFont = (HFONT)SelectObject(HdcTemp, mClients[0]->GetFont());
+      HFONT oldFont = (HFONT)SelectObject(hDC, mClients[0]->GetFont());
 
       if (mOnListCallback != NULL){
         mListInfo.DrawIndex = mListInfo.TopIndex + i;
         if (mListInfo.DrawIndex == mListInfo.ItemIndex)
           continue;
+
         mOnListCallback(this, &mListInfo);
       }
 
       mClients[0]->PaintSelector(true);
-      mClients[0]->Paint(HdcTemp);
+      mClients[0]->Paint(hDC);
       mClients[0]->PaintSelector(false);
 
-      BitBlt(hDC,
-          mClients[0]->GetLeft(), i*mClients[0]->GetHeight(),
-          mClients[0]->GetWidth(), mClients[0]->GetHeight(),
-          HdcTemp,
-          0,0,
-          SRCCOPY
-        );
-
-      SelectObject(HdcTemp, oldFont);
-
+      SelectObject(hDC, oldFont);
     }
 
-    mListInfo.DrawIndex = mListInfo.ItemIndex;
+    ::SetViewportOrgEx(hDC, old_viewport.x, old_viewport.y, NULL);
 
-    SelectObject(HdcTemp, oldBmp);
-    DeleteObject(BmpMem);
-    DeleteDC(HdcTemp);
+    mListInfo.DrawIndex = mListInfo.ItemIndex;
 
     DrawScrollBar(hDC);
   }
