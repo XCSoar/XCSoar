@@ -36,6 +36,8 @@ typedef struct Declaration {
   const WAYPOINT *waypoint[MAXTASKPOINTS];
 } Declaration_t;
 
+struct DeviceRegister;
+
 typedef	struct DeviceDescriptor_t{
   int	Port;
   FILE  *fhLogFile;
@@ -61,6 +63,7 @@ typedef	struct DeviceDescriptor_t{
   BOOL (*PutVoice)(DeviceDescriptor_t *d, TCHAR *Sentence);
   BOOL (*IsCondor)(DeviceDescriptor_t	*d);
   DeviceDescriptor_t *pDevPipeTo;
+  struct DeviceRegister *Driver;
 }DeviceDescriptor_t;
 
 typedef	DeviceDescriptor_t *PDeviceDescriptor_t;
@@ -73,7 +76,7 @@ void VarioWriteNMEA(const TCHAR *Text);
 void VarioWriteSettings(void);
 PDeviceDescriptor_t devVarioFindVega(void);
 
-typedef	struct {
+typedef	struct DeviceRegister {
   const TCHAR	*Name;
   unsigned int	Flags;
   BOOL (*ParseNMEA)(DeviceDescriptor_t *d, TCHAR *String, NMEA_INFO *GPS_INFO);

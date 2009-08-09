@@ -195,6 +195,7 @@ BOOL devInitOne(PDeviceDescriptor_t dev, int index, const TCHAR *port,
     memset(dev->Name, 0, sizeof(dev->Name));
     _tcsncpy(dev->Name, Driver->Name, DEVNAMESIZE);
 
+    dev->Driver = Driver;
     dev->ParseNMEA = Driver->ParseNMEA;
     dev->PutMacCready = Driver->PutMacCready;
     dev->PutBugs = Driver->PutBugs;
@@ -242,6 +243,7 @@ BOOL devInit(LPTSTR CommandLine){
     DeviceList[i].Port = -1;
     DeviceList[i].fhLogFile = NULL;
     DeviceList[i].Name[0] = '\0';
+    DeviceList[i].Driver = NULL;
     DeviceList[i].ParseNMEA = NULL;
     DeviceList[i].PutMacCready = NULL;
     DeviceList[i].PutBugs = NULL;
@@ -582,13 +584,13 @@ BOOL devIsLogger(PDeviceDescriptor_t d)
   bool result = false;
 
   LockComm();
-  if ((d != NULL) && (d->IsLogger != NULL)) {
-    if (d->IsLogger(d)) {
-      result = true;
-    }
-  }
-  if ((d != NULL) && !result) {
-    result |= NMEAParser::PortIsFlarm(d->Port);
+  if (d != NULL) {
+    if (d->IsLogger)
+      result = d->IsLogger(d);
+    else if (d->Driver)
+      result = d->Driver->Flags & drfLogger ? TRUE : FALSE;
+    if (!result)
+      result |= NMEAParser::PortIsFlarm(d->Port);
   }
   UnlockComm();
 
@@ -600,8 +602,12 @@ BOOL devIsGPSSource(PDeviceDescriptor_t d)
   BOOL result = FALSE;
 
   LockComm();
-  if ((d != NULL) && (d->IsGPSSource != NULL))
-    result = d->IsGPSSource(d);
+  if (d != NULL) {
+    if (d->IsGPSSource)
+      result = d->IsGPSSource(d);
+    else if (d->Driver)
+      result = d->Driver->Flags & drfGPS ? TRUE : FALSE;
+  }
   UnlockComm();
 
   return result;
@@ -612,8 +618,12 @@ BOOL devIsBaroSource(PDeviceDescriptor_t d)
   BOOL result = FALSE;
 
   LockComm();
-  if ((d != NULL) && (d->IsBaroSource != NULL))
-    result = d->IsBaroSource(d);
+  if (d != NULL) {
+    if (d->IsBaroSource)
+      result = d->IsBaroSource(d);
+    else if (d->Driver)
+      result = d->Driver->Flags & drfBaroAlt ? TRUE : FALSE;
+  }
   UnlockComm();
 
   return result;
@@ -624,8 +634,12 @@ BOOL devIsRadio(PDeviceDescriptor_t d)
   BOOL result = FALSE;
 
   LockComm();
-  if ((d != NULL) && (d->IsRadio != NULL))
-    result = d->IsRadio(d);
+  if (d != NULL) {
+    if (d->IsRadio)
+      result = d->IsRadio(d);
+    else if (d->Driver)
+      result = d->Driver->Flags & drfRadio ? TRUE : FALSE;
+  }
   UnlockComm();
 
   return result;
@@ -637,8 +651,12 @@ BOOL devIsCondor(PDeviceDescriptor_t d)
   BOOL result = FALSE;
 
   LockComm();
-  if ((d != NULL) && (d->IsCondor != NULL))
-    result = d->IsCondor(d);
+  if (d != NULL) {
+    if (d->IsCondor != NULL)
+      result = d->IsCondor(d);
+    else if (d->Driver)
+      result = d->Driver->Flags & drfCondor ? TRUE : FALSE;
+  }
   UnlockComm();
 
   return result;
