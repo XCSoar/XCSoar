@@ -3139,7 +3139,7 @@ int WndProperty::SetButtonSize(int Value){
 
     SetWindowPos(mhEdit, 0, mEditPos.x, mEditPos.y,
       mEditSize.x, mEditSize.y,
-      /*SWP_NOMOVE |*/  SWP_NOREPOSITION | SWP_NOACTIVATE // need to MOVE to enlarge/shift left for combopicker (no arrows)
+      /*SWP_NOMOVE |*/ SWP_NOACTIVATE // need to MOVE to enlarge/shift left for combopicker (no arrows)
                  | SWP_NOOWNERZORDER | SWP_NOZORDER
     );
 
