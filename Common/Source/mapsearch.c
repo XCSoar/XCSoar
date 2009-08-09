@@ -33,6 +33,8 @@ Copyright_License {
 
 #include "mapprimitive.h"
 
+#include <math.h>
+
 #define LASTVERT(v,n)  ((v) == 0 ? n-2 : v-1)
 #define NEXTVERT(v,n)  ((v) == n-2 ? 0 : v+1)
 
