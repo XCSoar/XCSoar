@@ -16,8 +16,6 @@ void EndDeclaration(void);
 void LoggerHeader(void);
 void LoggerNote(const TCHAR *text);
 void LoggerDeviceDeclare();
-void EW_Strings(double Lattitude, double Longditude, TCHAR *ID);
-void EW_Download(TCHAR *strAssetNumber);
 
 extern bool DeclaredToDevice;
 bool CheckDeclaration(void);
