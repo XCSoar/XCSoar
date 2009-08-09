@@ -130,9 +130,9 @@ static const DeviceRegister_t atrDevice = {
   NULL,				// Close
   NULL,				// LinkTimeout
   atrDeclare,			// Declare
-  devIsFalseReturn,		// IsLogger
-  devIsTrueReturn,		// IsGPSSource
-  devIsTrueReturn,		// IsBaroSource
+  NULL,				// IsLogger
+  NULL,				// IsGPSSource
+  NULL,				// IsBaroSource
   NULL,				// IsRadio
   NULL,				// IsCondor
   atrOnSysTicker		// OnSysTicker

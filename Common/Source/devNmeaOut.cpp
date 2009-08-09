@@ -85,9 +85,9 @@ static const DeviceRegister_t nmoDevice = {
   NULL,				// Close
   NULL,				// LinkTimeout
   NULL,				// Declare
-  devIsFalseReturn,		// IsLogger
+  NULL,				// IsLogger
   nmoIsGPSSource,		// IsGPSSource
-  devIsFalseReturn,		// IsBaroSource
+  NULL,				// IsBaroSource
   NULL,				// IsRadio
   NULL,				// IsCondor
   NULL				// OnSysTicker

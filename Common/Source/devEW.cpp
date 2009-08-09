@@ -349,9 +349,9 @@ static const DeviceRegister_t ewDevice = {
   NULL,				// Close
   EWLinkTimeout,		// LinkTimeout
   EWDeclare,			// Declare
-  devIsTrueReturn,		// IsLogger
-  devIsTrueReturn,		// IsGPSSource
-  devIsFalseReturn,		// IsBaroSource
+  NULL,				// IsLogger
+  NULL,				// IsGPSSource
+  NULL,				// IsBaroSource
   NULL,				// IsRadio
   NULL,				// IsCondor
   NULL				// OnSysTicker

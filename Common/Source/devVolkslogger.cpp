@@ -300,8 +300,8 @@ static const DeviceRegister_t vlDevice = {
   NULL,				// Close
   NULL,				// LinkTimeout
   VLDeclare,			// Declare
-  devIsTrueReturn,		// IsLogger
-  devIsTrueReturn,		// IsGPSSource
+  NULL,				// IsLogger
+  NULL,				// IsGPSSource
   devIsFalseReturn,		// IsBaroSource: devIsTrueReturn? -- rmk
   NULL,				// IsRadio
   NULL,				// IsCondor

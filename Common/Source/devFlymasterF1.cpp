@@ -72,9 +72,9 @@ static const DeviceRegister_t flymasterf1Device = {
   NULL,				// Close
   NULL,				// LinkTimeout
   NULL,				// Declare
-  devIsFalseReturn,		// IsLogger
-  devIsTrueReturn,		// IsGPSSource
-  devIsTrueReturn,		// IsBaroSource
+  NULL,				// IsLogger
+  NULL,				// IsGPSSource
+  NULL,				// IsBaroSource
   NULL,				// IsRadio
   NULL,				// IsCondor
   NULL				// OnSysTicker

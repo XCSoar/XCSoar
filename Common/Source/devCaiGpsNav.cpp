@@ -100,9 +100,9 @@ static const DeviceRegister_t caiGpsNavDevice = {
   NULL,				// Close
   NULL,				// LinkTimeout
   NULL,				// Declare
-  devIsFalseReturn,		// IsLogger - TODO feature: CAI GPS NAV declaration
-  devIsTrueReturn,		// IsGPSSource
-  devIsFalseReturn,		// IsBaroSource
+  NULL,				// IsLogger - TODO feature: CAI GPS NAV declaration
+  NULL,				// IsGPSSource
+  NULL,				// IsBaroSource
   NULL,				// IsRadio
   NULL,				// IsCondor
   NULL				// OnSysTicker

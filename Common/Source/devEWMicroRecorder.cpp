@@ -280,9 +280,9 @@ static const DeviceRegister_t ewMicroRecorderDevice = {
   NULL,				// Close
   NULL,				// LinkTimeout
   EWMicroRecorderDeclare,	// Declare
-  devIsTrueReturn,		// IsLogger
-  devIsTrueReturn,		// IsGPSSource
-  devIsTrueReturn,		// IsBaroSource
+  NULL,				// IsLogger
+  NULL,				// IsGPSSource
+  NULL,				// IsBaroSource
   NULL,				// IsRadio
   NULL,				// IsCondor
   NULL				// OnSysTicker

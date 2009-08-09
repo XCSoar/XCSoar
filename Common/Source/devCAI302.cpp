@@ -529,8 +529,8 @@ static const DeviceRegister_t cai302Device = {
   NULL,				// Close
   NULL,				// LinkTimeout
   cai302Declare,		// Declare
-  devIsTrueReturn,		// IsLogger
-  devIsTrueReturn,		// IsGPSSource
+  NULL,				// IsLogger
+  NULL,				// IsGPSSource
   devIsFalseReturn,		// IsBaroSource: shouldn't this be true? --rmk
   NULL,				// IsRadio
   NULL,				// IsCondor

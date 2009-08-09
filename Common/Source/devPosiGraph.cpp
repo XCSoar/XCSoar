@@ -99,9 +99,9 @@ static const DeviceRegister_t pgDevice = {
   NULL,				// Close
   NULL,				// LinkTimeout
   PGDeclare,			// Declare
-  devIsTrueReturn,		// IsLogger
-  devIsTrueReturn,		// IsGPSSource
-  devIsTrueReturn,		// IsBaroSource
+  NULL,				// IsLogger
+  NULL,				// IsGPSSource
+  NULL,				// IsBaroSource
   NULL,				// IsRadio
   NULL,				// IsCondor
   NULL				// OnSysTicker
