@@ -339,7 +339,7 @@ void InfoBox::SetSmallerFont(bool smallerFont)
 	this->mSmallerFont = smallerFont;
 }
 
-void InfoBox::PaintTitle(void){
+void InfoBox::PaintTitle(HDC mHdcBuf){
 
   if (!mTitleChanged) return;
 
@@ -441,7 +441,7 @@ void InfoBox::PaintTitle(void){
 
 }
 
-void InfoBox::PaintValue(void){
+void InfoBox::PaintValue(HDC mHdcBuf){
 
   SIZE tsize;
   int x,y;
@@ -550,7 +550,7 @@ void InfoBox::PaintValue(void){
 
 }
 
-void InfoBox::PaintComment(void){
+void InfoBox::PaintComment(HDC mHdcBuf){
 
   SIZE tsize;
   int x,y;
@@ -627,7 +627,7 @@ void InfoBox::PaintComment(void){
 }
 
 
-void InfoBox::PaintSelector(void){
+void InfoBox::PaintSelector(HDC mHdc){
 
   if (mHasFocus){
     HPEN oldPen = (HPEN)SelectObject(mHdc, hPenSelector);
@@ -695,7 +695,7 @@ void InfoBox::PaintSelector(void){
 
 }
 
-void InfoBox::Paint(void){
+void InfoBox::Paint(){
 
   if (!GlobalRunning) return; // safety
 
@@ -769,16 +769,16 @@ void InfoBox::Paint(void){
     SelectObject(mHdcBuf,oldPen);
   }
 
-  PaintTitle();
-  PaintComment();
-  PaintValue();
+  PaintTitle(mHdcBuf);
+  PaintComment(mHdcBuf);
+  PaintValue(mHdcBuf);
 }
 
 
 void InfoBox::PaintFast(void) {
   BitBlt(mHdc, 0, 0, mWidth, mHeight,
          mHdcBuf, 0, 0, SRCCOPY);
-  PaintSelector();
+  PaintSelector(mHdc);
 }
 
 

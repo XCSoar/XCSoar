@@ -121,15 +121,15 @@ class InfoBox{
 	bool mSmallerFont;
 
     void InitializeDrawHelpers(void);
-    void PaintTitle(void);
-    void PaintValue(void);
-    void PaintComment(void);
-    void PaintSelector(void);
+    void PaintTitle(HDC dc);
+    void PaintValue(HDC dc);
+    void PaintComment(HDC dc);
+    void PaintSelector(HDC dc);
 
     // LRESULT CALLBACK InfoBoxWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
   public:
-    void Paint(void);
+    void Paint();
     void PaintFast(void);
     void PaintInto(HDC mHdcDest, int xoff, int yoff, int width, int height);
 
