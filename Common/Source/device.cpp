@@ -165,9 +165,55 @@ static BOOL devIsFalseReturn(PDeviceDescriptor_t d){
 }
 
 
+DeviceRegister_t *devGetDriver(const TCHAR *DevName)
+{
+  int i;
+
+  for (i = DeviceRegisterCount - 1; i >= 0; i--)
+    if (_tcscmp(DeviceRegister[i].Name, DevName) == 0 || i == 0)
+      return &DeviceRegister[i];
+
+  return NULL;
+}
+
+BOOL devInitOne(PDeviceDescriptor_t dev, int index, const TCHAR *port,
+		DWORD speed, PDeviceDescriptor_t &nmeaout)
+{
+  TCHAR DeviceName[DEVNAMESIZE];
+
+  ReadDeviceSettings(index, DeviceName);
+
+  DeviceRegister_t *Driver = devGetDriver(DeviceName);
+
+  if (Driver) {
+    ComPort *Com = new ComPort(index);
+
+    if (!Com->Initialize(port, speed))
+      return FALSE;
+
+    Driver->Installer(dev);
+
+    dev->Com = Com;
+
+    devOpen(dev, index);
+
+    if (devIsBaroSource(dev)) {
+      if (pDevPrimaryBaroSource == NULL) {
+        pDevPrimaryBaroSource = dev;
+      } else if (pDevSecondaryBaroSource == NULL) {
+        pDevSecondaryBaroSource = dev;
+      }
+    }
+
+    if (nmeaout == NULL && Driver->Flags & (1l << dfNmeaOut)) {
+      nmeaout = dev;
+    }
+  }
+  return TRUE;
+}
+
 BOOL devInit(LPTSTR CommandLine){
   int i;
-  TCHAR DeviceName[DEVNAMESIZE];
   PDeviceDescriptor_t pDevNmeaOut = NULL;
 
   for (i=0; i<NUMDEV; i++){
@@ -201,89 +247,20 @@ BOOL devInit(LPTSTR CommandLine){
   pDevPrimaryBaroSource = NULL;
   pDevSecondaryBaroSource=NULL;
 
-  ReadDeviceSettings(0, DeviceName);
 #ifdef GNAV
   PortIndex1 = 2; SpeedIndex1 = 5;
-#else
-  PortIndex1 = 0; SpeedIndex1 = 2;
-#endif
-  ReadPort1Settings(&PortIndex1,&SpeedIndex1);
-
-  for (i=DeviceRegisterCount-1; i>=0; i--) {
-
-    if ((_tcscmp(DeviceRegister[i].Name, DeviceName) == 0) || (i==0)) {
-
-      ComPort *Com = new ComPort(0);
-
-      // remember: Port1 is the port used by device A, port1 may be Com3 or Com1 etc
-      if (!Com->Initialize(COMMPort[PortIndex1], dwSpeed[SpeedIndex1]))
-        break;
-
-      DeviceRegister[i].Installer(devA());
-
-      if ((pDevNmeaOut == NULL) &&
-	  (DeviceRegister[i].Flags & (1l << dfNmeaOut))){
-        pDevNmeaOut = devA();
-      }
-
-      devA()->Com = Com;
-
-      devOpen(devA(), 0);
-
-      if (devIsBaroSource(devA())) {
-        if (pDevPrimaryBaroSource == NULL){
-          pDevPrimaryBaroSource = devA();
-        } else
-        if (pDevSecondaryBaroSource == NULL){
-          pDevSecondaryBaroSource = devA();
-        }
-      }
-      break;
-    }
-  }
-
-
-  ReadDeviceSettings(1, DeviceName);
-#ifdef GNAV
   PortIndex2 = 0; SpeedIndex2 = 5;
 #else
+  PortIndex1 = 0; SpeedIndex1 = 2;
   PortIndex2 = 0; SpeedIndex2 = 2;
 #endif
+  ReadPort1Settings(&PortIndex1,&SpeedIndex1);
   ReadPort2Settings(&PortIndex2,&SpeedIndex2);
 
-  for (i=DeviceRegisterCount-1; i>=0; i--) {
-    if (PortIndex1 == PortIndex2)
-      break;
+  devInitOne(devA(), 0, COMMPort[PortIndex1], dwSpeed[SpeedIndex1], pDevNmeaOut);
 
-    if ((_tcscmp(DeviceRegister[i].Name, DeviceName) == 0) || (i==0)) {
-      ComPort *Com = new ComPort(1);
-
-      if (!Com->Initialize(COMMPort[PortIndex2], dwSpeed[SpeedIndex2]))
-        break;
-
-      DeviceRegister[i].Installer(devB());
-
-      if ((pDevNmeaOut == NULL) &&
-          (DeviceRegister[i].Flags & (1l << dfNmeaOut))){
-        pDevNmeaOut = devB();
-      }
-
-      devB()->Com = Com;
-
-      devOpen(devB(), 1);
-
-      if (devIsBaroSource(devB())) {
-        if (pDevPrimaryBaroSource == NULL){
-          pDevPrimaryBaroSource = devB();
-        } else
-        if (pDevSecondaryBaroSource == NULL){
-          pDevSecondaryBaroSource = devB();
-        }
-      }
-
-      break;
-    }
-  }
+  if (PortIndex1 != PortIndex2)
+    devInitOne(devB(), 1, COMMPort[PortIndex2], dwSpeed[SpeedIndex2], pDevNmeaOut);
 
   CommandLine = LOGGDEVCOMMANDLINE;
 
