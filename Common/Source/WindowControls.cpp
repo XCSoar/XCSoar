@@ -1390,9 +1390,7 @@ WindowControl::WindowControl(WindowControl *Owner,
   }
   InstCount++;
 
-  Style = WS_CHILD | ES_MULTILINE | ES_CENTER
-    | ES_READONLY | WS_CLIPCHILDREN
-    | WS_CLIPSIBLINGS;
+  Style = WS_CHILD | WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
 
   if (mParent == NULL)
     Style |= WS_POPUP;
