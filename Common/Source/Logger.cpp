@@ -45,6 +45,9 @@
 #include "InputEvents.h"
 #include "Parser.h"
 
+enum {
+  MAX_IGC_BUFF = 255,
+};
 
 
 HINSTANCE GRecordDLLHandle = NULL;
