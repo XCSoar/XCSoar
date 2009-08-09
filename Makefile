@@ -552,12 +552,22 @@ cxx-flags	=$(DEPFLAGS) $(CXXFLAGS) $(CPPFLAGS) $(CPPFLAGS_$(dirtarget)) $(TARGET
 	$(Q)$(CXX) $(cxx-flags) -c $(OUTPUT_OPTION) $<
 	@sed -i '1s,^[^ :]*,$@,' $(DEPFILE)
 
+%.o: %.cxx
+	@$(NQ)echo "  CXX     $@"
+	$(Q)$(CXX) $(cxx-flags) -c $(OUTPUT_OPTION) $<
+	@sed -i '1s,^[^ :]*,$@,' $(DEPFILE)
+
 %.os: %.c
 	@$(NQ)echo "  CC      $@"
 	$(Q)$(CC) $(cc-flags) -D_SIM_ -c $(OUTPUT_OPTION) $<
 	@sed -i '1s,^[^ :]*,$@,' $(DEPFILE)
 
 %.os: %.cpp
+	@$(NQ)echo "  CXX     $@"
+	$(Q)$(CXX) $(cxx-flags) -D_SIM_ -c $(OUTPUT_OPTION) $<
+	@sed -i '1s,^[^ :]*,$@,' $(DEPFILE)
+
+%.os: %.cxx
 	@$(NQ)echo "  CXX     $@"
 	$(Q)$(CXX) $(cxx-flags) -D_SIM_ -c $(OUTPUT_OPTION) $<
 	@sed -i '1s,^[^ :]*,$@,' $(DEPFILE)
