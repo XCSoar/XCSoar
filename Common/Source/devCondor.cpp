@@ -87,7 +87,6 @@ static const DeviceRegister_t condorDevice = {
   NULL,				// IsGPSSource
   NULL,				// IsBaroSource
   NULL,				// IsRadio
-  NULL,				// IsCondor
   NULL				// OnSysTicker
 };
 

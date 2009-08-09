@@ -103,7 +103,6 @@ static const DeviceRegister_t pgDevice = {
   NULL,				// IsGPSSource
   NULL,				// IsBaroSource
   NULL,				// IsRadio
-  NULL,				// IsCondor
   NULL				// OnSysTicker
 };
 

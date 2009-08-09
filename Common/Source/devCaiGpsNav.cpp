@@ -104,7 +104,6 @@ static const DeviceRegister_t caiGpsNavDevice = {
   NULL,				// IsGPSSource
   NULL,				// IsBaroSource
   NULL,				// IsRadio
-  NULL,				// IsCondor
   NULL				// OnSysTicker
 };
 

@@ -89,7 +89,6 @@ static const DeviceRegister_t nmoDevice = {
   nmoIsGPSSource,		// IsGPSSource
   NULL,				// IsBaroSource
   NULL,				// IsRadio
-  NULL,				// IsCondor
   NULL				// OnSysTicker
 };
 

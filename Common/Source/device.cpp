@@ -612,10 +612,7 @@ BOOL devIsCondor(PDeviceDescriptor_t d)
 
   LockComm();
   if (d && d->Driver) {
-    if (d->Driver->IsCondor != NULL)
-      result = d->Driver->IsCondor(d);
-    else
-      result = d->Driver->Flags & drfCondor ? TRUE : FALSE;
+    result = d->Driver->Flags & drfCondor ? TRUE : FALSE;
   }
   UnlockComm();
 

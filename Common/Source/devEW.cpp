@@ -353,7 +353,6 @@ static const DeviceRegister_t ewDevice = {
   NULL,				// IsGPSSource
   NULL,				// IsBaroSource
   NULL,				// IsRadio
-  NULL,				// IsCondor
   NULL				// OnSysTicker
 };
 

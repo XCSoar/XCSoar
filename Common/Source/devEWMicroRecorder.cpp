@@ -284,7 +284,6 @@ static const DeviceRegister_t ewMicroRecorderDevice = {
   NULL,				// IsGPSSource
   NULL,				// IsBaroSource
   NULL,				// IsRadio
-  NULL,				// IsCondor
   NULL				// OnSysTicker
 };
 

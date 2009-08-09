@@ -77,7 +77,6 @@ typedef	struct DeviceRegister {
   BOOL (*IsGPSSource)(DeviceDescriptor_t *d);
   BOOL (*IsBaroSource)(DeviceDescriptor_t *d);
   BOOL (*IsRadio)(DeviceDescriptor_t *d);
-  BOOL (*IsCondor)(DeviceDescriptor_t	*d);
   BOOL (*OnSysTicker)(DeviceDescriptor_t *d);
 } DeviceRegister_t;
 

@@ -134,7 +134,6 @@ static const DeviceRegister_t atrDevice = {
   NULL,				// IsGPSSource
   NULL,				// IsBaroSource
   NULL,				// IsRadio
-  NULL,				// IsCondor
   atrOnSysTicker		// OnSysTicker
 };
 

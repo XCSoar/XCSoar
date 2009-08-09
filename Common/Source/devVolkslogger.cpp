@@ -304,7 +304,6 @@ static const DeviceRegister_t vlDevice = {
   NULL,				// IsGPSSource
   devIsFalseReturn,		// IsBaroSource: devIsTrueReturn? -- rmk
   NULL,				// IsRadio
-  NULL,				// IsCondor
   NULL				// OnSysTicker
 };
 

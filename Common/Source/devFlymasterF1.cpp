@@ -76,7 +76,6 @@ static const DeviceRegister_t flymasterf1Device = {
   NULL,				// IsGPSSource
   NULL,				// IsBaroSource
   NULL,				// IsRadio
-  NULL,				// IsCondor
   NULL				// OnSysTicker
 };
 
