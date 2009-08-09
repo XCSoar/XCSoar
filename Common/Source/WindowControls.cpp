@@ -1646,15 +1646,8 @@ void WindowControl::SetHelpText(const TCHAR *Value) {
 
 
 void WindowControl::SetCaption(const TCHAR *Value){
-
-  if (Value == NULL && mCaption[0] != '\0'){
-    mCaption[0] ='\0';
-    InvalidateRect(GetHandle(), GetBoundRect(), false);
-    UpdateWindow(GetHandle());
-
-    return;
-
-  }
+  if (Value == NULL)
+    Value = TEXT("");
 
   if (_tcscmp(mCaption, Value) != 0){
 
@@ -2526,15 +2519,8 @@ void WndForm::Paint(HDC hDC){
 }
 
 void WndForm::SetCaption(const TCHAR *Value){
-
-  if (Value == NULL && mCaption[0] != '\0'){
-    mCaption[0] ='\0';
-    InvalidateRect(GetHandle(), GetBoundRect(), false);
-    UpdateWindow(GetHandle());
-
-    return;
-
-  }
+  if (Value == NULL)
+    Value = TEXT("");
 
   if (_tcscmp(mCaption, Value) != 0){
     _tcscpy(mCaption, Value);
@@ -3631,15 +3617,8 @@ void WndFrame::Paint(HDC hDC){
 }
 
 void WndFrame::SetCaption(const TCHAR *Value){
-
-  if (Value == NULL && mCaption[0] != '\0'){
-    mCaption[0] ='\0';
-    InvalidateRect(GetHandle(), GetBoundRect(), false);
-    UpdateWindow(GetHandle());
-
-    return;
-
-  }
+  if (Value == NULL)
+    Value = TEXT("");
 
   if (_tcscmp(mCaption, Value) != 0){
     _tcscpy(mCaption, Value);  // todo size check
