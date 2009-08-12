@@ -2236,8 +2236,9 @@ void MapWindow::RenderMapWindowBg(HDC hdc, const RECT rc,
     DrawProjectedTrack(hdc, rc, Orig_Aircraft);
     DrawOffTrackIndicator(hdc, rc);
     DrawBestCruiseTrack(hdc, Orig_Aircraft);
-    DrawBearing(hdc, rc);
   }
+  DrawBearing(hdc, rc, extGPSCONNECT);
+
 
   // draw wind vector at aircraft
   if (!EnablePan) {
@@ -3697,8 +3698,9 @@ void MapWindow::DrawWindAtAircraft2(HDC hdc, const POINT Orig, const RECT rc) {
 }
 
 
-void MapWindow::DrawBearing(HDC hdc, const RECT rc)
-{
+void MapWindow::DrawBearing(HDC hdc, const RECT rc, int bBearingValid)
+{ /* RLD bearing is invalid if GPS not connected and in non-sim mode,
+   but we can still draw targets */
 
   if (!ValidTaskPoint(ActiveWayPoint)) {
     return;
@@ -3719,66 +3721,60 @@ void MapWindow::DrawBearing(HDC hdc, const RECT rc)
     targetLon = WayPointList[Task[ActiveWayPoint].Index].Longitude;
   }
   UnlockTaskData();
+  if (bBearingValid) {
+      DrawGreatCircle(hdc, startLon, startLat,  // RLD skip if bearing invalid
+                      targetLon, targetLat, rc);// RLD bc Lat/Lon invalid
 
-  DrawGreatCircle(hdc, startLon, startLat,
-                  targetLon, targetLat, rc);
+    if (TargetPan) {
+      // Draw all of task if in target pan mode
+      startLat = targetLat;
+      startLon = targetLon;
 
-  if (TargetPan) {
-    // Draw all of task if in target pan mode
-    startLat = targetLat;
-    startLon = targetLon;
+      LockTaskData();
 
-    LockTaskData();
-    for (int i=ActiveWayPoint+1; i<MAXTASKPOINTS; i++) {
-      if (ValidTaskPoint(i)) {
-
-        if (AATEnabled && ValidTaskPoint(i+1)) {
-          targetLat = Task[i].AATTargetLat;
-          targetLon = Task[i].AATTargetLon;
-        } else {
-          targetLat = WayPointList[Task[i].Index].Latitude;
-          targetLon = WayPointList[Task[i].Index].Longitude;
-        }
-
-        DrawGreatCircle(hdc, startLon, startLat,
-                        targetLon, targetLat, rc);
-
-        startLat = targetLat;
-        startLon = targetLon;
-      }
-    }
-
-    // JMW draw symbol at target, makes it easier to see
-
-    if (AATEnabled) {
       for (int i=ActiveWayPoint+1; i<MAXTASKPOINTS; i++) {
-        if(ValidTaskPoint(i) && ValidTaskPoint(i+1)) {
-          if (i>= ActiveWayPoint) {
-            POINT sct;
-            LatLon2Screen(Task[i].AATTargetLon,
-                          Task[i].AATTargetLat,
-                          sct);
-            DrawBitmapIn(hdc, sct, hBmpTarget);
+        if (ValidTaskPoint(i)) {
+
+          if (AATEnabled && ValidTaskPoint(i+1)) {
+            targetLat = Task[i].AATTargetLat;
+            targetLon = Task[i].AATTargetLon;
+          } else {
+            targetLat = WayPointList[Task[i].Index].Latitude;
+            targetLon = WayPointList[Task[i].Index].Longitude;
           }
+
+          DrawGreatCircle(hdc, startLon, startLat,
+                          targetLon, targetLat, rc);
+
+          startLat = targetLat;
+          startLon = targetLon;
         }
       }
-    }
 
-    UnlockTaskData();
+      UnlockTaskData();
 
-  }
+    } // TargetPan
+  } // bearing valid
 
+  // JMW draw symbol at target, makes it easier to see
+  // RLD always draw all targets ahead so visible in pan mode
   if (AATEnabled) {
     LockTaskData();
-    if (ValidTaskPoint(ActiveWayPoint+1) && (ActiveWayPoint>0)) {
-      POINT sct;
-      LatLon2Screen(Task[ActiveWayPoint].AATTargetLon,
-                    Task[ActiveWayPoint].AATTargetLat,
-                    sct);
-      DrawBitmapIn(hdc, sct, hBmpTarget);
+    for (int i=ActiveWayPoint; i<MAXTASKPOINTS; i++) {
+      // RLD skip invalid targets and targets at start and finish
+      if(ValidTaskPoint(i) && ValidTaskPoint(i+1) && i > 0) {
+        if (i>= ActiveWayPoint) {
+          POINT sct;
+          LatLon2Screen(Task[i].AATTargetLon,
+                        Task[i].AATTargetLat,
+                        sct);
+          DrawBitmapIn(hdc, sct, hBmpTarget);
+        }
+      }
     }
     UnlockTaskData();
   }
+
 }
 
 

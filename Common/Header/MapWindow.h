@@ -318,7 +318,7 @@ class MapWindow {
   static void DrawThermalEstimate(HDC hdc, const RECT rc);
   static void DrawTaskAAT(HDC hdc, const RECT rc, HDC buffer);
   static void DrawAbortedTask(HDC hdc, const RECT rc, const POINT Orig);
-  static void DrawBearing(HDC hdc, const RECT rc);
+  static void DrawBearing(HDC hdc, const RECT rc, int bBearingValid);
   static void DrawGreatCircle(HDC hdc,
                               double lon_start, double lat_start,
                               double lon_end, double lat_end,
