@@ -1158,6 +1158,7 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
   double distance;
   int width = (int) LOWORD(lParam);
   int height = (int) HIWORD(lParam);
+  static bool ignorenext=true;
 
   static DWORD dwDownTime= 0L, dwUpTime= 0L, dwInterval= 0L;
 
@@ -1507,13 +1508,33 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
       // VNT TODO: do not handle this event and remove CS_DBLCLKS in register class.
       // Only handle timed clicks in BUTTONDOWN with no proximity.
       //
-      static bool ignorenext=true;
       dwDownTime = GetTickCount();
 
       #ifndef DISABLEAUDIO
       if (EnableSoundModes) PlayResource(TEXT("IDR_WAV_CLICK"));
       #endif
       ShowMenu();
+      break;
+
+    case WM_MOUSEMOVE:
+      if (AATEnabled && TargetPan && (TargetDrag_State>0)) {  // target follows "finger" so easier to drop near edge of sector
+        if (TargetDrag_State == 1) {
+          POINT Pos;
+          double mouseMovelon, mouseMovelat;
+          Pos.x = LOWORD(lParam);
+          Pos.y = HIWORD(lParam);
+
+          Screen2LatLon((int)Pos.x, (int)Pos.y, mouseMovelon, mouseMovelat);
+          if (InAATTurnSector(mouseMovelon, mouseMovelat, TargetPanIndex)) {
+            // update waypoints so if we drag out of the cylindar, it will remain adjacent to the edge
+            Task[TargetPanIndex].AATTargetLat = mouseMovelat;
+            Task[TargetPanIndex].AATTargetLon = mouseMovelon;
+            TargetDrag_Latitude = mouseMovelat;
+            TargetDrag_Longitude = mouseMovelon;
+            DrawBitmapIn(hdcScreen, Pos, hBmpTarget);
+          }
+        }
+      }
       break;
 
     case WM_LBUTTONDOWN:
@@ -1583,7 +1604,7 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
 	#ifdef DEBUG_VIRTUALKEYS
 	TCHAR buf[80]; char sbuf[80];
 	sprintf(sbuf,"%.0f",distance);
-	_stprintf(buf,_T("XY=%d,%d dist=%S Up=%ld Down=%ld Int=%ld"),X,Y,sbuf,dwUptime,dwDownTime,dwInterval);
+	_stprintf(buf,_T("XY=%d,%d dist=%S Up=%ld Down=%ld Int=%ld"),X,Y,sbuf,dwUpTime,dwDownTime,dwInterval);
         DoStatusMessage(buf);
 	#endif
 
@@ -1605,8 +1626,11 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
       if (AATEnabled && TargetPan && (TargetDrag_State>0)) {
 	LockTaskData();
 	TargetDrag_State = 2;
-	TargetDrag_Latitude = Ylat;
-	TargetDrag_Longitude = Xlat;
+        if (InAATTurnSector(Xlat, Ylat, TargetPanIndex)) {
+            // if release mouse out of sector, don't update w/ bad coords
+	  TargetDrag_Latitude = Ylat;
+	  TargetDrag_Longitude = Xlat;
+        }
 	UnlockTaskData();
 	break;
       } else if (!TargetPan && EnablePan && (distance>36)) { // TODO FIX should be IBLSCALE 36 instead?

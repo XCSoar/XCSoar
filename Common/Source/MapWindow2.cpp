@@ -1901,10 +1901,12 @@ void MapWindow::DrawProjectedTrack(HDC hdc, const RECT rc, const POINT Orig) {
 bool MapWindow::TargetDragged(double *longitude, double *latitude) {
   bool retval = false;
   LockTaskData();
-  if (TargetDrag_State==2) {
+  if (TargetDrag_State >0) { // always return true if we're dragging or just stopped dragging, so screen is updated
     *longitude = TargetDrag_Longitude;
     *latitude = TargetDrag_Latitude;
-    TargetDrag_State = 0;
+    if (TargetDrag_State == 2) {
+        TargetDrag_State = 0; // mouse up/ stop dragging
+    }
     retval = true;
   }
   UnlockTaskData();
