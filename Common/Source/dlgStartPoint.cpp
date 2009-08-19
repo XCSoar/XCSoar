@@ -40,6 +40,7 @@ Copyright_License {
 #include "InfoBoxLayout.h"
 #include "MapWindow.h"
 
+#include <assert.h>
 
 static WndForm *wf=NULL;
 static WndListFrame *wStartPointList=NULL;
@@ -202,18 +203,18 @@ void dlgStartPointShowModal(void) {
   }
   if (!wf) return;
 
-  ASSERT(wf!=NULL);
+  assert(wf!=NULL);
 
   CheckStartPointInTask();
 
   wStartPointList = (WndListFrame*)wf->FindByName(TEXT("frmStartPointList"));
-  ASSERT(wStartPointList!=NULL);
+  assert(wStartPointList!=NULL);
   wStartPointList->SetBorderKind(BORDERLEFT);
   wStartPointList->SetEnterCallback(OnStartPointListEnter);
 
   wStartPointListEntry = (WndOwnerDrawFrame*)wf->
     FindByName(TEXT("frmStartPointListEntry"));
-  ASSERT(wStartPointListEntry!=NULL);
+  assert(wStartPointListEntry!=NULL);
   wStartPointListEntry->SetCanFocus(true);
 
   UpdateList();

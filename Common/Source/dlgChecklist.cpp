@@ -43,6 +43,8 @@ Copyright_License {
 #include "dlgTools.h"
 #include "InfoBoxLayout.h"
 
+#include <assert.h>
+
 #define MAXTITLE 200
 #define MAXDETAILS 5000
 
@@ -306,11 +308,11 @@ void dlgChecklistShowModal(void){
   ((WndButton *)wf->FindByName(TEXT("cmdClose")))->SetOnClickNotify(OnCloseClicked);
 
   wDetails = (WndListFrame*)wf->FindByName(TEXT("frmDetails"));
-  ASSERT(wDetails!=NULL);
+  assert(wDetails!=NULL);
 
   wDetailsEntry =
     (WndOwnerDrawFrame*)wf->FindByName(TEXT("frmDetailsEntry"));
-  ASSERT(wDetailsEntry!=NULL);
+  assert(wDetailsEntry!=NULL);
   wDetailsEntry->SetCanFocus(true);
 
   wDetails->SetBorderKind(BORDERLEFT);

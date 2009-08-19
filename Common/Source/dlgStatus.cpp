@@ -45,6 +45,8 @@ Copyright_License {
 #include "Process.h"
 #endif
 
+#include <assert.h>
+
 extern BOOL extGPSCONNECT;
 
 #include "dlgTools.h"
@@ -629,11 +631,11 @@ void dlgStatusShowModal(int start_page){
   wStatus3    = ((WndFrame *)wf->FindByName(TEXT("frmStatusRules")));
   wStatus4    = ((WndFrame *)wf->FindByName(TEXT("frmStatusTimes")));
 
-  ASSERT(wStatus0!=NULL);
-  ASSERT(wStatus1!=NULL);
-  ASSERT(wStatus2!=NULL);
-  ASSERT(wStatus3!=NULL);
-  ASSERT(wStatus4!=NULL);
+  assert(wStatus0!=NULL);
+  assert(wStatus1!=NULL);
+  assert(wStatus2!=NULL);
+  assert(wStatus3!=NULL);
+  assert(wStatus4!=NULL);
 
   wf->SetTimerNotify(OnTimerNotify);
 

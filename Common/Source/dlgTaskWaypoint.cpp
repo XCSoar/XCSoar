@@ -42,6 +42,8 @@ Copyright_License {
 #include "Logger.h"
 #include "InfoBoxLayout.h"
 
+#include <assert.h>
+
 static int twItemIndex= 0;
 static WndForm *wf=NULL;
 static int twType = 0; // start, turnpoint, finish
@@ -505,7 +507,7 @@ void dlgTaskWaypointShowModal(int itemindex, int tasktype, bool addonly){
 
   if (!wf) return;
 
-  ASSERT(wf!=NULL);
+  assert(wf!=NULL);
   //  wf->SetKeyDownNotify(FormKeyDown);
 
   wStart     = ((WndFrame *)wf->FindByName(TEXT("frmStart")));
@@ -513,10 +515,10 @@ void dlgTaskWaypointShowModal(int itemindex, int tasktype, bool addonly){
   wAATTurnpoint = ((WndFrame *)wf->FindByName(TEXT("frmAATTurnpoint")));
   wFinish    = ((WndFrame *)wf->FindByName(TEXT("frmFinish")));
 
-  ASSERT(wStart!=NULL);
-  ASSERT(wTurnpoint!=NULL);
-  ASSERT(wAATTurnpoint!=NULL);
-  ASSERT(wFinish!=NULL);
+  assert(wStart!=NULL);
+  assert(wTurnpoint!=NULL);
+  assert(wAATTurnpoint!=NULL);
+  assert(wFinish!=NULL);
 
   WndButton* wb;
   if (addonly) {

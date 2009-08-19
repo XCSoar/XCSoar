@@ -41,6 +41,7 @@ Copyright_License {
 #include "InfoBoxLayout.h"
 #include "MapWindow.h"
 
+#include <assert.h>
 
 static WndForm *wf=NULL;
 static WndListFrame *wAirspaceList=NULL;
@@ -264,16 +265,16 @@ void dlgAirspaceShowModal(bool coloredit){
   }
   if (!wf) return;
 
-  ASSERT(wf!=NULL);
+  assert(wf!=NULL);
 
   wAirspaceList = (WndListFrame*)wf->FindByName(TEXT("frmAirspaceList"));
-  ASSERT(wAirspaceList!=NULL);
+  assert(wAirspaceList!=NULL);
   wAirspaceList->SetBorderKind(BORDERLEFT);
   wAirspaceList->SetEnterCallback(OnAirspaceListEnter);
 
   wAirspaceListEntry = (WndOwnerDrawFrame*)wf->
     FindByName(TEXT("frmAirspaceListEntry"));
-  ASSERT(wAirspaceListEntry!=NULL);
+  assert(wAirspaceListEntry!=NULL);
   wAirspaceListEntry->SetCanFocus(true);
 
   UpdateList();

@@ -280,6 +280,6 @@ Text2NE[129] = TEXT("UNUSED_57");
 Text2NE[130] = TEXT("COUNT");
 Text2Event_count = 62;
 // Check no array overrun
-ASSERT(130 <= NE_COUNT);
+assert(130 <= NE_COUNT);
 // Check no array overrun
-ASSERT(23 <= GCE_COUNT);
+assert(23 <= GCE_COUNT);

@@ -41,6 +41,8 @@ Copyright_License {
 #include "device.h"
 #include "InfoBoxLayout.h"
 
+#include <assert.h>
+
 extern void dlgVegaDemoShowModal(void);
 
 static bool changed = false;
@@ -1051,25 +1053,25 @@ bool dlgConfigurationVarioShowModal(void){
   wConfig18    = ((WndFrame *)wf->FindByName(TEXT("frmSchemes")));
   wConfig19    = ((WndFrame *)wf->FindByName(TEXT("frmDisplay")));
 
-  ASSERT(wConfig1!=NULL);
-  ASSERT(wConfig2!=NULL);
-  ASSERT(wConfig3!=NULL);
-  ASSERT(wConfig4!=NULL);
-  ASSERT(wConfig5!=NULL);
-  ASSERT(wConfig6!=NULL);
-  ASSERT(wConfig7!=NULL);
-  ASSERT(wConfig8!=NULL);
-  ASSERT(wConfig9!=NULL);
-  ASSERT(wConfig10!=NULL);
-  ASSERT(wConfig11!=NULL);
-  ASSERT(wConfig12!=NULL);
-  ASSERT(wConfig13!=NULL);
-  ASSERT(wConfig14!=NULL);
-  ASSERT(wConfig15!=NULL);
-  ASSERT(wConfig16!=NULL);
-  ASSERT(wConfig17!=NULL);
-  ASSERT(wConfig18!=NULL);
-  ASSERT(wConfig19!=NULL);
+  assert(wConfig1!=NULL);
+  assert(wConfig2!=NULL);
+  assert(wConfig3!=NULL);
+  assert(wConfig4!=NULL);
+  assert(wConfig5!=NULL);
+  assert(wConfig6!=NULL);
+  assert(wConfig7!=NULL);
+  assert(wConfig8!=NULL);
+  assert(wConfig9!=NULL);
+  assert(wConfig10!=NULL);
+  assert(wConfig11!=NULL);
+  assert(wConfig12!=NULL);
+  assert(wConfig13!=NULL);
+  assert(wConfig14!=NULL);
+  assert(wConfig15!=NULL);
+  assert(wConfig16!=NULL);
+  assert(wConfig17!=NULL);
+  assert(wConfig18!=NULL);
+  assert(wConfig19!=NULL);
 
   //// populate enums
 

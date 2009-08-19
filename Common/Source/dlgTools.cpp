@@ -43,6 +43,7 @@ Copyright_License {
 #include "InfoBoxLayout.h"
 #include "Dialogs.h"
 
+#include <assert.h>
 
 static inline int
 mmin(const int t1, const int t2)
@@ -106,8 +107,8 @@ int WINAPI MessageBoxX(LPCTSTR lpText, LPCTSTR lpCaption, UINT uType){
 
   // todo
 
-  ASSERT(lpText != NULL);
-  ASSERT(lpCaption != NULL);
+  assert(lpText != NULL);
+  assert(lpCaption != NULL);
 
   GetClientRect(hWnd, &rc);
 
@@ -451,7 +452,7 @@ WndForm *dlgLoadFromXML(CallBackTableEntry_t *LookUpTable, const char *FileName,
   WndForm *theForm = NULL;
   //  TCHAR sFileName[128];
 
-//  ASSERT(hWndMainWindow == Parent);  // Airspace warning has MapWindow as parent,
+//  assert(hWndMainWindow == Parent);  // Airspace warning has MapWindow as parent,
   // ist that ok?  JMW: No, I think that it is better to use main UI thread for
   // everything.  See changes regarding RequestAirspaceDialog in AirspaceWarning.cpp
 

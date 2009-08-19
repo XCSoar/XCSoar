@@ -82,6 +82,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "GaugeFLARM.h"
 #include "Waypointparser.h"
 
+#include <assert.h>
 #include <ctype.h>
 #include <tchar.h>
 
@@ -284,23 +285,23 @@ void InputEvents::readFile() {
 	token = _tcstok(d_mode, TEXT(" "));
 
 	// General errors - these should be true
-	ASSERT(d_location >= 0);
-	ASSERT(d_location < 1024);	// Scott arbitrary limit
-	ASSERT(event_id >= 0);
-	ASSERT(d_mode != NULL);
-	ASSERT(d_type != NULL);
-	ASSERT(d_label != NULL);
+	assert(d_location >= 0);
+	assert(d_location < 1024);	// Scott arbitrary limit
+	assert(event_id >= 0);
+	assert(d_mode != NULL);
+	assert(d_type != NULL);
+	assert(d_label != NULL);
 
 	// These could indicate bad data - thus not an ASSERT (debug only)
-	// ASSERT(_tcslen(d_mode) < 1024);
-	// ASSERT(_tcslen(d_type) < 1024);
-	// ASSERT(_tcslen(d_label) < 1024);
+	// assert(_tcslen(d_mode) < 1024);
+	// assert(_tcslen(d_type) < 1024);
+	// assert(_tcslen(d_label) < 1024);
 
 	while( token != NULL ) {
 
 	  // All modes are valid at this point
 	  int mode_id = mode2int(token, true);
-	  ASSERT(mode_id >= 0);
+	  assert(mode_id >= 0);
 
 	  // Make label event
 	  // TODO code: Consider Reuse existing entries...
@@ -558,7 +559,7 @@ int InputEvents::findNE(const TCHAR *data) {
 // without taking up more data - but when loading from file must copy string
 int InputEvents::makeEvent(void (*event)(const TCHAR *), const TCHAR *misc, int next) {
   if (Events_count >= MAX_EVENTS){
-    ASSERT(0);
+    assert(0);
     return 0;
   }
   Events_count++;	// NOTE - Starts at 1 - 0 is a noop
@@ -599,7 +600,7 @@ void InputEvents::makeLabel(int mode_id, const TCHAR* label, int location, int e
     ModeLabel[mode_id][ModeLabel_count[mode_id]].event = event_id;
     ModeLabel_count[mode_id]++;
   } else {
-    ASSERT(0);
+    assert(0);
   }
 }
 
@@ -624,7 +625,7 @@ int InputEvents::mode2int(const TCHAR *mode, bool create) {
   }
 
   // Should never reach this point
-  ASSERT(false);
+  assert(false);
   return -1;
 }
 
@@ -633,7 +634,7 @@ void InputEvents::setMode(const TCHAR *mode) {
   static int lastmode = -1;
   int thismode;
 
-  ASSERT(mode != NULL);
+  assert(mode != NULL);
 
   _tcsncpy(mode_current, mode, MAX_MODE_STRING);
 
@@ -1547,7 +1548,7 @@ void InputEvents::eventDoInfoKey(const TCHAR *misc) {
 //  The argument is the label of the mode to activate.
 //  This is used to activate menus/submenus of buttons
 void InputEvents::eventMode(const TCHAR *misc) {
-  ASSERT(misc != NULL);
+  assert(misc != NULL);
   InputEvents::setMode(misc);
 
   // trigger redraw of screen to reduce blank area under windows

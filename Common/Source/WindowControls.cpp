@@ -61,6 +61,8 @@ extern int DisplayTimeOut;
 #endif
 #endif
 
+#include <assert.h>
+
 #ifdef ALTAIRSYNC
 #define ISCALE 1
 void SetSourceRectangle(RECT fromRect) {};
@@ -1250,7 +1252,7 @@ ComboListEntry_t * ComboList::CreateItem(int ItemIndex,
   theItem->DataFieldIndex=0;  // NULL is same as 0, so it fails to set it if index value is 0
   theItem->ItemIndex=0;
 
-  ASSERT(theItem!= NULL);
+  assert(theItem!= NULL);
 
   theItem->ItemIndex=ItemIndex;
 
@@ -1261,14 +1263,14 @@ ComboListEntry_t * ComboList::CreateItem(int ItemIndex,
   if (StringValue == NULL)
   {
     theItem->StringValue = (TCHAR*)malloc((1) * sizeof(TCHAR));
-    ASSERT(theItem->StringValue != NULL);
+    assert(theItem->StringValue != NULL);
     theItem->StringValue[0]='\0';
   }
   else
   {
     iLen = _tcslen(StringValue);
     theItem->StringValue = (TCHAR*)malloc((iLen + 1) * sizeof(TCHAR));
-    ASSERT(theItem->StringValue != NULL);
+    assert(theItem->StringValue != NULL);
     _tcscpy(theItem->StringValue, StringValue);
   }
 
@@ -1277,14 +1279,14 @@ ComboListEntry_t * ComboList::CreateItem(int ItemIndex,
   if (StringValueFormatted == NULL)
   {
     theItem->StringValueFormatted = (TCHAR*)malloc((1) * sizeof(TCHAR));
-    ASSERT(theItem->StringValueFormatted != NULL);
+    assert(theItem->StringValueFormatted != NULL);
     theItem->StringValueFormatted[0]='\0';
   }
   else
   {
     iLen = _tcslen(StringValueFormatted);
     theItem->StringValueFormatted = (TCHAR*)malloc((iLen + 1) * sizeof(TCHAR));
-    ASSERT(theItem->StringValueFormatted != NULL);
+    assert(theItem->StringValueFormatted != NULL);
     _tcscpy(theItem->StringValueFormatted, StringValueFormatted);
   }
 
@@ -3032,7 +3034,7 @@ void WndProperty::Destroy(void){
       delete mDataField;
       mDataField = NULL;
     } else {
-      ASSERT(0);
+      assert(0);
     }
   }
 

@@ -44,6 +44,7 @@ Copyright_License {
 #include "dlgTools.h"
 #include "InfoBoxLayout.h"
 
+#include <assert.h>
 
 static WndForm *wf=NULL;
 static WndFrame *wfAdvanced=NULL;
@@ -554,22 +555,22 @@ void dlgTaskOverviewShowModal(void){
 
   if (!wf) return;
 
-  ASSERT(wf!=NULL);
+  assert(wf!=NULL);
 
   UpdateCaption();
 
   wfAdvanced = ((WndFrame *)wf->FindByName(TEXT("frmAdvanced")));
-  ASSERT(wfAdvanced!=NULL);
+  assert(wfAdvanced!=NULL);
 
   wTaskList = (WndListFrame*)wf->FindByName(TEXT("frmTaskList"));
-  ASSERT(wTaskList!=NULL);
+  assert(wTaskList!=NULL);
   wTaskList->SetBorderKind(BORDERLEFT);
   wTaskList->SetEnterCallback(OnTaskListEnter);
 
   wTaskListEntry = (WndOwnerDrawFrame*)wf->
     FindByName(TEXT("frmTaskListEntry"));
 
-  ASSERT(wTaskListEntry!=NULL);
+  assert(wTaskListEntry!=NULL);
   wTaskListEntry->SetCanFocus(true);
 
   WndProperty* wp;

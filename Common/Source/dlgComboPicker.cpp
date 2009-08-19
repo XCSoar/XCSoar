@@ -43,6 +43,8 @@ Copyright_License {
 #include "dlgTools.h"
 #include "InfoBoxLayout.h"
 
+#include <assert.h>
+
 extern HWND   hWndMainWindow;
 static WndForm *wf=NULL;
 
@@ -154,7 +156,7 @@ int dlgComboPicker(WndProperty* theProperty){
 
   while (bOpenCombo)
   {
-    ASSERT(theProperty!=NULL);
+    assert(theProperty!=NULL);
     wComboPopupWndProperty = theProperty;
 
 
@@ -177,26 +179,26 @@ int dlgComboPicker(WndProperty* theProperty){
 
     if (!wf) return -1;
 
-    ASSERT(wf!=NULL);
-    //ASSERT(wf->GetWidth() <1200);  // sometimes we have a bogus window, setfocus goes nuts
+    assert(wf!=NULL);
+    //assert(wf->GetWidth() <1200);  // sometimes we have a bogus window, setfocus goes nuts
 
     wf->SetCaption(theProperty->GetCaption());
 
     wComboPopupListFrame = (WndListFrame*)wf->FindByName(TEXT("frmComboPopupList"));
-    ASSERT(wComboPopupListFrame!=NULL);
+    assert(wComboPopupListFrame!=NULL);
     wComboPopupListFrame->SetBorderKind(BORDERLEFT | BORDERTOP | BORDERRIGHT|BORDERBOTTOM);
     wComboPopupListFrame->SetEnterCallback(OnComboPopupListEnter);
 
     // allow item to be focused / hightlighted
     wComboPopupListEntry = (WndOwnerDrawFrame*)wf->FindByName(TEXT("frmComboPopupListEntry"));
-    ASSERT(wComboPopupListEntry!=NULL);
+    assert(wComboPopupListEntry!=NULL);
     wComboPopupListEntry->SetCanFocus(true);
     wComboPopupListEntry->SetFocused(true, wComboPopupWndProperty->GetHandle());
 
 
     ComboPopupDataField = wComboPopupWndProperty->GetDataField();
     ComboListPopup = ComboPopupDataField->GetCombo();
-    ASSERT(ComboPopupDataField!=NULL);
+    assert(ComboPopupDataField!=NULL);
 
     ComboPopupDataField->CreateComboList();
     wComboPopupListFrame->ResetList();
@@ -234,7 +236,7 @@ int dlgComboPicker(WndProperty* theProperty){
     }
     else // Cancel
     { // if we've detached the GUI during the load, then there is nothing to do here
-      ASSERT(iSavedInitialDataIndex >=0);
+      assert(iSavedInitialDataIndex >=0);
       if (iSavedInitialDataIndex >=0) {
         /// use statics here - saved from first page if multiple were used
         ComboPopupDataField->SetFromCombo(iSavedInitialDataIndex, sSavedInitialValue);

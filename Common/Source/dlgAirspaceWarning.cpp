@@ -43,6 +43,7 @@ Copyright_License {
 
 #include "dlgTools.h"
 
+#include <assert.h>
 
 extern HWND   hWndMainWindow;
 extern HWND   hWndMapWindow;
@@ -634,8 +635,8 @@ bool dlgAirspaceWarningShowDlg(bool Force){
   if (Count == 0)
     return(false);
 
-  ASSERT(wf != NULL);
-  ASSERT(wAirspaceList != NULL);
+  assert(wf != NULL);
+  assert(wAirspaceList != NULL);
 
   wAirspaceList->ResetList();
 

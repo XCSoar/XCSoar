@@ -45,6 +45,8 @@ Copyright_License {
 #include "Airspace.h"
 #include "AirspaceWarning.h"
 
+#include <assert.h>
+
 static int index_circle = -1;
 static int index_area = -1;
 static WndForm *wf=NULL;
@@ -315,7 +317,7 @@ void dlgAirspaceDetails(int the_circle, int the_area) {
 
   if (!wf) return;
 
-  ASSERT(wf!=NULL);
+  assert(wf!=NULL);
 
   SetValues();
 

@@ -42,6 +42,8 @@ Copyright_License {
 #include "InfoBoxLayout.h"
 #include "Compatibility/string.h"
 
+#include <assert.h>
+
 typedef struct{
   int Index;
   double Distance;
@@ -720,7 +722,7 @@ int dlgWayPointSelect(double lon, double lat, int type, int FilterNear){
 
   if (!wf) return -1;
 
-  ASSERT(wf!=NULL);
+  assert(wf!=NULL);
 
   wf->SetKeyDownNotify(FormKeyDown);
 
@@ -729,12 +731,12 @@ int dlgWayPointSelect(double lon, double lat, int type, int FilterNear){
     SetOnClickNotify(OnWPSCloseClicked);
 
   wWayPointList = (WndListFrame*)wf->FindByName(TEXT("frmWayPointList"));
-  ASSERT(wWayPointList!=NULL);
+  assert(wWayPointList!=NULL);
   wWayPointList->SetBorderKind(BORDERLEFT);
   wWayPointList->SetEnterCallback(OnWaypointListEnter);
 
   wWayPointListEntry = (WndOwnerDrawFrame*)wf->FindByName(TEXT("frmWayPointListEntry"));
-  ASSERT(wWayPointListEntry!=NULL);
+  assert(wWayPointListEntry!=NULL);
   wWayPointListEntry->SetCanFocus(true);
 
   wpName = (WndProperty*)wf->FindByName(TEXT("prpFltName"));

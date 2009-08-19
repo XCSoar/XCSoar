@@ -41,6 +41,8 @@
 #include "InfoBoxLayout.h"
 #include "Utils.h"
 
+#include <assert.h>
+
 #define MAXTITLE 200
 #define MAXDETAILS 5000
 
@@ -299,11 +301,11 @@ void dlgFlarmTrafficShowModal(void){
 
   wDetails = (WndListFrame*)wf->FindByName(TEXT("frmDetails"));
   wDetails->SetEnterCallback(OnListEnter);
-  ASSERT(wDetails!=NULL);
+  assert(wDetails!=NULL);
 
   wDetailsEntry =
     (WndOwnerDrawFrame*)wf->FindByName(TEXT("frmDetailsEntry"));
-  ASSERT(wDetailsEntry!=NULL);
+  assert(wDetailsEntry!=NULL);
   wDetailsEntry->SetCanFocus(true);
 
 

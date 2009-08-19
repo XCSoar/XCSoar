@@ -48,6 +48,8 @@ Copyright_License {
 #include "AirspaceWarning.h"
 #include "Compatibility/string.h"
 
+#include <assert.h>
+
 typedef struct{
   int Index_Circle;
   int Index_Area;
@@ -800,7 +802,7 @@ void dlgAirspaceSelect(void) {
 
   if (!wf) return;
 
-  ASSERT(wf!=NULL);
+  assert(wf!=NULL);
 
   wf->SetKeyDownNotify(FormKeyDown);
 
@@ -809,12 +811,12 @@ void dlgAirspaceSelect(void) {
     SetOnClickNotify(OnWPSCloseClicked);
 
   wAirspaceList = (WndListFrame*)wf->FindByName(TEXT("frmAirspaceList"));
-  ASSERT(wAirspaceList!=NULL);
+  assert(wAirspaceList!=NULL);
   wAirspaceList->SetBorderKind(BORDERLEFT);
   wAirspaceList->SetEnterCallback(OnAirspaceListEnter);
 
   wAirspaceListEntry = (WndOwnerDrawFrame*)wf->FindByName(TEXT("frmAirspaceListEntry"));
-  ASSERT(wAirspaceListEntry!=NULL);
+  assert(wAirspaceListEntry!=NULL);
   wAirspaceListEntry->SetCanFocus(true);
 
   wpName = (WndProperty*)wf->FindByName(TEXT("prpFltName"));

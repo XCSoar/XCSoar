@@ -84,6 +84,8 @@ Copyright_License {
 #include "InfoBox.h"
 #include "RasterTerrain.h"
 
+#include <assert.h>
+
 #ifdef DEBUG_TRANSLATIONS
 #include <map>
 static std::map<TCHAR*, TCHAR*> unusedTranslations;
@@ -1150,7 +1152,7 @@ void CreateCalculationThread() {
     SetThreadPriority(hCalculationThread, THREAD_PRIORITY_NORMAL);
     CloseHandle (hCalculationThread);
   } else {
-    ASSERT(1);
+    assert(1);
   }
 
   HANDLE hInstrumentThread;
@@ -1164,7 +1166,7 @@ void CreateCalculationThread() {
     SetThreadPriority(hInstrumentThread, THREAD_PRIORITY_NORMAL);
     CloseHandle (hInstrumentThread);
   } else {
-    ASSERT(1);
+    assert(1);
   }
 
 }
@@ -2880,7 +2882,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	//END VENTA DBG
 
     case WM_TIMER:
-      //      ASSERT(hWnd==hWndMainWindow);
+      //      assert(hWnd==hWndMainWindow);
       if (ProgramStarted > psInitInProgress) {
 #ifdef _SIM_
 	SIMProcessTimer();
@@ -2913,7 +2915,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     case WM_CLOSE:
 
 #ifndef GNAV
-      ASSERT(hWnd==hWndMainWindow);
+      assert(hWnd==hWndMainWindow);
       if(ForceShutdown || ((hWnd==hWndMainWindow) &&
          (MessageBoxX(gettext(TEXT("Quit program?")),
                       gettext(TEXT("XCSoar")),

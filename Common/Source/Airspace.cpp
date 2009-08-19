@@ -54,6 +54,7 @@ Copyright_License {
 #include "wcecompat/ts_string.h"
 #include "Compatibility/string.h"
 
+#include <assert.h>
 
 #define  BINFILEMAGICNUMBER     0x4ab199f0
 #define  BINFILEVERION          0x00000101
@@ -873,8 +874,8 @@ static void AddPoint(AIRSPACE_POINT *Temp, unsigned *AreaPointCount)
     }
   */
 
-  ASSERT(Temp != NULL);
-  ASSERT(AreaPointCount != NULL);
+  assert(Temp != NULL);
+  assert(AreaPointCount != NULL);
 
   if(bFillMode){
 
@@ -1719,8 +1720,8 @@ void IntermediatePoint(double lon1, double lat1,
   lon2 *= DEG_TO_RAD;
   */
 
-  ASSERT(lat3 != NULL);
-  ASSERT(lon3 != NULL);
+  assert(lat3 != NULL);
+  assert(lon3 != NULL);
 
   if ((lon1 == lon2) && (lat1 == lat2)){
     *lat3 = lat1;

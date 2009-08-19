@@ -44,6 +44,8 @@ Copyright_License {
 #include "InfoBoxLayout.h"
 #include "InfoBox.h"
 
+#include <assert.h>
+
 extern NMEA_INFO GPS_INFO;
 extern DERIVED_INFO CALCULATED_INFO;
 
@@ -518,8 +520,8 @@ POINT *GaugeVario::getPolygon(int i) {
 void GaugeVario::MakeAllPolygons() {
   polys = (POINT*)malloc((gmax*2+1)*3*sizeof(POINT));
   lines = (POINT*)malloc((gmax*2+1)*sizeof(POINT));
-  ASSERT(polys);
-  ASSERT(lines);
+  assert(polys);
+  assert(lines);
   if (polys && lines) {
     for (int i= -gmax; i<= gmax; i++) {
       MakePolygon(i);

@@ -36,6 +36,8 @@ Copyright_License {
 #include "StdAfx.h"
 #include "STScreenBuffer.h"
 
+#include <assert.h>
+
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
@@ -83,8 +85,8 @@ CSTScreenBuffer::~CSTScreenBuffer()
 
 BOOL CSTScreenBuffer::CreateBitmap(int nWidth, int nHeight)
 {
-  ASSERT(nWidth>0);
-  ASSERT(nHeight>0);
+  assert(nWidth>0);
+  assert(nHeight>0);
 
   if (m_hBitmap!=NULL) DeleteObject(m_hBitmap);
 
@@ -111,11 +113,11 @@ BOOL CSTScreenBuffer::CreateBitmap(int nWidth, int nHeight)
   dibInfo.bmiColors[0].rgbReserved = 0;
 
   HDC hDC = ::GetDC(NULL);
-  ASSERT(hDC);
+  assert(hDC);
   m_hBitmap = CreateDIBSection(hDC, (const BITMAPINFO*)dibInfo, DIB_RGB_COLORS, (void**)&m_pBuffer, NULL, 0);
   ::ReleaseDC(NULL, hDC);
-  ASSERT(m_hBitmap);
-  ASSERT(m_pBuffer);
+  assert(m_hBitmap);
+  assert(m_pBuffer);
 
   m_pBufferTmp = (BGRColor*)malloc(sizeof(BGRColor)*m_nHeight*m_nCorrectedWidth);
 
@@ -124,16 +126,16 @@ BOOL CSTScreenBuffer::CreateBitmap(int nWidth, int nHeight)
 
 void CSTScreenBuffer::Create(int nWidth, int nHeight)
 {
-	ASSERT(nWidth>0);
-	ASSERT(nHeight>0);
+	assert(nWidth>0);
+	assert(nHeight>0);
 
 	CreateBitmap(nWidth, nHeight);
 }
 
 void CSTScreenBuffer::Create(int nWidth, int nHeight, COLORREF clr)
 {
-	ASSERT(nWidth>0);
-	ASSERT(nHeight>0);
+	assert(nWidth>0);
+	assert(nHeight>0);
 
 	CreateBitmap(nWidth, nHeight);
 
@@ -172,7 +174,7 @@ void CSTScreenBuffer::Create(HBITMAP hBitmap)
 
 void CSTScreenBuffer::Create(HDC *pDC, RECT rect)
 {
-  ASSERT(m_pDC);
+  assert(m_pDC);
 
   CreateBitmap(rect.right-rect.left, rect.bottom-rect.top);
   BitBlt(m_pDC, 0,0, rect.right-rect.left, rect.bottom-rect.top,
@@ -181,9 +183,9 @@ void CSTScreenBuffer::Create(HDC *pDC, RECT rect)
 
 void CSTScreenBuffer::CreateRGB(void *pData, int nWidth, int nHeight)
 {
-  ASSERT(pData);
-  ASSERT(nWidth>0);
-  ASSERT(nHeight>0);
+  assert(pData);
+  assert(nWidth>0);
+  assert(nHeight>0);
 
   CreateBitmap(nWidth, nHeight);
 
@@ -205,7 +207,7 @@ void CSTScreenBuffer::CreateRGB(void *pData, int nWidth, int nHeight)
 
 BOOL CSTScreenBuffer::Draw(HDC* pDC, POINT ptDest)
 {
-  ASSERT(m_hBitmap);
+  assert(m_hBitmap);
   ReleaseDC();
 
   POINT Origin = {0,0};
@@ -249,7 +251,7 @@ BOOL CSTScreenBuffer::DrawStretch(HDC* pDC, POINT ptDest,
                                   unsigned int cx,
                                   unsigned int cy)
 {
-  ASSERT(m_hBitmap);
+  assert(m_hBitmap);
   ReleaseDC();
 
   POINT Origin = {0,0};

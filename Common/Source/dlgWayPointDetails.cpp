@@ -45,6 +45,8 @@ Copyright_License {
 #include "dlgTools.h"
 #include "InfoBoxLayout.h"
 
+#include <assert.h>
+
 extern void DrawJPG(HDC hdc, RECT rc);
 
 #ifndef CECORE
@@ -493,15 +495,15 @@ void dlgWayPointDetailsShowModal(void){
   wImage   = ((WndOwnerDrawFrame *)wf->FindByName(TEXT("frmImage")));
   wDetails = (WndListFrame*)wf->FindByName(TEXT("frmDetails"));
 
-  ASSERT(wInfo!=NULL);
-  ASSERT(wCommand!=NULL);
-  ASSERT(wSpecial!=NULL); // VENTA3
-  ASSERT(wImage!=NULL);
-  ASSERT(wDetails!=NULL);
+  assert(wInfo!=NULL);
+  assert(wCommand!=NULL);
+  assert(wSpecial!=NULL); // VENTA3
+  assert(wImage!=NULL);
+  assert(wDetails!=NULL);
 
   wDetailsEntry =
     (WndOwnerDrawFrame*)wf->FindByName(TEXT("frmDetailsEntry"));
-  ASSERT(wDetailsEntry!=NULL);
+  assert(wDetailsEntry!=NULL);
   wDetailsEntry->SetCanFocus(true);
 
   nTextLines = TextToLineOffsets(WayPointList[SelectedWaypoint].Details,

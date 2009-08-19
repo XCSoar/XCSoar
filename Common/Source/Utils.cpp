@@ -76,6 +76,8 @@ FlarmIdFile file;
 #include "InfoBoxLayout.h"
 #endif
 
+#include <assert.h>
+
 // JMW not required in newer systems?
 #ifdef __MINGW32__
 #ifndef max
@@ -1991,7 +1993,7 @@ void CalculateNewPolarCoef(void)
     0};
   int i;
 
-  ASSERT(sizeof(Polars)/sizeof(Polars[0]) == sizeof(Weights)/sizeof(Weights[0]));
+  assert(sizeof(Polars)/sizeof(Polars[0]) == sizeof(Weights)/sizeof(Weights[0]));
 
   if (POLARID < sizeof(Polars)/sizeof(Polars[0])){
     for(i=0;i<3;i++){
@@ -2455,7 +2457,7 @@ BOOL PolygonVisible(const POINT *lpPoints, int nCount, RECT rc)
     }
 }
 
-#define CheckIndex(x, i)    ASSERT((i>=0) && (sizeof(x)/sizeof(x[0]) > i));
+#define CheckIndex(x, i)    assert((i>=0) && (sizeof(x)/sizeof(x[0]) > i));
 
 void SetRegistryColour(int i, DWORD c)
 {
@@ -2915,7 +2917,7 @@ BOOL ReadString(ZZIP_FILE *zFile, int Max, TCHAR *String)
   String[0] = '\0';
   sTmp[0] = 0;
 
-  ASSERT(Max<sizeof(sTmp));
+  assert(Max<sizeof(sTmp));
 
   if (Max >= sizeof(sTmp))
     return(FALSE);
@@ -2974,7 +2976,7 @@ BOOL ReadString(HANDLE hFile, int Max, TCHAR *String)
   String[0] = '\0';
   sTmp[0] = 0;
 
-  ASSERT(Max<sizeof(sTmp));
+  assert(Max<sizeof(sTmp));
 
   if (Max >= sizeof(sTmp))
     return(FALSE);
@@ -3661,7 +3663,7 @@ static bool LoadRegistryFromFile_inner(const TCHAR *szFile, bool wide=true)
 	    found = true;
 	  }
         } else {
-	  //		ASSERT(false);	// Invalid line reached
+	  //		assert(false);	// Invalid line reached
         }
       }
 
@@ -3701,7 +3703,7 @@ static bool LoadRegistryFromFile_inner(const TCHAR *szFile, bool wide=true)
 	    found = true;
 	  }
         } else {
-	  //		ASSERT(false);	// Invalid line reached
+	  //		assert(false);	// Invalid line reached
         }
       }
     }
@@ -4016,7 +4018,7 @@ void propGetFontSettingsFromString(TCHAR *Buffer1, LOGFONT* lplf)
     //FW_BOLD   700
     //FW_HEAVY  900
 
-  ASSERT(lplf != NULL);
+  assert(lplf != NULL);
   memset ((void *)&lfTmp, 0, sizeof (LOGFONT));
 
   if ((pToken = strtok_r(Buffer, TEXT(","), &pWClast)) == NULL) return;
@@ -4070,9 +4072,9 @@ void propGetFontSettings(TCHAR *Name, LOGFONT* lplf) {
 
   TCHAR Buffer[128];
 
-  ASSERT(Name != NULL);
-  ASSERT(Name[0] != '\0');
-  ASSERT(lplf != NULL);
+  assert(Name != NULL);
+  assert(Name[0] != '\0');
+  assert(lplf != NULL);
 
 #if (WINDOWSPC>0) && !defined(PCGNAV)
   // Don't load font settings from registry values for windows version
@@ -4094,8 +4096,8 @@ int propGetScaleList(double *List, size_t Size){
   double vlast=0;
   double val;
 
-  ASSERT(List != NULL);
-  ASSERT(Size > 0);
+  assert(List != NULL);
+  assert(Size > 0);
 
   SetRegistryString(TEXT("ScaleList"),
    TEXT("0.5,1,2,5,10,20,50,100,150,200,500,1000"));

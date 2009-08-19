@@ -48,6 +48,8 @@ Copyright_License {
 #include "Sizes.h"
 #include "Compatibility/string.h"
 
+#include <assert.h>
+
 //////////////////////////////////////////////////
 
 
@@ -874,7 +876,7 @@ public:
             (x<= rect_spot.right) &&
             (y>= rect_spot.top) &&
             (y<= rect_spot.bottom)) {
-          ASSERT(myhbuf<hBufTop);
+          assert(myhbuf<hBufTop);
 
           short val = *myhbuf;
           if (val>spot_max_val) {
@@ -918,7 +920,7 @@ public:
             (x<= rect_visible.right) &&
             (y>= rect_visible.top) &&
             (y<= rect_visible.bottom)) {
-          ASSERT(myhbuf<hBufTop);
+          assert(myhbuf<hBufTop);
 
           double Y = PanLatitude - (ycost+x*sint)*InvDrawScale;
           double X = PanLongitude + (x*cost-ysint)*invfastcosine(Y)*InvDrawScale;
@@ -997,7 +999,7 @@ public:
 
       for (unsigned int x = 0 ; x<cixs; x++, thBuf++, imageBuf++) {
 
-        ASSERT(thBuf< hBufTop);
+        assert(thBuf< hBufTop);
 
         if ((h = *thBuf)>0) {
 	  int p20, p22;
@@ -1009,38 +1011,38 @@ public:
             if (x<ixsright) {
               p20= iepx;
               p22= *(thBuf+iepx);
-              ASSERT(thBuf+iepx< hBufTop);
+              assert(thBuf+iepx< hBufTop);
             } else {
 	      int itss_x = cixs-x-2;
               p20= itss_x;
               p22= *(thBuf+itss_x);
-              ASSERT(thBuf+itss_x< hBufTop);
-              ASSERT(thBuf+itss_x>= hBuf);
+              assert(thBuf+itss_x< hBufTop);
+              assert(thBuf+itss_x>= hBuf);
             }
 
             if (x >= (unsigned int)iepx) {
               p20+= iepx;
               p22-= *(thBuf-iepx);
-              ASSERT(thBuf-iepx>= hBuf);
+              assert(thBuf-iepx>= hBuf);
             } else {
               p20+= x;
               p22-= *(thBuf-x);
-              ASSERT(thBuf-x>= hBuf);
+              assert(thBuf-x>= hBuf);
             }
 
             if (ybottom) {
               p32 = *(thBuf+ixsepx);
-              ASSERT(thBuf+ixsepx<hBufTop);
+              assert(thBuf+ixsepx<hBufTop);
             } else {
               p32 = *(thBuf+itss_y_ixs);
-              ASSERT(thBuf+itss_y_ixs<hBufTop);
+              assert(thBuf+itss_y_ixs<hBufTop);
             }
             if (ytop) {
               p32 -= *(thBuf-yixs);
-              ASSERT(thBuf-yixs>=hBuf);
+              assert(thBuf-yixs>=hBuf);
             } else {
               p32 -= *(thBuf-ixsepx);
-              ASSERT(thBuf-ixsepx>=hBuf);
+              assert(thBuf-ixsepx>=hBuf);
             }
 
             if ((p22==0) && (p32==0)) {
