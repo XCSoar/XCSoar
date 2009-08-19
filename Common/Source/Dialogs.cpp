@@ -61,6 +61,7 @@ Copyright_License {
 #include "InfoBoxLayout.h"
 #include "InputEvents.h"
 #include "Message.h"
+#include "Registry.hpp"
 
 #ifdef DEBUG_TRANSLATIONS
 #include <map>

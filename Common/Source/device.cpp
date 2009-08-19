@@ -44,6 +44,7 @@ Copyright_License {
 #include "Port.h"
 #include "device.h"
 #include "MapWindow.h"
+#include "Registry.hpp"
 
 #include "devCAI302.h"
 #include "devCaiGpsNav.h"

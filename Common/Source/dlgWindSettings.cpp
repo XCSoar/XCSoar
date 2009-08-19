@@ -39,6 +39,7 @@ Copyright_License {
 #include "externs.h"
 #include "Units.h"
 #include "dlgTools.h"
+#include "Registry.hpp"
 
 extern HWND   hWndMainWindow;
 static WndForm *wf=NULL;

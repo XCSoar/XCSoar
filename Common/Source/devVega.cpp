@@ -39,6 +39,7 @@ Copyright_License {
 #include "Math/FastMath.h"
 #include "Parser.h"
 #include "Port.h"
+#include "Registry.hpp"
 
 #include "devVega.h"
 

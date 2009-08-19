@@ -38,6 +38,7 @@ Copyright_License {
 
 #include "externs.h"
 #include "dlgTools.h"
+#include "Registry.hpp"
 
 #include "compatibility.h"
 #ifdef OLDPPC

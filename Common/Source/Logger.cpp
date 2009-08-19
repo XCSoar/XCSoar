@@ -39,6 +39,7 @@
 #include "externs.h"
 #include "Port.h"
 #include "Math/Earth.hpp"
+#include "Registry.hpp"
 
 #include <windows.h>
 #include "Utils.h"

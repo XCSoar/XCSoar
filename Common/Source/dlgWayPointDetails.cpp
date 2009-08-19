@@ -39,6 +39,7 @@ Copyright_License {
 #include "StdAfx.h"
 #include "XCSoar.h"
 #include "Math/Earth.hpp"
+#include "Registry.hpp"
 
 #include "Statistics.h"
 #include "externs.h"

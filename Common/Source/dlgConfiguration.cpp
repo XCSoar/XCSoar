@@ -50,6 +50,7 @@ Copyright_License {
 #include "dlgTools.h"
 #include "device.h"
 #include "Screen/Animation.hpp"
+#include "Registry.hpp"
 
 #include "compatibility.h"
 #ifdef OLDPPC

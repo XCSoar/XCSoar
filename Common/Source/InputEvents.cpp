@@ -81,6 +81,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Atmosphere.h"
 #include "GaugeFLARM.h"
 #include "Waypointparser.h"
+#include "Registry.hpp"
 
 #include <assert.h>
 #include <ctype.h>

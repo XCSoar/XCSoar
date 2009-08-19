@@ -38,6 +38,7 @@ Copyright_License {
 #include "InputEvents.h"
 #include "dlgTools.h"
 #include "Utils.h"
+#include "Registry.hpp"
 #include "VegaVoice.h"
 
 extern HWND   hWndMainWindow;

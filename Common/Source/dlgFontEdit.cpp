@@ -36,7 +36,7 @@ Copyright_License {
 
 
 #include "externs.h"
-#include "Utils.h"
+#include "Registry.hpp"
 #include "XCSoar.h"
 
 extern HWND   hWndMainWindow;

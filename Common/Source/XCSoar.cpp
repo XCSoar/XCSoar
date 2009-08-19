@@ -58,6 +58,7 @@ Copyright_License {
 #include "Math/Earth.hpp"
 #include "Battery.h"
 #include "PeriodClock.hpp"
+#include "Registry.hpp"
 #include "Port.h"
 #include "Waypointparser.h"
 #include "Airspace.h"

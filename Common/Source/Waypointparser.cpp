@@ -43,6 +43,7 @@ Copyright_License {
 #include "Math/FastMath.h"
 #include "WindowControls.h"
 #include "Math/Earth.hpp"
+#include "Registry.hpp"
 
 #include "Geoid.h"
 

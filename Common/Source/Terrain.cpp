@@ -48,6 +48,7 @@ Copyright_License {
 #include "InfoBoxLayout.h"
 #include "Sizes.h"
 #include "Compatibility/string.h"
+#include "Registry.hpp"
 
 #include <assert.h>
 
