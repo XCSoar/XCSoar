@@ -215,6 +215,10 @@ CPPFLAGS	+= -DFORCEPORTRAIT
   endif
 endif
 
+ifneq ($(CONFIG_WINE),y)
+CPPFLAGS += -DHAVE_MSVCRT
+endif
+
 ifeq ($(DEBUG),y)
 OPTIMIZE := -O0 -ggdb
 else
