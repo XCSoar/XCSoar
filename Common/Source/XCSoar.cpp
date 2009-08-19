@@ -56,6 +56,7 @@ Copyright_License {
 #include "Utils2.h"
 #include "Math/FastMath.h"
 #include "Math/Earth.hpp"
+#include "Battery.h"
 #include "Port.h"
 #include "Waypointparser.h"
 #include "Airspace.h"
@@ -480,16 +481,6 @@ void PopupBugsBallast(int updown);
 #include "GaugeCDI.h"
 #include "GaugeFLARM.h"
 #include "GaugeVario.h"
-
-// Battery status for SIMULATOR mode
-//	30% reminder, 20% exit, 30 second reminders on warnings
-
-#ifndef GNAV
-#define BATTERY_WARNING 30
-#define BATTERY_EXIT 20
-#define BATTERY_REMINDER 30000
-DWORD BatteryWarningTime = 0;
-#endif
 
 // Groups:
 //   Altitude 0,1,20,33
@@ -3037,7 +3028,6 @@ void    AssignValues(void)
   // nothing to do here now!
 }
 
-extern int PDABatteryTemperature;
 void DisplayText(void)
 {
   if (InfoBoxesHidden)
@@ -3993,45 +3983,6 @@ void ShowInfoBoxes() {
 
 
 
-/////////////////////
-
-#if (WINDOWSPC<1)
-#ifndef GNAV
-DWORD GetBatteryInfo(BATTERYINFO* pBatteryInfo)
-{
-    // set default return value
-    DWORD result = 0;
-
-    // check incoming pointer
-    if(NULL == pBatteryInfo)
-    {
-        return 0;
-    }
-
-    SYSTEM_POWER_STATUS_EX2 sps;
-
-    // request the power status
-    result = GetSystemPowerStatusEx2(&sps, sizeof(sps), TRUE);
-
-    // only update the caller if the previous call succeeded
-    if(0 != result)
-    {
-        pBatteryInfo->acStatus = sps.ACLineStatus;
-        pBatteryInfo->chargeStatus = sps.BatteryFlag;
-        pBatteryInfo->BatteryLifePercent = sps.BatteryLifePercent;
-	// VENTA get everything ready for PNAs battery control
-	pBatteryInfo->BatteryVoltage = sps.BatteryVoltage;
-	pBatteryInfo->BatteryAverageCurrent = sps.BatteryAverageCurrent;
-	pBatteryInfo->BatteryCurrent = sps.BatteryCurrent;
-	pBatteryInfo->BatterymAHourConsumed = sps.BatterymAHourConsumed;
-	pBatteryInfo->BatteryTemperature = sps.BatteryTemperature;
-    }
-
-    return result;
-}
-#endif
-#endif
-
 //////////////
 
 // GDI Escapes for ExtEscape()
@@ -4057,9 +4008,6 @@ typedef struct _VIDEO_POWER_MANAGEMENT {
     ULONG DPMSVersion;
     ULONG PowerState;
 } VIDEO_POWER_MANAGEMENT, *PVIDEO_POWER_MANAGEMENT;
-
-int PDABatteryPercent = 100;
-int PDABatteryTemperature = 0;
 
 void BlankDisplay(bool doblank) {
 

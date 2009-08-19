@@ -36,6 +36,7 @@ Copyright_License {
 
 #include "externs.h"
 #include "Math/Earth.hpp"
+#include "Battery.h"
 #include "Units.h"
 #include "Waypointparser.h"
 #include "Logger.h"
@@ -140,7 +141,6 @@ static CallBackTableEntry_t CallBackTable[]={
 };
 
 static bool first = true;
-extern int PDABatteryPercent;
 
 static void UpdateValuesSystem() {
   static int extGPSCONNECT_last = extGPSCONNECT;

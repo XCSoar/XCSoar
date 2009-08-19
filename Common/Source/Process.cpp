@@ -51,12 +51,11 @@ Copyright_License {
 #include "Port.h"
 #include "Atmosphere.h"
 #include "AATDistance.h"
+#include "Battery.h"
 
 #include <stdlib.h>
 
 extern AATDistance aatdistance;
-
-extern int PDABatteryPercent;
 
 // JMW added key codes,
 // so -1 down

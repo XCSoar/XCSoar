@@ -212,35 +212,6 @@ void DebugStore(const char *Str, ...);
 
 void StartupStore(const TCHAR *Str, ...);
 
-typedef struct
-{
-  BYTE acStatus;
-  // 0 offline
-  // 1 online
-  // 255 unknown
-  BYTE chargeStatus;
-  // 1 high
-  // 2 low
-  // 4 critical
-  // 8 charging
-  // 128 no system battery
-  // 255 unknown
-  BYTE BatteryLifePercent;
-  // 0-100 or 255 if unknown
-  // VENTA-TEST BATTERY
-  DWORD BatteryVoltage;
-  DWORD BatteryCurrent;
-  DWORD BatteryAverageCurrent;
-  DWORD BatterymAHourConsumed;
-  DWORD BatteryTemperature;
-  DWORD BatteryLifeTime;
-  DWORD BatteryFullLifeTime;
-// END VENTA-TEST
-
-} BATTERYINFO;
-
-
-DWORD GetBatteryInfo(BATTERYINFO* pBatteryInfo);
 void BlankDisplay(bool doblank);
 void DefocusInfoBox(void);
 void Event_SelectInfoBox(int i);
