@@ -758,7 +758,7 @@ void LoggerNote(const TCHAR *text) {
 }
 
 
-
+#ifdef ENABLE_UNUSED_CODE
 /* never used -- ToDo Delete DoLogger() completely
 void DoLogger(TCHAR *astrAssetNumber)
 {
@@ -841,6 +841,7 @@ void DoLogger(TCHAR *astrAssetNumber)
     }
 }
 */
+#endif /* ENABLE_UNUSED_CODE */
 
 bool DeclaredToDevice = false;
 

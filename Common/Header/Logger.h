@@ -2,7 +2,7 @@
 #define AFX_LOGGER_H__695AAC30_F401_4CFF_9BD9_FE62A2A2D0D2__INCLUDED_
 
 #include <tchar.h>
-void DoLogger(TCHAR *strAssetNumber);
+
 void StartLogger(TCHAR *strAssetNumber);
 void LogPoint(double Lattitude, double Longditude, double Altitude,
               double BaroAltitude);
