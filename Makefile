@@ -241,7 +241,7 @@ endif
 LDFLAGS		+=$(PROFILE)
 
 ifeq ($(CONFIG_PC),y)
-LDLIBS		:= -lmingw32 -lcomctl32 -lkernel32 -luser32 -lgdi32 -ladvapi32 -lwinmm -lmsimg32 -lstdc++
+LDLIBS		:= -lcomctl32 -lkernel32 -luser32 -lgdi32 -ladvapi32 -lwinmm -lmsimg32 -lstdc++
 else
   LDLIBS		:= -lcommctrl -lstdc++
   ifeq ($(MINIMAL),n)
