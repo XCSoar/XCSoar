@@ -163,6 +163,12 @@ SYNCE_PRM	:=synce-prm
 CE_VERSION	:=0x0$(CE_MAJOR)$(CE_MINOR)
 ARFLAGS		:=r
 
+ifeq ($(CONFIG_WINE),y)
+AR = ar$(EXE)
+STRIP = strip$(EXE)
+WINDRES = wrc$(EXE)
+endif
+
 ######## windows definitions
 
 ifeq ($(CONFIG_PC),y)
