@@ -52,25 +52,27 @@ BOOL atrParseNMEA(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO){
   // no propriatary sentence
 
   if (_tcsncmp(TEXT("$PGRMZ"), String, 6) == 0){
-
-    TCHAR  *pWClast = NULL;
-    TCHAR  *pToken;
-
     // eat $PGRMZ
-    if ((pToken = strtok_r(String, TEXT(","), &pWClast)) == NULL)
+
+    String = _tcschr(String + 6, ',');
+    if (String == NULL)
       return FALSE;
+
+    ++String;
 
     // get <alt>
-    if ((pToken = strtok_r(NULL, TEXT(","), &pWClast)) == NULL)
+
+    lastAlt = StrToDouble(String, NULL);
+
+    String = _tcschr(String, ',');
+    if (String == NULL)
       return FALSE;
 
-    lastAlt = StrToDouble(pToken, NULL);;
+    ++String;
 
     // get <unit>
-    if ((pToken = strtok_r(NULL, TEXT(","), &pWClast)) == NULL)
-      return FALSE;
 
-    if (*pToken == 'f' || *pToken== 'F')
+    if (*String == 'f' || *String== 'F')
       lastAlt /= TOFEET;
 
 

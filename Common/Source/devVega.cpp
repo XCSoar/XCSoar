@@ -326,20 +326,18 @@ static BOOL PDVVT(PDeviceDescriptor_t d, const TCHAR *String, NMEA_INFO *GPS_INF
 static BOOL PDTSM(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO){
 
   int   duration;
-  TCHAR  *pWClast = NULL;
-  TCHAR  *pToken;
   (void)GPS_INFO;
   (void)d;
-  if ((pToken = strtok_r(String, TEXT(","), &pWClast)) == NULL)
-    return FALSE;
 
-  duration = (int)StrToDouble(pToken, NULL);
+  duration = (int)StrToDouble(String, NULL);
 
-  if ((pToken = strtok_r(NULL, TEXT("*"), &pWClast)) == NULL)
+  String = _tcschr(String, ',');
+  if (String == NULL)
     return FALSE;
+  ++String;
 
   // todo duration handling
-  DoStatusMessage(TEXT("VEGA:"), pToken);
+  DoStatusMessage(TEXT("VEGA:"), String);
 
   return TRUE;
 
