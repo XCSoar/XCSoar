@@ -22,9 +22,6 @@
 
 #define ASSERT(x) assert(x)
 
-typedef unsigned int uint;
-typedef unsigned char byte;
-
 #ifdef __cplusplus
 extern "C" {
 #endif

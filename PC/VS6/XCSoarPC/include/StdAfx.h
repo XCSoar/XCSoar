@@ -108,15 +108,6 @@
 
 
 
-typedef unsigned char byte;
-
-
-typedef unsigned int uint;
-
-
-
-
-
 typedef struct _SYSTEM_POWER_STATUS_EX2 {
 
 
