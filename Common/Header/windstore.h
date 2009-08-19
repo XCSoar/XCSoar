@@ -19,6 +19,7 @@
 #define WINDSTORE_H
 
 #include "windmeasurementlist.h"
+#include "Calculations.h"
 
 /**
   * WindStore receives single windmeasurements and stores these. It uses
