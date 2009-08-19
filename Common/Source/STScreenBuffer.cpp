@@ -193,7 +193,7 @@ void CSTScreenBuffer::CreateRGB(void *pData, int nWidth, int nHeight)
 
   CreateBitmap(nWidth, nHeight);
 
-  byte *pByteData = (byte*)pData;
+  unsigned char *pByteData = (unsigned char*)pData;
   int nPosition = 0;
   int nDataPosition = 0;
 

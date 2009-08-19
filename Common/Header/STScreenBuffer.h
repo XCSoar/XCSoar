@@ -23,10 +23,11 @@
 struct BGRColor
 {
 	BGRColor() {}
-	BGRColor(byte R, byte G, byte B) : m_R(R), m_G(G), m_B(B) {}
-	byte m_B;
-	byte m_G;
-	byte m_R;
+	BGRColor(unsigned char R, unsigned char G, unsigned char B)
+		: m_R(R), m_G(G), m_B(B) {}
+	unsigned char m_B;
+	unsigned char m_G;
+	unsigned char m_R;
 };
 
 
@@ -78,12 +79,14 @@ public:
 	BOOL DrawStretch(HDC* pDC, RECT rcDest);
 
 	// Sets color of the given point
-	inline void SetPoint(int nX, int nY, byte R, byte G, byte B) {
+	inline void SetPoint(int nX, int nY, unsigned char R,
+                             unsigned char G, unsigned char B) {
 	  // m_pBuffer[m_nCorrectedWidth*(m_nHeight-nY-1)+nX] = BGRColor(R,G,B);
 	  m_pBuffer[m_nCorrectedWidth*(nY)+nX] = BGRColor(R,G,B);
 	}
 
-	inline void SetPoint(int i, byte R, byte G, byte B) {
+	inline void SetPoint(int i, unsigned char R,
+                             unsigned char G, unsigned char B) {
 	  m_pBuffer[i] = BGRColor(R,G,B);
 	}
 
