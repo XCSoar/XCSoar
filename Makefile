@@ -184,7 +184,7 @@ UNICODE		:= -DUNICODE -D_UNICODE
 ######## paths
 
 ifeq ($(CONFIG_WINE),y)
-INCLUDES	:= -I$(HDR)/mingw32compat -I$(HDR) -I$(SRC)
+INCLUDES	:= -I$(HDR) -I$(SRC)
 else
 INCLUDES	:= -I$(HDR)/mingw32compat -I$(HDR) -I$(SRC)
 endif
@@ -460,8 +460,12 @@ JASPER	:=\
 
 COMPATSRC:=$(SRC)/wcecompat
 COMPAT	:=\
-	$(COMPATSRC)/errno.cpp 		$(COMPATSRC)/string_extras.c \
+	$(COMPATSRC)/string_extras.c \
 	$(COMPATSRC)/ts_string.cpp
+
+ifneq ($(CONFIG_WINE),y)
+COMPAT += $(COMPATSRC)/errno.cpp
+endif
 
 all:	$(OUTPUTS)
 
