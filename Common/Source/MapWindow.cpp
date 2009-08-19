@@ -1793,8 +1793,7 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
 #if defined(GNAV)
       if (wParam == 0xF5){
 
-	if (MessageBoxX(hWnd,
-			gettext(TEXT("Shutdown?")),
+	if (MessageBoxX(gettext(TEXT("Shutdown?")),
 			gettext(TEXT("Altair system message")),
 			MB_YESNO|MB_ICONQUESTION) == IDYES) {
 
