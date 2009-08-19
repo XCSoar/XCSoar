@@ -402,6 +402,7 @@ OBJS	:=\
 	$(SRC)/Math/Earth.o \
 	$(SRC)/Math/Screen.o \
 	$(SRC)/Battery.o \
+	$(SRC)/Screen/Animation.o \
 	\
 	$(SRC)/mapbits.o \
 	$(SRC)/maperror.o 		$(SRC)/mapprimitive.o \

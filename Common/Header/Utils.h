@@ -343,9 +343,6 @@ int MeasureCPULoad();
 
 TCHAR* GetWinPilotPolarInternalName(int i);
 
-void SetSourceRectangle(RECT fromRect);
-RECT WINAPI DrawWireRects(LPRECT lprcTo, UINT nMilliSecSpeed);
-
 void OpenFLARMDetails();
 void CloseFLARMDetails();
 TCHAR* LookupFLARMDetails(long id);

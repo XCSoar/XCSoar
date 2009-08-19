@@ -49,6 +49,7 @@ Copyright_License {
 #include "McReady.h"
 #include "dlgTools.h"
 #include "device.h"
+#include "Screen/Animation.hpp"
 
 #include "compatibility.h"
 #ifdef OLDPPC
@@ -171,9 +172,6 @@ static void UpdateButtons(void) {
     buttonLoggerID->SetCaption(text);
   }
 }
-
-extern bool EnableAnimation;
-
 
 static void NextPage(int Step){
   config_page += Step;

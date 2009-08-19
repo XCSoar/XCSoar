@@ -41,6 +41,7 @@ Copyright_License {
 #include "Dialogs.h"
 #include "Utils.h"
 #include "externs.h"
+#include "Screen/Animation.hpp"
 
 #include "InfoBox.h"
 
