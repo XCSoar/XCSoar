@@ -49,6 +49,7 @@ Copyright_License {
 #include "Defines.h" // VENTA3
 
 #include "Utils.h"
+#include "Math/FastMath.h"
 
 #include "resource.h"
 #include "externs.h"
@@ -354,12 +355,6 @@ const TCHAR szRegistryFontStatisticsFont[]=	 TEXT("StatisticsFont");
 int UTCOffset = 0; // used for Altair
 bool LockSettingsInFlight = true;
 bool LoggerShortName = false;
-
-double COSTABLE[4096];
-double SINETABLE[4096];
-double INVCOSINETABLE[4096];
-int ISINETABLE[4096];
-int ICOSTABLE[4096];
 
 void StoreType(int Index,int InfoType)
 {
@@ -3045,32 +3040,6 @@ BOOL ReadStringX(FILE *fp, int Max, TCHAR *String){
 
 }
 
-
-
-void InitSineTable(void)
-{
-  int i;
-  double angle;
-  double cosa, sina;
-
-  for(i=0;i<4096; i++)
-    {
-      angle = DEG_TO_RAD*((double)i*360)/4096;
-      cosa = cos(angle);
-      sina = sin(angle);
-      SINETABLE[i] = sina;
-      COSTABLE[i] = cosa;
-      ISINETABLE[i] = iround(sina*1024);
-      ICOSTABLE[i] = iround(cosa*1024);
-      if ((cosa>0) && (cosa<1.0e-8)) {
-	cosa = 1.0e-8;
-      }
-      if ((cosa<0) && (cosa>-1.0e-8)) {
-	cosa = -1.0e-8;
-      }
-      INVCOSINETABLE[i] = 1.0/cosa;
-    }
-}
 
 
 double StrToDouble(const TCHAR *Source, TCHAR **Stop)

@@ -46,8 +46,7 @@ Copyright_License {
 #include "Process.h"
 #endif
 
-#include "Utils.h"
-
+#include "Math/FastMath.h"
 
 static bool changed = false;
 static WndForm *wf=NULL;

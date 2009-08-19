@@ -41,6 +41,7 @@ Copyright_License {
 #include "McReady.h"
 #include "dlgTools.h"
 #include "device.h"
+#include "Math/FastMath.h"
 
 extern HWND   hWndMainWindow;
 static WndForm *wf=NULL;

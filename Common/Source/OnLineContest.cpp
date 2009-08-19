@@ -37,6 +37,7 @@ Copyright_License {
 #include "XCSoar.h"
 #include "OnLineContest.h"
 #include "Utils.h"
+#include "Math/FastMath.h"
 #include "McReady.h"
 #include <math.h>
 

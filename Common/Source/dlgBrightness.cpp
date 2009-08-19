@@ -37,6 +37,7 @@ Copyright_License {
 #include "Units.h"
 #include "InputEvents.h"
 #include "dlgTools.h"
+#include "Math/FastMath.h"
 
 extern HWND   hWndMainWindow;
 static WndForm *wf=NULL;

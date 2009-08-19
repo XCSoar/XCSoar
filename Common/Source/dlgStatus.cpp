@@ -39,6 +39,7 @@ Copyright_License {
 #include "Waypointparser.h"
 #include "Logger.h"
 #include "compatibility.h"
+#include "Math/FastMath.h"
 #ifdef OLDPPC
 #include "XCSoarProcess.h"
 #else

@@ -40,7 +40,7 @@ Copyright_License {
 #include "Dialogs.h"
 #include "resource.h"
 #include "options.h"
-#include "Utils.h"
+#include "Math/FastMath.h"
 #include "WindowControls.h"
 
 #include "Geoid.h"

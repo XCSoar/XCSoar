@@ -36,7 +36,7 @@ Copyright_License {
 #include "StdAfx.h"
 #include "externs.h"
 #include "GaugeFLARM.h"
-#include "Utils.h"
+#include "Math/FastMath.h"
 
 #include <stdlib.h>
 

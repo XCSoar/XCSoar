@@ -48,8 +48,8 @@ Copyright_License {
 #else
 #include "Process.h"
 #endif
-#include "Utils.h"
 #include "Utils2.h"
+#include "Math/FastMath.h"
 #include "externs.h"
 #include "McReady.h"
 #include "Airspace.h"

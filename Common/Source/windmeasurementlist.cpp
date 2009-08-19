@@ -51,6 +51,7 @@ Copyright_License {
 */
 
 #include "Utils.h"
+#include "Math/FastMath.h"
 
 #include "windmeasurementlist.h"
 

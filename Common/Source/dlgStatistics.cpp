@@ -42,6 +42,7 @@ Copyright_License {
 #include "dlgTools.h"
 #include "Atmosphere.h"
 #include "RasterTerrain.h"
+#include "Math/FastMath.h"
 
 #define GROUND_COLOUR RGB(157,101,60)
 

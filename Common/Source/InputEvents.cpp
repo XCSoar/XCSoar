@@ -62,7 +62,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "StdAfx.h"
 #include "XCSoar.h"
 #include "InputEvents.h"
-#include "Utils.h"
+#include "Math/FastMath.h"
 #include "Dialogs.h"
 #include "Terrain.h"
 #include "compatibility.h"

@@ -36,7 +36,7 @@ Copyright_License {
 
 #include "StdAfx.h"
 #include "XCSoar.h"
-#include "Utils.h"
+#include "Math/FastMath.h"
 #include "MapWindow.h"
 #include "McReady.h"
 

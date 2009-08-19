@@ -39,7 +39,7 @@ Copyright_License {
 #include "options.h"
 
 #include "externs.h"
-#include "Utils.h"
+#include "Math/FastMath.h"
 #include "Parser.h"
 #include "Port.h"
 #include "device.h"

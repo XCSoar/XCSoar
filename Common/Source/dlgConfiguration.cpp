@@ -58,7 +58,7 @@ Copyright_License {
 #endif
 
 #include "McReady.h"
-#include "Utils.h"
+#include "Math/FastMath.h"
 #include "InfoBoxLayout.h"
 #include "Waypointparser.h"
 

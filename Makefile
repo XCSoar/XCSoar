@@ -397,6 +397,7 @@ OBJS	:=\
 	$(SRC)/windstore.o 		$(SRC)/WindowControls.o \
 	$(SRC)/WindZigZag.o 		$(SRC)/xmlParser.o \
 	$(SRC)/Compatibility/string.o \
+	$(SRC)/Math/FastMath.o \
 	\
 	$(SRC)/mapbits.o \
 	$(SRC)/maperror.o 		$(SRC)/mapprimitive.o \

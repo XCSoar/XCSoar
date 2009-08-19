@@ -44,7 +44,7 @@ Copyright_License {
 #include "MapWindow.h"
 #include "InfoBoxLayout.h"
 #endif
-#include "Utils.h"
+#include "Math/FastMath.h"
 #include "compatibility.h"
 #include "Compatibility/string.h"
 

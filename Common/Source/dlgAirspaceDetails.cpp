@@ -44,6 +44,7 @@ Copyright_License {
 #include "InfoBoxLayout.h"
 #include "Airspace.h"
 #include "AirspaceWarning.h"
+#include "Math/FastMath.h"
 
 #include <assert.h>
 

@@ -40,6 +40,7 @@ Copyright_License {
 #include "Units.h"
 #include "Process.h"
 #include "externs.h"
+#include "Math/FastMath.h"
 
 
 #ifdef __MINGW32__

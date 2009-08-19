@@ -53,7 +53,7 @@ Copyright_License {
 #include "StdAfx.h"
 
 #include "Calculations.h"
-#include "Utils.h"
+#include "Math/FastMath.h"
 #include "windanalyser.h"
 #include "XCSoar.h"
 

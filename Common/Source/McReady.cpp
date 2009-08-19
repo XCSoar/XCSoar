@@ -35,6 +35,7 @@ Copyright_License {
 #include "McReady.h"
 #include "resource.h"
 #include "externs.h"
+#include "Math/FastMath.h"
 
 #include "XCSoar.h"
 #include "device.h"

@@ -45,7 +45,7 @@ Copyright_License {
 #include "Process.h"
 #endif
 #include "externs.h"
-#include "Utils.h"
+#include "Math/FastMath.h"
 #include "device.h"
 #include "Dialogs.h"
 #include "Port.h"

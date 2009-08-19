@@ -39,7 +39,7 @@ Copyright_License {
 #include "GaugeVarioAltA.h"
 #include "MapWindow.h"
 #include "Logger.h"
-#include "Utils.h"
+#include "Math/FastMath.h"
 #include "externs.h"
 #include "InfoBoxLayout.h"
 #include "InfoBox.h"
