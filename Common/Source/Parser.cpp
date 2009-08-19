@@ -52,6 +52,7 @@ Copyright_License {
 #include "TeamCodeCalculation.h"
 
 #include <ctype.h>
+#include <stdlib.h>
 
 #ifdef FLARM_AVERAGE
 #include "FlarmCalculations.h"

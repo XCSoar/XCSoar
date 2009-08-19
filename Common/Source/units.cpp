@@ -59,6 +59,8 @@ Copyright_License {
 #include "Units.h"
 #include "externs.h"
 
+#include <stdlib.h>
+
 CoordinateFormats_t Units::CoordinateFormat;
 
 #ifndef __MINGW32__

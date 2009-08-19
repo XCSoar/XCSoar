@@ -42,6 +42,8 @@ Copyright_License {
 #include "maperror.h"
 #include "Compatibility/string.h"
 
+#include <stdlib.h>
+
 /************************************************************************/
 /*                             SfRealloc()                              */
 /*                                                                      */

@@ -44,6 +44,7 @@ Copyright_License {
 #include "dlgTools.h"
 
 #include <assert.h>
+#include <stdlib.h>
 
 extern HWND   hWndMainWindow;
 extern HWND   hWndMapWindow;

@@ -43,6 +43,7 @@ Copyright_License {
 #include "Compatibility/string.h"
 
 #include <assert.h>
+#include <stdlib.h>
 
 typedef struct{
   int Index;

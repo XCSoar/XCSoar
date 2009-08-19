@@ -35,6 +35,9 @@ Copyright_License {
 #include "maperror.h"
 #include "Compatibility/string.h"
 
+#include <stdlib.h>
+#include <math.h>
+
 typedef enum {CLIP_LEFT, CLIP_MIDDLE, CLIP_RIGHT} CLIP_STATE;
 
 #define CLIP_CHECK(min, a, max) ((a) < (min) ? CLIP_LEFT : ((a) > (max) ? CLIP_RIGHT : CLIP_MIDDLE));

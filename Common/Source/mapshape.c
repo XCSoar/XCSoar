@@ -42,6 +42,7 @@ Copyright_License {
 #include "maptree.h"
 
 #include <limits.h>
+#include <stdlib.h>
 
 #if UINT_MAX == 65535
 typedef long          int32;

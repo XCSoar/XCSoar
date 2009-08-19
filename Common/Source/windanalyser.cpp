@@ -57,6 +57,8 @@ Copyright_License {
 #include "windanalyser.h"
 #include "XCSoar.h"
 
+#include <stdlib.h>
+
 /*
   About Windanalysation
 

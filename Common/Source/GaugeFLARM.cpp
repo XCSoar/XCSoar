@@ -38,6 +38,8 @@ Copyright_License {
 #include "GaugeFLARM.h"
 #include "Utils.h"
 
+#include <stdlib.h>
+
 extern HFONT  TitleWindowFont;
 
 bool EnableFLARMGauge = true;

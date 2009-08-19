@@ -36,6 +36,8 @@ Copyright_License {
 #include "mapprimitive.h"
 #include "Compatibility/string.h"
 
+#include <stdlib.h>
+
 #ifdef NEED_NONBLOCKING_STDERR
 #include <fcntl.h>
 #endif

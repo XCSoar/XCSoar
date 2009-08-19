@@ -35,6 +35,8 @@ Copyright_License {
 #include "StdAfx.h"
 #include "Utils.h"
 
+#include <stdlib.h>
+
 #define EGM96SIZE 16200
 
 unsigned char* egm96data= NULL;

@@ -44,7 +44,6 @@ Copyright_License {
 #include "Airspace.h"
 #include "device.h"
 
-
 #ifdef HAVEEXCEPTIONS
 #define  __try     __try
 #define  __finally __finally
@@ -54,6 +53,8 @@ Copyright_License {
 #endif
 
 #include "simpleList.h"
+
+#include <stdlib.h>
 
 static bool NewAirspaceWarnings = false;
 static CRITICAL_SECTION  csAirspaceWarnings;

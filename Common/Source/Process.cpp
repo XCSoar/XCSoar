@@ -52,6 +52,8 @@ Copyright_License {
 #include "Atmosphere.h"
 #include "AATDistance.h"
 
+#include <stdlib.h>
+
 extern AATDistance aatdistance;
 
 extern int PDABatteryPercent;
