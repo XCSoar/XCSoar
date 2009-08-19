@@ -230,11 +230,14 @@ CFLAGS		:=$(OPTIMIZE) $(PROFILE)
 
 ####### linker configuration
 
+ifneq ($(CONFIG_WINE),y)
 LDFLAGS		:=-Wl,--major-subsystem-version=$(CE_MAJOR)
 LDFLAGS		+=-Wl,--minor-subsystem-version=$(CE_MINOR)
 ifeq ($(CONFIG_PC),y)
 LDFLAGS		+=-Wl,-subsystem,windows
 endif
+endif
+
 LDFLAGS		+=$(PROFILE)
 
 ifeq ($(CONFIG_PC),y)
