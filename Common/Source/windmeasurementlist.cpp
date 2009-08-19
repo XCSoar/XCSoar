@@ -102,7 +102,7 @@ Vector WindMeasurementList::getWind(double Time, double alt, bool *found){
   double override_time = 1.1;
   bool overridden = false;
 
-  for(uint i=0;i< nummeasurementlist; i++) {
+  for (unsigned i = 0; i < nummeasurementlist; i++) {
     m= measurementlist[i];
     altdiff= (alt - m->altitude)*1.0/altRange;
     timediff= fabs((double)(now - m->time)/timeRange);
@@ -170,7 +170,7 @@ Vector WindMeasurementList::getWind(double Time, double alt, bool *found){
 /** Adds the windvector vector with quality quality to the list. */
 void WindMeasurementList::addMeasurement(double Time,
                                          Vector vector, double alt, int quality){
-  uint index;
+  unsigned index;
   if (nummeasurementlist==MAX_MEASUREMENTS) {
     index = getLeastImportantItem(Time);
     delete measurementlist[index];
@@ -192,7 +192,8 @@ void WindMeasurementList::addMeasurement(double Time,
  * getLeastImportantItem is called to identify the item that should be
  * removed if the list is too full. Reimplemented from LimitedList.
  */
-uint WindMeasurementList::getLeastImportantItem(double Time) {
+unsigned WindMeasurementList::getLeastImportantItem(double Time)
+{
 
   int maxscore=0;
   int score=0;
