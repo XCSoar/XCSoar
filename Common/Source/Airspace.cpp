@@ -49,7 +49,6 @@ Copyright_License {
 #include <windows.h>
 #include <commctrl.h>
 #include <math.h>
-#include <aygshell.h>
 
 #include "resource.h"
 #include "wcecompat/ts_string.h"

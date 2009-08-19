@@ -34,8 +34,6 @@
 
 
 #include "StdAfx.h"
-#include <aygshell.h>
-
 #include "XCSoar.h"
 
 #include "externs.h"

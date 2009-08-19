@@ -49,7 +49,6 @@ Copyright_License {
 
 #include <windows.h>
 #include <commctrl.h>
-#include <aygshell.h>
 
 #include <tchar.h>
 

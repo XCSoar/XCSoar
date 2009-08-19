@@ -40,7 +40,10 @@ Copyright_License {
 
 #include <commdlg.h>
 #include <commctrl.h>
+
+#if !WINDOWSPC
 #include "aygshell.h"
+#endif
 
 #include "compatibility.h"
 

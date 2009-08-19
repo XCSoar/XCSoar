@@ -67,7 +67,6 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Terrain.h"
 #include "compatibility.h"
 #include <commctrl.h>
-#include <aygshell.h>
 #include "InfoBoxLayout.h"
 #include "Airspace.h"
 #ifdef OLDPPC

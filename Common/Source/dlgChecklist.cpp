@@ -37,8 +37,6 @@ Copyright_License {
 
 
 #include "StdAfx.h"
-#include <aygshell.h>
-
 #include "Defines.h"
 #include "XCSoar.h"
 #include "externs.h"

@@ -47,8 +47,6 @@ Copyright_License {
 #include "Utils.h"
 #include "options.h"
 
-#include <aygshell.h>
-
 #include "AirfieldDetails.h"
 #include <zzip/lib.h>
 #include "wcecompat/ts_string.h"
