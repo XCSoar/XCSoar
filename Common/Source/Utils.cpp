@@ -3314,6 +3314,7 @@ static int ByteCRC16(int value, int crcin)
     return ((crcin << 8) ^ crc);
 }
 
+#ifdef ENABLE_UNUSED_CODE
 WORD crcCalc(void *Buffer, size_t size){
 
   int crc = 0;
@@ -3326,6 +3327,7 @@ WORD crcCalc(void *Buffer, size_t size){
 
   return((WORD)crc);
 }
+#endif /* ENABLE_UNUSED_CODE */
 
 ///////////
 
