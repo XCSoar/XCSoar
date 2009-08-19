@@ -186,7 +186,7 @@ endif
 ######## compiler flags
 
 CPPFLAGS	:= $(INCLUDES) $(CE_DEFS)
-CPPFLAGS	+= -DNDEBUG -Wuninitialized -DFLARM_AVERAGE
+CPPFLAGS	+= -DFLARM_AVERAGE
 ifeq ($(CONFIG_PNA),y)
 CPPFLAGS	+= -DBIGDISPLAY -DCECORE -DPNA
 endif
@@ -207,6 +207,12 @@ CPPFLAGS 	+=-IPPC2005 -DGNAV
 CPPFLAGS	+= -DFORCEPORTRAIT
     endif
   endif
+endif
+
+ifeq ($(DEBUG),y)
+OPTIMIZE := -O0 -ggdb
+else
+CPPFLAGS += -DNDEBUG -Wuninitialized
 endif
 
 CXXFLAGS	:=$(OPTIMIZE) -fno-exceptions $(PROFILE)
