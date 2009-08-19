@@ -1719,6 +1719,7 @@ ATOM MyRegisterClass(HINSTANCE hInstance, LPTSTR szWindowClass)
 
 void ApplyClearType(LOGFONT *logfont) {
   logfont->lfQuality = ANTIALIASED_QUALITY;
+#ifdef CLEARTYPE_COMPAT_QUALITY
   if (0) {
     logfont->lfQuality = CLEARTYPE_COMPAT_QUALITY; // VENTA TODO FIX HERE. WHY NOT LANDSCAPE? cleartype is not native, but better than nothing!
 #ifndef NOCLEARTYPE
@@ -1727,6 +1728,7 @@ void ApplyClearType(LOGFONT *logfont) {
   }
 #endif
   }
+#endif
 }
 
 bool IsNullLogFont(LOGFONT logfont) {
