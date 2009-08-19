@@ -54,7 +54,7 @@ static int nDeclErrorCode = 0;
 static int user_size = 0;
 static TCHAR user_data[MAX_USER_SIZE];
 
-static BOOL
+static bool
 ExpectStringWait(PDeviceDescriptor_t d, const TCHAR *token)
 {
   int i=0, ch;
@@ -111,7 +111,7 @@ EWMicroRecorderParseNMEA(PDeviceDescriptor_t d,
   return FALSE;
 }
 
-static BOOL
+static bool
 EWMicroRecorderTryConnect(PDeviceDescriptor_t d)
 {
   int retries=10;
