@@ -158,6 +158,7 @@ void ClearStatusMessages(void) {
 }
 
 
+#ifdef ENABLE_UNUSED_CODE
 // Intercept messages destined for the Status Message window
 LRESULT CALLBACK StatusMsgWndTimerProc(HWND hwnd, UINT message,
 				       WPARAM wParam, LPARAM lParam)
@@ -254,6 +255,7 @@ LRESULT CALLBACK StatusMsgWndTimerProc(HWND hwnd, UINT message,
     return(0);
 
 }
+#endif /* ENABLE_UNUSED_CODE */
 
 
 // DoMessage is designed to delegate what to do for a message
