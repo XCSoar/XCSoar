@@ -452,19 +452,6 @@ inline int Real2Int(double val)
 }
 
 
-// =================================================================================
-// Real2Int
-// =================================================================================
-inline int Real2Int(float val)
-{
-#if (WINDOWS_PC>0)
-  return Real2Int ((double)val);
-#else
-  return (int)val;
-#endif
-}
-
-
 inline int iround(double i) {
     return Real2Int(floor(i+0.5));
 }
