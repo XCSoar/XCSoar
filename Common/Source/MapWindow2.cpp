@@ -39,7 +39,7 @@ Copyright_License {
 #include "StdAfx.h"
 #include "compatibility.h"
 #include "options.h"
-
+#include "Math/Screen.hpp"
 #include "MapWindow.h"
 #include "OnLineContest.h"
 #include "Utils.h"

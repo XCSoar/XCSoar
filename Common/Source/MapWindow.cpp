@@ -53,6 +53,7 @@ Copyright_License {
 #include "InputEvents.h"
 #include "Trigger.hpp"
 #include "Math/Geometry.hpp"
+#include "Math/Screen.hpp"
 
 // #include <assert.h>
 #include <windows.h>
@@ -2537,31 +2538,6 @@ void MapWindow::DrawCrossHairs(HDC hdc, const POINT Orig,
   DrawDashLine(hdc, 1, o1, o2,
                RGB(50,50,50), rc);
 
-}
-
-
-void PolygonRotateShift(POINT* poly, const int n, const int xs, const int ys, const double angle) {
-  static double lastangle = -1;
-  static int cost=1024, sint=0;
-
-  if(angle != lastangle) {
-    lastangle = angle;
-    int deg = DEG_TO_INT(AngleLimit360(angle));
-    cost = ICOSTABLE[deg]*InfoBoxLayout::scale;
-    sint = ISINETABLE[deg]*InfoBoxLayout::scale;
-  }
-  const int xxs = xs*1024+512;
-  const int yys = ys*1024+512;
-  POINT *p = poly;
-  const POINT *pe = poly+n;
-
-  while (p<pe) {
-    int x= p->x;
-    int y= p->y;
-    p->x = (x*cost - y*sint + xxs)/1024;
-    p->y = (y*cost + x*sint + yys)/1024;
-    p++;
-  }
 }
 
 

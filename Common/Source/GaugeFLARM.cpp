@@ -38,6 +38,7 @@ Copyright_License {
 #include "GaugeFLARM.h"
 #include "Math/FastMath.h"
 #include "Math/Geometry.hpp"
+#include "Math/Screen.hpp"
 
 #include <stdlib.h>
 

@@ -514,9 +514,6 @@ class MapWindow {
   static double TargetDrag_Longitude;
 };
 
-void PolygonRotateShift(POINT* poly, int n, int x, int y,
-                        double angle);
-
 extern void DrawDashLine(HDC , INT ,POINT , POINT , COLORREF );
 
 ////////////////
