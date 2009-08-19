@@ -155,7 +155,7 @@ void jpc_mqdec_setctxs(jpc_mqdec_t *dec, int numctxs, jpc_mqctx_t *ctxs);
 \******************************************************************************/
 
 /* Decode a symbol. */
-#if !defined(DEBUG)
+#ifdef NDEBUG
 #define	jpc_mqdec_getbit(dec) \
 	jpc_mqdec_getbit_macro(dec)
 #else
@@ -164,7 +164,7 @@ void jpc_mqdec_setctxs(jpc_mqdec_t *dec, int numctxs, jpc_mqctx_t *ctxs);
 #endif
 
 /* Decode a symbol (assuming an unskewed probability distribution). */
-#if !defined(DEBUG)
+#ifdef NDEBUG
 #define	jpc_mqdec_getbitnoskew(dec) \
 	jpc_mqdec_getbit_macro(dec)
 #else

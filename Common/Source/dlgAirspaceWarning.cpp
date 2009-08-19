@@ -369,7 +369,7 @@ static void OnAirspaceListItemPaint(WindowControl * Sender, HDC hDC){
       SetTextColor(hDC, clGray);
     }
 
-    #if defined(DEBUG)
+    #ifndef NDEBUG
     wsprintf(sTmp, TEXT("%-20s%d"), sName , pAS.WarnLevel - pAS.Acknowledge);
     #else
     wsprintf(sTmp, TEXT("%-20s"), sName);

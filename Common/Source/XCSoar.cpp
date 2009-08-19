@@ -3806,7 +3806,7 @@ void PopUpSelect(int Index)
 
 void DebugStore(const char *Str, ...)
 {
-#if defined(DEBUG) && !defined(GNAV)
+#if !defined(NDEBUG) && !defined(GNAV)
   char buf[MAX_PATH];
   va_list ap;
   int len;

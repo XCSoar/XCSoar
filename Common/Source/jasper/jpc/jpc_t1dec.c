@@ -103,11 +103,11 @@ static int dec_rawrefpass(jpc_dec_t *dec, jpc_bitstream_t *in, int bitpos,
 static int dec_clnpass(jpc_dec_t *dec, jpc_mqdec_t *mqdec, int bitpos, int orient,
   int vcausalflag, int segsymflag, jas_matrix_t *flags, jas_matrix_t *data);
 
-#if defined(DEBUG)
+#ifndef NDEBUG
 static long t1dec_cnt = 0;
 #endif
 
-#if !defined(DEBUG)
+#ifdef NDEBUG
 #define	JPC_T1D_GETBIT(mqdec, v, passtypename, symtypename) \
 	((v) = jpc_mqdec_getbit(mqdec))
 #else
@@ -123,7 +123,7 @@ static long t1dec_cnt = 0;
 #define	JPC_T1D_GETBITNOSKEW(mqdec, v, passtypename, symtypename) \
 	JPC_T1D_GETBIT(mqdec, v, passtypename, symtypename)
 
-#if !defined(DEBUG)
+#ifdef NDEBUG
 #define	JPC_T1D_RAWGETBIT(bitstream, v, passtypename, symtypename) \
 	((v) = jpc_bitstream_getbit(bitstream))
 #else

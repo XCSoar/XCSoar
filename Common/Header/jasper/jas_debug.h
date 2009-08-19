@@ -88,7 +88,7 @@ extern "C" {
 
 /* Output debugging information to standard error provided that the debug
   level is set sufficiently high. */
-#if defined(DEBUG)
+#ifndef NDEBUG
 #define	JAS_DBGLOG(n, x) \
 	((jas_getdbglevel() >= (n)) ? (jas_eprintf x) : 0)
 #else

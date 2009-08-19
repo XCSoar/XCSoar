@@ -346,14 +346,14 @@ long jas_stream_setrwcount(jas_stream_t *stream, long rwcnt);
 \******************************************************************************/
 
 /* Read a character from a stream. */
-#if defined(DEBUG)
+#ifndef NDEBUG
 #define	jas_stream_getc(stream)	jas_stream_getc_func(stream)
 #else
 #define jas_stream_getc(stream)	jas_stream_getc_macro(stream)
 #endif
 
 /* Write a character to a stream. */
-#if defined(DEBUG)
+#ifndef NDEBUG
 #define jas_stream_putc(stream, c)	jas_stream_putc_func(stream, c)
 #else
 #define jas_stream_putc(stream, c)	jas_stream_putc_macro(stream, c)

@@ -143,7 +143,7 @@ int jpc_bitstream_close(jpc_bitstream_t *bitstream);
 \******************************************************************************/
 
 /* Read a bit from a bit stream. */
-#if defined(DEBUG)
+#ifndef NDEBUG
 #define	jpc_bitstream_getbit(bitstream) \
 	jpc_bitstream_getbit_func(bitstream)
 #else
@@ -152,7 +152,7 @@ int jpc_bitstream_close(jpc_bitstream_t *bitstream);
 #endif
 
 /* Write a bit to a bit stream. */
-#if defined(DEBUG)
+#ifndef NDEBUG
 #define	jpc_bitstream_putbit(bitstream, v) \
 	jpc_bitstream_putbit_func(bitstream, v)
 #else

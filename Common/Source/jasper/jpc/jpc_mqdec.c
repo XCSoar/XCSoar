@@ -86,7 +86,7 @@
 * Local macros.
 \******************************************************************************/
 
-#if defined(DEBUG)
+#ifndef NDEBUG
 #define	MQDEC_CALL(n, x) \
 	((jas_getdbglevel() >= (n)) ? ((void)(x)) : ((void)0))
 #else

@@ -198,7 +198,7 @@ int jpc_mqenc_flush(jpc_mqenc_t *enc, int termmode);
 \******************************************************************************/
 
 /* Encode a bit. */
-#if !defined(DEBUG)
+#ifdef NDEBUG
 #define	jpc_mqenc_putbit(enc, bit)	jpc_mqenc_putbit_macro(enc, bit)
 #else
 #define	jpc_mqenc_putbit(enc, bit)	jpc_mqenc_putbit_func(enc, bit)
