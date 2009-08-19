@@ -57,6 +57,7 @@ Copyright_License {
 #include "Math/FastMath.h"
 #include "Math/Earth.hpp"
 #include "Battery.h"
+#include "PeriodClock.hpp"
 #include "Port.h"
 #include "Waypointparser.h"
 #include "Airspace.h"
@@ -2520,9 +2521,7 @@ void DoInfoKey(int keycode) {
 int debounceTimeout=200;
 
 bool Debounce(void) {
-  static DWORD fpsTimeLast= 0;
-  DWORD fpsTimeThis = ::GetTickCount();
-  DWORD dT = fpsTimeThis-fpsTimeLast;
+  static PeriodClock fps_last;
 
   DisplayTimeOut = 0;
   InterfaceTimeoutReset();
@@ -2533,12 +2532,7 @@ bool Debounce(void) {
     return false;
   }
 
-  if (dT>(unsigned int)debounceTimeout) {
-    fpsTimeLast = fpsTimeThis;
-    return true;
-  } else {
-    return false;
-  }
+  return fps_last.check_update(debounceTimeout);
 }
 
 

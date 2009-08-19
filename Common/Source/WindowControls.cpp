@@ -47,6 +47,7 @@ Copyright_License {
 #include "Math/FastMath.h"
 #include "compatibility.h"
 #include "Compatibility/string.h"
+#include "PeriodClock.hpp"
 
 #ifndef ALTAIRSYNC
 #include "externs.h"
@@ -123,12 +124,10 @@ extern int dlgComboPicker(WndProperty* theProperty);
 // returns true if it is a long press,
 // otherwise returns false
 static bool KeyTimer(bool isdown, DWORD thekey) {
-  static DWORD fpsTimeDown= 0;
+  static PeriodClock fps_time_down;
   static DWORD savedKey=0;
 
-  int dT = ::GetTickCount()-fpsTimeDown;
-  if ((dT>2000)&&(thekey==savedKey)) {
-    fpsTimeDown = ::GetTickCount();
+  if (thekey == savedKey && fps_time_down.check_update(2000)) {
     savedKey = 0;
     return true;
   }
@@ -138,7 +137,7 @@ static bool KeyTimer(bool isdown, DWORD thekey) {
   } else {
     // key is lowered
     if (thekey != savedKey) {
-      fpsTimeDown = ::GetTickCount();
+      fps_time_down.update();
       savedKey = thekey;
     }
   }
@@ -2251,7 +2250,8 @@ int WndForm::ShowModal(bool bEnableMap) {
   MSG msg;
   HWND oldFocusHwnd;
 
-  enterTime = ::GetTickCount();
+  PeriodClock enter_clock;
+  enter_clock.update();
 
 #ifndef ALTAIRSYNC
   Message::BlockRender(true);
@@ -2424,7 +2424,7 @@ int WndForm::ShowModal(bool bEnableMap) {
     // accidental key presses
     if (!hastimed) {
 #if !defined(GNAV) && !defined(NOKEYDEBONCE)
-      if (::GetTickCount()-enterTime<1000) {
+      if (!enter_clock.check(1000)) {
 	mModalResult = 0;
       } else {
 	hastimed = true;

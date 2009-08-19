@@ -53,6 +53,7 @@ Copyright_License {
 #include "TeamCodeCalculation.h"
 #include "Process.h"
 #include "Math/Earth.hpp"
+#include "PeriodClock.hpp"
 
 #include <tchar.h>
 
@@ -501,20 +502,21 @@ double MacCreadyTimeLimit(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
 
 /////////
 
+static PeriodClock last_team_code_update;
 DWORD lastTeamCodeUpdateTime = GetTickCount();
 
 void CalculateOwnTeamCode(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 {
   if (!WayPointList) return;
   if (TeamCodeRefWaypoint < 0) return;
-  if (lastTeamCodeUpdateTime + 10000 > GetTickCount()) return;
+
+  if (!last_team_code_update.check_update(10000))
+    return;
 
 
   double distance = 0;
   double bearing = 0;
   TCHAR code[10];
-
-  lastTeamCodeUpdateTime = GetTickCount();
 
   /*
   distance =  Distance(WayPointList[TeamCodeRefWaypoint].Latitude,

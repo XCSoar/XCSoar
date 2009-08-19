@@ -46,6 +46,7 @@ Copyright_License {
 #include "externs.h"
 #include "InfoBoxLayout.h"
 #include "Compatibility/string.h"
+#include "PeriodClock.hpp"
 
 #define DEFAULTBORDERPENWIDTH IBLSCALE(1)
 #define SELECTORWIDTH         (DEFAULTBORDERPENWIDTH+IBLSCALE(4))
@@ -839,9 +840,7 @@ extern void ShowMenu();
 
 LRESULT CALLBACK InfoBoxWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam){
   InfoBox *ib;
-
-static long tpassed=0L;
-long tnow;
+  static PeriodClock double_click;
 
   switch (uMsg){
 
@@ -895,16 +894,13 @@ long tnow;
        * synthetic double click detection with no proximity , good for infoboxes
        */
 
-	tnow=GetTickCount();
-	if ( (tnow - tpassed) < DOUBLECLICKINTERVAL ) {
+        if (!double_click.check_always_update(DOUBLECLICKINTERVAL)) {
 #ifdef DEBUG_DBLCLK
 	  DoStatusMessage(_T("synth DBLCLK InfoBox!")); // VENTA3
 #endif
-	  tpassed = tnow;
 	  ShowMenu();
 	  return(0);
 	}
-	tpassed = tnow;
 #ifdef DEBUG_DBLCLK
         DoStatusMessage(_T("BDOWN InfoBox")); // VENTA3
 #endif
