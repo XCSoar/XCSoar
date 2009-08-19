@@ -120,9 +120,6 @@
  */
 #if !defined(UNDER_CE) || defined(__BORLANDC__) || defined(__MINGW32__)
  #define	uchar		unsigned char
- #define	ushort		unsigned short
- #define	uint		unsigned int
- #define	ulong		unsigned long
  #define	longlong	long long
  #define	ulonglong	unsigned long long
 /*#define	ssize_t		int*/

@@ -84,6 +84,8 @@
 * Types.
 \******************************************************************************/
 
+typedef unsigned int uint;
+
 /* Marker segment table entry. */
 typedef struct {
 	int id;

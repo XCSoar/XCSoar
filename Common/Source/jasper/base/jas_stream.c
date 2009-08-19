@@ -88,7 +88,7 @@
 #include "jasper/jas_malloc.h"
 #include "jasper/jas_math.h"
 
-#if defined(WIN32) || defined(HAVE_IO_H)
+#if defined(HAVE_MSVCRT) && (defined(WIN32) || defined(HAVE_IO_H))
 #include <io.h>
 #endif
 
