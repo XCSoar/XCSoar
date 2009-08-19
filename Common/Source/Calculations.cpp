@@ -77,6 +77,7 @@ Copyright_License {
 #include "ClimbAverageCalculator.h" // JMW new
 #endif
 #include "Math/Earth.hpp"
+#include "Math/Pressure.h"
 
 WindAnalyser *windanalyser = NULL;
 OLCOptimizer olc;

@@ -45,6 +45,7 @@ Copyright_License {
 #include "device.h"
 #include "MapWindow.h"
 #include "Registry.hpp"
+#include "Math/Pressure.h"
 
 #include "devCAI302.h"
 #include "devCaiGpsNav.h"

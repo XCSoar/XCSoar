@@ -400,6 +400,7 @@ OBJS	:=\
 	$(SRC)/Math/FastMath.o \
 	$(SRC)/Math/Geometry.o \
 	$(SRC)/Math/Earth.o \
+	$(SRC)/Math/Pressure.o \
 	$(SRC)/Math/Screen.o \
 	$(SRC)/Battery.o \
 	$(SRC)/Screen/Animation.o \

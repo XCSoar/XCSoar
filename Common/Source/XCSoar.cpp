@@ -304,7 +304,6 @@ double        TASKSPEEDMODIFY = TOKPH;
 
 //Flight Data Globals
 double        MACCREADY = 0; // JMW now in SI units (m/s) for consistency
-double        QNH = (double)1013.2;
 double        BUGS = 1;
 double        BALLAST = 0;
 

@@ -227,7 +227,6 @@ extern double SAFETYALTITUDETERRAIN;
 extern double SAFTEYSPEED;
 
 extern int WindUpdateMode; // unused
-extern double QNH;
 extern int NettoSpeed;
 extern bool EnableCalibration;
 extern bool EnableAutoBlank;
