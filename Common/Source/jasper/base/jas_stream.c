@@ -433,9 +433,11 @@ jas_stream_t *jas_stream_fdopen(int fd, const char *mode)
 	  shells often open files in text mode when I/O redirection is
 	  used.  Grr... */
 #if (WINDOWSPC>0)
+#ifdef HAVE_MSVCRT
 	if (stream->openmode_ & JAS_STREAM_BINARY) {
 		_setmode(fd, O_BINARY);
 	}
+#endif
 #endif
 #endif
 
