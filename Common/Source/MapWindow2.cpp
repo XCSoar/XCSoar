@@ -45,6 +45,7 @@ Copyright_License {
 #include "Utils.h"
 #include "Math/FastMath.h"
 #include "Math/Geometry.hpp"
+#include "Math/Earth.hpp"
 #include "Units.h"
 #include "Logger.h"
 #include "McReady.h"

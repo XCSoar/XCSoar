@@ -43,6 +43,7 @@ Copyright_License {
 #include "STScreenBuffer.h"
 #include "externs.h"
 #include "Math/FastMath.h"
+#include "Math/Earth.hpp"
 #include "VarioSound.h"
 #include "InfoBoxLayout.h"
 #include "Sizes.h"

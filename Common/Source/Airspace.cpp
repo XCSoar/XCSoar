@@ -46,6 +46,8 @@ Copyright_License {
 #include "XCSoar.h"
 #include "MapWindow.h"
 #include "RasterTerrain.h"
+#include "Math/Earth.hpp"
+
 #include <windows.h>
 #include <commctrl.h>
 #include <math.h>
@@ -1701,102 +1703,6 @@ int FindNearestAirspaceCircle(double longitude, double latitude,
 }
 
 
-
-// this is a slow function
-// adapted from The Aviation Formulary 1.42
-
-// finds the point along a distance dthis between p1 and p2, which are
-// separated by dtotal
-void IntermediatePoint(double lon1, double lat1,
-		       double lon2, double lat2,
-		       double dthis,
-		       double dtotal,
-		       double *lon3, double *lat3) {
-  double A, B, x, y, z, d, f;
-  /*
-  lat1 *= DEG_TO_RAD;
-  lat2 *= DEG_TO_RAD;
-  lon1 *= DEG_TO_RAD;
-  lon2 *= DEG_TO_RAD;
-  */
-
-  assert(lat3 != NULL);
-  assert(lon3 != NULL);
-
-  if ((lon1 == lon2) && (lat1 == lat2)){
-    *lat3 = lat1;
-    *lon3 = lon1;
-    return;
-  }
-
-  if (dtotal>0) {
-    f = dthis/dtotal;
-    d = dtotal;
-  } else {
-    d = 1.0e-7;
-    f = 0.0;
-  }
-  f = min(1.0,max(0.0,f));
-
-  double coslat1 = cos(lat1);
-  double coslat2 = cos(lat2);
-
-  A=sin((1-f)*d)/sin(d);
-  B=sin(f*d)/sin(d);
-  x = A*coslat1*cos(lon1) +  B*coslat2*cos(lon2);
-  y = A*coslat1*sin(lon1) +  B*coslat2*sin(lon2);
-  z = A*sin(lat1)           +  B*sin(lat2);
-  *lat3=atan2(z,sqrt(x*x+y*y))*RAD_TO_DEG;
-  *lon3=atan2(y,x)*RAD_TO_DEG;
-}
-
-// finds cross track error in meters and closest point p4 between p3 and
-// desired track p1-p2.
-// very slow function!
-double CrossTrackError(double lon1, double lat1,
-                       double lon2, double lat2,
-                       double lon3, double lat3,
-                       double *lon4, double *lat4) {
-
-  double dist_AD, crs_AD;
-  DistanceBearing(lat1, lon1, lat3, lon3, &dist_AD, &crs_AD);
-  dist_AD/= (RAD_TO_DEG * 111194.9267); crs_AD*= DEG_TO_RAD;
-
-  double dist_AB, crs_AB;
-  DistanceBearing(lat1, lon1, lat2, lon2, &dist_AB, &crs_AB);
-  dist_AB/= (RAD_TO_DEG * 111194.9267); crs_AB*= DEG_TO_RAD;
-
-  lat1 *= DEG_TO_RAD;
-  lat2 *= DEG_TO_RAD;
-  lat3 *= DEG_TO_RAD;
-  lon1 *= DEG_TO_RAD;
-  lon2 *= DEG_TO_RAD;
-  lon3 *= DEG_TO_RAD;
-
-  double XTD; // cross track distance
-  double ATD; // along track distance
-  //  The "along track distance", ATD, the distance from A along the
-  //  course towards B to the point abeam D
-
-  double sindist_AD = sin(dist_AD);
-
-  XTD = asin(sindist_AD*sin(crs_AD-crs_AB));
-
-  double sinXTD = sin(XTD);
-  ATD = asin(sqrt( sindist_AD*sindist_AD - sinXTD*sinXTD )/cos(XTD));
-
-  if (lon4 && lat4) {
-    IntermediatePoint(lon1, lat1, lon2, lat2, ATD, dist_AB,
-		      lon4, lat4);
-  }
-
-  // units
-  XTD *= (RAD_TO_DEG * 111194.9267);
-
-  return XTD;
-}
-
-
 void ScreenClosestPoint(const POINT &p1, const POINT &p2,
 			const POINT &p3, POINT *p4, int offset) {
 
@@ -1850,22 +1756,6 @@ double ScreenCrossTrackError(double lon1, double lat1,
   // compute accurate distance
   double tmpd;
   DistanceBearing(lat3, lon3, *lat4, *lon4, &tmpd, NULL);
-  return tmpd;
-}
-
-
-// Calculates projected distance from P3 along line P1-P2
-double ProjectedDistance(double lon1, double lat1,
-                         double lon2, double lat2,
-                         double lon3, double lat3) {
-  double lon4, lat4;
-
-  CrossTrackError(lon1, lat1,
-                  lon2, lat2,
-                  lon3, lat3,
-                   &lon4, &lat4);
-  double tmpd;
-  DistanceBearing(lat1, lon1, lat4, lon4, &tmpd, NULL);
   return tmpd;
 }
 

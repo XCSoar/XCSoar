@@ -42,6 +42,7 @@ Copyright_License {
 #include "Calculations.h"
 #include "Waypointparser.h"
 #include "McReady.h"
+#include "Math/Earth.hpp"
 
 bool EnableMultipleStartPoints = false;
 bool TaskModified = false;

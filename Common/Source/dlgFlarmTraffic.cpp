@@ -40,6 +40,7 @@
 #include "dlgTools.h"
 #include "InfoBoxLayout.h"
 #include "Utils.h"
+#include "Math/Earth.hpp"
 
 #include <assert.h>
 

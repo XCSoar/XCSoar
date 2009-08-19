@@ -41,6 +41,7 @@ Copyright_License {
 #include "Calculations.h"
 #include "Math/Geometry.hpp"
 #include "externs.h"
+#include "Math/Earth.hpp"
 
 #define DISTANCETHRESHOLD 500
 

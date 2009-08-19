@@ -35,6 +35,7 @@ Copyright_License {
 #include "StdAfx.h"
 
 #include "externs.h"
+#include "Math/Earth.hpp"
 #include "Units.h"
 #include "Waypointparser.h"
 #include "Logger.h"

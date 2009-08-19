@@ -41,6 +41,7 @@ Copyright_License {
 
 #include "externs.h"
 #include "Units.h"
+#include "Math/Earth.hpp"
 
 #include "dlgTools.h"
 #include "Port.h"

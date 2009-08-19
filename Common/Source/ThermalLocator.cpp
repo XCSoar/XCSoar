@@ -38,6 +38,7 @@ Copyright_License {
 #include "RasterTerrain.h"
 #include "Utils.h"
 #include "Math/FastMath.h"
+#include "Math/Earth.hpp"
 
 #include <math.h>
 

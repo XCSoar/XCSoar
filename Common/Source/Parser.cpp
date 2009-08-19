@@ -51,6 +51,7 @@ Copyright_License {
 //#include "FlarmIdFile.h"
 #include "TeamCodeCalculation.h"
 #include "Math/Geometry.hpp"
+#include "Math/Earth.hpp"
 
 #include <ctype.h>
 #include <stdlib.h>

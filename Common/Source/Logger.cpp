@@ -38,6 +38,8 @@
 #include "Logger.h"
 #include "externs.h"
 #include "Port.h"
+#include "Math/Earth.hpp"
+
 #include <windows.h>
 #include "Utils.h"
 #include "device.h"

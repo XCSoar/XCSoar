@@ -52,6 +52,7 @@ Copyright_License {
 #include "RasterTerrain.h"
 #include "TeamCodeCalculation.h"
 #include "Process.h"
+#include "Math/Earth.hpp"
 
 #include <tchar.h>
 

@@ -205,7 +205,6 @@ extern bool Debounce();
   #undef M_PI
 #endif
 #define M_PI 3.14159265359
-#define M_2PI 6.28318530718
 
 extern "C" {
 void DebugStore(const char *Str, ...);

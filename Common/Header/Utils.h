@@ -228,16 +228,8 @@ void StoreType(int Index,int InfoType);
 void protate(POINT &pin, const double &angle);
 void protateshift(POINT &pin, const double &angle, const int &x, const int &y);
 
-void DistanceBearing(double lat1, double lon1, double lat2, double lon2,
-                     double *Distance, double *Bearing);
-double DoubleDistance(double lat1, double lon1, double lat2, double lon2,
-		      double lat3, double lon3);
-
 void SectorEndPoint(double StartLat, double StartLon, double  Radial, double Dist, double *EndLat, double *EndLon);
 void CalculateNewPolarCoef(void);
-void FindLatitudeLongitude(double Lat, double Lon,
-                           double Bearing, double Distance,
-                           double *lat_out, double *lon_out);
 void ConvertFlightLevels(void);
 BOOL PolygonVisible(const POINT *lpPoints, int nCount, RECT rc);
 void ReadPort1Settings(DWORD *PortIndex, DWORD *SpeedIndex);

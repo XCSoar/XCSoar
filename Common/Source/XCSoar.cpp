@@ -55,6 +55,7 @@ Copyright_License {
 #include "Utils.h"
 #include "Utils2.h"
 #include "Math/FastMath.h"
+#include "Math/Earth.hpp"
 #include "Port.h"
 #include "Waypointparser.h"
 #include "Airspace.h"

@@ -41,6 +41,7 @@ Copyright_License {
 #include "MapWindow.h"
 #include "OnLineContest.h"
 #include "Math/FastMath.h"
+#include "Math/Earth.hpp"
 #include "Units.h"
 #include "Logger.h"
 #include "McReady.h"

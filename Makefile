@@ -399,6 +399,7 @@ OBJS	:=\
 	$(SRC)/Compatibility/string.o \
 	$(SRC)/Math/FastMath.o \
 	$(SRC)/Math/Geometry.o \
+	$(SRC)/Math/Earth.o \
 	\
 	$(SRC)/mapbits.o \
 	$(SRC)/maperror.o 		$(SRC)/mapprimitive.o \

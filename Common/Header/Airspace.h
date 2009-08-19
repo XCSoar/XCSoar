@@ -174,10 +174,6 @@ void AirspaceWarnListDeInit(void);
 // MapWindow interface ...
 bool dlgAirspaceWarningShowDlg(bool Force);
 
-double ProjectedDistance(double lon1, double lat1,
-                         double lon2, double lat2,
-                         double lon3, double lat3);
-
 bool ValidAirspace(void);
 
 double RangeAirspaceCircle(const double &longitude,
