@@ -45,6 +45,7 @@ Copyright_License {
 #include "Math/FastMath.h"
 #include "Math/Geometry.hpp"
 #include "Math/Earth.hpp"
+#include "Screen/Util.hpp"
 
 #define GROUND_COLOUR RGB(157,101,60)
 

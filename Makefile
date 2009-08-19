@@ -404,6 +404,7 @@ OBJS	:=\
 	$(SRC)/Battery.o \
 	$(SRC)/Screen/Animation.o \
 	$(SRC)/Registry.o \
+	$(SRC)/Screen/Util.o \
 	\
 	$(SRC)/mapbits.o \
 	$(SRC)/maperror.o 		$(SRC)/mapprimitive.o \

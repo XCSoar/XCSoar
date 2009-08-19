@@ -54,6 +54,7 @@ Copyright_License {
 #include "Trigger.hpp"
 #include "Math/Geometry.hpp"
 #include "Math/Screen.hpp"
+#include "Screen/Util.hpp"
 
 // #include <assert.h>
 #include <windows.h>
@@ -4050,34 +4051,3 @@ void MapWindow::DrawDashLine(HDC hdc, const int width,
   DeleteObject((HPEN)hpDash);
 
 }
-
-
-/* Not used
-   void DrawDotLine(HDC hdc, POINT ptStart, POINT ptEnd, COLORREF cr,
-   const RECT rc)
-   {
-   HPEN hpDot, hpOld;
-   LOGPEN dashLogPen;
-   POINT pt[2];
-   //Create a dot pen
-   dashLogPen.lopnColor = cr;
-   dashLogPen.lopnStyle = PS_DOT;
-   dashLogPen.lopnWidth.x = 0;
-   dashLogPen.lopnWidth.y = 0;
-
-   hpDot = (HPEN)CreatePenIndirect(&dashLogPen);
-   hpOld = (HPEN)SelectObject(hdc, hpDot);
-
-   pt[0].x = ptStart.x;
-   pt[0].y = ptStart.y;
-   pt[1].x = ptEnd.x;
-   pt[1].y = ptEnd.y;
-
-   Polyline(hdc, pt, 2);
-
-   SelectObject(hdc, hpOld);
-   DeleteObject((HPEN)hpDot);
-   }
-
-*/
-

@@ -41,6 +41,7 @@ Copyright_License {
 #include "InfoBoxLayout.h"
 #include "MapWindow.h"
 #include "Registry.hpp"
+#include "Screen/Util.hpp"
 
 #include <assert.h>
 

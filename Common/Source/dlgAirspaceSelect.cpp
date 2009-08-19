@@ -49,6 +49,7 @@ Copyright_License {
 #include "Compatibility/string.h"
 #include "Math/FastMath.h"
 #include "Math/Earth.hpp"
+#include "Screen/Util.hpp"
 
 #include <assert.h>
 #include <stdlib.h>

@@ -71,16 +71,6 @@ void ReadPort3Settings(DWORD *PortIndex, DWORD *SpeedIndex);
 void WritePort1Settings(DWORD PortIndex, DWORD SpeedIndex);
 void WritePort2Settings(DWORD PortIndex, DWORD SpeedIndex);
 void WritePort3Settings(DWORD PortIndex, DWORD SpeedIndex);
-int  Circle(HDC hdc, long x, long y, int radius, RECT rc, bool clip=false,
-            bool fill=true);
-int Segment(HDC hdc, long x, long y, int radius, RECT rc,
-	    double start,
-	    double end,
-            bool horizon= false);
-// VENTA3 DrawArc
-int DrawArc(HDC hdc, long x, long y, int radius, RECT rc,
-	    double start,
-	    double end);
 void ReadAssetNumber(void);
 void WriteProfile(const TCHAR *szFile);
 void ReadProfile(const TCHAR *szFile);
@@ -224,8 +214,5 @@ inline unsigned int CombinedDivAndMod(unsigned int &lx) {
 }
 
 bool RotateScreen(void);
-
-int GetTextWidth(HDC hDC, TCHAR *text);
-void ExtTextOutClip(HDC hDC, int x, int y, TCHAR *text, int width);
 
 #endif

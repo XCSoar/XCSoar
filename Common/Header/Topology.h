@@ -142,8 +142,4 @@ class TopologyLabel: public Topology {
 
 };
 
-void ClipPolygon(HDC hdc, POINT *ptin, unsigned int n,
-                 RECT rc, bool fill=true);
-
-
 #endif

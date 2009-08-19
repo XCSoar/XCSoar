@@ -70,6 +70,7 @@ Copyright_License {
 #include "GaugeCDI.h"
 #include "GaugeFLARM.h"
 #include "InfoBoxLayout.h"
+#include "Screen/Util.hpp"
 
 #if (WINDOWSPC>0)
 #include <wingdi.h>

@@ -51,6 +51,7 @@ Copyright_License {
 #include "InfoBoxLayout.h"
 #include "Logger.h"
 #include "Process.h"
+#include "Screen/Util.hpp"
 
 //#include "Terrain.h"
 //#include "Task.h"

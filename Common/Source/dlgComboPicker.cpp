@@ -42,6 +42,7 @@ Copyright_License {
 #include "WindowControls.h"
 #include "dlgTools.h"
 #include "InfoBoxLayout.h"
+#include "Screen/Util.hpp"
 
 #include <assert.h>
 

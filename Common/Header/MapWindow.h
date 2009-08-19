@@ -514,11 +514,4 @@ class MapWindow {
   static double TargetDrag_Longitude;
 };
 
-extern void DrawDashLine(HDC , INT ,POINT , POINT , COLORREF );
-
-////////////////
-
-
-///////
-
 #endif

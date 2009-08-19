@@ -44,6 +44,7 @@ Copyright_License {
 #include "dlgTools.h"
 #include "InfoBoxLayout.h"
 #include "Math/FastMath.h"
+#include "Screen/Util.hpp"
 
 #include <assert.h>
 
