@@ -50,6 +50,15 @@ else
 	    CONFIG_PPC2003 := y
 	    MINIMAL       :=n
 	  endif
+	  ifeq ($(TARGET),WM5)
+	    CONFIG_WM5 := y
+	    MINIMAL := n
+	  endif
+	  ifeq ($(TARGET),WM5X)
+	    CONFIG_WM5 := y
+	    MINIMAL := n
+	    XSCALE := y
+	  endif
 	endif
       endif
     endif
@@ -107,6 +116,13 @@ CE_MAJOR	:=4
 CE_MINOR	:=00
 CE_PLATFORM	:=400
 PCPU		:=ARMV4
+endif
+
+ifeq ($(CONFIG_WM5),y)
+CE_MAJOR := 5
+CE_MINOR := 00
+CE_PLATFORM := 500
+PCPU := ARMV4
 endif
 
 # armv4i
