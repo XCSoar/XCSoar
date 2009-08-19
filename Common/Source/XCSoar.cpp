@@ -1261,7 +1261,6 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 {
   MSG msg;
   HACCEL hAccelTable;
-  INITCOMMONCONTROLSEX icc;
   (void)hPrevInstance;
 
 #ifdef GNAV
@@ -1351,8 +1350,6 @@ StartupStore(nTmp);
 
   XCSoarGetOpts(lpCmdLine);
 
-  icc.dwSize = sizeof(INITCOMMONCONTROLSEX);
-  icc.dwICC = ICC_UPDOWN_CLASS;
   InitCommonControls();
   InitSineTable();
 
