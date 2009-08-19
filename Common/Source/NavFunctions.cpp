@@ -34,6 +34,7 @@ Copyright_License {
 
 #include "StdAfx.h"
 #include "NavFunctions.h"
+#include "Compatibility/math.h"
 
 void xXY_to_LL(double Lat_TP, double Long_TP, double X_int, double Y_int, double *Lat, double *Long)
 {
