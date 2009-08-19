@@ -47,16 +47,14 @@
         #define TCHAR TCHAR
     #endif /* TCHAR */
 #else
-
-#rwrwr
     #ifndef LPCTSTR
-        #define LPCTSTR co nst char *
+        #define LPCTSTR const char *
     #endif /* LPCTSTR */
     #ifndef LPTSTR
-        #define LPTSTR c har *
+        #define LPTSTR char *
     #endif /* LPTSTR */
     #ifndef TCHAR
-        #define TCHAR ch ar
+        #define TCHAR char
     #endif /* TCHAR */
 #endif
 #ifndef FALSE
