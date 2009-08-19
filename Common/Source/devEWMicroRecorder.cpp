@@ -54,9 +54,9 @@ static int nDeclErrorCode = 0;
 static int user_size = 0;
 static TCHAR user_data[MAX_USER_SIZE];
 
-
-BOOL ExpectStringWait(PDeviceDescriptor_t d, const TCHAR *token) {
-
+static BOOL
+ExpectStringWait(PDeviceDescriptor_t d, const TCHAR *token)
+{
   int i=0, ch;
   int j=0;
 
@@ -87,10 +87,10 @@ BOOL ExpectStringWait(PDeviceDescriptor_t d, const TCHAR *token) {
 
 }
 
-
-
-BOOL EWMicroRecorderParseNMEA(PDeviceDescriptor_t d,
-                              const TCHAR *String, NMEA_INFO *GPS_INFO){
+static BOOL
+EWMicroRecorderParseNMEA(PDeviceDescriptor_t d,
+                         const TCHAR *String, NMEA_INFO *GPS_INFO)
+{
   TCHAR ctemp[80];
   const TCHAR *params[5];
   int nparams = NMEAParser::ValidateAndExtract(String, ctemp, 80, params, 5);
@@ -111,8 +111,9 @@ BOOL EWMicroRecorderParseNMEA(PDeviceDescriptor_t d,
   return FALSE;
 }
 
-
-BOOL EWMicroRecorderTryConnect(PDeviceDescriptor_t d) {
+static BOOL
+EWMicroRecorderTryConnect(PDeviceDescriptor_t d)
+{
   int retries=10;
   TCHAR ch;
 
@@ -204,8 +205,8 @@ static void EWMicroRecorderWriteWayPoint(PDeviceDescriptor_t d,
             wp->Name);
 }
 
-
-BOOL EWMicroRecorderDeclare(PDeviceDescriptor_t d, Declaration_t *decl)
+static BOOL
+EWMicroRecorderDeclare(PDeviceDescriptor_t d, Declaration_t *decl)
 {
   const WAYPOINT *wp;
   nDeclErrorCode = 0;
