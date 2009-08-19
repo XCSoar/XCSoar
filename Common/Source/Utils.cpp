@@ -3921,7 +3921,7 @@ CSIDL_PROGRAM_FILES 0x0026   The program files folder.
   _stprintf(buffer,TEXT("%s%S"),gmfpathname(), XCSDATADIR );
 #else
   // everything else that's not special
-  SHGetSpecialFolderPath(hWndMainWindow, buffer, loc, false);
+  SHGetSpecialFolderPath(NULL, buffer, loc, false);
   _tcscat(buffer,TEXT("\\"));
   _tcscat(buffer,TEXT(XCSDATADIR));
 #endif
