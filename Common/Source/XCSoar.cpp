@@ -43,6 +43,7 @@ Copyright_License {
 #include "Calculations2.h"
 #include "Task.h"
 #include "Dialogs.h"
+#include "Trigger.hpp"
 
 #ifdef OLDPPCx
 #include "XCSoarProcess.h"
@@ -685,9 +686,11 @@ bool csTaskDataInitialized = false;
 
 
 static BOOL GpsUpdated;
-static HANDLE dataTriggerEvent;
+static Trigger dataTriggerEvent(TEXT("dataTriggerEvent"));
+
 static BOOL VarioUpdated;
-static HANDLE varioTriggerEvent;
+static Trigger varioTriggerEvent(TEXT("varioTriggerEvent"));
+
 
 // Forward declarations of functions included in this code module:
 ATOM                                                    MyRegisterClass (HINSTANCE, LPTSTR);
@@ -711,13 +714,13 @@ void                                                    PopUpSelect(int i);
 void TriggerGPSUpdate()
 {
   GpsUpdated = true;
-  SetEvent(dataTriggerEvent);
+  dataTriggerEvent.trigger();
 }
 
 void TriggerVarioUpdate()
 {
   VarioUpdated = true;
-  PulseEvent(varioTriggerEvent);
+  varioTriggerEvent.pulse();
 }
 
 void HideMenu() {
@@ -974,7 +977,7 @@ void TriggerRedraws(NMEA_INFO *nmea_info,
   if (MapWindow::IsDisplayRunning()) {
     if (GpsUpdated) {
       MapWindow::MapDirty = true;
-      PulseEvent(drawTriggerEvent);
+      drawTriggerEvent.pulse();
       // only ask for redraw if the thread was waiting,
       // this causes the map thread to try to synchronise
       // with the calculation thread, which is desirable
@@ -995,8 +998,7 @@ DWORD InstrumentThread (LPVOID lpvoid) {
 
   while (!MapWindow::CLOSETHREAD) {
 
-    WaitForSingleObject(varioTriggerEvent, 5000);
-    ResetEvent(varioTriggerEvent);
+    varioTriggerEvent.wait(5000);
     if (MapWindow::CLOSETHREAD) break; // drop out on exit
 
     if (VarioUpdated) {
@@ -1028,8 +1030,7 @@ DWORD CalculationThread (LPVOID lpvoid) {
 
   while (!MapWindow::CLOSETHREAD) {
 
-    WaitForSingleObject(dataTriggerEvent, 5000);
-    ResetEvent(dataTriggerEvent);
+    dataTriggerEvent.wait(5000);
     if (MapWindow::CLOSETHREAD) break; // drop out on exit
 
     // set timer to determine latency (including calculations)
@@ -1201,7 +1202,8 @@ void PreloadInitialisation(bool ask) {
 
 }
 
-HANDLE drawTriggerEvent;
+Trigger drawTriggerEvent(TEXT("drawTriggerEvent"));
+
 
 StartupState_t ProgramStarted = psInitInProgress;
 // 0: not started at all
@@ -1239,7 +1241,7 @@ void AfterStartup() {
   GpsUpdated = true;
   MapWindow::MapDirty = true;
   FullScreen();
-  SetEvent(drawTriggerEvent);
+  drawTriggerEvent.trigger();
 }
 
 
@@ -1393,10 +1395,6 @@ StartupStore(nTmp);
   csTerrainDataGraphicsInitialized = true;
   InitializeCriticalSection(&CritSec_TerrainDataCalculations);
   csTerrainDataCalculationsInitialized = true;
-
-  drawTriggerEvent = CreateEvent(NULL, TRUE, FALSE, TEXT("drawTriggerEvent"));
-  dataTriggerEvent = CreateEvent(NULL, TRUE, FALSE, TEXT("dataTriggerEvent"));
-  varioTriggerEvent = CreateEvent(NULL, TRUE, FALSE, TEXT("varioTriggerEvent"));
 
   // Initialise main blackboard data
 
@@ -2591,9 +2589,9 @@ void Shutdown(void) {
   MapWindow::CloseDrawingThread();
 
   // Stop calculating too (wake up)
-  SetEvent(dataTriggerEvent);
-  SetEvent(drawTriggerEvent);
-  SetEvent(varioTriggerEvent);
+  dataTriggerEvent.trigger();
+  drawTriggerEvent.trigger();
+  varioTriggerEvent.trigger();
 
   // Clear data
 
@@ -2722,11 +2720,6 @@ void Shutdown(void) {
   StartupStore(TEXT("Close Windows\n"));
   DestroyWindow(hWndMapWindow);
   DestroyWindow(hWndMainWindow);
-
-  StartupStore(TEXT("Close Event Handles\n"));
-  CloseHandle(drawTriggerEvent);
-  CloseHandle(dataTriggerEvent);
-  CloseHandle(varioTriggerEvent);
 
 #ifdef DEBUG_TRANSLATIONS
   StartupStore(TEXT("Writing missing translations\n"));

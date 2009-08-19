@@ -48,6 +48,7 @@ Copyright_License {
 #include "Units.h"
 #include "compatibility.h"
 
+class Trigger;
 
 class InfoBoxFormatter {
  public:
@@ -189,7 +190,7 @@ extern void UnlockNavBox();
 extern void LockNavBox();
 extern void TriggerGPSUpdate();
 extern void TriggerVarioUpdate();
-extern HANDLE drawTriggerEvent;
+extern Trigger drawTriggerEvent;
 
 void FocusOnWindow(int i, bool selected);
 void FullScreen();

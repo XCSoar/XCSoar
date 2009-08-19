@@ -50,6 +50,8 @@ Copyright_License {
 #include "externs.h"
 #include "VarioSound.h"
 #include "InputEvents.h"
+#include "Trigger.hpp"
+
 // #include <assert.h>
 #include <windows.h>
 #include <math.h>
@@ -746,14 +748,14 @@ bool MapWindow::TextInBox(HDC hDC, TCHAR* Value, int x, int y,
 bool userasked = false;
 
 void MapWindow::RequestFastRefresh() {
-  SetEvent(drawTriggerEvent);
+  drawTriggerEvent.trigger();
 }
 
 void MapWindow::RefreshMap() {
   MapDirty = true;
   userasked = true;
   timestats_dirty = true;
-  SetEvent(drawTriggerEvent);
+  drawTriggerEvent.trigger();
 }
 
 bool MapWindow::IsMapFullScreen() {
@@ -2457,8 +2459,7 @@ DWORD MapWindow::DrawThread (LPVOID lpvoid)
 
   while (!CLOSETHREAD)
     {
-      WaitForSingleObject(drawTriggerEvent, 5000);
-      ResetEvent(drawTriggerEvent);
+      drawTriggerEvent.wait(5000);
       if (CLOSETHREAD) break; // drop out without drawing
 
       if ((!THREADRUNNING) || (!GlobalRunning)) {
@@ -3847,7 +3848,7 @@ void MapWindow::ResumeDrawingThread(void)
 void MapWindow::CloseDrawingThread(void)
 {
   CLOSETHREAD = TRUE;
-  SetEvent(drawTriggerEvent); // wake self up
+  drawTriggerEvent.trigger(); // wake self up
   LockTerrainDataGraphics();
   SuspendDrawingThread();
   UnlockTerrainDataGraphics();
