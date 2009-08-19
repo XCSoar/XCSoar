@@ -47,6 +47,7 @@ Copyright_License {
 #include "Calculations2.h"
 #include "MapWindow.h"
 #include "InfoBoxLayout.h"
+#include "Math/Geometry.hpp"
 
 extern HWND   hWndMainWindow;
 static WndForm *wf=NULL;

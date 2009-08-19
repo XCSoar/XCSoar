@@ -37,6 +37,7 @@ Copyright_License {
 #include "XCSoar.h"
 #include "AATDistance.h"
 #include "Utils.h"
+#include "Math/Geometry.hpp"
 #include "externs.h"
 #include "Calculations.h"
 #include "Waypointparser.h"

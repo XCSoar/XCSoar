@@ -45,6 +45,7 @@ Copyright_License {
 #include "Airspace.h"
 #include "AirspaceWarning.h"
 #include "Math/FastMath.h"
+#include "Math/Geometry.hpp"
 
 #include <assert.h>
 

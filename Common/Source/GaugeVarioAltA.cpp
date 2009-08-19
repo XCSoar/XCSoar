@@ -43,6 +43,7 @@ Copyright_License {
 #include "externs.h"
 #include "InfoBoxLayout.h"
 #include "InfoBox.h"
+#include "Math/Geometry.hpp"
 
 #include <assert.h>
 

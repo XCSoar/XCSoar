@@ -36,6 +36,7 @@ Copyright_License {
 //#include "ConditionMonitor.h"
 #include "StdAfx.h"
 #include "Calculations.h"
+#include "Math/Geometry.hpp"
 #include "Dialogs.h"
 #include "Task.h"
 #include "device.h"

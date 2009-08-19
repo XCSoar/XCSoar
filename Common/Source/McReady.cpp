@@ -36,6 +36,7 @@ Copyright_License {
 #include "resource.h"
 #include "externs.h"
 #include "Math/FastMath.h"
+#include "Math/Geometry.hpp"
 
 #include "XCSoar.h"
 #include "device.h"

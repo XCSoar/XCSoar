@@ -50,6 +50,7 @@ Copyright_License {
 #include "Geoid.h"
 //#include "FlarmIdFile.h"
 #include "TeamCodeCalculation.h"
+#include "Math/Geometry.hpp"
 
 #include <ctype.h>
 #include <stdlib.h>

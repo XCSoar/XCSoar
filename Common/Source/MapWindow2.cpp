@@ -44,6 +44,7 @@ Copyright_License {
 #include "OnLineContest.h"
 #include "Utils.h"
 #include "Math/FastMath.h"
+#include "Math/Geometry.hpp"
 #include "Units.h"
 #include "Logger.h"
 #include "McReady.h"

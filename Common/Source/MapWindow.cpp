@@ -51,6 +51,7 @@ Copyright_License {
 #include "VarioSound.h"
 #include "InputEvents.h"
 #include "Trigger.hpp"
+#include "Math/Geometry.hpp"
 
 // #include <assert.h>
 #include <windows.h>

@@ -224,24 +224,15 @@ void SetRegistryAirspacePriority(int i);
 void SetRegistryAirspaceMode(int i);
 int GetRegistryAirspaceMode(int i);
 void StoreType(int Index,int InfoType);
-void irotate(int &xin, int &yin, const double &angle);
-void irotatescale(int &xin, int &yin, const double &angle, const double &scale,
-                  double &x, double &y);
+
 void protate(POINT &pin, const double &angle);
 void protateshift(POINT &pin, const double &angle, const int &x, const int &y);
-void rotate(double &xin, double &yin, const double &angle);
-void frotate(float &xin, float &yin, const float &angle);
-void rotatescale(double &xin, double &yin, const double &angle, const double &scale);
-void frotatescale(float &xin, float &yin, const float &angle, const float &scale);
 
 void DistanceBearing(double lat1, double lon1, double lat2, double lon2,
                      double *Distance, double *Bearing);
 double DoubleDistance(double lat1, double lon1, double lat2, double lon2,
 		      double lat3, double lon3);
 
-double Reciprocal(double InBound);
-double BiSector(double InBound, double OutBound);
-double HalfAngle(double Angle0, double Angle1);
 void SectorEndPoint(double StartLat, double StartLon, double  Radial, double Dist, double *EndLat, double *EndLon);
 void CalculateNewPolarCoef(void);
 void FindLatitudeLongitude(double Lat, double Lon,
@@ -279,10 +270,6 @@ void FormatWarningString(int Type, TCHAR *Name , AIRSPACE_ALT Base, AIRSPACE_ALT
 BOOL ReadString(ZZIP_FILE* zFile, int Max, TCHAR *String);
 BOOL ReadString(HANDLE hFile, int Max, TCHAR *String);
 BOOL ReadStringX(FILE *fp, int Max, TCHAR *String);
-
-bool AngleInRange(double Angle0, double Angle1, double x, bool is_signed=false);
-double AngleLimit180(double theta);
-double AngleLimit360(double theta);
 
 double StrToDouble(const TCHAR *Source, TCHAR **Stop);
 void PExtractParameter(TCHAR *Source, TCHAR *Destination, int DesiredFieldNumber);

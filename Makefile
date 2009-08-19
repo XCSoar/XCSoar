@@ -398,6 +398,7 @@ OBJS	:=\
 	$(SRC)/WindZigZag.o 		$(SRC)/xmlParser.o \
 	$(SRC)/Compatibility/string.o \
 	$(SRC)/Math/FastMath.o \
+	$(SRC)/Math/Geometry.o \
 	\
 	$(SRC)/mapbits.o \
 	$(SRC)/maperror.o 		$(SRC)/mapprimitive.o \

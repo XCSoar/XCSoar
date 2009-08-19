@@ -69,6 +69,7 @@ Copyright_License {
 #include "AATDistance.h"
 #include "NavFunctions.h" // used for team code
 #include "Calculations2.h"
+#include "Math/Geometry.hpp"
 #include "Port.h"
 #include "WindZigZag.h"
 #include "device.h"
