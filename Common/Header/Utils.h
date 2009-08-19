@@ -156,8 +156,6 @@ void XCSoarGetOpts(LPTSTR CommandLine);
 bool CheckRectOverlap(RECT rc1, RECT rc2);
 int MeasureCPULoad();
 
-TCHAR* GetWinPilotPolarInternalName(int i);
-
 void OpenFLARMDetails();
 void CloseFLARMDetails();
 TCHAR* LookupFLARMDetails(long id);

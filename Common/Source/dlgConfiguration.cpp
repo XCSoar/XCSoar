@@ -63,6 +63,7 @@ Copyright_License {
 #include "Math/FastMath.h"
 #include "InfoBoxLayout.h"
 #include "Waypointparser.h"
+#include "Polar/BuiltIn.hpp"
 
 #include <assert.h>
 

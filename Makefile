@@ -408,6 +408,7 @@ OBJS	:=\
 	$(SRC)/Screen/Util.o \
 	$(SRC)/Registry.o \
 	$(SRC)/Polar/WinPilot.o \
+	$(SRC)/Polar/BuiltIn.o \
 	\
 	$(SRC)/mapbits.o \
 	$(SRC)/maperror.o 		$(SRC)/mapprimitive.o \
