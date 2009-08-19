@@ -33,10 +33,10 @@ Copyright_License {
 }
 */
 
-#include "StdAfx.h"
 #include "STScreenBuffer.h"
 
 #include <assert.h>
+#include <stdlib.h>
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction

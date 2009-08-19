@@ -10,7 +10,8 @@
 #if !defined(AFX_STSCREENBUFFER_H__22D62F5D_32E2_4785_B3D9_2341C11F84A3__INCLUDED_)
 #define AFX_STSCREENBUFFER_H__22D62F5D_32E2_4785_B3D9_2341C11F84A3__INCLUDED_
 
-#include "StdAfx.h"
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
 
 /////////////////////////////////////////////////////////////////////////////
 // BGRColor structure encapsulates color information about one point. Color
