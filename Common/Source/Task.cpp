@@ -778,9 +778,6 @@ void CalculateAATTaskSectors()
 
 ////////////
 
-#include "Logger.h"
-
-
 void guiStartLogger(bool noAsk) {
   int i;
   if (!LoggerActive) {
