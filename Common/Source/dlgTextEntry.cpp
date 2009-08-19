@@ -210,7 +210,7 @@ static void OnDownClicked(WindowControl * Sender){
 
 
 
-void dlgTextEntryHighscoreType(TCHAR *text, int width)
+static void dlgTextEntryHighscoreType(TCHAR *text, int width)
 {
   wf = NULL;
   wGrid = NULL;

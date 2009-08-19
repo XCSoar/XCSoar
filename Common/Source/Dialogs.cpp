@@ -376,10 +376,10 @@ void WriteMissingTranslations() {
 
 */
 
-TCHAR* gettext(const TCHAR* text) {
+const TCHAR* gettext(const TCHAR* text) {
   int i;
   // return if nothing to do
-  if (_tcscmp(text, _T("")) == 0) return (TCHAR*)text;
+  if (_tcscmp(text, _T("")) == 0) return (const TCHAR*)text;
 
   //find a translation
   for (i=0; i<GetTextData_Size; i++) {
@@ -395,7 +395,7 @@ TCHAR* gettext(const TCHAR* text) {
   TCHAR *tmp = _tcsdup(text);
   unusedTranslations[tmp] = tmp;
 #endif
-  return (TCHAR*)text;
+  return (const TCHAR*)text;
 }
 
 // Set the window text value, by passing through gettext
@@ -511,7 +511,7 @@ BOOL SetProgressStepSize(int nSize) {
 }
 
 
-HWND CreateProgressDialog(TCHAR* text) {
+HWND CreateProgressDialog(const TCHAR* text) {
 #if (WINDOWSPC>2)
   hProgress = NULL;
   return NULL;

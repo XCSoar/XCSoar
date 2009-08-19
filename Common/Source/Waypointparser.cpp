@@ -60,13 +60,13 @@ Copyright_License {
 
 static int globalFileNum = 0;
 
-TCHAR *strtok_r(TCHAR *s, TCHAR *delim, TCHAR **lasts);
+TCHAR *strtok_r(const TCHAR *s, TCHAR *delim, TCHAR **lasts);
 
 //static void ExtractParameter(TCHAR *Source, TCHAR *Destination, int DesiredFieldNumber);
-static int ParseWayPointString(TCHAR *mTempString,WAYPOINT *Temp);
-static double CalculateAngle(TCHAR *temp);
-static int CheckFlags(TCHAR *temp);
-static double ReadAltitude(TCHAR *temp);
+static int ParseWayPointString(const TCHAR *mTempString,WAYPOINT *Temp);
+static double CalculateAngle(const TCHAR *temp);
+static int CheckFlags(const TCHAR *temp);
+static double ReadAltitude(const TCHAR *temp);
 
 static TCHAR TempString[READLINE_LENGTH];
 
@@ -97,7 +97,7 @@ void CloseWayPoints() {
 }
 
 
-int dlgWaypointOutOfTerrain(TCHAR *Message);
+int dlgWaypointOutOfTerrain(const TCHAR *Message);
 
 
 static bool WaypointInTerrainRange(WAYPOINT *List) {
@@ -157,7 +157,9 @@ static bool WaypointInTerrainRange(WAYPOINT *List) {
 }
 
 
-static int ParseWayPointError(int LineNumber, TCHAR *FileName, TCHAR *String){
+static int ParseWayPointError(int LineNumber, const TCHAR *FileName,
+                              const TCHAR *String)
+{
   TCHAR szTemp[250];
 
   if (_tcslen(FileName)> 0) {
@@ -258,7 +260,7 @@ WAYPOINT* GrowWaypointList() {
 }
 
 
-void ReadWayPointFile(ZZIP_FILE *fp, TCHAR *CurrentWpFileName)
+static void ReadWayPointFile(ZZIP_FILE *fp, const TCHAR *CurrentWpFileName)
 {
   WAYPOINT *new_waypoint;
   TCHAR szTemp[100];
@@ -360,7 +362,7 @@ void WaypointAltitudeFromTerrain(WAYPOINT* Temp) {
 }
 
 
-int ParseWayPointString(TCHAR *String,WAYPOINT *Temp)
+int ParseWayPointString(const TCHAR *String,WAYPOINT *Temp)
 {
   TCHAR ctemp[80]; // must be bigger than COMMENT_SIZE!
   TCHAR *Zoom;
@@ -506,10 +508,10 @@ void ExtractParameter(TCHAR *Source, TCHAR *Destination, int DesiredFieldNumber)
 }
 */
 
-static double CalculateAngle(TCHAR *temp)
+static double CalculateAngle(const TCHAR *temp)
 {
   TCHAR *Colon;
-  TCHAR *Stop;
+  const TCHAR *Stop;
   double Degrees, Mins;
 
   Colon = _tcschr(temp,':');
@@ -522,10 +524,10 @@ static double CalculateAngle(TCHAR *temp)
   *Colon = _T('\0');
   Colon ++;
 
-  Degrees = (double)_tcstol(temp, &Stop, 10);
+  Degrees = (double)_tcstol(temp, (TCHAR**)&Stop, 10);
   Mins = (double)StrToDouble(Colon, &Stop);
   if (*Stop == ':') {
-    Mins += ((double)_tcstol(++Stop, &Stop, 10)/60.0);
+    Mins += ((double)_tcstol(++Stop, (TCHAR**)&Stop, 10)/60.0);
   }
 
   Degrees += (Mins/60);
@@ -545,7 +547,7 @@ static double CalculateAngle(TCHAR *temp)
   return Degrees;
 }
 
-static int CheckFlags(TCHAR *temp)
+static int CheckFlags(const TCHAR *temp)
 {
   int Flags = 0;
 
@@ -562,9 +564,9 @@ static int CheckFlags(TCHAR *temp)
 }
 
 
-static double ReadAltitude(TCHAR *temp)
+static double ReadAltitude(const TCHAR *temp)
 {
-  TCHAR *Stop;
+  const TCHAR *Stop;
   double Altitude=-9999;
 
 

@@ -48,7 +48,9 @@ double AltitudeToQNHAltitude(double alt);
 static double lastAlt = 0;
 
 
-BOOL atrParseNMEA(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO){
+BOOL atrParseNMEA(PDeviceDescriptor_t d, const TCHAR *String,
+                  NMEA_INFO *GPS_INFO)
+{
 
   // no propriatary sentence
 

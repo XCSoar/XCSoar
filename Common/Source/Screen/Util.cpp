@@ -564,13 +564,17 @@ int DrawArc(HDC hdc, long x, long y, int radius, RECT rc,
   return TRUE;
 }
 
-int GetTextWidth(HDC hDC, TCHAR *text) {
+int
+GetTextWidth(HDC hDC, const TCHAR *text)
+{
   SIZE tsize;
   GetTextExtentPoint(hDC, text, _tcslen(text), &tsize);
   return tsize.cx;
 }
 
-void ExtTextOutClip(HDC hDC, int x, int y, TCHAR *text, int width) {
+void
+ExtTextOutClip(HDC hDC, int x, int y, const TCHAR *text, int width)
+{
   int len = _tcslen(text);
   if (len <=0 ) {
     return;

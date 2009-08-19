@@ -3,7 +3,7 @@
 
 #include <tchar.h>
 
-TCHAR *GetWinPilotPolarInternalName(int i);
+const TCHAR *GetWinPilotPolarInternalName(int i);
 
 bool ReadWinPilotPolarInternal(int i);
 

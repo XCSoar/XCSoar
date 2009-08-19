@@ -15,7 +15,7 @@ void ReadWayPoints(void);
 void SetHome(bool reset);
 int FindNearestWayPoint(double X, double Y, double MaxRange, bool exhaustive=false);
 void CloseWayPoints(void);
-int dlgWaypointOutOfTerrain(TCHAR *Message);
+int dlgWaypointOutOfTerrain(const TCHAR *Message);
 void WaypointWriteFiles(void);
 void WaypointAltitudeFromTerrain(WAYPOINT* wpt);
 WAYPOINT* GrowWaypointList();

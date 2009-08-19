@@ -30,7 +30,7 @@ public:
   FlarmIdFile(void);
   ~FlarmIdFile(void);
   FlarmId* GetFlarmIdItem(long id);
-  FlarmId* GetFlarmIdItem(TCHAR *cn);
+  FlarmId* GetFlarmIdItem(const TCHAR *cn);
 };
 
 #endif

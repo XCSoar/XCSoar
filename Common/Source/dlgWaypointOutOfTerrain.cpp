@@ -74,7 +74,7 @@ static CallBackTableEntry_t CallBackTable[]={
   DeclareCallBackEntry(NULL)
 };
 
-int dlgWaypointOutOfTerrain(TCHAR *Message){
+int dlgWaypointOutOfTerrain(const TCHAR *Message){
 
   WndFrame* wfrm;
   int res = 0;

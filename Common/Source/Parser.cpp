@@ -136,7 +136,7 @@ void NMEAParser::UpdateMonitor(void)
 
 
 BOOL NMEAParser::ParseNMEAString(int device,
-				 TCHAR *String, NMEA_INFO *GPS_INFO)
+                                 const TCHAR *String, NMEA_INFO *GPS_INFO)
 {
   switch (device) {
   case 0:
@@ -153,7 +153,8 @@ BOOL NMEAParser::ParseNMEAString(int device,
  * the checksum separator, split into an array of parameters,
  * and return the number of parameters found.
  */
-size_t NMEAParser::ExtractParameters(const TCHAR *src, TCHAR *dst, TCHAR **arr, size_t sz)
+size_t NMEAParser::ExtractParameters(const TCHAR *src, TCHAR *dst,
+                                     const TCHAR **arr, size_t sz)
 {
   TCHAR c, *p;
   size_t i = 0;
@@ -181,7 +182,8 @@ size_t NMEAParser::ExtractParameters(const TCHAR *src, TCHAR *dst, TCHAR **arr, 
  * Same as ExtractParameters, but also validate the length of
  * the string and the NMEA checksum.
  */
-size_t NMEAParser::ValidateAndExtract(const TCHAR *src, TCHAR *dst, size_t dstsz, TCHAR **arr, size_t arrsz)
+size_t NMEAParser::ValidateAndExtract(const TCHAR *src, TCHAR *dst, size_t dstsz,
+                                      const TCHAR **arr, size_t arrsz)
 {
   int len = _tcslen(src);
 
@@ -194,10 +196,10 @@ size_t NMEAParser::ValidateAndExtract(const TCHAR *src, TCHAR *dst, size_t dstsz
 }
 
 
-BOOL NMEAParser::ParseNMEAString_Internal(TCHAR *String, NMEA_INFO *GPS_INFO)
+BOOL NMEAParser::ParseNMEAString_Internal(const TCHAR *String, NMEA_INFO *GPS_INFO)
 {
   TCHAR ctemp[MAX_NMEA_LEN];
-  TCHAR *params[MAX_NMEA_PARAMS];
+  const TCHAR *params[MAX_NMEA_PARAMS];
   size_t n_params;
 
   n_params = ValidateAndExtract(String, ctemp, MAX_NMEA_LEN, params, MAX_NMEA_PARAMS);
@@ -398,7 +400,8 @@ bool NMEAParser::TimeHasAdvanced(double ThisTime, NMEA_INFO *GPS_INFO) {
   }
 }
 
-BOOL NMEAParser::GSA(TCHAR *String, TCHAR **params, size_t nparams, NMEA_INFO *GPS_INFO)
+BOOL NMEAParser::GSA(const TCHAR *String,
+                     const TCHAR **params, size_t nparams, NMEA_INFO *GPS_INFO)
 {
   int iSatelliteCount =0;
 
@@ -423,7 +426,8 @@ BOOL NMEAParser::GSA(TCHAR *String, TCHAR **params, size_t nparams, NMEA_INFO *G
 
 }
 
-BOOL NMEAParser::GLL(TCHAR *String, TCHAR **params, size_t nparams, NMEA_INFO *GPS_INFO)
+BOOL NMEAParser::GLL(const TCHAR *String,
+                     const TCHAR **params, size_t nparams, NMEA_INFO *GPS_INFO)
 {
   gpsValid = !NAVWarn(params[5][0]);
 
@@ -463,7 +467,8 @@ BOOL NMEAParser::GLL(TCHAR *String, TCHAR **params, size_t nparams, NMEA_INFO *G
 }
 
 
-BOOL NMEAParser::RMB(TCHAR *String, TCHAR **params, size_t nparams, NMEA_INFO *GPS_INFO)
+BOOL NMEAParser::RMB(const TCHAR *String,
+                     const TCHAR **params, size_t nparams, NMEA_INFO *GPS_INFO)
 {
   (void)GPS_INFO;
   (void)String;
@@ -492,7 +497,8 @@ BOOL NMEAParser::RMB(TCHAR *String, TCHAR **params, size_t nparams, NMEA_INFO *G
 
 bool SetSystemTimeFromGPS = false;
 
-BOOL NMEAParser::RMC(TCHAR *String, TCHAR **params, size_t nparams, NMEA_INFO *GPS_INFO)
+BOOL NMEAParser::RMC(const TCHAR *String, const TCHAR **params, size_t nparams,
+                     NMEA_INFO *GPS_INFO)
 {
   TCHAR *Stop;
 
@@ -526,11 +532,15 @@ BOOL NMEAParser::RMC(TCHAR *String, TCHAR **params, size_t nparams, NMEA_INFO *G
   TriggerGPSUpdate();
 
   // JMW get date info first so TimeModify is accurate
-  GPS_INFO->Year = _tcstol(&params[8][4], &Stop, 10) + 2000;
-  params[8][4] = '\0';
-  GPS_INFO->Month = _tcstol(&params[8][2], &Stop, 10);
-  params[8][2] = '\0';
-  GPS_INFO->Day = _tcstol(&params[8][0], &Stop, 10);
+  TCHAR date_buffer[9];
+  _tcsncpy(date_buffer, params[8], sizeof(date_buffer) - 1);
+  date_buffer[sizeof(date_buffer) - 1] = 0;
+
+  GPS_INFO->Year = _tcstol(&date_buffer[4], &Stop, 10) + 2000;
+  date_buffer[4] = '\0';
+  GPS_INFO->Month = _tcstol(&date_buffer[2], &Stop, 10);
+  date_buffer[2] = '\0';
+  GPS_INFO->Day = _tcstol(&date_buffer[0], &Stop, 10);
 
   double ThisTime = TimeModify(StrToDouble(params[0],NULL), GPS_INFO);
   if (!TimeHasAdvanced(ThisTime, GPS_INFO))
@@ -627,7 +637,8 @@ BOOL NMEAParser::RMC(TCHAR *String, TCHAR **params, size_t nparams, NMEA_INFO *G
   return TRUE;
 }
 
-BOOL NMEAParser::GGA(TCHAR *String, TCHAR **params, size_t nparams, NMEA_INFO *GPS_INFO)
+BOOL NMEAParser::GGA(const TCHAR *String, const TCHAR **params, size_t nparams,
+                     NMEA_INFO *GPS_INFO)
 {
 
   if (ReplayLogger::IsEnabled()) {
@@ -709,7 +720,8 @@ BOOL NMEAParser::GGA(TCHAR *String, TCHAR **params, size_t nparams, NMEA_INFO *G
 }
 
 
-BOOL NMEAParser::RMZ(TCHAR *String, TCHAR **params, size_t nparams, NMEA_INFO *GPS_INFO)
+BOOL NMEAParser::RMZ(const TCHAR *String, const TCHAR **params, size_t nparams,
+                     NMEA_INFO *GPS_INFO)
 {
   (void)GPS_INFO;
 
@@ -729,7 +741,8 @@ BOOL NMEAParser::RMZ(TCHAR *String, TCHAR **params, size_t nparams, NMEA_INFO *G
 }
 
 
-BOOL NMEAParser::RMA(TCHAR *String, TCHAR **params, size_t nparams, NMEA_INFO *GPS_INFO)
+BOOL NMEAParser::RMA(const TCHAR *String, const TCHAR **params, size_t nparams,
+                     NMEA_INFO *GPS_INFO)
 {
   (void)GPS_INFO;
 
@@ -799,7 +812,9 @@ BOOL NMEAParser::NMEAChecksum(const TCHAR *String)
 
 
 
-BOOL NMEAParser::PTAS1(TCHAR *String, TCHAR **params, size_t nparams, NMEA_INFO *GPS_INFO)
+BOOL NMEAParser::PTAS1(const TCHAR *String,
+                       const TCHAR **params, size_t nparams,
+                       NMEA_INFO *GPS_INFO)
 {
   double wnet,baralt,vtas;
 
@@ -857,7 +872,9 @@ double FLARM_NorthingToLatitude = 0.0;
 double FLARM_EastingToLongitude = 0.0;
 
 
-BOOL NMEAParser::PFLAU(TCHAR *String, TCHAR **params, size_t nparams, NMEA_INFO *GPS_INFO)
+BOOL NMEAParser::PFLAU(const TCHAR *String,
+                       const TCHAR **params, size_t nparams,
+                       NMEA_INFO *GPS_INFO)
 {
   static int old_flarm_rx = 0;
 
@@ -943,7 +960,9 @@ int FLARM_FindSlot(NMEA_INFO *GPS_INFO, long Id)
 
 
 
-BOOL NMEAParser::PFLAA(TCHAR *String, TCHAR **params, size_t nparams, NMEA_INFO *GPS_INFO)
+BOOL NMEAParser::PFLAA(const TCHAR *String,
+                       const TCHAR **params, size_t nparams,
+                       NMEA_INFO *GPS_INFO)
 {
   int flarm_slot = 0;
 
@@ -1000,7 +1019,7 @@ BOOL NMEAParser::PFLAA(TCHAR *String, TCHAR **params, size_t nparams, NMEA_INFO 
   TCHAR *name = GPS_INFO->FLARM_Traffic[flarm_slot].Name;
   if (!_tcslen(name)) {
     // need to lookup name for this target
-    TCHAR *fname = LookupFLARMDetails(GPS_INFO->FLARM_Traffic[flarm_slot].ID);
+    const TCHAR *fname = LookupFLARMDetails(GPS_INFO->FLARM_Traffic[flarm_slot].ID);
     if (fname) {
       _tcscpy(name,fname);
     } else {
@@ -1063,7 +1082,7 @@ void NMEAParser::TestRoutine(NMEA_INFO *GPS_INFO) {
   if (i<50) {
     GPS_INFO->FLARM_Available = true;
     TCHAR ctemp[MAX_NMEA_LEN];
-    TCHAR *params[MAX_NMEA_PARAMS];
+    const TCHAR *params[MAX_NMEA_PARAMS];
     size_t nr;
     nr = nmeaParser1.ExtractParameters(t1, ctemp, params, MAX_NMEA_PARAMS);
     nmeaParser1.PFLAU(t1, params, nr, GPS_INFO);
@@ -1082,7 +1101,7 @@ void NMEAParser::TestRoutine(NMEA_INFO *GPS_INFO) {
 bool EnableLogNMEA = false;
 HANDLE nmeaLogFile = INVALID_HANDLE_VALUE;
 
-void LogNMEA(TCHAR* text) {
+void LogNMEA(const TCHAR* text) {
 
   if (!EnableLogNMEA) {
     if (nmeaLogFile != INVALID_HANDLE_VALUE) {

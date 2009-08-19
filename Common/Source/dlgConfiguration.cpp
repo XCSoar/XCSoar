@@ -615,7 +615,7 @@ static void OnUseCustomFontData(DataField *Sender, DataField::DataAccessKind_t M
   }
 }
 
-static void GetFontDescription(TCHAR Description[], TCHAR * prpName, int iMaxLen)
+static void GetFontDescription(TCHAR Description[], const TCHAR * prpName, int iMaxLen)
 {
   WndProperty * wp;
   wp = (WndProperty*)wf->FindByName(prpName);
@@ -1848,7 +1848,7 @@ static void setVariables(void) {
     i=0;
     bool ok = true;
     while (ok) {
-      TCHAR *name;
+      const TCHAR *name;
       name = GetWinPilotPolarInternalName(i);
       if (!name) {
 	ok=false;

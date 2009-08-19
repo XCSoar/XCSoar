@@ -165,7 +165,8 @@ void protateshift(POINT &pin, const double &angle,
 
 }
 
-void PExtractParameter(TCHAR *Source, TCHAR *Destination, int DesiredFieldNumber)
+void PExtractParameter(const TCHAR *Source, TCHAR *Destination,
+                       int DesiredFieldNumber)
 {
   int index = 0;
   int dest_index = 0;
@@ -721,7 +722,9 @@ double ScreenAngle(int x1, int y1, int x2, int y2)
   return atan2((double)y2-y1, (double)x2-x1)*RAD_TO_DEG;
 }
 
-void FormatWarningString(int Type, TCHAR *Name , AIRSPACE_ALT Base, AIRSPACE_ALT Top, TCHAR *szMessageBuffer, TCHAR *szTitleBuffer )
+void FormatWarningString(int Type, const TCHAR *Name,
+                         AIRSPACE_ALT Base, AIRSPACE_ALT Top,
+                         TCHAR *szMessageBuffer, TCHAR *szTitleBuffer)
 {
   TCHAR BaseStr[512];
   TCHAR TopStr[512];
@@ -948,7 +951,7 @@ BOOL ReadStringX(FILE *fp, int Max, TCHAR *String){
 
 
 
-double StrToDouble(const TCHAR *Source, TCHAR **Stop)
+double StrToDouble(const TCHAR *Source, const TCHAR **Stop)
 {
   int index = 0;
   int StringLength        = 0;
@@ -1138,7 +1141,7 @@ WORD crcCalc(void *Buffer, size_t size){
 
 ///////////
 
-void ExtractDirectory(TCHAR *Dest, TCHAR *Source) {
+void ExtractDirectory(TCHAR *Dest, const TCHAR *Source) {
   int len = _tcslen(Source);
   int found = -1;
   int i;
@@ -1225,7 +1228,7 @@ void *bsearch(void *key, void *base0, size_t nmemb, size_t size, int (*compar)(c
 
 
 
-TCHAR *strtok_r(TCHAR *s, TCHAR *delim, TCHAR **lasts){
+TCHAR *strtok_r(TCHAR *s, const TCHAR *delim, TCHAR **lasts){
 // "s" MUST be a pointer to an array, not to a string!!!
 // (ARM92, Win emulator cause access violation if not)
 
@@ -1338,7 +1341,7 @@ void ReadStatusFile() {
   TCHAR key[2049];	// key from scanf
   TCHAR value[2049];	// value from scanf
   int ms;				// Found ms for delay
-  TCHAR **location;	// Where to put the data
+  const TCHAR **location;	// Where to put the data
   int found;			// Entries found from scanf
   bool some_data;		// Did we find some in the last loop...
 
@@ -1385,7 +1388,7 @@ void ReadStatusFile() {
 	// TODO code: this picks up memory lost from no entry, but not duplicates - fix.
 	if (*location) {
 	  // JMW fix memory leak
-	  free(*location);
+          free((void*)*location);
 	}
 	*location = StringMallocParse(value);
       }
@@ -1413,7 +1416,9 @@ void _init_Status(int num) {
 	StatusMessageData[num].delay_ms = 2500;  // 2.5 s
 }
 
-TCHAR* StringMallocParse(TCHAR* old_string) {
+TCHAR *
+StringMallocParse(const TCHAR* old_string)
+{
   TCHAR buffer[2048];	// Note - max size of any string we cope with here !
   TCHAR* new_string;
   unsigned int used = 0;
@@ -1568,7 +1573,7 @@ void ConvertCToT(TCHAR* pszDest, const CHAR* pszSrc)
 }
 
 
-void propGetFontSettingsFromString(TCHAR *Buffer1, LOGFONT* lplf)
+void propGetFontSettingsFromString(const TCHAR *Buffer1, LOGFONT* lplf)
 {
 #define propGetFontSettingsMAX_SIZE 128
   TCHAR Buffer[propGetFontSettingsMAX_SIZE]; // RLD need a buffer (not sz) for strtok_r w/ gcc optimized ARM920
@@ -1636,7 +1641,7 @@ void propGetFontSettingsFromString(TCHAR *Buffer1, LOGFONT* lplf)
 }
 
 
-void propGetFontSettings(TCHAR *Name, LOGFONT* lplf) {
+void propGetFontSettings(const TCHAR *Name, LOGFONT* lplf) {
 
   TCHAR Buffer[128];
 
@@ -2024,7 +2029,7 @@ int LookupSecondaryFLARMId(int id)
   return -1;
 }
 
-int LookupSecondaryFLARMId(TCHAR *cn)
+int LookupSecondaryFLARMId(const TCHAR *cn)
 {
   for (int i=0; i<NumberOfFLARMNames; i++)
     {
@@ -2037,7 +2042,7 @@ int LookupSecondaryFLARMId(TCHAR *cn)
 }
 
 
-TCHAR* LookupFLARMDetails(long id) {
+const TCHAR* LookupFLARMDetails(long id) {
 
   // try to find flarm from userFile
   int index = LookupSecondaryFLARMId(id);
@@ -2058,7 +2063,7 @@ TCHAR* LookupFLARMDetails(long id) {
 }
 
 
-int LookupFLARMDetails(TCHAR *cn)
+int LookupFLARMDetails(const TCHAR *cn)
 {
   // try to find flarm from userFile
   int index = LookupSecondaryFLARMId(cn);
@@ -2079,7 +2084,7 @@ int LookupFLARMDetails(TCHAR *cn)
 }
 
 
-bool AddFlarmLookupItem(int id, TCHAR *name, bool saveFile)
+bool AddFlarmLookupItem(int id, const TCHAR *name, bool saveFile)
 {
   int index = LookupSecondaryFLARMId(id);
 
@@ -2261,7 +2266,7 @@ BOOL PlayResource (const TCHAR* lpName)
 #endif
 }
 
-void CreateDirectoryIfAbsent(TCHAR *filename) {
+void CreateDirectoryIfAbsent(const TCHAR *filename) {
   TCHAR fullname[MAX_PATH];
 
   LocalPath(fullname, filename);
@@ -2300,7 +2305,7 @@ bool InterfaceTimeoutCheck(void) {
   }
 }
 
-bool FileExistsW(TCHAR *FileName){
+bool FileExistsW(const TCHAR *FileName){
 
   HANDLE hFile = CreateFile(FileName, GENERIC_READ, 0, NULL,
                  OPEN_EXISTING,FILE_ATTRIBUTE_NORMAL,NULL);
@@ -2314,7 +2319,7 @@ bool FileExistsW(TCHAR *FileName){
 
 }
 
-bool FileExistsA(char *FileName){
+bool FileExistsA(const char *FileName){
 
 #if (WINDOWSPC>0)
   HANDLE hFile = CreateFileA(FileName, GENERIC_READ, 0, NULL,

@@ -336,7 +336,8 @@ class MapWindow {
 			    const POINT&start,
 			    const POINT&end ,
 			    const RECT rc);
-  static bool TextInBox(HDC hDC, TCHAR* Value, int x, int y, int size, TextInBoxMode_t Mode, bool noOverlap=false);
+  static bool TextInBox(HDC hDC, const TCHAR *Value, int x, int y, int size,
+                        TextInBoxMode_t Mode, bool noOverlap=false);
   static void ToggleFullScreenStart();
   static void RefreshMap();
   static bool WaypointInTask(int ind);
@@ -429,7 +430,8 @@ class MapWindow {
 
   ////
 
-  static void DisplayAirspaceWarning(int Type, TCHAR *Name , AIRSPACE_ALT Base, AIRSPACE_ALT Top );
+  static void DisplayAirspaceWarning(int Type, const TCHAR *Name,
+                                     AIRSPACE_ALT Base, AIRSPACE_ALT Top );
 
   static void UpdateMapScale();
   static void CalculateOrigin(const RECT rc, POINT *Orig);

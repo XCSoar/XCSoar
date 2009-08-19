@@ -238,7 +238,7 @@ BOOL devInitOne(PDeviceDescriptor_t dev, int index, const TCHAR *port,
   return TRUE;
 }
 
-BOOL devInit(LPTSTR CommandLine){
+BOOL devInit(LPCTSTR CommandLine){
   int i;
   PDeviceDescriptor_t pDevNmeaOut = NULL;
 
@@ -356,12 +356,14 @@ BOOL devInit(LPTSTR CommandLine){
 }
 
 
-BOOL devParseNMEA(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO){
+BOOL
+devParseNMEA(PDeviceDescriptor_t d, const TCHAR *String, NMEA_INFO *GPS_INFO)
+{
 
   if ((d->fhLogFile != NULL) &&
       (String != NULL) && (_tcslen(String) > 0)) {
     char  sTmp[500];  // temp multibyte buffer
-    TCHAR *pWC = String;
+    const TCHAR *pWC = String;
     char  *pC  = sTmp;
     //    static DWORD lastFlush = 0;
 
@@ -629,7 +631,7 @@ BOOL devIsCondor(PDeviceDescriptor_t d)
 
 
 
-BOOL devOpenLog(PDeviceDescriptor_t d, TCHAR *FileName){
+BOOL devOpenLog(PDeviceDescriptor_t d, const TCHAR *FileName){
   if (d != NULL){
     d->fhLogFile = _tfopen(FileName, TEXT("a+b"));
     return(d->fhLogFile != NULL);

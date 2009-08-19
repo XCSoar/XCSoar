@@ -156,7 +156,7 @@ FlarmId* FlarmIdFile::GetFlarmIdItem(long id)
   return NULL;
 }
 
-FlarmId* FlarmIdFile::GetFlarmIdItem(TCHAR *cn)
+FlarmId* FlarmIdFile::GetFlarmIdItem(const TCHAR *cn)
 {
   FlarmId *itemTemp = NULL;
   FlarmIdMap::iterator iterFind = flarmIds.begin();

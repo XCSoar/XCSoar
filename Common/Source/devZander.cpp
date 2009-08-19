@@ -41,11 +41,15 @@ Copyright_License {
 
 #include "devZander.h"
 
-static BOOL PZAN1(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *aGPS_INFO);
-static BOOL PZAN2(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *aGPS_INFO);
+static BOOL PZAN1(PDeviceDescriptor_t d, const TCHAR *String,
+                  NMEA_INFO *aGPS_INFO);
+static BOOL PZAN2(PDeviceDescriptor_t d, const TCHAR *String,
+                  NMEA_INFO *aGPS_INFO);
 
 
-static BOOL ZanderParseNMEA(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *aGPS_INFO){
+static BOOL ZanderParseNMEA(PDeviceDescriptor_t d, const TCHAR *String,
+                            NMEA_INFO *aGPS_INFO)
+{
   (void)d;
 
   if(_tcsncmp(TEXT("$PZAN1"), String, 6)==0)
@@ -92,7 +96,8 @@ BOOL zanderRegister(void){
 // *****************************************************************************
 // local stuff
 
-static BOOL PZAN1(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *aGPS_INFO)
+static BOOL PZAN1(PDeviceDescriptor_t d, const TCHAR *String,
+                  NMEA_INFO *aGPS_INFO)
 {
   TCHAR ctemp[80];
   aGPS_INFO->BaroAltitudeAvailable = TRUE;
@@ -102,7 +107,8 @@ static BOOL PZAN1(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *aGPS_INFO)
 }
 
 
-static BOOL PZAN2(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *aGPS_INFO)
+static BOOL PZAN2(PDeviceDescriptor_t d, const TCHAR *String,
+                  NMEA_INFO *aGPS_INFO)
 {
   TCHAR ctemp[80];
   double vtas, wnet, vias;

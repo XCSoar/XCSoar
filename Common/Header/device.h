@@ -60,12 +60,13 @@ PDeviceDescriptor_t devVarioFindVega(void);
 typedef	struct DeviceRegister {
   const TCHAR	*Name;
   unsigned int	Flags;
-  BOOL (*ParseNMEA)(DeviceDescriptor_t *d, TCHAR *String, NMEA_INFO *GPS_INFO);
+  BOOL (*ParseNMEA)(DeviceDescriptor_t *d, const TCHAR *String,
+                    NMEA_INFO *GPS_INFO);
   BOOL (*PutMacCready)(DeviceDescriptor_t *d, double McReady);
   BOOL (*PutBugs)(DeviceDescriptor_t *d, double	Bugs);
   BOOL (*PutBallast)(DeviceDescriptor_t	*d, double Ballast);
   BOOL (*PutQNH)(DeviceDescriptor_t *d, double NewQNH);
-  BOOL (*PutVoice)(DeviceDescriptor_t *d, TCHAR *Sentence);
+  BOOL (*PutVoice)(DeviceDescriptor_t *d, const TCHAR *Sentence);
   BOOL (*PutVolume)(DeviceDescriptor_t *d, int Volume);
   BOOL (*PutFreqActive)(DeviceDescriptor_t *d, double Freq);
   BOOL (*PutFreqStandby)(DeviceDescriptor_t *d, double Standby);
@@ -90,11 +91,12 @@ extern DeviceDescriptor_t *pDevSecondaryBaroSource;
 BOOL devRegister(const DeviceRegister_t *devReg);
 BOOL devRegisterGetName(int Index, TCHAR *Name);
 
-BOOL devInit(LPTSTR CommandLine);
+BOOL devInit(LPCTSTR CommandLine);
 BOOL ExpectString(PDeviceDescriptor_t d, const TCHAR *token);
 BOOL devHasBaroSource(void);
 
-BOOL devParseNMEA(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO);
+BOOL devParseNMEA(PDeviceDescriptor_t d, const TCHAR *String,
+                  NMEA_INFO *GPS_INFO);
 BOOL devPutMacCready(PDeviceDescriptor_t d,	double MacCready);
 BOOL devPutBugs(PDeviceDescriptor_t	d, double	Bugs);
 BOOL devPutBallast(PDeviceDescriptor_t d,	double Ballast);
@@ -110,7 +112,7 @@ BOOL devIsGPSSource(PDeviceDescriptor_t	d);
 BOOL devIsBaroSource(PDeviceDescriptor_t d);
 BOOL devIsRadio(PDeviceDescriptor_t d);
 BOOL devIsCondor(PDeviceDescriptor_t d);
-BOOL devOpenLog(PDeviceDescriptor_t d, TCHAR *FileName);
+BOOL devOpenLog(PDeviceDescriptor_t d, const TCHAR *FileName);
 BOOL devCloseLog(PDeviceDescriptor_t d);
 
 BOOL devPutQNH(DeviceDescriptor_t *d, double NewQNH);
@@ -118,7 +120,7 @@ void devTick(void);
 
 BOOL devGetBaroAltitude(double *Value);
 
-BOOL devPutVoice(PDeviceDescriptor_t d, TCHAR *Sentence);
+BOOL devPutVoice(PDeviceDescriptor_t d, const TCHAR *Sentence);
 
 
 BOOL devIsFalseReturn(PDeviceDescriptor_t d);

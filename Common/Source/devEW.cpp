@@ -58,7 +58,9 @@ static int nDeclErrorCode = 0;
 static int ewDecelTpIndex = 0;
 
 
-BOOL EWParseNMEA(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO){
+BOOL EWParseNMEA(PDeviceDescriptor_t d, const TCHAR *String,
+                 NMEA_INFO *GPS_INFO)
+{
   (void)d;
   (void)String;
   (void)GPS_INFO;

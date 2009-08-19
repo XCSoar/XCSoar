@@ -81,23 +81,25 @@ bool SetModelName(DWORD Temp);
 double ScreenAngle(int x1, int y1, int x2, int y2);
 void ReadCompaqID(void);
 void ReadUUID(void);
-void FormatWarningString(int Type, TCHAR *Name , AIRSPACE_ALT Base, AIRSPACE_ALT Top, TCHAR *szMessageBuffer, TCHAR *TileBuffer );
+void FormatWarningString(int Type, const TCHAR *Name,
+                         AIRSPACE_ALT Base, AIRSPACE_ALT Top,
+                         TCHAR *szMessageBuffer, TCHAR *TileBuffer);
 BOOL ReadString(ZZIP_FILE* zFile, int Max, TCHAR *String);
 BOOL ReadString(HANDLE hFile, int Max, TCHAR *String);
 BOOL ReadStringX(FILE *fp, int Max, TCHAR *String);
 
-double StrToDouble(const TCHAR *Source, TCHAR **Stop);
-void PExtractParameter(TCHAR *Source, TCHAR *Destination, int DesiredFieldNumber);
+double StrToDouble(const TCHAR *Source, const TCHAR **Stop);
+void PExtractParameter(const TCHAR *Source, TCHAR *Destination,
+                       int DesiredFieldNumber);
 
 unsigned int isqrt4(unsigned long val);
 
 
-WORD crcCalc(void *Buffer, size_t size);
-void ExtractDirectory(TCHAR *Dest, TCHAR *Source);
+void ExtractDirectory(TCHAR *Dest, const TCHAR *Source);
 double DoSunEphemeris(double lon, double lat);
 
 void *bsearch(void *key, void *base0, size_t nmemb, size_t size, int (*compar)(const void *elem1, const void *elem2));
-TCHAR *strtok_r(TCHAR *s, TCHAR *delim, TCHAR **lasts);
+TCHAR *strtok_r(TCHAR *s, const TCHAR *delim, TCHAR **lasts);
 
 
 void ResetInfoBoxes(void);
@@ -111,10 +113,10 @@ void StatusFileInit(void);
 void _init_Status(int num);
 
 typedef struct {
-	TCHAR *key;		/* English key */
-	TCHAR *sound;		/* What sound entry to play */
-	TCHAR *nmea_gps;		/* NMEA Sentence - to GPS serial */
-	TCHAR *nmea_vario;		/* NMEA Sentence - to Vario serial */
+	const TCHAR *key;		/* English key */
+	const TCHAR *sound;		/* What sound entry to play */
+	const TCHAR *nmea_gps;		/* NMEA Sentence - to GPS serial */
+	const TCHAR *nmea_vario;		/* NMEA Sentence - to Vario serial */
 	bool doStatus;
 	bool doSound;
 	int delay_ms;		/* Delay for DoStatusMessage */
@@ -132,7 +134,7 @@ typedef struct {
 
 
 // Parse string (new lines etc) and malloc the string
-TCHAR* StringMallocParse(TCHAR* old_string);
+TCHAR* StringMallocParse(const TCHAR* old_string);
 
 void LocalPath(TCHAR* buf, const TCHAR* file = TEXT(""), int loc = CSIDL_PERSONAL);
 void LocalPathS(char* buf, const TCHAR* file = TEXT(""), int loc = CSIDL_PERSONAL);
@@ -143,8 +145,8 @@ void ContractLocalPath(TCHAR* filein);
 void ConvertTToC(CHAR* pszDest, const TCHAR* pszSrc);
 void ConvertCToT(TCHAR* pszDest, const CHAR* pszSrc);
 
-void propGetFontSettings(TCHAR *Name, LOGFONT* lplf);
-void propGetFontSettingsFromString(TCHAR *Buffer, LOGFONT* lplf);
+void propGetFontSettings(const TCHAR *Name, LOGFONT* lplf);
+void propGetFontSettingsFromString(const TCHAR *Buffer, LOGFONT* lplf);
 int propGetScaleList(double *List, size_t Size);
 
 long GetUTCOffset(void);
@@ -158,9 +160,9 @@ int MeasureCPULoad();
 
 void OpenFLARMDetails();
 void CloseFLARMDetails();
-TCHAR* LookupFLARMDetails(long id);
-int LookupFLARMDetails(TCHAR *cn);
-bool AddFlarmLookupItem(int id, TCHAR *name, bool saveFile);
+const TCHAR* LookupFLARMDetails(long id);
+int LookupFLARMDetails(const TCHAR *cn);
+bool AddFlarmLookupItem(int id, const TCHAR *name, bool saveFile);
 int LookupSecondaryFLARMId(int id);
 
 double HexStrToDouble(TCHAR *Source, TCHAR **Stop);
@@ -173,7 +175,7 @@ void MyCompactHeaps();
 unsigned long FindFreeSpace(const TCHAR *path);
 bool MatchesExtension(const TCHAR *filename, const TCHAR* extension);
 BOOL PlayResource (const TCHAR* lpName);
-void CreateDirectoryIfAbsent(TCHAR *filename);
+void CreateDirectoryIfAbsent(const TCHAR *filename);
 
 bool InterfaceTimeoutZero(void);
 void InterfaceTimeoutReset(void);
@@ -183,8 +185,8 @@ bool InterfaceTimeoutCheck(void);
 extern "C"{
 #endif
 
-bool FileExistsW(TCHAR *FileName);
-bool FileExistsA(char *FileName);
+bool FileExistsW(const TCHAR *FileName);
+bool FileExistsA(const char *FileName);
 
 #ifdef _UNICODE
 #define FileExists FileExistsW

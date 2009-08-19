@@ -134,17 +134,19 @@ static cai302_GdataNoArgs_t cai302_GdataNoArgs;
 static cai302_Gdata_t cai302_Gdata;
 
 // Additional sentance for CAI302 support
-static BOOL cai_w(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO);
-static BOOL cai_PCAIB(TCHAR *String, NMEA_INFO *GPS_INFO);
-static BOOL cai_PCAID(TCHAR *String, NMEA_INFO *GPS_INFO);
+static BOOL cai_w(PDeviceDescriptor_t d, const TCHAR *String,
+                  NMEA_INFO *GPS_INFO);
+static BOOL cai_PCAIB(const TCHAR *String, NMEA_INFO *GPS_INFO);
+static BOOL cai_PCAID(const TCHAR *String, NMEA_INFO *GPS_INFO);
 
 static int  MacCreadyUpdateTimeout = 0;
 static int  BugsUpdateTimeout = 0;
 static int  BallastUpdateTimeout = 0;
 
 
-BOOL cai302ParseNMEA(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO){
-
+BOOL cai302ParseNMEA(PDeviceDescriptor_t d, const TCHAR *String,
+                     NMEA_INFO *GPS_INFO)
+{
   if (!NMEAParser::NMEAChecksum(String) || (GPS_INFO == NULL)){
     return FALSE;
   }
@@ -538,7 +540,8 @@ $PCAIB,<1>,<2>,<CR><LF>
 <2> Destination Navpoint attribute word, format XXXXX (leading zeros will be transmitted)
 */
 
-BOOL cai_PCAIB(TCHAR *String, NMEA_INFO *GPS_INFO){
+BOOL cai_PCAIB(const TCHAR *String, NMEA_INFO *GPS_INFO)
+{
   (void)GPS_INFO;
   (void)String;
   return TRUE;
@@ -554,7 +557,8 @@ $PCAID,<1>,<2>,<3>,<4>*hh<CR><LF>
 *hh Checksum, XOR of all bytes of the sentence after the ‘$’ and before the ‘*’
 */
 
-BOOL cai_PCAID(TCHAR *String, NMEA_INFO *GPS_INFO){
+BOOL cai_PCAID(const TCHAR *String, NMEA_INFO *GPS_INFO)
+{
 	(void)GPS_INFO;
 	(void)String;
   return TRUE;
@@ -578,7 +582,8 @@ BOOL cai_PCAID(TCHAR *String, NMEA_INFO *GPS_INFO){
 *hh  Checksum, XOR of all bytes
 */
 
-BOOL cai_w(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO){
+BOOL cai_w(PDeviceDescriptor_t d, const TCHAR *String, NMEA_INFO *GPS_INFO)
+{
 
   TCHAR ctemp[80];
 

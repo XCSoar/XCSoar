@@ -254,7 +254,8 @@ double StringToFloatDflt(const TCHAR *String, double Default){
   return(_tcstod(String, NULL));
 }
 
-const TCHAR *StringToStringDflt(const TCHAR *String, TCHAR *Default){
+const TCHAR *StringToStringDflt(const TCHAR *String, const TCHAR *Default)
+{
   if (String == NULL || String[0] == '\0')
     return(Default);
   return(String);
@@ -472,7 +473,7 @@ WndForm *dlgLoadFromXML(CallBackTableEntry_t *LookUpTable, const char *FileName,
 #endif
 */
 
-  if (FileExistsA((char*)FileName))   //sgi use window API cals to check if
+  if (FileExistsA(FileName))   //sgi use window API cals to check if
                                //file exists, this will supress
                                //CodeGurad warnings on callinf
                                //fopen(<unexisting file>)

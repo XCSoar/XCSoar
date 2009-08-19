@@ -270,7 +270,7 @@ int InfoBox::SetBorderKind(int Value){
 }
 
 
-void InfoBox::SetTitle(TCHAR *Value){
+void InfoBox::SetTitle(const TCHAR *Value){
   TCHAR sTmp[TITLESIZE+1];
 
   _tcsncpy(sTmp, Value, TITLESIZE);
@@ -287,7 +287,7 @@ void InfoBox::SetTitle(TCHAR *Value){
   }
 }
 
-void InfoBox::SetValue(TCHAR *Value){
+void InfoBox::SetValue(const TCHAR *Value){
   if (_tcscmp(mValue, Value) != 0){
     _tcsncpy(mValue, Value, VALUESIZE);
     mValue[VALUESIZE] = '\0';
@@ -319,7 +319,7 @@ void InfoBox::SetColorTop(int value) {
     colorTop = 0;
   }
 }
-void InfoBox::SetComment(TCHAR *Value){
+void InfoBox::SetComment(const TCHAR *Value){
   if (_tcscmp(mComment, Value) != 0){
     _tcsncpy(mComment, Value, COMMENTSIZE);
     mComment[COMMENTSIZE] = '\0';

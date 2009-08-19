@@ -48,10 +48,10 @@ class Trigger;
 
 class InfoBoxFormatter {
  public:
-  InfoBoxFormatter(TCHAR *theformat);
+  InfoBoxFormatter(const TCHAR *theformat);
 
-  virtual TCHAR *Render(int *color);
-  virtual TCHAR *RenderTitle(int *color); // VENTA3
+  virtual const TCHAR *Render(int *color);
+  virtual const TCHAR *RenderTitle(int *color); // VENTA3
   void RenderInvalid(int *color);
   BOOL Valid;
   double Value;
@@ -60,41 +60,41 @@ class InfoBoxFormatter {
   TCHAR CommentText[100];
 
   virtual void AssignValue(int i);
-  TCHAR *GetCommentText();
+  const TCHAR *GetCommentText();
   BOOL isValid();
 };
 
 
 class FormatterTeamCode: public InfoBoxFormatter {
  public:
-  FormatterTeamCode(TCHAR *theformat):InfoBoxFormatter(theformat) {};
+  FormatterTeamCode(const TCHAR *theformat):InfoBoxFormatter(theformat) {};
 
-  virtual TCHAR *Render(int *color);
+  virtual const TCHAR *Render(int *color);
 };
 
 
 class FormatterDiffTeamBearing: public InfoBoxFormatter {
  public:
-  FormatterDiffTeamBearing(TCHAR *theformat):InfoBoxFormatter(theformat) {};
+  FormatterDiffTeamBearing(const TCHAR *theformat):InfoBoxFormatter(theformat) {};
 
-  virtual TCHAR *Render(int *color);
+  virtual const TCHAR *Render(int *color);
 };
 
 
 class FormatterWaypoint: public InfoBoxFormatter {
  public:
-  FormatterWaypoint(TCHAR *theformat):InfoBoxFormatter(theformat) {};
+  FormatterWaypoint(const TCHAR *theformat):InfoBoxFormatter(theformat) {};
 
-  virtual TCHAR *Render(int *color);
+  virtual const TCHAR *Render(int *color);
 };
 
 // VENTA3 / alternates
 class FormatterAlternate: public InfoBoxFormatter {
  public:
-  FormatterAlternate(TCHAR *theformat):InfoBoxFormatter(theformat) {};
+  FormatterAlternate(const TCHAR *theformat):InfoBoxFormatter(theformat) {};
 
-  virtual TCHAR *Render(int *color);
-  virtual TCHAR *RenderTitle(int *color);
+  virtual const TCHAR *Render(int *color);
+  virtual const TCHAR *RenderTitle(int *color);
   virtual void AssignValue(int i);
 };
 // VENTA3 bestlanding
@@ -109,14 +109,14 @@ class FormatterBestLanding: public InfoBoxFormatter {
 */
 class FormatterLowWarning: public InfoBoxFormatter {
  public:
-  FormatterLowWarning(TCHAR *theformat, double the_minimum)
+  FormatterLowWarning(const TCHAR *theformat, double the_minimum)
     :InfoBoxFormatter(theformat) {
 
     minimum = the_minimum;
 
   };
 
-  virtual TCHAR *Render(int *color);
+  virtual const TCHAR *Render(int *color);
   double minimum;
   virtual void AssignValue(int i);
 };
@@ -124,9 +124,9 @@ class FormatterLowWarning: public InfoBoxFormatter {
 
 class FormatterTime: public InfoBoxFormatter {
  public:
-  FormatterTime(TCHAR *theformat):InfoBoxFormatter(theformat) {};
+  FormatterTime(const TCHAR *theformat):InfoBoxFormatter(theformat) {};
 
-  virtual TCHAR *Render(int *color);
+  virtual const TCHAR *Render(int *color);
   virtual void AssignValue(int i);
   int hours;
   int mins;
@@ -137,9 +137,9 @@ class FormatterTime: public InfoBoxFormatter {
 
 class FormatterAATTime: public FormatterTime {
  public:
-  FormatterAATTime(TCHAR *theformat):FormatterTime(theformat) {};
+  FormatterAATTime(const TCHAR *theformat):FormatterTime(theformat) {};
 
-  virtual TCHAR *Render(int *color);
+  virtual const TCHAR *Render(int *color);
   virtual void AssignValue(int i);
   int status;
 };
@@ -147,9 +147,9 @@ class FormatterAATTime: public FormatterTime {
 
 class FormatterDiffBearing: public InfoBoxFormatter {
  public:
-  FormatterDiffBearing(TCHAR *theformat):InfoBoxFormatter(theformat) {};
+  FormatterDiffBearing(const TCHAR *theformat):InfoBoxFormatter(theformat) {};
 
-  virtual TCHAR *Render(int *color);
+  virtual const TCHAR *Render(int *color);
 };
 
 typedef struct _SCREEN_INFO

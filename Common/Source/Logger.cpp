@@ -492,7 +492,7 @@ bool IsAlphaNum (TCHAR c) {
   }
 }
 
-void StartLogger(TCHAR *astrAssetNumber)
+void StartLogger(const TCHAR *astrAssetNumber)
 {
   HANDLE hFile;
   int i;
@@ -691,11 +691,11 @@ void EndDeclaration(void)
 {
   // TODO bug: this is causing problems with some analysis software
   // maybe it's because the date and location fields are bogus
-  char start[] = "C0000000N00000000ELANDING\r\n";
+  const char start[] = "C0000000N00000000ELANDING\r\n";
   IGCWriteRecord(start);
 }
 
-void AddDeclaration(double Latitude, double Longitude, TCHAR *ID)
+void AddDeclaration(double Latitude, double Longitude, const TCHAR *ID)
 {
   char szCRecord[500];
 
@@ -944,7 +944,8 @@ bool ReplayLogger::ReadLine(TCHAR *buffer) {
 }
 
 
-bool ReplayLogger::ScanBuffer(TCHAR *buffer, double *Time, double *Latitude,
+bool ReplayLogger::ScanBuffer(const TCHAR *buffer, double *Time,
+                              double *Latitude,
 			      double *Longitude, double *Altitude)
 {
   int DegLat, DegLon;
@@ -1285,12 +1286,12 @@ void ReplayLogger::Start(void) {
 }
 
 
-TCHAR* ReplayLogger::GetFilename(void) {
+const TCHAR* ReplayLogger::GetFilename(void) {
   return FileName;
 }
 
 
-void ReplayLogger::SetFilename(TCHAR *name) {
+void ReplayLogger::SetFilename(const TCHAR *name) {
   if (!name) {
     return;
   }
@@ -1523,7 +1524,7 @@ char * CleanIGCRecord (char * szIn)
   return szIn;
 }
 
-bool IGCWriteRecord(char *szIn)
+bool IGCWriteRecord(const char *szIn)
 {
   HANDLE hFile;
   DWORD dwBytesRead;
@@ -1544,7 +1545,8 @@ bool IGCWriteRecord(char *szIn)
 			 NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
       SetFilePointer(hFile, 0, NULL, FILE_END);
 
-      strcpy(charbuffer, CleanIGCRecord(szIn));
+      strcpy(charbuffer, szIn);
+      CleanIGCRecord(charbuffer);
 
       WriteFile(hFile, charbuffer, strlen(charbuffer), &dwBytesRead,
 		(OVERLAPPED *)NULL);

@@ -562,7 +562,7 @@ bool TextInBoxMoveInView(POINT *offset, RECT *brect){
 }
 
 // VENTA5 now returns true if really wrote something
-bool MapWindow::TextInBox(HDC hDC, TCHAR* Value, int x, int y,
+bool MapWindow::TextInBox(HDC hDC, const TCHAR* Value, int x, int y,
                           int size, TextInBoxMode_t Mode, bool noOverlap) {
 
 #define WPCIRCLESIZE        2
@@ -3877,7 +3877,7 @@ bool MapWindow::PointVisible(const POINT &P)
 }
 
 
-void MapWindow::DisplayAirspaceWarning(int Type, TCHAR *Name ,
+void MapWindow::DisplayAirspaceWarning(int Type, const TCHAR *Name,
                                        AIRSPACE_ALT Base, AIRSPACE_ALT Top )
 {
   TCHAR szMessageBuffer[1024];

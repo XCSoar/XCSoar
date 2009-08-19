@@ -6,12 +6,12 @@
 void ReadLanguageFile(void);
 
 void SetWindowText_gettext(HWND hDlg, int entry);
-TCHAR* gettext(const TCHAR* text);
+const TCHAR* gettext(const TCHAR* text);
 void ClearStatusMessages(void);
 
 void StartupScreen();
 
-HWND CreateProgressDialog(TCHAR *text);
+HWND CreateProgressDialog(const TCHAR *text);
 void CloseProgressDialog();
 void StepProgressDialog();
 BOOL SetProgressStepSize(int nSize);

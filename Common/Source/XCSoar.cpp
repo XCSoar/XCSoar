@@ -1480,7 +1480,7 @@ CreateProgressDialog(gettext(TEXT("Special ITA version")));
 #ifdef PNA // VENTA-ADDON
 
 	TCHAR sTmp[MAX_PATH];
-        _stprintf(sTmp,TEXT("Conf=%s%S"), gmfpathname(),XCSDATADIR ); // VENTA2 FIX double backslash
+	_stprintf(sTmp,TEXT("Conf=%s%S"), gmfpathname(),XCSDATADIR ); // VENTA2 FIX double backslash
 	CreateProgressDialog(sTmp); Sleep(3000);
 
 /*
@@ -3334,8 +3334,8 @@ void DisplayText(void)
 	// VENTA3 wind speed + bearing bottom line
 	case 25:
 		if ( CALCULATED_INFO.WindBearing == 0 )
-                  _stprintf(sTmp,_T("0%s"),_T(DEG)); else
-                  _stprintf(sTmp,_T("%1.0d%s"),(int)CALCULATED_INFO.WindBearing,_T(DEG));
+		_stprintf(sTmp,_T("0%s"),_T(DEG)); else
+		_stprintf(sTmp,_T("%1.0d%s"),(int)CALCULATED_INFO.WindBearing,_T(DEG));
 		InfoBoxes[i]->SetComment(sTmp);
 		break;
 
@@ -3346,8 +3346,8 @@ void DisplayText(void)
 			break;
 		}
 		if ( CALCULATED_INFO.HomeRadial == 0 )
-                  _stprintf(sTmp,_T("0%s"),_T(DEG)); else
-                  _stprintf(sTmp,_T("%1.0d%s"),(int)CALCULATED_INFO.HomeRadial,_T(DEG));
+		_stprintf(sTmp,_T("0%s"),_T(DEG)); else
+		_stprintf(sTmp,_T("%1.0d%s"),(int)CALCULATED_INFO.HomeRadial,_T(DEG));
 		InfoBoxes[i]->SetComment(sTmp);
 		break;
 
@@ -3359,7 +3359,7 @@ void DisplayText(void)
 	#if (WINDOWSPC<1)
 	case 65:
 		if ( PDABatteryTemperature >0 ) {
-                  _stprintf(sTmp,_T("%1.0d%SC"),(int)PDABatteryTemperature,_T(DEG));
+			_stprintf(sTmp,_T("%1.0d%SC"),(int)PDABatteryTemperature,_T(DEG));
 			InfoBoxes[i]->SetComment(sTmp);
 		} else
       			InfoBoxes[i]->SetComment(TEXT(""));
@@ -4172,8 +4172,8 @@ void Event_ChangeInfoBoxType(int i) {
 
 
 
-static void ReplaceInString(TCHAR *String, TCHAR *ToReplace,
-                            TCHAR *ReplaceWith, size_t Size){
+static void ReplaceInString(TCHAR *String, const TCHAR *ToReplace,
+                            const TCHAR *ReplaceWith, size_t Size){
   TCHAR TmpBuf[MAX_PATH];
   int   iR, iW;
   TCHAR *pC;
@@ -4189,8 +4189,8 @@ static void ReplaceInString(TCHAR *String, TCHAR *ToReplace,
 }
 
 static void CondReplaceInString(bool Condition, TCHAR *Buffer,
-                                TCHAR *Macro, TCHAR *TrueText,
-                                TCHAR *FalseText, size_t Size){
+                                const TCHAR *Macro, const TCHAR *TrueText,
+                                const TCHAR *FalseText, size_t Size){
   if (Condition)
     ReplaceInString(Buffer, Macro, TrueText, Size);
   else

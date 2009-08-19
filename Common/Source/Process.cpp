@@ -1003,7 +1003,7 @@ void InfoBoxFormatter::AssignValue(int i) {
 }
 
 
-TCHAR *InfoBoxFormatter::GetCommentText(void) {
+const TCHAR *InfoBoxFormatter::GetCommentText(void) {
   return CommentText;
 }
 
@@ -1018,7 +1018,7 @@ void InfoBoxFormatter::RenderInvalid(int *color) {
 }
 
 
-TCHAR *InfoBoxFormatter::Render(int *color) {
+const TCHAR *InfoBoxFormatter::Render(int *color) {
   if (Valid) {
     _stprintf(Text,
               Format,
@@ -1030,7 +1030,7 @@ TCHAR *InfoBoxFormatter::Render(int *color) {
   return(Text);
 }
 
-TCHAR *InfoBoxFormatter::RenderTitle(int *color) { // VENTA3
+const TCHAR *InfoBoxFormatter::RenderTitle(int *color) { // VENTA3
   if (Valid) {
     _stprintf(Text,
               Format,
@@ -1042,7 +1042,7 @@ TCHAR *InfoBoxFormatter::RenderTitle(int *color) { // VENTA3
   return(Text);
 }
 
-TCHAR *FormatterLowWarning::Render(int *color) {
+const TCHAR *FormatterLowWarning::Render(int *color) {
 
   if (Valid) {
     _stprintf(Text,
@@ -1060,7 +1060,7 @@ TCHAR *FormatterLowWarning::Render(int *color) {
 }
 
 
-TCHAR *FormatterTime::Render(int *color) {
+const TCHAR *FormatterTime::Render(int *color) {
   if (!Valid) {
     RenderInvalid(color);
     _stprintf(Text,TEXT("--:--"));
@@ -1108,7 +1108,7 @@ TCHAR *FormatterTime::Render(int *color) {
 }
 
 
-TCHAR *FormatterAATTime::Render(int *color) {
+const TCHAR *FormatterAATTime::Render(int *color) {
   if (!Valid) {
     RenderInvalid(color);
     _stprintf(Text,TEXT("--:--"));
@@ -1157,7 +1157,7 @@ TCHAR *FormatterAATTime::Render(int *color) {
 }
 
 
-TCHAR *FormatterWaypoint::Render(int *color) {
+const TCHAR *FormatterWaypoint::Render(int *color) {
   int thewaypoint = ActiveWayPoint;
   LockTaskData();
   if(ValidTaskPoint(thewaypoint))
@@ -1196,7 +1196,7 @@ TCHAR *FormatterWaypoint::Render(int *color) {
 }
 
 // VENTA3 Alternate destinations
-TCHAR *FormatterAlternate::RenderTitle(int *color) {
+const TCHAR *FormatterAlternate::RenderTitle(int *color) {
 
   LockTaskData();
   if(ValidWayPoint(ActiveAlternate))
@@ -1231,7 +1231,9 @@ TCHAR *FormatterAlternate::RenderTitle(int *color) {
 /*
  * Currently even if set for FIVV, colors are not used.
  */
-TCHAR *FormatterAlternate::Render(int *color) {
+const TCHAR *
+FormatterAlternate::Render(int *color)
+{
   LockTaskData();
   if(Valid && ValidWayPoint(ActiveAlternate)) {
 	switch (WayPointCalc[ActiveAlternate].VGR ) {
@@ -1330,7 +1332,7 @@ void FormatterAlternate::AssignValue(int i) {
    UnlockTaskData();
 }
 
-TCHAR *FormatterDiffBearing::Render(int *color) {
+const TCHAR *FormatterDiffBearing::Render(int *color) {
 
   if (ValidTaskPoint(ActiveWayPoint)
       && CALCULATED_INFO.WaypointDistance > 10.0) {
@@ -1371,7 +1373,7 @@ TCHAR *FormatterDiffBearing::Render(int *color) {
 
 
 
-TCHAR *FormatterTeamCode::Render(int *color) {
+const TCHAR *FormatterTeamCode::Render(int *color) {
 
   if(ValidWayPoint(TeamCodeRefWaypoint))
     {
@@ -1388,7 +1390,7 @@ TCHAR *FormatterTeamCode::Render(int *color) {
 }
 
 
-TCHAR *FormatterDiffTeamBearing::Render(int *color) {
+const TCHAR *FormatterDiffTeamBearing::Render(int *color) {
 
   if(ValidWayPoint(TeamCodeRefWaypoint) && TeammateCodeValid) {
     Valid = true;
@@ -1435,7 +1437,7 @@ if ((Calculated->FinalGlide) && (Calculated->Circling) && (Calculated->AverageTh
 
 
 
-InfoBoxFormatter::InfoBoxFormatter(TCHAR *theformat) {
+InfoBoxFormatter::InfoBoxFormatter(const TCHAR *theformat) {
   _tcscpy(Format, theformat);
   Valid = TRUE;
   Value = 0.0;

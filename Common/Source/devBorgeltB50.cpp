@@ -41,10 +41,12 @@ Copyright_License {
 
 #include "devBorgeltB50.h"
 
-BOOL PBB50(TCHAR *String, NMEA_INFO *GPS_INFO);
+BOOL PBB50(const TCHAR *String, NMEA_INFO *GPS_INFO);
 
 
-BOOL B50ParseNMEA(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO){
+BOOL B50ParseNMEA(PDeviceDescriptor_t d, const TCHAR *String,
+                  NMEA_INFO *GPS_INFO)
+{
   (void)d;
 
   if(_tcsncmp(TEXT("$PBB50"), String, 6)==0)
@@ -115,7 +117,8 @@ CHK = standard NMEA checksum
 
 */
 
-BOOL PBB50(TCHAR *String, NMEA_INFO *GPS_INFO) {
+BOOL PBB50(const TCHAR *String, NMEA_INFO *GPS_INFO)
+{
   // $PBB50,100,0,10,1,10000,0,1,0,20*4A..
   // $PBB50,0,.0,.0,0,0,1.07,0,-228*58
   // $PBB50,14,-.2,.0,196,0,.92,0,-228*71

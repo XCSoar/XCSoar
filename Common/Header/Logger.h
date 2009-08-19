@@ -3,10 +3,10 @@
 
 #include <tchar.h>
 
-void StartLogger(TCHAR *strAssetNumber);
+void StartLogger(const TCHAR *strAssetNumber);
 void LogPoint(double Lattitude, double Longditude, double Altitude,
               double BaroAltitude);
-void AddDeclaration(double Lattitude, double Longditude, TCHAR *ID);
+void AddDeclaration(double Lattitude, double Longditude, const TCHAR *ID);
 void StartDeclaration(int numturnpoints);
 void EndDeclaration(void);
 void LoggerHeader(void);
@@ -21,15 +21,15 @@ class ReplayLogger {
   static bool Update(void);
   static void Stop(void);
   static void Start(void);
-  static TCHAR* GetFilename(void);
-  static void SetFilename(TCHAR *name);
+  static const TCHAR* GetFilename(void);
+  static void SetFilename(const TCHAR *name);
   static bool IsEnabled(void);
   static double TimeScale;
  private:
   static bool UpdateInternal(void);
   static bool ReadLine(TCHAR *buffer);
   static bool Enabled;
-  static bool ScanBuffer(TCHAR *buffer, double *Time, double *Latitude,
+  static bool ScanBuffer(const TCHAR *buffer, double *Time, double *Latitude,
 			 double *Longitude, double *Altitude);
   static bool ReadPoint(double *Time,
 			double *Latitude,
@@ -40,7 +40,7 @@ class ReplayLogger {
 
 bool LoggerClearFreeSpace();
 void StopLogger(void);
-bool IGCWriteRecord(char *szIn);
+bool IGCWriteRecord(const char *szIn);
 void LinkGRecordDLL(void);
 bool LoggerGActive();
 

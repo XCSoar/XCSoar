@@ -134,9 +134,9 @@ class InfoBox{
     void PaintInto(HDC mHdcDest, int xoff, int yoff, int width, int height);
 
     Units_t SetValueUnit(Units_t Value);
-    void SetTitle(TCHAR *Value);
-    void SetValue(TCHAR *Value);
-    void SetComment(TCHAR *Value);
+    void SetTitle(const TCHAR *Value);
+    void SetValue(const TCHAR *Value);
+    void SetComment(const TCHAR *Value);
 	void SetSmallerFont(bool smallerFont);
 
     void SetFocus(bool Value);

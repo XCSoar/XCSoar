@@ -55,7 +55,7 @@ static int user_size = 0;
 static TCHAR user_data[MAX_USER_SIZE];
 
 
-BOOL ExpectStringWait(PDeviceDescriptor_t d, TCHAR *token) {
+BOOL ExpectStringWait(PDeviceDescriptor_t d, const TCHAR *token) {
 
   int i=0, ch;
   int j=0;
@@ -90,8 +90,9 @@ BOOL ExpectStringWait(PDeviceDescriptor_t d, TCHAR *token) {
 
 
 BOOL EWMicroRecorderParseNMEA(PDeviceDescriptor_t d,
-                              TCHAR *String, NMEA_INFO *GPS_INFO){
-  TCHAR ctemp[80], *params[5];
+                              const TCHAR *String, NMEA_INFO *GPS_INFO){
+  TCHAR ctemp[80];
+  const TCHAR *params[5];
   int nparams = NMEAParser::ValidateAndExtract(String, ctemp, 80, params, 5);
   if (nparams < 1)
     return FALSE;
@@ -164,7 +165,8 @@ static void EWMicroRecorderPrintf(PDeviceDescriptor_t d, const TCHAR *fmt, ...)
 
 static void EWMicroRecorderWriteWayPoint(PDeviceDescriptor_t d,
                                          const WAYPOINT *wp,
-                                         TCHAR* EWType) {
+                                         const TCHAR* EWType)
+{
   TCHAR EWRecord[128];
   int DegLat, DegLon;
   double tmp, MinLat, MinLon;

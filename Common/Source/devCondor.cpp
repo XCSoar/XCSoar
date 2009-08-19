@@ -42,12 +42,17 @@ Copyright_License {
 
 #include "devCondor.h"
 
-static BOOL cLXWP0(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO);
-static BOOL cLXWP1(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO);
-static BOOL cLXWP2(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO);
+static BOOL cLXWP0(PDeviceDescriptor_t d, const TCHAR *String,
+                   NMEA_INFO *GPS_INFO);
+static BOOL cLXWP1(PDeviceDescriptor_t d, const TCHAR *String,
+                   NMEA_INFO *GPS_INFO);
+static BOOL cLXWP2(PDeviceDescriptor_t d, const TCHAR *String,
+                   NMEA_INFO *GPS_INFO);
 
 
-static BOOL CondorParseNMEA(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO){
+static BOOL CondorParseNMEA(PDeviceDescriptor_t d, const TCHAR *String,
+                            NMEA_INFO *GPS_INFO)
+{
   (void)d;
 
   if(_tcsncmp(TEXT("$LXWP0"), String, 6)==0)
@@ -99,7 +104,8 @@ BOOL condorRegister(void){
 // local stuff
 
 
-static BOOL cLXWP1(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO)
+static BOOL cLXWP1(PDeviceDescriptor_t d, const TCHAR *String,
+                   NMEA_INFO *GPS_INFO)
 {
   //  TCHAR ctemp[80];
   (void)GPS_INFO;
@@ -108,7 +114,8 @@ static BOOL cLXWP1(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO)
 }
 
 
-static BOOL cLXWP2(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO)
+static BOOL cLXWP2(PDeviceDescriptor_t d, const TCHAR *String,
+                   NMEA_INFO *GPS_INFO)
 {
   TCHAR ctemp[80];
   (void)GPS_INFO;
@@ -119,7 +126,8 @@ static BOOL cLXWP2(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO)
 }
 
 
-static BOOL cLXWP0(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO) {
+static BOOL cLXWP0(PDeviceDescriptor_t d, const TCHAR *String,
+                   NMEA_INFO *GPS_INFO) {
   TCHAR ctemp[80];
 
   /*

@@ -56,9 +56,12 @@ Copyright_License {
 #include "devPosiGraph.h"
 
 
-static BOOL GPWIN(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO);
+static BOOL GPWIN(PDeviceDescriptor_t d, const TCHAR *String,
+                  NMEA_INFO *GPS_INFO);
 
-BOOL PGParseNMEA(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO){
+BOOL PGParseNMEA(PDeviceDescriptor_t d, const TCHAR *String,
+                 NMEA_INFO *GPS_INFO)
+{
   (void)d;
   (void)String;
   (void)GPS_INFO;
@@ -114,7 +117,8 @@ BOOL pgRegister(void){
 // *****************************************************************************
 // local stuff
 
-static BOOL GPWIN(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO)
+static BOOL GPWIN(PDeviceDescriptor_t d, const TCHAR *String,
+                  NMEA_INFO *GPS_INFO)
 {
   TCHAR ctemp[80];
   (void)GPS_INFO;

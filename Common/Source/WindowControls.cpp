@@ -1237,8 +1237,8 @@ TCHAR *DataFieldString::GetAsDisplayString(void){
 //----------------------------------------------------------
 ComboListEntry_t * ComboList::CreateItem(int ItemIndex,
                                         int DataFieldIndex,
-                                        TCHAR *StringValue,
-                                        TCHAR *StringValueFormatted)
+                                        const TCHAR *StringValue,
+                                        const TCHAR *StringValueFormatted)
 {
   int iLen = -1;
   ComboListEntry_t * theItem;

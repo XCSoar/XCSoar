@@ -26,8 +26,10 @@ int DrawArc(HDC hdc, long x, long y, int radius, RECT rc,
 	    double start,
 	    double end);
 
-int GetTextWidth(HDC hDC, TCHAR *text);
-void ExtTextOutClip(HDC hDC, int x, int y, TCHAR *text, int width);
+int
+GetTextWidth(HDC hDC, const TCHAR *text);
+void
+ExtTextOutClip(HDC hDC, int x, int y, const TCHAR *text, int width);
 
 void PolygonRotateShift(POINT* poly, int n, int x, int y,
                         double angle);

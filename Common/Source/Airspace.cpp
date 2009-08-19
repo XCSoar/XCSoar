@@ -712,7 +712,7 @@ static bool ReadCoords(TCHAR *Text, double *X, double *Y)
 {
   double Ydeg=0, Ymin=0, Ysec=0;
   double Xdeg=0, Xmin=0, Xsec=0;
-  TCHAR *Stop;
+  const TCHAR *Stop;
 
   // ToDo, add more error checking and making it more tolerant/robust
 
@@ -972,10 +972,10 @@ static void AddArea(AIRSPACE_AREA *Temp)
 
 static void ReadAltitude(TCHAR *Text_, AIRSPACE_ALT *Alt)
 {
-  TCHAR *Stop;
+  const TCHAR *Stop;
   TCHAR Text[128];
   TCHAR *pWClast = NULL;
-  TCHAR *pToken;
+  const TCHAR *pToken;
   bool  fHasUnit=false;
 
   _tcsncpy(Text, Text_, sizeof(Text)/sizeof(Text[0]));
@@ -1102,7 +1102,7 @@ static void CalculateSector(TCHAR *Text)
   double Radius;
   double StartBearing;
   double EndBearing;
-  TCHAR *Stop;
+  const TCHAR *Stop;
 
   Radius = NAUTICALMILESTOMETRES * (double)StrToDouble(&Text[2], &Stop);
   StartBearing = (double)StrToDouble(&Stop[1], &Stop);

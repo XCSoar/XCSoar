@@ -125,7 +125,7 @@ WinPilotPolarInternal WinPilotPolars[] =
 
 };
 
-TCHAR* GetWinPilotPolarInternalName(int i) {
+const TCHAR* GetWinPilotPolarInternalName(int i) {
   if (i>=sizeof(WinPilotPolars)/sizeof(WinPilotPolarInternal)) {
     return NULL; // error
   }

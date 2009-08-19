@@ -42,12 +42,17 @@ Copyright_License {
 
 #include "devLX.h"
 
-static BOOL LXWP0(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO);
-static BOOL LXWP1(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO);
-static BOOL LXWP2(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO);
+static BOOL LXWP0(PDeviceDescriptor_t d, const TCHAR *String,
+                  NMEA_INFO *GPS_INFO);
+static BOOL LXWP1(PDeviceDescriptor_t d, const TCHAR *String,
+                  NMEA_INFO *GPS_INFO);
+static BOOL LXWP2(PDeviceDescriptor_t d, const TCHAR *String,
+                  NMEA_INFO *GPS_INFO);
 
 
-static BOOL LXParseNMEA(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO){
+static BOOL LXParseNMEA(PDeviceDescriptor_t d, const TCHAR *String,
+                        NMEA_INFO *GPS_INFO)
+{
   (void)d;
 
   if(_tcsncmp(TEXT("$LXWP0"), String, 6)==0)
@@ -99,7 +104,8 @@ BOOL lxRegister(void){
 // local stuff
 
 
-static BOOL LXWP1(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO)
+static BOOL LXWP1(PDeviceDescriptor_t d, const TCHAR *String,
+                  NMEA_INFO *GPS_INFO)
 {
   //  TCHAR ctemp[80];
   (void)GPS_INFO;
@@ -108,7 +114,8 @@ static BOOL LXWP1(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO)
 }
 
 
-static BOOL LXWP2(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO)
+static BOOL LXWP2(PDeviceDescriptor_t d, const TCHAR *String,
+                  NMEA_INFO *GPS_INFO)
 {
   TCHAR ctemp[80];
   (void)GPS_INFO;
@@ -119,7 +126,9 @@ static BOOL LXWP2(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO)
 }
 
 
-static BOOL LXWP0(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO) {
+static BOOL LXWP0(PDeviceDescriptor_t d, const TCHAR *String,
+                  NMEA_INFO *GPS_INFO)
+{
   TCHAR ctemp[80];
 
   /*
