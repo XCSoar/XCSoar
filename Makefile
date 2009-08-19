@@ -403,8 +403,8 @@ OBJS	:=\
 	$(SRC)/Math/Screen.o \
 	$(SRC)/Battery.o \
 	$(SRC)/Screen/Animation.o \
-	$(SRC)/Registry.o \
 	$(SRC)/Screen/Util.o \
+	$(SRC)/Registry.o \
 	\
 	$(SRC)/mapbits.o \
 	$(SRC)/maperror.o 		$(SRC)/mapprimitive.o \

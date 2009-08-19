@@ -12,7 +12,7 @@ enum {
   MAXCLIPPOLYGON = 5000,
 };
 
-void ClipPolygon(HDC hdc, POINT *m_ptin, unsigned int inLength,
+void ClipPolygon(HDC hdc, const POINT *m_ptin, unsigned int inLength,
                  RECT rc, bool fill);
 
 int  Circle(HDC hdc, long x, long y, int radius, RECT rc, bool clip=false,
