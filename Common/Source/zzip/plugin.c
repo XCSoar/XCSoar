@@ -28,6 +28,10 @@
 #include <zzip/file.h>
 #include <zzip/format.h>
 
+#ifndef HAVE_MSVCRT
+#include <unistd.h>
+#endif
+
 zzip_off_t
 zzip_filesize(int fd)
 {
