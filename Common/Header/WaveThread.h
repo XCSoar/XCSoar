@@ -5,11 +5,6 @@
 #if !defined(AFX_WAVETHREAD_H__C76FCF03_9877_4C5E_92BA_DEDB09884315__INCLUDED_)
 #define AFX_WAVETHREAD_H__C76FCF03_9877_4C5E_92BA_DEDB09884315__INCLUDED_
 
-#if _MSC_VER > 1000
-#pragma once
-#endif // _MSC_VER > 1000
-
-
 #include <mmsystem.h>
 
 

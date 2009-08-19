@@ -24,10 +24,6 @@
 #if !defined(AFX_VOIMAGE_H__B83C4202_DB1E_48BE_92A5_21019F9EE6FC__INCLUDED_)
 #define AFX_VOIMAGE_H__B83C4202_DB1E_48BE_92A5_21019F9EE6FC__INCLUDED_
 
-#if _MSC_VER > 1000
-#pragma once
-#endif // _MSC_VER > 1000
-
 #include "imgdecmp.h"
 
 class CVOResource
