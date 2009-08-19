@@ -46,8 +46,7 @@ Copyright_License {
 #include "VarioSound.h"
 #include "InfoBoxLayout.h"
 #include "Sizes.h"
-
-#include <ctype.h>
+#include "Compatibility/string.h"
 
 //////////////////////////////////////////////////
 

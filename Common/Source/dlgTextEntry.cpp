@@ -41,6 +41,7 @@ Copyright_License {
 #include "Utils.h"
 #include "dlgTools.h"
 #include "externs.h"
+#include "Compatibility/string.h"
 
 static WndForm *wf=NULL;
 static WndOwnerDrawFrame *wGrid=NULL;

@@ -36,7 +36,6 @@ Copyright_License {
 */
 
 #include "StdAfx.h"
-#include "tchar.h"
 #include <stdio.h>
 #include "Defines.h" // VENTA3
 #include "WindowControls.h"
@@ -47,6 +46,7 @@ Copyright_License {
 #endif
 #include "Utils.h"
 #include "compatibility.h"
+#include "Compatibility/string.h"
 
 #ifndef ALTAIRSYNC
 #include "externs.h"

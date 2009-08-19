@@ -33,6 +33,7 @@ Copyright_License {
 
 #include "mapprimitive.h"
 #include "maperror.h"
+#include "Compatibility/string.h"
 
 typedef enum {CLIP_LEFT, CLIP_MIDDLE, CLIP_RIGHT} CLIP_STATE;
 

@@ -48,7 +48,7 @@ Copyright_License {
 #include "InfoBoxLayout.h"
 #include "Airspace.h"
 #include "AirspaceWarning.h"
-
+#include "Compatibility/string.h"
 
 typedef struct{
   int Index_Circle;

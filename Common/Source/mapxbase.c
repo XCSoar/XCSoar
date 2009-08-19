@@ -40,6 +40,7 @@ Copyright_License {
 #include "mapprimitive.h"
 #include "mapshape.h"
 #include "maperror.h"
+#include "Compatibility/string.h"
 
 /************************************************************************/
 /*                             SfRealloc()                              */

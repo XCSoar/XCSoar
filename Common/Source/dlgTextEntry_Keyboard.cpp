@@ -38,6 +38,7 @@ Copyright_License {
 #include "dlgTools.h"
 #include "externs.h"
 #include "InfoBoxLayout.h"
+#include "Compatibility/string.h"
 
 static WndForm *wf=NULL;
 static WndOwnerDrawFrame *wGrid=NULL;

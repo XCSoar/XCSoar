@@ -39,11 +39,11 @@
 #include "externs.h"
 #include "Port.h"
 #include <windows.h>
-#include <tchar.h>
 #include "Utils.h"
 #include "device.h"
 #include "InputEvents.h"
 #include "Parser.h"
+#include "Compatibility/string.h"
 
 enum {
   MAX_IGC_BUFF = 255,

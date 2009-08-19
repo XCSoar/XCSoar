@@ -393,6 +393,7 @@ OBJS	:=\
 	$(SRC)/windanalyser.o		$(SRC)/windmeasurementlist.o \
 	$(SRC)/windstore.o 		$(SRC)/WindowControls.o \
 	$(SRC)/WindZigZag.o 		$(SRC)/xmlParser.o \
+	$(SRC)/Compatibility/string.o \
 	\
 	$(SRC)/mapbits.o \
 	$(SRC)/maperror.o 		$(SRC)/mapprimitive.o \
@@ -457,7 +458,7 @@ JASPER	:=\
 COMPATSRC:=$(SRC)/wcecompat
 COMPAT	:=\
 	$(COMPATSRC)/errno.cpp 		$(COMPATSRC)/string_extras.c \
-	$(COMPATSRC)/ts_string.cpp 	$(COMPATSRC)/wtoi.c
+	$(COMPATSRC)/ts_string.cpp
 
 all:	$(OUTPUTS)
 

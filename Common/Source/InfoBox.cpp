@@ -45,6 +45,7 @@ Copyright_License {
 #include "Utils.h"
 #include "externs.h"
 #include "InfoBoxLayout.h"
+#include "Compatibility/string.h"
 
 #define DEFAULTBORDERPENWIDTH IBLSCALE(1)
 #define SELECTORWIDTH         (DEFAULTBORDERPENWIDTH+IBLSCALE(4))

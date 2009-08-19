@@ -51,11 +51,9 @@ Copyright_License {
 #include <math.h>
 #include <aygshell.h>
 
-#include <tchar.h>
-#include <ctype.h>
-
 #include "resource.h"
 #include "wcecompat/ts_string.h"
+#include "Compatibility/string.h"
 
 
 #define  BINFILEMAGICNUMBER     0x4ab199f0

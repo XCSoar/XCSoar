@@ -34,7 +34,7 @@ Copyright_License {
 
 #include "maperror.h"
 #include "mapprimitive.h"
-
+#include "Compatibility/string.h"
 
 #ifdef NEED_NONBLOCKING_STDERR
 #include <fcntl.h>

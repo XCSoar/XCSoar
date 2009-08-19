@@ -64,6 +64,7 @@ Copyright_License {
 #include "McReady.h"
 #include "NavFunctions.h"
 #include "WaveThread.h" // VENTA4
+#include "Compatibility/string.h"
 
 #ifdef NEWFLARMDB
 #include "FlarmIdFile.h"
