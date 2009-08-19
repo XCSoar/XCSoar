@@ -450,6 +450,7 @@ static double ycoords[64] = {
 };
 
 
+#ifdef ENABLE_UNUSED_CODE
 void StartArc(HDC hdc,
 	      double longitude0, double latitude0,
 	      double longitude1, double latitude1,
@@ -502,6 +503,7 @@ void StartArc(HDC hdc,
   }
 
 }
+#endif /* ENABLE_UNUSED_CODE */
 
 
 int Circle(HDC hdc, long x, long y, int radius, RECT rc, bool clip, bool fill)
