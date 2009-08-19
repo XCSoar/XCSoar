@@ -177,7 +177,6 @@ LoggerBuffer_T LoggerBuffer[MAX_LOGGER_BUFFER];
 
 void StopLogger(void) {
   TCHAR szMessage[MAX_PATH] = TEXT("\0");
-  TCHAR szLogMessage[MAX_PATH] = TEXT("\0");
   int iLoggerError=0;  // see switch statement for error handler
   if (LoggerActive) {
     LoggerActive = false;
@@ -1493,8 +1492,6 @@ bool LoggerClearFreeSpace(void) {
 
 bool IsValidIGCChar(char c) //returns 1 if valid char for IGC files
 {//
-  int iRetVal = 0;
-
   if ( c >=0x20  && c <= 0x7E &&
        c != 0x0D &&
        c != 0x0A &&

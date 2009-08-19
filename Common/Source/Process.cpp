@@ -1232,7 +1232,6 @@ TCHAR *FormatterAlternate::RenderTitle(int *color) {
  * Currently even if set for FIVV, colors are not used.
  */
 TCHAR *FormatterAlternate::Render(int *color) {
- int active=ActiveAlternate;
   LockTaskData();
   if(Valid && ValidWayPoint(ActiveAlternate)) {
 	switch (WayPointCalc[ActiveAlternate].VGR ) {

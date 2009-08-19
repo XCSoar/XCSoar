@@ -153,7 +153,6 @@ void GaugeFLARM::RenderTraffic(NMEA_INFO  *gps_info) {
       double DisplayAngle = -gps_info->TrackBearing;
       rotate(x, y, DisplayAngle); 	// or use .Heading?
       double scale = RangeScale(d);
-      int targetsize = IBLSCALE(3);
 
       POINT sc;
       sc.x = center.x + iround(x*scale);

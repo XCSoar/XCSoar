@@ -111,8 +111,6 @@ void LookupAirfieldDetail(TCHAR *Name, TCHAR *Details) {
   TCHAR NameD[100];
   TCHAR TmpName[100];
 
-  TCHAR ventabuffer[200];
-
   BOOL isHome, isPreferred, isAvoid;
 
   if (!WayPointList) return;
@@ -127,11 +125,6 @@ void LookupAirfieldDetail(TCHAR *Name, TCHAR *Details) {
 	CharUpper(Name);  // AIR name
 	                  // VENTA3 fix: If airfields name
 			  // was not uppercase it was not recon
-
-	/*
-	  wsprintf(ventabuffer,TEXT("Name=<%s>"), UName );
-	  if ((fp=_tfopen(_T("DEBUG.TXT"),_T("a")))!= NULL){;fprintf(fp,"%S\n",ventabuffer);fclose(fp);}
-	*/
 
 	_stprintf(NameA,TEXT("%s A/F"),Name);
 	_stprintf(NameB,TEXT("%s AF"),Name);
