@@ -48,10 +48,12 @@ inline size_t ts_strlen(const char* str)
 	return strlen(str);
 }
 
+#ifdef _UNICODE
 inline size_t ts_strlen(const unsigned short* str)
 {
 	return wcslen((const wchar_t *)str);
 }
+#endif /* _UNICODE */
 
 
 //
@@ -64,10 +66,12 @@ inline size_t ts_strsize(const char* str)
 	return strlen(str);
 }
 
+#ifdef _UNICODE
 inline size_t ts_strsize(const unsigned short* str)
 {
 	return wcslen((const wchar_t *)str)*2;
 }
+#endif
 
 
 //
@@ -80,10 +84,12 @@ inline size_t ts_strsizez(const char* str)
 	return strlen(str)+1;
 }
 
+#ifdef _UNICODE
 inline size_t ts_strsizez(const unsigned short* str)
 {
 	return (wcslen((const wchar_t *)str)+1)*2;
 }
+#endif /* _UNICODE */
 
 
 //
@@ -107,10 +113,12 @@ inline unsigned short* ts_strcpy(unsigned short* dest, const char* src)
 	return dest;
 }
 
+#ifdef _UNICODE
 inline unsigned short* ts_strcpy(unsigned short* dest, const unsigned short* src)
 {
 	return (unsigned short*)wcscpy((wchar_t *)dest, (const wchar_t *)src);
 }
+#endif /* _UNICODE */
 
 
 //
@@ -134,10 +142,12 @@ inline unsigned short* ts_strncpy(unsigned short* dest, const char* src, int n)
 	return dest;
 }
 
+#ifdef _UNICODE
 inline unsigned short* ts_strncpy(unsigned short* dest, const unsigned short* src, int n)
 {
 	return (unsigned short*)wcsncpy((wchar_t *)dest, (const wchar_t *)src, n);
 }
+#endif /* _UNICODE */
 
 
 //
@@ -149,6 +159,8 @@ inline char* ts_strcat(char* dest, const char* src)
 	return strcat(dest, src);
 }
 
+#ifdef _UNICODE
+
 char* ts_strcat(char* dest, const unsigned short* src);
 unsigned short* ts_strcat(unsigned short* dest, const char* src);
 
@@ -157,11 +169,14 @@ inline unsigned short* ts_strcat(unsigned short* dest, const unsigned short* src
 	return (unsigned short*)wcscat((wchar_t *)dest, (const wchar_t *)src);
 }
 
+#endif /* _UNICODE */
+
 
 //
 // ascii/unicode typesafe versions of strdup
 //
 
+#ifdef _UNICODE
 inline char* ts_strdup(const char* str)
 {
   #if defined(__BORLANDC__)
@@ -170,13 +185,16 @@ inline char* ts_strdup(const char* str)
   return _strdup(str);
   #endif
 }
+#endif
 
 char* ts_strdup_unicode_to_ascii(const unsigned short* str);
 
+#ifdef _UNICODE
 inline unsigned short* ts_strdup(const unsigned short* str)
 {
 	return (unsigned short*)_wcsdup((const wchar_t *)str);
 }
+#endif /* _UNICODE */
 
 unsigned short* ts_strdup_ascii_to_unicode(const char* str);
 

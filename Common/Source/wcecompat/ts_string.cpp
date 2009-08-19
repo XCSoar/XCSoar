@@ -53,6 +53,8 @@ void ascii2unicode(const char* ascii, WCHAR* unicode)
 	}
 }
 
+#ifdef _UNICODE
+
 void unicode2ascii(const WCHAR* unicode, char* ascii)
 {
   if (wcslen(unicode)==0) {
@@ -73,6 +75,8 @@ void unicode2ascii(const WCHAR* unicode, char* ascii)
 		*ascii = '\0';
 	}
 }
+
+#endif /* _UNICODE */
 
 void ascii2unicode(const char* ascii, WCHAR* unicode, int maxChars)
 {
@@ -103,6 +107,8 @@ void ascii2unicode(const char* ascii, WCHAR* unicode, int maxChars)
 	}
 }
 
+#ifdef _UNICODE
+
 void unicode2ascii(const WCHAR* unicode, char* ascii, int maxChars)
 {
   if (wcslen(unicode)==0) {
@@ -125,6 +131,8 @@ void unicode2ascii(const WCHAR* unicode, char* ascii, int maxChars)
 		ascii[i] = 0;
 	}
 }
+
+#endif /* _UNICODE */
 
 #ifndef _UNICODE
 void unicode2ascii(const char *unicode, char *ascii, int maxChars)
@@ -149,6 +157,8 @@ void ascii2unicode(const char *ascii, char *unicode)
 // ascii/unicode typesafe versions of strcat
 //
 
+#ifdef _UNICODE
+
 char* ts_strcat(char* dest, const unsigned short* src)
 {
 	char* p = dest;
@@ -167,10 +177,14 @@ unsigned short* ts_strcat(unsigned short* dest, const char* src)
 	return dest;
 }
 
+#endif /* _UNICODE */
+
 
 //
 // ascii/unicode typesafe versions of strdup
 //
+
+#ifdef _UNICODE
 
 char* ts_strdup_unicode_to_ascii(const unsigned short* str)
 {
@@ -189,3 +203,5 @@ unsigned short* ts_strdup_ascii_to_unicode(const char* str)
 	ascii2unicode(str, (wchar_t *)result);
 	return result;
 }
+
+#endif /* _UNICODE */
