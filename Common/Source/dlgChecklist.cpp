@@ -190,7 +190,6 @@ void addChecklist(TCHAR* name, TCHAR* details) {
 }
 
 void LoadChecklist(void) {
-  HANDLE hChecklist;
   nLists = 0;
   if (ChecklistText[0]) {
     free(ChecklistText[0]);
@@ -204,12 +203,8 @@ void LoadChecklist(void) {
   TCHAR filename[MAX_PATH];
   LocalPath(filename, TEXT(XCSCHKLIST));
 
-  hChecklist = INVALID_HANDLE_VALUE;
-  hChecklist = CreateFile(filename,
-			  GENERIC_READ,0,NULL,
-			  OPEN_EXISTING,
-			  FILE_ATTRIBUTE_NORMAL,NULL);
-  if( hChecklist == INVALID_HANDLE_VALUE)
+  FILE *file = _tfopen(filename, TEXT("rt"));
+  if (file == NULL)
     {
       return;
     }
@@ -225,7 +220,7 @@ void LoadChecklist(void) {
   Name[0]= 0;
   TempString[0]=0;
 
-  while(ReadString(hChecklist,MAXTITLE,TempString))
+  while (ReadStringX(file, MAXTITLE, TempString))
     {
       int len = _tcslen(TempString);
       if (len>0) {
@@ -269,8 +264,7 @@ void LoadChecklist(void) {
   }
 
   /////
-  CloseHandle(hChecklist);
-  hChecklist = NULL;
+  fclose(file);
 
 }
 
