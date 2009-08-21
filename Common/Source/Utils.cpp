@@ -650,6 +650,7 @@ void ReadUUIDold(void)
 }
 #endif
 
+#ifdef ENABLE_UNUSED_CODE
 void WriteFileRegistryString(HANDLE hFile, TCHAR *instring) {
     int len;
     char ctempFile[MAX_PATH];
@@ -679,14 +680,14 @@ void WriteFileRegistryString(HANDLE hFile, TCHAR *instring) {
     ctempFile[len-1]= '\n';
     WriteFile(hFile,ctempFile,len, &dwBytesWritten, (OVERLAPPED *)NULL);
 }
-
+#endif /* ENABLE_UNUSED_CODE */
 
 void WriteProfile(const TCHAR *szFile)
 {
   SaveRegistryToFile(szFile);
 }
 
-
+#ifdef ENABLE_UNUSED_CODE
 void ReadFileRegistryString(HANDLE hFile, TCHAR *instring) {
     int i;
     TCHAR tempFile[MAX_PATH];
@@ -698,7 +699,7 @@ void ReadFileRegistryString(HANDLE hFile, TCHAR *instring) {
     tempFile[_tcslen(tempFile)]= 0;
     SetRegistryString(instring, tempFile);
 }
-
+#endif /* ENABLE_UNUSED_CODE */
 
 void ReadProfile(const TCHAR *szFile)
 {
