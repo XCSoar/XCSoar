@@ -34,6 +34,7 @@ Copyright_License {
 }
 */
 
+#include "XCSoar.h"
 
 int	FilterFast(ifilter_s *buf, int minvalue, int maxvalue);
 bool	InitFilterBuffer(ifilter_s *buf, short bsize);
