@@ -4,7 +4,7 @@ use strict;
 
 my $header = q{
 
-  XCSoar Glide Computer - http://xcsoar.sourceforge.net/
+  XCSoar Glide Computer - http://www.xcsoar.org/
   Copyright (C) 2000 - 2009
 
 	M Roberts (original release)
