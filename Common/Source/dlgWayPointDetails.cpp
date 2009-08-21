@@ -38,6 +38,7 @@ Copyright_License {
 
 #include "StdAfx.h"
 #include "XCSoar.h"
+#include "Dialogs.h"
 #include "Math/Earth.hpp"
 #include "Registry.hpp"
 #include "LocalPath.hpp"

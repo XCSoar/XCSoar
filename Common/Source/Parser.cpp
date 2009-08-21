@@ -39,7 +39,7 @@ Copyright_License {
 
 #include "StdAfx.h"
 
-#include "externs.h"
+#include "XCSoar.h"
 #include "Utils.h"
 #include "externs.h"
 #include "VarioSound.h"

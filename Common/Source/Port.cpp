@@ -35,6 +35,8 @@ Copyright_License {
 #include "StdAfx.h"
 #include "Port.h"
 #include "externs.h"
+#include "Dialogs.h"
+#include "dlgTools.h"
 #include "XCSoar.h"
 #include "device.h"
 

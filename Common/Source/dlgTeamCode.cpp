@@ -37,6 +37,7 @@
 #include "XCSoar.h"
 #include "Utils.h"
 #include "dlgTools.h"
+#include "Dialogs.h"
 #include "externs.h"
 #include "InfoBoxLayout.h"
 

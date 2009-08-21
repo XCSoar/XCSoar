@@ -5,7 +5,7 @@
 #include "InfoBoxLayout.h"
 
 #ifdef PNA
-#include "externs.h" // for needclipping
+#include "XCSoar.h" // for needclipping
 #endif
 
 #include <tchar.h>

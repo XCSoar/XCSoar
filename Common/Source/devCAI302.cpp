@@ -49,6 +49,7 @@ Copyright_License {
 #include <tchar.h>
 
 
+#include "XCSoar.h"
 #include "externs.h"
 #include "Utils.h"
 #include "Parser.h"

@@ -35,7 +35,7 @@
 
 #include "StdAfx.h"
 #include "XCSoar.h"
-
+#include "Dialogs.h"
 #include "externs.h"
 #include "dlgTools.h"
 #include "InfoBoxLayout.h"

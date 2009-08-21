@@ -39,6 +39,7 @@ Copyright_License {
 #include <stdio.h>
 #include "Defines.h" // VENTA3
 #include "WindowControls.h"
+#include "dlgTools.h"
 #ifndef ALTAIRSYNC
 #include "Message.h"
 #include "MapWindow.h"

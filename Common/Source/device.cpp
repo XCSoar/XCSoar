@@ -39,6 +39,9 @@ Copyright_License {
 #include "options.h"
 
 #include "externs.h"
+#include "XCSoar.h"
+#include "Dialogs.h"
+#include "dlgTools.h"
 #include "Math/FastMath.h"
 #include "Parser.h"
 #include "Port.h"

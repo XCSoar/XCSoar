@@ -34,8 +34,7 @@ Copyright_License {
 
 #include "StdAfx.h"
 
-
-#include "externs.h"
+#include "Dialogs.h"
 #include "Math/FastMath.h"
 #include "Math/Pressure.h"
 #include "Parser.h"

@@ -38,9 +38,9 @@ Copyright_License {
 
 #include "StdAfx.h"
 #include "XCSoar.h"
+#include "Dialogs.h"
 #include "Utils.h"
 #include "dlgTools.h"
-#include "externs.h"
 #include "Compatibility/string.h"
 
 static WndForm *wf=NULL;

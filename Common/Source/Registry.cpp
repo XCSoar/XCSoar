@@ -5,7 +5,6 @@
 #include "Airspace.h"
 #include "Parser.h"
 #include "XCSoar.h"
-#include "externs.h"
 #include "MapWindow.h"
 #include "GaugeFLARM.h"
 #include "Terrain.h"
@@ -13,8 +12,10 @@
 #include "McReady.h"
 #include "device.h"
 #include "Math/FastMath.h"
+#include "Logger.h"
 
 #include <assert.h>
+#include <stdlib.h>
 
 const TCHAR szRegistryKey[] = TEXT(REGKEYNAME);
 const TCHAR *szRegistryDisplayType[MAXINFOWINDOWS] =     { TEXT("Info0"),

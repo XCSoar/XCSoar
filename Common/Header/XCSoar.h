@@ -42,6 +42,7 @@ Copyright_License {
 #include "resource.h"
 #include "Sizes.h"
 #include "Units.h"
+#include "Statistics.h"
 
 class Trigger;
 
@@ -453,7 +454,79 @@ typedef struct{
   bool GaugeVarioAveNeedle;
 } Appearance_t;
 
+extern TCHAR XCSoar_Version[256];
+
+// instance of main program
+extern HINSTANCE hInst;
+
+// windows
+extern HWND hWndMainWindow;           // HWND Main Window
+extern HWND hWndMapWindow;            // HWND MapWindow
+
+// infoboxes
+extern int  CurrentInfoType;          // Used for Popup Menu Select
+extern int  InfoType[MAXINFOWINDOWS]; //
+extern int  InfoFocus;
+extern SCREEN_INFO Data_Options[];
+extern const int NUMSELECTSTRINGS;
+extern int numInfoWindows;
+
 extern Appearance_t Appearance;
+
+// Specials
+#ifdef FIVV
+extern double GPSAltitudeOffset; 	// VENTA3
+#endif
+extern double QFEAltitudeOffset; // VENTA3
+extern int OnAirSpace; // VENTA3 toggle DrawAirSpace
+extern bool WasFlying; // used by auto QFE..
+extern double LastFlipBoxTime; // used by XCSoar and Calculations
+#if defined(PNA) || defined(FIVV)
+extern bool needclipping;
+#endif
+extern bool EnableAutoBacklight; // VENTA4
+extern bool EnableAutoSoundVolume; // VENTA4
+extern bool ExtendedVisualGlide;
+extern bool VirtualKeys;
+extern short ArrivalValue;
+extern short AverEffTime;
+
+extern ldrotary_s rotaryLD;
+
+// user controls/parameters
+extern double MACCREADY;
+extern bool   AutoMacCready;
+extern double SAFETYALTITUDEARRIVAL;
+extern double SAFETYALTITUDEBREAKOFF;
+extern double SAFETYALTITUDETERRAIN;
+extern double SAFTEYSPEED;
+
+extern int WindUpdateMode; // unused
+extern int NettoSpeed;
+extern bool EnableAutoBlank;
+extern bool EnableAuxiliaryInfo;
+extern int debounceTimeout;
+
+// statistics
+extern Statistics flightstats;
+
+extern int UseCustomFonts;
+#if (EXPERIMENTAL > 0)
+extern BlueDialupSMS bsms;
+#endif
+
+#if (WINDOWSPC>0)
+extern int SCREENWIDTH;
+extern int SCREENHEIGHT;
+#endif
+
+typedef enum {psInitInProgress=0, psInitDone=1, psFirstDrawDone=2, psNormalOp=3} StartupState_t;
+// 0: not started at all
+// 1: everything is alive
+// 2: done first draw
+// 3: normal operation
+
+extern StartupState_t ProgramStarted;
 
 // ******************************************************************
 

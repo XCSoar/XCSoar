@@ -35,8 +35,7 @@ Copyright_License {
 #include "StdAfx.h"
 
 #include "Statistics.h"
-
-#include "externs.h"
+#include "Dialogs.h"
 #include "Units.h"
 #include "Process.h"
 #include "RasterTerrain.h"

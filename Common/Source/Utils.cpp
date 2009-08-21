@@ -53,7 +53,7 @@ Copyright_License {
 #include "Screen/Animation.hpp"
 #include "Registry.hpp"
 #include "resource.h"
-#include "externs.h"
+#include "Dialogs.h"
 #include "device.h"
 #include "uniqueid.h"
 #include "XCSoar.h"

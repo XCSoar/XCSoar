@@ -38,36 +38,11 @@ Copyright_License {
 #ifndef EXTERNS_H
 #define EXTERNS_H
 
-#include <tchar.h>
-
-extern TCHAR XCSoar_Version[256];
-
-#include "Sizes.h"
-#include "XCSoar.h"
-#include "Parser.h"
-#include "Calculations.h"
 #include "MapWindow.h"
-#include "Task.h"
-#include "Statistics.h"
-#include "Dialogs.h"
 
 #if (EXPERIMENTAL > 0)
 //JMW#include "BlueSMS.h"
 #endif
-
-
-typedef enum {psInitInProgress=0, psInitDone=1, psFirstDrawDone=2, psNormalOp=3} StartupState_t;
-// 0: not started at all
-// 1: everything is alive
-// 2: done first draw
-// 3: normal operation
-
-
-// instance of main program
-extern HINSTANCE hInst;
-
-extern StartupState_t ProgramStarted;
-
 
 extern int UTCOffset;
 
@@ -91,19 +66,6 @@ extern void		ConvToUpper( TCHAR *);
 extern TCHAR strAssetNumber[];
 extern TCHAR strRegKey[];
 
-// windows
-extern HWND hWndMainWindow;           // HWND Main Window
-extern HWND hWndMapWindow;            // HWND MapWindow
-extern HWND hWndCB;
-
-// infoboxes
-extern int  CurrentInfoType;          // Used for Popup Menu Select
-extern int  InfoType[MAXINFOWINDOWS]; //
-extern int  InfoFocus;
-extern SCREEN_INFO Data_Options[];
-extern const int NUMSELECTSTRINGS;
-extern int numInfoWindows;
-
 // waypoint data
 extern int HomeWaypoint;
 extern int AirfieldsHomeWaypoint; // VENTA3
@@ -120,25 +82,6 @@ extern WPCALC   *WayPointCalc; // VENTA3 additional calculated infos on WPs
 extern unsigned int NumberOfWayPoints;
 extern int WaypointsOutOfRange;
 
-// Specials
-#ifdef FIVV
-extern double GPSAltitudeOffset; 	// VENTA3
-#endif
-extern double QFEAltitudeOffset; // VENTA3
-extern int OnAirSpace; // VENTA3 toggle DrawAirSpace
-extern bool WasFlying; // used by auto QFE..
-extern double LastFlipBoxTime; // used by XCSoar and Calculations
-#if defined(PNA) || defined(FIVV)
-extern bool needclipping;
-#endif
-extern bool EnableAutoBacklight; // VENTA4
-extern bool EnableAutoSoundVolume; // VENTA4
-extern bool ExtendedVisualGlide;
-extern bool VirtualKeys;
-extern short ArrivalValue;
-extern short AverEffTime;
-
-extern ldrotary_s rotaryLD;
 // airspace data
 extern AIRSPACE_AREA *AirspaceArea;
 extern AIRSPACE_POINT *AirspacePoint;
@@ -162,7 +105,6 @@ extern int SelectedWaypoint;
 extern int SectorType;
 extern DWORD SectorRadius;
 
-extern bool EnableMultipleStartPoints;
 extern int StartLine;
 extern DWORD StartRadius;
 extern int FinishLine;
@@ -175,7 +117,6 @@ extern DWORD StartMaxHeight;
 extern DWORD StartMaxHeightMargin;
 extern DWORD StartMaxSpeed;
 extern DWORD StartMaxSpeedMargin;
-extern int StartHeightRef;
 extern int OLCRules;
 extern int Handicap;
 extern bool EnableOLC;
@@ -216,30 +157,7 @@ extern bool LoggerActive;
 extern int LoggerTimeStepCruise;
 extern int LoggerTimeStepCircling;
 
-// user controls/parameters
-extern double MACCREADY;
-extern bool   AutoMacCready;
-extern int  AutoMcMode;
-extern double AccelerometerZero;
-extern double SAFETYALTITUDEARRIVAL;
-extern double SAFETYALTITUDEBREAKOFF;
-extern double SAFETYALTITUDETERRAIN;
-extern double SAFTEYSPEED;
-
-extern int WindUpdateMode; // unused
-extern int NettoSpeed;
-extern bool EnableCalibration;
-extern bool EnableAutoBlank;
-extern bool EnableAuxiliaryInfo;
-extern int debounceTimeout;
-extern bool SetSystemTimeFromGPS;
-extern bool ForceFinalGlide;
-extern bool AutoForceFinalGlide;
-
 // user interface options
-extern bool bAirspaceBlackOutline;
-extern int TrailActive;
-extern int VisualGlide; // VENTA3
 extern bool CircleZoom;
 extern bool EnableTopology;
 extern bool EnableTerrain;
@@ -273,9 +191,6 @@ extern bool ExternalTriggerCruise;
 extern bool ExternalTriggerCircling;
 extern int EnableExternalTriggerCruise;
 
-// statistics
-extern Statistics flightstats;
-
 // used in settings dialog
 extern BOOL COMPORTCHANGED;
 extern BOOL AIRSPACEFILECHANGED;
@@ -301,19 +216,8 @@ extern bool TeamFlarmTracking;
 extern TCHAR TeamFlarmCNTarget[4]; // CN of the glider to track
 extern int TeamFlarmIdTarget;    // FlarmId of the glider to track
 
-extern bool DisableAutoLogger;
-
 extern bool RequestAirspaceWarningDialog;
 
 extern int UserLevel;
-extern int UseCustomFonts;
-#if (EXPERIMENTAL > 0)
-extern BlueDialupSMS bsms;
-#endif
-
-#if (WINDOWSPC>0)
-extern int SCREENWIDTH;
-extern int SCREENHEIGHT;
-#endif
 
 #endif

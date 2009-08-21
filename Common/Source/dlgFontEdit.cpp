@@ -34,8 +34,7 @@ Copyright_License {
 
 #include "StdAfx.h"
 
-
-#include "externs.h"
+#include "Dialogs.h"
 #include "Registry.hpp"
 #include "XCSoar.h"
 

@@ -41,6 +41,8 @@ Copyright_License {
 #include "resource.h"
 #include "Calculations.h"
 #include "STScreenBuffer.h"
+#include "Dialogs.h"
+#include "XCSoar.h"
 #include "externs.h"
 #include "Math/FastMath.h"
 #include "Math/Earth.hpp"

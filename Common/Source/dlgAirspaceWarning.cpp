@@ -37,6 +37,7 @@ Copyright_License {
 #include "InfoBoxLayout.h"
 
 #include "externs.h"
+#include "Dialogs.h"
 #include "Units.h"
 #include "Airspace.h"
 #include "MapWindow.h"

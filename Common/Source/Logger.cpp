@@ -36,7 +36,7 @@
 */
 #include "StdAfx.h"
 #include "Logger.h"
-#include "externs.h"
+#include "Dialogs.h"
 #include "Port.h"
 #include "Math/Earth.hpp"
 #include "Registry.hpp"

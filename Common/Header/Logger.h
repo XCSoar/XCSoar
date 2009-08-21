@@ -3,6 +3,8 @@
 
 #include <tchar.h>
 
+extern bool DisableAutoLogger;
+
 void StartLogger(const TCHAR *strAssetNumber);
 void LogPoint(double Lattitude, double Longditude, double Altitude,
               double BaroAltitude);

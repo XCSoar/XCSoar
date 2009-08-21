@@ -68,9 +68,11 @@ Copyright_License {
 
 typedef enum {dmNone, dmCircling, dmCruise, dmFinalGlide} DisplayMode_t;
 
+extern int TrailActive;
+extern int VisualGlide; // VENTA3
+
 extern DisplayMode_t UserForceDisplayMode;
 extern DisplayMode_t DisplayMode;
-
 
 // VENTA3 note> probably it would be a good idea to separate static WP data to dynamic values,
 // by moving things like Reachable, AltArival , etc to WPCALC

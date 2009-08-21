@@ -56,6 +56,7 @@ Copyright_License {
 #include "device.h"
 #include "Logger.h"
 #include "Parser.h"
+#include "Dialogs.h"
 
 
 bool InitLDRotary(ldrotary_s *buf) {

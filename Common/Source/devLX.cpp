@@ -34,7 +34,7 @@ Copyright_License {
 
 #include "StdAfx.h"
 
-#include "externs.h"
+#include "XCSoar.h"
 #include "Utils.h"
 #include "Math/Pressure.h"
 #include "Parser.h"

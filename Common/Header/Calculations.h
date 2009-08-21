@@ -231,6 +231,10 @@ typedef struct _DERIVED_INFO
   // JMW note, new items should go at the bottom of this struct before experimental!
 } DERIVED_INFO;
 
+extern int AutoMcMode;
+extern bool EnableCalibration;
+extern bool ForceFinalGlide;
+extern bool AutoForceFinalGlide;
 
 BOOL DoCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 BOOL DoCalculationsVario(NMEA_INFO *Basic, DERIVED_INFO *Calculated);

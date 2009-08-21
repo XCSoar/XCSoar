@@ -37,9 +37,13 @@ Copyright_License {
 #include <ctype.h> // needed for Wine
 #include "Topology.h"
 #include "options.h"
+#include "XCSoar.h"
 #include "externs.h"
 #include "wcecompat/ts_string.h"
 #include "Screen/Util.hpp"
+
+#include <stdlib.h>
+#include <tchar.h>
 
 extern HFONT MapLabelFont;
 

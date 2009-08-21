@@ -191,6 +191,9 @@ class NMEAParser {
   BOOL PFLAA(const TCHAR *String, const TCHAR **, size_t, NMEA_INFO *GPS_INFO);
 };
 
+extern double AccelerometerZero;
+extern bool SetSystemTimeFromGPS;
+
 void FLARM_RefreshSlots(NMEA_INFO *GPS_INFO);
 
 extern bool EnableLogNMEA;

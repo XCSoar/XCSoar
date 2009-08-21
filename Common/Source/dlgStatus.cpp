@@ -34,6 +34,7 @@ Copyright_License {
 
 #include "StdAfx.h"
 
+#include "Dialogs.h"
 #include "externs.h"
 #include "Math/Earth.hpp"
 #include "Battery.h"
