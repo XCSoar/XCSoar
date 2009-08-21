@@ -90,17 +90,9 @@ extern HFONT  MapWindowBoldFont;
 
 
 void MapWindow::DrawCDI() {
-  bool dodrawcdi = false;
-
-  if (DerivedDrawInfo.Circling) {
-    if (EnableCDICircling) {
-      dodrawcdi = true;
-    }
-  } else {
-    if (EnableCDICruise) {
-      dodrawcdi = true;
-    }
-  }
+  bool dodrawcdi = DerivedDrawInfo.Circling
+    ? EnableCDICircling
+    : EnableCDICruise;
 
   if (dodrawcdi) {
     ShowWindow(hWndCDIWindow, SW_SHOW);
