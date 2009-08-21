@@ -151,9 +151,9 @@ static bool KeyTimer(bool isdown, DWORD thekey) {
 //////////////////////
 
 
-BOOL IsDots(const TCHAR* str) {
-  if(_tcscmp(str,TEXT(".")) && _tcscmp(str,TEXT(".."))) return FALSE;
-  return TRUE;
+bool IsDots(const TCHAR* str) {
+  if(_tcscmp(str,TEXT(".")) && _tcscmp(str,TEXT(".."))) return false;
+  return true;
 }
 
 
@@ -183,8 +183,8 @@ void DataFieldFileReader::ScanDirectoryTop(const TCHAR* filter) {
 // non altair, (non windowspc e non mingw32) e non ppc2002
   static bool first = true;
 
-  BOOL bContinue = TRUE;     // If TRUE, continue searching
-                             // If FALSE, stop searching.
+  bool bContinue = true;     // If true, continue searching
+                             // If false, stop searching.
   HANDLE hFlashCard;         // Search handle for storage cards
   WIN32_FIND_DATA FlashCardTmp; // Structure for storing card
                                       // information temporarily
@@ -249,7 +249,7 @@ void DataFieldFileReader::ScanDirectoryTop(const TCHAR* filter) {
 }
 
 
-BOOL DataFieldFileReader::ScanDirectories(const TCHAR* sPath,
+bool DataFieldFileReader::ScanDirectories(const TCHAR* sPath,
 					  const TCHAR* filter) {
 
   HANDLE hFind;  // file handle
@@ -273,7 +273,7 @@ BOOL DataFieldFileReader::ScanDirectories(const TCHAR* sPath,
 
   hFind = FindFirstFile(FileName,&FindFileData); // find the first file
   if(hFind == INVALID_HANDLE_VALUE) {
-    return FALSE;
+    return false;
   }
   _tcscpy(FileName,DirPath);
 
@@ -310,19 +310,19 @@ BOOL DataFieldFileReader::ScanDirectories(const TCHAR* sPath,
       if(GetLastError() == ERROR_NO_MORE_FILES) // no more files there
 	bSearch = false;
       else {
-	// some error occured, close the handle and return FALSE
+	// some error occured, close the handle and return false
 	FindClose(hFind);
-	return FALSE;
+	return false;
       }
     }
   }
   FindClose(hFind);  // closing file handle
 
-  return TRUE;
+  return true;
 }
 
 
-BOOL DataFieldFileReader::ScanFiles(const TCHAR* sPath,
+bool DataFieldFileReader::ScanFiles(const TCHAR* sPath,
 				    const TCHAR* filter) {
   HANDLE hFind;  // file handle
   WIN32_FIND_DATA FindFileData;
@@ -345,7 +345,7 @@ BOOL DataFieldFileReader::ScanFiles(const TCHAR* sPath,
   _tcscat(FileName,TEXT("\\"));
 
   hFind = FindFirstFile(DirPath,&FindFileData); // find the first file
-  if(hFind == INVALID_HANDLE_VALUE) return FALSE;
+  if(hFind == INVALID_HANDLE_VALUE) return false;
   _tcscpy(DirPath,FileName);
 
 
@@ -386,9 +386,9 @@ BOOL DataFieldFileReader::ScanFiles(const TCHAR* sPath,
       if(GetLastError() == ERROR_NO_MORE_FILES) // no more files there
 	bSearch = false;
       else {
-	// some error occured, close the handle and return FALSE
+	// some error occured, close the handle and return false
 	FindClose(hFind);
-	return FALSE;
+	return false;
       }
 
     }
@@ -396,7 +396,7 @@ BOOL DataFieldFileReader::ScanFiles(const TCHAR* sPath,
   }
   FindClose(hFind);  // closing file handle
 
-  return TRUE;
+  return true;
 }
 
 void DataFieldFileReader::Lookup(const TCHAR *Text) {
@@ -3210,7 +3210,7 @@ bool WndProperty::SetReadOnly(bool Value){
   if (GetReadOnly() != Value){
     WindowControl::SetReadOnly(Value);
 
-    SendMessage(mhEdit, EM_SETREADONLY, (WPARAM)(BOOL)Value, 0L);
+    SendMessage(mhEdit, EM_SETREADONLY, (WPARAM)(bool)Value, 0L);
 
   }
 
