@@ -4,7 +4,8 @@
 
 #include <string.h>
 
-bool InitLDRotary(ldrotary_s *buf) {
+void InitLDRotary(ldrotary_s *buf)
+{
 short i, bsize;
 #ifdef DEBUG_ROTARY
 char ventabuffer[200];
@@ -49,8 +50,6 @@ FILE *fp;
 	if ((fp=fopen("DEBUG.TXT","a"))!= NULL)
                     {;fprintf(fp,"%s\n",ventabuffer);fclose(fp);}
 #endif
-  return false; //RLD Paolo, I added this so it would compile correctly.  Not sure what the correct value is.
-                //VNT Rob, it's an unused bool type so any value is ok, Ill make it void eventually
 }
 
 void InsertLDRotary(ldrotary_s *buf, int distance, int altitude) {

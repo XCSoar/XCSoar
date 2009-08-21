@@ -12,7 +12,7 @@ typedef struct {
 	bool	valid;
 } ldrotary_s;
 
-bool	InitLDRotary(ldrotary_s *buf);
+void InitLDRotary(ldrotary_s *buf);
 void	InsertLDRotary(ldrotary_s *buf, int distance, int altitude);
 int	CalculateLDRotary(ldrotary_s *buf);
 
