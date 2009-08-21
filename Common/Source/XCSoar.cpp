@@ -53,6 +53,7 @@ Copyright_License {
 #include "Utils2.h"
 #include "Math/FastMath.h"
 #include "Math/Earth.hpp"
+#include "Math/Units.h"
 #include "Battery.h"
 #include "PeriodClock.hpp"
 #include "Registry.hpp"

@@ -44,6 +44,7 @@ Copyright_License {
 #include "Math/FastMath.h"
 #include "WindowControls.h"
 #include "Math/Earth.hpp"
+#include "Math/Units.h"
 #include "Registry.hpp"
 #include "LocalPath.hpp"
 #include "dlgTools.h"

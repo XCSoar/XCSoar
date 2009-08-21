@@ -37,6 +37,7 @@ Copyright_License {
 #include "XCSoar.h"
 #include "Utils.h"
 #include "Math/Pressure.h"
+#include "Math/Units.h"
 #include "Parser.h"
 #include "Port.h"
 

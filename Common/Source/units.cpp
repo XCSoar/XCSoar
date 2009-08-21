@@ -57,6 +57,7 @@ Copyright_License {
 
 #include "resource.h"
 #include "externs.h"
+#include "Math/Units.h"
 
 #include <stdlib.h>
 #include <math.h>

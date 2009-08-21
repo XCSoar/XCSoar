@@ -43,6 +43,7 @@ Copyright_License {
 #include "Airspace.h"
 #include "MapWindow.h"
 #include "Math/FastMath.h"
+#include "Math/Units.h"
 #include "Utils.h"
 
 #include "dlgTools.h"

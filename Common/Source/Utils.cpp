@@ -51,6 +51,7 @@ Copyright_License {
 #include "Math/FastMath.h"
 #include "Math/Geometry.hpp"
 #include "Math/Earth.hpp"
+#include "Math/Units.h"
 #include "Registry.hpp"
 #include "Dialogs.h"
 #include "uniqueid.h"

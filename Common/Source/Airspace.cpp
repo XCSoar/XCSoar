@@ -48,6 +48,7 @@ Copyright_License {
 #include "RasterTerrain.h"
 #include "Math/Earth.hpp"
 #include "Math/Screen.hpp"
+#include "Math/Units.h"
 #include "Registry.hpp"
 #include "Math/Pressure.h"
 #include "LocalPath.hpp"

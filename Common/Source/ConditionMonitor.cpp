@@ -37,6 +37,7 @@ Copyright_License {
 #include "StdAfx.h"
 #include "Calculations.h"
 #include "Math/Geometry.hpp"
+#include "Math/Units.h"
 #include "Dialogs.h"
 #include "Task.h"
 #include "device.h"

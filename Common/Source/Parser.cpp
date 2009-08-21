@@ -51,6 +51,7 @@ Copyright_License {
 #include "Math/Geometry.hpp"
 #include "Math/Earth.hpp"
 #include "Math/Pressure.h"
+#include "Math/Units.h"
 
 #include <ctype.h>
 #include <stdlib.h>
