@@ -7,7 +7,7 @@ my $header = q{
   XCSoar Glide Computer - http://xcsoar.sourceforge.net/
   Copyright (C) 2000 - 2009
 
-  	M Roberts (original release)
+	M Roberts (original release)
 	Robin Birch <robinb@ruffnready.co.uk>
 	Samuel Gisiger <samuel.gisiger@triadis.ch>
 	Jeff Goodenough <jeff@enborne.f2s.com>
