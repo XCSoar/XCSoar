@@ -303,10 +303,6 @@ extern int TeamFlarmIdTarget;    // FlarmId of the glider to track
 
 extern bool DisableAutoLogger;
 
-// Interface Globals
-extern StatusMessageSTRUCT StatusMessageData[];
-extern int StatusMessageData_Size;
-
 extern bool RequestAirspaceWarningDialog;
 
 extern int UserLevel;

@@ -45,6 +45,7 @@ Copyright_License {
 #include "Task.h"
 #include "Dialogs.h"
 #include "Trigger.hpp"
+#include "StatusMessage.hpp"
 
 #ifdef OLDPPCx
 #include "XCSoarProcess.h"
@@ -407,10 +408,6 @@ int AcknowledgementTime = 30;
 // Registration Data
 TCHAR strAssetNumber[MAX_LOADSTRING] = TEXT(""); //4G17DW31L0HY");
 TCHAR strRegKey[MAX_LOADSTRING] = TEXT("");
-
-// Interface Files
-StatusMessageSTRUCT StatusMessageData[MAXSTATUSMESSAGECACHE];
-int StatusMessageData_Size = 0;
 
 //Snail Trial
 SNAIL_POINT SnailTrail[TRAILSIZE];
