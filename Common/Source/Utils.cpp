@@ -463,8 +463,6 @@ void ReadAssetNumber(void)
 void ReadCompaqID(void)
 {
   PROCESS_INFORMATION pi;
-  HANDLE hInFile;// = INVALID_HANDLE_VALUE;
-  DWORD dwBytesRead;
 
   if(strAssetNumber[0] != '\0')
     {
@@ -473,16 +471,16 @@ void ReadCompaqID(void)
 
   CreateProcess(TEXT("\\windows\\CreateAssetFile.exe"), NULL, NULL, NULL, FALSE, 0, NULL, NULL, NULL, &pi);
 
-  hInFile = CreateFile(TEXT("\\windows\\cpqAssetData.dat"), GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
-  if (hInFile == INVALID_HANDLE_VALUE)
+  FILE *file = _tfopen(TEXT("\\windows\\cpqAssetData.dat"), TEXT("rb"));
+  if (file == NULL)
     {
       //	    MessageBox(hWnd, TEXT("Unable to open asset data file."), TEXT("Error!"), MB_OK);
       return;
     }
-  SetFilePointer(hInFile, 976, NULL, FILE_BEGIN);
+  fseek(file, 976, SEEK_SET);
   memset(strAssetNumber, 0, 64 * sizeof(TCHAR));
-  ReadFile(hInFile, &strAssetNumber, 64, &dwBytesRead, (OVERLAPPED *)NULL);
-  CloseHandle(hInFile);
+  fread(&strAssetNumber, 64, 1, file);
+  fclose(file);
 }
 
 
@@ -1719,12 +1717,12 @@ void OpenFLARMDetails() {
   TCHAR filename[MAX_PATH];
   LocalPath(filename,TEXT("xcsoar-flarm.txt"));
 
-  HANDLE hFile = CreateFile(filename,GENERIC_READ,0,NULL,
-			    OPEN_EXISTING,FILE_ATTRIBUTE_NORMAL,NULL);
-  if( hFile == INVALID_HANDLE_VALUE) return;
+  FILE *file = _tfopen(filename, TEXT("rt"));
+  if (file == NULL)
+    return;
 
   TCHAR line[READLINE_LENGTH];
-  while (ReadString(hFile,READLINE_LENGTH, line)) {
+  while (ReadStringX(file, READLINE_LENGTH, line)) {
     long id;
     TCHAR Name[MAX_PATH];
 
@@ -1735,18 +1733,19 @@ void OpenFLARMDetails() {
 	}
     }
   }
-  CloseHandle(hFile);
+
+  fclose(file);
 }
 
 
 void SaveFLARMDetails(void)
 {
-  DWORD bytesWritten;
   TCHAR filename[MAX_PATH];
   LocalPath(filename,TEXT("xcsoar-flarm.txt"));
 
-  HANDLE hFile = CreateFile(filename,GENERIC_WRITE,0,NULL,CREATE_ALWAYS,FILE_ATTRIBUTE_NORMAL,NULL);
-  if( hFile == INVALID_HANDLE_VALUE) return;
+  FILE *file = _tfopen(filename, TEXT("wt"));
+  if (file == NULL)
+    return;
 
   TCHAR wsline[READLINE_LENGTH];
   char cline[READLINE_LENGTH];
@@ -1764,9 +1763,10 @@ void SaveFLARMDetails(void)
       strcpy(cline, wsline);
 #endif
 
-      WriteFile(hFile, cline, strlen(cline), &bytesWritten, NULL);
+      fputs(cline, file);
     }
-  CloseHandle(hFile);
+
+  fclose(file);
 }
 
 
@@ -2059,39 +2059,23 @@ bool InterfaceTimeoutCheck(void) {
 }
 
 bool FileExistsW(const TCHAR *FileName){
-
-  HANDLE hFile = CreateFile(FileName, GENERIC_READ, 0, NULL,
-                 OPEN_EXISTING,FILE_ATTRIBUTE_NORMAL,NULL);
-
-  if( hFile == INVALID_HANDLE_VALUE)
+  FILE *file = _tfopen(FileName, TEXT("r"));
+  if (file == NULL)
     return(FALSE);
 
-  CloseHandle(hFile);
+  fclose(file);
 
   return(TRUE);
 
 }
 
 bool FileExistsA(const char *FileName){
-
-#if (WINDOWSPC>0)
-  HANDLE hFile = CreateFileA(FileName, GENERIC_READ, 0, NULL,
-                 OPEN_EXISTING,FILE_ATTRIBUTE_NORMAL,NULL);
-  if( hFile == INVALID_HANDLE_VALUE)
-    return(FALSE);
-
-  CloseHandle(hFile);
-
-  return(TRUE);
-#else
   FILE *file = fopen(FileName, "r");
   if (file != NULL) {
     fclose(file);
     return(TRUE);
   }
   return FALSE;
-#endif
-
 }
 
 
