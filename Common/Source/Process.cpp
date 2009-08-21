@@ -1012,8 +1012,8 @@ bool InfoBoxFormatter::isValid(void) {
 }
 
 void InfoBoxFormatter::RenderInvalid(int *color) {
-  _tcscpy(CommentText, TEXT(""));
-  _tcscpy(Text, TEXT("---"));
+  _tcscpy(CommentText, _T(""));
+  _tcscpy(Text, _T("---"));
   *color = -1;
 }
 
@@ -1063,44 +1063,44 @@ const TCHAR *FormatterLowWarning::Render(int *color) {
 const TCHAR *FormatterTime::Render(int *color) {
   if (!Valid) {
     RenderInvalid(color);
-    _stprintf(Text,TEXT("--:--"));
+    _stprintf(Text,_T("--:--"));
   } else {
     if ((hours<0) || (mins<0) || (seconds<0)) {
       // Time is negative
       *color = 1; // red!
       if (hours<0) { // hh:mm, ss
         _stprintf(Text,
-                  TEXT("%02d:%02d"),
+                  _T("%02d:%02d"),
                   hours, mins );
         _stprintf(CommentText,
-                  TEXT("%02d"),
+                  _T("%02d"),
                   seconds);
       } else if (mins<0) { // mm:ss
         _stprintf(Text,
-                  TEXT("%02d:%02d"),
+                  _T("%02d:%02d"),
                   mins, seconds );
-        _tcscpy(CommentText, TEXT(""));
+        _tcscpy(CommentText, _T(""));
       } else {
         _stprintf(Text,
-                  TEXT("-00:%02d"),
+                  _T("-00:%02d"),
                   abs(seconds));
-        _tcscpy(CommentText, TEXT(""));
+        _tcscpy(CommentText, _T(""));
       }
     } else {
       // Time is positive
       *color = 0; // black
       if (hours>0) { // hh:mm, ss
         _stprintf(Text,
-                  TEXT("%02d:%02d"),
+                  _T("%02d:%02d"),
                   hours, mins );
         _stprintf(CommentText,
-                  TEXT("%02d"),
+                  _T("%02d"),
                   seconds);
       } else { // mm:ss
         _stprintf(Text,
-                  TEXT("%02d:%02d"),
+                  _T("%02d:%02d"),
                   mins, seconds );
-        _tcscpy(CommentText, TEXT(""));
+        _tcscpy(CommentText, _T(""));
       }
     }
   }
@@ -1111,7 +1111,7 @@ const TCHAR *FormatterTime::Render(int *color) {
 const TCHAR *FormatterAATTime::Render(int *color) {
   if (!Valid) {
     RenderInvalid(color);
-    _stprintf(Text,TEXT("--:--"));
+    _stprintf(Text,_T("--:--"));
   } else {
 
     *color = status;
@@ -1120,36 +1120,36 @@ const TCHAR *FormatterAATTime::Render(int *color) {
       // Time is negative
       if (hours<0) { // hh:mm, ss
         _stprintf(Text,
-                  TEXT("%02d:%02d"),
+                  _T("%02d:%02d"),
                   hours, mins );
         _stprintf(CommentText,
-                  TEXT("%02d"),
+                  _T("%02d"),
                   seconds);
       } else if (mins<0) { // mm:ss
         _stprintf(Text,
-                  TEXT("%02d:%02d"),
+                  _T("%02d:%02d"),
                   mins, seconds );
-        _tcscpy(CommentText, TEXT(""));
+        _tcscpy(CommentText, _T(""));
       } else {
         _stprintf(Text,
-                  TEXT("-00:%02d"),
+                  _T("-00:%02d"),
                   abs(seconds));
-        _tcscpy(CommentText, TEXT(""));
+        _tcscpy(CommentText, _T(""));
       }
     } else {
       // Time is positive
       if (hours>0) { // hh:mm, ss
         _stprintf(Text,
-                  TEXT("%02d:%02d"),
+                  _T("%02d:%02d"),
                   hours, mins );
         _stprintf(CommentText,
-                  TEXT("%02d"),
+                  _T("%02d"),
                   seconds);
       } else { // mm:ss
         _stprintf(Text,
-                  TEXT("%02d:%02d"),
+                  _T("%02d:%02d"),
                   mins, seconds );
-        _tcscpy(CommentText, TEXT(""));
+        _tcscpy(CommentText, _T(""));
       }
     }
   }
@@ -1175,7 +1175,7 @@ const TCHAR *FormatterWaypoint::Render(int *color) {
         }
       else if( DisplayTextType == DISPLAYNUMBER)
         {
-          _stprintf(Text,TEXT("%d"),
+          _stprintf(Text,_T("%d"),
 		    WayPointList[index].Number );
         }
       else
@@ -1208,7 +1208,7 @@ const TCHAR *FormatterAlternate::RenderTitle(int *color) {
         }
       else if( DisplayTextType == DISPLAYNUMBER)
         {
-          _stprintf(Text,TEXT("%d"),
+          _stprintf(Text,_T("%d"),
 		    WayPointList[ActiveAlternate].Number );
         }
       else
@@ -1348,18 +1348,18 @@ const TCHAR *FormatterDiffBearing::Render(int *color) {
 
 #ifndef __MINGW32__
     if (Value > 1)
-      _stprintf(Text, TEXT("%2.0f°»"), Value);
+      _stprintf(Text, _T("%2.0f°»"), Value);
     else if (Value < -1)
-      _stprintf(Text, TEXT("«%2.0f°"), -Value);
+      _stprintf(Text, _T("«%2.0f°"), -Value);
     else
-      _tcscpy(Text, TEXT("«»"));
+      _tcscpy(Text, _T("«»"));
 #else
     if (Value > 1)
-      _stprintf(Text, TEXT("%2.0fÂ°Â»"), Value);
+      _stprintf(Text, _T("%2.0fÂ°Â»"), Value);
     else if (Value < -1)
-      _stprintf(Text, TEXT("Â«%2.0fÂ°"), -Value);
+      _stprintf(Text, _T("Â«%2.0fÂ°"), -Value);
     else
-      _tcscpy(Text, TEXT("Â«Â»"));
+      _tcscpy(Text, _T("Â«Â»"));
 #endif
     *color = 0;
   } else {
@@ -1405,18 +1405,18 @@ const TCHAR *FormatterDiffTeamBearing::Render(int *color) {
 
 #ifndef __MINGW32__
     if (Value > 1)
-      _stprintf(Text, TEXT("%2.0f°»"), Value);
+      _stprintf(Text, _T("%2.0f°»"), Value);
     else if (Value < -1)
-      _stprintf(Text, TEXT("«%2.0f°"), -Value);
+      _stprintf(Text, _T("«%2.0f°"), -Value);
     else
-      _tcscpy(Text, TEXT("«»"));
+      _tcscpy(Text, _T("«»"));
 #else
     if (Value > 1)
-      _stprintf(Text, TEXT("%2.0fÂ°Â»"), Value);
+      _stprintf(Text, _T("%2.0fÂ°Â»"), Value);
     else if (Value < -1)
-      _stprintf(Text, TEXT("Â«%2.0fÂ°"), -Value);
+      _stprintf(Text, _T("Â«%2.0fÂ°"), -Value);
     else
-      _tcscpy(Text, TEXT("Â«Â»"));
+      _tcscpy(Text, _T("Â«Â»"));
 #endif
     *color = 0;
 
