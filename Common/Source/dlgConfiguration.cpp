@@ -3693,6 +3693,7 @@ void dlgConfigurationShowModal(void){
     }
   }
 
+#ifdef HAVE_BLANK
   wp = (WndProperty*)wf->FindByName(TEXT("prpAutoBlank"));
   if (wp) {
     if (EnableAutoBlank != (wp->GetDataField()->GetAsInteger()!=0)) {
@@ -3701,6 +3702,7 @@ void dlgConfigurationShowModal(void){
       changed = true;
     }
   }
+#endif
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpAutoBacklight")); // VENTA4
   if (wp) {

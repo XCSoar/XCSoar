@@ -684,9 +684,11 @@ void ReadRegistrySettings(void)
   EnableCDICircling = (Temp == 1);
   */
 
+#ifdef HAVE_BLANK
   Temp = 0;
   GetFromRegistry(szRegistryAutoBlank,&Temp);
   EnableAutoBlank = (Temp == 1);
+#endif
 
   Temp = 1;
   GetFromRegistry(szRegistryAutoBacklight,&Temp); // VENTA4

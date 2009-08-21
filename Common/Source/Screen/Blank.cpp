@@ -1,4 +1,7 @@
 #include "Screen/Blank.hpp"
+
+#ifdef HAVE_BLANK
+
 #include "XCSoar.h"
 #include "Battery.h"
 #include "Dialogs.h"
@@ -34,13 +37,6 @@ bool ScreenBlanked = false;
 bool ForceShutdown = false;
 
 void BlankDisplay(bool doblank) {
-
-#if (WINDOWSPC>0)
-  return;
-#else
-#ifdef GNAV
-  return;
-#else
   static bool oldblank = false;
 
   BATTERYINFO BatteryInfo;
@@ -141,8 +137,6 @@ void BlankDisplay(bool doblank) {
 
   }
   ::ReleaseDC(NULL, gdc);
-#endif
-#endif
 }
 
 void CheckDisplayTimeOut(bool sticky)
@@ -162,3 +156,5 @@ void CheckDisplayTimeOut(bool sticky)
     }
   }
 }
+
+#endif /* HAVE_BLANK */
