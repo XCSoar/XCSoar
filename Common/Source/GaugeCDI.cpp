@@ -38,7 +38,6 @@ Copyright_License {
 #include "GaugeCDI.h"
 #include "Math/FastMath.h"
 
-HWND hWndCDIWindow = NULL; //CDI Window
 extern HFONT CDIWindowFont;
 extern HWND hWndMainWindow; // Main Windows
 extern HINSTANCE hInst;      // The current instance
@@ -46,6 +45,8 @@ extern HINSTANCE hInst;      // The current instance
 #include "InfoBoxLayout.h"
 
 #include <tchar.h>
+
+HWND GaugeCDI::hWndCDIWindow = NULL;
 
 void GaugeCDI::Create() {
   // start of new code for displaying CDI window

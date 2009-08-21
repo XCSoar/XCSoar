@@ -3,6 +3,8 @@
 #include "StdAfx.h"
 
 class GaugeCDI {
+  static HWND hWndCDIWindow;
+
  public:
   static void Create();
   static void Destroy();
