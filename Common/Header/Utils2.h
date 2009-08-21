@@ -36,11 +36,6 @@ Copyright_License {
 
 #include "XCSoar.h"
 
-int	FilterFast(ifilter_s *buf, int minvalue, int maxvalue);
-bool	InitFilterBuffer(ifilter_s *buf, short bsize);
-int	FilterRotary(ifilter_s *buf, int minvalue, int maxvalue);
-void	InsertRotaryBuffer(ifilter_s *buf, int value);
-
 bool	InitLDRotary(ldrotary_s *buf);
 void	InsertLDRotary(ldrotary_s *buf, int distance, int altitude);
 int	CalculateLDRotary(ldrotary_s *buf);

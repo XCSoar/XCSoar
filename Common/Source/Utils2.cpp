@@ -236,6 +236,14 @@ int CalculateLDRotary(ldrotary_s *buf ) {
 }
 
 
+#ifdef ENABLE_UNUSED_CODE
+
+typedef struct {
+        int     array[RASIZE]; // rotary array with a predefined max capacity
+        short   start;          // pointer to current first item in rotarybuf if used
+        short   size;           // real size of rotary buffer (0-size)
+} ifilter_s;
+
 bool InitFilterBuffer(ifilter_s *buf, short bsize) {
 short i;
 	if (bsize <3 || bsize>RASIZE) return false;
@@ -330,6 +338,8 @@ main(int argc, char *argv[])
   FilterFast(&buf, 70,200 );
 }
 */
+
+#endif /* ENABLE_UNUSED_CODE */
 
 /*
 	Virtual Key Manager by Paolo Ventafridda

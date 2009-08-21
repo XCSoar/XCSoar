@@ -323,12 +323,6 @@ typedef enum{
 } AverEffTime_t;
 
 typedef struct {
-        int     array[RASIZE]; // rotary array with a predefined max capacity
-        short   start;          // pointer to current first item in rotarybuf if used
-        short   size;           // real size of rotary buffer (0-size)
-} ifilter_s;
-
-typedef struct {
         int     distance[MAXLDROTARYSIZE]; // rotary array with a predefined max capacity
         int     altitude[MAXLDROTARYSIZE];
 	int	totaldistance;
