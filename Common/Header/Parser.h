@@ -1,6 +1,7 @@
 #if !defined(AFX_PARSER_H__695AAC30_F401_4CFF_9BD9_FE62A2A2D0D2__INCLUDED_)
 #define AFX_PARSER_H__695AAC30_F401_4CFF_9BD9_FE62A2A2D0D2__INCLUDED_
 
+#include "FLARM/Traffic.h"
 #include "Sizes.h"
 
 #include <tchar.h>
@@ -17,30 +18,6 @@
 #define TOKILOMETER     (double)0.001
 #define TOFEET          (double)3.281
 #define TOMETER         (double)1.0
-
-typedef struct _FLARM_TRAFFIC
-{
-  double Latitude;
-  double Longitude;
-  double TrackBearing;
-  double Speed;
-  double Altitude;
-  double TurnRate;
-  double ClimbRate;
-  double RelativeNorth;
-  double RelativeEast;
-  double RelativeAltitude;
-  long ID;
-  TCHAR Name[10];
-  unsigned short IDType;
-  unsigned short AlarmLevel;
-  double Time_Fix;
-  unsigned short Type;
-#ifdef FLARM_AVERAGE
-  double Average30s;
-#endif
-} FLARM_TRAFFIC;
-
 
 typedef struct _SWITCH_INFO
 {
