@@ -77,11 +77,6 @@ extern bool  OnBestAlternate;
 extern bool  OnAlternate1;
 extern bool  OnAlternate2;
 
-extern WAYPOINT *WayPointList;
-extern WPCALC   *WayPointCalc; // VENTA3 additional calculated infos on WPs
-extern unsigned int NumberOfWayPoints;
-extern int WaypointsOutOfRange;
-
 // airspace data
 extern AIRSPACE_AREA *AirspaceArea;
 extern AIRSPACE_POINT *AirspacePoint;

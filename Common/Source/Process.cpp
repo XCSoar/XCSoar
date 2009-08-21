@@ -47,6 +47,7 @@ Copyright_License {
 #include "Atmosphere.h"
 #include "AATDistance.h"
 #include "Battery.h"
+#include "WayPoint.hpp"
 #include "Registry.hpp"
 #include "XCSoar.h"
 

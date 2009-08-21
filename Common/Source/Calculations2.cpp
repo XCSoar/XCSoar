@@ -56,6 +56,7 @@ Copyright_License {
 #include "Math/Earth.hpp"
 #include "PeriodClock.hpp"
 #include "Math/Pressure.h"
+#include "WayPoint.hpp"
 
 #include <tchar.h>
 

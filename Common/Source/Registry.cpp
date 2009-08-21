@@ -10,6 +10,7 @@
 #include "Terrain.h"
 #include "VegaVoice.h"
 #include "McReady.h"
+#include "WayPoint.hpp"
 #include "device.h"
 #include "Math/FastMath.h"
 #include "Logger.h"

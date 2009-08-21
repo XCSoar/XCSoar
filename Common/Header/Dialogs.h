@@ -1,6 +1,8 @@
 #if !defined(AFX_DIALOGS_H__695AAC30_F401_4CFF_9BD9_FE62A2A2D0D2__INCLUDED_)
 #define AFX_DIALOGS_H__695AAC30_F401_4CFF_9BD9_FE62A2A2D0D2__INCLUDED_
 
+#include "WayPoint.hpp"
+
 #include <windows.h>
 
 void ReadLanguageFile(void);
@@ -53,7 +55,6 @@ void dlgWayPointDetailsShowModal(void);
 void dlgTextEntryShowModal(TCHAR *text, int width=0);
 void dlgTeamCodeShowModal(void);
 void dlgStartPointShowModal(void);
-#include "MapWindow.h"
 void dlgWaypointEditShowModal(WAYPOINT *wpt);
 void dlgWeatherShowModal(void);
 void dlgAirspaceSelect(void);

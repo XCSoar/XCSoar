@@ -5,7 +5,10 @@
 #include <windows.h>
 #include "Sizes.h"
 #include "Port.h"
-#include "MapWindow.h"
+#include "WayPoint.hpp"
+#include "Parser.h"
+
+#include <stdio.h>
 
 #define DEVNAMESIZE  32
 #define	NUMDEV		 2

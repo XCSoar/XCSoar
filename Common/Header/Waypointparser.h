@@ -1,9 +1,9 @@
 #if !defined(AFX_WAYPOINTPARSER_H__695AAC30_F401_4CFF_9BD9_FE62A2A2D0D2__INCLUDED_)
 #define AFX_WAYPOINTPARSER_H__695AAC30_F401_4CFF_9BD9_FE62A2A2D0D2__INCLUDED_
 
-#include <windows.h>
+#include "WayPoint.hpp"
 
-#include "MapWindow.h"
+#include <windows.h>
 
 #define wpTerrainBoundsYes    100
 #define wpTerrainBoundsYesAll 101

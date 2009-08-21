@@ -43,7 +43,7 @@ Copyright_License {
 #include "externs.h"
 #include "Process.h"
 #include "InputEvents.h"
-
+#include "WayPoint.hpp"
 
 class ConditionMonitor {
 public:

@@ -435,6 +435,7 @@ OBJS	:=\
 	$(SRC)/DataField/Float.o \
 	$(SRC)/DataField/Integer.o \
 	$(SRC)/DataField/String.o \
+	$(SRC)/WayPoint.o \
 	\
 	$(SRC)/mapbits.o \
 	$(SRC)/maperror.o 		$(SRC)/mapprimitive.o \

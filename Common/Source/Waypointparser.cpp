@@ -70,7 +70,6 @@ static double ReadAltitude(const TCHAR *temp);
 
 static TCHAR TempString[READLINE_LENGTH];
 
-int WaypointsOutOfRange = 1; // include
 static int WaypointOutOfTerrainRangeDontAskAgain = -1;
 
 

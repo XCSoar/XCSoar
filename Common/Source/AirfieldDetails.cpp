@@ -49,7 +49,7 @@ Copyright_License {
 #include "Registry.hpp"
 #include "LocalPath.hpp"
 #include "XCSoar.h"
-
+#include "WayPoint.hpp"
 #include "AirfieldDetails.h"
 #include <zzip/lib.h>
 #include "wcecompat/ts_string.h"

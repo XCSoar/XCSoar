@@ -42,6 +42,7 @@ Copyright_License {
 #include "Math/Geometry.hpp"
 #include "externs.h"
 #include "Math/Earth.hpp"
+#include "WayPoint.hpp"
 
 #define DISTANCETHRESHOLD 500
 
