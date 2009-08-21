@@ -36,6 +36,7 @@ Copyright_License {
 #include "StdAfx.h"
 #include "XCSoar.h"
 #include "GaugeCDI.h"
+#include "Math/FastMath.h"
 
 HWND hWndCDIWindow = NULL; //CDI Window
 extern HFONT CDIWindowFont;
@@ -75,4 +76,46 @@ void GaugeCDI::Create() {
 
 void GaugeCDI::Destroy() {
   DestroyWindow(hWndCDIWindow);
+}
+
+void GaugeCDI::Update(double TrackBearing, double WaypointBearing)
+{
+  // JMW changed layout here to fit reorganised display
+  // insert waypoint bearing ".<|>." into CDIScale string"
+
+  TCHAR CDIScale[] = TEXT("330..340..350..000..010..020..030..040..050..060..070..080..090..100..110..120..130..140..150..160..170..180..190..200..210..220..230..240..250..260..270..280..290..300..310..320..330..340..350..000..010..020..030..040.");
+  TCHAR CDIDisplay[25] = TEXT("");
+  int j;
+  int CDI_WP_Bearing = (int)WaypointBearing/2;
+  CDIScale[CDI_WP_Bearing + 9] = 46;
+  CDIScale[CDI_WP_Bearing + 10] = 60;
+  CDIScale[CDI_WP_Bearing + 11] = 124; // "|" character
+  CDIScale[CDI_WP_Bearing + 12] = 62;
+  CDIScale[CDI_WP_Bearing + 13] = 46;
+  for (j=0;j<24;j++) CDIDisplay[j] = CDIScale[(j + (int)(TrackBearing)/2)];
+  CDIDisplay[24] = _T('\0');
+  // JMW fix bug! This indicator doesn't always display correctly!
+
+  // JMW added arrows at end of CDI to point to track if way off..
+  int deltacdi = iround(WaypointBearing - TrackBearing);
+
+  while (deltacdi>180) {
+    deltacdi-= 360;
+  }
+  while (deltacdi<-180) {
+    deltacdi+= 360;
+  }
+  if (deltacdi>20) {
+    CDIDisplay[21]='>';
+    CDIDisplay[22]='>';
+    CDIDisplay[23]='>';
+  }
+  if (deltacdi<-20) {
+    CDIDisplay[0]='<';
+    CDIDisplay[1]='<';
+    CDIDisplay[2]='<';
+  }
+
+  SetWindowText(hWndCDIWindow,CDIDisplay);
+  // end of new code to display CDI scale
 }

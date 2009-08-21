@@ -6,6 +6,8 @@ class GaugeCDI {
  public:
   static void Create();
   static void Destroy();
+
+  static void Update(double TrackBearing, double WaypointBearing);
 };
 
 #endif
