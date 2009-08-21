@@ -32,18 +32,16 @@ Copyright_License {
 }
 */
 
-#include "StdAfx.h"
-
+#include "devFlymasterF1.h"
+#include "device.h"
 #include "XCSoar.h"
-#include "externs.h"
 #include "Math/Pressure.h"
 #include "Utils.h"
 #include "Parser.h"
 #include "Port.h"
 
-#include "devFlymasterF1.h"
-
 #include <tchar.h>
+#include <math.h>
 
 static BOOL VARIO(PDeviceDescriptor_t d, const TCHAR *String,
                   NMEA_INFO *GPS_INFO);
@@ -84,7 +82,7 @@ static const DeviceRegister_t flymasterf1Device = {
   NULL				// OnSysTicker
 };
 
-BOOL flymasterf1Register(void){
+bool flymasterf1Register(void){
   return devRegister(&flymasterf1Device);
 }
 

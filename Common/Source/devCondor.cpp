@@ -32,16 +32,13 @@ Copyright_License {
 }
 */
 
-#include "StdAfx.h"
-
+#include "devCondor.h"
+#include "device.h"
 #include "XCSoar.h"
-#include "externs.h"
 #include "Utils.h"
 #include "Math/Pressure.h"
 #include "Parser.h"
 #include "Port.h"
-
-#include "devCondor.h"
 
 #include <tchar.h>
 
@@ -98,7 +95,7 @@ static const DeviceRegister_t condorDevice = {
   NULL				// OnSysTicker
 };
 
-BOOL condorRegister(void){
+bool condorRegister(void){
   return devRegister(&condorDevice);
 }
 

@@ -32,15 +32,13 @@ Copyright_License {
 }
 */
 
-#include "StdAfx.h"
-
+#include "devZander.h"
+#include "device.h"
 #include "XCSoar.h"
 #include "Math/Pressure.h"
 #include "Parser.h"
 #include "Port.h"
 #include "Utils.h"
-
-#include "devZander.h"
 
 #include <tchar.h>
 
@@ -91,7 +89,7 @@ static const DeviceRegister_t zanderDevice = {
   NULL				// OnSysTicker
 };
 
-BOOL zanderRegister(void){
+bool zanderRegister(void){
   return devRegister(&zanderDevice);
 }
 

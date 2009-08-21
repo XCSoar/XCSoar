@@ -32,15 +32,13 @@ Copyright_License {
 }
 */
 
-#include "StdAfx.h"
-
+#include "devLX.h"
+#include "device.h"
 #include "XCSoar.h"
 #include "Utils.h"
 #include "Math/Pressure.h"
 #include "Parser.h"
 #include "Port.h"
-
-#include "devLX.h"
 
 #include <tchar.h>
 
@@ -97,7 +95,7 @@ static const DeviceRegister_t lxDevice = {
   NULL				// OnSysTicker
 };
 
-BOOL lxRegister(void){
+bool lxRegister(void){
   return devRegister(&lxDevice);
 }
 

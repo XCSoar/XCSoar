@@ -1,12 +1,7 @@
 #ifndef DEVB50_H
 #define DEVB50_H
 
-#include <windows.h>
-#include "Sizes.h"
-#include "MapWindow.h"
-#include "device.h"
-
-BOOL b50Register(void);
+bool b50Register(void);
 
 #endif
 

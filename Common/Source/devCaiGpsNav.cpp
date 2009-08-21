@@ -41,16 +41,13 @@ Copyright_License {
 // caiGpsNavParseNMEA is called from com port read thread
 // all other functions are called from windows message loop thread
 
-#include <windows.h>
-#include <tchar.h>
-
-
-#include "externs.h"
-#include "Utils.h"
+#include "devCaiGpsNav.h"
+#include "device.h"
 #include "Parser.h"
 #include "Port.h"
 
-#include "devCaiGpsNav.h"
+#include <windows.h>
+#include <tchar.h>
 
 #define  CtrlC  0x03
 #define  swap(x)      x = ((((x<<8) & 0xff00) | ((x>>8) & 0x00ff)) & 0xffff)
@@ -93,7 +90,7 @@ static const DeviceRegister_t caiGpsNavDevice = {
   NULL				// OnSysTicker
 };
 
-BOOL caiGpsNavRegister(void){
+bool caiGpsNavRegister(void){
   return devRegister(&caiGpsNavDevice);
 }
 

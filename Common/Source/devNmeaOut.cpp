@@ -32,16 +32,10 @@ Copyright_License {
 }
 */
 
-#include "StdAfx.h"
-
-
-#include "externs.h"
-#include "Utils.h"
+#include "devNmeaOut.h"
+#include "device.h"
 #include "Parser.h"
 #include "Port.h"
-
-#include "devVega.h"
-
 
 BOOL nmoParseNMEA(PDeviceDescriptor_t d, const TCHAR *String,
                   NMEA_INFO *GPS_INFO)
@@ -92,7 +86,7 @@ static const DeviceRegister_t nmoDevice = {
   NULL				// OnSysTicker
 };
 
-BOOL nmoRegister(void){
+bool nmoRegister(void){
   return devRegister(&nmoDevice);
 }
 

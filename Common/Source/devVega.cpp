@@ -33,8 +33,8 @@ Copyright_License {
 */
 
 #include "devVega.h"
+#include "device.h"
 #include "XCSoar.h"
-#include "StdAfx.h"
 #include "Dialogs.h"
 #include "Math/FastMath.h"
 #include "Math/Pressure.h"
@@ -45,6 +45,9 @@ Copyright_License {
 #include "Utils.h"
 #include "externs.h"
 #include "InputEvents.h"
+
+#include <tchar.h>
+#include <math.h>
 
 #define INPUT_BIT_FLAP_POS                  0 // 1 flap pos
 #define INPUT_BIT_FLAP_ZERO                 1 // 1 flap zero
@@ -474,7 +477,7 @@ static const DeviceRegister_t vgaDevice = {
   vgaOnSysTicker		// OnSysTicker
 };
 
-BOOL vgaRegister(void){
+bool vgaRegister(void){
   return devRegister(&vgaDevice);
 }
 

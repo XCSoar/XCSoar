@@ -32,14 +32,10 @@ Copyright_License {
 }
 */
 
-#include "StdAfx.h"
-
-#include "externs.h"
-#include "Utils.h"
+#include "devXCOM760.h"
+#include "device.h"
 #include "Parser.h"
 #include "Port.h"
-
-#include "devXCOM760.h"
 
 #include <tchar.h>
 
@@ -89,7 +85,7 @@ static const DeviceRegister_t xcom760Device = {
   NULL,				// OnSysTicker
 };
 
-BOOL xcom760Register(void){
+bool xcom760Register(void){
   return devRegister(&xcom760Device);
 }
 

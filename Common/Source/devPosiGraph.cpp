@@ -41,20 +41,13 @@ Copyright_License {
 
 // adding baro alt sentance paser to support baro source priority  if (d == pDevPrimaryBaroSource){...}
 
-
-
-
-#include "StdAfx.h"
-
-
-#include "externs.h"
+#include "devPosiGraph.h"
+#include "device.h"
 #include "Math/FastMath.h"
 #include "Math/Pressure.h"
 #include "Parser.h"
 #include "Port.h"
 #include "Utils.h"
-
-#include "devPosiGraph.h"
 
 #include <tchar.h>
 
@@ -111,7 +104,7 @@ static const DeviceRegister_t pgDevice = {
   NULL				// OnSysTicker
 };
 
-BOOL pgRegister(void){
+bool pgRegister(void){
   return devRegister(&pgDevice);
 }
 

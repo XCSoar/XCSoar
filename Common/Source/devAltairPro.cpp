@@ -32,16 +32,13 @@ Copyright_License {
 }
 */
 
-#include "StdAfx.h"
-
-
+#include "devAltairPro.h"
+#include "device.h"
 #include "externs.h"
 #include "Utils.h"
 #include "Parser.h"
 #include "Port.h"
 #include "Math/Pressure.h"
-
-#include "devAltairPro.h"
 
 #include <tchar.h>
 
@@ -141,7 +138,7 @@ static const DeviceRegister_t atrDevice = {
   atrOnSysTicker		// OnSysTicker
 };
 
-BOOL atrRegister(void){
+bool atrRegister(void){
   return devRegister(&atrDevice);
 }
 

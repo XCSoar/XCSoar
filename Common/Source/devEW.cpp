@@ -37,15 +37,10 @@ Copyright_License {
 
 // adding baro alt sentance parser to support baro source priority  if (d == pDevPrimaryBaroSource){...}
 
-#include "StdAfx.h"
-
-
-#include "externs.h"
-#include "Utils.h"
+#include "devEW.h"
+#include "device.h"
 #include "Parser.h"
 #include "Port.h"
-
-#include "devEW.h"
 
 #include <tchar.h>
 
@@ -358,7 +353,7 @@ static const DeviceRegister_t ewDevice = {
   NULL				// OnSysTicker
 };
 
-BOOL ewRegister(void){
+bool ewRegister(void){
   return devRegister(&ewDevice);
 }
 

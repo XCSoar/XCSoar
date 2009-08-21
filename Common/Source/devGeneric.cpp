@@ -32,15 +32,8 @@ Copyright_License {
 }
 */
 
-#include "StdAfx.h"
-
-
-#include "externs.h"
-#include "Utils.h"
-#include "Parser.h"
-#include "Port.h"
-
 #include "devGeneric.h"
+#include "device.h"
 
 static const DeviceRegister_t genDevice = {
   TEXT("Generic"),
@@ -64,6 +57,6 @@ static const DeviceRegister_t genDevice = {
   NULL				// OnSysTicker
 };
 
-BOOL genRegister(void){
+bool genRegister(void){
   return devRegister(&genDevice);
 }

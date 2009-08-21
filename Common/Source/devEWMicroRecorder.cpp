@@ -37,16 +37,14 @@ Copyright_License {
 
 // adding baro alt sentance parser to support baro source priority  if (d == pDevPrimaryBaroSource){...}
 
-#include "StdAfx.h"
-
-
+#include "devEWMicroRecorder.h"
+#include "device.h"
 #include "Math/Pressure.h"
 #include "Parser.h"
 #include "Port.h"
 
-#include "devEWMicroRecorder.h"
-
 #include <tchar.h>
+#include <stdio.h>
 
 // Additional sentance for EW support
 
@@ -289,7 +287,7 @@ static const DeviceRegister_t ewMicroRecorderDevice = {
   NULL				// OnSysTicker
 };
 
-BOOL ewMicroRecorderRegister(void){
+bool ewMicroRecorderRegister(void){
   return devRegister(&ewMicroRecorderDevice);
 }
 

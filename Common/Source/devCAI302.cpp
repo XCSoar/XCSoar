@@ -41,17 +41,16 @@ Copyright_License {
 // cai302ParseNMEA is called from com port read thread
 // all other functions are called from windows message loop thread
 
-#include <windows.h>
-#include <tchar.h>
-
-
+#include "devCAI302.h"
+#include "device.h"
 #include "XCSoar.h"
 #include "externs.h"
 #include "Utils.h"
 #include "Parser.h"
 #include "Port.h"
 
-#include "devCAI302.h"
+#include <windows.h>
+#include <tchar.h>
 
 #define  CtrlC  0x03
 #define  swap(x)      x = ((((x<<8) & 0xff00) | ((x>>8) & 0x00ff)) & 0xffff)
@@ -525,7 +524,7 @@ static const DeviceRegister_t cai302Device = {
   NULL				// OnSysTicker
 };
 
-BOOL cai302Register(void){
+bool cai302Register(void){
   return devRegister(&cai302Device);
 }
 

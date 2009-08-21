@@ -2,7 +2,6 @@
 #ifndef	DEVICE_H
 #define	DEVICE_H
 
-#include <windows.h>
 #include "Sizes.h"
 #include "Port.h"
 #include "WayPoint.hpp"

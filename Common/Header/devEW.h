@@ -1,11 +1,6 @@
 #ifndef	DEVEW_H
 #define	DEVEW_H
 
-#include <windows.h>
-#include "Sizes.h"
-#include "MapWindow.h"
-#include "device.h"
-
-BOOL ewRegister(void);
+bool ewRegister(void);
 
 #endif

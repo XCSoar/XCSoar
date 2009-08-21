@@ -32,17 +32,16 @@ Copyright_License {
 }
 */
 
-#include "StdAfx.h"
-
+#include "devBorgeltB50.h"
+#include "device.h"
 #include "XCSoar.h"
 #include "externs.h"
 #include "Utils.h"
 #include "Parser.h"
 #include "Port.h"
 
-#include "devBorgeltB50.h"
-
 #include <tchar.h>
+#include <math.h>
 
 BOOL PBB50(const TCHAR *String, NMEA_INFO *GPS_INFO);
 
@@ -84,7 +83,7 @@ static const DeviceRegister_t b50Device = {
   NULL				// OnSysTicker
 };
 
-BOOL b50Register(void){
+bool b50Register(void){
   return devRegister(&b50Device);
 }
 
