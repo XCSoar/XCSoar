@@ -1,10 +1,10 @@
 /*
 Copyright_License {
 
-  XCSoar Glide Computer - http://xcsoar.sourceforge.net/
-  Copyright (C) 2000 - 2008
+  XCSoar Glide Computer - http://www.xcsoar.org/
+  Copyright (C) 2000 - 2009
 
-  	M Roberts (original release)
+	M Roberts (original release)
 	Robin Birch <robinb@ruffnready.co.uk>
 	Samuel Gisiger <samuel.gisiger@triadis.ch>
 	Jeff Goodenough <jeff@enborne.f2s.com>
@@ -16,6 +16,8 @@ Copyright_License {
 	Russell King <rmk@arm.linux.org.uk>
 	Paolo Ventafridda <coolwind@email.it>
 	Tobias Lohner <tobias@lohner-net.de>
+	Mirek Jezek <mjezek@ipplc.cz>
+	Max Kellermann <max@duempel.org>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -30,8 +32,6 @@ Copyright_License {
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-
-  $Id$
 }
 */
 #if !defined(AFX_MAPWINDOW_H__695AAC30_F401_4CFF_9BD9_FE62A2A2D0D2__INCLUDED_)
