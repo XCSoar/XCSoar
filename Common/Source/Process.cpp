@@ -495,7 +495,7 @@ void FormatterTime::SecsToDisplayTime(int d) {
       seconds = -seconds;
     }
   }
-  Valid = TRUE;
+  Valid = true;
 }
 
 
@@ -1007,7 +1007,7 @@ const TCHAR *InfoBoxFormatter::GetCommentText(void) {
   return CommentText;
 }
 
-BOOL InfoBoxFormatter::isValid(void) {
+bool InfoBoxFormatter::isValid(void) {
   return Valid;
 }
 
@@ -1439,7 +1439,7 @@ if ((Calculated->FinalGlide) && (Calculated->Circling) && (Calculated->AverageTh
 
 InfoBoxFormatter::InfoBoxFormatter(const TCHAR *theformat) {
   _tcscpy(Format, theformat);
-  Valid = TRUE;
+  Valid = true;
   Value = 0.0;
   Text[0] = 0;
   CommentText[0] = 0;

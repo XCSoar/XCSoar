@@ -55,7 +55,7 @@ class InfoBoxFormatter {
   virtual const TCHAR *Render(int *color);
   virtual const TCHAR *RenderTitle(int *color); // VENTA3
   void RenderInvalid(int *color);
-  BOOL Valid;
+  bool Valid;
   double Value;
   TCHAR Format[FORMAT_SIZE+1];
   TCHAR Text[100];
@@ -63,7 +63,7 @@ class InfoBoxFormatter {
 
   virtual void AssignValue(int i);
   const TCHAR *GetCommentText();
-  BOOL isValid();
+  bool isValid();
 };
 
 
