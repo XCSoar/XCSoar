@@ -3651,7 +3651,6 @@ void ProcessTimer(void)
     // re-draw screen every five seconds even if no GPS
     // this prevents sluggish screen when inside hangar..
     TriggerGPSUpdate();
-    DisplayTimeOut=1;
   }
 
   CommonProcessTimer();
