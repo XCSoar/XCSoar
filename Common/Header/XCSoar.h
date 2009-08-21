@@ -154,7 +154,6 @@ void DebugStore(const char *Str, ...);
 
 void StartupStore(const TCHAR *Str, ...);
 
-void BlankDisplay(bool doblank);
 void DefocusInfoBox(void);
 void Event_SelectInfoBox(int i);
 void Event_ChangeInfoBoxType(int i);
@@ -438,7 +437,6 @@ extern double SAFTEYSPEED;
 
 extern int WindUpdateMode; // unused
 extern int NettoSpeed;
-extern bool EnableAutoBlank;
 extern bool EnableAuxiliaryInfo;
 extern int debounceTimeout;
 

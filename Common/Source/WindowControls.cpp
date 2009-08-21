@@ -52,11 +52,11 @@ Copyright_License {
 #include "Screen/Animation.hpp"
 #include "DataField/Base.hpp"
 #include "Utils.h"
+#include "Screen/Blank.hpp"
 
 #ifndef ALTAIRSYNC
 #include "externs.h"
 
-extern int DisplayTimeOut;
 #ifndef GNAV
 #if (WINDOWSPC<1)
 #ifndef __MINGW32__

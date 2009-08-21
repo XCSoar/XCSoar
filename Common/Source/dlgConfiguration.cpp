@@ -53,6 +53,7 @@ Copyright_License {
 #include "dlgTools.h"
 #include "device.h"
 #include "Screen/Animation.hpp"
+#include "Screen/Blank.hpp"
 #include "Registry.hpp"
 #include "Process.h"
 #include "McReady.h"

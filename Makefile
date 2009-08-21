@@ -420,6 +420,7 @@ OBJS	:=\
 	$(SRC)/Math/Screen.o \
 	$(SRC)/Battery.o \
 	$(SRC)/Screen/Animation.o \
+	$(SRC)/Screen/Blank.o \
 	$(SRC)/Screen/Ramp.o \
 	$(SRC)/Screen/Util.o \
 	$(SRC)/Registry.o \

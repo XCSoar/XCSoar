@@ -54,6 +54,7 @@ Copyright_License {
 #include "Trigger.hpp"
 #include "Math/Geometry.hpp"
 #include "Math/Screen.hpp"
+#include "Screen/Blank.hpp"
 #include "Screen/Util.hpp"
 #include "Screen/Ramp.hpp"
 #include "Compatibility/gdi.h"
@@ -282,8 +283,6 @@ bool MapWindow::RequestFullScreen = false;
 bool MapWindow::ForceVisibilityScan = false;
 
 /////////////////////////////////
-
-extern int DisplayTimeOut;
 
 NMEA_INFO MapWindow::DrawInfo;
 DERIVED_INFO MapWindow::DerivedDrawInfo;
@@ -3789,11 +3788,6 @@ double MapWindow::GetApproxScreenRange() {
                          MapRectBig.bottom-MapRectBig.top))
     *1000.0/GetMapResolutionFactor();
 }
-
-
-
-
-extern bool ScreenBlanked;
 
 bool MapWindow::IsDisplayRunning() {
   return (THREADRUNNING && GlobalRunning && !ScreenBlanked && ProgramStarted);

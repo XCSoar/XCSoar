@@ -1,5 +1,6 @@
 #include "Registry.hpp"
 #include "Screen/Animation.hpp"
+#include "Screen/Blank.hpp"
 #include "Defines.h"
 #include "Sizes.h"
 #include "Airspace.h"
