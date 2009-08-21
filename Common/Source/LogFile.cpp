@@ -5,9 +5,9 @@
 #include <stdio.h>
 #include <stdarg.h>
 
+#if !defined(NDEBUG) && !defined(GNAV)
 void DebugStore(const char *Str, ...)
 {
-#if !defined(NDEBUG) && !defined(GNAV)
   char buf[MAX_PATH];
   va_list ap;
   int len;
@@ -31,8 +31,8 @@ void DebugStore(const char *Str, ...)
 
   fclose(stream);
   UnlockFlightData();
-#endif
 }
+#endif /* !NDEBUG */
 
 void StartupStore(const TCHAR *Str, ...)
 {
