@@ -1,8 +1,6 @@
 *.o
-*.os
 *.a
 *.o.d
-*.os.d
 *.exe
 .stgit*
 .deps
