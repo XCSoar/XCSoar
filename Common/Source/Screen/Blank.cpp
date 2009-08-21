@@ -126,7 +126,7 @@ void BlankDisplay(bool doblank) {
         oldblank = true;
         ScreenBlanked = true;
       } else {
-        DisplayTimeOut = 0;
+        ResetDisplayTimeOut();
       }
     } else {
       if (oldblank) { // was blanked
@@ -143,4 +143,22 @@ void BlankDisplay(bool doblank) {
   ::ReleaseDC(NULL, gdc);
 #endif
 #endif
+}
+
+void CheckDisplayTimeOut(bool sticky)
+{
+  if (DisplayTimeOut >= DISPLAYTIMEOUTMAX) {
+    BlankDisplay(true);
+  } else {
+    BlankDisplay(false);
+  }
+  if (!sticky) {
+    DisplayTimeOut++;
+  } else {
+    // JMW don't let display timeout while a dialog is active,
+    // but allow button presses to trigger redisplay
+    if (DisplayTimeOut>1) {
+      DisplayTimeOut=1;
+    }
+  }
 }

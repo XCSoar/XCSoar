@@ -844,7 +844,7 @@ int WindowControl::WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam){
     case WM_LBUTTONDBLCLK:
       InterfaceTimeoutReset();
       if (!OnLButtonDoubleClick(wParam, lParam)) {
-        DisplayTimeOut = 0;
+        ResetDisplayTimeOut();
         return(0);
       }
     break;
@@ -852,7 +852,7 @@ int WindowControl::WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam){
     case WM_LBUTTONDOWN:
       InterfaceTimeoutReset();
       if (!OnLButtonDown(wParam, lParam)) {
-        DisplayTimeOut = 0;
+        ResetDisplayTimeOut();
         return(0);
       }
       // TODO enhancement: need to be able to focus list items here...
@@ -861,7 +861,7 @@ int WindowControl::WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam){
     case WM_LBUTTONUP:
       InterfaceTimeoutReset();
       if (!OnLButtonUp(wParam, lParam)) {
-        DisplayTimeOut = 0;
+        ResetDisplayTimeOut();
         return(0);
       }
     break;
@@ -874,13 +874,13 @@ int WindowControl::WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam){
       // return(OnKeyDown(wParam, lParam));
       // experimental 20060516:sgi
       if (!OnKeyDown(wParam, lParam)) {
-        DisplayTimeOut = 0;
+        ResetDisplayTimeOut();
         return(0);
       }
       break;
 
     case WM_KEYUP:
-      DisplayTimeOut = 0;
+      ResetDisplayTimeOut();
       InterfaceTimeoutReset();
       // JMW: detect long enter release
       // VENTA4: PNAs don't have Enter, so it should be better to find an alternate solution
@@ -893,7 +893,7 @@ int WindowControl::WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam){
       // return(OnKeyUp(wParam, lParam));
       // experimental 20060516:sgi
         if (!OnKeyUp(wParam, lParam)) {
-          DisplayTimeOut = 0;
+          ResetDisplayTimeOut();
           return(0);
         }
       break;
@@ -1973,7 +1973,7 @@ int WndProperty::WndProcEditControl(HWND hwnd, UINT uMsg,
         if (this->mDialogStyle) {
           InterfaceTimeoutReset();
           if (!OnLButtonDown(wParam, lParam)) {
-            DisplayTimeOut = 0;
+            ResetDisplayTimeOut();
             return(0);
           }
         } //end combopicker
@@ -2014,7 +2014,7 @@ int WndProperty::WndProcEditControl(HWND hwnd, UINT uMsg,
       if (this->mDialogStyle) {
         InterfaceTimeoutReset();
         if (!OnLButtonDown(wParam, lParam)) {
-          DisplayTimeOut = 0;
+          ResetDisplayTimeOut();
           return(0);
         }
       } //end combopicker

@@ -712,7 +712,7 @@ void HideMenu() {
   // ignore this if the display isn't locked -- must keep menu visible
   if (DisplayLocked) {
     MenuTimeOut = MenuTimeoutMax;
-    DisplayTimeOut = 0;
+    ResetDisplayTimeOut();
   }
 }
 
@@ -723,7 +723,7 @@ void ShowMenu() {
   InputEvents::setMode(TEXT("Menu")); // VENTA3
 #endif
   MenuTimeOut = 0;
-  DisplayTimeOut = 0;
+  ResetDisplayTimeOut();
 }
 
 
@@ -2495,7 +2495,7 @@ void DoInfoKey(int keycode) {
   TriggerGPSUpdate(); // emulate update to trigger calculations
 
   InfoBoxFocusTimeOut = 0;
-  DisplayTimeOut = 0;
+  ResetDisplayTimeOut();
 
 }
 
@@ -2509,7 +2509,7 @@ int debounceTimeout=200;
 bool Debounce(void) {
   static PeriodClock fps_last;
 
-  DisplayTimeOut = 0;
+  ResetDisplayTimeOut();
   InterfaceTimeoutReset();
 
   if (ScreenBlanked) {
@@ -3411,7 +3411,7 @@ void CommonProcessTimer()
   if (ProgramStarted==psNormalOp) {
     InputEvents::DoQueuedEvents();
     if (RequestAirspaceWarningDialog) {
-      DisplayTimeOut=0;
+      ResetDisplayTimeOut();
       RequestAirspaceWarningDialog= false;
       dlgAirspaceWarningShowDlg(RequestAirspaceWarningForce);
       RequestAirspaceWarningForce = false;
@@ -3446,20 +3446,7 @@ void CommonProcessTimer()
     MenuTimeOut++;
   }
 
-  if (DisplayTimeOut >= DISPLAYTIMEOUTMAX) {
-    BlankDisplay(true);
-  } else {
-    BlankDisplay(false);
-  }
-  if (!DialogActive) {
-    DisplayTimeOut++;
-  } else {
-    // JMW don't let display timeout while a dialog is active,
-    // but allow button presses to trigger redisplay
-    if (DisplayTimeOut>1) {
-      DisplayTimeOut=1;
-    }
-  }
+  CheckDisplayTimeOut(DialogActive);
 
   if (MapWindow::IsDisplayRunning()) {
     // No need to redraw map or infoboxes if screen is blanked.
@@ -3480,7 +3467,7 @@ void CommonProcessTimer()
   if (!dlgAirspaceWarningVisible()) {
     if (Message::Render()) {
       // turn screen on if blanked and receive a new message
-      DisplayTimeOut=0;
+      ResetDisplayTimeOut();
     }
   }
 
@@ -3488,7 +3475,7 @@ void CommonProcessTimer()
 
   if (bsms.Poll()) {
     // turn screen on if blanked and receive a new message
-    DisplayTimeOut = 0;
+    ResetDisplayTimeOut();
   }
 
 #endif
@@ -3646,7 +3633,7 @@ int ConnectionProcessTimer(int itimeout) {
 void ProcessTimer(void)
 {
 
-  if (!GPSCONNECT && (DisplayTimeOut==0)) {
+  if (!GPSCONNECT && DisplayTimeOutIsFresh()) {
     // JMW 20071207
     // re-draw screen every five seconds even if no GPS
     // this prevents sluggish screen when inside hangar..

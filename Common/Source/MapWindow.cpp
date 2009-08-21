@@ -1547,7 +1547,7 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
       #ifdef DEBUG_DBLCLK
       DoStatusMessage(_T("BUTTONDOWN MapWindow"));
       #endif
-      DisplayTimeOut = 0;
+      ResetDisplayTimeOut();
       dwDownTime = GetTickCount();
       if (ignorenext) break;
       XstartScreen = LOWORD(lParam); YstartScreen = HIWORD(lParam);
@@ -1727,7 +1727,7 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
       _stprintf(ventabuffer,TEXT("WMKEY uMsg=%d wParam=%ld lParam=%ld"), uMsg, wParam,lParam);
       DoStatusMessage(ventabuffer);
 #endif
-      DisplayTimeOut = 0;
+      ResetDisplayTimeOut();
       InterfaceTimeoutReset();
 
 #if defined(PNA) // VENTA-ADDON HARDWARE KEYS TRANSCODING
