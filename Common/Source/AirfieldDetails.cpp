@@ -48,7 +48,7 @@ Copyright_License {
 #include "options.h"
 #include "Registry.hpp"
 #include "LocalPath.hpp"
-#include "XCSoar.h"
+#include "LogFile.hpp"
 #include "WayPoint.hpp"
 
 #include <zzip/lib.h>

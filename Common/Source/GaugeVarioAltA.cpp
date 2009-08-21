@@ -36,6 +36,7 @@ Copyright_License {
 */
 
 #include "GaugeVarioAltA.h"
+#include "LogFile.hpp"
 #include "XCSoar.h"
 #include "MapWindow.h"
 #include "Logger.h"

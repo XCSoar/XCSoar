@@ -53,7 +53,7 @@ Copyright_License {
 #include "windanalyser.h"
 #include "Calculations.h"
 #include "Math/FastMath.h"
-#include "XCSoar.h"
+#include "LogFile.hpp"
 
 #include <stdlib.h>
 

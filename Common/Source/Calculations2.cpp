@@ -58,6 +58,7 @@ Copyright_License {
 #include "Math/Pressure.h"
 #include "WayPoint.hpp"
 #include "SnailTrail.hpp"
+#include "LogFile.hpp"
 
 #include <tchar.h>
 

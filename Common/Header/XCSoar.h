@@ -148,12 +148,6 @@ extern bool Debounce();
 #endif
 #define M_PI 3.14159265359
 
-extern "C" {
-void DebugStore(const char *Str, ...);
-}
-
-void StartupStore(const TCHAR *Str, ...);
-
 void DefocusInfoBox(void);
 void Event_SelectInfoBox(int i);
 void Event_ChangeInfoBoxType(int i);
@@ -404,6 +398,8 @@ extern int  InfoFocus;
 extern SCREEN_INFO Data_Options[];
 extern const int NUMSELECTSTRINGS;
 extern int numInfoWindows;
+
+extern bool csFlightDataInitialized;
 
 extern Appearance_t Appearance;
 

@@ -34,6 +34,7 @@ Copyright_License {
 */
 
 #include "GaugeCDI.h"
+#include "LogFile.hpp"
 #include "XCSoar.h"
 #include "Math/FastMath.h"
 #include "InfoBoxLayout.h"

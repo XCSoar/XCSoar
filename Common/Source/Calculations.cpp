@@ -74,6 +74,7 @@ Copyright_License {
 #include "Math/Earth.hpp"
 #include "Math/Pressure.h"
 #include "WayPoint.hpp"
+#include "LogFile.hpp"
 
 WindAnalyser *windanalyser = NULL;
 OLCOptimizer olc;

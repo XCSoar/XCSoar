@@ -42,7 +42,7 @@ Copyright_License {
 #include "externs.h"
 #include "Dialogs.h"
 #include "Utils.h"
-#include "XCSoar.h"
+#include "LogFile.hpp"
 #include "externs.h"
 #include "MapWindow.h"
 #include "RasterTerrain.h"

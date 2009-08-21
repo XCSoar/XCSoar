@@ -52,6 +52,7 @@ Copyright_License {
 #include "Geoid.h"
 #include "MapWindow.h"
 #include "RasterTerrain.h"
+#include "LogFile.hpp"
 
 #include <windows.h>
 #include <commctrl.h>

@@ -18,6 +18,7 @@
 #include "Utils.h"
 #include "Parser.h"
 #include "externs.h"
+#include "LogFile.hpp"
 
 #include <assert.h>
 #include <stdlib.h>

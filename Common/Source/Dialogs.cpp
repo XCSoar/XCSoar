@@ -39,6 +39,7 @@ Copyright_License {
 #include "Dialogs.h"
 #include "StdAfx.h"
 #include "XCSoar.h"
+#include "LogFile.hpp"
 
 #include <commdlg.h>
 #include <commctrl.h>

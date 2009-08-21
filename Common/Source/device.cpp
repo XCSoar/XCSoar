@@ -36,7 +36,7 @@ Copyright_License {
 
 #include "device.h"
 #include "options.h"
-
+#include "LogFile.hpp"
 #include "externs.h"
 #include "XCSoar.h"
 #include "Dialogs.h"

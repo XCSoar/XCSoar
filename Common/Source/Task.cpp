@@ -46,6 +46,7 @@ Copyright_License {
 #include "Waypointparser.h"
 #include "McReady.h"
 #include "Math/Earth.hpp"
+#include "LogFile.hpp"
 
 #include <math.h>
 

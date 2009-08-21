@@ -33,6 +33,7 @@ Copyright_License {
 */
 
 #include "RasterTerrain.h"
+#include "LogFile.hpp"
 #include "XCSoar.h"
 #include "Dialogs.h"
 #include "Units.h"

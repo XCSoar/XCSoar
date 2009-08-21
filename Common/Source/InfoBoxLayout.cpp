@@ -36,6 +36,7 @@ Copyright_License {
 */
 
 #include "InfoBoxLayout.h"
+#include "LogFile.hpp"
 #include "XCSoar.h"
 #include "Sizes.h"
 #include "MapWindow.h"

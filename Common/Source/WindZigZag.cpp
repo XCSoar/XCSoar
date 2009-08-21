@@ -34,7 +34,7 @@ Copyright_License {
 */
 
 #include "WindZigZag.h"
-#include "XCSoar.h"
+#include "LogFile.hpp"
 #include "Math/FastMath.h"
 #include "MapWindow.h"
 #include "McReady.h"
