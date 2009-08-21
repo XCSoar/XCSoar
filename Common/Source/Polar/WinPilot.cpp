@@ -55,7 +55,7 @@ bool ReadWinPilotPolar(void) {
   TCHAR	szFile[MAX_PATH] = TEXT("\0");
   TCHAR ctemp[80];
   TCHAR TempString[READLINE_LENGTH+1];
-  HANDLE hFile;
+  FILE *file;
 
   double POLARV[3];
   double POLARW[3];
@@ -82,9 +82,9 @@ bool ReadWinPilotPolar(void) {
     SetRegistryString(szRegistryPolarFile, TEXT("\0"));
     #endif
 
-    hFile = CreateFile(szFile,GENERIC_READ,0,(LPSECURITY_ATTRIBUTES)NULL,OPEN_EXISTING,FILE_ATTRIBUTE_NORMAL,NULL);
+    file = _tfopen(szFile, TEXT("rt"));
 
-    if (hFile != INVALID_HANDLE_VALUE ){
+    if (file != NULL) {
 
 #ifdef HAVEEXCEPTIONS
       __try{
@@ -92,7 +92,7 @@ bool ReadWinPilotPolar(void) {
       int *p=NULL; // test, force an exception
       p=0;
 
-        while(ReadString(hFile,READLINE_LENGTH,TempString) && (!foundline)){
+        while(ReadStringX(file,READLINE_LENGTH,TempString) && (!foundline)){
 
           if(_tcsstr(TempString,TEXT("*")) != TempString) // Look For Comment
             {
@@ -133,7 +133,7 @@ bool ReadWinPilotPolar(void) {
       }__finally
 #endif
       {
-        CloseHandle (hFile);
+        fclose(file);
       }
     }
 #ifdef HAVEEXCEPTIONS
