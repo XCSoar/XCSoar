@@ -1413,7 +1413,6 @@ WindowControl::WindowControl(WindowControl *Owner,
   mBoundRect.right = GetWidth();
   mBoundRect.bottom = GetHeight();
 
-  mSavWndProcedure = GetWindowLong(mHWnd, GWL_WNDPROC);
   SetWindowLong(mHWnd, GWL_USERDATA, (long)this);
   SetWindowLong(mHWnd, GWL_WNDPROC, (LONG) WindowControlWndProc);
 
@@ -1474,10 +1473,7 @@ void WindowControl::Destroy(void){
   /* JMW debugging
   DeleteObject(mBmpMem);
   */
-  SetWindowLong(mHWnd, GWL_WNDPROC, (LONG) mSavWndProcedure);
-  SetWindowLong(mHWnd, GWL_USERDATA, (long)0);
 
-  // SetWindowLong(mHWnd, GWL_WNDPROC, (LONG) WindowControlWndProc);
   // ShowWindow(GetHandle(), SW_SHOW);
   DestroyWindow(mHWnd);
 

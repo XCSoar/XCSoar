@@ -582,8 +582,6 @@ class WindowControl {
 
     WindowControl *mActiveClient;
 
-    LONG mSavWndProcedure;
-
     static int InstCount;
     static HBRUSH hBrushDefaultBk;
     static HPEN hPenDefaultBorder;
