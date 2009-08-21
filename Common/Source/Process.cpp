@@ -53,6 +53,7 @@ Copyright_License {
 #include "AATDistance.h"
 #include "Battery.h"
 #include "Registry.hpp"
+#include "XCSoar.h"
 
 #include <stdlib.h>
 

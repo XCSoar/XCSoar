@@ -47,6 +47,7 @@ Copyright_License {
 #include "InfoBoxLayout.h"
 #include "Compatibility/string.h"
 #include "PeriodClock.hpp"
+#include "WindowControls.h"
 
 #define DEFAULTBORDERPENWIDTH IBLSCALE(1)
 #define SELECTORWIDTH         (DEFAULTBORDERPENWIDTH+IBLSCALE(4))

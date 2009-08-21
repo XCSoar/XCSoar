@@ -35,6 +35,7 @@ Copyright_License {
 }
 */
 #include "StdAfx.h"
+#include "XCSoar.h"
 #include "Sizes.h"
 #include "MapWindow.h"
 #include "InfoBoxLayout.h"
@@ -43,6 +44,7 @@ Copyright_License {
 #include "Screen/Animation.hpp"
 #include "Registry.hpp"
 #include "InfoBox.h"
+#include "WindowControls.h"
 
 extern InfoBox *InfoBoxes[MAXINFOWINDOWS];
 extern HWND hWndMainWindow; // Main Windows

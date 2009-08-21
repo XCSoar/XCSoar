@@ -48,6 +48,7 @@ Copyright_License {
 #include "options.h"
 #include "Registry.hpp"
 #include "LocalPath.hpp"
+#include "XCSoar.h"
 
 #include "AirfieldDetails.h"
 #include <zzip/lib.h>
