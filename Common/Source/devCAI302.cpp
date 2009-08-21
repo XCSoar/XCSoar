@@ -41,10 +41,6 @@ Copyright_License {
 // cai302ParseNMEA is called from com port read thread
 // all other functions are called from windows message loop thread
 
-
-#define  LOGSTREAM 0
-
-
 #include <windows.h>
 #include <tchar.h>
 
