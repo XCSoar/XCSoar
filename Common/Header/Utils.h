@@ -37,7 +37,6 @@ Copyright_License {
 #define AFX_UTILS_H__695AAC30_F401_4CFF_9BD9_FE62A2A2D0D2__INCLUDED_
 
 #include <windows.h>
-#include <shlobj.h>
 #include <math.h>
 #include "Task.h"
 #include "Airspace.h"
@@ -117,12 +116,6 @@ typedef struct {
 
 // Parse string (new lines etc) and malloc the string
 TCHAR* StringMallocParse(const TCHAR* old_string);
-
-void LocalPath(TCHAR* buf, const TCHAR* file = TEXT(""), int loc = CSIDL_PERSONAL);
-void LocalPathS(char* buf, const TCHAR* file = TEXT(""), int loc = CSIDL_PERSONAL);
-
-void ExpandLocalPath(TCHAR* filein);
-void ContractLocalPath(TCHAR* filein);
 
 void ConvertTToC(CHAR* pszDest, const TCHAR* pszSrc);
 void ConvertCToT(TCHAR* pszDest, const CHAR* pszSrc);

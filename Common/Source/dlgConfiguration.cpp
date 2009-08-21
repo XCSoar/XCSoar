@@ -42,7 +42,7 @@ Copyright_License {
 #include "MapWindow.h"
 #include "Terrain.h"
 #include "GaugeFLARM.h"
-
+#include "LocalPath.hpp"
 #include "WindowControls.h"
 #include "Statistics.h"
 #include "externs.h"

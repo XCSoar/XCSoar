@@ -3,6 +3,7 @@
 #include "Utils.h"
 #include "externs.h"
 #include "Registry.hpp"
+#include "LocalPath.hpp"
 
 #include <math.h>
 

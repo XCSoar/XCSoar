@@ -50,6 +50,7 @@ Copyright_License {
 #include "Compatibility/string.h"
 #include "Registry.hpp"
 #include "Screen/Ramp.hpp"
+#include "LocalPath.hpp"
 
 #include <assert.h>
 

@@ -42,6 +42,7 @@ Copyright_License {
 #include "xmlParser.h"
 #include "InfoBoxLayout.h"
 #include "Dialogs.h"
+#include "LocalPath.hpp"
 
 #include <assert.h>
 

@@ -54,6 +54,7 @@ Copyright_License {
 #endif
 
 #include "Utils.h"
+#include "LocalPath.hpp"
 #include "Utils2.h"
 #include "Math/FastMath.h"
 #include "Math/Earth.hpp"

@@ -38,6 +38,7 @@ Copyright_License {
 #include "AATDistance.h"
 #include "Utils.h"
 #include "Math/Geometry.hpp"
+#include "LocalPath.hpp"
 #include "externs.h"
 #include "Calculations.h"
 #include "Waypointparser.h"

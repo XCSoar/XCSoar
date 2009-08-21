@@ -49,6 +49,7 @@ Copyright_License {
 #include "Compatibility/string.h"
 #include "PeriodClock.hpp"
 #include "Screen/Animation.hpp"
+#include "LocalPath.hpp"
 
 #ifndef ALTAIRSYNC
 #include "externs.h"

@@ -51,6 +51,7 @@ Copyright_License {
 #include "Logger.h"
 #include "resource.h"
 #include "Utils.h"
+#include "LocalPath.hpp"
 #include "externs.h"
 #include "Port.h"
 #include "AirfieldDetails.h"

@@ -44,7 +44,7 @@ Copyright_License {
 #include "WindowControls.h"
 #include "Math/Earth.hpp"
 #include "Registry.hpp"
-
+#include "LocalPath.hpp"
 #include "Geoid.h"
 
 #include "RasterTerrain.h"

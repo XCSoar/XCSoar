@@ -38,6 +38,7 @@ Copyright_License {
 #ifdef NEWFLARMDB
 #include "FlarmIdFile.h"
 #include "Utils.h"
+#include "LocalPath.hpp"
 
 FlarmIdFile::FlarmIdFile(void)
 {

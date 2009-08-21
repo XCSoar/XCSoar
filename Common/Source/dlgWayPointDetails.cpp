@@ -40,7 +40,7 @@ Copyright_License {
 #include "XCSoar.h"
 #include "Math/Earth.hpp"
 #include "Registry.hpp"
-
+#include "LocalPath.hpp"
 #include "Statistics.h"
 #include "externs.h"
 #include "McReady.h"

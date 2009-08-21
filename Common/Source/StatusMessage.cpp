@@ -1,6 +1,7 @@
 #include "StatusMessage.hpp"
 #include "Registry.hpp"
 #include "Utils.h"
+#include "LocalPath.hpp"
 #include "XCSoar.h"
 
 #include <stdio.h>

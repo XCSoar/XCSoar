@@ -42,7 +42,6 @@ Copyright_License {
 #include "Airspace.h"
 #include "externs.h"
 #include "Dialogs.h"
-#include "Utils.h"
 #include "XCSoar.h"
 #include "MapWindow.h"
 #include "RasterTerrain.h"
@@ -50,6 +49,7 @@ Copyright_License {
 #include "Math/Screen.hpp"
 #include "Registry.hpp"
 #include "Math/Pressure.h"
+#include "LocalPath.hpp"
 
 #include <windows.h>
 #include <commctrl.h>

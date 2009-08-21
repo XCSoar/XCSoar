@@ -42,6 +42,7 @@ Copyright_License {
 #include "externs.h"
 #include "dlgTools.h"
 #include "InfoBoxLayout.h"
+#include "LocalPath.hpp"
 
 #include <assert.h>
 

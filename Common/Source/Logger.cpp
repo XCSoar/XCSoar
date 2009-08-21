@@ -43,6 +43,7 @@
 
 #include <windows.h>
 #include "Utils.h"
+#include "LocalPath.hpp"
 #include "device.h"
 #include "InputEvents.h"
 #include "Parser.h"

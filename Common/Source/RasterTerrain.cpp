@@ -43,6 +43,7 @@ Copyright_License {
 #include "Math/FastMath.h"
 #include "Math/Earth.hpp"
 #include "Registry.hpp"
+#include "LocalPath.hpp"
 
 #ifdef __MINGW32__
 #define int_fast8_t jas_int_fast8_t

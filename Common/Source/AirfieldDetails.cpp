@@ -47,6 +47,7 @@ Copyright_License {
 #include "Utils.h"
 #include "options.h"
 #include "Registry.hpp"
+#include "LocalPath.hpp"
 
 #include "AirfieldDetails.h"
 #include <zzip/lib.h>

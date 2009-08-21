@@ -426,6 +426,7 @@ OBJS	:=\
 	$(SRC)/Polar/WinPilot.o \
 	$(SRC)/Polar/BuiltIn.o \
 	$(SRC)/StatusMessage.o \
+	$(SRC)/LocalPath.o \
 	\
 	$(SRC)/mapbits.o \
 	$(SRC)/maperror.o 		$(SRC)/mapprimitive.o \
