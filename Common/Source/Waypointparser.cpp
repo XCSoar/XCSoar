@@ -56,7 +56,6 @@ Copyright_License {
 
 #include <tchar.h>
 
-#include "xmlParser.h"
 #include "wcecompat/ts_string.h"
 
 
