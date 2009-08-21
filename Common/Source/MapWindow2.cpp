@@ -84,7 +84,6 @@ extern int misc_tick_count;
 #endif
 #endif
 
-extern HWND hWndCDIWindow;
 extern HFONT MapLabelFont;
 extern HFONT  MapWindowBoldFont;
 
@@ -95,11 +94,10 @@ void MapWindow::DrawCDI() {
     : EnableCDICruise;
 
   if (dodrawcdi) {
-    ShowWindow(hWndCDIWindow, SW_SHOW);
-
+    GaugeCDI::Show();
     GaugeCDI::Update(DrawInfo.TrackBearing, DerivedDrawInfo.WaypointBearing);
   } else {
-    ShowWindow(hWndCDIWindow, SW_HIDE);
+    GaugeCDI::Hide();
   }
 }
 

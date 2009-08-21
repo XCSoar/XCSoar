@@ -290,7 +290,6 @@ int SelectedWaypoint = -1;
 bool EnableCDICruise = false;
 bool EnableCDICircling = false;
 
-extern HWND hWndCDIWindow;
 extern int iround(double i);
 extern void ShowMenu();
 

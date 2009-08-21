@@ -78,6 +78,16 @@ void GaugeCDI::Destroy() {
   DestroyWindow(hWndCDIWindow);
 }
 
+void GaugeCDI::Show()
+{
+  ::ShowWindow(hWndCDIWindow, SW_SHOW);
+}
+
+void GaugeCDI::Hide()
+{
+  ::ShowWindow(hWndCDIWindow, SW_HIDE);
+}
+
 void GaugeCDI::Update(double TrackBearing, double WaypointBearing)
 {
   // JMW changed layout here to fit reorganised display

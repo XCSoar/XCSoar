@@ -7,6 +7,9 @@ class GaugeCDI {
   static void Create();
   static void Destroy();
 
+  static void Show();
+  static void Hide();
+
   static void Update(double TrackBearing, double WaypointBearing);
 };
 
