@@ -15,6 +15,7 @@
 #include "Math/Units.h"
 #include "Logger.h"
 #include "Utils.h"
+#include "Parser.h"
 #include "externs.h"
 
 #include <assert.h>

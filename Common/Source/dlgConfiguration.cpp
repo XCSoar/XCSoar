@@ -38,6 +38,7 @@ Copyright_License {
 #include "Dialogs.h"
 #include "XCSoar.h"
 #include "externs.h"
+#include "Parser.h"
 #include "Utils2.h"
 #include "externs.h"
 #include "MapWindow.h"
