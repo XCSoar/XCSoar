@@ -4,8 +4,6 @@
 #define TLOCATOR_NMIN 5
 #define TLOCATOR_NMAX 60
 
-#include "leastsqs.h"
-
 class ThermalLocator_Point {
  public:
   ThermalLocator_Point() {
