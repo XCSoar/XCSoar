@@ -154,6 +154,25 @@ typedef union{
 
 class MapWindow {
  public:
+  HWND hWndMapWindow;
+
+  /**
+   * This cast operator allows existing code to use a MapWindow object
+   * as if it were a HWND.
+   */
+  operator HWND() {
+    return hWndMapWindow;
+  }
+
+  /**
+   * This assignment operator allows existing code to initialize the
+   * MapWindow variable.
+   */
+  HWND operator =(HWND hWnd) {
+    return hWndMapWindow = hWnd;
+  }
+
+ public:
 
   static bool IsDisplayRunning();
   static int iAirspaceMode[AIRSPACECLASSCOUNT];

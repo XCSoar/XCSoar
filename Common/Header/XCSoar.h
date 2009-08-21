@@ -43,6 +43,7 @@ Copyright_License {
 #include "Sizes.h"
 #include "Units.h"
 #include "Statistics.h"
+#include "MapWindow.h"
 
 class Trigger;
 
@@ -461,7 +462,7 @@ extern HINSTANCE hInst;
 
 // windows
 extern HWND hWndMainWindow;           // HWND Main Window
-extern HWND hWndMapWindow;            // HWND MapWindow
+extern MapWindow hWndMapWindow;
 
 // infoboxes
 extern int  CurrentInfoType;          // Used for Popup Menu Select

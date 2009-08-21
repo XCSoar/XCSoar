@@ -190,7 +190,7 @@ static bool ForceShutdown = false;
 HINSTANCE hInst; // The current instance
 //HWND hWndCB; // The command bar handle
 HWND hWndMainWindow; // Main Windows
-HWND hWndMapWindow;  // MapWindow
+MapWindow hWndMapWindow;
 
 int numInfoWindows = 8;
 

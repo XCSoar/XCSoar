@@ -2414,6 +2414,8 @@ void MapWindow::UpdateCaches(bool force) {
 
 DWORD MapWindow::DrawThread (LPVOID lpvoid)
 {
+  HWND hWndMapWindow = ::hWndMapWindow;
+
   while ((!ProgramStarted) || (!Initialised)) {
     Sleep(100);
   }
