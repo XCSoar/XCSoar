@@ -36,6 +36,7 @@ Copyright_License {
 */
 
 #include "WindowControls.h"
+#include "XCSoar.h"
 #include "StdAfx.h"
 #include "Defines.h" // VENTA3
 #include "dlgTools.h"

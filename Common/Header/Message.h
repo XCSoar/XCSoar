@@ -2,7 +2,6 @@
 #define MESSAGE_H
 
 #include "StdAfx.h"
-#include "XCSoar.h"
 
 #define MAXMESSAGES 20
 

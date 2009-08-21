@@ -37,7 +37,10 @@ Copyright_License {
 #ifndef INPUTEVENTS_H
 #define INPUTEVENTS_H
 
-#include "XCSoar.h"
+#include <tchar.h>
+
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
 
 typedef void (*pt2Event)(const TCHAR *);
 

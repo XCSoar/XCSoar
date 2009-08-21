@@ -33,6 +33,7 @@ Copyright_License {
 */
 
 #include "devVega.h"
+#include "XCSoar.h"
 #include "StdAfx.h"
 #include "Dialogs.h"
 #include "Math/FastMath.h"

@@ -36,6 +36,7 @@ Copyright_License {
 */
 
 #include "Waypointparser.h"
+#include "XCSoar.h"
 #include "externs.h"
 #include "Dialogs.h"
 #include "resource.h"

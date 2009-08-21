@@ -35,6 +35,7 @@ Copyright_License {
 */
 
 #include "Message.h"
+#include "XCSoar.h"
 #include "StdAfx.h"
 #include "MapWindow.h"
 #include "externs.h"

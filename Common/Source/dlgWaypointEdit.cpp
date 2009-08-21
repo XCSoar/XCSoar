@@ -33,6 +33,7 @@ Copyright_License {
 */
 
 #include "StdAfx.h"
+#include "XCSoar.h"
 #include "Dialogs.h"
 #include "Units.h"
 #include "InputEvents.h"

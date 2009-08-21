@@ -39,6 +39,7 @@ Copyright_License {
 #include "dlgTools.h"
 #include "DataField/Base.hpp"
 #include "Utils.h"
+#include "XCSoar.h"
 
 static WndForm *wf=NULL;
 

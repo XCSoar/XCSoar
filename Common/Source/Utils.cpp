@@ -36,6 +36,7 @@ Copyright_License {
 */
 
 #include "Utils.h"
+#include "XCSoar.h"
 #include "StdAfx.h"
 
 #ifndef __MINGW32__

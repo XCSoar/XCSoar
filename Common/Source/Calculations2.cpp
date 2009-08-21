@@ -38,6 +38,7 @@ Copyright_License {
 
 #include "Calculations2.h"
 #include "Calculations.h"
+#include "XCSoar.h"
 #include "Dialogs.h"
 #include "Utils.h"
 #include "LocalPath.hpp"
