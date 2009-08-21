@@ -39,14 +39,8 @@ Copyright_License {
 #include "externs.h"
 #include "dlgTools.h"
 #include "Registry.hpp"
-
 #include "compatibility.h"
-#ifdef OLDPPC
-#include "XCSoarProcess.h"
-#else
 #include "Process.h"
-#endif
-
 #include "Math/FastMath.h"
 
 static bool changed = false;

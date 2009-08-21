@@ -42,11 +42,7 @@ Copyright_License {
 #include "Logger.h"
 #include "compatibility.h"
 #include "Math/FastMath.h"
-#ifdef OLDPPC
-#include "XCSoarProcess.h"
-#else
 #include "Process.h"
-#endif
 
 #include <assert.h>
 

@@ -43,11 +43,7 @@ Copyright_License {
 #include "Dialogs.h"
 #include "Parser.h"
 #include "compatibility.h"
-#ifdef OLDPPC
-#include "XCSoarProcess.h"
-#else
 #include "Process.h"
-#endif
 #include "Utils2.h"
 #include "Math/FastMath.h"
 #include "externs.h"

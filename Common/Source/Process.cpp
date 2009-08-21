@@ -39,11 +39,7 @@ Copyright_License {
 
 #include "Defines.h" // VENTA3
 #include "compatibility.h"
-#ifdef OLDPPC
-#include "XCSoarProcess.h"
-#else
 #include "Process.h"
-#endif
 #include "externs.h"
 #include "Math/FastMath.h"
 #include "device.h"

@@ -69,11 +69,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include <commctrl.h>
 #include "InfoBoxLayout.h"
 #include "Airspace.h"
-#ifdef OLDPPC
-#include "XCSoarProcess.h"
-#else
 #include "Process.h"
-#endif
 #include "device.h"
 #include "Message.h"
 #include "Units.h"

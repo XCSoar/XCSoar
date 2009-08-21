@@ -41,13 +41,8 @@ Copyright_License {
 #include "Task.h"
 #include "device.h"
 #include "externs.h"
-
 #include "compatibility.h"
-#ifdef OLDPPC
-#include "XCSoarProcess.h"
-#else
 #include "Process.h"
-#endif
 #include "InputEvents.h"
 
 

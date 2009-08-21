@@ -51,14 +51,8 @@ Copyright_License {
 #include "device.h"
 #include "Screen/Animation.hpp"
 #include "Registry.hpp"
-
 #include "compatibility.h"
-#ifdef OLDPPC
-#include "XCSoarProcess.h"
-#else
 #include "Process.h"
-#endif
-
 #include "McReady.h"
 #include "Math/FastMath.h"
 #include "InfoBoxLayout.h"

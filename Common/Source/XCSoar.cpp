@@ -47,13 +47,7 @@ Copyright_License {
 #include "Dialogs.h"
 #include "Trigger.hpp"
 #include "StatusMessage.hpp"
-
-#ifdef OLDPPCx
-#include "XCSoarProcess.h"
-#else
 #include "Process.h"
-#endif
-
 #include "Utils.h"
 #include "LocalPath.hpp"
 #include "Utils2.h"

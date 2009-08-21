@@ -40,11 +40,7 @@ Copyright_License {
 #include "externs.h"
 #include "Units.h"
 #include "dlgTools.h"
-#ifdef OLDPPC
-#include "XCSoarProcess.h"
-#else
 #include "Process.h"
-#endif
 
 extern HWND   hWndMainWindow;
 static WndForm *wf=NULL;

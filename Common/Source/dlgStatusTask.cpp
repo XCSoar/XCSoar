@@ -39,13 +39,8 @@ Copyright_License {
 #include "externs.h"
 #include "Waypointparser.h"
 #include "dlgTools.h"
-
 #include "compatibility.h"
-#ifdef OLDPPC
-#include "XCSoarProcess.h"
-#else
 #include "Process.h"
-#endif
 
 void dlgStatusTaskShowModal(void){
 
