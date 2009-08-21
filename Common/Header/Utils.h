@@ -55,12 +55,8 @@ bool SetBacklight(); // VENTA4-ADDON for PNA
 bool SetSoundVolume(); // VENTA4-ADDON for PNA
 #endif
 
-void protate(POINT &pin, const double &angle);
-void protateshift(POINT &pin, const double &angle, const int &x, const int &y);
-
 void SectorEndPoint(double StartLat, double StartLon, double  Radial, double Dist, double *EndLat, double *EndLon);
 void ConvertFlightLevels(void);
-BOOL PolygonVisible(const POINT *lpPoints, int nCount, RECT rc);
 void ReadPort1Settings(DWORD *PortIndex, DWORD *SpeedIndex);
 void ReadPort2Settings(DWORD *PortIndex, DWORD *SpeedIndex);
 void ReadPort3Settings(DWORD *PortIndex, DWORD *SpeedIndex);
@@ -74,7 +70,6 @@ void ReadProfile(const TCHAR *szFile);
 void SetModelType();
 bool SetModelName(DWORD Temp);
 #endif
-double ScreenAngle(int x1, int y1, int x2, int y2);
 void ReadCompaqID(void);
 void ReadUUID(void);
 void FormatWarningString(int Type, const TCHAR *Name,

@@ -40,8 +40,59 @@ Copyright_License {
 #include "Math/FastMath.h"
 #include "Utils.h"
 #include "InfoBoxLayout.h"
+#include "MapWindow.h"
 
 #include <math.h>
+
+#ifndef RAD_TO_DEG
+#define RAD_TO_DEG 57.2957795131
+#endif
+
+void protate(POINT &pin, const double &angle)
+{
+  int x= pin.x;
+  int y= pin.y;
+  static double lastangle = 0;
+  static int cost=1024,sint=0;
+
+  if(angle != lastangle)
+    {
+      lastangle = angle;
+      cost = ifastcosine(angle);
+      sint = ifastsine(angle);
+    }
+  pin.x = (x*cost - y*sint + 512 )/1024;
+  pin.y = (y*cost + x*sint + 512 )/1024;
+
+  // round (x/b) = (x+b/2)/b;
+  // b = 2; x = 10 -> (10+1)/2=5
+  // b = 2; x = 11 -> (11+1)/2=6
+  // b = 2; x = -10 -> (-10+1)/2=4
+}
+
+void protateshift(POINT &pin, const double &angle,
+                  const int &xs, const int &ys)
+{
+  int x= pin.x;
+  int y= pin.y;
+  static double lastangle = 0;
+  static int cost=1024,sint=0;
+
+  if(angle != lastangle)
+    {
+      lastangle = angle;
+      cost = ifastcosine(angle);
+      sint = ifastsine(angle);
+    }
+  pin.x = (x*cost - y*sint + 512 + (xs*1024))/1024;
+  pin.y = (y*cost + x*sint + 512 + (ys*1024))/1024;
+
+}
+
+double ScreenAngle(int x1, int y1, int x2, int y2)
+{
+  return atan2((double)y2-y1, (double)x2-x1)*RAD_TO_DEG;
+}
 
 void ScreenClosestPoint(const POINT &p1, const POINT &p2,
                         const POINT &p3, POINT *p4, int offset)
@@ -98,4 +149,84 @@ void PolygonRotateShift(POINT* poly, const int n, const int xs, const int ys, co
     p->y = (y*cost + x*sint + yys)/1024;
     p++;
   }
+}
+
+BOOL PolygonVisible(const POINT *lpPoints, int nCount, RECT rc)
+{
+  BOOL Sector[9] = {FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE};
+  int i;
+  int Count = 0;
+  (void)rc;
+  //return TRUE;
+
+  for(i=0;i<nCount;i++)
+    {
+      if(lpPoints[i].y < MapWindow::MapRect.top)
+	{
+	  if(lpPoints[i].x < MapWindow::MapRect.left)
+	    {
+	      Sector[0] = TRUE;
+	    }
+	  else if((lpPoints[i].x >=MapWindow::MapRect.left)
+		  && (lpPoints[i].x <MapWindow::MapRect.right))
+	    {
+	      Sector[1] = TRUE;
+	    }
+	  else if(lpPoints[i].x >=MapWindow::MapRect.right)
+	    {
+	      Sector[2] = TRUE;
+	    }
+	}
+      else if((lpPoints[i].y >=MapWindow::MapRect.top)
+	      && (lpPoints[i].y <MapWindow::MapRect.bottom))
+	{
+	  if(lpPoints[i].x <MapWindow::MapRect.left)
+	    {
+	      Sector[3] = TRUE;
+	    }
+	  else if((lpPoints[i].x >=MapWindow::MapRect.left)
+		  && (lpPoints[i].x <MapWindow::MapRect.right))
+	    {
+	      Sector[4] = TRUE;
+	      return TRUE;
+	    }
+	  else if(lpPoints[i].x >=MapWindow::MapRect.right)
+	    {
+	      Sector[5] = TRUE;
+	    }
+	}
+      else if(lpPoints[i].y >=MapWindow::MapRect.bottom)
+	{
+	  if(lpPoints[i].x <MapWindow::MapRect.left)
+	    {
+	      Sector[6] = TRUE;
+	    }
+	  else if((lpPoints[i].x >=MapWindow::MapRect.left)
+		  && (lpPoints[i].x <MapWindow::MapRect.right))
+	    {
+	      Sector[7] = TRUE;
+	    }
+	  else if(lpPoints[i].x >=MapWindow::MapRect.right)
+	    {
+	      Sector[8] = TRUE;
+	    }
+	}
+    }
+
+  for(i=0;i<9;i++)
+    {
+      if(Sector[i])
+	{
+	  Count ++;
+	}
+    }
+
+  if(Count>= 2)
+    {
+      return TRUE;
+    }
+  else
+    {
+      return FALSE;
+    }
 }

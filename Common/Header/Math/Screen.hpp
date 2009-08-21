@@ -45,10 +45,17 @@ Copyright_License {
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
+void protate(POINT &pin, const double &angle);
+void protateshift(POINT &pin, const double &angle, const int &x, const int &y);
+
+double ScreenAngle(int x1, int y1, int x2, int y2);
+
 void ScreenClosestPoint(const POINT &p1, const POINT &p2,
                         const POINT &p3, POINT *p4, int offset);
 
 void PolygonRotateShift(POINT* poly, int n, int x, int y,
                         double angle);
+
+BOOL PolygonVisible(const POINT *lpPoints, int nCount, RECT rc);
 
 #endif
