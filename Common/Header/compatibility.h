@@ -22,10 +22,6 @@
 
 	#if (_WIN32_WCE == 300)
 	// Pocket PC 2000
-                #define OLDPPC
-
-//#define ASSERT(x) 0
-
 		// App keys
 		#define VK_APP1     0xC1
 		#define VK_APP2     0xC2
@@ -36,40 +32,6 @@
 	    // Note - note used on most builds...
 		// #define VK_APP7     0xC7
 		// #define VK_APP8     0xC8
-
-
-		#ifndef NOCLEARTYPE
-		#define NOCLEARTYPE
-		#endif
-
-		#ifndef NOLINETO
-		#define NOLINETO
-		#endif
-
-                #define NOTIME_H
-
-	#elif (WIN32_PLATFORM_PSPC == 310)
-	// Pocket PC 2002
-
-//#define ASSERT(x) 0
-		#ifndef NOCLEARTYPE
-		#define NOCLEARTYPE
-		#endif
-  	#ifndef NOLINETO
-        #define NOLINETO
-		#endif
-
-	#elif (WIN32_PLATFORM_PSPC == 400)
-	// Pocket PC 2003
-#include <assert.h>
-
-
-	#else
-	// Some other Pocket PC
-#include <assert.h>
-
-	// NOT EXPLICITLY SUPPORTED
-
 	#endif
 
 #elif defined(WIN32_PLATFORM_WFSP)

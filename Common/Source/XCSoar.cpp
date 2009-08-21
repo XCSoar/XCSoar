@@ -37,6 +37,7 @@ Copyright_License {
 #include "StdAfx.h"
 #include "compatibility.h"
 #include "Compatibility/string.h"
+#include "options.h"
 #include "XCSoar.h"
 #include "MapWindow.h"
 #include "Parser.h"

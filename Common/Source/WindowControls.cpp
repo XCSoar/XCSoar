@@ -45,7 +45,7 @@ Copyright_License {
 #include "InfoBoxLayout.h"
 #endif
 #include "Math/FastMath.h"
-#include "compatibility.h"
+#include "options.h"
 #include "Compatibility/string.h"
 #include "PeriodClock.hpp"
 #include "Screen/Animation.hpp"

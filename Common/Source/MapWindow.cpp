@@ -36,7 +36,6 @@ Copyright_License {
 */
 
 #include "StdAfx.h"
-#include "compatibility.h"
 #include "Defines.h"
 #include "MapWindow.h"
 #include "OnLineContest.h"

@@ -18,7 +18,7 @@
 #ifndef VLCONV_H
 #define VLCONV_H
 
-#include "compatibility.h"
+#include "options.h"
 
 #include <stdio.h>
 #ifndef NOTIME_H
