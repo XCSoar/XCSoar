@@ -50,22 +50,12 @@ Copyright_License {
 #include "Math/FastMath.h"
 #include "Math/Geometry.hpp"
 #include "Math/Earth.hpp"
-#include "Screen/Animation.hpp"
 #include "Registry.hpp"
-#include "resource.h"
 #include "Dialogs.h"
-#include "device.h"
 #include "uniqueid.h"
-#include "XCSoar.h"
-#include "Topology.h"
 #include "Terrain.h"
-#include "Units.h"
-#include "Calculations.h"
-#include "GaugeFLARM.h"
-#include "VegaVoice.h"
+#include "externs.h"
 #include "McReady.h"
-#include "NavFunctions.h"
-#include "WaveThread.h" // VENTA4
 #include "Compatibility/string.h"
 #include "Screen/Util.hpp"
 #include "Math/Pressure.h"
@@ -76,11 +66,6 @@ Copyright_License {
 #ifdef NEWFLARMDB
 #include "FlarmIdFile.h"
 FlarmIdFile file;
-#endif
-
-// VENTA2 added portrait settings in fontsettings for pnas
-#if defined(PNA) || defined(FIVV)
-#include "InfoBoxLayout.h"
 #endif
 
 #include <assert.h>
