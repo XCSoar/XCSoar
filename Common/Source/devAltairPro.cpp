@@ -45,8 +45,6 @@ Copyright_License {
 
 #include <tchar.h>
 
-double AltitudeToQNHAltitude(double alt);
-
 static double lastAlt = 0;
 
 
