@@ -49,8 +49,6 @@ Copyright_License {
 #include <assert.h>
 #include <stdlib.h>
 
-extern HWND   hWndMainWindow;
-extern HWND   hWndMapWindow;
 static WndForm *wf=NULL;
 static WndListFrame *wAirspaceList=NULL;
 static WndOwnerDrawFrame *wAirspaceListEntry = NULL;

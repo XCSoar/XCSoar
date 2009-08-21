@@ -48,19 +48,10 @@ Copyright_License {
 
 #include <assert.h>
 
-extern NMEA_INFO GPS_INFO;
-extern DERIVED_INFO CALCULATED_INFO;
-
 HWND   hWndVarioWindow = NULL; // Vario Window
-extern HINSTANCE hInst;      // The current instance
-extern HWND hWndMainWindow; // Main Windows
 extern HFONT CDIWindowFont; // New
 
-extern HFONT InfoWindowFont;
 extern HFONT TitleWindowFont;
-extern HFONT TitleWindowFont;
-extern HFONT MapWindowFont;
-extern HFONT MapWindowBoldFont;
 
 HDC GaugeVario::hdcScreen = NULL;
 HDC GaugeVario::hdcDrawWindow = NULL;
@@ -284,10 +275,6 @@ void GaugeVario::Destroy() {
 
 #define GAUGEVARIORANGE 5.0 //2.50 // 5 m/s
 #define GAUGEVARIOSWEEP 180 // degrees total sweep
-
-extern NMEA_INFO     GPS_INFO;
-extern DERIVED_INFO  CALCULATED_INFO;
-
 
 void GaugeVario::Render() {
 

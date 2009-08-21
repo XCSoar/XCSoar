@@ -40,8 +40,6 @@ Copyright_License {
 #include "InfoBoxLayout.h"
 
 HWND hWndVarioWindow = NULL; // Vario Window
-extern HINSTANCE hInst;      // The current instance
-extern HWND hWndMainWindow; // Main Windows
 extern HFONT CDIWindowFont; // New
 extern HWND hWndMenuButton;
 

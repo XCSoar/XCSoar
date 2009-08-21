@@ -62,9 +62,6 @@ Copyright_License {
 
 CRITICAL_SECTION  CritSec_Messages;
 
-extern HWND hWndMainWindow; // Main Windows
-extern HINSTANCE hInst;      // The current instance
-
 RECT Message::rcmsg;
 HWND Message::hWndMessageWindow;
 HDC Message::hdc;

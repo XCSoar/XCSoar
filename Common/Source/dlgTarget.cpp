@@ -50,7 +50,6 @@ Copyright_License {
 #include "InfoBoxLayout.h"
 #include "Math/Geometry.hpp"
 
-extern HWND   hWndMainWindow;
 static WndForm *wf=NULL;
 static WindowControl *btnMove = NULL;
 static int ActiveWayPointOnEntry = 0;

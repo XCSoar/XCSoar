@@ -1974,8 +1974,6 @@ bool MatchesExtension(const TCHAR *filename, const TCHAR* extension) {
 
 #include "mmsystem.h"
 
-extern HINSTANCE                       hInst; // The current instance
-
 BOOL PlayResource (const TCHAR* lpName)
 {
 #ifdef DISABLEAUDIO

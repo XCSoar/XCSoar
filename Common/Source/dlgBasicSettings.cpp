@@ -44,7 +44,6 @@ Copyright_License {
 #include "dlgTools.h"
 #include "device.h"
 
-extern HWND   hWndMainWindow;
 static WndForm *wf=NULL;
 
 // static bool BallastTimerActive = false;

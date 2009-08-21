@@ -49,8 +49,6 @@ DWORD EnableFLARMMap = 1;
 
 HWND GaugeFLARM::hWndFLARMWindow = NULL; //FLARM Window
 
-extern HWND hWndMainWindow; // Main Windows
-extern HINSTANCE hInst;      // The current instance
 HBITMAP GaugeFLARM::hDrawBitMap = NULL;
 HBITMAP GaugeFLARM::hRoseBitMap = NULL;
 int GaugeFLARM::hRoseBitMapWidth = 0;

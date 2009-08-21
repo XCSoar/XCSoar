@@ -1315,7 +1315,6 @@ void ComboList::FreeComboPopupItemList(void)
 
 
 extern HFONT  MapWindowFont;
-extern HINSTANCE hInst;
 WindowControl *ActiveControl = NULL;
 WindowControl *LastFocusControl = NULL;
 
@@ -2236,9 +2235,6 @@ void WndForm::SetToForeground(void)
   BringWindowToTop(GetHandle());
   SetActiveWindow(GetHandle());
 }
-
-
-extern HWND hWndMapWindow;  // MapWindow
 
 int WndForm::ShowModal(void){
   return ShowModal(false);

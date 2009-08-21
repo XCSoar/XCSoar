@@ -41,7 +41,6 @@ Copyright_License {
 #include "Waypointparser.h"
 #include "Math/FastMath.h"
 
-extern HWND   hWndMainWindow;
 static WndForm *wf=NULL;
 static WAYPOINT *global_wpt=NULL;
 

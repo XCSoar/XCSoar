@@ -42,7 +42,6 @@ Copyright_License {
 
 #include "dlgTools.h"
 
-extern HWND   hWndMainWindow;
 static WndForm *wf=NULL;
 
 static void OnYesClicked(WindowControl * Sender){

@@ -41,7 +41,6 @@ Copyright_License {
 #include "Registry.hpp"
 #include "VegaVoice.h"
 
-extern HWND   hWndMainWindow;
 static WndForm *wf=NULL;
 
 static void OnCloseClicked(WindowControl * Sender){

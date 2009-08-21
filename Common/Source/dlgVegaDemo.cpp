@@ -43,7 +43,6 @@ Copyright_License {
 #include "device.h"
 #include "Math/FastMath.h"
 
-extern HWND   hWndMainWindow;
 static WndForm *wf=NULL;
 
 static void OnCloseClicked(WindowControl * Sender){

@@ -47,8 +47,6 @@ Copyright_License {
 #include "WindowControls.h"
 
 extern InfoBox *InfoBoxes[MAXINFOWINDOWS];
-extern HWND hWndMainWindow; // Main Windows
-extern HINSTANCE hInst; // The current instance
 
 // Layouts:
 // 0: default, infoboxes along top and bottom, map in middle

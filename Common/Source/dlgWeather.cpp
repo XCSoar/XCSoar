@@ -43,9 +43,7 @@ Copyright_License {
 #include "Port.h"
 #include "InfoBoxLayout.h"
 
-extern HWND   hWndMainWindow;
 static WndForm *wf=NULL;
-extern int TimeLocal(int d);
 
 static void OnCloseClicked(WindowControl * Sender){
 	(void)Sender;

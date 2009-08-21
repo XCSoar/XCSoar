@@ -39,8 +39,6 @@ Copyright_License {
 #include "Math/FastMath.h"
 
 extern HFONT CDIWindowFont;
-extern HWND hWndMainWindow; // Main Windows
-extern HINSTANCE hInst;      // The current instance
 
 #include "InfoBoxLayout.h"
 

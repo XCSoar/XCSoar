@@ -97,9 +97,6 @@ void CloseWayPoints() {
 }
 
 
-int dlgWaypointOutOfTerrain(const TCHAR *Message);
-
-
 static bool WaypointInTerrainRange(WAYPOINT *List) {
 
   if (WaypointOutOfTerrainRangeDontAskAgain == 1){

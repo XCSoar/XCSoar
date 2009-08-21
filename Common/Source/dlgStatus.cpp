@@ -50,7 +50,6 @@ extern BOOL extGPSCONNECT;
 
 #include "dlgTools.h"
 
-extern HWND   hWndMainWindow;
 static WndForm *wf=NULL;
 static bool multi_page = false;
 static int status_page = 0;

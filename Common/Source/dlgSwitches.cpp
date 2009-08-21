@@ -38,7 +38,6 @@ Copyright_License {
 #include "InputEvents.h"
 #include "dlgTools.h"
 
-extern HWND   hWndMainWindow;
 static WndForm *wf=NULL;
 
 

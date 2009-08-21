@@ -41,7 +41,6 @@ Copyright_License {
 #include "dlgTools.h"
 #include "Registry.hpp"
 
-extern HWND   hWndMainWindow;
 static WndForm *wf=NULL;
 
 static void OnCloseClicked(WindowControl * Sender){

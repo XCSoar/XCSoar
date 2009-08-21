@@ -38,7 +38,6 @@ Copyright_License {
 #include "Registry.hpp"
 #include "XCSoar.h"
 
-extern HWND   hWndMainWindow;
 extern void InitializeOneFont (HFONT * theFont,
                                const TCHAR FontRegKey[] ,
                                LOGFONT autoLogFont,

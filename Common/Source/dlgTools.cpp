@@ -61,9 +61,6 @@ int DLGSCALE(int x) {
   return iRetVal;
 }
 
-extern HWND   hWndMainWindow;
-extern HWND   hWndMapWindow;
-
 extern HFONT  TitleWindowFont;
 extern HFONT  MapWindowFont;
 extern HFONT  MapWindowBoldFont;

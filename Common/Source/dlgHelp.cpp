@@ -39,7 +39,6 @@ Copyright_License {
 #include "dlgTools.h"
 #include "InfoBoxLayout.h"
 
-extern HWND   hWndMainWindow;
 static WndForm *wf=NULL;
 
 

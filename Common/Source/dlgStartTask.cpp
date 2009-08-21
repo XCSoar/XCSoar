@@ -42,7 +42,6 @@ Copyright_License {
 #include "dlgTools.h"
 #include "Process.h"
 
-extern HWND   hWndMainWindow;
 static WndForm *wf=NULL;
 
 bool startIsValid = false;

@@ -46,7 +46,6 @@ Copyright_License {
 
 #include <assert.h>
 
-extern HWND   hWndMainWindow;
 static WndForm *wf=NULL;
 
 WndProperty * wComboPopupWndProperty;

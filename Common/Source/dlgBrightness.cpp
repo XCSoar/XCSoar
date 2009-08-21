@@ -3,7 +3,7 @@ Copyright_License {
 
   XCSoar Glide Computer - http://xcsoar.sourceforge.net/
   Copyright (C) 2000 - 2008
-
+ r
   	M Roberts (original release)
 	Robin Birch <robinb@ruffnready.co.uk>
 	Samuel Gisiger <samuel.gisiger@triadis.ch>
@@ -39,7 +39,6 @@ Copyright_License {
 #include "dlgTools.h"
 #include "Math/FastMath.h"
 
-extern HWND   hWndMainWindow;
 static WndForm *wf=NULL;
 
 static void OnCloseClicked(WindowControl * Sender){

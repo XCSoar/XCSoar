@@ -41,7 +41,6 @@ Copyright_License {
 #include "Logger.h"
 #include "dlgTools.h"
 
-extern HWND   hWndMainWindow;
 static WndForm *wf=NULL;
 
 

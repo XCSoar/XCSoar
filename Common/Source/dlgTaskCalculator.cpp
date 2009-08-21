@@ -45,7 +45,6 @@ Copyright_License {
 #include "Calculations2.h"
 #include "Dialogs.h"
 
-extern HWND   hWndMainWindow;
 static WndForm *wf=NULL;
 
 extern double CRUISE_EFFICIENCY;

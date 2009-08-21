@@ -41,8 +41,6 @@ Copyright_License {
 #include "Logger.h"
 #include "dlgTools.h"
 
-extern HWND   hWndMainWindow;
-
 void dlgStatusSystemShowModal(void){
 
 
