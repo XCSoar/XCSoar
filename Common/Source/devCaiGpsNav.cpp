@@ -43,7 +43,6 @@ Copyright_License {
 
 #include "devCaiGpsNav.h"
 #include "device.h"
-#include "Parser.h"
 #include "Port.h"
 
 #include <windows.h>

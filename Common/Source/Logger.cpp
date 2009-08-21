@@ -49,7 +49,6 @@
 #include "LocalPath.hpp"
 #include "device.h"
 #include "InputEvents.h"
-#include "Parser.h"
 #include "Compatibility/string.h"
 
 enum {

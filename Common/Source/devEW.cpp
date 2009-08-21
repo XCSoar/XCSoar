@@ -39,7 +39,6 @@ Copyright_License {
 
 #include "devEW.h"
 #include "device.h"
-#include "Parser.h"
 #include "Port.h"
 
 #include <tchar.h>

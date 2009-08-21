@@ -63,7 +63,6 @@ bool GaugeFLARM::Suppress= false;
 
 #include "InfoBoxLayout.h"
 #include "XCSoar.h"
-#include "Parser.h"
 
 static COLORREF colTextGray;
 static COLORREF colText;

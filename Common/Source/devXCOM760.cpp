@@ -34,7 +34,6 @@ Copyright_License {
 
 #include "devXCOM760.h"
 #include "device.h"
-#include "Parser.h"
 #include "Port.h"
 
 #include <tchar.h>

@@ -34,7 +34,6 @@ Copyright_License {
 
 #include "devNmeaOut.h"
 #include "device.h"
-#include "Parser.h"
 #include "Port.h"
 
 BOOL nmoParseNMEA(PDeviceDescriptor_t d, const TCHAR *String,

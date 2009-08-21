@@ -52,7 +52,6 @@ Copyright_License {
 #include "InfoBoxLayout.h"
 #include "device.h"
 #include "Logger.h"
-#include "Parser.h"
 #include "Dialogs.h"
 #include "Utils.h"
 #include "MapWindow.h"
