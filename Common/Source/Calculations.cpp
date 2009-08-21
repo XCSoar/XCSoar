@@ -66,6 +66,7 @@ Copyright_License {
 #include "Math/Geometry.hpp"
 #include "Port.h"
 #include "WindZigZag.h"
+#include "MapWindow.h"
 #include "device.h"
 #ifdef NEWCLIMBAV
 #include "ClimbAverageCalculator.h" // JMW new

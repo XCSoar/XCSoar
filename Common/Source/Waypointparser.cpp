@@ -49,7 +49,7 @@ Copyright_License {
 #include "dlgTools.h"
 #include "Utils.h"
 #include "Geoid.h"
-
+#include "MapWindow.h"
 #include "RasterTerrain.h"
 
 #include <windows.h>

@@ -55,6 +55,7 @@ Copyright_License {
 #include "Parser.h"
 #include "Dialogs.h"
 #include "Utils.h"
+#include "MapWindow.h"
 
 bool InitLDRotary(ldrotary_s *buf) {
 short i, bsize;

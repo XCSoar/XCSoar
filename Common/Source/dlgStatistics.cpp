@@ -48,6 +48,7 @@ Copyright_License {
 #include "Math/Earth.hpp"
 #include "Screen/Util.hpp"
 #include "Utils.h"
+#include "MapWindow.h"
 
 #define GROUND_COLOUR RGB(157,101,60)
 

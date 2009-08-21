@@ -49,6 +49,7 @@ Copyright_License {
 #include "Registry.hpp"
 #include "XCSoar.h"
 #include "Utils.h"
+#include "MapWindow.h"
 
 #include <stdlib.h>
 

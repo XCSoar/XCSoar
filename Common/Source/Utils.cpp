@@ -63,6 +63,7 @@ Copyright_License {
 #include "Polar/WinPilot.hpp"
 #include "Polar/BuiltIn.hpp"
 #include "LocalPath.hpp"
+#include "MapWindow.h"
 
 #ifdef NEWFLARMDB
 #include "FlarmIdFile.h"

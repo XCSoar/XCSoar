@@ -40,8 +40,6 @@ Copyright_License {
 
 #include "StdAfx.h"
 #include "mapshape.h"
-#include "MapWindow.h"
-
 
 class XShape {
  public:

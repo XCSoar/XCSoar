@@ -41,6 +41,7 @@ Copyright_License {
 #include "Registry.hpp"
 #include "DataField/Enum.hpp"
 #include "Utils.h"
+#include "MapWindow.h"
 
 static WndForm *wf=NULL;
 

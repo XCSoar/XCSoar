@@ -43,9 +43,9 @@ Copyright_License {
 #include "Sizes.h"
 #include "Units.h"
 #include "Statistics.h"
-#include "MapWindow.h"
 
 class Trigger;
+class MapWindow;
 
 class InfoBoxFormatter {
  public:

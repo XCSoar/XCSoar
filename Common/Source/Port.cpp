@@ -39,6 +39,7 @@ Copyright_License {
 #include "dlgTools.h"
 #include "XCSoar.h"
 #include "device.h"
+#include "MapWindow.h"
 
 #include <windows.h>
 #include <tchar.h>
