@@ -93,10 +93,10 @@ void NMEAParser::_Reset(void) {
   gpsValid = false;
   isFlarm = false;
   activeGPS = true;
-  GGAAvailable = FALSE;
-  RMZAvailable = FALSE;
+  GGAAvailable = false;
+  RMZAvailable = false;
   RMZAltitude = 0;
-  RMAAvailable = FALSE;
+  RMAAvailable = false;
   RMAAltitude = 0;
   LastTime = 0;
 }
@@ -133,7 +133,7 @@ void NMEAParser::UpdateMonitor(void)
 }
 
 
-BOOL NMEAParser::ParseNMEAString(int device,
+bool NMEAParser::ParseNMEAString(int device,
                                  const TCHAR *String, NMEA_INFO *GPS_INFO)
 {
   switch (device) {
@@ -142,7 +142,7 @@ BOOL NMEAParser::ParseNMEAString(int device,
   case 1:
     return nmeaParser2.ParseNMEAString_Internal(String, GPS_INFO);
   };
-  return FALSE;
+  return false;
 }
 
 
@@ -194,7 +194,7 @@ size_t NMEAParser::ValidateAndExtract(const TCHAR *src, TCHAR *dst, size_t dstsz
 }
 
 
-BOOL NMEAParser::ParseNMEAString_Internal(const TCHAR *String, NMEA_INFO *GPS_INFO)
+bool NMEAParser::ParseNMEAString_Internal(const TCHAR *String, NMEA_INFO *GPS_INFO)
 {
   TCHAR ctemp[MAX_NMEA_LEN];
   const TCHAR *params[MAX_NMEA_PARAMS];
@@ -202,7 +202,7 @@ BOOL NMEAParser::ParseNMEAString_Internal(const TCHAR *String, NMEA_INFO *GPS_IN
 
   n_params = ValidateAndExtract(String, ctemp, MAX_NMEA_LEN, params, MAX_NMEA_PARAMS);
   if (n_params < 1 || params[0][0] != '$')
-    return FALSE;
+    return false;
   if (EnableLogNMEA)
     LogNMEA(String);
 
@@ -230,7 +230,7 @@ BOOL NMEAParser::ParseNMEAString_Internal(const TCHAR *String, NMEA_INFO *GPS_IN
 	{
 	  return RMZ(&String[7], params + 1, n_params, GPS_INFO);
 	}
-      return FALSE;
+      return false;
     }
 
   if(_tcscmp(params[0] + 3,TEXT("GSA"))==0)
@@ -240,12 +240,12 @@ BOOL NMEAParser::ParseNMEAString_Internal(const TCHAR *String, NMEA_INFO *GPS_IN
   if(_tcscmp(params[0] + 3,TEXT("GLL"))==0)
     {
       //    return GLL(&String[7], params + 1, n_params, GPS_INFO);
-      return FALSE;
+      return false;
     }
   if(_tcscmp(params[0] + 3,TEXT("RMB"))==0)
     {
       //return RMB(&String[7], params + 1, n_params, GPS_INFO);
-          return FALSE;
+          return false;
       }
   if(_tcscmp(params[0] + 3,TEXT("RMC"))==0)
     {
@@ -256,7 +256,7 @@ BOOL NMEAParser::ParseNMEAString_Internal(const TCHAR *String, NMEA_INFO *GPS_IN
       return GGA(&String[7], params + 1, n_params, GPS_INFO);
     }
 
-  return FALSE;
+  return false;
 }
 
 void NMEAParser::ExtractParameter(const TCHAR *Source,
@@ -326,9 +326,9 @@ double LeftOrRight(double in, TCHAR LoR)
 int NAVWarn(TCHAR c)
 {
   if(c=='A')
-    return FALSE;
+    return false;
   else
-    return TRUE;
+    return true;
 }
 
 double NMEAParser::ParseAltitude(const TCHAR *value, const TCHAR *format)
@@ -398,13 +398,13 @@ bool NMEAParser::TimeHasAdvanced(double ThisTime, NMEA_INFO *GPS_INFO) {
   }
 }
 
-BOOL NMEAParser::GSA(const TCHAR *String,
+bool NMEAParser::GSA(const TCHAR *String,
                      const TCHAR **params, size_t nparams, NMEA_INFO *GPS_INFO)
 {
   int iSatelliteCount =0;
 
   if (ReplayLogger::IsEnabled()) {
-    return TRUE;
+    return true;
   }
 
   // satellites are in items 4-15 of GSA string (4-15 is 1-indexed)
@@ -419,23 +419,23 @@ BOOL NMEAParser::GSA(const TCHAR *String,
   }
 
 
-  GSAAvailable = TRUE;
-  return TRUE;
+  GSAAvailable = true;
+  return true;
 
 }
 
-BOOL NMEAParser::GLL(const TCHAR *String,
+bool NMEAParser::GLL(const TCHAR *String,
                      const TCHAR **params, size_t nparams, NMEA_INFO *GPS_INFO)
 {
   gpsValid = !NAVWarn(params[5][0]);
 
   if (!activeGPS)
-    return TRUE;
+    return true;
 
   if (ReplayLogger::IsEnabled()) {
     // block actual GPS signal
     InterfaceTimeoutReset();
-    return TRUE;
+    return true;
   }
 
   GPS_INFO->NAVWarning = !gpsValid;
@@ -444,7 +444,7 @@ BOOL NMEAParser::GLL(const TCHAR *String,
 
   double ThisTime = TimeModify(StrToDouble(params[4],NULL), GPS_INFO);
   if (!TimeHasAdvanced(ThisTime, GPS_INFO))
-    return FALSE;
+    return false;
 
   double tmplat;
   double tmplon;
@@ -461,11 +461,11 @@ BOOL NMEAParser::GLL(const TCHAR *String,
   } else {
 
   }
-  return TRUE;
+  return true;
 }
 
 
-BOOL NMEAParser::RMB(const TCHAR *String,
+bool NMEAParser::RMB(const TCHAR *String,
                      const TCHAR **params, size_t nparams, NMEA_INFO *GPS_INFO)
 {
   (void)GPS_INFO;
@@ -489,20 +489,20 @@ BOOL NMEAParser::RMB(const TCHAR *String,
   GPS_INFO->WaypointSpeed = KNOTSTOMETRESSECONDS * StrToDouble(params[11], NULL);
   */
 
-  return TRUE;
+  return true;
 }
 
 
 bool SetSystemTimeFromGPS = false;
 
-BOOL NMEAParser::RMC(const TCHAR *String, const TCHAR **params, size_t nparams,
+bool NMEAParser::RMC(const TCHAR *String, const TCHAR **params, size_t nparams,
                      NMEA_INFO *GPS_INFO)
 {
   TCHAR *Stop;
 
   gpsValid = !NAVWarn(params[1][0]);
 
-  GPSCONNECT = TRUE;
+  GPSCONNECT = true;
 
   if (!activeGPS)
     return true;
@@ -510,16 +510,16 @@ BOOL NMEAParser::RMC(const TCHAR *String, const TCHAR **params, size_t nparams,
   double speed = StrToDouble(params[6], NULL);
 
   if (speed>2.0) {
-    GPS_INFO->MovementDetected = TRUE;
+    GPS_INFO->MovementDetected = true;
     if (ReplayLogger::IsEnabled()) {
       // stop logger replay if aircraft is actually moving.
       ReplayLogger::Stop();
     }
   } else {
-    GPS_INFO->MovementDetected = FALSE;
+    GPS_INFO->MovementDetected = false;
     if (ReplayLogger::IsEnabled()) {
       // block actual GPS signal if not moving and a log is being replayed
-      return TRUE;
+      return true;
     }
   }
 
@@ -542,7 +542,7 @@ BOOL NMEAParser::RMC(const TCHAR *String, const TCHAR **params, size_t nparams,
 
   double ThisTime = TimeModify(StrToDouble(params[0],NULL), GPS_INFO);
   if (!TimeHasAdvanced(ThisTime, GPS_INFO))
-    return FALSE;
+    return false;
 
   double tmplat;
   double tmplon;
@@ -589,7 +589,7 @@ BOOL NMEAParser::RMC(const TCHAR *String, const TCHAR **params, size_t nparams,
         sysTime.wMinute = (unsigned short)mins;
         sysTime.wSecond = (unsigned short)secs;
         sysTime.wMilliseconds = 0;
-        sysTimeInitialised = (::SetSystemTime(&sysTime)==TRUE);
+        sysTimeInitialised = (::SetSystemTime(&sysTime)==true);
 
 #if defined(GNAV) && (!defined(WINDOWSPC) || (WINDOWSPC==0))
         TIME_ZONE_INFORMATION tzi;
@@ -632,18 +632,18 @@ BOOL NMEAParser::RMC(const TCHAR *String, const TCHAR **params, size_t nparams,
     }
   }
 
-  return TRUE;
+  return true;
 }
 
-BOOL NMEAParser::GGA(const TCHAR *String, const TCHAR **params, size_t nparams,
+bool NMEAParser::GGA(const TCHAR *String, const TCHAR **params, size_t nparams,
                      NMEA_INFO *GPS_INFO)
 {
 
   if (ReplayLogger::IsEnabled()) {
-    return TRUE;
+    return true;
   }
 
-  GGAAvailable = TRUE;
+  GGAAvailable = true;
 
   nSatellites = (int)(min(16.0, StrToDouble(params[6], NULL)));
   if (nSatellites==0) {
@@ -651,13 +651,13 @@ BOOL NMEAParser::GGA(const TCHAR *String, const TCHAR **params, size_t nparams,
   }
 
   if (!activeGPS)
-    return TRUE;
+    return true;
 
   GPS_INFO->SatellitesUsed = (int)(min(16,StrToDouble(params[6], NULL)));
 
   double ThisTime = TimeModify(StrToDouble(params[0],NULL), GPS_INFO);
   if (!TimeHasAdvanced(ThisTime, GPS_INFO))
-    return FALSE;
+    return false;
 
   double tmplat;
   double tmplon;
@@ -714,18 +714,18 @@ BOOL NMEAParser::GGA(const TCHAR *String, const TCHAR **params, size_t nparams,
     }
   }
 
-  return TRUE;
+  return true;
 }
 
 
-BOOL NMEAParser::RMZ(const TCHAR *String, const TCHAR **params, size_t nparams,
+bool NMEAParser::RMZ(const TCHAR *String, const TCHAR **params, size_t nparams,
                      NMEA_INFO *GPS_INFO)
 {
   (void)GPS_INFO;
 
   RMZAltitude = ParseAltitude(params[0], params[1]);
   //JMW?  RMZAltitude = AltitudeToQNHAltitude(RMZAltitude);
-  RMZAvailable = TRUE;
+  RMZAvailable = true;
 
   if (!devHasBaroSource()) {
     // JMW no in-built baro sources, so use this generic one
@@ -735,18 +735,18 @@ BOOL NMEAParser::RMZ(const TCHAR *String, const TCHAR **params, size_t nparams,
     }
   }
 
-  return FALSE;
+  return false;
 }
 
 
-BOOL NMEAParser::RMA(const TCHAR *String, const TCHAR **params, size_t nparams,
+bool NMEAParser::RMA(const TCHAR *String, const TCHAR **params, size_t nparams,
                      NMEA_INFO *GPS_INFO)
 {
   (void)GPS_INFO;
 
   RMAAltitude = ParseAltitude(params[0], params[1]);
   //JMW?  RMAAltitude = AltitudeToQNHAltitude(RMAAltitude);
-  RMAAvailable = TRUE;
+  RMAAvailable = true;
   GPS_INFO->BaroAltitudeAvailable = true;
 
   if (!devHasBaroSource()) {
@@ -757,11 +757,11 @@ BOOL NMEAParser::RMA(const TCHAR *String, const TCHAR **params, size_t nparams,
     }
   }
 
-  return FALSE;
+  return false;
 }
 
 
-BOOL NMEAParser::NMEAChecksum(const TCHAR *String)
+bool NMEAParser::NMEAChecksum(const TCHAR *String)
 {
   unsigned char CalcCheckSum = 0;
   unsigned char ReadCheckSum;
@@ -773,10 +773,10 @@ BOOL NMEAParser::NMEAChecksum(const TCHAR *String)
 
   pEnd = _tcschr((TCHAR*)String,'*');
   if(pEnd == NULL)
-    return FALSE;
+    return false;
 
   if(_tcslen(pEnd)<3)
-    return FALSE;
+    return false;
 
   c1 = pEnd[1], c2 = pEnd[2];
 
@@ -801,16 +801,16 @@ BOOL NMEAParser::NMEAChecksum(const TCHAR *String)
     }
 
   if(CalcCheckSum == ReadCheckSum)
-    return TRUE;
+    return true;
   else
-    return FALSE;
+    return false;
 }
 
 //////
 
 
 
-BOOL NMEAParser::PTAS1(const TCHAR *String,
+bool NMEAParser::PTAS1(const TCHAR *String,
                        const TCHAR **params, size_t nparams,
                        NMEA_INFO *GPS_INFO)
 {
@@ -820,17 +820,17 @@ BOOL NMEAParser::PTAS1(const TCHAR *String,
   baralt = max(0.0, (StrToDouble(params[2],NULL)-2000)/TOFEET);
   vtas = StrToDouble(params[3],NULL)/TOKNOTS;
 
-  GPS_INFO->AirspeedAvailable = TRUE;
+  GPS_INFO->AirspeedAvailable = true;
   GPS_INFO->TrueAirspeed = vtas;
-  GPS_INFO->VarioAvailable = TRUE;
+  GPS_INFO->VarioAvailable = true;
   GPS_INFO->Vario = wnet;
-  GPS_INFO->BaroAltitudeAvailable = TRUE;
+  GPS_INFO->BaroAltitudeAvailable = true;
   GPS_INFO->BaroAltitude = AltitudeToQNHAltitude(baralt);
   GPS_INFO->IndicatedAirspeed = vtas/AirDensityRatio(baralt);
 
   TriggerVarioUpdate();
 
-  return FALSE;
+  return false;
 }
 
 
@@ -870,7 +870,7 @@ double FLARM_NorthingToLatitude = 0.0;
 double FLARM_EastingToLongitude = 0.0;
 
 
-BOOL NMEAParser::PFLAU(const TCHAR *String,
+bool NMEAParser::PFLAU(const TCHAR *String,
                        const TCHAR **params, size_t nparams,
                        NMEA_INFO *GPS_INFO)
 {
@@ -926,7 +926,7 @@ BOOL NMEAParser::PFLAU(const TCHAR *String,
 
   old_flarm_rx = GPS_INFO->FLARM_RX;
 
-  return FALSE;
+  return false;
 }
 
 
@@ -958,7 +958,7 @@ int FLARM_FindSlot(NMEA_INFO *GPS_INFO, long Id)
 
 
 
-BOOL NMEAParser::PFLAA(const TCHAR *String,
+bool NMEAParser::PFLAA(const TCHAR *String,
                        const TCHAR **params, size_t nparams,
                        NMEA_INFO *GPS_INFO)
 {
@@ -974,7 +974,7 @@ BOOL NMEAParser::PFLAA(const TCHAR *String,
   flarm_slot = FLARM_FindSlot(GPS_INFO, ID);
   if (flarm_slot<0) {
     // no more slots available,
-    return FALSE;
+    return false;
   }
 
   // set time of fix to current time
@@ -1043,7 +1043,7 @@ BOOL NMEAParser::PFLAA(const TCHAR *String,
     TeammateCodeValid = true;
   }
 
-  return FALSE;
+  return false;
 }
 
 

@@ -1,8 +1,9 @@
 #if !defined(AFX_PARSER_H__695AAC30_F401_4CFF_9BD9_FE62A2A2D0D2__INCLUDED_)
 #define AFX_PARSER_H__695AAC30_F401_4CFF_9BD9_FE62A2A2D0D2__INCLUDED_
 
-#include <windows.h>
 #include "Sizes.h"
+
+#include <tchar.h>
 
 #define NAUTICALMILESTOMETRES (double)1851.96
 #define KNOTSTOMETRESSECONDS (double)0.5144
@@ -85,32 +86,32 @@ typedef struct _NMEA_INFO
   double TrueAirspeed;
   double BaroAltitude;
   double MacReady;
-  BOOL BaroAltitudeAvailable;
-  BOOL ExternalWindAvailalbe;
+  bool BaroAltitudeAvailable;
+  bool ExternalWindAvailalbe;
   double ExternalWindSpeed;
   double ExternalWindDirection;
-  BOOL VarioAvailable;
-  BOOL NettoVarioAvailable;
-  BOOL AirspeedAvailable;
+  bool VarioAvailable;
+  bool NettoVarioAvailable;
+  bool AirspeedAvailable;
   double Vario;
   double NettoVario;
   double Ballast;
   double Bugs;
   double Gload;
-  BOOL AccelerationAvailable;
+  bool AccelerationAvailable;
   double AccelX;
   double AccelZ;
   int SatellitesUsed;
-  BOOL TemperatureAvailable;
+  bool TemperatureAvailable;
   double OutsideAirTemperature;
-  BOOL HumidityAvailable;
+  bool HumidityAvailable;
   double RelativeHumidity;
 
   unsigned short FLARM_RX;
   unsigned short FLARM_TX;
   unsigned short FLARM_GPS;
   unsigned short FLARM_AlarmLevel;
-  BOOL FLARM_Available;
+  bool FLARM_Available;
   FLARM_TRAFFIC FLARM_Traffic[FLARM_MAX_TRAFFIC];
   int SatelliteIDs[MAXSATELLITES];
 
@@ -118,7 +119,7 @@ typedef struct _NMEA_INFO
 
   SWITCH_INFO SwitchState;
 
-  BOOL MovementDetected;
+  bool MovementDetected;
 
   double StallRatio;
 
@@ -129,13 +130,13 @@ class NMEAParser {
  public:
   NMEAParser();
   static void UpdateMonitor(void);
-  static BOOL ParseNMEAString(int portnum,
+  static bool ParseNMEAString(int portnum,
                               const TCHAR *String, NMEA_INFO *GPS_INFO);
   static void Reset(void);
   static bool PortIsFlarm(int portnum);
   void _Reset(void);
 
-  BOOL ParseNMEAString_Internal(const TCHAR *String, NMEA_INFO *GPS_INFO);
+  bool ParseNMEAString_Internal(const TCHAR *String, NMEA_INFO *GPS_INFO);
   bool gpsValid;
   int nSatellites;
 
@@ -153,17 +154,17 @@ class NMEAParser {
                                    const TCHAR **arr, size_t arrsz);
   static size_t ExtractParameters(const TCHAR *src, TCHAR *dst,
                                   const TCHAR **arr, size_t sz);
-  static BOOL NMEAChecksum(const TCHAR *String);
+  static bool NMEAChecksum(const TCHAR *String);
 
   static void ExtractParameter(const TCHAR *Source,
 			       TCHAR *Destination,
 			       int DesiredFieldNumber);
 
  private:
-  BOOL GSAAvailable;
-  BOOL GGAAvailable;
-  BOOL RMZAvailable;
-  BOOL RMAAvailable;
+  bool GSAAvailable;
+  bool GGAAvailable;
+  bool RMZAvailable;
+  bool RMAAvailable;
   double RMZAltitude;
   double RMAAltitude;
   double LastTime;
@@ -171,24 +172,24 @@ class NMEAParser {
   bool TimeHasAdvanced(double ThisTime, NMEA_INFO *GPS_INFO);
   static double TimeModify(double FixTime, NMEA_INFO* info);
 
-  BOOL GLL(const TCHAR *String, const TCHAR **, size_t, NMEA_INFO *GPS_INFO);
-  BOOL GGA(const TCHAR *String, const TCHAR **, size_t, NMEA_INFO *GPS_INFO);
-  BOOL GSA(const TCHAR *String, const TCHAR **, size_t, NMEA_INFO *GPS_INFO);
-  BOOL RMC(const TCHAR *String, const TCHAR **, size_t, NMEA_INFO *GPS_INFO);
-  BOOL RMB(const TCHAR *String, const TCHAR **, size_t, NMEA_INFO *GPS_INFO);
-  BOOL RMA(const TCHAR *String, const TCHAR **, size_t, NMEA_INFO *GPS_INFO);
-  BOOL RMZ(const TCHAR *String, const TCHAR **, size_t, NMEA_INFO *GPS_INFO);
+  bool GLL(const TCHAR *String, const TCHAR **, size_t, NMEA_INFO *GPS_INFO);
+  bool GGA(const TCHAR *String, const TCHAR **, size_t, NMEA_INFO *GPS_INFO);
+  bool GSA(const TCHAR *String, const TCHAR **, size_t, NMEA_INFO *GPS_INFO);
+  bool RMC(const TCHAR *String, const TCHAR **, size_t, NMEA_INFO *GPS_INFO);
+  bool RMB(const TCHAR *String, const TCHAR **, size_t, NMEA_INFO *GPS_INFO);
+  bool RMA(const TCHAR *String, const TCHAR **, size_t, NMEA_INFO *GPS_INFO);
+  bool RMZ(const TCHAR *String, const TCHAR **, size_t, NMEA_INFO *GPS_INFO);
 
-  BOOL WP0(const TCHAR *String, const TCHAR **, size_t, NMEA_INFO *GPS_INFO);
-  BOOL WP1(const TCHAR *String, const TCHAR **, size_t, NMEA_INFO *GPS_INFO);
-  BOOL WP2(const TCHAR *String, const TCHAR **, size_t, NMEA_INFO *GPS_INFO);
+  bool WP0(const TCHAR *String, const TCHAR **, size_t, NMEA_INFO *GPS_INFO);
+  bool WP1(const TCHAR *String, const TCHAR **, size_t, NMEA_INFO *GPS_INFO);
+  bool WP2(const TCHAR *String, const TCHAR **, size_t, NMEA_INFO *GPS_INFO);
 
   // Additional sentances
-  BOOL PTAS1(const TCHAR *String, const TCHAR **, size_t, NMEA_INFO *GPS_INFO);  // RMN: Tasman instruments.  TAS, Vario, QNE-altitude
+  bool PTAS1(const TCHAR *String, const TCHAR **, size_t, NMEA_INFO *GPS_INFO);  // RMN: Tasman instruments.  TAS, Vario, QNE-altitude
 
   // FLARM sentances
-  BOOL PFLAU(const TCHAR *String, const TCHAR **, size_t, NMEA_INFO *GPS_INFO);
-  BOOL PFLAA(const TCHAR *String, const TCHAR **, size_t, NMEA_INFO *GPS_INFO);
+  bool PFLAU(const TCHAR *String, const TCHAR **, size_t, NMEA_INFO *GPS_INFO);
+  bool PFLAA(const TCHAR *String, const TCHAR **, size_t, NMEA_INFO *GPS_INFO);
 };
 
 extern double AccelerometerZero;
