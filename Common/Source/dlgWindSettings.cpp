@@ -32,10 +32,8 @@ Copyright_License {
 }
 */
 
-#include "StdAfx.h"
-
-#include "Statistics.h"
 #include "Dialogs.h"
+#include "Statistics.h"
 #include "externs.h"
 #include "Units.h"
 #include "dlgTools.h"

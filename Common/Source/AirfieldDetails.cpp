@@ -37,7 +37,7 @@ Copyright_License {
 
 */
 
-
+#include "AirfieldDetails.h"
 #include "StdAfx.h"
 #include "Utils.h"
 #include "Sizes.h"
@@ -50,7 +50,7 @@ Copyright_License {
 #include "LocalPath.hpp"
 #include "XCSoar.h"
 #include "WayPoint.hpp"
-#include "AirfieldDetails.h"
+
 #include <zzip/lib.h>
 #include "wcecompat/ts_string.h"
 

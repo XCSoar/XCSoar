@@ -33,8 +33,8 @@ Copyright_License {
 
 */
 
-#include "StdAfx.h"
 #include "AATDistance.h"
+#include "StdAfx.h"
 #include "Task.h"
 #include "Airspace.h"
 #include "XCSoar.h"

@@ -36,6 +36,7 @@ Copyright_License {
 
 */
 
+#include "Dialogs.h"
 #include "StdAfx.h"
 
 #include <commdlg.h>
@@ -45,7 +46,6 @@ Copyright_License {
 #include "aygshell.h"
 #endif
 
-#include "Dialogs.h"
 #include "Logger.h"
 #include "resource.h"
 #include "Utils.h"

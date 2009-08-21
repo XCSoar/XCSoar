@@ -31,14 +31,14 @@ Copyright_License {
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-  $Id$
+   $Id$
 }
 */
-#include "StdAfx.h"
+
+#include "InfoBoxLayout.h"
 #include "XCSoar.h"
 #include "Sizes.h"
 #include "MapWindow.h"
-#include "InfoBoxLayout.h"
 #include "Dialogs.h"
 #include "externs.h"
 #include "Screen/Animation.hpp"

@@ -32,11 +32,10 @@ Copyright_License {
 }
 */
 
-
-#include "StdAfx.h"
 #include "TeamCodeCalculation.h"
-#include "math.h"
 
+#include <math.h>
+#include <string.h>
 
 void ConvertHeadingToTeamCode(double heading, TCHAR *code);
 void NumberToTeamCode(double value, TCHAR *code, int minCiffers);

@@ -36,7 +36,9 @@ Copyright_License {
 */
 #ifndef PROCESS_H
 #define PROCESS_H
-#include "externs.h"
+
+#include "Parser.h"
+#include "Calculations.h"
 
 void				NoProcessing(int UpDown);
 void				WindSpeedProcessing(int UpDown);

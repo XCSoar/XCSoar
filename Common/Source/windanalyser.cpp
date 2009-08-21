@@ -50,11 +50,9 @@ Copyright_License {
 }
 */
 
-#include "StdAfx.h"
-
+#include "windanalyser.h"
 #include "Calculations.h"
 #include "Math/FastMath.h"
-#include "windanalyser.h"
 #include "XCSoar.h"
 
 #include <stdlib.h>

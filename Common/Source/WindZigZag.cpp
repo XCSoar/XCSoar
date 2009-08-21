@@ -33,8 +33,7 @@ Copyright_License {
 
 */
 
-
-#include "StdAfx.h"
+#include "WindZigZag.h"
 #include "XCSoar.h"
 #include "Math/FastMath.h"
 #include "MapWindow.h"

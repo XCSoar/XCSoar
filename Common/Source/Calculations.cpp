@@ -37,11 +37,9 @@ Copyright_License {
 
 */
 
-#include "StdAfx.h"
-#include "Defines.h" // VENTA3
 #include "Calculations.h"
+#include "Defines.h" // VENTA3
 #include "Dialogs.h"
-#include "Parser.h"
 #include "Process.h"
 #include "Utils.h"
 #include "Utils2.h"

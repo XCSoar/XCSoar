@@ -38,7 +38,6 @@ Copyright_License {
 
 */
 
-#include "StdAfx.h"
 #include "Airspace.h"
 #include "externs.h"
 #include "Dialogs.h"

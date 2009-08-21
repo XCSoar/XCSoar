@@ -36,12 +36,11 @@ Copyright_License {
 }
 */
 
-#include "StdAfx.h"
+#include "Airspace.h"
 #include "Calculations.h"
 #include "externs.h"
 #include "Dialogs.h"
 #include "Utils.h"
-#include "Airspace.h"
 #include "device.h"
 
 #ifdef HAVEEXCEPTIONS

@@ -35,9 +35,9 @@ Copyright_License {
 }
 */
 
-
-#include "StdAfx.h"
+#include "Dialogs.h"
 #include "XCSoar.h"
+#include "externs.h"
 #include "Utils2.h"
 #include "MapWindow.h"
 #include "Terrain.h"
@@ -46,7 +46,6 @@ Copyright_License {
 #include "Utils.h"
 #include "WindowControls.h"
 #include "Statistics.h"
-#include "Dialogs.h"
 #include "Logger.h"
 #include "McReady.h"
 #include "dlgTools.h"

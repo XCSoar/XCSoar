@@ -37,15 +37,13 @@ Copyright_License {
 
 */
 
-#include "StdAfx.h"
-
+#include "Parser.h"
 #include "XCSoar.h"
 #include "Utils.h"
 #include "externs.h"
 #include "VarioSound.h"
 #include "Logger.h"
 #include "GaugeFLARM.h"
-#include "Parser.h"
 #include "device.h"
 #include "Geoid.h"
 //#include "FlarmIdFile.h"

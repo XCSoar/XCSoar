@@ -35,12 +35,12 @@ Copyright_License {
 }
 */
 
+#include "InfoBox.h"
 #include "StdAfx.h"
 #include "Defines.h" // VENTA3
 #include "XCSoar.h"
 #include "Sizes.h"
 #include "MapWindow.h"
-#include "InfoBox.h"
 #include "Dialogs.h"
 #include "Utils.h"
 #include "externs.h"

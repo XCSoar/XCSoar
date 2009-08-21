@@ -32,13 +32,9 @@ Copyright_License {
 }
 */
 
-#include "StdAfx.h"
-#include <limits.h>
-
-//#include "winbase.h" // needed for resource stuff
-
-#include "WindowControls.h"
 #include "dlgTools.h"
+#include "StdAfx.h"
+#include "WindowControls.h"
 #include "xmlParser.h"
 #include "InfoBoxLayout.h"
 #include "Dialogs.h"
@@ -52,6 +48,7 @@ Copyright_License {
 #include "Utils.h"
 
 #include <assert.h>
+#include <limits.h>
 
 static inline int
 mmin(const int t1, const int t2)

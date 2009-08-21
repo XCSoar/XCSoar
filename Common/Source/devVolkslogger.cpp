@@ -37,6 +37,7 @@ Copyright_License {
 
 // adding baro alt sentance parser to support baro source priority  if (d == pDevPrimaryBaroSource){...}
 
+#include "devVolkslogger.h"
 #include "StdAfx.h"
 
 #include "Dialogs.h"
@@ -45,8 +46,6 @@ Copyright_License {
 #include "Math/Pressure.h"
 #include "Parser.h"
 #include "Port.h"
-
-#include "devVolkslogger.h"
 
 #include "Volkslogger/vlapi2.h"
 #include "Volkslogger/vlapihlp.h"

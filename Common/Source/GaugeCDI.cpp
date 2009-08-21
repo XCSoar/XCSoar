@@ -33,16 +33,14 @@ Copyright_License {
 
 */
 
-#include "StdAfx.h"
-#include "XCSoar.h"
 #include "GaugeCDI.h"
+#include "XCSoar.h"
 #include "Math/FastMath.h"
-
-extern HFONT CDIWindowFont;
-
 #include "InfoBoxLayout.h"
 
 #include <tchar.h>
+
+extern HFONT CDIWindowFont;
 
 HWND GaugeCDI::hWndCDIWindow = NULL;
 

@@ -1,11 +1,12 @@
 #ifndef RASTERTERRAIN_H
 #define RASTERTERRAIN_H
 
-#include "StdAfx.h"
-#include "Utils.h"
 #include "Sizes.h"
 #include <zzip/lib.h>
 #include "jasper/RasterTile.h"
+
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
 
 typedef struct _TERRAIN_INFO
 {

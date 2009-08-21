@@ -35,7 +35,6 @@ Copyright_License {
 }
 */
 
-#include "StdAfx.h"
 #include "GaugeVarioAltA.h"
 #include "XCSoar.h"
 #include "MapWindow.h"

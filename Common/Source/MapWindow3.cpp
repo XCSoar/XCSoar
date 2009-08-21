@@ -35,11 +35,11 @@ Copyright_License {
 }
 */
 
+#include "MapWindow.h"
 #include "StdAfx.h"
 #include "options.h"
 #include "XCSoar.h"
 #include "Utils2.h"
-#include "MapWindow.h"
 #include "Units.h"
 #include "McReady.h"
 #include "externs.h"

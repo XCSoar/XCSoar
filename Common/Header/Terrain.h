@@ -1,7 +1,8 @@
 #ifndef TERRAIN_H
 #define TERRAIN_H
-#include "StdAfx.h"
-#include "Topology.h"
+
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
 
 extern short TerrainContrast;
 extern short TerrainBrightness;

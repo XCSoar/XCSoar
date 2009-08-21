@@ -35,9 +35,7 @@ Copyright_License {
 }
 */
 
-/*
-#include <string.h>
-*/
+#include "Utils2.h"
 #include "StdAfx.h"
 #include <stdio.h>
 #ifndef __MINGW32__
@@ -52,7 +50,6 @@ Copyright_License {
 #include "externs.h"
 #include "XCSoar.h"
 #include "InfoBoxLayout.h"
-#include "Utils2.h"
 #include "device.h"
 #include "Logger.h"
 #include "Parser.h"

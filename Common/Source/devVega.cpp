@@ -32,19 +32,17 @@ Copyright_License {
 }
 */
 
+#include "devVega.h"
 #include "StdAfx.h"
-
 #include "Dialogs.h"
 #include "Math/FastMath.h"
 #include "Math/Pressure.h"
 #include "Parser.h"
 #include "Port.h"
 #include "Registry.hpp"
-
 #include "devVega.h"
 #include "Utils.h"
 #include "InputEvents.h"
-
 
 #define INPUT_BIT_FLAP_POS                  0 // 1 flap pos
 #define INPUT_BIT_FLAP_ZERO                 1 // 1 flap zero

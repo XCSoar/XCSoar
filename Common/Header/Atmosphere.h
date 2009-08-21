@@ -1,6 +1,8 @@
 #ifndef ATMOSPHERE_H
 #define ATMOSPHERE_H
 
+#include "Parser.h"
+#include "Calculations.h"
 
 class CuSondeLevel {
 public:

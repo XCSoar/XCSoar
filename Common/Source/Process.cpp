@@ -31,14 +31,12 @@ Copyright_License {
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-  $Id$
+   $Id$
 }
 */
-#include "StdAfx.h"
-#include <windows.h>
 
-#include "Defines.h" // VENTA3
 #include "Process.h"
+#include "Defines.h" // VENTA3
 #include "externs.h"
 #include "Math/FastMath.h"
 #include "device.h"
@@ -53,6 +51,9 @@ Copyright_License {
 #include "Utils.h"
 
 #include <stdlib.h>
+
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
 
 extern AATDistance aatdistance;
 

@@ -32,8 +32,6 @@ Copyright_License {
 }
 */
 
-
-#include "StdAfx.h"
 #include "RasterTerrain.h"
 #include "XCSoar.h"
 #include "Dialogs.h"

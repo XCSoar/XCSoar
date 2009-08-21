@@ -50,13 +50,11 @@ Copyright_License {
 //IAS           km/  kts  mp   kts
 //distance      km   nm   ml   nm
 
-
-#include "StdAfx.h"
+#include "Units.h"
 
 #include <stdio.h>
 //#include <assert.h>
 
-#include "Units.h"
 #include "resource.h"
 #include "externs.h"
 

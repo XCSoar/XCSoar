@@ -35,8 +35,7 @@ Copyright_License {
 }
 */
 
-#include "StdAfx.h"
-
+#include "Dialogs.h"
 #include "Statistics.h"
 #include "Utils.h"
 #include "externs.h"

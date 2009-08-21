@@ -35,14 +35,14 @@ Copyright_License {
 }
 */
 
-#include "StdAfx.h"
-#include <math.h>
+#include "Atmosphere.h"
 #include "XCSoar.h"
 #include "Parser.h"
 #include "Calculations.h"
-#include "Atmosphere.h"
 #include "externs.h"
 #include "RasterTerrain.h"
+
+#include <math.h>
 
 unsigned short CuSonde::last_level=0;
 double CuSonde::thermalHeight = 0;

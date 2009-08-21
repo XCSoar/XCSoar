@@ -36,10 +36,9 @@ Copyright_License {
 }
 */
 
+#include "MapWindow.h"
 #include "StdAfx.h"
 #include "options.h"
-#include "Math/Screen.hpp"
-#include "MapWindow.h"
 #include "OnLineContest.h"
 #include "Utils.h"
 #include "Math/FastMath.h"

@@ -35,10 +35,9 @@ Copyright_License {
 }
 */
 
-#include "StdAfx.h"
-#include <stdio.h>
-#include "Defines.h" // VENTA3
 #include "WindowControls.h"
+#include "StdAfx.h"
+#include "Defines.h" // VENTA3
 #include "dlgTools.h"
 #ifndef ALTAIRSYNC
 #include "Message.h"
@@ -67,6 +66,7 @@ extern int DisplayTimeOut;
 #endif
 
 #include <assert.h>
+#include <stdio.h>
 
 #ifdef ALTAIRSYNC
 #define ISCALE 1

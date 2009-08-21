@@ -34,8 +34,8 @@ Copyright_License {
 
 */
 
-#include "StdAfx.h"
 #include "Message.h"
+#include "StdAfx.h"
 #include "MapWindow.h"
 #include "externs.h"
 #include "InfoBoxLayout.h"

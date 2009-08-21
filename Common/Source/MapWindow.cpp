@@ -35,10 +35,10 @@ Copyright_License {
 }
 */
 
+#include "MapWindow.h"
 #include "StdAfx.h"
 #include "Utils.h"
 #include "Defines.h"
-#include "MapWindow.h"
 #include "OnLineContest.h"
 #include "Math/FastMath.h"
 #include "Math/Earth.hpp"
@@ -58,7 +58,7 @@ Copyright_License {
 #include "Screen/Ramp.hpp"
 #include "Compatibility/gdi.h"
 
-// #include <assert.h>
+#include <assert.h>
 #include <windows.h>
 #include <math.h>
 
@@ -3139,7 +3139,7 @@ void MapWindow::DrawWaypoints(HDC hdc, const RECT rc)
 		  Buffer[0]= '\0';
 	      default:
 #if (WINDOWSPC<1)
-		ASSERT(0);
+		assert(0);
 #endif
 		break;
 	      }
@@ -3228,7 +3228,7 @@ void MapWaypointLabelAdd(TCHAR *Name, int X, int Y,
 
   if (MapWaypointLabelListCount >= (sizeof(MapWaypointLabelList)/sizeof(MapWaypointLabel_t))-1){
 #if (WINDOWSPC<1)
-    ASSERT(0);
+    assert(0);
 #endif
     return;
   }

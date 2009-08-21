@@ -1,7 +1,7 @@
 #ifndef WINDZIGZAG_H
 #define WINDZIGZAG_H
 
-#include "XCSoar.h"
+#include "Calculations.h"
 #include "Parser.h"
 
 int WindZigZagUpdate(NMEA_INFO* Basic, DERIVED_INFO* Calculated,

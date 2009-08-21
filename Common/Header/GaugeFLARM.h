@@ -1,7 +1,10 @@
 #ifndef GAUGE_FLARM_H
 #define GAUGE_FLARM_H
-#include "StdAfx.h"
+
 #include "Parser.h"
+
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
 
 class GaugeFLARM {
  public:

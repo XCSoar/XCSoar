@@ -35,6 +35,7 @@ Copyright_License {
 }
 */
 
+#include "Utils.h"
 #include "StdAfx.h"
 
 #ifndef __MINGW32__
@@ -46,7 +47,6 @@ Copyright_License {
 #endif
 #endif
 
-#include "Utils.h"
 #include "Math/FastMath.h"
 #include "Math/Geometry.hpp"
 #include "Math/Earth.hpp"

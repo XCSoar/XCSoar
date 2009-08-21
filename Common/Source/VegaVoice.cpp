@@ -32,15 +32,13 @@ Copyright_License {
 }
 */
 
-#include <math.h>
-
+#include "VegaVoice.h"
 #include "StdAfx.h"
 #include "InputEvents.h"  // used for altair beep hack
-#include "VegaVoice.h"
-
 #include "device.h"
 
 #include <tchar.h>
+#include <math.h>
 
 bool EnableVoiceClimbRate=true;
 bool EnableVoiceTerrain=true;

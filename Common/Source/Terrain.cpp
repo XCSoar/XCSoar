@@ -31,9 +31,7 @@ Copyright_License {
 
 }
 */
-// omaplibdemo.cpp : Defines the entry point for the application.
-//
-#include "StdAfx.h"
+
 #include "Terrain.h"
 #include "RasterTerrain.h"
 #include "MapWindow.h"

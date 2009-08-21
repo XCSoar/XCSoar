@@ -36,10 +36,9 @@ Copyright_License {
 
 */
 
-#include "StdAfx.h"
+#include "Calculations2.h"
 #include "Calculations.h"
 #include "Dialogs.h"
-#include "Parser.h"
 #include "Utils.h"
 #include "LocalPath.hpp"
 #include "externs.h"

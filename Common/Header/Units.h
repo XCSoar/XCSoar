@@ -38,6 +38,11 @@ Copyright_License {
 #if !defined(__UNITS_H)
 #define __UNITS_H
 
+#include <tchar.h>
+
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+
 #define UNITBITMAPNORMAL      0
 #define UNITBITMAPINVERS      1
 #define UNITBITMAPGRAY        2
