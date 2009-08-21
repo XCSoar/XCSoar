@@ -36,10 +36,6 @@ Copyright_License {
 
 #include "XCSoar.h"
 
-bool	InitLDRotary(ldrotary_s *buf);
-void	InsertLDRotary(ldrotary_s *buf, int distance, int altitude);
-int	CalculateLDRotary(ldrotary_s *buf);
-
 int ProcessVirtualKey(int x, int y, long keytime, short vkmode);
 
 

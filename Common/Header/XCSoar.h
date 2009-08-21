@@ -45,6 +45,7 @@ Copyright_License {
 #include "Statistics.h"
 #include "Screen/Font.hpp"
 #include "Formatter/Base.hpp"
+#include "GlideRatio.hpp"
 
 class Trigger;
 class MapWindow;
@@ -321,16 +322,6 @@ typedef enum{
 	ae2minutes,
 	ae3minutes,
 } AverEffTime_t;
-
-typedef struct {
-        int     distance[MAXLDROTARYSIZE]; // rotary array with a predefined max capacity
-        int     altitude[MAXLDROTARYSIZE];
-	int	totaldistance;
-        short   start;          // pointer to current first item in rotarybuf if used
-        short   size;           // real size of rotary buffer (0-size)
-	bool	valid;
-} ldrotary_s;
-
 
 typedef struct{
   MapScaleAppearance_t MapScale;
