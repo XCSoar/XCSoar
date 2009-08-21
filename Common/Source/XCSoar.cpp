@@ -1230,9 +1230,6 @@ void AfterStartup() {
   drawTriggerEvent.trigger();
 }
 
-
-extern int testmain();
-
 void StartupLogFreeRamAndStorage() {
   int freeram = CheckFreeRam()/1024;
   TCHAR buffer[MAX_PATH];
