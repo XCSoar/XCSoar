@@ -289,6 +289,35 @@ void ClipPolygon(HDC hdc, const POINT *m_ptin, unsigned int inLength,
   }
 }
 
+void ClipPolyline(HDC hdc, POINT* pt, const int npoints, const RECT rc)
+{
+#ifdef BUG_IN_CLIPPING
+  ClipPolygon(hdc, pt, npoints, rc, false);
+  //VENTA2
+#elif defined(PNA)
+  // if (GlobalModelType == MODELTYPE_PNA_HP31X)
+  if (needclipping==true)
+    ClipPolygon(hdc, pt, npoints, rc, false);
+  else
+    Polyline(hdc, pt, npoints);
+#else
+  Polyline(hdc, pt, npoints);
+#endif
+}
+
+void ClipLine(const HDC& hdc, const POINT &ptStart,
+              const POINT &ptEnd, const RECT rc)
+{
+  POINT pt[2];
+
+  pt[0].x= ptStart.x;
+  pt[0].y= ptStart.y;
+  pt[1].x= ptEnd.x;
+  pt[1].y= ptEnd.y;
+
+  ClipPolyline(hdc, pt, 2, rc);
+}
+
 static const double xcoords[64] = {
   0,			0.09801714,		0.195090322,	0.290284677,	0.382683432,	0.471396737,	0.555570233,	0.634393284,
   0.707106781,	0.773010453,	0.831469612,	0.881921264,	0.923879533,	0.956940336,	0.98078528,		0.995184727,
@@ -415,7 +444,7 @@ int Circle(HDC hdc, long x, long y, int radius, RECT rc, bool clip, bool fill)
 // VENTA3 FIX HP clipping bug
 #ifdef PNA
       if (needclipping==true)
-      	MapWindow::_Polyline(hdc,pt,step+1,rc);
+        ClipPolyline(hdc,pt,step+1,rc);
       else
         Polyline(hdc,pt,step+1);
 #else

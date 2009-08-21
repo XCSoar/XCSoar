@@ -15,6 +15,11 @@ enum {
 void ClipPolygon(HDC hdc, const POINT *m_ptin, unsigned int inLength,
                  RECT rc, bool fill);
 
+void ClipPolyline(HDC hdc, POINT* pt, const int npoints, const RECT rc);
+
+void ClipLine(const HDC& hdc, const POINT &ptStart,
+              const POINT &ptEnd, const RECT rc);
+
 int  Circle(HDC hdc, long x, long y, int radius, RECT rc, bool clip=false,
             bool fill=true);
 int Segment(HDC hdc, long x, long y, int radius, RECT rc,

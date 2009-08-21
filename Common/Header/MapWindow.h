@@ -180,7 +180,6 @@ class MapWindow {
   static void _DrawLine(HDC hdc, const int PenStyle, const int width,
 	       const POINT ptStart, const POINT ptEnd,
 	       const COLORREF cr, const RECT rc);
-  static void _Polyline(HDC hdc, POINT* pt, const int npoints, const RECT rc);
   static void DrawBitmapIn(const HDC hdc, const POINT &sc, const HBITMAP h);
   static void DrawBitmapX(HDC hdc, int top, int right,
 		     int sizex, int sizey,
@@ -286,10 +285,6 @@ class MapWindow {
   //  static void DrawSpeedToFly(HDC hDC, RECT rc);
   static void DrawFLARMTraffic(HDC hDC, RECT rc, POINT Orig_Aircraft);
 
-  static void DrawSolidLine(const HDC&hdc,
-			    const POINT&start,
-			    const POINT&end ,
-			    const RECT rc);
   static bool TextInBox(HDC hDC, const TCHAR *Value, int x, int y, int size,
                         TextInBoxMode_t Mode, bool noOverlap=false);
   static void ToggleFullScreenStart();

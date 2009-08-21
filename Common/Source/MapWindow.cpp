@@ -3584,12 +3584,12 @@ void MapWindow::DrawTaskAAT(HDC hdc, const RECT rc, HDC buffer)
 		      Task[i].AATStartRadial-DisplayAngle,
 		      Task[i].AATFinishRadial-DisplayAngle);
 
-              DrawSolidLine(buffer,
-			    WayPointList[Task[i].Index].Screen, Task[i].AATStart,
-			    rc);
-              DrawSolidLine(buffer,
-			    WayPointList[Task[i].Index].Screen, Task[i].AATFinish,
-			    rc);
+              ClipLine(buffer,
+                       WayPointList[Task[i].Index].Screen, Task[i].AATStart,
+                       rc);
+              ClipLine(buffer,
+                       WayPointList[Task[i].Index].Screen, Task[i].AATFinish,
+                       rc);
 
 	    }
 
@@ -3962,36 +3962,6 @@ void MapWindow::LatLon2Screen(pointObj *ptin, POINT *ptout, const int n,
 
 ////////////////////////////////////////////////////////////////////////
 
-void MapWindow::_Polyline(HDC hdc, POINT* pt, const int npoints,
-			  const RECT rc) {
-#ifdef BUG_IN_CLIPPING
-  ClipPolygon(hdc, pt, npoints, rc, false);
-  //VENTA2
-#elif defined(PNA)
-  // if (GlobalModelType == MODELTYPE_PNA_HP31X)
-  if (needclipping==true)
-    ClipPolygon(hdc, pt, npoints, rc, false);
-  else
-    Polyline(hdc, pt, npoints);
-#else
-  Polyline(hdc, pt, npoints);
-#endif
-}
-
-void MapWindow::DrawSolidLine(const HDC& hdc, const POINT &ptStart,
-                              const POINT &ptEnd, const RECT rc)
-{
-  POINT pt[2];
-
-  pt[0].x= ptStart.x;
-  pt[0].y= ptStart.y;
-  pt[1].x= ptEnd.x;
-  pt[1].y= ptEnd.y;
-
-  _Polyline(hdc, pt, 2, rc);
-}
-
-
 void MapWindow::_DrawLine(HDC hdc, const int PenStyle, const int width,
 			  const POINT ptStart, const POINT ptEnd,
 			  const COLORREF cr,
@@ -4008,7 +3978,7 @@ void MapWindow::_DrawLine(HDC hdc, const int PenStyle, const int width,
   pt[1].x = ptEnd.x;
   pt[1].y = ptEnd.y;
 
-  _Polyline(hdc, pt, 2, rc);
+  ClipPolyline(hdc, pt, 2, rc);
 
   SelectObject(hdc, hpOld);
   DeleteObject((HPEN)hpDash);
@@ -4038,7 +4008,7 @@ void MapWindow::DrawDashLine(HDC hdc, const int width,
     for (i = 0; i < width; i++){
       pt[0].x += 1;
       pt[1].x += 1;
-      _Polyline(hdc, pt, 2, rc);
+      ClipPolyline(hdc, pt, 2, rc);
     }
   } else {
     pt[0].y -= width / 2;
@@ -4046,7 +4016,7 @@ void MapWindow::DrawDashLine(HDC hdc, const int width,
     for (i = 0; i < width; i++){
       pt[0].y += 1;
       pt[1].y += 1;
-      _Polyline(hdc, pt, 2, rc);
+      ClipPolyline(hdc, pt, 2, rc);
     }
   }
 

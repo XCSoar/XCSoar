@@ -215,7 +215,7 @@ void Statistics::StyleLine(HDC hdc, const POINT l1, const POINT l2,
     break;
   case STYLE_MEDIUMBLACK:
     SelectObject(hdc, penThinSignal /*GetStockObject(BLACK_PEN)*/);
-    MapWindow::_Polyline(hdc, line, 2, rc);
+    ClipPolyline(hdc, line, 2, rc);
     break;
   case STYLE_THINDASHPAPER:
     MapWindow::DrawDashLine(hdc, 1,

@@ -158,7 +158,7 @@ void MapWindow::DrawMapScale2(HDC hDC, const RECT rc,
       SelectObject(hDC, hpBlack);
     }
     if (!first) {
-      DrawSolidLine(hDC,Start,End, rc);
+      ClipLine(hDC, Start, End, rc);
     } else {
       first=false;
     }
@@ -175,7 +175,7 @@ void MapWindow::DrawMapScale2(HDC hDC, const RECT rc,
       SelectObject(hDC, hpBlack);
     }
     if (!first) {
-      DrawSolidLine(hDC,Start,End, rc);
+      ClipLine(hDC, Start, End, rc);
     } else {
       first=false;
     }
@@ -247,7 +247,7 @@ void MapWindow::DrawSpeedToFly(HDC hDC, RECT rc) {
       chevron[2].x = xoffset+IBLSCALE(20);
       chevron[2].y = yoffset;
 
-      _Polyline(hDC, chevron, 3, rc);
+      ClipPolyline(hDC, chevron, 3, rc);
     }
     if (vdiff>0) {
       hpOld = (HPEN)SelectObject(hDC, hpSpeedSlow);
@@ -261,7 +261,7 @@ void MapWindow::DrawSpeedToFly(HDC hDC, RECT rc) {
   chevron[0].y = ycenter;
   chevron[1].x = xoffset+IBLSCALE(3+20);
   chevron[1].y = ycenter;
-  _Polyline(hDC, chevron, 2, rc);
+  ClipPolyline(hDC, chevron, 2, rc);
 
   SelectObject(hDC, hbOld);
   SelectObject(hDC, hpOld);
@@ -1280,7 +1280,7 @@ void MapWindow::DrawGreatCircle(HDC hdc,
                 EndP);
 
   if (d_distance>distanceTotal) {
-    DrawSolidLine(hdc, StartP, EndP, rc);
+    ClipLine(hdc, StartP, EndP, rc);
   } else {
 
     for (int i=0; i<= 10; i++) {
@@ -1305,7 +1305,7 @@ void MapWindow::DrawGreatCircle(HDC hdc,
                     tlat1,
                     EndP);
 
-      DrawSolidLine(hdc, StartP, EndP, rc);
+      ClipLine(hdc, StartP, EndP, rc);
 
       StartP.x = EndP.x;
       StartP.y = EndP.y;
@@ -1586,7 +1586,7 @@ double MapWindow::DrawTrail( HDC hdc, const POINT Orig, const RECT rc)
 #ifndef NOLINETO
       LineTo(hdc, P1.Screen.x, P1.Screen.y);
 #else
-      DrawSolidLine(hdc, P1.Screen, point_lastdrawn, rc);
+      ClipLine(hdc, P1.Screen, point_lastdrawn, rc);
 #endif
     }
     point_lastdrawn = P1.Screen;
@@ -1598,7 +1598,7 @@ double MapWindow::DrawTrail( HDC hdc, const POINT Orig, const RECT rc)
 #ifndef NOLINETO
     LineTo(hdc, Orig.x, Orig.y);
 #else
-    DrawSolidLine(hdc, Orig, point_lastdrawn, rc);
+    ClipLine(hdc, Orig, point_lastdrawn, rc);
 #endif
   }
 
@@ -2464,7 +2464,7 @@ void MapWindow::DrawAirSpace(HDC hdc, const RECT rc, HDC buffer)
 	    POINT ps[2];
 	    ps[0] = pstart[0];
 	    ps[1] = pstart[AirspaceArea[i].NumPoints-1];
-	    _Polyline(buffer, ps, 2, rc);
+            ClipPolyline(buffer, ps, 2, rc);
 	  }
 	}
 
@@ -2517,14 +2517,14 @@ void MapWindow::DrawMapScale(HDC hDC, const RECT rc /* the Map Rect*/,
 
     Start.x = rc.right-IBLSCALE(6); End.x = rc.right-IBLSCALE(6);
     Start.y = rc.bottom-IBLSCALE(30); End.y = Start.y - IBLSCALE(30);
-    DrawSolidLine(hDC,Start,End, rc);
+    ClipLine(hDC, Start, End, rc);
 
     Start.x = rc.right-IBLSCALE(11); End.x = rc.right-IBLSCALE(6);
     End.y = Start.y;
-    DrawSolidLine(hDC,Start,End, rc);
+    ClipLine(hDC, Start, End, rc);
 
     Start.y = Start.y - IBLSCALE(30); End.y = Start.y;
-    DrawSolidLine(hDC,Start,End, rc);
+    ClipLine(hDC, Start, End, rc);
 
     SelectObject(hDC, hpOld);
 
@@ -2727,11 +2727,11 @@ void MapWindow::DrawGlideThroughTerrain(HDC hDC, const RECT rc) {
                              hpTerrainLineBg);  //sjt 02feb06 added bg line
 
   SelectObject(hDC,hpTerrainLineBg);
-  _Polyline(hDC,Groundline,NUMTERRAINSWEEPS+1, rc);
+  ClipPolyline(hDC, Groundline, NUMTERRAINSWEEPS + 1, rc);
   if ((FinalGlideTerrain==1) ||
       ((!EnableTerrain || !DerivedDrawInfo.Flying) && (FinalGlideTerrain==2))) {
     SelectObject(hDC,hpTerrainLine);
-    _Polyline(hDC,Groundline,NUMTERRAINSWEEPS+1, rc);
+    ClipPolyline(hDC, Groundline, NUMTERRAINSWEEPS + 1, rc);
   }
 
   if (DerivedDrawInfo.Flying && ValidTaskPoint(ActiveWayPoint)) {
