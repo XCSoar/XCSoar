@@ -65,21 +65,6 @@ extern int VisualGlide; // VENTA3
 extern DisplayMode_t UserForceDisplayMode;
 extern DisplayMode_t DisplayMode;
 
-typedef struct _SNAIL_POINT
-{
-  float Latitude;
-  float Longitude;
-  float Vario;
-  double Time;
-  POINT Screen;
-  short Colour;
-  BOOL Circling;
-  bool FarVisible;
-  double DriftFactor;
-} SNAIL_POINT;
-
-
-
 typedef union{
   unsigned int AsInt;
   struct{

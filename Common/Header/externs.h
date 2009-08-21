@@ -38,7 +38,10 @@ Copyright_License {
 #ifndef EXTERNS_H
 #define EXTERNS_H
 
-#include "MapWindow.h"
+#include "Airspace.h"
+#include "Task.h"
+#include "Parser.h"
+#include "Calculations.h"
 
 #if (EXPERIMENTAL > 0)
 //JMW#include "BlueSMS.h"
@@ -141,11 +144,6 @@ extern int BallastSecsToEmpty;
 extern bool BallastTimerActive;
 
 extern bool InfoWindowActive;
-
-// snail trail
-extern SNAIL_POINT SnailTrail[TRAILSIZE];
-extern	int SnailNext;
-extern int TrailLock;
 
 // Logger
 extern bool LoggerActive;

@@ -63,6 +63,7 @@ Copyright_License {
 #include "McReady.h"
 #include "AirfieldDetails.h"
 #include "InfoBoxLayout.h"
+#include "SnailTrail.hpp"
 
 #include <commctrl.h>
 #if (WINDOWSPC<1)
@@ -401,10 +402,6 @@ int AcknowledgementTime = 30;
 // Registration Data
 TCHAR strAssetNumber[MAX_LOADSTRING] = TEXT(""); //4G17DW31L0HY");
 TCHAR strRegKey[MAX_LOADSTRING] = TEXT("");
-
-//Snail Trial
-SNAIL_POINT SnailTrail[TRAILSIZE];
-int SnailNext = 0;
 
 // user interface settings
 bool CircleZoom = false;

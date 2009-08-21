@@ -43,6 +43,7 @@ Copyright_License {
 #include "externs.h"
 #include "Dialogs.h"
 #include "XCSoar.h"
+#include "externs.h"
 #include "MapWindow.h"
 #include "RasterTerrain.h"
 #include "Math/Earth.hpp"

@@ -57,6 +57,7 @@ Copyright_License {
 #include "PeriodClock.hpp"
 #include "Math/Pressure.h"
 #include "WayPoint.hpp"
+#include "SnailTrail.hpp"
 
 #include <tchar.h>
 

@@ -55,6 +55,7 @@ Copyright_License {
 #include "VarioSound.h"
 #include "InputEvents.h"
 #include "Compatibility/gdi.h"
+#include "SnailTrail.hpp"
 
 // #include <assert.h>
 #include <windows.h>
