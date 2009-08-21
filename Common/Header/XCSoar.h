@@ -43,6 +43,7 @@ Copyright_License {
 #include "Sizes.h"
 #include "Units.h"
 #include "Statistics.h"
+#include "Screen/Font.hpp"
 
 class Trigger;
 class MapWindow;
@@ -336,13 +337,6 @@ typedef enum{
   tiHighScore=0,
   tiKeyboard,
 }TextInputStyle_t;
-
-
-typedef struct{
-  int Height;
-  int AscentHeight;
-  int CapitalHeight;
-}FontHeightInfo_t;
 
 typedef enum{
   gvnsDefault=0,

@@ -34,7 +34,7 @@ Copyright_License {
 */
 
 #include "Units.h"
-#include "XCSoar.h"
+#include "Screen/Font.hpp"
 #include "Dialogs.h"
 
 #define BORDERTOP    (1<<bkTop)
