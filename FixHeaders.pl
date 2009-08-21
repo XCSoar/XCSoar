@@ -5,7 +5,7 @@ use strict;
 my $header = q{
 
   XCSoar Glide Computer - http://xcsoar.sourceforge.net/
-  Copyright (C) 2000 - 2008
+  Copyright (C) 2000 - 2009
 
   	M Roberts (original release)
 	Robin Birch <robinb@ruffnready.co.uk>
@@ -20,6 +20,7 @@ my $header = q{
 	Paolo Ventafridda <coolwind@email.it>
 	Tobias Lohner <tobias@lohner-net.de>
 	Mirek Jezek <mjezek@ipplc.cz>
+	Max Kellermann <max@duempel.org>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
