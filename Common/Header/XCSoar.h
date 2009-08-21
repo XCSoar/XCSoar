@@ -44,71 +44,11 @@ Copyright_License {
 #include "Units.h"
 #include "Statistics.h"
 #include "Screen/Font.hpp"
+#include "Formatter/Base.hpp"
 
 class Trigger;
 class MapWindow;
 
-class InfoBoxFormatter {
- public:
-  InfoBoxFormatter(const TCHAR *theformat);
-
-  virtual const TCHAR *Render(int *color);
-  virtual const TCHAR *RenderTitle(int *color); // VENTA3
-  void RenderInvalid(int *color);
-  bool Valid;
-  double Value;
-  TCHAR Format[FORMAT_SIZE+1];
-  TCHAR Text[100];
-  TCHAR CommentText[100];
-
-  virtual void AssignValue(int i);
-  const TCHAR *GetCommentText();
-  bool isValid();
-};
-
-
-class FormatterTeamCode: public InfoBoxFormatter {
- public:
-  FormatterTeamCode(const TCHAR *theformat):InfoBoxFormatter(theformat) {};
-
-  virtual const TCHAR *Render(int *color);
-};
-
-
-class FormatterDiffTeamBearing: public InfoBoxFormatter {
- public:
-  FormatterDiffTeamBearing(const TCHAR *theformat):InfoBoxFormatter(theformat) {};
-
-  virtual const TCHAR *Render(int *color);
-};
-
-
-class FormatterWaypoint: public InfoBoxFormatter {
- public:
-  FormatterWaypoint(const TCHAR *theformat):InfoBoxFormatter(theformat) {};
-
-  virtual const TCHAR *Render(int *color);
-};
-
-// VENTA3 / alternates
-class FormatterAlternate: public InfoBoxFormatter {
- public:
-  FormatterAlternate(const TCHAR *theformat):InfoBoxFormatter(theformat) {};
-
-  virtual const TCHAR *Render(int *color);
-  virtual const TCHAR *RenderTitle(int *color);
-  virtual void AssignValue(int i);
-};
-// VENTA3 bestlanding
-/*
-class FormatterBestLanding: public InfoBoxFormatter {
- public:
-  FormatterBestLanding(TCHAR *theformat):InfoBoxFormatter(theformat) {};
-  virtual TCHAR *Render(int *color);
-  virtual TCHAR *RenderTitle(int *color);
-  virtual void AssignValue(int i);
-};
-*/
 class FormatterLowWarning: public InfoBoxFormatter {
  public:
   FormatterLowWarning(const TCHAR *theformat, double the_minimum)

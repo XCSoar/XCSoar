@@ -64,6 +64,8 @@ Copyright_License {
 #include "AirfieldDetails.h"
 #include "InfoBoxLayout.h"
 #include "SnailTrail.hpp"
+#include "Formatter/TeamCode.hpp"
+#include "Formatter/WayPoint.hpp"
 
 #include <commctrl.h>
 #if (WINDOWSPC<1)
