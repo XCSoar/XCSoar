@@ -41,6 +41,7 @@ Copyright_License {
 #include "Registry.hpp"
 #include "Process.h"
 #include "Math/FastMath.h"
+#include "DataField/Enum.hpp"
 
 static bool changed = false;
 static WndForm *wf=NULL;

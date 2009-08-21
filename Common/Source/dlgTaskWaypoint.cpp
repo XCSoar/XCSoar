@@ -43,6 +43,7 @@ Copyright_License {
 #include "Logger.h"
 #include "InfoBoxLayout.h"
 #include "Math/FastMath.h"
+#include "DataField/Enum.hpp"
 
 #include <assert.h>
 

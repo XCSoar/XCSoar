@@ -37,6 +37,9 @@ Copyright_License {
 #include "Dialogs.h"
 #include "Registry.hpp"
 #include "XCSoar.h"
+#include "DataField/Boolean.hpp"
+#include "DataField/Enum.hpp"
+#include "DataField/Integer.hpp"
 
 extern void InitializeOneFont (HFONT * theFont,
                                const TCHAR FontRegKey[] ,

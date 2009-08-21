@@ -41,6 +41,7 @@ Copyright_License {
 #include "device.h"
 #include "InfoBoxLayout.h"
 #include "Registry.hpp"
+#include "DataField/Enum.hpp"
 
 #include <assert.h>
 

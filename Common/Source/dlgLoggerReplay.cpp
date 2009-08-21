@@ -40,6 +40,7 @@ Copyright_License {
 #include "Units.h"
 #include "Logger.h"
 #include "dlgTools.h"
+#include "DataField/FileReader.hpp"
 
 static WndForm *wf=NULL;
 

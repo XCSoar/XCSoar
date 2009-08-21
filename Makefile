@@ -427,6 +427,14 @@ OBJS	:=\
 	$(SRC)/Polar/BuiltIn.o \
 	$(SRC)/StatusMessage.o \
 	$(SRC)/LocalPath.o \
+	$(SRC)/DataField/Base.o \
+	$(SRC)/DataField/Boolean.o \
+	$(SRC)/DataField/ComboList.o \
+	$(SRC)/DataField/Enum.o \
+	$(SRC)/DataField/FileReader.o \
+	$(SRC)/DataField/Float.o \
+	$(SRC)/DataField/Integer.o \
+	$(SRC)/DataField/String.o \
 	\
 	$(SRC)/mapbits.o \
 	$(SRC)/maperror.o 		$(SRC)/mapprimitive.o \

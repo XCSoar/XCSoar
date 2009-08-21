@@ -58,6 +58,9 @@ Copyright_License {
 #include "InfoBoxLayout.h"
 #include "Waypointparser.h"
 #include "Polar/BuiltIn.hpp"
+#include "DataField/Boolean.hpp"
+#include "DataField/Enum.hpp"
+#include "DataField/FileReader.hpp"
 
 #include <assert.h>
 

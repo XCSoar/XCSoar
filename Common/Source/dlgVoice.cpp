@@ -40,6 +40,7 @@ Copyright_License {
 #include "Utils.h"
 #include "Registry.hpp"
 #include "VegaVoice.h"
+#include "DataField/Base.hpp"
 
 static WndForm *wf=NULL;
 

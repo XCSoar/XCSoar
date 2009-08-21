@@ -46,6 +46,7 @@ Copyright_License {
 #include "Math/FastMath.h"
 #include "Screen/Util.hpp"
 #include "LocalPath.hpp"
+#include "DataField/FileReader.hpp"
 
 #include <assert.h>
 

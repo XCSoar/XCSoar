@@ -43,6 +43,8 @@ Copyright_License {
 #include "dlgTools.h"
 #include "InfoBoxLayout.h"
 #include "Screen/Util.hpp"
+#include "DataField/Base.hpp"
+#include "DataField/ComboList.hpp"
 
 #include <assert.h>
 

@@ -49,6 +49,7 @@ Copyright_License {
 #include "MapWindow.h"
 #include "InfoBoxLayout.h"
 #include "Math/Geometry.hpp"
+#include "DataField/Enum.hpp"
 
 static WndForm *wf=NULL;
 static WindowControl *btnMove = NULL;

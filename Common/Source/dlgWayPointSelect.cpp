@@ -44,6 +44,7 @@ Copyright_License {
 #include "InfoBoxLayout.h"
 #include "Compatibility/string.h"
 #include "Math/FastMath.h"
+#include "DataField/Base.hpp"
 
 #include <assert.h>
 #include <stdlib.h>

@@ -40,6 +40,7 @@
 #include "Dialogs.h"
 #include "externs.h"
 #include "InfoBoxLayout.h"
+#include "DataField/Base.hpp"
 
 static WndForm *wf=NULL;
 

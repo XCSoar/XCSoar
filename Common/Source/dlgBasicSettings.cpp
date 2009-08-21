@@ -43,6 +43,7 @@ Copyright_License {
 #include "Atmosphere.h"
 #include "dlgTools.h"
 #include "device.h"
+#include "DataField/Base.hpp"
 
 static WndForm *wf=NULL;
 

@@ -50,6 +50,7 @@ Copyright_License {
 #include "Math/FastMath.h"
 #include "Math/Earth.hpp"
 #include "Screen/Util.hpp"
+#include "DataField/Base.hpp"
 
 #include <assert.h>
 #include <stdlib.h>

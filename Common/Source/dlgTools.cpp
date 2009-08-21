@@ -43,6 +43,12 @@ Copyright_License {
 #include "InfoBoxLayout.h"
 #include "Dialogs.h"
 #include "LocalPath.hpp"
+#include "DataField/Boolean.hpp"
+#include "DataField/Enum.hpp"
+#include "DataField/FileReader.hpp"
+#include "DataField/Float.hpp"
+#include "DataField/Integer.hpp"
+#include "DataField/String.hpp"
 
 #include <assert.h>
 

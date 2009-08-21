@@ -44,6 +44,7 @@ Copyright_License {
 #include "Port.h"
 #include "Calculations2.h"
 #include "Dialogs.h"
+#include "DataField/Base.hpp"
 
 static WndForm *wf=NULL;
 

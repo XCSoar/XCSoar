@@ -38,6 +38,7 @@ Copyright_License {
 #include "externs.h"
 #include "dlgTools.h"
 #include "InfoBoxLayout.h"
+#include "DataField/FileReader.hpp"
 
 static WndForm *wf=NULL;
 static WndOwnerDrawFrame *wSplash=NULL;
