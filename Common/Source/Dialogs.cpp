@@ -45,8 +45,6 @@ Copyright_License {
 #include "aygshell.h"
 #endif
 
-#include "compatibility.h"
-
 #include "Dialogs.h"
 #include "Logger.h"
 #include "resource.h"

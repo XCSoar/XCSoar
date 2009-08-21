@@ -35,7 +35,6 @@ Copyright_License {
 
 #include "StdAfx.h"
 
-#include "compatibility.h"
 #include "Dialogs.h"
 #include "resource.h"
 #include "Utils.h"

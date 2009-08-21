@@ -42,7 +42,6 @@ Copyright_License {
 #include "Calculations.h"
 #include "Dialogs.h"
 #include "Parser.h"
-#include "compatibility.h"
 #include "Process.h"
 #include "Utils2.h"
 #include "Math/FastMath.h"

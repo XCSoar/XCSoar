@@ -70,8 +70,6 @@ Copyright_License {
 
 #include "resource-launch.h"
 
-//#include "compatibility.h"
-
 
 
 /**************************************************************************

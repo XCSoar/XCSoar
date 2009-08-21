@@ -43,6 +43,7 @@ Copyright_License {
 #include "Math/FastMath.h"
 
 #include "dlgTools.h"
+#include "Compatibility/vk.h"
 
 #include <assert.h>
 #include <stdlib.h>

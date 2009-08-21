@@ -39,7 +39,6 @@ Copyright_License {
 #include "externs.h"
 #include "Waypointparser.h"
 #include "dlgTools.h"
-#include "compatibility.h"
 #include "Process.h"
 
 void dlgStatusTaskShowModal(void){

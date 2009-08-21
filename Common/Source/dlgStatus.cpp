@@ -40,7 +40,6 @@ Copyright_License {
 #include "Units.h"
 #include "Waypointparser.h"
 #include "Logger.h"
-#include "compatibility.h"
 #include "Math/FastMath.h"
 #include "Process.h"
 

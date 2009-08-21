@@ -42,7 +42,6 @@ Copyright_License {
 #include "resource.h"
 #include "Sizes.h"
 #include "Units.h"
-#include "compatibility.h"
 
 class Trigger;
 

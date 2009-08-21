@@ -51,7 +51,6 @@ Copyright_License {
 #include "device.h"
 #include "Screen/Animation.hpp"
 #include "Registry.hpp"
-#include "compatibility.h"
 #include "Process.h"
 #include "McReady.h"
 #include "Math/FastMath.h"

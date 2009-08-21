@@ -53,7 +53,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "xmlParser.h"
-#include "compatibility.h"
 #include "StdAfx.h"
 #include "Compatibility/string.h"
 

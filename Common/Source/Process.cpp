@@ -38,7 +38,6 @@ Copyright_License {
 #include <windows.h>
 
 #include "Defines.h" // VENTA3
-#include "compatibility.h"
 #include "Process.h"
 #include "externs.h"
 #include "Math/FastMath.h"

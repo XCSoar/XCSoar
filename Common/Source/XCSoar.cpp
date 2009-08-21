@@ -35,7 +35,7 @@ Copyright_License {
 }
 */
 #include "StdAfx.h"
-#include "compatibility.h"
+#include "Compatibility/vk.h"
 #include "Compatibility/string.h"
 #include "options.h"
 #include "XCSoar.h"
