@@ -37,7 +37,7 @@ Copyright_License {
 #ifndef PROCESS_H
 #define PROCESS_H
 
-#include "Parser.h"
+#include "NMEA/Info.h"
 #include "Calculations.h"
 
 void				NoProcessing(int UpDown);

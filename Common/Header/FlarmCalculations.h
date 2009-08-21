@@ -2,8 +2,10 @@
 #define FLARMCALCULATIONS_H
 
 #ifdef FLARM_AVERAGE
+
+#include "NMEA/Info.h"
+
 #include <map>
-#include "Parser.h"
 #include "ClimbAverageCalculator.h"
 
 class FlarmCalculations

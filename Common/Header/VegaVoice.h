@@ -1,9 +1,9 @@
 #ifndef VEGAVOICE_H
 #define VEGAVOICE_H
 
+#include "NMEA/Info.h"
 #include "StdAfx.h"
 #include <windows.h>
-#include "Parser.h"
 #include "Calculations.h"
 
 extern bool EnableVoiceClimbRate;

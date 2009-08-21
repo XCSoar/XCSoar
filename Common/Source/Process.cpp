@@ -36,6 +36,7 @@ Copyright_License {
 */
 
 #include "Process.h"
+#include "Parser.h"
 #include "Defines.h" // VENTA3
 #include "externs.h"
 #include "Math/FastMath.h"

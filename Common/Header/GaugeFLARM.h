@@ -1,7 +1,7 @@
 #ifndef GAUGE_FLARM_H
 #define GAUGE_FLARM_H
 
-#include "Parser.h"
+#include "NMEA/Info.h"
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>

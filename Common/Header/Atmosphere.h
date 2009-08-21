@@ -1,7 +1,7 @@
 #ifndef ATMOSPHERE_H
 #define ATMOSPHERE_H
 
-#include "Parser.h"
+#include "NMEA/Info.h"
 #include "Calculations.h"
 
 class CuSondeLevel {

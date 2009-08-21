@@ -5,7 +5,7 @@
 #include "Sizes.h"
 #include "Port.h"
 #include "WayPoint.hpp"
-#include "Parser.h"
+#include "NMEA/Info.h"
 
 #include <stdio.h>
 
