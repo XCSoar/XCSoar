@@ -70,6 +70,8 @@ Copyright_License {
 
 #include "NavFunctions.h" // used for team code
 
+#include <stdio.h>
+
 extern OLCOptimizer olc;
 
 int FastLogNum = 0; // number of points to log at high rate
@@ -669,37 +671,49 @@ void LoadCalculationsPersist(DERIVED_INFO *Calculated) {
 
   StartupStore(TEXT("LoadCalculationsPersist\n"));
 
-  HANDLE hFile;
-  DWORD dwBytesWritten;
-  DWORD size, sizein;
-  hFile = CreateFile(szCalculationsPersistFileName,
-                     GENERIC_READ,0,(LPSECURITY_ATTRIBUTES)NULL,
-                     OPEN_EXISTING,FILE_ATTRIBUTE_NORMAL,NULL);
-  if(hFile!=INVALID_HANDLE_VALUE ) {
-    size = sizeof(DERIVED_INFO);
-    ReadFile(hFile,&sizein,sizeof(DWORD),&dwBytesWritten,(OVERLAPPED*)NULL);
-    if (sizein != size) { CloseHandle(hFile); return; }
-    ReadFile(hFile,Calculated,size,&dwBytesWritten,(OVERLAPPED*)NULL);
+  DWORD sizein;
 
-    size = sizeof(Statistics);
-    ReadFile(hFile,&sizein,sizeof(DWORD),&dwBytesWritten,(OVERLAPPED*)NULL);
-    if (sizein != size) { flightstats.Reset(); CloseHandle(hFile); return; }
-    ReadFile(hFile,&flightstats,size,&dwBytesWritten,(OVERLAPPED*)NULL);
+  FILE *file = _tfopen(szCalculationsPersistFileName, _T("rb"));
+  if (file != NULL) {
+    fread(&sizein, sizeof(sizein), 1, file);
+    if (sizein != sizeof(*Calculated)) {
+      fclose(file);
+      return;
+    }
 
-    size = sizeof(OLCData);
-    ReadFile(hFile,&sizein,sizeof(DWORD),&dwBytesWritten,(OVERLAPPED*)NULL);
-    if (sizein != size) { olc.ResetFlight(); CloseHandle(hFile); return; }
-    ReadFile(hFile,&olc.data,size,&dwBytesWritten,(OVERLAPPED*)NULL);
+    fread(Calculated, sizeof(*Calculated), 1, file);
 
-    size = sizeof(double);
-    ReadFile(hFile,&sizein,sizeof(DWORD),&dwBytesWritten,(OVERLAPPED*)NULL);
-    if (sizein != size*5) { CloseHandle(hFile); return; }
-    ReadFile(hFile,&MACCREADY,size,&dwBytesWritten,(OVERLAPPED*)NULL);
-    ReadFile(hFile,&QNH,size,&dwBytesWritten,(OVERLAPPED*)NULL);
-    ReadFile(hFile,&BUGS,size,&dwBytesWritten,(OVERLAPPED*)NULL);
-    ReadFile(hFile,&BALLAST,size,&dwBytesWritten,(OVERLAPPED*)NULL);
-    ReadFile(hFile,&CuSonde::maxGroundTemperature,
-             size,&dwBytesWritten,(OVERLAPPED*)NULL);
+    fread(&sizein, sizeof(sizein), 1, file);
+    if (sizein != sizeof(flightstats)) {
+      flightstats.Reset();
+      fclose(file);
+      return;
+    }
+
+    fread(&flightstats, sizeof(flightstats), 1, file);
+
+    fread(&sizein, sizeof(sizein), 1, file);
+    if (sizein != sizeof(olc.data)) {
+      olc.ResetFlight();
+      fclose(file);
+      return;
+    }
+
+    fread(&olc.data, sizeof(olc.data), 1, file);
+
+    fread(&sizein, sizeof(sizein), 1, file);
+    if (sizein != 5 * sizeof(double)) {
+      fclose(file);
+      return;
+    }
+
+    fread(&MACCREADY, sizeof(MACCREADY), 1, file);
+    fread(&QNH, sizeof(QNH), 1, file);
+    fread(&BUGS, sizeof(BUGS), 1, file);
+    fread(&BALLAST, sizeof(BALLAST), 1, file);
+    fread(&CuSonde::maxGroundTemperature,
+          sizeof(CuSonde::maxGroundTemperature), 1, file);
+
     //    ReadFile(hFile,&CRUISE_EFFICIENCY,
     //             size,&dwBytesWritten,(OVERLAPPED*)NULL);
 
@@ -711,7 +725,7 @@ void LoadCalculationsPersist(DERIVED_INFO *Calculated) {
 
     StartupStore(TEXT("LoadCalculationsPersist OK\n"));
 
-    CloseHandle(hFile);
+    fclose(file);
   } else {
     StartupStore(TEXT("LoadCalculationsPersist file not found\n"));
   }
@@ -719,8 +733,6 @@ void LoadCalculationsPersist(DERIVED_INFO *Calculated) {
 
 
 void SaveCalculationsPersist(DERIVED_INFO *Calculated) {
-  HANDLE hFile;
-  DWORD dwBytesWritten;
   DWORD size;
 
   LoggerClearFreeSpace();
@@ -736,34 +748,35 @@ void SaveCalculationsPersist(DERIVED_INFO *Calculated) {
 
   StartupStore(TEXT("SaveCalculationsPersist\n"));
 
-  hFile = CreateFile(szCalculationsPersistFileName,
-                     GENERIC_WRITE,0,(LPSECURITY_ATTRIBUTES)NULL,
-                     CREATE_ALWAYS,FILE_ATTRIBUTE_NORMAL,NULL);
-  if (hFile!=INVALID_HANDLE_VALUE ) {
+  FILE *file = _tfopen(szCalculationsPersistFileName, _T("wb"));
+  if (file != NULL) {
     size = sizeof(DERIVED_INFO);
-    WriteFile(hFile,&size,sizeof(DWORD),&dwBytesWritten,(OVERLAPPED*)NULL);
-    WriteFile(hFile,Calculated,size,&dwBytesWritten,(OVERLAPPED*)NULL);
+    fwrite(&size, sizeof(size), 1, file);
+    fwrite(Calculated, sizeof(*Calculated), 1, file);
+
     size = sizeof(Statistics);
-    WriteFile(hFile,&size,sizeof(DWORD),&dwBytesWritten,(OVERLAPPED*)NULL);
-    WriteFile(hFile,&flightstats,size,&dwBytesWritten,(OVERLAPPED*)NULL);
+    fwrite(&size, sizeof(size), 1, file);
+    fwrite(&flightstats, sizeof(flightstats), 1, file);
+
     size = sizeof(OLCData);
-    WriteFile(hFile,&size,sizeof(DWORD),&dwBytesWritten,(OVERLAPPED*)NULL);
-    WriteFile(hFile,&olc.data,size,&dwBytesWritten,(OVERLAPPED*)NULL);
+    fwrite(&size, sizeof(size), 1, file);
+    fwrite(&olc.data, sizeof(olc.data), 1, file);
+
     size = sizeof(double)*5;
-    WriteFile(hFile,&size,sizeof(DWORD),&dwBytesWritten,(OVERLAPPED*)NULL);
-    size = sizeof(double);
-    WriteFile(hFile,&MACCREADY,size,&dwBytesWritten,(OVERLAPPED*)NULL);
-    WriteFile(hFile,&QNH,size,&dwBytesWritten,(OVERLAPPED*)NULL);
-    WriteFile(hFile,&BUGS,size,&dwBytesWritten,(OVERLAPPED*)NULL);
-    WriteFile(hFile,&BALLAST,size,&dwBytesWritten,(OVERLAPPED*)NULL);
-    WriteFile(hFile,&CuSonde::maxGroundTemperature,
-              size,&dwBytesWritten,(OVERLAPPED*)NULL);
+    fwrite(&size, sizeof(size), 1, file);
+    fwrite(&MACCREADY, sizeof(MACCREADY), 1, file);
+    fwrite(&QNH, sizeof(QNH), 1, file);
+    fwrite(&BUGS, sizeof(BUGS), 1, file);
+    fwrite(&BALLAST, sizeof(BALLAST), 1, file);
+    fwrite(&CuSonde::maxGroundTemperature,
+           sizeof(CuSonde::maxGroundTemperature), 1, file);
+
     //    WriteFile(hFile,&CRUISE_EFFICIENCY,
     //              size,&dwBytesWritten,(OVERLAPPED*)NULL);
 
     StartupStore(TEXT("SaveCalculationsPersist ok\n"));
 
-    CloseHandle(hFile);
+    fclose(file);
   } else {
     StartupStore(TEXT("SaveCalculationsPersist can't create file\n"));
   }

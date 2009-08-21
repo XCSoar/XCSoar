@@ -980,14 +980,12 @@ static int FindOrAddWaypoint(WAYPOINT *read_waypoint) {
 }
 
 
-static bool LoadTaskWaypoints(HANDLE hFile) {
+static bool LoadTaskWaypoints(FILE *file) {
   WAYPOINT read_waypoint;
-  DWORD dwBytesRead;
 
   int i;
   for(i=0;i<MAXTASKPOINTS;i++) {
-    if(!ReadFile(hFile,&read_waypoint,sizeof(read_waypoint),&dwBytesRead, (OVERLAPPED *)NULL)
-       || (dwBytesRead<sizeof(read_waypoint))) {
+    if (fread(&read_waypoint, sizeof(read_waypoint), 1, file) != 1) {
       return false;
     }
     if (Task[i].Index != -1) {
@@ -995,8 +993,7 @@ static bool LoadTaskWaypoints(HANDLE hFile) {
     }
   }
   for(i=0;i<MAXSTARTPOINTS;i++) {
-    if(!ReadFile(hFile,&read_waypoint,sizeof(read_waypoint),&dwBytesRead, (OVERLAPPED *)NULL)
-       || (dwBytesRead<sizeof(read_waypoint))) {
+    if (fread(&read_waypoint, sizeof(read_waypoint), 1, file) != 1) {
       return false;
     }
     if (StartPoints[i].Index != -1) {
@@ -1011,10 +1008,8 @@ static bool LoadTaskWaypoints(HANDLE hFile) {
 // loads a new task from scratch.
 void LoadNewTask(TCHAR *szFileName)
 {
-  HANDLE hFile;
   TASK_POINT Temp;
   START_POINT STemp;
-  DWORD dwBytesRead;
   int i;
   bool TaskInvalid = false;
   bool WaypointInvalid = false;
@@ -1028,11 +1023,8 @@ void LoadNewTask(TCHAR *szFileName)
       Task[i].Index = -1;
     }
 
-  hFile = CreateFile(szFileName,GENERIC_READ,0,
-                     (LPSECURITY_ATTRIBUTES)NULL,OPEN_EXISTING,
-                     FILE_ATTRIBUTE_NORMAL,NULL);
-
-  if(hFile!= INVALID_HANDLE_VALUE )
+  FILE *file = _tfopen(szFileName, _T("rb"));
+  if(file != NULL)
     {
 
       // Defaults
@@ -1051,7 +1043,7 @@ void LoadNewTask(TCHAR *szFileName)
 
       for(i=0;i<MAXTASKPOINTS;i++)
         {
-          if(!ReadFile(hFile,&Temp,sizeof(TASK_POINT),&dwBytesRead, (OVERLAPPED *)NULL))
+          if (fread(&Temp, sizeof(Temp), 1, file) != 1)
             {
               TaskInvalid = true;
               break;
@@ -1069,45 +1061,46 @@ void LoadNewTask(TCHAR *szFileName)
 
       if (!TaskInvalid) {
 
-	if (!ReadFile(hFile,&AATEnabled,sizeof(BOOL),&dwBytesRead,(OVERLAPPED*)NULL)) {
+        if (fread(&AATEnabled, sizeof(AATEnabled), 1, file) != 1) {
           TaskInvalid = true;
         }
-	if (!ReadFile(hFile,&AATTaskLength,sizeof(double),&dwBytesRead,(OVERLAPPED*)NULL)) {
+        if (fread(&AATTaskLength, sizeof(AATTaskLength), 1, file) != 1) {
           TaskInvalid = true;
         }
 
 	// ToDo review by JW
 
 	// 20060521:sgi added additional task parameters
-	if (!ReadFile(hFile,&FinishRadius,sizeof(FinishRadius),&dwBytesRead,(OVERLAPPED*)NULL)) {
+        if (fread(&FinishRadius, sizeof(FinishRadius), 1, file) != 1) {
           TaskInvalid = true;
         }
-	if (!ReadFile(hFile,&FinishLine,sizeof(FinishLine),&dwBytesRead,(OVERLAPPED*)NULL)) {
+        if (fread(&FinishLine, sizeof(FinishLine), 1, file) != 1) {
           TaskInvalid = true;
         }
-	if (!ReadFile(hFile,&StartRadius,sizeof(StartRadius),&dwBytesRead,(OVERLAPPED*)NULL)) {
+        if (fread(&StartRadius, sizeof(StartRadius), 1, file) != 1) {
           TaskInvalid = true;
         }
-	if (!ReadFile(hFile,&StartLine,sizeof(StartLine),&dwBytesRead,(OVERLAPPED*)NULL)) {
+        if (fread(&StartLine, sizeof(StartLine), 1, file) != 1) {
           TaskInvalid = true;
         }
-	if (!ReadFile(hFile,&SectorType,sizeof(SectorType),&dwBytesRead,(OVERLAPPED*)NULL)) {
+        if (fread(&SectorType, sizeof(SectorType), 1, file) != 1) {
           TaskInvalid = true;
         }
-	if (!ReadFile(hFile,&SectorRadius,sizeof(SectorRadius),&dwBytesRead,(OVERLAPPED*)NULL)) {
+        if (fread(&SectorRadius, sizeof(SectorRadius), 1, file) != 1) {
           TaskInvalid = true;
         }
-	if (!ReadFile(hFile,&AutoAdvance,sizeof(AutoAdvance),&dwBytesRead,(OVERLAPPED*)NULL)) {
+        if (fread(&AutoAdvance, sizeof(AutoAdvance), 1, file) != 1) {
           TaskInvalid = true;
         }
 
-        if (!ReadFile(hFile,&EnableMultipleStartPoints,sizeof(bool),&dwBytesRead,(OVERLAPPED*)NULL)) {
+        if (fread(&EnableMultipleStartPoints,
+                  sizeof(EnableMultipleStartPoints), 1, file) != 1) {
           TaskInvalid = true;
         }
 
         for(i=0;i<MAXSTARTPOINTS;i++)
         {
-          if(!ReadFile(hFile,&STemp,sizeof(START_POINT),&dwBytesRead, (OVERLAPPED *)NULL)) {
+          if (fread(&STemp, sizeof(STemp), 1, file) != 1) {
             TaskInvalid = true;
             break;
           }
@@ -1121,14 +1114,15 @@ void LoadNewTask(TCHAR *szFileName)
 
         //// search for waypoints...
         if (!TaskInvalid) {
-          if (!LoadTaskWaypoints(hFile) && WaypointInvalid) {
+          if (!LoadTaskWaypoints(file) && WaypointInvalid) {
             // couldn't lookup the waypoints in the file and we know there are invalid waypoints
             TaskInvalid = true;
           }
         }
 
       }
-      CloseHandle(hFile);
+
+      fclose(file);
 
       if (TaskInvalid) {
         StartLine = old_StartLine;
@@ -1222,58 +1216,51 @@ bool ValidTaskPoint(int i) {
 
 void SaveTask(TCHAR *szFileName)
 {
-  HANDLE hFile;
-  DWORD dwBytesWritten;
-
   if (!WayPointList) return; // this should never happen, but just to be safe...
 
   LockTaskData();
 
-  hFile = CreateFile(szFileName,GENERIC_WRITE,0,
-                     (LPSECURITY_ATTRIBUTES)NULL,CREATE_ALWAYS,
-                     FILE_ATTRIBUTE_NORMAL,NULL);
-
-  if(hFile!=INVALID_HANDLE_VALUE ) {
-    WriteFile(hFile,&Task[0],sizeof(TASK_POINT)*MAXTASKPOINTS,&dwBytesWritten,(OVERLAPPED *)NULL);
-    WriteFile(hFile,&AATEnabled,sizeof(BOOL),&dwBytesWritten,(OVERLAPPED*)NULL);
-    WriteFile(hFile,&AATTaskLength,sizeof(double),&dwBytesWritten,(OVERLAPPED*)NULL);
+  FILE *file = _tfopen(szFileName, _T("wb"));
+  if (file != NULL) {
+    fwrite(&Task[0], sizeof(Task[0]), MAXTASKPOINTS, file);
+    fwrite(&AATEnabled, sizeof(AATEnabled), 1, file);
+    fwrite(&AATTaskLength, sizeof(AATTaskLength), 1, file);
 
     // 20060521:sgi added additional task parameters
-    WriteFile(hFile,&FinishRadius,sizeof(FinishRadius),&dwBytesWritten,(OVERLAPPED*)NULL);
-    WriteFile(hFile,&FinishLine,sizeof(FinishLine),&dwBytesWritten,(OVERLAPPED*)NULL);
-    WriteFile(hFile,&StartRadius,sizeof(StartRadius),&dwBytesWritten,(OVERLAPPED*)NULL);
-    WriteFile(hFile,&StartLine,sizeof(StartLine),&dwBytesWritten,(OVERLAPPED*)NULL);
-    WriteFile(hFile,&SectorType,sizeof(SectorType),&dwBytesWritten,(OVERLAPPED*)NULL);
-    WriteFile(hFile,&SectorRadius,sizeof(SectorRadius),&dwBytesWritten,(OVERLAPPED*)NULL);
-    WriteFile(hFile,&AutoAdvance,sizeof(AutoAdvance),&dwBytesWritten,(OVERLAPPED*)NULL);
+    fwrite(&FinishRadius, sizeof(FinishRadius), 1, file);
+    fwrite(&FinishLine, sizeof(FinishLine), 1, file);
+    fwrite(&StartRadius, sizeof(StartRadius), 1, file);
+    fwrite(&StartLine, sizeof(StartLine), 1, file);
+    fwrite(&SectorType, sizeof(SectorType), 1, file);
+    fwrite(&SectorRadius, sizeof(SectorRadius), 1, file);
+    fwrite(&AutoAdvance, sizeof(AutoAdvance), 1, file);
 
-    WriteFile(hFile,&EnableMultipleStartPoints,sizeof(bool),&dwBytesWritten,(OVERLAPPED*)NULL);
-    WriteFile(hFile,&StartPoints[0],sizeof(START_POINT)*MAXSTARTPOINTS,&dwBytesWritten,(OVERLAPPED*)NULL);
+    fwrite(&EnableMultipleStartPoints,
+           sizeof(EnableMultipleStartPoints), 1, file);
+    fwrite(&StartPoints[0], sizeof(StartPoints[0]), MAXSTARTPOINTS, file);
 
     // JMW added writing of waypoint data, in case it's missing
     int i;
     for(i=0;i<MAXTASKPOINTS;i++) {
       if (ValidWayPoint(Task[i].Index)) {
-        WriteFile(hFile,&WayPointList[Task[i].Index],
-                  sizeof(WAYPOINT), &dwBytesWritten, (OVERLAPPED*)NULL);
+        fwrite(&WayPointList[Task[i].Index],
+               sizeof(WayPointList[Task[i].Index]), 1, file);
       } else {
         // dummy data..
-        WriteFile(hFile,&WayPointList[0],
-                  sizeof(WAYPOINT), &dwBytesWritten, (OVERLAPPED*)NULL);
+        fwrite(&WayPointList[0], sizeof(WayPointList[0]), 1, file);
       }
     }
     for(i=0;i<MAXSTARTPOINTS;i++) {
       if (ValidWayPoint(StartPoints[i].Index)) {
-        WriteFile(hFile,&WayPointList[StartPoints[i].Index],
-                  sizeof(WAYPOINT), &dwBytesWritten, (OVERLAPPED*)NULL);
+        fwrite(&WayPointList[StartPoints[i].Index],
+               sizeof(WayPointList[StartPoints[i].Index]), 1, file);
       } else {
         // dummy data..
-        WriteFile(hFile,&WayPointList[0],
-                  sizeof(WAYPOINT), &dwBytesWritten, (OVERLAPPED*)NULL);
+        fwrite(&WayPointList[0], sizeof(WayPointList[0]), 1, file);
       }
     }
 
-    CloseHandle(hFile);
+    fclose(file);
     TaskModified = false; // task successfully saved
     TargetModified = false;
     _tcscpy(LastTaskFileName, szFileName);
