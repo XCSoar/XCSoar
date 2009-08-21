@@ -27,8 +27,6 @@ extern "C" {
 #endif
 
 #ifndef __WINE__
-	void __cdecl	TransparentImage(HDC, ...);
-
   // JMW _CRTIMP int __cdecl	SHSetAppKeyWndAssoc(int, HWND);
 _CRTIMP void __cdecl	SystemIdleTimerReset(void);
 #endif
