@@ -42,6 +42,7 @@ Copyright_License {
 #include "Airspace.h"
 #include "externs.h"
 #include "Dialogs.h"
+#include "Utils.h"
 #include "XCSoar.h"
 #include "externs.h"
 #include "MapWindow.h"

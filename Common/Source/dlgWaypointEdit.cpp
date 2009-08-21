@@ -41,6 +41,7 @@ Copyright_License {
 #include "Waypointparser.h"
 #include "Math/FastMath.h"
 #include "DataField/Enum.hpp"
+#include "Utils.h"
 
 static WndForm *wf=NULL;
 static WAYPOINT *global_wpt=NULL;

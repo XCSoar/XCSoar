@@ -50,6 +50,7 @@ Copyright_License {
 #include "WayPoint.hpp"
 #include "Registry.hpp"
 #include "XCSoar.h"
+#include "Utils.h"
 
 #include <stdlib.h>
 

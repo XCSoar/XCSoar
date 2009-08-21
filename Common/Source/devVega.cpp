@@ -42,7 +42,7 @@ Copyright_License {
 #include "Registry.hpp"
 
 #include "devVega.h"
-
+#include "Utils.h"
 #include "InputEvents.h"
 
 

@@ -38,6 +38,7 @@ Copyright_License {
 #include "Dialogs.h"
 #include "Math/Earth.hpp"
 #include "Screen/Util.hpp"
+#include "Utils.h"
 #include "Statistics.h"
 #include "externs.h"
 #include "dlgTools.h"

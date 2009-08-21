@@ -42,6 +42,7 @@ Copyright_License {
 #include "Math/Earth.hpp"
 #include "Registry.hpp"
 #include "LocalPath.hpp"
+#include "Utils.h"
 #include "Statistics.h"
 #include "externs.h"
 #include "McReady.h"

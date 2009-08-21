@@ -14,6 +14,7 @@
 #include "device.h"
 #include "Math/FastMath.h"
 #include "Logger.h"
+#include "Utils.h"
 
 #include <assert.h>
 #include <stdlib.h>

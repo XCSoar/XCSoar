@@ -39,7 +39,6 @@ Copyright_License {
 
 #include <windows.h>
 #include "Sizes.h"
-#include "Utils.h"
 #include "Airspace.h"
 #include "Parser.h"
 #include "Calculations.h"

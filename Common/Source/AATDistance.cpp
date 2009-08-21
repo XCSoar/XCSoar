@@ -44,6 +44,8 @@ Copyright_License {
 #include "Math/Earth.hpp"
 #include "WayPoint.hpp"
 
+#include <math.h>
+
 #define DISTANCETHRESHOLD 500
 
 extern NMEA_INFO GPS_INFO;

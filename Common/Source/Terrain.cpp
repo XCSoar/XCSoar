@@ -53,6 +53,7 @@ Copyright_License {
 #include "Registry.hpp"
 #include "Screen/Ramp.hpp"
 #include "LocalPath.hpp"
+#include "Utils.h"
 
 #include <assert.h>
 

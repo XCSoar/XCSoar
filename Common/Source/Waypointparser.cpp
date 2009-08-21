@@ -46,7 +46,7 @@ Copyright_License {
 #include "Registry.hpp"
 #include "LocalPath.hpp"
 #include "dlgTools.h"
-
+#include "Utils.h"
 #include "Geoid.h"
 
 #include "RasterTerrain.h"

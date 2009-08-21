@@ -48,6 +48,7 @@ Copyright_License {
 #include "Math/FastMath.h"
 #include "Math/Geometry.hpp"
 #include "Math/Earth.hpp"
+#include "Utils.h"
 
 #include <assert.h>
 

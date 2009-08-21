@@ -47,6 +47,8 @@ Copyright_License {
 #include "McReady.h"
 #include "Math/Earth.hpp"
 
+#include <math.h>
+
 bool EnableMultipleStartPoints = false;
 bool TaskModified = false;
 bool TargetModified = false;

@@ -49,6 +49,7 @@ Copyright_License {
 #include "DataField/Float.hpp"
 #include "DataField/Integer.hpp"
 #include "DataField/String.hpp"
+#include "Utils.h"
 
 #include <assert.h>
 

@@ -39,6 +39,7 @@ Copyright_License {
 #include "dlgTools.h"
 #include "Math/FastMath.h"
 #include "DataField/Base.hpp"
+#include "Utils.h"
 
 static WndForm *wf=NULL;
 

@@ -43,6 +43,7 @@ Copyright_License {
 #include "Terrain.h"
 #include "GaugeFLARM.h"
 #include "LocalPath.hpp"
+#include "Utils.h"
 #include "WindowControls.h"
 #include "Statistics.h"
 #include "Dialogs.h"

@@ -43,6 +43,7 @@ Copyright_License {
 #include "Port.h"
 #include "InfoBoxLayout.h"
 #include "DataField/Enum.hpp"
+#include "Utils.h"
 
 static WndForm *wf=NULL;
 

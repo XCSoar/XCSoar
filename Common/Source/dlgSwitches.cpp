@@ -38,6 +38,7 @@ Copyright_License {
 #include "InputEvents.h"
 #include "dlgTools.h"
 #include "DataField/Base.hpp"
+#include "Utils.h"
 
 static WndForm *wf=NULL;
 

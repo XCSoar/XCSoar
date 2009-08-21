@@ -39,6 +39,7 @@ Copyright_License {
 #include "Math/FastMath.h"
 #include "MapWindow.h"
 #include "McReady.h"
+#include "Utils.h"
 
 #include <math.h>
 

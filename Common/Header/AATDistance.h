@@ -38,7 +38,6 @@ Copyright_License {
 
 #include "StdAfx.h"
 #include "Calculations.h"
-#include "Utils.h"
 
 #define MAXNUM_AATDISTANCE 50
 

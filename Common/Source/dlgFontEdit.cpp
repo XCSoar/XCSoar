@@ -40,6 +40,7 @@ Copyright_License {
 #include "DataField/Boolean.hpp"
 #include "DataField/Enum.hpp"
 #include "DataField/Integer.hpp"
+#include "Utils.h"
 
 extern void InitializeOneFont (HFONT * theFont,
                                const TCHAR FontRegKey[] ,

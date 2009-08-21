@@ -41,6 +41,7 @@ Copyright_License {
 #include "dlgTools.h"
 #include "Registry.hpp"
 #include "DataField/Enum.hpp"
+#include "Utils.h"
 
 static WndForm *wf=NULL;
 

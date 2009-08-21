@@ -39,6 +39,7 @@ Copyright_License {
 
 #include "externs.h"
 #include "Units.h"
+#include "Utils.h"
 #include "dlgTools.h"
 #include "Process.h"
 

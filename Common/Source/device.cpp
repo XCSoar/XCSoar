@@ -49,7 +49,7 @@ Copyright_License {
 #include "MapWindow.h"
 #include "Registry.hpp"
 #include "Math/Pressure.h"
-
+#include "Utils.h"
 #include "devCAI302.h"
 #include "devCaiGpsNav.h"
 #include "devEW.h"

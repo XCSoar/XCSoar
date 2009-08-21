@@ -51,6 +51,7 @@ Copyright_License {
 #include "Math/Earth.hpp"
 #include "Screen/Util.hpp"
 #include "DataField/Base.hpp"
+#include "Utils.h"
 
 #include <assert.h>
 #include <stdlib.h>

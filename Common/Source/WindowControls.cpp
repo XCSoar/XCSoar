@@ -51,6 +51,7 @@ Copyright_License {
 #include "PeriodClock.hpp"
 #include "Screen/Animation.hpp"
 #include "DataField/Base.hpp"
+#include "Utils.h"
 
 #ifndef ALTAIRSYNC
 #include "externs.h"

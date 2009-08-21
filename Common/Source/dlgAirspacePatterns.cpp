@@ -40,6 +40,7 @@ Copyright_License {
 #include "dlgTools.h"
 #include "InfoBoxLayout.h"
 #include "MapWindow.h"
+#include "Utils.h"
 
 #include <assert.h>
 

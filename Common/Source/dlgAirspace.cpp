@@ -41,6 +41,7 @@ Copyright_License {
 #include "MapWindow.h"
 #include "Registry.hpp"
 #include "Screen/Util.hpp"
+#include "Utils.h"
 
 #include <assert.h>
 

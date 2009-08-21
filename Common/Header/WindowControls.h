@@ -38,7 +38,7 @@ Copyright_License {
 #include <malloc.h>
 #include "Units.h"
 #include "XCSoar.h"
-#include "Utils.h"
+
 #include <tchar.h>
 #define IsEmptyString(x)        ((x==NULL) || (x[0]=='\0'))
 

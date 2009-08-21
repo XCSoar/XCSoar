@@ -39,7 +39,7 @@ Copyright_License {
 #include "externs.h"
 #include "Units.h"
 #include "Waypointparser.h"
-
+#include "Utils.h"
 #include "dlgTools.h"
 
 static WndForm *wf=NULL;

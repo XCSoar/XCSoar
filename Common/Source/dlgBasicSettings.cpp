@@ -44,6 +44,7 @@ Copyright_License {
 #include "dlgTools.h"
 #include "device.h"
 #include "DataField/Base.hpp"
+#include "Utils.h"
 
 static WndForm *wf=NULL;
 

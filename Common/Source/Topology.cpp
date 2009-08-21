@@ -41,6 +41,7 @@ Copyright_License {
 #include "externs.h"
 #include "wcecompat/ts_string.h"
 #include "Screen/Util.hpp"
+#include "Utils.h"
 
 #include <stdlib.h>
 #include <tchar.h>
