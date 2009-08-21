@@ -22,9 +22,9 @@ void DebugStore(const char *Str, ...)
   static bool initialised = false;
   if (!initialised) {
     initialised = true;
-    stream = _wfopen(szFileName,TEXT("w"));
+    stream = _tfopen(szFileName,TEXT("w"));
   } else {
-    stream = _wfopen(szFileName,TEXT("a+"));
+    stream = _tfopen(szFileName,TEXT("a+"));
   }
 
   fwrite(buf,len,1,stream);
