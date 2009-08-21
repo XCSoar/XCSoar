@@ -41,6 +41,7 @@ Copyright_License {
 
 #include "devXCOM760.h"
 
+#include <tchar.h>
 
 static BOOL XCOM760PutVolume(PDeviceDescriptor_t d, int Volume) {
   TCHAR  szTmp[32];

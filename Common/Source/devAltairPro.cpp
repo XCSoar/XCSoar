@@ -43,6 +43,8 @@ Copyright_License {
 
 #include "devAltairPro.h"
 
+#include <tchar.h>
+
 double AltitudeToQNHAltitude(double alt);
 
 static double lastAlt = 0;

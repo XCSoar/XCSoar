@@ -44,6 +44,7 @@ extern HINSTANCE hInst;      // The current instance
 
 #include "InfoBoxLayout.h"
 
+#include <tchar.h>
 
 void GaugeCDI::Create() {
   // start of new code for displaying CDI window

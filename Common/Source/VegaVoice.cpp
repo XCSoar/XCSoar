@@ -40,6 +40,7 @@ Copyright_License {
 
 #include "device.h"
 
+#include <tchar.h>
 
 bool EnableVoiceClimbRate=true;
 bool EnableVoiceTerrain=true;

@@ -55,6 +55,7 @@ Copyright_License {
 
 #include "devPosiGraph.h"
 
+#include <tchar.h>
 
 static BOOL GPWIN(PDeviceDescriptor_t d, const TCHAR *String,
                   NMEA_INFO *GPS_INFO);

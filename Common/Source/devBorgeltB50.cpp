@@ -41,6 +41,8 @@ Copyright_License {
 
 #include "devBorgeltB50.h"
 
+#include <tchar.h>
+
 BOOL PBB50(const TCHAR *String, NMEA_INFO *GPS_INFO);
 
 

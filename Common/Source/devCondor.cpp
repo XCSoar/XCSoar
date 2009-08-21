@@ -42,6 +42,8 @@ Copyright_License {
 
 #include "devCondor.h"
 
+#include <tchar.h>
+
 static BOOL cLXWP0(PDeviceDescriptor_t d, const TCHAR *String,
                    NMEA_INFO *GPS_INFO);
 static BOOL cLXWP1(PDeviceDescriptor_t d, const TCHAR *String,

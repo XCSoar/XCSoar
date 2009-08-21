@@ -47,6 +47,7 @@ Copyright_License {
 
 #include "devEW.h"
 
+#include <tchar.h>
 
 #define  USESHORTTPNAME   1       // hack, soulf be configurable
 

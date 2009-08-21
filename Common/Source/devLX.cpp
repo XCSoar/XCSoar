@@ -42,6 +42,8 @@ Copyright_License {
 
 #include "devLX.h"
 
+#include <tchar.h>
+
 static BOOL LXWP0(PDeviceDescriptor_t d, const TCHAR *String,
                   NMEA_INFO *GPS_INFO);
 static BOOL LXWP1(PDeviceDescriptor_t d, const TCHAR *String,

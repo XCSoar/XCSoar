@@ -40,6 +40,7 @@ Copyright_License {
 #include "externs.h"
 #include "InfoBoxLayout.h"
 
+#include <tchar.h>
 
 /*
 

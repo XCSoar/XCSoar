@@ -41,6 +41,7 @@ Copyright_License {
 #include "XCSoar.h"
 #include "device.h"
 
+#include <tchar.h>
 #include <math.h>
 #include <windows.h>
 /*

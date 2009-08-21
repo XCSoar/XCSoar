@@ -41,6 +41,8 @@ Copyright_License {
 
 #include "devZander.h"
 
+#include <tchar.h>
+
 static BOOL PZAN1(PDeviceDescriptor_t d, const TCHAR *String,
                   NMEA_INFO *aGPS_INFO);
 static BOOL PZAN2(PDeviceDescriptor_t d, const TCHAR *String,

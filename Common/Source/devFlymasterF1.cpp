@@ -42,6 +42,8 @@ Copyright_License {
 
 #include "devFlymasterF1.h"
 
+#include <tchar.h>
+
 static BOOL VARIO(PDeviceDescriptor_t d, const TCHAR *String,
                   NMEA_INFO *GPS_INFO);
 

@@ -46,6 +46,7 @@ Copyright_License {
 
 #include "devEWMicroRecorder.h"
 
+#include <tchar.h>
 
 // Additional sentance for EW support
 

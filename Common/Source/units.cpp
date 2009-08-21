@@ -60,6 +60,7 @@ Copyright_License {
 #include "externs.h"
 
 #include <stdlib.h>
+#include <tchar.h>
 
 CoordinateFormats_t Units::CoordinateFormat;
 
