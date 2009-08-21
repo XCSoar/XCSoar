@@ -16,3 +16,5 @@
 *.dll
 *.log
 *.dmp
+*.so
+XCSoar*-WINE-ns
