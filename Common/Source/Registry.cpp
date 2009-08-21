@@ -15,6 +15,7 @@
 #include "Math/FastMath.h"
 #include "Logger.h"
 #include "Utils.h"
+#include "externs.h"
 
 #include <assert.h>
 #include <stdlib.h>

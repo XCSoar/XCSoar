@@ -42,6 +42,7 @@ Copyright_License {
 #include "Registry.hpp"
 #include "devVega.h"
 #include "Utils.h"
+#include "externs.h"
 #include "InputEvents.h"
 
 #define INPUT_BIT_FLAP_POS                  0 // 1 flap pos

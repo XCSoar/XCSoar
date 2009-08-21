@@ -39,6 +39,7 @@ Copyright_License {
 #include "XCSoar.h"
 #include "externs.h"
 #include "Utils2.h"
+#include "externs.h"
 #include "MapWindow.h"
 #include "Terrain.h"
 #include "GaugeFLARM.h"

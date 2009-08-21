@@ -38,7 +38,6 @@ Copyright_License {
 #define INPUTEVENTS_H
 
 #include "XCSoar.h"
-#include "externs.h"
 
 typedef void (*pt2Event)(const TCHAR *);
 

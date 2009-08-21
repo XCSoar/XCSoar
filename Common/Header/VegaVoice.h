@@ -5,7 +5,6 @@
 #include <windows.h>
 #include "Parser.h"
 #include "Calculations.h"
-#include "externs.h"
 
 extern bool EnableVoiceClimbRate;
 extern bool EnableVoiceTerrain;

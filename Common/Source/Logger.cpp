@@ -39,8 +39,9 @@
 #include "StdAfx.h"
 #include "Dialogs.h"
 #include "Port.h"
-#include "Math/Earth.hpp"
+#include "externs.h"
 #include "Registry.hpp"
+#include "Math/Earth.hpp"
 
 #include <windows.h>
 #include "Utils.h"
