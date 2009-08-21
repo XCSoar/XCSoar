@@ -441,6 +441,7 @@ OBJS	:=\
 	$(SRC)/Formatter/Base.o \
 	$(SRC)/Formatter/TeamCode.o \
 	$(SRC)/Formatter/WayPoint.o \
+	$(SRC)/ExpandMacros.o \
 	\
 	$(SRC)/mapbits.o \
 	$(SRC)/maperror.o 		$(SRC)/mapprimitive.o \

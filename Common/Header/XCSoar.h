@@ -463,9 +463,6 @@ extern StartupState_t ProgramStarted;
 
 // ******************************************************************
 
-
-bool ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size);
-
 #ifndef __MINGW32__
 #define DEG "°"
 #else
