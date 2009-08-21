@@ -426,6 +426,7 @@ OBJS	:=\
 	$(SRC)/Registry.o \
 	$(SRC)/Polar/WinPilot.o \
 	$(SRC)/Polar/BuiltIn.o \
+	$(SRC)/Polar/Historical.o \
 	$(SRC)/StatusMessage.o \
 	$(SRC)/LocalPath.o \
 	$(SRC)/DataField/Base.o \

@@ -69,6 +69,7 @@ Copyright_License {
 #include "Formatter/TeamCode.hpp"
 #include "Formatter/WayPoint.hpp"
 #include "Screen/Blank.hpp"
+#include "Polar/Historical.hpp"
 
 #include <commctrl.h>
 #if (WINDOWSPC<1)

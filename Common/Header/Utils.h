@@ -43,9 +43,6 @@ Copyright_License {
 #include "Airspace.h"
 #include <zzip/lib.h>
 
-
-#define  POLARUSEWINPILOTFILE  6    // if this polat is selected use the winpilot file
-
 extern bool LockSettingsInFlight;
 extern bool LoggerShortName;
 
@@ -62,7 +59,6 @@ void protate(POINT &pin, const double &angle);
 void protateshift(POINT &pin, const double &angle, const int &x, const int &y);
 
 void SectorEndPoint(double StartLat, double StartLon, double  Radial, double Dist, double *EndLat, double *EndLon);
-void CalculateNewPolarCoef(void);
 void ConvertFlightLevels(void);
 BOOL PolygonVisible(const POINT *lpPoints, int nCount, RECT rc);
 void ReadPort1Settings(DWORD *PortIndex, DWORD *SpeedIndex);
