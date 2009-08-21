@@ -859,7 +859,7 @@ BOOL ReadString(ZZIP_FILE *zFile, int Max, TCHAR *String)
   return (dwTotalNumBytesRead>0);
 }
 
-
+#ifdef ENABLE_UNUSED_CODE
 // read string from file
 // support national codepage
 // hFile:  file handle
@@ -920,6 +920,7 @@ BOOL ReadString(HANDLE hFile, int Max, TCHAR *String)
   return (dwTotalNumBytesRead>0);
 
 }
+#endif /* ENABLE_UNUSED_CODE */
 
 BOOL ReadStringX(FILE *fp, int Max, TCHAR *String){
   if (fp == NULL || Max < 1 || String == NULL) {

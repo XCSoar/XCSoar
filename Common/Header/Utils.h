@@ -84,7 +84,6 @@ void FormatWarningString(int Type, const TCHAR *Name,
                          AIRSPACE_ALT Base, AIRSPACE_ALT Top,
                          TCHAR *szMessageBuffer, TCHAR *TileBuffer);
 BOOL ReadString(ZZIP_FILE* zFile, int Max, TCHAR *String);
-BOOL ReadString(HANDLE hFile, int Max, TCHAR *String);
 BOOL ReadStringX(FILE *fp, int Max, TCHAR *String);
 
 double StrToDouble(const TCHAR *Source, const TCHAR **Stop);
