@@ -446,21 +446,9 @@ static XMLNode xmlOpenResourceHelper(const TCHAR *lpszXML, LPCTSTR tag)
 
 ///////////////////////////////////////
 
-
-WndForm *dlgLoadFromXML(CallBackTableEntry_t *LookUpTable, const char *FileName, HWND Parent,
-                        const TCHAR* resource) {
-
-  WndForm *theForm = NULL;
-  //  TCHAR sFileName[128];
-
-//  assert(hWndMainWindow == Parent);  // Airspace warning has MapWindow as parent,
-  // ist that ok?  JMW: No, I think that it is better to use main UI thread for
-  // everything.  See changes regarding RequestAirspaceDialog in AirspaceWarning.cpp
-
-// T:\\Project\\WINCE\\TNAV\\XCSoar\\
-
-  // this open and parse the XML file:
-
+static const XMLNode
+load_xml_file_or_resource(const char *FileName, const TCHAR* resource)
+{
   XMLNode xMainNode;
 
 /* -> filename is allready localized
@@ -485,6 +473,25 @@ WndForm *dlgLoadFromXML(CallBackTableEntry_t *LookUpTable, const char *FileName,
                                        TEXT("PMML"));
     }
   }
+
+  return xMainNode;
+}
+
+WndForm *dlgLoadFromXML(CallBackTableEntry_t *LookUpTable, const char *FileName, HWND Parent,
+                        const TCHAR* resource) {
+
+  WndForm *theForm = NULL;
+  //  TCHAR sFileName[128];
+
+//  assert(hWndMainWindow == Parent);  // Airspace warning has MapWindow as parent,
+  // ist that ok?  JMW: No, I think that it is better to use main UI thread for
+  // everything.  See changes regarding RequestAirspaceDialog in AirspaceWarning.cpp
+
+// T:\\Project\\WINCE\\TNAV\\XCSoar\\
+
+  // this open and parse the XML file:
+
+  XMLNode xMainNode = load_xml_file_or_resource(FileName, resource);
 
   // TODO code: put in error checking here and get rid of exits in xmlParser
   if (xMainNode.isEmpty()) {
