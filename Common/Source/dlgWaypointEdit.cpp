@@ -454,17 +454,13 @@ void dlgWaypointEditShowModal(WAYPOINT *wpt) {
   global_wpt = wpt;
 
   if (!InfoBoxLayout::landscape) {
-    char filename[MAX_PATH];
-    LocalPathS(filename, TEXT("dlgWaypointEdit_L.xml"));
     wf = dlgLoadFromXML(CallBackTable,
-                        filename,
+                        TEXT("dlgWaypointEdit_L.xml"),
                         hWndMainWindow,
                         TEXT("IDR_XML_WAYPOINTEDIT_L"));
   } else {
-    char filename[MAX_PATH];
-    LocalPathS(filename, TEXT("dlgWaypointEdit.xml"));
     wf = dlgLoadFromXML(CallBackTable,
-                        filename,
+                        TEXT("dlgWaypointEdit.xml"),
                         hWndMainWindow,
                         TEXT("IDR_XML_WAYPOINTEDIT"));
   }

@@ -277,17 +277,13 @@ void dlgFlarmTrafficShowModal(void){
   }
 
   if (InfoBoxLayout::landscape) {
-    char filename[MAX_PATH];
-    LocalPathS(filename, TEXT("dlgFlarmTraffic_L.xml"));
     wf = dlgLoadFromXML(CallBackTable,
-			filename,
+                        TEXT("dlgFlarmTraffic_L.xml"),
 			hWndMainWindow,
 			TEXT("IDR_XML_FLARMTRAFFIC_L"));
   } else {
-    char filename[MAX_PATH];
-    LocalPathS(filename, TEXT("dlgFlarmTraffic.xml"));
     wf = dlgLoadFromXML(CallBackTable,
-			filename,
+                        TEXT("dlgFlarmTraffic.xml"),
 			hWndMainWindow,
 			TEXT("IDR_XML_FLARMTRAFFIC"));
   }

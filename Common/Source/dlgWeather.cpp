@@ -165,17 +165,13 @@ static CallBackTableEntry_t CallBackTable[]={
 void dlgWeatherShowModal(void){
 
   if (!InfoBoxLayout::landscape) {
-    char filename[MAX_PATH];
-    LocalPathS(filename, TEXT("dlgWeather_L.xml"));
     wf = dlgLoadFromXML(CallBackTable,
-                        filename,
+                        TEXT("dlgWeather_L.xml"),
                         hWndMainWindow,
                         TEXT("IDR_XML_WEATHER_L"));
   } else {
-    char filename[MAX_PATH];
-    LocalPathS(filename, TEXT("dlgWeather.xml"));
     wf = dlgLoadFromXML(CallBackTable,
-                        filename,
+                        TEXT("dlgWeather.xml"),
                         hWndMainWindow,
                         TEXT("IDR_XML_WEATHER"));
   }

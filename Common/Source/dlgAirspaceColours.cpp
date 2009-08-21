@@ -122,19 +122,13 @@ int dlgAirspaceColoursShowModal(void){
   ItemIndex = -1;
 
   if (!InfoBoxLayout::landscape) {
-    char filename[MAX_PATH];
-    LocalPathS(filename, TEXT("dlgAirspaceColours_L.xml"));
     wf = dlgLoadFromXML(CallBackTable,
-
-                        filename,
+                        TEXT("dlgAirspaceColours_L.xml"),
                         hWndMainWindow,
                         TEXT("IDR_XML_AIRSPACECOLOURS_L"));
   } else {
-    char filename[MAX_PATH];
-    LocalPathS(filename, TEXT("dlgAirspaceColours.xml"));
     wf = dlgLoadFromXML(CallBackTable,
-
-                        filename,
+                        TEXT("dlgAirspaceColours.xml"),
                         hWndMainWindow,
                         TEXT("IDR_XML_AIRSPACECOLOURS"));
   }

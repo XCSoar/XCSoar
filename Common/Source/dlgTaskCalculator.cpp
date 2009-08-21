@@ -334,11 +334,8 @@ static CallBackTableEntry_t CallBackTable[]={
 
 
 void dlgTaskCalculatorShowModal(void){
-
-  char filename[MAX_PATH];
-  LocalPathS(filename, TEXT("dlgTaskCalculator.xml"));
   wf = dlgLoadFromXML(CallBackTable,
-                      filename,
+                      TEXT("dlgTaskCalculator.xml"),
 		      hWndMainWindow,
 		      TEXT("IDR_XML_TASKCALCULATOR"));
 

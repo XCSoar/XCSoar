@@ -1011,17 +1011,13 @@ bool dlgConfigurationVarioShowModal(void){
 #endif
 
   if (!InfoBoxLayout::landscape) {
-    char filename[MAX_PATH];
-    LocalPathS(filename, TEXT("dlgVario_L.xml"));
     wf = dlgLoadFromXML(CallBackTable,
-                        filename,
+                        TEXT("dlgVario_L.xml"),
                         hWndMainWindow,
                         TEXT("IDR_XML_VARIO_L"));
   } else {
-    char filename[MAX_PATH];
-    LocalPathS(filename, TEXT("dlgVario.xml"));
     wf = dlgLoadFromXML(CallBackTable,
-                      filename,
+                        TEXT("dlgVario.xml"),
 		      hWndMainWindow,
 		      TEXT("IDR_XML_VARIO"));
   }

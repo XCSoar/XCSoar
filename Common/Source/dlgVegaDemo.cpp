@@ -126,11 +126,8 @@ static CallBackTableEntry_t CallBackTable[]={
 
 
 void dlgVegaDemoShowModal(void){
-
-  char filename[MAX_PATH];
-  LocalPathS(filename, TEXT("dlgVegaDemo.xml"));
   wf = dlgLoadFromXML(CallBackTable,
-                      filename,
+                      TEXT("dlgVegaDemo.xml"),
 		      hWndMainWindow,
 		      TEXT("IDR_XML_VEGADEMO"));
 

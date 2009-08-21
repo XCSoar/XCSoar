@@ -144,10 +144,8 @@ bool dlgTaskRules(void){
 
   WndProperty *wp;
 
-  char filename[MAX_PATH];
-  LocalPathS(filename, TEXT("dlgTaskRules.xml"));
   wf = dlgLoadFromXML(CallBackTable,
-		      filename,
+                      TEXT("dlgTaskRules.xml"),
 		      hWndMainWindow,
 		      TEXT("IDR_XML_TASKRULES"));
 

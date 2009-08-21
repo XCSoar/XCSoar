@@ -677,10 +677,8 @@ int dlgAirspaceWarningInit(void){
 
 //    hActiveWindow = GetActiveWindow();
 
-    char filename[MAX_PATH];
-    LocalPathS(filename, TEXT("dlgAirspaceWarning.xml"));
     wf = dlgLoadFromXML(CallBackTable,
-                        filename,
+                        TEXT("dlgAirspaceWarning.xml"),
 		        hWndMainWindow,
 		        TEXT("IDR_XML_AIRSPACEWARNING"));
 

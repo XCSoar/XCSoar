@@ -175,12 +175,8 @@ static CallBackTableEntry_t CallBackTable[]={
 
 
 void dlgSwitchesShowModal(void){
-
-  char filename[MAX_PATH];
-  LocalPathS(filename, TEXT("dlgSwitches.xml"));
   wf = dlgLoadFromXML(CallBackTable,
-
-                      filename,
+                      TEXT("dlgSwitches.xml"),
 		      hWndMainWindow,
 		      TEXT("IDR_XML_SWITCHES"));
 

@@ -67,17 +67,13 @@ void dlgHelpShowModal(const TCHAR* Caption, const TCHAR* HelpText) {
   }
 
   if (!InfoBoxLayout::landscape) {
-    char filename[MAX_PATH];
-    LocalPathS(filename, TEXT("dlgHelp_L.xml"));
     wf = dlgLoadFromXML(CallBackTable,
-                        filename,
+                        TEXT("dlgHelp_L.xml"),
                         hWndMainWindow,
                         TEXT("IDR_XML_HELP_L"));
   } else {
-    char filename[MAX_PATH];
-    LocalPathS(filename, TEXT("dlgHelp.xml"));
     wf = dlgLoadFromXML(CallBackTable,
-                        filename,
+                        TEXT("dlgHelp.xml"),
                         hWndMainWindow,
                         TEXT("IDR_XML_HELP"));
   }

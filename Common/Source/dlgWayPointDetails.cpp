@@ -356,19 +356,14 @@ void dlgWayPointDetailsShowModal(void){
   WndProperty *wp;
 
   if (!InfoBoxLayout::landscape) {
-    char filename[MAX_PATH];
-    LocalPathS(filename, TEXT("dlgWayPointDetails_L.xml"));
     wf = dlgLoadFromXML(CallBackTable,
-
-                        filename,
+                        TEXT("dlgWayPointDetails_L.xml"),
                         hWndMainWindow,
                         TEXT("IDR_XML_WAYPOINTDETAILS_L"));
 
   } else {
-    char filename[MAX_PATH];
-    LocalPathS(filename, TEXT("dlgWayPointDetails.xml"));
     wf = dlgLoadFromXML(CallBackTable,
-                        filename,
+                        TEXT("dlgWayPointDetails.xml"),
                         hWndMainWindow,
                         TEXT("IDR_XML_WAYPOINTDETAILS"));
   }

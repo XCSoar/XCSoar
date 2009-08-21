@@ -261,11 +261,8 @@ static CallBackTableEntry_t CallBackTable[]={
 
 
 void dlgBasicSettingsShowModal(void){
-
-  char filename[MAX_PATH];
-  LocalPathS(filename, TEXT("dlgBasicSettings.xml"));
   wf = dlgLoadFromXML(CallBackTable,
-                      filename,
+                      TEXT("dlgBasicSettings.xml"),
 		      hWndMainWindow,
 		      TEXT("IDR_XML_BASICSETTINGS"));
 

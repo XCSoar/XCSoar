@@ -121,18 +121,13 @@ int dlgAirspacePatternsShowModal(void){
   ItemIndex = -1;
 
   if (!InfoBoxLayout::landscape) {
-    char filename[MAX_PATH];
-    LocalPathS(filename, TEXT("dlgAirspacePatterns_L.xml"));
     wf = dlgLoadFromXML(CallBackTable,
-
-                        filename,
+                        TEXT("dlgAirspacePatterns_L.xml"),
                         hWndMainWindow,
                         TEXT("IDR_XML_AIRSPACEPATTERNS_L"));
   } else {
-    char filename[MAX_PATH];
-    LocalPathS(filename, TEXT("dlgAirspacePatterns.xml"));
     wf = dlgLoadFromXML(CallBackTable,
-                        filename,
+                        TEXT("dlgAirspacePatterns.xml"),
                         hWndMainWindow,
                         TEXT("IDR_XML_AIRSPACEPATTERNS"));
   }

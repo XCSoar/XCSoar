@@ -487,18 +487,13 @@ void dlgTaskWaypointShowModal(int itemindex, int tasktype, bool addonly){
   wf = NULL;
 
   if (!InfoBoxLayout::landscape) {
-    char filename[MAX_PATH];
-    LocalPathS(filename, TEXT("dlgTaskWaypoint_L.xml"));
     wf = dlgLoadFromXML(CallBackTable,
-
-                        filename,
+                        TEXT("dlgTaskWaypoint_L.xml"),
                         hWndMainWindow,
                         TEXT("IDR_XML_TASKWAYPOINT_L"));
   } else {
-    char filename[MAX_PATH];
-    LocalPathS(filename, TEXT("dlgTaskWaypoint.xml"));
     wf = dlgLoadFromXML(CallBackTable,
-                        filename,
+                        TEXT("dlgTaskWaypoint.xml"),
                         hWndMainWindow,
                         TEXT("IDR_XML_TASKWAYPOINT"));
   }

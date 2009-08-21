@@ -81,17 +81,13 @@ void dlgStartupShowModal(void){
   StartupStore(TEXT("Startup dialog\n"));
 
   if (!InfoBoxLayout::landscape) {
-    char filename[MAX_PATH];
-    LocalPathS(filename, TEXT("dlgStartup_L.xml"));
     wf = dlgLoadFromXML(CallBackTable,
-                        filename,
+                        TEXT("dlgStartup_L.xml"),
                         hWndMainWindow,
                         TEXT("IDR_XML_STARTUP_L"));
   } else {
-    char filename[MAX_PATH];
-    LocalPathS(filename, TEXT("dlgStartup.xml"));
     wf = dlgLoadFromXML(CallBackTable,
-                        filename,
+                        TEXT("dlgStartup.xml"),
                         hWndMainWindow,
                         TEXT("IDR_XML_STARTUP"));
   }

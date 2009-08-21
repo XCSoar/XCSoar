@@ -447,7 +447,7 @@ static XMLNode xmlOpenResourceHelper(const TCHAR *lpszXML, LPCTSTR tag)
 ///////////////////////////////////////
 
 static const XMLNode
-load_xml_file_or_resource(const char *FileName, const TCHAR* resource)
+load_xml_file_or_resource(const TCHAR *name, const TCHAR* resource)
 {
   XMLNode xMainNode;
 
@@ -460,6 +460,9 @@ load_xml_file_or_resource(const char *FileName, const TCHAR* resource)
   xMainNode=XMLNode::openFileHelper(winname ,TEXT("PMML"));
 #endif
 */
+
+  char FileName[MAX_PATH];
+  LocalPathS(FileName, name);
 
   if (FileExistsA(FileName))   //sgi use window API cals to check if
                                //file exists, this will supress
@@ -477,7 +480,8 @@ load_xml_file_or_resource(const char *FileName, const TCHAR* resource)
   return xMainNode;
 }
 
-WndForm *dlgLoadFromXML(CallBackTableEntry_t *LookUpTable, const char *FileName, HWND Parent,
+WndForm *dlgLoadFromXML(CallBackTableEntry_t *LookUpTable,
+                        const TCHAR *FileName, HWND Parent,
                         const TCHAR* resource) {
 
   WndForm *theForm = NULL;

@@ -575,17 +575,13 @@ void dlgTarget(void) {
   ActiveWayPointOnEntry = ActiveWayPoint;
 
   if (!InfoBoxLayout::landscape) {
-    char filename[MAX_PATH];
-    LocalPathS(filename, TEXT("dlgTarget_L.xml"));
     wf = dlgLoadFromXML(CallBackTable,
-                        filename,
+                        TEXT("dlgTarget_L.xml"),
                         hWndMainWindow,
                         TEXT("IDR_XML_TARGET_L"));
   } else {
-    char filename[MAX_PATH];
-    LocalPathS(filename, TEXT("dlgTarget.xml"));
     wf = dlgLoadFromXML(CallBackTable,
-                        filename,
+                        TEXT("dlgTarget.xml"),
                         hWndMainWindow,
                         TEXT("IDR_XML_TARGET"));
   }

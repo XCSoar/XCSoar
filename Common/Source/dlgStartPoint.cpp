@@ -187,17 +187,13 @@ void dlgStartPointShowModal(void) {
   ItemIndex = -1;
 
   if (!InfoBoxLayout::landscape) {
-    char filename[MAX_PATH];
-    LocalPathS(filename, TEXT("dlgStartPoint_L.xml"));
     wf = dlgLoadFromXML(CallBackTable,
-                        filename,
+                        TEXT("dlgStartPoint_L.xml"),
                         hWndMainWindow,
                         TEXT("IDR_XML_STARTPOINT_L"));
   } else {
-    char filename[MAX_PATH];
-    LocalPathS(filename, TEXT("dlgStartPoint.xml"));
     wf = dlgLoadFromXML(CallBackTable,
-                        filename,
+                        TEXT("dlgStartPoint.xml"),
                         hWndMainWindow,
                         TEXT("IDR_XML_STARTPOINT"));
   }

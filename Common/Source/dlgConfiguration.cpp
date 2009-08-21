@@ -2529,18 +2529,13 @@ void dlgConfigurationShowModal(void){
   StartHourglassCursor();
 
   if (!InfoBoxLayout::landscape) {
-    char filename[MAX_PATH];
-    LocalPathS(filename, TEXT("dlgConfiguration_L.xml"));
     wf = dlgLoadFromXML(CallBackTable,
-
-                        filename,
+                        TEXT("dlgConfiguration_L.xml"),
                         hWndMainWindow,
                         TEXT("IDR_XML_CONFIGURATION_L"));
   } else {
-    char filename[MAX_PATH];
-    LocalPathS(filename, TEXT("dlgConfiguration.xml"));
     wf = dlgLoadFromXML(CallBackTable,
-                        filename,
+                        TEXT("dlgConfiguration.xml"),
                         hWndMainWindow,
                         TEXT("IDR_XML_CONFIGURATION"));
   }

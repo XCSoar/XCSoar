@@ -707,18 +707,13 @@ int dlgWayPointSelect(double lon, double lat, int type, int FilterNear){
   }
 
   if (!InfoBoxLayout::landscape) {
-    char filename[MAX_PATH];
-    LocalPathS(filename, TEXT("dlgWayPointSelect_L.xml"));
     wf = dlgLoadFromXML(CallBackTable,
-
-                        filename,
+                        TEXT("dlgWayPointSelect_L.xml"),
                         hWndMainWindow,
                         TEXT("IDR_XML_WAYPOINTSELECT_L"));
   } else {
-    char filename[MAX_PATH];
-    LocalPathS(filename, TEXT("dlgWayPointSelect.xml"));
     wf = dlgLoadFromXML(CallBackTable,
-                        filename,
+                        TEXT("dlgWayPointSelect.xml"),
                         hWndMainWindow,
                         TEXT("IDR_XML_WAYPOINTSELECT"));
   }

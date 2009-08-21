@@ -2030,18 +2030,13 @@ void dlgAnalysisShowModal(void){
   olcfinished = false;
 
   if (!InfoBoxLayout::landscape) {
-    char filename[MAX_PATH];
-    LocalPathS(filename, TEXT("dlgAnalysis_L.xml"));
     wf = dlgLoadFromXML(CallBackTable,
-
-                        filename,
+                        TEXT("dlgAnalysis_L.xml"),
                         hWndMainWindow,
                         TEXT("IDR_XML_ANALYSIS_L"));
   } else  {
-    char filename[MAX_PATH];
-    LocalPathS(filename, TEXT("dlgAnalysis.xml"));
     wf = dlgLoadFromXML(CallBackTable,
-                        filename,
+                        TEXT("dlgAnalysis.xml"),
                         hWndMainWindow,
                         TEXT("IDR_XML_ANALYSIS"));
   }

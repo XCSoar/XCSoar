@@ -788,18 +788,13 @@ void dlgAirspaceSelect(void) {
   Longitude = GPS_INFO.Longitude;
 
   if (!InfoBoxLayout::landscape) {
-    char filename[MAX_PATH];
-    LocalPathS(filename, TEXT("dlgAirspaceSelect_L.xml"));
     wf = dlgLoadFromXML(CallBackTable,
-
-                        filename,
+                        TEXT("dlgAirspaceSelect_L.xml"),
                         hWndMainWindow,
                         TEXT("IDR_XML_AIRSPACESELECT_L"));
   } else {
-    char filename[MAX_PATH];
-    LocalPathS(filename, TEXT("dlgAirspaceSelect.xml"));
     wf = dlgLoadFromXML(CallBackTable,
-                        filename,
+                        TEXT("dlgAirspaceSelect.xml"),
                         hWndMainWindow,
                         TEXT("IDR_XML_AIRSPACESELECT"));
   }

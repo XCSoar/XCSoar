@@ -182,23 +182,19 @@ void dlgTeamCodeShowModal(void)
   WndProperty* wp = NULL;
   WndButton *buttonCode = NULL;
   wf = NULL;
-  char filename[MAX_PATH];
+
   if (InfoBoxLayout::landscape)
     {
-      LocalPathS(filename, TEXT("dlgTeamCode_L.xml"));
       wf = dlgLoadFromXML(CallBackTable,
-
-			  filename,
+                          TEXT("dlgTeamCode_L.xml"),
 			  hWndMainWindow,
 			  TEXT("IDR_XML_TEAMCODE_L"));
       if (!wf) return;
     }
   else
     {
-      LocalPathS(filename, TEXT("dlgTeamCode.xml"));
       wf = dlgLoadFromXML(CallBackTable,
-
-			  filename,
+                          TEXT("dlgTeamCode.xml"),
 			  hWndMainWindow,
 			  TEXT("IDR_XML_TEAMCODE"));
       if (!wf) return;

@@ -539,18 +539,13 @@ void dlgTaskOverviewShowModal(void){
   wf = NULL;
 
   if (!InfoBoxLayout::landscape) {
-    char filename[MAX_PATH];
-    LocalPathS(filename, TEXT("dlgTaskOverview_L.xml"));
     wf = dlgLoadFromXML(CallBackTable,
-
-                        filename,
+                        TEXT("dlgTaskOverview_L.xml"),
                         hWndMainWindow,
                         TEXT("IDR_XML_TASKOVERVIEW_L"));
   } else {
-    char filename[MAX_PATH];
-    LocalPathS(filename, TEXT("dlgTaskOverview.xml"));
     wf = dlgLoadFromXML(CallBackTable,
-                        filename,
+                        TEXT("dlgTaskOverview.xml"),
                         hWndMainWindow,
                         TEXT("IDR_XML_TASKOVERVIEW"));
   }

@@ -251,17 +251,13 @@ void dlgAirspaceShowModal(bool coloredit){
   ItemIndex = -1;
 
   if (!InfoBoxLayout::landscape) {
-    char filename[MAX_PATH];
-    LocalPathS(filename, TEXT("dlgAirspace_L.xml"));
     wf = dlgLoadFromXML(CallBackTable,
-                        filename,
+                        TEXT("dlgAirspace_L.xml"),
                         hWndMainWindow,
                         TEXT("IDR_XML_AIRSPACE_L"));
   } else {
-    char filename[MAX_PATH];
-    LocalPathS(filename, TEXT("dlgAirspace.xml"));
     wf = dlgLoadFromXML(CallBackTable,
-                        filename,
+                        TEXT("dlgAirspace.xml"),
                         hWndMainWindow,
                         TEXT("IDR_XML_AIRSPACE"));
   }

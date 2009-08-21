@@ -311,10 +311,8 @@ void dlgAirspaceDetails(int the_circle, int the_area) {
     return;
   }
 
-  char filename[MAX_PATH];
-  LocalPathS(filename, TEXT("dlgAirspaceDetails.xml"));
   wf = dlgLoadFromXML(CallBackTable,
-		      filename,
+                      TEXT("dlgAirspaceDetails.xml"),
 		      hWndMainWindow,
 		      TEXT("IDR_XML_AIRSPACEDETAILS"));
 

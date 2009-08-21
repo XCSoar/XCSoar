@@ -162,18 +162,13 @@ int dlgComboPicker(WndProperty* theProperty){
 
 
     if (!InfoBoxLayout::landscape) {
-      char filename[MAX_PATH];
-      LocalPathS(filename, TEXT("dlgComboPicker_L.xml"));
       wf = dlgLoadFromXML(CallBackTable,
-
-                          filename,
+                          TEXT("dlgComboPicker_L.xml"),
                           hWndMainWindow,
                           TEXT("IDR_XML_COMBOPICKER_L"));
     } else {
-      char filename[MAX_PATH];
-      LocalPathS(filename, TEXT("dlgWayComboPicker.xml"));
       wf = dlgLoadFromXML(CallBackTable,
-                          filename,
+                          TEXT("dlgWayComboPicker.xml"),
                           hWndMainWindow,
                           TEXT("IDR_XML_COMBOPICKER"));
     }

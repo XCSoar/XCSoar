@@ -284,17 +284,13 @@ void dlgChecklistShowModal(void){
   //  WndProperty *wp;
 
   if (!InfoBoxLayout::landscape) {
-    char filename[MAX_PATH];
-    LocalPathS(filename, TEXT("dlgChecklist_L.xml"));
     wf = dlgLoadFromXML(CallBackTable,
-                        filename,
+                        TEXT("dlgChecklist_L.xml"),
                         hWndMainWindow,
                         TEXT("IDR_XML_CHECKLIST_L"));
   } else {
-    char filename[MAX_PATH];
-    LocalPathS(filename, TEXT("dlgChecklist.xml"));
     wf = dlgLoadFromXML(CallBackTable,
-                        filename,
+                        TEXT("dlgChecklist.xml"),
                         hWndMainWindow,
                         TEXT("IDR_XML_CHECKLIST"));
   }

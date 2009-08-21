@@ -220,17 +220,14 @@ static void dlgTextEntryHighscoreType(TCHAR *text, int width)
   }
   max_width = min(MAX_TEXTENTRY, width);
 
-  char filename[MAX_PATH];
 #ifndef GNAV
-  LocalPathS(filename, TEXT("dlgTextEntry_T.xml"));
   wf = dlgLoadFromXML(CallBackTable,
-                      filename,
+                      TEXT("dlgTextEntry_T.xml"),
 		      hWndMainWindow,
 		      TEXT("IDR_XML_TEXTENTRY_T"));
 #else
-  LocalPathS(filename, TEXT("dlgTextEntry.xml"));
   wf = dlgLoadFromXML(CallBackTable,
-                      filename,
+                      TEXT("dlgTextEntry.xml"),
 		      hWndMainWindow,
 		      TEXT("IDR_XML_TEXTENTRY"));
 #endif

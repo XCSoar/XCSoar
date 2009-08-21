@@ -130,21 +130,19 @@ void dlgNumberEntryKeyboardShowModal(int *value, int width)
     width = MAX_TEXTENTRY;
   }
   max_width = min(MAX_TEXTENTRY, width);
-  char filename[MAX_PATH];
+
   if (InfoBoxLayout::landscape)
     {
-      LocalPathS(filename, TEXT("frmNumberEntry_Keyboard_L.xml"));
       wf = dlgLoadFromXML(CallBackTable,
-			  filename,
+                          TEXT("frmNumberEntry_Keyboard_L.xml"),
 			  hWndMainWindow,
 			  TEXT("IDR_XML_NUMBERENTRY_KEYBOARD_L"));
       if (!wf) return;
     }
   else
     {
-      LocalPathS(filename, TEXT("frmNumberEntry_Keyboard.xml"));
       wf = dlgLoadFromXML(CallBackTable,
-			  filename,
+                          TEXT("frmNumberEntry_Keyboard.xml"),
 			  hWndMainWindow,
 			  TEXT("IDR_XML_NUMBERENTRY_KEYBOARD"));
       if (!wf) return;
