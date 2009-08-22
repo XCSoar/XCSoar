@@ -397,10 +397,12 @@ OBJS	:=\
 	$(SRC)/CalculationsAirspace.o \
 	$(SRC)/CalculationsAutoMc.o \
 	$(SRC)/CalculationsBallast.o \
+	$(SRC)/CalculationsClimb.o \
 	$(SRC)/CalculationsSector.o \
 	$(SRC)/CalculationsTask.o \
 	$(SRC)/CalculationsTerrain.o \
 	$(SRC)/CalculationsVario.o \
+	$(SRC)/CalculationsVertical.o \
 	$(SRC)/CalculationsWind.o \
 	\
 	$(SRC)/ClimbAverageCalculator.o \
