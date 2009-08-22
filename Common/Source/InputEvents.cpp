@@ -66,7 +66,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "externs.h"
 #include "Math/FastMath.h"
 #include "Dialogs.h"
-#include "Terrain.h"
+#include "Marks.h"
 #include "Compatibility/vk.h"
 #include <commctrl.h>
 #include "InfoBoxLayout.h"

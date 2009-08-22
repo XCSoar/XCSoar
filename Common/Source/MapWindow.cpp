@@ -65,7 +65,10 @@ Copyright_License {
 
 #include <tchar.h>
 
-#include "Terrain.h"
+#include "TopologyStore.h"
+#include "TerrainRenderer.h"
+#include "Marks.h"
+
 #include "options.h"
 #include "Task.h"
 #include "AATDistance.h"

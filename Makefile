@@ -402,16 +402,20 @@ OBJS	:=\
 	$(SRC)/Parser.o			$(SRC)/Device/Port.o \
 	$(SRC)/Process.o \
 	$(SRC)/InfoBoxEvents.o \
-	$(SRC)/RasterMap.o \
-	$(SRC)/RasterTerrain.o \
-	$(SRC)/RasterWeather.o \
 	$(SRC)/rscalc.o \
 	$(SRC)/StdAfx.o			\
 	$(SRC)/Task.o			$(SRC)/TeamCodeCalculation.o \
-	$(SRC)/Terrain.o		\
+	\
+	$(SRC)/Topology.o		\
+	$(SRC)/TopologyStore.o		\
+	$(SRC)/RasterMap.o \
+	$(SRC)/RasterTerrain.o \
+	$(SRC)/RasterWeather.o \
 	$(SRC)/TerrainRenderer.o	\
 	$(SRC)/ThermalLocator.o \
-	$(SRC)/Topology.o		$(SRC)/units.o \
+	$(SRC)/Marks.o \
+	\
+	$(SRC)/units.o \
 	$(SRC)/Utils.o			$(SRC)/Utils2.o \
 	$(SRC)/Waypointparser.o \
 	$(SRC)/windanalyser.o		$(SRC)/windmeasurementlist.o \

@@ -44,7 +44,7 @@ Copyright_License {
 #include "XCSoar.h"
 #include "MapWindow.h"
 #include "GaugeFLARM.h"
-#include "Terrain.h"
+#include "TerrainRenderer.h"
 #include "Audio/VegaVoice.h"
 #include "McReady.h"
 #include "WayPoint.hpp"

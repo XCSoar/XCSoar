@@ -83,7 +83,9 @@ Copyright_License {
 #endif
 #endif
 
-#include "Terrain.h"
+#include "TopologyStore.h"
+#include "TerrainRenderer.h"
+#include "Marks.h"
 #include "Audio/VarioSound.h"
 #include "Device/device.h"
 
@@ -1525,7 +1527,7 @@ CreateProgressDialog(gettext(TEXT("Special ITA version")));
   SortAirspace();
 
   OpenTopology();
-  TopologyInitialiseMarks();
+  InitialiseMarks();
 
   OpenFLARMDetails();
 
@@ -1998,7 +2000,7 @@ void Shutdown(void) {
 
   CloseTopology();
 
-  TopologyCloseMarks();
+  CloseMarks();
 
   CloseTerrainRenderer();
 

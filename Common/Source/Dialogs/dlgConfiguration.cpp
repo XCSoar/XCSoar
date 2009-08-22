@@ -42,7 +42,7 @@ Copyright_License {
 #include "Utils2.h"
 #include "externs.h"
 #include "MapWindow.h"
-#include "Terrain.h"
+#include "TerrainRenderer.h"
 #include "GaugeFLARM.h"
 #include "LocalPath.hpp"
 #include "Utils.h"
