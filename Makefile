@@ -408,7 +408,9 @@ OBJS	:=\
 	$(SRC)/rscalc.o \
 	$(SRC)/StdAfx.o			\
 	$(SRC)/Task.o			$(SRC)/TeamCodeCalculation.o \
-	$(SRC)/Terrain.o		$(SRC)/ThermalLocator.o \
+	$(SRC)/Terrain.o		\
+	$(SRC)/TerrainRenderer.o	\
+	$(SRC)/ThermalLocator.o \
 	$(SRC)/Topology.o		$(SRC)/units.o \
 	$(SRC)/Utils.o			$(SRC)/Utils2.o \
 	$(SRC)/Waypointparser.o \
