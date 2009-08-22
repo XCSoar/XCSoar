@@ -73,6 +73,7 @@ Copyright_License {
 #include "GaugeFLARM.h"
 #include "InfoBoxLayout.h"
 #include "Screen/Util.hpp"
+#include "GlideSolvers.hpp"
 
 #if (WINDOWSPC>0)
 #include <wingdi.h>

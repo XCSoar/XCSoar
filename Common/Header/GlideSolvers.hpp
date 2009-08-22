@@ -35,18 +35,29 @@ Copyright_License {
 }
 */
 
-#ifndef CALCULATIONS2_H
-#define CALCULATIONS2_H
+#ifndef GLIDE_SOLVERS_HPP
+#define GLIDE_SOLVERS_HPP
+
 #include "Calculations.h"
 
-void DoLogging(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
+double FinalGlideThroughTerrain(const double bearing, NMEA_INFO *Basic,
+                                DERIVED_INFO *Calculated,
+                                double *retlat, double *retlon,
+                                const double maxrange,
+				bool *outofrange,
+				double *TerrainBase = NULL);
 
+double PirkerAnalysis(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
+		      const double bearing,
+		      const double GlideSlope);
 
-void CalculateOwnTeamCode(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
-void CalculateTeammateBearingRange(NMEA_INFO *Basic, DERIVED_INFO *Calculated) ;
+double MacCreadyTimeLimit(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
+			  const double bearing,
+			  const double timeremaining,
+			  const double hfinal);
 
-void CalibrationInit(void);
-void CalibrationUpdate(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
-void CalibrationSave(void);
+double EffectiveMacCready(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
+double EffectiveCruiseEfficiency(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
+
 
 #endif

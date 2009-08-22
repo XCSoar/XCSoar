@@ -398,6 +398,8 @@ OBJS	:=\
 	$(SRC)/FlarmIdFile.o 		$(SRC)/FlarmCalculations.o \
 	$(SRC)/GaugeCDI.o 		$(SRC)/GaugeFLARM.o \
 	$(SRC)/GaugeVarioAltA.o 	$(SRC)/Device/Geoid.o \
+	$(SRC)/GlideSolvers.o \
+	$(SRC)/Persist.o \
 	\
 	$(SRC)/InfoBox.o 		\
 	$(SRC)/InfoBoxLayout.o \

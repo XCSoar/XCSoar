@@ -1,3 +1,4 @@
+
 /*
 Copyright_License {
 
@@ -33,20 +34,17 @@ Copyright_License {
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
+
 */
 
-#ifndef CALCULATIONS2_H
-#define CALCULATIONS2_H
+#ifndef XCSOAR_PERSIST_HPP
+#define XCSOAR_PERSIST_HPP
+
 #include "Calculations.h"
 
-void DoLogging(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
+void LoadCalculationsPersist(DERIVED_INFO *Calculated);
+void SaveCalculationsPersist(DERIVED_INFO *Calculated);
+void DeleteCalculationsPersist(void);
 
-
-void CalculateOwnTeamCode(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
-void CalculateTeammateBearingRange(NMEA_INFO *Basic, DERIVED_INFO *Calculated) ;
-
-void CalibrationInit(void);
-void CalibrationUpdate(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
-void CalibrationSave(void);
 
 #endif

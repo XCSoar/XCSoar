@@ -74,6 +74,8 @@ Copyright_License {
 #include "Math/Pressure.h"
 #include "WayPoint.hpp"
 #include "LogFile.hpp"
+#include "GlideSolvers.hpp"
+#include "Persist.hpp"
 
 WindAnalyser *windanalyser = NULL;
 OLCOptimizer olc;

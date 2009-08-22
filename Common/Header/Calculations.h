@@ -246,10 +246,6 @@ bool ClearAirspaceWarnings(const bool ack, const bool allday=false);
 void RefreshTaskStatistics(void);
 void  SetWindEstimate(const double speed, const double bearing, const int quality=6);
 
-void LoadCalculationsPersist(DERIVED_INFO *Calculated);
-void SaveCalculationsPersist(DERIVED_INFO *Calculated);
-void DeleteCalculationsPersist(void);
-
 void CloseCalculations(void);
 void InitCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 
@@ -267,12 +263,6 @@ bool ValidStartSpeed(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 bool InsideStartHeight(NMEA_INFO *Basic, DERIVED_INFO *Calculated, DWORD Margin);
 bool ValidStartSpeed(NMEA_INFO *Basic, DERIVED_INFO *Calculated, DWORD Margin);
 
-double FinalGlideThroughTerrain(const double bearing, NMEA_INFO *Basic,
-                                DERIVED_INFO *Calculated,
-                                double *retlat, double *retlon,
-                                const double maxrange,
-				bool *outofrange,
-				double *TerrainBase = NULL);
 
 void BallastDump();
 

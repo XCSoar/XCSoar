@@ -44,6 +44,7 @@ Copyright_License {
 #include "Device/Parser.h"
 #include "Calculations.h"
 #include "Calculations2.h"
+#include "Persist.hpp"
 #include "Task.h"
 #include "Dialogs.h"
 #include "Trigger.hpp"

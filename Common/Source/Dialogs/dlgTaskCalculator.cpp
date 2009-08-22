@@ -43,7 +43,7 @@ Copyright_License {
 #include "McReady.h"
 
 #include "Dialogs/dlgTools.h"
-#include "Calculations2.h"
+#include "GlideSolvers.hpp"
 #include "Dialogs.h"
 #include "DataField/Base.hpp"
 
