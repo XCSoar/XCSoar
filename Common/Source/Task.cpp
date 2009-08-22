@@ -1654,3 +1654,27 @@ void ResumeAbortTask(int set) {
   //  UnlockFlightData();
 
 }
+
+
+
+int getFinalWaypoint() {
+  int i;
+  i=max(-1,min(MAXTASKPOINTS,ActiveWayPoint));
+  if (TaskAborted) {
+    return i;
+  }
+
+  i++;
+  LockTaskData();
+  while((i<MAXTASKPOINTS) && (Task[i].Index != -1))
+    {
+      i++;
+    }
+  UnlockTaskData();
+  return i-1;
+}
+
+bool ActiveIsFinalWaypoint() {
+  return (ActiveWayPoint == getFinalWaypoint());
+}
+

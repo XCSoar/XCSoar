@@ -159,4 +159,8 @@ void ResumeAbortTask(int set = 0);
 
 bool TaskIsTemporary(void);
 
+int getFinalWaypoint(void);
+
+bool ActiveIsFinalWaypoint(void);
+
 #endif

@@ -100,6 +100,8 @@ extern "C" {
 // Fast trig functions
 void InitSineTable(void);
 
+unsigned int isqrt4(unsigned long val);
+
 #ifdef __cplusplus
 }
 #endif

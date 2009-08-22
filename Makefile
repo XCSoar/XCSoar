@@ -394,9 +394,10 @@ OBJS	:=\
 	\
 	$(SRC)/Calculations.o 		$(SRC)/Calculations2.o \
 	$(SRC)/CalculationsAirspace.o \
+	$(SRC)/CalculationsAbort.o \
+	$(SRC)/CalculationsBallast.o \
 	$(SRC)/CalculationsTerrain.o \
 	$(SRC)/CalculationsWind.o \
-	$(SRC)/CalculationsBallast.o \
 	\
 	$(SRC)/ClimbAverageCalculator.o \
 	$(SRC)/ConditionMonitor.o 	$(SRC)/Device/device.o \

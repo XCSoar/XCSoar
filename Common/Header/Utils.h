@@ -79,7 +79,6 @@ double StrToDouble(const TCHAR *Source, const TCHAR **Stop);
 void PExtractParameter(const TCHAR *Source, TCHAR *Destination,
                        int DesiredFieldNumber);
 
-unsigned int isqrt4(unsigned long val);
 
 
 void ExtractDirectory(TCHAR *Dest, const TCHAR *Source);
