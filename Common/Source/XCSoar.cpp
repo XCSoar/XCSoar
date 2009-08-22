@@ -102,6 +102,8 @@ Copyright_License {
 #include "GaugeFLARM.h"
 #include "GaugeVarioAltA.h"
 
+#include "Asset.hpp"
+
 #include <assert.h>
 
 
@@ -251,10 +253,6 @@ unsigned int NumberOfAirspaceCircles = 0;
 int AIRSPACEWARNINGS = TRUE;
 int WarningTime = 30;
 int AcknowledgementTime = 30;
-
-// Registration Data
-TCHAR strAssetNumber[MAX_LOADSTRING] = TEXT(""); //4G17DW31L0HY");
-TCHAR strRegKey[MAX_LOADSTRING] = TEXT("");
 
 // user interface settings
 bool CircleZoom = false;

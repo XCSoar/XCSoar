@@ -64,11 +64,6 @@ extern void		ConvToUpper( TCHAR *);
 
 #endif
 
-
-// asset/registration data
-extern TCHAR strAssetNumber[];
-extern TCHAR strRegKey[];
-
 // waypoint data
 extern int HomeWaypoint;
 extern int AirfieldsHomeWaypoint; // VENTA3

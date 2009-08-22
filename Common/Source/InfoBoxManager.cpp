@@ -958,3 +958,26 @@ void InfoBoxesSetDirty(bool is_dirty) {
   InfoBoxesDirty = is_dirty;
 }
 
+
+void ResetInfoBoxes(void) {
+#ifdef GNAV
+  InfoType[0]=873336334;
+  InfoType[1]=856820491;
+  InfoType[2]=822280982;
+  InfoType[3]=2829105;
+  InfoType[4]=103166000;
+  InfoType[5]=421601569;
+  InfoType[6]=657002759;
+  InfoType[7]=621743887;
+  InfoType[8]=439168301;
+#else
+  InfoType[0] = 921102;
+  InfoType[1] = 725525;
+  InfoType[2] = 262144;
+  InfoType[3] = 74518;
+  InfoType[4] = 657930;
+  InfoType[5] = 2236963;
+  InfoType[6] = 394758;
+  InfoType[7] = 1644825;
+#endif
+}

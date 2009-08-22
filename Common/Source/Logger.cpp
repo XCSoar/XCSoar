@@ -44,6 +44,7 @@
 #include "Registry.hpp"
 #include "Math/Earth.hpp"
 #include "LogFile.hpp"
+#include "Asset.hpp"
 
 #include <windows.h>
 #include "Utils.h"

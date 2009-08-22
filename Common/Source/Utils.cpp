@@ -85,30 +85,6 @@ bool LockSettingsInFlight = true;
 bool LoggerShortName = false;
 
 
-void ResetInfoBoxes(void) {
-#ifdef GNAV
-  InfoType[0]=873336334;
-  InfoType[1]=856820491;
-  InfoType[2]=822280982;
-  InfoType[3]=2829105;
-  InfoType[4]=103166000;
-  InfoType[5]=421601569;
-  InfoType[6]=657002759;
-  InfoType[7]=621743887;
-  InfoType[8]=439168301;
-#else
-  InfoType[0] = 921102;
-  InfoType[1] = 725525;
-  InfoType[2] = 262144;
-  InfoType[3] = 74518;
-  InfoType[4] = 657930;
-  InfoType[5] = 2236963;
-  InfoType[6] = 394758;
-  InfoType[7] = 1644825;
-#endif
-}
-
-
 void PExtractParameter(const TCHAR *Source, TCHAR *Destination,
                        int DesiredFieldNumber)
 {
@@ -177,257 +153,6 @@ void ConvertFlightLevels(void)
     }
 }
 
-void ReadAssetNumber(void)
-{
-  TCHAR val[MAX_PATH];
-
-  val[0]= _T('\0');
-
-  memset(strAssetNumber, 0, MAX_LOADSTRING*sizeof(TCHAR));
-  // JMW clear this first just to be safe.
-
-  StartupStore(TEXT("Asset ID: "));
-
-#if (WINDOWSPC>0)
-  return;
-#endif
-
-  GetRegistryString(szRegistryLoggerID, val, 100);
-  int ifound=0;
-  int len = _tcslen(val);
-  for (int i=0; i< len; i++) {
-    if (((val[i] >= _T('A'))&&(val[i] <= _T('Z')))
-        ||((val[i] >= _T('0'))&&(val[i] <= _T('9')))) {
-      strAssetNumber[ifound]= val[i];
-      ifound++;
-    }
-    if (ifound>=3) {
-      StartupStore(strAssetNumber);
-      StartupStore(TEXT(" (reg)\n"));
-      return;
-    }
-  }
-
-  if(strAssetNumber[0] != '\0')
-    {
-      StartupStore(strAssetNumber);
-      StartupStore(TEXT(" (?)\n"));
-      return;
-    }
-
-  ReadCompaqID();
-  if(strAssetNumber[0] != '\0')
-    {
-      StartupStore(strAssetNumber);
-      StartupStore(TEXT(" (compaq)\n"));
-      return;
-    }
-
-  ReadUUID();
-  if(strAssetNumber[0] != '\0')
-    {
-      StartupStore(strAssetNumber);
-      StartupStore(TEXT(" (uuid)\n"));
-      return;
-    }
-
-  strAssetNumber[0]= _T('A');
-  strAssetNumber[1]= _T('A');
-  strAssetNumber[2]= _T('A');
-
-  StartupStore(strAssetNumber);
-  StartupStore(TEXT(" (fallback)\n"));
-
-  return;
-}
-
-void ReadCompaqID(void)
-{
-  PROCESS_INFORMATION pi;
-
-  if(strAssetNumber[0] != '\0')
-    {
-      return;
-    }
-
-  CreateProcess(TEXT("\\windows\\CreateAssetFile.exe"), NULL, NULL, NULL, FALSE, 0, NULL, NULL, NULL, &pi);
-
-  FILE *file = _tfopen(TEXT("\\windows\\cpqAssetData.dat"), TEXT("rb"));
-  if (file == NULL)
-    {
-      //	    MessageBox(hWnd, TEXT("Unable to open asset data file."), TEXT("Error!"), MB_OK);
-      return;
-    }
-  fseek(file, 976, SEEK_SET);
-  memset(strAssetNumber, 0, 64 * sizeof(TCHAR));
-  fread(&strAssetNumber, 64, 1, file);
-  fclose(file);
-}
-
-
-void ReadUUID(void)
-{
-#if !(defined(__MINGW32__) && (WINDOWSPC>0))
-  BOOL fRes;
-
-#define GUIDBuffsize 100
-  unsigned char GUIDbuffer[GUIDBuffsize];
-
-  int eLast=0;
-  int i;
-  unsigned long uNumReturned=0;
-  int iBuffSizeIn=0;
-  unsigned long temp, Asset;
-
-
-  GUID Guid;
-
-
-  // approach followed: http://blogs.msdn.com/jehance/archive/2004/07/12/181116.aspx
-  // 1) send 16 byte buffer - some older devices need this
-  // 2) if buffer is wrong size, resize buffer accordingly and retry
-  // 3) take first 16 bytes of buffer and process.  Buffer returned may be any size
-  // First try exactly 16 bytes, some older PDAs require exactly 16 byte buffer
-
-      #ifdef HAVEEXCEPTIONS
-    __try {
-      #else
-	  strAssetNumber[0]= '\0';
-      #endif
-
-	  iBuffSizeIn=sizeof(Guid);
-	  memset(GUIDbuffer, 0, iBuffSizeIn);
-	  fRes = KernelIoControl(IOCTL_HAL_GET_DEVICEID, 0, 0, GUIDbuffer, iBuffSizeIn, &uNumReturned);
-	  if(fRes == FALSE)
-	  { // try larger buffer
-		  eLast = GetLastError();
-		  if (ERROR_INSUFFICIENT_BUFFER != eLast)
-		  {
-			return;
-		  }
-		  else
-		  { // wrong buffer
-			iBuffSizeIn = uNumReturned;
-			memset(GUIDbuffer, 0, iBuffSizeIn);
-			fRes = KernelIoControl(IOCTL_HAL_GET_DEVICEID, 0, 0, GUIDbuffer, iBuffSizeIn, &uNumReturned);
-  			eLast = GetLastError();
-			if(FALSE == fRes)
-				return;
-		  }
-	  }
-
-	  // here assume we have data in GUIDbuffer of length uNumReturned
-	  memcpy(&Guid,GUIDbuffer, sizeof(Guid));
-
-
-	  temp = Guid.Data2; temp = temp << 16;
-	  temp += Guid.Data3 ;
-
-	  Asset = temp ^ Guid.Data1 ;
-
-	  temp = 0;
-	  for(i=0;i<4;i++)
-		{
-		  temp = temp << 8;
-		  temp += Guid.Data4[i];
-		}
-
-	  Asset = Asset ^ temp;
-
-	  temp = 0;
-	  for(i=0;i<4;i++)
-		{
-		  temp = temp << 8;
-		  temp += Guid.Data4[i+4];
-		}
-
-	  Asset = Asset ^ temp;
-
-	  _stprintf(strAssetNumber,TEXT("%08X%08X"),Asset,Guid.Data1 );
-
-#ifdef HAVEEXCEPTIONS
-  }
-  __except(EXCEPTION_EXECUTE_HANDLER)
-  {
-	  strAssetNumber[0]= '\0';
-  }
-#endif
-#endif
-  return;
-}
-
-
-#if 0
-void ReadUUIDold(void)
-{
-#ifndef __MINGW32__
-  BOOL fRes;
-  DWORD dwBytesReturned =0;
-  DEVICE_ID DevID;
-  int wSize;
-  int i;
-
-  GUID Guid;
-
-  unsigned long temp, Asset;
-
-  memset(&Guid, 0, sizeof(GUID));
-
-  memset(&DevID, 0, sizeof(DEVICE_ID));
-  DevID.dwSize = sizeof(DEVICE_ID);
-
-  fRes = KernelIoControl( IOCTL_HAL_GET_DEVICEID, NULL, 0,
-			  &DevID, sizeof( DEVICE_ID ), &dwBytesReturned );
-
-  wSize = DevID.dwSize;
-
-  if( (FALSE != fRes) || (ERROR_INSUFFICIENT_BUFFER != GetLastError()))
-    return;
-
-  memset(&DevID, 0, sizeof(wSize));
-  DevID.dwSize = wSize;
-
-  fRes = KernelIoControl( IOCTL_HAL_GET_DEVICEID, NULL, 0,
-			  &DevID, wSize, &dwBytesReturned );
-
-  if((FALSE == fRes) || (ERROR_INSUFFICIENT_BUFFER == GetLastError()) )
-    return;
-
-  BYTE* pDat = (BYTE*)&Guid.Data1;
-  BYTE* pSrc = (BYTE*)(&DevID) + DevID.dwPresetIDOffset;
-  memcpy(pDat, pSrc, DevID.dwPresetIDBytes);
-  pDat +=  DevID.dwPresetIDBytes;
-  pSrc =  (BYTE*)(&DevID) + DevID.dwPlatformIDOffset;
-  memcpy(pDat, pSrc, DevID.dwPlatformIDBytes);
-
-  temp = Guid.Data2; temp = temp << 16;
-  temp += Guid.Data3 ;
-
-  Asset = temp ^ Guid.Data1 ;
-
-  temp = 0;
-  for(i=0;i<4;i++)
-    {
-      temp = temp << 8;
-      temp += Guid.Data4[i];
-    }
-
-  Asset = Asset ^ temp;
-
-  temp = 0;
-  for(i=0;i<4;i++)
-    {
-      temp = temp << 8;
-      temp += Guid.Data4[i+4];
-    }
-
-  Asset = Asset ^ temp;
-
-  _stprintf(strAssetNumber,TEXT("%08X%08X"),Asset,Guid.Data1 );
-  return;
-#endif
-}
-#endif
 
 #ifdef ENABLE_UNUSED_CODE
 void WriteFileRegistryString(HANDLE hFile, TCHAR *instring) {
@@ -479,6 +204,7 @@ void ReadFileRegistryString(HANDLE hFile, TCHAR *instring) {
     SetRegistryString(instring, tempFile);
 }
 #endif /* ENABLE_UNUSED_CODE */
+
 
 void ReadProfile(const TCHAR *szFile)
 {
@@ -2312,40 +2038,38 @@ bool SetSoundVolume() // VENTA4
  */
 short InstallFonts() {
 
-TCHAR srcdir[MAX_PATH];
-TCHAR dstdir[MAX_PATH];
-TCHAR srcfile[MAX_PATH];
-TCHAR dstfile[MAX_PATH];
+  TCHAR srcdir[MAX_PATH];
+  TCHAR dstdir[MAX_PATH];
+  TCHAR srcfile[MAX_PATH];
+  TCHAR dstfile[MAX_PATH];
 
-_stprintf(srcdir,TEXT("%s%S\\Fonts"),gmfpathname(), XCSDATADIR );
-_stprintf(dstdir,TEXT("\\Windows\\Fonts"),gmfpathname() );
-
-
-if (  GetFileAttributes(srcdir) != FILE_ATTRIBUTE_DIRECTORY) return 1;
-if (  GetFileAttributes(dstdir) != FILE_ATTRIBUTE_DIRECTORY) return 2;
-
-_stprintf(srcfile,TEXT("%s\\DejaVuSansCondensed2.ttf"),srcdir);
-_stprintf(dstfile,TEXT("%s\\DejaVuSansCondensed2.ttf"),dstdir);
-//if (  GetFileAttributes(srcfile) != FILE_ATTRIBUTE_NORMAL) return 3;
-if (  GetFileAttributes(dstfile) != 0xffffffff ) return 4;
-if ( !CopyFile(srcfile, dstfile, TRUE)) return 5;
-
-// From now on we attempt to copy without overwriting
-_stprintf(srcfile,TEXT("%s\\DejaVuSansCondensed-Bold2.ttf"),srcdir);
-_stprintf(dstfile,TEXT("%s\\DejaVuSansCondensed-Bold2.ttf"),dstdir);
-CopyFile(srcfile,dstfile,TRUE);
-
-_stprintf(srcfile,TEXT("%s\\DejaVuSansCondensed-BoldOblique2.ttf"),srcdir);
-_stprintf(dstfile,TEXT("%s\\DejaVuSansCondensed-BoldOblique2.ttf"),dstdir);
-CopyFile(srcfile,dstfile,TRUE);
-
-_stprintf(srcfile,TEXT("%s\\DejaVuSansCondensed-Oblique2.ttf"),srcdir);
-_stprintf(dstfile,TEXT("%s\\DejaVuSansCondensed-Oblique2.ttf"),dstdir);
-CopyFile(srcfile,dstfile,TRUE);
+  _stprintf(srcdir,TEXT("%s%S\\Fonts"),gmfpathname(), XCSDATADIR );
+  _stprintf(dstdir,TEXT("\\Windows\\Fonts"),gmfpathname() );
 
 
-return 0;
+  if (  GetFileAttributes(srcdir) != FILE_ATTRIBUTE_DIRECTORY) return 1;
+  if (  GetFileAttributes(dstdir) != FILE_ATTRIBUTE_DIRECTORY) return 2;
 
+  _stprintf(srcfile,TEXT("%s\\DejaVuSansCondensed2.ttf"),srcdir);
+  _stprintf(dstfile,TEXT("%s\\DejaVuSansCondensed2.ttf"),dstdir);
+  //if (  GetFileAttributes(srcfile) != FILE_ATTRIBUTE_NORMAL) return 3;
+  if (  GetFileAttributes(dstfile) != 0xffffffff ) return 4;
+  if ( !CopyFile(srcfile, dstfile, TRUE)) return 5;
+
+  // From now on we attempt to copy without overwriting
+  _stprintf(srcfile,TEXT("%s\\DejaVuSansCondensed-Bold2.ttf"),srcdir);
+  _stprintf(dstfile,TEXT("%s\\DejaVuSansCondensed-Bold2.ttf"),dstdir);
+  CopyFile(srcfile,dstfile,TRUE);
+
+  _stprintf(srcfile,TEXT("%s\\DejaVuSansCondensed-BoldOblique2.ttf"),srcdir);
+  _stprintf(dstfile,TEXT("%s\\DejaVuSansCondensed-BoldOblique2.ttf"),dstdir);
+  CopyFile(srcfile,dstfile,TRUE);
+
+  _stprintf(srcfile,TEXT("%s\\DejaVuSansCondensed-Oblique2.ttf"),srcdir);
+  _stprintf(dstfile,TEXT("%s\\DejaVuSansCondensed-Oblique2.ttf"),dstdir);
+  CopyFile(srcfile,dstfile,TRUE);
+
+  return 0;
 }
 
 /*

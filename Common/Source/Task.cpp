@@ -50,6 +50,7 @@ Copyright_License {
 #include "McReady.h"
 #include "Math/Earth.hpp"
 #include "LogFile.hpp"
+#include "Asset.hpp"
 
 #include <math.h>
 

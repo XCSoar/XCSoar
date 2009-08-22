@@ -57,6 +57,7 @@ Copyright_License {
 #include "externs.h"
 #include "LogFile.hpp"
 #include "InfoBoxManager.h"
+#include "Asset.hpp"
 
 #include <assert.h>
 #include <stdlib.h>

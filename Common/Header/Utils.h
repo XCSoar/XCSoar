@@ -34,8 +34,8 @@ Copyright_License {
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
 */
-#if !defined(AFX_UTILS_H__695AAC30_F401_4CFF_9BD9_FE62A2A2D0D2__INCLUDED_)
-#define AFX_UTILS_H__695AAC30_F401_4CFF_9BD9_FE62A2A2D0D2__INCLUDED_
+#if !defined(XCSOAR_UTILS_H)
+#define XCSOAR_UTILS_H
 
 #include <windows.h>
 #include <math.h>
@@ -63,15 +63,12 @@ void ReadPort3Settings(DWORD *PortIndex, DWORD *SpeedIndex);
 void WritePort1Settings(DWORD PortIndex, DWORD SpeedIndex);
 void WritePort2Settings(DWORD PortIndex, DWORD SpeedIndex);
 void WritePort3Settings(DWORD PortIndex, DWORD SpeedIndex);
-void ReadAssetNumber(void);
 void WriteProfile(const TCHAR *szFile);
 void ReadProfile(const TCHAR *szFile);
 #if defined(PNA) || defined(FIVV)  // VENTA-ADDON
 void SetModelType();
 bool SetModelName(DWORD Temp);
 #endif
-void ReadCompaqID(void);
-void ReadUUID(void);
 void FormatWarningString(int Type, const TCHAR *Name,
                          AIRSPACE_ALT Base, AIRSPACE_ALT Top,
                          TCHAR *szMessageBuffer, TCHAR *TileBuffer);

@@ -65,6 +65,7 @@ Copyright_License {
 #include "DataField/Boolean.hpp"
 #include "DataField/Enum.hpp"
 #include "DataField/FileReader.hpp"
+#include "Asset.hpp"
 
 #include <assert.h>
 
