@@ -402,7 +402,10 @@ OBJS	:=\
 	$(SRC)/Parser.o			$(SRC)/Device/Port.o \
 	$(SRC)/Process.o \
 	$(SRC)/InfoBoxEvents.o \
-	$(SRC)/RasterTerrain.o		$(SRC)/rscalc.o \
+	$(SRC)/RasterMap.o \
+	$(SRC)/RasterTerrain.o \
+	$(SRC)/RasterWeather.o \
+	$(SRC)/rscalc.o \
 	$(SRC)/StdAfx.o			\
 	$(SRC)/Task.o			$(SRC)/TeamCodeCalculation.o \
 	$(SRC)/Terrain.o		$(SRC)/ThermalLocator.o \

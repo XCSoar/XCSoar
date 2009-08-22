@@ -37,7 +37,6 @@ Copyright_License {
 
 #include "Dialogs.h"
 #include "XCSoar.h"
-#include "Statistics.h"
 #include "Utils.h"
 #include "externs.h"
 #include "Units.h"

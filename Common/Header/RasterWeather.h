@@ -35,73 +35,49 @@ Copyright_License {
 }
 */
 
-#include "StdAfx.h"
-#include "XCSoar.h"
-#include "externs.h"
-#include "McReady.h"
-#include "Dialogs/dlgTools.h"
+#ifndef RASTERWEATHER_H
+#define RASTERWEATHER_H
 
-static int page=0;
+#include "Sizes.h"
+#include "RasterMap.h"
 
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
 
-void NextPage(int Step){
-  page += Step;
-  if (page > 3)
-    page = 0;
-  if (page < 0)
-    page = 3;
-  Update();
-}
-
-void OnNextClicked(WindowControl * Sender){
-  NextPage(+1);
-}
-
-void OnPrevClicked(WindowControl * Sender){
-  NextPage(-1);
-}
-
-static void OnCloseClicked(WindowControl * Sender){
-  wf->SetModalResult(mrOK);
-}
-
-static int FormKeyDown(WindowControl * Sender, WPARAM wParam, LPARAM lParam){
-
-  if (wGrid->GetFocused())
-    return(0);
-
-  switch(wParam & 0xffff){
-    case VK_LEFT:
-      NextPage(-1);
-    return(0);
-    case VK_RIGHT:
-      NextPage(+1);
-    return(0);
+class RasterWeather {
+public:
+  RasterWeather() {
+    int i;
+    bsratio = false;
+    for (i=0; i<MAX_WEATHER_MAP; i++) {
+      weather_map[i]= 0;
+    }
+    for (i=0; i<MAX_WEATHER_TIMES; i++) {
+      weather_available[i]= false;
+    }
+    weather_time = 0;
   }
-  return(1);
-}
-
-static CallBackTableEntry_t CallBackTable[]={
-  DeclareCallBackEntry(OnAnalysisPaint),
-  DeclareCallBackEntry(OnNextClicked),
-  DeclareCallBackEntry(OnPrevClicked),
-  DeclareCallBackEntry(NULL)
+  ~RasterWeather() {
+    Close();
+  }
+ public:
+  void Close();
+  void Reload(double lat, double lon);
+  int weather_time;
+  RasterMap* weather_map[MAX_WEATHER_MAP];
+  void RASP_filename(char* rasp_filename, const TCHAR* name);
+  bool LoadItem(int item, const TCHAR* name);
+  void SetViewCenter(double lat, double lon);
+  void ServiceFullReload(double lat, double lon);
+  void ValueToText(TCHAR* Buffer, short val);
+  void ItemLabel(int i, TCHAR* Buffer);
+  void Scan(double lat, double lon);
+  bool weather_available[MAX_WEATHER_TIMES];
+  int IndexToTime(int x);
+ private:
+  bool bsratio;
 };
 
-void dlgAnalysisShowModal(void){
+extern RasterWeather RASP;
 
-  wf = dlgLoadFromXML(CallBackTable, "T:\\Project\\WINCE\\TNAV\\XCSoar\\dlgWayPointInfo.xml", hWndMainWindow);
-
-  wf->SetKeyDownNotify(FormKeyDown);
-
-  ((WndButton *)wf->FindByName(TEXT("cmdClose")))->SetOnClickNotify(OnCloseClicked);
-
-  Update();
-
-  wf->ShowModal();
-
-  delete wf;
-
-  wf = NULL;
-
-}
+#endif

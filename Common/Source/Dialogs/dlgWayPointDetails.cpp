@@ -43,7 +43,6 @@ Copyright_License {
 #include "Registry.hpp"
 #include "LocalPath.hpp"
 #include "Utils.h"
-#include "Statistics.h"
 #include "externs.h"
 #include "McReady.h"
 #include "Dialogs/dlgTools.h"

@@ -96,6 +96,7 @@ Copyright_License {
 
 #include "InfoBox.h"
 #include "RasterTerrain.h"
+#include "RasterWeather.h"
 
 #include <assert.h>
 

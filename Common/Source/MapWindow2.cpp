@@ -66,6 +66,7 @@ Copyright_License {
 
 #include "Terrain.h"
 #include "RasterTerrain.h"
+#include "RasterWeather.h"
 
 #include "GaugeVarioAltA.h"
 #include "GaugeCDI.h"

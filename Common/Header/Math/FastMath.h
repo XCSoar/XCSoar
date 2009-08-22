@@ -88,6 +88,14 @@ extern int ICOSTABLE[4096];
 extern "C" {
 #endif
 
+inline unsigned int CombinedDivAndMod(unsigned int &lx) {
+  unsigned int ox = lx & 0xff;
+  // JMW no need to check max since overflow will result in
+  // beyond max dimensions
+  lx = lx>>8;
+  return ox;
+}
+
 // Fast trig functions
 void InitSineTable(void);
 

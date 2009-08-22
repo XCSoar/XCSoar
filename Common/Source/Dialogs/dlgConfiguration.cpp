@@ -47,7 +47,6 @@ Copyright_License {
 #include "LocalPath.hpp"
 #include "Utils.h"
 #include "WindowControls.h"
-#include "Statistics.h"
 #include "Logger.h"
 #include "McReady.h"
 #include "Dialogs/dlgTools.h"

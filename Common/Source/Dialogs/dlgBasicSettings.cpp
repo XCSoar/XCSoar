@@ -36,10 +36,7 @@ Copyright_License {
 */
 
 #include "StdAfx.h"
-
-#include "Statistics.h"
 #include "XCSoar.h"
-
 #include "Math/Pressure.h"
 #include "externs.h"
 #include "Units.h"

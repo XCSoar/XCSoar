@@ -37,11 +37,11 @@ Copyright_License {
 
 #include "StdAfx.h"
 #include "XCSoar.h"
-#include "Statistics.h"
 #include "Dialogs.h"
 #include "Units.h"
 #include "Process.h"
 #include "RasterTerrain.h"
+#include "RasterWeather.h"
 #include "Dialogs/dlgTools.h"
 #include "InfoBoxLayout.h"
 #include "DataField/Enum.hpp"

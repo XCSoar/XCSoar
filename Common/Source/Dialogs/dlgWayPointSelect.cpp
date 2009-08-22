@@ -42,7 +42,6 @@ Copyright_License {
 #include "Math/Earth.hpp"
 #include "Screen/Util.hpp"
 #include "Utils.h"
-#include "Statistics.h"
 #include "externs.h"
 #include "Dialogs/dlgTools.h"
 #include "InfoBoxLayout.h"
