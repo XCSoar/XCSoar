@@ -41,8 +41,6 @@
     <WndButton Name="cmdAppendInTask" Caption="Append to task"       X=50 Y=-1 Width=150  Height=30 Font=2 />
     <WndButton Name="cmdRemoveFromTask" Caption="Remove from task"   X=50 Y=-1 Width=150  Height=30 Font=2 />
 
-    <WndButton Name="cmdNext"  Caption="Next page >>" X=50 Y=180 Width=150  Height=30 Font=2 OnClickNotify="OnNextClicked" Tag=1 />
-
   </WndFrame>
 
   <WndOwnerDrawFrame Name="frmImage" X=70 Y=0 Width=246 Height=222 Font=2 Visible=0>

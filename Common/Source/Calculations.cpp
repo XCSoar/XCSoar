@@ -62,7 +62,6 @@ Copyright_License {
 #include "Math/Geometry.hpp"
 #include "Math/Earth.hpp"
 #include "Math/Pressure.h"
-#include "Math/LowPassFilter.hpp"
 #include "WayPoint.hpp"
 #include "LogFile.hpp"
 #include "BestAlternate.hpp"
@@ -85,6 +84,7 @@ bool EnableFAIFinishHeight = false;
 
 int FinishLine=1;
 DWORD FinishRadius=1000;
+bool EnableCalibration = false;
 
 extern int FastLogNum; // number of points to log at high rate
 
@@ -227,13 +227,6 @@ void AnnounceWayPointSwitch(DERIVED_INFO *Calculated, bool do_advance) {
   // start logging data at faster rate
   FastLogNum = 5;
 }
-
-
-
-
-
-
-bool EnableCalibration = false;
 
 
 void DoCalculationsSlow(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
@@ -392,8 +385,6 @@ void InitCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
 
   InitialiseCalculationsWind();
 }
-
-
 
 extern bool TargetDialogOpen;
 
