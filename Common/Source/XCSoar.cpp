@@ -98,102 +98,11 @@ Copyright_License {
 #include "RasterTerrain.h"
 #include "RasterWeather.h"
 
+#include "GaugeCDI.h"
+#include "GaugeFLARM.h"
+#include "GaugeVarioAltA.h"
+
 #include <assert.h>
-
-
-#ifdef DEBUG_TRANSLATIONS
-#include <map>
-static std::map<TCHAR*, TCHAR*> unusedTranslations;
-#endif
-
-#if !defined(MapScale2)
-  #define MapScale2  apMs2Default
-#endif
-
-#if SAMGI
-Appearance_t Appearance = {
-  apMsAltA,
-  apMs2None,
-  true,
-  206,
-  {0,-13},
-  apFlightModeIconAltA,
-  //apFlightModeIconDefault,
-  {10,3},
-  apCompassAltA,
-  {0,0,0},
-  {0,0,0},
-  {0,0,0},
-  {0,0,0},
-  {0,0,0},
-  ctBestCruiseTrackAltA,
-  afAircraftAltA,
-  true,
-  fgFinalGlideAltA,
-  wpLandableAltA,
-  true,
-  true,
-  true,
-  smAlligneTopLeft,
-  true,
-  true,
-  true,
-  true,
-  true,
-  gvnsDefault,
-  false,
-  apIbBox,
-  false,
-  true,
-  false
-};
-#else
-
-Appearance_t Appearance = {
-  apMsAltA, // mapscale
-  MapScale2,
-  false, // don't show logger indicator
-  206,
-  {0,-13},
-  apFlightModeIconDefault,
-  {0,0},
-  apCompassAltA,
-  {0,0,0},
-  {0,0,0},
-  {0,0,0},
-  {0,0,0},
-  {0,0,0},
-  {0,0,0},
-  {0,0,0},
-  {0,0,0},
-  ctBestCruiseTrackAltA,
-  afAircraftAltA,
-  true, // don't show speed to fly
-  fgFinalGlideDefault,
-  wpLandableDefault,
-  true,
-  false,
-  true,
-  smAlligneCenter,
-  tiHighScore,
-  false,
-  false,
-  false,
-  false,
-  false,
-  gvnsLongNeedle,
-  true,
-  apIbBox,
-#if defined(PNA) || defined(FIVV)  // VENTA-ADDON Model type
-  apIg0,  // VENTA-ADDON GEOM
-  apImPnaGeneric,
-#endif
-  false,
-  true,
-  false
-};
-
-#endif
 
 
 TCHAR XCSoar_Version[256] = TEXT("");
@@ -413,10 +322,6 @@ Statistics flightstats;
 static SHACTIVATEINFO s_sai;
 #endif
 
-#include "GaugeCDI.h"
-#include "GaugeFLARM.h"
-#include "GaugeVarioAltA.h"
-
 
 CRITICAL_SECTION  CritSec_FlightData;
 bool csFlightDataInitialized = false;
@@ -457,6 +362,7 @@ void                                                    PopUpSelect(int i);
 
 //HWND CreateRpCommandBar(HWND hwnd);
 
+///////////////////////////////////////
 
 void TriggerGPSUpdate()
 {
@@ -469,6 +375,26 @@ void TriggerVarioUpdate()
   VarioUpdated = true;
   varioTriggerEvent.pulse();
 }
+
+void TriggerRedraws(NMEA_INFO *nmea_info,
+		    DERIVED_INFO *derived_info) {
+	(void)nmea_info;
+	(void)derived_info;
+  if (MapWindow::IsDisplayRunning()) {
+    if (GpsUpdated) {
+      MapWindow::MapDirty = true;
+      drawTriggerEvent.pulse();
+      // only ask for redraw if the thread was waiting,
+      // this causes the map thread to try to synchronise
+      // with the calculation thread, which is desirable
+      // to reduce latency
+      // it also ensures that if the display is lagging,
+      // it will have a chance to catch up.
+    }
+  }
+}
+
+/////////////////////////////////////
 
 void HideMenu() {
   // ignore this if the display isn't locked -- must keep menu visible
@@ -681,23 +607,6 @@ void RestartCommPorts() {
 
 
 
-void TriggerRedraws(NMEA_INFO *nmea_info,
-		    DERIVED_INFO *derived_info) {
-	(void)nmea_info;
-	(void)derived_info;
-  if (MapWindow::IsDisplayRunning()) {
-    if (GpsUpdated) {
-      MapWindow::MapDirty = true;
-      drawTriggerEvent.pulse();
-      // only ask for redraw if the thread was waiting,
-      // this causes the map thread to try to synchronise
-      // with the calculation thread, which is desirable
-      // to reduce latency
-      // it also ensures that if the display is lagging,
-      // it will have a chance to catch up.
-    }
-  }
-}
 
 
 DWORD InstrumentThread (LPVOID lpvoid) {
@@ -821,7 +730,8 @@ DWORD CalculationThread (LPVOID lpvoid) {
     if (MapWindow::CLOSETHREAD) break; // drop out on exit
 
 #if defined(_SIM_)
-    if (needcalculationsslow || ( (OnBestAlternate == true) && (ReplayLogger::IsEnabled()) )) { // VENTA3, needed for BestAlternate SIM
+    if (needcalculationsslow ||
+	( (OnBestAlternate == true) && (ReplayLogger::IsEnabled()) )) { // VENTA3, needed for BestAlternate SIM
 #else
     if (needcalculationsslow) {
 #endif
@@ -1033,7 +943,7 @@ RegDeleteKey(HKEY_CURRENT_USER, _T(REGKEYNAME));
 #if defined(FIVV) && ( !defined(WINDOWSPC) || WINDOWSPC==0 )
 //#ifndef PNA
 
-bool datadir=CheckDataDir(); // VENTA3 changed to bool
+bool datadir=CheckDataDir();
 if (datadir) StartupStore(TEXT("XCSoarData directory found.\n"));
 else StartupStore(TEXT("ERROR: NO XCSOARDATA DIRECTORY FOUND!\n"));
 
@@ -1050,7 +960,7 @@ StartupStore(nTmp);
 // VENTA2- TODO fix these directories are not used always!
   CreateDirectoryIfAbsent(TEXT(""));  // RLD make sure the LocalPath folder actually exists
   CreateDirectoryIfAbsent(TEXT("persist"));
-  CreateDirectoryIfAbsent(TEXT("logs")); // VENTA3 we use this one for logging
+  CreateDirectoryIfAbsent(TEXT("logs"));
   CreateDirectoryIfAbsent(TEXT("config"));
 
   StartupStore(TEXT("Starting XCSoar %s\n"), XCSoar_Version);
@@ -2003,8 +1913,6 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 
 //////////////////////
-
-#include "winbase.h"
 
 
 void CommonProcessTimer()

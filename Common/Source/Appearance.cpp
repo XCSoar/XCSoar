@@ -34,43 +34,95 @@ Copyright_License {
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
 */
-#ifndef INFOBOX_MANAGER_H
-#define INFOBOX_MANAGER_H
 
-#include "XCSoar.h"
+#include "options.h"
+#include "Appearance.hpp"
 
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
+#if !defined(MapScale2)
+  #define MapScale2  apMs2Default
+#endif
 
-typedef struct _SCREEN_INFO
-{
-  UnitGroup_t UnitGroup;
-  TCHAR Description[DESCRIPTION_SIZE +1];
-  TCHAR Title[TITLE_SIZE + 1];
-  InfoBoxFormatter *Formatter;
-  void (*Process)(int UpDown);
-  char next_screen;
-  char prev_screen;
-} SCREEN_INFO;
+#if SAMGI
+Appearance_t Appearance = {
+  apMsAltA,
+  apMs2None,
+  true,
+  206,
+  {0,-13},
+  apFlightModeIconAltA,
+  //apFlightModeIconDefault,
+  {10,3},
+  apCompassAltA,
+  {0,0,0},
+  {0,0,0},
+  {0,0,0},
+  {0,0,0},
+  {0,0,0},
+  ctBestCruiseTrackAltA,
+  afAircraftAltA,
+  true,
+  fgFinalGlideAltA,
+  wpLandableAltA,
+  true,
+  true,
+  true,
+  smAlligneTopLeft,
+  true,
+  true,
+  true,
+  true,
+  true,
+  gvnsDefault,
+  false,
+  apIbBox,
+  false,
+  true,
+  false
+};
+#else
 
-extern SCREEN_INFO Data_Options[];
-extern int InfoType[MAXINFOWINDOWS]; //
-extern int  InfoFocus;
-extern const int NUMSELECTSTRINGS;
-extern int numInfoWindows;
-
-void InfoBoxesSetDirty(bool is_dirty);
-void DeleteInfoBoxFormatters();
-bool InfoBoxClick(HWND wmControl, bool display_locked);
-void InfoBoxFocus(bool display_locked);
-void InfoBoxProcessTimer(void);
-void InfoBoxDrawIfDirty(void);
-void InfoBoxFocusSetMaxTimeOut(void);
-void ShowInfoBoxes();
-void HideInfoBoxes();
-void DefocusInfoBox(void);
-void Event_SelectInfoBox(int i);
-void Event_ChangeInfoBoxType(int i);
-void DoInfoKey(int keycode);
+Appearance_t Appearance = {
+  apMsAltA, // mapscale
+  MapScale2,
+  false, // don't show logger indicator
+  206,
+  {0,-13},
+  apFlightModeIconDefault,
+  {0,0},
+  apCompassAltA,
+  {0,0,0},
+  {0,0,0},
+  {0,0,0},
+  {0,0,0},
+  {0,0,0},
+  {0,0,0},
+  {0,0,0},
+  {0,0,0},
+  ctBestCruiseTrackAltA,
+  afAircraftAltA,
+  true, // don't show speed to fly
+  fgFinalGlideDefault,
+  wpLandableDefault,
+  true,
+  false,
+  true,
+  smAlligneCenter,
+  tiHighScore,
+  false,
+  false,
+  false,
+  false,
+  false,
+  gvnsLongNeedle,
+  true,
+  apIbBox,
+#if defined(PNA) || defined(FIVV)  // VENTA-ADDON Model type
+  apIg0,  // VENTA-ADDON GEOM
+  apImPnaGeneric,
+#endif
+  false,
+  true,
+  false
+};
 
 #endif

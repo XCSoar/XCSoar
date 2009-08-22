@@ -63,6 +63,7 @@ Copyright_License {
 #include "Screen/Util.hpp"
 #include "Math/Pressure.h"
 #include "LocalPath.hpp"
+#include "InfoBoxManager.h"
 
 #ifdef NEWFLARMDB
 #include "FlarmIdFile.h"

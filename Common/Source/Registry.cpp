@@ -56,6 +56,7 @@ Copyright_License {
 #include "Device/Parser.h"
 #include "externs.h"
 #include "LogFile.hpp"
+#include "InfoBoxManager.h"
 
 #include <assert.h>
 #include <stdlib.h>

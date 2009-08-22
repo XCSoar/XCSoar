@@ -37,6 +37,7 @@ Copyright_License {
 
 #include "Dialogs.h"
 #include "XCSoar.h"
+#include "InfoBoxManager.h"
 #include "externs.h"
 #include "Device/Parser.h"
 #include "Utils2.h"

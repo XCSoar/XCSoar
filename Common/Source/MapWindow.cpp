@@ -77,6 +77,7 @@ Copyright_License {
 #include "GaugeCDI.h"
 #include "GaugeFLARM.h"
 #include "InfoBoxLayout.h"
+#include "InfoBoxManager.h"
 #include "RasterTerrain.h"
 #include "Utils2.h"
 

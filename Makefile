@@ -382,6 +382,7 @@ VOLKS	:=\
 	$(SRC)/Device/Volkslogger/vlutils.cpp
 
 OBJS	:=\
+	$(SRC)/Appearance.o \
 	$(SRC)/AATDistance.o 		$(SRC)/AirfieldDetails.o \
 	\
 	$(SRC)/Airspace.o 		\
