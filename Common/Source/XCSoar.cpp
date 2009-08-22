@@ -66,6 +66,7 @@ Copyright_License {
 #include "McReady.h"
 #include "AirfieldDetails.h"
 #include "InfoBoxLayout.h"
+#include "ButtonLabel.h"
 #include "SnailTrail.hpp"
 #include "Formatter/TeamCode.hpp"
 #include "Formatter/WayPoint.hpp"
@@ -1371,7 +1372,8 @@ StartupStore(nTmp);
   ClearTask();
   memset( &(GPS_INFO), 0, sizeof(GPS_INFO));
   memset( &(CALCULATED_INFO), 0,sizeof(CALCULATED_INFO));
-  memset( &SnailTrail[0],0,TRAILSIZE*sizeof(SNAIL_POINT));
+
+  InitialiseSnailTrail();
 
   InitCalculations(&GPS_INFO,&CALCULATED_INFO);
 

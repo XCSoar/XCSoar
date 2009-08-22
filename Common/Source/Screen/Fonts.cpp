@@ -39,6 +39,7 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "Utils.h" // propGetFontSettings
 #include "InfoBoxLayout.h"
+#include "ButtonLabel.h"
 #include "Registry.hpp"
 #include "MapWindow.h"
 

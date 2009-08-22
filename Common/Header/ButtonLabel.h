@@ -34,31 +34,27 @@ Copyright_License {
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
 */
+#ifndef BUTTON_LABEL_H
+#define BUTTON_LABEL_H
 
-#ifndef XCSOAR_SNAIL_TRAIL_HPP
-#define XCSOAR_SNAIL_TRAIL_HPP
-
+#include "StdAfx.h"
 #include "Sizes.h"
 
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
-
-typedef struct _SNAIL_POINT
-{
-  float Latitude;
-  float Longitude;
-  float Vario;
-  double Time;
-  POINT Screen;
-  short Colour;
-  BOOL Circling;
-  bool FarVisible;
-  double DriftFactor;
-} SNAIL_POINT;
-
-extern SNAIL_POINT SnailTrail[TRAILSIZE];
-extern	int SnailNext;
-
-void InitialiseSnailTrail(void);
+class ButtonLabel {
+ public:
+  static int ButtonLabelGeometry;
+  static HWND hWndButtonWindow[NUMBUTTONLABELS];
+  static bool ButtonVisible[NUMBUTTONLABELS];
+  static bool ButtonDisabled[NUMBUTTONLABELS];
+  static void CreateButtonLabels(RECT rc);
+  static void AnimateButton(int i);
+  static void SetFont(HFONT Font);
+  static void Destroy();
+  static void SetLabelText(int index, const TCHAR *text);
+  static bool CheckButtonPress(HWND pressedwindow);
+  static void GetButtonPosition(int i, RECT rc,
+				int *x, int *y,
+				int *sizex, int *sizey);
+};
 
 #endif

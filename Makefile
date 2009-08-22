@@ -392,7 +392,12 @@ OBJS	:=\
 	$(SRC)/FlarmIdFile.o 		$(SRC)/FlarmCalculations.o \
 	$(SRC)/GaugeCDI.o 		$(SRC)/GaugeFLARM.o \
 	$(SRC)/GaugeVarioAltA.o 	$(SRC)/Device/Geoid.o \
-	$(SRC)/InfoBox.o 		$(SRC)/InfoBoxLayout.o \
+	\
+	$(SRC)/InfoBox.o 		\
+	$(SRC)/InfoBoxLayout.o \
+	$(SRC)/InfoBoxEvents.o \
+	$(SRC)/ButtonLabel.o \
+	\
 	$(SRC)/InputEvents.o 		\
 	$(SRC)/Logger.o 		\
 	$(SRC)/MapWindow.o 		$(SRC)/MapWindow2.o \
@@ -401,7 +406,6 @@ OBJS	:=\
 	$(SRC)/NavFunctions.o		$(SRC)/OnLineContest.o \
 	$(SRC)/Device/Parser.o		$(SRC)/Device/Port.o \
 	$(SRC)/Process.o \
-	$(SRC)/InfoBoxEvents.o \
 	$(SRC)/StdAfx.o			\
 	$(SRC)/Task.o			$(SRC)/TeamCodeCalculation.o \
 	\

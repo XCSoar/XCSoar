@@ -39,3 +39,8 @@ Copyright_License {
 
 SNAIL_POINT SnailTrail[TRAILSIZE];
 int SnailNext = 0;
+
+void InitialiseSnailTrail(void) {
+  memset( &SnailTrail[0],0,TRAILSIZE*sizeof(SNAIL_POINT));
+}
+
