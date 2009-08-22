@@ -1,4 +1,3 @@
-/* $Id$ */
 /*
 Copyright_License {
 
