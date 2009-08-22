@@ -401,6 +401,7 @@ OBJS	:=\
 	$(SRC)/NavFunctions.o		$(SRC)/OnLineContest.o \
 	$(SRC)/Parser.o			$(SRC)/Device/Port.o \
 	$(SRC)/Process.o \
+	$(SRC)/InfoBoxEvents.o \
 	$(SRC)/RasterTerrain.o		$(SRC)/rscalc.o \
 	$(SRC)/StdAfx.o			\
 	$(SRC)/Task.o			$(SRC)/TeamCodeCalculation.o \

@@ -49,6 +49,7 @@ Copyright_License {
 #include "Trigger.hpp"
 #include "StatusMessage.hpp"
 #include "Process.h"
+#include "InfoBoxEvents.h"
 #include "Utils.h"
 #include "LocalPath.hpp"
 #include "Utils2.h"

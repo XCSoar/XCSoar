@@ -71,7 +71,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include <commctrl.h>
 #include "InfoBoxLayout.h"
 #include "Airspace.h"
-#include "Process.h"
+#include "InfoBoxEvents.h"
 #include "Device/device.h"
 #include "Message.h"
 #include "Units.h"
