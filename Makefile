@@ -429,6 +429,7 @@ OBJS	:=\
 	$(SRC)/Screen/Util.o \
 	$(SRC)/Screen/STScreenBuffer.o \
 	$(SRC)/Screen/VOIMAGE.o \
+	$(SRC)/Screen/Fonts.o \
 	\
 	$(SRC)/Registry.o \
 	\
