@@ -52,16 +52,13 @@ Copyright_License {
 #endif
 
 #include "Logger.h"
-#include "resource.h"
 #include "Utils.h"
 #include "LocalPath.hpp"
 #include "externs.h"
 #include "Device/Port.h"
 #include "AirfieldDetails.h"
-//#include "Audio/VarioSound.h"
 #include "Device/device.h"
 #include "Units.h"
-#include "GaugeVarioAltA.h"
 #include "InfoBoxLayout.h"
 #include "InputEvents.h"
 #include "Message.h"

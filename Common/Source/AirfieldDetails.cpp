@@ -43,7 +43,6 @@ Copyright_License {
 #include "Sizes.h"
 #include "externs.h"
 #include "Dialogs.h"
-#include "resource.h"
 #include "Utils.h"
 #include "options.h"
 #include "Registry.hpp"

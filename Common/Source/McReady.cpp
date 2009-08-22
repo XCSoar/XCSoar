@@ -36,7 +36,6 @@ Copyright_License {
 */
 #include "StdAfx.h"
 #include "McReady.h"
-#include "resource.h"
 #include "externs.h"
 #include "Math/FastMath.h"
 #include "Math/Geometry.hpp"

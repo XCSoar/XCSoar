@@ -56,7 +56,6 @@ Copyright_License {
 #include <commctrl.h>
 #include <math.h>
 
-#include "resource.h"
 #include "wcecompat/ts_string.h"
 #include "Compatibility/string.h"
 
