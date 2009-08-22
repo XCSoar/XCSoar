@@ -915,6 +915,8 @@ void CloseCalculations() {
 
 void InitCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   StartupStore(TEXT("InitCalculations\n"));
+  memset( Calculated, 0,sizeof(CALCULATED_INFO));
+
   CalibrationInit();
   ResetFlightStats(Basic, Calculated, true);
 #ifndef FIVV

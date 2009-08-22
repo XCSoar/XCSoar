@@ -119,8 +119,6 @@ bool RequestAirspaceWarningDialog= false;
 bool RequestAirspaceWarningForce=false;
 static bool DisplayLocked = true;
 bool                                    EnableAuxiliaryInfo = false;
-int                                     MenuTimeOut = 0;
-int                                     MenuTimeoutMax = MENUTIMEOUTMAX;
 
 
 HBRUSH hBrushSelected;
@@ -285,7 +283,7 @@ BOOL POLARFILECHANGED = FALSE;
 BOOL LANGUAGEFILECHANGED = FALSE;
 BOOL STATUSFILECHANGED = FALSE;
 BOOL INPUTFILECHANGED = FALSE;
-static bool MenuActive = false;
+
 
 //Task Information
 Task_t Task = {{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0}};
@@ -342,6 +340,11 @@ static Trigger dataTriggerEvent(TEXT("dataTriggerEvent"));
 
 static BOOL VarioUpdated;
 static Trigger varioTriggerEvent(TEXT("varioTriggerEvent"));
+
+// Menu handling
+int MenuTimeOut = 0;
+int MenuTimeoutMax = MENUTIMEOUTMAX;
+static bool MenuActive = false;
 
 
 // Forward declarations of functions included in this code module:
@@ -1018,7 +1021,6 @@ StartupStore(nTmp);
   memset( &(StartPoints), 0, sizeof(Start_t));
   ClearTask();
   memset( &(GPS_INFO), 0, sizeof(GPS_INFO));
-  memset( &(CALCULATED_INFO), 0,sizeof(CALCULATED_INFO));
 
   InitialiseSnailTrail();
 
