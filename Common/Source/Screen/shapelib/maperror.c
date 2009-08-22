@@ -38,8 +38,8 @@ Copyright_License {
 
 #include "StdAfx.h"
 
-#include "maperror.h"
-#include "mapprimitive.h"
+#include "Screen/shapelib/maperror.h"
+#include "Screen/shapelib/mapprimitive.h"
 #include "Compatibility/string.h"
 
 #include <stdlib.h>

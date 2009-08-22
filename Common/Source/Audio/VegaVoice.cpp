@@ -35,7 +35,7 @@ Copyright_License {
 }
 */
 
-#include "VegaVoice.h"
+#include "Audio/VegaVoice.h"
 #include "XCSoar.h"
 #include "StdAfx.h"
 #include "InputEvents.h"  // used for altair beep hack

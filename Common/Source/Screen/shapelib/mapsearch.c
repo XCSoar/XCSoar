@@ -37,7 +37,7 @@ Copyright_License {
 */
 #include "StdAfx.h"
 
-#include "mapprimitive.h"
+#include "Screen/shapelib/mapprimitive.h"
 
 #include <math.h>
 

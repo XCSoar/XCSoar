@@ -1,4 +1,4 @@
-//#include "map.h"
+//#include "Screen/shapelib/map.h"
 /*
 Copyright_License {
 
@@ -36,8 +36,8 @@ Copyright_License {
 }
 */
 #include "StdAfx.h"
-#include "mapprimitive.h"
-#include "maperror.h"
+#include "Screen/shapelib/mapprimitive.h"
+#include "Screen/shapelib/maperror.h"
 #include <string.h>
 
 #include <windows.h>

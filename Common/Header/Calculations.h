@@ -40,7 +40,7 @@ Copyright_License {
 
 #include "NMEA/Info.h"
 #include <windows.h>
-#include "mapshape.h"
+#include "Screen/shapelib/mapshape.h"
 
 #define NUMTHERMALBUCKETS 10
 #define MAX_THERMAL_SOURCES 20

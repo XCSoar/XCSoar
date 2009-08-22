@@ -41,9 +41,9 @@ Copyright_License {
 
 #include <stdlib.h>
 #include <string.h>
-//#include "map.h"
-#include "maptree.h"
-#include "maperror.h"
+//#include "Screen/shapelib/map.h"
+#include "Screen/shapelib/maptree.h"
+#include "Screen/shapelib/maperror.h"
 
 int FileExistsA(char *FileName);
 /* -------------------------------------------------------------------- */

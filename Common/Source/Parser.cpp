@@ -41,7 +41,7 @@ Copyright_License {
 #include "XCSoar.h"
 #include "Utils.h"
 #include "externs.h"
-#include "VarioSound.h"
+#include "Audio/VarioSound.h"
 #include "Logger.h"
 #include "GaugeFLARM.h"
 #include "Device/device.h"

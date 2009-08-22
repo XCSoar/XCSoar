@@ -40,7 +40,7 @@ Copyright_License {
 #define TOPOLOGY_H
 
 #include "StdAfx.h"
-#include "mapshape.h"
+#include "Screen/shapelib/mapshape.h"
 
 class XShape {
  public:

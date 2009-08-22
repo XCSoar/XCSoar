@@ -38,7 +38,7 @@ Copyright_License {
 #include "Screen/Util.hpp"
 #include "Math/Geometry.hpp"
 #include "Math/FastMath.h"
-#include "mapprimitive.h"
+#include "Screen/shapelib/mapprimitive.h"
 #include "InfoBoxLayout.h"
 
 #ifdef PNA

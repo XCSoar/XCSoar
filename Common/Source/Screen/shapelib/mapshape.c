@@ -43,9 +43,9 @@ Copyright_License {
 
 #include "StdAfx.h"
 
-#include "mapshape.h"
-#include "maperror.h"
-#include "maptree.h"
+#include "Screen/shapelib/mapshape.h"
+#include "Screen/shapelib/maperror.h"
+#include "Screen/shapelib/maptree.h"
 
 #include <limits.h>
 #include <stdlib.h>

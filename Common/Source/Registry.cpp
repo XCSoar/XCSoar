@@ -45,7 +45,7 @@ Copyright_License {
 #include "MapWindow.h"
 #include "GaugeFLARM.h"
 #include "Terrain.h"
-#include "VegaVoice.h"
+#include "Audio/VegaVoice.h"
 #include "McReady.h"
 #include "WayPoint.hpp"
 #include "Device/device.h"

@@ -65,7 +65,7 @@ Copyright_License {
 #include <stdio.h>
 #include <math.h>
 
-#include "leastsqs.h"
+#include "Math/leastsqs.h"
 
 
 /*

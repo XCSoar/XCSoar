@@ -39,7 +39,7 @@ Copyright_License {
 #define STATISTICS_H
 
 #include <windows.h>
-#include "leastsqs.h"
+#include "Math/leastsqs.h"
 #include "Task.h"
 
 class Statistics {

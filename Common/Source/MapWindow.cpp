@@ -49,7 +49,7 @@ Copyright_License {
 #include "Waypointparser.h"
 #include "Dialogs.h"
 #include "externs.h"
-#include "VarioSound.h"
+#include "Audio/VarioSound.h"
 #include "InputEvents.h"
 #include "Trigger.hpp"
 #include "Math/Geometry.hpp"

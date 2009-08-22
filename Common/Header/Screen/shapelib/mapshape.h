@@ -2,7 +2,7 @@
 #define MAPSHAPE_H
 
 #include <stdio.h>
-#include "mapprimitive.h"
+#include "Screen/shapelib/mapprimitive.h"
 
 #ifdef __cplusplus
 extern "C" {

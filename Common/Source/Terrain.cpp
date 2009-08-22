@@ -47,7 +47,7 @@ Copyright_License {
 #include "externs.h"
 #include "Math/FastMath.h"
 #include "Math/Earth.hpp"
-#include "VarioSound.h"
+#include "Audio/VarioSound.h"
 #include "InfoBoxLayout.h"
 #include "Sizes.h"
 #include "Compatibility/string.h"

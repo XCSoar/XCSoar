@@ -40,7 +40,7 @@ Copyright_License {
 
 #include "StdAfx.h"
 #include "Sizes.h"
-#include "mapshape.h"
+#include "Screen/shapelib/mapshape.h"
 
 #define OTHER                           0
 #define RESTRICT                        1

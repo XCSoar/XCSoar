@@ -58,7 +58,7 @@ Copyright_License {
 #include "externs.h"
 #include "Device/Port.h"
 #include "AirfieldDetails.h"
-#include "VarioSound.h"
+//#include "Audio/VarioSound.h"
 #include "Device/device.h"
 #include "Units.h"
 #include "GaugeVarioAltA.h"

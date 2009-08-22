@@ -57,7 +57,7 @@ Copyright_License {
 #include "ThermalLocator.h"
 #include "windanalyser.h"
 #include "Atmosphere.h"
-#include "VegaVoice.h"
+#include "Audio/VegaVoice.h"
 #include "OnLineContest.h"
 #include "AATDistance.h"
 #include "NavFunctions.h" // used for team code

@@ -393,7 +393,7 @@ OBJS	:=\
 	$(SRC)/GaugeCDI.o 		$(SRC)/GaugeFLARM.o \
 	$(SRC)/GaugeVarioAltA.o 	$(SRC)/Device/Geoid.o \
 	$(SRC)/InfoBox.o 		$(SRC)/InfoBoxLayout.o \
-	$(SRC)/InputEvents.o 		$(SRC)/leastsqs.o \
+	$(SRC)/InputEvents.o 		$(SRC)/Math/leastsqs.o \
 	$(SRC)/Logger.o 		\
 	$(SRC)/MapWindow.o 		$(SRC)/MapWindow2.o \
 	$(SRC)/MapWindow3.o 		\
@@ -447,10 +447,13 @@ OBJS	:=\
 	$(SRC)/LogFile.o \
 	$(SRC)/GlideRatio.o \
 	\
-	$(SRC)/mapbits.o \
-	$(SRC)/maperror.o 		$(SRC)/mapprimitive.o \
-	$(SRC)/mapsearch.o		$(SRC)/mapshape.o \
-	$(SRC)/maptree.o                $(SRC)/mapxbase.o \
+	$(SRC)/Screen/shapelib/mapbits.o \
+	$(SRC)/Screen/shapelib/maperror.o \
+	$(SRC)/Screen/shapelib/mapprimitive.o \
+	$(SRC)/Screen/shapelib/mapsearch.o \
+	$(SRC)/Screen/shapelib/mapshape.o \
+	$(SRC)/Screen/shapelib/maptree.o \
+	$(SRC)/Screen/shapelib/mapxbase.o \
 	\
 	$(SRC)/XCSoar.o \
 	$(DEVS) \

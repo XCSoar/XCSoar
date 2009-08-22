@@ -178,7 +178,7 @@ static BOOL PDSWC(PDeviceDescriptor_t d, const TCHAR *String,
   return TRUE;
 }
 
-#include "VarioSound.h"
+//#include "Audio/VarioSound.h"
 
 static BOOL PDAAV(PDeviceDescriptor_t d, const TCHAR *String,
                   NMEA_INFO *GPS_INFO)

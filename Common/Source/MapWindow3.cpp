@@ -64,7 +64,7 @@ Copyright_License {
 //#include "Airspace.h"
 //#include "Waypointparser.h"
 //#include "Dialogs.h"
-//#include "VarioSound.h"
+//#include "Audio/VarioSound.h"
 //#include <assert.h>
 //#include "RasterTerrain.h"
 

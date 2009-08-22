@@ -43,7 +43,7 @@ Copyright_License {
 #include "Dialogs/dlgTools.h"
 #include "Utils.h"
 #include "Registry.hpp"
-#include "VegaVoice.h"
+#include "Audio/VegaVoice.h"
 #include "DataField/Base.hpp"
 
 static WndForm *wf=NULL;

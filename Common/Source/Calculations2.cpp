@@ -66,7 +66,7 @@ Copyright_License {
 #include "windanalyser.h"
 #include "Atmosphere.h"
 
-#include "VegaVoice.h"
+#include "Audio/VegaVoice.h"
 
 #include "OnLineContest.h"
 #include "AATDistance.h"

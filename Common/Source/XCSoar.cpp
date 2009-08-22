@@ -80,7 +80,7 @@ Copyright_License {
 #endif
 
 #include "Terrain.h"
-#include "VarioSound.h"
+#include "Audio/VarioSound.h"
 #include "Device/device.h"
 
 #include "externs.h"
