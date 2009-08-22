@@ -61,6 +61,7 @@ extern DERIVED_INFO Finish_Derived_Info;
 void StartTask(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
 	       const bool do_advance,
                const bool do_announce) {
+
   Calculated->ValidFinish = false;
   Calculated->TaskStartTime = Basic->Time ;
   Calculated->TaskStartSpeed = Basic->Speed;

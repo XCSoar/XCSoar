@@ -66,7 +66,6 @@ Copyright_License {
 #include "Math/LowPassFilter.hpp"
 #include "WayPoint.hpp"
 #include "LogFile.hpp"
-#include "GlideSolvers.hpp"
 #include "BestAlternate.hpp"
 #include "Persist.hpp"
 #include "GlideRatio.hpp"
@@ -85,12 +84,12 @@ bool ExternalTriggerCruise= false;
 bool ExternalTriggerCircling= false;
 bool ForceFinalGlide= false;
 bool AutoForceFinalGlide= false;
-int  AutoMcMode = 0;
 bool EnableFAIFinishHeight = false;
 
-// 0: Final glide only
-// 1: Set to average if in climb mode
-// 2: Average if in climb mode, final glide in final glide mode
+int FinishLine=1;
+DWORD FinishRadius=1000;
+
+extern int FastLogNum; // number of points to log at high rate
 
 #define THERMAL_TIME_MIN 45.0
 
@@ -124,9 +123,11 @@ void InSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 void AATStats(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 //static void FinalGlideAlert(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 
-static void DoAutoMacCready(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 static void ThermalBand(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 static void TakeoffLanding(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
+
+// now in CalculationsAutoMc.cpp
+void DoAutoMacCready(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 
 // now in CalculationsAirspace.cpp
 void PredictNextPosition(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
@@ -155,10 +156,7 @@ void SortLandableWaypoints(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 // now in CalculationsBallast.cpp
 void BallastDump(NMEA_INFO *Basic);
 
-//////////////////
-
-
-
+/////////////////////////////////////////////////////////////////////////////////////
 
 
 double FAIFinishHeight(NMEA_INFO *Basic, DERIVED_INFO *Calculated, int wp) {
@@ -186,12 +184,6 @@ double FAIFinishHeight(NMEA_INFO *Basic, DERIVED_INFO *Calculated, int wp) {
 }
 
 
-
-
-int FinishLine=1;
-DWORD FinishRadius=1000;
-
-
 void RefreshTaskStatistics(void) {
   //  LockFlightData();
   LockTaskData();
@@ -203,8 +195,6 @@ void RefreshTaskStatistics(void) {
   //  UnlockFlightData();
 }
 
-
-extern int FastLogNum; // number of points to log at high rate
 
 void AnnounceWayPointSwitch(DERIVED_INFO *Calculated, bool do_advance) {
   if (ActiveWayPoint == 0) {
@@ -245,187 +235,6 @@ void AnnounceWayPointSwitch(DERIVED_INFO *Calculated, bool do_advance) {
 
 
 
-void SpeedToFly(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
-  double n;
-  // get load factor
-  if (Basic->AccelerationAvailable) {
-    n = fabs(Basic->Gload);
-  } else {
-    n = fabs(Calculated->Gload);
-  }
-
-  // calculate optimum cruise speed in current track direction
-  // this still makes use of mode, so it should agree with
-  // Vmcready if the track bearing is the best cruise track
-  // this does assume g loading of 1.0
-
-  // this is basically a dolphin soaring calculator
-
-  double delta_mc;
-  double risk_mc;
-  if (Calculated->TaskAltitudeDifference> -120) {
-    risk_mc = MACCREADY;
-  } else {
-    risk_mc =
-      GlidePolar::MacCreadyRisk(Calculated->NavAltitude+Calculated->EnergyHeight
-                                -SAFETYALTITUDEBREAKOFF-Calculated->TerrainBase,
-                                Calculated->MaxThermalHeight,
-                                MACCREADY);
-  }
-  Calculated->MacCreadyRisk = risk_mc;
-
-  if (EnableBlockSTF) {
-    delta_mc = risk_mc;
-  } else {
-    delta_mc = risk_mc-Calculated->NettoVario;
-  }
-
-  if (1 || (Calculated->Vario <= risk_mc)) {
-    // thermal is worse than mc threshold, so find opt cruise speed
-
-    double VOptnew;
-
-    if (!ValidTaskPoint(ActiveWayPoint) || !Calculated->FinalGlide) {
-      // calculate speed as if cruising, wind has no effect on opt speed
-      GlidePolar::MacCreadyAltitude(delta_mc,
-                                    100.0, // dummy value
-                                    Basic->TrackBearing,
-                                    0.0,
-                                    0.0,
-                                    NULL,
-                                    &VOptnew,
-                                    false,
-                                    NULL, 0, CRUISE_EFFICIENCY);
-    } else {
-      GlidePolar::MacCreadyAltitude(delta_mc,
-                                    100.0, // dummy value
-                                    Basic->TrackBearing,
-                                    Calculated->WindSpeed,
-                                    Calculated->WindBearing,
-                                    0,
-                                    &VOptnew,
-                                    true,
-                                    NULL, 1.0e6, CRUISE_EFFICIENCY);
-    }
-
-    // put low pass filter on VOpt so display doesn't jump around
-    // too much
-    if (Calculated->Vario <= risk_mc) {
-      Calculated->VOpt = max(Calculated->VOpt,
-			     GlidePolar::Vminsink*sqrt(n));
-    } else {
-      Calculated->VOpt = max(Calculated->VOpt,
-			     GlidePolar::Vminsink);
-    }
-    Calculated->VOpt = LowPassFilter(Calculated->VOpt,VOptnew, 0.6);
-
-  } else {
-    // this thermal is better than maccready, so fly at minimum sink
-    // speed
-    // calculate speed of min sink adjusted for load factor
-    Calculated->VOpt = GlidePolar::Vminsink*sqrt(n);
-  }
-
-  Calculated->STFMode = !Calculated->Circling;
-}
-
-
-void NettoVario(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
-
-  double n;
-  // get load factor
-  if (Basic->AccelerationAvailable) {
-    n = fabs(Basic->Gload);
-  } else {
-    n = fabs(Calculated->Gload);
-  }
-
-  // calculate sink rate of glider for calculating netto vario
-
-  bool replay_disabled = !ReplayLogger::IsEnabled();
-
-  double glider_sink_rate;
-  if (Basic->AirspeedAvailable && replay_disabled) {
-    glider_sink_rate= GlidePolar::SinkRate(max(GlidePolar::Vminsink,
-					       Basic->IndicatedAirspeed), n);
-  } else {
-    // assume zero wind (Speed=Airspeed, very bad I know)
-    // JMW TODO accuracy: adjust for estimated airspeed
-    glider_sink_rate= GlidePolar::SinkRate(max(GlidePolar::Vminsink,
-					       Basic->Speed), n);
-  }
-  Calculated->GliderSinkRate = glider_sink_rate;
-
-  if (Basic->NettoVarioAvailable && replay_disabled) {
-    Calculated->NettoVario = Basic->NettoVario;
-  } else {
-    if (Basic->VarioAvailable && replay_disabled) {
-      Calculated->NettoVario = Basic->Vario - glider_sink_rate;
-    } else {
-      Calculated->NettoVario = Calculated->Vario - glider_sink_rate;
-    }
-  }
-}
-
-
-void AudioVario(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
-  /* JMW disabled, no longer used
-#define AUDIOSCALE 100/7.5  // +/- 7.5 m/s range
-
-  if (
-      (Basic->AirspeedAvailable &&
-       (Basic->IndicatedAirspeed >= NettoSpeed))
-      ||
-      (!Basic->AirspeedAvailable &&
-       (Basic->Speed >= NettoSpeed))
-      ) {
-
-    //    VarioSound_SetV((short)((Calculated->NettoVario-GlidePolar::minsink)*AUDIOSCALE));
-
-  } else {
-    if (Basic->VarioAvailable && !ReplayLogger::IsEnabled()) {
-      //      VarioSound_SetV((short)(Basic->Vario*AUDIOSCALE));
-    } else {
-      //      VarioSound_SetV((short)(Calculated->Vario*AUDIOSCALE));
-    }
-  }
-
-  double vdiff;
-
-  if (Basic->AirspeedAvailable) {
-    if (Basic->AirspeedAvailable) {
-      vdiff = 100*(1.0-Calculated->VOpt/(Basic->IndicatedAirspeed+0.01));
-    } else {
-      vdiff = 100*(1.0-Calculated->VOpt/(Basic->Speed+0.01));
-    }
-    //    VarioSound_SetVAlt((short)(vdiff));
-  }
-
-  //  VarioSound_SoundParam();
-  */
-}
-
-
-BOOL DoCalculationsVario(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
-{
-  static double LastTime = 0;
-
-  NettoVario(Basic, Calculated);
-  SpeedToFly(Basic, Calculated);
-#ifndef DISABLEAUDIOVARIO
-  AudioVario(Basic, Calculated);
-#endif
-
-  // has GPS time advanced?
-  if(Basic->Time <= LastTime)
-    {
-      LastTime = Basic->Time;
-      return FALSE;
-    }
-  LastTime = Basic->Time;
-
-  return TRUE;
-}
 
 
 bool EnableCalibration = false;
@@ -1433,111 +1242,6 @@ static void LastThermalStats(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
     }
   LastCircling = Calculated->Circling;
 }
-
-
-
-void DoAutoMacCready(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
-{
-  bool is_final_glide = false;
-
-  if (!Calculated->AutoMacCready) return;
-
-  //  LockFlightData();
-  LockTaskData();
-
-  double mc_new = MACCREADY;
-  static bool first_mc = true;
-
-  if (Calculated->FinalGlide && ActiveIsFinalWaypoint()) {
-    is_final_glide = true;
-  } else {
-    first_mc = true;
-  }
-
-  double av_thermal = -1;
-  if (flightstats.ThermalAverage.y_ave>0) {
-    if (Calculated->Circling && (Calculated->AverageThermal>0)) {
-      av_thermal = (flightstats.ThermalAverage.y_ave
-		*flightstats.ThermalAverage.sum_n
-		+ Calculated->AverageThermal)/
-	(flightstats.ThermalAverage.sum_n+1);
-    } else {
-      av_thermal = flightstats.ThermalAverage.y_ave;
-    }
-  } else if (Calculated->Circling && (Calculated->AverageThermal>0)) {
-    // insufficient stats, so use this/last thermal's average
-    av_thermal = Calculated->AverageThermal;
-  }
-
-  if (!ValidTaskPoint(ActiveWayPoint)) {
-    if (av_thermal>0) {
-      mc_new = av_thermal;
-    }
-  } else if ( ((AutoMcMode==0)||(AutoMcMode==2)) && is_final_glide) {
-
-    double time_remaining = Basic->Time-Calculated->TaskStartTime-9000;
-    if (EnableOLC
-	&& (OLCRules==0)
-	&& (Calculated->NavAltitude>Calculated->TaskStartAltitude)
-	&& (time_remaining>0)) {
-
-      mc_new = MacCreadyTimeLimit(Basic, Calculated,
-				  Calculated->WaypointBearing,
-				  time_remaining,
-				  Calculated->TaskStartAltitude);
-
-    } else if (Calculated->TaskAltitudeDifference0>0) {
-
-      // only change if above final glide with zero Mc
-      // otherwise when we are well below, it will wind Mc back to
-      // zero
-
-      double slope =
-	(Calculated->NavAltitude + Calculated->EnergyHeight
-	 - FAIFinishHeight(Basic, Calculated, ActiveWayPoint))/
-	(Calculated->WaypointDistance+1);
-
-      double mc_pirker = PirkerAnalysis(Basic, Calculated,
-					Calculated->WaypointBearing,
-					slope);
-      mc_pirker = max(0.0, mc_pirker);
-      if (first_mc) {
-	// don't allow Mc to wind down to zero when first achieving
-	// final glide; but do allow it to wind down after that
-	if (mc_pirker >= mc_new) {
-	  mc_new = mc_pirker;
-	  first_mc = false;
-	} else if (AutoMcMode==2) {
-	  // revert to averager based auto Mc
-	  if (av_thermal>0) {
-	    mc_new = av_thermal;
-	  }
-	}
-      } else {
-	mc_new = mc_pirker;
-      }
-    } else { // below final glide at zero Mc, never achieved final glide
-      if (first_mc && (AutoMcMode==2)) {
-	// revert to averager based auto Mc
-	if (av_thermal>0) {
-	  mc_new = av_thermal;
-	}
-      }
-    }
-  } else if ( (AutoMcMode==1) || ((AutoMcMode==2)&& !is_final_glide) ) {
-    if (av_thermal>0) {
-      mc_new = av_thermal;
-    }
-  }
-
-  MACCREADY = LowPassFilter(MACCREADY,mc_new,0.15);
-
-  UnlockTaskData();
-  //  UnlockFlightData();
-
-}
-
-
 
 
 void ThermalBand(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
