@@ -36,7 +36,7 @@ Copyright_License {
 */
 
 #include "InfoBoxEvents.h"
-#include "Parser.h"
+#include "Device/Parser.h"
 #include "Defines.h" // VENTA3
 #include "externs.h"
 #include "Math/FastMath.h"

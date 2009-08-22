@@ -41,7 +41,7 @@ Copyright_License {
 #include "Compatibility/string.h"
 #include "options.h"
 #include "MapWindow.h"
-#include "Parser.h"
+#include "Device/Parser.h"
 #include "Calculations.h"
 #include "Calculations2.h"
 #include "Task.h"

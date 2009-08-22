@@ -37,7 +37,7 @@ Copyright_License {
 
 */
 
-#include "Parser.h"
+#include "Device/Parser.h"
 #include "XCSoar.h"
 #include "Utils.h"
 #include "externs.h"

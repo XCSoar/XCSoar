@@ -399,7 +399,7 @@ OBJS	:=\
 	$(SRC)/MapWindow3.o 		\
 	$(SRC)/McReady.o 		$(SRC)/Message.o \
 	$(SRC)/NavFunctions.o		$(SRC)/OnLineContest.o \
-	$(SRC)/Parser.o			$(SRC)/Device/Port.o \
+	$(SRC)/Device/Parser.o		$(SRC)/Device/Port.o \
 	$(SRC)/Process.o \
 	$(SRC)/InfoBoxEvents.o \
 	$(SRC)/StdAfx.o			\

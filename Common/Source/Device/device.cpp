@@ -44,7 +44,7 @@ Copyright_License {
 #include "XCSoar.h"
 #include "Dialogs.h"
 #include "Math/FastMath.h"
-#include "Parser.h"
+#include "Device/Parser.h"
 #include "Device/Port.h"
 #include "MapWindow.h"
 #include "Registry.hpp"

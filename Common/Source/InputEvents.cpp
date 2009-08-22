@@ -62,7 +62,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "StdAfx.h"
 #include "XCSoar.h"
 #include "LogFile.hpp"
-#include "Parser.h"
+#include "Device/Parser.h"
 #include "externs.h"
 #include "Math/FastMath.h"
 #include "Dialogs.h"
