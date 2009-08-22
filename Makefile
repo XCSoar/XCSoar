@@ -400,6 +400,7 @@ OBJS	:=\
 	$(SRC)/InfoBox.o 		\
 	$(SRC)/InfoBoxLayout.o \
 	$(SRC)/InfoBoxEvents.o \
+	$(SRC)/InfoBoxManager.o \
 	$(SRC)/ButtonLabel.o \
 	\
 	$(SRC)/InputEvents.o 		\
