@@ -58,8 +58,6 @@ Copyright_License {
 #include "NavFunctions.h" // used for team code
 #include "Calculations2.h"
 #include "Math/Geometry.hpp"
-#include "Device/Port.h"
-#include "Device/device.h"
 #ifdef NEWCLIMBAV
 #include "ClimbAverageCalculator.h" // JMW new
 #endif
@@ -89,7 +87,6 @@ bool ForceFinalGlide= false;
 bool AutoForceFinalGlide= false;
 int  AutoMcMode = 0;
 bool EnableFAIFinishHeight = false;
-bool BallastTimerActive = false;
 
 // 0: Final glide only
 // 1: Set to average if in climb mode
@@ -155,7 +152,7 @@ static void SortLandableWaypoints(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 
 extern void ConditionMonitorsUpdate(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 
-extern void BallastDump();
+void BallastDump(NMEA_INFO *Basic); // now in CalculationsBallast.cpp
 
 #ifdef DEBUG
 #define DEBUGTASKSPEED
@@ -913,7 +910,7 @@ BOOL DoCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   CalculateOwnTeamCode(Basic, Calculated);
   CalculateTeammateBearingRange(Basic, Calculated);
 
-  BallastDump();
+  BallastDump(Basic);
 
   if (!TaskIsTemporary()) {
     InSector(Basic, Calculated);
@@ -4067,33 +4064,4 @@ bool IsFlarmTargetCNInRange()
   return FlarmTargetContact;
 }
 
-
-int BallastSecsToEmpty = 120;
-
-void BallastDump ()
-{
-  static double BallastTimeLast = -1;
-
-  if (BallastTimerActive) {
-    // JMW only update every 5 seconds to stop flooding the devices
-    if (GPS_INFO.Time > BallastTimeLast+5) {
-      double BALLAST_last = BALLAST;
-      double dt = GPS_INFO.Time - BallastTimeLast;
-      double percent_per_second = 1.0/max(10.0, BallastSecsToEmpty);
-      BALLAST -= dt*percent_per_second;
-      if (BALLAST<0) {
-	BallastTimerActive = false;
-	BALLAST = 0.0;
-      }
-      if (fabs(BALLAST-BALLAST_last)>0.05) { // JMW update on 5 percent!
-	GlidePolar::SetBallast();
-	devPutBallast(devA(), BALLAST);
-	devPutBallast(devB(), BALLAST);
-      }
-      BallastTimeLast = GPS_INFO.Time;
-    }
-  } else {
-    BallastTimeLast = GPS_INFO.Time;
-  }
-}
 
