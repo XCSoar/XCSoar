@@ -396,6 +396,8 @@ OBJS	:=\
 	$(SRC)/CalculationsAirspace.o \
 	$(SRC)/CalculationsAbort.o \
 	$(SRC)/CalculationsBallast.o \
+	$(SRC)/CalculationsSector.o \
+	$(SRC)/CalculationsTask.o \
 	$(SRC)/CalculationsTerrain.o \
 	$(SRC)/CalculationsWind.o \
 	\

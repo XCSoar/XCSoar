@@ -1678,3 +1678,15 @@ bool ActiveIsFinalWaypoint() {
   return (ActiveWayPoint == getFinalWaypoint());
 }
 
+
+bool IsFinalWaypoint(void) {
+  bool retval;
+  LockTaskData();
+  if (ValidTaskPoint(ActiveWayPoint) && (Task[ActiveWayPoint+1].Index >= 0)) {
+    retval = false;
+  } else {
+    retval = true;
+  }
+  UnlockTaskData();
+  return retval;
+}

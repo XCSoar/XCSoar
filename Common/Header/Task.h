@@ -163,4 +163,6 @@ int getFinalWaypoint(void);
 
 bool ActiveIsFinalWaypoint(void);
 
+bool IsFinalWaypoint(void);
+
 #endif
