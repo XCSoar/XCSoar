@@ -51,7 +51,6 @@ Copyright_License {
 #include "Message.h"
 #include "TeamCodeCalculation.h"
 #include <tchar.h>
-#include "windanalyser.h"
 #include "Atmosphere.h"
 #include "Audio/VegaVoice.h"
 #include "OnLineContest.h"
@@ -60,8 +59,6 @@ Copyright_License {
 #include "Calculations2.h"
 #include "Math/Geometry.hpp"
 #include "Device/Port.h"
-#include "WindZigZag.h"
-#include "MapWindow.h"
 #include "Device/device.h"
 #ifdef NEWCLIMBAV
 #include "ClimbAverageCalculator.h" // JMW new
@@ -76,7 +73,6 @@ Copyright_License {
 #include "Persist.hpp"
 #include "GlideRatio.hpp"
 
-WindAnalyser *windanalyser = NULL;
 OLCOptimizer olc;
 AATDistance aatdistance;
 static DERIVED_INFO Finish_Derived_Info;
@@ -84,16 +80,6 @@ static VegaVoice vegavoice;
 
 #include "ThermalLocator.h"
 static ThermalLocator thermallocator;
-
-
-#define D_AUTOWIND_CIRCLING 1
-#define D_AUTOWIND_ZIGZAG 2
-int AutoWindMode= D_AUTOWIND_CIRCLING;
-
-// 0: Manual
-// 1: Circling
-// 2: ZigZag
-// 3: Both
 
 bool EnableNavBaroAltitude=false;
 int EnableExternalTriggerCruise=false;
@@ -154,6 +140,16 @@ void CheckFinalGlideThroughTerrain(NMEA_INFO *Basic,
 				   DERIVED_INFO *Calculated,
 				   double LegToGo,
 				   double LegBearing); // now in CalculationsTerrain.cpp
+
+
+void InitialiseCalculationsWind();
+void CloseCalculationsWind();
+void DoWindZigZag(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
+void DoWindCirclingMode(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
+			bool left);
+void DoWindCirclingSample(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
+void DoWindCirclingAltitude(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
+
 
 static void SortLandableWaypoints(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 
@@ -581,46 +577,12 @@ void Heading(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
       atan2(Calculated->GPSVario-Calculated->Vario,
            Calculated->TrueAirspeedEstimated);
 
-    // update zigzag wind
-    if (((AutoWindMode & D_AUTOWIND_ZIGZAG)==D_AUTOWIND_ZIGZAG)
-        && (!ReplayLogger::IsEnabled())) {
-      double zz_wind_speed;
-      double zz_wind_bearing;
-      int quality;
-      quality = WindZigZagUpdate(Basic, Calculated,
-                                 &zz_wind_speed,
-				 &zz_wind_bearing);
-      if (quality>0) {
-        SetWindEstimate(zz_wind_speed, zz_wind_bearing, quality);
-        Vector v_wind;
-        v_wind.x = zz_wind_speed*cos(zz_wind_bearing*3.1415926/180.0);
-        v_wind.y = zz_wind_speed*sin(zz_wind_bearing*3.1415926/180.0);
-        LockFlightData();
-        if (windanalyser) {
-	  windanalyser->slot_newEstimate(Basic, Calculated, v_wind, quality);
-        }
-        UnlockFlightData();
-      }
-    }
+    DoWindZigZag(Basic, Calculated);
+
   } else {
     Calculated->Heading = Basic->TrackBearing;
   }
 
-}
-
-
-void  SetWindEstimate(const double wind_speed,
-		      const double wind_bearing,
-		      const int quality) {
-  Vector v_wind;
-  v_wind.x = wind_speed*cos(wind_bearing*3.1415926/180.0);
-  v_wind.y = wind_speed*sin(wind_bearing*3.1415926/180.0);
-  LockFlightData();
-  if (windanalyser) {
-    windanalyser->slot_newEstimate(&GPS_INFO, &CALCULATED_INFO,
-                                   v_wind, quality);
-  }
-  UnlockFlightData();
 }
 
 
@@ -808,10 +770,7 @@ void StartTask(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
 
 
 void CloseCalculations() {
-  if (windanalyser) {
-    delete windanalyser;
-    windanalyser = NULL;
-  }
+  CloseCalculationsWind();
 }
 
 
@@ -846,17 +805,7 @@ void InitCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
 //  Calculated->ThermalGain=0.0; // VENTA7
  */
 
-  LockFlightData();
-
-  if (!windanalyser) {
-    windanalyser = new WindAnalyser();
-
-    //JMW TODO enhancement: seed initial wind store with start conditions
-    // SetWindEstimate(Calculated->WindSpeed,Calculated->WindBearing, 1);
-
-  }
-  UnlockFlightData();
-
+  InitialiseCalculationsWind();
 }
 
 
@@ -1294,12 +1243,7 @@ void SwitchZoomClimb(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
                      bool isclimb, bool left) {
 
   // this is calculation stuff, leave it there
-  if ((AutoWindMode & D_AUTOWIND_CIRCLING)==D_AUTOWIND_CIRCLING) {
-    LockFlightData();
-    windanalyser->slot_newFlightMode(Basic, Calculated, left, 0);
-    UnlockFlightData();
-  }
-
+  DoWindCirclingMode(Basic, Calculated, left);
 }
 
 
@@ -1489,11 +1433,7 @@ void Turning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
     }
     break;
   case CLIMB:
-    if ((AutoWindMode & D_AUTOWIND_CIRCLING)==D_AUTOWIND_CIRCLING) {
-      LockFlightData();
-      windanalyser->slot_newSample(Basic, Calculated);
-      UnlockFlightData();
-    }
+    DoWindCirclingSample(Basic, Calculated);
 
     if((Rate < MinTurnRate)||(forcecruise)) {
       StartTime = Basic->Time;
@@ -1550,13 +1490,10 @@ void Turning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
     // error, go to cruise
     MODE = CRUISE;
   }
+
   // generate new wind vector if altitude changes or a new
   // estimate is available
-  if (AutoWindMode>0) {
-    LockFlightData();
-    windanalyser->slot_Altitude(Basic, Calculated);
-    UnlockFlightData();
-  }
+  DoWindCirclingAltitude(Basic, Calculated);
 
   if (EnableThermalLocator) {
     if (Calculated->Circling) {
