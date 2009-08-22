@@ -45,16 +45,12 @@ Copyright_License {
 #include "Math/FastMath.h"
 #include "externs.h"
 #include "McReady.h"
-#include "Airspace.h"
-#include "AirspaceWarning.h"
 #include "Logger.h"
 #include <math.h>
 #include "InputEvents.h"
 #include "Message.h"
-#include "RasterTerrain.h"
 #include "TeamCodeCalculation.h"
 #include <tchar.h>
-#include "ThermalLocator.h"
 #include "windanalyser.h"
 #include "Atmosphere.h"
 #include "Audio/VegaVoice.h"
@@ -85,7 +81,11 @@ OLCOptimizer olc;
 AATDistance aatdistance;
 static DERIVED_INFO Finish_Derived_Info;
 static VegaVoice vegavoice;
+
+#include "ThermalLocator.h"
 static ThermalLocator thermallocator;
+
+
 #define D_AUTOWIND_CIRCLING 1
 #define D_AUTOWIND_ZIGZAG 2
 int AutoWindMode= D_AUTOWIND_CIRCLING;
@@ -140,18 +140,22 @@ static void InSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 static bool  InFinishSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated, const int i);
 static bool  InTurnSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated, const int i);
 //static void FinalGlideAlert(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
-static void PredictNextPosition(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
-static void AirspaceWarning(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 static void AATStats(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 static void DoAutoMacCready(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 static void ThermalBand(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 static void TakeoffLanding(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 
+void PredictNextPosition(NMEA_INFO *Basic, DERIVED_INFO *Calculated); // now in CalculationsAirspace.cpp
+void AirspaceWarning(NMEA_INFO *Basic, DERIVED_INFO *Calculated); // now in CalculationsAirspace.cpp
 
-static void TerrainHeight(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
+void TerrainHeight(NMEA_INFO *Basic, DERIVED_INFO *Calculated); // now in CalculationsTerrain.cpp
+void TerrainFootprint(NMEA_INFO *Basic, DERIVED_INFO *Calculated); // now in CalculationsTerrain.cpp
+void CheckFinalGlideThroughTerrain(NMEA_INFO *Basic,
+				   DERIVED_INFO *Calculated,
+				   double LegToGo,
+				   double LegBearing); // now in CalculationsTerrain.cpp
+
 static void SortLandableWaypoints(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
-
-static void TerrainFootprint(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 
 extern void ConditionMonitorsUpdate(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 
@@ -272,38 +276,6 @@ static double SpeedHeight(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   // Excess height
   return Calculated->NavAltitude
     - (dh_start*(1.0-d_fraction)+dh_finish*(d_fraction));
-}
-
-
-
-void TerrainFootprint(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
-  double bearing, distance;
-  double lat, lon;
-  bool out_of_range;
-
-  // estimate max range (only interested in at most one screen distance away)
-  // except we need to scan for terrain base, so 20km search minimum is required
-  double mymaxrange = max(20000.0, MapWindow::GetApproxScreenRange());
-
-  Calculated->TerrainBase = Calculated->TerrainAlt;
-
-  for (int i=0; i<=NUMTERRAINSWEEPS; i++) {
-    bearing = (i*360.0)/NUMTERRAINSWEEPS;
-    distance = FinalGlideThroughTerrain(bearing,
-                                        Basic,
-                                        Calculated, &lat, &lon,
-                                        mymaxrange, &out_of_range,
-					&Calculated->TerrainBase);
-    if (out_of_range) {
-      FindLatitudeLongitude(Basic->Latitude, Basic->Longitude,
-                            bearing,
-                            mymaxrange*20,
-                            &lat, &lon);
-    }
-    Calculated->GlideFootPrint[i].x = lon;
-    Calculated->GlideFootPrint[i].y = lat;
-  }
-  Calculated->Experimental = Calculated->TerrainBase;
 }
 
 
@@ -661,7 +633,6 @@ void DoCalculationsSlow(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
                 of the local device, and fine-tune some parameters
  */
 
-  static double LastOptimiseTime = 0;
   static double lastTime = 0;
   if (Basic->Time<= lastTime) {
     lastTime = Basic->Time-6;
@@ -670,15 +641,7 @@ void DoCalculationsSlow(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
     AirspaceWarning(Basic, Calculated);
   }
 
-  if (FinalGlideTerrain)
-     TerrainFootprint(Basic, Calculated);
-
-  // moved from MapWindow.cpp
-  if(Basic->Time> LastOptimiseTime+0.0)
-    {
-      LastOptimiseTime = Basic->Time;
-      RasterTerrain::ServiceCache();
-    }
+  TerrainFootprint(Basic, Calculated);
 
   DoBestAlternateSlow(Basic, Calculated);
 
@@ -2487,34 +2450,6 @@ void InSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 
 
 
-static void TerrainHeight(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
-{
-  short Alt = 0;
-
-  RasterTerrain::Lock();
-  // want most accurate rounding here
-  RasterTerrain::SetTerrainRounding(0,0);
-  Alt = RasterTerrain::GetTerrainHeight(Basic->Latitude,
-                                        Basic->Longitude);
-  RasterTerrain::Unlock();
-
-  if(Alt<0) {
-    Alt = 0;
-    if (Alt <= TERRAIN_INVALID) {
-      Calculated->TerrainValid = false;
-    } else {
-      Calculated->TerrainValid = true;
-    }
-    Calculated->TerrainAlt = 0;
-  } else {
-    Calculated->TerrainValid = true;
-    Calculated->TerrainAlt = Alt;
-  }
-  Calculated->AltitudeAGL = Calculated->NavAltitude - Calculated->TerrainAlt;
-  if (!FinalGlideTerrain) {
-    Calculated->TerrainBase = Calculated->TerrainAlt;
-  }
-}
 
 
 /////////////////////////////////////////
@@ -2935,37 +2870,6 @@ void TaskSpeed(NMEA_INFO *Basic, DERIVED_INFO *Calculated, const double this_mac
  OnExit:
   UnlockTaskData();
 
-}
-
-
-static void CheckFinalGlideThroughTerrain(NMEA_INFO *Basic,
-                                          DERIVED_INFO *Calculated,
-                                          double LegToGo,
-                                          double LegBearing) {
-
-  // Final glide through terrain updates
-  if (Calculated->FinalGlide) {
-
-    double lat, lon;
-    bool out_of_range;
-    double distance_soarable =
-      FinalGlideThroughTerrain(LegBearing,
-                               Basic, Calculated,
-                               &lat,
-                               &lon,
-                               LegToGo, &out_of_range, NULL);
-
-    if ((!out_of_range)&&(distance_soarable< LegToGo)) {
-      Calculated->TerrainWarningLatitude = lat;
-      Calculated->TerrainWarningLongitude = lon;
-    } else {
-      Calculated->TerrainWarningLatitude = 0.0;
-      Calculated->TerrainWarningLongitude = 0.0;
-    }
-  } else {
-    Calculated->TerrainWarningLatitude = 0.0;
-    Calculated->TerrainWarningLongitude = 0.0;
-  }
 }
 
 
@@ -3497,170 +3401,6 @@ void DoAutoMacCready(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 
 }
 
-
-extern int AIRSPACEWARNINGS;
-extern int WarningTime;
-extern int AcknowledgementTime;
-
-
-void PredictNextPosition(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
-{
-  if(Calculated->Circling)
-    {
-      Calculated->NextLatitude = Basic->Latitude;
-      Calculated->NextLongitude = Basic->Longitude;
-      Calculated->NextAltitude =
-        Calculated->NavAltitude + Calculated->Average30s * WarningTime;
-    }
-  else
-    {
-      FindLatitudeLongitude(Basic->Latitude,
-                            Basic->Longitude,
-                            Basic->TrackBearing,
-                            Basic->Speed*WarningTime,
-                            &Calculated->NextLatitude,
-                            &Calculated->NextLongitude);
-
-      if (Basic->BaroAltitudeAvailable) {
-        Calculated->NextAltitude =
-          Basic->BaroAltitude + Calculated->Average30s * WarningTime;
-      } else {
-        Calculated->NextAltitude =
-          Calculated->NavAltitude + Calculated->Average30s * WarningTime;
-      }
-    }
-    // MJJ TODO Predict terrain altitude
-    Calculated->NextAltitudeAGL = Calculated->NextAltitude - Calculated->TerrainAlt;
-
-}
-
-
-//////////////////////////////////////////////
-
-bool GlobalClearAirspaceWarnings = false;
-
-// JMW this code is deprecated
-bool ClearAirspaceWarnings(const bool acknowledge, const bool ack_all_day) {
-  unsigned int i;
-  if (acknowledge) {
-    GlobalClearAirspaceWarnings = true;
-    if (AirspaceCircle) {
-      for (i=0; i<NumberOfAirspaceCircles; i++) {
-        if (AirspaceCircle[i].WarningLevel>0) {
-          AirspaceCircle[i].Ack.AcknowledgementTime = GPS_INFO.Time;
-          if (ack_all_day) {
-            AirspaceCircle[i].Ack.AcknowledgedToday = true;
-          }
-          AirspaceCircle[i].WarningLevel = 0;
-        }
-      }
-    }
-    if (AirspaceArea) {
-      for (i=0; i<NumberOfAirspaceAreas; i++) {
-        if (AirspaceArea[i].WarningLevel>0) {
-          AirspaceArea[i].Ack.AcknowledgementTime = GPS_INFO.Time;
-          if (ack_all_day) {
-            AirspaceArea[i].Ack.AcknowledgedToday = true;
-          }
-          AirspaceArea[i].WarningLevel = 0;
-        }
-      }
-    }
-    return Message::Acknowledge(MSG_AIRSPACE);
-  }
-  return false;
-}
-
-
-void AirspaceWarning(NMEA_INFO *Basic, DERIVED_INFO *Calculated){
-  unsigned int i;
-
-  if(!AIRSPACEWARNINGS)
-      return;
-
-  static bool position_is_predicted = false;
-
-  //  LockFlightData(); Not necessary, airspace stuff has its own locking
-
-  if (GlobalClearAirspaceWarnings == true) {
-    GlobalClearAirspaceWarnings = false;
-    Calculated->IsInAirspace = false;
-  }
-
-  position_is_predicted = !position_is_predicted;
-  // every second time step, do predicted position rather than
-  // current position
-
-  double alt;
-  double agl;
-  double lat;
-  double lon;
-
-  if (position_is_predicted) {
-    alt = Calculated->NextAltitude;
-    agl = Calculated->NextAltitudeAGL;
-    lat = Calculated->NextLatitude;
-    lon = Calculated->NextLongitude;
-  } else {
-    if (Basic->BaroAltitudeAvailable) {
-      alt = Basic->BaroAltitude;
-    } else {
-      alt = Basic->Altitude;
-    }
-    agl = Calculated->AltitudeAGL;
-    lat = Basic->Latitude;
-    lon = Basic->Longitude;
-  }
-
-  // JMW TODO enhancement: FindAirspaceCircle etc should sort results, return
-  // the most critical or closest.
-
-  if (AirspaceCircle) {
-    for (i=0; i<NumberOfAirspaceCircles; i++) {
-
-      if ((((AirspaceCircle[i].Base.Base != abAGL) && (alt >= AirspaceCircle[i].Base.Altitude))
-           || ((AirspaceCircle[i].Base.Base == abAGL) && (agl >= AirspaceCircle[i].Base.AGL)))
-          && (((AirspaceCircle[i].Top.Base != abAGL) && (alt < AirspaceCircle[i].Top.Altitude))
-           || ((AirspaceCircle[i].Top.Base == abAGL) && (agl < AirspaceCircle[i].Top.AGL)))) {
-
-        if ((MapWindow::iAirspaceMode[AirspaceCircle[i].Type] >= 2) &&
-	    InsideAirspaceCircle(lon, lat, i)) {
-
-          AirspaceWarnListAdd(Basic, Calculated, position_is_predicted, 1, i, false);
-        }
-
-      }
-
-    }
-  }
-
-  // repeat process for areas
-
-  if (AirspaceArea) {
-    for (i=0; i<NumberOfAirspaceAreas; i++) {
-
-      if ((((AirspaceArea[i].Base.Base != abAGL) && (alt >= AirspaceArea[i].Base.Altitude))
-           || ((AirspaceArea[i].Base.Base == abAGL) && (agl >= AirspaceArea[i].Base.AGL)))
-          && (((AirspaceArea[i].Top.Base != abAGL) && (alt < AirspaceArea[i].Top.Altitude))
-           || ((AirspaceArea[i].Top.Base == abAGL) && (agl < AirspaceArea[i].Top.AGL)))) {
-
-        if ((MapWindow::iAirspaceMode[AirspaceArea[i].Type] >= 2)
-            && InsideAirspaceArea(lon, lat, i)){
-
-          AirspaceWarnListAdd(Basic, Calculated, position_is_predicted, 0, i, false);
-        }
-
-      }
-    }
-  }
-
-  AirspaceWarnListProcess(Basic, Calculated);
-
-  //  UnlockFlightData();
-
-}
-
-//////////////////////////////////////////////
 
 void AATStats_Time(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   // Task time to go calculations
