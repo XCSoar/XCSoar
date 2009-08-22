@@ -85,8 +85,6 @@ extern int ICOSTABLE[4096];
 #define fastsine(x) SINETABLE[DEG_TO_INT(x)]
 
 #ifdef __cplusplus
-extern "C" {
-#endif
 
 inline unsigned int CombinedDivAndMod(unsigned int &lx) {
   unsigned int ox = lx & 0xff;
@@ -95,6 +93,9 @@ inline unsigned int CombinedDivAndMod(unsigned int &lx) {
   lx = lx>>8;
   return ox;
 }
+
+extern "C" {
+#endif
 
 // Fast trig functions
 void InitSineTable(void);
