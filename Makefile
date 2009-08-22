@@ -383,7 +383,7 @@ VOLKS	:=\
 
 OBJS	:=\
 	$(SRC)/AATDistance.o 		$(SRC)/AirfieldDetails.o \
-	$(SRC)/Airspace.o 		$(SRC)/AirspaceColourDlg.o \
+	$(SRC)/Airspace.o 		\
 	$(SRC)/AirspaceWarning.o 	$(SRC)/Atmosphere.o \
 	$(SRC)/Calculations.o 		$(SRC)/Calculations2.o \
 	$(SRC)/ClimbAverageCalculator.o \
@@ -407,11 +407,12 @@ OBJS	:=\
 	$(SRC)/Terrain.o		$(SRC)/ThermalLocator.o \
 	$(SRC)/Topology.o		$(SRC)/units.o \
 	$(SRC)/Utils.o			$(SRC)/Utils2.o \
-	$(SRC)/VegaVoice.o		$(SRC)/VOIMAGE.o \
+	$(SRC)/VOIMAGE.o \
 	$(SRC)/Waypointparser.o \
 	$(SRC)/windanalyser.o		$(SRC)/windmeasurementlist.o \
 	$(SRC)/windstore.o 		$(SRC)/WindowControls.o \
 	$(SRC)/WindZigZag.o 		$(SRC)/xmlParser.o \
+	$(SRC)/Audio/VegaVoice.o		\
 	$(SRC)/Compatibility/string.o \
 	$(SRC)/Math/FastMath.o \
 	$(SRC)/Math/Geometry.o \

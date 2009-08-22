@@ -61,7 +61,7 @@ Copyright_License {
 #include "VarioSound.h"
 #include "Device/device.h"
 #include "Units.h"
-#include "GaugeVario.h"
+#include "GaugeVarioAltA.h"
 #include "InfoBoxLayout.h"
 #include "InputEvents.h"
 #include "Message.h"

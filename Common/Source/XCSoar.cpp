@@ -469,7 +469,7 @@ void PopupBugsBallast(int updown);
 
 #include "GaugeCDI.h"
 #include "GaugeFLARM.h"
-#include "GaugeVario.h"
+#include "GaugeVarioAltA.h"
 
 // Groups:
 //   Altitude 0,1,20,33
