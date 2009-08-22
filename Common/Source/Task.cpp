@@ -43,7 +43,7 @@ Copyright_License {
 #include "Math/Geometry.hpp"
 #include "LocalPath.hpp"
 #include "Dialogs.h"
-#include "dlgTools.h"
+#include "Dialogs/dlgTools.h"
 #include "externs.h"
 #include "Calculations.h"
 #include "Waypointparser.h"

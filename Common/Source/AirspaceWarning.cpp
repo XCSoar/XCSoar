@@ -40,7 +40,7 @@ Copyright_License {
 #include "externs.h"
 #include "Dialogs.h"
 #include "Utils.h"
-#include "device.h"
+#include "Device/device.h"
 
 #ifdef HAVEEXCEPTIONS
 #define  __try     __try

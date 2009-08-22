@@ -50,7 +50,7 @@ Copyright_License {
 #include "externs.h"
 #include "XCSoar.h"
 #include "InfoBoxLayout.h"
-#include "device.h"
+#include "Device/device.h"
 #include "Logger.h"
 #include "Dialogs.h"
 #include "Utils.h"

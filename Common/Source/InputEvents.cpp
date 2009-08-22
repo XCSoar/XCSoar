@@ -72,7 +72,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "InfoBoxLayout.h"
 #include "Airspace.h"
 #include "Process.h"
-#include "device.h"
+#include "Device/device.h"
 #include "Message.h"
 #include "Units.h"
 #include "MapWindow.h"
@@ -1966,7 +1966,7 @@ void InputEvents::eventAbortTask(const TCHAR *misc) {
   UnlockTaskData();
 }
 
-#include "device.h"
+#include "Device/device.h"
 #include "McReady.h"
 
 // Bugs

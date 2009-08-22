@@ -39,7 +39,7 @@ Copyright_License {
 #include "Polar/WinPilot.hpp"
 #include "Polar/BuiltIn.hpp"
 #include "LogFile.hpp"
-#include "dlgTools.h"
+#include "Dialogs/dlgTools.h"
 #include "Dialogs.h"
 #include "externs.h"
 #include "McReady.h"

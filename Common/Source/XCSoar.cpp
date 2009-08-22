@@ -58,7 +58,7 @@ Copyright_License {
 #include "Battery.h"
 #include "PeriodClock.hpp"
 #include "Registry.hpp"
-#include "Port.h"
+#include "Device/Port.h"
 #include "Waypointparser.h"
 #include "Airspace.h"
 #include "Logger.h"
@@ -81,14 +81,14 @@ Copyright_License {
 
 #include "Terrain.h"
 #include "VarioSound.h"
-#include "device.h"
+#include "Device/device.h"
 
 #include "externs.h"
 #include "Units.h"
 #include "InputEvents.h"
 #include "Message.h"
 #include "Atmosphere.h"
-#include "Geoid.h"
+#include "Device/Geoid.h"
 
 #include "InfoBox.h"
 #include "RasterTerrain.h"

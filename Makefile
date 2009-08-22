@@ -311,75 +311,75 @@ ifeq ($(CONFIG_PC),n)
 endif
 
 DEVS	:=\
-	$(SRC)/devAltairPro.o \
-	$(SRC)/devBorgeltB50.o \
-	$(SRC)/devCAI302.o \
-	$(SRC)/devCaiGpsNav.o \
-	$(SRC)/devCondor.o \
-	$(SRC)/devEW.o \
-	$(SRC)/devEWMicroRecorder.o \
-	$(SRC)/devFlymasterF1.o \
-	$(SRC)/devGeneric.o \
-	$(SRC)/devLX.o \
-	$(SRC)/devNmeaOut.o \
-	$(SRC)/devPosiGraph.o \
-	$(SRC)/devVega.o \
-	$(SRC)/devVolkslogger.o \
-	$(SRC)/devXCOM760.o \
-	$(SRC)/devZander.o
+	$(SRC)/Device/devAltairPro.o \
+	$(SRC)/Device/devBorgeltB50.o \
+	$(SRC)/Device/devCAI302.o \
+	$(SRC)/Device/devCaiGpsNav.o \
+	$(SRC)/Device/devCondor.o \
+	$(SRC)/Device/devEW.o \
+	$(SRC)/Device/devEWMicroRecorder.o \
+	$(SRC)/Device/devFlymasterF1.o \
+	$(SRC)/Device/devGeneric.o \
+	$(SRC)/Device/devLX.o \
+	$(SRC)/Device/devNmeaOut.o \
+	$(SRC)/Device/devPosiGraph.o \
+	$(SRC)/Device/devVega.o \
+	$(SRC)/Device/devVolkslogger.o \
+	$(SRC)/Device/devXCOM760.o \
+	$(SRC)/Device/devZander.o
 
 DLGS	:=\
-	$(SRC)/dlgAirspace.o \
-	$(SRC)/dlgAirspaceColours.o \
-	$(SRC)/dlgAirspaceDetails.o \
-	$(SRC)/dlgAirspacePatterns.o \
-	$(SRC)/dlgAirspaceSelect.o \
-	$(SRC)/dlgAirspaceWarning.o \
-	$(SRC)/dlgBasicSettings.cpp \
-	$(SRC)/dlgBrightness.o \
-	$(SRC)/dlgChecklist.o \
-	$(SRC)/dlgComboPicker.o \
-	$(SRC)/dlgConfiguration.o \
-	$(SRC)/dlgConfiguration2.o \
-	$(SRC)/dlgConfigurationVario.o \
-	$(SRC)/dlgFlarmTraffic.o \
-	$(SRC)/dlgHelp.o \
-	$(SRC)/dlgLoggerReplay.o \
-	$(SRC)/dlgStartPoint.o \
-	$(SRC)/dlgStartup.o \
-	$(SRC)/dlgStatistics.o \
-	$(SRC)/dlgStatus.o \
-	$(SRC)/dlgStatusSystem.o \
-	$(SRC)/dlgStatusTask.o \
-	$(SRC)/dlgSwitches.o \
-	$(SRC)/dlgTarget.o \
-	$(SRC)/dlgTaskCalculator.o \
-	$(SRC)/dlgTaskOverview.o \
-	$(SRC)/dlgTaskRules.o \
-	$(SRC)/dlgTaskWaypoint.o \
-	$(SRC)/dlgTeamCode.o \
-	$(SRC)/dlgTextEntry.o \
-	$(SRC)/dlgTextEntry_Keyboard.o \
-	$(SRC)/dlgTools.o \
-	$(SRC)/dlgVegaDemo.o \
-	$(SRC)/dlgVoice.o \
-	$(SRC)/dlgWayPointDetails.o \
-	$(SRC)/dlgWaypointEdit.o \
-	$(SRC)/dlgWayPointSelect.o \
-	$(SRC)/dlgWaypointOutOfTerrain.o \
-	$(SRC)/dlgWeather.o \
-	$(SRC)/dlgWindSettings.o \
-	$(SRC)/dlgStartTask.o \
-	$(SRC)/dlgFontEdit.o \
+	$(SRC)/Dialogs/dlgAirspace.o \
+	$(SRC)/Dialogs/dlgAirspaceColours.o \
+	$(SRC)/Dialogs/dlgAirspaceDetails.o \
+	$(SRC)/Dialogs/dlgAirspacePatterns.o \
+	$(SRC)/Dialogs/dlgAirspaceSelect.o \
+	$(SRC)/Dialogs/dlgAirspaceWarning.o \
+	$(SRC)/Dialogs/dlgBasicSettings.o \
+	$(SRC)/Dialogs/dlgBrightness.o \
+	$(SRC)/Dialogs/dlgChecklist.o \
+	$(SRC)/Dialogs/dlgComboPicker.o \
+	$(SRC)/Dialogs/dlgConfiguration.o \
+	$(SRC)/Dialogs/dlgConfiguration2.o \
+	$(SRC)/Dialogs/dlgConfigurationVario.o \
+	$(SRC)/Dialogs/dlgFlarmTraffic.o \
+	$(SRC)/Dialogs/dlgHelp.o \
+	$(SRC)/Dialogs/dlgLoggerReplay.o \
+	$(SRC)/Dialogs/dlgStartPoint.o \
+	$(SRC)/Dialogs/dlgStartup.o \
+	$(SRC)/Dialogs/dlgStatistics.o \
+	$(SRC)/Dialogs/dlgStatus.o \
+	$(SRC)/Dialogs/dlgStatusSystem.o \
+	$(SRC)/Dialogs/dlgStatusTask.o \
+	$(SRC)/Dialogs/dlgSwitches.o \
+	$(SRC)/Dialogs/dlgTarget.o \
+	$(SRC)/Dialogs/dlgTaskCalculator.o \
+	$(SRC)/Dialogs/dlgTaskOverview.o \
+	$(SRC)/Dialogs/dlgTaskRules.o \
+	$(SRC)/Dialogs/dlgTaskWaypoint.o \
+	$(SRC)/Dialogs/dlgTeamCode.o \
+	$(SRC)/Dialogs/dlgTextEntry.o \
+	$(SRC)/Dialogs/dlgTextEntry_Keyboard.o \
+	$(SRC)/Dialogs/dlgTools.o \
+	$(SRC)/Dialogs/dlgVegaDemo.o \
+	$(SRC)/Dialogs/dlgVoice.o \
+	$(SRC)/Dialogs/dlgWayPointDetails.o \
+	$(SRC)/Dialogs/dlgWaypointEdit.o \
+	$(SRC)/Dialogs/dlgWayPointSelect.o \
+	$(SRC)/Dialogs/dlgWaypointOutOfTerrain.o \
+	$(SRC)/Dialogs/dlgWeather.o \
+	$(SRC)/Dialogs/dlgWindSettings.o \
+	$(SRC)/Dialogs/dlgStartTask.o \
+	$(SRC)/Dialogs/dlgFontEdit.o \
 
 VOLKS	:=\
-	$(SRC)/Volkslogger/dbbconv.cpp \
-	$(SRC)/Volkslogger/grecord.cpp \
-	$(SRC)/Volkslogger/vlapi2.cpp \
-	$(SRC)/Volkslogger/vlapihlp.cpp \
-	$(SRC)/Volkslogger/vlapisys_win.cpp \
-	$(SRC)/Volkslogger/vlconv.cpp \
-	$(SRC)/Volkslogger/vlutils.cpp
+	$(SRC)/Device/Volkslogger/dbbconv.cpp \
+	$(SRC)/Device/Volkslogger/grecord.cpp \
+	$(SRC)/Device/Volkslogger/vlapi2.cpp \
+	$(SRC)/Device/Volkslogger/vlapihlp.cpp \
+	$(SRC)/Device/Volkslogger/vlapisys_win.cpp \
+	$(SRC)/Device/Volkslogger/vlconv.cpp \
+	$(SRC)/Device/Volkslogger/vlutils.cpp
 
 OBJS	:=\
 	$(SRC)/AATDistance.o 		$(SRC)/AirfieldDetails.o \
@@ -387,11 +387,11 @@ OBJS	:=\
 	$(SRC)/AirspaceWarning.o 	$(SRC)/Atmosphere.o \
 	$(SRC)/Calculations.o 		$(SRC)/Calculations2.o \
 	$(SRC)/ClimbAverageCalculator.o \
-	$(SRC)/ConditionMonitor.o 	$(SRC)/device.o \
+	$(SRC)/ConditionMonitor.o 	$(SRC)/Device/device.o \
 	$(SRC)/Dialogs.o 		\
 	$(SRC)/FlarmIdFile.o 		$(SRC)/FlarmCalculations.o \
 	$(SRC)/GaugeCDI.o 		$(SRC)/GaugeFLARM.o \
-	$(SRC)/GaugeVarioAltA.o 	$(SRC)/Geoid.o \
+	$(SRC)/GaugeVarioAltA.o 	$(SRC)/Device/Geoid.o \
 	$(SRC)/InfoBox.o 		$(SRC)/InfoBoxLayout.o \
 	$(SRC)/InputEvents.o 		$(SRC)/leastsqs.o \
 	$(SRC)/Logger.o 		\
@@ -399,7 +399,7 @@ OBJS	:=\
 	$(SRC)/MapWindow3.o 		\
 	$(SRC)/McReady.o 		$(SRC)/Message.o \
 	$(SRC)/NavFunctions.o		$(SRC)/OnLineContest.o \
-	$(SRC)/Parser.o			$(SRC)/Port.o \
+	$(SRC)/Parser.o			$(SRC)/Device/Port.o \
 	$(SRC)/Process.o \
 	$(SRC)/RasterTerrain.o		$(SRC)/rscalc.o \
 	$(SRC)/StdAfx.o			$(SRC)/STScreenBuffer.o \

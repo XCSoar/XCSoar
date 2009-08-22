@@ -42,7 +42,7 @@ Copyright_License {
 #include "Math/Geometry.hpp"
 
 #include "XCSoar.h"
-#include "device.h"
+#include "Device/device.h"
 
 #include <tchar.h>
 #include <math.h>

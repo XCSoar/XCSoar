@@ -39,7 +39,7 @@
 #include "StdAfx.h"
 #include "XCSoar.h"
 #include "Dialogs.h"
-#include "Port.h"
+#include "Device/Port.h"
 #include "externs.h"
 #include "Registry.hpp"
 #include "Math/Earth.hpp"
@@ -48,7 +48,7 @@
 #include <windows.h>
 #include "Utils.h"
 #include "LocalPath.hpp"
-#include "device.h"
+#include "Device/device.h"
 #include "InputEvents.h"
 #include "Compatibility/string.h"
 

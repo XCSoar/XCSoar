@@ -40,9 +40,9 @@ Copyright_License {
 #include "Defines.h" // VENTA3
 #include "externs.h"
 #include "Math/FastMath.h"
-#include "device.h"
+#include "Device/device.h"
 #include "Dialogs.h"
-#include "Port.h"
+#include "Device/Port.h"
 #include "Atmosphere.h"
 #include "AATDistance.h"
 #include "Battery.h"

@@ -63,10 +63,10 @@ Copyright_License {
 #include "NavFunctions.h" // used for team code
 #include "Calculations2.h"
 #include "Math/Geometry.hpp"
-#include "Port.h"
+#include "Device/Port.h"
 #include "WindZigZag.h"
 #include "MapWindow.h"
-#include "device.h"
+#include "Device/device.h"
 #ifdef NEWCLIMBAV
 #include "ClimbAverageCalculator.h" // JMW new
 #endif

@@ -39,7 +39,7 @@ Copyright_License {
 #include "XCSoar.h"
 #include "StdAfx.h"
 #include "Defines.h" // VENTA3
-#include "dlgTools.h"
+#include "Dialogs/dlgTools.h"
 #ifndef ALTAIRSYNC
 #include "Message.h"
 #include "MapWindow.h"

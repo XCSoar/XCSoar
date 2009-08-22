@@ -40,7 +40,7 @@ Copyright_License {
 #include "StdAfx.h"
 #include "InputEvents.h"  // used for altair beep hack
 #include "externs.h"
-#include "device.h"
+#include "Device/device.h"
 
 #include <tchar.h>
 #include <math.h>

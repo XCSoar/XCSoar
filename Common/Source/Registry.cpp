@@ -48,7 +48,7 @@ Copyright_License {
 #include "VegaVoice.h"
 #include "McReady.h"
 #include "WayPoint.hpp"
-#include "device.h"
+#include "Device/device.h"
 #include "Math/FastMath.h"
 #include "Math/Units.h"
 #include "Logger.h"

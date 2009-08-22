@@ -43,7 +43,7 @@ Copyright_License {
 #include "Math/Units.h"
 #include "Dialogs.h"
 #include "Task.h"
-#include "device.h"
+#include "Device/device.h"
 #include "externs.h"
 #include "Utils.h"
 #include "Process.h"
