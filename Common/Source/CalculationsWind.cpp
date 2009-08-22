@@ -36,7 +36,7 @@ Copyright_License {
 
 */
 
-#include "Calculations.h"
+#include "CalculationsWind.hpp"
 #include "externs.h"
 #include "XCSoar.h"
 #include "WindZigZag.h"

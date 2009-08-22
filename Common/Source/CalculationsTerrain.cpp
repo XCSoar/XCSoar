@@ -35,8 +35,9 @@ Copyright_License {
 }
 
 */
+
+#include "CalculationsTerrain.hpp"
 #include "externs.h"
-#include "Calculations.h"
 #include "GlideSolvers.hpp"
 #include "MapWindow.h"
 #include "RasterTerrain.h"

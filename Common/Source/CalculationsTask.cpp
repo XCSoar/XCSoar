@@ -36,7 +36,7 @@ Copyright_License {
 
 */
 
-#include "Calculations.h"
+#include "CalculationsTask.hpp"
 #include "XCSoar.h"
 #include "externs.h"
 #include "Math/FastMath.h"

@@ -94,37 +94,18 @@ extern void ConditionMonitorsUpdate(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 
 static void Heading(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 
-void Turning(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
-void LastThermalStats(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
-
-static void PercentCircling(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
-                            const double Rate);
 static void EnergyHeightNavAltitude(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 
 static void DistanceToHome(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 
-// now in CalculationsTask.cpp
-void DistanceToNext(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
-void TaskSpeed(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
-	       const double this_maccready);
-void AltitudeRequired(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
-		      const double this_maccready);
-void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated, const double this_maccready);
-void InSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
-void AATStats(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
-//static void FinalGlideAlert(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 
 static void TakeoffLanding(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 
-// now in CalculationsVertical.cpp
-void AverageClimbRate(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
-void Vario(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
-void LD(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
-void CruiseLD(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
-void Average30s(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
-void AverageThermal(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
-void ThermalGain(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
-void MaxHeightGain(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
+#include "CalculationsClimb.hpp"
+#include "CalculationsTask.hpp"
+#include "CalculationsVertical.hpp"
+#include "CalculationsTerrain.hpp"
+#include "CalculationsWind.hpp"
 
 // now in CalculationsAutoMc.cpp
 void DoAutoMacCready(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
@@ -132,19 +113,6 @@ void DoAutoMacCready(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 // now in CalculationsAirspace.cpp
 void PredictNextPosition(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 void AirspaceWarning(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
-
-// now in CalculationsTerrain.cpp
-void TerrainHeight(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
-void TerrainFootprint(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
-void CheckFinalGlideThroughTerrain(NMEA_INFO *Basic,
-				   DERIVED_INFO *Calculated,
-				   double LegToGo,
-				   double LegBearing);
-
-// now in CalculationsWind.cpp
-void InitialiseCalculationsWind();
-void CloseCalculationsWind();
-void DoWindZigZag(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 
 // now in CalculationsAbort.cpp
 void SortLandableWaypoints(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
