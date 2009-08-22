@@ -440,10 +440,11 @@ OBJS	:=\
 	$(SRC)/Compatibility/string.o \
 	$(SRC)/Battery.o \
 	\
-	$(SRC)/Math/leastsqs.o \
+	$(SRC)/Math/Earth.o \
 	$(SRC)/Math/FastMath.o \
 	$(SRC)/Math/Geometry.o \
-	$(SRC)/Math/Earth.o \
+	$(SRC)/Math/leastsqs.o \
+	$(SRC)/Math/LowPassFilter.o \
 	$(SRC)/Math/Pressure.o \
 	$(SRC)/Math/Screen.o \
 	$(SRC)/Math/SunEphemeris.o \

@@ -707,3 +707,56 @@ void DoBestAlternateSlow(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
     }
 
 }
+
+
+/*
+ * VENTA3 Alternates destinations
+ *
+ * Used by Alternates and BestAlternate
+ *
+ * Colors VGR are disabled, but available
+ */
+
+void DoAlternates(NMEA_INFO *Basic, DERIVED_INFO *Calculated, int AltWaypoint) { // VENTA3
+  if (!ValidWayPoint(AltWaypoint)) {
+    return;
+  }
+  double w1lat = WayPointList[AltWaypoint].Latitude;
+  double w1lon = WayPointList[AltWaypoint].Longitude;
+  double w0lat = Basic->Latitude;
+  double w0lon = Basic->Longitude;
+  double *altwp_dist = &WayPointCalc[AltWaypoint].Distance;
+  double *altwp_gr   = &WayPointCalc[AltWaypoint].GR;
+  double *altwp_arrival = &WayPointCalc[AltWaypoint].AltArriv;
+  short  *altwp_vgr  = &WayPointCalc[AltWaypoint].VGR;
+
+  DistanceBearing(w1lat, w1lon,
+                  w0lat, w0lon,
+                  altwp_dist, NULL);
+
+  double GRsafecalc = Calculated->NavAltitude - (WayPointList[AltWaypoint].Altitude + SAFETYALTITUDEARRIVAL);
+
+  if (GRsafecalc <=0) *altwp_gr = INVALID_GR;
+  else {
+	*altwp_gr = *altwp_dist / GRsafecalc;
+	if ( *altwp_gr >ALTERNATE_MAXVALIDGR || *altwp_gr <0 ) *altwp_gr = INVALID_GR;
+	else if ( *altwp_gr <1 ) *altwp_gr = 1;
+  }
+
+
+  // We need to calculate arrival also for BestAlternate, since the last "reachable" could be
+  // even 60 seconds old and things may have changed drastically
+
+  *altwp_arrival = CalculateWaypointArrivalAltitude(Basic, Calculated, AltWaypoint);
+  if ( (*altwp_arrival - ALTERNATE_OVERSAFETY) >0 ) {
+  	if ( *altwp_gr <= (GlidePolar::bestld *SAFELD_FACTOR) ) *altwp_vgr = 1; // full green vgr
+  	else
+  		if ( *altwp_gr <= GlidePolar::bestld ) *altwp_vgr = 2; // yellow vgr
+		else *altwp_vgr =3; // RED vgr
+  } else
+  {
+	*altwp_vgr = 3; // full red
+  }
+
+
+}

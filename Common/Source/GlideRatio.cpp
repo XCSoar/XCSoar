@@ -38,6 +38,8 @@ Copyright_License {
 #include "GlideRatio.hpp"
 #include "XCSoar.h"
 #include "externs.h"
+#include "Math/LowPassFilter.hpp"
+#include <math.h>
 
 #include <string.h>
 
@@ -152,3 +154,39 @@ int CalculateLDRotary(ldrotary_s *buf ) {
 	return(eff);
 
 }
+
+///// existing methods (moving average via low pass filter)
+
+double LimitLD(double LD) {
+  if (fabs(LD)>INVALID_GR) {
+    return INVALID_GR;
+  } else {
+    if ((LD>=0.0)&&(LD<1.0)) {
+      LD= 1.0;
+    }
+    if ((LD<0.0)&&(LD>-1.0)) {
+      LD= -1.0;
+    }
+    return LD;
+  }
+}
+
+
+double UpdateLD(double LD, double d, double h, double filter_factor) {
+  double glideangle;
+  if (LD != 0) {
+    glideangle = 1.0/LD;
+  } else {
+    glideangle = 1.0;
+  }
+  if (d!=0) {
+    glideangle = LowPassFilter(1.0/LD, h/d, filter_factor);
+    if (fabs(glideangle) > 1.0/INVALID_GR) {
+      LD = LimitLD(1.0/glideangle);
+    } else {
+      LD = INVALID_GR;
+    }
+  }
+  return LD;
+}
+

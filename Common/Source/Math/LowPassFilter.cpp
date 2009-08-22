@@ -34,30 +34,8 @@ Copyright_License {
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
 */
+#include "Math/LowPassFilter.hpp"
 
-#ifndef XCSOAR_GLIDE_RATIO_HPP
-#define XCSOAR_GLIDE_RATIO_HPP
-
-#include "Defines.h"
-
-typedef struct {
-        int     distance[MAXLDROTARYSIZE]; // rotary array with a predefined max capacity
-        int     altitude[MAXLDROTARYSIZE];
-	int	totaldistance;
-        short   start;          // pointer to current first item in rotarybuf if used
-        short   size;           // real size of rotary buffer (0-size)
-	bool	valid;
-} ldrotary_s;
-
-void InitLDRotary(ldrotary_s *buf);
-void	InsertLDRotary(ldrotary_s *buf, int distance, int altitude);
-int	CalculateLDRotary(ldrotary_s *buf);
-
-// limit to reasonable values
-double LimitLD(double LD);
-// methods using low-pass filter
-
-double UpdateLD(double LD, double d, double h, double filter_factor);
-
-
-#endif
+double LowPassFilter(double y_last, double x_in, double fact) {
+  return (1.0-fact)*y_last+(fact)*x_in;
+}

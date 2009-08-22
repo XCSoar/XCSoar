@@ -35,29 +35,9 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_GLIDE_RATIO_HPP
-#define XCSOAR_GLIDE_RATIO_HPP
+#ifndef LOW_PASS_FILTER_HPP
+#define LOW_PASS_FILTER_HPP
 
-#include "Defines.h"
-
-typedef struct {
-        int     distance[MAXLDROTARYSIZE]; // rotary array with a predefined max capacity
-        int     altitude[MAXLDROTARYSIZE];
-	int	totaldistance;
-        short   start;          // pointer to current first item in rotarybuf if used
-        short   size;           // real size of rotary buffer (0-size)
-	bool	valid;
-} ldrotary_s;
-
-void InitLDRotary(ldrotary_s *buf);
-void	InsertLDRotary(ldrotary_s *buf, int distance, int altitude);
-int	CalculateLDRotary(ldrotary_s *buf);
-
-// limit to reasonable values
-double LimitLD(double LD);
-// methods using low-pass filter
-
-double UpdateLD(double LD, double d, double h, double filter_factor);
-
+double LowPassFilter(double y_last, double x_in, double fact);
 
 #endif

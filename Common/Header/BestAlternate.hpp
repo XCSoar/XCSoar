@@ -41,5 +41,6 @@ Copyright_License {
 #include "Calculations.h"
 
 void DoBestAlternateSlow(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
+void DoAlternates(NMEA_INFO *Basic, DERIVED_INFO *Calculated, int AltWaypoint);
 
 #endif

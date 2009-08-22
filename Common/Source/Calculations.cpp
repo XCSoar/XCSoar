@@ -72,11 +72,13 @@ Copyright_License {
 #endif
 #include "Math/Earth.hpp"
 #include "Math/Pressure.h"
+#include "Math/LowPassFilter.hpp"
 #include "WayPoint.hpp"
 #include "LogFile.hpp"
 #include "GlideSolvers.hpp"
 #include "BestAlternate.hpp"
 #include "Persist.hpp"
+#include "GlideRatio.hpp"
 
 WindAnalyser *windanalyser = NULL;
 OLCOptimizer olc;
@@ -126,7 +128,6 @@ static void LastThermalStats(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 static void ThermalGain(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 static void MaxHeightGain(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 static void DistanceToNext(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
-static void DoAlternates(NMEA_INFO *Basic, DERIVED_INFO *Calculated, int AltWaypoint); // VENTA3
 static void EnergyHeightNavAltitude(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 static void TaskSpeed(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
                       const double this_maccready);
@@ -373,9 +374,6 @@ void AnnounceWayPointSwitch(DERIVED_INFO *Calculated, bool do_advance) {
 }
 
 
-double LowPassFilter(double y_last, double x_in, double fact) {
-  return (1.0-fact)*y_last+(fact)*x_in;
-}
 
 
 void SpeedToFly(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
@@ -711,57 +709,6 @@ void DistanceToHome(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
 
 }
 
-/*
- * VENTA3 Alternates destinations
- *
- * Used by Alternates and BestAlternate
- *
- * Colors VGR are disabled, but available
- */
-
-void DoAlternates(NMEA_INFO *Basic, DERIVED_INFO *Calculated, int AltWaypoint) { // VENTA3
-  if (!ValidWayPoint(AltWaypoint)) {
-    return;
-  }
-  double w1lat = WayPointList[AltWaypoint].Latitude;
-  double w1lon = WayPointList[AltWaypoint].Longitude;
-  double w0lat = Basic->Latitude;
-  double w0lon = Basic->Longitude;
-  double *altwp_dist = &WayPointCalc[AltWaypoint].Distance;
-  double *altwp_gr   = &WayPointCalc[AltWaypoint].GR;
-  double *altwp_arrival = &WayPointCalc[AltWaypoint].AltArriv;
-  short  *altwp_vgr  = &WayPointCalc[AltWaypoint].VGR;
-
-  DistanceBearing(w1lat, w1lon,
-                  w0lat, w0lon,
-                  altwp_dist, NULL);
-
-  double GRsafecalc = Calculated->NavAltitude - (WayPointList[AltWaypoint].Altitude + SAFETYALTITUDEARRIVAL);
-
-  if (GRsafecalc <=0) *altwp_gr = INVALID_GR;
-  else {
-	*altwp_gr = *altwp_dist / GRsafecalc;
-	if ( *altwp_gr >ALTERNATE_MAXVALIDGR || *altwp_gr <0 ) *altwp_gr = INVALID_GR;
-	else if ( *altwp_gr <1 ) *altwp_gr = 1;
-  }
-
-
-  // We need to calculate arrival also for BestAlternate, since the last "reachable" could be
-  // even 60 seconds old and things may have changed drastically
-
-  *altwp_arrival = CalculateWaypointArrivalAltitude(Basic, Calculated, AltWaypoint);
-  if ( (*altwp_arrival - ALTERNATE_OVERSAFETY) >0 ) {
-  	if ( *altwp_gr <= (GlidePolar::bestld *SAFELD_FACTOR) ) *altwp_vgr = 1; // full green vgr
-  	else
-  		if ( *altwp_gr <= GlidePolar::bestld ) *altwp_vgr = 2; // yellow vgr
-		else *altwp_vgr =3; // RED vgr
-  } else
-  {
-	*altwp_vgr = 3; // full red
-  }
-
-
-}
 
 void ResetFlightStats(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
                       bool full=true) {
@@ -1297,39 +1244,6 @@ void ThermalGain(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   }
 }
 
-
-double LimitLD(double LD) {
-  if (fabs(LD)>INVALID_GR) {
-    return INVALID_GR;
-  } else {
-    if ((LD>=0.0)&&(LD<1.0)) {
-      LD= 1.0;
-    }
-    if ((LD<0.0)&&(LD>-1.0)) {
-      LD= -1.0;
-    }
-    return LD;
-  }
-}
-
-
-double UpdateLD(double LD, double d, double h, double filter_factor) {
-  double glideangle;
-  if (LD != 0) {
-    glideangle = 1.0/LD;
-  } else {
-    glideangle = 1.0;
-  }
-  if (d!=0) {
-    glideangle = LowPassFilter(1.0/LD, h/d, filter_factor);
-    if (fabs(glideangle) > 1.0/INVALID_GR) {
-      LD = LimitLD(1.0/glideangle);
-    } else {
-      LD = INVALID_GR;
-    }
-  }
-  return LD;
-}
 
 
 void LD(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
@@ -4477,32 +4391,32 @@ bool IsFlarmTargetCNInRange()
 }
 
 
- int BallastSecsToEmpty = 120;
+int BallastSecsToEmpty = 120;
 
- void BallastDump ()
- {
-   static double BallastTimeLast = -1;
+void BallastDump ()
+{
+  static double BallastTimeLast = -1;
 
-   if (BallastTimerActive) {
-         // JMW only update every 5 seconds to stop flooding the devices
-     if (GPS_INFO.Time > BallastTimeLast+5) {
-       double BALLAST_last = BALLAST;
-       double dt = GPS_INFO.Time - BallastTimeLast;
-       double percent_per_second = 1.0/max(10.0, BallastSecsToEmpty);
-       BALLAST -= dt*percent_per_second;
-       if (BALLAST<0) {
-         BallastTimerActive = false;
-         BALLAST = 0.0;
-       }
-       if (fabs(BALLAST-BALLAST_last)>0.05) { // JMW update on 5 percent!
-         GlidePolar::SetBallast();
-         devPutBallast(devA(), BALLAST);
-         devPutBallast(devB(), BALLAST);
-       }
-       BallastTimeLast = GPS_INFO.Time;
-     }
-   } else {
-     BallastTimeLast = GPS_INFO.Time;
-   }
- }
+  if (BallastTimerActive) {
+    // JMW only update every 5 seconds to stop flooding the devices
+    if (GPS_INFO.Time > BallastTimeLast+5) {
+      double BALLAST_last = BALLAST;
+      double dt = GPS_INFO.Time - BallastTimeLast;
+      double percent_per_second = 1.0/max(10.0, BallastSecsToEmpty);
+      BALLAST -= dt*percent_per_second;
+      if (BALLAST<0) {
+	BallastTimerActive = false;
+	BALLAST = 0.0;
+      }
+      if (fabs(BALLAST-BALLAST_last)>0.05) { // JMW update on 5 percent!
+	GlidePolar::SetBallast();
+	devPutBallast(devA(), BALLAST);
+	devPutBallast(devB(), BALLAST);
+      }
+      BallastTimeLast = GPS_INFO.Time;
+    }
+  } else {
+    BallastTimeLast = GPS_INFO.Time;
+  }
+}
 
