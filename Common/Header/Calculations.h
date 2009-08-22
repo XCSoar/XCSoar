@@ -238,7 +238,7 @@ extern bool AutoForceFinalGlide;
 BOOL DoCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 BOOL DoCalculationsVario(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 void DoCalculationsSlow(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
-void SearchBestAlternate(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
+
 double CalculateWaypointArrivalAltitude(NMEA_INFO *Basic, DERIVED_INFO *Calculated, int thepoint); // VENTA3
 
 

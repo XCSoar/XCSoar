@@ -399,6 +399,7 @@ OBJS	:=\
 	$(SRC)/GaugeCDI.o 		$(SRC)/GaugeFLARM.o \
 	$(SRC)/GaugeVarioAltA.o 	$(SRC)/Device/Geoid.o \
 	$(SRC)/GlideSolvers.o \
+	$(SRC)/BestAlternate.o \
 	$(SRC)/Persist.o \
 	\
 	$(SRC)/InfoBox.o 		\
