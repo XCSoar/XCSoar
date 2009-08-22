@@ -41,7 +41,7 @@ Copyright_License {
 #include "Topology.h"
 #include "resource.h"
 #include "Calculations.h"
-#include "STScreenBuffer.h"
+#include "Screen/STScreenBuffer.h"
 #include "Dialogs.h"
 #include "XCSoar.h"
 #include "externs.h"

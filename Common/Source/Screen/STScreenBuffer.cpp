@@ -36,7 +36,7 @@ Copyright_License {
 }
 */
 
-#include "STScreenBuffer.h"
+#include "Screen/STScreenBuffer.h"
 
 #include <assert.h>
 #include <stdlib.h>

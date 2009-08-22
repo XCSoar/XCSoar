@@ -65,7 +65,7 @@ Copyright_License {
 #ifndef GNAV
 #include "StdAfx.h"
 
-#include "VOIMAGE.h"
+#include "Screen/VOIMAGE.h"
 
 #ifdef _DEBUG
 #undef THIS_FILE

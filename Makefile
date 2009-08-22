@@ -393,7 +393,7 @@ OBJS	:=\
 	$(SRC)/GaugeCDI.o 		$(SRC)/GaugeFLARM.o \
 	$(SRC)/GaugeVarioAltA.o 	$(SRC)/Device/Geoid.o \
 	$(SRC)/InfoBox.o 		$(SRC)/InfoBoxLayout.o \
-	$(SRC)/InputEvents.o 		$(SRC)/Math/leastsqs.o \
+	$(SRC)/InputEvents.o 		\
 	$(SRC)/Logger.o 		\
 	$(SRC)/MapWindow.o 		$(SRC)/MapWindow2.o \
 	$(SRC)/MapWindow3.o 		\
@@ -402,34 +402,42 @@ OBJS	:=\
 	$(SRC)/Parser.o			$(SRC)/Device/Port.o \
 	$(SRC)/Process.o \
 	$(SRC)/RasterTerrain.o		$(SRC)/rscalc.o \
-	$(SRC)/StdAfx.o			$(SRC)/STScreenBuffer.o \
+	$(SRC)/StdAfx.o			\
 	$(SRC)/Task.o			$(SRC)/TeamCodeCalculation.o \
 	$(SRC)/Terrain.o		$(SRC)/ThermalLocator.o \
 	$(SRC)/Topology.o		$(SRC)/units.o \
 	$(SRC)/Utils.o			$(SRC)/Utils2.o \
-	$(SRC)/VOIMAGE.o \
 	$(SRC)/Waypointparser.o \
 	$(SRC)/windanalyser.o		$(SRC)/windmeasurementlist.o \
 	$(SRC)/windstore.o 		$(SRC)/WindowControls.o \
 	$(SRC)/WindZigZag.o 		$(SRC)/xmlParser.o \
 	$(SRC)/Audio/VegaVoice.o		\
 	$(SRC)/Compatibility/string.o \
+	$(SRC)/Battery.o \
+	\
+	$(SRC)/Math/leastsqs.o \
 	$(SRC)/Math/FastMath.o \
 	$(SRC)/Math/Geometry.o \
 	$(SRC)/Math/Earth.o \
 	$(SRC)/Math/Pressure.o \
 	$(SRC)/Math/Screen.o \
-	$(SRC)/Battery.o \
+	\
 	$(SRC)/Screen/Animation.o \
 	$(SRC)/Screen/Blank.o \
 	$(SRC)/Screen/Ramp.o \
 	$(SRC)/Screen/Util.o \
+	$(SRC)/Screen/STScreenBuffer.o \
+	$(SRC)/Screen/VOIMAGE.o \
+	\
 	$(SRC)/Registry.o \
+	\
 	$(SRC)/Polar/WinPilot.o \
 	$(SRC)/Polar/BuiltIn.o \
 	$(SRC)/Polar/Historical.o \
+	\
 	$(SRC)/StatusMessage.o \
 	$(SRC)/LocalPath.o \
+	\
 	$(SRC)/DataField/Base.o \
 	$(SRC)/DataField/Boolean.o \
 	$(SRC)/DataField/ComboList.o \
