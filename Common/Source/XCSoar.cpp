@@ -69,6 +69,8 @@ Copyright_License {
 #include "SnailTrail.hpp"
 #include "Formatter/TeamCode.hpp"
 #include "Formatter/WayPoint.hpp"
+#include "Formatter/LowWarning.hpp"
+#include "Formatter/Time.hpp"
 #include "Screen/Blank.hpp"
 #include "Polar/Historical.hpp"
 

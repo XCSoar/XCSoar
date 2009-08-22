@@ -452,6 +452,8 @@ OBJS	:=\
 	$(SRC)/Formatter/Base.o \
 	$(SRC)/Formatter/TeamCode.o \
 	$(SRC)/Formatter/WayPoint.o \
+	$(SRC)/Formatter/LowWarning.o \
+	$(SRC)/Formatter/Time.o \
 	$(SRC)/ExpandMacros.o \
 	$(SRC)/LogFile.o \
 	$(SRC)/GlideRatio.o \

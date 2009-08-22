@@ -51,42 +51,7 @@ Copyright_License {
 class Trigger;
 class MapWindow;
 
-class FormatterLowWarning: public InfoBoxFormatter {
- public:
-  FormatterLowWarning(const TCHAR *theformat, double the_minimum)
-    :InfoBoxFormatter(theformat) {
 
-    minimum = the_minimum;
-
-  };
-
-  virtual const TCHAR *Render(int *color);
-  double minimum;
-  virtual void AssignValue(int i);
-};
-
-
-class FormatterTime: public InfoBoxFormatter {
- public:
-  FormatterTime(const TCHAR *theformat):InfoBoxFormatter(theformat) {};
-
-  virtual const TCHAR *Render(int *color);
-  virtual void AssignValue(int i);
-  int hours;
-  int mins;
-  int seconds;
-  void SecsToDisplayTime(int i);
-};
-
-
-class FormatterAATTime: public FormatterTime {
- public:
-  FormatterAATTime(const TCHAR *theformat):FormatterTime(theformat) {};
-
-  virtual const TCHAR *Render(int *color);
-  virtual void AssignValue(int i);
-  int status;
-};
 
 
 class FormatterDiffBearing: public InfoBoxFormatter {
