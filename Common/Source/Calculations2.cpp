@@ -79,33 +79,7 @@ extern OLCOptimizer olc;
 
 int FastLogNum = 0; // number of points to log at high rate
 
-void AddSnailPoint(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
-{
-  if (!Calculated->Flying) return;
-
-  SnailTrail[SnailNext].Latitude = (float)(Basic->Latitude);
-  SnailTrail[SnailNext].Longitude = (float)(Basic->Longitude);
-  SnailTrail[SnailNext].Time = Basic->Time;
-  SnailTrail[SnailNext].FarVisible = true; // hasn't been filtered out yet.
-  if (Calculated->TerrainValid) {
-    double hr = max(0,Calculated->AltitudeAGL)/100.0;
-    SnailTrail[SnailNext].DriftFactor = 2.0/(1.0+exp(-hr))-1.0;
-  } else {
-    SnailTrail[SnailNext].DriftFactor = 1.0;
-  }
-
-  if (Calculated->Circling) {
-    SnailTrail[SnailNext].Vario = (float)(Calculated->NettoVario) ;
-  } else {
-    SnailTrail[SnailNext].Vario = (float)(Calculated->NettoVario) ;
-  }
-  SnailTrail[SnailNext].Colour = -1; // need to have colour calculated
-  SnailTrail[SnailNext].Circling = Calculated->Circling;
-
-  SnailNext ++;
-  SnailNext %= TRAILSIZE;
-
-}
+void AddSnailPoint(NMEA_INFO *Basic, DERIVED_INFO *Calculated); // from SnailTrail.cpp
 
 
 int LoggerTimeStepCruise=5;

@@ -41,7 +41,6 @@ Copyright_License {
 
 void DoLogging(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 
-void AddSnailPoint(void);
 
 double PirkerAnalysis(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
 		      const double bearing,
