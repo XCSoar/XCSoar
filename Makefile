@@ -399,6 +399,8 @@ OBJS	:=\
 	$(SRC)/ButtonLabel.o \
 	\
 	$(SRC)/InputEvents.o 		\
+	$(SRC)/InputEventsActions.o 		\
+	\
 	$(SRC)/Logger.o 		\
 	$(SRC)/MapWindow.o 		$(SRC)/MapWindow2.o \
 	$(SRC)/MapWindow3.o 		\
