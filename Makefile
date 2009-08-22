@@ -402,7 +402,6 @@ OBJS	:=\
 	$(SRC)/Parser.o			$(SRC)/Device/Port.o \
 	$(SRC)/Process.o \
 	$(SRC)/InfoBoxEvents.o \
-	$(SRC)/rscalc.o \
 	$(SRC)/StdAfx.o			\
 	$(SRC)/Task.o			$(SRC)/TeamCodeCalculation.o \
 	\
@@ -431,6 +430,7 @@ OBJS	:=\
 	$(SRC)/Math/Earth.o \
 	$(SRC)/Math/Pressure.o \
 	$(SRC)/Math/Screen.o \
+	$(SRC)/Math/SunEphemeris.o \
 	\
 	$(SRC)/Screen/Animation.o \
 	$(SRC)/Screen/Blank.o \
