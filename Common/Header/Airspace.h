@@ -221,4 +221,6 @@ double RangeAirspaceArea(const double &longitude,
 			 const double &latitude,
 			 int i, double *bearing);
 
+bool CheckAirspacePoint(int Idx);
+
 #endif

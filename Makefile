@@ -383,8 +383,12 @@ VOLKS	:=\
 
 OBJS	:=\
 	$(SRC)/AATDistance.o 		$(SRC)/AirfieldDetails.o \
+	\
 	$(SRC)/Airspace.o 		\
-	$(SRC)/AirspaceWarning.o 	$(SRC)/Atmosphere.o \
+	$(SRC)/AirspaceParser.o 		\
+	$(SRC)/AirspaceWarning.o 	\
+	\
+	$(SRC)/Atmosphere.o \
 	$(SRC)/Calculations.o 		$(SRC)/Calculations2.o \
 	$(SRC)/ClimbAverageCalculator.o \
 	$(SRC)/ConditionMonitor.o 	$(SRC)/Device/device.o \
