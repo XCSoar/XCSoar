@@ -38,7 +38,8 @@ Copyright_License {
 #ifndef EXTERNS_H
 #define EXTERNS_H
 
-#include "Task.h"
+#include "Settings.hpp"
+
 #include "NMEA/Info.h"
 #include "Calculations.h"
 
@@ -46,44 +47,6 @@ Copyright_License {
 //JMW#include "BlueSMS.h"
 #endif
 
-extern int UTCOffset;
-
-// waypoint data
-extern int HomeWaypoint;
-extern int AirfieldsHomeWaypoint; // VENTA3
-extern int Alternate1; // VENTA3
-extern int Alternate2;
-extern int BestAlternate;
-extern int ActiveAlternate;
-extern bool  OnBestAlternate;
-extern bool  OnAlternate1;
-extern bool  OnAlternate2;
-
-// task data
-extern START_POINT StartPoints[];
-extern TASK_POINT Task[];
-extern TASKSTATS_POINT TaskStats[];
-extern int ActiveWayPoint;
-extern bool TaskAborted;
-extern int SelectedWaypoint;
-extern int SectorType;
-extern DWORD SectorRadius;
-
-extern int StartLine;
-extern DWORD StartRadius;
-extern int FinishLine;
-extern DWORD FinishRadius;
-extern double AATTaskLength;
-extern BOOL AATEnabled;
-extern bool EnableFAIFinishHeight;
-extern DWORD FinishMinHeight;
-extern DWORD StartMaxHeight;
-extern DWORD StartMaxHeightMargin;
-extern DWORD StartMaxSpeed;
-extern DWORD StartMaxSpeedMargin;
-extern int OLCRules;
-extern int Handicap;
-extern bool EnableOLC;
 
 // master flight data
 extern NMEA_INFO GPS_INFO;
@@ -92,47 +55,6 @@ extern DERIVED_INFO CALCULATED_INFO;
 // gps detection
 extern BOOL GPSCONNECT;
 extern BOOL VARIOCONNECT;
-
-// polar info
-extern int BallastSecsToEmpty;
-extern bool BallastTimerActive;
-
-extern bool InfoWindowActive;
-
-// Logger
-extern bool LoggerActive;
-extern int LoggerTimeStepCruise;
-extern int LoggerTimeStepCircling;
-
-// user interface options
-extern bool CircleZoom;
-extern bool EnableTopology;
-extern bool EnableTerrain;
-extern int FinalGlideTerrain;
-extern int AutoWindMode;
-extern bool EnableNavBaroAltitude;
-extern bool EnableSoundVario;
-extern bool EnableSoundTask;
-extern bool EnableSoundModes;
-extern int SoundVolume;
-extern int SoundDeadband;
-extern int DisplayOrientation;
-extern int DisplayTextType;
-
-
-extern bool EnableCDICruise;
-extern bool EnableCDICircling;
-extern bool EnableVarioGauge;
-extern int AutoAdvance;
-extern bool AdvanceArmed;
-extern bool EnableBlockSTF; // block speed to fly instead of dolphin
-extern int MenuTimeoutMax;
-extern int EnableThermalLocator;
-//
-
-extern bool ExternalTriggerCruise;
-extern bool ExternalTriggerCircling;
-extern int EnableExternalTriggerCruise;
 
 // used in settings dialog
 extern BOOL COMPORTCHANGED;
@@ -146,8 +68,6 @@ extern BOOL LANGUAGEFILECHANGED;
 extern BOOL STATUSFILECHANGED;
 extern BOOL INPUTFILECHANGED;
 extern BOOL MAPFILECHANGED;
-
-bool Debounce();
 
 // Team code
 extern int TeamCodeRefWaypoint;
@@ -165,9 +85,6 @@ extern bool RequestAirspaceWarningDialog;
 
 extern double QFEAltitudeOffset; // VENTA3
 extern int OnAirSpace; // VENTA3 toggle DrawAirSpace
-extern bool EnableAutoBacklight; // VENTA4
-extern bool EnableAutoSoundVolume; // VENTA4
-extern bool ExtendedVisualGlide;
 extern bool VirtualKeys;
 extern short ArrivalValue;
 extern short AverEffTime;

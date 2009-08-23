@@ -72,12 +72,6 @@ extern TCHAR XCSoar_Version[256];
 
 extern Appearance_t Appearance;
 
-// user controls/parameters
-extern double SAFETYALTITUDEARRIVAL;
-extern double SAFETYALTITUDEBREAKOFF;
-extern double SAFETYALTITUDETERRAIN;
-extern double SAFTEYSPEED;
-
 // ******************************************************************
 
 #endif // !defined(AFX_XCSOAR_H__695AAC30_F401_4CFF_9BD9_FE62A2A2D0D2__INCLUDED_)

@@ -58,6 +58,8 @@ extern HWND hWndMainWindow;           // HWND Main Window
 
 extern bool GlobalRunning;
 
+extern bool InfoWindowActive;
+
 extern bool csFlightDataInitialized;
 
 typedef enum {psInitInProgress=0, psInitDone=1, psFirstDrawDone=2, psNormalOp=3} StartupState_t;
@@ -67,5 +69,6 @@ typedef enum {psInitInProgress=0, psInitDone=1, psFirstDrawDone=2, psNormalOp=3}
 // 3: normal operation
 
 extern StartupState_t ProgramStarted;
+
 
 #endif
