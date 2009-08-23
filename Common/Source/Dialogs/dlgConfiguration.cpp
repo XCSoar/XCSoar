@@ -66,6 +66,7 @@ Copyright_License {
 #include "DataField/Enum.hpp"
 #include "DataField/FileReader.hpp"
 #include "Asset.hpp"
+#include "Screen/Fonts.hpp"
 
 #include <assert.h>
 

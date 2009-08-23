@@ -119,5 +119,8 @@ extern int SCREENWIDTH;
 extern int SCREENHEIGHT;
 #endif
 
+#if defined(PNA) || defined(FIVV)
+extern bool needclipping;
+#endif
 
 #endif

@@ -87,13 +87,6 @@ void FullScreen();
 
 extern bool Debounce();
 
-#define DEG_TO_RAD .0174532925199432958
-#define RAD_TO_DEG 57.2957795131
-#if defined(M_PI)
-  #undef M_PI
-#endif
-#define M_PI 3.14159265359
-
 extern void PopupWaypointDetails();
 extern void PopupAnalysis();
 
@@ -152,9 +145,6 @@ extern double QFEAltitudeOffset; // VENTA3
 extern int OnAirSpace; // VENTA3 toggle DrawAirSpace
 extern bool WasFlying; // used by auto QFE..
 extern double LastFlipBoxTime; // used by XCSoar and Calculations
-#if defined(PNA) || defined(FIVV)
-extern bool needclipping;
-#endif
 extern bool EnableAutoBacklight; // VENTA4
 extern bool EnableAutoSoundVolume; // VENTA4
 extern bool ExtendedVisualGlide;
@@ -179,7 +169,6 @@ extern int debounceTimeout;
 // statistics
 extern Statistics flightstats;
 
-extern int UseCustomFonts;
 #if (EXPERIMENTAL > 0)
 extern BlueDialupSMS bsms;
 #endif

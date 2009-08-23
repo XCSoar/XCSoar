@@ -34,23 +34,14 @@ Copyright_License {
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
 */
-#ifndef XCSOAR_FONTS_HPP
-#define XCSOAR_FONTS_HPP
+#ifndef XCSOAR_PROCESS_TIMER_H
+#define XCSOAR_PROCESS_TIMER_H
 
-#include "StdAfx.h"
-
-void DeleteFonts();
-void InitialiseFonts(HWND hwnd, RECT rc);
-
-extern HFONT                                   InfoWindowFont;
-extern HFONT                                   TitleWindowFont;
-extern HFONT                                   MapWindowFont;
-extern HFONT                                   TitleSmallWindowFont;
-extern HFONT                                   MapWindowBoldFont;
-extern HFONT                                   CDIWindowFont;
-extern HFONT                                   MapLabelFont;
-extern HFONT                                   StatisticsFont;
-
-extern int UseCustomFonts;
+void CommonProcessTimer    (void);
+#ifdef _SIM_
+void SIMProcessTimer(void);
+#else
+void ProcessTimer    (void);
+#endif
 
 #endif

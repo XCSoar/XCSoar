@@ -44,6 +44,7 @@ Copyright_License {
 #include "DataField/Enum.hpp"
 #include "DataField/Integer.hpp"
 #include "Utils.h"
+#include "Screen/Fonts.hpp"
 
 extern void InitializeOneFont (HFONT * theFont,
                                const TCHAR FontRegKey[] ,
@@ -429,14 +430,13 @@ bool dlgFontEditShowModal(const TCHAR * FontDescription,
 		      hWndMainWindow,
 		      TEXT("IDR_XML_FONTEDIT"));
 
-
-  int UseCustomFontsold = UseCustomFonts;
+  int UseCustomFonts_old = UseCustomFonts;
   UseCustomFonts=1;// global var
   InitializeOneFont (&NewFont,
                         FontRegKey,
                         autoLogFont,
                         &OriginalLogFont);
-  UseCustomFonts=UseCustomFontsold;
+  UseCustomFonts=UseCustomFonts_old;
 
 
   OriginalFontRegKey=FontRegKey;
