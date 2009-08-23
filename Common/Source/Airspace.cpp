@@ -346,6 +346,7 @@ bool InsideAirspaceArea(const double &longitude,
   return false;
 }
 
+/*
 
 int FindAirspaceArea(double Longitude,double Latitude, bool visibleonly)
 {
@@ -385,7 +386,7 @@ int FindAirspaceArea(double Longitude,double Latitude, bool visibleonly)
   return -1;
 }
 
-
+*/
 
 
 

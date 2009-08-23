@@ -56,6 +56,8 @@ extern HINSTANCE hInst;
 extern HWND hWndMainWindow;           // HWND Main Window
 //extern MapWindow hWndMapWindow;
 
+extern bool GlobalRunning;
+
 extern bool csFlightDataInitialized;
 
 typedef enum {psInitInProgress=0, psInitDone=1, psFirstDrawDone=2, psNormalOp=3} StartupState_t;

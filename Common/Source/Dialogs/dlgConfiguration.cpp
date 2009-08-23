@@ -68,6 +68,9 @@ Copyright_License {
 #include "Asset.hpp"
 #include "Screen/Fonts.hpp"
 
+#include "GlideRatio.hpp"
+extern ldrotary_s rotaryLD;
+
 #include <assert.h>
 
 static HFONT TempInfoWindowFont;

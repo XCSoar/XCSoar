@@ -44,6 +44,7 @@ Copyright_License {
 #include "Math/Earth.hpp"
 #include "Math/LowPassFilter.hpp"
 #include "McReady.h"
+#include "GlideRatio.hpp"
 
 ldrotary_s rotaryLD;
 
@@ -250,7 +251,7 @@ void LD(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
                                 DistanceFlown,
                                 LastAlt - Calculated->NavAltitude, 0.1);
 
-      InsertLDRotary(&rotaryLD,(int)DistanceFlown, (int)Calculated->NavAltitude);
+      InsertLDRotary(Calculated, &rotaryLD,(int)DistanceFlown, (int)Calculated->NavAltitude);
 
       LastLat = Basic->Latitude;
       LastLon = Basic->Longitude;

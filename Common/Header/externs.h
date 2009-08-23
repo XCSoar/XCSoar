@@ -48,21 +48,6 @@ Copyright_License {
 
 extern int UTCOffset;
 
-#if defined(PNA) || defined(FIVV)  // VENTA2- ADD GlobalEllipse
-extern int	GlobalModelType;
-extern TCHAR	GlobalModelName[];
-extern float	GlobalEllipse;
-extern TCHAR *	gmfpathname();
-extern TCHAR *	gmfbasename();
-extern int		GetGlobalModelName();
-extern void		SmartGlobalModelType();
-extern short		InstallFonts();
-extern bool		CheckDataDir();
-extern bool		CheckRegistryProfile();
-extern void		ConvToUpper( TCHAR *);
-
-#endif
-
 // waypoint data
 extern int HomeWaypoint;
 extern int AirfieldsHomeWaypoint; // VENTA3
@@ -73,10 +58,6 @@ extern int ActiveAlternate;
 extern bool  OnBestAlternate;
 extern bool  OnAlternate1;
 extern bool  OnAlternate2;
-
-extern bool GlobalRunning;
-
-extern short ScreenSize; // VENTA6
 
 // task data
 extern START_POINT StartPoints[];

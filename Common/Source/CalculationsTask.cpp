@@ -50,6 +50,7 @@ Copyright_License {
 #include "Dialogs.h"
 #include "AATDistance.h"
 #include "InputEvents.h"
+#include "GlideRatio.hpp"
 
 extern double CRUISE_EFFICIENCY;
 extern AATDistance aatdistance;

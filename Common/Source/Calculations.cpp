@@ -68,6 +68,8 @@ Copyright_License {
 #include "Persist.hpp"
 #include "GlideRatio.hpp"
 
+extern ldrotary_s rotaryLD;
+
 OLCOptimizer olc;
 AATDistance aatdistance;
 DERIVED_INFO Finish_Derived_Info;
@@ -352,6 +354,7 @@ void InitCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
  */
 
   InitialiseCalculationsWind();
+  InitLDRotary(&rotaryLD);
 }
 
 extern bool TargetDialogOpen;
@@ -389,7 +392,7 @@ BOOL DoCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 
   LD(Basic,Calculated);
   CruiseLD(Basic,Calculated);
-  Calculated->AverageLD=CalculateLDRotary(&rotaryLD); // AverageLD
+  Calculated->AverageLD=CalculateLDRotary(Calculated, &rotaryLD); // AverageLD
   Average30s(Basic,Calculated);
   AverageThermal(Basic,Calculated);
   AverageClimbRate(Basic,Calculated);

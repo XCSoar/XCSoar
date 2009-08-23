@@ -81,25 +81,27 @@ short i, bsize;
 	buf->valid=false;
 }
 
-void InsertLDRotary(ldrotary_s *buf, int distance, int altitude) {
+
+
+void InsertLDRotary(DERIVED_INFO *Calculated, ldrotary_s *buf, int distance, int altitude) {
 static short errs=0;
 
-	if (CALCULATED_INFO.OnGround == TRUE) {
+	if (Calculated->OnGround == TRUE) {
 		return;
 	}
-	if (CALCULATED_INFO.Circling == TRUE) {
+	if (Calculated->Circling == TRUE) {
 		return;
 	}
 
 	if (distance<3 || distance>150) { // just ignore, no need to reset rotary
-		if (errs>2) {
-			InitLDRotary(&rotaryLD);
-			errs=0;
-			return;
+	  if (errs>2) {
+	    InitLDRotary(buf); // bug fix
+	    errs=0;
+	    return;
 
-		}
-		errs++;
-		return;
+	  }
+	  errs++;
+	  return;
 	}
 	errs=0;
 	if (++buf->start >=buf->size) {
@@ -117,12 +119,12 @@ static short errs=0;
  * returns 0 if invalid, 999 if too high
 
  */
-int CalculateLDRotary(ldrotary_s *buf ) {
+int CalculateLDRotary(DERIVED_INFO *Calculated, ldrotary_s *buf ) {
 
 	int altdiff, eff;
 	short bcold;
 
-	if ( CALCULATED_INFO.Circling == TRUE || CALCULATED_INFO.OnGround == TRUE) {
+	if ( Calculated->Circling == TRUE || Calculated->OnGround == TRUE) {
 		return(0);
 	}
 

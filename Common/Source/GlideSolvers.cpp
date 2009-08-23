@@ -404,8 +404,8 @@ static double EffectiveMacCready_internal(NMEA_INFO *Basic, DERIVED_INFO *Calcul
     if (cruise_efficiency_mode) {
       mc_effective = MACCREADY;
       if (Calculated->FinalGlide && (Calculated->timeCircling>0)) {
-	mc_effective = CALCULATED_INFO.TotalHeightClimb
-	  /CALCULATED_INFO.timeCircling;
+	mc_effective = Calculated->TotalHeightClimb
+	  /Calculated->timeCircling;
       }
       cruise_efficiency = 0.5+value_scan;
     } else {

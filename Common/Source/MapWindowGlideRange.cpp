@@ -150,7 +150,7 @@ void MapWindow::DrawGlideCircle(HDC hdc, POINT Orig, RECT rc )
   TCHAR gtext[100];
   char text[20]; // TODO size it
 
-  double cruise= CALCULATED_INFO.AverageLD;
+  double cruise= DerivedDrawInfo.AverageLD;
   static double maxcruise=(GlidePolar::bestld);
   static double mincruise=(GlidePolar::bestld/4);
   int i;

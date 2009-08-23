@@ -55,6 +55,7 @@ CuSondeLevel CuSonde::cslevels[CUSONDE_NUMLEVELS];
 // TODO accuracy: recalculate thermal index etc if maxGroundTemp changes
 
 void CuSonde::test() {
+  /*
   CALCULATED_INFO.Flying= true;
   GPS_INFO.TemperatureAvailable = true;
   GPS_INFO.HumidityAvailable = true;
@@ -72,6 +73,7 @@ void CuSonde::test() {
     GPS_INFO.RelativeHumidity = 50;
     updateMeasurements(&GPS_INFO, &CALCULATED_INFO);
   }
+  */
 }
 
 void CuSonde::setForecastTemperature(double val) {

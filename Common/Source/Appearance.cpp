@@ -126,3 +126,11 @@ Appearance_t Appearance = {
 };
 
 #endif
+
+
+#if defined(PNA) || defined(FIVV)  // VENTA-ADDON we call it model and not PNA for possible future usage even for custom PDAs
+int	GlobalModelType=0;	// see XCSoar.h for modeltype definitions
+TCHAR	GlobalModelName[MAX_PATH]; // there are currently no checks.. TODO check it fits here
+float	GlobalEllipse=1.1f;	// default ellipse type VENTA2-ADDON
+#endif
+

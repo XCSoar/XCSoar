@@ -39,6 +39,7 @@ Copyright_License {
 #define XCSOAR_GLIDE_RATIO_HPP
 
 #include "Defines.h"
+#include "Calculations.h"
 
 typedef enum{
 	ae15seconds=0,
@@ -60,8 +61,8 @@ typedef struct {
 } ldrotary_s;
 
 void InitLDRotary(ldrotary_s *buf);
-void	InsertLDRotary(ldrotary_s *buf, int distance, int altitude);
-int	CalculateLDRotary(ldrotary_s *buf);
+void	InsertLDRotary(DERIVED_INFO *Calculated, ldrotary_s *buf, int distance, int altitude);
+int	CalculateLDRotary(DERIVED_INFO *Calculated, ldrotary_s *buf);
 
 // limit to reasonable values
 double LimitLD(double LD);

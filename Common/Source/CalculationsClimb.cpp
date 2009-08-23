@@ -51,6 +51,9 @@ Copyright_License {
 #include "ThermalLocator.h"
 static ThermalLocator thermallocator;
 
+#include "GlideRatio.hpp"
+extern ldrotary_s rotaryLD;
+
 #define CRUISE 0
 #define WAITCLIMB 1
 #define CLIMB 2
