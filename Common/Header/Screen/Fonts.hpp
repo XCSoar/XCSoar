@@ -40,6 +40,16 @@ Copyright_License {
 #include "StdAfx.h"
 
 void DeleteFonts();
-void InitialiseFonts(RECT rc);
+void InitialiseFonts(HWND hwnd, RECT rc);
+
+extern HFONT                                   InfoWindowFont;
+extern HFONT                                   TitleWindowFont;
+extern HFONT                                   MapWindowFont;
+extern HFONT                                   TitleSmallWindowFont;
+extern HFONT                                   MapWindowBoldFont;
+extern HFONT                                   CDIWindowFont;
+extern HFONT                                   MapLabelFont;
+extern HFONT                                   StatisticsFont;
+
 
 #endif

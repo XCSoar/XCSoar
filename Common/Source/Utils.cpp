@@ -38,6 +38,7 @@ Copyright_License {
 #include "Utils.h"
 #include "LogFile.hpp"
 #include "XCSoar.h"
+#include "Asset.hpp"
 #include "StdAfx.h"
 
 #ifndef __MINGW32__

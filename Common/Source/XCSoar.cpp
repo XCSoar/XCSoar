@@ -907,7 +907,7 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 // VENTA2- delete registries at startup, but not on PC!
 #if defined(FIVV) && ( !defined(WINDOWSPC) || WINDOWSPC==0 )
 #ifndef PNA
-RegDeleteKey(HKEY_CURRENT_USER, _T(REGKEYNAME));
+  RegDeleteKey(HKEY_CURRENT_USER, _T(REGKEYNAME));
 #endif
 #endif
 
@@ -931,17 +931,17 @@ RegDeleteKey(HKEY_CURRENT_USER, _T(REGKEYNAME));
 #if defined(FIVV) && ( !defined(WINDOWSPC) || WINDOWSPC==0 )
 //#ifndef PNA
 
-bool datadir=CheckDataDir();
-if (datadir) StartupStore(TEXT("XCSoarData directory found.\n"));
-else StartupStore(TEXT("ERROR: NO XCSOARDATA DIRECTORY FOUND!\n"));
+  bool datadir=CheckDataDir();
+  if (datadir) StartupStore(TEXT("XCSoarData directory found.\n"));
+  else StartupStore(TEXT("ERROR: NO XCSOARDATA DIRECTORY FOUND!\n"));
 
-StartupStore(TEXT("Check for installing fonts\n"));
-short didfonts=InstallFonts();  // check if really did it, and maybe restart
-TCHAR nTmp[100];
-_stprintf(nTmp,TEXT("InstallFonts() result=%d (0=installed >0 not installed)\n"), didfonts);
-StartupStore(nTmp);
+  StartupStore(TEXT("Check for installing fonts\n"));
+  short didfonts=InstallFonts();  // check if really did it, and maybe restart
+  TCHAR nTmp[100];
+  _stprintf(nTmp,TEXT("InstallFonts() result=%d (0=installed >0 not installed)\n"), didfonts);
+  StartupStore(nTmp);
 
-//#endif
+  //#endif
 #endif
 
 
@@ -1080,21 +1080,21 @@ StartupStore(nTmp);
 #endif
 
 #ifdef CREDITS_FIVV
-CreateProgressDialog(gettext(TEXT("Special ITA version")));
- Sleep(1000);
+  CreateProgressDialog(gettext(TEXT("Special ITA version")));
+  Sleep(1000);
 #endif
 
 #ifdef PNA // VENTA-ADDON
 
-	TCHAR sTmp[MAX_PATH];
-	_stprintf(sTmp,TEXT("Conf=%s%S"), gmfpathname(),XCSDATADIR ); // VENTA2 FIX double backslash
-	CreateProgressDialog(sTmp); Sleep(3000);
+  TCHAR sTmp[MAX_PATH];
+  _stprintf(sTmp,TEXT("Conf=%s%S"), gmfpathname(),XCSDATADIR ); // VENTA2 FIX double backslash
+  CreateProgressDialog(sTmp); Sleep(3000);
 
 /*
 	if (  !wcscmp(GlobalModelName, _T("UNKNOWN")) ) SetModelType();
 */
-	_stprintf(sTmp, TEXT("PNA MODEL=%s (%d)"), GlobalModelName, GlobalModelType);
-	CreateProgressDialog(sTmp); Sleep(3000);
+  _stprintf(sTmp, TEXT("PNA MODEL=%s (%d)"), GlobalModelName, GlobalModelType);
+  CreateProgressDialog(sTmp); Sleep(3000);
 #else
 #if defined(FIVV) && ( !defined(WINDOWSPC) || WINDOWSPC==0 )
   if ( didfonts == 0 ) {
@@ -1123,21 +1123,21 @@ CreateProgressDialog(gettext(TEXT("Special ITA version")));
 #endif // non PNA
 
 #ifdef _SIM_
-	CreateProgressDialog(TEXT("SIMULATION")); Sleep(2000);
+  CreateProgressDialog(TEXT("SIMULATION")); Sleep(2000);
 #endif
 
 #ifdef PNA
   if ( SetBacklight() == true )
-	CreateProgressDialog(TEXT("AUTOMATIC BACKLIGHT CONTROL"));
+    CreateProgressDialog(TEXT("AUTOMATIC BACKLIGHT CONTROL"));
   else
-	CreateProgressDialog(TEXT("NO BACKLIGHT CONTROL"));
+    CreateProgressDialog(TEXT("NO BACKLIGHT CONTROL"));
   Sleep(3000);
 
   // this should work ok for all pdas as well
   if ( SetSoundVolume() == true )
-	CreateProgressDialog(TEXT("AUTOMATIC SOUND LEVEL CONTROL"));
+    CreateProgressDialog(TEXT("AUTOMATIC SOUND LEVEL CONTROL"));
   else
-	CreateProgressDialog(TEXT("NO SOUND LEVEL CONTROL"));
+    CreateProgressDialog(TEXT("NO SOUND LEVEL CONTROL"));
   Sleep(3000);
 #endif
 
@@ -1441,7 +1441,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
   ////////////////// do fonts
   StartupStore(TEXT("Initialise fonts\n"));
-  InitialiseFonts(rc);
+  InitialiseFonts(hWndMainWindow, rc);
 
   StartupStore(TEXT("Initialise message system\n"));
   Message::Initialize(rc); // creates window, sets fonts
@@ -1459,6 +1459,9 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
                                0, 0, (rc.right - rc.left),
 			       (rc.bottom-rc.top) ,
                                hWndMainWindow, NULL ,hInstance,NULL);
+
+  SendMessage(hWndMapWindow,WM_SETFONT,
+              (WPARAM)MapWindowFont,MAKELPARAM(TRUE,0));
 
   // JMW gauge creation was here
 

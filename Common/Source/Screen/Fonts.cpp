@@ -35,21 +35,22 @@ Copyright_License {
 }
 */
 
-#include "XCSoar.h"
+#include "Screen/Fonts.hpp"
 #include "LogFile.hpp"
 #include "Utils.h" // propGetFontSettings
 #include "InfoBoxLayout.h"
 #include "ButtonLabel.h"
 #include "Registry.hpp"
 #include "MapWindow.h"
+#include "Asset.hpp"
 
-// Display Gobals
+// Display Globals
 HFONT                                   InfoWindowFont;
 HFONT                                   TitleWindowFont;
 HFONT                                   MapWindowFont;
 HFONT                                   TitleSmallWindowFont;
 HFONT                                   MapWindowBoldFont;
-HFONT                                   CDIWindowFont; // New
+HFONT                                   CDIWindowFont;
 HFONT                                   MapLabelFont;
 HFONT                                   StatisticsFont;
 
@@ -59,7 +60,7 @@ LOGFONT                                   autoTitleWindowLogFont;
 LOGFONT                                   autoMapWindowLogFont;
 LOGFONT                                   autoTitleSmallWindowLogFont;
 LOGFONT                                   autoMapWindowBoldLogFont;
-LOGFONT                                   autoCDIWindowLogFont; // New
+LOGFONT                                   autoCDIWindowLogFont;
 LOGFONT                                   autoMapLabelLogFont;
 LOGFONT                                   autoStatisticsLogFont;
 
@@ -311,7 +312,8 @@ short   ScreenSize=0;
 
 }
 
-void InitialiseFontsAuto(RECT rc,
+void InitialiseFontsAuto(HWND hwnd,
+			 RECT rc,
                         LOGFONT * ptrautoInfoWindowLogFont,
                         LOGFONT * ptrautoTitleWindowLogFont,
                         LOGFONT * ptrautoMapWindowLogFont,
@@ -379,7 +381,7 @@ void InitialiseFontsAuto(RECT rc,
   // JMW algorithm to auto-size info window font.
   // this is still required in case title font property doesn't exist.
   SIZE tsize;
-  HDC iwhdc = GetDC(hWndMainWindow);
+  HDC iwhdc = GetDC(hwnd);
   do {
     HFONT TempWindowFont;
     HFONT hfOld;
@@ -399,7 +401,7 @@ void InitialiseFontsAuto(RECT rc,
     DeleteObject(TempWindowFont);
 
   } while (tsize.cx>InfoBoxLayout::ControlWidth);
-  ReleaseDC(hWndMainWindow, iwhdc);
+  ReleaseDC(hwnd, iwhdc);
 
   iFontHeight++;
   logfont.lfHeight = iFontHeight;
@@ -518,7 +520,7 @@ void InitialiseFontsAuto(RECT rc,
 //  TitleSmallWindowFont = CreateFontIndirect (&logfont);
 
 
-void InitialiseFonts(RECT rc)
+void InitialiseFonts(HWND hwnd, RECT rc)
 { //this routine must be called only at start/restart of XCSoar b/c there are many pointers to these fonts
 
   DeleteObject(InfoWindowFont);
@@ -540,7 +542,7 @@ void InitialiseFonts(RECT rc)
   memset ((char *)&autoStatisticsLogFont, 0, sizeof (LOGFONT));
 
 
-  InitialiseFontsAuto(rc,
+  InitialiseFontsAuto(hwnd, rc,
                         &autoInfoWindowLogFont,
                         &autoTitleWindowLogFont,
                         &autoMapWindowLogFont,
@@ -645,9 +647,6 @@ void InitialiseFonts(RECT rc)
                         szRegistryFontTitleSmallWindowFont,
                         autoTitleSmallWindowLogFont,
                         NULL);
-
-  SendMessage(hWndMapWindow,WM_SETFONT,
-              (WPARAM)MapWindowFont,MAKELPARAM(TRUE,0));
 
   ButtonLabel::SetFont(MapWindowBoldFont);
 
