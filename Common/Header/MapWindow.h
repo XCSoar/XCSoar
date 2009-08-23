@@ -193,6 +193,8 @@ class MapWindow {
   static void RequestOnFullScreen();
   static void RequestOffFullScreen();
 
+  static void MapWaypointLabelSortAndRender(HDC hdc);
+
   static void OrigScreen2LatLon(const int &x, const int &y,
                                 double &X, double &Y);
   static void Screen2LatLon(const int &x, const int &y, double &X, double &Y);
@@ -228,6 +230,7 @@ class MapWindow {
   static void SwitchZoomClimb(void);
 
  private:
+  static void ScanVisibilityTrail(rectObj *bounds_active);
   static void CalculateScreenPositions(POINT Orig, RECT rc,
                                        POINT *Orig_Aircraft);
   static void CalculateScreenPositionsGroundline();

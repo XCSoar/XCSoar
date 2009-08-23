@@ -142,4 +142,7 @@
 #define MAX_WEATHER_MAP 16
 #define MAX_WEATHER_TIMES 48
 
+// used by map window
+#define WPCIRCLESIZE        2
+
 #endif

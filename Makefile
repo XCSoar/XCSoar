@@ -425,8 +425,23 @@ OBJS	:=\
 	$(SRC)/InputEventsActions.o 		\
 	\
 	$(SRC)/Logger.o 		\
-	$(SRC)/MapWindow.o 		$(SRC)/MapWindow2.o \
-	$(SRC)/MapWindow3.o 		\
+	\
+	$(SRC)/MapWindow.o 			\
+	$(SRC)/MapWindowAirspace.o 		\
+	$(SRC)/MapWindowGraphics.o 		\
+	$(SRC)/MapWindowGlideRange.o 		\
+	$(SRC)/MapWindowLabels.o 		\
+	$(SRC)/MapWindowProjection.o 		\
+	$(SRC)/MapWindowScale.o 		\
+	$(SRC)/MapWindowSymbols.o 		\
+	$(SRC)/MapWindowTask.o 			\
+	$(SRC)/MapWindowThermal.o 		\
+	$(SRC)/MapWindowTraffic.o 		\
+	$(SRC)/MapWindowTrail.o 		\
+	$(SRC)/MapWindowWaypoints.o 		\
+	$(SRC)/MapWindow2.o 			\
+	$(SRC)/MapWindow3.o 			\
+	\
 	$(SRC)/McReady.o 		$(SRC)/Message.o \
 	$(SRC)/NavFunctions.o		$(SRC)/OnLineContest.o \
 	$(SRC)/Device/Parser.o		$(SRC)/Device/Port.o \
