@@ -435,12 +435,12 @@ OBJS	:=\
 	$(SRC)/MapWindowScale.o 		\
 	$(SRC)/MapWindowSymbols.o 		\
 	$(SRC)/MapWindowTask.o 			\
+	$(SRC)/MapWindowTarget.o		\
 	$(SRC)/MapWindowThermal.o 		\
 	$(SRC)/MapWindowTraffic.o 		\
 	$(SRC)/MapWindowTrail.o 		\
 	$(SRC)/MapWindowWaypoints.o 		\
 	$(SRC)/MapWindow2.o 			\
-	$(SRC)/MapWindow3.o 			\
 	\
 	$(SRC)/McReady.o 		$(SRC)/Message.o \
 	$(SRC)/NavFunctions.o		$(SRC)/OnLineContest.o \

@@ -85,7 +85,6 @@ extern Trigger drawTriggerEvent;
 void FocusOnWindow(int i, bool selected);
 void FullScreen();
 
-extern void RestartCommPorts();
 extern bool Debounce();
 
 #define DEG_TO_RAD .0174532925199432958
@@ -97,8 +96,6 @@ extern bool Debounce();
 
 extern void PopupWaypointDetails();
 extern void PopupAnalysis();
-
-void SwitchToMapWindow(void);
 
 
 typedef enum{
@@ -240,7 +237,6 @@ extern double SAFETYALTITUDEBREAKOFF;
 extern double SAFETYALTITUDETERRAIN;
 extern double SAFTEYSPEED;
 
-extern int WindUpdateMode; // unused
 extern int NettoSpeed;
 extern bool EnableAuxiliaryInfo;
 extern int debounceTimeout;
@@ -267,11 +263,5 @@ typedef enum {psInitInProgress=0, psInitDone=1, psFirstDrawDone=2, psNormalOp=3}
 extern StartupState_t ProgramStarted;
 
 // ******************************************************************
-
-#ifndef __MINGW32__
-#define DEG "°"
-#else
-#define DEG "Â°"
-#endif
 
 #endif // !defined(AFX_XCSOAR_H__695AAC30_F401_4CFF_9BD9_FE62A2A2D0D2__INCLUDED_)

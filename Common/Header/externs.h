@@ -38,7 +38,6 @@ Copyright_License {
 #ifndef EXTERNS_H
 #define EXTERNS_H
 
-#include "Airspace.h"
 #include "Task.h"
 #include "NMEA/Info.h"
 #include "Calculations.h"
@@ -74,15 +73,6 @@ extern int ActiveAlternate;
 extern bool  OnBestAlternate;
 extern bool  OnAlternate1;
 extern bool  OnAlternate2;
-
-// airspace data
-extern AIRSPACE_AREA *AirspaceArea;
-extern AIRSPACE_POINT *AirspacePoint;
-extern POINT *AirspaceScreenPoint;
-extern AIRSPACE_CIRCLE *AirspaceCircle;
-extern unsigned int NumberOfAirspacePoints;
-extern unsigned int NumberOfAirspaceAreas;
-extern unsigned int NumberOfAirspaceCircles;
 
 extern bool GlobalRunning;
 
@@ -159,12 +149,8 @@ extern int SoundVolume;
 extern int SoundDeadband;
 extern int DisplayOrientation;
 extern int DisplayTextType;
-extern int AIRSPACEWARNINGS;
-extern int WarningTime;
-extern int AcknowledgementTime;
-extern int AltitudeMode;
-extern int ClipAltitude;
-extern int AltWarningMargin;
+
+
 extern bool EnableCDICruise;
 extern bool EnableCDICircling;
 extern bool EnableVarioGauge;

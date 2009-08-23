@@ -40,7 +40,6 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "XCSoar.h"
 #include "Sizes.h"
-#include "MapWindow.h"
 #include "Dialogs.h"
 #include "externs.h"
 #include "Screen/Animation.hpp"

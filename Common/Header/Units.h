@@ -47,6 +47,11 @@ Copyright_License {
 #define UNITBITMAPINVERS      1
 #define UNITBITMAPGRAY        2
 
+#ifndef __MINGW32__
+#define DEG "°"
+#else
+#define DEG "Â°"
+#endif
 
 typedef enum {
   cfDDMMSS=0,

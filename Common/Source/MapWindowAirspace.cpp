@@ -289,3 +289,32 @@ void MapWindow::DrawAirSpace(HDC hdc, const RECT rc, HDC buffer)
     SetBkMode(buffer, OPAQUE);
   }
 }
+
+
+void MapWindow::ScanVisibilityAirspace(rectObj *bounds_active) {
+  // received when the SetTopoBounds determines the visibility
+  // boundary has changed.
+  // This happens rarely, so it is good pre-filtering of what is visible.
+  // (saves from having to do it every screen redraw)
+  const rectObj bounds = *bounds_active;
+
+  if (AirspaceCircle) {
+    for (AIRSPACE_CIRCLE* circ = AirspaceCircle;
+         circ < AirspaceCircle+NumberOfAirspaceCircles; circ++) {
+      circ->FarVisible =
+        (msRectOverlap(&circ->bounds, bounds_active) == MS_TRUE) ||
+        (msRectContained(bounds_active, &circ->bounds) == MS_TRUE) ||
+        (msRectContained(&circ->bounds, bounds_active) == MS_TRUE);
+    }
+  }
+
+  if (AirspaceArea) {
+    for(AIRSPACE_AREA *area = AirspaceArea;
+        area < AirspaceArea+NumberOfAirspaceAreas; area++) {
+      area->FarVisible =
+        (msRectOverlap(&area->bounds, bounds_active) == MS_TRUE) ||
+        (msRectContained(bounds_active, &area->bounds) == MS_TRUE) ||
+        (msRectContained(&area->bounds, bounds_active) == MS_TRUE);
+    }
+  }
+}

@@ -57,6 +57,45 @@ Copyright_License {
 #include <assert.h>
 
 
+AIRSPACE_AREA *AirspaceArea;
+AIRSPACE_POINT *AirspacePoint;
+POINT *AirspaceScreenPoint;
+AIRSPACE_CIRCLE *AirspaceCircle;
+unsigned int NumberOfAirspacePoints;
+unsigned int NumberOfAirspaceAreas;
+unsigned int NumberOfAirspaceCircles;
+
+int AIRSPACEWARNINGS = TRUE;
+int WarningTime = 30;
+int AcknowledgementTime = 30;
+int AltitudeMode = ALLON;
+int ClipAltitude = 1000;
+int AltWarningMargin = 100;
+
+void DeleteAirspace() {
+  NumberOfAirspacePoints = 0;
+  NumberOfAirspaceAreas = 0;
+  NumberOfAirspaceCircles = 0;
+
+  if(AirspaceArea != NULL)   {
+    LocalFree((HLOCAL)AirspaceArea);
+    AirspaceArea = NULL;
+  }
+  if(AirspacePoint != NULL)  {
+    LocalFree((HLOCAL)AirspacePoint);
+    AirspacePoint = NULL;
+  }
+  if(AirspaceScreenPoint != NULL)  {
+    LocalFree((HLOCAL)AirspaceScreenPoint);
+    AirspaceScreenPoint = NULL;
+  }
+  if(AirspaceCircle != NULL) {
+    AirspaceCircle = NULL;
+    LocalFree((HLOCAL)AirspaceCircle);
+  }
+}
+
+
 double RangeAirspaceCircle(const double &longitude,
 			   const double &latitude,
 			   int i) {

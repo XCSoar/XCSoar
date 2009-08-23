@@ -121,6 +121,10 @@
 #define NUMAIRSPACECOLORS 16
 #define NUMAIRSPACEBRUSHES 8
 
+#define AIRSPACE_SCANSIZE_X 16
+#define AIRSPACE_SCANSIZE_H 16
+#define OUTSIDE_CHECK_INTERVAL 4
+
 ////////////////////////
 
 #define NUMBUTTONLABELS 16
@@ -144,5 +148,6 @@
 
 // used by map window
 #define WPCIRCLESIZE        2
+
 
 #endif

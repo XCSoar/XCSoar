@@ -195,7 +195,6 @@ const TCHAR szRegistryFinishLine[]=		 TEXT("FinishLine");
 const TCHAR szRegistryFinishRadius[]=		 TEXT("FinishRadius");
 const TCHAR szRegistryWarningTime[]=		 TEXT("WarnTime");
 const TCHAR szRegistryAcknowledgementTime[]=	 TEXT("AcknowledgementTime");
-const TCHAR szRegistryWindUpdateMode[] =       TEXT("WindUpdateMode");
 const TCHAR szRegistryWindSpeed[] =            TEXT("WindSpeed");
 const TCHAR szRegistryWindBearing[] =          TEXT("WindBearing");
 const TCHAR szRegistryAirfieldFile[]=  TEXT("AirfieldFile"); // pL
@@ -617,10 +616,6 @@ void ReadRegistrySettings(void)
   Temp  = CircleZoom;
   GetFromRegistry(szRegistryCircleZoom,&Temp);
   CircleZoom = (Temp == 1);
-
-  Temp  = WindUpdateMode;
-  GetFromRegistry(szRegistryWindUpdateMode,&Temp);
-  WindUpdateMode = Temp;
 
   Temp = HomeWaypoint;
   if (GetFromRegistry(szRegistryHomeWaypoint,&Temp)==ERROR_SUCCESS) {

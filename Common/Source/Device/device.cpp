@@ -46,7 +46,6 @@ Copyright_License {
 #include "Math/FastMath.h"
 #include "Device/Parser.h"
 #include "Device/Port.h"
-#include "MapWindow.h"
 #include "Registry.hpp"
 #include "Math/Pressure.h"
 #include "Utils.h"

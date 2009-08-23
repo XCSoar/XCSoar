@@ -35,8 +35,8 @@ Copyright_License {
 }
 */
 
-#if !defined(AFX_AIRSPACE_H__695AAC30_F401_4CFF_9BD9_FE62A2A2D0D2__INCLUDED_)
-#define AFX_AIRSPACE_H__695AAC30_F401_4CFF_9BD9_FE62A2A2D0D2__INCLUDED_
+#if !defined(XCSOAR_AIRSPACE_H)
+#define XCSOAR_AIRSPACE_H
 
 #include "StdAfx.h"
 #include "Sizes.h"
@@ -58,6 +58,7 @@ Copyright_License {
 #define CLASSF				13
 #define AIRSPACECLASSCOUNT              14
 
+// modes
 #define ALLON 0
 #define CLIP 1
 #define AUTO 2
@@ -127,7 +128,31 @@ typedef struct _AIRSPACE_CIRCLE
   bool FarVisible;
 } AIRSPACE_CIRCLE;
 
+/////////////////////////////////////////
 
+// Airspace Database
+extern AIRSPACE_AREA *AirspaceArea;
+extern AIRSPACE_POINT *AirspacePoint;
+extern POINT *AirspaceScreenPoint;
+extern AIRSPACE_CIRCLE *AirspaceCircle;
+extern unsigned int NumberOfAirspacePoints;
+extern unsigned int NumberOfAirspaceAreas;
+extern unsigned int NumberOfAirspaceCircles;
+
+//Airspace Warnings
+extern int AIRSPACEWARNINGS;
+extern int WarningTime;
+extern int AcknowledgementTime;
+
+extern int AltitudeMode;
+extern int ClipAltitude;
+extern int AltWarningMargin;
+
+////////
+
+void DeleteAirspace();
+
+///////////////////////////////////////
 void ReadAirspace(void);
 int FindAirspaceCircle(double Longditude,double Lattitude,
 		       bool visibleonly=true);
@@ -155,9 +180,6 @@ bool InsideAirspaceArea(const double &longitude,
 			const double &latitude,
 			int i);
 
-#define AIRSPACE_SCANSIZE_X 16
-#define AIRSPACE_SCANSIZE_H 16
-
 void ScanAirspaceLine(double *lats, double *lons, double *heights,
 		      int airspacetype[AIRSPACE_SCANSIZE_H][AIRSPACE_SCANSIZE_X]);
 
@@ -166,9 +188,6 @@ void AirspaceQnhChangeNotify(double newQNH);
 
 //*******************************************************************************
 // experimental: new dialog based warning system
-
-
-#define OUTSIDE_CHECK_INTERVAL 4
 
 class AirspaceInfo_c{
 

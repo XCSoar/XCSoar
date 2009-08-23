@@ -40,7 +40,6 @@ Copyright_License {
 #include "Defines.h" // VENTA3
 #include "XCSoar.h"
 #include "Sizes.h"
-#include "MapWindow.h"
 #include "Dialogs.h"
 #include "Utils.h"
 #include "externs.h"

@@ -37,6 +37,9 @@ bool InfoWindowActive = true;
 void DisplayText(void);
 void AssignValues(void);
 
+// from XCSoar.cpp
+void SwitchToMapWindow(void);
+
 
 void PopupAnalysis()
 {

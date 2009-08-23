@@ -132,3 +132,158 @@ void MapWindow::DrawGlideThroughTerrain(HDC hDC, const RECT rc) {
 
 }
 
+
+#include "McReady.h"
+#include "InfoBoxLayout.h"
+extern HFONT  MapWindowBoldFont;
+
+/*
+ * The VisualGlide by Paolo Ventafridda
+ * Sort of a Stocker dynamic chart!
+ *
+ * VisualGlide=1 : Steady sector/circle
+ *             2 : Moving sector/circle   optional configurable, not much useful.
+ */
+void MapWindow::DrawGlideCircle(HDC hdc, POINT Orig, RECT rc )
+{
+  double tmp=0;
+  TCHAR gtext[100];
+  char text[20]; // TODO size it
+
+  double cruise= CALCULATED_INFO.AverageLD;
+  static double maxcruise=(GlidePolar::bestld);
+  static double mincruise=(GlidePolar::bestld/4);
+  int i;
+  double gunit;
+  COLORREF oldcolor=0;
+  HFONT oldfont;
+  static int spread=0;
+  //static short rcx=rc.left+rc.right/2-30;
+  //static short rcy=rc.top+rc.bottom-35;
+  short rcx=rc.left+rc.right/2-IBLSCALE(20);
+  short rcy=rc.bottom-IBLSCALE(15); // 35
+
+  if ( cruise < 0 ) cruise = GlidePolar::bestld;
+  if ( cruise < mincruise ) return;
+  if ( cruise >maxcruise ) cruise=maxcruise;
+
+  // Spread from
+  static short turn=1;
+  static short count=0;
+  spread += (10 * turn);
+  if ( spread <-25 || spread >25 ) turn*=-1;
+  if ( ++count >6) count=-1;
+
+  SelectObject(hdc, GetStockObject(HOLLOW_BRUSH));
+  // SetBkMode(hdc,TRANSPARENT);
+
+  oldfont = (HFONT)SelectObject(hdc, MapWindowBoldFont);
+
+  // 100m or 300ft scale
+  if ( Units::GetUserAltitudeUnit() == unMeter ) gunit=100; else gunit = 91.44;
+
+  for (i=1; i<9; i++) {
+
+      SelectObject(hdc, hpVisualGlideHeavyBlack);
+
+    /*
+     * TRACKUP, NORTHUP, NORTHCIRCLE, TRACKCIRCLE, NORTHTRACK
+     */
+    if ( ( DisplayOrientation == TRACKUP) || (DisplayOrientation == NORTHCIRCLE)
+	 || (DisplayOrientation == TRACKCIRCLE)
+	 && (DisplayMode != dmCircling) )
+      {
+	if ( VisualGlide == 1 ) {
+	  tmp = i*gunit*cruise*ResMapScaleOverDistanceModify;
+	  DrawArc(hdc, Orig.x, Orig.y,(int)tmp, rc, 315, 45);
+	} else
+	  {
+	    tmp = i*gunit*cruise*ResMapScaleOverDistanceModify;
+	    DrawArc(hdc, Orig.x, Orig.y,(int)tmp, rc, 330+spread, 30+spread);
+	  }
+      } else
+      {
+	tmp = i*gunit*cruise*ResMapScaleOverDistanceModify;
+	Circle(hdc, Orig.x,Orig.y,(int)tmp, rc, true, false);
+      }
+
+
+    if (turn>0||true) oldcolor=SetTextColor(hdc, RGB(0x0,0x0,0x0));
+    else oldcolor=SetTextColor(hdc, RGB(0xff,0x00,0x00)); // red
+    if ( i==2 || i==4 || i==6 || i==8 ) {
+      if (Units::GetUserAltitudeUnit() == unMeter)
+        _stprintf(gtext, _T("-%dm"), i * 100);
+      else
+        _stprintf(gtext, _T("-%dft"), i * 300);
+      if (count<5)
+	ExtTextOut( hdc, Orig.x+35, Orig.y-5 - (int) tmp, 0, NULL, gtext , _tcslen(gtext), NULL );
+    }
+    SetTextColor(hdc,oldcolor);
+    if (turn>0||true) oldcolor=SetTextColor(hdc, RGB(0x0,0x0,0x0)); // dark grey
+    else oldcolor=SetTextColor(hdc, RGB(0xff,0x00,0x00)); // red
+    if ( i==2 || i==4 || i==6 || i==8 ) {
+      if ( Units::GetUserDistanceUnit() == unKiloMeter )
+	{
+	  //sprintf(text,"%3.1f Km",i*100*cruise /1000);
+	  sprintf(text,"%3.0fkm",i*100*cruise /1000);
+	} else  if ( Units::GetUserDistanceUnit() == unNauticalMiles )
+	{
+	  sprintf(text,"%3.0fnm", i*100*cruise / 1852);
+	} else  if ( Units::GetUserDistanceUnit() == unStatuteMiles )
+	{
+	  sprintf(text,"%3.0fm", i*100*cruise / 1609);
+	}
+
+      _stprintf(gtext, _T("%S"), text);
+      if (count<5)
+	ExtTextOut( hdc, Orig.x-100, Orig.y-5 - (int) tmp, 0, NULL, gtext , _tcslen(gtext), NULL );
+    }
+    SetTextColor(hdc,oldcolor);
+
+  }
+
+  SelectObject(hdc, oldfont);
+
+/*
+  if (NewMap&&OutlinedTp)
+    oldcolor=SetTextColor(hdc, RGB(0x0,0x0,0x0)); // dark grey 0x50
+  else {
+    if (turn>0||true)
+      oldcolor=SetTextColor(hdc, RGB(0x0,0x0,0x0)); // dark grey 0x50
+    else
+      oldcolor=SetTextColor(hdc, RGB(0xff,0x00,0x00)); // red
+  }
+  _stprintf(gtext,_T("L/D:%d"),(int)cruise);
+
+  //ExtTextOut( hdc, Orig.x+30, Orig.y +20 , 0, NULL, gtext , _tcslen(gtext), NULL );
+  //ExtTextOut( hdc, Orig.x-30, Orig_Aircraft.y +50 , 0, NULL, gtext , _tcslen(gtext), NULL );
+  //ExtTextOut( hdc, (rc.left+rc.right)/2, rc.top+rc.bottom-20 , 0, NULL, gtext , _tcslen(gtext), NULL );
+
+  if (NewMap&&OutlinedTp) {
+    ExtTextOut( hdc, rcx+2, rcy , 0, NULL, gtext , _tcslen(gtext), NULL );
+    ExtTextOut( hdc, rcx+1, rcy , 0, NULL, gtext , _tcslen(gtext), NULL );
+    ExtTextOut( hdc, rcx-1, rcy , 0, NULL, gtext , _tcslen(gtext), NULL );
+    ExtTextOut( hdc, rcx-2, rcy , 0, NULL, gtext , _tcslen(gtext), NULL );
+    ExtTextOut( hdc, rcx, rcy+1 , 0, NULL, gtext , _tcslen(gtext), NULL );
+    ExtTextOut( hdc, rcx, rcy-1 , 0, NULL, gtext , _tcslen(gtext), NULL );
+
+#ifdef PNA
+    if (GlobalModelType == MODELTYPE_PNA_HP31X ) {
+	    ExtTextOut( hdc, rcx+3, rcy , 0, NULL, gtext , _tcslen(gtext), NULL );
+	    ExtTextOut( hdc, rcx-3, rcy , 0, NULL, gtext , _tcslen(gtext), NULL );
+	    ExtTextOut( hdc, rcx, rcy+2 , 0, NULL, gtext , _tcslen(gtext), NULL );
+	    ExtTextOut( hdc, rcx, rcy-2 , 0, NULL, gtext , _tcslen(gtext), NULL );
+	    ExtTextOut( hdc, rcx, rcy+3 , 0, NULL, gtext , _tcslen(gtext), NULL );
+	    ExtTextOut( hdc, rcx, rcy-3 , 0, NULL, gtext , _tcslen(gtext), NULL );
+    }
+#endif
+
+    SetTextColor(hdc,RGB(0xff,0xff,0xff));
+  }
+  ExtTextOut( hdc, rcx, rcy , 0, NULL, gtext , _tcslen(gtext), NULL );
+*/
+
+
+  SetTextColor(hdc,oldcolor);
+
+}

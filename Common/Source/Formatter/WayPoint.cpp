@@ -39,7 +39,8 @@ Copyright_License {
 #include "WayPoint.hpp"
 #include "XCSoar.h"
 #include "externs.h"
-#include "MapWindow.h"
+#include "MapWindow.h" // only for display mode definitions, should be elsewhere
+
 
 const TCHAR *FormatterWaypoint::Render(int *color) {
   int thewaypoint = ActiveWayPoint;

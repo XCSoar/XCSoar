@@ -231,8 +231,13 @@ class MapWindow {
 
  private:
   static void ScanVisibilityTrail(rectObj *bounds_active);
+  static void ScanVisibilityWaypoints(rectObj *bounds_active);
+  static void ScanVisibilityAirspace(rectObj *bounds_active);
+
   static void CalculateScreenPositions(POINT Orig, RECT rc,
                                        POINT *Orig_Aircraft);
+  static void CalculateScreenPositionsTask();
+  static void CalculateScreenPositionsWaypoints();
   static void CalculateScreenPositionsGroundline();
   static void CalculateScreenPositionsAirspace();
   static void CalculateScreenPositionsAirspaceCircle(AIRSPACE_CIRCLE& circ);

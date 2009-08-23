@@ -118,8 +118,9 @@ MapWindow hWndMapWindow;
 
 bool RequestAirspaceWarningDialog= false;
 bool RequestAirspaceWarningForce=false;
+
 static bool DisplayLocked = true;
-bool                                    EnableAuxiliaryInfo = false;
+bool EnableAuxiliaryInfo = false;
 
 
 HBRUSH hBrushSelected;
@@ -134,9 +135,6 @@ COLORREF ColorButton = RGB(0xA0,0xE0,0xA0);
 int                                             DisplayOrientation = TRACKUP;
 int                                             DisplayTextType = DISPLAYNONE;
 
-int                                             AltitudeMode = ALLON;
-int                                             ClipAltitude = 1000;
-int                                             AltWarningMargin = 100;
 int                                             AutoAdvance = 1;
 bool                                            AdvanceArmed = false;
 
@@ -239,23 +237,8 @@ short AverEffTime=0;
 
 ldrotary_s rotaryLD;
 
-// Airspace Database
-AIRSPACE_AREA *AirspaceArea = NULL;
-AIRSPACE_POINT *AirspacePoint = NULL;
-POINT *AirspaceScreenPoint = NULL;
-AIRSPACE_CIRCLE *AirspaceCircle = NULL;
-unsigned int NumberOfAirspacePoints = 0;
-unsigned int NumberOfAirspaceAreas = 0;
-unsigned int NumberOfAirspaceCircles = 0;
-
-//Airspace Warnings
-int AIRSPACEWARNINGS = TRUE;
-int WarningTime = 30;
-int AcknowledgementTime = 30;
-
 // user interface settings
 bool CircleZoom = false;
-int WindUpdateMode = 0;
 bool EnableTopology = false;
 bool EnableTerrain = false;
 int FinalGlideTerrain = 0;
@@ -360,9 +343,12 @@ void SIMProcessTimer(void);
 #else
 void ProcessTimer    (void);
 #endif
-void                                                    PopUpSelect(int i);
+void PopUpSelect(int i);
 
 //HWND CreateRpCommandBar(HWND hwnd);
+
+void RestartCommPorts(void);
+void SwitchToMapWindow(void);
 
 ///////////////////////////////////////
 
@@ -1572,8 +1558,7 @@ void Shutdown(void) {
   LockTaskData();
   Task[0].Index = -1;  ActiveWayPoint = -1;
   AATEnabled = FALSE;
-  NumberOfAirspacePoints = 0; NumberOfAirspaceAreas = 0;
-  NumberOfAirspaceCircles = 0;
+  CloseAirspace();
   CloseWayPoints();
   UnlockTaskData();
 
@@ -1641,10 +1626,7 @@ void Shutdown(void) {
 
   DeleteFonts();
 
-  if(AirspaceArea != NULL)   LocalFree((HLOCAL)AirspaceArea);
-  if(AirspacePoint != NULL)  LocalFree((HLOCAL)AirspacePoint);
-  if(AirspaceScreenPoint != NULL)  LocalFree((HLOCAL)AirspaceScreenPoint);
-  if(AirspaceCircle != NULL) LocalFree((HLOCAL)AirspaceCircle);
+  DeleteAirspace();
 
   StartupStore(TEXT("Delete Critical Sections\n"));
 

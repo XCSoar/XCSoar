@@ -163,29 +163,10 @@ bool ValidAirspace(void) {
 
 ///////////////////////////////
 
+
 void CloseAirspace() {
-
   AirspaceWarnListClear();
-
-  NumberOfAirspacePoints = 0;
-  NumberOfAirspaceAreas = 0;
-  NumberOfAirspaceCircles = 0;
-  if(AirspaceArea != NULL)   {
-    LocalFree((HLOCAL)AirspaceArea);
-    AirspaceArea = NULL;
-  }
-  if(AirspacePoint != NULL)  {
-    LocalFree((HLOCAL)AirspacePoint);
-    AirspacePoint = NULL;
-  }
-  if(AirspaceScreenPoint != NULL)  {
-    LocalFree((HLOCAL)AirspaceScreenPoint);
-    AirspaceScreenPoint = NULL;
-  }
-  if(AirspaceCircle != NULL) {
-    AirspaceCircle = NULL;
-    LocalFree((HLOCAL)AirspaceCircle);
-  }
+  DeleteAirspace();
 }
 
 // this can now be called multiple times to load several airspaces.

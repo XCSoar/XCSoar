@@ -1045,3 +1045,19 @@ void MapWindow::DrawSpeedToFly(HDC hDC, RECT rc) {
 
 }
 */
+
+
+#include "GaugeCDI.h"
+
+void MapWindow::DrawCDI() {
+  bool dodrawcdi = DerivedDrawInfo.Circling
+    ? EnableCDICircling
+    : EnableCDICruise;
+
+  if (dodrawcdi) {
+    GaugeCDI::Show();
+    GaugeCDI::Update(DrawInfo.TrackBearing, DerivedDrawInfo.WaypointBearing);
+  } else {
+    GaugeCDI::Hide();
+  }
+}

@@ -672,3 +672,63 @@ void MapWindow::DrawProjectedTrack(HDC hdc, const RECT rc, const POINT Orig) {
   }
   DrawDashLine(hdc, 2, pt[0], pt[1], RGB(0,0,0), rc);
 }
+
+
+void MapWindow::CalculateScreenPositionsTask() {
+  unsigned int i;
+
+  LockTaskData();
+
+  if (EnableMultipleStartPoints) {
+    for(i=0;i<MAXSTARTPOINTS-1;i++) {
+      if (StartPoints[i].Active && ValidWayPoint(StartPoints[i].Index)) {
+        LatLon2Screen(StartPoints[i].SectorEndLon,
+                      StartPoints[i].SectorEndLat, StartPoints[i].End);
+        LatLon2Screen(StartPoints[i].SectorStartLon,
+                      StartPoints[i].SectorStartLat, StartPoints[i].Start);
+      }
+    }
+  }
+
+  for(i=0;i<MAXTASKPOINTS-1;i++)
+  {
+    bool this_valid = ValidTaskPoint(i);
+    bool next_valid = ValidTaskPoint(i+1);
+    if (AATEnabled && this_valid) {
+      LatLon2Screen(Task[i].AATTargetLon, Task[i].AATTargetLat,
+                    Task[i].Target);
+    }
+
+    if(this_valid && !next_valid)
+    {
+      // finish
+      LatLon2Screen(Task[i].SectorEndLon, Task[i].SectorEndLat, Task[i].End);
+      LatLon2Screen(Task[i].SectorStartLon, Task[i].SectorStartLat, Task[i].Start);
+    }
+    if(this_valid && next_valid)
+    {
+      LatLon2Screen(Task[i].SectorEndLon, Task[i].SectorEndLat, Task[i].End);
+      LatLon2Screen(Task[i].SectorStartLon, Task[i].SectorStartLat, Task[i].Start);
+
+      if((AATEnabled) && (Task[i].AATType == SECTOR))
+      {
+        LatLon2Screen(Task[i].AATStartLon, Task[i].AATStartLat, Task[i].AATStart);
+        LatLon2Screen(Task[i].AATFinishLon, Task[i].AATFinishLat, Task[i].AATFinish);
+      }
+      if (AATEnabled && (((int)i==ActiveWayPoint) ||
+			 (TargetPan && ((int)i==TargetPanIndex)))) {
+
+	for (int j=0; j<MAXISOLINES; j++) {
+	  if (TaskStats[i].IsoLine_valid[j]) {
+	    LatLon2Screen(TaskStats[i].IsoLine_Longitude[j],
+			  TaskStats[i].IsoLine_Latitude[j],
+			  TaskStats[i].IsoLine_Screen[j]);
+	  }
+	}
+      }
+    }
+  }
+
+  UnlockTaskData();
+}
+

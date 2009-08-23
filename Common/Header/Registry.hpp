@@ -87,7 +87,6 @@ extern const TCHAR szRegistryAirspaceBlackOutline[];
 extern const TCHAR szRegistryWarningTime[];
 extern const TCHAR szRegistryAcknowledgementTime[];
 extern const TCHAR szRegistryCircleZoom[];
-extern const TCHAR szRegistryWindUpdateMode[];
 extern const TCHAR szRegistryHomeWaypoint[];
 extern const TCHAR szRegistryAlternate1[];         // VENTA3
 extern const TCHAR szRegistryAlternate2[];

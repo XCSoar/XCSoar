@@ -41,7 +41,6 @@ Copyright_License {
 #include "externs.h"
 #include "Dialogs/dlgTools.h"
 #include "InfoBoxLayout.h"
-#include "MapWindow.h"
 #include "Utils.h"
 
 #include <assert.h>

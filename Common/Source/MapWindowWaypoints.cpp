@@ -44,6 +44,9 @@ Copyright_License {
 //#include "Math/Screen.hpp"
 #include "Math/Earth.hpp"
 
+#include "McReady.h"
+#include "GlideSolvers.hpp"
+
 
 bool MapWindow::WaypointInTask(int ind) {
   if (!WayPointList) return false;
@@ -259,4 +262,214 @@ void MapWindow::DrawWaypoints(HDC hdc, const RECT rc)
     }
 
   MapWaypointLabelSortAndRender(hdc);
+}
+
+
+// JMW this is slow way to do things...
+
+static bool CheckLandableReachableTerrain(NMEA_INFO *Basic,
+                                          DERIVED_INFO *Calculated,
+                                          double LegToGo,
+                                          double LegBearing) {
+  double lat, lon;
+  bool out_of_range;
+  double distance_soarable =
+    FinalGlideThroughTerrain(LegBearing,
+                             Basic, Calculated,
+                             &lat,
+                             &lon,
+                             LegToGo, &out_of_range, NULL);
+
+  if ((out_of_range)||(distance_soarable> LegToGo)) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+
+void MapWindow::CalculateWaypointReachable(void)
+{
+  unsigned int i;
+  double WaypointDistance, WaypointBearing,AltitudeRequired,AltitudeDifference;
+
+  LandableReachable = false;
+
+  if (!WayPointList) return;
+
+  LockTaskData();
+
+  for(i=0;i<NumberOfWayPoints;i++)
+  {
+    if ((WayPointList[i].Visible &&
+	 (
+	  ((WayPointList[i].Flags & AIRPORT) == AIRPORT) ||
+	  ((WayPointList[i].Flags & LANDPOINT) == LANDPOINT)
+	  ))
+	|| WaypointInTask(i) ) {
+
+      DistanceBearing(DrawInfo.Latitude,
+		      DrawInfo.Longitude,
+		      WayPointList[i].Latitude,
+		      WayPointList[i].Longitude,
+		      &WaypointDistance,
+		      &WaypointBearing);
+
+      AltitudeRequired =
+	GlidePolar::MacCreadyAltitude
+	(GlidePolar::SafetyMacCready,
+	 WaypointDistance,
+	 WaypointBearing,
+	 DerivedDrawInfo.WindSpeed,
+	 DerivedDrawInfo.WindBearing,
+	 0,0,true,0);
+      AltitudeRequired = AltitudeRequired + SAFETYALTITUDEARRIVAL
+	+ WayPointList[i].Altitude ;
+      AltitudeDifference = DerivedDrawInfo.NavAltitude - AltitudeRequired;
+      WayPointList[i].AltArivalAGL = AltitudeDifference;
+
+      if(AltitudeDifference >=0){
+	WayPointList[i].Reachable = TRUE;
+	if (!LandableReachable || ((int)i==ActiveWayPoint)) {
+	  if (CheckLandableReachableTerrain(&DrawInfo,
+					    &DerivedDrawInfo,
+					    WaypointDistance,
+					    WaypointBearing)) {
+	    LandableReachable = true;
+	  } else if ((int)i==ActiveWayPoint) {
+	    WayPointList[i].Reachable = FALSE;
+	  }
+	}
+      } else {
+	WayPointList[i].Reachable = FALSE;
+      }
+    }
+  }
+
+  if (!LandableReachable) {
+    // widen search to far visible waypoints
+    // (only do this if can't see one at present)
+
+    for(i=0;i<NumberOfWayPoints;i++)
+      {
+        if(!WayPointList[i].Visible && WayPointList[i].FarVisible)
+          // visible but only at a distance (limit this to 100km radius)
+          {
+            if(  ((WayPointList[i].Flags & AIRPORT) == AIRPORT)
+                 || ((WayPointList[i].Flags & LANDPOINT) == LANDPOINT) )
+              {
+                DistanceBearing(DrawInfo.Latitude,
+                                DrawInfo.Longitude,
+                                WayPointList[i].Latitude,
+                                WayPointList[i].Longitude,
+                                &WaypointDistance,
+                                &WaypointBearing);
+
+                if (WaypointDistance<100000.0) {
+                  AltitudeRequired =
+                    GlidePolar::MacCreadyAltitude
+                    (GlidePolar::SafetyMacCready,
+                     WaypointDistance,
+                     WaypointBearing,
+                     DerivedDrawInfo.WindSpeed,
+                     DerivedDrawInfo.WindBearing,
+                     0,0,true,0);
+
+                  AltitudeRequired = AltitudeRequired + SAFETYALTITUDEARRIVAL
+                    + WayPointList[i].Altitude ;
+                  AltitudeDifference = DerivedDrawInfo.NavAltitude - AltitudeRequired;
+                  WayPointList[i].AltArivalAGL = AltitudeDifference;
+
+                  if(AltitudeDifference >=0){
+                    WayPointList[i].Reachable = TRUE;
+                    if (!LandableReachable) {
+                      if (CheckLandableReachableTerrain(&DrawInfo,
+                                                        &DerivedDrawInfo,
+                                                        WaypointDistance,
+                                                        WaypointBearing)) {
+                        LandableReachable = true;
+                      }
+                    }
+                  } else {
+                    WayPointList[i].Reachable = FALSE;
+                  }
+                }
+              }
+          }
+      }
+  }
+
+  UnlockTaskData();
+}
+
+
+
+void MapWindow::ScanVisibilityWaypoints(rectObj *bounds_active) {
+  // received when the SetTopoBounds determines the visibility
+  // boundary has changed.
+  // This happens rarely, so it is good pre-filtering of what is visible.
+  // (saves from having to do it every screen redraw)
+  const rectObj bounds = *bounds_active;
+
+  if (WayPointList) {
+    WAYPOINT *wv = WayPointList;
+    const WAYPOINT *we = WayPointList+NumberOfWayPoints;
+    while (wv<we) {
+      // TODO code: optimise waypoint visibility
+      wv->FarVisible = ((wv->Longitude> bounds.minx) &&
+			(wv->Longitude< bounds.maxx) &&
+			(wv->Latitude> bounds.miny) &&
+			(wv->Latitude< bounds.maxy));
+      wv++;
+    }
+  }
+}
+
+
+void MapWindow::CalculateScreenPositionsWaypoints() {
+  unsigned int i;
+  LockTaskData();
+
+  if (WayPointList) {
+    int index;
+    for (i=0; i<MAXTASKPOINTS; i++) {
+      index = Task[i].Index;
+      if (index>=0) {
+
+        LatLon2Screen(WayPointList[index].Longitude,
+                      WayPointList[index].Latitude,
+                      WayPointList[index].Screen);
+        WayPointList[index].Visible =
+          PointVisible(WayPointList[index].Screen);
+      }
+    }
+    if (EnableMultipleStartPoints) {
+      for(i=0;i<MAXSTARTPOINTS-1;i++) {
+        index = StartPoints[i].Index;
+        if (StartPoints[i].Active && (index>=0)) {
+
+          LatLon2Screen(WayPointList[index].Longitude,
+                        WayPointList[index].Latitude,
+                        WayPointList[index].Screen);
+          WayPointList[index].Visible =
+            PointVisible(WayPointList[index].Screen);
+        }
+      }
+    }
+
+    // only calculate screen coordinates for waypoints that are visible
+
+    for(i=0;i<NumberOfWayPoints;i++)
+      {
+        WayPointList[i].Visible = false;
+        if (!WayPointList[i].FarVisible) continue;
+        if(PointVisible(WayPointList[i].Longitude, WayPointList[i].Latitude) )
+          {
+            LatLon2Screen(WayPointList[i].Longitude, WayPointList[i].Latitude,
+                          WayPointList[i].Screen);
+            WayPointList[i].Visible = PointVisible(WayPointList[i].Screen);
+          }
+      }
+  }
+  UnlockTaskData();
 }
