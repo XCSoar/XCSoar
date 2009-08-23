@@ -42,6 +42,7 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "externs.h"
 #include "XCSoar.h"
+#include "Interface.hpp"
 #include "Dialogs.h"
 #include "Math/FastMath.h"
 #include "Device/Parser.h"

@@ -1712,6 +1712,8 @@ void MapWindow::UpdateCaches(bool force) {
   }
 }
 
+extern MapWindow hWndMapWindow; // TODO try to avoid this
+
 
 DWORD MapWindow::DrawThread (LPVOID lpvoid)
 {

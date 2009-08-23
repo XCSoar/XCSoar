@@ -38,6 +38,7 @@ Copyright_License {
 #include "StdAfx.h"
 #include "externs.h"
 #include "XCSoar.h"
+#include "Interface.hpp"
 #include "Units.h"
 #include "Device/device.h"
 #include "InputEvents.h"

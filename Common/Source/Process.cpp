@@ -44,6 +44,8 @@ Copyright_License {
 #include "Utils.h"
 #include <stdlib.h>
 
+#include "Formatter/WayPoint.hpp"
+
 ////////////////////
 
 

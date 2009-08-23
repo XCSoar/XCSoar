@@ -90,7 +90,7 @@ MessageBoxW(
 
 // Message Box Replacement
 /*
-    MessageBox(hWndMapWindow,
+    MessageBox(hWndMainWindow,
       gettext(TEXT("Too many waypoints in task!")),
       gettext(TEXT("Insert Waypoint")),
       MB_OK|MB_ICONEXCLAMATION);

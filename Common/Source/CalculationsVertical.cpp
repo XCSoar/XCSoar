@@ -45,6 +45,7 @@ Copyright_License {
 #include "Math/LowPassFilter.hpp"
 #include "McReady.h"
 
+ldrotary_s rotaryLD;
 
 void AverageClimbRate(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 {

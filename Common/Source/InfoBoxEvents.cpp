@@ -51,6 +51,7 @@ Copyright_License {
 #include "XCSoar.h"
 #include "Utils.h"
 #include "MapWindow.h"
+#include "McReady.h"
 
 #include <stdlib.h>
 

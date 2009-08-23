@@ -215,6 +215,7 @@ void NettoVario(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   }
 }
 
+// int          NettoSpeed = 1000;
 
 void AudioVario(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   /* JMW disabled, no longer used

@@ -112,19 +112,7 @@ extern DERIVED_INFO CALCULATED_INFO;
 extern BOOL GPSCONNECT;
 extern BOOL VARIOCONNECT;
 
-// units
-extern double SPEEDMODIFY;
-extern double LIFTMODIFY;
-extern double DISTANCEMODIFY;
-extern double ALTITUDEMODIFY;
-extern double TASKSPEEDMODIFY;
-
 // polar info
-extern double BUGS;
-extern double BALLAST;
-extern int POLARID;
-extern double POLAR[POLARSIZE];
-extern double WEIGHTS[POLARSIZE];
 extern int BallastSecsToEmpty;
 extern bool BallastTimerActive;
 
@@ -192,6 +180,15 @@ extern int TeamFlarmIdTarget;    // FlarmId of the glider to track
 
 extern bool RequestAirspaceWarningDialog;
 
-extern int UserLevel;
+//////
+
+extern double QFEAltitudeOffset; // VENTA3
+extern int OnAirSpace; // VENTA3 toggle DrawAirSpace
+extern bool EnableAutoBacklight; // VENTA4
+extern bool EnableAutoSoundVolume; // VENTA4
+extern bool ExtendedVisualGlide;
+extern bool VirtualKeys;
+extern short ArrivalValue;
+extern short AverEffTime;
 
 #endif

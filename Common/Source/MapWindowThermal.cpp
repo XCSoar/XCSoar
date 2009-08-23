@@ -42,6 +42,7 @@ Copyright_License {
 #include "Math/FastMath.h"
 #include "Math/Screen.hpp"
 #include "Math/Earth.hpp"
+#include "McReady.h"
 
 
 void MapWindow::CalculateScreenPositionsThermalSources() {

@@ -40,6 +40,7 @@ Copyright_License {
 #include "Topology.h"
 #include "options.h"
 #include "XCSoar.h"
+#include "Interface.hpp"
 #include "externs.h"
 #include "wcecompat/ts_string.h"
 #include "Screen/Util.hpp"

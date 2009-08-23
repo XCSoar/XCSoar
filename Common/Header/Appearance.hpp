@@ -114,6 +114,20 @@ typedef enum{
   apIg7
 }InfoBoxGeomAppearance_t;
 
+#if defined(PNA) || defined(FIVV)
+// VENTA-ADDON MODEL
+typedef enum{
+	apImPnaGeneric=0,
+	apImPnaHp31x,
+	apImPnaMedionP5,
+	apImPnaMio,
+	apImPnaNokia500,
+	apImPnaPn6000,
+}InfoBoxModelAppearance_t;
+#endif
+
+
+
 typedef struct{
   MapScaleAppearance_t MapScale;
   MapScale2Appearance_t MapScale2;
@@ -157,5 +171,18 @@ typedef struct{
   bool GaugeVarioGross;
   bool GaugeVarioAveNeedle;
 } Appearance_t;
+
+/////////////////////
+// Specials
+
+typedef enum{
+	evgNormal=0,
+	evgExtended,
+} ExtendedVisualGlide_t;
+
+typedef enum{
+	vkDisabled=0,
+	vkEnabled,
+} VirtualKeys_t;
 
 #endif

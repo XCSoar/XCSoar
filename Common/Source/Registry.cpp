@@ -42,6 +42,7 @@ Copyright_License {
 #include "Sizes.h"
 #include "Airspace.h"
 #include "XCSoar.h"
+#include "Interface.hpp"
 #include "MapWindow.h"
 #include "GaugeFLARM.h"
 #include "TerrainRenderer.h"
@@ -59,6 +60,7 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "InfoBoxManager.h"
 #include "Asset.hpp"
+#include "GlideRatio.hpp"
 
 #include <assert.h>
 #include <stdlib.h>
@@ -323,6 +325,8 @@ const TCHAR szRegistryFontCDIWindowFont[]=	 TEXT("CDIWindowFont");
 const TCHAR szRegistryFontMapLabelFont[]=	 TEXT("MapLabelFont");
 const TCHAR szRegistryFontStatisticsFont[]=	 TEXT("StatisticsFont");
 
+
+extern int UserLevel; // used by dlgConfiguration
 
 void StoreType(int Index,int InfoType)
 {
@@ -703,9 +707,11 @@ void ReadRegistrySettings(void)
   GetFromRegistry(szRegistrySoundModes,&Temp);
   EnableSoundModes = (Temp == 1);
 
+  /* no longer used
   Temp = 500;
   GetFromRegistry(szRegistryNettoSpeed,&Temp);
   NettoSpeed = Temp;
+  */
 
   EnableCDICruise = 0;
   EnableCDICircling = 0;

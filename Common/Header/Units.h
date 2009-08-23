@@ -62,6 +62,14 @@ Copyright_License {
 #define M_PI 3.14159265359
 
 
+// units
+extern double SPEEDMODIFY;
+extern double LIFTMODIFY;
+extern double DISTANCEMODIFY;
+extern double ALTITUDEMODIFY;
+extern double TASKSPEEDMODIFY;
+
+
 typedef enum {
   cfDDMMSS=0,
   cfDDMMSSss,

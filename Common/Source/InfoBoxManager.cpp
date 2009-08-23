@@ -32,6 +32,8 @@ bool InfoBoxesDirty= false;
 static bool InfoBoxesHidden = false;
 int InfoFocus = 0;
 bool InfoWindowActive = true;
+bool EnableAuxiliaryInfo = false;
+double LastFlipBoxTime = 0; // VENTA3 need this global for slowcalculations cycle
 
 // fwd declarations
 void DisplayText(void);
@@ -445,25 +447,13 @@ void DisplayText(void)
   static bool first=true;
   static int InfoFocusLast = -1;
   static int DisplayTypeLast[MAXINFOWINDOWS];
-// static double LastFlipBoxTime = 0; //  now global for SlowCalculations
   static bool FlipBoxValue = false;
 
-
   // VENTA3 - Dynamic box values
-  if ( GPS_INFO.Time > LastFlipBoxTime + DYNABOXTIME ) {
-/*
-	static TCHAR ventabuffer[200];
-	FILE *fp;
-        wsprintf(ventabuffer,TEXT("GPS_INFO.Time=%d LastFlipBoxTime=%d Flip=%d"),(int)GPS_INFO.Time, (int)LastFlipBoxTime,
-	FlipBoxValue == true ? 1 : 0);
-        if ((fp=_tfopen(_T("DEBUG.TXT"),_T("a")))!= NULL){;fprintf(fp,"%S\n",ventabuffer);fclose(fp)
-;}
-*/
-	FlipBoxValue = ( FlipBoxValue == false );
-	LastFlipBoxTime = GPS_INFO.Time;
+  if (LastFlipBoxTime > DYNABOXTIME ) {
+    FlipBoxValue = ( FlipBoxValue == false );
+    LastFlipBoxTime = 0;
   }
-
-
 
   LockNavBox();
 
@@ -907,6 +897,8 @@ void DeleteInfoBoxFormatters() {
     delete Data_Options[i].Formatter;
   }
 }
+
+extern MapWindow hWndMapWindow; // TODO try to avoid this
 
 
 void InfoBoxFocus(bool display_locked) {

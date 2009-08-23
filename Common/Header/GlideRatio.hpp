@@ -40,6 +40,16 @@ Copyright_License {
 
 #include "Defines.h"
 
+typedef enum{
+	ae15seconds=0,
+	ae30seconds,
+	ae60seconds,
+	ae90seconds,
+	ae2minutes,
+	ae3minutes,
+} AverEffTime_t;
+
+
 typedef struct {
         int     distance[MAXLDROTARYSIZE]; // rotary array with a predefined max capacity
         int     altitude[MAXLDROTARYSIZE];

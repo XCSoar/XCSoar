@@ -72,6 +72,16 @@ bool GlidePolar::AbortSafetyUseCurrent = false;
 
 static int iSAFETYSPEED=0;
 
+//Flight Data Globals
+double        MACCREADY = 0; // JMW now in SI units (m/s) for consistency
+double        BUGS = 1;
+double        BALLAST = 0;
+int POLARID = 0;
+double POLAR[POLARSIZE] = {0,0,0};
+double WEIGHTS[POLARSIZE] = {250,70,100};
+bool          AutoMacCready = false;
+
+
 double GlidePolar::AbortSafetyMacCready() {
   if (AbortSafetyUseCurrent) {
     return MACCREADY;

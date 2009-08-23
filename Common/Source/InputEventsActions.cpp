@@ -82,6 +82,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Registry.hpp"
 #include "LocalPath.hpp"
 #include "Utils.h"
+#include "McReady.h"
 
 #include <assert.h>
 #include <ctype.h>

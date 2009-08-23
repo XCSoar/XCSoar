@@ -49,6 +49,7 @@ Copyright_License {
 #include "externs.h"
 #include "InputEvents.h"
 #include "LogFile.hpp"
+#include "McReady.h"
 
 #include <tchar.h>
 #include <math.h>

@@ -45,6 +45,7 @@ Copyright_License {
 #include "InfoBoxLayout.h"
 #include "InfoBox.h"
 #include "Math/Geometry.hpp"
+#include "McReady.h"
 
 #include <assert.h>
 

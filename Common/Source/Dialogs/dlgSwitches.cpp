@@ -43,6 +43,7 @@ Copyright_License {
 #include "DataField/Base.hpp"
 #include "Utils.h"
 #include "XCSoar.h"
+#include "Interface.hpp"
 
 static WndForm *wf=NULL;
 

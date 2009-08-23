@@ -44,6 +44,7 @@ Copyright_License {
 #include "externs.h"
 #include "Compatibility/string.h"
 #include "Utils.h"
+#include "InfoBoxManager.h"
 
 #include <stdlib.h>
 

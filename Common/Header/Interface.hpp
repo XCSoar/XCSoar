@@ -34,46 +34,36 @@ Copyright_License {
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
 */
-#ifndef INFOBOX_MANAGER_H
-#define INFOBOX_MANAGER_H
 
-#include "XCSoar.h"
-#include "Formatter/Base.hpp"
+#if !defined(XCSOAR_INTERFACE_HPP)
+#define XCSOAR_INTERFACE_HPP
 
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
+#include "StdAfx.h"
+#include "Defines.h"
 
-typedef struct _SCREEN_INFO
-{
-  UnitGroup_t UnitGroup;
-  TCHAR Description[DESCRIPTION_SIZE +1];
-  TCHAR Title[TITLE_SIZE + 1];
-  InfoBoxFormatter *Formatter;
-  void (*Process)(int UpDown);
-  char next_screen;
-  char prev_screen;
-} SCREEN_INFO;
+void FocusOnWindow(int i, bool selected);
+void FullScreen();
 
-extern SCREEN_INFO Data_Options[];
-extern int InfoType[MAXINFOWINDOWS]; //
-extern int  InfoFocus;
-extern const int NUMSELECTSTRINGS;
-extern int numInfoWindows;
-extern bool EnableAuxiliaryInfo;
-extern double LastFlipBoxTime; // used by XCSoar and Calculations
+extern bool Debounce();
+extern void PopupWaypointDetails();
+extern void PopupAnalysis();
+extern int debounceTimeout;
 
-void InfoBoxesSetDirty(bool is_dirty);
-void DeleteInfoBoxFormatters();
-bool InfoBoxClick(HWND wmControl, bool display_locked);
-void InfoBoxFocus(bool display_locked);
-void InfoBoxProcessTimer(void);
-void InfoBoxDrawIfDirty(void);
-void InfoBoxFocusSetMaxTimeOut(void);
-void ShowInfoBoxes();
-void HideInfoBoxes();
-void DefocusInfoBox(void);
-void Event_SelectInfoBox(int i);
-void Event_ChangeInfoBoxType(int i);
-void DoInfoKey(int keycode);
+// instance of main program
+extern HINSTANCE hInst;
+
+// windows
+extern HWND hWndMainWindow;           // HWND Main Window
+//extern MapWindow hWndMapWindow;
+
+extern bool csFlightDataInitialized;
+
+typedef enum {psInitInProgress=0, psInitDone=1, psFirstDrawDone=2, psNormalOp=3} StartupState_t;
+// 0: not started at all
+// 1: everything is alive
+// 2: done first draw
+// 3: normal operation
+
+extern StartupState_t ProgramStarted;
 
 #endif

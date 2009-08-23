@@ -43,24 +43,10 @@ Copyright_License {
 #include "resource.h"
 #include "Sizes.h"
 #include "Units.h"
-#include "Statistics.h"
 #include "Appearance.hpp"
-#include "Formatter/Base.hpp"
-#include "GlideRatio.hpp"
 
 class Trigger;
 class MapWindow;
-
-class FormatterDiffBearing: public InfoBoxFormatter {
- public:
-  FormatterDiffBearing(const TCHAR *theformat):InfoBoxFormatter(theformat) {};
-
-  virtual const TCHAR *Render(int *color);
-};
-
-
-void ProcessChar1 (char c);
-void ProcessChar2 (char c);
 
 extern void UnlockEventQueue();
 extern void LockEventQueue();
@@ -82,104 +68,15 @@ extern void TriggerGPSUpdate();
 extern void TriggerVarioUpdate();
 extern Trigger drawTriggerEvent;
 
-void FocusOnWindow(int i, bool selected);
-void FullScreen();
-
-extern bool Debounce();
-
-extern void PopupWaypointDetails();
-extern void PopupAnalysis();
-
-
-typedef enum{
-	ae15seconds=0,
-	ae30seconds,
-	ae60seconds,
-	ae90seconds,
-	ae2minutes,
-	ae3minutes,
-} AverEffTime_t;
-
-
-#if defined(PNA) || defined(FIVV)
-// VENTA-ADDON MODEL
-typedef enum{
-	apImPnaGeneric=0,
-	apImPnaHp31x,
-	apImPnaMedionP5,
-	apImPnaMio,
-	apImPnaNokia500,
-	apImPnaPn6000,
-}InfoBoxModelAppearance_t;
-#endif
-
-typedef enum{
-	evgNormal=0,
-	evgExtended,
-} ExtendedVisualGlide_t;
-
-typedef enum{
-	vkDisabled=0,
-	vkEnabled,
-} VirtualKeys_t;
-
-
 extern TCHAR XCSoar_Version[256];
-
-// instance of main program
-extern HINSTANCE hInst;
-
-// windows
-extern HWND hWndMainWindow;           // HWND Main Window
-extern MapWindow hWndMapWindow;
-
-extern bool csFlightDataInitialized;
 
 extern Appearance_t Appearance;
 
-// Specials
-#ifdef FIVV
-extern double GPSAltitudeOffset; 	// VENTA3
-#endif
-extern double QFEAltitudeOffset; // VENTA3
-extern int OnAirSpace; // VENTA3 toggle DrawAirSpace
-extern bool WasFlying; // used by auto QFE..
-extern double LastFlipBoxTime; // used by XCSoar and Calculations
-extern bool EnableAutoBacklight; // VENTA4
-extern bool EnableAutoSoundVolume; // VENTA4
-extern bool ExtendedVisualGlide;
-extern bool VirtualKeys;
-extern short ArrivalValue;
-extern short AverEffTime;
-
-extern ldrotary_s rotaryLD;
-
 // user controls/parameters
-extern double MACCREADY;
-extern bool   AutoMacCready;
 extern double SAFETYALTITUDEARRIVAL;
 extern double SAFETYALTITUDEBREAKOFF;
 extern double SAFETYALTITUDETERRAIN;
 extern double SAFTEYSPEED;
-
-extern int NettoSpeed;
-extern bool EnableAuxiliaryInfo;
-extern int debounceTimeout;
-
-// statistics
-extern Statistics flightstats;
-
-#if (EXPERIMENTAL > 0)
-extern BlueDialupSMS bsms;
-#endif
-
-typedef enum {psInitInProgress=0, psInitDone=1, psFirstDrawDone=2, psNormalOp=3} StartupState_t;
-// 0: not started at all
-// 1: everything is alive
-// 2: done first draw
-// 3: normal operation
-
-extern StartupState_t ProgramStarted;
 
 // ******************************************************************
 

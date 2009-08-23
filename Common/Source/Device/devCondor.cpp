@@ -43,6 +43,7 @@ Copyright_License {
 #include "Math/Units.h"
 #include "Device/Parser.h"
 #include "Device/Port.h"
+#include "McReady.h"
 
 #include <tchar.h>
 

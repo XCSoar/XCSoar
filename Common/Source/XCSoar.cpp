@@ -118,7 +118,6 @@ MapWindow hWndMapWindow;
 
 
 bool DisplayLocked = true;
-bool EnableAuxiliaryInfo = false;
 
 
 HBRUSH hBrushSelected;
@@ -152,21 +151,7 @@ float	GlobalEllipse=1.1f;	// default ellipse type VENTA2-ADDON
 // properly initialised.
 
 
-//SI to Local Units
-double        SPEEDMODIFY = TOKNOTS;
-double        LIFTMODIFY  = TOKNOTS;
-double        DISTANCEMODIFY = TONAUTICALMILES;
-double        ALTITUDEMODIFY = TOFEET;
-double        TASKSPEEDMODIFY = TOKPH;
-
 //Flight Data Globals
-double        MACCREADY = 0; // JMW now in SI units (m/s) for consistency
-double        BUGS = 1;
-double        BALLAST = 0;
-
-bool          AutoMacCready = false;
-
-int          NettoSpeed = 1000;
 
 NMEA_INFO     GPS_INFO;
 DERIVED_INFO  CALCULATED_INFO;
@@ -185,12 +170,6 @@ double SAFETYALTITUDEBREAKOFF = 700;
 double SAFETYALTITUDETERRAIN = 200;
 double SAFTEYSPEED = 50.0;
 
-// polar info
-int              POLARID = 0;
-double POLAR[POLARSIZE] = {0,0,0};
-double POLARV[POLARSIZE] = {21,27,40};
-double POLARLD[POLARSIZE] = {33,30,20};
-double WEIGHTS[POLARSIZE] = {250,70,100};
 
 // Team code info
 int TeamCodeRefWaypoint = -1;
@@ -214,14 +193,8 @@ int AirfieldsHomeWaypoint = -1; // VENTA3 force Airfields home to be HomeWaypoin
                                 // an H flag in waypoints file is not available..
 
 // Specials
-#ifdef FIVV
-double GPSAltitudeOffset = 0; // VENTA3
-#endif
 double QFEAltitudeOffset = 0;
 int OnAirSpace=1; // VENTA3 toggle DrawAirSpace, normal behaviour is "true"
-bool WasFlying = false; // VENTA3 used by auto QFE: do not reset QFE if previously in flight. So you can check QFE
-			//   on the ground, otherwise it turns to zero at once!
-double LastFlipBoxTime = 0; // VENTA3 need this global for slowcalculations cycle
 #if defined(PNA) || defined(FIVV)
 bool needclipping=false; // flag to activate extra clipping for some PNAs
 #endif
@@ -230,8 +203,6 @@ bool EnableAutoSoundVolume=true;
 bool ExtendedVisualGlide=false;
 bool VirtualKeys=false;
 short AverEffTime=0;
-
-ldrotary_s rotaryLD;
 
 // user interface settings
 bool CircleZoom = false;
@@ -289,9 +260,6 @@ int ActiveAlternate = -1; // VENTA3
 bool OnBestAlternate=false;
 bool OnAlternate1=false;
 bool OnAlternate2=false;
-
-// Statistics
-Statistics flightstats;
 
 #if (((UNDER_CE >= 300)||(_WIN32_WCE >= 0x0300)) && (WINDOWSPC<1))
 #define HAVE_ACTIVATE_INFO
@@ -392,10 +360,6 @@ void ShowMenu() {
   ResetDisplayTimeOut();
 }
 
-
-#if (EXPERIMENTAL > 0)
-BlueDialupSMS bsms;
-#endif
 
 void SettingsEnter() {
   MenuActive = true;
@@ -1184,11 +1148,6 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   StartupStore(TEXT("GlidePolar::SetBallast\n"));
   GlidePolar::SetBallast();
 
-#if (EXPERIMENTAL > 0)
-  CreateProgressDialog(gettext(TEXT("Bluetooth dialup SMS")));
-  bsms.Initialise();
-#endif
-
   CreateProgressDialog(gettext(TEXT("Initialising display")));
 
   // just about done....
@@ -1889,7 +1848,6 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 
 //////////////////////
-
 
 
 

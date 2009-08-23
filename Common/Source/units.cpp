@@ -71,6 +71,17 @@ CoordinateFormats_t Units::CoordinateFormat;
 #define DEG "°"
 #endif
 
+
+//SI to Local Units
+double        SPEEDMODIFY = TOKNOTS;
+double        LIFTMODIFY  = TOKNOTS;
+double        DISTANCEMODIFY = TONAUTICALMILES;
+double        ALTITUDEMODIFY = TOFEET;
+double        TASKSPEEDMODIFY = TOKPH;
+
+///////////////////
+
+
 UnitDescriptor_t Units::UnitDescriptors[] ={
   {NULL,         1,          0},
   {TEXT("km"),   0.001,      0},

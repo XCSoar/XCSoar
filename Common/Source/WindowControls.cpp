@@ -37,6 +37,7 @@ Copyright_License {
 
 #include "WindowControls.h"
 #include "XCSoar.h"
+#include "Interface.hpp"
 #include "StdAfx.h"
 #include "Defines.h" // VENTA3
 #include "Dialogs/dlgTools.h"
@@ -44,6 +45,8 @@ Copyright_License {
 #include "Message.h"
 #include "MapWindow.h"
 #include "InfoBoxLayout.h"
+extern MapWindow hWndMapWindow; // TODO try to avoid this
+
 #endif
 #include "Math/FastMath.h"
 #include "options.h"

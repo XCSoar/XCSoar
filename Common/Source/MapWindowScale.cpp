@@ -42,6 +42,8 @@ Copyright_License {
 #include "Math/FastMath.h"
 #include "Screen/Util.hpp"
 #include "XCSoar.h" // for task lock/unlock
+#include "McReady.h"
+#include "InfoBoxManager.h"
 
 #include "RasterTerrain.h"
 #include "RasterWeather.h"
@@ -54,7 +56,7 @@ double MapWindow::LimitMapScale(double value) {
 
   double minreasonable;
 
-    minreasonable = 0.05;
+  minreasonable = 0.05;
 
   if (AutoZoom && DisplayMode != dmCircling) {
     if (AATEnabled && (ActiveWayPoint>0)) {

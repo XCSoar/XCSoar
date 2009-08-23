@@ -44,6 +44,7 @@ Copyright_License {
 #include "externs.h"
 #include "Logger.h"
 #include "Dialogs.h"
+#include "McReady.h"
 
 extern HFONT  MapWindowBoldFont;
 extern BOOL extGPSCONNECT;

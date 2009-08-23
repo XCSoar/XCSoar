@@ -41,6 +41,11 @@ Copyright_License {
 #include "NMEA/Info.h"
 #include <windows.h>
 #include "Screen/shapelib/mapshape.h"
+#include "Statistics.h"
+extern Statistics flightstats;
+
+#include "GlideRatio.hpp"
+extern ldrotary_s rotaryLD;
 
 #define NUMTHERMALBUCKETS 10
 #define MAX_THERMAL_SOURCES 20

@@ -51,6 +51,7 @@ Copyright_License {
 #include "Device/Parser.h"
 #include "Device/Port.h"
 #include "Math/Units.h"
+#include "McReady.h"
 
 #include <windows.h>
 #include <tchar.h>

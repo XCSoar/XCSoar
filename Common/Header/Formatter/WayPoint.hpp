@@ -47,6 +47,14 @@ class FormatterWaypoint: public InfoBoxFormatter {
   virtual const TCHAR *Render(int *color);
 };
 
+class FormatterDiffBearing: public InfoBoxFormatter {
+ public:
+  FormatterDiffBearing(const TCHAR *theformat):InfoBoxFormatter(theformat) {};
+
+  virtual const TCHAR *Render(int *color);
+};
+
+
 // VENTA3 / alternates
 class FormatterAlternate: public InfoBoxFormatter {
  public:
@@ -66,5 +74,7 @@ class FormatterBestLanding: public InfoBoxFormatter {
   virtual void AssignValue(int i);
 };
 */
+
+
 
 #endif

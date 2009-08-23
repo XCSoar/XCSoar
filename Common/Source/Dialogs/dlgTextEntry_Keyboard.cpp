@@ -37,6 +37,7 @@ Copyright_License {
 
 #include "StdAfx.h"
 #include "XCSoar.h"
+#include "Interface.hpp"
 #include "Dialogs/dlgTools.h"
 #include "externs.h"
 #include "InfoBoxLayout.h"

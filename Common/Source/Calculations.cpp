@@ -71,8 +71,8 @@ Copyright_License {
 OLCOptimizer olc;
 AATDistance aatdistance;
 DERIVED_INFO Finish_Derived_Info;
+Statistics flightstats;
 static VegaVoice vegavoice;
-
 
 bool EnableNavBaroAltitude=false;
 int EnableExternalTriggerCruise=false;
@@ -85,6 +85,9 @@ bool EnableFAIFinishHeight = false;
 int FinishLine=1;
 DWORD FinishRadius=1000;
 bool EnableCalibration = false;
+
+bool WasFlying = false; // VENTA3 used by auto QFE: do not reset QFE if previously in flight. So you can check QFE
+			//   on the ground, otherwise it turns to zero at once!
 
 extern int FastLogNum; // number of points to log at high rate
 
@@ -217,9 +220,6 @@ void DoCalculationsSlow(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   TerrainFootprint(Basic, Calculated);
 
   DoBestAlternateSlow(Basic, Calculated);
-
-  // If using a replay IGC file, current time is in the past and LastFlipBoxTime becomes unreachable!
-  if ( LastFlipBoxTime > Basic->Time ) LastFlipBoxTime = Basic->Time;
 
 }
 

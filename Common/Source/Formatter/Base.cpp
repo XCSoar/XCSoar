@@ -41,6 +41,7 @@ Copyright_License {
 #include "externs.h"
 #include "Atmosphere.h"
 #include "Battery.h"
+#include "McReady.h"
 
 #include <stdio.h>
 

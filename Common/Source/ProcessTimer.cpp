@@ -38,6 +38,7 @@ Copyright_License {
 
 #include "ProcessTimer.hpp"
 #include "XCSoar.h"
+#include "Interface.hpp"
 #include "InputEvents.h"
 #include "Logger.h"
 #include "GaugeFLARM.h"
@@ -131,6 +132,8 @@ void CommonProcessTimer()
     MyCompactHeaps();
     iheapcompact = 0;
   }
+
+  LastFlipBoxTime++;
 }
 
 ////////////////

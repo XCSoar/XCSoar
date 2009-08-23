@@ -61,6 +61,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "InputEvents.h"
 #include "StdAfx.h"
 #include "XCSoar.h"
+#include "Interface.hpp"
 #include "LogFile.hpp"
 #include "externs.h"
 #include "Compatibility/vk.h"
@@ -70,6 +71,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "MapWindow.h"
 #include "Registry.hpp"
 #include "LocalPath.hpp"
+#include "McReady.h"
 #include "Utils.h"
 
 #include <assert.h>
