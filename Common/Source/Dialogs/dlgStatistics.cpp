@@ -50,6 +50,7 @@ Copyright_License {
 #include "Math/FastMath.h"
 #include "Math/Geometry.hpp"
 #include "Math/Earth.hpp"
+#include "Screen/Graphics.hpp"
 #include "Screen/Util.hpp"
 #include "Utils.h"
 #include "MapWindow.h"
@@ -202,33 +203,33 @@ void Statistics::StyleLine(HDC hdc, const POINT l1, const POINT l2,
   line[1] = l2;
   switch (Style) {
   case STYLE_BLUETHIN:
-    MapWindow::DrawDashLine(hdc,
-			    minwidth,
-			    l1,
-			    l2,
-			    RGB(0,50,255), rc);
+    DrawDashLine(hdc,
+		 minwidth,
+		 l1,
+		 l2,
+		 RGB(0,50,255), rc);
     break;
   case STYLE_REDTHICK:
-    MapWindow::DrawDashLine(hdc, 3,
-			    l1,
-			    l2,
-			    RGB(200,50,50), rc);
+    DrawDashLine(hdc, 3,
+		 l1,
+		 l2,
+		 RGB(200,50,50), rc);
     break;
   case STYLE_DASHGREEN:
-    MapWindow::DrawDashLine(hdc, 2,
-			    line[0],
-			    line[1],
-			    RGB(0,255,0), rc);
+    DrawDashLine(hdc, 2,
+		 line[0],
+		 line[1],
+		 RGB(0,255,0), rc);
     break;
   case STYLE_MEDIUMBLACK:
     SelectObject(hdc, penThinSignal /*GetStockObject(BLACK_PEN)*/);
     ClipPolyline(hdc, line, 2, rc);
     break;
   case STYLE_THINDASHPAPER:
-    MapWindow::DrawDashLine(hdc, 1,
-			    l1,
-			    l2,
-			    RGB(0x60,0x60,0x60), rc);
+    DrawDashLine(hdc, 1,
+		 l1,
+		 l2,
+		 RGB(0x60,0x60,0x60), rc);
     break;
 
   default:

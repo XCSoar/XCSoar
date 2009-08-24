@@ -106,11 +106,6 @@ class MapWindow {
   static HANDLE hRenderEvent;
   static LRESULT CALLBACK MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,LPARAM lParam);
 
-  // use at startup
-  static void SetMapRect(RECT rc) {
-    MapRect = rc;
-  }
-
   static void CloseDrawingThread(void);
   static void CreateDrawingThread(void);
   static void SuspendDrawingThread(void);
@@ -119,6 +114,11 @@ class MapWindow {
 
   static void UpdateInfo(NMEA_INFO *nmea_info,
 			 DERIVED_INFO *derived_info);
+
+  // use at startup
+  static void SetMapRect(RECT rc) {
+    MapRect = rc;
+  }
 
   // display management
   static bool checkLabelBlock(RECT rc);
@@ -177,12 +177,7 @@ class MapWindow {
   static bool Event_NearestWaypointDetails(double lon, double lat,
 					   double range, bool pan);
 
-  // Drawing primitives (should go outside this class!)
-
-  static void MapWaypointLabelSortAndRender(HDC hdc);
-  static void DrawDashLine(HDC , const int , const POINT , const POINT ,
-			   const COLORREF ,
-			   const RECT rc);
+  // Drawing primitives (should go outside this class if reusable)
   static void DrawBitmapIn(const HDC hdc, const POINT &sc, const HBITMAP h);
 
   // airspace brushes/colours
@@ -191,6 +186,7 @@ class MapWindow {
   static COLORREF GetAirspaceColourByClass(int i);
   static HBRUSH GetAirspaceBrushByClass(int i);
 
+  ////////////////////////////////////////////////////////////////////////////
  private:
   // state
   static BOOL     Initialised;
@@ -260,16 +256,12 @@ class MapWindow {
   static void CalculateScreenPositionsThermalSources();
   static void CalculateWaypointReachable(void);
   static bool WaypointInTask(int ind);
+  static void MapWaypointLabelSortAndRender(HDC hdc);
 
   // display utilities
   static void _DrawLine(HDC hdc, const int PenStyle, const int width,
 	       const POINT ptStart, const POINT ptEnd,
 	       const COLORREF cr, const RECT rc);
-  static void DrawBitmapX(HDC hdc, int top, int right,
-		     int sizex, int sizey,
-		     HDC source,
-		     int offsetx, int offsety,
-		     DWORD mode);
   static bool TextInBox(HDC hDC, const TCHAR *Value, int x, int y, int size,
                         TextInBoxMode_t Mode, bool noOverlap=false);
 

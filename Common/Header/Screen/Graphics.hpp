@@ -122,4 +122,15 @@ public:
 
 extern ScreenGraphics MapGfx;
 
+void DrawBitmapX(HDC hdc, int top, int right,
+		 int sizex, int sizey,
+		 HDC source,
+		 int offsetx, int offsety,
+		 DWORD mode);
+
+void DrawDashLine(HDC hdc, const int width,
+		  const POINT ptStart, const POINT ptEnd,
+		  const COLORREF cr,
+		  const RECT rc);
+
 #endif

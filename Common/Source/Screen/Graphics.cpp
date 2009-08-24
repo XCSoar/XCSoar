@@ -37,10 +37,12 @@ Copyright_License {
 
 #include "Screen/Graphics.hpp"
 #include "Screen/Ramp.hpp"
+#include "Screen/Util.hpp"
 #include "Appearance.hpp"
 #include "MapWindow.h"
 #include "Interface.hpp"
 #include "InfoBoxLayout.h"
+#include <stdlib.h>
 
 #define NUMSNAILRAMP 6
 
@@ -334,4 +336,65 @@ void ScreenGraphics::Destroy() {
     DeleteObject(hSnailPens[i]);
   }
 
+}
+
+
+void DrawBitmapX(HDC hdc, int x, int y,
+		 int sizex, int sizey,
+		 HDC source,
+		 int offsetx, int offsety,
+		 DWORD mode) {
+
+  if (InfoBoxLayout::scale>1) {
+    StretchBlt(hdc, x, y,
+               IBLSCALE(sizex),
+               IBLSCALE(sizey),
+               source,
+               offsetx, offsety, sizex, sizey,
+               mode);
+  } else {
+    BitBlt(hdc, x, y, sizex, sizey,
+           source, offsetx, offsety, mode);
+  }
+}
+
+
+void DrawDashLine(HDC hdc, const int width,
+		  const POINT ptStart, const POINT ptEnd,
+		  const COLORREF cr,
+		  const RECT rc)
+{
+  int i;
+  HPEN hpDash,hpOld;
+  POINT pt[2];
+  //Create a dot pen
+  hpDash = (HPEN)CreatePen(PS_DASH, 1, cr);
+  hpOld = (HPEN)SelectObject(hdc, hpDash);
+
+  pt[0].x = ptStart.x;
+  pt[0].y = ptStart.y;
+  pt[1].x = ptEnd.x;
+  pt[1].y = ptEnd.y;
+
+  //increment on smallest variance
+  if(abs(ptStart.x - ptEnd.x) < abs(ptStart.y - ptEnd.y)){
+    pt[0].x -= width / 2;
+    pt[1].x -= width / 2;
+    for (i = 0; i < width; i++){
+      pt[0].x += 1;
+      pt[1].x += 1;
+      ClipPolyline(hdc, pt, 2, rc);
+    }
+  } else {
+    pt[0].y -= width / 2;
+    pt[1].y -= width / 2;
+    for (i = 0; i < width; i++){
+      pt[0].y += 1;
+      pt[1].y += 1;
+      ClipPolyline(hdc, pt, 2, rc);
+    }
+  }
+
+  SelectObject(hdc, hpOld);
+  DeleteObject((HPEN)hpDash);
 }
