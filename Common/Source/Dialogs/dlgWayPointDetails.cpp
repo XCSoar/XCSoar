@@ -43,6 +43,8 @@ Copyright_License {
 #include "LocalPath.hpp"
 #include "Utils.h"
 #include "externs.h"
+#include "SettingsComputer.hpp"
+#include "SettingsTask.hpp"
 #include "McReady.h"
 #include "Dialogs/dlgTools.h"
 #include "InfoBoxLayout.h"

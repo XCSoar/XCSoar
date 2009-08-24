@@ -55,6 +55,8 @@ Copyright_License {
 #include "Utils.h"
 #include "Device/Parser.h"
 #include "externs.h"
+#include "SettingsComputer.hpp"
+#include "SettingsTask.hpp"
 #include "SettingsUser.hpp"
 #include "LogFile.hpp"
 #include "InfoBoxManager.h"

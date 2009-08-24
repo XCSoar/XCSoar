@@ -38,7 +38,7 @@ Copyright_License {
 
 #include "CalculationsVertical.hpp"
 #include "XCSoar.h"
-#include "externs.h"
+#include "SettingsComputer.hpp"
 #include "Math/FastMath.h"
 #include "WayPoint.hpp"
 #include "Math/Earth.hpp"

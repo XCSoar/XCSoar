@@ -38,6 +38,7 @@ Copyright_License {
 #include "Formatter/Time.hpp"
 #include "Process.h"
 #include "externs.h"
+#include "SettingsTask.hpp"
 
 void FormatterTime::SecsToDisplayTime(int d) {
   bool negative = (d<0);

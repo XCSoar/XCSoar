@@ -40,6 +40,7 @@ Copyright_License {
 #include "Protection.hpp"
 #include "Device/Parser.h"
 #include "externs.h"
+#include "SettingsTask.hpp"
 #include "Math/FastMath.h"
 #include "Device/device.h"
 #include "Dialogs.h"

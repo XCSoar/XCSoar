@@ -39,6 +39,7 @@ Copyright_License {
 #include "Math/FastMath.h"
 #include "XCSoar.h"
 #include "externs.h"
+#include "SettingsTask.hpp"
 #include "Atmosphere.h"
 #include "Battery.h"
 #include "McReady.h"

@@ -43,7 +43,7 @@ Copyright_License {
 #include "Airspace.h"
 #include "Calculations.h"
 #include "Math/Geometry.hpp"
-#include "externs.h"
+#include "SettingsTask.hpp"
 #include "Math/Earth.hpp"
 #include "WayPoint.hpp"
 

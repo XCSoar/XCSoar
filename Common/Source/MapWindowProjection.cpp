@@ -38,7 +38,8 @@ Copyright_License {
 #include "MapWindow.h"
 #include "Math/FastMath.h"
 #include "Math/Geometry.hpp"
-#include "externs.h" // for DisplayGeometry
+#include "SettingsUser.hpp"
+#include "SettingsTask.hpp"
 #include "InputEvents.h"
 #include "SettingsUser.hpp"
 

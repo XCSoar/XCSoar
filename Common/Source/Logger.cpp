@@ -41,6 +41,7 @@
 #include "Dialogs.h"
 #include "Device/Port.h"
 #include "externs.h"
+#include "SettingsTask.hpp"
 #include "Registry.hpp"
 #include "Math/Earth.hpp"
 #include "LogFile.hpp"

@@ -41,6 +41,8 @@ Copyright_License {
 #include "InfoBoxLayout.h"
 #include "Statistics.h"
 #include "externs.h"
+#include "SettingsComputer.hpp"
+#include "SettingsTask.hpp"
 #include "McReady.h"
 #include "Dialogs/dlgTools.h"
 #include "Atmosphere.h"

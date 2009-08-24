@@ -48,6 +48,7 @@ Copyright_License {
 #include "Waypointparser.h"
 #include "Dialogs.h"
 #include "externs.h"
+#include "SettingsTask.hpp"
 #include "Audio/VarioSound.h"
 #include "InputEvents.h"
 #include "Trigger.hpp"

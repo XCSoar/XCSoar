@@ -59,9 +59,9 @@ Copyright_License {
 #include "Math/Units.h"
 #include "Registry.hpp"
 #include "Screen/Blank.hpp"
-
-
 #include "externs.h"
+#include "SettingsTask.hpp"
+#include "SettingsComputer.hpp"
 
 extern bool DialogActive;
 int  InfoBoxFocusTimeOut = 0;

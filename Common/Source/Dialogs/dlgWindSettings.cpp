@@ -38,6 +38,7 @@ Copyright_License {
 #include "Dialogs.h"
 #include "XCSoar.h"
 #include "externs.h"
+#include "SettingsComputer.hpp"
 #include "Units.h"
 #include "Dialogs/dlgTools.h"
 #include "Registry.hpp"

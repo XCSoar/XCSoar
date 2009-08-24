@@ -41,6 +41,8 @@ Copyright_License {
 #include "Protection.hpp"
 #include "McReady.h"
 #include "Settings.hpp"
+#include "SettingsComputer.hpp"
+#include "SettingsTask.hpp"
 #include "RasterTerrain.h"
 #include "Math/FastMath.h"
 #include "Math/Earth.hpp"
@@ -315,7 +317,6 @@ double MacCreadyTimeLimit(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
 
 
 #include "Calculations.h"
-#include "externs.h"
 #include "WayPoint.hpp"
 
 

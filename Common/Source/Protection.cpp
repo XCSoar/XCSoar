@@ -14,6 +14,8 @@
 
 static Trigger dataTriggerEvent(TEXT("dataTriggerEvent"));
 static Trigger varioTriggerEvent(TEXT("varioTriggerEvent"));
+Trigger drawTriggerEvent(TEXT("drawTriggerEvent"));
+
 static BOOL GpsUpdated;
 static BOOL VarioUpdated;
 

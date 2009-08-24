@@ -39,6 +39,7 @@ Copyright_License {
 #include "Protection.hpp"
 #include "Utils.h"
 #include "externs.h"
+#include "SettingsTask.hpp"
 #include "Dialogs.h"
 #include "Logger.h"
 #include "McReady.h"

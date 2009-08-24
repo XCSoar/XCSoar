@@ -41,6 +41,7 @@ Copyright_License {
 #include "Airspace.h"
 #include "InputEvents.h"  // used for altair beep hack
 #include "externs.h"
+#include "SettingsTask.hpp"
 #include "Device/device.h"
 
 #include <tchar.h>

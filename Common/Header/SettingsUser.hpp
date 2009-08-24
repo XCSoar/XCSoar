@@ -45,6 +45,9 @@ Copyright_License {
 // where using these from Calculations or MapWindow thread, should
 // protect
 
+// local time adjustment
+extern int UTCOffset;
+
 extern bool CircleZoom;
 extern bool EnableTopology;
 extern bool EnableTerrain;

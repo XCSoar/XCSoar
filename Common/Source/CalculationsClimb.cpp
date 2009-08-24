@@ -38,6 +38,7 @@ Copyright_License {
 
 #include "Calculations.h"
 #include "externs.h"
+#include "SettingsComputer.hpp"
 #include "Device/device.h"
 #include "InputEvents.h"
 #include "McReady.h"

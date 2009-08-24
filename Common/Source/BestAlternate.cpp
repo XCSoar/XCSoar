@@ -41,6 +41,8 @@ Copyright_License {
 #include "Protection.hpp"
 #include "WayPoint.hpp"
 #include "Math/FastMath.h"
+#include "SettingsComputer.hpp"
+#include "SettingsTask.hpp"
 #include "externs.h"
 #include "McReady.h"
 #include "Dialogs.h"

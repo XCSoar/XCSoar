@@ -42,10 +42,11 @@ Copyright_License {
 #include "Math/Screen.hpp"
 #include "Math/FastMath.h"
 #include "Math/Geometry.hpp"
-#include "externs.h"
 #include "Logger.h"
 #include "Dialogs.h"
 #include "McReady.h"
+#include "Settings.hpp"
+#include "SettingsTask.hpp"
 #include "SettingsUser.hpp"
 
 extern HFONT  MapWindowBoldFont;

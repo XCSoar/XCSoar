@@ -38,19 +38,7 @@ Copyright_License {
 #ifndef XCSOAR_SETTINGS_HPP
 #define XCSOAR_SETTINGS_HPP
 
-#include "Task.h"
-
 // changed only in config or by user interface /////////////////////////////
-
-// local time adjustment
-extern int UTCOffset;
-
-// user controls/parameters
-extern double SAFETYALTITUDEARRIVAL;
-extern double SAFETYALTITUDEBREAKOFF;
-extern double SAFETYALTITUDETERRAIN;
-extern double SAFTEYSPEED;
-
 
 // sound stuff not used?
 extern bool EnableSoundVario;
@@ -59,66 +47,22 @@ extern bool EnableSoundModes;
 extern int  SoundVolume;
 extern int  SoundDeadband;
 
-// external control of user interface
-extern int EnableExternalTriggerCruise;
-
-// Logger
-extern int LoggerTimeStepCruise;
-extern int LoggerTimeStepCircling;
-
-// control of calculations
-extern int  AutoWindMode;
-extern bool EnableNavBaroAltitude;
-extern bool EnableBlockSTF; // block speed to fly instead of dolphin
-extern int  EnableThermalLocator;
-
-// control of task/waypoints
-extern int  AutoAdvance;
-extern bool AdvanceArmed;
-extern int  HomeWaypoint;
-extern int  AirfieldsHomeWaypoint; // VENTA3
-
-// task data
-extern START_POINT StartPoints[];
-extern TASK_POINT Task[];
-extern TASKSTATS_POINT TaskStats[];
-extern int ActiveWayPoint;
-extern bool TaskAborted;
-extern int SelectedWaypoint;
-extern int SectorType;
-extern DWORD SectorRadius;
-extern int StartLine;
-extern DWORD StartRadius;
-extern int FinishLine;
-extern DWORD FinishRadius;
-extern double AATTaskLength;
-extern BOOL AATEnabled;
-extern bool EnableFAIFinishHeight;
-extern DWORD FinishMinHeight;
-extern DWORD StartMaxHeight;
-extern DWORD StartMaxHeightMargin;
-extern DWORD StartMaxSpeed;
-extern DWORD StartMaxSpeedMargin;
-extern int OLCRules;
-extern int Handicap;
-extern bool EnableOLC;
-
 // changed in task/flight or by calc thread /////////////////////////////////
 
 extern bool LoggerActive;
 
 // polar info
-extern int BallastSecsToEmpty;
+extern int  BallastSecsToEmpty;
 extern bool BallastTimerActive;
 
 // waypoint data
-extern int Alternate1; // VENTA3
-extern int Alternate2;
-extern int BestAlternate;
-extern int ActiveAlternate;
-extern bool  OnBestAlternate;
-extern bool  OnAlternate1;
-extern bool  OnAlternate2;
+extern int  Alternate1; // VENTA3
+extern int  Alternate2;
+extern int  BestAlternate;
+extern int  ActiveAlternate;
+extern bool OnBestAlternate;
+extern bool OnAlternate1;
+extern bool OnAlternate2;
 
 // external control of user interface
 extern bool ExternalTriggerCruise;

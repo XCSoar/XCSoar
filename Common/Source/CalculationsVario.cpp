@@ -37,7 +37,8 @@ Copyright_License {
 */
 
 #include "Calculations.h"
-#include "externs.h"
+#include "SettingsComputer.hpp"
+#include "SettingsTask.hpp"
 #include "Device/device.h"
 #include "McReady.h"
 #include "Math/LowPassFilter.hpp"

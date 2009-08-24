@@ -382,155 +382,161 @@ VOLKS	:=\
 	$(SRC)/Device/Volkslogger/vlutils.cpp
 
 OBJS	:=\
-	$(SRC)/Protection.o \
-	$(SRC)/ProcessTimer.o \
-	\
-	$(SRC)/Asset.o \
-	$(SRC)/Appearance.o \
-	$(SRC)/AATDistance.o 		$(SRC)/AirfieldDetails.o \
-	\
+	$(SRC)/AATDistance.o 		\
 	$(SRC)/Airspace.o 		\
-	$(SRC)/AirspaceParser.o 		\
+	$(SRC)/AirspaceParser.o 	\
 	$(SRC)/AirspaceWarning.o 	\
-	\
-	$(SRC)/Atmosphere.o \
-	\
-	$(SRC)/Calculations.o 		$(SRC)/Calculations2.o \
-	$(SRC)/CalculationsAbort.o \
-	$(SRC)/CalculationsAirspace.o \
-	$(SRC)/CalculationsAutoMc.o \
-	$(SRC)/CalculationsBallast.o \
-	$(SRC)/CalculationsClimb.o \
-	$(SRC)/CalculationsSector.o \
-	$(SRC)/CalculationsTask.o \
-	$(SRC)/CalculationsTerrain.o \
-	$(SRC)/CalculationsVario.o \
-	$(SRC)/CalculationsVertical.o \
-	$(SRC)/CalculationsWind.o \
-	\
+	$(SRC)/Atmosphere.o 		\
+	$(SRC)/BestAlternate.o 		\
 	$(SRC)/ClimbAverageCalculator.o \
-	$(SRC)/ConditionMonitor.o 	$(SRC)/Device/device.o \
-	$(SRC)/Dialogs.o 		\
-	$(SRC)/FlarmIdFile.o 		$(SRC)/FlarmCalculations.o \
-	$(SRC)/GaugeCDI.o 		$(SRC)/GaugeFLARM.o \
-	$(SRC)/GaugeVarioAltA.o 	$(SRC)/Device/Geoid.o \
-	$(SRC)/GlideSolvers.o \
-	$(SRC)/BestAlternate.o \
-	$(SRC)/Persist.o \
-	\
-	$(SRC)/InfoBox.o 		\
-	$(SRC)/InfoBoxLayout.o \
-	$(SRC)/InfoBoxEvents.o \
-	$(SRC)/InfoBoxManager.o \
-	$(SRC)/ButtonLabel.o \
-	\
-	$(SRC)/InputEvents.o 		\
-	$(SRC)/InputEventsActions.o 		\
-	\
+	$(SRC)/ConditionMonitor.o 	\
+	$(SRC)/Calculations.o 		\
+	$(SRC)/Calculations2.o 		\
+	$(SRC)/CalculationsAbort.o 	\
+	$(SRC)/CalculationsAirspace.o 	\
+	$(SRC)/CalculationsAutoMc.o 	\
+	$(SRC)/CalculationsBallast.o 	\
+	$(SRC)/CalculationsClimb.o 	\
+	$(SRC)/CalculationsSector.o 	\
+	$(SRC)/CalculationsTask.o 	\
+	$(SRC)/CalculationsTerrain.o 	\
+	$(SRC)/CalculationsVario.o 	\
+	$(SRC)/CalculationsVertical.o 	\
+	$(SRC)/CalculationsWind.o 	\
+	$(SRC)/FlarmIdFile.o 		\
+	$(SRC)/FlarmCalculations.o 	\
+	$(SRC)/GlideRatio.o 		\
+	$(SRC)/GlideSolvers.o 		\
 	$(SRC)/Logger.o 		\
+	$(SRC)/McReady.o 		\
+	$(SRC)/NavFunctions.o		\
+	$(SRC)/OnLineContest.o 		\
+	$(SRC)/Persist.o 		\
+	$(SRC)/SnailTrail.o 		\
+	$(SRC)/Task.o			\
+	$(SRC)/TeamCodeCalculation.o 	\
+	$(SRC)/ThermalLocator.o 	\
+	$(SRC)/Waypointparser.o 	\
+	$(SRC)/WayPoint.o 		\
+	$(SRC)/windanalyser.o 		\
+	$(SRC)/windmeasurementlist.o 	\
+	$(SRC)/windstore.o 		\
+	$(SRC)/WindZigZag.o 		\
 	\
-	$(SRC)/MapWindow.o 			\
-	$(SRC)/MapWindowAirspace.o 		\
-	$(SRC)/MapWindowGraphics.o 		\
-	$(SRC)/MapWindowGlideRange.o 		\
-	$(SRC)/MapWindowLabels.o 		\
-	$(SRC)/MapWindowProjection.o 		\
-	$(SRC)/MapWindowScale.o 		\
-	$(SRC)/MapWindowSymbols.o 		\
-	$(SRC)/MapWindowTask.o 			\
-	$(SRC)/MapWindowTarget.o		\
-	$(SRC)/MapWindowThermal.o 		\
-	$(SRC)/MapWindowTraffic.o 		\
-	$(SRC)/MapWindowTrail.o 		\
-	$(SRC)/MapWindowWaypoints.o 		\
-	$(SRC)/MapWindow2.o 			\
+	$(SRC)/GaugeCDI.o 		\
+	$(SRC)/GaugeFLARM.o 		\
+	$(SRC)/GaugeVarioAltA.o 	\
 	\
-	$(SRC)/McReady.o 		$(SRC)/Message.o \
-	$(SRC)/NavFunctions.o		$(SRC)/OnLineContest.o \
-	$(SRC)/Device/Parser.o		$(SRC)/Device/Port.o \
-	$(SRC)/Process.o \
-	$(SRC)/StdAfx.o			\
-	$(SRC)/Task.o			$(SRC)/TeamCodeCalculation.o \
+	$(SRC)/AirfieldDetails.o 	\
+	$(SRC)/ButtonLabel.o 		\
+	$(SRC)/DataField/Base.o 	\
+	$(SRC)/DataField/Boolean.o 	\
+	$(SRC)/DataField/ComboList.o 	\
+	$(SRC)/DataField/Enum.o 	\
+	$(SRC)/DataField/FileReader.o 	\
+	$(SRC)/DataField/Float.o 	\
+	$(SRC)/DataField/Integer.o 	\
+	$(SRC)/DataField/String.o 	\
+	$(SRC)/Dialogs.o 		\
+	$(SRC)/ExpandMacros.o 		\
+	$(SRC)/Formatter/Base.o 	\
+	$(SRC)/Formatter/TeamCode.o 	\
+	$(SRC)/Formatter/WayPoint.o 	\
+	$(SRC)/Formatter/LowWarning.o 	\
+	$(SRC)/Formatter/Time.o 	\
+	$(SRC)/InfoBox.o 		\
+	$(SRC)/InfoBoxLayout.o 		\
+	$(SRC)/InfoBoxEvents.o 		\
+	$(SRC)/InfoBoxManager.o 	\
+	$(SRC)/InputEvents.o 		\
+	$(SRC)/InputEventsActions.o 	\
+	$(SRC)/Message.o 		\
+	$(SRC)/Process.o 		\
+	$(SRC)/StatusMessage.o 		\
+	$(SRC)/WindowControls.o 	\
+	$(SRC)/LogFile.o 		\
+	\
+	$(SRC)/MapWindow.o 		\
+	$(SRC)/MapWindowAirspace.o 	\
+	$(SRC)/MapWindowGraphics.o 	\
+	$(SRC)/MapWindowGlideRange.o 	\
+	$(SRC)/MapWindowLabels.o 	\
+	$(SRC)/MapWindowProjection.o 	\
+	$(SRC)/MapWindowScale.o 	\
+	$(SRC)/MapWindowSymbols.o 	\
+	$(SRC)/MapWindowTask.o 		\
+	$(SRC)/MapWindowTarget.o	\
+	$(SRC)/MapWindowThermal.o 	\
+	$(SRC)/MapWindowTraffic.o 	\
+	$(SRC)/MapWindowTrail.o 	\
+	$(SRC)/MapWindowWaypoints.o 	\
+	$(SRC)/MapWindow2.o 		\
 	\
 	$(SRC)/Topology.o		\
 	$(SRC)/TopologyStore.o		\
-	$(SRC)/RasterMap.o \
-	$(SRC)/RasterTerrain.o \
-	$(SRC)/RasterWeather.o \
+	$(SRC)/RasterMap.o 		\
+	$(SRC)/RasterTerrain.o 		\
+	$(SRC)/RasterWeather.o 		\
 	$(SRC)/TerrainRenderer.o	\
-	$(SRC)/ThermalLocator.o \
-	$(SRC)/Marks.o \
+	$(SRC)/Marks.o 			\
 	\
-	$(SRC)/units.o \
-	$(SRC)/Utils.o			$(SRC)/Utils2.o \
-	$(SRC)/Waypointparser.o \
-	$(SRC)/windanalyser.o		$(SRC)/windmeasurementlist.o \
-	$(SRC)/windstore.o 		$(SRC)/WindowControls.o \
-	$(SRC)/WindZigZag.o 		$(SRC)/xmlParser.o \
-	$(SRC)/Audio/VegaVoice.o		\
-	$(SRC)/Compatibility/string.o \
-	$(SRC)/Battery.o \
+	$(SRC)/Asset.o 			\
+	$(SRC)/Appearance.o 		\
+	$(SRC)/Battery.o 		\
+	$(SRC)/units.o 			\
+	$(SRC)/Utils.o			\
+	$(SRC)/Utils2.o 		\
+	$(SRC)/Audio/VegaVoice.o	\
+	$(SRC)/Compatibility/string.o 	\
+	$(SRC)/LocalPath.o 		\
+	$(SRC)/Registry.o 		\
+	$(SRC)/xmlParser.o 		\
 	\
-	$(SRC)/Math/Earth.o \
-	$(SRC)/Math/FastMath.o \
-	$(SRC)/Math/Geometry.o \
-	$(SRC)/Math/leastsqs.o \
-	$(SRC)/Math/LowPassFilter.o \
-	$(SRC)/Math/Pressure.o \
-	$(SRC)/Math/Screen.o \
-	$(SRC)/Math/SunEphemeris.o \
+	$(SRC)/Math/Earth.o 		\
+	$(SRC)/Math/FastMath.o 		\
+	$(SRC)/Math/Geometry.o 		\
+	$(SRC)/Math/leastsqs.o 		\
+	$(SRC)/Math/LowPassFilter.o 	\
+	$(SRC)/Math/Pressure.o 		\
+	$(SRC)/Math/Screen.o 		\
+	$(SRC)/Math/SunEphemeris.o 	\
 	\
-	$(SRC)/Screen/Animation.o \
-	$(SRC)/Screen/Blank.o \
-	$(SRC)/Screen/Ramp.o \
-	$(SRC)/Screen/Util.o \
-	$(SRC)/Screen/STScreenBuffer.o \
-	$(SRC)/Screen/VOIMAGE.o \
-	$(SRC)/Screen/Fonts.o \
+	$(SRC)/Screen/Animation.o 	\
+	$(SRC)/Screen/Blank.o 		\
+	$(SRC)/Screen/Ramp.o 		\
+	$(SRC)/Screen/Util.o 		\
+	$(SRC)/Screen/STScreenBuffer.o 	\
+	$(SRC)/Screen/VOIMAGE.o 	\
+	$(SRC)/Screen/Fonts.o 		\
 	\
-	$(SRC)/Registry.o \
+	$(SRC)/Polar/WinPilot.o 	\
+	$(SRC)/Polar/BuiltIn.o 		\
+	$(SRC)/Polar/Historical.o 	\
 	\
-	$(SRC)/Polar/WinPilot.o \
-	$(SRC)/Polar/BuiltIn.o \
-	$(SRC)/Polar/Historical.o \
+	$(SRC)/Screen/shapelib/mapbits.o 	\
+	$(SRC)/Screen/shapelib/maperror.o 	\
+	$(SRC)/Screen/shapelib/mapprimitive.o 	\
+	$(SRC)/Screen/shapelib/mapsearch.o 	\
+	$(SRC)/Screen/shapelib/mapshape.o 	\
+	$(SRC)/Screen/shapelib/maptree.o 	\
+	$(SRC)/Screen/shapelib/mapxbase.o 	\
 	\
-	$(SRC)/StatusMessage.o \
-	$(SRC)/LocalPath.o \
+	$(SRC)/StdAfx.o			\
+	$(SRC)/Protection.o 		\
+	$(SRC)/ProcessTimer.o 		\
+	$(SRC)/XCSoar.o 		\
 	\
-	$(SRC)/DataField/Base.o \
-	$(SRC)/DataField/Boolean.o \
-	$(SRC)/DataField/ComboList.o \
-	$(SRC)/DataField/Enum.o \
-	$(SRC)/DataField/FileReader.o \
-	$(SRC)/DataField/Float.o \
-	$(SRC)/DataField/Integer.o \
-	$(SRC)/DataField/String.o \
-	$(SRC)/WayPoint.o \
-	$(SRC)/SnailTrail.o \
-	$(SRC)/Formatter/Base.o \
-	$(SRC)/Formatter/TeamCode.o \
-	$(SRC)/Formatter/WayPoint.o \
-	$(SRC)/Formatter/LowWarning.o \
-	$(SRC)/Formatter/Time.o \
-	$(SRC)/ExpandMacros.o \
-	$(SRC)/LogFile.o \
-	$(SRC)/GlideRatio.o \
+	$(SRC)/Device/device.o 		\
+	$(SRC)/Device/Geoid.o 		\
+	$(SRC)/Device/Parser.o		\
+	$(SRC)/Device/Port.o 		\
+	$(DEVS) 			\
 	\
-	$(SRC)/Screen/shapelib/mapbits.o \
-	$(SRC)/Screen/shapelib/maperror.o \
-	$(SRC)/Screen/shapelib/mapprimitive.o \
-	$(SRC)/Screen/shapelib/mapsearch.o \
-	$(SRC)/Screen/shapelib/mapshape.o \
-	$(SRC)/Screen/shapelib/maptree.o \
-	$(SRC)/Screen/shapelib/mapxbase.o \
-	\
-	$(SRC)/XCSoar.o \
-	$(DEVS) \
-	$(DLGS:.cpp=.o) \
-	$(VOLKS:.cpp=.o) \
-	$(SRC)/XCSoar.rsc \
-	$(SRC)/jasper.a \
-	$(SRC)/zzip.a \
+	$(DLGS:.cpp=.o) 		\
+	$(VOLKS:.cpp=.o) 		\
+	$(SRC)/XCSoar.rsc 		\
+	$(SRC)/jasper.a 		\
+	$(SRC)/zzip.a 			\
 	$(SRC)/compat.a
 
 #	$(SRC)/VarioSound.o \

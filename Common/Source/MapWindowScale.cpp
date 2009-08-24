@@ -37,7 +37,9 @@ Copyright_License {
 
 #include "MapWindow.h"
 #include "Protection.hpp"
-#include "externs.h" // for
+#include "Settings.hpp"
+#include "SettingsUser.hpp"
+#include "SettingsTask.hpp"
 #include "InfoBoxLayout.h"
 #include <math.h>
 #include "Math/FastMath.h"

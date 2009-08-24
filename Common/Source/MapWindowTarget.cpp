@@ -39,7 +39,7 @@ Copyright_License {
 #include "XCSoar.h"
 #include "Protection.hpp"
 #include "Task.h"
-#include "externs.h"
+#include "SettingsTask.hpp"
 #include "WayPoint.hpp"
 
 

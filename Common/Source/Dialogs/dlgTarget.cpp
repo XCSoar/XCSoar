@@ -41,6 +41,7 @@ Copyright_License {
 #include "Interface.hpp"
 #include "Utils.h"
 #include "externs.h"
+#include "SettingsTask.hpp"
 #include "Units.h"
 #include "Math/Earth.hpp"
 #include "LogFile.hpp"

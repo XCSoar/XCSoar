@@ -522,8 +522,6 @@ void PreloadInitialisation(bool ask) {
 
 }
 
-Trigger drawTriggerEvent(TEXT("drawTriggerEvent"));
-
 
 StartupState_t ProgramStarted = psInitInProgress;
 // 0: not started at all

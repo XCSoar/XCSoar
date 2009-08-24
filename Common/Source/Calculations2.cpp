@@ -41,6 +41,7 @@ Copyright_License {
 #include "XCSoar.h"
 #include "Dialogs.h"
 #include "Utils.h"
+#include "SettingsTask.hpp"
 #include "externs.h"
 #include "McReady.h"
 #include "Airspace.h"

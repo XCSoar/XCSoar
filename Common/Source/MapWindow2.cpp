@@ -40,7 +40,7 @@ Copyright_License {
 #include "Protection.hpp"
 #include "Utils.h"
 #include "Math/Earth.hpp"
-#include "externs.h"
+#include "SettingsComputer.hpp"
 
 
 void MapWindow::ScanVisibility(rectObj *bounds_active) {

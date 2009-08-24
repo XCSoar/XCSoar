@@ -39,6 +39,7 @@ Copyright_License {
 #include "XCSoar.h"
 #include "Device/Parser.h"
 #include "externs.h"
+#include "SettingsTask.hpp"
 #include "WayPoint.hpp"
 #include "Utils.h"
 #include <stdlib.h>

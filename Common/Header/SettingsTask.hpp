@@ -35,21 +35,41 @@ Copyright_License {
 }
 */
 
-#if !defined(AFX_XCSOAR_H__695AAC30_F401_4CFF_9BD9_FE62A2A2D0D2__INCLUDED_)
-#define AFX_XCSOAR_H__695AAC30_F401_4CFF_9BD9_FE62A2A2D0D2__INCLUDED_
+#ifndef XCSOAR_SETTINGS_TASK_HPP
+#define XCSOAR_SETTINGS_TASK_HPP
 
-#include "StdAfx.h"
-// #include "options.h" already in StdAfx.h
-#include "Defines.h"
-#include "resource.h"
-#include "Sizes.h"
-#include "Units.h"
-#include "Appearance.hpp"
+#include "Task.h"
 
-extern TCHAR XCSoar_Version[256];
+// control of task/waypoints
+extern int  AutoAdvance;
+extern bool AdvanceArmed;
+extern int  HomeWaypoint;
+extern int  AirfieldsHomeWaypoint; // VENTA3
 
-extern Appearance_t Appearance;
+// task data
+extern START_POINT StartPoints[];
+extern TASK_POINT Task[];
+extern TASKSTATS_POINT TaskStats[];
+extern int ActiveWayPoint;
+extern bool TaskAborted;
+extern int SelectedWaypoint;
+extern int SectorType;
+extern DWORD SectorRadius;
+extern int StartLine;
+extern DWORD StartRadius;
+extern int FinishLine;
+extern DWORD FinishRadius;
+extern double AATTaskLength;
+extern BOOL AATEnabled;
+extern bool EnableFAIFinishHeight;
+extern DWORD FinishMinHeight;
+extern DWORD StartMaxHeight;
+extern DWORD StartMaxHeightMargin;
+extern DWORD StartMaxSpeed;
+extern DWORD StartMaxSpeedMargin;
+extern int OLCRules;
+extern int Handicap;
+extern bool EnableOLC;
 
-// ******************************************************************
 
-#endif // !defined(AFX_XCSOAR_H__695AAC30_F401_4CFF_9BD9_FE62A2A2D0D2__INCLUDED_)
+#endif

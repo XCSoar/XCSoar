@@ -40,6 +40,7 @@ Copyright_License {
 #include "Utils.h"
 #include "Dialogs.h"
 #include "externs.h"
+#include "SettingsTask.hpp"
 #include "Dialogs/dlgTools.h"
 #include "Logger.h"
 #include "InfoBoxLayout.h"

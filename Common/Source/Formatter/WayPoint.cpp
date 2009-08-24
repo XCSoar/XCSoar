@@ -41,6 +41,7 @@ Copyright_License {
 #include "Formatter/WayPoint.hpp"
 #include "externs.h"
 #include "MapWindow.h" // only for display mode definitions, should be elsewhere
+#include "SettingsTask.hpp"
 #include "SettingsUser.hpp"
 
 

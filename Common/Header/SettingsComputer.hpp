@@ -35,21 +35,23 @@ Copyright_License {
 }
 */
 
-#if !defined(AFX_XCSOAR_H__695AAC30_F401_4CFF_9BD9_FE62A2A2D0D2__INCLUDED_)
-#define AFX_XCSOAR_H__695AAC30_F401_4CFF_9BD9_FE62A2A2D0D2__INCLUDED_
+#ifndef XCSOAR_SETTINGS_COMPUTER_HPP
+#define XCSOAR_SETTINGS_COMPUTER_HPP
 
-#include "StdAfx.h"
-// #include "options.h" already in StdAfx.h
-#include "Defines.h"
-#include "resource.h"
-#include "Sizes.h"
-#include "Units.h"
-#include "Appearance.hpp"
+// control of calculations, these only changed by user interface
+// but are used by calculations
 
-extern TCHAR XCSoar_Version[256];
+extern int    AutoWindMode;
+extern bool   EnableNavBaroAltitude;
+extern bool   EnableBlockSTF; // block speed to fly instead of dolphin
+extern int    EnableThermalLocator;
+extern int    LoggerTimeStepCruise;
+extern int    LoggerTimeStepCircling;
+extern double SAFETYALTITUDEARRIVAL;
+extern double SAFETYALTITUDEBREAKOFF;
+extern double SAFETYALTITUDETERRAIN;
+extern double SAFTEYSPEED;
+extern int    EnableExternalTriggerCruise;
 
-extern Appearance_t Appearance;
+#endif
 
-// ******************************************************************
-
-#endif // !defined(AFX_XCSOAR_H__695AAC30_F401_4CFF_9BD9_FE62A2A2D0D2__INCLUDED_)
