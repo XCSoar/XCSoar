@@ -38,13 +38,11 @@ Copyright_License {
 */
 
 #include "AirfieldDetails.h"
-#include "StdAfx.h"
+#include "XCSoar.h"
 #include "Utils.h"
-#include "Sizes.h"
 #include "externs.h"
 #include "Dialogs.h"
 #include "Utils.h"
-#include "options.h"
 #include "Registry.hpp"
 #include "LocalPath.hpp"
 #include "LogFile.hpp"

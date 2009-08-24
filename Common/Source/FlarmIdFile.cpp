@@ -35,8 +35,8 @@ Copyright_License {
 }
 */
 
-#include "options.h"
 #ifdef NEWFLARMDB
+#include "XCSoar.h"
 #include "FlarmIdFile.h"
 #include "LogFile.hpp"
 #include "Utils.h"

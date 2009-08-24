@@ -36,7 +36,6 @@ Copyright_License {
 */
 
 #include "InfoBox.h"
-#include "StdAfx.h"
 #include "XCSoar.h"
 #include "Dialogs.h"
 #include "Utils.h"
@@ -45,7 +44,6 @@ Copyright_License {
 #include "Compatibility/string.h"
 #include "PeriodClock.hpp"
 #include "WindowControls.h"
-#include "options.h"
 
 #define DEFAULTBORDERPENWIDTH IBLSCALE(1)
 #define SELECTORWIDTH         (DEFAULTBORDERPENWIDTH+IBLSCALE(4))

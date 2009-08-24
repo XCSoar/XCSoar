@@ -35,8 +35,8 @@ Copyright_License {
 }
 */
 
-#include "options.h"
 #include "Appearance.hpp"
+#include "XCSoar.h"
 
 #if !defined(MapScale2)
   #define MapScale2  apMs2Default

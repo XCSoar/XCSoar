@@ -47,7 +47,6 @@ extern MapWindow hWndMapWindow; // TODO try to avoid this
 
 #endif
 #include "Math/FastMath.h"
-#include "options.h"
 #include "Compatibility/string.h"
 #include "PeriodClock.hpp"
 #include "Screen/Animation.hpp"

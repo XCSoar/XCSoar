@@ -50,7 +50,6 @@ Copyright_License {
 #include "Message.h"
 #include "Utils.h"
 #include "InfoBoxManager.h"
-#include "Sizes.h"
 #include "MapWindow.h"
 #include "Math/Earth.hpp"
 

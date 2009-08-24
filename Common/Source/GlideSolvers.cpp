@@ -40,7 +40,6 @@ Copyright_License {
 #include "XCSoar.h"
 #include "Protection.hpp"
 #include "McReady.h"
-#include "Sizes.h"
 #include "Settings.hpp"
 #include "RasterTerrain.h"
 #include "Math/FastMath.h"

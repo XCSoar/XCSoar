@@ -35,11 +35,9 @@ Copyright_License {
 }
 */
 
-#include "StdAfx.h"
-#include <ctype.h> // needed for Wine
 #include "Topology.h"
-#include "options.h"
 #include "XCSoar.h"
+#include <ctype.h> // needed for Wine
 #include "Interface.hpp"
 #include "externs.h"
 #include "wcecompat/ts_string.h"

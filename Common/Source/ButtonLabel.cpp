@@ -36,10 +36,9 @@ Copyright_License {
 */
 
 #include "InfoBoxLayout.h"
+#include "XCSoar.h"
 #include "ButtonLabel.h"
 #include "LogFile.hpp"
-#include "XCSoar.h"
-#include "Sizes.h"
 #include "Dialogs.h"
 #include "externs.h"
 #include "Screen/Animation.hpp"

@@ -36,7 +36,7 @@ Copyright_License {
 */
 
 #include "Utils2.h"
-#include "StdAfx.h"
+#include "XCSoar.h"
 #include <stdio.h>
 #ifndef __MINGW32__
 #if defined(CECORE)
@@ -46,9 +46,7 @@ Copyright_License {
 #include "projects.h"
 #endif
 #endif
-#include "options.h"
 #include "externs.h"
-#include "XCSoar.h"
 #include "InfoBoxLayout.h"
 #include "Device/device.h"
 #include "Logger.h"
