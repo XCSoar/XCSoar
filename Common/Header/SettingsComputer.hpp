@@ -41,8 +41,8 @@ Copyright_License {
 // control of calculations, these only changed by user interface
 // but are used by calculations
 
-// All of these should be protected by LockFlightData() when using from outside
-// calculation thread
+// All of these should be protected by LockFlightData() when setting from outside
+// calculation thread; calculation thread should not set these values
 
 extern int    AutoMcMode;
 extern bool   EnableCalibration;
@@ -60,22 +60,25 @@ extern double SAFETYALTITUDETERRAIN;
 extern double SAFTEYSPEED;
 extern int    EnableExternalTriggerCruise;
 
+extern short  AverEffTime;
+extern double QFEAltitudeOffset; // VENTA3
+
 extern bool   EnableBestAlternate;
 extern bool   EnableAlternate1;
 extern bool   EnableAlternate2;
 
 // polar info
-extern int  BallastSecsToEmpty;
-extern bool BallastTimerActive;
-
+extern int    BallastSecsToEmpty;
+extern bool   BallastTimerActive;
 extern double BUGS;
 extern double BALLAST;
 extern double MACCREADY;
 extern bool   AutoMacCready;
 
-extern short AverEffTime;
-extern double QFEAltitudeOffset; // VENTA3
-
+extern int TeamCodeRefWaypoint;
+extern bool TeammateCodeValid;
+extern bool TeamFlarmTracking;
+extern TCHAR TeamFlarmCNTarget[4]; // CN of the glider to track
 
 #endif
 

@@ -39,7 +39,6 @@ Copyright_License {
 #include "XCSoar.h"
 #include "Protection.hpp"
 #include "Device/Parser.h"
-#include "externs.h"
 #include "Blackboard.hpp"
 #include "Settings.hpp"
 #include "SettingsComputer.hpp"

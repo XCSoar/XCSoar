@@ -53,7 +53,6 @@ Copyright_License {
 #include "Logger.h"
 #include "Utils.h"
 #include "LocalPath.hpp"
-#include "externs.h"
 #include "Settings.hpp"
 #include "SettingsUser.hpp"
 #include "Device/Port.h"

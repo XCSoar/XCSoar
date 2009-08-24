@@ -63,7 +63,6 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Protection.hpp"
 #include "LogFile.hpp"
 #include "Device/Parser.h"
-#include "externs.h"
 #include "Blackboard.hpp"
 #include "Settings.hpp"
 #include "SettingsComputer.hpp"

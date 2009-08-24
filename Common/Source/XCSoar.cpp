@@ -83,7 +83,6 @@ Copyright_License {
 #include "Audio/VarioSound.h"
 #include "Device/device.h"
 
-#include "externs.h"
 #include "Units.h"
 #include "InputEvents.h"
 #include "Message.h"

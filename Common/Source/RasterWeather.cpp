@@ -41,7 +41,6 @@ Copyright_License {
 #include "Dialogs.h"
 #include "Units.h"
 #include "Process.h"
-#include "externs.h"
 #include "Blackboard.hpp"
 #include "Math/FastMath.h"
 #include "Math/Earth.hpp"

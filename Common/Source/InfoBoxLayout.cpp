@@ -42,7 +42,6 @@ Copyright_License {
 #include "XCSoar.h"
 #include "MapWindow.h"
 #include "Dialogs.h"
-#include "externs.h"
 #include "Screen/Animation.hpp"
 #include "Registry.hpp"
 #include "InfoBox.h"

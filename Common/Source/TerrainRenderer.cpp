@@ -43,7 +43,6 @@ Copyright_License {
 #include "Topology.h"
 #include "Screen/STScreenBuffer.h"
 #include "Dialogs.h"
-#include "externs.h"
 #include "Math/FastMath.h"
 #include "Math/Earth.hpp"
 #include "InfoBoxLayout.h"

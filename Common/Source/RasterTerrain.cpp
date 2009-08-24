@@ -36,12 +36,11 @@ Copyright_License {
 */
 
 #include "RasterTerrain.h"
+#include "XCSoar.h"
 #include "RasterWeather.h"
 #include "LogFile.hpp"
-#include "XCSoar.h"
 #include "Dialogs.h"
 #include "Process.h"
-#include "externs.h"
 #include "Math/FastMath.h"
 #include "Registry.hpp"
 #include "LocalPath.hpp"

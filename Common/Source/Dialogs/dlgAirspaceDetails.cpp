@@ -37,7 +37,6 @@ Copyright_License {
 
 #include "XCSoar.h"
 #include "Dialogs.h"
-#include "externs.h"
 #include "Blackboard.hpp"
 #include "Dialogs/dlgTools.h"
 #include "InfoBoxLayout.h"

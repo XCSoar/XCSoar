@@ -56,7 +56,7 @@ Copyright_License {
 //#include <assert.h>
 
 #include "resource.h"
-#include "externs.h"
+#include "SettingsUser.hpp"
 #include "Math/Units.h"
 
 #include <stdlib.h>

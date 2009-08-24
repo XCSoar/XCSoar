@@ -67,6 +67,21 @@ void TriggerRedraws(void);
 void TriggerAll(void);
 void CreateCalculationThread(void);
 
+///////
+
+// changed only in config or by user interface /////////////////////////////
+// used in settings dialog
+extern BOOL COMPORTCHANGED;
+extern BOOL AIRSPACEFILECHANGED;
+extern BOOL WAYPOINTFILECHANGED;
+extern BOOL TERRAINFILECHANGED;
+extern BOOL AIRFIELDFILECHANGED;
+extern BOOL TOPOLOGYFILECHANGED;
+extern BOOL POLARFILECHANGED;
+extern BOOL LANGUAGEFILECHANGED;
+extern BOOL STATUSFILECHANGED;
+extern BOOL INPUTFILECHANGED;
+extern BOOL MAPFILECHANGED;
 
 #endif
 

@@ -55,7 +55,6 @@ extern MapWindow hWndMapWindow; // TODO try to avoid this
 #include "Screen/Blank.hpp"
 
 #ifndef ALTAIRSYNC
-#include "externs.h"
 
 #ifndef GNAV
 #if (WINDOWSPC<1)

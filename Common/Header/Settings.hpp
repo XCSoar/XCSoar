@@ -40,6 +40,11 @@ Copyright_License {
 
 // changed only in config or by user interface /////////////////////////////
 
+// ?
+
+// Team code
+extern TCHAR TeammateCode[10];
+
 // changed in task/flight or by calc thread /////////////////////////////////
 
 extern bool RequestAirspaceWarningDialog;
@@ -54,6 +59,11 @@ extern int  BestAlternate;
 // external control of user interface
 extern bool ExternalTriggerCruise;
 extern bool ExternalTriggerCircling;
+
+extern int TeamFlarmIdTarget;    // FlarmId of the glider to track
+
+extern double TeammateLatitude;
+extern double TeammateLongitude;
 
 // unsorted ///////////////////////////////////////////////////////////////////
 

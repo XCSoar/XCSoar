@@ -36,7 +36,6 @@ Copyright_License {
 */
 
 #include "XCSoar.h"
-#include "externs.h"
 #include "Interface.hpp"
 #include "Units.h"
 #include "Device/device.h"

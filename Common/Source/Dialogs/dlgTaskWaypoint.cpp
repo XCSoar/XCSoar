@@ -39,7 +39,6 @@ Copyright_License {
 #include "Protection.hpp"
 #include "Utils.h"
 #include "Dialogs.h"
-#include "externs.h"
 #include "SettingsTask.hpp"
 #include "Dialogs/dlgTools.h"
 #include "Logger.h"

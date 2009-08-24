@@ -38,11 +38,9 @@ Copyright_License {
 */
 
 #include "Airspace.h"
-#include "externs.h"
 #include "Dialogs.h"
 #include "Utils.h"
 #include "LogFile.hpp"
-#include "externs.h"
 #include "RasterTerrain.h"
 #include "Math/Earth.hpp"
 #include "Math/Units.h"

@@ -41,7 +41,6 @@ Copyright_License {
 #include "XCSoar.h"
 #include "Protection.hpp"
 #include "Utils.h"
-#include "externs.h"
 #include "Blackboard.hpp"
 #include "Audio/VarioSound.h"
 #include "Logger.h"
@@ -54,6 +53,9 @@ Copyright_License {
 #include "Math/Earth.hpp"
 #include "Math/Pressure.h"
 #include "Math/Units.h"
+
+#include "SettingsComputer.hpp"
+#include "Settings.hpp"
 
 #include <ctype.h>
 #include <stdlib.h>

@@ -39,7 +39,6 @@ Copyright_License {
 #include "XCSoar.h"
 #include "Dialogs.h"
 #include "Utils.h"
-#include "externs.h"
 #include "InfoBoxLayout.h"
 #include "Compatibility/string.h"
 #include "PeriodClock.hpp"

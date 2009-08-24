@@ -47,7 +47,6 @@ Copyright_License {
 #include "Airspace.h"
 #include "Waypointparser.h"
 #include "Dialogs.h"
-#include "externs.h"
 #include "Blackboard.hpp"
 #include "Settings.hpp"
 #include "SettingsTask.hpp"

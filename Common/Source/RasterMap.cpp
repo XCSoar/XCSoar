@@ -36,7 +36,6 @@ Copyright_License {
 */
 
 #include "RasterMap.h"
-#include "externs.h"
 #include "Math/FastMath.h"
 #include "Math/Earth.hpp"
 #include "Utils.h"

@@ -46,7 +46,6 @@ Copyright_License {
 #include "projects.h"
 #endif
 #endif
-#include "externs.h"
 #include "Settings.hpp"
 #include "SettingsUser.hpp"
 #include "InfoBoxLayout.h"

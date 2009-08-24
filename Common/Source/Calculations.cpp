@@ -43,7 +43,6 @@ Copyright_License {
 #include "Process.h"
 #include "Utils.h"
 #include "Utils2.h"
-#include "externs.h"
 #include "Blackboard.hpp"
 #include "Settings.hpp"
 #include "SettingsComputer.hpp"

@@ -37,7 +37,6 @@ Copyright_License {
 
 #include "Airspace.h"
 #include "Calculations.h"
-#include "externs.h"
 #include "Dialogs.h"
 #include "Utils.h"
 #include "Device/device.h"

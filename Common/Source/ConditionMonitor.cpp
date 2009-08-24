@@ -45,7 +45,6 @@ Copyright_License {
 #include "Task.h"
 #include "Device/device.h"
 #include "SettingsTask.hpp"
-#include "externs.h"
 #include "Utils.h"
 #include "Process.h"
 #include "InputEvents.h"

@@ -41,7 +41,6 @@ Copyright_License {
 #include "MapWindow.h"
 #include "Logger.h"
 #include "Math/FastMath.h"
-#include "externs.h"
 #include "Blackboard.hpp"
 #include "InfoBoxLayout.h"
 #include "InfoBox.h"

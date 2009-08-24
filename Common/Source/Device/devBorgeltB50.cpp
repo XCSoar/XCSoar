@@ -39,7 +39,6 @@ Copyright_License {
 #include "Device/device.h"
 #include "XCSoar.h"
 #include "Protection.hpp"
-#include "externs.h"
 #include "Settings.hpp"
 #include "SettingsComputer.hpp"
 #include "Utils.h"

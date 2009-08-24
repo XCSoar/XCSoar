@@ -37,15 +37,13 @@ Copyright_License {
 */
 
 #include "Persist.hpp"
+#include "XCSoar.h"
 #include "LogFile.hpp"
 #include "LocalPath.hpp"
 #include "SettingsComputer.hpp"
-#include "externs.h"
 #include "OnLineContest.h"
 #include "McReady.h"
 #include "Math/Pressure.h"
-#include "externs.h"
-#include "XCSoar.h"
 #include "Atmosphere.h"
 #include "Utils.h"
 #include "Logger.h"

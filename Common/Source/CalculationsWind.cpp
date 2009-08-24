@@ -39,7 +39,6 @@ Copyright_License {
 #include "CalculationsWind.hpp"
 #include "XCSoar.h"
 #include "Protection.hpp"
-#include "externs.h"
 #include "WindZigZag.h"
 #include "windanalyser.h"
 #include <math.h>

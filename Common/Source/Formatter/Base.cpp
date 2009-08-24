@@ -36,12 +36,11 @@ Copyright_License {
 */
 
 #include "Formatter/Base.hpp"
-#include "Math/FastMath.h"
 #include "XCSoar.h"
-#include "externs.h"
 #include "Blackboard.hpp"
 #include "SettingsTask.hpp"
 #include "SettingsComputer.hpp"
+#include "Math/FastMath.h"
 #include "Atmosphere.h"
 #include "Battery.h"
 #include "McReady.h"

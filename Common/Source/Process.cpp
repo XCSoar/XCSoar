@@ -38,7 +38,6 @@ Copyright_License {
 #include "Process.h"
 #include "XCSoar.h"
 #include "Device/Parser.h"
-#include "externs.h"
 #include "Blackboard.hpp"
 #include "SettingsTask.hpp"
 #include "WayPoint.hpp"

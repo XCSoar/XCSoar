@@ -37,7 +37,6 @@ Copyright_License {
 
 #include "Dialogs.h"
 #include "XCSoar.h"
-#include "externs.h"
 #include "Dialogs/dlgTools.h"
 #include "InfoBoxLayout.h"
 #include "DataField/FileReader.hpp"

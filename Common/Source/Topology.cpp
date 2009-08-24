@@ -39,7 +39,6 @@ Copyright_License {
 #include "XCSoar.h"
 #include <ctype.h> // needed for Wine
 #include "Interface.hpp"
-#include "externs.h"
 #include "wcecompat/ts_string.h"
 #include "Screen/Util.hpp"
 #include "Utils.h"

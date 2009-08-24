@@ -38,7 +38,6 @@ Copyright_License {
 #include "MapWindow.h"
 #include "Airspace.h"
 #include "XCSoar.h"
-#include "externs.h"
 #include "Screen/Util.hpp"
 #include "Math/FastMath.h"
 

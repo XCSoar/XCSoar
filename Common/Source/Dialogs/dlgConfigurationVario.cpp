@@ -36,7 +36,6 @@ Copyright_License {
 */
 
 #include "XCSoar.h"
-#include "externs.h"
 #include "McReady.h"
 #include "Dialogs.h"
 #include "Dialogs/dlgTools.h"

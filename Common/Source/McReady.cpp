@@ -39,7 +39,6 @@ Copyright_License {
 #include "Protection.hpp"
 #include "McReady.h"
 #include "SettingsComputer.hpp"
-#include "externs.h"
 #include "Math/FastMath.h"
 #include "Math/Geometry.hpp"
 #include "Device/device.h"

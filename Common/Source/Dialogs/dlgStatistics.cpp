@@ -40,7 +40,6 @@ Copyright_License {
 #include "Dialogs.h"
 #include "InfoBoxLayout.h"
 #include "Statistics.h"
-#include "externs.h"
 #include "Blackboard.hpp"
 #include "SettingsComputer.hpp"
 #include "SettingsTask.hpp"

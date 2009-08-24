@@ -37,10 +37,10 @@
 
 #include "XCSoar.h"
 #include "Protection.hpp"
-#include "externs.h"
+#include "Settings.hpp"
+#include "SettingsComputer.hpp"
 #include "Blackboard.hpp"
 #include "Dialogs.h"
-#include "externs.h"
 #include "Dialogs/dlgTools.h"
 #include "InfoBoxLayout.h"
 #include "Utils.h"

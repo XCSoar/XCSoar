@@ -41,7 +41,6 @@ Copyright_License {
 #include "GaugeFLARM.h"
 #include "Logger.h"
 #include "MapWindow.h"
-#include "externs.h"
 #include "Blackboard.hpp"
 #include "Settings.hpp"
 #include "SettingsComputer.hpp"

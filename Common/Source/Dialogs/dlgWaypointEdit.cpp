@@ -45,7 +45,6 @@ Copyright_License {
 #include "Math/FastMath.h"
 #include "DataField/Enum.hpp"
 #include "Utils.h"
-#include "externs.h"
 
 static WndForm *wf=NULL;
 static WAYPOINT *global_wpt=NULL;

@@ -38,11 +38,11 @@ Copyright_License {
 #include "MapWindow.h"
 #include "XCSoar.h"
 #include "InfoBoxLayout.h"
-#include "externs.h"
 #include "GaugeFLARM.h"
 #include "Math/Screen.hpp"
 #include "Math/Earth.hpp"
 #include "SettingsComputer.hpp"
+#include "Settings.hpp"
 
 extern HFONT MapLabelFont;
 

@@ -45,7 +45,6 @@ Copyright_License {
 #include "SettingsComputer.hpp"
 #include "SettingsUser.hpp"
 #include "SettingsTask.hpp"
-#include "externs.h"
 #include "McReady.h"
 #include "Dialogs.h"
 #include "GlideSolvers.hpp"

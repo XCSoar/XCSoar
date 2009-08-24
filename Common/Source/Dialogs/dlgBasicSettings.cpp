@@ -39,7 +39,6 @@ Copyright_License {
 #include "Protection.hpp"
 #include "Interface.hpp"
 #include "Math/Pressure.h"
-#include "externs.h"
 #include "Blackboard.hpp"
 #include "Settings.hpp"
 #include "SettingsComputer.hpp"
