@@ -101,19 +101,6 @@ void DoWindZigZag(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   }
 }
 
-void  SetWindEstimate(const double wind_speed,
-		      const double wind_bearing,
-		      const int quality) {
-  Vector v_wind;
-  v_wind.x = wind_speed*cos(wind_bearing*3.1415926/180.0);
-  v_wind.y = wind_speed*sin(wind_bearing*3.1415926/180.0);
-  LockFlightData();
-  if (windanalyser) {
-    windanalyser->slot_newEstimate(&GPS_INFO, &CALCULATED_INFO,
-                                   v_wind, quality);
-  }
-  UnlockFlightData();
-}
 
 void DoWindCirclingMode(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
 			bool left) {
@@ -138,4 +125,20 @@ void DoWindCirclingAltitude(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
     windanalyser->slot_Altitude(Basic, Calculated);
     UnlockFlightData();
   }
+}
+
+#include "Blackboard.hpp"
+
+void  SetWindEstimate(const double wind_speed,
+		      const double wind_bearing,
+		      const int quality) {
+  Vector v_wind;
+  v_wind.x = wind_speed*cos(wind_bearing*3.1415926/180.0);
+  v_wind.y = wind_speed*sin(wind_bearing*3.1415926/180.0);
+  LockFlightData();
+  if (windanalyser) {
+    windanalyser->slot_newEstimate(&GPS_INFO, &CALCULATED_INFO,
+                                   v_wind, quality);
+  }
+  UnlockFlightData();
 }

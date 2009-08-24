@@ -36,9 +36,10 @@ Copyright_License {
 */
 
 #include "Formatter/LowWarning.hpp"
-#include "externs.h"
 #include "XCSoar.h"
+#include "externs.h"
 #include "SettingsComputer.hpp"
+#include "Blackboard.hpp"
 
 void FormatterLowWarning::AssignValue(int i) {
   InfoBoxFormatter::AssignValue(i);

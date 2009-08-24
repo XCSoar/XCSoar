@@ -42,6 +42,7 @@ Copyright_License {
 #include "Protection.hpp"
 #include "Utils.h"
 #include "externs.h"
+#include "Blackboard.hpp"
 #include "Audio/VarioSound.h"
 #include "Logger.h"
 #include "GaugeFLARM.h"

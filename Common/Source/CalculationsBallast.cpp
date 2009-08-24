@@ -36,7 +36,8 @@ Copyright_License {
 
 */
 
-#include "externs.h"
+#include "XCSoar.h"
+#include "Settings.hpp"
 #include "Device/device.h"
 #include "McReady.h"
 #include <math.h>

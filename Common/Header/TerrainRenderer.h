@@ -44,7 +44,9 @@ Copyright_License {
 extern short TerrainContrast;
 extern short TerrainBrightness;
 extern short TerrainRamp;
-void DrawTerrain(const HDC hdc, const RECT rc, const double sunazimuth, const double sunelevation);
+void DrawTerrain(const HDC hdc, const RECT rc,
+		 const double sunazimuth, const double sunelevation,
+		 double lon, double lat);
 void DrawSpotHeights(const HDC hdc);
 void CloseTerrainRenderer();
 

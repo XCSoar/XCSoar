@@ -41,6 +41,7 @@ Copyright_License {
 #include "Screen/Util.hpp"
 #include "Utils.h"
 #include "externs.h"
+#include "Blackboard.hpp"
 #include "Dialogs/dlgTools.h"
 #include "InfoBoxLayout.h"
 #include "Compatibility/string.h"

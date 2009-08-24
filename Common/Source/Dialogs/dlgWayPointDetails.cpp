@@ -43,6 +43,7 @@ Copyright_License {
 #include "LocalPath.hpp"
 #include "Utils.h"
 #include "externs.h"
+#include "Blackboard.hpp"
 #include "Settings.hpp"
 #include "SettingsComputer.hpp"
 #include "SettingsTask.hpp"

@@ -1,5 +1,6 @@
 #include "XCSoar.h"
 #include "externs.h"
+#include "Blackboard.hpp"
 #include "MapWindow.h"
 #include "Trigger.hpp"
 #include "Protection.hpp"

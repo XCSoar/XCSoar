@@ -38,6 +38,7 @@
 #include "XCSoar.h"
 #include "Protection.hpp"
 #include "externs.h"
+#include "Blackboard.hpp"
 #include "Dialogs.h"
 #include "externs.h"
 #include "Dialogs/dlgTools.h"

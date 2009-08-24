@@ -95,6 +95,8 @@ double GlidePolar::GetAUW() {
   return BallastLitres + WEIGHTS[0] + WEIGHTS[1];
 }
 
+#include "Blackboard.hpp"
+
 void GlidePolar::SetBallast() {
 
   LockFlightData();

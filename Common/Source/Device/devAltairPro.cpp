@@ -38,6 +38,7 @@ Copyright_License {
 #include "Device/devAltairPro.h"
 #include "Device/device.h"
 #include "externs.h"
+#include "Blackboard.hpp"
 #include "Utils.h"
 #include "Device/Port.h"
 #include "Math/Pressure.h"

@@ -37,7 +37,7 @@ Copyright_License {
 
 #include "Formatter/Time.hpp"
 #include "Process.h"
-#include "externs.h"
+#include "Blackboard.hpp"
 #include "SettingsTask.hpp"
 
 void FormatterTime::SecsToDisplayTime(int d) {

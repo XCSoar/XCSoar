@@ -38,7 +38,7 @@ Copyright_License {
 #ifndef EXTERNS_H
 #define EXTERNS_H
 
-#include "Blackboard.hpp"
+//#include "Blackboard.hpp"
 
 // used in settings dialog
 extern BOOL COMPORTCHANGED;

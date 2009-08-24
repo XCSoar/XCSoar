@@ -44,6 +44,7 @@ Copyright_License {
 #include "Utils.h"
 #include "Utils2.h"
 #include "externs.h"
+#include "Blackboard.hpp"
 #include "Settings.hpp"
 #include "SettingsComputer.hpp"
 #include "SettingsTask.hpp"
@@ -154,18 +155,6 @@ double FAIFinishHeight(NMEA_INFO *Basic, DERIVED_INFO *Calculated, int wp) {
   } else {
     return wp_alt + SAFETYALTITUDEARRIVAL;
   }
-}
-
-
-void RefreshTaskStatistics(void) {
-  //  LockFlightData();
-  LockTaskData();
-  TaskStatistics(&GPS_INFO, &CALCULATED_INFO, MACCREADY);
-  AATStats(&GPS_INFO, &CALCULATED_INFO);
-  TaskSpeed(&GPS_INFO, &CALCULATED_INFO, MACCREADY);
-  IterateEffectiveMacCready(&GPS_INFO, &CALCULATED_INFO);
-  UnlockTaskData();
-  //  UnlockFlightData();
 }
 
 
@@ -708,6 +697,18 @@ bool IsFlarmTargetCNInRange()
 	}
     }
   return FlarmTargetContact;
+}
+
+
+void RefreshTaskStatistics(void) {
+  //  LockFlightData();
+  LockTaskData();
+  TaskStatistics(&GPS_INFO, &CALCULATED_INFO, MACCREADY);
+  AATStats(&GPS_INFO, &CALCULATED_INFO);
+  TaskSpeed(&GPS_INFO, &CALCULATED_INFO, MACCREADY);
+  IterateEffectiveMacCready(&GPS_INFO, &CALCULATED_INFO);
+  UnlockTaskData();
+  //  UnlockFlightData();
 }
 
 

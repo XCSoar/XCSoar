@@ -41,6 +41,7 @@ Copyright_License {
 #include "InfoBoxLayout.h"
 #include "Statistics.h"
 #include "externs.h"
+#include "Blackboard.hpp"
 #include "SettingsComputer.hpp"
 #include "SettingsTask.hpp"
 #include "McReady.h"

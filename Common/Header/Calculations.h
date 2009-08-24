@@ -81,6 +81,5 @@ void BallastDump();
 int FindFlarmSlot(const int flarmId);
 int FindFlarmSlot(const TCHAR *flarmCN);
 bool IsFlarmTargetCNInRange(void);
-void AlertBestAlternate(short soundmode);
 
 #endif

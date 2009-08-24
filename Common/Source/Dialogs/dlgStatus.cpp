@@ -40,6 +40,7 @@ Copyright_License {
 #include "Dialogs.h"
 #include "Utils.h"
 #include "externs.h"
+#include "Blackboard.hpp"
 #include "Settings.hpp"
 #include "SettingsTask.hpp"
 #include "Math/Earth.hpp"

@@ -47,6 +47,7 @@ Copyright_License {
 #include "XCSoar.h"
 #include <windows.h>
 #include "externs.h"
+#include "Blackboard.hpp"
 #include "Utils.h"
 
 class SunEphemeris {

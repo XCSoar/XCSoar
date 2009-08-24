@@ -48,6 +48,7 @@ Copyright_License {
 #include "Waypointparser.h"
 #include "Dialogs.h"
 #include "externs.h"
+#include "Blackboard.hpp"
 #include "Settings.hpp"
 #include "SettingsTask.hpp"
 #include "Audio/VarioSound.h"
@@ -1479,7 +1480,7 @@ void MapWindow::RenderMapWindowBg(HDC hdc, const RECT rc,
       BigZoom = true;
     }
     LockTerrainDataGraphics();
-    DrawTerrain(hdc, rc, sunazimuth, sunelevation);
+    DrawTerrain(hdc, rc, sunazimuth, sunelevation, DrawInfo.Longitude, DrawInfo.Latitude);
     if ((FinalGlideTerrain==2) && DerivedDrawInfo.TerrainValid) {
       SelectObject(hDCTemp, (HBITMAP)hDrawBitMapTmp);
       DrawTerrainAbove(hdc, rc, hDCTemp);

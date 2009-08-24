@@ -389,9 +389,9 @@ private:
   unsigned int height_scale;
 
 public:
-  bool SetMap() {
+  bool SetMap(double lon, double lat) {
     if (RasterTerrain::render_weather) {
-      RASP.Reload(GPS_INFO.Latitude, GPS_INFO.Longitude);
+      RASP.Reload(lat, lon);
     }
     interp_levels = 5;
     switch (RasterTerrain::render_weather) {
@@ -872,7 +872,8 @@ void CloseTerrainRenderer() {
 
 
 void DrawTerrain( const HDC hdc, const RECT rc,
-                  const double sunazimuth, const double sunelevation)
+                  const double sunazimuth, const double sunelevation,
+		  double lon, double lat)
 {
   (void)sunelevation; // TODO feature: sun-based rendering option
   (void)rc;
@@ -885,7 +886,7 @@ void DrawTerrain( const HDC hdc, const RECT rc,
     trenderer = new TerrainRenderer(MapWindow::MapRectBig);
   }
 
-  if (!trenderer->SetMap()) {
+  if (!trenderer->SetMap(lon, lat)) {
     return;
   }
 

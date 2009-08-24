@@ -60,6 +60,7 @@ Copyright_License {
 #include "Registry.hpp"
 #include "Screen/Blank.hpp"
 #include "externs.h"
+#include "Blackboard.hpp"
 #include "Settings.hpp"
 #include "SettingsTask.hpp"
 #include "SettingsComputer.hpp"

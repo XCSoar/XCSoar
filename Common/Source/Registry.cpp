@@ -55,6 +55,7 @@ Copyright_License {
 #include "Utils.h"
 #include "Device/Parser.h"
 #include "externs.h"
+#include "Blackboard.hpp"
 #include "Settings.hpp"
 #include "SettingsComputer.hpp"
 #include "SettingsTask.hpp"

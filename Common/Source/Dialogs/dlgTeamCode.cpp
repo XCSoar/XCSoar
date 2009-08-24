@@ -40,6 +40,7 @@
 #include "Dialogs/dlgTools.h"
 #include "Dialogs.h"
 #include "externs.h"
+#include "Blackboard.hpp"
 #include "InfoBoxLayout.h"
 #include "DataField/Base.hpp"
 

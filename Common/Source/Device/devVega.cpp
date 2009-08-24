@@ -48,6 +48,7 @@ Copyright_License {
 #include "Device/devVega.h"
 #include "Utils.h"
 #include "externs.h"
+#include "Blackboard.hpp"
 #include "Settings.hpp"
 #include "SettingsComputer.hpp"
 #include "InputEvents.h"
