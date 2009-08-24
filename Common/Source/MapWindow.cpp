@@ -61,6 +61,7 @@ Copyright_License {
 #include "Compatibility/gdi.h"
 
 #include "SettingsUser.hpp"
+#include "Interface.hpp"
 
 #include <assert.h>
 #include <windows.h>

@@ -39,6 +39,7 @@
 #include "XCSoar.h"
 #include "Protection.hpp"
 #include "Dialogs.h"
+#include "Dialogs/dlgTools.h"
 #include "Device/Port.h"
 #include "Calculations.h"
 #include "Settings.hpp"

@@ -63,6 +63,7 @@ Copyright_License {
 #include "Settings.hpp"
 #include "SettingsTask.hpp"
 #include "SettingsComputer.hpp"
+#include "Interface.hpp"
 
 extern bool DialogActive;
 int  InfoBoxFocusTimeOut = 0;

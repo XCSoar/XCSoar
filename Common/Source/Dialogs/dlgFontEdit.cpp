@@ -37,6 +37,7 @@ Copyright_License {
 
 #include "XCSoar.h"
 #include "Dialogs.h"
+#include "Dialogs/dlgTools.h"
 #include "Registry.hpp"
 #include "DataField/Boolean.hpp"
 #include "DataField/Enum.hpp"

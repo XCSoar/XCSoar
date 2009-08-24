@@ -37,6 +37,7 @@ Copyright_License {
 
 #include "XCSoar.h"
 #include "Protection.hpp"
+#include "Interface.hpp"
 #include "LogFile.hpp"
 #include "Compatibility/vk.h"
 #include "Compatibility/string.h"
@@ -47,6 +48,7 @@ Copyright_License {
 #include "Persist.hpp"
 #include "Task.h"
 #include "Dialogs.h"
+#include "Dialogs/dlgTools.h"
 #include "Trigger.hpp"
 #include "StatusMessage.hpp"
 #include "Process.h"

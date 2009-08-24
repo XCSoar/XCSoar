@@ -46,11 +46,13 @@ Copyright_License {
 #include "InfoBox.h"
 #include "Math/Geometry.hpp"
 #include "McReady.h"
+#include "Interface.hpp"
 
 #include "SettingsUser.hpp"
 #include "SettingsComputer.hpp"
 
 #include <assert.h>
+#include <stdlib.h>
 
 HWND   hWndVarioWindow = NULL; // Vario Window
 extern HFONT CDIWindowFont; // New

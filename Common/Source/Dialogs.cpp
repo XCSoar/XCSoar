@@ -64,6 +64,7 @@ Copyright_License {
 #include "Message.h"
 #include "Registry.hpp"
 #include "StatusMessage.hpp"
+#include "Interface.hpp"
 
 #ifdef DEBUG_TRANSLATIONS
 #include <map>

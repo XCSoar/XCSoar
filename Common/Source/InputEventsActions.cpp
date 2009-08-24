@@ -87,6 +87,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "LocalPath.hpp"
 #include "Utils.h"
 #include "McReady.h"
+#include "Interface.hpp"
 
 #include <assert.h>
 #include <ctype.h>

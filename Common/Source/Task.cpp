@@ -793,6 +793,8 @@ void CalculateAATTaskSectors()
 
 ////////////
 
+#include "Interface.hpp"
+
 void guiStartLogger(bool noAsk) {
   int i;
   if (!LoggerActive) {

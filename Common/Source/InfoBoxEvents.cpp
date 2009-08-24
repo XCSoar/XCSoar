@@ -55,6 +55,7 @@ Copyright_License {
 #include "Utils.h"
 #include "MapWindow.h"
 #include "McReady.h"
+#include "Interface.hpp"
 
 #include <stdlib.h>
 

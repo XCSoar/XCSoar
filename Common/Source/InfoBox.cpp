@@ -43,6 +43,7 @@ Copyright_License {
 #include "Compatibility/string.h"
 #include "PeriodClock.hpp"
 #include "WindowControls.h"
+#include "Interface.hpp"
 
 #define DEFAULTBORDERPENWIDTH IBLSCALE(1)
 #define SELECTORWIDTH         (DEFAULTBORDERPENWIDTH+IBLSCALE(4))

@@ -47,6 +47,7 @@ Copyright_License {
 #include "InfoBox.h"
 #include "WindowControls.h"
 #include "ExpandMacros.hpp"
+#include "Interface.hpp"
 
 extern InfoBox *InfoBoxes[MAXINFOWINDOWS];
 

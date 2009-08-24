@@ -39,7 +39,6 @@ Copyright_License {
 
 #include "Units.h"
 #include "Screen/Font.hpp"
-#include "Dialogs.h"
 
 #define BORDERTOP    (1<<bkTop)
 #define BORDERRIGHT  (1<<bkRight)
@@ -122,7 +121,7 @@ class InfoBox{
     int mBorderSize;
     int mUnitBitmapKind;
     bool mVisible;
-	bool mSmallerFont;
+    bool mSmallerFont;
 
     void InitializeDrawHelpers(void);
     void PaintTitle(HDC dc);
@@ -141,7 +140,7 @@ class InfoBox{
     void SetTitle(const TCHAR *Value);
     void SetValue(const TCHAR *Value);
     void SetComment(const TCHAR *Value);
-	void SetSmallerFont(bool smallerFont);
+    void SetSmallerFont(bool smallerFont);
 
     void SetFocus(bool Value);
     bool SetVisible(bool Value);
