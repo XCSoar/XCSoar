@@ -80,7 +80,7 @@ class ReplayLogger {
 
 bool LoggerClearFreeSpace();
 void StopLogger(void);
-bool IGCWriteRecord(const char *szIn);
+bool IGCWriteRecord(const char *szIn, const TCHAR *);
 void LinkGRecordDLL(void);
 bool LoggerGActive();
 

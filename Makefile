@@ -408,6 +408,8 @@ OBJS	:=\
 	$(SRC)/GlideRatio.o 		\
 	$(SRC)/GlideSolvers.o 		\
 	$(SRC)/Logger.o 		\
+	$(SRC)/LoggerSign.o 		\
+	$(SRC)/ReplayLogger.o 		\
 	$(SRC)/McReady.o 		\
 	$(SRC)/NavFunctions.o		\
 	$(SRC)/OnLineContest.o 		\

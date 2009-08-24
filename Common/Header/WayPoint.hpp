@@ -38,11 +38,7 @@ Copyright_License {
 #ifndef XCSOAR_WAY_POINT_HPP
 #define XCSOAR_WAY_POINT_HPP
 
-#include "Sizes.h"
-
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
-
+#include "XCSoar.h"
 #include <tchar.h>
 
 #define AIRPORT				0x01
