@@ -35,14 +35,13 @@ Copyright_License {
 }
 */
 
-#include "StdAfx.h"
+#include "XCSoar.h"
 #include "externs.h"
 #include "Units.h"
 #include "InputEvents.h"
 #include "Dialogs/dlgTools.h"
 #include "DataField/Base.hpp"
 #include "Utils.h"
-#include "XCSoar.h"
 #include "Interface.hpp"
 
 static WndForm *wf=NULL;

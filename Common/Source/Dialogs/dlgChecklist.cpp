@@ -35,9 +35,6 @@ Copyright_License {
 }
 */
 
-
-#include "StdAfx.h"
-#include "Defines.h"
 #include "XCSoar.h"
 #include "Dialogs.h"
 #include "Dialogs/dlgTools.h"

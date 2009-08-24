@@ -40,14 +40,12 @@ Copyright_License {
 }
 */
 
-#include "StdAfx.h"
-
 #define PI 3.1415926
 #define SUN_DIAMETER 0.53     // Sunradius degrees
 #define AIR_REFRACTION 34.0/60.0 // athmospheric refraction degrees //
 
-#include <windows.h>
 #include "XCSoar.h"
+#include <windows.h>
 #include "externs.h"
 #include "Utils.h"
 

@@ -35,8 +35,7 @@ Copyright_License {
 }
 */
 
-#include "StdAfx.h"
-
+#include "XCSoar.h"
 #include "externs.h"
 #include "Units.h"
 #include "externs.h"

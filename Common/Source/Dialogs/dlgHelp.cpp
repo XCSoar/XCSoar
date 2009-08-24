@@ -35,7 +35,6 @@ Copyright_License {
 }
 */
 
-#include "StdAfx.h"
 #include "XCSoar.h"
 #include "Interface.hpp"
 #include "externs.h"
@@ -47,16 +46,10 @@ Copyright_License {
 
 static WndForm *wf=NULL;
 
-
-//
-//
-
 static void OnCloseClicked(WindowControl * Sender){
 	(void)Sender;
   wf->SetModalResult(mrOK);
 }
-
-
 
 
 static CallBackTableEntry_t CallBackTable[]={

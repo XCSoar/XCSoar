@@ -36,7 +36,6 @@ Copyright_License {
 */
 
 
-#include "StdAfx.h"
 #include "XCSoar.h"
 #include "InfoBoxLayout.h"
 

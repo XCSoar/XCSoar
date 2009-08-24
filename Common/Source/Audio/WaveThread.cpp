@@ -38,8 +38,8 @@ Copyright_License {
 */
 
 
-#include "StdAfx.h"
 #include "WaveThread.h"
+#include "XCSoar.h"
 
 
 ////////////////////////

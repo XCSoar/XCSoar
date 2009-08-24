@@ -36,7 +36,6 @@
 */
 
 #include "Logger.h"
-#include "StdAfx.h"
 #include "XCSoar.h"
 #include "Protection.hpp"
 #include "Dialogs.h"

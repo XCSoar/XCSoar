@@ -36,7 +36,6 @@ Copyright_License {
 */
 
 
-#include "StdAfx.h"
 #include "XCSoar.h"
 #include "Protection.hpp"
 #include "OnLineContest.h"

@@ -60,12 +60,10 @@ Copyright_License {
 */
 
 
-#include "StdAfx.h"
-
+#include "Math/leastsqs.h"
+#include "XCSoar.h"
 #include <stdio.h>
 #include <math.h>
-
-#include "Math/leastsqs.h"
 
 
 /*

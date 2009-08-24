@@ -40,7 +40,6 @@ Copyright_License {
 #include "Message.h"
 #include "XCSoar.h"
 #include "Interface.hpp"
-#include "StdAfx.h"
 #include "MapWindow.h"
 #include "externs.h"
 #include "InfoBoxLayout.h"

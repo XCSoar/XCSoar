@@ -35,7 +35,7 @@ Copyright_License {
 }
 */
 
-#include "StdAfx.h"
+#include "XCSoar.h"
 #include "NavFunctions.h"
 #include "Compatibility/math.h"
 

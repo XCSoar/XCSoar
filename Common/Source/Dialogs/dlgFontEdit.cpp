@@ -35,11 +35,9 @@ Copyright_License {
 }
 */
 
-#include "StdAfx.h"
-
+#include "XCSoar.h"
 #include "Dialogs.h"
 #include "Registry.hpp"
-#include "XCSoar.h"
 #include "DataField/Boolean.hpp"
 #include "DataField/Enum.hpp"
 #include "DataField/Integer.hpp"

@@ -39,7 +39,6 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "XCSoar.h"
 #include "Asset.hpp"
-#include "StdAfx.h"
 
 #ifndef __MINGW32__
 #if defined(CECORE)

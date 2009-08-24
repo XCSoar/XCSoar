@@ -53,7 +53,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "xmlParser.h"
-#include "StdAfx.h"
+#include "XCSoar.h"
 #include "Compatibility/string.h"
 
 #include <assert.h>

@@ -37,10 +37,9 @@ Copyright_License {
 */
 
 
-#include "StdAfx.h"
 #include "VarioSound.h"
-#include <math.h>
 #include "XCSoar.h"
+#include <math.h>
 
 BOOL APIENTRY DllMain( HANDLE hModule,
                        DWORD  ul_reason_for_call,

@@ -37,11 +37,10 @@ Copyright_License {
 */
 
 #include "AATDistance.h"
-#include "StdAfx.h"
+#include "XCSoar.h"
 #include "Protection.hpp"
 #include "Task.h"
 #include "Airspace.h"
-#include "XCSoar.h"
 #include "Calculations.h"
 #include "Math/Geometry.hpp"
 #include "externs.h"

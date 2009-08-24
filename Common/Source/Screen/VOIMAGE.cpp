@@ -61,9 +61,10 @@ Copyright_License {
 
 */
 
+#include "XCSoar.h"
+
 #ifndef CECORE
 #ifndef GNAV
-#include "StdAfx.h"
 
 #include "Screen/VOIMAGE.h"
 
