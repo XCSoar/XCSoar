@@ -127,7 +127,8 @@ void ScreenClosestPoint(const POINT &p1, const POINT &p2,
   }
 }
 
-void PolygonRotateShift(POINT* poly, const int n, const int xs, const int ys, const double angle) {
+void PolygonRotateShift(POINT* poly, const int n, const int xs, const int ys,
+			const double angle) {
   static double lastangle = -1;
   static int cost=1024, sint=0;
 
@@ -153,6 +154,7 @@ void PolygonRotateShift(POINT* poly, const int n, const int xs, const int ys, co
 
 BOOL PolygonVisible(const POINT *lpPoints, int nCount, RECT rc)
 {
+  const RECT MapRect = MapWindow::GetMapRect();
   BOOL Sector[9] = {FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE};
   int i;
   int Count = 0;
@@ -161,52 +163,52 @@ BOOL PolygonVisible(const POINT *lpPoints, int nCount, RECT rc)
 
   for(i=0;i<nCount;i++)
     {
-      if(lpPoints[i].y < MapWindow::MapRect.top)
+      if(lpPoints[i].y < MapRect.top)
 	{
-	  if(lpPoints[i].x < MapWindow::MapRect.left)
+	  if(lpPoints[i].x < MapRect.left)
 	    {
 	      Sector[0] = TRUE;
 	    }
-	  else if((lpPoints[i].x >=MapWindow::MapRect.left)
-		  && (lpPoints[i].x <MapWindow::MapRect.right))
+	  else if((lpPoints[i].x >=MapRect.left)
+		  && (lpPoints[i].x <MapRect.right))
 	    {
 	      Sector[1] = TRUE;
 	    }
-	  else if(lpPoints[i].x >=MapWindow::MapRect.right)
+	  else if(lpPoints[i].x >=MapRect.right)
 	    {
 	      Sector[2] = TRUE;
 	    }
 	}
-      else if((lpPoints[i].y >=MapWindow::MapRect.top)
-	      && (lpPoints[i].y <MapWindow::MapRect.bottom))
+      else if((lpPoints[i].y >=MapRect.top)
+	      && (lpPoints[i].y <MapRect.bottom))
 	{
-	  if(lpPoints[i].x <MapWindow::MapRect.left)
+	  if(lpPoints[i].x <MapRect.left)
 	    {
 	      Sector[3] = TRUE;
 	    }
-	  else if((lpPoints[i].x >=MapWindow::MapRect.left)
-		  && (lpPoints[i].x <MapWindow::MapRect.right))
+	  else if((lpPoints[i].x >=MapRect.left)
+		  && (lpPoints[i].x <MapRect.right))
 	    {
 	      Sector[4] = TRUE;
 	      return TRUE;
 	    }
-	  else if(lpPoints[i].x >=MapWindow::MapRect.right)
+	  else if(lpPoints[i].x >=MapRect.right)
 	    {
 	      Sector[5] = TRUE;
 	    }
 	}
-      else if(lpPoints[i].y >=MapWindow::MapRect.bottom)
+      else if(lpPoints[i].y >=MapRect.bottom)
 	{
-	  if(lpPoints[i].x <MapWindow::MapRect.left)
+	  if(lpPoints[i].x <MapRect.left)
 	    {
 	      Sector[6] = TRUE;
 	    }
-	  else if((lpPoints[i].x >=MapWindow::MapRect.left)
-		  && (lpPoints[i].x <MapWindow::MapRect.right))
+	  else if((lpPoints[i].x >=MapRect.left)
+		  && (lpPoints[i].x <MapRect.right))
 	    {
 	      Sector[7] = TRUE;
 	    }
-	  else if(lpPoints[i].x >=MapWindow::MapRect.right)
+	  else if(lpPoints[i].x >=MapRect.right)
 	    {
 	      Sector[8] = TRUE;
 	    }

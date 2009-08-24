@@ -145,7 +145,7 @@ void MapWindow::DrawDashLine(HDC hdc, const int width,
 }
 
 
-bool TextInBoxMoveInView(POINT *offset, RECT *brect){
+bool TextInBoxMoveInView(POINT *offset, RECT *brect, const RECT &MapRect){
 
   bool res = false;
 
@@ -154,8 +154,8 @@ bool TextInBoxMoveInView(POINT *offset, RECT *brect){
   offset->x = 0;
   offset->y = 0;
 
-  if (MapWindow::MapRect.top > brect->top){
-    int d = MapWindow::MapRect.top - brect->top;
+  if (MapRect.top > brect->top){
+    int d = MapRect.top - brect->top;
     brect->top += d;
     brect->bottom += d;
     offset->y += d;
@@ -165,8 +165,8 @@ bool TextInBoxMoveInView(POINT *offset, RECT *brect){
     res = true;
   }
 
-  if (MapWindow::MapRect.right < brect->right){
-    int d = MapWindow::MapRect.right - brect->right;
+  if (MapRect.right < brect->right){
+    int d = MapRect.right - brect->right;
 
     if (offset->y < LabelMargin){
       int dy;
@@ -200,9 +200,9 @@ bool TextInBoxMoveInView(POINT *offset, RECT *brect){
     res = true;
   }
 
-  if (MapWindow::MapRect.bottom < brect->bottom){
+  if (MapRect.bottom < brect->bottom){
     if (offset->x == 0){
-      int d = MapWindow::MapRect.bottom - brect->bottom;
+      int d = MapRect.bottom - brect->bottom;
       brect->top += d;
       brect->bottom += d;
       offset->y += d;
@@ -222,8 +222,8 @@ bool TextInBoxMoveInView(POINT *offset, RECT *brect){
     res = true;
   }
 
-  if (MapWindow::MapRect.left > brect->left){
-    int d = MapWindow::MapRect.left - brect->left;
+  if (MapRect.left > brect->left){
+    int d = MapRect.left - brect->left;
     brect->right+= d;
     brect->left += d;
     offset->x += d;
@@ -303,7 +303,7 @@ bool MapWindow::TextInBox(HDC hDC, const TCHAR* Value, int x, int y,
     if (Mode.AsFlag.AlligneRight)
       x -= 3;
 
-    if (TextInBoxMoveInView(&offset, &brect)){
+    if (TextInBoxMoveInView(&offset, &brect, MapRect)){
       x += offset.x;
       y += offset.y;
     }
@@ -342,7 +342,7 @@ bool MapWindow::TextInBox(HDC hDC, const TCHAR* Value, int x, int y,
     if (Mode.AsFlag.AlligneRight)
       x -= 2;
 
-    if (TextInBoxMoveInView(&offset, &brect)){
+    if (TextInBoxMoveInView(&offset, &brect, MapRect)){
       x += offset.x;
       y += offset.y;
     }

@@ -1110,7 +1110,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
   StartupStore(TEXT("Create info boxes\n"));
 
-  InfoBoxLayout::CreateInfoBoxes(rc);
+  MapWindow::SetMapRect(InfoBoxLayout::CreateInfoBoxes(rc));
 
   StartupStore(TEXT("Create FLARM gauge\n"));
   GaugeFLARM::Create();

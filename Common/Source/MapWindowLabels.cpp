@@ -71,20 +71,22 @@ int _cdecl MapWaypointLabelListCompare(const void *elem1, const void *elem2 ){
   return (0);
 }
 
-//static void MapWaypointLabelAdd(TCHAR *Name, int X, int Y,  FIX
 void MapWaypointLabelAdd(TCHAR *Name, int X, int Y,
 			 TextInBoxMode_t Mode,
-			 int AltArivalAGL, bool inTask, bool isLandable, bool isAirport, bool isExcluded){
+			 int AltArivalAGL, bool inTask,
+			 bool isLandable, bool isAirport, bool isExcluded,
+			 RECT MapRect) {
   MapWaypointLabel_t *E;
 
-  if ((X<MapWindow::MapRect.left-WPCIRCLESIZE)
-      || (X>MapWindow::MapRect.right+(WPCIRCLESIZE*3))
-      || (Y<MapWindow::MapRect.top-WPCIRCLESIZE)
-      || (Y>MapWindow::MapRect.bottom+WPCIRCLESIZE)){
+  if ((X<MapRect.left-WPCIRCLESIZE)
+      || (X>MapRect.right+(WPCIRCLESIZE*3))
+      || (Y<MapRect.top-WPCIRCLESIZE)
+      || (Y>MapRect.bottom+WPCIRCLESIZE)){
     return;
   }
 
-  if (MapWaypointLabelListCount >= (sizeof(MapWaypointLabelList)/sizeof(MapWaypointLabel_t))-1){
+  if (MapWaypointLabelListCount >=
+      (sizeof(MapWaypointLabelList)/sizeof(MapWaypointLabel_t))-1){
 #if (WINDOWSPC<1)
     assert(0);
 #endif

@@ -599,7 +599,8 @@ void dlgTarget(void) {
     WndFrame *wf2 = (WndFrame*)wf->FindByName(TEXT("frmTarget"));
     if (wf2)
     {
-      wf->SetLeft(MapWindow::MapRectBig.right- wf2->GetWidth());
+      RECT MapRectBig = MapWindow::GetMapRectBig();
+      wf->SetLeft(MapRectBig.right- wf2->GetWidth());
     }
   }
 

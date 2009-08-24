@@ -58,8 +58,11 @@ bool MapWindow::WaypointInTask(int ind) {
 }
 
 //FIX
-//static void MapWaypointLabelAdd(TCHAR *Name, int X, int Y, TextInBoxMode_t Mode, int AltArivalAGL, bool inTask=false, bool isLandable=false, bool isAirport=false, bool isExcluded=false);
-void MapWaypointLabelAdd(TCHAR *Name, int X, int Y, TextInBoxMode_t Mode, int AltArivalAGL, bool inTask, bool isLandable, bool isAirport, bool isExcluded);
+void MapWaypointLabelAdd(TCHAR *Name, int X, int Y,
+			 TextInBoxMode_t Mode, int AltArivalAGL,
+			 bool inTask, bool isLandable,
+			 bool isAirport, bool isExcluded,
+			 RECT rc);
 void MapWaypointLabelClear();
 
 
@@ -253,7 +256,8 @@ void MapWindow::DrawWaypoints(HDC hdc, const RECT rc)
 				    WayPointList[i].Screen.y,
 				    TextDisplayMode,
 				    (int)(WayPointList[i].AltArivalAGL*ALTITUDEMODIFY),
-				    intask,false,false,false);
+				    intask,false,false,false,
+				    MapRect);
 	      }
 
 	    }

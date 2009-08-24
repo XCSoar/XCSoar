@@ -546,14 +546,17 @@ public:
     }
 
     POINT orig = MapWindow::GetOrigScreen();
-    rect_visible.left = max((long)MapWindow::MapRectBig.left,
-                            (long)(MapWindow::MapRect.left-(long)epx*dtquant))-orig.x;
-    rect_visible.right = min((long)MapWindow::MapRectBig.right,
-                             (long)(MapWindow::MapRect.right+(long)epx*dtquant))-orig.x;
-    rect_visible.top = max((long)MapWindow::MapRectBig.top,
-                           (long)(MapWindow::MapRect.top-(long)epx*dtquant))-orig.y;
-    rect_visible.bottom = min((long)MapWindow::MapRectBig.bottom,
-                              (long)(MapWindow::MapRect.bottom+(long)epx*dtquant))-orig.y;
+    RECT MapRectBig = MapWindow::GetMapRectBig();
+    RECT MapRect    = MapWindow::GetMapRect();
+
+    rect_visible.left = max((long)MapRectBig.left,
+                            (long)(MapRect.left-(long)epx*dtquant))-orig.x;
+    rect_visible.right = min((long)MapRectBig.right,
+                             (long)(MapRect.right+(long)epx*dtquant))-orig.x;
+    rect_visible.top = max((long)MapRectBig.top,
+                           (long)(MapRect.top-(long)epx*dtquant))-orig.y;
+    rect_visible.bottom = min((long)MapRectBig.bottom,
+                              (long)(MapRect.bottom+(long)epx*dtquant))-orig.y;
 
     FillHeightBuffer(X0-orig.x, Y0-orig.y, X1-orig.x, Y1-orig.y);
 
@@ -879,7 +882,7 @@ void DrawTerrain( const HDC hdc, const RECT rc,
   }
 
   if (!trenderer) {
-    trenderer = new TerrainRenderer(MapWindow::MapRectBig);
+    trenderer = new TerrainRenderer(MapWindow::GetMapRectBig());
   }
 
   if (!trenderer->SetMap(lon, lat)) {
@@ -905,7 +908,7 @@ void DrawTerrain( const HDC hdc, const RECT rc,
   trenderer->Slope(sx, sy, sz);
 
   // step 5: draw
-  trenderer->Draw(hdc, MapWindow::MapRectBig);
+  trenderer->Draw(hdc, MapWindow::GetMapRectBig());
 
   misc_tick_count = GetTickCount()-misc_tick_count;
 }

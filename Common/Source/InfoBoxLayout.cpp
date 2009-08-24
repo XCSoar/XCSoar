@@ -309,7 +309,9 @@ void InfoBoxLayout::ScreenGeometry(RECT rc) {
 }
 
 
-void InfoBoxLayout::GetInfoBoxSizes(RECT rc) {
+RECT InfoBoxLayout::GetInfoBoxSizes(RECT rc) {
+
+  RECT MapRect;
 
   switch (InfoBoxGeometry) {
   case 0: // portrait
@@ -320,10 +322,10 @@ void InfoBoxLayout::GetInfoBoxSizes(RECT rc) {
 
     // calculate small map screen size
 
-    MapWindow::MapRect.top = rc.top+ControlHeight;
-    MapWindow::MapRect.left = rc.left;
-    MapWindow::MapRect.bottom = rc.bottom-ControlHeight;
-    MapWindow::MapRect.right = rc.right;
+    MapRect.top = rc.top+ControlHeight;
+    MapRect.left = rc.left;
+    MapRect.bottom = rc.bottom-ControlHeight;
+    MapRect.right = rc.right;
     break;
 
   case 1: // not used
@@ -335,10 +337,10 @@ void InfoBoxLayout::GetInfoBoxSizes(RECT rc) {
 
     // calculate small map screen size
 
-    MapWindow::MapRect.top = rc.top;
-    MapWindow::MapRect.left = rc.left;
-    MapWindow::MapRect.bottom = rc.bottom-ControlHeight*2;
-    MapWindow::MapRect.right = rc.right;
+    MapRect.top = rc.top;
+    MapRect.left = rc.left;
+    MapRect.bottom = rc.bottom-ControlHeight*2;
+    MapRect.right = rc.right;
     break;
 
   case 2: // not used
@@ -350,10 +352,10 @@ void InfoBoxLayout::GetInfoBoxSizes(RECT rc) {
 
     // calculate small map screen size
 
-    MapWindow::MapRect.top = rc.top+ControlHeight*2;
-    MapWindow::MapRect.left = rc.left;
-    MapWindow::MapRect.bottom = rc.bottom;
-    MapWindow::MapRect.right = rc.right;
+    MapRect.top = rc.top+ControlHeight*2;
+    MapRect.left = rc.left;
+    MapRect.bottom = rc.bottom;
+    MapRect.right = rc.right;
     break;
 
   case 3: // not used
@@ -365,10 +367,10 @@ void InfoBoxLayout::GetInfoBoxSizes(RECT rc) {
 
     // calculate small map screen size
 
-    MapWindow::MapRect.top = rc.top;
-    MapWindow::MapRect.left = rc.left+ControlWidth;
-    MapWindow::MapRect.bottom = rc.bottom;
-    MapWindow::MapRect.right = rc.right-ControlWidth;
+    MapRect.top = rc.top;
+    MapRect.left = rc.left+ControlWidth;
+    MapRect.bottom = rc.bottom;
+    MapRect.right = rc.right-ControlWidth;
     break;
 
   case 4:
@@ -380,10 +382,10 @@ void InfoBoxLayout::GetInfoBoxSizes(RECT rc) {
 
     // calculate small map screen size
 
-    MapWindow::MapRect.top = rc.top;
-    MapWindow::MapRect.left = rc.left+ControlWidth*2;
-    MapWindow::MapRect.bottom = rc.bottom;
-    MapWindow::MapRect.right = rc.right;
+    MapRect.top = rc.top;
+    MapRect.left = rc.left+ControlWidth*2;
+    MapRect.bottom = rc.bottom;
+    MapRect.right = rc.right;
     break;
 
   case 5: // not used
@@ -395,10 +397,10 @@ void InfoBoxLayout::GetInfoBoxSizes(RECT rc) {
 
     // calculate small map screen size
 
-    MapWindow::MapRect.top = rc.top;
-    MapWindow::MapRect.left = rc.left;
-    MapWindow::MapRect.bottom = rc.bottom;
-    MapWindow::MapRect.right = rc.right-ControlWidth*2;
+    MapRect.top = rc.top;
+    MapRect.left = rc.left;
+    MapRect.bottom = rc.bottom;
+    MapRect.right = rc.right-ControlWidth*2;
     break;
 
   case 6: // landscape
@@ -410,10 +412,10 @@ void InfoBoxLayout::GetInfoBoxSizes(RECT rc) {
 
     // calculate small map screen size
 
-    MapWindow::MapRect.top = rc.top;
-    MapWindow::MapRect.left = rc.left;
-    MapWindow::MapRect.bottom = rc.bottom;
-    MapWindow::MapRect.right = rc.right-ControlWidth*2;
+    MapRect.top = rc.top;
+    MapRect.left = rc.left;
+    MapRect.bottom = rc.bottom;
+    MapRect.right = rc.right-ControlWidth*2;
 
     break;
 
@@ -426,14 +428,14 @@ void InfoBoxLayout::GetInfoBoxSizes(RECT rc) {
 
     // calculate small map screen size
 
-    MapWindow::MapRect.top = rc.top;
-    MapWindow::MapRect.left = rc.left;
-    MapWindow::MapRect.bottom = rc.bottom;
-    MapWindow::MapRect.right = rc.right-ControlWidth;
+    MapRect.top = rc.top;
+    MapRect.left = rc.left;
+    MapRect.bottom = rc.bottom;
+    MapRect.right = rc.right-ControlWidth;
 
     break;
   };
-
+  return MapRect;
 }
 
 
@@ -490,11 +492,11 @@ void InfoBoxLayout::Paint(void) {
 }
 
 
-void InfoBoxLayout::CreateInfoBoxes(RECT rc) {
+RECT InfoBoxLayout::CreateInfoBoxes(RECT rc) {
   int i;
   int xoff, yoff, sizex, sizey;
 
-  GetInfoBoxSizes(rc);
+  RECT retval = GetInfoBoxSizes(rc);
 
   // JMW created full screen infobox mode
   xoff=0;
@@ -533,6 +535,7 @@ void InfoBoxLayout::CreateInfoBoxes(RECT rc) {
       }
     }
 
+  return retval; // for use in setting MapWindow
 }
 
 void InfoBoxLayout::DestroyInfoBoxes(void){

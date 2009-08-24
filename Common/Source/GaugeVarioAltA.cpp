@@ -119,8 +119,7 @@ void GaugeVario::Create() {
 
   StartupStore(TEXT("Create Vario\n"));
 
-  RECT bigrc;
-  bigrc = MapWindow::MapRect;
+  RECT MapRectBig = MapWindow::GetMapRect();
 
   hWndVarioWindow = CreateWindow(TEXT("STATIC"),TEXT(" "),
 			       WS_VISIBLE|WS_CHILD | WS_CLIPCHILDREN
@@ -129,14 +128,14 @@ void GaugeVario::Create() {
 			       hWndMainWindow,NULL,hInst,NULL);
   if (InfoBoxLayout::landscape) {
     SetWindowPos(hWndVarioWindow, HWND_TOP,
-                 bigrc.right+InfoBoxLayout::ControlWidth,
-                 bigrc.top,
+                 MapRectBig.right+InfoBoxLayout::ControlWidth,
+                 MapRectBig.top,
                  GAUGEXSIZE,GAUGEYSIZE,
                  SWP_HIDEWINDOW);
   } else {
     SetWindowPos(hWndVarioWindow, HWND_TOP,
-                 bigrc.right-GAUGEXSIZE,
-                 bigrc.top,
+                 MapRectBig.right-GAUGEXSIZE,
+                 MapRectBig.top,
                  GAUGEXSIZE,GAUGEYSIZE,
                  SWP_HIDEWINDOW);
   }

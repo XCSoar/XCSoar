@@ -37,8 +37,7 @@ Copyright_License {
 #ifndef INFOBOXLAYOUT_H
 #define INFOBOXLAYOUT_H
 
-#include "StdAfx.h"
-#include "Sizes.h"
+#include "XCSoar.h"
 
 class InfoBoxLayout {
  public:
@@ -49,7 +48,7 @@ class InfoBoxLayout {
   static double dscale;
   static bool IntScaleFlag;
   static int scale;
-  static void CreateInfoBoxes(RECT rc);
+  static RECT CreateInfoBoxes(RECT rc);
   static void DestroyInfoBoxes(void);
   static int InfoBoxGeometry;
   static int ControlWidth, ControlHeight, TitleHeight;
@@ -59,7 +58,7 @@ class InfoBoxLayout {
   static void GetInfoBoxPosition(int i, RECT rc,
 				 int *x, int *y,
 				 int *sizex, int *sizey);
-  static void GetInfoBoxSizes(RECT rc);
+  static RECT GetInfoBoxSizes(RECT rc);
 };
 
 

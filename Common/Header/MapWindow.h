@@ -106,6 +106,11 @@ class MapWindow {
   static HANDLE hRenderEvent;
   static LRESULT CALLBACK MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,LPARAM lParam);
 
+  // use at startup
+  static void SetMapRect(RECT rc) {
+    MapRect = rc;
+  }
+
   static void CloseDrawingThread(void);
   static void CreateDrawingThread(void);
   static void SuspendDrawingThread(void);
@@ -154,8 +159,12 @@ class MapWindow {
   static rectObj CalculateScreenBounds(double scale);
   static bool WaypointInRange(int i);
 
-  static RECT MapRect;
-  static RECT MapRectBig;
+  static RECT GetMapRectBig() {
+    return MapRectBig;
+  }
+  static RECT GetMapRect() {
+    return MapRect;
+  }
 
   // input events or reused code
   static void Event_SetZoom(double value);
@@ -312,6 +321,9 @@ class MapWindow {
 
   // projection
   static RECT   MapRectSmall;
+  static RECT   MapRectBig;
+  static RECT   MapRect;
+
   static bool   MapFullScreen;
   static void   StoreRestoreFullscreen(bool);
   static void   CalculateOrigin(const RECT rc, POINT *Orig);

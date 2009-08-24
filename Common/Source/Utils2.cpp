@@ -68,17 +68,21 @@ int ProcessVirtualKey(int X, int Y, long keytime, short vkmode) {
 #define MAXBOTTOMMODES 5
 #define VKTIMELONG 1500
 
+	RECT MapRect = MapWindow::GetMapRect();
+
 	#ifdef DEBUG_PROCVK
 	TCHAR buf[100];
-	wsprintf(buf,_T("R=%d,%d,%d,%d, X=%d Y=%d kt=%ld"),MapWindow::MapRect.left, MapWindow::MapRect.top,
-	MapWindow::MapRect.right, MapWindow::MapRect.bottom,X,Y,keytime);
+	wsprintf(buf,_T("R=%d,%d,%d,%d, X=%d Y=%d kt=%ld"),
+		 MapRect.left, MapRect.top,
+		 MapRect.right, MapRect.bottom,
+		 X,Y,keytime);
 	DoStatusMessage(buf);
 	#endif
 
-	short sizeup=MapWindow::MapRect.bottom-MapWindow::MapRect.top;
-	short sizeright=MapWindow::MapRect.right-MapWindow::MapRect.left;
-	short yup=(sizeup/3)+MapWindow::MapRect.top;
-	short ydown=MapWindow::MapRect.bottom-(sizeup/3);
+	short sizeup=MapRect.bottom-MapRect.top;
+	short sizeright=MapRect.right-MapRect.left;
+	short yup=(sizeup/3)+MapRect.top;
+	short ydown=MapRect.bottom-(sizeup/3);
 	short xleft=sizeright/3; // TODO FIX
 	short xright=sizeright-xleft;
 
