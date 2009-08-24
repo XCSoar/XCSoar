@@ -40,6 +40,7 @@ Copyright_License {
 #include "Math/Geometry.hpp"
 #include "externs.h" // for DisplayGeometry
 #include "InputEvents.h"
+#include "SettingsUser.hpp"
 
 
 bool MapWindow::PointInRect(const double &lon, const double &lat,

@@ -43,6 +43,8 @@ Copyright_License {
 #include "RasterTerrain.h"
 #include "Math/Earth.hpp"
 
+#include "SettingsUser.hpp" // for FinalGlideTerrain, read-only
+
 void TerrainHeight(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 {
   short Alt = 0;
@@ -67,9 +69,11 @@ void TerrainHeight(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
     Calculated->TerrainAlt = Alt;
   }
   Calculated->AltitudeAGL = Calculated->NavAltitude - Calculated->TerrainAlt;
+
   if (!FinalGlideTerrain) {
     Calculated->TerrainBase = Calculated->TerrainAlt;
   }
+
 }
 
 void CheckFinalGlideThroughTerrain(NMEA_INFO *Basic,

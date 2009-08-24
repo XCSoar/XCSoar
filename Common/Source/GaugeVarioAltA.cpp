@@ -47,6 +47,8 @@ Copyright_License {
 #include "Math/Geometry.hpp"
 #include "McReady.h"
 
+#include "SettingsUser.hpp"
+
 #include <assert.h>
 
 HWND   hWndVarioWindow = NULL; // Vario Window

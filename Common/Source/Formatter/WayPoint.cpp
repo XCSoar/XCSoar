@@ -40,6 +40,7 @@ Copyright_License {
 #include "XCSoar.h"
 #include "externs.h"
 #include "MapWindow.h" // only for display mode definitions, should be elsewhere
+#include "SettingsUser.hpp"
 
 
 const TCHAR *FormatterWaypoint::Render(int *color) {

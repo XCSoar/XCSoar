@@ -58,6 +58,8 @@ Copyright_License {
 #include "Screen/Ramp.hpp"
 #include "Compatibility/gdi.h"
 
+#include "SettingsUser.hpp"
+
 #include <assert.h>
 #include <windows.h>
 #include <math.h>

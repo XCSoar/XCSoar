@@ -223,19 +223,6 @@ void ButtonLabel::CreateButtonLabels(RECT rc) {
   }
 
   //
-
-// VENTA3 disable gauge vario for geometry 5 in landscape mode, use 8 box right instead
-// beside those boxes were painted and overwritten by the gauge already and gauge was
-// graphically too much stretched, requiring a restyle!
-  if (InfoBoxLayout::gnav) {
-      if ( ( InfoBoxLayout::landscape == true) && ( InfoBoxLayout::InfoBoxGeometry == 5 ) )
-      	EnableVarioGauge = false;
-      else
-      	EnableVarioGauge = true;
-  } else {
-    EnableVarioGauge = false;
-  }
-
 }
 
 void ButtonLabel::SetFont(HFONT Font) {

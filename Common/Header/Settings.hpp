@@ -51,25 +51,13 @@ extern double SAFETYALTITUDEBREAKOFF;
 extern double SAFETYALTITUDETERRAIN;
 extern double SAFTEYSPEED;
 
-// user interface options
-extern bool CircleZoom;
-extern bool EnableTopology;
-extern bool EnableTerrain;
-extern int  FinalGlideTerrain;
+
+// sound stuff not used?
 extern bool EnableSoundVario;
 extern bool EnableSoundTask;
 extern bool EnableSoundModes;
-extern int SoundVolume;
-extern int SoundDeadband;
-extern int DisplayOrientation;
-extern int DisplayTextType;
-extern bool EnableCDICruise;
-extern bool EnableCDICircling;
-extern bool EnableVarioGauge;
-extern int MenuTimeoutMax;
-extern bool EnableAutoBacklight; // VENTA4
-extern bool EnableAutoSoundVolume; // VENTA4
-extern bool ExtendedVisualGlide;
+extern int  SoundVolume;
+extern int  SoundDeadband;
 
 // external control of user interface
 extern int EnableExternalTriggerCruise;
@@ -87,8 +75,8 @@ extern int  EnableThermalLocator;
 // control of task/waypoints
 extern int  AutoAdvance;
 extern bool AdvanceArmed;
-extern int HomeWaypoint;
-extern int AirfieldsHomeWaypoint; // VENTA3
+extern int  HomeWaypoint;
+extern int  AirfieldsHomeWaypoint; // VENTA3
 
 // task data
 extern START_POINT StartPoints[];

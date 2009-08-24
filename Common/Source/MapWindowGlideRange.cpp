@@ -38,6 +38,7 @@ Copyright_License {
 #include "MapWindow.h"
 #include "XCSoar.h"
 #include "externs.h"
+#include "SettingsUser.hpp"
 #include "Screen/Util.hpp"
 
 

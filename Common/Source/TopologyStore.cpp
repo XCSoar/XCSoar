@@ -48,6 +48,8 @@ Copyright_License {
 #include "Utils.h"
 #include "LogFile.hpp"
 
+#include "SettingsUser.hpp" // for EnableTopology
+
 #include <assert.h>
 
 #include "wcecompat/ts_string.h"

@@ -42,6 +42,7 @@ Copyright_License {
 #include "Device/Parser.h"
 #include "Utils2.h"
 #include "externs.h"
+#include "SettingsUser.hpp"
 #include "MapWindow.h"
 #include "TerrainRenderer.h"
 #include "GaugeFLARM.h"

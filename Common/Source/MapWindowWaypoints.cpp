@@ -40,8 +40,7 @@ Copyright_License {
 #include "Task.h"
 #include "WayPoint.hpp"
 #include "InfoBoxLayout.h"
-//#include "Screen/Util.hpp"
-//#include "Math/Screen.hpp"
+#include "SettingsUser.hpp"
 #include "Math/Earth.hpp"
 
 #include "McReady.h"

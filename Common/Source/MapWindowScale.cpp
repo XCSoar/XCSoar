@@ -48,6 +48,7 @@ Copyright_License {
 #include "RasterTerrain.h"
 #include "RasterWeather.h"
 #include "Logger.h"
+#include "SettingsUser.hpp"
 
 extern HFONT  MapWindowBoldFont;
 extern HFONT  TitleWindowFont;
