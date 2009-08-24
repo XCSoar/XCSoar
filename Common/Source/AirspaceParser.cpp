@@ -49,7 +49,7 @@ Copyright_License {
 #include "Math/Pressure.h"
 #include "LocalPath.hpp"
 
-#include "Calculations.h" // for ClearAirspaceWarnings
+#include "Calculations.h" // TODO danger! ClearAirspaceWarnings
 
 #include <windows.h>
 #include <commctrl.h>

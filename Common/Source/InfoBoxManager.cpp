@@ -51,7 +51,6 @@ Copyright_License {
 #include "Compatibility/string.h"
 #include "MapWindow.h"
 #include "Device/Parser.h"
-#include "Calculations.h"
 #include "Utils.h"
 #include "Utils2.h"
 #include "Math/FastMath.h"
@@ -64,6 +63,8 @@ Copyright_License {
 #include "SettingsTask.hpp"
 #include "SettingsComputer.hpp"
 #include "Interface.hpp"
+
+#include "Calculations.h" // TODO danger! IsFlarmTargetCNInRange
 
 extern bool DialogActive;
 int  InfoBoxFocusTimeOut = 0;

@@ -46,6 +46,7 @@ Copyright_License {
 #include "RasterTerrain.h"
 #include "Math/FastMath.h"
 #include "Math/Earth.hpp"
+#include "WayPoint.hpp"
 
 
 //////////////////////////////////////////////////////////
@@ -314,10 +315,6 @@ double MacCreadyTimeLimit(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
   }
   return mc_best;
 }
-
-
-#include "Calculations.h"
-#include "WayPoint.hpp"
 
 
 static double EffectiveMacCready_internal(NMEA_INFO *Basic, DERIVED_INFO *Calculated,

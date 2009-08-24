@@ -48,7 +48,7 @@ Copyright_License {
 #include "Settings.hpp"
 #include "SettingsComputer.hpp"
 #include "SettingsTask.hpp"
-#include "Calculations.h"
+#include "Calculations.h" // TODO danger! InAATTurnSector
 #include "Waypointparser.h"
 #include "McReady.h"
 #include "Math/Earth.hpp"

@@ -280,8 +280,6 @@ void ThermalLocator::Drift(double t_0,
   }
 }
 
-#include "Calculations.h"
-
 
 void ThermalLocator::EstimateThermalBase(double Thermal_Longitude,
 					 double Thermal_Latitude,

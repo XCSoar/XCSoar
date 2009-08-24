@@ -37,7 +37,7 @@ Copyright_License {
 
 #include "SnailTrail.hpp"
 #include "NMEA/Info.h"
-#include "Calculations.h"
+#include "NMEA/Derived.hpp"
 #include <math.h>
 
 SNAIL_POINT SnailTrail[TRAILSIZE];

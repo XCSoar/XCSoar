@@ -54,7 +54,6 @@ Copyright_License {
 */
 
 #include "windanalyser.h"
-#include "Calculations.h"
 #include "Math/FastMath.h"
 #include "LogFile.hpp"
 
