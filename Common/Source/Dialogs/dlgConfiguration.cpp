@@ -1440,7 +1440,7 @@ static void setVariables(void) {
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpAirspaceOutline"));
   if (wp) {
-    wp->GetDataField()->Set(MapWindow::bAirspaceBlackOutline);
+    wp->GetDataField()->Set(bAirspaceBlackOutline);
     wp->RefreshDisplay();
   }
 
@@ -1757,7 +1757,7 @@ static void setVariables(void) {
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpTrailDrift"));
   if (wp) {
-    wp->GetDataField()->Set(MapWindow::EnableTrailDrift);
+    wp->GetDataField()->Set(EnableTrailDrift);
     wp->RefreshDisplay();
   }
 
@@ -2708,9 +2708,9 @@ void dlgConfigurationShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpTrailDrift"));
   if (wp) {
-    if (MapWindow::EnableTrailDrift != wp->GetDataField()->GetAsBoolean()) {
-      MapWindow::EnableTrailDrift = wp->GetDataField()->GetAsBoolean();
-      SetToRegistry(szRegistryTrailDrift, MapWindow::EnableTrailDrift);
+    if (EnableTrailDrift != wp->GetDataField()->GetAsBoolean()) {
+      EnableTrailDrift = wp->GetDataField()->GetAsBoolean();
+      SetToRegistry(szRegistryTrailDrift, EnableTrailDrift);
       changed = true;
     }
   }
@@ -2810,11 +2810,11 @@ void dlgConfigurationShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpAirspaceOutline"));
   if (wp) {
-    if (MapWindow::bAirspaceBlackOutline !=
+    if (bAirspaceBlackOutline !=
 	wp->GetDataField()->GetAsBoolean()) {
-      MapWindow::bAirspaceBlackOutline = wp->GetDataField()->GetAsBoolean();
+      bAirspaceBlackOutline = wp->GetDataField()->GetAsBoolean();
       SetToRegistry(szRegistryAirspaceBlackOutline,
-		    MapWindow::bAirspaceBlackOutline);
+		    bAirspaceBlackOutline);
       changed = true;
     }
   }

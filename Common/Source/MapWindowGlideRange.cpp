@@ -40,6 +40,8 @@ Copyright_License {
 #include "SettingsTask.hpp"
 #include "SettingsUser.hpp"
 #include "Screen/Util.hpp"
+#include "Screen/Graphics.hpp"
+#include "Compatibility/gdi.h"
 
 
 void MapWindow::CalculateScreenPositionsGroundline(void) {
@@ -64,7 +66,7 @@ void MapWindow::DrawTerrainAbove(HDC hDC, const RECT rc, HDC buffer) {
 
   SelectObject(buffer, GetStockObject(WHITE_PEN));
   SetTextColor(buffer, graycolor);
-  SelectObject(buffer, hAboveTerrainBrush); // hAirspaceBrushes[3] or 6
+  SelectObject(buffer, MapGfx.hAboveTerrainBrush); // hAirspaceBrushes[3] or 6
   Rectangle(buffer,rc.left,rc.top,rc.right,rc.bottom);
 
   SelectObject(buffer, GetStockObject(WHITE_PEN));
@@ -104,14 +106,13 @@ void MapWindow::DrawTerrainAbove(HDC hDC, const RECT rc, HDC buffer) {
 void MapWindow::DrawGlideThroughTerrain(HDC hDC, const RECT rc) {
   HPEN hpOld;
 
-  hpOld = (HPEN)SelectObject(hDC,
-                             hpTerrainLineBg);  //sjt 02feb06 added bg line
+  hpOld = (HPEN)SelectObject(hDC, MapGfx.hpTerrainLineBg);  //sjt 02feb06 added bg line
 
-  SelectObject(hDC,hpTerrainLineBg);
+  SelectObject(hDC,MapGfx.hpTerrainLineBg);
   ClipPolyline(hDC, Groundline, NUMTERRAINSWEEPS + 1, rc);
   if ((FinalGlideTerrain==1) ||
       ((!EnableTerrain || !DerivedDrawInfo.Flying) && (FinalGlideTerrain==2))) {
-    SelectObject(hDC,hpTerrainLine);
+    SelectObject(hDC,MapGfx.hpTerrainLine);
     ClipPolyline(hDC, Groundline, NUMTERRAINSWEEPS + 1, rc);
   }
 
@@ -124,7 +125,7 @@ void MapWindow::DrawGlideThroughTerrain(HDC hDC, const RECT rc) {
                        DerivedDrawInfo.TerrainWarningLatitude)) {
         LatLon2Screen(DerivedDrawInfo.TerrainWarningLongitude,
                       DerivedDrawInfo.TerrainWarningLatitude, sc);
-        DrawBitmapIn(hDC, sc, hTerrainWarning);
+        DrawBitmapIn(hDC, sc, MapGfx.hTerrainWarning);
       }
     }
   }
@@ -185,7 +186,7 @@ void MapWindow::DrawGlideCircle(HDC hdc, POINT Orig, RECT rc )
 
   for (i=1; i<9; i++) {
 
-      SelectObject(hdc, hpVisualGlideHeavyBlack);
+      SelectObject(hdc, MapGfx.hpVisualGlideHeavyBlack);
 
     /*
      * TRACKUP, NORTHUP, NORTHCIRCLE, TRACKCIRCLE, NORTHTRACK

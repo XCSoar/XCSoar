@@ -58,7 +58,7 @@ extern void DrawJPG(HDC hdc, RECT rc);
 
 #ifndef CECORE
 #ifndef GNAV
-#include "VOIMAGE.h"
+#include "Screen/VOIMAGE.h"
 #endif
 #endif
 

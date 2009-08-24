@@ -47,6 +47,7 @@ Copyright_License {
 #include "OnLineContest.h"
 #include "SettingsComputer.hpp"
 #include "SettingsUser.hpp"
+#include "Screen/Graphics.hpp"
 
 int MapWindow::iSnailNext=0;
 #define fSnailColour(cv) max(0,min((short)(NUMSNAILCOLORS-1), (short)((cv+1.0)/2.0*NUMSNAILCOLORS)))
@@ -291,7 +292,7 @@ double MapWindow::DrawTrail( HDC hdc, const POINT Orig, const RECT rc)
       }
       P1.Colour = fSnailColour(colour_vario);
     }
-    SelectObject(hdc, hSnailPens[P1.Colour]);
+    SelectObject(hdc, MapGfx.hSnailPens[P1.Colour]);
 
     if (!last_visible) { // draw set cursor at P1
 #ifndef NOLINETO
@@ -345,7 +346,7 @@ void MapWindow::DrawTrailFromTask(HDC hdc, const RECT rc,
     j++;
   }
   if (j>=2) {
-    SelectObject(hdc,hSnailPens[NUMSNAILCOLORS/2]);
+    SelectObject(hdc,MapGfx.hSnailPens[NUMSNAILCOLORS/2]);
     ClipPolygon(hdc, ptin, j, rc, false);
   }
 }

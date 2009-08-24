@@ -37,7 +37,7 @@ Copyright_License {
 
 #include "MapWindow.h"
 #include "Math/Screen.hpp"
-
+#include <assert.h>
 
 typedef struct{
   TCHAR Name[NAME_SIZE+1];

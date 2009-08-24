@@ -332,7 +332,7 @@ bool ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size){
   CondReplaceInString(EnableTerrain, OutBuffer, TEXT("$(TerrainToggleActionName)"), TEXT("Off"), TEXT("On"), Size);
 
   if (_tcsstr(OutBuffer, TEXT("$(MapLabelsToggleActionName)"))) {
-    switch(MapWindow::DeclutterLabels) {
+    switch(DeclutterLabels) {
     case 0:
       ReplaceInString(OutBuffer, TEXT("$(MapLabelsToggleActionName)"),
                       TEXT("MID"), Size);

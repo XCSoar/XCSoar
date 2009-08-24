@@ -43,6 +43,7 @@ Copyright_License {
 #include "Screen/Util.hpp"
 #include "UtilsText.hpp"
 #include "MapWindow.h"
+#include "SettingsUser.hpp"
 
 #include <stdlib.h>
 #include <tchar.h>
@@ -142,7 +143,7 @@ Topology::~Topology() {
 
 
 bool Topology::CheckScale(void) {
-  return (MapWindow::MapScale <= scaleThreshold);
+  return (MapWindow::GetMapScale() <= scaleThreshold);
 }
 
 void Topology::TriggerIfScaleNowVisible(void) {
@@ -228,7 +229,7 @@ void Topology::Paint(HDC hdc, RECT rc) {
 
   if (!shapefileopen) return;
 
-  if (MapWindow::MapScale > scaleThreshold)
+  if (MapWindow::GetMapScale() > scaleThreshold)
     return;
 
   // TODO code: only draw inside screen!
@@ -248,13 +249,13 @@ void Topology::Paint(HDC hdc, RECT rc) {
 
   int iskip = 1;
 
-  if (MapWindow::MapScale>0.25*scaleThreshold) {
+  if (MapWindow::GetMapScale()>0.25*scaleThreshold) {
     iskip = 2;
   }
-  if (MapWindow::MapScale>0.5*scaleThreshold) {
+  if (MapWindow::GetMapScale()>0.5*scaleThreshold) {
     iskip = 3;
   }
-  if (MapWindow::MapScale>0.75*scaleThreshold) {
+  if (MapWindow::GetMapScale()>0.75*scaleThreshold) {
     iskip = 4;
   }
 
@@ -380,7 +381,7 @@ XShape* TopologyLabel::addShape(const int i) {
 
 
 void XShapeLabel::renderSpecial(HDC hDC, int x, int y) {
-  if (label && (MapWindow::DeclutterLabels<2)) {
+  if (label && (DeclutterLabels<2)) {
 
     TCHAR Temp[100];
     _stprintf(Temp,TEXT("%S"),label);

@@ -155,4 +155,7 @@ enum {
   MAX_IGC_BUFF = 255,
 };
 
+#define SCALELISTSIZE  30
+#define MAXLABELBLOCKS 100
+
 #endif

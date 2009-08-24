@@ -43,6 +43,7 @@ Copyright_License {
 #include "Math/Earth.hpp"
 #include "SettingsComputer.hpp"
 #include "Settings.hpp"
+#include "Screen/Graphics.hpp"
 
 extern HFONT MapLabelFont;
 
@@ -182,8 +183,8 @@ void MapWindow::DrawFLARMTraffic(HDC hDC, RECT rc, POINT Orig_Aircraft) {
 	  brect.top = sc_av.y+((tsize.cy+4)>>3)-2;
 	  brect.bottom = brect.top+3+tsize.cy-((tsize.cy+4)>>3);
 
-	  HPEN hpOld = (HPEN)SelectObject(hDC, hSnailPens[colourIndex]);
-	  HBRUSH hVarioBrush = CreateSolidBrush(hSnailColours[colourIndex]);
+	  HPEN hpOld = (HPEN)SelectObject(hDC, MapGfx.hSnailPens[colourIndex]);
+	  HBRUSH hVarioBrush = CreateSolidBrush(MapGfx.hSnailColours[colourIndex]);
 	  HBRUSH hbOld = (HBRUSH)SelectObject(hDC, hVarioBrush);
 
 	  RoundRect(hDC, brect.left, brect.top, brect.right, brect.bottom,
@@ -209,7 +210,7 @@ void MapWindow::DrawFLARMTraffic(HDC hDC, RECT rc, POINT Orig_Aircraft) {
 #endif
       if ((DrawInfo.FLARM_Traffic[i].AlarmLevel>0)
 	  && (DrawInfo.FLARM_Traffic[i].AlarmLevel<4)) {
-	DrawBitmapIn(hDC, sc, hFLARMTraffic);
+	DrawBitmapIn(hDC, sc, MapGfx.hFLARMTraffic);
       }
 
       Arrow[0].x = -4;
@@ -266,7 +267,7 @@ void MapWindow::DrawTeammate(HDC hdc, RECT rc)
 	{
 	  LatLon2Screen(TeammateLongitude, TeammateLatitude, point);
 
-	  SelectObject(hDCTemp,hBmpTeammatePosition);
+	  SelectObject(hDCTemp, MapGfx.hBmpTeammatePosition);
 	  DrawBitmapX(hdc,
 		      point.x-IBLSCALE(10),
 		      point.y-IBLSCALE(10),

@@ -36,10 +36,11 @@ Copyright_License {
 */
 
 #include "Screen/Blank.hpp"
+#include "XCSoar.h"
 
 #ifdef HAVE_BLANK
 
-#include "XCSoar.h"
+#include "Interface.hpp"
 #include "Battery.h"
 #include "Dialogs.h"
 #include "LogFile.hpp"

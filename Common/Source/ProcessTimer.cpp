@@ -67,6 +67,9 @@ extern int MenuTimeoutMax;
 extern bool DisplayLocked;
 extern bool DialogActive;
 
+extern void RestartCommPorts(void);
+
+
 void CommonProcessTimer()
 {
 

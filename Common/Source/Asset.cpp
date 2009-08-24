@@ -40,6 +40,7 @@ Copyright_License {
 #include "Registry.hpp"
 #include "UtilsText.hpp"
 #include "LogFile.hpp"
+#include "uniqueid.h"
 
 // Registration Data
 TCHAR strAssetNumber[MAX_LOADSTRING] = TEXT(""); //4G17DW31L0HY");

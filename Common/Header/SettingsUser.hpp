@@ -94,6 +94,10 @@ extern int OnAirSpace; // VENTA3 toggle DrawAirSpace
 
 extern bool VirtualKeys;
 
+extern unsigned char DeclutterLabels;
+extern bool EnableTrailDrift;
+extern bool bAirspaceBlackOutline;
+
 // sound stuff not used?
 extern bool EnableSoundVario;
 extern bool EnableSoundTask;

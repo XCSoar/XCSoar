@@ -38,6 +38,7 @@ Copyright_License {
 #include "MapWindow.h"
 #include "InfoBoxLayout.h"
 #include "Screen/Util.hpp"
+#include "Screen/Graphics.hpp"
 #include "XCSoar.h" // for Appearance
 
 extern HFONT  MapWindowFont;
@@ -312,7 +313,7 @@ bool MapWindow::TextInBox(HDC hDC, const TCHAR* Value, int x, int y,
     if (!noOverlap || notoverlapping) {
       HPEN oldPen;
       if (Mode.AsFlag.Border) {
-        oldPen = (HPEN)SelectObject(hDC, hpMapScale);
+        oldPen = (HPEN)SelectObject(hDC, MapGfx.hpMapScale);
       } else {
         oldPen = (HPEN)SelectObject(hDC, GetStockObject(WHITE_PEN));
       }
@@ -499,7 +500,7 @@ void MapWindow::DrawGreatCircle(HDC hdc,
 #else
   // Simple and this should work for PNA with display bug
 
-  HPEN hpOld = (HPEN)SelectObject(hdc, hpBearing);
+  HPEN hpOld = (HPEN)SelectObject(hdc, MapGfx.hpBearing);
   POINT pt[2];
   LatLon2Screen(startLon,
                 startLat,

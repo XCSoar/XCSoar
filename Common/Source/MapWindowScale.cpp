@@ -45,13 +45,13 @@ Copyright_License {
 #include <math.h>
 #include "Math/FastMath.h"
 #include "Screen/Util.hpp"
+#include "Screen/Graphics.hpp"
 #include "McReady.h"
 #include "InfoBoxManager.h"
 
 #include "RasterTerrain.h"
 #include "RasterWeather.h"
 #include "Logger.h"
-#include "SettingsUser.hpp"
 
 extern HFONT  MapWindowBoldFont;
 extern HFONT  TitleWindowFont;
@@ -379,7 +379,7 @@ void MapWindow::DrawMapScale2(HDC hDC, const RECT rc,
 
   if (Appearance.MapScale2 == apMs2None) return;
 
-  HPEN hpOld   = (HPEN)SelectObject(hDC, hpMapScale);
+  HPEN hpOld   = (HPEN)SelectObject(hDC, MapGfx.hpMapScale);
   HPEN hpWhite = (HPEN)GetStockObject(WHITE_PEN);
   HPEN hpBlack = (HPEN)GetStockObject(BLACK_PEN);
 
@@ -440,7 +440,7 @@ void MapWindow::DrawMapScale(HDC hDC, const RECT rc /* the Map Rect*/,
     TCHAR TEMP[20];
     POINT Start, End;
     HPEN hpOld;
-    hpOld = (HPEN)SelectObject(hDC, hpMapScale);
+    hpOld = (HPEN)SelectObject(hDC, MapGfx.hpMapScale);
 
     Start.x = rc.right-IBLSCALE(6); End.x = rc.right-IBLSCALE(6);
     Start.y = rc.bottom-IBLSCALE(30); End.y = Start.y - IBLSCALE(30);
@@ -565,7 +565,7 @@ void MapWindow::DrawMapScale(HDC hDC, const RECT rc /* the Map Rect*/,
                rc.bottom-Appearance.MapWindowBoldFont.AscentHeight-IBLSCALE(1),
                0, NULL, ScaleInfo, _tcslen(ScaleInfo), NULL);
 
-    oldBitMap = (HBITMAP)SelectObject(hDCTemp, hBmpMapScale);
+    oldBitMap = (HBITMAP)SelectObject(hDCTemp, MapGfx.hBmpMapScale);
 
     DrawBitmapX(hDC, 0, rc.bottom-Height, 6, 11, hDCTemp, 0, 0, SRCCOPY);
     DrawBitmapX(hDC,

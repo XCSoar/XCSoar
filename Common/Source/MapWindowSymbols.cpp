@@ -39,6 +39,7 @@ Copyright_License {
 #include "Protection.hpp"
 #include "InfoBoxLayout.h"
 #include "Screen/Util.hpp"
+#include "Screen/Graphics.hpp"
 #include "Math/Screen.hpp"
 #include "Math/FastMath.h"
 #include "Math/Geometry.hpp"
@@ -118,7 +119,7 @@ void MapWindow::DrawAircraft(HDC hdc, const POINT Orig)
     }
 
     HBRUSH hbOld = (HBRUSH)SelectObject(hdc, hbAircraftSolidBg);
-    hpOld = (HPEN)SelectObject(hdc, hpAircraft);
+    hpOld = (HPEN)SelectObject(hdc, MapGfx.hpAircraft);
 
     PolygonRotateShift(Aircraft, NUMAIRCRAFTPOINTS, Orig.x+1, Orig.y+1,
                        DisplayAircraftAngle+
@@ -127,7 +128,7 @@ void MapWindow::DrawAircraft(HDC hdc, const POINT Orig)
     Polygon(hdc, Aircraft, NUMAIRCRAFTPOINTS);
 
     // draw it again so can get white border
-    SelectObject(hdc, hpAircraftBorder);
+    SelectObject(hdc, MapGfx.hpAircraftBorder);
     SelectObject(hdc, hbAircraftSolid);
 
     for(i=0; i<NUMAIRCRAFTPOINTS; i++)
@@ -187,7 +188,7 @@ void MapWindow::DrawAircraft(HDC hdc, const POINT Orig)
       PolygonRotateShift(Aircraft, n,
 			 Orig.x-1, Orig.y, angle);
 
-      oldPen = (HPEN)SelectObject(hdc, hpAircraft);
+      oldPen = (HPEN)SelectObject(hdc, MapGfx.hpAircraft);
       Polygon(hdc, Aircraft, n);
 
       HBRUSH hbOld;
@@ -196,7 +197,7 @@ void MapWindow::DrawAircraft(HDC hdc, const POINT Orig)
       } else {
 	hbOld = (HBRUSH)SelectObject(hdc, GetStockObject(BLACK_BRUSH));
       }
-      SelectObject(hdc, hpAircraftBorder); // hpBearing
+      SelectObject(hdc, MapGfx.hpAircraftBorder); // hpBearing
       Polygon(hdc, Aircraft, n);
 
       SelectObject(hdc, oldPen);
@@ -219,7 +220,7 @@ void MapWindow::DrawGPSStatus(HDC hDC, const RECT rc)
   TextInBoxMode_t TextInBoxMode = {2};
 
   if (!extGPSCONNECT) {
-    SelectObject(hDCTemp,hGPSStatus2);
+    SelectObject(hDCTemp,MapGfx.hGPSStatus2);
     DrawBitmapX(hDC,
                 rc.left+IBLSCALE(2),
                 rc.bottom+IBLSCALE(Appearance.GPSStatusOffset.y-22),
@@ -234,7 +235,7 @@ void MapWindow::DrawGPSStatus(HDC hDC, const RECT rc)
 
   } else
     if (DrawInfo.NAVWarning || (DrawInfo.SatellitesUsed == 0)) {
-      SelectObject(hDCTemp,hGPSStatus1);
+      SelectObject(hDCTemp,MapGfx.hGPSStatus1);
 
       DrawBitmapX(hDC,
                   rc.left+IBLSCALE(2),
@@ -281,9 +282,9 @@ void MapWindow::DrawFlightMode(HDC hdc, const RECT rc)
       offset -= 7;
 
       if (LoggerActive && flip) {
-        SelectObject(hDCTemp,hLogger);
+        SelectObject(hDCTemp,MapGfx.hLogger);
       } else {
-        SelectObject(hDCTemp,hLoggerOff);
+        SelectObject(hDCTemp,MapGfx.hLoggerOff);
       }
       //changed draw mode & icon for higher opacity 12aug -st
       DrawBitmapX(hdc,
@@ -305,14 +306,14 @@ void MapWindow::DrawFlightMode(HDC hdc, const RECT rc)
   if (Appearance.FlightModeIcon == apFlightModeIconDefault){
 
     if (TaskAborted) {
-      SelectObject(hDCTemp,hAbort);
+      SelectObject(hDCTemp,MapGfx.hAbort);
     } else {
       if (DisplayMode == dmCircling) {
-        SelectObject(hDCTemp,hClimb);
+        SelectObject(hDCTemp,MapGfx.hClimb);
       } else if (DisplayMode == dmFinalGlide) {
-        SelectObject(hDCTemp,hFinalGlide);
+        SelectObject(hDCTemp,MapGfx.hFinalGlide);
       } else {
-        SelectObject(hDCTemp,hCruise);
+        SelectObject(hDCTemp,MapGfx.hCruise);
       }
     }
     // Code already commented as of 12aug05 - redundant? -st
@@ -389,14 +390,14 @@ void MapWindow::DrawFlightMode(HDC hdc, const RECT rc)
     }
 
     if (TaskAborted)
-      oldBrush = (HBRUSH)SelectObject(hdc, hBrushFlyingModeAbort);
+      oldBrush = (HBRUSH)SelectObject(hdc, MapGfx.hBrushFlyingModeAbort);
     else
-      oldBrush = (HBRUSH)SelectObject(hdc, hbCompass);
+      oldBrush = (HBRUSH)SelectObject(hdc, MapGfx.hbCompass);
 
-    oldPen = (HPEN)SelectObject(hdc, hpCompassBorder);
+    oldPen = (HPEN)SelectObject(hdc, MapGfx.hpCompassBorder);
     Polygon(hdc, Arrow, 3);
 
-    SelectObject(hdc, hpCompass);
+    SelectObject(hdc, MapGfx.hpCompass);
     Polygon(hdc, Arrow, 3);
 
     SelectObject(hdc, oldPen);
@@ -406,7 +407,7 @@ void MapWindow::DrawFlightMode(HDC hdc, const RECT rc)
 
 
   if (!Appearance.DontShowAutoMacCready && DerivedDrawInfo.AutoMacCready) {
-    SelectObject(hDCTemp,hAutoMacCready);
+    SelectObject(hDCTemp,MapGfx.hAutoMacCready);
 
     offset -= 24;
 
@@ -455,8 +456,8 @@ void MapWindow::DrawWindAtAircraft2(HDC hdc, const POINT Orig, const RECT rc) {
     tsize.cx = tsize.cx/2;
   }
 
-  hpOld = (HPEN)SelectObject(hdc, hpWind);
-  hbOld = (HBRUSH)SelectObject(hdc, hbWind);
+  hpOld = (HPEN)SelectObject(hdc, MapGfx.hpWind);
+  hbOld = (HBRUSH)SelectObject(hdc, MapGfx.hbWind);
 
   int wmag = iround(4.0*DerivedDrawInfo.WindSpeed);
 
@@ -727,29 +728,29 @@ void MapWindow::DrawFinalGlide(HDC hDC, const RECT rc)
       // draw actual glide bar
       if (Offset<=0) {
         if (LandableReachable) {
-          hpOld = (HPEN)SelectObject(hDC, hpFinalGlideBelowLandable);
-          hbOld = (HBRUSH)SelectObject(hDC, hbFinalGlideBelowLandable);
+          hpOld = (HPEN)SelectObject(hDC, MapGfx.hpFinalGlideBelowLandable);
+          hbOld = (HBRUSH)SelectObject(hDC, MapGfx.hbFinalGlideBelowLandable);
         } else {
-          hpOld = (HPEN)SelectObject(hDC, hpFinalGlideBelow);
-          hbOld = (HBRUSH)SelectObject(hDC, hbFinalGlideBelow);
+          hpOld = (HPEN)SelectObject(hDC, MapGfx.hpFinalGlideBelow);
+          hbOld = (HBRUSH)SelectObject(hDC, MapGfx.hbFinalGlideBelow);
         }
       } else {
-        hpOld = (HPEN)SelectObject(hDC, hpFinalGlideAbove);
-        hbOld = (HBRUSH)SelectObject(hDC, hbFinalGlideAbove);
+        hpOld = (HPEN)SelectObject(hDC, MapGfx.hpFinalGlideAbove);
+        hbOld = (HBRUSH)SelectObject(hDC, MapGfx.hbFinalGlideAbove);
       }
       Polygon(hDC,GlideBar,6);
 
       // draw glide bar at mc 0
       if (Offset0<=0) {
         if (LandableReachable) {
-          SelectObject(hDC, hpFinalGlideBelowLandable);
+          SelectObject(hDC, MapGfx.hpFinalGlideBelowLandable);
           SelectObject(hDC, GetStockObject(HOLLOW_BRUSH));
         } else {
-          SelectObject(hDC, hpFinalGlideBelow);
+          SelectObject(hDC, MapGfx.hpFinalGlideBelow);
           SelectObject(hDC, GetStockObject(HOLLOW_BRUSH));
         }
       } else {
-        SelectObject(hDC, hpFinalGlideAbove);
+        SelectObject(hDC, MapGfx.hpFinalGlideAbove);
         SelectObject(hDC, GetStockObject(HOLLOW_BRUSH));
       }
       if (Offset!=Offset0) {
@@ -760,7 +761,7 @@ void MapWindow::DrawFinalGlide(HDC hDC, const RECT rc)
       // hpAircraftBorder
       if ((DerivedDrawInfo.TaskTimeToGo>0.9*ERROR_TIME)
 	  || ((MACCREADY<0.01) && (DerivedDrawInfo.TaskAltitudeDifference<0))) {
-	SelectObject(hDC, hpAircraftBorder);
+	SelectObject(hDC, MapGfx.hpAircraftBorder);
 	POINT Cross[4] = { {-5, -5},
 			   { 5,  5},
 			   {-5,  5},
@@ -861,8 +862,8 @@ void MapWindow::DrawCompass(HDC hDC, const RECT rc)
 
     POINT Arrow[5] = { {0,-18}, {-6,10}, {0,0}, {6,10}, {0,-18}};
 
-    hpOld = (HPEN)SelectObject(hDC, hpCompass);
-    hbOld = (HBRUSH)SelectObject(hDC, hbCompass);
+    hpOld = (HPEN)SelectObject(hDC, MapGfx.hpCompass);
+    hbOld = (HBRUSH)SelectObject(hDC, MapGfx.hbCompass);
 
     // North arrow
     PolygonRotateShift(Arrow, 5, Start.x, Start.y, -DisplayAngle);
@@ -907,11 +908,11 @@ void MapWindow::DrawCompass(HDC hDC, const RECT rc)
       lastRcRight = rc.right;
     }
 
-    hpOld = (HPEN)SelectObject(hDC, hpCompassBorder);
-    hbOld = (HBRUSH)SelectObject(hDC, hbCompass);
+    hpOld = (HPEN)SelectObject(hDC, MapGfx.hpCompassBorder);
+    hbOld = (HBRUSH)SelectObject(hDC, MapGfx.hbCompass);
     Polygon(hDC,Arrow,5);
 
-    SelectObject(hDC, hpCompass);
+    SelectObject(hDC, MapGfx.hpCompass);
     Polygon(hDC,Arrow,5);
 
     SelectObject(hDC, hbOld);
@@ -938,8 +939,8 @@ void MapWindow::DrawBestCruiseTrack(HDC hdc, const POINT Orig)
   if (DerivedDrawInfo.WaypointDistance < 0.010)
     return;
 
-  hpOld = (HPEN)SelectObject(hdc, hpBestCruiseTrack);
-  hbOld = (HBRUSH)SelectObject(hdc, hbBestCruiseTrack);
+  hpOld = (HPEN)SelectObject(hdc, MapGfx.hpBestCruiseTrack);
+  hbOld = (HBRUSH)SelectObject(hdc, MapGfx.hbBestCruiseTrack);
 
   if (Appearance.BestCruiseTrack == ctBestCruiseTrackDefault){
 

@@ -382,6 +382,7 @@ VOLKS	:=\
 	$(SRC)/Device/Volkslogger/vlutils.cpp
 
 OBJS	:=\
+	\
 	$(SRC)/AATDistance.o 		\
 	$(SRC)/Airspace.o 		\
 	$(SRC)/AirspaceParser.o 	\
@@ -511,11 +512,12 @@ OBJS	:=\
 	\
 	$(SRC)/Screen/Animation.o 	\
 	$(SRC)/Screen/Blank.o 		\
-	$(SRC)/Screen/Ramp.o 		\
-	$(SRC)/Screen/Util.o 		\
-	$(SRC)/Screen/STScreenBuffer.o 	\
-	$(SRC)/Screen/VOIMAGE.o 	\
 	$(SRC)/Screen/Fonts.o 		\
+	$(SRC)/Screen/Graphics.o 	\
+	$(SRC)/Screen/Ramp.o 		\
+	$(SRC)/Screen/STScreenBuffer.o 	\
+	$(SRC)/Screen/Util.o 		\
+	$(SRC)/Screen/VOIMAGE.o 	\
 	\
 	$(SRC)/Polar/WinPilot.o 	\
 	$(SRC)/Polar/BuiltIn.o 		\

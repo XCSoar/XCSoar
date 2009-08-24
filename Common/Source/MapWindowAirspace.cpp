@@ -40,7 +40,9 @@ Copyright_License {
 #include "XCSoar.h"
 #include "Screen/Util.hpp"
 #include "Math/FastMath.h"
-
+#include "SettingsUser.hpp"
+#include "Screen/Graphics.hpp"
+#include "Compatibility/gdi.h"
 
 void MapWindow::CalculateScreenPositionsAirspaceCircle(AIRSPACE_CIRCLE &circ) {
   circ.Visible = false;
@@ -170,10 +172,10 @@ void MapWindow::DrawAirSpace(HDC hdc, const RECT rc, HDC buffer)
 	}
         // this color is used as the black bit
         SetTextColor(buffer,
-                     Colours[iAirspaceColour[AirspaceCircle[i].Type]]);
+                     MapGfx.Colours[iAirspaceColour[AirspaceCircle[i].Type]]);
         // get brush, can be solid or a 1bpp bitmap
         SelectObject(buffer,
-                     hAirspaceBrushes[iAirspaceBrush[AirspaceCircle[i].Type]]);
+                     MapGfx.hAirspaceBrushes[iAirspaceBrush[AirspaceCircle[i].Type]]);
         Circle(buffer,
                AirspaceCircle[i].Screen.x ,
                AirspaceCircle[i].Screen.y ,
@@ -191,9 +193,9 @@ void MapWindow::DrawAirSpace(HDC hdc, const RECT rc, HDC buffer)
 	}
         // this color is used as the black bit
         SetTextColor(buffer,
-                     Colours[iAirspaceColour[AirspaceArea[i].Type]]);
+                     MapGfx.Colours[iAirspaceColour[AirspaceArea[i].Type]]);
         SelectObject(buffer,
-                     hAirspaceBrushes[iAirspaceBrush[AirspaceArea[i].Type]]);
+                     MapGfx.hAirspaceBrushes[iAirspaceBrush[AirspaceArea[i].Type]]);
         ClipPolygon(buffer,
                     AirspaceScreenPoint+AirspaceArea[i].FirstPoint,
                     AirspaceArea[i].NumPoints, rc, true);
@@ -218,7 +220,7 @@ void MapWindow::DrawAirSpace(HDC hdc, const RECT rc, HDC buffer)
         if (bAirspaceBlackOutline) {
           SelectObject(buffer, GetStockObject(BLACK_PEN));
         } else {
-          SelectObject(buffer, hAirspacePens[AirspaceCircle[i].Type]);
+          SelectObject(buffer, MapGfx.hAirspacePens[AirspaceCircle[i].Type]);
         }
         Circle(buffer,
                AirspaceCircle[i].Screen.x ,
@@ -238,7 +240,7 @@ void MapWindow::DrawAirSpace(HDC hdc, const RECT rc, HDC buffer)
         if (bAirspaceBlackOutline) {
           SelectObject(buffer, GetStockObject(BLACK_PEN));
         } else {
-          SelectObject(buffer, hAirspacePens[AirspaceArea[i].Type]);
+          SelectObject(buffer, MapGfx.hAirspacePens[AirspaceArea[i].Type]);
         }
 
 	POINT *pstart = AirspaceScreenPoint+AirspaceArea[i].FirstPoint;

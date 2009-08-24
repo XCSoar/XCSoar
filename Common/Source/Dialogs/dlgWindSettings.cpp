@@ -38,6 +38,7 @@ Copyright_License {
 #include "Dialogs.h"
 #include "XCSoar.h"
 #include "Blackboard.hpp"
+#include "SettingsUser.hpp"
 #include "SettingsComputer.hpp"
 #include "Units.h"
 #include "Dialogs/dlgTools.h"
@@ -161,7 +162,7 @@ void dlgWindSettingsShowModal(void){
 
       wp = (WndProperty*)wf->FindByName(TEXT("prpTrailDrift"));
       if (wp) {
-        wp->GetDataField()->Set(MapWindow::EnableTrailDrift);
+        wp->GetDataField()->Set(EnableTrailDrift);
         wp->RefreshDisplay();
       }
     }
@@ -177,8 +178,8 @@ void dlgWindSettingsShowModal(void){
     }
     wp = (WndProperty*)wf->FindByName(TEXT("prpTrailDrift"));
     if (wp) {
-      if (MapWindow::EnableTrailDrift != wp->GetDataField()->GetAsBoolean()) {
-        MapWindow::EnableTrailDrift = wp->GetDataField()->GetAsBoolean();
+      if (EnableTrailDrift != wp->GetDataField()->GetAsBoolean()) {
+        EnableTrailDrift = wp->GetDataField()->GetAsBoolean();
         // SetToRegistry(szRegistryTrailDrift, MapWindow::EnableTrailDrift);
       }
     }

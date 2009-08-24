@@ -64,7 +64,7 @@ Copyright_License {
 #include "SettingsUser.hpp"
 #include "SettingsComputer.hpp"
 #include "Interface.hpp"
-
+#include "Battery.h"
 #include "Calculations.h" // TODO danger! IsFlarmTargetCNInRange
 
 extern bool DialogActive;

@@ -583,17 +583,17 @@ void ReadRegistrySettings(void)
 
     }
 
-  Temp = MapWindow::bAirspaceBlackOutline;
+  Temp = bAirspaceBlackOutline;
   GetFromRegistry(szRegistryAirspaceBlackOutline,&Temp);
-  MapWindow::bAirspaceBlackOutline = (Temp == 1);
+  bAirspaceBlackOutline = (Temp == 1);
 
   Temp = TrailActive;
   GetFromRegistry(szRegistrySnailTrail,&Temp);
   TrailActive = Temp;
 
-  Temp = MapWindow::EnableTrailDrift;
+  Temp = EnableTrailDrift;
   GetFromRegistry(szRegistryTrailDrift,&Temp);
-  MapWindow::EnableTrailDrift = (Temp==1);
+  EnableTrailDrift = (Temp==1);
 
   Temp = EnableThermalLocator;
   GetFromRegistry(szRegistryThermalLocator,&Temp);

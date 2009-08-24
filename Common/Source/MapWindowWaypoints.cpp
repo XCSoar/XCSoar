@@ -45,9 +45,11 @@ Copyright_License {
 #include "InfoBoxLayout.h"
 #include "SettingsUser.hpp"
 #include "Math/Earth.hpp"
-
+#include "Screen/Graphics.hpp"
 #include "McReady.h"
 #include "GlideSolvers.hpp"
+#include "Compatibility/gdi.h"
+#include <assert.h>
 
 
 bool MapWindow::WaypointInTask(int ind) {
@@ -109,7 +111,7 @@ void MapWindow::DrawWaypoints(HDC hdc, const RECT rc)
 	    irange = WaypointInRange(i);
 
 	    if(MapScale > 20) {
-	      SelectObject(hDCTemp,hSmall);
+	      SelectObject(hDCTemp,MapGfx.hSmall);
 	    } else if( ((WayPointList[i].Flags & AIRPORT) == AIRPORT)
 		       || ((WayPointList[i].Flags & LANDPOINT) == LANDPOINT) ) {
 	      islandable = true; // so we can always draw them
@@ -128,20 +130,20 @@ void MapWindow::DrawWaypoints(HDC hdc, const RECT rc)
 		}
 
 		if ((WayPointList[i].Flags & AIRPORT) == AIRPORT)
-		  SelectObject(hDCTemp,hBmpAirportReachable);
+		  SelectObject(hDCTemp,MapGfx.hBmpAirportReachable);
 		else
-		  SelectObject(hDCTemp,hBmpFieldReachable);
+		  SelectObject(hDCTemp,MapGfx.hBmpFieldReachable);
 	      } else {
 		if ((WayPointList[i].Flags & AIRPORT) == AIRPORT)
-		  SelectObject(hDCTemp,hBmpAirportUnReachable);
+		  SelectObject(hDCTemp,MapGfx.hBmpAirportUnReachable);
 		else
-		  SelectObject(hDCTemp,hBmpFieldUnReachable);
+		  SelectObject(hDCTemp,MapGfx.hBmpFieldUnReachable);
 	      }
 	    } else {
 	      if(MapScale > 4) {
-		SelectObject(hDCTemp,hSmall);
+		SelectObject(hDCTemp,MapGfx.hSmall);
 	      } else {
-		SelectObject(hDCTemp,hTurnPoint);
+		SelectObject(hDCTemp,MapGfx.hTurnPoint);
 	      }
 	    }
 

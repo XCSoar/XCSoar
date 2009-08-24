@@ -36,6 +36,7 @@ Copyright_License {
 */
 
 #include "MapWindow.h"
+#include "Screen/Graphics.hpp"
 #include "XCSoar.h"
 #include "Protection.hpp"
 #include "Utils.h"
@@ -100,70 +101,33 @@ int misc_tick_count=0;
 int TrailActive = true;
 int VisualGlide = 0;
 
+ScreenGraphics MapGfx;
+
 extern void DrawGlideCircle(HDC hdc, POINT Orig, RECT rc );
 
 DisplayOrientation_t DisplayOrientation = TRACKUP;
 DisplayTextType_t    DisplayTextType = DISPLAYNONE;
 
-#define NUMSNAILRAMP 6
-
-static const COLORREF taskcolor = RGB(0,120,0); // was 255
-
-const COLORRAMP snail_colors[] = {
-  {0,         0xff, 0x3e, 0x00},
-  {50,        0xcd, 0x4f, 0x27},
-  {100,       0x8f, 0x8f, 0x8f},
-  {150,       0x27, 0xcd, 0x4f},
-  {201,       0x00, 0xff, 0x3e},
-  {501,       0x00, 0xff, 0x3e}
-};
-
 ///////////////////////////////// Initialisation
 
+// settings
 DisplayMode_t UserForceDisplayMode = dmNone;
 DisplayMode_t DisplayMode = dmCruise;
-
-HBITMAP MapWindow::hBmpAirportReachable;
-HBITMAP MapWindow::hBmpAirportUnReachable;
-HBITMAP MapWindow::hBmpFieldReachable;
-HBITMAP MapWindow::hBmpFieldUnReachable;
-HBITMAP MapWindow::hBmpThermalSource;
-HBITMAP MapWindow::hBmpTarget;
-HBITMAP MapWindow::hBmpTeammatePosition;
-HBITMAP MapWindow::hAboveTerrainBitmap;
-HBRUSH  MapWindow::hAboveTerrainBrush;
-
-HPEN    MapWindow::hpCompassBorder;
-HBRUSH  MapWindow::hBrushFlyingModeAbort;
+bool EnableTrailDrift=false;
+bool bAirspaceBlackOutline = false;
 int MapWindow::SnailWidthScale = 16;
 
-HBITMAP MapWindow::hBmpUnitKm;
-HBITMAP MapWindow::hBmpUnitSm;
-HBITMAP MapWindow::hBmpUnitNm;
-HBITMAP MapWindow::hBmpUnitM;
-HBITMAP MapWindow::hBmpUnitFt;
-HBITMAP MapWindow::hBmpUnitMpS;
+///////////////////////////////// Initialisation
 
 int MapWindow::ScaleListCount = 0;
 double MapWindow::ScaleList[];
 int MapWindow::ScaleCurrent;
-HBITMAP MapWindow::hBmpCompassBg = NULL;
-HBITMAP MapWindow::hBmpClimbeAbort = NULL;
-HBITMAP MapWindow::hBmpMapScale=NULL;
 
 POINT MapWindow::Orig_Screen;
 
 RECT MapWindow::MapRect;
 RECT MapWindow::MapRectBig;
 RECT MapWindow::MapRectSmall;
-
-HBITMAP MapWindow::hDrawBitMap = NULL;
-HBITMAP MapWindow::hDrawBitMapTmp = NULL;
-HBITMAP MapWindow::hMaskBitMap = NULL;
-HDC MapWindow::hdcDrawWindow = NULL;
-HDC MapWindow::hdcScreen = NULL;
-HDC MapWindow::hDCTemp = NULL;
-HDC MapWindow::hDCMask = NULL;
 
 rectObj MapWindow::screenbounds_latlon;
 
@@ -178,7 +142,6 @@ bool MapWindow::EnablePan = false;
 bool MapWindow::TargetPan = false;
 int MapWindow::TargetPanIndex = 0;
 double MapWindow::TargetZoomDistance = 500.0;
-bool MapWindow::EnableTrailDrift=false;
 int MapWindow::GliderScreenPosition = 20; // 20% from bottom
 int MapWindow::WindArrowStyle = 0;
 
@@ -188,7 +151,7 @@ BOOL MapWindow::THREADEXIT = FALSE;
 BOOL MapWindow::Initialised = FALSE;
 
 bool MapWindow::BigZoom = true;
-unsigned char MapWindow::DeclutterLabels = 0;
+unsigned char DeclutterLabels = 0;
 
 DWORD  MapWindow::dwDrawThreadID;
 HANDLE MapWindow::hDrawThread;
@@ -205,23 +168,6 @@ double MapWindow::InvDrawScale;
 bool MapWindow::AutoZoom = false;
 bool MapWindow::LandableReachable = false;
 
-HBITMAP MapWindow::hTurnPoint;
-HBITMAP MapWindow::hSmall;
-HBITMAP MapWindow::hCruise;
-HBITMAP MapWindow::hClimb;
-HBITMAP MapWindow::hFinalGlide;
-HBITMAP MapWindow::hAutoMacCready;
-HBITMAP MapWindow::hTerrainWarning;
-HBITMAP MapWindow::hFLARMTraffic;
-HBITMAP MapWindow::hGPSStatus1;
-HBITMAP MapWindow::hGPSStatus2;
-HBITMAP MapWindow::hAbort;
-HBITMAP MapWindow::hLogger;
-HBITMAP MapWindow::hLoggerOff;
-
-HPEN MapWindow::hSnailPens[NUMSNAILCOLORS];
-COLORREF MapWindow::hSnailColours[NUMSNAILCOLORS];
-
 POINT MapWindow::Groundline[NUMTERRAINSWEEPS+1];
 
 // 12 is number of airspace types
@@ -231,61 +177,6 @@ int      MapWindow::iAirspaceColour[AIRSPACECLASSCOUNT] =
   {5,0,0,10,0,0,10,2,0,10,9,3,7,7};
 int      MapWindow::iAirspaceMode[AIRSPACECLASSCOUNT] =
   {0,0,0,0,0,0,0,0,0,0,0,1,1,0};
-
-HPEN MapWindow::hAirspacePens[AIRSPACECLASSCOUNT];
-bool MapWindow::bAirspaceBlackOutline = false;
-
-HBRUSH  MapWindow::hBackgroundBrush;
-
-HBRUSH  MapWindow::hAirspaceBrushes[NUMAIRSPACEBRUSHES];
-HBITMAP MapWindow::hAirspaceBitmap[NUMAIRSPACEBRUSHES];
-
-COLORREF MapWindow::Colours[NUMAIRSPACECOLORS] =
-  {RGB(0xFF,0x00,0x00), RGB(0x00,0xFF,0x00),
-   RGB(0x00,0x00,0xFF), RGB(0xFF,0xFF,0x00),
-   RGB(0xFF,0x00,0xFF), RGB(0x00,0xFF,0xFF),
-   RGB(0x7F,0x00,0x00), RGB(0x00,0x7F,0x00),
-   RGB(0x00,0x00,0x7F), RGB(0x7F,0x7F,0x00),
-   RGB(0x7F,0x00,0x7F), RGB(0x00,0x7F,0x7F),
-   RGB(0xFF,0xFF,0xFF), RGB(0xC0,0xC0,0xC0),
-   RGB(0x7F,0x7F,0x7F), RGB(0x00,0x00,0x00)};
-
-
-HBRUSH MapWindow::hbCompass;
-HBRUSH MapWindow::hbThermalBand;
-HBRUSH MapWindow::hbBestCruiseTrack;
-HBRUSH MapWindow::hbFinalGlideBelow;
-HBRUSH MapWindow::hbFinalGlideBelowLandable;
-HBRUSH MapWindow::hbFinalGlideAbove;
-HBRUSH MapWindow::hbWind;
-
-
-HPEN MapWindow::hpAircraft;
-HPEN MapWindow::hpAircraftBorder;
-HPEN MapWindow::hpWind;
-HPEN MapWindow::hpWindThick;
-HPEN MapWindow::hpBearing;
-HPEN MapWindow::hpBestCruiseTrack;
-HPEN MapWindow::hpCompass;
-HPEN MapWindow::hpThermalBand;
-HPEN MapWindow::hpThermalBandGlider;
-HPEN MapWindow::hpFinalGlideAbove;
-HPEN MapWindow::hpFinalGlideBelow;
-HPEN MapWindow::hpFinalGlideBelowLandable;
-HPEN MapWindow::hpMapScale;
-HPEN MapWindow::hpTerrainLine;
-HPEN MapWindow::hpTerrainLineBg;
-HPEN MapWindow::hpSpeedSlow;
-HPEN MapWindow::hpSpeedFast;
-HPEN MapWindow::hpStartFinishThick;
-HPEN MapWindow::hpStartFinishThin;
-HPEN MapWindow::hpVisualGlideLightBlack; // VENTA3
-HPEN MapWindow::hpVisualGlideHeavyBlack; // VENTA3
-HPEN MapWindow::hpVisualGlideLightRed; // VENTA3
-HPEN MapWindow::hpVisualGlideHeavyRed; // VENTA3
-
-
-COLORREF MapWindow::BackgroundColor = RGB(0xFF,0xFF,0xFF); //sjt 02NOV05 - was F5F5F5. Changed to increase screen clarity at oblique viewing angles.
 
 bool MapWindow::MapDirty = true;
 DWORD MapWindow::fpsTime0 = 0;
@@ -314,6 +205,13 @@ extern HFONT  StatisticsFont;
 extern HFONT  MapLabelFont; // VENTA6
 extern HFONT  TitleSmallWindowFont; // VENTA6
 
+HDC MapWindow::hDCTemp;
+HDC MapWindow::hDCMask;
+HDC MapWindow::hdcDrawWindow;
+HDC MapWindow::hdcScreen;
+HBITMAP MapWindow::hMaskBitMap;
+HBITMAP MapWindow::hDrawBitMap;
+HBITMAP MapWindow::hDrawBitMapTmp;
 
 ///////////////////
 
@@ -808,179 +706,10 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
       hDCTemp = CreateCompatibleDC(hdcDrawWindow);
       hDCMask = CreateCompatibleDC(hdcDrawWindow);
 
-      hBackgroundBrush = CreateSolidBrush(BackgroundColor);
-
-      hFLARMTraffic=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_FLARMTRAFFIC));
-      hTerrainWarning=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_TERRAINWARNING));
-      hTurnPoint=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_TURNPOINT));
-      hSmall=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_SMALL));
-      hAutoMacCready=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_AUTOMCREADY));
-      hGPSStatus1=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_GPSSTATUS1));
-      hGPSStatus2=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_GPSSTATUS2));
-      hLogger=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_LOGGER));
-      hLoggerOff=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_LOGGEROFF));
-      hBmpTeammatePosition = LoadBitmap(hInst, MAKEINTRESOURCE(IDB_TEAMMATE_POS));
-
-      //if (Appearance.FlightModeIcon == apFlightModeIconAltA){
-	hCruise=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_CRUISE));
-	hClimb=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_CLIMB));
-	hFinalGlide=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_FINALGLIDE));
-	hAbort=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_ABORT));
-
-      //hBmpCompassBg = LoadBitmap(hInst, MAKEINTRESOURCE(IDB_COMPASSBG));
-
-
-      // airspace brushes and colours
-
-      hAirspaceBitmap[0]=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_AIRSPACE0));
-      hAirspaceBitmap[1]=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_AIRSPACE1));
-      hAirspaceBitmap[2]=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_AIRSPACE2));
-      hAirspaceBitmap[3]=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_AIRSPACE3));
-      hAirspaceBitmap[4]=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_AIRSPACE4));
-      hAirspaceBitmap[5]=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_AIRSPACE5));
-      hAirspaceBitmap[6]=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_AIRSPACE6));
-      hAirspaceBitmap[7]=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_AIRSPACE7));
-
-      hAboveTerrainBitmap = LoadBitmap(hInst, MAKEINTRESOURCE(IDB_ABOVETERRAIN));
-
-      for (i=0; i<NUMAIRSPACEBRUSHES; i++) {
-	hAirspaceBrushes[i] =
-	  CreatePatternBrush((HBITMAP)hAirspaceBitmap[i]);
-      }
-      hAboveTerrainBrush = CreatePatternBrush((HBITMAP)hAboveTerrainBitmap);
-
-      BYTE Red,Green,Blue;
-      int iwidth;
-      int minwidth;
-      minwidth = max(IBLSCALE(2),IBLSCALE(SnailWidthScale)/16);
-      for (i=0; i<NUMSNAILCOLORS; i++) {
-	short ih = i*200/(NUMSNAILCOLORS-1);
-	ColorRampLookup(ih,
-			Red, Green, Blue,
-			snail_colors, NUMSNAILRAMP, 6);
-	if (i<NUMSNAILCOLORS/2) {
-	  iwidth= minwidth;
-	} else {
-	  iwidth = max(minwidth,
-		       (i-NUMSNAILCOLORS/2)
-		       *IBLSCALE(SnailWidthScale)/NUMSNAILCOLORS);
-	}
-
-	hSnailColours[i] = RGB((BYTE)Red,(BYTE)Green,(BYTE)Blue);
-	hSnailPens[i] = (HPEN)CreatePen(PS_SOLID, iwidth, hSnailColours[i]);
-
-      }
-
-      /* JMW created all re-used pens here */
-
-      hpCompassBorder = (HPEN)CreatePen(PS_SOLID, IBLSCALE(3),
-					RGB(0xff,0xff,0xff));
-
-      // testing only    Appearance.InverseAircraft = true;
-
-      if (Appearance.InverseAircraft) {
-	hpAircraft = (HPEN)CreatePen(PS_SOLID, IBLSCALE(3),
-				     RGB(0x00,0x00,0x00));
-	hpAircraftBorder = (HPEN)CreatePen(PS_SOLID, IBLSCALE(1),
-					   RGB(0xff,0xff,0xff));
-      } else {
-	hpAircraft = (HPEN)CreatePen(PS_SOLID, IBLSCALE(3),
-				     RGB(0xff,0xff,0xff));
-	hpAircraftBorder = (HPEN)CreatePen(PS_SOLID, IBLSCALE(1),
-					   RGB(0x00,0x00,0x00));
-      }
-
-#if (MONOCHROME_SCREEN > 0)
-      hpWind = (HPEN)CreatePen(PS_SOLID, IBLSCALE(2), RGB(0,0,0));
-#else
-      hpWind = (HPEN)CreatePen(PS_SOLID, IBLSCALE(2), RGB(255,0,0));
-#endif
-
-      hpWindThick = (HPEN)CreatePen(PS_SOLID, IBLSCALE(4),
-				    RGB(255,220,220));
-
-      hpBearing = (HPEN)CreatePen(PS_SOLID, IBLSCALE(2),
-				  RGB(0,0,0));
-      hpBestCruiseTrack = (HPEN)CreatePen(PS_SOLID, IBLSCALE(1),
-					  RGB(0,0,255));
-#if (MONOCHROME_SCREEN > 0)
-      hpCompass = (HPEN)CreatePen(PS_SOLID, IBLSCALE(1), RGB(0x00,0x00,0x00));
-      //hpCompass = (HPEN)CreatePen(PS_SOLID, 1, RGB(0xff,0xff,0xff));
-#else
-      hpCompass = (HPEN)CreatePen(PS_SOLID, IBLSCALE(1), RGB(0xcf,0xcf,0xFF));
-#endif
-      hpThermalBand = (HPEN)CreatePen(PS_SOLID, IBLSCALE(2), RGB(0x40,0x40,0xFF));
-      hpThermalBandGlider = (HPEN)CreatePen(PS_SOLID, IBLSCALE(2), RGB(0x00,0x00,0x30));
-
-      hpFinalGlideBelow = (HPEN)CreatePen(PS_SOLID, IBLSCALE(1), RGB(0xFF,0xA0,0xA0));
-      hpFinalGlideBelowLandable = (HPEN)CreatePen(PS_SOLID, IBLSCALE(1), RGB(255,196,0));
-
-      // TODO enhancement: support red/green Color blind
-      hpFinalGlideAbove = (HPEN)CreatePen(PS_SOLID, IBLSCALE(1), RGB(0xA0,0xFF,0xA0));
-
-      hpSpeedSlow=(HPEN)CreatePen(PS_SOLID, IBLSCALE(1),
-				  RGB(0xFF,0x00,0x00));
-      hpSpeedFast=(HPEN)CreatePen(PS_SOLID, IBLSCALE(1),
-				  RGB(0x00,0xFF,0x00));
-
-      hpStartFinishThick=(HPEN)CreatePen(PS_SOLID, IBLSCALE(5),
-					 taskcolor);
-
-      hpStartFinishThin=(HPEN)CreatePen(PS_SOLID, IBLSCALE(1),
-					RGB(255,0,0));
-
-      hpMapScale = (HPEN)CreatePen(PS_SOLID, IBLSCALE(1),
-				   RGB(0,0,0));
-      hpTerrainLine = (HPEN)CreatePen(PS_DASH, (1),
-				      RGB(0x30,0x30,0x30));
-      hpTerrainLineBg = (HPEN)CreatePen(PS_SOLID, (1),
-					RGB(0xFF,0xFF,0xFF));
-      // VENTA3
-      hpVisualGlideLightBlack = (HPEN)CreatePen(PS_DASH, (1), RGB(0x0,0x0,0x0));
-      hpVisualGlideHeavyBlack = (HPEN)CreatePen(PS_DASH, (2), RGB(0x0,0x0,0x0));
-      hpVisualGlideLightRed = (HPEN)CreatePen(PS_DASH, (1), RGB(0xff,0x0,0x0));
-      hpVisualGlideHeavyRed = (HPEN)CreatePen(PS_DASH, (2), RGB(0xff,0x0,0x0));
-
-#if (MONOCHROME_SCREEN > 0)
-      hbCompass=(HBRUSH)CreateSolidBrush(RGB(0xff,0xff,0xff));
-#else
-      hbCompass=(HBRUSH)CreateSolidBrush(RGB(0x40,0x40,0xFF));
-#endif
-      hbThermalBand=(HBRUSH)CreateSolidBrush(RGB(0x80,0x80,0xFF));
-      hbBestCruiseTrack=(HBRUSH)CreateSolidBrush(RGB(0x0,0x0,0xFF));
-      hbFinalGlideBelow=(HBRUSH)CreateSolidBrush(RGB(0xFF,0x00,0x00));
-      hbFinalGlideBelowLandable=(HBRUSH)CreateSolidBrush(RGB(0xFF,180,0x00));
-      hbFinalGlideAbove=(HBRUSH)CreateSolidBrush(RGB(0x00,0xFF,0x00));
-
-
-#if (MONOCHROME_SCREEN > 0)
-      hbWind=(HBRUSH)CreateSolidBrush(RGB(0x80,0x80,0x80));
-#else
-      hbWind=(HBRUSH)CreateSolidBrush(RGB(0x80,0x80,0x80));
-#endif
+      MapGfx.Initialise();
 
       ScaleListCount = propGetScaleList(ScaleList, sizeof(ScaleList)/sizeof(ScaleList[0]));
       RequestMapScale = LimitMapScale(RequestMapScale);
-
-      hBmpMapScale = LoadBitmap(hInst, MAKEINTRESOURCE(IDB_MAPSCALE_A));
-
-      hBrushFlyingModeAbort = (HBRUSH)CreateSolidBrush(RGB(0xff,0x00,0x00));
-
-      if (Appearance.IndLandable == wpLandableDefault){
-	hBmpAirportReachable = LoadBitmap(hInst, MAKEINTRESOURCE(IDB_REACHABLE));
-	hBmpAirportUnReachable = LoadBitmap(hInst, MAKEINTRESOURCE(IDB_LANDABLE));
-	hBmpFieldReachable = LoadBitmap(hInst, MAKEINTRESOURCE(IDB_REACHABLE));
-	hBmpFieldUnReachable = LoadBitmap(hInst, MAKEINTRESOURCE(IDB_LANDABLE));
-      }else
-	if (Appearance.IndLandable == wpLandableAltA){
-	  hBmpAirportReachable = LoadBitmap(hInst, MAKEINTRESOURCE(IDB_AIRPORT_REACHABLE));
-	  hBmpAirportUnReachable = LoadBitmap(hInst, MAKEINTRESOURCE(IDB_AIRPORT_UNREACHABLE));
-	  hBmpFieldReachable = LoadBitmap(hInst, MAKEINTRESOURCE(IDB_OUTFILED_REACHABLE));
-	  hBmpFieldUnReachable = LoadBitmap(hInst, MAKEINTRESOURCE(IDB_OUTFILED_UNREACHABLE));
-	}
-
-      hBmpThermalSource = LoadBitmap(hInst, MAKEINTRESOURCE(IDB_THERMALSOURCE));
-      hBmpTarget = LoadBitmap(hInst, MAKEINTRESOURCE(IDB_TARGET));
 
       // Signal that draw thread can run now
       Initialised = TRUE;
@@ -996,85 +725,7 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
       DeleteObject(hDrawBitMap);
       DeleteObject(hMaskBitMap);
 
-      DeleteObject(hTurnPoint);
-      DeleteObject(hSmall);
-      DeleteObject(hCruise);
-      DeleteObject(hClimb);
-      DeleteObject(hFinalGlide);
-      DeleteObject(hAutoMacCready);
-      DeleteObject(hFLARMTraffic);
-      DeleteObject(hTerrainWarning);
-      DeleteObject(hGPSStatus1);
-      DeleteObject(hGPSStatus2);
-      DeleteObject(hAbort);
-      DeleteObject(hLogger);
-      DeleteObject(hLoggerOff);
-
-      DeleteObject((HPEN)hpAircraft);
-      DeleteObject((HPEN)hpAircraftBorder);
-      DeleteObject((HPEN)hpWind);
-      DeleteObject((HPEN)hpWindThick);
-      DeleteObject((HPEN)hpBearing);
-      DeleteObject((HPEN)hpBestCruiseTrack);
-      DeleteObject((HPEN)hpCompass);
-      DeleteObject((HPEN)hpThermalBand);
-      DeleteObject((HPEN)hpThermalBandGlider);
-      DeleteObject((HPEN)hpFinalGlideAbove);
-      DeleteObject((HPEN)hpFinalGlideBelow);
-      DeleteObject((HPEN)hpFinalGlideBelowLandable);
-      DeleteObject((HPEN)hpMapScale);
-      DeleteObject((HPEN)hpTerrainLine);
-      DeleteObject((HPEN)hpTerrainLineBg);
-      DeleteObject((HPEN)hpSpeedFast);
-      DeleteObject((HPEN)hpSpeedSlow);
-      DeleteObject((HPEN)hpStartFinishThick);
-      DeleteObject((HPEN)hpStartFinishThin);
-
-      DeleteObject((HPEN)hpVisualGlideLightBlack); // VENTA3
-      DeleteObject((HPEN)hpVisualGlideLightRed); // VENTA3
-      DeleteObject((HPEN)hpVisualGlideHeavyRed); // VENTA3
-      DeleteObject((HPEN)hpVisualGlideHeavyBlack); // VENTA3
-
-      DeleteObject((HBRUSH)hbCompass);
-      DeleteObject((HBRUSH)hbThermalBand);
-      DeleteObject((HBRUSH)hbBestCruiseTrack);
-      DeleteObject((HBRUSH)hbFinalGlideBelow);
-      DeleteObject((HBRUSH)hbFinalGlideBelowLandable);
-      DeleteObject((HBRUSH)hbFinalGlideAbove);
-      DeleteObject((HBRUSH)hbWind);
-
-      DeleteObject(hBmpMapScale);
-      DeleteObject(hBmpCompassBg);
-      DeleteObject(hBackgroundBrush);
-      DeleteObject(hBmpClimbeAbort);
-
-      DeleteObject((HPEN)hpCompassBorder);
-      DeleteObject((HBRUSH)hBrushFlyingModeAbort);
-
-      DeleteObject(hBmpAirportReachable);
-      DeleteObject(hBmpAirportUnReachable);
-      DeleteObject(hBmpFieldReachable);
-      DeleteObject(hBmpFieldUnReachable);
-      DeleteObject(hBmpThermalSource);
-      DeleteObject(hBmpTarget);
-      DeleteObject(hBmpTeammatePosition);
-
-      for(i=0;i<NUMAIRSPACEBRUSHES;i++)
-	{
-	  DeleteObject(hAirspaceBrushes[i]);
-	  DeleteObject(hAirspaceBitmap[i]);
-	}
-
-      DeleteObject(hAboveTerrainBitmap);
-      DeleteObject(hAboveTerrainBrush);
-
-      for (i=0; i<AIRSPACECLASSCOUNT; i++) {
-	DeleteObject(hAirspacePens[i]);
-      }
-
-      for (i=0; i<NUMSNAILCOLORS; i++) {
-	DeleteObject(hSnailPens[i]);
-      }
+      MapGfx.Destroy();
 
       PostQuitMessage (0);
 
@@ -1109,7 +760,7 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
             Task[TargetPanIndex].AATTargetLon = mouseMovelon;
             TargetDrag_Latitude = mouseMovelat;
             TargetDrag_Longitude = mouseMovelon;
-            DrawBitmapIn(hdcScreen, Pos, hBmpTarget);
+            DrawBitmapIn(hdcScreen, Pos, MapGfx.hBmpTarget);
           }
         }
       }
@@ -1454,7 +1105,7 @@ void MapWindow::RenderMapWindowBg(HDC hdc, const RECT rc,
     }
     else {
       // JMW added light grey background
-      SelectObject(hdc, hBackgroundBrush);
+      SelectObject(hdc, MapGfx.hBackgroundBrush);
       SelectObject(hdc, GetStockObject(WHITE_PEN));
     }
     Rectangle(hdc,rc.left,rc.top,rc.right,rc.bottom);
@@ -1492,6 +1143,10 @@ void MapWindow::RenderMapWindowBg(HDC hdc, const RECT rc,
       DrawTerrainAbove(hdc, rc, hDCTemp);
     }
     UnlockTerrainDataGraphics();
+
+    if (BigZoom) {
+      BigZoom = false;
+    }
   }
 
   if (EnableTopology) {
@@ -1768,11 +1423,6 @@ DWORD MapWindow::DrawThread (LPVOID lpvoid)
 
   bool first = true;
 
-  for (int i=0; i<AIRSPACECLASSCOUNT; i++) {
-    hAirspacePens[i] =
-      CreatePen(PS_SOLID, IBLSCALE(2), Colours[iAirspaceColour[i]]);
-  }
-
   while (!CLOSETHREAD)
     {
       drawTriggerEvent.wait(5000);
@@ -1889,3 +1539,17 @@ void MapWindow::DisplayAirspaceWarning(int Type, const TCHAR *Name,
 
 
 //////////////////////////////////////////////////////////////////////////////
+
+// airspace brushes/colours
+COLORREF MapWindow::GetAirspaceColour(int i) {
+  return MapGfx.Colours[i];
+}
+HBRUSH MapWindow::GetAirspaceBrush(int i) {
+  return MapGfx.hAirspaceBrushes[i];
+}
+COLORREF MapWindow::GetAirspaceColourByClass(int i) {
+  return MapGfx.Colours[iAirspaceColour[i]];
+}
+HBRUSH MapWindow::GetAirspaceBrushByClass(int i) {
+  return MapGfx.hAirspaceBrushes[iAirspaceBrush[i]];
+}

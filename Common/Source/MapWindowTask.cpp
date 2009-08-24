@@ -41,11 +41,13 @@ Copyright_License {
 #include "SettingsTask.hpp"
 #include "WayPoint.hpp"
 #include "Screen/Util.hpp"
+#include "Screen/Graphics.hpp"
 #include "InfoBoxLayout.h"
 #include "AATDistance.h"
 #include "Math/FastMath.h"
 #include "Math/Screen.hpp"
 #include "Math/Earth.hpp"
+#include "Compatibility/gdi.h"
 #include <math.h>
 
 static const COLORREF taskcolor = RGB(0,120,0); // duplicated from MapWindow.cpp!
@@ -97,11 +99,11 @@ void MapWindow::DrawStartSector(HDC hdc, const RECT rc,
   } else {
     tmp = StartRadius*ResMapScaleOverDistanceModify;
     SelectObject(hdc, GetStockObject(HOLLOW_BRUSH));
-    SelectObject(hdc, hpStartFinishThick);
+    SelectObject(hdc, MapGfx.hpStartFinishThick);
     Circle(hdc,
            WayPointList[Index].Screen.x,
            WayPointList[Index].Screen.y,(int)tmp, rc, false, false);
-    SelectObject(hdc, hpStartFinishThin);
+    SelectObject(hdc, MapGfx.hpStartFinishThin);
     Circle(hdc,
            WayPointList[Index].Screen.x,
            WayPointList[Index].Screen.y,(int)tmp, rc, false, false);
@@ -161,12 +163,12 @@ void MapWindow::DrawTask(HDC hdc, RECT rc, const POINT &Orig_Aircraft)
 	  } else {
 	    tmp = FinishRadius*ResMapScaleOverDistanceModify;
 	    SelectObject(hdc, GetStockObject(HOLLOW_BRUSH));
-	    SelectObject(hdc, hpStartFinishThick);
+	    SelectObject(hdc, MapGfx.hpStartFinishThick);
 	    Circle(hdc,
 		   WayPointList[Task[i].Index].Screen.x,
 		   WayPointList[Task[i].Index].Screen.y,
 		   (int)tmp, rc, false, false);
-	    SelectObject(hdc, hpStartFinishThin);
+	    SelectObject(hdc, MapGfx.hpStartFinishThin);
 	    Circle(hdc,
 		   WayPointList[Task[i].Index].Screen.x,
 		   WayPointList[Task[i].Index].Screen.y,
@@ -341,7 +343,7 @@ void MapWindow::DrawTaskAAT(HDC hdc, const RECT rc, HDC buffer)
 
 	      // this color is used as the black bit
               SetTextColor(buffer,
-			   Colours[iAirspaceColour[AATASK]]);
+			   MapGfx.Colours[iAirspaceColour[AATASK]]);
 
 	      // this color is the transparent bit
               SetBkColor(buffer,
@@ -350,7 +352,7 @@ void MapWindow::DrawTaskAAT(HDC hdc, const RECT rc, HDC buffer)
 	      if (i<ActiveWayPoint) {
                 SelectObject(buffer, GetStockObject(HOLLOW_BRUSH));
 	      } else {
-                SelectObject(buffer, hAirspaceBrushes[iAirspaceBrush[AATASK]]);
+                SelectObject(buffer, MapGfx.hAirspaceBrushes[iAirspaceBrush[AATASK]]);
 	      }
               SelectObject(buffer, GetStockObject(BLACK_PEN));
 
@@ -364,7 +366,7 @@ void MapWindow::DrawTaskAAT(HDC hdc, const RECT rc, HDC buffer)
 
 	      // this color is used as the black bit
               SetTextColor(buffer,
-			   Colours[iAirspaceColour[AATASK]]);
+			   MapGfx.Colours[iAirspaceColour[AATASK]]);
 
 	      // this color is the transparent bit
               SetBkColor(buffer,
@@ -373,7 +375,7 @@ void MapWindow::DrawTaskAAT(HDC hdc, const RECT rc, HDC buffer)
 	      if (i<ActiveWayPoint) {
                 SelectObject(buffer, GetStockObject(HOLLOW_BRUSH));
 	      } else {
-                SelectObject(buffer, hAirspaceBrushes[iAirspaceBrush[AATASK]]);
+                SelectObject(buffer, MapGfx.hAirspaceBrushes[iAirspaceBrush[AATASK]]);
 	      }
               SelectObject(buffer, GetStockObject(BLACK_PEN));
 
@@ -502,7 +504,7 @@ void MapWindow::DrawBearing(HDC hdc, const RECT rc, int bBearingValid)
           LatLon2Screen(Task[i].AATTargetLon,
                         Task[i].AATTargetLat,
                         sct);
-          DrawBitmapIn(hdc, sct, hBmpTarget);
+          DrawBitmapIn(hdc, sct, MapGfx.hBmpTarget);
         }
       }
     }

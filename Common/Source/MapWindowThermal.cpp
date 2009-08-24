@@ -46,6 +46,7 @@ Copyright_License {
 #include "Math/Screen.hpp"
 #include "Math/Earth.hpp"
 #include "McReady.h"
+#include "Screen/Graphics.hpp"
 
 
 void MapWindow::CalculateScreenPositionsThermalSources() {
@@ -95,7 +96,7 @@ void MapWindow::DrawThermalEstimate(HDC hdc, const RECT rc) {
                     screen);
       DrawBitmapIn(hdc,
 		   screen,
-		   hBmpThermalSource);
+		   MapGfx.hBmpThermalSource);
       /*
 	SelectObject(hdc, GetStockObject(HOLLOW_BRUSH));
 	SelectObject(hdc, GetStockObject(BLACK_PEN));
@@ -110,7 +111,7 @@ void MapWindow::DrawThermalEstimate(HDC hdc, const RECT rc) {
         if (DerivedDrawInfo.ThermalSources[i].Visible) {
           DrawBitmapIn(hdc,
                        DerivedDrawInfo.ThermalSources[i].Screen,
-                       hBmpThermalSource);
+                       MapGfx.hBmpThermalSource);
         }
       }
     }
@@ -213,8 +214,8 @@ void MapWindow::DrawThermalBand(HDC hDC, const RECT rc)
 
   // position of thermal band
   if (numtherm>1) {
-    hpOld = (HPEN)SelectObject(hDC, hpThermalBand);
-    HBRUSH hbOld = (HBRUSH)SelectObject(hDC, hbThermalBand);
+    hpOld = (HPEN)SelectObject(hDC, MapGfx.hpThermalBand);
+    HBRUSH hbOld = (HBRUSH)SelectObject(hDC, MapGfx.hbThermalBand);
 
     POINT ThermalProfile[NUMTHERMALBUCKETS+2];
     for (i=0; i<numtherm; i++) {
@@ -247,13 +248,13 @@ void MapWindow::DrawThermalBand(HDC hDC, const RECT rc)
   GliderBand[4].x = GliderBand[1].x-IBLSCALE(4);
   GliderBand[4].y = GliderBand[0].y+IBLSCALE(4);
 
-  hpOld = (HPEN)SelectObject(hDC, hpThermalBandGlider);
+  hpOld = (HPEN)SelectObject(hDC, MapGfx.hpThermalBandGlider);
 
   Polyline(hDC,GliderBand, 2);
   Polyline(hDC,GliderBand+2, 3); // arrow head
 
   if (draw_start_height) {
-    SelectObject(hDC, hpFinalGlideBelow);
+    SelectObject(hDC, MapGfx.hpFinalGlideBelow);
     GliderBand[0].y = IBLSCALE(4)+iround(TBSCALEY*(1.0-hstart))+rc.top;
     GliderBand[1].y = GliderBand[0].y;
     Polyline(hDC, GliderBand, 2);
