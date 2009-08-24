@@ -43,27 +43,6 @@ Copyright_License {
 #include "XCSoar.h"
 #include "Airspace.h"
 
-#define NORTHTRACK 4
-#define TRACKCIRCLE 3
-#define NORTHCIRCLE 2
-#define NORTHUP 1
-#define TRACKUP 0
-
-#define DISPLAYNAME 0
-#define DISPLAYNUMBER 1
-#define DISPLAYFIRSTFIVE 2
-#define DISPLAYNONE 3
-#define DISPLAYFIRSTTHREE 4
-#define DISPLAYNAMEIFINTASK 5
-
-typedef enum {dmNone, dmCircling, dmCruise, dmFinalGlide} DisplayMode_t;
-
-extern int TrailActive;
-extern int VisualGlide; // VENTA3
-
-extern DisplayMode_t UserForceDisplayMode;
-extern DisplayMode_t DisplayMode;
-
 typedef union{
   unsigned int AsInt;
   struct{
@@ -77,7 +56,7 @@ typedef union{
     unsigned NoSetFont:1;  // VENTA5
     unsigned Color:3;
   }AsFlag;
-}TextInBoxMode_t;
+} TextInBoxMode_t;
   // mode are flags
   // bit 0 == fill background add border / 1
   // bit 1 == fill background            / 2

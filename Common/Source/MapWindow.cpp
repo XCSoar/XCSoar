@@ -97,11 +97,13 @@ int misc_tick_count=0;
 #define DEBUG_VIRTUALKEYS
 #endif
 
-int TrailActive = TRUE;
+int TrailActive = true;
 int VisualGlide = 0;
 
 extern void DrawGlideCircle(HDC hdc, POINT Orig, RECT rc );
 
+DisplayOrientation_t DisplayOrientation = TRACKUP;
+DisplayTextType_t    DisplayTextType = DISPLAYNONE;
 
 #define NUMSNAILRAMP 6
 

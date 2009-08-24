@@ -61,6 +61,7 @@ Copyright_License {
 #include "Blackboard.hpp"
 #include "Settings.hpp"
 #include "SettingsTask.hpp"
+#include "SettingsUser.hpp"
 #include "SettingsComputer.hpp"
 #include "Interface.hpp"
 

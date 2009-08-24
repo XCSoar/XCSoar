@@ -2897,7 +2897,7 @@ void dlgConfigurationShowModal(void){
   wp = (WndProperty*)wf->FindByName(TEXT("prpWaypointLabels"));
   if (wp) {
     if (DisplayTextType != wp->GetDataField()->GetAsInteger()) {
-      DisplayTextType = wp->GetDataField()->GetAsInteger();
+      DisplayTextType = (DisplayTextType_t)(wp->GetDataField()->GetAsInteger());
       SetToRegistry(szRegistryDisplayText,DisplayTextType);
       changed = true;
     }
@@ -2933,7 +2933,7 @@ void dlgConfigurationShowModal(void){
   wp = (WndProperty*)wf->FindByName(TEXT("prpOrientation"));
   if (wp) {
     if (DisplayOrientation != wp->GetDataField()->GetAsInteger()) {
-      DisplayOrientation = wp->GetDataField()->GetAsInteger();
+      DisplayOrientation = (DisplayOrientation_t)wp->GetDataField()->GetAsInteger();
       SetToRegistry(szRegistryDisplayUpValue,DisplayOrientation);
       changed = true;
     }

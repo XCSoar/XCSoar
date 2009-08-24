@@ -46,7 +46,7 @@ Copyright_License {
 #include "Screen/Util.hpp"
 #include "OnLineContest.h"
 #include "SettingsComputer.hpp"
-
+#include "SettingsUser.hpp"
 
 int MapWindow::iSnailNext=0;
 #define fSnailColour(cv) max(0,min((short)(NUMSNAILCOLORS-1), (short)((cv+1.0)/2.0*NUMSNAILCOLORS)))

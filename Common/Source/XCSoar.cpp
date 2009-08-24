@@ -129,9 +129,6 @@ COLORREF ColorWarning = RGB(0xFF,0x00,0x00);
 COLORREF ColorOK = RGB(0x00,0x00,0xFF);
 COLORREF ColorButton = RGB(0xA0,0xE0,0xA0);
 
-int                                             DisplayOrientation = TRACKUP;
-int                                             DisplayTextType = DISPLAYNONE;
-
 int                                             AutoAdvance = 1;
 bool                                            AdvanceArmed = false;
 

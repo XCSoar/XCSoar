@@ -40,6 +40,35 @@ Copyright_License {
 // changed only in config or by user interface /////////////////////////////
 // not expected to be used by other threads
 
+typedef enum {
+  TRACKUP=0,
+  NORTHUP=1,
+  NORTHCIRCLE=2,
+  TRACKCIRCLE=3,
+  NORTHTRACK=4
+} DisplayOrientation_t;
+
+typedef enum {
+  DISPLAYNAME=0,
+  DISPLAYNUMBER=1,
+  DISPLAYFIRSTFIVE=2,
+  DISPLAYNONE=3,
+  DISPLAYFIRSTTHREE=4,
+  DISPLAYNAMEIFINTASK=5
+} DisplayTextType_t;
+
+typedef enum {
+  dmNone,
+  dmCircling,
+  dmCruise,
+  dmFinalGlide
+} DisplayMode_t;
+
+extern int TrailActive;
+extern int VisualGlide;
+extern DisplayMode_t UserForceDisplayMode;
+extern DisplayMode_t DisplayMode;
+
 // user interface options
 
 // where using these from Calculations or MapWindow thread, should
@@ -52,8 +81,8 @@ extern bool CircleZoom;
 extern bool EnableTopology;
 extern bool EnableTerrain;
 extern int  FinalGlideTerrain;
-extern int  DisplayOrientation;
-extern int  DisplayTextType;
+extern DisplayOrientation_t DisplayOrientation;
+extern DisplayTextType_t  DisplayTextType;
 extern bool EnableCDICruise;
 extern bool EnableCDICircling;
 extern bool EnableVarioGauge;
