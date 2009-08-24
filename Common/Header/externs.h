@@ -38,23 +38,7 @@ Copyright_License {
 #ifndef EXTERNS_H
 #define EXTERNS_H
 
-#include "Settings.hpp"
-
-#include "NMEA/Info.h"
-#include "Calculations.h"
-
-#if (EXPERIMENTAL > 0)
-//JMW#include "BlueSMS.h"
-#endif
-
-
-// master flight data
-extern NMEA_INFO GPS_INFO;
-extern DERIVED_INFO CALCULATED_INFO;
-
-// gps detection
-extern BOOL GPSCONNECT;
-extern BOOL VARIOCONNECT;
+#include "Blackboard.hpp"
 
 // used in settings dialog
 extern BOOL COMPORTCHANGED;
@@ -78,8 +62,6 @@ extern bool TeammateCodeValid;
 extern bool TeamFlarmTracking;
 extern TCHAR TeamFlarmCNTarget[4]; // CN of the glider to track
 extern int TeamFlarmIdTarget;    // FlarmId of the glider to track
-
-extern bool RequestAirspaceWarningDialog;
 
 //////
 

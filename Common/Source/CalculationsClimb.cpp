@@ -38,6 +38,7 @@ Copyright_License {
 
 #include "Calculations.h"
 #include "externs.h"
+#include "Settings.hpp"
 #include "SettingsComputer.hpp"
 #include "Device/device.h"
 #include "InputEvents.h"

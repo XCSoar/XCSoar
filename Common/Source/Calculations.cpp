@@ -44,6 +44,7 @@ Copyright_License {
 #include "Utils.h"
 #include "Utils2.h"
 #include "externs.h"
+#include "Settings.hpp"
 #include "SettingsComputer.hpp"
 #include "SettingsTask.hpp"
 #include "McReady.h"

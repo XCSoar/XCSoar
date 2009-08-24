@@ -40,6 +40,7 @@ Copyright_License {
 #include "Interface.hpp"
 #include "Math/Pressure.h"
 #include "externs.h"
+#include "Settings.hpp"
 #include "Units.h"
 #include "McReady.h"
 #include "Atmosphere.h"

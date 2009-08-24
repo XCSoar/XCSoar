@@ -42,6 +42,7 @@ Copyright_License {
 #include "Logger.h"
 #include "MapWindow.h"
 #include "externs.h"
+#include "Settings.hpp"
 #include "SettingsTask.hpp"
 #include "Compatibility/string.h"
 #include "Utils.h"

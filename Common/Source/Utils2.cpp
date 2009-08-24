@@ -47,6 +47,7 @@ Copyright_License {
 #endif
 #endif
 #include "externs.h"
+#include "Settings.hpp"
 #include "InfoBoxLayout.h"
 #include "Device/device.h"
 #include "Logger.h"

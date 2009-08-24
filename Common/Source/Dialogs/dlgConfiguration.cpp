@@ -42,6 +42,7 @@ Copyright_License {
 #include "Device/Parser.h"
 #include "Utils2.h"
 #include "externs.h"
+#include "Settings.hpp"
 #include "SettingsComputer.hpp"
 #include "SettingsTask.hpp"
 #include "SettingsUser.hpp"
