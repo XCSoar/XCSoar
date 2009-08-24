@@ -57,6 +57,8 @@ Copyright_License {
 #include "McReady.h"
 #include "Interface.hpp"
 
+#include "Calculations.h" // TODO danger! SetWindEstimate
+
 #include <stdlib.h>
 
 #define WIN32_LEAN_AND_MEAN

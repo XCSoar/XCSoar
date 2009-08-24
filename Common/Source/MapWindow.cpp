@@ -65,6 +65,8 @@ Copyright_License {
 #include "SettingsUser.hpp"
 #include "Interface.hpp"
 
+#include "Calculations.h" // TODO danger! for InAATTurnSector
+
 #include <assert.h>
 #include <windows.h>
 #include <math.h>

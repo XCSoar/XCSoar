@@ -40,7 +40,8 @@ Copyright_License {
 #ifndef XCSOAR_PERSIST_HPP
 #define XCSOAR_PERSIST_HPP
 
-#include "Calculations.h"
+#include "NMEA/Info.h"
+#include "NMEA/Derived.hpp"
 
 void LoadCalculationsPersist(DERIVED_INFO *Calculated);
 void SaveCalculationsPersist(DERIVED_INFO *Calculated);

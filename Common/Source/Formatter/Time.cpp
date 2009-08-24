@@ -39,6 +39,7 @@ Copyright_License {
 #include "Process.h"
 #include "Blackboard.hpp"
 #include "SettingsTask.hpp"
+#include <stdlib.h>
 
 void FormatterTime::SecsToDisplayTime(int d) {
   bool negative = (d<0);

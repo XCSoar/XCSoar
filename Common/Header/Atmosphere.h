@@ -38,8 +38,9 @@ Copyright_License {
 #ifndef ATMOSPHERE_H
 #define ATMOSPHERE_H
 
+#include "XCSoar.h"
 #include "NMEA/Info.h"
-#include "Calculations.h"
+#include "NMEA/Derived.hpp"
 
 class CuSondeLevel {
 public:

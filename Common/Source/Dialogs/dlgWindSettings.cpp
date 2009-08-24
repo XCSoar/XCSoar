@@ -46,6 +46,7 @@ Copyright_License {
 #include "Utils.h"
 #include "MapWindow.h"
 #include "Math/Units.h"
+#include "Calculations.h" // TODO danger! for SetWindEstimate
 
 static WndForm *wf=NULL;
 

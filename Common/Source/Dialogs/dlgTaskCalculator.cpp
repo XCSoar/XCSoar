@@ -43,7 +43,7 @@ Copyright_License {
 #include "SettingsTask.hpp"
 #include "SettingsComputer.hpp"
 #include "Units.h"
-
+#include "Calculations.h" // TODO danger! RefreshTaskStatistics()
 #include "Dialogs/dlgTools.h"
 #include "GlideSolvers.hpp"
 #include "Dialogs.h"

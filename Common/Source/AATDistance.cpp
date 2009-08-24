@@ -40,12 +40,11 @@ Copyright_License {
 #include "XCSoar.h"
 #include "Protection.hpp"
 #include "Task.h"
-#include "Airspace.h"
-#include "Calculations.h"
 #include "Math/Geometry.hpp"
 #include "SettingsTask.hpp"
 #include "Math/Earth.hpp"
 #include "WayPoint.hpp"
+#include "Calculations.h" // TODO danger using InAATTurnSector
 
 #include <math.h>
 

@@ -230,3 +230,14 @@ BOOL PolygonVisible(const POINT *lpPoints, int nCount, RECT rc)
       return FALSE;
     }
 }
+
+
+bool CheckRectOverlap(RECT rc1, RECT rc2) {
+  if(rc1.left >= rc2.right) return(false);
+  if(rc1.right <= rc2.left) return(false);
+  if(rc1.top >= rc2.bottom) return(false);
+  if(rc1.bottom <= rc2.top) return(false);
+  return(true);
+}
+
+

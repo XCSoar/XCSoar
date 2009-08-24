@@ -38,7 +38,8 @@ Copyright_License {
 #ifndef BEST_ALTERNATE
 #define BEST_ALTERNATE
 
-#include "Calculations.h"
+#include "NMEA/Info.h"
+#include "NMEA/Derived.hpp"
 
 void DoBestAlternateSlow(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 void DoAlternates(NMEA_INFO *Basic, DERIVED_INFO *Calculated, int AltWaypoint);

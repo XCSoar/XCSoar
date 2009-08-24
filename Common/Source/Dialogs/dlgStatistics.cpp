@@ -54,6 +54,8 @@ Copyright_License {
 #include "Utils.h"
 #include "MapWindow.h"
 
+#include "Calculations.h" // TODO danger! multiple
+
 #define GROUND_COLOUR RGB(157,101,60)
 
 extern HFONT                                   StatisticsFont;

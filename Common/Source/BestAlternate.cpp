@@ -63,6 +63,8 @@ bool EnableAlternate2=false;
 
 
 // in Calculations.cpp
+#include "Calculations.h"
+
 void LatLon2Flat(double lon, double lat, int *scx, int *scy);
 
 int CalculateWaypointApproxDistance(int scx_aircraft, int scy_aircraft,

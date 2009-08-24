@@ -58,4 +58,6 @@ void PolygonRotateShift(POINT* poly, int n, int x, int y,
 
 BOOL PolygonVisible(const POINT *lpPoints, int nCount, RECT rc);
 
+bool CheckRectOverlap(RECT rc1, RECT rc2);
+
 #endif

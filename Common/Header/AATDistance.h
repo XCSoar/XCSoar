@@ -39,8 +39,9 @@ Copyright_License {
 #ifndef AATDISTANCE_H
 #define AATDISTANCE_H
 
-#include "StdAfx.h"
-#include "Calculations.h"
+#include "XCSoar.h"
+#include "NMEA/Info.h"
+#include "NMEA/Derived.hpp"
 
 #define MAXNUM_AATDISTANCE 50
 

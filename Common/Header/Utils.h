@@ -82,8 +82,6 @@ long GetUTCOffset(void);
 void RestoreRegistry(void);
 void StoreRegistry(void);
 
-bool CheckRectOverlap(RECT rc1, RECT rc2);
-
 bool InterfaceTimeoutZero(void);
 void InterfaceTimeoutReset(void);
 bool InterfaceTimeoutCheck(void);

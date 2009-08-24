@@ -37,8 +37,6 @@ Copyright_License {
 
 #include "Atmosphere.h"
 #include "XCSoar.h"
-#include "NMEA/Info.h"
-#include "Calculations.h"
 #include "RasterTerrain.h"
 
 #include <math.h>

@@ -38,8 +38,9 @@ Copyright_License {
 #ifndef WINDZIGZAG_H
 #define WINDZIGZAG_H
 
-#include "Calculations.h"
+#include "XCSoar.h"
 #include "NMEA/Info.h"
+#include "NMEA/Derived.hpp"
 
 int WindZigZagUpdate(NMEA_INFO* Basic, DERIVED_INFO* Calculated,
 		      double *zzwindspeed, double *zzwindbearing);

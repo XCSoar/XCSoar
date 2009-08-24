@@ -38,7 +38,8 @@ Copyright_License {
 #include "Utils.h"
 #include "LogFile.hpp"
 #include "XCSoar.h"
-#include "Asset.hpp"
+
+/*
 
 #ifndef __MINGW32__
 #if defined(CECORE)
@@ -49,26 +50,6 @@ Copyright_License {
 #endif
 #endif
 
-#include "Math/FastMath.h"
-#include "Math/Geometry.hpp"
-#include "Math/Earth.hpp"
-#include "Math/Units.h"
-#include "Registry.hpp"
-#include "Dialogs.h"
-#include "uniqueid.h"
-#include "Terrain.h"
-#include "Settings.hpp"
-#include "Protection.hpp"
-#include "McReady.h"
-#include "Compatibility/string.h"
-#include "Screen/Util.hpp"
-#include "Math/Pressure.h"
-#include "LocalPath.hpp"
-#include "InfoBoxManager.h"
-#include "Interface.hpp"
-
-#include <assert.h>
-
 // JMW not required in newer systems?
 #ifdef __MINGW32__
 #ifndef max
@@ -76,6 +57,9 @@ Copyright_License {
 #define min(x, y)   (x < y ? x : y)
 #endif
 #endif
+
+*/
+
 
 int UTCOffset = 0; // used for Altair
 bool LockSettingsInFlight = true;
@@ -111,17 +95,6 @@ long GetUTCOffset(void) {
 
 ////////////////////////////////////
 
-
-bool CheckRectOverlap(RECT rc1, RECT rc2) {
-  if(rc1.left >= rc2.right) return(false);
-  if(rc1.right <= rc2.left) return(false);
-  if(rc1.top >= rc2.bottom) return(false);
-  if(rc1.bottom <= rc2.top) return(false);
-  return(true);
-}
-
-
-////////////////////////////////////
 
 static int interface_timeout;
 

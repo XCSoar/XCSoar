@@ -37,8 +37,9 @@ Copyright_License {
 #ifndef PROCESS_H
 #define PROCESS_H
 
+#include "XCSoar.h"
 #include "NMEA/Info.h"
-#include "Calculations.h"
+#include "NMEA/Derived.hpp"
 
 int DetectStartTime(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 int DetectCurrentTime(void);

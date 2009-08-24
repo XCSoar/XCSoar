@@ -50,6 +50,8 @@ Copyright_License {
 #include "Math/FastMath.h"
 #include "Process.h"
 
+#include "Calculations.h" // TODO danger! FAIFinishHeight
+
 #include <assert.h>
 
 extern BOOL extGPSCONNECT;

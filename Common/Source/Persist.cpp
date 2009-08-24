@@ -48,6 +48,8 @@ Copyright_License {
 #include "UtilsSystem.hpp"
 #include "Logger.h"
 
+#include "Calculations.h"
+
 
 static TCHAR szCalculationsPersistFileName[MAX_PATH]= TEXT("\0");
 static TCHAR szCalculationsPersistDirectory[MAX_PATH]= TEXT("\0");

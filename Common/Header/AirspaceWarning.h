@@ -37,7 +37,9 @@ Copyright_License {
 #ifndef AIRSPACE_WARNING_H
 #define AIRSPACE_WARNING_H
 
-#include "Calculations.h"
+#include "XCSoar.h"
+#include "NMEA/Info.h"
+#include "NMEA/Derived.hpp"
 
 extern void AirspaceWarnListAdd(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
                                 bool Predicted, bool IsCircle, int AsIdx,

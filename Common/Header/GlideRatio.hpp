@@ -38,8 +38,9 @@ Copyright_License {
 #ifndef XCSOAR_GLIDE_RATIO_HPP
 #define XCSOAR_GLIDE_RATIO_HPP
 
-#include "Defines.h"
-#include "Calculations.h"
+#include "XCSoar.h"
+#include "NMEA/Info.h"
+#include "NMEA/Derived.hpp"
 
 typedef enum{
 	ae15seconds=0,

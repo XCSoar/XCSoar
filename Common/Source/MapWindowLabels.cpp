@@ -36,7 +36,7 @@ Copyright_License {
 */
 
 #include "MapWindow.h"
-#include "Utils.h" // CheckRectOverlap
+#include "Math/Screen.hpp"
 
 
 typedef struct{

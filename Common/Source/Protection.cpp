@@ -10,6 +10,7 @@
 #include "Device/Parser.h"
 #include "GaugeVarioAltA.h"
 #include "Logger.h"
+#include "Calculations.h"
 
 #include <assert.h>
 

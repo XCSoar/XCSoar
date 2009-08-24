@@ -18,8 +18,10 @@
 #ifndef WINDSTORE_H
 #define WINDSTORE_H
 
+#include "XCSoar.h"
 #include "windmeasurementlist.h"
-#include "Calculations.h"
+#include "NMEA/Info.h"
+#include "NMEA/Derived.hpp"
 
 /**
   * WindStore receives single windmeasurements and stores these. It uses
