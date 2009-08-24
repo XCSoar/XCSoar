@@ -36,12 +36,10 @@ Copyright_License {
 */
 
 #include "Registry.hpp"
+#include "XCSoar.h"
 #include "Screen/Animation.hpp"
 #include "Screen/Blank.hpp"
-#include "Defines.h"
-#include "Sizes.h"
 #include "Airspace.h"
-#include "XCSoar.h"
 #include "Interface.hpp"
 #include "MapWindow.h"
 #include "GaugeFLARM.h"

@@ -38,8 +38,6 @@ Copyright_License {
 #include "WindowControls.h"
 #include "XCSoar.h"
 #include "Interface.hpp"
-#include "StdAfx.h"
-#include "Defines.h" // VENTA3
 #include "Dialogs/dlgTools.h"
 #ifndef ALTAIRSYNC
 #include "Message.h"

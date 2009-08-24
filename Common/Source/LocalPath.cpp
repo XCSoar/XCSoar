@@ -36,12 +36,8 @@ Copyright_License {
 */
 
 #include "LocalPath.hpp"
-#include "Defines.h"
-
-#if defined(PNA) || defined(FIVV)
-#include "externs.h" /* for gmfpathname() */
-#endif
-
+#include "XCSoar.h"
+#include "Appearance.hpp"
 #include <stdio.h>
 
 // Get local My Documents path - optionally include file to add and location

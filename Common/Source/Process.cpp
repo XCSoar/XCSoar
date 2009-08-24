@@ -36,11 +36,10 @@ Copyright_License {
 */
 
 #include "Process.h"
+#include "XCSoar.h"
 #include "Device/Parser.h"
-#include "Defines.h" // VENTA3
 #include "externs.h"
 #include "WayPoint.hpp"
-#include "XCSoar.h"
 #include "Utils.h"
 #include <stdlib.h>
 
