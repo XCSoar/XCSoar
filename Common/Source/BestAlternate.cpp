@@ -43,6 +43,7 @@ Copyright_License {
 #include "Math/FastMath.h"
 #include "Settings.hpp"
 #include "SettingsComputer.hpp"
+#include "SettingsUser.hpp"
 #include "SettingsTask.hpp"
 #include "externs.h"
 #include "McReady.h"
@@ -50,6 +51,17 @@ Copyright_License {
 #include "GlideSolvers.hpp"
 #include "Utils.h"
 #include "Math/Earth.hpp"
+
+
+
+// Alternates VENTA3
+int Alternate1 = -1;
+int Alternate2 = -1;
+int BestAlternate = -1;
+bool EnableBestAlternate=false;
+bool EnableAlternate1=false;
+bool EnableAlternate2=false;
+
 
 // in Calculations.cpp
 void LatLon2Flat(double lon, double lat, int *scx, int *scy);
@@ -487,9 +499,9 @@ void DoBestAlternateSlow(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
 
  // VENTA3 best landing slow calculation
 #if (WINDOWSPC>0)
-  if ( (OnBestAlternate == true ) && (Basic->Time > LastSearchBestTime+10.0) ) // VENTA3
+  if ( (EnableBestAlternate) && (Basic->Time > LastSearchBestTime+10.0) ) // VENTA3
 #else
-  if ( (OnBestAlternate == true ) && (Basic->Time > LastSearchBestTime+BESTALTERNATEINTERVAL) ) // VENTA3
+  if ( (EnableBestAlternate) && (Basic->Time > LastSearchBestTime+BESTALTERNATEINTERVAL) ) // VENTA3
 #endif
     {
       LastSearchBestTime = Basic->Time;

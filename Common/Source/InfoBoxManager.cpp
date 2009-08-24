@@ -74,6 +74,8 @@ bool InfoWindowActive = true;
 bool EnableAuxiliaryInfo = false;
 double LastFlipBoxTime = 0; // VENTA3 need this global for slowcalculations cycle
 
+int ActiveAlternate = -1;
+
 // fwd declarations
 void DisplayText(void);
 void AssignValues(void);
@@ -308,7 +310,7 @@ SCREEN_INFO Data_Options[] = {
 	  // 68 Alternate 2
 	  {ugNone,            TEXT("Alternate2 GR"), TEXT("Altern 2"), new FormatterAlternate(TEXT("\0")), Alternate2Processing, 36, 46},
 	  // 69 BestAlternate aka BestLanding
-	  {ugNone,            TEXT("Best Alternate"), TEXT("BestAltr"), new FormatterAlternate(TEXT("\0")), BestAlternateProcessing, 36, 46},
+	  {ugNone,            TEXT("Best Alternate"), TEXT("BestAltn"), new FormatterAlternate(TEXT("\0")), BestAlternateProcessing, 36, 46},
           // 70
 	  {ugAltitude,        TEXT("QFE GPS"), TEXT("QFE GPS"), new InfoBoxFormatter(TEXT("%2.0f")), QFEAltitudeProcessing, 1, 33},
           // 71 TODO FIX those 19,4 values
@@ -534,9 +536,15 @@ void DisplayText(void)
     case 67: // VENTA3 alternate1 and 2
     case 68:
     case 69:
-	if (DisplayType[i]==67) ActiveAlternate=Alternate1; else
-	if (DisplayType[i]==68) ActiveAlternate=Alternate2;
-		else ActiveAlternate=BestAlternate;
+
+	if (DisplayType[i]==67)
+	  ActiveAlternate=Alternate1;
+	else
+	  if (DisplayType[i]==68)
+	    ActiveAlternate=Alternate2;
+	  else
+	    ActiveAlternate=BestAlternate;
+
 	InfoBoxes[i]->SetSmallerFont(false);
 	if ( ActiveAlternate != -1 ) {
 		InfoBoxes[i]->SetTitle(Data_Options[DisplayType[i]].Formatter->

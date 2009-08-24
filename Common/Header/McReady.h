@@ -42,13 +42,9 @@ Copyright_License {
 
 #include "Sizes.h"
 
-extern double BUGS;
-extern double BALLAST;
 extern int POLARID;
 extern double POLAR[POLARSIZE];
 extern double WEIGHTS[POLARSIZE];
-extern double MACCREADY;
-extern bool   AutoMacCready;
 
 class GlidePolar {
  public:

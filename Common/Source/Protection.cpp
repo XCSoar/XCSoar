@@ -6,6 +6,7 @@
 #include "Protection.hpp"
 #include "InfoBoxManager.h"
 #include "Settings.hpp"
+#include "SettingsComputer.hpp"
 #include "SettingsUser.hpp"
 #include "Device/Parser.h"
 #include "GaugeVarioAltA.h"
@@ -337,12 +338,11 @@ DWORD CalculationThread (LPVOID lpvoid) {
     if (MapWindow::CLOSETHREAD) break; // drop out on exit
 
 #if defined(_SIM_)
-    if (needcalculationsslow ||
-	( (OnBestAlternate == true)
-	  && (ReplayLogger::IsEnabled()) )) { // VENTA3, needed for BestAlternate SIM
-#else
-    if (needcalculationsslow) {
+    needcalculationsslow |= (EnableBestAlternate && ReplayLogger::IsEnabled());
+    // VENTA3, needed for BestAlternate SIM
 #endif
+
+    if (needcalculationsslow) {
       DoCalculationsSlow(&tmp_GPS_INFO,&tmp_CALCULATED_INFO);
       needcalculationsslow = false;
     }

@@ -39,6 +39,7 @@ Copyright_License {
 #include "Persist.hpp"
 #include "LogFile.hpp"
 #include "LocalPath.hpp"
+#include "SettingsComputer.hpp"
 #include "externs.h"
 #include "OnLineContest.h"
 #include "McReady.h"

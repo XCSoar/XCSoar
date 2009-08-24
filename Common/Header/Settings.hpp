@@ -40,31 +40,16 @@ Copyright_License {
 
 // changed only in config or by user interface /////////////////////////////
 
-// sound stuff not used?
-extern bool EnableSoundVario;
-extern bool EnableSoundTask;
-extern bool EnableSoundModes;
-extern int  SoundVolume;
-extern int  SoundDeadband;
-
 // changed in task/flight or by calc thread /////////////////////////////////
 
 extern bool RequestAirspaceWarningDialog;
 
 extern bool LoggerActive;
 
-// polar info
-extern int  BallastSecsToEmpty;
-extern bool BallastTimerActive;
-
 // waypoint data
 extern int  Alternate1; // VENTA3
 extern int  Alternate2;
 extern int  BestAlternate;
-extern int  ActiveAlternate;
-extern bool OnBestAlternate;
-extern bool OnAlternate1;
-extern bool OnAlternate2;
 
 // external control of user interface
 extern bool ExternalTriggerCruise;

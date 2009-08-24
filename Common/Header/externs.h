@@ -38,8 +38,6 @@ Copyright_License {
 #ifndef EXTERNS_H
 #define EXTERNS_H
 
-//#include "Blackboard.hpp"
-
 // used in settings dialog
 extern BOOL COMPORTCHANGED;
 extern BOOL AIRSPACEFILECHANGED;
@@ -62,13 +60,5 @@ extern bool TeammateCodeValid;
 extern bool TeamFlarmTracking;
 extern TCHAR TeamFlarmCNTarget[4]; // CN of the glider to track
 extern int TeamFlarmIdTarget;    // FlarmId of the glider to track
-
-//////
-
-extern double QFEAltitudeOffset; // VENTA3
-extern int OnAirSpace; // VENTA3 toggle DrawAirSpace
-extern bool VirtualKeys;
-extern short ArrivalValue;
-extern short AverEffTime;
 
 #endif

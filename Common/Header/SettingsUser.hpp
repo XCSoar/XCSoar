@@ -61,6 +61,15 @@ extern int  MenuTimeoutMax;
 extern bool EnableAutoBacklight; // VENTA4
 extern bool EnableAutoSoundVolume; // VENTA4
 extern bool ExtendedVisualGlide;
+extern int OnAirSpace; // VENTA3 toggle DrawAirSpace
 
+extern bool VirtualKeys;
+
+// sound stuff not used?
+extern bool EnableSoundVario;
+extern bool EnableSoundTask;
+extern bool EnableSoundModes;
+extern int  SoundVolume;
+extern int  SoundDeadband;
 
 #endif

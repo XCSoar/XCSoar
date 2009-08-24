@@ -41,8 +41,8 @@ Copyright_License {
 #include "externs.h"
 #include "Blackboard.hpp"
 #include "SettingsTask.hpp"
+#include "SettingsComputer.hpp"
 #include "Units.h"
-#include "McReady.h"
 
 #include "Dialogs/dlgTools.h"
 #include "GlideSolvers.hpp"

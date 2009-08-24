@@ -46,6 +46,7 @@ Copyright_License {
 #include "Dialogs.h"
 #include "Dialogs/dlgTools.h"
 #include "Settings.hpp"
+#include "SettingsComputer.hpp"
 #include "SettingsTask.hpp"
 #include "Calculations.h"
 #include "Waypointparser.h"

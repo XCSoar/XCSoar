@@ -42,7 +42,7 @@ Copyright_License {
 #include "GaugeFLARM.h"
 #include "Math/Screen.hpp"
 #include "Math/Earth.hpp"
-#include "McReady.h"
+#include "SettingsComputer.hpp"
 
 extern HFONT MapLabelFont;
 

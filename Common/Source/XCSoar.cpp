@@ -243,15 +243,6 @@ DWORD StartMaxSpeed = 0;
 DWORD StartMaxHeightMargin = 0;
 DWORD StartMaxSpeedMargin = 0;
 
-// Alternates
-int Alternate1 = -1; // VENTA3
-int Alternate2 = -1; // VENTA3
-int BestAlternate = -1; // VENTA3
-int ActiveAlternate = -1; // VENTA3
-bool OnBestAlternate=false;
-bool OnAlternate1=false;
-bool OnAlternate2=false;
-
 #if (((UNDER_CE >= 300)||(_WIN32_WCE >= 0x0300)) && (WINDOWSPC<1))
 #define HAVE_ACTIVATE_INFO
 static SHACTIVATEINFO s_sai;

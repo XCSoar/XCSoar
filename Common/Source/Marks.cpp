@@ -42,6 +42,7 @@ Copyright_License {
 #include "Topology.h"
 #include "Dialogs.h"
 #include "Settings.hpp"
+#include "SettingsUser.hpp"
 #include "Compatibility/string.h"
 #include "Registry.hpp"
 #include "LocalPath.hpp"

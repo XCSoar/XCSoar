@@ -41,6 +41,7 @@ Copyright_License {
 #include "externs.h"
 #include "Blackboard.hpp"
 #include "SettingsTask.hpp"
+#include "SettingsComputer.hpp"
 #include "Atmosphere.h"
 #include "Battery.h"
 #include "McReady.h"

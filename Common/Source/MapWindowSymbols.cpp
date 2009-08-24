@@ -48,6 +48,7 @@ Copyright_License {
 #include "Settings.hpp"
 #include "SettingsTask.hpp"
 #include "SettingsUser.hpp"
+#include "SettingsComputer.hpp"
 
 extern HFONT  MapWindowBoldFont;
 extern BOOL extGPSCONNECT;

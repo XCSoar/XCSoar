@@ -49,6 +49,7 @@ Copyright_License {
 #include "McReady.h"
 
 #include "SettingsUser.hpp"
+#include "SettingsComputer.hpp"
 
 #include <assert.h>
 

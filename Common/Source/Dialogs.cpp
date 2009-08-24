@@ -55,6 +55,7 @@ Copyright_License {
 #include "LocalPath.hpp"
 #include "externs.h"
 #include "Settings.hpp"
+#include "SettingsUser.hpp"
 #include "Device/Port.h"
 #include "AirfieldDetails.h"
 #include "Device/device.h"

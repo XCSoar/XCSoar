@@ -42,6 +42,7 @@ Copyright_License {
 #include "externs.h"
 #include "Blackboard.hpp"
 #include "Settings.hpp"
+#include "SettingsComputer.hpp"
 #include "Units.h"
 #include "McReady.h"
 #include "Atmosphere.h"
@@ -55,14 +56,14 @@ static WndForm *wf=NULL;
 // static bool BallastTimerActive = false;
 
 static void OnCloseClicked(WindowControl * Sender){
-(void)Sender;
-	wf->SetModalResult(mrOK);
+  (void)Sender;
+  wf->SetModalResult(mrOK);
 }
 
 static void OnBallastDump(WindowControl *Sender){
 (void)Sender;
-        BallastTimerActive=!BallastTimerActive;
-	wf->SetModalResult(mrOK);
+ BallastTimerActive=!BallastTimerActive;
+ wf->SetModalResult(mrOK);
 }
 
 

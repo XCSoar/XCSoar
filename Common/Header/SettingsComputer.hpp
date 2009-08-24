@@ -41,6 +41,9 @@ Copyright_License {
 // control of calculations, these only changed by user interface
 // but are used by calculations
 
+// All of these should be protected by LockFlightData() when using from outside
+// calculation thread
+
 extern int    AutoMcMode;
 extern bool   EnableCalibration;
 extern bool   ForceFinalGlide;
@@ -56,6 +59,23 @@ extern double SAFETYALTITUDEBREAKOFF;
 extern double SAFETYALTITUDETERRAIN;
 extern double SAFTEYSPEED;
 extern int    EnableExternalTriggerCruise;
+
+extern bool   EnableBestAlternate;
+extern bool   EnableAlternate1;
+extern bool   EnableAlternate2;
+
+// polar info
+extern int  BallastSecsToEmpty;
+extern bool BallastTimerActive;
+
+extern double BUGS;
+extern double BALLAST;
+extern double MACCREADY;
+extern bool   AutoMacCready;
+
+extern short AverEffTime;
+extern double QFEAltitudeOffset; // VENTA3
+
 
 #endif
 

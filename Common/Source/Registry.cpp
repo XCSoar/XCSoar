@@ -638,19 +638,19 @@ void ReadRegistrySettings(void)
     Alternate1 = Temp;
     // TODO: for portrait no need to force alternate calculations here.
     // Infobox will trigger them on if visible..
-    OnAlternate1=true;
+    EnableAlternate1=true;
   } else {
     Alternate1 = -1;
-    OnAlternate1=false;
+    EnableAlternate1=false;
   }
 
   Temp = Alternate2;
   if (GetFromRegistry(szRegistryAlternate2,&Temp)==ERROR_SUCCESS) {
     Alternate2 = Temp;
-    OnAlternate2=true;
+    EnableAlternate2=true;
   } else {
     Alternate2 = -1;
-    OnAlternate2=false;
+    EnableAlternate2=false;
   }
 
 

@@ -407,9 +407,9 @@ BOOL DoCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   }
 
   // VENTA3 Alternates
-  if ( OnAlternate1 == true ) DoAlternates(Basic, Calculated,Alternate1);
-  if ( OnAlternate2 == true ) DoAlternates(Basic, Calculated,Alternate2);
-  if ( OnBestAlternate == true ) DoAlternates(Basic, Calculated,BestAlternate);
+  if ( EnableAlternate1 == true ) DoAlternates(Basic, Calculated,Alternate1);
+  if ( EnableAlternate2 == true ) DoAlternates(Basic, Calculated,Alternate2);
+  if ( EnableBestAlternate == true ) DoAlternates(Basic, Calculated,BestAlternate);
 
   DoLogging(Basic, Calculated);
   vegavoice.Update(Basic, Calculated);

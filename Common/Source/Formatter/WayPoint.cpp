@@ -42,9 +42,11 @@ Copyright_License {
 #include "externs.h"
 #include "Settings.hpp"
 #include "MapWindow.h" // only for display mode definitions, should be elsewhere
+#include "SettingsComputer.hpp" // for auto-setting of alternates.  Dangerous!
 #include "SettingsTask.hpp"
 #include "SettingsUser.hpp"
 
+extern int  ActiveAlternate; // from InfoBoxManager
 
 const TCHAR *FormatterWaypoint::Render(int *color) {
   int thewaypoint = ActiveWayPoint;
@@ -169,41 +171,43 @@ FormatterAlternate::Render(int *color)
 void FormatterAlternate::AssignValue(int i) {
   LockTaskData();
    switch (i) {
-	case 67:
-		if (OnAlternate1 == false ) { // first run, activate calculations
-			OnAlternate1 = true;
-        		Value=INVALID_GR;
-		} else {
-			if ( ValidWayPoint(Alternate1) ) Value=WayPointCalc[Alternate1].GR;
-			else Value=INVALID_GR;
-		}
-		break;
-/*
-		if ( ValidWayPoint(Alternate1) ) Value=WayPointCalc[Alternate1].GR;
-		else Value=INVALID_GR;
-		break;
-*/
-	case 68:
-		if (OnAlternate2 == false ) { // first run, activate calculations
-			OnAlternate2 = true;
-        		Value=INVALID_GR;
-		} else {
-			if ( ValidWayPoint(Alternate2) ) Value=WayPointCalc[Alternate2].GR;
-			else Value=INVALID_GR;
-		}
-		break;
-	case 69:
-		if (OnBestAlternate == false ) { // first run, waiting for slowcalculation loop
-			OnBestAlternate = true;		// activate it
-        		Value=INVALID_GR;
-		} else {
-			if ( ValidWayPoint(BestAlternate)) Value=WayPointCalc[BestAlternate].GR;
-			else Value=INVALID_GR;
-		}
-		break;
-	default:
-		Value=66.6; // something evil to notice..
-		break;
+   case 67:
+     if (!EnableAlternate1) { // first run, activate calculations
+       EnableAlternate1 = true;
+       Value=INVALID_GR;
+     } else {
+       if ( ValidWayPoint(Alternate1) ) Value=WayPointCalc[Alternate1].GR;
+       else Value=INVALID_GR;
+     }
+     break;
+     /*
+       if ( ValidWayPoint(Alternate1) ) Value=WayPointCalc[Alternate1].GR;
+       else Value=INVALID_GR;
+       break;
+     */
+   case 68:
+     if (!EnableAlternate2) { // first run, activate calculations
+       EnableAlternate2 = true;
+       Value=INVALID_GR;
+     } else {
+       if ( ValidWayPoint(Alternate2) ) Value=WayPointCalc[Alternate2].GR;
+       else Value=INVALID_GR;
+     }
+     break;
+   case 69:
+     if (!EnableBestAlternate) { // first run, waiting for slowcalculation loop
+       EnableBestAlternate = true;	  // activate it
+       Value=INVALID_GR;
+     } else {
+       if ( ValidWayPoint(BestAlternate))
+	 Value=WayPointCalc[BestAlternate].GR;
+       else
+	 Value=INVALID_GR;
+     }
+     break;
+   default:
+     Value=66.6; // something evil to notice..
+     break;
    }
 
    Valid=false;

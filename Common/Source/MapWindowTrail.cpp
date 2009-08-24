@@ -45,7 +45,7 @@ Copyright_License {
 #include "Math/Earth.hpp"
 #include "Screen/Util.hpp"
 #include "OnLineContest.h"
-#include "McReady.h"
+#include "SettingsComputer.hpp"
 
 
 int MapWindow::iSnailNext=0;
