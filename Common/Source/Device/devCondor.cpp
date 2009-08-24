@@ -39,7 +39,7 @@ Copyright_License {
 #include "Device/device.h"
 #include "XCSoar.h"
 #include "Protection.hpp"
-#include "Utils.h"
+#include "UtilsText.hpp"
 #include "Math/Pressure.h"
 #include "Math/Units.h"
 #include "Device/Parser.h"

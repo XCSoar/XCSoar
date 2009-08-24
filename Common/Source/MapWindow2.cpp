@@ -39,6 +39,7 @@ Copyright_License {
 #include "XCSoar.h"
 #include "Protection.hpp"
 #include "Utils.h"
+#include <math.h>
 #include "Math/Earth.hpp"
 #include "SettingsComputer.hpp"
 

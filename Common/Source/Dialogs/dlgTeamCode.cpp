@@ -36,7 +36,7 @@
 */
 
 #include "XCSoar.h"
-#include "Utils.h"
+#include "UtilsFLARM.hpp"
 #include "Dialogs/dlgTools.h"
 #include "Dialogs.h"
 #include "Settings.hpp"

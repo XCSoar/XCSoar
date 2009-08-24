@@ -71,6 +71,7 @@ Copyright_License {
 #include "BestAlternate.hpp"
 #include "Persist.hpp"
 #include "GlideRatio.hpp"
+#include "Airspace.h"
 
 extern ldrotary_s rotaryLD;
 

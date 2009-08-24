@@ -49,6 +49,8 @@ Copyright_License {
 #include "Device/device.h"
 #include "DataField/Base.hpp"
 #include "Utils.h"
+#include "Airspace.h"
+#include <math.h>
 
 static WndForm *wf=NULL;
 

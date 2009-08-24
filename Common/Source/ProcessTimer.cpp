@@ -49,6 +49,7 @@ Copyright_License {
 #include "Screen/Blank.hpp"
 #include "Message.h"
 #include "Utils.h"
+#include "UtilsSystem.hpp"
 #include "InfoBoxManager.h"
 #include "MapWindow.h"
 #include "Math/Earth.hpp"

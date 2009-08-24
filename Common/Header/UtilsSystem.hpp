@@ -34,47 +34,48 @@ Copyright_License {
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
 */
-#ifndef INFOBOX_MANAGER_H
-#define INFOBOX_MANAGER_H
+#if !defined(XCSOAR_UTILS_SYSTEM_H)
+#define XCSOAR_UTILS_SYSTEM_H
 
-#include "XCSoar.h"
-#include "Formatter/Base.hpp"
-
-#define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
-typedef struct _SCREEN_INFO
-{
-  UnitGroup_t UnitGroup;
-  TCHAR Description[DESCRIPTION_SIZE +1];
-  TCHAR Title[TITLE_SIZE + 1];
-  InfoBoxFormatter *Formatter;
-  void (*Process)(int UpDown);
-  char next_screen;
-  char prev_screen;
-} SCREEN_INFO;
+#ifdef PNA
+bool SetBacklight(); // VENTA4-ADDON for PNA
+bool SetSoundVolume(); // VENTA4-ADDON for PNA
+#endif
 
-extern SCREEN_INFO Data_Options[];
-extern int InfoType[MAXINFOWINDOWS]; //
-extern int  InfoFocus;
-extern const int NUMSELECTSTRINGS;
-extern int numInfoWindows;
-extern bool EnableAuxiliaryInfo;
-extern double LastFlipBoxTime; // used by XCSoar and Calculations
+#if defined(PNA) || defined(FIVV)  // VENTA-ADDON
+void SetModelType();
+bool SetModelName(DWORD Temp);
+#endif
 
-void InfoBoxesSetDirty(bool is_dirty);
-void DeleteInfoBoxFormatters();
-bool InfoBoxClick(HWND wmControl, bool display_locked);
-void InfoBoxFocus(bool display_locked);
-void InfoBoxProcessTimer(void);
-void InfoBoxDrawIfDirty(void);
-void InfoBoxFocusSetMaxTimeOut(void);
-void ShowInfoBoxes();
-void HideInfoBoxes();
-void DefocusInfoBox(void);
-void Event_SelectInfoBox(int i);
-void Event_ChangeInfoBoxType(int i);
-void DoInfoKey(int keycode);
-void ResetInfoBoxes(void);
+void XCSoarGetOpts(LPTSTR CommandLine);
+int MeasureCPULoad();
+long CheckFreeRam(void);
+void MemCheckPoint();
+void MemLeakCheck();
+void MyCompactHeaps();
+unsigned long FindFreeSpace(const TCHAR *path);
+BOOL PlayResource (const TCHAR* lpName);
+void CreateDirectoryIfAbsent(const TCHAR *filename);
+
+#ifdef __cplusplus
+extern "C"{
+#endif
+
+bool FileExistsW(const TCHAR *FileName);
+bool FileExistsA(const char *FileName);
+
+#ifdef _UNICODE
+#define FileExists FileExistsW
+#else
+#define FileExists FileExistsA
+#endif
+
+#ifdef __cplusplus
+}
+#endif
+
+bool RotateScreen(void);
 
 #endif

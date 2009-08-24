@@ -41,6 +41,7 @@ Copyright_License {
 #include "Math/Earth.hpp"
 #include "Registry.hpp"
 #include "LocalPath.hpp"
+#include "UtilsText.hpp"
 #include "Utils.h"
 #include "Blackboard.hpp"
 #include "Settings.hpp"

@@ -45,7 +45,7 @@ Copyright_License {
 #define AIR_REFRACTION 34.0/60.0 // athmospheric refraction degrees //
 
 #include "XCSoar.h"
-#include <windows.h>
+#include <math.h>
 #include "Blackboard.hpp"
 #include "Utils.h"
 

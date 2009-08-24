@@ -50,7 +50,7 @@ Copyright_License {
 #include "Math/Pressure.h"
 #include "Device/Parser.h"
 #include "Device/Port.h"
-#include "Utils.h"
+#include "UtilsText.hpp"
 
 #include <tchar.h>
 

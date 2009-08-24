@@ -36,8 +36,10 @@ Copyright_License {
 */
 
 #include "StatusMessage.hpp"
+#include "XCSoar.h"
 #include "Registry.hpp"
 #include "Utils.h"
+#include "UtilsText.hpp"
 #include "LocalPath.hpp"
 #include "LogFile.hpp"
 

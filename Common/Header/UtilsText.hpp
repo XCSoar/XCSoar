@@ -34,47 +34,34 @@ Copyright_License {
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
 */
-#ifndef INFOBOX_MANAGER_H
-#define INFOBOX_MANAGER_H
+#if !defined(XCSOAR_UTILS_TEXT_H)
+#define XCSOAR_UTILS_TEXT_H
 
-#include "XCSoar.h"
-#include "Formatter/Base.hpp"
-
-#define WIN32_LEAN_AND_MEAN
 #include <windows.h>
+#include <stdio.h>
+#include <zzip/lib.h>
 
-typedef struct _SCREEN_INFO
-{
-  UnitGroup_t UnitGroup;
-  TCHAR Description[DESCRIPTION_SIZE +1];
-  TCHAR Title[TITLE_SIZE + 1];
-  InfoBoxFormatter *Formatter;
-  void (*Process)(int UpDown);
-  char next_screen;
-  char prev_screen;
-} SCREEN_INFO;
+BOOL ReadString(ZZIP_FILE* zFile, int Max, TCHAR *String);
+BOOL ReadStringX(FILE *fp, int Max, TCHAR *String);
 
-extern SCREEN_INFO Data_Options[];
-extern int InfoType[MAXINFOWINDOWS]; //
-extern int  InfoFocus;
-extern const int NUMSELECTSTRINGS;
-extern int numInfoWindows;
-extern bool EnableAuxiliaryInfo;
-extern double LastFlipBoxTime; // used by XCSoar and Calculations
+double StrToDouble(const TCHAR *Source, const TCHAR **Stop);
+void PExtractParameter(const TCHAR *Source, TCHAR *Destination,
+                       int DesiredFieldNumber);
 
-void InfoBoxesSetDirty(bool is_dirty);
-void DeleteInfoBoxFormatters();
-bool InfoBoxClick(HWND wmControl, bool display_locked);
-void InfoBoxFocus(bool display_locked);
-void InfoBoxProcessTimer(void);
-void InfoBoxDrawIfDirty(void);
-void InfoBoxFocusSetMaxTimeOut(void);
-void ShowInfoBoxes();
-void HideInfoBoxes();
-void DefocusInfoBox(void);
-void Event_SelectInfoBox(int i);
-void Event_ChangeInfoBoxType(int i);
-void DoInfoKey(int keycode);
-void ResetInfoBoxes(void);
+void ExtractDirectory(TCHAR *Dest, const TCHAR *Source);
+
+void *bsearch(void *key, void *base0, size_t nmemb, size_t size, int (*compar)(const void *elem1, const void *elem2));
+TCHAR *strtok_r(TCHAR *s, const TCHAR *delim, TCHAR **lasts);
+
+// Parse string (new lines etc) and malloc the string
+TCHAR* StringMallocParse(const TCHAR* old_string);
+
+void ConvertTToC(CHAR* pszDest, const TCHAR* pszSrc);
+void ConvertCToT(TCHAR* pszDest, const CHAR* pszSrc);
+
+int TextToLineOffsets(TCHAR* text, int* LineOffsets, int maxLines);
+double HexStrToDouble(TCHAR *Source, TCHAR **Stop);
+
+bool MatchesExtension(const TCHAR *filename, const TCHAR* extension);
 
 #endif

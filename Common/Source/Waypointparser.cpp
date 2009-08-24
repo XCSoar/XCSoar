@@ -50,6 +50,7 @@ Copyright_License {
 #include "LocalPath.hpp"
 #include "Dialogs/dlgTools.h"
 #include "Utils.h"
+#include "UtilsText.hpp"
 #include "MapWindow.h"
 #include "RasterTerrain.h"
 #include "LogFile.hpp"

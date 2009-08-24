@@ -36,6 +36,7 @@ Copyright_License {
 */
 
 #include "Utils2.h"
+#include "UtilsSystem.hpp"
 #include "XCSoar.h"
 #include <stdio.h>
 #ifndef __MINGW32__
@@ -54,111 +55,6 @@ Copyright_License {
 #include "Dialogs.h"
 #include "Utils.h"
 #include "MapWindow.h"
-
-#ifdef ENABLE_UNUSED_CODE
-
-typedef struct {
-        int     array[RASIZE]; // rotary array with a predefined max capacity
-        short   start;          // pointer to current first item in rotarybuf if used
-        short   size;           // real size of rotary buffer (0-size)
-} ifilter_s;
-
-bool InitFilterBuffer(ifilter_s *buf, short bsize) {
-short i;
-	if (bsize <3 || bsize>RASIZE) return false;
-	for (i=0; i<RASIZE; i++) buf->array[i]=0;
-	buf->start=-1;
-	buf->size=bsize;
-}
-
-void InsertRotaryBuffer(ifilter_s *buf, int value) {
-	if (++buf->start >=buf->size) {
-		buf->start=0;
-	}
-	buf->array[buf->start]=value;
-}
-
-int FilterFast(ifilter_s *buf, int minvalue, int maxvalue) {
-
-  ifilter_s bc;
-  memcpy(&bc, buf, sizeof(ifilter_s));
-
-  short i,curs,nc,iter;
-  int s, *val;
-  float aver=0.0, oldaver, low=minvalue, high=maxvalue, cutoff;
-
-  for (iter=0; iter<MAXITERFILTER; iter++) {
- 	 for (i=0, nc=0, s=0; i<bc.size; i++) {
-		val=&bc.array[i];
-		if (*val >=low && *val <=high) { s+=*val; nc++; }
-	  }
-	  if (nc==0) { aver=0.0; break; }
-	  oldaver=aver; aver=((float)s/nc);
- 	  //printf("Sum=%d count=%d Aver=%0.3f (old=%0.3f)\n",s,nc,aver,oldaver);
-	  if (oldaver==aver) break;
-	  cutoff=aver/50; // 2%
- 	  low=aver-cutoff;
- 	  high=aver+cutoff;
-  }
-  //printf("Found: aver=%d (%0.3f) after %d iterations\n",(int)aver, aver, iter);
-  return ((int)aver);
-
-}
-
-int FilterRotary(ifilter_s *buf, int minvalue, int maxvalue) {
-
-  ifilter_s bc;
-  memcpy(&bc, buf, sizeof(ifilter_s));
-
-  short i,curs,nc,iter;
-  int s, val;
-  float aver, low, high, cutoff;
-
-  low  = minvalue;
-  high = maxvalue;
-
-  for (iter=0; iter<MAXITERFILTER; iter++) {
- 	 for (i=0, nc=0, s=0,curs=bc.start; i<bc.size; i++) {
-
-		val=bc.array[curs];
-		if (val >=low && val <=high) {
-			s+=val;
-			nc++;
-		}
-		if (++curs >= bc.size ) curs=0;
-	  }
-	  if (nc==0) {
-		aver=0.0;
-		break;
-	  }
-	  aver=((float)s/nc);
- 	  //printf("Sum=%d count=%d Aver=%0.3f\n",s,nc,aver);
-
-	  cutoff=aver/50; // 2%
- 	  low=aver-cutoff;
- 	  high=aver+cutoff;
-  }
-
-  //printf("final: aver=%d\n",(int)aver);
-  return ((int)aver);
-
-}
-/*
-main(int argc, char *argv[])
-{
-  short i;
-  ifilter_s buf;
-  InitFilterBuffer(&buf,20);
-  int values[20] = { 140,121,134,119,116,118,121,122,120,124,119,117,116,130,122,119,110,118,120,121 };
-  for (i=0; i<20; i++) InsertRotaryBuffer(&buf, values[i]);
-  FilterFast(&buf, 70,200 );
-  buf.start=10;
-  for (i=0; i<20; i++) InsertRotaryBuffer(&buf, values[i]);
-  FilterFast(&buf, 70,200 );
-}
-*/
-
-#endif /* ENABLE_UNUSED_CODE */
 
 /*
 	Virtual Key Manager by Paolo Ventafridda

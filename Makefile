@@ -487,6 +487,12 @@ OBJS	:=\
 	$(SRC)/Battery.o 		\
 	$(SRC)/units.o 			\
 	$(SRC)/Utils.o			\
+	$(SRC)/UtilsAirspace.o		\
+	$(SRC)/UtilsFLARM.o		\
+	$(SRC)/UtilsFont.o		\
+	$(SRC)/UtilsProfile.o		\
+	$(SRC)/UtilsSystem.o		\
+	$(SRC)/UtilsText.o		\
 	$(SRC)/Utils2.o 		\
 	$(SRC)/Audio/VegaVoice.o	\
 	$(SRC)/Compatibility/string.o 	\

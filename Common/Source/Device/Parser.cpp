@@ -40,7 +40,10 @@ Copyright_License {
 #include "Device/Parser.h"
 #include "XCSoar.h"
 #include "Protection.hpp"
+#include <math.h>
 #include "Utils.h"
+#include "UtilsText.hpp"
+#include "UtilsFLARM.hpp"
 #include "Blackboard.hpp"
 #include "Audio/VarioSound.h"
 #include "Logger.h"
@@ -53,7 +56,7 @@ Copyright_License {
 #include "Math/Earth.hpp"
 #include "Math/Pressure.h"
 #include "Math/Units.h"
-
+#include "Task.h" // TODO danger!
 #include "SettingsComputer.hpp"
 #include "Settings.hpp"
 

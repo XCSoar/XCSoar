@@ -39,6 +39,8 @@ Copyright_License {
 #include "XCSoar.h"
 #include "Protection.hpp"
 #include "Utils.h"
+#include "UtilsAirspace.hpp"
+#include "UtilsSystem.hpp"
 #include "OnLineContest.h"
 #include "Math/FastMath.h"
 #include "Math/Earth.hpp"

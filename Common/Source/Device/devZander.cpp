@@ -42,9 +42,7 @@ Copyright_License {
 #include "Math/Pressure.h"
 #include "Device/Parser.h"
 #include "Device/Port.h"
-#include "Utils.h"
-
-#include <tchar.h>
+#include "UtilsText.hpp"
 
 static BOOL PZAN1(PDeviceDescriptor_t d, const TCHAR *String,
                   NMEA_INFO *aGPS_INFO);

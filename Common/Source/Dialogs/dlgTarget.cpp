@@ -40,6 +40,7 @@ Copyright_License {
 #include "Protection.hpp"
 #include "Interface.hpp"
 #include "Utils.h"
+#include <math.h>
 #include "Blackboard.hpp"
 #include "SettingsTask.hpp"
 #include "Units.h"

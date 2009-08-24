@@ -39,10 +39,9 @@ Copyright_License {
 
 #include "AirfieldDetails.h"
 #include "XCSoar.h"
-#include "Utils.h"
+#include "UtilsText.hpp"
 #include "SettingsTask.hpp"
 #include "Dialogs.h"
-#include "Utils.h"
 #include "Registry.hpp"
 #include "LocalPath.hpp"
 #include "LogFile.hpp"

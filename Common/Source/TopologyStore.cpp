@@ -44,7 +44,7 @@ Copyright_License {
 #include "Compatibility/string.h"
 #include "Registry.hpp"
 #include "LocalPath.hpp"
-#include "Utils.h"
+#include "UtilsText.hpp"
 #include "LogFile.hpp"
 
 #include "SettingsUser.hpp" // for EnableTopology

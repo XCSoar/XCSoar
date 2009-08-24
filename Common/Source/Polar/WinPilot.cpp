@@ -37,9 +37,8 @@ Copyright_License {
 
 #include "Polar/WinPilot.hpp"
 #include "McReady.h"
-#include "Utils.h"
+#include "UtilsText.hpp"
 #include "Registry.hpp"
-#include "Utils.h"
 #include "LocalPath.hpp"
 
 #include <math.h>

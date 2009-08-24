@@ -40,7 +40,7 @@ Copyright_License {
 #include "Airspace.h"
 #include "Dialogs.h"
 #include "Dialogs/dlgTools.h"
-#include "Utils.h"
+#include "UtilsText.hpp"
 #include "LogFile.hpp"
 #include "RasterTerrain.h"
 #include "Math/Earth.hpp"

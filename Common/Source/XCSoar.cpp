@@ -53,6 +53,8 @@ Copyright_License {
 #include "StatusMessage.hpp"
 #include "Process.h"
 #include "Utils.h"
+#include "UtilsFLARM.hpp"
+#include "UtilsSystem.hpp"
 #include "Utils2.h"
 #include "LocalPath.hpp"
 #include "Math/FastMath.h"

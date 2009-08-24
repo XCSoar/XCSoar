@@ -41,7 +41,7 @@ Copyright_License {
 #include "Interface.hpp"
 #include "wcecompat/ts_string.h"
 #include "Screen/Util.hpp"
-#include "Utils.h"
+#include "UtilsText.hpp"
 #include "MapWindow.h"
 
 #include <stdlib.h>

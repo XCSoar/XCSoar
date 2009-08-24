@@ -40,7 +40,7 @@ Copyright_License {
 #include "Dialogs/dlgTools.h"
 #include "InfoBoxLayout.h"
 #include "LocalPath.hpp"
-#include "Utils.h"
+#include "UtilsText.hpp"
 
 #include <assert.h>
 

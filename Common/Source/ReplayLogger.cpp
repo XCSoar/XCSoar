@@ -49,7 +49,7 @@
 #include "LogFile.hpp"
 #include "Asset.hpp"
 
-#include "Utils.h"
+#include "UtilsText.hpp"
 #include "LocalPath.hpp"
 #include "Device/device.h"
 #include "InputEvents.h"
