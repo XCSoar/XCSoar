@@ -36,11 +36,12 @@ Copyright_License {
 */
 
 #include "StdAfx.h"
+#include "XCSoar.h"
+#include "Protection.hpp"
 #include "Device/Port.h"
 #include "externs.h"
 #include "Dialogs.h"
 #include "Dialogs/dlgTools.h"
-#include "XCSoar.h"
 #include "Device/device.h"
 #include "MapWindow.h"
 

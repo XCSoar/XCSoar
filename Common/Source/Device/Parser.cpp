@@ -39,6 +39,7 @@ Copyright_License {
 
 #include "Device/Parser.h"
 #include "XCSoar.h"
+#include "Protection.hpp"
 #include "Utils.h"
 #include "externs.h"
 #include "Audio/VarioSound.h"

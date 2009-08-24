@@ -35,9 +35,10 @@ Copyright_License {
 }
 */
 
-#include "Formatter/WayPoint.hpp"
 #include "WayPoint.hpp"
 #include "XCSoar.h"
+#include "Protection.hpp"
+#include "Formatter/WayPoint.hpp"
 #include "externs.h"
 #include "MapWindow.h" // only for display mode definitions, should be elsewhere
 #include "SettingsUser.hpp"

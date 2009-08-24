@@ -36,9 +36,10 @@ Copyright_License {
 */
 
 #include "MapWindow.h"
+#include "XCSoar.h"
+#include "Protection.hpp"
 #include "StdAfx.h"
 #include "Utils.h"
-#include "Defines.h"
 #include "OnLineContest.h"
 #include "Math/FastMath.h"
 #include "Math/Earth.hpp"
@@ -69,8 +70,6 @@ Copyright_License {
 #include "TopologyStore.h"
 #include "TerrainRenderer.h"
 #include "Marks.h"
-
-#include "options.h"
 #include "Task.h"
 
 #include "GaugeVarioAltA.h"

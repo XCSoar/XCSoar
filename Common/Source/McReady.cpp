@@ -35,12 +35,12 @@ Copyright_License {
 }
 */
 #include "StdAfx.h"
+#include "XCSoar.h"
+#include "Protection.hpp"
 #include "McReady.h"
 #include "externs.h"
 #include "Math/FastMath.h"
 #include "Math/Geometry.hpp"
-
-#include "XCSoar.h"
 #include "Device/device.h"
 
 #include <tchar.h>

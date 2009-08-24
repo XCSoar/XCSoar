@@ -37,7 +37,8 @@ Copyright_License {
 */
 
 #include "Calculations.h"
-#include "Defines.h" // VENTA3
+#include "XCSoar.h"
+#include "Protection.hpp"
 #include "Dialogs.h"
 #include "Process.h"
 #include "Utils.h"

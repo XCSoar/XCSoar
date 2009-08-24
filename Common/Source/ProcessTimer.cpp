@@ -38,6 +38,7 @@ Copyright_License {
 
 #include "ProcessTimer.hpp"
 #include "XCSoar.h"
+#include "Protection.hpp"
 #include "Interface.hpp"
 #include "InputEvents.h"
 #include "Logger.h"

@@ -38,6 +38,7 @@ Copyright_License {
 
 #include "CalculationsTask.hpp"
 #include "XCSoar.h"
+#include "Protection.hpp"
 #include "externs.h"
 #include "Math/FastMath.h"
 #include "Math/LowPassFilter.hpp"

@@ -382,6 +382,7 @@ VOLKS	:=\
 	$(SRC)/Device/Volkslogger/vlutils.cpp
 
 OBJS	:=\
+	$(SRC)/Protection.o \
 	$(SRC)/ProcessTimer.o \
 	\
 	$(SRC)/Asset.o \

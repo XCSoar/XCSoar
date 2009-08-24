@@ -38,6 +38,7 @@ Copyright_License {
 
 #include "StdAfx.h"
 #include "XCSoar.h"
+#include "Protection.hpp"
 #include "Utils.h"
 #include "Dialogs.h"
 #include "externs.h"

@@ -61,6 +61,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "InputEvents.h"
 #include "StdAfx.h"
 #include "XCSoar.h"
+#include "Protection.hpp"
 #include "LogFile.hpp"
 #include "Device/Parser.h"
 #include "externs.h"

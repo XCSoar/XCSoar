@@ -35,21 +35,38 @@ Copyright_License {
 }
 */
 
-#if !defined(AFX_XCSOAR_H__695AAC30_F401_4CFF_9BD9_FE62A2A2D0D2__INCLUDED_)
-#define AFX_XCSOAR_H__695AAC30_F401_4CFF_9BD9_FE62A2A2D0D2__INCLUDED_
+#ifndef XCSOAR_PROTECTION_HPP
+#define XCSOAR_PROTECTION_HPP
 
-#include "StdAfx.h"
-#include "Defines.h"
-#include "options.h"
-#include "resource.h"
-#include "Sizes.h"
-#include "Units.h"
-#include "Appearance.hpp"
 
-extern TCHAR XCSoar_Version[256];
+void UnlockEventQueue();
+void LockEventQueue();
+void UnlockComm();
+void LockComm();
+void UnlockGraphicsData();
+void LockGraphicsData();
+void UnlockFlightData();
+void LockFlightData();
+void UnlockTaskData();
+void LockTaskData();
+void UnlockTerrainDataCalculations();
+void LockTerrainDataCalculations();
+void UnlockTerrainDataGraphics();
+void LockTerrainDataGraphics();
+void UnlockNavBox();
+void LockNavBox();
+void TriggerGPSUpdate();
+void TriggerVarioUpdate();
 
-extern Appearance_t Appearance;
+class Trigger;
+extern Trigger drawTriggerEvent;
 
-// ******************************************************************
+void InitialiseProtection(void);
+void DeleteProtection(void);
+void TriggerRedraws(void);
+void TriggerAll(void);
+void CreateCalculationThread(void);
 
-#endif // !defined(AFX_XCSOAR_H__695AAC30_F401_4CFF_9BD9_FE62A2A2D0D2__INCLUDED_)
+
+#endif
+

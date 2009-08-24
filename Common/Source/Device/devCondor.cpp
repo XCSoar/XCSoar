@@ -38,6 +38,7 @@ Copyright_License {
 #include "Device/devCondor.h"
 #include "Device/device.h"
 #include "XCSoar.h"
+#include "Protection.hpp"
 #include "Utils.h"
 #include "Math/Pressure.h"
 #include "Math/Units.h"

@@ -37,11 +37,11 @@ Copyright_License {
 */
 
 #include "BestAlternate.hpp"
+#include "XCSoar.h"
+#include "Protection.hpp"
 #include "WayPoint.hpp"
-#include "Defines.h" // VENTA3
 #include "Math/FastMath.h"
 #include "externs.h"
-#include "XCSoar.h"
 #include "McReady.h"
 #include "Dialogs.h"
 #include "GlideSolvers.hpp"

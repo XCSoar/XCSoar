@@ -36,8 +36,9 @@ Copyright_License {
 */
 
 #include "Task.h"
-#include "Logger.h"
 #include "XCSoar.h"
+#include "Protection.hpp"
+#include "Logger.h"
 #include "AATDistance.h"
 #include "Utils.h"
 #include "Math/Geometry.hpp"

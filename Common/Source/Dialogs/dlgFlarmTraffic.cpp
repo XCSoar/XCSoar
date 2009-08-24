@@ -38,6 +38,8 @@
 
 #include "StdAfx.h"
 #include "XCSoar.h"
+#include "Protection.hpp"
+#include "externs.h"
 #include "Dialogs.h"
 #include "externs.h"
 #include "Dialogs/dlgTools.h"

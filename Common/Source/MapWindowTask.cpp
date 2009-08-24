@@ -36,6 +36,7 @@ Copyright_License {
 */
 #include "MapWindow.h"
 #include "XCSoar.h"
+#include "Protection.hpp"
 #include "externs.h"
 #include "Task.h"
 #include "WayPoint.hpp"

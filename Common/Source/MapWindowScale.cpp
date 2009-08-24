@@ -36,12 +36,12 @@ Copyright_License {
 */
 
 #include "MapWindow.h"
+#include "Protection.hpp"
 #include "externs.h" // for
 #include "InfoBoxLayout.h"
 #include <math.h>
 #include "Math/FastMath.h"
 #include "Screen/Util.hpp"
-#include "XCSoar.h" // for task lock/unlock
 #include "McReady.h"
 #include "InfoBoxManager.h"
 

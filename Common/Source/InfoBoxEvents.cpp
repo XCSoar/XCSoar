@@ -36,8 +36,9 @@ Copyright_License {
 */
 
 #include "InfoBoxEvents.h"
+#include "XCSoar.h"
+#include "Protection.hpp"
 #include "Device/Parser.h"
-#include "Defines.h" // VENTA3
 #include "externs.h"
 #include "Math/FastMath.h"
 #include "Device/device.h"
@@ -48,7 +49,6 @@ Copyright_License {
 #include "Battery.h"
 #include "WayPoint.hpp"
 #include "Registry.hpp"
-#include "XCSoar.h"
 #include "Utils.h"
 #include "MapWindow.h"
 #include "McReady.h"

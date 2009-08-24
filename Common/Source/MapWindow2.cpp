@@ -37,8 +37,7 @@ Copyright_License {
 
 #include "MapWindow.h"
 #include "XCSoar.h"
-#include "StdAfx.h"
-#include "options.h"
+#include "Protection.hpp"
 #include "Utils.h"
 #include "Math/Earth.hpp"
 #include "externs.h"

@@ -38,6 +38,7 @@
 #include "Logger.h"
 #include "StdAfx.h"
 #include "XCSoar.h"
+#include "Protection.hpp"
 #include "Dialogs.h"
 #include "Device/Port.h"
 #include "externs.h"

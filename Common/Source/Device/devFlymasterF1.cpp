@@ -38,6 +38,7 @@ Copyright_License {
 #include "Device/devFlymasterF1.h"
 #include "Device/device.h"
 #include "XCSoar.h"
+#include "Protection.hpp"
 #include "Math/Pressure.h"
 #include "Utils.h"
 #include "Device/Parser.h"

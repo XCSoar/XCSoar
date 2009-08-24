@@ -36,8 +36,9 @@ Copyright_License {
 */
 
 #include "LogFile.hpp"
-#include "LocalPath.hpp"
 #include "XCSoar.h"
+#include "Protection.hpp"
+#include "LocalPath.hpp"
 #include "Interface.hpp"
 
 #include <stdio.h>

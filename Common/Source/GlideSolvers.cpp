@@ -37,10 +37,11 @@ Copyright_License {
 */
 
 #include "GlideSolvers.hpp"
+#include "XCSoar.h"
+#include "Protection.hpp"
 #include "McReady.h"
 #include "Sizes.h"
 #include "Settings.hpp"
-#include "XCSoar.h"
 #include "RasterTerrain.h"
 #include "Math/FastMath.h"
 #include "Math/Earth.hpp"

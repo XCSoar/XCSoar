@@ -38,6 +38,7 @@ Copyright_License {
 #include "Device/devVega.h"
 #include "Device/device.h"
 #include "XCSoar.h"
+#include "Protection.hpp"
 #include "Dialogs.h"
 #include "Math/FastMath.h"
 #include "Math/Pressure.h"

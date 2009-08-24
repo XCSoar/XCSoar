@@ -43,8 +43,9 @@ Copyright_License {
 #include "Device/devVolkslogger.h"
 #include "Device/device.h"
 #include "XCSoar.h"
+#include "Protection.hpp"
 #include "Dialogs.h"
-#include "externs.h"
+#include "externs.h" // for task stuff
 #include "Utils.h"
 #include "Math/Pressure.h"
 #include "Device/Parser.h"

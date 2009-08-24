@@ -37,9 +37,9 @@ Copyright_License {
 
 #include "Waypointparser.h"
 #include "XCSoar.h"
+#include "Protection.hpp"
 #include "externs.h"
 #include "Dialogs.h"
-#include "options.h"
 #include "Math/FastMath.h"
 #include "Math/Earth.hpp"
 #include "Math/Units.h"

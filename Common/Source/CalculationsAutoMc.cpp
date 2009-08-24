@@ -37,11 +37,12 @@ Copyright_License {
 */
 
 #include "Calculations.h"
+#include "XCSoar.h"
+#include "Protection.hpp"
 #include "externs.h"
 #include "Device/device.h"
 #include "McReady.h"
 #include "Math/LowPassFilter.hpp"
-#include "XCSoar.h"
 #include "Logger.h"
 #include "GlideSolvers.hpp"
 #include <math.h>

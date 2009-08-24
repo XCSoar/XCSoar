@@ -38,6 +38,7 @@ Copyright_License {
 #include "Device/devBorgeltB50.h"
 #include "Device/device.h"
 #include "XCSoar.h"
+#include "Protection.hpp"
 #include "externs.h"
 #include "Utils.h"
 #include "Device/Parser.h"

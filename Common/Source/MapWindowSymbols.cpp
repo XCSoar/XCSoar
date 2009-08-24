@@ -35,12 +35,13 @@ Copyright_License {
 }
 */
 #include "MapWindow.h"
+#include "XCSoar.h"
+#include "Protection.hpp"
 #include "InfoBoxLayout.h"
 #include "Screen/Util.hpp"
 #include "Math/Screen.hpp"
 #include "Math/FastMath.h"
 #include "Math/Geometry.hpp"
-#include "XCSoar.h"
 #include "externs.h"
 #include "Logger.h"
 #include "Dialogs.h"

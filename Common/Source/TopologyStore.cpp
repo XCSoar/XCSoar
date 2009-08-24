@@ -36,12 +36,12 @@ Copyright_License {
 */
 
 #include "TopologyStore.h"
+#include "XCSoar.h"
+#include "Protection.hpp"
 #include "MapWindow.h"
 #include "Topology.h"
 #include "Dialogs.h"
-#include "XCSoar.h"
 #include "externs.h"
-#include "Sizes.h"
 #include "Compatibility/string.h"
 #include "Registry.hpp"
 #include "LocalPath.hpp"

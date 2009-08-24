@@ -34,22 +34,30 @@ Copyright_License {
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
 */
+#ifndef XCSOAR_SETTINGS_USER_HPP
+#define XCSOAR_SETTINGS_USER_HPP
 
-#if !defined(AFX_XCSOAR_H__695AAC30_F401_4CFF_9BD9_FE62A2A2D0D2__INCLUDED_)
-#define AFX_XCSOAR_H__695AAC30_F401_4CFF_9BD9_FE62A2A2D0D2__INCLUDED_
+// changed only in config or by user interface /////////////////////////////
+// not expected to be used by other threads
 
-#include "StdAfx.h"
-#include "Defines.h"
-#include "options.h"
-#include "resource.h"
-#include "Sizes.h"
-#include "Units.h"
-#include "Appearance.hpp"
+// user interface options
 
-extern TCHAR XCSoar_Version[256];
+// where using these from Calculations or MapWindow thread, should
+// protect
 
-extern Appearance_t Appearance;
+extern bool CircleZoom;
+extern bool EnableTopology;
+extern bool EnableTerrain;
+extern int  FinalGlideTerrain;
+extern int  DisplayOrientation;
+extern int  DisplayTextType;
+extern bool EnableCDICruise;
+extern bool EnableCDICircling;
+extern bool EnableVarioGauge;
+extern int  MenuTimeoutMax;
+extern bool EnableAutoBacklight; // VENTA4
+extern bool EnableAutoSoundVolume; // VENTA4
+extern bool ExtendedVisualGlide;
 
-// ******************************************************************
 
-#endif // !defined(AFX_XCSOAR_H__695AAC30_F401_4CFF_9BD9_FE62A2A2D0D2__INCLUDED_)
+#endif
