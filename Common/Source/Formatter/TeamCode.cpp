@@ -36,6 +36,7 @@ Copyright_License {
 */
 
 #include "Formatter/TeamCode.hpp"
+#include "Task.h"
 #include "externs.h"
 
 const TCHAR *FormatterTeamCode::Render(int *color) {

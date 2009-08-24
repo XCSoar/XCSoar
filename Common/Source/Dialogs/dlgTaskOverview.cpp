@@ -38,6 +38,7 @@ Copyright_License {
 #include "XCSoar.h"
 #include "Protection.hpp"
 #include "Utils.h"
+#include "Calculations.h" // for RefreshTaskStatistics()
 #include "externs.h"
 #include "SettingsTask.hpp"
 #include "Dialogs.h"

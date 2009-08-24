@@ -39,7 +39,7 @@ Copyright_License {
 #define BLACKBOARD_H
 
 #include "NMEA/Info.h"
-#include "Calculations.h"
+#include "NMEA/Derived.hpp"
 
 // master flight data
 extern NMEA_INFO GPS_INFO;

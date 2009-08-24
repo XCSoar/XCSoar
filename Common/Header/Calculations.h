@@ -46,11 +46,6 @@ Copyright_License {
 extern Statistics flightstats;
 
 
-extern int AutoMcMode;
-extern bool EnableCalibration;
-extern bool ForceFinalGlide;
-extern bool AutoForceFinalGlide;
-
 BOOL DoCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 BOOL DoCalculationsVario(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 void DoCalculationsSlow(NMEA_INFO *Basic, DERIVED_INFO *Calculated);

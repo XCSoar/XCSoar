@@ -41,6 +41,10 @@ Copyright_License {
 // control of calculations, these only changed by user interface
 // but are used by calculations
 
+extern int    AutoMcMode;
+extern bool   EnableCalibration;
+extern bool   ForceFinalGlide;
+extern bool   AutoForceFinalGlide;
 extern int    AutoWindMode;
 extern bool   EnableNavBaroAltitude;
 extern bool   EnableBlockSTF; // block speed to fly instead of dolphin

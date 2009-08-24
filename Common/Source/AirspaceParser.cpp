@@ -50,6 +50,8 @@ Copyright_License {
 #include "Math/Pressure.h"
 #include "LocalPath.hpp"
 
+#include "Calculations.h" // for ClearAirspaceWarnings
+
 #include <windows.h>
 #include <commctrl.h>
 #include <math.h>
