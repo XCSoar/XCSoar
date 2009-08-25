@@ -41,6 +41,7 @@ Copyright_License {
 
 #include <windef.h>
 
+
 typedef struct WinPilotPolarInternal {
   TCHAR name[50];
   double ww0;

@@ -82,36 +82,6 @@ int ActiveAlternate = -1;
 void DisplayText(void);
 void AssignValues(void);
 
-// from XCSoar.cpp
-void SwitchToMapWindow(void);
-
-
-void PopupAnalysis()
-{
-  DialogActive = true;
-  dlgAnalysisShowModal();
-  DialogActive = false;
-}
-
-
-void PopupWaypointDetails()
-{
-  dlgWayPointDetailsShowModal();
-}
-
-
-void PopupBugsBallast(int UpDown)
-{
-	(void)UpDown;
-  DialogActive = true;
-  //  ShowWindow(hWndCB,SW_HIDE);
-  FullScreen();
-  SwitchToMapWindow();
-  DialogActive = false;
-}
-
-
-
 int numInfoWindows = 8;
 
 InfoBox *InfoBoxes[MAXINFOWINDOWS];

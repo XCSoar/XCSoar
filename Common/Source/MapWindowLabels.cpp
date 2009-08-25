@@ -37,6 +37,7 @@ Copyright_License {
 
 #include "MapWindow.h"
 #include "Math/Screen.hpp"
+#include "Screen/Graphics.hpp"
 #include <assert.h>
 
 typedef struct{
@@ -150,23 +151,3 @@ void MapWaypointLabelClear() {
 }
 
 
-//////////////////////
-// JMW added simple code to prevent text writing over map city names
-int MapWindow::nLabelBlocks;
-RECT MapWindow::LabelBlockCoords[MAXLABELBLOCKS];
-
-bool MapWindow::checkLabelBlock(RECT rc) {
-  bool ok = true;
-
-  for (int i=0; i<nLabelBlocks; i++) {
-    if (CheckRectOverlap(LabelBlockCoords[i],rc)) {
-      ok = false;
-      continue;
-    }
-  }
-  if (nLabelBlocks<MAXLABELBLOCKS-1) {
-    LabelBlockCoords[nLabelBlocks]= rc;
-    nLabelBlocks++;
-  }
-  return ok;
-}

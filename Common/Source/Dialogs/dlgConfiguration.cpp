@@ -1195,12 +1195,6 @@ static void GetInfoBoxSelector(int item, int mode)
 }
 
 
-
-
-//////////
-
-extern const TCHAR *PolarLabels[];
-
 static  TCHAR szPolarFile[MAX_PATH] = TEXT("\0");
 static  TCHAR szAirspaceFile[MAX_PATH] = TEXT("\0");
 static  TCHAR szAdditionalAirspaceFile[MAX_PATH] = TEXT("\0");

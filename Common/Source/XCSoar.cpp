@@ -150,8 +150,6 @@ DERIVED_INFO  CALCULATED_INFO;
 
 bool          TaskAborted = false;
 
-bool DialogActive = false;
-
 //Local Static data
 static int iTimerID= 0;
 
@@ -255,22 +253,24 @@ static bool MenuActive = false;
 
 
 // Forward declarations of functions included in this code module:
-ATOM                                                    MyRegisterClass (HINSTANCE, LPTSTR);
-BOOL                                                    InitInstance    (HINSTANCE, int);
-LRESULT CALLBACK        WndProc                 (HWND, UINT, WPARAM, LPARAM);
-LRESULT                                         MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
-
-void PopUpSelect(int i);
-
-//HWND CreateRpCommandBar(HWND hwnd);
-
+ATOM MyRegisterClass (HINSTANCE, LPTSTR);
+BOOL InitInstance    (HINSTANCE, int);
+LRESULT CALLBACK WndProc (HWND, UINT, WPARAM, LPARAM);
+LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 void RestartCommPorts(void);
-void SwitchToMapWindow(void);
 
 ///////////////////////////////////////
 
+void SwitchToMapWindow(void)
+{
+  DefocusInfoBox();
 
-/////////////////////////////////////
+  SetFocus(hWndMapWindow);
+  if (MenuTimeOut< MenuTimeoutMax) {
+    MenuTimeOut = MenuTimeoutMax;
+  }
+  InfoBoxFocusSetMaxTimeOut();
+}
 
 void HideMenu() {
   // ignore this if the display isn't locked -- must keep menu visible
@@ -415,7 +415,6 @@ void SystemConfiguration(void) {
     return;
   }
 #endif
-
   SettingsEnter();
   dlgConfigurationShowModal();
   SettingsLeave();
@@ -1037,7 +1036,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
     }
 
 #ifdef PNA
-	CleanRegistry(); // VENTA2-FIX for PNA we can't delete all registries..by now
+  CleanRegistry(); // VENTA2-FIX for PNA we can't delete all registries..by now
 #endif
   PreloadInitialisation(true);
 
@@ -1049,7 +1048,6 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
   WindowSize.top = 0;
   WindowSize.right = GetSystemMetrics(SM_CXSCREEN);
   WindowSize.bottom = GetSystemMetrics(SM_CYSCREEN);
-
 
 #if (WINDOWSPC>0)
   WindowSize.right = SCREENWIDTH
@@ -1554,7 +1552,7 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
   if(wmControl != NULL) {
     if (ProgramStarted==psNormalOp) {
 
-      DialogActive = false;
+      DialogActive = false; // is this required?
 
       FullScreen();
 
@@ -1575,19 +1573,5 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 
 //////////////////////
-
-
-
-void SwitchToMapWindow(void)
-{
-  DefocusInfoBox();
-
-  SetFocus(hWndMapWindow);
-  if (  MenuTimeOut< MenuTimeoutMax) {
-    MenuTimeOut = MenuTimeoutMax;
-  }
-  InfoBoxFocusSetMaxTimeOut();
-}
-
 
 

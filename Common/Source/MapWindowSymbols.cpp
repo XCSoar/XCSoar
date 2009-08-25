@@ -489,7 +489,7 @@ void MapWindow::DrawWindAtAircraft2(HDC hdc, const POINT Orig, const RECT rc) {
     }
 
     // optionally draw dashed line
-    _DrawLine(hdc, PS_DASH, 1, Tail[0], Tail[1], RGB(0,0,0), rc);
+    ClipDrawLine(hdc, PS_DASH, 1, Tail[0], Tail[1], RGB(0,0,0), rc);
   }
 
 
@@ -564,7 +564,7 @@ void MapWindow::DrawHorizon(HDC hDC, const RECT rc)
   a2.x = Start.x + fastsine(alpha2)*radius;
   a2.y = Start.y - fastcosine(alpha2)*radius;
 
-  _DrawLine(hDC, PS_SOLID, IBLSCALE(1),
+  ClipDrawLine(hDC, PS_SOLID, IBLSCALE(1),
             a1, a2, RGB(0,0,0));
   */
 
@@ -572,12 +572,12 @@ void MapWindow::DrawHorizon(HDC hDC, const RECT rc)
   a1.y = Start.y;
   a2.x = Start.x-radius/2;
   a2.y = Start.y;
-  _DrawLine(hDC, PS_SOLID, IBLSCALE(2),
+  ClipDrawLine(hDC, PS_SOLID, IBLSCALE(2),
             a1, a2, RGB(0,0,0), rc);
 
   a1.x = Start.x;
   a1.y = Start.y-radius/4;
-  _DrawLine(hDC, PS_SOLID, IBLSCALE(2),
+  ClipDrawLine(hDC, PS_SOLID, IBLSCALE(2),
             a1, Start, RGB(0,0,0), rc);
 
   //
@@ -592,7 +592,7 @@ void MapWindow::DrawHorizon(HDC hDC, const RECT rc)
   a2.x = Start.x+rr2n;
   a2.y = Start.y-rr2n;
 
-  _DrawLine(hDC, PS_SOLID, IBLSCALE(1),
+  ClipDrawLine(hDC, PS_SOLID, IBLSCALE(1),
             a1, a2, RGB(0,0,0), rc);
 
   a1.x = Start.x-rr2p;
@@ -600,7 +600,7 @@ void MapWindow::DrawHorizon(HDC hDC, const RECT rc)
   a2.x = Start.x-rr2n;
   a2.y = Start.y-rr2n;
 
-  _DrawLine(hDC, PS_SOLID, IBLSCALE(1),
+  ClipDrawLine(hDC, PS_SOLID, IBLSCALE(1),
             a1, a2, RGB(0,0,0), rc);
 
   // JMW experimental, display stall sensor
@@ -610,7 +610,7 @@ void MapWindow::DrawHorizon(HDC hDC, const RECT rc)
   a1.y = rc.bottom-m;
   a2.x = a1.x-10;
   a2.y = a1.y;
-  _DrawLine(hDC, PS_SOLID, IBLSCALE(2),
+  ClipDrawLine(hDC, PS_SOLID, IBLSCALE(2),
             a1, a2, RGB(0xff,0,0), rc);
 
   SelectObject(hDC, hbOld);

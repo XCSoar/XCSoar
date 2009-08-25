@@ -43,26 +43,6 @@ Copyright_License {
 #include "XCSoar.h"
 #include "Airspace.h"
 
-typedef union{
-  unsigned int AsInt;
-  struct{
-    unsigned Border:1;
-    unsigned FillBackground:1;
-    unsigned AlligneRight:1;
-    unsigned Reachable:1;
-    unsigned AlligneCenter:1;
-    unsigned WhiteBorder:1;
-    unsigned WhiteBold:1;
-    unsigned NoSetFont:1;  // VENTA5
-    unsigned Color:3;
-  }AsFlag;
-} TextInBoxMode_t;
-  // mode are flags
-  // bit 0 == fill background add border / 1
-  // bit 1 == fill background            / 2
-  // bit 2 == right alligned             / 4
-  // bit 3 == landable TP label          / 8
-  // bit 4 == center alligned
 
 class MapWindow {
  public:
@@ -121,7 +101,6 @@ class MapWindow {
   }
 
   // display management
-  static bool checkLabelBlock(RECT rc);
   static void SwitchZoomClimb(void);
   static bool isAutoZoom();
   static bool isPan();
@@ -141,23 +120,22 @@ class MapWindow {
   }
 
   // projection
-  static double GetApproxScreenRange(void);
-  static int GetMapResolutionFactor();
-  static POINT GetOrigScreen(void) { return Orig_Screen; }
-  static rectObj screenbounds_latlon;
-  static double GetPanLatitude() { return PanLatitude; }
-  static double GetPanLongitude() { return PanLongitude; }
-  static double GetInvDrawScale() { return InvDrawScale; }
-  static double GetDisplayAngle() { return DisplayAngle; }
-  static void OrigScreen2LatLon(const int &x, const int &y,
+  static double  GetApproxScreenRange(void);
+  static int     GetMapResolutionFactor();
+  static POINT   GetOrigScreen(void) { return Orig_Screen; }
+  static double  GetPanLatitude() { return PanLatitude; }
+  static double  GetPanLongitude() { return PanLongitude; }
+  static double  GetInvDrawScale() { return InvDrawScale; }
+  static double  GetDisplayAngle() { return DisplayAngle; }
+  static void    OrigScreen2LatLon(const int &x, const int &y,
                                 double &X, double &Y);
-  static void Screen2LatLon(const int &x, const int &y, double &X, double &Y);
+  static void    Screen2LatLon(const int &x, const int &y, double &X, double &Y);
 
-  static void LatLon2Screen(const double &lon, const double &lat, POINT &sc);
-  static void LatLon2Screen(pointObj *ptin, POINT *ptout, const int n,
+  static void    LatLon2Screen(const double &lon, const double &lat, POINT &sc);
+  static void    LatLon2Screen(pointObj *ptin, POINT *ptout, const int n,
 			    const int skip);
   static rectObj CalculateScreenBounds(double scale);
-  static bool WaypointInRange(int i);
+  static bool    WaypointInRange(int i);
 
   static RECT GetMapRectBig() {
     return MapRectBig;
@@ -178,6 +156,7 @@ class MapWindow {
 					   double range, bool pan);
 
   // Drawing primitives (should go outside this class if reusable)
+  // (only used by Topology)
   static void DrawBitmapIn(const HDC hdc, const POINT &sc, const HBITMAP h);
 
   // airspace brushes/colours
@@ -210,8 +189,6 @@ class MapWindow {
   static POINT         Groundline[NUMTERRAINSWEEPS+1];
   static bool          LandableReachable;
   static DWORD         fpsTime0;
-  static int           nLabelBlocks;
-  static RECT          LabelBlockCoords[MAXLABELBLOCKS];
 
   // projection
   static bool      GliderCenter;
@@ -229,6 +206,7 @@ class MapWindow {
   static double    ScaleList[SCALELISTSIZE];
   static double    StepMapScale(int Step);
   static double    FindMapScale(double Value);
+  static rectObj   screenbounds_latlon;
 
   // other
   static void UpdateTimeStats(bool start);
@@ -258,13 +236,6 @@ class MapWindow {
   static bool WaypointInTask(int ind);
   static void MapWaypointLabelSortAndRender(HDC hdc);
 
-  // display utilities
-  static void _DrawLine(HDC hdc, const int PenStyle, const int width,
-	       const POINT ptStart, const POINT ptEnd,
-	       const COLORREF cr, const RECT rc);
-  static bool TextInBox(HDC hDC, const TCHAR *Value, int x, int y, int size,
-                        TextInBoxMode_t Mode, bool noOverlap=false);
-
   // display renderers
   static void DrawAircraft(HDC hdc, const POINT Orig);
   static void DrawCrossHairs(HDC hdc, const POINT Orig, const RECT rc);
@@ -291,10 +262,6 @@ class MapWindow {
   static void DrawTaskAAT(HDC hdc, const RECT rc, HDC buffer);
   static void DrawAbortedTask(HDC hdc, const RECT rc, const POINT Orig);
   static void DrawBearing(HDC hdc, const RECT rc, int bBearingValid);
-  static void DrawGreatCircle(HDC hdc,
-                              double lon_start, double lat_start,
-                              double lon_end, double lat_end,
-			      const RECT rc);
   static void DrawMapScale(HDC hDC, const RECT rc,
 			   const bool ScaleChangeFeedback);
   static void DrawMapScale2(HDC hDC, const RECT rc,

@@ -41,6 +41,28 @@ Copyright_License {
 #include "XCSoar.h"
 #include "Airspace.h"
 
+typedef union{
+  unsigned int AsInt;
+  struct{
+    unsigned Border:1;
+    unsigned FillBackground:1;
+    unsigned AlligneRight:1;
+    unsigned Reachable:1;
+    unsigned AlligneCenter:1;
+    unsigned WhiteBorder:1;
+    unsigned WhiteBold:1;
+    unsigned NoSetFont:1;  // VENTA5
+    unsigned Color:3;
+  }AsFlag;
+} TextInBoxMode_t;
+  // mode are flags
+  // bit 0 == fill background add border / 1
+  // bit 1 == fill background            / 2
+  // bit 2 == right alligned             / 4
+  // bit 3 == landable TP label          / 8
+  // bit 4 == center alligned
+
+
 class ScreenGraphics {
 public:
   void Initialise();
@@ -132,5 +154,21 @@ void DrawDashLine(HDC hdc, const int width,
 		  const POINT ptStart, const POINT ptEnd,
 		  const COLORREF cr,
 		  const RECT rc);
+
+void DrawGreatCircle(HDC hdc,
+		     double lon_start, double lat_start,
+		     double lon_end, double lat_end,
+		     const RECT rc);
+
+void ClipDrawLine(HDC hdc, const int PenStyle, const int width,
+		  const POINT ptStart, const POINT ptEnd,
+		  const COLORREF cr, const RECT rc);
+
+bool TextInBox(HDC hDC, const TCHAR *Value, int x, int y, int size,
+	       TextInBoxMode_t Mode, bool noOverlap=false);
+
+bool checkLabelBlock(RECT rc);
+
+void LabelBlockReset();
 
 #endif

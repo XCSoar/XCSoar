@@ -36,12 +36,14 @@ Copyright_License {
 */
 
 #include "Screen/Graphics.hpp"
+#include "Screen/Fonts.hpp"
 #include "Screen/Ramp.hpp"
 #include "Screen/Util.hpp"
 #include "Appearance.hpp"
 #include "MapWindow.h"
 #include "Interface.hpp"
 #include "InfoBoxLayout.h"
+#include "Math/Screen.hpp"
 #include <stdlib.h>
 
 #define NUMSNAILRAMP 6
@@ -397,4 +399,426 @@ void DrawDashLine(HDC hdc, const int width,
 
   SelectObject(hdc, hpOld);
   DeleteObject((HPEN)hpDash);
+}
+
+
+void ClipDrawLine(HDC hdc, const int PenStyle, const int width,
+		  const POINT ptStart, const POINT ptEnd,
+		  const COLORREF cr, const RECT rc) {
+
+  HPEN hpDash,hpOld;
+  POINT pt[2];
+  //Create a dot pen
+  hpDash = (HPEN)CreatePen(PenStyle, width, cr);
+  hpOld = (HPEN)SelectObject(hdc, hpDash);
+
+  pt[0].x = ptStart.x;
+  pt[0].y = ptStart.y;
+  pt[1].x = ptEnd.x;
+  pt[1].y = ptEnd.y;
+
+  ClipPolyline(hdc, pt, 2, rc);
+
+  SelectObject(hdc, hpOld);
+  DeleteObject((HPEN)hpDash);
+}
+
+
+void DrawGreatCircle(HDC hdc,
+		     double startLon, double startLat,
+		     double targetLon, double targetLat,
+		     const RECT rc) {
+
+#if OLD_GREAT_CIRCLE
+  // TODO accuracy: this is actually wrong, it should recalculate the
+  // bearing each step
+  double distance=0;
+  double distanceTotal=0;
+  double Bearing;
+
+  DistanceBearing(startLat,
+                  startLon,
+                  targetLat,
+                  targetLon,
+                  &distanceTotal,
+                  &Bearing);
+
+  distance = distanceTotal;
+
+  if (distanceTotal==0.0) {
+    return;
+  }
+
+  double d_distance = max(5000.0,distanceTotal/10);
+
+  HPEN hpOld = (HPEN)SelectObject(hdc, hpBearing);
+
+  POINT StartP;
+  POINT EndP;
+  LatLon2Screen(startLon,
+                startLat,
+                StartP);
+  LatLon2Screen(targetLon,
+                targetLat,
+                EndP);
+
+  if (d_distance>distanceTotal) {
+    ClipLine(hdc, StartP, EndP, rc);
+  } else {
+
+    for (int i=0; i<= 10; i++) {
+
+      double tlat1, tlon1;
+
+      FindLatitudeLongitude(startLat,
+                            startLon,
+                            Bearing,
+                            min(distance,d_distance),
+                            &tlat1,
+                            &tlon1);
+
+      DistanceBearing(tlat1,
+                      tlon1,
+                      targetLat,
+                      targetLon,
+                      &distance,
+                      &Bearing);
+
+      LatLon2Screen(tlon1,
+                    tlat1,
+                    EndP);
+
+      ClipLine(hdc, StartP, EndP, rc);
+
+      StartP.x = EndP.x;
+      StartP.y = EndP.y;
+
+      startLat = tlat1;
+      startLon = tlon1;
+
+    }
+  }
+#else
+  // Simple and this should work for PNA with display bug
+
+  HPEN hpOld = (HPEN)SelectObject(hdc, MapGfx.hpBearing);
+  POINT pt[2];
+  MapWindow::LatLon2Screen(startLon,
+                startLat,
+                pt[0]);
+  MapWindow::LatLon2Screen(targetLon,
+                targetLat,
+                pt[1]);
+  ClipPolygon(hdc, pt, 2, rc, false);
+
+#endif
+  SelectObject(hdc, hpOld);
+}
+
+
+
+bool TextInBoxMoveInView(POINT *offset, RECT *brect, const RECT &MapRect){
+
+  bool res = false;
+
+  int LabelMargin = 4;
+
+  offset->x = 0;
+  offset->y = 0;
+
+  if (MapRect.top > brect->top){
+    int d = MapRect.top - brect->top;
+    brect->top += d;
+    brect->bottom += d;
+    offset->y += d;
+    brect->bottom -= d;
+    brect->left -= d;
+    offset->x -= d;
+    res = true;
+  }
+
+  if (MapRect.right < brect->right){
+    int d = MapRect.right - brect->right;
+
+    if (offset->y < LabelMargin){
+      int dy;
+
+      if (d > -LabelMargin){
+        dy = LabelMargin-offset->y;
+        if (d > -dy)
+          dy = -d;
+      } else {
+        int x = d + (brect->right - brect->left) + 10;
+
+        dy = x - offset->y;
+
+        if (dy < 0)
+          dy = 0;
+
+        if (dy > LabelMargin)
+          dy = LabelMargin;
+      }
+
+      brect->top += dy;
+      brect->bottom += dy;
+      offset->y += dy;
+
+    }
+
+    brect->right += d;
+    brect->left += d;
+    offset->x += d;
+
+    res = true;
+  }
+
+  if (MapRect.bottom < brect->bottom){
+    if (offset->x == 0){
+      int d = MapRect.bottom - brect->bottom;
+      brect->top += d;
+      brect->bottom += d;
+      offset->y += d;
+    } else
+      if (offset->x < -LabelMargin){
+	int d = -(brect->bottom - brect->top) - 10;
+	brect->top += d;
+	brect->bottom += d;
+	offset->y += d;
+      } else {
+	int d = -(2*offset->x + (brect->bottom - brect->top));
+	brect->top += d;
+	brect->bottom += d;
+	offset->y += d;
+      }
+
+    res = true;
+  }
+
+  if (MapRect.left > brect->left){
+    int d = MapRect.left - brect->left;
+    brect->right+= d;
+    brect->left += d;
+    offset->x += d;
+    res = true;
+  }
+
+  return(res);
+
+}
+
+
+
+// returns true if really wrote something
+bool TextInBox(HDC hDC, const TCHAR* Value, int x, int y,
+	       int size, TextInBoxMode_t Mode, bool noOverlap) {
+
+  SIZE tsize;
+  RECT brect;
+  HFONT oldFont=0;
+  POINT org;
+  bool drawn=false;
+
+  RECT MapRect = MapWindow::GetMapRect();
+
+  if ((x<MapRect.left-WPCIRCLESIZE) ||
+      (x>MapRect.right+(WPCIRCLESIZE*3)) ||
+      (y<MapRect.top-WPCIRCLESIZE) ||
+      (y>MapRect.bottom+WPCIRCLESIZE)) {
+    return drawn; // FIX Not drawn really
+  }
+
+  org.x = x;
+  org.y = y;
+
+  if (size==0) {
+    size = _tcslen(Value);
+  }
+
+  HBRUSH hbOld;
+  hbOld = (HBRUSH)SelectObject(hDC, GetStockObject(WHITE_BRUSH));
+
+  if (Mode.AsFlag.Reachable){
+    if (Appearance.IndLandable == wpLandableDefault){
+      x += 5;  // make space for the green circle
+    }else
+      if (Appearance.IndLandable == wpLandableAltA){
+	x += 0;
+      }
+  }
+
+  // landable waypoint label inside white box
+  if (!Mode.AsFlag.NoSetFont) {  // VENTA5 predefined font from calling function
+    if (Mode.AsFlag.Border){
+      oldFont = (HFONT)SelectObject(hDC, MapWindowBoldFont);
+    } else {
+      oldFont = (HFONT)SelectObject(hDC, MapWindowFont);
+    }
+  }
+
+  GetTextExtentPoint(hDC, Value, size, &tsize);
+
+  if (Mode.AsFlag.AlligneRight){
+    x -= tsize.cx;
+  } else
+    if (Mode.AsFlag.AlligneCenter){
+      x -= tsize.cx/2;
+      y -= tsize.cy/2;
+    }
+
+  bool notoverlapping = true;
+
+  if (Mode.AsFlag.Border || Mode.AsFlag.WhiteBorder){
+
+    POINT offset;
+
+    brect.left = x-2;
+    brect.right = brect.left+tsize.cx+4;
+    brect.top = y+((tsize.cy+4)>>3)-2;
+    brect.bottom = brect.top+3+tsize.cy-((tsize.cy+4)>>3);
+
+    if (Mode.AsFlag.AlligneRight)
+      x -= 3;
+
+    if (TextInBoxMoveInView(&offset, &brect, MapRect)){
+      x += offset.x;
+      y += offset.y;
+    }
+
+    notoverlapping = checkLabelBlock(brect);
+
+    if (!noOverlap || notoverlapping) {
+      HPEN oldPen;
+      if (Mode.AsFlag.Border) {
+        oldPen = (HPEN)SelectObject(hDC, MapGfx.hpMapScale);
+      } else {
+        oldPen = (HPEN)SelectObject(hDC, GetStockObject(WHITE_PEN));
+      }
+      RoundRect(hDC, brect.left, brect.top, brect.right, brect.bottom,
+                IBLSCALE(8), IBLSCALE(8));
+      SelectObject(hDC, oldPen);
+#if (WINDOWSPC>0)
+      SetBkMode(hDC,TRANSPARENT);
+      ExtTextOut(hDC, x, y, 0, NULL, Value, size, NULL);
+#else
+      ExtTextOut(hDC, x, y, ETO_OPAQUE, NULL, Value, size, NULL);
+#endif
+      drawn=true;
+    }
+
+
+  } else if (Mode.AsFlag.FillBackground) {
+
+    POINT offset;
+
+    brect.left = x-1;
+    brect.right = brect.left+tsize.cx+1;
+    brect.top = y+((tsize.cy+4)>>3);
+    brect.bottom = brect.top+tsize.cy-((tsize.cy+4)>>3);
+
+    if (Mode.AsFlag.AlligneRight)
+      x -= 2;
+
+    if (TextInBoxMoveInView(&offset, &brect, MapRect)){
+      x += offset.x;
+      y += offset.y;
+    }
+
+    notoverlapping = checkLabelBlock(brect);
+
+    if (!noOverlap || notoverlapping) {
+      COLORREF oldColor = SetBkColor(hDC, RGB(0xff, 0xff, 0xff));
+      ExtTextOut(hDC, x, y, ETO_OPAQUE, &brect, Value, size, NULL);
+      SetBkColor(hDC, oldColor);
+      drawn=true;
+    }
+
+  } else if (Mode.AsFlag.WhiteBold) {
+
+    brect.left = x-2;
+    brect.right = brect.left+tsize.cx+4;
+    brect.top = y+((tsize.cy+4)>>3)-2;
+    brect.bottom = brect.top+3+tsize.cy-((tsize.cy+4)>>3);
+
+    notoverlapping = checkLabelBlock(brect);
+
+    if (!noOverlap || notoverlapping) {
+	SetTextColor(hDC,RGB(0xff,0xff,0xff));
+
+#if (WINDOWSPC>0)
+      SetBkMode(hDC,TRANSPARENT);
+      ExtTextOut(hDC, x+1, y, 0, NULL, Value, size, NULL);
+      ExtTextOut(hDC, x+2, y, 0, NULL, Value, size, NULL);
+      ExtTextOut(hDC, x-1, y, 0, NULL, Value, size, NULL);
+      ExtTextOut(hDC, x-2, y, 0, NULL, Value, size, NULL);
+      ExtTextOut(hDC, x, y+1, 0, NULL, Value, size, NULL);
+      ExtTextOut(hDC, x, y-1, 0, NULL, Value, size, NULL);
+	SetTextColor(hDC,RGB(0x00,0x00,0x00));
+
+      ExtTextOut(hDC, x, y, 0, NULL, Value, size, NULL);
+
+#else
+      ExtTextOut(hDC, x+2, y, ETO_OPAQUE, NULL, Value, size, NULL);
+      ExtTextOut(hDC, x+1, y, ETO_OPAQUE, NULL, Value, size, NULL);
+      ExtTextOut(hDC, x-1, y, ETO_OPAQUE, NULL, Value, size, NULL);
+      ExtTextOut(hDC, x-2, y, ETO_OPAQUE, NULL, Value, size, NULL);
+      ExtTextOut(hDC, x, y+1, ETO_OPAQUE, NULL, Value, size, NULL);
+      ExtTextOut(hDC, x, y-1, ETO_OPAQUE, NULL, Value, size, NULL);
+	SetTextColor(hDC,RGB(0x00,0x00,0x00));
+
+      ExtTextOut(hDC, x, y, ETO_OPAQUE, NULL, Value, size, NULL);
+#endif
+      drawn=true;
+    }
+
+  } else {
+
+    brect.left = x-2;
+    brect.right = brect.left+tsize.cx+4;
+    brect.top = y+((tsize.cy+4)>>3)-2;
+    brect.bottom = brect.top+3+tsize.cy-((tsize.cy+4)>>3);
+
+    notoverlapping = checkLabelBlock(brect);
+
+    if (!noOverlap || notoverlapping) {
+#if (WINDOWSPC>0)
+      SetBkMode(hDC,TRANSPARENT);
+      ExtTextOut(hDC, x, y, 0, NULL, Value, size, NULL);
+#else
+      ExtTextOut(hDC, x, y, ETO_OPAQUE, NULL, Value, size, NULL);
+#endif
+      drawn=true;
+    }
+
+  }
+
+  SelectObject(hDC, hbOld);
+
+  return drawn;
+
+}
+
+// simple code to prevent text writing over map city names
+
+static int nLabelBlocks;
+static RECT LabelBlockCoords[MAXLABELBLOCKS];
+
+void LabelBlockReset() {
+  nLabelBlocks = 0;
+}
+
+
+bool checkLabelBlock(RECT rc) {
+  bool ok = true;
+
+  for (int i=0; i<nLabelBlocks; i++) {
+    if (CheckRectOverlap(LabelBlockCoords[i],rc)) {
+      ok = false;
+      continue;
+    }
+  }
+  if (nLabelBlocks<MAXLABELBLOCKS-1) {
+    LabelBlockCoords[nLabelBlocks]= rc;
+    nLabelBlocks++;
+  }
+  return ok;
 }

@@ -49,6 +49,7 @@ Copyright_License {
 #include "Compatibility/string.h"
 #include "Registry.hpp"
 #include "Screen/Ramp.hpp"
+#include "Screen/Graphics.hpp"
 #include "LocalPath.hpp"
 #include "Utils.h"
 #include "LogFile.hpp"
@@ -931,7 +932,7 @@ static void DrawSpotHeight_Internal(const HDC hdc, TCHAR *Buffer, POINT pt) {
   brect.top = pt.y;
   brect.bottom = brect.top+tsize.cy;
 
-  if (!MapWindow::checkLabelBlock(brect))
+  if (!checkLabelBlock(brect))
     return;
 
   ExtTextOut(hdc, pt.x, pt.y, 0, NULL,

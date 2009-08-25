@@ -88,13 +88,13 @@ void MapWindow::DrawStartSector(HDC hdc, const RECT rc,
   double tmp;
 
   if(StartLine) {
-    _DrawLine(hdc, PS_SOLID, IBLSCALE(5), WayPointList[Index].Screen,
+    ClipDrawLine(hdc, PS_SOLID, IBLSCALE(5), WayPointList[Index].Screen,
               Start, taskcolor, rc);
-    _DrawLine(hdc, PS_SOLID, IBLSCALE(5), WayPointList[Index].Screen,
+    ClipDrawLine(hdc, PS_SOLID, IBLSCALE(5), WayPointList[Index].Screen,
               End, taskcolor, rc);
-    _DrawLine(hdc, PS_SOLID, IBLSCALE(1), WayPointList[Index].Screen,
+    ClipDrawLine(hdc, PS_SOLID, IBLSCALE(1), WayPointList[Index].Screen,
               Start, RGB(255,0,0), rc);
-    _DrawLine(hdc, PS_SOLID, IBLSCALE(1), WayPointList[Index].Screen,
+    ClipDrawLine(hdc, PS_SOLID, IBLSCALE(1), WayPointList[Index].Screen,
               End, RGB(255,0,0), rc);
   } else {
     tmp = StartRadius*ResMapScaleOverDistanceModify;
@@ -148,16 +148,16 @@ void MapWindow::DrawTask(HDC hdc, RECT rc, const POINT &Orig_Aircraft)
 	  // only draw finish line when past the first
 	  // waypoint.
 	  if(FinishLine) {
-	    _DrawLine(hdc, PS_SOLID, IBLSCALE(5),
+	    ClipDrawLine(hdc, PS_SOLID, IBLSCALE(5),
 		      WayPointList[Task[i].Index].Screen,
 		      Task[i].Start, taskcolor, rc);
-	    _DrawLine(hdc, PS_SOLID, IBLSCALE(5),
+	    ClipDrawLine(hdc, PS_SOLID, IBLSCALE(5),
 		      WayPointList[Task[i].Index].Screen,
 		      Task[i].End, taskcolor, rc);
-	    _DrawLine(hdc, PS_SOLID, IBLSCALE(1),
+	    ClipDrawLine(hdc, PS_SOLID, IBLSCALE(1),
 		      WayPointList[Task[i].Index].Screen,
 		      Task[i].Start, RGB(255,0,0), rc);
-	    _DrawLine(hdc, PS_SOLID, IBLSCALE(1),
+	    ClipDrawLine(hdc, PS_SOLID, IBLSCALE(1),
 		      WayPointList[Task[i].Index].Screen,
 		      Task[i].End, RGB(255,0,0), rc);
 	  } else {
@@ -234,7 +234,7 @@ void MapWindow::DrawTask(HDC hdc, RECT rc, const POINT &Orig_Aircraft)
 	      for (int j=0; j<MAXISOLINES-1; j++) {
 		if (TaskStats[i].IsoLine_valid[j]
 		    && TaskStats[i].IsoLine_valid[j+1]) {
-		  _DrawLine(hdc, PS_SOLID, IBLSCALE(2),
+		  ClipDrawLine(hdc, PS_SOLID, IBLSCALE(2),
 			    TaskStats[i].IsoLine_Screen[j],
 			    TaskStats[i].IsoLine_Screen[j+1],
 			    RGB(0,0,255), rc);
@@ -297,8 +297,8 @@ void MapWindow::DrawTask(HDC hdc, RECT rc, const POINT &Orig_Aircraft)
 	PolygonRotateShift(Arrow, 2, p_p.x, p_p.y,
 			   bearing-DisplayAngle);
 
-	_DrawLine(hdc, PS_SOLID, IBLSCALE(2), Arrow[0], p_p, taskcolor, rc);
-	_DrawLine(hdc, PS_SOLID, IBLSCALE(2), Arrow[1], p_p, taskcolor, rc);
+	ClipDrawLine(hdc, PS_SOLID, IBLSCALE(2), Arrow[0], p_p, taskcolor, rc);
+	ClipDrawLine(hdc, PS_SOLID, IBLSCALE(2), Arrow[1], p_p, taskcolor, rc);
       }
     }
 #ifdef HAVEEXCEPTIONS

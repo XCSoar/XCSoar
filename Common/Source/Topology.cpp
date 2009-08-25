@@ -43,6 +43,7 @@ Copyright_License {
 #include "Screen/Util.hpp"
 #include "UtilsText.hpp"
 #include "MapWindow.h"
+#include "Screen/Graphics.hpp"
 #include "SettingsUser.hpp"
 
 #include <stdlib.h>
@@ -412,7 +413,7 @@ void XShapeLabel::renderSpecial(HDC hDC, int x, int y) {
     brect.top = y;
     brect.bottom = brect.top+tsize.cy;
 
-    if (!MapWindow::checkLabelBlock(brect))
+    if (!checkLabelBlock(brect))
       return;
 
     SetTextColor(hDC, RGB(0x20,0x20,0x20));

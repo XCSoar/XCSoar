@@ -61,6 +61,7 @@ Copyright_License {
 #include "Screen/Blank.hpp"
 #include "Screen/Util.hpp"
 #include "Screen/Ramp.hpp"
+#include "Screen/Fonts.hpp"
 #include "Compatibility/gdi.h"
 
 #include "SettingsUser.hpp"
@@ -91,33 +92,36 @@ Copyright_License {
 #include <wingdi.h>
 #endif
 
-int misc_tick_count=0;
-
 #ifndef NDEBUG
 #define DRAWLOAD
 #define DEBUG_VIRTUALKEYS
 #endif
 
-int TrailActive = true;
-int VisualGlide = 0;
-
 ScreenGraphics MapGfx;
 
-extern void DrawGlideCircle(HDC hdc, POINT Orig, RECT rc );
+///////////////////////////////// Settings
 
 DisplayOrientation_t DisplayOrientation = TRACKUP;
 DisplayTextType_t    DisplayTextType = DISPLAYNONE;
-
-///////////////////////////////// Initialisation
-
-// settings
+int TrailActive = true;
+int VisualGlide = 0;
 DisplayMode_t UserForceDisplayMode = dmNone;
 DisplayMode_t DisplayMode = dmCruise;
 bool EnableTrailDrift=false;
 bool bAirspaceBlackOutline = false;
+int SelectedWaypoint = -1;
+bool EnableCDICruise = false;
+bool EnableCDICircling = false;
+unsigned char DeclutterLabels = 0;
+bool MapWindow::AutoZoom = false;
 int MapWindow::SnailWidthScale = 16;
+bool MapWindow::EnablePan = false;
+int MapWindow::GliderScreenPosition = 20; // 20% from bottom
+int MapWindow::WindArrowStyle = 0;
 
 ///////////////////////////////// Initialisation
+
+int misc_tick_count=0;
 
 int MapWindow::ScaleListCount = 0;
 double MapWindow::ScaleList[];
@@ -138,12 +142,9 @@ int MapWindow::TargetDrag_State = 0;
 double MapWindow::TargetDrag_Latitude = 0;
 double MapWindow::TargetDrag_Longitude = 0;
 
-bool MapWindow::EnablePan = false;
 bool MapWindow::TargetPan = false;
 int MapWindow::TargetPanIndex = 0;
 double MapWindow::TargetZoomDistance = 500.0;
-int MapWindow::GliderScreenPosition = 20; // 20% from bottom
-int MapWindow::WindArrowStyle = 0;
 
 BOOL MapWindow::CLOSETHREAD = FALSE;
 BOOL MapWindow::THREADRUNNING = TRUE;
@@ -151,7 +152,6 @@ BOOL MapWindow::THREADEXIT = FALSE;
 BOOL MapWindow::Initialised = FALSE;
 
 bool MapWindow::BigZoom = true;
-unsigned char DeclutterLabels = 0;
 
 DWORD  MapWindow::dwDrawThreadID;
 HANDLE MapWindow::hDrawThread;
@@ -165,7 +165,6 @@ double MapWindow::DisplayAircraftAngle = 0.0;
 double MapWindow::DrawScale;
 double MapWindow::InvDrawScale;
 
-bool MapWindow::AutoZoom = false;
 bool MapWindow::LandableReachable = false;
 
 POINT MapWindow::Groundline[NUMTERRAINSWEEPS+1];
@@ -189,21 +188,8 @@ bool MapWindow::ForceVisibilityScan = false;
 NMEA_INFO MapWindow::DrawInfo;
 DERIVED_INFO MapWindow::DerivedDrawInfo;
 
-int SelectedWaypoint = -1;
-bool EnableCDICruise = false;
-bool EnableCDICircling = false;
-
 extern int iround(double i);
 extern void ShowMenu();
-
-extern HFONT  TitleWindowFont;
-extern HFONT  MapWindowFont;
-extern HFONT  MapWindowBoldFont;
-extern HFONT  InfoWindowFont;
-extern HFONT  CDIWindowFont;
-extern HFONT  StatisticsFont;
-extern HFONT  MapLabelFont; // VENTA6
-extern HFONT  TitleSmallWindowFont; // VENTA6
 
 HDC MapWindow::hDCTemp;
 HDC MapWindow::hDCMask;
@@ -1154,7 +1140,7 @@ void MapWindow::RenderMapWindowBg(HDC hdc, const RECT rc,
   }
 
   // reset label over-write preventer
-  nLabelBlocks = 0;
+  LabelBlockReset();
 
   if (!TaskIsTemporary()) {
     SelectObject(hDCTemp, (HBITMAP)hDrawBitMapTmp);
@@ -1376,6 +1362,7 @@ void MapWindow::UpdateCaches(bool force) {
   }
 }
 
+
 extern MapWindow hWndMapWindow; // TODO try to avoid this
 
 
@@ -1390,7 +1377,7 @@ DWORD MapWindow::DrawThread (LPVOID lpvoid)
   //  THREADRUNNING = FALSE;
   THREADEXIT = FALSE;
 
-  nLabelBlocks = 0;
+  LabelBlockReset();
 
   GetClientRect(hWndMapWindow, &MapRectBig);
 

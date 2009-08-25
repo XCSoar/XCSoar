@@ -71,22 +71,41 @@ Copyright_License {
 #include <map>
 #endif
 
+bool DialogActive = false;
+
+// from XCSoar.cpp
+void SwitchToMapWindow(void);
+
+
+void PopupAnalysis()
+{
+  DialogActive = true;
+  dlgAnalysisShowModal();
+  DialogActive = false;
+}
+
+
+void PopupWaypointDetails()
+{
+  dlgWayPointDetailsShowModal();
+}
+
+
+void PopupBugsBallast(int x)
+{
+  (void)x;
+  DialogActive = true;
+  FullScreen();
+  SwitchToMapWindow();
+  DialogActive = false;
+}
+
+
+
 static GetTextSTRUCT GetTextData[MAXSTATUSMESSAGECACHE];
 static int GetTextData_Size = 0;
 
-void ReadWayPoints(void);
-void ReadAirspace(void);
-int FindIndex(HWND hWnd);
-void ReadNewTask(HWND hDlg);
-
-const TCHAR *PolarLabels[] = {TEXT("Vintage - Ka6"),
-			      TEXT("Club - ASW19"),
-			      TEXT("Standard - LS8"),
-			      TEXT("15M - ASW27"),
-			      TEXT("18M - LS6C"),
-			      TEXT("Open - ASW22"),
-			      TEXT("WinPilot File")};
-
+///////////////////////////////////
 
 LRESULT CALLBACK Progress(HWND hDlg, UINT message,
                           WPARAM wParam, LPARAM lParam)
@@ -590,4 +609,6 @@ HWND CreateProgressDialog(const TCHAR* text) {
   return hProgress;
 }
 
+
+///////////////
 

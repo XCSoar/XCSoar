@@ -37,17 +37,14 @@ Copyright_License {
 
 #if !defined(XCSOAR_INTERFACE_HPP)
 #define XCSOAR_INTERFACE_HPP
-
-#include "StdAfx.h"
-#include "Defines.h"
+#include "XCSoar.h"
 
 void FocusOnWindow(int i, bool selected);
-void FullScreen();
 
-extern bool Debounce();
-extern void PopupWaypointDetails();
-extern void PopupAnalysis();
+bool Debounce();
 extern int debounceTimeout;
+void SwitchToMapWindow(void);
+void FullScreen();
 
 // instance of main program
 extern HINSTANCE hInst;
@@ -62,13 +59,18 @@ extern bool InfoWindowActive;
 
 extern bool csFlightDataInitialized;
 
-typedef enum {psInitInProgress=0, psInitDone=1, psFirstDrawDone=2, psNormalOp=3} StartupState_t;
+typedef enum {
+  psInitInProgress=0,
+  psInitDone=1,
+  psFirstDrawDone=2,
+  psNormalOp=3
+} StartupState_t;
+
 // 0: not started at all
 // 1: everything is alive
 // 2: done first draw
 // 3: normal operation
 
 extern StartupState_t ProgramStarted;
-
 
 #endif

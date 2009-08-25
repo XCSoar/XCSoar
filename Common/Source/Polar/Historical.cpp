@@ -50,6 +50,14 @@ Copyright_License {
 typedef double PolarCoefficients_t[3];
 typedef double WeightCoefficients_t[3];
 
+const TCHAR *PolarLabels[] = {TEXT("Vintage - Ka6"),
+			      TEXT("Club - ASW19"),
+			      TEXT("Standard - LS8"),
+			      TEXT("15M - ASW27"),
+			      TEXT("18M - LS6C"),
+			      TEXT("Open - ASW22"),
+			      TEXT("WinPilot File")};
+
 void CalculateNewPolarCoef(void)
 {
 
