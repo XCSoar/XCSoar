@@ -249,24 +249,20 @@ void InputEvents::eventScreenModes(const TCHAR *misc) {
   //  -- normal infobox
 
   if (_tcscmp(misc, TEXT("normal")) == 0) {
-    MapWindow::RequestOffFullScreen();
+    MapWindow::RequestFullScreen(false);
     EnableAuxiliaryInfo = false;
   } else if (_tcscmp(misc, TEXT("auxilary")) == 0) {
-    MapWindow::RequestOffFullScreen();
+    MapWindow::RequestFullScreen(false);
     EnableAuxiliaryInfo = true;
   } else if (_tcscmp(misc, TEXT("toggleauxiliary")) == 0) {
-    MapWindow::RequestOffFullScreen();
+    MapWindow::RequestFullScreen(false);
     EnableAuxiliaryInfo = !EnableAuxiliaryInfo;
   } else if (_tcscmp(misc, TEXT("full")) == 0) {
-    MapWindow::RequestOnFullScreen();
+    MapWindow::RequestFullScreen(true);
   } else if (_tcscmp(misc, TEXT("togglefull")) == 0) {
-    if (MapWindow::IsMapFullScreen()) {
-      MapWindow::RequestOffFullScreen();
-    } else {
-      MapWindow::RequestOnFullScreen();
-    }
+    MapWindow::RequestToggleFullScreen();
   } else if (_tcscmp(misc, TEXT("show")) == 0) {
-    if (MapWindow::IsMapFullScreen())
+    if (MapWindow::isMapFullScreen())
       DoStatusMessage(TEXT("Screen Mode Full"));
     else if (EnableAuxiliaryInfo)
       DoStatusMessage(TEXT("Screen Mode Auxiliary"));
@@ -276,106 +272,98 @@ void InputEvents::eventScreenModes(const TCHAR *misc) {
     InfoBoxLayout::fullscreen = !InfoBoxLayout::fullscreen;
   } else {
 
-
-
-	//
-    // VENTA-ADDON TOGGLE SCROLLWHEEL as INPUT on the HP31X
-	//
+  //
+  // VENTA-ADDON TOGGLE SCROLLWHEEL as INPUT on the HP31X
+  //
 
 #ifdef PNA
 
-	if ( GlobalModelType == MODELTYPE_PNA_HP31X ) {
-		// 1 normal > 2 aux > 3 biginfo > 4 fullscreen
-		short pnascrollstatus;
-		pnascrollstatus=1;
-		if ( InfoBoxLayout::fullscreen == true ) pnascrollstatus=3;
-		if ( MapWindow::IsMapFullScreen() ) pnascrollstatus=4;
-		if ( EnableAuxiliaryInfo == true ) pnascrollstatus=2;
+    if ( GlobalModelType == MODELTYPE_PNA_HP31X ) {
+      // 1 normal > 2 aux > 3 biginfo > 4 fullscreen
+      short pnascrollstatus;
+      pnascrollstatus=1;
+      if ( InfoBoxLayout::fullscreen == true ) pnascrollstatus=3;
+      if ( MapWindow::isMapFullScreen() ) pnascrollstatus=4;
+      if ( EnableAuxiliaryInfo == true ) pnascrollstatus=2;
 
-		switch (pnascrollstatus) {
-		case 1:
+      switch (pnascrollstatus) {
+      case 1:
 #ifndef DISABLEAUDIO
-				if (EnableSoundModes) PlayResource(TEXT("IDR_WAV_CLICK"));
+	if (EnableSoundModes) PlayResource(TEXT("IDR_WAV_CLICK"));
 #endif
-				EnableAuxiliaryInfo = true;
-				break;
-		case 2:
-			//	EnableAuxiliaryInfo = false;		// Disable BigInfo until it is useful
-			//	InfoBoxLayout::fullscreen = true;
-			//	break;
-		case 3:
-			//	InfoBoxLayout::fullscreen = false;
+	EnableAuxiliaryInfo = true;
+	break;
+      case 2:
+	//	EnableAuxiliaryInfo = false;		// Disable BigInfo until it is useful
+	//	InfoBoxLayout::fullscreen = true;
+	//	break;
+      case 3:
+	//	InfoBoxLayout::fullscreen = false;
 #ifndef DISABLEAUDIO
-				if (EnableSoundModes) PlayResource(TEXT("IDR_WAV_CLICK"));
+	if (EnableSoundModes) PlayResource(TEXT("IDR_WAV_CLICK"));
 #endif
-				EnableAuxiliaryInfo = false;
-				MapWindow::RequestOnFullScreen();
-				break;
-		case 4:
-			//	InfoBoxLayout::fullscreen = false;
-				EnableAuxiliaryInfo = false;
-				MapWindow::RequestOffFullScreen();
+	EnableAuxiliaryInfo = false;
+	MapWindow::RequestOnFullScreen();
+	break;
+      case 4:
+	//	InfoBoxLayout::fullscreen = false;
+	EnableAuxiliaryInfo = false;
+	MapWindow::RequestOffFullScreen();
 #ifndef DISABLEAUDIO
-				if (EnableSoundModes) PlayResource(TEXT("IDR_WAV_BELL"));
+	if (EnableSoundModes) PlayResource(TEXT("IDR_WAV_BELL"));
 #endif
-				break;
-		default:
-				break;
-		} // switch pnascrollstatus
-	  } // not a PNA_HP31X
-	  else
-	  {
+	break;
+      default:
+	break;
+      } // switch pnascrollstatus
+    } // not a PNA_HP31X
+    else
+      {
+	if (EnableAuxiliaryInfo) {
+#ifndef DISABLEAUDIO
+	  if (EnableSoundModes) PlayResource(TEXT("IDR_WAV_CLICK"));
+#endif
+	  MapWindow::RequestToggleFullScreen();
+	  EnableAuxiliaryInfo = false;
+	} else {
+	  if (MapWindow::isMapFullScreen()) {
+	    MapWindow::RequestToggleFullScreen();
+#ifndef DISABLEAUDIO
+	    if (EnableSoundModes) PlayResource(TEXT("IDR_WAV_BELL"));
+#endif
+	  } else {
+#ifndef DISABLEAUDIO
+	    if (EnableSoundModes) PlayResource(TEXT("IDR_WAV_CLICK"));
+#endif
+	    EnableAuxiliaryInfo = true;
+	  }
+	}
+      } // fallback for other PNAs
+
+#else // UNDEFINED PNA
     if (EnableAuxiliaryInfo) {
 #ifndef DISABLEAUDIO
-			if (EnableSoundModes) PlayResource(TEXT("IDR_WAV_CLICK"));
+      if (EnableSoundModes) PlayResource(TEXT("IDR_WAV_CLICK"));
 #endif
       MapWindow::RequestToggleFullScreen();
       EnableAuxiliaryInfo = false;
-
     } else {
-      if (MapWindow::IsMapFullScreen()) {
+      if (MapWindow::isMapFullScreen()) {
 	MapWindow::RequestToggleFullScreen();
-#ifndef DISABLEAUDIO
-						if (EnableSoundModes) PlayResource(TEXT("IDR_WAV_BELL"));
+
+#ifndef DISABLEAUDIO  // VENTA-ADDON SOUND CYCLING SCREENS
+	if (EnableSoundModes) PlayResource(TEXT("IDR_WAV_BELL"));
 #endif
       } else {
 #ifndef DISABLEAUDIO
-						if (EnableSoundModes) PlayResource(TEXT("IDR_WAV_CLICK"));
+	if (EnableSoundModes) PlayResource(TEXT("IDR_WAV_CLICK"));
 #endif
 	EnableAuxiliaryInfo = true;
       }
     }
-
-	  } // fallback for other PNAs
-
-#else // UNDEFINED PNA
-	if (EnableAuxiliaryInfo) {
-
-#ifndef DISABLEAUDIO
-		if (EnableSoundModes) PlayResource(TEXT("IDR_WAV_CLICK"));
-#endif
-		MapWindow::RequestToggleFullScreen();
-	    EnableAuxiliaryInfo = false;
-
-	  } else {
-			  if (MapWindow::IsMapFullScreen()) {
-     				  MapWindow::RequestToggleFullScreen();
-
-#ifndef DISABLEAUDIO  // VENTA-ADDON SOUND CYCLING SCREENS
-					if (EnableSoundModes) PlayResource(TEXT("IDR_WAV_BELL"));
-#endif
-			  } else {
-#ifndef DISABLEAUDIO
-				if (EnableSoundModes) PlayResource(TEXT("IDR_WAV_CLICK"));
-#endif
-				  EnableAuxiliaryInfo = true;
-			  }
-	  }
 #endif // def/undef PNA
-
   }
 }
-
 
 
 // eventAutoZoom - Turn on|off|toggle AutoZoom
@@ -405,7 +393,7 @@ void InputEvents::eventZoom(const TCHAR* misc) {
   else if (_tcscmp(misc, TEXT("auto off")) == 0)
     MapWindow::Event_AutoZoom(0);
   else if (_tcscmp(misc, TEXT("auto show")) == 0) {
-    if (MapWindow::isAutoZoom())
+    if (AutoZoom)
       DoStatusMessage(TEXT("AutoZoom ON"));
     else
       DoStatusMessage(TEXT("AutoZoom OFF"));
@@ -679,7 +667,7 @@ void InputEvents::eventMode(const TCHAR *misc) {
   InputEvents::setMode(misc);
 
   // trigger redraw of screen to reduce blank area under windows
-  MapWindow::RequestFastRefresh();
+  drawTriggerEvent.trigger();
 }
 
 // MainMenu
@@ -1363,16 +1351,16 @@ void InputEvents::eventNearestAirspaceDetails(const TCHAR *misc) {
 //  pan: the waypoint nearest to the pan cursor
 void InputEvents::eventNearestWaypointDetails(const TCHAR *misc) {
   if (_tcscmp(misc, TEXT("aircraft")) == 0) {
-    MapWindow::Event_NearestWaypointDetails(GPS_INFO.Longitude,
-					    GPS_INFO.Latitude,
-					    1.0e5, // big range..
-					    false);
+    PopupNearestWaypointDetails(GPS_INFO.Longitude,
+				GPS_INFO.Latitude,
+				1.0e5, // big range..
+				false);
   }
   if (_tcscmp(misc, TEXT("pan")) == 0) {
-    MapWindow::Event_NearestWaypointDetails(GPS_INFO.Longitude,
-					    GPS_INFO.Latitude,
-					    1.0e5, // big range..
-					    true);
+    PopupNearestWaypointDetails(GPS_INFO.Longitude,
+				GPS_INFO.Latitude,
+				1.0e5, // big range..
+				true);
   }
 }
 

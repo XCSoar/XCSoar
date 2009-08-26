@@ -64,9 +64,9 @@ bool MapWindow::SetTargetPan(bool do_pan, int target_point) {
     old_pan = EnablePan;
     EnablePan = true;
     TargetPan = do_pan;
-    old_fullscreen = RequestFullScreen;
-    if (RequestFullScreen) {
-      RequestFullScreen = false;
+    old_fullscreen = askFullScreen;
+    if (askFullScreen) {
+      askFullScreen = false;
     }
     SwitchZoomClimb();
   }
@@ -96,7 +96,7 @@ bool MapWindow::SetTargetPan(bool do_pan, int target_point) {
     EnablePan = old_pan;
     TargetPan = do_pan;
     if (old_fullscreen) {
-      RequestFullScreen = true;
+      askFullScreen = true;
     }
     SwitchZoomClimb();
   }

@@ -39,7 +39,7 @@ Copyright_License {
 #include "XCSoar.h"
 #include "RasterTerrain.h"
 #include "RasterWeather.h"
-#include "MapWindow.h"
+#include "MapWindowProjection.hpp"
 #include "Topology.h"
 #include "Screen/STScreenBuffer.h"
 #include "Dialogs.h"
@@ -484,7 +484,7 @@ public:
 
   }
 
-  void Height() {
+  void Height(bool isBigZoom) {
     double X, Y;
     int x, y;
     int X0 = (unsigned int)(dtquant/2);
@@ -494,7 +494,7 @@ public:
 
     unsigned int rfact=1;
 
-    if (MapWindow::isBigZoom() && !RasterTerrain::IsDirectAccess()) {
+    if (isBigZoom && !RasterTerrain::IsDirectAccess()) {
       // first time displaying this data, so do it at half resolution
       // to avoid too many cache misses
       rfact = 2;
@@ -504,20 +504,20 @@ public:
 
     x = (X0+X1)/2;
     y = (Y0+Y1)/2;
-    MapWindow::Screen2LatLon(x, y, X, Y);
+    MapWindowProjection::Screen2LatLon(x, y, X, Y);
     double xmiddle = X;
     double ymiddle = Y;
     int dd = (int)lround(dtquant*rfact);
 
     x = (X0+X1)/2+dd;
     y = (Y0+Y1)/2;
-    MapWindow::Screen2LatLon(x, y, X, Y);
+    MapWindowProjection::Screen2LatLon(x, y, X, Y);
     float Xrounding = (float)fabs(X-xmiddle);
     DistanceBearing(ymiddle, xmiddle, Y, X, &pixelDX, NULL);
 
     x = (X0+X1)/2;
     y = (Y0+Y1)/2+dd;
-    MapWindow::Screen2LatLon(x, y, X, Y);
+    MapWindowProjection::Screen2LatLon(x, y, X, Y);
     float Yrounding = (float)fabs(Y-ymiddle);
     DistanceBearing(ymiddle, xmiddle, Y, X, &pixelDY, NULL);
 
@@ -546,9 +546,9 @@ public:
       do_shading = false;
     }
 
-    POINT orig = MapWindow::GetOrigScreen();
-    RECT MapRectBig = MapWindow::GetMapRectBig();
-    RECT MapRect    = MapWindow::GetMapRect();
+    POINT orig = MapWindowProjection::GetOrigScreen();
+    RECT MapRectBig = MapWindowProjection::GetMapRectBig();
+    RECT MapRect    = MapWindowProjection::GetMapRect();
 
     rect_visible.left = max((long)MapRectBig.left,
                             (long)(MapRect.left-(long)epx*dtquant))-orig.x;
@@ -622,10 +622,10 @@ public:
 
     // This code is quickest but not so readable
 
-    const double PanLatitude =  MapWindow::GetPanLatitude();
-    const double PanLongitude = MapWindow::GetPanLongitude();
-    const double InvDrawScale = MapWindow::GetInvDrawScale()/1024.0;
-    const double DisplayAngle = MapWindow::GetDisplayAngle();
+    const double PanLatitude =  MapWindowProjection::GetPanLatitude();
+    const double PanLongitude = MapWindowProjection::GetPanLongitude();
+    const double InvDrawScale = MapWindowProjection::GetInvDrawScale()/1024.0;
+    const double DisplayAngle = MapWindowProjection::GetDisplayAngle();
     const int cost = ifastcosine(DisplayAngle);
     const int sint = ifastsine(DisplayAngle);
 
@@ -654,7 +654,7 @@ public:
     double X, Y;
     for (int y = Y0; y<Y1; y+= dtquant) {
       for (int x = X0; x<X1; x+= dtquant) {
-        MapWindow::Screen2LatLon(x,y,X,Y);
+        MapWindowProjection::Screen2LatLon(x,y,X,Y);
         *myhbuf++ = max(0, DisplayMap->GetField(Y, X));
       }
     }
@@ -873,7 +873,8 @@ void CloseTerrainRenderer() {
 
 void DrawTerrain( const HDC hdc, const RECT rc,
                   const double sunazimuth, const double sunelevation,
-		  double lon, double lat)
+		  double lon, double lat,
+		  const bool isBigZoom)
 {
   (void)sunelevation; // TODO feature: sun-based rendering option
   (void)rc;
@@ -883,7 +884,7 @@ void DrawTerrain( const HDC hdc, const RECT rc,
   }
 
   if (!trenderer) {
-    trenderer = new TerrainRenderer(MapWindow::GetMapRectBig());
+    trenderer = new TerrainRenderer(MapWindowProjection::GetMapRectBig());
   }
 
   if (!trenderer->SetMap(lon, lat)) {
@@ -902,14 +903,14 @@ void DrawTerrain( const HDC hdc, const RECT rc,
 
   // step 2: fill height buffer
 
-  trenderer->Height();
+  trenderer->Height(isBigZoom);
 
   // step 3: calculate derivatives of height buffer
   // step 4: calculate illumination and colors
   trenderer->Slope(sx, sy, sz);
 
   // step 5: draw
-  trenderer->Draw(hdc, MapWindow::GetMapRectBig());
+  trenderer->Draw(hdc, MapWindowProjection::GetMapRectBig());
 
   misc_tick_count = GetTickCount()-misc_tick_count;
 }
@@ -920,7 +921,7 @@ static void DrawSpotHeight_Internal(const HDC hdc, TCHAR *Buffer, POINT pt) {
   if (size==0) {
     return;
   }
-  POINT orig = MapWindow::GetOrigScreen();
+  POINT orig = MapWindowProjection::GetOrigScreen();
   SIZE tsize;
   RECT brect;
   GetTextExtentPoint(hdc, Buffer, size, &tsize);

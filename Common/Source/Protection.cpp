@@ -14,14 +14,11 @@
 
 #include <assert.h>
 
-
+static Trigger gpsUpdatedTriggerEvent(TEXT("gpsUpdatedTriggerEvent"));
 static Trigger dataTriggerEvent(TEXT("dataTriggerEvent"));
 static Trigger varioTriggerEvent(TEXT("varioTriggerEvent"));
+Trigger closeTriggerEvent(TEXT("mapCloseEvent"));
 Trigger drawTriggerEvent(TEXT("drawTriggerEvent"));
-
-static BOOL GpsUpdated;
-static BOOL VarioUpdated;
-
 
 CRITICAL_SECTION  CritSec_FlightData;
 bool csFlightDataInitialized = false;
@@ -38,16 +35,17 @@ bool csCommInitialized = false;
 CRITICAL_SECTION  CritSec_TaskData;
 bool csTaskDataInitialized = false;
 
+//////////
+
 void TriggerGPSUpdate()
 {
-  GpsUpdated = true;
+  gpsUpdatedTriggerEvent.trigger();
   dataTriggerEvent.trigger();
 }
 
 void TriggerVarioUpdate()
 {
-  VarioUpdated = true;
-  varioTriggerEvent.pulse();
+  varioTriggerEvent.trigger(); // was pulse
 }
 
 void TriggerAll(void) {
@@ -58,9 +56,11 @@ void TriggerAll(void) {
 
 void TriggerRedraws() {
   if (MapWindow::IsDisplayRunning()) {
-    if (GpsUpdated) {
-      MapWindow::MapDirty = true;
-      drawTriggerEvent.pulse();
+    if (gpsUpdatedTriggerEvent.test()) {
+      MapWindow::dirtyEvent.trigger();
+      if (!drawTriggerEvent.test()) {
+	drawTriggerEvent.trigger();
+      }
       // only ask for redraw if the thread was waiting,
       // this causes the map thread to try to synchronise
       // with the calculation thread, which is desirable
@@ -224,13 +224,12 @@ DWORD InstrumentThread (LPVOID lpvoid) {
     Sleep(100);
   }
 
-  while (!MapWindow::CLOSETHREAD) {
+  while (!closeTriggerEvent.test()) {
 
-    varioTriggerEvent.wait(5000);
-    if (MapWindow::CLOSETHREAD) break; // drop out on exit
+    if (closeTriggerEvent.test())
+      break; // drop out on exit
 
-    if (VarioUpdated) {
-      VarioUpdated = false;
+    if (varioTriggerEvent.wait(5000)) {
       if (MapWindow::IsDisplayRunning()) {
         if (EnableVarioGauge) {
           GaugeVario::Render();
@@ -244,31 +243,32 @@ DWORD InstrumentThread (LPVOID lpvoid) {
 
 DWORD CalculationThread (LPVOID lpvoid) {
 	(void)lpvoid;
-  bool needcalculationsslow;
+  bool need_calculations_slow;
 
   NMEA_INFO     tmp_GPS_INFO;
   DERIVED_INFO  tmp_CALCULATED_INFO;
 
-  needcalculationsslow = false;
+  need_calculations_slow = false;
 
   // wait for proper startup signal
   while (!MapWindow::IsDisplayRunning()) {
     Sleep(100);
   }
 
-  while (!MapWindow::CLOSETHREAD) {
+  while (!closeTriggerEvent.test()) {
 
     dataTriggerEvent.wait(5000);
-    if (MapWindow::CLOSETHREAD) break; // drop out on exit
+    if (closeTriggerEvent.test())
+      break; // drop out on exit
 
     // set timer to determine latency (including calculations)
-    if (GpsUpdated) {
+    if (gpsUpdatedTriggerEvent.test()) {
       //      MapWindow::UpdateTimeStats(true);
     }
 
     // make local copy before editing...
     LockFlightData();
-    if (GpsUpdated) { // timeout on FLARM objects
+    if (gpsUpdatedTriggerEvent.test()) { // timeout on FLARM objects
       FLARM_RefreshSlots(&GPS_INFO);
     }
     memcpy(&tmp_GPS_INFO,&GPS_INFO,sizeof(NMEA_INFO));
@@ -278,30 +278,28 @@ DWORD CalculationThread (LPVOID lpvoid) {
 
     // Do vario first to reduce audio latency
     if (GPS_INFO.VarioAvailable) {
-      // if (VarioUpdated) {  20060511/sgi commented out dueto asynchronus reset of VarioUpdate in InstrumentThread
       if (DoCalculationsVario(&tmp_GPS_INFO,&tmp_CALCULATED_INFO)) {
 
       }
       // assume new vario data has arrived, so infoboxes
       // need to be redrawn
-      //} 20060511/sgi commented out
     } else {
       // run the function anyway, because this gives audio functions
       // if no vario connected
-      if (GpsUpdated) {
+      if (gpsUpdatedTriggerEvent.test()) {
 	if (DoCalculationsVario(&tmp_GPS_INFO,&tmp_CALCULATED_INFO)) {
 	}
 	TriggerVarioUpdate(); // emulate vario update
       }
     }
 
-    if (GpsUpdated) {
+    if (gpsUpdatedTriggerEvent.test()) {
       if(DoCalculations(&tmp_GPS_INFO,&tmp_CALCULATED_INFO)){
 
         DisplayMode_t lastDisplayMode = DisplayMode;
 
-        MapWindow::MapDirty = true;
-        needcalculationsslow = true;
+	MapWindow::dirtyEvent.trigger();
+        need_calculations_slow = true;
 
         switch (UserForceDisplayMode){
           case dmCircling:
@@ -331,23 +329,26 @@ DWORD CalculationThread (LPVOID lpvoid) {
       InfoBoxesSetDirty(true);
     }
 
-    if (MapWindow::CLOSETHREAD) break; // drop out on exit
+    if (closeTriggerEvent.test())
+      break; // drop out on exit
 
     TriggerRedraws();
 
-    if (MapWindow::CLOSETHREAD) break; // drop out on exit
+    if (closeTriggerEvent.test())
+      break; // drop out on exit
 
 #if defined(_SIM_)
-    needcalculationsslow |= (EnableBestAlternate && ReplayLogger::IsEnabled());
+    need_calculations_slow |= (EnableBestAlternate && ReplayLogger::IsEnabled());
     // VENTA3, needed for BestAlternate SIM
 #endif
 
-    if (needcalculationsslow) {
+    if (need_calculations_slow) {
       DoCalculationsSlow(&tmp_GPS_INFO,&tmp_CALCULATED_INFO);
-      needcalculationsslow = false;
+      need_calculations_slow = false;
     }
 
-    if (MapWindow::CLOSETHREAD) break; // drop out on exit
+    if (closeTriggerEvent.test())
+      break; // drop out on exit
 
     // values changed, so copy them back now: ONLY CALCULATED INFO
     // should be changed in DoCalculations, so we only need to write
@@ -356,8 +357,7 @@ DWORD CalculationThread (LPVOID lpvoid) {
     memcpy(&CALCULATED_INFO,&tmp_CALCULATED_INFO,sizeof(DERIVED_INFO));
     UnlockFlightData();
 
-    GpsUpdated = false;
-
+    gpsUpdatedTriggerEvent.reset();
   }
   return 0;
 }

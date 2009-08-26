@@ -67,7 +67,6 @@ Copyright_License {
 #include "Battery.h"
 #include "Calculations.h" // TODO danger! IsFlarmTargetCNInRange
 
-extern bool DialogActive;
 int  InfoBoxFocusTimeOut = 0;
 bool InfoBoxesDirty= false;
 static bool InfoBoxesHidden = false;
@@ -134,9 +133,9 @@ SCREEN_INFO Data_Options[] = {
 	  {ugNone,            TEXT("Bearing"), TEXT("Bearing"), new InfoBoxFormatter(TEXT("%2.0f")TEXT(DEG)TEXT("T")), NoProcessing, 6, 54},
 #endif
 	  // 4
-	  {ugNone,            TEXT("L/D instantaneous"), TEXT("L/D Inst"), new InfoBoxFormatter(TEXT("%2.0f")), PopupBugsBallast, 5, 38},
+	  {ugNone,            TEXT("L/D instantaneous"), TEXT("L/D Inst"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 5, 38},
 	  // 5
-	  {ugNone,            TEXT("L/D cruise"), TEXT("L/D Cru"), new InfoBoxFormatter(TEXT("%2.0f")), PopupBugsBallast, 19, 4},
+	  {ugNone,            TEXT("L/D cruise"), TEXT("L/D Cru"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 19, 4},
 	  // 6
 	  {ugHorizontalSpeed, TEXT("Speed ground"), TEXT("V Gnd"), new InfoBoxFormatter(TEXT("%2.0f")), SpeedProcessing, 23, 3},
 	  // 7
@@ -418,7 +417,8 @@ void Event_ChangeInfoBoxType(int i) {
 void DefocusInfoBox() {
   FocusOnWindow(InfoFocus,false);
   InfoFocus = -1;
-  if (MapWindow::isPan() && !MapWindow::isTargetPan()) {
+  if (MapWindowProjection::isPan()
+      && !MapWindowProjection::isTargetPan()) {
     InputEvents::setMode(TEXT("pan"));
   } else {
     InputEvents::setMode(TEXT("default"));
@@ -871,15 +871,12 @@ int CurrentInfoType;
 
 void PopUpSelect(int Index)
 {
-  DialogActive = true;
   CurrentInfoType = InfoType[Index];
   StoreType(Index, InfoType[Index]);
   //  ShowWindow(hWndCB,SW_HIDE);
   FullScreen();
   SwitchToMapWindow();
-  DialogActive = false;
 }
-
 
 bool InfoBoxClick(HWND wmControl, bool display_locked) {
   int i;

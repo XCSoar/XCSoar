@@ -53,7 +53,6 @@ Copyright_License {
 #include "Screen/Graphics.hpp"
 #include "Screen/Util.hpp"
 #include "Utils.h"
-#include "MapWindow.h"
 
 #include "Calculations.h" // TODO danger! multiple
 
@@ -1030,7 +1029,7 @@ void Statistics::RenderTask(HDC hdc, const RECT rc, const bool olcmode)
 	  y2 = (lat2-lat_c);
 
 	  SelectObject(hdc,
-		       MapWindow::GetAirspaceBrushByClass(AATASK));
+		       MapGfx.GetAirspaceBrushByClass(AATASK));
 	  SelectObject(hdc, GetStockObject(WHITE_PEN));
 	  if (Task[i].AATType == SECTOR) {
 	    Segment(hdc,
@@ -1470,9 +1469,9 @@ void Statistics::RenderAirspace(HDC hdc, const RECT rc) {
       type = d_airspace[i][j];
       if (type>=0) {
 	SelectObject(hdc,
-		     MapWindow::GetAirspaceBrushByClass(type));
+		     MapGfx.GetAirspaceBrushByClass(type));
 	SetTextColor(hdc,
-		     MapWindow::GetAirspaceColourByClass(type));
+		     MapGfx.GetAirspaceColourByClass(type));
 
 	rcd.left = iround((j-0.5)*dx)+x0;
 	rcd.right = iround((j+0.5)*dx)+x0;
@@ -2077,10 +2076,9 @@ void dlgAnalysisShowModal(void){
 
   DeleteObject(penThinSignal);
 
-  MapWindow::RequestFastRefresh();
+  //  MapWindow::RequestFastRefresh();
   ClearAirspaceWarnings(false); // airspace warning gets refreshed
   FullScreen();
-
 }
 
 

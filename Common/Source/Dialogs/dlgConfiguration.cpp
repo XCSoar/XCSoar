@@ -43,10 +43,10 @@ Copyright_License {
 #include "Utils2.h"
 #include "Blackboard.hpp"
 #include "Settings.hpp"
+#include "SettingsAirspace.hpp"
 #include "SettingsComputer.hpp"
 #include "SettingsTask.hpp"
 #include "SettingsUser.hpp"
-#include "MapWindow.h"
 #include "TerrainRenderer.h"
 #include "GaugeFLARM.h"
 #include "LocalPath.hpp"
@@ -1428,7 +1428,7 @@ static void setVariables(void) {
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpAutoZoom"));
   if (wp) {
-    wp->GetDataField()->Set(MapWindow::AutoZoom);
+    wp->GetDataField()->Set(AutoZoom);
     wp->RefreshDisplay();
   }
 
@@ -1587,7 +1587,7 @@ static void setVariables(void) {
     dfe = (DataFieldEnum*)wp->GetDataField();
     dfe->addEnumText(gettext(TEXT("Arrow head")));
     dfe->addEnumText(gettext(TEXT("Full arrow")));
-    wp->GetDataField()->Set(MapWindow::WindArrowStyle);
+    wp->GetDataField()->Set(WindArrowStyle);
     wp->RefreshDisplay();
   }
 
@@ -2264,7 +2264,7 @@ static void setVariables(void) {
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpGliderScreenPosition"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(MapWindow::GliderScreenPosition);
+    wp->GetDataField()->SetAsFloat(GliderScreenPosition);
     wp->RefreshDisplay();
   }
 
@@ -2501,7 +2501,7 @@ static void setVariables(void) {
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpSnailWidthScale"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(MapWindow::SnailWidthScale);
+    wp->GetDataField()->SetAsFloat(SnailWidthScale);
     wp->RefreshDisplay();
   }
 
@@ -2815,11 +2815,11 @@ void dlgConfigurationShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpAutoZoom"));
   if (wp) {
-    if (MapWindow::AutoZoom !=
+    if (AutoZoom !=
 	wp->GetDataField()->GetAsBoolean()) {
-      MapWindow::AutoZoom = wp->GetDataField()->GetAsBoolean();
+      AutoZoom = wp->GetDataField()->GetAsBoolean();
       SetToRegistry(szRegistryAutoZoom,
-		    MapWindow::AutoZoom);
+		    AutoZoom);
       changed = true;
     }
   }
@@ -2986,9 +2986,9 @@ void dlgConfigurationShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpWindArrowStyle"));
   if (wp) {
-    if (MapWindow::WindArrowStyle != wp->GetDataField()->GetAsInteger()) {
-      MapWindow::WindArrowStyle = wp->GetDataField()->GetAsInteger();
-      SetToRegistry(szRegistryWindArrowStyle, MapWindow::WindArrowStyle);
+    if (WindArrowStyle != wp->GetDataField()->GetAsInteger()) {
+      WindArrowStyle = wp->GetDataField()->GetAsInteger();
+      SetToRegistry(szRegistryWindArrowStyle, WindArrowStyle);
       changed = true;
     }
   }
@@ -3598,11 +3598,11 @@ void dlgConfigurationShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpGliderScreenPosition"));
   if (wp) {
-    if (MapWindow::GliderScreenPosition !=
+    if (GliderScreenPosition !=
 	wp->GetDataField()->GetAsInteger()) {
-      MapWindow::GliderScreenPosition = wp->GetDataField()->GetAsInteger();
+      GliderScreenPosition = wp->GetDataField()->GetAsInteger();
       SetToRegistry(szRegistryGliderScreenPosition,
-		    MapWindow::GliderScreenPosition);
+		    GliderScreenPosition);
       changed = true;
     }
   }
@@ -3903,9 +3903,9 @@ void dlgConfigurationShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpSnailWidthScale"));
   if (wp) {
-    if (MapWindow::SnailWidthScale != wp->GetDataField()->GetAsInteger()) {
-      MapWindow::SnailWidthScale = wp->GetDataField()->GetAsInteger();
-      SetToRegistry(szRegistrySnailWidthScale,MapWindow::SnailWidthScale);
+    if (SnailWidthScale != wp->GetDataField()->GetAsInteger()) {
+      SnailWidthScale = wp->GetDataField()->GetAsInteger();
+      SetToRegistry(szRegistrySnailWidthScale, SnailWidthScale);
       changed = true;
       requirerestart = true;
     }

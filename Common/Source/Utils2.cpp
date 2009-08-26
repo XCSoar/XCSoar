@@ -68,7 +68,7 @@ int ProcessVirtualKey(int X, int Y, long keytime, short vkmode) {
 #define MAXBOTTOMMODES 5
 #define VKTIMELONG 1500
 
-	RECT MapRect = MapWindow::GetMapRect();
+  RECT MapRect = MapWindow::GetMapRect();
 
 	#ifdef DEBUG_PROCVK
 	TCHAR buf[100];

@@ -39,6 +39,7 @@ Copyright_License {
 #include "Protection.hpp"
 #include "InfoBoxLayout.h"
 #include "Screen/Util.hpp"
+#include "Screen/Fonts.hpp"
 #include "Screen/Graphics.hpp"
 #include "Math/Screen.hpp"
 #include "Math/FastMath.h"
@@ -50,10 +51,9 @@ Copyright_License {
 #include "SettingsTask.hpp"
 #include "SettingsUser.hpp"
 #include "SettingsComputer.hpp"
+#include <stdlib.h>
 
-extern HFONT  MapWindowBoldFont;
 extern BOOL extGPSCONNECT;
-
 
 void MapWindow::DrawCrossHairs(HDC hdc, const POINT Orig,
 			       const RECT rc)

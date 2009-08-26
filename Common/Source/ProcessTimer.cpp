@@ -65,7 +65,6 @@ bool RequestAirspaceWarningForce=false;
 extern int MenuTimeOut;
 extern int MenuTimeoutMax;
 extern bool DisplayLocked;
-extern bool DialogActive;
 
 extern void RestartCommPorts(void);
 
@@ -94,14 +93,14 @@ void CommonProcessTimer()
 
   if (DisplayLocked) {
     if(MenuTimeOut==MenuTimeoutMax) {
-      if (!MapWindow::isPan()) {
+      if (!MapWindowProjection::isPan()) {
 	InputEvents::setMode(TEXT("default"));
       }
     }
     MenuTimeOut++;
   }
 
-  CheckDisplayTimeOut(DialogActive);
+  CheckDisplayTimeOut(false);
 
   if (MapWindow::IsDisplayRunning()) {
     // No need to redraw map or infoboxes if screen is blanked.

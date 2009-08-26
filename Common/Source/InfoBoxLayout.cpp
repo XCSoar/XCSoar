@@ -40,7 +40,6 @@ Copyright_License {
 #include "ButtonLabel.h"
 #include "LogFile.hpp"
 #include "XCSoar.h"
-#include "MapWindow.h"
 #include "Dialogs.h"
 #include "Screen/Animation.hpp"
 #include "Registry.hpp"

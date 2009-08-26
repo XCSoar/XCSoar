@@ -43,7 +43,6 @@ Copyright_License {
 #include "Dialogs.h"
 #include "Dialogs/dlgTools.h"
 #include "Device/device.h"
-#include "MapWindow.h"
 
 #include <windows.h>
 #include <tchar.h>
@@ -245,7 +244,7 @@ DWORD ComPort::ReadThread()
   fRxThreadTerminated = FALSE;
 
   while ((hPort != INVALID_HANDLE_VALUE) &&
-	 (!MapWindow::CLOSETHREAD) && (!CloseThread))
+	 (!closeTriggerEvent.test()) && (!CloseThread))
   {
 
 #if (WINDOWSPC>0)

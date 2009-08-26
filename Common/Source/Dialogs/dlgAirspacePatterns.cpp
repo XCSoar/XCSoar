@@ -40,7 +40,7 @@ Copyright_License {
 #include "Interface.hpp"
 #include "Dialogs/dlgTools.h"
 #include "InfoBoxLayout.h"
-#include "MapWindow.h"
+#include "Screen/Graphics.hpp"
 #include "Utils.h"
 
 #include <assert.h>
@@ -68,7 +68,7 @@ static void OnAirspacePatternsPaintListItem(WindowControl * Sender, HDC hDC){
     SetBkColor(hDC,
 	       RGB(0xFF, 0xFF, 0xFF));
     SelectObject(hDC,
-		 MapWindow::GetAirspaceBrush(i));
+		 MapGfx.GetAirspaceBrush(i));
     SetTextColor(hDC, RGB(0x00,0x00, 0x00));
     Rectangle(hDC,
               100*InfoBoxLayout::scale,

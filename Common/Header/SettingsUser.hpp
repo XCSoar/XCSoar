@@ -98,11 +98,20 @@ extern unsigned char DeclutterLabels;
 extern bool EnableTrailDrift;
 extern bool bAirspaceBlackOutline;
 
+extern int GliderScreenPosition;
+
 // sound stuff not used?
 extern bool EnableSoundVario;
 extern bool EnableSoundTask;
 extern bool EnableSoundModes;
 extern int  SoundVolume;
 extern int  SoundDeadband;
+
+// airspace display stuff
+
+extern bool   AutoZoom;
+extern int    SnailWidthScale;
+extern int    WindArrowStyle;
+
 
 #endif

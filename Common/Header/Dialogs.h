@@ -110,10 +110,10 @@ void WriteMissingTranslations(void);
 void dlgTextEntryKeyboardShowModal(TCHAR *text, int width=0);
 void dlgNumberEntryKeyboardShowModal(int *value, int width=0);
 
-extern bool DialogActive;
-void PopupBugsBallast(int x);
 void PopupWaypointDetails();
 void PopupAnalysis();
-
+bool PopupNearestWaypointDetails(double lon, double lat,
+				 double range, bool pan);
+bool PopupInteriorAirspaceDetails(double lon, double lat);
 
 #endif

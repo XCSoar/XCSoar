@@ -44,6 +44,7 @@ Copyright_License {
 #include "PeriodClock.hpp"
 #include "WindowControls.h"
 #include "Interface.hpp"
+#include "Screen/Graphics.hpp"
 
 #define DEFAULTBORDERPENWIDTH IBLSCALE(1)
 #define SELECTORWIDTH         (DEFAULTBORDERPENWIDTH+IBLSCALE(4))
@@ -56,17 +57,6 @@ extern HFONT  InfoWindowFont;
 extern HFONT  CDIWindowFont;
 
 //static ATOM atmWndClass;
-COLORREF InfoBox::redColor = RGB(0xff,0x00,0x00);
-COLORREF InfoBox::blueColor = RGB(0x00,0x00,0xff);
-COLORREF InfoBox::inv_redColor = RGB(0xff,0x70,0x70);
-COLORREF InfoBox::inv_blueColor = RGB(0x90,0x90,0xff);
-COLORREF InfoBox::yellowColor = RGB(0xff,0xff,0x00);//VENTA2
-COLORREF InfoBox::greenColor = RGB(0x00,0xff,0x00);//VENTA2
-COLORREF InfoBox::magentaColor = RGB(0xff,0x00,0xff);//VENTA2
-COLORREF InfoBox::inv_yellowColor = RGB(0xff,0xff,0x00); //VENTA2
-COLORREF InfoBox::inv_greenColor = RGB(0x00,0xff,0x00); //VENTA2
-COLORREF InfoBox::inv_magentaColor = RGB(0xff,0x00,0xff); //VENTA2
-
 
 static COLORREF fgColor = RGB(0x0,0x0,0x0);
 static COLORREF bkColor = RGB(0xff,0xff,0xff);
@@ -357,38 +347,38 @@ void InfoBox::PaintTitle(HDC mHdcBuf){
     break;
   case 1:
     if (Appearance.InverseInfoBox){
-      SetTextColor(mHdcBuf, inv_redColor);
+      SetTextColor(mHdcBuf, MapGfx.inv_redColor);
     } else {
-      SetTextColor(mHdcBuf, redColor);
+      SetTextColor(mHdcBuf, MapGfx.redColor);
     }
     break;
   case 2:
     if (Appearance.InverseInfoBox){
-      SetTextColor(mHdcBuf, inv_blueColor);
+      SetTextColor(mHdcBuf, MapGfx.inv_blueColor);
     } else {
-      SetTextColor(mHdcBuf, blueColor);
+      SetTextColor(mHdcBuf, MapGfx.blueColor);
     }
     break;
 // VENTA3 added colors
   case 3:
     if (Appearance.InverseInfoBox){
-      SetTextColor(mHdcBuf, inv_greenColor);
+      SetTextColor(mHdcBuf, MapGfx.inv_greenColor);
     } else {
-      SetTextColor(mHdcBuf, greenColor);
+      SetTextColor(mHdcBuf, MapGfx.greenColor);
     }
     break;
   case 4:
     if (Appearance.InverseInfoBox){
-      SetTextColor(mHdcBuf, inv_yellowColor);
+      SetTextColor(mHdcBuf, MapGfx.inv_yellowColor);
     } else {
-      SetTextColor(mHdcBuf, yellowColor);
+      SetTextColor(mHdcBuf, MapGfx.yellowColor);
     }
     break;
   case 5:
     if (Appearance.InverseInfoBox){
-      SetTextColor(mHdcBuf, inv_magentaColor);
+      SetTextColor(mHdcBuf, MapGfx.inv_magentaColor);
     } else {
-      SetTextColor(mHdcBuf, magentaColor);
+      SetTextColor(mHdcBuf, MapGfx.magentaColor);
     }
     break;
   }
@@ -457,38 +447,38 @@ void InfoBox::PaintValue(HDC mHdcBuf){
     break;
   case 1:
     if (Appearance.InverseInfoBox){
-      SetTextColor(mHdcBuf, inv_redColor);
+      SetTextColor(mHdcBuf, MapGfx.inv_redColor);
     } else {
-      SetTextColor(mHdcBuf, redColor);
+      SetTextColor(mHdcBuf, MapGfx.redColor);
     }
     break;
   case 2:
     if (Appearance.InverseInfoBox){
-      SetTextColor(mHdcBuf, inv_blueColor);
+      SetTextColor(mHdcBuf, MapGfx.inv_blueColor);
     } else {
-      SetTextColor(mHdcBuf, blueColor);
+      SetTextColor(mHdcBuf, MapGfx.blueColor);
     }
     break;
 // VENTA3 more colors
   case 3:
     if (Appearance.InverseInfoBox){
-      SetTextColor(mHdcBuf, inv_greenColor);
+      SetTextColor(mHdcBuf, MapGfx.inv_greenColor);
     } else {
-      SetTextColor(mHdcBuf, greenColor);
+      SetTextColor(mHdcBuf, MapGfx.greenColor);
     }
     break;
   case 4:
     if (Appearance.InverseInfoBox){
-      SetTextColor(mHdcBuf, inv_yellowColor);
+      SetTextColor(mHdcBuf, MapGfx.inv_yellowColor);
     } else {
-      SetTextColor(mHdcBuf, yellowColor);
+      SetTextColor(mHdcBuf, MapGfx.yellowColor);
     }
     break;
   case 5:
     if (Appearance.InverseInfoBox){
-      SetTextColor(mHdcBuf, inv_magentaColor);
+      SetTextColor(mHdcBuf, MapGfx.inv_magentaColor);
     } else {
-      SetTextColor(mHdcBuf, magentaColor);
+      SetTextColor(mHdcBuf, MapGfx.magentaColor);
     }
     break;
   }
@@ -567,38 +557,38 @@ void InfoBox::PaintComment(HDC mHdcBuf){
     break;
   case 1:
     if (Appearance.InverseInfoBox){
-      SetTextColor(mHdcBuf, inv_redColor);
+      SetTextColor(mHdcBuf, MapGfx.inv_redColor);
     } else {
-      SetTextColor(mHdcBuf, redColor);
+      SetTextColor(mHdcBuf, MapGfx.redColor);
     }
     break;
   case 2:
     if (Appearance.InverseInfoBox){
-      SetTextColor(mHdcBuf, inv_blueColor);
+      SetTextColor(mHdcBuf, MapGfx.inv_blueColor);
     } else {
-      SetTextColor(mHdcBuf, blueColor);
+      SetTextColor(mHdcBuf, MapGfx.blueColor);
     }
     break;
 // VENTA3 more colors
   case 3:
     if (Appearance.InverseInfoBox){
-      SetTextColor(mHdcBuf, inv_greenColor);
+      SetTextColor(mHdcBuf, MapGfx.inv_greenColor);
     } else {
-      SetTextColor(mHdcBuf, greenColor);
+      SetTextColor(mHdcBuf, MapGfx.greenColor);
     }
     break;
   case 4:
     if (Appearance.InverseInfoBox){
-      SetTextColor(mHdcBuf, inv_yellowColor);
+      SetTextColor(mHdcBuf, MapGfx.inv_yellowColor);
     } else {
-      SetTextColor(mHdcBuf, yellowColor);
+      SetTextColor(mHdcBuf, MapGfx.yellowColor);
     }
     break;
   case 5:
     if (Appearance.InverseInfoBox){
-      SetTextColor(mHdcBuf, inv_magentaColor);
+      SetTextColor(mHdcBuf, MapGfx.inv_magentaColor);
     } else {
-      SetTextColor(mHdcBuf, magentaColor);
+      SetTextColor(mHdcBuf, MapGfx.magentaColor);
     }
     break;
   }

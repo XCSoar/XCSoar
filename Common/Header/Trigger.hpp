@@ -77,6 +77,16 @@ public:
   }
 
   /**
+   * Checks if this object is triggered.
+   * @return true if this object was triggered, false if not
+   */
+  bool test(void) {
+    if (::WaitForSingleObject(handle, 0) != WAIT_OBJECT_0)
+      return false;
+    return true;
+  }
+
+  /**
    * Waits indefinitely until this object is triggered with trigger().
    * If this object is already triggered, this method returns
    * immediately.
@@ -100,6 +110,13 @@ public:
   void pulse() {
     ::PulseEvent(handle);
   }
+  /**
+   * Resets the trigger
+   */
+  void reset() {
+    ::ResetEvent(handle);
+  }
+
 };
 
 #endif

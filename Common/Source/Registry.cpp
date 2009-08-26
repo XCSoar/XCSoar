@@ -563,22 +563,22 @@ void ReadRegistrySettings(void)
 
   for(i=0;i<AIRSPACECLASSCOUNT;i++)
     {
-      MapWindow::iAirspaceMode[i] = GetRegistryAirspaceMode(i);
+      iAirspaceMode[i] = GetRegistryAirspaceMode(i);
 
-      Temp= MapWindow::iAirspaceBrush[i];
+      Temp= iAirspaceBrush[i];
       if(GetFromRegistry(szRegistryBrush[i],&Temp)==ERROR_SUCCESS)
-        MapWindow::iAirspaceBrush[i] =			(int)Temp;
+        iAirspaceBrush[i] =			(int)Temp;
 
-      Temp= MapWindow::iAirspaceColour[i];
+      Temp= iAirspaceColour[i];
       if(GetFromRegistry(szRegistryColour[i],&Temp)==ERROR_SUCCESS)
-        MapWindow::iAirspaceColour[i] =			(int)Temp;
+        iAirspaceColour[i] =			(int)Temp;
 
-      if (MapWindow::iAirspaceColour[i]>= NUMAIRSPACECOLORS) {
-        MapWindow::iAirspaceColour[i]= 0;
+      if (iAirspaceColour[i]>= NUMAIRSPACECOLORS) {
+        iAirspaceColour[i]= 0;
       }
 
-      if (MapWindow::iAirspaceBrush[i]>= NUMAIRSPACEBRUSHES) {
-        MapWindow::iAirspaceBrush[i]= 0;
+      if (iAirspaceBrush[i]>= NUMAIRSPACEBRUSHES) {
+        iAirspaceBrush[i]= 0;
       }
 
     }
@@ -653,9 +653,9 @@ void ReadRegistrySettings(void)
   }
 
 
-  Temp = MapWindow::SnailWidthScale;
+  Temp = SnailWidthScale;
   GetFromRegistry(szRegistrySnailWidthScale,&Temp);
-  MapWindow::SnailWidthScale = Temp;
+  SnailWidthScale = Temp;
 
   Temp = TeamCodeRefWaypoint;
   GetFromRegistry(szRegistryTeamcodeRefWaypoint,&Temp);
@@ -953,7 +953,7 @@ void ReadRegistrySettings(void)
 
   Temp = 0;
   GetFromRegistry(szRegistryAutoZoom,&Temp);
-  MapWindow::AutoZoom = (Temp == 1);
+  AutoZoom = (Temp == 1);
 
   Temp = MenuTimeoutMax;
   GetFromRegistry(szRegistryMenuTimeout,&Temp);
@@ -987,9 +987,9 @@ void ReadRegistrySettings(void)
   GetFromRegistry(szRegistryTerrainRamp,&Temp);
   TerrainRamp = (short)Temp;
 
-  Temp = MapWindow::GliderScreenPosition;
+  Temp = GliderScreenPosition;
   GetFromRegistry(szRegistryGliderScreenPosition,&Temp);
-  MapWindow::GliderScreenPosition = (int)Temp;
+  GliderScreenPosition = (int)Temp;
 
   Temp = BallastSecsToEmpty;
   GetFromRegistry(szRegistryBallastSecsToEmpty,&Temp);
@@ -1097,10 +1097,9 @@ void ReadRegistrySettings(void)
   GetFromRegistry(szRegistryRiskGamma,&Temp);
   GlidePolar::RiskGamma = Temp/10.0;
 
-  //Temp = MapWindow::WindArrowStyle;
   Temp=(CompassAppearance_t)apCompassAltA; // VNT9 default
   GetFromRegistry(szRegistryWindArrowStyle,&Temp);
-  MapWindow::WindArrowStyle = Temp;
+  WindArrowStyle = Temp;
 
   Temp = DisableAutoLogger;
   GetFromRegistry(szRegistryDisableAutoLogger,&Temp);
@@ -1292,10 +1291,10 @@ void SetRegistryBrush(int i, DWORD c)
 void SetRegistryAirspaceMode(int i)
 {
 
-  CheckIndex(MapWindow::iAirspaceMode, i);
+  CheckIndex(iAirspaceMode, i);
   CheckIndex(szRegistryAirspaceMode, i);
 
-  DWORD val = MapWindow::iAirspaceMode[i];
+  DWORD val = iAirspaceMode[i];
   SetToRegistry(szRegistryAirspaceMode[i], val);
 }
 

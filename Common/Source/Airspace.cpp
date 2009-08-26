@@ -40,11 +40,12 @@ Copyright_License {
 #include "Airspace.h"
 #include "Blackboard.hpp"
 #include "Utils.h"
-#include "MapWindow.h"
+#include "MapWindowProjection.hpp"
 #include "Math/Earth.hpp"
 #include "Math/Screen.hpp"
 #include "Math/Units.h"
 #include "Math/Pressure.h"
+#include "SettingsAirspace.hpp"
 
 //#include <windows.h>
 //#include <commctrl.h>
@@ -149,7 +150,7 @@ int FindAirspaceCircle(double Longitude,double Latitude, bool visibleonly)
     }
 
   for(i=0;i<NumberOfAirspaceCircles;i++) {
-    if (MapWindow::iAirspaceMode[AirspaceCircle[i].Type]< 2) {
+    if (iAirspaceMode[AirspaceCircle[i].Type]< 2) {
       // don't want warnings for this one
       continue;
     }
@@ -358,7 +359,7 @@ int FindAirspaceArea(double Longitude,double Latitude, bool visibleonly)
       return -1;
     }
   for(i=0;i<NumberOfAirspaceAreas;i++) {
-    if (MapWindow::iAirspaceMode[AirspaceArea[i].Type]< 2) {
+    if (iAirspaceMode[AirspaceArea[i].Type]< 2) {
       // don't want warnings for this one
       continue;
     }
@@ -413,8 +414,8 @@ int FindNearestAirspaceCircle(double longitude, double latitude,
     double basealt;
     double topalt;
 
-    iswarn = (MapWindow::iAirspaceMode[AirspaceCircle[i].Type]>=2);
-    isdisplay = ((MapWindow::iAirspaceMode[AirspaceCircle[i].Type]%2)>0);
+    iswarn = (iAirspaceMode[AirspaceCircle[i].Type]>=2);
+    isdisplay = ((iAirspaceMode[AirspaceCircle[i].Type]%2)>0);
 
     if (!isdisplay || !iswarn) {
       // don't want warnings for this one
@@ -469,13 +470,13 @@ double ScreenCrossTrackError(double lon1, double lat1,
 		     double *lon4, double *lat4) {
   POINT p1, p2, p3, p4;
 
-  MapWindow::LatLon2Screen(lon1, lat1, p1);
-  MapWindow::LatLon2Screen(lon2, lat2, p2);
-  MapWindow::LatLon2Screen(lon3, lat3, p3);
+  MapWindowProjection::LatLon2Screen(lon1, lat1, p1);
+  MapWindowProjection::LatLon2Screen(lon2, lat2, p2);
+  MapWindowProjection::LatLon2Screen(lon3, lat3, p3);
 
   ScreenClosestPoint(p1, p2, p3, &p4, 0);
 
-  MapWindow::Screen2LatLon(p4.x, p4.y, *lon4, *lat4);
+  MapWindowProjection::Screen2LatLon(p4.x, p4.y, *lon4, *lat4);
 
   // compute accurate distance
   double tmpd;
@@ -547,8 +548,8 @@ int FindNearestAirspaceArea(double longitude,
     double basealt;
     double topalt;
 
-    iswarn = (MapWindow::iAirspaceMode[AirspaceArea[i].Type]>=2);
-    isdisplay = ((MapWindow::iAirspaceMode[AirspaceArea[i].Type]%2)>0);
+    iswarn = (iAirspaceMode[AirspaceArea[i].Type]>=2);
+    isdisplay = ((iAirspaceMode[AirspaceArea[i].Type]%2)>0);
 
     if (!isdisplay || !iswarn) {
       // don't want warnings for this one

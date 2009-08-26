@@ -67,7 +67,6 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include <commctrl.h>
 #include "InfoBoxLayout.h"
 #include "ButtonLabel.h"
-#include "MapWindow.h"
 #include "Registry.hpp"
 #include "LocalPath.hpp"
 #include "McReady.h"
@@ -652,7 +651,7 @@ void InputEvents::setMode(const TCHAR *mode) {
 				);
     }
   }
-  MapWindow::RequestFastRefresh();
+  drawTriggerEvent.trigger();
   */
 
   lastmode = thismode;
@@ -662,7 +661,7 @@ void InputEvents::setMode(const TCHAR *mode) {
 void InputEvents::drawButtons(int Mode){
   int i;
 
-  if (!(ProgramStarted==3)) return;
+  if (!(ProgramStarted==psNormalOp)) return;
 
   for (i = 0; i < ModeLabel_count[Mode]; i++) {
     if ((ModeLabel[Mode][i].location > 0)) {
@@ -674,9 +673,7 @@ void InputEvents::drawButtons(int Mode){
 
     }
   }
-
-  MapWindow::RequestFastRefresh();
-
+  drawTriggerEvent.trigger();
 }
 
 TCHAR* InputEvents::getMode() {
@@ -694,7 +691,7 @@ int InputEvents::getModeID() {
 
 // Input is a via the user touching the label on a touch screen / mouse
 bool InputEvents::processButton(int bindex) {
-  if (!(ProgramStarted==3)) return false;
+  if (!(ProgramStarted==psNormalOp)) return false;
 
   int thismode = getModeID();
 
@@ -737,7 +734,7 @@ bool InputEvents::processButton(int bindex) {
   Return = We had a valid key (even if nothing happens because of Bounce)
 */
 bool InputEvents::processKey(int dWord) {
-  if (!(ProgramStarted==3)) return false;
+  if (!(ProgramStarted==psNormalOp)) return false;
 
   InterfaceTimeoutReset();
 
@@ -790,7 +787,8 @@ bool InputEvents::processKey(int dWord) {
     }
 
     // experimental: update button text, macro may change the value
-    if ((lastMode == getModeID()) && (bindex > 0) && (pLabelText != NULL) && ButtonLabel::ButtonVisible[bindex]) {
+    if ((lastMode == getModeID()) && (bindex > 0) &&
+	(pLabelText != NULL) && ButtonLabel::ButtonVisible[bindex]) {
       drawButtons(lastMode);
     }
 
@@ -820,7 +818,7 @@ bool InputEvents::processNmea(int ne_id) {
   Return = TRUE if we have a valid key match
 */
 bool InputEvents::processNmea_real(int ne_id) {
-  if (!(ProgramStarted==3)) return false;
+  if (!(ProgramStarted==psNormalOp)) return false;
   int event_id = 0;
 
   InterfaceTimeoutReset();
@@ -916,7 +914,7 @@ bool InputEvents::processGlideComputer(int gce_id) {
   Take virtual inputs from a Glide Computer to do special events
 */
 bool InputEvents::processGlideComputer_real(int gce_id) {
-  if (!(ProgramStarted==3)) return false;
+  if (!(ProgramStarted==psNormalOp)) return false;
   int event_id = 0;
 
   // TODO feature: Log glide computer events to IGC file
@@ -947,7 +945,7 @@ extern int MenuTimeOut;
 
 // EXECUTE an Event - lookup event handler and call back - no return
 void InputEvents::processGo(int eventid) {
-  if (!(ProgramStarted==3)) return;
+  if (!(ProgramStarted==psNormalOp)) return;
 
   //
   // TODO feature: event/macro recorder

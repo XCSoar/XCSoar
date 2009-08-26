@@ -36,29 +36,55 @@ Copyright_License {
 */
 
 #include "MapWindow.h"
-#include "XCSoar.h" // for Appearance
-#include "InfoBoxLayout.h"
-#include "Screen/Util.hpp"
-#include "Screen/Graphics.hpp"
-#include "Screen/Fonts.hpp"
+#include "Interface.hpp"
+#include "Protection.hpp"
+#include "Screen/Blank.hpp"
 
+Trigger MapWindowBase::dirtyEvent(TEXT("mapDirty"));
+bool MapWindowBase::THREADRUNNING = TRUE;
+bool MapWindowBase::THREADEXIT = FALSE;
+DWORD  MapWindowBase::dwDrawThreadID;
+HANDLE MapWindowBase::hDrawThread;
 
-void MapWindow::DrawBitmapIn(const HDC hdc, const POINT &sc,
-			     const HBITMAP h) {
-  if (!PointVisible(sc)) return;
-
-  SelectObject(hDCTemp, h);
-
-  DrawBitmapX(hdc,
-              sc.x-IBLSCALE(5),
-              sc.y-IBLSCALE(5),
-              10,10,
-	      hDCTemp,0,0,SRCPAINT);
-  DrawBitmapX(hdc,
-              sc.x-IBLSCALE(5),
-              sc.y-IBLSCALE(5),
-              10,10,
-              hDCTemp,10,0,SRCAND);
+bool MapWindowBase::IsDisplayRunning() {
+  return (THREADRUNNING && GlobalRunning && !ScreenBlanked && ProgramStarted);
 }
 
+
+void MapWindowBase::CreateDrawingThread(void)
+{
+  closeTriggerEvent.reset();
+  THREADEXIT = false;
+  hDrawThread = CreateThread (NULL, 0,
+                              (LPTHREAD_START_ROUTINE )
+			      MapWindow::DrawThread,
+                              0, 0, &dwDrawThreadID);
+  SetThreadPriority(hDrawThread,THREAD_PRIORITY_NORMAL);
+}
+
+void MapWindowBase::SuspendDrawingThread(void)
+{
+  LockTerrainDataGraphics();
+  THREADRUNNING = false;
+  UnlockTerrainDataGraphics();
+  //  SuspendThread(hDrawThread);
+}
+
+void MapWindowBase::ResumeDrawingThread(void)
+{
+  LockTerrainDataGraphics();
+  THREADRUNNING = true;
+  UnlockTerrainDataGraphics();
+  //  ResumeThread(hDrawThread);
+}
+
+void MapWindowBase::CloseDrawingThread(void)
+{
+  closeTriggerEvent.trigger();
+  drawTriggerEvent.trigger(); // wake self up
+  LockTerrainDataGraphics();
+  SuspendDrawingThread();
+  UnlockTerrainDataGraphics();
+  while(!THREADEXIT) { Sleep(100); };
+}
 

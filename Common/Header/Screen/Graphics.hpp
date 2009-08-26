@@ -68,6 +68,12 @@ public:
   void Initialise();
   void Destroy();
 
+  // airspace brushes/colours
+  COLORREF GetAirspaceColour(const int i);
+  HBRUSH GetAirspaceBrush(const int i);
+  COLORREF GetAirspaceColourByClass(const int i);
+  HBRUSH GetAirspaceBrushByClass(const int i);
+
   HPEN hAirspacePens[AIRSPACECLASSCOUNT];
   HPEN hSnailPens[NUMSNAILCOLORS];
   COLORREF hSnailColours[NUMSNAILCOLORS];
@@ -75,7 +81,6 @@ public:
   HBITMAP hAirspaceBitmap[NUMAIRSPACEBRUSHES];
   HBITMAP hAboveTerrainBitmap;
   HBRUSH hAboveTerrainBrush;
-  COLORREF Colours[NUMAIRSPACECOLORS];
 
   HBITMAP
     hTurnPoint, hSmall, hCruise, hClimb,
@@ -83,9 +88,6 @@ public:
     hAbort, hLogger, hLoggerOff, hFLARMTraffic;
 
   HBRUSH   hBackgroundBrush;
-
-  COLORREF BackgroundColor;
-  COLORREF TaskColor;
 
   HPEN hpAircraft;
   HPEN hpAircraftBorder;
@@ -140,6 +142,38 @@ public:
   HBITMAP hBmpUnitM;
   HBITMAP hBmpUnitFt;
   HBITMAP hBmpUnitMpS;
+
+  // used for flarm
+  HBRUSH redBrush;
+  HBRUSH yellowBrush;
+  HBRUSH greenBrush;
+
+  // misc
+  static const COLORREF BackgroundColor;
+  static const COLORREF TaskColor;
+  static const COLORREF Colours[NUMAIRSPACECOLORS];
+
+  // used by infobox and gauges
+  static const COLORREF redColor;
+  static const COLORREF blueColor;
+  static const COLORREF inv_redColor;
+  static const COLORREF inv_blueColor;
+// Not really used, tested and dropped. But useful for the future
+  static const COLORREF yellowColor;
+  static const COLORREF greenColor;
+  static const COLORREF magentaColor;
+  static const COLORREF inv_yellowColor;
+  static const COLORREF inv_greenColor;
+  static const COLORREF inv_magentaColor;
+
+  // these used for infoboxes/buttons
+  static const COLORREF ColorSelected;
+  static const COLORREF ColorUnselected;
+  static const COLORREF ColorWarning;
+  static const COLORREF ColorOK;
+  static const COLORREF ColorButton;
+  static const COLORREF ColorBlack;
+  static const COLORREF ColorMidGrey;
 };
 
 extern ScreenGraphics MapGfx;

@@ -42,6 +42,10 @@ Copyright_License {
 #include "Dialogs.h"
 #include "XCSoar.h"
 #include "LogFile.hpp"
+#include "MapWindowProjection.hpp"
+#include "Waypointparser.h"
+#include "SettingsTask.hpp"
+#include "Airspace.h"
 
 #include <commdlg.h>
 #include <commctrl.h>
@@ -50,16 +54,12 @@ Copyright_License {
 #include "aygshell.h"
 #endif
 
-#include "Logger.h"
 #include "Utils.h"
 #include "UtilsText.hpp"
 #include "UtilsSystem.hpp"
 #include "LocalPath.hpp"
 #include "Settings.hpp"
 #include "SettingsUser.hpp"
-#include "Device/Port.h"
-#include "AirfieldDetails.h"
-#include "Device/device.h"
 #include "InfoBoxLayout.h"
 #include "InputEvents.h"
 #include "Message.h"
@@ -71,17 +71,13 @@ Copyright_License {
 #include <map>
 #endif
 
-bool DialogActive = false;
-
 // from XCSoar.cpp
 void SwitchToMapWindow(void);
 
 
 void PopupAnalysis()
 {
-  DialogActive = true;
   dlgAnalysisShowModal();
-  DialogActive = false;
 }
 
 
@@ -89,17 +85,6 @@ void PopupWaypointDetails()
 {
   dlgWayPointDetailsShowModal();
 }
-
-
-void PopupBugsBallast(int x)
-{
-  (void)x;
-  DialogActive = true;
-  FullScreen();
-  SwitchToMapWindow();
-  DialogActive = false;
-}
-
 
 
 static GetTextSTRUCT GetTextData[MAXSTATUSMESSAGECACHE];
@@ -612,3 +597,64 @@ HWND CreateProgressDialog(const TCHAR* text) {
 
 ///////////////
 
+bool PopupNearestWaypointDetails(double lon, double lat,
+                                             double range,
+                                             bool pan) {
+  /*
+    if (!pan) {
+    dlgWayPointSelect(lon, lat, 0, 1);
+    } else {
+    dlgWayPointSelect(PanLongitude, PanLatitude, 0, 1);
+    }
+  */
+
+  int i;
+  if (!pan || !MapWindowProjection::isPan()) {
+    i=FindNearestWayPoint(lon, lat, range);
+  } else {
+    // nearest to center of screen if in pan mode
+    i=FindNearestWayPoint(MapWindowProjection::GetPanLongitude(),
+			  MapWindowProjection::GetPanLatitude(), range);
+  }
+  if(i != -1) {
+    SelectedWaypoint = i;
+    PopupWaypointDetails();
+    return true;
+  }
+
+  return false;
+}
+
+
+bool PopupInteriorAirspaceDetails(double lon, double lat) {
+  unsigned int i;
+  bool found=false;
+  bool inside;
+
+  if (AirspaceCircle) {
+    for (i=0; i<NumberOfAirspaceCircles; i++) {
+      inside = false;
+      if (AirspaceCircle[i].Visible) {
+        inside = InsideAirspaceCircle(lon, lat, i);
+      }
+      if (inside) {
+	dlgAirspaceDetails(i, -1);
+        found = true;
+      }
+    }
+  }
+  if (AirspaceArea) {
+    for (i=0; i<NumberOfAirspaceAreas; i++) {
+      inside = false;
+      if (AirspaceArea[i].Visible) {
+        inside = InsideAirspaceArea(lon, lat, i);
+      }
+      if (inside) {
+	dlgAirspaceDetails(-1, i);
+        found = true;
+      }
+    }
+  }
+
+  return found; // nothing found..
+}

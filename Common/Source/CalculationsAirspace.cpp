@@ -43,11 +43,7 @@ Copyright_License {
 #include "Math/Geometry.hpp"
 #include "Message.h"
 #include "Math/Earth.hpp"
-#include "MapWindow.h"
-
-extern int AIRSPACEWARNINGS;
-extern int WarningTime;
-extern int AcknowledgementTime;
+#include "SettingsAirspace.hpp"
 
 
 void PredictNextPosition(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
@@ -170,7 +166,7 @@ void AirspaceWarning(NMEA_INFO *Basic, DERIVED_INFO *Calculated){
           && (((AirspaceCircle[i].Top.Base != abAGL) && (alt < AirspaceCircle[i].Top.Altitude))
            || ((AirspaceCircle[i].Top.Base == abAGL) && (agl < AirspaceCircle[i].Top.AGL)))) {
 
-        if ((MapWindow::iAirspaceMode[AirspaceCircle[i].Type] >= 2) &&
+        if ((iAirspaceMode[AirspaceCircle[i].Type] >= 2) &&
 	    InsideAirspaceCircle(lon, lat, i)) {
 
           AirspaceWarnListAdd(Basic, Calculated, position_is_predicted, 1, i, false);
@@ -191,7 +187,7 @@ void AirspaceWarning(NMEA_INFO *Basic, DERIVED_INFO *Calculated){
           && (((AirspaceArea[i].Top.Base != abAGL) && (alt < AirspaceArea[i].Top.Altitude))
            || ((AirspaceArea[i].Top.Base == abAGL) && (agl < AirspaceArea[i].Top.AGL)))) {
 
-        if ((MapWindow::iAirspaceMode[AirspaceArea[i].Type] >= 2)
+        if ((iAirspaceMode[AirspaceArea[i].Type] >= 2)
             && InsideAirspaceArea(lon, lat, i)){
 
           AirspaceWarnListAdd(Basic, Calculated, position_is_predicted, 0, i, false);

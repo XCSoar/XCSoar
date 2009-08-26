@@ -40,6 +40,7 @@ Copyright_License {
 #include "SnailTrail.hpp"
 #include "InfoBoxLayout.h"
 #include <math.h>
+#include <stdlib.h>
 #include "Math/FastMath.h"
 #include "Math/Geometry.hpp"
 #include "Math/Earth.hpp"

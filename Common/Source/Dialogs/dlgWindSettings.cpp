@@ -45,7 +45,6 @@ Copyright_License {
 #include "Registry.hpp"
 #include "DataField/Enum.hpp"
 #include "Utils.h"
-#include "MapWindow.h"
 #include "Math/Units.h"
 #include "Calculations.h" // TODO danger! for SetWindEstimate
 
@@ -180,7 +179,7 @@ void dlgWindSettingsShowModal(void){
     if (wp) {
       if (EnableTrailDrift != wp->GetDataField()->GetAsBoolean()) {
         EnableTrailDrift = wp->GetDataField()->GetAsBoolean();
-        // SetToRegistry(szRegistryTrailDrift, MapWindow::EnableTrailDrift);
+        // SetToRegistry(szRegistryTrailDrift, EnableTrailDrift);
       }
     }
 

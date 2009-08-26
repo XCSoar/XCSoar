@@ -41,7 +41,7 @@ Copyright_License {
 #include "Dialogs.h"
 #include "Units.h"
 #include "Airspace.h"
-#include "MapWindow.h"
+#include "Protection.hpp"
 #include "Math/FastMath.h"
 #include "Math/Units.h"
 #include "Utils.h"
@@ -115,8 +115,7 @@ static void OnEnableClicked(WindowControl * Sender){
 static void OnCloseClicked(WindowControl * Sender){
 	(void)Sender;
   wf->SetVisible(false);
-  MapWindow::RequestFastRefresh();
-
+  drawTriggerEvent.trigger();
 //  SetFocus(hWndMainWindow);
 //  SetFocus(hWndMapWindow);
 

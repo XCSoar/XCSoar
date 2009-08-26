@@ -46,7 +46,8 @@ extern short TerrainBrightness;
 extern short TerrainRamp;
 void DrawTerrain(const HDC hdc, const RECT rc,
 		 const double sunazimuth, const double sunelevation,
-		 double lon, double lat);
+		 double lon, double lat,
+		 const bool isBigZoom);
 void DrawSpotHeights(const HDC hdc);
 void CloseTerrainRenderer();
 

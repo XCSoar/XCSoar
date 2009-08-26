@@ -70,6 +70,7 @@ Copyright_License {
 #include "SnailTrail.hpp"
 #include "Screen/Blank.hpp"
 #include "Screen/Fonts.hpp"
+#include "Screen/Graphics.hpp"
 #include "Polar/Historical.hpp"
 #include "ProcessTimer.hpp"
 
@@ -123,42 +124,18 @@ bool DisplayLocked = true;
 HBRUSH hBrushSelected;
 HBRUSH hBrushUnselected;
 HBRUSH hBrushButton;
-COLORREF ColorSelected = RGB(0xC0,0xC0,0xC0);
-COLORREF ColorUnselected = RGB(0xFF,0xFF,0xFF);
-COLORREF ColorWarning = RGB(0xFF,0x00,0x00);
-COLORREF ColorOK = RGB(0x00,0x00,0xFF);
-COLORREF ColorButton = RGB(0xA0,0xE0,0xA0);
 
-int                                             AutoAdvance = 1;
-bool                                            AdvanceArmed = false;
-
-
-bool EnableBlockSTF = false;
-
-bool GlobalRunning = false;
-
-
-// this controls all displays, to make sure everything is
-// properly initialised.
-
-
-//Flight Data Globals
-
-NMEA_INFO     GPS_INFO;
-DERIVED_INFO  CALCULATED_INFO;
-
-
-bool          TaskAborted = false;
-
-//Local Static data
-static int iTimerID= 0;
-
-// Final Glide Data
+///////////////////////////////////////////////////////////////////////////////
+// settings
+int    AutoAdvance = 1;
+bool   AdvanceArmed = false;
+bool   EnableBlockSTF = false;
+bool   GlobalRunning = false;
+bool   TaskAborted = false;
 double SAFETYALTITUDEARRIVAL = 500;
 double SAFETYALTITUDEBREAKOFF = 700;
 double SAFETYALTITUDETERRAIN = 200;
 double SAFTEYSPEED = 50.0;
-
 
 // Team code info
 int TeamCodeRefWaypoint = -1;
@@ -176,11 +153,9 @@ int SectorType = 1; // FAI sector
 DWORD SectorRadius = 500;
 int StartLine = TRUE;
 DWORD StartRadius = 3000;
-
 int HomeWaypoint = -1;
 int AirfieldsHomeWaypoint = -1; // VENTA3 force Airfields home to be HomeWaypoint if
                                 // an H flag in waypoints file is not available..
-
 // Specials
 double QFEAltitudeOffset = 0;
 int OnAirSpace=1; // VENTA3 toggle DrawAirSpace, normal behaviour is "true"
@@ -192,7 +167,6 @@ bool EnableAutoSoundVolume=true;
 bool ExtendedVisualGlide=false;
 bool VirtualKeys=false;
 short AverEffTime=0;
-
 // user interface settings
 bool CircleZoom = false;
 bool EnableTopology = false;
@@ -205,13 +179,10 @@ int SoundVolume = 80;
 int SoundDeadband = 5;
 bool EnableVarioGauge = false;
 
-
-
 //IGC Logger
 bool LoggerActive = false;
 
 // Others
-
 BOOL COMPORTCHANGED = FALSE;
 BOOL MAPFILECHANGED = FALSE;
 BOOL AIRSPACEFILECHANGED = FALSE;
@@ -224,13 +195,11 @@ BOOL LANGUAGEFILECHANGED = FALSE;
 BOOL STATUSFILECHANGED = FALSE;
 BOOL INPUTFILECHANGED = FALSE;
 
-
 //Task Information
 Task_t Task = {{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0}};
 Start_t StartPoints;
 TaskStats_t TaskStats;
 int ActiveWayPoint = -1;
-
 
 // Assigned Area Task
 double AATTaskLength = 120;
@@ -241,17 +210,30 @@ DWORD StartMaxSpeed = 0;
 DWORD StartMaxHeightMargin = 0;
 DWORD StartMaxSpeedMargin = 0;
 
+////////////////////////////////////////////////////////////////////////////////
+//Flight Data Globals
+
+NMEA_INFO     GPS_INFO;
+DERIVED_INFO  CALCULATED_INFO;
+
+////////////////////////////////////////////////////////////////////////////////
+//Local Static data
+static int iTimerID= 0;
+
+
 #if (((UNDER_CE >= 300)||(_WIN32_WCE >= 0x0300)) && (WINDOWSPC<1))
 #define HAVE_ACTIVATE_INFO
 static SHACTIVATEINFO s_sai;
 #endif
 
+////////////////////////////////////////////////////////////////////////////////
 // Menu handling
 int MenuTimeOut = 0;
 int MenuTimeoutMax = MENUTIMEOUTMAX;
 static bool MenuActive = false;
 
 
+////////////////////////////////////////////////////////////////////////////////
 // Forward declarations of functions included in this code module:
 ATOM MyRegisterClass (HINSTANCE, LPTSTR);
 BOOL InitInstance    (HINSTANCE, int);
@@ -259,8 +241,8 @@ LRESULT CALLBACK WndProc (HWND, UINT, WPARAM, LPARAM);
 LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 void RestartCommPorts(void);
 
-///////////////////////////////////////
-
+////////////////////////////////////////////////////////////////////////////////
+//
 void SwitchToMapWindow(void)
 {
   DefocusInfoBox();
@@ -294,7 +276,7 @@ void ShowMenu() {
 void SettingsEnter() {
   MenuActive = true;
 
-  MapWindow::SuspendDrawingThread();
+  MapWindowBase::SuspendDrawingThread();
   // This prevents the map and calculation threads from doing anything
   // with shared data while it is being changed.
 
@@ -403,7 +385,7 @@ void SettingsLeave() {
 
 #endif
 
-  MapWindow::ResumeDrawingThread();
+  MapWindowBase::ResumeDrawingThread();
   // allow map and calculations threads to continue on their merry way
 }
 
@@ -420,7 +402,7 @@ void SystemConfiguration(void) {
   SettingsLeave();
 }
 
-
+//////////////////////////////////////////////////////////////////////
 
 void FullScreen() {
 
@@ -442,11 +424,11 @@ void FullScreen() {
                  SWP_SHOWWINDOW);
 #endif
   }
-  MapWindow::RequestFastRefresh();
+  drawTriggerEvent.trigger();
   InfoBoxesSetDirty(true);
 }
 
-
+////////////////////////////////////////////////////////////////////////
 void RestartCommPorts() {
   static bool first = true;
   /*
@@ -474,7 +456,7 @@ void RestartCommPorts() {
 
 }
 
-
+/////////////////////////////////////////////////////////////////////////////////
 
 
 void PreloadInitialisation(bool ask) {
@@ -547,7 +529,7 @@ void AfterStartup() {
 
   // Trigger first redraw
   TriggerGPSUpdate();
-  MapWindow::MapDirty = true;
+  MapWindow::dirtyEvent.trigger();
   FullScreen();
   TriggerRedraws();
 }
@@ -703,6 +685,7 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   OpenGeoid();
 
   PreloadInitialisation(false);
+  ////////////////////////////////////////////////////////
 
   GaugeCDI::Create();
   GaugeVario::Create();
@@ -1058,6 +1041,9 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
   WindowSize.top = (GetSystemMetrics(SM_CYSCREEN) - WindowSize.bottom) / 2;
 #endif
 
+  // color/pattern chart
+  MapGfx.Initialise();
+
   StartupStore(TEXT("Create main window\n"));
 
   hWndMainWindow = CreateWindow(szWindowClass, szTitle,
@@ -1083,9 +1069,9 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 	      (WPARAM)ICON_SMALL, (LPARAM)hTmp);
 #endif
 
-  hBrushSelected = (HBRUSH)CreateSolidBrush(ColorSelected);
-  hBrushUnselected = (HBRUSH)CreateSolidBrush(ColorUnselected);
-  hBrushButton = (HBRUSH)CreateSolidBrush(ColorButton);
+  hBrushSelected = (HBRUSH)CreateSolidBrush(MapGfx.ColorSelected);
+  hBrushUnselected = (HBRUSH)CreateSolidBrush(MapGfx.ColorUnselected);
+  hBrushButton = (HBRUSH)CreateSolidBrush(MapGfx.ColorButton);
 
   GetClientRect(hWndMainWindow, &rc);
 
@@ -1230,7 +1216,7 @@ void Shutdown(void) {
   CreateProgressDialog(gettext(TEXT("Shutdown, please wait...")));
 
   StartupStore(TEXT("CloseDrawingThread\n"));
-  MapWindow::CloseDrawingThread();
+  MapWindowBase::CloseDrawingThread();
 
   // Stop calculating too (wake up)
   TriggerAll();
@@ -1376,30 +1362,30 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
       wdata = GetWindowLong((HWND)lParam, GWL_USERDATA);
       switch(wdata) {
       case 0:
-        SetBkColor((HDC)wParam, ColorUnselected);
-        SetTextColor((HDC)wParam, RGB(0x00,0x00,0x00));
+        SetBkColor((HDC)wParam, MapGfx.ColorUnselected);
+        SetTextColor((HDC)wParam, MapGfx.ColorBlack);
         return (LRESULT)hBrushUnselected;
       case 1:
-        SetBkColor((HDC)wParam, ColorSelected);
-        SetTextColor((HDC)wParam, RGB(0x00,0x00,0x00));
+        SetBkColor((HDC)wParam, MapGfx.ColorSelected);
+        SetTextColor((HDC)wParam, MapGfx.ColorBlack);
         return (LRESULT)hBrushSelected;
       case 2:
-	SetBkColor((HDC)wParam, ColorUnselected);
-        SetTextColor((HDC)wParam, ColorWarning);
+	SetBkColor((HDC)wParam, MapGfx.ColorUnselected);
+        SetTextColor((HDC)wParam, MapGfx.ColorWarning);
 	return (LRESULT)hBrushUnselected;
       case 3:
-	SetBkColor((HDC)wParam, ColorUnselected);
-        SetTextColor((HDC)wParam, ColorOK);
+	SetBkColor((HDC)wParam, MapGfx.ColorUnselected);
+        SetTextColor((HDC)wParam, MapGfx.ColorOK);
 	return (LRESULT)hBrushUnselected;
       case 4:
 	// black on light green
-	SetBkColor((HDC)wParam, ColorButton);
-        SetTextColor((HDC)wParam, RGB(0x00,0x00,0x00));
+	SetBkColor((HDC)wParam, MapGfx.ColorButton);
+        SetTextColor((HDC)wParam, MapGfx.ColorBlack);
 	return (LRESULT)hBrushButton;
       case 5:
 	// grey on light green
-	SetBkColor((HDC)wParam, ColorButton);
-        SetTextColor((HDC)wParam, RGB(0x80,0x80,0x80));
+	SetBkColor((HDC)wParam, MapGfx.ColorButton);
+        SetTextColor((HDC)wParam, MapGfx.ColorMidGrey);
 	return (LRESULT)hBrushButton;
       }
       break;
@@ -1552,8 +1538,6 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
   if(wmControl != NULL) {
     if (ProgramStarted==psNormalOp) {
 
-      DialogActive = false; // is this required?
-
       FullScreen();
 
       if (InfoBoxClick(wmControl, DisplayLocked)) {
@@ -1570,8 +1554,5 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
   }
   return DefWindowProc(hWnd, message, wParam, lParam);
 }
-
-
-//////////////////////
 
 

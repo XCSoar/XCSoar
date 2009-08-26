@@ -461,10 +461,13 @@ OBJS	:=\
 	\
 	$(SRC)/MapWindow.o 		\
 	$(SRC)/MapWindowAirspace.o 	\
-	$(SRC)/MapWindowGraphics.o 	\
+	$(SRC)/MapWindowBase.o 		\
+	$(SRC)/MapWindowEvents.o	\
 	$(SRC)/MapWindowGlideRange.o 	\
+	$(SRC)/MapWindowGraphics.o 	\
 	$(SRC)/MapWindowLabels.o 	\
 	$(SRC)/MapWindowProjection.o 	\
+	$(SRC)/MapWindowRender.o 	\
 	$(SRC)/MapWindowScale.o 	\
 	$(SRC)/MapWindowSymbols.o 	\
 	$(SRC)/MapWindowTask.o 		\

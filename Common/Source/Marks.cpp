@@ -38,7 +38,6 @@ Copyright_License {
 #include "Terrain.h"
 #include "XCSoar.h"
 #include "Protection.hpp"
-#include "MapWindow.h"
 #include "Topology.h"
 #include "Dialogs.h"
 #include "Settings.hpp"

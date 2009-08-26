@@ -37,17 +37,18 @@ Copyright_License {
 */
 
 #include "GaugeFLARM.h"
+#include "XCSoar.h"
 #include "Interface.hpp"
 #include "Math/FastMath.h"
 #include "Math/Geometry.hpp"
 #include "Math/Screen.hpp"
 #include "Compatibility/string.h"
-
+#include "InfoBoxLayout.h"
+#include "Screen/Graphics.hpp"
+#include "Screen/Fonts.hpp"
 #include <stdlib.h>
 
-extern HFONT  TitleWindowFont;
-
-bool EnableFLARMGauge = true;
+bool  EnableFLARMGauge = true;
 DWORD EnableFLARMMap = 1;
 
 HWND GaugeFLARM::hWndFLARMWindow = NULL; //FLARM Window
@@ -64,9 +65,6 @@ bool GaugeFLARM::Traffic= false;
 bool GaugeFLARM::ForceVisible= false;
 RECT GaugeFLARM::rc;
 bool GaugeFLARM::Suppress= false;
-
-#include "InfoBoxLayout.h"
-#include "XCSoar.h"
 
 static COLORREF colTextGray;
 static COLORREF colText;
@@ -110,9 +108,6 @@ void GaugeFLARM::RenderBg() {
 #include "WindowControls.h" // just to get colors
 
 void GaugeFLARM::RenderTraffic(NMEA_INFO  *gps_info) {
-  HBRUSH redBrush = CreateSolidBrush(RGB(0xFF,0x00,0x00));
-  HBRUSH yellowBrush = CreateSolidBrush(RGB(0xFF,0xFF,0x00));
-  HBRUSH greenBrush = CreateSolidBrush(RGB(0x00,0xFF,0x00));
   // TODO enhancement: support red/green Color blind pilots
 
   SelectObject(hdcDrawWindow, TitleWindowFont);
@@ -124,15 +119,15 @@ void GaugeFLARM::RenderTraffic(NMEA_INFO  *gps_info) {
 
       switch (gps_info->FLARM_Traffic[i].AlarmLevel) {
       case 1:
-	  SelectObject(hdcDrawWindow, yellowBrush);
+	  SelectObject(hdcDrawWindow, MapGfx.yellowBrush);
 	  break;
       case 2:
       case 3:
-	  SelectObject(hdcDrawWindow, redBrush);
+	  SelectObject(hdcDrawWindow, MapGfx.redBrush);
 	  break;
       case 0:
       case 4:
-	  SelectObject(hdcDrawWindow, greenBrush);
+	  SelectObject(hdcDrawWindow, MapGfx.greenBrush);
 	  break;
       }
 
@@ -228,9 +223,6 @@ void GaugeFLARM::RenderTraffic(NMEA_INFO  *gps_info) {
 
     }
   }
-  DeleteObject(greenBrush);
-  DeleteObject(yellowBrush);
-  DeleteObject(redBrush);
 }
 
 

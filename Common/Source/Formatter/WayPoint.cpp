@@ -40,7 +40,6 @@ Copyright_License {
 #include "WayPoint.hpp"
 #include "Protection.hpp"
 #include "Settings.hpp"
-#include "MapWindow.h" // only for display mode definitions, should be elsewhere
 #include "SettingsComputer.hpp" // for auto-setting of alternates.  Dangerous!
 #include "SettingsTask.hpp"
 #include "SettingsUser.hpp"

@@ -123,8 +123,6 @@ void MapWindow::CalculateScreenPositionsAirspaceArea(AIRSPACE_AREA &area) {
 }
 
 void MapWindow::CalculateScreenPositionsAirspace() {
-
-
   if (AirspaceCircle) {
     for (AIRSPACE_CIRCLE* circ = AirspaceCircle;
          circ < AirspaceCircle+NumberOfAirspaceCircles; circ++) {

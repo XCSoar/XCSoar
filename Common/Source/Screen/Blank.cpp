@@ -180,19 +180,20 @@ void BlankDisplay(bool doblank) {
 
 void CheckDisplayTimeOut(bool sticky)
 {
-  if (DisplayTimeOut >= DISPLAYTIMEOUTMAX) {
-    BlankDisplay(true);
-  } else {
-    BlankDisplay(false);
-  }
   if (!sticky) {
-    DisplayTimeOut++;
+    if (DisplayTimeOut< DISPLAYTIMEOUTMAX)
+      DisplayTimeOut++;
   } else {
     // JMW don't let display timeout while a dialog is active,
     // but allow button presses to trigger redisplay
     if (DisplayTimeOut>1) {
       DisplayTimeOut=1;
     }
+  }
+  if (DisplayTimeOut >= DISPLAYTIMEOUTMAX) {
+    BlankDisplay(true);
+  } else {
+    BlankDisplay(false);
   }
 }
 

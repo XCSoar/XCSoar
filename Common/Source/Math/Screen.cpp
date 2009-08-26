@@ -40,13 +40,15 @@ Copyright_License {
 #include "Math/FastMath.h"
 #include "Utils.h"
 #include "InfoBoxLayout.h"
-#include "MapWindow.h"
+#include "MapWindowProjection.hpp"
 
 #include <math.h>
 
 #ifndef RAD_TO_DEG
 #define RAD_TO_DEG 57.2957795131
 #endif
+
+// note these use static vars! not thread-safe
 
 void protate(POINT &pin, const double &angle)
 {
@@ -152,6 +154,7 @@ void PolygonRotateShift(POINT* poly, const int n, const int xs, const int ys,
   }
 }
 
+/* not used!
 BOOL PolygonVisible(const POINT *lpPoints, int nCount, RECT rc)
 {
   const RECT MapRect = MapWindow::GetMapRect();
@@ -232,7 +235,7 @@ BOOL PolygonVisible(const POINT *lpPoints, int nCount, RECT rc)
       return FALSE;
     }
 }
-
+*/
 
 bool CheckRectOverlap(RECT rc1, RECT rc2) {
   if(rc1.left >= rc2.right) return(false);

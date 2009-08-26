@@ -53,19 +53,7 @@ Copyright_License {
 
 class InfoBox{
  public:
-    static COLORREF redColor;
-    static COLORREF blueColor;
-    static COLORREF inv_redColor;
-    static COLORREF inv_blueColor;
-
-// Not really used, tested and dropped. But useful for the future
-    static COLORREF yellowColor;
-    static COLORREF greenColor;
-    static COLORREF magentaColor;
-    static COLORREF inv_yellowColor;
-    static COLORREF inv_greenColor;
-    static COLORREF inv_magentaColor;
-  private:
+ private:
 
     int mX;
     int mY;

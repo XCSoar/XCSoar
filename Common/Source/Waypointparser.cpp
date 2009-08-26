@@ -51,7 +51,7 @@ Copyright_License {
 #include "Dialogs/dlgTools.h"
 #include "Utils.h"
 #include "UtilsText.hpp"
-#include "MapWindow.h"
+#include "MapWindowProjection.hpp"
 #include "RasterTerrain.h"
 #include "LogFile.hpp"
 
@@ -811,7 +811,7 @@ int FindNearestWayPoint(double X, double Y, double MaxRange,
 
     if (WayPointList[i].Visible) {
 
-      if (MapWindow::WaypointInRange(i)) {
+      if (MapWindowProjection::WaypointInRange(i)) {
 
         // only look for visible waypoints
         // feature added by Samuel Gisiger

@@ -40,31 +40,8 @@ Copyright_License {
 
 #include "StdAfx.h"
 #include "Sizes.h"
+#include "SettingsAirspace.hpp"
 #include "Screen/shapelib/mapshape.h"
-
-#define OTHER                           0
-#define RESTRICT                        1
-#define PROHIBITED                      2
-#define DANGER                          3
-#define CLASSA				4
-#define CLASSB				5
-#define CLASSC				6
-#define CLASSD				7
-#define	NOGLIDER			8
-#define CTR                             9
-#define WAVE				10
-#define AATASK				11
-#define CLASSE				12
-#define CLASSF				13
-#define AIRSPACECLASSCOUNT              14
-
-// modes
-#define ALLON 0
-#define CLIP 1
-#define AUTO 2
-#define ALLBELOW 3
-#define INSIDE 4
-#define ALLOFF 5
 
 
 typedef struct _AIRSPACE_ACK
@@ -138,15 +115,6 @@ extern AIRSPACE_CIRCLE *AirspaceCircle;
 extern unsigned int NumberOfAirspacePoints;
 extern unsigned int NumberOfAirspaceAreas;
 extern unsigned int NumberOfAirspaceCircles;
-
-//Airspace Warnings
-extern int AIRSPACEWARNINGS;
-extern int WarningTime;
-extern int AcknowledgementTime;
-
-extern int AltitudeMode;
-extern int ClipAltitude;
-extern int AltWarningMargin;
 
 ////////
 

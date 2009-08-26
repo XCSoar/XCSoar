@@ -80,7 +80,7 @@ void SetTopologyBounds(const RECT rcin, const bool force) {
   rectObj bounds_screen;
   (void)rcin;
 
-  bounds_screen = MapWindow::CalculateScreenBounds(1.0);
+  bounds_screen = MapWindowProjection::CalculateScreenBounds(1.0);
 
   bool recompute = false;
 
@@ -110,7 +110,7 @@ void SetTopologyBounds(const RECT rcin, const bool force) {
     } else {
       scale = BORDERFACTOR;
     }
-    bounds_active = MapWindow::CalculateScreenBounds(scale);
+    bounds_active = MapWindowProjection::CalculateScreenBounds(scale);
 
     range_active = max((bounds_active.maxx-bounds_active.minx),
 		       (bounds_active.maxy-bounds_active.miny));

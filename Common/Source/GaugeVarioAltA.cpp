@@ -38,12 +38,12 @@ Copyright_License {
 #include "GaugeVarioAltA.h"
 #include "LogFile.hpp"
 #include "XCSoar.h"
-#include "MapWindow.h"
+#include "MapWindowProjection.hpp"
 #include "Logger.h"
 #include "Math/FastMath.h"
 #include "Blackboard.hpp"
 #include "InfoBoxLayout.h"
-#include "InfoBox.h"
+#include "Screen/Graphics.hpp"
 #include "Math/Geometry.hpp"
 #include "McReady.h"
 #include "Interface.hpp"
@@ -119,7 +119,7 @@ void GaugeVario::Create() {
 
   StartupStore(TEXT("Create Vario\n"));
 
-  RECT MapRectBig = MapWindow::GetMapRect();
+  RECT MapRectBig = MapWindowProjection::GetMapRect();
 
   hWndVarioWindow = CreateWindow(TEXT("STATIC"),TEXT(" "),
 			       WS_VISIBLE|WS_CHILD | WS_CLIPCHILDREN
@@ -166,17 +166,17 @@ void GaugeVario::Create() {
   COLORREF themagentaColor; // VENTA2
 
   if (Appearance.InverseInfoBox) {
-    theredColor = InfoBox::inv_redColor;
-    theblueColor = InfoBox::inv_blueColor;
-    theyellowColor = InfoBox::inv_yellowColor;
-    thegreenColor = InfoBox::inv_greenColor;
-    themagentaColor = InfoBox::inv_magentaColor;
+    theredColor = MapGfx.inv_redColor;
+    theblueColor = MapGfx.inv_blueColor;
+    theyellowColor = MapGfx.inv_yellowColor;
+    thegreenColor = MapGfx.inv_greenColor;
+    themagentaColor = MapGfx.inv_magentaColor;
   } else {
-    theredColor = InfoBox::redColor;
-    theblueColor = InfoBox::blueColor;
-    theyellowColor = InfoBox::yellowColor;
-    thegreenColor = InfoBox::greenColor;
-    themagentaColor = InfoBox::magentaColor;
+    theredColor = MapGfx.redColor;
+    theblueColor = MapGfx.blueColor;
+    theyellowColor = MapGfx.yellowColor;
+    thegreenColor = MapGfx.greenColor;
+    themagentaColor = MapGfx.magentaColor;
   }
   redBrush = CreateSolidBrush(theredColor);
   blueBrush = CreateSolidBrush(theblueColor);

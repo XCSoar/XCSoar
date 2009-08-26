@@ -36,15 +36,54 @@ Copyright_License {
 */
 
 #include "MapWindow.h"
+#include "Protection.hpp"
 #include "Math/FastMath.h"
 #include "Math/Geometry.hpp"
+#include "InfoBoxLayout.h"
 #include "SettingsUser.hpp"
 #include "SettingsTask.hpp"
 #include "InputEvents.h"
 #include "SettingsUser.hpp"
+#include <stdlib.h>
+
+int GliderScreenPosition = 20; // 20% from bottom
+DisplayOrientation_t DisplayOrientation = TRACKUP;
+bool MapWindowProjection::GliderCenter=false;
+
+rectObj MapWindowProjection::screenbounds_latlon;
+RECT MapWindowProjection::MapRect;
+RECT MapWindowProjection::MapRectBig;
+RECT MapWindowProjection::MapRectSmall;
+POINT MapWindowProjection::Orig_Screen;
+double MapWindowProjection::PanLatitude = 0.0;
+double MapWindowProjection::PanLongitude = 0.0;
+double MapWindowProjection::DisplayAngle = 0.0;
+double MapWindowProjection::DrawScale;
+double MapWindowProjection::InvDrawScale;
+double MapWindowProjection::RequestMapScale=5;
+double MapWindowProjection::MapScale=5;
+double MapWindowProjection::MapScaleOverDistanceModify=5/DISTANCEMODIFY;
+double MapWindowProjection::ResMapScaleOverDistanceModify = 0.0;
+double MapWindowProjection::DisplayAircraftAngle = 0.0;
+bool MapWindowProjection::TargetPan = false;
+bool MapWindowProjection::EnablePan = false;
+int MapWindowProjection::TargetPanIndex = 0;
+double MapWindowProjection::TargetZoomDistance = 500.0;
+int MapWindowProjection::ScaleListCount = 0;
+double MapWindowProjection::ScaleList[];
+int MapWindowProjection::ScaleCurrent;
+
+#include "WayPoint.hpp"
+
+bool MapWindowProjection::WaypointInRange(int i) {
+  return ((WayPointList[i].Zoom >= MapScale*10)
+          || (WayPointList[i].Zoom == 0))
+    && (MapScale <= 10);
+}
 
 
-bool MapWindow::PointInRect(const double &lon, const double &lat,
+bool MapWindowProjection::PointInRect(const double &lon,
+			    const double &lat,
                             const rectObj &bounds) {
   if ((lon> bounds.minx) &&
       (lon< bounds.maxx) &&
@@ -56,7 +95,8 @@ bool MapWindow::PointInRect(const double &lon, const double &lat,
 }
 
 
-bool MapWindow::PointVisible(const double &lon, const double &lat) {
+bool MapWindowProjection::PointVisible(const double &lon,
+				       const double &lat) {
   if ((lon> screenbounds_latlon.minx) &&
       (lon< screenbounds_latlon.maxx) &&
       (lat> screenbounds_latlon.miny) &&
@@ -67,7 +107,7 @@ bool MapWindow::PointVisible(const double &lon, const double &lat) {
 }
 
 
-bool MapWindow::PointVisible(const POINT &P)
+bool MapWindowProjection::PointVisible(const POINT &P)
 {
   if(( P.x >= MapRect.left )
      &&
@@ -82,191 +122,8 @@ bool MapWindow::PointVisible(const POINT &P)
     return FALSE;
 }
 
-////////////////////////////////////////////////////////////////////
-// RETURNS Longitude, Latitude!
 
-void MapWindow::OrigScreen2LatLon(const int &x, const int &y,
-                                  double &X, double &Y)
-{
-  int sx = x;
-  int sy = y;
-  irotate(sx, sy, DisplayAngle);
-  Y= PanLatitude  - sy*InvDrawScale;
-  X= PanLongitude + sx*invfastcosine(Y)*InvDrawScale;
-}
-
-
-void MapWindow::Screen2LatLon(const int &x, const int &y,
-                              double &X, double &Y)
-{
-  int sx = x-(int)Orig_Screen.x;
-  int sy = y-(int)Orig_Screen.y;
-  irotate(sx, sy, DisplayAngle);
-  Y= PanLatitude  - sy*InvDrawScale;
-  X= PanLongitude + sx*invfastcosine(Y)*InvDrawScale;
-}
-
-void MapWindow::LatLon2Screen(const double &lon, const double &lat,
-                              POINT &sc) {
-
-  int Y = Real2Int((PanLatitude-lat)*DrawScale);
-  int X = Real2Int((PanLongitude-lon)*fastcosine(lat)*DrawScale);
-
-  irotate(X, Y, DisplayAngle);
-
-  sc.x = Orig_Screen.x - X;
-  sc.y = Orig_Screen.y + Y;
-}
-
-// This one is optimised for long polygons
-void MapWindow::LatLon2Screen(pointObj *ptin, POINT *ptout, const int n,
-			      const int skip) {
-  static double lastangle = -1;
-  static int cost=1024, sint=0;
-  const double mDisplayAngle = DisplayAngle;
-
-  if(mDisplayAngle != lastangle) {
-    lastangle = mDisplayAngle;
-    int deg = DEG_TO_INT(AngleLimit360(mDisplayAngle));
-    cost = ICOSTABLE[deg];
-    sint = ISINETABLE[deg];
-  }
-  const int xxs = Orig_Screen.x*1024-512;
-  const int yys = Orig_Screen.y*1024+512;
-  const double mDrawScale = DrawScale;
-  const double mPanLongitude = PanLongitude;
-  const double mPanLatitude = PanLatitude;
-  pointObj* p = ptin;
-  const pointObj* ptend = ptin+n;
-
-  while (p<ptend) {
-    int Y = Real2Int((mPanLatitude-p->y)*mDrawScale);
-    int X = Real2Int((mPanLongitude-p->x)*fastcosine(p->y)*mDrawScale);
-    ptout->x = (xxs-X*cost + Y*sint)/1024;
-    ptout->y = (Y*cost + X*sint + yys)/1024;
-    ptout++;
-    p+= skip;
-  }
-}
-
-
-bool MapWindow::GliderCenter=false;
-
-
-void MapWindow::CalculateOrientationNormal(void) {
-  double trackbearing = DrawInfo.TrackBearing;
-  //  trackbearing = DerivedDrawInfo.NextTrackBearing;
-  if( (DisplayOrientation == NORTHUP)
-      ||
-      ((DisplayOrientation == NORTHTRACK)
-       &&(DisplayMode != dmCircling))
-      ||
-      (
-       ((DisplayOrientation == NORTHCIRCLE)
-        ||(DisplayOrientation==TRACKCIRCLE))
-       && (DisplayMode == dmCircling) )
-      ) {
-    GliderCenter = true;
-
-    if (DisplayOrientation == TRACKCIRCLE) {
-      DisplayAngle = DerivedDrawInfo.WaypointBearing;
-      DisplayAircraftAngle = trackbearing-DisplayAngle;
-    } else {
-      DisplayAngle = 0.0;
-      DisplayAircraftAngle = trackbearing;
-    }
-  } else {
-    // normal, glider forward
-    GliderCenter = false;
-    DisplayAngle = trackbearing;
-    DisplayAircraftAngle = 0.0;
-  }
-  DisplayAngle = AngleLimit360(DisplayAngle);
-  DisplayAircraftAngle = AngleLimit360(DisplayAircraftAngle);
-}
-
-
-void MapWindow::CalculateOrientationTargetPan(void) {
-  // Target pan mode, show track up when looking at current task point,
-  // otherwise north up.  If circling, orient towards target.
-  GliderCenter = true;
-  if ((ActiveWayPoint==TargetPanIndex)
-      &&(DisplayOrientation != NORTHUP)
-      &&(DisplayOrientation != NORTHTRACK)
-      )    {
-    if (DisplayMode == dmCircling) {
-      // target-up
-      DisplayAngle = DerivedDrawInfo.WaypointBearing;
-      DisplayAircraftAngle =
-        DrawInfo.TrackBearing-DisplayAngle;
-    } else {
-      // track up
-      DisplayAngle = DrawInfo.TrackBearing;
-      DisplayAircraftAngle = 0.0;
-    }
-  } else {
-    // North up
-    DisplayAngle = 0.0;
-    DisplayAircraftAngle = DrawInfo.TrackBearing;
-  }
-
-}
-
-
-void MapWindow::CalculateOrigin(const RECT rc, POINT *Orig)
-{
-  if (TargetPan) {
-    CalculateOrientationTargetPan();
-  } else {
-    CalculateOrientationNormal();
-  }
-
-  if (GliderCenter || EnablePan) {
-    Orig->x = (rc.left + rc.right)/2;
-    Orig->y = (rc.bottom + rc.top)/2;
-  } else {
-    Orig->x = (rc.left + rc.right)/2;
-    Orig->y = ((rc.top - rc.bottom )*GliderScreenPosition/100)+rc.bottom;
-  }
-}
-
-
-void MapWindow::Event_Pan(int vswitch) {
-  //  static bool oldfullscreen = 0;  never assigned!
-  bool oldPan = EnablePan;
-  if (vswitch == -2) { // superpan, toggles fullscreen also
-
-    if (!EnablePan) {
-      StoreRestoreFullscreen(true);
-    } else {
-      StoreRestoreFullscreen(false);
-    }
-    // new mode
-    EnablePan = !EnablePan;
-    if (EnablePan) { // pan now on, so go fullscreen
-      RequestFullScreen = true;
-    }
-
-  } else if (vswitch == -1) {
-    EnablePan = !EnablePan;
-  } else {
-    EnablePan = (vswitch != 0); // 0 off, 1 on
-  }
-
-  if (EnablePan != oldPan) {
-    if (EnablePan) {
-      PanLongitude = DrawInfo.Longitude;
-      PanLatitude = DrawInfo.Latitude;
-      InputEvents::setMode(TEXT("pan"));
-    } else
-      InputEvents::setMode(TEXT("default"));
-  }
-  RefreshMap();
-}
-
-
-
-rectObj MapWindow::CalculateScreenBounds(double scale) {
+rectObj MapWindowProjection::CalculateScreenBounds(double scale) {
   // compute lat lon extents of visible screen
   rectObj sb;
 
@@ -346,4 +203,413 @@ rectObj MapWindow::CalculateScreenBounds(double scale) {
   }
 
   return sb;
+}
+
+////////////////////////////////////////////////////////////////////
+// RETURNS Longitude, Latitude!
+
+void MapWindowProjection::OrigScreen2LatLon(const int &x, const int &y,
+					    double &X, double &Y)
+{
+  int sx = x;
+  int sy = y;
+  irotate(sx, sy, DisplayAngle);
+  Y= PanLatitude  - sy*InvDrawScale;
+  X= PanLongitude + sx*invfastcosine(Y)*InvDrawScale;
+}
+
+
+void MapWindowProjection::Screen2LatLon(const int &x,
+					const int &y,
+					double &X, double &Y)
+{
+  int sx = x-(int)Orig_Screen.x;
+  int sy = y-(int)Orig_Screen.y;
+  irotate(sx, sy, DisplayAngle);
+  Y= PanLatitude  - sy*InvDrawScale;
+  X= PanLongitude + sx*invfastcosine(Y)*InvDrawScale;
+}
+
+void MapWindowProjection::LatLon2Screen(const double &lon,
+					const double &lat,
+					POINT &sc) {
+
+  int Y = Real2Int((PanLatitude-lat)*DrawScale);
+  int X = Real2Int((PanLongitude-lon)*fastcosine(lat)*DrawScale);
+
+  irotate(X, Y, DisplayAngle);
+
+  sc.x = Orig_Screen.x - X;
+  sc.y = Orig_Screen.y + Y;
+}
+
+// This one is optimised for long polygons
+void MapWindowProjection::LatLon2Screen(pointObj *ptin,
+					POINT *ptout,
+					const int n,
+					const int skip) {
+  static double lastangle = -1;
+  static int cost=1024, sint=0;
+  const double mDisplayAngle = DisplayAngle;
+
+  if(mDisplayAngle != lastangle) {
+    lastangle = mDisplayAngle;
+    int deg = DEG_TO_INT(AngleLimit360(mDisplayAngle));
+    cost = ICOSTABLE[deg];
+    sint = ISINETABLE[deg];
+  }
+  const int xxs = Orig_Screen.x*1024-512;
+  const int yys = Orig_Screen.y*1024+512;
+  const double mDrawScale = DrawScale;
+  const double mPanLongitude = PanLongitude;
+  const double mPanLatitude = PanLatitude;
+  pointObj* p = ptin;
+  const pointObj* ptend = ptin+n;
+
+  while (p<ptend) {
+    int Y = Real2Int((mPanLatitude-p->y)*mDrawScale);
+    int X = Real2Int((mPanLongitude-p->x)*fastcosine(p->y)*mDrawScale);
+    ptout->x = (xxs-X*cost + Y*sint)/1024;
+    ptout->y = (Y*cost + X*sint + yys)/1024;
+    ptout++;
+    p+= skip;
+  }
+}
+
+////////////////////////////////////////////////////////////////////
+
+
+void MapWindowProjection::CalculateOrientationNormal(void) {
+  double trackbearing = DrawInfo.TrackBearing;
+
+  if( (DisplayOrientation == NORTHUP)
+      ||
+      ((DisplayOrientation == NORTHTRACK)
+       &&(DisplayMode != dmCircling))
+      ||
+      (
+       ((DisplayOrientation == NORTHCIRCLE)
+        ||(DisplayOrientation==TRACKCIRCLE))
+       && (DisplayMode == dmCircling) )
+      ) {
+    GliderCenter = true;
+
+    if (DisplayOrientation == TRACKCIRCLE) {
+      DisplayAngle = DerivedDrawInfo.WaypointBearing;
+      DisplayAircraftAngle = trackbearing-DisplayAngle;
+    } else {
+      DisplayAngle = 0.0;
+      DisplayAircraftAngle = trackbearing;
+    }
+  } else {
+    // normal, glider forward
+    GliderCenter = false;
+    DisplayAngle = trackbearing;
+    DisplayAircraftAngle = 0.0;
+  }
+  DisplayAngle = AngleLimit360(DisplayAngle);
+  DisplayAircraftAngle = AngleLimit360(DisplayAircraftAngle);
+}
+
+
+void MapWindowProjection::CalculateOrientationTargetPan(void) {
+  // Target pan mode, show track up when looking at current task point,
+  // otherwise north up.  If circling, orient towards target.
+  GliderCenter = true;
+  if ((ActiveWayPoint==TargetPanIndex)
+      &&(DisplayOrientation != NORTHUP)
+      &&(DisplayOrientation != NORTHTRACK)
+      )    {
+    if (DisplayMode == dmCircling) {
+      // target-up
+      DisplayAngle = DerivedDrawInfo.WaypointBearing;
+      DisplayAircraftAngle =
+        DrawInfo.TrackBearing-DisplayAngle;
+    } else {
+      // track up
+      DisplayAngle = DrawInfo.TrackBearing;
+      DisplayAircraftAngle = 0.0;
+    }
+  } else {
+    // North up
+    DisplayAngle = 0.0;
+    DisplayAircraftAngle = DrawInfo.TrackBearing;
+  }
+
+}
+
+
+void MapWindowProjection::CalculateOrigin(const RECT rc, POINT *Orig)
+{
+  if (TargetPan) {
+    CalculateOrientationTargetPan();
+  } else {
+    CalculateOrientationNormal();
+  }
+
+  if (GliderCenter || EnablePan) {
+    Orig->x = (rc.left + rc.right)/2;
+    Orig->y = (rc.bottom + rc.top)/2;
+  } else {
+    Orig->x = (rc.left + rc.right)/2;
+    Orig->y = ((rc.top - rc.bottom )*GliderScreenPosition/100)+rc.bottom;
+  }
+}
+
+
+void MapWindow::Event_Pan(int vswitch) {
+  //  static bool oldfullscreen = 0;  never assigned!
+  bool oldPan = EnablePan;
+  if (vswitch == -2) { // superpan, toggles fullscreen also
+
+    if (!EnablePan) {
+      StoreRestoreFullscreen(true);
+    } else {
+      StoreRestoreFullscreen(false);
+    }
+    // new mode
+    EnablePan = !EnablePan;
+    if (EnablePan) { // pan now on, so go fullscreen
+      askFullScreen = true;
+    }
+
+  } else if (vswitch == -1) {
+    EnablePan = !EnablePan;
+  } else {
+    EnablePan = (vswitch != 0); // 0 off, 1 on
+  }
+
+  if (EnablePan != oldPan) {
+    if (EnablePan) {
+      PanLongitude = DrawInfo.Longitude;
+      PanLatitude = DrawInfo.Latitude;
+      InputEvents::setMode(TEXT("pan"));
+    } else
+      InputEvents::setMode(TEXT("default"));
+  }
+  RefreshMap();
+}
+
+
+double MapWindowProjection::GetApproxScreenRange() {
+  return (MapScale * max(MapRectBig.right-MapRectBig.left,
+                         MapRectBig.bottom-MapRectBig.top))
+    *1000.0/GetMapResolutionFactor();
+}
+
+
+int MapWindowProjection::GetMapResolutionFactor(void) {
+  return IBLSCALE(30);
+}
+
+
+/////
+
+
+double MapWindowProjection::LimitMapScale(double value) {
+
+  double minreasonable;
+
+  minreasonable = 0.05;
+
+  if (AutoZoom && DisplayMode != dmCircling) {
+    if (AATEnabled && (ActiveWayPoint>0)) {
+      minreasonable = 0.88;
+    } else {
+      minreasonable = 0.44;
+    }
+  }
+
+  if (ScaleListCount>0) {
+    return FindMapScale(max(minreasonable,min(160.0,value)));
+  } else {
+    return max(minreasonable,min(160.0,value));
+  }
+}
+
+
+double MapWindowProjection::StepMapScale(int Step){
+  static int nslow=0;
+  if (abs(Step)>=4) {
+    nslow++;
+    //    if (nslow %2 == 0) {
+    ScaleCurrent += Step/4;
+    //    }
+  } else {
+    ScaleCurrent += Step;
+  }
+  ScaleCurrent = max(0,min(ScaleListCount-1, ScaleCurrent));
+  return((ScaleList[ScaleCurrent]*GetMapResolutionFactor())
+         /(IBLSCALE(/*Appearance.DefaultMapWidth*/ MapRect.right)));
+}
+
+double MapWindowProjection::FindMapScale(double Value){
+
+  int    i;
+  double BestFit = 99999;
+  int    BestFitIdx=-1;
+  double DesiredScale =
+    (Value*IBLSCALE(/*Appearance.DefaultMapWidth*/ MapRect.right))/GetMapResolutionFactor();
+
+  for (i=0; i<ScaleListCount; i++){
+    double err = fabs(DesiredScale - ScaleList[i])/DesiredScale;
+    if (err < BestFit){
+      BestFit = err;
+      BestFitIdx = i;
+    }
+  }
+
+  if (BestFitIdx != -1){
+    ScaleCurrent = BestFitIdx;
+    return((ScaleList[ScaleCurrent]*GetMapResolutionFactor())
+           /IBLSCALE(/*Appearance.DefaultMapWidth*/ MapRect.right));
+  }
+  return(Value);
+}
+
+
+
+void MapWindowProjection::ModifyMapScale(void) {
+  // limit zoomed in so doesn't reach silly levels
+  RequestMapScale = LimitMapScale(RequestMapScale); // FIX VENTA remove limit
+  MapScaleOverDistanceModify = RequestMapScale/DISTANCEMODIFY;
+  ResMapScaleOverDistanceModify =
+    GetMapResolutionFactor()/MapScaleOverDistanceModify;
+  DrawScale = MapScaleOverDistanceModify;
+  DrawScale = DrawScale/111194;
+  DrawScale = GetMapResolutionFactor()/DrawScale;
+  InvDrawScale = 1.0/DrawScale;
+  MapScale = RequestMapScale;
+}
+
+
+void MapWindowProjection::UpdateMapScale()
+{
+  static int AutoMapScaleWaypointIndex = -1;
+  static double StartingAutoMapScale=0.0;
+  double AutoZoomFactor;
+
+  bool user_asked_for_change = false;
+
+  // if there is user intervention in the scale
+  if(MapScale != RequestMapScale) {
+    ModifyMapScale();
+    user_asked_for_change = true;
+  }
+
+  double wpd;
+  if (TargetPan) {
+    wpd = TargetZoomDistance;
+  } else {
+    wpd = DerivedDrawInfo.ZoomDistance;
+  }
+  if (TargetPan) {
+    // set scale exactly so that waypoint distance is the zoom factor
+    // across the screen
+    RequestMapScale = LimitMapScale(wpd
+                                    *DISTANCEMODIFY/ 4.0);
+    ModifyMapScale();
+    return;
+  }
+
+  if (AutoZoom) {
+    if(wpd > 0)
+      {
+
+	if(
+	   (((DisplayOrientation == NORTHTRACK)
+	     &&(DisplayMode != dmCircling))
+	    ||(DisplayOrientation == NORTHUP)
+	    ||
+	    (((DisplayOrientation == NORTHCIRCLE)
+	      || (DisplayOrientation == TRACKCIRCLE))
+	     && (DisplayMode == dmCircling) ))
+	   && !TargetPan
+	   )
+	  {
+	    AutoZoomFactor = 2.5;
+	  }
+	else
+	  {
+	    AutoZoomFactor = 4;
+	  }
+
+	if(
+	   (wpd < ( AutoZoomFactor * MapScaleOverDistanceModify))
+	   ||
+	   (StartingAutoMapScale==0.0))
+	  {
+	    // waypoint is too close, so zoom in
+	    // OR just turned waypoint
+
+	    // this is the first time this waypoint has gotten close,
+	    // so save original map scale
+
+	    if (StartingAutoMapScale==0.0) {
+	      StartingAutoMapScale = MapScale;
+	    }
+
+	    // set scale exactly so that waypoint distance is the zoom factor
+	    // across the screen
+	    RequestMapScale = LimitMapScale(wpd
+					    *DISTANCEMODIFY/ AutoZoomFactor);
+	    ModifyMapScale();
+
+	  } else {
+
+	  if (user_asked_for_change) {
+
+	    // user asked for a zoom change and it was achieved, so
+	    // reset starting map scale
+	    ////?TODO enhancement: for frank          StartingAutoMapScale = MapScale;
+	  }
+
+	}
+      }
+  } else {
+
+    // reset starting map scale for auto zoom if momentarily switch
+    // off autozoom
+    //    StartingAutoMapScale = RequestMapScale;
+  }
+
+  if (TargetPan) {
+    return;
+  }
+
+  LockTaskData();  // protect from external task changes
+#ifdef HAVEEXCEPTIONS
+  __try{
+#endif
+    // if we aren't looking at a waypoint, see if we are now
+    if (AutoMapScaleWaypointIndex == -1) {
+      if (ValidTaskPoint(ActiveWayPoint)) {
+	AutoMapScaleWaypointIndex = Task[ActiveWayPoint].Index;
+      }
+    }
+
+    // if there is an active waypoint
+    if (ValidTaskPoint(ActiveWayPoint)) {
+
+      // if the current zoom focused waypoint has changed...
+      if (AutoMapScaleWaypointIndex != Task[ActiveWayPoint].Index) {
+	AutoMapScaleWaypointIndex = Task[ActiveWayPoint].Index;
+
+	// zoom back out to where we were before
+	if (StartingAutoMapScale> 0.0) {
+	  RequestMapScale = StartingAutoMapScale;
+	}
+
+	// reset search for new starting zoom level
+	StartingAutoMapScale = 0.0;
+      }
+
+    }
+#ifdef HAVEEXCEPTIONS
+  }__finally
+#endif
+     {
+       UnlockTaskData();
+     }
+
 }

@@ -40,7 +40,7 @@ Copyright_License {
 #include "Message.h"
 #include "XCSoar.h"
 #include "Interface.hpp"
-#include "MapWindow.h"
+#include "Protection.hpp"
 #include "InfoBoxLayout.h"
 
 #include <tchar.h>
@@ -202,7 +202,7 @@ void Message::Resize() {
       //      mRc.top=0; mRc.bottom=0;
       //      DrawWireRects(&mRc, 5);
 
-      MapWindow::RequestFastRefresh();
+      drawTriggerEvent.trigger();
     }
     hidden = true;
   } else {
@@ -253,8 +253,7 @@ void Message::Resize() {
     hidden = false;
 
     // window has resized potentially, so redraw map to reduce artifacts
-    MapWindow::RequestFastRefresh();
-
+    drawTriggerEvent.trigger();
   }
 
 }

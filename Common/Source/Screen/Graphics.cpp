@@ -40,11 +40,13 @@ Copyright_License {
 #include "Screen/Ramp.hpp"
 #include "Screen/Util.hpp"
 #include "Appearance.hpp"
-#include "MapWindow.h"
+#include "MapWindowProjection.hpp"
 #include "Interface.hpp"
 #include "InfoBoxLayout.h"
 #include "Math/Screen.hpp"
 #include <stdlib.h>
+#include "SettingsUser.hpp"
+#include "SettingsAirspace.hpp"
 
 #define NUMSNAILRAMP 6
 
@@ -57,29 +59,67 @@ const COLORRAMP snail_colors[] = {
   {501,       0x00, 0xff, 0x3e}
 };
 
+
+// airspace brushes/colours
+COLORREF ScreenGraphics::GetAirspaceColour(const int i) {
+  return Colours[i];
+}
+HBRUSH ScreenGraphics::GetAirspaceBrush(const int i) {
+  return hAirspaceBrushes[i];
+}
+COLORREF ScreenGraphics::GetAirspaceColourByClass(const int i) {
+  return Colours[iAirspaceColour[i]];
+}
+HBRUSH ScreenGraphics::GetAirspaceBrushByClass(const int i) {
+  return hAirspaceBrushes[iAirspaceBrush[i]];
+}
+
+const COLORREF ScreenGraphics::ColorSelected = RGB(0xC0,0xC0,0xC0);
+const COLORREF ScreenGraphics::ColorUnselected = RGB(0xFF,0xFF,0xFF);
+const COLORREF ScreenGraphics::ColorWarning = RGB(0xFF,0x00,0x00);
+const COLORREF ScreenGraphics::ColorOK = RGB(0x00,0x00,0xFF);
+const COLORREF ScreenGraphics::ColorButton = RGB(0xA0,0xE0,0xA0);
+const COLORREF ScreenGraphics::ColorBlack = RGB(0x00,0x00,0x00);
+const COLORREF ScreenGraphics::ColorMidGrey = RGB(0x80,0x80,0x80);
+
+const COLORREF ScreenGraphics::redColor = RGB(0xff,0x00,0x00);
+const COLORREF ScreenGraphics::blueColor = RGB(0x00,0x00,0xff);
+const COLORREF ScreenGraphics::inv_redColor = RGB(0xff,0x70,0x70);
+const COLORREF ScreenGraphics::inv_blueColor = RGB(0x90,0x90,0xff);
+const COLORREF ScreenGraphics::yellowColor = RGB(0xff,0xff,0x00);//VENTA2
+const COLORREF ScreenGraphics::greenColor = RGB(0x00,0xff,0x00);//VENTA2
+const COLORREF ScreenGraphics::magentaColor = RGB(0xff,0x00,0xff);//VENTA2
+const COLORREF ScreenGraphics::inv_yellowColor = RGB(0xff,0xff,0x00); //VENTA2
+const COLORREF ScreenGraphics::inv_greenColor = RGB(0x00,0xff,0x00); //VENTA2
+const COLORREF ScreenGraphics::inv_magentaColor = RGB(0xff,0x00,0xff); //VENTA2
+const COLORREF ScreenGraphics::TaskColor = RGB(0,120,0); // was 255
+const COLORREF ScreenGraphics::BackgroundColor = RGB(0xFF,0xFF,0xFF);
+const COLORREF ScreenGraphics::Colours[] =
+{
+  RGB(0xFF,0x00,0x00),
+  RGB(0x00,0xFF,0x00),
+  RGB(0x00,0x00,0xFF),
+  RGB(0xFF,0xFF,0x00),
+  RGB(0xFF,0x00,0xFF),
+  RGB(0x00,0xFF,0xFF),
+  RGB(0x7F,0x00,0x00),
+  RGB(0x00,0x7F,0x00),
+  RGB(0x00,0x00,0x7F),
+  RGB(0x7F,0x7F,0x00),
+  RGB(0x7F,0x00,0x7F),
+  RGB(0x00,0x7F,0x7F),
+  RGB(0xFF,0xFF,0xFF),
+  RGB(0xC0,0xC0,0xC0),
+  RGB(0x7F,0x7F,0x7F),
+  RGB(0x00,0x00,0x00),
+};
+
 void ScreenGraphics::Initialise(void) {
   int i;
 
-  TaskColor = RGB(0,120,0); // was 255
-
-  Colours[ 0]= RGB(0xFF,0x00,0x00);
-  Colours[ 1]= RGB(0x00,0xFF,0x00);
-  Colours[ 2]= RGB(0x00,0x00,0xFF);
-  Colours[ 3]= RGB(0xFF,0xFF,0x00);
-  Colours[ 4]= RGB(0xFF,0x00,0xFF);
-  Colours[ 5]= RGB(0x00,0xFF,0xFF);
-  Colours[ 6]= RGB(0x7F,0x00,0x00);
-  Colours[ 7]= RGB(0x00,0x7F,0x00);
-  Colours[ 8]= RGB(0x00,0x00,0x7F);
-  Colours[ 9]= RGB(0x7F,0x7F,0x00);
-  Colours[10]= RGB(0x7F,0x00,0x7F);
-  Colours[11]= RGB(0x00,0x7F,0x7F);
-  Colours[12]= RGB(0xFF,0xFF,0xFF);
-  Colours[13]= RGB(0xC0,0xC0,0xC0);
-  Colours[14]= RGB(0x7F,0x7F,0x7F);
-  Colours[15]= RGB(0x00,0x00,0x00);
-
-  BackgroundColor = RGB(0xFF,0xFF,0xFF);
+  redBrush = CreateSolidBrush(redColor);
+  yellowBrush = CreateSolidBrush(yellowColor);
+  greenBrush = CreateSolidBrush(greenColor);
 
   hBackgroundBrush = CreateSolidBrush(BackgroundColor);
 
@@ -121,7 +161,7 @@ void ScreenGraphics::Initialise(void) {
   BYTE Red,Green,Blue;
   int iwidth;
   int minwidth;
-  minwidth = max(IBLSCALE(2),IBLSCALE(MapWindow::SnailWidthScale)/16);
+  minwidth = max(IBLSCALE(2),IBLSCALE(SnailWidthScale)/16);
   for (i=0; i<NUMSNAILCOLORS; i++) {
     short ih = i*200/(NUMSNAILCOLORS-1);
     ColorRampLookup(ih,
@@ -132,7 +172,7 @@ void ScreenGraphics::Initialise(void) {
     } else {
       iwidth = max(minwidth,
 		   (i-NUMSNAILCOLORS/2)
-		   *IBLSCALE(MapWindow::SnailWidthScale)/NUMSNAILCOLORS);
+		   *IBLSCALE(SnailWidthScale)/NUMSNAILCOLORS);
     }
 
     hSnailColours[i] = RGB((BYTE)Red,(BYTE)Green,(BYTE)Blue);
@@ -249,7 +289,7 @@ void ScreenGraphics::Initialise(void) {
 
   for (int i=0; i<AIRSPACECLASSCOUNT; i++) {
     hAirspacePens[i] =
-      CreatePen(PS_SOLID, IBLSCALE(2), Colours[MapWindow::iAirspaceColour[i]]);
+      CreatePen(PS_SOLID, IBLSCALE(2), GetAirspaceColourByClass(i));
   }
 
 }
@@ -338,6 +378,9 @@ void ScreenGraphics::Destroy() {
     DeleteObject(hSnailPens[i]);
   }
 
+  DeleteObject(greenBrush);
+  DeleteObject(yellowBrush);
+  DeleteObject(redBrush);
 }
 
 
@@ -503,10 +546,10 @@ void DrawGreatCircle(HDC hdc,
 
   HPEN hpOld = (HPEN)SelectObject(hdc, MapGfx.hpBearing);
   POINT pt[2];
-  MapWindow::LatLon2Screen(startLon,
+  MapWindowProjection::LatLon2Screen(startLon,
                 startLat,
                 pt[0]);
-  MapWindow::LatLon2Screen(targetLon,
+  MapWindowProjection::LatLon2Screen(targetLon,
                 targetLat,
                 pt[1]);
   ClipPolygon(hdc, pt, 2, rc, false);
@@ -618,7 +661,7 @@ bool TextInBox(HDC hDC, const TCHAR* Value, int x, int y,
   POINT org;
   bool drawn=false;
 
-  RECT MapRect = MapWindow::GetMapRect();
+  RECT MapRect = MapWindowProjection::GetMapRect();
 
   if ((x<MapRect.left-WPCIRCLESIZE) ||
       (x>MapRect.right+(WPCIRCLESIZE*3)) ||
@@ -822,3 +865,5 @@ bool checkLabelBlock(RECT rc) {
   }
   return ok;
 }
+
+

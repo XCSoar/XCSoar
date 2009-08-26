@@ -38,6 +38,7 @@ Copyright_License {
 #include "MapWindow.h"
 #include "Math/Screen.hpp"
 #include "Screen/Graphics.hpp"
+#include <stdlib.h>
 #include <assert.h>
 
 typedef struct{

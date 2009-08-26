@@ -66,12 +66,6 @@ void MapWaypointLabelAdd(TCHAR *Name, int X, int Y,
 void MapWaypointLabelClear();
 
 
-bool MapWindow::WaypointInRange(int i) {
-  return ((WayPointList[i].Zoom >= MapScale*10)
-          || (WayPointList[i].Zoom == 0))
-    && (MapScale <= 10);
-}
-
 void MapWindow::DrawWaypoints(HDC hdc, const RECT rc)
 {
   unsigned int i;

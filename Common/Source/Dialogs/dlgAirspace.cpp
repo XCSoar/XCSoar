@@ -39,9 +39,10 @@ Copyright_License {
 #include "Dialogs.h"
 #include "Dialogs/dlgTools.h"
 #include "InfoBoxLayout.h"
-#include "MapWindow.h"
 #include "Registry.hpp"
 #include "Screen/Util.hpp"
+#include "Screen/Graphics.hpp"
+#include "SettingsAirspace.hpp"
 #include "Utils.h"
 
 #include <assert.h>
@@ -135,11 +136,11 @@ static void OnAirspacePaintListItem(WindowControl * Sender, HDC hDC){
           x0, 2*InfoBoxLayout::scale,
           w0, 22*InfoBoxLayout::scale);
       SetTextColor(hDC,
-         MapWindow::GetAirspaceColourByClass(i));
+         MapGfx.GetAirspaceColourByClass(i));
          SetBkColor(hDC,
          RGB(0xFF, 0xFF, 0xFF));
       SelectObject(hDC,
-		   MapWindow::GetAirspaceBrushByClass(i));
+		   MapGfx.GetAirspaceBrushByClass(i));
         Rectangle(hDC,
         x0, 2*InfoBoxLayout::scale,
         w0, 22*InfoBoxLayout::scale);
@@ -149,8 +150,8 @@ static void OnAirspacePaintListItem(WindowControl * Sender, HDC hDC){
       bool iswarn;
       bool isdisplay;
 
-      iswarn = (MapWindow::iAirspaceMode[i]>=2);
-      isdisplay = ((MapWindow::iAirspaceMode[i]%2)>0);
+      iswarn = (iAirspaceMode[i]>=2);
+      isdisplay = ((iAirspaceMode[i]%2)>0);
       if (iswarn) {
         _tcscpy(label, gettext(TEXT("Warn")));
         ExtTextOut(hDC,
@@ -192,19 +193,19 @@ static void OnAirspaceListEnter(WindowControl * Sender,
     if (colormode) {
       int c = dlgAirspaceColoursShowModal();
       if (c>=0) {
-	MapWindow::iAirspaceColour[ItemIndex] = c;
-	SetRegistryColour(ItemIndex,MapWindow::iAirspaceColour[ItemIndex]);
+	iAirspaceColour[ItemIndex] = c;
+	SetRegistryColour(ItemIndex,iAirspaceColour[ItemIndex]);
 	changed = true;
       }
       int p = dlgAirspacePatternsShowModal();
       if (p>=0) {
-	MapWindow::iAirspaceBrush[ItemIndex] = p;
-	SetRegistryBrush(ItemIndex,MapWindow::iAirspaceBrush[ItemIndex]);
+	iAirspaceBrush[ItemIndex] = p;
+	SetRegistryBrush(ItemIndex,iAirspaceBrush[ItemIndex]);
 	changed = true;
       }
     } else {
-      int v = (MapWindow::iAirspaceMode[ItemIndex]+1)%4;
-      MapWindow::iAirspaceMode[ItemIndex] = v;
+      int v = (iAirspaceMode[ItemIndex]+1)%4;
+      iAirspaceMode[ItemIndex] = v;
       //  wAirspaceList->Redraw();
       SetRegistryAirspaceMode(ItemIndex);
       changed = true;

@@ -41,7 +41,6 @@ Copyright_License {
 #include "InfoBoxLayout.h"
 #include "ButtonLabel.h"
 #include "Registry.hpp"
-#include "MapWindow.h"
 #include "Asset.hpp"
 
 // Display Globals

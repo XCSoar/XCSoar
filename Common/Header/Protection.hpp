@@ -38,6 +38,7 @@ Copyright_License {
 #ifndef XCSOAR_PROTECTION_HPP
 #define XCSOAR_PROTECTION_HPP
 
+#include "Trigger.hpp"
 
 void UnlockEventQueue();
 void LockEventQueue();
@@ -55,20 +56,19 @@ void UnlockTerrainDataGraphics();
 void LockTerrainDataGraphics();
 void UnlockNavBox();
 void LockNavBox();
+
+/////////////////
+
 void TriggerGPSUpdate();
 void TriggerVarioUpdate();
-
-class Trigger;
-extern Trigger drawTriggerEvent;
+void TriggerRedraws(void);
+void TriggerAll(void);
 
 void InitialiseProtection(void);
 void DeleteProtection(void);
-void TriggerRedraws(void);
-void TriggerAll(void);
 void CreateCalculationThread(void);
 
 ///////
-
 // changed only in config or by user interface /////////////////////////////
 // used in settings dialog
 extern BOOL COMPORTCHANGED;
@@ -82,6 +82,9 @@ extern BOOL LANGUAGEFILECHANGED;
 extern BOOL STATUSFILECHANGED;
 extern BOOL INPUTFILECHANGED;
 extern BOOL MAPFILECHANGED;
+
+extern Trigger drawTriggerEvent;
+extern Trigger closeTriggerEvent;
 
 #endif
 

@@ -37,14 +37,28 @@ Copyright_License {
 #if !defined(XCSOAR_MAPWINDOW_H)
 #define XCSOAR_MAPWINDOW_H
 
-#include "NMEA/Info.h"
-#include "NMEA/Derived.hpp"
-
 #include "XCSoar.h"
+#include "MapWindowProjection.hpp"
 #include "Airspace.h"
+#include "Trigger.hpp"
+
+class MapWindowBase {
+ public:
+  static Trigger  dirtyEvent;
+  static void     CloseDrawingThread(void);
+  static void     SuspendDrawingThread(void);
+  static void     ResumeDrawingThread(void);
+  static bool     IsDisplayRunning();
+  static void     CreateDrawingThread(void);
+ protected:
+  static bool     THREADRUNNING;
+  static bool     THREADEXIT;
+  static DWORD    dwDrawThreadID;
+  static HANDLE   hDrawThread;
+};
 
 
-class MapWindow {
+class MapWindow: public MapWindowBase, public MapWindowProjection {
  public:
   HWND hWndMapWindow;
 
@@ -66,31 +80,20 @@ class MapWindow {
 
  public:
   // user settings
-  static int    iAirspaceMode[AIRSPACECLASSCOUNT];
-  static int    iAirspaceBrush[AIRSPACECLASSCOUNT];
-  static int    iAirspaceColour[AIRSPACECLASSCOUNT];
-  static int    GliderScreenPosition;
-  static bool   AutoZoom;
-  static int    SnailWidthScale;
-  static int    WindArrowStyle;
 
   // inter-process
-  static bool ForceVisibilityScan;
-  static bool MapDirty;
-  static bool RenderTimeAvailable();
+  static bool ForceVisibilityScan; // called only by XCSoar.cpp on
+				   // settings reload
+
+  static bool RenderTimeAvailable(); // used only by TopologyStore.cpp
+
+  // used by dlgTarget
   static bool TargetDragged(double *longitude, double *latitude);
+  static bool SetTargetPan(bool dopan, int task_index);
 
-  static BOOL CLOSETHREAD;
-  static BOOL THREADRUNNING;
-  static BOOL THREADEXIT;
-  static HANDLE hRenderEvent;
-  static LRESULT CALLBACK MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,LPARAM lParam);
-
-  static void CloseDrawingThread(void);
-  static void CreateDrawingThread(void);
-  static void SuspendDrawingThread(void);
-  static void ResumeDrawingThread(void);
-  static bool IsDisplayRunning();
+  // used only by XCSoar.cpp on instantiation
+  static LRESULT CALLBACK MapWndProc (HWND hWnd, UINT uMsg,
+				      WPARAM wParam,LPARAM lParam);
 
   static void UpdateInfo(NMEA_INFO *nmea_info,
 			 DERIVED_INFO *derived_info);
@@ -102,47 +105,14 @@ class MapWindow {
 
   // display management
   static void SwitchZoomClimb(void);
-  static bool isAutoZoom();
-  static bool isPan();
-  static bool isTargetPan(void);
-  static bool IsMapFullScreen();
-  static void RequestFastRefresh();
+
+  static bool isMapFullScreen(); // gui feedback
+
   static void RequestToggleFullScreen();
-  static void RequestOnFullScreen();
-  static void RequestOffFullScreen();
-  static bool SetTargetPan(bool dopan, int task_index);
+  static void RequestFullScreen(bool full);
+
+  // used by terrain renderer, topology and airspace
   static void ScanVisibility(rectObj *bounds_active);
-  static bool isBigZoom(void) {
-    return BigZoom;
-  }
-  static double GetMapScale() {
-    return MapScale;
-  }
-
-  // projection
-  static double  GetApproxScreenRange(void);
-  static int     GetMapResolutionFactor();
-  static POINT   GetOrigScreen(void) { return Orig_Screen; }
-  static double  GetPanLatitude() { return PanLatitude; }
-  static double  GetPanLongitude() { return PanLongitude; }
-  static double  GetInvDrawScale() { return InvDrawScale; }
-  static double  GetDisplayAngle() { return DisplayAngle; }
-  static void    OrigScreen2LatLon(const int &x, const int &y,
-                                double &X, double &Y);
-  static void    Screen2LatLon(const int &x, const int &y, double &X, double &Y);
-
-  static void    LatLon2Screen(const double &lon, const double &lat, POINT &sc);
-  static void    LatLon2Screen(pointObj *ptin, POINT *ptout, const int n,
-			    const int skip);
-  static rectObj CalculateScreenBounds(double scale);
-  static bool    WaypointInRange(int i);
-
-  static RECT GetMapRectBig() {
-    return MapRectBig;
-  }
-  static RECT GetMapRect() {
-    return MapRect;
-  }
 
   // input events or reused code
   static void Event_SetZoom(double value);
@@ -151,71 +121,45 @@ class MapWindow {
   static void Event_TerrainTopology(int vswitch);
   static void Event_AutoZoom(int vswitch);
   static void Event_PanCursor(int dx, int dy);
-  static bool Event_InteriorAirspaceDetails(double lon, double lat);
-  static bool Event_NearestWaypointDetails(double lon, double lat,
-					   double range, bool pan);
 
   // Drawing primitives (should go outside this class if reusable)
   // (only used by Topology)
-  static void DrawBitmapIn(const HDC hdc, const POINT &sc, const HBITMAP h);
+  static void DrawBitmapIn(const HDC hdc, const POINT &sc,
+			   const HBITMAP h);
 
-  // airspace brushes/colours
-  static COLORREF GetAirspaceColour(int i);
-  static HBRUSH GetAirspaceBrush(int i);
-  static COLORREF GetAirspaceColourByClass(int i);
-  static HBRUSH GetAirspaceBrushByClass(int i);
+  // used by MapWindowBase
+  static DWORD DrawThread (LPVOID);
 
-  ////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////
  private:
   // state
   static BOOL     Initialised;
   static DWORD    timestamp_newdata;
+  static bool     user_asked_redraw;
 
   // display management
-  static void     ToggleFullScreenStart();
   static void     RefreshMap();
-  static double   TargetDrag_Latitude;
-  static double   TargetDrag_Longitude;
-
-  static bool     TargetPan;
-  static double   TargetZoomDistance;
-  static int      TargetPanIndex;
 
   // state/localcopy/local data
   static int           iSnailNext;
-  static NMEA_INFO     DrawInfo;
-  static DERIVED_INFO  DerivedDrawInfo;
+  static double        TargetDrag_Latitude;
+  static double        TargetDrag_Longitude;
   static int           TargetDrag_State;
   static POINT         Groundline[NUMTERRAINSWEEPS+1];
   static bool          LandableReachable;
   static DWORD         fpsTime0;
 
   // projection
-  static bool      GliderCenter;
-  static double    MapScale;
   static bool      BigZoom;
-  static void      ModifyMapScale();
-  static double    MapScaleOverDistanceModify; // speedup
-  static double    ResMapScaleOverDistanceModify; // speedup
-  static double    RequestMapScale;
-  static bool      RequestFullScreen;
-  static void      UpdateMapScale();
+  static bool      askFullScreen;
+  static bool      MapFullScreen;
+  static void      StoreRestoreFullscreen(bool);
+  static void      ToggleFullScreenStart();
+
   static double    findMapScaleBarSize(const RECT rc);
-  static int       ScaleListCount;
-  static int       ScaleCurrent;
-  static double    ScaleList[SCALELISTSIZE];
-  static double    StepMapScale(int Step);
-  static double    FindMapScale(double Value);
-  static rectObj   screenbounds_latlon;
 
   // other
-  static void UpdateTimeStats(bool start);
-
-  // helpers
-  static bool PointVisible(const POINT &P);
-  static bool PointVisible(const double &lon, const double &lat);
-  static bool PointInRect(const double &lon, const double &lat,
-			  const rectObj &bounds);
+  static void      UpdateTimeStats(bool start);
 
   // display element functions
 
@@ -275,38 +219,13 @@ class MapWindow {
   static void DrawFLARMTraffic(HDC hDC, RECT rc, POINT Orig_Aircraft);
 
   static void ClearAirSpace(HDC dc, bool fill);
-  static void DisplayAirspaceWarning(int Type, const TCHAR *Name,
-                                     AIRSPACE_ALT Base, AIRSPACE_ALT Top );
-
-  // projection
-  static RECT   MapRectSmall;
-  static RECT   MapRectBig;
-  static RECT   MapRect;
-
-  static bool   MapFullScreen;
-  static void   StoreRestoreFullscreen(bool);
-  static void   CalculateOrigin(const RECT rc, POINT *Orig);
-  static void   CalculateOrientationTargetPan(void);
-  static void   CalculateOrientationNormal(void);
-  static POINT  Orig_Screen;
-  static double PanLatitude;
-  static double PanLongitude;
-  static bool   EnablePan;
-  static double DisplayAngle;
-  static double DisplayAircraftAngle;
-  static double DrawScale;
-  static double InvDrawScale;
-  static double LimitMapScale(double value);
 
   // thread, main functions
-  static DWORD  dwDrawThreadID;
-  static HANDLE hDrawThread;
-  static DWORD DrawThread (LPVOID);
   static void RenderMapWindow(HDC hdc, const RECT rc);
   static void RenderMapWindowBg(HDC hdc, const RECT rc,
 				const POINT &Orig,
 				const POINT &Orig_Aircraft);
-  static void UpdateCaches(bool force=false);
+  static void UpdateCaches(const bool force=false);
 
   // graphics vars
 

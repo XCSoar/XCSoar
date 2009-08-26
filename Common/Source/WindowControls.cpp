@@ -41,8 +41,9 @@ Copyright_License {
 #include "Dialogs/dlgTools.h"
 #ifndef ALTAIRSYNC
 #include "Message.h"
-#include "MapWindow.h"
+#include "Protection.hpp"
 #include "InfoBoxLayout.h"
+#include "MapWindow.h"
 extern MapWindow hWndMapWindow; // TODO try to avoid this
 
 #endif
@@ -50,10 +51,11 @@ extern MapWindow hWndMapWindow; // TODO try to avoid this
 #include "Compatibility/string.h"
 #include "PeriodClock.hpp"
 #include "Screen/Animation.hpp"
-#include "DataField/Base.hpp"
-#include "Utils.h"
+#include "Screen/Fonts.hpp"
 #include "Screen/Blank.hpp"
 #include "Screen/Viewport.hpp"
+#include "DataField/Base.hpp"
+#include "Utils.h"
 
 #ifdef PNA
 #include "Asset.hpp"
@@ -158,11 +160,8 @@ static bool KeyTimer(bool isdown, DWORD thekey) {
 // WindowControl Classes
 //----------------------------------------------------------
 
-
-extern HFONT  MapWindowFont;
 WindowControl *ActiveControl = NULL;
 WindowControl *LastFocusControl = NULL;
-
 
 void InitWindowControlModule(void);
 LRESULT CALLBACK WindowControlWndProc(HWND hwnd, UINT uMsg,
@@ -1290,7 +1289,7 @@ int WndForm::ShowModal(bool bEnableMap) {
 
 #ifndef ALTAIRSYNC
   // JMW added to make sure screen is redrawn
-  MapWindow::RequestFastRefresh();
+  drawTriggerEvent.trigger();
 
   Message::BlockRender(false);
 #endif
