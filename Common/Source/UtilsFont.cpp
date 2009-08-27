@@ -41,6 +41,8 @@ Copyright_License {
 #include <assert.h>
 #include "Registry.hpp"
 
+#include <stdlib.h> /* for strtol() */
+
 void propGetFontSettingsFromString(const TCHAR *Buffer1, LOGFONT* lplf)
 {
 #define propGetFontSettingsMAX_SIZE 128

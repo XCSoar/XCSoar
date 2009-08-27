@@ -41,6 +41,7 @@ Copyright_License {
 #include "Math/FastMath.h"
 #include "Math/Geometry.hpp"
 #include "Math/Screen.hpp"
+#include "Compatibility/string.h"
 
 #include <stdlib.h>
 

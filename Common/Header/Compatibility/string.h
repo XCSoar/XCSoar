@@ -43,6 +43,10 @@ Copyright_License {
 
 #ifndef HAVE_MSVCRT
 
+/* WINE is more strict, and doesn't give is sprintf() / _stprintf() if
+   we don't include stdio.h */
+#include <stdio.h>
+
 static inline char *
 _strupr(char *p)
 {

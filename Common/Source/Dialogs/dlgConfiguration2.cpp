@@ -42,6 +42,7 @@ Copyright_License {
 #include "InfoBoxLayout.h"
 #include "Waypointparser.h"
 #include "DataField/Base.hpp"
+#include "Compatibility/string.h"
 
 extern int config_page;
 
