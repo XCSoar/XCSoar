@@ -40,30 +40,9 @@ public:
 
 	virtual ~CSTScreenBuffer();
 
-	// Creates buffer with the given size.
-	void Create(int nWidth, int nHeight);
-
 	// Creates buffer with the given size and fills it with
 	// the given color
 	void Create(int nWidth, int nHeight, COLORREF clr);
-
-	// Creates buffer with the same width andheight as
-	// the given bitmap and that contains the same picture.
-	void Create(HBITMAP hBitmap);
-
-	// Creates buffer that will contain picture from the given
- 	// area of the given device context.
-	void Create(HDC *pDC, RECT rect);
-
-	// Creates buffer with the given size and uses the given
-	// array as a source of pixels color information. The given
-	// array should contain 3 bytes per pixel (RGB). To the array
-	// size should be 3*nWidth*nHeight
-	void CreateRGB(void *pData, int nWidth, int nHeight);
-
-	// Draws buffer into the given device context starting from
-	// the given point (top left corner)
-	BOOL Draw(HDC *pDC, POINT ptDest);
 
 	// Draws buffer into the given device context starting from
 	// the given point (top left corner)
@@ -104,14 +83,6 @@ public:
 	  return m_pBuffer[m_nCorrectedWidth*(nY)+nX];
 	}
 
-	// Returns array that contains points color information. Each
-	// point is represented by 3 bytes in Blue, Green, Red order.
-	// Array contains CorrectedWidth*Height elements (Note! not
-	// Width*Height).
-	BGRColor *GetPointsArray() {
-		return m_pBuffer;
-	}
-
 	// Returns real width of the screen buffer. It could be slightly more then
 	// requested width. This paramater is important only when you work with
 	// points array directly (using GetPointsArray function).
@@ -129,22 +100,7 @@ public:
 		return m_nHeight;
 	}
 
-	// Returns handle of the encapsulated bitmap.
-	HBITMAP GetHBitmap() {
-		return m_hBitmap;
-	}
-
-	// Returns screen buffer device context. After drawing this
-	// device context should be closed (call ReleaseDC method).
-	HDC GetDC();
-
-	// Closes bitmap device context previously opened by GetDC function.
-	void ReleaseDC();
-
 public:
-	// Creates bitmap with the given sizes and the given array of colors.
-	static HBITMAP CreateBitmapByRGBArray(void *pData, int nWidth, int nHeight);
-
 	// Returns minimum width that is greater then the given width and
 	// that is acceptable as image width (not all numbers are acceptable)
 	static int CorrectedWidth(int nWidth);
@@ -162,7 +118,6 @@ protected:
 	HBITMAP m_hBitmap;
 
 	// Members related to device context
-	HDC m_pDC;
 	HBITMAP m_hSaveBitmap;
 };
 
