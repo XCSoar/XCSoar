@@ -61,15 +61,22 @@ BOOL extGPSCONNECT = FALSE; // this one used by external functions
 
 bool RequestAirspaceWarningForce=false;
 
-extern int  MenuTimeOut;
-extern int  MenuTimeoutMax;
-
 extern void RestartCommPorts(void);
 
 
+static void HeapCompactTimer()
+{
+  static int iheapcompact = 0;
+  // called 2 times per second, compact heap every minute.
+  iheapcompact++;
+  if (iheapcompact == 120) {
+    MyCompactHeaps();
+    iheapcompact = 0;
+  }
+}
+
 void CommonProcessTimer()
 {
-
   // service the GCE and NMEA queue
   if (ProgramStarted==psNormalOp) {
     InputEvents::DoQueuedEvents();
@@ -83,33 +90,13 @@ void CommonProcessTimer()
     GaugeFLARM::Show();
   }
 
-#if (WINDOWSPC<1)
-  SystemIdleTimerReset();
-#endif
-
   InfoBoxProcessTimer();
 
-  if (DisplayLocked) {
-    if(MenuTimeOut==MenuTimeoutMax) {
-      if (!MapWindowProjection::isPan()) {
-	InputEvents::setMode(TEXT("default"));
-      }
-    }
-    MenuTimeOut++;
-  }
+  InputEvents::ProcessMenuTimer();
 
   CheckDisplayTimeOut(false);
 
-  if (MapWindow::IsDisplayRunning()) {
-    // No need to redraw map or infoboxes if screen is blanked.
-    // This should save lots of battery power due to CPU usage
-    // of drawing the screen
-    InfoBoxDrawIfDirty();
-  }
-
-  //
-  // maybe block/delay this if a dialog is active?
-  // JMW: is done in the message function now.
+  // don't display messages if airspace warning dialog is active
   if (!dlgAirspaceWarningVisible()) {
     if (Message::Render()) {
       // turn screen on if blanked and receive a new message
@@ -117,24 +104,7 @@ void CommonProcessTimer()
     }
   }
 
-#if (EXPERIMENTAL > 0)
-
-  if (bsms.Poll()) {
-    // turn screen on if blanked and receive a new message
-    ResetDisplayTimeOut();
-  }
-
-#endif
-
-  static int iheapcompact = 0;
-  // called 2 times per second, compact heap every minute.
-  iheapcompact++;
-  if (iheapcompact == 120) {
-    MyCompactHeaps();
-    iheapcompact = 0;
-  }
-
-  LastFlipBoxTime++;
+  HeapCompactTimer();
 }
 
 ////////////////
@@ -200,14 +170,10 @@ int ConnectionProcessTimer(int itimeout) {
 	  extGPSCONNECT = FALSE;
           InputEvents::processGlideComputer(GCE_GPS_CONNECTION_WAIT);
 
-	  //            SetDlgItemText(hGPSStatus,IDC_GPSMESSAGE,szLoadText);
-
 	  CONNECTWAIT = TRUE;
 #ifndef DISABLEAUDIO
 	  MessageBeep(MB_ICONEXCLAMATION);
 #endif
-	  FullScreen();
-
 	} else {
 
 	if (itimeout % 30 == 0) {
@@ -262,8 +228,6 @@ int ConnectionProcessTimer(int itimeout) {
 #ifndef DISABLEAUDIO
 	  MessageBeep(MB_ICONEXCLAMATION);
 #endif
-	  FullScreen();
-
 	}
       else if((navwarning == FALSE) && (LOCKWAIT == TRUE))
 	{

@@ -1100,10 +1100,6 @@ static CallBackTableEntry_t CallBackTable[]={
 };
 
 
-extern SCREEN_INFO Data_Options[];
-extern int InfoType[];
-
-
 
 static void SetInfoBoxSelector(int item, int mode)
 {
@@ -1116,7 +1112,7 @@ static void SetInfoBoxSelector(int item, int mode)
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
     for (int i=0; i<NUMSELECTSTRINGS; i++) {
-      dfe->addEnumText(gettext(Data_Options[i].Description));
+      dfe->addEnumText(gettext(InfoBoxGetDescription(i)));
     }
     dfe->Sort(0);
 
@@ -1124,16 +1120,16 @@ static void SetInfoBoxSelector(int item, int mode)
 
     switch(mode) {
     case 1: // climb
-      it = (InfoType[item])& 0xff;
+      it = getInfoType(item, 0);
       break;
     case 0: // cruise
-      it = (InfoType[item]>>8)& 0xff;
+      it = getInfoType(item, 1);
       break;
     case 2: // final glide
-      it = (InfoType[item]>>16)& 0xff;
+      it = getInfoType(item, 2);
       break;
     case 3: // aux
-      it = (InfoType[item]>>24)& 0xff;
+      it = getInfoType(item, 3);
       break;
     };
     dfe->Set(it);
@@ -1154,16 +1150,16 @@ static void GetInfoBoxSelector(int item, int mode)
 
     switch(mode) {
     case 1: // climb
-      it = (InfoType[item])& 0xff;
+      it = getInfoType(item, 0);
       break;
     case 0: // cruise
-      it = (InfoType[item]>>8)& 0xff;
+      it = getInfoType(item, 1);
       break;
     case 2: // final glide
-      it = (InfoType[item]>>16)& 0xff;
+      it = getInfoType(item, 2);
       break;
     case 3: // aux
-      it = (InfoType[item]>>24)& 0xff;
+      it = getInfoType(item, 3);
       break;
     };
 
@@ -1173,23 +1169,19 @@ static void GetInfoBoxSelector(int item, int mode)
 
       switch(mode) {
       case 0: // cruise
-	InfoType[item] &= 0xffff00ff;
-	InfoType[item] += (itnew<<8);
+	setInfoType(item, 1, itnew);
 	break;
       case 1: // climb
-	InfoType[item] &= 0xffffff00;
-	InfoType[item] += itnew;
+	setInfoType(item, 0, itnew);
 	break;
       case 2: // final glide
-	InfoType[item] &= 0xff00ffff;
-	InfoType[item] += (itnew<<16);
+	setInfoType(item, 2, itnew);
 	break;
       case 3: // aux
-	InfoType[item] &= 0x00ffffff;
-	InfoType[item] += (itnew<<24);
+	setInfoType(item, 3, itnew);
 	break;
       };
-      StoreType(item,InfoType[item]);
+      StoreType(item, getInfoTypeAll(item));
     }
   }
 }

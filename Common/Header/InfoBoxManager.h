@@ -38,42 +38,28 @@ Copyright_License {
 #define INFOBOX_MANAGER_H
 
 #include "XCSoar.h"
-#include "Formatter/Base.hpp"
 
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
-
-typedef struct _SCREEN_INFO
-{
-  UnitGroup_t UnitGroup;
-  TCHAR Description[DESCRIPTION_SIZE +1];
-  TCHAR Title[TITLE_SIZE + 1];
-  InfoBoxFormatter *Formatter;
-  void (*Process)(int UpDown);
-  char next_screen;
-  char prev_screen;
-} SCREEN_INFO;
-
-extern SCREEN_INFO Data_Options[];
-extern int InfoType[MAXINFOWINDOWS]; //
-extern int  InfoFocus;
+extern int  numInfoWindows;
 extern const int NUMSELECTSTRINGS;
-extern int numInfoWindows;
-extern double LastFlipBoxTime; // used by XCSoar and Calculations
 
 void InfoBoxesSetDirty(bool is_dirty);
 void DeleteInfoBoxFormatters();
-bool InfoBoxClick(HWND wmControl, bool display_locked);
-void InfoBoxFocus(bool display_locked);
+bool InfoBoxClick(HWND wmControl);
+void InfoBoxFocus();
 void InfoBoxProcessTimer(void);
-void InfoBoxDrawIfDirty(void);
 void InfoBoxFocusSetMaxTimeOut(void);
 void ShowInfoBoxes();
 void HideInfoBoxes();
-void DefocusInfoBox(void);
+bool DefocusInfoBox(void);
 void Event_SelectInfoBox(int i);
 void Event_ChangeInfoBoxType(int i);
 void DoInfoKey(int keycode);
 void ResetInfoBoxes(void);
+TCHAR *InfoBoxGetDescription(int i);
+int getInfoType(const int i, const int layer);
+void setInfoType(const int i, const char j, const int layer);
+
+int getInfoTypeAll(const int i);
+void setInfoTypeAll(const int i, const int j);
 
 #endif

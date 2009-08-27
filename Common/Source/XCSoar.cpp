@@ -118,8 +118,6 @@ HWND hWndMainWindow; // Main Windows
 MapWindow hWndMapWindow;
 
 
-bool DisplayLocked = true;
-
 HBRUSH hBrushSelected;
 HBRUSH hBrushUnselected;
 HBRUSH hBrushButton;
@@ -224,12 +222,6 @@ static int iTimerID= 0;
 static SHACTIVATEINFO s_sai;
 #endif
 
-////////////////////////////////////////////////////////////////////////////////
-// Menu handling
-int MenuTimeOut = 0;
-int MenuTimeoutMax = MENUTIMEOUTMAX;
-static bool MenuActive = false;
-
 
 ////////////////////////////////////////////////////////////////////////////////
 // Forward declarations of functions included in this code module:
@@ -243,40 +235,16 @@ void RestartCommPorts(void);
 //
 void SwitchToMapWindow(void)
 {
-  DefocusInfoBox();
-
   SetFocus(hWndMapWindow);
-  if (MenuTimeOut< MenuTimeoutMax) {
-    MenuTimeOut = MenuTimeoutMax;
-  }
-  InfoBoxFocusSetMaxTimeOut();
 }
 
-void HideMenu() {
-  // ignore this if the display isn't locked -- must keep menu visible
-  if (DisplayLocked) {
-    MenuTimeOut = MenuTimeoutMax;
-    ResetDisplayTimeOut();
-  }
-}
-
-void ShowMenu() {
-#if !defined(GNAV) && !defined(PCGNAV)
-  // Popup exit button if in .xci
-  //InputEvents::setMode(TEXT("Exit"));
-  InputEvents::setMode(TEXT("Menu")); // VENTA3
-#endif
-  MenuTimeOut = 0;
-  ResetDisplayTimeOut();
-}
-
+////////////////////////////////////////////////////////////////////////////////
+//
 
 void SettingsEnter() {
-  MenuActive = true;
-
   MapWindowBase::SuspendDrawingThread();
   // This prevents the map and calculation threads from doing anything
-  // with shared data while it is being changed.
+  // with shared data while it is being changed (also prevents drawing)
 
   MAPFILECHANGED = FALSE;
   AIRSPACEFILECHANGED = FALSE;
@@ -292,7 +260,6 @@ void SettingsEnter() {
 }
 
 
-
 void SettingsLeave() {
   if (!globalRunningEvent.test()) return;
 
@@ -304,8 +271,6 @@ void SettingsLeave() {
   mutexFlightData.Lock();
   mutexTaskData.Lock();
   mutexNavBox.Lock();
-
-  MenuActive = false;
 
   if(MAPFILECHANGED) {
     AIRSPACEFILECHANGED = TRUE;
@@ -402,28 +367,24 @@ void SystemConfiguration(void) {
 
 //////////////////////////////////////////////////////////////////////
 
-void FullScreen() {
+void MainWindowTop() {
 
-  if (!MenuActive) {
-    SetForegroundWindow(hWndMainWindow);
+  SetForegroundWindow(hWndMainWindow);
 #if (WINDOWSPC>0)
-    SetWindowPos(hWndMainWindow,HWND_TOP,
-                 0, 0, 0, 0,
-                 SWP_SHOWWINDOW|SWP_NOMOVE|SWP_NOSIZE);
+  SetWindowPos(hWndMainWindow,HWND_TOP,
+	       0, 0, 0, 0,
+	       SWP_SHOWWINDOW|SWP_NOMOVE|SWP_NOSIZE);
 #else
 #ifndef CECORE
-    SHFullScreen(hWndMainWindow,
-                 SHFS_HIDETASKBAR|SHFS_HIDESIPBUTTON|SHFS_HIDESTARTICON);
+  SHFullScreen(hWndMainWindow,
+	       SHFS_HIDETASKBAR|SHFS_HIDESIPBUTTON|SHFS_HIDESTARTICON);
 #endif
-    SetWindowPos(hWndMainWindow,HWND_TOP,
-                 0,0,
-                 GetSystemMetrics(SM_CXSCREEN),
-                 GetSystemMetrics(SM_CYSCREEN),
-                 SWP_SHOWWINDOW);
+  SetWindowPos(hWndMainWindow,HWND_TOP,
+	       0,0,
+	       GetSystemMetrics(SM_CXSCREEN),
+	       GetSystemMetrics(SM_CYSCREEN),
+	       SWP_SHOWWINDOW);
 #endif
-  }
-  drawTriggerEvent.trigger();
-  InfoBoxesSetDirty(true);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -527,8 +488,10 @@ void AfterStartup() {
 
   // Trigger first redraw
   TriggerGPSUpdate();
+  MainWindowTop();
   MapWindow::dirtyEvent.trigger();
-  FullScreen();
+  drawTriggerEvent.trigger();
+  InfoBoxesSetDirty(true);
   TriggerRedraws();
 }
 
@@ -868,8 +831,8 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   Sleep(100);
   StartupStore(TEXT("ShowInfoBoxes\n"));
   ShowInfoBoxes();
-
   SwitchToMapWindow();
+
   StartupStore(TEXT("CreateCalculationThread\n"));
   CreateCalculationThread();
   Sleep(500);
@@ -1308,6 +1271,7 @@ void Shutdown(void) {
   CloseGeoid();
 
   StartupStore(TEXT("Close Windows\n"));
+  MapGfx.Destroy();
   DestroyWindow(hWndMapWindow);
   DestroyWindow(hWndMainWindow);
 
@@ -1419,7 +1383,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     case WM_SETFOCUS:
       // JMW not sure this ever does anything useful..
       if (ProgramStarted > psInitInProgress) {
-	InfoBoxFocus(DisplayLocked);
+	InfoBoxFocus();
       }
       break;
       // TODO enhancement: Capture KEYDOWN time
@@ -1471,7 +1435,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
     case WM_INITMENUPOPUP:
       if (ProgramStarted > psInitInProgress) {
-	if(DisplayLocked)
+	if(true) // was DisplayLocked
 	  CheckMenuItem((HMENU) wParam,IDM_FILE_LOCK,MF_CHECKED|MF_BYCOMMAND);
 	else
 	  CheckMenuItem((HMENU) wParam,IDM_FILE_LOCK,MF_UNCHECKED|MF_BYCOMMAND);
@@ -1519,7 +1483,6 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
   int wmId, wmEvent;
   HWND wmControl;
-  int i;
 
   wmId    = LOWORD(wParam);
   wmEvent = HIWORD(wParam);
@@ -1528,9 +1491,9 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
   if(wmControl != NULL) {
     if (ProgramStarted==psNormalOp) {
 
-      FullScreen();
+      MainWindowTop();
 
-      if (InfoBoxClick(wmControl, DisplayLocked)) {
+      if (InfoBoxClick(wmControl)) {
 	return FALSE;
       }
 

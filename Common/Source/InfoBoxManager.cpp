@@ -49,8 +49,6 @@ Copyright_License {
 #include "Dialogs.h"
 #include "InputEvents.h"
 #include "Compatibility/string.h"
-#include "MapWindow.h"
-#include "MapWindowProjection.hpp"
 #include "Device/Parser.h"
 #include "Utils.h"
 #include "Utils2.h"
@@ -67,26 +65,28 @@ Copyright_License {
 #include "Interface.hpp"
 #include "Battery.h"
 #include "Calculations.h" // TODO danger! IsFlarmTargetCNInRange
+#include "UtilsSystem.hpp"
 
-int  InfoBoxFocusTimeOut = 0;
-bool InfoBoxesDirty= false;
-static bool InfoBoxesHidden = false;
-int InfoFocus = 0;
-static bool InfoWindowActive = true;
+// user setting
 bool EnableAuxiliaryInfo = false;
-double LastFlipBoxTime = 0; // VENTA3 need this global for slowcalculations cycle
-
 int ActiveAlternate = -1;
 
+static int  InfoBoxFocusTimeOut = 0;
+static bool InfoBoxesDirty= false;
+static bool InfoBoxesHidden = false;
+static int InfoFocus = 0;
+static bool InfoWindowActive = true;
+static double LastFlipBoxTime = 0; // VENTA3
+
+
 // fwd declarations
-void DisplayText(void);
-void AssignValues(void);
+void DisplayInfoBox(void);
 
 int numInfoWindows = 8;
 
 InfoBox *InfoBoxes[MAXINFOWINDOWS];
 
-int                                     InfoType[MAXINFOWINDOWS] =
+static int InfoType[MAXINFOWINDOWS] =
 #ifdef GNAV
   {
     873336334,
@@ -109,6 +109,19 @@ int                                     InfoType[MAXINFOWINDOWS] =
    394758,
    1644825};
 #endif
+
+
+
+typedef struct _SCREEN_INFO
+{
+  UnitGroup_t UnitGroup;
+  TCHAR Description[DESCRIPTION_SIZE +1];
+  TCHAR Title[TITLE_SIZE + 1];
+  InfoBoxFormatter *Formatter;
+  void (*Process)(int UpDown);
+  char next_screen;
+  char prev_screen;
+} SCREEN_INFO;
 
 
 // Groups:
@@ -298,9 +311,9 @@ const int NUMSELECTSTRINGS = 74;
 
 /////////////////
 
-void HideMenu();
+static void FocusOnWindow(int i, bool selected);
 
-
+// TODO locking
 void HideInfoBoxes() {
   int i;
   InfoBoxesHidden = true;
@@ -316,7 +329,27 @@ void ShowInfoBoxes() {
   for (i=0; i<numInfoWindows; i++) {
     InfoBoxes[i]->SetVisible(true);
   }
+  DefocusInfoBox();
 }
+
+
+bool DefocusInfoBox() {
+  bool retval = (InfoFocus>=0);
+  // JMW TODO this needs to be reworked
+  if (retval) {
+    FocusOnWindow(InfoFocus,false);
+    InfoFocus = -1;
+    InputEvents::HideMenu();
+    InfoWindowActive = false;
+    InfoBoxFocusSetMaxTimeOut();
+#ifndef DISABLEAUDIO
+	  if (EnableSoundModes) PlayResource(TEXT("IDR_WAV_CLICK"));
+#endif
+    SwitchToMapWindow();
+  }
+  return retval;
+}
+
 
 void Event_SelectInfoBox(int i) {
 //  int oldinfofocus = InfoFocus;
@@ -336,14 +369,13 @@ void Event_SelectInfoBox(int i) {
   }
   if (InfoFocus<0) {
     DefocusInfoBox();
-    SwitchToMapWindow();
     return;
   }
 
   //  SetFocus(hWndInfoWindow[InfoFocus]);
   FocusOnWindow(InfoFocus,true);
   InfoWindowActive = true;
-  DisplayText();
+  DisplayInfoBox();
 
   InputEvents::setMode(TEXT("infobox"));
 }
@@ -351,41 +383,81 @@ void Event_SelectInfoBox(int i) {
 
 ////////////////////////////////////
 
-static int getInfoType(int i) {
+int getInfoType(const int i, const int layer) {
+  switch(layer) {
+  case 0:
+    return InfoType[i] & 0xff;         // climb
+  case 1:
+    return (InfoType[i] >> 8) & 0xff;  // cruise
+  case 2:
+    return (InfoType[i] >> 16) & 0xff; // final glide
+  case 3:
+    return (InfoType[i] >> 24) & 0xff; // auxiliary
+  };
+}
+
+int getInfoTypeAll(const int i) {
+  return InfoType[i];
+}
+
+void setInfoTypeAll(const int i, const int j) {
+  InfoType[i] = j;
+  // TODO: check it's within range
+}
+
+
+static int getInfoType(const int i) {
   int retval = 0;
   if (i<0) return 0; // error
 
   if (EnableAuxiliaryInfo) {
-    retval = (InfoType[i] >> 24) & 0xff; // auxiliary
+    retval = getInfoType(i,3);
   } else {
     if (DisplayMode == dmCircling)
-      retval = InfoType[i] & 0xff; // climb
+      retval = getInfoType(i,0);
     else if (DisplayMode == dmFinalGlide) {
-      retval = (InfoType[i] >> 16) & 0xff; //final glide
+      retval = getInfoType(i,2);
     } else {
-      retval = (InfoType[i] >> 8) & 0xff; // cruise
+      retval = getInfoType(i,1); // cruise
     }
   }
-  return min(NUMSELECTSTRINGS-1,retval);
+  return min(NUMSELECTSTRINGS-1, retval);
 }
 
 
-static void setInfoType(int i, char j) {
+void setInfoType(const int i, const char j, const int layer) {
+  switch(layer) {
+  case 0:
+    InfoType[i] &= 0xffffff00;
+    InfoType[i] += (j);
+    break;
+  case 1:
+    InfoType[i] &= 0xffff00ff;
+    InfoType[i] += (j<<8);
+    break;
+  case 2:
+    InfoType[i] &= 0xff00ffff;
+    InfoType[i] += (j<<16);
+    break;
+  case 3:
+    InfoType[i] &= 0x00ffffff;
+    InfoType[i] += (j<<24);
+    break;
+  };
+}
+
+static void setInfoType(const int i, const char j) {
   if (i<0) return; // error
 
   if (EnableAuxiliaryInfo) {
-    InfoType[i] &= 0x00ffffff;
-    InfoType[i] += (j<<24);
+    setInfoType(i, 3, j);
   } else {
     if (DisplayMode == dmCircling) {
-      InfoType[i] &= 0xffffff00;
-      InfoType[i] += (j);
+      setInfoType(i, 0, j);
     } else if (DisplayMode == dmFinalGlide) {
-      InfoType[i] &= 0xff00ffff;
-      InfoType[i] += (j<<16);
+      setInfoType(i, 2, j);
     } else {
-      InfoType[i] &= 0xffff00ff;
-      InfoType[i] += (j<<8);
+      setInfoType(i, 1, j);
     }
   }
 }
@@ -409,49 +481,21 @@ void Event_ChangeInfoBoxType(int i) {
   // TODO code: if i==0, go to default or reset
 
   setInfoType(InfoFocus, j);
-  DisplayText();
+  DisplayInfoBox();
 
 }
 
 ////////////////////
 
-void DefocusInfoBox() {
-  FocusOnWindow(InfoFocus,false);
-  InfoFocus = -1;
-  if (MapWindowProjection::isPan()
-      && !MapWindowProjection::isTargetPan()) {
-    InputEvents::setMode(TEXT("pan"));
-  } else {
-    InputEvents::setMode(TEXT("default"));
-  }
-  InfoWindowActive = false;
-}
-
 
 void FocusOnWindow(int i, bool selected) {
-    //hWndTitleWindow
-
-  if (i<0) return; // error
-
+  if (i<0)
+    return; // error
   InfoBoxes[i]->SetFocus(selected);
   // todo defocus all other?
-
 }
 
-
-void    AssignValues(void)
-{
-  if (InfoBoxesHidden) {
-    // no need to assign values
-    return;
-  }
-
-  //  DetectStartTime(); moved to Calculations
-
-  // nothing to do here now!
-}
-
-void DisplayText(void)
+void DisplayInfoBox(void)
 {
   if (InfoBoxesHidden)
     return;
@@ -845,7 +889,7 @@ void DoInfoKey(int keycode) {
 
   if (InfoFocus<0) return; // paranoid
 
-  HideMenu();
+  InputEvents::HideMenu();
 
   mutexNavBox.Lock();
   i = getInfoType(InfoFocus);
@@ -875,11 +919,11 @@ void PopUpSelect(int Index)
   CurrentInfoType = InfoType[Index];
   StoreType(Index, InfoType[Index]);
   //  ShowWindow(hWndCB,SW_HIDE);
-  FullScreen();
+  //  FullScreen();
   SwitchToMapWindow();
 }
 
-bool InfoBoxClick(HWND wmControl, bool display_locked) {
+bool InfoBoxClick(HWND wmControl) {
   int i;
 
   InfoBoxFocusTimeOut = 0;
@@ -887,19 +931,14 @@ bool InfoBoxClick(HWND wmControl, bool display_locked) {
   for(i=0;i<numInfoWindows;i++) {
     if(wmControl == InfoBoxes[i]->GetHandle()) {
       InfoWindowActive = true;
-      if(display_locked) {
-	if( i!= InfoFocus) {
-	  FocusOnWindow(i,true);
-	  FocusOnWindow(InfoFocus,false);
-	  InfoFocus = i;
-	  InfoWindowActive = true;
-	}
-	DisplayText();
-	InputEvents::setMode(TEXT("infobox"));
-      } else {
-	PopUpSelect(i);
-	DisplayText();
+      if( i!= InfoFocus) {
+	FocusOnWindow(i,true);
+	FocusOnWindow(InfoFocus,false);
+	InfoFocus = i;
+	InfoWindowActive = true;
       }
+      DisplayInfoBox();
+      InputEvents::setMode(TEXT("infobox"));
       return 1;
     }
   }
@@ -915,46 +954,23 @@ void DeleteInfoBoxFormatters() {
   }
 }
 
-extern MapWindow hWndMapWindow; // TODO try to avoid this
-
-
-void InfoBoxFocus(bool display_locked) {
+void InfoBoxFocus(void) {
   if (InfoWindowActive) {
-
-    if (display_locked) {
-      FocusOnWindow(InfoFocus,true);
-    } else {
-      FocusOnWindow(InfoFocus,true);
-    }
+    FocusOnWindow(InfoFocus,true);
   } else {
-    DefocusInfoBox();
-    HideMenu();
-    SetFocus(hWndMapWindow);
+    SwitchToMapWindow();
   }
 }
 
 
-void InfoBoxProcessTimer(void) {
-  if(InfoWindowActive)
-    {
-      if (!dlgAirspaceWarningVisible()) {
-	// JMW prevent switching to map window if in airspace warning dialog
-
-	if(InfoBoxFocusTimeOut >= FOCUSTIMEOUTMAX)
-	  {
-	    SwitchToMapWindow();
-	  }
-	InfoBoxFocusTimeOut ++;
-      }
-    }
-}
-
-
 void InfoBoxDrawIfDirty(void) {
-  if (InfoBoxesDirty) {
+  // No need to redraw map or infoboxes if screen is blanked.
+  // This should save lots of battery power due to CPU usage
+  // of drawing the screen
+
+  if (InfoBoxesDirty && !ScreenBlanked) {
     //JMWTEST    mutexFlightData.Lock();
-    AssignValues();
-    DisplayText();
+    DisplayInfoBox();
     InfoBoxesDirty = false;
     //JMWTEST    mutexFlightData.Unlock();
   }
@@ -968,6 +984,23 @@ void InfoBoxFocusSetMaxTimeOut(void) {
 
 void InfoBoxesSetDirty(bool is_dirty) {
   InfoBoxesDirty = is_dirty;
+}
+
+
+void InfoBoxProcessTimer(void) {
+  if(InfoWindowActive) {
+    if (!dlgAirspaceWarningVisible()) {
+      // JMW prevent switching to map window if in airspace warning dialog
+      InfoBoxFocusTimeOut ++;
+
+      if(InfoBoxFocusTimeOut >= FOCUSTIMEOUTMAX) {
+	SwitchToMapWindow();
+      }
+    }
+  }
+
+  InfoBoxDrawIfDirty();
+  LastFlipBoxTime++;
 }
 
 
@@ -992,4 +1025,8 @@ void ResetInfoBoxes(void) {
   InfoType[6] = 394758;
   InfoType[7] = 1644825;
 #endif
+}
+
+TCHAR *InfoBoxGetDescription(int i) {
+  return Data_Options[i].Description;
 }

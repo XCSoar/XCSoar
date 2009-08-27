@@ -39,11 +39,8 @@ Copyright_License {
 #define XCSOAR_INTERFACE_HPP
 #include "XCSoar.h"
 
-void FocusOnWindow(int i, bool selected);
-
 bool Debounce();
 void SwitchToMapWindow(void);
-void FullScreen();
 
 // instance of main program
 extern HINSTANCE hInst;

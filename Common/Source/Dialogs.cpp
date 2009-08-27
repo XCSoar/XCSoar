@@ -71,10 +71,6 @@ Copyright_License {
 #include <map>
 #endif
 
-// from XCSoar.cpp
-void SwitchToMapWindow(void);
-
-
 void PopupAnalysis()
 {
   dlgAnalysisShowModal();

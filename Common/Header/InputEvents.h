@@ -47,7 +47,14 @@ typedef void (*pt2Event)(const TCHAR *);
 HINSTANCE _loadDLL(TCHAR *name);
 
 class InputEvents {
+ private:
+  static int MenuTimeOut;
  public:
+  static void ShowMenu();
+  static void HideMenu();
+  static void ResetMenuTimeOut();
+  static void ProcessMenuTimer();
+
   static void readFile();
   static int mode2int(const TCHAR *mode, bool create);
   static void setMode(const TCHAR *mode);

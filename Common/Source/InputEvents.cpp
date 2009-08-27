@@ -941,7 +941,6 @@ bool InputEvents::processGlideComputer_real(int gce_id) {
   return false;
 }
 
-extern int MenuTimeOut;
 
 // EXECUTE an Event - lookup event handler and call back - no return
 void InputEvents::processGo(int eventid) {
@@ -968,3 +967,47 @@ void InputEvents::processGo(int eventid) {
   return;
 }
 
+
+///////////
+
+#include "SettingsUser.hpp"
+#include "Screen/Blank.hpp"
+
+int InputEvents::MenuTimeOut = 0;
+int MenuTimeoutMax = MENUTIMEOUTMAX;
+
+void InputEvents::HideMenu() {
+  MenuTimeOut = MenuTimeoutMax;
+  ProcessMenuTimer();
+  ResetDisplayTimeOut();
+}
+
+void InputEvents::ResetMenuTimeOut() {
+  MenuTimeOut = 0;
+  ResetDisplayTimeOut();
+}
+
+void InputEvents::ShowMenu() {
+#if !defined(GNAV) && !defined(PCGNAV)
+  // Popup exit button if in .xci
+  // setMode(TEXT("Exit"));
+  setMode(TEXT("Menu")); // VENTA3
+#endif
+  MenuTimeOut = 0;
+  ProcessMenuTimer();
+  ResetDisplayTimeOut();
+}
+
+#include "MapWindowProjection.hpp"
+
+void InputEvents::ProcessMenuTimer() {
+  if(MenuTimeOut==MenuTimeoutMax) {
+    if (MapWindowProjection::isPan()
+	&& !MapWindowProjection::isTargetPan()) {
+      InputEvents::setMode(TEXT("pan"));
+    } else {
+      InputEvents::setMode(TEXT("default"));
+    }
+  }
+  MenuTimeOut++;
+}

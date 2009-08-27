@@ -822,7 +822,7 @@ void guiStartLogger(bool noAsk) {
 
     if(noAsk ||
        (MessageBoxX(TaskMessage,gettext(TEXT("Start Logger")),
-		   MB_YESNO|MB_ICONQUESTION) == IDYES))
+		    MB_YESNO|MB_ICONQUESTION) == IDYES))
       {
 
 	if (LoggerClearFreeSpace()) {
@@ -851,17 +851,17 @@ void guiStartLogger(bool noAsk) {
 			     WayPointList[Task[i].Index].Name );
 	    }
 	  EndDeclaration();
-	  ResetFRecord(); // reset timer & lastRecord string so if logger is restarted, FRec appears at top of file
-	  }
-      else {
+	  ResetFRecord(); // reset timer & lastRecord string so if
+			  // logger is restarted, FRec appears at top
+			  // of file
+	} else {
 
-        MessageBoxX(
-          gettext(TEXT("Logger inactive, insufficient storage!")),
-          gettext(TEXT("Logger Error")), MB_OK| MB_ICONERROR);
-        StartupStore(TEXT("Logger not started: Insufficient Storage\r\n"));
-	  }
+	  MessageBoxX(
+		      gettext(TEXT("Logger inactive, insufficient storage!")),
+		      gettext(TEXT("Logger Error")), MB_OK| MB_ICONERROR);
+	  StartupStore(TEXT("Logger not started: Insufficient Storage\r\n"));
+	}
       }
-    FullScreen();
   }
 }
 
@@ -873,9 +873,6 @@ void guiStopLogger(bool noAsk) {
 		    gettext(TEXT("Stop Logger")),
 		    MB_YESNO|MB_ICONQUESTION) == IDYES)) {
       StopLogger();
-      if (!noAsk) {
-        FullScreen();
-      }
     }
   }
 }

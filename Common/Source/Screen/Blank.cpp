@@ -180,6 +180,10 @@ void BlankDisplay(bool doblank) {
 
 void CheckDisplayTimeOut(bool sticky)
 {
+#if (WINDOWSPC<1)
+  SystemIdleTimerReset();
+#endif
+
   if (!sticky) {
     if (DisplayTimeOut< DISPLAYTIMEOUTMAX)
       DisplayTimeOut++;

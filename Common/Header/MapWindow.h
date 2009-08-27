@@ -41,6 +41,7 @@ Copyright_License {
 #include "MapWindowProjection.hpp"
 #include "Airspace.h"
 #include "Trigger.hpp"
+#include "Mutex.hpp"
 
 class MapWindowBase {
  public:
@@ -50,8 +51,8 @@ class MapWindowBase {
   static void     ResumeDrawingThread(void);
   static bool     IsDisplayRunning();
   static void     CreateDrawingThread(void);
+  static Mutex    mutexRun;
  protected:
-  static bool     THREADRUNNING;
   static DWORD    dwDrawThreadID;
   static HANDLE   hDrawThread;
 };

@@ -54,6 +54,7 @@ class InfoBoxLayout {
   static int ControlWidth, ControlHeight, TitleHeight;
   static void ScreenGeometry(RECT rc);
   static void Paint(void);
+
  private:
   static void GetInfoBoxPosition(int i, RECT rc,
 				 int *x, int *y,

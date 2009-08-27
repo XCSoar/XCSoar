@@ -41,6 +41,7 @@ Copyright_License {
 #include "Dialogs.h"
 #include "Utils.h"
 #include "InfoBoxLayout.h"
+#include "InputEvents.h"
 #include "Compatibility/string.h"
 #include "PeriodClock.hpp"
 #include "WindowControls.h"
@@ -824,7 +825,6 @@ void InfoBox::InitializeDrawHelpers(void){
 
 }
 
-extern void ShowMenu();
 
 LRESULT CALLBACK InfoBoxWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam){
   InfoBox *ib;
@@ -871,7 +871,7 @@ LRESULT CALLBACK InfoBoxWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 #ifdef DEBUG_DBLCLK
       DoStatusMessage(_T("DBLCLK InfoBox")); // VENTA3
 #endif
-      ShowMenu();
+      InputEvents::ShowMenu();
       break;
 #endif
 
@@ -886,7 +886,7 @@ LRESULT CALLBACK InfoBoxWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 #ifdef DEBUG_DBLCLK
 	  DoStatusMessage(_T("synth DBLCLK InfoBox!")); // VENTA3
 #endif
-	  ShowMenu();
+	  InputEvents::ShowMenu();
 	  return(0);
 	}
 #ifdef DEBUG_DBLCLK

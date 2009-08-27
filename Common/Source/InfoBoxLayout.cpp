@@ -48,8 +48,6 @@ Copyright_License {
 #include "ExpandMacros.hpp"
 #include "Interface.hpp"
 
-extern InfoBox *InfoBoxes[MAXINFOWINDOWS];
-
 // Layouts:
 // 0: default, infoboxes along top and bottom, map in middle
 // 1: both infoboxes along bottom
@@ -437,6 +435,12 @@ RECT InfoBoxLayout::GetInfoBoxSizes(RECT rc) {
   return MapRect;
 }
 
+/////////////////////////////////////////////////////////////////////////////////
+
+// TODO: this should go into the manager
+
+extern InfoBox *InfoBoxes[MAXINFOWINDOWS];
+
 
 void InfoBoxLayout::Paint(void) {
   int i;
@@ -450,6 +454,8 @@ void InfoBoxLayout::Paint(void) {
   } else {
     InfoBoxes[numInfoWindows]->SetVisible(true);
     for (i=0; i<numInfoWindows; i++) {
+
+      // JMW TODO: make these calculated once only.
       int x, y;
       int rx, ry;
       int rw;

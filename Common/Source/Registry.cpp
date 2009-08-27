@@ -330,9 +330,9 @@ const TCHAR szRegistryFontStatisticsFont[]=	 TEXT("StatisticsFont");
 
 extern int UserLevel; // used by dlgConfiguration
 
-void StoreType(int Index,int InfoType)
+void StoreType(int Index,int the_type)
 {
-  SetToRegistry(szRegistryDisplayType[Index],(DWORD)InfoType);
+  SetToRegistry(szRegistryDisplayType[Index],(DWORD)the_type);
 }
 
 // This function checks to see if Final Glide mode infoboxes have been
@@ -340,14 +340,22 @@ void StoreType(int Index,int InfoType)
 // using XCSoarV3 infoboxes, so copy settings from cruise mode.
 void CheckInfoTypes() {
   int i;
-  char iszero=0;
+  char iszero_fg = 0;
+  char iszero_aux = 0;
+
   for (i=0; i<MAXINFOWINDOWS; i++) {
-    iszero |= (InfoType[i] >> 16) & 0xff;
+    iszero_fg  |= getInfoType(i, 2);
+    iszero_aux |= getInfoType(i, 3);
   }
-  if (iszero==0) {
+  if (iszero_fg || iszero_aux) {
     for (i=0; i<MAXINFOWINDOWS; i++) {
-      InfoType[i] += (InfoType[i] & 0xff)<<16;
-      StoreType(i,InfoType[i]);
+      if (iszero_fg) {
+	setInfoType(i, 2, getInfoType(i,1));
+      }
+      if (iszero_aux) {
+	setInfoType(i, 3, getInfoType(i,1));
+      }
+      StoreType(i, getInfoTypeAll(i));
     }
   }
 }
@@ -487,9 +495,9 @@ void ReadRegistrySettings(void)
 
   for (i=0;i<MAXINFOWINDOWS;i++)
     {
-      Temp = InfoType[i];
+      Temp = getInfoTypeAll(i);
       GetFromRegistry(szRegistryDisplayType[i],&Temp);
-      InfoType[i] = Temp;
+      setInfoTypeAll(i,Temp);
     }
 
   // check against V3 infotypes
@@ -840,36 +848,36 @@ void ReadRegistrySettings(void)
   Appearance.InfoBoxGeom = (InfoBoxGeomAppearance_t)Temp;
 
   if (GlobalModelType == MODELTYPE_PNA_HP31X ) {
-			needclipping=true;
-			// key transcoding for this one
-			StartupStore(TEXT("Loading HP31X settings\n"));
-	}
-	else
-	if (GlobalModelType == MODELTYPE_PNA_PN6000 ) {
-			StartupStore(TEXT("Loading PN6000 settings\n"));
-			// key transcoding for this one
-	}
-	else
-	if (GlobalModelType == MODELTYPE_PNA_MIO ) {
-			StartupStore(TEXT("Loading MIO settings\n"));
-			// currently no special settings from MIO but need to handle hw keys
-	}
-	else
+    needclipping=true;
+    // key transcoding for this one
+    StartupStore(TEXT("Loading HP31X settings\n"));
+  }
+  else
+    if (GlobalModelType == MODELTYPE_PNA_PN6000 ) {
+      StartupStore(TEXT("Loading PN6000 settings\n"));
+      // key transcoding for this one
+    }
+    else
+      if (GlobalModelType == MODELTYPE_PNA_MIO ) {
+	StartupStore(TEXT("Loading MIO settings\n"));
+	// currently no special settings from MIO but need to handle hw keys
+      }
+      else
 	if (GlobalModelType == MODELTYPE_PNA_NOKIA_500 ) {
-			StartupStore(TEXT("Loading Nokia500 settings\n"));
-			// key transcoding is made
+	  StartupStore(TEXT("Loading Nokia500 settings\n"));
+	  // key transcoding is made
 	}
 	else
 	if (GlobalModelType == MODELTYPE_PNA_MEDION_P5 ) {
-			StartupStore(TEXT("Loading Medion settings\n"));
-			needclipping=true;
+	  StartupStore(TEXT("Loading Medion settings\n"));
+	  needclipping=true;
 	}
 	else
-	if (GlobalModelType == MODELTYPE_PNA_PNA ) {
-		StartupStore(TEXT("Loading default PNA settings\n"));
-	}
-	else
-		StartupStore(TEXT("No special regsets for this PDA\n")); // VENTA2
+	  if (GlobalModelType == MODELTYPE_PNA_PNA ) {
+	    StartupStore(TEXT("Loading default PNA settings\n"));
+	  }
+	  else
+	    StartupStore(TEXT("No special regsets for this PDA\n")); // VENTA2
 
 // VENTA-ADDON Model change
   Temp = Appearance.InfoBoxModel;

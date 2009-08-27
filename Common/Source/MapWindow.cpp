@@ -138,8 +138,6 @@ bool  MapWindow::askVisibilityScan = false;
 
 /////////////////////////////////
 
-extern void ShowMenu();
-
 HDC MapWindow::hDCTemp;
 HDC MapWindow::hDCMask;
 HDC MapWindow::hdcDrawWindow;
@@ -365,8 +363,6 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
       DeleteObject(hDrawBitMap);
       DeleteObject(hMaskBitMap);
 
-      MapGfx.Destroy();
-
       PostQuitMessage (0);
 
       break;
@@ -382,7 +378,7 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
       #ifndef DISABLEAUDIO
       if (EnableSoundModes) PlayResource(TEXT("IDR_WAV_CLICK"));
       #endif
-      ShowMenu();
+      InputEvents::ShowMenu();
       break;
 
     case WM_MOUSEMOVE:
@@ -443,8 +439,6 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
 	}
       }
       mutexTaskData.Unlock();
-
-      FullScreen();
       break;
 
     case WM_LBUTTONUP:
@@ -472,8 +466,10 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
       X = LOWORD(lParam); Y = HIWORD(lParam);
 
       if (dwInterval == 0) {
-		DoStatusMessage(_T("dwInterval==0 impossible!"));
-		break; // should be impossible
+#ifdef DEBUG_VIRTUALKEYS
+	DoStatusMessage(_T("dwInterval==0 impossible!"));
+#endif
+	break; // should be impossible
       }
 
 
@@ -484,7 +480,8 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
 #ifdef DEBUG_VIRTUALKEYS
       TCHAR buf[80]; char sbuf[80];
       sprintf(sbuf,"%.0f",distance);
-      _stprintf(buf,_T("XY=%d,%d dist=%S Up=%ld Down=%ld Int=%ld"),X,Y,sbuf,dwUpTime,dwDownTime,dwInterval);
+      _stprintf(buf,_T("XY=%d,%d dist=%S Up=%ld Down=%ld Int=%ld"),
+		X,Y,sbuf,dwUpTime,dwDownTime,dwInterval);
       DoStatusMessage(buf);
 #endif
 
@@ -545,12 +542,7 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
       }
 #endif
       if (!my_target_pan) {
-	if ( InfoFocus>=0) { //
-	  DefocusInfoBox();
-	  SetFocus(hWnd);
-#ifndef DISABLEAUDIO
-	  if (EnableSoundModes) PlayResource(TEXT("IDR_WAV_CLICK"));
-#endif
+	if (DefocusInfoBox()) { //
 	  break;
 	}
 	if (VirtualKeys==(VirtualKeys_t)vkEnabled) {
@@ -799,9 +791,11 @@ void MapWindow::DrawThreadLoop(bool first_time) {
 	   MapRectBig.bottom-MapRectBig.top,
 	   hdcDrawWindow, 0, 0, SRCCOPY);
     return;
-  } else {
-    dirtyEvent.reset();
   }
+
+  mutexRun.Lock(); // take control
+
+  dirtyEvent.reset();
 
   UpdateInfo(&GPS_INFO, &CALCULATED_INFO);
 
@@ -829,6 +823,8 @@ void MapWindow::DrawThreadLoop(bool first_time) {
   UpdateTimeStats(false);
   // we do caching after screen update, to minimise perceived delay
   UpdateCaches(first_time);
+
+  mutexRun.Unlock(); // release control
 }
 
 
@@ -889,15 +885,11 @@ DWORD MapWindow::DrawThread (LPVOID lpvoid)
     GaugeVario::Show(!MapFullScreen);
   }
 
-  do {
+  // this is the main drawing loop
 
-    if (!THREADRUNNING) {
-      Sleep(100); // wait around if suspended
-      continue;
-    }
+  do {
     DrawThreadLoop(false);
     drawTriggerEvent.wait(5000);
-
   } while (!closeTriggerEvent.test());
 
   return 0;

@@ -2078,7 +2078,6 @@ void dlgAnalysisShowModal(void){
 
   //  MapWindow::RequestFastRefresh();
   ClearAirspaceWarnings(false); // airspace warning gets refreshed
-  FullScreen();
 }
 
 

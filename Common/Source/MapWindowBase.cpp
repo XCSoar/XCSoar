@@ -41,13 +41,13 @@ Copyright_License {
 #include "Screen/Blank.hpp"
 
 Trigger MapWindowBase::dirtyEvent(TEXT("mapDirty"));
-bool MapWindowBase::THREADRUNNING = TRUE;
 DWORD  MapWindowBase::dwDrawThreadID;
 HANDLE MapWindowBase::hDrawThread;
+Mutex MapWindowBase::mutexRun;
+
 
 bool MapWindowBase::IsDisplayRunning() {
-  return (THREADRUNNING
-	  && globalRunningEvent.test()
+  return (globalRunningEvent.test()
 	  && !ScreenBlanked
 	  && ProgramStarted);
 }
@@ -65,18 +65,12 @@ void MapWindowBase::CreateDrawingThread(void)
 
 void MapWindowBase::SuspendDrawingThread(void)
 {
-  mutexTerrainDataGraphics.Lock();
-  THREADRUNNING = false;
-  mutexTerrainDataGraphics.Unlock();
-  //  SuspendThread(hDrawThread);
+  mutexRun.Lock();
 }
 
 void MapWindowBase::ResumeDrawingThread(void)
 {
-  mutexTerrainDataGraphics.Lock();
-  THREADRUNNING = true;
-  mutexTerrainDataGraphics.Unlock();
-  //  ResumeThread(hDrawThread);
+  mutexRun.Unlock();
 }
 
 void MapWindowBase::CloseDrawingThread(void)
