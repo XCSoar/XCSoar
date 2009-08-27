@@ -52,7 +52,6 @@ class MapWindowBase {
   static void     CreateDrawingThread(void);
  protected:
   static bool     THREADRUNNING;
-  static bool     THREADEXIT;
   static DWORD    dwDrawThreadID;
   static HANDLE   hDrawThread;
 };
@@ -79,13 +78,10 @@ class MapWindow: public MapWindowBase, public MapWindowProjection {
   }
 
  public:
-  // user settings
-
-  // inter-process
-  static bool ForceVisibilityScan; // called only by XCSoar.cpp on
-				   // settings reload
-
-  static bool RenderTimeAvailable(); // used only by TopologyStore.cpp
+  // inter-process, used only on file change
+  static void ForceVisibilityScan() {
+    askVisibilityScan = true;
+  }
 
   // used by dlgTarget
   static bool TargetDragged(double *longitude, double *latitude);
@@ -94,9 +90,6 @@ class MapWindow: public MapWindowBase, public MapWindowProjection {
   // used only by XCSoar.cpp on instantiation
   static LRESULT CALLBACK MapWndProc (HWND hWnd, UINT uMsg,
 				      WPARAM wParam,LPARAM lParam);
-
-  static void UpdateInfo(NMEA_INFO *nmea_info,
-			 DERIVED_INFO *derived_info);
 
   // use at startup
   static void SetMapRect(RECT rc) {
@@ -108,8 +101,9 @@ class MapWindow: public MapWindowBase, public MapWindowProjection {
   static void RequestToggleFullScreen();
   static void RequestFullScreen(bool full);
 
-  // used by terrain renderer, topology and airspace
+  // used by topology store
   static void ScanVisibility(rectObj *bounds_active);
+  static bool RenderTimeAvailable(); // used only by TopologyStore.cpp
 
   // input events or reused code
   static void Event_SetZoom(double value);
@@ -129,14 +123,20 @@ class MapWindow: public MapWindowBase, public MapWindowProjection {
 
   ////////////////////////////////////////////////////////////////////
  private:
+
+  static void DrawThreadLoop (const bool first);
+  static void DrawThreadInitialise (void);
+
   // state
   static BOOL     Initialised;
-  static DWORD    timestamp_newdata;
   static bool     user_asked_redraw;
 
+  static void     UpdateInfo(NMEA_INFO *nmea_info,
+			     DERIVED_INFO *derived_info);
+
   // display management
-  static void     RefreshMap();
-  static void     SwitchZoomClimb(void);
+  static void          RefreshMap();
+  static void          SwitchZoomClimb(void);
 
   // state/localcopy/local data
   static int           iSnailNext;
@@ -145,18 +145,21 @@ class MapWindow: public MapWindowBase, public MapWindowProjection {
   static int           TargetDrag_State;
   static POINT         Groundline[NUMTERRAINSWEEPS+1];
   static bool          LandableReachable;
-  static DWORD         fpsTime0;
 
   // projection
   static bool      BigZoom;
   static bool      askFullScreen;
   static bool      MapFullScreen;
+  static bool      askVisibilityScan; // called only by XCSoar.cpp on
+			              // settings reload
   static void      StoreRestoreFullscreen(bool);
   static void      ToggleFullScreenStart();
 
   static double    findMapScaleBarSize(const RECT rc);
 
   // other
+  static DWORD     fpsTime0;
+  static DWORD     timestamp_newdata;
   static void      UpdateTimeStats(bool start);
 
   // display element functions

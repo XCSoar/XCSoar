@@ -129,6 +129,7 @@ class MapWindowProjection: public MapWindowData {
   static double    StepMapScale(int Step);
   static double    FindMapScale(double Value);
   static double    LimitMapScale(double value);
+  static void      InitialiseScaleList();
 
  private:
   static void   ModifyMapScale();

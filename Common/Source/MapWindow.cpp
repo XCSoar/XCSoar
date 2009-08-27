@@ -134,7 +134,7 @@ POINT MapWindow::Groundline[NUMTERRAINSWEEPS+1];
 DWORD MapWindow::fpsTime0 = 0;
 bool  MapWindow::MapFullScreen = false;
 bool  MapWindow::askFullScreen = false;
-bool  MapWindow::ForceVisibilityScan = false;
+bool  MapWindow::askVisibilityScan = false;
 
 /////////////////////////////////
 
@@ -350,9 +350,6 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
       hdcDrawWindow = CreateCompatibleDC(hdcScreen);
       hDCTemp = CreateCompatibleDC(hdcDrawWindow);
       hDCMask = CreateCompatibleDC(hdcDrawWindow);
-
-      ScaleListCount = propGetScaleList(ScaleList, sizeof(ScaleList)/sizeof(ScaleList[0]));
-      RequestMapScale = LimitMapScale(RequestMapScale);
 
       // Signal that draw thread can run now
       Initialised = TRUE;
@@ -755,12 +752,9 @@ void MapWindow::UpdateCaches(const bool force) {
   DWORD fpsTimeThis = ::GetTickCount();
   static double lastTime = 0;
   static DWORD fpsTimeMapCenter = 0;
-  bool do_force = force;
+  bool do_force = force | askVisibilityScan;
 
-  if (ForceVisibilityScan) {
-    do_force = true;
-    ForceVisibilityScan = false;
-  }
+  askVisibilityScan = false; // reset
 
   // have some time, do shape file cache update if necessary
   LockTerrainDataGraphics();
@@ -797,15 +791,53 @@ void MapWindow::UpdateCaches(const bool force) {
 
 extern MapWindow hWndMapWindow; // TODO try to avoid this
 
-DWORD MapWindow::DrawThread (LPVOID lpvoid)
-{
-  HWND hWndMapWindow = ::hWndMapWindow;
+void MapWindow::DrawThreadLoop(bool first_time) {
 
-  while ((!ProgramStarted) || (!Initialised)) {
-    Sleep(100);
+  if (!dirtyEvent.test() && !first_time) {
+    // redraw old screen, must have been a request for fast refresh
+    BitBlt(hdcScreen, 0, 0, MapRectBig.right-MapRectBig.left,
+	   MapRectBig.bottom-MapRectBig.top,
+	   hdcDrawWindow, 0, 0, SRCCOPY);
+    return;
+  } else {
+    dirtyEvent.reset();
   }
 
-  THREADEXIT = false;
+  UpdateInfo(&GPS_INFO, &CALCULATED_INFO);
+
+  if (BigZoom) {
+    // quickly draw zoom level on top
+    DrawMapScale(hdcScreen, MapRect, true);
+  }
+
+  if (askFullScreen != MapFullScreen) {
+    ToggleFullScreenStart();
+  }
+
+  GaugeFLARM::Render(&DrawInfo);
+
+  RenderMapWindow(hdcDrawWindow, MapRect);
+
+  if (!first_time) {
+    BitBlt(hdcScreen, 0, 0,
+	   MapRectBig.right-MapRectBig.left,
+	   MapRectBig.bottom-MapRectBig.top,
+	   hdcDrawWindow, 0, 0, SRCCOPY);
+    HWND hWndMapWindow = ::hWndMapWindow;
+    InvalidateRect(hWndMapWindow, &MapRect, false);
+  }
+  UpdateTimeStats(false);
+  // we do caching after screen update, to minimise perceived delay
+  UpdateCaches(first_time);
+}
+
+
+void MapWindow::DrawThreadInitialise(void) {
+  HWND hWndMapWindow = ::hWndMapWindow;
+
+  // initialise other systems
+  InitialiseScaleList(); // should really be done before the thread
+			 // has started, so it happens from main thread
 
   LabelBlockReset();
 
@@ -838,66 +870,36 @@ DWORD MapWindow::DrawThread (LPVOID lpvoid)
 
   RequestMapScale = MapScale;
   UpdateMapScale(); // first call
+}
 
-  bool first_time = true;
 
-  while (!closeTriggerEvent.test()) {
+DWORD MapWindow::DrawThread (LPVOID lpvoid)
+{
+  while (!globalRunningEvent.test() || !Initialised) {
+    // wait for start
+    Sleep(100);
+  }
 
-    if ((!THREADRUNNING) || (!globalRunningEvent.test())) {
+  DrawThreadInitialise();
+
+  DrawThreadLoop(true); // first time draw
+  // mode advance
+  if (ProgramStarted==psInitDone) {
+    ProgramStarted = psFirstDrawDone;
+    GaugeVario::Show(!MapFullScreen);
+  }
+
+  do {
+
+    if (!THREADRUNNING) {
       Sleep(100); // wait around if suspended
       continue;
     }
-
+    DrawThreadLoop(false);
     drawTriggerEvent.wait(5000);
 
-    if (closeTriggerEvent.test())
-      break; // drop out without drawing
+  } while (!closeTriggerEvent.test());
 
-    if (!dirtyEvent.test() && !first_time) {
-      // redraw old screen, must have been a request for fast refresh
-      BitBlt(hdcScreen, 0, 0, MapRectBig.right-MapRectBig.left,
-	     MapRectBig.bottom-MapRectBig.top,
-	     hdcDrawWindow, 0, 0, SRCCOPY);
-      continue;
-    } else {
-      dirtyEvent.reset();
-    }
-
-    MapWindow::UpdateInfo(&GPS_INFO, &CALCULATED_INFO);
-
-    if (BigZoom) {
-      // quickly draw zoom level on top
-      DrawMapScale(hdcScreen, MapRect, true);
-    }
-
-    if (askFullScreen != MapFullScreen) {
-      ToggleFullScreenStart();
-    }
-
-    GaugeFLARM::Render(&DrawInfo);
-
-    RenderMapWindow(hdcDrawWindow, MapRect);
-
-    if (!first_time) {
-      BitBlt(hdcScreen, 0, 0,
-	     MapRectBig.right-MapRectBig.left,
-	     MapRectBig.bottom-MapRectBig.top,
-	     hdcDrawWindow, 0, 0, SRCCOPY);
-      InvalidateRect(hWndMapWindow, &MapRect, false);
-    }
-    UpdateTimeStats(false);
-
-    // we do caching after screen update, to minimise perceived delay
-    UpdateCaches(first_time);
-    first_time = false;
-
-    if (ProgramStarted==psInitDone) {
-      ProgramStarted = psFirstDrawDone;
-      GaugeVario::Show(!MapFullScreen);
-    }
-
-  }
-  THREADEXIT = true;
   return 0;
 }
 

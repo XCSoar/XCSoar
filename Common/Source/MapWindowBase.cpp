@@ -42,7 +42,6 @@ Copyright_License {
 
 Trigger MapWindowBase::dirtyEvent(TEXT("mapDirty"));
 bool MapWindowBase::THREADRUNNING = TRUE;
-bool MapWindowBase::THREADEXIT = FALSE;
 DWORD  MapWindowBase::dwDrawThreadID;
 HANDLE MapWindowBase::hDrawThread;
 
@@ -57,7 +56,6 @@ bool MapWindowBase::IsDisplayRunning() {
 void MapWindowBase::CreateDrawingThread(void)
 {
   closeTriggerEvent.reset();
-  THREADEXIT = false;
   hDrawThread = CreateThread (NULL, 0,
                               (LPTHREAD_START_ROUTINE )
 			      MapWindow::DrawThread,
@@ -88,6 +86,5 @@ void MapWindowBase::CloseDrawingThread(void)
   LockTerrainDataGraphics();
   SuspendDrawingThread();
   UnlockTerrainDataGraphics();
-  while(!THREADEXIT) { Sleep(100); };
+  WaitForSingleObject(hDrawThread, INFINITE);
 }
-

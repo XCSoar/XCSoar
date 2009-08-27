@@ -337,14 +337,14 @@ void SettingsLeave() {
       RasterTerrain::ServiceFullReload(GPS_INFO.Latitude,
                                        GPS_INFO.Longitude);
 
-      MapWindow::ForceVisibilityScan = true;
+      MapWindow::ForceVisibilityScan();
     }
 
   if (TOPOLOGYFILECHANGED)
     {
       CloseTopology();
       OpenTopology();
-      MapWindow::ForceVisibilityScan = true;
+      MapWindow::ForceVisibilityScan();
     }
 
   if(AIRSPACEFILECHANGED)
@@ -352,7 +352,7 @@ void SettingsLeave() {
       CloseAirspace();
       ReadAirspace();
       SortAirspace();
-      MapWindow::ForceVisibilityScan = true;
+      MapWindow::ForceVisibilityScan();
     }
 
   if (POLARFILECHANGED) {

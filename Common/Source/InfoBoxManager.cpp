@@ -50,6 +50,7 @@ Copyright_License {
 #include "InputEvents.h"
 #include "Compatibility/string.h"
 #include "MapWindow.h"
+#include "MapWindowProjection.hpp"
 #include "Device/Parser.h"
 #include "Utils.h"
 #include "Utils2.h"

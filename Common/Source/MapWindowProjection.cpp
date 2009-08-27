@@ -44,6 +44,7 @@ Copyright_License {
 #include "SettingsTask.hpp"
 #include "InputEvents.h"
 #include "SettingsUser.hpp"
+#include "Utils.h"
 #include <stdlib.h>
 
 int GliderScreenPosition = 20; // 20% from bottom
@@ -75,6 +76,12 @@ int MapWindowProjection::TargetPanIndex = 0;
 double MapWindowProjection::TargetZoomDistance = 500.0;
 
 #include "WayPoint.hpp"
+
+
+void MapWindowProjection::InitialiseScaleList(void) {
+  ScaleListCount = propGetScaleList(ScaleList, sizeof(ScaleList)/sizeof(ScaleList[0]));
+  RequestMapScale = LimitMapScale(RequestMapScale);
+}
 
 bool MapWindowProjection::WaypointInRange(int i) {
   return ((WayPointList[i].Zoom >= MapScale*10)
