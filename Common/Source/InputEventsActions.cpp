@@ -419,13 +419,10 @@ void InputEvents::eventZoom(const TCHAR* misc) {
 
   else if (_tcscmp(misc, TEXT("circlezoom toggle")) == 0) {
     CircleZoom = !CircleZoom;
-    MapWindow::SwitchZoomClimb();
   } else if (_tcscmp(misc, TEXT("circlezoom on")) == 0) {
     CircleZoom = true;
-    MapWindow::SwitchZoomClimb();
   } else if (_tcscmp(misc, TEXT("circlezoom off")) == 0) {
     CircleZoom = false;
-    MapWindow::SwitchZoomClimb();
   } else if (_tcscmp(misc, TEXT("circlezoom show")) == 0) {
     if (CircleZoom)
       DoStatusMessage(TEXT("Circling Zoom ON"));
@@ -1269,7 +1266,7 @@ void InputEvents::eventNearestAirspaceDetails(const TCHAR *misc) {
 
   if (!dlgAirspaceWarningIsEmpty()) {
     RequestAirspaceWarningForce = true;
-    RequestAirspaceWarningDialog= true;
+    airspaceWarningEvent.trigger();
     return;
   }
 

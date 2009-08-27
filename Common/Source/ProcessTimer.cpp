@@ -47,24 +47,22 @@ Copyright_License {
 #include "Device/Parser.h"
 #include "Dialogs.h"
 #include "Screen/Blank.hpp"
+#include "SettingsUser.hpp"
 #include "Message.h"
 #include "Utils.h"
 #include "UtilsSystem.hpp"
 #include "InfoBoxManager.h"
 #include "MapWindow.h"
 #include "Math/Earth.hpp"
-
-extern NMEA_INFO     GPS_INFO;
+#include "Blackboard.hpp"
 
 BOOL GPSCONNECT = FALSE;
 BOOL extGPSCONNECT = FALSE; // this one used by external functions
 
-bool RequestAirspaceWarningDialog= false;
 bool RequestAirspaceWarningForce=false;
 
-extern int MenuTimeOut;
-extern int MenuTimeoutMax;
-extern bool DisplayLocked;
+extern int  MenuTimeOut;
+extern int  MenuTimeoutMax;
 
 extern void RestartCommPorts(void);
 
@@ -75,9 +73,9 @@ void CommonProcessTimer()
   // service the GCE and NMEA queue
   if (ProgramStarted==psNormalOp) {
     InputEvents::DoQueuedEvents();
-    if (RequestAirspaceWarningDialog) {
+    if (airspaceWarningEvent.test()) {
+      airspaceWarningEvent.reset();
       ResetDisplayTimeOut();
-      RequestAirspaceWarningDialog= false;
       dlgAirspaceWarningShowDlg(RequestAirspaceWarningForce);
       RequestAirspaceWarningForce = false;
     }

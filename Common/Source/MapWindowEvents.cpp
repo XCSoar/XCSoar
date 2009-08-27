@@ -54,6 +54,7 @@ void MapWindow::SwitchZoomClimb(void) {
   static double ClimbMapScale = MapWindow::RequestMapScale/20;
   static bool last_isclimb = false;
   static bool last_targetpan = false;
+
   bool isclimb = (DisplayMode == dmCircling);
 
   if (TargetPan != last_targetpan) {
@@ -76,6 +77,7 @@ void MapWindow::SwitchZoomClimb(void) {
     last_targetpan = TargetPan;
     return;
   }
+
   if (!TargetPan && CircleZoom) {
     if (isclimb != last_isclimb) {
       if (isclimb) {
@@ -92,11 +94,8 @@ void MapWindow::SwitchZoomClimb(void) {
       }
       BigZoom = true;
       last_isclimb = isclimb;
-    } else {
-      // nothing to do.
     }
   }
-
 }
 
 /////////////////////////////////////////

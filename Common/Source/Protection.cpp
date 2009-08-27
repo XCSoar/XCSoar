@@ -19,6 +19,8 @@ static Trigger dataTriggerEvent(TEXT("dataTriggerEvent"));
 static Trigger varioTriggerEvent(TEXT("varioTriggerEvent"));
 Trigger closeTriggerEvent(TEXT("mapCloseEvent"));
 Trigger drawTriggerEvent(TEXT("drawTriggerEvent"));
+Trigger globalRunningEvent(TEXT("globalRunning"));
+Trigger airspaceWarningEvent(TEXT("airspaceWarning"));
 
 CRITICAL_SECTION  CritSec_FlightData;
 bool csFlightDataInitialized = false;
@@ -295,36 +297,8 @@ DWORD CalculationThread (LPVOID lpvoid) {
 
     if (gpsUpdatedTriggerEvent.test()) {
       if(DoCalculations(&tmp_GPS_INFO,&tmp_CALCULATED_INFO)){
-
-        DisplayMode_t lastDisplayMode = DisplayMode;
-
 	MapWindow::dirtyEvent.trigger();
         need_calculations_slow = true;
-
-        switch (UserForceDisplayMode){
-          case dmCircling:
-            DisplayMode = dmCircling;
-          break;
-          case dmCruise:
-            DisplayMode = dmCruise;
-          break;
-          case dmFinalGlide:
-            DisplayMode = dmFinalGlide;
-          break;
-          case dmNone:
-            if (tmp_CALCULATED_INFO.Circling){
-              DisplayMode = dmCircling;
-            } else if (tmp_CALCULATED_INFO.FinalGlide){
-              DisplayMode = dmFinalGlide;
-            } else
-              DisplayMode = dmCruise;
-          break;
-        }
-
-        if (lastDisplayMode != DisplayMode){
-          MapWindow::SwitchZoomClimb();
-        }
-
       }
       InfoBoxesSetDirty(true);
     }

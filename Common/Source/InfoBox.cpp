@@ -37,6 +37,7 @@ Copyright_License {
 
 #include "InfoBox.h"
 #include "XCSoar.h"
+#include "Protection.hpp"
 #include "Dialogs.h"
 #include "Utils.h"
 #include "InfoBoxLayout.h"
@@ -686,7 +687,7 @@ void InfoBox::PaintSelector(HDC mHdc){
 
 void InfoBox::Paint(){
 
-  if (!GlobalRunning) return; // safety
+  if (!globalRunningEvent.test()) return; // safety
 
   static bool InitDone = false;
   RECT rc;

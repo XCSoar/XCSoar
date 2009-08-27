@@ -273,7 +273,7 @@ void Message::BlockRender(bool doblock) {
 
 
 bool Message::Render() {
-  if (!GlobalRunning) return false;
+  if (!globalRunningEvent.test()) return false;
   if (block_ref) return false;
 
   Lock();

@@ -85,6 +85,8 @@ extern BOOL MAPFILECHANGED;
 
 extern Trigger drawTriggerEvent;
 extern Trigger closeTriggerEvent;
+extern Trigger globalRunningEvent;
+extern Trigger airspaceWarningEvent;
 
 #endif
 

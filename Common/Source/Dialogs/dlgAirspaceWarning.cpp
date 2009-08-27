@@ -559,8 +559,6 @@ int UserMsgNotify(WindowControl *Sender, MSG *msg){
 }
 
 
-extern bool RequestAirspaceWarningDialog;
-
 // WARNING: this is NOT called from the windows thread!
 void AirspaceWarningNotify(AirspaceWarningNotifyAction_t Action,
                            AirspaceInfo_c *AirSpace) {
@@ -584,8 +582,8 @@ void AirspaceWarningNotify(AirspaceWarningNotifyAction_t Action,
       PostMessage(wf->GetHandle(), WM_USER+1, 0, 0);
     }
     else {
-      RequestAirspaceWarningDialog= true;
-      // JMW this is bad! PostMessage(hWndMapWindow, WM_USER+1, 0, 0);
+      airspaceWarningEvent.trigger();
+      // JMW this was bad! PostMessage(hWndMapWindow, WM_USER+1, 0, 0);
       // (Makes it serviced by the main gui thread, much better)
     }
     // sync dialog with MapWindow (event processing etc)

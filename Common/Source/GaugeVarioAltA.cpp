@@ -36,8 +36,9 @@ Copyright_License {
 */
 
 #include "GaugeVarioAltA.h"
-#include "LogFile.hpp"
 #include "XCSoar.h"
+#include "Protection.hpp"
+#include "LogFile.hpp"
 #include "MapWindowProjection.hpp"
 #include "Logger.h"
 #include "Math/FastMath.h"
@@ -243,7 +244,8 @@ void GaugeVario::Show(bool doshow) {
 #endif
 
  // Disable vario gauge in geometry 5 landscape mode, leave 8 boxes on the right
- if ( ( InfoBoxLayout::landscape == true) && ( InfoBoxLayout::InfoBoxGeometry == 5 ) ) return; // VENTA3
+ if ( ( InfoBoxLayout::landscape == true)
+      && ( InfoBoxLayout::InfoBoxGeometry == 5 ) ) return; // VENTA3
 
   if (gaugeVarioInPortrait || InfoBoxLayout::landscape) {
     EnableVarioGauge = doshow;
@@ -1157,7 +1159,7 @@ LRESULT CALLBACK GaugeVarioWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l
     return TRUE;
 
     case WM_PAINT:
-      if (GlobalRunning && EnableVarioGauge) {
+      if (globalRunningEvent.test() && EnableVarioGauge) {
 	hDC = BeginPaint(hwnd, &ps);
 	GaugeVario::Repaint(hDC);
 	DeleteDC(hDC);

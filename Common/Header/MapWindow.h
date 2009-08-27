@@ -103,9 +103,6 @@ class MapWindow: public MapWindowBase, public MapWindowProjection {
     MapRect = rc;
   }
 
-  // display management
-  static void SwitchZoomClimb(void);
-
   static bool isMapFullScreen(); // gui feedback
 
   static void RequestToggleFullScreen();
@@ -139,6 +136,7 @@ class MapWindow: public MapWindowBase, public MapWindowProjection {
 
   // display management
   static void     RefreshMap();
+  static void     SwitchZoomClimb(void);
 
   // state/localcopy/local data
   static int           iSnailNext;

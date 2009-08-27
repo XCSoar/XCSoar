@@ -71,7 +71,7 @@ int  InfoBoxFocusTimeOut = 0;
 bool InfoBoxesDirty= false;
 static bool InfoBoxesHidden = false;
 int InfoFocus = 0;
-bool InfoWindowActive = true;
+static bool InfoWindowActive = true;
 bool EnableAuxiliaryInfo = false;
 double LastFlipBoxTime = 0; // VENTA3 need this global for slowcalculations cycle
 
@@ -866,8 +866,8 @@ void DoInfoKey(int keycode) {
 
 }
 
-int CurrentInfoType;
 
+static int CurrentInfoType;
 
 void PopUpSelect(int Index)
 {

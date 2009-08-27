@@ -42,7 +42,6 @@ Copyright_License {
 void FocusOnWindow(int i, bool selected);
 
 bool Debounce();
-extern int debounceTimeout;
 void SwitchToMapWindow(void);
 void FullScreen();
 
@@ -52,10 +51,6 @@ extern HINSTANCE hInst;
 // windows
 extern HWND hWndMainWindow;           // HWND Main Window
 //extern MapWindow hWndMapWindow;
-
-extern bool GlobalRunning;
-
-extern bool InfoWindowActive;
 
 extern bool csFlightDataInitialized;
 

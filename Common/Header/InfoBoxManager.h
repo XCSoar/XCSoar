@@ -59,7 +59,6 @@ extern int InfoType[MAXINFOWINDOWS]; //
 extern int  InfoFocus;
 extern const int NUMSELECTSTRINGS;
 extern int numInfoWindows;
-extern bool EnableAuxiliaryInfo;
 extern double LastFlipBoxTime; // used by XCSoar and Calculations
 
 void InfoBoxesSetDirty(bool is_dirty);

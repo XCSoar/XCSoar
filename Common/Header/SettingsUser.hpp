@@ -113,5 +113,10 @@ extern bool   AutoZoom;
 extern int    SnailWidthScale;
 extern int    WindArrowStyle;
 
+extern int debounceTimeout;
+
+// display mode stuff
+extern bool EnableAuxiliaryInfo;
+extern bool DisplayLocked; // not sure what this does if anything
 
 #endif

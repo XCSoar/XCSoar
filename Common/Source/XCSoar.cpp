@@ -120,7 +120,6 @@ MapWindow hWndMapWindow;
 
 bool DisplayLocked = true;
 
-
 HBRUSH hBrushSelected;
 HBRUSH hBrushUnselected;
 HBRUSH hBrushButton;
@@ -130,7 +129,6 @@ HBRUSH hBrushButton;
 int    AutoAdvance = 1;
 bool   AdvanceArmed = false;
 bool   EnableBlockSTF = false;
-bool   GlobalRunning = false;
 bool   TaskAborted = false;
 double SAFETYALTITUDEARRIVAL = 500;
 double SAFETYALTITUDEBREAKOFF = 700;
@@ -296,7 +294,7 @@ void SettingsEnter() {
 
 
 void SettingsLeave() {
-  if (!GlobalRunning) return;
+  if (!globalRunningEvent.test()) return;
 
   SwitchToMapWindow();
 
@@ -891,7 +889,7 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   StartupStore(TEXT("ProgramStarted=1\n"));
   ProgramStarted = psInitDone;
 
-  GlobalRunning = true;
+  globalRunningEvent.trigger();
 
 #if _DEBUG
  // _crtBreakAlloc = -1;     // Set this to the number in {} brackets to
@@ -899,8 +897,7 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 #endif
 
   // Main message loop:
-  while (/* GlobalRunning && */
-         GetMessage(&msg, NULL, 0, 0))
+  while (GetMessage(&msg, NULL, 0, 0))
     {
       if (!TranslateAccelerator(msg.hwnd, hAccelTable, &msg))
         {
@@ -1041,9 +1038,6 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
   WindowSize.top = (GetSystemMetrics(SM_CYSCREEN) - WindowSize.bottom) / 2;
 #endif
 
-  // color/pattern chart
-  MapGfx.Initialise();
-
   StartupStore(TEXT("Create main window\n"));
 
   hWndMainWindow = CreateWindow(szWindowClass, szTitle,
@@ -1085,6 +1079,8 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
   StartupStore(TEXT("InfoBox geometry\n"));
 
   InfoBoxLayout::ScreenGeometry(rc);
+  // color/pattern chart (must have infobox geometry before this)
+  MapGfx.Initialise();
 
   ///////////////////////////////////////// create infoboxes
 
@@ -1182,7 +1178,7 @@ void Shutdown(void) {
   StartupLogFreeRamAndStorage();
 
   // turn off all displays
-  GlobalRunning = false;
+  globalRunningEvent.reset();
 
   StartupStore(TEXT("dlgAirspaceWarningDeInit\n"));
   dlgAirspaceWarningDeInit();
@@ -1541,7 +1537,7 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
       FullScreen();
 
       if (InfoBoxClick(wmControl, DisplayLocked)) {
-	return 0;
+	return FALSE;
       }
 
       Message::CheckTouch(wmControl);

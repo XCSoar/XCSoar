@@ -38,6 +38,7 @@ Copyright_License {
 
 #include "GaugeFLARM.h"
 #include "XCSoar.h"
+#include "Protection.hpp"
 #include "Interface.hpp"
 #include "Math/FastMath.h"
 #include "Math/Geometry.hpp"
@@ -350,7 +351,7 @@ LRESULT CALLBACK GaugeFLARMWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l
     return TRUE;
 
     case WM_PAINT:
-      if (GlobalRunning && GaugeFLARM::Visible) {
+      if (globalRunningEvent.test() && GaugeFLARM::Visible) {
 	hDC = BeginPaint(hwnd, &ps);
 	GaugeFLARM::Repaint(hDC);
 	DeleteDC(hDC);

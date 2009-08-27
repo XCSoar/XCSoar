@@ -47,7 +47,10 @@ DWORD  MapWindowBase::dwDrawThreadID;
 HANDLE MapWindowBase::hDrawThread;
 
 bool MapWindowBase::IsDisplayRunning() {
-  return (THREADRUNNING && GlobalRunning && !ScreenBlanked && ProgramStarted);
+  return (THREADRUNNING
+	  && globalRunningEvent.test()
+	  && !ScreenBlanked
+	  && ProgramStarted);
 }
 
 
