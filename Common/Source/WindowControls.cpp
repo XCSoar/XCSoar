@@ -53,6 +53,7 @@ extern MapWindow hWndMapWindow; // TODO try to avoid this
 #include "DataField/Base.hpp"
 #include "Utils.h"
 #include "Screen/Blank.hpp"
+#include "Screen/Viewport.hpp"
 
 #ifdef PNA
 #include "Asset.hpp"
@@ -2547,13 +2548,11 @@ void WndListFrame::Paint(HDC hDC){
   WndFrame::Paint(hDC);
 
   if (mClientCount > 0){
+    Viewport viewport(hDC, mClients[0]->GetWidth(),
+                      mClients[0]->GetHeight());
+    HDC HdcTemp = viewport;
 
-    HDC HdcTemp = CreateCompatibleDC(hDC);
-    HBITMAP BmpMem = CreateCompatibleBitmap(hDC,
-               mClients[0]->GetWidth(),
-               mClients[0]->GetHeight());
-
-    HBITMAP oldBmp = (HBITMAP)SelectObject(HdcTemp, BmpMem);
+    viewport.move(mClients[0]->GetLeft(), 0);
 
     for (i=0; i<mListInfo.ItemInViewCount; i++){
 
@@ -2561,8 +2560,10 @@ void WndListFrame::Paint(HDC hDC){
 
       if (mOnListCallback != NULL){
         mListInfo.DrawIndex = mListInfo.TopIndex + i;
-        if (mListInfo.DrawIndex == mListInfo.ItemIndex)
+        if (mListInfo.DrawIndex == mListInfo.ItemIndex) {
+          viewport.move(0, mClients[0]->GetHeight());
           continue;
+        }
         mOnListCallback(this, &mListInfo);
       }
 
@@ -2570,23 +2571,16 @@ void WndListFrame::Paint(HDC hDC){
       mClients[0]->Paint(HdcTemp);
       mClients[0]->PaintSelector(false);
 
-      BitBlt(hDC,
-          mClients[0]->GetLeft(), i*mClients[0]->GetHeight(),
-          mClients[0]->GetWidth(), mClients[0]->GetHeight(),
-          HdcTemp,
-          0,0,
-          SRCCOPY
-        );
+      viewport.commit();
+      viewport.move(0, mClients[0]->GetHeight());
 
       SelectObject(HdcTemp, oldFont);
 
     }
 
-    mListInfo.DrawIndex = mListInfo.ItemIndex;
+    viewport.restore();
 
-    SelectObject(HdcTemp, oldBmp);
-    DeleteObject(BmpMem);
-    DeleteDC(HdcTemp);
+    mListInfo.DrawIndex = mListInfo.ItemIndex;
 
     DrawScrollBar(hDC);
   }
