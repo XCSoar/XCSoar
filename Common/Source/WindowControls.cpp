@@ -54,6 +54,10 @@ extern MapWindow hWndMapWindow; // TODO try to avoid this
 #include "Utils.h"
 #include "Screen/Blank.hpp"
 
+#ifdef PNA
+#include "Asset.hpp"
+#endif
+
 #ifndef ALTAIRSYNC
 
 #ifndef GNAV

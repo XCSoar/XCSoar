@@ -42,7 +42,7 @@ Copyright_License {
 #include "InfoBoxLayout.h"
 
 #ifdef PNA
-#include "XCSoar.h" // for needclipping
+#include "Asset.hpp" // for needclipping
 #endif
 
 #include <tchar.h>

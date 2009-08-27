@@ -69,6 +69,10 @@ Copyright_License {
 
 #include "Calculations.h" // TODO danger! for InAATTurnSector
 
+#ifdef PNA
+#include "Asset.hpp"
+#endif
+
 #include <assert.h>
 #include <windows.h>
 #include <math.h>

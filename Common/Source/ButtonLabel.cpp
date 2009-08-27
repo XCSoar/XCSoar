@@ -47,6 +47,10 @@ Copyright_License {
 #include "ExpandMacros.hpp"
 #include "Interface.hpp"
 
+#ifdef PNA
+#include "Asset.hpp"
+#endif
+
 
 HWND ButtonLabel::hWndButtonWindow[NUMBUTTONLABELS];
 bool ButtonLabel::ButtonVisible[NUMBUTTONLABELS];

@@ -45,6 +45,11 @@ Copyright_License {
 #include "Registry.hpp"
 #include "LocalPath.hpp"
 
+#ifdef PNA
+#include "LogFile.hpp"
+#include "SettingsUser.hpp"
+#endif
+
 #ifndef __MINGW32__
 #if defined(CECORE)
 #include "winbase.h"
