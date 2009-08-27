@@ -65,13 +65,14 @@ double MapWindowProjection::MapScale=5;
 double MapWindowProjection::MapScaleOverDistanceModify=5/DISTANCEMODIFY;
 double MapWindowProjection::ResMapScaleOverDistanceModify = 0.0;
 double MapWindowProjection::DisplayAircraftAngle = 0.0;
-bool MapWindowProjection::TargetPan = false;
-bool MapWindowProjection::EnablePan = false;
-int MapWindowProjection::TargetPanIndex = 0;
-double MapWindowProjection::TargetZoomDistance = 500.0;
 int MapWindowProjection::ScaleListCount = 0;
 double MapWindowProjection::ScaleList[];
 int MapWindowProjection::ScaleCurrent;
+bool MapWindowProjection::EnablePan = false;
+
+bool MapWindowProjection::TargetPan = false;
+int MapWindowProjection::TargetPanIndex = 0;
+double MapWindowProjection::TargetZoomDistance = 500.0;
 
 #include "WayPoint.hpp"
 
@@ -315,6 +316,7 @@ void MapWindowProjection::CalculateOrientationNormal(void) {
 void MapWindowProjection::CalculateOrientationTargetPan(void) {
   // Target pan mode, show track up when looking at current task point,
   // otherwise north up.  If circling, orient towards target.
+
   GliderCenter = true;
   if ((ActiveWayPoint==TargetPanIndex)
       &&(DisplayOrientation != NORTHUP)
@@ -335,17 +337,19 @@ void MapWindowProjection::CalculateOrientationTargetPan(void) {
     DisplayAngle = 0.0;
     DisplayAircraftAngle = DrawInfo.TrackBearing;
   }
-
 }
 
 
 void MapWindowProjection::CalculateOrigin(const RECT rc, POINT *Orig)
 {
+
+  LockTaskData();
   if (TargetPan) {
     CalculateOrientationTargetPan();
   } else {
     CalculateOrientationNormal();
   }
+  UnlockTaskData();
 
   if (GliderCenter || EnablePan) {
     Orig->x = (rc.left + rc.right)/2;
@@ -491,6 +495,10 @@ void MapWindowProjection::UpdateMapScale()
 
   bool user_asked_for_change = false;
 
+  LockTaskData();
+  bool my_target_pan = TargetPan;
+  UnlockTaskData();
+
   // if there is user intervention in the scale
   if(MapScale != RequestMapScale) {
     ModifyMapScale();
@@ -498,12 +506,12 @@ void MapWindowProjection::UpdateMapScale()
   }
 
   double wpd;
-  if (TargetPan) {
+  if (my_target_pan) {
     wpd = TargetZoomDistance;
   } else {
     wpd = DerivedDrawInfo.ZoomDistance;
   }
-  if (TargetPan) {
+  if (my_target_pan) {
     // set scale exactly so that waypoint distance is the zoom factor
     // across the screen
     RequestMapScale = LimitMapScale(wpd
@@ -524,7 +532,7 @@ void MapWindowProjection::UpdateMapScale()
 	    (((DisplayOrientation == NORTHCIRCLE)
 	      || (DisplayOrientation == TRACKCIRCLE))
 	     && (DisplayMode == dmCircling) ))
-	   && !TargetPan
+	   && !my_target_pan
 	   )
 	  {
 	    AutoZoomFactor = 2.5;
@@ -573,7 +581,7 @@ void MapWindowProjection::UpdateMapScale()
     //    StartingAutoMapScale = RequestMapScale;
   }
 
-  if (TargetPan) {
+  if (my_target_pan) {
     return;
   }
 

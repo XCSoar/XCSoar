@@ -39,6 +39,7 @@ Copyright_License {
 #include "SettingsUser.hpp"
 #include "GaugeVarioAltA.h"
 #include "InfoBoxManager.h"
+#include "Protection.hpp"
 #include "InputEvents.h"
 #include "Dialogs.h"
 #include <stdlib.h>
@@ -57,8 +58,12 @@ void MapWindow::SwitchZoomClimb(void) {
 
   bool isclimb = (DisplayMode == dmCircling);
 
-  if (TargetPan != last_targetpan) {
-    if (TargetPan) {
+  LockTaskData();
+  bool my_target_pan = TargetPan;
+  UnlockTaskData();
+
+  if (my_target_pan != last_targetpan) {
+    if (my_target_pan) {
       // save starting values
       if (isclimb) {
         ClimbMapScale = MapScale;
@@ -74,11 +79,11 @@ void MapWindow::SwitchZoomClimb(void) {
       }
       BigZoom = true;
     }
-    last_targetpan = TargetPan;
+    last_targetpan = my_target_pan;
     return;
   }
 
-  if (!TargetPan && CircleZoom) {
+  if (!my_target_pan && CircleZoom) {
     if (isclimb != last_isclimb) {
       if (isclimb) {
         // save cruise scale

@@ -389,6 +389,7 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
       break;
 
     case WM_MOUSEMOVE:
+      LockTaskData();
       if (AATEnabled && TargetPan && (TargetDrag_State>0)) {
 	// target follows "finger" so easier to drop near edge of
 	// sector
@@ -410,6 +411,7 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
           }
         }
       }
+      UnlockTaskData();
       break;
 
     case WM_LBUTTONDOWN:
@@ -449,12 +451,12 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
       break;
 
     case WM_LBUTTONUP:
-
       if (ignorenext||dwDownTime==0) {
 		ignorenext=false;
 	  break;
 	}
       RECT rc;
+      bool my_target_pan;
       dwUpTime = GetTickCount();
       dwInterval=dwUpTime-dwDownTime;
       dwDownTime=0; // do it once forever
@@ -463,6 +465,11 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
 	wsprintf(buf,_T("Interval %ldms"),dwInterval);
         DoStatusMessage(buf);
 */
+
+      LockTaskData();
+      my_target_pan = TargetPan;
+      UnlockTaskData();
+
       GetClientRect(hWnd,&rc);
 
       X = LOWORD(lParam); Y = HIWORD(lParam);
@@ -501,7 +508,7 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
 
       Screen2LatLon(X, Y, Xlat, Ylat);
 
-      if (AATEnabled && TargetPan && (TargetDrag_State>0)) {
+      if (AATEnabled && my_target_pan && (TargetDrag_State>0)) {
 	LockTaskData();
 	TargetDrag_State = 2;
         if (InAATTurnSector(Xlat, Ylat, TargetPanIndex)) {
@@ -511,7 +518,7 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
         }
 	UnlockTaskData();
 	break;
-      } else if (!TargetPan && EnablePan && (distance>36)) {
+      } else if (!my_target_pan && EnablePan && (distance>36)) {
 	// TODO FIX should be IBLSCALE 36 instead?
 	PanLongitude += Xstart-Xlat;
 	PanLatitude  += Ystart-Ylat;
@@ -519,7 +526,7 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
 	break;
       }
 #ifdef _SIM_
-      else if (!TargetPan && (distance>IBLSCALE(36))) {
+      else if (!my_target_pan && (distance>IBLSCALE(36))) {
 	// This drag moves the aircraft (changes speed and direction)
 	double newbearing;
 	double oldbearing = GPS_INFO.TrackBearing;
@@ -540,7 +547,7 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
 	break;
       }
 #endif
-      if (!TargetPan) {
+      if (!my_target_pan) {
 	if ( InfoFocus>=0) { //
 	  DefocusInfoBox();
 	  SetFocus(hWnd);
@@ -549,7 +556,6 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
 #endif
 	  break;
 	}
-
 	if (VirtualKeys==(VirtualKeys_t)vkEnabled) {
 	  if(dwInterval < VKSHORTCLICK) {
 	    //100ms is NOT enough for a short click since GetTickCount

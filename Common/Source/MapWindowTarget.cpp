@@ -52,6 +52,8 @@ bool MapWindow::SetTargetPan(bool do_pan, int target_point) {
   static bool old_pan=false;
   static bool old_fullscreen=false;
 
+  LockTaskData(); // protect thread because some target stuff used in mapwindow thread
+
   if (!TargetPan || (TargetPanIndex != target_point)) {
     TargetDrag_State = 0;
   }
@@ -101,6 +103,9 @@ bool MapWindow::SetTargetPan(bool do_pan, int target_point) {
     SwitchZoomClimb();
   }
   TargetPan = do_pan;
+
+  UnlockTaskData();
+
   return old_pan;
 };
 
@@ -108,7 +113,9 @@ bool MapWindow::SetTargetPan(bool do_pan, int target_point) {
 bool MapWindow::TargetDragged(double *longitude, double *latitude) {
   bool retval = false;
   LockTaskData();
-  if (TargetDrag_State >0) { // always return true if we're dragging or just stopped dragging, so screen is updated
+  if (TargetDrag_State >0) { // always return true if we're dragging
+			     // or just stopped dragging, so screen is
+			     // updated
     *longitude = TargetDrag_Longitude;
     *latitude = TargetDrag_Latitude;
     if (TargetDrag_State == 2) {
