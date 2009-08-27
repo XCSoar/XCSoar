@@ -80,16 +80,16 @@ void AATDistance::Reset() {
 
 double AATDistance::LegDistanceAchieved(int taskwaypoint) {
   double retval;
-  LockTaskData();
+  mutexTaskData.Lock();
   retval= legdistance_achieved[taskwaypoint];
-  UnlockTaskData();
+  mutexTaskData.Unlock();
   return retval;
 }
 
 void AATDistance::ResetEnterTrigger(int taskwaypoint) {
-  LockTaskData();
+  mutexTaskData.Lock();
   has_entered[taskwaypoint] = false;
-  UnlockTaskData();
+  mutexTaskData.Unlock();
 }
 
 void AATDistance::AddPoint(double longitude, double latitude,
@@ -101,7 +101,7 @@ void AATDistance::AddPoint(double longitude, double latitude,
 
   if (!AATEnabled) return; // nothing else to do for non-AAT tasks
 
-  LockTaskData();
+  mutexTaskData.Lock();
 
   // should only add ONE point to start.
   // If restart, need to reset
@@ -178,7 +178,7 @@ void AATDistance::AddPoint(double longitude, double latitude,
       }
     }
   }
-  UnlockTaskData();
+  mutexTaskData.Unlock();
 
 }
 
@@ -416,14 +416,14 @@ double AATDistance::DistanceCovered_internal(double longitude,
     //   max_achieved_distance = 0;
     return 0.0;
   }
-  LockTaskData();
+  mutexTaskData.Lock();
   if (insector) {
     achieved = DistanceCovered_inside(longitude, latitude);
   } else {
     achieved = DistanceCovered_outside(longitude, latitude);
   }
 
-  UnlockTaskData();
+  mutexTaskData.Unlock();
   //  max_achieved_distance = max(achieved, max_achieved_distance);
   return achieved;
 }
@@ -515,7 +515,7 @@ double AATDistance::DistanceCovered_outside(double longitude,
     return 0.0;
   }
 
-  LockTaskData();
+  mutexTaskData.Lock();
   double retval = 0.0;
   double best_doubleleg_distance = 0;
   int jbest = -1;
@@ -545,7 +545,7 @@ double AATDistance::DistanceCovered_outside(double longitude,
   } else {
     retval = 0.0;
   }
-  UnlockTaskData();
+  mutexTaskData.Unlock();
   return retval;
 }
 
@@ -564,9 +564,9 @@ double AATDistance::DistanceCovered(double longitude,
                                     int taskwaypoint) {
   (void)taskwaypoint; // unused
   double retval;
-  LockTaskData();
+  mutexTaskData.Lock();
   retval= DistanceCovered_internal(longitude, latitude, false);
-  UnlockTaskData();
+  mutexTaskData.Unlock();
   return retval;
 }
 
@@ -617,9 +617,9 @@ void AATDistance::UpdateSearch(int taskwaypoint) {
 
 bool AATDistance::HasEntered(int taskwaypoint) {
   bool retval = false;
-  LockTaskData();
+  mutexTaskData.Lock();
   retval = has_entered[taskwaypoint];
-  UnlockTaskData();
+  mutexTaskData.Unlock();
   return retval;
 }
 
@@ -627,7 +627,7 @@ void AATDistance::ThinData(int taskwaypoint) {
   double contractfactor = 0.8;
   static bool do_delete[MAXNUM_AATDISTANCE];
 
-  LockTaskData();
+  mutexTaskData.Lock();
 
   int i;
   for (i=0; i<MAXNUM_AATDISTANCE; i++) {
@@ -671,7 +671,7 @@ void AATDistance::ThinData(int taskwaypoint) {
     // error!
     num_points[taskwaypoint]=MAXNUM_AATDISTANCE-1;
   }
-  UnlockTaskData();
+  mutexTaskData.Unlock();
 }
 
 

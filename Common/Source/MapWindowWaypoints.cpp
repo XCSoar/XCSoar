@@ -299,7 +299,7 @@ void MapWindow::CalculateWaypointReachable(void)
 
   if (!WayPointList) return;
 
-  LockTaskData();
+  mutexTaskData.Lock();
 
   for(i=0;i<NumberOfWayPoints;i++)
   {
@@ -401,7 +401,7 @@ void MapWindow::CalculateWaypointReachable(void)
       }
   }
 
-  UnlockTaskData();
+  mutexTaskData.Unlock();
 }
 
 
@@ -430,7 +430,7 @@ void MapWindow::ScanVisibilityWaypoints(rectObj *bounds_active) {
 
 void MapWindow::CalculateScreenPositionsWaypoints() {
   unsigned int i;
-  LockTaskData();
+  mutexTaskData.Lock();
 
   if (WayPointList) {
     int index;
@@ -473,5 +473,5 @@ void MapWindow::CalculateScreenPositionsWaypoints() {
           }
       }
   }
-  UnlockTaskData();
+  mutexTaskData.Unlock();
 }

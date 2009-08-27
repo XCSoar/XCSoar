@@ -120,13 +120,13 @@ bool InTurnSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated, const int the_turn
     }
   if (SectorType>0)
     {
-      LockTaskData();
+      mutexTaskData.Lock();
       DistanceBearing(WayPointList[Task[the_turnpoint].Index].Latitude,
                       WayPointList[Task[the_turnpoint].Index].Longitude,
                       Basic->Latitude ,
                       Basic->Longitude,
                       NULL, &AircraftBearing);
-      UnlockTaskData();
+      mutexTaskData.Unlock();
 
       AircraftBearing = AircraftBearing - Task[the_turnpoint].Bisector ;
       while (AircraftBearing<-180) {
@@ -172,7 +172,7 @@ bool InAATTurnSector(const double longitude, const double latitude,
   }
 
   double distance;
-  LockTaskData();
+  mutexTaskData.Lock();
   DistanceBearing(WayPointList[Task[the_turnpoint].Index].Latitude,
                   WayPointList[Task[the_turnpoint].Index].Longitude,
                   latitude,
@@ -191,7 +191,7 @@ bool InAATTurnSector(const double longitude, const double latitude,
     }
   }
 
-  UnlockTaskData();
+  mutexTaskData.Unlock();
   return retval;
 }
 
@@ -223,7 +223,7 @@ bool InFinishSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
   // Finish invalid
   if (!ValidTaskPoint(i)) return FALSE;
 
-  LockTaskData();
+  mutexTaskData.Lock();
 
   // distance from aircraft to start point
   DistanceBearing(Basic->Latitude,
@@ -278,7 +278,7 @@ bool InFinishSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
     LastInSector = false;
   }
  OnExit:
-  UnlockTaskData();
+  mutexTaskData.Unlock();
   return retval;
 }
 
@@ -399,7 +399,7 @@ static bool InStartSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated, int &index
       !ValidTaskPoint(0))
     return false;
 
-  LockTaskData();
+  mutexTaskData.Lock();
 
   bool in_height = true;
 
@@ -460,7 +460,7 @@ static bool InStartSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated, int &index
 
  OnExit:
 
-  UnlockTaskData();
+  mutexTaskData.Unlock();
   return isInSector;
 }
 
@@ -719,7 +719,7 @@ void InSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 
   if (ActiveWayPoint<0) return;
 
-  LockTaskData();
+  mutexTaskData.Lock();
 
   Calculated->IsInSector = false;
 
@@ -738,7 +738,7 @@ void InSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
       }
     }
   }
-  UnlockTaskData();
+  mutexTaskData.Unlock();
 }
 
 

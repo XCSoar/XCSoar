@@ -555,9 +555,9 @@ void ComPort::ProcessChar(char c) {
 
     if(c=='\n') {
       BuildingString[bi] = '\0';
-      LockFlightData();
+      mutexFlightData.Lock();
       devParseNMEA(dev, BuildingString, &GPS_INFO);
-      UnlockFlightData();
+      mutexFlightData.Unlock();
     } else {
       return;
     }

@@ -126,9 +126,9 @@ void InputEvents::eventMarkLocation(const TCHAR *misc) {
   if (_tcscmp(misc, TEXT("reset")) == 0) {
     reset_marks = true;
   } else {
-    LockFlightData();
+    mutexFlightData.Lock();
     MarkLocation(GPS_INFO.Longitude, GPS_INFO.Latitude);
-    UnlockFlightData();
+    mutexFlightData.Unlock();
   }
 }
 
@@ -1058,7 +1058,7 @@ void InputEvents::eventAdjustWaypoint(const TCHAR *misc) {
 // toggle: toggles between abort and resume
 // show: displays a status message showing the task abort status
 void InputEvents::eventAbortTask(const TCHAR *misc) {
-  LockTaskData();
+  mutexTaskData.Lock();
   if (_tcscmp(misc, TEXT("abort")) == 0)
     ResumeAbortTask(1);
   else if (_tcscmp(misc, TEXT("resume")) == 0)
@@ -1074,7 +1074,7 @@ void InputEvents::eventAbortTask(const TCHAR *misc) {
   } else {
     ResumeAbortTask(0);
   }
-  UnlockTaskData();
+  mutexTaskData.Unlock();
 }
 
 #include "Device/device.h"
@@ -1090,8 +1090,8 @@ void InputEvents::eventAbortTask(const TCHAR *misc) {
 void InputEvents::eventBugs(const TCHAR *misc) {
   double oldBugs = BUGS;
 
-  LockComm(); // Must LockComm to prevent deadlock
-  LockFlightData();
+  mutexComm.Lock(); // Must LockComm to prevent deadlock
+  mutexFlightData.Lock();
 
   if (_tcscmp(misc, TEXT("up")) == 0) {
     BUGS = iround(BUGS*100+10) / 100.0;
@@ -1117,8 +1117,8 @@ void InputEvents::eventBugs(const TCHAR *misc) {
     devPutBugs(devB(), BUGS);
     GlidePolar::SetBallast();
   }
-  UnlockFlightData();
-  UnlockComm();
+  mutexFlightData.Unlock();
+  mutexComm.Unlock();
 }
 
 // Ballast
@@ -1130,8 +1130,8 @@ void InputEvents::eventBugs(const TCHAR *misc) {
 // show: displays a status message indicating the ballast percentage
 void InputEvents::eventBallast(const TCHAR *misc) {
   double oldBallast= BALLAST;
-  LockComm(); // Must LockComm to prevent deadlock
-  LockFlightData();
+  mutexComm.Lock(); // Must mutexComm.Lock to prevent deadlock
+  mutexFlightData.Lock();
   if (_tcscmp(misc, TEXT("up")) == 0) {
     BALLAST = iround(BALLAST*100.0+10) / 100.0;
   }
@@ -1155,8 +1155,8 @@ void InputEvents::eventBallast(const TCHAR *misc) {
     devPutBallast(devB(), BALLAST);
     GlidePolar::SetBallast();
   }
-  UnlockFlightData();
-  UnlockComm();
+  mutexFlightData.Unlock();
+  mutexComm.Unlock();
 }
 
 #include "Task.h"
@@ -1374,10 +1374,10 @@ void InputEvents::eventNull(const TCHAR *misc) {
 void InputEvents::eventTaskLoad(const TCHAR *misc) {
   TCHAR buffer[MAX_PATH];
   if (_tcslen(misc)>0) {
-    LockTaskData();
+    mutexTaskData.Lock();
     LocalPath(buffer,misc);
     LoadNewTask(buffer);
-    UnlockTaskData();
+    mutexTaskData.Unlock();
   }
 }
 
@@ -1386,10 +1386,10 @@ void InputEvents::eventTaskLoad(const TCHAR *misc) {
 void InputEvents::eventTaskSave(const TCHAR *misc) {
   TCHAR buffer[MAX_PATH];
   if (_tcslen(misc)>0) {
-    LockTaskData();
+    mutexTaskData.Lock();
     LocalPath(buffer, misc);
     SaveTask(buffer);
-    UnlockTaskData();
+    mutexTaskData.Unlock();
   }
 }
 
@@ -1672,7 +1672,7 @@ void InputEvents::eventAirspaceDisplayMode(const TCHAR *misc){
 void InputEvents::eventAddWaypoint(const TCHAR *misc) {
   static int tmpWaypointNum = 0;
   WAYPOINT edit_waypoint;
-  LockTaskData();
+  mutexTaskData.Lock();
   edit_waypoint.Latitude = GPS_INFO.Latitude;
   edit_waypoint.Longitude = GPS_INFO.Longitude;
   edit_waypoint.Altitude = CALCULATED_INFO.TerrainAlt;
@@ -1693,7 +1693,7 @@ void InputEvents::eventAddWaypoint(const TCHAR *misc) {
     _stprintf(new_waypoint->Name,TEXT("_%d"), tmpWaypointNum);
     new_waypoint->Details= 0;
   }
-  UnlockTaskData();
+  mutexTaskData.Unlock();
 }
 
 

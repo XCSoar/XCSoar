@@ -649,7 +649,7 @@ void MapWindow::DrawFinalGlide(HDC hDC, const RECT rc)
   int Offset0;
   int i;
 
-  LockTaskData();  // protect from external task changes
+  mutexTaskData.Lock();  // protect from external task changes
   #ifdef HAVEEXCEPTIONS
   __try{
   #endif
@@ -840,7 +840,7 @@ void MapWindow::DrawFinalGlide(HDC hDC, const RECT rc)
   }__finally
 #endif
      {
-       UnlockTaskData();
+       mutexTaskData.Unlock();
      }
 
 }

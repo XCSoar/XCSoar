@@ -617,7 +617,7 @@ void ReadWayPoints(void)
   __try{
 #endif
 
-    LockTaskData();
+    mutexTaskData.Lock();
     CloseWayPoints();
 
     GetRegistryString(szRegistryWayPointFile, szFile1, MAX_PATH);
@@ -717,7 +717,7 @@ void ReadWayPoints(void)
   }
 #endif
 
-  UnlockTaskData();
+  mutexTaskData.Unlock();
 
 }
 
@@ -1009,7 +1009,7 @@ void WriteWayPointFile(FILE *fp) {
 
 
 void WaypointWriteFiles(void) {
-  LockTaskData();
+  mutexTaskData.Lock();
 
   TCHAR szFile1[MAX_PATH] = TEXT("\0");
   TCHAR szFile2[MAX_PATH] = TEXT("\0");
@@ -1054,7 +1054,7 @@ void WaypointWriteFiles(void) {
     fp = NULL;
   }
 
-  UnlockTaskData();
+  mutexTaskData.Unlock();
 }
 
 

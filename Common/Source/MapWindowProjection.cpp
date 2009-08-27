@@ -350,13 +350,13 @@ void MapWindowProjection::CalculateOrientationTargetPan(void) {
 void MapWindowProjection::CalculateOrigin(const RECT rc, POINT *Orig)
 {
 
-  LockTaskData();
+  mutexTaskData.Lock();
   if (TargetPan) {
     CalculateOrientationTargetPan();
   } else {
     CalculateOrientationNormal();
   }
-  UnlockTaskData();
+  mutexTaskData.Unlock();
 
   if (GliderCenter || EnablePan) {
     Orig->x = (rc.left + rc.right)/2;
@@ -502,9 +502,9 @@ void MapWindowProjection::UpdateMapScale()
 
   bool user_asked_for_change = false;
 
-  LockTaskData();
+  mutexTaskData.Lock();
   bool my_target_pan = TargetPan;
-  UnlockTaskData();
+  mutexTaskData.Unlock();
 
   // if there is user intervention in the scale
   if(MapScale != RequestMapScale) {
@@ -592,7 +592,7 @@ void MapWindowProjection::UpdateMapScale()
     return;
   }
 
-  LockTaskData();  // protect from external task changes
+  mutexTaskData.Lock();  // protect from external task changes
 #ifdef HAVEEXCEPTIONS
   __try{
 #endif
@@ -624,7 +624,7 @@ void MapWindowProjection::UpdateMapScale()
   }__finally
 #endif
      {
-       UnlockTaskData();
+       mutexTaskData.Unlock();
      }
 
 }

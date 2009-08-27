@@ -61,7 +61,7 @@ void DoAutoMacCready(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   if (!Calculated->AutoMacCready) return;
 
   //  LockFlightData();
-  LockTaskData();
+  mutexTaskData.Lock();
 
   double mc_new = MACCREADY;
   static bool first_mc = true;
@@ -150,7 +150,7 @@ void DoAutoMacCready(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 
   MACCREADY = LowPassFilter(MACCREADY,mc_new,0.15);
 
-  UnlockTaskData();
+  mutexTaskData.Unlock();
   //  UnlockFlightData();
 
 }

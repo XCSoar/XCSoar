@@ -477,7 +477,7 @@ static void UpdateValuesRules(void) {
   // StartMaxHeight, StartMaxSpeed;
 
   //  double start_h;
-  LockTaskData();
+  mutexTaskData.Lock();
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpStartPoint"));
 
@@ -514,7 +514,7 @@ static void UpdateValuesRules(void) {
     wp->SetText(Temp);
   }
 
-  UnlockTaskData();
+  mutexTaskData.Unlock();
 }
 
 

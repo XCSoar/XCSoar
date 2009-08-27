@@ -298,12 +298,12 @@ void SettingsLeave() {
 
   SwitchToMapWindow();
 
-  // Locking everything here prevents the calculation thread from running,
+  // mutexing.Lock everything here prevents the calculation thread from running,
   // while shared data is potentially reloaded.
 
-  LockFlightData();
-  LockTaskData();
-  LockNavBox();
+  mutexFlightData.Lock();
+  mutexTaskData.Lock();
+  mutexNavBox.Lock();
 
   MenuActive = false;
 
@@ -370,9 +370,9 @@ void SettingsLeave() {
     SetFocus(hWndMapWindow);
   }
 
-  UnlockNavBox();
-  UnlockTaskData();
-  UnlockFlightData();
+  mutexNavBox.Unlock();
+  mutexTaskData.Unlock();
+  mutexFlightData.Unlock();
 
 #ifndef _SIM_
   if(COMPORTCHANGED)
@@ -439,7 +439,7 @@ void RestartCommPorts() {
   */
   StartupStore(TEXT("RestartCommPorts\n"));
 
-  LockComm();
+  mutexComm.Lock();
 
   devClose(devA());
   devClose(devB());
@@ -450,7 +450,7 @@ void RestartCommPorts() {
 
   devInit(TEXT(""));
 
-  UnlockComm();
+  mutexComm.Unlock();
 
 }
 
@@ -663,9 +663,6 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   SHSetAppKeyWndAssoc(VK_APP5, hWndMainWindow);
   SHSetAppKeyWndAssoc(VK_APP6, hWndMainWindow);
 #endif
-
-  StartupStore(TEXT("Initialising critical sections and events\n"));
-  InitialiseProtection();
 
   // Initialise main blackboard data
 
@@ -1221,19 +1218,19 @@ void Shutdown(void) {
 
   CreateProgressDialog(gettext(TEXT("Shutdown, saving task...")));
   StartupStore(TEXT("Save default task\n"));
-  LockTaskData();
+  mutexTaskData.Lock();
   ResumeAbortTask(-1); // turn off abort if it was on.
-  UnlockTaskData();
+  mutexTaskData.Unlock();
   SaveDefaultTask();
 
   StartupStore(TEXT("Clear task data\n"));
 
-  LockTaskData();
+  mutexTaskData.Lock();
   Task[0].Index = -1;  ActiveWayPoint = -1;
   AATEnabled = FALSE;
   CloseAirspace();
   CloseWayPoints();
-  UnlockTaskData();
+  mutexTaskData.Unlock();
 
   CreateProgressDialog(gettext(TEXT("Shutdown, please wait...")));
   StartupStore(TEXT("CloseTerrainTopology\n"));
@@ -1300,9 +1297,6 @@ void Shutdown(void) {
   DeleteFonts();
 
   DeleteAirspace();
-
-  StartupStore(TEXT("Delete Critical Sections\n"));
-  DeleteProtection();
 
   StartupStore(TEXT("Close Progress Dialog\n"));
 

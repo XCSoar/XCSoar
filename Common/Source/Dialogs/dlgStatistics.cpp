@@ -621,7 +621,7 @@ void Statistics::RenderBarograph(HDC hdc, const RECT rc)
   ScaleXFromValue(rc, flightstats.Altitude.x_min+1.0); // in case no data
   ScaleXFromValue(rc, flightstats.Altitude.x_min);
 
-  LockTaskData();
+  mutexTaskData.Lock();
   for(int j=1;j<MAXTASKPOINTS;j++) {
     if (ValidTaskPoint(j) && (flightstats.LegStartTime[j]>=0)) {
       double xx =
@@ -634,7 +634,7 @@ void Statistics::RenderBarograph(HDC hdc, const RECT rc)
       }
     }
   }
-  UnlockTaskData();
+  mutexTaskData.Unlock();
 
   HPEN   hpHorizonGround;
   HBRUSH hbHorizonGround;
@@ -689,7 +689,7 @@ void Statistics::RenderSpeed(HDC hdc, const RECT rc)
   ScaleXFromValue(rc, flightstats.Task_Speed.x_min+1.0); // in case no data
   ScaleXFromValue(rc, flightstats.Task_Speed.x_min);
 
-  LockTaskData();
+  mutexTaskData.Lock();
   for(int j=1;j<MAXTASKPOINTS;j++) {
     if (ValidTaskPoint(j) && (flightstats.LegStartTime[j]>=0)) {
       double xx =
@@ -702,7 +702,7 @@ void Statistics::RenderSpeed(HDC hdc, const RECT rc)
       }
     }
   }
-  UnlockTaskData();
+  mutexTaskData.Unlock();
 
   DrawXGrid(hdc, rc,
             0.5, flightstats.Task_Speed.x_min,
@@ -901,7 +901,7 @@ void Statistics::RenderTask(HDC hdc, const RECT rc, const bool olcmode)
     aatradius[i]=0;
   }
   bool nowaypoints = true;
-  LockTaskData();
+  mutexTaskData.Lock();
   for (i=0; i<MAXTASKPOINTS; i++) {
     if (ValidTaskPoint(i)) {
       lat1 = WayPointList[Task[i].Index].Latitude;
@@ -911,7 +911,7 @@ void Statistics::RenderTask(HDC hdc, const RECT rc, const bool olcmode)
       nowaypoints = false;
     }
   }
-  UnlockTaskData();
+  mutexTaskData.Unlock();
   if (nowaypoints && !olcmode) {
     DrawNoData(hdc, rc);
     return;
@@ -950,7 +950,7 @@ void Statistics::RenderTask(HDC hdc, const RECT rc, const bool olcmode)
   ScaleXFromValue(rc, x1);
   ScaleYFromValue(rc, y1);
 
-  LockTaskData();
+  mutexTaskData.Lock();
   for (i=0; i<MAXTASKPOINTS; i++) {
     if (ValidTaskPoint(i)) {
       nwps++;
@@ -994,7 +994,7 @@ void Statistics::RenderTask(HDC hdc, const RECT rc, const bool olcmode)
       }
     }
   }
-  UnlockTaskData();
+  mutexTaskData.Unlock();
   for (i=0; i< nolc; i++) {
     lat1 = olc.getLatitude(i);
     lon1 = olc.getLongitude(i);
@@ -1014,7 +1014,7 @@ void Statistics::RenderTask(HDC hdc, const RECT rc, const bool olcmode)
             STYLE_THINDASHPAPER, 1.0, false);
 
   // draw aat areas
-  LockTaskData();
+  mutexTaskData.Lock();
   if (!olcmode) {
     if (AATEnabled) {
       for (i=MAXTASKPOINTS-1; i>0; i--) {
@@ -1050,7 +1050,7 @@ void Statistics::RenderTask(HDC hdc, const RECT rc, const bool olcmode)
       }
     }
   }
-  UnlockTaskData();
+  mutexTaskData.Unlock();
 
   // draw track
 
@@ -1070,7 +1070,7 @@ void Statistics::RenderTask(HDC hdc, const RECT rc, const bool olcmode)
 
   // draw task lines and labels
 
-  LockTaskData();
+  mutexTaskData.Lock();
   if (!olcmode) {
     for (i=MAXTASKPOINTS-1; i>0; i--) {
       if (ValidTaskPoint(i) && ValidTaskPoint(i-1)) {
@@ -1148,7 +1148,7 @@ void Statistics::RenderTask(HDC hdc, const RECT rc, const bool olcmode)
       }
     }
   }
-  UnlockTaskData();
+  mutexTaskData.Unlock();
 
   if (olcmode && olcvalid_this) {
     for (i=0; i< 7-1; i++) {
@@ -1618,15 +1618,15 @@ static void OnAnalysisPaint(WindowControl * Sender, HDC hDC){
     break;
   case ANALYSIS_PAGE_TASK:
     SetCalcCaption(TEXT("Task calc"));
-    LockTaskData();
+    mutexTaskData.Lock();
     Statistics::RenderTask(hDC, rcgfx, false);
-    UnlockTaskData();
+    mutexTaskData.Unlock();
     break;
   case ANALYSIS_PAGE_OLC:
     SetCalcCaption(TEXT("Optimise"));
-    LockTaskData();
+    mutexTaskData.Lock();
     Statistics::RenderTask(hDC, rcgfx, true);
-    UnlockTaskData();
+    mutexTaskData.Unlock();
     break;
   case ANALYSIS_PAGE_AIRSPACE:
     SetCalcCaption(TEXT("Warnings"));
@@ -1634,9 +1634,9 @@ static void OnAnalysisPaint(WindowControl * Sender, HDC hDC){
     break;
   case ANALYSIS_PAGE_TASK_SPEED:
     SetCalcCaption(TEXT("Task calc"));
-    LockTaskData();
+    mutexTaskData.Lock();
     Statistics::RenderSpeed(hDC, rcgfx);
-    UnlockTaskData();
+    mutexTaskData.Unlock();
     break;
   default:
     // should never get here!

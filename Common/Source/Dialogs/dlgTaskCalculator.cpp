@@ -186,8 +186,8 @@ static void DoOptimise(void) {
   int steps = 0;
   if (!AATEnabled) return;
 
-  LockFlightData();
-  LockTaskData();
+  mutexFlightData.Lock();
+  mutexTaskData.Lock();
   TargetDialogOpen = true;
   do {
     myrange = Range;
@@ -233,8 +233,8 @@ static void DoOptimise(void) {
   RefreshCalculator();
 
   TargetDialogOpen = false;
-  UnlockTaskData();
-  UnlockFlightData();
+  mutexTaskData.Unlock();
+  mutexFlightData.Unlock();
 }
 
 

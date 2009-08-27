@@ -386,7 +386,7 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
       break;
 
     case WM_MOUSEMOVE:
-      LockTaskData();
+      mutexTaskData.Lock();
       if (AATEnabled && TargetPan && (TargetDrag_State>0)) {
 	// target follows "finger" so easier to drop near edge of
 	// sector
@@ -408,7 +408,7 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
           }
         }
       }
-      UnlockTaskData();
+      mutexTaskData.Unlock();
       break;
 
     case WM_LBUTTONDOWN:
@@ -424,7 +424,7 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
       // milliseconds waiting for BUTTONUP GetTickCount
       Screen2LatLon(XstartScreen, YstartScreen, Xstart, Ystart);
 
-      LockTaskData();
+      mutexTaskData.Lock();
       if (AATEnabled && TargetPan) {
 	if (ValidTaskPoint(TargetPanIndex)) {
 	  POINT tscreen;
@@ -442,7 +442,7 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
 	  }
 	}
       }
-      UnlockTaskData();
+      mutexTaskData.Unlock();
 
       FullScreen();
       break;
@@ -463,9 +463,9 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
         DoStatusMessage(buf);
 */
 
-      LockTaskData();
+      mutexTaskData.Lock();
       my_target_pan = TargetPan;
-      UnlockTaskData();
+      mutexTaskData.Unlock();
 
       GetClientRect(hWnd,&rc);
 
@@ -506,14 +506,14 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
       Screen2LatLon(X, Y, Xlat, Ylat);
 
       if (AATEnabled && my_target_pan && (TargetDrag_State>0)) {
-	LockTaskData();
+        mutexTaskData.Lock();
 	TargetDrag_State = 2;
         if (InAATTurnSector(Xlat, Ylat, TargetPanIndex)) {
             // if release mouse out of sector, don't update w/ bad coords
 	  TargetDrag_Latitude = Ylat;
 	  TargetDrag_Longitude = Xlat;
         }
-	UnlockTaskData();
+        mutexTaskData.Unlock();
 	break;
       } else if (!my_target_pan && EnablePan && (distance>36)) {
 	// TODO FIX should be IBLSCALE 36 instead?
@@ -713,7 +713,7 @@ bool MapWindow::RenderTimeAvailable() {
 
 void MapWindow::UpdateInfo(NMEA_INFO *nmea_info,
                            DERIVED_INFO *derived_info) {
-  LockFlightData();
+  mutexFlightData.Lock();
   memcpy(&DrawInfo,nmea_info,sizeof(NMEA_INFO));
   memcpy(&DerivedDrawInfo,derived_info,sizeof(DERIVED_INFO));
   UpdateMapScale(); // done here to avoid double latency due to locks
@@ -742,7 +742,7 @@ void MapWindow::UpdateInfo(NMEA_INFO *nmea_info,
     SwitchZoomClimb();
   }
 
-  UnlockFlightData();
+  mutexFlightData.Unlock();
 }
 
 
@@ -757,9 +757,9 @@ void MapWindow::UpdateCaches(const bool force) {
   askVisibilityScan = false; // reset
 
   // have some time, do shape file cache update if necessary
-  LockTerrainDataGraphics();
+  mutexTerrainDataGraphics.Lock();
   SetTopologyBounds(MapRect, do_force);
-  UnlockTerrainDataGraphics();
+  mutexTerrainDataGraphics.Unlock();
 
   // JMW experimental jpeg2000 rendering/tile management
   // Must do this even if terrain is not displayed, because

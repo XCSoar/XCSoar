@@ -197,22 +197,31 @@ void	QFEAltitudeProcessing(int UpDown)
 void Alternate1Processing(int UpDown)
 {
    if (UpDown==0) {
-	if ( Alternate1 <0 ) return;
-	LockTaskData(); SelectedWaypoint = Alternate1; PopupWaypointDetails(); UnlockTaskData();
+     if ( Alternate1 <0 ) return;
+     mutexTaskData.Lock();
+     SelectedWaypoint = Alternate1;
+     PopupWaypointDetails();
+     mutexTaskData.Unlock();
   }
 }
 void Alternate2Processing(int UpDown)
 {
    if (UpDown==0) {
-	if ( Alternate2 <0 ) return;
-	LockTaskData(); SelectedWaypoint = Alternate2; PopupWaypointDetails(); UnlockTaskData();
+     if ( Alternate2 <0 ) return;
+     mutexTaskData.Lock();
+     SelectedWaypoint = Alternate2;
+     PopupWaypointDetails();
+     mutexTaskData.Unlock();
   }
 }
 void BestAlternateProcessing(int UpDown)
 {
    if (UpDown==0) {
-	if ( BestAlternate <0 ) return;
-	LockTaskData(); SelectedWaypoint = BestAlternate; PopupWaypointDetails(); UnlockTaskData();
+     if ( BestAlternate <0 ) return;
+     mutexTaskData.Lock();
+     SelectedWaypoint = BestAlternate;
+     PopupWaypointDetails();
+     mutexTaskData.Unlock();
   }
 }
 
@@ -387,7 +396,7 @@ extern void PopupWaypointDetails();
 */
 void NextUpDown(int UpDown)
 {
-  LockTaskData();
+  mutexTaskData.Lock();
 
   if(UpDown>0) {
     if(ActiveWayPoint < MAXTASKPOINTS) {
@@ -453,7 +462,7 @@ void NextUpDown(int UpDown)
   if (ActiveWayPoint>=0) {
     SelectedWaypoint = Task[ActiveWayPoint].Index;
   }
-  UnlockTaskData();
+  mutexTaskData.Unlock();
 }
 
 

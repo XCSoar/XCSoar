@@ -58,7 +58,7 @@ void MapWindow::DrawAbortedTask(HDC hdc, const RECT rc, const POINT me)
   int i;
   if (!WayPointList) return;
 
-  LockTaskData();  // protect from external task changes
+  mutexTaskData.Lock();  // protect from external task changes
 #ifdef HAVEEXCEPTIONS
   __try{
 #endif
@@ -77,7 +77,7 @@ void MapWindow::DrawAbortedTask(HDC hdc, const RECT rc, const POINT me)
   }__finally
 #endif
      {
-       UnlockTaskData();
+       mutexTaskData.Unlock();
      }
 }
 
@@ -122,7 +122,7 @@ void MapWindow::DrawTask(HDC hdc, RECT rc, const POINT &Orig_Aircraft)
 
   if (!WayPointList) return;
 
-  LockTaskData();  // protect from external task changes
+  mutexTaskData.Lock();  // protect from external task changes
 #ifdef HAVEEXCEPTIONS
   __try{
 #endif
@@ -305,7 +305,7 @@ void MapWindow::DrawTask(HDC hdc, RECT rc, const POINT &Orig_Aircraft)
   }__finally
 #endif
      {
-       UnlockTaskData();
+       mutexTaskData.Unlock();
      }
 
   // restore original color
@@ -322,7 +322,7 @@ void MapWindow::DrawTaskAAT(HDC hdc, const RECT rc, HDC buffer)
   if (!WayPointList) return;
   if (!AATEnabled) return;
 
-  LockTaskData();  // protect from external task changes
+  mutexTaskData.Lock();  // protect from external task changes
 #ifdef HAVEEXCEPTIONS
   __try{
 #endif
@@ -429,7 +429,7 @@ void MapWindow::DrawTaskAAT(HDC hdc, const RECT rc, HDC buffer)
   }__finally
 #endif
      {
-       UnlockTaskData();
+       mutexTaskData.Unlock();
      }
 }
 
@@ -442,7 +442,7 @@ void MapWindow::DrawBearing(HDC hdc, const RECT rc, int bBearingValid)
     return;
   }
 
-  LockTaskData();  // protect from external task changes
+  mutexTaskData.Lock();  // protect from external task changes
 
   double startLat = DrawInfo.Latitude;
   double startLon = DrawInfo.Longitude;
@@ -456,7 +456,7 @@ void MapWindow::DrawBearing(HDC hdc, const RECT rc, int bBearingValid)
     targetLat = WayPointList[Task[ActiveWayPoint].Index].Latitude;
     targetLon = WayPointList[Task[ActiveWayPoint].Index].Longitude;
   }
-  UnlockTaskData();
+  mutexTaskData.Unlock();
   if (bBearingValid) {
       DrawGreatCircle(hdc, startLon, startLat,  // RLD skip if bearing invalid
                       targetLon, targetLat, rc);// RLD bc Lat/Lon invalid
@@ -466,7 +466,7 @@ void MapWindow::DrawBearing(HDC hdc, const RECT rc, int bBearingValid)
       startLat = targetLat;
       startLon = targetLon;
 
-      LockTaskData();
+      mutexTaskData.Lock();
 
       for (int i=ActiveWayPoint+1; i<MAXTASKPOINTS; i++) {
         if (ValidTaskPoint(i)) {
@@ -487,7 +487,7 @@ void MapWindow::DrawBearing(HDC hdc, const RECT rc, int bBearingValid)
         }
       }
 
-      UnlockTaskData();
+      mutexTaskData.Unlock();
 
     } // TargetPan
   } // bearing valid
@@ -495,7 +495,7 @@ void MapWindow::DrawBearing(HDC hdc, const RECT rc, int bBearingValid)
   // JMW draw symbol at target, makes it easier to see
   // RLD always draw all targets ahead so visible in pan mode
   if (AATEnabled) {
-    LockTaskData();
+    mutexTaskData.Lock();
     for (int i=ActiveWayPoint; i<MAXTASKPOINTS; i++) {
       // RLD skip invalid targets and targets at start and finish
       if(ValidTaskPoint(i) && ValidTaskPoint(i+1) && i > 0) {
@@ -508,7 +508,7 @@ void MapWindow::DrawBearing(HDC hdc, const RECT rc, int bBearingValid)
         }
       }
     }
-    UnlockTaskData();
+    mutexTaskData.Unlock();
   }
 
 }
@@ -537,7 +537,7 @@ void MapWindow::DrawOffTrackIndicator(HDC hdc, const RECT rc) {
     return;
   }
 
-  LockTaskData();  // protect from external task changes
+  mutexTaskData.Lock();  // protect from external task changes
 
   double startLat = DrawInfo.Latitude;
   double startLon = DrawInfo.Longitude;
@@ -552,7 +552,7 @@ void MapWindow::DrawOffTrackIndicator(HDC hdc, const RECT rc) {
     targetLat = WayPointList[Task[ActiveWayPoint].Index].Latitude;
     targetLon = WayPointList[Task[ActiveWayPoint].Index].Longitude;
   }
-  UnlockTaskData();
+  mutexTaskData.Unlock();
 
   HFONT oldFont = (HFONT)SelectObject(hdc, TitleWindowFont);
   SetTextColor(hdc, RGB(0x0,0x0,0x0));
@@ -620,7 +620,7 @@ void MapWindow::DrawProjectedTrack(HDC hdc, const RECT rc, const POINT Orig) {
   // TODO feature: maybe have this work even if no task?
   // TODO feature: draw this also when in target pan mode
 
-  LockTaskData();  // protect from external task changes
+  mutexTaskData.Lock();  // protect from external task changes
 
   double startLat = DrawInfo.Latitude;
   double startLon = DrawInfo.Longitude;
@@ -633,7 +633,7 @@ void MapWindow::DrawProjectedTrack(HDC hdc, const RECT rc, const POINT Orig) {
     previousLat = WayPointList[Task[max(0,ActiveWayPoint-1)].Index].Latitude;
     previousLon = WayPointList[Task[max(0,ActiveWayPoint-1)].Index].Longitude;
   }
-  UnlockTaskData();
+  mutexTaskData.Unlock();
 
   double distance_from_previous, bearing;
   DistanceBearing(previousLat, previousLon,
@@ -680,7 +680,7 @@ void MapWindow::DrawProjectedTrack(HDC hdc, const RECT rc, const POINT Orig) {
 void MapWindow::CalculateScreenPositionsTask() {
   unsigned int i;
 
-  LockTaskData();
+  mutexTaskData.Lock();
 
   if (EnableMultipleStartPoints) {
     for(i=0;i<MAXSTARTPOINTS-1;i++) {
@@ -732,6 +732,6 @@ void MapWindow::CalculateScreenPositionsTask() {
     }
   }
 
-  UnlockTaskData();
+  mutexTaskData.Unlock();
 }
 

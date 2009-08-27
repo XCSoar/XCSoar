@@ -230,61 +230,61 @@ static int FormKeyDown(WindowControl * Sender, WPARAM wParam, LPARAM lParam){
 
 static void OnGotoClicked(WindowControl * Sender){
 	(void)Sender;
-  LockTaskData();
+  mutexTaskData.Lock();
   FlyDirectTo(SelectedWaypoint);
-  UnlockTaskData();
+  mutexTaskData.Unlock();
   wf->SetModalResult(mrOK);
 }
 
 static void OnReplaceClicked(WindowControl * Sender){
 	(void)Sender;
-  LockTaskData();
+  mutexTaskData.Lock();
   ReplaceWaypoint(SelectedWaypoint);
   RefreshTask();
-  UnlockTaskData();
+  mutexTaskData.Unlock();
   wf->SetModalResult(mrOK);
 }
 
 static void OnNewHomeClicked(WindowControl * Sender){
 	(void)Sender;
-  LockTaskData();
+  mutexTaskData.Lock();
   HomeWaypoint = SelectedWaypoint;
   SetToRegistry(szRegistryHomeWaypoint, HomeWaypoint);
   RefreshTask();
-  UnlockTaskData();
+  mutexTaskData.Unlock();
   wf->SetModalResult(mrOK);
 }
 
 // VENTA3
 static void OnSetAlternate1Clicked(WindowControl * Sender){
 	(void)Sender;
-  LockTaskData();
+  mutexTaskData.Lock();
   Alternate1 = SelectedWaypoint;
   SetToRegistry(szRegistryAlternate1, Alternate1);
   RefreshTask();
-  UnlockTaskData();
+  mutexTaskData.Unlock();
   wf->SetModalResult(mrOK);
 }
 
 static void OnSetAlternate2Clicked(WindowControl * Sender){
 	(void)Sender;
-  LockTaskData();
+  mutexTaskData.Lock();
   Alternate2 = SelectedWaypoint;
   SetToRegistry(szRegistryAlternate2, Alternate2);
   RefreshTask();
-  UnlockTaskData();
+  mutexTaskData.Unlock();
   wf->SetModalResult(mrOK);
 }
 
 static void OnClearAlternatesClicked(WindowControl * Sender){
 	(void)Sender;
-  LockTaskData();
+  mutexTaskData.Lock();
   Alternate1 = -1; EnableAlternate1=false;
   Alternate2 = -1; EnableAlternate2=false;
   SetToRegistry(szRegistryAlternate1, Alternate1);
   SetToRegistry(szRegistryAlternate2, Alternate2);
   RefreshTask();
-  UnlockTaskData();
+  mutexTaskData.Unlock();
   wf->SetModalResult(mrOK);
 }
 
@@ -299,29 +299,29 @@ static void OnTeamCodeClicked(WindowControl * Sender){
 
 static void OnInserInTaskClicked(WindowControl * Sender){
 	(void)Sender;
-  LockTaskData();
+  mutexTaskData.Lock();
   InsertWaypoint(SelectedWaypoint);
   RefreshTask();
-  UnlockTaskData();
+  mutexTaskData.Unlock();
   wf->SetModalResult(mrOK);
 }
 
 static void OnAppendInTaskClicked(WindowControl * Sender){
 	(void)Sender;
-  LockTaskData();
+  mutexTaskData.Lock();
   InsertWaypoint(SelectedWaypoint, true);
   RefreshTask();
-  UnlockTaskData();
+  mutexTaskData.Unlock();
   wf->SetModalResult(mrOK);
 }
 
 
 static void OnRemoveFromTaskClicked(WindowControl * Sender){
 	(void)Sender;
-  LockTaskData();
+  mutexTaskData.Lock();
   RemoveWaypoint(SelectedWaypoint);
   RefreshTask();
-  UnlockTaskData();
+  mutexTaskData.Unlock();
   wf->SetModalResult(mrOK);
 }
 

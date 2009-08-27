@@ -166,7 +166,7 @@ void InputEvents::readFile() {
   StartupStore(TEXT("Loading input events file\n"));
 
   // clear the GCE and NMEA queues
-  LockEventQueue();
+  mutexEventQueue.Lock();
   int i;
   for (i=0; i<MAX_GCE_QUEUE; i++) {
     GCE_Queue[i]= -1;
@@ -174,7 +174,7 @@ void InputEvents::readFile() {
   for (i=0; i<MAX_NMEA_QUEUE; i++) {
     NMEA_Queue[i]= -1;
   }
-  UnlockEventQueue();
+  mutexEventQueue.Unlock();
 
   // Get defaults
   if (!InitONCE) {
@@ -801,14 +801,14 @@ bool InputEvents::processKey(int dWord) {
 
 bool InputEvents::processNmea(int ne_id) {
   // add an event to the bottom of the queue
-  LockEventQueue();
+  mutexEventQueue.Lock();
   for (int i=0; i< MAX_NMEA_QUEUE; i++) {
     if (NMEA_Queue[i]== -1) {
       NMEA_Queue[i]= ne_id;
       break;
     }
   }
-  UnlockEventQueue();
+  mutexEventQueue.Unlock();
   return true; // ok.
 }
 
@@ -860,14 +860,14 @@ void InputEvents::DoQueuedEvents(void) {
   blockqueue = true;
 
   // copy the queue first, blocking
-  LockEventQueue();
+  mutexEventQueue.Lock();
   for (i=0; i<MAX_GCE_QUEUE; i++) {
     GCE_Queue_copy[i]= GCE_Queue[i];
   }
   for (i=0; i<MAX_NMEA_QUEUE; i++) {
     NMEA_Queue_copy[i]= NMEA_Queue[i];
   }
-  UnlockEventQueue();
+  mutexEventQueue.Unlock();
 
   // process each item in the queue
   for (i=0; i< MAX_GCE_QUEUE; i++) {
@@ -882,14 +882,14 @@ void InputEvents::DoQueuedEvents(void) {
   }
 
   // now flush the queue, again blocking
-  LockEventQueue();
+  mutexEventQueue.Lock();
   for (i=0; i<MAX_GCE_QUEUE; i++) {
     GCE_Queue[i]= -1;
   }
   for (i=0; i<MAX_NMEA_QUEUE; i++) {
     NMEA_Queue[i]= -1;
   }
-  UnlockEventQueue();
+  mutexEventQueue.Unlock();
 
   blockqueue = false; // ok, ready to go on.
 
@@ -898,14 +898,14 @@ void InputEvents::DoQueuedEvents(void) {
 
 bool InputEvents::processGlideComputer(int gce_id) {
   // add an event to the bottom of the queue
-  LockEventQueue();
+  mutexEventQueue.Lock();
   for (int i=0; i< MAX_GCE_QUEUE; i++) {
     if (GCE_Queue[i]== -1) {
       GCE_Queue[i]= gce_id;
       break;
     }
   }
-  UnlockEventQueue();
+  mutexEventQueue.Unlock();
   return true; // ok.
 }
 

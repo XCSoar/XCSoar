@@ -82,7 +82,7 @@ static void OnPaintDetailsListItem(WindowControl * Sender, HDC hDC){
     double range;
     double bear;
 
-    LockFlightData();
+    mutexFlightData.Lock();
 
     DistanceBearing(GPS_INFO.Latitude,
 		    GPS_INFO.Longitude,
@@ -115,7 +115,7 @@ static void OnPaintDetailsListItem(WindowControl * Sender, HDC hDC){
 		   txtLen,
 		   NULL);
       }
-    UnlockFlightData();
+    mutexFlightData.Unlock();
   }
 }
 

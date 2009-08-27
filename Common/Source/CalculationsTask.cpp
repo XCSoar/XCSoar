@@ -151,8 +151,8 @@ double AATCloseBearing(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
 
 void DistanceToNext(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 {
-  //  LockFlightData();
-  LockTaskData();
+  //  mutexFlightData.Lock();
+  mutexTaskData.Lock();
 
   if(ValidTaskPoint(ActiveWayPoint))
     {
@@ -213,17 +213,17 @@ void DistanceToNext(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
       Calculated->WaypointDistance = 0;
       Calculated->WaypointBearing = 0;
     }
-  UnlockTaskData();
-  //  UnlockFlightData();
+  mutexTaskData.Unlock();
+  //  mutexFlightData.Unlock();
 }
 
 
 void AltitudeRequired(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
                       const double this_maccready)
 {
-  //  LockFlightData();
+  //  mutexFlightData.Lock();
   (void)Basic;
-  LockTaskData();
+  mutexTaskData.Lock();
   if(ValidTaskPoint(ActiveWayPoint))
     {
       double wp_alt = FAIFinishHeight(Basic, Calculated, ActiveWayPoint);
@@ -276,8 +276,8 @@ void AltitudeRequired(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
       Calculated->NextAltitudeDifference = 0;
       Calculated->NextAltitudeDifference0 = 0; // VENTA6
     }
-  UnlockTaskData();
-  //  UnlockFlightData();
+  mutexTaskData.Unlock();
+  //  mutexFlightData.Unlock();
 }
 
 
@@ -302,7 +302,7 @@ static bool TaskAltitudeRequired(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
   *TotalTime = 0; *TotalDistance = 0;
   *ifinal = 0;
 
-  LockTaskData();
+  mutexTaskData.Lock();
 
   double height_above_finish = FAIFinishHeight(Basic, Calculated, 0)-
     FAIFinishHeight(Basic, Calculated, -1);
@@ -352,7 +352,7 @@ static bool TaskAltitudeRequired(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
     TotalAltitude += LegAltitude;
 
     if (LegTime<0) {
-      UnlockTaskData();
+      mutexTaskData.Unlock();
       return false;
     } else {
       *TotalTime += LegTime;
@@ -381,7 +381,7 @@ static bool TaskAltitudeRequired(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
     retval = true;
   }
  OnExit:
-  UnlockTaskData();
+  mutexTaskData.Unlock();
   return retval;
 }
 
@@ -440,8 +440,8 @@ void TaskSpeed(NMEA_INFO *Basic, DERIVED_INFO *Calculated, const double this_mac
     return;
   }
 
-  //  LockFlightData();
-  LockTaskData();
+  //  mutexFlightData.Lock();
+  mutexTaskData.Lock();
 
   if (TaskAltitudeRequired(Basic, Calculated, this_maccready, &Vfinal,
                            &TotalTime, &TotalDistance, &ifinal)) {
@@ -695,7 +695,7 @@ void TaskSpeed(NMEA_INFO *Basic, DERIVED_INFO *Calculated, const double this_mac
     }
   }
  OnExit:
-  UnlockTaskData();
+  mutexTaskData.Unlock();
 
 }
 
@@ -788,8 +788,8 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
     return;
   }
 
-  //  LockFlightData();
-  LockTaskData();
+  //  mutexFlightData.Lock();
+  mutexTaskData.Lock();
 
   ///////////////////////////////////////////////
   // Calculate Task Distances
@@ -1147,8 +1147,8 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
 
   CheckForceFinalGlide(Basic, Calculated);
 
-  UnlockTaskData();
-  //  UnlockFlightData();
+  mutexTaskData.Unlock();
+  //  mutexFlightData.Unlock();
 
 }
 
@@ -1184,8 +1184,8 @@ void AATStats_Distance(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   int i;
   double MaxDistance, MinDistance, TargetDistance;
 
-  //  LockFlightData();
-  LockTaskData();
+  //  mutexFlightData.Lock();
+  mutexTaskData.Lock();
 
   MaxDistance = 0; MinDistance = 0; TargetDistance = 0;
   // Calculate Task Distances
@@ -1291,8 +1291,8 @@ void AATStats_Distance(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
       Calculated->AATMinDistance = MinDistance;
       Calculated->AATTargetDistance = TargetDistance;
     }
-  UnlockTaskData();
-  //  UnlockFlightData();
+  mutexTaskData.Unlock();
+  //  mutexFlightData.Unlock();
 }
 
 

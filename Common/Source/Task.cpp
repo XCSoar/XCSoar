@@ -91,7 +91,7 @@ void FlyDirectTo(int index) {
   if (!CheckDeclaration())
     return;
 
-  LockTaskData();
+  mutexTaskData.Lock();
 
   if (TaskAborted) {
     // in case we GOTO while already aborted
@@ -121,7 +121,7 @@ void FlyDirectTo(int index) {
   }
   ActiveWayPoint = 0;
   RefreshTask();
-  UnlockTaskData();
+  mutexTaskData.Unlock();
 }
 
 
@@ -130,7 +130,7 @@ void SwapWaypoint(int index) {
   if (!CheckDeclaration())
     return;
 
-  LockTaskData();
+  mutexTaskData.Lock();
   TaskModified = true;
   TargetModified = true;
   if (index<0) {
@@ -146,7 +146,7 @@ void SwapWaypoint(int index) {
     Task[index+1] = tmpPoint;
   }
   RefreshTask();
-  UnlockTaskData();
+  mutexTaskData.Unlock();
 }
 
 
@@ -159,7 +159,7 @@ void InsertWaypoint(int index, bool append) {
 
   int i;
 
-  LockTaskData();
+  mutexTaskData.Lock();
   TaskModified = true;
   TargetModified = true;
 
@@ -168,7 +168,7 @@ void InsertWaypoint(int index, bool append) {
     ResetTaskWaypoint(ActiveWayPoint);
     Task[ActiveWayPoint].Index = index;
 
-    UnlockTaskData();
+    mutexTaskData.Unlock();
     return;
   }
 
@@ -179,7 +179,7 @@ void InsertWaypoint(int index, bool append) {
       gettext(TEXT("Insert Waypoint")),
       MB_OK|MB_ICONEXCLAMATION);
 
-    UnlockTaskData();
+    mutexTaskData.Unlock();
     return;
   }
 
@@ -204,13 +204,13 @@ void InsertWaypoint(int index, bool append) {
   }
 
   RefreshTask();
-  UnlockTaskData();
+  mutexTaskData.Unlock();
 
 }
 
 // Create a default task to home at startup if no task is present
 void DefaultTask(void) {
-  LockTaskData();
+  mutexTaskData.Lock();
   TaskModified = true;
   TargetModified = true;
   if ((Task[0].Index == -1)||(ActiveWayPoint==-1)) {
@@ -220,7 +220,7 @@ void DefaultTask(void) {
     }
   }
   RefreshTask();
-  UnlockTaskData();
+  mutexTaskData.Unlock();
 }
 
 
@@ -240,12 +240,12 @@ void RemoveTaskPoint(int index) {
     return; // index out of bounds
   }
 
-  LockTaskData();
+  mutexTaskData.Lock();
   TaskModified = true;
   TargetModified = true;
 
   if (Task[index].Index == -1) {
-    UnlockTaskData();
+    mutexTaskData.Unlock();
     return; // There's no WP at this location
   }
 
@@ -258,7 +258,7 @@ void RemoveTaskPoint(int index) {
   Task[MAXTASKPOINTS-1].AATTargetOffsetRadius= 0.0;
 
   RefreshTask();
-  UnlockTaskData();
+  mutexTaskData.Unlock();
 
 }
 
@@ -286,7 +286,7 @@ void RemoveWaypoint(int index) {
   // If they're all before the active WP then just remove
   // the nearest to the active WP
 
-  LockTaskData();
+  mutexTaskData.Lock();
   TaskModified = true;
   TargetModified = true;
 
@@ -322,12 +322,12 @@ void RemoveWaypoint(int index) {
     } else {
       // WP not found, so ask user if they want to
       // remove the active WP
-      UnlockTaskData();
+      mutexTaskData.Unlock();
       int ret = MessageBoxX(
         gettext(TEXT("Chosen Waypoint not in current task.\nRemove active WayPoint?")),
         gettext(TEXT("Remove Waypoint")),
         MB_YESNO|MB_ICONQUESTION);
-      LockTaskData();
+      mutexTaskData.Lock();
 
       if (ret == IDYES) {
         RemoveTaskPoint(ActiveWayPoint);
@@ -340,7 +340,7 @@ void RemoveWaypoint(int index) {
     }
   }
   RefreshTask();
-  UnlockTaskData();
+  mutexTaskData.Unlock();
 
 }
 
@@ -349,7 +349,7 @@ void ReplaceWaypoint(int index) {
   if (!CheckDeclaration())
     return;
 
-  LockTaskData();
+  mutexTaskData.Lock();
   TaskModified = true;
   TargetModified = true;
 
@@ -366,7 +366,7 @@ void ReplaceWaypoint(int index) {
     Task[ActiveWayPoint].Index = index;
   }
   RefreshTask();
-  UnlockTaskData();
+  mutexTaskData.Unlock();
 }
 
 
@@ -374,7 +374,7 @@ void RefreshTask() {
   double lengthtotal = 0.0;
   int i;
 
-  LockTaskData();
+  mutexTaskData.Lock();
   if ((ActiveWayPoint<0)&&(Task[0].Index>=0)) {
     ActiveWayPoint=0;
   }
@@ -432,7 +432,7 @@ void RefreshTask() {
 
   CalculateTaskSectors();
   CalculateAATTaskSectors();
-  UnlockTaskData();
+  mutexTaskData.Unlock();
 }
 
 
@@ -440,7 +440,7 @@ void RotateStartPoints(void) {
   if (ActiveWayPoint>0) return;
   if (!EnableMultipleStartPoints) return;
 
-  LockTaskData();
+  mutexTaskData.Lock();
 
   int found = -1;
   int imax = 0;
@@ -461,7 +461,7 @@ void RotateStartPoints(void) {
   }
 
   RefreshTask();
-  UnlockTaskData();
+  mutexTaskData.Unlock();
 }
 
 
@@ -470,7 +470,7 @@ void CalculateTaskSectors(void)
   int i;
   double SectorAngle, SectorSize, SectorBearing;
 
-  LockTaskData();
+  mutexTaskData.Lock();
 
   if (EnableMultipleStartPoints) {
     for(i=0;i<MAXSTARTPOINTS-1;i++) {
@@ -563,7 +563,7 @@ void CalculateTaskSectors(void)
 
 	}
     }
-  UnlockTaskData();
+  mutexTaskData.Unlock();
 }
 
 
@@ -573,7 +573,7 @@ double AdjustAATTargets(double desired) {
   istart = max(1,ActiveWayPoint);
   inum=0;
 
-  LockTaskData();
+  mutexTaskData.Lock();
   for(i=istart;i<MAXTASKPOINTS-1;i++)
     {
       if(ValidTaskPoint(i)&&ValidTaskPoint(i+1) && !Task[i].AATTargetLocked)
@@ -620,7 +620,7 @@ double AdjustAATTargets(double desired) {
 	}
     }
  OnExit:
-  UnlockTaskData();
+  mutexTaskData.Unlock();
   return av;
 }
 
@@ -640,7 +640,7 @@ void CalculateAATTaskSectors()
   double latitude = GPS_INFO.Latitude;
   double longitude = GPS_INFO.Longitude;
 
-  LockTaskData();
+  mutexTaskData.Lock();
 
   Task[0].AATTargetOffsetRadius = 0.0;
   Task[0].AATTargetOffsetRadial = 0.0;
@@ -788,7 +788,7 @@ void CalculateAATTaskSectors()
     // allow target dialog to detect externally changed targets
   }
 
-  UnlockTaskData();
+  mutexTaskData.Unlock();
 }
 
 
@@ -1030,7 +1030,7 @@ void LoadNewTask(TCHAR *szFileName)
   bool WaypointInvalid = false;
   bool TaskLoaded = false;
 
-  LockTaskData();
+  mutexTaskData.Lock();
 
   ActiveWayPoint = -1;
   for(i=0;i<MAXTASKPOINTS;i++)
@@ -1166,7 +1166,7 @@ void LoadNewTask(TCHAR *szFileName)
     ActiveWayPoint = 0;
   }
 
-  UnlockTaskData();
+  mutexTaskData.Unlock();
 
   if (TaskInvalid && TaskLoaded) {
     MessageBoxX(
@@ -1183,7 +1183,7 @@ void LoadNewTask(TCHAR *szFileName)
 
 
 void ClearTask(void) {
-  LockTaskData();
+  mutexTaskData.Lock();
   TaskModified = true;
   TargetModified = true;
   LastTaskFileName[0] = _T('\0');
@@ -1204,28 +1204,28 @@ void ClearTask(void) {
   for (i=0; i<MAXSTARTPOINTS; i++) {
     StartPoints[i].Index = -1;
   }
-  UnlockTaskData();
+  mutexTaskData.Unlock();
 }
 
 
 bool ValidWayPoint(int i) {
   bool retval = true;
-  LockTaskData();
+  mutexTaskData.Lock();
   if ((!WayPointList)||(i<0)||(i>=(int)NumberOfWayPoints)) {
     retval = false;
   }
-  UnlockTaskData();
+  mutexTaskData.Unlock();
   return retval;
 }
 
 bool ValidTaskPoint(int i) {
   bool retval = true;
-  LockTaskData();
+  mutexTaskData.Lock();
   if ((i<0) || (i>= MAXTASKPOINTS))
     retval = false;
   else if (!ValidWayPoint(Task[i].Index))
     retval = false;
-  UnlockTaskData();
+  mutexTaskData.Unlock();
   return retval;
 }
 
@@ -1233,7 +1233,7 @@ void SaveTask(TCHAR *szFileName)
 {
   if (!WayPointList) return; // this should never happen, but just to be safe...
 
-  LockTaskData();
+  mutexTaskData.Lock();
 
   FILE *file = _tfopen(szFileName, _T("wb"));
   if (file != NULL) {
@@ -1287,7 +1287,7 @@ void SaveTask(TCHAR *szFileName)
                 gettext(TEXT("Save task")),
                 MB_OK|MB_ICONEXCLAMATION);
   }
-  UnlockTaskData();
+  mutexTaskData.Unlock();
 }
 
 
@@ -1442,7 +1442,7 @@ void CalculateAATIsoLines(void) {
   if(AATEnabled == FALSE)
     return;
 
-  LockTaskData();
+  mutexTaskData.Lock();
 
   for(i=1;i<MAXTASKPOINTS;i++) {
 
@@ -1548,12 +1548,12 @@ void CalculateAATIsoLines(void) {
 
     }
   }
-  UnlockTaskData();
+  mutexTaskData.Unlock();
 }
 
 
 void SaveDefaultTask(void) {
-  LockTaskData();
+  mutexTaskData.Lock();
   if (!TaskAborted) {
     TCHAR buffer[MAX_PATH];
 #ifdef GNAV
@@ -1563,7 +1563,7 @@ void SaveDefaultTask(void) {
 #endif
     SaveTask(buffer);
   }
-  UnlockTaskData();
+  mutexTaskData.Unlock();
 }
 
 //////////////////////////////////////////////////////
@@ -1572,7 +1572,7 @@ void SaveDefaultTask(void) {
 
 bool TaskIsTemporary(void) {
   bool retval = false;
-  LockTaskData();
+  mutexTaskData.Lock();
   if (TaskAborted) {
     retval = true;
   }
@@ -1581,13 +1581,13 @@ bool TaskIsTemporary(void) {
     retval = true;
   };
 
-  UnlockTaskData();
+  mutexTaskData.Unlock();
   return retval;
 }
 
 
 static void BackupTask(void) {
-  LockTaskData();
+  mutexTaskData.Lock();
   for (int i=0; i<=MAXTASKPOINTS; i++) {
     Task_saved[i]= Task[i].Index;
   }
@@ -1597,7 +1597,7 @@ static void BackupTask(void) {
   } else {
     aat_enabled_saved = false;
   }
-  UnlockTaskData();
+  mutexTaskData.Unlock();
 }
 
 
@@ -1606,8 +1606,8 @@ void ResumeAbortTask(int set) {
   int active_waypoint_on_entry;
   bool task_temporary_on_entry = TaskIsTemporary();
 
-  //  LockFlightData();
-  LockTaskData();
+  //  mutexFlightData.Lock();
+  mutexTaskData.Lock();
   active_waypoint_on_entry = ActiveWayPoint;
 
   if (set == 0) {
@@ -1656,8 +1656,8 @@ void ResumeAbortTask(int set) {
     SelectedWaypoint = ActiveWayPoint;
   }
 
-  UnlockTaskData();
-  //  UnlockFlightData();
+  mutexTaskData.Unlock();
+  //  mutexFlightData.Unlock();
 
 }
 
@@ -1671,12 +1671,12 @@ int getFinalWaypoint() {
   }
 
   i++;
-  LockTaskData();
+  mutexTaskData.Lock();
   while((i<MAXTASKPOINTS) && (Task[i].Index != -1))
     {
       i++;
     }
-  UnlockTaskData();
+  mutexTaskData.Unlock();
   return i-1;
 }
 
@@ -1687,12 +1687,12 @@ bool ActiveIsFinalWaypoint() {
 
 bool IsFinalWaypoint(void) {
   bool retval;
-  LockTaskData();
+  mutexTaskData.Lock();
   if (ValidTaskPoint(ActiveWayPoint) && (Task[ActiveWayPoint+1].Index >= 0)) {
     retval = false;
   } else {
     retval = true;
   }
-  UnlockTaskData();
+  mutexTaskData.Unlock();
   return retval;
 }

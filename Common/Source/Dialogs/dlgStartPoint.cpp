@@ -108,10 +108,10 @@ static void OnStartPointListEnter(WindowControl * Sender,
     res = dlgWayPointSelect();
     if (res>=0) {
       // TODO bug: don't add it if it's already present!
-      LockTaskData();
+      mutexTaskData.Lock();
       StartPoints[ItemIndex].Index = res;
       StartPoints[ItemIndex].Active = true;
-      UnlockTaskData();
+      mutexTaskData.Unlock();
       changed = true;
     }
   }
@@ -136,7 +136,7 @@ static void OnCloseClicked(WindowControl * Sender){
 
 static void OnClearClicked(WindowControl * Sender){
 	(void)Sender;
-  LockTaskData();
+  mutexTaskData.Lock();
   for (int i=0; i<MAXSTARTPOINTS; i++) {
     StartPoints[i].Index = -1;
     StartPoints[i].Active = false;
@@ -144,7 +144,7 @@ static void OnClearClicked(WindowControl * Sender){
   StartPoints[0].Index = Task[0].Index;
   StartPoints[0].Active = true;
   changed = true;
-  UnlockTaskData();
+  mutexTaskData.Unlock();
   UpdateList();
 }
 
@@ -159,7 +159,7 @@ static CallBackTableEntry_t CallBackTable[]={
 
 
 static void CheckStartPointInTask(void) {
-  LockTaskData();
+  mutexTaskData.Lock();
   if (Task[0].Index != -1) {
     // ensure current start point is in task
     int index_last = 0;
@@ -181,7 +181,7 @@ static void CheckStartPointInTask(void) {
       StartPoints[index_last].Active = true;
     }
   }
-  UnlockTaskData();
+  mutexTaskData.Unlock();
 }
 
 
@@ -224,10 +224,10 @@ void dlgStartPointShowModal(void) {
 
   // now retrieve back the properties...
   if (changed) {
-    LockTaskData();
+    mutexTaskData.Lock();
     TaskModified = true;
     RefreshTask();
-    UnlockTaskData();
+    mutexTaskData.Unlock();
   };
 
   delete wf;

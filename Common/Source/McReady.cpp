@@ -98,7 +98,7 @@ double GlidePolar::GetAUW() {
 
 void GlidePolar::SetBallast() {
 
-  LockFlightData();
+  mutexFlightData.Lock();
   double BallastWeight;
   BallastLitres = WEIGHTS[2] * BALLAST;
   BallastWeight = GetAUW();
@@ -146,7 +146,7 @@ void GlidePolar::SetBallast() {
       sinkratecache[i] = -thesinkrate;
 
     }
-  UnlockFlightData();
+  mutexFlightData.Unlock();
 
   int polar_ai = iround((polar_a*10)*4096);
   int polar_bi = iround((polar_b)*4096);

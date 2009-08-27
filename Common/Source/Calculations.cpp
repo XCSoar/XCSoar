@@ -701,14 +701,14 @@ bool IsFlarmTargetCNInRange()
 
 
 void RefreshTaskStatistics(void) {
-  //  LockFlightData();
-  LockTaskData();
+  //  mutexFlightData.Lock();
+  mutexTaskData.Unlock();
   TaskStatistics(&GPS_INFO, &CALCULATED_INFO, MACCREADY);
   AATStats(&GPS_INFO, &CALCULATED_INFO);
   TaskSpeed(&GPS_INFO, &CALCULATED_INFO, MACCREADY);
   IterateEffectiveMacCready(&GPS_INFO, &CALCULATED_INFO);
-  UnlockTaskData();
-  //  UnlockFlightData();
+  mutexTaskData.Unlock();
+  //  mutexFlightData.Unlock();
 }
 
 

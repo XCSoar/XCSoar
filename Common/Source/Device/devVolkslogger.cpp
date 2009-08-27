@@ -175,7 +175,7 @@ BOOL VLDeclare(PDeviceDescriptor_t d, Declaration_t *decl){
 
   vl.declaration.task.nturnpoints = max(min(nturnpoints-2, 12), 0);
 
-  LockTaskData();
+  mutexTaskData.Lock();
 
   // start..
   switch(StartLine) {
@@ -250,7 +250,7 @@ BOOL VLDeclare(PDeviceDescriptor_t d, Declaration_t *decl){
   }
   vl.declaration.task.finishpoint.ws = 360;
 
-  UnlockTaskData();
+  mutexTaskData.Unlock();
 
   BOOL ok = (vl.write_db_and_declaration() == VLA_ERR_NOERR);
 

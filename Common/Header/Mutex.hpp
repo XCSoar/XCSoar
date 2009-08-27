@@ -35,45 +35,41 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_PROTECTION_HPP
-#define XCSOAR_PROTECTION_HPP
+#ifndef XCSOAR_MUTEX_HXX
+#define XCSOAR_MUTEX_HXX
 
-#include "Trigger.hpp"
-#include "Mutex.hpp"
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
 
-extern Mutex mutexFlightData;
-extern Mutex mutexEventQueue;
-extern Mutex mutexTerrainDataGraphics;
-extern Mutex mutexTerrainDataCalculations;
-extern Mutex mutexNavBox;
-extern Mutex mutexComm;
-extern Mutex mutexTaskData;
-
-void TriggerGPSUpdate();
-void TriggerVarioUpdate();
-void TriggerRedraws(void);
-void TriggerAll(void);
-void CreateCalculationThread(void);
-
-///////
-// changed only in config or by user interface /////////////////////////////
-// used in settings dialog
-extern BOOL COMPORTCHANGED;
-extern BOOL AIRSPACEFILECHANGED;
-extern BOOL WAYPOINTFILECHANGED;
-extern BOOL TERRAINFILECHANGED;
-extern BOOL AIRFIELDFILECHANGED;
-extern BOOL TOPOLOGYFILECHANGED;
-extern BOOL POLARFILECHANGED;
-extern BOOL LANGUAGEFILECHANGED;
-extern BOOL STATUSFILECHANGED;
-extern BOOL INPUTFILECHANGED;
-extern BOOL MAPFILECHANGED;
-
-extern Trigger drawTriggerEvent;
-extern Trigger closeTriggerEvent;
-extern Trigger globalRunningEvent;
-extern Trigger airspaceWarningEvent;
+/**
+ * This class wraps an OS specific mutex.  It is an object which one
+ * thread can wait for, and another thread can wake it up.
+ */
+class Mutex {
+  CRITICAL_SECTION handle;
+public:
+  /**
+   * Initializes the trigger.
+   *
+   * @param name an application specific name for this trigger
+   */
+  Mutex():refcount(0) {
+    ::InitializeCriticalSection(&handle);
+  }
+  ~Mutex() {
+    ::DeleteCriticalSection(&handle);
+  }
+public:
+  void Lock() {
+    EnterCriticalSection(&handle);
+    refcount++;
+  };
+  void Unlock() {
+    refcount--;
+    LeaveCriticalSection(&handle);
+  }
+private:
+  int refcount;
+};
 
 #endif
-

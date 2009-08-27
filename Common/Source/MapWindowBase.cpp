@@ -65,17 +65,17 @@ void MapWindowBase::CreateDrawingThread(void)
 
 void MapWindowBase::SuspendDrawingThread(void)
 {
-  LockTerrainDataGraphics();
+  mutexTerrainDataGraphics.Lock();
   THREADRUNNING = false;
-  UnlockTerrainDataGraphics();
+  mutexTerrainDataGraphics.Unlock();
   //  SuspendThread(hDrawThread);
 }
 
 void MapWindowBase::ResumeDrawingThread(void)
 {
-  LockTerrainDataGraphics();
+  mutexTerrainDataGraphics.Lock();
   THREADRUNNING = true;
-  UnlockTerrainDataGraphics();
+  mutexTerrainDataGraphics.Unlock();
   //  ResumeThread(hDrawThread);
 }
 
@@ -83,8 +83,8 @@ void MapWindowBase::CloseDrawingThread(void)
 {
   closeTriggerEvent.trigger();
   drawTriggerEvent.trigger(); // wake self up
-  LockTerrainDataGraphics();
+  mutexTerrainDataGraphics.Lock();
   SuspendDrawingThread();
-  UnlockTerrainDataGraphics();
+  mutexTerrainDataGraphics.Unlock();
   WaitForSingleObject(hDrawThread, INFINITE);
 }

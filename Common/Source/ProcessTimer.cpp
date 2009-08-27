@@ -141,9 +141,9 @@ void CommonProcessTimer()
 
 
 int ConnectionProcessTimer(int itimeout) {
-  LockComm();
+  mutexComm.Lock();
   NMEAParser::UpdateMonitor();
-  UnlockComm();
+  mutexComm.Unlock();
 
   static BOOL LastGPSCONNECT = FALSE;
   static BOOL CONNECTWAIT = FALSE;
@@ -162,9 +162,9 @@ int ConnectionProcessTimer(int itimeout) {
   if (!extGPSCONNECT) {
     // if gps is not connected, set navwarning to true so
     // calculations flight timers don't get updated
-    LockFlightData();
+    mutexFlightData.Lock();
     GPS_INFO.NAVWarning = true;
-    UnlockFlightData();
+    mutexFlightData.Unlock();
   }
 
   GPSCONNECT = FALSE;
@@ -334,7 +334,7 @@ void SIMProcessTimer(void)
 
     if (i%2==0) return;
 
-    LockFlightData();
+    mutexFlightData.Lock();
 
     GPS_INFO.NAVWarning = FALSE;
     GPS_INFO.SatellitesUsed = 6;
@@ -348,7 +348,7 @@ void SIMProcessTimer(void)
     GPS_INFO.Minute = (tsec-GPS_INFO.Hour*3600)/60;
     GPS_INFO.Second = (tsec-GPS_INFO.Hour*3600-GPS_INFO.Minute*60);
 
-    UnlockFlightData();
+    mutexFlightData.Unlock();
   }
 
   if (i%2==0) return;

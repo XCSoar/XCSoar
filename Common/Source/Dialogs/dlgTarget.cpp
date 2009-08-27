@@ -82,7 +82,7 @@ static void MoveTarget(double adjust_angle) {
   if (!ValidTaskPoint(target_point+1)) return;
   if (target_point < ActiveWayPoint) return;
 
-  LockTaskData();
+  mutexTaskData.Lock();
 
   double target_latitude, target_longitude;
   double bearing, distance;
@@ -161,7 +161,7 @@ static void MoveTarget(double adjust_angle) {
       TargetModified = true;
     }
   }
-  UnlockTaskData();
+  mutexTaskData.Unlock();
 }
 
 
@@ -172,7 +172,7 @@ static void DragTarget(double target_longitude, double target_latitude) {
   if (!ValidTaskPoint(target_point+1)) return;
   if (target_point < ActiveWayPoint) return;
 
-  LockTaskData();
+  mutexTaskData.Lock();
 
   double distance, bearing;
 
@@ -236,7 +236,7 @@ static void DragTarget(double target_longitude, double target_latitude) {
       TargetModified = true;
     }
   }
-  UnlockTaskData();
+  mutexTaskData.Unlock();
 }
 
 
@@ -440,7 +440,7 @@ static void OnRangeData(DataField *Sender, DataField::DataAccessKind_t Mode) {
     break;
     case DataField::daPut:
     case DataField::daChange:
-      LockTaskData();
+      mutexTaskData.Lock();
       if (target_point>=ActiveWayPoint) {
         RangeNew = Sender->GetAsFloat()/100.0;
         if (RangeNew != Range) {
@@ -449,7 +449,7 @@ static void OnRangeData(DataField *Sender, DataField::DataAccessKind_t Mode) {
           updated = true;
         }
       }
-      UnlockTaskData();
+      mutexTaskData.Unlock();
       if (updated) {
         TaskModified = true;
         TargetModified = true;
@@ -470,7 +470,7 @@ static void OnRadialData(DataField *Sender, DataField::DataAccessKind_t Mode) {
     break;
     case DataField::daPut:
     case DataField::daChange:
-      LockTaskData();
+      mutexTaskData.Lock();
       if (target_point>=ActiveWayPoint) {
         if (!CALCULATED_INFO.IsInSector || (target_point != ActiveWayPoint)) {
           dowrap = true;
@@ -495,7 +495,7 @@ static void OnRadialData(DataField *Sender, DataField::DataAccessKind_t Mode) {
           updated = true;
         }
       }
-      UnlockTaskData();
+      mutexTaskData.Unlock();
       if (updated) {
         TaskModified = true;
         TargetModified = true;
@@ -507,7 +507,7 @@ static void OnRadialData(DataField *Sender, DataField::DataAccessKind_t Mode) {
 
 
 static void RefreshTargetPoint(void) {
-  LockTaskData();
+  mutexTaskData.Lock();
   target_point = max(target_point, ActiveWayPoint);
   if (ValidTaskPoint(target_point)) {
     MapWindow::SetTargetPan(true, target_point);
@@ -517,7 +517,7 @@ static void RefreshTargetPoint(void) {
     Range = 0;
     Radial = 0;
   }
-  UnlockTaskData();
+  mutexTaskData.Unlock();
   RefreshCalculator();
 }
 
@@ -614,7 +614,7 @@ void dlgTarget(void) {
   dfe = (DataFieldEnum*)wp->GetDataField();
   TCHAR tp_label[80];
   TCHAR tp_short[21];
-  LockTaskData();
+  mutexTaskData.Lock();
   if (!ValidTaskPoint(target_point)) {
     target_point = ActiveWayPointOnEntry;
   } else {
@@ -633,7 +633,7 @@ void dlgTarget(void) {
     }
   }
   dfe->Set(max(0,target_point-ActiveWayPointOnEntry));
-  UnlockTaskData();
+  mutexTaskData.Unlock();
   wp->RefreshDisplay();
 
   RefreshTargetPoint();

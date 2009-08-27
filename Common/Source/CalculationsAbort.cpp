@@ -120,7 +120,7 @@ void SortLandableWaypoints(NMEA_INFO *Basic,
   if (!WayPointList) return;
 
   //  LockFlightData();
-  LockTaskData();
+  mutexTaskData.Lock();
   active_waypoint_on_entry = ActiveWayPoint;
 
   // Do preliminary fast search
@@ -363,6 +363,6 @@ void SortLandableWaypoints(NMEA_INFO *Basic,
   if (active_waypoint_on_entry != ActiveWayPoint){
     SelectedWaypoint = ActiveWayPoint;
   }
-  UnlockTaskData();
+  mutexTaskData.Unlock();
   //  UnlockFlightData();
 }

@@ -118,14 +118,14 @@ void MapWindow::CalculateScreenPositions(POINT Orig, RECT rc,
   CalculateScreenPositionsWaypoints();
   CalculateScreenPositionsTask();
 
-  LockTaskData();
+  mutexTaskData.Lock();
   if(TrailActive)
   {
     iSnailNext = SnailNext;
     // set this so that new data doesn't arrive between calculating
     // this and the screen updates
   }
-  UnlockTaskData();
+  mutexTaskData.Unlock();
 
 }
 

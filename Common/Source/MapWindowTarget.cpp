@@ -52,7 +52,7 @@ bool MapWindow::SetTargetPan(bool do_pan, int target_point) {
   static bool old_pan=false;
   static bool old_fullscreen=false;
 
-  LockTaskData(); // protect thread because some target stuff used in mapwindow thread
+  mutexTaskData.Lock(); // protect thread because some target stuff used in mapwindow thread
 
   if (!TargetPan || (TargetPanIndex != target_point)) {
     TargetDrag_State = 0;
@@ -73,7 +73,7 @@ bool MapWindow::SetTargetPan(bool do_pan, int target_point) {
     SwitchZoomClimb();
   }
   if (do_pan) {
-    LockTaskData();
+    mutexTaskData.Lock();
     if (ValidTaskPoint(target_point)) {
       PanLongitude = WayPointList[Task[target_point].Index].Longitude;
       PanLatitude = WayPointList[Task[target_point].Index].Latitude;
@@ -91,7 +91,7 @@ bool MapWindow::SetTargetPan(bool do_pan, int target_point) {
         TargetZoomDistance = max(2e3, SectorRadius*2);
       }
     }
-    UnlockTaskData();
+    mutexTaskData.Unlock();
   } else if (TargetPan) {
     PanLongitude = old_longitude;
     PanLatitude = old_latitude;
@@ -104,7 +104,7 @@ bool MapWindow::SetTargetPan(bool do_pan, int target_point) {
   }
   TargetPan = do_pan;
 
-  UnlockTaskData();
+  mutexTaskData.Unlock();
 
   return old_pan;
 };
@@ -112,7 +112,7 @@ bool MapWindow::SetTargetPan(bool do_pan, int target_point) {
 
 bool MapWindow::TargetDragged(double *longitude, double *latitude) {
   bool retval = false;
-  LockTaskData();
+  mutexTaskData.Lock();
   if (TargetDrag_State >0) { // always return true if we're dragging
 			     // or just stopped dragging, so screen is
 			     // updated
@@ -123,7 +123,7 @@ bool MapWindow::TargetDragged(double *longitude, double *latitude) {
     }
     retval = true;
   }
-  UnlockTaskData();
+  mutexTaskData.Unlock();
   return retval;
 }
 

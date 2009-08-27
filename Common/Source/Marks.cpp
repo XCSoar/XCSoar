@@ -63,7 +63,7 @@ void InitialiseMarks() {
 
   StartupStore(TEXT("Initialise marks\n"));
 
-  LockTerrainDataGraphics();
+  mutexTerrainDataGraphics.Lock();
 
   // TODO code: - This convert to non-unicode will not support all languages
   //		(some may use more complicated PATH names, containing Unicode)
@@ -83,25 +83,25 @@ void InitialiseMarks() {
     topo_marks->scaleThreshold = 30.0;
     topo_marks->loadBitmap(IDB_MARK);
   }
-  UnlockTerrainDataGraphics();
+  mutexTerrainDataGraphics.Unlock();
 }
 
 
 void CloseMarks() {
   StartupStore(TEXT("CloseMarks\n"));
-  LockTerrainDataGraphics();
+  mutexTerrainDataGraphics.Lock();
   if (topo_marks) {
     topo_marks->DeleteFiles();
     delete topo_marks;
     topo_marks = NULL;
   }
-  UnlockTerrainDataGraphics();
+  mutexTerrainDataGraphics.Unlock();
 }
 
 
 void MarkLocation(const double lon, const double lat)
 {
-  LockTerrainDataGraphics();
+  mutexTerrainDataGraphics.Lock();
 
 #ifndef DISABLEAUDIO
   if (EnableSoundModes) {
@@ -112,7 +112,7 @@ void MarkLocation(const double lon, const double lat)
     topo_marks->addPoint(lon, lat);
     topo_marks->triggerUpdateCache = true;
   }
-  UnlockTerrainDataGraphics();
+  mutexTerrainDataGraphics.Unlock();
 
   //////////
 
@@ -138,7 +138,7 @@ void MarkLocation(const double lon, const double lat)
 void DrawMarks (const HDC hdc, const RECT rc)
 {
 
-  LockTerrainDataGraphics();
+  mutexTerrainDataGraphics.Lock();
   if (topo_marks) {
     if (reset_marks) {
       topo_marks->Reset();
@@ -146,7 +146,7 @@ void DrawMarks (const HDC hdc, const RECT rc)
     }
     topo_marks->Paint(hdc, rc);
   }
-  UnlockTerrainDataGraphics();
+  mutexTerrainDataGraphics.Unlock();
 
 }
 

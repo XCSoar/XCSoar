@@ -207,7 +207,7 @@ static void GetWaypointValues(void) {
   }
 
   if ((twItemIndex<MAXTASKPOINTS)&&(twItemIndex>=0)) {
-    LockTaskData();
+    mutexTaskData.Lock();
     wp = (WndProperty*)wf->FindByName(TEXT("prpAATType"));
     if (wp) {
       CHECK_CHANGED(Task[twItemIndex].AATType,
@@ -240,7 +240,7 @@ static void GetWaypointValues(void) {
     if (changed) {
       TaskModified = true;
     }
-    UnlockTaskData();
+    mutexTaskData.Unlock();
 
   }
 }
@@ -302,7 +302,7 @@ static void ReadValues(void) {
   WndProperty* wp;
   bool changed = false;
 
-  LockTaskData();
+  mutexTaskData.Lock();
   wp = (WndProperty*)wf->FindByName(TEXT("prpEnableMultipleStartPoints"));
   if (wp) {
     CHECK_CHANGED(EnableMultipleStartPoints,
@@ -369,7 +369,7 @@ static void ReadValues(void) {
     TaskModified = true;
   }
 
-  UnlockTaskData();
+  mutexTaskData.Unlock();
 
 }
 
@@ -397,7 +397,7 @@ static void OnSelectClicked(WindowControl * Sender){
     SelectedWaypoint = res;
     if (Task[twItemIndex].Index != res) {
       if (CheckDeclaration()) {
-        LockTaskData();
+        mutexTaskData.Lock();
 	Task[twItemIndex].Index = res;
         Task[twItemIndex].AATTargetOffsetRadius = 0.0;
         Task[twItemIndex].AATTargetOffsetRadial = 0.0;
@@ -405,7 +405,7 @@ static void OnSelectClicked(WindowControl * Sender){
         Task[twItemIndex].AATCircleRadius = SectorRadius;
         Task[twItemIndex].AATTargetLocked = false;
         TaskModified = true;
-        UnlockTaskData();
+        mutexTaskData.Unlock();
       }
     }
     UpdateCaption();
@@ -425,19 +425,19 @@ static void OnStartPointClicked(WindowControl * Sender){
 
 static void OnMoveAfterClicked(WindowControl * Sender){
 	(void)Sender;
-  LockTaskData();
+  mutexTaskData.Lock();
   SwapWaypoint(twItemIndex);
   SetWaypointValues();
-  UnlockTaskData();
+  mutexTaskData.Unlock();
   wf->SetModalResult(mrOK);
 }
 
 static void OnMoveBeforeClicked(WindowControl * Sender){
 	(void)Sender;
-  LockTaskData();
+  mutexTaskData.Lock();
   SwapWaypoint(twItemIndex-1);
   SetWaypointValues();
-  UnlockTaskData();
+  mutexTaskData.Unlock();
   wf->SetModalResult(mrOK);
 }
 
@@ -449,7 +449,7 @@ static void OnDetailsClicked(WindowControl * Sender){
 
 static void OnRemoveClicked(WindowControl * Sender) {
 	(void)Sender;
-  LockTaskData();
+  mutexTaskData.Lock();
   RemoveTaskPoint(twItemIndex);
   SetWaypointValues();
   if (ActiveWayPoint>=twItemIndex) {
@@ -458,7 +458,7 @@ static void OnRemoveClicked(WindowControl * Sender) {
   if (ActiveWayPoint<0) {
     ActiveWayPoint= -1;
   }
-  UnlockTaskData();
+  mutexTaskData.Unlock();
   wf->SetModalResult(mrOK);
 }
 

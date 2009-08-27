@@ -57,14 +57,14 @@ int AutoWindMode= D_AUTOWIND_CIRCLING;
 
 
 void InitialiseCalculationsWind() {
-  LockFlightData();
+  mutexFlightData.Lock();
   if (!windanalyser) {
     windanalyser = new WindAnalyser();
 
     //JMW TODO enhancement: seed initial wind store with start conditions
     // SetWindEstimate(Calculated->WindSpeed,Calculated->WindBearing, 1);
   }
-  UnlockFlightData();
+  mutexFlightData.Unlock();
 }
 
 void CloseCalculationsWind() {
@@ -91,11 +91,11 @@ void DoWindZigZag(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
       Vector v_wind;
       v_wind.x = zz_wind_speed*cos(zz_wind_bearing*3.1415926/180.0);
       v_wind.y = zz_wind_speed*sin(zz_wind_bearing*3.1415926/180.0);
-      LockFlightData();
+      mutexFlightData.Lock();
       if (windanalyser) {
 	windanalyser->slot_newEstimate(Basic, Calculated, v_wind, quality);
       }
-      UnlockFlightData();
+      mutexFlightData.Unlock();
     }
   }
 }
@@ -104,25 +104,25 @@ void DoWindZigZag(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
 void DoWindCirclingMode(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
 			bool left) {
   if ((AutoWindMode & D_AUTOWIND_CIRCLING)==D_AUTOWIND_CIRCLING) {
-    LockFlightData();
+    mutexFlightData.Lock();
     windanalyser->slot_newFlightMode(Basic, Calculated, left, 0);
-    UnlockFlightData();
+    mutexFlightData.Unlock();
   }
 }
 
 void DoWindCirclingSample(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   if ((AutoWindMode & D_AUTOWIND_CIRCLING)==D_AUTOWIND_CIRCLING) {
-    LockFlightData();
+    mutexFlightData.Lock();
     windanalyser->slot_newSample(Basic, Calculated);
-    UnlockFlightData();
+    mutexFlightData.Unlock();
   }
 }
 
 void DoWindCirclingAltitude(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   if (AutoWindMode>0) {
-    LockFlightData();
+    mutexFlightData.Lock();
     windanalyser->slot_Altitude(Basic, Calculated);
-    UnlockFlightData();
+    mutexFlightData.Unlock();
   }
 }
 
@@ -134,10 +134,10 @@ void  SetWindEstimate(const double wind_speed,
   Vector v_wind;
   v_wind.x = wind_speed*cos(wind_bearing*3.1415926/180.0);
   v_wind.y = wind_speed*sin(wind_bearing*3.1415926/180.0);
-  LockFlightData();
+  mutexFlightData.Lock();
   if (windanalyser) {
     windanalyser->slot_newEstimate(&GPS_INFO, &CALCULATED_INFO,
                                    v_wind, quality);
   }
-  UnlockFlightData();
+  mutexFlightData.Unlock();
 }

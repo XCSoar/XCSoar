@@ -48,7 +48,7 @@ extern int  ActiveAlternate; // from InfoBoxManager
 
 const TCHAR *FormatterWaypoint::Render(int *color) {
   int thewaypoint = ActiveWayPoint;
-  LockTaskData();
+  mutexTaskData.Lock();
   if(ValidTaskPoint(thewaypoint))
     {
       int index = Task[thewaypoint].Index;
@@ -79,7 +79,7 @@ const TCHAR *FormatterWaypoint::Render(int *color) {
       Valid = false;
       RenderInvalid(color);
     }
-  UnlockTaskData();
+  mutexTaskData.Unlock();
 
   return(Text);
 }
@@ -87,7 +87,7 @@ const TCHAR *FormatterWaypoint::Render(int *color) {
 // VENTA3 Alternate destinations
 const TCHAR *FormatterAlternate::RenderTitle(int *color) {
 
-  LockTaskData();
+  mutexTaskData.Lock();
   if(ValidWayPoint(ActiveAlternate))
     {
       if ( DisplayTextType == DISPLAYFIRSTTHREE)
@@ -112,7 +112,7 @@ const TCHAR *FormatterAlternate::RenderTitle(int *color) {
       Valid = false;
       RenderInvalid(color);
     }
-  UnlockTaskData();
+  mutexTaskData.Unlock();
 
   return(Text);
 }
@@ -124,7 +124,7 @@ const TCHAR *FormatterAlternate::RenderTitle(int *color) {
 const TCHAR *
 FormatterAlternate::Render(int *color)
 {
-  LockTaskData();
+  mutexTaskData.Lock();
   if(Valid && ValidWayPoint(ActiveAlternate)) {
 	switch (WayPointCalc[ActiveAlternate].VGR ) {
 		case 0:
@@ -161,13 +161,13 @@ FormatterAlternate::Render(int *color)
 	Valid = false;
 	RenderInvalid(color);
   }
-   UnlockTaskData();
+   mutexTaskData.Unlock();
    return(Text);
 }
 
 
 void FormatterAlternate::AssignValue(int i) {
-  LockTaskData();
+  mutexTaskData.Lock();
    switch (i) {
    case 67:
      if (!EnableAlternate1) { // first run, activate calculations
@@ -221,5 +221,5 @@ void FormatterAlternate::AssignValue(int i) {
 	  }
    }
 
-   UnlockTaskData();
+   mutexTaskData.Unlock();
 }

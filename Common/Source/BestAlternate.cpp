@@ -116,7 +116,7 @@ void SearchBestAlternate(NMEA_INFO *Basic,
   if (searchrange > ALTERNATE_MAXRANGE)
     searchrange=ALTERNATE_MAXRANGE;
 
-  LockTaskData();
+  mutexTaskData.Lock();
   active_bestalternate_on_entry = BestAlternate;
 
   // Do preliminary fast search
@@ -456,7 +456,7 @@ void SearchBestAlternate(NMEA_INFO *Basic,
     //		if (EnableSoundModes) PlayResource(TEXT("IDR_WAV_GREEN"));
   }
 
-  UnlockTaskData();
+  mutexTaskData.Unlock();
 }
 
 /*

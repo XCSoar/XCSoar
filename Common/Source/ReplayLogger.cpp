@@ -371,7 +371,7 @@ bool ReplayLogger::UpdateInternal(void) {
 
     if ((SpeedX>0) && (LatX != LatX1) && (LonX != LonX1)) {
 
-      LockFlightData();
+      mutexFlightData.Lock();
       if (init) {
         flightstats.Reset();
       }
@@ -382,7 +382,7 @@ bool ReplayLogger::UpdateInternal(void) {
       GPS_INFO.Altitude = AltX;
       GPS_INFO.BaroAltitude = AltX;
       GPS_INFO.Time = tthis;
-      UnlockFlightData();
+      mutexFlightData.Unlock();
     } else {
       // This is required in case the integrator fails,
       // which can occur due to parsing faults
@@ -403,11 +403,11 @@ bool ReplayLogger::UpdateInternal(void) {
 void ReplayLogger::Stop(void) {
   ReadLine(NULL); // close the file
   if (Enabled) {
-    LockFlightData();
+    mutexFlightData.Lock();
     GPS_INFO.Speed = 0;
     //    GPS_INFO.Time = 0;
     NumLoggerBuffered = 0;
-    UnlockFlightData();
+    mutexFlightData.Unlock();
   }
   Enabled = false;
 }

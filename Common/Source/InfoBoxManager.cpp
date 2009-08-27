@@ -469,7 +469,7 @@ void DisplayText(void)
     LastFlipBoxTime = 0;
   }
 
-  LockNavBox();
+  mutexNavBox.Lock();
 
   // JMW note: this is updated every GPS time step
 
@@ -834,7 +834,7 @@ void DisplayText(void)
 
   first = false;
 
-  UnlockNavBox();
+  mutexNavBox.Unlock();
 }
 
 
@@ -847,16 +847,16 @@ void DoInfoKey(int keycode) {
 
   HideMenu();
 
-  LockNavBox();
+  mutexNavBox.Lock();
   i = getInfoType(InfoFocus);
 
   // XXX This could crash if MapWindow does not capture
 
-  LockFlightData();
+  mutexFlightData.Lock();
   Data_Options[min(NUMSELECTSTRINGS-1,i)].Process(keycode);
-  UnlockFlightData();
+  mutexFlightData.Unlock();
 
-  UnlockNavBox();
+  mutexNavBox.Unlock();
 
   InfoBoxesDirty = true;
 
@@ -952,11 +952,11 @@ void InfoBoxProcessTimer(void) {
 
 void InfoBoxDrawIfDirty(void) {
   if (InfoBoxesDirty) {
-    //JMWTEST    LockFlightData();
+    //JMWTEST    mutexFlightData.Lock();
     AssignValues();
     DisplayText();
     InfoBoxesDirty = false;
-    //JMWTEST    UnlockFlightData();
+    //JMWTEST    mutexFlightData.Unlock();
   }
 }
 

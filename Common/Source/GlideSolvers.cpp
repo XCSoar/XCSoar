@@ -331,7 +331,7 @@ static double EffectiveMacCready_internal(NMEA_INFO *Basic, DERIVED_INFO *Calcul
     return 0;
   }
 
-  LockTaskData();
+  mutexTaskData.Lock();
 
   double start_speed = Calculated->TaskStartSpeed;
   double V_bestld = GlidePolar::Vbestld;
@@ -469,7 +469,7 @@ static double EffectiveMacCready_internal(NMEA_INFO *Basic, DERIVED_INFO *Calcul
 
   }
 
-  UnlockTaskData();
+  mutexTaskData.Unlock();
 
   return value_found;
 }

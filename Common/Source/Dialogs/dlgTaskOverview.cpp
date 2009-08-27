@@ -88,7 +88,7 @@ static void UpdateFilePointer(void) {
 static void UpdateCaption (void) {
   TCHAR title[MAX_PATH];
   TCHAR name[MAX_PATH] = TEXT("\0");
-  LockTaskData();
+  mutexTaskData.Lock();
   int len = _tcslen(LastTaskFileName);
   if (len>0) {
     int index = 0;
@@ -104,7 +104,7 @@ static void UpdateCaption (void) {
     }
     name[index]= _T('\0');
   }
-  UnlockTaskData();
+  mutexTaskData.Unlock();
 
   if (_tcslen(name)>0) {
     _stprintf(title, TEXT("%s: %s"),
@@ -127,7 +127,7 @@ static void OnTaskPaintListItem(WindowControl * Sender, HDC hDC){
   (void)Sender;
   int n = UpLimit - LowLimit;
   TCHAR sTmp[120];
-  LockTaskData();
+  mutexTaskData.Lock();
 
   int w0;
   if (InfoBoxLayout::landscape) {
@@ -226,13 +226,13 @@ static void OnTaskPaintListItem(WindowControl * Sender, HDC hDC){
       }
     }
   }
-  UnlockTaskData();
+  mutexTaskData.Unlock();
 
 }
 
 
 static void OverviewRefreshTask(void) {
-  LockTaskData();
+  mutexTaskData.Lock();
   RefreshTask();
 
   int i;
@@ -281,7 +281,7 @@ static void OverviewRefreshTask(void) {
   wTaskList->Redraw();
 
   UpdateCaption();
-  UnlockTaskData();
+  mutexTaskData.Unlock();
 
 }
 
@@ -316,7 +316,7 @@ static void OnTaskListEnter(WindowControl * Sender,
         }
       }
 
-      LockTaskData();
+      mutexTaskData.Lock();
       if (ItemIndex>0) {
 	Task[ItemIndex].Index = Task[0].Index;
       } else {
@@ -326,11 +326,11 @@ static void OnTaskListEnter(WindowControl * Sender,
 	  Task[ItemIndex].Index = -1;
 	}
       }
-      UnlockTaskData();
+      mutexTaskData.Unlock();
 
       int res;
       res = dlgWayPointSelect();
-      LockTaskData();
+      mutexTaskData.Lock();
       if (res != -1){
         Task[ItemIndex].Index = res;
       }
@@ -339,7 +339,7 @@ static void OnTaskListEnter(WindowControl * Sender,
       Task[ItemIndex].AATSectorRadius = SectorRadius;
       Task[ItemIndex].AATCircleRadius = SectorRadius;
       Task[ItemIndex].AATTargetLocked = false;
-      UnlockTaskData();
+      mutexTaskData.Unlock();
 
       if (ItemIndex==0) {
 	dlgTaskWaypointShowModal(ItemIndex, 0, true); // start waypoint

@@ -55,7 +55,7 @@ void DebugStore(const char *Str, ...)
   len = vsprintf(buf, Str, ap);
   va_end(ap);
 
-  LockFlightData();
+  mutexFlightData.Lock();
   FILE *stream;
   TCHAR szFileName[] = TEXT("xcsoar-debug.log");
   static bool initialised = false;
@@ -69,7 +69,7 @@ void DebugStore(const char *Str, ...)
   fwrite(buf,len,1,stream);
 
   fclose(stream);
-  UnlockFlightData();
+  mutexFlightData.Unlock();
 }
 #endif /* !NDEBUG */
 
@@ -82,9 +82,7 @@ void StartupStore(const TCHAR *Str, ...)
   _vstprintf(buf, Str, ap);
   va_end(ap);
 
-  if (csFlightDataInitialized) {
-    LockFlightData();
-  }
+  mutexFlightData.Lock();
   FILE *startupStoreFile = NULL;
   static TCHAR szFileName[MAX_PATH];
   static bool initialised = false;
@@ -105,7 +103,5 @@ void StartupStore(const TCHAR *Str, ...)
     fprintf(startupStoreFile, "%S", buf);
     fclose(startupStoreFile);
   }
-  if (csFlightDataInitialized) {
-    UnlockFlightData();
-  }
+  mutexFlightData.Unlock();
 }

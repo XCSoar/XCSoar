@@ -420,10 +420,10 @@ BOOL devPutMacCready(PDeviceDescriptor_t d, double MacCready)
 
   if (fSimMode)
     return TRUE;
-  LockComm();
+  mutexComm.Lock();
   if (d && d->Driver && d->Driver->PutMacCready)
     result = d->Driver->PutMacCready(d, MacCready);
-  UnlockComm();
+  mutexComm.Unlock();
 
   return result;
 }
@@ -434,10 +434,10 @@ BOOL devPutBugs(PDeviceDescriptor_t d, double Bugs)
 
   if (fSimMode)
     return TRUE;
-  LockComm();
+  mutexComm.Lock();
   if (d && d->Driver && d->Driver->PutBugs)
     result = d->Driver->PutBugs(d, Bugs);
-  UnlockComm();
+  mutexComm.Unlock();
 
   return result;
 }
@@ -448,16 +448,16 @@ BOOL devPutBallast(PDeviceDescriptor_t d, double Ballast)
 
   if (fSimMode)
     return TRUE;
-  LockComm();
+  mutexComm.Lock();
   if (d && d->Driver && d->Driver->PutBallast)
     result = d->Driver->PutBallast(d, Ballast);
-  UnlockComm();
+  mutexComm.Unlock();
 
   return result;
 }
 
 // Only called from devInit() above which
-// is in turn called with LockComm
+// is in turn called with mutexComm.Lock
 BOOL devOpen(PDeviceDescriptor_t d, int Port){
   BOOL res = TRUE;
 
@@ -497,7 +497,7 @@ BOOL devLinkTimeout(PDeviceDescriptor_t d)
 
   if (fSimMode)
     return TRUE;
-  LockComm();
+  mutexComm.Lock();
   if (d == NULL){
     for (int i=0; i<NUMDEV; i++){
       d = &DeviceList[i];
@@ -509,7 +509,7 @@ BOOL devLinkTimeout(PDeviceDescriptor_t d)
     if (d->Driver && d->Driver->LinkTimeout != NULL)
       result = d->Driver->LinkTimeout(d);
   }
-  UnlockComm();
+  mutexComm.Unlock();
 
   return FALSE;
 }
@@ -519,7 +519,7 @@ BOOL devPutVoice(PDeviceDescriptor_t d, TCHAR *Sentence)
 {
   BOOL result = FALSE;
 
-  LockComm();
+  mutexComm.Lock();
   if (d == NULL){
     for (int i=0; i<NUMDEV; i++){
       d = &DeviceList[i];
@@ -531,7 +531,7 @@ BOOL devPutVoice(PDeviceDescriptor_t d, TCHAR *Sentence)
     if (d->Driver && d->Driver->PutVoice)
       result = d->Driver->PutVoice(d, Sentence);
   }
-  UnlockComm();
+  mutexComm.Unlock();
 
   return FALSE;
 }
@@ -542,7 +542,7 @@ BOOL devDeclare(PDeviceDescriptor_t d, Declaration_t *decl)
 
   if (fSimMode)
     return TRUE;
-  LockComm();
+  mutexComm.Lock();
   if (d) {
     if ((d->Driver) && (d->Driver->Declare != NULL))
       result = d->Driver->Declare(d, decl);
@@ -550,7 +550,7 @@ BOOL devDeclare(PDeviceDescriptor_t d, Declaration_t *decl)
     if (NMEAParser::PortIsFlarm(d->Port))
       result |= FlarmDeclare(d, decl);
   }
-  UnlockComm();
+  mutexComm.Unlock();
 
   return result;
 }
@@ -559,7 +559,7 @@ BOOL devIsLogger(PDeviceDescriptor_t d)
 {
   bool result = false;
 
-  LockComm();
+  mutexComm.Lock();
   if (d && d->Driver) {
     if (d->Driver->IsLogger)
       result = d->Driver->IsLogger(d);
@@ -568,7 +568,7 @@ BOOL devIsLogger(PDeviceDescriptor_t d)
     if (!result)
       result |= NMEAParser::PortIsFlarm(d->Port);
   }
-  UnlockComm();
+  mutexComm.Unlock();
 
   return result;
 }
@@ -577,14 +577,14 @@ BOOL devIsGPSSource(PDeviceDescriptor_t d)
 {
   BOOL result = FALSE;
 
-  LockComm();
+  mutexComm.Lock();
   if (d && d->Driver) {
     if (d->Driver->IsGPSSource)
       result = d->Driver->IsGPSSource(d);
     else
       result = d->Driver->Flags & drfGPS ? TRUE : FALSE;
   }
-  UnlockComm();
+  mutexComm.Unlock();
 
   return result;
 }
@@ -593,14 +593,14 @@ BOOL devIsBaroSource(PDeviceDescriptor_t d)
 {
   BOOL result = FALSE;
 
-  LockComm();
+  mutexComm.Lock();
   if (d && d->Driver) {
     if (d->Driver->IsBaroSource)
       result = d->Driver->IsBaroSource(d);
     else
       result = d->Driver->Flags & drfBaroAlt ? TRUE : FALSE;
   }
-  UnlockComm();
+  mutexComm.Unlock();
 
   return result;
 }
@@ -609,11 +609,11 @@ BOOL devIsRadio(PDeviceDescriptor_t d)
 {
   BOOL result = FALSE;
 
-  LockComm();
+  mutexComm.Lock();
   if (d && d->Driver) {
     result = d->Driver->Flags & drfRadio ? TRUE : FALSE;
   }
-  UnlockComm();
+  mutexComm.Unlock();
 
   return result;
 }
@@ -623,11 +623,11 @@ BOOL devIsCondor(PDeviceDescriptor_t d)
 {
   BOOL result = FALSE;
 
-  LockComm();
+  mutexComm.Lock();
   if (d && d->Driver) {
     result = d->Driver->Flags & drfCondor ? TRUE : FALSE;
   }
-  UnlockComm();
+  mutexComm.Unlock();
 
   return result;
 }
@@ -654,7 +654,7 @@ BOOL devPutQNH(DeviceDescriptor_t *d, double NewQNH)
 {
   BOOL result = FALSE;
 
-  LockComm();
+  mutexComm.Lock();
   if (d == NULL){
     for (int i=0; i<NUMDEV; i++){
       d = &DeviceList[i];
@@ -666,7 +666,7 @@ BOOL devPutQNH(DeviceDescriptor_t *d, double NewQNH)
     if (d->Driver && d->Driver->PutQNH)
       result = d->Driver->PutQNH(d, NewQNH);
   }
-  UnlockComm();
+  mutexComm.Unlock();
 
   return FALSE;
 }
@@ -675,7 +675,7 @@ void devTick()
 {
   int i;
 
-  LockComm();
+  mutexComm.Lock();
   for (i = 0; i < NUMDEV; i++) {
     DeviceDescriptor_t *d = &DeviceList[i];
     if (!d->Driver)
@@ -687,7 +687,7 @@ void devTick()
     if (d->ticker && d->Driver->OnSysTicker)
       d->Driver->OnSysTicker(d);
   }
-  UnlockComm();
+  mutexComm.Unlock();
 }
 
 static void devFormatNMEAString(TCHAR *dst, size_t sz, const TCHAR *text)
@@ -707,10 +707,10 @@ void devWriteNMEAString(PDeviceDescriptor_t d, const TCHAR *text)
 
   devFormatNMEAString(tmp, 512, text);
 
-  LockComm();
+  mutexComm.Lock();
   if (d->Com)
     d->Com->WriteString(tmp);
-  UnlockComm();
+  mutexComm.Unlock();
 }
 
 void VarioWriteNMEA(const TCHAR *text)
@@ -719,12 +719,12 @@ void VarioWriteNMEA(const TCHAR *text)
 
   devFormatNMEAString(tmp, 512, text);
 
-  LockComm();
+  mutexComm.Lock();
   for (int i = 0; i < NUMDEV; i++)
     if (_tcscmp(DeviceList[i].Name, TEXT("Vega")) == 0)
       if (DeviceList[i].Com)
         DeviceList[i].Com->WriteString(tmp);
-  UnlockComm();
+  mutexComm.Unlock();
 }
 
 PDeviceDescriptor_t devVarioFindVega(void)
@@ -742,10 +742,10 @@ BOOL devPutVolume(PDeviceDescriptor_t d, int Volume)
 
   if (fSimMode)
     return TRUE;
-  LockComm();
+  mutexComm.Lock();
   if (d && d->Driver && d->Driver->PutVolume != NULL)
     result = d->Driver->PutVolume(d, Volume);
-  UnlockComm();
+  mutexComm.Unlock();
 
   return result;
 }
@@ -756,10 +756,10 @@ BOOL devPutFreqActive(PDeviceDescriptor_t d, double Freq)
 
   if (fSimMode)
     return TRUE;
-  LockComm();
+  mutexComm.Lock();
   if (d && d->Driver && d->Driver->PutFreqActive != NULL)
     result = d->Driver->PutFreqActive(d, Freq);
-  UnlockComm();
+  mutexComm.Unlock();
 
   return result;
 }
@@ -770,10 +770,10 @@ BOOL devPutFreqStandby(PDeviceDescriptor_t d, double Freq)
 
   if (fSimMode)
     return TRUE;
-  LockComm();
+  mutexComm.Lock();
   if (d && d->Driver && d->Driver->PutFreqStandby != NULL)
     result = d->Driver->PutFreqStandby(d, Freq);
-  UnlockComm();
+  mutexComm.Unlock();
 
   return result;
 }
