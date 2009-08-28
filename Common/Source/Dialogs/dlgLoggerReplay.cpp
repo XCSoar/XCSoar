@@ -39,7 +39,7 @@ Copyright_License {
 #include "Interface.hpp"
 #include "Utils.h"
 #include "Units.h"
-#include "Logger.h"
+#include "ReplayLogger.hpp"
 #include "Dialogs/dlgTools.h"
 #include "DataField/FileReader.hpp"
 

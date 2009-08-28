@@ -55,6 +55,7 @@ Copyright_License {
 #include "Audio/VarioSound.h"
 #include "InputEvents.h"
 #include "Trigger.hpp"
+#include "ReplayLogger.hpp"
 #include "Screen/Blank.hpp"
 #include "Screen/Graphics.hpp"
 #include "Screen/Util.hpp"
@@ -522,7 +523,7 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
 	break;
       }
 #ifdef _SIM_
-      else if (!my_target_pan && (distance>IBLSCALE(36))) {
+      else if (!ReplayLogger::IsEnabled() && !my_target_pan && (distance>IBLSCALE(36))) {
 	// This drag moves the aircraft (changes speed and direction)
 	double newbearing;
 	double oldbearing = GPS_INFO.TrackBearing;
@@ -541,7 +542,7 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
 	TriggerGPSUpdate();
 
 	break;
-      }
+      } else
 #endif
       if (!my_target_pan) {
 	if (DefocusInfoBox()) { //

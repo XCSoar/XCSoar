@@ -46,7 +46,7 @@ Copyright_License {
 #include "Math/FastMath.h"
 #include "Math/Geometry.hpp"
 #include "XCSoar.h"
-#include "Logger.h"
+#include "ReplayLogger.hpp"
 #include <math.h>
 #include "Atmosphere.h"
 #include "ThermalLocator.h"

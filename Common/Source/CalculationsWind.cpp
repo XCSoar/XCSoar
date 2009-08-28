@@ -42,7 +42,7 @@ Copyright_License {
 #include "WindZigZag.h"
 #include "windanalyser.h"
 #include <math.h>
-#include "Logger.h"
+#include "ReplayLogger.hpp"
 #include "GlideComputer.hpp"
 #include "Protection.hpp"
 

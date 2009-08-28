@@ -46,7 +46,6 @@ Copyright_License {
 #include "UtilsFLARM.hpp"
 #include "Blackboard.hpp"
 #include "Audio/VarioSound.h"
-#include "Logger.h"
 #include "GaugeFLARM.h"
 #include "Device/device.h"
 #include "Device/Geoid.h"
@@ -59,6 +58,7 @@ Copyright_License {
 #include "Task.h" // TODO danger!
 #include "SettingsComputer.hpp"
 #include "Settings.hpp"
+#include "ReplayLogger.hpp"
 
 #include <ctype.h>
 #include <stdlib.h>

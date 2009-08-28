@@ -39,6 +39,7 @@ Copyright_License {
 #include "XCSoar.h"
 #include "Protection.hpp"
 #include "Logger.h"
+#include "ReplayLogger.hpp"
 #include "Utils.h"
 #include "Math/Geometry.hpp"
 #include "LocalPath.hpp"

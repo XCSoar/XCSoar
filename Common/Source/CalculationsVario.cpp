@@ -44,7 +44,7 @@ Copyright_License {
 #include "McReady.h"
 #include "Math/LowPassFilter.hpp"
 #include "XCSoar.h"
-#include "Logger.h"
+#include "ReplayLogger.hpp"
 #include <math.h>
 #include "Calculations2.h"
 

@@ -53,6 +53,7 @@ Copyright_License {
 #include "RasterTerrain.h"
 #include "RasterWeather.h"
 #include "Logger.h"
+#include "ReplayLogger.hpp"
 
 
 double MapWindow::findMapScaleBarSize(const RECT rc) {

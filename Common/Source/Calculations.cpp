@@ -49,6 +49,7 @@ Copyright_License {
 #include "SettingsTask.hpp"
 #include "McReady.h"
 #include "Logger.h"
+#include "ReplayLogger.hpp"
 #include "Math/FastMath.h"
 #include <math.h>
 #include "InputEvents.h"

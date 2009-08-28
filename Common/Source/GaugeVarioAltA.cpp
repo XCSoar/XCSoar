@@ -40,7 +40,7 @@ Copyright_License {
 #include "Protection.hpp"
 #include "LogFile.hpp"
 #include "MapWindowProjection.hpp"
-#include "Logger.h"
+#include "ReplayLogger.hpp"
 #include "Math/FastMath.h"
 #include "Blackboard.hpp"
 #include "InfoBoxLayout.h"
