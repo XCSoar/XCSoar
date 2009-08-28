@@ -39,6 +39,7 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "XCSoar.h"
 #include "Dialogs.h"
+#include "Language.hpp"
 #include "Units.h"
 #include "Process.h"
 #include "Blackboard.hpp"

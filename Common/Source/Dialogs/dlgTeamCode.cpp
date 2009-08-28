@@ -39,6 +39,7 @@
 #include "UtilsFLARM.hpp"
 #include "Dialogs/dlgTools.h"
 #include "Dialogs.h"
+#include "Language.hpp"
 #include "Settings.hpp"
 #include "SettingsComputer.hpp"
 #include "Blackboard.hpp"

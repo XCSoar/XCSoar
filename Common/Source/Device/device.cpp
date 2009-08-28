@@ -44,6 +44,7 @@ Copyright_License {
 #include "Blackboard.hpp"
 #include "Interface.hpp"
 #include "Dialogs.h"
+#include "Language.hpp"
 #include "Math/FastMath.h"
 #include "Device/Parser.h"
 #include "Device/Port.h"

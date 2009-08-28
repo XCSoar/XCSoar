@@ -42,6 +42,7 @@ Copyright_License {
 #include "Blackboard.hpp"
 #include "SettingsTask.hpp"
 #include "Dialogs.h"
+#include "Language.hpp"
 #include "Logger.h"
 #include "McReady.h"
 #include "Dialogs/dlgTools.h"

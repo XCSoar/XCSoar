@@ -35,16 +35,23 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_POLAR_HISTORICAL_HPP
-#define XCSOAR_POLAR_HISTORICAL_HPP
+#if !defined(XCSOAR_LANGUAGE_HPP)
+#define XCSOAR_LANGUAGE_HPP
+
 #include "XCSoar.h"
 
-#define  POLARUSEWINPILOTFILE  6    // if this polat is selected use the winpilot file
+void ReadLanguageFile(void);
 
-#define NUMPOLARS 7 // number of in-built polars
+void SetWindowText_gettext(HWND hDlg, int entry);
+const TCHAR* gettext(const TCHAR* text);
 
-extern const TCHAR *PolarLabels[];
+#if (WINDOWSPC>0)
+#ifndef NDEBUG
+//#define DEBUG_TRANSLATIONS
+#pragma warning( disable : 4786 ) 
+#endif
+#endif
 
-void CalculateNewPolarCoef(void);
+void WriteMissingTranslations(void);
 
 #endif

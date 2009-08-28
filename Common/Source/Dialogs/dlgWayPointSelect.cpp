@@ -37,6 +37,7 @@ Copyright_License {
 
 #include "XCSoar.h"
 #include "Dialogs.h"
+#include "Language.hpp"
 #include "Math/Earth.hpp"
 #include "Screen/Util.hpp"
 #include "Utils.h"

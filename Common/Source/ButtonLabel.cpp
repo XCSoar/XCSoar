@@ -40,6 +40,7 @@ Copyright_License {
 #include "ButtonLabel.h"
 #include "LogFile.hpp"
 #include "Dialogs.h"
+#include "Language.hpp"
 #include "Screen/Animation.hpp"
 #include "Registry.hpp"
 #include "InfoBox.h"

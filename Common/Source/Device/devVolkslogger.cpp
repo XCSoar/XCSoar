@@ -45,6 +45,7 @@ Copyright_License {
 #include "XCSoar.h"
 #include "Protection.hpp"
 #include "Dialogs.h"
+#include "Language.hpp"
 #include "SettingsTask.hpp"
 #include "UtilsText.hpp"
 #include "Math/Pressure.h"

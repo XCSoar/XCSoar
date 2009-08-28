@@ -41,6 +41,7 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "Dialogs/dlgTools.h"
 #include "Dialogs.h"
+#include "Language.hpp"
 #include "McReady.h"
 
 #define WIN32_LEAN_AND_MEAN

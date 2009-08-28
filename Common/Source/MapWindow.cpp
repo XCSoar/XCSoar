@@ -796,36 +796,36 @@ void MapWindow::DrawThreadLoop(bool first_time) {
   }
 
   mutexRun.Lock(); // take control
+  {
+    dirtyEvent.reset();
 
-  dirtyEvent.reset();
-
-  UpdateInfo(&GPS_INFO, &CALCULATED_INFO);
-
-  if (BigZoom) {
-    // quickly draw zoom level on top
-    DrawMapScale(hdcScreen, MapRect, true);
+    UpdateInfo(&GPS_INFO, &CALCULATED_INFO);
+    
+    if (BigZoom) {
+      // quickly draw zoom level on top
+      DrawMapScale(hdcScreen, MapRect, true);
+    }
+    
+    if (askFullScreen != MapFullScreen) {
+      ToggleFullScreenStart();
+    }
+    
+    GaugeFLARM::Render(&DrawInfo);
+    
+    RenderMapWindow(hdcDrawWindow, MapRect);
+    
+    if (!first_time) {
+      BitBlt(hdcScreen, 0, 0,
+	     MapRectBig.right-MapRectBig.left,
+	     MapRectBig.bottom-MapRectBig.top,
+	     hdcDrawWindow, 0, 0, SRCCOPY);
+      HWND hWndMapWindow = ::hWndMapWindow;
+      InvalidateRect(hWndMapWindow, &MapRect, false);
+    }
+    UpdateTimeStats(false);
+    // we do caching after screen update, to minimise perceived delay
+    UpdateCaches(first_time);
   }
-
-  if (askFullScreen != MapFullScreen) {
-    ToggleFullScreenStart();
-  }
-
-  GaugeFLARM::Render(&DrawInfo);
-
-  RenderMapWindow(hdcDrawWindow, MapRect);
-
-  if (!first_time) {
-    BitBlt(hdcScreen, 0, 0,
-	   MapRectBig.right-MapRectBig.left,
-	   MapRectBig.bottom-MapRectBig.top,
-	   hdcDrawWindow, 0, 0, SRCCOPY);
-    HWND hWndMapWindow = ::hWndMapWindow;
-    InvalidateRect(hWndMapWindow, &MapRect, false);
-  }
-  UpdateTimeStats(false);
-  // we do caching after screen update, to minimise perceived delay
-  UpdateCaches(first_time);
-
   mutexRun.Unlock(); // release control
 }
 

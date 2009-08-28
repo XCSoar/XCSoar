@@ -41,6 +41,7 @@ Copyright_License {
 #include "InfoBoxManager.h"
 #include "Protection.hpp"
 #include "InputEvents.h"
+#include "Language.hpp"
 #include "Dialogs.h"
 #include <stdlib.h>
 

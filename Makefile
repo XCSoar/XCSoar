@@ -489,6 +489,7 @@ OBJS	:=\
 	$(SRC)/Asset.o 			\
 	$(SRC)/Appearance.o 		\
 	$(SRC)/Battery.o 		\
+	$(SRC)/Language.o 		\
 	$(SRC)/units.o 			\
 	$(SRC)/Utils.o			\
 	$(SRC)/UtilsAirspace.o		\

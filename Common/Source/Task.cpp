@@ -44,6 +44,7 @@ Copyright_License {
 #include "Math/Geometry.hpp"
 #include "LocalPath.hpp"
 #include "Dialogs.h"
+#include "Language.hpp"
 #include "Dialogs/dlgTools.h"
 #include "Settings.hpp"
 #include "SettingsComputer.hpp"

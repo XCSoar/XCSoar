@@ -41,6 +41,7 @@ Copyright_License {
 #include "Device/Port.h"
 #include "Blackboard.hpp"
 #include "Dialogs.h"
+#include "Language.hpp"
 #include "Dialogs/dlgTools.h"
 #include "Device/device.h"
 

@@ -38,15 +38,10 @@ Copyright_License {
 #if !defined(AFX_DIALOGS_H__695AAC30_F401_4CFF_9BD9_FE62A2A2D0D2__INCLUDED_)
 #define AFX_DIALOGS_H__695AAC30_F401_4CFF_9BD9_FE62A2A2D0D2__INCLUDED_
 
+#include "XCSoar.h"
 #include "WayPoint.hpp"
-#include <windows.h>
 
-void ReadLanguageFile(void);
-
-void SetWindowText_gettext(HWND hDlg, int entry);
-const TCHAR* gettext(const TCHAR* text);
 void ClearStatusMessages(void);
-
 void StartupScreen();
 
 HWND CreateProgressDialog(const TCHAR *text);
@@ -57,8 +52,6 @@ void StartHourglassCursor();
 void StopHourglassCursor();
 
 extern void DoStatusMessage(const TCHAR* text, const TCHAR* data = NULL);
-
-#define NUMPOLARS 7 // number of in-built polars
 
 bool dlgAirspaceWarningShowDlg(bool force);
 // int dlgWayPointSelect(void);
@@ -97,16 +90,6 @@ bool dlgTaskRules(void);
 void dlgAirspaceDetails(int the_circle, int the_area);
 bool dlgAirspaceWarningVisible(void);
 void dlgFlarmTrafficShowModal(void);
-
-
-#if (WINDOWSPC>0)
-#ifndef NDEBUG
-//#define DEBUG_TRANSLATIONS
-#pragma warning( disable : 4786 )
-#endif
-#endif
-
-void WriteMissingTranslations(void);
 void dlgTextEntryKeyboardShowModal(TCHAR *text, int width=0);
 void dlgNumberEntryKeyboardShowModal(int *value, int width=0);
 

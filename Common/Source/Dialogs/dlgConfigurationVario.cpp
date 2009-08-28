@@ -38,6 +38,7 @@ Copyright_License {
 #include "XCSoar.h"
 #include "McReady.h"
 #include "Dialogs.h"
+#include "Language.hpp"
 #include "Dialogs/dlgTools.h"
 #include "Device/device.h"
 #include "InfoBoxLayout.h"

@@ -36,6 +36,7 @@ Copyright_License {
 */
 
 #include "Dialogs/dlgTools.h"
+#include "Language.hpp"
 #include "XCSoar.h"
 #include "WindowControls.h"
 #include "xmlParser.h"

@@ -37,7 +37,7 @@ Copyright_License {
 
 #include "ExpandMacros.hpp"
 #include "XCSoar.h"
-#include "Dialogs.h"
+#include "Language.hpp"
 #include "GaugeFLARM.h"
 #include "Logger.h"
 #include "MapWindow.h"

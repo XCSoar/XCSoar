@@ -38,6 +38,7 @@ Copyright_License {
 #include "XCSoar.h"
 #include "Protection.hpp"
 #include "Dialogs.h"
+#include "Language.hpp"
 #include "InfoBoxLayout.h"
 #include "Statistics.h"
 #include "Blackboard.hpp"

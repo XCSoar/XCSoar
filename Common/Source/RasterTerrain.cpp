@@ -40,6 +40,7 @@ Copyright_License {
 #include "RasterWeather.h"
 #include "LogFile.hpp"
 #include "Dialogs.h"
+#include "Language.hpp"
 #include "Process.h"
 #include "Math/FastMath.h"
 #include "Registry.hpp"

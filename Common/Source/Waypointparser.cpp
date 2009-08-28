@@ -43,6 +43,7 @@ Copyright_License {
 #include "SettingsComputer.hpp"
 #include "SettingsTask.hpp"
 #include "Dialogs.h"
+#include "Language.hpp"
 #include "Math/FastMath.h"
 #include "Math/Earth.hpp"
 #include "Math/Units.h"

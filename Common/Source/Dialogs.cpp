@@ -1,7 +1,4 @@
 /*
-
-  $Id$
-
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
@@ -40,6 +37,7 @@ Copyright_License {
 */
 
 #include "Dialogs.h"
+#include "Language.hpp"
 #include "XCSoar.h"
 #include "LogFile.hpp"
 #include "MapWindowProjection.hpp"
@@ -66,25 +64,6 @@ Copyright_License {
 #include "Registry.hpp"
 #include "StatusMessage.hpp"
 #include "Interface.hpp"
-
-#ifdef DEBUG_TRANSLATIONS
-#include <map>
-#endif
-
-void PopupAnalysis()
-{
-  dlgAnalysisShowModal();
-}
-
-
-void PopupWaypointDetails()
-{
-  dlgWayPointDetailsShowModal();
-}
-
-
-static GetTextSTRUCT GetTextData[MAXSTATUSMESSAGECACHE];
-static int GetTextData_Size = 0;
 
 ///////////////////////////////////
 
@@ -311,158 +290,6 @@ void DoStatusMessage(const TCHAR* text, const TCHAR *data) {
 }
 
 
-#ifdef DEBUG_TRANSLATIONS
-/*
-
-  WriteMissingTranslations - write all missing translations found
-  during runtime to a lanuage file in data dir
-
-*/
-template<class _Ty>
-struct lessTCHAR: public std::binary_function<_Ty, _Ty, bool>
-{	// functor for operator<
-  bool operator()(const _Ty& _Left, const _Ty& _Right) const
-  {	// apply operator< to operands
-    return (_tcscmp(_Left, _Right) < 0);
-  }
-};
-
-std::map<TCHAR*, TCHAR*, lessTCHAR<TCHAR*> > unusedTranslations;
-
-void WriteMissingTranslations() {
-  std::map<TCHAR*, TCHAR*, lessTCHAR<TCHAR*> >::iterator
-    s=unusedTranslations.begin(),e=unusedTranslations.end();
-
-  TCHAR szFile1[MAX_PATH] = TEXT("%LOCAL_PATH%\\\\localization_todo.xcl\0");
-  FILE *fp=NULL;
-
-  ExpandLocalPath(szFile1);
-  fp  = _tfopen(szFile1, TEXT("w+"));
-
-  if (fp != NULL) {
-    while (s != e) {
-      TCHAR* p = (s->second);
-      if (p) {
-        while (*p) {
-          if (*p != _T('\n')) {
-            fwprintf(fp, TEXT("%c"), *p);
-          } else {
-            fwprintf(fp, TEXT("\\n"));
-          }
-          p++;
-        }
-        fwprintf(fp, TEXT("=\n"));
-      }
-      s++;
-    }
-    fclose(fp);
-  }
-}
-
-#endif
-
-
-
-
-/*
-
-  gettext - look up a string of text for the current language
-
-  Currently very simple. Looks up the current string and current language
-  to find the appropriate string response. On failure will return the string itself.
-
-  NOTES CACHING:
-  	- Could load the whole file or part
-	- qsort/bsearch good idea
-	- cache misses in data structure for future use
-
-   TODO enhancement: Fast search of text strings
-
-*/
-
-const TCHAR* gettext(const TCHAR* text) {
-  int i;
-  // return if nothing to do
-  if (_tcscmp(text, _T("")) == 0) return (const TCHAR*)text;
-
-  //find a translation
-  for (i=0; i<GetTextData_Size; i++) {
-    if (!text || !GetTextData[i].key) continue;
-    if (_tcscmp(text, GetTextData[i].key) == 0)
-      return GetTextData[i].text;
-  }
-
-  // return untranslated text if no translation is found.
-  // Set a breakpoint here to find untranslated strings
-
-#ifdef DEBUG_TRANSLATIONS
-  TCHAR *tmp = _tcsdup(text);
-  unusedTranslations[tmp] = tmp;
-#endif
-  return (const TCHAR*)text;
-}
-
-// Set the window text value, by passing through gettext
-// TODO code: Review if this needs to be done every time?
-void SetWindowText_gettext(HWND hDlg, int entry) {
-  TCHAR strTemp[1024];
-  GetWindowText(GetDlgItem(hDlg,entry),strTemp, 1023);
-  SetWindowText(GetDlgItem(hDlg,entry),gettext(strTemp));
-}
-
-
-void ReadLanguageFile() {
-  StartupStore(TEXT("Loading language file\n"));
-
-  TCHAR szFile1[MAX_PATH] = TEXT("\0");
-  FILE *fp=NULL;
-
-  // Open file from registry
-  GetRegistryString(szRegistryLanguageFile, szFile1, MAX_PATH);
-  ExpandLocalPath(szFile1);
-
-  SetRegistryString(szRegistryLanguageFile, TEXT("\0"));
-
-  if (_tcslen(szFile1)==0) {
-    // JMW set default language file if none present
-    _tcscpy(szFile1,TEXT("default.xcl"));
-  }
-
-  fp  = _tfopen(szFile1, TEXT("rt"));
-
-  if (fp == NULL)
-    return;
-
-  // TODO code: Safer sizes, strings etc - use C++ (can scanf restrict length?)
-  TCHAR buffer[2049];	// key from scanf
-  TCHAR key[2049];	// key from scanf
-  TCHAR value[2049];	// value from scanf
-  int found;            // Entries found from scanf
-
-  /* Read from the file */
-  while (
-  	 (GetTextData_Size < MAXSTATUSMESSAGECACHE)
-	 && _fgetts(buffer, 2048, fp)
-	 && ((found = _stscanf(buffer, TEXT("%[^#=]=%[^\r\n][\r\n]"), key, value)) != EOF)
-         ) {
-    // Check valid line?
-    if ((found != 2) || !key || !value) continue;
-
-    GetTextData[GetTextData_Size].key = StringMallocParse(key);
-    GetTextData[GetTextData_Size].text = StringMallocParse(value);
-
-    // Global counter
-    GetTextData_Size++;
-  }
-
-  // file was OK, so save registry
-  ContractLocalPath(szFile1);
-  SetRegistryString(szRegistryLanguageFile, szFile1);
-
-  fclose(fp);
-}
-
-
 /////////////////////////////////////////////////
 
 static HWND hProgress = NULL;
@@ -592,6 +419,19 @@ HWND CreateProgressDialog(const TCHAR* text) {
 
 
 ///////////////
+
+void PopupAnalysis()
+{
+  dlgAnalysisShowModal();
+}
+
+
+void PopupWaypointDetails()
+{
+  dlgWayPointDetailsShowModal();
+}
+
+
 
 bool PopupNearestWaypointDetails(double lon, double lat,
                                              double range,

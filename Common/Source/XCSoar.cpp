@@ -48,6 +48,7 @@ Copyright_License {
 #include "Persist.hpp"
 #include "Task.h"
 #include "Dialogs.h"
+#include "Language.hpp"
 #include "Dialogs/dlgTools.h"
 #include "Trigger.hpp"
 #include "StatusMessage.hpp"

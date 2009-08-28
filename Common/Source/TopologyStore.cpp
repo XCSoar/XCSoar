@@ -41,6 +41,7 @@ Copyright_License {
 #include "MapWindow.h"
 #include "Topology.h"
 #include "Dialogs.h"
+#include "Language.hpp"
 #include "Compatibility/string.h"
 #include "Registry.hpp"
 #include "LocalPath.hpp"

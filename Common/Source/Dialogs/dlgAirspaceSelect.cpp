@@ -40,6 +40,7 @@ Copyright_License {
 #include "Dialogs.h"
 #include "Blackboard.hpp"
 #include "Dialogs/dlgTools.h"
+#include "Language.hpp"
 #include "InfoBoxLayout.h"
 #include "Airspace.h"
 #include "AirspaceWarning.h"
