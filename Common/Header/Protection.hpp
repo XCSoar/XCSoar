@@ -42,6 +42,7 @@ Copyright_License {
 #include "Mutex.hpp"
 
 extern Mutex mutexFlightData;
+extern Mutex mutexGlideComputer;
 extern Mutex mutexEventQueue;
 extern Mutex mutexTerrainData;
 extern Mutex mutexMapData;

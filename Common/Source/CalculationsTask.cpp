@@ -150,7 +150,6 @@ double AATCloseBearing(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
 
 void DistanceToNext(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 {
-  //  mutexFlightData.Lock();
   mutexTaskData.Lock();
 
   if(ValidTaskPoint(ActiveWayPoint))
@@ -213,14 +212,12 @@ void DistanceToNext(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
       Calculated->WaypointBearing = 0;
     }
   mutexTaskData.Unlock();
-  //  mutexFlightData.Unlock();
 }
 
 
 void AltitudeRequired(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
                       const double this_maccready)
 {
-  //  mutexFlightData.Lock();
   (void)Basic;
   mutexTaskData.Lock();
   if(ValidTaskPoint(ActiveWayPoint))
@@ -276,7 +273,6 @@ void AltitudeRequired(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
       Calculated->NextAltitudeDifference0 = 0; // VENTA6
     }
   mutexTaskData.Unlock();
-  //  mutexFlightData.Unlock();
 }
 
 
@@ -406,12 +402,14 @@ double MacCreadyOrAvClimbRate(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
         ))
       ) {
 
+    mutexGlideComputer.Lock();
     if (GlideComputer::flightstats.ThermalAverage.y_ave>0) {
       mc_val = GlideComputer::flightstats.ThermalAverage.y_ave;
     } else if (Calculated->AverageThermal>0) {
       // insufficient stats, so use this/last thermal's average
       mc_val = Calculated->AverageThermal;
     }
+    mutexGlideComputer.Unlock();
   }
   return max(0.1, mc_val);
 
@@ -439,7 +437,6 @@ void TaskSpeed(NMEA_INFO *Basic, DERIVED_INFO *Calculated, const double this_mac
     return;
   }
 
-  //  mutexFlightData.Lock();
   mutexTaskData.Lock();
 
   if (TaskAltitudeRequired(Basic, Calculated, this_maccready, &Vfinal,
@@ -668,11 +665,15 @@ void TaskSpeed(NMEA_INFO *Basic, DERIVED_INFO *Calculated, const double this_mac
 	    n_av = 0;
           } else if (n_av>=60) {
 	    tsi_av/= n_av;
+
+	    mutexGlideComputer.Lock();
             GlideComputer::flightstats.Task_Speed.
               least_squares_update(
                                    max(0,
                                        Basic->Time-Calculated->TaskStartTime)/3600.0,
                                    max(0,min(100.0,tsi_av)));
+	    mutexGlideComputer.Unlock();
+
             LastTimeStats = Basic->Time;
 	    tsi_av = 0;
 	    n_av = 0;
@@ -787,7 +788,6 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
     return;
   }
 
-  //  mutexFlightData.Lock();
   mutexTaskData.Lock();
 
   ///////////////////////////////////////////////
@@ -865,9 +865,11 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
   Calculated->TaskDistanceCovered = LegCovered;
 
   if (Basic->Time > Calculated->LegStartTime) {
+    mutexGlideComputer.Lock();
     if (GlideComputer::flightstats.LegStartTime[ActiveWayPoint]<0) {
       GlideComputer::flightstats.LegStartTime[ActiveWayPoint] = Basic->Time;
     }
+    mutexGlideComputer.Unlock();
     Calculated->LegSpeed = Calculated->LegDistanceCovered
       / (Basic->Time - Calculated->LegStartTime);
   }
@@ -896,10 +898,12 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
         }
     } else if (ActiveWayPoint>0) {
       // JMW added correction for distance covered
+      mutexGlideComputer.Lock();
       Calculated->TaskDistanceCovered =
         GlideComputer::aatdistance.DistanceCovered(Basic->Longitude,
                                     Basic->Latitude,
                                     ActiveWayPoint);
+      mutexGlideComputer.Unlock();
     }
   }
 
@@ -1147,7 +1151,6 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
   CheckForceFinalGlide(Basic, Calculated);
 
   mutexTaskData.Unlock();
-  //  mutexFlightData.Unlock();
 
 }
 
@@ -1183,7 +1186,6 @@ void AATStats_Distance(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   int i;
   double MaxDistance, MinDistance, TargetDistance;
 
-  //  mutexFlightData.Lock();
   mutexTaskData.Lock();
 
   MaxDistance = 0; MinDistance = 0; TargetDistance = 0;
@@ -1291,7 +1293,6 @@ void AATStats_Distance(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
       Calculated->AATTargetDistance = TargetDistance;
     }
   mutexTaskData.Unlock();
-  //  mutexFlightData.Unlock();
 }
 
 

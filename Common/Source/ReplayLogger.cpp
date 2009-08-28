@@ -373,10 +373,12 @@ bool ReplayLogger::UpdateInternal(void) {
 
     if ((SpeedX>0) && (LatX != LatX1) && (LonX != LonX1)) {
 
-      mutexFlightData.Lock();
       if (init) {
+	mutexGlideComputer.Lock();
 	GlideComputer::flightstats.Reset();
+	mutexGlideComputer.Unlock();
       }
+      mutexFlightData.Lock();
       GPS_INFO.Latitude = LatX;
       GPS_INFO.Longitude = LonX;
       GPS_INFO.Speed = SpeedX;
@@ -421,9 +423,9 @@ void ReplayLogger::Start(void) {
   }
   NumLoggerBuffered = 0;
 
-  mutexFlightData.Lock();
+  mutexGlideComputer.Lock();
   GlideComputer::flightstats.Reset();
-  mutexFlightData.Unlock();
+  mutexGlideComputer.Unlock();
 
   if (!UpdateInternal()) {
     MessageBoxX(gettext(TEXT("Could not open IGC file!")),

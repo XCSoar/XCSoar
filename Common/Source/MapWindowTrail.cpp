@@ -335,7 +335,7 @@ void MapWindow::DrawTrailFromTask(HDC hdc, const RECT rc,
   const double mTrailFirstTime = TrailFirstTime - DerivedDrawInfo.TakeOffTime;
   // since olc keeps track of time wrt takeoff
 
-  mutexFlightData.Lock();
+  mutexGlideComputer.Lock();
   GlideComputer::olc.SetLine();
   int n = min(MAXCLIPPOLYGON, GlideComputer::olc.getN());
   int i, j=0;
@@ -347,7 +347,7 @@ void MapWindow::DrawTrailFromTask(HDC hdc, const RECT rc,
                   ptin[j]);
     j++;
   }
-  mutexFlightData.Unlock();
+  mutexGlideComputer.Unlock();
   if (j>=2) {
     SelectObject(hdc,MapGfx.hSnailPens[NUMSNAILCOLORS/2]);
     ClipPolygon(hdc, ptin, j, rc, false);

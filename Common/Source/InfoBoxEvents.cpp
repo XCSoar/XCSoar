@@ -445,9 +445,9 @@ void NextUpDown(int UpDown)
 	//	TODO bug: not required? CALCULATED_INFO.TaskStartTime = 0;
       }
     }
-    mutexFlightData.Lock();
+    mutexGlideComputer.Lock();
     GlideComputer::aatdistance.ResetEnterTrigger(ActiveWayPoint);
-    mutexFlightData.Unlock();
+    mutexGlideComputer.Unlock();
   }
   else if (UpDown==0) {
     SelectedWaypoint = Task[ActiveWayPoint].Index;

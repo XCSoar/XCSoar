@@ -61,7 +61,6 @@ void GlideComputer::DoAutoMacCready(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 
   if (!Calculated->AutoMacCready) return;
 
-  //  LockFlightData();
   mutexTaskData.Lock();
 
   double mc_new = MACCREADY;
@@ -152,6 +151,4 @@ void GlideComputer::DoAutoMacCready(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   MACCREADY = LowPassFilter(MACCREADY,mc_new,0.15);
 
   mutexTaskData.Unlock();
-  //  UnlockFlightData();
-
 }

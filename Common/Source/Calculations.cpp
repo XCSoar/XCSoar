@@ -214,9 +214,11 @@ void ResetFlightStats(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
   CRUISE_EFFICIENCY = 1.0;
 
   if (full) {
+    mutexGlideComputer.Lock();
     GlideComputer::olc.ResetFlight();
     GlideComputer::flightstats.Reset();
     GlideComputer::aatdistance.Reset();
+    mutexGlideComputer.Unlock();
     CRUISE_EFFICIENCY = 1.0;
     Calculated->FlightTime = 0;
     Calculated->TakeOffTime = 0;
@@ -334,7 +336,9 @@ void InitCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
  */
 
   InitialiseCalculationsWind();
+  mutexGlideComputer.Lock();
   InitLDRotary(&GlideComputer::rotaryLD);
+  mutexGlideComputer.Unlock();
 }
 
 extern bool TargetDialogOpen;
@@ -693,14 +697,16 @@ bool IsFlarmTargetCNInRange()
 
 
 void RefreshTaskStatistics(void) {
-  //  mutexFlightData.Lock();
-  mutexTaskData.Unlock();
+  mutexGlideComputer.Lock();
+  mutexFlightData.Lock();
+  mutexTaskData.Lock();
   TaskStatistics(&GPS_INFO, &CALCULATED_INFO, MACCREADY);
   AATStats(&GPS_INFO, &CALCULATED_INFO);
   TaskSpeed(&GPS_INFO, &CALCULATED_INFO, MACCREADY);
   IterateEffectiveMacCready(&GPS_INFO, &CALCULATED_INFO);
   mutexTaskData.Unlock();
-  //  mutexFlightData.Unlock();
+  mutexFlightData.Unlock();
+  mutexGlideComputer.Unlock();
 }
 
 

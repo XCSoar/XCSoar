@@ -45,6 +45,6 @@ OLCOptimizer   GlideComputer::olc;
 DERIVED_INFO   GlideComputer::Finish_Derived_Info;
 VegaVoice      GlideComputer::vegavoice;
 ThermalLocator GlideComputer::thermallocator;
-WindAnalyser*   GlideComputer::windanalyser;
+WindAnalyser*   GlideComputer::windanalyser = NULL;
 
 

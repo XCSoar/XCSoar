@@ -800,59 +800,64 @@ void DisplayInfoBox(void)
       break;
 	// VENTA3 wind speed + bearing bottom line
 	case 25:
-		if ( CALCULATED_INFO.WindBearing == 0 )
-		_stprintf(sTmp,_T("0%s"),_T(DEG)); else
-		_stprintf(sTmp,_T("%1.0d%s"),(int)CALCULATED_INFO.WindBearing,_T(DEG));
-		InfoBoxes[i]->SetComment(sTmp);
-		break;
+	  if ( CALCULATED_INFO.WindBearing == 0 )
+	    _stprintf(sTmp,_T("0%s"),_T(DEG)); else
+	    _stprintf(sTmp,_T("%1.0d%s"),(int)CALCULATED_INFO.WindBearing,_T(DEG));
+	  InfoBoxes[i]->SetComment(sTmp);
+	  break;
 
 	// VENTA3 radial
 	case 60:
-		if ( HomeWaypoint == -1 ) {  // should be redundant
-      			InfoBoxes[i]->SetComment(TEXT(""));
-			break;
-		}
-		if ( CALCULATED_INFO.HomeRadial == 0 )
-		_stprintf(sTmp,_T("0%s"),_T(DEG)); else
-		_stprintf(sTmp,_T("%1.0d%s"),(int)CALCULATED_INFO.HomeRadial,_T(DEG));
-		InfoBoxes[i]->SetComment(sTmp);
-		break;
+	  if ( HomeWaypoint == -1 ) {  // should be redundant
+	    InfoBoxes[i]->SetComment(TEXT(""));
+	    break;
+	  }
+	  if ( CALCULATED_INFO.HomeRadial == 0 ) {
+	    _stprintf(sTmp,_T("0%s"),_T(DEG)); 
+	  } else {
+	    _stprintf(sTmp,_T("%1.0d%s"),(int)CALCULATED_INFO.HomeRadial,_T(DEG));
+	  }
+	  InfoBoxes[i]->SetComment(sTmp);
+	  break;
+	  
+	// VENTA3 battery temperature under voltage. There is a good
+	// reason to see the temperature, if available: many PNA/PDA
+	// will switch OFF during flight under direct sunlight for
+	// several hours due to battery temperature too high!! The 314
+	// does!
 
-	// VENTA3 battery temperature under voltage. There is a good reason to see the temperature,
-	// if available: many PNA/PDA will switch OFF during flight under direct sunlight for several
-	// hours due to battery temperature too high!! The 314 does!
-
-	// TODO: check temperature too high and set a warning flag to be used by an event or something
+	// TODO: check temperature too high and set a warning flag to
+	// be used by an event or something
 	#if (WINDOWSPC<1)
 	case 65:
-		if ( PDABatteryTemperature >0 ) {
-			_stprintf(sTmp,_T("%1.0d%SC"),(int)PDABatteryTemperature,_T(DEG));
-			InfoBoxes[i]->SetComment(sTmp);
-		} else
-      			InfoBoxes[i]->SetComment(TEXT(""));
-		break;
+	  if ( PDABatteryTemperature >0 ) {
+	    _stprintf(sTmp,_T("%1.0d%SC"),(int)PDABatteryTemperature,_T(DEG));
+	    InfoBoxes[i]->SetComment(sTmp);
+	  } else
+	    InfoBoxes[i]->SetComment(TEXT(""));
+	  break;
 	#endif
 
 	// VENTA3 alternates
 	case 67:
 	case 68:
 	case 69:
-		if ( ActiveAlternate == -1 ) {  // should be redundant
-      			InfoBoxes[i]->SetComment(TEXT(""));
-			break;
-		}
-		if (FlipBoxValue == true) {
-			Units::FormatUserDistance(WayPointCalc[ActiveAlternate].Distance,
-					 sTmp, sizeof(sTmp)/sizeof(sTmp[0]));
-			InfoBoxes[i]->SetComment(sTmp);
-		} else {
-			Units::FormatUserArrival(WayPointCalc[ActiveAlternate].AltArriv,
-					 sTmp, sizeof(sTmp)/sizeof(sTmp[0]));
-			InfoBoxes[i]->SetComment(sTmp);
-		}
-		break;
+	  if ( ActiveAlternate == -1 ) {  // should be redundant
+	    InfoBoxes[i]->SetComment(TEXT(""));
+	    break;
+	  }
+	  if (FlipBoxValue == true) {
+	    Units::FormatUserDistance(WayPointCalc[ActiveAlternate].Distance,
+				      sTmp, sizeof(sTmp)/sizeof(sTmp[0]));
+	    InfoBoxes[i]->SetComment(sTmp);
+	  } else {
+	    Units::FormatUserArrival(WayPointCalc[ActiveAlternate].AltArriv,
+				     sTmp, sizeof(sTmp)/sizeof(sTmp[0]));
+	    InfoBoxes[i]->SetComment(sTmp);
+	  }
+	  break;
 	case 70: // QFE
-		/*
+	  /*
 		 // Showing the diff value offset was just interesting ;-)
 		if (FlipBoxValue == true) {
 			//Units::FormatUserArrival(QFEAltitudeOffset,
@@ -891,15 +896,11 @@ void DoInfoKey(int keycode) {
 
   InputEvents::HideMenu();
 
-  mutexNavBox.Lock();
-  i = getInfoType(InfoFocus);
-
-  // XXX This could crash if MapWindow does not capture
-
-  mutexFlightData.Lock();
-  Data_Options[min(NUMSELECTSTRINGS-1,i)].Process(keycode);
-  mutexFlightData.Unlock();
-
+  mutexNavBox.Lock(); 
+  {
+    i = getInfoType(InfoFocus);
+    Data_Options[min(NUMSELECTSTRINGS-1,i)].Process(keycode);
+  }
   mutexNavBox.Unlock();
 
   InfoBoxesDirty = true;
@@ -969,10 +970,8 @@ void InfoBoxDrawIfDirty(void) {
   // of drawing the screen
 
   if (InfoBoxesDirty && !ScreenBlanked) {
-    //JMWTEST    mutexFlightData.Lock();
     DisplayInfoBox();
     InfoBoxesDirty = false;
-    //JMWTEST    mutexFlightData.Unlock();
   }
 }
 

@@ -51,6 +51,7 @@ Copyright_License {
 #include "Atmosphere.h"
 #include "ThermalLocator.h"
 #include "GlideComputer.hpp"
+#include "Protection.hpp"
 
 #define CRUISE 0
 #define WAITCLIMB 1
@@ -354,6 +355,8 @@ static void ThermalSources(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   double ground_longitude;
   double ground_latitude;
   double ground_altitude;
+
+  mutexGlideComputer.Lock();
   GlideComputer::thermallocator.
     EstimateThermalBase(
 			Calculated->ThermalEstimate_Longitude,
@@ -366,6 +369,7 @@ static void ThermalSources(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
 			&ground_latitude,
 			&ground_altitude
 			);
+  mutexGlideComputer.Unlock();
 
   if (ground_altitude>0) {
     double tbest=0;
@@ -414,6 +418,7 @@ void LastThermalStats(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 	      Calculated->LastThermalGain = ThermalGain;
 	      Calculated->LastThermalTime = ThermalTime;
 
+	      mutexGlideComputer.Lock();
               GlideComputer::flightstats.ThermalAverage.
                 least_squares_update(Calculated->LastThermalAverage);
 
@@ -423,6 +428,7 @@ void LastThermalStats(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
                       GlideComputer::flightstats.ThermalAverage.b
                       );
 #endif
+	      mutexGlideComputer.Unlock();
               if (EnableThermalLocator) {
                 ThermalSources(Basic, Calculated);
               }

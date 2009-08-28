@@ -283,7 +283,7 @@ void OLCOptimizer::thin_data() {
     return;
   }
 
-  mutexFlightData.Lock();
+  mutexGlideComputer.Lock();
 
   int i;
   int nistart = 5;
@@ -370,7 +370,7 @@ void OLCOptimizer::thin_data() {
     // error!
     data.pnts_in = MAX_OLC_POINTS-1;
   }
-  mutexFlightData.Unlock();
+  mutexGlideComputer.Unlock();
 }
 
 
@@ -391,7 +391,7 @@ bool OLCOptimizer::addPoint(double lon, double lat, double alt,
 
   if (busy) return false; // don't add data while in analysis
 
-  mutexFlightData.Lock();
+  mutexGlideComputer.Lock();
 
   data.waypointbearing = bearing;
 
@@ -456,7 +456,7 @@ bool OLCOptimizer::addPoint(double lon, double lat, double alt,
     }
   }
 
-  mutexFlightData.Unlock();
+  mutexGlideComputer.Unlock();
 
   return isminimum;
   // detect new start and return true if start detected
@@ -490,10 +490,10 @@ double OLCOptimizer::getLongitude(int i) {
 
 void OLCOptimizer::SetLine() {
 
-  mutexFlightData.Lock();
+  mutexGlideComputer.Lock();
   pnts = data.pnts_in; // save value in case we get new data while
                        // performing the analysis/display
-  mutexFlightData.Unlock();
+  mutexGlideComputer.Unlock();
 
 }
 

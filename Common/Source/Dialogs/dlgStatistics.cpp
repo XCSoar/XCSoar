@@ -600,8 +600,10 @@ static bool olcfinished=false;
 
 void Statistics::RenderBarograph(HDC hdc, const RECT rc)
 {
+  mutexGlideComputer.Lock();
 
   if (GlideComputer::flightstats.Altitude.sum_n<2) {
+    mutexGlideComputer.Unlock();
     DrawNoData(hdc, rc);
     return;
   }
@@ -661,16 +663,19 @@ void Statistics::RenderBarograph(HDC hdc, const RECT rc)
 
   DrawXLabel(hdc, rc, TEXT("t"));
   DrawYLabel(hdc, rc, TEXT("h"));
+  mutexGlideComputer.Unlock();
 
 }
 
 
 void Statistics::RenderSpeed(HDC hdc, const RECT rc)
 {
+  mutexGlideComputer.Lock();
 
   if ((GlideComputer::flightstats.Task_Speed.sum_n<2)
       || !ValidTaskPoint(ActiveWayPoint)) {
     DrawNoData(hdc, rc);
+    mutexGlideComputer.Unlock();
     return;
   }
 
@@ -711,6 +716,7 @@ void Statistics::RenderSpeed(HDC hdc, const RECT rc)
 
   DrawXLabel(hdc, rc, TEXT("t"));
   DrawYLabel(hdc, rc, TEXT("V"));
+  mutexGlideComputer.Unlock();
 
 }
 
@@ -718,9 +724,11 @@ void Statistics::RenderSpeed(HDC hdc, const RECT rc)
 
 void Statistics::RenderClimb(HDC hdc, const RECT rc)
 {
+  mutexGlideComputer.Lock();
 
   if (GlideComputer::flightstats.ThermalAverage.sum_n<1) {
     DrawNoData(hdc, rc);
+    mutexGlideComputer.Unlock();
     return;
   }
 
@@ -754,13 +762,15 @@ void Statistics::RenderClimb(HDC hdc, const RECT rc)
 
   DrawXLabel(hdc, rc, TEXT("n"));
   DrawYLabel(hdc, rc, TEXT("w"));
-
+  mutexGlideComputer.Unlock();
 }
 
 
 void Statistics::RenderGlidePolar(HDC hdc, const RECT rc)
 {
   int i;
+
+  mutexFlightData.Lock();
 
   ResetScale();
   ScaleYFromValue(rc, 0);
@@ -838,6 +848,7 @@ void Statistics::RenderGlidePolar(HDC hdc, const RECT rc)
 	     ETO_OPAQUE, NULL, text, _tcslen(text), NULL);
 
   SetBkMode(hdc, TRANSPARENT);
+  mutexFlightData.Unlock();
 }
 
 
@@ -910,6 +921,7 @@ void Statistics::RenderTask(HDC hdc, const RECT rc, const bool olcmode)
     return;
   }
 
+  mutexGlideComputer.Lock();
   GlideComputer::olc.SetLine();
   int nolc = GlideComputer::olc.getN();
 
@@ -1188,6 +1200,7 @@ void Statistics::RenderTask(HDC hdc, const RECT rc, const bool olcmode)
   x1 = (lon1-lon_c)*fastcosine(lat1);
   y1 = (lat1-lat_c);
   DrawLabel(hdc, rc, TEXT("+"), x1, y1);
+  mutexGlideComputer.Unlock();
 }
 
 
@@ -1291,9 +1304,11 @@ void Statistics::RenderWind(HDC hdc, const RECT rc)
 
   LeastSquares windstats_mag;
 
+  mutexGlideComputer.Lock();
   if (GlideComputer::flightstats.Altitude_Ceiling.y_max
       -GlideComputer::flightstats.Altitude_Ceiling.y_min<=10) {
     DrawNoData(hdc, rc);
+    mutexGlideComputer.Unlock();
     return;
   }
 
@@ -1382,6 +1397,7 @@ void Statistics::RenderWind(HDC hdc, const RECT rc)
 
   DrawXLabel(hdc, rc, TEXT("w"));
   DrawYLabel(hdc, rc, TEXT("h"));
+  mutexGlideComputer.Unlock();
 
 }
 
@@ -1644,6 +1660,8 @@ static void Update(void){
   //  WndProperty *wp;
   int dt=1;
   double d=0;
+
+  mutexGlideComputer.Lock();
 
   switch(page){
     case ANALYSIS_PAGE_BAROGRAPH:
@@ -1915,6 +1933,7 @@ static void Update(void){
     wInfo->SetCaption(TEXT(" "));
     break;
   }
+  mutexGlideComputer.Unlock();
 
   wGrid->SetVisible(page<MAXPAGE+1);
 

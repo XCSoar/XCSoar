@@ -335,6 +335,7 @@ static CallBackTableEntry_t CallBackTable[]={
   DeclareCallBackEntry(NULL)
 };
 
+#include "LogFile.hpp"
 
 void dlgTaskCalculatorShowModal(void){
   wf = dlgLoadFromXML(CallBackTable,
@@ -354,7 +355,11 @@ void dlgTaskCalculatorShowModal(void){
   // find start value for range
   Range = AdjustAATTargets(2.0);
 
+  StartupStore(TEXT("ccc\n"));
+
   RefreshCalculator();
+
+  StartupStore(TEXT("ddd\n"));
 
   if (!AATEnabled || !ValidTaskPoint(ActiveWayPoint+1)) {
     ((WndButton *)wf->FindByName(TEXT("Optimise")))->SetVisible(false);

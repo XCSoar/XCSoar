@@ -79,12 +79,12 @@ void LoadCalculationsPersist(DERIVED_INFO *Calculated) {
 
   FILE *file = _tfopen(szCalculationsPersistFileName, _T("rb"));
   if (file != NULL) {
-    mutexFlightData.Lock();
+    mutexGlideComputer.Lock();
 
     fread(&sizein, sizeof(sizein), 1, file);
     if (sizein != sizeof(*Calculated)) {
       fclose(file);
-      mutexFlightData.Unlock();
+      mutexGlideComputer.Unlock();
       return;
     }
 
@@ -95,7 +95,7 @@ void LoadCalculationsPersist(DERIVED_INFO *Calculated) {
 
       GlideComputer::flightstats.Reset();
       fclose(file);
-      mutexFlightData.Unlock();
+      mutexGlideComputer.Unlock();
       return;
     }
 
@@ -105,7 +105,7 @@ void LoadCalculationsPersist(DERIVED_INFO *Calculated) {
     if (sizein != sizeof(GlideComputer::olc.data)) {
       GlideComputer::olc.ResetFlight();
       fclose(file);
-      mutexFlightData.Unlock();
+      mutexGlideComputer.Unlock();
       return;
     }
 
@@ -114,7 +114,7 @@ void LoadCalculationsPersist(DERIVED_INFO *Calculated) {
     fread(&sizein, sizeof(sizein), 1, file);
     if (sizein != 5 * sizeof(double)) {
       fclose(file);
-      mutexFlightData.Unlock();
+      mutexGlideComputer.Unlock();
       return;
     }
 
@@ -137,7 +137,7 @@ void LoadCalculationsPersist(DERIVED_INFO *Calculated) {
     StartupStore(TEXT("LoadCalculationsPersist OK\n"));
 
     fclose(file);
-    mutexFlightData.Unlock();
+    mutexGlideComputer.Unlock();
   } else {
     StartupStore(TEXT("LoadCalculationsPersist file not found\n"));
   }
@@ -162,7 +162,7 @@ void SaveCalculationsPersist(DERIVED_INFO *Calculated) {
 
   FILE *file = _tfopen(szCalculationsPersistFileName, _T("wb"));
   if (file != NULL) {
-    mutexFlightData.Lock();
+    mutexGlideComputer.Lock();
     size = sizeof(DERIVED_INFO);
     fwrite(&size, sizeof(size), 1, file);
     fwrite(Calculated, sizeof(*Calculated), 1, file);
@@ -190,7 +190,7 @@ void SaveCalculationsPersist(DERIVED_INFO *Calculated) {
     StartupStore(TEXT("SaveCalculationsPersist ok\n"));
 
     fclose(file);
-    mutexFlightData.Unlock();
+    mutexGlideComputer.Unlock();
   } else {
     StartupStore(TEXT("SaveCalculationsPersist can't create file\n"));
   }

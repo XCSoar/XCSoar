@@ -25,6 +25,8 @@ Trigger airspaceWarningEvent(TEXT("airspaceWarning"));
 Mutex mutexFlightData;
 // protect GPS_INFO, mcready etc,
 // should be fast
+Mutex mutexGlideComputer;
+// protect GlideComputer data
 
 Mutex mutexEventQueue;
 Mutex mutexTerrainData;

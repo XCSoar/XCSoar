@@ -41,6 +41,7 @@ Copyright_License {
 #include "GlideComputer.hpp"
 #include "XCSoar.h"
 #include "Dialogs.h"
+#include "Protection.hpp"
 #include "Utils.h"
 #include "Settings.hpp"
 #include "SettingsTask.hpp"
@@ -190,11 +191,13 @@ void GlideComputer::DoLogging(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
 
     if (Calculated->Flying && (Basic->Time - OLCLastTime >= dtOLC)) {
       bool restart;
+      mutexGlideComputer.Lock();
       restart = olc.addPoint(Basic->Longitude,
 			     Basic->Latitude,
 			     Calculated->NavAltitude,
 			     Calculated->WaypointBearing,
 			     Basic->Time-Calculated->TakeOffTime);
+      mutexGlideComputer.Unlock();
 
       if (restart && EnableOLC) {
 	Calculated->ValidFinish = false;

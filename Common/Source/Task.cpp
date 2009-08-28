@@ -1601,7 +1601,6 @@ void ResumeAbortTask(int set) {
   int active_waypoint_on_entry;
   bool task_temporary_on_entry = TaskIsTemporary();
 
-  //  mutexFlightData.Lock();
   mutexTaskData.Lock();
   active_waypoint_on_entry = ActiveWayPoint;
 
@@ -1652,8 +1651,6 @@ void ResumeAbortTask(int set) {
   }
 
   mutexTaskData.Unlock();
-  //  mutexFlightData.Unlock();
-
 }
 
 

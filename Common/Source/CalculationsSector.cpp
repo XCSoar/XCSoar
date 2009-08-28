@@ -698,6 +698,8 @@ static void CheckInSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
 
   // JMW Start bug XXX
 
+  mutexGlideComputer.Lock();
+
   if (GlideComputer::aatdistance.HasEntered(ActiveWayPoint)) {
     if (ReadyToAdvance(Calculated, true, false)) {
       AnnounceWayPointSwitch(Calculated, true);
@@ -708,6 +710,7 @@ static void CheckInSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
       Calculated->ValidFinish = false;
     }
   }
+  mutexGlideComputer.Unlock();
 }
 
 

@@ -43,13 +43,13 @@ Copyright_License {
 #include "windanalyser.h"
 #include <math.h>
 #include "Logger.h"
-
-WindAnalyser *windanalyser = NULL;
+#include "GlideComputer.hpp"
+#include "Protection.hpp"
 
 #define D_AUTOWIND_CIRCLING 1
 #define D_AUTOWIND_ZIGZAG 2
-int AutoWindMode= D_AUTOWIND_CIRCLING;
 
+int AutoWindMode= D_AUTOWIND_CIRCLING;
 // 0: Manual
 // 1: Circling
 // 2: ZigZag
@@ -57,21 +57,23 @@ int AutoWindMode= D_AUTOWIND_CIRCLING;
 
 
 void InitialiseCalculationsWind() {
-  mutexFlightData.Lock();
-  if (!windanalyser) {
-    windanalyser = new WindAnalyser();
+  mutexGlideComputer.Lock();
+  if (!GlideComputer::windanalyser) {
+    GlideComputer::windanalyser = new WindAnalyser();
 
     //JMW TODO enhancement: seed initial wind store with start conditions
     // SetWindEstimate(Calculated->WindSpeed,Calculated->WindBearing, 1);
   }
-  mutexFlightData.Unlock();
+  mutexGlideComputer.Unlock();
 }
 
 void CloseCalculationsWind() {
-  if (windanalyser) {
-    delete windanalyser;
-    windanalyser = NULL;
+  mutexGlideComputer.Lock();
+  if (GlideComputer::windanalyser) {
+    delete GlideComputer::windanalyser;
+    GlideComputer::windanalyser = NULL;
   }
+  mutexGlideComputer.Unlock();
 }
 
 //// WIND
@@ -91,11 +93,11 @@ void DoWindZigZag(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
       Vector v_wind;
       v_wind.x = zz_wind_speed*cos(zz_wind_bearing*3.1415926/180.0);
       v_wind.y = zz_wind_speed*sin(zz_wind_bearing*3.1415926/180.0);
-      mutexFlightData.Lock();
-      if (windanalyser) {
-	windanalyser->slot_newEstimate(Basic, Calculated, v_wind, quality);
+      mutexGlideComputer.Lock();
+      if (GlideComputer::windanalyser) {
+	GlideComputer::windanalyser->slot_newEstimate(Basic, Calculated, v_wind, quality);
       }
-      mutexFlightData.Unlock();
+      mutexGlideComputer.Unlock();
     }
   }
 }
@@ -104,25 +106,31 @@ void DoWindZigZag(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
 void DoWindCirclingMode(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
 			bool left) {
   if ((AutoWindMode & D_AUTOWIND_CIRCLING)==D_AUTOWIND_CIRCLING) {
-    mutexFlightData.Lock();
-    windanalyser->slot_newFlightMode(Basic, Calculated, left, 0);
-    mutexFlightData.Unlock();
+    mutexGlideComputer.Lock();
+    if (GlideComputer::windanalyser) {
+      GlideComputer::windanalyser->slot_newFlightMode(Basic, Calculated, left, 0);
+    }
+    mutexGlideComputer.Unlock();
   }
 }
 
 void DoWindCirclingSample(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   if ((AutoWindMode & D_AUTOWIND_CIRCLING)==D_AUTOWIND_CIRCLING) {
-    mutexFlightData.Lock();
-    windanalyser->slot_newSample(Basic, Calculated);
-    mutexFlightData.Unlock();
+    mutexGlideComputer.Lock();
+    if (GlideComputer::windanalyser) {
+      GlideComputer::windanalyser->slot_newSample(Basic, Calculated);
+    }
+    mutexGlideComputer.Unlock();
   }
 }
 
 void DoWindCirclingAltitude(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   if (AutoWindMode>0) {
-    mutexFlightData.Lock();
-    windanalyser->slot_Altitude(Basic, Calculated);
-    mutexFlightData.Unlock();
+    mutexGlideComputer.Lock();
+    if (GlideComputer::windanalyser) {
+      GlideComputer::windanalyser->slot_Altitude(Basic, Calculated);
+    }
+    mutexGlideComputer.Unlock();
   }
 }
 
@@ -134,10 +142,10 @@ void  SetWindEstimate(const double wind_speed,
   Vector v_wind;
   v_wind.x = wind_speed*cos(wind_bearing*3.1415926/180.0);
   v_wind.y = wind_speed*sin(wind_bearing*3.1415926/180.0);
-  mutexFlightData.Lock();
-  if (windanalyser) {
-    windanalyser->slot_newEstimate(&GPS_INFO, &CALCULATED_INFO,
-                                   v_wind, quality);
+  mutexGlideComputer.Lock();
+  if (GlideComputer::windanalyser) {
+    GlideComputer::windanalyser->slot_newEstimate(&GPS_INFO, &CALCULATED_INFO,
+						  v_wind, quality);
   }
-  mutexFlightData.Unlock();
+  mutexGlideComputer.Unlock();
 }
