@@ -1629,7 +1629,8 @@ void ResumeAbortTask(int set) {
 
       // set MacCready
       if (!GlidePolar::AbortSafetyUseCurrent)  // 20060520:sgi added
-        MACCREADY = min(MACCREADY,GlidePolar::AbortSafetyMacCready());
+	GlidePolar::SetMacCready(min(GlidePolar::GetMacCready(), 
+				     GlidePolar::AbortSafetyMacCready()));
 
     } else {
 

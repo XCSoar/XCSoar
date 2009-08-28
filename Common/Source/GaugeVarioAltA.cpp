@@ -355,14 +355,15 @@ void GaugeVario::Render() {
   }
 
   if (Appearance.GaugeVarioMc) {
+    double mc = GlidePolar::GetMacCready()*LIFTMODIFY;
     if (CALCULATED_INFO.AutoMacCready)
       RenderValue(orgBottom.x, orgBottom.y,
 		  &diValueBottom, &diLabelBottom,
-		  MACCREADY*LIFTMODIFY, TEXT("Auto Mc"));
+		  mc, TEXT("Auto Mc"));
     else
       RenderValue(orgBottom.x, orgBottom.y,
 		  &diValueBottom, &diLabelBottom,
-		  MACCREADY*LIFTMODIFY, TEXT("Mc"));
+		  mc, TEXT("Mc"));
   }
 
   if (Appearance.GaugeVarioSpeedToFly) {
@@ -1011,6 +1012,7 @@ void GaugeVario::RenderBallast(void){
 
   }
 
+  double BALLAST = GlidePolar::GetBallast();
 
   if (BALLAST != lastBallast){
        // ballast hase been changed
@@ -1101,6 +1103,8 @@ void GaugeVario::RenderBugs(void){
     recValueBk.bottom = recValueBk.top + Appearance.TitleWindowFont.CapitalHeight;
 
   }
+
+  double BUGS = GlidePolar::GetBugs();
 
   if (BUGS != lastBugs){
 

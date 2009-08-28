@@ -45,6 +45,7 @@ Copyright_License {
 #include "Settings.hpp"
 #include "Screen/Graphics.hpp"
 #include "Screen/Fonts.hpp"
+#include "McReady.h"
 
 
 #define fSnailColour(cv) max(0,min((short)(NUMSNAILCOLORS-1), (short)((cv+1.0)/2.0*NUMSNAILCOLORS)))
@@ -72,6 +73,8 @@ void MapWindow::DrawFLARMTraffic(HDC hDC, RECT rc, POINT Orig_Aircraft) {
   HBRUSH redBrush = CreateSolidBrush(RGB(0xFF,0x00,0x00));
   HBRUSH yellowBrush = CreateSolidBrush(RGB(0xFF,0xFF,0x00));
   HBRUSH greenBrush = CreateSolidBrush(RGB(0x00,0xFF,0x00));
+
+  const double MACCREADY = GlidePolar::GetMacCready();
 
   for (i=0; i<FLARM_MAX_TRAFFIC; i++) {
     if (DrawInfo.FLARM_Traffic[i].ID!=0) {

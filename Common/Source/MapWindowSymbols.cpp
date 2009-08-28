@@ -759,7 +759,8 @@ void MapWindow::DrawFinalGlide(HDC hDC, const RECT rc)
       // JMW draw x on final glide bar if unreachable at current Mc
       // hpAircraftBorder
       if ((DerivedDrawInfo.TaskTimeToGo>0.9*ERROR_TIME)
-	  || ((MACCREADY<0.01) && (DerivedDrawInfo.TaskAltitudeDifference<0))) {
+	  || ((GlidePolar::GetMacCready()<0.01) 
+	      && (DerivedDrawInfo.TaskAltitudeDifference<0))) {
 	SelectObject(hDC, MapGfx.hpAircraftBorder);
 	POINT Cross[4] = { {-5, -5},
 			   { 5,  5},

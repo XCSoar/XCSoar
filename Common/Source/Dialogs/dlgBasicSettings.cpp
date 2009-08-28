@@ -119,18 +119,17 @@ static void OnAltitudeData(DataField *Sender, DataField::DataAccessKind_t Mode){
 static void SetBallast(void) {
   WndProperty* wp;
 
-  GlidePolar::SetBallast();
-  devPutBallast(devA(), BALLAST);
-  devPutBallast(devB(), BALLAST);
+  GlidePolar::UpdatePolar(true);
+
   wp = (WndProperty*)wf->FindByName(TEXT("prpBallastPercent"));
   if (wp) {
-    wp->GetDataField()->Set(BALLAST*100);
+    wp->GetDataField()->Set(GlidePolar::GetBallast()*100);
     wp->RefreshDisplay();
   }
   wp = (WndProperty*)wf->FindByName(TEXT("prpBallastLitres"));
   if (wp) {
     wp->GetDataField()->
-      SetAsFloat(GlidePolar::BallastLitres);
+      SetAsFloat(GlidePolar::GetBallastLitres());
     wp->RefreshDisplay();
   }
   wp = (WndProperty*)wf->FindByName(TEXT("prpWingLoading"));
@@ -188,6 +187,7 @@ static int OnTimerNotify(WindowControl * Sender) {
 
 static void OnBallastData(DataField *Sender, DataField::DataAccessKind_t Mode){
   static double lastRead = -1;
+  double BALLAST = GlidePolar::GetBallast();
 
   switch(Mode){
   case DataField::daSpecial:
@@ -207,6 +207,7 @@ static void OnBallastData(DataField *Sender, DataField::DataAccessKind_t Mode){
   case DataField::daPut:
     if (fabs(lastRead-Sender->GetAsFloat()/100.0) >= 0.005){
       lastRead = BALLAST = Sender->GetAsFloat()/100.0;
+      GlidePolar::SetBallast(BALLAST);
       SetBallast();
     }
     break;
@@ -214,7 +215,7 @@ static void OnBallastData(DataField *Sender, DataField::DataAccessKind_t Mode){
 }
 
 static void OnBugsData(DataField *Sender, DataField::DataAccessKind_t Mode){
-
+  double BUGS = GlidePolar::GetBugs();
   static double lastRead = -1;
 
   switch(Mode){
@@ -226,9 +227,8 @@ static void OnBugsData(DataField *Sender, DataField::DataAccessKind_t Mode){
     case DataField::daPut:
       if (fabs(lastRead-Sender->GetAsFloat()/100.0) >= 0.005){
         lastRead = BUGS = Sender->GetAsFloat()/100.0;
-        GlidePolar::SetBallast();
-        devPutBugs(devA(), BUGS);
-        devPutBugs(devB(), BUGS);
+	GlidePolar::SetBugs(BUGS);
+        GlidePolar::UpdatePolar(true);
       }
     break;
   }
@@ -294,7 +294,7 @@ void dlgBasicSettingsShowModal(void){
     wp = (WndProperty*)wf->FindByName(TEXT("prpBallastLitres"));
     if (wp) {
       wp->GetDataField()->
-	SetAsFloat(GlidePolar::BallastLitres);
+	SetAsFloat(GlidePolar::GetBallastLitres());
       wp->RefreshDisplay();
     }
     wp = (WndProperty*)wf->FindByName(TEXT("prpWingLoading"));

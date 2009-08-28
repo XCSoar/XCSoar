@@ -93,7 +93,7 @@ void Vario(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 }
 
 
-void SpeedToFly(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
+void SpeedToFly(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double mc_setting) {
   double n;
   // get load factor
   if (Basic->AccelerationAvailable) {
@@ -112,13 +112,13 @@ void SpeedToFly(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   double delta_mc;
   double risk_mc;
   if (Calculated->TaskAltitudeDifference> -120) {
-    risk_mc = MACCREADY;
+    risk_mc = mc_setting;
   } else {
     risk_mc =
       GlidePolar::MacCreadyRisk(Calculated->NavAltitude+Calculated->EnergyHeight
                                 -SAFETYALTITUDEBREAKOFF-Calculated->TerrainBase,
                                 Calculated->MaxThermalHeight,
-                                MACCREADY);
+                                mc_setting);
   }
   Calculated->MacCreadyRisk = risk_mc;
 
@@ -258,9 +258,10 @@ void AudioVario(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
 BOOL DoCalculationsVario(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 {
   static double LastTime = 0;
+  double mc = GlidePolar::GetMacCready();
 
   NettoVario(Basic, Calculated);
-  SpeedToFly(Basic, Calculated);
+  SpeedToFly(Basic, Calculated, mc);
 #ifndef DISABLEAUDIOVARIO
   AudioVario(Basic, Calculated);
 #endif

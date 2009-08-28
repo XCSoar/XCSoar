@@ -63,7 +63,6 @@ class GlidePolar {
   static double MacCreadyRisk(double HeightAboveTerrain, double MaxThermalHeight,
                               double MCREADY);
 
-  static void SetBallast();
   static double GetAUW();
 
   static double AbortSafetyMacCready();
@@ -75,11 +74,10 @@ class GlidePolar {
   static double polar_a;
   static double polar_b;
   static double polar_c;
-  static int Vminsink;
-  static int Vbestld;
+  static int    Vminsink;
+  static int    Vbestld;
   static double bestld;
   static double minsink;
-  static double BallastLitres;
   static double WingArea;
   static double WingLoading;
 
@@ -117,6 +115,24 @@ class GlidePolar {
                                                const double AltitudeAboveTarget,
 					       const double cruise_efficiency);
 
+ private:
+  static double MACCREADY; // m/s
+  static double BUGS;   
+  static double BALLAST;
+  static void Lock();
+  static void Unlock();
+  static double BallastLitres;
+
+ public:
+  static double GetMacCready();
+  static double GetBugs();
+  static double GetBallast();
+  static double GetBallastLitres();
+
+  static void SetMacCready(double);
+  static void SetBallast(double);
+  static void SetBugs(double);
+  static void UpdatePolar(bool send);
 };
 
 #endif

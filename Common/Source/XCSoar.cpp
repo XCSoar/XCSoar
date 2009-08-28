@@ -322,7 +322,7 @@ void SettingsLeave() {
 
   if (POLARFILECHANGED) {
     CalculateNewPolarCoef();
-    GlidePolar::SetBallast();
+    GlidePolar::UpdatePolar(false);
   }
 
   if (AIRFIELDFILECHANGED
@@ -688,8 +688,8 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 
   LoadWindFromRegistry();
   CalculateNewPolarCoef();
-  StartupStore(TEXT("GlidePolar::SetBallast\n"));
-  GlidePolar::SetBallast();
+  StartupStore(TEXT("GlidePolar::UpdatePolar\n"));
+  GlidePolar::UpdatePolar(false);
 
 // VENTA-ADDON
 #ifdef VENTA_DEBUG_KEY
@@ -816,8 +816,8 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 #endif
 
   // re-set polar in case devices need the data
-  StartupStore(TEXT("GlidePolar::SetBallast\n"));
-  GlidePolar::SetBallast();
+  StartupStore(TEXT("GlidePolar::UpdatePolar\n"));
+  GlidePolar::UpdatePolar(true);
 
   CreateProgressDialog(gettext(TEXT("Initialising display")));
 

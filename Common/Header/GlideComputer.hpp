@@ -61,7 +61,8 @@ public:
   static void DoLogging(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 
   // CalculationsAutoMc
-  static void DoAutoMacCready(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
+  static void DoAutoMacCready(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
+			      double mc_setting);
 
   //protected:
   static  VegaVoice    vegavoice;

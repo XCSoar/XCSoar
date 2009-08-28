@@ -471,7 +471,7 @@ void dlgWayPointDetailsShowModal(void){
   // alt reqd at current mc
 
   alt = CALCULATED_INFO.NavAltitude -
-    GlidePolar::MacCreadyAltitude(MACCREADY,
+    GlidePolar::MacCreadyAltitude(GlidePolar::GetMacCready(),
 				  distance,
 				  bearing,
 				  CALCULATED_INFO.WindSpeed,

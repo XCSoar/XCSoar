@@ -42,6 +42,7 @@ Copyright_License {
 #include "Blackboard.hpp"
 #include "SettingsTask.hpp"
 #include "SettingsComputer.hpp"
+#include "McReady.h"
 #include "Units.h"
 #include "Calculations.h" // TODO danger! RefreshTaskStatistics()
 #include "Dialogs/dlgTools.h"
@@ -251,21 +252,24 @@ static void OnTargetClicked(WindowControl * Sender){
 
 static void OnMacCreadyData(DataField *Sender,
 			    DataField::DataAccessKind_t Mode){
+  double MACCREADY;
   switch(Mode){
   case DataField::daSpecial:
     if (CALCULATED_INFO.timeCircling>0) {
       MACCREADY = CALCULATED_INFO.TotalHeightClimb
 	/CALCULATED_INFO.timeCircling;
       Sender->Set(MACCREADY*LIFTMODIFY);
+      GlidePolar::SetMacCready(MACCREADY);
       RefreshCalculator();
     }
     break;
   case DataField::daGet:
-    Sender->Set(MACCREADY*LIFTMODIFY);
+    Sender->Set(GlidePolar::GetMacCready()*LIFTMODIFY);
     break;
   case DataField::daPut:
   case DataField::daChange:
     MACCREADY = Sender->GetAsFloat()/LIFTMODIFY;
+    GlidePolar::SetMacCready(MACCREADY);
     RefreshCalculator();
     break;
   }
@@ -335,8 +339,6 @@ static CallBackTableEntry_t CallBackTable[]={
   DeclareCallBackEntry(NULL)
 };
 
-#include "LogFile.hpp"
-
 void dlgTaskCalculatorShowModal(void){
   wf = dlgLoadFromXML(CallBackTable,
                       TEXT("dlgTaskCalculator.xml"),
@@ -345,7 +347,7 @@ void dlgTaskCalculatorShowModal(void){
 
   if (!wf) return;
 
-  double MACCREADY_enter = MACCREADY;
+  double MACCREADY_enter = GlidePolar::GetMacCready();
   double CRUISE_EFFICIENCY_enter = CRUISE_EFFICIENCY;
 
   emc = EffectiveMacCready(&GPS_INFO, &CALCULATED_INFO);
@@ -355,11 +357,7 @@ void dlgTaskCalculatorShowModal(void){
   // find start value for range
   Range = AdjustAATTargets(2.0);
 
-  StartupStore(TEXT("ccc\n"));
-
   RefreshCalculator();
-
-  StartupStore(TEXT("ddd\n"));
 
   if (!AATEnabled || !ValidTaskPoint(ActiveWayPoint+1)) {
     ((WndButton *)wf->FindByName(TEXT("Optimise")))->SetVisible(false);
@@ -370,7 +368,7 @@ void dlgTaskCalculatorShowModal(void){
 
   if (wf->ShowModal() == mrCancle) {
     // todo: restore task settings.
-    MACCREADY = MACCREADY_enter;
+    GlidePolar::SetMacCready(MACCREADY_enter);
     CRUISE_EFFICIENCY = CRUISE_EFFICIENCY_enter;
   }
   delete wf;

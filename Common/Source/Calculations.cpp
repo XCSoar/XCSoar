@@ -214,11 +214,13 @@ void ResetFlightStats(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
   CRUISE_EFFICIENCY = 1.0;
 
   if (full) {
+
     mutexGlideComputer.Lock();
     GlideComputer::olc.ResetFlight();
     GlideComputer::flightstats.Reset();
     GlideComputer::aatdistance.Reset();
     mutexGlideComputer.Unlock();
+
     CRUISE_EFFICIENCY = 1.0;
     Calculated->FlightTime = 0;
     Calculated->TakeOffTime = 0;
@@ -346,13 +348,14 @@ extern bool TargetDialogOpen;
 
 BOOL DoCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 {
+  double mc = GlidePolar::GetMacCready();
 
   Heading(Basic, Calculated);
   DistanceToNext(Basic, Calculated);
   DistanceToHome(Basic, Calculated);
   EnergyHeightNavAltitude(Basic, Calculated);
   TerrainHeight(Basic, Calculated);
-  AltitudeRequired(Basic, Calculated, MACCREADY);
+  AltitudeRequired(Basic, Calculated, mc);
   Vario(Basic,Calculated);
 
   if (TaskAborted) {
@@ -361,9 +364,9 @@ BOOL DoCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   if (!TargetDialogOpen) {
     // don't calculate these if optimise function being invoked or
     // target is being adjusted
-    TaskStatistics(Basic, Calculated, MACCREADY);
+    TaskStatistics(Basic, Calculated, mc);
     AATStats(Basic, Calculated);
-    TaskSpeed(Basic, Calculated, MACCREADY);
+    TaskSpeed(Basic, Calculated, mc);
   }
 
   if (!FlightTimes(Basic, Calculated)) {
@@ -398,7 +401,7 @@ BOOL DoCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 
   if (!TaskIsTemporary()) {
     InSector(Basic, Calculated);
-    GlideComputer::DoAutoMacCready(Basic, Calculated);
+    GlideComputer::DoAutoMacCready(Basic, Calculated, mc);
     IterateEffectiveMacCready(Basic, Calculated);
   }
 
@@ -697,12 +700,13 @@ bool IsFlarmTargetCNInRange()
 
 
 void RefreshTaskStatistics(void) {
+  double mc = GlidePolar::GetMacCready();
   mutexGlideComputer.Lock();
   mutexFlightData.Lock();
   mutexTaskData.Lock();
-  TaskStatistics(&GPS_INFO, &CALCULATED_INFO, MACCREADY);
+  TaskStatistics(&GPS_INFO, &CALCULATED_INFO, mc);
   AATStats(&GPS_INFO, &CALCULATED_INFO);
-  TaskSpeed(&GPS_INFO, &CALCULATED_INFO, MACCREADY);
+  TaskSpeed(&GPS_INFO, &CALCULATED_INFO, mc);
   IterateEffectiveMacCready(&GPS_INFO, &CALCULATED_INFO);
   mutexTaskData.Unlock();
   mutexFlightData.Unlock();

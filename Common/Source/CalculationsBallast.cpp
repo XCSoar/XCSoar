@@ -53,6 +53,7 @@ void BallastDump (NMEA_INFO *Basic)
   if (BallastTimerActive) {
     // JMW only update every 5 seconds to stop flooding the devices
     if (Basic->Time > BallastTimeLast+5) {
+      double BALLAST = GlidePolar::GetBallast();
       double BALLAST_last = BALLAST;
       double dt = Basic->Time - BallastTimeLast;
       double percent_per_second = 1.0/max(10.0, BallastSecsToEmpty);
@@ -61,10 +62,9 @@ void BallastDump (NMEA_INFO *Basic)
 	BallastTimerActive = false;
 	BALLAST = 0.0;
       }
+      GlidePolar::SetBallast(BALLAST);
       if (fabs(BALLAST-BALLAST_last)>0.05) { // JMW update on 5 percent!
-	GlidePolar::SetBallast();
-	devPutBallast(devA(), BALLAST);
-	devPutBallast(devB(), BALLAST);
+	GlidePolar::UpdatePolar(true);
       }
       BallastTimeLast = Basic->Time;
     }

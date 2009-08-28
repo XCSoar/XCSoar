@@ -731,6 +731,7 @@ void Statistics::RenderClimb(HDC hdc, const RECT rc)
     mutexGlideComputer.Unlock();
     return;
   }
+  double MACCREADY = GlidePolar::GetMacCready();
 
   ResetScale();
   ScaleYFromData(rc, &GlideComputer::flightstats.ThermalAverage);
@@ -819,6 +820,8 @@ void Statistics::RenderGlidePolar(HDC hdc, const RECT rc)
     }
 
   }
+
+  double MACCREADY = GlidePolar::GetMacCready();
 
   double ff = SAFTEYSPEED/max(1.0, CALCULATED_INFO.VMacCready);
   double sb = GlidePolar::SinkRate(CALCULATED_INFO.VMacCready);

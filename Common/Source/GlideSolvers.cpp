@@ -61,7 +61,8 @@ double FinalGlideThroughTerrain(const double this_bearing,
 				bool *out_of_range,
 				double *TerrainBase)
 {
-  double irange = GlidePolar::MacCreadyAltitude(MACCREADY,
+  double mc = GlidePolar::GetMacCready();
+  double irange = GlidePolar::MacCreadyAltitude(mc,
 						1.0, this_bearing,
 						Calculated->WindSpeed,
 						Calculated->WindBearing,
@@ -325,11 +326,14 @@ static double EffectiveMacCready_internal(NMEA_INFO *Basic, DERIVED_INFO *Calcul
   if (!Calculated->ValidStart) return 0;
   if (Calculated->TaskStartTime<0) return 0;
 
+
   if (!ValidTaskPoint(ActiveWayPoint)
       || !ValidTaskPoint(ActiveWayPoint-1)) return 0;
   if (Calculated->TaskDistanceToGo<=0) {
     return 0;
   }
+
+  double mc_setting = GlidePolar::GetMacCready();
 
   mutexTaskData.Lock();
 
@@ -401,7 +405,7 @@ static double EffectiveMacCready_internal(NMEA_INFO *Basic, DERIVED_INFO *Calcul
     double cruise_efficiency;
 
     if (cruise_efficiency_mode) {
-      mc_effective = MACCREADY;
+      mc_effective = mc_setting;
       if (Calculated->FinalGlide && (Calculated->timeCircling>0)) {
 	mc_effective = Calculated->TotalHeightClimb
 	  /Calculated->timeCircling;

@@ -45,6 +45,7 @@ Copyright_License {
 #include "Math/Geometry.hpp"
 #include "Math/Earth.hpp"
 #include "Screen/Util.hpp"
+#include "McReady.h"
 #include "OnLineContest.h"
 #include "SettingsComputer.hpp"
 #include "SettingsUser.hpp"
@@ -111,6 +112,7 @@ double MapWindow::DrawTrail( HDC hdc, const POINT Orig, const RECT rc)
 
   ///////////// Vario colour scaling
 
+  double MACCREADY = GlidePolar::GetMacCready();
   float this_vario_max = (float)(1.5*min(5.0, max(MACCREADY,0.5)));
   float this_vario_min = (float)(-1.5*min(5.0, max(MACCREADY,2.0)));
   vario_max = this_vario_max;

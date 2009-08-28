@@ -193,7 +193,7 @@ void MapWindow::DrawMapScale(HDC hDC, const RECT rc /* the Map Rect*/,
       _tcscat(Scale,TEXT(" REPLAY"));
     }
     if (BallastTimerActive) {
-      _stprintf(TEMP,TEXT(" BALLAST %3.0f LITERS"), WEIGHTS[2]*BALLAST);
+      _stprintf(TEMP,TEXT(" BALLAST %3.0f LITERS"), GlidePolar::GetBallastLitres());
       _tcscat(Scale, TEMP);
     }
     TCHAR Buffer[20];
@@ -318,7 +318,7 @@ void MapWindow::DrawMapScale(HDC hDC, const RECT rc /* the Map Rect*/,
         _tcscat(ScaleInfo, TEXT("REPLAY "));
       }
       if (BallastTimerActive) {
-        _stprintf(TEMP,TEXT("BALLAST %3.0f LITERS"), WEIGHTS[2]*BALLAST);
+        _stprintf(TEMP,TEXT("BALLAST %3.0f LITERS"), GlidePolar::GetBallastLitres());
         _tcscat(ScaleInfo, TEMP);
       }
       TCHAR Buffer[20];

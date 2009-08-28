@@ -803,7 +803,7 @@ void InputEvents::eventMacCready(const TCHAR *misc) {
     }
   } else if (_tcscmp(misc, TEXT("show")) == 0) {
     TCHAR Temp[100];
-    _stprintf(Temp,TEXT("%0.1f"),MACCREADY*LIFTMODIFY);
+    _stprintf(Temp,TEXT("%0.1f"),GlidePolar::GetMacCready()*LIFTMODIFY);
     DoStatusMessage(TEXT("MacCready "), Temp);
   }
 }
@@ -1090,6 +1090,7 @@ void InputEvents::eventAbortTask(const TCHAR *misc) {
 // min: selects the worst performance (50%)
 // show: shows the current bug degradation
 void InputEvents::eventBugs(const TCHAR *misc) {
+  double BUGS = GlidePolar::GetBugs();
   double oldBugs = BUGS;
 
   mutexComm.Lock(); // Must LockComm to prevent deadlock
@@ -1114,10 +1115,8 @@ void InputEvents::eventBugs(const TCHAR *misc) {
   }
   if (BUGS != oldBugs) {
     BUGS= min(1.0,max(0.5,BUGS));
-
-    devPutBugs(devA(), BUGS);
-    devPutBugs(devB(), BUGS);
-    GlidePolar::SetBallast();
+    GlidePolar::SetBugs(BUGS);
+    GlidePolar::UpdatePolar(true);
   }
   mutexFlightData.Unlock();
   mutexComm.Unlock();
@@ -1131,6 +1130,7 @@ void InputEvents::eventBugs(const TCHAR *misc) {
 // min: selects 0% ballast
 // show: displays a status message indicating the ballast percentage
 void InputEvents::eventBallast(const TCHAR *misc) {
+  double BALLAST = GlidePolar::GetBallast();
   double oldBallast= BALLAST;
   mutexComm.Lock(); // Must mutexComm.Lock to prevent deadlock
   mutexFlightData.Lock();
@@ -1153,9 +1153,8 @@ void InputEvents::eventBallast(const TCHAR *misc) {
   }
   if (BALLAST != oldBallast) {
     BALLAST=min(1.0,max(0.0,BALLAST));
-    devPutBallast(devA(), BALLAST);
-    devPutBallast(devB(), BALLAST);
-    GlidePolar::SetBallast();
+    GlidePolar::SetBallast(BALLAST);
+    GlidePolar::UpdatePolar(true);
   }
   mutexFlightData.Unlock();
   mutexComm.Unlock();

@@ -70,9 +70,6 @@ extern bool   EnableAlternate2;
 // polar info
 extern int    BallastSecsToEmpty;
 extern bool   BallastTimerActive;
-extern double BUGS;
-extern double BALLAST;
-extern double MACCREADY;
 extern bool   AutoMacCready;
 
 extern int TeamCodeRefWaypoint;

@@ -128,7 +128,7 @@ static BOOL cLXWP2(PDeviceDescriptor_t d, const TCHAR *String,
   (void)GPS_INFO;
 
   NMEAParser::ExtractParameter(String,ctemp,0);
-  MACCREADY = StrToDouble(ctemp,NULL);
+  GlidePolar::SetMacCready(StrToDouble(ctemp,NULL));
   return TRUE;
 }
 

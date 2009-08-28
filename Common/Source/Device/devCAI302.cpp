@@ -52,6 +52,7 @@ Copyright_License {
 #include "Device/Port.h"
 #include "Math/Units.h"
 #include "SettingsComputer.hpp"
+#include "McReady.h"
 
 #include <windows.h>
 #include <tchar.h>
@@ -618,23 +619,22 @@ BOOL cai_w(PDeviceDescriptor_t d, const TCHAR *String, NMEA_INFO *GPS_INFO)
   NMEAParser::ExtractParameter(String,ctemp,10);
   GPS_INFO->MacReady = (StrToDouble(ctemp,NULL) / 10.0) * KNOTSTOMETRESSECONDS;
   if (MacCreadyUpdateTimeout <= 0)
-    MACCREADY = GPS_INFO->MacReady;
+    GlidePolar::SetMacCready(GPS_INFO->MacReady);
   else
     MacCreadyUpdateTimeout--;
 
   NMEAParser::ExtractParameter(String,ctemp,11);
   GPS_INFO->Ballast = StrToDouble(ctemp,NULL) / 100.0;
-  if (BugsUpdateTimeout <= 0)
-    BALLAST = GPS_INFO->Ballast;
-  else
+  if (BugsUpdateTimeout <= 0) {
+    GlidePolar::SetBallast(GPS_INFO->Ballast);
+  } else
     BallastUpdateTimeout--;
-
 
   NMEAParser::ExtractParameter(String,ctemp,12);
   GPS_INFO->Bugs = StrToDouble(ctemp,NULL) / 100.0;
-  if (BugsUpdateTimeout <= 0)
-    BUGS = GPS_INFO->Bugs;
-  else
+  if (BugsUpdateTimeout <= 0) {
+    GlidePolar::SetBugs(GPS_INFO->Bugs);
+  } else
     BugsUpdateTimeout--;
 
   // JMW update audio functions etc.

@@ -143,7 +143,7 @@ BOOL PBB50(const TCHAR *String, NMEA_INFO *GPS_INFO)
 
   NMEAParser::ExtractParameter(String,ctemp,2);
   GPS_INFO->MacReady = StrToDouble(ctemp,NULL)/TOKNOTS;
-  MACCREADY = GPS_INFO->MacReady;
+  GlidePolar::SetMacCready(GPS_INFO->MacReady);
 
   NMEAParser::ExtractParameter(String,ctemp,3);
   vias = sqrt(StrToDouble(ctemp,NULL))/TOKNOTS;

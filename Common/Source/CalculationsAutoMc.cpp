@@ -55,7 +55,8 @@ int  AutoMcMode = 0;
 // 2: Average if in climb mode, final glide in final glide mode
 
 
-void GlideComputer::DoAutoMacCready(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
+void GlideComputer::DoAutoMacCready(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
+				    double mc_setting)
 {
   bool is_final_glide = false;
 
@@ -63,7 +64,7 @@ void GlideComputer::DoAutoMacCready(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 
   mutexTaskData.Lock();
 
-  double mc_new = MACCREADY;
+  double mc_new = mc_setting;
   static bool first_mc = true;
 
   if (Calculated->FinalGlide && ActiveIsFinalWaypoint()) {
@@ -148,7 +149,6 @@ void GlideComputer::DoAutoMacCready(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
     }
   }
 
-  MACCREADY = LowPassFilter(MACCREADY,mc_new,0.15);
-
   mutexTaskData.Unlock();
+  GlidePolar::SetMacCready(LowPassFilter(mc_setting, mc_new, 0.15));
 }

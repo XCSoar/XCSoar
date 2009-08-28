@@ -42,7 +42,7 @@ Copyright_License {
 #include "Math/FastMath.h"
 #include "Math/Geometry.hpp"
 #include "Device/device.h"
-
+#include "Mutex.hpp"
 #include <tchar.h>
 #include <math.h>
 #include <windows.h>
@@ -72,33 +72,98 @@ bool GlidePolar::AbortSafetyUseCurrent = false;
 
 static int iSAFETYSPEED=0;
 
+Mutex mutexGlidePolar;
+
 //Flight Data Globals
-double        MACCREADY = 0; // JMW now in SI units (m/s) for consistency
-double        BUGS = 1;
-double        BALLAST = 0;
-int POLARID = 0;
-double POLAR[POLARSIZE] = {0,0,0};
-double WEIGHTS[POLARSIZE] = {250,70,100};
+double        GlidePolar::MACCREADY = 0; // JMW now in SI units (m/s) for consistency
+double        GlidePolar::BUGS = 1;
+double        GlidePolar::BALLAST = 0;
+int           POLARID = 0;
+double        POLAR[POLARSIZE] = {0,0,0};
+double        WEIGHTS[POLARSIZE] = {250,70,100};
 bool          AutoMacCready = false;
 
+void GlidePolar::Lock() {
+  mutexGlidePolar.Lock();
+}
+
+void GlidePolar::Unlock() {
+  mutexGlidePolar.Unlock();
+}
 
 double GlidePolar::AbortSafetyMacCready() {
+  double retval;
+  Lock();
   if (AbortSafetyUseCurrent) {
-    return MACCREADY;
+    retval = MACCREADY;
   } else {
-    return SafetyMacCready;
+    retval= SafetyMacCready;
   }
+  Unlock();
+  return retval;
 }
 
 double GlidePolar::GetAUW() {
-  return BallastLitres + WEIGHTS[0] + WEIGHTS[1];
+  double retval;
+  Lock();
+  retval = BallastLitres + WEIGHTS[0] + WEIGHTS[1];
+  Unlock();
+  return retval;
 }
 
-#include "Blackboard.hpp"
+double GlidePolar::GetMacCready() {
+  double retval;
+  Lock();
+  retval = MACCREADY;
+  Unlock();
+  return retval;
+}
 
-void GlidePolar::SetBallast() {
+double GlidePolar::GetBugs() {
+  double retval;
+  Lock();
+  retval = BUGS;
+  Unlock();
+  return retval;
+}
 
-  mutexFlightData.Lock();
+double GlidePolar::GetBallast() {
+  double retval;
+  Lock();
+  retval = BALLAST;
+  Unlock();
+  return retval;
+}
+
+double GlidePolar::GetBallastLitres() {
+  double retval;
+  Lock();
+  retval = BallastLitres;
+  Unlock();
+  return retval;
+}
+
+void GlidePolar::SetMacCready(double val) {
+  Lock();
+  MACCREADY = val;
+  Unlock();
+}
+
+void GlidePolar::SetBugs(double val) {
+  Lock();
+  BUGS = val;
+  Unlock();
+}
+
+void GlidePolar::SetBallast(double val) {
+  Lock();
+  BALLAST = val;
+  Unlock();
+}
+
+void GlidePolar::UpdatePolar(bool send) {
+
+  Lock();
   double BallastWeight;
   BallastLitres = WEIGHTS[2] * BALLAST;
   BallastWeight = GetAUW();
@@ -146,7 +211,6 @@ void GlidePolar::SetBallast() {
       sinkratecache[i] = -thesinkrate;
 
     }
-  mutexFlightData.Unlock();
 
   int polar_ai = iround((polar_a*10)*4096);
   int polar_bi = iround((polar_b)*4096);
@@ -154,6 +218,11 @@ void GlidePolar::SetBallast() {
   int minsinki = -iround(minsink*10);
   int vbestldi = iround(Vbestld*10);
   int bestldi = iround(bestld*10);
+  Unlock();
+  /* use this instead? etc
+    devPutBugs(devA(), BUGS);
+    devPutBugs(devB(), BUGS);
+/// JMW TODO
 
   if (GPS_INFO.VarioAvailable) {
 
@@ -168,7 +237,14 @@ void GlidePolar::SetBallast() {
 
     VarioWriteNMEA(nmeabuf);
   }
+  */
 
+  if (send) {
+    devPutBallast(devA(), BALLAST);
+    devPutBallast(devB(), BALLAST);
+    devPutBugs(devA(), BUGS);
+    devPutBugs(devB(), BUGS);
+  }
 }
 
 

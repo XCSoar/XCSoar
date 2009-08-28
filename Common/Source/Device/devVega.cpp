@@ -78,6 +78,7 @@ static BOOL PDSWC(PDeviceDescriptor_t d, const TCHAR *String,
 {
   static long last_switchinputs;
   static long last_switchoutputs;
+  double MACCREADY = GlidePolar::GetMacCready();
   (void)d;
   unsigned long uswitchinputs, uswitchoutputs;
   _stscanf(String,
@@ -434,7 +435,7 @@ static void _VarioWriteSettings(DeviceDescriptor_t *d) {
     TCHAR mcbuf[100];
 
     wsprintf(mcbuf, TEXT("PDVMC,%d,%d,%d,%d,%d"),
-	     iround(MACCREADY*10),
+	     iround(GlidePolar::GetMacCready()*10),
 	     iround(CALCULATED_INFO.VOpt*10),
 	     CALCULATED_INFO.Circling,
 	     iround(CALCULATED_INFO.TerrainAlt),

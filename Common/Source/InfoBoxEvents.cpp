@@ -326,9 +326,10 @@ void	DirectionProcessing(int UpDown)
 	return;
 }
 
+
 void	MacCreadyProcessing(int UpDown)
 {
-
+  double MACCREADY = GlidePolar::GetMacCready();
   if(UpDown==1) {
 
     MACCREADY += (double)0.1;
@@ -336,6 +337,7 @@ void	MacCreadyProcessing(int UpDown)
     if (MACCREADY>5.0) { // JMW added sensible limit
       MACCREADY=5.0;
     }
+    GlidePolar::SetMacCready(MACCREADY);
   }
   else if(UpDown==-1)
     {
@@ -344,7 +346,7 @@ void	MacCreadyProcessing(int UpDown)
 	{
 	  MACCREADY = 0;
 	}
-
+    GlidePolar::SetMacCready(MACCREADY);
   } else if (UpDown==0)
     {
       CALCULATED_INFO.AutoMacCready = !CALCULATED_INFO.AutoMacCready;
@@ -361,6 +363,7 @@ void	MacCreadyProcessing(int UpDown)
 
     }
 
+  // JMW TODO check scope
   devPutMacCready(devA(), MACCREADY);
   devPutMacCready(devB(), MACCREADY);
 

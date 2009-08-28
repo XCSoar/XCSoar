@@ -2727,7 +2727,7 @@ void dlgConfigurationShowModal(void){
     if (POLARID != wp->GetDataField()->GetAsInteger()) {
       POLARID = wp->GetDataField()->GetAsInteger();
       SetToRegistry(szRegistryPolarID, POLARID);
-      GlidePolar::SetBallast();
+      GlidePolar::UpdatePolar(false);
       POLARFILECHANGED = true;
       changed = true;
     }
@@ -3145,7 +3145,7 @@ void dlgConfigurationShowModal(void){
     if (_tcscmp(temptext,szPolarFile)) {
       SetRegistryString(szRegistryPolarFile, temptext);
       POLARFILECHANGED = true;
-      GlidePolar::SetBallast();
+      GlidePolar::UpdatePolar(false);
       changed = true;
     }
   }
@@ -3309,7 +3309,7 @@ void dlgConfigurationShowModal(void){
     if (SAFTEYSPEED != ival) {
       SAFTEYSPEED = ival;
       SetToRegistry(szRegistrySafteySpeed,(DWORD)SAFTEYSPEED);
-      GlidePolar::SetBallast();
+      GlidePolar::UpdatePolar(false);
       changed = true;
     }
   }
