@@ -637,11 +637,11 @@ XCSoarSimulator-$(TARGET).exe: XCSoarSimulator-$(TARGET)-ns.exe
 	$(Q)$(STRIP) $< -o $@
 	$(Q)$(SIZE) $@
 
-XCSoar-$(TARGET)-ns.exe: $(OBJS)
+XCSoar-$(TARGET)-ns.exe: $(OBJS:.o=-$(TARGET).o)
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
-XCSoarSimulator-$(TARGET)-ns.exe: $(OBJS:.o=_Simulator.o)
+XCSoarSimulator-$(TARGET)-ns.exe: $(OBJS:.o=-$(TARGET)-Simulator.o)
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
@@ -706,32 +706,32 @@ cxx-flags	=$(DEPFLAGS) $(CXXFLAGS) $(CPPFLAGS) $(CPPFLAGS_$(dirtarget)) $(TARGET
 #
 # Provide our own rules for building...
 #
-%.o: %.c
+%-$(TARGET).o: %.c
 	@$(NQ)echo "  CC      $@"
 	$(Q)$(CC) $(cc-flags) -c $(OUTPUT_OPTION) $<
 	@sed -i '1s,^[^ :]*,$@,' $(DEPFILE)
 
-%.o: %.cpp
+%-$(TARGET).o: %.cpp
 	@$(NQ)echo "  CXX     $@"
 	$(Q)$(CXX) $(cxx-flags) -c $(OUTPUT_OPTION) $<
 	@sed -i '1s,^[^ :]*,$@,' $(DEPFILE)
 
-%.o: %.cxx
+%-$(TARGET).o: %.cxx
 	@$(NQ)echo "  CXX     $@"
 	$(Q)$(CXX) $(cxx-flags) -c $(OUTPUT_OPTION) $<
 	@sed -i '1s,^[^ :]*,$@,' $(DEPFILE)
 
-%_Simulator.o: %.c
+%-$(TARGET)-Simulator.o: %.c
 	@$(NQ)echo "  CC      $@"
 	$(Q)$(CC) $(cc-flags) -D_SIM_ -c $(OUTPUT_OPTION) $<
 	@sed -i '1s,^[^ :]*,$@,' $(DEPFILE)
 
-%_Simulator.o: %.cpp
+%-$(TARGET)-Simulator.o: %.cpp
 	@$(NQ)echo "  CXX     $@"
 	$(Q)$(CXX) $(cxx-flags) -D_SIM_ -c $(OUTPUT_OPTION) $<
 	@sed -i '1s,^[^ :]*,$@,' $(DEPFILE)
 
-%_Simulator.o: %.cxx
+%-$(TARGET)-Simulator.o: %.cxx
 	@$(NQ)echo "  CXX     $@"
 	$(Q)$(CXX) $(cxx-flags) -D_SIM_ -c $(OUTPUT_OPTION) $<
 	@sed -i '1s,^[^ :]*,$@,' $(DEPFILE)
