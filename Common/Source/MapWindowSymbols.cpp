@@ -476,6 +476,7 @@ void MapWindow::DrawWindAtAircraft2(HDC hdc, const POINT Orig, const RECT rc) {
 
   PolygonRotateShift(Arrow, 7, Start.x, Start.y,
 		     DerivedDrawInfo.WindBearing-DisplayAngle);
+  Polygon(hdc, Arrow, 5);
 
   if (WindArrowStyle==1) {
     POINT Tail[2] = {{0,-20}, {0,-26-min(20,wmag)*3}};
@@ -501,8 +502,6 @@ void MapWindow::DrawWindAtAircraft2(HDC hdc, const POINT Orig, const RECT rc) {
   } else {
     TextInBox(hdc, sTmp, Arrow[6].x-kx, Arrow[6].y, 0, TextInBoxMode);
   }
-
-  Polygon(hdc,Arrow,5);
 
   SelectObject(hdc, hbOld);
   SelectObject(hdc, hpOld);
