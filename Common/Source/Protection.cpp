@@ -130,10 +130,11 @@ DWORD CalculationThread (LPVOID lpvoid) {
     memcpy(&tmp_GPS_INFO,&GPS_INFO,sizeof(NMEA_INFO));
     memcpy(&tmp_CALCULATED_INFO,&CALCULATED_INFO,sizeof(DERIVED_INFO));
 
+    bool has_vario = GPS_INFO.VarioAvailable;
     mutexFlightData.Unlock();
 
     // Do vario first to reduce audio latency
-    if (GPS_INFO.VarioAvailable) {
+    if (has_vario) {
       if (DoCalculationsVario(&tmp_GPS_INFO,&tmp_CALCULATED_INFO)) {
 
       }
