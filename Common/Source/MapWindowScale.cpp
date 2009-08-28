@@ -46,16 +46,13 @@ Copyright_License {
 #include "Math/FastMath.h"
 #include "Screen/Util.hpp"
 #include "Screen/Graphics.hpp"
+#include "Screen/Fonts.hpp"
 #include "McReady.h"
 #include "InfoBoxManager.h"
 
 #include "RasterTerrain.h"
 #include "RasterWeather.h"
 #include "Logger.h"
-
-extern HFONT  MapWindowBoldFont;
-extern HFONT  TitleWindowFont;
-
 
 
 double MapWindow::findMapScaleBarSize(const RECT rc) {

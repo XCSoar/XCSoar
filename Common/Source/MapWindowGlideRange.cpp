@@ -137,7 +137,7 @@ void MapWindow::DrawGlideThroughTerrain(HDC hDC, const RECT rc) {
 
 #include "McReady.h"
 #include "InfoBoxLayout.h"
-extern HFONT  MapWindowBoldFont;
+#include "Screen/Fonts.hpp"
 
 /*
  * The VisualGlide by Paolo Ventafridda

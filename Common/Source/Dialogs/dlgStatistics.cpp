@@ -54,8 +54,7 @@ Copyright_License {
 #include "Screen/Graphics.hpp"
 #include "Screen/Util.hpp"
 #include "Utils.h"
-
-#include "Calculations.h" // TODO danger! multiple
+#include "GlideComputer.hpp"
 
 #define GROUND_COLOUR RGB(157,101,60)
 
@@ -596,37 +595,30 @@ void Statistics::DrawYGrid(HDC hdc, const RECT rc,
   }
 }
 
-
-
-
-/////////////////
-
-#include "OnLineContest.h"
-extern OLCOptimizer olc;
 static bool olcvalid=false;
 static bool olcfinished=false;
 
 void Statistics::RenderBarograph(HDC hdc, const RECT rc)
 {
 
-  if (flightstats.Altitude.sum_n<2) {
+  if (GlideComputer::flightstats.Altitude.sum_n<2) {
     DrawNoData(hdc, rc);
     return;
   }
 
   ResetScale();
 
-  ScaleXFromData(rc, &flightstats.Altitude);
-  ScaleYFromData(rc, &flightstats.Altitude);
+  ScaleXFromData(rc, &GlideComputer::flightstats.Altitude);
+  ScaleYFromData(rc, &GlideComputer::flightstats.Altitude);
   ScaleYFromValue(rc, 0);
-  ScaleXFromValue(rc, flightstats.Altitude.x_min+1.0); // in case no data
-  ScaleXFromValue(rc, flightstats.Altitude.x_min);
+  ScaleXFromValue(rc, GlideComputer::flightstats.Altitude.x_min+1.0); // in case no data
+  ScaleXFromValue(rc, GlideComputer::flightstats.Altitude.x_min);
 
   mutexTaskData.Lock();
   for(int j=1;j<MAXTASKPOINTS;j++) {
-    if (ValidTaskPoint(j) && (flightstats.LegStartTime[j]>=0)) {
+    if (ValidTaskPoint(j) && (GlideComputer::flightstats.LegStartTime[j]>=0)) {
       double xx =
-        (flightstats.LegStartTime[j]-CALCULATED_INFO.TakeOffTime)/3600.0;
+        (GlideComputer::flightstats.LegStartTime[j]-CALCULATED_INFO.TakeOffTime)/3600.0;
       if (xx>=0) {
         DrawLine(hdc, rc,
                  xx, y_min,
@@ -645,7 +637,7 @@ void Statistics::RenderBarograph(HDC hdc, const RECT rc)
   SelectObject(hdc, hpHorizonGround);
   SelectObject(hdc, hbHorizonGround);
 
-  DrawFilledLineGraph(hdc, rc, &flightstats.Altitude_Terrain,
+  DrawFilledLineGraph(hdc, rc, &GlideComputer::flightstats.Altitude_Terrain,
                 GROUND_COLOUR);
 
   SelectObject(hdc, GetStockObject(WHITE_PEN));
@@ -654,18 +646,18 @@ void Statistics::RenderBarograph(HDC hdc, const RECT rc)
   DeleteObject(hbHorizonGround);
 
   DrawXGrid(hdc, rc,
-            0.5, flightstats.Altitude.x_min,
+            0.5, GlideComputer::flightstats.Altitude.x_min,
             STYLE_THINDASHPAPER, 0.5, true);
 
   DrawYGrid(hdc, rc, 1000/ALTITUDEMODIFY, 0, STYLE_THINDASHPAPER,
             1000, true);
 
-  DrawLineGraph(hdc, rc, &flightstats.Altitude,
+  DrawLineGraph(hdc, rc, &GlideComputer::flightstats.Altitude,
                 STYLE_MEDIUMBLACK);
 
-  DrawTrend(hdc, rc, &flightstats.Altitude_Base, STYLE_BLUETHIN);
+  DrawTrend(hdc, rc, &GlideComputer::flightstats.Altitude_Base, STYLE_BLUETHIN);
 
-  DrawTrend(hdc, rc, &flightstats.Altitude_Ceiling, STYLE_BLUETHIN);
+  DrawTrend(hdc, rc, &GlideComputer::flightstats.Altitude_Ceiling, STYLE_BLUETHIN);
 
   DrawXLabel(hdc, rc, TEXT("t"));
   DrawYLabel(hdc, rc, TEXT("h"));
@@ -676,7 +668,7 @@ void Statistics::RenderBarograph(HDC hdc, const RECT rc)
 void Statistics::RenderSpeed(HDC hdc, const RECT rc)
 {
 
-  if ((flightstats.Task_Speed.sum_n<2)
+  if ((GlideComputer::flightstats.Task_Speed.sum_n<2)
       || !ValidTaskPoint(ActiveWayPoint)) {
     DrawNoData(hdc, rc);
     return;
@@ -684,17 +676,17 @@ void Statistics::RenderSpeed(HDC hdc, const RECT rc)
 
   ResetScale();
 
-  ScaleXFromData(rc, &flightstats.Task_Speed);
-  ScaleYFromData(rc, &flightstats.Task_Speed);
+  ScaleXFromData(rc, &GlideComputer::flightstats.Task_Speed);
+  ScaleYFromData(rc, &GlideComputer::flightstats.Task_Speed);
   ScaleYFromValue(rc, 0);
-  ScaleXFromValue(rc, flightstats.Task_Speed.x_min+1.0); // in case no data
-  ScaleXFromValue(rc, flightstats.Task_Speed.x_min);
+  ScaleXFromValue(rc, GlideComputer::flightstats.Task_Speed.x_min+1.0); // in case no data
+  ScaleXFromValue(rc, GlideComputer::flightstats.Task_Speed.x_min);
 
   mutexTaskData.Lock();
   for(int j=1;j<MAXTASKPOINTS;j++) {
-    if (ValidTaskPoint(j) && (flightstats.LegStartTime[j]>=0)) {
+    if (ValidTaskPoint(j) && (GlideComputer::flightstats.LegStartTime[j]>=0)) {
       double xx =
-        (flightstats.LegStartTime[j]-CALCULATED_INFO.TaskStartTime)/3600.0;
+        (GlideComputer::flightstats.LegStartTime[j]-CALCULATED_INFO.TaskStartTime)/3600.0;
       if (xx>=0) {
         DrawLine(hdc, rc,
                  xx, y_min,
@@ -706,16 +698,16 @@ void Statistics::RenderSpeed(HDC hdc, const RECT rc)
   mutexTaskData.Unlock();
 
   DrawXGrid(hdc, rc,
-            0.5, flightstats.Task_Speed.x_min,
+            0.5, GlideComputer::flightstats.Task_Speed.x_min,
             STYLE_THINDASHPAPER, 0.5, true);
 
   DrawYGrid(hdc, rc, 10/TASKSPEEDMODIFY, 0, STYLE_THINDASHPAPER,
             10, true);
 
-  DrawLineGraph(hdc, rc, &flightstats.Task_Speed,
+  DrawLineGraph(hdc, rc, &GlideComputer::flightstats.Task_Speed,
                 STYLE_MEDIUMBLACK);
 
-  DrawTrend(hdc, rc, &flightstats.Task_Speed, STYLE_BLUETHIN);
+  DrawTrend(hdc, rc, &GlideComputer::flightstats.Task_Speed, STYLE_BLUETHIN);
 
   DrawXLabel(hdc, rc, TEXT("t"));
   DrawYLabel(hdc, rc, TEXT("V"));
@@ -727,37 +719,37 @@ void Statistics::RenderSpeed(HDC hdc, const RECT rc)
 void Statistics::RenderClimb(HDC hdc, const RECT rc)
 {
 
-  if (flightstats.ThermalAverage.sum_n<1) {
+  if (GlideComputer::flightstats.ThermalAverage.sum_n<1) {
     DrawNoData(hdc, rc);
     return;
   }
 
   ResetScale();
-  ScaleYFromData(rc, &flightstats.ThermalAverage);
+  ScaleYFromData(rc, &GlideComputer::flightstats.ThermalAverage);
   ScaleYFromValue(rc, (MACCREADY+0.5));
   ScaleYFromValue(rc, 0);
 
   ScaleXFromValue(rc, -1);
-  ScaleXFromValue(rc, flightstats.ThermalAverage.sum_n);
+  ScaleXFromValue(rc, GlideComputer::flightstats.ThermalAverage.sum_n);
 
   DrawYGrid(hdc, rc,
             1.0/LIFTMODIFY, 0,
             STYLE_THINDASHPAPER, 1.0, true);
 
   DrawBarChart(hdc, rc,
-               &flightstats.ThermalAverage);
+               &GlideComputer::flightstats.ThermalAverage);
 
   DrawLine(hdc, rc,
            0, MACCREADY,
-           flightstats.ThermalAverage.sum_n,
+           GlideComputer::flightstats.ThermalAverage.sum_n,
            MACCREADY,
            STYLE_REDTHICK);
 
   DrawLabel(hdc, rc, TEXT("MC"),
-	    max(0.5, flightstats.ThermalAverage.sum_n-1), MACCREADY);
+	    max(0.5, GlideComputer::flightstats.ThermalAverage.sum_n-1), MACCREADY);
 
   DrawTrendN(hdc, rc,
-             &flightstats.ThermalAverage,
+             &GlideComputer::flightstats.ThermalAverage,
              STYLE_BLUETHIN);
 
   DrawXLabel(hdc, rc, TEXT("n"));
@@ -918,19 +910,19 @@ void Statistics::RenderTask(HDC hdc, const RECT rc, const bool olcmode)
     return;
   }
 
-  olc.SetLine();
-  int nolc = olc.getN();
+  GlideComputer::olc.SetLine();
+  int nolc = GlideComputer::olc.getN();
 
   if (olcvalid_this) {
     for (i=0; i< nolc; i++) {
-      lat1 = olc.getLatitude(i);
-      lon1 = olc.getLongitude(i);
+      lat1 = GlideComputer::olc.getLatitude(i);
+      lon1 = GlideComputer::olc.getLongitude(i);
       ScaleYFromValue(rc, lat1);
       ScaleXFromValue(rc, lon1);
     }
     if (!olcfinished) {
-      lat1 = olc.lat_proj;
-      lon1 = olc.lon_proj;
+      lat1 = GlideComputer::olc.lat_proj;
+      lon1 = GlideComputer::olc.lon_proj;
       ScaleYFromValue(rc, lat1);
       ScaleXFromValue(rc, lon1);
     }
@@ -997,8 +989,8 @@ void Statistics::RenderTask(HDC hdc, const RECT rc, const bool olcmode)
   }
   mutexTaskData.Unlock();
   for (i=0; i< nolc; i++) {
-    lat1 = olc.getLatitude(i);
-    lon1 = olc.getLongitude(i);
+    lat1 = GlideComputer::olc.getLatitude(i);
+    lon1 = GlideComputer::olc.getLongitude(i);
     x1 = (lon1-lon_c)*fastcosine(lat1);
     y1 = (lat1-lat_c);
     ScaleXFromValue(rc, x1);
@@ -1056,10 +1048,10 @@ void Statistics::RenderTask(HDC hdc, const RECT rc, const bool olcmode)
   // draw track
 
   for (i=0; i< nolc-1; i++) {
-    lat1 = olc.getLatitude(i);
-    lon1 = olc.getLongitude(i);
-    lat2 = olc.getLatitude(i+1);
-    lon2 = olc.getLongitude(i+1);
+    lat1 = GlideComputer::olc.getLatitude(i);
+    lon1 = GlideComputer::olc.getLongitude(i);
+    lat2 = GlideComputer::olc.getLatitude(i+1);
+    lon2 = GlideComputer::olc.getLongitude(i+1);
     x1 = (lon1-lon_c)*fastcosine(lat1);
     y1 = (lat1-lat_c);
     x2 = (lon2-lon_c)*fastcosine(lat2);
@@ -1155,22 +1147,22 @@ void Statistics::RenderTask(HDC hdc, const RECT rc, const bool olcmode)
     for (i=0; i< 7-1; i++) {
       switch(OLCRules) {
       case 0:
-	lat1 = olc.data.solution_FAI_sprint.latitude[i];
-	lon1 = olc.data.solution_FAI_sprint.longitude[i];
-	lat2 = olc.data.solution_FAI_sprint.latitude[i+1];
-	lon2 = olc.data.solution_FAI_sprint.longitude[i+1];
+	lat1 = GlideComputer::olc.data.solution_FAI_sprint.latitude[i];
+	lon1 = GlideComputer::olc.data.solution_FAI_sprint.longitude[i];
+	lat2 = GlideComputer::olc.data.solution_FAI_sprint.latitude[i+1];
+	lon2 = GlideComputer::olc.data.solution_FAI_sprint.longitude[i+1];
 	break;
       case 1:
-	lat1 = olc.data.solution_FAI_triangle.latitude[i];
-	lon1 = olc.data.solution_FAI_triangle.longitude[i];
-	lat2 = olc.data.solution_FAI_triangle.latitude[i+1];
-	lon2 = olc.data.solution_FAI_triangle.longitude[i+1];
+	lat1 = GlideComputer::olc.data.solution_FAI_triangle.latitude[i];
+	lon1 = GlideComputer::olc.data.solution_FAI_triangle.longitude[i];
+	lat2 = GlideComputer::olc.data.solution_FAI_triangle.latitude[i+1];
+	lon2 = GlideComputer::olc.data.solution_FAI_triangle.longitude[i+1];
 	break;
       case 2:
-	lat1 = olc.data.solution_FAI_classic.latitude[i];
-	lon1 = olc.data.solution_FAI_classic.longitude[i];
-	lat2 = olc.data.solution_FAI_classic.latitude[i+1];
-	lon2 = olc.data.solution_FAI_classic.longitude[i+1];
+	lat1 = GlideComputer::olc.data.solution_FAI_classic.latitude[i];
+	lon1 = GlideComputer::olc.data.solution_FAI_classic.longitude[i];
+	lat2 = GlideComputer::olc.data.solution_FAI_classic.latitude[i+1];
+	lon2 = GlideComputer::olc.data.solution_FAI_classic.longitude[i+1];
 	break;
       }
       x1 = (lon1-lon_c)*fastcosine(lat1);
@@ -1182,8 +1174,8 @@ void Statistics::RenderTask(HDC hdc, const RECT rc, const bool olcmode)
 	       STYLE_REDTHICK);
     }
     if (!olcfinished) {
-      x1 = (olc.lon_proj-lon_c)*fastcosine(lat1);
-      y1 = (olc.lat_proj-lat_c);
+      x1 = (GlideComputer::olc.lon_proj-lon_c)*fastcosine(lat1);
+      y1 = (GlideComputer::olc.lat_proj-lat_c);
       DrawLine(hdc, rc,
 	       x1, y1, x2, y2,
 	       STYLE_BLUETHIN);
@@ -1288,10 +1280,6 @@ void Statistics::RenderTemperature(HDC hdc, const RECT rc)
 }
 
 
-// from Calculations.cpp
-#include "windanalyser.h"
-extern WindAnalyser *windanalyser;
-
 void Statistics::RenderWind(HDC hdc, const RECT rc)
 {
   int numsteps=10;
@@ -1303,18 +1291,19 @@ void Statistics::RenderWind(HDC hdc, const RECT rc)
 
   LeastSquares windstats_mag;
 
-  if (flightstats.Altitude_Ceiling.y_max
-      -flightstats.Altitude_Ceiling.y_min<=10) {
+  if (GlideComputer::flightstats.Altitude_Ceiling.y_max
+      -GlideComputer::flightstats.Altitude_Ceiling.y_min<=10) {
     DrawNoData(hdc, rc);
     return;
   }
 
   for (i=0; i<numsteps ; i++) {
 
-    h = (flightstats.Altitude_Ceiling.y_max-flightstats.Altitude_Base.y_min)*
-      i/(double)(numsteps-1)+flightstats.Altitude_Base.y_min;
+    h = (GlideComputer::flightstats.Altitude_Ceiling.y_max
+	 -GlideComputer::flightstats.Altitude_Base.y_min)*
+      i/(double)(numsteps-1)+GlideComputer::flightstats.Altitude_Base.y_min;
 
-    wind = windanalyser->windstore.getWind(GPS_INFO.Time, h, &found);
+    wind = GlideComputer::windanalyser->windstore.getWind(GPS_INFO.Time, h, &found);
     mag = sqrt(wind.x*wind.x+wind.y*wind.y);
 
     windstats_mag.least_squares_update(mag, h);
@@ -1350,10 +1339,11 @@ void Statistics::RenderWind(HDC hdc, const RECT rc)
   double hfact;
   for (i=0; i<numsteps ; i++) {
     hfact = (i+1)/(double)(numsteps+1);
-    h = (flightstats.Altitude_Ceiling.y_max-flightstats.Altitude_Base.y_min)*
-      hfact+flightstats.Altitude_Base.y_min;
+    h = (GlideComputer::flightstats.Altitude_Ceiling.y_max
+	 -GlideComputer::flightstats.Altitude_Base.y_min)*
+      hfact+GlideComputer::flightstats.Altitude_Base.y_min;
 
-    wind = windanalyser->windstore.getWind(GPS_INFO.Time, h, &found);
+    wind = GlideComputer::windanalyser->windstore.getWind(GPS_INFO.Time, h, &found);
     if (windstats_mag.x_max == 0)
       windstats_mag.x_max=1;  // prevent /0 problems
     wind.x /= windstats_mag.x_max;
@@ -1661,24 +1651,24 @@ static void Update(void){
                 gettext(TEXT("Analysis")),
                 gettext(TEXT("Barograph")));
       wf->SetCaption(sTmp);
-      if (flightstats.Altitude_Ceiling.sum_n<2) {
+      if (GlideComputer::flightstats.Altitude_Ceiling.sum_n<2) {
         _stprintf(sTmp, TEXT("\0"));
-      } else if (flightstats.Altitude_Ceiling.sum_n<4) {
+      } else if (GlideComputer::flightstats.Altitude_Ceiling.sum_n<4) {
         _stprintf(sTmp, TEXT("%s:\r\n  %.0f-%.0f %s"),
                   gettext(TEXT("Working band")),
-                  flightstats.Altitude_Base.y_ave*ALTITUDEMODIFY,
-                  flightstats.Altitude_Ceiling.y_ave*ALTITUDEMODIFY,
+                  GlideComputer::flightstats.Altitude_Base.y_ave*ALTITUDEMODIFY,
+                  GlideComputer::flightstats.Altitude_Ceiling.y_ave*ALTITUDEMODIFY,
                   Units::GetAltitudeName());
 
       } else {
 
         _stprintf(sTmp, TEXT("%s:\r\n  %.0f-%.0f %s\r\n\r\n%s:\r\n  %.0f %s/hr"),
                   gettext(TEXT("Working band")),
-                  flightstats.Altitude_Base.y_ave*ALTITUDEMODIFY,
-                  flightstats.Altitude_Ceiling.y_ave*ALTITUDEMODIFY,
+                  GlideComputer::flightstats.Altitude_Base.y_ave*ALTITUDEMODIFY,
+                  GlideComputer::flightstats.Altitude_Ceiling.y_ave*ALTITUDEMODIFY,
                   Units::GetAltitudeName(),
                   gettext(TEXT("Ceiling trend")),
-                  flightstats.Altitude_Ceiling.m*ALTITUDEMODIFY,
+                  GlideComputer::flightstats.Altitude_Ceiling.m*ALTITUDEMODIFY,
                   Units::GetAltitudeName());
       }
       wInfo->SetCaption(sTmp);
@@ -1690,21 +1680,21 @@ static void Update(void){
                 gettext(TEXT("Climb")));
       wf->SetCaption(sTmp);
 
-      if (flightstats.ThermalAverage.sum_n==0) {
+      if (GlideComputer::flightstats.ThermalAverage.sum_n==0) {
         _stprintf(sTmp, TEXT("\0"));
-      } else if (flightstats.ThermalAverage.sum_n==1) {
+      } else if (GlideComputer::flightstats.ThermalAverage.sum_n==1) {
         _stprintf(sTmp, TEXT("%s:\r\n  %3.1f %s"),
                   gettext(TEXT("Av climb")),
-                  flightstats.ThermalAverage.y_ave*LIFTMODIFY,
+                  GlideComputer::flightstats.ThermalAverage.y_ave*LIFTMODIFY,
                   Units::GetVerticalSpeedName()
                   );
       } else {
         _stprintf(sTmp, TEXT("%s:\r\n  %3.1f %s\r\n\r\n%s:\r\n  %3.2f %s"),
                   gettext(TEXT("Av climb")),
-                  flightstats.ThermalAverage.y_ave*LIFTMODIFY,
+                  GlideComputer::flightstats.ThermalAverage.y_ave*LIFTMODIFY,
                   Units::GetVerticalSpeedName(),
                   gettext(TEXT("Climb trend")),
-                  flightstats.ThermalAverage.m*LIFTMODIFY,
+                  GlideComputer::flightstats.ThermalAverage.m*LIFTMODIFY,
                   Units::GetVerticalSpeedName()
                   );
       }
@@ -1845,25 +1835,25 @@ static void Update(void){
 
     switch(OLCRules) {
     case 0:
-      dt = olc.data.solution_FAI_sprint.time;
-      d = olc.data.solution_FAI_sprint.distance;
-      olcvalid = olc.data.solution_FAI_sprint.valid;
-      score = olc.data.solution_FAI_sprint.score;
-      olcfinished = olc.data.solution_FAI_sprint.finished;
+      dt = GlideComputer::olc.data.solution_FAI_sprint.time;
+      d = GlideComputer::olc.data.solution_FAI_sprint.distance;
+      olcvalid = GlideComputer::olc.data.solution_FAI_sprint.valid;
+      score = GlideComputer::olc.data.solution_FAI_sprint.score;
+      olcfinished = GlideComputer::olc.data.solution_FAI_sprint.finished;
       break;
     case 1:
-      dt = olc.data.solution_FAI_triangle.time;
-      d = olc.data.solution_FAI_triangle.distance;
-      olcvalid = olc.data.solution_FAI_triangle.valid;
-      score = olc.data.solution_FAI_triangle.score;
-      olcfinished = olc.data.solution_FAI_triangle.finished;
+      dt = GlideComputer::olc.data.solution_FAI_triangle.time;
+      d = GlideComputer::olc.data.solution_FAI_triangle.distance;
+      olcvalid = GlideComputer::olc.data.solution_FAI_triangle.valid;
+      score = GlideComputer::olc.data.solution_FAI_triangle.score;
+      olcfinished = GlideComputer::olc.data.solution_FAI_triangle.finished;
       break;
     case 2:
-      dt = olc.data.solution_FAI_classic.time;
-      d = olc.data.solution_FAI_classic.distance;
-      olcvalid = olc.data.solution_FAI_classic.valid;
-      score = olc.data.solution_FAI_classic.score;
-      olcfinished = olc.data.solution_FAI_classic.finished;
+      dt = GlideComputer::olc.data.solution_FAI_classic.time;
+      d = GlideComputer::olc.data.solution_FAI_classic.distance;
+      olcvalid = GlideComputer::olc.data.solution_FAI_classic.valid;
+      score = GlideComputer::olc.data.solution_FAI_classic.score;
+      olcfinished = GlideComputer::olc.data.solution_FAI_classic.finished;
       break;
     default:
       olcvalid = false;
@@ -2010,7 +2000,7 @@ static void OnCalcClicked(WindowControl * Sender,
   }
   if (page==ANALYSIS_PAGE_OLC) {
     StartHourglassCursor();
-    olc.Optimize((CALCULATED_INFO.Flying==1));
+    GlideComputer::olc.Optimize((CALCULATED_INFO.Flying==1));
     StopHourglassCursor();
   }
   if (page==ANALYSIS_PAGE_AIRSPACE) {

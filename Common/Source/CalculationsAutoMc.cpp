@@ -46,6 +46,7 @@ Copyright_License {
 #include "Math/LowPassFilter.hpp"
 #include "Logger.h"
 #include "GlideSolvers.hpp"
+#include "GlideComputer.hpp"
 #include <math.h>
 
 int  AutoMcMode = 0;
@@ -54,7 +55,7 @@ int  AutoMcMode = 0;
 // 2: Average if in climb mode, final glide in final glide mode
 
 
-void DoAutoMacCready(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
+void GlideComputer::DoAutoMacCready(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 {
   bool is_final_glide = false;
 

@@ -42,6 +42,7 @@ Copyright_License {
 #include "WayPoint.hpp"
 #include "Screen/Util.hpp"
 #include "Screen/Graphics.hpp"
+#include "Screen/Fonts.hpp"
 #include "InfoBoxLayout.h"
 #include "AATDistance.h"
 #include "Math/FastMath.h"
@@ -50,15 +51,12 @@ Copyright_License {
 #include "Compatibility/gdi.h"
 #include <math.h>
 
-static const COLORREF taskcolor = RGB(0,120,0); // duplicated from MapWindow.cpp!
-
-
 void MapWindow::DrawAbortedTask(HDC hdc, const RECT rc, const POINT me)
 {
   int i;
   if (!WayPointList) return;
 
-  mutexTaskData.Lock();  // protect from external task changes
+  mutexTaskData.Lock();  // protect from extrnal task changes
 #ifdef HAVEEXCEPTIONS
   __try{
 #endif
@@ -70,7 +68,7 @@ void MapWindow::DrawAbortedTask(HDC hdc, const RECT rc, const POINT me)
 	    DrawDashLine(hdc, 1,
 			 WayPointList[index].Screen,
 			 me,
-			 taskcolor, rc);
+			 MapGfx.TaskColor, rc);
 	  }
       }
 #ifdef HAVEEXCEPTIONS
@@ -89,9 +87,9 @@ void MapWindow::DrawStartSector(HDC hdc, const RECT rc,
 
   if(StartLine) {
     ClipDrawLine(hdc, PS_SOLID, IBLSCALE(5), WayPointList[Index].Screen,
-              Start, taskcolor, rc);
+              Start, MapGfx.TaskColor, rc);
     ClipDrawLine(hdc, PS_SOLID, IBLSCALE(5), WayPointList[Index].Screen,
-              End, taskcolor, rc);
+              End, MapGfx.TaskColor, rc);
     ClipDrawLine(hdc, PS_SOLID, IBLSCALE(1), WayPointList[Index].Screen,
               Start, RGB(255,0,0), rc);
     ClipDrawLine(hdc, PS_SOLID, IBLSCALE(1), WayPointList[Index].Screen,
@@ -122,7 +120,7 @@ void MapWindow::DrawTask(HDC hdc, RECT rc, const POINT &Orig_Aircraft)
 
   if (!WayPointList) return;
 
-  mutexTaskData.Lock();  // protect from external task changes
+  mutexTaskData.Lock();  // protect from extrnal task changes
 #ifdef HAVEEXCEPTIONS
   __try{
 #endif
@@ -150,10 +148,10 @@ void MapWindow::DrawTask(HDC hdc, RECT rc, const POINT &Orig_Aircraft)
 	  if(FinishLine) {
 	    ClipDrawLine(hdc, PS_SOLID, IBLSCALE(5),
 		      WayPointList[Task[i].Index].Screen,
-		      Task[i].Start, taskcolor, rc);
+		      Task[i].Start, MapGfx.TaskColor, rc);
 	    ClipDrawLine(hdc, PS_SOLID, IBLSCALE(5),
 		      WayPointList[Task[i].Index].Screen,
-		      Task[i].End, taskcolor, rc);
+		      Task[i].End, MapGfx.TaskColor, rc);
 	    ClipDrawLine(hdc, PS_SOLID, IBLSCALE(1),
 		      WayPointList[Task[i].Index].Screen,
 		      Task[i].Start, RGB(255,0,0), rc);
@@ -271,7 +269,7 @@ void MapWindow::DrawTask(HDC hdc, RECT rc, const POINT &Orig_Aircraft)
 	  DrawDashLine(hdc, 1,
 		       WayPointList[imin].Screen,
 		       WayPointList[imax].Screen,
-		       taskcolor, rc);
+		       MapGfx.TaskColor, rc);
 	} else {
 	  sct1 = WayPointList[Task[i].Index].Screen;
 	  sct2 = WayPointList[Task[i+1].Index].Screen;
@@ -281,12 +279,12 @@ void MapWindow::DrawTask(HDC hdc, RECT rc, const POINT &Orig_Aircraft)
 	  DrawDashLine(hdc, 3,
 		       sct1,
 		       sct2,
-		       taskcolor, rc);
+		       MapGfx.TaskColor, rc);
 	} else {
 	  DrawDashLine(hdc, 3,
 		       sct2,
 		       sct1,
-		       taskcolor, rc);
+		       MapGfx.TaskColor, rc);
 	}
 
 	// draw small arrow along task direction
@@ -297,8 +295,8 @@ void MapWindow::DrawTask(HDC hdc, RECT rc, const POINT &Orig_Aircraft)
 	PolygonRotateShift(Arrow, 2, p_p.x, p_p.y,
 			   bearing-DisplayAngle);
 
-	ClipDrawLine(hdc, PS_SOLID, IBLSCALE(2), Arrow[0], p_p, taskcolor, rc);
-	ClipDrawLine(hdc, PS_SOLID, IBLSCALE(2), Arrow[1], p_p, taskcolor, rc);
+	ClipDrawLine(hdc, PS_SOLID, IBLSCALE(2), Arrow[0], p_p, MapGfx.TaskColor, rc);
+	ClipDrawLine(hdc, PS_SOLID, IBLSCALE(2), Arrow[1], p_p, MapGfx.TaskColor, rc);
       }
     }
 #ifdef HAVEEXCEPTIONS
@@ -322,7 +320,7 @@ void MapWindow::DrawTaskAAT(HDC hdc, const RECT rc, HDC buffer)
   if (!WayPointList) return;
   if (!AATEnabled) return;
 
-  mutexTaskData.Lock();  // protect from external task changes
+  mutexTaskData.Lock();  // protect from extrnal task changes
 #ifdef HAVEEXCEPTIONS
   __try{
 #endif
@@ -442,7 +440,7 @@ void MapWindow::DrawBearing(HDC hdc, const RECT rc, int bBearingValid)
     return;
   }
 
-  mutexTaskData.Lock();  // protect from external task changes
+  mutexTaskData.Lock();  // protect from extrnal task changes
 
   double startLat = DrawInfo.Latitude;
   double startLon = DrawInfo.Longitude;
@@ -515,8 +513,6 @@ void MapWindow::DrawBearing(HDC hdc, const RECT rc, int bBearingValid)
 
 
 
-extern HFONT  TitleWindowFont;
-
 void MapWindow::DrawOffTrackIndicator(HDC hdc, const RECT rc) {
   if ((ActiveWayPoint<=0) || !ValidTaskPoint(ActiveWayPoint)) {
     return;
@@ -537,7 +533,7 @@ void MapWindow::DrawOffTrackIndicator(HDC hdc, const RECT rc) {
     return;
   }
 
-  mutexTaskData.Lock();  // protect from external task changes
+  mutexTaskData.Lock();  // protect from extrnal task changes
 
   double startLat = DrawInfo.Latitude;
   double startLon = DrawInfo.Longitude;
@@ -620,7 +616,7 @@ void MapWindow::DrawProjectedTrack(HDC hdc, const RECT rc, const POINT Orig) {
   // TODO feature: maybe have this work even if no task?
   // TODO feature: draw this also when in target pan mode
 
-  mutexTaskData.Lock();  // protect from external task changes
+  mutexTaskData.Lock();  // protect from extrnal task changes
 
   double startLat = DrawInfo.Latitude;
   double startLon = DrawInfo.Longitude;

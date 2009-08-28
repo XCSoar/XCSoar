@@ -47,6 +47,8 @@ extern TCHAR TeammateCode[10];
 
 // changed in task/flight or by calc thread /////////////////////////////////
 
+extern double CRUISE_EFFICIENCY;
+
 extern bool RequestAirspaceWarningDialog;
 
 extern bool LoggerActive;

@@ -55,9 +55,7 @@ Copyright_License {
 #include "Message.h"
 #include "TeamCodeCalculation.h"
 #include <tchar.h>
-#include "Audio/VegaVoice.h"
-#include "OnLineContest.h"
-#include "AATDistance.h"
+#include "GlideComputer.hpp"
 #include "NavFunctions.h" // used for team code
 #include "Calculations2.h"
 #ifdef NEWCLIMBAV
@@ -70,16 +68,7 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "BestAlternate.hpp"
 #include "Persist.hpp"
-#include "GlideRatio.hpp"
 #include "Airspace.h"
-
-extern ldrotary_s rotaryLD;
-
-OLCOptimizer olc;
-AATDistance aatdistance;
-DERIVED_INFO Finish_Derived_Info;
-Statistics flightstats;
-static VegaVoice vegavoice;
 
 bool EnableNavBaroAltitude=false;
 int EnableExternalTriggerCruise=false;
@@ -93,9 +82,10 @@ int FinishLine=1;
 DWORD FinishRadius=1000;
 bool EnableCalibration = false;
 
-bool WasFlying = false; // VENTA3 used by auto QFE: do not reset QFE if previously in flight. So you can check QFE
-			//   on the ground, otherwise it turns to zero at once!
-
+bool WasFlying = false; // VENTA3 used by auto QFE: do not reset QFE
+			//   if previously in flight. So you can check
+			//   QFE on the ground, otherwise it turns to
+			//   zero at once!
 extern int FastLogNum; // number of points to log at high rate
 
 double CRUISE_EFFICIENCY = 1.0;
@@ -116,9 +106,6 @@ static void TakeoffLanding(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 #include "CalculationsVertical.hpp"
 #include "CalculationsTerrain.hpp"
 #include "CalculationsWind.hpp"
-
-// now in CalculationsAutoMc.cpp
-void DoAutoMacCready(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 
 // now in CalculationsAirspace.cpp
 void PredictNextPosition(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
@@ -227,9 +214,9 @@ void ResetFlightStats(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
   CRUISE_EFFICIENCY = 1.0;
 
   if (full) {
-    olc.ResetFlight();
-    flightstats.Reset();
-    aatdistance.Reset();
+    GlideComputer::olc.ResetFlight();
+    GlideComputer::flightstats.Reset();
+    GlideComputer::aatdistance.Reset();
     CRUISE_EFFICIENCY = 1.0;
     Calculated->FlightTime = 0;
     Calculated->TakeOffTime = 0;
@@ -347,7 +334,7 @@ void InitCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
  */
 
   InitialiseCalculationsWind();
-  InitLDRotary(&rotaryLD);
+  InitLDRotary(&GlideComputer::rotaryLD);
 }
 
 extern bool TargetDialogOpen;
@@ -390,7 +377,7 @@ BOOL DoCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 
   LD(Basic,Calculated);
   CruiseLD(Basic,Calculated);
-  Calculated->AverageLD=CalculateLDRotary(Calculated, &rotaryLD); // AverageLD
+  Calculated->AverageLD=CalculateLDRotary(Calculated, &GlideComputer::rotaryLD); // AverageLD
   Average30s(Basic,Calculated);
   AverageThermal(Basic,Calculated);
   AverageClimbRate(Basic,Calculated);
@@ -407,7 +394,7 @@ BOOL DoCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 
   if (!TaskIsTemporary()) {
     InSector(Basic, Calculated);
-    DoAutoMacCready(Basic, Calculated);
+    GlideComputer::DoAutoMacCready(Basic, Calculated);
     IterateEffectiveMacCready(Basic, Calculated);
   }
 
@@ -416,8 +403,8 @@ BOOL DoCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   if ( EnableAlternate2 == true ) DoAlternates(Basic, Calculated,Alternate2);
   if ( EnableBestAlternate == true ) DoAlternates(Basic, Calculated,BestAlternate);
 
-  DoLogging(Basic, Calculated);
-  vegavoice.Update(Basic, Calculated);
+  GlideComputer::DoLogging(Basic, Calculated);
+  GlideComputer::vegavoice.Update(Basic, Calculated);
   ConditionMonitorsUpdate(Basic, Calculated);
 
   return TRUE;
@@ -619,7 +606,7 @@ void TakeoffLanding(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
       Calculated->TakeOffTime= Basic->Time;
 
       // save stats in case we never finish
-      memcpy(&Finish_Derived_Info, Calculated, sizeof(DERIVED_INFO));
+      memcpy(&GlideComputer::Finish_Derived_Info, Calculated, sizeof(DERIVED_INFO));
 
     }
     if (time_on_ground>10) {
@@ -643,7 +630,7 @@ void TakeoffLanding(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
       if (Calculated->ValidFinish) {
         double flighttime = Calculated->FlightTime;
         double takeofftime = Calculated->TakeOffTime;
-        memcpy(Calculated, &Finish_Derived_Info, sizeof(DERIVED_INFO));
+        memcpy(Calculated, &GlideComputer::Finish_Derived_Info, sizeof(DERIVED_INFO));
         Calculated->FlightTime = flighttime;
         Calculated->TakeOffTime = takeofftime;
       }

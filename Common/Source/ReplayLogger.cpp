@@ -57,6 +57,7 @@
 #include "Compatibility/string.h"
 
 #include "Blackboard.hpp"
+#include "GlideComputer.hpp"
 
 extern int NumLoggerBuffered; // from Logger
 
@@ -374,7 +375,7 @@ bool ReplayLogger::UpdateInternal(void) {
 
       mutexFlightData.Lock();
       if (init) {
-        flightstats.Reset();
+	GlideComputer::flightstats.Reset();
       }
       GPS_INFO.Latitude = LatX;
       GPS_INFO.Longitude = LonX;
@@ -419,7 +420,11 @@ void ReplayLogger::Start(void) {
     Stop();
   }
   NumLoggerBuffered = 0;
-  flightstats.Reset();
+
+  mutexFlightData.Lock();
+  GlideComputer::flightstats.Reset();
+  mutexFlightData.Unlock();
+
   if (!UpdateInternal()) {
     MessageBoxX(gettext(TEXT("Could not open IGC file!")),
 		gettext(TEXT("Flight replay")),

@@ -50,10 +50,7 @@ Copyright_License {
 #include <math.h>
 #include "Atmosphere.h"
 #include "ThermalLocator.h"
-static ThermalLocator thermallocator;
-
-#include "GlideRatio.hpp"
-extern ldrotary_s rotaryLD;
+#include "GlideComputer.hpp"
 
 #define CRUISE 0
 #define WAITCLIMB 1
@@ -243,11 +240,11 @@ void Turning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
         Calculated->ClimbStartAlt = StartAlt+StartEnergyHeight;
         Calculated->ClimbStartTime = StartTime;
 
-        if (flightstats.Altitude_Ceiling.sum_n>0) {
+        if (GlideComputer::flightstats.Altitude_Ceiling.sum_n>0) {
           // only update base if have already climbed, otherwise
           // we will catch the takeoff height as the base.
 
-          flightstats.Altitude_Base.
+          GlideComputer::flightstats.Altitude_Base.
             least_squares_update(max(0,Calculated->ClimbStartTime
                                      - Calculated->TakeOffTime)/3600.0,
                                  StartAlt);
@@ -299,9 +296,9 @@ void Turning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
         Calculated->CruiseStartAlt = StartAlt;
         Calculated->CruiseStartTime = StartTime;
 
- 	InitLDRotary(&rotaryLD);
+ 	InitLDRotary(&GlideComputer::rotaryLD);
 
-        flightstats.Altitude_Ceiling.
+        GlideComputer::flightstats.Altitude_Ceiling.
           least_squares_update(max(0,Calculated->CruiseStartTime
                                    - Calculated->TakeOffTime)/3600.0,
                                Calculated->CruiseStartAlt);
@@ -331,9 +328,9 @@ void Turning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 
   if (EnableThermalLocator) {
     if (Calculated->Circling) {
-      thermallocator.AddPoint(Basic->Time, Basic->Longitude, Basic->Latitude,
+      GlideComputer::thermallocator.AddPoint(Basic->Time, Basic->Longitude, Basic->Latitude,
 			      Calculated->NettoVario);
-      thermallocator.Update(Basic->Time, Basic->Longitude, Basic->Latitude,
+      GlideComputer::thermallocator.Update(Basic->Time, Basic->Longitude, Basic->Latitude,
 			    Calculated->WindSpeed, Calculated->WindBearing,
 			    Basic->TrackBearing,
 			    &Calculated->ThermalEstimate_Longitude,
@@ -343,7 +340,7 @@ void Turning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
     } else {
       Calculated->ThermalEstimate_W = 0;
       Calculated->ThermalEstimate_R = -1;
-      thermallocator.Reset();
+      GlideComputer::thermallocator.Reset();
     }
   }
 
@@ -357,7 +354,7 @@ static void ThermalSources(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   double ground_longitude;
   double ground_latitude;
   double ground_altitude;
-  thermallocator.
+  GlideComputer::thermallocator.
     EstimateThermalBase(
 			Calculated->ThermalEstimate_Longitude,
 			Calculated->ThermalEstimate_Latitude,
@@ -417,13 +414,13 @@ void LastThermalStats(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 	      Calculated->LastThermalGain = ThermalGain;
 	      Calculated->LastThermalTime = ThermalTime;
 
-              flightstats.ThermalAverage.
+              GlideComputer::flightstats.ThermalAverage.
                 least_squares_update(Calculated->LastThermalAverage);
 
 #ifdef DEBUG_STATS
               DebugStore("%f %f # thermal stats\n",
-                      flightstats.ThermalAverage.m,
-                      flightstats.ThermalAverage.b
+                      GlideComputer::flightstats.ThermalAverage.m,
+                      GlideComputer::flightstats.ThermalAverage.b
                       );
 #endif
               if (EnableThermalLocator) {

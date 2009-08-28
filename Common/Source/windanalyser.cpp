@@ -402,7 +402,7 @@ void WindAnalyser::slot_newEstimate(NMEA_INFO *nmeaInfo,
   const char *type;
 
   if (quality>=6) {
-    type = "external wind";
+    type = "extrnal wind";
   } else {
     type = "wind circling";
   }

@@ -38,6 +38,7 @@ Copyright_License {
 
 #include "Calculations2.h"
 #include "Calculations.h"
+#include "GlideComputer.hpp"
 #include "XCSoar.h"
 #include "Dialogs.h"
 #include "Utils.h"
@@ -68,25 +69,18 @@ Copyright_License {
 #include "Atmosphere.h"
 
 #include "Audio/VegaVoice.h"
-
-#include "OnLineContest.h"
-#include "AATDistance.h"
-
 #include "NavFunctions.h" // used for team code
 
 #include <stdio.h>
 
-extern OLCOptimizer olc;
-
 int FastLogNum = 0; // number of points to log at high rate
-
 void AddSnailPoint(NMEA_INFO *Basic, DERIVED_INFO *Calculated); // from SnailTrail.cpp
 
 
 int LoggerTimeStepCruise=5;
 int LoggerTimeStepCircling=1;
 
-void DoLogging(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
+void GlideComputer::DoLogging(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   static double SnailLastTime=0;
   static double LogLastTime=0;
   static double StatsLastTime=0;

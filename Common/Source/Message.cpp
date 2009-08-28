@@ -42,7 +42,7 @@ Copyright_License {
 #include "Interface.hpp"
 #include "Protection.hpp"
 #include "InfoBoxLayout.h"
-
+#include "Screen/Fonts.hpp"
 #include <tchar.h>
 
 /*
@@ -53,7 +53,7 @@ Copyright_License {
      -- disappear when touched
      -- disappear when return clicked
      -- disappear when timeout
-     -- disappear when extern event triggered
+     -- disappear when extrn event triggered
   - Message properties
      -- have a start time (seconds)
      -- timeout (start time + delta)
@@ -73,7 +73,6 @@ bool Message::hidden=false;
 int Message::nvisible=0;
 
 TCHAR Message::msgText[2000];
-extern HFONT MapWindowBoldFont;
 
 // Get start time to reduce overrun errors
 DWORD startTime = ::GetTickCount();

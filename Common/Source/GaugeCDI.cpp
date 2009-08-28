@@ -42,10 +42,9 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "Math/FastMath.h"
 #include "InfoBoxLayout.h"
+#include "Screen/Fonts.hpp"
 
 #include <tchar.h>
-
-extern HFONT CDIWindowFont;
 
 HWND GaugeCDI::hWndCDIWindow = NULL;
 

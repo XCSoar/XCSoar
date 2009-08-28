@@ -35,20 +35,38 @@ Copyright_License {
 }
 */
 
-#ifndef BLACKBOARD_H
-#define BLACKBOARD_H
+#if !defined(XCSOAR_GLIDECOMPUTER_HPP)
+#define XCSOAR_GLIDECOMPUTER_HPP
 
 #include "NMEA/Info.h"
 #include "NMEA/Derived.hpp"
+#include "XCSoar.h"
+#include "Statistics.h"
+#include "AATDistance.h"
+#include "OnLineContest.h"
+#include "Audio/VegaVoice.h"
+#include "GlideRatio.hpp"
+#include "ThermalLocator.h"
+#include "windanalyser.h"
 
-// master flight data
-extern NMEA_INFO GPS_INFO;
-extern DERIVED_INFO CALCULATED_INFO;
+class GlideComputer {
+public:
+  static  ldrotary_s     rotaryLD;
+  static  Statistics     flightstats;
+  static  AATDistance    aatdistance;
+  static  OLCOptimizer   olc;
+  static  ThermalLocator thermallocator;
+  static  WindAnalyser   *windanalyser;
 
-// gps detection
-extern BOOL GPSCONNECT;
-extern BOOL VARIOCONNECT;
+  static void DoLogging(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 
-extern BOOL extGPSCONNECT;
+  // CalculationsAutoMc
+  static void DoAutoMacCready(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
+
+  //protected:
+  static  VegaVoice    vegavoice;
+  static  DERIVED_INFO Finish_Derived_Info;
+
+};
 
 #endif

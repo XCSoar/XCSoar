@@ -437,7 +437,7 @@ RECT InfoBoxLayout::GetInfoBoxSizes(RECT rc) {
 }
 
 /////////////////////////////////////////////////////////////////////////////////
-
+//
 // TODO: this should go into the manager
 
 extern InfoBox *InfoBoxes[MAXINFOWINDOWS];

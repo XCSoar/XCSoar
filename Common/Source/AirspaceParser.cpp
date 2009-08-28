@@ -102,8 +102,6 @@ static double CenterX = 0;
 static double CenterY = 0;
 static int LineCount;
 
-extern double airspace_QNH; // initialised here
-
 int AirspacePriority[AIRSPACECLASSCOUNT];
 
 static const int k_nLineTypes = 9;

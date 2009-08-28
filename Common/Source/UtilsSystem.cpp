@@ -740,8 +740,8 @@ void XCSoarGetOpts(LPTSTR CommandLine) {
   (void)CommandLine;
 // SaveRegistryToFile(TEXT("iPAQ File Store\xcsoar-registry.prf"));
 
-  TCHAR externProfileFile[MAX_PATH];
-  externProfileFile[0] = 0;
+  TCHAR extrnProfileFile[MAX_PATH];
+  extrnProfileFile[0] = 0;
 
 #if (WINDOWSPC>0)
   SCREENWIDTH=640;
@@ -776,8 +776,8 @@ void XCSoarGetOpts(LPTSTR CommandLine) {
       }
       if (pCe != NULL && pCe-1 > pC){
 
-        _tcsncpy(externProfileFile, pC, pCe-pC);
-        externProfileFile[pCe-pC] = '\0';
+        _tcsncpy(extrnProfileFile, pC, pCe-pC);
+        extrnProfileFile[pCe-pC] = '\0';
       }
     }
 #if (WINDOWSPC>0)
@@ -825,6 +825,6 @@ void XCSoarGetOpts(LPTSTR CommandLine) {
 #endif
   }
 
-  SetProfileFiles(externProfileFile);
+  SetProfileFiles(extrnProfileFile);
 
 }

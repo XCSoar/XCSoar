@@ -49,6 +49,8 @@ Copyright_License {
 #include "SettingsComputer.hpp"
 #include "SettingsUser.hpp"
 #include "Screen/Graphics.hpp"
+#include "GlideComputer.hpp"
+#include "Protection.hpp"
 
 int MapWindow::iSnailNext=0;
 #define fSnailColour(cv) max(0,min((short)(NUMSNAILCOLORS-1), (short)((cv+1.0)/2.0*NUMSNAILCOLORS)))
@@ -323,8 +325,6 @@ double MapWindow::DrawTrail( HDC hdc, const POINT Orig, const RECT rc)
 }
 
 
-extern OLCOptimizer olc;
-
 void MapWindow::DrawTrailFromTask(HDC hdc, const RECT rc,
 				  const double TrailFirstTime) {
   static POINT ptin[MAXCLIPPOLYGON];
@@ -335,17 +335,19 @@ void MapWindow::DrawTrailFromTask(HDC hdc, const RECT rc,
   const double mTrailFirstTime = TrailFirstTime - DerivedDrawInfo.TakeOffTime;
   // since olc keeps track of time wrt takeoff
 
-  olc.SetLine();
-  int n = min(MAXCLIPPOLYGON,olc.getN());
+  mutexFlightData.Lock();
+  GlideComputer::olc.SetLine();
+  int n = min(MAXCLIPPOLYGON, GlideComputer::olc.getN());
   int i, j=0;
   for (i=0; i<n; i++) {
-    if (olc.getTime(i)>= mTrailFirstTime)
+    if (GlideComputer::olc.getTime(i)>= mTrailFirstTime)
       break;
-    LatLon2Screen(olc.getLongitude(i),
-                  olc.getLatitude(i),
+    LatLon2Screen(GlideComputer::olc.getLongitude(i),
+                  GlideComputer::olc.getLatitude(i),
                   ptin[j]);
     j++;
   }
+  mutexFlightData.Unlock();
   if (j>=2) {
     SelectObject(hdc,MapGfx.hSnailPens[NUMSNAILCOLORS/2]);
     ClipPolygon(hdc, ptin, j, rc, false);

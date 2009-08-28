@@ -592,7 +592,7 @@ void MapWindowProjection::UpdateMapScale()
     return;
   }
 
-  mutexTaskData.Lock();  // protect from external task changes
+  mutexTaskData.Lock();  // protect from extrnal task changes
 #ifdef HAVEEXCEPTIONS
   __try{
 #endif

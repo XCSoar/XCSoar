@@ -39,7 +39,7 @@ Copyright_License {
 
 InputEvents
 
-This class is used to control all user and external InputEvents.
+This class is used to control all user and extrnal InputEvents.
 This includes some Nmea strings, virtual events (Glide Computer
 Evnets) and Keyboard.
 

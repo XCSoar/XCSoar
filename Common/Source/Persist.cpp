@@ -47,20 +47,19 @@ Copyright_License {
 #include "Atmosphere.h"
 #include "UtilsSystem.hpp"
 #include "Logger.h"
-
+#include "GlideComputer.hpp"
 #include "Calculations.h"
-
+#include "Protection.hpp"
 
 static TCHAR szCalculationsPersistFileName[MAX_PATH]= TEXT("\0");
 static TCHAR szCalculationsPersistDirectory[MAX_PATH]= TEXT("\0");
-
-extern OLCOptimizer olc;
 
 void DeleteCalculationsPersist(void) {
   DeleteFile(szCalculationsPersistFileName);
 }
 
 void LoadCalculationsPersist(DERIVED_INFO *Calculated) {
+
   if (szCalculationsPersistFileName[0]==0) {
 #ifdef GNAV
     LocalPath(szCalculationsPersistFileName,
@@ -80,35 +79,42 @@ void LoadCalculationsPersist(DERIVED_INFO *Calculated) {
 
   FILE *file = _tfopen(szCalculationsPersistFileName, _T("rb"));
   if (file != NULL) {
+    mutexFlightData.Lock();
+
     fread(&sizein, sizeof(sizein), 1, file);
     if (sizein != sizeof(*Calculated)) {
       fclose(file);
+      mutexFlightData.Unlock();
       return;
     }
 
     fread(Calculated, sizeof(*Calculated), 1, file);
 
     fread(&sizein, sizeof(sizein), 1, file);
-    if (sizein != sizeof(flightstats)) {
-      flightstats.Reset();
+    if (sizein != sizeof(GlideComputer::flightstats)) {
+
+      GlideComputer::flightstats.Reset();
       fclose(file);
+      mutexFlightData.Unlock();
       return;
     }
 
-    fread(&flightstats, sizeof(flightstats), 1, file);
+    fread(&GlideComputer::flightstats, sizeof(GlideComputer::flightstats), 1, file);
 
     fread(&sizein, sizeof(sizein), 1, file);
-    if (sizein != sizeof(olc.data)) {
-      olc.ResetFlight();
+    if (sizein != sizeof(GlideComputer::olc.data)) {
+      GlideComputer::olc.ResetFlight();
       fclose(file);
+      mutexFlightData.Unlock();
       return;
     }
 
-    fread(&olc.data, sizeof(olc.data), 1, file);
+    fread(&GlideComputer::olc.data, sizeof(GlideComputer::olc.data), 1, file);
 
     fread(&sizein, sizeof(sizein), 1, file);
     if (sizein != 5 * sizeof(double)) {
       fclose(file);
+      mutexFlightData.Unlock();
       return;
     }
 
@@ -131,6 +137,7 @@ void LoadCalculationsPersist(DERIVED_INFO *Calculated) {
     StartupStore(TEXT("LoadCalculationsPersist OK\n"));
 
     fclose(file);
+    mutexFlightData.Unlock();
   } else {
     StartupStore(TEXT("LoadCalculationsPersist file not found\n"));
   }
@@ -155,17 +162,18 @@ void SaveCalculationsPersist(DERIVED_INFO *Calculated) {
 
   FILE *file = _tfopen(szCalculationsPersistFileName, _T("wb"));
   if (file != NULL) {
+    mutexFlightData.Lock();
     size = sizeof(DERIVED_INFO);
     fwrite(&size, sizeof(size), 1, file);
     fwrite(Calculated, sizeof(*Calculated), 1, file);
 
     size = sizeof(Statistics);
     fwrite(&size, sizeof(size), 1, file);
-    fwrite(&flightstats, sizeof(flightstats), 1, file);
+    fwrite(&GlideComputer::flightstats, sizeof(GlideComputer::flightstats), 1, file);
 
     size = sizeof(OLCData);
     fwrite(&size, sizeof(size), 1, file);
-    fwrite(&olc.data, sizeof(olc.data), 1, file);
+    fwrite(&GlideComputer::olc.data, sizeof(GlideComputer::olc.data), 1, file);
 
     size = sizeof(double)*5;
     fwrite(&size, sizeof(size), 1, file);
@@ -182,6 +190,7 @@ void SaveCalculationsPersist(DERIVED_INFO *Calculated) {
     StartupStore(TEXT("SaveCalculationsPersist ok\n"));
 
     fclose(file);
+    mutexFlightData.Unlock();
   } else {
     StartupStore(TEXT("SaveCalculationsPersist can't create file\n"));
   }

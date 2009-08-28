@@ -57,12 +57,9 @@ Copyright_License {
 #include "Blackboard.hpp"
 
 BOOL GPSCONNECT = FALSE;
-BOOL extGPSCONNECT = FALSE; // this one used by external functions
+BOOL extGPSCONNECT = FALSE; // this one used by extrnal functions
 
 bool RequestAirspaceWarningForce=false;
-
-extern void RestartCommPorts(void);
-
 
 static void HeapCompactTimer()
 {

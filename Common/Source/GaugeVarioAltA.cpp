@@ -45,6 +45,7 @@ Copyright_License {
 #include "Blackboard.hpp"
 #include "InfoBoxLayout.h"
 #include "Screen/Graphics.hpp"
+#include "Screen/Fonts.hpp"
 #include "Math/Geometry.hpp"
 #include "McReady.h"
 #include "Interface.hpp"
@@ -56,9 +57,6 @@ Copyright_License {
 #include <stdlib.h>
 
 HWND   hWndVarioWindow = NULL; // Vario Window
-extern HFONT CDIWindowFont; // New
-
-extern HFONT TitleWindowFont;
 
 HDC GaugeVario::hdcScreen = NULL;
 HDC GaugeVario::hdcDrawWindow = NULL;

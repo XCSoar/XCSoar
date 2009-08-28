@@ -47,18 +47,7 @@ Copyright_License {
 #include "WindowControls.h"
 #include "Interface.hpp"
 #include "Screen/Graphics.hpp"
-
-#define DEFAULTBORDERPENWIDTH IBLSCALE(1)
-#define SELECTORWIDTH         (DEFAULTBORDERPENWIDTH+IBLSCALE(4))
-
-extern HFONT  TitleWindowFont;
-extern HFONT  TitleSmallWindowFont;
-extern HFONT  MapWindowFont;
-extern HFONT  MapWindowBoldFont;
-extern HFONT  InfoWindowFont;
-extern HFONT  CDIWindowFont;
-
-//static ATOM atmWndClass;
+#include "Screen/Fonts.hpp"
 
 static COLORREF fgColor = RGB(0x0,0x0,0x0);
 static COLORREF bkColor = RGB(0xff,0xff,0xff);
@@ -70,6 +59,11 @@ static HBRUSH hBrushDefaultBackGroundSel;
 static HPEN hPenDefaultBorder;
 static HPEN hPenSelector;
 static int Count=0;
+
+
+// infobox
+#define DEFAULTBORDERPENWIDTH IBLSCALE(1)
+#define SELECTORWIDTH         (DEFAULTBORDERPENWIDTH+IBLSCALE(4))
 
 
 void InitInfoBoxModule(void);

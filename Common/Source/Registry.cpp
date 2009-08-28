@@ -327,9 +327,6 @@ const TCHAR szRegistryFontCDIWindowFont[]=	 TEXT("CDIWindowFont");
 const TCHAR szRegistryFontMapLabelFont[]=	 TEXT("MapLabelFont");
 const TCHAR szRegistryFontStatisticsFont[]=	 TEXT("StatisticsFont");
 
-
-extern int UserLevel; // used by dlgConfiguration
-
 void StoreType(int Index,int the_type)
 {
   SetToRegistry(szRegistryDisplayType[Index],(DWORD)the_type);

@@ -44,8 +44,8 @@ Copyright_License {
 #include "SettingsComputer.hpp"
 #include "Settings.hpp"
 #include "Screen/Graphics.hpp"
+#include "Screen/Fonts.hpp"
 
-extern HFONT MapLabelFont;
 
 #define fSnailColour(cv) max(0,min((short)(NUMSNAILCOLORS-1), (short)((cv+1.0)/2.0*NUMSNAILCOLORS)))
 

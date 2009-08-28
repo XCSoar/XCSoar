@@ -45,12 +45,10 @@ Copyright_License {
 #include "Math/Earth.hpp"
 #include "WayPoint.hpp"
 #include "Calculations.h" // TODO danger using InAATTurnSector
-
 #include <math.h>
 
 #define DISTANCETHRESHOLD 500
 
-extern NMEA_INFO GPS_INFO;
 
 AATDistance::AATDistance() {
   Reset();
@@ -250,13 +248,10 @@ void AATDistance::ShiftTargetFromInFront(double longitude, double latitude,
 }
 
 
-extern bool TargetDialogOpen;
-
-
 void AATDistance::ShiftTargetFromBehind(double longitude, double latitude,
                               int taskwaypoint) {
 
-  // JMWAAT if being externally updated e.g. from task dialog, don't move it
+  // JMWAAT if being extrnally updated e.g. from task dialog, don't move it
   if (TargetDialogOpen) return;
   if (taskwaypoint==0) return;
 
@@ -674,6 +669,8 @@ void AATDistance::ThinData(int taskwaypoint) {
   mutexTaskData.Unlock();
 }
 
+//////////
+#include "Blackboard.hpp"
 
 double AATCloseDistance(void) {
   return max(100,GPS_INFO.Speed*1.5);

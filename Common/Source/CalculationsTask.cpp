@@ -41,6 +41,7 @@ Copyright_License {
 #include "Protection.hpp"
 #include "SettingsComputer.hpp"
 #include "SettingsTask.hpp"
+#include "Settings.hpp"
 #include "Math/FastMath.h"
 #include "Math/LowPassFilter.hpp"
 #include "Math/Earth.hpp"
@@ -50,12 +51,10 @@ Copyright_License {
 #include "McReady.h"
 #include "GlideSolvers.hpp"
 #include "Dialogs.h"
-#include "AATDistance.h"
+#include "GlideComputer.hpp"
 #include "InputEvents.h"
 #include "GlideRatio.hpp"
 
-extern double CRUISE_EFFICIENCY;
-extern AATDistance aatdistance;
 
 void CheckFinalGlideThroughTerrain(NMEA_INFO *Basic,
 				   DERIVED_INFO *Calculated,
@@ -407,8 +406,8 @@ double MacCreadyOrAvClimbRate(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
         ))
       ) {
 
-    if (flightstats.ThermalAverage.y_ave>0) {
-      mc_val = flightstats.ThermalAverage.y_ave;
+    if (GlideComputer::flightstats.ThermalAverage.y_ave>0) {
+      mc_val = GlideComputer::flightstats.ThermalAverage.y_ave;
     } else if (Calculated->AverageThermal>0) {
       // insufficient stats, so use this/last thermal's average
       mc_val = Calculated->AverageThermal;
@@ -669,7 +668,7 @@ void TaskSpeed(NMEA_INFO *Basic, DERIVED_INFO *Calculated, const double this_mac
 	    n_av = 0;
           } else if (n_av>=60) {
 	    tsi_av/= n_av;
-            flightstats.Task_Speed.
+            GlideComputer::flightstats.Task_Speed.
               least_squares_update(
                                    max(0,
                                        Basic->Time-Calculated->TaskStartTime)/3600.0,
@@ -866,8 +865,8 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
   Calculated->TaskDistanceCovered = LegCovered;
 
   if (Basic->Time > Calculated->LegStartTime) {
-    if (flightstats.LegStartTime[ActiveWayPoint]<0) {
-      flightstats.LegStartTime[ActiveWayPoint] = Basic->Time;
+    if (GlideComputer::flightstats.LegStartTime[ActiveWayPoint]<0) {
+      GlideComputer::flightstats.LegStartTime[ActiveWayPoint] = Basic->Time;
     }
     Calculated->LegSpeed = Calculated->LegDistanceCovered
       / (Basic->Time - Calculated->LegStartTime);
@@ -898,7 +897,7 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
     } else if (ActiveWayPoint>0) {
       // JMW added correction for distance covered
       Calculated->TaskDistanceCovered =
-        aatdistance.DistanceCovered(Basic->Longitude,
+        GlideComputer::aatdistance.DistanceCovered(Basic->Longitude,
                                     Basic->Latitude,
                                     ActiveWayPoint);
     }

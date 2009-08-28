@@ -1249,8 +1249,6 @@ void InputEvents::eventRepeatStatusMessage(const TCHAR *misc) {
 
 bool dlgAirspaceWarningIsEmpty(void);
 
-extern bool RequestAirspaceWarningForce;
-
 void InputEvents::eventNearestAirspaceDetails(const TCHAR *misc) {
   (void)misc;
   double nearestdistance=0;

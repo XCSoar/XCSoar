@@ -49,15 +49,13 @@ Copyright_License {
 #include "McReady.h"
 #include "GlideSolvers.hpp"
 #include "Dialogs.h"
-#include "AATDistance.h"
 #include "InputEvents.h"
+#include "GlideComputer.hpp"
 
 bool  InFinishSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated, const int i);
 bool  InTurnSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated, const int i);
 
 void AnnounceWayPointSwitch(DERIVED_INFO *Calculated, bool do_advance);
-extern AATDistance aatdistance;
-extern DERIVED_INFO Finish_Derived_Info;
 
 void StartTask(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
 	       const bool do_advance,
@@ -68,8 +66,8 @@ void StartTask(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
   Calculated->TaskStartSpeed = Basic->Speed;
   Calculated->TaskStartAltitude = Calculated->NavAltitude;
   Calculated->LegStartTime = Basic->Time;
-  flightstats.LegStartTime[0] = Basic->Time;
-  flightstats.LegStartTime[1] = Basic->Time;
+  GlideComputer::flightstats.LegStartTime[0] = Basic->Time;
+  GlideComputer::flightstats.LegStartTime[1] = Basic->Time;
 
   Calculated->CruiseStartLat = Basic->Latitude;
   Calculated->CruiseStartLong = Basic->Longitude;
@@ -80,8 +78,8 @@ void StartTask(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
   // more accurate
 
   // JMW clear thermal climb average on task start
-  flightstats.ThermalAverage.Reset();
-  flightstats.Task_Speed.Reset();
+  GlideComputer::flightstats.ThermalAverage.Reset();
+  GlideComputer::flightstats.Task_Speed.Reset();
   Calculated->AverageThermal = 0; // VNT for some reason looked uninitialised
   Calculated->WaypointBearing=0; // VNT TEST
 
@@ -556,9 +554,9 @@ static void CheckStart(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
     Calculated->IsInSector = true;
 
     if (ReadyToStart(Calculated)) {
-      aatdistance.AddPoint(Basic->Longitude,
-                           Basic->Latitude,
-                           0);
+      GlideComputer::aatdistance.AddPoint(Basic->Longitude,
+					  Basic->Latitude,
+					  0);
     }
     // ToLo: we are ready to start even when outside start rules but within margin
     if (ValidStartSpeed(Basic, Calculated, StartMaxSpeedMargin)) {
@@ -655,7 +653,7 @@ static BOOL CheckRestart(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
 static void CheckFinish(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   if (InFinishSector(Basic,Calculated, ActiveWayPoint)) {
     Calculated->IsInSector = true;
-    aatdistance.AddPoint(Basic->Longitude,
+    GlideComputer::aatdistance.AddPoint(Basic->Longitude,
                          Basic->Latitude,
                          ActiveWayPoint);
     if (!Calculated->ValidFinish) {
@@ -663,7 +661,7 @@ static void CheckFinish(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
       AnnounceWayPointSwitch(Calculated, false);
 
       // JMWX save calculated data at finish
-      memcpy(&Finish_Derived_Info, Calculated, sizeof(DERIVED_INFO));
+      memcpy(&GlideComputer::Finish_Derived_Info, Calculated, sizeof(DERIVED_INFO));
     }
   }
 }
@@ -683,7 +681,7 @@ static void AddAATPoint(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
       if (taskwaypoint == ActiveWayPoint) {
         Calculated->IsInSector = true;
       }
-      aatdistance.AddPoint(Basic->Longitude,
+      GlideComputer::aatdistance.AddPoint(Basic->Longitude,
                            Basic->Latitude,
                            taskwaypoint);
     }
@@ -700,11 +698,11 @@ static void CheckInSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
 
   // JMW Start bug XXX
 
-  if (aatdistance.HasEntered(ActiveWayPoint)) {
+  if (GlideComputer::aatdistance.HasEntered(ActiveWayPoint)) {
     if (ReadyToAdvance(Calculated, true, false)) {
       AnnounceWayPointSwitch(Calculated, true);
       Calculated->LegStartTime = Basic->Time;
-      flightstats.LegStartTime[ActiveWayPoint] = Basic->Time;
+      GlideComputer::flightstats.LegStartTime[ActiveWayPoint] = Basic->Time;
     }
     if (Calculated->Flying) {
       Calculated->ValidFinish = false;

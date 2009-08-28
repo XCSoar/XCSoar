@@ -39,9 +39,6 @@ Copyright_License {
 #define CALCULATIONS2_H
 #include "Calculations.h"
 
-void DoLogging(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
-
-
 void CalculateOwnTeamCode(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 void CalculateTeammateBearingRange(NMEA_INFO *Basic, DERIVED_INFO *Calculated) ;
 

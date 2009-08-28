@@ -44,12 +44,11 @@ Copyright_License {
 #include "UtilsText.hpp"
 #include "MapWindow.h"
 #include "Screen/Graphics.hpp"
+#include "Screen/Fonts.hpp"
 #include "SettingsUser.hpp"
 
 #include <stdlib.h>
 #include <tchar.h>
-
-extern HFONT MapLabelFont;
 
 XShape::XShape() {
   hide=false;

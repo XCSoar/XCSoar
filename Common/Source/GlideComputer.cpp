@@ -33,22 +33,18 @@ Copyright_License {
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
+
 */
 
-#ifndef BLACKBOARD_H
-#define BLACKBOARD_H
+#include "GlideComputer.hpp"
 
-#include "NMEA/Info.h"
-#include "NMEA/Derived.hpp"
+ldrotary_s     GlideComputer::rotaryLD;
+Statistics     GlideComputer::flightstats;
+AATDistance    GlideComputer::aatdistance;
+OLCOptimizer   GlideComputer::olc;
+DERIVED_INFO   GlideComputer::Finish_Derived_Info;
+VegaVoice      GlideComputer::vegavoice;
+ThermalLocator GlideComputer::thermallocator;
+WindAnalyser*   GlideComputer::windanalyser;
 
-// master flight data
-extern NMEA_INFO GPS_INFO;
-extern DERIVED_INFO CALCULATED_INFO;
 
-// gps detection
-extern BOOL GPSCONNECT;
-extern BOOL VARIOCONNECT;
-
-extern BOOL extGPSCONNECT;
-
-#endif

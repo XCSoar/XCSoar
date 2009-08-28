@@ -114,7 +114,6 @@ Copyright_License {
 TCHAR XCSoar_Version[256] = TEXT("");
 
 HINSTANCE hInst; // The current instance
-//HWND hWndCB; // The command bar handle
 HWND hWndMainWindow; // Main Windows
 MapWindow hWndMapWindow;
 
@@ -1162,19 +1161,14 @@ void Shutdown(void) {
   //  VarioSound_Close();
 #endif
 
-  // Stop SMS device
-#if (EXPERIMENTAL > 0)
-  bsms.Shutdown();
-#endif
-
   // Stop drawing
   CreateProgressDialog(gettext(TEXT("Shutdown, please wait...")));
 
-  StartupStore(TEXT("CloseDrawingThread\n"));
-  MapWindowBase::CloseDrawingThread();
-
   // Stop calculating too (wake up)
   TriggerAll();
+
+  StartupStore(TEXT("CloseDrawingThread\n"));
+  MapWindowBase::CloseDrawingThread();
 
   // Clear data
 
@@ -1349,9 +1343,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
       if (iTimerID == 0) {
         iTimerID = SetTimer(hWnd,1000,500,NULL); // 2 times per second
       }
-
-      //      hWndCB = CreateRpCommandBar(hWnd);
-
       break;
 
     case WM_ACTIVATE:

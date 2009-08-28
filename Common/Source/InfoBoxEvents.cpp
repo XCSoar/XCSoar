@@ -56,15 +56,9 @@ Copyright_License {
 #include "MapWindow.h"
 #include "McReady.h"
 #include "Interface.hpp"
-
 #include "Calculations.h" // TODO danger! SetWindEstimate
-
 #include <stdlib.h>
-
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
-
-extern AATDistance aatdistance;
+#include "GlideComputer.hpp"
 
 // JMW added key codes,
 // so -1 down
@@ -385,8 +379,6 @@ void	ForecastTemperatureProcessing(int UpDown)
 }
 
 
-extern void PopupWaypointDetails();
-
 /*
 	1	Next waypoint
 	0	Show waypoint details
@@ -453,7 +445,9 @@ void NextUpDown(int UpDown)
 	//	TODO bug: not required? CALCULATED_INFO.TaskStartTime = 0;
       }
     }
-    aatdistance.ResetEnterTrigger(ActiveWayPoint);
+    mutexFlightData.Lock();
+    GlideComputer::aatdistance.ResetEnterTrigger(ActiveWayPoint);
+    mutexFlightData.Unlock();
   }
   else if (UpDown==0) {
     SelectedWaypoint = Task[ActiveWayPoint].Index;

@@ -45,7 +45,6 @@ Copyright_License {
 #include "Math/FastMath.h"
 #include "Math/Geometry.hpp"
 #include "Logger.h"
-//#include "Dialogs.h"
 #include "Language.hpp"
 #include "McReady.h"
 #include "Settings.hpp"
@@ -54,7 +53,7 @@ Copyright_License {
 #include "SettingsComputer.hpp"
 #include <stdlib.h>
 
-extern BOOL extGPSCONNECT;
+#include "Blackboard.hpp"
 
 void MapWindow::DrawCrossHairs(HDC hdc, const POINT Orig,
 			       const RECT rc)
@@ -649,7 +648,7 @@ void MapWindow::DrawFinalGlide(HDC hDC, const RECT rc)
   int Offset0;
   int i;
 
-  mutexTaskData.Lock();  // protect from external task changes
+  mutexTaskData.Lock();  // protect from extrnal task changes
   #ifdef HAVEEXCEPTIONS
   __try{
   #endif
@@ -878,7 +877,6 @@ void MapWindow::DrawCompass(HDC hDC, const RECT rc)
     static double lastDisplayAngle = 9999.9;
     static int lastRcRight = 0;
     static POINT Arrow[5] = { {0,-11}, {-5,9}, {0,3}, {5,9}, {0,-11}};
-    extern bool EnableVarioGauge;
 
     if (lastDisplayAngle != DisplayAngle || lastRcRight != rc.right){
 

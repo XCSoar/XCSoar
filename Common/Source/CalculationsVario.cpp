@@ -39,6 +39,7 @@ Copyright_License {
 #include "Calculations.h"
 #include "SettingsComputer.hpp"
 #include "SettingsTask.hpp"
+#include "Settings.hpp"
 #include "Device/device.h"
 #include "McReady.h"
 #include "Math/LowPassFilter.hpp"
@@ -46,8 +47,6 @@ Copyright_License {
 #include "Logger.h"
 #include <math.h>
 #include "Calculations2.h"
-
-extern double CRUISE_EFFICIENCY;
 
 
 void Vario(NMEA_INFO *Basic, DERIVED_INFO *Calculated)

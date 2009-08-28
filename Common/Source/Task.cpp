@@ -39,7 +39,6 @@ Copyright_License {
 #include "XCSoar.h"
 #include "Protection.hpp"
 #include "Logger.h"
-#include "AATDistance.h"
 #include "Utils.h"
 #include "Math/Geometry.hpp"
 #include "LocalPath.hpp"
@@ -49,6 +48,7 @@ Copyright_License {
 #include "Settings.hpp"
 #include "SettingsComputer.hpp"
 #include "SettingsTask.hpp"
+#include "SettingsUser.hpp"
 #include "Calculations.h" // TODO danger! InAATTurnSector
 #include "Waypointparser.h"
 #include "McReady.h"
@@ -65,9 +65,6 @@ int StartHeightRef = 0; // MSL
 int SelectedWaypoint = -1;
 
 TCHAR LastTaskFileName[MAX_PATH]= TEXT("\0");
-extern bool TargetDialogOpen;
-
-extern AATDistance aatdistance;
 
 static int Task_saved[MAXTASKPOINTS+1];
 static int active_waypoint_saved= -1;

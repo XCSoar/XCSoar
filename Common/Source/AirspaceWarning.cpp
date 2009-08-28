@@ -40,6 +40,7 @@ Copyright_License {
 #include "Dialogs.h"
 #include "Utils.h"
 #include "Device/device.h"
+#include "SettingsAirspace.hpp"
 
 #ifdef HAVEEXCEPTIONS
 #define  __try     __try
@@ -57,8 +58,6 @@ static bool NewAirspaceWarnings = false;
 static CRITICAL_SECTION  csAirspaceWarnings;
 static bool InitDone = false;
 #define OUTSIDE_CHECK_INTERVAL 4
-
-extern int AcknowledgementTime;
 
 List<AirspaceWarningNotifier_t> AirspaceWarningNotifierList;
 

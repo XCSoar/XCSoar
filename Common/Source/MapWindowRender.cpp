@@ -45,8 +45,7 @@ Copyright_License {
 #include "RasterTerrain.h"
 #include "Task.h"
 #include "TopologyStore.h"
-
-extern BOOL extGPSCONNECT;
+#include "Blackboard.hpp"
 
 void MapWindow::RenderMapWindowBg(HDC hdc, const RECT rc,
 				  const POINT &Orig,

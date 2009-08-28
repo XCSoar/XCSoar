@@ -406,6 +406,7 @@ OBJS	:=\
 	$(SRC)/CalculationsWind.o 	\
 	$(SRC)/FlarmIdFile.o 		\
 	$(SRC)/FlarmCalculations.o 	\
+	$(SRC)/GlideComputer.o 		\
 	$(SRC)/GlideRatio.o 		\
 	$(SRC)/GlideSolvers.o 		\
 	$(SRC)/Logger.o 		\

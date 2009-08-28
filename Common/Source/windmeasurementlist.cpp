@@ -77,8 +77,6 @@ WindMeasurementList::~WindMeasurementList(){
   * too low quality data).
   */
 
-extern int iround(double);
-
 
 Vector WindMeasurementList::getWind(double Time, double alt, bool *found){
   //relative weight for each factor

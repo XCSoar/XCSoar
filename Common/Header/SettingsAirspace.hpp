@@ -72,5 +72,6 @@ extern int AcknowledgementTime;
 extern int AltitudeMode;
 extern int ClipAltitude;
 extern int AltWarningMargin;
+extern double airspace_QNH; 
 
 #endif

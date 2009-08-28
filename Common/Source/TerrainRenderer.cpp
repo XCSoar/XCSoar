@@ -269,7 +269,6 @@ short TerrainBrightness = 36;
 short TerrainRamp = 0;
 
 
-
 #define MIX(x,y,i) (BYTE)((x*i+y*((1<<7)-i))>>7)
 
 inline void TerrainShading(const short illum, BYTE &r, BYTE &g, BYTE &b)

@@ -40,18 +40,15 @@ Copyright_License {
 
 #include "NMEA/Info.h"
 #include "NMEA/Derived.hpp"
-#include <windows.h>
-#include "Statistics.h"
-
-extern Statistics flightstats;
 
 
 BOOL DoCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 BOOL DoCalculationsVario(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 void DoCalculationsSlow(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 
-double CalculateWaypointArrivalAltitude(NMEA_INFO *Basic, DERIVED_INFO *Calculated, int thepoint); // VENTA3
-
+double CalculateWaypointArrivalAltitude(NMEA_INFO *Basic, 
+					DERIVED_INFO *Calculated, 
+					int thepoint); // VENTA3
 
 bool ClearAirspaceWarnings(const bool ack, const bool allday=false);
 void RefreshTaskStatistics(void);

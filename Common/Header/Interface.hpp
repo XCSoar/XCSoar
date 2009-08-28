@@ -49,4 +49,6 @@ extern HINSTANCE hInst;
 extern HWND hWndMainWindow;           // HWND Main Window
 //extern MapWindow hWndMapWindow;
 
+void RestartCommPorts(void);
+
 #endif
