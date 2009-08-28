@@ -47,7 +47,6 @@ Copyright_License {
 #include "LocalPath.hpp"
 #include "UtilsText.hpp"
 #include "LogFile.hpp"
-
 #include "SettingsUser.hpp" // for EnableTopology
 
 #include <assert.h>
@@ -174,26 +173,26 @@ void SetTopologyBounds(const RECT rcin, const bool force) {
 void CloseTopology() {
   StartupStore(TEXT("CloseTopology\n"));
 
-  mutexTerrainDataGraphics.Lock();
+  mutexMapData.Lock();
   for (int z=0; z<MAXTOPOLOGY; z++) {
     if (TopoStore[z]) {
       delete TopoStore[z];
     }
   }
-  mutexTerrainDataGraphics.Unlock();
+  mutexMapData.Unlock();
 }
 
 
 void DrawTopology(const HDC hdc, const RECT rc)
 {
-  mutexTerrainDataGraphics.Lock();
+  mutexMapData.Lock();
 
   for (int z=0; z<MAXTOPOLOGY; z++) {
     if (TopoStore[z]) {
       TopoStore[z]->Paint(hdc,rc);
     }
   }
-  mutexTerrainDataGraphics.Unlock();
+  mutexMapData.Unlock();
 }
 
 
@@ -207,7 +206,7 @@ void OpenTopology() {
   static TCHAR  szFile[MAX_PATH] = TEXT("\0");
   static  TCHAR Directory[MAX_PATH] = TEXT("\0");
 
-  mutexTerrainDataGraphics.Lock();
+  mutexMapData.Lock();
 
   for (int z=0; z<MAXTOPOLOGY; z++) {
     TopoStore[z] = 0;
@@ -227,7 +226,7 @@ void OpenTopology() {
     static TCHAR  szMapFile[MAX_PATH] = TEXT("\0");
     GetRegistryString(szRegistryMapFile, szMapFile, MAX_PATH);
     if (_tcslen(szMapFile)==0) {
-      mutexTerrainDataGraphics.Unlock();
+      mutexMapData.Unlock();
       return;
     }
     ExpandLocalPath(szMapFile);
@@ -250,7 +249,7 @@ void OpenTopology() {
   unicode2ascii(szFile, zfilename, MAX_PATH);
   zFile = zzip_fopen(zfilename, "rt");
   if (!zFile) {
-    mutexTerrainDataGraphics.Unlock();
+    mutexMapData.Unlock();
     StartupStore(TEXT("No topology file\n%s\n"), szFile);
     return;
   }
@@ -358,6 +357,6 @@ void OpenTopology() {
   // file was OK, so save it
   SetRegistryString(szRegistryTopologyFile, szOrigFile);
 
-  mutexTerrainDataGraphics.Unlock();
+  mutexMapData.Unlock();
 
 }

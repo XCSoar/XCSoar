@@ -43,8 +43,8 @@ Copyright_License {
 
 extern Mutex mutexFlightData;
 extern Mutex mutexEventQueue;
-extern Mutex mutexTerrainDataGraphics;
-extern Mutex mutexTerrainDataCalculations;
+extern Mutex mutexTerrainData;
+extern Mutex mutexMapData;
 extern Mutex mutexNavBox;
 extern Mutex mutexComm;
 extern Mutex mutexTaskData;

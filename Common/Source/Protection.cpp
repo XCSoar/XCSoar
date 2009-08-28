@@ -27,8 +27,8 @@ Mutex mutexFlightData;
 // should be fast
 
 Mutex mutexEventQueue;
-Mutex mutexTerrainDataGraphics;
-Mutex mutexTerrainDataCalculations;
+Mutex mutexTerrainData;
+Mutex mutexMapData;
 Mutex mutexNavBox;
 Mutex mutexComm;
 Mutex mutexTaskData;

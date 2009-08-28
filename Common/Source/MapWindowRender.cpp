@@ -96,7 +96,7 @@ void MapWindow::RenderMapWindowBg(HDC hdc, const RECT rc,
       // map has been dirtied since we started drawing, so hurry up
       BigZoom = true;
     }
-    mutexTerrainDataGraphics.Lock();
+    mutexTerrainData.Lock();
     DrawTerrain(hdc, rc, sunazimuth, sunelevation,
 		DrawInfo.Longitude, DrawInfo.Latitude,
 	        BigZoom);
@@ -104,7 +104,7 @@ void MapWindow::RenderMapWindowBg(HDC hdc, const RECT rc,
       SelectObject(hDCTemp, (HBITMAP)hDrawBitMapTmp);
       DrawTerrainAbove(hdc, rc, hDCTemp);
     }
-    mutexTerrainDataGraphics.Unlock();
+    mutexTerrainData.Unlock();
 
     if (BigZoom) {
       BigZoom = false;

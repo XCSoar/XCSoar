@@ -751,9 +751,9 @@ void MapWindow::UpdateCaches(const bool force) {
   askVisibilityScan = false; // reset
 
   // have some time, do shape file cache update if necessary
-  mutexTerrainDataGraphics.Lock();
+  mutexTerrainData.Lock();
   SetTopologyBounds(MapRect, do_force);
-  mutexTerrainDataGraphics.Unlock();
+  mutexTerrainData.Unlock();
 
   // JMW experimental jpeg2000 rendering/tile management
   // Must do this even if terrain is not displayed, because
