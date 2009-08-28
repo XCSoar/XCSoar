@@ -42,6 +42,7 @@ Copyright_License {
 #include "Task.h"
 #include "Math/Geometry.hpp"
 #include "SettingsTask.hpp"
+#include "SettingsUser.hpp"
 #include "Math/Earth.hpp"
 #include "WayPoint.hpp"
 #include "Calculations.h" // TODO danger using InAATTurnSector
