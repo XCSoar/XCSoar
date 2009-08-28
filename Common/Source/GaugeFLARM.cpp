@@ -179,6 +179,11 @@ void GaugeFLARM::RenderTraffic(NMEA_INFO  *gps_info) {
       Arrow[4].x = -3;
       Arrow[4].y = 4;
 
+      PolygonRotateShift(Arrow, 5, sc.x, sc.y,
+                         gps_info->FLARM_Traffic[i].TrackBearing
+                         + DisplayAngle);
+      Polygon(hdcDrawWindow, Arrow, 5);
+
       short relalt =
 	iround(gps_info->FLARM_Traffic[i].RelativeAltitude*ALTITUDEMODIFY/100);
 
@@ -216,12 +221,6 @@ void GaugeFLARM::RenderTraffic(NMEA_INFO  *gps_info) {
 	SelectObject(hdcDrawWindow, oldBrush);
 
       }
-
-      PolygonRotateShift(Arrow, 5, sc.x, sc.y,
-			 gps_info->FLARM_Traffic[i].TrackBearing
-			 + DisplayAngle);
-      Polygon(hdcDrawWindow, Arrow, 5);
-
     }
   }
 }
