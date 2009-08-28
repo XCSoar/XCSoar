@@ -131,10 +131,6 @@ static void OnAirspacePaintListItem(WindowControl * Sender, HDC hDC){
     if (colormode) {
 
       SelectObject(hDC, GetStockObject(WHITE_PEN));
-      SelectObject(hDC, GetStockObject(WHITE_BRUSH));
-      Rectangle(hDC,
-          x0, 2*InfoBoxLayout::scale,
-          w0, 22*InfoBoxLayout::scale);
       SetTextColor(hDC,
          MapGfx.GetAirspaceColourByClass(i));
          SetBkColor(hDC,
