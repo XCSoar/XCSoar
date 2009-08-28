@@ -122,13 +122,15 @@ class GlidePolar {
   static void Lock();
   static void Unlock();
   static double BallastLitres;
-
+  static double CRUISE_EFFICIENCY;
  public:
   static double GetMacCready();
   static double GetBugs();
   static double GetBallast();
   static double GetBallastLitres();
+  static double GetCruiseEfficiency();
 
+  static void SetCruiseEfficiency(double);
   static void SetMacCready(double);
   static void SetBallast(double);
   static void SetBugs(double);

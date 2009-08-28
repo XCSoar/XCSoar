@@ -216,7 +216,8 @@ void DistanceToNext(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 
 
 void AltitudeRequired(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
-                      const double this_maccready)
+                      const double this_maccready,
+		      const double cruise_efficiency)
 {
   (void)Basic;
   mutexTaskData.Lock();
@@ -234,7 +235,7 @@ void AltitudeRequired(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
                         Calculated->WindSpeed, Calculated->WindBearing,
                         0, 0,
 			true,
-			NULL, height_above_wp, CRUISE_EFFICIENCY
+			NULL, height_above_wp, cruise_efficiency
                         );
       // JMW CHECK FGAMT
 
@@ -248,7 +249,7 @@ void AltitudeRequired(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
 				Calculated->WindSpeed, Calculated->WindBearing,
 				0, 0,
 				true,
-				NULL, height_above_wp, CRUISE_EFFICIENCY
+				NULL, height_above_wp, cruise_efficiency
 				);
 
 
@@ -279,7 +280,8 @@ void AltitudeRequired(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
 static bool TaskAltitudeRequired(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
                                  double this_maccready, double *Vfinal,
                                  double *TotalTime, double *TotalDistance,
-                                 int *ifinal)
+                                 int *ifinal,
+				 const double cruise_efficiency)
 {
   int i;
   double w1lat;
@@ -338,7 +340,7 @@ static bool TaskAltitudeRequired(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
                                     true,
                                     &LegTime,
 				    height_above_finish,
-				    CRUISE_EFFICIENCY
+				    cruise_efficiency
                                     );
 
     // JMW CHECK FGAMT
@@ -416,7 +418,9 @@ double MacCreadyOrAvClimbRate(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
 }
 
 
-void TaskSpeed(NMEA_INFO *Basic, DERIVED_INFO *Calculated, const double this_maccready)
+void TaskSpeed(NMEA_INFO *Basic, DERIVED_INFO *Calculated, 
+	       const double this_maccready,
+	       const double cruise_efficiency)
 {
   int ifinal;
   static double LastTime = 0;
@@ -440,7 +444,8 @@ void TaskSpeed(NMEA_INFO *Basic, DERIVED_INFO *Calculated, const double this_mac
   mutexTaskData.Lock();
 
   if (TaskAltitudeRequired(Basic, Calculated, this_maccready, &Vfinal,
-                           &TotalTime, &TotalDistance, &ifinal)) {
+                           &TotalTime, &TotalDistance, &ifinal, 
+			   cruise_efficiency)) {
 
     double t0 = TotalTime;
     // total time expected for task
@@ -737,7 +742,8 @@ static void CheckForceFinalGlide(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
 
 
 void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
-                    const double this_maccready)
+                    const double this_maccready,
+		    const double cruise_efficiency)
 {
 
   if (!ValidTaskPoint(ActiveWayPoint) ||
@@ -783,7 +789,7 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
                                   &(Calculated->BestCruiseTrack),
                                   &(Calculated->VMacCready),
                                   (Calculated->FinalGlide==1),
-                                  NULL, 1.0e6, CRUISE_EFFICIENCY);
+                                  NULL, 1.0e6, cruise_efficiency);
 
     return;
   }
@@ -969,7 +975,7 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
 			  0, 0,
 			  this_is_final,
 			  &this_LegTimeToGo,
-			  height_above_finish, CRUISE_EFFICIENCY);
+			  height_above_finish, cruise_efficiency);
 
       double LegAltitude0 = GlidePolar::
 	MacCreadyAltitude(0,
@@ -978,7 +984,7 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
 			  Calculated->WindBearing,
 			  0, 0,
 			  true,
-			  &LegTime0, 1.0e6, CRUISE_EFFICIENCY
+			  &LegTime0, 1.0e6, cruise_efficiency
 			  );
 
       if (LegTime0>=0.9*ERROR_TIME) {
@@ -1018,7 +1024,7 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
 			      0, 0,
 			      this_is_final,
 			      &this_LegTimeToGo_turningnow,
-			      height_above_finish, CRUISE_EFFICIENCY);
+			      height_above_finish, cruise_efficiency);
 	  Calculated->TaskTimeToGoTurningNow += this_LegTimeToGo_turningnow;
 	} else {
 	  Calculated->TaskTimeToGoTurningNow += this_LegTimeToGo;
@@ -1057,7 +1063,7 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
 				  true,  // JMW CHECK FGAMT
 
                                   &(Calculated->LegTimeToGo),
-                                  height_above_finish, CRUISE_EFFICIENCY);
+                                  height_above_finish, cruise_efficiency);
 
   double LegAltitude0 =
     GlidePolar::MacCreadyAltitude(0,
@@ -1068,7 +1074,7 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
                                   0,
                                   0,
                                   true,
-                                  &LegTime0, 1.0e6, CRUISE_EFFICIENCY
+                                  &LegTime0, 1.0e6, cruise_efficiency
                                   );
 
   if (Calculated->IsInSector && (ActiveWayPoint==0) && !TaskIsTemporary()) {

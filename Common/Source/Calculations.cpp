@@ -88,8 +88,6 @@ bool WasFlying = false; // VENTA3 used by auto QFE: do not reset QFE
 			//   zero at once!
 extern int FastLogNum; // number of points to log at high rate
 
-double CRUISE_EFFICIENCY = 1.0;
-
 extern void ConditionMonitorsUpdate(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 
 static void Heading(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
@@ -211,7 +209,7 @@ void ResetFlightStats(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
   int i;
   (void)Basic;
 
-  CRUISE_EFFICIENCY = 1.0;
+  GlidePolar::SetCruiseEfficiency(1.0);
 
   if (full) {
 
@@ -221,7 +219,7 @@ void ResetFlightStats(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
     GlideComputer::aatdistance.Reset();
     mutexGlideComputer.Unlock();
 
-    CRUISE_EFFICIENCY = 1.0;
+    GlidePolar::SetCruiseEfficiency(1.0);
     Calculated->FlightTime = 0;
     Calculated->TakeOffTime = 0;
     Calculated->timeCruising = 0;
@@ -349,13 +347,14 @@ extern bool TargetDialogOpen;
 BOOL DoCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 {
   double mc = GlidePolar::GetMacCready();
+  double ce = GlidePolar::GetCruiseEfficiency();
 
   Heading(Basic, Calculated);
   DistanceToNext(Basic, Calculated);
   DistanceToHome(Basic, Calculated);
   EnergyHeightNavAltitude(Basic, Calculated);
   TerrainHeight(Basic, Calculated);
-  AltitudeRequired(Basic, Calculated, mc);
+  AltitudeRequired(Basic, Calculated, mc, ce);
   Vario(Basic,Calculated);
 
   if (TaskAborted) {
@@ -364,9 +363,9 @@ BOOL DoCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   if (!TargetDialogOpen) {
     // don't calculate these if optimise function being invoked or
     // target is being adjusted
-    TaskStatistics(Basic, Calculated, mc);
+    TaskStatistics(Basic, Calculated, mc, ce);
     AATStats(Basic, Calculated);
-    TaskSpeed(Basic, Calculated, mc);
+    TaskSpeed(Basic, Calculated, mc, ce);
   }
 
   if (!FlightTimes(Basic, Calculated)) {
@@ -700,13 +699,15 @@ bool IsFlarmTargetCNInRange()
 
 
 void RefreshTaskStatistics(void) {
-  double mc = GlidePolar::GetMacCready();
+  const double mc = GlidePolar::GetMacCready();
+  const double ce = GlidePolar::GetCruiseEfficiency();
+
   mutexGlideComputer.Lock();
   mutexFlightData.Lock();
   mutexTaskData.Lock();
-  TaskStatistics(&GPS_INFO, &CALCULATED_INFO, mc);
+  TaskStatistics(&GPS_INFO, &CALCULATED_INFO, mc, ce);
   AATStats(&GPS_INFO, &CALCULATED_INFO);
-  TaskSpeed(&GPS_INFO, &CALCULATED_INFO, mc);
+  TaskSpeed(&GPS_INFO, &CALCULATED_INFO, mc, ce);
   IterateEffectiveMacCready(&GPS_INFO, &CALCULATED_INFO);
   mutexTaskData.Unlock();
   mutexFlightData.Unlock();

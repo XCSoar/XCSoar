@@ -52,8 +52,6 @@ Copyright_License {
 
 static WndForm *wf=NULL;
 
-extern double CRUISE_EFFICIENCY;
-
 static double emc= 0.0;
 static double cruise_efficiency= 1.0;
 
@@ -78,7 +76,7 @@ static void GetCruiseEfficiency(void) {
 
     cruise_efficiency = EffectiveCruiseEfficiency(&GPS_INFO, &CALCULATED_INFO);
   } else {
-    cruise_efficiency = CRUISE_EFFICIENCY;
+    cruise_efficiency = GlidePolar::GetCruiseEfficiency();
   }
 }
 
@@ -299,13 +297,13 @@ static void OnRangeData(DataField *Sender, DataField::DataAccessKind_t Mode){
 
 
 static void OnCruiseEfficiencyData(DataField *Sender, DataField::DataAccessKind_t Mode) {
-  double clast = CRUISE_EFFICIENCY;
+  double clast = GlidePolar::GetCruiseEfficiency();
   switch(Mode){
   case DataField::daGet:
     break;
   case DataField::daSpecial:
     GetCruiseEfficiency();
-    CRUISE_EFFICIENCY = cruise_efficiency;
+    GlidePolar::SetCruiseEfficiency(cruise_efficiency);
     if (fabs(cruise_efficiency-clast)>0.01) {
       RefreshCalculator();
     }
@@ -313,7 +311,7 @@ static void OnCruiseEfficiencyData(DataField *Sender, DataField::DataAccessKind_
   case DataField::daPut:
   case DataField::daChange:
     cruise_efficiency = Sender->GetAsFloat()/100.0;
-    CRUISE_EFFICIENCY = cruise_efficiency;
+    GlidePolar::SetCruiseEfficiency(cruise_efficiency);
     if (fabs(cruise_efficiency-clast)>0.01) {
       RefreshCalculator();
     }
@@ -348,11 +346,11 @@ void dlgTaskCalculatorShowModal(void){
   if (!wf) return;
 
   double MACCREADY_enter = GlidePolar::GetMacCready();
-  double CRUISE_EFFICIENCY_enter = CRUISE_EFFICIENCY;
+  double CRUISE_EFFICIENCY_enter = GlidePolar::GetCruiseEfficiency();
 
   emc = EffectiveMacCready(&GPS_INFO, &CALCULATED_INFO);
 
-  cruise_efficiency = CRUISE_EFFICIENCY;
+  cruise_efficiency = CRUISE_EFFICIENCY_enter;
 
   // find start value for range
   Range = AdjustAATTargets(2.0);
@@ -369,7 +367,7 @@ void dlgTaskCalculatorShowModal(void){
   if (wf->ShowModal() == mrCancle) {
     // todo: restore task settings.
     GlidePolar::SetMacCready(MACCREADY_enter);
-    CRUISE_EFFICIENCY = CRUISE_EFFICIENCY_enter;
+    GlidePolar::SetCruiseEfficiency(CRUISE_EFFICIENCY_enter);
   }
   delete wf;
   wf = NULL;

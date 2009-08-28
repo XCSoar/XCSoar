@@ -78,6 +78,8 @@ Mutex mutexGlidePolar;
 double        GlidePolar::MACCREADY = 0; // JMW now in SI units (m/s) for consistency
 double        GlidePolar::BUGS = 1;
 double        GlidePolar::BALLAST = 0;
+double        GlidePolar::CRUISE_EFFICIENCY = 1.0;
+
 int           POLARID = 0;
 double        POLAR[POLARSIZE] = {0,0,0};
 double        WEIGHTS[POLARSIZE] = {250,70,100};
@@ -135,6 +137,14 @@ double GlidePolar::GetBallast() {
   return retval;
 }
 
+double GlidePolar::GetCruiseEfficiency() {
+  double retval;
+  Lock();
+  retval = CRUISE_EFFICIENCY;
+  Unlock();
+  return retval;
+}
+
 double GlidePolar::GetBallastLitres() {
   double retval;
   Lock();
@@ -152,6 +162,12 @@ void GlidePolar::SetMacCready(double val) {
 void GlidePolar::SetBugs(double val) {
   Lock();
   BUGS = val;
+  Unlock();
+}
+
+void GlidePolar::SetCruiseEfficiency(double val) {
+  Lock();
+  CRUISE_EFFICIENCY = val;
   Unlock();
 }
 

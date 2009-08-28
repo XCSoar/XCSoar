@@ -93,7 +93,9 @@ void Vario(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 }
 
 
-void SpeedToFly(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double mc_setting) {
+void SpeedToFly(NMEA_INFO *Basic, DERIVED_INFO *Calculated, 
+		const double mc_setting,
+		const double cruise_efficiency) {
   double n;
   // get load factor
   if (Basic->AccelerationAvailable) {
@@ -143,7 +145,7 @@ void SpeedToFly(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double mc_setting) {
                                     NULL,
                                     &VOptnew,
                                     false,
-                                    NULL, 0, CRUISE_EFFICIENCY);
+                                    NULL, 0, cruise_efficiency);
     } else {
       GlidePolar::MacCreadyAltitude(delta_mc,
                                     100.0, // dummy value
@@ -153,7 +155,7 @@ void SpeedToFly(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double mc_setting) {
                                     0,
                                     &VOptnew,
                                     true,
-                                    NULL, 1.0e6, CRUISE_EFFICIENCY);
+                                    NULL, 1.0e6, cruise_efficiency);
     }
 
     // put low pass filter on VOpt so display doesn't jump around
@@ -258,10 +260,11 @@ void AudioVario(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
 BOOL DoCalculationsVario(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 {
   static double LastTime = 0;
-  double mc = GlidePolar::GetMacCready();
+  const double mc = GlidePolar::GetMacCready();
+  const double ce = GlidePolar::GetCruiseEfficiency();
 
   NettoVario(Basic, Calculated);
-  SpeedToFly(Basic, Calculated, mc);
+  SpeedToFly(Basic, Calculated, mc, ce);
 #ifndef DISABLEAUDIOVARIO
   AudioVario(Basic, Calculated);
 #endif
