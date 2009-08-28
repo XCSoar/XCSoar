@@ -342,6 +342,8 @@ static NextToken GetNextToken(XML *pXML, int *pcbToken, enum TokenTypeTag *pType
     int              cbOpen;
     int              nIsText = FALSE;
 
+    result.pClr = NULL; // avoid compiler warning for uninitialised variable
+
     // Find next non-white space character
     ch = FindNonWhiteSpace(pXML);
 
