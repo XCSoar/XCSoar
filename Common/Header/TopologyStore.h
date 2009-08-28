@@ -41,9 +41,11 @@ Copyright_License {
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
+class Canvas;
+
 void SetTopologyBounds(const RECT rcin, const bool force=false);
 void OpenTopology();
 void CloseTopology();
-void DrawTopology(const HDC hdc, const RECT rc);
+void DrawTopology(Canvas &canvas, const RECT rc);
 
 #endif

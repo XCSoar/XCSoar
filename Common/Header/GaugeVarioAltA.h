@@ -38,8 +38,9 @@ Copyright_License {
 #ifndef GAUGE_VARIO_H
 #define GAUGE_VARIO_H
 #include "StdAfx.h"
-
-extern HWND hWndVarioWindow;
+#include "Screen/BufferCanvas.hpp"
+#include "Screen/BitmapCanvas.hpp"
+#include "Screen/PaintWindow.hpp"
 
 typedef struct{
   bool    InitDone;
@@ -48,16 +49,22 @@ typedef struct{
   POINT   orgText;
   double  lastValue;
   TCHAR   lastText[32];
-  HBITMAP lastBitMap;
+  const Bitmap *lastBitMap;
 }DrawInfo_t;
 
 class GaugeVario {
+public:
+  static Widget widget;
+
+private:
+  static BufferCanvas hdcDrawWindow;
+
  public:
   static void Create();
   static void Destroy();
   static void Render();
   static void RenderBg();
-  static void Repaint(HDC hDC);
+  static void Repaint(Canvas &canvas);
   static void Show(bool doshow);
 
  private:
@@ -80,34 +87,31 @@ class GaugeVario {
   static POINT *polys;
   static POINT *lines;
   static bool dirty;
-  static HDC hdcScreen;
-  static HDC hdcDrawWindow;
-  static HDC hdcTemp;
-  static HBITMAP hDrawBitMap;
-  static RECT rc;
+  static BitmapCanvas hdcTemp;
+  static Bitmap hDrawBitMap;
   static DrawInfo_t diValueTop;
   static DrawInfo_t diValueMiddle;
   static DrawInfo_t diValueBottom;
   static DrawInfo_t diLabelTop;
   static DrawInfo_t diLabelMiddle;
   static DrawInfo_t diLabelBottom;
-  static HBITMAP hBitmapUnit;
-  static HBITMAP hBitmapClimb;
+  const static Bitmap *hBitmapUnit;
+  static Bitmap hBitmapClimb;
   static POINT BitmapUnitPos;
   static POINT BitmapUnitSize;
-  static HBRUSH redBrush;
-  static HBRUSH blueBrush;
-  static HPEN redPen;
-  static HPEN bluePen;
-  static HPEN redThickPen;
-  static HPEN blueThickPen;
-  static HPEN blankThickPen;
-  static HBRUSH yellowBrush;
-  static HBRUSH greenBrush;
-  static HBRUSH magentaBrush;
-  static HPEN yellowPen;
-  static HPEN greenPen;
-  static HPEN magentaPen;
+  static Brush redBrush;
+  static Brush blueBrush;
+  static Pen redPen;
+  static Pen bluePen;
+  static Pen redThickPen;
+  static Pen blueThickPen;
+  static Pen blankThickPen;
+  static Brush yellowBrush;
+  static Brush greenBrush;
+  static Brush magentaBrush;
+  static Pen yellowPen;
+  static Pen greenPen;
+  static Pen magentaPen;
 
 };
 

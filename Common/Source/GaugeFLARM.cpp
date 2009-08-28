@@ -47,29 +47,28 @@ Copyright_License {
 #include "InfoBoxLayout.h"
 #include "Screen/Graphics.hpp"
 #include "Screen/Fonts.hpp"
+#include "Screen/PaintCanvas.hpp"
+#include "Screen/MainWindow.hpp"
 #include <stdlib.h>
 
 bool  EnableFLARMGauge = true;
 DWORD EnableFLARMMap = 1;
 
-HWND GaugeFLARM::hWndFLARMWindow = NULL; //FLARM Window
+Widget GaugeFLARM::widget; //FLARM Window
 
-HBITMAP GaugeFLARM::hDrawBitMap = NULL;
-HBITMAP GaugeFLARM::hRoseBitMap = NULL;
+Bitmap GaugeFLARM::hRoseBitMap;
 int GaugeFLARM::hRoseBitMapWidth = 0;
 int GaugeFLARM::hRoseBitMapHeight= 0;
-HDC GaugeFLARM::hdcScreen = NULL;
-HDC GaugeFLARM::hdcTemp = NULL;
-HDC GaugeFLARM::hdcDrawWindow = NULL;
+BitmapCanvas GaugeFLARM::hdcTemp;
+BufferCanvas GaugeFLARM::hdcDrawWindow;
 bool GaugeFLARM::Visible= false;
 bool GaugeFLARM::Traffic= false;
 bool GaugeFLARM::ForceVisible= false;
-RECT GaugeFLARM::rc;
 bool GaugeFLARM::Suppress= false;
 
-static COLORREF colTextGray;
-static COLORREF colText;
-static COLORREF colTextBackgnd;
+static Color colTextGray;
+static Color colText;
+static Color colTextBackgnd;
 
 LRESULT CALLBACK GaugeFLARMWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
@@ -87,21 +86,20 @@ int GaugeFLARM::RangeScale(double d) {
 
 void GaugeFLARM::RenderBg() {
 
-  SelectObject(hdcTemp, hRoseBitMap);
+  hdcTemp.select(hRoseBitMap);
   if ( hRoseBitMapWidth != IBLSCALE(InfoBoxLayout::ControlWidth*2)
       || hRoseBitMapHeight != IBLSCALE(InfoBoxLayout::ControlHeight*2-1) )
   {
-    StretchBlt(hdcDrawWindow, 0, 0,
-	     (InfoBoxLayout::ControlWidth*2),
-	     (InfoBoxLayout::ControlHeight*2-1),
-	     hdcTemp,
-	     0, 0, hRoseBitMapWidth, hRoseBitMapHeight,
-	     SRCCOPY);
+    hdcDrawWindow.stretch(0, 0,
+                          InfoBoxLayout::ControlWidth * 2,
+                          InfoBoxLayout::ControlHeight * 2 - 1,
+                          hdcTemp,
+                          0, 0, hRoseBitMapWidth, hRoseBitMapHeight);
   }
   else
   {
-    BitBlt(hdcDrawWindow, 0, 0, InfoBoxLayout::ControlWidth*2, InfoBoxLayout::ControlHeight*2-1,
-	   hdcTemp, 0, 0, SRCCOPY);
+    hdcDrawWindow.copy(0, 0, InfoBoxLayout::ControlWidth * 2, InfoBoxLayout::ControlHeight * 2 - 1,
+                       hdcTemp, 0, 0);
   }
 
 }
@@ -111,24 +109,24 @@ void GaugeFLARM::RenderBg() {
 void GaugeFLARM::RenderTraffic(NMEA_INFO  *gps_info) {
   // TODO enhancement: support red/green Color blind pilots
 
-  SelectObject(hdcDrawWindow, TitleWindowFont);
-  SetTextColor(hdcDrawWindow, RGB(0x0,0x0,0x0));
-  SetBkColor(hdcDrawWindow, RGB(0xff,0xff,0xff));
+  hdcDrawWindow.select(TitleWindowFont);
+  hdcDrawWindow.set_text_color(Color(0x0,0x0,0x0));
+  hdcDrawWindow.set_background_color(Color(0xff,0xff,0xff));
 
   for (int i=0; i<FLARM_MAX_TRAFFIC; i++) {
     if (gps_info->FLARM_Traffic[i].ID>0) {
 
       switch (gps_info->FLARM_Traffic[i].AlarmLevel) {
       case 1:
-	  SelectObject(hdcDrawWindow, MapGfx.yellowBrush);
+        hdcDrawWindow.select(MapGfx.yellowBrush);
 	  break;
       case 2:
       case 3:
-	  SelectObject(hdcDrawWindow, MapGfx.redBrush);
+        hdcDrawWindow.select(MapGfx.redBrush);
 	  break;
       case 0:
       case 4:
-	  SelectObject(hdcDrawWindow, MapGfx.greenBrush);
+        hdcDrawWindow.select(MapGfx.greenBrush);
 	  break;
       }
 
@@ -158,12 +156,9 @@ void GaugeFLARM::RenderTraffic(NMEA_INFO  *gps_info) {
 
       if (gps_info->FLARM_Traffic[i].AlarmLevel>0) {
         // Draw line through target
-        POINT tl[2];
-        tl[0].x = sc.x;
-        tl[0].y = sc.y;
-        tl[1].x = center.x + iround(radius*x);
-        tl[1].y = center.y + iround(radius*y);
-        Polygon(hdcDrawWindow, tl, 2);
+        hdcDrawWindow.line(sc.x, sc.y,
+                           center.x + iround(radius*x),
+                           center.y + iround(radius*y));
       }
 
       POINT Arrow[5];
@@ -182,7 +177,7 @@ void GaugeFLARM::RenderTraffic(NMEA_INFO  *gps_info) {
       PolygonRotateShift(Arrow, 5, sc.x, sc.y,
                          gps_info->FLARM_Traffic[i].TrackBearing
                          + DisplayAngle);
-      Polygon(hdcDrawWindow, Arrow, 5);
+      hdcDrawWindow.polygon(Arrow, 5);
 
       short relalt =
 	iround(gps_info->FLARM_Traffic[i].RelativeAltitude*ALTITUDEMODIFY/100);
@@ -190,15 +185,12 @@ void GaugeFLARM::RenderTraffic(NMEA_INFO  *gps_info) {
       if (relalt != 0) {
 	TCHAR Buffer[10];
 	_stprintf(Buffer, TEXT("%d"), abs(relalt));
-	short size = _tcslen(Buffer);
-	SIZE tsize;
-	GetTextExtentPoint(hdcDrawWindow, Buffer, size, &tsize);
+        SIZE tsize = hdcDrawWindow.text_size(Buffer);
 	tsize.cx = (tsize.cx+IBLSCALE(6))/2;
-	ExtTextOut(hdcDrawWindow, sc.x-tsize.cx+IBLSCALE(7),
-		   sc.y-tsize.cy-IBLSCALE(5),
-		   ETO_OPAQUE, NULL, Buffer, size, NULL);
-	HBRUSH oldBrush = (HBRUSH)SelectObject(hdcDrawWindow,
-					       GetStockObject(BLACK_BRUSH));
+        hdcDrawWindow.text(sc.x - tsize.cx + IBLSCALE(7),
+                           sc.y - tsize.cy - IBLSCALE(5),
+                           Buffer);
+        hdcDrawWindow.black_brush();
 	POINT triangle[4];
 	triangle[0].x = 3;  // was  2
 	triangle[0].y = -3; // was -2
@@ -217,8 +209,7 @@ void GaugeFLARM::RenderTraffic(NMEA_INFO  *gps_info) {
           }
 	triangle[3].x = triangle[0].x;
 	triangle[3].y = triangle[0].y;
-	Polygon(hdcDrawWindow, triangle, 4);
-	SelectObject(hdcDrawWindow, oldBrush);
+        hdcDrawWindow.polygon(triangle, 4);
 
       }
     }
@@ -232,7 +223,7 @@ void GaugeFLARM::Render(NMEA_INFO *gps_info) {
 
     RenderTraffic(gps_info);
 
-    BitBlt(hdcScreen, 0, 0, rc.right, rc.bottom, hdcDrawWindow, 0, 0, SRCCOPY);
+    widget.get_canvas().copy(hdcDrawWindow);
   }
 }
 
@@ -240,66 +231,54 @@ void GaugeFLARM::Render(NMEA_INFO *gps_info) {
 void GaugeFLARM::Create() {
   // start of new code for displaying FLARM window
 
-  GetClientRect(hWndMainWindow, &rc);
+  RECT rc = hWndMainWindow.get_client_rect();
 
-  hWndFLARMWindow = CreateWindow(TEXT("STATIC"),TEXT(" "),
-			       WS_VISIBLE|WS_CHILD | WS_CLIPCHILDREN
-			       | WS_CLIPSIBLINGS,
-			       0,0,0,0,
-			       hWndMainWindow,NULL,hInst,NULL);
+  widget.set(hWndMainWindow,
+             (int)(rc.right - InfoBoxLayout::ControlWidth * 2)+1,
+             (int)(rc.bottom - InfoBoxLayout::ControlHeight * 2)+1,
+             (int)(InfoBoxLayout::ControlWidth * 2)-1,
+             (int)(InfoBoxLayout::ControlHeight * 2)-1,
+             false, false, false);
+  widget.insert_after(HWND_TOP, false);
 
-  SetWindowPos(hWndFLARMWindow, HWND_TOP,
-	       (int)(rc.right-InfoBoxLayout::ControlWidth*2)+1,
-	       (int)(rc.bottom-InfoBoxLayout::ControlHeight*2)+1,
-	       (int)(InfoBoxLayout::ControlWidth*2)-1,
-	       (int)(InfoBoxLayout::ControlHeight*2)-1,
-	       SWP_HIDEWINDOW);
+  rc = widget.get_client_rect();
 
-  GetClientRect(hWndFLARMWindow, &rc);
+  center.x = widget.get_hmiddle();
+  center.y = widget.get_vmiddle();
+  radius = min(widget.get_right() - center.x, widget.get_bottom() - center.y);
 
-  center.x = (rc.right+rc.left)/2;
-  center.y = (rc.top+rc.bottom)/2;
-  radius = min(rc.right-center.x,rc.bottom-center.y);
+  hdcDrawWindow.set(widget.get_canvas());
+  hdcTemp.set(hdcDrawWindow);
 
-  hdcScreen = GetDC(hWndFLARMWindow);                       // the screen DC
-  hdcDrawWindow = CreateCompatibleDC(hdcScreen);            // the memory DC
-  hdcTemp = CreateCompatibleDC(hdcDrawWindow);
+  hRoseBitMap.load(IDB_FLARMROSE);
 
-  hRoseBitMap = LoadBitmap(hInst, MAKEINTRESOURCE(IDB_FLARMROSE));
-
-  BITMAP bm;
-  ::GetObject( hRoseBitMap, sizeof( bm ), &bm );
-  hRoseBitMapWidth = bm.bmWidth;
-  hRoseBitMapHeight = bm.bmHeight;
-
-
-  hDrawBitMap =
-    CreateCompatibleBitmap (hdcScreen, rc.right-rc.left, rc.bottom-rc.top);
-  SelectObject(hdcDrawWindow, hDrawBitMap);
+  const SIZE size = hRoseBitMap.get_size();
+  hRoseBitMapWidth = size.cx;
+  hRoseBitMapHeight = size.cy;
 
   if (Appearance.InverseInfoBox){
-    colText = RGB(0xff, 0xff, 0xff);
-    colTextBackgnd = RGB(0x00, 0x00, 0x00);
-    colTextGray = RGB(0xa0, 0xa0, 0xa0);
+    colText = Color(0xff, 0xff, 0xff);
+    colTextBackgnd = Color(0x00, 0x00, 0x00);
+    colTextGray = Color(0xa0, 0xa0, 0xa0);
   } else {
-    colText = RGB(0x00, 0x00, 0x00);
-    colTextBackgnd = RGB(0xff, 0xff, 0xff);
-    colTextGray = RGB(~0xa0, ~0xa0, ~0xa0);
+    colText = Color(0x00, 0x00, 0x00);
+    colTextBackgnd = Color(0xff, 0xff, 0xff);
+    colTextGray = Color(~0xa0, ~0xa0, ~0xa0);
   }
 
-  SetTextColor(hdcDrawWindow, colText);
-  SetBkColor(hdcDrawWindow, colTextBackgnd);
+  hdcDrawWindow.set_text_color(colText);
+  hdcDrawWindow.set_background_color(colTextBackgnd);
 
   // end of new code for drawing FLARM window (see below for destruction of objects)
 
   // turn off suppression
   Suppress = false;
 
-  SetWindowLong(hWndFLARMWindow, GWL_WNDPROC, (LONG) GaugeFLARMWndProc);
-  ShowWindow(hWndFLARMWindow, SW_HIDE);
+  widget.set_wndproc(GaugeFLARMWndProc);
+  widget.hide();
 
   RenderBg();
-  BitBlt(hdcScreen, 0, 0, rc.right, rc.bottom, hdcDrawWindow, 0, 0, SRCCOPY);
+  widget.get_canvas().copy(hdcDrawWindow);
 
   Visible = false;
   Traffic = false;
@@ -316,33 +295,26 @@ void GaugeFLARM::Show() {
   Visible = ForceVisible || (Traffic && EnableFLARMGauge && !Suppress);
   static bool lastvisible = true;
   if (Visible && !lastvisible) {
-    ShowWindow(hWndFLARMWindow, SW_SHOW);
+    widget.show();
   }
   if (!Visible && lastvisible) {
-    ShowWindow(hWndFLARMWindow, SW_HIDE);
+    widget.hide();
   }
   lastvisible = Visible;
 }
 
 
 void GaugeFLARM::Destroy() {
-  ReleaseDC(hWndFLARMWindow, hdcScreen);
-  DeleteDC(hdcDrawWindow);
-  DeleteDC(hdcTemp);
-  DeleteObject(hDrawBitMap);
-  DeleteObject(hRoseBitMap);
-  DestroyWindow(hWndFLARMWindow);
+  hdcDrawWindow.reset();
+  hdcTemp.reset();
+  widget.reset();
 }
 
-void GaugeFLARM::Repaint(HDC hDC) {
-  BitBlt(hDC, 0, 0, rc.right, rc.bottom, hdcDrawWindow, 0, 0, SRCCOPY);
+void GaugeFLARM::Repaint(Canvas &canvas) {
+  canvas.copy(hdcDrawWindow);
 }
 
 LRESULT CALLBACK GaugeFLARMWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam){
-
-  PAINTSTRUCT ps;            // structure for paint info
-  HDC hDC;                   // handle to graphics device context,
-
   switch (uMsg){
 
     case WM_ERASEBKGND:
@@ -351,10 +323,8 @@ LRESULT CALLBACK GaugeFLARMWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l
 
     case WM_PAINT:
       if (globalRunningEvent.test() && GaugeFLARM::Visible) {
-	hDC = BeginPaint(hwnd, &ps);
-	GaugeFLARM::Repaint(hDC);
-	DeleteDC(hDC);
-	EndPaint(hwnd, &ps);
+        PaintCanvas canvas(GaugeFLARM::widget, hwnd);
+        GaugeFLARM::Repaint(canvas);
       }
     break;
 

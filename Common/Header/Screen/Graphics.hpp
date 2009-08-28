@@ -38,6 +38,11 @@ Copyright_License {
 #ifndef SCREEN_GRAPHICS_HPP
 #define SCREEN_GRAPHICS_HPP
 
+#include "Screen/Bitmap.hpp"
+#include "Screen/Brush.hpp"
+#include "Screen/Color.hpp"
+#include "Screen/Pen.hpp"
+#include "Screen/Canvas.hpp"
 #include "XCSoar.h"
 #include "Airspace.h"
 
@@ -69,136 +74,125 @@ public:
   void Destroy();
 
   // airspace brushes/colours
-  COLORREF GetAirspaceColour(const int i);
-  HBRUSH GetAirspaceBrush(const int i);
-  COLORREF GetAirspaceColourByClass(const int i);
-  HBRUSH GetAirspaceBrushByClass(const int i);
+  const Color GetAirspaceColour(const int i);
+  const Brush &GetAirspaceBrush(const int i);
+  const Color GetAirspaceColourByClass(const int i);
+  const Brush &GetAirspaceBrushByClass(const int i);
 
-  HPEN hAirspacePens[AIRSPACECLASSCOUNT];
-  HPEN hSnailPens[NUMSNAILCOLORS];
-  COLORREF hSnailColours[NUMSNAILCOLORS];
-  HBRUSH hAirspaceBrushes[NUMAIRSPACEBRUSHES];
-  HBITMAP hAirspaceBitmap[NUMAIRSPACEBRUSHES];
-  HBITMAP hAboveTerrainBitmap;
-  HBRUSH hAboveTerrainBrush;
+  Pen hAirspacePens[AIRSPACECLASSCOUNT];
+  Pen hSnailPens[NUMSNAILCOLORS];
+  Color hSnailColours[NUMSNAILCOLORS];
+  Brush hAirspaceBrushes[NUMAIRSPACEBRUSHES];
+  Bitmap hAirspaceBitmap[NUMAIRSPACEBRUSHES];
+  Bitmap hAboveTerrainBitmap;
+  Brush hAboveTerrainBrush;
 
-  HBITMAP
+  Bitmap
     hTurnPoint, hSmall, hCruise, hClimb,
     hFinalGlide, hAutoMacCready, hTerrainWarning, hGPSStatus1, hGPSStatus2,
     hAbort, hLogger, hLoggerOff, hFLARMTraffic;
 
-  HBRUSH   hBackgroundBrush;
+  Brush   hBackgroundBrush;
 
-  HPEN hpAircraft;
-  HPEN hpAircraftBorder;
-  HPEN hpWind;
-  HPEN hpWindThick;
-  HPEN hpBearing;
-  HPEN hpBestCruiseTrack;
-  HPEN hpCompass;
-  HPEN hpThermalBand;
-  HPEN hpThermalBandGlider;
-  HPEN hpFinalGlideAbove;
-  HPEN hpFinalGlideBelow;
-  HPEN hpFinalGlideBelowLandable;
-  HPEN hpMapScale;
-  HPEN hpTerrainLine;
-  HPEN hpTerrainLineBg;
-  HPEN hpVisualGlideLightRed; // VENTA3
-  HPEN hpVisualGlideHeavyRed; //
-  HPEN hpVisualGlideLightBlack; // VENTA3
-  HPEN hpVisualGlideHeavyBlack; //
-  HPEN hpVisualGlideExtra; // future use
-  HPEN hpSpeedFast;
-  HPEN hpSpeedSlow;
-  HPEN hpStartFinishThick;
-  HPEN hpStartFinishThin;
+  Pen hpAircraft;
+  Pen hpAircraftBorder;
+  Pen hpWind;
+  Pen hpWindThick;
+  Pen hpBearing;
+  Pen hpBestCruiseTrack;
+  Pen hpCompass;
+  Pen hpThermalBand;
+  Pen hpThermalBandGlider;
+  Pen hpFinalGlideAbove;
+  Pen hpFinalGlideBelow;
+  Pen hpFinalGlideBelowLandable;
+  Pen hpMapScale;
+  Pen hpTerrainLine;
+  Pen hpTerrainLineBg;
+  Pen hpVisualGlideLightRed; // VENTA3
+  Pen hpVisualGlideHeavyRed; //
+  Pen hpVisualGlideLightBlack; // VENTA3
+  Pen hpVisualGlideHeavyBlack; //
+  Pen hpVisualGlideExtra; // future use
+  Pen hpSpeedFast;
+  Pen hpSpeedSlow;
+  Pen hpStartFinishThick;
+  Pen hpStartFinishThin;
 
-  HBRUSH hbCompass;
-  HBRUSH hbThermalBand;
-  HBRUSH hbBestCruiseTrack;
-  HBRUSH hbFinalGlideBelow;
-  HBRUSH hbFinalGlideBelowLandable;
-  HBRUSH hbFinalGlideAbove;
-  HBRUSH hbWind;
+  Brush hbCompass;
+  Brush hbThermalBand;
+  Brush hbBestCruiseTrack;
+  Brush hbFinalGlideBelow;
+  Brush hbFinalGlideBelowLandable;
+  Brush hbFinalGlideAbove;
+  Brush hbWind;
 
-  HPEN    hpCompassBorder;
-  HBRUSH  hBrushFlyingModeAbort;
+  Pen    hpCompassBorder;
+  Brush  hBrushFlyingModeAbort;
 
-  HBITMAP hBmpAirportReachable;
-  HBITMAP hBmpAirportUnReachable;
-  HBITMAP hBmpFieldReachable;
-  HBITMAP hBmpFieldUnReachable;
-  HBITMAP hBmpThermalSource;
-  HBITMAP hBmpTarget;
-  HBITMAP hBmpTeammatePosition;
+  Bitmap hBmpAirportReachable;
+  Bitmap hBmpAirportUnReachable;
+  Bitmap hBmpFieldReachable;
+  Bitmap hBmpFieldUnReachable;
+  Bitmap hBmpThermalSource;
+  Bitmap hBmpTarget;
+  Bitmap hBmpTeammatePosition;
 
-  HBITMAP hBmpMapScale;
-  HBITMAP hBmpCompassBg;
-  HBITMAP hBmpClimbeAbort;
-  HBITMAP hBmpUnitKm;
-  HBITMAP hBmpUnitSm;
-  HBITMAP hBmpUnitNm;
-  HBITMAP hBmpUnitM;
-  HBITMAP hBmpUnitFt;
-  HBITMAP hBmpUnitMpS;
+  Bitmap hBmpMapScale;
+  Bitmap hBmpCompassBg;
+  Bitmap hBmpClimbeAbort;
+  Bitmap hBmpUnitKm;
+  Bitmap hBmpUnitSm;
+  Bitmap hBmpUnitNm;
+  Bitmap hBmpUnitM;
+  Bitmap hBmpUnitFt;
+  Bitmap hBmpUnitMpS;
 
   // used for flarm
-  HBRUSH redBrush;
-  HBRUSH yellowBrush;
-  HBRUSH greenBrush;
+  Brush redBrush;
+  Brush yellowBrush;
+  Brush greenBrush;
 
   // misc
-  static const COLORREF BackgroundColor;
-  static const COLORREF TaskColor;
-  static const COLORREF Colours[NUMAIRSPACECOLORS];
+  static const Color BackgroundColor;
+  static const Color TaskColor;
+  static const Color Colours[NUMAIRSPACECOLORS];
 
   // used by infobox and gauges
-  static const COLORREF redColor;
-  static const COLORREF blueColor;
-  static const COLORREF inv_redColor;
-  static const COLORREF inv_blueColor;
+  static const Color redColor;
+  static const Color blueColor;
+  static const Color inv_redColor;
+  static const Color inv_blueColor;
 // Not really used, tested and dropped. But useful for the future
-  static const COLORREF yellowColor;
-  static const COLORREF greenColor;
-  static const COLORREF magentaColor;
-  static const COLORREF inv_yellowColor;
-  static const COLORREF inv_greenColor;
-  static const COLORREF inv_magentaColor;
+  static const Color yellowColor;
+  static const Color greenColor;
+  static const Color magentaColor;
+  static const Color inv_yellowColor;
+  static const Color inv_greenColor;
+  static const Color inv_magentaColor;
 
   // these used for infoboxes/buttons
-  static const COLORREF ColorSelected;
-  static const COLORREF ColorUnselected;
-  static const COLORREF ColorWarning;
-  static const COLORREF ColorOK;
-  static const COLORREF ColorButton;
-  static const COLORREF ColorBlack;
-  static const COLORREF ColorMidGrey;
+  static const Color ColorSelected;
+  static const Color ColorUnselected;
+  static const Color ColorWarning;
+  static const Color ColorOK;
+  static const Color ColorButton;
+  static const Color ColorBlack;
+  static const Color ColorMidGrey;
 };
 
 extern ScreenGraphics MapGfx;
 
-void DrawBitmapX(HDC hdc, int top, int right,
-		 int sizex, int sizey,
-		 HDC source,
-		 int offsetx, int offsety,
-		 DWORD mode);
-
-void DrawDashLine(HDC hdc, const int width,
-		  const POINT ptStart, const POINT ptEnd,
-		  const COLORREF cr,
-		  const RECT rc);
-
-void DrawGreatCircle(HDC hdc,
+void DrawGreatCircle(Canvas &canvas,
 		     double lon_start, double lat_start,
 		     double lon_end, double lat_end,
 		     const RECT rc);
 
-void ClipDrawLine(HDC hdc, const int PenStyle, const int width,
+void ClipDrawLine(Canvas &canvas, Pen::style PenStyle, const int width,
 		  const POINT ptStart, const POINT ptEnd,
-		  const COLORREF cr, const RECT rc);
+                  const Color cr, const RECT rc);
 
-bool TextInBox(HDC hDC, const TCHAR *Value, int x, int y, int size,
+bool TextInBox(Canvas &canvas, const TCHAR *Value, int x, int y, int size,
 	       TextInBoxMode_t Mode, bool noOverlap=false);
 
 bool checkLabelBlock(RECT rc);

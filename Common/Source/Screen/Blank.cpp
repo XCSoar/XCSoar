@@ -36,6 +36,7 @@ Copyright_License {
 */
 
 #include "Screen/Blank.hpp"
+#include "Screen/MainWindow.hpp"
 #include "XCSoar.h"
 
 #ifdef HAVE_BLANK
@@ -137,7 +138,7 @@ void BlankDisplay(bool doblank) {
           StartupStore(TEXT("Battery low exit...\n"));
           // TODO feature: Warning message on battery shutdown
 	  ForceShutdown = true;
-          SendMessage(hWndMainWindow, WM_CLOSE, 0, 0);
+          hWndMainWindow.close();
         } else
 #endif
           if (PDABatteryPercent < BATTERY_WARNING) {

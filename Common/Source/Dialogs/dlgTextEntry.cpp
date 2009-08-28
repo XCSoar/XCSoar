@@ -40,6 +40,7 @@ Copyright_License {
 #include "Dialogs.h"
 #include "Utils.h"
 #include "Dialogs/dlgTools.h"
+#include "Screen/MainWindow.hpp"
 #include "Compatibility/string.h"
 
 static WndForm *wf=NULL;
@@ -68,7 +69,7 @@ static void OnTextPaint(WindowControl *Sender, HDC hDC) {
 
   CopyRect(&rcgfx, Sender->GetBoundRect());
   // background is painted in the base-class
-  hfOld = (HFONT)SelectObject(hDC, Sender->GetFont());
+  hfOld = (HFONT)SelectObject(hDC, Sender->GetFont()->native());
   SetBkMode(hDC, TRANSPARENT);
   SetTextColor(hDC, Sender->GetForeColor());
 

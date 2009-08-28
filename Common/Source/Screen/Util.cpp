@@ -36,6 +36,7 @@ Copyright_License {
 */
 
 #include "Screen/Util.hpp"
+#include "Screen/Canvas.hpp"
 #include "Math/Geometry.hpp"
 #include "Math/FastMath.h"
 #include "Screen/shapelib/mapprimitive.h"
@@ -269,7 +270,7 @@ static unsigned int SutherlandHodgmanPolygoClip (POINT* inVertexArray,
 static POINT clip_ptout[MAXCLIPPOLYGON];
 static POINT clip_ptin[MAXCLIPPOLYGON];
 
-void ClipPolygon(HDC hdc, const POINT *m_ptin, unsigned int inLength,
+void ClipPolygon(Canvas &canvas, const POINT *m_ptin, unsigned int inLength,
                  RECT rc, bool fill)
 {
   unsigned int outLength = 0;
@@ -317,42 +318,13 @@ void ClipPolygon(HDC hdc, const POINT *m_ptin, unsigned int inLength,
 
   if (fill) {
     if (outLength>2) {
-      Polygon(hdc, clip_ptout, outLength);
+      canvas.polygon(clip_ptout, outLength);
     }
   } else {
     if (outLength>1) {
-      Polyline(hdc, clip_ptout, outLength);
+      canvas.polyline(clip_ptout, outLength);
     }
   }
-}
-
-void ClipPolyline(HDC hdc, POINT* pt, const int npoints, const RECT rc)
-{
-#ifdef BUG_IN_CLIPPING
-  ClipPolygon(hdc, pt, npoints, rc, false);
-  //VENTA2
-#elif defined(PNA)
-  // if (GlobalModelType == MODELTYPE_PNA_HP31X)
-  if (needclipping==true)
-    ClipPolygon(hdc, pt, npoints, rc, false);
-  else
-    Polyline(hdc, pt, npoints);
-#else
-  Polyline(hdc, pt, npoints);
-#endif
-}
-
-void ClipLine(const HDC& hdc, const POINT &ptStart,
-              const POINT &ptEnd, const RECT rc)
-{
-  POINT pt[2];
-
-  pt[0].x= ptStart.x;
-  pt[0].y= ptStart.y;
-  pt[1].x= ptEnd.x;
-  pt[1].y= ptEnd.y;
-
-  ClipPolyline(hdc, pt, 2, rc);
 }
 
 static const double xcoords[64] = {
@@ -432,7 +404,9 @@ void StartArc(HDC hdc,
 }
 #endif /* ENABLE_UNUSED_CODE */
 
-int Circle(HDC hdc, long x, long y, int radius, RECT rc, bool clip, bool fill)
+int
+Circle(Canvas &canvas, long x, long y, int radius, RECT rc,
+       bool clip, bool fill)
 {
   POINT pt[65];
   unsigned int i;
@@ -466,33 +440,33 @@ int Circle(HDC hdc, long x, long y, int radius, RECT rc, bool clip, bool fill)
   pt[step].y = y + (long) (radius * ycoords[0]);
 
   if (clip) {
-    ClipPolygon(hdc,pt,step+1,rc, fill);
+    canvas.clipped_polygon(pt, step + 1, rc, fill);
   } else {
     if (fill) {
 #ifdef PNA
       if (needclipping==true)
-      	ClipPolygon(hdc,pt,step+1,rc, false); // VENTA4: CHECK FIX AIRSPACE CLIPPING PROBLEM
+        canvas.clipped_polygon(pt, step + 1, rc, false); // VENTA4: CHECK FIX AIRSPACE CLIPPING PROBLEM
       else
-        Polygon(hdc,pt,step+1);
+        canvas.polygon(pt, step + 1);
 #else
-      Polygon(hdc,pt,step+1);
+      canvas.polygon(pt, step + 1);
 #endif
     } else {
 // VENTA3 FIX HP clipping bug
 #ifdef PNA
       if (needclipping==true)
-        ClipPolyline(hdc,pt,step+1,rc);
+        canvas.clipped_polyline(pt, step + 1, rc);
       else
-        Polyline(hdc,pt,step+1);
+        canvas.polyline(pt, step + 1);
 #else
-      Polyline(hdc,pt,step+1);
+      canvas.polyline(pt, step + 1);
 #endif
     }
   }
   return TRUE;
 }
 
-int Segment(HDC hdc, long x, long y, int radius, RECT rc,
+int Segment(Canvas &canvas, long x, long y, int radius, RECT rc,
 	    double start,
 	    double end,
             bool horizon)
@@ -560,7 +534,7 @@ int Segment(HDC hdc, long x, long y, int radius, RECT rc,
     npoly++;
   }
   if (npoly) {
-    Polygon(hdc,pt,npoly);
+    canvas.polygon(pt, npoly);
   }
 
   return TRUE;
@@ -569,7 +543,7 @@ int Segment(HDC hdc, long x, long y, int radius, RECT rc,
 /*
  * VENTA3 This is a modified Segment()
  */
-int DrawArc(HDC hdc, long x, long y, int radius, RECT rc,
+int DrawArc(Canvas &canvas, long x, long y, int radius, RECT rc,
 	    double start,
 	    double end)
 {
@@ -624,7 +598,7 @@ int DrawArc(HDC hdc, long x, long y, int radius, RECT rc,
   pt[npoly].y = y - (long) (radius * fastcosine(end));
   npoly++;
   if (npoly) {
-    Polyline(hdc,pt,npoly); // TODO check ClipPolygon for HP31X
+    canvas.polyline(pt, npoly); // TODO check ClipPolygon for HP31X
   }
 
   return TRUE;

@@ -43,6 +43,7 @@ Copyright_License {
 #include "DataField/Base.hpp"
 #include "Utils.h"
 #include "Interface.hpp"
+#include "Screen/MainWindow.hpp"
 
 static WndForm *wf=NULL;
 

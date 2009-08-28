@@ -60,5 +60,4 @@ double MacCreadyTimeLimit(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
 double EffectiveMacCready(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 double EffectiveCruiseEfficiency(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 
-
 #endif

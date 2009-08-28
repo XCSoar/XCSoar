@@ -41,6 +41,7 @@ Copyright_License {
 #include "Dialogs/dlgTools.h"
 #include "InfoBoxLayout.h"
 #include "Screen/Graphics.hpp"
+#include "Screen/MainWindow.hpp"
 #include "Utils.h"
 
 #include <assert.h>
@@ -59,19 +60,19 @@ static void UpdateList(void){
 
 static int DrawListIndex=0;
 
-static void OnAirspaceColoursPaintListItem(WindowControl * Sender, HDC hDC){
+static void
+OnAirspaceColoursPaintListItem(WindowControl * Sender, Canvas &canvas)
+{
   (void)Sender;
   if ((DrawListIndex < NUMAIRSPACECOLORS) &&(DrawListIndex>=0)) {
     int i = DrawListIndex;
-    SelectObject(hDC, GetStockObject(WHITE_BRUSH));
-    SelectObject(hDC, GetStockObject(BLACK_PEN));
-    SetBkColor(hDC,
+    canvas.white_brush();
+    canvas.black_pen();
+    SetBkColor(canvas,
 	       RGB(0xFF, 0xFF, 0xFF));
-    SelectObject(hDC,
-		 MapGfx.GetAirspaceBrush(1)); // this is the solid brush
-    SetTextColor(hDC,
-		 MapGfx.GetAirspaceColour(i));
-    Rectangle(hDC,
+    canvas.select(MapGfx.GetAirspaceBrush(1)); // this is the solid brush
+    SetTextColor(canvas, MapGfx.GetAirspaceColour(i));
+    Rectangle(canvas,
               100*InfoBoxLayout::scale,
               2*InfoBoxLayout::scale,
               180*InfoBoxLayout::scale,

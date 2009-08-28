@@ -45,21 +45,20 @@ Copyright_License {
 #include "Settings.hpp"
 #include "Screen/Graphics.hpp"
 
-extern HFONT MapLabelFont;
+extern Font MapLabelFont;
 
 #define fSnailColour(cv) max(0,min((short)(NUMSNAILCOLORS-1), (short)((cv+1.0)/2.0*NUMSNAILCOLORS)))
 
-void MapWindow::DrawFLARMTraffic(HDC hDC, RECT rc, POINT Orig_Aircraft) {
+void MapWindow::DrawFLARMTraffic(Canvas &canvas, RECT rc, POINT Orig_Aircraft) {
 
   if (!EnableFLARMMap) return;
 
   if (!DrawInfo.FLARM_Available) return;
 
-  HPEN hpOld;
-  HPEN thinBlackPen = CreatePen(PS_SOLID, IBLSCALE(1), RGB(0,0,0));
+  Pen thinBlackPen(IBLSCALE(1), Color(0, 0, 0));
   POINT Arrow[5];
 
-  hpOld = (HPEN)SelectObject(hDC, thinBlackPen);
+  canvas.select(thinBlackPen);
 
   int i;
 //  double dX, dY;
@@ -69,9 +68,9 @@ void MapWindow::DrawFLARMTraffic(HDC hDC, RECT rc, POINT Orig_Aircraft) {
   double screenrange = GetApproxScreenRange();
   double scalefact = screenrange/6000.0;
 
-  HBRUSH redBrush = CreateSolidBrush(RGB(0xFF,0x00,0x00));
-  HBRUSH yellowBrush = CreateSolidBrush(RGB(0xFF,0xFF,0x00));
-  HBRUSH greenBrush = CreateSolidBrush(RGB(0x00,0xFF,0x00));
+  Brush redBrush(Color(0xFF,0x00,0x00));
+  Brush yellowBrush(Color(0xFF,0xFF,0x00));
+  Brush greenBrush(Color(0x00,0xFF,0x00));
 
   for (i=0; i<FLARM_MAX_TRAFFIC; i++) {
     if (DrawInfo.FLARM_Traffic[i].ID!=0) {
@@ -165,52 +164,44 @@ void MapWindow::DrawFLARMTraffic(HDC hDC, RECT rc, POINT Orig_Aircraft) {
       if (dx*dx+dy*dy > IBLSCALE(30)*IBLSCALE(30)) {
 	// only draw labels if not close to aircraft
 
-	HGDIOBJ oldFont = SelectObject(hDC, MapLabelFont);
-	COLORREF oldTextColor = SetTextColor(hDC, RGB(0,0,0));
+        canvas.select(MapLabelFont);
+	canvas.set_text_color(Color(0,0,0));
 
 	if (_tcslen(label_name)>0) {
-	  ExtTextOut(hDC, sc_name.x, sc_name.y, ETO_OPAQUE, NULL, label_name, _tcslen(label_name), NULL);
+          canvas.text_opaque(sc_name.x, sc_name.y, NULL, label_name);
 	}
 
 	if (_tcslen(label_avg)>0) {
-	  int size = _tcslen(label_avg);
 	  SIZE tsize;
 	  RECT brect;
 
-	  GetTextExtentPoint(hDC, label_avg, size, &tsize);
+          tsize = canvas.text_size(label_avg);
 	  brect.left = sc_av.x-2;
 	  brect.right = brect.left+tsize.cx+6;
 	  brect.top = sc_av.y+((tsize.cy+4)>>3)-2;
 	  brect.bottom = brect.top+3+tsize.cy-((tsize.cy+4)>>3);
 
-	  HPEN hpOld = (HPEN)SelectObject(hDC, MapGfx.hSnailPens[colourIndex]);
-	  HBRUSH hVarioBrush = CreateSolidBrush(MapGfx.hSnailColours[colourIndex]);
-	  HBRUSH hbOld = (HBRUSH)SelectObject(hDC, hVarioBrush);
+          canvas.select(MapGfx.hSnailPens[colourIndex]);
+          Brush hVarioBrush(MapGfx.hSnailColours[colourIndex]);
+	  canvas.select(hVarioBrush);
 
-	  RoundRect(hDC, brect.left, brect.top, brect.right, brect.bottom,
-		    IBLSCALE(8), IBLSCALE(8));
+          canvas.round_rectangle(brect.left, brect.top,
+                                 brect.right, brect.bottom,
+                                 IBLSCALE(8), IBLSCALE(8));
 
 #if (WINDOWSPC>0)
-      SetBkMode(hDC,TRANSPARENT);
-      ExtTextOut(hDC, sc_av.x, sc_av.y, 0, NULL, label_avg, size, NULL);
+          canvas.background_transparent();
+          canvas.text(sc_av.x, sc_av.y, label_avg);
 #else
-      ExtTextOut(hDC, sc_av.x, sc_av.y, ETO_OPAQUE, NULL, label_avg, size, NULL);
+          canvas.text_opaque(sc_av.x, sc_av.y, NULL, label_avg);
 #endif
-	  SelectObject(hDC, hpOld);
-	  SelectObject(hDC, hbOld);
-	  DeleteObject(hVarioBrush);
-
 	}
-
-	SelectObject(hDC, oldFont);
-	SetTextColor(hDC, oldTextColor);
-
       }
 
 #endif
       if ((DrawInfo.FLARM_Traffic[i].AlarmLevel>0)
 	  && (DrawInfo.FLARM_Traffic[i].AlarmLevel<4)) {
-	DrawBitmapIn(hDC, sc, MapGfx.hFLARMTraffic);
+        DrawBitmapIn(canvas, sc, MapGfx.hFLARMTraffic);
       }
 
       Arrow[0].x = -4;
@@ -228,36 +219,28 @@ void MapWindow::DrawFLARMTraffic(HDC hDC, RECT rc, POINT Orig_Aircraft) {
 
       switch (DrawInfo.FLARM_Traffic[i].AlarmLevel) {
       case 1:
-	  SelectObject(hDC, yellowBrush);
+	  canvas.select(yellowBrush);
 	  break;
       case 2:
       case 3:
-	  SelectObject(hDC, redBrush);
+	  canvas.select(redBrush);
 	  break;
       case 0:
       case 4:
-	  SelectObject(hDC, greenBrush);
+	  canvas.select(greenBrush);
 	  break;
       }
 
       PolygonRotateShift(Arrow, 5, sc.x, sc.y,
                          DrawInfo.FLARM_Traffic[i].TrackBearing - DisplayAngle);
-      Polygon(hDC,Arrow,5);
+      canvas.polygon(Arrow, 5);
 
     }
   }
-
-  SelectObject(hDC, hpOld);
-
-  DeleteObject((HPEN)thinBlackPen);
-  DeleteObject(greenBrush);
-  DeleteObject(yellowBrush);
-  DeleteObject(redBrush);
-
 }
 
 
-void MapWindow::DrawTeammate(HDC hdc, RECT rc)
+void MapWindow::DrawTeammate(Canvas &canvas, RECT rc)
 {
   POINT point;
 
@@ -267,19 +250,10 @@ void MapWindow::DrawTeammate(HDC hdc, RECT rc)
 	{
 	  LatLon2Screen(TeammateLongitude, TeammateLatitude, point);
 
-	  SelectObject(hDCTemp, MapGfx.hBmpTeammatePosition);
-	  DrawBitmapX(hdc,
-		      point.x-IBLSCALE(10),
-		      point.y-IBLSCALE(10),
-		      20,20,
-		      hDCTemp,0,0,SRCPAINT);
-
-	  DrawBitmapX(hdc,
-		      point.x-IBLSCALE(10),
-		      point.y-IBLSCALE(10),
-		      20,20,
-		      hDCTemp,20,0,SRCAND);
+          hDCTemp.select(MapGfx.hBmpTeammatePosition);
+          canvas.scale_or_and(point.x - IBLSCALE(10),  point.y - IBLSCALE(10),
+                              hDCTemp, 20, 20);
+          hDCTemp.clear();
 	}
     }
 }
-

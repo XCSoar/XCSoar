@@ -41,10 +41,12 @@ Copyright_License {
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
+class Canvas;
+
 extern bool reset_marks;
 void InitialiseMarks();
 void CloseMarks();
-void DrawMarks(const HDC hdc, const RECT rc);
+void DrawMarks(Canvas &canvas, const RECT rc);
 void MarkLocation(const double lon, const double lat);
 
 #endif

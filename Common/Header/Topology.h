@@ -41,6 +41,11 @@ Copyright_License {
 
 #include "StdAfx.h"
 #include "Screen/shapelib/mapshape.h"
+#include "Screen/Pen.hpp"
+#include "Screen/Brush.hpp"
+#include "Screen/Bitmap.hpp"
+
+class Canvas;
 
 class XShape {
  public:
@@ -49,7 +54,9 @@ class XShape {
 
   virtual void load(shapefileObj* shpfile, int i);
   virtual void clear();
-  virtual void renderSpecial(HDC hdc, int x, int y) { (void)x; (void)y; (void)hdc; };
+  virtual void renderSpecial(Canvas &canvas, int x, int y) {
+    (void)canvas; (void)x; (void)y;
+  };
 
   bool hide;
   shapeObj shape;
@@ -66,14 +73,14 @@ class XShapeLabel: public XShape {
   virtual void clear();
   char *label;
   void setlabel(const char* src);
-  virtual void renderSpecial(HDC hdc, int x, int y);
+  virtual void renderSpecial(Canvas &canvas, int x, int y);
 };
 
 
 class Topology {
 
  public:
-  Topology(const char* shpname, COLORREF thecolor, bool doappend=false);
+  Topology(const char* shpname, const Color thecolor, bool doappend=false);
   Topology() {};
 
   ~Topology();
@@ -82,7 +89,7 @@ class Topology {
   void Close();
 
   void updateCache(rectObj thebounds, bool purgeonly=false);
-  void Paint(HDC hdc, RECT rc);
+  void Paint(Canvas &canvas, RECT rc);
 
   double scaleThreshold;
 
@@ -109,9 +116,9 @@ class Topology {
 
   bool append;
   bool in_scale;
-  HPEN hPen;
-  HBRUSH hbBrush;
-  HBITMAP hBitmap;
+  Pen hPen;
+  Brush hbBrush;
+  Bitmap hBitmap;
   shapefileObj shpfile;
   bool shapefileopen;
 
@@ -120,7 +127,7 @@ class Topology {
 
 class TopologyWriter: public Topology {
  public:
-  TopologyWriter(const char *shpname, COLORREF thecolor);
+  TopologyWriter(const char *shpname, const Color thecolor);
   ~TopologyWriter();
 
   void addPoint(double x, double y);
@@ -133,7 +140,7 @@ class TopologyWriter: public Topology {
 
 class TopologyLabel: public Topology {
  public:
-  TopologyLabel(const char* shpname, COLORREF thecolor, INT field1);
+  TopologyLabel(const char* shpname, const Color thecolor, INT field1);
   ~TopologyLabel();
   virtual XShape* addShape(const int i);
   void setField(int i);

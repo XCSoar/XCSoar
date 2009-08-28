@@ -48,12 +48,10 @@ Copyright_License {
 
 extern BOOL extGPSCONNECT;
 
-void MapWindow::RenderMapWindowBg(HDC hdc, const RECT rc,
+void MapWindow::RenderMapWindowBg(Canvas &canvas, const RECT rc,
 				  const POINT &Orig,
 				  const POINT &Orig_Aircraft)
 {
-  HFONT hfOld;
-
   // do slow calculations before clearing the screen
   // to reduce flicker
   CalculateWaypointReachable();
@@ -67,14 +65,14 @@ void MapWindow::RenderMapWindowBg(HDC hdc, const RECT rc,
     // JMW this isn't needed any more unless we're not drawing terrain
 
     // display border and fill background..
-    SelectObject(hdc, MapGfx.hBackgroundBrush);
-    SelectObject(hdc, GetStockObject(WHITE_PEN));
-    Rectangle(hdc,rc.left,rc.top,rc.right,rc.bottom);
+    canvas.select(MapGfx.hBackgroundBrush);
+    canvas.white_pen();
+    canvas.rectangle(rc.left, rc.top, rc.right, rc.bottom);
   }
 
-  SelectObject(hdc, GetStockObject(BLACK_BRUSH));
-  SelectObject(hdc, GetStockObject(BLACK_PEN));
-  hfOld = (HFONT)SelectObject(hdc, MapWindowFont);
+  canvas.black_brush();
+  canvas.black_pen();
+  canvas.select(MapWindowFont);
 
   // ground first...
 
@@ -98,12 +96,12 @@ void MapWindow::RenderMapWindowBg(HDC hdc, const RECT rc,
       BigZoom = true;
     }
     mutexTerrainDataGraphics.Lock();
-    DrawTerrain(hdc, rc, sunazimuth, sunelevation,
+    DrawTerrain(canvas, rc, sunazimuth, sunelevation,
 		DrawInfo.Longitude, DrawInfo.Latitude,
 	        BigZoom);
+
     if ((FinalGlideTerrain==2) && DerivedDrawInfo.TerrainValid) {
-      SelectObject(hDCTemp, (HBITMAP)hDrawBitMapTmp);
-      DrawTerrainAbove(hdc, rc, hDCTemp);
+      DrawTerrainAbove(canvas, rc, buffer_canvas);
     }
     mutexTerrainDataGraphics.Unlock();
 
@@ -113,31 +111,28 @@ void MapWindow::RenderMapWindowBg(HDC hdc, const RECT rc,
   }
 
   if (EnableTopology) {
-    DrawTopology(hdc, rc);
+    DrawTopology(canvas, rc);
   }
 
   // reset label over-write preventer
   LabelBlockReset();
 
   if (!TaskIsTemporary()) {
-    SelectObject(hDCTemp, (HBITMAP)hDrawBitMapTmp);
-    DrawTaskAAT(hdc, rc, hDCTemp);
+    DrawTaskAAT(canvas, rc, buffer_canvas);
   }
 
   // then airspace..
   if (OnAirSpace > 0) {
     // VENTA3 default is true, always true at startup no regsave
-    SelectObject(hDCTemp, (HBITMAP)hDrawBitMapTmp);
-    DrawAirSpace(hdc, rc, hDCTemp);
+    DrawAirSpace(canvas, rc, buffer_canvas);
   }
 
   if(TrailActive) {
     // TODO enhancement: For some reason, the shadow drawing of the
     // trail doesn't work in portrait mode.  No idea why.
     if (1) {
-      double TrailFirstTime =
-	DrawTrail(hdc, Orig_Aircraft, rc);
-      DrawTrailFromTask(hdc, rc, TrailFirstTime);
+      double TrailFirstTime = DrawTrail(canvas, Orig_Aircraft, rc);
+      DrawTrailFromTask(canvas, rc, TrailFirstTime);
     } else {
       /*
       //  Draw trail with white outline --- very slow!
@@ -165,69 +160,67 @@ void MapWindow::RenderMapWindowBg(HDC hdc, const RECT rc,
     }
   }
 
-  DrawThermalEstimate(hdc, rc);
+  DrawThermalEstimate(canvas, rc);
 
   if (TaskAborted) {
-    DrawAbortedTask(hdc, rc, Orig_Aircraft);
+    DrawAbortedTask(canvas, rc, Orig_Aircraft);
   } else {
-    DrawTask(hdc, rc, Orig_Aircraft);
+    DrawTask(canvas, rc, Orig_Aircraft);
   }
 
   // draw red cross on glide through terrain marker
   if (FinalGlideTerrain && DerivedDrawInfo.TerrainValid) {
-    DrawGlideThroughTerrain(hdc, rc);
+    DrawGlideThroughTerrain(canvas, rc);
   }
 
-  DrawWaypoints(hdc,rc);
+  DrawWaypoints(canvas, rc);
 
-  DrawTeammate(hdc, rc);
+  DrawTeammate(canvas, rc);
 
   if ((EnableTerrain && (DerivedDrawInfo.TerrainValid))
       || RasterTerrain::render_weather) {
-    DrawSpotHeights(hdc);
+    DrawSpotHeights(canvas);
   }
 
   if (extGPSCONNECT) {
     // TODO enhancement: don't draw offtrack indicator if showing spot heights
-    DrawProjectedTrack(hdc, rc, Orig_Aircraft);
-    DrawOffTrackIndicator(hdc, rc);
-    DrawBestCruiseTrack(hdc, Orig_Aircraft);
+    DrawProjectedTrack(canvas, rc, Orig_Aircraft);
+    DrawOffTrackIndicator(canvas, rc);
+    DrawBestCruiseTrack(canvas, Orig_Aircraft);
   }
-  DrawBearing(hdc, rc, extGPSCONNECT);
+  DrawBearing(canvas, rc, extGPSCONNECT);
 
 
   // draw wind vector at aircraft
   if (!EnablePan) {
-    DrawWindAtAircraft2(hdc, Orig_Aircraft, rc);
+    DrawWindAtAircraft2(canvas, Orig_Aircraft, rc);
   } else if (TargetPan) {
-    DrawWindAtAircraft2(hdc, Orig, rc);
+    DrawWindAtAircraft2(canvas, Orig, rc);
   }
 
   // Draw traffic
-  DrawFLARMTraffic(hdc, rc, Orig_Aircraft);
+  DrawFLARMTraffic(canvas, rc, Orig_Aircraft);
 
   // finally, draw you!
 
   if (EnablePan && !TargetPan) {
-    DrawCrossHairs(hdc, Orig, rc);
+    DrawCrossHairs(canvas, Orig, rc);
   }
 
   if (extGPSCONNECT) {
-    DrawAircraft(hdc, Orig_Aircraft);
+    DrawAircraft(canvas, Orig_Aircraft);
   }
 
   if ( (!TargetPan) && (!EnablePan) && (VisualGlide>0) ) {
-    DrawGlideCircle(hdc, Orig, rc);
+    DrawGlideCircle(canvas, Orig, rc);
   }
 
   // marks on top...
-  DrawMarks(hdc, rc);
-  SelectObject(hdcDrawWindow, hfOld);
-
+  DrawMarks(canvas, rc);
 }
 
 
-void MapWindow::RenderMapWindow(HDC hdc, const RECT rc)
+void MapWindow::RenderMapWindow(Canvas &canvas, const RECT rc)
 {
   bool drawmap = false;
   HFONT hfOld;
@@ -248,38 +241,35 @@ void MapWindow::RenderMapWindow(HDC hdc, const RECT rc)
 
   CalculateScreenPositions(Orig, rc, &Orig_Aircraft);
 
-  RenderMapWindowBg(hdc, rc, Orig, Orig_Aircraft);
+  RenderMapWindowBg(canvas, rc, Orig, Orig_Aircraft);
 
   // overlays
   DrawCDI();
 
-  hfOld = (HFONT)SelectObject(hdc, MapWindowFont);
+  canvas.select(MapWindowFont);
 
-  DrawMapScale(hdc,rc, BigZoom);
+  DrawMapScale(canvas, rc, BigZoom);
 
-  DrawMapScale2(hdc,rc, Orig_Aircraft);
+  DrawMapScale2(canvas, rc, Orig_Aircraft);
 
-  DrawCompass(hdc, rc);
+  DrawCompass(canvas, rc);
 
   // JMW Experimental only! EXPERIMENTAL
 #if 0
   //  #ifdef GNAV
   if (EnableAuxiliaryInfo) {
-    DrawHorizon(hdc, rc);
+    DrawHorizon(canvas, rc);
   }
   //  #endif
 #endif
 
-  DrawFlightMode(hdc, rc);
+  DrawFlightMode(canvas, rc);
 
-  DrawThermalBand(hdc, rc);
+  DrawThermalBand(canvas, rc);
 
   DrawFinalGlide(hdcDrawWindow,rc);
 
-  //  DrawSpeedToFly(hdc, rc);
+  //  DrawSpeedToFly(canvas, rc);
 
-  DrawGPSStatus(hdc, rc);
-
-  SelectObject(hdc, hfOld);
-
+  DrawGPSStatus(canvas, rc);
 }

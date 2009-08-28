@@ -49,7 +49,7 @@ Copyright_License {
 #include "Logger.h"
 #include "Math/FastMath.h"
 #include "Process.h"
-
+#include "Screen/MainWindow.hpp"
 #include "Calculations.h" // TODO danger! FAIFinishHeight
 
 #include <assert.h>

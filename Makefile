@@ -521,6 +521,20 @@ OBJS	:=\
 	$(SRC)/Screen/STScreenBuffer.o 	\
 	$(SRC)/Screen/Util.o 		\
 	$(SRC)/Screen/VOIMAGE.o 	\
+	$(SRC)/Screen/Bitmap.o \
+	$(SRC)/Screen/Brush.o \
+	$(SRC)/Screen/Canvas.o \
+	$(SRC)/Screen/VirtualCanvas.o \
+	$(SRC)/Screen/BufferCanvas.o \
+	$(SRC)/Screen/BitmapCanvas.o \
+	$(SRC)/Screen/PaintCanvas.o \
+	$(SRC)/Screen/Font.o \
+	$(SRC)/Screen/Pen.o \
+	$(SRC)/Screen/Window.o \
+	$(SRC)/Screen/PaintWindow.o \
+	$(SRC)/Screen/TextWindow.o \
+	$(SRC)/Screen/EditWindow.o \
+	$(SRC)/Screen/MainWindow.o \
 	\
 	$(SRC)/Polar/WinPilot.o 	\
 	$(SRC)/Polar/BuiltIn.o 		\

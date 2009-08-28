@@ -42,16 +42,15 @@ Copyright_License {
 #include "externs.h"
 #include "InfoBoxLayout.h"
 
+#include "widget.hxx"
+
+static Widget vario_widget;
+static BufferCanvas vario_buffer;
 HWND hWndVarioWindow = NULL; // Vario Window
 extern HFONT CDIWindowFont; // New
 extern HWND hWndMenuButton;
 
 extern HFONT InfoWindowFont;
-
-HDC GaugeVario::hdcScreen = NULL;
-HDC GaugeVario::hdcDrawWindow = NULL;
-HBITMAP GaugeVario::hDrawBitMap = NULL;
-RECT GaugeVario::rc;
 
 #define GAUGEXSIZE (InfoBoxLayout::ControlWidth)
 #define GAUGEYSIZE (InfoBoxLayout::ControlHeight*3)
@@ -61,34 +60,23 @@ void GaugeVario::Create() {
 
   bigrc = MapWindow::MapRect;
 
-  hWndVarioWindow = CreateWindow(TEXT("STATIC"),TEXT(" "),
-			       WS_VISIBLE|WS_CHILD | WS_CLIPCHILDREN
-			       | WS_CLIPSIBLINGS,
-                               0,0,0,0,
-			       hWndMainWindow,NULL,hInst,NULL);
+  vario_widget.set(hWndMainWindow,
+                   bigrc.right + InfoBoxLayout::ControlWidth,
+                   bigrc.top,
+                   GAUGEXSIZE, GAUGEYSIZE);
+  vario_widget.insert_after(hWndMenuButton);
+  vario_buffer.set(vario_widget, GAUGEXSIZE, GAUGEYSIZE);
+
+  hWndVarioWindow = vario_widget;
+
   SendMessage(hWndVarioWindow,WM_SETFONT,
               (WPARAM)CDIWindowFont,MAKELPARAM(TRUE,0));
-  SetWindowPos(hWndVarioWindow,hWndMenuButton,
-               bigrc.right+InfoBoxLayout::ControlWidth,
-	       bigrc.top,
-               GAUGEXSIZE,GAUGEYSIZE,
-	       SWP_SHOWWINDOW);
-
-  GetClientRect(hWndVarioWindow, &rc);
-
-  //
-  hdcScreen = GetDC(hWndVarioWindow);
-  hdcDrawWindow = CreateCompatibleDC(hdcScreen);
-  hDrawBitMap = CreateCompatibleBitmap (hdcScreen, GAUGEXSIZE, GAUGEYSIZE);
-
 }
 
 
 void GaugeVario::Destroy() {
-  ReleaseDC(hWndVarioWindow, hdcScreen);
-  DeleteDC(hdcDrawWindow);
-  DeleteObject(hDrawBitMap);
-  DestroyWindow(hWndVarioWindow);
+  vario_buffer.reset();
+  vario_widget.reset();
 }
 
 #define GAUGEVARIORANGE 2.50 // 5 m/s
@@ -101,21 +89,18 @@ extern DERIVED_INFO  CALCULATED_INFO;
 //extern NMEA_INFO DrawInfo;
 
 void GaugeVario::Render() {
-
-  SelectObject(hdcDrawWindow, (HBITMAP)hDrawBitMap);
   RenderBg();
 
-  SelectObject(hdcDrawWindow, GetStockObject(BLACK_BRUSH));
-  SelectObject(hdcDrawWindow, GetStockObject(BLACK_PEN));
+  vario_buffer.black_brush();
+  vario_buffer.black_pen();
 
   TCHAR Temp[10];
-  SIZE tsize;
 
   // draw dashes
   POINT bit[3];
   int i;
   int xoffset = 80;
-  int yoffset = (rc.bottom-rc.top)/2;
+  int yoffset = vario_buffer.get_height() / 2;
   int degrees_per_unit = (int)((GAUGEVARIOSWEEP/2.0)/(GAUGEVARIORANGE*LIFTMODIFY));
   int gmax = (int)(degrees_per_unit*(GAUGEVARIORANGE*LIFTMODIFY))+2;
   double dx, dy;
@@ -142,32 +127,30 @@ void GaugeVario::Render() {
   bit[2].x = (int)(dx+xoffset); bit[2].y = (int)(dy+yoffset);
 
   _stprintf(Temp,TEXT("%2.1f"), vval*LIFTMODIFY);
-  SelectObject(hdcDrawWindow, InfoWindowFont);
-  GetTextExtentPoint(hdcDrawWindow, Temp, _tcslen(Temp), &tsize);
+  vario_buffer.font(InfoWindowFont);
+  vario_buffer.bottom_right_text(vario_buffer.get_width() - 2,
+                                 vario_buffer.get_height() - 2,
+                                 Temp);
 
-  ExtTextOut(hdcDrawWindow, rc.right-tsize.cx-2, yoffset-tsize.cy/2,
-	     0, NULL, Temp, _tcslen(Temp), NULL);
+  vario_buffer.line(bit[0].x, bit[0].y, bit[1].x, bit[1].y);
+  vario_buffer.line(bit[1].x, bit[1].y, bit[2].x, bit[2].y);
 
-  Polygon(hdcDrawWindow, bit, 3);
-
-  BitBlt(hdcScreen, 0, 0, rc.right, rc.bottom, hdcDrawWindow, 0, 0, SRCCOPY);
-
+  vario_widget.get_canvas().copy(vario_buffer);
 }
 
 
 void GaugeVario::RenderBg() {
+  vario_buffer.white_pen();
+  vario_buffer.white_brush();
+  vario_buffer.clear();
 
-  SelectObject(hdcDrawWindow, GetStockObject(WHITE_PEN));
-  SelectObject(hdcDrawWindow, GetStockObject(WHITE_BRUSH));
-  Rectangle(hdcDrawWindow,0,0,GAUGEXSIZE,GAUGEYSIZE);
-
-  SelectObject(hdcDrawWindow, GetStockObject(BLACK_PEN));
+  vario_buffer.black_pen();
 
   // draw dashes
   POINT bit[4];
   int i;
   int xoffset = 80;
-  int yoffset = (rc.bottom-rc.top)/2;
+  int yoffset = vario_buffer.get_height() / 2;
   int degrees_per_unit =
     (int)((GAUGEVARIOSWEEP/2.0)/(GAUGEVARIORANGE*LIFTMODIFY));
   int gmax =
@@ -185,11 +168,11 @@ void GaugeVario::RenderBg() {
     dx = -xoffset; dy = 0; rotate(dx, dy, i);
     bit[1].x = (int)(dx+xoffset); bit[1].y = (int)(dy+yoffset);
 
-    Polyline(hdcDrawWindow, bit, 2);
+    vario_buffer.line(bit[0].x, bit[0].y, bit[1].x, bit[1].y);
 
     bit[2] = bit[1];
     if (i>0) {
-      Polyline(hdcDrawWindow, &bit[2], 2);
+      vario_buffer.line(bit[2].x, bit[2].y, bit[3].x, bit[3].y);
     }
     bit[3] = bit[1];
   }
@@ -205,11 +188,11 @@ void GaugeVario::RenderBg() {
     dx = -xoffset; dy = 0; rotate(dx, dy, i);
     bit[1].x = (int)(dx+xoffset); bit[1].y = (int)(dy+yoffset);
 
-    Polyline(hdcDrawWindow, bit, 2);
+    vario_buffer.line(bit[0].x, bit[0].y, bit[1].x, bit[1].y);
 
     bit[2] = bit[1];
     if (i<0) {
-      Polyline(hdcDrawWindow, &bit[2], 2);
+      vario_buffer.line(bit[2].x, bit[2].y, bit[3].x, bit[3].y);
     }
     bit[3] = bit[1];
   }

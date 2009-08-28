@@ -53,8 +53,8 @@ Copyright_License {
 #include "RasterWeather.h"
 #include "Logger.h"
 
-extern HFONT  MapWindowBoldFont;
-extern HFONT  TitleWindowFont;
+extern Font MapWindowBoldFont;
+extern Font TitleWindowFont;
 
 
 
@@ -86,15 +86,13 @@ double MapWindow::findMapScaleBarSize(const RECT rc) {
 }
 
 
-void MapWindow::DrawMapScale2(HDC hDC, const RECT rc,
+void MapWindow::DrawMapScale2(Canvas &canvas, const RECT rc,
 			      const POINT Orig_Aircraft)
 {
 
   if (Appearance.MapScale2 == apMs2None) return;
 
-  HPEN hpOld   = (HPEN)SelectObject(hDC, MapGfx.hpMapScale);
-  HPEN hpWhite = (HPEN)GetStockObject(WHITE_PEN);
-  HPEN hpBlack = (HPEN)GetStockObject(BLACK_PEN);
+  canvas.select(MapGfx.hpMapScale);
 
   bool color = false;
   POINT Start, End={0,0};
@@ -105,12 +103,12 @@ void MapWindow::DrawMapScale2(HDC hDC, const RECT rc,
   Start.x = rc.right-1;
   for (Start.y=Orig_Aircraft.y; Start.y<rc.bottom+barsize; Start.y+= barsize) {
     if (color) {
-      SelectObject(hDC, hpWhite);
+      canvas.white_pen();
     } else {
-      SelectObject(hDC, hpBlack);
+      canvas.black_pen();
     }
     if (!first) {
-      ClipLine(hDC, Start, End, rc);
+      canvas.clipped_line(Start, End, rc);
     } else {
       first=false;
     }
@@ -122,12 +120,12 @@ void MapWindow::DrawMapScale2(HDC hDC, const RECT rc,
   first = true;
   for (Start.y=Orig_Aircraft.y; Start.y>rc.top-barsize; Start.y-= barsize) {
     if (color) {
-      SelectObject(hDC, hpWhite);
+      canvas.white_pen();
     } else {
-      SelectObject(hDC, hpBlack);
+      canvas.black_pen();
     }
     if (!first) {
-      ClipLine(hDC, Start, End, rc);
+      canvas.clipped_line(Start, End, rc);
     } else {
       first=false;
     }
@@ -136,13 +134,10 @@ void MapWindow::DrawMapScale2(HDC hDC, const RECT rc,
   }
 
   // draw text as before
-
-  SelectObject(hDC, hpOld);
-
 }
 
 
-void MapWindow::DrawMapScale(HDC hDC, const RECT rc /* the Map Rect*/,
+void MapWindow::DrawMapScale(Canvas &canvas, const RECT rc /* the Map Rect*/,
                              const bool ScaleChangeFeedback)
 {
 
@@ -152,21 +147,18 @@ void MapWindow::DrawMapScale(HDC hDC, const RECT rc /* the Map Rect*/,
     TCHAR Scale[80];
     TCHAR TEMP[20];
     POINT Start, End;
-    HPEN hpOld;
-    hpOld = (HPEN)SelectObject(hDC, MapGfx.hpMapScale);
+    canvas.select(MapGfx.hpMapScale);
 
     Start.x = rc.right-IBLSCALE(6); End.x = rc.right-IBLSCALE(6);
     Start.y = rc.bottom-IBLSCALE(30); End.y = Start.y - IBLSCALE(30);
-    ClipLine(hDC, Start, End, rc);
+    canvas.clipped_line(Start, End, rc);
 
     Start.x = rc.right-IBLSCALE(11); End.x = rc.right-IBLSCALE(6);
     End.y = Start.y;
-    ClipLine(hDC, Start, End, rc);
+    canvas.clipped_line(Start, End, rc);
 
     Start.y = Start.y - IBLSCALE(30); End.y = Start.y;
-    ClipLine(hDC, Start, End, rc);
-
-    SelectObject(hDC, hpOld);
+    canvas.clipped_line(Start, End, rc);
 
     if(MapScale <0.1)
     {
@@ -206,33 +198,22 @@ void MapWindow::DrawMapScale(HDC hDC, const RECT rc /* the Map Rect*/,
       _tcscat(Scale, Buffer);
     }
 
-    SIZE tsize;
-    GetTextExtentPoint(hDC, Scale, _tcslen(Scale), &tsize);
+    SIZE tsize = canvas.text_size(Scale);
 
-    COLORREF whitecolor = RGB(0xd0,0xd0, 0xd0);
-    COLORREF blackcolor = RGB(0x20,0x20, 0x20);
-    COLORREF origcolor = SetTextColor(hDC, whitecolor);
+    canvas.set_text_color(Color(0xd0, 0xd0, 0xd0));
+    canvas.text(rc.right - IBLSCALE(11) - tsize.cx, End.y + IBLSCALE(8),
+                Scale);
 
-    SetTextColor(hDC, whitecolor);
-    ExtTextOut(hDC, rc.right-IBLSCALE(11)-tsize.cx, End.y+IBLSCALE(8), 0,
-               NULL, Scale, _tcslen(Scale), NULL);
-
-    SetTextColor(hDC, blackcolor);
-    ExtTextOut(hDC, rc.right-IBLSCALE(10)-tsize.cx, End.y+IBLSCALE(7), 0,
-               NULL, Scale, _tcslen(Scale), NULL);
+    canvas.set_text_color(Color(0x20, 0x20, 0x20));
+    canvas.text(rc.right - IBLSCALE(10) - tsize.cx, End.y + IBLSCALE(7),
+                Scale);
 
     #ifdef DRAWLOAD
-    SelectObject(hDC, MapWindowFont);
+    canvas.select(MapWindowFont);
     _stprintf(Scale,TEXT("            %d %d ms"), timestats_av,
               misc_tick_count);
-    ExtTextOut(hDC, rc.left, rc.top, 0, NULL, Scale, _tcslen(Scale), NULL);
+    canvas.text(rc.left, rc.top, Scale);
     #endif
-
-    // restore original color
-    SetTextColor(hDC, origcolor);
-
-    SelectObject(hDC, hpOld);
-
   }
   if (Appearance.MapScale == apMsAltA){
 
@@ -241,13 +222,7 @@ void MapWindow::DrawMapScale(HDC hDC, const RECT rc /* the Map Rect*/,
     TCHAR ScaleInfo[80];
     TCHAR TEMP[20];
 
-    HFONT          oldFont;
     int            Height;
-    SIZE           TextSize;
-    HBRUSH         oldBrush;
-    HPEN           oldPen;
-    COLORREF       oldTextColor;
-    HBITMAP        oldBitMap;
     Units_t        Unit;
 
     if (ScaleChangeFeedback)
@@ -255,48 +230,46 @@ void MapWindow::DrawMapScale(HDC hDC, const RECT rc /* the Map Rect*/,
     else
       MapWidth = (MapScale * rc.right)/DISTANCEMODIFY/GetMapResolutionFactor();
 
-    oldFont = (HFONT)SelectObject(hDC, MapWindowBoldFont);
+    canvas.select(MapWindowBoldFont);
     Units::FormatUserMapScale(&Unit, MapWidth, ScaleInfo,
                               sizeof(ScaleInfo)/sizeof(TCHAR));
-    GetTextExtentPoint(hDC, ScaleInfo, _tcslen(ScaleInfo), &TextSize);
+    SIZE TextSize = canvas.text_size(ScaleInfo);
     LastMapWidth = (int)MapWidth;
 
     Height = Appearance.MapWindowBoldFont.CapitalHeight+IBLSCALE(2);
     // 2: add 1pix border
 
-    oldBrush = (HBRUSH)SelectObject(hDC, GetStockObject(WHITE_BRUSH));
-    oldPen = (HPEN)SelectObject(hDC, GetStockObject(WHITE_PEN));
-    Rectangle(hDC, 0, rc.bottom-Height,
-              TextSize.cx + IBLSCALE(21), rc.bottom);
+    canvas.white_brush();
+    canvas.white_pen();
+    canvas.rectangle(0, rc.bottom - Height,
+                     TextSize.cx + IBLSCALE(21), rc.bottom);
     if (ScaleChangeFeedback){
-      SetBkMode(hDC, TRANSPARENT);
-      oldTextColor = SetTextColor(hDC, RGB(0xff,0,0));
+      canvas.background_transparent();
+      canvas.set_text_color(Color(0xff, 0, 0));
     }else
-      oldTextColor = SetTextColor(hDC, RGB(0,0,0));
+      canvas.set_text_color(Color(0, 0, 0));
 
-    ExtTextOut(hDC, IBLSCALE(7),
-               rc.bottom-Appearance.MapWindowBoldFont.AscentHeight-IBLSCALE(1),
-               0, NULL, ScaleInfo, _tcslen(ScaleInfo), NULL);
+    canvas.text(IBLSCALE(7),
+                rc.bottom - Appearance.MapWindowBoldFont.AscentHeight - IBLSCALE(1),
+                ScaleInfo);
 
-    oldBitMap = (HBITMAP)SelectObject(hDCTemp, MapGfx.hBmpMapScale);
+    hDCTemp.select(MapGfx.hBmpMapScale);
 
-    DrawBitmapX(hDC, 0, rc.bottom-Height, 6, 11, hDCTemp, 0, 0, SRCCOPY);
-    DrawBitmapX(hDC,
-           IBLSCALE(14)+TextSize.cx,
-           rc.bottom-Height, 8, 11, hDCTemp, 6, 0, SRCCOPY);
+    canvas.scale_copy(0, rc.bottom - Height, hDCTemp, 0, 0, 6, 11);
+    canvas.scale_copy(IBLSCALE(14) + TextSize.cx,  rc.bottom - Height,
+                      hDCTemp, 6, 0, 8, 11);
+
+    hDCTemp.clear();
 
     if (!ScaleChangeFeedback){
-      HBITMAP Bmp;
+      const Bitmap *Bmp;
       POINT   BmpPos, BmpSize;
 
       if (Units::GetUnitBitmap(Unit, &Bmp, &BmpPos, &BmpSize, 0)){
-        HBITMAP oldBitMapa = (HBITMAP)SelectObject(hDCTemp, Bmp);
-
-        DrawBitmapX(hDC,
-                    IBLSCALE(8)+TextSize.cx, rc.bottom-Height,
-                    BmpSize.x, BmpSize.y,
-                    hDCTemp, BmpPos.x, BmpPos.y, SRCCOPY);
-        SelectObject(hDCTemp, oldBitMapa);
+        hDCTemp.select(*Bmp);
+        canvas.scale_copy(IBLSCALE(8) + TextSize.cx, rc.bottom - Height,
+                          hDCTemp, BmpPos.x, BmpPos.y, BmpSize.x, BmpSize.y);
+        hDCTemp.clear();
       }
     }
 
@@ -331,30 +304,23 @@ void MapWindow::DrawMapScale(HDC hDC, const RECT rc /* the Map Rect*/,
       }
 
       if (ScaleInfo[0]) {
-        SelectObject(hDC, TitleWindowFont);
+        canvas.select(TitleWindowFont);
         // FontSelected = true;
-        ExtTextOut(hDC, IBLSCALE(1), y, 0, NULL, ScaleInfo,
-                   _tcslen(ScaleInfo), NULL);
+        canvas.text(IBLSCALE(1), y, ScaleInfo);
         y -= (Appearance.TitleWindowFont.CapitalHeight+IBLSCALE(1));
       }
     }
 
     #ifdef DRAWLOAD
-    SelectObject(hDC, MapWindowFont);
+    canvas.select(MapWindowFont);
     _stprintf(ScaleInfo,TEXT("    %d %d ms"),
               timestats_av,
               misc_tick_count);
 
-    ExtTextOut(hDC, rc.left, rc.top, 0, NULL, ScaleInfo,
-               _tcslen(ScaleInfo), NULL);
+    canvas.text(rc.left, rc.top, ScaleInfo);
     #endif
 
-    SetTextColor(hDC, oldTextColor);
-    SelectObject(hDC, oldPen);
-    SelectObject(hDC, oldFont);
-    SelectObject(hDC, oldBrush);
-    SelectObject(hDCTemp, oldBitMap);
-
+    hDCTemp.clear();
   }
 
 }

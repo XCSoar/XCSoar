@@ -50,6 +50,8 @@ Copyright_License {
 #include "DataField/Base.hpp"
 #include "Utils.h"
 #include "Airspace.h"
+#include "Screen/MainWindow.hpp"
+
 #include <math.h>
 
 static WndForm *wf=NULL;

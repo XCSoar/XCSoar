@@ -50,6 +50,7 @@ Copyright_License {
 #include "DataField/String.hpp"
 #include "Utils.h"
 #include "UtilsSystem.hpp"
+#include "Screen/MainWindow.hpp"
 
 #include <assert.h>
 #include <limits.h>
@@ -69,11 +70,11 @@ int DLGSCALE(int x) {
   return iRetVal;
 }
 
-extern HFONT  TitleWindowFont;
-extern HFONT  MapWindowFont;
-extern HFONT  MapWindowBoldFont;
-extern HFONT  CDIWindowFont;
-extern HFONT  InfoWindowFont;
+extern Font TitleWindowFont;
+extern Font MapWindowFont;
+extern Font MapWindowBoldFont;
+extern Font CDIWindowFont;
+extern Font InfoWindowFont;
 
 /*
 extern "C" {
@@ -102,7 +103,6 @@ static void OnButtonClick(WindowControl * Sender){
 
 int WINAPI MessageBoxX(LPCTSTR lpText, LPCTSTR lpCaption, UINT uType){
 
-  const HWND hWnd = hWndMainWindow;
   WndForm *wf=NULL;
   WndFrame *wText=NULL;
   int X, Y, Width, Height;
@@ -116,7 +116,7 @@ int WINAPI MessageBoxX(LPCTSTR lpText, LPCTSTR lpCaption, UINT uType){
   assert(lpText != NULL);
   assert(lpCaption != NULL);
 
-  GetClientRect(hWnd, &rc);
+  rc = hWndMainWindow.get_position();
 
 #ifdef ALTAIRSYNC
   Width = DLGSCALE(220);
@@ -133,7 +133,7 @@ int WINAPI MessageBoxX(LPCTSTR lpText, LPCTSTR lpCaption, UINT uType){
   w = DLGSCALE(60);
   h = DLGSCALE(32);
 
-  wf = new WndForm(hWnd, TEXT("frmXcSoarMessageDlg"),
+  wf = new WndForm(&hWndMainWindow, TEXT("frmXcSoarMessageDlg"),
                    (TCHAR*)lpCaption, X, Y, Width, Height);
   wf->SetFont(MapWindowBoldFont);
   wf->SetTitleFont(MapWindowBoldFont);
@@ -305,13 +305,13 @@ void *CallBackLookup(CallBackTableEntry_t *LookUpTable, TCHAR *Name){
 
 void LoadChildsFromXML(WindowControl *Parent, CallBackTableEntry_t *LookUpTable, XMLNode *Node, int Font);
 
-static HFONT FontMap[5] = {
-    TitleWindowFont,
-    MapWindowFont,
-    MapWindowBoldFont,
-    CDIWindowFont,
-    InfoWindowFont
-  };
+static Font *FontMap[5] = {
+  &TitleWindowFont,
+  &MapWindowFont,
+  &MapWindowBoldFont,
+  &CDIWindowFont,
+  &InfoWindowFont
+};
 
 
 #include <stdio.h>
@@ -487,7 +487,8 @@ load_xml_file_or_resource(const TCHAR *name, const TCHAR* resource)
 }
 
 WndForm *dlgLoadFromXML(CallBackTableEntry_t *LookUpTable,
-                        const TCHAR *FileName, HWND Parent,
+                        const TCHAR *FileName,
+                        ContainerWindow &Parent,
                         const TCHAR* resource) {
 
   WndForm *theForm = NULL;
@@ -517,11 +518,11 @@ WndForm *dlgLoadFromXML(CallBackTableEntry_t *LookUpTable,
 
   XMLNode xNode=xMainNode.getChildNode(TEXT("WndForm"));
 
-  FontMap[0] = TitleWindowFont;
-  FontMap[1] = MapWindowFont;
-  FontMap[2] = MapWindowBoldFont;
-  FontMap[3] = CDIWindowFont;
-  FontMap[4] = InfoWindowFont;
+  FontMap[0] = &TitleWindowFont;
+  FontMap[1] = &MapWindowFont;
+  FontMap[2] = &MapWindowBoldFont;
+  FontMap[3] = &CDIWindowFont;
+  FontMap[4] = &InfoWindowFont;
 
   if (!xNode.isEmpty()){
     int X,Y,Width,Height,Font;
@@ -538,13 +539,13 @@ WndForm *dlgLoadFromXML(CallBackTableEntry_t *LookUpTable,
     ForeColor = StringToIntDflt(xNode.getAttribute(TEXT("ForeColor")),
                                 0xffffffff);
 
-    theForm = new WndForm(Parent, Name, sTmp, X, Y, Width, Height);
+    theForm = new WndForm(&Parent, Name, sTmp, X, Y, Width, Height);
 
     if (Font != -1)
-      theForm->SetTitleFont(FontMap[Font]);
+      theForm->SetTitleFont(*FontMap[Font]);
 
     if (Font != -1)
-      theForm->SetFont(FontMap[Font]);
+      theForm->SetFont(*FontMap[Font]);
     if (BackColor != 0xffffffff){
       BackColor = RGB((BackColor>>16)&0xff,
                       (BackColor>>8)&0xff,

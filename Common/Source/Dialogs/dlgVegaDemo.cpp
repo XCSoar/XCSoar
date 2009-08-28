@@ -44,6 +44,7 @@ Copyright_License {
 #include "Math/FastMath.h"
 #include "DataField/Base.hpp"
 #include "Utils.h"
+#include "Screen/MainWindow.hpp"
 
 static WndForm *wf=NULL;
 

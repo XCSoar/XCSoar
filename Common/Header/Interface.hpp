@@ -39,6 +39,8 @@ Copyright_License {
 #define XCSOAR_INTERFACE_HPP
 #include "XCSoar.h"
 
+class MainWindow;
+
 bool Debounce();
 void SwitchToMapWindow(void);
 
@@ -46,7 +48,7 @@ void SwitchToMapWindow(void);
 extern HINSTANCE hInst;
 
 // windows
-extern HWND hWndMainWindow;           // HWND Main Window
+extern MainWindow hWndMainWindow;
 //extern MapWindow hWndMapWindow;
 
 extern bool csFlightDataInitialized;

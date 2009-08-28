@@ -38,20 +38,10 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_VIEWPORT_HPP
 #define XCSOAR_SCREEN_VIEWPORT_HPP
 
+#include "Screen/Canvas.hpp"
+
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
-
-#if WINDOWSPC > 0
-#define HAVE_VIEWPORT
-#define HAVE_OFFSET_VIEWPORT
-#elif defined(_WIN32_WCE) && _WIN32_WCE >= 0x0500
-#define HAVE_VIEWPORT
-#if !defined(__GNUC__)
-/* OffsetViewportOrgEx() is supported since Windows CE 5.0, but not in
-   mingw32ce */
-#define HAVE_OFFSET_VIEWPORT
-#endif /* __GNUC__ */
-#endif
 
 /**
  * This class allows you to get a handle for drawing into an aperture
@@ -59,7 +49,7 @@ Copyright_License {
  */
 class Viewport {
 private:
-  HDC hDC;
+  Canvas &canvas;
 
 #ifdef HAVE_VIEWPORT
   POINT old_origin;
@@ -72,42 +62,31 @@ private:
 
   int left, top;
   unsigned width, height;
-  HDC hVirtualDC;
-  HBITMAP hBitmap;
+  BufferCanvas buffer;
 #endif
 
 public:
 #ifdef HAVE_VIEWPORT
-  Viewport(HDC _hDC, unsigned _width, unsigned _height)
-    :hDC(_hDC) {
+  Viewport(Canvas &_canvas, unsigned _width, unsigned _height)
+    :canvas(_canvas) {
     (void)_width;
     (void)_height;
 
-#ifdef HAVE_OFFSET_VIEWPORT
-    ::GetViewportOrgEx(hDC, &old_origin);
-#else
-    ::SetViewportOrgEx(hDC, 0, 0, &old_origin);
-    if (old_origin.x != 0 || old_origin.y != 0)
-      ::SetViewportOrgEx(hDC, old_origin.x, old_origin.y, NULL);
+    old_origin = canvas.get_viewport_origin();
+#ifndef HAVE_OFFSET_VIEWPORT
     current = old_origin;
 #endif
   }
 #else
-  Viewport(HDC _hDC, unsigned _width, unsigned _height)
-    :hDC(_hDC), left(0), top(0), width(_width), height(_height)
+  Viewport(Canvas &_canvas, unsigned _width, unsigned _height)
+    :canvas(_canvas), left(0), top(0), width(_width), height(_height)
   {
-    hBitmap = ::CreateCompatibleBitmap(hDC, width, height);
-    hVirtualDC = ::CreateCompatibleDC(hDC);
-    ::SelectObject(hVirtualDC, hBitmap);
+    buffer.set(canvas, width, height);
   }
 #endif
 
   ~Viewport() {
     restore();
-#ifndef HAVE_VIEWPORT
-    ::DeleteDC(hVirtualDC);
-    ::DeleteObject(hBitmap);
-#endif
   }
 
   /**
@@ -115,7 +94,7 @@ public:
    */
   void restore(void) {
 #ifdef HAVE_VIEWPORT
-    ::SetViewportOrgEx(hDC, old_origin.x, old_origin.y, NULL);
+    canvas.set_viewport_origin(old_origin.x, old_origin.y);
 #endif
   }
 
@@ -126,11 +105,11 @@ public:
   void move(int x, int y) {
 #ifdef HAVE_VIEWPORT
 #ifdef HAVE_OFFSET_VIEWPORT
-    ::OffsetViewportOrgEx(hDC, x, y, NULL);
+    canvas.offset_viewport_origin(x, y);
 #else /* HAVE_OFFSET_VIEWPORT */
     current.x += x;
     current.y += y;
-    ::SetViewportOrgEx(hDC, current.x, current.y, NULL);
+    canvas.set_viewport_origin(current.x, current.y);
 #endif /* !HAVE_OFFSET_VIEWPORT */
 #else /* HAVE_VIEWPORT */
     left += x;
@@ -138,11 +117,11 @@ public:
 #endif /* !HAVE_VIEWPORT */
   }
 
-  operator HDC() {
+  operator Canvas &() {
 #ifdef HAVE_VIEWPORT
-    return hDC;
+    return canvas;
 #else
-    return hVirtualDC;
+    return buffer;
 #endif
   }
 
@@ -151,8 +130,7 @@ public:
    */
   void commit() {
 #ifndef HAVE_VIEWPORT
-    ::BitBlt(hDC, left, top, width, height,
-             hVirtualDC, 0, 0, SRCCOPY);
+    canvas.copy(left, top, width, height, buffer, 0, 0);
 #endif
   }
 };

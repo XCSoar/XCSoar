@@ -41,6 +41,7 @@ Copyright_License {
 #include "InfoBoxLayout.h"
 #include "LocalPath.hpp"
 #include "UtilsText.hpp"
+#include "Screen/MainWindow.hpp"
 
 #include <assert.h>
 

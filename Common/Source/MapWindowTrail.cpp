@@ -54,7 +54,7 @@ int MapWindow::iSnailNext=0;
 #define fSnailColour(cv) max(0,min((short)(NUMSNAILCOLORS-1), (short)((cv+1.0)/2.0*NUMSNAILCOLORS)))
 
 // This function is slow...
-double MapWindow::DrawTrail( HDC hdc, const POINT Orig, const RECT rc)
+double MapWindow::DrawTrail(Canvas &canvas, const POINT Orig, const RECT rc)
 {
   int i, snail_index;
   SNAIL_POINT P1;
@@ -293,17 +293,17 @@ double MapWindow::DrawTrail( HDC hdc, const POINT Orig, const RECT rc)
       }
       P1.Colour = fSnailColour(colour_vario);
     }
-    SelectObject(hdc, MapGfx.hSnailPens[P1.Colour]);
+    canvas.select(MapGfx.hSnailPens[P1.Colour]);
 
     if (!last_visible) { // draw set cursor at P1
 #ifndef NOLINETO
-      MoveToEx(hdc, P1.Screen.x, P1.Screen.y, NULL);
+      canvas.move_to(P1.Screen.x, P1.Screen.y);
 #endif
     } else {
 #ifndef NOLINETO
-      LineTo(hdc, P1.Screen.x, P1.Screen.y);
+      canvas.line_to(P1.Screen.x, P1.Screen.y);
 #else
-      ClipLine(hdc, P1.Screen, point_lastdrawn, rc);
+      canvas.clipped_line(P1.Screen, point_lastdrawn, rc);
 #endif
     }
     point_lastdrawn = P1.Screen;
@@ -313,9 +313,9 @@ double MapWindow::DrawTrail( HDC hdc, const POINT Orig, const RECT rc)
   // draw final point to glider
   if (last_visible) {
 #ifndef NOLINETO
-    LineTo(hdc, Orig.x, Orig.y);
+    canvas.line_to(Orig.x, Orig.y);
 #else
-    ClipLine(hdc, Orig, point_lastdrawn, rc);
+    canvas.clipped_line(Orig, point_lastdrawn, rc);
 #endif
   }
 
@@ -325,7 +325,7 @@ double MapWindow::DrawTrail( HDC hdc, const POINT Orig, const RECT rc)
 
 extern OLCOptimizer olc;
 
-void MapWindow::DrawTrailFromTask(HDC hdc, const RECT rc,
+void MapWindow::DrawTrailFromTask(Canvas &canvas, const RECT rc,
 				  const double TrailFirstTime) {
   static POINT ptin[MAXCLIPPOLYGON];
 
@@ -347,8 +347,8 @@ void MapWindow::DrawTrailFromTask(HDC hdc, const RECT rc,
     j++;
   }
   if (j>=2) {
-    SelectObject(hdc,MapGfx.hSnailPens[NUMSNAILCOLORS/2]);
-    ClipPolygon(hdc, ptin, j, rc, false);
+    canvas.select(MapGfx.hSnailPens[NUMSNAILCOLORS / 2]);
+    canvas.clipped_polygon(ptin, j, rc, false);
   }
 }
 

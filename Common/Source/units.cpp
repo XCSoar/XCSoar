@@ -644,7 +644,7 @@ double Units::ToSysDistance(double Distance){
 
 void Units::setupUnitBitmap(Units_t Unit, HINSTANCE hInst, WORD IDB, int Width, int Height){
 
-  UnitDescriptors[Unit].hBitmap = LoadBitmap(hInst, MAKEINTRESOURCE(IDB));
+  UnitDescriptors[Unit].bitmap.load(IDB);
   UnitDescriptors[Unit].BitMapSize.x = Width;
   UnitDescriptors[Unit].BitMapSize.y = Height;
 
@@ -653,7 +653,6 @@ void Units::setupUnitBitmap(Units_t Unit, HINSTANCE hInst, WORD IDB, int Width, 
 
 bool Units::LoadUnitBitmap(HINSTANCE hInst){
 
-  UnitDescriptors[unUndef].hBitmap = NULL;
   UnitDescriptors[unUndef].BitMapSize.x = 0;
   UnitDescriptors[unUndef].BitMapSize.y = 0;
 
@@ -681,8 +680,7 @@ bool Units::UnLoadUnitBitmap(void){
   int i;
 
   for (i=1; i<sizeof(UnitDescriptors)/sizeof(UnitDescriptors[0]); i++){
-    if (UnitDescriptors[unUndef].hBitmap != NULL)
-      DeleteObject(UnitDescriptors[unUndef].hBitmap);
+    UnitDescriptors[unUndef].bitmap.reset();
   }
 
   return(true);
@@ -706,11 +704,13 @@ void Units::TimeToText(TCHAR* text, int d) {
 }
 
 
-bool Units::GetUnitBitmap(Units_t Unit, HBITMAP *HBmp, POINT *Org, POINT *Size, int Kind){
+bool Units::GetUnitBitmap(Units_t Unit, const Bitmap **HBmp,
+                          POINT *Org, POINT *Size, int Kind){
 
   UnitDescriptor_t *pU = &UnitDescriptors[Unit];
 
-  *HBmp = pU->hBitmap;
+  *HBmp = pU->bitmap.defined()
+    ? &pU->bitmap : NULL;
 
   Size->x = pU->BitMapSize.x;
   Size->y = pU->BitMapSize.y;
@@ -731,7 +731,7 @@ bool Units::GetUnitBitmap(Units_t Unit, HBITMAP *HBmp, POINT *Org, POINT *Size, 
     break;
   }
 
-  return(pU->hBitmap != NULL);
+  return pU->bitmap.defined();
 
 }
 

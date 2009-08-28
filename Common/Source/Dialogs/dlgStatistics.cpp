@@ -51,7 +51,7 @@ Copyright_License {
 #include "Math/Geometry.hpp"
 #include "Math/Earth.hpp"
 #include "Screen/Graphics.hpp"
-#include "Screen/Util.hpp"
+#include "Screen/MainWindow.hpp"
 #include "Utils.h"
 
 #include "Calculations.h" // TODO danger! multiple
@@ -71,7 +71,7 @@ double Statistics::y_max;
 bool   Statistics::unscaled_x;
 bool   Statistics::unscaled_y;
 
-static HPEN penThinSignal = NULL;
+static Pen penThinSignal;
 
 #define BORDER_X 24
 #define BORDER_Y 19
@@ -191,7 +191,7 @@ void Statistics::ScaleXFromValue(const RECT rc, const double value)
 }
 
 
-void Statistics::StyleLine(HDC hdc, const POINT l1, const POINT l2,
+void Statistics::StyleLine(Canvas &canvas, const POINT l1, const POINT l2,
                            const int Style, const RECT rc) {
   int minwidth = 1;
 #ifndef GNAV
@@ -202,30 +202,30 @@ void Statistics::StyleLine(HDC hdc, const POINT l1, const POINT l2,
   line[1] = l2;
   switch (Style) {
   case STYLE_BLUETHIN:
-    DrawDashLine(hdc,
+    canvas.clipped_dashed_line(
 		 minwidth,
 		 l1,
 		 l2,
 		 RGB(0,50,255), rc);
     break;
   case STYLE_REDTHICK:
-    DrawDashLine(hdc, 3,
+    canvas.clipped_dashed_line(3,
 		 l1,
 		 l2,
 		 RGB(200,50,50), rc);
     break;
   case STYLE_DASHGREEN:
-    DrawDashLine(hdc, 2,
+    canvas.clipped_dashed_line(2,
 		 line[0],
 		 line[1],
 		 RGB(0,255,0), rc);
     break;
   case STYLE_MEDIUMBLACK:
-    SelectObject(hdc, penThinSignal /*GetStockObject(BLACK_PEN)*/);
-    ClipPolyline(hdc, line, 2, rc);
+    canvas.select(penThinSignal /*GetStockObject(BLACK_PEN)*/);
+    canvas.clipped_polyline(line, 2, rc);
     break;
   case STYLE_THINDASHPAPER:
-    DrawDashLine(hdc, 1,
+    canvas.clipped_dashed_line(1,
 		 l1,
 		 l2,
 		 RGB(0x60,0x60,0x60), rc);
@@ -238,59 +238,59 @@ void Statistics::StyleLine(HDC hdc, const POINT l1, const POINT l2,
 }
 
 
-void Statistics::DrawLabel(HDC hdc, const RECT rc, const TCHAR *text,
+void Statistics::DrawLabel(Canvas &canvas, const RECT rc, const TCHAR *text,
 			   const double xv, const double yv) {
 
   SIZE tsize;
-  GetTextExtentPoint(hdc, text, _tcslen(text), &tsize);
+  GetTextExtentPoint(canvas, text, _tcslen(text), &tsize);
   int x = (int)((xv-x_min)*xscale)+rc.left-tsize.cx/2+BORDER_X;
   int y = (int)((y_max-yv)*yscale)+rc.top-tsize.cy/2;
-  SetBkMode(hdc, OPAQUE);
-  ExtTextOut(hdc, x, y, ETO_OPAQUE, NULL, text, _tcslen(text), NULL);
-  SetBkMode(hdc, TRANSPARENT);
+  SetBkMode(canvas, OPAQUE);
+  ExtTextOut(canvas, x, y, ETO_OPAQUE, NULL, text, _tcslen(text), NULL);
+  SetBkMode(canvas, TRANSPARENT);
 }
 
 
-void Statistics::DrawNoData(HDC hdc, RECT rc) {
+void Statistics::DrawNoData(Canvas &canvas, RECT rc) {
 
   SIZE tsize;
   TCHAR text[80];
   _stprintf(text,TEXT("%s"), gettext(TEXT("No data")));
-  GetTextExtentPoint(hdc, text, _tcslen(text), &tsize);
+  GetTextExtentPoint(canvas, text, _tcslen(text), &tsize);
   int x = (int)(rc.left+rc.right-tsize.cx)/2;
   int y = (int)(rc.top+rc.bottom-tsize.cy)/2;
-  SetBkMode(hdc, OPAQUE);
-  ExtTextOut(hdc, x, y, ETO_OPAQUE, NULL, text, _tcslen(text), NULL);
-  SetBkMode(hdc, TRANSPARENT);
+  SetBkMode(canvas, OPAQUE);
+  ExtTextOut(canvas, x, y, ETO_OPAQUE, NULL, text, _tcslen(text), NULL);
+  SetBkMode(canvas, TRANSPARENT);
 }
 
 
 extern HFONT MapLabelFont;
 
 
-void Statistics::DrawXLabel(HDC hdc, const RECT rc, const TCHAR *text) {
+void Statistics::DrawXLabel(Canvas &canvas, const RECT rc, const TCHAR *text) {
   SIZE tsize;
-  HFONT hfOld = (HFONT)SelectObject(hdc, MapLabelFont);
-  GetTextExtentPoint(hdc, text, _tcslen(text), &tsize);
+  HFONT hfOld = (HFONT)SelectObject(canvas, MapLabelFont);
+  GetTextExtentPoint(canvas, text, _tcslen(text), &tsize);
   int x = rc.right-tsize.cx-IBLSCALE(3);
   int y = rc.bottom-tsize.cy;
-  ExtTextOut(hdc, x, y, ETO_OPAQUE, NULL, text, _tcslen(text), NULL);
-  SelectObject(hdc, hfOld);
+  ExtTextOut(canvas, x, y, ETO_OPAQUE, NULL, text, _tcslen(text), NULL);
+  SelectObject(canvas, hfOld);
 }
 
 
-void Statistics::DrawYLabel(HDC hdc, const RECT rc, const TCHAR *text) {
+void Statistics::DrawYLabel(Canvas &canvas, const RECT rc, const TCHAR *text) {
   SIZE tsize;
-  HFONT hfOld = (HFONT)SelectObject(hdc, MapLabelFont);
-  GetTextExtentPoint(hdc, text, _tcslen(text), &tsize);
+  HFONT hfOld = (HFONT)SelectObject(canvas, MapLabelFont);
+  GetTextExtentPoint(canvas, text, _tcslen(text), &tsize);
   int x = max(2,rc.left-tsize.cx);
   int y = rc.top;
-  ExtTextOut(hdc, x, y, ETO_OPAQUE, NULL, text, _tcslen(text), NULL);
-  SelectObject(hdc, hfOld);
+  ExtTextOut(canvas, x, y, ETO_OPAQUE, NULL, text, _tcslen(text), NULL);
+  SelectObject(canvas, hfOld);
 }
 
 
-void Statistics::DrawTrend(HDC hdc, const RECT rc, LeastSquares* lsdata,
+void Statistics::DrawTrend(Canvas &canvas, const RECT rc, LeastSquares* lsdata,
 			   const int Style)
 {
   if (lsdata->sum_n<2) {
@@ -317,12 +317,12 @@ void Statistics::DrawTrend(HDC hdc, const RECT rc, LeastSquares* lsdata,
   line[1].x = (int)xmax;
   line[1].y = (int)ymax;
 
-  StyleLine(hdc, line[0], line[1], Style, rc);
+  StyleLine(canvas, line[0], line[1], Style, rc);
 
 }
 
 
-void Statistics::DrawTrendN(HDC hdc, const RECT rc,
+void Statistics::DrawTrendN(Canvas &canvas, const RECT rc,
 			    LeastSquares* lsdata,
                             const int Style)
 {
@@ -350,12 +350,12 @@ void Statistics::DrawTrendN(HDC hdc, const RECT rc,
   line[1].x = (int)xmax;
   line[1].y = (int)ymax;
 
-  StyleLine(hdc, line[0], line[1], Style, rc);
+  StyleLine(canvas, line[0], line[1], Style, rc);
 
 }
 
 
-void Statistics::DrawLine(HDC hdc, const RECT rc,
+void Statistics::DrawLine(Canvas &canvas, const RECT rc,
 			  const double xmin, const double ymin,
                           const double xmax, const double ymax,
                           const int Style) {
@@ -369,20 +369,20 @@ void Statistics::DrawLine(HDC hdc, const RECT rc,
   line[1].x = (int)((xmax-x_min)*xscale)+rc.left+BORDER_X;
   line[1].y = (int)((y_max-ymax)*yscale)+rc.top;
 
-  StyleLine(hdc, line[0], line[1], Style, rc);
+  StyleLine(canvas, line[0], line[1], Style, rc);
 
 }
 
 
-void Statistics::DrawBarChart(HDC hdc, const RECT rc, LeastSquares* lsdata) {
+void Statistics::DrawBarChart(Canvas &canvas, const RECT rc, LeastSquares* lsdata) {
   int i;
 
   if (unscaled_x || unscaled_y) {
     return;
   }
 
-  SelectObject(hdc, GetStockObject(WHITE_PEN));
-  SelectObject(hdc, GetStockObject(WHITE_BRUSH));
+  SelectObject(canvas, GetStockObject(WHITE_PEN));
+  SelectObject(canvas, GetStockObject(WHITE_BRUSH));
 
   int xmin, ymin, xmax, ymax;
 
@@ -391,7 +391,7 @@ void Statistics::DrawBarChart(HDC hdc, const RECT rc, LeastSquares* lsdata) {
     ymin = (int)((y_max-y_min)*yscale)+rc.top;
     xmax = (int)((i+1+0.8)*xscale)+rc.left+BORDER_X;
     ymax = (int)((y_max-lsdata->ystore[i])*yscale)+rc.top;
-    Rectangle(hdc,
+    Rectangle(canvas,
               xmin,
               ymin,
               xmax,
@@ -401,7 +401,7 @@ void Statistics::DrawBarChart(HDC hdc, const RECT rc, LeastSquares* lsdata) {
 }
 
 
-void Statistics::DrawFilledLineGraph(HDC hdc, const RECT rc,
+void Statistics::DrawFilledLineGraph(Canvas &canvas, const RECT rc,
 				     LeastSquares* lsdata,
 				     const COLORREF color) {
 
@@ -416,13 +416,13 @@ void Statistics::DrawFilledLineGraph(HDC hdc, const RECT rc,
     line[2].y = rc.bottom-BORDER_Y;
     line[3].x = line[0].x;
     line[3].y = rc.bottom-BORDER_Y;
-    Polygon(hdc, line, 4);
+    Polygon(canvas, line, 4);
   }
 }
 
 
 
-void Statistics::DrawLineGraph(HDC hdc, RECT rc, LeastSquares* lsdata,
+void Statistics::DrawLineGraph(Canvas &canvas, RECT rc, LeastSquares* lsdata,
                                int Style) {
 
   POINT line[2];
@@ -435,7 +435,7 @@ void Statistics::DrawLineGraph(HDC hdc, RECT rc, LeastSquares* lsdata,
 
     // STYLE_DASHGREEN
     // STYLE_MEDIUMBLACK
-    StyleLine(hdc, line[0], line[1], Style, rc);
+    StyleLine(canvas, line[0], line[1], Style, rc);
   }
 }
 
@@ -449,7 +449,7 @@ void Statistics::FormatTicText(TCHAR *text, const double val, const double step)
 }
 
 
-void Statistics::DrawXGrid(HDC hdc, const RECT rc,
+void Statistics::DrawXGrid(Canvas &canvas, const RECT rc,
 			   const double tic_step,
 			   const double zero,
                            const int Style,
@@ -478,15 +478,15 @@ void Statistics::DrawXGrid(HDC hdc, const RECT rc,
     // STYLE_THINDASHPAPER
     if ((xval< x_max)
         && (xmin>=rc.left+BORDER_X) && (xmin<=rc.right)) {
-      StyleLine(hdc, line[0], line[1], Style, rc);
+      StyleLine(canvas, line[0], line[1], Style, rc);
 
       if (draw_units) {
 	TCHAR unit_text[MAX_PATH];
 	FormatTicText(unit_text, xval*unit_step/tic_step, unit_step);
-	SetBkMode(hdc, OPAQUE);
-	ExtTextOut(hdc, xmin, ymax-IBLSCALE(17),
+	SetBkMode(canvas, OPAQUE);
+	ExtTextOut(canvas, xmin, ymax-IBLSCALE(17),
 		   ETO_OPAQUE, NULL, unit_text, _tcslen(unit_text), NULL);
-	SetBkMode(hdc, TRANSPARENT);
+	SetBkMode(canvas, TRANSPARENT);
       }
     }
 
@@ -508,15 +508,15 @@ void Statistics::DrawXGrid(HDC hdc, const RECT rc,
     if ((xval> x_min)
         && (xmin>=rc.left+BORDER_X) && (xmin<=rc.right)) {
 
-      StyleLine(hdc, line[0], line[1], Style, rc);
+      StyleLine(canvas, line[0], line[1], Style, rc);
 
       if (draw_units) {
 	TCHAR unit_text[MAX_PATH];
 	FormatTicText(unit_text, xval*unit_step/tic_step, unit_step);
-	SetBkMode(hdc, OPAQUE);
-	ExtTextOut(hdc, xmin, ymax-IBLSCALE(17),
+	SetBkMode(canvas, OPAQUE);
+	ExtTextOut(canvas, xmin, ymax-IBLSCALE(17),
 		   ETO_OPAQUE, NULL, unit_text, _tcslen(unit_text), NULL);
-	SetBkMode(hdc, TRANSPARENT);
+	SetBkMode(canvas, TRANSPARENT);
       }
     }
 
@@ -524,7 +524,7 @@ void Statistics::DrawXGrid(HDC hdc, const RECT rc,
 
 }
 
-void Statistics::DrawYGrid(HDC hdc, const RECT rc,
+void Statistics::DrawYGrid(Canvas &canvas, const RECT rc,
 			   const double tic_step,
 			   const double zero,
                            const int Style,
@@ -553,15 +553,15 @@ void Statistics::DrawYGrid(HDC hdc, const RECT rc,
     if ((yval< y_max) &&
         (ymin>=rc.top) && (ymin<=rc.bottom-BORDER_Y)) {
 
-      StyleLine(hdc, line[0], line[1], Style, rc);
+      StyleLine(canvas, line[0], line[1], Style, rc);
 
       if (draw_units) {
 	TCHAR unit_text[MAX_PATH];
 	FormatTicText(unit_text, yval*unit_step/tic_step, unit_step);
-	SetBkMode(hdc, OPAQUE);
-	ExtTextOut(hdc, xmin+IBLSCALE(8), ymin,
+	SetBkMode(canvas, OPAQUE);
+	ExtTextOut(canvas, xmin+IBLSCALE(8), ymin,
 		   ETO_OPAQUE, NULL, unit_text, _tcslen(unit_text), NULL);
-	SetBkMode(hdc, TRANSPARENT);
+	SetBkMode(canvas, TRANSPARENT);
       }
     }
   }
@@ -581,15 +581,15 @@ void Statistics::DrawYGrid(HDC hdc, const RECT rc,
     if ((yval> y_min) &&
         (ymin>=rc.top) && (ymin<=rc.bottom-BORDER_Y)) {
 
-      StyleLine(hdc, line[0], line[1], Style, rc);
+      StyleLine(canvas, line[0], line[1], Style, rc);
 
       if (draw_units) {
 	TCHAR unit_text[MAX_PATH];
 	FormatTicText(unit_text, yval*unit_step/tic_step, unit_step);
-	SetBkMode(hdc, OPAQUE);
-	ExtTextOut(hdc, xmin+IBLSCALE(8), ymin,
+	SetBkMode(canvas, OPAQUE);
+	ExtTextOut(canvas, xmin+IBLSCALE(8), ymin,
 		   ETO_OPAQUE, NULL, unit_text, _tcslen(unit_text), NULL);
-	SetBkMode(hdc, TRANSPARENT);
+	SetBkMode(canvas, TRANSPARENT);
       }
     }
   }
@@ -605,11 +605,11 @@ extern OLCOptimizer olc;
 static bool olcvalid=false;
 static bool olcfinished=false;
 
-void Statistics::RenderBarograph(HDC hdc, const RECT rc)
+void Statistics::RenderBarograph(Canvas &canvas, const RECT rc)
 {
 
   if (flightstats.Altitude.sum_n<2) {
-    DrawNoData(hdc, rc);
+    DrawNoData(canvas, rc);
     return;
   }
 
@@ -627,7 +627,7 @@ void Statistics::RenderBarograph(HDC hdc, const RECT rc)
       double xx =
         (flightstats.LegStartTime[j]-CALCULATED_INFO.TakeOffTime)/3600.0;
       if (xx>=0) {
-        DrawLine(hdc, rc,
+        DrawLine(canvas, rc,
                  xx, y_min,
                  xx, y_max,
                  STYLE_REDTHICK);
@@ -641,43 +641,43 @@ void Statistics::RenderBarograph(HDC hdc, const RECT rc)
   hpHorizonGround = (HPEN)CreatePen(PS_SOLID, IBLSCALE(1),
                                     GROUND_COLOUR);
   hbHorizonGround = (HBRUSH)CreateSolidBrush(GROUND_COLOUR);
-  SelectObject(hdc, hpHorizonGround);
-  SelectObject(hdc, hbHorizonGround);
+  SelectObject(canvas, hpHorizonGround);
+  SelectObject(canvas, hbHorizonGround);
 
-  DrawFilledLineGraph(hdc, rc, &flightstats.Altitude_Terrain,
+  DrawFilledLineGraph(canvas, rc, &flightstats.Altitude_Terrain,
                 GROUND_COLOUR);
 
-  SelectObject(hdc, GetStockObject(WHITE_PEN));
-  SelectObject(hdc, GetStockObject(WHITE_BRUSH));
+  SelectObject(canvas, GetStockObject(WHITE_PEN));
+  SelectObject(canvas, GetStockObject(WHITE_BRUSH));
   DeleteObject(hpHorizonGround);
   DeleteObject(hbHorizonGround);
 
-  DrawXGrid(hdc, rc,
+  DrawXGrid(canvas, rc,
             0.5, flightstats.Altitude.x_min,
             STYLE_THINDASHPAPER, 0.5, true);
 
-  DrawYGrid(hdc, rc, 1000/ALTITUDEMODIFY, 0, STYLE_THINDASHPAPER,
+  DrawYGrid(canvas, rc, 1000/ALTITUDEMODIFY, 0, STYLE_THINDASHPAPER,
             1000, true);
 
-  DrawLineGraph(hdc, rc, &flightstats.Altitude,
+  DrawLineGraph(canvas, rc, &flightstats.Altitude,
                 STYLE_MEDIUMBLACK);
 
-  DrawTrend(hdc, rc, &flightstats.Altitude_Base, STYLE_BLUETHIN);
+  DrawTrend(canvas, rc, &flightstats.Altitude_Base, STYLE_BLUETHIN);
 
-  DrawTrend(hdc, rc, &flightstats.Altitude_Ceiling, STYLE_BLUETHIN);
+  DrawTrend(canvas, rc, &flightstats.Altitude_Ceiling, STYLE_BLUETHIN);
 
-  DrawXLabel(hdc, rc, TEXT("t"));
-  DrawYLabel(hdc, rc, TEXT("h"));
+  DrawXLabel(canvas, rc, TEXT("t"));
+  DrawYLabel(canvas, rc, TEXT("h"));
 
 }
 
 
-void Statistics::RenderSpeed(HDC hdc, const RECT rc)
+void Statistics::RenderSpeed(Canvas &canvas, const RECT rc)
 {
 
   if ((flightstats.Task_Speed.sum_n<2)
       || !ValidTaskPoint(ActiveWayPoint)) {
-    DrawNoData(hdc, rc);
+    DrawNoData(canvas, rc);
     return;
   }
 
@@ -695,7 +695,7 @@ void Statistics::RenderSpeed(HDC hdc, const RECT rc)
       double xx =
         (flightstats.LegStartTime[j]-CALCULATED_INFO.TaskStartTime)/3600.0;
       if (xx>=0) {
-        DrawLine(hdc, rc,
+        DrawLine(canvas, rc,
                  xx, y_min,
                  xx, y_max,
                  STYLE_REDTHICK);
@@ -704,30 +704,30 @@ void Statistics::RenderSpeed(HDC hdc, const RECT rc)
   }
   mutexTaskData.Unlock();
 
-  DrawXGrid(hdc, rc,
+  DrawXGrid(canvas, rc,
             0.5, flightstats.Task_Speed.x_min,
             STYLE_THINDASHPAPER, 0.5, true);
 
-  DrawYGrid(hdc, rc, 10/TASKSPEEDMODIFY, 0, STYLE_THINDASHPAPER,
+  DrawYGrid(canvas, rc, 10/TASKSPEEDMODIFY, 0, STYLE_THINDASHPAPER,
             10, true);
 
-  DrawLineGraph(hdc, rc, &flightstats.Task_Speed,
+  DrawLineGraph(canvas, rc, &flightstats.Task_Speed,
                 STYLE_MEDIUMBLACK);
 
-  DrawTrend(hdc, rc, &flightstats.Task_Speed, STYLE_BLUETHIN);
+  DrawTrend(canvas, rc, &flightstats.Task_Speed, STYLE_BLUETHIN);
 
-  DrawXLabel(hdc, rc, TEXT("t"));
-  DrawYLabel(hdc, rc, TEXT("V"));
+  DrawXLabel(canvas, rc, TEXT("t"));
+  DrawYLabel(canvas, rc, TEXT("V"));
 
 }
 
 
 
-void Statistics::RenderClimb(HDC hdc, const RECT rc)
+void Statistics::RenderClimb(Canvas &canvas, const RECT rc)
 {
 
   if (flightstats.ThermalAverage.sum_n<1) {
-    DrawNoData(hdc, rc);
+    DrawNoData(canvas, rc);
     return;
   }
 
@@ -739,33 +739,33 @@ void Statistics::RenderClimb(HDC hdc, const RECT rc)
   ScaleXFromValue(rc, -1);
   ScaleXFromValue(rc, flightstats.ThermalAverage.sum_n);
 
-  DrawYGrid(hdc, rc,
+  DrawYGrid(canvas, rc,
             1.0/LIFTMODIFY, 0,
             STYLE_THINDASHPAPER, 1.0, true);
 
-  DrawBarChart(hdc, rc,
+  DrawBarChart(canvas, rc,
                &flightstats.ThermalAverage);
 
-  DrawLine(hdc, rc,
+  DrawLine(canvas, rc,
            0, MACCREADY,
            flightstats.ThermalAverage.sum_n,
            MACCREADY,
            STYLE_REDTHICK);
 
-  DrawLabel(hdc, rc, TEXT("MC"),
+  DrawLabel(canvas, rc, TEXT("MC"),
 	    max(0.5, flightstats.ThermalAverage.sum_n-1), MACCREADY);
 
-  DrawTrendN(hdc, rc,
+  DrawTrendN(canvas, rc,
              &flightstats.ThermalAverage,
              STYLE_BLUETHIN);
 
-  DrawXLabel(hdc, rc, TEXT("n"));
-  DrawYLabel(hdc, rc, TEXT("w"));
+  DrawXLabel(canvas, rc, TEXT("n"));
+  DrawYLabel(canvas, rc, TEXT("w"));
 
 }
 
 
-void Statistics::RenderGlidePolar(HDC hdc, const RECT rc)
+void Statistics::RenderGlidePolar(Canvas &canvas, const RECT rc)
 {
   int i;
 
@@ -775,10 +775,10 @@ void Statistics::RenderGlidePolar(HDC hdc, const RECT rc)
   ScaleXFromValue(rc, GlidePolar::Vminsink*0.8);
   ScaleXFromValue(rc, SAFTEYSPEED+2);
 
-  DrawXGrid(hdc, rc,
+  DrawXGrid(canvas, rc,
             10.0/SPEEDMODIFY, 0,
             STYLE_THINDASHPAPER, 10.0, true);
-  DrawYGrid(hdc, rc,
+  DrawYGrid(canvas, rc,
             1.0/LIFTMODIFY, 0,
             STYLE_THINDASHPAPER, 1.0, true);
 
@@ -792,7 +792,7 @@ void Statistics::RenderGlidePolar(HDC hdc, const RECT rc)
 
     sinkrate0 = GlidePolar::SinkRateFast(0,i);
     sinkrate1 = GlidePolar::SinkRateFast(0,i+1);
-    DrawLine(hdc, rc,
+    DrawLine(canvas, rc,
              i, sinkrate0 ,
              i+1, sinkrate1,
              STYLE_MEDIUMBLACK);
@@ -803,7 +803,7 @@ void Statistics::RenderGlidePolar(HDC hdc, const RECT rc)
 
       if (v0valid) {
 
-        DrawLine(hdc, rc,
+        DrawLine(canvas, rc,
                  i0, v0 ,
                  i, v1,
                  STYLE_DASHGREEN);
@@ -820,31 +820,31 @@ void Statistics::RenderGlidePolar(HDC hdc, const RECT rc)
   double ff = SAFTEYSPEED/max(1.0, CALCULATED_INFO.VMacCready);
   double sb = GlidePolar::SinkRate(CALCULATED_INFO.VMacCready);
   ff= (sb-MACCREADY)/max(1.0, CALCULATED_INFO.VMacCready);
-  DrawLine(hdc, rc,
+  DrawLine(canvas, rc,
            0, MACCREADY,
            SAFTEYSPEED,
            MACCREADY+ff*SAFTEYSPEED,
            STYLE_REDTHICK);
 
-  DrawXLabel(hdc, rc, TEXT("V"));
-  DrawYLabel(hdc, rc, TEXT("w"));
+  DrawXLabel(canvas, rc, TEXT("V"));
+  DrawYLabel(canvas, rc, TEXT("w"));
 
   TCHAR text[80];
-  SetBkMode(hdc, OPAQUE);
+  SetBkMode(canvas, OPAQUE);
 
   _stprintf(text,TEXT("Weight %.0f kg"),
 	    GlidePolar::GetAUW());
-  ExtTextOut(hdc, rc.left+IBLSCALE(30),
+  ExtTextOut(canvas, rc.left+IBLSCALE(30),
 	     rc.bottom-IBLSCALE(55),
 	     ETO_OPAQUE, NULL, text, _tcslen(text), NULL);
 
   _stprintf(text,TEXT("Wing loading %.1f kg/m2"),
 	    GlidePolar::WingLoading);
-  ExtTextOut(hdc, rc.left+IBLSCALE(30),
+  ExtTextOut(canvas, rc.left+IBLSCALE(30),
 	     rc.bottom-IBLSCALE(40),
 	     ETO_OPAQUE, NULL, text, _tcslen(text), NULL);
 
-  SetBkMode(hdc, TRANSPARENT);
+  SetBkMode(canvas, TRANSPARENT);
 }
 
 
@@ -881,7 +881,7 @@ void Statistics::ScaleMakeSquare(const RECT rc) {
 }
 
 
-void Statistics::RenderTask(HDC hdc, const RECT rc, const bool olcmode)
+void Statistics::RenderTask(Canvas &canvas, const RECT rc, const bool olcmode)
 {
   int i;
 
@@ -913,7 +913,7 @@ void Statistics::RenderTask(HDC hdc, const RECT rc, const bool olcmode)
   }
   mutexTaskData.Unlock();
   if (nowaypoints && !olcmode) {
-    DrawNoData(hdc, rc);
+    DrawNoData(canvas, rc);
     return;
   }
 
@@ -1006,10 +1006,10 @@ void Statistics::RenderTask(HDC hdc, const RECT rc, const bool olcmode)
 
   ScaleMakeSquare(rc);
 
-  DrawXGrid(hdc, rc,
+  DrawXGrid(canvas, rc,
             1.0, 0,
             STYLE_THINDASHPAPER, 1.0, false);
-  DrawYGrid(hdc, rc,
+  DrawYGrid(canvas, rc,
             1.0, 0,
             STYLE_THINDASHPAPER, 1.0, false);
 
@@ -1028,23 +1028,20 @@ void Statistics::RenderTask(HDC hdc, const RECT rc, const bool olcmode)
 	  x2 = (lon2-lon_c)*fastcosine(lat2);
 	  y2 = (lat2-lat_c);
 
-	  SelectObject(hdc,
-		       MapGfx.GetAirspaceBrushByClass(AATASK));
-	  SelectObject(hdc, GetStockObject(WHITE_PEN));
+          canvas.select(MapGfx.GetAirspaceBrushByClass(AATASK));
+          canvas.white_pen();
 	  if (Task[i].AATType == SECTOR) {
-	    Segment(hdc,
-		    (long)((x2-x_min)*xscale+rc.left+BORDER_X),
-		    (long)((y_max-y2)*yscale+rc.top),
-		    (long)(aatradius[i]*yscale),
-		    rc,
-		    Task[i].AATStartRadial,
-		    Task[i].AATFinishRadial);
+	    canvas.segment((long)((x2-x_min)*xscale+rc.left+BORDER_X),
+                           (long)((y_max-y2)*yscale+rc.top),
+                           (long)(aatradius[i]*yscale),
+                           rc,
+                           Task[i].AATStartRadial,
+                           Task[i].AATFinishRadial);
 	  } else {
-	    Circle(hdc,
-		   (long)((x2-x_min)*xscale+rc.left+BORDER_X),
-		   (long)((y_max-y2)*yscale+rc.top),
-		   (long)(aatradius[i]*yscale),
-		   rc);
+	    canvas.circle((long)((x2-x_min)*xscale+rc.left+BORDER_X),
+                          (long)((y_max-y2)*yscale+rc.top),
+                          (long)(aatradius[i]*yscale),
+                          rc);
 	  }
 	}
       }
@@ -1063,7 +1060,7 @@ void Statistics::RenderTask(HDC hdc, const RECT rc, const bool olcmode)
     y1 = (lat1-lat_c);
     x2 = (lon2-lon_c)*fastcosine(lat2);
     y2 = (lat2-lat_c);
-    DrawLine(hdc, rc,
+    DrawLine(canvas, rc,
 	     x1, y1, x2, y2,
 	     STYLE_MEDIUMBLACK);
   }
@@ -1088,17 +1085,17 @@ void Statistics::RenderTask(HDC hdc, const RECT rc, const bool olcmode)
 	x2 = (lon2-lon_c)*fastcosine(lat2);
 	y2 = (lat2-lat_c);
 
-	DrawLine(hdc, rc,
+	DrawLine(canvas, rc,
 		 x1, y1, x2, y2,
 		 STYLE_DASHGREEN);
 
 	TCHAR text[100];
 	if ((i==nwps-1) && (Task[i].Index == Task[0].Index)) {
 	  _stprintf(text,TEXT("%0d"),1);
-	  DrawLabel(hdc, rc, text, x2, y2);
+	  DrawLabel(canvas, rc, text, x2, y2);
 	} else {
 	  _stprintf(text,TEXT("%0d"),i+1);
-	  DrawLabel(hdc, rc, text, x2, y2);
+	  DrawLabel(canvas, rc, text, x2, y2);
 	}
 
 	if ((i==ActiveWayPoint)&&(!AATEnabled)) {
@@ -1106,7 +1103,7 @@ void Statistics::RenderTask(HDC hdc, const RECT rc, const bool olcmode)
 	  lon1 = GPS_INFO.Longitude;
 	  x1 = (lon1-lon_c)*fastcosine(lat1);
 	  y1 = (lat1-lat_c);
-	  DrawLine(hdc, rc,
+	  DrawLine(canvas, rc,
 		   x1, y1, x2, y2,
 		   STYLE_REDTHICK);
 	}
@@ -1141,7 +1138,7 @@ void Statistics::RenderTask(HDC hdc, const RECT rc, const bool olcmode)
 	  x2 = (lon2-lon_c)*fastcosine(lat2);
 	  y2 = (lat2-lat_c);
 
-	  DrawLine(hdc, rc,
+	  DrawLine(canvas, rc,
 		   x1, y1, x2, y2,
 		   STYLE_REDTHICK);
 	}
@@ -1176,14 +1173,14 @@ void Statistics::RenderTask(HDC hdc, const RECT rc, const bool olcmode)
       y1 = (lat1-lat_c);
       x2 = (lon2-lon_c)*fastcosine(lat2);
       y2 = (lat2-lat_c);
-      DrawLine(hdc, rc,
+      DrawLine(canvas, rc,
 	       x1, y1, x2, y2,
 	       STYLE_REDTHICK);
     }
     if (!olcfinished) {
       x1 = (olc.lon_proj-lon_c)*fastcosine(lat1);
       y1 = (olc.lat_proj-lat_c);
-      DrawLine(hdc, rc,
+      DrawLine(canvas, rc,
 	       x1, y1, x2, y2,
 	       STYLE_BLUETHIN);
     }
@@ -1194,11 +1191,11 @@ void Statistics::RenderTask(HDC hdc, const RECT rc, const bool olcmode)
   lon1 = GPS_INFO.Longitude;
   x1 = (lon1-lon_c)*fastcosine(lat1);
   y1 = (lat1-lat_c);
-  DrawLabel(hdc, rc, TEXT("+"), x1, y1);
+  DrawLabel(canvas, rc, TEXT("+"), x1, y1);
 }
 
 
-void Statistics::RenderTemperature(HDC hdc, const RECT rc)
+void Statistics::RenderTemperature(Canvas &canvas, const RECT rc)
 {
   ResetScale();
 
@@ -1223,7 +1220,7 @@ void Statistics::RenderTemperature(HDC hdc, const RECT rc)
     }
   }
   if (hmin>= hmax) {
-    DrawNoData(hdc, rc);
+    DrawNoData(canvas, rc);
     return;
   }
 
@@ -1245,34 +1242,34 @@ void Statistics::RenderTemperature(HDC hdc, const RECT rc)
 
       ipos++;
 
-      DrawLine(hdc, rc,
+      DrawLine(canvas, rc,
 	       CuSonde::cslevels[i].tempDry, i,
 	       CuSonde::cslevels[i+1].tempDry, (i+1),
 	       STYLE_REDTHICK);
 
-      DrawLine(hdc, rc,
+      DrawLine(canvas, rc,
 	       CuSonde::cslevels[i].airTemp, i,
 	       CuSonde::cslevels[i+1].airTemp, (i+1),
 	       STYLE_MEDIUMBLACK);
 
-      DrawLine(hdc, rc,
+      DrawLine(canvas, rc,
 	       CuSonde::cslevels[i].dewpoint, i,
 	       CuSonde::cslevels[i+1].dewpoint, i+1,
 	       STYLE_BLUETHIN);
 
       if (ipos> 2) {
 	if (!labelDry) {
-	  DrawLabel(hdc, rc, TEXT("DALR"),
+	  DrawLabel(canvas, rc, TEXT("DALR"),
 		    CuSonde::cslevels[i+1].tempDry, i);
 	  labelDry = true;
 	} else {
 	  if (!labelAir) {
-	    DrawLabel(hdc, rc, TEXT("Air"),
+	    DrawLabel(canvas, rc, TEXT("Air"),
 		      CuSonde::cslevels[i+1].airTemp, i);
 	    labelAir = true;
 	  } else {
 	    if (!labelDew) {
-	      DrawLabel(hdc, rc, TEXT("Dew"),
+	      DrawLabel(canvas, rc, TEXT("Dew"),
 			CuSonde::cslevels[i+1].dewpoint, i);
 	      labelDew = true;
 	    }
@@ -1282,8 +1279,8 @@ void Statistics::RenderTemperature(HDC hdc, const RECT rc)
     }
   }
 
-  DrawXLabel(hdc, rc, TEXT("T")TEXT(DEG));
-  DrawYLabel(hdc, rc, TEXT("h"));
+  DrawXLabel(canvas, rc, TEXT("T")TEXT(DEG));
+  DrawYLabel(canvas, rc, TEXT("h"));
 }
 
 
@@ -1291,7 +1288,7 @@ void Statistics::RenderTemperature(HDC hdc, const RECT rc)
 #include "windanalyser.h"
 extern WindAnalyser *windanalyser;
 
-void Statistics::RenderWind(HDC hdc, const RECT rc)
+void Statistics::RenderWind(Canvas &canvas, const RECT rc)
 {
   int numsteps=10;
   int i;
@@ -1304,7 +1301,7 @@ void Statistics::RenderWind(HDC hdc, const RECT rc)
 
   if (flightstats.Altitude_Ceiling.y_max
       -flightstats.Altitude_Ceiling.y_min<=10) {
-    DrawNoData(hdc, rc);
+    DrawNoData(canvas, rc);
     return;
   }
 
@@ -1330,11 +1327,11 @@ void Statistics::RenderWind(HDC hdc, const RECT rc)
 
   ScaleYFromData(rc, &windstats_mag);
 
-  DrawXGrid(hdc, rc, 5/SPEEDMODIFY, 0, STYLE_THINDASHPAPER, 5.0, true);
-  DrawYGrid(hdc, rc, 1000/ALTITUDEMODIFY, 0, STYLE_THINDASHPAPER,
+  DrawXGrid(canvas, rc, 5/SPEEDMODIFY, 0, STYLE_THINDASHPAPER, 5.0, true);
+  DrawYGrid(canvas, rc, 1000/ALTITUDEMODIFY, 0, STYLE_THINDASHPAPER,
             1000.0, true);
 
-  DrawLineGraph(hdc, rc, &windstats_mag,
+  DrawLineGraph(canvas, rc, &windstats_mag,
                 STYLE_MEDIUMBLACK);
 
 #define WINDVECTORMAG 25
@@ -1370,14 +1367,14 @@ void Statistics::RenderWind(HDC hdc, const RECT rc)
     rotate(dX,dY,angle);
     wv[1].x = (int)(wv[0].x + dX);
     wv[1].y = (int)(wv[0].y + dY);
-    StyleLine(hdc, wv[0], wv[1], STYLE_MEDIUMBLACK, rc);
+    StyleLine(canvas, wv[0], wv[1], STYLE_MEDIUMBLACK, rc);
 
     dX = (mag*WINDVECTORMAG-5);
     dY = -3;
     rotate(dX,dY,angle);
     wv[2].x = (int)(wv[0].x + dX);
     wv[2].y = (int)(wv[0].y + dY);
-    StyleLine(hdc, wv[1], wv[2], STYLE_MEDIUMBLACK, rc);
+    StyleLine(canvas, wv[1], wv[2], STYLE_MEDIUMBLACK, rc);
 
     dX = (mag*WINDVECTORMAG-5);
     dY = 3;
@@ -1385,12 +1382,12 @@ void Statistics::RenderWind(HDC hdc, const RECT rc)
     wv[3].x = (int)(wv[0].x + dX);
     wv[3].y = (int)(wv[0].y + dY);
 
-    StyleLine(hdc, wv[1], wv[3], STYLE_MEDIUMBLACK, rc);
+    StyleLine(canvas, wv[1], wv[3], STYLE_MEDIUMBLACK, rc);
 
   }
 
-  DrawXLabel(hdc, rc, TEXT("w"));
-  DrawYLabel(hdc, rc, TEXT("h"));
+  DrawXLabel(canvas, rc, TEXT("w"));
+  DrawYLabel(canvas, rc, TEXT("h"));
 
 }
 
@@ -1398,7 +1395,7 @@ void Statistics::RenderWind(HDC hdc, const RECT rc)
 ////////////////////////////////////////////////////////////////
 
 
-void Statistics::RenderAirspace(HDC hdc, const RECT rc) {
+void Statistics::RenderAirspace(Canvas &canvas, const RECT rc) {
   double range = 50.0*1000; // km
   double aclat, aclon, ach, acb;
   double fi, fj;
@@ -1455,7 +1452,7 @@ void Statistics::RenderAirspace(HDC hdc, const RECT rc) {
   int type;
 
   HPEN mpen = (HPEN)CreatePen(PS_NULL, 0, RGB(0xf0,0xf0,0xb0));
-  HPEN oldpen = (HPEN)SelectObject(hdc, (HPEN)mpen);
+  HPEN oldpen = (HPEN)SelectObject(canvas, (HPEN)mpen);
   double dx = dfj*(rc.right-rc.left-BORDER_X);
   int x0 = rc.left+BORDER_X;
   double dy = dfi*(rc.top-rc.bottom+BORDER_Y);
@@ -1468,17 +1465,15 @@ void Statistics::RenderAirspace(HDC hdc, const RECT rc) {
 
       type = d_airspace[i][j];
       if (type>=0) {
-	SelectObject(hdc,
-		     MapGfx.GetAirspaceBrushByClass(type));
-	SetTextColor(hdc,
-		     MapGfx.GetAirspaceColourByClass(type));
+        canvas.select(MapGfx.GetAirspaceBrushByClass(type));
+        canvas.set_text_color(MapGfx.GetAirspaceColourByClass(type));
 
 	rcd.left = iround((j-0.5)*dx)+x0;
 	rcd.right = iround((j+0.5)*dx)+x0;
 	rcd.bottom = iround((i+0.5)*dy)+y0;
 	rcd.top = iround((i-0.5)*dy)+y0;
 
-	Rectangle(hdc,rcd.left,rcd.top,rcd.right,rcd.bottom);
+	Rectangle(canvas,rcd.left,rcd.top,rcd.right,rcd.bottom);
 
       }
     }
@@ -1490,8 +1485,8 @@ void Statistics::RenderAirspace(HDC hdc, const RECT rc) {
   hpHorizonGround = (HPEN)CreatePen(PS_SOLID, IBLSCALE(1),
                                     GROUND_COLOUR);
   hbHorizonGround = (HBRUSH)CreateSolidBrush(GROUND_COLOUR);
-  SelectObject(hdc, hpHorizonGround);
-  SelectObject(hdc, hbHorizonGround);
+  SelectObject(canvas, hpHorizonGround);
+  SelectObject(canvas, hbHorizonGround);
   for (j=1; j< AIRSPACE_SCANSIZE_X; j++) { // scan range
 
     ground[0].x = iround((j-1)*dx)+x0;
@@ -1504,7 +1499,7 @@ void Statistics::RenderAirspace(HDC hdc, const RECT rc) {
     ground[2].y = iround((d_alt[j]-hmin)/(hmax-hmin)
 			 *(rc.top-rc.bottom+BORDER_Y))+y0;
     ground[3].y = y0;
-    Polygon(hdc, ground, 4);
+    Polygon(canvas, ground, 4);
   }
 
   //
@@ -1517,23 +1512,23 @@ void Statistics::RenderAirspace(HDC hdc, const RECT rc) {
     line[0].y = (int)(fh*(rc.top-rc.bottom+BORDER_Y)+y0)-1;
     line[1].x = rc.right;
     line[1].y = (int)(gfh*(rc.top-rc.bottom+BORDER_Y)+y0)-1;
-    StyleLine(hdc, line[0], line[1], STYLE_BLUETHIN, rc);
+    StyleLine(canvas, line[0], line[1], STYLE_BLUETHIN, rc);
   }
 
-  SelectObject(hdc, GetStockObject(WHITE_PEN));
-  SelectObject(hdc, GetStockObject(WHITE_BRUSH));
-  SetTextColor(hdc, RGB(0xff,0xff,0xff));
+  SelectObject(canvas, GetStockObject(WHITE_PEN));
+  SelectObject(canvas, GetStockObject(WHITE_BRUSH));
+  SetTextColor(canvas, RGB(0xff,0xff,0xff));
 
-  DrawXGrid(hdc, rc,
+  DrawXGrid(canvas, rc,
             5.0/DISTANCEMODIFY, 0,
             STYLE_THINDASHPAPER, 5.0, true);
-  DrawYGrid(hdc, rc, 1000.0/ALTITUDEMODIFY, 0, STYLE_THINDASHPAPER,
+  DrawYGrid(canvas, rc, 1000.0/ALTITUDEMODIFY, 0, STYLE_THINDASHPAPER,
             1000.0, true);
 
   // draw aircraft
   int delta;
-  SelectObject(hdc, GetStockObject(WHITE_PEN));
-  SelectObject(hdc, GetStockObject(WHITE_BRUSH));
+  SelectObject(canvas, GetStockObject(WHITE_PEN));
+  SelectObject(canvas, GetStockObject(WHITE_BRUSH));
   line[0].x = (int)(rc.left+(rc.right-rc.left-BORDER_X)/AIRSPACE_SCANSIZE_X-1);
   line[0].y = (int)(fh*(rc.top-rc.bottom+BORDER_Y)+rc.bottom-BORDER_Y)-1;
   line[1].x = rc.left;
@@ -1543,12 +1538,12 @@ void Statistics::RenderAirspace(HDC hdc, const RECT rc) {
   line[2].y = line[0].y-delta/2;
   line[3].x = (line[1].x+line[0].x)/2;
   line[3].y = line[0].y;
-  Polygon(hdc, line, 4);
+  Polygon(canvas, line, 4);
 
-  DrawXLabel(hdc, rc, TEXT("D"));
-  DrawYLabel(hdc, rc, TEXT("h"));
+  DrawXLabel(canvas, rc, TEXT("D"));
+  DrawYLabel(canvas, rc, TEXT("h"));
 
-  SelectObject(hdc, (HPEN)oldpen);
+  SelectObject(canvas, (HPEN)oldpen);
   DeleteObject(mpen);
   DeleteObject(hpHorizonGround);
   DeleteObject(hbHorizonGround);
@@ -1581,7 +1576,8 @@ static void SetCalcCaption(const TCHAR* caption) {
 #define ANALYSIS_PAGE_OLC          7
 #define ANALYSIS_PAGE_AIRSPACE     8
 
-static void OnAnalysisPaint(WindowControl * Sender, HDC hDC){
+static void OnAnalysisPaint(WindowControl *Sender, Canvas &canvas)
+{
 
   RECT  rcgfx;
   HFONT hfOld;
@@ -1590,59 +1586,59 @@ static void OnAnalysisPaint(WindowControl * Sender, HDC hDC){
 
   // background is painted in the base-class
 
-  hfOld = (HFONT)SelectObject(hDC, Sender->GetFont());
+  hfOld = (HFONT)SelectObject(canvas, Sender->GetFont()->native());
 
-  SetBkMode(hDC, TRANSPARENT);
-  SetTextColor(hDC, Sender->GetForeColor());
+  SetBkMode(canvas, TRANSPARENT);
+  SetTextColor(canvas, Sender->GetForeColor());
 
   switch (page) {
   case ANALYSIS_PAGE_BAROGRAPH:
     SetCalcCaption(TEXT("Settings"));
-    Statistics::RenderBarograph(hDC, rcgfx);
+    Statistics::RenderBarograph(canvas, rcgfx);
     break;
   case ANALYSIS_PAGE_CLIMB:
     SetCalcCaption(TEXT("Task calc"));
-    Statistics::RenderClimb(hDC, rcgfx);
+    Statistics::RenderClimb(canvas, rcgfx);
     break;
   case ANALYSIS_PAGE_WIND:
     SetCalcCaption(TEXT("Set wind"));
-    Statistics::RenderWind(hDC, rcgfx);
+    Statistics::RenderWind(canvas, rcgfx);
     break;
   case ANALYSIS_PAGE_POLAR:
     SetCalcCaption(TEXT("Settings"));
-    Statistics::RenderGlidePolar(hDC, rcgfx);
+    Statistics::RenderGlidePolar(canvas, rcgfx);
     break;
   case ANALYSIS_PAGE_TEMPTRACE:
     SetCalcCaption(TEXT("Settings"));
-    Statistics::RenderTemperature(hDC, rcgfx);
+    Statistics::RenderTemperature(canvas, rcgfx);
     break;
   case ANALYSIS_PAGE_TASK:
     SetCalcCaption(TEXT("Task calc"));
     mutexTaskData.Lock();
-    Statistics::RenderTask(hDC, rcgfx, false);
+    Statistics::RenderTask(canvas, rcgfx, false);
     mutexTaskData.Unlock();
     break;
   case ANALYSIS_PAGE_OLC:
     SetCalcCaption(TEXT("Optimise"));
     mutexTaskData.Lock();
-    Statistics::RenderTask(hDC, rcgfx, true);
+    Statistics::RenderTask(canvas, rcgfx, true);
     mutexTaskData.Unlock();
     break;
   case ANALYSIS_PAGE_AIRSPACE:
     SetCalcCaption(TEXT("Warnings"));
-    Statistics::RenderAirspace(hDC, rcgfx);
+    Statistics::RenderAirspace(canvas, rcgfx);
     break;
   case ANALYSIS_PAGE_TASK_SPEED:
     SetCalcCaption(TEXT("Task calc"));
     mutexTaskData.Lock();
-    Statistics::RenderSpeed(hDC, rcgfx);
+    Statistics::RenderSpeed(canvas, rcgfx);
     mutexTaskData.Unlock();
     break;
   default:
     // should never get here!
     break;
   }
-  SelectObject(hDC, hfOld);
+  SelectObject(canvas, hfOld);
 
 }
 
@@ -2053,9 +2049,9 @@ void dlgAnalysisShowModal(void){
   if (!wf) return;
 
 #ifndef GNAV
-  penThinSignal = CreatePen(PS_SOLID, 2 , RGB(50,243,45));
+  penThinSignal.set(2, Color(50, 243, 45));
 #else
-  penThinSignal = CreatePen(PS_SOLID, 1 , RGB(50,243,45));
+  penThinSignal.set(1, Color(50, 243, 45));
 #endif
 
   wf->SetKeyDownNotify(FormKeyDown);
@@ -2074,7 +2070,7 @@ void dlgAnalysisShowModal(void){
 
   wf = NULL;
 
-  DeleteObject(penThinSignal);
+  penThinSignal.reset();
 
   //  MapWindow::RequestFastRefresh();
   ClearAirspaceWarnings(false); // airspace warning gets refreshed

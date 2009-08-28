@@ -61,102 +61,101 @@ const COLORRAMP snail_colors[] = {
 
 
 // airspace brushes/colours
-COLORREF ScreenGraphics::GetAirspaceColour(const int i) {
+const Color ScreenGraphics::GetAirspaceColour(const int i) {
   return Colours[i];
 }
-HBRUSH ScreenGraphics::GetAirspaceBrush(const int i) {
+const Brush &ScreenGraphics::GetAirspaceBrush(const int i) {
   return hAirspaceBrushes[i];
 }
-COLORREF ScreenGraphics::GetAirspaceColourByClass(const int i) {
+const Color ScreenGraphics::GetAirspaceColourByClass(const int i) {
   return Colours[iAirspaceColour[i]];
 }
-HBRUSH ScreenGraphics::GetAirspaceBrushByClass(const int i) {
+const Brush &ScreenGraphics::GetAirspaceBrushByClass(const int i) {
   return hAirspaceBrushes[iAirspaceBrush[i]];
 }
 
-const COLORREF ScreenGraphics::ColorSelected = RGB(0xC0,0xC0,0xC0);
-const COLORREF ScreenGraphics::ColorUnselected = RGB(0xFF,0xFF,0xFF);
-const COLORREF ScreenGraphics::ColorWarning = RGB(0xFF,0x00,0x00);
-const COLORREF ScreenGraphics::ColorOK = RGB(0x00,0x00,0xFF);
-const COLORREF ScreenGraphics::ColorButton = RGB(0xA0,0xE0,0xA0);
-const COLORREF ScreenGraphics::ColorBlack = RGB(0x00,0x00,0x00);
-const COLORREF ScreenGraphics::ColorMidGrey = RGB(0x80,0x80,0x80);
+const Color ScreenGraphics::ColorSelected = Color(0xC0,0xC0,0xC0);
+const Color ScreenGraphics::ColorUnselected = Color(0xFF,0xFF,0xFF);
+const Color ScreenGraphics::ColorWarning = Color(0xFF,0x00,0x00);
+const Color ScreenGraphics::ColorOK = Color(0x00,0x00,0xFF);
+const Color ScreenGraphics::ColorButton = Color(0xA0,0xE0,0xA0);
+const Color ScreenGraphics::ColorBlack = Color(0x00,0x00,0x00);
+const Color ScreenGraphics::ColorMidGrey = Color(0x80,0x80,0x80);
 
-const COLORREF ScreenGraphics::redColor = RGB(0xff,0x00,0x00);
-const COLORREF ScreenGraphics::blueColor = RGB(0x00,0x00,0xff);
-const COLORREF ScreenGraphics::inv_redColor = RGB(0xff,0x70,0x70);
-const COLORREF ScreenGraphics::inv_blueColor = RGB(0x90,0x90,0xff);
-const COLORREF ScreenGraphics::yellowColor = RGB(0xff,0xff,0x00);//VENTA2
-const COLORREF ScreenGraphics::greenColor = RGB(0x00,0xff,0x00);//VENTA2
-const COLORREF ScreenGraphics::magentaColor = RGB(0xff,0x00,0xff);//VENTA2
-const COLORREF ScreenGraphics::inv_yellowColor = RGB(0xff,0xff,0x00); //VENTA2
-const COLORREF ScreenGraphics::inv_greenColor = RGB(0x00,0xff,0x00); //VENTA2
-const COLORREF ScreenGraphics::inv_magentaColor = RGB(0xff,0x00,0xff); //VENTA2
-const COLORREF ScreenGraphics::TaskColor = RGB(0,120,0); // was 255
-const COLORREF ScreenGraphics::BackgroundColor = RGB(0xFF,0xFF,0xFF);
-const COLORREF ScreenGraphics::Colours[] =
+const Color ScreenGraphics::redColor = Color(0xff,0x00,0x00);
+const Color ScreenGraphics::blueColor = Color(0x00,0x00,0xff);
+const Color ScreenGraphics::inv_redColor = Color(0xff,0x70,0x70);
+const Color ScreenGraphics::inv_blueColor = Color(0x90,0x90,0xff);
+const Color ScreenGraphics::yellowColor = Color(0xff,0xff,0x00);//VENTA2
+const Color ScreenGraphics::greenColor = Color(0x00,0xff,0x00);//VENTA2
+const Color ScreenGraphics::magentaColor = Color(0xff,0x00,0xff);//VENTA2
+const Color ScreenGraphics::inv_yellowColor = Color(0xff,0xff,0x00); //VENTA2
+const Color ScreenGraphics::inv_greenColor = Color(0x00,0xff,0x00); //VENTA2
+const Color ScreenGraphics::inv_magentaColor = Color(0xff,0x00,0xff); //VENTA2
+const Color ScreenGraphics::TaskColor = Color(0,120,0); // was 255
+const Color ScreenGraphics::BackgroundColor = Color(0xFF,0xFF,0xFF);
+const Color ScreenGraphics::Colours[] =
 {
-  RGB(0xFF,0x00,0x00),
-  RGB(0x00,0xFF,0x00),
-  RGB(0x00,0x00,0xFF),
-  RGB(0xFF,0xFF,0x00),
-  RGB(0xFF,0x00,0xFF),
-  RGB(0x00,0xFF,0xFF),
-  RGB(0x7F,0x00,0x00),
-  RGB(0x00,0x7F,0x00),
-  RGB(0x00,0x00,0x7F),
-  RGB(0x7F,0x7F,0x00),
-  RGB(0x7F,0x00,0x7F),
-  RGB(0x00,0x7F,0x7F),
-  RGB(0xFF,0xFF,0xFF),
-  RGB(0xC0,0xC0,0xC0),
-  RGB(0x7F,0x7F,0x7F),
-  RGB(0x00,0x00,0x00),
+  Color(0xFF,0x00,0x00),
+  Color(0x00,0xFF,0x00),
+  Color(0x00,0x00,0xFF),
+  Color(0xFF,0xFF,0x00),
+  Color(0xFF,0x00,0xFF),
+  Color(0x00,0xFF,0xFF),
+  Color(0x7F,0x00,0x00),
+  Color(0x00,0x7F,0x00),
+  Color(0x00,0x00,0x7F),
+  Color(0x7F,0x7F,0x00),
+  Color(0x7F,0x00,0x7F),
+  Color(0x00,0x7F,0x7F),
+  Color(0xFF,0xFF,0xFF),
+  Color(0xC0,0xC0,0xC0),
+  Color(0x7F,0x7F,0x7F),
+  Color(0x00,0x00,0x00),
 };
 
 void ScreenGraphics::Initialise(void) {
   int i;
 
-  redBrush = CreateSolidBrush(redColor);
-  yellowBrush = CreateSolidBrush(yellowColor);
-  greenBrush = CreateSolidBrush(greenColor);
+  redBrush.set(redColor);
+  yellowBrush.set(yellowColor);
+  greenBrush.set(greenColor);
 
-  hBackgroundBrush = CreateSolidBrush(BackgroundColor);
+  hBackgroundBrush.set(BackgroundColor);
 
-  hFLARMTraffic=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_FLARMTRAFFIC));
-  hTerrainWarning=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_TERRAINWARNING));
-  hTurnPoint=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_TURNPOINT));
-  hSmall=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_SMALL));
-  hAutoMacCready=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_AUTOMCREADY));
-  hGPSStatus1=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_GPSSTATUS1));
-  hGPSStatus2=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_GPSSTATUS2));
-  hLogger=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_LOGGER));
-  hLoggerOff=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_LOGGEROFF));
-  hBmpTeammatePosition = LoadBitmap(hInst, MAKEINTRESOURCE(IDB_TEAMMATE_POS));
+  hFLARMTraffic.load(IDB_FLARMTRAFFIC);
+  hTerrainWarning.load(IDB_TERRAINWARNING);
+  hTurnPoint.load(IDB_TURNPOINT);
+  hSmall.load(IDB_SMALL);
+  hAutoMacCready.load(IDB_AUTOMCREADY);
+  hGPSStatus1.load(IDB_GPSSTATUS1);
+  hGPSStatus2.load(IDB_GPSSTATUS2);
+  hLogger.load(IDB_LOGGER);
+  hLoggerOff.load(IDB_LOGGEROFF);
+  hBmpTeammatePosition.load(IDB_TEAMMATE_POS);
 
-  hCruise=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_CRUISE));
-  hClimb=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_CLIMB));
-  hFinalGlide=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_FINALGLIDE));
-  hAbort=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_ABORT));
+  hCruise.load(IDB_CRUISE);
+  hClimb.load(IDB_CLIMB);
+  hFinalGlide.load(IDB_FINALGLIDE);
+  hAbort.load(IDB_ABORT);
 
   // airspace brushes and colours
 
-  hAirspaceBitmap[0]=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_AIRSPACE0));
-  hAirspaceBitmap[1]=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_AIRSPACE1));
-  hAirspaceBitmap[2]=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_AIRSPACE2));
-  hAirspaceBitmap[3]=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_AIRSPACE3));
-  hAirspaceBitmap[4]=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_AIRSPACE4));
-  hAirspaceBitmap[5]=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_AIRSPACE5));
-  hAirspaceBitmap[6]=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_AIRSPACE6));
-  hAirspaceBitmap[7]=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_AIRSPACE7));
+  hAirspaceBitmap[0].load(IDB_AIRSPACE0);
+  hAirspaceBitmap[1].load(IDB_AIRSPACE1);
+  hAirspaceBitmap[2].load(IDB_AIRSPACE2);
+  hAirspaceBitmap[3].load(IDB_AIRSPACE3);
+  hAirspaceBitmap[4].load(IDB_AIRSPACE4);
+  hAirspaceBitmap[5].load(IDB_AIRSPACE5);
+  hAirspaceBitmap[6].load(IDB_AIRSPACE6);
+  hAirspaceBitmap[7].load(IDB_AIRSPACE7);
 
-  hAboveTerrainBitmap = LoadBitmap(hInst, MAKEINTRESOURCE(IDB_ABOVETERRAIN));
+  hAboveTerrainBitmap.load(IDB_ABOVETERRAIN);
 
   for (i=0; i<NUMAIRSPACEBRUSHES; i++) {
-    hAirspaceBrushes[i] =
-      CreatePatternBrush((HBITMAP)hAirspaceBitmap[i]);
+    hAirspaceBrushes[i].set(hAirspaceBitmap[i]);
   }
-  hAboveTerrainBrush = CreatePatternBrush((HBITMAP)hAboveTerrainBitmap);
+  hAboveTerrainBrush.set(hAboveTerrainBitmap);
 
   BYTE Red,Green,Blue;
   int iwidth;
@@ -175,121 +174,104 @@ void ScreenGraphics::Initialise(void) {
 		   *IBLSCALE(SnailWidthScale)/NUMSNAILCOLORS);
     }
 
-    hSnailColours[i] = RGB((BYTE)Red,(BYTE)Green,(BYTE)Blue);
-    hSnailPens[i] = (HPEN)CreatePen(PS_SOLID, iwidth, hSnailColours[i]);
+    hSnailColours[i] = Color((BYTE)Red, (BYTE)Green, (BYTE)Blue);
+    hSnailPens[i].set(iwidth, hSnailColours[i]);
 
   }
 
   /* JMW created all re-used pens here */
 
-  hpCompassBorder = (HPEN)CreatePen(PS_SOLID, IBLSCALE(3),
-				    RGB(0xff,0xff,0xff));
+  hpCompassBorder.set(IBLSCALE(3), Color(0xff,0xff,0xff));
 
   // testing only    Appearance.InverseAircraft = true;
 
   if (Appearance.InverseAircraft) {
-    hpAircraft = (HPEN)CreatePen(PS_SOLID, IBLSCALE(3),
-				 RGB(0x00,0x00,0x00));
-    hpAircraftBorder = (HPEN)CreatePen(PS_SOLID, IBLSCALE(1),
-				       RGB(0xff,0xff,0xff));
+    hpAircraft.set(IBLSCALE(3), Color(0x00,0x00,0x00));
+    hpAircraftBorder.set(IBLSCALE(1), Color(0xff,0xff,0xff));
   } else {
-    hpAircraft = (HPEN)CreatePen(PS_SOLID, IBLSCALE(3),
-				 RGB(0xff,0xff,0xff));
-    hpAircraftBorder = (HPEN)CreatePen(PS_SOLID, IBLSCALE(1),
-				       RGB(0x00,0x00,0x00));
+    hpAircraft.set(IBLSCALE(3), Color(0xff,0xff,0xff));
+    hpAircraftBorder.set(IBLSCALE(1), Color(0x00,0x00,0x00));
   }
 
 #if (MONOCHROME_SCREEN > 0)
-  hpWind = (HPEN)CreatePen(PS_SOLID, IBLSCALE(2), RGB(0,0,0));
+  hpWind.set(IBLSCALE(2), Color(0,0,0));
 #else
-  hpWind = (HPEN)CreatePen(PS_SOLID, IBLSCALE(2), RGB(255,0,0));
+  hpWind.set(IBLSCALE(2), Color(255,0,0));
 #endif
 
-  hpWindThick = (HPEN)CreatePen(PS_SOLID, IBLSCALE(4),
-				RGB(255,220,220));
+  hpWindThick.set(IBLSCALE(4), Color(255,220,220));
 
-  hpBearing = (HPEN)CreatePen(PS_SOLID, IBLSCALE(2),
-			      RGB(0,0,0));
-  hpBestCruiseTrack = (HPEN)CreatePen(PS_SOLID, IBLSCALE(1),
-				      RGB(0,0,255));
+  hpBearing.set(IBLSCALE(2), Color(0,0,0));
+  hpBestCruiseTrack.set(IBLSCALE(1), Color(0,0,255));
 #if (MONOCHROME_SCREEN > 0)
-  hpCompass = (HPEN)CreatePen(PS_SOLID, IBLSCALE(1), RGB(0x00,0x00,0x00));
-  //hpCompass = (HPEN)CreatePen(PS_SOLID, 1, RGB(0xff,0xff,0xff));
+  hpCompass.set(IBLSCALE(1), Color(0x00,0x00,0x00));
+  //hpCompass.set(1, Color(0xff,0xff,0xff));
 #else
-  hpCompass = (HPEN)CreatePen(PS_SOLID, IBLSCALE(1), RGB(0xcf,0xcf,0xFF));
+  hpCompass.set(IBLSCALE(1), Color(0xcf,0xcf,0xFF));
 #endif
-  hpThermalBand = (HPEN)CreatePen(PS_SOLID, IBLSCALE(2), RGB(0x40,0x40,0xFF));
-  hpThermalBandGlider = (HPEN)CreatePen(PS_SOLID, IBLSCALE(2), RGB(0x00,0x00,0x30));
+  hpThermalBand.set(IBLSCALE(2), Color(0x40,0x40,0xFF));
+  hpThermalBandGlider.set(IBLSCALE(2), Color(0x00,0x00,0x30));
 
-  hpFinalGlideBelow = (HPEN)CreatePen(PS_SOLID, IBLSCALE(1), RGB(0xFF,0xA0,0xA0));
-  hpFinalGlideBelowLandable = (HPEN)CreatePen(PS_SOLID, IBLSCALE(1), RGB(255,196,0));
+  hpFinalGlideBelow.set(IBLSCALE(1), Color(0xFF,0xA0,0xA0));
+  hpFinalGlideBelowLandable.set(IBLSCALE(1), Color(255,196,0));
 
   // TODO enhancement: support red/green Color blind
-  hpFinalGlideAbove = (HPEN)CreatePen(PS_SOLID, IBLSCALE(1), RGB(0xA0,0xFF,0xA0));
+  hpFinalGlideAbove.set(IBLSCALE(1), Color(0xA0,0xFF,0xA0));
 
-  hpSpeedSlow=(HPEN)CreatePen(PS_SOLID, IBLSCALE(1),
-			      RGB(0xFF,0x00,0x00));
-  hpSpeedFast=(HPEN)CreatePen(PS_SOLID, IBLSCALE(1),
-			      RGB(0x00,0xFF,0x00));
+  hpSpeedSlow.set(IBLSCALE(1), Color(0xFF,0x00,0x00));
+  hpSpeedFast.set(IBLSCALE(1), Color(0x00,0xFF,0x00));
 
-  hpStartFinishThick=(HPEN)CreatePen(PS_SOLID, IBLSCALE(5),
-				     TaskColor);
+  hpStartFinishThick.set(IBLSCALE(5), TaskColor);
 
-  hpStartFinishThin=(HPEN)CreatePen(PS_SOLID, IBLSCALE(1),
-				    RGB(255,0,0));
+  hpStartFinishThin.set(IBLSCALE(1), Color(255,0,0));
 
-  hpMapScale = (HPEN)CreatePen(PS_SOLID, IBLSCALE(1),
-			       RGB(0,0,0));
-  hpTerrainLine = (HPEN)CreatePen(PS_DASH, (1),
-				  RGB(0x30,0x30,0x30));
-  hpTerrainLineBg = (HPEN)CreatePen(PS_SOLID, (1),
-				    RGB(0xFF,0xFF,0xFF));
+  hpMapScale.set(IBLSCALE(1), Color(0,0,0));
+  hpTerrainLine.set(Pen::DASH, 1, Color(0x30,0x30,0x30));
+  hpTerrainLineBg.set(1, Color(0xFF,0xFF,0xFF));
   // VENTA3
-  hpVisualGlideLightBlack = (HPEN)CreatePen(PS_DASH, (1), RGB(0x0,0x0,0x0));
-  hpVisualGlideHeavyBlack = (HPEN)CreatePen(PS_DASH, (2), RGB(0x0,0x0,0x0));
-  hpVisualGlideLightRed = (HPEN)CreatePen(PS_DASH, (1), RGB(0xff,0x0,0x0));
-  hpVisualGlideHeavyRed = (HPEN)CreatePen(PS_DASH, (2), RGB(0xff,0x0,0x0));
+  hpVisualGlideLightBlack.set(Pen::DASH, 1, Color(0x0,0x0,0x0));
+  hpVisualGlideHeavyBlack.set(Pen::DASH, 2, Color(0x0,0x0,0x0));
+  hpVisualGlideLightRed.set(Pen::DASH, 1, Color(0xff,0x0,0x0));
+  hpVisualGlideHeavyRed.set(Pen::DASH, 2, Color(0xff,0x0,0x0));
 
 #if (MONOCHROME_SCREEN > 0)
-  hbCompass=(HBRUSH)CreateSolidBrush(RGB(0xff,0xff,0xff));
+  hbCompass.set(Color(0xff,0xff,0xff));
 #else
-  hbCompass=(HBRUSH)CreateSolidBrush(RGB(0x40,0x40,0xFF));
+  hbCompass.set(Color(0x40,0x40,0xFF));
 #endif
-  hbThermalBand=(HBRUSH)CreateSolidBrush(RGB(0x80,0x80,0xFF));
-  hbBestCruiseTrack=(HBRUSH)CreateSolidBrush(RGB(0x0,0x0,0xFF));
-  hbFinalGlideBelow=(HBRUSH)CreateSolidBrush(RGB(0xFF,0x00,0x00));
-  hbFinalGlideBelowLandable=(HBRUSH)CreateSolidBrush(RGB(0xFF,180,0x00));
-  hbFinalGlideAbove=(HBRUSH)CreateSolidBrush(RGB(0x00,0xFF,0x00));
+  hbThermalBand.set(Color(0x80,0x80,0xFF));
+  hbBestCruiseTrack.set(Color(0x0,0x0,0xFF));
+  hbFinalGlideBelow.set(Color(0xFF,0x00,0x00));
+  hbFinalGlideBelowLandable.set(Color(0xFF,180,0x00));
+  hbFinalGlideAbove.set(Color(0x00,0xFF,0x00));
 
 #if (MONOCHROME_SCREEN > 0)
-  hbWind=(HBRUSH)CreateSolidBrush(RGB(0x80,0x80,0x80));
+  hbWind.set(Color(0x80,0x80,0x80));
 #else
-  hbWind=(HBRUSH)CreateSolidBrush(RGB(0x80,0x80,0x80));
+  hbWind.set(Color(0x80,0x80,0x80));
 #endif
 
-  hBmpMapScale = LoadBitmap(hInst, MAKEINTRESOURCE(IDB_MAPSCALE_A));
+  hBmpMapScale.load(IDB_MAPSCALE_A);
 
-  hBrushFlyingModeAbort = (HBRUSH)CreateSolidBrush(RGB(0xff,0x00,0x00));
+  hBrushFlyingModeAbort.set(Color(0xff,0x00,0x00));
 
   if (Appearance.IndLandable == wpLandableDefault){
-    hBmpAirportReachable = LoadBitmap(hInst, MAKEINTRESOURCE(IDB_REACHABLE));
-    hBmpAirportUnReachable = LoadBitmap(hInst, MAKEINTRESOURCE(IDB_LANDABLE));
-    hBmpFieldReachable = LoadBitmap(hInst, MAKEINTRESOURCE(IDB_REACHABLE));
-    hBmpFieldUnReachable = LoadBitmap(hInst, MAKEINTRESOURCE(IDB_LANDABLE));
-  }else
-    if (Appearance.IndLandable == wpLandableAltA){
-      hBmpAirportReachable = LoadBitmap(hInst, MAKEINTRESOURCE(IDB_AIRPORT_REACHABLE));
-      hBmpAirportUnReachable = LoadBitmap(hInst, MAKEINTRESOURCE(IDB_AIRPORT_UNREACHABLE));
-      hBmpFieldReachable = LoadBitmap(hInst, MAKEINTRESOURCE(IDB_OUTFILED_REACHABLE));
-      hBmpFieldUnReachable = LoadBitmap(hInst, MAKEINTRESOURCE(IDB_OUTFILED_UNREACHABLE));
-    }
+    hBmpAirportReachable.load(IDB_REACHABLE);
+    hBmpAirportUnReachable.load(IDB_LANDABLE);
+    hBmpFieldReachable.load(IDB_REACHABLE);
+    hBmpFieldUnReachable.load(IDB_LANDABLE);
+  } else if (Appearance.IndLandable == wpLandableAltA){
+    hBmpAirportReachable.load(IDB_AIRPORT_REACHABLE);
+    hBmpAirportUnReachable.load(IDB_AIRPORT_UNREACHABLE);
+    hBmpFieldReachable.load(IDB_OUTFILED_REACHABLE);
+    hBmpFieldUnReachable.load(IDB_OUTFILED_UNREACHABLE);
+  }
 
-  hBmpThermalSource = LoadBitmap(hInst, MAKEINTRESOURCE(IDB_THERMALSOURCE));
-  hBmpTarget = LoadBitmap(hInst, MAKEINTRESOURCE(IDB_TARGET));
+  hBmpThermalSource.load(IDB_THERMALSOURCE);
+  hBmpTarget.load(IDB_TARGET);
 
   for (int i=0; i<AIRSPACECLASSCOUNT; i++) {
-    hAirspacePens[i] =
-      CreatePen(PS_SOLID, IBLSCALE(2), GetAirspaceColourByClass(i));
+    hAirspacePens[i].set(IBLSCALE(2), GetAirspaceColourByClass(i));
   }
 
 }
@@ -298,123 +280,102 @@ void ScreenGraphics::Destroy() {
 
   int i;
 
-  DeleteObject(hTurnPoint);
-  DeleteObject(hSmall);
-  DeleteObject(hCruise);
-  DeleteObject(hClimb);
-  DeleteObject(hFinalGlide);
-  DeleteObject(hAutoMacCready);
-  DeleteObject(hFLARMTraffic);
-  DeleteObject(hTerrainWarning);
-  DeleteObject(hGPSStatus1);
-  DeleteObject(hGPSStatus2);
-  DeleteObject(hAbort);
-  DeleteObject(hLogger);
-  DeleteObject(hLoggerOff);
+  hTurnPoint.reset();
+  hSmall.reset();
+  hCruise.reset();
+  hClimb.reset();
+  hFinalGlide.reset();
+  hAutoMacCready.reset();
+  hFLARMTraffic.reset();
+  hTerrainWarning.reset();
+  hGPSStatus1.reset();
+  hGPSStatus2.reset();
+  hAbort.reset();
+  hLogger.reset();
+  hLoggerOff.reset();
 
-  DeleteObject((HPEN)hpAircraft);
-  DeleteObject((HPEN)hpAircraftBorder);
-  DeleteObject((HPEN)hpWind);
-  DeleteObject((HPEN)hpWindThick);
-  DeleteObject((HPEN)hpBearing);
-  DeleteObject((HPEN)hpBestCruiseTrack);
-  DeleteObject((HPEN)hpCompass);
-  DeleteObject((HPEN)hpThermalBand);
-  DeleteObject((HPEN)hpThermalBandGlider);
-  DeleteObject((HPEN)hpFinalGlideAbove);
-  DeleteObject((HPEN)hpFinalGlideBelow);
-  DeleteObject((HPEN)hpFinalGlideBelowLandable);
-  DeleteObject((HPEN)hpMapScale);
-  DeleteObject((HPEN)hpTerrainLine);
-  DeleteObject((HPEN)hpTerrainLineBg);
-  DeleteObject((HPEN)hpSpeedFast);
-  DeleteObject((HPEN)hpSpeedSlow);
-  DeleteObject((HPEN)hpStartFinishThick);
-  DeleteObject((HPEN)hpStartFinishThin);
+  hpAircraft.reset();
+  hpAircraftBorder.reset();
+  hpWind.reset();
+  hpWindThick.reset();
+  hpBearing.reset();
+  hpBestCruiseTrack.reset();
+  hpCompass.reset();
+  hpThermalBand.reset();
+  hpThermalBandGlider.reset();
+  hpFinalGlideAbove.reset();
+  hpFinalGlideBelow.reset();
+  hpFinalGlideBelowLandable.reset();
+  hpMapScale.reset();
+  hpTerrainLine.reset();
+  hpTerrainLineBg.reset();
+  hpSpeedFast.reset();
+  hpSpeedSlow.reset();
+  hpStartFinishThick.reset();
+  hpStartFinishThin.reset();
 
-  DeleteObject((HPEN)hpVisualGlideLightBlack); // VENTA3
-  DeleteObject((HPEN)hpVisualGlideLightRed); // VENTA3
-  DeleteObject((HPEN)hpVisualGlideHeavyRed); // VENTA3
-  DeleteObject((HPEN)hpVisualGlideHeavyBlack); // VENTA3
+  hpVisualGlideLightBlack.reset(); // VENTA3
+  hpVisualGlideLightRed.reset(); // VENTA3
+  hpVisualGlideHeavyRed.reset(); // VENTA3
+  hpVisualGlideHeavyBlack.reset(); // VENTA3
 
-  DeleteObject((HBRUSH)hbCompass);
-  DeleteObject((HBRUSH)hbThermalBand);
-  DeleteObject((HBRUSH)hbBestCruiseTrack);
-  DeleteObject((HBRUSH)hbFinalGlideBelow);
-  DeleteObject((HBRUSH)hbFinalGlideBelowLandable);
-  DeleteObject((HBRUSH)hbFinalGlideAbove);
-  DeleteObject((HBRUSH)hbWind);
+  hbCompass.reset();
+  hbThermalBand.reset();
+  hbBestCruiseTrack.reset();
+  hbFinalGlideBelow.reset();
+  hbFinalGlideBelowLandable.reset();
+  hbFinalGlideAbove.reset();
+  hbWind.reset();
 
-  DeleteObject(hBmpMapScale);
-  DeleteObject(hBmpCompassBg);
-  DeleteObject(hBackgroundBrush);
-  DeleteObject(hBmpClimbeAbort);
+  hBmpMapScale.reset();
+  hBmpCompassBg.reset();
+  hBackgroundBrush.reset();
+  hBmpClimbeAbort.reset();
 
-  DeleteObject((HPEN)hpCompassBorder);
-  DeleteObject((HBRUSH)hBrushFlyingModeAbort);
+  hpCompassBorder.reset();
+  hBrushFlyingModeAbort.reset();
 
-  DeleteObject(hBmpAirportReachable);
-  DeleteObject(hBmpAirportUnReachable);
-  DeleteObject(hBmpFieldReachable);
-  DeleteObject(hBmpFieldUnReachable);
-  DeleteObject(hBmpThermalSource);
-  DeleteObject(hBmpTarget);
-  DeleteObject(hBmpTeammatePosition);
+  hBmpAirportReachable.reset();
+  hBmpAirportUnReachable.reset();
+  hBmpFieldReachable.reset();
+  hBmpFieldUnReachable.reset();
+  hBmpThermalSource.reset();
+  hBmpTarget.reset();
+  hBmpTeammatePosition.reset();
 
   for(i=0;i<NUMAIRSPACEBRUSHES;i++)
     {
-      DeleteObject(hAirspaceBrushes[i]);
-      DeleteObject(hAirspaceBitmap[i]);
+      hAirspaceBrushes[i].reset();
+      hAirspaceBitmap[i].reset();
     }
 
-  DeleteObject(hAboveTerrainBitmap);
-  DeleteObject(hAboveTerrainBrush);
+  hAboveTerrainBitmap.reset();
+  hAboveTerrainBrush.reset();
 
   for (i=0; i<AIRSPACECLASSCOUNT; i++) {
-    DeleteObject(hAirspacePens[i]);
+    hAirspacePens[i].reset();
   }
 
   for (i=0; i<NUMSNAILCOLORS; i++) {
-    DeleteObject(hSnailPens[i]);
+    hSnailPens[i].reset();
   }
 
-  DeleteObject(greenBrush);
-  DeleteObject(yellowBrush);
-  DeleteObject(redBrush);
+  greenBrush.reset();
+  yellowBrush.reset();
+  redBrush.reset();
 }
 
 
-void DrawBitmapX(HDC hdc, int x, int y,
-		 int sizex, int sizey,
-		 HDC source,
-		 int offsetx, int offsety,
-		 DWORD mode) {
-
-  if (InfoBoxLayout::scale>1) {
-    StretchBlt(hdc, x, y,
-               IBLSCALE(sizex),
-               IBLSCALE(sizey),
-               source,
-               offsetx, offsety, sizex, sizey,
-               mode);
-  } else {
-    BitBlt(hdc, x, y, sizex, sizey,
-           source, offsetx, offsety, mode);
-  }
-}
-
-
-void DrawDashLine(HDC hdc, const int width,
+void ClipDrawLine(Canvas &canvas, Pen::style PenStyle, const int width,
 		  const POINT ptStart, const POINT ptEnd,
-		  const COLORREF cr,
-		  const RECT rc)
+                  const Color cr, const RECT rc)
 {
   int i;
   HPEN hpDash,hpOld;
   POINT pt[2];
   //Create a dot pen
-  hpDash = (HPEN)CreatePen(PS_DASH, 1, cr);
-  hpOld = (HPEN)SelectObject(hdc, hpDash);
+  Pen pen(PenStyle, 1, cr);
+  canvas.select(pen);
 
   pt[0].x = ptStart.x;
   pt[0].y = ptStart.y;
@@ -428,7 +389,7 @@ void DrawDashLine(HDC hdc, const int width,
     for (i = 0; i < width; i++){
       pt[0].x += 1;
       pt[1].x += 1;
-      ClipPolyline(hdc, pt, 2, rc);
+      canvas.clipped_polyline(pt, 2, rc);
     }
   } else {
     pt[0].y -= width / 2;
@@ -436,38 +397,13 @@ void DrawDashLine(HDC hdc, const int width,
     for (i = 0; i < width; i++){
       pt[0].y += 1;
       pt[1].y += 1;
-      ClipPolyline(hdc, pt, 2, rc);
+      canvas.clipped_polyline(pt, 2, rc);
     }
   }
-
-  SelectObject(hdc, hpOld);
-  DeleteObject((HPEN)hpDash);
 }
 
 
-void ClipDrawLine(HDC hdc, const int PenStyle, const int width,
-		  const POINT ptStart, const POINT ptEnd,
-		  const COLORREF cr, const RECT rc) {
-
-  HPEN hpDash,hpOld;
-  POINT pt[2];
-  //Create a dot pen
-  hpDash = (HPEN)CreatePen(PenStyle, width, cr);
-  hpOld = (HPEN)SelectObject(hdc, hpDash);
-
-  pt[0].x = ptStart.x;
-  pt[0].y = ptStart.y;
-  pt[1].x = ptEnd.x;
-  pt[1].y = ptEnd.y;
-
-  ClipPolyline(hdc, pt, 2, rc);
-
-  SelectObject(hdc, hpOld);
-  DeleteObject((HPEN)hpDash);
-}
-
-
-void DrawGreatCircle(HDC hdc,
+void DrawGreatCircle(Canvas &canvas,
 		     double startLon, double startLat,
 		     double targetLon, double targetLat,
 		     const RECT rc) {
@@ -494,7 +430,7 @@ void DrawGreatCircle(HDC hdc,
 
   double d_distance = max(5000.0,distanceTotal/10);
 
-  HPEN hpOld = (HPEN)SelectObject(hdc, hpBearing);
+  canvas.select(MapGfx.hpBearing);
 
   POINT StartP;
   POINT EndP;
@@ -506,7 +442,7 @@ void DrawGreatCircle(HDC hdc,
                 EndP);
 
   if (d_distance>distanceTotal) {
-    ClipLine(hdc, StartP, EndP, rc);
+    canvas.clipped_line(StartP, EndP, rc);
   } else {
 
     for (int i=0; i<= 10; i++) {
@@ -531,7 +467,7 @@ void DrawGreatCircle(HDC hdc,
                     tlat1,
                     EndP);
 
-      ClipLine(hdc, StartP, EndP, rc);
+      canvas.clipped_line(StartP, EndP, rc);
 
       StartP.x = EndP.x;
       StartP.y = EndP.y;
@@ -544,7 +480,7 @@ void DrawGreatCircle(HDC hdc,
 #else
   // Simple and this should work for PNA with display bug
 
-  HPEN hpOld = (HPEN)SelectObject(hdc, MapGfx.hpBearing);
+  canvas.select(MapGfx.hpBearing);
   POINT pt[2];
   MapWindowProjection::LatLon2Screen(startLon,
                 startLat,
@@ -552,10 +488,9 @@ void DrawGreatCircle(HDC hdc,
   MapWindowProjection::LatLon2Screen(targetLon,
                 targetLat,
                 pt[1]);
-  ClipPolygon(hdc, pt, 2, rc, false);
+  canvas.clipped_polygon(pt, 2, rc, false);
 
 #endif
-  SelectObject(hdc, hpOld);
 }
 
 
@@ -652,12 +587,10 @@ bool TextInBoxMoveInView(POINT *offset, RECT *brect, const RECT &MapRect){
 
 
 // returns true if really wrote something
-bool TextInBox(HDC hDC, const TCHAR* Value, int x, int y,
+bool TextInBox(Canvas &canvas, const TCHAR* Value, int x, int y,
 	       int size, TextInBoxMode_t Mode, bool noOverlap) {
 
-  SIZE tsize;
   RECT brect;
-  HFONT oldFont=0;
   POINT org;
   bool drawn=false;
 
@@ -677,8 +610,7 @@ bool TextInBox(HDC hDC, const TCHAR* Value, int x, int y,
     size = _tcslen(Value);
   }
 
-  HBRUSH hbOld;
-  hbOld = (HBRUSH)SelectObject(hDC, GetStockObject(WHITE_BRUSH));
+  canvas.white_brush();
 
   if (Mode.AsFlag.Reachable){
     if (Appearance.IndLandable == wpLandableDefault){
@@ -691,14 +623,10 @@ bool TextInBox(HDC hDC, const TCHAR* Value, int x, int y,
 
   // landable waypoint label inside white box
   if (!Mode.AsFlag.NoSetFont) {  // VENTA5 predefined font from calling function
-    if (Mode.AsFlag.Border){
-      oldFont = (HFONT)SelectObject(hDC, MapWindowBoldFont);
-    } else {
-      oldFont = (HFONT)SelectObject(hDC, MapWindowFont);
-    }
+    canvas.select(Mode.AsFlag.Border ? MapWindowBoldFont : MapWindowFont);
   }
 
-  GetTextExtentPoint(hDC, Value, size, &tsize);
+  SIZE tsize = canvas.text_size(Value);
 
   if (Mode.AsFlag.AlligneRight){
     x -= tsize.cx;
@@ -732,18 +660,17 @@ bool TextInBox(HDC hDC, const TCHAR* Value, int x, int y,
     if (!noOverlap || notoverlapping) {
       HPEN oldPen;
       if (Mode.AsFlag.Border) {
-        oldPen = (HPEN)SelectObject(hDC, MapGfx.hpMapScale);
+        canvas.select(MapGfx.hpMapScale);
       } else {
-        oldPen = (HPEN)SelectObject(hDC, GetStockObject(WHITE_PEN));
+        canvas.white_pen();
       }
-      RoundRect(hDC, brect.left, brect.top, brect.right, brect.bottom,
-                IBLSCALE(8), IBLSCALE(8));
-      SelectObject(hDC, oldPen);
+      canvas.round_rectangle(brect.left, brect.top, brect.right, brect.bottom,
+                             IBLSCALE(8), IBLSCALE(8));
 #if (WINDOWSPC>0)
-      SetBkMode(hDC,TRANSPARENT);
-      ExtTextOut(hDC, x, y, 0, NULL, Value, size, NULL);
+      canvas.background_transparent();
+      canvas.text(x, y, Value);
 #else
-      ExtTextOut(hDC, x, y, ETO_OPAQUE, NULL, Value, size, NULL);
+      canvas.text_opaque(x, y, NULL, Value);
 #endif
       drawn=true;
     }
@@ -769,9 +696,8 @@ bool TextInBox(HDC hDC, const TCHAR* Value, int x, int y,
     notoverlapping = checkLabelBlock(brect);
 
     if (!noOverlap || notoverlapping) {
-      COLORREF oldColor = SetBkColor(hDC, RGB(0xff, 0xff, 0xff));
-      ExtTextOut(hDC, x, y, ETO_OPAQUE, &brect, Value, size, NULL);
-      SetBkColor(hDC, oldColor);
+      canvas.set_background_color(Color(0xff, 0xff, 0xff));
+      canvas.text_opaque(x, y, &brect, Value);
       drawn=true;
     }
 
@@ -785,30 +711,30 @@ bool TextInBox(HDC hDC, const TCHAR* Value, int x, int y,
     notoverlapping = checkLabelBlock(brect);
 
     if (!noOverlap || notoverlapping) {
-	SetTextColor(hDC,RGB(0xff,0xff,0xff));
+      canvas.set_text_color(Color(0xff,0xff,0xff));
 
 #if (WINDOWSPC>0)
-      SetBkMode(hDC,TRANSPARENT);
-      ExtTextOut(hDC, x+1, y, 0, NULL, Value, size, NULL);
-      ExtTextOut(hDC, x+2, y, 0, NULL, Value, size, NULL);
-      ExtTextOut(hDC, x-1, y, 0, NULL, Value, size, NULL);
-      ExtTextOut(hDC, x-2, y, 0, NULL, Value, size, NULL);
-      ExtTextOut(hDC, x, y+1, 0, NULL, Value, size, NULL);
-      ExtTextOut(hDC, x, y-1, 0, NULL, Value, size, NULL);
-	SetTextColor(hDC,RGB(0x00,0x00,0x00));
+      canvas.background_transparent();
+      canvas.text(x+1, y, Value);
+      canvas.text(x+2, y, Value);
+      canvas.text(x-1, y, Value);
+      canvas.text(x-2, y, Value);
+      canvas.text(x, y+1, Value);
+      canvas.text(x, y-1, Value);
+      canvas.set_text_color(Color(0x00,0x00,0x00));
 
-      ExtTextOut(hDC, x, y, 0, NULL, Value, size, NULL);
+      canvas.text(x, y, Value);
 
 #else
-      ExtTextOut(hDC, x+2, y, ETO_OPAQUE, NULL, Value, size, NULL);
-      ExtTextOut(hDC, x+1, y, ETO_OPAQUE, NULL, Value, size, NULL);
-      ExtTextOut(hDC, x-1, y, ETO_OPAQUE, NULL, Value, size, NULL);
-      ExtTextOut(hDC, x-2, y, ETO_OPAQUE, NULL, Value, size, NULL);
-      ExtTextOut(hDC, x, y+1, ETO_OPAQUE, NULL, Value, size, NULL);
-      ExtTextOut(hDC, x, y-1, ETO_OPAQUE, NULL, Value, size, NULL);
-	SetTextColor(hDC,RGB(0x00,0x00,0x00));
+      canvas.text_opaque(x+2, y, NULL, Value);
+      canvas.text_opaque(x+1, y, NULL, Value);
+      canvas.text_opaque(x-1, y, NULL, Value);
+      canvas.text_opaque(x-2, y, NULL, Value);
+      canvas.text_opaque(x, y+1, NULL, Value);
+      canvas.text_opaque(x, y-1, NULL, Value);
+      canvas.set_text_color(Color(0x00,0x00,0x00));
 
-      ExtTextOut(hDC, x, y, ETO_OPAQUE, NULL, Value, size, NULL);
+      canvas.text_opaque(x, y, NULL, Value);
 #endif
       drawn=true;
     }
@@ -824,17 +750,15 @@ bool TextInBox(HDC hDC, const TCHAR* Value, int x, int y,
 
     if (!noOverlap || notoverlapping) {
 #if (WINDOWSPC>0)
-      SetBkMode(hDC,TRANSPARENT);
-      ExtTextOut(hDC, x, y, 0, NULL, Value, size, NULL);
+      canvas.background_transparent();
+      canvas.text(x, y, Value);
 #else
-      ExtTextOut(hDC, x, y, ETO_OPAQUE, NULL, Value, size, NULL);
+      canvas.text_opaque(x, y, NULL, Value);
 #endif
       drawn=true;
     }
 
   }
-
-  SelectObject(hDC, hbOld);
 
   return drawn;
 

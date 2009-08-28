@@ -41,6 +41,7 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "Dialogs.h"
 #include "Screen/Animation.hpp"
+#include "Screen/MainWindow.hpp"
 #include "Registry.hpp"
 #include "InfoBox.h"
 #include "WindowControls.h"
@@ -52,7 +53,7 @@ Copyright_License {
 #include "Asset.hpp"
 #endif
 
-HWND ButtonLabel::hWndButtonWindow[NUMBUTTONLABELS];
+TextWidget ButtonLabel::hWndButtonWindow[NUMBUTTONLABELS];
 bool ButtonLabel::ButtonVisible[NUMBUTTONLABELS];
 bool ButtonLabel::ButtonDisabled[NUMBUTTONLABELS];
 
@@ -174,65 +175,25 @@ void ButtonLabel::CreateButtonLabels(RECT rc) {
   }
 
   for (i=0; i<NUMBUTTONLABELS; i++) {
-// VENTA3 added THICKFRAME
-#ifdef PNA // VENTA3 FIX  better borders
- if (GlobalModelType == MODELTYPE_PNA_HP31X )
-    hWndButtonWindow[i] =
-      CreateWindowEx( WS_EX_CLIENTEDGE,
-		   TEXT("STATIC"), TEXT("\0"),
-		   WS_CHILD|WS_TABSTOP|WS_THICKFRAME
-		   |SS_CENTER|SS_NOTIFY
-		   |WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_BORDER,
-		   rc.left, rc.top,
-		   buttonWidth, buttonHeight,
-		   hWndMainWindow, NULL, hInst, NULL);
- else
-    hWndButtonWindow[i] =
-      CreateWindow(
-		   TEXT("STATIC"), TEXT("\0"),
-		   /*WS_VISIBLE|*/ WS_CHILD|WS_TABSTOP
-		   |SS_CENTER|SS_NOTIFY
-		   |WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_BORDER,
-		   rc.left, rc.top,
-		   // TODO code: need to have these passed in too as
-		   // some buttons may actually be a different shape.
-		   buttonWidth, buttonHeight,
-		   hWndMainWindow, NULL, hInst, NULL);
-
-#else
-    hWndButtonWindow[i] =
-      CreateWindow(
-		   TEXT("STATIC"), TEXT("\0"),
-		   /*WS_VISIBLE|*/ WS_CHILD|WS_TABSTOP
-		   |SS_CENTER|SS_NOTIFY
-		   |WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_BORDER,
-		   rc.left, rc.top,
-		   // TODO code: need to have these passed in too as
-		   // some buttons may actually be a different shape.
-		   buttonWidth, buttonHeight,
-		   hWndMainWindow, NULL, hInst, NULL);
-#endif
-
     GetButtonPosition(i, rc, &x, &y, &xsize, &ysize);
+    hWndButtonWindow[i].set(hWndMainWindow, x, y, xsize, ysize,
+                            true, true, false, true, true);
+    hWndButtonWindow[i].insert_after(HWND_TOP, true);
 
-    SetWindowPos(hWndButtonWindow[i],HWND_TOP,
-		 x, y,
-		 xsize, ysize, SWP_SHOWWINDOW);
     ButtonVisible[i]= true;
     ButtonDisabled[i]= false;
 
     SetLabelText(i,NULL);
-    SetWindowLong(hWndButtonWindow[i], GWL_USERDATA, 4);
+    hWndButtonWindow[i].set_userdata(4);
   }
 
   //
 }
 
-void ButtonLabel::SetFont(HFONT Font) {
+void ButtonLabel::SetFont(const Font &Font) {
   int i;
   for (i=0; i<NUMBUTTONLABELS; i++) {
-    SendMessage(hWndButtonWindow[i], WM_SETFONT,
-              (WPARAM)Font, MAKELPARAM(TRUE,0));
+    hWndButtonWindow[i].set_font(Font);
   }
 }
 
@@ -240,10 +201,7 @@ void ButtonLabel::SetFont(HFONT Font) {
 void ButtonLabel::Destroy() {
   int i;
   for (i=0; i<NUMBUTTONLABELS; i++) {
-    DestroyWindow(hWndButtonWindow[i]);
-
-    // prevent setting of button details if it's been destroyed
-    hWndButtonWindow[i] = NULL;
+    hWndButtonWindow[i].reset();
     ButtonVisible[i]= false;
     ButtonDisabled[i] = true;
   }
@@ -260,7 +218,7 @@ void ButtonLabel::SetLabelText(int index, const TCHAR *text) {
     return;
 
   if ((text==NULL) || (*text==_T('\0'))||(*text==_T(' '))) {
-    ShowWindow(hWndButtonWindow[index], SW_HIDE);
+    hWndButtonWindow[index].hide();
     ButtonVisible[index]= false;
   } else {
 
@@ -269,15 +227,15 @@ void ButtonLabel::SetLabelText(int index, const TCHAR *text) {
     bool greyed = ExpandMacros(text, s, sizeof(s)/sizeof(s[0]));
 
     if (greyed) {
-      SetWindowLong(hWndButtonWindow[index], GWL_USERDATA, 5);
+      hWndButtonWindow[index].set_userdata(5);
       ButtonDisabled[index]= true;
     } else {
-      SetWindowLong(hWndButtonWindow[index], GWL_USERDATA, 4);
+      hWndButtonWindow[index].set_userdata(4);
       ButtonDisabled[index]= false;
     }
 
     if ((s[0]==_T('\0'))||(s[0]==_T(' '))) {
-      ShowWindow(hWndButtonWindow[index], SW_HIDE);
+      hWndButtonWindow[index].hide();
       ButtonVisible[index]= false;
     } else {
 
@@ -314,7 +272,7 @@ bool ButtonLabel::CheckButtonPress(HWND pressedwindow) {
 
 void ButtonLabel::AnimateButton(int i) {
   RECT mRc, aniRect;
-  GetWindowRect(hWndButtonWindow[i], &mRc);
+  mRc = hWndButtonWindow[i].get_position();
 
   if (ButtonVisible[i]) {
     aniRect.top = (mRc.top*5+mRc.bottom)/6;

@@ -42,6 +42,7 @@ Copyright_License {
 #include "Logger.h"
 #include "Dialogs/dlgTools.h"
 #include "DataField/FileReader.hpp"
+#include "Screen/MainWindow.hpp"
 
 static WndForm *wf=NULL;
 

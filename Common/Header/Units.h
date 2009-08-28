@@ -38,6 +38,8 @@ Copyright_License {
 #if !defined(__UNITS_H)
 #define __UNITS_H
 
+#include "Screen/Bitmap.hpp"
+
 #include <tchar.h>
 
 #define WIN32_LEAN_AND_MEAN
@@ -110,7 +112,7 @@ typedef struct{
   const TCHAR   *Name;
   double  ToUserFact;
   double  ToUserOffset;
-  HBITMAP hBitmap;
+  Bitmap bitmap;
   POINT   BitMapSize;
 }UnitDescriptor_t;
 
@@ -191,7 +193,8 @@ public:
   static double ToUserDistance(double Distance);
   static double ToSysDistance(double Distance);
 
-  static bool GetUnitBitmap(Units_t Unit, HBITMAP *HBmp, POINT *Org, POINT *Size, int Kind);
+  static bool GetUnitBitmap(Units_t Unit, const Bitmap **HBmp,
+                            POINT *Org, POINT *Size, int Kind);
   static bool LoadUnitBitmap(HINSTANCE hInst);
   static bool UnLoadUnitBitmap(void);
 

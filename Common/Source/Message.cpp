@@ -42,6 +42,7 @@ Copyright_License {
 #include "Interface.hpp"
 #include "Protection.hpp"
 #include "InfoBoxLayout.h"
+#include "Screen/MainWindow.hpp"
 
 #include <tchar.h>
 

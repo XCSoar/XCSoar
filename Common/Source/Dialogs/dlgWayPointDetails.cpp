@@ -51,6 +51,7 @@ Copyright_License {
 #include "Dialogs/dlgTools.h"
 #include "InfoBoxLayout.h"
 #include "Math/FastMath.h"
+#include "Screen/MainWindow.hpp"
 
 #include <assert.h>
 
@@ -325,16 +326,18 @@ static void OnRemoveFromTaskClicked(WindowControl * Sender){
   wf->SetModalResult(mrOK);
 }
 
-static void OnImagePaint(WindowControl * Sender, HDC hDC){
+static void
+OnImagePaint(WindowControl *Sender, Canvas &canvas)
+{
   (void)Sender;
 
 #ifndef CECORE
 #ifndef GNAV
   if (page == 3)
-    jpgimage1.Draw(hDC, 0, 0, -1, -1);
+    jpgimage1.Draw(canvas, 0, 0, -1, -1);
 
   if (page == 4)
-    jpgimage2.Draw(hDC, 0, 0, -1, -1);
+    jpgimage2.Draw(canvas, 0, 0, -1, -1);
 
 #endif
 #endif
@@ -572,8 +575,8 @@ void dlgWayPointDetailsShowModal(void){
 
 #ifndef CECORE
 #ifndef GNAV
-  hasimage1 = jpgimage1.Load(wImage->GetDeviceContext() ,path_modis );
-  hasimage2 = jpgimage2.Load(wImage->GetDeviceContext() ,path_google );
+  hasimage1 = jpgimage1.Load(wImage->GetCanvas() ,path_modis );
+  hasimage2 = jpgimage2.Load(wImage->GetCanvas() ,path_google );
 #endif
 #endif
 

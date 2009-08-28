@@ -52,6 +52,7 @@ Copyright_License {
 #include "InfoBoxLayout.h"
 #include "Math/Geometry.hpp"
 #include "DataField/Enum.hpp"
+#include "Screen/MainWindow.hpp"
 #include "WayPoint.hpp"
 
 static WndForm *wf=NULL;

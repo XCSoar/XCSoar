@@ -47,6 +47,7 @@ Copyright_License {
 #include "Math/FastMath.h"
 #include "Math/Earth.hpp"
 #include "Screen/Util.hpp"
+#include "Screen/MainWindow.hpp"
 #include "DataField/Base.hpp"
 #include "Utils.h"
 

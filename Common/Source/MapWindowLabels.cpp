@@ -112,7 +112,7 @@ void MapWaypointLabelAdd(TCHAR *Name, int X, int Y,
 }
 
 
-void MapWindow::MapWaypointLabelSortAndRender(HDC hdc) {
+void MapWindow::MapWaypointLabelSortAndRender(Canvas &canvas) {
   qsort(&MapWaypointLabelList,
         MapWaypointLabelListCount,
         sizeof(MapWaypointLabel_t),
@@ -127,7 +127,7 @@ void MapWindow::MapWaypointLabelSortAndRender(HDC hdc) {
     // draws if they are in task unconditionally,
     // otherwise, does comparison
     if (E->inTask) {
-      TextInBox(hdc, E->Name, E->Pos.x,
+      TextInBox(canvas, E->Name, E->Pos.x,
                 E->Pos.y, 0, E->Mode,
                 false);
     }
@@ -138,7 +138,7 @@ void MapWindow::MapWaypointLabelSortAndRender(HDC hdc) {
   for (j=0; j<MapWaypointLabelListCount; j++) {
     MapWaypointLabel_t *E = &MapWaypointLabelList[j];
     if (!E->inTask) {
-      TextInBox(hdc, E->Name, E->Pos.x,
+      TextInBox(canvas, E->Name, E->Pos.x,
                 E->Pos.y, 0, E->Mode,
                 true);
     }

@@ -66,6 +66,7 @@ Copyright_License {
 #include "Device/devFlymasterF1.h"
 #include "Device/devXCOM760.h"
 #include "Device/devCondor.h"
+#include "Screen/MainWindow.hpp"
 
 // A note about locking.
 //  The ComPort RX threads lock using FlightData critical section.

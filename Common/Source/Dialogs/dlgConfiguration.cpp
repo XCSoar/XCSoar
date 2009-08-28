@@ -58,6 +58,7 @@ Copyright_License {
 #include "Device/device.h"
 #include "Screen/Animation.hpp"
 #include "Screen/Blank.hpp"
+#include "Screen/MainWindow.hpp"
 #include "Registry.hpp"
 #include "Process.h"
 #include "McReady.h"
@@ -77,15 +78,15 @@ extern ldrotary_s rotaryLD;
 
 #include <assert.h>
 
-static HFONT TempInfoWindowFont;
-static HFONT TempTitleWindowFont;
-static HFONT TempMapWindowFont;
-static HFONT TempTitleSmallWindowFont;
-static HFONT TempMapWindowBoldFont;
-static HFONT TempCDIWindowFont; // New
-static HFONT TempMapLabelFont;
-static HFONT TempStatisticsFont;
-static HFONT TempUseCustomFontsFont;
+static Font TempInfoWindowFont;
+static Font TempTitleWindowFont;
+static Font TempMapWindowFont;
+static Font TempTitleSmallWindowFont;
+static Font TempMapWindowBoldFont;
+static Font TempCDIWindowFont; // New
+static Font TempMapLabelFont;
+static Font TempStatisticsFont;
+static Font TempUseCustomFontsFont;
 
 extern LOGFONT autoInfoWindowLogFont;
 extern LOGFONT autoTitleWindowLogFont;
@@ -96,7 +97,7 @@ extern LOGFONT autoCDIWindowLogFont; // New
 extern LOGFONT autoMapLabelLogFont;
 extern LOGFONT autoStatisticsLogFont;
 
-extern void InitializeOneFont (HFONT * theFont,
+extern void InitializeOneFont(Font *theFont,
                                const TCHAR FontRegKey[] ,
                                LOGFONT autoLogFont,
                                LOGFONT * LogFontUsed);
@@ -3522,16 +3523,16 @@ void dlgConfigurationShowModal(void){
       changed = true;
       requirerestart = true;
   }
-  DeleteObject(TempUseCustomFontsFont);
+  TempUseCustomFontsFont.reset();
 
-  DeleteObject (TempInfoWindowFont);
-  DeleteObject (TempTitleWindowFont);
-  DeleteObject (TempMapWindowFont);
-  DeleteObject (TempTitleSmallWindowFont);
-  DeleteObject (TempMapWindowBoldFont);
-  DeleteObject (TempCDIWindowFont);
-  DeleteObject (TempMapLabelFont);
-  DeleteObject (TempStatisticsFont);
+  TempInfoWindowFont.reset();
+  TempTitleWindowFont.reset();
+  TempMapWindowFont.reset();
+  TempTitleSmallWindowFont.reset();
+  TempMapWindowBoldFont.reset();
+  TempCDIWindowFont.reset();
+  TempMapLabelFont.reset();
+  TempStatisticsFont.reset();
 
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpAppStatusMessageAlignment"));

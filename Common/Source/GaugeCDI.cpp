@@ -42,52 +42,46 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "Math/FastMath.h"
 #include "InfoBoxLayout.h"
+#include "Screen/TextWindow.hpp"
+#include "Screen/MainWindow.hpp"
 
 #include <tchar.h>
 
-extern HFONT CDIWindowFont;
+extern Font CDIWindowFont;
 
-HWND GaugeCDI::hWndCDIWindow = NULL;
+TextWidget GaugeCDI::widget;
 
 void GaugeCDI::Create() {
   // start of new code for displaying CDI window
   StartupStore(TEXT("Create CDI\n"));
 
-  hWndCDIWindow = CreateWindow(TEXT("STATIC"),TEXT(" "),
-			       WS_VISIBLE|WS_CHILD | WS_CLIPCHILDREN
-			       | WS_CLIPSIBLINGS,
-			       0,0,0,0,
-			       hWndMainWindow,NULL,hInst,NULL);
-
-  SendMessage(hWndCDIWindow,WM_SETFONT,
-	      (WPARAM)CDIWindowFont,MAKELPARAM(TRUE,0));
-
-  SetWindowPos(hWndCDIWindow,HWND_TOP,
-	       (int)(InfoBoxLayout::ControlWidth*0.6),
-	       (int)(InfoBoxLayout::ControlHeight+1),
-	       (int)(InfoBoxLayout::ControlWidth*2.8),
-	       (int)(InfoBoxLayout::TitleHeight*1.4),
-	       SWP_SHOWWINDOW);
+  widget.set(hWndMainWindow,
+             (int)(InfoBoxLayout::ControlWidth*0.6),
+             (int)(InfoBoxLayout::ControlHeight+1),
+             (int)(InfoBoxLayout::ControlWidth*2.8),
+             (int)(InfoBoxLayout::TitleHeight*1.4));
+  widget.insert_after(HWND_TOP);
+  widget.set_font(CDIWindowFont);
 
   // end of new code for drawing CDI window (see below for destruction of objects)
 
-  ShowWindow(hWndCDIWindow, SW_HIDE);
+  widget.hide();
 }
 
 
 
 void GaugeCDI::Destroy() {
-  DestroyWindow(hWndCDIWindow);
+  widget.reset();
 }
 
 void GaugeCDI::Show()
 {
-  ::ShowWindow(hWndCDIWindow, SW_SHOW);
+  widget.show();
 }
 
 void GaugeCDI::Hide()
 {
-  ::ShowWindow(hWndCDIWindow, SW_HIDE);
+  widget.hide();
 }
 
 void GaugeCDI::Update(double TrackBearing, double WaypointBearing)
@@ -128,6 +122,6 @@ void GaugeCDI::Update(double TrackBearing, double WaypointBearing)
     CDIDisplay[2]='<';
   }
 
-  SetWindowText(hWndCDIWindow,CDIDisplay);
+  widget.set_text(CDIDisplay);
   // end of new code to display CDI scale
 }

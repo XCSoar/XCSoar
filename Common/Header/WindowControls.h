@@ -38,6 +38,10 @@ Copyright_License {
 #if !defined(__WINDOWSCONTROL_H)
 #define __WINDOWSCONTROL_H
 
+#include "Screen/BitmapCanvas.hpp"
+#include "Screen/ContainerWindow.hpp"
+#include "Screen/EditWindow.hpp"
+
 #include <malloc.h>
 #include "Units.h"
 
@@ -93,17 +97,16 @@ class WindowControl {
 
     WindowControl *mOwner;
     WindowControl *mTopOwner;
-    HDC  mHdc;
-    HDC  mHdcTemp;
+    BitmapCanvas mHdcTemp;
     HBITMAP mBmpMem;
     int  mBorderKind;
     COLORREF mColorBack;
     COLORREF mColorFore;
-    HBRUSH mhBrushBk;
-    HPEN mhPenBorder;
-    HPEN mhPenSelector;
+    Brush mhBrushBk;
+    Pen mhPenBorder;
+    Pen mhPenSelector;
     RECT mBoundRect;
-    HFONT mhFont;
+    const Font *mhFont;
     TCHAR mName[64];
     TCHAR *mHelpText;
 
@@ -119,13 +122,13 @@ class WindowControl {
     WindowControl *mActiveClient;
 
     static int InstCount;
-    static HBRUSH hBrushDefaultBk;
-    static HPEN hPenDefaultBorder;
-    static HPEN hPenDefaultSelector;
+    static Brush hBrushDefaultBk;
+    static Pen hPenDefaultBorder;
+    static Pen hPenDefaultSelector;
 
   protected:
 
-    HWND mHWnd;
+    ContainerWindow widget;
     bool mCanFocus;
     TCHAR mCaption[254];
     bool mDontPaintSelector;
@@ -133,7 +136,7 @@ class WindowControl {
     WindowControl *mClients[50];
     int mClientCount;
 
-    virtual void PaintSelector(HDC hDC);
+    virtual void PaintSelector(Canvas &canvas);
     virtual WindowControl *SetOwner(WindowControl *Value);
     void UpdatePosSize(void);
     bool HasFocus(void) { return mHasFocus; };
@@ -144,7 +147,7 @@ class WindowControl {
 
     virtual void AddClient(WindowControl *Client);
 
-    virtual void Paint(HDC hDC);
+    virtual void Paint(Canvas &canvas);
 
     virtual int OnHelp();
 
@@ -210,8 +213,12 @@ class WindowControl {
     int  GetBorderKind(void);
     int  SetBorderKind(int Value);
 
-    HFONT GetFont(void){return(mhFont);};
-    virtual HFONT SetFont(HFONT Value);
+    const Font *GetFont(void) { return(mhFont); };
+    virtual const Font *SetFont(const Font &font);
+
+    const Font *SetFont(const Font *font) {
+      return SetFont(*font);
+    }
 
     virtual COLORREF SetForeColor(COLORREF Value);
     COLORREF GetForeColor(void){return(mColorFore);};
@@ -219,17 +226,30 @@ class WindowControl {
     virtual COLORREF SetBackColor(COLORREF Value);
     COLORREF GetBackColor(void){return(mColorBack);};
 
-    HBRUSH   GetBackBrush(void){return(mhBrushBk);};
-    HPEN     GetBorderPen(void){return(mhPenBorder);};
-    HPEN     GetSelectorPen(void){return(mhPenSelector);};
+    Brush &GetBackBrush(void) {
+      return mhBrushBk.defined()
+        ? mhBrushBk
+        : hBrushDefaultBk;
+    }
+    Pen &GetBorderPen(void) {
+      return mhPenBorder.defined()
+        ? mhPenBorder
+        : hPenDefaultBorder;
+    }
+    Pen &GetSelectorPen(void) {
+      return mhPenSelector.defined()
+        ? mhPenSelector
+        : hPenDefaultSelector;
+    }
 
     virtual void SetCaption(const TCHAR *Value);
     void SetHelpText(const TCHAR *Value);
 
-    HWND GetHandle(void){return(mHWnd);};
-    virtual HWND GetClientAreaHandle(void){return(mHWnd);};
-    HDC  GetDeviceContext(void){return(mHdc);};
-    HDC  GetTempDeviceContext(void){return(mHdcTemp);};
+    HWND GetHandle(void) { return widget; }
+    ContainerWindow &GetWidget(void) { return widget; }
+    virtual ContainerWindow &GetClientAreaWidget(void) { return widget; }
+    Canvas &GetCanvas(void) { return widget.get_canvas(); }
+    BitmapCanvas &GetTempDeviceContext(void) { return mHdcTemp; }
     WindowControl *GetOwner(void){return(mOwner);};
 
     int GetTag(void){return(mTag);};
@@ -246,7 +266,9 @@ class WindowControl {
     WindowControl *FocusNext(WindowControl *Sender);
     WindowControl *FocusPrev(WindowControl *Sender);
 
-    WindowControl(WindowControl *Owner, HWND Parent, const TCHAR *Name, int X, int Y, int Width, int Height, bool Visible=true);
+    WindowControl(WindowControl *Owner, ContainerWindow *Parent,
+                  const TCHAR *Name, int X, int Y, int Width, int Height,
+                  bool Visible=true);
     virtual ~WindowControl(void);
 
     virtual void Destroy(void);
@@ -307,7 +329,7 @@ class WndFrame:public WindowControl{
 
     UINT mCaptionStyle;
 
-    void Paint(HDC hDC);
+    void Paint(Canvas &canvas);
 
 };
 
@@ -342,7 +364,7 @@ class WndListFrame:public WndFrame{
     void ResetList(void);
     void SetEnterCallback(void (*OnListCallback)(WindowControl * Sender, ListInfo_t *ListInfo));
     void RedrawScrolled(bool all);
-    void DrawScrollBar(HDC hDC);
+    void DrawScrollBar(Canvas &canvas);
     int RecalculateIndices(bool bigscroll);
     void Redraw(void);
     int GetItemIndex(void){return(mListInfo.ItemIndex);}
@@ -363,7 +385,7 @@ class WndListFrame:public WndFrame{
     OnListCallback_t mOnListCallback;
     OnListCallback_t mOnListEnterCallback;
     ListInfo_t mListInfo;
-    void Paint(HDC hDC);
+    void Paint(Canvas &canvas);
 	  RECT rcScrollBarButton;
 	  RECT rcScrollBar;
     int mMouseScrollBarYOffset; // where in the scrollbar button was mouse down at
@@ -375,7 +397,7 @@ class WndOwnerDrawFrame:public WndFrame{
 
   public:
 
-    typedef void (*OnPaintCallback_t)(WindowControl * Sender, HDC hDC);
+    typedef void (*OnPaintCallback_t)(WindowControl *Sender, Canvas &canvas);
 
     WndOwnerDrawFrame(WindowControl *Owner, TCHAR *Name, int X, int Y,
                       int Width, int Height,
@@ -398,7 +420,7 @@ class WndOwnerDrawFrame:public WndFrame{
   protected:
 
     OnPaintCallback_t mOnPaintCallback;
-    void Paint(HDC hDC);
+    void Paint(Canvas &canvas);
 
 };
 
@@ -418,7 +440,7 @@ class WndForm:public WindowControl{
     HACCEL mhAccelTable;
     COLORREF mColorTitle;
     HBRUSH mhBrushTitle;
-    HFONT mhTitleFont;
+    const Font *mhTitleFont;
     WindowControl *mClientWindow;
     RECT mClientRect;
     RECT mTitleRect;
@@ -432,17 +454,19 @@ class WndForm:public WindowControl{
 
     int OnUnhandledMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-    void Paint(HDC hDC);
+    void Paint(Canvas &canvas);
     int cbTimerID;
 
   public:
 
-    WndForm(HWND Parent, const TCHAR *Name, const TCHAR *Caption, int X, int Y, int Width, int Height);
+    WndForm(ContainerWindow *Parent,
+            const TCHAR *Name, const TCHAR *Caption,
+            int X, int Y, int Width, int Height);
     ~WndForm(void);
     virtual void Destroy(void);
 
     bool bLButtonDown; //RLD
-    HWND GetClientAreaHandle(void);
+    ContainerWindow &GetClientAreaWidget(void);
     void AddClient(WindowControl *Client);
 
     virtual bool SetFocused(bool Value, HWND FromTo);
@@ -465,7 +489,7 @@ class WndForm:public WindowControl{
     int GetModalResult(void){return(mModalResult);};
     int SetModalResult(int Value){mModalResult = Value;return(Value);};
 
-    HFONT SetTitleFont(HFONT Value);
+    const Font *SetTitleFont(const Font &font);
 
     int ShowModal(bool bEnableMap);
     int ShowModal(void);
@@ -477,7 +501,8 @@ class WndForm:public WindowControl{
 
     COLORREF SetForeColor(COLORREF Value);
     COLORREF SetBackColor(COLORREF Value);
-    HFONT SetFont(HFONT Value);
+    const Font *SetFont(const Font &Value);
+
     void SetKeyDownNotify(int (*KeyDownNotify)(WindowControl * Sender, WPARAM wParam, LPARAM lParam));
     void SetKeyUpNotify(int (*KeyUpNotify)(WindowControl * Sender, WPARAM wParam, LPARAM lParam));
     void SetLButtonUpNotify(int (*LButtonUpNotify)(WindowControl * Sender, WPARAM wParam, LPARAM lParam));
@@ -494,7 +519,7 @@ class WndButton:public WindowControl{
 
   private:
 
-    void Paint(HDC hDC);
+    void Paint(Canvas &canvas);
     bool mDown;
     bool mDefault;
     int mLastDrawTextHeight;
@@ -533,11 +558,11 @@ class WndProperty:public WindowControl{
     static HBITMAP hBmpRight32;
     static int InstCount;
 
-    HWND mhEdit;
+    EditWidget edit;
     POINT mEditSize;
     POINT mEditPos;
-    HFONT mhCaptionFont;
-    HFONT mhValueFont;
+    const Font *mhCaptionFont;
+    const Font *mhValueFont;
     int  mBitmapSize;
     int  mCaptionWidth;
     RECT mHitRectUp;
@@ -545,7 +570,7 @@ class WndProperty:public WindowControl{
     bool mDownDown;
     bool mUpDown;
 
-    void Paint(HDC hDC);
+    void Paint(Canvas &canvas);
     void (*mOnClickUpNotify)(WindowControl * Sender);
     void (*mOnClickDownNotify)(WindowControl * Sender);
 
@@ -578,7 +603,7 @@ class WndProperty:public WindowControl{
 
     void RefreshDisplay(void);
 
-    HFONT SetFont(HFONT Value);
+    const Font *SetFont(const Font &font);
 
     int OnKeyDown(WPARAM wParam, LPARAM lParam);
     int OnEditKeyDown(WPARAM wParam, LPARAM lParam);

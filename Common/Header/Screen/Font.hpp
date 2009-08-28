@@ -38,10 +38,34 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_FONT_HPP
 #define XCSOAR_SCREEN_FONT_HPP
 
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+
 typedef struct{
   int Height;
   int AscentHeight;
   int CapitalHeight;
 }FontHeightInfo_t;
+
+class Font {
+protected:
+  HFONT font;
+
+public:
+  Font():font(NULL) {}
+  ~Font() { reset(); }
+
+public:
+  bool defined() const {
+    return font != NULL;
+  }
+
+  bool set(const LOGFONT *lplf);
+  void reset();
+
+  HFONT native() const {
+    return font;
+  }
+};
 
 #endif

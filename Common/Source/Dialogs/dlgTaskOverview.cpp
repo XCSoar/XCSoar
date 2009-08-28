@@ -48,6 +48,7 @@ Copyright_License {
 #include "InfoBoxLayout.h"
 #include "Math/FastMath.h"
 #include "Screen/Util.hpp"
+#include "Screen/MainWindow.hpp"
 #include "LocalPath.hpp"
 #include "DataField/FileReader.hpp"
 

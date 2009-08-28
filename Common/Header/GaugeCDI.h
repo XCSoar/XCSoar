@@ -39,8 +39,10 @@ Copyright_License {
 #define GAUGE_CDI_H
 #include "StdAfx.h"
 
+#include "Screen/TextWindow.hpp"
+
 class GaugeCDI {
-  static HWND hWndCDIWindow;
+  static TextWidget widget;
 
  public:
   static void Create();

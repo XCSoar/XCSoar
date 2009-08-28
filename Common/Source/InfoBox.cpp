@@ -51,24 +51,24 @@ Copyright_License {
 #define DEFAULTBORDERPENWIDTH IBLSCALE(1)
 #define SELECTORWIDTH         (DEFAULTBORDERPENWIDTH+IBLSCALE(4))
 
-extern HFONT  TitleWindowFont;
-extern HFONT  TitleSmallWindowFont;
-extern HFONT  MapWindowFont;
-extern HFONT  MapWindowBoldFont;
-extern HFONT  InfoWindowFont;
-extern HFONT  CDIWindowFont;
+extern Font TitleWindowFont;
+extern Font TitleSmallWindowFont;
+extern Font MapWindowFont;
+extern Font MapWindowBoldFont;
+extern Font InfoWindowFont;
+extern Font CDIWindowFont;
 
 //static ATOM atmWndClass;
 
-static COLORREF fgColor = RGB(0x0,0x0,0x0);
-static COLORREF bkColor = RGB(0xff,0xff,0xff);
-static COLORREF bkColorSel = RGB(150,0x0,0x0);
-static COLORREF bdColor = RGB(80,80,80);
+static Color fgColor = RGB(0x0,0x0,0x0);
+static Color bkColor = RGB(0xff,0xff,0xff);
+static Color bkColorSel = RGB(150,0x0,0x0);
+static Color bdColor = RGB(80,80,80);
 static DWORD lastErr;
-static HBRUSH hBrushDefaultBackGround;
-static HBRUSH hBrushDefaultBackGroundSel;
-static HPEN hPenDefaultBorder;
-static HPEN hPenSelector;
+static Brush hBrushDefaultBackGround;
+static Brush hBrushDefaultBackGroundSel;
+static Pen hPenDefaultBorder;
+static Pen hPenSelector;
 static int Count=0;
 
 
@@ -76,51 +76,59 @@ void InitInfoBoxModule(void);
 LRESULT CALLBACK InfoBoxWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 
-InfoBox::InfoBox(HWND Parent, int X, int Y, int Width, int Height){
+InfoBox::InfoBox(ContainerWindow &parent, int X, int Y, int Width, int Height)
+  :mParent(parent)
+{
   mX = X;
   mY = Y;
   mWidth = Width;
   mHeight = Height;
-  mParent = Parent;
 
   mTitleChanged = true;
   mSmallerFont = false;
 
   InitInfoBoxModule();
 
-  mColorBack = bkColor;
-  mColorFore = fgColor;
   color = 0;
   colorTop = 0;
   colorBottom = 0;
 
-  if (Count == 0){
-    hBrushDefaultBackGround = (HBRUSH)CreateSolidBrush(bkColor);
-    hBrushDefaultBackGroundSel = (HBRUSH)CreateSolidBrush(bkColorSel);
-    hPenDefaultBorder = (HPEN)CreatePen(PS_SOLID, DEFAULTBORDERPENWIDTH, bdColor);
-    hPenSelector = (HPEN)CreatePen(PS_SOLID, DEFAULTBORDERPENWIDTH+2, mColorFore);
-  }
-
-  mHWnd = CreateWindow(TEXT("STATIC"), TEXT("\0"),
-                     WS_VISIBLE | WS_CHILD | SS_CENTER | SS_NOTIFY
-                       | WS_CLIPCHILDREN | WS_CLIPSIBLINGS,
-                     mX, mY,
-                     mWidth, mHeight,
-                     Parent, NULL, hInst, NULL);
+  widget.set(parent, mX, mY, mWidth, mHeight, true, true);
 
   mVisible = false;
 
-  mHdc = GetDC(mHWnd);
-  mHdcTemp = CreateCompatibleDC(mHdc);
+  Canvas &canvas = widget.get_canvas();
+
+  Color fgColor, bkColor, bkColorSel;
+
+  if (Appearance.InverseInfoBox){
+    fgColor = Color(0xff, 0xff, 0xff);
+    bkColor = Color(0x00, 0x00, 0x00);
+  } else {
+    bkColor = Color(0xff, 0xff, 0xff);
+    fgColor = Color(0x00, 0x00, 0x00);
+  }
+
+  bkColorSel = Color(150, 0x0, 0x0);
+  bdColor = Color(80, 80, 80);
+
+  mColorBack = bkColor;
+  mColorFore = fgColor;
+
+  if (Count == 0){
+    hBrushDefaultBackGround.set(bkColor);
+    hBrushDefaultBackGroundSel.set(bkColorSel);
+    hPenDefaultBorder.set(DEFAULTBORDERPENWIDTH, bdColor);
+    hPenSelector.set(DEFAULTBORDERPENWIDTH + 2, mColorFore);
+  }
+
+  temp.set(widget.get_canvas());
 
   // JMW added double buffering to reduce flicker
-  mBufBitMap = CreateCompatibleBitmap(mHdc, mWidth, mHeight);
-  mHdcBuf = CreateCompatibleDC(mHdc);
-  SelectObject(mHdcBuf, mBufBitMap);
+  buffer.set(widget.get_canvas(), mWidth, mHeight);
 
-  SetWindowLong(mHWnd, GWL_WNDPROC, (LONG) InfoBoxWndProc);
-
-  SetWindowLong(mHWnd, GWL_USERDATA, (long)this);
+  widget.set_wndproc(InfoBoxWndProc);
+  widget.set_userdata(this);
 
   mhBrushBk = hBrushDefaultBackGround;
   mhBrushBkSel = hBrushDefaultBackGroundSel;
@@ -132,7 +140,7 @@ InfoBox::InfoBox(HWND Parent, int X, int Y, int Width, int Height){
   rc.top = 0;
   rc.right = 0 + mWidth;
   rc.bottom = 0 + mHeight;
-  FillRect(mHdcBuf, &rc, mhBrushBk);
+  buffer.fill_rectangle(0, 0, mWidth, mHeight, mhBrushBk);
 
   mBorderSize = 1;
   if (Appearance.InfoBoxBorder == apIbTab) {
@@ -173,7 +181,7 @@ InfoBox::InfoBox(HWND Parent, int X, int Y, int Width, int Height){
   mBitmapUnitSize.x = 0;
   mBitmapUnitSize.y = 0;
 
-  SetBkMode(mHdcBuf, TRANSPARENT);
+  buffer.background_transparent();
 
   SetVisible(true);
 
@@ -189,20 +197,16 @@ InfoBox::~InfoBox(void){
 
   if (Count==0){
 
-    DeleteObject(hBrushDefaultBackGround);
-    DeleteObject(hBrushDefaultBackGroundSel);
-    DeleteObject(hPenDefaultBorder);
-    DeleteObject(hPenSelector);
+    hBrushDefaultBackGround.reset();
+    hBrushDefaultBackGroundSel.reset();
+    hPenDefaultBorder.reset();
+    hPenSelector.reset();
 
   }
 
-  DeleteObject(mBufBitMap);
-  DeleteDC(mHdcBuf);
-
-  ReleaseDC(mHWnd, mHdc);
-  DeleteDC(mHdcTemp);
-  DestroyWindow(mHWnd);
-
+  buffer.reset();
+  temp.reset();
+  widget.reset();
 }
 
 void InfoBox::SetFocus(bool Value){
@@ -218,9 +222,9 @@ bool InfoBox::SetVisible(bool Value){
   if (mVisible != Value){
     mVisible = Value;
     if (mVisible)
-      ShowWindow(mHWnd, SW_SHOW);
+      widget.show();
     else
-      ShowWindow(mHWnd, SW_HIDE);
+      widget.hide();
   }
   return(res);
 }
@@ -317,11 +321,11 @@ void InfoBox::SetComment(const TCHAR *Value){
   }
 }
 
-HWND InfoBox::GetHandle(void){
-  return(mHWnd);
+Widget &InfoBox::GetHandle(void){
+  return widget;
 }
 
-HWND InfoBox::GetParent(void){
+ContainerWindow &InfoBox::GetParent(void){
   return(mParent);
 }
 
@@ -330,7 +334,7 @@ void InfoBox::SetSmallerFont(bool smallerFont)
 	this->mSmallerFont = smallerFont;
 }
 
-void InfoBox::PaintTitle(HDC mHdcBuf){
+void InfoBox::PaintTitle(Canvas &canvas){
 
   if (!mTitleChanged) return;
 
@@ -338,56 +342,41 @@ void InfoBox::PaintTitle(HDC mHdcBuf){
   int x,y;
   int halftextwidth;
 
-  SetBkColor(mHdcBuf, mColorTitleBk);
+  canvas.set_background_color(mColorTitleBk);
  // SetTextColor(mHdcBuf, mColorTitle);
   switch (colorTop) {
   case -1:
-    SetTextColor(mHdcBuf, bdColor);
+    canvas.set_text_color(bdColor);
     break;
   case 0:
-    SetTextColor(mHdcBuf, mColorValue);
+    canvas.set_text_color(mColorValue);
     break;
   case 1:
-    if (Appearance.InverseInfoBox){
-      SetTextColor(mHdcBuf, MapGfx.inv_redColor);
-    } else {
-      SetTextColor(mHdcBuf, MapGfx.redColor);
-    }
+    canvas.set_text_color(Appearance.InverseInfoBox
+                          ? MapGfx.inv_redColor : MapGfx.redColor);
     break;
   case 2:
-    if (Appearance.InverseInfoBox){
-      SetTextColor(mHdcBuf, MapGfx.inv_blueColor);
-    } else {
-      SetTextColor(mHdcBuf, MapGfx.blueColor);
-    }
+    canvas.set_text_color(Appearance.InverseInfoBox
+                          ? MapGfx.inv_blueColor : MapGfx.blueColor);
     break;
 // VENTA3 added colors
   case 3:
-    if (Appearance.InverseInfoBox){
-      SetTextColor(mHdcBuf, MapGfx.inv_greenColor);
-    } else {
-      SetTextColor(mHdcBuf, MapGfx.greenColor);
-    }
+    canvas.set_text_color(Appearance.InverseInfoBox
+                          ? MapGfx.inv_greenColor : MapGfx.greenColor);
     break;
   case 4:
-    if (Appearance.InverseInfoBox){
-      SetTextColor(mHdcBuf, MapGfx.inv_yellowColor);
-    } else {
-      SetTextColor(mHdcBuf, MapGfx.yellowColor);
-    }
+    canvas.set_text_color(Appearance.InverseInfoBox
+                          ? MapGfx.inv_yellowColor : MapGfx.yellowColor);
     break;
   case 5:
-    if (Appearance.InverseInfoBox){
-      SetTextColor(mHdcBuf, MapGfx.inv_magentaColor);
-    } else {
-      SetTextColor(mHdcBuf, MapGfx.magentaColor);
-    }
+    canvas.set_text_color(Appearance.InverseInfoBox
+                          ? MapGfx.inv_magentaColor : MapGfx.magentaColor);
     break;
   }
 
-  SelectObject(mHdcBuf, *mphFontTitle);
+  canvas.select(*mphFontTitle);
 
-  GetTextExtentPoint(mHdcBuf, mTitle, _tcslen(mTitle), &tsize);
+  tsize = canvas.text_size(mTitle);
 
   halftextwidth = (mWidth - tsize.cx)>>1;
 
@@ -399,8 +388,7 @@ void InfoBox::PaintTitle(HDC mHdcBuf){
   if (mBorderKind & BORDERLEFT)
     x+= DEFAULTBORDERPENWIDTH;
 
-  ExtTextOut(mHdcBuf, x, y,
-    ETO_OPAQUE, &recTitle, mTitle, _tcslen(mTitle), NULL);
+  canvas.text_opaque(x, y, &recTitle, mTitle);
 
   if ((mBorderKind & BORDERTAB) && (halftextwidth>IBLSCALE(3))) {
 
@@ -408,7 +396,7 @@ void InfoBox::PaintTitle(HDC mHdcBuf){
     int ytopedge = ytop+IBLSCALE(2);
     int ybottom = recTitle.top + IBLSCALE(6) + mpFontHeightTitle->CapitalHeight;
 
-    HPEN oldPen = (HPEN)SelectObject(mHdcBuf, mhPenBorder);
+    canvas.select(mhPenBorder);
 
     POINT tab[8];
     tab[0].x = tab[1].x = recTitle.left+IBLSCALE(1);
@@ -421,80 +409,70 @@ void InfoBox::PaintTitle(HDC mHdcBuf){
     tab[3].x = recTitle.left+halftextwidth-IBLSCALE(1);
     tab[4].x = recTitle.right-halftextwidth+IBLSCALE(1);
 
-    Polyline(mHdcBuf, tab, 4);
-    Polyline(mHdcBuf, tab+4, 4);
-
-    SelectObject(mHdcBuf,oldPen);
-
+    canvas.polyline(tab, 4);
+    canvas.polyline(tab + 4, 4);
   }
 
   mTitleChanged = false;
 
 }
 
-void InfoBox::PaintValue(HDC mHdcBuf){
+void InfoBox::PaintValue(Canvas &canvas){
 
   SIZE tsize;
   int x,y;
   unsigned int len = _tcslen(mValue);
 
-  SetBkColor(mHdcBuf, mColorValueBk);
+  canvas.set_background_color(mColorValueBk);
 
   switch (color) {
   case -1:
-    SetTextColor(mHdcBuf, bdColor);
+    canvas.set_text_color(bdColor);
     break;
   case 0:
-    SetTextColor(mHdcBuf, mColorValue);
+    canvas.set_text_color(mColorValue);
     break;
   case 1:
     if (Appearance.InverseInfoBox){
-      SetTextColor(mHdcBuf, MapGfx.inv_redColor);
+      canvas.set_text_color(MapGfx.inv_redColor);
     } else {
-      SetTextColor(mHdcBuf, MapGfx.redColor);
+      canvas.set_text_color(MapGfx.redColor);
     }
     break;
   case 2:
     if (Appearance.InverseInfoBox){
-      SetTextColor(mHdcBuf, MapGfx.inv_blueColor);
+      canvas.set_text_color(MapGfx.inv_blueColor);
     } else {
-      SetTextColor(mHdcBuf, MapGfx.blueColor);
+      canvas.set_text_color(MapGfx.blueColor);
     }
     break;
 // VENTA3 more colors
   case 3:
     if (Appearance.InverseInfoBox){
-      SetTextColor(mHdcBuf, MapGfx.inv_greenColor);
+      canvas.set_text_color(MapGfx.inv_greenColor);
     } else {
-      SetTextColor(mHdcBuf, MapGfx.greenColor);
+      canvas.set_text_color(MapGfx.greenColor);
     }
     break;
   case 4:
     if (Appearance.InverseInfoBox){
-      SetTextColor(mHdcBuf, MapGfx.inv_yellowColor);
+      canvas.set_text_color(MapGfx.inv_yellowColor);
     } else {
-      SetTextColor(mHdcBuf, MapGfx.yellowColor);
+      canvas.set_text_color(MapGfx.yellowColor);
     }
     break;
   case 5:
     if (Appearance.InverseInfoBox){
-      SetTextColor(mHdcBuf, MapGfx.inv_magentaColor);
+      canvas.set_text_color(MapGfx.inv_magentaColor);
     } else {
-      SetTextColor(mHdcBuf, MapGfx.magentaColor);
+      canvas.set_text_color(MapGfx.magentaColor);
     }
     break;
   }
 
-  if (mSmallerFont)
-  {
-    SelectObject(mHdcBuf, *valueFont);
-  }
-  else
-  {
-    SelectObject(mHdcBuf, *mphFontValue);
-  }
+  canvas.select(mSmallerFont ? *valueFont : *mphFontValue);
 
-  GetTextExtentPoint(mHdcBuf, mValue, len, &tsize);
+  tsize = canvas.text_size(mValue);
 
   x = max(1,recValue.left +
           (mWidth - tsize.cx - mBitmapUnitSize.x*InfoBoxLayout::scale) / 2);
@@ -505,43 +483,24 @@ void InfoBox::PaintValue(HDC mHdcBuf){
   y = recValue.top + 1 - mpFontHeightValue->AscentHeight +
     (recValue.bottom - recValue.top + mpFontHeightValue->CapitalHeight)/2;
 
-  ExtTextOut(mHdcBuf, x, y, ETO_OPAQUE, &recValue, mValue, len, NULL);
+  canvas.text_opaque(x, y, &recValue, mValue);
 
   if ((mValueUnit != unUndef) && (color>=0)){
     if (mhBitmapUnit != NULL){
-      HBITMAP oldBmp;
-      oldBmp = (HBITMAP)SelectObject(mHdcTemp, mhBitmapUnit);
-      if (InfoBoxLayout::scale>1) {
-        StretchBlt(mHdcBuf,
-                   x+tsize.cx,
-                   y+mpFontHeightValue->AscentHeight
-                   -mBitmapUnitSize.y*InfoBoxLayout::scale,
-                   mBitmapUnitSize.x*InfoBoxLayout::scale,
-                   mBitmapUnitSize.y*InfoBoxLayout::scale,
-                   mHdcTemp,
-                   mBitmapUnitPos.x, mBitmapUnitPos.y,
-                   mBitmapUnitSize.x,
-                   mBitmapUnitSize.y,
-               SRCCOPY
-               );
-      } else {
-        BitBlt(mHdcBuf,
-               x+tsize.cx,
-               y+mpFontHeightValue->AscentHeight
-               -mBitmapUnitSize.y,
-               mBitmapUnitSize.x, mBitmapUnitSize.y,
-               mHdcTemp,
-               mBitmapUnitPos.x, mBitmapUnitPos.y,
-               SRCCOPY
-               );
-      }
-      SelectObject(mHdcTemp ,oldBmp);
+      temp.select(*mhBitmapUnit);
+      canvas.scale_copy(x + tsize.cx,
+                        y + mpFontHeightValue->AscentHeight
+                        - mBitmapUnitSize.y * InfoBoxLayout::scale,
+                        temp,
+                        mBitmapUnitPos.x, mBitmapUnitPos.y,
+                        mBitmapUnitSize.x, mBitmapUnitSize.y);
+      temp.clear();
     }
   }
 
 }
 
-void InfoBox::PaintComment(HDC mHdcBuf){
+void InfoBox::PaintComment(Canvas &canvas){
 
   SIZE tsize;
   int x,y;
@@ -552,57 +511,57 @@ void InfoBox::PaintComment(HDC mHdcBuf){
 
   switch (colorBottom) {
   case -1:
-    SetTextColor(mHdcBuf, bdColor);
+    canvas.set_text_color(bdColor);
     break;
   case 0:
-    SetTextColor(mHdcBuf, mColorValue);
+    canvas.set_text_color(mColorValue);
     break;
   case 1:
     if (Appearance.InverseInfoBox){
-      SetTextColor(mHdcBuf, MapGfx.inv_redColor);
+      canvas.set_text_color(MapGfx.inv_redColor);
     } else {
-      SetTextColor(mHdcBuf, MapGfx.redColor);
+      canvas.set_text_color(MapGfx.redColor);
     }
     break;
   case 2:
     if (Appearance.InverseInfoBox){
-      SetTextColor(mHdcBuf, MapGfx.inv_blueColor);
+      canvas.set_text_color(MapGfx.inv_blueColor);
     } else {
-      SetTextColor(mHdcBuf, MapGfx.blueColor);
+      canvas.set_text_color(MapGfx.blueColor);
     }
     break;
 // VENTA3 more colors
   case 3:
     if (Appearance.InverseInfoBox){
-      SetTextColor(mHdcBuf, MapGfx.inv_greenColor);
+      canvas.set_text_color(MapGfx.inv_greenColor);
     } else {
-      SetTextColor(mHdcBuf, MapGfx.greenColor);
+      canvas.set_text_color(MapGfx.greenColor);
     }
     break;
   case 4:
     if (Appearance.InverseInfoBox){
-      SetTextColor(mHdcBuf, MapGfx.inv_yellowColor);
+      canvas.set_text_color(MapGfx.inv_yellowColor);
     } else {
-      SetTextColor(mHdcBuf, MapGfx.yellowColor);
+      canvas.set_text_color(MapGfx.yellowColor);
     }
     break;
   case 5:
     if (Appearance.InverseInfoBox){
-      SetTextColor(mHdcBuf, MapGfx.inv_magentaColor);
+      canvas.set_text_color(MapGfx.inv_magentaColor);
     } else {
-      SetTextColor(mHdcBuf, MapGfx.magentaColor);
+      canvas.set_text_color(MapGfx.magentaColor);
     }
     break;
   }
 
 
-  SetBkColor(mHdcBuf, mColorCommentBk);
+  canvas.set_background_color(mColorCommentBk);
 
  // SetTextColor(mHdcBuf, mColorComment);
 
-  SelectObject(mHdcBuf, *mphFontComment);
+  canvas.select(*mphFontComment);
 
-  GetTextExtentPoint(mHdcBuf, mComment, len, &tsize);
+  tsize = canvas.text_size(mComment);
 
   x = max(1,recComment.left + (mWidth - tsize.cx) / 2);
   if (mBorderKind & BORDERLEFT)
@@ -612,76 +571,31 @@ void InfoBox::PaintComment(HDC mHdcBuf){
     + mpFontHeightComment->CapitalHeight
     - mpFontHeightComment->AscentHeight;
 
-  ExtTextOut(mHdcBuf, x, y,
-    ETO_OPAQUE, &recComment, mComment, len, NULL);
+  canvas.text_opaque(x, y, &recComment, mComment);
 
 }
 
 
-void InfoBox::PaintSelector(HDC mHdc){
+void InfoBox::PaintSelector(Canvas &canvas){
 
   if (mHasFocus){
-    HPEN oldPen = (HPEN)SelectObject(mHdc, hPenSelector);
+    canvas.select(hPenSelector);
 
-#ifndef NOLINETO
+    canvas.two_lines(mWidth - SELECTORWIDTH - 1, 0,
+                     mWidth - 1, 0,
+                     mWidth - 1, SELECTORWIDTH + 1);
 
-    MoveToEx(mHdc, mWidth-SELECTORWIDTH-1, 0, NULL);
-    LineTo(mHdc, mWidth-1, 0);
-    LineTo(mHdc, mWidth-1, SELECTORWIDTH+1);
+    canvas.two_lines(mWidth - 1, mHeight - SELECTORWIDTH - 2,
+                     mWidth - 1, mHeight - 1,
+                     mWidth - SELECTORWIDTH - 1, mHeight - 1);
 
-    MoveToEx(mHdc, mWidth-1, mHeight-SELECTORWIDTH-2, NULL);
-    LineTo(mHdc, mWidth-1, mHeight-1);
-    LineTo(mHdc, mWidth-SELECTORWIDTH-1, mHeight-1);
+    canvas.two_lines(SELECTORWIDTH + 1, mHeight - 1,
+                     0, mHeight - 1,
+                     0, mHeight - SELECTORWIDTH - 2);
 
-    MoveToEx(mHdc, SELECTORWIDTH+1, mHeight-1, NULL);
-    LineTo(mHdc, 0, mHeight-1);
-    LineTo(mHdc, 0, mHeight-SELECTORWIDTH-2);
-
-    MoveToEx(mHdc, 0, SELECTORWIDTH+1, NULL);
-    LineTo(mHdc, 0, 0);
-    LineTo(mHdc, SELECTORWIDTH+1, 0);
-
-#else
-    POINT p[2];
-    p[0].x = mWidth-SELECTORWIDTH-1;
-    p[0].y = 0;
-    p[1].x = mWidth-1;
-    p[1].y = 0;
-    Polyline(mHdc, p, 2);
-    p[0].x = mWidth-1;
-    p[0].y = SELECTORWIDTH+1;
-    Polyline(mHdc, p, 2);
-
-    p[0].x = mWidth-1;
-    p[0].y = mHeight-SELECTORWIDTH-2;
-    p[1].x = mWidth-1;
-    p[1].y = mHeight-1;
-    Polyline(mHdc, p, 2);
-    p[0].x = mWidth-SELECTORWIDTH-1;
-    p[0].y = mHeight-1;
-    Polyline(mHdc, p, 2);
-
-    p[0].x = SELECTORWIDTH+1;
-    p[0].y = mHeight-1;
-    p[1].x = 0;
-    p[1].y = mHeight-1;
-    Polyline(mHdc, p, 2);
-    p[0].x = 0;
-    p[0].y = mHeight-SELECTORWIDTH-2;
-    Polyline(mHdc, p, 2);
-
-    p[0].x = 0;
-    p[0].y = SELECTORWIDTH+1;
-    p[1].x = 0;
-    p[1].y = 0;
-    Polyline(mHdc, p, 2);
-    p[0].x = SELECTORWIDTH+1;
-    p[0].y = 0;
-    Polyline(mHdc, p, 2);
-
-#endif
-
-    SelectObject(mHdc,oldPen);
+    canvas.two_lines(0, SELECTORWIDTH + 1,
+                     0, 0,
+                     SELECTORWIDTH + 1, 0);
   }
 
 }
@@ -691,95 +605,57 @@ void InfoBox::Paint(){
   if (!globalRunningEvent.test()) return; // safety
 
   static bool InitDone = false;
-  RECT rc;
 
   if (!InitDone){
     InitializeDrawHelpers();
     InitDone = false;
   }
 
-  if (mTitleChanged) {
-    // clear the whole area
-    rc.left = 0;
-    rc.top = 0;
-    rc.right = 0 + mWidth;
-    rc.bottom = 0 + mHeight;
-  } else {
-    rc.left = 0;
-    rc.top = recTitle.bottom;
-    rc.right = 0 + mWidth;
-    rc.bottom = 0 + mHeight;
-  }
-  FillRect(mHdcBuf, &rc, mhBrushBk);
+  buffer.fill_rectangle(0, mTitleChanged ? 0 : recTitle.bottom,
+                        mWidth, mHeight, mhBrushBk);
 
   if (mBorderKind != 0){
-
-    HPEN oldPen = (HPEN)SelectObject(mHdcBuf, mhPenBorder);
-#ifndef NOLINETO
+    buffer.select(mhPenBorder);
 
     if (mBorderKind & BORDERTOP){
-      MoveToEx(mHdcBuf, 0, 0, NULL);
-      LineTo(mHdcBuf, mWidth, 0);
+      buffer.line(0, 0, mWidth, 0);
     }
     if (mBorderKind & BORDERRIGHT){
-      MoveToEx(mHdcBuf, mWidth-DEFAULTBORDERPENWIDTH, 0, NULL);
-      LineTo(mHdcBuf, mWidth-DEFAULTBORDERPENWIDTH, mHeight);
+      buffer.line(mWidth - DEFAULTBORDERPENWIDTH, 0,
+                  mWidth - DEFAULTBORDERPENWIDTH, mHeight);
     }
     if (mBorderKind & BORDERBOTTOM){
-      MoveToEx(mHdcBuf, mWidth-DEFAULTBORDERPENWIDTH, mHeight-DEFAULTBORDERPENWIDTH, NULL);
-      LineTo(mHdcBuf, -DEFAULTBORDERPENWIDTH, mHeight-DEFAULTBORDERPENWIDTH);
+      buffer.line(mWidth - DEFAULTBORDERPENWIDTH,
+                  mHeight - DEFAULTBORDERPENWIDTH,
+                  -DEFAULTBORDERPENWIDTH, mHeight - DEFAULTBORDERPENWIDTH);
     }
     if (mBorderKind & BORDERLEFT){
-      MoveToEx(mHdcBuf, 0, mHeight-DEFAULTBORDERPENWIDTH, NULL);
-      LineTo(mHdcBuf, 0, -DEFAULTBORDERPENWIDTH);
+      buffer.line(0, mHeight - DEFAULTBORDERPENWIDTH,
+                  0, -DEFAULTBORDERPENWIDTH);
     }
-#else
-    POINT p[2];
-    if (mBorderKind & BORDERTOP){
-      p[0].x = 0; p[0].y= 0;
-      p[1].x = mWidth; p[1].y= 0;
-      Polyline(mHdcBuf, p, 2);
-    }
-    if (mBorderKind & BORDERRIGHT){
-      p[0].x = mWidth-DEFAULTBORDERPENWIDTH; p[0].y= 0;
-      p[1].x = mWidth-DEFAULTBORDERPENWIDTH; p[1].y= mHeight;
-      Polyline(mHdcBuf, p, 2);
-    }
-    if (mBorderKind & BORDERBOTTOM){
-      p[0].x = mWidth-DEFAULTBORDERPENWIDTH; p[0].y= mHeight-DEFAULTBORDERPENWIDTH;
-      p[1].x = -DEFAULTBORDERPENWIDTH; p[1].y= mHeight-DEFAULTBORDERPENWIDTH;
-      Polyline(mHdcBuf, p, 2);
-    }
-    if (mBorderKind & BORDERLEFT){
-      p[0].x = 0; p[0].y= mHeight-DEFAULTBORDERPENWIDTH;
-      p[1].x = 0; p[1].y= -DEFAULTBORDERPENWIDTH;
-      Polyline(mHdcBuf, p, 2);
-    }
-#endif
-
-    SelectObject(mHdcBuf,oldPen);
   }
 
-  PaintTitle(mHdcBuf);
-  PaintComment(mHdcBuf);
-  PaintValue(mHdcBuf);
+  PaintTitle(buffer);
+  PaintComment(buffer);
+  PaintValue(buffer);
 }
 
 
 void InfoBox::PaintFast(void) {
-  BitBlt(mHdc, 0, 0, mWidth, mHeight,
-         mHdcBuf, 0, 0, SRCCOPY);
-  PaintSelector(mHdc);
+  widget.get_canvas().copy(buffer);
+  PaintSelector(widget.get_canvas());
 }
 
 
-void InfoBox::PaintInto(HDC mHdcDest, int xoff, int yoff, int width, int height) {
-  StretchBlt(mHdcDest, xoff, yoff, width, height,
-          mHdcBuf, 0, 0, mWidth, mHeight, SRCCOPY);
+void
+InfoBox::PaintInto(Canvas &dest, int xoff, int yoff, int width, int height)
+{
+  dest.stretch(xoff, yoff, width, height,
+               buffer, 0, 0, mWidth, mHeight);
 }
 
-HDC InfoBox::GetHdcBuf(void) {
-  return mHdcBuf;
+Canvas &InfoBox::GetCanvas(void) {
+  return buffer;
 }
 
 void InfoBox::InitializeDrawHelpers(void){
@@ -842,7 +718,7 @@ LRESULT CALLBACK InfoBoxWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     return TRUE;
 
     case WM_PAINT:
-      ib = (InfoBox *)GetWindowLong(hwnd, GWL_USERDATA);
+      ib = (InfoBox *)Window::get_userdata_pointer(hwnd);
       if (ib)
         ib->PaintFast();
 
@@ -852,7 +728,7 @@ LRESULT CALLBACK InfoBoxWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     break;
 
     case WM_WINDOWPOSCHANGED:
-      ib = (InfoBox *)GetWindowLong(hwnd, GWL_USERDATA);
+      ib = (InfoBox *)Window::get_userdata_pointer(hwnd);
       if (ib)
         ib->PaintFast();
     return 0;
@@ -892,9 +768,9 @@ LRESULT CALLBACK InfoBoxWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 #ifdef DEBUG_DBLCLK
         DoStatusMessage(_T("BDOWN InfoBox")); // VENTA3
 #endif
-        ib = (InfoBox *)GetWindowLong(hwnd, GWL_USERDATA);
+        ib = (InfoBox *)Window::get_userdata_pointer(hwnd);
         if (ib)
-	  SendMessage(ib->GetParent(), WM_COMMAND, (WPARAM)0, (LPARAM)ib->GetHandle());
+          ib->GetParent().send_command(ib->GetHandle());
     return(0);
 
     case WM_LBUTTONUP:
@@ -914,13 +790,6 @@ void InitInfoBoxModule(void){
 
   if (InitDone)
     return;
-
-  if (Appearance.InverseInfoBox){
-    COLORREF cl;
-    cl = fgColor;
-    fgColor = bkColor;
-    bkColor = cl;
-  }
 
   InitDone = true;
 }
