@@ -137,7 +137,7 @@ static void OnAirspacePaintListItem(WindowControl * Sender, HDC hDC){
          RGB(0xFF, 0xFF, 0xFF));
       SelectObject(hDC,
 		   MapGfx.GetAirspaceBrushByClass(i));
-        Rectangle(hDC,
+      Rectangle(hDC,
         x0, 2*InfoBoxLayout::scale,
         w0, 22*InfoBoxLayout::scale);
 

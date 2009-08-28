@@ -55,6 +55,7 @@ class MapWindowBase {
  protected:
   static DWORD    dwDrawThreadID;
   static HANDLE   hDrawThread;
+  static Mutex    mutexStart;
 };
 
 

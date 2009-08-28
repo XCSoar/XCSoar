@@ -661,7 +661,7 @@ void InputEvents::setMode(const TCHAR *mode) {
 void InputEvents::drawButtons(int Mode){
   int i;
 
-  if (!(ProgramStarted==psNormalOp)) return;
+  if (!globalRunningEvent.test()) return; 
 
   for (i = 0; i < ModeLabel_count[Mode]; i++) {
     if ((ModeLabel[Mode][i].location > 0)) {
@@ -691,7 +691,7 @@ int InputEvents::getModeID() {
 
 // Input is a via the user touching the label on a touch screen / mouse
 bool InputEvents::processButton(int bindex) {
-  if (!(ProgramStarted==psNormalOp)) return false;
+  if (!globalRunningEvent.test()) return false; 
 
   int thismode = getModeID();
 
@@ -734,7 +734,7 @@ bool InputEvents::processButton(int bindex) {
   Return = We had a valid key (even if nothing happens because of Bounce)
 */
 bool InputEvents::processKey(int dWord) {
-  if (!(ProgramStarted==psNormalOp)) return false;
+  if (!globalRunningEvent.test()) return false; 
 
   InterfaceTimeoutReset();
 
@@ -818,7 +818,7 @@ bool InputEvents::processNmea(int ne_id) {
   Return = TRUE if we have a valid key match
 */
 bool InputEvents::processNmea_real(int ne_id) {
-  if (!(ProgramStarted==psNormalOp)) return false;
+  if (!globalRunningEvent.test()) return false; 
   int event_id = 0;
 
   InterfaceTimeoutReset();
@@ -914,7 +914,7 @@ bool InputEvents::processGlideComputer(int gce_id) {
   Take virtual inputs from a Glide Computer to do special events
 */
 bool InputEvents::processGlideComputer_real(int gce_id) {
-  if (!(ProgramStarted==psNormalOp)) return false;
+  if (!globalRunningEvent.test()) return false; 
   int event_id = 0;
 
   // TODO feature: Log glide computer events to IGC file
@@ -944,7 +944,7 @@ bool InputEvents::processGlideComputer_real(int gce_id) {
 
 // EXECUTE an Event - lookup event handler and call back - no return
 void InputEvents::processGo(int eventid) {
-  if (!(ProgramStarted==psNormalOp)) return;
+  if (!globalRunningEvent.test()) return; 
 
   //
   // TODO feature: event/macro recorder

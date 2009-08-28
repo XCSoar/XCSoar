@@ -49,20 +49,4 @@ extern HINSTANCE hInst;
 extern HWND hWndMainWindow;           // HWND Main Window
 //extern MapWindow hWndMapWindow;
 
-extern bool csFlightDataInitialized;
-
-typedef enum {
-  psInitInProgress=0,
-  psInitDone=1,
-  psFirstDrawDone=2,
-  psNormalOp=3
-} StartupState_t;
-
-// 0: not started at all
-// 1: everything is alive
-// 2: done first draw
-// 3: normal operation
-
-extern StartupState_t ProgramStarted;
-
 #endif

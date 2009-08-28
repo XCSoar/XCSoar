@@ -60,7 +60,6 @@ Copyright_License {
 #include "Screen/Fonts.hpp"
 #include "Compatibility/gdi.h"
 #include "TopologyStore.h"
-#include "GaugeVarioAltA.h"
 #include "GaugeFLARM.h"
 #include "InfoBoxLayout.h"
 #include "InfoBoxManager.h"
@@ -127,7 +126,6 @@ DERIVED_INFO MapWindowData::DerivedDrawInfo;
 
 ///////////////////
 
-BOOL  MapWindow::Initialised = FALSE;
 bool  MapWindow::BigZoom = true;
 bool  MapWindow::LandableReachable = false;
 POINT MapWindow::Groundline[NUMTERRAINSWEEPS+1];
@@ -299,6 +297,7 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
 	return TRUE;
       */
       return TRUE;
+
     case WM_SIZE:
 
       hDrawBitMap = CreateCompatibleBitmap (hdcScreen, width, height);
@@ -340,6 +339,9 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
 	SelectObject(hDCTemp, oldFont);
       }
 
+      // Signal that draw thread can run now
+      mutexStart.Unlock(); // release lock
+
       break;
 
     case WM_CREATE:
@@ -348,9 +350,6 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
       hdcDrawWindow = CreateCompatibleDC(hdcScreen);
       hDCTemp = CreateCompatibleDC(hdcDrawWindow);
       hDCMask = CreateCompatibleDC(hdcDrawWindow);
-
-      // Signal that draw thread can run now
-      Initialised = TRUE;
 
       break;
 
@@ -571,9 +570,9 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
       } // !TargetPan
 
       break;
-      /*
+      /* 
 	case WM_PAINT:
-	if ((hWnd == hWndMapWindow) && (ProgramStarted==3)) {
+	if (hWnd == hWndMapWindow) {
 	// drawTriggerEvent.trigger();
 
 	return TRUE;
@@ -866,12 +865,15 @@ void MapWindow::DrawThreadInitialise(void) {
 
   RequestMapScale = MapScale;
   UpdateMapScale(); // first call
+  ToggleFullScreenStart();
 }
 
 
 DWORD MapWindow::DrawThread (LPVOID lpvoid)
 {
-  while (!globalRunningEvent.test() || !Initialised) {
+  mutexStart.Lock(); // wait for display to start
+
+  while (!globalRunningEvent.test()) {
     // wait for start
     Sleep(100);
   }
@@ -879,11 +881,6 @@ DWORD MapWindow::DrawThread (LPVOID lpvoid)
   DrawThreadInitialise();
 
   DrawThreadLoop(true); // first time draw
-  // mode advance
-  if (ProgramStarted==psInitDone) {
-    ProgramStarted = psFirstDrawDone;
-    GaugeVario::Show(!MapFullScreen);
-  }
 
   // this is the main drawing loop
 
@@ -892,6 +889,7 @@ DWORD MapWindow::DrawThread (LPVOID lpvoid)
     drawTriggerEvent.wait(5000);
   } while (!closeTriggerEvent.test());
 
+  mutexStart.Unlock(); // release lock
   return 0;
 }
 

@@ -44,17 +44,17 @@ Trigger MapWindowBase::dirtyEvent(TEXT("mapDirty"));
 DWORD  MapWindowBase::dwDrawThreadID;
 HANDLE MapWindowBase::hDrawThread;
 Mutex MapWindowBase::mutexRun;
+Mutex MapWindowBase::mutexStart;
 
 
 bool MapWindowBase::IsDisplayRunning() {
   return (globalRunningEvent.test()
-	  && !ScreenBlanked
-	  && ProgramStarted);
+	  && !ScreenBlanked);
 }
-
 
 void MapWindowBase::CreateDrawingThread(void)
 {
+  mutexStart.Lock();
   closeTriggerEvent.reset();
   hDrawThread = CreateThread (NULL, 0,
                               (LPTHREAD_START_ROUTINE )

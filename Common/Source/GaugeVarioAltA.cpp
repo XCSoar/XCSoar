@@ -230,11 +230,7 @@ void GaugeVario::Create() {
 
   SetWindowLong(hWndVarioWindow, GWL_WNDPROC, (LONG) GaugeVarioWndProc);
 
-  //  Render();
-
   ShowWindow(hWndVarioWindow, SW_HIDE);
-  //  Show(true);
-
 }
 
 void GaugeVario::Show(bool doshow) {

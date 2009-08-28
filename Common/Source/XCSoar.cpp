@@ -453,14 +453,21 @@ void PreloadInitialisation(bool ask) {
 
 }
 
+static void StartupLogFreeRamAndStorage() {
+  int freeram = CheckFreeRam()/1024;
+  TCHAR buffer[MAX_PATH];
+  LocalPath(buffer);
+  int freestorage = FindFreeSpace(buffer);
+  StartupStore(TEXT("Free ram %d\nFree storage %d\n"), freeram, freestorage);
+}
 
-StartupState_t ProgramStarted = psInitInProgress;
-// 0: not started at all
-// 1: everything is alive
-// 2: done first draw
-// 3: normal operation
-
-void AfterStartup() {
+static void AfterStartup() {
+  static bool first = true;
+  if (!first) {
+    return;
+  }
+  StartupStore(TEXT("ProgramStarted=3\n"));
+  StartupLogFreeRamAndStorage();
 
   StartupStore(TEXT("CloseProgressDialog\n"));
   CloseProgressDialog();
@@ -493,14 +500,6 @@ void AfterStartup() {
   drawTriggerEvent.trigger();
   InfoBoxesSetDirty(true);
   TriggerRedraws();
-}
-
-void StartupLogFreeRamAndStorage() {
-  int freeram = CheckFreeRam()/1024;
-  TCHAR buffer[MAX_PATH];
-  LocalPath(buffer);
-  int freestorage = FindFreeSpace(buffer);
-  StartupStore(TEXT("Free ram %d\nFree storage %d\n"), freeram, freestorage);
 }
 
 
@@ -846,9 +845,7 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   ReadAssetNumber();
 
   // Da-da, start everything now
-  StartupStore(TEXT("ProgramStarted=1\n"));
-  ProgramStarted = psInitDone;
-
+  StartupStore(TEXT("ProgramStarted\n"));
   globalRunningEvent.trigger();
 
 #if _DEBUG
@@ -1226,8 +1223,6 @@ void Shutdown(void) {
 
   CloseFLARMDetails();
 
-  ProgramStarted = psInitInProgress;
-
   // Kill windows
 
   StartupStore(TEXT("Close Gauges\n"));
@@ -1382,7 +1377,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
     case WM_SETFOCUS:
       // JMW not sure this ever does anything useful..
-      if (ProgramStarted > psInitInProgress) {
+      if (globalRunningEvent.test()) {
 	InfoBoxFocus();
       }
       break;
@@ -1418,23 +1413,19 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
     case WM_TIMER:
       //      assert(hWnd==hWndMainWindow);
-      if (ProgramStarted > psInitInProgress) {
+      if (globalRunningEvent.test()) {
 #ifdef _SIM_
 	SIMProcessTimer();
 #else
 	ProcessTimer();
 #endif
-	if (ProgramStarted==psFirstDrawDone) {
-	  AfterStartup();
-	  ProgramStarted = psNormalOp;
-          StartupStore(TEXT("ProgramStarted=3\n"));
-          StartupLogFreeRamAndStorage();
-	}
+	AfterStartup();
+	
       }
       break;
 
     case WM_INITMENUPOPUP:
-      if (ProgramStarted > psInitInProgress) {
+      if (globalRunningEvent.test()) {
 	if(true) // was DisplayLocked
 	  CheckMenuItem((HMENU) wParam,IDM_FILE_LOCK,MF_CHECKED|MF_BYCOMMAND);
 	else
@@ -1489,7 +1480,7 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
   wmControl = (HWND)lParam;
 
   if(wmControl != NULL) {
-    if (ProgramStarted==psNormalOp) {
+    if (globalRunningEvent.test()) {
 
       MainWindowTop();
 

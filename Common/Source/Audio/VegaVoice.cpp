@@ -37,7 +37,7 @@ Copyright_License {
 
 #include "Audio/VegaVoice.h"
 #include "XCSoar.h"
-#include "Interface.hpp"
+#include "Protection.hpp"
 #include "Airspace.h"
 #include "InputEvents.h"  // used for altair beep hack
 #include "SettingsTask.hpp"
@@ -479,8 +479,7 @@ static void AirspaceWarningNotify(AirspaceWarningNotifyAction_t Action, Airspace
   (void)AirSpace;
   static bool PlaySimpleWarning = false;
 
-
-  if (!(ProgramStarted==psNormalOp))
+  if (!globalRunningEvent.test())
     return;
 
   switch (Action){

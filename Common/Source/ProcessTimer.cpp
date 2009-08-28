@@ -78,7 +78,8 @@ static void HeapCompactTimer()
 void CommonProcessTimer()
 {
   // service the GCE and NMEA queue
-  if (ProgramStarted==psNormalOp) {
+  if (globalRunningEvent.test()) {
+
     InputEvents::DoQueuedEvents();
     if (airspaceWarningEvent.test()) {
       airspaceWarningEvent.reset();

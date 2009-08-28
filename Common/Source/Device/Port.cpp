@@ -272,7 +272,7 @@ DWORD ComPort::ReadThread()
               // Read the data from the serial port.
         if (ReadFile(hPort, inbuf, 1024, &dwBytesTransferred,
 		     (OVERLAPPED *)NULL)) {
-	  if (ProgramStarted >= psNormalOp)  // ignore everything until started
+	  if (globalRunningEvent.test())  // ignore everything until started
 	    for (unsigned int j = 0; j < dwBytesTransferred; j++) {
 	      ProcessChar(inbuf[j]);
 	    }
