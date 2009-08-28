@@ -83,6 +83,7 @@
    long" types.  So, we work around this problem by using the "INT64"
    and "UINT64" types that are defined in the header file "windows.h".
  */
+#define WIN32_LEAN_AND_MEAN		// Exclude rarely-used stuff from Windows headers
 #include <windows.h>
 #undef longlong
 #define	longlong	INT64

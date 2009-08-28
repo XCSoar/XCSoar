@@ -21,7 +21,6 @@
 
 #include <memory.h>
 #include <string.h>
-#include <windows.h>
 #include "ts_string.h"
 #include "StdAfx.h"
 

@@ -37,6 +37,7 @@ Copyright_License {
 #if !defined(XCSOAR_UTILS_SYSTEM_H)
 #define XCSOAR_UTILS_SYSTEM_H
 
+#define WIN32_LEAN_AND_MEAN		// Exclude rarely-used stuff from Windows headers
 #include <windows.h>
 
 #ifdef PNA

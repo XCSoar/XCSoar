@@ -303,12 +303,12 @@ void InputEvents::eventScreenModes(const TCHAR *misc) {
 	if (EnableSoundModes) PlayResource(TEXT("IDR_WAV_CLICK"));
 #endif
 	EnableAuxiliaryInfo = false;
-	MapWindow::RequestOnFullScreen();
+	MapWindow::RequestFullScreen(true);
 	break;
       case 4:
 	//	InfoBoxLayout::fullscreen = false;
 	EnableAuxiliaryInfo = false;
-	MapWindow::RequestOffFullScreen();
+	MapWindow::RequestFullScreen(false);
 #ifndef DISABLEAUDIO
 	if (EnableSoundModes) PlayResource(TEXT("IDR_WAV_BELL"));
 #endif

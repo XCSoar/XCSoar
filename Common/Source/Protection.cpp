@@ -79,16 +79,18 @@ DWORD InstrumentThread (LPVOID lpvoid) {
 
   while (!closeTriggerEvent.test()) {
 
-    if (closeTriggerEvent.test())
-      break; // drop out on exit
+    if (!varioTriggerEvent.test()) {
+      Sleep(100);
+      continue;
+    }
 
-    if (varioTriggerEvent.wait(5000)) {
-      if (MapWindow::IsDisplayRunning()) {
-        if (EnableVarioGauge) {
-          GaugeVario::Render();
-        }
+    if (MapWindow::IsDisplayRunning()) {
+      if (EnableVarioGauge) {
+	GaugeVario::Render();
       }
     }
+
+    varioTriggerEvent.reset();
   }
   return 0;
 }
@@ -110,9 +112,10 @@ DWORD CalculationThread (LPVOID lpvoid) {
 
   while (!closeTriggerEvent.test()) {
 
-    dataTriggerEvent.wait(5000);
-    if (closeTriggerEvent.test())
-      break; // drop out on exit
+    if (!dataTriggerEvent.test()) {
+      Sleep(100);
+      continue;
+    }
 
     // set timer to determine latency (including calculations)
     if (gpsUpdatedTriggerEvent.test()) {
@@ -162,11 +165,6 @@ DWORD CalculationThread (LPVOID lpvoid) {
     if (closeTriggerEvent.test())
       break; // drop out on exit
 
-#if defined(_SIM_)
-    need_calculations_slow |= (EnableBestAlternate && ReplayLogger::IsEnabled());
-    // VENTA3, needed for BestAlternate SIM
-#endif
-
     if (need_calculations_slow) {
       DoCalculationsSlow(&tmp_GPS_INFO,&tmp_CALCULATED_INFO);
       need_calculations_slow = false;
@@ -182,6 +180,8 @@ DWORD CalculationThread (LPVOID lpvoid) {
     memcpy(&CALCULATED_INFO,&tmp_CALCULATED_INFO,sizeof(DERIVED_INFO));
     mutexFlightData.Unlock();
 
+    // reset triggers
+    dataTriggerEvent.reset();
     gpsUpdatedTriggerEvent.reset();
   }
   return 0;

@@ -47,6 +47,7 @@ Copyright_License {
 #include "WindowControls.h"
 #include "ExpandMacros.hpp"
 #include "Interface.hpp"
+#include <stdio.h>
 
 // Layouts:
 // 0: default, infoboxes along top and bottom, map in middle

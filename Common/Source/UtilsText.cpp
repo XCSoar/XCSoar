@@ -40,6 +40,7 @@ Copyright_License {
 #include "XCSoar.h"
 #include "Compatibility/string.h"
 #include <assert.h>
+#include <stdlib.h>
 
 void PExtractParameter(const TCHAR *Source, TCHAR *Destination,
                        int DesiredFieldNumber)

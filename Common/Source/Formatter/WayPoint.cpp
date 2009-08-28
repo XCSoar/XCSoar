@@ -43,6 +43,7 @@ Copyright_License {
 #include "SettingsComputer.hpp" // for auto-setting of alternates.  Dangerous!
 #include "SettingsTask.hpp"
 #include "SettingsUser.hpp"
+#include <stdio.h>
 
 extern int  ActiveAlternate; // from InfoBoxManager
 

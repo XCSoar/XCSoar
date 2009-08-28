@@ -216,7 +216,7 @@ endif
 ifeq ($(CONFIG_PC),y)
 CPPFLAGS	+= -D_WINDOWS -DWIN32 -DCECORE -DUNDER_CE=300
   ifeq ($(CONFIG_WINE),y)
-CPPFLAGS	+= -D__MINGW32__
+CPPFLAGS	+= -D__MINGW32__ -D__WINE__
 # -mno-cygwin
   else
 CPPFLAGS	+= $(UNICODE) -D_MBCS

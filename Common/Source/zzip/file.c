@@ -28,8 +28,10 @@
 #if defined(__MINGW32__)
 //(WINDOWSPC>0)&&
 // JMW needed otherwise seek/tell won't work!
+#ifndef __WINE__
 #undef _fmode
 int _fmode = _O_BINARY;
+#endif
 #endif
 
 #if 0
