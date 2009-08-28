@@ -100,7 +100,13 @@ public:
    * trigger is reset only if a thread was really woken up.
    */
   void trigger() {
+#if defined(_WIN32_WCE) && defined(__MINGW32__) && defined(EVENT_SET)
+    /* mingw32ce < 0.59 has a bugged SetEvent() implementation in
+       kfuncs.h */
+    ::EventModify(handle, EVENT_SET);
+#else
     ::SetEvent(handle);
+#endif
   }
 
   /**
@@ -114,7 +120,13 @@ public:
    * Resets the trigger
    */
   void reset() {
+#if defined(_WIN32_WCE) && defined(__MINGW32__) && defined(EVENT_RESET)
+    /* mingw32ce < 0.59 has a bugged SetEvent() implementation in
+       kfuncs.h */
+    ::EventModify(handle, EVENT_RESET);
+#else
     ::ResetEvent(handle);
+#endif
   }
 
 };
