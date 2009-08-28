@@ -85,8 +85,8 @@ void MapWindowBase::CloseDrawingThread(void)
 {
   closeTriggerEvent.trigger();
   drawTriggerEvent.trigger(); // wake self up
-  mutexTerrainDataGraphics.Lock();
+  //  mutexTerrainDataGraphics.Lock();
   SuspendDrawingThread();
-  mutexTerrainDataGraphics.Unlock();
+  //  mutexTerrainDataGraphics.Unlock();
   WaitForSingleObject(hDrawThread, INFINITE);
 }
