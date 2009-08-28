@@ -46,6 +46,7 @@ HANDLE MapWindowBase::hDrawThread;
 Mutex MapWindowBase::mutexRun;
 Mutex MapWindowBase::mutexStart;
 
+bool     MapWindowBase::window_initialised = false;
 
 bool MapWindowBase::IsDisplayRunning() {
   return (globalRunningEvent.test()
@@ -54,7 +55,14 @@ bool MapWindowBase::IsDisplayRunning() {
 
 void MapWindowBase::CreateDrawingThread(void)
 {
-  mutexStart.Lock();
+  bool has_initialised = false;
+  do {
+    mutexStart.Lock(); // wait for display to start
+    has_initialised |= window_initialised;
+    mutexStart.Unlock();
+    Sleep(100);
+  } while (!window_initialised);
+
   closeTriggerEvent.reset();
   hDrawThread = CreateThread (NULL, 0,
                               (LPTHREAD_START_ROUTINE )

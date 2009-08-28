@@ -38,6 +38,7 @@ Copyright_License {
 #include "MapWindow.h"
 #include "XCSoar.h"
 #include "Interface.hpp"
+#include "LogFile.hpp"
 #include "Protection.hpp"
 #include "Utils.h"
 #include "Utils2.h"
@@ -340,6 +341,8 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
       }
 
       // Signal that draw thread can run now
+      mutexStart.Lock();
+      window_initialised = true;
       mutexStart.Unlock(); // release lock
 
       break;
@@ -871,8 +874,6 @@ void MapWindow::DrawThreadInitialise(void) {
 
 DWORD MapWindow::DrawThread (LPVOID lpvoid)
 {
-  mutexStart.Lock(); // wait for display to start
-
   while (!globalRunningEvent.test()) {
     // wait for start
     Sleep(100);

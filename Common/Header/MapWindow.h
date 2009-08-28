@@ -56,6 +56,7 @@ class MapWindowBase {
   static DWORD    dwDrawThreadID;
   static HANDLE   hDrawThread;
   static Mutex    mutexStart;
+  static bool     window_initialised;
 };
 
 

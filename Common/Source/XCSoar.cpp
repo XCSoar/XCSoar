@@ -466,6 +466,7 @@ static void AfterStartup() {
   if (!first) {
     return;
   }
+  first = false;
   StartupStore(TEXT("ProgramStarted=3\n"));
   StartupLogFreeRamAndStorage();
 
