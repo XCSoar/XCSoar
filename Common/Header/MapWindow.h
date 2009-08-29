@@ -64,7 +64,7 @@ class MapWindowBase {
 
 
 class MapWindow
-: public Widget, public MapWindowBase,
+: public PaintWindow, public MapWindowBase,
   public MapWindowProjection {
  public:
   // inter-process, used only on file change

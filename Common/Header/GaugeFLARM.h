@@ -45,7 +45,7 @@ Copyright_License {
 
 class GaugeFLARM {
  public:
-  static Widget widget;
+  static PaintWindow window;
 
  public:
   static void Create();

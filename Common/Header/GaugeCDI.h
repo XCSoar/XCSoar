@@ -42,7 +42,7 @@ Copyright_License {
 #include "Screen/TextWindow.hpp"
 
 class GaugeCDI {
-  static TextWidget widget;
+  static TextWindow window;
 
  public:
   static void Create();

@@ -62,10 +62,10 @@ void WindowCanvas::reset()
 }
 
 void
-Widget::set(ContainerWindow *parent, unsigned left, unsigned top,
-            unsigned width, unsigned height,
-            bool center, bool notify, bool show,
-            bool tabstop, bool border)
+PaintWindow::set(ContainerWindow *parent, unsigned left, unsigned top,
+                 unsigned width, unsigned height,
+                 bool center, bool notify, bool show,
+                 bool tabstop, bool border)
 {
   canvas.reset();
 
@@ -78,17 +78,17 @@ Widget::set(ContainerWindow *parent, unsigned left, unsigned top,
 }
 
 void
-Widget::set(ContainerWindow &parent, unsigned left, unsigned top,
-            unsigned width, unsigned height,
-            bool center, bool notify, bool show,
-            bool tabstop, bool border)
+PaintWindow::set(ContainerWindow &parent, unsigned left, unsigned top,
+                 unsigned width, unsigned height,
+                 bool center, bool notify, bool show,
+                 bool tabstop, bool border)
 {
   set(&parent, left, top, width, height,
       center, notify, show, tabstop, border);
 }
 
 void
-Widget::created(HWND _hWnd)
+PaintWindow::created(HWND _hWnd)
 {
   assert(!canvas.defined());
 
@@ -97,7 +97,7 @@ Widget::created(HWND _hWnd)
 }
 
 void
-Widget::reset()
+PaintWindow::reset()
 {
   canvas.reset();
   Window::reset();

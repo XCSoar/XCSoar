@@ -40,7 +40,7 @@ Copyright_License {
 
 #include "Screen/PaintWindow.hpp"
 
-class ContainerWindow : public Widget {
+class ContainerWindow : public PaintWindow {
 };
 
 #endif

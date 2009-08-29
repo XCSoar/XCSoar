@@ -56,7 +56,7 @@ public:
 
 class ContainerWindow;
 
-class Widget : public Window {
+class PaintWindow : public Window {
 private:
   WindowCanvas canvas;
 

@@ -43,7 +43,7 @@ Copyright_License {
 #endif
 
 void
-EditWidget::set(ContainerWindow &parent, int left, int top,
+EditWindow::set(ContainerWindow &parent, int left, int top,
                 unsigned width, unsigned height,
                 bool multiline)
 {

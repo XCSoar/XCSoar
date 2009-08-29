@@ -40,7 +40,7 @@ Copyright_License {
 
 #include "Screen/Window.hpp"
 
-class TextWidget : public Window {
+class TextWindow : public Window {
 public:
   void set(ContainerWindow &parent, unsigned left, unsigned top,
            unsigned width, unsigned height,

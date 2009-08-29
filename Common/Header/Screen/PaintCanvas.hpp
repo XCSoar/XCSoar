@@ -40,7 +40,7 @@ Copyright_License {
 
 #include "Screen/Canvas.hpp"
 
-class Widget;
+class PaintWindow;
 
 class PaintCanvas : public Canvas {
 private:
@@ -48,7 +48,7 @@ private:
   PAINTSTRUCT ps;
 
 public:
-  PaintCanvas(const Widget &widget, HWND _hWnd);
+  PaintCanvas(const PaintWindow &window, HWND _hWnd);
   ~PaintCanvas();
 };
 

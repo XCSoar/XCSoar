@@ -63,7 +63,7 @@ class InfoBox{
     int mWidth;
     int mHeight;
     ContainerWindow &mParent;
-    Widget widget;
+    PaintWindow window;
     BufferCanvas buffer;
     BitmapCanvas temp;
     int  mBorderKind;
@@ -138,7 +138,7 @@ class InfoBox{
     int GetBorderKind(void);
     int SetBorderKind(int Value);
 
-    Widget &GetHandle(void);
+    PaintWindow &GetHandle(void);
     ContainerWindow &GetParent(void);
 
     void SetColor(int Value);

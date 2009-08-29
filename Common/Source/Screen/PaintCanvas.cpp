@@ -38,11 +38,11 @@ Copyright_License {
 #include "Screen/PaintCanvas.hpp"
 #include "Screen/PaintWindow.hpp"
 
-PaintCanvas::PaintCanvas(const Widget &widget, HWND _hWnd)
+PaintCanvas::PaintCanvas(const PaintWindow &window, HWND _hWnd)
   :hWnd(_hWnd)
 {
   HDC hDC = ::BeginPaint(hWnd, &ps);
-  set(hDC, widget.get_width(), widget.get_height());
+  set(hDC, window.get_width(), window.get_height());
 }
 
 PaintCanvas::~PaintCanvas()

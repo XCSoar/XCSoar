@@ -54,7 +54,7 @@ typedef struct{
 
 class GaugeVario {
 public:
-  static Widget widget;
+  static PaintWindow window;
 
 private:
   static BufferCanvas hdcDrawWindow;

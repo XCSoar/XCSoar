@@ -128,7 +128,7 @@ class WindowControl {
 
   protected:
 
-    ContainerWindow widget;
+    ContainerWindow window;
     bool mCanFocus;
     TCHAR mCaption[254];
     bool mDontPaintSelector;
@@ -245,10 +245,10 @@ class WindowControl {
     virtual void SetCaption(const TCHAR *Value);
     void SetHelpText(const TCHAR *Value);
 
-    HWND GetHandle(void) { return widget; }
-    ContainerWindow &GetWidget(void) { return widget; }
-    virtual ContainerWindow &GetClientAreaWidget(void) { return widget; }
-    Canvas &GetCanvas(void) { return widget.get_canvas(); }
+    HWND GetHandle(void) { return window; }
+    ContainerWindow &GetWindow(void) { return window; }
+    virtual ContainerWindow &GetClientAreaWindow(void) { return window; }
+    Canvas &GetCanvas(void) { return window.get_canvas(); }
     BitmapCanvas &GetTempDeviceContext(void) { return mHdcTemp; }
     WindowControl *GetOwner(void){return(mOwner);};
 
@@ -466,7 +466,7 @@ class WndForm:public WindowControl{
     virtual void Destroy(void);
 
     bool bLButtonDown; //RLD
-    ContainerWindow &GetClientAreaWidget(void);
+    ContainerWindow &GetClientAreaWindow(void);
     void AddClient(WindowControl *Client);
 
     virtual bool SetFocused(bool Value, HWND FromTo);
@@ -558,7 +558,7 @@ class WndProperty:public WindowControl{
     static HBITMAP hBmpRight32;
     static int InstCount;
 
-    EditWidget edit;
+    EditWindow edit;
     POINT mEditSize;
     POINT mEditPos;
     const Font *mhCaptionFont;

@@ -40,7 +40,7 @@ Copyright_License {
 
 #include "Screen/Window.hpp"
 
-class EditWidget : public Window {
+class EditWindow : public Window {
 public:
   void set(ContainerWindow &parent, int left, int top,
            unsigned width, unsigned height,
