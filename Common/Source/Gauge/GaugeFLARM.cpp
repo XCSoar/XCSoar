@@ -58,8 +58,7 @@ DWORD EnableFLARMMap = 1;
 PaintWindow GaugeFLARM::window; //FLARM Window
 
 Bitmap GaugeFLARM::hRoseBitMap;
-int GaugeFLARM::hRoseBitMapWidth = 0;
-int GaugeFLARM::hRoseBitMapHeight= 0;
+SIZE GaugeFLARM::hRoseBitMapSize;
 BufferCanvas GaugeFLARM::hdcDrawWindow;
 bool GaugeFLARM::Visible= false;
 bool GaugeFLARM::Traffic= false;
@@ -87,14 +86,13 @@ int GaugeFLARM::RangeScale(double d) {
 void GaugeFLARM::RenderBg(Canvas &canvas) {
   BitmapCanvas hdcTemp(canvas, hRoseBitMap);
 
-  if ( hRoseBitMapWidth != IBLSCALE(InfoBoxLayout::ControlWidth*2)
-      || hRoseBitMapHeight != IBLSCALE(InfoBoxLayout::ControlHeight*2-1) )
-  {
+  if (hRoseBitMapSize.cx != IBLSCALE(InfoBoxLayout::ControlWidth * 2) ||
+      hRoseBitMapSize.cy != IBLSCALE(InfoBoxLayout::ControlHeight * 2 - 1)) {
     canvas.stretch(0, 0,
                    InfoBoxLayout::ControlWidth * 2,
                    InfoBoxLayout::ControlHeight * 2 - 1,
                    hdcTemp,
-                   0, 0, hRoseBitMapWidth, hRoseBitMapHeight);
+                   0, 0, hRoseBitMapSize.cx, hRoseBitMapSize.cy);
   }
   else
   {
@@ -254,9 +252,7 @@ void GaugeFLARM::Create() {
 
   hRoseBitMap.load(IDB_FLARMROSE);
 
-  const SIZE size = hRoseBitMap.get_size();
-  hRoseBitMapWidth = size.cx;
-  hRoseBitMapHeight = size.cy;
+  hRoseBitMapSize = hRoseBitMap.get_size();
 
   if (Appearance.InverseInfoBox){
     colText = Color(0xff, 0xff, 0xff);

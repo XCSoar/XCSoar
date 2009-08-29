@@ -61,8 +61,7 @@ class GaugeFLARM {
  private:
   static BufferCanvas hdcDrawWindow;
   static Bitmap hRoseBitMap;
-  static int hRoseBitMapWidth;
-  static int hRoseBitMapHeight;
+  static SIZE hRoseBitMapSize;
   static int radius;
   static POINT center;
   static bool Traffic;
