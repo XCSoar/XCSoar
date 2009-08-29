@@ -48,6 +48,7 @@ Copyright_License {
 #include "Interface.hpp"
 #include "Screen/Graphics.hpp"
 #include "Screen/Fonts.hpp"
+#include "Screen/BitmapCanvas.hpp"
 
 static Color fgColor = RGB(0x0,0x0,0x0);
 static Color bkColor = RGB(0xff,0xff,0xff);
@@ -114,8 +115,6 @@ InfoBox::InfoBox(ContainerWindow &parent, int X, int Y, int Width, int Height)
     hPenDefaultBorder.set(DEFAULTBORDERPENWIDTH, bdColor);
     hPenSelector.set(DEFAULTBORDERPENWIDTH + 2, mColorFore);
   }
-
-  temp.set(window.get_canvas());
 
   // JMW added double buffering to reduce flicker
   buffer.set(window.get_canvas(), mWidth, mHeight);
@@ -198,7 +197,6 @@ InfoBox::~InfoBox(void){
   }
 
   buffer.reset();
-  temp.reset();
   window.reset();
 }
 
@@ -480,14 +478,13 @@ void InfoBox::PaintValue(Canvas &canvas){
 
   if ((mValueUnit != unUndef) && (color>=0)){
     if (mhBitmapUnit != NULL){
-      temp.select(*mhBitmapUnit);
+      BitmapCanvas temp(canvas, *mhBitmapUnit);
       canvas.scale_copy(x + tsize.cx,
                         y + mpFontHeightValue->AscentHeight
                         - mBitmapUnitSize.y * InfoBoxLayout::scale,
                         temp,
                         mBitmapUnitPos.x, mBitmapUnitPos.y,
                         mBitmapUnitSize.x, mBitmapUnitSize.y);
-      temp.clear();
     }
   }
 

@@ -40,7 +40,6 @@ Copyright_License {
 #include "Units.h"
 #include "Screen/Font.hpp"
 #include "Screen/BufferCanvas.hpp"
-#include "Screen/BitmapCanvas.hpp"
 #include "Screen/PaintWindow.hpp"
 
 #define BORDERTOP    (1<<bkTop)
@@ -65,7 +64,6 @@ class InfoBox{
     ContainerWindow &mParent;
     PaintWindow window;
     BufferCanvas buffer;
-    BitmapCanvas temp;
     int  mBorderKind;
     Color mColorBack;
     Color mColorFore;
