@@ -46,6 +46,7 @@ Copyright_License {
 #include "InfoBoxLayout.h"
 #include "Screen/Graphics.hpp"
 #include "Screen/Fonts.hpp"
+#include "Screen/BitmapCanvas.hpp"
 #include "Screen/PaintCanvas.hpp"
 #include "Screen/MainWindow.hpp"
 #include "Math/Geometry.hpp"
@@ -61,7 +62,6 @@ Copyright_License {
 PaintWindow GaugeVario::window;
 BufferCanvas GaugeVario::hdcDrawWindow;
 
-BitmapCanvas GaugeVario::hdcTemp;
 Bitmap GaugeVario::hDrawBitMap;
 bool GaugeVario::dirty;
 int GaugeVario::xoffset;
@@ -130,8 +130,6 @@ void GaugeVario::Create() {
   window.insert_after(HWND_TOP, false);
 
   hdcDrawWindow.set(window.get_canvas());
-
-  hdcTemp.set(window.get_canvas());
 
   // load vario scale
   if (Units::GetUserVerticalSpeedUnit()==unKnots) {
@@ -242,7 +240,6 @@ void GaugeVario::Destroy() {
   }
 
   hdcDrawWindow.reset();
-  hdcTemp.reset();
   hDrawBitMap.reset();
   window.reset();
 }
@@ -277,7 +274,7 @@ void GaugeVario::Render() {
     orgBottom.y = orgMiddle.y + ValueHeight;
     orgBottom.x = window.get_right();
 
-    hdcTemp.select(hDrawBitMap);
+    BitmapCanvas hdcTemp(hdcDrawWindow, hDrawBitMap);
     // copy scale bitmap to memory DC
     if (InfoBoxLayout::dscale>1) {
       if (Appearance.InverseInfoBox)
@@ -292,8 +289,6 @@ void GaugeVario::Render() {
         hdcDrawWindow.copy(hdcTemp, 0, 0);
 
     }
-
-    hdcTemp.clear();
 
     InitDone = true;
   }
@@ -505,7 +500,7 @@ void GaugeVario::RenderClimb() {
 
     hdcDrawWindow.rectangle(x, y, x + IBLSCALE(12), y + IBLSCALE(12));
   } else {
-    hdcTemp.select(hBitmapClimb);
+    BitmapCanvas hdcTemp(hdcDrawWindow, hBitmapClimb);
     if (InfoBoxLayout::dscale>1) {
       hdcDrawWindow.stretch(x, y, IBLSCALE(12), IBLSCALE(12),
                             hdcTemp, 12, 0, 12, 12);
@@ -513,7 +508,6 @@ void GaugeVario::RenderClimb() {
       hdcDrawWindow.copy(x, y, 12, 12,
                          hdcTemp, 12, 0);
     }
-    hdcTemp.clear();
   }
 }
 
@@ -727,7 +721,7 @@ void GaugeVario::RenderValue(int x, int y,
   }
 
   if (dirty && (diLabel->lastBitMap != hBitmapUnit)) {
-    hdcTemp.select(*hBitmapUnit);
+    BitmapCanvas hdcTemp(hdcDrawWindow, *hBitmapUnit);
     if (InfoBoxLayout::dscale>1) {
       hdcDrawWindow.stretch(x - IBLSCALE(5), diValue->recBkg.top,
                             IBLSCALE(BitmapUnitSize.x),
@@ -741,7 +735,6 @@ void GaugeVario::RenderValue(int x, int y,
                          hdcTemp,
                          BitmapUnitPos.x, BitmapUnitPos.y);
     }
-    hdcTemp.clear();
     diLabel->lastBitMap = hBitmapUnit;
   }
 

@@ -39,7 +39,6 @@ Copyright_License {
 #define GAUGE_VARIO_H
 #include "StdAfx.h"
 #include "Screen/BufferCanvas.hpp"
-#include "Screen/BitmapCanvas.hpp"
 #include "Screen/PaintWindow.hpp"
 
 typedef struct{
@@ -87,7 +86,6 @@ private:
   static POINT *polys;
   static POINT *lines;
   static bool dirty;
-  static BitmapCanvas hdcTemp;
   static Bitmap hDrawBitMap;
   static DrawInfo_t diValueTop;
   static DrawInfo_t diValueMiddle;
