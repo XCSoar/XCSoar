@@ -62,20 +62,22 @@ private:
   static void Create();
   static void Destroy();
   static void Render();
-  static void RenderBg();
+  static void RenderBg(Canvas &canvas);
   static void Repaint(Canvas &canvas);
   static void Show(bool doshow);
 
  private:
-  static void RenderZero(void);
-  static void RenderValue(int x, int y, DrawInfo_t *diValue, DrawInfo_t *diLabel, double Value, const TCHAR *Label);
-  static void RenderSpeedToFly(int x, int y);
-  static void RenderBallast(void);
-  static void RenderBugs(void);
+  static void RenderZero(Canvas &canvas);
+  static void RenderValue(Canvas &canvas, int x, int y,
+                          DrawInfo_t *diValue, DrawInfo_t *diLabel,
+                          double Value, const TCHAR *Label);
+  static void RenderSpeedToFly(Canvas &canvas, int x, int y);
+  static void RenderBallast(Canvas &canvas);
+  static void RenderBugs(Canvas &canvas);
   static int  ValueToNeedlePos(double Value);
-  static void RenderNeedle(int i, bool average, bool clear);
-  static void RenderVarioLine(int i, int sink, bool clear);
-  static void RenderClimb(void);
+  static void RenderNeedle(Canvas &canvas, int i, bool average, bool clear);
+  static void RenderVarioLine(Canvas &canvas, int i, int sink, bool clear);
+  static void RenderClimb(Canvas &canvas);
 
   static int xoffset;
   static int yoffset;
