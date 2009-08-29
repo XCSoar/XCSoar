@@ -810,6 +810,10 @@ void MapWindow::DrawThreadLoop(bool first_time) {
     map_window.get_canvas().copy(hdcDrawWindow);
     map_window.update(MapRect);
   }
+
+  UpdateTimeStats(false);
+  UpdateCaches(first_time);
+
   mutexRun.Unlock(); // release control
 }
 

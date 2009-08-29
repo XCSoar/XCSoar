@@ -50,6 +50,8 @@ Copyright_License {
 #include <stdlib.h>
 #include <tchar.h>
 
+#include "LogFile.hpp"
+
 XShape::XShape() {
   hide=false;
 }
@@ -152,6 +154,7 @@ void Topology::flushCache() {
 }
 
 void Topology::updateCache(rectObj thebounds, bool purgeonly) {
+
   if (!triggerUpdateCache) return;
 
   if (!shapefileopen) return;
@@ -186,6 +189,7 @@ void Topology::updateCache(rectObj thebounds, bool purgeonly) {
 
       if (shpCache[i]==NULL) {
 	// shape is now in range, and wasn't before
+
 	shpCache[i] = addShape(i);
       }
       shapes_visible_count++;
