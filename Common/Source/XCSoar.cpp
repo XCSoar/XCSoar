@@ -117,6 +117,7 @@ TCHAR XCSoar_Version[256] = TEXT("");
 HINSTANCE hInst; // The current instance
 MainWindow hWndMainWindow;
 MapWindow map_window;
+GaugeVario *gauge_vario;
 GaugeFLARM *gauge_flarm;
 
 HBRUSH hBrushSelected;
@@ -629,7 +630,8 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   ////////////////////////////////////////////////////////
 
   GaugeCDI::Create();
-  GaugeVario::Create();
+
+  gauge_vario = new GaugeVario(hWndMainWindow);
 
   GPS_INFO.NAVWarning = true; // default, no gps at all!
 
@@ -1193,7 +1195,8 @@ void Shutdown(void) {
   StartupStore(TEXT("Close Gauges\n"));
 
   GaugeCDI::Destroy();
-  GaugeVario::Destroy();
+  delete gauge_vario;
+  gauge_vario = NULL;
   delete gauge_flarm;
   gauge_flarm = NULL;
 

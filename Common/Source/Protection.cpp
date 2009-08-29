@@ -48,6 +48,7 @@ Copyright_License {
 #include "Gauge/GaugeVarioAltA.hpp"
 #include "Logger.h"
 #include "Calculations.h"
+#include "Interface.hpp"
 
 #include <assert.h>
 
@@ -125,7 +126,7 @@ DWORD InstrumentThread (LPVOID lpvoid) {
 
     if (MapWindow::IsDisplayRunning()) {
       if (EnableVarioGauge) {
-	GaugeVario::Render();
+	gauge_vario->Render();
       }
     }
 

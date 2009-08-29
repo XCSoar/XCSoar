@@ -48,54 +48,15 @@ Copyright_License {
 #include "Screen/Fonts.hpp"
 #include "Screen/BitmapCanvas.hpp"
 #include "Screen/PaintCanvas.hpp"
-#include "Screen/MainWindow.hpp"
+#include "Screen/ContainerWindow.hpp"
 #include "Math/Geometry.hpp"
 #include "McReady.h"
-#include "Interface.hpp"
 
 #include "SettingsUser.hpp"
 #include "SettingsComputer.hpp"
 
 #include <assert.h>
 #include <stdlib.h>
-
-PaintWindow GaugeVario::window;
-BufferCanvas GaugeVario::hdcDrawWindow;
-
-Bitmap GaugeVario::hDrawBitMap;
-bool GaugeVario::dirty;
-int GaugeVario::xoffset;
-int GaugeVario::yoffset;
-int GaugeVario::gmax;
-POINT* GaugeVario::polys=NULL;
-POINT* GaugeVario::lines=NULL;
-
-const Bitmap *GaugeVario::hBitmapUnit;
-Bitmap GaugeVario::hBitmapClimb;
-POINT GaugeVario::BitmapUnitPos;
-POINT GaugeVario::BitmapUnitSize;
-Brush GaugeVario::redBrush;
-Brush GaugeVario::blueBrush;
-Pen GaugeVario::redPen;
-Pen GaugeVario::bluePen;
-Pen GaugeVario::redThickPen;
-Pen GaugeVario::blueThickPen;
-Pen GaugeVario::blankThickPen;
-
-Brush GaugeVario::yellowBrush;
-Brush GaugeVario::greenBrush;
-Brush GaugeVario::magentaBrush;
-Pen GaugeVario::yellowPen;
-Pen GaugeVario::greenPen;
-Pen GaugeVario::magentaPen;
-
-
-DrawInfo_t GaugeVario::diValueTop = {false};
-DrawInfo_t GaugeVario::diValueMiddle = {false};
-DrawInfo_t GaugeVario::diValueBottom = {false};
-DrawInfo_t GaugeVario::diLabelTop = {false};
-DrawInfo_t GaugeVario::diLabelMiddle = {false};
-DrawInfo_t GaugeVario::diLabelBottom = {false};
 
 #define GAUGEXSIZE (InfoBoxLayout::ControlWidth)
 #define GAUGEYSIZE (InfoBoxLayout::ControlHeight*3)
@@ -114,13 +75,21 @@ static Color colTextBackgnd;
 LRESULT CALLBACK GaugeVarioWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 
-void GaugeVario::Create() {
+GaugeVario::GaugeVario(ContainerWindow &parent)
+ :polys(NULL), lines(NULL)
+{
+  diValueTop.InitDone = false;
+  diValueMiddle.InitDone = false;
+  diValueBottom.InitDone = false;
+  diLabelTop.InitDone = false;
+  diLabelMiddle.InitDone = false;
+  diLabelBottom.InitDone = false;
 
   StartupStore(TEXT("Create Vario\n"));
 
   RECT MapRectBig = MapWindowProjection::GetMapRect();
 
-  window.set(hWndMainWindow,
+  window.set(parent,
              InfoBoxLayout::landscape
              ? (MapRectBig.right + InfoBoxLayout::ControlWidth)
              : (MapRectBig.right - GAUGEXSIZE),
@@ -199,6 +168,7 @@ void GaugeVario::Create() {
   xoffset = window.get_width();
   yoffset = window.get_height() / 2;
 
+  window.set_userdata(this);
   window.set_wndproc(GaugeVarioWndProc);
   window.hide();
 }
@@ -229,7 +199,8 @@ void GaugeVario::Show(bool doshow) {
 }
 
 
-void GaugeVario::Destroy() {
+GaugeVario::~GaugeVario()
+{
   if (polys) {
     free(polys);
     polys=NULL;
@@ -238,10 +209,6 @@ void GaugeVario::Destroy() {
     free(lines);
     lines=NULL;
   }
-
-  hdcDrawWindow.reset();
-  hDrawBitMap.reset();
-  window.reset();
 }
 
 
@@ -1057,6 +1024,7 @@ void GaugeVario::RenderBugs(Canvas &canvas)
 
 
 LRESULT CALLBACK GaugeVarioWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam){
+  GaugeVario *gauge = (GaugeVario *)Window::get_userdata_pointer(hwnd);
 
   switch (uMsg){
     case WM_ERASEBKGND:
@@ -1065,8 +1033,8 @@ LRESULT CALLBACK GaugeVarioWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l
 
     case WM_PAINT:
       if (globalRunningEvent.test() && EnableVarioGauge) {
-        PaintCanvas canvas(GaugeVario::window, hwnd);
-        GaugeVario::Repaint(canvas);
+        PaintCanvas canvas(gauge->window, hwnd);
+        gauge->Repaint(canvas);
       }
     break;
 

@@ -37,9 +37,12 @@ Copyright_License {
 
 #ifndef GAUGE_VARIO_H
 #define GAUGE_VARIO_H
-#include "StdAfx.h"
+
 #include "Screen/BufferCanvas.hpp"
 #include "Screen/PaintWindow.hpp"
+#include "Screen/Bitmap.hpp"
+
+class ContainerWindow;
 
 typedef struct{
   bool    InitDone;
@@ -53,65 +56,70 @@ typedef struct{
 
 class GaugeVario {
 public:
-  static PaintWindow window;
+  PaintWindow window;
 
 private:
-  static BufferCanvas hdcDrawWindow;
+  BufferCanvas hdcDrawWindow;
+  int xoffset;
+  int yoffset;
+
+  Brush redBrush;
+  Brush blueBrush;
+  Brush yellowBrush;
+  Brush greenBrush;
+  Brush magentaBrush;
+  Pen redPen;
+  Pen bluePen;
+  Pen yellowPen;
+  Pen greenPen;
+  Pen magentaPen;
+  Pen redThickPen;
+  Pen blueThickPen;
+  Pen blankThickPen;
+
+  Bitmap hBitmapClimb;
+
+  POINT *polys;
+  POINT *lines;
+
+  int gmax;
+  bool dirty;
+  Bitmap hDrawBitMap;
+  DrawInfo_t diValueTop;
+  DrawInfo_t diValueMiddle;
+  DrawInfo_t diValueBottom;
+  DrawInfo_t diLabelTop;
+  DrawInfo_t diLabelMiddle;
+  DrawInfo_t diLabelBottom;
+  const Bitmap *hBitmapUnit;
+  POINT BitmapUnitPos;
+  POINT BitmapUnitSize;
 
  public:
-  static void Create();
-  static void Destroy();
-  static void Render();
-  static void RenderBg(Canvas &canvas);
-  static void Repaint(Canvas &canvas);
-  static void Show(bool doshow);
+  GaugeVario(ContainerWindow &parent);
+  ~GaugeVario();
+
+  void Render();
+  void RenderBg(Canvas &canvas);
+  void Repaint(Canvas &canvas);
+  void Show(bool doshow);
 
  private:
-  static void RenderZero(Canvas &canvas);
-  static void RenderValue(Canvas &canvas, int x, int y,
-                          DrawInfo_t *diValue, DrawInfo_t *diLabel,
-                          double Value, const TCHAR *Label);
-  static void RenderSpeedToFly(Canvas &canvas, int x, int y);
-  static void RenderBallast(Canvas &canvas);
-  static void RenderBugs(Canvas &canvas);
-  static int  ValueToNeedlePos(double Value);
-  static void RenderNeedle(Canvas &canvas, int i, bool average, bool clear);
-  static void RenderVarioLine(Canvas &canvas, int i, int sink, bool clear);
-  static void RenderClimb(Canvas &canvas);
+  void RenderZero(Canvas &canvas);
+  void RenderValue(Canvas &canvas, int x, int y,
+                   DrawInfo_t *diValue, DrawInfo_t *diLabel,
+                   double Value, const TCHAR *Label);
+  void RenderSpeedToFly(Canvas &canvas, int x, int y);
+  void RenderBallast(Canvas &canvas);
+  void RenderBugs(Canvas &canvas);
+  int  ValueToNeedlePos(double Value);
+  void RenderNeedle(Canvas &canvas, int i, bool average, bool clear);
+  void RenderVarioLine(Canvas &canvas, int i, int sink, bool clear);
+  void RenderClimb(Canvas &canvas);
 
-  static int xoffset;
-  static int yoffset;
-  static int gmax;
-  static void MakePolygon(const int i);
-  static void MakeAllPolygons();
-  static POINT* getPolygon(const int i);
-  static POINT *polys;
-  static POINT *lines;
-  static bool dirty;
-  static Bitmap hDrawBitMap;
-  static DrawInfo_t diValueTop;
-  static DrawInfo_t diValueMiddle;
-  static DrawInfo_t diValueBottom;
-  static DrawInfo_t diLabelTop;
-  static DrawInfo_t diLabelMiddle;
-  static DrawInfo_t diLabelBottom;
-  const static Bitmap *hBitmapUnit;
-  static Bitmap hBitmapClimb;
-  static POINT BitmapUnitPos;
-  static POINT BitmapUnitSize;
-  static Brush redBrush;
-  static Brush blueBrush;
-  static Pen redPen;
-  static Pen bluePen;
-  static Pen redThickPen;
-  static Pen blueThickPen;
-  static Pen blankThickPen;
-  static Brush yellowBrush;
-  static Brush greenBrush;
-  static Brush magentaBrush;
-  static Pen yellowPen;
-  static Pen greenPen;
-  static Pen magentaPen;
+  void MakePolygon(const int i);
+  void MakeAllPolygons();
+  POINT* getPolygon(const int i);
 
 };
 
