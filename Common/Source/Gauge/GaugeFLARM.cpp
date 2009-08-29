@@ -106,7 +106,8 @@ void GaugeFLARM::RenderBg() {
 
 #include "WindowControls.h" // just to get colors
 
-void GaugeFLARM::RenderTraffic(NMEA_INFO  *gps_info) {
+void GaugeFLARM::RenderTraffic(const NMEA_INFO *gps_info)
+{
   // TODO enhancement: support red/green Color blind pilots
 
   hdcDrawWindow.select(TitleWindowFont);
@@ -217,7 +218,8 @@ void GaugeFLARM::RenderTraffic(NMEA_INFO  *gps_info) {
 }
 
 
-void GaugeFLARM::Render(NMEA_INFO *gps_info) {
+void GaugeFLARM::Render(const NMEA_INFO *gps_info)
+{
   if (Visible) {
     RenderBg();
 

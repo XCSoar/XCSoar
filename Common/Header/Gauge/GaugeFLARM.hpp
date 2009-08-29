@@ -49,8 +49,8 @@ class GaugeFLARM {
  public:
   static void Create();
   static void Destroy();
-  static void Render(NMEA_INFO* gps_info);
-  static void RenderTraffic(NMEA_INFO *gps_info);
+  static void Render(const NMEA_INFO *gps_info);
+  static void RenderTraffic(const NMEA_INFO *gps_info);
   static void RenderBg();
   static void Repaint(Canvas &canvas);
   static void Show();
