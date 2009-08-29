@@ -43,15 +43,15 @@ Copyright_License {
 #include "Registry.hpp"
 #include "Asset.hpp"
 
-// Display Globals
-HFONT                                   InfoWindowFont;
-HFONT                                   TitleWindowFont;
-HFONT                                   MapWindowFont;
-HFONT                                   TitleSmallWindowFont;
-HFONT                                   MapWindowBoldFont;
-HFONT                                   CDIWindowFont;
-HFONT                                   MapLabelFont;
-HFONT                                   StatisticsFont;
+// Display Gobals
+Font InfoWindowFont;
+Font TitleWindowFont;
+Font MapWindowFont;
+Font TitleSmallWindowFont;
+Font MapWindowBoldFont;
+Font CDIWindowFont; // New
+Font MapLabelFont;
+Font StatisticsFont;
 
 
 LOGFONT                                   autoInfoWindowLogFont; // these are the non-custom parameters
@@ -92,34 +92,30 @@ bool IsNullLogFont(LOGFONT logfont) {
   return bRetVal;
 }
 
-void InitializeOneFont (HFONT * theFont,
+void InitializeOneFont(Font *theFont,
                                const TCHAR FontRegKey[] ,
                                LOGFONT autoLogFont,
                                LOGFONT * LogFontUsed)
 {
   LOGFONT logfont;
-  int iDelStatus = 0;
-  if (GetObjectType(*theFont) == OBJ_FONT) {
-    iDelStatus=DeleteObject(*theFont); // RLD the EditFont screens use the Delete
-  }
 
   memset ((char *)&logfont, 0, sizeof (LOGFONT));
 
   if (UseCustomFonts) {
     propGetFontSettings((TCHAR * )FontRegKey, &logfont);
     if (!IsNullLogFont(logfont)) {
-      *theFont = CreateFontIndirect (&logfont);
-      if (GetObjectType(*theFont) == OBJ_FONT) {
+      theFont->set(&logfont);
+      if (theFont->defined()) {
         if (LogFontUsed != NULL) *LogFontUsed = logfont; // RLD save for custom font GUI
       }
     }
   }
 
-  if (GetObjectType(*theFont) != OBJ_FONT) {
+  if (!theFont->defined()) {
     if (!IsNullLogFont(autoLogFont)) {
       ApplyClearType(&autoLogFont);
-      *theFont = CreateFontIndirect (&autoLogFont);
-      if (GetObjectType(*theFont) == OBJ_FONT) {
+      theFont->set(&autoLogFont);
+      if (theFont->defined()) {
         if (LogFontUsed != NULL) *LogFontUsed = autoLogFont; // RLD save for custom font GUI
       }
     }
@@ -522,14 +518,14 @@ void InitialiseFontsAuto(HWND hwnd,
 void InitialiseFonts(HWND hwnd, RECT rc)
 { //this routine must be called only at start/restart of XCSoar b/c there are many pointers to these fonts
 
-  DeleteObject(InfoWindowFont);
-  DeleteObject(TitleWindowFont);
-  DeleteObject(MapWindowFont);
-  DeleteObject(TitleSmallWindowFont);
-  DeleteObject(MapWindowBoldFont);
-  DeleteObject(CDIWindowFont);
-  DeleteObject(MapLabelFont);
-  DeleteObject(StatisticsFont);
+  InfoWindowFont.reset();
+  TitleWindowFont.reset();
+  MapWindowFont.reset();
+  TitleSmallWindowFont.reset();
+  MapWindowBoldFont.reset();
+  CDIWindowFont.reset();
+  MapLabelFont.reset();
+  StatisticsFont.reset();
 
   memset ((char *)&autoInfoWindowLogFont, 0, sizeof (LOGFONT));
   memset ((char *)&autoTitleWindowLogFont, 0, sizeof (LOGFONT));
@@ -652,12 +648,12 @@ void InitialiseFonts(HWND hwnd, RECT rc)
 }
 
 void DeleteFonts() {
-  DeleteObject(InfoWindowFont);
-  DeleteObject(TitleWindowFont);
-  DeleteObject(CDIWindowFont);
-  DeleteObject(MapLabelFont);
-  DeleteObject(MapWindowFont);
-  DeleteObject(MapWindowBoldFont);
-  DeleteObject(StatisticsFont);
-  DeleteObject(TitleSmallWindowFont);
+  InfoWindowFont.reset();
+  TitleWindowFont.reset();
+  CDIWindowFont.reset();
+  MapLabelFont.reset();
+  MapWindowFont.reset();
+  MapWindowBoldFont.reset();
+  StatisticsFont.reset();
+  TitleSmallWindowFont.reset();
 }

@@ -50,10 +50,6 @@ class GaugeVario {
  private:
   static int xoffset;
   static int yoffset;
-  static HDC hdcScreen;
-  static HDC hdcDrawWindow;
-  static HBITMAP hDrawBitMap;
-  static RECT rc;
 };
 
 #endif

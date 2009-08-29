@@ -51,7 +51,7 @@ Copyright_License {
 #include "Compatibility/gdi.h"
 #include <math.h>
 
-void MapWindow::DrawAbortedTask(HDC hdc, const RECT rc, const POINT me)
+void MapWindow::DrawAbortedTask(Canvas &canvas, const RECT rc, const POINT me)
 {
   int i;
   if (!WayPointList) return;
@@ -65,7 +65,7 @@ void MapWindow::DrawAbortedTask(HDC hdc, const RECT rc, const POINT me)
 	int index = Task[i].Index;
 	if(ValidWayPoint(index))
 	  {
-	    DrawDashLine(hdc, 1,
+            canvas.clipped_dashed_line(1,
 			 WayPointList[index].Screen,
 			 me,
 			 MapGfx.TaskColor, rc);
@@ -80,43 +80,40 @@ void MapWindow::DrawAbortedTask(HDC hdc, const RECT rc, const POINT me)
 }
 
 
-void MapWindow::DrawStartSector(HDC hdc, const RECT rc,
+void MapWindow::DrawStartSector(Canvas &canvas, const RECT rc,
                                 POINT &Start,
                                 POINT &End, int Index) {
   double tmp;
 
   if(StartLine) {
-    ClipDrawLine(hdc, PS_SOLID, IBLSCALE(5), WayPointList[Index].Screen,
+    ClipDrawLine(canvas, Pen::SOLID, IBLSCALE(5), WayPointList[Index].Screen,
               Start, MapGfx.TaskColor, rc);
-    ClipDrawLine(hdc, PS_SOLID, IBLSCALE(5), WayPointList[Index].Screen,
+    ClipDrawLine(canvas, Pen::SOLID, IBLSCALE(5), WayPointList[Index].Screen,
               End, MapGfx.TaskColor, rc);
-    ClipDrawLine(hdc, PS_SOLID, IBLSCALE(1), WayPointList[Index].Screen,
-              Start, RGB(255,0,0), rc);
-    ClipDrawLine(hdc, PS_SOLID, IBLSCALE(1), WayPointList[Index].Screen,
-              End, RGB(255,0,0), rc);
+    ClipDrawLine(canvas, Pen::SOLID, IBLSCALE(1), WayPointList[Index].Screen,
+              Start, Color(255, 0, 0), rc);
+    ClipDrawLine(canvas, Pen::SOLID, IBLSCALE(1), WayPointList[Index].Screen,
+              End, Color(255, 0, 0), rc);
   } else {
     tmp = StartRadius*ResMapScaleOverDistanceModify;
-    SelectObject(hdc, GetStockObject(HOLLOW_BRUSH));
-    SelectObject(hdc, MapGfx.hpStartFinishThick);
-    Circle(hdc,
-           WayPointList[Index].Screen.x,
-           WayPointList[Index].Screen.y,(int)tmp, rc, false, false);
-    SelectObject(hdc, MapGfx.hpStartFinishThin);
-    Circle(hdc,
-           WayPointList[Index].Screen.x,
-           WayPointList[Index].Screen.y,(int)tmp, rc, false, false);
+    canvas.hollow_brush();
+    canvas.select(MapGfx.hpStartFinishThick);
+    canvas.circle(WayPointList[Index].Screen.x, WayPointList[Index].Screen.y,
+                  (int)tmp, rc, false, false);
+    canvas.select(MapGfx.hpStartFinishThin);
+    canvas.circle(WayPointList[Index].Screen.x, WayPointList[Index].Screen.y,
+                  (int)tmp, rc, false, false);
   }
 
 }
 
 
-void MapWindow::DrawTask(HDC hdc, RECT rc, const POINT &Orig_Aircraft)
+void MapWindow::DrawTask(Canvas &canvas, RECT rc, const POINT &Orig_Aircraft)
 {
   int i;
   double tmp;
 
-  COLORREF whitecolor = RGB(0xff,0xff, 0xff);
-  COLORREF origcolor = SetTextColor(hDCTemp, whitecolor);
+  hDCTemp.set_text_color(Color(0xff,0xff, 0xff));
 
   if (!WayPointList) return;
 
@@ -127,11 +124,11 @@ void MapWindow::DrawTask(HDC hdc, RECT rc, const POINT &Orig_Aircraft)
 
     if(ValidTaskPoint(0) && ValidTaskPoint(1) && (ActiveWayPoint<2))
       {
-	DrawStartSector(hdc,rc, Task[0].Start, Task[0].End, Task[0].Index);
+        DrawStartSector(canvas, rc, Task[0].Start, Task[0].End, Task[0].Index);
 	if (EnableMultipleStartPoints) {
 	  for (i=0; i<MAXSTARTPOINTS; i++) {
 	    if (StartPoints[i].Active && ValidWayPoint(StartPoints[i].Index)) {
-	      DrawStartSector(hdc,rc,
+              DrawStartSector(canvas, rc,
 			      StartPoints[i].Start,
 			      StartPoints[i].End, StartPoints[i].Index);
 	    }
@@ -146,75 +143,69 @@ void MapWindow::DrawTask(HDC hdc, RECT rc, const POINT &Orig_Aircraft)
 	  // only draw finish line when past the first
 	  // waypoint.
 	  if(FinishLine) {
-	    ClipDrawLine(hdc, PS_SOLID, IBLSCALE(5),
+            ClipDrawLine(canvas, Pen::SOLID, IBLSCALE(5),
 		      WayPointList[Task[i].Index].Screen,
 		      Task[i].Start, MapGfx.TaskColor, rc);
-	    ClipDrawLine(hdc, PS_SOLID, IBLSCALE(5),
+            ClipDrawLine(canvas, Pen::SOLID, IBLSCALE(5),
 		      WayPointList[Task[i].Index].Screen,
 		      Task[i].End, MapGfx.TaskColor, rc);
-	    ClipDrawLine(hdc, PS_SOLID, IBLSCALE(1),
+            ClipDrawLine(canvas, Pen::SOLID, IBLSCALE(1),
 		      WayPointList[Task[i].Index].Screen,
-		      Task[i].Start, RGB(255,0,0), rc);
-	    ClipDrawLine(hdc, PS_SOLID, IBLSCALE(1),
+                         Task[i].Start, Color(255,0,0), rc);
+            ClipDrawLine(canvas, Pen::SOLID, IBLSCALE(1),
 		      WayPointList[Task[i].Index].Screen,
-		      Task[i].End, RGB(255,0,0), rc);
+                         Task[i].End, Color(255,0,0), rc);
 	  } else {
-	    tmp = FinishRadius*ResMapScaleOverDistanceModify;
-	    SelectObject(hdc, GetStockObject(HOLLOW_BRUSH));
-	    SelectObject(hdc, MapGfx.hpStartFinishThick);
-	    Circle(hdc,
-		   WayPointList[Task[i].Index].Screen.x,
-		   WayPointList[Task[i].Index].Screen.y,
-		   (int)tmp, rc, false, false);
-	    SelectObject(hdc, MapGfx.hpStartFinishThin);
-	    Circle(hdc,
-		   WayPointList[Task[i].Index].Screen.x,
-		   WayPointList[Task[i].Index].Screen.y,
-		   (int)tmp, rc, false, false);
+            tmp = FinishRadius*ResMapScaleOverDistanceModify;
+            canvas.hollow_brush();
+            canvas.select(MapGfx.hpStartFinishThick);
+            canvas.circle(WayPointList[Task[i].Index].Screen.x,
+                          WayPointList[Task[i].Index].Screen.y,
+                          (int)tmp, rc, false, false);
+            canvas.select(MapGfx.hpStartFinishThin);
+            canvas.circle(WayPointList[Task[i].Index].Screen.x,
+                          WayPointList[Task[i].Index].Screen.y,
+                          (int)tmp, rc, false, false);
 	  }
 	}
       }
       if(ValidTaskPoint(i) && ValidTaskPoint(i+1)) { // normal sector
 	if(AATEnabled != TRUE) {
-	  DrawDashLine(hdc, 2,
+          canvas.clipped_dashed_line(2,
 		       WayPointList[Task[i].Index].Screen,
-		       Task[i].Start, RGB(127,127,127), rc);
-	  DrawDashLine(hdc, 2,
+                                     Task[i].Start, Color(127,127,127), rc);
+          canvas.clipped_dashed_line(2,
 		       WayPointList[Task[i].Index].Screen,
-		       Task[i].End, RGB(127,127,127), rc);
+                                     Task[i].End, Color(127,127,127), rc);
 
-	  SelectObject(hdc, GetStockObject(HOLLOW_BRUSH));
-	  SelectObject(hdc, GetStockObject(BLACK_PEN));
+          canvas.hollow_brush();
+          canvas.black_pen();
 	  if(SectorType== 0) {
 	    tmp = SectorRadius*ResMapScaleOverDistanceModify;
-	    Circle(hdc,
-		   WayPointList[Task[i].Index].Screen.x,
-		   WayPointList[Task[i].Index].Screen.y,
-		   (int)tmp, rc, false, false);
+	    canvas.circle(WayPointList[Task[i].Index].Screen.x,
+                          WayPointList[Task[i].Index].Screen.y,
+                          (int)tmp, rc, false, false);
 	  }
 	  if(SectorType==1) {
 	    tmp = SectorRadius*ResMapScaleOverDistanceModify;
-	    Segment(hdc,
-		    WayPointList[Task[i].Index].Screen.x,
-		    WayPointList[Task[i].Index].Screen.y,(int)tmp, rc,
-		    Task[i].AATStartRadial-DisplayAngle,
-		    Task[i].AATFinishRadial-DisplayAngle);
+	    canvas.segment(WayPointList[Task[i].Index].Screen.x,
+                           WayPointList[Task[i].Index].Screen.y,(int)tmp, rc,
+                           Task[i].AATStartRadial-DisplayAngle,
+                           Task[i].AATFinishRadial-DisplayAngle);
 	  }
 	  if(SectorType== 2) {
 	    // JMW added german rules
 	    tmp = 500*ResMapScaleOverDistanceModify;
-	    Circle(hdc,
-		   WayPointList[Task[i].Index].Screen.x,
-		   WayPointList[Task[i].Index].Screen.y,
-		   (int)tmp, rc, false, false);
+	    canvas.circle(WayPointList[Task[i].Index].Screen.x,
+                          WayPointList[Task[i].Index].Screen.y,
+                          (int)tmp, rc, false, false);
 
 	    tmp = 10e3*ResMapScaleOverDistanceModify;
 
-	    Segment(hdc,
-		    WayPointList[Task[i].Index].Screen.x,
-		    WayPointList[Task[i].Index].Screen.y,(int)tmp, rc,
-		    Task[i].AATStartRadial-DisplayAngle,
-		    Task[i].AATFinishRadial-DisplayAngle);
+	    canvas.segment(WayPointList[Task[i].Index].Screen.x,
+                           WayPointList[Task[i].Index].Screen.y,(int)tmp, rc,
+                           Task[i].AATStartRadial-DisplayAngle,
+                           Task[i].AATFinishRadial-DisplayAngle);
 
 	  }
 	} else {
@@ -232,10 +223,10 @@ void MapWindow::DrawTask(HDC hdc, RECT rc, const POINT &Orig_Aircraft)
 	      for (int j=0; j<MAXISOLINES-1; j++) {
 		if (TaskStats[i].IsoLine_valid[j]
 		    && TaskStats[i].IsoLine_valid[j+1]) {
-		  ClipDrawLine(hdc, PS_SOLID, IBLSCALE(2),
+                  ClipDrawLine(canvas, Pen::SOLID, IBLSCALE(2),
 			    TaskStats[i].IsoLine_Screen[j],
 			    TaskStats[i].IsoLine_Screen[j+1],
-			    RGB(0,0,255), rc);
+                               Color(0, 0, 255), rc);
 		}
 	      }
 	    }
@@ -266,7 +257,7 @@ void MapWindow::DrawTask(HDC hdc, RECT rc, const POINT &Orig_Aircraft)
 			  NULL, &bearing);
 
 	  // draw nominal track line
-	  DrawDashLine(hdc, 1,
+          canvas.clipped_dashed_line(1,
 		       WayPointList[imin].Screen,
 		       WayPointList[imax].Screen,
 		       MapGfx.TaskColor, rc);
@@ -276,12 +267,12 @@ void MapWindow::DrawTask(HDC hdc, RECT rc, const POINT &Orig_Aircraft)
 	}
 
 	if (is_first) {
-	  DrawDashLine(hdc, 3,
+          canvas.clipped_dashed_line(3,
 		       sct1,
 		       sct2,
 		       MapGfx.TaskColor, rc);
 	} else {
-	  DrawDashLine(hdc, 3,
+          canvas.clipped_dashed_line(3,
 		       sct2,
 		       sct1,
 		       MapGfx.TaskColor, rc);
@@ -295,8 +286,8 @@ void MapWindow::DrawTask(HDC hdc, RECT rc, const POINT &Orig_Aircraft)
 	PolygonRotateShift(Arrow, 2, p_p.x, p_p.y,
 			   bearing-DisplayAngle);
 
-	ClipDrawLine(hdc, PS_SOLID, IBLSCALE(2), Arrow[0], p_p, MapGfx.TaskColor, rc);
-	ClipDrawLine(hdc, PS_SOLID, IBLSCALE(2), Arrow[1], p_p, MapGfx.TaskColor, rc);
+        ClipDrawLine(canvas, Pen::SOLID, IBLSCALE(2), Arrow[0], p_p, MapGfx.TaskColor, rc);
+        ClipDrawLine(canvas, Pen::SOLID, IBLSCALE(2), Arrow[1], p_p, MapGfx.TaskColor, rc);
       }
     }
 #ifdef HAVEEXCEPTIONS
@@ -305,14 +296,10 @@ void MapWindow::DrawTask(HDC hdc, RECT rc, const POINT &Orig_Aircraft)
      {
        mutexTaskData.Unlock();
      }
-
-  // restore original color
-  SetTextColor(hDCTemp, origcolor);
-
 }
 
 
-void MapWindow::DrawTaskAAT(HDC hdc, const RECT rc, HDC buffer)
+void MapWindow::DrawTaskAAT(Canvas &canvas, const RECT rc, Canvas &buffer)
 {
   int i;
   double tmp;
@@ -325,12 +312,11 @@ void MapWindow::DrawTaskAAT(HDC hdc, const RECT rc, HDC buffer)
   __try{
 #endif
 
-    COLORREF whitecolor = RGB(0xff,0xff, 0xff);
-    COLORREF origcolor = SetTextColor(buffer, whitecolor);
-
-    SelectObject(buffer, GetStockObject(WHITE_PEN));
-    SelectObject(buffer, GetStockObject(WHITE_BRUSH));
-    Rectangle(buffer,rc.left,rc.top,rc.right,rc.bottom);
+    Color whitecolor = Color(0xff,0xff, 0xff);
+    buffer.set_text_color(whitecolor);
+    buffer.white_pen();
+    buffer.white_brush();
+    buffer.rectangle(rc.left, rc.top, rc.right, rc.bottom);
 
     for(i=MAXTASKPOINTS-2;i>0;i--)
       {
@@ -340,88 +326,57 @@ void MapWindow::DrawTaskAAT(HDC hdc, const RECT rc, HDC buffer)
 	      tmp = Task[i].AATCircleRadius*ResMapScaleOverDistanceModify;
 
 	      // this color is used as the black bit
-              SetTextColor(buffer,
-			   MapGfx.Colours[iAirspaceColour[AATASK]]);
+              buffer.set_text_color(MapGfx.Colours[iAirspaceColour[AATASK]]);
 
 	      // this color is the transparent bit
-              SetBkColor(buffer,
-			 whitecolor);
+              buffer.set_background_color(whitecolor);
 
 	      if (i<ActiveWayPoint) {
-                SelectObject(buffer, GetStockObject(HOLLOW_BRUSH));
+                buffer.hollow_brush();
 	      } else {
-                SelectObject(buffer, MapGfx.hAirspaceBrushes[iAirspaceBrush[AATASK]]);
+                buffer.select(MapGfx.hAirspaceBrushes[iAirspaceBrush[AATASK]]);
 	      }
-              SelectObject(buffer, GetStockObject(BLACK_PEN));
+              buffer.black_pen();
 
-              Circle(buffer,
-		     WayPointList[Task[i].Index].Screen.x,
-		     WayPointList[Task[i].Index].Screen.y,
-		     (int)tmp, rc, true, true);
+              buffer.circle(WayPointList[Task[i].Index].Screen.x,
+                            WayPointList[Task[i].Index].Screen.y,
+                            (int)tmp, rc, true, true);
 	    }
 	  else
 	    {
 
 	      // this color is used as the black bit
-              SetTextColor(buffer,
-			   MapGfx.Colours[iAirspaceColour[AATASK]]);
+              buffer.set_text_color(MapGfx.Colours[iAirspaceColour[AATASK]]);
 
 	      // this color is the transparent bit
-              SetBkColor(buffer,
-			 whitecolor);
+              buffer.set_background_color(whitecolor);
 
 	      if (i<ActiveWayPoint) {
-                SelectObject(buffer, GetStockObject(HOLLOW_BRUSH));
+                buffer.hollow_brush();
 	      } else {
-                SelectObject(buffer, MapGfx.hAirspaceBrushes[iAirspaceBrush[AATASK]]);
+                buffer.select(MapGfx.hAirspaceBrushes[iAirspaceBrush[AATASK]]);
 	      }
-              SelectObject(buffer, GetStockObject(BLACK_PEN));
+              buffer.black_pen();
 
 	      tmp = Task[i].AATSectorRadius*ResMapScaleOverDistanceModify;
 
-              Segment(buffer,
-		      WayPointList[Task[i].Index].Screen.x,
-		      WayPointList[Task[i].Index].Screen.y,(int)tmp, rc,
-		      Task[i].AATStartRadial-DisplayAngle,
-		      Task[i].AATFinishRadial-DisplayAngle);
+              buffer.segment(WayPointList[Task[i].Index].Screen.x,
+                             WayPointList[Task[i].Index].Screen.y,(int)tmp, rc,
+                             Task[i].AATStartRadial-DisplayAngle,
+                             Task[i].AATFinishRadial-DisplayAngle);
 
-              ClipLine(buffer,
-                       WayPointList[Task[i].Index].Screen, Task[i].AATStart,
-                       rc);
-              ClipLine(buffer,
-                       WayPointList[Task[i].Index].Screen, Task[i].AATFinish,
-                       rc);
-
+              buffer.clipped_line(WayPointList[Task[i].Index].Screen,
+                                  Task[i].AATStart, rc);
+              buffer.clipped_line(WayPointList[Task[i].Index].Screen,
+                                  Task[i].AATFinish, rc);
 	    }
 
 	}
       }
 
-    // restore original color
-    SetTextColor(buffer, origcolor);
-
     //////
 
-#if (WINDOWSPC<1)
-    TransparentImage(hdc,
-		     rc.left,rc.top,
-		     rc.right-rc.left,rc.bottom-rc.top,
-                     buffer,
-		     rc.left,rc.top,
-		     rc.right-rc.left,rc.bottom-rc.top,
-		     whitecolor
-		     );
-
-#else
-    TransparentBlt(hdc,
-                   rc.left,rc.top,
-                   rc.right-rc.left,rc.bottom-rc.top,
-                   buffer,
-                   rc.left,rc.top,
-                   rc.right-rc.left,rc.bottom-rc.top,
-                   whitecolor
-                   );
-#endif
+    canvas.copy_transparent_white(buffer, rc);
 
 #ifdef HAVEEXCEPTIONS
   }__finally
@@ -432,7 +387,7 @@ void MapWindow::DrawTaskAAT(HDC hdc, const RECT rc, HDC buffer)
 }
 
 
-void MapWindow::DrawBearing(HDC hdc, const RECT rc, int bBearingValid)
+void MapWindow::DrawBearing(Canvas &canvas, const RECT rc, int bBearingValid)
 { /* RLD bearing is invalid if GPS not connected and in non-sim mode,
    but we can still draw targets */
 
@@ -456,7 +411,7 @@ void MapWindow::DrawBearing(HDC hdc, const RECT rc, int bBearingValid)
   }
   mutexTaskData.Unlock();
   if (bBearingValid) {
-      DrawGreatCircle(hdc, startLon, startLat,  // RLD skip if bearing invalid
+      DrawGreatCircle(canvas, startLon, startLat,  // RLD skip if bearing invalid
                       targetLon, targetLat, rc);// RLD bc Lat/Lon invalid
 
     if (TargetPan) {
@@ -477,7 +432,7 @@ void MapWindow::DrawBearing(HDC hdc, const RECT rc, int bBearingValid)
             targetLon = WayPointList[Task[i].Index].Longitude;
           }
 
-          DrawGreatCircle(hdc, startLon, startLat,
+          DrawGreatCircle(canvas, startLon, startLat,
                           targetLon, targetLat, rc);
 
           startLat = targetLat;
@@ -502,7 +457,7 @@ void MapWindow::DrawBearing(HDC hdc, const RECT rc, int bBearingValid)
           LatLon2Screen(Task[i].AATTargetLon,
                         Task[i].AATTargetLat,
                         sct);
-          DrawBitmapIn(hdc, sct, MapGfx.hBmpTarget);
+          DrawBitmapIn(canvas, sct, MapGfx.hBmpTarget);
         }
       }
     }
@@ -513,7 +468,7 @@ void MapWindow::DrawBearing(HDC hdc, const RECT rc, int bBearingValid)
 
 
 
-void MapWindow::DrawOffTrackIndicator(HDC hdc, const RECT rc) {
+void MapWindow::DrawOffTrackIndicator(Canvas &canvas, const RECT rc) {
   if ((ActiveWayPoint<=0) || !ValidTaskPoint(ActiveWayPoint)) {
     return;
   }
@@ -550,8 +505,8 @@ void MapWindow::DrawOffTrackIndicator(HDC hdc, const RECT rc) {
   }
   mutexTaskData.Unlock();
 
-  HFONT oldFont = (HFONT)SelectObject(hdc, TitleWindowFont);
-  SetTextColor(hdc, RGB(0x0,0x0,0x0));
+  canvas.select(TitleWindowFont);
+  canvas.set_text_color(Color(0x0, 0x0, 0x0));
 
   int ilast = 0;
   for (double d=0.25; d<=1.0; d+= 0.25) {
@@ -578,12 +533,10 @@ void MapWindow::DrawOffTrackIndicator(HDC hdc, const RECT rc) {
 
       TCHAR Buffer[5];
       _stprintf(Buffer, TEXT("%d"), idist);
-      short size = _tcslen(Buffer);
-      SIZE tsize;
       POINT sc;
       RECT brect;
       LatLon2Screen(dLon, dLat, sc);
-      GetTextExtentPoint(hdc, Buffer, size, &tsize);
+      SIZE tsize = canvas.text_size(Buffer);
 
       brect.left = sc.x-4;
       brect.right = brect.left+tsize.cx+4;
@@ -591,20 +544,19 @@ void MapWindow::DrawOffTrackIndicator(HDC hdc, const RECT rc) {
       brect.bottom = brect.top+tsize.cy+4;
 
       if (checkLabelBlock(brect)) {
-	ExtTextOut(hdc, sc.x-tsize.cx/2, sc.y-tsize.cy/2,
-		   0, NULL, Buffer, size, NULL);
+        canvas.text(sc.x - tsize.cx / 2, sc.y - tsize.cy / 2, Buffer);
 	ilast = idist;
       }
     }
 
   }
-
-  SelectObject(hdc, oldFont);
 }
 
 
 
-void MapWindow::DrawProjectedTrack(HDC hdc, const RECT rc, const POINT Orig) {
+void
+MapWindow::DrawProjectedTrack(Canvas &canvas, const RECT rc, const POINT Orig)
+{
   if ((ActiveWayPoint<=0) || !ValidTaskPoint(ActiveWayPoint) || !AATEnabled) {
     return;
   }
@@ -669,7 +621,7 @@ void MapWindow::DrawProjectedTrack(HDC hdc, const RECT rc, const POINT Orig) {
     PolygonRotateShift(pt, 2, Orig.x, Orig.y,
 		       bearing-DisplayAngle);
   }
-  DrawDashLine(hdc, 2, pt[0], pt[1], RGB(0,0,0), rc);
+  canvas.clipped_dashed_line(2, pt[0], pt[1], Color(0,0,0), rc);
 }
 
 

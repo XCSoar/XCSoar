@@ -340,7 +340,7 @@ public:
     int res_y = iround((rc.bottom-rc.top)*oversampling/dtquant);
 
     sbuf = new CSTScreenBuffer();
-    sbuf->Create(res_x, res_y, RGB(0xff,0xff,0xff));
+    sbuf->Create(res_x, res_y, Color(0xff,0xff,0xff));
     ixs = sbuf->GetCorrectedWidth()/oversampling;
     iys = sbuf->GetHeight()/oversampling;
 
@@ -838,7 +838,7 @@ public:
     }
   }
 
-  void Draw(HDC hdc, RECT rc) {
+  void Draw(Canvas &canvas, RECT rc) {
 
     sbuf->Zoom(oversampling);
 
@@ -848,7 +848,7 @@ public:
       sbuf->VerticalBlur(blursize);
 
     }
-    sbuf->DrawStretch(&hdc, rc);
+    sbuf->DrawStretch(canvas, rc);
 
   }
 
@@ -870,7 +870,7 @@ void CloseTerrainRenderer() {
 
 
 
-void DrawTerrain( const HDC hdc, const RECT rc,
+void DrawTerrain(Canvas &canvas, const RECT rc,
                   const double sunazimuth, const double sunelevation,
 		  double lon, double lat,
 		  const bool isBigZoom)
@@ -909,21 +909,20 @@ void DrawTerrain( const HDC hdc, const RECT rc,
   trenderer->Slope(sx, sy, sz);
 
   // step 5: draw
-  trenderer->Draw(hdc, MapWindowProjection::GetMapRectBig());
+  trenderer->Draw(canvas, MapWindowProjection::GetMapRectBig());
 
   misc_tick_count = GetTickCount()-misc_tick_count;
 }
 
 
-static void DrawSpotHeight_Internal(const HDC hdc, TCHAR *Buffer, POINT pt) {
+static void DrawSpotHeight_Internal(Canvas &canvas, TCHAR *Buffer, POINT pt) {
   int size = _tcslen(Buffer);
   if (size==0) {
     return;
   }
   POINT orig = MapWindowProjection::GetOrigScreen();
-  SIZE tsize;
   RECT brect;
-  GetTextExtentPoint(hdc, Buffer, size, &tsize);
+  SIZE tsize = canvas.text_size(Buffer);
 
   pt.x+= 2+orig.x;
   pt.y+= 2+orig.y;
@@ -935,28 +934,25 @@ static void DrawSpotHeight_Internal(const HDC hdc, TCHAR *Buffer, POINT pt) {
   if (!checkLabelBlock(brect))
     return;
 
-  ExtTextOut(hdc, pt.x, pt.y, 0, NULL,
-             Buffer, size, NULL);
+  canvas.text(pt.x, pt.y, Buffer);
 }
 
-void DrawSpotHeights(const HDC hdc) {
+void DrawSpotHeights(Canvas &canvas) {
   // JMW testing, display of spot max/min
   if (!RasterTerrain::render_weather)
     return;
   if (!trenderer)
     return;
 
-  extern HFONT  TitleWindowFont;
-  HFONT old_font = (HFONT)SelectObject(hdc, TitleWindowFont);
+  extern Font TitleWindowFont;
+  canvas.select(TitleWindowFont);
 
   TCHAR Buffer[20];
 
   RASP.ValueToText(Buffer, trenderer->spot_max_val);
-  DrawSpotHeight_Internal(hdc, Buffer, trenderer->spot_max_pt);
+  DrawSpotHeight_Internal(canvas, Buffer, trenderer->spot_max_pt);
 
   RASP.ValueToText(Buffer, trenderer->spot_min_val);
-  DrawSpotHeight_Internal(hdc, Buffer, trenderer->spot_min_pt);
-
-  SelectObject(hdc, old_font);
+  DrawSpotHeight_Internal(canvas, Buffer, trenderer->spot_min_pt);
 }
 

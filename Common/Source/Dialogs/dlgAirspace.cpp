@@ -43,6 +43,7 @@ Copyright_License {
 #include "Registry.hpp"
 #include "Screen/Util.hpp"
 #include "Screen/Graphics.hpp"
+#include "Screen/MainWindow.hpp"
 #include "SettingsAirspace.hpp"
 #include "Utils.h"
 
@@ -65,7 +66,9 @@ static void UpdateList(void){
 
 static int DrawListIndex=0;
 
-static void OnAirspacePaintListItem(WindowControl * Sender, HDC hDC){
+static void
+OnAirspacePaintListItem(WindowControl *Sender, Canvas &canvas)
+{
 
   TCHAR label[40];
   (void)Sender;
@@ -122,25 +125,21 @@ static void OnAirspacePaintListItem(WindowControl * Sender, HDC hDC){
     } else {
       w0 = 225*InfoBoxLayout::scale;
     }
-    w1 = GetTextWidth(hDC, gettext(TEXT("Warn")))+InfoBoxLayout::scale*10;
-    w2 = GetTextWidth(hDC, gettext(TEXT("Display")))+InfoBoxLayout::scale*10;
+    w1 = GetTextWidth(canvas, gettext(TEXT("Warn")))+InfoBoxLayout::scale*10;
+    w2 = GetTextWidth(canvas, gettext(TEXT("Display")))+InfoBoxLayout::scale*10;
     x0 = w0-w1-w2;
 
-    ExtTextOutClip(hDC, 2*InfoBoxLayout::scale, 2*InfoBoxLayout::scale,
+    ExtTextOutClip(canvas, 2*InfoBoxLayout::scale, 2*InfoBoxLayout::scale,
                    label, x0-InfoBoxLayout::scale*10);
 
     if (colormode) {
 
-      SelectObject(hDC, GetStockObject(WHITE_PEN));
-      SetTextColor(hDC,
-         MapGfx.GetAirspaceColourByClass(i));
-         SetBkColor(hDC,
-         RGB(0xFF, 0xFF, 0xFF));
-      SelectObject(hDC,
-		   MapGfx.GetAirspaceBrushByClass(i));
-      Rectangle(hDC,
-        x0, 2*InfoBoxLayout::scale,
-        w0, 22*InfoBoxLayout::scale);
+      canvas.white_pen();
+      canvas.set_text_color(MapGfx.GetAirspaceColourByClass(i));
+      canvas.set_background_color(Color(0xFF, 0xFF, 0xFF));
+      canvas.select(MapGfx.GetAirspaceBrushByClass(i));
+      canvas.rectangle(x0, 2 * InfoBoxLayout::scale,
+                       w0, 22 * InfoBoxLayout::scale);
 
     } else {
 
@@ -151,7 +150,7 @@ static void OnAirspacePaintListItem(WindowControl * Sender, HDC hDC){
       isdisplay = ((iAirspaceMode[i]%2)>0);
       if (iswarn) {
         _tcscpy(label, gettext(TEXT("Warn")));
-        ExtTextOut(hDC,
+        ExtTextOut(canvas,
                    w0-w1-w2,
                    2*InfoBoxLayout::scale,
                    ETO_OPAQUE, NULL,
@@ -161,7 +160,7 @@ static void OnAirspacePaintListItem(WindowControl * Sender, HDC hDC){
       }
       if (isdisplay) {
         _tcscpy(label, gettext(TEXT("Display")));
-        ExtTextOut(hDC,
+        ExtTextOut(canvas,
                    w0-w2,
                    2*InfoBoxLayout::scale,
                    ETO_OPAQUE, NULL,

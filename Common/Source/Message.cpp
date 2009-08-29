@@ -43,6 +43,7 @@ Copyright_License {
 #include "Protection.hpp"
 #include "InfoBoxLayout.h"
 #include "Screen/Fonts.hpp"
+#include "Screen/MainWindow.hpp"
 #include <tchar.h>
 
 /*

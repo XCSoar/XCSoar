@@ -41,6 +41,7 @@ Copyright_License {
 #include <windows.h>
 #include "Math/leastsqs.h"
 #include "Task.h"
+#include "Screen/Canvas.hpp"
 
 class Statistics {
  public:
@@ -65,20 +66,20 @@ class Statistics {
 
   void Reset();
 
-  static void DrawBarChart(HDC hdc, const RECT rc, LeastSquares* lsdata);
+  static void DrawBarChart(Canvas &canvas, const RECT rc, LeastSquares* lsdata);
 
-  static void DrawFilledLineGraph(HDC hdc, const RECT rc,
+  static void DrawFilledLineGraph(Canvas &canvas, const RECT rc,
 				  LeastSquares* lsdata,
 				  const COLORREF thecolor);
 
-  static void DrawLineGraph(HDC hdc, const RECT rc, LeastSquares* lsdata,
+  static void DrawLineGraph(Canvas &canvas, const RECT rc, LeastSquares* lsdata,
                             const int Style);
-  static void DrawTrend(HDC hdc, const RECT rc, LeastSquares* lsdata,
+  static void DrawTrend(Canvas &canvas, const RECT rc, LeastSquares* lsdata,
                         const int Style);
-  static void DrawTrendN(HDC hdc, const RECT rc, LeastSquares* lsdata,
+  static void DrawTrendN(Canvas &canvas, const RECT rc, LeastSquares* lsdata,
                          const int Style);
 
-  static void DrawLine(HDC hdc, RECT rc,
+  static void DrawLine(Canvas &canvas, RECT rc,
 		       const double xmin,
 		       const double ymin,
                        const double xmax,
@@ -90,7 +91,7 @@ class Statistics {
   static void ScaleXFromValue(const RECT rc, const double val);
   static void ScaleMakeSquare(const RECT rc);
 
-  static void StyleLine(HDC hdc, const POINT l1, const POINT l2, const int Style, const RECT rc);
+  static void StyleLine(Canvas &canvas, const POINT l1, const POINT l2, const int Style, const RECT rc);
 
   static double yscale;
   static double xscale;
@@ -101,34 +102,34 @@ class Statistics {
   static void ResetScale();
 
   static void FormatTicText(TCHAR *text, const double val, const double step);
-  static void DrawXGrid(HDC hdc, const RECT rc,
+  static void DrawXGrid(Canvas &canvas, const RECT rc,
 			const double tic_step,
 			const double zero,
                         const int Style,
 			const double unit_step,
 			bool draw_units=false);
-  static void DrawYGrid(HDC hdc, const RECT rc,
+  static void DrawYGrid(Canvas &canvas, const RECT rc,
 			const double tic_step,
 			const double zero,
                         const int Style,
 			const double unit_step, bool draw_units=false);
 
-  static void DrawXLabel(HDC hdc, const RECT rc, const TCHAR *text);
-  static void DrawYLabel(HDC hdc, const RECT rc, const TCHAR *text);
-  static void DrawLabel(HDC hdc, const RECT rc, const TCHAR *text,
+  static void DrawXLabel(Canvas &canvas, const RECT rc, const TCHAR *text);
+  static void DrawYLabel(Canvas &canvas, const RECT rc, const TCHAR *text);
+  static void DrawLabel(Canvas &canvas, const RECT rc, const TCHAR *text,
 			const double xv, const double yv);
-  static void DrawNoData(HDC hdc, const RECT rc);
+  static void DrawNoData(Canvas &canvas, const RECT rc);
 
   ///
 
-    static void RenderAirspace(HDC hdc, const RECT rc);
-    static void RenderBarograph(HDC hdc, const RECT rc);
-    static void RenderClimb(HDC hdc, const RECT rc);
-    static void RenderGlidePolar(HDC hdc, const RECT rc);
-    static void RenderWind(HDC hdc, const RECT rc);
-    static void RenderTemperature(HDC hdc, const RECT rc);
-    static void RenderTask(HDC hdc, const RECT rc, const bool olcmode);
-    static void RenderSpeed(HDC hdc, const RECT rc);
+    static void RenderAirspace(Canvas &canvas, const RECT rc);
+    static void RenderBarograph(Canvas &canvas, const RECT rc);
+    static void RenderClimb(Canvas &canvas, const RECT rc);
+    static void RenderGlidePolar(Canvas &canvas, const RECT rc);
+    static void RenderWind(Canvas &canvas, const RECT rc);
+    static void RenderTemperature(Canvas &canvas, const RECT rc);
+    static void RenderTask(Canvas &canvas, const RECT rc, const bool olcmode);
+    static void RenderSpeed(Canvas &canvas, const RECT rc);
 
 };
 

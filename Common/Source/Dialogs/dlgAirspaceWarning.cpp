@@ -46,7 +46,7 @@ Copyright_License {
 #include "Math/FastMath.h"
 #include "Math/Units.h"
 #include "Utils.h"
-
+#include "Screen/MainWindow.hpp"
 #include "Dialogs/dlgTools.h"
 #include "Compatibility/vk.h"
 

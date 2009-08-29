@@ -44,7 +44,7 @@ Copyright_License {
 #include "Protection.hpp"
 #include "InfoBoxLayout.h"
 #include "MapWindow.h"
-extern MapWindow hWndMapWindow; // TODO try to avoid this
+extern MapWindow map_window; // TODO try to avoid this
 
 #endif
 #include "Math/FastMath.h"
@@ -54,6 +54,7 @@ extern MapWindow hWndMapWindow; // TODO try to avoid this
 #include "Screen/Fonts.hpp"
 #include "Screen/Blank.hpp"
 #include "Screen/Viewport.hpp"
+#include "Screen/PaintCanvas.hpp"
 #include "DataField/Base.hpp"
 #include "Utils.h"
 
@@ -91,37 +92,8 @@ RECT WINAPI DrawWireRects(LPRECT lprcTo, UINT nMilliSecSpeed) {
 
 // utility functions
 
-void DrawLine(const HDC&hdc, int x1, int y1, int x2, int y2) {
-#ifndef NOLINETO
-  MoveToEx(hdc, x1, y1, NULL);
-  LineTo(hdc, x2, y2);
-#else
-  POINT p[2];
-  p[0].x = x1;
-  p[0].y = y1;
-  p[1].x = x2;
-  p[1].y = y2;
-  Polyline(hdc, p, 2);
-#endif
-
-}
-
-
-void DrawLine2(const HDC&hdc, int x1, int y1, int x2, int y2, int x3, int y3) {
-#ifndef NOLINETO
-  MoveToEx(hdc, x1, y1, NULL);
-  LineTo(hdc, x2, y2);
-  LineTo(hdc, x3, y3);
-#else
-  POINT p[3];
-  p[0].x = x1;
-  p[0].y = y1;
-  p[1].x = x2;
-  p[1].y = y2;
-  p[2].x = x3;
-  p[2].y = y3;
-  Polyline(hdc, p, 3);
-#endif
+void DrawLine(Canvas &canvas, int x1, int y1, int x2, int y2) {
+  canvas.line(x1, y1, x2, y2);
 }
 
 extern int dlgComboPicker(WndProperty* theProperty);
@@ -170,12 +142,12 @@ LRESULT CALLBACK WindowControlWndProc(HWND hwnd, UINT uMsg,
 static COLORREF bkColor = clWhite;
 static COLORREF fgColor = clBlack;
 int WindowControl::InstCount=0;
-HBRUSH WindowControl::hBrushDefaultBk=NULL;
-HPEN WindowControl::hPenDefaultBorder=NULL;
-HPEN WindowControl::hPenDefaultSelector=NULL;
+Brush WindowControl::hBrushDefaultBk;
+Pen WindowControl::hPenDefaultBorder;
+Pen WindowControl::hPenDefaultSelector;
 
 WindowControl::WindowControl(WindowControl *Owner,
-			     HWND Parent,
+                             ContainerWindow *Parent,
 			     const TCHAR *Name,
 			     int X, int Y,
 			     int Width, int Height,
@@ -194,8 +166,6 @@ WindowControl::WindowControl(WindowControl *Owner,
 
   // todo
 
-  DWORD Style = 0;
-
   mX = X;
   mY = Y;
   mWidth = Width;
@@ -207,13 +177,13 @@ WindowControl::WindowControl(WindowControl *Owner,
     mTopOwner = mTopOwner->GetOwner();
 
   // todo
-  mhFont = MapWindowFont;
+  mhFont = &MapWindowFont;
   mVisible = Visible;
   mCaption[0] = '\0';
   mDontPaintSelector = false;
 
   if ((Parent == NULL) && (mOwner != NULL))
-    Parent = mOwner->GetClientAreaHandle();
+    Parent = (ContainerWindow *)&mOwner->GetClientAreaWidget();
 
   if (Name != NULL)
     _tcscpy(mName, Name);  // todo size check
@@ -226,27 +196,14 @@ WindowControl::WindowControl(WindowControl *Owner,
   mColorFore = fgColor;
 
   if (InstCount == 0){
-    hBrushDefaultBk = (HBRUSH)CreateSolidBrush(mColorBack);
-    hPenDefaultBorder = (HPEN)CreatePen(PS_SOLID, DEFAULTBORDERPENWIDTH, mColorFore);
-    hPenDefaultSelector = (HPEN)CreatePen(PS_SOLID, DEFAULTBORDERPENWIDTH+2, mColorFore);
+    hBrushDefaultBk.set(mColorBack);
+    hPenDefaultBorder.set(DEFAULTBORDERPENWIDTH, mColorFore);
+    hPenDefaultSelector.set(DEFAULTBORDERPENWIDTH + 2, mColorFore);
   }
   InstCount++;
 
-  Style = WS_CHILD | WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
-
-  if (Parent == NULL)
-    Style |= WS_POPUP;
-
-  mHWnd = CreateWindow(TEXT("STATIC"), TEXT("\0"),
-		     Style,
-		     mX, mY,
-		     mWidth, mHeight,
-		     Parent, NULL, hInst, NULL);
-
-  SetWindowPos(mHWnd, HWND_TOP,
-		     mX, mY,
-		     mWidth, mHeight,
-	       SWP_HIDEWINDOW);
+  widget.set(Parent, mX, mY, mWidth, mHeight,
+             false, false, false, false, false);
 
   if (mOwner != NULL)
     mOwner->AddClient(this);
@@ -256,29 +213,24 @@ WindowControl::WindowControl(WindowControl *Owner,
   mBoundRect.right = GetWidth();
   mBoundRect.bottom = GetHeight();
 
-  SetWindowLong(mHWnd, GWL_USERDATA, (long)this);
-  SetWindowLong(mHWnd, GWL_WNDPROC, (LONG) WindowControlWndProc);
+  widget.set_userdata(this);
+  widget.set_wndproc(WindowControlWndProc);
 
-  mHdc = GetDC(mHWnd);
-  mHdcTemp = CreateCompatibleDC(mHdc);
+  mHdcTemp.set(widget.get_canvas());
 
   /* JMW debugging
   mBmpMem = CreateCompatibleBitmap(mHdc, mWidth, mHeight);
   SelectObject(mHdcTemp, mBmpMem);
   */
 
-  mhBrushBk = hBrushDefaultBk;
-  mhPenBorder = hPenDefaultBorder;
-  mhPenSelector = hPenDefaultSelector;
   mBorderSize = 1;
 
   mBorderKind = 0; //BORDERRIGHT | BORDERBOTTOM;
 
-  SetBkMode(mHdc, TRANSPARENT);
+  widget.get_canvas().background_transparent();
 
   if (mVisible)
-    ShowWindow(GetHandle(), SW_SHOW);
-
+    widget.show();
 }
 
 WindowControl::~WindowControl(void){
@@ -301,30 +253,23 @@ void WindowControl::Destroy(void){
   if (ActiveControl == this)
     ActiveControl = NULL;
 
-  if (mhBrushBk != hBrushDefaultBk){
-    DeleteObject(mhBrushBk);
-  }
-  if (mhPenBorder != hPenDefaultBorder){
-    DeleteObject(mhPenBorder);
-  }
-  if (mhPenSelector != hPenDefaultSelector){
-    DeleteObject(mhPenSelector);
-  }
+  mhBrushBk.reset();
+  mhPenBorder.reset();
+  mhPenSelector.reset();
 
-  ReleaseDC(mHWnd, mHdc);
-  DeleteDC(mHdcTemp);
+  mHdcTemp.reset();
   /* JMW debugging
   DeleteObject(mBmpMem);
   */
 
   // ShowWindow(GetHandle(), SW_SHOW);
-  DestroyWindow(mHWnd);
+  widget.reset();
 
   InstCount--;
   if (InstCount==0){
-    DeleteObject(hBrushDefaultBk);
-    DeleteObject(hPenDefaultBorder);
-    DeleteObject(hPenDefaultSelector);
+    hBrushDefaultBk.reset();
+    hPenDefaultBorder.reset();
+    hPenDefaultSelector.reset();
   }
 
 }
@@ -336,10 +281,7 @@ void WindowControl::UpdatePosSize(void){
   mBoundRect.right = GetWidth();
   mBoundRect.bottom = GetHeight();
 
-  SetWindowPos(GetHandle(),0,
-     mX, mY,
-     mWidth, mHeight,
-     SWP_NOZORDER | SWP_NOACTIVATE | SWP_NOOWNERZORDER);
+  widget.move(mX, mY, mWidth, mHeight);
 }
 
 void WindowControl::SetTop(int Value){
@@ -398,11 +340,7 @@ void WindowControl::AddClient(WindowControl *Client){
       Client->mY =
 	mClients[mClientCount-2]->mY
 	+ mClients[mClientCount-2]->mHeight;
-      SetWindowPos(Client->GetHandle(), 0,
-		   Client->mX, Client->mY,
-		   0, 0,
-		   SWP_NOSIZE | SWP_NOZORDER
-		   | SWP_NOACTIVATE | SWP_NOOWNERZORDER);
+      Client->GetWidget().move(Client->mX, Client->mY);
     }
   }
 
@@ -483,10 +421,8 @@ void WindowControl::SetCaption(const TCHAR *Value){
 
     _tcscpy(mCaption, Value);
 
-    InvalidateRect(GetHandle(), GetBoundRect(), false);
-    UpdateWindow(GetHandle());
-
-
+    widget.update(*GetBoundRect());
+    widget.update();
   }
 
 }
@@ -504,9 +440,9 @@ bool WindowControl::SetFocused(bool Value, HWND FromTo){
       rc.top = 0;
       rc.right = GetWidth();
       rc.bottom = GetHeight();
-      InvalidateRect(GetHandle(), &rc, false);
+      widget.update(rc);
       // todo, only paint the selector edges
-      UpdateWindow(GetHandle());
+      widget.update();
       // Paint(GetDeviceContext());
     }
 
@@ -553,11 +489,11 @@ bool WindowControl::SetVisible(bool Value){
     */
 
     if (mVisible){
-      InvalidateRect(GetHandle(), GetBoundRect(), false);
-      UpdateWindow(GetHandle());
-      ShowWindow(GetHandle(), SW_SHOW);
+      widget.update(*GetBoundRect());
+      widget.update();
+      widget.show();
     } else {
-      ShowWindow(GetHandle(), SW_HIDE);
+      widget.hide();
     }
 
   }
@@ -576,17 +512,17 @@ int WindowControl::SetBorderKind(int Value){
   int res = mBorderKind;
   if (mBorderKind != Value){
     mBorderKind = Value;
-    InvalidateRect(GetHandle(), GetBoundRect(), false);
-    UpdateWindow(GetHandle());
+    widget.update(*GetBoundRect());
+    widget.update();
   }
   return(res);
 }
 
-HFONT WindowControl::SetFont(HFONT Value){
-  HFONT res = mhFont;
-  if (mhFont != Value){
+const Font *WindowControl::SetFont(const Font &Value){
+  const Font *res = mhFont;
+  if (mhFont != &Value){
     // todo
-    mhFont = Value;
+    mhFont = &Value;
   }
   return(res);
 }
@@ -595,7 +531,7 @@ bool WindowControl::SetReadOnly(bool Value){
   bool res = mReadOnly;
   if (mReadOnly != Value){
     mReadOnly = Value;
-    Paint(GetDeviceContext());
+    Paint(GetCanvas());
   }
   return(res);
 }
@@ -605,7 +541,7 @@ COLORREF WindowControl::SetForeColor(COLORREF Value){
   if (mColorFore != Value){
     mColorFore = Value;
     if (mVisible)
-      Paint(GetDeviceContext());
+      Paint(GetCanvas());
   }
   return(res);
 }
@@ -614,52 +550,44 @@ COLORREF WindowControl::SetBackColor(COLORREF Value){
   COLORREF res = mColorBack;
   if (mColorBack != Value){
     mColorBack = Value;
-    if (mhBrushBk != hBrushDefaultBk){
-      // JMW possible memory leak if this brush is being used!
-      DeleteObject(mhBrushBk);
-    }
-    mhBrushBk = (HBRUSH)CreateSolidBrush(mColorBack);
+    mhBrushBk.set(mColorBack);
     if (mVisible)
-      Paint(GetDeviceContext());
+      Paint(GetCanvas());
   }
   return(res);
 }
 
 
-void WindowControl::PaintSelector(HDC hDC){
+void
+WindowControl::PaintSelector(Canvas &canvas)
+{
 
   if (!mDontPaintSelector && mCanFocus && mHasFocus){
-    HPEN oldPen = (HPEN)SelectObject(hDC, hPenDefaultSelector);
+    canvas.select(hPenDefaultSelector);
 
-    DrawLine2(hDC,
-	      mWidth-SELECTORWIDTH-1, 0,
-	      mWidth-1, 0,
-	      mWidth-1, SELECTORWIDTH+1);
+    canvas.two_lines(mWidth - SELECTORWIDTH - 1, 0,
+                     mWidth - 1, 0,
+                     mWidth - 1, SELECTORWIDTH + 1);
 
-    DrawLine2(hDC,
-	      mWidth-1, mHeight-SELECTORWIDTH-2,
-	      mWidth-1, mHeight-1,
-	      mWidth-SELECTORWIDTH-1, mHeight-1);
+    canvas.two_lines(mWidth - 1, mHeight - SELECTORWIDTH - 2,
+                     mWidth - 1, mHeight - 1,
+                     mWidth - SELECTORWIDTH - 1, mHeight - 1);
 
-    DrawLine2(hDC,
-	      SELECTORWIDTH+1, mHeight-1,
-	      0, mHeight-1,
-	      0, mHeight-SELECTORWIDTH-2);
+    canvas.two_lines(SELECTORWIDTH + 1, mHeight - 1,
+                     0, mHeight - 1,
+                     0, mHeight - SELECTORWIDTH - 2);
 
-    DrawLine2(hDC,
-	      0, SELECTORWIDTH+1,
-	      0, 0,
-	      SELECTORWIDTH+1, 0);
-
-    SelectObject(hDC,oldPen);
+    canvas.two_lines(0, SELECTORWIDTH + 1,
+                     0, 0,
+                     SELECTORWIDTH + 1, 0);
   }
 
 }
 
 void WindowControl::Redraw(void){
   if (GetVisible()){
-    InvalidateRect(GetHandle(), GetBoundRect(), false);
-    UpdateWindow(GetHandle());
+    widget.update(*GetBoundRect());
+    widget.update();
   }
 }
 
@@ -688,7 +616,9 @@ int WindowControl::OnHelp() {
 #endif
 };
 
-void WindowControl::Paint(HDC hDC){
+void
+WindowControl::Paint(Canvas &canvas)
+{
 
   RECT rc;
 
@@ -699,52 +629,42 @@ void WindowControl::Paint(HDC hDC){
 
   if (!mVisible) return;
 
-  FillRect(hDC, &rc, mhBrushBk);
+  canvas.fill_rectangle(rc, GetBackBrush());
 
   // JMW added highlighting, useful for lists
   if (!mDontPaintSelector && mCanFocus && mHasFocus){
     COLORREF ff = (GetBackColor()+0x00ffffff*3)/4;
-    HBRUSH hB = (HBRUSH)CreateSolidBrush(ff);
+    Brush brush(ff);
     rc.left += 0;
     rc.right -= 2;
     rc.top += 0;
     rc.bottom -= 2;
-    FillRect(hDC, &rc, hB);
+    canvas.fill_rectangle(rc, brush);
 
 #if (WINDOWSPC>0)
   // JMW make it look nice on wine
-    SetBkColor(hDC, ff);
+    canvas.set_background_color(ff);
 #endif
-
-    DeleteObject(hB);
   }
 
   if (mBorderKind != 0){
-
-    HPEN oldPen = (HPEN)SelectObject(hDC, mhPenBorder);
+    canvas.select(GetBorderPen());
 
     if (mBorderKind & BORDERTOP){
-      DrawLine(hDC,0,0, mWidth, 0);
+      canvas.line(0, 0, mWidth, 0);
     }
     if (mBorderKind & BORDERRIGHT){
-      DrawLine(hDC, mWidth-1, 0,
-	       mWidth-1, mHeight);
+      canvas.line(mWidth - 1, 0, mWidth - 1, mHeight);
     }
     if (mBorderKind & BORDERBOTTOM){
-      DrawLine(hDC,
-	       mWidth-1, mHeight-1,
-	       -1, mHeight-1);
+      canvas.line(mWidth - 1, mHeight - 1, -1, mHeight - 1);
     }
     if (mBorderKind & BORDERLEFT){
-      DrawLine(hDC,
-	       0, mHeight-1,
-	       0, -1);
+      canvas.line(0, mHeight - 1, 0, -1);
     }
-    SelectObject(hDC,oldPen);
   }
 
-  PaintSelector(hDC);
-
+  PaintSelector(canvas);
 }
 
 WindowControl *WindowControl::FocusNext(WindowControl *Sender){
@@ -760,7 +680,7 @@ WindowControl *WindowControl::FocusNext(WindowControl *Sender){
 
   for (; idx<mClientCount; idx++){
     if ((W = mClients[idx]->GetCanFocus()) != NULL){
-      SetFocus(W->GetHandle());
+      W->GetWidget().set_focus();
       return(W);
     }
   }
@@ -786,7 +706,7 @@ WindowControl *WindowControl::FocusPrev(WindowControl *Sender){
 
   for (; idx>=0; idx--)
     if ((W=mClients[idx]->GetCanFocus()) != NULL){
-      SetFocus(W->GetHandle());
+      W->GetWidget().set_focus();
       return(W);
     }
 
@@ -812,7 +732,6 @@ LRESULT CALLBACK WindowControlWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARA
 int WindowControl::WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam){
 
   PAINTSTRUCT ps;            // structure for paint info
-  HDC hDC;                   // handle to graphics device context,
 
   switch (uMsg){
 
@@ -822,11 +741,10 @@ int WindowControl::WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam){
     return TRUE;
 
     case WM_PAINT:
-      hDC = BeginPaint(GetHandle(), &ps);
-      Paint(hDC);
-
-      DeleteDC(hDC);
-      EndPaint(GetHandle(), &ps);
+      {
+        PaintCanvas canvas(widget, hwnd);
+        Paint(canvas);
+      }
     return(0);
 
     case WM_WINDOWPOSCHANGED:
@@ -962,7 +880,8 @@ ACCEL  WndForm::mAccel[] = {
   {0, VK_RETURN,  VK_RETURN},
 };
 
-WndForm::WndForm(HWND Parent, const TCHAR *Name, const TCHAR *Caption,
+WndForm::WndForm(ContainerWindow *Parent,
+                 const TCHAR *Name, const TCHAR *Caption,
                  int X, int Y, int Width, int Height):
   WindowControl(NULL, Parent, Name, X, Y, Width, Height, false) {
 
@@ -981,7 +900,8 @@ WndForm::WndForm(HWND Parent, const TCHAR *Name, const TCHAR *Caption,
 
   mhBrushTitle = (HBRUSH)CreateSolidBrush(mColorTitle);
 
-  mClientWindow = new WindowControl(this, GetHandle(), TEXT(""), 20, 20, Width, Height);
+  mClientWindow = new WindowControl(this, &GetWidget(),
+                                    TEXT(""), 20, 20, Width, Height);
   mClientWindow->SetBackColor(GetBackColor());
   mClientWindow->SetCanFocus(false);
 
@@ -990,7 +910,7 @@ WndForm::WndForm(HWND Parent, const TCHAR *Name, const TCHAR *Caption,
   mClientRect.bottom=Width;
   mClientRect.right=Height;
 
-  cbTimerID = SetTimer(GetHandle(),1001,500,NULL);
+  cbTimerID = widget.set_timer(1001, 500);
 
   mModalResult = 0;
   if (Caption != NULL)
@@ -1011,7 +931,7 @@ void WndForm::Destroy(void){
   if (mClientWindow)
     mClientWindow->SetVisible(false);
 
-  KillTimer(GetHandle(),cbTimerID);
+  widget.kill_timer(cbTimerID);
 
   DestroyAcceleratorTable(mhAccelTable);
   DeleteObject(mhBrushTitle);
@@ -1021,16 +941,14 @@ void WndForm::Destroy(void){
 }
 
 
-HWND WndForm::GetClientAreaHandle(void){
+ContainerWindow &
+WndForm::GetClientAreaWidget(void)
+{
 
   if (mClientWindow != NULL)
-
-    return(mClientWindow->GetHandle());
-
+    return mClientWindow->GetWidget();
   else
-
-    return(GetHandle());
-
+    return widget;
 };
 
 
@@ -1059,12 +977,14 @@ int WndForm::OnCommand(WPARAM wParam, LPARAM lParam){
 
 };
 
-HFONT WndForm::SetTitleFont(HFONT Value){
-  HFONT res = mhTitleFont;
+const Font *
+WndForm::SetTitleFont(const Font &font)
+{
+  const Font *res = mhTitleFont;
 
-  if (mhTitleFont != Value){
+  if (mhTitleFont != &font){
     // todo
-    mhTitleFont = Value;
+    mhTitleFont = &font;
 
 
 
@@ -1076,8 +996,8 @@ HFONT WndForm::SetTitleFont(HFONT Value){
 
 void WndForm::SetToForeground(void)
 {
-  BringWindowToTop(GetHandle());
-  SetActiveWindow(GetHandle());
+  widget.bring_to_top();
+  widget.set_active();
 }
 
 int WndForm::ShowModal(void){
@@ -1096,8 +1016,7 @@ int WndForm::ShowModal(bool bEnableMap) {
   Message::BlockRender(true);
 #endif
 
-  RECT mRc;
-  GetWindowRect(GetHandle(), &mRc);
+  RECT mRc = widget.get_position();
   DrawWireRects(&mRc, 5);
 
   SetVisible(true);
@@ -1145,7 +1064,7 @@ int WndForm::ShowModal(bool bEnableMap) {
 #ifndef GNAV
         &&  !( // exception
               bEnableMap
-              && msg.hwnd == hWndMapWindow
+              && msg.hwnd == map_window
               && (
                 msg.message == WM_LBUTTONDOWN
                 || msg.message == WM_LBUTTONUP
@@ -1298,7 +1217,9 @@ int WndForm::ShowModal(bool bEnableMap) {
 
 }
 
-void WndForm::Paint(HDC hDC){
+void
+WndForm::Paint(Canvas &canvas)
+{
 
   RECT rcClient;
   SIZE tsize;
@@ -1309,17 +1230,17 @@ void WndForm::Paint(HDC hDC){
 
   CopyRect(&rcClient, GetBoundRect());
 
-  oldPen = (HPEN)SelectObject(hDC, GetBorderPen());
-  oldBrush = (HBRUSH) SelectObject(hDC, GetBackBrush());
+  canvas.select(GetBorderPen());
+  canvas.select(GetBackBrush());
 
-  DrawEdge(hDC, &rcClient, EDGE_RAISED, BF_ADJUST | BF_FLAT | BF_RECT);
+  DrawEdge(canvas, &rcClient, EDGE_RAISED, BF_ADJUST | BF_FLAT | BF_RECT);
 
-  SetTextColor(hDC, GetForeColor());
-  SetBkColor(hDC, mColorTitle);
-  SetBkMode(hDC, TRANSPARENT);
+  canvas.set_text_color(GetForeColor());
+  canvas.set_background_color(mColorTitle);
+  canvas.background_transparent();
 
-  SelectObject(hDC, mhTitleFont);
-  GetTextExtentPoint(hDC, mCaption, _tcslen(mCaption), &tsize);
+  canvas.select(*mhTitleFont);
+  tsize = canvas.text_size(mCaption);
 
   // JMW todo add here icons?
 
@@ -1338,12 +1259,8 @@ void WndForm::Paint(HDC hDC){
 
   }
 
-  ExtTextOut(hDC, mTitleRect.left+1, mTitleRect.top-2,
-             ETO_OPAQUE, &mTitleRect, mCaption, _tcslen(mCaption), NULL);
-
-  SelectObject(hDC, oldBrush);
-  SelectObject(hDC, oldPen);
-
+  canvas.text_opaque(mTitleRect.left + 1, mTitleRect.top - 2,
+                     &mTitleRect, mCaption);
 }
 
 void WndForm::SetCaption(const TCHAR *Value){
@@ -1352,10 +1269,8 @@ void WndForm::SetCaption(const TCHAR *Value){
 
   if (_tcscmp(mCaption, Value) != 0){
     _tcscpy(mCaption, Value);
-    InvalidateRect(GetHandle(), &mTitleRect, false);
-    UpdateWindow(GetHandle());
-
-
+    widget.update(mTitleRect);
+    widget.update();
   }
 
 }
@@ -1372,7 +1287,7 @@ COLORREF WndForm::SetBackColor(COLORREF Value){
   return(WindowControl::SetBackColor(Value));
 }
 
-HFONT WndForm::SetFont(HFONT Value){
+const Font *WndForm::SetFont(const Font &Value){
   if (mClientWindow)
     mClientWindow->SetFont(Value);
   return(WindowControl::SetFont(Value));
@@ -1540,7 +1455,7 @@ int WndButton::OnLButtonUp(WPARAM wParam, LPARAM lParam){
   (void)wParam;
 
   mDown = false;
-  Paint(GetDeviceContext());
+  Paint(widget.get_canvas());
   ReleaseCapture();
 
   Pos.x = lParam & 0x0000ffff;
@@ -1577,7 +1492,7 @@ int WndButton::OnKeyDown(WPARAM wParam, LPARAM lParam){
     case VK_SPACE:
       if (!mDown){
         mDown = true;
-        Paint(GetDeviceContext());
+        Paint(widget.get_canvas());
       }
     return(0);
   }
@@ -1596,7 +1511,7 @@ int WndButton::OnKeyUp(WPARAM wParam, LPARAM lParam){
       if (!Debounce()) return(1); // prevent false trigger
       if (mDown){
         mDown = false;
-        Paint(GetDeviceContext());
+        Paint(widget.get_canvas());
         if (mOnClickNotify != NULL) {
           RECT mRc;
           GetWindowRect(GetHandle(), &mRc);
@@ -1615,8 +1530,8 @@ int WndButton::OnLButtonDown(WPARAM wParam, LPARAM lParam){
   if (!GetFocused())
     SetFocus(GetHandle());
   else {
-    InvalidateRect(GetHandle(), GetBoundRect(), false);
-    UpdateWindow(GetHandle());
+    widget.update(*GetBoundRect());
+    widget.update();
   }
   SetCapture(GetHandle());
   return(1);
@@ -1625,20 +1540,22 @@ int WndButton::OnLButtonDown(WPARAM wParam, LPARAM lParam){
 int WndButton::OnLButtonDoubleClick(WPARAM wParam, LPARAM lParam){
 	(void)lParam; (void)wParam;
   mDown = true;
-  InvalidateRect(GetHandle(), GetBoundRect(), false);
-  UpdateWindow(GetHandle());
+  widget.update(*GetBoundRect());
+  widget.update();
   SetCapture(GetHandle());
   return(1);
 };
 
 
-void WndButton::Paint(HDC hDC){
+void
+WndButton::Paint(Canvas &canvas)
+{
 
   RECT rc;
 
   if (!GetVisible()) return;
 
-  WindowControl::Paint(hDC);
+  WindowControl::Paint(canvas);
 
   CopyRect(&rc, GetBoundRect());
   InflateRect(&rc, -2, -2); // todo border width
@@ -1646,19 +1563,17 @@ void WndButton::Paint(HDC hDC){
   // JMW todo: add icons?
 
   if (mDown){
-    DrawFrameControl(hDC, &rc, DFC_BUTTON, DFCS_BUTTONPUSH | DFCS_PUSHED);
+    DrawFrameControl(canvas, &rc, DFC_BUTTON, DFCS_BUTTONPUSH | DFCS_PUSHED);
   }else{
-    DrawFrameControl(hDC, &rc, DFC_BUTTON, DFCS_BUTTONPUSH);
+    DrawFrameControl(canvas, &rc, DFC_BUTTON, DFCS_BUTTONPUSH);
   }
 
   if (mCaption != NULL && mCaption[0] != '\0'){
+    canvas.set_text_color(GetForeColor());
+    canvas.set_background_color(GetBackColor());
+    canvas.background_transparent();
 
-    SetTextColor(hDC, GetForeColor());
-
-    SetBkColor(hDC, GetBackColor());
-    SetBkMode(hDC, TRANSPARENT);
-
-    HFONT oldFont = (HFONT)SelectObject(hDC, GetFont());
+    canvas.select(*GetFont());
 
     CopyRect(&rc, GetBoundRect());
     InflateRect(&rc, -2, -2); // todo border width
@@ -1668,7 +1583,7 @@ void WndButton::Paint(HDC hDC){
 
     if (mLastDrawTextHeight < 0){
 
-      DrawText(hDC, mCaption, _tcslen(mCaption), &rc,
+      DrawText(canvas, mCaption, _tcslen(mCaption), &rc,
           DT_CALCRECT
         | DT_EXPANDTABS
         | DT_CENTER
@@ -1687,14 +1602,12 @@ void WndButton::Paint(HDC hDC){
 
     rc.top += ((GetHeight()-4-mLastDrawTextHeight)/2);
 
-    DrawText(hDC, mCaption, _tcslen(mCaption), &rc,
+    DrawText(canvas, mCaption, _tcslen(mCaption), &rc,
         DT_EXPANDTABS
       | DT_CENTER
       | DT_NOCLIP
       | DT_WORDBREAK // mCaptionStyle // | DT_CALCRECT
     );
-
-    SelectObject(hDC, oldFont);
 
 //    mLastDrawTextHeight = rc.bottom - rc.top;
 
@@ -1742,7 +1655,6 @@ WndProperty::WndProperty(WindowControl *Parent,
   mOnClickDownNotify = NULL;
   mOnDataChangeNotify = DataChangeNotify;
   _tcscpy(mCaption, Caption);
-  mhEdit = NULL;
   mDataField = NULL;
   mDialogStyle=false; // this is set by ::SetDataField()
 
@@ -1759,82 +1671,13 @@ WndProperty::WndProperty(WindowControl *Parent,
 
   UpdateButtonData(mBitmapSize);
 
-  if (MultiLine) {
-// VENTA3 better borders on PNA HP31X
-#ifdef PNA // VENTA3 FIX
-    if (GlobalModelType == MODELTYPE_PNA_HP31X )
-    mhEdit = CreateWindowEx(WS_EX_CLIENTEDGE,TEXT("EDIT"), TEXT("\0"),
-			  WS_BORDER | WS_VISIBLE | WS_CHILD
-			  | ES_LEFT // | ES_AUTOHSCROLL
-			  | WS_CLIPCHILDREN
-			  | WS_CLIPSIBLINGS
-			  | WS_VSCROLL // RLD Added HSSCROLL
-			  | ES_MULTILINE, // JMW added MULTILINE
-        mEditPos.x, mEditPos.y,
-			  mEditSize.x, mEditSize.y,
-			  GetHandle(), NULL, hInst, NULL);
-   else
-    mhEdit = CreateWindow(TEXT("EDIT"), TEXT("\0"),
-			  WS_BORDER | WS_VISIBLE | WS_CHILD
-			  | ES_LEFT // | ES_AUTOHSCROLL
-			  | WS_CLIPCHILDREN
-			  | WS_CLIPSIBLINGS
-			  | WS_VSCROLL // RLD Added HSSCROLL
-			  | ES_MULTILINE, // JMW added MULTILINE
-			  mEditPos.x, mEditPos.y,
-			  mEditSize.x, mEditSize.y,
-			  GetHandle(), NULL, hInst, NULL);
+  edit.set(widget, mEditPos.x, mEditPos.y, mEditSize.x, mEditSize.y,
+           MultiLine);
 
-#else
-    mhEdit = CreateWindow(TEXT("EDIT"), TEXT("\0"),
-			  WS_BORDER | WS_VISIBLE | WS_CHILD
-			  | ES_LEFT // | ES_AUTOHSCROLL
-			  | WS_CLIPCHILDREN
-			  | WS_CLIPSIBLINGS
-			  | WS_VSCROLL // RLD Added HSSCROLL
-			  | ES_MULTILINE, // JMW added MULTILINE
-			  mEditPos.x, mEditPos.y,
-			  mEditSize.x, mEditSize.y,
-			  GetHandle(), NULL, hInst, NULL);
-#endif
-  } else {
-#ifdef PNA // VENTA3 FIX
-    if (GlobalModelType == MODELTYPE_PNA_HP31X )
-    mhEdit = CreateWindowEx(WS_EX_CLIENTEDGE,TEXT("EDIT"), TEXT("\0"),
-			  WS_BORDER | WS_VISIBLE | WS_CHILD
-			  | ES_LEFT | ES_AUTOHSCROLL
-			  | WS_CLIPCHILDREN
-			  | WS_CLIPSIBLINGS,
-			  mEditPos.x, mEditPos.y,
-			  mEditSize.x, mEditSize.y,
-			  GetHandle(), NULL, hInst, NULL);
-    else
-    mhEdit = CreateWindow(TEXT("EDIT"), TEXT("\0"),
-			  WS_BORDER | WS_VISIBLE | WS_CHILD
-			  | ES_LEFT | ES_AUTOHSCROLL
-			  | WS_CLIPCHILDREN
-			  | WS_CLIPSIBLINGS,
-			  mEditPos.x, mEditPos.y,
-			  mEditSize.x, mEditSize.y,
-			  GetHandle(), NULL, hInst, NULL);
-#else
-    mhEdit = CreateWindow(TEXT("EDIT"), TEXT("\0"),
-			  WS_BORDER | WS_VISIBLE | WS_CHILD
-			  | ES_LEFT | ES_AUTOHSCROLL
-			  | WS_CLIPCHILDREN
-			  | WS_CLIPSIBLINGS,
-			  mEditPos.x, mEditPos.y,
-			  mEditSize.x, mEditSize.y,
-			  GetHandle(), NULL, hInst, NULL);
-#endif
-  }
+  edit.set_userdata(this);
+  mEditWindowProcedure = edit.set_wndproc(WndPropertyEditWndProc);
 
-  SetWindowLong(mhEdit, GWL_USERDATA, (long)this);
-  mEditWindowProcedure = (WNDPROC)SetWindowLong(mhEdit, GWL_WNDPROC, (LONG) WndPropertyEditWndProc);
-
-  SendMessage(mhEdit, WM_SETFONT,
-		     (WPARAM)mhValueFont, MAKELPARAM(TRUE,0));
-
+  edit.set_font(*mhValueFont);
 
   mCanFocus = true;
 
@@ -1873,10 +1716,9 @@ void WndProperty::Destroy(void){
     }
   }
 
-  SetWindowLong(mhEdit, GWL_WNDPROC, (LONG) mEditWindowProcedure);
-  SetWindowLong(mhEdit, GWL_USERDATA, (long)0);
+  edit.set_wndproc(mEditWindowProcedure);
 
-  DestroyWindow(mhEdit);
+  edit.reset();
 
   WindowControl::Destroy();
 
@@ -1885,7 +1727,7 @@ void WndProperty::Destroy(void){
 
 
 void WndProperty::SetText(const TCHAR *Value){
-  SetWindowText(mhEdit, Value);
+  edit.set_text(Value);
 }
 
 
@@ -1898,17 +1740,16 @@ LRESULT CALLBACK WndPropertyEditWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPA
 		return (DefWindowProc(hwnd, uMsg, wParam, lParam));
 }
 
-HFONT WndProperty::SetFont(HFONT Value){
-  HFONT res = GetFont();
+const Font *WndProperty::SetFont(const Font &Value){
+  const Font *res = GetFont();
 
   WindowControl::SetFont(Value);
 
   // todo, support value font
 
-  if (res != Value){
-    mhValueFont = Value;
-    SendMessage(mhEdit, WM_SETFONT,
-		     (WPARAM)mhValueFont, MAKELPARAM(TRUE,0));
+  if (res != &Value){
+    mhValueFont = &Value;
+    edit.set_font(Value);
   }
   return(res);
 }
@@ -1951,15 +1792,11 @@ int WndProperty::SetButtonSize(int Value){
 
     UpdateButtonData(Value);
 
-    SetWindowPos(mhEdit, 0, mEditPos.x, mEditPos.y,
-      mEditSize.x, mEditSize.y,
-      /*SWP_NOMOVE |*/ SWP_NOACTIVATE // need to MOVE to enlarge/shift left for combopicker (no arrows)
-                 | SWP_NOOWNERZORDER | SWP_NOZORDER
-    );
+    edit.move(mEditPos.x, mEditPos.y, mEditSize.x, mEditSize.y);
 
     if (GetVisible()){
-      InvalidateRect(GetHandle(), GetBoundRect(), false);
-      UpdateWindow(GetHandle());
+      widget.update(*GetBoundRect());
+      widget.update();
     }
   }
   return(res);
@@ -1992,7 +1829,7 @@ int WndProperty::WndProcEditControl(HWND hwnd, UINT uMsg,
       if (wParam == VK_UP || wParam == VK_DOWN){
         WindowControl *owner = GetOwner();
         if (owner != NULL)
-          PostMessage(owner->GetClientAreaHandle(), uMsg, wParam, lParam);
+          PostMessage(owner->GetClientAreaWidget(), uMsg, wParam, lParam);
 	// pass the message to the parent window;
         return(0);
         // return(1);
@@ -2054,8 +1891,7 @@ bool WndProperty::SetReadOnly(bool Value){
   if (GetReadOnly() != Value){
     WindowControl::SetReadOnly(Value);
 
-    SendMessage(mhEdit, EM_SETREADONLY, (WPARAM)(bool)Value, 0L);
-
+    edit.set_read_only(Value);
   }
 
   return(res);
@@ -2063,6 +1899,7 @@ bool WndProperty::SetReadOnly(bool Value){
 
 bool WndProperty::SetFocused(bool Value, HWND FromTo){
 
+  const HWND mhEdit = edit;
   TCHAR sTmp[STRINGVALUESIZE];
 
   if (Value && GetReadOnly()){  // keep focus on last control
@@ -2078,14 +1915,14 @@ bool WndProperty::SetFocused(bool Value, HWND FromTo){
       if (Value){
         if (mDataField != NULL){
           mDataField->GetData();
-          SetWindowText(mhEdit, mDataField->GetAsString());
+          edit.set_text(mDataField->GetAsString());
         }
       } else {
         if (mDataField != NULL){
           GetWindowText(mhEdit, sTmp, (sizeof(sTmp)/sizeof(TCHAR))-1);
           mDataField->SetAsString(sTmp);
           mDataField->SetData();
-          SetWindowText(mhEdit, mDataField->GetAsDisplayString());
+          edit.set_text(mDataField->GetAsDisplayString());
       }
     }
   }
@@ -2093,8 +1930,8 @@ bool WndProperty::SetFocused(bool Value, HWND FromTo){
   if (FromTo != mhEdit)
     WindowControl::SetFocused(Value, FromTo);
   if (Value){
-    SetFocus(mhEdit);
-    PostMessage(mhEdit, EM_SETSEL, 0, -1);
+    edit.set_focus();
+    edit.set_selection();
   }
   return(0);
 }
@@ -2146,7 +1983,7 @@ int WndProperty::OnLButtonDown(WPARAM wParam, LPARAM lParam){
   {
 
     if (!GetFocused()){
-      SetFocus(GetHandle());
+      widget.set_focus();
       return(0);
     }
 
@@ -2158,18 +1995,18 @@ int WndProperty::OnLButtonDown(WPARAM wParam, LPARAM lParam){
 
     if (mDownDown) {
       DecValue();
-      InvalidateRect(GetHandle(), &mHitRectDown, false);
-      UpdateWindow(GetHandle());
+      widget.update(mHitRectDown);
+      widget.update();
     }
 
     mUpDown = (PtInRect(&mHitRectUp, Pos) != 0);
 
     if (mUpDown) {
       IncValue();
-      InvalidateRect(GetHandle(), &mHitRectUp, false);
-      UpdateWindow(GetHandle());
+      widget.update(mHitRectUp);
+      widget.update();
     }
-    SetCapture(GetHandle());
+    widget.set_capture();
   }
   return(0);
 };
@@ -2192,17 +2029,17 @@ int WndProperty::OnLButtonUp(WPARAM wParam, LPARAM lParam){
 
     if (mDownDown){
       mDownDown = false;
-      InvalidateRect(GetHandle(), &mHitRectDown, false);
-      UpdateWindow(GetHandle());
+      widget.update(mHitRectDown);
+      widget.update();
     }
     if (mUpDown){
       mUpDown = false;
-      InvalidateRect(GetHandle(), &mHitRectUp, false);
-      UpdateWindow(GetHandle());
+      widget.update(mHitRectUp);
+      widget.update();
     }
 
   }
-  ReleaseCapture();
+  widget.release_capture();
   return(0);
 }
 
@@ -2210,7 +2047,7 @@ int WndProperty::OnLButtonUp(WPARAM wParam, LPARAM lParam){
 int WndProperty::CallSpecial(void){
   if (mDataField != NULL){
     mDataField->Special();
-    SetWindowText(mhEdit, mDataField->GetAsString());
+    edit.set_text(mDataField->GetAsString());
   }
   return(0);
 }
@@ -2218,7 +2055,7 @@ int WndProperty::CallSpecial(void){
 int WndProperty::IncValue(void){
   if (mDataField != NULL){
     mDataField->Inc();
-    SetWindowText(mhEdit, mDataField->GetAsString());
+    edit.set_text(mDataField->GetAsString());
   }
   return(0);
 }
@@ -2226,13 +2063,15 @@ int WndProperty::IncValue(void){
 int WndProperty::DecValue(void){
   if (mDataField != NULL){
     mDataField->Dec();
-    SetWindowText(mhEdit, mDataField->GetAsString());
+    edit.set_text(mDataField->GetAsString());
   }
   return(0);
 }
 
 
-void WndProperty::Paint(HDC hDC){
+void
+WndProperty::Paint(Canvas &canvas)
+{
 
   RECT r;
   SIZE tsize;
@@ -2242,26 +2081,26 @@ void WndProperty::Paint(HDC hDC){
 
   if (!GetVisible()) return;
 
-  WindowControl::Paint(hDC);
+  WindowControl::Paint(canvas);
 
   r.left = 0;
   r.top = 0;
   r.right = GetWidth();
   r.bottom = GetHeight();
 
-  SetTextColor(hDC, GetForeColor());
+  canvas.set_text_color(GetForeColor());
 
 #if (WINDOWSPC>0)
   // JMW make it look nice on wine
   if (!GetFocused()) {
-    SetBkColor(hDC, GetBackColor());
+    canvas.set_background_color(GetBackColor());
   }
 #endif
 
-  SetBkMode(hDC, TRANSPARENT);
-  HFONT oldFont = (HFONT)SelectObject(hDC, GetFont());
+  canvas.background_transparent();
+  canvas.select(*GetFont());
 
-  GetTextExtentPoint(hDC, mCaption, _tcslen(mCaption), &tsize);
+  tsize = canvas.text_size(mCaption);
 
   if (mCaptionWidth==0){
     org.x = mEditPos.x;
@@ -2276,8 +2115,7 @@ void WndProperty::Paint(HDC hDC){
 
   // JMW TODO: use stretch functions for bigger displays, since these icons are too small for them.
 
-  ExtTextOut(hDC, org.x, org.y,
-    ETO_OPAQUE, NULL, mCaption, _tcslen(mCaption), NULL);
+  canvas.text_opaque(org.x, org.y, NULL, mCaption);
 
     if (mDialogStyle) // can't but dlgComboPicker here b/c it calls paint when combopicker closes too
     {     // so it calls dlgCombopicker on the click/focus handlers for the wndproperty & label
@@ -2289,35 +2127,30 @@ void WndProperty::Paint(HDC hDC){
 
       oldBmp = (HBITMAP)SelectObject(GetTempDeviceContext(), hBmpLeft32);
 
-      StretchBlt(hDC,
-                 mHitRectDown.left, mHitRectDown.top,
-                 mBitmapSize, mBitmapSize,
-                 GetTempDeviceContext(),
-                 mDownDown ? 32 : 0, 0, 32, 32,
-                 SRCCOPY);
+      canvas.stretch(mHitRectDown.left, mHitRectDown.top,
+                     mBitmapSize, mBitmapSize,
+                     GetTempDeviceContext(),
+                     mDownDown ? 32 : 0, 0, 32, 32);
 
       SelectObject(GetTempDeviceContext(), hBmpRight32);
 
-      StretchBlt(hDC,
-                 mHitRectUp.left, mHitRectUp.top,
-                 mBitmapSize, mBitmapSize,
-                 GetTempDeviceContext(),
-                 mUpDown ? 32 : 0, 0, 32, 32,
-                 SRCCOPY);
+      canvas.stretch(mHitRectUp.left, mHitRectUp.top,
+                     mBitmapSize, mBitmapSize,
+                     GetTempDeviceContext(),
+                     mUpDown ? 32 : 0, 0, 32, 32);
 
       SelectObject(GetTempDeviceContext(), oldBmp);
     }
   }
-  SelectObject(hDC, oldFont);
 }
 
 
 void WndProperty::RefreshDisplay() {
   if (!mDataField) return;
   if (GetFocused())
-    SetWindowText(mhEdit, mDataField->GetAsString());
+    edit.set_text(mDataField->GetAsString());
   else
-    SetWindowText(mhEdit, mDataField->GetAsDisplayString());
+    edit.set_text(mDataField->GetAsDisplayString());
 }
 
 
@@ -2371,19 +2204,18 @@ DataField *WndProperty::SetDataField(DataField *Value){
 }
 
 
-void WndOwnerDrawFrame::Paint(HDC hDC){
+void
+WndOwnerDrawFrame::Paint(Canvas &canvas)
+{
 
   if (!GetVisible()) return;
 
-  WndFrame::Paint(hDC);
+  WndFrame::Paint(canvas);
 
-  HFONT oldFont = (HFONT)SelectObject(hDC, GetFont());
+  canvas.select(*GetFont());
 
   if (mOnPaintCallback != NULL)
-    (mOnPaintCallback)(this, hDC);
-
-  SelectObject(hDC, oldFont);
-
+    (mOnPaintCallback)(this, canvas);
 }
 
 void WndOwnerDrawFrame::Destroy(void){
@@ -2402,15 +2234,16 @@ void WndFrame::Destroy(void){
 
 int WndFrame::OnKeyDown(WPARAM wParam, LPARAM lParam){
   if (mIsListItem && GetOwner()!=NULL){
-    RECT mRc;
-    GetWindowRect(GetHandle(), &mRc);
+    RECT mRc = widget.get_position();
     SetSourceRectangle(mRc);
     return(((WndListFrame*)GetOwner())->OnItemKeyDown(this, wParam, lParam));
   }
   return(1);
 }
 
-void WndFrame::Paint(HDC hDC){
+void
+WndFrame::Paint(Canvas &canvas)
+{
 
   if (!GetVisible()) return;
 
@@ -2418,28 +2251,26 @@ void WndFrame::Paint(HDC hDC){
     ((WndListFrame*)GetOwner())->PrepareItemDraw();
   }
 
-  WindowControl::Paint(hDC);
+  WindowControl::Paint(canvas);
 
   if (mCaption != 0){
 
     RECT rc;
 
-    SetTextColor(hDC, GetForeColor());
-    SetBkColor(hDC, GetBackColor());
-    SetBkMode(hDC, TRANSPARENT);
+    canvas.set_text_color(GetForeColor());
+    canvas.set_background_color(GetBackColor());
+    canvas.background_transparent();
 
-    HFONT oldFont = (HFONT)SelectObject(hDC, GetFont());
+    canvas.select(*GetFont());
 
     CopyRect(&rc, GetBoundRect());
     InflateRect(&rc, -2, -2); // todo border width
 
 //    h = rc.bottom - rc.top;
 
-    DrawText(hDC, mCaption, _tcslen(mCaption), &rc,
+    DrawText(canvas, mCaption, _tcslen(mCaption), &rc,
       mCaptionStyle // | DT_CALCRECT
     );
-
-    SelectObject(hDC, oldFont);
   }
 
 }
@@ -2450,9 +2281,8 @@ void WndFrame::SetCaption(const TCHAR *Value){
 
   if (_tcscmp(mCaption, Value) != 0){
     _tcscpy(mCaption, Value);  // todo size check
-    InvalidateRect(GetHandle(), GetBoundRect(), false);
-    UpdateWindow(GetHandle());
-
+    widget.update(*GetBoundRect());
+    widget.update();
   }
 }
 
@@ -2461,9 +2291,8 @@ UINT WndFrame::SetCaptionStyle(UINT Value){
   if (res != Value){
     mCaptionStyle = Value;
 
-    InvalidateRect(GetHandle(), GetBoundRect(), false);
-    UpdateWindow(GetHandle());
-
+    widget.update(*GetBoundRect());
+    widget.update();
   }
   return(res);
 }
@@ -2475,10 +2304,9 @@ WndFrame::GetTextHeight()
   ::CopyRect(&rc, GetBoundRect());
   ::InflateRect(&rc, -2, -2); // todo border width
 
-  HDC hDC = GetDeviceContext();
-  HFONT old_font = (HFONT)::SelectObject(hDC, GetFont());
-  ::DrawText(hDC, mCaption, -1, &rc, mCaptionStyle | DT_CALCRECT);
-  ::SelectObject(hDC, old_font);
+  Canvas &canvas = GetCanvas();
+  canvas.select(*GetFont());
+  ::DrawText(canvas, mCaption, -1, &rc, mCaptionStyle | DT_CALCRECT);
 
   return rc.bottom - rc.top;
 }
@@ -2529,7 +2357,9 @@ void WndListFrame::Destroy(void){
 }
 
 
-void WndListFrame::Paint(HDC hDC){
+void
+WndListFrame::Paint(Canvas &canvas)
+{
   int i;
 
   if (mClientCount > 0){
@@ -2544,18 +2374,17 @@ void WndListFrame::Paint(HDC hDC){
 */
   }
 
-  WndFrame::Paint(hDC);
+  WndFrame::Paint(canvas);
 
   if (mClientCount > 0){
-    Viewport viewport(hDC, mClients[0]->GetWidth(),
+    Viewport viewport(canvas, mClients[0]->GetWidth(),
                       mClients[0]->GetHeight());
-    HDC HdcTemp = viewport;
+    Canvas &canvas2 = viewport;
 
     viewport.move(mClients[0]->GetLeft(), 0);
 
     for (i=0; i<mListInfo.ItemInViewCount; i++){
-
-      HFONT oldFont = (HFONT)SelectObject(HdcTemp, mClients[0]->GetFont());
+      canvas2.select(*mClients[0]->GetFont());
 
       if (mOnListCallback != NULL){
         mListInfo.DrawIndex = mListInfo.TopIndex + i;
@@ -2567,21 +2396,18 @@ void WndListFrame::Paint(HDC hDC){
       }
 
       mClients[0]->PaintSelector(true);
-      mClients[0]->Paint(HdcTemp);
+      mClients[0]->Paint(canvas2);
       mClients[0]->PaintSelector(false);
 
       viewport.commit();
       viewport.move(0, mClients[0]->GetHeight());
-
-      SelectObject(HdcTemp, oldFont);
-
     }
 
     viewport.restore();
 
     mListInfo.DrawIndex = mListInfo.ItemIndex;
 
-    DrawScrollBar(hDC);
+    DrawScrollBar(canvas);
   }
 }
 
@@ -2591,12 +2417,10 @@ void WndListFrame::Redraw(void){
 }
 
 
-void WndListFrame::DrawScrollBar(HDC hDC) {
+void WndListFrame::DrawScrollBar(Canvas &canvas) {
 #ifdef GNAVxxx  // Johnny, I think this GNAVxxx section can be removed entirely in place of the adjustment to the width below. - RLD
 
   RECT rc;
-  HPEN hP;
-  HBRUSH hB;
   int w = 1+GetWidth()- 2*SELECTORWIDTH;
   int h = GetHeight()- SELECTORWIDTH;
 
@@ -2606,9 +2430,8 @@ void WndListFrame::DrawScrollBar(HDC hDC) {
   rc.bottom = h;
 
   if (mListInfo.ItemCount <= mListInfo.ItemInViewCount){
-    hB = (HBRUSH)CreateSolidBrush(GetBackColor());
-    FillRect(hDC, &rc, hB);
-    DeleteObject(hB);
+    Brush brush(GetBackColor());
+    canvas.fill_rectangle(rc, brush);
     return;
   }
 
@@ -2621,7 +2444,7 @@ void WndListFrame::DrawScrollBar(HDC hDC) {
 
   DeleteObject(hP);
 
-  hB = (HBRUSH)CreateSolidBrush(GetForeColor());
+  Brush brush(GetForeColor());
 
   rc.left = 1+w;
   rc.top = 1+(h * mListInfo.ScrollIndex) / mListInfo.ItemCount;
@@ -2636,19 +2459,14 @@ void WndListFrame::DrawScrollBar(HDC hDC) {
     rc.top += d;
   }
 
-  FillRect(hDC, &rc, hB);
-
-  DeleteObject(hB);
+  canvas.fill_rectangle(rc, brush);
 #else   // GNAVxxx
 
-  static HBITMAP hScrollBarBitmapTop = NULL;
-  static HBITMAP hScrollBarBitmapMid = NULL;
-  static HBITMAP hScrollBarBitmapBot = NULL;
-  static HBITMAP hScrollBarBitmapFill = NULL;
+  static Bitmap hScrollBarBitmapTop;
+  static Bitmap hScrollBarBitmapMid;
+  static Bitmap hScrollBarBitmapBot;
+  static Bitmap hScrollBarBitmapFill;
   RECT rc;
-  HPEN hP, hP3;
-  HBRUSH hB;
-  HBITMAP oldBmp;
 
   if ( ScrollbarWidth == -1) {  // resize height for each dialog so top button is below 1st item (to avoid initial highlighted overlap)
 #ifdef GNAV
@@ -2676,18 +2494,18 @@ void WndListFrame::DrawScrollBar(HDC hDC) {
   int w = GetWidth()- (ScrollbarWidth);
   int h = GetHeight() - ScrollbarTop;
 
-  if (hScrollBarBitmapTop == NULL)
-    hScrollBarBitmapTop=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_SCROLLBARTOP));
-  if (hScrollBarBitmapMid == NULL)
-    hScrollBarBitmapMid=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_SCROLLBARMID));
-  if (hScrollBarBitmapBot == NULL)
-    hScrollBarBitmapBot=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_SCROLLBARBOT));
-  if (hScrollBarBitmapFill == NULL)
-    hScrollBarBitmapFill=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_SCROLLBARFILL));
+  if (!hScrollBarBitmapTop.defined())
+    hScrollBarBitmapTop.load(IDB_SCROLLBARTOP);
+  if (!hScrollBarBitmapMid.defined())
+    hScrollBarBitmapMid.load(IDB_SCROLLBARMID);
+  if (!hScrollBarBitmapBot.defined())
+    hScrollBarBitmapBot.load(IDB_SCROLLBARBOT);
+  if (!hScrollBarBitmapFill.defined())
+    hScrollBarBitmapFill.load(IDB_SCROLLBARFILL);
 
-  hB =(HBRUSH)CreateSolidBrush(0xFFFFFF);
-  hP = (HPEN)CreatePen(PS_SOLID, DEFAULTBORDERPENWIDTH, GetForeColor());
-  SelectObject(hDC, hP);
+  Brush brush(0xFFFFFF);
+  Pen pen(DEFAULTBORDERPENWIDTH, GetForeColor());
+  canvas.select(pen);
 
   // ENTIRE SCROLLBAR AREA
   rc.left = w;
@@ -2706,8 +2524,8 @@ void WndListFrame::DrawScrollBar(HDC hDC) {
   }
 
   // draw rectangle around entire scrollbar area
-  DrawLine2(hDC, rc.left, rc.top, rc.left, rc.bottom, rc.right, rc.bottom);
-  DrawLine2(hDC, rc.right, rc.bottom, rc.right, rc.top, rc.left, rc.top);
+  canvas.two_lines(rc.left, rc.top, rc.left, rc.bottom, rc.right, rc.bottom);
+  canvas.two_lines(rc.right, rc.bottom, rc.right, rc.top, rc.left, rc.top);
 
   // Just Scroll Bar Slider button
   rc.left = w;
@@ -2722,16 +2540,10 @@ void WndListFrame::DrawScrollBar(HDC hDC) {
     rc.top += d;
   }
 
-  unsigned long ctUpDown =0;
   unsigned long ctScroll =0;
 
   bool bTransparentUpDown = true;
   bool bTransparentScroll = true;
-
-  if (bTransparentUpDown)
-    ctUpDown=SRCAND;  //Combines the colors of the source and destination rectangles by using the Boolean AND operator.
-  else
-    ctUpDown=SRCCOPY;  //Copies the source rectangle directly to the destination rectangle.
 
   if (bTransparentScroll)
     ctScroll=SRCAND;  //Combines the colors of the source and destination rectangles by using the Boolean AND operator.
@@ -2743,47 +2555,46 @@ void WndListFrame::DrawScrollBar(HDC hDC) {
   // BOT Up Button 32x32
   if (ScrollbarWidth == SCROLLBARWIDTH_INITIAL)
     {
-      oldBmp = (HBITMAP)SelectObject(GetTempDeviceContext(), hScrollBarBitmapTop);
-      BitBlt(hDC, w, ScrollbarTop, SCROLLBARWIDTH_INITIAL, SCROLLBARWIDTH_INITIAL,
-	     GetTempDeviceContext(), 0, 0, ctUpDown);
+      GetTempDeviceContext().select(hScrollBarBitmapTop);
+      canvas.copy(w, ScrollbarTop,
+                  SCROLLBARWIDTH_INITIAL, SCROLLBARWIDTH_INITIAL,
+                  GetTempDeviceContext(), 0, 0,
+                  bTransparentUpDown);
 
-      SelectObject(GetTempDeviceContext(), hScrollBarBitmapBot);
-      BitBlt(hDC, w, h-SCROLLBARWIDTH_INITIAL+ScrollbarTop, SCROLLBARWIDTH_INITIAL, SCROLLBARWIDTH_INITIAL,
-	     GetTempDeviceContext(), 0, 0, ctUpDown);
+      GetTempDeviceContext().select(hScrollBarBitmapBot);
+      canvas.copy(w, h - SCROLLBARWIDTH_INITIAL + ScrollbarTop,
+                  SCROLLBARWIDTH_INITIAL, SCROLLBARWIDTH_INITIAL,
+                  GetTempDeviceContext(), 0, 0,
+                  bTransparentUpDown);
     }
   else
     {
-      oldBmp = (HBITMAP)SelectObject(GetTempDeviceContext(), hScrollBarBitmapTop);
-
-      StretchBlt(hDC, w, ScrollbarTop,
-		 (ScrollbarWidth),
-		 (ScrollbarWidth),
-		 GetTempDeviceContext(),
-		 0, 0, SCROLLBARWIDTH_INITIAL, SCROLLBARWIDTH_INITIAL,
-		 ctUpDown);
-
+      GetTempDeviceContext().select(hScrollBarBitmapTop);
+      canvas.stretch(w, ScrollbarTop,
+                     ScrollbarWidth, ScrollbarWidth,
+                     GetTempDeviceContext(),
+                     0, 0, SCROLLBARWIDTH_INITIAL, SCROLLBARWIDTH_INITIAL,
+                     bTransparentUpDown);
 
       // BOT Up Button 32x32
-      SelectObject(GetTempDeviceContext(), hScrollBarBitmapBot);
-
-      StretchBlt(hDC, w, h-(ScrollbarWidth)+ScrollbarTop,
-		 (ScrollbarWidth),
-		 (ScrollbarWidth),
-		 GetTempDeviceContext(),
-		 0, 0, SCROLLBARWIDTH_INITIAL, SCROLLBARWIDTH_INITIAL,
-		 ctUpDown);
+      GetTempDeviceContext().select(hScrollBarBitmapBot);
+      canvas.stretch(w, h - ScrollbarWidth + ScrollbarTop,
+                     ScrollbarWidth, ScrollbarWidth,
+                     GetTempDeviceContext(),
+                     0, 0, SCROLLBARWIDTH_INITIAL, SCROLLBARWIDTH_INITIAL,
+                     bTransparentUpDown);
     }
 
   // Middle Slider Button 30x28
   if (mListInfo.ItemCount > mListInfo.ItemInViewCount){
 
     // handle on slider
-    SelectObject(GetTempDeviceContext(), hScrollBarBitmapMid);
+    GetTempDeviceContext().select(hScrollBarBitmapMid);
     if (ScrollbarWidth == SCROLLBARWIDTH_INITIAL)
       {
-	  BitBlt(hDC, w+1, rc.top + GetScrollBarHeight()/2 - 14, 30, 28,
-	         GetTempDeviceContext(), 0, 0,
-	         SRCAND); // always SRCAND b/c on top of scrollbutton texture
+        canvas.copy_and(w + 1, rc.top + GetScrollBarHeight() / 2 - 14, 30, 28,
+                        GetTempDeviceContext(), 0, 0);
+        // always SRCAND b/c on top of scrollbutton texture
       }
     else
       {
@@ -2795,31 +2606,29 @@ void WndListFrame::DrawScrollBar(HDC hDC) {
           SCButtonH = (int) (28.0 * (float)ScrollbarWidth / (float)SCROLLBARWIDTH_INITIAL);
           SCButtonY = (int) (14.0 * (float)ScrollbarWidth / (float)SCROLLBARWIDTH_INITIAL);
         }
-       StretchBlt(hDC, w+1, rc.top + GetScrollBarHeight()/2 - SCButtonY, SCButtonW, SCButtonH,
-		   GetTempDeviceContext(), 0, 0,
-		   30, 28,
-		   SRCAND); // always SRCAND b/c on top of scrollbutton texture
+
+        canvas.stretch_and(w + 1, rc.top + GetScrollBarHeight() / 2 - SCButtonY,
+                           SCButtonW, SCButtonH,
+                           GetTempDeviceContext(), 0, 0, 30, 28);
+        // always SRCAND b/c on top of scrollbutton texture
       }
 
     // box around slider rect
-    hP3 = (HPEN)CreatePen(PS_SOLID, DEFAULTBORDERPENWIDTH * 2, GetForeColor());
+    Pen pen3(DEFAULTBORDERPENWIDTH * 2, GetForeColor());
     int iBorderOffset = 1;  // set to 1 if BORDERWIDTH >2, else 0
-    SelectObject(hDC, hP3);
-    DrawLine2(hDC, rc.left+iBorderOffset, rc.top, rc.left+iBorderOffset, rc.bottom, rc.right, rc.bottom); // just left line of scrollbar
-    DrawLine2(hDC, rc.right, rc.bottom, rc.right, rc.top, rc.left+iBorderOffset, rc.top); // just left line of scrollbar
-    DeleteObject(hP3);
-
+    canvas.select(pen3);
+    canvas.two_lines(rc.left + iBorderOffset, rc.top,
+                     rc.left + iBorderOffset, rc.bottom,
+                     rc.right, rc.bottom); // just left line of scrollbar
+    canvas.two_lines(rc.right, rc.bottom,
+                     rc.right, rc.top,
+                     rc.left + iBorderOffset, rc.top); // just left line of scrollbar
   } // more items than fit on screen
-
-  SelectObject(GetTempDeviceContext(), oldBmp);
 
   rcScrollBarButton.left=rc.left;
   rcScrollBarButton.right=rc.right;
   rcScrollBarButton.top=rc.top;
   rcScrollBarButton.bottom=rc.bottom;
-
-  DeleteObject(hP);
-  DeleteObject(hB);
 #endif // GNAVxxx
 }
 
@@ -3015,19 +2824,18 @@ int WndFrame::OnLButtonDown(WPARAM wParam, LPARAM lParam) {
   if (mIsListItem && GetOwner()!=NULL) {
 
     if (!GetFocused()) {
-      SetFocus(GetHandle());
+      widget.set_focus();
       //return(1);
     }
     //else {  // always doing this allows selected item in list to remain selected.
-      InvalidateRect(GetHandle(), GetBoundRect(), false);
-      UpdateWindow(GetHandle());
+      widget.update(*GetBoundRect());
+      widget.update();
     //}
 
     int xPos = LOWORD(lParam);  // horizontal position of cursor
     int yPos = HIWORD(lParam);  // vertical position of cursor
     WndListFrame* wlf = ((WndListFrame*)GetOwner());
-    RECT mRc;
-    GetWindowRect(GetHandle(), &mRc);
+    RECT mRc = widget.get_position();
     wlf->SelectItemFromScreen(xPos, yPos, &mRc);
   }
   isselect = false;
@@ -3071,7 +2879,7 @@ void WndListFrame::SelectItemFromScreen(int xPos, int yPos,
   }
 */
   int index;
-  GetClientRect(GetHandle(), rect);
+  *rect = widget.get_position();
   index = yPos/mClients[0]->GetHeight(); // yPos is offset within ListEntry item!
 
   if ((index>=0)&&(index<mListInfo.BottomIndex)) {

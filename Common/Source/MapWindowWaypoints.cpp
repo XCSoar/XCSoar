@@ -66,7 +66,7 @@ void MapWaypointLabelAdd(TCHAR *Name, int X, int Y,
 void MapWaypointLabelClear();
 
 
-void MapWindow::DrawWaypoints(HDC hdc, const RECT rc)
+void MapWindow::DrawWaypoints(Canvas &canvas, const RECT rc)
 {
   unsigned int i;
   TCHAR Buffer[32];
@@ -108,7 +108,7 @@ void MapWindow::DrawWaypoints(HDC hdc, const RECT rc)
 	    irange = WaypointInRange(i);
 
 	    if(MapScale > 20) {
-	      SelectObject(hDCTemp,MapGfx.hSmall);
+              hDCTemp.select(MapGfx.hSmall);
 	    } else if( ((WayPointList[i].Flags & AIRPORT) == AIRPORT)
 		       || ((WayPointList[i].Flags & LANDPOINT) == LANDPOINT) ) {
 	      islandable = true; // so we can always draw them
@@ -127,41 +127,28 @@ void MapWindow::DrawWaypoints(HDC hdc, const RECT rc)
 		}
 
 		if ((WayPointList[i].Flags & AIRPORT) == AIRPORT)
-		  SelectObject(hDCTemp,MapGfx.hBmpAirportReachable);
+                  hDCTemp.select(MapGfx.hBmpAirportReachable);
 		else
-		  SelectObject(hDCTemp,MapGfx.hBmpFieldReachable);
+                  hDCTemp.select(MapGfx.hBmpFieldReachable);
 	      } else {
 		if ((WayPointList[i].Flags & AIRPORT) == AIRPORT)
-		  SelectObject(hDCTemp,MapGfx.hBmpAirportUnReachable);
+		  hDCTemp.select(MapGfx.hBmpAirportUnReachable);
 		else
-		  SelectObject(hDCTemp,MapGfx.hBmpFieldUnReachable);
+		  hDCTemp.select(MapGfx.hBmpFieldUnReachable);
 	      }
 	    } else {
-	      if(MapScale > 4) {
-		SelectObject(hDCTemp,MapGfx.hSmall);
-	      } else {
-		SelectObject(hDCTemp,MapGfx.hTurnPoint);
-	      }
-	    }
+              hDCTemp.select(MapScale > 4 ? MapGfx.hSmall : MapGfx.hTurnPoint);
+            }
 
 	    if (intask) { // VNT
 	      TextDisplayMode.AsFlag.WhiteBold = 1;
 	    }
 
 	    if(irange || intask || islandable || dowrite) {
-
-	      DrawBitmapX(hdc,
-			  WayPointList[i].Screen.x-IBLSCALE(10),
-			  WayPointList[i].Screen.y-IBLSCALE(10),
-			  20,20,
-			  hDCTemp,0,0,SRCPAINT);
-
-	      DrawBitmapX(hdc,
-			  WayPointList[i].Screen.x-IBLSCALE(10),
-			  WayPointList[i].Screen.y-IBLSCALE(10),
-			  20,20,
-			  hDCTemp,20,0,SRCAND);
-	    }
+              canvas.scale_or_and(WayPointList[i].Screen.x - IBLSCALE(10),
+                                  WayPointList[i].Screen.y - IBLSCALE(10),
+                                  hDCTemp, 20, 20);
+            }
 
 	    if(intask || irange || dowrite) {
 	      bool draw_alt = TextDisplayMode.AsFlag.Reachable
@@ -263,7 +250,7 @@ void MapWindow::DrawWaypoints(HDC hdc, const RECT rc)
 	}
     }
 
-  MapWaypointLabelSortAndRender(hdc);
+  MapWaypointLabelSortAndRender(canvas);
 }
 
 

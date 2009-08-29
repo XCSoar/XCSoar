@@ -41,6 +41,7 @@ Copyright_License {
 #include "Utils.h"
 #include "Dialogs/dlgTools.h"
 #include "Process.h"
+#include "Screen/MainWindow.hpp"
 
 static WndForm *wf=NULL;
 

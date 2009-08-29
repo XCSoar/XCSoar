@@ -39,6 +39,9 @@ Copyright_License {
 
 #include "Units.h"
 #include "Screen/Font.hpp"
+#include "Screen/BufferCanvas.hpp"
+#include "Screen/BitmapCanvas.hpp"
+#include "Screen/PaintWindow.hpp"
 
 #define BORDERTOP    (1<<bkTop)
 #define BORDERRIGHT  (1<<bkRight)
@@ -59,38 +62,37 @@ class InfoBox{
     int mY;
     int mWidth;
     int mHeight;
-    HWND mParent;
-    HWND mHWnd;
-    HDC  mHdc;
-    HDC  mHdcTemp;
-    HDC mHdcBuf;
+    ContainerWindow &mParent;
+    Widget widget;
+    BufferCanvas buffer;
+    BitmapCanvas temp;
     int  mBorderKind;
-    COLORREF mColorBack;
-    COLORREF mColorFore;
-    COLORREF mColorTitle;
-    COLORREF mColorTitleBk;
-    COLORREF mColorValue;
-    COLORREF mColorValueBk;
-    COLORREF mColorComment;
-    COLORREF mColorCommentBk;
+    Color mColorBack;
+    Color mColorFore;
+    Color mColorTitle;
+    Color mColorTitleBk;
+    Color mColorValue;
+    Color mColorValueBk;
+    Color mColorComment;
+    Color mColorCommentBk;
 
-    COLORREF mColorRed;
-    COLORREF mColorBlue;
+    Color mColorRed;
+    Color mColorBlue;
 
     bool mTitleChanged;
 
-    HBRUSH mhBrushBk;
-    HBRUSH mhBrushBkSel;
-    HPEN mhPenBorder;
-    HPEN mhPenSelector;
+    Brush mhBrushBk;
+    Brush mhBrushBkSel;
+    Pen mhPenBorder;
+    Pen mhPenSelector;
     TCHAR mTitle[TITLESIZE+1];
     TCHAR mValue[VALUESIZE+1];
     TCHAR mComment[COMMENTSIZE+1];
     Units_t mValueUnit;
-    HFONT  *mphFontTitle;
-    HFONT  *mphFontValue;
-    HFONT  *mphFontComment;
-    HFONT  *valueFont;
+    const Font *mphFontTitle;
+    const Font *mphFontValue;
+    const Font *mphFontComment;
+    const Font *valueFont;
     FontHeightInfo_t *mpFontHeightTitle;
     FontHeightInfo_t *mpFontHeightValue;
     FontHeightInfo_t *mpFontHeightComment;
@@ -98,7 +100,7 @@ class InfoBox{
     RECT   recTitle;
     RECT   recValue;
     RECT   recComment;
-    HBITMAP mhBitmapUnit;
+    const Bitmap *mhBitmapUnit;
     HBITMAP mBufBitMap;
     POINT  mBitmapUnitPos;
     POINT  mBitmapUnitSize;
@@ -112,17 +114,17 @@ class InfoBox{
     bool mSmallerFont;
 
     void InitializeDrawHelpers(void);
-    void PaintTitle(HDC dc);
-    void PaintValue(HDC dc);
-    void PaintComment(HDC dc);
-    void PaintSelector(HDC dc);
+    void PaintTitle(Canvas &canvas);
+    void PaintValue(Canvas &canvas);
+    void PaintComment(Canvas &canvas);
+    void PaintSelector(Canvas &canvas);
 
     // LRESULT CALLBACK InfoBoxWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
   public:
     void Paint();
     void PaintFast(void);
-    void PaintInto(HDC mHdcDest, int xoff, int yoff, int width, int height);
+    void PaintInto(Canvas &dest, int xoff, int yoff, int width, int height);
 
     Units_t SetValueUnit(Units_t Value);
     void SetTitle(const TCHAR *Value);
@@ -136,17 +138,17 @@ class InfoBox{
     int GetBorderKind(void);
     int SetBorderKind(int Value);
 
-    HWND GetHandle(void);
-    HWND GetParent(void);
+    Widget &GetHandle(void);
+    ContainerWindow &GetParent(void);
 
     void SetColor(int Value);
     void SetColorBottom(int Value);
     void SetColorTop(int Value);
 
-    InfoBox(HWND Parent, int X, int Y, int Width, int Height);
+    InfoBox(ContainerWindow &Parent, int X, int Y, int Width, int Height);
     ~InfoBox(void);
 
-    HDC GetHdcBuf(void);
+    Canvas &GetCanvas(void);
 
 };
 

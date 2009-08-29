@@ -46,6 +46,8 @@ Copyright_License {
 #include "InfoBoxLayout.h"
 #include "Screen/Graphics.hpp"
 #include "Screen/Fonts.hpp"
+#include "Screen/PaintCanvas.hpp"
+#include "Screen/MainWindow.hpp"
 #include "Math/Geometry.hpp"
 #include "McReady.h"
 #include "Interface.hpp"
@@ -56,13 +58,11 @@ Copyright_License {
 #include <assert.h>
 #include <stdlib.h>
 
-HWND   hWndVarioWindow = NULL; // Vario Window
+Widget GaugeVario::widget;
+BufferCanvas GaugeVario::hdcDrawWindow;
 
-HDC GaugeVario::hdcScreen = NULL;
-HDC GaugeVario::hdcDrawWindow = NULL;
-HDC GaugeVario::hdcTemp = NULL;
-HBITMAP GaugeVario::hDrawBitMap = NULL;
-RECT GaugeVario::rc;
+BitmapCanvas GaugeVario::hdcTemp;
+Bitmap GaugeVario::hDrawBitMap;
 bool GaugeVario::dirty;
 int GaugeVario::xoffset;
 int GaugeVario::yoffset;
@@ -70,24 +70,24 @@ int GaugeVario::gmax;
 POINT* GaugeVario::polys=NULL;
 POINT* GaugeVario::lines=NULL;
 
-HBITMAP GaugeVario::hBitmapUnit;
-HBITMAP GaugeVario::hBitmapClimb;
+const Bitmap *GaugeVario::hBitmapUnit;
+Bitmap GaugeVario::hBitmapClimb;
 POINT GaugeVario::BitmapUnitPos;
 POINT GaugeVario::BitmapUnitSize;
-HBRUSH GaugeVario::redBrush;
-HBRUSH GaugeVario::blueBrush;
-HPEN GaugeVario::redPen;
-HPEN GaugeVario::bluePen;
-HPEN GaugeVario::redThickPen;
-HPEN GaugeVario::blueThickPen;
-HPEN GaugeVario::blankThickPen;
+Brush GaugeVario::redBrush;
+Brush GaugeVario::blueBrush;
+Pen GaugeVario::redPen;
+Pen GaugeVario::bluePen;
+Pen GaugeVario::redThickPen;
+Pen GaugeVario::blueThickPen;
+Pen GaugeVario::blankThickPen;
 
-HBRUSH GaugeVario::yellowBrush;
-HBRUSH GaugeVario::greenBrush;
-HBRUSH GaugeVario::magentaBrush;
-HPEN GaugeVario::yellowPen;
-HPEN GaugeVario::greenPen;
-HPEN GaugeVario::magentaPen;
+Brush GaugeVario::yellowBrush;
+Brush GaugeVario::greenBrush;
+Brush GaugeVario::magentaBrush;
+Pen GaugeVario::yellowPen;
+Pen GaugeVario::greenPen;
+Pen GaugeVario::magentaPen;
 
 
 DrawInfo_t GaugeVario::diValueTop = {false};
@@ -101,9 +101,9 @@ DrawInfo_t GaugeVario::diLabelBottom = {false};
 #define GAUGEYSIZE (InfoBoxLayout::ControlHeight*3)
 
 
-static COLORREF colTextGray;
-static COLORREF colText;
-static COLORREF colTextBackgnd;
+static Color colTextGray;
+static Color colText;
+static Color colTextBackgnd;
 
 
 #define NARROWS 3
@@ -120,49 +120,31 @@ void GaugeVario::Create() {
 
   RECT MapRectBig = MapWindowProjection::GetMapRect();
 
-  hWndVarioWindow = CreateWindow(TEXT("STATIC"),TEXT(" "),
-			       WS_VISIBLE|WS_CHILD | WS_CLIPCHILDREN
-			       | WS_CLIPSIBLINGS,
-                               0,0,0,0,
-			       hWndMainWindow,NULL,hInst,NULL);
-  if (InfoBoxLayout::landscape) {
-    SetWindowPos(hWndVarioWindow, HWND_TOP,
-                 MapRectBig.right+InfoBoxLayout::ControlWidth,
-                 MapRectBig.top,
-                 GAUGEXSIZE,GAUGEYSIZE,
-                 SWP_HIDEWINDOW);
-  } else {
-    SetWindowPos(hWndVarioWindow, HWND_TOP,
-                 MapRectBig.right-GAUGEXSIZE,
-                 MapRectBig.top,
-                 GAUGEXSIZE,GAUGEYSIZE,
-                 SWP_HIDEWINDOW);
-  }
+  widget.set(hWndMainWindow,
+             InfoBoxLayout::landscape
+             ? (MapRectBig.right + InfoBoxLayout::ControlWidth)
+             : (MapRectBig.right - GAUGEXSIZE),
+             MapRectBig.top,
+             GAUGEXSIZE, GAUGEYSIZE,
+             false, false, false);
+  widget.insert_after(HWND_TOP, false);
 
-  GetClientRect(hWndVarioWindow, &rc);
+  hdcDrawWindow.set(widget.get_canvas());
 
-  hdcScreen = GetDC(hWndVarioWindow);       // the screen DC
-  hdcDrawWindow = CreateCompatibleDC(hdcScreen);            // the memory DC
-  hdcTemp = CreateCompatibleDC(hdcScreen);  // temp DC to select Uniz Bmp's
-
-                       // prepare drawing DC, setup size and color depth
-  HBITMAP memBM = CreateCompatibleBitmap (hdcScreen,
-					  rc.right-rc.left,
-					  rc.bottom-rc.top);
-  SelectObject(hdcDrawWindow, memBM);
+  hdcTemp.set(widget.get_canvas());
 
   // load vario scale
   if (Units::GetUserVerticalSpeedUnit()==unKnots) {
-    hDrawBitMap = LoadBitmap(hInst, MAKEINTRESOURCE(IDB_VARIOSCALEC));
+    hDrawBitMap.load(IDB_VARIOSCALEC);
   } else {
-    hDrawBitMap = LoadBitmap(hInst, MAKEINTRESOURCE(IDB_VARIOSCALEA));
+    hDrawBitMap.load(IDB_VARIOSCALEA);
   }
 
-  COLORREF theredColor;
-  COLORREF theblueColor;
-  COLORREF theyellowColor; // VENTA2
-  COLORREF thegreenColor; // VENTA2
-  COLORREF themagentaColor; // VENTA2
+  Color theredColor;
+  Color theblueColor;
+  Color theyellowColor; // VENTA2
+  Color thegreenColor; // VENTA2
+  Color themagentaColor; // VENTA2
 
   if (Appearance.InverseInfoBox) {
     theredColor = MapGfx.inv_redColor;
@@ -177,43 +159,36 @@ void GaugeVario::Create() {
     thegreenColor = MapGfx.greenColor;
     themagentaColor = MapGfx.magentaColor;
   }
-  redBrush = CreateSolidBrush(theredColor);
-  blueBrush = CreateSolidBrush(theblueColor);
-  yellowBrush = CreateSolidBrush(theyellowColor);
-  greenBrush = CreateSolidBrush(thegreenColor);
-  magentaBrush = CreateSolidBrush(themagentaColor);
-  redPen = CreatePen(PS_SOLID, 1,
-                     theredColor);
-  bluePen = CreatePen(PS_SOLID, 1,
-                      theblueColor);
-  yellowPen = CreatePen(PS_SOLID, 1,
-                      theyellowColor);
-  greenPen = CreatePen(PS_SOLID, 1,
-                      thegreenColor);
-  magentaPen = CreatePen(PS_SOLID, 1,
-                      themagentaColor);
-  redThickPen = CreatePen(PS_SOLID, IBLSCALE(5),
-                     theredColor);
-  blueThickPen = CreatePen(PS_SOLID, IBLSCALE(5),
-			   theblueColor);
+
+  redBrush.set(theredColor);
+  blueBrush.set(theblueColor);
+  yellowBrush.set(theyellowColor);
+  greenBrush.set(thegreenColor);
+  magentaBrush.set(themagentaColor);
+  redPen.set(1, theredColor);
+  bluePen.set(1, theblueColor);
+  yellowPen.set(1, theyellowColor);
+  greenPen.set(1, thegreenColor);
+  magentaPen.set(1, themagentaColor);
+  redThickPen.set(IBLSCALE(5), theredColor);
+  blueThickPen.set(IBLSCALE(5), theblueColor);
 
   if (Appearance.InverseInfoBox){
-    colText = RGB(0xff, 0xff, 0xff);
-    colTextBackgnd = RGB(0x00, 0x00, 0x00);
-    colTextGray = RGB(0xa0, 0xa0, 0xa0);
-    hBitmapClimb = LoadBitmap(hInst, MAKEINTRESOURCE(IDB_CLIMBSMALLINV));
+    colText = Color(0xff, 0xff, 0xff);
+    colTextBackgnd = Color(0x00, 0x00, 0x00);
+    colTextGray = Color(0xa0, 0xa0, 0xa0);
+    hBitmapClimb.load(IDB_CLIMBSMALLINV);
   } else {
-    colText = RGB(0x00, 0x00, 0x00);
-    colTextBackgnd = RGB(0xff, 0xff, 0xff);
-    colTextGray = RGB(~0xa0, ~0xa0, ~0xa0);
-    hBitmapClimb = LoadBitmap(hInst, MAKEINTRESOURCE(IDB_CLIMBSMALL));
+    colText = Color(0x00, 0x00, 0x00);
+    colTextBackgnd = Color(0xff, 0xff, 0xff);
+    colTextGray = Color(~0xa0, ~0xa0, ~0xa0);
+    hBitmapClimb.load(IDB_CLIMBSMALL);
   }
 
-  blankThickPen = CreatePen(PS_SOLID, IBLSCALE(5),
-			    colTextBackgnd);
+  blankThickPen.set(IBLSCALE(5), colTextBackgnd);
 
-  SetTextColor(hdcDrawWindow, colText);
-  SetBkColor(hdcDrawWindow, colTextBackgnd);
+  hdcDrawWindow.set_text_color(colText);
+  hdcDrawWindow.set_background_color(colTextBackgnd);
 
   if (Appearance.InverseInfoBox){
     Units::GetUnitBitmap(Units::GetUserUnitByGroup(ugVerticalSpeed),
@@ -223,12 +198,11 @@ void GaugeVario::Create() {
       &hBitmapUnit, &BitmapUnitPos, &BitmapUnitSize, UNITBITMAPGRAY);
   }
 
-  xoffset = (rc.right-rc.left);
-  yoffset = (rc.bottom-rc.top)/2;
+  xoffset = widget.get_width();
+  yoffset = widget.get_height() / 2;
 
-  SetWindowLong(hWndVarioWindow, GWL_WNDPROC, (LONG) GaugeVarioWndProc);
-
-  ShowWindow(hWndVarioWindow, SW_HIDE);
+  widget.set_wndproc(GaugeVarioWndProc);
+  widget.hide();
 }
 
 void GaugeVario::Show(bool doshow) {
@@ -246,10 +220,10 @@ void GaugeVario::Show(bool doshow) {
 
     static bool lastvisible = false;
     if (EnableVarioGauge && !lastvisible) {
-      ShowWindow(hWndVarioWindow, SW_SHOW);
+      widget.show();
     }
     if (!EnableVarioGauge && lastvisible) {
-      ShowWindow(hWndVarioWindow, SW_HIDE);
+      widget.hide();
     }
     lastvisible = EnableVarioGauge;
   }
@@ -266,11 +240,11 @@ void GaugeVario::Destroy() {
     free(lines);
     lines=NULL;
   }
-  ReleaseDC(hWndVarioWindow, hdcScreen);
-  DeleteDC(hdcDrawWindow);
-  DeleteDC(hdcTemp);
-  DeleteObject(hDrawBitMap);
-  DestroyWindow(hWndVarioWindow);
+
+  hdcDrawWindow.reset();
+  hdcTemp.reset();
+  hDrawBitMap.reset();
+  widget.reset();
 }
 
 
@@ -292,45 +266,34 @@ void GaugeVario::Render() {
 //  RenderBg();                                          // ???
 
   if (!InitDone){
-    HBITMAP oldBmp;
     ValueHeight = (4
 		   + Appearance.CDIWindowFont.CapitalHeight
 		   + Appearance.TitleWindowFont.CapitalHeight);
 
     orgMiddle.y = yoffset - ValueHeight/2;
-    orgMiddle.x = rc.right;
+    orgMiddle.x = widget.get_right();
     orgTop.y = orgMiddle.y-ValueHeight;
-    orgTop.x = rc.right;
+    orgTop.x = widget.get_right();
     orgBottom.y = orgMiddle.y + ValueHeight;
-    orgBottom.x = rc.right;
+    orgBottom.x = widget.get_right();
 
-    oldBmp = (HBITMAP)SelectObject(hdcTemp, (HBITMAP)hDrawBitMap);
+    hdcTemp.select(hDrawBitMap);
     // copy scale bitmap to memory DC
     if (InfoBoxLayout::dscale>1) {
       if (Appearance.InverseInfoBox)
-	StretchBlt(hdcDrawWindow, 0, 0, rc.right, rc.bottom,
-		   hdcTemp,
-		   58, 0,
-		   58, 120,
-		   SRCCOPY);
+        hdcDrawWindow.stretch(hdcTemp, 58, 0, 58, 120);
       else
-	StretchBlt(hdcDrawWindow, 0, 0, rc.right, rc.bottom,
-		   hdcTemp,
-		   0, 0,
-		   58, 120,
-		   SRCCOPY);
+        hdcDrawWindow.stretch(hdcTemp, 0, 0, 58, 120);
     } else {
 
       if (Appearance.InverseInfoBox)
-	BitBlt(hdcDrawWindow, 0, 0, rc.right, rc.bottom,
-	       hdcTemp, 58, 0, SRCCOPY);
+        hdcDrawWindow.copy(hdcTemp, 58, 0);
       else
-	BitBlt(hdcDrawWindow, 0, 0, rc.right, rc.bottom,
-	       hdcTemp, 0, 0, SRCCOPY);
+        hdcDrawWindow.copy(hdcTemp, 0, 0);
 
     }
 
-    SelectObject(hdcTemp, oldBmp);
+    hdcTemp.clear();
 
     InitDone = true;
   }
@@ -367,7 +330,7 @@ void GaugeVario::Render() {
   }
 
   if (Appearance.GaugeVarioSpeedToFly) {
-    RenderSpeedToFly(rc.right - 11, (rc.bottom-rc.top)/2);
+    RenderSpeedToFly(widget.get_right() - 11, widget.get_height() / 2);
   } else {
     RenderClimb();
   }
@@ -430,12 +393,12 @@ void GaugeVario::Render() {
   }
   RenderZero();
 
-  BitBlt(hdcScreen, 0, 0, rc.right, rc.bottom, hdcDrawWindow, 0, 0, SRCCOPY);
+  widget.get_canvas().copy(hdcDrawWindow);
 
 }
 
-void GaugeVario::Repaint(HDC hDC){
-  BitBlt(hDC, 0, 0, rc.right, rc.bottom, hdcDrawWindow, 0, 0, SRCCOPY);
+void GaugeVario::Repaint(Canvas &canvas){
+  canvas.copy(hdcDrawWindow);
 }
 
 void GaugeVario::RenderBg() {
@@ -523,8 +486,8 @@ void GaugeVario::MakeAllPolygons() {
 
 void GaugeVario::RenderClimb() {
 
-  int x = rc.right-IBLSCALE(14);
-  int y = rc.bottom-IBLSCALE(24);
+  int x = widget.get_right() - IBLSCALE(14);
+  int y = widget.get_bottom() - IBLSCALE(24);
 
   // testing  GPS_INFO.SwitchState.VarioCircling = true;
 
@@ -532,41 +495,25 @@ void GaugeVario::RenderClimb() {
 
   if (!GPS_INFO.SwitchState.VarioCircling) {
     if (Appearance.InverseInfoBox){
-      SelectObject(hdcDrawWindow, GetStockObject(BLACK_BRUSH));
-      SelectObject(hdcDrawWindow, GetStockObject(BLACK_PEN));
+      hdcDrawWindow.black_brush();
+      hdcDrawWindow.black_pen();
     } else {
-      SelectObject(hdcDrawWindow, GetStockObject(WHITE_BRUSH));
-      SelectObject(hdcDrawWindow, GetStockObject(WHITE_PEN));
+      hdcDrawWindow.white_brush();
+      hdcDrawWindow.white_pen();
     }
-    SetBkMode(hdcDrawWindow, OPAQUE);
+    hdcDrawWindow.background_opaque();
 
-    Rectangle(hdcDrawWindow,
-	      x, y,
-	      x+IBLSCALE(12),y+IBLSCALE(12));
+    hdcDrawWindow.rectangle(x, y, x + IBLSCALE(12), y + IBLSCALE(12));
   } else {
-    HBITMAP oldBmp = (HBITMAP)SelectObject(hdcTemp, hBitmapClimb);
+    hdcTemp.select(hBitmapClimb);
     if (InfoBoxLayout::dscale>1) {
-      StretchBlt(hdcDrawWindow,
-		 x,
-		 y,
-		 IBLSCALE(12),
-		 IBLSCALE(12),
-		 hdcTemp,
-		 12, 0,
-		 12, 12,
-		 SRCCOPY
-		 );
+      hdcDrawWindow.stretch(x, y, IBLSCALE(12), IBLSCALE(12),
+                            hdcTemp, 12, 0, 12, 12);
     } else {
-      BitBlt(hdcDrawWindow,
-	     x,
-	     y,
-	     12, 12,
-	     hdcTemp,
-	     12, 0,
-	     SRCCOPY
-	     );
+      hdcDrawWindow.copy(x, y, 12, 12,
+                         hdcTemp, 12, 0);
     }
-    SelectObject(hdcTemp, oldBmp);
+    hdcTemp.clear();
   }
 }
 
@@ -574,17 +521,14 @@ void GaugeVario::RenderClimb() {
 void GaugeVario::RenderZero(void) {
   static POINT lp[2];
   if (Appearance.InverseInfoBox){
-    SelectObject(hdcDrawWindow, GetStockObject(WHITE_BRUSH));
-    SelectObject(hdcDrawWindow, GetStockObject(WHITE_PEN));
+    hdcDrawWindow.white_brush();
+    hdcDrawWindow.white_pen();
   } else {
-    SelectObject(hdcDrawWindow, GetStockObject(BLACK_BRUSH));
-    SelectObject(hdcDrawWindow, GetStockObject(BLACK_PEN));
+    hdcDrawWindow.black_brush();
+    hdcDrawWindow.black_pen();
   }
-  lp[0].x = 0; lp[0].y = yoffset+1;
-  lp[1].x = IBLSCALE(17); lp[1].y = yoffset+1;
-  Polyline(hdcDrawWindow,lp,2);
-  lp[0].y-= 1; lp[1].y-= 1;
-  Polyline(hdcDrawWindow,lp,2);
+  hdcDrawWindow.line(0, yoffset, IBLSCALE(17), yoffset);
+  hdcDrawWindow.line(0, yoffset + 1, IBLSCALE(17), yoffset + 1);
 }
 
 int  GaugeVario::ValueToNeedlePos(double Value) {
@@ -610,30 +554,30 @@ void GaugeVario::RenderVarioLine(int i, int sink, bool clear) {
   if (i==sink) return; // nothing to do
 
   if (clear){
-    SelectObject(hdcDrawWindow, blankThickPen);
+    hdcDrawWindow.select(blankThickPen);
   } else {
     if (i>sink) {
-      SelectObject(hdcDrawWindow, blueThickPen);
+      hdcDrawWindow.select(blueThickPen);
     } else {
-      SelectObject(hdcDrawWindow, redThickPen);
+      hdcDrawWindow.select(redThickPen);
     }
   }
   if (i>sink) {
-    Polyline(hdcDrawWindow, lines+gmax+sink, i-sink);
+    hdcDrawWindow.polyline(lines + gmax + sink, i - sink);
   } else {
-    Polyline(hdcDrawWindow, lines+gmax+i, sink-i);
+    hdcDrawWindow.polyline(lines + gmax + i, sink - i);
   }
   if (!clear) {
     // clear up naked (sink) edge of polygon, this gives it a nice
     // taper look
     if (Appearance.InverseInfoBox) {
-      SelectObject(hdcDrawWindow, GetStockObject(BLACK_BRUSH));
-      SelectObject(hdcDrawWindow, GetStockObject(BLACK_PEN));
+      hdcDrawWindow.black_brush();
+      hdcDrawWindow.black_pen();
     } else {
-      SelectObject(hdcDrawWindow, GetStockObject(WHITE_BRUSH));
-      SelectObject(hdcDrawWindow, GetStockObject(WHITE_PEN));
+      hdcDrawWindow.white_brush();
+      hdcDrawWindow.white_pen();
     }
-    Polygon(hdcDrawWindow, getPolygon(sink), 3);
+    hdcDrawWindow.polygon(getPolygon(sink), 3);
   }
 }
 
@@ -648,11 +592,11 @@ void GaugeVario::RenderNeedle(int i, bool average, bool clear) {
   if (clear || !colorfull) {
     // legacy behaviour
     if (clear ^ Appearance.InverseInfoBox) {
-      SelectObject(hdcDrawWindow, GetStockObject(WHITE_BRUSH));
-      SelectObject(hdcDrawWindow, GetStockObject(WHITE_PEN));
+      hdcDrawWindow.white_brush();
+      hdcDrawWindow.white_pen();
     } else {
-      SelectObject(hdcDrawWindow, GetStockObject(BLACK_BRUSH));
-      SelectObject(hdcDrawWindow, GetStockObject(BLACK_PEN));
+      hdcDrawWindow.black_brush();
+      hdcDrawWindow.black_pen();
     }
   } else {
     // VENTA2-ADDON Colorful needles
@@ -661,40 +605,40 @@ void GaugeVario::RenderNeedle(int i, bool average, bool clear) {
       if (average) {
 	// Average Needle
 	if ( i >= 0) {
-	  SelectObject(hdcDrawWindow, greenBrush);
-	  SelectObject(hdcDrawWindow, GetStockObject(WHITE_PEN));
+          hdcDrawWindow.select(greenBrush);
+          hdcDrawWindow.white_pen();
 	} else {
-	  SelectObject(hdcDrawWindow, redBrush);
-	  SelectObject(hdcDrawWindow, GetStockObject(WHITE_PEN));
+          hdcDrawWindow.select(redBrush);
+          hdcDrawWindow.white_pen();
 	}
       } else {
 	// varioline needle: b&w as usual, could also change aspect..
-	SelectObject(hdcDrawWindow, yellowBrush );
-	SelectObject(hdcDrawWindow, GetStockObject(WHITE_PEN));
+        hdcDrawWindow.select(yellowBrush);
+        hdcDrawWindow.white_pen();
       }
     } else {
       // Non inverse infoboxes
       if (average) {
 	// Average Needle
 	if ( i >= 0) {
-	  SelectObject(hdcDrawWindow, greenBrush);
-	  SelectObject(hdcDrawWindow, GetStockObject(BLACK_PEN));
+          hdcDrawWindow.select(greenBrush);
+          hdcDrawWindow.black_pen();
 	} else {
-	  SelectObject(hdcDrawWindow, redBrush);
-	  SelectObject(hdcDrawWindow, GetStockObject(BLACK_PEN) );
+          hdcDrawWindow.select(redBrush);
+          hdcDrawWindow.black_pen();
 	}
       } else {
 	// varioline needle: b&w as usual, could also change aspect..
-	SelectObject(hdcDrawWindow, GetStockObject(BLACK_BRUSH));
-	SelectObject(hdcDrawWindow, GetStockObject(BLACK_PEN));
+        hdcDrawWindow.black_brush();
+        hdcDrawWindow.black_pen();
       }
     }
   }
 
   if (average) {
-    Polyline(hdcDrawWindow, getPolygon(i), 3);
+    hdcDrawWindow.polyline(getPolygon(i), 3);
   } else {
-    Polygon(hdcDrawWindow, getPolygon(i), 3);
+    hdcDrawWindow.polygon(getPolygon(i), 3);
   }
 }
 
@@ -752,62 +696,52 @@ void GaugeVario::RenderValue(int x, int y,
     diLabel->InitDone = true;
   }
 
-  SetBkMode(hdcDrawWindow, TRANSPARENT);
+  hdcDrawWindow.background_transparent();
 
   if (dirty && (_tcscmp(diLabel->lastText, Label) != 0)) {
-    SetBkColor(hdcDrawWindow, colTextBackgnd);
-    SetTextColor(hdcDrawWindow, colTextGray);
-    SelectObject(hdcDrawWindow, TitleWindowFont);
-    GetTextExtentPoint(hdcDrawWindow, Label, _tcslen(Label), &tsize);
+    hdcDrawWindow.set_background_color(colTextBackgnd);
+    hdcDrawWindow.set_text_color(colTextGray);
+    hdcDrawWindow.select(TitleWindowFont);
+    tsize = hdcDrawWindow.text_size(Label);
     diLabel->orgText.x = diLabel->recBkg.right - tsize.cx;
-    ExtTextOut(hdcDrawWindow, diLabel->orgText.x, diLabel->orgText.y,
-	       ETO_OPAQUE, &diLabel->recBkg, Label, _tcslen(Label), NULL);
+    hdcDrawWindow.text_opaque(diLabel->orgText.x, diLabel->orgText.y,
+                              &diLabel->recBkg, Label);
     diLabel->recBkg.left = diLabel->orgText.x;
     _tcscpy(diLabel->lastText, Label);
   }
 
   if (dirty && (diValue->lastValue != Value)) {
     TCHAR Temp[18];
-    SetBkColor(hdcDrawWindow, colTextBackgnd);
-    SetTextColor(hdcDrawWindow, colText);
+    hdcDrawWindow.set_background_color(colTextBackgnd);
+    hdcDrawWindow.set_text_color(colText);
     _stprintf(Temp, TEXT("%.1f"), Value);
-    SelectObject(hdcDrawWindow, CDIWindowFont);
-    GetTextExtentPoint(hdcDrawWindow, Temp, _tcslen(Temp), &tsize);
+    hdcDrawWindow.select(CDIWindowFont);
+    tsize = hdcDrawWindow.text_size(Temp);
     diValue->orgText.x = diValue->recBkg.right - tsize.cx;
 
-    ExtTextOut(hdcDrawWindow, diValue->orgText.x, diValue->orgText.y,
-	       ETO_OPAQUE, &diValue->recBkg, Temp, _tcslen(Temp), NULL);
+    hdcDrawWindow.text_opaque(diValue->orgText.x, diValue->orgText.y,
+                              &diValue->recBkg, Temp);
 
     diValue->recBkg.left = diValue->orgText.x;
     diValue->lastValue = Value;
   }
 
   if (dirty && (diLabel->lastBitMap != hBitmapUnit)) {
-    HBITMAP oldBmp;
-
-    oldBmp = (HBITMAP)SelectObject(hdcTemp, hBitmapUnit);
+    hdcTemp.select(*hBitmapUnit);
     if (InfoBoxLayout::dscale>1) {
-      StretchBlt(hdcDrawWindow,
-		 x-IBLSCALE(5),
-		 diValue->recBkg.top,
-		 IBLSCALE(BitmapUnitSize.x),
-		 IBLSCALE(BitmapUnitSize.y),
-		 hdcTemp,
-		 BitmapUnitPos.x, BitmapUnitPos.y,
-		 BitmapUnitSize.x, BitmapUnitSize.y,
-		 SRCCOPY
-		 );
+      hdcDrawWindow.stretch(x - IBLSCALE(5), diValue->recBkg.top,
+                            IBLSCALE(BitmapUnitSize.x),
+                            IBLSCALE(BitmapUnitSize.y),
+                            hdcTemp,
+                            BitmapUnitPos.x, BitmapUnitPos.y,
+                            BitmapUnitSize.x, BitmapUnitSize.y);
     } else {
-      BitBlt(hdcDrawWindow,
-	     x-5,
-	     diValue->recBkg.top,
-	     BitmapUnitSize.x, BitmapUnitSize.y,
-	     hdcTemp,
-	     BitmapUnitPos.x, BitmapUnitPos.y,
-	     SRCCOPY
-	     );
+      hdcDrawWindow.copy(x - 5, diValue->recBkg.top,
+                         BitmapUnitSize.x, BitmapUnitSize.y,
+                         hdcTemp,
+                         BitmapUnitPos.x, BitmapUnitPos.y);
     }
-    SelectObject(hdcTemp, oldBmp);
+    hdcTemp.clear();
     diLabel->lastBitMap = hBitmapUnit;
   }
 
@@ -833,16 +767,16 @@ void GaugeVario::RenderSpeedToFly(int x, int y){
   double vdiff;
 
   int nary = NARROWS*ARROWYSIZE;
-  int ytop = rc.top
+  int ytop = widget.get_top()
     +YOFFSET+nary; // JMW
-  int ybottom = rc.bottom
+  int ybottom = widget.get_bottom()
     -YOFFSET-nary-InfoBoxLayout::scale; // JMW
 
   ytop += IBLSCALE(14);
   ybottom -= IBLSCALE(14);
   // JMW
   //  x = rc.left+IBLSCALE(1);
-  x = rc.right-2*ARROWXSIZE;
+  x = widget.get_right() - 2 * ARROWXSIZE;
 
   // only draw speed command if flying and vario is not circling
   //
@@ -862,49 +796,49 @@ void GaugeVario::RenderSpeedToFly(int x, int y){
     lastVdiff = vdiff;
 
     if (Appearance.InverseInfoBox){
-      SelectObject(hdcDrawWindow, GetStockObject(BLACK_BRUSH));
-      SelectObject(hdcDrawWindow, GetStockObject(BLACK_PEN));
+      hdcDrawWindow.black_brush();
+      hdcDrawWindow.black_pen();
     } else {
-      SelectObject(hdcDrawWindow, GetStockObject(WHITE_BRUSH));
-      SelectObject(hdcDrawWindow, GetStockObject(WHITE_PEN));
+      hdcDrawWindow.white_brush();
+      hdcDrawWindow.white_pen();
     }
-    SetBkMode(hdcDrawWindow, OPAQUE);
+    hdcDrawWindow.background_opaque();
 
     // ToDo sgi optimize
 
     // bottom (too slow)
-    Rectangle(hdcDrawWindow,
-	      x, (ybottom+YOFFSET),
-	      x+ARROWXSIZE*2+1,
-              (ybottom+YOFFSET)+nary+ARROWYSIZE+InfoBoxLayout::scale*2);
+    hdcDrawWindow.rectangle(x, ybottom + YOFFSET,
+                            x + ARROWXSIZE * 2 + 1,
+                            ybottom + YOFFSET + nary + ARROWYSIZE +
+                            InfoBoxLayout::scale * 2);
 
     // top (too fast)
-    Rectangle(hdcDrawWindow,
-	      x, (ytop-YOFFSET)+1,
-	      x+ARROWXSIZE*2+1,
-              (ytop-YOFFSET)-nary+1-ARROWYSIZE-InfoBoxLayout::scale*2);
+    hdcDrawWindow.rectangle(x, ytop - YOFFSET + 1,
+                            x + ARROWXSIZE * 2  +1,
+                            ytop - YOFFSET - nary + 1 - ARROWYSIZE -
+                            InfoBoxLayout::scale * 2);
 
     RenderClimb();
 
     if (Appearance.InverseInfoBox){
-      SelectObject(hdcDrawWindow, GetStockObject(WHITE_PEN));
+      hdcDrawWindow.white_pen();
     } else {
-      SelectObject(hdcDrawWindow, GetStockObject(BLACK_PEN));
+      hdcDrawWindow.black_pen();
     }
 
     if (Appearance.InfoBoxColors) {
       if (vdiff>0) { // too slow
-        SelectObject(hdcDrawWindow, redBrush);
-        SelectObject(hdcDrawWindow, redPen);
+        hdcDrawWindow.select(redBrush);
+        hdcDrawWindow.select(redPen);
       } else {
-        SelectObject(hdcDrawWindow, blueBrush);
-        SelectObject(hdcDrawWindow, bluePen);
+        hdcDrawWindow.select(blueBrush);
+        hdcDrawWindow.select(bluePen);
       }
     } else {
       if (Appearance.InverseInfoBox){
-        SelectObject(hdcDrawWindow, GetStockObject(WHITE_BRUSH));
+        hdcDrawWindow.white_brush();
       } else {
-        SelectObject(hdcDrawWindow, GetStockObject(BLACK_BRUSH));
+        hdcDrawWindow.black_brush();
       }
     }
 
@@ -915,16 +849,15 @@ void GaugeVario::RenderSpeedToFly(int x, int y){
 
       while (vdiff > 0){
         if (vdiff > DeltaVstep){
-          Rectangle(hdcDrawWindow,
-		    x, y,
-		    x+ARROWXSIZE*2+1, y+ARROWYSIZE-1);
+          hdcDrawWindow.rectangle(x, y,
+                                  x + ARROWXSIZE * 2 + 1, y + ARROWYSIZE - 1);
         } else {
           POINT Arrow[4];
           Arrow[0].x = x; Arrow[0].y = y;
           Arrow[1].x = x+ARROWXSIZE; Arrow[1].y = y+ARROWYSIZE-1;
           Arrow[2].x = x+2*ARROWXSIZE; Arrow[2].y = y;
           Arrow[3].x = x; Arrow[3].y = y;
-          Polygon(hdcDrawWindow, Arrow, 4);
+          hdcDrawWindow.polygon(Arrow, 4);
         }
         vdiff -=DeltaVstep;
         y += ARROWYSIZE;
@@ -937,15 +870,15 @@ void GaugeVario::RenderSpeedToFly(int x, int y){
 
       while (vdiff < 0){
         if (vdiff < -DeltaVstep){
-          Rectangle(hdcDrawWindow, x, y+1,
-		    x+ARROWXSIZE*2+1, y-ARROWYSIZE+2);
+          hdcDrawWindow.rectangle(x, y + 1,
+                                  x + ARROWXSIZE * 2 + 1, y - ARROWYSIZE + 2);
         } else {
           POINT Arrow[4];
           Arrow[0].x = x; Arrow[0].y = y;
           Arrow[1].x = x+ARROWXSIZE; Arrow[1].y = y-ARROWYSIZE+1;
           Arrow[2].x = x+2*ARROWXSIZE; Arrow[2].y = y;
           Arrow[3].x = x; Arrow[3].y = y;
-          Polygon(hdcDrawWindow, Arrow, 4);
+          hdcDrawWindow.polygon(Arrow, 4);
         }
         vdiff +=DeltaVstep;
         y -= ARROWYSIZE;
@@ -969,9 +902,9 @@ void GaugeVario::RenderBallast(void){
   static POINT orgValue  = {-1,-1};
 
   if (Appearance.InverseInfoBox){
-    SelectObject(hdcDrawWindow, GetStockObject(WHITE_PEN));
+    hdcDrawWindow.white_pen();
   } else {
-    SelectObject(hdcDrawWindow, GetStockObject(BLACK_PEN));
+    hdcDrawWindow.black_pen();
   }
 
   if (recLabelBk.left == -1){                               // ontime init, origin and background rect
@@ -979,12 +912,12 @@ void GaugeVario::RenderBallast(void){
     SIZE tSize;
 
     orgLabel.x = 1;                                         // position of ballast label
-    orgLabel.y = rc.top + 2 +
+    orgLabel.y = widget.get_top() + 2 +
       (Appearance.TitleWindowFont.CapitalHeight*2)
       - Appearance.TitleWindowFont.AscentHeight;
 
     orgValue.x = 1;                                         // position of ballast value
-    orgValue.y = rc.top + 1 +
+    orgValue.y = widget.get_top() + 1 +
       Appearance.TitleWindowFont.CapitalHeight
       - Appearance.TitleWindowFont.AscentHeight;
 
@@ -997,14 +930,14 @@ void GaugeVario::RenderBallast(void){
       + Appearance.TitleWindowFont.AscentHeight
       - Appearance.TitleWindowFont.CapitalHeight;
 
-    SelectObject(hdcDrawWindow, TitleWindowFont);           // get max label size
-    GetTextExtentPoint(hdcDrawWindow, TextBal, _tcslen(TextBal), &tSize);
+    hdcDrawWindow.select(TitleWindowFont);           // get max label size
+    tSize = hdcDrawWindow.text_size(TextBal);
 
     recLabelBk.right = recLabelBk.left + tSize.cx;          // update back rect with max label size
     recLabelBk.bottom = recLabelBk.top + Appearance.TitleWindowFont.CapitalHeight;
 
                                                             // get max value size
-    GetTextExtentPoint(hdcDrawWindow, TEXT("100%"), _tcslen(TEXT("100%")), &tSize);
+    tSize = hdcDrawWindow.text_size(TEXT("100%"));
 
     recValueBk.right = recValueBk.left + tSize.cx;
      // update back rect with max label size
@@ -1019,22 +952,18 @@ void GaugeVario::RenderBallast(void){
 
     TCHAR Temp[18];
 
-    SelectObject(hdcDrawWindow, TitleWindowFont);
-    SetBkColor(hdcDrawWindow, colTextBackgnd);
+    hdcDrawWindow.select(TitleWindowFont);
+    hdcDrawWindow.set_background_color(colTextBackgnd);
 
     if (lastBallast < 0.001 || BALLAST < 0.001){
       if (BALLAST < 0.001)    // new ballast is 0, hide label
-        ExtTextOut(hdcDrawWindow,
-          orgLabel.x,
-          orgLabel.y,
-          ETO_OPAQUE, &recLabelBk, TEXT(""), 0, NULL);
+        hdcDrawWindow.text_opaque(orgLabel.x, orgLabel.y,
+                                  &recLabelBk, TEXT(""));
       else {
-        SetTextColor(hdcDrawWindow, colTextGray);
+        hdcDrawWindow.set_text_color(colTextGray);
           // ols ballast was 0, show label
-        ExtTextOut(hdcDrawWindow,
-          orgLabel.x,
-          orgLabel.y,
-          ETO_OPAQUE, &recLabelBk, TextBal, _tcslen(TextBal), NULL);
+        hdcDrawWindow.text_opaque(orgLabel.x, orgLabel.y,
+                                  &recLabelBk, TextBal);
       }
     }
 
@@ -1043,11 +972,9 @@ void GaugeVario::RenderBallast(void){
     else
       _stprintf(Temp, TEXT("%.0f%%"), BALLAST*100);
 
-    SetTextColor(hdcDrawWindow, colText);  // display value
-    ExtTextOut(hdcDrawWindow,
-      orgValue.x,
-      orgValue.y,
-      ETO_OPAQUE, &recValueBk, Temp, _tcslen(Temp), NULL);
+    hdcDrawWindow.set_text_color(colText);
+    hdcDrawWindow.text_opaque(orgValue.x, orgValue.y,
+                              &recValueBk, Temp);
 
     lastBallast = BALLAST;
 
@@ -1065,9 +992,9 @@ void GaugeVario::RenderBugs(void){
   static POINT orgValue  = {-1,-1};
 
   if (Appearance.InverseInfoBox){
-    SelectObject(hdcDrawWindow, GetStockObject(WHITE_PEN));
+    hdcDrawWindow.white_pen();
   } else {
-    SelectObject(hdcDrawWindow, GetStockObject(BLACK_PEN));
+    hdcDrawWindow.black_pen();
   }
 
   if (recLabelBk.left == -1){
@@ -1075,11 +1002,11 @@ void GaugeVario::RenderBugs(void){
     SIZE tSize;
 
     orgLabel.x = 1;
-    orgLabel.y = rc.bottom
+    orgLabel.y = widget.get_bottom()
       - 2 - Appearance.TitleWindowFont.CapitalHeight - Appearance.TitleWindowFont.AscentHeight;
 
     orgValue.x = 1;
-    orgValue.y = rc.bottom
+    orgValue.y = widget.get_bottom()
       - 1 - Appearance.TitleWindowFont.AscentHeight;
 
     recLabelBk.left = orgLabel.x;
@@ -1089,15 +1016,15 @@ void GaugeVario::RenderBugs(void){
     recValueBk.top = orgValue.y
       + Appearance.TitleWindowFont.AscentHeight - Appearance.TitleWindowFont.CapitalHeight;
 
-    SelectObject(hdcDrawWindow, TitleWindowFont);
-    GetTextExtentPoint(hdcDrawWindow, TextBug, _tcslen(TextBug), &tSize);
+    hdcDrawWindow.select(TitleWindowFont);
+    tSize = hdcDrawWindow.text_size(TextBug);
 
     recLabelBk.right = recLabelBk.left
       + tSize.cx;
     recLabelBk.bottom = recLabelBk.top
       + Appearance.TitleWindowFont.CapitalHeight + Appearance.TitleWindowFont.Height - Appearance.TitleWindowFont.AscentHeight;
 
-    GetTextExtentPoint(hdcDrawWindow, TEXT("100%"), _tcslen(TEXT("100%")), &tSize);
+    tSize = hdcDrawWindow.text_size(TEXT("100%"));
 
     recValueBk.right = recValueBk.left + tSize.cx;
     recValueBk.bottom = recValueBk.top + Appearance.TitleWindowFont.CapitalHeight;
@@ -1110,21 +1037,17 @@ void GaugeVario::RenderBugs(void){
 
     TCHAR Temp[18];
 
-    SelectObject(hdcDrawWindow, TitleWindowFont);
-    SetBkColor(hdcDrawWindow, colTextBackgnd);
+    hdcDrawWindow.select(TitleWindowFont);
+    hdcDrawWindow.set_background_color(colTextBackgnd);
 
     if (lastBugs > 0.999 || BUGS > 0.999){
       if (BUGS > 0.999)
-        ExtTextOut(hdcDrawWindow,
-          orgLabel.x,
-          orgLabel.y,
-          ETO_OPAQUE, &recLabelBk, TEXT(""), 0, NULL);
+        hdcDrawWindow.text_opaque(orgLabel.x, orgLabel.y,
+                                  &recLabelBk, TEXT(""));
       else {
-        SetTextColor(hdcDrawWindow, colTextGray);
-        ExtTextOut(hdcDrawWindow,
-          orgLabel.x,
-          orgLabel.y,
-          ETO_OPAQUE, &recLabelBk, TextBug, _tcslen(TextBug), NULL);
+        hdcDrawWindow.set_text_color(colTextGray);
+        hdcDrawWindow.text_opaque(orgLabel.x, orgLabel.y,
+                                  &recLabelBk, TextBug);
       }
     }
 
@@ -1133,12 +1056,10 @@ void GaugeVario::RenderBugs(void){
     else
       _stprintf(Temp, TEXT("%.0f%%"), (1-BUGS)*100);
 
-    SetTextColor(hdcDrawWindow, colText);
+    hdcDrawWindow.set_text_color(colText);
 
-    ExtTextOut(hdcDrawWindow,
-	       orgValue.x,
-	       orgValue.y,
-	       ETO_OPAQUE, &recValueBk, Temp, _tcslen(Temp), NULL);
+    hdcDrawWindow.text_opaque(orgLabel.x, orgLabel.y,
+                              &recValueBk, Temp);
 
     lastBugs = BUGS;
 
@@ -1148,9 +1069,6 @@ void GaugeVario::RenderBugs(void){
 
 LRESULT CALLBACK GaugeVarioWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam){
 
-  PAINTSTRUCT ps;            // structure for paint info
-  HDC hDC;                   // handle to graphics device context,
-
   switch (uMsg){
     case WM_ERASEBKGND:
       // we don't need one, we just paint over the top
@@ -1158,10 +1076,8 @@ LRESULT CALLBACK GaugeVarioWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l
 
     case WM_PAINT:
       if (globalRunningEvent.test() && EnableVarioGauge) {
-	hDC = BeginPaint(hwnd, &ps);
-	GaugeVario::Repaint(hDC);
-	DeleteDC(hDC);
-	EndPaint(hwnd, &ps);
+        PaintCanvas canvas(GaugeVario::widget, hwnd);
+        GaugeVario::Repaint(canvas);
       }
     break;
 

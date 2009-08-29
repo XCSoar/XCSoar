@@ -42,6 +42,7 @@ Copyright_License {
 #include "XCSoar.h"
 #include "Dialogs.h"
 #include "Screen/Animation.hpp"
+#include "Screen/MainWindow.hpp"
 #include "Registry.hpp"
 #include "InfoBox.h"
 #include "WindowControls.h"
@@ -490,7 +491,7 @@ void InfoBoxLayout::Paint(void) {
         y = (rh)*ry;
 
       }
-      InfoBoxes[i]->PaintInto(InfoBoxes[numInfoWindows]->GetHdcBuf(),
+      InfoBoxes[i]->PaintInto(InfoBoxes[numInfoWindows]->GetCanvas(),
                               IBLSCALE(x), IBLSCALE(y), IBLSCALE(rw), IBLSCALE(rh));
     }
     InfoBoxes[numInfoWindows]->PaintFast();

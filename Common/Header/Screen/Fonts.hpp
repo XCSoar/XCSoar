@@ -38,18 +38,19 @@ Copyright_License {
 #define XCSOAR_FONTS_HPP
 
 #include "StdAfx.h"
+#include "Screen/Font.hpp"
 
 void DeleteFonts();
 void InitialiseFonts(HWND hwnd, RECT rc);
 
-extern HFONT                                   InfoWindowFont;
-extern HFONT                                   TitleWindowFont;
-extern HFONT                                   MapWindowFont;
-extern HFONT                                   TitleSmallWindowFont;
-extern HFONT                                   MapWindowBoldFont;
-extern HFONT                                   CDIWindowFont;
-extern HFONT                                   MapLabelFont;
-extern HFONT                                   StatisticsFont;
+extern Font InfoWindowFont;
+extern Font TitleWindowFont;
+extern Font MapWindowFont;
+extern Font TitleSmallWindowFont;
+extern Font MapWindowBoldFont;
+extern Font CDIWindowFont;
+extern Font MapLabelFont;
+extern Font StatisticsFont;
 
 extern int UseCustomFonts;
 

@@ -42,6 +42,7 @@ Copyright_License {
 #include "ReplayLogger.hpp"
 #include "Dialogs/dlgTools.h"
 #include "DataField/FileReader.hpp"
+#include "Screen/MainWindow.hpp"
 
 static WndForm *wf=NULL;
 

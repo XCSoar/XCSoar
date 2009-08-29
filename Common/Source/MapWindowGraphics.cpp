@@ -43,22 +43,15 @@ Copyright_License {
 #include "Screen/Fonts.hpp"
 
 
-void MapWindow::DrawBitmapIn(const HDC hdc, const POINT &sc,
-			     const HBITMAP h) {
+void
+MapWindow::DrawBitmapIn(Canvas &canvas, const POINT &sc, const Bitmap &h)
+{
   if (!PointVisible(sc)) return;
 
-  SelectObject(hDCTemp, h);
+  hDCTemp.select(h);
 
-  DrawBitmapX(hdc,
-              sc.x-IBLSCALE(5),
-              sc.y-IBLSCALE(5),
-              10,10,
-	      hDCTemp,0,0,SRCPAINT);
-  DrawBitmapX(hdc,
-              sc.x-IBLSCALE(5),
-              sc.y-IBLSCALE(5),
-              10,10,
-              hDCTemp,10,0,SRCAND);
+  canvas.scale_or_and(sc.x - IBLSCALE(5), sc.y - IBLSCALE(5),
+                      hDCTemp, 10, 10);
 }
 
 

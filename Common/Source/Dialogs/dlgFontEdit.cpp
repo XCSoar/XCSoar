@@ -45,25 +45,26 @@ Copyright_License {
 #include "DataField/Integer.hpp"
 #include "Utils.h"
 #include "Screen/Fonts.hpp"
+#include "Screen/MainWindow.hpp"
 
-extern void InitializeOneFont (HFONT * theFont,
-                               const TCHAR FontRegKey[] ,
-                               LOGFONT autoLogFont,
-                               LOGFONT * LogFontUsed);
-extern HFONT InfoWindowFont;
-extern HFONT TitleWindowFont;
-extern HFONT MapWindowFont;
-extern HFONT TitleSmallWindowFont;
-extern HFONT MapWindowBoldFont;
-extern HFONT CDIWindowFont; // New
-extern HFONT MapLabelFont;
-extern HFONT StatisticsFont;
+extern void InitializeOneFont(Font *theFont,
+                              const TCHAR FontRegKey[] ,
+                              LOGFONT autoLogFont,
+                              LOGFONT * LogFontUsed);
+extern Font InfoWindowFont;
+extern Font TitleWindowFont;
+extern Font MapWindowFont;
+extern Font TitleSmallWindowFont;
+extern Font MapWindowBoldFont;
+extern Font CDIWindowFont; // New
+extern Font MapLabelFont;
+extern Font StatisticsFont;
 
 static WndForm *wf=NULL;
 static LOGFONT OriginalLogFont;
 static LOGFONT NewLogFont;
 static LOGFONT resetLogFont;
-static HFONT NewFont;
+static Font NewFont;
 const static TCHAR * OriginalFontRegKey;
 static bool IsInitialized=false;
 
@@ -132,9 +133,7 @@ static void RedrawSampleFont(void)
     }
   }
 
-  DeleteObject(NewFont);
-
-  NewFont = CreateFontIndirect (&NewLogFont);
+  NewFont.set(&NewLogFont);
 
   if ( _tcscmp(OriginalFontRegKey, szRegistryFontMapWindowBoldFont) == 0 ) {
     wf->SetFont(NewFont);
@@ -146,7 +145,7 @@ static void RedrawSampleFont(void)
   wp = (WndProperty*)wf->FindByName(TEXT("prpFontSample"));
 
   if(wp) {
-    if (GetObjectType(NewFont) == OBJ_FONT) {
+    if (NewFont.defined()) {
       wp->SetFont(NewFont);
       wp->SetCaption(TEXT("Sample Text 123"));
       wp->SetVisible(false);

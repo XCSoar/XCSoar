@@ -72,6 +72,7 @@ Copyright_License {
 #include "Screen/Blank.hpp"
 #include "Screen/Fonts.hpp"
 #include "Screen/Graphics.hpp"
+#include "Screen/MainWindow.hpp"
 #include "Polar/Historical.hpp"
 #include "ProcessTimer.hpp"
 
@@ -114,9 +115,8 @@ Copyright_License {
 TCHAR XCSoar_Version[256] = TEXT("");
 
 HINSTANCE hInst; // The current instance
-HWND hWndMainWindow; // Main Windows
-MapWindow hWndMapWindow;
-
+MainWindow hWndMainWindow;
+MapWindow map_window;
 
 HBRUSH hBrushSelected;
 HBRUSH hBrushUnselected;
@@ -235,7 +235,7 @@ void RestartCommPorts(void);
 //
 void SwitchToMapWindow(void)
 {
-  SetFocus(hWndMapWindow);
+  map_window.set_focus();
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -332,7 +332,7 @@ void SettingsLeave() {
       || TOPOLOGYFILECHANGED
       ) {
     CloseProgressDialog();
-    SetFocus(hWndMapWindow);
+    map_window.set_focus();
   }
 
   mutexNavBox.Unlock();
@@ -368,23 +368,7 @@ void SystemConfiguration(void) {
 //////////////////////////////////////////////////////////////////////
 
 void MainWindowTop() {
-
-  SetForegroundWindow(hWndMainWindow);
-#if (WINDOWSPC>0)
-  SetWindowPos(hWndMainWindow,HWND_TOP,
-	       0, 0, 0, 0,
-	       SWP_SHOWWINDOW|SWP_NOMOVE|SWP_NOSIZE);
-#else
-#ifndef CECORE
-  SHFullScreen(hWndMainWindow,
-	       SHFS_HIDETASKBAR|SHFS_HIDESIPBUTTON|SHFS_HIDESTARTICON);
-#endif
-  SetWindowPos(hWndMainWindow,HWND_TOP,
-	       0,0,
-	       GetSystemMetrics(SM_CXSCREEN),
-	       GetSystemMetrics(SM_CYSCREEN),
-	       SWP_SHOWWINDOW);
-#endif
+  hWndMainWindow.full_screen();
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -966,12 +950,8 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
   LoadString(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
 
   //If it is already running, then focus on the window
-  hWndMainWindow = FindWindow(szWindowClass, szTitle);
-  if (hWndMainWindow)
-    {
-      SetForegroundWindow((HWND)((ULONG) hWndMainWindow | 0x00000001));
-      return 0;
-    }
+  if (hWndMainWindow.find(szWindowClass, szTitle))
+    return 0;
 
 #ifdef PNA
   CleanRegistry(); // VENTA2-FIX for PNA we can't delete all registries..by now
@@ -998,16 +978,11 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
   StartupStore(TEXT("Create main window\n"));
 
-  hWndMainWindow = CreateWindow(szWindowClass, szTitle,
-                                WS_SYSMENU
-                                | WS_CLIPCHILDREN
-				| WS_CLIPSIBLINGS,
-                                WindowSize.left, WindowSize.top,
-				WindowSize.right, WindowSize.bottom,
-                                NULL, NULL,
-				hInstance, NULL);
+  hWndMainWindow.set(szWindowClass, szTitle,
+                     WindowSize.left, WindowSize.top,
+                     WindowSize.right, WindowSize.bottom);
 
-  if (!hWndMainWindow)
+  if (!hWndMainWindow.defined())
     {
       return FALSE;
     }
@@ -1077,28 +1052,23 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
   StartupStore(TEXT("Initialise message system\n"));
   Message::Initialize(rc); // creates window, sets fonts
 
-  ShowWindow(hWndMainWindow, SW_SHOW);
+  hWndMainWindow.show();
 
   ///////////////////////////////////////////////////////
   //// create map window
 
   StartupStore(TEXT("Create map window\n"));
 
-  hWndMapWindow = CreateWindow(TEXT("MapWindowClass"),NULL,
-			       WS_VISIBLE | WS_CHILD
-			       | WS_CLIPCHILDREN | WS_CLIPSIBLINGS,
-                               0, 0, (rc.right - rc.left),
-			       (rc.bottom-rc.top) ,
-                               hWndMainWindow, NULL ,hInstance,NULL);
+  map_window.set(hWndMainWindow, TEXT("MapWindowClass"),
+                 0, 0, rc.right - rc.left, rc.bottom-rc.top);
 
-  SendMessage(hWndMapWindow,WM_SETFONT,
-              (WPARAM)MapWindowFont,MAKELPARAM(TRUE,0));
+  map_window.set_font(MapWindowFont);
 
   // JMW gauge creation was here
 
   ShowWindow(hWndMainWindow, nCmdShow);
 
-  UpdateWindow(hWndMainWindow);
+  hWndMainWindow.update();
 
   return TRUE;
 }
@@ -1263,8 +1233,8 @@ void Shutdown(void) {
 
   StartupStore(TEXT("Close Windows\n"));
   MapGfx.Destroy();
-  DestroyWindow(hWndMapWindow);
-  DestroyWindow(hWndMainWindow);
+  map_window.reset();
+  hWndMainWindow.reset();
 
 #ifdef DEBUG_TRANSLATIONS
   StartupStore(TEXT("Writing missing translations\n"));
@@ -1304,7 +1274,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
       return MainMenu(hWnd, message, wParam, lParam);
       break;
     case WM_CTLCOLORSTATIC:
-      wdata = GetWindowLong((HWND)lParam, GWL_USERDATA);
+      wdata = Window::get_userdata((HWND)lParam);
       switch(wdata) {
       case 0:
         SetBkColor((HDC)wParam, MapGfx.ColorUnselected);
@@ -1335,6 +1305,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
       }
       break;
     case WM_CREATE:
+      hWndMainWindow.created(hWnd);
+
 #ifdef HAVE_ACTIVATE_INFO
       memset (&s_sai, 0, sizeof (s_sai));
       s_sai.cbSize = sizeof (s_sai);

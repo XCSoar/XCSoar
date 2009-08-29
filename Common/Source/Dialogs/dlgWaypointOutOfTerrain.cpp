@@ -41,6 +41,7 @@ Copyright_License {
 #include "Waypointparser.h"
 #include "Utils.h"
 #include "Dialogs/dlgTools.h"
+#include "Screen/MainWindow.hpp"
 
 static WndForm *wf=NULL;
 

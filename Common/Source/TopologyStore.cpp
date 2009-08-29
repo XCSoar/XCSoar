@@ -183,13 +183,13 @@ void CloseTopology() {
 }
 
 
-void DrawTopology(const HDC hdc, const RECT rc)
+void DrawTopology(Canvas &canvas, const RECT rc)
 {
   mutexMapData.Lock();
 
   for (int z=0; z<MAXTOPOLOGY; z++) {
     if (TopoStore[z]) {
-      TopoStore[z]->Paint(hdc,rc);
+      TopoStore[z]->Paint(canvas,rc);
     }
   }
   mutexMapData.Unlock();

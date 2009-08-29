@@ -51,7 +51,8 @@ typedef struct{
 
 WndForm *dlgLoadFromXML(CallBackTableEntry_t *LookUpTable,
                         const TCHAR *FileName,
-			HWND Parent, const TCHAR *resource=NULL);
+                        ContainerWindow &Parent,
+                        const TCHAR *resource=NULL);
 
 int
 WINAPI

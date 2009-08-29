@@ -45,6 +45,7 @@ Copyright_License {
 #include "Registry.hpp"
 #include "DataField/Enum.hpp"
 #include "Utils.h"
+#include "Screen/MainWindow.hpp"
 
 #include <assert.h>
 

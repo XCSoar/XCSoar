@@ -39,33 +39,32 @@ Copyright_License {
 #define GAUGE_FLARM_H
 
 #include "NMEA/Info.h"
-
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
+#include "Screen/BufferCanvas.hpp"
+#include "Screen/BitmapCanvas.hpp"
+#include "Screen/PaintWindow.hpp"
 
 class GaugeFLARM {
+ public:
+  static Widget widget;
+
  public:
   static void Create();
   static void Destroy();
   static void Render(NMEA_INFO* gps_info);
   static void RenderTraffic(NMEA_INFO *gps_info);
   static void RenderBg();
-  static void Repaint(HDC hDC);
+  static void Repaint(Canvas &canvas);
   static void Show();
   static bool Visible;
   static bool Suppress;
   static void TrafficPresent(bool traffic);
   static bool ForceVisible;
  private:
-  static HWND hWndFLARMWindow;
-  static HDC hdcScreen;
-  static HDC hdcDrawWindow;
-  static HDC hdcTemp;
-  static HBITMAP hDrawBitMap;
-  static HBITMAP hRoseBitMap;
+  static BufferCanvas hdcDrawWindow;
+  static BitmapCanvas hdcTemp;
+  static Bitmap hRoseBitMap;
   static int hRoseBitMapWidth;
   static int hRoseBitMapHeight;
-  static RECT rc;
   static int radius;
   static POINT center;
   static bool Traffic;

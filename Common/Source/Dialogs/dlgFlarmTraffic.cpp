@@ -45,6 +45,7 @@
 #include "InfoBoxLayout.h"
 #include "UtilsFLARM.hpp"
 #include "Math/Earth.hpp"
+#include "Screen/MainWindow.hpp"
 
 #include <assert.h>
 

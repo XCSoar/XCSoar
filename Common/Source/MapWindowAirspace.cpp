@@ -138,24 +138,23 @@ void MapWindow::CalculateScreenPositionsAirspace() {
 }
 
 
-void MapWindow::ClearAirSpace(HDC dc, bool fill) {
-  COLORREF whitecolor = RGB(0xff,0xff,0xff);
+void MapWindow::ClearAirSpace(Canvas &canvas, bool fill) {
+  Color whitecolor(0xff,0xff,0xff);
 
-  SetTextColor(dc, whitecolor);
-  SetBkMode(dc, TRANSPARENT);
-  SetBkColor(dc, whitecolor);
-  SelectObject(dc, GetStockObject(WHITE_PEN));
-  SelectObject(dc, GetStockObject(WHITE_BRUSH));
-  Rectangle(dc, MapRect.left, MapRect.top, MapRect.right, MapRect.bottom);
+  canvas.set_text_color(whitecolor);
+  canvas.background_transparent();
+  canvas.set_background_color(whitecolor);
+  canvas.white_pen();
+  canvas.white_brush();
+  canvas.rectangle(MapRect.left, MapRect.top, MapRect.right, MapRect.bottom);
   if (fill) {
-    SelectObject(dc, GetStockObject(WHITE_PEN));
+    canvas.white_pen();
   }
 }
 
 // TODO code: optimise airspace drawing
-void MapWindow::DrawAirSpace(HDC hdc, const RECT rc, HDC buffer)
+void MapWindow::DrawAirSpace(Canvas &canvas, const RECT rc, Canvas &buffer)
 {
-  COLORREF whitecolor = RGB(0xff,0xff,0xff);
   unsigned int i;
 
   bool found = false;
@@ -169,15 +168,12 @@ void MapWindow::DrawAirSpace(HDC hdc, const RECT rc, HDC buffer)
 	  found = true;
 	}
         // this color is used as the black bit
-        SetTextColor(buffer,
-                     MapGfx.Colours[iAirspaceColour[AirspaceCircle[i].Type]]);
+        buffer.set_text_color(MapGfx.Colours[iAirspaceColour[AirspaceCircle[i].Type]]);
         // get brush, can be solid or a 1bpp bitmap
-        SelectObject(buffer,
-                     MapGfx.hAirspaceBrushes[iAirspaceBrush[AirspaceCircle[i].Type]]);
-        Circle(buffer,
-               AirspaceCircle[i].Screen.x ,
-               AirspaceCircle[i].Screen.y ,
-               AirspaceCircle[i].ScreenR ,rc, true, true);
+        buffer.select(MapGfx.hAirspaceBrushes[iAirspaceBrush[AirspaceCircle[i].Type]]);
+        buffer.circle(AirspaceCircle[i].Screen.x, AirspaceCircle[i].Screen.y,
+                      AirspaceCircle[i].ScreenR,
+                      rc, true, true);
       }
     }
   }
@@ -190,13 +186,10 @@ void MapWindow::DrawAirSpace(HDC hdc, const RECT rc, HDC buffer)
 	  found = true;
 	}
         // this color is used as the black bit
-        SetTextColor(buffer,
-                     MapGfx.Colours[iAirspaceColour[AirspaceArea[i].Type]]);
-        SelectObject(buffer,
-                     MapGfx.hAirspaceBrushes[iAirspaceBrush[AirspaceArea[i].Type]]);
-        ClipPolygon(buffer,
-                    AirspaceScreenPoint+AirspaceArea[i].FirstPoint,
-                    AirspaceArea[i].NumPoints, rc, true);
+        buffer.set_text_color(MapGfx.Colours[iAirspaceColour[AirspaceArea[i].Type]]);
+        buffer.select(MapGfx.hAirspaceBrushes[iAirspaceBrush[AirspaceArea[i].Type]]);
+        buffer.clipped_polygon(AirspaceScreenPoint+AirspaceArea[i].FirstPoint,
+                               AirspaceArea[i].NumPoints, rc, true);
       }
     }
   }
@@ -204,8 +197,8 @@ void MapWindow::DrawAirSpace(HDC hdc, const RECT rc, HDC buffer)
   ////////// draw it again, just the outlines
 
   if (found) {
-    SelectObject(buffer, GetStockObject(HOLLOW_BRUSH));
-    SelectObject(buffer, GetStockObject(WHITE_PEN));
+    buffer.hollow_brush();
+    buffer.white_pen();
   }
 
   if (AirspaceCircle) {
@@ -216,14 +209,12 @@ void MapWindow::DrawAirSpace(HDC hdc, const RECT rc, HDC buffer)
 	  found = true;
 	}
         if (bAirspaceBlackOutline) {
-          SelectObject(buffer, GetStockObject(BLACK_PEN));
+          buffer.black_pen();
         } else {
-          SelectObject(buffer, MapGfx.hAirspacePens[AirspaceCircle[i].Type]);
+          buffer.select(MapGfx.hAirspacePens[AirspaceCircle[i].Type]);
         }
-        Circle(buffer,
-               AirspaceCircle[i].Screen.x ,
-               AirspaceCircle[i].Screen.y ,
-               AirspaceCircle[i].ScreenR ,rc, true, false);
+        buffer.circle(AirspaceCircle[i].Screen.x, AirspaceCircle[i].Screen.y,
+                      AirspaceCircle[i].ScreenR, rc, true, false);
       }
     }
   }
@@ -236,14 +227,13 @@ void MapWindow::DrawAirSpace(HDC hdc, const RECT rc, HDC buffer)
 	  found = true;
 	}
         if (bAirspaceBlackOutline) {
-          SelectObject(buffer, GetStockObject(BLACK_PEN));
+          buffer.black_pen();
         } else {
-          SelectObject(buffer, MapGfx.hAirspacePens[AirspaceArea[i].Type]);
+          buffer.select(MapGfx.hAirspacePens[AirspaceArea[i].Type]);
         }
 
 	POINT *pstart = AirspaceScreenPoint+AirspaceArea[i].FirstPoint;
-        ClipPolygon(buffer, pstart,
-                    AirspaceArea[i].NumPoints, rc, false);
+        buffer.clipped_polygon(pstart, AirspaceArea[i].NumPoints, rc, false);
 
 	if (AirspaceArea[i].NumPoints>2) {
 	  // JMW close if open
@@ -252,7 +242,7 @@ void MapWindow::DrawAirSpace(HDC hdc, const RECT rc, HDC buffer)
 	    POINT ps[2];
 	    ps[0] = pstart[0];
 	    ps[1] = pstart[AirspaceArea[i].NumPoints-1];
-            ClipPolyline(buffer, ps, 2, rc);
+            buffer.clipped_polyline(ps, 2, rc);
 	  }
 	}
 
@@ -262,30 +252,13 @@ void MapWindow::DrawAirSpace(HDC hdc, const RECT rc, HDC buffer)
 
   if (found) {
     // need to do this to prevent drawing of colored outline
-    SelectObject(buffer, GetStockObject(WHITE_PEN));
-#if (WINDOWSPC<1)
-    TransparentImage(hdc,
-                     rc.left, rc.top,
-                     rc.right-rc.left,rc.bottom-rc.top,
-                     buffer,
-                     rc.left, rc.top,
-                     rc.right-rc.left,rc.bottom-rc.top,
-                     whitecolor
-                     );
+    buffer.white_pen();
 
-#else
-    TransparentBlt(hdc,
-                   rc.left,rc.top,
-                   rc.right-rc.left,rc.bottom-rc.top,
-                   buffer,
-                   rc.left,rc.top,
-                   rc.right-rc.left,rc.bottom-rc.top,
-                   whitecolor
-                   );
-  #endif
+    canvas.copy_transparent_white(buffer, rc);
+
     // restore original color
     //    SetTextColor(hDCTemp, origcolor);
-    SetBkMode(buffer, OPAQUE);
+    buffer.background_opaque();
   }
 }
 

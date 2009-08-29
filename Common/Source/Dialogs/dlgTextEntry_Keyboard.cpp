@@ -39,6 +39,7 @@ Copyright_License {
 #include "Interface.hpp"
 #include "Dialogs/dlgTools.h"
 #include "InfoBoxLayout.h"
+#include "Screen/MainWindow.hpp"
 #include "Compatibility/string.h"
 
 static WndForm *wf=NULL;

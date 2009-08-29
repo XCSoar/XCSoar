@@ -41,6 +41,7 @@ Copyright_License {
 #include "InfoBoxLayout.h"
 #include "DataField/FileReader.hpp"
 #include "LogFile.hpp"
+#include "Screen/MainWindow.hpp"
 #include "Compatibility/string.h"
 
 static WndForm *wf=NULL;

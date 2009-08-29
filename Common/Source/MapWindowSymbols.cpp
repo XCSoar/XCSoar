@@ -55,7 +55,7 @@ Copyright_License {
 
 #include "Blackboard.hpp"
 
-void MapWindow::DrawCrossHairs(HDC hdc, const POINT Orig,
+void MapWindow::DrawCrossHairs(Canvas &canvas, const POINT Orig,
 			       const RECT rc)
 {
   POINT o1, o2;
@@ -65,21 +65,19 @@ void MapWindow::DrawCrossHairs(HDC hdc, const POINT Orig,
   o1.y = Orig.y;
   o2.y = Orig.y;
 
-  DrawDashLine(hdc, 1, o1, o2,
-               RGB(50,50,50), rc);
+  canvas.clipped_dashed_line(1, o1, o2, Color(50,50,50), rc);
 
   o1.x = Orig.x;
   o2.x = Orig.x;
   o1.y = Orig.y+20;
   o2.y = Orig.y-20;
 
-  DrawDashLine(hdc, 1, o1, o2,
-               RGB(50,50,50), rc);
+  canvas.clipped_dashed_line(1, o1, o2, Color(50,50,50), rc);
 
 }
 
 
-void MapWindow::DrawAircraft(HDC hdc, const POINT Orig)
+void MapWindow::DrawAircraft(Canvas &canvas, const POINT Orig)
 {
 
   if (Appearance.Aircraft == afAircraftDefault){
@@ -106,49 +104,39 @@ void MapWindow::DrawAircraft(HDC hdc, const POINT Orig)
     };
 
     int i;
-    HPEN hpOld;
-    HBRUSH hbAircraftSolid;
-    HBRUSH hbAircraftSolidBg;
+    Brush hbAircraftSolid, hbAircraftSolidBg;
 
     if (Appearance.InverseAircraft) {
-      hbAircraftSolid = (HBRUSH) CreateSolidBrush(RGB(0xff,0xff,0xff));
-      hbAircraftSolidBg = (HBRUSH) CreateSolidBrush(RGB(0x00,0x00,0x00));
+      hbAircraftSolid.set(Color(0xff,0xff,0xff));
+      hbAircraftSolidBg.set(Color(0x00,0x00,0x00));
     } else {
-      hbAircraftSolid = (HBRUSH) CreateSolidBrush(RGB(0x00,0x00,0x00));
-      hbAircraftSolidBg = (HBRUSH) CreateSolidBrush(RGB(0xff,0xff,0xff));
+      hbAircraftSolid.set(Color(0x00,0x00,0x00));
+      hbAircraftSolidBg.set(Color(0xff,0xff,0xff));
     }
 
-    HBRUSH hbOld = (HBRUSH)SelectObject(hdc, hbAircraftSolidBg);
-    hpOld = (HPEN)SelectObject(hdc, MapGfx.hpAircraft);
+    canvas.select(hbAircraftSolidBg);
+    canvas.select(MapGfx.hpAircraft);
 
     PolygonRotateShift(Aircraft, NUMAIRCRAFTPOINTS, Orig.x+1, Orig.y+1,
                        DisplayAircraftAngle+
                        (DerivedDrawInfo.Heading-DrawInfo.TrackBearing));
 
-    Polygon(hdc, Aircraft, NUMAIRCRAFTPOINTS);
+    canvas.polygon(Aircraft, NUMAIRCRAFTPOINTS);
 
     // draw it again so can get white border
-    SelectObject(hdc, MapGfx.hpAircraftBorder);
-    SelectObject(hdc, hbAircraftSolid);
+    canvas.select(MapGfx.hpAircraftBorder);
+    canvas.select(hbAircraftSolid);
 
     for(i=0; i<NUMAIRCRAFTPOINTS; i++)
       {
 	Aircraft[i].x -= 1;  Aircraft[i].y -= 1;
       }
 
-    Polygon(hdc, Aircraft, NUMAIRCRAFTPOINTS);
-
-    SelectObject(hdc, hpOld);
-    SelectObject(hdc, hbOld);
-
-    DeleteObject(hbAircraftSolid);
-    DeleteObject(hbAircraftSolidBg);
-
+    canvas.polygon(Aircraft, NUMAIRCRAFTPOINTS);
   } else
 
     if (Appearance.Aircraft == afAircraftAltA){
 
-      HPEN oldPen;
       POINT Aircraft[] = {
 	{1, -5},
 	{1, 0},
@@ -188,27 +176,22 @@ void MapWindow::DrawAircraft(HDC hdc, const POINT Orig)
       PolygonRotateShift(Aircraft, n,
 			 Orig.x-1, Orig.y, angle);
 
-      oldPen = (HPEN)SelectObject(hdc, MapGfx.hpAircraft);
-      Polygon(hdc, Aircraft, n);
+      canvas.select(MapGfx.hpAircraft);
+      canvas.polygon(Aircraft, n);
 
-      HBRUSH hbOld;
       if (Appearance.InverseAircraft) {
-	hbOld = (HBRUSH)SelectObject(hdc, GetStockObject(WHITE_BRUSH));
+        canvas.white_brush();
       } else {
-	hbOld = (HBRUSH)SelectObject(hdc, GetStockObject(BLACK_BRUSH));
+        canvas.black_brush();
       }
-      SelectObject(hdc, MapGfx.hpAircraftBorder); // hpBearing
-      Polygon(hdc, Aircraft, n);
-
-      SelectObject(hdc, oldPen);
-      SelectObject(hdc, hbOld);
-
+      canvas.select(MapGfx.hpAircraftBorder); // hpBearing
+      canvas.polygon(Aircraft, n);
     }
 
 }
 
 
-void MapWindow::DrawGPSStatus(HDC hDC, const RECT rc)
+void MapWindow::DrawGPSStatus(Canvas &canvas, const RECT rc)
 {
 
   if (extGPSCONNECT && !(DrawInfo.NAVWarning) && (DrawInfo.SatellitesUsed != 0))
@@ -220,31 +203,24 @@ void MapWindow::DrawGPSStatus(HDC hDC, const RECT rc)
   TextInBoxMode_t TextInBoxMode = {2};
 
   if (!extGPSCONNECT) {
-    SelectObject(hDCTemp,MapGfx.hGPSStatus2);
-    DrawBitmapX(hDC,
-                rc.left+IBLSCALE(2),
-                rc.bottom+IBLSCALE(Appearance.GPSStatusOffset.y-22),
-                20, 20,
-                hDCTemp,
-                0, 0, SRCAND);
+    hDCTemp.select(MapGfx.hGPSStatus2);
+    canvas.scale_and(rc.left + IBLSCALE(2),
+                     rc.bottom +IBLSCALE(Appearance.GPSStatusOffset.y - 22),
+                     hDCTemp, 0, 0, 20, 20);
 
-    TextInBox(hDC, gettext(gpswarningtext1),
+    TextInBox(canvas, gettext(gpswarningtext1),
               rc.left+IBLSCALE(24),
               rc.bottom+IBLSCALE(Appearance.GPSStatusOffset.y-19),
               0, TextInBoxMode);
 
   } else
     if (DrawInfo.NAVWarning || (DrawInfo.SatellitesUsed == 0)) {
-      SelectObject(hDCTemp,MapGfx.hGPSStatus1);
+      hDCTemp.select(MapGfx.hGPSStatus1);
+      canvas.scale_and(rc.left + IBLSCALE(2),
+                       rc.bottom +IBLSCALE(Appearance.GPSStatusOffset.y - 22),
+                       hDCTemp, 0, 0, 20, 20);
 
-      DrawBitmapX(hDC,
-                  rc.left+IBLSCALE(2),
-                  rc.bottom+IBLSCALE(Appearance.GPSStatusOffset.y-22),
-                  20, 20,
-                  hDCTemp,
-                  0, 0, SRCAND);
-
-      TextInBox(hDC, gettext(gpswarningtext2),
+      TextInBox(canvas, gettext(gpswarningtext2),
                 rc.left+IBLSCALE(24),
                 rc.bottom+
                 IBLSCALE(Appearance.GPSStatusOffset.y-19),
@@ -255,7 +231,7 @@ void MapWindow::DrawGPSStatus(HDC hDC, const RECT rc)
 }
 
 
-void MapWindow::DrawFlightMode(HDC hdc, const RECT rc)
+void MapWindow::DrawFlightMode(Canvas &canvas, const RECT rc)
 {
   static bool flip= true;
   static double LastTime = 0;
@@ -281,39 +257,26 @@ void MapWindow::DrawFlightMode(HDC hdc, const RECT rc)
     if (drawlogger) {
       offset -= 7;
 
-      if (LoggerActive && flip) {
-        SelectObject(hDCTemp,MapGfx.hLogger);
-      } else {
-        SelectObject(hDCTemp,MapGfx.hLoggerOff);
-      }
+      hDCTemp.select(LoggerActive && flip
+                     ? MapGfx.hLogger : MapGfx.hLoggerOff);
       //changed draw mode & icon for higher opacity 12aug -st
-      DrawBitmapX(hdc,
-                  rc.right+IBLSCALE(offset+Appearance.FlightModeOffset.x),
-                  rc.bottom+IBLSCALE(-7+Appearance.FlightModeOffset.y),
-                  7,7,
-                  hDCTemp,
-                  0,0,SRCPAINT);
-
-      DrawBitmapX(hdc,
-                  rc.right+IBLSCALE(offset+Appearance.FlightModeOffset.x),
-                  rc.bottom+IBLSCALE(-7+Appearance.FlightModeOffset.y),
-                  7,7,
-                  hDCTemp,
-                  7,0,SRCAND);
+      canvas.scale_or_and(rc.right + IBLSCALE(offset + Appearance.FlightModeOffset.x),
+                          rc.bottom + IBLSCALE(-7 + Appearance.FlightModeOffset.y),
+                          hDCTemp, 7, 7);
     }
   }
 
   if (Appearance.FlightModeIcon == apFlightModeIconDefault){
 
     if (TaskAborted) {
-      SelectObject(hDCTemp,MapGfx.hAbort);
+      hDCTemp.select(MapGfx.hAbort);
     } else {
       if (DisplayMode == dmCircling) {
-        SelectObject(hDCTemp,MapGfx.hClimb);
+        hDCTemp.select(MapGfx.hClimb);
       } else if (DisplayMode == dmFinalGlide) {
-        SelectObject(hDCTemp,MapGfx.hFinalGlide);
+        hDCTemp.select(MapGfx.hFinalGlide);
       } else {
-        SelectObject(hDCTemp,MapGfx.hCruise);
+        hDCTemp.select(MapGfx.hCruise);
       }
     }
     // Code already commented as of 12aug05 - redundant? -st
@@ -326,19 +289,9 @@ void MapWindow::DrawFlightMode(HDC hdc, const RECT rc)
 
     offset -= 24;
 
-    DrawBitmapX(hdc,
-                rc.right+IBLSCALE(offset-1+Appearance.FlightModeOffset.x),
-                rc.bottom+IBLSCALE(-20-1+Appearance.FlightModeOffset.y),
-                24,20,
-                hDCTemp,
-                0,0,SRCPAINT);
-
-    DrawBitmapX(hdc,
-                rc.right+IBLSCALE(offset-1+Appearance.FlightModeOffset.x),
-                rc.bottom+IBLSCALE(-20-1+Appearance.FlightModeOffset.y),
-                24,20,
-                hDCTemp,
-                24,0,SRCAND);
+    canvas.scale_or_and(rc.right + IBLSCALE(offset - 1 + Appearance.FlightModeOffset.x),
+                        rc.bottom + IBLSCALE(-20 - 1 + Appearance.FlightModeOffset.y),
+                        hDCTemp, 24, 20);
 
   } else if (Appearance.FlightModeIcon == apFlightModeIconAltA){
 
@@ -346,8 +299,6 @@ void MapWindow::DrawFlightMode(HDC hdc, const RECT rc)
 
     POINT Arrow[3];
     POINT Center;
-    HBRUSH oldBrush;
-    HPEN   oldPen;
 
     Center.x = rc.right-10;
     Center.y = rc.bottom-10;
@@ -390,42 +341,28 @@ void MapWindow::DrawFlightMode(HDC hdc, const RECT rc)
     }
 
     if (TaskAborted)
-      oldBrush = (HBRUSH)SelectObject(hdc, MapGfx.hBrushFlyingModeAbort);
+      canvas.select(MapGfx.hBrushFlyingModeAbort);
     else
-      oldBrush = (HBRUSH)SelectObject(hdc, MapGfx.hbCompass);
+      canvas.select(MapGfx.hbCompass);
 
-    oldPen = (HPEN)SelectObject(hdc, MapGfx.hpCompassBorder);
-    Polygon(hdc, Arrow, 3);
+    canvas.select(MapGfx.hpCompassBorder);
+    canvas.polygon(Arrow, 3);
 
-    SelectObject(hdc, MapGfx.hpCompass);
-    Polygon(hdc, Arrow, 3);
-
-    SelectObject(hdc, oldPen);
-    SelectObject(hdc, oldBrush);
-
+    canvas.select(MapGfx.hpCompass);
+    canvas.polygon(Arrow, 3);
   }
 
 
   if (!Appearance.DontShowAutoMacCready && DerivedDrawInfo.AutoMacCready) {
-    SelectObject(hDCTemp,MapGfx.hAutoMacCready);
+    hDCTemp.select(MapGfx.hAutoMacCready);
 
     offset -= 24;
 
     //changed draw mode & icon for higher opacity 12aug -st
 
-    DrawBitmapX(hdc,
-		rc.right+IBLSCALE(offset-3+Appearance.FlightModeOffset.x),
-		rc.bottom+IBLSCALE(-20-3+Appearance.FlightModeOffset.y),
-		24,20,
-		hDCTemp,
-		0,0,SRCPAINT);
-
-    DrawBitmapX(hdc,
-		rc.right+IBLSCALE(offset-3+Appearance.FlightModeOffset.x),
-		rc.bottom+IBLSCALE(-20-3+Appearance.FlightModeOffset.y),
-		24,20,
-		hDCTemp,
-		24,0,SRCAND);
+    canvas.scale_or_and(rc.right + IBLSCALE(offset - 3 + Appearance.FlightModeOffset.x),
+                        rc.bottom + IBLSCALE(-20 - 3 + Appearance.FlightModeOffset.y),
+                        hDCTemp, 24, 20);
 
     //  commented @ 12aug st
     //  BitBlt(hdc,rc.right-48-3,rc.bottom-20-3,24,20,
@@ -436,11 +373,9 @@ void MapWindow::DrawFlightMode(HDC hdc, const RECT rc)
 
 
 
-void MapWindow::DrawWindAtAircraft2(HDC hdc, const POINT Orig, const RECT rc) {
+void MapWindow::DrawWindAtAircraft2(Canvas &canvas, const POINT Orig, const RECT rc) {
   int i;
   POINT Start;
-  HPEN hpOld;
-  HBRUSH hbOld;
   TCHAR sTmp[12];
   static SIZE tsize = {0,0};
 
@@ -449,15 +384,13 @@ void MapWindow::DrawWindAtAircraft2(HDC hdc, const POINT Orig, const RECT rc) {
   }
 
   if (tsize.cx == 0){
-
-    HFONT oldFont = (HFONT)SelectObject(hdc, MapWindowBoldFont);
-    GetTextExtentPoint(hdc, TEXT("99"), 2, &tsize);
-    SelectObject(hdc, oldFont);
+    canvas.select(MapWindowBoldFont);
+    tsize = canvas.text_size(TEXT("99"));
     tsize.cx = tsize.cx/2;
   }
 
-  hpOld = (HPEN)SelectObject(hdc, MapGfx.hpWind);
-  hbOld = (HBRUSH)SelectObject(hdc, MapGfx.hbWind);
+  canvas.select(MapGfx.hpWind);
+  canvas.select(MapGfx.hbWind);
 
   int wmag = iround(4.0*DerivedDrawInfo.WindSpeed);
 
@@ -476,7 +409,7 @@ void MapWindow::DrawWindAtAircraft2(HDC hdc, const POINT Orig, const RECT rc) {
 
   PolygonRotateShift(Arrow, 7, Start.x, Start.y,
 		     DerivedDrawInfo.WindBearing-DisplayAngle);
-  Polygon(hdc, Arrow, 5);
+  canvas.polygon(Arrow, 5);
 
   if (WindArrowStyle==1) {
     POINT Tail[2] = {{0,-20}, {0,-26-min(20,wmag)*3}};
@@ -490,7 +423,7 @@ void MapWindow::DrawWindAtAircraft2(HDC hdc, const POINT Orig, const RECT rc) {
     }
 
     // optionally draw dashed line
-    ClipDrawLine(hdc, PS_DASH, 1, Tail[0], Tail[1], RGB(0,0,0), rc);
+    ClipDrawLine(canvas, Pen::DASH, 1, Tail[0], Tail[1], Color(0,0,0), rc);
   }
 
 
@@ -498,20 +431,17 @@ void MapWindow::DrawWindAtAircraft2(HDC hdc, const POINT Orig, const RECT rc) {
 
   TextInBoxMode_t TextInBoxMode = { 16 | 32 }; // JMW test {2 | 16};
   if (Arrow[5].y>=Arrow[6].y) {
-    TextInBox(hdc, sTmp, Arrow[5].x-kx, Arrow[5].y, 0, TextInBoxMode);
+    TextInBox(canvas, sTmp, Arrow[5].x-kx, Arrow[5].y, 0, TextInBoxMode);
   } else {
-    TextInBox(hdc, sTmp, Arrow[6].x-kx, Arrow[6].y, 0, TextInBoxMode);
+    TextInBox(canvas, sTmp, Arrow[6].x-kx, Arrow[6].y, 0, TextInBoxMode);
   }
-
-  SelectObject(hdc, hbOld);
-  SelectObject(hdc, hpOld);
 }
 
 
 /////////////////
 
 
-void MapWindow::DrawHorizon(HDC hDC, const RECT rc)
+void MapWindow::DrawHorizon(Canvas &canvas, const RECT rc)
 {
   POINT Start;
 
@@ -520,21 +450,10 @@ void MapWindow::DrawHorizon(HDC hDC, const RECT rc)
   if (EnableVarioGauge && MapRectBig.right == rc.right)
     Start.x -= InfoBoxLayout::ControlWidth;
 
-  HPEN   hpHorizonSky;
-  HBRUSH hbHorizonSky;
-  HPEN   hpHorizonGround;
-  HBRUSH hbHorizonGround;
-  HPEN   hpOld;
-  HBRUSH hbOld;
-
-  hpHorizonSky = (HPEN)CreatePen(PS_SOLID, IBLSCALE(1),
-                                 RGB(0x40,0x40,0xff));
-  hbHorizonSky = (HBRUSH)CreateSolidBrush(RGB(0xA0,0xA0,0xff));
-
-  hpHorizonGround = (HPEN)CreatePen(PS_SOLID, IBLSCALE(1),
-                                    RGB(106,55,12));
-  hbHorizonGround = (HBRUSH)CreateSolidBrush(
-                                             RGB(157,101,60));
+  Pen hpHorizonSky(IBLSCALE(1), Color(0x40,0x40,0xff));
+  Brush hbHorizonSky(Color(0xA0,0xA0,0xff));
+  Pen hpHorizonGround(IBLSCALE(1), Color(106,55,12));
+  Brush hbHorizonGround(Color(157,101,60));
 
   int radius = IBLSCALE(17);
   double phi = max(-89,min(89,DerivedDrawInfo.BankAngle));
@@ -543,17 +462,15 @@ void MapWindow::DrawHorizon(HDC hDC, const RECT rc)
   double alpha1 = 180-alpha-phi;
   double alpha2 = 180+alpha-phi;
 
-  hpOld = (HPEN)SelectObject(hDC, hpHorizonSky);
-  hbOld = (HBRUSH)SelectObject(hDC, hbHorizonSky);
+  canvas.select(hpHorizonSky);
+  canvas.select(hbHorizonSky);
 
-  Segment(hDC, Start.x, Start.y, radius, rc,
-          alpha2, alpha1, true);
+  canvas.segment(Start.x, Start.y, radius, rc, alpha2, alpha1, true);
 
-  SelectObject(hDC, hpHorizonGround);
-  SelectObject(hDC, hbHorizonGround);
+  canvas.select(hpHorizonGround);
+  canvas.select(hbHorizonGround);
 
-  Segment(hDC, Start.x, Start.y, radius, rc,
-          alpha1, alpha2, true);
+  canvas.segment(Start.x, Start.y, radius, rc, alpha1, alpha2, true);
 
   POINT a1, a2;
 
@@ -571,13 +488,13 @@ void MapWindow::DrawHorizon(HDC hDC, const RECT rc)
   a1.y = Start.y;
   a2.x = Start.x-radius/2;
   a2.y = Start.y;
-  ClipDrawLine(hDC, PS_SOLID, IBLSCALE(2),
-            a1, a2, RGB(0,0,0), rc);
+  ClipDrawLine(canvas, Pen::SOLID, IBLSCALE(2),
+            a1, a2, Color(0,0,0), rc);
 
   a1.x = Start.x;
   a1.y = Start.y-radius/4;
-  ClipDrawLine(hDC, PS_SOLID, IBLSCALE(2),
-            a1, Start, RGB(0,0,0), rc);
+  ClipDrawLine(canvas, Pen::SOLID, IBLSCALE(2),
+            a1, Start, Color(0,0,0), rc);
 
   //
 
@@ -591,16 +508,16 @@ void MapWindow::DrawHorizon(HDC hDC, const RECT rc)
   a2.x = Start.x+rr2n;
   a2.y = Start.y-rr2n;
 
-  ClipDrawLine(hDC, PS_SOLID, IBLSCALE(1),
-            a1, a2, RGB(0,0,0), rc);
+  ClipDrawLine(canvas, Pen::SOLID, IBLSCALE(1),
+            a1, a2, Color(0,0,0), rc);
 
   a1.x = Start.x-rr2p;
   a1.y = Start.y-rr2p;
   a2.x = Start.x-rr2n;
   a2.y = Start.y-rr2n;
 
-  ClipDrawLine(hDC, PS_SOLID, IBLSCALE(1),
-            a1, a2, RGB(0,0,0), rc);
+  ClipDrawLine(canvas, Pen::SOLID, IBLSCALE(1),
+            a1, a2, Color(0,0,0), rc);
 
   // JMW experimental, display stall sensor
   double s = max(0.0,min(1.0,DrawInfo.StallRatio));
@@ -609,19 +526,12 @@ void MapWindow::DrawHorizon(HDC hDC, const RECT rc)
   a1.y = rc.bottom-m;
   a2.x = a1.x-10;
   a2.y = a1.y;
-  ClipDrawLine(hDC, PS_SOLID, IBLSCALE(2),
-            a1, a2, RGB(0xff,0,0), rc);
-
-  SelectObject(hDC, hbOld);
-  SelectObject(hDC, hpOld);
-  DeleteObject((HPEN)hpHorizonSky);
-  DeleteObject((HBRUSH)hbHorizonSky);
-  DeleteObject((HPEN)hpHorizonGround);
-  DeleteObject((HBRUSH)hbHorizonGround);
+  ClipDrawLine(canvas, Pen::SOLID, IBLSCALE(2),
+            a1, a2, Color(0xff,0,0), rc);
 }
 
 
-void MapWindow::DrawFinalGlide(HDC hDC, const RECT rc)
+void MapWindow::DrawFinalGlide(Canvas &canvas, const RECT rc)
 {
 
   /*
@@ -727,33 +637,33 @@ void MapWindow::DrawFinalGlide(HDC hDC, const RECT rc)
       // draw actual glide bar
       if (Offset<=0) {
         if (LandableReachable) {
-          hpOld = (HPEN)SelectObject(hDC, MapGfx.hpFinalGlideBelowLandable);
-          hbOld = (HBRUSH)SelectObject(hDC, MapGfx.hbFinalGlideBelowLandable);
+          canvas.select(MapGfx.hpFinalGlideBelowLandable);
+          canvas.select(MapGfx.hbFinalGlideBelowLandable);
         } else {
-          hpOld = (HPEN)SelectObject(hDC, MapGfx.hpFinalGlideBelow);
-          hbOld = (HBRUSH)SelectObject(hDC, MapGfx.hbFinalGlideBelow);
+          canvas.select(MapGfx.hpFinalGlideBelow);
+          canvas.select(MapGfx.hbFinalGlideBelow);
         }
       } else {
-        hpOld = (HPEN)SelectObject(hDC, MapGfx.hpFinalGlideAbove);
-        hbOld = (HBRUSH)SelectObject(hDC, MapGfx.hbFinalGlideAbove);
+        canvas.select(MapGfx.hpFinalGlideAbove);
+        canvas.select(MapGfx.hbFinalGlideAbove);
       }
-      Polygon(hDC,GlideBar,6);
+      canvas.polygon(GlideBar, 6);
 
       // draw glide bar at mc 0
       if (Offset0<=0) {
         if (LandableReachable) {
-          SelectObject(hDC, MapGfx.hpFinalGlideBelowLandable);
-          SelectObject(hDC, GetStockObject(HOLLOW_BRUSH));
+          canvas.select(MapGfx.hpFinalGlideBelowLandable);
+          canvas.hollow_brush();
         } else {
-          SelectObject(hDC, MapGfx.hpFinalGlideBelow);
-          SelectObject(hDC, GetStockObject(HOLLOW_BRUSH));
+          canvas.select(MapGfx.hpFinalGlideBelow);
+          canvas.hollow_brush();
         }
       } else {
-        SelectObject(hDC, MapGfx.hpFinalGlideAbove);
-        SelectObject(hDC, GetStockObject(HOLLOW_BRUSH));
+        canvas.select(MapGfx.hpFinalGlideAbove);
+        canvas.hollow_brush();
       }
       if (Offset!=Offset0) {
-        Polygon(hDC,GlideBar0,6);
+        canvas.polygon(GlideBar0, 6);
       }
 
       // JMW draw x on final glide bar if unreachable at current Mc
@@ -761,7 +671,7 @@ void MapWindow::DrawFinalGlide(HDC hDC, const RECT rc)
       if ((DerivedDrawInfo.TaskTimeToGo>0.9*ERROR_TIME)
 	  || ((GlidePolar::GetMacCready()<0.01) 
 	      && (DerivedDrawInfo.TaskAltitudeDifference<0))) {
-	SelectObject(hDC, MapGfx.hpAircraftBorder);
+        canvas.select(MapGfx.hpAircraftBorder);
 	POINT Cross[4] = { {-5, -5},
 			   { 5,  5},
 			   {-5,  5},
@@ -770,8 +680,8 @@ void MapWindow::DrawFinalGlide(HDC hDC, const RECT rc)
 	  Cross[i].x = IBLSCALE(Cross[i].x+9);
 	  Cross[i].y = IBLSCALE(Cross[i].y+9)+y0;
 	}
-        Polygon(hDC,Cross,2);
-        Polygon(hDC,&Cross[2],2);
+        canvas.polygon(Cross, 2);
+        canvas.polygon(&Cross[2], 2);
       }
 
       if (Appearance.IndFinalGlide == fgFinalGlideDefault){
@@ -790,51 +700,46 @@ void MapWindow::DrawFinalGlide(HDC hDC, const RECT rc)
         }
 
         TextInBoxMode_t TextInBoxMode = {1|8};
-        TextInBox(hDC, Value, 0, (int)Offset, 0, TextInBoxMode);
+        TextInBox(canvas, Value, 0, (int)Offset, 0, TextInBoxMode);
 
       } else
         if (Appearance.IndFinalGlide == fgFinalGlideAltA){
 
           SIZE  TextSize;
-          HFONT oldFont;
           int y = GlideBar[3].y;
           // was ((rc.bottom - rc.top )/2)-rc.top-
           //            Appearance.MapWindowBoldFont.CapitalHeight/2-1;
           int x = GlideBar[2].x+IBLSCALE(1);
-          HBITMAP Bmp;
+          const Bitmap *Bmp;
           POINT  BmpPos;
           POINT  BmpSize;
 
           _stprintf(Value, TEXT("%1.0f"),
                     Units::ToUserAltitude(DerivedDrawInfo.TaskAltitudeDifference));
 
-          oldFont = (HFONT)SelectObject(hDC, MapWindowBoldFont);
-          GetTextExtentPoint(hDC, Value, _tcslen(Value), &TextSize);
+          canvas.select(MapWindowBoldFont);
+          TextSize = canvas.text_size(Value);
 
-          SelectObject(hDC, GetStockObject(WHITE_BRUSH));
-          SelectObject(hDC, GetStockObject(WHITE_PEN));
-          Rectangle(hDC, x, y,
-                    x+IBLSCALE(1)+TextSize.cx,
-                    y+Appearance.MapWindowBoldFont.CapitalHeight+IBLSCALE(2));
+          canvas.white_brush();
+          canvas.white_pen();
+          canvas.rectangle(x, y,
+                           x + IBLSCALE(1) + TextSize.cx,
+                           y + Appearance.MapWindowBoldFont.CapitalHeight +
+                           IBLSCALE(2));
 
-          ExtTextOut(hDC, x+IBLSCALE(1),
-                     y+Appearance.MapWindowBoldFont.CapitalHeight
-                     -Appearance.MapWindowBoldFont.AscentHeight+IBLSCALE(1),
-                     0, NULL, Value, _tcslen(Value), NULL);
+          canvas.text(x + IBLSCALE(1),
+                      y + Appearance.MapWindowBoldFont.CapitalHeight -
+                      Appearance.MapWindowBoldFont.AscentHeight +
+                      IBLSCALE(1),
+                      Value);
 
           if (Units::GetUnitBitmap(Units::GetUserAltitudeUnit(), &Bmp, &BmpPos, &BmpSize, 0)){
-            HBITMAP oldBitMap = (HBITMAP)SelectObject(hDCTemp, Bmp);
-            DrawBitmapX(hDC, x+TextSize.cx+IBLSCALE(1), y, BmpSize.x, BmpSize.y,
-                        hDCTemp, BmpPos.x, BmpPos.y, SRCCOPY);
-            SelectObject(hDCTemp, oldBitMap);
+            hDCTemp.select(*Bmp);
+            canvas.scale_copy(x + TextSize.cx + IBLSCALE(1), y,
+                              hDCTemp, BmpPos.x, BmpPos.y, BmpSize.x, BmpSize.y);
+            hDCTemp.clear();
           }
-
-          SelectObject(hDC, oldFont);
-
         }
-
-      SelectObject(hDC, hbOld);
-      SelectObject(hDC, hpOld);
     }
 #ifdef HAVEEXCEPTIONS
   }__finally
@@ -846,11 +751,9 @@ void MapWindow::DrawFinalGlide(HDC hDC, const RECT rc)
 }
 
 
-void MapWindow::DrawCompass(HDC hDC, const RECT rc)
+void MapWindow::DrawCompass(Canvas &canvas, const RECT rc)
 {
   POINT Start;
-  HPEN hpOld;
-  HBRUSH hbOld;
 
   if (Appearance.CompassAppearance == apCompassDefault){
 
@@ -862,16 +765,12 @@ void MapWindow::DrawCompass(HDC hDC, const RECT rc)
 
     POINT Arrow[5] = { {0,-18}, {-6,10}, {0,0}, {6,10}, {0,-18}};
 
-    hpOld = (HPEN)SelectObject(hDC, MapGfx.hpCompass);
-    hbOld = (HBRUSH)SelectObject(hDC, MapGfx.hbCompass);
+    canvas.select(MapGfx.hpCompass);
+    canvas.select(MapGfx.hbCompass);
 
     // North arrow
     PolygonRotateShift(Arrow, 5, Start.x, Start.y, -DisplayAngle);
-    Polygon(hDC,Arrow,5);
-
-    SelectObject(hDC, hbOld);
-    SelectObject(hDC, hpOld);
-
+    canvas.polygon(Arrow, 5);
   } else
   if (Appearance.CompassAppearance == apCompassAltA){
 
@@ -907,27 +806,18 @@ void MapWindow::DrawCompass(HDC hDC, const RECT rc)
       lastRcRight = rc.right;
     }
 
-    hpOld = (HPEN)SelectObject(hDC, MapGfx.hpCompassBorder);
-    hbOld = (HBRUSH)SelectObject(hDC, MapGfx.hbCompass);
-    Polygon(hDC,Arrow,5);
+    canvas.polygon(Arrow, 5);
 
-    SelectObject(hDC, MapGfx.hpCompass);
-    Polygon(hDC,Arrow,5);
-
-    SelectObject(hDC, hbOld);
-    SelectObject(hDC, hpOld);
-
+    canvas.select(MapGfx.hpCompass);
+    canvas.polygon(Arrow, 5);
   }
 
 }
 
 
 
-void MapWindow::DrawBestCruiseTrack(HDC hdc, const POINT Orig)
+void MapWindow::DrawBestCruiseTrack(Canvas &canvas, const POINT Orig)
 {
-  HPEN hpOld;
-  HBRUSH hbOld;
-
   if (ActiveWayPoint<0) {
     return; // nothing to draw..
   }
@@ -938,8 +828,8 @@ void MapWindow::DrawBestCruiseTrack(HDC hdc, const POINT Orig)
   if (DerivedDrawInfo.WaypointDistance < 0.010)
     return;
 
-  hpOld = (HPEN)SelectObject(hdc, MapGfx.hpBestCruiseTrack);
-  hbOld = (HBRUSH)SelectObject(hdc, MapGfx.hbBestCruiseTrack);
+  canvas.select(MapGfx.hpBestCruiseTrack);
+  canvas.select(MapGfx.hbBestCruiseTrack);
 
   if (Appearance.BestCruiseTrack == ctBestCruiseTrackDefault){
 
@@ -954,7 +844,7 @@ void MapWindow::DrawBestCruiseTrack(HDC hdc, const POINT Orig)
     PolygonRotateShift(Arrow, 7, Orig.x, Orig.y,
                        DerivedDrawInfo.BestCruiseTrack-DisplayAngle);
 
-    Polygon(hdc,Arrow,7);
+    canvas.polygon(Arrow, 7);
 
   } else
   if (Appearance.BestCruiseTrack == ctBestCruiseTrackAltA){
@@ -964,11 +854,8 @@ void MapWindow::DrawBestCruiseTrack(HDC hdc, const POINT Orig)
     PolygonRotateShift(Arrow, sizeof(Arrow)/sizeof(Arrow[0]),
                        Orig.x, Orig.y,
                        DerivedDrawInfo.BestCruiseTrack-DisplayAngle);
-    Polygon(hdc, Arrow, (sizeof(Arrow)/sizeof(Arrow[0])));
+    canvas.polygon(Arrow, sizeof(Arrow) / sizeof(Arrow[0]));
   }
-
-  SelectObject(hdc, hpOld);
-  SelectObject(hdc, hbOld);
 }
 
 

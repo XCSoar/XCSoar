@@ -84,7 +84,7 @@ void MapWindow::CalculateScreenPositionsThermalSources() {
 
 
 
-void MapWindow::DrawThermalEstimate(HDC hdc, const RECT rc) {
+void MapWindow::DrawThermalEstimate(Canvas &canvas, const RECT rc) {
   POINT screen;
   if (!EnableThermalLocator)
     return;
@@ -94,9 +94,9 @@ void MapWindow::DrawThermalEstimate(HDC hdc, const RECT rc) {
       LatLon2Screen(DerivedDrawInfo.ThermalEstimate_Longitude,
                     DerivedDrawInfo.ThermalEstimate_Latitude,
                     screen);
-      DrawBitmapIn(hdc,
+      DrawBitmapIn(canvas,
 		   screen,
-		   MapGfx.hBmpThermalSource);
+                   MapGfx.hBmpThermalSource);
       /*
 	SelectObject(hdc, GetStockObject(HOLLOW_BRUSH));
 	SelectObject(hdc, GetStockObject(BLACK_PEN));
@@ -109,7 +109,7 @@ void MapWindow::DrawThermalEstimate(HDC hdc, const RECT rc) {
     if (MapScale <= 4) {
       for (int i=0; i<MAX_THERMAL_SOURCES; i++) {
         if (DerivedDrawInfo.ThermalSources[i].Visible) {
-          DrawBitmapIn(hdc,
+          DrawBitmapIn(canvas,
                        DerivedDrawInfo.ThermalSources[i].Screen,
                        MapGfx.hBmpThermalSource);
         }
@@ -119,7 +119,7 @@ void MapWindow::DrawThermalEstimate(HDC hdc, const RECT rc) {
 }
 
 
-void MapWindow::DrawThermalBand(HDC hDC, const RECT rc)
+void MapWindow::DrawThermalBand(Canvas &canvas, const RECT rc)
 {
   POINT GliderBand[5] = { {0,0},{23,0},{22,0},{24,0},{0,0} };
 
@@ -209,13 +209,10 @@ void MapWindow::DrawThermalBand(HDC hDC, const RECT rc)
     // but do draw if start height needs to be drawn
   }
 
-  // drawing info
-  HPEN hpOld;
-
   // position of thermal band
   if (numtherm>1) {
-    hpOld = (HPEN)SelectObject(hDC, MapGfx.hpThermalBand);
-    HBRUSH hbOld = (HBRUSH)SelectObject(hDC, MapGfx.hbThermalBand);
+    canvas.select(MapGfx.hpThermalBand);
+    canvas.select(MapGfx.hbThermalBand);
 
     POINT ThermalProfile[NUMTHERMALBUCKETS+2];
     for (i=0; i<numtherm; i++) {
@@ -230,8 +227,7 @@ void MapWindow::DrawThermalBand(HDC hDC, const RECT rc)
     ThermalProfile[numtherm+1].x = rc.left;
     ThermalProfile[numtherm+1].y = ThermalProfile[numtherm].y;
 
-    Polygon(hDC,ThermalProfile,numtherm+2);
-    SelectObject(hDC, hbOld);
+    canvas.polygon(ThermalProfile, numtherm + 2);
   }
 
   // position of thermal band
@@ -248,18 +244,15 @@ void MapWindow::DrawThermalBand(HDC hDC, const RECT rc)
   GliderBand[4].x = GliderBand[1].x-IBLSCALE(4);
   GliderBand[4].y = GliderBand[0].y+IBLSCALE(4);
 
-  hpOld = (HPEN)SelectObject(hDC, MapGfx.hpThermalBandGlider);
+  canvas.select(MapGfx.hpThermalBandGlider);
 
-  Polyline(hDC,GliderBand, 2);
-  Polyline(hDC,GliderBand+2, 3); // arrow head
+  canvas.polyline(GliderBand, 2);
+  canvas.polyline(GliderBand + 2, 3); // arrow head
 
   if (draw_start_height) {
-    SelectObject(hDC, MapGfx.hpFinalGlideBelow);
+    canvas.select(MapGfx.hpFinalGlideBelow);
     GliderBand[0].y = IBLSCALE(4)+iround(TBSCALEY*(1.0-hstart))+rc.top;
     GliderBand[1].y = GliderBand[0].y;
-    Polyline(hDC, GliderBand, 2);
+    canvas.polyline(GliderBand, 2);
   }
-
-  SelectObject(hDC, hpOld);
-
 }

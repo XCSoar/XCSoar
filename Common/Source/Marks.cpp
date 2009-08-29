@@ -77,8 +77,7 @@ void InitialiseMarks() {
     delete topo_marks;
   }
 
-  topo_marks =
-	  new TopologyWriter("xcsoar-marks", RGB(0xD0,0xD0,0xD0));
+  topo_marks = new TopologyWriter("xcsoar-marks", Color(0xD0,0xD0,0xD0));
   if (topo_marks) {
     topo_marks->scaleThreshold = 30.0;
     topo_marks->loadBitmap(IDB_MARK);
@@ -135,7 +134,7 @@ void MarkLocation(const double lon, const double lat)
 
 }
 
-void DrawMarks (const HDC hdc, const RECT rc)
+void DrawMarks(Canvas &canvas, const RECT rc)
 {
 
   mutexMapData.Lock();
@@ -144,7 +143,7 @@ void DrawMarks (const HDC hdc, const RECT rc)
       topo_marks->Reset();
       reset_marks = false;
     }
-    topo_marks->Paint(hdc, rc);
+    topo_marks->Paint(canvas, rc);
   }
   mutexMapData.Unlock();
 

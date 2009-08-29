@@ -44,6 +44,7 @@ Copyright_License {
 #include "Dialogs/dlgTools.h"
 #include "InfoBoxLayout.h"
 #include "Screen/Util.hpp"
+#include "Screen/MainWindow.hpp"
 #include "DataField/Base.hpp"
 #include "DataField/ComboList.hpp"
 #include "Utils.h"
@@ -61,7 +62,9 @@ ComboList * ComboListPopup=NULL;
 static TCHAR sSavedInitialValue[ComboPopupITEMMAX];
 static int iSavedInitialDataIndex=-1;
 
-static void OnPaintComboPopupListItem(WindowControl * Sender, HDC hDC){
+static void
+OnPaintComboPopupListItem(WindowControl *Sender, Canvas &canvas)
+{
 
   (void)Sender;
 
@@ -77,10 +80,9 @@ static void OnPaintComboPopupListItem(WindowControl * Sender, HDC hDC){
     }
     w=Sender->GetWidth();
 
-    ExtTextOutClip(hDC, 2*InfoBoxLayout::scale,
-                  2*InfoBoxLayout::scale,
-                  ComboListPopup->ComboPopupItemList[ComboListPopup->ComboPopupDrawListIndex]->StringValueFormatted,
-                  w-InfoBoxLayout::scale*5);
+    canvas.text_clipped(2 * InfoBoxLayout::scale, 2 * InfoBoxLayout::scale,
+                        w - InfoBoxLayout::scale * 5,
+                        ComboListPopup->ComboPopupItemList[ComboListPopup->ComboPopupDrawListIndex]->StringValueFormatted);
   }
 }
 

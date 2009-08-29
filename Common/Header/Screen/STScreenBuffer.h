@@ -13,6 +13,9 @@
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
+#include "Screen/Bitmap.hpp"
+#include "Screen/BitmapCanvas.hpp"
+
 /////////////////////////////////////////////////////////////////////////////
 // BGRColor structure encapsulates color information about one point. Color
 // order is Blue, Green, Red (not RGB).
@@ -42,17 +45,17 @@ public:
 
 	// Creates buffer with the given size and fills it with
 	// the given color
-	void Create(int nWidth, int nHeight, COLORREF clr);
+	void Create(int nWidth, int nHeight, const Color clr);
 
 	// Draws buffer into the given device context starting from
 	// the given point (top left corner)
-	BOOL DrawStretch(HDC *pDC, POINT ptDest, unsigned int cx,
+	BOOL DrawStretch(Canvas &canvas, POINT ptDest, unsigned int cx,
                          unsigned int cy);
 
-	HDC memDc;
+        BitmapCanvas memDc;
 
 	// Draws buffer into given device context within rectangle
-	BOOL DrawStretch(HDC* pDC, RECT rcDest);
+	BOOL DrawStretch(Canvas &canvas, RECT rcDest);
 
 	// Sets color of the given point
 	inline void SetPoint(int nX, int nY, unsigned char R,
@@ -115,7 +118,7 @@ protected:
 	unsigned int m_nCorrectedWidth;
 	BGRColor *m_pBuffer;
 	BGRColor *m_pBufferTmp;
-	HBITMAP m_hBitmap;
+        Bitmap m_hBitmap;
 
 	// Members related to device context
 	HBITMAP m_hSaveBitmap;

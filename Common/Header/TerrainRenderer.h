@@ -41,14 +41,16 @@ Copyright_License {
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
+class Canvas;
+
 extern short TerrainContrast;
 extern short TerrainBrightness;
 extern short TerrainRamp;
-void DrawTerrain(const HDC hdc, const RECT rc,
+void DrawTerrain(Canvas &canvas, const RECT rc,
 		 const double sunazimuth, const double sunelevation,
 		 double lon, double lat,
 		 const bool isBigZoom);
-void DrawSpotHeights(const HDC hdc);
+void DrawSpotHeights(Canvas &canvas);
 void CloseTerrainRenderer();
 
 #endif

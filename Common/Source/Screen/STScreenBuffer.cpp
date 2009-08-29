@@ -64,24 +64,20 @@ struct DIBINFO : public BITMAPINFO
 // CSTScreenBuffer
 
 CSTScreenBuffer::CSTScreenBuffer()
-	: m_hBitmap(NULL),
-	  m_pBuffer(NULL),
-	  m_pBufferTmp(NULL),
-	  memDc(NULL)
+	: m_pBuffer(NULL),
+	  m_pBufferTmp(NULL)
 {
 }
 
 CSTScreenBuffer::~CSTScreenBuffer()
 {
-	if (m_hBitmap!=NULL) {
-		::DeleteObject(m_hBitmap);
-	}
+  if (m_hBitmap.defined())
+    m_hBitmap.reset();
+
 	if (m_pBufferTmp) {
 	  free(m_pBufferTmp);
 	}
-	if (memDc) {
-	  DeleteDC(memDc); memDc = NULL;
-	}
+        memDc.reset();
 }
 
 BOOL CSTScreenBuffer::CreateBitmap(int nWidth, int nHeight)
@@ -89,7 +85,8 @@ BOOL CSTScreenBuffer::CreateBitmap(int nWidth, int nHeight)
   assert(nWidth>0);
   assert(nHeight>0);
 
-  if (m_hBitmap!=NULL) DeleteObject(m_hBitmap);
+  if (m_hBitmap.defined())
+    m_hBitmap.reset();
 
   m_nCorrectedWidth = CorrectedWidth(nWidth);
   m_nWidth = nWidth;
@@ -113,11 +110,8 @@ BOOL CSTScreenBuffer::CreateBitmap(int nWidth, int nHeight)
   dibInfo.bmiColors[0].rgbRed = 0;
   dibInfo.bmiColors[0].rgbReserved = 0;
 
-  HDC hDC = ::GetDC(NULL);
-  assert(hDC);
-  m_hBitmap = CreateDIBSection(hDC, (const BITMAPINFO*)dibInfo, DIB_RGB_COLORS, (void**)&m_pBuffer, NULL, 0);
-  ::ReleaseDC(NULL, hDC);
-  assert(m_hBitmap);
+  m_hBitmap.create((const BITMAPINFO*)dibInfo, (void**)&m_pBuffer);
+  assert(m_hBitmap.defined());
   assert(m_pBuffer);
 
   m_pBufferTmp = (BGRColor*)malloc(sizeof(BGRColor)*m_nHeight*m_nCorrectedWidth);
@@ -125,14 +119,14 @@ BOOL CSTScreenBuffer::CreateBitmap(int nWidth, int nHeight)
   return TRUE;
 }
 
-void CSTScreenBuffer::Create(int nWidth, int nHeight, COLORREF clr)
+void CSTScreenBuffer::Create(int nWidth, int nHeight, const Color clr)
 {
 	assert(nWidth>0);
 	assert(nHeight>0);
 
 	CreateBitmap(nWidth, nHeight);
 
-	BGRColor bgrColor = BGRColor(GetBValue(clr), GetGValue(clr), GetRValue(clr));
+        BGRColor bgrColor = BGRColor(clr.blue(), clr.green(), clr.red());
 	int nPosition = 0;
 
 	for (int y=0; y<nHeight; y++) {
@@ -144,7 +138,7 @@ void CSTScreenBuffer::Create(int nWidth, int nHeight, COLORREF clr)
 	}
 }
 
-BOOL CSTScreenBuffer::DrawStretch(HDC* pDC, RECT rcDest)
+BOOL CSTScreenBuffer::DrawStretch(Canvas &canvas, RECT rcDest)
 {
   POINT ptDest;
   unsigned int cx;
@@ -154,27 +148,27 @@ BOOL CSTScreenBuffer::DrawStretch(HDC* pDC, RECT rcDest)
   ptDest.y = rcDest.top;
   cx = rcDest.right-rcDest.left;
   cy = rcDest.bottom-rcDest.top;
-  return DrawStretch(pDC, ptDest, cx, cy);
+  return DrawStretch(canvas, ptDest, cx, cy);
 }
 
 #include "InfoBoxLayout.h"
 
-BOOL CSTScreenBuffer::DrawStretch(HDC* pDC, POINT ptDest,
+BOOL CSTScreenBuffer::DrawStretch(Canvas &canvas, POINT ptDest,
                                   unsigned int cx,
                                   unsigned int cy)
 {
-  assert(m_hBitmap);
+  assert(m_hBitmap.defined());
 
   POINT Origin = {0,0};
 
-  if (!memDc) {
-    memDc = CreateCompatibleDC(*pDC);
+  if (!memDc.defined()) {
+    memDc.set(canvas);
   }
-  if (!memDc) {
+  if (!memDc.defined()) {
     return FALSE;
   }
 
-  HBITMAP m_hOldBitmap = (HBITMAP)::SelectObject(memDc, m_hBitmap);
+  memDc.select(m_hBitmap);
 
   int cropsize;
   if ((cy<m_nWidth)||(InfoBoxLayout::landscape)) {
@@ -184,21 +178,15 @@ BOOL CSTScreenBuffer::DrawStretch(HDC* pDC, POINT ptDest,
     cropsize = m_nWidth;
   }
 
-  BOOL bResult = StretchBlt(*pDC,
-                       ptDest.x, ptDest.y,
-		       cx, cy,
-                       memDc,
-		       Origin.x, Origin.y,
-		       cropsize, m_nHeight, SRCCOPY);
+  canvas.stretch(ptDest.x, ptDest.y, cx, cy,
+                 memDc, Origin.x, Origin.y, cropsize, m_nHeight);
   /*
   BitBlt(*pDC,
          ptDest.x, ptDest.y,
          cx, cy, memDc, 0, 0, SRCCOPY);
   */
 
-  ::SelectObject(memDc, m_hOldBitmap);
-
-  return bResult;
+  return true;
 }
 
 void CSTScreenBuffer::Zoom(unsigned int step) {

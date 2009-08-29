@@ -72,11 +72,11 @@ void XShape::load(shapefileObj* shpfile, int i) {
 
 
 void Topology::loadBitmap(const int xx) {
-  hBitmap = LoadBitmap(hInst, MAKEINTRESOURCE(xx));
+  hBitmap.load(xx);
 }
 
 
-Topology::Topology(const char* shpname, COLORREF thecolor, bool doappend) {
+Topology::Topology(const char* shpname, const Color thecolor, bool doappend) {
 
   append = doappend;
   memset((void*)&shpfile, 0 ,sizeof(shpfile));
@@ -84,13 +84,12 @@ Topology::Topology(const char* shpname, COLORREF thecolor, bool doappend) {
   triggerUpdateCache = false;
   scaleThreshold = 0;
   shpCache= NULL;
-  hBitmap = NULL;
 
   in_scale = false;
 
   strcpy( filename, shpname );
-  hPen = (HPEN)CreatePen(PS_SOLID, 1, thecolor);
-  hbBrush=(HBRUSH)CreateSolidBrush(thecolor);
+  hPen.set(1, thecolor);
+  hbBrush.set(thecolor);
   Open();
 }
 
@@ -134,11 +133,6 @@ void Topology::Close() {
 
 Topology::~Topology() {
   Close();
-  DeleteObject((HPEN)hPen);
-  DeleteObject((HBRUSH)hbBrush);
-  if (hBitmap) {
-    DeleteObject(hBitmap);
-  }
 }
 
 
@@ -225,7 +219,7 @@ bool Topology::checkVisible(shapeObj& shape, rectObj &screenRect) {
 
 ///////////////
 
-void Topology::Paint(HDC hdc, RECT rc) {
+void Topology::Paint(Canvas &canvas, RECT rc) {
 
   if (!shapefileopen) return;
 
@@ -237,13 +231,9 @@ void Topology::Paint(HDC hdc, RECT rc) {
   // we already do an outer visibility test, but may need a test
   // in screen coords
 
-  HPEN  hpOld;
-  HBRUSH hbOld;
-  HFONT hfOld;
-
-  hpOld = (HPEN)SelectObject(hdc,hPen);
-  hbOld = (HBRUSH)SelectObject(hdc, hbBrush);
-  hfOld = (HFONT)SelectObject(hdc, MapLabelFont);
+  canvas.select(hPen);
+  canvas.select(hbBrush);
+  canvas.select(MapLabelFont);
 
   // get drawing info
 
@@ -285,9 +275,9 @@ void Topology::Paint(HDC hdc, RECT rc) {
               MapWindow::LatLon2Screen(shape->line[tt].point[jj].x,
                                        shape->line[tt].point[jj].y,
                                        sc);
-              MapWindow::DrawBitmapIn(hdc, sc, hBitmap);
+              MapWindow::DrawBitmapIn(canvas, sc, hBitmap);
 
-              cshape->renderSpecial(hdc, sc.x, sc.y);
+              cshape->renderSpecial(canvas, sc.x, sc.y);
 
           }
         }
@@ -312,8 +302,8 @@ void Topology::Paint(HDC hdc, RECT rc) {
             }
 	  }
 
-          ClipPolygon(hdc, pt, msize, rc, false);
-          cshape->renderSpecial(hdc,minx,miny);
+          canvas.clipped_polygon(pt, msize, rc, false);
+          cshape->renderSpecial(canvas, minx, miny);
         }
       break;
 
@@ -335,8 +325,8 @@ void Topology::Paint(HDC hdc, RECT rc) {
               miny = pt[jj].y;
             }
 	  }
-          ClipPolygon(hdc,pt, msize, rc, true);
-          cshape->renderSpecial(hdc,minx,miny);
+          canvas.clipped_polygon(pt, msize, rc, true);
+          cshape->renderSpecial(canvas, minx, miny);
         }
       break;
 
@@ -344,18 +334,14 @@ void Topology::Paint(HDC hdc, RECT rc) {
       break;
     }
   }
-
-  SelectObject(hdc, hbOld);
-  SelectObject(hdc, hpOld);
-  SelectObject(hdc, (HFONT)hfOld);
-
 }
 
 
 ///////////////////////////////////////////////////////////
 
 
-TopologyLabel::TopologyLabel(const char* shpname, COLORREF thecolor, int field1):Topology(shpname, thecolor)
+TopologyLabel::TopologyLabel(const char* shpname, const Color thecolor,
+                             int field1):Topology(shpname, thecolor)
 {
   //sjt 02nov05 - enabled label fields
   setField(max(0,field1));
@@ -380,12 +366,12 @@ XShape* TopologyLabel::addShape(const int i) {
 }
 
 
-void XShapeLabel::renderSpecial(HDC hDC, int x, int y) {
+void XShapeLabel::renderSpecial(Canvas &canvas, int x, int y) {
   if (label && (DeclutterLabels<2)) {
 
     TCHAR Temp[100];
     _stprintf(Temp,TEXT("%S"),label);
-    SetBkMode(hDC,TRANSPARENT);
+    canvas.background_transparent();
 
     // TODO code: JMW asks, what does this do?
     if (ispunct(Temp[0])) {
@@ -400,11 +386,8 @@ void XShapeLabel::renderSpecial(HDC hDC, int x, int y) {
         _stprintf(Temp,TEXT("%d"),int(dTemp));
     }
 
-    int size = _tcslen(Temp);
-
-    SIZE tsize;
+    SIZE tsize = canvas.text_size(Temp);
     RECT brect;
-    GetTextExtentPoint(hDC, Temp, size, &tsize);
     x+= 2;
     y+= 2;
     brect.left = x;
@@ -415,9 +398,8 @@ void XShapeLabel::renderSpecial(HDC hDC, int x, int y) {
     if (!checkLabelBlock(brect))
       return;
 
-    SetTextColor(hDC, RGB(0x20,0x20,0x20));
-
-    ExtTextOut(hDC, x, y, 0, NULL, Temp, size, NULL);
+    canvas.set_text_color(Color(0x20,0x20,0x20));
+    canvas.text(x, y, Temp);
   }
 }
 
@@ -474,7 +456,7 @@ TopologyWriter::~TopologyWriter() {
 }
 
 
-TopologyWriter::TopologyWriter(const char* shpname, COLORREF thecolor):
+TopologyWriter::TopologyWriter(const char* shpname, const Color thecolor):
   Topology(shpname, thecolor, true) {
 
   Reset();

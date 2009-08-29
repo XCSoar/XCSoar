@@ -138,13 +138,11 @@ bool  MapWindow::askVisibilityScan = false;
 
 /////////////////////////////////
 
-HDC MapWindow::hDCTemp;
-HDC MapWindow::hDCMask;
-HDC MapWindow::hdcDrawWindow;
-HDC MapWindow::hdcScreen;
-HBITMAP MapWindow::hMaskBitMap;
-HBITMAP MapWindow::hDrawBitMap;
-HBITMAP MapWindow::hDrawBitMapTmp;
+BufferCanvas MapWindow::hdcDrawWindow;
+BitmapCanvas MapWindow::hDCTemp;
+BufferCanvas MapWindow::buffer_canvas;
+BufferCanvas MapWindow::hDCMask;
+extern void ShowMenu();
 
 ///////////////////
 
@@ -217,25 +215,25 @@ void MapWindow::StoreRestoreFullscreen(bool store) {
 ///////////////////////////////////////////////////////////////////////////
 
 
-static void SetFontInfo(HDC hDC, FontHeightInfo_t *FontHeightInfo){
+static void SetFontInfo(Canvas &canvas, FontHeightInfo_t *FontHeightInfo){
   TEXTMETRIC tm;
   int x,y=0;
   RECT  rec;
   int top, bottom;
 
-  GetTextMetrics(hDC, &tm);
+  GetTextMetrics(canvas, &tm);
   FontHeightInfo->Height = tm.tmHeight;
   FontHeightInfo->AscentHeight = tm.tmAscent;
   FontHeightInfo->CapitalHeight = 0;
 
-  SetBkMode(hDC, OPAQUE);
-  SetBkColor(hDC,RGB(0xff,0xff,0xff));
-  SetTextColor(hDC,RGB(0x00,0x00,0x00));
+  canvas.background_opaque();
+  canvas.set_background_color(Color(0xff,0xff,0xff));
+  canvas.set_text_color(Color(0x00,0x00,0x00));
   rec.left = 0;
   rec.top = 0;
   rec.right = tm.tmAveCharWidth;
   rec.bottom = tm.tmHeight;
-  ExtTextOut(hDC, 0, 0, ETO_OPAQUE, &rec, TEXT("M"), _tcslen(TEXT("M")), NULL);
+  canvas.text_opaque(0, 0, &rec, TEXT("M"));
 
   top = tm.tmHeight;
   bottom = 0;
@@ -243,7 +241,7 @@ static void SetFontInfo(HDC hDC, FontHeightInfo_t *FontHeightInfo){
   FontHeightInfo->CapitalHeight = 0;
   for (x=0; x<tm.tmAveCharWidth; x++){
     for (y=0; y<tm.tmHeight; y++){
-      if ((GetPixel(hDC, x, y)) != RGB(0xff,0xff,0xff)){
+      if (canvas.get_pixel(x, y) != canvas.map(Color(0xff,0xff,0xff))) {
         if (top > y)
           top = y;
         if (bottom < y)
@@ -265,6 +263,8 @@ static void SetFontInfo(HDC hDC, FontHeightInfo_t *FontHeightInfo){
   // dpi
 }
 
+
+extern MapWindow map_window; // TODO try to avoid this
 
 LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
                                         LPARAM lParam)
@@ -301,44 +301,40 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
       return TRUE;
 
     case WM_SIZE:
+      map_window.resize(width, height);
 
-      hDrawBitMap = CreateCompatibleBitmap (hdcScreen, width, height);
-      SelectObject(hdcDrawWindow, (HBITMAP)hDrawBitMap);
+      hdcDrawWindow.resize(width, height);
+      buffer_canvas.resize(width, height);
 
-      hDrawBitMapTmp = CreateCompatibleBitmap (hdcScreen, width, height);
-      SelectObject(hDCTemp, (HBITMAP)hDrawBitMapTmp);
-
-      hMaskBitMap = CreateBitmap(width+1, height+1, 1, 1, NULL);
-      SelectObject(hDCMask, (HBITMAP)hMaskBitMap);
+      hDCMask.resize(width + 1, height + 1);
 
       {
-	HFONT      oldFont;
+        VirtualCanvas canvas(map_window.get_canvas(), 1, 1);
 
-	oldFont = (HFONT)SelectObject(hDCTemp, TitleWindowFont);
-	SetFontInfo(hDCTemp, &Appearance.TitleWindowFont);
+        canvas.select(TitleWindowFont);
+        SetFontInfo(canvas, &Appearance.TitleWindowFont);
 
-	SelectObject(hDCTemp, MapWindowFont);
-	SetFontInfo(hDCTemp, &Appearance.MapWindowFont);
+        canvas.select(MapWindowFont);
+        SetFontInfo(canvas, &Appearance.MapWindowFont);
 
-	SelectObject(hDCTemp, MapWindowBoldFont);
-	SetFontInfo(hDCTemp, &Appearance.MapWindowBoldFont);
+        canvas.select(MapWindowBoldFont);
+        SetFontInfo(canvas, &Appearance.MapWindowBoldFont);
 
-	SelectObject(hDCTemp, InfoWindowFont);
-	SetFontInfo(hDCTemp, &Appearance.InfoWindowFont);
+        canvas.select(InfoWindowFont);
+        SetFontInfo(canvas, &Appearance.InfoWindowFont);
 
-	SelectObject(hDCTemp, CDIWindowFont);
-	SetFontInfo(hDCTemp, &Appearance.CDIWindowFont);
+        canvas.select(CDIWindowFont);
+        SetFontInfo(canvas, &Appearance.CDIWindowFont);
 //VENTA6
-	SelectObject(hDCTemp, StatisticsFont);
-	SetFontInfo(hDCTemp, &Appearance.StatisticsFont);
+        canvas.select(StatisticsFont);
+        SetFontInfo(canvas, &Appearance.StatisticsFont);
 
-	SelectObject(hDCTemp, MapLabelFont);
-	SetFontInfo(hDCTemp, &Appearance.MapLabelFont);
+        canvas.select(MapLabelFont);
+        SetFontInfo(canvas, &Appearance.MapLabelFont);
 
-	SelectObject(hDCTemp, TitleSmallWindowFont);
-	SetFontInfo(hDCTemp, &Appearance.TitleSmallWindowFont);
+        canvas.select(TitleSmallWindowFont);
+        SetFontInfo(canvas, &Appearance.TitleSmallWindowFont);
 
-	SelectObject(hDCTemp, oldFont);
       }
 
       // Signal that draw thread can run now
@@ -349,22 +345,21 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
       break;
 
     case WM_CREATE:
+      map_window.created(hWnd);
 
-      hdcScreen = GetDC(hWnd);
-      hdcDrawWindow = CreateCompatibleDC(hdcScreen);
-      hDCTemp = CreateCompatibleDC(hdcDrawWindow);
-      hDCMask = CreateCompatibleDC(hdcDrawWindow);
+      hdcDrawWindow.set(map_window.get_canvas());
+      hDCTemp.set(map_window.get_canvas());
+      buffer_canvas.set(map_window.get_canvas());
+      hDCMask.set(hdcDrawWindow, 1, 1);
 
       break;
 
     case WM_DESTROY:
 
-      ReleaseDC(hWnd, hdcScreen);
-      DeleteDC(hdcDrawWindow);
-      DeleteDC(hDCTemp);
-      DeleteDC(hDCMask);
-      DeleteObject(hDrawBitMap);
-      DeleteObject(hMaskBitMap);
+      hdcDrawWindow.reset();
+      hDCTemp.reset();
+      buffer_canvas.reset();
+      hDCMask.reset();
 
       PostQuitMessage (0);
 
@@ -403,7 +398,7 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
             Task[TargetPanIndex].AATTargetLon = mouseMovelon;
             TargetDrag_Latitude = mouseMovelat;
             TargetDrag_Longitude = mouseMovelon;
-            DrawBitmapIn(hdcScreen, Pos, MapGfx.hBmpTarget);
+            DrawBitmapIn(map_window.get_canvas(), Pos, MapGfx.hBmpTarget);
           }
         }
       }
@@ -672,7 +667,7 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
 		      WM_ACTIVATE,
 		      MAKEWPARAM(WA_INACTIVE, 0),
 		      (LPARAM)hWndMainWindow);
-	  SendMessage (hWndMainWindow, WM_CLOSE, 0, 0);
+	  hWndMainWindow.close();
 	}
 	break;
       }
@@ -784,56 +779,42 @@ void MapWindow::UpdateCaches(const bool force) {
 }
 
 
-extern MapWindow hWndMapWindow; // TODO try to avoid this
-
 void MapWindow::DrawThreadLoop(bool first_time) {
 
   if (!dirtyEvent.test() && !first_time) {
     // redraw old screen, must have been a request for fast refresh
-    BitBlt(hdcScreen, 0, 0, MapRectBig.right-MapRectBig.left,
-	   MapRectBig.bottom-MapRectBig.top,
-	   hdcDrawWindow, 0, 0, SRCCOPY);
+    map_window.get_canvas().copy(hdcDrawWindow);
     return;
   }
 
   mutexRun.Lock(); // take control
-  {
-    dirtyEvent.reset();
 
-    UpdateInfo(&GPS_INFO, &CALCULATED_INFO);
-    
-    if (BigZoom) {
-      // quickly draw zoom level on top
-      DrawMapScale(hdcScreen, MapRect, true);
-    }
-    
-    if (askFullScreen != MapFullScreen) {
-      ToggleFullScreenStart();
-    }
-    
-    GaugeFLARM::Render(&DrawInfo);
-    
-    RenderMapWindow(hdcDrawWindow, MapRect);
-    
-    if (!first_time) {
-      BitBlt(hdcScreen, 0, 0,
-	     MapRectBig.right-MapRectBig.left,
-	     MapRectBig.bottom-MapRectBig.top,
-	     hdcDrawWindow, 0, 0, SRCCOPY);
-      HWND hWndMapWindow = ::hWndMapWindow;
-      InvalidateRect(hWndMapWindow, &MapRect, false);
-    }
-    UpdateTimeStats(false);
-    // we do caching after screen update, to minimise perceived delay
-    UpdateCaches(first_time);
+  dirtyEvent.reset();
+
+  UpdateInfo(&GPS_INFO, &CALCULATED_INFO);
+
+  if (BigZoom) {
+    // quickly draw zoom level on top
+    DrawMapScale(map_window.get_canvas(), MapRect, true);
+  }
+
+  if (askFullScreen != MapFullScreen) {
+    ToggleFullScreenStart();
+  }
+
+  GaugeFLARM::Render(&DrawInfo);
+
+  RenderMapWindow(hdcDrawWindow, MapRect);
+
+  if (!first_time) {
+    map_window.get_canvas().copy(hdcDrawWindow);
+    map_window.update(MapRect);
   }
   mutexRun.Unlock(); // release control
 }
 
 
 void MapWindow::DrawThreadInitialise(void) {
-  HWND hWndMapWindow = ::hWndMapWindow;
-
   // initialise other systems
   InitialiseScaleList(); // should really be done before the thread
 			 // has started, so it happens from main thread
@@ -841,25 +822,23 @@ void MapWindow::DrawThreadInitialise(void) {
   LabelBlockReset();
 
   // set main rectangles
-  GetClientRect(hWndMapWindow, &MapRectBig);
+  MapRectBig = map_window.get_client_rect();
   MapRectSmall = MapRect;
   MapRect = MapRectSmall;
 
   UpdateTimeStats(true);
 
   // set initial display mode
-  SetBkMode(hdcDrawWindow,TRANSPARENT);
-  SetBkMode(hDCTemp,OPAQUE);
-  SetBkMode(hDCMask,OPAQUE);
+  hdcDrawWindow.background_transparent();
+  hDCTemp.background_opaque();
+  hDCMask.background_opaque();
 
   // paint draw window black to start
-  SelectObject(hdcDrawWindow, GetStockObject(BLACK_PEN));
-  Rectangle(hdcDrawWindow,MapRectBig.left,MapRectBig.top,
-            MapRectBig.right,MapRectBig.bottom);
+  hdcDrawWindow.black_pen();
+  hdcDrawWindow.rectangle(MapRectBig.left, MapRectBig.top,
+                          MapRectBig.right, MapRectBig.bottom);
 
-  BitBlt(hdcScreen, 0, 0, MapRectBig.right-MapRectBig.left,
-         MapRectBig.bottom-MapRectBig.top,
-         hdcDrawWindow, 0, 0, SRCCOPY);
+  map_window.get_canvas().copy(hdcDrawWindow);
 
   ////// This is just here to give fully rendered start screen
   UpdateInfo(&GPS_INFO, &CALCULATED_INFO);

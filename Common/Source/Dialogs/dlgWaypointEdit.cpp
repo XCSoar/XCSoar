@@ -46,6 +46,7 @@ Copyright_License {
 #include "Math/FastMath.h"
 #include "DataField/Enum.hpp"
 #include "Utils.h"
+#include "Screen/MainWindow.hpp"
 #include "Compatibility/string.h"
 
 static WndForm *wf=NULL;
