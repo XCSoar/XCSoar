@@ -53,7 +53,6 @@ static Color fgColor = RGB(0x0,0x0,0x0);
 static Color bkColor = RGB(0xff,0xff,0xff);
 static Color bkColorSel = RGB(150,0x0,0x0);
 static Color bdColor = RGB(80,80,80);
-static DWORD lastErr;
 static Brush hBrushDefaultBackGround;
 static Brush hBrushDefaultBackGroundSel;
 static Pen hPenDefaultBorder;

@@ -53,7 +53,6 @@ Copyright_License {
 #include "GlideComputer.hpp"
 #include "Protection.hpp"
 
-int MapWindow::iSnailNext=0;
 #define fSnailColour(cv) max(0,min((short)(NUMSNAILCOLORS-1), (short)((cv+1.0)/2.0*NUMSNAILCOLORS)))
 
 // This function is slow...
@@ -70,6 +69,8 @@ double MapWindow::DrawTrail(Canvas &canvas, const POINT Orig, const RECT rc)
 
   if(!TrailActive)
     return -1;
+
+  mutexGlideComputer.Lock();
 
   if ((DisplayMode == dmCircling) != last_circling) {
     need_colour = true;
@@ -124,7 +125,7 @@ double MapWindow::DrawTrail(Canvas &canvas, const POINT Orig, const RECT rc)
   int skip_border = skip_divisor;
   int skip_level= 3; // TODO code: try lower level?
 
-  int snail_offset = TRAILSIZE+iSnailNext-num_trail_max;
+  int snail_offset = TRAILSIZE+GlideComputer::snail_trail.getIndex()-num_trail_max;
   while (snail_offset>= TRAILSIZE) {
     snail_offset -= TRAILSIZE;
   }
@@ -202,7 +203,7 @@ double MapWindow::DrawTrail(Canvas &canvas, const POINT Orig, const RECT rc)
       snail_index-= TRAILSIZE;
     }
 
-    P1 = SnailTrail[snail_index];
+    P1 = GlideComputer::snail_trail.getPoint(snail_index);
 
     /////// Mark first time of display point
 
@@ -323,6 +324,8 @@ double MapWindow::DrawTrail(Canvas &canvas, const POINT Orig, const RECT rc)
 #endif
   }
 
+  mutexGlideComputer.Unlock();
+
   return TrailFirstTime;
 }
 
@@ -357,15 +360,3 @@ void MapWindow::DrawTrailFromTask(Canvas &canvas, const RECT rc,
 }
 
 
-void MapWindow::ScanVisibilityTrail(rectObj *bounds_active) {
-  SNAIL_POINT *sv= SnailTrail;
-  const rectObj bounds = *bounds_active;
-  const SNAIL_POINT *se = sv+TRAILSIZE;
-  while (sv<se) {
-    sv->FarVisible = ((sv->Longitude> bounds.minx) &&
-		      (sv->Longitude< bounds.maxx) &&
-		      (sv->Latitude> bounds.miny) &&
-		      (sv->Latitude< bounds.maxy));
-    sv++;
-  }
-}

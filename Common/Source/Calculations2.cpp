@@ -75,8 +75,6 @@ Copyright_License {
 #include <stdio.h>
 
 int FastLogNum = 0; // number of points to log at high rate
-void AddSnailPoint(NMEA_INFO *Basic, DERIVED_INFO *Calculated); // from SnailTrail.cpp
-
 
 int LoggerTimeStepCruise=5;
 int LoggerTimeStepCircling=1;
@@ -164,7 +162,11 @@ void GlideComputer::DoLogging(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   }
 
   if (Basic->Time - SnailLastTime >= dtSnail) {
-    AddSnailPoint(Basic, Calculated);
+
+    mutexGlideComputer.Lock();
+    GlideComputer::snail_trail.AddPoint(Basic, Calculated);
+    mutexGlideComputer.Unlock();
+
     SnailLastTime += dtSnail;
     if (SnailLastTime< Basic->Time-dtSnail) {
       SnailLastTime = Basic->Time-dtSnail;

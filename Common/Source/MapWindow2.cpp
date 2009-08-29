@@ -38,6 +38,7 @@ Copyright_License {
 #include "MapWindow.h"
 #include "XCSoar.h"
 #include "Protection.hpp"
+#include "GlideComputer.hpp"
 #include "Utils.h"
 #include <math.h>
 #include "Math/Earth.hpp"
@@ -51,7 +52,10 @@ void MapWindow::ScanVisibility(rectObj *bounds_active) {
   // This happens rarely, so it is good pre-filtering of what is visible.
   // (saves from having to do it every screen redraw)
 
-  ScanVisibilityTrail(bounds_active);
+  mutexGlideComputer.Lock();
+  GlideComputer::snail_trail.ScanVisibility(bounds_active);
+  mutexGlideComputer.Unlock();
+
   ScanVisibilityWaypoints(bounds_active);
   ScanVisibilityAirspace(bounds_active);
 }
@@ -117,15 +121,5 @@ void MapWindow::CalculateScreenPositions(POINT Orig, RECT rc,
   // get screen coordinates for all task waypoints
   CalculateScreenPositionsWaypoints();
   CalculateScreenPositionsTask();
-
-  mutexTaskData.Lock();
-  if(TrailActive)
-  {
-    iSnailNext = SnailNext;
-    // set this so that new data doesn't arrive between calculating
-    // this and the screen updates
-  }
-  mutexTaskData.Unlock();
-
 }
 

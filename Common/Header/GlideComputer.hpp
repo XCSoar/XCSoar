@@ -38,9 +38,9 @@ Copyright_License {
 #if !defined(XCSOAR_GLIDECOMPUTER_HPP)
 #define XCSOAR_GLIDECOMPUTER_HPP
 
+#include "XCSoar.h"
 #include "NMEA/Info.h"
 #include "NMEA/Derived.hpp"
-#include "XCSoar.h"
 #include "Statistics.h"
 #include "AATDistance.h"
 #include "OnLineContest.h"
@@ -48,6 +48,7 @@ Copyright_License {
 #include "GlideRatio.hpp"
 #include "ThermalLocator.h"
 #include "windanalyser.h"
+#include "SnailTrail.hpp"
 
 class GlideComputer {
 public:
@@ -57,6 +58,7 @@ public:
   static  OLCOptimizer   olc;
   static  ThermalLocator thermallocator;
   static  WindAnalyser   *windanalyser;
+  static  SnailTrail     snail_trail;
 
   static void DoLogging(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 

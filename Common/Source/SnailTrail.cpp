@@ -36,43 +36,54 @@ Copyright_License {
 */
 
 #include "SnailTrail.hpp"
-#include "NMEA/Info.h"
-#include "NMEA/Derived.hpp"
 #include <math.h>
 
-SNAIL_POINT SnailTrail[TRAILSIZE];
-int SnailNext = 0;
 
-void InitialiseSnailTrail(void) {
-  memset( &SnailTrail[0],0,TRAILSIZE*sizeof(SNAIL_POINT));
+SnailTrail::SnailTrail() {
+  indexNext = 0;
+  memset(&TrailPoints[0],0,TRAILSIZE*sizeof(SNAIL_POINT));
 }
 
 // called by calculation thread
 
-void AddSnailPoint(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
+void SnailTrail::AddPoint(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 {
   if (!Calculated->Flying) return;
 
-  SnailTrail[SnailNext].Latitude = (float)(Basic->Latitude);
-  SnailTrail[SnailNext].Longitude = (float)(Basic->Longitude);
-  SnailTrail[SnailNext].Time = Basic->Time;
-  SnailTrail[SnailNext].FarVisible = true; // hasn't been filtered out yet.
+  TrailPoints[indexNext].Latitude = (float)(Basic->Latitude);
+  TrailPoints[indexNext].Longitude = (float)(Basic->Longitude);
+  TrailPoints[indexNext].Time = Basic->Time;
+  TrailPoints[indexNext].FarVisible = true; // hasn't been filtered out yet.
   if (Calculated->TerrainValid) {
     double hr = max(0,Calculated->AltitudeAGL)/100.0;
-    SnailTrail[SnailNext].DriftFactor = 2.0/(1.0+exp(-hr))-1.0;
+    TrailPoints[indexNext].DriftFactor = 2.0/(1.0+exp(-hr))-1.0;
   } else {
-    SnailTrail[SnailNext].DriftFactor = 1.0;
+    TrailPoints[indexNext].DriftFactor = 1.0;
   }
 
   if (Calculated->Circling) {
-    SnailTrail[SnailNext].Vario = (float)(Calculated->NettoVario) ;
+    TrailPoints[indexNext].Vario = (float)(Calculated->NettoVario) ;
   } else {
-    SnailTrail[SnailNext].Vario = (float)(Calculated->NettoVario) ;
+    TrailPoints[indexNext].Vario = (float)(Calculated->NettoVario) ;
   }
-  SnailTrail[SnailNext].Colour = -1; // need to have colour calculated
-  SnailTrail[SnailNext].Circling = Calculated->Circling;
+  TrailPoints[indexNext].Colour = -1; // need to have colour calculated
+  TrailPoints[indexNext].Circling = Calculated->Circling;
 
-  SnailNext ++;
-  SnailNext %= TRAILSIZE;
+  indexNext ++;
+  indexNext %= TRAILSIZE;
 
+}
+
+
+void SnailTrail::ScanVisibility(rectObj *bounds_active) {
+  SNAIL_POINT *sv= TrailPoints;
+  const rectObj bounds = *bounds_active;
+  const SNAIL_POINT *se = sv+TRAILSIZE;
+  while (sv<se) {
+    sv->FarVisible = ((sv->Longitude> bounds.minx) &&
+		      (sv->Longitude< bounds.maxx) &&
+		      (sv->Latitude> bounds.miny) &&
+		      (sv->Latitude< bounds.maxy));
+    sv++;
+  }
 }

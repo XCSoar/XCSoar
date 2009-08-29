@@ -38,10 +38,10 @@ Copyright_License {
 #ifndef XCSOAR_SNAIL_TRAIL_HPP
 #define XCSOAR_SNAIL_TRAIL_HPP
 
-#include "Sizes.h"
-
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
+#include "XCSoar.h"
+#include "NMEA/Info.h"
+#include "NMEA/Derived.hpp"
+#include "Screen/shapelib/mapshape.h"
 
 typedef struct _SNAIL_POINT
 {
@@ -56,9 +56,20 @@ typedef struct _SNAIL_POINT
   double DriftFactor;
 } SNAIL_POINT;
 
-extern SNAIL_POINT SnailTrail[TRAILSIZE];
-extern	int SnailNext;
-
-void InitialiseSnailTrail(void);
+class SnailTrail {
+public:
+  SnailTrail();
+  void AddPoint(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
+  int getIndex() {
+    return indexNext;
+  }
+  SNAIL_POINT getPoint(int index) {
+    return TrailPoints[index];
+  }
+  void ScanVisibility(rectObj *bounds);
+private:
+  SNAIL_POINT TrailPoints[TRAILSIZE];
+  int indexNext;
+};
 
 #endif

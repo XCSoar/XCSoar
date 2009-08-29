@@ -127,7 +127,6 @@ class MapWindow
   static void          SwitchZoomClimb(void);
 
   // state/localcopy/local data
-  static int           iSnailNext;
   static double        TargetDrag_Latitude;
   static double        TargetDrag_Longitude;
   static int           TargetDrag_State;
@@ -152,7 +151,6 @@ class MapWindow
 
   // display element functions
 
-  static void ScanVisibilityTrail(rectObj *bounds_active);
   static void ScanVisibilityWaypoints(rectObj *bounds_active);
   static void ScanVisibilityAirspace(rectObj *bounds_active);
 

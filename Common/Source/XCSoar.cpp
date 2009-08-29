@@ -618,8 +618,6 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   ClearTask();
   memset( &(GPS_INFO), 0, sizeof(GPS_INFO));
 
-  InitialiseSnailTrail();
-
   InitCalculations(&GPS_INFO,&CALCULATED_INFO);
 
   LinkGRecordDLL(); // try to link DLL if it exists
