@@ -1,3 +1,13 @@
+TARGETS = PC PPC2002 PPC2003 PPC2003X PNA WM5 WINE ALTAIR ALTAIRPORTRAIT
+
+ifeq ($(TARGET),)
+$(error No target specified.  Set the variable TARGET to one of: $(TARGETS))
+endif
+
+ifeq ($(filter $(TARGET),$(TARGETS)),)
+$(error Invalid target: $(TARGET))
+endif
+
 #
 SRC=Common/Source
 HDR=Common/Header
