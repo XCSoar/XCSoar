@@ -37,7 +37,7 @@ Copyright_License {
 
 #include "MapWindow.h"
 #include "SettingsUser.hpp"
-#include "GaugeVarioAltA.h"
+#include "Gauge/GaugeVarioAltA.hpp"
 #include "InfoBoxManager.h"
 #include "Protection.hpp"
 #include "InputEvents.h"

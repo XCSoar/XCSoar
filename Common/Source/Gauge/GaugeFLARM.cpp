@@ -36,7 +36,7 @@ Copyright_License {
 
 */
 
-#include "GaugeFLARM.h"
+#include "Gauge/GaugeFLARM.hpp"
 #include "XCSoar.h"
 #include "Protection.hpp"
 #include "Interface.hpp"

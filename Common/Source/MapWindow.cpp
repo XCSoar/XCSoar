@@ -62,7 +62,7 @@ Copyright_License {
 #include "Screen/Fonts.hpp"
 #include "Compatibility/gdi.h"
 #include "TopologyStore.h"
-#include "GaugeFLARM.h"
+#include "Gauge/GaugeFLARM.hpp"
 #include "InfoBoxLayout.h"
 #include "InfoBoxManager.h"
 #include "RasterTerrain.h"

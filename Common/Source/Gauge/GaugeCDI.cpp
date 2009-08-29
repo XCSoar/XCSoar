@@ -36,7 +36,7 @@ Copyright_License {
 
 */
 
-#include "GaugeCDI.h"
+#include "Gauge/GaugeCDI.hpp"
 #include "XCSoar.h"
 #include "Interface.hpp"
 #include "LogFile.hpp"

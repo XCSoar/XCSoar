@@ -46,7 +46,7 @@ Copyright_License {
 #include "UtilsFLARM.hpp"
 #include "Blackboard.hpp"
 #include "Audio/VarioSound.h"
-#include "GaugeFLARM.h"
+#include "Gauge/GaugeFLARM.hpp"
 #include "Device/device.h"
 #include "Device/Geoid.h"
 //#include "FlarmIdFile.h"

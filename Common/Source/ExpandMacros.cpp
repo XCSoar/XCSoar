@@ -38,7 +38,7 @@ Copyright_License {
 #include "ExpandMacros.hpp"
 #include "XCSoar.h"
 #include "Language.hpp"
-#include "GaugeFLARM.h"
+#include "Gauge/GaugeFLARM.hpp"
 #include "Logger.h"
 #include "ReplayLogger.hpp"
 #include "MapWindow.h"

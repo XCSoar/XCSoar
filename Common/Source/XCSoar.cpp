@@ -103,9 +103,9 @@ Copyright_License {
 #include "RasterTerrain.h"
 #include "RasterWeather.h"
 
-#include "GaugeCDI.h"
-#include "GaugeFLARM.h"
-#include "GaugeVarioAltA.h"
+#include "Gauge/GaugeCDI.hpp"
+#include "Gauge/GaugeFLARM.hpp"
+#include "Gauge/GaugeVarioAltA.hpp"
 
 #include "Asset.hpp"
 

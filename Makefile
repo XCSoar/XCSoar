@@ -457,9 +457,9 @@ OBJS	:=\
 	$(SRC)/windstore.o 		\
 	$(SRC)/WindZigZag.o 		\
 	\
-	$(SRC)/GaugeCDI.o 		\
-	$(SRC)/GaugeFLARM.o 		\
-	$(SRC)/GaugeVarioAltA.o 	\
+	$(SRC)/Gauge/GaugeCDI.o \
+	$(SRC)/Gauge/GaugeFLARM.o \
+	$(SRC)/Gauge/GaugeVarioAltA.o \
 	\
 	$(SRC)/AirfieldDetails.o 	\
 	$(SRC)/ButtonLabel.o 		\

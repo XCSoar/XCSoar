@@ -42,7 +42,7 @@ Copyright_License {
 #include "Airspace.h"
 #include "Interface.hpp"
 #include "MapWindow.h"
-#include "GaugeFLARM.h"
+#include "Gauge/GaugeFLARM.hpp"
 #include "TerrainRenderer.h"
 #include "Audio/VegaVoice.h"
 #include "McReady.h"

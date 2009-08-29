@@ -42,7 +42,7 @@ Copyright_License {
 #include "Interface.hpp"
 #include "InputEvents.h"
 #include "ReplayLogger.hpp"
-#include "GaugeFLARM.h"
+#include "Gauge/GaugeFLARM.hpp"
 #include "Device/device.h"
 #include "Device/Parser.h"
 #include "Dialogs.h"
