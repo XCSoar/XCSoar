@@ -41,6 +41,11 @@ Copyright_License {
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
+/**
+ * This class represents a color in the RGB color space.  This is used
+ * for compile-time constant colors, or for colors loaded from the
+ * configuration.
+ */
 struct Color {
   COLORREF value;
 
@@ -82,6 +87,12 @@ operator !=(const Color a, const Color b)
   return !(a == b);
 }
 
+/**
+ * A hardware color on a specific #Canvas.  A #Canvas maps a #Color
+ * object into #HWColor.  Depending on the platform, #Color and
+ * #HWColor may be different, e.g. if the #Canvas can not display 24
+ * bit RGB colors.
+ */
 struct HWColor {
   COLORREF value;
 

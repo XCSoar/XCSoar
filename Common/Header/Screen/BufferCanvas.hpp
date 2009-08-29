@@ -40,6 +40,10 @@ Copyright_License {
 
 #include "Screen/VirtualCanvas.hpp"
 
+/**
+ * An off-screen #Canvas implementation.  The constructor allocates
+ * memory for the specified dimensions.
+ */
 class BufferCanvas : public VirtualCanvas {
 protected:
   HBITMAP bitmap;

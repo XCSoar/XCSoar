@@ -40,6 +40,9 @@ Copyright_License {
 
 #include "Screen/ContainerWindow.hpp"
 
+/**
+ * The main window of the application.
+ */
 class MainWindow : public ContainerWindow {
 public:
   bool find(LPCTSTR cls, LPCTSTR text);

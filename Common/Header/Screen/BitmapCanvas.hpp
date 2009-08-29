@@ -42,6 +42,10 @@ Copyright_License {
 
 class Bitmap;
 
+/**
+ * A #Canvas implementation which represents a #Bitmap object.  Use
+ * this class to draw a #Bitmap into another #Canvas object.
+ */
 class BitmapCanvas : public VirtualCanvas {
 protected:
   HBITMAP old;

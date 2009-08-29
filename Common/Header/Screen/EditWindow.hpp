@@ -40,6 +40,9 @@ Copyright_License {
 
 #include "Screen/Window.hpp"
 
+/**
+ * A simple text editor widget.
+ */
 class EditWindow : public Window {
 public:
   void set(ContainerWindow &parent, int left, int top,

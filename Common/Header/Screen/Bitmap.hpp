@@ -43,6 +43,9 @@ Copyright_License {
 
 #include <tchar.h>
 
+/**
+ * An image loaded from storage.
+ */
 class Bitmap {
 protected:
   HBITMAP bitmap;

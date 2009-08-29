@@ -41,6 +41,10 @@ Copyright_License {
 #include "Screen/Canvas.hpp"
 #include "Screen/Window.hpp"
 
+/**
+ * A #Canvas implementation which allows you to draw into WIN32 window
+ * handle (HWND).  Use #PaintCanvas instead to implement WM_PAINT.
+ */
 class WindowCanvas : public Canvas {
 protected:
   HWND wnd;
@@ -56,6 +60,10 @@ public:
 
 class ContainerWindow;
 
+/**
+ * A #Window implementation for custom drawing.  Call get_canvas()
+ * whenever you want to draw something.
+ */
 class PaintWindow : public Window {
 private:
   WindowCanvas canvas;

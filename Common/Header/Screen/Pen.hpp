@@ -40,6 +40,9 @@ Copyright_License {
 
 #include "Screen/Color.hpp"
 
+/**
+ * A pen draws lines and borders.
+ */
 class Pen {
 public:
   enum style {

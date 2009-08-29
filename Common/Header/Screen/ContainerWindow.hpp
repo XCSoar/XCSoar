@@ -40,6 +40,11 @@ Copyright_License {
 
 #include "Screen/PaintWindow.hpp"
 
+/**
+ * A container for more #Window objects.  It is also derived from
+ * #PaintWindow, because you might want to paint a border between the
+ * child windows.
+ */
 class ContainerWindow : public PaintWindow {
 };
 

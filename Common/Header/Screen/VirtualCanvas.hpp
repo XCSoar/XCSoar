@@ -40,6 +40,11 @@ Copyright_License {
 
 #include "Screen/Canvas.hpp"
 
+/**
+ * A #Canvas implementation which draws to an off-screen surface.
+ * This is an abstract class; see #BufferCanvas or #BitmapCanvas for
+ * concrete implementations.
+ */
 class VirtualCanvas : public Canvas {
 public:
   VirtualCanvas() {}

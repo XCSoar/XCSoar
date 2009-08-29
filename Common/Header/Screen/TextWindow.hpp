@@ -40,6 +40,9 @@ Copyright_License {
 
 #include "Screen/Window.hpp"
 
+/**
+ * A window which renders static text.
+ */
 class TextWindow : public Window {
 public:
   void set(ContainerWindow &parent, unsigned left, unsigned top,

@@ -42,6 +42,10 @@ Copyright_License {
 
 class PaintWindow;
 
+/**
+ * A #Canvas implementation to use during WM_PAINT.  Use this class
+ * instead of #PaintWindow.get_canvas().
+ */
 class PaintCanvas : public Canvas {
 private:
   HWND hWnd;

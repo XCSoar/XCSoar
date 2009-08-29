@@ -42,6 +42,11 @@ Copyright_License {
 
 class ContainerWindow;
 
+/**
+ * A Window is a portion on the screen which displays something, and
+ * which optionally interacts with the user.  To draw custom graphics
+ * into a Window, derive your class from #PaintWindow.
+ */
 class Window {
 protected:
   HWND hWnd;
