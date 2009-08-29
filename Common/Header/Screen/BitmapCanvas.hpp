@@ -55,6 +55,15 @@ public:
   BitmapCanvas(const Canvas &canvas)
     :VirtualCanvas(canvas, 1, 1), old(NULL) {}
 
+  /**
+   * Creates the BitmapCanvas, and initially selects the specified
+   * bitmap.
+   */
+  BitmapCanvas(const Canvas &canvas, const Bitmap &bitmap)
+    :VirtualCanvas(canvas, 1, 1), old(NULL) {
+    select(bitmap);
+  }
+
   void set()
   {
     VirtualCanvas::set(1, 1);
