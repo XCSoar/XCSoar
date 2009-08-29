@@ -140,7 +140,7 @@ void Message::Initialize(RECT rc) {
   ShowWindow(hWndMessageWindow, SW_HIDE);
 
   SendMessage(hWndMessageWindow, WM_SETFONT,
-		     (WPARAM)MapWindowBoldFont,MAKELPARAM(TRUE,0));
+	      (WPARAM)MapWindowBoldFont.native(),MAKELPARAM(TRUE,0));
 
   /*
   SetWindowLong(hWndMessageWindow, GWL_WNDPROC,
