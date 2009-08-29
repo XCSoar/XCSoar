@@ -39,7 +39,6 @@ Copyright_License {
 #include "Gauge/GaugeFLARM.hpp"
 #include "XCSoar.h"
 #include "Protection.hpp"
-#include "Interface.hpp"
 #include "Math/FastMath.h"
 #include "Math/Geometry.hpp"
 #include "Math/Screen.hpp"
@@ -55,24 +54,11 @@ Copyright_License {
 bool  EnableFLARMGauge = true;
 DWORD EnableFLARMMap = 1;
 
-PaintWindow GaugeFLARM::window; //FLARM Window
-
-Bitmap GaugeFLARM::hRoseBitMap;
-SIZE GaugeFLARM::hRoseBitMapSize;
-BufferCanvas GaugeFLARM::hdcDrawWindow;
-bool GaugeFLARM::Visible= false;
-bool GaugeFLARM::Traffic= false;
-bool GaugeFLARM::ForceVisible= false;
-bool GaugeFLARM::Suppress= false;
-
 static Color colTextGray;
 static Color colText;
 static Color colTextBackgnd;
 
 LRESULT CALLBACK GaugeFLARMWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
-
-int GaugeFLARM::radius=0;
-POINT GaugeFLARM::center;
 
 #define FLARMMAXRANGE 2000
 
@@ -229,12 +215,14 @@ void GaugeFLARM::Render(const NMEA_INFO *gps_info)
 }
 
 
-void GaugeFLARM::Create() {
+GaugeFLARM::GaugeFLARM(ContainerWindow &parent)
+  :Visible(false), ForceVisible(false), Suppress(false), Traffic(false)
+{
   // start of new code for displaying FLARM window
 
-  RECT rc = hWndMainWindow.get_client_rect();
+  RECT rc = parent.get_client_rect();
 
-  window.set(hWndMainWindow,
+  window.set(parent,
              (int)(rc.right - InfoBoxLayout::ControlWidth * 2)+1,
              (int)(rc.bottom - InfoBoxLayout::ControlHeight * 2)+1,
              (int)(InfoBoxLayout::ControlWidth * 2)-1,
@@ -272,6 +260,7 @@ void GaugeFLARM::Create() {
   // turn off suppression
   Suppress = false;
 
+  window.set_userdata(this);
   window.set_wndproc(GaugeFLARMWndProc);
   window.hide();
 
@@ -301,17 +290,13 @@ void GaugeFLARM::Show() {
   lastvisible = Visible;
 }
 
-
-void GaugeFLARM::Destroy() {
-  hdcDrawWindow.reset();
-  window.reset();
-}
-
 void GaugeFLARM::Repaint(Canvas &canvas) {
   canvas.copy(hdcDrawWindow);
 }
 
 LRESULT CALLBACK GaugeFLARMWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam){
+  GaugeFLARM *gauge = (GaugeFLARM *)Window::get_userdata_pointer(hwnd);
+
   switch (uMsg){
 
     case WM_ERASEBKGND:
@@ -319,9 +304,9 @@ LRESULT CALLBACK GaugeFLARMWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l
     return TRUE;
 
     case WM_PAINT:
-      if (globalRunningEvent.test() && GaugeFLARM::Visible) {
-        PaintCanvas canvas(GaugeFLARM::window, hwnd);
-        GaugeFLARM::Repaint(canvas);
+      if (globalRunningEvent.test() && gauge->Visible) {
+        PaintCanvas canvas(gauge->window, hwnd);
+        gauge->Repaint(canvas);
       }
     break;
 

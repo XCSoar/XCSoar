@@ -117,6 +117,7 @@ TCHAR XCSoar_Version[256] = TEXT("");
 HINSTANCE hInst; // The current instance
 MainWindow hWndMainWindow;
 MapWindow map_window;
+GaugeFLARM *gauge_flarm;
 
 HBRUSH hBrushSelected;
 HBRUSH hBrushUnselected;
@@ -1024,7 +1025,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
   MapWindow::SetMapRect(InfoBoxLayout::CreateInfoBoxes(rc));
 
   StartupStore(TEXT("Create FLARM gauge\n"));
-  GaugeFLARM::Create();
+  gauge_flarm = new GaugeFLARM(hWndMainWindow);
 
   StartupStore(TEXT("Create button labels\n"));
   ButtonLabel::CreateButtonLabels(rc);
@@ -1193,7 +1194,8 @@ void Shutdown(void) {
 
   GaugeCDI::Destroy();
   GaugeVario::Destroy();
-  GaugeFLARM::Destroy();
+  delete gauge_flarm;
+  gauge_flarm = NULL;
 
   StartupStore(TEXT("Close Messages\n"));
   Message::Destroy();

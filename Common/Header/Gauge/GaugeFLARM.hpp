@@ -41,31 +41,34 @@ Copyright_License {
 #include "NMEA/Info.h"
 #include "Screen/BufferCanvas.hpp"
 #include "Screen/PaintWindow.hpp"
+#include "Screen/Bitmap.hpp"
+
+class ContainerWindow;
 
 class GaugeFLARM {
- public:
-  static PaintWindow window;
+private:
+  PaintWindow window;
+  BufferCanvas hdcDrawWindow;
+  Bitmap hRoseBitMap;
+  SIZE hRoseBitMapSize;
+  POINT center;
+  int radius;
 
- public:
-  static void Create();
-  static void Destroy();
-  static void Render(const NMEA_INFO *gps_info);
-  static void RenderTraffic(Canvas &canvas, const NMEA_INFO *gps_info);
-  static void RenderBg(Canvas &canvas);
-  static void Repaint(Canvas &canvas);
-  static void Show();
-  static bool Visible;
-  static bool Suppress;
-  static void TrafficPresent(bool traffic);
-  static bool ForceVisible;
+public:
+  bool Visible, ForceVisible, Suppress, Traffic;
+
+public:
+  GaugeFLARM(ContainerWindow &parent);
+  void Render(const NMEA_INFO *gps_info);
+  void RenderTraffic(Canvas &canvas, const NMEA_INFO *gps_info);
+  void RenderBg(Canvas &canvas);
+  void Repaint(Canvas &canvas);
+  void Show();
+  void TrafficPresent(bool traffic);
  private:
-  static BufferCanvas hdcDrawWindow;
-  static Bitmap hRoseBitMap;
-  static SIZE hRoseBitMapSize;
-  static int radius;
-  static POINT center;
-  static bool Traffic;
-  static int RangeScale(double d);
+  int RangeScale(double d);
+
+  friend LRESULT CALLBACK GaugeFLARMWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 };
 
 extern bool EnableFLARMGauge;

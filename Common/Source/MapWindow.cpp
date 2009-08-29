@@ -802,7 +802,8 @@ void MapWindow::DrawThreadLoop(bool first_time) {
     ToggleFullScreenStart();
   }
 
-  GaugeFLARM::Render(&DrawInfo);
+  if (gauge_flarm != NULL)
+    gauge_flarm->Render(&DrawInfo);
 
   RenderMapWindow(hdcDrawWindow, MapRect);
 

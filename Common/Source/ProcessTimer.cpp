@@ -85,7 +85,8 @@ void CommonProcessTimer()
       RequestAirspaceWarningForce = false;
     }
     // update FLARM display (show/hide)
-    GaugeFLARM::Show();
+    if (gauge_flarm != NULL)
+      gauge_flarm->Show();
   }
 
   InfoBoxProcessTimer();
