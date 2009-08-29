@@ -80,7 +80,6 @@ int LoggerTimeStepCruise=5;
 int LoggerTimeStepCircling=1;
 
 void GlideComputer::DoLogging(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
-  static double SnailLastTime=0;
   static double LogLastTime=0;
   static double StatsLastTime=0;
   static double OLCLastTime = 0;
@@ -92,9 +91,6 @@ void GlideComputer::DoLogging(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
 
   if(Basic->Time <= LogLastTime) {
     LogLastTime = Basic->Time;
-  }
-  if(Basic->Time <= SnailLastTime)  {
-    SnailLastTime = Basic->Time;
   }
   if(Basic->Time <= StatsLastTime) {
     StatsLastTime = Basic->Time;
@@ -152,30 +148,27 @@ void GlideComputer::DoLogging(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   if (Basic->Time - GetFRecordLastTime() >= dtFRecord)
   {
     if (LogFRecord(Basic->SatelliteIDs,false))
-    {  // need F record every 5 minutes
-       // so if write fails or constellation is invalid, don't update timer and try again next cycle
+    {  // need F record every 5 minutes so if write fails or
+       // constellation is invalid, don't update timer and try again
+       // next cycle
       SetFRecordLastTime(GetFRecordLastTime() + dtFRecord);
-      // the FRecordLastTime is reset when the logger restarts so it is always at the start of the file
+      // the FRecordLastTime is reset when the logger restarts so it
+      // is always at the start of the file
       if (GetFRecordLastTime() < Basic->Time-dtFRecord)
         SetFRecordLastTime(Basic->Time-dtFRecord);
     }
   }
 
-  if (Basic->Time - SnailLastTime >= dtSnail) {
-
+  if (snail_trail.CheckAdvance(Basic->Time, dtSnail)) {
     mutexGlideComputer.Lock();
-    GlideComputer::snail_trail.AddPoint(Basic, Calculated);
+    snail_trail.AddPoint(Basic, Calculated);
     mutexGlideComputer.Unlock();
-
-    SnailLastTime += dtSnail;
-    if (SnailLastTime< Basic->Time-dtSnail) {
-      SnailLastTime = Basic->Time-dtSnail;
-    }
   }
 
   if (Calculated->Flying) {
     if (Basic->Time - StatsLastTime >= dtStats) {
 
+      mutexGlideComputer.Lock();
       flightstats.Altitude_Terrain.
         least_squares_update(max(0,
                                  Basic->Time-Calculated->TakeOffTime)/3600.0,
@@ -185,6 +178,8 @@ void GlideComputer::DoLogging(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
         least_squares_update(max(0,
                                  Basic->Time-Calculated->TakeOffTime)/3600.0,
                              Calculated->NavAltitude);
+      mutexGlideComputer.Unlock();
+
       StatsLastTime += dtStats;
       if (StatsLastTime< Basic->Time-dtStats) {
         StatsLastTime = Basic->Time-dtStats;

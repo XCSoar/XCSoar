@@ -67,9 +67,11 @@ public:
     return TrailPoints[index];
   }
   void ScanVisibility(rectObj *bounds);
+  bool CheckAdvance(const double gps_time, const double dt);
 private:
   SNAIL_POINT TrailPoints[TRAILSIZE];
   int indexNext;
+  double SnailLastTime;
 };
 
 #endif

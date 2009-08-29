@@ -87,3 +87,20 @@ void SnailTrail::ScanVisibility(rectObj *bounds_active) {
     sv++;
   }
 }
+
+bool SnailTrail::CheckAdvance(const double gps_time, const double dt) {
+
+  if(gps_time <= SnailLastTime)  {
+    SnailLastTime = gps_time;
+  }
+  if (gps_time-SnailLastTime>= dt) {
+
+    SnailLastTime += dt;
+    if (SnailLastTime< gps_time-dt) {
+      SnailLastTime = gps_time-dt;
+    }
+
+    return true;
+  }
+  return false;
+}
