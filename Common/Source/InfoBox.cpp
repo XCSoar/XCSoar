@@ -87,11 +87,9 @@ InfoBox::InfoBox(ContainerWindow &parent, int X, int Y, int Width, int Height)
   colorTop = 0;
   colorBottom = 0;
 
-  window.set(parent, mX, mY, mWidth, mHeight, true, true);
+  set(parent, mX, mY, mWidth, mHeight, true, true);
 
   mVisible = false;
-
-  Canvas &canvas = window.get_canvas();
 
   Color fgColor, bkColor, bkColorSel;
 
@@ -117,10 +115,10 @@ InfoBox::InfoBox(ContainerWindow &parent, int X, int Y, int Width, int Height)
   }
 
   // JMW added double buffering to reduce flicker
-  buffer.set(window.get_canvas(), mWidth, mHeight);
+  buffer.set(get_canvas(), mWidth, mHeight);
 
-  window.set_wndproc(InfoBoxWndProc);
-  window.set_userdata(this);
+  set_wndproc(InfoBoxWndProc);
+  set_userdata(this);
 
   mhBrushBk = hBrushDefaultBackGround;
   mhBrushBkSel = hBrushDefaultBackGroundSel;
@@ -197,7 +195,6 @@ InfoBox::~InfoBox(void){
   }
 
   buffer.reset();
-  window.reset();
 }
 
 void InfoBox::SetFocus(bool Value){
@@ -213,9 +210,9 @@ bool InfoBox::SetVisible(bool Value){
   if (mVisible != Value){
     mVisible = Value;
     if (mVisible)
-      window.show();
+      show();
     else
-      window.hide();
+      hide();
   }
   return(res);
 }
@@ -313,7 +310,7 @@ void InfoBox::SetComment(const TCHAR *Value){
 }
 
 PaintWindow &InfoBox::GetHandle(void){
-  return window;
+  return *this;
 }
 
 ContainerWindow &InfoBox::GetParent(void){
@@ -632,8 +629,8 @@ void InfoBox::Paint(){
 
 
 void InfoBox::PaintFast(void) {
-  window.get_canvas().copy(buffer);
-  PaintSelector(window.get_canvas());
+  get_canvas().copy(buffer);
+  PaintSelector(get_canvas());
 }
 
 

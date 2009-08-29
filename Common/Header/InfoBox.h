@@ -53,7 +53,7 @@ Copyright_License {
 #define COMMENTSIZE  32
 
 
-class InfoBox{
+class InfoBox : public PaintWindow {
  public:
  private:
 
@@ -62,7 +62,6 @@ class InfoBox{
     int mWidth;
     int mHeight;
     ContainerWindow &mParent;
-    PaintWindow window;
     BufferCanvas buffer;
     int  mBorderKind;
     Color mColorBack;
