@@ -38,8 +38,7 @@ Copyright_License {
 #ifndef GAUGE_VARIO_H
 #define GAUGE_VARIO_H
 
-#include "Screen/BufferCanvas.hpp"
-#include "Screen/PaintWindow.hpp"
+#include "Screen/BufferWindow.hpp"
 #include "Screen/Bitmap.hpp"
 
 class ContainerWindow;
@@ -54,9 +53,8 @@ typedef struct{
   const Bitmap *lastBitMap;
 }DrawInfo_t;
 
-class GaugeVario : public PaintWindow {
+class GaugeVario : public BufferWindow {
 private:
-  BufferCanvas hdcDrawWindow;
   int xoffset;
   int yoffset;
 

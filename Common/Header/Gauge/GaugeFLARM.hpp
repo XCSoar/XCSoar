@@ -39,15 +39,13 @@ Copyright_License {
 #define GAUGE_FLARM_H
 
 #include "NMEA/Info.h"
-#include "Screen/BufferCanvas.hpp"
-#include "Screen/PaintWindow.hpp"
+#include "Screen/BufferWindow.hpp"
 #include "Screen/Bitmap.hpp"
 
 class ContainerWindow;
 
-class GaugeFLARM : public PaintWindow {
+class GaugeFLARM : public BufferWindow {
 private:
-  BufferCanvas hdcDrawWindow;
   Bitmap hRoseBitMap;
   SIZE hRoseBitMapSize;
   POINT center;

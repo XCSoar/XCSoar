@@ -98,8 +98,6 @@ GaugeVario::GaugeVario(ContainerWindow &parent)
       false, false, false);
   insert_after(HWND_TOP, false);
 
-  hdcDrawWindow.set(get_canvas());
-
   // load vario scale
   if (Units::GetUserVerticalSpeedUnit()==unKnots) {
     hDrawBitMap.load(IDB_VARIOSCALEC);
@@ -154,8 +152,8 @@ GaugeVario::GaugeVario(ContainerWindow &parent)
 
   blankThickPen.set(IBLSCALE(5), colTextBackgnd);
 
-  hdcDrawWindow.set_text_color(colText);
-  hdcDrawWindow.set_background_color(colTextBackgnd);
+  get_canvas().set_text_color(colText);
+  get_canvas().set_background_color(colTextBackgnd);
 
   if (Appearance.InverseInfoBox){
     Units::GetUnitBitmap(Units::GetUserUnitByGroup(ugVerticalSpeed),
@@ -224,6 +222,8 @@ void GaugeVario::Render() {
   static bool InitDone = false;
 
   double vval;
+
+  Canvas &hdcDrawWindow = get_canvas();
 
 //  HKEY Key;
 
@@ -356,12 +356,11 @@ void GaugeVario::Render() {
   }
   RenderZero(hdcDrawWindow);
 
-  get_canvas().copy(hdcDrawWindow);
-
+  commit_buffer();
 }
 
 void GaugeVario::Repaint(Canvas &canvas){
-  canvas.copy(hdcDrawWindow);
+  commit_buffer(canvas);
 }
 
 void GaugeVario::RenderBg(Canvas &canvas) {

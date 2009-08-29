@@ -206,11 +206,10 @@ void GaugeFLARM::RenderTraffic(Canvas &canvas, const NMEA_INFO *gps_info)
 void GaugeFLARM::Render(const NMEA_INFO *gps_info)
 {
   if (Visible) {
-    RenderBg(hdcDrawWindow);
+    RenderBg(get_canvas());
+    RenderTraffic(get_canvas(), gps_info);
 
-    RenderTraffic(hdcDrawWindow, gps_info);
-
-    get_canvas().copy(hdcDrawWindow);
+    commit_buffer();
   }
 }
 
@@ -236,8 +235,6 @@ GaugeFLARM::GaugeFLARM(ContainerWindow &parent)
   center.y = get_vmiddle();
   radius = min(get_right() - center.x, get_bottom() - center.y);
 
-  hdcDrawWindow.set(get_canvas());
-
   hRoseBitMap.load(IDB_FLARMROSE);
 
   hRoseBitMapSize = hRoseBitMap.get_size();
@@ -252,8 +249,8 @@ GaugeFLARM::GaugeFLARM(ContainerWindow &parent)
     colTextGray = Color(~0xa0, ~0xa0, ~0xa0);
   }
 
-  hdcDrawWindow.set_text_color(colText);
-  hdcDrawWindow.set_background_color(colTextBackgnd);
+  get_canvas().set_text_color(colText);
+  get_canvas().set_background_color(colTextBackgnd);
 
   // end of new code for drawing FLARM window (see below for destruction of objects)
 
@@ -264,8 +261,8 @@ GaugeFLARM::GaugeFLARM(ContainerWindow &parent)
   set_wndproc(GaugeFLARMWndProc);
   hide();
 
-  RenderBg(hdcDrawWindow);
-  get_canvas().copy(hdcDrawWindow);
+  RenderBg(get_canvas());
+  commit_buffer();
 
   Visible = false;
   Traffic = false;
@@ -291,7 +288,7 @@ void GaugeFLARM::Show() {
 }
 
 void GaugeFLARM::Repaint(Canvas &canvas) {
-  canvas.copy(hdcDrawWindow);
+  commit_buffer(canvas);
 }
 
 LRESULT CALLBACK GaugeFLARMWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam){
