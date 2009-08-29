@@ -54,10 +54,7 @@ typedef struct{
   const Bitmap *lastBitMap;
 }DrawInfo_t;
 
-class GaugeVario {
-public:
-  PaintWindow window;
-
+class GaugeVario : public PaintWindow {
 private:
   BufferCanvas hdcDrawWindow;
   int xoffset;

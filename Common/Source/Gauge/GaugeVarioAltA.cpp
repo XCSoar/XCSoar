@@ -89,16 +89,16 @@ GaugeVario::GaugeVario(ContainerWindow &parent)
 
   RECT MapRectBig = MapWindowProjection::GetMapRect();
 
-  window.set(parent,
-             InfoBoxLayout::landscape
-             ? (MapRectBig.right + InfoBoxLayout::ControlWidth)
-             : (MapRectBig.right - GAUGEXSIZE),
-             MapRectBig.top,
-             GAUGEXSIZE, GAUGEYSIZE,
-             false, false, false);
-  window.insert_after(HWND_TOP, false);
+  set(parent,
+      InfoBoxLayout::landscape
+      ? (MapRectBig.right + InfoBoxLayout::ControlWidth)
+      : (MapRectBig.right - GAUGEXSIZE),
+      MapRectBig.top,
+      GAUGEXSIZE, GAUGEYSIZE,
+      false, false, false);
+  insert_after(HWND_TOP, false);
 
-  hdcDrawWindow.set(window.get_canvas());
+  hdcDrawWindow.set(get_canvas());
 
   // load vario scale
   if (Units::GetUserVerticalSpeedUnit()==unKnots) {
@@ -165,12 +165,12 @@ GaugeVario::GaugeVario(ContainerWindow &parent)
       &hBitmapUnit, &BitmapUnitPos, &BitmapUnitSize, UNITBITMAPGRAY);
   }
 
-  xoffset = window.get_width();
-  yoffset = window.get_height() / 2;
+  xoffset = get_width();
+  yoffset = get_height() / 2;
 
-  window.set_userdata(this);
-  window.set_wndproc(GaugeVarioWndProc);
-  window.hide();
+  set_userdata(this);
+  set_wndproc(GaugeVarioWndProc);
+  hide();
 }
 
 void GaugeVario::Show(bool doshow) {
@@ -188,10 +188,10 @@ void GaugeVario::Show(bool doshow) {
 
     static bool lastvisible = false;
     if (EnableVarioGauge && !lastvisible) {
-      window.show();
+      show();
     }
     if (!EnableVarioGauge && lastvisible) {
-      window.hide();
+      hide();
     }
     lastvisible = EnableVarioGauge;
   }
@@ -235,11 +235,11 @@ void GaugeVario::Render() {
 		   + Appearance.TitleWindowFont.CapitalHeight);
 
     orgMiddle.y = yoffset - ValueHeight/2;
-    orgMiddle.x = window.get_right();
+    orgMiddle.x = get_right();
     orgTop.y = orgMiddle.y-ValueHeight;
-    orgTop.x = window.get_right();
+    orgTop.x = get_right();
     orgBottom.y = orgMiddle.y + ValueHeight;
-    orgBottom.x = window.get_right();
+    orgBottom.x = get_right();
 
     BitmapCanvas hdcTemp(hdcDrawWindow, hDrawBitMap);
     // copy scale bitmap to memory DC
@@ -293,7 +293,7 @@ void GaugeVario::Render() {
 
   if (Appearance.GaugeVarioSpeedToFly) {
     RenderSpeedToFly(hdcDrawWindow,
-                     window.get_right() - 11, window.get_height() / 2);
+                     get_right() - 11, get_height() / 2);
   } else {
     RenderClimb(hdcDrawWindow);
   }
@@ -356,7 +356,7 @@ void GaugeVario::Render() {
   }
   RenderZero(hdcDrawWindow);
 
-  window.get_canvas().copy(hdcDrawWindow);
+  get_canvas().copy(hdcDrawWindow);
 
 }
 
@@ -450,8 +450,8 @@ void GaugeVario::MakeAllPolygons() {
 void GaugeVario::RenderClimb(Canvas &canvas)
 {
 
-  int x = window.get_right() - IBLSCALE(14);
-  int y = window.get_bottom() - IBLSCALE(24);
+  int x = get_right() - IBLSCALE(14);
+  int y = get_bottom() - IBLSCALE(24);
 
   // testing  GPS_INFO.SwitchState.VarioCircling = true;
 
@@ -731,16 +731,15 @@ void GaugeVario::RenderSpeedToFly(Canvas &canvas, int x, int y)
   double vdiff;
 
   int nary = NARROWS*ARROWYSIZE;
-  int ytop = window.get_top()
-    +YOFFSET+nary; // JMW
-  int ybottom = window.get_bottom()
+  int ytop = get_top() + YOFFSET + nary; // JMW
+  int ybottom = get_bottom()
     -YOFFSET-nary-InfoBoxLayout::scale; // JMW
 
   ytop += IBLSCALE(14);
   ybottom -= IBLSCALE(14);
   // JMW
   //  x = rc.left+IBLSCALE(1);
-  x = window.get_right() - 2 * ARROWXSIZE;
+  x = get_right() - 2 * ARROWXSIZE;
 
   // only draw speed command if flying and vario is not circling
   //
@@ -875,12 +874,12 @@ void GaugeVario::RenderBallast(Canvas &canvas)
     SIZE tSize;
 
     orgLabel.x = 1;                                         // position of ballast label
-    orgLabel.y = window.get_top() + 2 +
+    orgLabel.y = get_top() + 2 +
       (Appearance.TitleWindowFont.CapitalHeight*2)
       - Appearance.TitleWindowFont.AscentHeight;
 
     orgValue.x = 1;                                         // position of ballast value
-    orgValue.y = window.get_top() + 1 +
+    orgValue.y = get_top() + 1 +
       Appearance.TitleWindowFont.CapitalHeight
       - Appearance.TitleWindowFont.AscentHeight;
 
@@ -962,11 +961,11 @@ void GaugeVario::RenderBugs(Canvas &canvas)
     SIZE tSize;
 
     orgLabel.x = 1;
-    orgLabel.y = window.get_bottom()
+    orgLabel.y = get_bottom()
       - 2 - Appearance.TitleWindowFont.CapitalHeight - Appearance.TitleWindowFont.AscentHeight;
 
     orgValue.x = 1;
-    orgValue.y = window.get_bottom()
+    orgValue.y = get_bottom()
       - 1 - Appearance.TitleWindowFont.AscentHeight;
 
     recLabelBk.left = orgLabel.x;
@@ -1033,7 +1032,7 @@ LRESULT CALLBACK GaugeVarioWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l
 
     case WM_PAINT:
       if (globalRunningEvent.test() && EnableVarioGauge) {
-        PaintCanvas canvas(gauge->window, hwnd);
+        PaintCanvas canvas(*gauge, hwnd);
         gauge->Repaint(canvas);
       }
     break;
