@@ -47,6 +47,7 @@ Copyright_License {
 #include "InfoBoxLayout.h"
 #include "Screen/Graphics.hpp"
 #include "Screen/Fonts.hpp"
+#include "Screen/BitmapCanvas.hpp"
 #include "Screen/PaintCanvas.hpp"
 #include "Screen/MainWindow.hpp"
 #include <stdlib.h>
@@ -59,7 +60,6 @@ PaintWindow GaugeFLARM::window; //FLARM Window
 Bitmap GaugeFLARM::hRoseBitMap;
 int GaugeFLARM::hRoseBitMapWidth = 0;
 int GaugeFLARM::hRoseBitMapHeight= 0;
-BitmapCanvas GaugeFLARM::hdcTemp;
 BufferCanvas GaugeFLARM::hdcDrawWindow;
 bool GaugeFLARM::Visible= false;
 bool GaugeFLARM::Traffic= false;
@@ -85,8 +85,8 @@ int GaugeFLARM::RangeScale(double d) {
 }
 
 void GaugeFLARM::RenderBg() {
+  BitmapCanvas hdcTemp(hdcDrawWindow, hRoseBitMap);
 
-  hdcTemp.select(hRoseBitMap);
   if ( hRoseBitMapWidth != IBLSCALE(InfoBoxLayout::ControlWidth*2)
       || hRoseBitMapHeight != IBLSCALE(InfoBoxLayout::ControlHeight*2-1) )
   {
@@ -248,7 +248,6 @@ void GaugeFLARM::Create() {
   radius = min(window.get_right() - center.x, window.get_bottom() - center.y);
 
   hdcDrawWindow.set(window.get_canvas());
-  hdcTemp.set(hdcDrawWindow);
 
   hRoseBitMap.load(IDB_FLARMROSE);
 
@@ -306,7 +305,6 @@ void GaugeFLARM::Show() {
 
 void GaugeFLARM::Destroy() {
   hdcDrawWindow.reset();
-  hdcTemp.reset();
   window.reset();
 }
 

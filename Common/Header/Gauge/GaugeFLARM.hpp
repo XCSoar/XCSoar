@@ -40,7 +40,6 @@ Copyright_License {
 
 #include "NMEA/Info.h"
 #include "Screen/BufferCanvas.hpp"
-#include "Screen/BitmapCanvas.hpp"
 #include "Screen/PaintWindow.hpp"
 
 class GaugeFLARM {
@@ -61,7 +60,6 @@ class GaugeFLARM {
   static bool ForceVisible;
  private:
   static BufferCanvas hdcDrawWindow;
-  static BitmapCanvas hdcTemp;
   static Bitmap hRoseBitMap;
   static int hRoseBitMapWidth;
   static int hRoseBitMapHeight;
