@@ -661,8 +661,8 @@ void Statistics::RenderBarograph(Canvas &canvas, const RECT rc)
 
   DrawTrend(canvas, rc, &GlideComputer::flightstats.Altitude_Ceiling, STYLE_BLUETHIN);
 
-  DrawXLabel(hdc, rc, TEXT("t"));
-  DrawYLabel(hdc, rc, TEXT("h"));
+  DrawXLabel(canvas, rc, TEXT("t"));
+  DrawYLabel(canvas, rc, TEXT("h"));
   mutexGlideComputer.Unlock();
 
 }
