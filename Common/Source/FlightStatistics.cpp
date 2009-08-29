@@ -76,6 +76,7 @@ void FlightStatistics::Reset() {
 void FlightStatistics::RenderBarograph(Canvas &canvas, const RECT rc)
 {
   Chart chart(canvas, rc);
+  ScopeLock protect(&mutexTaskData);
 
   if (Altitude.sum_n<2) {
     chart.DrawNoData();
@@ -88,7 +89,6 @@ void FlightStatistics::RenderBarograph(Canvas &canvas, const RECT rc)
   chart.ScaleXFromValue(Altitude.x_min+1.0); // in case no data
   chart.ScaleXFromValue(Altitude.x_min);
 
-  mutexTaskData.Lock();
   for(int j=1;j<MAXTASKPOINTS;j++) {
     if (ValidTaskPoint(j) && (LegStartTime[j]>=0)) {
       double xx =
@@ -100,7 +100,6 @@ void FlightStatistics::RenderBarograph(Canvas &canvas, const RECT rc)
       }
     }
   }
-  mutexTaskData.Unlock();
 
   HPEN   hpHorizonGround;
   HBRUSH hbHorizonGround;
@@ -126,13 +125,13 @@ void FlightStatistics::RenderBarograph(Canvas &canvas, const RECT rc)
 
   chart.DrawXLabel(TEXT("t"));
   chart.DrawYLabel(TEXT("h"));
-
 }
 
 
 void FlightStatistics::RenderSpeed(Canvas &canvas, const RECT rc)
 {
   Chart chart(canvas, rc);
+  ScopeLock protect(&mutexTaskData);
 
   if ((Task_Speed.sum_n<2)
       || !ValidTaskPoint(ActiveWayPoint)) {
@@ -146,7 +145,6 @@ void FlightStatistics::RenderSpeed(Canvas &canvas, const RECT rc)
   chart.ScaleXFromValue(Task_Speed.x_min+1.0); // in case no data
   chart.ScaleXFromValue(Task_Speed.x_min);
 
-  mutexTaskData.Lock();
   for(int j=1;j<MAXTASKPOINTS;j++) {
     if (ValidTaskPoint(j) && (LegStartTime[j]>=0)) {
       double xx =
@@ -158,7 +156,6 @@ void FlightStatistics::RenderSpeed(Canvas &canvas, const RECT rc)
       }
     }
   }
-  mutexTaskData.Unlock();
 
   chart.DrawXGrid(0.5, Task_Speed.x_min,
 		  Chart::STYLE_THINDASHPAPER, 0.5, true);
@@ -210,8 +207,7 @@ void FlightStatistics::RenderGlidePolar(Canvas &canvas, const RECT rc)
 {
   int i;
   Chart chart(canvas, rc);
-
-  mutexFlightData.Lock();
+  ScopeLock protect(&mutexFlightData);
 
   chart.ScaleYFromValue( 0);
   chart.ScaleYFromValue( GlidePolar::SinkRateFast(0,(int)(SAFTEYSPEED-1))*1.1);
@@ -258,8 +254,6 @@ void FlightStatistics::RenderGlidePolar(Canvas &canvas, const RECT rc)
   double sb = GlidePolar::SinkRate(CALCULATED_INFO.VMacCready);
   ff= (sb-MACCREADY)/max(1.0, CALCULATED_INFO.VMacCready);
 
-  mutexFlightData.Unlock();
-
   chart.DrawLine(0, MACCREADY,
 		 SAFTEYSPEED, MACCREADY+ff*SAFTEYSPEED,
 		 Chart::STYLE_REDTHICK);
@@ -273,12 +267,12 @@ void FlightStatistics::RenderGlidePolar(Canvas &canvas, const RECT rc)
   _stprintf(text,TEXT("Weight %.0f kg"),
 	    GlidePolar::GetAUW());
   canvas.text_opaque(rc.left+IBLSCALE(30), rc.bottom-IBLSCALE(55),
-		     &rc, text);
+		     NULL, text);
 
   _stprintf(text,TEXT("Wing loading %.1f kg/m2"),
 	    GlidePolar::WingLoading);
   canvas.text_opaque(rc.left+IBLSCALE(30), rc.bottom-IBLSCALE(40),
-		     &rc, text);
+		     NULL, text);
 
   canvas.background_transparent();
 }
@@ -288,6 +282,7 @@ void FlightStatistics::RenderTask(Canvas &canvas, const RECT rc, const bool olcm
 {
   int i;
   Chart chart(canvas, rc);
+  ScopeLock protect(&mutexTaskData);
 
   double lat1 = 0;
   double lon1 = 0;
@@ -304,7 +299,6 @@ void FlightStatistics::RenderTask(Canvas &canvas, const RECT rc, const bool olcm
   }
   bool nowaypoints = true;
 
-  mutexTaskData.Lock();
   for (i=0; i<MAXTASKPOINTS; i++) {
     if (ValidTaskPoint(i)) {
       lat1 = WayPointList[Task[i].Index].Latitude;
@@ -315,7 +309,6 @@ void FlightStatistics::RenderTask(Canvas &canvas, const RECT rc, const bool olcm
     }
   }
   if (nowaypoints && !olcmode) {
-    mutexTaskData.Unlock();
     chart.DrawNoData();
     return;
   }
@@ -398,7 +391,6 @@ void FlightStatistics::RenderTask(Canvas &canvas, const RECT rc, const bool olcm
       }
     }
   }
-  mutexTaskData.Unlock();
   for (i=0; i< nolc; i++) {
     lat1 = GlideComputer::olc.getLatitude(i);
     lon1 = GlideComputer::olc.getLongitude(i);
@@ -579,7 +571,6 @@ void FlightStatistics::RenderTask(Canvas &canvas, const RECT rc, const bool olcm
   x1 = (lon1-lon_c)*fastcosine(lat1);
   y1 = (lat1-lat_c);
   chart.DrawLabel(TEXT("+"), x1, y1);
-  mutexTaskData.Unlock();
 }
 
 
@@ -871,7 +862,7 @@ void FlightStatistics::RenderAirspace(Canvas &canvas, const RECT rc) {
   canvas.white_brush();
 
   line[0].x = chart.screenX(0.0);
-  line[0].x = chart.screenY(ach);
+  line[0].y = chart.screenY(ach);
   line[1].x = rc.left;
   line[1].y = line[0].y;
   delta = (line[0].x-line[1].x);

@@ -40,7 +40,6 @@ Copyright_License {
 #include "Dialogs.h"
 #include "Language.hpp"
 #include "InfoBoxLayout.h"
-#include "FlightStatistics.hpp"
 #include "SettingsComputer.hpp"
 #include "SettingsTask.hpp"
 #include "McReady.h"
@@ -86,7 +85,7 @@ static void OnAnalysisPaint(WindowControl *Sender, Canvas &canvas)
 {
   RECT  rcgfx;
   HFONT hfOld;
-  ScopeLock protect(mutexGlideComputer);
+  ScopeLock protect(&mutexGlideComputer);
 
   CopyRect(&rcgfx, Sender->GetBoundRect());
 
@@ -94,8 +93,8 @@ static void OnAnalysisPaint(WindowControl *Sender, Canvas &canvas)
 
   hfOld = (HFONT)SelectObject(canvas, Sender->GetFont()->native());
 
-  SetBkMode(canvas, TRANSPARENT);
-  SetTextColor(canvas, Sender->GetForeColor());
+  canvas.background_transparent();
+  canvas.set_text_color(Sender->GetForeColor());
 
   switch (page) {
   case ANALYSIS_PAGE_BAROGRAPH:
@@ -150,7 +149,7 @@ static void Update(void){
   int dt=1;
   double d=0;
 
-  mutexGlideComputer.Lock();
+  ScopeLock protect(&mutexGlideComputer);
 
   switch(page){
     case ANALYSIS_PAGE_BAROGRAPH:
@@ -401,7 +400,6 @@ static void Update(void){
     wInfo->SetCaption(TEXT(" "));
     break;
   }
-  mutexGlideComputer.Unlock();
 
   wGrid->SetVisible(page<MAXPAGE+1);
 
@@ -543,9 +541,4 @@ void dlgAnalysisShowModal(void){
   delete wf;
 
   wf = NULL;
-
-  //  MapWindow::RequestFastRefresh();
-  ClearAirspaceWarnings(false); // airspace warning gets refreshed
 }
-
-
