@@ -84,50 +84,51 @@ int GaugeFLARM::RangeScale(double d) {
   return iround(radius*(1.0-drad*drad));
 }
 
-void GaugeFLARM::RenderBg() {
-  BitmapCanvas hdcTemp(hdcDrawWindow, hRoseBitMap);
+void GaugeFLARM::RenderBg(Canvas &canvas) {
+  BitmapCanvas hdcTemp(canvas, hRoseBitMap);
 
   if ( hRoseBitMapWidth != IBLSCALE(InfoBoxLayout::ControlWidth*2)
       || hRoseBitMapHeight != IBLSCALE(InfoBoxLayout::ControlHeight*2-1) )
   {
-    hdcDrawWindow.stretch(0, 0,
-                          InfoBoxLayout::ControlWidth * 2,
-                          InfoBoxLayout::ControlHeight * 2 - 1,
-                          hdcTemp,
-                          0, 0, hRoseBitMapWidth, hRoseBitMapHeight);
+    canvas.stretch(0, 0,
+                   InfoBoxLayout::ControlWidth * 2,
+                   InfoBoxLayout::ControlHeight * 2 - 1,
+                   hdcTemp,
+                   0, 0, hRoseBitMapWidth, hRoseBitMapHeight);
   }
   else
   {
-    hdcDrawWindow.copy(0, 0, InfoBoxLayout::ControlWidth * 2, InfoBoxLayout::ControlHeight * 2 - 1,
-                       hdcTemp, 0, 0);
+    canvas.copy(0, 0, InfoBoxLayout::ControlWidth * 2,
+                InfoBoxLayout::ControlHeight * 2 - 1,
+                hdcTemp, 0, 0);
   }
 
 }
 
 #include "WindowControls.h" // just to get colors
 
-void GaugeFLARM::RenderTraffic(const NMEA_INFO *gps_info)
+void GaugeFLARM::RenderTraffic(Canvas &canvas, const NMEA_INFO *gps_info)
 {
   // TODO enhancement: support red/green Color blind pilots
 
-  hdcDrawWindow.select(TitleWindowFont);
-  hdcDrawWindow.set_text_color(Color(0x0,0x0,0x0));
-  hdcDrawWindow.set_background_color(Color(0xff,0xff,0xff));
+  canvas.select(TitleWindowFont);
+  canvas.set_text_color(Color(0x0,0x0,0x0));
+  canvas.set_background_color(Color(0xff,0xff,0xff));
 
   for (int i=0; i<FLARM_MAX_TRAFFIC; i++) {
     if (gps_info->FLARM_Traffic[i].ID>0) {
 
       switch (gps_info->FLARM_Traffic[i].AlarmLevel) {
       case 1:
-        hdcDrawWindow.select(MapGfx.yellowBrush);
+        canvas.select(MapGfx.yellowBrush);
 	  break;
       case 2:
       case 3:
-        hdcDrawWindow.select(MapGfx.redBrush);
+        canvas.select(MapGfx.redBrush);
 	  break;
       case 0:
       case 4:
-        hdcDrawWindow.select(MapGfx.greenBrush);
+        canvas.select(MapGfx.greenBrush);
 	  break;
       }
 
@@ -157,9 +158,9 @@ void GaugeFLARM::RenderTraffic(const NMEA_INFO *gps_info)
 
       if (gps_info->FLARM_Traffic[i].AlarmLevel>0) {
         // Draw line through target
-        hdcDrawWindow.line(sc.x, sc.y,
-                           center.x + iround(radius*x),
-                           center.y + iround(radius*y));
+        canvas.line(sc.x, sc.y,
+                    center.x + iround(radius*x),
+                    center.y + iround(radius*y));
       }
 
       POINT Arrow[5];
@@ -178,7 +179,7 @@ void GaugeFLARM::RenderTraffic(const NMEA_INFO *gps_info)
       PolygonRotateShift(Arrow, 5, sc.x, sc.y,
                          gps_info->FLARM_Traffic[i].TrackBearing
                          + DisplayAngle);
-      hdcDrawWindow.polygon(Arrow, 5);
+      canvas.polygon(Arrow, 5);
 
       short relalt =
 	iround(gps_info->FLARM_Traffic[i].RelativeAltitude*ALTITUDEMODIFY/100);
@@ -186,12 +187,12 @@ void GaugeFLARM::RenderTraffic(const NMEA_INFO *gps_info)
       if (relalt != 0) {
 	TCHAR Buffer[10];
 	_stprintf(Buffer, TEXT("%d"), abs(relalt));
-        SIZE tsize = hdcDrawWindow.text_size(Buffer);
+        SIZE tsize = canvas.text_size(Buffer);
 	tsize.cx = (tsize.cx+IBLSCALE(6))/2;
-        hdcDrawWindow.text(sc.x - tsize.cx + IBLSCALE(7),
-                           sc.y - tsize.cy - IBLSCALE(5),
-                           Buffer);
-        hdcDrawWindow.black_brush();
+        canvas.text(sc.x - tsize.cx + IBLSCALE(7),
+                    sc.y - tsize.cy - IBLSCALE(5),
+                    Buffer);
+        canvas.black_brush();
 	POINT triangle[4];
 	triangle[0].x = 3;  // was  2
 	triangle[0].y = -3; // was -2
@@ -210,7 +211,7 @@ void GaugeFLARM::RenderTraffic(const NMEA_INFO *gps_info)
           }
 	triangle[3].x = triangle[0].x;
 	triangle[3].y = triangle[0].y;
-        hdcDrawWindow.polygon(triangle, 4);
+        canvas.polygon(triangle, 4);
 
       }
     }
@@ -221,9 +222,9 @@ void GaugeFLARM::RenderTraffic(const NMEA_INFO *gps_info)
 void GaugeFLARM::Render(const NMEA_INFO *gps_info)
 {
   if (Visible) {
-    RenderBg();
+    RenderBg(hdcDrawWindow);
 
-    RenderTraffic(gps_info);
+    RenderTraffic(hdcDrawWindow, gps_info);
 
     window.get_canvas().copy(hdcDrawWindow);
   }
@@ -278,7 +279,7 @@ void GaugeFLARM::Create() {
   window.set_wndproc(GaugeFLARMWndProc);
   window.hide();
 
-  RenderBg();
+  RenderBg(hdcDrawWindow);
   window.get_canvas().copy(hdcDrawWindow);
 
   Visible = false;
