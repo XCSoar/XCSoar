@@ -47,6 +47,7 @@ Copyright_License {
 #include "Settings.hpp"
 #include "SettingsComputer.hpp"
 #include "SettingsTask.hpp"
+#include "Calibration.hpp"
 #include "McReady.h"
 #include "Logger.h"
 #include "ReplayLogger.hpp"
@@ -81,7 +82,6 @@ bool EnableFAIFinishHeight = false;
 
 int FinishLine=1;
 DWORD FinishRadius=1000;
-bool EnableCalibration = false;
 
 bool WasFlying = false; // VENTA3 used by auto QFE: do not reset QFE
 			//   if previously in flight. So you can check

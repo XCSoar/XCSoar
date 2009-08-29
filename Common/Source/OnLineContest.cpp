@@ -1039,3 +1039,84 @@ int OLCOptimizer::scan_classic() {
 
 // Use of ArmAdvance to reset starts?
 // Symbol on screen "ADV+" if valid for arm
+
+
+double OLCOptimizer::getDt() {
+  switch(OLCRules) {
+  case 0:
+    return data.solution_FAI_sprint.time;
+    break;
+  case 1:
+    return data.solution_FAI_triangle.time;
+    break;
+  case 2:
+    return data.solution_FAI_classic.time;
+    break;
+  default:
+    return 0.0;
+  }
+}
+
+double OLCOptimizer::getD() {
+  switch(OLCRules) {
+  case 0:
+    return data.solution_FAI_sprint.distance;
+    break;
+  case 1:
+    return data.solution_FAI_triangle.distance;
+    break;
+  case 2:
+    return data.solution_FAI_classic.distance;
+    break;
+  default:
+    return 0;
+  }
+}
+
+double OLCOptimizer::getValid() {
+  switch(OLCRules) {
+  case 0:
+    return data.solution_FAI_sprint.valid;
+    break;
+  case 1:
+    return data.solution_FAI_triangle.valid;
+    break;
+  case 2:
+    return data.solution_FAI_classic.valid;
+    break;
+  default:
+    return false;
+  }
+}
+
+double OLCOptimizer::getScore() {
+  switch(OLCRules) {
+  case 0:
+    return data.solution_FAI_sprint.score;
+    break;
+  case 1:
+    return data.solution_FAI_triangle.score;
+    break;
+  case 2:
+    return data.solution_FAI_classic.score;
+    break;
+  default:
+    return 0;
+  }
+}
+
+double OLCOptimizer::getFinished() {
+  switch(OLCRules) {
+  case 0:
+    return data.solution_FAI_sprint.finished;
+    break;
+  case 1:
+    return data.solution_FAI_triangle.finished;
+    break;
+  case 2:
+    return data.solution_FAI_classic.finished;
+    break;
+  default:
+    return false;
+  }
+}

@@ -391,6 +391,7 @@ OBJS	:=\
 	$(SRC)/BestAlternate.o 		\
 	$(SRC)/ClimbAverageCalculator.o \
 	$(SRC)/ConditionMonitor.o 	\
+	$(SRC)/Calibration.o 		\
 	$(SRC)/Calculations.o 		\
 	$(SRC)/Calculations2.o 		\
 	$(SRC)/CalculationsAbort.o 	\
@@ -406,6 +407,7 @@ OBJS	:=\
 	$(SRC)/CalculationsWind.o 	\
 	$(SRC)/FlarmIdFile.o 		\
 	$(SRC)/FlarmCalculations.o 	\
+	$(SRC)/FlightStatistics.o 	\
 	$(SRC)/GlideComputer.o 		\
 	$(SRC)/GlideRatio.o 		\
 	$(SRC)/GlideSolvers.o 		\
@@ -517,6 +519,7 @@ OBJS	:=\
 	\
 	$(SRC)/Screen/Animation.o 	\
 	$(SRC)/Screen/Blank.o 		\
+	$(SRC)/Screen/Chart.o 		\
 	$(SRC)/Screen/Fonts.o 		\
 	$(SRC)/Screen/Graphics.o 	\
 	$(SRC)/Screen/Ramp.o 		\

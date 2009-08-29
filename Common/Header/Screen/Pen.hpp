@@ -8,6 +8,7 @@ public:
   enum style {
     SOLID = PS_SOLID,
     DASH = PS_DASH,
+    BLANK = PS_NULL
   };
 
 protected:

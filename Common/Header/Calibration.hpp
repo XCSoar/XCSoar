@@ -35,41 +35,13 @@ Copyright_License {
 }
 */
 
-#if !defined(XCSOAR_GLIDECOMPUTER_HPP)
-#define XCSOAR_GLIDECOMPUTER_HPP
-
-#include "XCSoar.h"
+#ifndef CALIBRATION_HPP
+#define CALIBRATION_HPP
 #include "NMEA/Info.h"
 #include "NMEA/Derived.hpp"
-#include "FlightStatistics.hpp"
-#include "AATDistance.h"
-#include "OnLineContest.h"
-#include "Audio/VegaVoice.h"
-#include "GlideRatio.hpp"
-#include "ThermalLocator.h"
-#include "windanalyser.h"
-#include "SnailTrail.hpp"
 
-class GlideComputer {
-public:
-  static  ldrotary_s     rotaryLD;
-  static  FlightStatistics     flightstats;
-  static  AATDistance    aatdistance;
-  static  OLCOptimizer   olc;
-  static  ThermalLocator thermallocator;
-  static  WindAnalyser   *windanalyser;
-  static  SnailTrail     snail_trail;
-
-  static void DoLogging(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
-
-  // CalculationsAutoMc
-  static void DoAutoMacCready(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
-			      double mc_setting);
-
-  //protected:
-  static  VegaVoice    vegavoice;
-  static  DERIVED_INFO Finish_Derived_Info;
-
-};
+void CalibrationInit(void);
+void CalibrationUpdate(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
+void CalibrationSave(void);
 
 #endif

@@ -38,8 +38,8 @@ Copyright_License {
 
 #include "GlideComputer.hpp"
 
-ldrotary_s     GlideComputer::rotaryLD;
-Statistics     GlideComputer::flightstats;
+ldrotary_s           GlideComputer::rotaryLD;
+FlightStatistics     GlideComputer::flightstats;
 AATDistance    GlideComputer::aatdistance;
 OLCOptimizer   GlideComputer::olc;
 DERIVED_INFO   GlideComputer::Finish_Derived_Info;

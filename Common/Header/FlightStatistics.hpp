@@ -35,41 +35,36 @@ Copyright_License {
 }
 */
 
-#if !defined(XCSOAR_GLIDECOMPUTER_HPP)
-#define XCSOAR_GLIDECOMPUTER_HPP
+#ifndef FLIGHT_STATISTICS_HPP
+#define FLIGHT_STATISTICS_HPP
 
 #include "XCSoar.h"
-#include "NMEA/Info.h"
-#include "NMEA/Derived.hpp"
-#include "FlightStatistics.hpp"
-#include "AATDistance.h"
-#include "OnLineContest.h"
-#include "Audio/VegaVoice.h"
-#include "GlideRatio.hpp"
-#include "ThermalLocator.h"
-#include "windanalyser.h"
-#include "SnailTrail.hpp"
+#include "Math/leastsqs.h"
+#include "Task.h"
+#include "Screen/Canvas.hpp"
 
-class GlideComputer {
+class FlightStatistics {
 public:
-  static  ldrotary_s     rotaryLD;
-  static  FlightStatistics     flightstats;
-  static  AATDistance    aatdistance;
-  static  OLCOptimizer   olc;
-  static  ThermalLocator thermallocator;
-  static  WindAnalyser   *windanalyser;
-  static  SnailTrail     snail_trail;
+  void Reset();
 
-  static void DoLogging(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
+  LeastSquares ThermalAverage;
+  LeastSquares Wind_x;
+  LeastSquares Wind_y;
+  LeastSquares Altitude;
+  LeastSquares Altitude_Base;
+  LeastSquares Altitude_Ceiling;
+  LeastSquares Task_Speed;
+  double       LegStartTime[MAXTASKPOINTS];
+  LeastSquares Altitude_Terrain;
 
-  // CalculationsAutoMc
-  static void DoAutoMacCready(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
-			      double mc_setting);
-
-  //protected:
-  static  VegaVoice    vegavoice;
-  static  DERIVED_INFO Finish_Derived_Info;
-
+  void RenderAirspace(Canvas &canvas, const RECT rc);
+  void RenderBarograph(Canvas &canvas, const RECT rc);
+  void RenderClimb(Canvas &canvas, const RECT rc);
+  void RenderGlidePolar(Canvas &canvas, const RECT rc);
+  void RenderWind(Canvas &canvas, const RECT rc);
+  void RenderTemperature(Canvas &canvas, const RECT rc);
+  void RenderTask(Canvas &canvas, const RECT rc, const bool olcmode);
+  void RenderSpeed(Canvas &canvas, const RECT rc);
 };
 
 #endif

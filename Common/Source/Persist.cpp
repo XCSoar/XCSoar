@@ -173,15 +173,15 @@ void SaveCalculationsPersist(DERIVED_INFO *Calculated) {
     mutexGlideComputer.Lock();
     size = sizeof(DERIVED_INFO);
     fwrite(&size, sizeof(size), 1, file);
-    fwrite(Calculated, sizeof(*Calculated), 1, file);
+    fwrite(Calculated, size, 1, file);
 
-    size = sizeof(Statistics);
+    size = sizeof(FlightStatistics);
     fwrite(&size, sizeof(size), 1, file);
-    fwrite(&GlideComputer::flightstats, sizeof(GlideComputer::flightstats), 1, file);
+    fwrite(&GlideComputer::flightstats, size, 1, file);
 
     size = sizeof(OLCData);
     fwrite(&size, sizeof(size), 1, file);
-    fwrite(&GlideComputer::olc.data, sizeof(GlideComputer::olc.data), 1, file);
+    fwrite(&GlideComputer::olc.data, size, 1, file);
 
     double MACCREADY = GlidePolar::GetMacCready();
     double BUGS = GlidePolar::GetBugs();

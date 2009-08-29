@@ -79,6 +79,12 @@ public:
   virtual ~OLCOptimizer();
   void ResetFlight();
 
+  double getDt();
+  double getD();
+  double getValid();
+  double getScore();
+  double getFinished();
+
 private:
 
   void Clear();
