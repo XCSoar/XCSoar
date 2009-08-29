@@ -58,8 +58,6 @@ static Color colTextGray;
 static Color colText;
 static Color colTextBackgnd;
 
-LRESULT CALLBACK GaugeFLARMWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
-
 #define FLARMMAXRANGE 2000
 
 #include "Utils.h"
@@ -257,8 +255,7 @@ GaugeFLARM::GaugeFLARM(ContainerWindow &parent)
   // turn off suppression
   Suppress = false;
 
-  set_userdata(this);
-  set_wndproc(GaugeFLARMWndProc);
+  install_wndproc();
   hide();
 
   RenderBg(get_canvas());
@@ -285,29 +282,4 @@ void GaugeFLARM::Show() {
     hide();
   }
   lastvisible = Visible;
-}
-
-void GaugeFLARM::Repaint(Canvas &canvas) {
-  commit_buffer(canvas);
-}
-
-LRESULT CALLBACK GaugeFLARMWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam){
-  GaugeFLARM *gauge = (GaugeFLARM *)Window::get_userdata_pointer(hwnd);
-
-  switch (uMsg){
-
-    case WM_ERASEBKGND:
-      // we don't need one, we just paint over the top
-    return TRUE;
-
-    case WM_PAINT:
-      if (globalRunningEvent.test() && gauge->Visible) {
-        PaintCanvas canvas(*gauge, hwnd);
-        gauge->Repaint(canvas);
-      }
-    break;
-
-  }
-
-  return(DefWindowProc (hwnd, uMsg, wParam, lParam));
 }

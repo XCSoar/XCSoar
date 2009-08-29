@@ -111,3 +111,93 @@ Window::reset()
 {
   DestroyWindow(hWnd);
 }
+
+void
+Window::on_create()
+{
+}
+
+void
+Window::on_destroy()
+{
+}
+
+void
+Window::on_resize(unsigned width, unsigned height)
+{
+}
+
+void
+Window::on_mouse_down(unsigned x, unsigned y)
+{
+}
+
+void
+Window::on_mouse_up(unsigned x, unsigned y)
+{
+}
+
+void
+Window::on_mouse_double(unsigned x, unsigned y)
+{
+}
+
+void
+Window::on_key_down(unsigned key_code)
+{
+}
+
+void
+Window::on_key_up(unsigned key_code)
+{
+}
+
+LRESULT
+Window::on_message(HWND hWnd, UINT message,
+                       WPARAM wParam, LPARAM lParam)
+{
+  switch (message) {
+  case WM_CREATE:
+    created(hWnd);
+    on_create();
+    break;
+
+  case WM_DESTROY:
+    on_destroy();
+    break;
+
+  case WM_SIZE:
+    on_resize(LOWORD(lParam), HIWORD(lParam));
+    break;
+
+  case WM_LBUTTONDOWN:
+    on_mouse_down(LOWORD(lParam), HIWORD(lParam));
+    break;
+
+  case WM_LBUTTONUP:
+    on_mouse_up(LOWORD(lParam), HIWORD(lParam));
+    break;
+
+  case WM_LBUTTONDBLCLK:
+    on_mouse_double(LOWORD(lParam), HIWORD(lParam));
+    break;
+
+  case WM_KEYDOWN:
+    on_key_down(wParam);
+    break;
+
+  case WM_KEYUP:
+    on_key_up(wParam);
+    break;
+  }
+
+  return ::DefWindowProc(hWnd, message, wParam, lParam);
+}
+
+LRESULT CALLBACK
+Window::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+{
+  Window *widget = (Window *)get_userdata_pointer(hWnd);
+
+  return widget->on_message(hWnd, message, wParam, lParam);
+}

@@ -191,6 +191,36 @@ public:
   void send_command(const Window &from) {
     ::SendMessage(hWnd, WM_COMMAND, (WPARAM)0, (LPARAM)from.hWnd);
   }
+
+protected:
+  virtual void on_create();
+  virtual void on_destroy();
+  virtual void on_resize(unsigned width, unsigned height);
+  virtual void on_mouse_down(unsigned x, unsigned y);
+  virtual void on_mouse_up(unsigned x, unsigned y);
+  virtual void on_mouse_double(unsigned x, unsigned y);
+  virtual void on_key_down(unsigned key_code);
+  virtual void on_key_up(unsigned key_code);
+
+  virtual LRESULT on_message(HWND hWnd, UINT message,
+                             WPARAM wParam, LPARAM lParam);
+
+public:
+  /**
+   * This static method reads the Window* object from GWL_USERDATA and
+   * calls on_message().
+   */
+  static LRESULT CALLBACK WndProc(HWND hWnd, UINT message,
+                                  WPARAM wParam, LPARAM lParam);
+
+  /**
+   * Installs Window::WndProc() has the WNDPROC.  This enables the
+   * methods on_*() methods, which may be implemented by sub classes.
+   */
+  void install_wndproc() {
+    set_userdata(this);
+    set_wndproc(WndProc);
+  }
 };
 
 #endif

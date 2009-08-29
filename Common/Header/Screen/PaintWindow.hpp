@@ -153,6 +153,14 @@ public:
   void EndPaint(PAINTSTRUCT *ps) {
     ::EndPaint(hWnd, ps);
   }
+
+protected:
+  virtual void on_resize(unsigned width, unsigned height);
+
+  virtual void on_paint(Canvas &canvas);
+
+  virtual LRESULT on_message(HWND hWnd, UINT message,
+                             WPARAM wParam, LPARAM lParam);
 };
 
 #endif

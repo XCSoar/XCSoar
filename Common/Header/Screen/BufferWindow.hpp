@@ -105,6 +105,9 @@ public:
   void commit_buffer() {
     commit_buffer(PaintWindow::get_canvas());
   }
+
+protected:
+  virtual void on_paint(Canvas &canvas);
 };
 
 #endif

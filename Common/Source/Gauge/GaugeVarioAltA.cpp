@@ -71,10 +71,6 @@ static Color colTextBackgnd;
 #define ARROWYSIZE IBLSCALE(3)
 #define ARROWXSIZE IBLSCALE(7)
 
-
-LRESULT CALLBACK GaugeVarioWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
-
-
 GaugeVario::GaugeVario(ContainerWindow &parent)
  :polys(NULL), lines(NULL)
 {
@@ -166,8 +162,7 @@ GaugeVario::GaugeVario(ContainerWindow &parent)
   xoffset = get_width();
   yoffset = get_height() / 2;
 
-  set_userdata(this);
-  set_wndproc(GaugeVarioWndProc);
+  install_wndproc();
   hide();
 }
 
@@ -357,10 +352,6 @@ void GaugeVario::Render() {
   RenderZero(hdcDrawWindow);
 
   commit_buffer();
-}
-
-void GaugeVario::Repaint(Canvas &canvas){
-  commit_buffer(canvas);
 }
 
 void GaugeVario::RenderBg(Canvas &canvas) {
@@ -1019,27 +1010,3 @@ void GaugeVario::RenderBugs(Canvas &canvas)
 
   }
 }
-
-
-LRESULT CALLBACK GaugeVarioWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam){
-  GaugeVario *gauge = (GaugeVario *)Window::get_userdata_pointer(hwnd);
-
-  switch (uMsg){
-    case WM_ERASEBKGND:
-      // we don't need one, we just paint over the top
-    return TRUE;
-
-    case WM_PAINT:
-      if (globalRunningEvent.test() && EnableVarioGauge) {
-        PaintCanvas canvas(*gauge, hwnd);
-        gauge->Repaint(canvas);
-      }
-    break;
-
-  }
-
-  return(DefWindowProc (hwnd, uMsg, wParam, lParam));
-}
-
-
-

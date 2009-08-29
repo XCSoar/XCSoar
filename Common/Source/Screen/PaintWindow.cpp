@@ -36,6 +36,7 @@ Copyright_License {
 */
 
 #include "Screen/PaintWindow.hpp"
+#include "Screen/PaintCanvas.hpp"
 
 #include <assert.h>
 
@@ -101,4 +102,38 @@ PaintWindow::reset()
 {
   canvas.reset();
   Window::reset();
+}
+
+void
+PaintWindow::on_resize(unsigned width, unsigned height)
+{
+  resize(width, height);
+}
+
+void
+PaintWindow::on_paint(Canvas &canvas)
+{
+  /* to be implemented by a subclass */
+  /* this is not an abstract method yet until the OO transition of all
+     PaintWindow users is complete */
+}
+
+LRESULT
+PaintWindow::on_message(HWND hWnd, UINT message,
+                        WPARAM wParam, LPARAM lParam)
+{
+  switch (message) {
+  case WM_ERASEBKGND:
+    // we don't need one, we just paint over the top
+    return true;
+
+  case WM_PAINT:
+    {
+      PaintCanvas canvas(*this, hWnd);
+      on_paint(canvas);
+    }
+    return true;
+  }
+
+  return Window::on_message(hWnd, message, wParam, lParam);
 }

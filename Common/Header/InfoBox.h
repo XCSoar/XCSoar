@@ -147,6 +147,10 @@ class InfoBox : public PaintWindow {
 
     Canvas &GetCanvas(void);
 
+protected:
+  virtual void on_mouse_down(unsigned x, unsigned y);
+  virtual void on_mouse_double(unsigned x, unsigned y);
+  virtual void on_paint(Canvas &canvas);
 };
 
 #endif

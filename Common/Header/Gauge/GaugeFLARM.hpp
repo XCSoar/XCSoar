@@ -59,7 +59,6 @@ public:
   void Render(const NMEA_INFO *gps_info);
   void RenderTraffic(Canvas &canvas, const NMEA_INFO *gps_info);
   void RenderBg(Canvas &canvas);
-  void Repaint(Canvas &canvas);
   void Show();
   void TrafficPresent(bool traffic);
  private:

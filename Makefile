@@ -565,6 +565,7 @@ OBJS	:=\
 	$(SRC)/Screen/Pen.o \
 	$(SRC)/Screen/Window.o \
 	$(SRC)/Screen/PaintWindow.o \
+	$(SRC)/Screen/BufferWindow.o \
 	$(SRC)/Screen/TextWindow.o \
 	$(SRC)/Screen/EditWindow.o \
 	$(SRC)/Screen/MainWindow.o \
