@@ -45,9 +45,8 @@ Copyright_License {
 
 class ContainerWindow;
 
-class GaugeFLARM {
+class GaugeFLARM : public PaintWindow {
 private:
-  PaintWindow window;
   BufferCanvas hdcDrawWindow;
   Bitmap hRoseBitMap;
   SIZE hRoseBitMapSize;

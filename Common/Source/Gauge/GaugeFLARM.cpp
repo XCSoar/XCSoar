@@ -210,7 +210,7 @@ void GaugeFLARM::Render(const NMEA_INFO *gps_info)
 
     RenderTraffic(hdcDrawWindow, gps_info);
 
-    window.get_canvas().copy(hdcDrawWindow);
+    get_canvas().copy(hdcDrawWindow);
   }
 }
 
@@ -222,21 +222,21 @@ GaugeFLARM::GaugeFLARM(ContainerWindow &parent)
 
   RECT rc = parent.get_client_rect();
 
-  window.set(parent,
-             (int)(rc.right - InfoBoxLayout::ControlWidth * 2)+1,
-             (int)(rc.bottom - InfoBoxLayout::ControlHeight * 2)+1,
-             (int)(InfoBoxLayout::ControlWidth * 2)-1,
-             (int)(InfoBoxLayout::ControlHeight * 2)-1,
-             false, false, false);
-  window.insert_after(HWND_TOP, false);
+  set(parent,
+      (int)(rc.right - InfoBoxLayout::ControlWidth * 2)+1,
+      (int)(rc.bottom - InfoBoxLayout::ControlHeight * 2)+1,
+      (int)(InfoBoxLayout::ControlWidth * 2)-1,
+      (int)(InfoBoxLayout::ControlHeight * 2)-1,
+      false, false, false);
+  insert_after(HWND_TOP, false);
 
-  rc = window.get_client_rect();
+  rc = get_client_rect();
 
-  center.x = window.get_hmiddle();
-  center.y = window.get_vmiddle();
-  radius = min(window.get_right() - center.x, window.get_bottom() - center.y);
+  center.x = get_hmiddle();
+  center.y = get_vmiddle();
+  radius = min(get_right() - center.x, get_bottom() - center.y);
 
-  hdcDrawWindow.set(window.get_canvas());
+  hdcDrawWindow.set(get_canvas());
 
   hRoseBitMap.load(IDB_FLARMROSE);
 
@@ -260,12 +260,12 @@ GaugeFLARM::GaugeFLARM(ContainerWindow &parent)
   // turn off suppression
   Suppress = false;
 
-  window.set_userdata(this);
-  window.set_wndproc(GaugeFLARMWndProc);
-  window.hide();
+  set_userdata(this);
+  set_wndproc(GaugeFLARMWndProc);
+  hide();
 
   RenderBg(hdcDrawWindow);
-  window.get_canvas().copy(hdcDrawWindow);
+  get_canvas().copy(hdcDrawWindow);
 
   Visible = false;
   Traffic = false;
@@ -282,10 +282,10 @@ void GaugeFLARM::Show() {
   Visible = ForceVisible || (Traffic && EnableFLARMGauge && !Suppress);
   static bool lastvisible = true;
   if (Visible && !lastvisible) {
-    window.show();
+    show();
   }
   if (!Visible && lastvisible) {
-    window.hide();
+    hide();
   }
   lastvisible = Visible;
 }
@@ -305,7 +305,7 @@ LRESULT CALLBACK GaugeFLARMWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l
 
     case WM_PAINT:
       if (globalRunningEvent.test() && gauge->Visible) {
-        PaintCanvas canvas(gauge->window, hwnd);
+        PaintCanvas canvas(*gauge, hwnd);
         gauge->Repaint(canvas);
       }
     break;
