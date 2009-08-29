@@ -46,30 +46,21 @@ Copyright_License {
 #include "Settings.hpp"
 #include "SettingsTask.hpp"
 #include "SettingsComputer.hpp"
-#include "McReady.h"
 #include "Airspace.h"
 #include "Logger.h"
 #include <windows.h>
 #include <math.h>
 #include "InputEvents.h"
-#include "Message.h"
-#include "RasterTerrain.h"
 #include "TeamCodeCalculation.h"
 #include "Process.h"
 #include "Math/Earth.hpp"
 #include "PeriodClock.hpp"
 #include "Math/Pressure.h"
 #include "WayPoint.hpp"
-#include "SnailTrail.hpp"
 #include "LogFile.hpp"
 
 #include <tchar.h>
 
-#include "ThermalLocator.h"
-#include "windanalyser.h"
-#include "Atmosphere.h"
-
-#include "Audio/VegaVoice.h"
 #include "NavFunctions.h" // used for team code
 
 #include <stdio.h>
@@ -205,8 +196,6 @@ void GlideComputer::DoLogging(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
     }
   }
 }
-
-
 
 
 /////////
