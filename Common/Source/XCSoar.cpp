@@ -64,29 +64,11 @@ Copyright_License {
 HINSTANCE hInst; // The current instance
 MainWindow main_window;
 
-////////////////////////////////////////////////////////////////////////////////
-//Local Static data
-int iTimerID= 0;
 
-
-#if (((UNDER_CE >= 300)||(_WIN32_WCE >= 0x0300)) && (WINDOWSPC<1))
-#define HAVE_ACTIVATE_INFO
-#endif
-
-#ifdef HAVE_ACTIVATE_INFO
-static SHACTIVATEINFO s_sai;
-#endif
-
-
-WPARAM WindowsMessageLoop() {
-#if _DEBUG
- // _crtBreakAlloc = -1;     // Set this to the number in {} brackets to
-                             // break on a memory leak
-#endif
-
-  HACCEL hAccelTable = LoadAccelerators(hInst, (LPCTSTR)IDC_XCSOAR);
-
-  // Main message loop:
+// Main message loop
+WPARAM WindowsMessageLoop(HINSTANCE hInstance) 
+{
+  HACCEL hAccelTable = LoadAccelerators(hInstance, (LPCTSTR)IDC_XCSOAR);
   MSG msg;
   while (GetMessage(&msg, NULL, 0, 0)) {
     if (!TranslateAccelerator(msg.hwnd, hAccelTable, &msg)) {
@@ -94,14 +76,6 @@ WPARAM WindowsMessageLoop() {
       DispatchMessage(&msg);
     }
   }
-
-#if (WINDOWSPC>0)
-#if _DEBUG
-  _CrtCheckMemory();
-  _CrtDumpMemoryLeaks();
-#endif
-#endif
-
   return msg.wParam;
 }
 
@@ -125,11 +99,36 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 
   StartupStore(TEXT("Initialise application instance\n"));
 
-  // Perform application initialization:
-  if (!Startup (hInstance, lpCmdLine)) {
+  // Perform application initialization and run loop
+  if (Startup (hInstance, lpCmdLine)) {
+    return WindowsMessageLoop(hInstance);
+  } else {
     return FALSE;
   }
-
-  return WindowsMessageLoop();
 }
 
+
+////
+
+#if (((UNDER_CE >= 300)||(_WIN32_WCE >= 0x0300)) && (WINDOWSPC<1))
+#define HAVE_ACTIVATE_INFO
+#endif
+
+#ifdef HAVE_ACTIVATE_INFO
+static SHACTIVATEINFO s_sai;
+#endif
+
+
+/*
+#if _DEBUG
+ // _crtBreakAlloc = -1;     // Set this to the number in {} brackets to
+                             // break on a memory leak
+#endif
+#if (WINDOWSPC>0)
+#if _DEBUG
+  _CrtCheckMemory();
+  _CrtDumpMemoryLeaks();
+#endif
+#endif
+
+*/
