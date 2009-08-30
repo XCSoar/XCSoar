@@ -89,8 +89,6 @@ MapWindow map_window;
 NMEA_INFO     GPS_INFO;
 DERIVED_INFO  CALCULATED_INFO;
 
-extern int iTimerID;
-
 
 /////////////////////////////////////////////////////////////////////////////////
 
@@ -232,9 +230,12 @@ bool Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
 		  WindowSize.left, WindowSize.top,
 		  WindowSize.right, WindowSize.bottom);
 
+  main_window.install_wndproc();
+
   if (!main_window.defined()) {
     return false;
   }
+  main_window.install_timer();
 
   rc = main_window.get_client_rect();
 #if (WINDOWSPC>0)
@@ -400,11 +401,6 @@ bool Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
 
 void Shutdown(void) {
   int i;
-
-  if(iTimerID) {
-    KillTimer(main_window,iTimerID);
-    iTimerID = 0;
-  }
 
   CreateProgressDialog(gettext(TEXT("Shutdown, please wait...")));
   StartHourglassCursor();

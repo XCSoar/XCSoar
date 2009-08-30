@@ -343,11 +343,12 @@ bool InfoBoxManager::Defocus() {
   if (retval) {
     FocusOnWindow(InfoFocus,false);
     InfoFocus = -1;
-    InputEvents::HideMenu();
     InfoWindowActive = false;
+    InputEvents::HideMenu();
     FocusSetMaxTimeOut();
+    InfoBoxesDirty = true;
 #ifndef DISABLEAUDIO
-	  if (EnableSoundModes) PlayResource(TEXT("IDR_WAV_CLICK"));
+    if (EnableSoundModes) PlayResource(TEXT("IDR_WAV_CLICK"));
 #endif
     map_window.set_focus();
   }
@@ -965,6 +966,9 @@ void InfoBoxManager::Focus(void) {
   }
 }
 
+bool InfoBoxManager::IsFocus() {
+  return InfoWindowActive;
+}
 
 void InfoBoxManager::InfoBoxDrawIfDirty(void) {
   // No need to redraw map or infoboxes if screen is blanked.
@@ -995,7 +999,7 @@ void InfoBoxManager::ProcessTimer(void) {
       InfoBoxFocusTimeOut ++;
 
       if(InfoBoxFocusTimeOut >= FOCUSTIMEOUTMAX) {
-	map_window.set_focus();
+	Defocus();
       }
     }
   }

@@ -185,9 +185,8 @@ void ButtonLabel::CreateButtonLabels(RECT rc) {
     ButtonDisabled[i]= false;
 
     SetLabelText(i,NULL);
-    hWndButtonWindow[i].set_userdata(4);
+    //JMW TODO BROKEN    hWndButtonWindow[i].set_userdata(4);
   }
-
   //
 }
 
@@ -228,10 +227,10 @@ void ButtonLabel::SetLabelText(int index, const TCHAR *text) {
     bool greyed = ExpandMacros(text, s, sizeof(s)/sizeof(s[0]));
 
     if (greyed) {
-      hWndButtonWindow[index].set_userdata(5);
+      //      hWndButtonWindow[index].set_userdata(5);
       ButtonDisabled[index]= true;
     } else {
-      hWndButtonWindow[index].set_userdata(4);
+      //      hWndButtonWindow[index].set_userdata(4);
       ButtonDisabled[index]= false;
     }
 

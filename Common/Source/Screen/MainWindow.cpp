@@ -88,16 +88,13 @@ MainWindow::full_screen()
 #endif
 }
 
-LRESULT CALLBACK MainWndProc (HWND, UINT, WPARAM, LPARAM);
-
-
 bool 
 MainWindow::register_class(HINSTANCE hInstance, const TCHAR* szWindowClass)
 {
   WNDCLASS wc;
 
   wc.style                      = CS_HREDRAW | CS_VREDRAW;
-  wc.lpfnWndProc                = (WNDPROC) MainWndProc;
+  wc.lpfnWndProc                = ::DefWindowProc; // (WNDPROC) MainWndProc;
   wc.cbClsExtra                 = 0;
 #if (WINDOWSPC>0)
   wc.cbWndExtra = 0;
@@ -119,3 +116,155 @@ MainWindow::register_class(HINSTANCE hInstance, const TCHAR* szWindowClass)
 
   return (RegisterClass(&wc)!= FALSE);
 }
+
+///////////////////////////////////////////////////////////////////////////
+// Windows event handlers
+
+#include "Protection.hpp"
+#include "InfoBoxManager.h"
+#include "Message.h"
+#include "Interface.hpp"
+#include "ButtonLabel.h"
+#include "Screen/Graphics.hpp"
+#include "Components.hpp"
+#include "ProcessTimer.hpp"
+#include "LogFile.hpp"
+
+LRESULT MainWindow::on_command(HWND wmControl)
+{
+  if (wmControl && globalRunningEvent.test()) {
+
+    full_screen();
+
+    if (InfoBoxManager::Click(wmControl)) {
+      return TRUE; // don't continue processing..
+    }
+
+    Message::CheckTouch(wmControl);
+    
+    if (ButtonLabel::CheckButtonPress(wmControl)) {
+      return TRUE; // don't continue processing..
+    }
+  }
+  return FALSE;
+}
+
+
+LRESULT MainWindow::on_colour(HDC hdc, int wdata)
+{
+  switch(wdata) {
+  case 0:
+    SetBkColor(hdc, MapGfx.ColorUnselected);
+    SetTextColor(hdc, MapGfx.ColorBlack);
+    return (LRESULT)MapGfx.infoUnselectedBrush.native();
+  case 1:
+    SetBkColor(hdc, MapGfx.ColorSelected);
+    SetTextColor(hdc, MapGfx.ColorBlack);
+    return (LRESULT)MapGfx.infoSelectedBrush.native();
+  case 2:
+    SetBkColor(hdc, MapGfx.ColorUnselected);
+    SetTextColor(hdc, MapGfx.ColorWarning);
+    return (LRESULT)MapGfx.infoUnselectedBrush.native();
+  case 3:
+    SetBkColor(hdc, MapGfx.ColorUnselected);
+    SetTextColor(hdc, MapGfx.ColorOK);
+    return (LRESULT)MapGfx.infoUnselectedBrush.native();
+  case 4:
+    // black on light green
+    SetBkColor(hdc, MapGfx.ColorButton);
+    SetTextColor(hdc, MapGfx.ColorBlack);
+    return (LRESULT)MapGfx.buttonBrush.native();
+  case 5:
+    // grey on light green
+    SetBkColor(hdc, MapGfx.ColorButton);
+    SetTextColor(hdc, MapGfx.ColorMidGrey);
+    return (LRESULT)MapGfx.buttonBrush.native();
+  }
+}
+
+void MainWindow::on_timer(void)
+{
+  if (globalRunningEvent.test()) {
+    AfterStartup();
+#ifdef _SIM_
+    SIMProcessTimer();
+#else
+    ProcessTimer();
+#endif
+  }
+}
+
+void MainWindow::on_create(void)
+{
+  // strange, this never gets called..
+#ifdef HAVE_ACTIVATE_INFO
+  memset (&s_sai, 0, sizeof (s_sai));
+  s_sai.cbSize = sizeof (s_sai);
+#endif
+  if (_timer_id == 0) {
+    _timer_id = SetTimer(hWnd,1000,500,NULL); // 2 times per second
+  }
+}
+
+void MainWindow::install_timer(void) {
+  // cheat
+  on_create();
+}
+
+void MainWindow::on_key_down(unsigned key_code) {
+  InterfaceTimeoutReset();
+}
+
+void MainWindow::on_destroy(void) {
+  PostQuitMessage(0);
+}
+
+void MainWindow::on_close() {
+  if (CheckShutdown()) {
+    if(_timer_id) {
+      ::KillTimer(hWnd, _timer_id);
+      _timer_id = 0;
+    }
+    Shutdown();
+  }
+}
+
+LRESULT MainWindow::on_message(HWND _hWnd, UINT message,
+			       WPARAM wParam, LPARAM lParam) {
+  switch (message) {
+  case WM_CREATE:
+    created(_hWnd);
+    on_create();
+    break;
+  case WM_COMMAND:
+    return on_command((HWND)lParam);
+    break;
+    /*
+  case WM_CTLCOLORSTATIC:
+    return on_colour((HDC)wParam, get_userdata((HWND)lParam));
+    break;
+    */
+  case WM_ACTIVATE:
+    if(LOWORD(wParam) != WA_INACTIVE) {
+      full_screen();
+    }
+#ifdef HAVE_ACTIVATE_INFO
+    SHHandleWMActivate(_hWnd, wParam, lParam, &s_sai, FALSE);
+#endif
+    break;
+  case WM_SETTINGCHANGE:
+#ifdef HAVE_ACTIVATE_INFO
+    SHHandleWMSettingChange(_hWnd, wParam, lParam, &s_sai);
+#endif
+    break;
+  case WM_TIMER:
+    on_timer();
+    break;
+  case WM_CLOSE:
+    on_close();
+    return FALSE;
+    break;
+  };
+  return ContainerWindow::on_message(_hWnd, message, wParam, lParam);
+}
+

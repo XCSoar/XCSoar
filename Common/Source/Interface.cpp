@@ -84,24 +84,26 @@ static bool ShutdownRequested = false;
 
 void SignalShutdown(bool force) {
   if (!ShutdownRequested) {
-    main_window.close();
     doForceShutdown = force;
     ShutdownRequested = true;
+    main_window.close(); // signals close
   }
 }
 
 bool CheckShutdown(void) {
-  ShutdownRequested = false;
-  bool retval = true;
-  if(doForceShutdown ||
-     MessageBoxX(gettext(TEXT("Quit program?")),
-		 gettext(TEXT("XCSoar")),
-		 MB_YESNO|MB_ICONQUESTION) == IDYES) {
-    retval = true;
-  } else {
-    retval = false;
+  bool retval = false;
+  if (ShutdownRequested) {
+    if(doForceShutdown ||
+       (MessageBoxX(gettext(TEXT("Quit program?")),
+		    gettext(TEXT("XCSoar")),
+		    MB_YESNO|MB_ICONQUESTION) == IDYES)) {
+      retval = true;
+    } else {
+      retval = false;
+    }
+    doForceShutdown = false;
+    ShutdownRequested = false;
   }
-  doForceShutdown = false;
   return retval;
 }
 

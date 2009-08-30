@@ -983,8 +983,8 @@ void InputEvents::HideMenu() {
 }
 
 void InputEvents::ResetMenuTimeOut() {
-  MenuTimeOut = 0;
   ResetDisplayTimeOut();
+  MenuTimeOut = 0;
 }
 
 void InputEvents::ShowMenu() {
@@ -993,21 +993,26 @@ void InputEvents::ShowMenu() {
   // setMode(TEXT("Exit"));
   setMode(TEXT("Menu")); // VENTA3
 #endif
+  ResetDisplayTimeOut();
   MenuTimeOut = 0;
   ProcessMenuTimer();
-  ResetDisplayTimeOut();
 }
 
 #include "MapWindowProjection.hpp"
+#include "InfoBoxManager.h"
 
 void InputEvents::ProcessMenuTimer() {
-  if(MenuTimeOut==MenuTimeoutMax) {
-    if (MapWindowProjection::isPan()
-	&& !MapWindowProjection::isTargetPan()) {
-      InputEvents::setMode(TEXT("pan"));
-    } else {
-      InputEvents::setMode(TEXT("default"));
+  if (InfoBoxManager::IsFocus()) {
+    InputEvents::setMode(TEXT("infobox"));
+  } else {
+    if(MenuTimeOut==MenuTimeoutMax) {
+      if (MapWindowProjection::isPan()
+	  && !MapWindowProjection::isTargetPan()) {
+	InputEvents::setMode(TEXT("pan"));
+      } else {
+	InputEvents::setMode(TEXT("default"));
+      }
     }
+    MenuTimeOut++;
   }
-  MenuTimeOut++;
 }

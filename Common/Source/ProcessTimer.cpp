@@ -144,7 +144,7 @@ int ConnectionProcessTimer(int itimeout) {
 #ifdef GNAV
       // TODO feature: ask question about shutdown or give warning
       // then shutdown if no activity.
-      //     Shutdown();
+      // Shutdown();
 #endif
     }
   }
@@ -190,14 +190,6 @@ int ConnectionProcessTimer(int itimeout) {
 	  RestartCommPorts();
 #endif
 #endif
-
-#if (EXPERIMENTAL > 0)
-	  // if comm port shut down, probably so did bluetooth dialup
-	  // so restart it here also.
-	  bsms.Shutdown();
-	  bsms.Initialise();
-#endif
-
 	  itimeout = 0;
 	}
       }

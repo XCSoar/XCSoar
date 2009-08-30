@@ -153,12 +153,12 @@ Window::on_key_up(unsigned key_code)
 }
 
 LRESULT
-Window::on_message(HWND hWnd, UINT message,
+Window::on_message(HWND _hWnd, UINT message,
                        WPARAM wParam, LPARAM lParam)
 {
   switch (message) {
   case WM_CREATE:
-    created(hWnd);
+    created(_hWnd);
     on_create();
     break;
 
@@ -191,13 +191,13 @@ Window::on_message(HWND hWnd, UINT message,
     break;
   }
 
-  return ::DefWindowProc(hWnd, message, wParam, lParam);
+  return ::DefWindowProc(_hWnd, message, wParam, lParam);
 }
 
 LRESULT CALLBACK
-Window::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+Window::WndProc(HWND _hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-  Window *widget = (Window *)get_userdata_pointer(hWnd);
+  Window *widget = (Window *)get_userdata_pointer(_hWnd);
 
-  return widget->on_message(hWnd, message, wParam, lParam);
+  return widget->on_message(_hWnd, message, wParam, lParam);
 }

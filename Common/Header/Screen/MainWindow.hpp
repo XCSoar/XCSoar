@@ -45,6 +45,8 @@ Copyright_License {
  */
 class MainWindow : public ContainerWindow {
 public:
+  MainWindow():_timer_id(0) {};
+
   bool find(LPCTSTR cls, LPCTSTR text);
 
   void set(LPCTSTR cls, LPCTSTR text,
@@ -62,6 +64,21 @@ public:
   }
 
   bool register_class(HINSTANCE hInstance, const TCHAR* szWindowClass);
+
+protected:
+  virtual LRESULT on_message(HWND hWnd, UINT message,
+                             WPARAM wParam, LPARAM lParam);
+
+  LRESULT on_colour(HDC hdc, int wdata);
+  LRESULT on_command(HWND wmControl);
+  void on_timer();
+  int _timer_id;
+  void on_create();
+  void on_key_down(unsigned key_code);
+  void on_destroy();
+  void on_close();
+public:
+  void install_timer();
 };
 
 #endif

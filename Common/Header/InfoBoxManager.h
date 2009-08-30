@@ -79,6 +79,7 @@ public:
   static int getTypeAll(const int i);
   static void setTypeAll(const int i, const int j);
 
+  static bool IsFocus();
 };
 
 #endif
