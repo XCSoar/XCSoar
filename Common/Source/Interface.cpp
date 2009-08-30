@@ -84,7 +84,7 @@ static bool ShutdownRequested = false;
 
 void SignalShutdown(bool force) {
   if (!ShutdownRequested) {
-    SendMessage(hWndMainWindow, WM_CLOSE,
+    SendMessage(main_window, WM_CLOSE,
 		0, 0);
     ForceShutdown = force;
     ShutdownRequested = true;

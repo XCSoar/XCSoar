@@ -538,7 +538,7 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
       } else
 #endif
       if (!my_target_pan) {
-	if (DefocusInfoBox()) { //
+	if (InfoBoxManager::DefocusInfoBox()) { //
 	  break;
 	}
 	if (VirtualKeys==(VirtualKeys_t)vkEnabled) {

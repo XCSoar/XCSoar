@@ -314,7 +314,7 @@ void dlgAirspaceDetails(int the_circle, int the_area) {
 
   wf = dlgLoadFromXML(CallBackTable,
                       TEXT("dlgAirspaceDetails.xml"),
-		      hWndMainWindow,
+		      main_window,
 		      TEXT("IDR_XML_AIRSPACEDETAILS"));
 
   if (!wf) return;

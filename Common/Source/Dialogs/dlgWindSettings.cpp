@@ -137,7 +137,7 @@ static CallBackTableEntry_t CallBackTable[]={
 void dlgWindSettingsShowModal(void){
   wf = dlgLoadFromXML(CallBackTable,
                       TEXT("dlgWindSettings.xml"),
-		      hWndMainWindow,
+		      main_window,
 		      TEXT("IDR_XML_WINDSETTINGS"));
 
   if (wf) {

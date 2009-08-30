@@ -192,12 +192,12 @@ void dlgStartPointShowModal(void) {
   if (!InfoBoxLayout::landscape) {
     wf = dlgLoadFromXML(CallBackTable,
                         TEXT("dlgStartPoint_L.xml"),
-                        hWndMainWindow,
+                        main_window,
                         TEXT("IDR_XML_STARTPOINT_L"));
   } else {
     wf = dlgLoadFromXML(CallBackTable,
                         TEXT("dlgStartPoint.xml"),
-                        hWndMainWindow,
+                        main_window,
                         TEXT("IDR_XML_STARTPOINT"));
   }
   if (!wf) return;

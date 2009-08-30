@@ -114,7 +114,7 @@ Copyright_License {
 TCHAR XCSoar_Version[256] = TEXT("");
 
 HINSTANCE hInst; // The current instance
-MainWindow hWndMainWindow;
+MainWindow main_window;
 MapWindow map_window;
 GaugeVario *gauge_vario;
 GaugeFLARM *gauge_flarm;
@@ -238,6 +238,11 @@ void SwitchToMapWindow(void)
 {
   map_window.set_focus();
 }
+
+void MainWindowTop() {
+  main_window.full_screen();
+}
+
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -368,10 +373,6 @@ void SystemConfiguration(void) {
 
 //////////////////////////////////////////////////////////////////////
 
-void MainWindowTop() {
-  hWndMainWindow.full_screen();
-}
-
 ////////////////////////////////////////////////////////////////////////
 void RestartCommPorts() {
   static bool first = true;
@@ -482,7 +483,7 @@ static void AfterStartup() {
   MainWindowTop();
   MapWindow::dirtyEvent.trigger();
   drawTriggerEvent.trigger();
-  InfoBoxesSetDirty(true);
+  InfoBoxManager::InfoBoxesSetDirty(true);
   TriggerRedraws();
 }
 
@@ -597,17 +598,17 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   hAccelTable = LoadAccelerators(hInstance, (LPCTSTR)IDC_XCSOAR);
 
 #ifdef HAVE_ACTIVATE_INFO
-  SHSetAppKeyWndAssoc(VK_APP1, hWndMainWindow);
-  SHSetAppKeyWndAssoc(VK_APP2, hWndMainWindow);
-  SHSetAppKeyWndAssoc(VK_APP3, hWndMainWindow);
-  SHSetAppKeyWndAssoc(VK_APP4, hWndMainWindow);
+  SHSetAppKeyWndAssoc(VK_APP1, main_window);
+  SHSetAppKeyWndAssoc(VK_APP2, main_window);
+  SHSetAppKeyWndAssoc(VK_APP3, main_window);
+  SHSetAppKeyWndAssoc(VK_APP4, main_window);
   // Typical Record Button
   //	Why you can't always get this to work
   //	http://forums.devbuzz.com/m_1185/mpage_1/key_/tm.htm
   //	To do with the fact it is a global hotkey, but you can with code above
   //	Also APPA is record key on some systems
-  SHSetAppKeyWndAssoc(VK_APP5, hWndMainWindow);
-  SHSetAppKeyWndAssoc(VK_APP6, hWndMainWindow);
+  SHSetAppKeyWndAssoc(VK_APP5, main_window);
+  SHSetAppKeyWndAssoc(VK_APP6, main_window);
 #endif
 
   // Initialise main blackboard data
@@ -628,7 +629,7 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 
   GaugeCDI::Create();
 
-  gauge_vario = new GaugeVario(hWndMainWindow);
+  gauge_vario = new GaugeVario(main_window);
 
   GPS_INFO.NAVWarning = true; // default, no gps at all!
 
@@ -812,7 +813,7 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   MapWindow::CreateDrawingThread();
   Sleep(100);
   StartupStore(TEXT("ShowInfoBoxes\n"));
-  ShowInfoBoxes();
+  InfoBoxManager::ShowInfoBoxes();
   SwitchToMapWindow();
 
   StartupStore(TEXT("CreateCalculationThread\n"));
@@ -948,7 +949,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
   LoadString(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
 
   //If it is already running, then focus on the window
-  if (hWndMainWindow.find(szWindowClass, szTitle))
+  if (main_window.find(szWindowClass, szTitle))
     return 0;
 
 #ifdef PNA
@@ -976,11 +977,11 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
   StartupStore(TEXT("Create main window\n"));
 
-  hWndMainWindow.set(szWindowClass, szTitle,
+  main_window.set(szWindowClass, szTitle,
                      WindowSize.left, WindowSize.top,
                      WindowSize.right, WindowSize.bottom);
 
-  if (!hWndMainWindow.defined())
+  if (!main_window.defined())
     {
       return FALSE;
     }
@@ -988,9 +989,9 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 #if defined(GNAV) && !defined(PCGNAV)
   // TODO code: release the handle?
   HANDLE hTmp = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_XCSOARSWIFT));
-  SendMessage(hWndMainWindow, WM_SETICON,
+  SendMessage(main_window, WM_SETICON,
 	      (WPARAM)ICON_BIG, (LPARAM)hTmp);
-  SendMessage(hWndMainWindow, WM_SETICON,
+  SendMessage(main_window, WM_SETICON,
 	      (WPARAM)ICON_SMALL, (LPARAM)hTmp);
 #endif
 
@@ -998,7 +999,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
   hBrushUnselected = (HBRUSH)CreateSolidBrush(MapGfx.ColorUnselected);
   hBrushButton = (HBRUSH)CreateSolidBrush(MapGfx.ColorButton);
 
-  GetClientRect(hWndMainWindow, &rc);
+  GetClientRect(main_window, &rc);
 
 #if (WINDOWSPC>0)
   rc.left = 0;
@@ -1021,10 +1022,10 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
   StartupStore(TEXT("Create info boxes\n"));
 
-  MapWindow::SetMapRect(InfoBoxLayout::CreateInfoBoxes(rc));
+  MapWindow::SetMapRect(InfoBoxManager::CreateInfoBoxes(rc));
 
   StartupStore(TEXT("Create FLARM gauge\n"));
-  gauge_flarm = new GaugeFLARM(hWndMainWindow);
+  gauge_flarm = new GaugeFLARM(main_window);
 
   StartupStore(TEXT("Create button labels\n"));
   ButtonLabel::CreateButtonLabels(rc);
@@ -1045,28 +1046,28 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
   ////////////////// do fonts
   StartupStore(TEXT("Initialise fonts\n"));
-  InitialiseFonts(hWndMainWindow, rc);
+  InitialiseFonts(main_window, rc);
 
   StartupStore(TEXT("Initialise message system\n"));
   Message::Initialize(rc); // creates window, sets fonts
 
-  hWndMainWindow.show();
+  main_window.show();
 
   ///////////////////////////////////////////////////////
   //// create map window
 
   StartupStore(TEXT("Create map window\n"));
 
-  map_window.set(hWndMainWindow, TEXT("MapWindowClass"),
+  map_window.set(main_window, TEXT("MapWindowClass"),
                  0, 0, rc.right - rc.left, rc.bottom-rc.top);
 
   map_window.set_font(MapWindowFont);
 
   // JMW gauge creation was here
 
-  ShowWindow(hWndMainWindow, nCmdShow);
+  ShowWindow(main_window, nCmdShow);
 
-  hWndMainWindow.update();
+  main_window.update();
 
   return TRUE;
 }
@@ -1096,6 +1097,11 @@ bool Debounce(void) {
 
 void Shutdown(void) {
   int i;
+
+  if(iTimerID) {
+    KillTimer(main_window,iTimerID);
+    iTimerID = 0;
+  }
 
   CreateProgressDialog(gettext(TEXT("Shutdown, please wait...")));
   StartHourglassCursor();
@@ -1203,14 +1209,12 @@ void Shutdown(void) {
   Units::UnLoadUnitBitmap();
 
   StartupStore(TEXT("Destroy Info Boxes\n"));
-  InfoBoxLayout::DestroyInfoBoxes();
+  InfoBoxManager::Destroy();
 
   StartupStore(TEXT("Destroy Button Labels\n"));
   ButtonLabel::Destroy();
 
   StartupStore(TEXT("Delete Objects\n"));
-
-  DeleteInfoBoxFormatters();
 
   // Kill graphics objects
 
@@ -1234,7 +1238,7 @@ void Shutdown(void) {
   StartupStore(TEXT("Close Windows - map\n"));
   map_window.reset();
   StartupStore(TEXT("Close Windows - main \n"));
-  hWndMainWindow.reset();
+  main_window.reset();
   StartupStore(TEXT("Close Graphics\n"));
   MapGfx.Destroy();
 
@@ -1307,7 +1311,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
       }
       break;
     case WM_CREATE:
-      hWndMainWindow.created(hWnd);
+      main_window.created(hWnd);
 
 #ifdef HAVE_ACTIVATE_INFO
       memset (&s_sai, 0, sizeof (s_sai));
@@ -1321,12 +1325,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     case WM_ACTIVATE:
       if(LOWORD(wParam) != WA_INACTIVE)
         {
-          SetWindowPos(hWndMainWindow,HWND_TOP,
+          SetWindowPos(main_window,HWND_TOP,
                  0, 0, 0, 0,
                  SWP_SHOWWINDOW|SWP_NOMOVE|SWP_NOSIZE);
 
 #ifdef HAVE_ACTIVATE_INFO
-	  SHFullScreen(hWndMainWindow,SHFS_HIDETASKBAR|SHFS_HIDESIPBUTTON|SHFS_HIDESTARTICON);
+	  SHFullScreen(main_window,SHFS_HIDETASKBAR|SHFS_HIDESIPBUTTON|SHFS_HIDESTARTICON);
 #endif
 
         }
@@ -1344,7 +1348,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     case WM_SETFOCUS:
       // JMW not sure this ever does anything useful..
       if (globalRunningEvent.test()) {
-	InfoBoxFocus();
+	InfoBoxManager::InfoBoxFocus();
       }
       break;
       // TODO enhancement: Capture KEYDOWN time
@@ -1378,7 +1382,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	//END VENTA DBG
 
     case WM_TIMER:
-      //      assert(hWnd==hWndMainWindow);
+      //      assert(hWnd==main_window);
       if (globalRunningEvent.test()) {
 #ifdef _SIM_
 	SIMProcessTimer();
@@ -1406,16 +1410,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
     case WM_CLOSE:
       if (CheckShutdown()) {
-	if(iTimerID) {
-	  KillTimer(hWnd,iTimerID);
-	  iTimerID = 0;
-	}
 	Shutdown();
       }
       break;
 
     case WM_DESTROY:
-      if (hWnd==hWndMainWindow) {
+      if (hWnd==main_window) {
         PostQuitMessage(0);
       }
       break;
@@ -1441,7 +1441,7 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
       MainWindowTop();
 
-      if (InfoBoxClick(wmControl)) {
+      if (InfoBoxManager::InfoBoxClick(wmControl)) {
 	return FALSE;
       }
 

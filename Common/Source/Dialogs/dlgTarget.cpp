@@ -580,12 +580,12 @@ void dlgTarget(void) {
   if (!InfoBoxLayout::landscape) {
     wf = dlgLoadFromXML(CallBackTable,
                         TEXT("dlgTarget_L.xml"),
-                        hWndMainWindow,
+                        main_window,
                         TEXT("IDR_XML_TARGET_L"));
   } else {
     wf = dlgLoadFromXML(CallBackTable,
                         TEXT("dlgTarget.xml"),
-                        hWndMainWindow,
+                        main_window,
                         TEXT("IDR_XML_TARGET"));
   }
 

@@ -366,13 +366,13 @@ void dlgWayPointDetailsShowModal(void){
   if (!InfoBoxLayout::landscape) {
     wf = dlgLoadFromXML(CallBackTable,
                         TEXT("dlgWayPointDetails_L.xml"),
-                        hWndMainWindow,
+                        main_window,
                         TEXT("IDR_XML_WAYPOINTDETAILS_L"));
 
   } else {
     wf = dlgLoadFromXML(CallBackTable,
                         TEXT("dlgWayPointDetails.xml"),
-                        hWndMainWindow,
+                        main_window,
                         TEXT("IDR_XML_WAYPOINTDETAILS"));
   }
   nTextLines = 0;

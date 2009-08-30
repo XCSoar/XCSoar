@@ -98,7 +98,7 @@ int WINAPI MessageBoxX(LPCTSTR lpText, LPCTSTR lpCaption, UINT uType){
   assert(lpText != NULL);
   assert(lpCaption != NULL);
 
-  rc = hWndMainWindow.get_position();
+  rc = main_window.get_position();
 
 #ifdef ALTAIRSYNC
   Width = DLGSCALE(220);
@@ -115,7 +115,7 @@ int WINAPI MessageBoxX(LPCTSTR lpText, LPCTSTR lpCaption, UINT uType){
   w = DLGSCALE(60);
   h = DLGSCALE(32);
 
-  wf = new WndForm(&hWndMainWindow, TEXT("frmXcSoarMessageDlg"),
+  wf = new WndForm(&main_window, TEXT("frmXcSoarMessageDlg"),
                    (TCHAR*)lpCaption, X, Y, Width, Height);
   wf->SetFont(MapWindowBoldFont);
   wf->SetTitleFont(MapWindowBoldFont);
@@ -476,7 +476,7 @@ WndForm *dlgLoadFromXML(CallBackTableEntry_t *LookUpTable,
   WndForm *theForm = NULL;
   //  TCHAR sFileName[128];
 
-//  assert(hWndMainWindow == Parent);  // Airspace warning has MapWindow as parent,
+//  assert(main_window == Parent);  // Airspace warning has MapWindow as parent,
   // ist that ok?  JMW: No, I think that it is better to use main UI thread for
   // everything.  See changes regarding RequestAirspaceDialog in AirspaceWarning.cpp
 

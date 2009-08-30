@@ -195,7 +195,7 @@ DWORD CalculationThread (LPVOID lpvoid) {
 	MapWindow::dirtyEvent.trigger();
         need_calculations_slow = true;
       }
-      InfoBoxesSetDirty(true);
+      InfoBoxManager::InfoBoxesSetDirty(true);
     }
 
     if (closeTriggerEvent.test())

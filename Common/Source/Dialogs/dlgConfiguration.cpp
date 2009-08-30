@@ -1113,7 +1113,7 @@ static void SetInfoBoxSelector(int item, int mode)
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
     for (int i=0; i<NUMSELECTSTRINGS; i++) {
-      dfe->addEnumText(gettext(InfoBoxGetDescription(i)));
+      dfe->addEnumText(gettext(InfoBoxManager::InfoBoxGetDescription(i)));
     }
     dfe->Sort(0);
 
@@ -1121,16 +1121,16 @@ static void SetInfoBoxSelector(int item, int mode)
 
     switch(mode) {
     case 1: // climb
-      it = getInfoType(item, 0);
+      it = InfoBoxManager::getType(item, 0);
       break;
     case 0: // cruise
-      it = getInfoType(item, 1);
+      it = InfoBoxManager::getType(item, 1);
       break;
     case 2: // final glide
-      it = getInfoType(item, 2);
+      it = InfoBoxManager::getType(item, 2);
       break;
     case 3: // aux
-      it = getInfoType(item, 3);
+      it = InfoBoxManager::getType(item, 3);
       break;
     };
     dfe->Set(it);
@@ -1151,16 +1151,16 @@ static void GetInfoBoxSelector(int item, int mode)
 
     switch(mode) {
     case 1: // climb
-      it = getInfoType(item, 0);
+      it = InfoBoxManager::getType(item, 0);
       break;
     case 0: // cruise
-      it = getInfoType(item, 1);
+      it = InfoBoxManager::getType(item, 1);
       break;
     case 2: // final glide
-      it = getInfoType(item, 2);
+      it = InfoBoxManager::getType(item, 2);
       break;
     case 3: // aux
-      it = getInfoType(item, 3);
+      it = InfoBoxManager::getType(item, 3);
       break;
     };
 
@@ -1170,19 +1170,19 @@ static void GetInfoBoxSelector(int item, int mode)
 
       switch(mode) {
       case 0: // cruise
-	setInfoType(item, 1, itnew);
+	InfoBoxManager::setType(item, 1, itnew);
 	break;
       case 1: // climb
-	setInfoType(item, 0, itnew);
+	InfoBoxManager::setType(item, 0, itnew);
 	break;
       case 2: // final glide
-	setInfoType(item, 2, itnew);
+	InfoBoxManager::setType(item, 2, itnew);
 	break;
       case 3: // aux
-	setInfoType(item, 3, itnew);
+	InfoBoxManager::setType(item, 3, itnew);
 	break;
       };
-      StoreType(item, getInfoTypeAll(item));
+      StoreType(item, InfoBoxManager::getTypeAll(item));
     }
   }
 }
@@ -2528,12 +2528,12 @@ void dlgConfigurationShowModal(void){
   if (!InfoBoxLayout::landscape) {
     wf = dlgLoadFromXML(CallBackTable,
                         TEXT("dlgConfiguration_L.xml"),
-                        hWndMainWindow,
+                        main_window,
                         TEXT("IDR_XML_CONFIGURATION_L"));
   } else {
     wf = dlgLoadFromXML(CallBackTable,
                         TEXT("dlgConfiguration.xml"),
-                        hWndMainWindow,
+                        main_window,
                         TEXT("IDR_XML_CONFIGURATION"));
   }
 

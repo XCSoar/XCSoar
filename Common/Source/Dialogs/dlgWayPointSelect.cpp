@@ -713,12 +713,12 @@ int dlgWayPointSelect(double lon, double lat, int type, int FilterNear){
   if (!InfoBoxLayout::landscape) {
     wf = dlgLoadFromXML(CallBackTable,
                         TEXT("dlgWayPointSelect_L.xml"),
-                        hWndMainWindow,
+                        main_window,
                         TEXT("IDR_XML_WAYPOINTSELECT_L"));
   } else {
     wf = dlgLoadFromXML(CallBackTable,
                         TEXT("dlgWayPointSelect.xml"),
-                        hWndMainWindow,
+                        main_window,
                         TEXT("IDR_XML_WAYPOINTSELECT"));
   }
 

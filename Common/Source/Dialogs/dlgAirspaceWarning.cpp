@@ -679,7 +679,7 @@ int dlgAirspaceWarningInit(void){
 
     wf = dlgLoadFromXML(CallBackTable,
                         TEXT("dlgAirspaceWarning.xml"),
-		        hWndMainWindow,
+		        main_window,
 		        TEXT("IDR_XML_AIRSPACEWARNING"));
 
     if (wf) {

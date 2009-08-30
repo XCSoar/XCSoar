@@ -38,6 +38,8 @@ Copyright_License {
 
 #include "InfoBoxManager.h"
 #include "XCSoar.h"
+#include "InfoBox.h"
+#include "WindowControls.h"
 #include "Protection.hpp"
 #include "InfoBox.h"
 #include "InfoBoxLayout.h"
@@ -64,6 +66,7 @@ Copyright_License {
 #include "Battery.h"
 #include "Calculations.h" // TODO danger! IsFlarmTargetCNInRange
 #include "UtilsSystem.hpp"
+#include "Screen/MainWindow.hpp"
 
 // user setting
 bool EnableAuxiliaryInfo = false;
@@ -312,7 +315,7 @@ const int NUMSELECTSTRINGS = 74;
 static void FocusOnWindow(int i, bool selected);
 
 // TODO locking
-void HideInfoBoxes() {
+void InfoBoxManager::HideInfoBoxes() {
   int i;
   InfoBoxesHidden = true;
   for (i=0; i<numInfoWindows+1; i++) {
@@ -321,7 +324,7 @@ void HideInfoBoxes() {
 }
 
 
-void ShowInfoBoxes() {
+void InfoBoxManager::ShowInfoBoxes() {
   int i;
   InfoBoxesHidden = false;
   for (i=0; i<numInfoWindows; i++) {
@@ -331,7 +334,7 @@ void ShowInfoBoxes() {
 }
 
 
-bool DefocusInfoBox() {
+bool InfoBoxManager::DefocusInfoBox() {
   bool retval = (InfoFocus>=0);
   // JMW TODO this needs to be reworked
   if (retval) {
@@ -349,7 +352,7 @@ bool DefocusInfoBox() {
 }
 
 
-void Event_SelectInfoBox(int i) {
+void InfoBoxManager::Event_SelectInfoBox(int i) {
 //  int oldinfofocus = InfoFocus;
 
   // must do this
@@ -381,7 +384,7 @@ void Event_SelectInfoBox(int i) {
 
 ////////////////////////////////////
 
-int getInfoType(const int i, const int layer) {
+int InfoBoxManager::getType(const int i, const int layer) {
   switch(layer) {
   case 0:
     return InfoType[i] & 0xff;         // climb
@@ -394,36 +397,36 @@ int getInfoType(const int i, const int layer) {
   };
 }
 
-int getInfoTypeAll(const int i) {
+int InfoBoxManager::getTypeAll(const int i) {
   return InfoType[i];
 }
 
-void setInfoTypeAll(const int i, const int j) {
+void InfoBoxManager::setTypeAll(const int i, const int j) {
   InfoType[i] = j;
   // TODO: check it's within range
 }
 
 
-static int getInfoType(const int i) {
+int InfoBoxManager::getType(const int i) {
   int retval = 0;
   if (i<0) return 0; // error
 
   if (EnableAuxiliaryInfo) {
-    retval = getInfoType(i,3);
+    retval = getType(i,3);
   } else {
     if (DisplayMode == dmCircling)
-      retval = getInfoType(i,0);
+      retval = getType(i,0);
     else if (DisplayMode == dmFinalGlide) {
-      retval = getInfoType(i,2);
+      retval = getType(i,2);
     } else {
-      retval = getInfoType(i,1); // cruise
+      retval = getType(i,1); // cruise
     }
   }
   return min(NUMSELECTSTRINGS-1, retval);
 }
 
 
-void setInfoType(const int i, const char j, const int layer) {
+void InfoBoxManager::setType(const int i, const char j, const int layer) {
   switch(layer) {
   case 0:
     InfoType[i] &= 0xffffff00;
@@ -444,31 +447,31 @@ void setInfoType(const int i, const char j, const int layer) {
   };
 }
 
-static void setInfoType(const int i, const char j) {
+void InfoBoxManager::setType(const int i, const char j) {
   if (i<0) return; // error
 
   if (EnableAuxiliaryInfo) {
-    setInfoType(i, 3, j);
+    setType(i, 3, j);
   } else {
     if (DisplayMode == dmCircling) {
-      setInfoType(i, 0, j);
+      setType(i, 0, j);
     } else if (DisplayMode == dmFinalGlide) {
-      setInfoType(i, 2, j);
+      setType(i, 2, j);
     } else {
-      setInfoType(i, 1, j);
+      setType(i, 1, j);
     }
   }
 }
 
 
-void Event_ChangeInfoBoxType(int i) {
+void InfoBoxManager::Event_ChangeInfoBoxType(int i) {
   int j=0, k;
 
   if (InfoFocus<0) {
     return;
   }
 
-  k = getInfoType(InfoFocus);
+  k = getType(InfoFocus);
   if (i>0) {
     j = Data_Options[k].next_screen;
   }
@@ -478,7 +481,7 @@ void Event_ChangeInfoBoxType(int i) {
 
   // TODO code: if i==0, go to default or reset
 
-  setInfoType(InfoFocus, j);
+  setType(InfoFocus, j);
   DisplayInfoBox();
 
 }
@@ -486,14 +489,14 @@ void Event_ChangeInfoBoxType(int i) {
 ////////////////////
 
 
-void FocusOnWindow(int i, bool selected) {
+void InfoBoxManager::FocusOnWindow(int i, bool selected) {
   if (i<0)
     return; // error
   InfoBoxes[i]->SetFocus(selected);
   // todo defocus all other?
 }
 
-void DisplayInfoBox(void)
+void InfoBoxManager::DisplayInfoBox(void)
 {
   if (InfoBoxesHidden)
     return;
@@ -529,7 +532,7 @@ void DisplayInfoBox(void)
     // All calculations are made in a separate thread. Slow calculations should apply to
     // the function DoCalculationsSlow() . Do not put calculations here!
 
-    DisplayType[i] = getInfoType(i);
+    DisplayType[i] = getType(i);
     Data_Options[DisplayType[i]].Formatter->AssignValue(DisplayType[i]);
 
     TCHAR sTmp[32];
@@ -877,7 +880,7 @@ void DisplayInfoBox(void)
     DisplayTypeLast[i] = DisplayType[i];
 
   }
-  InfoBoxLayout::Paint();
+  Paint();
 
   first = false;
 
@@ -887,7 +890,7 @@ void DisplayInfoBox(void)
 
 
 
-void DoInfoKey(int keycode) {
+void InfoBoxManager::DoInfoKey(int keycode) {
   int i;
 
   if (InfoFocus<0) return; // paranoid
@@ -896,7 +899,7 @@ void DoInfoKey(int keycode) {
 
   mutexNavBox.Lock(); 
   {
-    i = getInfoType(InfoFocus);
+    i = getType(InfoFocus);
     Data_Options[min(NUMSELECTSTRINGS-1,i)].Process(keycode);
   }
   mutexNavBox.Unlock();
@@ -922,7 +925,7 @@ void PopUpSelect(int Index)
   SwitchToMapWindow();
 }
 
-bool InfoBoxClick(HWND wmControl) {
+bool InfoBoxManager::InfoBoxClick(HWND wmControl) {
   int i;
 
   InfoBoxFocusTimeOut = 0;
@@ -945,7 +948,7 @@ bool InfoBoxClick(HWND wmControl) {
 }
 
 
-void DeleteInfoBoxFormatters() {
+void InfoBoxManager::DestroyInfoBoxFormatters() {
   int i;
   //  CommandBar_Destroy(hWndCB);
   for (i=0; i<NUMSELECTSTRINGS; i++) {
@@ -953,7 +956,7 @@ void DeleteInfoBoxFormatters() {
   }
 }
 
-void InfoBoxFocus(void) {
+void InfoBoxManager::InfoBoxFocus(void) {
   if (InfoWindowActive) {
     FocusOnWindow(InfoFocus,true);
   } else {
@@ -962,7 +965,7 @@ void InfoBoxFocus(void) {
 }
 
 
-void InfoBoxDrawIfDirty(void) {
+void InfoBoxManager::InfoBoxDrawIfDirty(void) {
   // No need to redraw map or infoboxes if screen is blanked.
   // This should save lots of battery power due to CPU usage
   // of drawing the screen
@@ -973,18 +976,18 @@ void InfoBoxDrawIfDirty(void) {
   }
 }
 
-void InfoBoxFocusSetMaxTimeOut(void) {
+void InfoBoxManager::InfoBoxFocusSetMaxTimeOut(void) {
   if (InfoBoxFocusTimeOut< FOCUSTIMEOUTMAX) {
     InfoBoxFocusTimeOut = FOCUSTIMEOUTMAX;
   }
 }
 
-void InfoBoxesSetDirty(bool is_dirty) {
+void InfoBoxManager::InfoBoxesSetDirty(bool is_dirty) {
   InfoBoxesDirty = is_dirty;
 }
 
 
-void InfoBoxProcessTimer(void) {
+void InfoBoxManager::InfoBoxProcessTimer(void) {
   if(InfoWindowActive) {
     if (!dlgAirspaceWarningVisible()) {
       // JMW prevent switching to map window if in airspace warning dialog
@@ -1001,7 +1004,7 @@ void InfoBoxProcessTimer(void) {
 }
 
 
-void ResetInfoBoxes(void) {
+void InfoBoxManager::ResetInfoBoxes(void) {
 #ifdef GNAV
   InfoType[0]=873336334;
   InfoType[1]=856820491;
@@ -1024,6 +1027,124 @@ void ResetInfoBoxes(void) {
 #endif
 }
 
-TCHAR *InfoBoxGetDescription(int i) {
+TCHAR *InfoBoxManager::InfoBoxGetDescription(int i) {
   return Data_Options[i].Description;
 }
+
+
+/////////////////////////////////////////////////////////////////////////////////
+//
+// TODO: this should go into the manager
+
+extern InfoBox *InfoBoxes[MAXINFOWINDOWS];
+
+
+void InfoBoxManager::Paint(void) {
+  int i;
+  for (i=0; i<numInfoWindows; i++)
+    InfoBoxes[i]->Paint();
+
+  if (!InfoBoxLayout::fullscreen) {
+    InfoBoxes[numInfoWindows]->SetVisible(false);
+    for (i=0; i<numInfoWindows; i++)
+      InfoBoxes[i]->PaintFast();
+  } else {
+    InfoBoxes[numInfoWindows]->SetVisible(true);
+    for (i=0; i<numInfoWindows; i++) {
+
+      // JMW TODO: make these calculated once only.
+      int x, y;
+      int rx, ry;
+      int rw;
+      int rh;
+      double fw, fh;
+      if (InfoBoxLayout::landscape) {
+        rw = 84;
+        rh = 68;
+      } else {
+        rw = 120;
+        rh = 80;
+      }
+      fw = rw/(double)InfoBoxLayout::ControlWidth;
+      fh = rh/(double)InfoBoxLayout::ControlHeight;
+      double f = min(fw, fh);
+      rw = (int)(f*InfoBoxLayout::ControlWidth);
+      rh = (int)(f*InfoBoxLayout::ControlHeight);
+
+      if (InfoBoxLayout::landscape) {
+        rx = i % 3;
+        ry = i / 3;
+
+        x = (rw+4)*rx;
+        y = (rh+3)*ry;
+
+      } else {
+        rx = i % 2;
+        ry = i / 4;
+
+        x = (rw)*rx;
+        y = (rh)*ry;
+
+      }
+      InfoBoxes[i]->PaintInto(InfoBoxes[numInfoWindows]->GetCanvas(),
+                              IBLSCALE(x), IBLSCALE(y), IBLSCALE(rw), IBLSCALE(rh));
+    }
+    InfoBoxes[numInfoWindows]->PaintFast();
+  }
+}
+
+
+RECT InfoBoxManager::CreateInfoBoxes(RECT rc) {
+  int i;
+  int xoff, yoff, sizex, sizey;
+
+  RECT retval = InfoBoxLayout::GetInfoBoxSizes(rc);
+
+  // JMW created full screen infobox mode
+  xoff=0;
+  yoff=0;
+  sizex=rc.right-rc.left;
+  sizey=rc.bottom-rc.top;
+
+  InfoBoxes[numInfoWindows] = new InfoBox(main_window, xoff, yoff, sizex, sizey);
+  InfoBoxes[numInfoWindows]->SetBorderKind(0);
+
+  // create infobox windows
+
+  for(i=0;i<numInfoWindows;i++)
+    {
+      InfoBoxLayout::GetInfoBoxPosition(i, rc, &xoff, &yoff, &sizex, &sizey);
+
+      InfoBoxes[i] = new InfoBox(main_window, xoff, yoff, sizex, sizey);
+
+      int Border=0;
+      if (InfoBoxLayout::gnav){
+        if (i>0)
+          Border |= BORDERTOP;
+        if (i<6)
+          Border |= BORDERRIGHT;
+        InfoBoxes[i]->SetBorderKind(Border);
+      } else
+      if (!InfoBoxLayout::landscape) {
+        Border = 0;
+        if (i<4) {
+          Border |= BORDERBOTTOM;
+        } else {
+          Border |= BORDERTOP;
+        }
+        Border |= BORDERRIGHT;
+        InfoBoxes[i]->SetBorderKind(Border);
+      }
+    }
+
+  return retval; // for use in setting MapWindow
+}
+
+void InfoBoxManager::Destroy(void){
+  int i;
+  for(i=0; i<numInfoWindows+1; i++){
+    delete (InfoBoxes[i]);
+  }
+  DestroyInfoBoxFormatters();
+}
+

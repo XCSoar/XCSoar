@@ -340,18 +340,18 @@ void CheckInfoTypes() {
   char iszero_aux = 0;
 
   for (i=0; i<MAXINFOWINDOWS; i++) {
-    iszero_fg  |= getInfoType(i, 2);
-    iszero_aux |= getInfoType(i, 3);
+    iszero_fg  |= InfoBoxManager::getType(i, 2);
+    iszero_aux |= InfoBoxManager::getType(i, 3);
   }
   if (iszero_fg || iszero_aux) {
     for (i=0; i<MAXINFOWINDOWS; i++) {
       if (iszero_fg) {
-	setInfoType(i, 2, getInfoType(i,1));
+	InfoBoxManager::setType(i, 2, InfoBoxManager::getType(i,1));
       }
       if (iszero_aux) {
-	setInfoType(i, 3, getInfoType(i,1));
+	InfoBoxManager::setType(i, 3, InfoBoxManager::getType(i,1));
       }
-      StoreType(i, getInfoTypeAll(i));
+      StoreType(i, InfoBoxManager::getTypeAll(i));
     }
   }
 }
@@ -491,9 +491,9 @@ void ReadRegistrySettings(void)
 
   for (i=0;i<MAXINFOWINDOWS;i++)
     {
-      Temp = getInfoTypeAll(i);
+      Temp = InfoBoxManager::getTypeAll(i);
       GetFromRegistry(szRegistryDisplayType[i],&Temp);
-      setInfoTypeAll(i,Temp);
+      InfoBoxManager::setTypeAll(i,Temp);
     }
 
   // check against V3 infotypes

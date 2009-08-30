@@ -53,7 +53,7 @@ void GaugeCDI::Create() {
   // start of new code for displaying CDI window
   StartupStore(TEXT("Create CDI\n"));
 
-  window.set(hWndMainWindow,
+  window.set(main_window,
              (int)(InfoBoxLayout::ControlWidth*0.6),
              (int)(InfoBoxLayout::ControlHeight+1),
              (int)(InfoBoxLayout::ControlWidth*2.8),

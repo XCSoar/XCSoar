@@ -40,7 +40,6 @@ Copyright_License {
 #include "ButtonLabel.h"
 #include "LogFile.hpp"
 #include "XCSoar.h"
-#include "Dialogs.h"
 #include "Screen/Animation.hpp"
 #include "Screen/MainWindow.hpp"
 #include "Registry.hpp"
@@ -435,121 +434,5 @@ RECT InfoBoxLayout::GetInfoBoxSizes(RECT rc) {
     break;
   };
   return MapRect;
-}
-
-/////////////////////////////////////////////////////////////////////////////////
-//
-// TODO: this should go into the manager
-
-extern InfoBox *InfoBoxes[MAXINFOWINDOWS];
-
-
-void InfoBoxLayout::Paint(void) {
-  int i;
-  for (i=0; i<numInfoWindows; i++)
-    InfoBoxes[i]->Paint();
-
-  if (!fullscreen) {
-    InfoBoxes[numInfoWindows]->SetVisible(false);
-    for (i=0; i<numInfoWindows; i++)
-      InfoBoxes[i]->PaintFast();
-  } else {
-    InfoBoxes[numInfoWindows]->SetVisible(true);
-    for (i=0; i<numInfoWindows; i++) {
-
-      // JMW TODO: make these calculated once only.
-      int x, y;
-      int rx, ry;
-      int rw;
-      int rh;
-      double fw, fh;
-      if (landscape) {
-        rw = 84;
-        rh = 68;
-      } else {
-        rw = 120;
-        rh = 80;
-      }
-      fw = rw/(double)ControlWidth;
-      fh = rh/(double)ControlHeight;
-      double f = min(fw, fh);
-      rw = (int)(f*ControlWidth);
-      rh = (int)(f*ControlHeight);
-
-      if (landscape) {
-        rx = i % 3;
-        ry = i / 3;
-
-        x = (rw+4)*rx;
-        y = (rh+3)*ry;
-
-      } else {
-        rx = i % 2;
-        ry = i / 4;
-
-        x = (rw)*rx;
-        y = (rh)*ry;
-
-      }
-      InfoBoxes[i]->PaintInto(InfoBoxes[numInfoWindows]->GetCanvas(),
-                              IBLSCALE(x), IBLSCALE(y), IBLSCALE(rw), IBLSCALE(rh));
-    }
-    InfoBoxes[numInfoWindows]->PaintFast();
-  }
-}
-
-
-RECT InfoBoxLayout::CreateInfoBoxes(RECT rc) {
-  int i;
-  int xoff, yoff, sizex, sizey;
-
-  RECT retval = GetInfoBoxSizes(rc);
-
-  // JMW created full screen infobox mode
-  xoff=0;
-  yoff=0;
-  sizex=rc.right-rc.left;
-  sizey=rc.bottom-rc.top;
-
-  InfoBoxes[numInfoWindows] = new InfoBox(hWndMainWindow, xoff, yoff, sizex, sizey);
-  InfoBoxes[numInfoWindows]->SetBorderKind(0);
-
-  // create infobox windows
-
-  for(i=0;i<numInfoWindows;i++)
-    {
-      GetInfoBoxPosition(i, rc, &xoff, &yoff, &sizex, &sizey);
-
-      InfoBoxes[i] = new InfoBox(hWndMainWindow, xoff, yoff, sizex, sizey);
-
-      int Border=0;
-      if (gnav){
-        if (i>0)
-          Border |= BORDERTOP;
-        if (i<6)
-          Border |= BORDERRIGHT;
-        InfoBoxes[i]->SetBorderKind(Border);
-      } else
-      if (!landscape) {
-        Border = 0;
-        if (i<4) {
-          Border |= BORDERBOTTOM;
-        } else {
-          Border |= BORDERTOP;
-        }
-        Border |= BORDERRIGHT;
-        InfoBoxes[i]->SetBorderKind(Border);
-      }
-    }
-
-  return retval; // for use in setting MapWindow
-}
-
-void InfoBoxLayout::DestroyInfoBoxes(void){
-  int i;
-  for(i=0; i<numInfoWindows+1; i++){
-    delete (InfoBoxes[i]);
-  }
-
 }
 

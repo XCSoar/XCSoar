@@ -547,12 +547,12 @@ void dlgTaskOverviewShowModal(void){
   if (!InfoBoxLayout::landscape) {
     wf = dlgLoadFromXML(CallBackTable,
                         TEXT("dlgTaskOverview_L.xml"),
-                        hWndMainWindow,
+                        main_window,
                         TEXT("IDR_XML_TASKOVERVIEW_L"));
   } else {
     wf = dlgLoadFromXML(CallBackTable,
                         TEXT("dlgTaskOverview.xml"),
-                        hWndMainWindow,
+                        main_window,
                         TEXT("IDR_XML_TASKOVERVIEW"));
   }
 

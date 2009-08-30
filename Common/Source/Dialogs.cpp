@@ -306,14 +306,14 @@ HWND CreateProgressDialog(const TCHAR* text) {
       hProgress=
 	CreateDialog(hInst,
 		     (LPCTSTR)IDD_PROGRESS_LANDSCAPE,
-		     hWndMainWindow,
+		     main_window,
 		     (DLGPROC)Progress);
 
     } else {
       hProgress=
 	CreateDialog(hInst,
 		     (LPCTSTR)IDD_PROGRESS,
-		     hWndMainWindow,
+		     main_window,
 		     (DLGPROC)Progress);
     }
 
@@ -322,14 +322,14 @@ HWND CreateProgressDialog(const TCHAR* text) {
     SetWindowText(GetDlgItem(hProgress,IDC_VERSION),Temp);
 
     RECT rc;
-    GetClientRect(hWndMainWindow, &rc);
+    GetClientRect(main_window, &rc);
 
 #if (WINDOWSPC<1)
     hWndCurtain = CreateWindow(TEXT("STATIC"), TEXT(" "),
 			       WS_VISIBLE | WS_CHILD,
                                0, 0, (rc.right - rc.left),
 			       (rc.bottom-rc.top),
-                               hWndMainWindow, NULL, hInst, NULL);
+                               main_window, NULL, hInst, NULL);
     SetWindowPos(hWndCurtain,HWND_TOP,0,0,0,0,
                  SWP_NOMOVE|SWP_NOSIZE|SWP_SHOWWINDOW);
     ShowWindow(hWndCurtain,SW_SHOW);
@@ -340,7 +340,7 @@ HWND CreateProgressDialog(const TCHAR* text) {
 #if (WINDOWSPC>0)
     RECT rcp;
     GetClientRect(hProgress, &rcp);
-    GetWindowRect(hWndMainWindow, &rc);
+    GetWindowRect(main_window, &rc);
     SetWindowPos(hProgress,HWND_TOP,
                  rc.left, rc.top, (rcp.right - rcp.left), (rcp.bottom-rcp.top),
                  SWP_SHOWWINDOW);

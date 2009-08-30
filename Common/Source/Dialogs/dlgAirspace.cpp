@@ -240,12 +240,12 @@ void dlgAirspaceShowModal(bool coloredit){
   if (!InfoBoxLayout::landscape) {
     wf = dlgLoadFromXML(CallBackTable,
                         TEXT("dlgAirspace_L.xml"),
-                        hWndMainWindow,
+                        main_window,
                         TEXT("IDR_XML_AIRSPACE_L"));
   } else {
     wf = dlgLoadFromXML(CallBackTable,
                         TEXT("dlgAirspace.xml"),
-                        hWndMainWindow,
+                        main_window,
                         TEXT("IDR_XML_AIRSPACE"));
   }
   if (!wf) return;

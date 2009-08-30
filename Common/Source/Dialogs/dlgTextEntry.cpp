@@ -222,12 +222,12 @@ static void dlgTextEntryHighscoreType(TCHAR *text, int width)
 #ifndef GNAV
   wf = dlgLoadFromXML(CallBackTable,
                       TEXT("dlgTextEntry_T.xml"),
-		      hWndMainWindow,
+		      main_window,
 		      TEXT("IDR_XML_TEXTENTRY_T"));
 #else
   wf = dlgLoadFromXML(CallBackTable,
                       TEXT("dlgTextEntry.xml"),
-		      hWndMainWindow,
+		      main_window,
 		      TEXT("IDR_XML_TEXTENTRY"));
 #endif
   if (!wf) return;

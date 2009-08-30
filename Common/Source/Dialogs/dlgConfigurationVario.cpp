@@ -1017,13 +1017,13 @@ bool dlgConfigurationVarioShowModal(void){
   if (!InfoBoxLayout::landscape) {
     wf = dlgLoadFromXML(CallBackTable,
                         TEXT("dlgVario_L.xml"),
-                        hWndMainWindow,
+                        main_window,
                         TEXT("IDR_XML_VARIO_L"));
   } else {
     wf = dlgLoadFromXML(CallBackTable,
                         TEXT("dlgVario.xml"),
-		      hWndMainWindow,
-		      TEXT("IDR_XML_VARIO"));
+			main_window,
+			TEXT("IDR_XML_VARIO"));
   }
 
   if (!wf) return false;

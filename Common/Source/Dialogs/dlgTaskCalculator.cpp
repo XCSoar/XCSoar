@@ -340,7 +340,7 @@ static CallBackTableEntry_t CallBackTable[]={
 void dlgTaskCalculatorShowModal(void){
   wf = dlgLoadFromXML(CallBackTable,
                       TEXT("dlgTaskCalculator.xml"),
-		      hWndMainWindow,
+		      main_window,
 		      TEXT("IDR_XML_TASKCALCULATOR"));
 
   if (!wf) return;

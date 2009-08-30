@@ -284,12 +284,12 @@ void dlgFlarmTrafficShowModal(void){
   if (InfoBoxLayout::landscape) {
     wf = dlgLoadFromXML(CallBackTable,
                         TEXT("dlgFlarmTraffic_L.xml"),
-			hWndMainWindow,
+			main_window,
 			TEXT("IDR_XML_FLARMTRAFFIC_L"));
   } else {
     wf = dlgLoadFromXML(CallBackTable,
                         TEXT("dlgFlarmTraffic.xml"),
-			hWndMainWindow,
+			main_window,
 			TEXT("IDR_XML_FLARMTRAFFIC"));
   }
 

@@ -88,7 +88,7 @@ void CommonProcessTimer()
       gauge_flarm->Show();
   }
 
-  InfoBoxProcessTimer();
+  InfoBoxManager::InfoBoxProcessTimer();
 
   InputEvents::ProcessMenuTimer();
 

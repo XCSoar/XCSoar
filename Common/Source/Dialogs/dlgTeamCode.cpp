@@ -194,7 +194,7 @@ void dlgTeamCodeShowModal(void)
     {
       wf = dlgLoadFromXML(CallBackTable,
                           TEXT("dlgTeamCode_L.xml"),
-			  hWndMainWindow,
+			  main_window,
 			  TEXT("IDR_XML_TEAMCODE_L"));
       if (!wf) return;
     }
@@ -202,7 +202,7 @@ void dlgTeamCodeShowModal(void)
     {
       wf = dlgLoadFromXML(CallBackTable,
                           TEXT("dlgTeamCode.xml"),
-			  hWndMainWindow,
+			  main_window,
 			  TEXT("IDR_XML_TEAMCODE"));
       if (!wf) return;
     }

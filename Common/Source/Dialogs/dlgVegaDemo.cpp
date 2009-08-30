@@ -129,7 +129,7 @@ static CallBackTableEntry_t CallBackTable[]={
 void dlgVegaDemoShowModal(void){
   wf = dlgLoadFromXML(CallBackTable,
                       TEXT("dlgVegaDemo.xml"),
-		      hWndMainWindow,
+		      main_window,
 		      TEXT("IDR_XML_VEGADEMO"));
 
   WndProperty* wp;

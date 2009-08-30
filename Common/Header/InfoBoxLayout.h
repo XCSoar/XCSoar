@@ -48,14 +48,13 @@ class InfoBoxLayout {
   static double dscale;
   static bool IntScaleFlag;
   static int scale;
-  static RECT CreateInfoBoxes(RECT rc);
-  static void DestroyInfoBoxes(void);
   static int InfoBoxGeometry;
   static int ControlWidth, ControlHeight, TitleHeight;
   static void ScreenGeometry(RECT rc);
-  static void Paint(void);
 
- private:
+ public:
+  // used by manager
+
   static void GetInfoBoxPosition(int i, RECT rc,
 				 int *x, int *y,
 				 int *sizex, int *sizey);

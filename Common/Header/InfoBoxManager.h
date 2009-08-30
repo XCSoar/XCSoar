@@ -42,26 +42,39 @@ Copyright_License {
 extern int  numInfoWindows;
 extern const int NUMSELECTSTRINGS;
 
-void InfoBoxesSetDirty(bool is_dirty);
-void DeleteInfoBoxFormatters();
-bool InfoBoxClick(HWND wmControl);
-void InfoBoxFocus();
-void InfoBoxProcessTimer(void);
-void InfoBoxFocusSetMaxTimeOut(void);
-void ShowInfoBoxes();
-void HideInfoBoxes();
-bool DefocusInfoBox(void);
-void Event_SelectInfoBox(int i);
-void Event_ChangeInfoBoxType(int i);
-void DoInfoKey(int keycode);
-void ResetInfoBoxes(void);
-TCHAR *InfoBoxGetDescription(int i);
-int getInfoType(const int i, const int layer);
-void setInfoType(const int i, const char j, const int layer);
+class InfoBoxManager {
+ private:
+  static void InfoBoxFocusSetMaxTimeOut(void);
+  static void ResetInfoBoxes(void);
+ private:
+  static int getType(const int i);
+  static void setType(const int i, const char j);
+  static void FocusOnWindow(int i, bool selected);
+  static void DisplayInfoBox(void);
+  static void InfoBoxDrawIfDirty();
+  static void DestroyInfoBoxFormatters();
+public:
+  static void Event_SelectInfoBox(int i);
+  static void Event_ChangeInfoBoxType(int i);
+  static TCHAR *InfoBoxGetDescription(int i);
+  static void DoInfoKey(int keycode);
+  static bool InfoBoxClick(HWND wmControl);
+  static void InfoBoxFocus();
+  static bool DefocusInfoBox(void);
+  static void InfoBoxProcessTimer(void);
+  static void InfoBoxesSetDirty(bool is_dirty);
+  static RECT CreateInfoBoxes(RECT rc);
+  static void Destroy(void);
+  static void Paint(void);
+  static void ShowInfoBoxes();
+  static void HideInfoBoxes();
 
-int getInfoTypeAll(const int i);
-void setInfoTypeAll(const int i, const int j);
+  static int getType(const int i, const int layer);
+  static void setType(const int i, const char j, const int layer);
+  
+  static int getTypeAll(const int i);
+  static void setTypeAll(const int i, const int j);
 
-void ResetInfoBoxes(void);
+};
 
 #endif

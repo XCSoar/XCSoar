@@ -50,7 +50,7 @@ void SwitchToMapWindow(void);
 extern HINSTANCE hInst;
 
 // windows
-extern MainWindow hWndMainWindow;
+extern MainWindow main_window;
 
 extern GaugeVario *gauge_vario;
 extern GaugeFLARM *gauge_flarm;

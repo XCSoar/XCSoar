@@ -790,12 +790,12 @@ void dlgAirspaceSelect(void) {
   if (!InfoBoxLayout::landscape) {
     wf = dlgLoadFromXML(CallBackTable,
                         TEXT("dlgAirspaceSelect_L.xml"),
-                        hWndMainWindow,
+                        main_window,
                         TEXT("IDR_XML_AIRSPACESELECT_L"));
   } else {
     wf = dlgLoadFromXML(CallBackTable,
                         TEXT("dlgAirspaceSelect.xml"),
-                        hWndMainWindow,
+                        main_window,
                         TEXT("IDR_XML_AIRSPACESELECT"));
   }
 

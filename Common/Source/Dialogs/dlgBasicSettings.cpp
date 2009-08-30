@@ -271,7 +271,7 @@ static CallBackTableEntry_t CallBackTable[]={
 void dlgBasicSettingsShowModal(void){
   wf = dlgLoadFromXML(CallBackTable,
                       TEXT("dlgBasicSettings.xml"),
-		      hWndMainWindow,
+		      main_window,
 		      TEXT("IDR_XML_BASICSETTINGS"));
 
   WndProperty* wp;

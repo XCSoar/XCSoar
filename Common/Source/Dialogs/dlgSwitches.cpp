@@ -182,7 +182,7 @@ static CallBackTableEntry_t CallBackTable[]={
 void dlgSwitchesShowModal(void){
   wf = dlgLoadFromXML(CallBackTable,
                       TEXT("dlgSwitches.xml"),
-		      hWndMainWindow,
+		      main_window,
 		      TEXT("IDR_XML_SWITCHES"));
 
   if (wf) {

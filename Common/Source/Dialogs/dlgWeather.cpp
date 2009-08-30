@@ -168,12 +168,12 @@ void dlgWeatherShowModal(void){
   if (!InfoBoxLayout::landscape) {
     wf = dlgLoadFromXML(CallBackTable,
                         TEXT("dlgWeather_L.xml"),
-                        hWndMainWindow,
+                        main_window,
                         TEXT("IDR_XML_WEATHER_L"));
   } else {
     wf = dlgLoadFromXML(CallBackTable,
                         TEXT("dlgWeather.xml"),
-                        hWndMainWindow,
+                        main_window,
                         TEXT("IDR_XML_WEATHER"));
   }
 

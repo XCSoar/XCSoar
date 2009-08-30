@@ -514,12 +514,12 @@ void dlgAnalysisShowModal(void){
   if (!InfoBoxLayout::landscape) {
     wf = dlgLoadFromXML(CallBackTable,
                         TEXT("dlgAnalysis_L.xml"),
-                        hWndMainWindow,
+                        main_window,
                         TEXT("IDR_XML_ANALYSIS_L"));
   } else  {
     wf = dlgLoadFromXML(CallBackTable,
                         TEXT("dlgAnalysis.xml"),
-                        hWndMainWindow,
+                        main_window,
                         TEXT("IDR_XML_ANALYSIS"));
   }
 

@@ -281,12 +281,12 @@ void dlgChecklistShowModal(void){
   if (!InfoBoxLayout::landscape) {
     wf = dlgLoadFromXML(CallBackTable,
                         TEXT("dlgChecklist_L.xml"),
-                        hWndMainWindow,
+                        main_window,
                         TEXT("IDR_XML_CHECKLIST_L"));
   } else {
     wf = dlgLoadFromXML(CallBackTable,
                         TEXT("dlgChecklist.xml"),
-                        hWndMainWindow,
+                        main_window,
                         TEXT("IDR_XML_CHECKLIST"));
   }
 
