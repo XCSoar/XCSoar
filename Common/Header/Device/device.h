@@ -166,5 +166,6 @@ BOOL devIsTrueReturn(PDeviceDescriptor_t d);
 
 void devStartup(LPTSTR lpCmdLine);
 void devShutdown();
+void devRestart(void);
 
 #endif

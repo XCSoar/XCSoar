@@ -39,7 +39,7 @@ Copyright_License {
 #include "Device/device.h"
 #include "XCSoar.h"
 #include "Protection.hpp"
-#include "StatusMessage.hpp"
+#include "Message.h"
 #include "Math/FastMath.h"
 #include "Math/Pressure.h"
 #include "Device/Parser.h"
@@ -356,7 +356,7 @@ static BOOL PDTSM(PDeviceDescriptor_t d, const TCHAR *String,
   ++String;
 
   // todo duration handling
-  AddStatusMessage(TEXT("VEGA:"), String);
+  Message::AddMessage(TEXT("VEGA:"), String);
 
   return TRUE;
 
@@ -400,7 +400,7 @@ BOOL vgaParseNMEA(PDeviceDescriptor_t d, const TCHAR *String,
       // 		DoStatusMessage(TEXT("Vario Message"), cptext);
       // 		(then you can assign time and sound to Vario Message)
       // 	or	Message::AddMessage
-      AddStatusMessage(cptext);
+      Message::AddMessage(cptext);
       return FALSE;
     }
   if(_tcsncmp(TEXT("$PDTSM"), String, 6)==0)

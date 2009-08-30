@@ -43,7 +43,7 @@ Copyright_License {
 #include "Dialogs.h"
 #include "Language.hpp"
 #include "Device/device.h"
-#include "StatusMessage.hpp"
+#include "Message.h"
 #include <windows.h>
 #include <tchar.h>
 
@@ -63,7 +63,7 @@ static void ComPort_StatusMessage(UINT type, const TCHAR *caption, const TCHAR *
   if (caption)
     MessageBoxX(tmp, gettext(caption), type);
   else
-    AddStatusMessage(tmp);
+    Message::AddMessage(tmp);
 }
 
 ComPort::ComPort(struct DeviceDescriptor_t *d)

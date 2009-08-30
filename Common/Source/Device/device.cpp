@@ -917,3 +917,28 @@ void devShutdown()
     devCloseLog(&DeviceList[i]);
   }
 }
+
+
+////////////////////////////////////////////////////////////////////////
+void devRestart() {
+  /*
+#if (WINDOWSPC>0)
+  static bool first = true;
+  if (!first) {
+    NMEAParser::Reset();
+    return;
+  }
+  first = false;
+#endif
+  */
+  StartupStore(TEXT("RestartCommPorts\n"));
+
+  mutexComm.Lock();
+
+  devShutdown();
+  NMEAParser::Reset();
+
+  devInit(TEXT(""));
+
+  mutexComm.Unlock();
+}

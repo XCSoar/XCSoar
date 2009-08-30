@@ -55,8 +55,6 @@ extern MainWindow main_window;
 extern GaugeVario *gauge_vario;
 extern GaugeFLARM *gauge_flarm;
 
-void RestartCommPorts(void);
-
 bool InterfaceTimeoutZero(void);
 void InterfaceTimeoutReset(void);
 bool InterfaceTimeoutCheck(void);

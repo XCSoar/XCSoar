@@ -46,7 +46,7 @@ Copyright_License {
 #include "SettingsUser.hpp"
 #include "SettingsTask.hpp"
 #include "McReady.h"
-#include "StatusMessage.hpp"
+#include "Message.h"
 #include "GlideSolvers.hpp"
 #include "UtilsSystem.hpp"
 #include "Math/Earth.hpp"
@@ -443,7 +443,7 @@ void SearchBestAlternate(NMEA_INFO *Basic,
     if ( !ValidWayPoint(bestalternate) ) {
       //if (EnableSoundModes) PlayResource(TEXT("IDR_WAV_RED"));
       AlertBestAlternate(Basic, 2);
-      AddStatusMessage(_T("Error, invalid best alternate!"));
+      Message::AddMessage(_T("Error, invalid best alternate!"));
       // todo: immediate disable function
     }
   }

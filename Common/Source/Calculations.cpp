@@ -40,7 +40,7 @@ Copyright_License {
 #include "XCSoar.h"
 #include "Protection.hpp"
 #include "Interface.hpp"
-#include "StatusMessage.hpp"
+#include "Message.h"
 #include "Blackboard.hpp"
 #include "Settings.hpp"
 #include "SettingsComputer.hpp"
@@ -160,7 +160,7 @@ void AnnounceWayPointSwitch(DERIVED_INFO *Calculated, bool do_advance) {
     TCHAR TempAll[120];
     _stprintf(TempAll, TEXT("\r\nAltitude: %s\r\nSpeed:%s\r\nTime: %s"), TempAlt, TempSpeed, TempTime);
 
-    AddStatusMessage(TEXT("Task Start"), TempAll);
+    Message::AddMessage(TEXT("Task Start"), TempAll);
 
   } else if (Calculated->ValidFinish && IsFinalWaypoint()) {
     InputEvents::processGlideComputer(GCE_TASK_FINISH);

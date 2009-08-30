@@ -67,6 +67,7 @@ class Message {
   static bool Render(); // returns true if messages have changed
 
   static void AddMessage(DWORD tshow, int type, TCHAR *Text);
+  static void AddMessage(const TCHAR* text, const TCHAR *data=NULL);
 
   // repeats last non-visible message of specified type (or any message
   // type=0)
@@ -82,7 +83,10 @@ class Message {
 
   static void BlockRender(bool doblock);
 
+  // used by main
   static void Startup(bool first);
+  static void LoadFile(void);
+  static void InitFile(void);
 
  private:
   static struct singleMessage messages[MAXMESSAGES];
@@ -97,10 +101,5 @@ class Message {
   static int block_ref;
 
 };
-
-void ReadStatusFile(void);
-void StatusFileInit(void);
-
-void ClearStatusMessages(void);
 
 #endif

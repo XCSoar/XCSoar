@@ -46,7 +46,7 @@ Copyright_License {
 #include "Math/FastMath.h"
 #include "Device/device.h"
 #include "Dialogs.h"
-#include "StatusMessage.hpp"
+#include "Message.h"
 #include "Device/Port.h"
 #include "AATDistance.h"
 #include "Atmosphere.h"
@@ -71,9 +71,9 @@ void	AirspeedProcessing(int UpDown)
     EnableCalibration = !EnableCalibration;
 	// XXX InputEvents - Is this an automatic or user thing - either way, needs moving
     if (EnableCalibration)
-      AddStatusMessage(TEXT("Calibrate ON"));
+      Message::AddMessage(TEXT("Calibrate ON"));
     else
-      AddStatusMessage(TEXT("Calibrate OFF"));
+      Message::AddMessage(TEXT("Calibrate OFF"));
   }
 
 }

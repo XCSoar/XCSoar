@@ -62,7 +62,6 @@ Copyright_License {
 #include "InputEvents.h"
 #include "Message.h"
 #include "Registry.hpp"
-#include "StatusMessage.hpp"
 #include "Interface.hpp"
 
 ///////////////////////////////////

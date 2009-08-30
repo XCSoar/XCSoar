@@ -51,7 +51,7 @@ Copyright_License {
 #include "Language.hpp"
 #include "Trigger.hpp"
 #include "Message.h"
-#include "StatusMessage.hpp"
+#include "Message.h"
 #include "SettingsUser.hpp"
 #include "Math/SunEphemeris.hpp"
 #include "UtilsProfile.hpp"
@@ -228,7 +228,6 @@ ATOM MyRegisterClass (HINSTANCE, LPTSTR);
 BOOL InitInstance    (HINSTANCE, int);
 LRESULT CALLBACK WndProc (HWND, UINT, WPARAM, LPARAM);
 LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
-void RestartCommPorts(void);
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -347,7 +346,7 @@ void SettingsLeave() {
   if(COMPORTCHANGED)
     {
       // JMW disabled com opening in sim mode
-      RestartCommPorts();
+      devRestart();
     }
 
 #endif
@@ -360,43 +359,13 @@ void SettingsLeave() {
 void SystemConfiguration(void) {
 #ifndef _SIM_
   if (LockSettingsInFlight && CALCULATED_INFO.Flying) {
-    AddStatusMessage(TEXT("Settings locked in flight"));
+    Message::AddMessage(TEXT("Settings locked in flight"));
     return;
   }
 #endif
   SettingsEnter();
   dlgConfigurationShowModal();
   SettingsLeave();
-}
-
-//////////////////////////////////////////////////////////////////////
-
-////////////////////////////////////////////////////////////////////////
-void RestartCommPorts() {
-  static bool first = true;
-  /*
-#if (WINDOWSPC>0)
-  if (!first) {
-    NMEAParser::Reset();
-    return;
-  }
-#endif
-  */
-  StartupStore(TEXT("RestartCommPorts\n"));
-
-  mutexComm.Lock();
-
-  devClose(devA());
-  devClose(devB());
-
-  NMEAParser::Reset();
-
-  first = false;
-
-  devInit(TEXT(""));
-
-  mutexComm.Unlock();
-
 }
 
 /////////////////////////////////////////////////////////////////////////////////
@@ -414,7 +383,7 @@ void PreloadInitialisation(bool ask) {
   if (ask) {
     RestoreRegistry();
     ReadRegistrySettings();
-    StatusFileInit();
+    Message::InitFile();
 
     //    CreateProgressDialog(gettext(TEXT("Initialising")));
 
@@ -431,7 +400,7 @@ void PreloadInitialisation(bool ask) {
 #ifndef DEBUG_TRANSLATIONS
     ReadLanguageFile();
 #endif
-    ReadStatusFile();
+    Message::LoadFile();
     InputEvents::readFile();
   }
 
@@ -790,10 +759,7 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 
 #ifndef _SIM_
   StartupStore(TEXT("RestartCommPorts\n"));
-  RestartCommPorts();
-#endif
-#if (WINDOWSPC>0)
-  devInit(TEXT(""));
+  devRestart();
 #endif
 
   // re-set polar in case devices need the data
@@ -1363,11 +1329,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 #ifdef VENTA_DEBUG_EVENT
 	case WM_KEYDOWN:
 
-		AddStatusMessage(TEXT("DBG KDOWN 1")); // VENTA
+		Message::AddMessage(TEXT("DBG KDOWN 1")); // VENTA
 		InterfaceTimeoutReset();
 	      break;
 	case WM_SYSKEYDOWN:
-		AddStatusMessage(TEXT("DBG SYSKDOWN 1")); // VENTA
+		Message::AddMessage(TEXT("DBG SYSKDOWN 1")); // VENTA
 		InterfaceTimeoutReset();
 	      break;
 #endif

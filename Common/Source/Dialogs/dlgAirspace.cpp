@@ -37,7 +37,7 @@ Copyright_License {
 
 #include "XCSoar.h"
 #include "Dialogs.h"
-#include "StatusMessage.hpp"
+#include "Message.h"
 #include "Language.hpp"
 #include "Dialogs/dlgTools.h"
 #include "InfoBoxLayout.h"
@@ -271,7 +271,7 @@ void dlgAirspaceShowModal(bool coloredit){
   // now retrieve back the properties...
   if (changed) {
     StoreRegistry();
-    AddStatusMessage(TEXT("Configuration saved"));
+    Message::AddMessage(TEXT("Configuration saved"));
   };
 
   delete wf;

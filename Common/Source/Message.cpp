@@ -474,7 +474,7 @@ void _init_Status(int num);
 StatusMessageSTRUCT StatusMessageData[MAXSTATUSMESSAGECACHE];
 int StatusMessageData_Size = 0;
 
-void StatusFileInit() {
+void Message::InitFile() {
   StartupStore(TEXT("StatusFileInit\n"));
 
   // DEFAULT - 0 is loaded as default, and assumed to exist
@@ -494,7 +494,7 @@ void StatusFileInit() {
 
 }
 
-void ReadStatusFile() {
+void Message::LoadFile() {
 
   StartupStore(TEXT("Loading status file\n"));
 
@@ -585,6 +585,7 @@ void ReadStatusFile() {
   fclose(fp);
 }
 
+
 // Create a blank entry (not actually used)
 void _init_Status(int num) {
   StatusMessageData[num].key = TEXT("");
@@ -608,8 +609,8 @@ void _init_Status(int num) {
 //
 // TODO code: (need to discuss) Consider moving almost all this functionality into AddMessage ?
 
-void AddStatusMessage(const TCHAR* text, const TCHAR *data) {
-  Message::Lock();
+void Message::AddMessage(const TCHAR* text, const TCHAR *data) {
+  Lock();
 
   StatusMessageSTRUCT LocalMessage;
   LocalMessage = StatusMessageData[0];
@@ -636,10 +637,10 @@ void AddStatusMessage(const TCHAR* text, const TCHAR *data) {
       _tcscat(msgcache, data);
     }
 
-    Message::AddMessage(LocalMessage.delay_ms, 1, msgcache);
+    AddMessage(LocalMessage.delay_ms, MSG_USERINTERFACE, msgcache);
   }
 
-  Message::Unlock();
+  Unlock();
 }
 
 
