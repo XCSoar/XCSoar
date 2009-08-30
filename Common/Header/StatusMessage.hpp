@@ -40,11 +40,6 @@ Copyright_License {
 
 #include "XCSoar.h"
 
-void ReadStatusFile(void);
-void StatusFileInit(void);
-
-void ClearStatusMessages(void);
 void AddStatusMessage(const TCHAR* text, const TCHAR* data = NULL);
-void StatusMessageStart(bool first);
 
 #endif

@@ -541,7 +541,6 @@ void InputEvents::eventClearAirspaceWarnings(const TCHAR *misc) {
 // Do Clear Event Warnings
 void InputEvents::eventClearStatusMessages(const TCHAR *misc) {
 	(void)misc;
-  ClearStatusMessages();
   // TODO enhancement: allow selection of specific messages (here we are acknowledging all)
   Message::Acknowledge(0);
 }
@@ -1336,12 +1335,12 @@ void InputEvents::eventNearestAirspaceDetails(const TCHAR *misc) {
   }
 
   // clear previous warning if any
-  Message::Acknowledge(MSG_AIRSPACE);
+  Message::Acknowledge(Message::MSG_AIRSPACE);
 
   // TODO code: No control via status data (ala DoStatusMEssage)
   // - can we change this?
   Message::Lock();
-  Message::AddMessage(5000, MSG_AIRSPACE, text);
+  Message::AddMessage(5000, Message::MSG_AIRSPACE, text);
   Message::Unlock();
 }
 

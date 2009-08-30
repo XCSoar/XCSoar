@@ -84,9 +84,10 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #define MAX_LABEL NUMBUTTONLABELS
 
 /*
-  TODO code - All of this input_Errors code needs to be removed and replaced with standard logger.
-  The logger can then display messages through Message:: if ncessary and log to files etc
-  This code, and baddly written #ifdef should be moved to Macros in the Log class.
+  TODO code - All of this input_Errors code needs to be removed and
+  replaced with standard logger.  The logger can then display messages
+  through Message if ncessary and log to files etc This code, and
+  baddly written #ifdef should be moved to Macros in the Log class.
 */
 
 #ifdef _INPUTDEBUG_

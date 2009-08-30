@@ -457,7 +457,7 @@ static void AfterStartup() {
   StartupStore(TEXT("CloseProgressDialog\n"));
   CloseProgressDialog();
 
-  StatusMessageStart(true);
+  Message::Startup(true);
 
 #ifdef _SIM_
   StartupStore(TEXT("GCE_STARTUP_SIMULATOR\n"));
@@ -466,7 +466,7 @@ static void AfterStartup() {
   StartupStore(TEXT("GCE_STARTUP_REAL\n"));
   InputEvents::processGlideComputer(GCE_STARTUP_REAL);
 #endif
-  StatusMessageStart(false);
+  Message::Startup(false);
 
 #ifdef _INPUTDEBUG_
   InputEvents::showErrors();

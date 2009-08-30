@@ -42,15 +42,6 @@ Copyright_License {
 
 #define MAXMESSAGES 20
 
-enum {
-  MSG_UNKNOWN=0,
-  MSG_AIRSPACE,
-  MSG_USERINTERFACE,
-  MSG_GLIDECOMPUTER,
-  MSG_COMMS
-};
-
-
 struct singleMessage {
   TCHAR text[1000];
   int type;
@@ -62,6 +53,15 @@ struct singleMessage {
 
 class Message {
  public:
+
+  enum {
+    MSG_UNKNOWN=0,
+    MSG_AIRSPACE=1,
+    MSG_USERINTERFACE=2,
+    MSG_GLIDECOMPUTER=3,
+    MSG_COMMS=4
+  };
+
   static void Initialize(RECT rc);
   static void Destroy();
   static bool Render(); // returns true if messages have changed
@@ -82,6 +82,8 @@ class Message {
 
   static void BlockRender(bool doblock);
 
+  static void Startup(bool first);
+
  private:
   static struct singleMessage messages[MAXMESSAGES];
   static RECT rcmsg; // maximum message size
@@ -96,5 +98,9 @@ class Message {
 
 };
 
+void ReadStatusFile(void);
+void StatusFileInit(void);
+
+void ClearStatusMessages(void);
 
 #endif

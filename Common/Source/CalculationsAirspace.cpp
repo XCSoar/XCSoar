@@ -109,7 +109,7 @@ bool ClearAirspaceWarnings(const bool acknowledge, const bool ack_all_day) {
         }
       }
     }
-    return Message::Acknowledge(MSG_AIRSPACE);
+    return Message::Acknowledge(Message::MSG_AIRSPACE);
   }
   return false;
 }
