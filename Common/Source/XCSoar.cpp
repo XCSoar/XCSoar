@@ -107,104 +107,12 @@ Copyright_License {
 
 #include <assert.h>
 
-
+///////////////////////////////////////////////////////////////////////////////
 HINSTANCE hInst; // The current instance
 MainWindow main_window;
 MapWindow map_window;
 GaugeVario *gauge_vario;
 GaugeFLARM *gauge_flarm;
-
-HBRUSH hBrushSelected;
-HBRUSH hBrushUnselected;
-HBRUSH hBrushButton;
-
-///////////////////////////////////////////////////////////////////////////////
-// settings
-int    AutoAdvance = 1;
-bool   AdvanceArmed = false;
-bool   EnableBlockSTF = false;
-bool   TaskAborted = false;
-double SAFETYALTITUDEARRIVAL = 500;
-double SAFETYALTITUDEBREAKOFF = 700;
-double SAFETYALTITUDETERRAIN = 200;
-double SAFTEYSPEED = 50.0;
-
-// Team code info
-int TeamCodeRefWaypoint = -1;
-TCHAR TeammateCode[10];
-bool TeamFlarmTracking = false;
-TCHAR TeamFlarmCNTarget[4]; // CN of the glider to track
-int TeamFlarmIdTarget;      // FlarmId of the glider to track
-double TeammateLatitude;
-double TeammateLongitude;
-bool TeammateCodeValid = false;
-
-
-// Waypoint Database
-int SectorType = 1; // FAI sector
-DWORD SectorRadius = 500;
-int StartLine = TRUE;
-DWORD StartRadius = 3000;
-int HomeWaypoint = -1;
-int AirfieldsHomeWaypoint = -1; // VENTA3 force Airfields home to be HomeWaypoint if
-                                // an H flag in waypoints file is not available..
-// Specials
-double QFEAltitudeOffset = 0;
-int OnAirSpace=1; // VENTA3 toggle DrawAirSpace, normal behaviour is "true"
-#if defined(PNA) || defined(FIVV)
-bool needclipping=false; // flag to activate extra clipping for some PNAs
-#endif
-bool EnableAutoBacklight=true;
-bool EnableAutoSoundVolume=true;
-bool ExtendedVisualGlide=false;
-bool VirtualKeys=false;
-short AverEffTime=0;
-// user interface settings
-bool CircleZoom = false;
-bool EnableTopology = false;
-bool EnableTerrain = false;
-int FinalGlideTerrain = 0;
-bool EnableSoundVario = true;
-bool EnableSoundModes = true;
-bool EnableSoundTask = true;
-int SoundVolume = 80;
-int SoundDeadband = 5;
-bool EnableVarioGauge = false;
-
-//IGC Logger
-bool LoggerActive = false;
-
-// Others
-BOOL COMPORTCHANGED = FALSE;
-BOOL MAPFILECHANGED = FALSE;
-BOOL AIRSPACEFILECHANGED = FALSE;
-BOOL AIRFIELDFILECHANGED = FALSE;
-BOOL WAYPOINTFILECHANGED = FALSE;
-BOOL TERRAINFILECHANGED = FALSE;
-BOOL TOPOLOGYFILECHANGED = FALSE;
-BOOL POLARFILECHANGED = FALSE;
-BOOL LANGUAGEFILECHANGED = FALSE;
-BOOL STATUSFILECHANGED = FALSE;
-BOOL INPUTFILECHANGED = FALSE;
-
-//Task Information
-Task_t Task = {{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0}};
-Start_t StartPoints;
-TaskStats_t TaskStats;
-int ActiveWayPoint = -1;
-
-// Assigned Area Task
-double AATTaskLength = 120;
-BOOL AATEnabled = FALSE;
-DWORD FinishMinHeight = 0;
-DWORD StartMaxHeight = 0;
-DWORD StartMaxSpeed = 0;
-DWORD StartMaxHeightMargin = 0;
-DWORD StartMaxSpeedMargin = 0;
-
-////////////////////////////////////////////////////////////////////////////////
-//Flight Data Globals
-
 NMEA_INFO     GPS_INFO;
 DERIVED_INFO  CALCULATED_INFO;
 
@@ -212,157 +120,86 @@ DERIVED_INFO  CALCULATED_INFO;
 //Local Static data
 static int iTimerID= 0;
 
+HBRUSH hBrushSelected;
+HBRUSH hBrushUnselected;
+HBRUSH hBrushButton;
 
 #if (((UNDER_CE >= 300)||(_WIN32_WCE >= 0x0300)) && (WINDOWSPC<1))
 #define HAVE_ACTIVATE_INFO
+#endif
+
+#ifdef HAVE_ACTIVATE_INFO
 static SHACTIVATEINFO s_sai;
 #endif
 
-
 ////////////////////////////////////////////////////////////////////////////////
 // Forward declarations of functions included in this code module:
-ATOM RegisterWindowClass (HINSTANCE, LPTSTR);
-bool InitInstance    (HINSTANCE);
-LRESULT CALLBACK MainWndProc (HWND, UINT, WPARAM, LPARAM);
+bool Startup (HINSTANCE, LPTSTR lpCmdLine);
 
 ////////////////////////////////////////////////////////////////////////////////
-//
-void SwitchToMapWindow(void)
-{
-  map_window.set_focus();
-}
-
-void MainWindowTop() {
-  main_window.full_screen();
-}
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-
-void SettingsEnter() {
-  MapWindowBase::SuspendDrawingThread();
-  // This prevents the map and calculation threads from doing anything
-  // with shared data while it is being changed (also prevents drawing)
-
-  MAPFILECHANGED = FALSE;
-  AIRSPACEFILECHANGED = FALSE;
-  AIRFIELDFILECHANGED = FALSE;
-  WAYPOINTFILECHANGED = FALSE;
-  TERRAINFILECHANGED = FALSE;
-  TOPOLOGYFILECHANGED = FALSE;
-  POLARFILECHANGED = FALSE;
-  LANGUAGEFILECHANGED = FALSE;
-  STATUSFILECHANGED = FALSE;
-  INPUTFILECHANGED = FALSE;
-  COMPORTCHANGED = FALSE;
-}
-
-
-void SettingsLeave() {
-  if (!globalRunningEvent.test()) return;
-
-  SwitchToMapWindow();
-
-  // mutexing.Lock everything here prevents the calculation thread from running,
-  // while shared data is potentially reloaded.
-
-  mutexFlightData.Lock();
-  mutexTaskData.Lock();
-  mutexNavBox.Lock();
-
-  if(MAPFILECHANGED) {
-    AIRSPACEFILECHANGED = TRUE;
-    AIRFIELDFILECHANGED = TRUE;
-    WAYPOINTFILECHANGED = TRUE;
-    TERRAINFILECHANGED = TRUE;
-    TOPOLOGYFILECHANGED = TRUE;
-  }
-
-  if((WAYPOINTFILECHANGED) || (TERRAINFILECHANGED) || (AIRFIELDFILECHANGED))
-    {
-      ClearTask();
-
-      // re-load terrain
-      RasterTerrain::CloseTerrain();
-      RasterTerrain::OpenTerrain();
-
-      // re-load waypoints
-      ReadWayPoints();
-      InitWayPointCalc(); // VENTA3
-      ReadAirfieldFile();
-
-      // re-set home
-      if (WAYPOINTFILECHANGED || TERRAINFILECHANGED) {
-	SetHome(WAYPOINTFILECHANGED==TRUE);
-      }
-
-      //
-      RasterTerrain::ServiceFullReload(GPS_INFO.Latitude,
-                                       GPS_INFO.Longitude);
-
-      MapWindow::ForceVisibilityScan();
-    }
-
-  if (TOPOLOGYFILECHANGED)
-    {
-      CloseTopology();
-      OpenTopology();
-      MapWindow::ForceVisibilityScan();
-    }
-
-  if(AIRSPACEFILECHANGED)
-    {
-      CloseAirspace();
-      ReadAirspace();
-      SortAirspace();
-      MapWindow::ForceVisibilityScan();
-    }
-
-  if (POLARFILECHANGED) {
-    CalculateNewPolarCoef();
-    GlidePolar::UpdatePolar(false);
-  }
-
-  if (AIRFIELDFILECHANGED
-      || AIRSPACEFILECHANGED
-      || WAYPOINTFILECHANGED
-      || TERRAINFILECHANGED
-      || TOPOLOGYFILECHANGED
-      ) {
-    CloseProgressDialog();
-    map_window.set_focus();
-  }
-
-  mutexNavBox.Unlock();
-  mutexTaskData.Unlock();
-  mutexFlightData.Unlock();
-
-  if(COMPORTCHANGED) {
-    devRestart();
-  }
-
-  MapWindowBase::ResumeDrawingThread();
-  // allow map and calculations threads to continue on their merry way
-}
-
-
-void SystemConfiguration(void) {
-#ifndef _SIM_
-  if (LockSettingsInFlight && CALCULATED_INFO.Flying) {
-    Message::AddMessage(TEXT("Settings locked in flight"));
-    return;
-  }
+WPARAM WindowsMessageLoop() {
+#if _DEBUG
+ // _crtBreakAlloc = -1;     // Set this to the number in {} brackets to
+                             // break on a memory leak
 #endif
-  SettingsEnter();
-  dlgConfigurationShowModal();
-  SettingsLeave();
+
+  HACCEL hAccelTable = LoadAccelerators(hInst, (LPCTSTR)IDC_XCSOAR);
+
+  // Main message loop:
+  MSG msg;
+  while (GetMessage(&msg, NULL, 0, 0))
+    {
+      if (!TranslateAccelerator(msg.hwnd, hAccelTable, &msg))
+        {
+          TranslateMessage(&msg);
+          DispatchMessage(&msg);
+        }
+    }
+
+#if (WINDOWSPC>0)
+#if _DEBUG
+  _CrtCheckMemory();
+  _CrtDumpMemoryLeaks();
+#endif
+#endif
+
+  return msg.wParam;
+}
+
+
+
+int WINAPI WinMain(     HINSTANCE hInstance,
+                        HINSTANCE hPrevInstance,
+                        LPTSTR    lpCmdLine,
+                        int       nCmdShow)
+{
+  (void)hPrevInstance;
+
+  InitAsset();
+
+  Version();
+  StartupStore(TEXT("Starting XCSoar %s\n"), XCSoar_Version);
+
+  XCSoarGetOpts(lpCmdLine);
+
+  InitCommonControls();
+
+  StartupStore(TEXT("Initialise application instance\n"));
+
+  // Perform application initialization:
+  if (!Startup (hInstance, lpCmdLine))
+    {
+      return FALSE;
+    }
+
+  return WindowsMessageLoop();
 }
 
 /////////////////////////////////////////////////////////////////////////////////
 
-
-void PreloadInitialisation(bool ask) {
+static void PreloadInitialisation(bool ask) {
   if (ask) {
 #ifdef PNA
     CleanRegistry(); // VENTA2-FIX for PNA we can't delete all registries..by now
@@ -429,7 +266,7 @@ static void AfterStartup() {
   StartupStore(TEXT("CloseProgressDialog\n"));
   CloseProgressDialog();
 
-  MainWindowTop();
+  main_window.full_screen();
   TriggerAll();
   InfoBoxManager::SetDirty(true);
   TriggerRedraws();
@@ -438,38 +275,98 @@ static void AfterStartup() {
 #ifdef _INPUTDEBUG_
   InputEvents::showErrors();
 #endif
-
 }
 
 
-int WINAPI WinMain(     HINSTANCE hInstance,
-                        HINSTANCE hPrevInstance,
-                        LPTSTR    lpCmdLine,
-                        int       nCmdShow)
+bool Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
 {
-  MSG msg;
-  HACCEL hAccelTable;
-  (void)hPrevInstance;
+  TCHAR szTitle[MAX_LOADSTRING];                        // The title bar text
+  TCHAR szWindowClass[MAX_LOADSTRING];                  // The window class name
+  RECT rc;
 
-  InitAsset();
+  hInst = hInstance;            // Store instance handle in our global variable
 
-  Version();
-  StartupStore(TEXT("Starting XCSoar %s\n"), XCSoar_Version);
+  LoadString(hInstance, IDC_XCSOAR, szWindowClass, MAX_LOADSTRING);
+  LoadString(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
 
-  XCSoarGetOpts(lpCmdLine);
+  //If it is already running, then focus on the window
+  if (main_window.find(szWindowClass, szTitle))
+    return false;
 
-  InitCommonControls();
+  main_window.register_class(hInst, szWindowClass);
+
+  // other startup...
+
   InitSineTable();
+  PreloadInitialisation(true);
 
-  StartupStore(TEXT("Initialise application instance\n"));
+  StartupStore(TEXT("Create main window\n"));
 
-  // Perform application initialization:
-  if (!InitInstance (hInstance))
-    {
-      return FALSE;
-    }
+  RECT WindowSize = SystemWindowSize();
+  main_window.set(szWindowClass, szTitle,
+		  WindowSize.left, WindowSize.top,
+		  WindowSize.right, WindowSize.bottom);
 
-  hAccelTable = LoadAccelerators(hInstance, (LPCTSTR)IDC_XCSOAR);
+  if (!main_window.defined()) {
+    return false;
+  }
+
+  rc = main_window.get_client_rect();
+#if (WINDOWSPC>0)
+  rc.left = 0;
+  rc.right = SCREENWIDTH;
+  rc.top = 0;
+  rc.bottom = SCREENHEIGHT;
+#endif
+
+  StartupStore(TEXT("InfoBox geometry\n"));
+
+  InfoBoxLayout::ScreenGeometry(rc);
+  // color/pattern chart (must have infobox geometry before this)
+  MapGfx.Initialise();
+
+  hBrushSelected = (HBRUSH)CreateSolidBrush(MapGfx.ColorSelected);
+  hBrushUnselected = (HBRUSH)CreateSolidBrush(MapGfx.ColorUnselected);
+  hBrushButton = (HBRUSH)CreateSolidBrush(MapGfx.ColorButton);
+
+  StartupStore(TEXT("Create info boxes\n"));
+  RECT rcsmall = InfoBoxManager::Create(rc);
+
+  StartupStore(TEXT("Create button labels\n"));
+  ButtonLabel::CreateButtonLabels(rc);
+  ButtonLabel::SetLabelText(0,TEXT("MODE"));
+
+  StartupStore(TEXT("Initialise fonts\n"));
+  InitialiseFonts(main_window, rc);
+
+  StartupStore(TEXT("Create FLARM gauge\n"));
+  gauge_flarm = new GaugeFLARM(main_window);
+
+  StartupStore(TEXT("Initialise message system\n"));
+  Message::Initialize(rc); // creates window, sets fonts
+
+  ///////////////////////////////////////////////////////
+  //// create map window
+
+  StartupStore(TEXT("Create map window\n"));
+
+  MapWindow::SetMapRect(rcsmall);
+  map_window.register_class(hInst, TEXT("MapWindowClass"));
+  map_window.set(main_window, TEXT("MapWindowClass"),
+                 0, 0, rc.right - rc.left, rc.bottom-rc.top);
+
+  map_window.set_font(MapWindowFont);
+
+  ///////////////////////////////////////////////////////
+  // initial show
+  map_window.show();
+  map_window.update();
+
+  main_window.show();
+  main_window.update();
+
+  ///////////////////////////////////////////////////////
+  // other initialisation...
 
 #ifdef HAVE_ACTIVATE_INFO
   SHSetAppKeyWndAssoc(VK_APP1, main_window);
@@ -487,14 +384,9 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 
   // Initialise main blackboard data
 
-  memset( &(Task), 0, sizeof(Task_t));
-  memset( &(StartPoints), 0, sizeof(Start_t));
   ClearTask();
-
   InitCalculations(&GPS_INFO,&CALCULATED_INFO);
-
   LinkGRecordDLL(); // try to link DLL if it exists
-
   OpenGeoid();
 
   PreloadInitialisation(false);
@@ -642,7 +534,6 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   Sleep(100);
   StartupStore(TEXT("ShowInfoBoxes\n"));
   InfoBoxManager::Show();
-  SwitchToMapWindow();
 
   StartupStore(TEXT("CreateCalculationThread\n"));
   CreateCalculationThread();
@@ -658,127 +549,11 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 
   // Da-da, start everything now
   StartupStore(TEXT("ProgramStarted\n"));
+
+  // map gets initial focus
+  map_window.set_focus();
+
   globalRunningEvent.trigger();
-
-#if _DEBUG
- // _crtBreakAlloc = -1;     // Set this to the number in {} brackets to
-                             // break on a memory leak
-#endif
-
-  // Main message loop:
-  while (GetMessage(&msg, NULL, 0, 0))
-    {
-      if (!TranslateAccelerator(msg.hwnd, hAccelTable, &msg))
-        {
-          TranslateMessage(&msg);
-          DispatchMessage(&msg);
-        }
-    }
-
-#if (WINDOWSPC>0)
-#if _DEBUG
-  _CrtCheckMemory();
-  _CrtDumpMemoryLeaks();
-#endif
-#endif
-
-  return msg.wParam;
-}
-
-
-//
-//  FUNCTION: InitInstance(HANDLE, int)
-//
-//  PURPOSE: Saves instance handle and creates main window
-//
-//  COMMENTS:
-//
-//    In this function, we save the instance handle in a global variable and
-//    create and display the main program window.
-//
-bool InitInstance(HINSTANCE hInstance)
-{
-  TCHAR szTitle[MAX_LOADSTRING];                        // The title bar text
-  TCHAR szWindowClass[MAX_LOADSTRING];                  // The window class name
-  RECT rc;
-
-  hInst = hInstance;            // Store instance handle in our global variable
-
-  LoadString(hInstance, IDC_XCSOAR, szWindowClass, MAX_LOADSTRING);
-  LoadString(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
-
-  //If it is already running, then focus on the window
-  if (main_window.find(szWindowClass, szTitle))
-    return false;
-
-  main_window.register_class(hInst, szWindowClass);
-
-  PreloadInitialisation(true);
-
-  StartupStore(TEXT("Create main window\n"));
-
-  RECT WindowSize = SystemWindowSize();
-  main_window.set(szWindowClass, szTitle,
-		  WindowSize.left, WindowSize.top,
-		  WindowSize.right, WindowSize.bottom);
-
-  if (!main_window.defined()) {
-    return false;
-  }
-
-  rc = main_window.get_client_rect();
-#if (WINDOWSPC>0)
-  rc.left = 0;
-  rc.right = SCREENWIDTH;
-  rc.top = 0;
-  rc.bottom = SCREENHEIGHT;
-#endif
-
-  StartupStore(TEXT("InfoBox geometry\n"));
-
-  InfoBoxLayout::ScreenGeometry(rc);
-  // color/pattern chart (must have infobox geometry before this)
-  MapGfx.Initialise();
-
-  hBrushSelected = (HBRUSH)CreateSolidBrush(MapGfx.ColorSelected);
-  hBrushUnselected = (HBRUSH)CreateSolidBrush(MapGfx.ColorUnselected);
-  hBrushButton = (HBRUSH)CreateSolidBrush(MapGfx.ColorButton);
-
-  StartupStore(TEXT("Create info boxes\n"));
-  RECT rcsmall = InfoBoxManager::Create(rc);
-
-  StartupStore(TEXT("Create button labels\n"));
-  ButtonLabel::CreateButtonLabels(rc);
-  ButtonLabel::SetLabelText(0,TEXT("MODE"));
-
-  StartupStore(TEXT("Initialise fonts\n"));
-  InitialiseFonts(main_window, rc);
-
-  StartupStore(TEXT("Create FLARM gauge\n"));
-  gauge_flarm = new GaugeFLARM(main_window);
-
-  StartupStore(TEXT("Initialise message system\n"));
-  Message::Initialize(rc); // creates window, sets fonts
-
-  ///////////////////////////////////////////////////////
-  //// create map window
-
-  StartupStore(TEXT("Create map window\n"));
-
-  MapWindow::SetMapRect(rcsmall);
-  map_window.register_class(hInst, TEXT("MapWindowClass"));
-  map_window.set(main_window, TEXT("MapWindowClass"),
-                 0, 0, rc.right - rc.left, rc.bottom-rc.top);
-
-  map_window.set_font(MapWindowFont);
-
-  ///////////////////////////////////////////////////////
-  // initial show
-  map_window.show();
-  map_window.update();
-
-  main_window.show();
-  main_window.update();
 
   return true;
 }
@@ -844,9 +619,7 @@ void Shutdown(void) {
 
   StartupStore(TEXT("Clear task data\n"));
 
-  mutexTaskData.Lock();
-  Task[0].Index = -1;  ActiveWayPoint = -1;
-  AATEnabled = FALSE;
+  ClearTask();
   CloseAirspace();
   CloseWayPoints();
   mutexTaskData.Unlock();
@@ -951,6 +724,7 @@ void Shutdown(void) {
 #endif
 }
 
+
 ///////////////////////////////////////////////////////////////////////////
 // Windows event handlers
 
@@ -966,7 +740,7 @@ LRESULT MainHandler_Command(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
   if(wmControl != NULL) {
     if (globalRunningEvent.test()) {
 
-      MainWindowTop();
+      main_window.full_screen();
 
       if (InfoBoxManager::Click(wmControl)) {
 	return FALSE;
@@ -982,6 +756,7 @@ LRESULT MainHandler_Command(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
   }
   return DefWindowProc(hWnd, message, wParam, lParam);
 }
+
 
 LRESULT CALLBACK MainHandler_Colour(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {

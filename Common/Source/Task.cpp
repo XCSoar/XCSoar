@@ -1178,6 +1178,10 @@ void LoadNewTask(TCHAR *szFileName)
 
 void ClearTask(void) {
   mutexTaskData.Lock();
+
+  memset( &(Task), 0, sizeof(Task_t));
+  memset( &(StartPoints), 0, sizeof(Start_t));
+
   TaskModified = true;
   TargetModified = true;
   LastTaskFileName[0] = _T('\0');

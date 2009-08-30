@@ -67,6 +67,9 @@ Copyright_License {
 #include "Calculations.h" // TODO danger! IsFlarmTargetCNInRange
 #include "UtilsSystem.hpp"
 #include "Screen/MainWindow.hpp"
+#include "MapWindow.h"
+
+extern MapWindow map_window;
 
 // user setting
 bool EnableAuxiliaryInfo = false;
@@ -346,7 +349,7 @@ bool InfoBoxManager::Defocus() {
 #ifndef DISABLEAUDIO
 	  if (EnableSoundModes) PlayResource(TEXT("IDR_WAV_CLICK"));
 #endif
-    SwitchToMapWindow();
+    map_window.set_focus();
   }
   return retval;
 }
@@ -920,7 +923,7 @@ void PopUpSelect(int Index)
   StoreType(Index, InfoType[Index]);
   //  ShowWindow(hWndCB,SW_HIDE);
   //  FullScreen();
-  SwitchToMapWindow();
+  map_window.set_focus();
 }
 
 bool InfoBoxManager::Click(HWND wmControl) {
@@ -958,7 +961,7 @@ void InfoBoxManager::Focus(void) {
   if (InfoWindowActive) {
     FocusOnWindow(InfoFocus,true);
   } else {
-    SwitchToMapWindow();
+    map_window.set_focus();
   }
 }
 
@@ -992,11 +995,10 @@ void InfoBoxManager::ProcessTimer(void) {
       InfoBoxFocusTimeOut ++;
 
       if(InfoBoxFocusTimeOut >= FOCUSTIMEOUTMAX) {
-	SwitchToMapWindow();
+	map_window.set_focus();
       }
     }
   }
-
   InfoBoxDrawIfDirty();
   LastFlipBoxTime++;
 }

@@ -44,7 +44,6 @@ class GaugeVario;
 class GaugeFLARM;
 
 bool Debounce();
-void SwitchToMapWindow(void);
 
 // instance of main program
 extern HINSTANCE hInst;

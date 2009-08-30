@@ -527,6 +527,7 @@ OBJS	:=\
 	$(SRC)/UtilsFLARM.o		\
 	$(SRC)/UtilsFont.o		\
 	$(SRC)/UtilsProfile.o		\
+	$(SRC)/UtilsSettings.o		\
 	$(SRC)/UtilsSystem.o		\
 	$(SRC)/UtilsText.o		\
 	$(SRC)/Version.o 		\
