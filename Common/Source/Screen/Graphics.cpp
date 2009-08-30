@@ -47,6 +47,7 @@ Copyright_License {
 #include <stdlib.h>
 #include "SettingsUser.hpp"
 #include "SettingsAirspace.hpp"
+#include "Units.h"
 
 #define NUMSNAILRAMP 6
 
@@ -116,6 +117,8 @@ const Color ScreenGraphics::Colours[] =
 
 void ScreenGraphics::Initialise(void) {
   int i;
+
+  Units::LoadUnitBitmap(hInst);
 
   redBrush.set(redColor);
   yellowBrush.set(yellowColor);
@@ -363,6 +366,9 @@ void ScreenGraphics::Destroy() {
   greenBrush.reset();
   yellowBrush.reset();
   redBrush.reset();
+
+  Units::UnLoadUnitBitmap();
+
 }
 
 

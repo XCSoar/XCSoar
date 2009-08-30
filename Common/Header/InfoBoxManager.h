@@ -53,8 +53,8 @@ class InfoBoxManager {
   static void InfoBoxDrawIfDirty();
   static void DestroyInfoBoxFormatters();
 public:
-  static void Event_SelectInfoBox(int i);
-  static void Event_ChangeInfoBoxType(int i);
+  static void Event_Select(int i);
+  static void Event_Change(int i);
 
   static TCHAR *GetTypeDescription(int i);
 

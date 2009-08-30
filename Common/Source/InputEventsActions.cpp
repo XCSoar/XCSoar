@@ -566,10 +566,10 @@ void InputEvents::eventFLARMRadar(const TCHAR *misc) {
 // Selects the next or previous infobox
 void InputEvents::eventSelectInfoBox(const TCHAR *misc) {
   if (_tcscmp(misc, TEXT("next")) == 0) {
-    InfoBoxManager::Event_SelectInfoBox(1);
+    InfoBoxManager::Event_Select(1);
   }
   if (_tcscmp(misc, TEXT("previous")) == 0) {
-    InfoBoxManager::Event_SelectInfoBox(-1);
+    InfoBoxManager::Event_Select(-1);
   }
 }
 
@@ -577,10 +577,10 @@ void InputEvents::eventSelectInfoBox(const TCHAR *misc) {
 // Changes the type of the current infobox to the next/previous type
 void InputEvents::eventChangeInfoBoxType(const TCHAR *misc) {
   if (_tcscmp(misc, TEXT("next")) == 0) {
-    InfoBoxManager::Event_ChangeInfoBoxType(1);
+    InfoBoxManager::Event_Change(1);
   }
   if (_tcscmp(misc, TEXT("previous")) == 0) {
-    InfoBoxManager::Event_ChangeInfoBoxType(-1);
+    InfoBoxManager::Event_Change(-1);
   }
 }
 
@@ -741,9 +741,11 @@ void InputEvents::eventAnalysis(const TCHAR *misc) {
 void InputEvents::eventWaypointDetails(const TCHAR *misc) {
 
   if (_tcscmp(misc, TEXT("current")) == 0) {
-    if (ActiveWayPoint>=0) {
+    mutexTaskData.Lock();
+    if (ValidTaskPoint(ActiveWayPoint)) {
       SelectedWaypoint = Task[ActiveWayPoint].Index;
     }
+    mutexTaskData.Unlock();
     if (SelectedWaypoint<0){
       AddStatusMessage(TEXT("No Active Waypoint!"));
       return;

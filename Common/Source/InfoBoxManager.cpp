@@ -352,7 +352,7 @@ bool InfoBoxManager::Defocus() {
 }
 
 
-void InfoBoxManager::Event_SelectInfoBox(int i) {
+void InfoBoxManager::Event_Select(int i) {
 //  int oldinfofocus = InfoFocus;
 
   // must do this
@@ -464,7 +464,7 @@ void InfoBoxManager::setType(const int i, const char j) {
 }
 
 
-void InfoBoxManager::Event_ChangeInfoBoxType(int i) {
+void InfoBoxManager::Event_Change(int i) {
   int j=0, k;
 
   if (InfoFocus<0) {

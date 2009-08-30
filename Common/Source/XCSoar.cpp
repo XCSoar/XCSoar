@@ -89,8 +89,6 @@ Copyright_License {
 #include "Marks.h"
 #include "Audio/VarioSound.h"
 #include "Device/device.h"
-
-#include "Units.h"
 #include "InputEvents.h"
 #include "Atmosphere.h"
 #include "Device/Geoid.h"
@@ -1016,10 +1014,6 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
   ///////////////////////////////////////// create infoboxes
 
-  StartupStore(TEXT("Load unit bitmaps\n"));
-
-  Units::LoadUnitBitmap(hInstance);
-
   StartupStore(TEXT("Create info boxes\n"));
 
   MapWindow::SetMapRect(InfoBoxManager::Create(rc));
@@ -1205,8 +1199,6 @@ void Shutdown(void) {
 
   StartupStore(TEXT("Close Messages\n"));
   Message::Destroy();
-
-  Units::UnLoadUnitBitmap();
 
   StartupStore(TEXT("Destroy Info Boxes\n"));
   InfoBoxManager::Destroy();
