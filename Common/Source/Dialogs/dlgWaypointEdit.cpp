@@ -45,7 +45,6 @@ Copyright_License {
 #include "Waypointparser.h"
 #include "Math/FastMath.h"
 #include "DataField/Enum.hpp"
-#include "Utils.h"
 #include "Screen/MainWindow.hpp"
 #include "Compatibility/string.h"
 

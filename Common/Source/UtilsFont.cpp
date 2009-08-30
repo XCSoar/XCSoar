@@ -35,7 +35,6 @@ Copyright_License {
 }
 */
 
-#include "Utils.h"
 #include "XCSoar.h"
 #include "UtilsText.hpp"
 #include <assert.h>

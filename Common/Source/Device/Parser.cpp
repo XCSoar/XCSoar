@@ -41,7 +41,6 @@ Copyright_License {
 #include "XCSoar.h"
 #include "Protection.hpp"
 #include <math.h>
-#include "Utils.h"
 #include "UtilsText.hpp"
 #include "UtilsFLARM.hpp"
 #include "Blackboard.hpp"

@@ -41,7 +41,6 @@ Copyright_License {
 #include "InputEvents.h"
 #include "Dialogs/dlgTools.h"
 #include "DataField/Base.hpp"
-#include "Utils.h"
 #include "Interface.hpp"
 #include "Screen/MainWindow.hpp"
 

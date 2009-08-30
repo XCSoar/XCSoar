@@ -60,8 +60,6 @@ static Color colTextBackgnd;
 
 #define FLARMMAXRANGE 2000
 
-#include "Utils.h"
-
 int GaugeFLARM::RangeScale(double d) {
   double drad = max(0.0,1.0-d/FLARMMAXRANGE);
   return iround(radius*(1.0-drad*drad));

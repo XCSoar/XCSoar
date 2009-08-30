@@ -50,7 +50,6 @@ Copyright_License {
 #include "Device/Port.h"
 #include "Registry.hpp"
 #include "Math/Pressure.h"
-#include "Utils.h"
 #include "Device/devCAI302.h"
 #include "Device/devCaiGpsNav.h"
 #include "Device/devEW.h"

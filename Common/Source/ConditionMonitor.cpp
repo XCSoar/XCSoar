@@ -47,7 +47,7 @@ Copyright_License {
 #include "Device/device.h"
 #include "SettingsTask.hpp"
 #include "Math/SunEphemeris.hpp"
-#include "Process.h"
+#include "LocalTime.hpp"
 #include "InputEvents.h"
 #include "WayPoint.hpp"
 

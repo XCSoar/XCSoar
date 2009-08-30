@@ -42,7 +42,6 @@ Copyright_License {
 #include "XCSoar.h"
 #include "Dialogs.h"
 #include "Protection.hpp"
-#include "Utils.h"
 #include "Settings.hpp"
 #include "SettingsTask.hpp"
 #include "SettingsComputer.hpp"
@@ -50,7 +49,6 @@ Copyright_License {
 #include <math.h>
 #include "InputEvents.h"
 #include "TeamCodeCalculation.h"
-#include "Process.h"
 #include "Math/Earth.hpp"
 #include "PeriodClock.hpp"
 #include "Math/Pressure.h"

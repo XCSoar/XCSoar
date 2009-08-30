@@ -35,7 +35,6 @@ Copyright_License {
 }
 */
 #include "UtilsAirspace.hpp"
-#include "Utils.h"
 #include "XCSoar.h"
 #include "LogFile.hpp"
 #include "Dialogs.h"

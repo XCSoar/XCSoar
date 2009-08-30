@@ -39,7 +39,6 @@ Copyright_License {
 
 #include "Airspace.h"
 #include "Blackboard.hpp"
-#include "Utils.h"
 #include "MapWindowProjection.hpp"
 #include "Math/Earth.hpp"
 #include "Math/Screen.hpp"

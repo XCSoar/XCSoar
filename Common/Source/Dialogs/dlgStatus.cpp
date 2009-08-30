@@ -48,7 +48,7 @@ Copyright_License {
 #include "Waypointparser.h"
 #include "Logger.h"
 #include "Math/FastMath.h"
-#include "Process.h"
+#include "LocalTime.hpp"
 #include "Screen/MainWindow.hpp"
 #include "Calculations.h" // TODO danger! FAIFinishHeight
 #include "Math/SunEphemeris.hpp"

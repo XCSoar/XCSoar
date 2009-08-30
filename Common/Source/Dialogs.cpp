@@ -53,7 +53,6 @@ Copyright_License {
 #include "aygshell.h"
 #endif
 
-#include "Utils.h"
 #include "UtilsText.hpp"
 #include "UtilsSystem.hpp"
 #include "LocalPath.hpp"

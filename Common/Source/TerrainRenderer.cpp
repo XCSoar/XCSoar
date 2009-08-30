@@ -51,7 +51,6 @@ Copyright_License {
 #include "Screen/Ramp.hpp"
 #include "Screen/Graphics.hpp"
 #include "LocalPath.hpp"
-#include "Utils.h"
 #include "LogFile.hpp"
 
 #include <assert.h>

@@ -38,7 +38,6 @@ Copyright_License {
 
 #include "XCSoar.h"
 #include "Dialogs.h"
-#include "Utils.h"
 #include "Dialogs/dlgTools.h"
 #include "Screen/MainWindow.hpp"
 #include "Compatibility/string.h"

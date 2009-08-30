@@ -50,7 +50,6 @@ Copyright_License {
 #include "Screen/Fonts.hpp"
 #include "Screen/Graphics.hpp"
 #include "Screen/MainWindow.hpp"
-#include "Utils.h"
 #include "GlideComputer.hpp"
 #include "Atmosphere.h"
 #include "Blackboard.hpp"

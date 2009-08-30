@@ -485,7 +485,6 @@ OBJS	:=\
 	$(SRC)/InputEvents.o 		\
 	$(SRC)/InputEventsActions.o 	\
 	$(SRC)/Message.o 		\
-	$(SRC)/Process.o 		\
 	$(SRC)/StatusMessage.o 		\
 	$(SRC)/WindowControls.o 	\
 	$(SRC)/LogFile.o 		\
@@ -523,6 +522,7 @@ OBJS	:=\
 	$(SRC)/Language.o 		\
 	$(SRC)/LocalPath.o 		\
 	$(SRC)/Interface.o		\
+	$(SRC)/LocalTime.o		\
 	$(SRC)/Units.o 			\
 	$(SRC)/UtilsAirspace.o		\
 	$(SRC)/UtilsFLARM.o		\

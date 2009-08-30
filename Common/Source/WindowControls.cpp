@@ -56,7 +56,6 @@ extern MapWindow map_window; // TODO try to avoid this
 #include "Screen/Viewport.hpp"
 #include "Screen/PaintCanvas.hpp"
 #include "DataField/Base.hpp"
-#include "Utils.h"
 
 #ifdef PNA
 #include "Asset.hpp"

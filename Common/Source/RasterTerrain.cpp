@@ -41,11 +41,9 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "Dialogs.h"
 #include "Language.hpp"
-#include "Process.h"
 #include "Math/FastMath.h"
 #include "Registry.hpp"
 #include "LocalPath.hpp"
-#include "Utils.h"
 
 #include "wcecompat/ts_string.h"
 

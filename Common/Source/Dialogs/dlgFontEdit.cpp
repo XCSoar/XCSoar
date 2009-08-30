@@ -43,7 +43,6 @@ Copyright_License {
 #include "DataField/Boolean.hpp"
 #include "DataField/Enum.hpp"
 #include "DataField/Integer.hpp"
-#include "Utils.h"
 #include "Screen/Fonts.hpp"
 #include "Screen/MainWindow.hpp"
 

@@ -39,13 +39,12 @@ Copyright_License {
 #include "Dialogs.h"
 #include "Language.hpp"
 #include "Units.h"
-#include "Process.h"
+#include "LocalTime.hpp"
 #include "RasterTerrain.h"
 #include "RasterWeather.h"
 #include "Dialogs/dlgTools.h"
 #include "InfoBoxLayout.h"
 #include "DataField/Enum.hpp"
-#include "Utils.h"
 #include "Screen/MainWindow.hpp"
 
 static WndForm *wf=NULL;

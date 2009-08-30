@@ -45,7 +45,6 @@ Copyright_License {
 #include "Dialogs/dlgTools.h"
 #include "Registry.hpp"
 #include "DataField/Enum.hpp"
-#include "Utils.h"
 #include "Math/Units.h"
 #include "Calculations.h" // TODO danger! for SetWindEstimate
 #include "Screen/MainWindow.hpp"

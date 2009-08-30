@@ -60,7 +60,7 @@ Copyright_License {
 #include "Screen/Blank.hpp"
 #include "Screen/MainWindow.hpp"
 #include "Registry.hpp"
-#include "Process.h"
+#include "LocalTime.hpp"
 #include "McReady.h"
 #include "Math/FastMath.h"
 #include "InfoBoxLayout.h"

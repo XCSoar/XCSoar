@@ -38,9 +38,8 @@ Copyright_License {
 #include "XCSoar.h"
 #include "Interface.hpp"
 #include "Units.h"
-#include "Utils.h"
 #include "Dialogs/dlgTools.h"
-#include "Process.h"
+#include "LocalTime.hpp"
 #include "Screen/MainWindow.hpp"
 
 static WndForm *wf=NULL;

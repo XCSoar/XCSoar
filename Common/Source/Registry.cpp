@@ -52,7 +52,6 @@ Copyright_License {
 #include "Math/FastMath.h"
 #include "Math/Units.h"
 #include "Logger.h"
-#include "Utils.h"
 #include "Device/Parser.h"
 #include "Blackboard.hpp"
 #include "Settings.hpp"

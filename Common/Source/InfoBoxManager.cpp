@@ -50,7 +50,6 @@ Copyright_License {
 #include "InputEvents.h"
 #include "Compatibility/string.h"
 #include "Device/Parser.h"
-#include "Utils.h"
 #include "Math/FastMath.h"
 #include "Math/Earth.hpp"
 #include "Math/Units.h"

@@ -70,7 +70,6 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Registry.hpp"
 #include "LocalPath.hpp"
 #include "McReady.h"
-#include "Utils.h"
 #include "UtilsText.hpp"
 
 #include <assert.h>

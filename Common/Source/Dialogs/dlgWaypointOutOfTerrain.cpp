@@ -39,7 +39,6 @@ Copyright_License {
 #include "Interface.hpp"
 #include "Units.h"
 #include "Waypointparser.h"
-#include "Utils.h"
 #include "Dialogs/dlgTools.h"
 #include "Screen/MainWindow.hpp"
 

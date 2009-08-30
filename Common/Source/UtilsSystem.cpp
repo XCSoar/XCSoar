@@ -36,7 +36,6 @@ Copyright_License {
 */
 
 #include "UtilsSystem.hpp"
-#include "Utils.h"
 #include "UtilsText.hpp"
 #include "XCSoar.h"
 #include <assert.h>

@@ -41,13 +41,12 @@ Copyright_License {
 #include "Dialogs.h"
 #include "Language.hpp"
 #include "Units.h"
-#include "Process.h"
 #include "Blackboard.hpp"
 #include "Math/FastMath.h"
 #include "Math/Earth.hpp"
 #include "Registry.hpp"
 #include "LocalPath.hpp"
-#include "Utils.h"
+#include "LocalTime.hpp"
 
 #include "wcecompat/ts_string.h"
 

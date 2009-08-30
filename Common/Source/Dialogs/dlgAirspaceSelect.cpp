@@ -50,7 +50,6 @@ Copyright_License {
 #include "Screen/Util.hpp"
 #include "Screen/MainWindow.hpp"
 #include "DataField/Base.hpp"
-#include "Utils.h"
 
 #include <assert.h>
 #include <stdlib.h>

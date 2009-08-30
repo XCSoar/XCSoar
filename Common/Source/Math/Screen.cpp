@@ -38,7 +38,6 @@ Copyright_License {
 #include "Math/Screen.hpp"
 #include "Math/Geometry.hpp"
 #include "Math/FastMath.h"
-#include "Utils.h"
 #include "InfoBoxLayout.h"
 #include "MapWindowProjection.hpp"
 

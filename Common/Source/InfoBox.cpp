@@ -39,7 +39,6 @@ Copyright_License {
 #include "XCSoar.h"
 #include "Protection.hpp"
 #include "Dialogs.h"
-#include "Utils.h"
 #include "InfoBoxLayout.h"
 #include "InputEvents.h"
 #include "Compatibility/string.h"

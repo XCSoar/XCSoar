@@ -47,8 +47,6 @@
 #include "Math/Earth.hpp"
 #include "LogFile.hpp"
 #include "Asset.hpp"
-
-#include "Utils.h"
 #include "LocalPath.hpp"
 #include "Device/device.h"
 #include "InputEvents.h"

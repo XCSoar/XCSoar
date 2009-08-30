@@ -39,7 +39,6 @@ Copyright_License {
 #include "Calculations.h"
 #include "XCSoar.h"
 #include "Math/FastMath.h"
-#include "Utils.h"
 #include "LogFile.hpp"
 
 /////////////////////////////////////////////////////////////////////

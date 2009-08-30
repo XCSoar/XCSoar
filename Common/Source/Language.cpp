@@ -38,7 +38,6 @@ Copyright_License {
 
 
 #include "Language.hpp"
-#include "Utils.h"
 #include "LocalPath.hpp"
 #include "UtilsText.hpp"
 #include "LogFile.hpp"

@@ -42,7 +42,6 @@ Copyright_License {
 #include "Dialogs/dlgTools.h"
 #include "Math/FastMath.h"
 #include "DataField/Base.hpp"
-#include "Utils.h"
 #include "Screen/MainWindow.hpp"
 #include "Compatibility/string.h"
 

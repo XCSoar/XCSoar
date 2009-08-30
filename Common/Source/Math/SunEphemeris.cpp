@@ -47,7 +47,7 @@ Copyright_License {
 #include "XCSoar.h"
 #include <math.h>
 #include "Blackboard.hpp"
-#include "Utils.h"
+#include "LocalTime.hpp"
 
 class SunEphemeris {
 

@@ -39,7 +39,6 @@ Copyright_License {
 #include "Dialogs.h"
 #include "Language.hpp"
 #include "Dialogs/dlgTools.h"
-#include "Utils.h"
 #include "InfoBoxLayout.h"
 #include "Waypointparser.h"
 #include "DataField/Base.hpp"

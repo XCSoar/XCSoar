@@ -34,8 +34,8 @@ Copyright_License {
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
 */
-#ifndef PROCESS_H
-#define PROCESS_H
+#ifndef LOCALTIME_H
+#define LOCALTIME_H
 
 #include "XCSoar.h"
 #include "NMEA/Info.h"

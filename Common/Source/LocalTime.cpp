@@ -35,13 +35,12 @@ Copyright_License {
 }
 */
 
-#include "Process.h"
+#include "LocalTime.hpp"
 #include "XCSoar.h"
 #include "Device/Parser.h"
 #include "Blackboard.hpp"
 #include "SettingsTask.hpp"
 #include "WayPoint.hpp"
-#include "Utils.h"
 #include <stdlib.h>
 
 #include "Formatter/WayPoint.hpp"

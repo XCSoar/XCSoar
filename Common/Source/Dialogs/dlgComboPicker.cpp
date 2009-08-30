@@ -47,7 +47,6 @@ Copyright_License {
 #include "Screen/MainWindow.hpp"
 #include "DataField/Base.hpp"
 #include "DataField/ComboList.hpp"
-#include "Utils.h"
 
 #include <assert.h>
 

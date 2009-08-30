@@ -41,7 +41,6 @@ Copyright_License {
 #include "InputEvents.h"
 #include "Dialogs/dlgTools.h"
 #include "InfoBoxLayout.h"
-#include "Utils.h"
 #include "Screen/MainWindow.hpp"
 #include "Compatibility/string.h"
 

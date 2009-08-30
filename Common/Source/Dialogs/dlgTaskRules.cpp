@@ -42,10 +42,8 @@ Copyright_License {
 #include "UtilsProfile.hpp"
 #include "Dialogs/dlgTools.h"
 #include "Registry.hpp"
-#include "Process.h"
 #include "Math/FastMath.h"
 #include "DataField/Enum.hpp"
-#include "Utils.h"
 #include "Screen/MainWindow.hpp"
 
 static bool changed = false;

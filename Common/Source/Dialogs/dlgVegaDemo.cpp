@@ -43,7 +43,6 @@ Copyright_License {
 #include "Device/device.h"
 #include "Math/FastMath.h"
 #include "DataField/Base.hpp"
-#include "Utils.h"
 #include "Screen/MainWindow.hpp"
 
 static WndForm *wf=NULL;

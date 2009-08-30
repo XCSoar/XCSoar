@@ -48,7 +48,6 @@ Copyright_License {
 #include "Dialogs/dlgTools.h"
 #include "Device/device.h"
 #include "DataField/Base.hpp"
-#include "Utils.h"
 #include "Airspace.h"
 #include "Screen/MainWindow.hpp"
 

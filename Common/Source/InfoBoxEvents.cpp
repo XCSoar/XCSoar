@@ -52,7 +52,6 @@ Copyright_License {
 #include "Battery.h"
 #include "WayPoint.hpp"
 #include "Registry.hpp"
-#include "Utils.h"
 #include "MapWindow.h"
 #include "McReady.h"
 #include "Interface.hpp"
