@@ -60,7 +60,6 @@ Copyright_License {
 #include "UtilsSystem.hpp"
 #include "LocalPath.hpp"
 #include "Math/FastMath.h"
-#include "PeriodClock.hpp"
 #include "Registry.hpp"
 #include "Device/Port.h"
 #include "Waypointparser.h"
@@ -70,7 +69,6 @@ Copyright_License {
 #include "AirfieldDetails.h"
 #include "ButtonLabel.h"
 #include "SnailTrail.hpp"
-#include "Screen/Blank.hpp"
 #include "Screen/Fonts.hpp"
 #include "Screen/Graphics.hpp"
 #include "Screen/MainWindow.hpp"
@@ -223,7 +221,7 @@ static SHACTIVATEINFO s_sai;
 
 ////////////////////////////////////////////////////////////////////////////////
 // Forward declarations of functions included in this code module:
-ATOM MyRegisterClass (HINSTANCE, LPTSTR);
+ATOM RegisterWindowClass (HINSTANCE, LPTSTR);
 BOOL InitInstance    (HINSTANCE, int);
 LRESULT CALLBACK WndProc (HWND, UINT, WPARAM, LPARAM);
 LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
@@ -366,6 +364,12 @@ void SystemConfiguration(void) {
 
 
 void PreloadInitialisation(bool ask) {
+  if (ask) {
+#ifdef PNA
+    CleanRegistry(); // VENTA2-FIX for PNA we can't delete all registries..by now
+#endif
+  }
+
   SetToRegistry(TEXT("XCV"), 1);
 
 #ifdef DEBUG_TRANSLATIONS
@@ -660,7 +664,7 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 
 #if _DEBUG
  // _crtBreakAlloc = -1;     // Set this to the number in {} brackets to
-                           // break on a memory leak
+                             // break on a memory leak
 #endif
 
   // Main message loop:
@@ -684,7 +688,7 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 }
 
 //
-//  FUNCTION: MyRegisterClass()
+//  FUNCTION: RegisterWindowClass()
 //
 //  PURPOSE: Registers the window class.
 //
@@ -693,7 +697,7 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 //    It is important to call this function so that the application
 //    will get 'well formed' small icons associated with it.
 //
-ATOM MyRegisterClass(HINSTANCE hInstance, LPTSTR szWindowClass)
+ATOM RegisterWindowClass(HINSTANCE hInstance, LPTSTR szWindowClass)
 {
 
   WNDCLASS wc;
@@ -746,13 +750,6 @@ ATOM MyRegisterClass(HINSTANCE hInstance, LPTSTR szWindowClass)
 }
 
 
-
-
-#if (WINDOWSPC>0)
-int SCREENWIDTH=640;
-int SCREENHEIGHT=480;
-#endif
-
 //
 //  FUNCTION: InitInstance(HANDLE, int)
 //
@@ -778,12 +775,9 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
   if (main_window.find(szWindowClass, szTitle))
     return 0;
 
-#ifdef PNA
-  CleanRegistry(); // VENTA2-FIX for PNA we can't delete all registries..by now
-#endif
-  PreloadInitialisation(true);
+  RegisterWindowClass(hInst, szWindowClass);
 
-  MyRegisterClass(hInst, szWindowClass);
+  PreloadInitialisation(true);
 
   RECT WindowSize;
 
@@ -840,8 +834,6 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
   // color/pattern chart (must have infobox geometry before this)
   MapGfx.Initialise();
 
-  ///////////////////////////////////////// create infoboxes
-
   StartupStore(TEXT("Create info boxes\n"));
 
   MapWindow::SetMapRect(InfoBoxManager::Create(rc));
@@ -852,19 +844,6 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
   StartupStore(TEXT("Create button labels\n"));
   ButtonLabel::CreateButtonLabels(rc);
   ButtonLabel::SetLabelText(0,TEXT("MODE"));
-
-  //
-// VENTA3 disable gauge vario for geometry 5 in landscape mode, use 8 box right instead
-// beside those boxes were painted and overwritten by the gauge already and gauge was
-// graphically too much stretched, requiring a restyle!
-  if (InfoBoxLayout::gnav) {
-      if ( ( InfoBoxLayout::landscape == true) && ( InfoBoxLayout::InfoBoxGeometry == 5 ) )
-      	EnableVarioGauge = false;
-      else
-      	EnableVarioGauge = true;
-  } else {
-    EnableVarioGauge = false;
-  }
 
   ////////////////// do fonts
   StartupStore(TEXT("Initialise fonts\n"));
@@ -892,28 +871,6 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
   main_window.update();
 
   return TRUE;
-}
-
-/////////////////////
-// Debounce input buttons (does not matter which button is pressed)
-// VNT 090702 FIX Careful here: synthetic double clicks and virtual keys require some timing.
-// See Defines.h DOUBLECLICKINTERVAL . Not sure they are 100% independent.
-
-int debounceTimeout=200;
-
-bool Debounce(void) {
-  static PeriodClock fps_last;
-
-  ResetDisplayTimeOut();
-  InterfaceTimeoutReset();
-
-  if (ScreenBlanked) {
-    // prevent key presses working if screen is blanked,
-    // so a key press just triggers turning the display on again
-    return false;
-  }
-
-  return fps_last.check_update(debounceTimeout);
 }
 
 

@@ -59,6 +59,10 @@ Copyright_License {
 #endif
 #endif
 
+#if (WINDOWSPC>0)
+int SCREENWIDTH=640;
+int SCREENHEIGHT=480;
+#endif
 
 #if !defined(GNAV) || (WINDOWSPC>0)
 typedef DWORD (_stdcall *GetIdleTimeProc) (void);

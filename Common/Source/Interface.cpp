@@ -79,14 +79,14 @@ bool InterfaceTimeoutCheck(void) {
 }
 
 
-static bool ForceShutdown = false;
+static bool doForceShutdown = false;
 static bool ShutdownRequested = false;
 
 void SignalShutdown(bool force) {
   if (!ShutdownRequested) {
     SendMessage(main_window, WM_CLOSE,
 		0, 0);
-    ForceShutdown = force;
+    doForceShutdown = force;
     ShutdownRequested = true;
   }
 }
@@ -95,7 +95,7 @@ bool CheckShutdown(void) {
   ShutdownRequested = false;
   bool retval = true;
 #ifndef GNAV
-  if(ForceShutdown ||
+  if(doForceShutdown ||
      MessageBoxX(gettext(TEXT("Quit program?")),
 		 gettext(TEXT("XCSoar")),
 		 MB_YESNO|MB_ICONQUESTION) == IDYES) {
@@ -103,10 +103,36 @@ bool CheckShutdown(void) {
   } else {
     retval = false;
   }
-  ForceShutdown = false;
+  doForceShutdown = false;
 #else
   retval = true;
 #endif
   return retval;
+}
+
+
+/////////////////////
+// Debounce input buttons (does not matter which button is pressed)
+// VNT 090702 FIX Careful here: synthetic double clicks and virtual keys require some timing.
+// See Defines.h DOUBLECLICKINTERVAL . Not sure they are 100% independent.
+
+#include "PeriodClock.hpp"
+#include "Screen/Blank.hpp"
+
+int debounceTimeout=200;
+
+bool Debounce(void) {
+  static PeriodClock fps_last;
+
+  ResetDisplayTimeOut();
+  InterfaceTimeoutReset();
+
+  if (ScreenBlanked) {
+    // prevent key presses working if screen is blanked,
+    // so a key press just triggers turning the display on again
+    return false;
+  }
+
+  return fps_last.check_update(debounceTimeout);
 }
 
