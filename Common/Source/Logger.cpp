@@ -40,7 +40,6 @@
 #include "Protection.hpp"
 #include "Dialogs.h"
 #include "Language.hpp"
-#include "Dialogs/dlgTools.h"
 #include "Device/Port.h"
 #include "Settings.hpp"
 #include "SettingsComputer.hpp"

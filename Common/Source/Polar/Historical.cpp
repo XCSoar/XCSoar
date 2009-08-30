@@ -36,16 +36,13 @@ Copyright_License {
 */
 
 #include "Polar/Historical.hpp"
+#include "XCSoar.h"
 #include "Polar/WinPilot.hpp"
 #include "Polar/BuiltIn.hpp"
 #include "LogFile.hpp"
-#include "Dialogs/dlgTools.h"
 #include "Dialogs.h"
 #include "Language.hpp"
 #include "McReady.h"
-
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
 #include <assert.h>
 
 typedef double PolarCoefficients_t[3];
