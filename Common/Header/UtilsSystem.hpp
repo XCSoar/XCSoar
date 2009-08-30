@@ -79,4 +79,6 @@ bool FileExistsA(const char *FileName);
 
 bool RotateScreen(void);
 
+void StartupLogFreeRamAndStorage();
+
 #endif

@@ -37,7 +37,7 @@ Copyright_License {
 #ifndef ASSET_H
 #define ASSET_H
 
-#include "StdAfx.h"
+#include "XCSoar.h"
 
 // asset/registration data
 extern TCHAR strAssetNumber[];
@@ -122,5 +122,7 @@ extern int SCREENHEIGHT;
 #if defined(PNA) || defined(FIVV)
 extern bool needclipping;
 #endif
+
+void InitAsset();
 
 #endif

@@ -400,13 +400,6 @@ void PreloadInitialisation(bool ask) {
 
 }
 
-static void StartupLogFreeRamAndStorage() {
-  int freeram = CheckFreeRam()/1024;
-  TCHAR buffer[MAX_PATH];
-  LocalPath(buffer);
-  int freestorage = FindFreeSpace(buffer);
-  StartupStore(TEXT("Free ram %d\nFree storage %d\n"), freeram, freestorage);
-}
 
 static void AfterStartup() {
   static bool first = true;
@@ -456,65 +449,10 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   HACCEL hAccelTable;
   (void)hPrevInstance;
 
-#ifdef GNAV
-#ifdef FORCEPORTRAIT
-  // JMW testing only for portrait mode of Altair
-  RotateScreen();
-#endif
-#endif
-
-// VENTA2- delete registries at startup, but not on PC!
-#if defined(FIVV) && ( !defined(WINDOWSPC) || WINDOWSPC==0 )
-#ifndef PNA
-  RegDeleteKey(HKEY_CURRENT_USER, _T(REGKEYNAME));
-#endif
-#endif
-
-#ifdef PNA // VENTA2-ADDON MODEL TYPE
-/*
-  LocalPath is called for the very first time by CreateDirectoryIfAbsent.
-  In order to be able in the future to behave differently for each PNA device
-  and maybe also for common PDAs, we need to know the PNA/PDA Model Type
-  BEFORE calling LocalPath. This was critical.
-*/
-
-  SmartGlobalModelType(); // First we check the exec filename, which
-			  // has priority over registry values
-
-  if (!_tcscmp(GlobalModelName, _T("UNKNOWN"))) // Then if there is no smart name...
-    SetModelType();                         // get the modeltype from
-					    // the registry as usual
-#endif
-
-// VENTA2-ADDON install fonts on PDAs and check XCSoarData existance
-#if defined(FIVV) && ( !defined(WINDOWSPC) || WINDOWSPC==0 )
-//#ifndef PNA
-
-  bool datadir=CheckDataDir();
-  if (datadir) StartupStore(TEXT("XCSoarData directory found.\n"));
-  else StartupStore(TEXT("ERROR: NO XCSOARDATA DIRECTORY FOUND!\n"));
-
-  StartupStore(TEXT("Check for installing fonts\n"));
-  short didfonts=InstallFonts();  // check if really did it, and maybe restart
-  TCHAR nTmp[100];
-  _stprintf(nTmp,TEXT("InstallFonts() result=%d (0=installed >0 not installed)\n"), didfonts);
-  StartupStore(nTmp);
-
-  //#endif
-#endif
-
-
-// VENTA2- TODO fix these directories are not used always!
-  CreateDirectoryIfAbsent(TEXT(""));  // RLD make sure the LocalPath folder actually exists
-  CreateDirectoryIfAbsent(TEXT("persist"));
-  CreateDirectoryIfAbsent(TEXT("logs"));
-  CreateDirectoryIfAbsent(TEXT("config"));
+  InitAsset();
 
   Version();
   StartupStore(TEXT("Starting XCSoar %s\n"), XCSoar_Version);
-
-  //
-  StartupLogFreeRamAndStorage();
 
   XCSoarGetOpts(lpCmdLine);
 

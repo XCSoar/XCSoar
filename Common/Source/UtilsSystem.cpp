@@ -43,6 +43,7 @@ Copyright_License {
 #include "Asset.hpp"
 #include "Registry.hpp"
 #include "LocalPath.hpp"
+#include "LogFile.hpp"
 
 #ifdef PNA
 #include "LogFile.hpp"
@@ -827,3 +828,13 @@ void XCSoarGetOpts(LPTSTR CommandLine) {
   SetProfileFiles(extrnProfileFile);
 
 }
+
+
+void StartupLogFreeRamAndStorage() {
+  int freeram = CheckFreeRam()/1024;
+  TCHAR buffer[MAX_PATH];
+  LocalPath(buffer);
+  int freestorage = FindFreeSpace(buffer);
+  StartupStore(TEXT("Free ram %d\nFree storage %d\n"), freeram, freestorage);
+}
+
