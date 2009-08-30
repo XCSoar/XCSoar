@@ -127,43 +127,43 @@ FormatterAlternate::Render(int *color)
 {
   mutexTaskData.Lock();
   if(Valid && ValidWayPoint(ActiveAlternate)) {
-	switch (WayPointCalc[ActiveAlternate].VGR ) {
-		case 0:
-			// impossible, give a magenta debug color;
-			*color = 5;
-			break;
-		case 1:
+    switch (WayPointCalc[ActiveAlternate].VGR ) {
+    case 0:
+      // impossible, give a magenta debug color;
+      *color = 5;
+      break;
+    case 1:
 #ifdef FIVV
-			*color = 0; // green
+      *color = 0; // green
 #else
-			*color = 0; // blue
+      *color = 0; // blue
 #endif
-			break;
-		case 2:
+      break;
+    case 2:
 #ifdef FIVV
-			*color = 0; // yellow 4
+      *color = 0; // yellow 4
 #else
-			*color = 0; // normale white
+      *color = 0; // normale white
 #endif
-			break;
-		case 3:
-			*color = 1; // red
-			break;
-		default:
-			// even more impossible, give debug color magenta
-			*color = 5;
-			break;
-	}
+      break;
+    case 3:
+      *color = 1; // red
+      break;
+    default:
+      // even more impossible, give debug color magenta
+      *color = 5;
+      break;
+    }
 
-	Value=WayPointCalc[ActiveAlternate].GR;
-
-	_stprintf(Text,Format,Value);
+    Value=WayPointCalc[ActiveAlternate].GR;
+    
+    _stprintf(Text,Format,Value);
   } else {
-	Valid = false;
-	RenderInvalid(color);
+    Valid = false;
+    RenderInvalid(color);
   }
-   mutexTaskData.Unlock();
-   return(Text);
+  mutexTaskData.Unlock();
+  return(Text);
 }
 
 
@@ -224,3 +224,45 @@ void FormatterAlternate::AssignValue(int i) {
 
    mutexTaskData.Unlock();
 }
+
+
+/////////
+
+const TCHAR *FormatterDiffBearing::Render(int *color) {
+
+  if (ValidTaskPoint(ActiveWayPoint)
+      && CALCULATED_INFO.WaypointDistance > 10.0) {
+    Valid = true;
+
+    Value = CALCULATED_INFO.WaypointBearing -  GPS_INFO.TrackBearing;
+
+    if (Value < -180.0)
+      Value += 360.0;
+    else
+    if (Value > 180.0)
+      Value -= 360.0;
+
+#ifndef __MINGW32__
+    if (Value > 1)
+      _stprintf(Text, _T("%2.0f°»"), Value);
+    else if (Value < -1)
+      _stprintf(Text, _T("«%2.0f°"), -Value);
+    else
+      _tcscpy(Text, _T("«»"));
+#else
+    if (Value > 1)
+      _stprintf(Text, _T("%2.0fÂ°Â»"), Value);
+    else if (Value < -1)
+      _stprintf(Text, _T("Â«%2.0fÂ°"), -Value);
+    else
+      _tcscpy(Text, _T("Â«Â»"));
+#endif
+    *color = 0;
+  } else {
+    Valid = false;
+    RenderInvalid(color);
+  }
+
+  return(Text);
+}
+
