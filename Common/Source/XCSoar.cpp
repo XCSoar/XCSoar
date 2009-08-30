@@ -488,7 +488,6 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   memset( &(Task), 0, sizeof(Task_t));
   memset( &(StartPoints), 0, sizeof(Start_t));
   ClearTask();
-  memset( &(GPS_INFO), 0, sizeof(GPS_INFO));
 
   InitCalculations(&GPS_INFO,&CALCULATED_INFO);
 
@@ -566,43 +565,10 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 #endif
 
 #ifdef PNA // VENTA-ADDON
-
   TCHAR sTmp[MAX_PATH];
-  _stprintf(sTmp,TEXT("Conf=%s%S"), gmfpathname(),XCSDATADIR ); // VENTA2 FIX double backslash
-  CreateProgressDialog(sTmp); Sleep(3000);
-
-/*
-	if (  !wcscmp(GlobalModelName, _T("UNKNOWN")) ) SetModelType();
-*/
   _stprintf(sTmp, TEXT("PNA MODEL=%s (%d)"), GlobalModelName, GlobalModelType);
   CreateProgressDialog(sTmp); Sleep(3000);
-#else
-#if defined(FIVV) && ( !defined(WINDOWSPC) || WINDOWSPC==0 )
-  if ( didfonts == 0 ) {
-    CreateProgressDialog(TEXT("NEW FONTS INSTALLED!")); Sleep(3000);
-  } else
-    if ( didfonts == 5 ) {
-      CreateProgressDialog(TEXT("ERROR NO FONTS!")); Sleep(3000);
-    }
-#endif
-  TCHAR sTmpA[MAX_PATH], sTmpB[MAX_PATH];
-  LocalPath(sTmpA,_T(""));
-#if defined(FIVV) && ( !defined(WINDOWSPC) || WINDOWSPC==0 )
-  if ( !datadir ) {
-    CreateProgressDialog(TEXT("ERROR NO DIRECTORY:"));
-    Sleep(3000);
-  }
-#endif
-  _stprintf(sTmpB, TEXT("Conf=%s"),sTmpA);
-  CreateProgressDialog(sTmpB); Sleep(3000);
-#if defined(FIVV) && ( !defined(WINDOWSPC) || WINDOWSPC==0 )
-  if ( !datadir ) {
-    CreateProgressDialog(TEXT("CHECK INSTALLATION!"));
-    Sleep(3000);
-  }
-#endif
 #endif // non PNA
-
 #ifdef _SIM_
   CreateProgressDialog(TEXT("SIMULATION")); Sleep(2000);
 #endif
@@ -625,11 +591,7 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   RasterTerrain::OpenTerrain();
 
   ReadWayPoints();
-  InitWayPointCalc(); // VENTA3
-/*
-  for (int i=0; i< NumberOfWayPoints; i++) WayPointList[i].Preferred = false;
-*/
-
+  InitWayPointCalc();
 
   ReadAirfieldFile();
   SetHome(false);

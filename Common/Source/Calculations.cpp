@@ -307,6 +307,7 @@ void CloseCalculations() {
 
 void InitCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   StartupStore(TEXT("InitCalculations\n"));
+  memset( Basic, 0, sizeof(GPS_INFO));
   memset( Calculated, 0,sizeof(CALCULATED_INFO));
 
   CalibrationInit();
