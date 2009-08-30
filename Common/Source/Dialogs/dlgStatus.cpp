@@ -309,7 +309,7 @@ static void UpdateValuesTimes(void) {
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpLocalTime"));
   if (wp) {
-    Units::TimeToText(Temp, (int)DetectCurrentTime());
+    Units::TimeToText(Temp, (int)DetectCurrentTime(&GPS_INFO));
     wp->SetText(Temp);
   }
 

@@ -71,13 +71,13 @@ void FormatterTime::AssignValue(int i) {
     SecsToDisplayTime((int)CALCULATED_INFO.FlightTime);
     break;
   case 39:
-    SecsToDisplayTime(DetectCurrentTime());
+    SecsToDisplayTime(DetectCurrentTime(&GPS_INFO));
     break;
   case 40:
     SecsToDisplayTime((int)(GPS_INFO.Time));
     break;
   case 46:
-    SecsToDisplayTime((int)(CALCULATED_INFO.LegTimeToGo+DetectCurrentTime()));
+    SecsToDisplayTime((int)(CALCULATED_INFO.LegTimeToGo+DetectCurrentTime(&GPS_INFO)));
     Valid = ValidTaskPoint(ActiveWayPoint) &&
       (CALCULATED_INFO.LegTimeToGo< 0.9*ERROR_TIME);
     break;
@@ -127,7 +127,7 @@ void FormatterAATTime::AssignValue(int i) {
       && (CALCULATED_INFO.LegTimeToGo< 0.9*ERROR_TIME);
     break;
   case 45:
-    SecsToDisplayTime((int)(CALCULATED_INFO.TaskTimeToGo+DetectCurrentTime()));
+    SecsToDisplayTime((int)(CALCULATED_INFO.TaskTimeToGo+DetectCurrentTime(&GPS_INFO)));
     Valid = ValidTaskPoint(ActiveWayPoint)
       && (CALCULATED_INFO.TaskTimeToGo< 0.9*ERROR_TIME);
     break;

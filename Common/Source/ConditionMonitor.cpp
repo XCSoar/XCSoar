@@ -46,6 +46,7 @@ Copyright_License {
 #include "Task.h"
 #include "Device/device.h"
 #include "SettingsTask.hpp"
+#include "Protection.hpp"
 #include "Math/SunEphemeris.hpp"
 #include "LocalTime.hpp"
 #include "InputEvents.h"
@@ -251,12 +252,16 @@ protected:
       return false;
     }
 
+    mutexTaskData.Lock();
+
     double sunsettime
       = DoSunEphemeris(
                        WayPointList[Task[ActiveWayPoint].Index].Longitude,
                        WayPointList[Task[ActiveWayPoint].Index].Latitude);
-    double d1 = (Calculated->TaskTimeToGo+DetectCurrentTime())/3600;
-    double d0 = (DetectCurrentTime())/3600;
+    double d1 = (Calculated->TaskTimeToGo+DetectCurrentTime(Basic))/3600;
+    double d0 = (DetectCurrentTime(Basic))/3600;
+
+    mutexTaskData.Unlock();
 
     bool past_sunset = (d1>sunsettime) && (d0<sunsettime);
 

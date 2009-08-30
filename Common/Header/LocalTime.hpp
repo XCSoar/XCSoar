@@ -42,7 +42,7 @@ Copyright_License {
 #include "NMEA/Derived.hpp"
 
 int DetectStartTime(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
-int DetectCurrentTime(void);
+int DetectCurrentTime(NMEA_INFO *Basic);
 int TimeLocal(int d);
 long GetUTCOffset(void);
 
