@@ -1113,7 +1113,7 @@ static void SetInfoBoxSelector(int item, int mode)
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
     for (int i=0; i<NUMSELECTSTRINGS; i++) {
-      dfe->addEnumText(gettext(InfoBoxManager::InfoBoxGetDescription(i)));
+      dfe->addEnumText(gettext(InfoBoxManager::GetTypeDescription(i)));
     }
     dfe->Sort(0);
 

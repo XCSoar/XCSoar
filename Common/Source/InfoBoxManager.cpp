@@ -342,7 +342,7 @@ bool InfoBoxManager::Defocus() {
     InfoFocus = -1;
     InputEvents::HideMenu();
     InfoWindowActive = false;
-    InfoBoxFocusSetMaxTimeOut();
+    FocusSetMaxTimeOut();
 #ifndef DISABLEAUDIO
 	  if (EnableSoundModes) PlayResource(TEXT("IDR_WAV_CLICK"));
 #endif
@@ -888,9 +888,7 @@ void InfoBoxManager::DisplayInfoBox(void)
 }
 
 
-
-
-void InfoBoxManager::DoInfoKey(int keycode) {
+void InfoBoxManager::ProcessKey(int keycode) {
   int i;
 
   if (InfoFocus<0) return; // paranoid
@@ -956,7 +954,7 @@ void InfoBoxManager::DestroyInfoBoxFormatters() {
   }
 }
 
-void InfoBoxManager::InfoBoxFocus(void) {
+void InfoBoxManager::Focus(void) {
   if (InfoWindowActive) {
     FocusOnWindow(InfoFocus,true);
   } else {
@@ -976,18 +974,18 @@ void InfoBoxManager::InfoBoxDrawIfDirty(void) {
   }
 }
 
-void InfoBoxManager::InfoBoxFocusSetMaxTimeOut(void) {
+void InfoBoxManager::FocusSetMaxTimeOut(void) {
   if (InfoBoxFocusTimeOut< FOCUSTIMEOUTMAX) {
     InfoBoxFocusTimeOut = FOCUSTIMEOUTMAX;
   }
 }
 
-void InfoBoxManager::InfoBoxesSetDirty(bool is_dirty) {
+void InfoBoxManager::SetDirty(bool is_dirty) {
   InfoBoxesDirty = is_dirty;
 }
 
 
-void InfoBoxManager::InfoBoxProcessTimer(void) {
+void InfoBoxManager::ProcessTimer(void) {
   if(InfoWindowActive) {
     if (!dlgAirspaceWarningVisible()) {
       // JMW prevent switching to map window if in airspace warning dialog
@@ -1027,7 +1025,7 @@ void InfoBoxManager::ResetInfoBoxes(void) {
 #endif
 }
 
-TCHAR *InfoBoxManager::InfoBoxGetDescription(int i) {
+TCHAR *InfoBoxManager::GetTypeDescription(int i) {
   return Data_Options[i].Description;
 }
 

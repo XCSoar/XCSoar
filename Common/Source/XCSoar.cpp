@@ -483,7 +483,7 @@ static void AfterStartup() {
   MainWindowTop();
   MapWindow::dirtyEvent.trigger();
   drawTriggerEvent.trigger();
-  InfoBoxManager::InfoBoxesSetDirty(true);
+  InfoBoxManager::SetDirty(true);
   TriggerRedraws();
 }
 
@@ -1348,7 +1348,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     case WM_SETFOCUS:
       // JMW not sure this ever does anything useful..
       if (globalRunningEvent.test()) {
-	InfoBoxManager::InfoBoxFocus();
+	InfoBoxManager::Focus();
       }
       break;
       // TODO enhancement: Capture KEYDOWN time

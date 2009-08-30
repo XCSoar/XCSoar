@@ -44,9 +44,8 @@ extern const int NUMSELECTSTRINGS;
 
 class InfoBoxManager {
  private:
-  static void InfoBoxFocusSetMaxTimeOut(void);
+  static void FocusSetMaxTimeOut(void);
   static void ResetInfoBoxes(void);
- private:
   static int  getType(const int i);
   static void setType(const int i, const char j);
   static void FocusOnWindow(int i, bool selected);
@@ -56,15 +55,17 @@ class InfoBoxManager {
 public:
   static void Event_SelectInfoBox(int i);
   static void Event_ChangeInfoBoxType(int i);
-  static TCHAR *InfoBoxGetDescription(int i);
-  static void DoInfoKey(int keycode);
 
+  static TCHAR *GetTypeDescription(int i);
+
+  static void ProcessKey(int keycode);
   static bool Click(HWND wmControl);
 
-  static void InfoBoxFocus();
+  static void Focus();
   static bool Defocus(void);
-  static void InfoBoxProcessTimer(void);
-  static void InfoBoxesSetDirty(bool is_dirty);
+
+  static void ProcessTimer(void);
+  static void SetDirty(bool is_dirty);
 
   static RECT Create(RECT rc);
   static void Destroy(void);
