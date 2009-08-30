@@ -76,19 +76,6 @@ extern Font MapWindowBoldFont;
 extern Font CDIWindowFont;
 extern Font InfoWindowFont;
 
-/*
-extern "C" {
-int
-WINAPI
-MessageBoxW(
-    HWND hWnd ,
-    LPCWSTR lpText,
-    LPCWSTR lpCaption,
-    UINT uType);
-}
-*/
-
-
 // Message Box Replacement
 /*
     MessageBox(hWndMainWindow,

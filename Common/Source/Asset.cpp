@@ -124,7 +124,7 @@ void ReadCompaqID(void)
   FILE *file = _tfopen(TEXT("\\windows\\cpqAssetData.dat"), TEXT("rb"));
   if (file == NULL)
     {
-      //	    MessageBox(hWnd, TEXT("Unable to open asset data file."), TEXT("Error!"), MB_OK);
+      // MessageBoxX(hWnd, TEXT("Unable to open asset data file."), TEXT("Error!"), MB_OK);
       return;
     }
   fseek(file, 976, SEEK_SET);

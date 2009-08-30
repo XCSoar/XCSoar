@@ -66,7 +66,6 @@ Copyright_License {
 #include "Device/devFlymasterF1.h"
 #include "Device/devXCOM760.h"
 #include "Device/devCondor.h"
-#include "Screen/MainWindow.hpp"
 
 // A note about locking.
 //  The ComPort RX threads lock using FlightData critical section.
@@ -297,13 +296,13 @@ BOOL devInit(LPCTSTR CommandLine){
 
         if (devOpenLog(devA(), wcLogFileName)){
           _stprintf(sTmp, TEXT("Device A logs to\r\n%s"), wcLogFileName);
-          MessageBox (hWndMainWindow, sTmp,
+          MessageBoxX (sTmp,
                       gettext(TEXT("Information")),
                       MB_OK|MB_ICONINFORMATION);
         } else {
           _stprintf(sTmp,
                     TEXT("Unable to open log\r\non device A\r\n%s"), wcLogFileName);
-          MessageBox (hWndMainWindow, sTmp,
+          MessageBoxX (sTmp,
                       gettext(TEXT("Error")),
                       MB_OK|MB_ICONWARNING);
         }
@@ -330,13 +329,13 @@ BOOL devInit(LPCTSTR CommandLine){
 
         if (devOpenLog(devB(), wcLogFileName)){
           _stprintf(sTmp, TEXT("Device B logs to\r\n%s"), wcLogFileName);
-          MessageBox (hWndMainWindow, sTmp,
+          MessageBoxX (sTmp,
                       gettext(TEXT("Information")),
                       MB_OK|MB_ICONINFORMATION);
         } else {
           _stprintf(sTmp, TEXT("Unable to open log\r\non device B\r\n%s"),
                     wcLogFileName);
-          MessageBox (hWndMainWindow, sTmp,
+          MessageBoxX (sTmp,
                       gettext(TEXT("Error")),
                       MB_OK|MB_ICONWARNING);
         }
