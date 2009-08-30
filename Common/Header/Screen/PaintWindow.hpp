@@ -161,6 +161,8 @@ protected:
 
   virtual LRESULT on_message(HWND hWnd, UINT message,
                              WPARAM wParam, LPARAM lParam);
+
+  virtual bool register_class(HINSTANCE hInstance, const TCHAR* szWindowClass);
 };
 
 #endif

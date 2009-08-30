@@ -139,3 +139,8 @@ PaintWindow::on_message(HWND hWnd, UINT message,
 
   return Window::on_message(hWnd, message, wParam, lParam);
 }
+
+bool PaintWindow::register_class(HINSTANCE hInstance, const TCHAR* szWindowClass) {
+  // not defined!
+  return false;
+}

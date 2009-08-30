@@ -60,6 +60,8 @@ public:
   void close() {
     ::SendMessage(hWnd, WM_CLOSE, 0, 0);
   }
+
+  bool register_class(HINSTANCE hInstance, const TCHAR* szWindowClass);
 };
 
 #endif

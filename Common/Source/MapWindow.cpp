@@ -791,3 +791,27 @@ DWORD MapWindow::DrawThread (LPVOID lpvoid)
   return 0;
 }
 
+
+bool MapWindow::register_class(HINSTANCE hInstance, const TCHAR* szWindowClass) {
+
+  WNDCLASS wc;
+
+  wc.hInstance = hInstance;
+  wc.style = CS_VREDRAW | CS_HREDRAW | CS_DBLCLKS;
+  wc.lpfnWndProc = (WNDPROC)MapWindow::MapWndProc;
+  wc.cbClsExtra = 0;
+#if (WINDOWSPC>0)
+  wc.cbWndExtra = 0 ;
+#else
+  WNDCLASS dc;
+  GetClassInfo(hInstance,TEXT("DIALOG"),&dc);
+  wc.cbWndExtra = dc.cbWndExtra ;
+#endif
+  wc.hIcon = (HICON)NULL;
+  wc.hCursor = NULL;
+  wc.hbrBackground = (HBRUSH)GetStockObject (WHITE_BRUSH);
+  wc.lpszMenuName = 0;
+  wc.lpszClassName = szWindowClass;
+
+  return (RegisterClass(&wc)!= FALSE);
+}

@@ -67,6 +67,9 @@ class MapWindow
 : public PaintWindow, public MapWindowBase,
   public MapWindowProjection {
  public:
+
+  bool register_class(HINSTANCE hInstance, const TCHAR* szWindowClass);
+
   // inter-process, used only on file change
   static void ForceVisibilityScan() {
     askVisibilityScan = true;

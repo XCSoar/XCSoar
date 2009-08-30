@@ -36,6 +36,7 @@ Copyright_License {
 */
 
 #include "Screen/MainWindow.hpp"
+#include "resource.h"
 
 #ifndef CECORE
 #include <aygshell.h>
@@ -76,4 +77,36 @@ MainWindow::full_screen()
                  GetSystemMetrics(SM_CYSCREEN),
                  SWP_SHOWWINDOW);
 #endif
+}
+
+LRESULT CALLBACK MainWndProc (HWND, UINT, WPARAM, LPARAM);
+
+
+bool 
+MainWindow::register_class(HINSTANCE hInstance, const TCHAR* szWindowClass)
+{
+  WNDCLASS wc;
+
+  wc.style                      = CS_HREDRAW | CS_VREDRAW;
+  wc.lpfnWndProc                = (WNDPROC) MainWndProc;
+  wc.cbClsExtra                 = 0;
+#if (WINDOWSPC>0)
+  wc.cbWndExtra = 0;
+#else
+  WNDCLASS dc;
+  GetClassInfo(hInstance,TEXT("DIALOG"),&dc);
+  wc.cbWndExtra                 = dc.cbWndExtra ;
+#endif
+  wc.hInstance                  = hInstance;
+#if defined(GNAV) && !defined(PCGNAV)
+  wc.hIcon = NULL;
+#else
+  wc.hIcon                      = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_XCSOARSWIFT));
+#endif
+  wc.hCursor                    = 0;
+  wc.hbrBackground              = (HBRUSH) GetStockObject(WHITE_BRUSH);
+  wc.lpszMenuName               = 0;
+  wc.lpszClassName              = szWindowClass;
+
+  return (RegisterClass(&wc)!= FALSE);
 }

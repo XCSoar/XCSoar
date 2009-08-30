@@ -223,7 +223,7 @@ static SHACTIVATEINFO s_sai;
 // Forward declarations of functions included in this code module:
 ATOM RegisterWindowClass (HINSTANCE, LPTSTR);
 BOOL InitInstance    (HINSTANCE, int);
-LRESULT CALLBACK WndProc (HWND, UINT, WPARAM, LPARAM);
+LRESULT CALLBACK MainWndProc (HWND, UINT, WPARAM, LPARAM);
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -685,68 +685,6 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   return msg.wParam;
 }
 
-//
-//  FUNCTION: RegisterWindowClass()
-//
-//  PURPOSE: Registers the window class.
-//
-//  COMMENTS:
-//
-//    It is important to call this function so that the application
-//    will get 'well formed' small icons associated with it.
-//
-ATOM RegisterWindowClass(HINSTANCE hInstance, LPTSTR szWindowClass)
-{
-
-  WNDCLASS wc;
-  WNDCLASS dc;
-
-  GetClassInfo(hInstance,TEXT("DIALOG"),&dc);
-
-   wc.style                      = CS_HREDRAW | CS_VREDRAW;
-//  wc.style                      = CS_HREDRAW | CS_VREDRAW | CS_DBLCLKS; // VENTA3 NO USE
-  wc.lpfnWndProc                = (WNDPROC) WndProc;
-  wc.cbClsExtra                 = 0;
-#if (WINDOWSPC>0)
-  wc.cbWndExtra = 0;
-#else
-  wc.cbWndExtra                 = dc.cbWndExtra ;
-#endif
-  wc.hInstance                  = hInstance;
-#if defined(GNAV) && !defined(PCGNAV)
-  wc.hIcon = NULL;
-#else
-  wc.hIcon                      = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_XCSOARSWIFT));
-#endif
-  wc.hCursor                    = 0;
-  wc.hbrBackground              = (HBRUSH) GetStockObject(WHITE_BRUSH);
-  wc.lpszMenuName               = 0;
-  wc.lpszClassName              = szWindowClass;
-
-  if (!RegisterClass (&wc))
-    return FALSE;
-
-  wc.style = CS_VREDRAW | CS_HREDRAW | CS_DBLCLKS;
-  wc.lpfnWndProc = (WNDPROC)MapWindow::MapWndProc;
-  wc.cbClsExtra = 0;
-
-#if (WINDOWSPC>0)
-  wc.cbWndExtra = 0 ;
-#else
-  wc.cbWndExtra = dc.cbWndExtra ;
-#endif
-
-  wc.hInstance = hInstance;
-  wc.hIcon = (HICON)NULL;
-  wc.hCursor = NULL;
-  wc.hbrBackground = (HBRUSH)GetStockObject (WHITE_BRUSH);
-  wc.lpszMenuName = 0;
-  wc.lpszClassName = TEXT("MapWindowClass");
-
-  return RegisterClass(&wc);
-
-}
-
 
 //
 //  FUNCTION: InitInstance(HANDLE, int)
@@ -773,7 +711,8 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
   if (main_window.find(szWindowClass, szTitle))
     return 0;
 
-  RegisterWindowClass(hInst, szWindowClass);
+  main_window.register_class(hInst, szWindowClass);
+  map_window.register_class(hInst, TEXT("MapWindowClass"));
 
   PreloadInitialisation(true);
 
@@ -796,8 +735,8 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
   StartupStore(TEXT("Create main window\n"));
 
   main_window.set(szWindowClass, szTitle,
-                     WindowSize.left, WindowSize.top,
-                     WindowSize.right, WindowSize.bottom);
+		  WindowSize.left, WindowSize.top,
+		  WindowSize.right, WindowSize.bottom);
 
   if (!main_window.defined())
     {
@@ -1117,7 +1056,7 @@ LRESULT CALLBACK MainHandler_Timer(void)
 }
 
 
-LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
   switch (message) {
     case WM_ERASEBKGND:
