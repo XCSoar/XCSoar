@@ -108,15 +108,7 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 }
 
 
-////
-
-#if (((UNDER_CE >= 300)||(_WIN32_WCE >= 0x0300)) && (WINDOWSPC<1))
-#define HAVE_ACTIVATE_INFO
-#endif
-
-#ifdef HAVE_ACTIVATE_INFO
-static SHACTIVATEINFO s_sai;
-#endif
+/////////////////////////////////////////
 
 
 /*
