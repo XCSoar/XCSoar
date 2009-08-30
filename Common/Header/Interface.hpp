@@ -51,7 +51,6 @@ extern HINSTANCE hInst;
 
 // windows
 extern MainWindow hWndMainWindow;
-//extern MapWindow hWndMapWindow;
 
 extern GaugeVario *gauge_vario;
 extern GaugeFLARM *gauge_flarm;

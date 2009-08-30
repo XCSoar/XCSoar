@@ -51,6 +51,7 @@ Copyright_License {
 #include "DataField/String.hpp"
 #include "UtilsSystem.hpp"
 #include "Screen/MainWindow.hpp"
+#include "Screen/Fonts.hpp"
 
 #include <assert.h>
 #include <limits.h>
@@ -69,12 +70,6 @@ int DLGSCALE(int x) {
 #endif
   return iRetVal;
 }
-
-extern Font TitleWindowFont;
-extern Font MapWindowFont;
-extern Font MapWindowBoldFont;
-extern Font CDIWindowFont;
-extern Font InfoWindowFont;
 
 // Message Box Replacement
 /*

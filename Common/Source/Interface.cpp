@@ -79,7 +79,7 @@ bool InterfaceTimeoutCheck(void) {
 }
 
 
-static bool ForceShutdown = true;
+static bool ForceShutdown = false;
 static bool ShutdownRequested = false;
 
 void SignalShutdown(bool force) {
