@@ -522,6 +522,7 @@ OBJS	:=\
 	$(SRC)/Battery.o 		\
 	$(SRC)/Language.o 		\
 	$(SRC)/LocalPath.o 		\
+	$(SRC)/Interface.o		\
 	$(SRC)/Units.o 			\
 	$(SRC)/Utils.o			\
 	$(SRC)/UtilsAirspace.o		\
@@ -563,6 +564,7 @@ OBJS	:=\
 	$(SRC)/Screen/Font.o \
 	$(SRC)/Screen/Pen.o \
 	$(SRC)/Screen/Window.o \
+	$(SRC)/Screen/BufferWindow.o \
 	$(SRC)/Screen/PaintWindow.o \
 	$(SRC)/Screen/TextWindow.o \
 	$(SRC)/Screen/EditWindow.o \

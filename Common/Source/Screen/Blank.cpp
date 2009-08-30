@@ -46,9 +46,6 @@ Copyright_License {
 #include "Dialogs.h"
 #include "LogFile.hpp"
 
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
-
 // GDI Escapes for ExtEscape()
 #define QUERYESCSUPPORT    8
 // The following are unique to CE
@@ -203,3 +200,5 @@ void CheckDisplayTimeOut(bool sticky)
 }
 
 #endif /* HAVE_BLANK */
+
+

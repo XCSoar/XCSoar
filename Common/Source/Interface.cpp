@@ -34,9 +34,43 @@ Copyright_License {
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
 */
-#if !defined(XCSOAR_UTILS_H)
-#define XCSOAR_UTILS_H
+#include "Interface.hpp"
+#include "Mutex.hpp"
 
-long GetUTCOffset(void);
+////////////////////////////////////
+// JMW TODO: protect with mutex
 
-#endif
+Mutex mutexInterfaceTimeout;
+
+static int interface_timeout;
+
+bool InterfaceTimeoutZero(void) {
+  bool retval;
+  mutexInterfaceTimeout.Lock();
+  retval= (interface_timeout==0);
+  mutexInterfaceTimeout.Unlock();
+  retval;
+}
+
+void InterfaceTimeoutReset(void) {
+  mutexInterfaceTimeout.Lock();
+  interface_timeout = 0;
+  mutexInterfaceTimeout.Unlock();
+}
+
+
+bool InterfaceTimeoutCheck(void) {
+  bool retval;
+  mutexInterfaceTimeout.Lock();
+  if (interface_timeout > 60*10) {
+    interface_timeout = 0;
+    retval= true;
+  } else {
+    interface_timeout++;
+    retval= false;
+  }
+  mutexInterfaceTimeout.Unlock();
+  return retval;
+}
+
+

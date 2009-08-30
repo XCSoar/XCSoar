@@ -39,6 +39,7 @@ Copyright_License {
 #include "Calculations.h"
 #include "XCSoar.h"
 #include "Protection.hpp"
+#include "Interface.hpp"
 #include "Dialogs.h"
 #include "Process.h"
 #include "Utils.h"

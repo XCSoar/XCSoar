@@ -59,6 +59,7 @@
 
 
 bool DisableAutoLogger = false;
+bool LoggerShortName = false;
 
 TCHAR NumToIGCChar(int n) {
   if (n<10) {
