@@ -521,7 +521,8 @@ OBJS	:=\
 	$(SRC)/Appearance.o 		\
 	$(SRC)/Battery.o 		\
 	$(SRC)/Language.o 		\
-	$(SRC)/units.o 			\
+	$(SRC)/LocalPath.o 		\
+	$(SRC)/Units.o 			\
 	$(SRC)/Utils.o			\
 	$(SRC)/UtilsAirspace.o		\
 	$(SRC)/UtilsFLARM.o		\
@@ -532,7 +533,6 @@ OBJS	:=\
 	$(SRC)/Utils2.o 		\
 	$(SRC)/Audio/VegaVoice.o	\
 	$(SRC)/Compatibility/string.o 	\
-	$(SRC)/LocalPath.o 		\
 	$(SRC)/Registry.o 		\
 	$(SRC)/xmlParser.o 		\
 	\

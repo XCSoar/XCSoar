@@ -61,10 +61,6 @@ void MapWindow::ScanVisibility(rectObj *bounds_active) {
 }
 
 
-#include "SnailTrail.hpp"
-// only needed once here!
-// TODO: chop this into sections
-
 void MapWindow::CalculateScreenPositions(POINT Orig, RECT rc,
                                          POINT *Orig_Aircraft)
 {
