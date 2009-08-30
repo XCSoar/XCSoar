@@ -36,7 +36,6 @@ Copyright_License {
 */
 
 #include "Screen/Blank.hpp"
-#include "Screen/MainWindow.hpp"
 #include "XCSoar.h"
 
 #ifdef HAVE_BLANK
@@ -71,7 +70,6 @@ typedef struct _VIDEO_POWER_MANAGEMENT {
 bool EnableAutoBlank = false;
 int DisplayTimeOut = 0;
 bool ScreenBlanked = false;
-bool ForceShutdown = false;
 
 void BlankDisplay(bool doblank) {
   static bool oldblank = false;
@@ -131,11 +129,10 @@ void BlankDisplay(bool doblank) {
 
       if (BatteryInfo.acStatus==0) {
 #ifdef _SIM_
-        if ((PDABatteryPercent < BATTERY_EXIT) && !ForceShutdown) {
+        if ((PDABatteryPercent < BATTERY_EXIT)) {
           StartupStore(TEXT("Battery low exit...\n"));
           // TODO feature: Warning message on battery shutdown
-	  ForceShutdown = true;
-          hWndMainWindow.close();
+	  SignalShutdown(true);
         } else
 #endif
           if (PDABatteryPercent < BATTERY_WARNING) {

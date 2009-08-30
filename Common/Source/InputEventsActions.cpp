@@ -90,8 +90,6 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "UtilsSystem.hpp"
 #include "McReady.h"
 #include "Interface.hpp"
-#include "Screen/MainWindow.hpp"
-
 #include "Calculations.h" // TODO danger! ClearAirspaceWarnings
 
 #ifdef PNA
@@ -1626,9 +1624,8 @@ void InputEvents::eventBrightness(const TCHAR *misc) {
 
 
 void InputEvents::eventExit(const TCHAR *misc) {
-	(void)misc;
-  SendMessage(hWndMainWindow, WM_CLOSE,
-	      0, 0);
+  (void)misc;
+  SignalShutdown(false);
 }
 
 void InputEvents::eventUserDisplayModeForce(const TCHAR *misc){

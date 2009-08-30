@@ -97,6 +97,8 @@ PaintWindow::created(HWND _hWnd)
   canvas.set(hWnd, 1, 1);
 }
 
+#include "LogFile.hpp"
+
 void
 PaintWindow::reset()
 {

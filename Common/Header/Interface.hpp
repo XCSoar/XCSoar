@@ -61,5 +61,7 @@ void RestartCommPorts(void);
 bool InterfaceTimeoutZero(void);
 void InterfaceTimeoutReset(void);
 bool InterfaceTimeoutCheck(void);
+void SignalShutdown(bool force);
+bool CheckShutdown(void);
 
 #endif

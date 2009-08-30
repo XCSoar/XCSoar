@@ -1234,10 +1234,12 @@ void Shutdown(void) {
 
   CloseGeoid();
 
-  StartupStore(TEXT("Close Windows\n"));
-  MapGfx.Destroy();
+  StartupStore(TEXT("Close Windows - map\n"));
   map_window.reset();
+  StartupStore(TEXT("Close Windows - main \n"));
   hWndMainWindow.reset();
+  StartupStore(TEXT("Close Graphics\n"));
+  MapGfx.Destroy();
 
 #ifdef DEBUG_TRANSLATIONS
   StartupStore(TEXT("Writing missing translations\n"));
@@ -1314,7 +1316,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
       memset (&s_sai, 0, sizeof (s_sai));
       s_sai.cbSize = sizeof (s_sai);
 #endif
-      //if (hWnd==hWndMainWindow) {
       if (iTimerID == 0) {
         iTimerID = SetTimer(hWnd,1000,500,NULL); // 2 times per second
       }
@@ -1407,22 +1408,13 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
       break;
 
     case WM_CLOSE:
-
-#ifndef GNAV
-      assert(hWnd==hWndMainWindow);
-      if(ForceShutdown || ((hWnd==hWndMainWindow) &&
-         (MessageBoxX(gettext(TEXT("Quit program?")),
-                      gettext(TEXT("XCSoar")),
-                      MB_YESNO|MB_ICONQUESTION) == IDYES)))
-#endif
-        {
-          if(iTimerID) {
-            KillTimer(hWnd,iTimerID);
-            iTimerID = 0;
-          }
-
-          Shutdown();
-        }
+      if (CheckShutdown()) {
+	if(iTimerID) {
+	  KillTimer(hWnd,iTimerID);
+	  iTimerID = 0;
+	}
+	Shutdown();
+      }
       break;
 
     case WM_DESTROY:

@@ -36,6 +36,10 @@ Copyright_License {
 */
 #include "Interface.hpp"
 #include "Mutex.hpp"
+#include "Screen/MainWindow.hpp"
+#include "Language.hpp"
+#include "Dialogs/dlgTools.h"
+#include "Dialogs.h"
 
 ////////////////////////////////////
 // JMW TODO: protect with mutex
@@ -75,4 +79,35 @@ bool InterfaceTimeoutCheck(void) {
   return retval;
 }
 
+
+static bool ForceShutdown = true;
+static bool ShutdownRequested = false;
+
+void SignalShutdown(bool force) {
+  if (!ShutdownRequested) {
+    SendMessage(hWndMainWindow, WM_CLOSE,
+		0, 0);
+    ForceShutdown = force;
+    ShutdownRequested = true;
+  }
+}
+
+bool CheckShutdown(void) {
+  ShutdownRequested = false;
+  bool retval = true;
+#ifndef GNAV
+  if(ForceShutdown ||
+     MessageBoxX(gettext(TEXT("Quit program?")),
+		 gettext(TEXT("XCSoar")),
+		 MB_YESNO|MB_ICONQUESTION) == IDYES) {
+    retval = true;
+  } else {
+    retval = false;
+  }
+  ForceShutdown = false;
+#else
+  retval = true;
+#endif
+  return retval;
+}
 
