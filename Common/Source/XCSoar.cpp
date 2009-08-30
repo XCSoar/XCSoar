@@ -49,7 +49,6 @@ Copyright_License {
 #include "Task.h"
 #include "Dialogs.h"
 #include "Language.hpp"
-#include "Dialogs/dlgTools.h"
 #include "Trigger.hpp"
 #include "Message.h"
 #include "StatusMessage.hpp"

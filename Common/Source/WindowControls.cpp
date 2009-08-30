@@ -969,7 +969,7 @@ int WndForm::OnCommand(WPARAM wParam, LPARAM lParam){
 	DoStatusMessage(ventabuffer);
 #endif
    if ((wParam & 0xffff) == VK_ESCAPE){
-     mModalResult = mrCancle;
+     mModalResult = mrCancel;
      return(0);
    }
    return(1);
@@ -1050,7 +1050,7 @@ int WndForm::ShowModal(bool bEnableMap) {
     }
 
     if ((msg.message == WM_KEYDOWN) && ((msg.wParam & 0xffff) == VK_ESCAPE))
-      mModalResult = mrCancle;
+      mModalResult = mrCancel;
 
     if (
         (msg.message == WM_KEYDOWN

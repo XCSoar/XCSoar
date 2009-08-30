@@ -41,7 +41,7 @@ Copyright_License {
 #include "Screen/BitmapCanvas.hpp"
 #include "Screen/ContainerWindow.hpp"
 #include "Screen/EditWindow.hpp"
-
+#include "Dialogs.h"
 #include <malloc.h>
 #include "Units.h"
 
@@ -427,9 +427,6 @@ class WndOwnerDrawFrame:public WndFrame{
 extern WindowControl *ActiveControl;
 extern WindowControl *LastFocusControl;
 
-#define mrOK             2
-#define mrCancle         3
-
 class WndForm:public WindowControl{
 
   protected:
@@ -479,7 +476,7 @@ class WndForm:public WindowControl{
 
     void Close(void){
       WindowControl::Close();
-      mModalResult = mrCancle;
+      mModalResult = mrCancel;
     }
 
     DWORD enterTime;

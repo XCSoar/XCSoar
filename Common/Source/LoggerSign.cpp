@@ -39,7 +39,6 @@
 #include "XCSoar.h"
 #include "Protection.hpp"
 #include "Dialogs.h"
-#include "Dialogs/dlgTools.h"
 #include "Device/Port.h"
 #include "Settings.hpp"
 #include "SettingsTask.hpp"

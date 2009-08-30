@@ -58,7 +58,7 @@ static double cruise_efficiency= 1.0;
 
 static void OnCancelClicked(WindowControl * Sender){
 	(void)Sender;
-  wf->SetModalResult(mrCancle);
+  wf->SetModalResult(mrCancel);
 }
 
 static void OnOKClicked(WindowControl * Sender){
@@ -364,7 +364,7 @@ void dlgTaskCalculatorShowModal(void){
     ((WndButton *)wf->FindByName(TEXT("Target")))->SetVisible(false);
   }
 
-  if (wf->ShowModal() == mrCancle) {
+  if (wf->ShowModal() == mrCancel) {
     // todo: restore task settings.
     GlidePolar::SetMacCready(MACCREADY_enter);
     GlidePolar::SetCruiseEfficiency(CRUISE_EFFICIENCY_enter);

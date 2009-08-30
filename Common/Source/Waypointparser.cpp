@@ -49,7 +49,6 @@ Copyright_License {
 #include "Math/Units.h"
 #include "Registry.hpp"
 #include "LocalPath.hpp"
-#include "Dialogs/dlgTools.h"
 #include "UtilsProfile.hpp"
 #include "UtilsText.hpp"
 #include "MapWindowProjection.hpp"
@@ -138,7 +137,7 @@ static bool WaypointInTerrainRange(WAYPOINT *List) {
                       WaypointsOutOfRange);
         StoreRegistry();
         return true;
-      case mrCancle:
+      case mrCancel:
       case wpTerrainBoundsNoAll:
         WaypointOutOfTerrainRangeDontAskAgain = 2;
         WaypointsOutOfRange = 2;

@@ -70,12 +70,12 @@ static bool IsInitialized=false;
 void LoadGUI();
 
 static void OnCloseClicked(WindowControl * Sender){
-(void)Sender;
-	wf->SetModalResult(mrOK);
+  (void)Sender;
+  wf->SetModalResult(mrOK);
 }
 static void OnCancelClicked(WindowControl * Sender){
-(void)Sender;
-	wf->SetModalResult(mrCancle);
+  (void)Sender;
+  wf->SetModalResult(mrCancel);
 }
 static void OnResetClicked(WindowControl * Sender){
 (void)Sender;

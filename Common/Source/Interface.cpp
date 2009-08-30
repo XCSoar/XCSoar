@@ -38,7 +38,6 @@ Copyright_License {
 #include "Mutex.hpp"
 #include "Screen/MainWindow.hpp"
 #include "Language.hpp"
-#include "Dialogs/dlgTools.h"
 #include "Dialogs.h"
 
 ////////////////////////////////////
