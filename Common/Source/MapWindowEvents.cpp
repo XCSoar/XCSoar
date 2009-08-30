@@ -36,6 +36,7 @@ Copyright_License {
 */
 
 #include "MapWindow.h"
+#include "UtilsSystem.hpp"
 #include "SettingsUser.hpp"
 #include "Gauge/GaugeVarioAltA.hpp"
 #include "InfoBoxManager.h"
@@ -305,3 +306,72 @@ void MapWindow::Event_ScaleZoom(int vswitch) {
     // JMW this is bad, happening from wrong thread.
   }
 }
+
+/////////////////////////////////////////////////////////////////////////
+// Interface/touchscreen callbacks
+//
+
+/*
+	Virtual Key Manager by Paolo Ventafridda
+
+	Returns 0 if invalid virtual scan code, otherwise a valid transcoded keycode.
+
+ */
+int MapWindow::ProcessVirtualKey(int X, int Y, long keytime, short vkmode) {
+
+// 0 is always thermal mode, and does not account
+#define MAXBOTTOMMODES 5
+#define VKTIMELONG 1500
+
+#ifdef DEBUG_PROCVK
+  TCHAR buf[100];
+  wsprintf(buf,_T("R=%d,%d,%d,%d, X=%d Y=%d kt=%ld"),
+	   MapRect.left, MapRect.top,
+	   MapRect.right, MapRect.bottom,
+	   X,Y,keytime);
+  DoStatusMessage(buf);
+#endif
+  
+  short sizeup=MapRect.bottom-MapRect.top;
+  short sizeright=MapRect.right-MapRect.left;
+  short yup=(sizeup/3)+MapRect.top;
+  short ydown=MapRect.bottom-(sizeup/3);
+  short xleft=sizeright/3; // TODO FIX
+  short xright=sizeright-xleft;
+  
+  if (Y<yup) {
+#ifndef DISABLEAUDIO
+    if (EnableSoundModes) PlayResource(TEXT("IDR_WAV_CLICK"));
+#endif
+    if (keytime>=VKTIMELONG)
+      return 0xc1;
+    else
+      return 38;
+  }
+  if (Y>ydown) {
+#ifndef DISABLEAUDIO
+    if (EnableSoundModes) PlayResource(TEXT("IDR_WAV_CLICK"));
+#endif
+    if (keytime>=VKTIMELONG)
+      return 0xc2;
+    else
+      
+      return 40;
+  }
+
+  /*
+   * FIX ready: do not pass virtual ENTER while in Panmode.
+   * Currently it is allowed, should be better tested.  VNT 090702
+   if ( !MapWindow::EnablePan ) {
+     DoStatusMessage(_T("Virtual ENTER"));
+     return 13;
+   }
+   return 0; // ignore it
+  */
+  return 13;
+//	}
+  DoStatusMessage(_T("VirtualKey Error"));
+  return 0;
+}
+
+

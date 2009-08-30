@@ -149,6 +149,9 @@ class MapWindow
   static DWORD     timestamp_newdata;
   static void      UpdateTimeStats(bool start);
 
+  // interface handlers
+  static int ProcessVirtualKey(int X, int Y, long keytime, short vkmode);
+
   // display element functions
 
   static void ScanVisibilityWaypoints(rectObj *bounds_active);
