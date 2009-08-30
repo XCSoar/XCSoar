@@ -40,6 +40,8 @@ Copyright_License {
 ////////////////////////////////////
 // JMW TODO: protect with mutex
 
+bool LockSettingsInFlight = true;
+
 Mutex mutexInterfaceTimeout;
 
 static int interface_timeout;

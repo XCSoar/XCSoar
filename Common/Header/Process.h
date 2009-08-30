@@ -44,5 +44,6 @@ Copyright_License {
 int DetectStartTime(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 int DetectCurrentTime(void);
 int TimeLocal(int d);
+long GetUTCOffset(void);
 
 #endif

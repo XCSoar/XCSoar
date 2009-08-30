@@ -118,6 +118,7 @@ extern int debounceTimeout;
 // display mode stuff
 extern bool EnableAuxiliaryInfo;
 extern int  UserLevel; // used by dlgConfiguration
+extern int  ActiveAlternate;
 
 // safety protection
 extern bool LockSettingsInFlight;

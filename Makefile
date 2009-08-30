@@ -524,7 +524,6 @@ OBJS	:=\
 	$(SRC)/LocalPath.o 		\
 	$(SRC)/Interface.o		\
 	$(SRC)/Units.o 			\
-	$(SRC)/Utils.o			\
 	$(SRC)/UtilsAirspace.o		\
 	$(SRC)/UtilsFLARM.o		\
 	$(SRC)/UtilsFont.o		\

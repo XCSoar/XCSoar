@@ -61,32 +61,4 @@ Copyright_License {
 */
 
 
-int UTCOffset = 0; // used for Altair
-bool LockSettingsInFlight = true;
-
-
-long GetUTCOffset(void) {
-#ifndef GNAV
-  long utcoffset=0;
-  // returns offset in seconds
-  TIME_ZONE_INFORMATION TimeZoneInformation;
-  DWORD tzi = GetTimeZoneInformation(&TimeZoneInformation);
-
-  utcoffset = -TimeZoneInformation.Bias*60;
-
-  if (tzi==TIME_ZONE_ID_STANDARD) {
-    utcoffset -= TimeZoneInformation.StandardBias*60;
-  }
-  if (tzi==TIME_ZONE_ID_DAYLIGHT) {
-    utcoffset -= TimeZoneInformation.DaylightBias*60;
-  }
-#if (WINDOWSPC>0)
-  return UTCOffset;
-#else
-  return utcoffset;
-#endif
-#else
-  return UTCOffset;
-#endif
-}
 

@@ -37,6 +37,5 @@ Copyright_License {
 #if !defined(XCSOAR_UTILS_H)
 #define XCSOAR_UTILS_H
 
-long GetUTCOffset(void);
 
 #endif

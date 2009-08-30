@@ -44,8 +44,7 @@ Copyright_License {
 #include "SettingsTask.hpp"
 #include "SettingsUser.hpp"
 #include <stdio.h>
-
-extern int  ActiveAlternate; // from InfoBoxManager
+#include "Blackboard.hpp"
 
 const TCHAR *FormatterWaypoint::Render(int *color) {
   int thewaypoint = ActiveWayPoint;
