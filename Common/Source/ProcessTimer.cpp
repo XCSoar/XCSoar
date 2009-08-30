@@ -42,7 +42,7 @@ Copyright_License {
 #include "Interface.hpp"
 #include "InputEvents.h"
 #include "ReplayLogger.hpp"
-#include "GaugeFLARM.h"
+#include "Gauge/GaugeFLARM.hpp"
 #include "Device/device.h"
 #include "Device/Parser.h"
 #include "Dialogs.h"
@@ -85,7 +85,8 @@ void CommonProcessTimer()
       RequestAirspaceWarningForce = false;
     }
     // update FLARM display (show/hide)
-    GaugeFLARM::Show();
+    if (gauge_flarm != NULL)
+      gauge_flarm->Show();
   }
 
   InfoBoxProcessTimer();

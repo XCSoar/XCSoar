@@ -35,14 +35,13 @@ Copyright_License {
 }
 */
 
-#ifndef GAUGE_CDI_H
-#define GAUGE_CDI_H
-#include "StdAfx.h"
+#ifndef XCSOAR_GAUGE_CDI_HPP
+#define XCSOAR_GAUGE_CDI_HPP
 
 #include "Screen/TextWindow.hpp"
 
 class GaugeCDI {
-  static TextWidget widget;
+  static TextWindow window;
 
  public:
   static void Create();

@@ -40,7 +40,6 @@ Copyright_License {
 #include "Units.h"
 #include "Screen/Font.hpp"
 #include "Screen/BufferCanvas.hpp"
-#include "Screen/BitmapCanvas.hpp"
 #include "Screen/PaintWindow.hpp"
 
 #define BORDERTOP    (1<<bkTop)
@@ -54,7 +53,7 @@ Copyright_License {
 #define COMMENTSIZE  32
 
 
-class InfoBox{
+class InfoBox : public PaintWindow {
  public:
  private:
 
@@ -63,9 +62,7 @@ class InfoBox{
     int mWidth;
     int mHeight;
     ContainerWindow &mParent;
-    Widget widget;
     BufferCanvas buffer;
-    BitmapCanvas temp;
     int  mBorderKind;
     Color mColorBack;
     Color mColorFore;
@@ -138,7 +135,7 @@ class InfoBox{
     int GetBorderKind(void);
     int SetBorderKind(int Value);
 
-    Widget &GetHandle(void);
+    PaintWindow &GetHandle(void);
     ContainerWindow &GetParent(void);
 
     void SetColor(int Value);
@@ -150,6 +147,10 @@ class InfoBox{
 
     Canvas &GetCanvas(void);
 
+protected:
+  virtual void on_mouse_down(unsigned x, unsigned y);
+  virtual void on_mouse_double(unsigned x, unsigned y);
+  virtual void on_paint(Canvas &canvas);
 };
 
 #endif

@@ -44,7 +44,7 @@ Copyright_License {
 class ButtonLabel {
  public:
   static int ButtonLabelGeometry;
-  static TextWidget hWndButtonWindow[NUMBUTTONLABELS];
+  static TextWindow hWndButtonWindow[NUMBUTTONLABELS];
   static bool ButtonVisible[NUMBUTTONLABELS];
   static bool ButtonDisabled[NUMBUTTONLABELS];
   static void CreateButtonLabels(RECT rc);

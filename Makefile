@@ -1,4 +1,32 @@
 #
+# This is the XCSoar build script.  To compile XCSoar, you must
+# specify the target platform, e.g. for Pocket PC 2003, type:
+#
+#   make TARGET=PPC2003
+#
+# The following parameters may be specified on the "make" command
+# line:
+#
+#   TARGET      The name of the target platform.  See the TARGETS variable
+#               below for a list of valid target platforms.
+#
+#   DEBUG       If set to "y", the debugging version of XCSoar is built.
+#
+#   V           Verbosity; 1 is the default, and prints terse information.
+#               0 means quiet, and 2 prints the full compiler commands.
+#
+
+TARGETS = PC PPC2002 PPC2003 PPC2003X PNA WM5 WINE ALTAIR ALTAIRPORTRAIT
+
+ifeq ($(TARGET),)
+$(error No target specified.  Set the variable TARGET to one of: $(TARGETS))
+endif
+
+ifeq ($(filter $(TARGET),$(TARGETS)),)
+$(error Invalid target: $(TARGET))
+endif
+
+#
 SRC=Common/Source
 HDR=Common/Header
 #
@@ -429,9 +457,9 @@ OBJS	:=\
 	$(SRC)/windstore.o 		\
 	$(SRC)/WindZigZag.o 		\
 	\
-	$(SRC)/GaugeCDI.o 		\
-	$(SRC)/GaugeFLARM.o 		\
-	$(SRC)/GaugeVarioAltA.o 	\
+	$(SRC)/Gauge/GaugeCDI.o \
+	$(SRC)/Gauge/GaugeFLARM.o \
+	$(SRC)/Gauge/GaugeVarioAltA.o \
 	\
 	$(SRC)/AirfieldDetails.o 	\
 	$(SRC)/ButtonLabel.o 		\
@@ -537,6 +565,7 @@ OBJS	:=\
 	$(SRC)/Screen/Pen.o \
 	$(SRC)/Screen/Window.o \
 	$(SRC)/Screen/PaintWindow.o \
+	$(SRC)/Screen/BufferWindow.o \
 	$(SRC)/Screen/TextWindow.o \
 	$(SRC)/Screen/EditWindow.o \
 	$(SRC)/Screen/MainWindow.o \

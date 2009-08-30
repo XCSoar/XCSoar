@@ -62,7 +62,7 @@ Copyright_License {
 #include "Screen/Fonts.hpp"
 #include "Compatibility/gdi.h"
 #include "TopologyStore.h"
-#include "GaugeFLARM.h"
+#include "Gauge/GaugeFLARM.hpp"
 #include "InfoBoxLayout.h"
 #include "InfoBoxManager.h"
 #include "RasterTerrain.h"
@@ -802,7 +802,8 @@ void MapWindow::DrawThreadLoop(bool first_time) {
     ToggleFullScreenStart();
   }
 
-  GaugeFLARM::Render(&DrawInfo);
+  if (gauge_flarm != NULL)
+    gauge_flarm->Render(&DrawInfo);
 
   RenderMapWindow(hdcDrawWindow, MapRect);
 

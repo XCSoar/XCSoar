@@ -47,6 +47,9 @@ typedef struct{
   int CapitalHeight;
 }FontHeightInfo_t;
 
+/**
+ * A font loaded from storage.  It is used by #Canvas to draw text.
+ */
 class Font {
 protected:
   HFONT font;

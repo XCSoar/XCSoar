@@ -39,36 +39,32 @@ Copyright_License {
 #define GAUGE_FLARM_H
 
 #include "NMEA/Info.h"
-#include "Screen/BufferCanvas.hpp"
-#include "Screen/BitmapCanvas.hpp"
-#include "Screen/PaintWindow.hpp"
+#include "Screen/BufferWindow.hpp"
+#include "Screen/Bitmap.hpp"
 
-class GaugeFLARM {
- public:
-  static Widget widget;
+class ContainerWindow;
 
- public:
-  static void Create();
-  static void Destroy();
-  static void Render(NMEA_INFO* gps_info);
-  static void RenderTraffic(NMEA_INFO *gps_info);
-  static void RenderBg();
-  static void Repaint(Canvas &canvas);
-  static void Show();
-  static bool Visible;
-  static bool Suppress;
-  static void TrafficPresent(bool traffic);
-  static bool ForceVisible;
+class GaugeFLARM : public BufferWindow {
+private:
+  Bitmap hRoseBitMap;
+  SIZE hRoseBitMapSize;
+  POINT center;
+  int radius;
+
+public:
+  bool Visible, ForceVisible, Suppress, Traffic;
+
+public:
+  GaugeFLARM(ContainerWindow &parent);
+  void Render(const NMEA_INFO *gps_info);
+  void RenderTraffic(Canvas &canvas, const NMEA_INFO *gps_info);
+  void RenderBg(Canvas &canvas);
+  void Show();
+  void TrafficPresent(bool traffic);
  private:
-  static BufferCanvas hdcDrawWindow;
-  static BitmapCanvas hdcTemp;
-  static Bitmap hRoseBitMap;
-  static int hRoseBitMapWidth;
-  static int hRoseBitMapHeight;
-  static int radius;
-  static POINT center;
-  static bool Traffic;
-  static int RangeScale(double d);
+  int RangeScale(double d);
+
+  friend LRESULT CALLBACK GaugeFLARMWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 };
 
 extern bool EnableFLARMGauge;

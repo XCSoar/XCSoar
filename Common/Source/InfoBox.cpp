@@ -48,6 +48,7 @@ Copyright_License {
 #include "Interface.hpp"
 #include "Screen/Graphics.hpp"
 #include "Screen/Fonts.hpp"
+#include "Screen/BitmapCanvas.hpp"
 
 static Color fgColor = RGB(0x0,0x0,0x0);
 static Color bkColor = RGB(0xff,0xff,0xff);
@@ -66,8 +67,6 @@ static int Count=0;
 
 
 void InitInfoBoxModule(void);
-LRESULT CALLBACK InfoBoxWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
-
 
 InfoBox::InfoBox(ContainerWindow &parent, int X, int Y, int Width, int Height)
   :mParent(parent)
@@ -86,11 +85,9 @@ InfoBox::InfoBox(ContainerWindow &parent, int X, int Y, int Width, int Height)
   colorTop = 0;
   colorBottom = 0;
 
-  widget.set(parent, mX, mY, mWidth, mHeight, true, true);
+  set(parent, mX, mY, mWidth, mHeight, true, true);
 
   mVisible = false;
-
-  Canvas &canvas = widget.get_canvas();
 
   Color fgColor, bkColor, bkColorSel;
 
@@ -115,13 +112,10 @@ InfoBox::InfoBox(ContainerWindow &parent, int X, int Y, int Width, int Height)
     hPenSelector.set(DEFAULTBORDERPENWIDTH + 2, mColorFore);
   }
 
-  temp.set(widget.get_canvas());
-
   // JMW added double buffering to reduce flicker
-  buffer.set(widget.get_canvas(), mWidth, mHeight);
+  buffer.set(get_canvas(), mWidth, mHeight);
 
-  widget.set_wndproc(InfoBoxWndProc);
-  widget.set_userdata(this);
+  install_wndproc();
 
   mhBrushBk = hBrushDefaultBackGround;
   mhBrushBkSel = hBrushDefaultBackGroundSel;
@@ -198,8 +192,6 @@ InfoBox::~InfoBox(void){
   }
 
   buffer.reset();
-  temp.reset();
-  widget.reset();
 }
 
 void InfoBox::SetFocus(bool Value){
@@ -215,9 +207,9 @@ bool InfoBox::SetVisible(bool Value){
   if (mVisible != Value){
     mVisible = Value;
     if (mVisible)
-      widget.show();
+      show();
     else
-      widget.hide();
+      hide();
   }
   return(res);
 }
@@ -314,8 +306,8 @@ void InfoBox::SetComment(const TCHAR *Value){
   }
 }
 
-Widget &InfoBox::GetHandle(void){
-  return widget;
+PaintWindow &InfoBox::GetHandle(void){
+  return *this;
 }
 
 ContainerWindow &InfoBox::GetParent(void){
@@ -480,14 +472,13 @@ void InfoBox::PaintValue(Canvas &canvas){
 
   if ((mValueUnit != unUndef) && (color>=0)){
     if (mhBitmapUnit != NULL){
-      temp.select(*mhBitmapUnit);
+      BitmapCanvas temp(canvas, *mhBitmapUnit);
       canvas.scale_copy(x + tsize.cx,
                         y + mpFontHeightValue->AscentHeight
                         - mBitmapUnitSize.y * InfoBoxLayout::scale,
                         temp,
                         mBitmapUnitPos.x, mBitmapUnitPos.y,
                         mBitmapUnitSize.x, mBitmapUnitSize.y);
-      temp.clear();
     }
   }
 
@@ -633,12 +624,9 @@ void InfoBox::Paint(){
   PaintValue(buffer);
 }
 
-
 void InfoBox::PaintFast(void) {
-  widget.get_canvas().copy(buffer);
-  PaintSelector(widget.get_canvas());
+  on_paint(get_canvas());
 }
-
 
 void
 InfoBox::PaintInto(Canvas &dest, int xoff, int yoff, int width, int height)
@@ -694,88 +682,44 @@ void InfoBox::InitializeDrawHelpers(void){
 
 }
 
-
-LRESULT CALLBACK InfoBoxWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam){
-  InfoBox *ib;
+void InfoBox::on_mouse_down(unsigned x, unsigned y)
+{
+  /* synthetic double click detection with no proximity , good for
+     infoboxes */
   static PeriodClock double_click;
 
-  switch (uMsg){
-
-    case WM_ERASEBKGND:
-      /* JMW we erase ourselves so can prevent flicker by eliminating
-         windows from doing it.
-      ib = (InfoBox *)GetWindowLong(hwnd, GWL_USERDATA);
-      if (ib)
-        ib->Paint();
-      */
-    return TRUE;
-
-    case WM_PAINT:
-      ib = (InfoBox *)Window::get_userdata_pointer(hwnd);
-      if (ib)
-        ib->PaintFast();
-
-    break;
-
-    case WM_SIZE:
-    break;
-
-    case WM_WINDOWPOSCHANGED:
-      ib = (InfoBox *)Window::get_userdata_pointer(hwnd);
-      if (ib)
-        ib->PaintFast();
-    return 0;
-
-    case WM_CREATE:
-    break;
-
-    case WM_DESTROY:
-    break;
-
-    case WM_LBUTTONDBLCLK:
-#ifndef GNAV
-      // JMW capture double click, so infoboxes double clicked also bring up menu
-      // VENTA3: apparently this is working only on PC ! Disable it to let PC work
-      // with same timeout of PDA and PNA versions with synthetic DBLCLK
+  if (!double_click.check_always_update(DOUBLECLICKINTERVAL)) {
 #ifdef DEBUG_DBLCLK
-      DoStatusMessage(_T("DBLCLK InfoBox")); // VENTA3
+    DoStatusMessage(_T("synth DBLCLK InfoBox!")); // VENTA3
 #endif
-      InputEvents::ShowMenu();
-      break;
-#endif
-
-    case WM_LBUTTONDOWN:
-      /*
-       * VENTA3 SYNTHETIC DOUBLE CLICK ON INFOBOXES
-       * Paolo Ventafridda
-       * synthetic double click detection with no proximity , good for infoboxes
-       */
-
-        if (!double_click.check_always_update(DOUBLECLICKINTERVAL)) {
-#ifdef DEBUG_DBLCLK
-	  DoStatusMessage(_T("synth DBLCLK InfoBox!")); // VENTA3
-#endif
-	  InputEvents::ShowMenu();
-	  return(0);
-	}
-#ifdef DEBUG_DBLCLK
-        DoStatusMessage(_T("BDOWN InfoBox")); // VENTA3
-#endif
-        ib = (InfoBox *)Window::get_userdata_pointer(hwnd);
-        if (ib)
-          ib->GetParent().send_command(ib->GetHandle());
-    return(0);
-
-    case WM_LBUTTONUP:
-    break;
-
-    case WM_KEYUP:
-    break;
+    InputEvents::ShowMenu();
+    return;
   }
 
-  return (DefWindowProc (hwnd, uMsg, wParam, lParam));
+#ifdef DEBUG_DBLCLK
+  DoStatusMessage(_T("BDOWN InfoBox")); // VENTA3
+#endif
+  GetParent().send_command(GetHandle());
 }
 
+void InfoBox::on_mouse_double(unsigned x, unsigned y)
+{
+#ifndef GNAV
+  // JMW capture double click, so infoboxes double clicked also bring up menu
+  // VENTA3: apparently this is working only on PC ! Disable it to let PC work
+  // with same timeout of PDA and PNA versions with synthetic DBLCLK
+#ifdef DEBUG_DBLCLK
+  DoStatusMessage(_T("DBLCLK InfoBox")); // VENTA3
+#endif
+  InputEvents::ShowMenu();
+#endif
+}
+
+void InfoBox::on_paint(Canvas &canvas)
+{
+  canvas.copy(buffer);
+  PaintSelector(canvas);
+}
 
 void InitInfoBoxModule(void){
 
@@ -786,4 +730,3 @@ void InitInfoBoxModule(void){
 
   InitDone = true;
 }
-

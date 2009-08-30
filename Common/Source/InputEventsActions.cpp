@@ -81,7 +81,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Units.h"
 #include "MapWindow.h"
 #include "Atmosphere.h"
-#include "GaugeFLARM.h"
+#include "Gauge/GaugeFLARM.hpp"
 #include "Waypointparser.h"
 #include "Registry.hpp"
 #include "LocalPath.hpp"
@@ -551,12 +551,14 @@ void InputEvents::eventFLARMRadar(const TCHAR *misc) {
 	(void)misc;
   //  if (_tcscmp(misc, TEXT("on")) == 0) {
 
-  if (_tcscmp(misc, TEXT("ForceToggle")) == 0) {
-    GaugeFLARM::ForceVisible = !GaugeFLARM::ForceVisible;
-    EnableFLARMGauge = GaugeFLARM::ForceVisible;
-  } else
+  if (gauge_flarm == NULL)
+    return;
 
-  GaugeFLARM::Suppress = !GaugeFLARM::Suppress;
+  if (_tcscmp(misc, TEXT("ForceToggle")) == 0) {
+    gauge_flarm->ForceVisible = !gauge_flarm->ForceVisible;
+    EnableFLARMGauge = gauge_flarm->ForceVisible;
+  } else
+    gauge_flarm->Suppress = !gauge_flarm->Suppress;
   // the result of this will get triggered by refreshslots
 }
 

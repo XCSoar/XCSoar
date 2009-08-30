@@ -54,7 +54,7 @@ Copyright_License {
 #include "Asset.hpp"
 #endif
 
-TextWidget ButtonLabel::hWndButtonWindow[NUMBUTTONLABELS];
+TextWindow ButtonLabel::hWndButtonWindow[NUMBUTTONLABELS];
 bool ButtonLabel::ButtonVisible[NUMBUTTONLABELS];
 bool ButtonLabel::ButtonDisabled[NUMBUTTONLABELS];
 

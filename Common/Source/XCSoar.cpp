@@ -103,9 +103,9 @@ Copyright_License {
 #include "RasterTerrain.h"
 #include "RasterWeather.h"
 
-#include "GaugeCDI.h"
-#include "GaugeFLARM.h"
-#include "GaugeVarioAltA.h"
+#include "Gauge/GaugeCDI.hpp"
+#include "Gauge/GaugeFLARM.hpp"
+#include "Gauge/GaugeVarioAltA.hpp"
 
 #include "Asset.hpp"
 
@@ -117,6 +117,8 @@ TCHAR XCSoar_Version[256] = TEXT("");
 HINSTANCE hInst; // The current instance
 MainWindow hWndMainWindow;
 MapWindow map_window;
+GaugeVario *gauge_vario;
+GaugeFLARM *gauge_flarm;
 
 HBRUSH hBrushSelected;
 HBRUSH hBrushUnselected;
@@ -628,7 +630,8 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   ////////////////////////////////////////////////////////
 
   GaugeCDI::Create();
-  GaugeVario::Create();
+
+  gauge_vario = new GaugeVario(hWndMainWindow);
 
   GPS_INFO.NAVWarning = true; // default, no gps at all!
 
@@ -1024,7 +1027,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
   MapWindow::SetMapRect(InfoBoxLayout::CreateInfoBoxes(rc));
 
   StartupStore(TEXT("Create FLARM gauge\n"));
-  GaugeFLARM::Create();
+  gauge_flarm = new GaugeFLARM(hWndMainWindow);
 
   StartupStore(TEXT("Create button labels\n"));
   ButtonLabel::CreateButtonLabels(rc);
@@ -1192,8 +1195,10 @@ void Shutdown(void) {
   StartupStore(TEXT("Close Gauges\n"));
 
   GaugeCDI::Destroy();
-  GaugeVario::Destroy();
-  GaugeFLARM::Destroy();
+  delete gauge_vario;
+  gauge_vario = NULL;
+  delete gauge_flarm;
+  gauge_flarm = NULL;
 
   StartupStore(TEXT("Close Messages\n"));
   Message::Destroy();

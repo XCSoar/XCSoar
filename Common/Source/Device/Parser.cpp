@@ -46,7 +46,7 @@ Copyright_License {
 #include "UtilsFLARM.hpp"
 #include "Blackboard.hpp"
 #include "Audio/VarioSound.h"
-#include "GaugeFLARM.h"
+#include "Gauge/GaugeFLARM.hpp"
 #include "Device/device.h"
 #include "Device/Geoid.h"
 //#include "FlarmIdFile.h"
@@ -59,6 +59,7 @@ Copyright_License {
 #include "SettingsComputer.hpp"
 #include "Settings.hpp"
 #include "ReplayLogger.hpp"
+#include "Interface.hpp"
 
 #include <ctype.h>
 #include <stdlib.h>
@@ -860,15 +861,17 @@ void FLARM_RefreshSlots(NMEA_INFO *GPS_INFO) {
 	  GPS_INFO->FLARM_Traffic[i].ID= 0;
 	  GPS_INFO->FLARM_Traffic[i].Name[0] = 0;
 	} else {
-          if (GPS_INFO->FLARM_Traffic[i].AlarmLevel>0) {
-            GaugeFLARM::Suppress = false;
-          }
+          if (gauge_flarm != NULL && GPS_INFO->FLARM_Traffic[i].AlarmLevel > 0)
+            gauge_flarm->Suppress = false;
+
 	  present = true;
 	}
       }
     }
   }
-  GaugeFLARM::TrafficPresent(present);
+
+  if (gauge_flarm != NULL)
+    gauge_flarm->TrafficPresent(present);
 }
 
 
@@ -955,7 +958,8 @@ int FLARM_FindSlot(NMEA_INFO *GPS_INFO, long Id)
   for (i=0; i<FLARM_MAX_TRAFFIC; i++) {
     if (GPS_INFO->FLARM_Traffic[i].ID==0) {
       // this is a new target
-      GaugeFLARM::Suppress = false;
+      if (gauge_flarm != NULL)
+        gauge_flarm->Suppress = false;
       return i;
     }
   }

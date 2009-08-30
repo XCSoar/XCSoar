@@ -40,6 +40,8 @@ Copyright_License {
 #include "XCSoar.h"
 
 class MainWindow;
+class GaugeVario;
+class GaugeFLARM;
 
 bool Debounce();
 void SwitchToMapWindow(void);
@@ -50,6 +52,9 @@ extern HINSTANCE hInst;
 // windows
 extern MainWindow hWndMainWindow;
 //extern MapWindow hWndMapWindow;
+
+extern GaugeVario *gauge_vario;
+extern GaugeFLARM *gauge_flarm;
 
 void RestartCommPorts(void);
 

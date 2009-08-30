@@ -939,7 +939,7 @@ void MapWindow::DrawSpeedToFly(HDC hDC, RECT rc) {
 */
 
 
-#include "GaugeCDI.h"
+#include "Gauge/GaugeCDI.hpp"
 
 void MapWindow::DrawCDI() {
   bool dodrawcdi = DerivedDrawInfo.Circling

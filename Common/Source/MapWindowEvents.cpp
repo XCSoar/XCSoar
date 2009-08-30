@@ -37,12 +37,14 @@ Copyright_License {
 
 #include "MapWindow.h"
 #include "SettingsUser.hpp"
-#include "GaugeVarioAltA.h"
+#include "Gauge/GaugeVarioAltA.hpp"
 #include "InfoBoxManager.h"
 #include "Protection.hpp"
 #include "InputEvents.h"
 #include "Language.hpp"
 #include "Dialogs.h"
+#include "Interface.hpp"
+
 #include <stdlib.h>
 
 /////////////////////////////////////////
@@ -120,8 +122,9 @@ void MapWindow::ToggleFullScreenStart() {
     MapRect = MapRectSmall;
     ShowInfoBoxes();
   }
-  GaugeVario::Show(!MapFullScreen);
 
+  if (gauge_vario != NULL)
+    gauge_vario->Show(!MapFullScreen);
 }
 
 
