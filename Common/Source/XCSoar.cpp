@@ -224,7 +224,6 @@ static SHACTIVATEINFO s_sai;
 ATOM RegisterWindowClass (HINSTANCE, LPTSTR);
 BOOL InitInstance    (HINSTANCE, int);
 LRESULT CALLBACK WndProc (HWND, UINT, WPARAM, LPARAM);
-LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -414,9 +413,6 @@ static void AfterStartup() {
   StartupStore(TEXT("ProgramStarted=3\n"));
   StartupLogFreeRamAndStorage();
 
-  StartupStore(TEXT("CloseProgressDialog\n"));
-  CloseProgressDialog();
-
   Message::Startup(true);
 #ifdef _SIM_
   StartupStore(TEXT("GCE_STARTUP_SIMULATOR\n"));
@@ -425,22 +421,24 @@ static void AfterStartup() {
   StartupStore(TEXT("GCE_STARTUP_REAL\n"));
   InputEvents::processGlideComputer(GCE_STARTUP_REAL);
 #endif
-  Message::Startup(false);
-#ifdef _INPUTDEBUG_
-  InputEvents::showErrors();
-#endif
 
   // Create default task if none exists
   StartupStore(TEXT("Create default task\n"));
   DefaultTask();
 
-  // Trigger first redraw
-  TriggerGPSUpdate();
+  StartupStore(TEXT("CloseProgressDialog\n"));
+  CloseProgressDialog();
+
   MainWindowTop();
-  MapWindow::dirtyEvent.trigger();
-  drawTriggerEvent.trigger();
+  TriggerAll();
   InfoBoxManager::SetDirty(true);
   TriggerRedraws();
+
+  Message::Startup(false);
+#ifdef _INPUTDEBUG_
+  InputEvents::showErrors();
+#endif
+
 }
 
 
@@ -1041,170 +1039,10 @@ void Shutdown(void) {
 #endif
 }
 
+///////////////////////////////////////////////////////////////////////////
+// Windows event handlers
 
-
-LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
-{
-  long wdata;
-
-  switch (message)
-    {
-
-    case WM_ERASEBKGND:
-      return TRUE; // JMW trying to reduce screen flicker
-      break;
-    case WM_COMMAND:
-      return MainMenu(hWnd, message, wParam, lParam);
-      break;
-    case WM_CTLCOLORSTATIC:
-      wdata = Window::get_userdata((HWND)lParam);
-      switch(wdata) {
-      case 0:
-        SetBkColor((HDC)wParam, MapGfx.ColorUnselected);
-        SetTextColor((HDC)wParam, MapGfx.ColorBlack);
-        return (LRESULT)hBrushUnselected;
-      case 1:
-        SetBkColor((HDC)wParam, MapGfx.ColorSelected);
-        SetTextColor((HDC)wParam, MapGfx.ColorBlack);
-        return (LRESULT)hBrushSelected;
-      case 2:
-	SetBkColor((HDC)wParam, MapGfx.ColorUnselected);
-        SetTextColor((HDC)wParam, MapGfx.ColorWarning);
-	return (LRESULT)hBrushUnselected;
-      case 3:
-	SetBkColor((HDC)wParam, MapGfx.ColorUnselected);
-        SetTextColor((HDC)wParam, MapGfx.ColorOK);
-	return (LRESULT)hBrushUnselected;
-      case 4:
-	// black on light green
-	SetBkColor((HDC)wParam, MapGfx.ColorButton);
-        SetTextColor((HDC)wParam, MapGfx.ColorBlack);
-	return (LRESULT)hBrushButton;
-      case 5:
-	// grey on light green
-	SetBkColor((HDC)wParam, MapGfx.ColorButton);
-        SetTextColor((HDC)wParam, MapGfx.ColorMidGrey);
-	return (LRESULT)hBrushButton;
-      }
-      break;
-    case WM_CREATE:
-      main_window.created(hWnd);
-
-#ifdef HAVE_ACTIVATE_INFO
-      memset (&s_sai, 0, sizeof (s_sai));
-      s_sai.cbSize = sizeof (s_sai);
-#endif
-      if (iTimerID == 0) {
-        iTimerID = SetTimer(hWnd,1000,500,NULL); // 2 times per second
-      }
-      break;
-
-    case WM_ACTIVATE:
-      if(LOWORD(wParam) != WA_INACTIVE)
-        {
-          SetWindowPos(main_window,HWND_TOP,
-                 0, 0, 0, 0,
-                 SWP_SHOWWINDOW|SWP_NOMOVE|SWP_NOSIZE);
-
-#ifdef HAVE_ACTIVATE_INFO
-	  SHFullScreen(main_window,SHFS_HIDETASKBAR|SHFS_HIDESIPBUTTON|SHFS_HIDESTARTICON);
-#endif
-
-        }
-#ifdef HAVE_ACTIVATE_INFO
-      SHHandleWMActivate(hWnd, wParam, lParam, &s_sai, FALSE);
-#endif
-      break;
-
-    case WM_SETTINGCHANGE:
-#ifdef HAVE_ACTIVATE_INFO
-      SHHandleWMSettingChange(hWnd, wParam, lParam, &s_sai);
-#endif
-      break;
-
-    case WM_SETFOCUS:
-      // JMW not sure this ever does anything useful..
-      if (globalRunningEvent.test()) {
-	InfoBoxManager::Focus();
-      }
-      break;
-      // TODO enhancement: Capture KEYDOWN time
-      // 	- Pass that (otpionally) to processKey, allowing
-      // 	  processKey to handle long events - at any length
-      // 	- Not sure how to do double click... (need timer call back
-      // 	process unless reset etc... tricky)
-      // we do this in WindowControls
-#if defined(GNAV) || defined(PCGNAV)
-    case WM_KEYDOWN: // JMW was keyup
-#else
-    case WM_KEYUP: // JMW was keyup
-#endif
-
-      InterfaceTimeoutReset();
-
-      /* DON'T PROCESS KEYS HERE WITH NEWINFOBOX, IT CAUSES CRASHES! */
-      break;
-	  //VENTA DBG
-#ifdef VENTA_DEBUG_EVENT
-	case WM_KEYDOWN:
-
-		Message::AddMessage(TEXT("DBG KDOWN 1")); // VENTA
-		InterfaceTimeoutReset();
-	      break;
-	case WM_SYSKEYDOWN:
-		Message::AddMessage(TEXT("DBG SYSKDOWN 1")); // VENTA
-		InterfaceTimeoutReset();
-	      break;
-#endif
-	//END VENTA DBG
-
-    case WM_TIMER:
-      //      assert(hWnd==main_window);
-      if (globalRunningEvent.test()) {
-#ifdef _SIM_
-	SIMProcessTimer();
-#else
-	ProcessTimer();
-#endif
-	AfterStartup();
-	
-      }
-      break;
-
-    case WM_INITMENUPOPUP:
-      if (globalRunningEvent.test()) {
-	if(true) // was DisplayLocked
-	  CheckMenuItem((HMENU) wParam,IDM_FILE_LOCK,MF_CHECKED|MF_BYCOMMAND);
-	else
-	  CheckMenuItem((HMENU) wParam,IDM_FILE_LOCK,MF_UNCHECKED|MF_BYCOMMAND);
-
-	if(LoggerActive)
-	  CheckMenuItem((HMENU) wParam,IDM_FILE_LOGGER,MF_CHECKED|MF_BYCOMMAND);
-	else
-	  CheckMenuItem((HMENU) wParam,IDM_FILE_LOGGER,MF_UNCHECKED|MF_BYCOMMAND);
-      }
-      break;
-
-    case WM_CLOSE:
-      if (CheckShutdown()) {
-	Shutdown();
-      }
-      break;
-
-    case WM_DESTROY:
-      if (hWnd==main_window) {
-        PostQuitMessage(0);
-      }
-      break;
-
-    default:
-      return DefWindowProc(hWnd, message, wParam, lParam);
-    }
-  return 0;
-}
-
-
-LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+LRESULT MainHandler_Command(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
   int wmId, wmEvent;
   HWND wmControl;
@@ -1233,4 +1071,121 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
   return DefWindowProc(hWnd, message, wParam, lParam);
 }
 
+LRESULT CALLBACK MainHandler_Colour(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+{
+  long wdata = Window::get_userdata((HWND)lParam);
+  switch(wdata) {
+  case 0:
+    SetBkColor((HDC)wParam, MapGfx.ColorUnselected);
+    SetTextColor((HDC)wParam, MapGfx.ColorBlack);
+    return (LRESULT)hBrushUnselected;
+  case 1:
+    SetBkColor((HDC)wParam, MapGfx.ColorSelected);
+    SetTextColor((HDC)wParam, MapGfx.ColorBlack);
+    return (LRESULT)hBrushSelected;
+  case 2:
+    SetBkColor((HDC)wParam, MapGfx.ColorUnselected);
+    SetTextColor((HDC)wParam, MapGfx.ColorWarning);
+    return (LRESULT)hBrushUnselected;
+  case 3:
+    SetBkColor((HDC)wParam, MapGfx.ColorUnselected);
+    SetTextColor((HDC)wParam, MapGfx.ColorOK);
+    return (LRESULT)hBrushUnselected;
+  case 4:
+    // black on light green
+    SetBkColor((HDC)wParam, MapGfx.ColorButton);
+    SetTextColor((HDC)wParam, MapGfx.ColorBlack);
+    return (LRESULT)hBrushButton;
+  case 5:
+    // grey on light green
+    SetBkColor((HDC)wParam, MapGfx.ColorButton);
+    SetTextColor((HDC)wParam, MapGfx.ColorMidGrey);
+    return (LRESULT)hBrushButton;
+  }
+}
 
+LRESULT CALLBACK MainHandler_Timer(void)
+{
+  if (globalRunningEvent.test()) {
+    AfterStartup();
+#ifdef _SIM_
+    SIMProcessTimer();
+#else
+    ProcessTimer();
+#endif
+  }
+}
+
+
+LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+{
+  switch (message) {
+    case WM_ERASEBKGND:
+      return TRUE; // JMW trying to reduce screen flicker
+      break;
+    case WM_COMMAND:
+      return MainHandler_Command(hWnd, message, wParam, lParam);
+      break;
+    case WM_CTLCOLORSTATIC:
+      return MainHandler_Colour(hWnd, message, wParam, lParam);
+      break;
+    case WM_ACTIVATE:
+      if(LOWORD(wParam) != WA_INACTIVE) {
+	SetWindowPos(main_window,HWND_TOP, 0, 0, 0, 0,
+		     SWP_SHOWWINDOW|SWP_NOMOVE|SWP_NOSIZE);
+#ifdef HAVE_ACTIVATE_INFO
+	SHFullScreen(main_window,SHFS_HIDETASKBAR|SHFS_HIDESIPBUTTON|SHFS_HIDESTARTICON);
+#endif
+      }
+#ifdef HAVE_ACTIVATE_INFO
+      SHHandleWMActivate(hWnd, wParam, lParam, &s_sai, FALSE);
+#endif
+      break;
+    case WM_SETTINGCHANGE:
+#ifdef HAVE_ACTIVATE_INFO
+      SHHandleWMSettingChange(hWnd, wParam, lParam, &s_sai);
+#endif
+      break;
+    case WM_SETFOCUS:
+      // JMW not sure this ever does anything useful..
+      if (globalRunningEvent.test()) {
+	InfoBoxManager::Focus();
+      }
+      break;
+#if defined(GNAV) || defined(PCGNAV)
+    case WM_KEYDOWN: // JMW was keyup
+#else
+    case WM_KEYUP: // JMW was keyup
+#endif
+      InterfaceTimeoutReset();
+      /* DON'T PROCESS KEYS HERE WITH NEWINFOBOX, IT CAUSES CRASHES! */
+      break;
+    case WM_TIMER:
+      MainHandler_Timer();
+      break;
+    case WM_CREATE:
+      main_window.created(hWnd);
+
+#ifdef HAVE_ACTIVATE_INFO
+      memset (&s_sai, 0, sizeof (s_sai));
+      s_sai.cbSize = sizeof (s_sai);
+#endif
+      if (iTimerID == 0) {
+        iTimerID = SetTimer(hWnd,1000,500,NULL); // 2 times per second
+      }
+      break;
+    case WM_CLOSE:
+      if (CheckShutdown()) {
+	Shutdown();
+      }
+      break;
+    case WM_DESTROY:
+      if (hWnd==main_window) {
+        PostQuitMessage(0);
+      }
+      break;
+    default:
+      return DefWindowProc(hWnd, message, wParam, lParam);
+    }
+  return 0;
+}

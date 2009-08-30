@@ -94,7 +94,6 @@ void SignalShutdown(bool force) {
 bool CheckShutdown(void) {
   ShutdownRequested = false;
   bool retval = true;
-#ifndef GNAV
   if(doForceShutdown ||
      MessageBoxX(gettext(TEXT("Quit program?")),
 		 gettext(TEXT("XCSoar")),
@@ -104,9 +103,6 @@ bool CheckShutdown(void) {
     retval = false;
   }
   doForceShutdown = false;
-#else
-  retval = true;
-#endif
   return retval;
 }
 

@@ -670,7 +670,6 @@ void InputEvents::eventMode(const TCHAR *misc) {
   drawTriggerEvent.trigger();
 }
 
-// MainMenu
 // Don't think we need this.
 void InputEvents::eventMainMenu(const TCHAR *misc) {
 	(void)misc;

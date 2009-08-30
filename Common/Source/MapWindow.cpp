@@ -439,9 +439,9 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
 
     case WM_LBUTTONUP:
       if (ignorenext||dwDownTime==0) {
-		ignorenext=false;
-	  break;
-	}
+	ignorenext=false;
+	break;
+      }
       RECT rc;
       bool my_target_pan;
       dwUpTime = GetTickCount();
@@ -565,18 +565,7 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
 	  }
 	} // VK enabled
       } // !TargetPan
-
       break;
-      /* 
-	case WM_PAINT:
-	if (hWnd == hWndMapWindow) {
-	// drawTriggerEvent.trigger();
-
-	return TRUE;
-	} else {
-	break;
-	}
-      */
 
 #if defined(GNAV) || defined(PNA) // VENTA FIXED PNA SCROLL WHEEL
     case WM_KEYDOWN: // JMW was keyup
@@ -586,87 +575,12 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
       // VENTA-TODO careful here, keyup no more trapped for PNA.
       // Forbidden usage of keypress timing.
 
-#ifdef VENTA_DEBUG_KEY
-      TCHAR ventabuffer[80];
-      _stprintf(ventabuffer,TEXT("WMKEY uMsg=%d wParam=%ld lParam=%ld"), uMsg, wParam,lParam);
-      DoStatusMessage(ventabuffer);
-#endif
       ResetDisplayTimeOut();
       InterfaceTimeoutReset();
-
-#if defined(PNA) // VENTA-ADDON HARDWARE KEYS TRANSCODING
-
-      if ( GlobalModelType == MODELTYPE_PNA_HP31X )
-	{
-	  //		if (wParam == 0x7b) wParam=0xc1;  // VK_APP1
-	  if (wParam == 0x7b) wParam=0x1b;  // VK_ESCAPE
-	  //		if (wParam == 0x7b) wParam=0x27;  // VK_RIGHT
-	  //		if (wParam == 0x7b) wParam=0x25;  // VK_LEFT
-	}
-      else if ( GlobalModelType == MODELTYPE_PNA_PN6000 )
-	{
-	  switch(wParam) {
-	  case 0x79:					// Upper Silver key short press
-	    wParam = 0xc1;	// F10 -> APP1
-	    break;
-	  case 0x7b:					// Lower Silver key short press
-	    wParam = 0xc2;	// F12 -> APP2
-	    break;
-	  case 0x72:					// Back key plus
-	    wParam = 0xc3;	// F3  -> APP3
-	    break;
-	  case 0x71:					// Back key minus
-	    wParam = 0xc4;	// F2  -> APP4
-	    break;
-	  case 0x7a:					// Upper silver key LONG press
-	    wParam = 0x70;	// F11 -> F1
-	    break;
-	  case 0x7c:					// Lower silver key LONG press
-	    wParam = 0x71;	// F13 -> F2
-	    break;
-	  }
-	}
-      else if ( GlobalModelType == MODELTYPE_PNA_NOKIA_500 )
-	{
-	  switch(wParam) {
-	  case 0xc1:
-	    wParam = 0x0d;	// middle key = enter
-	    break;
-	  case 0xc5:
-	    wParam = 0x26;	// + key = pg Up
-	    break;
-	  case 0xc6:
-	    wParam = 0x28;	// - key = pg Down
-	    break;
-	  }
-	}
-      else if ( GlobalModelType == MODELTYPE_PNA_MEDION_P5 )
-	{
-	  switch(wParam) {
-	  case 0x79:
-	    wParam = 0x0d;	// middle key = enter
-	    break;
-	  case 0x75:
-	    wParam = 0x26;	// + key = pg Up
-	    break;
-	  case 0x76:
-	    wParam = 0x28;	// - key = pg Down
-	    break;
-	  }
-	}
-#endif
-
+      wParam = TranscodeKey(wParam);
 #if defined(GNAV)
       if (wParam == 0xF5){
-	if (MessageBoxX(gettext(TEXT("Shutdown?")),
-			gettext(TEXT("Altair system message")),
-			MB_YESNO|MB_ICONQUESTION) == IDYES) {
-	  SendMessage(hWnd,
-		      WM_ACTIVATE,
-		      MAKEWPARAM(WA_INACTIVE, 0),
-		      (LPARAM)hWndMainWindow);
-	  hWndMainWindow.close();
-	}
+	SignalShutdown(false);
 	break;
       }
 #endif

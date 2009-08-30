@@ -81,4 +81,6 @@ bool RotateScreen(void);
 
 void StartupLogFreeRamAndStorage();
 
+WPARAM TranscodeKey(WPARAM wParam);
+
 #endif
