@@ -34,34 +34,27 @@ Copyright_License {
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
 */
-#ifndef INFOBOX_MANAGER_H
-#define INFOBOX_MANAGER_H
+#if !defined(XCSOAR_UTILS_PROFILE_HPP)
+#define XCSOAR_UTILS_PROFILE_HPP
 
-#include "XCSoar.h"
+#define WIN32_LEAN_AND_MEAN		// Exclude rarely-used stuff from Windows headers
+#include <windows.h>
 
-extern int  numInfoWindows;
-extern const int NUMSELECTSTRINGS;
 
-void InfoBoxesSetDirty(bool is_dirty);
-void DeleteInfoBoxFormatters();
-bool InfoBoxClick(HWND wmControl);
-void InfoBoxFocus();
-void InfoBoxProcessTimer(void);
-void InfoBoxFocusSetMaxTimeOut(void);
-void ShowInfoBoxes();
-void HideInfoBoxes();
-bool DefocusInfoBox(void);
-void Event_SelectInfoBox(int i);
-void Event_ChangeInfoBoxType(int i);
-void DoInfoKey(int keycode);
-void ResetInfoBoxes(void);
-TCHAR *InfoBoxGetDescription(int i);
-int getInfoType(const int i, const int layer);
-void setInfoType(const int i, const char j, const int layer);
+#ifdef FIVV
+BOOL DelRegistryKey(const TCHAR *szRegistryKey); // VENTA2-ADDON delregistrykey
+#endif
+#ifdef PNA
+void CleanRegistry(); // VENTA2-ADDON cleanregistrykeyA
+#endif
 
-int getInfoTypeAll(const int i);
-void setInfoTypeAll(const int i, const int j);
+void WriteProfile(const TCHAR *szFile);
+void ReadProfile(const TCHAR *szFile);
+void propGetFontSettings(const TCHAR *Name, LOGFONT* lplf);
+void propGetFontSettingsFromString(const TCHAR *Buffer, LOGFONT* lplf);
+int propGetScaleList(double *List, size_t Size);
 
-void ResetInfoBoxes(void);
+void RestoreRegistry(void);
+void StoreRegistry(void);
 
 #endif

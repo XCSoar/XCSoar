@@ -39,7 +39,7 @@ Copyright_License {
 #include "Language.hpp"
 #include "XCSoar.h"
 #include "SettingsTask.hpp"
-#include "Utils.h"
+#include "UtilsProfile.hpp"
 #include "Dialogs/dlgTools.h"
 #include "Registry.hpp"
 #include "Process.h"

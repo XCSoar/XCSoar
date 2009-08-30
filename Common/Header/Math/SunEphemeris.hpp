@@ -34,34 +34,9 @@ Copyright_License {
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
 */
-#ifndef INFOBOX_MANAGER_H
-#define INFOBOX_MANAGER_H
+#if !defined(SUN_EPHEMERIS_HPP)
+#define SUN_EPHEMERIS_HPP
 
-#include "XCSoar.h"
-
-extern int  numInfoWindows;
-extern const int NUMSELECTSTRINGS;
-
-void InfoBoxesSetDirty(bool is_dirty);
-void DeleteInfoBoxFormatters();
-bool InfoBoxClick(HWND wmControl);
-void InfoBoxFocus();
-void InfoBoxProcessTimer(void);
-void InfoBoxFocusSetMaxTimeOut(void);
-void ShowInfoBoxes();
-void HideInfoBoxes();
-bool DefocusInfoBox(void);
-void Event_SelectInfoBox(int i);
-void Event_ChangeInfoBoxType(int i);
-void DoInfoKey(int keycode);
-void ResetInfoBoxes(void);
-TCHAR *InfoBoxGetDescription(int i);
-int getInfoType(const int i, const int layer);
-void setInfoType(const int i, const char j, const int layer);
-
-int getInfoTypeAll(const int i);
-void setInfoTypeAll(const int i, const int j);
-
-void ResetInfoBoxes(void);
+double DoSunEphemeris(double lon, double lat);
 
 #endif

@@ -46,7 +46,7 @@ Copyright_License {
 #include "Task.h"
 #include "Device/device.h"
 #include "SettingsTask.hpp"
-#include "Utils.h"
+#include "Math/SunEphemeris.hpp"
 #include "Process.h"
 #include "InputEvents.h"
 #include "WayPoint.hpp"

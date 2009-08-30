@@ -43,7 +43,7 @@ Copyright_License {
 #include "Registry.hpp"
 #include "LocalPath.hpp"
 #include "UtilsText.hpp"
-#include "Utils.h"
+#include "Math/SunEphemeris.hpp"
 #include "Blackboard.hpp"
 #include "Settings.hpp"
 #include "SettingsComputer.hpp"

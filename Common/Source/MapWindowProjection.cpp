@@ -44,7 +44,7 @@ Copyright_License {
 #include "SettingsTask.hpp"
 #include "InputEvents.h"
 #include "SettingsUser.hpp"
-#include "Utils.h"
+#include "UtilsProfile.hpp"
 #include <stdlib.h>
 
 int GliderScreenPosition = 20; // 20% from bottom

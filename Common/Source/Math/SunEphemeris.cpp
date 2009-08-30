@@ -234,6 +234,7 @@ class SunEphemeris {
 
 };
 
+#include "Math/SunEphemeris.hpp"
 
 SunEphemeris mysun;
 

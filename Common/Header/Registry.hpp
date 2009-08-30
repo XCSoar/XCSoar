@@ -43,6 +43,13 @@ Copyright_License {
 
 #include <tchar.h>
 
+void ReadPort1Settings(DWORD *PortIndex, DWORD *SpeedIndex);
+void ReadPort2Settings(DWORD *PortIndex, DWORD *SpeedIndex);
+void ReadPort3Settings(DWORD *PortIndex, DWORD *SpeedIndex);
+void WritePort1Settings(DWORD PortIndex, DWORD SpeedIndex);
+void WritePort2Settings(DWORD PortIndex, DWORD SpeedIndex);
+void WritePort3Settings(DWORD PortIndex, DWORD SpeedIndex);
+
 extern const TCHAR szRegistryKey[];
 extern const TCHAR szRegistrySpeedUnitsValue[];
 extern const TCHAR szRegistryDistanceUnitsValue[];

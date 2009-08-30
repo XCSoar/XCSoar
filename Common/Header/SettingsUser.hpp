@@ -119,6 +119,9 @@ extern int debounceTimeout;
 extern bool EnableAuxiliaryInfo;
 extern int  UserLevel; // used by dlgConfiguration
 
+// safety protection
+extern bool LockSettingsInFlight;
+
 // temporary
 extern bool RequestAirspaceWarningForce;
 extern bool TargetDialogOpen;

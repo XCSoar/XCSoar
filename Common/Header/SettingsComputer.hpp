@@ -54,6 +54,7 @@ extern bool   EnableBlockSTF; // block speed to fly instead of dolphin
 extern int    EnableThermalLocator;
 extern int    LoggerTimeStepCruise;
 extern int    LoggerTimeStepCircling;
+extern bool   LoggerShortName;
 extern double SAFETYALTITUDEARRIVAL;
 extern double SAFETYALTITUDEBREAKOFF;
 extern double SAFETYALTITUDETERRAIN;

@@ -85,7 +85,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Waypointparser.h"
 #include "Registry.hpp"
 #include "LocalPath.hpp"
-#include "Utils.h"
+#include "UtilsProfile.hpp"
 #include "UtilsText.hpp"
 #include "UtilsSystem.hpp"
 #include "McReady.h"

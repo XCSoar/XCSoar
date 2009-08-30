@@ -39,7 +39,6 @@ Copyright_License {
 #include "Protection.hpp"
 #include "Dialogs.h"
 #include "Language.hpp"
-#include "Utils.h"
 #include "Blackboard.hpp"
 #include "Settings.hpp"
 #include "SettingsTask.hpp"
@@ -52,6 +51,7 @@ Copyright_License {
 #include "Process.h"
 #include "Screen/MainWindow.hpp"
 #include "Calculations.h" // TODO danger! FAIFinishHeight
+#include "Math/SunEphemeris.hpp"
 
 #include <assert.h>
 

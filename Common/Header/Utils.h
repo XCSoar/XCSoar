@@ -37,41 +37,7 @@ Copyright_License {
 #if !defined(XCSOAR_UTILS_H)
 #define XCSOAR_UTILS_H
 
-#define WIN32_LEAN_AND_MEAN		// Exclude rarely-used stuff from Windows headers
-#include <windows.h>
-
-extern bool LockSettingsInFlight;
-extern bool LoggerShortName;
-
-#ifdef FIVV
-BOOL DelRegistryKey(const TCHAR *szRegistryKey); // VENTA2-ADDON delregistrykey
-#endif
-#ifdef PNA
-void CleanRegistry(); // VENTA2-ADDON cleanregistrykeyA
-#endif
-
-void ReadPort1Settings(DWORD *PortIndex, DWORD *SpeedIndex);
-void ReadPort2Settings(DWORD *PortIndex, DWORD *SpeedIndex);
-void ReadPort3Settings(DWORD *PortIndex, DWORD *SpeedIndex);
-void WritePort1Settings(DWORD PortIndex, DWORD SpeedIndex);
-void WritePort2Settings(DWORD PortIndex, DWORD SpeedIndex);
-void WritePort3Settings(DWORD PortIndex, DWORD SpeedIndex);
-void WriteProfile(const TCHAR *szFile);
-void ReadProfile(const TCHAR *szFile);
-
-double DoSunEphemeris(double lon, double lat);
-
-void ResetInfoBoxes(void);
-
-void propGetFontSettings(const TCHAR *Name, LOGFONT* lplf);
-void propGetFontSettingsFromString(const TCHAR *Buffer, LOGFONT* lplf);
-int propGetScaleList(double *List, size_t Size);
-
 long GetUTCOffset(void);
-
-void RestoreRegistry(void);
-void StoreRegistry(void);
-
 bool InterfaceTimeoutZero(void);
 void InterfaceTimeoutReset(void);
 bool InterfaceTimeoutCheck(void);

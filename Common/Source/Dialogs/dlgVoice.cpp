@@ -42,6 +42,7 @@ Copyright_License {
 #include "InputEvents.h"
 #include "Dialogs/dlgTools.h"
 #include "Utils.h"
+#include "UtilsProfile.hpp"
 #include "Registry.hpp"
 #include "Audio/VegaVoice.h"
 #include "DataField/Base.hpp"

@@ -50,7 +50,7 @@ Copyright_License {
 #include "Registry.hpp"
 #include "LocalPath.hpp"
 #include "Dialogs/dlgTools.h"
-#include "Utils.h"
+#include "UtilsProfile.hpp"
 #include "UtilsText.hpp"
 #include "MapWindowProjection.hpp"
 #include "RasterTerrain.h"

@@ -53,10 +53,10 @@ Copyright_License {
 }
 */
 
-#include "Utils.h"
-#include "Math/FastMath.h"
-
 #include "windmeasurementlist.h"
+#include "XCSoar.h"
+#include "Math/FastMath.h"
+#include <stdlib.h>
 
 
 WindMeasurementList::WindMeasurementList(){

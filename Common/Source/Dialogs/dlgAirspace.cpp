@@ -41,6 +41,7 @@ Copyright_License {
 #include "Dialogs/dlgTools.h"
 #include "InfoBoxLayout.h"
 #include "Registry.hpp"
+#include "UtilsProfile.hpp"
 #include "Screen/Util.hpp"
 #include "Screen/Graphics.hpp"
 #include "Screen/MainWindow.hpp"
