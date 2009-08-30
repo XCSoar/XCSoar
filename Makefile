@@ -529,6 +529,7 @@ OBJS	:=\
 	$(SRC)/UtilsProfile.o		\
 	$(SRC)/UtilsSystem.o		\
 	$(SRC)/UtilsText.o		\
+	$(SRC)/Version.o 		\
 	$(SRC)/Audio/VegaVoice.o	\
 	$(SRC)/Compatibility/string.o 	\
 	$(SRC)/Registry.o 		\

@@ -43,6 +43,7 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "Screen/MainWindow.hpp"
 #include "Compatibility/string.h"
+#include "Version.hpp"
 
 static WndForm *wf=NULL;
 static WndOwnerDrawFrame *wSplash=NULL;

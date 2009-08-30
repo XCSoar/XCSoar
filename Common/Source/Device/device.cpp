@@ -902,7 +902,7 @@ void devStartup(LPTSTR lpCmdLine)
   xcom760Register();
   condorRegister();
 
-  //JMW disabled  devInit(lpCmdLine);
+  devInit(lpCmdLine);
 }
 
 void devShutdown()
@@ -921,6 +921,7 @@ void devShutdown()
 
 ////////////////////////////////////////////////////////////////////////
 void devRestart() {
+#ifndef _SIM_
   /*
 #if (WINDOWSPC>0)
   static bool first = true;
@@ -941,4 +942,5 @@ void devRestart() {
   devInit(TEXT(""));
 
   mutexComm.Unlock();
+#endif
 }

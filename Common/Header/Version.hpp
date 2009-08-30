@@ -34,20 +34,11 @@ Copyright_License {
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
 */
+#ifndef XCSOAR_VERSION_HPP
+#define XCSOAR_VERSION_HPP
+#include "XCSoar.h"
 
-#if !defined(AFX_XCSOAR_H__695AAC30_F401_4CFF_9BD9_FE62A2A2D0D2__INCLUDED_)
-#define AFX_XCSOAR_H__695AAC30_F401_4CFF_9BD9_FE62A2A2D0D2__INCLUDED_
+extern TCHAR XCSoar_Version[256];
+void Version();
 
-#include "StdAfx.h"
-// #include "options.h" already in StdAfx.h
-#include "Defines.h"
-#include "resource.h"
-#include "Sizes.h"
-#include "Units.h"
-#include "Appearance.hpp"
-
-extern Appearance_t Appearance;
-
-// ******************************************************************
-
-#endif // !defined(AFX_XCSOAR_H__695AAC30_F401_4CFF_9BD9_FE62A2A2D0D2__INCLUDED_)
+#endif

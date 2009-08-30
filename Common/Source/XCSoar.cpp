@@ -36,6 +36,7 @@ Copyright_License {
 */
 
 #include "XCSoar.h"
+#include "Version.hpp"
 #include "Protection.hpp"
 #include "Interface.hpp"
 #include "LogFile.hpp"
@@ -108,8 +109,6 @@ Copyright_License {
 
 #include <assert.h>
 
-
-TCHAR XCSoar_Version[256] = TEXT("");
 
 HINSTANCE hInst; // The current instance
 MainWindow main_window;
@@ -342,14 +341,9 @@ void SettingsLeave() {
   mutexTaskData.Unlock();
   mutexFlightData.Unlock();
 
-#ifndef _SIM_
-  if(COMPORTCHANGED)
-    {
-      // JMW disabled com opening in sim mode
-      devRestart();
-    }
-
-#endif
+  if(COMPORTCHANGED) {
+    devRestart();
+  }
 
   MapWindowBase::ResumeDrawingThread();
   // allow map and calculations threads to continue on their merry way
@@ -427,7 +421,6 @@ static void AfterStartup() {
   CloseProgressDialog();
 
   Message::Startup(true);
-
 #ifdef _SIM_
   StartupStore(TEXT("GCE_STARTUP_SIMULATOR\n"));
   InputEvents::processGlideComputer(GCE_STARTUP_SIMULATOR);
@@ -436,7 +429,6 @@ static void AfterStartup() {
   InputEvents::processGlideComputer(GCE_STARTUP_REAL);
 #endif
   Message::Startup(false);
-
 #ifdef _INPUTDEBUG_
   InputEvents::showErrors();
 #endif
@@ -470,32 +462,6 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   RotateScreen();
 #endif
 #endif
-
-  // Version String
-#ifdef GNAV
-  _tcscat(XCSoar_Version, TEXT("Altair "));
-#elif PNA  // VENTA-ADDON
-  _tcscat(XCSoar_Version, TEXT("PNA "));
-#else
-#if (WINDOWSPC>0)
-  _tcscat(XCSoar_Version, TEXT("PC "));
-#else
-  _tcscat(XCSoar_Version, TEXT("PPC "));
-  // TODO code: consider adding PPC, 2002, 2003 (not enough room now)
-#endif
-#endif
-
-  // experimental CVS
-
-#ifdef FIVV
-  _tcscat(XCSoar_Version, TEXT("5.2.4F "));
-#elif defined(__MINGW32__)
-  _tcscat(XCSoar_Version, TEXT("5.2.4 "));
-#else
-  _tcscat(XCSoar_Version, TEXT("5.2.4 "));
-#endif
-
-  _tcscat(XCSoar_Version, TEXT(__DATE__));
 
 // VENTA2- delete registries at startup, but not on PC!
 #if defined(FIVV) && ( !defined(WINDOWSPC) || WINDOWSPC==0 )
@@ -544,6 +510,7 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   CreateDirectoryIfAbsent(TEXT("logs"));
   CreateDirectoryIfAbsent(TEXT("config"));
 
+  Version();
   StartupStore(TEXT("Starting XCSoar %s\n"), XCSoar_Version);
 
   //
@@ -756,11 +723,6 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 
   CreateProgressDialog(gettext(TEXT("Starting devices")));
   devStartup(lpCmdLine);
-
-#ifndef _SIM_
-  StartupStore(TEXT("RestartCommPorts\n"));
-  devRestart();
-#endif
 
   // re-set polar in case devices need the data
   StartupStore(TEXT("GlidePolar::UpdatePolar\n"));

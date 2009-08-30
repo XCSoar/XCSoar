@@ -34,20 +34,34 @@ Copyright_License {
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
 */
+#include "Version.hpp"
 
-#if !defined(AFX_XCSOAR_H__695AAC30_F401_4CFF_9BD9_FE62A2A2D0D2__INCLUDED_)
-#define AFX_XCSOAR_H__695AAC30_F401_4CFF_9BD9_FE62A2A2D0D2__INCLUDED_
+TCHAR XCSoar_Version[256] = TEXT("");
 
-#include "StdAfx.h"
-// #include "options.h" already in StdAfx.h
-#include "Defines.h"
-#include "resource.h"
-#include "Sizes.h"
-#include "Units.h"
-#include "Appearance.hpp"
+void Version() {
+  // Version String
+#ifdef GNAV
+  _tcscat(XCSoar_Version, TEXT("Altair "));
+#elif PNA  // VENTA-ADDON
+  _tcscat(XCSoar_Version, TEXT("PNA "));
+#else
+#if (WINDOWSPC>0)
+  _tcscat(XCSoar_Version, TEXT("PC "));
+#else
+  _tcscat(XCSoar_Version, TEXT("PPC "));
+  // TODO code: consider adding PPC, 2002, 2003 (not enough room now)
+#endif
+#endif
 
-extern Appearance_t Appearance;
+  // experimental CVS
 
-// ******************************************************************
+#ifdef FIVV
+  _tcscat(XCSoar_Version, TEXT("5.2.5F "));
+#elif defined(__MINGW32__)
+  _tcscat(XCSoar_Version, TEXT("5.2.5 "));
+#else
+  _tcscat(XCSoar_Version, TEXT("5.2.5 "));
+#endif
 
-#endif // !defined(AFX_XCSOAR_H__695AAC30_F401_4CFF_9BD9_FE62A2A2D0D2__INCLUDED_)
+  _tcscat(XCSoar_Version, TEXT(__DATE__));
+}
