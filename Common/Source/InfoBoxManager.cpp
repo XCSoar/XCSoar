@@ -51,7 +51,6 @@ Copyright_License {
 #include "Compatibility/string.h"
 #include "Device/Parser.h"
 #include "Utils.h"
-#include "Utils2.h"
 #include "Math/FastMath.h"
 #include "Math/Earth.hpp"
 #include "Math/Units.h"

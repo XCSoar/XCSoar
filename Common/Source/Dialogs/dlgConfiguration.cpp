@@ -41,7 +41,6 @@ Copyright_License {
 #include "Protection.hpp"
 #include "InfoBoxManager.h"
 #include "Device/Parser.h"
-#include "Utils2.h"
 #include "Blackboard.hpp"
 #include "Settings.hpp"
 #include "SettingsAirspace.hpp"

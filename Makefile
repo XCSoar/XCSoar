@@ -530,7 +530,6 @@ OBJS	:=\
 	$(SRC)/UtilsProfile.o		\
 	$(SRC)/UtilsSystem.o		\
 	$(SRC)/UtilsText.o		\
-	$(SRC)/Utils2.o 		\
 	$(SRC)/Audio/VegaVoice.o	\
 	$(SRC)/Compatibility/string.o 	\
 	$(SRC)/Registry.o 		\
@@ -565,7 +564,6 @@ OBJS	:=\
 	$(SRC)/Screen/Pen.o \
 	$(SRC)/Screen/Window.o \
 	$(SRC)/Screen/PaintWindow.o \
-	$(SRC)/Screen/BufferWindow.o \
 	$(SRC)/Screen/TextWindow.o \
 	$(SRC)/Screen/EditWindow.o \
 	$(SRC)/Screen/MainWindow.o \

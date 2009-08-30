@@ -41,7 +41,6 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "Protection.hpp"
 #include "Utils.h"
-#include "Utils2.h"
 #include "UtilsSystem.hpp"
 #include "Math/FastMath.h"
 #include "Math/Geometry.hpp"

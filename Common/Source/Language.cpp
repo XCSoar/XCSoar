@@ -44,6 +44,11 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "Registry.hpp"
 
+typedef struct {
+	TCHAR *key;
+	TCHAR *text;
+} GetTextSTRUCT;
+
 static GetTextSTRUCT GetTextData[MAXSTATUSMESSAGECACHE];
 static int GetTextData_Size = 0;
 
