@@ -912,3 +912,21 @@ WPARAM TranscodeKey(WPARAM wParam) {
 #endif
   return wParam;
 }
+
+RECT SystemWindowSize(void) {
+  RECT WindowSize;
+#if (WINDOWSPC>0)
+  WindowSize.right = SCREENWIDTH
+    + 2*GetSystemMetrics( SM_CXFIXEDFRAME);
+  WindowSize.left = (GetSystemMetrics(SM_CXSCREEN) - WindowSize.right) / 2;
+  WindowSize.bottom = SCREENHEIGHT
+    + 2*GetSystemMetrics( SM_CYFIXEDFRAME) + GetSystemMetrics(SM_CYCAPTION);
+  WindowSize.top = (GetSystemMetrics(SM_CYSCREEN) - WindowSize.bottom) / 2;
+#else
+  WindowSize.left = 0;
+  WindowSize.top = 0;
+  WindowSize.right = GetSystemMetrics(SM_CXSCREEN);
+  WindowSize.bottom = GetSystemMetrics(SM_CYSCREEN);
+#endif
+  return WindowSize;
+}

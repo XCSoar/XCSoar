@@ -59,6 +59,15 @@ MainWindow::set(LPCTSTR cls, LPCTSTR text,
 {
   Window::set(NULL, cls, text, left, top, width, height,
               (DWORD)(WS_SYSMENU|WS_CLIPCHILDREN|WS_CLIPSIBLINGS));
+
+#if defined(GNAV) && !defined(PCGNAV)
+  // TODO code: release the handle?
+  HANDLE hTmp = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_XCSOARSWIFT));
+  SendMessage(hWnd, WM_SETICON,
+	      (WPARAM)ICON_BIG, (LPARAM)hTmp);
+  SendMessage(hWnd, WM_SETICON,
+	      (WPARAM)ICON_SMALL, (LPARAM)hTmp);
+#endif
 }
 
 void

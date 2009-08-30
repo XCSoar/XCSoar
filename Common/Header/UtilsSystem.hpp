@@ -82,5 +82,6 @@ bool RotateScreen(void);
 void StartupLogFreeRamAndStorage();
 
 WPARAM TranscodeKey(WPARAM wParam);
+RECT SystemWindowSize(void);
 
 #endif

@@ -222,7 +222,7 @@ static SHACTIVATEINFO s_sai;
 ////////////////////////////////////////////////////////////////////////////////
 // Forward declarations of functions included in this code module:
 ATOM RegisterWindowClass (HINSTANCE, LPTSTR);
-BOOL InitInstance    (HINSTANCE, int);
+bool InitInstance    (HINSTANCE);
 LRESULT CALLBACK MainWndProc (HWND, UINT, WPARAM, LPARAM);
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -464,7 +464,7 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   StartupStore(TEXT("Initialise application instance\n"));
 
   // Perform application initialization:
-  if (!InitInstance (hInstance, nCmdShow))
+  if (!InitInstance (hInstance))
     {
       return FALSE;
     }
@@ -696,7 +696,7 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 //    In this function, we save the instance handle in a global variable and
 //    create and display the main program window.
 //
-BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
+bool InitInstance(HINSTANCE hInstance)
 {
   TCHAR szTitle[MAX_LOADSTRING];                        // The title bar text
   TCHAR szWindowClass[MAX_LOADSTRING];                  // The window class name
@@ -709,55 +709,24 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
   //If it is already running, then focus on the window
   if (main_window.find(szWindowClass, szTitle))
-    return 0;
+    return false;
 
   main_window.register_class(hInst, szWindowClass);
-  map_window.register_class(hInst, TEXT("MapWindowClass"));
 
   PreloadInitialisation(true);
 
-  RECT WindowSize;
-
-  WindowSize.left = 0;
-  WindowSize.top = 0;
-  WindowSize.right = GetSystemMetrics(SM_CXSCREEN);
-  WindowSize.bottom = GetSystemMetrics(SM_CYSCREEN);
-
-#if (WINDOWSPC>0)
-  WindowSize.right = SCREENWIDTH
-    + 2*GetSystemMetrics( SM_CXFIXEDFRAME);
-  WindowSize.left = (GetSystemMetrics(SM_CXSCREEN) - WindowSize.right) / 2;
-  WindowSize.bottom = SCREENHEIGHT
-    + 2*GetSystemMetrics( SM_CYFIXEDFRAME) + GetSystemMetrics(SM_CYCAPTION);
-  WindowSize.top = (GetSystemMetrics(SM_CYSCREEN) - WindowSize.bottom) / 2;
-#endif
-
   StartupStore(TEXT("Create main window\n"));
 
+  RECT WindowSize = SystemWindowSize();
   main_window.set(szWindowClass, szTitle,
 		  WindowSize.left, WindowSize.top,
 		  WindowSize.right, WindowSize.bottom);
 
-  if (!main_window.defined())
-    {
-      return FALSE;
-    }
+  if (!main_window.defined()) {
+    return false;
+  }
 
-#if defined(GNAV) && !defined(PCGNAV)
-  // TODO code: release the handle?
-  HANDLE hTmp = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_XCSOARSWIFT));
-  SendMessage(main_window, WM_SETICON,
-	      (WPARAM)ICON_BIG, (LPARAM)hTmp);
-  SendMessage(main_window, WM_SETICON,
-	      (WPARAM)ICON_SMALL, (LPARAM)hTmp);
-#endif
-
-  hBrushSelected = (HBRUSH)CreateSolidBrush(MapGfx.ColorSelected);
-  hBrushUnselected = (HBRUSH)CreateSolidBrush(MapGfx.ColorUnselected);
-  hBrushButton = (HBRUSH)CreateSolidBrush(MapGfx.ColorButton);
-
-  GetClientRect(main_window, &rc);
-
+  rc = main_window.get_client_rect();
 #if (WINDOWSPC>0)
   rc.left = 0;
   rc.right = SCREENWIDTH;
@@ -771,43 +740,47 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
   // color/pattern chart (must have infobox geometry before this)
   MapGfx.Initialise();
 
+  hBrushSelected = (HBRUSH)CreateSolidBrush(MapGfx.ColorSelected);
+  hBrushUnselected = (HBRUSH)CreateSolidBrush(MapGfx.ColorUnselected);
+  hBrushButton = (HBRUSH)CreateSolidBrush(MapGfx.ColorButton);
+
   StartupStore(TEXT("Create info boxes\n"));
-
-  MapWindow::SetMapRect(InfoBoxManager::Create(rc));
-
-  StartupStore(TEXT("Create FLARM gauge\n"));
-  gauge_flarm = new GaugeFLARM(main_window);
+  RECT rcsmall = InfoBoxManager::Create(rc);
 
   StartupStore(TEXT("Create button labels\n"));
   ButtonLabel::CreateButtonLabels(rc);
   ButtonLabel::SetLabelText(0,TEXT("MODE"));
 
-  ////////////////// do fonts
   StartupStore(TEXT("Initialise fonts\n"));
   InitialiseFonts(main_window, rc);
 
+  StartupStore(TEXT("Create FLARM gauge\n"));
+  gauge_flarm = new GaugeFLARM(main_window);
+
   StartupStore(TEXT("Initialise message system\n"));
   Message::Initialize(rc); // creates window, sets fonts
-
-  main_window.show();
 
   ///////////////////////////////////////////////////////
   //// create map window
 
   StartupStore(TEXT("Create map window\n"));
 
+  MapWindow::SetMapRect(rcsmall);
+  map_window.register_class(hInst, TEXT("MapWindowClass"));
   map_window.set(main_window, TEXT("MapWindowClass"),
                  0, 0, rc.right - rc.left, rc.bottom-rc.top);
 
   map_window.set_font(MapWindowFont);
 
-  // JMW gauge creation was here
+  ///////////////////////////////////////////////////////
+  // initial show
+  map_window.show();
+  map_window.update();
 
-  ShowWindow(main_window, nCmdShow);
-
+  main_window.show();
   main_window.update();
 
-  return TRUE;
+  return true;
 }
 
 
