@@ -310,6 +310,41 @@ void InitCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   memset( Basic, 0, sizeof(GPS_INFO));
   memset( Calculated, 0,sizeof(CALCULATED_INFO));
 
+  GPS_INFO.NAVWarning = true; // default, no gps at all!
+  GPS_INFO.SwitchState.AirbrakeLocked = false;
+  GPS_INFO.SwitchState.FlapPositive = false;
+  GPS_INFO.SwitchState.FlapNeutral = false;
+  GPS_INFO.SwitchState.FlapNegative = false;
+  GPS_INFO.SwitchState.GearExtended = false;
+  GPS_INFO.SwitchState.Acknowledge = false;
+  GPS_INFO.SwitchState.Repeat = false;
+  GPS_INFO.SwitchState.SpeedCommand = false;
+  GPS_INFO.SwitchState.UserSwitchUp = false;
+  GPS_INFO.SwitchState.UserSwitchMiddle = false;
+  GPS_INFO.SwitchState.UserSwitchDown = false;
+  GPS_INFO.SwitchState.VarioCircling = false;
+
+  SYSTEMTIME pda_time;
+  GetSystemTime(&pda_time);
+  GPS_INFO.Time  = pda_time.wHour*3600+pda_time.wMinute*60+pda_time.wSecond;
+  GPS_INFO.Year  = pda_time.wYear;
+  GPS_INFO.Month = pda_time.wMonth;
+  GPS_INFO.Day	 = pda_time.wDay;
+  GPS_INFO.Hour  = pda_time.wHour;
+  GPS_INFO.Minute = pda_time.wMinute;
+  GPS_INFO.Second = pda_time.wSecond;
+
+#ifdef _SIM_
+  #if _SIM_STARTUPSPEED
+  GPS_INFO.Speed = _SIM_STARTUPSPEED;
+  #endif
+  #if _SIM_STARTUPALTITUDE
+  GPS_INFO.Altitude = _SIM_STARTUPALTITUDE;
+  #endif
+#endif
+
+  ///////////////
+
   CalibrationInit();
   ResetFlightStats(Basic, Calculated, true);
 #ifndef FIVV

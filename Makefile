@@ -585,6 +585,7 @@ OBJS	:=\
 	$(SRC)/StdAfx.o			\
 	$(SRC)/Protection.o 		\
 	$(SRC)/ProcessTimer.o 		\
+	$(SRC)/Components.o 		\
 	$(SRC)/XCSoar.o 		\
 	\
 	$(SRC)/Device/device.o 		\

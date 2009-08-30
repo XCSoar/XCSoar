@@ -79,6 +79,10 @@ public:
   const Color GetAirspaceColourByClass(const int i);
   const Brush &GetAirspaceBrushByClass(const int i);
 
+  Brush infoSelectedBrush;
+  Brush infoUnselectedBrush;
+  Brush buttonBrush;
+
   Pen hAirspacePens[AIRSPACECLASSCOUNT];
   Pen hSnailPens[NUMSNAILCOLORS];
   Color hSnailColours[NUMSNAILCOLORS];

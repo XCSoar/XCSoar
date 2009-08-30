@@ -75,6 +75,7 @@ const Brush &ScreenGraphics::GetAirspaceBrushByClass(const int i) {
   return hAirspaceBrushes[iAirspaceBrush[i]];
 }
 
+
 const Color ScreenGraphics::ColorSelected = Color(0xC0,0xC0,0xC0);
 const Color ScreenGraphics::ColorUnselected = Color(0xFF,0xFF,0xFF);
 const Color ScreenGraphics::ColorWarning = Color(0xFF,0x00,0x00);
@@ -119,6 +120,10 @@ void ScreenGraphics::Initialise(void) {
   int i;
 
   Units::LoadUnitBitmap(hInst);
+
+  infoSelectedBrush.set(MapGfx.ColorSelected);
+  infoUnselectedBrush.set(MapGfx.ColorUnselected);
+  buttonBrush.set(MapGfx.ColorButton);
 
   redBrush.set(redColor);
   yellowBrush.set(yellowColor);
@@ -366,6 +371,10 @@ void ScreenGraphics::Destroy() {
   greenBrush.reset();
   yellowBrush.reset();
   redBrush.reset();
+
+  infoSelectedBrush.reset();
+  infoUnselectedBrush.reset();
+  buttonBrush.reset();
 
   Units::UnLoadUnitBitmap();
 
