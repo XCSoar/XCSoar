@@ -315,7 +315,7 @@ const int NUMSELECTSTRINGS = 74;
 static void FocusOnWindow(int i, bool selected);
 
 // TODO locking
-void InfoBoxManager::HideInfoBoxes() {
+void InfoBoxManager::Hide() {
   int i;
   InfoBoxesHidden = true;
   for (i=0; i<numInfoWindows+1; i++) {
@@ -324,17 +324,17 @@ void InfoBoxManager::HideInfoBoxes() {
 }
 
 
-void InfoBoxManager::ShowInfoBoxes() {
+void InfoBoxManager::Show() {
   int i;
   InfoBoxesHidden = false;
   for (i=0; i<numInfoWindows; i++) {
     InfoBoxes[i]->SetVisible(true);
   }
-  DefocusInfoBox();
+  Defocus();
 }
 
 
-bool InfoBoxManager::DefocusInfoBox() {
+bool InfoBoxManager::Defocus() {
   bool retval = (InfoFocus>=0);
   // JMW TODO this needs to be reworked
   if (retval) {
@@ -369,7 +369,7 @@ void InfoBoxManager::Event_SelectInfoBox(int i) {
     InfoFocus = -1; // deactivate if wrap around
   }
   if (InfoFocus<0) {
-    DefocusInfoBox();
+    Defocus();
     return;
   }
 
@@ -925,7 +925,7 @@ void PopUpSelect(int Index)
   SwitchToMapWindow();
 }
 
-bool InfoBoxManager::InfoBoxClick(HWND wmControl) {
+bool InfoBoxManager::Click(HWND wmControl) {
   int i;
 
   InfoBoxFocusTimeOut = 0;
@@ -1094,7 +1094,7 @@ void InfoBoxManager::Paint(void) {
 }
 
 
-RECT InfoBoxManager::CreateInfoBoxes(RECT rc) {
+RECT InfoBoxManager::Create(RECT rc) {
   int i;
   int xoff, yoff, sizex, sizey;
 

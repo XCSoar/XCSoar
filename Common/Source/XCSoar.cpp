@@ -813,7 +813,7 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   MapWindow::CreateDrawingThread();
   Sleep(100);
   StartupStore(TEXT("ShowInfoBoxes\n"));
-  InfoBoxManager::ShowInfoBoxes();
+  InfoBoxManager::Show();
   SwitchToMapWindow();
 
   StartupStore(TEXT("CreateCalculationThread\n"));
@@ -1022,7 +1022,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
   StartupStore(TEXT("Create info boxes\n"));
 
-  MapWindow::SetMapRect(InfoBoxManager::CreateInfoBoxes(rc));
+  MapWindow::SetMapRect(InfoBoxManager::Create(rc));
 
   StartupStore(TEXT("Create FLARM gauge\n"));
   gauge_flarm = new GaugeFLARM(main_window);
@@ -1441,7 +1441,7 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
       MainWindowTop();
 
-      if (InfoBoxManager::InfoBoxClick(wmControl)) {
+      if (InfoBoxManager::Click(wmControl)) {
 	return FALSE;
       }
 

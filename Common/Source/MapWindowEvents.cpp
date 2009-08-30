@@ -118,10 +118,10 @@ void MapWindow::ToggleFullScreenStart() {
 
   if (MapFullScreen) {
     MapRect = MapRectBig;
-    InfoBoxManager::HideInfoBoxes();
+    InfoBoxManager::Hide();
   } else {
     MapRect = MapRectSmall;
-    InfoBoxManager::ShowInfoBoxes();
+    InfoBoxManager::Show();
   }
 
   if (gauge_vario != NULL)

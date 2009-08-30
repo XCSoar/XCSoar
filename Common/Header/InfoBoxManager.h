@@ -47,7 +47,7 @@ class InfoBoxManager {
   static void InfoBoxFocusSetMaxTimeOut(void);
   static void ResetInfoBoxes(void);
  private:
-  static int getType(const int i);
+  static int  getType(const int i);
   static void setType(const int i, const char j);
   static void FocusOnWindow(int i, bool selected);
   static void DisplayInfoBox(void);
@@ -58,16 +58,19 @@ public:
   static void Event_ChangeInfoBoxType(int i);
   static TCHAR *InfoBoxGetDescription(int i);
   static void DoInfoKey(int keycode);
-  static bool InfoBoxClick(HWND wmControl);
+
+  static bool Click(HWND wmControl);
+
   static void InfoBoxFocus();
-  static bool DefocusInfoBox(void);
+  static bool Defocus(void);
   static void InfoBoxProcessTimer(void);
   static void InfoBoxesSetDirty(bool is_dirty);
-  static RECT CreateInfoBoxes(RECT rc);
+
+  static RECT Create(RECT rc);
   static void Destroy(void);
   static void Paint(void);
-  static void ShowInfoBoxes();
-  static void HideInfoBoxes();
+  static void Show();
+  static void Hide();
 
   static int getType(const int i, const int layer);
   static void setType(const int i, const char j, const int layer);
