@@ -54,11 +54,4 @@ WndForm *dlgLoadFromXML(CallBackTableEntry_t *LookUpTable,
                         ContainerWindow &Parent,
                         const TCHAR *resource=NULL);
 
-int
-WINAPI
-MessageBoxX(
-    LPCTSTR lpText,
-    LPCTSTR lpCaption,
-    UINT uType);
-
 #endif

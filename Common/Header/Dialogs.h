@@ -35,13 +35,12 @@ Copyright_License {
 }
 */
 
-#if !defined(AFX_DIALOGS_H__695AAC30_F401_4CFF_9BD9_FE62A2A2D0D2__INCLUDED_)
-#define AFX_DIALOGS_H__695AAC30_F401_4CFF_9BD9_FE62A2A2D0D2__INCLUDED_
+#if !defined(XCSOAR_DIALOGS_H)
+#define XCSOAR_DIALOGS_H
 
 #include "XCSoar.h"
 #include "WayPoint.hpp"
 
-void ClearStatusMessages(void);
 void StartupScreen();
 
 HWND CreateProgressDialog(const TCHAR *text);
@@ -51,10 +50,7 @@ BOOL SetProgressStepSize(int nSize);
 void StartHourglassCursor();
 void StopHourglassCursor();
 
-extern void DoStatusMessage(const TCHAR* text, const TCHAR* data = NULL);
-
 bool dlgAirspaceWarningShowDlg(bool force);
-// int dlgWayPointSelect(void);
 int dlgWayPointSelect(double lon=0.0, double lat=90.0, int type=-1, int FilterNear=0);
 int dlgAirspaceColoursShowModal(void);
 int dlgAirspacePatternsShowModal(void);
@@ -98,5 +94,12 @@ void PopupAnalysis();
 bool PopupNearestWaypointDetails(double lon, double lat,
 				 double range, bool pan);
 bool PopupInteriorAirspaceDetails(double lon, double lat);
+
+int
+WINAPI
+MessageBoxX(
+    LPCTSTR lpText,
+    LPCTSTR lpCaption,
+    UINT uType);
 
 #endif

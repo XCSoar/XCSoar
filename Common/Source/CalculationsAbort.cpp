@@ -46,7 +46,7 @@ Copyright_License {
 #include "Math/Earth.hpp"
 #include "McReady.h"
 #include "GlideSolvers.hpp"
-#include "Dialogs.h"
+#include "StatusMessage.hpp"
 
 //////////////////////////////////////////////////////////////////
 
@@ -346,7 +346,7 @@ void SortLandableWaypoints(NMEA_INFO *Basic,
       if (last_wp_distance>2000.0) {
         // don't display the message unless the airfield has moved by more
         // than 2 km
-        DoStatusMessage(TEXT("Closest Airfield Changed!"));
+        AddStatusMessage(TEXT("Closest Airfield Changed!"));
       }
 
     }

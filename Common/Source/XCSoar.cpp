@@ -51,6 +51,7 @@ Copyright_License {
 #include "Language.hpp"
 #include "Dialogs/dlgTools.h"
 #include "Trigger.hpp"
+#include "Message.h"
 #include "StatusMessage.hpp"
 #include "SettingsUser.hpp"
 #include "Math/SunEphemeris.hpp"
@@ -92,7 +93,6 @@ Copyright_License {
 
 #include "Units.h"
 #include "InputEvents.h"
-#include "Message.h"
 #include "Atmosphere.h"
 #include "Device/Geoid.h"
 
@@ -358,7 +358,7 @@ void SettingsLeave() {
 void SystemConfiguration(void) {
 #ifndef _SIM_
   if (LockSettingsInFlight && CALCULATED_INFO.Flying) {
-    DoStatusMessage(TEXT("Settings locked in flight"));
+    AddStatusMessage(TEXT("Settings locked in flight"));
     return;
   }
 #endif
@@ -459,9 +459,7 @@ static void AfterStartup() {
   StartupStore(TEXT("CloseProgressDialog\n"));
   CloseProgressDialog();
 
-  // NOTE: Must show errors AFTER all windows ready
-  int olddelay = StatusMessageData[0].delay_ms;
-  StatusMessageData[0].delay_ms = 20000; // 20 seconds
+  StatusMessageStart(true);
 
 #ifdef _SIM_
   StartupStore(TEXT("GCE_STARTUP_SIMULATOR\n"));
@@ -470,7 +468,7 @@ static void AfterStartup() {
   StartupStore(TEXT("GCE_STARTUP_REAL\n"));
   InputEvents::processGlideComputer(GCE_STARTUP_REAL);
 #endif
-  StatusMessageData[0].delay_ms = olddelay;
+  StatusMessageStart(false);
 
 #ifdef _INPUTDEBUG_
   InputEvents::showErrors();
@@ -1370,11 +1368,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 #ifdef VENTA_DEBUG_EVENT
 	case WM_KEYDOWN:
 
-		DoStatusMessage(TEXT("DBG KDOWN 1")); // VENTA
+		AddStatusMessage(TEXT("DBG KDOWN 1")); // VENTA
 		InterfaceTimeoutReset();
 	      break;
 	case WM_SYSKEYDOWN:
-		DoStatusMessage(TEXT("DBG SYSKDOWN 1")); // VENTA
+		AddStatusMessage(TEXT("DBG SYSKDOWN 1")); // VENTA
 		InterfaceTimeoutReset();
 	      break;
 #endif

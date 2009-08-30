@@ -70,6 +70,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "SettingsUser.hpp"
 #include "Math/FastMath.h"
 #include "Dialogs.h"
+#include "StatusMessage.hpp"
 #include "Marks.h"
 #include <commctrl.h>
 #include "Airspace.h"
@@ -145,9 +146,9 @@ void InputEvents::eventSounds(const TCHAR *misc) {
     EnableSoundVario = false;
   else if (_tcscmp(misc, TEXT("show")) == 0) {
     if (EnableSoundVario)
-      DoStatusMessage(TEXT("Vario Sounds ON"));
+      AddStatusMessage(TEXT("Vario Sounds ON"));
     else
-      DoStatusMessage(TEXT("Vario Sounds OFF"));
+      AddStatusMessage(TEXT("Vario Sounds OFF"));
   }
   /*
   if (EnableSoundVario != OldEnableSoundVario) {
@@ -175,13 +176,13 @@ void InputEvents::eventSnailTrail(const TCHAR *misc) {
 
   else if (_tcscmp(misc, TEXT("show")) == 0) {
     if (TrailActive==0)
-      DoStatusMessage(TEXT("SnailTrail OFF"));
+      AddStatusMessage(TEXT("SnailTrail OFF"));
     if (TrailActive==1)
-      DoStatusMessage(TEXT("SnailTrail ON Long"));
+      AddStatusMessage(TEXT("SnailTrail ON Long"));
     if (TrailActive==2)
-      DoStatusMessage(TEXT("SnailTrail ON Short"));
+      AddStatusMessage(TEXT("SnailTrail ON Short"));
     if (TrailActive==3)
-      DoStatusMessage(TEXT("SnailTrail ON Full"));
+      AddStatusMessage(TEXT("SnailTrail ON Full"));
   }
 }
 
@@ -204,11 +205,11 @@ void InputEvents::eventVisualGlide(const TCHAR *misc) {
 
   else if (_tcscmp(misc, TEXT("show")) == 0) {
     if (VisualGlide==0)
-      DoStatusMessage(TEXT("VisualGlide OFF"));
+      AddStatusMessage(TEXT("VisualGlide OFF"));
     if (VisualGlide==1)
-      DoStatusMessage(TEXT("VisualGlide Steady"));
+      AddStatusMessage(TEXT("VisualGlide Steady"));
     if (VisualGlide==2)
-      DoStatusMessage(TEXT("VisualGlide Moving"));
+      AddStatusMessage(TEXT("VisualGlide Moving"));
   }
 }
 
@@ -236,9 +237,9 @@ void InputEvents::eventAirSpace(const TCHAR *misc) {
     OnAirSpace = 1;
   else if (_tcscmp(misc, TEXT("show")) == 0) {
     if (OnAirSpace==0)
-      DoStatusMessage(TEXT("Show AirSpace OFF"));
+      AddStatusMessage(TEXT("Show AirSpace OFF"));
     if (OnAirSpace==1)
-      DoStatusMessage(TEXT("Show AirSpace ON"));
+      AddStatusMessage(TEXT("Show AirSpace ON"));
   }
 }
 
@@ -264,11 +265,11 @@ void InputEvents::eventScreenModes(const TCHAR *misc) {
     MapWindow::RequestToggleFullScreen();
   } else if (_tcscmp(misc, TEXT("show")) == 0) {
     if (MapWindow::isMapFullScreen())
-      DoStatusMessage(TEXT("Screen Mode Full"));
+      AddStatusMessage(TEXT("Screen Mode Full"));
     else if (EnableAuxiliaryInfo)
-      DoStatusMessage(TEXT("Screen Mode Auxiliary"));
+      AddStatusMessage(TEXT("Screen Mode Auxiliary"));
     else
-      DoStatusMessage(TEXT("Screen Mode Normal"));
+      AddStatusMessage(TEXT("Screen Mode Normal"));
   } else if (_tcscmp(misc, TEXT("togglebiginfo")) == 0) {
     InfoBoxLayout::fullscreen = !InfoBoxLayout::fullscreen;
   } else {
@@ -395,9 +396,9 @@ void InputEvents::eventZoom(const TCHAR* misc) {
     MapWindow::Event_AutoZoom(0);
   else if (_tcscmp(misc, TEXT("auto show")) == 0) {
     if (AutoZoom)
-      DoStatusMessage(TEXT("AutoZoom ON"));
+      AddStatusMessage(TEXT("AutoZoom ON"));
     else
-      DoStatusMessage(TEXT("AutoZoom OFF"));
+      AddStatusMessage(TEXT("AutoZoom OFF"));
   }
   else if (_tcscmp(misc, TEXT("slowout")) == 0)
     MapWindow::Event_ScaleZoom(-4);
@@ -426,9 +427,9 @@ void InputEvents::eventZoom(const TCHAR* misc) {
     CircleZoom = false;
   } else if (_tcscmp(misc, TEXT("circlezoom show")) == 0) {
     if (CircleZoom)
-      DoStatusMessage(TEXT("Circling Zoom ON"));
+      AddStatusMessage(TEXT("Circling Zoom ON"));
     else
-      DoStatusMessage(TEXT("Circling Zoom OFF"));
+      AddStatusMessage(TEXT("Circling Zoom OFF"));
   }
 
 }
@@ -471,9 +472,9 @@ else if (_tcscmp(misc, TEXT("down")) == 0)
     MapWindow::Event_PanCursor(-1,0);
   else if (_tcscmp(misc, TEXT("show")) == 0) {
     if (MapWindow::isPan())
-      DoStatusMessage(TEXT("Pan mode ON"));
+      AddStatusMessage(TEXT("Pan mode ON"));
     else
-      DoStatusMessage(TEXT("Pan mode OFF"));
+      AddStatusMessage(TEXT("Pan mode OFF"));
   }
 
 }
@@ -604,27 +605,27 @@ void InputEvents::eventArmAdvance(const TCHAR *misc) {
   if (_tcscmp(misc, TEXT("show")) == 0) {
     switch (AutoAdvance) {
     case 0:
-      DoStatusMessage(TEXT("Auto Advance: Manual"));
+      AddStatusMessage(TEXT("Auto Advance: Manual"));
       break;
     case 1:
-      DoStatusMessage(TEXT("Auto Advance: Automatic"));
+      AddStatusMessage(TEXT("Auto Advance: Automatic"));
       break;
     case 2:
       if (AdvanceArmed) {
-        DoStatusMessage(TEXT("Auto Advance: ARMED"));
+        AddStatusMessage(TEXT("Auto Advance: ARMED"));
       } else {
-        DoStatusMessage(TEXT("Auto Advance: DISARMED"));
+        AddStatusMessage(TEXT("Auto Advance: DISARMED"));
       }
       break;
     case 3:
       if (ActiveWayPoint<2) { // past start (but can re-start)
         if (AdvanceArmed) {
-          DoStatusMessage(TEXT("Auto Advance: ARMED"));
+          AddStatusMessage(TEXT("Auto Advance: ARMED"));
         } else {
-          DoStatusMessage(TEXT("Auto Advance: DISARMED"));
+          AddStatusMessage(TEXT("Auto Advance: DISARMED"));
         }
       } else {
-        DoStatusMessage(TEXT("Auto Advance: Automatic"));
+        AddStatusMessage(TEXT("Auto Advance: Automatic"));
       }
       break;
     default:
@@ -744,7 +745,7 @@ void InputEvents::eventWaypointDetails(const TCHAR *misc) {
       SelectedWaypoint = Task[ActiveWayPoint].Index;
     }
     if (SelectedWaypoint<0){
-      DoStatusMessage(TEXT("No Active Waypoint!"));
+      AddStatusMessage(TEXT("No Active Waypoint!"));
       return;
     }
     PopupWaypointDetails();
@@ -774,7 +775,7 @@ void InputEvents::eventGotoLookup(const TCHAR *misc) {
 //    The argument is the text to be displayed.
 //    No punctuation characters are allowed.
 void InputEvents::eventStatusMessage(const TCHAR *misc) {
-  DoStatusMessage(misc);
+  AddStatusMessage(misc);
 }
 
 // Plays a sound from the filename
@@ -798,14 +799,14 @@ void InputEvents::eventMacCready(const TCHAR *misc) {
     MacCreadyProcessing(-2);
   } else if (_tcscmp(misc, TEXT("auto show")) == 0) {
     if (CALCULATED_INFO.AutoMacCready) {
-      DoStatusMessage(TEXT("Auto MacCready ON"));
+      AddStatusMessage(TEXT("Auto MacCready ON"));
     } else {
-      DoStatusMessage(TEXT("Auto MacCready OFF"));
+      AddStatusMessage(TEXT("Auto MacCready OFF"));
     }
   } else if (_tcscmp(misc, TEXT("show")) == 0) {
     TCHAR Temp[100];
     _stprintf(Temp,TEXT("%0.1f"),GlidePolar::GetMacCready()*LIFTMODIFY);
-    DoStatusMessage(TEXT("MacCready "), Temp);
+    AddStatusMessage(TEXT("MacCready "), Temp);
   }
 }
 
@@ -823,13 +824,13 @@ void InputEvents::eventFlightMode(const TCHAR *misc) {
   }
   if (_tcscmp(misc, TEXT("show")) == 0) {
     if (ForceFinalGlide) {
-      DoStatusMessage(TEXT("Final glide forced ON"));
+      AddStatusMessage(TEXT("Final glide forced ON"));
     } else {
-      DoStatusMessage(TEXT("Final glide automatic"));
+      AddStatusMessage(TEXT("Final glide automatic"));
     }
   }
   if (ForceFinalGlide && ActiveWayPoint == -1){
-    DoStatusMessage(TEXT("No Active Waypoint!"));
+    AddStatusMessage(TEXT("No Active Waypoint!"));
   }
 }
 
@@ -1068,11 +1069,11 @@ void InputEvents::eventAbortTask(const TCHAR *misc) {
     ResumeAbortTask(-1);
   else if (_tcscmp(misc, TEXT("show")) == 0) {
     if (TaskAborted)
-      DoStatusMessage(TEXT("Task Aborted"));
+      AddStatusMessage(TEXT("Task Aborted"));
     else if (TaskIsTemporary()) {
-      DoStatusMessage(TEXT("Task Temporary"));
+      AddStatusMessage(TEXT("Task Temporary"));
     } else {
-      DoStatusMessage(TEXT("Task Resume"));
+      AddStatusMessage(TEXT("Task Resume"));
     }
   } else {
     ResumeAbortTask(0);
@@ -1112,7 +1113,7 @@ void InputEvents::eventBugs(const TCHAR *misc) {
   if (_tcscmp(misc, TEXT("show")) == 0) {
     TCHAR Temp[100];
     _stprintf(Temp,TEXT("%d"), iround(BUGS*100));
-    DoStatusMessage(TEXT("Bugs Performance"), Temp);
+    AddStatusMessage(TEXT("Bugs Performance"), Temp);
   }
   if (BUGS != oldBugs) {
     BUGS= min(1.0,max(0.5,BUGS));
@@ -1150,7 +1151,7 @@ void InputEvents::eventBallast(const TCHAR *misc) {
   if (_tcscmp(misc, TEXT("show")) == 0) {
     TCHAR Temp[100];
     _stprintf(Temp,TEXT("%d"),iround(BALLAST*100));
-    DoStatusMessage(TEXT("Ballast %"), Temp);
+    AddStatusMessage(TEXT("Ballast %"), Temp);
   }
   if (BALLAST != oldBallast) {
     BALLAST=min(1.0,max(0.0,BALLAST));
@@ -1214,16 +1215,16 @@ void InputEvents::eventLogger(const TCHAR *misc) {
   } else if (_tcscmp(misc, TEXT("nmea")) == 0) {
     EnableLogNMEA = !EnableLogNMEA;
     if (EnableLogNMEA) {
-      DoStatusMessage(TEXT("NMEA Log ON"));
+      AddStatusMessage(TEXT("NMEA Log ON"));
     } else {
-      DoStatusMessage(TEXT("NMEA Log OFF"));
+      AddStatusMessage(TEXT("NMEA Log OFF"));
     }
     return;
   } else if (_tcscmp(misc, TEXT("show")) == 0) {
     if (LoggerActive) {
-      DoStatusMessage(TEXT("Logger ON"));
+      AddStatusMessage(TEXT("Logger ON"));
     } else {
-      DoStatusMessage(TEXT("Logger OFF"));
+      AddStatusMessage(TEXT("Logger OFF"));
     }
   } else if (_tcsncmp(misc, TEXT("note"), 4)==0) {
     // add note to logger file if available..
@@ -1576,7 +1577,7 @@ void InputEvents::eventAdjustForecastTemperature(const TCHAR *misc) {
   if (_tcscmp(misc, TEXT("show")) == 0) {
     TCHAR Temp[100];
     _stprintf(Temp,TEXT("%f"),CuSonde::maxGroundTemperature);
-    DoStatusMessage(TEXT("Forecast temperature"), Temp);
+    AddStatusMessage(TEXT("Forecast temperature"), Temp);
   }
 }
 
@@ -1606,11 +1607,11 @@ void InputEvents::eventDeclutterLabels(const TCHAR *misc) {
     DeclutterLabels = 1;
   else if (_tcscmp(misc, TEXT("show")) == 0) {
     if (DeclutterLabels==0)
-      DoStatusMessage(TEXT("Map labels ON"));
+      AddStatusMessage(TEXT("Map labels ON"));
     else if (DeclutterLabels==1)
-      DoStatusMessage(TEXT("Map labels MID"));
+      AddStatusMessage(TEXT("Map labels MID"));
     else
-      DoStatusMessage(TEXT("Map labels OFF"));
+      AddStatusMessage(TEXT("Map labels OFF"));
   }
 }
 
@@ -1643,9 +1644,8 @@ void InputEvents::eventUserDisplayModeForce(const TCHAR *misc){
     UserForceDisplayMode = dmFinalGlide;
   }
   else if (_tcscmp(misc, TEXT("show")) == 0){
-    DoStatusMessage(TEXT("Map labels ON"));
+    AddStatusMessage(TEXT("Map labels ON"));
   }
-
 }
 
 void InputEvents::eventAirspaceDisplayMode(const TCHAR *misc){

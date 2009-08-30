@@ -43,7 +43,7 @@ Copyright_License {
 #include "Protection.hpp"
 #include "InputEvents.h"
 #include "Language.hpp"
-#include "Dialogs.h"
+#include "StatusMessage.hpp"
 #include "Interface.hpp"
 
 #include <stdlib.h>
@@ -238,7 +238,7 @@ void MapWindow::Event_TerrainTopology(int vswitch) {
       _stprintf(buf+_tcslen(buf), TEXT("%s"), gettext(TEXT("ON")));
     else
       _stprintf(buf+_tcslen(buf), TEXT("%s"), gettext(TEXT("OFF")));
-    DoStatusMessage(TEXT("Topology / Terrain"), buf);
+    AddStatusMessage(TEXT("Topology / Terrain"), buf);
   }
 }
 
@@ -370,7 +370,7 @@ int MapWindow::ProcessVirtualKey(int X, int Y, long keytime, short vkmode) {
   */
   return 13;
 //	}
-  DoStatusMessage(_T("VirtualKey Error"));
+  AddStatusMessage(_T("VirtualKey Error"));
   return 0;
 }
 

@@ -42,7 +42,7 @@ Copyright_License {
 #include <math.h>
 #include "Math/Geometry.hpp"
 #include "Math/Units.h"
-#include "Dialogs.h"
+#include "StatusMessage.hpp"
 #include "Task.h"
 #include "Device/device.h"
 #include "SettingsTask.hpp"
@@ -158,7 +158,7 @@ protected:
   };
 
   void Notify(void) {
-    DoStatusMessage(TEXT("Significant wind change"));
+    AddStatusMessage(TEXT("Significant wind change"));
   };
 
   void SaveLast(void) {
@@ -274,7 +274,7 @@ protected:
   };
 
   void Notify(void) {
-    DoStatusMessage(TEXT("Expect arrival past sunset"));
+    AddStatusMessage(TEXT("Expect arrival past sunset"));
   };
 
   void SaveLast(void) {
@@ -311,7 +311,7 @@ protected:
   };
 
   void Notify(void) {
-    DoStatusMessage(TEXT("Expect early task arrival"));
+    AddStatusMessage(TEXT("Expect early task arrival"));
   };
 
   void SaveLast(void) {
@@ -350,9 +350,9 @@ protected:
 
   void Notify(void) {
     if (withinMargin)
-      DoStatusMessage(TEXT("Start rules slightly violated\r\nbut within margin"));
+      AddStatusMessage(TEXT("Start rules slightly violated\r\nbut within margin"));
     else
-      DoStatusMessage(TEXT("Start rules violated"));
+      AddStatusMessage(TEXT("Start rules violated"));
   };
 
   void SaveLast(void) {

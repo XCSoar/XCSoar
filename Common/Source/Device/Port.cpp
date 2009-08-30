@@ -42,9 +42,8 @@ Copyright_License {
 #include "Blackboard.hpp"
 #include "Dialogs.h"
 #include "Language.hpp"
-#include "Dialogs/dlgTools.h"
 #include "Device/device.h"
-
+#include "StatusMessage.hpp"
 #include <windows.h>
 #include <tchar.h>
 
@@ -64,7 +63,7 @@ static void ComPort_StatusMessage(UINT type, const TCHAR *caption, const TCHAR *
   if (caption)
     MessageBoxX(tmp, gettext(caption), type);
   else
-    DoStatusMessage(tmp);
+    AddStatusMessage(tmp);
 }
 
 ComPort::ComPort(struct DeviceDescriptor_t *d)

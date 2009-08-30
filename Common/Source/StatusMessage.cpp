@@ -36,13 +36,34 @@ Copyright_License {
 */
 
 #include "StatusMessage.hpp"
+#include "Message.h"
 #include "XCSoar.h"
 #include "Registry.hpp"
 #include "UtilsText.hpp"
 #include "LocalPath.hpp"
 #include "LogFile.hpp"
+#include "SettingsUser.hpp"
+#include "UtilsSystem.hpp"
+#include "Language.hpp"
 
 #include <stdio.h>
+
+typedef struct {
+	const TCHAR *key;		/* English key */
+	const TCHAR *sound;		/* What sound entry to play */
+	const TCHAR *nmea_gps;		/* NMEA Sentence - to GPS serial */
+	const TCHAR *nmea_vario;		/* NMEA Sentence - to Vario serial */
+	bool doStatus;
+	bool doSound;
+	int delay_ms;		/* Delay for DoStatusMessage */
+	int iFontHeightRatio;	// TODO - not yet used
+	bool docenter;		// TODO - not yet used
+	int *TabStops;		// TODO - not yet used
+	int disabled;		/* Disabled - currently during run time */
+} StatusMessageSTRUCT;
+
+void _init_Status(int num);
+
 
 StatusMessageSTRUCT StatusMessageData[MAXSTATUSMESSAGECACHE];
 int StatusMessageData_Size = 0;
@@ -160,9 +181,69 @@ void ReadStatusFile() {
 
 // Create a blank entry (not actually used)
 void _init_Status(int num) {
-	StatusMessageData[num].key = TEXT("");
-	StatusMessageData[num].doStatus = true;
-	StatusMessageData[num].doSound = false;
-	StatusMessageData[num].sound = TEXT("");
-	StatusMessageData[num].delay_ms = 2500;  // 2.5 s
+  StatusMessageData[num].key = TEXT("");
+  StatusMessageData[num].doStatus = true;
+  StatusMessageData[num].doSound = false;
+  StatusMessageData[num].sound = TEXT("");
+  StatusMessageData[num].delay_ms = 2500;  // 2.5 s
+}
+
+
+// DoMessage is designed to delegate what to do for a message
+// The "what to do" can be defined in a configuration file
+// Defaults for each message include:
+//	- Text to display (including multiple languages)
+//	- Text to display extra - NOT multiple language
+//		(eg: If Airspace Warning - what details - airfield name is in data file, already
+//		covers multiple languages).
+//	- ShowStatusMessage - including font size and delay
+//	- Sound to play - What sound to play
+//	- Log - Keep the message on the log/history window (goes to log file and history)
+//
+// TODO code: (need to discuss) Consider moving almost all this functionality into AddMessage ?
+
+void AddStatusMessage(const TCHAR* text, const TCHAR *data) {
+  Message::Lock();
+
+  StatusMessageSTRUCT LocalMessage;
+  LocalMessage = StatusMessageData[0];
+
+  int i;
+  // Search from end of list (allow overwrites by user)
+  for (i=StatusMessageData_Size - 1; i>0; i--) {
+    if (_tcscmp(text, StatusMessageData[i].key) == 0) {
+      LocalMessage = StatusMessageData[i];
+      break;
+    }
+  }
+
+  if (EnableSoundModes && LocalMessage.doSound)
+    PlayResource(LocalMessage.sound);
+
+  // TODO code: consider what is a sensible size?
+  TCHAR msgcache[1024];
+  if (LocalMessage.doStatus) {
+
+    _tcscpy(msgcache, gettext(text));
+    if (data != NULL) {
+      _tcscat(msgcache, TEXT(" "));
+      _tcscat(msgcache, data);
+    }
+
+    Message::AddMessage(LocalMessage.delay_ms, 1, msgcache);
+  }
+
+  Message::Unlock();
+}
+
+
+void StatusMessageStart(bool first) {
+  static int olddelay = 2000;
+  if (first) {
+    // NOTE: Must show errors AFTER all windows ready
+    olddelay = StatusMessageData[0].delay_ms;
+    StatusMessageData[0].delay_ms = 20000; // 20 seconds
+  } else {
+    StatusMessageData[0].delay_ms = olddelay;
+  }
 }
