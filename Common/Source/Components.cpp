@@ -249,7 +249,7 @@ bool Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
 
   InfoBoxLayout::ScreenGeometry(rc);
   // color/pattern chart (must have infobox geometry before this)
-  MapGfx.Initialise();
+  MapGfx.Initialise(hInstance);
 
   StartupStore(TEXT("Create info boxes\n"));
   RECT rcsmall = InfoBoxManager::Create(rc);
@@ -539,17 +539,6 @@ void Shutdown(void) {
   StartupStore(TEXT("Finished shutdown\n"));
   StopHourglassCursor();
 
-#ifndef NDEBUG
-  TCHAR foop[80];
-  TASK_POINT wp;
-  TASK_POINT *wpr = &wp;
-  _stprintf(foop,TEXT("Sizes %d %d %d\n"),
-	    sizeof(TASK_POINT),
-	    ((long)&wpr->AATTargetLocked)-((long)wpr),
-	    ((long)&wpr->Target)-((long)wpr)
-	    );
-  StartupStore(foop);
-#endif
 }
 
 

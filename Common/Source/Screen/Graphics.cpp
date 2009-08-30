@@ -41,7 +41,6 @@ Copyright_License {
 #include "Screen/Util.hpp"
 #include "Appearance.hpp"
 #include "MapWindowProjection.hpp"
-#include "Interface.hpp"
 #include "InfoBoxLayout.h"
 #include "Math/Screen.hpp"
 #include <stdlib.h>
@@ -116,10 +115,10 @@ const Color ScreenGraphics::Colours[] =
   Color(0x00,0x00,0x00),
 };
 
-void ScreenGraphics::Initialise(void) {
+void ScreenGraphics::Initialise(HINSTANCE hInstance) {
   int i;
 
-  Units::LoadUnitBitmap(hInst);
+  Units::LoadUnitBitmap(hInstance);
 
   infoSelectedBrush.set(MapGfx.ColorSelected);
   infoUnselectedBrush.set(MapGfx.ColorUnselected);

@@ -39,15 +39,11 @@ Copyright_License {
 #include "Version.hpp"
 #include "Protection.hpp"
 #include "Components.hpp"
-#include "Interface.hpp"
 #include "LogFile.hpp"
 #include "UtilsSystem.hpp"
-#include "Screen/Graphics.hpp"
 #include "Screen/MainWindow.hpp"
-#include "ProcessTimer.hpp"
 #include "Message.h"
-#include "InfoBoxManager.h"
-#include "ButtonLabel.h"
+#include "Asset.hpp"
 
 #include <commctrl.h>
 #if (WINDOWSPC<1)
@@ -56,9 +52,6 @@ Copyright_License {
 #include <aygshell.h>
 #endif
 #endif
-
-#include "Asset.hpp"
-#include <assert.h>
 
 ///////////////////////////////////////////////////////////////////////////////
 HINSTANCE hInst; // The current instance

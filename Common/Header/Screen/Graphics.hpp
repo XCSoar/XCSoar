@@ -70,7 +70,7 @@ typedef union{
 
 class ScreenGraphics {
 public:
-  void Initialise();
+  void Initialise(HINSTANCE hInstance);
   void Destroy();
 
   // airspace brushes/colours
