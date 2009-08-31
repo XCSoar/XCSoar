@@ -2014,7 +2014,7 @@ static void setVariables(void) {
     dfe = (DataFieldEnum*)wp->GetDataField();
     dfe->addEnumText(gettext(TEXT("Center")));
     dfe->addEnumText(gettext(TEXT("Topleft")));
-    dfe->Set(Appearance.StateMessageAlligne);
+    dfe->Set(Appearance.StateMessageAlign);
     wp->RefreshDisplay();
   }
 
@@ -3537,12 +3537,12 @@ void dlgConfigurationShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpAppStatusMessageAlignment"));
   if (wp) {
-    if (Appearance.StateMessageAlligne != (StateMessageAlligne_t)
+    if (Appearance.StateMessageAlign != (StateMessageAlign_t)
 	(wp->GetDataField()->GetAsInteger())) {
-      Appearance.StateMessageAlligne = (StateMessageAlligne_t)
+      Appearance.StateMessageAlign = (StateMessageAlign_t)
 	(wp->GetDataField()->GetAsInteger());
       SetToRegistry(szRegistryAppStatusMessageAlignment,
-		    (DWORD)(Appearance.StateMessageAlligne));
+		    (DWORD)(Appearance.StateMessageAlign));
       changed = true;
     }
   }

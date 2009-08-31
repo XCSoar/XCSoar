@@ -881,9 +881,9 @@ void ReadRegistrySettings(void)
   Appearance.InfoBoxModel = (InfoBoxModelAppearance_t)Temp;
 #endif
 
-  Temp = Appearance.StateMessageAlligne;
+  Temp = Appearance.StateMessageAlign;
   GetFromRegistry(szRegistryAppStatusMessageAlignment, &Temp);
-  Appearance.StateMessageAlligne = (StateMessageAlligne_t)Temp;
+  Appearance.StateMessageAlign = (StateMessageAlign_t)Temp;
 
   Temp = Appearance.TextInputStyle;
   GetFromRegistry(szRegistryAppTextInputStyle, &Temp);
@@ -902,7 +902,7 @@ void ReadRegistrySettings(void)
   GetFromRegistry(szRegistryAppAveNeedle, &Temp);
   Appearance.GaugeVarioAveNeedle = (Temp != 0);
 
-  // StateMessageAlligne : center, topleft
+  // StateMessageAlign : center, topleft
   // DefaultMapWidth: 206?
   // CompassAppearance (north arrow)
   //

@@ -384,134 +384,6 @@ void ScreenGraphics::Destroy() {
 }
 
 
-void ClipDrawLine(Canvas &canvas, Pen::style PenStyle, const int width,
-		  const POINT ptStart, const POINT ptEnd,
-                  const Color cr, const RECT rc)
-{
-  int i;
-  HPEN hpDash,hpOld;
-  POINT pt[2];
-  //Create a dot pen
-  Pen pen(PenStyle, 1, cr);
-  canvas.select(pen);
-
-  pt[0].x = ptStart.x;
-  pt[0].y = ptStart.y;
-  pt[1].x = ptEnd.x;
-  pt[1].y = ptEnd.y;
-
-  //increment on smallest variance
-  if(abs(ptStart.x - ptEnd.x) < abs(ptStart.y - ptEnd.y)){
-    pt[0].x -= width / 2;
-    pt[1].x -= width / 2;
-    for (i = 0; i < width; i++){
-      pt[0].x += 1;
-      pt[1].x += 1;
-      canvas.clipped_polyline(pt, 2, rc);
-    }
-  } else {
-    pt[0].y -= width / 2;
-    pt[1].y -= width / 2;
-    for (i = 0; i < width; i++){
-      pt[0].y += 1;
-      pt[1].y += 1;
-      canvas.clipped_polyline(pt, 2, rc);
-    }
-  }
-}
-
-
-void DrawGreatCircle(Canvas &canvas,
-		     double startLon, double startLat,
-		     double targetLon, double targetLat,
-		     const RECT rc) {
-
-#if OLD_GREAT_CIRCLE
-  // TODO accuracy: this is actually wrong, it should recalculate the
-  // bearing each step
-  double distance=0;
-  double distanceTotal=0;
-  double Bearing;
-
-  DistanceBearing(startLat,
-                  startLon,
-                  targetLat,
-                  targetLon,
-                  &distanceTotal,
-                  &Bearing);
-
-  distance = distanceTotal;
-
-  if (distanceTotal==0.0) {
-    return;
-  }
-
-  double d_distance = max(5000.0,distanceTotal/10);
-
-  canvas.select(MapGfx.hpBearing);
-
-  POINT StartP;
-  POINT EndP;
-  LatLon2Screen(startLon,
-                startLat,
-                StartP);
-  LatLon2Screen(targetLon,
-                targetLat,
-                EndP);
-
-  if (d_distance>distanceTotal) {
-    canvas.clipped_line(StartP, EndP, rc);
-  } else {
-
-    for (int i=0; i<= 10; i++) {
-
-      double tlat1, tlon1;
-
-      FindLatitudeLongitude(startLat,
-                            startLon,
-                            Bearing,
-                            min(distance,d_distance),
-                            &tlat1,
-                            &tlon1);
-
-      DistanceBearing(tlat1,
-                      tlon1,
-                      targetLat,
-                      targetLon,
-                      &distance,
-                      &Bearing);
-
-      LatLon2Screen(tlon1,
-                    tlat1,
-                    EndP);
-
-      canvas.clipped_line(StartP, EndP, rc);
-
-      StartP.x = EndP.x;
-      StartP.y = EndP.y;
-
-      startLat = tlat1;
-      startLon = tlon1;
-
-    }
-  }
-#else
-  // Simple and this should work for PNA with display bug
-
-  canvas.select(MapGfx.hpBearing);
-  POINT pt[2];
-  MapWindowProjection::LatLon2Screen(startLon,
-                startLat,
-                pt[0]);
-  MapWindowProjection::LatLon2Screen(targetLon,
-                targetLat,
-                pt[1]);
-  canvas.clipped_polygon(pt, 2, rc, false);
-
-#endif
-}
-
-
 
 bool TextInBoxMoveInView(POINT *offset, RECT *brect, const RECT &MapRect){
 
@@ -646,10 +518,10 @@ bool TextInBox(Canvas &canvas, const TCHAR* Value, int x, int y,
 
   SIZE tsize = canvas.text_size(Value);
 
-  if (Mode.AsFlag.AlligneRight){
+  if (Mode.AsFlag.AlignRight){
     x -= tsize.cx;
   } else
-    if (Mode.AsFlag.AlligneCenter){
+    if (Mode.AsFlag.AlignCenter){
       x -= tsize.cx/2;
       y -= tsize.cy/2;
     }
@@ -665,7 +537,7 @@ bool TextInBox(Canvas &canvas, const TCHAR* Value, int x, int y,
     brect.top = y+((tsize.cy+4)>>3)-2;
     brect.bottom = brect.top+3+tsize.cy-((tsize.cy+4)>>3);
 
-    if (Mode.AsFlag.AlligneRight)
+    if (Mode.AsFlag.AlignRight)
       x -= 3;
 
     if (TextInBoxMoveInView(&offset, &brect, MapRect)){
@@ -703,7 +575,7 @@ bool TextInBox(Canvas &canvas, const TCHAR* Value, int x, int y,
     brect.top = y+((tsize.cy+4)>>3);
     brect.bottom = brect.top+tsize.cy-((tsize.cy+4)>>3);
 
-    if (Mode.AsFlag.AlligneRight)
+    if (Mode.AsFlag.AlignRight)
       x -= 2;
 
     if (TextInBoxMoveInView(&offset, &brect, MapRect)){

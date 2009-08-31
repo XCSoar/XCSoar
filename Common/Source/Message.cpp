@@ -229,7 +229,7 @@ void Message::Resize() {
     int midx = (rcmsg.right+rcmsg.left)/2;
     int midy = (rcmsg.bottom+rcmsg.top)/2;
 
-    if (Appearance.StateMessageAlligne == smAlligneTopLeft){
+    if (Appearance.StateMessageAlign == smAlignTopLeft){
       rthis.top = 0;
       rthis.left = 0;
       rthis.bottom = height;

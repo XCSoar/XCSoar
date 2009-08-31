@@ -423,7 +423,7 @@ void MapWindow::DrawWindAtAircraft2(Canvas &canvas, const POINT Orig, const RECT
     }
 
     // optionally draw dashed line
-    ClipDrawLine(canvas, Pen::DASH, 1, Tail[0], Tail[1], Color(0,0,0), rc);
+    canvas.clipped_dashed_line(1, Tail[0], Tail[1], Color(0,0,0), rc);
   }
 
 
@@ -488,13 +488,11 @@ void MapWindow::DrawHorizon(Canvas &canvas, const RECT rc)
   a1.y = Start.y;
   a2.x = Start.x-radius/2;
   a2.y = Start.y;
-  ClipDrawLine(canvas, Pen::SOLID, IBLSCALE(2),
-            a1, a2, Color(0,0,0), rc);
+  canvas.clipped_dashed_line(2, a1, a2, Color(0,0,0), rc);
 
   a1.x = Start.x;
   a1.y = Start.y-radius/4;
-  ClipDrawLine(canvas, Pen::SOLID, IBLSCALE(2),
-            a1, Start, Color(0,0,0), rc);
+  canvas.clipped_dashed_line(2, a1, Start, Color(0,0,0), rc);
 
   //
 
@@ -508,16 +506,16 @@ void MapWindow::DrawHorizon(Canvas &canvas, const RECT rc)
   a2.x = Start.x+rr2n;
   a2.y = Start.y-rr2n;
 
-  ClipDrawLine(canvas, Pen::SOLID, IBLSCALE(1),
-            a1, a2, Color(0,0,0), rc);
+  Pen penb1(Pen::SOLID, 1, Color(0,0,0));
+  canvas.select(penb1);
+  canvas.clipped_line(a1, a2, rc);
 
   a1.x = Start.x-rr2p;
   a1.y = Start.y-rr2p;
   a2.x = Start.x-rr2n;
   a2.y = Start.y-rr2n;
 
-  ClipDrawLine(canvas, Pen::SOLID, IBLSCALE(1),
-            a1, a2, Color(0,0,0), rc);
+  canvas.clipped_line(a1, a2, rc);
 
   // JMW experimental, display stall sensor
   double s = max(0.0,min(1.0,DrawInfo.StallRatio));
@@ -526,8 +524,10 @@ void MapWindow::DrawHorizon(Canvas &canvas, const RECT rc)
   a1.y = rc.bottom-m;
   a2.x = a1.x-10;
   a2.y = a1.y;
-  ClipDrawLine(canvas, Pen::SOLID, IBLSCALE(2),
-            a1, a2, Color(0xff,0,0), rc);
+
+  Pen penr2(Pen::SOLID, 1, Color(0,0,0));
+  canvas.select(penr2);
+  canvas.clipped_line(a1, a2, rc);
 }
 
 

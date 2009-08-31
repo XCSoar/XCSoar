@@ -84,9 +84,9 @@ typedef enum{
 }IndLandable_t;
 
 typedef enum{
-  smAlligneCenter=0,
-  smAlligneTopLeft,
-}StateMessageAlligne_t;
+  smAlignCenter=0,
+  smAlignTopLeft,
+}StateMessageAlign_t;
 
 typedef enum{
   tiHighScore=0,
@@ -153,7 +153,7 @@ typedef struct{
   bool DontShowAutoMacCready;
   bool InverseInfoBox;
   bool InfoTitelCapital;
-  StateMessageAlligne_t StateMessageAlligne;
+  StateMessageAlign_t StateMessageAlign;
   TextInputStyle_t TextInputStyle;
   bool GaugeVarioAvgText;
   bool GaugeVarioMc;

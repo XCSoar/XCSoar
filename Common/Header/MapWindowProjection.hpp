@@ -40,6 +40,7 @@ Copyright_License {
 #include "XCSoar.h"
 #include "NMEA/Info.h"
 #include "NMEA/Derived.hpp"
+#include "Screen/Canvas.hpp"
 
 class MapWindowData {
  public:
@@ -89,6 +90,12 @@ class MapWindowProjection: public MapWindowData {
 
   // used by waypoint nearest routine
   static bool    WaypointInRange(int i);
+
+  // drawing functions
+  static void DrawGreatCircle(Canvas &canvas,
+			      double lon_start, double lat_start,
+			      double lon_end, double lat_end,
+			      const RECT rc);
 
  protected:
   // helpers

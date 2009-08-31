@@ -47,6 +47,7 @@ Copyright_License {
 #include <string.h>
 #include <stdlib.h> /* for abs() */
 
+
 void
 Canvas::clipped_polygon(const POINT* lppt, unsigned cPoints, const RECT rc,
                         bool fill)

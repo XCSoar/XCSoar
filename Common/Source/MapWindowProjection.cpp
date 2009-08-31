@@ -628,3 +628,95 @@ void MapWindowProjection::UpdateMapScale()
      }
 
 }
+
+#include "Screen/Graphics.hpp"
+
+void MapWindowProjection::DrawGreatCircle(Canvas &canvas,
+					  double startLon, double startLat,
+					  double targetLon, double targetLat,
+					  const RECT rc) {
+
+#if OLD_GREAT_CIRCLE
+  // TODO accuracy: this is actually wrong, it should recalculate the
+  // bearing each step
+  double distance=0;
+  double distanceTotal=0;
+  double Bearing;
+
+  DistanceBearing(startLat,
+                  startLon,
+                  targetLat,
+                  targetLon,
+                  &distanceTotal,
+                  &Bearing);
+
+  distance = distanceTotal;
+
+  if (distanceTotal==0.0) {
+    return;
+  }
+
+  double d_distance = max(5000.0,distanceTotal/10);
+
+  canvas.select(MapGfx.hpBearing);
+
+  POINT StartP;
+  POINT EndP;
+  LatLon2Screen(startLon,
+		startLat,
+		StartP);
+  LatLon2Screen(targetLon,
+		targetLat,
+		EndP);
+
+  if (d_distance>distanceTotal) {
+    canvas.clipped_line(StartP, EndP, rc);
+  } else {
+
+    for (int i=0; i<= 10; i++) {
+
+      double tlat1, tlon1;
+
+      FindLatitudeLongitude(startLat,
+                            startLon,
+                            Bearing,
+                            min(distance,d_distance),
+                            &tlat1,
+                            &tlon1);
+
+      DistanceBearing(tlat1,
+                      tlon1,
+                      targetLat,
+                      targetLon,
+                      &distance,
+                      &Bearing);
+
+      LatLon2Screen(tlon1,
+                    tlat1,
+                    EndP);
+
+      canvas.clipped_line(StartP, EndP, rc);
+
+      StartP.x = EndP.x;
+      StartP.y = EndP.y;
+
+      startLat = tlat1;
+      startLon = tlon1;
+
+    }
+  }
+#else
+  // Simple and this should work for PNA with display bug
+
+  canvas.select(MapGfx.hpBearing);
+  POINT pt[2];
+  LatLon2Screen(startLon,
+                startLat,
+                pt[0]);
+  LatLon2Screen(targetLon,
+                targetLat,
+                pt[1]);
+  canvas.clipped_polygon(pt, 2, rc, false);
+
+#endif
+}

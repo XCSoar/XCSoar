@@ -51,14 +51,14 @@ typedef union{
   struct{
     unsigned Border:1;
     unsigned FillBackground:1;
-    unsigned AlligneRight:1;
+    unsigned AlignRight:1;
     unsigned Reachable:1;
-    unsigned AlligneCenter:1;
+    unsigned AlignCenter:1;
     unsigned WhiteBorder:1;
     unsigned WhiteBold:1;
     unsigned NoSetFont:1;  // VENTA5
     unsigned Color:3;
-  }AsFlag;
+  } AsFlag;
 } TextInBoxMode_t;
   // mode are flags
   // bit 0 == fill background add border / 1
@@ -186,11 +186,6 @@ public:
 };
 
 extern ScreenGraphics MapGfx;
-
-void DrawGreatCircle(Canvas &canvas,
-		     double lon_start, double lat_start,
-		     double lon_end, double lat_end,
-		     const RECT rc);
 
 void ClipDrawLine(Canvas &canvas, Pen::style PenStyle, const int width,
 		  const POINT ptStart, const POINT ptEnd,
