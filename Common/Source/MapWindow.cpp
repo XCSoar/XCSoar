@@ -61,11 +61,10 @@ Copyright_License {
 #include "Screen/LabelBlock.hpp"
 #include "Compatibility/gdi.h"
 #include "TopologyStore.h"
-#include "Gauge/GaugeFLARM.hpp"
 #include "InfoBoxLayout.h"
 #include "InfoBoxManager.h"
 #include "RasterTerrain.h"
-
+#include "Gauge/GaugeFLARM.hpp"
 #include "Calculations.h" // TODO danger! for InAATTurnSector
 
 #ifdef PNA
@@ -457,6 +456,236 @@ void MapWindow::on_destroy()
   PostQuitMessage (0);
 }
 
+///////
+
+static double Xstart, Ystart;
+static int XstartScreen, YstartScreen;
+static bool ignorenext=true;
+static DWORD dwDownTime= 0L, dwUpTime= 0L, dwInterval= 0L;
+
+void MapWindow::on_mouse_double(unsigned x, unsigned y)
+{
+  // Added by ARH to show menu button when mapwindow is double clicked.
+  //
+  // VNT TODO: do not handle this event and remove CS_DBLCLKS in register class.
+  // Only handle timed clicks in BUTTONDOWN with no proximity.
+  //
+  dwDownTime = GetTickCount();
+  
+#ifndef DISABLEAUDIO
+  if (EnableSoundModes) PlayResource(TEXT("IDR_WAV_CLICK"));
+#endif
+  InputEvents::ShowMenu();
+}
+
+void MapWindow::on_mouse_move(unsigned x, unsigned y)
+{
+  mutexTaskData.Lock();
+  if (AATEnabled && TargetPan && (TargetDrag_State>0)) {
+    // target follows "finger" so easier to drop near edge of
+    // sector
+    if (TargetDrag_State == 1) {
+      double mouseMovelon, mouseMovelat;
+      Screen2LatLon((int)x, (int)y, mouseMovelon, mouseMovelat);
+      if (InAATTurnSector(mouseMovelon, mouseMovelat, TargetPanIndex)) {
+	// update waypoints so if we drag out of the cylinder, it
+	// will remain adjacent to the edge
+	Task[TargetPanIndex].AATTargetLat = mouseMovelat;
+	Task[TargetPanIndex].AATTargetLon = mouseMovelon;
+	TargetDrag_Latitude = mouseMovelat;
+	TargetDrag_Longitude = mouseMovelon;
+	POINT Pos; Pos.x = x; Pos.y = y;
+	DrawBitmapIn(map_window.get_canvas(), Pos, MapGfx.hBmpTarget);
+      }
+    }
+  }
+  mutexTaskData.Unlock();
+}
+
+void MapWindow::on_mouse_down(unsigned x, unsigned y)
+{
+  ResetDisplayTimeOut();
+  dwDownTime = GetTickCount();
+  if (ignorenext) return;
+
+  // TODO VNT move Screen2LatLon in LBUTTONUP after making sure we
+  // really need Xstart and Ystart so we save precious
+  // milliseconds waiting for BUTTONUP GetTickCount
+  Screen2LatLon(x, y, Xstart, Ystart);
+
+  mutexTaskData.Lock();
+  if (AATEnabled && TargetPan) {
+    if (ValidTaskPoint(TargetPanIndex)) {
+      POINT tscreen;
+      LatLon2Screen(Task[TargetPanIndex].AATTargetLon,
+		    Task[TargetPanIndex].AATTargetLat,
+		    tscreen);
+      double distance = isqrt4((long)((XstartScreen-tscreen.x)
+			       *(XstartScreen-tscreen.x)+
+			       (YstartScreen-tscreen.y)
+			       *(YstartScreen-tscreen.y)))
+	/InfoBoxLayout::scale;
+      
+      if (distance<10) {
+	TargetDrag_State = 1;
+      }
+    }
+  }
+  mutexTaskData.Unlock();
+}
+
+
+
+
+void MapWindow::on_mouse_up(unsigned x, unsigned y)
+{
+  if (ignorenext||dwDownTime==0) {
+    ignorenext=false;
+    return;
+  }
+  RECT rc = MapRect;
+  bool my_target_pan;
+  dwUpTime = GetTickCount();
+  dwInterval=dwUpTime-dwDownTime;
+  dwDownTime=0; // do it once forever
+
+  mutexTaskData.Lock();
+  my_target_pan = TargetPan;
+  mutexTaskData.Unlock();
+
+  if (dwInterval == 0) {
+#ifdef DEBUG_VIRTUALKEYS
+    DoStatusMessage(_T("dwInterval==0 impossible!"));
+#endif
+    return; // should be impossible
+  }
+
+  double distance = isqrt4((long)((XstartScreen-x)*(XstartScreen-x)+
+			   (YstartScreen-y)*(YstartScreen-y)))
+    /InfoBoxLayout::scale;
+
+#ifdef DEBUG_VIRTUALKEYS
+  TCHAR buf[80]; char sbuf[80];
+  sprintf(sbuf,"%.0f",distance);
+  _stprintf(buf,_T("XY=%d,%d dist=%S Up=%ld Down=%ld Int=%ld"),
+	    X,Y,sbuf,dwUpTime,dwDownTime,dwInterval);
+  DoStatusMessage(buf);
+#endif
+
+  // Caution, timed clicks from PC with a mouse are different
+  // from real touchscreen devices
+  
+  if ((distance<50) 
+       && (VirtualKeys==(VirtualKeys_t)vkEnabled) 
+       && (dwInterval>= DOUBLECLICKINTERVAL)) {
+    unsigned wParam=ProcessVirtualKey(x,y,dwInterval,0);
+    if (wParam==0) {
+#ifdef DEBUG_VIRTUALKEYS
+      DoStatusMessage(_T("E02 INVALID Virtual Key!"));
+#endif
+      return;
+    }
+    dwDownTime= 0L;
+    InputEvents::processKey(wParam);
+    return;
+  }
+
+  double Xlat, Ylat;
+  Screen2LatLon(x, y, Xlat, Ylat);
+
+  if (AATEnabled && my_target_pan && (TargetDrag_State>0)) {
+    mutexTaskData.Lock();
+    TargetDrag_State = 2;
+    if (InAATTurnSector(Xlat, Ylat, TargetPanIndex)) {
+      // if release mouse out of sector, don't update w/ bad coords
+      TargetDrag_Latitude = Ylat;
+      TargetDrag_Longitude = Xlat;
+    }
+    mutexTaskData.Unlock();
+    return;
+  }
+ 
+  if (!my_target_pan && EnablePan && (distance>36)) {
+    // TODO FIX should be IBLSCALE 36 instead?
+    PanLongitude += Xstart-Xlat;
+    PanLatitude  += Ystart-Ylat;
+    RefreshMap();
+    return;
+  }
+#ifdef _SIM_
+  if (!ReplayLogger::IsEnabled() && !my_target_pan && (distance>IBLSCALE(36))) {
+    // This drag moves the aircraft (changes speed and direction)
+    double newbearing;
+    double oldbearing = GPS_INFO.TrackBearing;
+    double minspeed = 1.1*GlidePolar::Vminsink;
+    DistanceBearing(Ystart, Xstart, Ylat, Xlat, NULL, &newbearing);
+    if ((fabs(AngleLimit180(newbearing-oldbearing))<30)
+	|| (GPS_INFO.Speed<minspeed)) {
+      GPS_INFO.Speed = min(100.0,max(minspeed,distance/3));
+      // 20080817 JMW change speed only if in direction
+    }
+    GPS_INFO.TrackBearing = newbearing;
+    // change bearing without changing speed if direction change > 30
+    // 20080815 JMW prevent dragging to stop glider
+    
+    // JMW trigger recalcs immediately
+    TriggerGPSUpdate();
+    
+    return;
+  }
+#endif
+  if (!my_target_pan) {
+    if (InfoBoxManager::Defocus()) { //
+      return;
+    }
+    if (VirtualKeys==(VirtualKeys_t)vkEnabled) {
+      if(dwInterval < VKSHORTCLICK) {
+	//100ms is NOT enough for a short click since GetTickCount
+	//is OEM custom!
+	if (PopupNearestWaypointDetails(Xstart, Ystart, 500*MapScale, false)) {
+	  return;
+	}
+      } else {
+	if (PopupInteriorAirspaceDetails(Xstart, Ystart)) {
+	  return;
+	}
+      }
+    } else {
+      if(dwInterval < AIRSPACECLICK) { // original and untouched interval
+	if (PopupNearestWaypointDetails(Xstart, Ystart, 500*MapScale, false)) {
+	  return;
+	}
+      } else {
+	if (PopupInteriorAirspaceDetails(Xstart, Ystart)) {
+	  return;
+	}
+      }
+    } // VK enabled
+  } // !TargetPan
+}
+
+
+void MapWindow::on_key_down(unsigned key_code)
+{
+  // VENTA-TODO careful here, keyup no more trapped for PNA.
+  // Forbidden usage of keypress timing.
+  
+  ResetDisplayTimeOut();
+  InterfaceTimeoutReset();
+  key_code = TranscodeKey(key_code);
+#if defined(GNAV)
+  if (key_code == 0xF5){
+    SignalShutdown(false);
+    return;
+  }
+#endif
+  dwDownTime= 0L;
+  if (InputEvents::processKey(key_code)) {
+    //    return TRUE; // don't go to default handler
+  }
+}
+
+
 //////////////////////////
 //
 
@@ -469,24 +698,12 @@ DWORD MapWindow::DrawThread (LPVOID lpvoid)
 LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
                                         LPARAM lParam)
 {
-  int i;
-  static double Xstart, Ystart;
-  static int XstartScreen, YstartScreen;
-  int X,Y;
-  double Xlat, Ylat;
-  double distance;
-  int width = (int) LOWORD(lParam);
-  int height = (int) HIWORD(lParam);
-  static bool ignorenext=true;
-
-  static DWORD dwDownTime= 0L, dwUpTime= 0L, dwInterval= 0L;
-
   switch (uMsg)
     {
     case WM_ERASEBKGND:
       return TRUE;
     case WM_SIZE:
-      map_window.on_size(width, height);
+      map_window.on_size(LOWORD(lParam), HIWORD(lParam));
       break;
     case WM_CREATE:
       map_window.on_create(hWnd);
@@ -494,231 +711,28 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
     case WM_DESTROY:
       map_window.on_destroy();
       break;
-      /*
     case WM_LBUTTONDBLCLK:
-      // Added by ARH to show menu button when mapwindow is double clicked.
-      //
-      // VNT TODO: do not handle this event and remove CS_DBLCLKS in register class.
-      // Only handle timed clicks in BUTTONDOWN with no proximity.
-      //
-      dwDownTime = GetTickCount();
-
-      #ifndef DISABLEAUDIO
-      if (EnableSoundModes) PlayResource(TEXT("IDR_WAV_CLICK"));
-      #endif
-      InputEvents::ShowMenu();
+      map_window.on_mouse_double(LOWORD(lParam), HIWORD(lParam));
       break;
-
     case WM_MOUSEMOVE:
-      mutexTaskData.Lock();
-      if (AATEnabled && TargetPan && (TargetDrag_State>0)) {
-	// target follows "finger" so easier to drop near edge of
-	// sector
-        if (TargetDrag_State == 1) {
-          POINT Pos;
-          double mouseMovelon, mouseMovelat;
-          Pos.x = LOWORD(lParam);
-          Pos.y = HIWORD(lParam);
-
-          Screen2LatLon((int)Pos.x, (int)Pos.y, mouseMovelon, mouseMovelat);
-          if (InAATTurnSector(mouseMovelon, mouseMovelat, TargetPanIndex)) {
-            // update waypoints so if we drag out of the cylinder, it
-            // will remain adjacent to the edge
-            Task[TargetPanIndex].AATTargetLat = mouseMovelat;
-            Task[TargetPanIndex].AATTargetLon = mouseMovelon;
-            TargetDrag_Latitude = mouseMovelat;
-            TargetDrag_Longitude = mouseMovelon;
-            DrawBitmapIn(map_window.get_canvas(), Pos, MapGfx.hBmpTarget);
-          }
-        }
-      }
-      mutexTaskData.Unlock();
+      map_window.on_mouse_move(LOWORD(lParam), HIWORD(lParam));
       break;
-
     case WM_LBUTTONDOWN:
-      #ifdef DEBUG_DBLCLK
-      DoStatusMessage(_T("BUTTONDOWN MapWindow"));
-      #endif
-      ResetDisplayTimeOut();
-      dwDownTime = GetTickCount();
-      if (ignorenext) break;
-      XstartScreen = LOWORD(lParam); YstartScreen = HIWORD(lParam);
-      // TODO VNT move Screen2LatLon in LBUTTONUP after making sure we
-      // really need Xstart and Ystart so we save precious
-      // milliseconds waiting for BUTTONUP GetTickCount
-      Screen2LatLon(XstartScreen, YstartScreen, Xstart, Ystart);
-
-      mutexTaskData.Lock();
-      if (AATEnabled && TargetPan) {
-	if (ValidTaskPoint(TargetPanIndex)) {
-	  POINT tscreen;
-	  LatLon2Screen(Task[TargetPanIndex].AATTargetLon,
-			Task[TargetPanIndex].AATTargetLat,
-			tscreen);
-	  distance = isqrt4((long)((XstartScreen-tscreen.x)
-				   *(XstartScreen-tscreen.x)+
-				   (YstartScreen-tscreen.y)
-				   *(YstartScreen-tscreen.y)))
-	    /InfoBoxLayout::scale;
-
-	  if (distance<10) {
-	    TargetDrag_State = 1;
-	  }
-	}
-      }
-      mutexTaskData.Unlock();
+      map_window.on_mouse_down(LOWORD(lParam), HIWORD(lParam));
       break;
-
     case WM_LBUTTONUP:
-      if (ignorenext||dwDownTime==0) {
-	ignorenext=false;
-	break;
-      }
-      RECT rc;
-      bool my_target_pan;
-      dwUpTime = GetTickCount();
-      dwInterval=dwUpTime-dwDownTime;
-      dwDownTime=0; // do it once forever
-
-      mutexTaskData.Lock();
-      my_target_pan = TargetPan;
-      mutexTaskData.Unlock();
-
-      GetClientRect(hWnd,&rc);
-
-      X = LOWORD(lParam); Y = HIWORD(lParam);
-
-      if (dwInterval == 0) {
-#ifdef DEBUG_VIRTUALKEYS
-	DoStatusMessage(_T("dwInterval==0 impossible!"));
-#endif
-	break; // should be impossible
-      }
-
-
-      distance = isqrt4((long)((XstartScreen-X)*(XstartScreen-X)+
-			       (YstartScreen-Y)*(YstartScreen-Y)))
-	/InfoBoxLayout::scale;
-
-#ifdef DEBUG_VIRTUALKEYS
-      TCHAR buf[80]; char sbuf[80];
-      sprintf(sbuf,"%.0f",distance);
-      _stprintf(buf,_T("XY=%d,%d dist=%S Up=%ld Down=%ld Int=%ld"),
-		X,Y,sbuf,dwUpTime,dwDownTime,dwInterval);
-      DoStatusMessage(buf);
-#endif
-
-      // Caution, timed clicks from PC with a mouse are different
-      // from real touchscreen devices
-
-      if ((VirtualKeys==(VirtualKeys_t)vkEnabled) &&
-	  (distance<50) && (dwInterval>= DOUBLECLICKINTERVAL)) {
-	wParam=ProcessVirtualKey(X,Y,dwInterval,0);
-	if (wParam==0) {
-#ifdef DEBUG_VIRTUALKEYS
-	  DoStatusMessage(_T("E02 INVALID Virtual Key!"));
-#endif
-	  break;
-	}
-	goto Wirth;
-      }
-
-      Screen2LatLon(X, Y, Xlat, Ylat);
-
-      if (AATEnabled && my_target_pan && (TargetDrag_State>0)) {
-        mutexTaskData.Lock();
-	TargetDrag_State = 2;
-        if (InAATTurnSector(Xlat, Ylat, TargetPanIndex)) {
-            // if release mouse out of sector, don't update w/ bad coords
-	  TargetDrag_Latitude = Ylat;
-	  TargetDrag_Longitude = Xlat;
-        }
-        mutexTaskData.Unlock();
-	break;
-      } else if (!my_target_pan && EnablePan && (distance>36)) {
-	// TODO FIX should be IBLSCALE 36 instead?
-	PanLongitude += Xstart-Xlat;
-	PanLatitude  += Ystart-Ylat;
-	RefreshMap();
-	break;
-      }
-#ifdef _SIM_
-      else if (!ReplayLogger::IsEnabled() && !my_target_pan && (distance>IBLSCALE(36))) {
-	// This drag moves the aircraft (changes speed and direction)
-	double newbearing;
-	double oldbearing = GPS_INFO.TrackBearing;
-	double minspeed = 1.1*GlidePolar::Vminsink;
-	DistanceBearing(Ystart, Xstart, Ylat, Xlat, NULL, &newbearing);
-	if ((fabs(AngleLimit180(newbearing-oldbearing))<30)
-	    || (GPS_INFO.Speed<minspeed)) {
-	  GPS_INFO.Speed = min(100.0,max(minspeed,distance/3));
-	  // 20080817 JMW change speed only if in direction
-	}
-	GPS_INFO.TrackBearing = newbearing;
-	// change bearing without changing speed if direction change > 30
-	// 20080815 JMW prevent dragging to stop glider
-
-	// JMW trigger recalcs immediately
-	TriggerGPSUpdate();
-
-	break;
-      } else
-#endif
-      if (!my_target_pan) {
-	if (InfoBoxManager::Defocus()) { //
-	  break;
-	}
-	if (VirtualKeys==(VirtualKeys_t)vkEnabled) {
-	  if(dwInterval < VKSHORTCLICK) {
-	    //100ms is NOT enough for a short click since GetTickCount
-	    //is OEM custom!
-	    if (PopupNearestWaypointDetails(Xstart, Ystart, 500*MapScale, false)) {
-	      break;
-	    }
-	  } else {
-	    if (PopupInteriorAirspaceDetails(Xstart, Ystart)) {
-	      break;
-	    }
-	  }
-	} else {
-	  if(dwInterval < AIRSPACECLICK) { // original and untouched interval
-	    if (PopupNearestWaypointDetails(Xstart, Ystart, 500*MapScale, false)) {
-	      break;
-	    }
-	  } else {
-	    if (PopupInteriorAirspaceDetails(Xstart, Ystart)) {
-	      break;
-	    }
-	  }
-	} // VK enabled
-      } // !TargetPan
+      map_window.on_mouse_up(LOWORD(lParam), HIWORD(lParam));
       break;
-
 #if defined(GNAV) || defined(PNA) // VENTA FIXED PNA SCROLL WHEEL
     case WM_KEYDOWN: // JMW was keyup
 #else
     case WM_KEYUP: // JMW was keyup
 #endif
-      // VENTA-TODO careful here, keyup no more trapped for PNA.
-      // Forbidden usage of keypress timing.
-
-      ResetDisplayTimeOut();
-      InterfaceTimeoutReset();
-      wParam = TranscodeKey(wParam);
-#if defined(GNAV)
-      if (wParam == 0xF5){
-	SignalShutdown(false);
-	break;
-      }
-#endif
-Wirth:
-      dwDownTime= 0L;
-      if (InputEvents::processKey(wParam)) {
-	return TRUE; // don't go to default handler
-      }
-      // break; unreachable!
-*/
+      map_window.on_key_down(wParam);
+      break;
+    default:
+      return ::DefWindowProc (hWnd, uMsg, wParam, lParam);
     }
-
-  return (DefWindowProc (hWnd, uMsg, wParam, lParam));
+  return ::DefWindowProc (hWnd, uMsg, wParam, lParam);
+  //  return TRUE;
 }

@@ -248,6 +248,11 @@ class MapWindow
   void on_size(int width, int height);
   void on_create(HWND hWnd);
   void on_destroy();
+  void on_mouse_double(unsigned x, unsigned y);
+  void on_mouse_move(unsigned x, unsigned y);
+  void on_mouse_down(unsigned x, unsigned y);
+  void on_mouse_up(unsigned x, unsigned y);
+  void on_key_down(unsigned key_code);
 };
 
 #endif
