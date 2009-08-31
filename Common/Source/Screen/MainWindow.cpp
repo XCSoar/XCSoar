@@ -103,7 +103,7 @@ MainWindow::register_class(HINSTANCE hInstance, const TCHAR* szWindowClass)
   WNDCLASS wc;
 
   wc.style                      = CS_HREDRAW | CS_VREDRAW;
-  wc.lpfnWndProc                = ::DefWindowProc; // (WNDPROC) MainWndProc;
+  wc.lpfnWndProc = Window::WndProc;
   wc.cbClsExtra                 = 0;
 #if (WINDOWSPC>0)
   wc.cbWndExtra = 0;
@@ -246,10 +246,6 @@ bool MainWindow::on_close() {
 LRESULT MainWindow::on_message(HWND _hWnd, UINT message,
 			       WPARAM wParam, LPARAM lParam) {
   switch (message) {
-  case WM_CREATE:
-    created(_hWnd);
-    if (on_create()) return true;
-    break;
   case WM_COMMAND:
     if (on_command((HWND)lParam)) return true;
     break;
@@ -276,10 +272,6 @@ LRESULT MainWindow::on_message(HWND _hWnd, UINT message,
     break;
   case WM_TIMER:
     if (on_timer()) return true;
-    break;
-  case WM_CLOSE:
-    if (on_close()) return true;
-    //    return FALSE;
     break;
   };
   return ContainerWindow::on_message(_hWnd, message, wParam, lParam);
