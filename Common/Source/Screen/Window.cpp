@@ -37,6 +37,7 @@ Copyright_License {
 
 #include "Screen/Window.hpp"
 #include "Screen/ContainerWindow.hpp"
+#include "Screen/Blank.hpp"
 #include "Interface.hpp"
 
 #ifdef PNA
@@ -195,28 +196,55 @@ Window::on_message(HWND _hWnd, UINT message,
     break;
 
   case WM_LBUTTONDOWN:
-    if (on_mouse_down(LOWORD(lParam), HIWORD(lParam))) return true;
+    InterfaceTimeoutReset();
+    if (on_mouse_down(LOWORD(lParam), HIWORD(lParam))) {
+      /* true returned: message was handled */
+      ResetDisplayTimeOut();
+      return 0;
+    }
     break;
 
   case WM_LBUTTONUP:
-    if (on_mouse_up(LOWORD(lParam), HIWORD(lParam))) return true;
+    InterfaceTimeoutReset();
+    if (on_mouse_up(LOWORD(lParam), HIWORD(lParam))) {
+      /* true returned: message was handled */
+      ResetDisplayTimeOut();
+      return 0;
+    }
     break;
 
   case WM_LBUTTONDBLCLK:
-    if (on_mouse_double(LOWORD(lParam), HIWORD(lParam))) return true;
+    InterfaceTimeoutReset();
+    if (on_mouse_double(LOWORD(lParam), HIWORD(lParam))) {
+      /* true returned: message was handled */
+      ResetDisplayTimeOut();
+      return 0;
+    }
     break;
 
   case WM_KEYDOWN:
-    if (on_key_down(wParam)) return true;
+    InterfaceTimeoutReset();
+    if (on_key_down(wParam)) {
+      /* true returned: message was handled */
+      ResetDisplayTimeOut();
+      return 0;
+    }
     break;
 
   case WM_KEYUP:
-    if (on_key_up(wParam)) return true;
+    InterfaceTimeoutReset();
+    if (on_key_up(wParam)) {
+      /* true returned: message was handled */
+      ResetDisplayTimeOut();
+      return 0;
+    }
     break;
 
   case WM_COMMAND:
+    InterfaceTimeoutReset();
     if (on_command((HWND)lParam, LOWORD(wParam), HIWORD(wParam))) {
       /* true returned: message was handled */
+      ResetDisplayTimeOut();
       return 0;
     }
     break;
