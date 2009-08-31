@@ -497,7 +497,7 @@ bool MapWindow::on_mouse_move(unsigned x, unsigned y)
 	TargetDrag_Latitude = mouseMovelat;
 	TargetDrag_Longitude = mouseMovelon;
 	POINT Pos; Pos.x = x; Pos.y = y;
-	DrawBitmapIn(map_window.get_canvas(), Pos, MapGfx.hBmpTarget);
+	DrawBitmapIn(get_canvas(), Pos, MapGfx.hBmpTarget);
       }
     }
   }
@@ -702,6 +702,7 @@ bool MapWindow::on_key_down(unsigned key_code)
 
 DWORD MapWindow::DrawThread (LPVOID lpvoid)
 {
-  map_window._DrawThread();
+  MapWindow *mw = (MapWindow *)lpvoid;
+  mw->_DrawThread();
 }
 
