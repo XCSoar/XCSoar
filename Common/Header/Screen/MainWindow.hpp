@@ -71,7 +71,7 @@ protected:
 
   LRESULT on_colour(HDC hdc, int wdata);
   int _timer_id;
-  bool on_command(HWND wmControl);
+  virtual bool on_command(HWND hWnd, unsigned id, unsigned code);
   bool on_timer();
   bool on_create();
   bool on_key_down(unsigned key_code);

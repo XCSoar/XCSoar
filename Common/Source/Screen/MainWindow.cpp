@@ -139,7 +139,8 @@ MainWindow::register_class(HINSTANCE hInstance, const TCHAR* szWindowClass)
 #include "ProcessTimer.hpp"
 #include "LogFile.hpp"
 
-bool MainWindow::on_command(HWND wmControl)
+bool
+MainWindow::on_command(HWND wmControl, unsigned id, unsigned code)
 {
   if (wmControl && globalRunningEvent.test()) {
 
@@ -155,7 +156,8 @@ bool MainWindow::on_command(HWND wmControl)
       return true; // don't continue processing..
     }
   }
-  return false;
+
+  return ContainerWindow::on_command(wmControl, id, code);
 }
 
 
@@ -246,9 +248,6 @@ bool MainWindow::on_close() {
 LRESULT MainWindow::on_message(HWND _hWnd, UINT message,
 			       WPARAM wParam, LPARAM lParam) {
   switch (message) {
-  case WM_COMMAND:
-    if (on_command((HWND)lParam)) return true;
-    break;
     /*
   case WM_CTLCOLORSTATIC:
     return on_colour((HDC)wParam, get_userdata((HWND)lParam));
