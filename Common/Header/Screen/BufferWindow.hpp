@@ -107,7 +107,7 @@ public:
   }
 
 protected:
-  virtual bool on_paint(Canvas &canvas);
+  virtual void on_paint(Canvas &canvas);
 };
 
 #endif

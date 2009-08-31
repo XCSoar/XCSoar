@@ -37,9 +37,9 @@ Copyright_License {
 
 #include "Screen/BufferWindow.hpp"
 
-bool BufferWindow::on_paint(Canvas &canvas)
+void
+BufferWindow::on_paint(Canvas &canvas)
 {
   commit_buffer(canvas);
-  return false;
 }
 

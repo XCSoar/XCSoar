@@ -84,7 +84,7 @@ typedef enum{
   bkLeft
 }BorderKind_t;
 
-class WindowControl {
+class WindowControl : public ContainerWindow {
  public:
     typedef void (*OnHelpCallback_t)(WindowControl * Sender);
 
@@ -97,7 +97,6 @@ class WindowControl {
 
     WindowControl *mOwner;
     WindowControl *mTopOwner;
-    BitmapCanvas mHdcTemp;
     HBITMAP mBmpMem;
     int  mBorderKind;
     COLORREF mColorBack;
@@ -128,7 +127,6 @@ class WindowControl {
 
   protected:
 
-    ContainerWindow window;
     bool mCanFocus;
     TCHAR mCaption[254];
     bool mDontPaintSelector;
@@ -143,42 +141,19 @@ class WindowControl {
 
   public:
     TCHAR* GetCaption(void) { return mCaption; };
-    int WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+
+    virtual LRESULT on_message(HWND hWnd, UINT message,
+                               WPARAM wParam, LPARAM lParam);
 
     virtual void AddClient(WindowControl *Client);
 
-    virtual void Paint(Canvas &canvas);
+    virtual bool on_close(void);
+
+    /** from class PaintWindow */
+    virtual void on_paint(Canvas &canvas);
 
     virtual int OnHelp();
 
-    virtual int OnLButtonDoubleClick(WPARAM wParam, LPARAM lParam){
-		(void)wParam; (void)lParam;
-      return(1);
-    };
-    virtual int OnLButtonDown(WPARAM wParam, LPARAM lParam){
-		(void)wParam; (void)lParam;
-      return(1);
-    };
-    virtual int OnLButtonUp(WPARAM wParam, LPARAM lParam){
-		(void)wParam; (void)lParam;
-      return(1);
-    };
-    virtual int OnKeyDown(WPARAM wParam, LPARAM lParam){
-		(void)wParam; (void)lParam;
-      return(1);
-    };
-    virtual int OnKeyUp(WPARAM wParam, LPARAM lParam){
-		(void)wParam; (void)lParam;
-      return(1);
-    };
-    virtual int OnCommand(WPARAM wParam, LPARAM lParam){
-		(void)wParam; (void)lParam;
-      return(1);
-    };
-    virtual int OnMouseMove(WPARAM wParam, LPARAM lParam){
-		(void)wParam; (void)lParam;
-      return(1);
-    };
     virtual int OnUnhandledMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam){
 		(void)hwnd; (void)uMsg; (void)wParam; (void)lParam;
       return(1);
@@ -245,11 +220,9 @@ class WindowControl {
     virtual void SetCaption(const TCHAR *Value);
     void SetHelpText(const TCHAR *Value);
 
-    HWND GetHandle(void) { return window; }
-    ContainerWindow &GetWindow(void) { return window; }
-    virtual ContainerWindow &GetClientAreaWindow(void) { return window; }
-    Canvas &GetCanvas(void) { return window.get_canvas(); }
-    BitmapCanvas &GetTempDeviceContext(void) { return mHdcTemp; }
+    HWND GetHandle(void) { return *this; }
+    virtual ContainerWindow &GetClientAreaWindow(void) { return *this; }
+    Canvas &GetCanvas(void) { return get_canvas(); }
     WindowControl *GetOwner(void){return(mOwner);};
 
     int GetTag(void){return(mTag);};
@@ -303,11 +276,6 @@ class WndFrame:public WindowControl{
 
     virtual void Destroy(void);
 
-    virtual int OnMouseMove(WPARAM wParam, LPARAM lParam){
-		(void)wParam; (void)lParam;
-      return(1);
-    };
-
     void SetCaption(const TCHAR *Value);
 
     UINT GetCaptionStyle(void){return(mCaptionStyle);};
@@ -317,19 +285,19 @@ class WndFrame:public WindowControl{
 
     void SetIsListItem(bool Value){mIsListItem = Value;};
 
-
-    int OnLButtonDown(WPARAM wParam, LPARAM lParam);
-    int OnLButtonUp(WPARAM wParam, LPARAM lParam);
+    /* events from class Window */
+    virtual bool on_mouse_down(unsigned x, unsigned y);
 
   protected:
 
-    int OnKeyDown(WPARAM wParam, LPARAM lParam);
+    virtual bool on_key_down(unsigned key_code);
 
     bool mIsListItem;
 
     UINT mCaptionStyle;
 
-    void Paint(Canvas &canvas);
+    /** from class PaintWindow */
+    virtual void on_paint(Canvas &canvas);
 
 };
 
@@ -358,7 +326,7 @@ class WndListFrame:public WndFrame{
 
     virtual void Destroy(void);
 
-    int OnMouseMove(WPARAM wParam, LPARAM lParam);
+    bool on_mouse_move(unsigned x, unsigned y, unsigned keys);
     int OnItemKeyDown(WindowControl *Sender, WPARAM wParam, LPARAM lParam);
     int PrepareItemDraw(void);
     void ResetList(void);
@@ -379,13 +347,16 @@ class WndListFrame:public WndFrame{
     int ScrollbarTop;
     int ScrollbarWidth;
 
-    int OnLButtonDown(WPARAM wParam, LPARAM lParam);
-    int OnLButtonUp(WPARAM wParam, LPARAM lParam);
+    virtual bool on_mouse_down(unsigned x, unsigned y);
+    virtual bool on_mouse_up(unsigned x, unsigned y);
 
     OnListCallback_t mOnListCallback;
     OnListCallback_t mOnListEnterCallback;
     ListInfo_t mListInfo;
-    void Paint(Canvas &canvas);
+
+    /** from class PaintWindow */
+    virtual void on_paint(Canvas &canvas);
+
 	  RECT rcScrollBarButton;
 	  RECT rcScrollBar;
     int mMouseScrollBarYOffset; // where in the scrollbar button was mouse down at
@@ -420,8 +391,9 @@ class WndOwnerDrawFrame:public WndFrame{
   protected:
 
     OnPaintCallback_t mOnPaintCallback;
-    void Paint(Canvas &canvas);
 
+    /** from class PaintWindow */
+    virtual void on_paint(Canvas &canvas);
 };
 
 extern WindowControl *ActiveControl;
@@ -451,7 +423,9 @@ class WndForm:public WindowControl{
 
     int OnUnhandledMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-    void Paint(Canvas &canvas);
+    /** from class PaintWindow */
+    virtual void on_paint(Canvas &canvas);
+
     int cbTimerID;
 
   public:
@@ -494,7 +468,8 @@ class WndForm:public WindowControl{
 
     void SetCaption(const TCHAR *Value);
 
-    virtual int OnCommand(WPARAM wParam, LPARAM lParam);
+    /** from class Window */
+    virtual bool on_command(HWND hWnd, unsigned id, unsigned code);
 
     COLORREF SetForeColor(COLORREF Value);
     COLORREF SetBackColor(COLORREF Value);
@@ -516,7 +491,9 @@ class WndButton:public WindowControl{
 
   private:
 
-    void Paint(Canvas &canvas);
+    /** from class PaintWindow */
+    virtual void on_paint(Canvas &canvas);
+
     bool mDown;
     bool mDefault;
     int mLastDrawTextHeight;
@@ -529,12 +506,12 @@ class WndButton:public WindowControl{
     WndButton(WindowControl *Parent, const TCHAR *Name, const TCHAR *Caption, int X, int Y, int Width, int Height, void(*Function)(WindowControl * Sender) = NULL);
     virtual void Destroy(void);
 
-    int OnLButtonUp(WPARAM wParam, LPARAM lParam);
-    int OnLButtonDown(WPARAM wParam, LPARAM lParam);
-    int OnLButtonDoubleClick(WPARAM wParam, LPARAM lParam);
-
-    int OnKeyDown(WPARAM wParam, LPARAM lParam);
-    int OnKeyUp(WPARAM wParam, LPARAM lParam);
+    /* override event methods from class Window */
+    virtual bool on_mouse_up(unsigned x, unsigned y);
+    virtual bool on_mouse_down(unsigned x, unsigned y);
+    virtual bool on_mouse_double(unsigned x, unsigned y);
+    virtual bool on_key_down(unsigned key_code);
+    virtual bool on_key_up(unsigned key_code);
 
     void SetOnClickNotify(void(*Function)(WindowControl * Sender)){
       mOnClickNotify = Function;
@@ -551,8 +528,8 @@ class WndProperty:public WindowControl{
 
   private:
 
-    static HBITMAP hBmpLeft32;
-    static HBITMAP hBmpRight32;
+    static Bitmap hBmpLeft32;
+    static Bitmap hBmpRight32;
     static int InstCount;
 
     EditWindow edit;
@@ -567,7 +544,9 @@ class WndProperty:public WindowControl{
     bool mDownDown;
     bool mUpDown;
 
-    void Paint(Canvas &canvas);
+    /** from class PaintWindow */
+    virtual void on_paint(Canvas &canvas);
+
     void (*mOnClickUpNotify)(WindowControl * Sender);
     void (*mOnClickDownNotify)(WindowControl * Sender);
 
@@ -602,11 +581,11 @@ class WndProperty:public WindowControl{
 
     const Font *SetFont(const Font &font);
 
-    int OnKeyDown(WPARAM wParam, LPARAM lParam);
+    virtual bool on_key_down(unsigned key_code);
     int OnEditKeyDown(WPARAM wParam, LPARAM lParam);
-    int OnLButtonDown(WPARAM wParam, LPARAM lParam);
-    int OnLButtonUp(WPARAM wParam, LPARAM lParam);
-    int OnLButtonDoubleClick(WPARAM wParam, LPARAM lParam);
+    virtual bool on_mouse_down(unsigned x, unsigned y);
+    virtual bool on_mouse_up(unsigned x, unsigned y);
+    virtual bool on_mouse_double(unsigned x, unsigned y);
 
 //    int GetAsInteger(void){return(mValue);};
 //    int SetAsInteger(int Value);

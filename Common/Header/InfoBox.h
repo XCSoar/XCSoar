@@ -150,7 +150,7 @@ class InfoBox : public PaintWindow {
 protected:
   virtual bool on_mouse_down(unsigned x, unsigned y);
   virtual bool on_mouse_double(unsigned x, unsigned y);
-  virtual bool on_paint(Canvas &canvas);
+  virtual void on_paint(Canvas &canvas);
 };
 
 #endif

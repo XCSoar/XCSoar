@@ -195,12 +195,15 @@ public:
 protected:
   virtual bool on_create();
   virtual bool on_destroy();
+  virtual bool on_close();
   virtual bool on_resize(unsigned width, unsigned height);
+  virtual bool on_mouse_move(unsigned x, unsigned y, unsigned keys);
   virtual bool on_mouse_down(unsigned x, unsigned y);
   virtual bool on_mouse_up(unsigned x, unsigned y);
   virtual bool on_mouse_double(unsigned x, unsigned y);
   virtual bool on_key_down(unsigned key_code);
   virtual bool on_key_up(unsigned key_code);
+  virtual bool on_command(HWND hWnd, unsigned id, unsigned code);
 
   virtual LRESULT on_message(HWND hWnd, UINT message,
                              WPARAM wParam, LPARAM lParam);

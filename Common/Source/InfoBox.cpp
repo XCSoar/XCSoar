@@ -716,11 +716,11 @@ bool InfoBox::on_mouse_double(unsigned x, unsigned y)
   return true;
 }
 
-bool InfoBox::on_paint(Canvas &canvas)
+void
+InfoBox::on_paint(Canvas &canvas)
 {
   canvas.copy(buffer);
   PaintSelector(canvas);
-  return true;
 }
 
 void InitInfoBoxModule(void){

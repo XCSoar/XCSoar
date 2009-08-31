@@ -37,6 +37,7 @@ Copyright_License {
 
 #include "Screen/Window.hpp"
 #include "Screen/ContainerWindow.hpp"
+#include "Screen/Blank.hpp"
 #include "Interface.hpp"
 
 #ifdef PNA
@@ -55,7 +56,7 @@ Window::set(ContainerWindow *parent, LPCTSTR cls, LPCTSTR text,
   hWnd = ::CreateWindowEx(ex_style, cls, text, style,
                           left, top, width, height,
                           parent != NULL ? parent->hWnd : NULL,
-                          NULL, hInst, NULL);
+                          NULL, hInst, this);
 }
 
 void
@@ -128,8 +129,21 @@ Window::on_destroy()
 }
 
 bool
+Window::on_close()
+{
+  return false;
+}
+
+bool
 Window::on_resize(unsigned width, unsigned height)
 {
+  return false;
+}
+
+bool
+Window::on_mouse_move(unsigned x, unsigned y, unsigned keys)
+{
+  /* not handled here */
   return false;
 }
 
@@ -163,13 +177,17 @@ Window::on_key_up(unsigned key_code)
   return false;
 }
 
+bool
+Window::on_command(HWND hWnd, unsigned id, unsigned code)
+{
+}
+
 LRESULT
 Window::on_message(HWND _hWnd, UINT message,
                        WPARAM wParam, LPARAM lParam)
 {
   switch (message) {
   case WM_CREATE:
-    created(_hWnd);
     if (on_create()) return true;
     break;
 
@@ -177,28 +195,73 @@ Window::on_message(HWND _hWnd, UINT message,
     if (on_destroy()) return true;
     break;
 
+  case WM_CLOSE:
+    if (on_close())
+      /* true returned: message was handled */
+      return 0;
+    break;
+
   case WM_SIZE:
     if (on_resize(LOWORD(lParam), HIWORD(lParam))) return true;
     break;
 
+  case WM_MOUSEMOVE:
+    if (on_mouse_move(LOWORD(lParam), HIWORD(lParam), wParam))
+      return 0;
+    break;
+
   case WM_LBUTTONDOWN:
-    if (on_mouse_down(LOWORD(lParam), HIWORD(lParam))) return true;
+    InterfaceTimeoutReset();
+    if (on_mouse_down(LOWORD(lParam), HIWORD(lParam))) {
+      /* true returned: message was handled */
+      ResetDisplayTimeOut();
+      return 0;
+    }
     break;
 
   case WM_LBUTTONUP:
-    if (on_mouse_up(LOWORD(lParam), HIWORD(lParam))) return true;
+    InterfaceTimeoutReset();
+    if (on_mouse_up(LOWORD(lParam), HIWORD(lParam))) {
+      /* true returned: message was handled */
+      ResetDisplayTimeOut();
+      return 0;
+    }
     break;
 
   case WM_LBUTTONDBLCLK:
-    if (on_mouse_double(LOWORD(lParam), HIWORD(lParam))) return true;
+    InterfaceTimeoutReset();
+    if (on_mouse_double(LOWORD(lParam), HIWORD(lParam))) {
+      /* true returned: message was handled */
+      ResetDisplayTimeOut();
+      return 0;
+    }
     break;
 
   case WM_KEYDOWN:
-    if (on_key_down(wParam)) return true;
+    InterfaceTimeoutReset();
+    if (on_key_down(wParam)) {
+      /* true returned: message was handled */
+      ResetDisplayTimeOut();
+      return 0;
+    }
     break;
 
   case WM_KEYUP:
-    if (on_key_up(wParam)) return true;
+    InterfaceTimeoutReset();
+    if (on_key_up(wParam)) {
+      /* true returned: message was handled */
+      ResetDisplayTimeOut();
+      return 0;
+    }
+    break;
+
+  case WM_COMMAND:
+    InterfaceTimeoutReset();
+    if (on_command((HWND)lParam, LOWORD(wParam), HIWORD(wParam))) {
+      /* true returned: message was handled */
+      ResetDisplayTimeOut();
+      return 0;
+    }
     break;
   }
 
@@ -208,7 +271,20 @@ Window::on_message(HWND _hWnd, UINT message,
 LRESULT CALLBACK
 Window::WndProc(HWND _hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-  Window *widget = (Window *)get_userdata_pointer(_hWnd);
+  if (message == WM_GETMINMAXINFO)
+    /* WM_GETMINMAXINFO is called before WM_CREATE, and we havn't set
+       a Window pointer yet - let DefWindowProc() handle it */
+    return ::DefWindowProc(_hWnd, message, wParam, lParam);
 
-  return widget->on_message(_hWnd, message, wParam, lParam);
+  Window *window;
+  if (message == WM_NCCREATE) {
+    LPCREATESTRUCT cs = (LPCREATESTRUCT)lParam;
+
+    window = (Window *)cs->lpCreateParams;
+    window->created(_hWnd);
+    window->set_userdata(window);
+  } else
+    window = (Window *)get_userdata_pointer(_hWnd);
+
+  return window->on_message(_hWnd, message, wParam, lParam);
 }

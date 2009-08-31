@@ -112,13 +112,12 @@ PaintWindow::on_resize(unsigned width, unsigned height)
   return true;
 }
 
-bool
+void
 PaintWindow::on_paint(Canvas &canvas)
 {
   /* to be implemented by a subclass */
   /* this is not an abstract method yet until the OO transition of all
      PaintWindow users is complete */
-  return false;
 }
 
 LRESULT
@@ -128,14 +127,14 @@ PaintWindow::on_message(HWND hWnd, UINT message,
   switch (message) {
   case WM_ERASEBKGND:
     // we don't need one, we just paint over the top
-    return true;
+    return 0;
 
   case WM_PAINT:
     {
       PaintCanvas canvas(*this, hWnd);
       on_paint(canvas);
     }
-    return true;
+    return 0;
   }
 
   return Window::on_message(hWnd, message, wParam, lParam);
