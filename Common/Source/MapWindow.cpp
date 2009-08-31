@@ -293,7 +293,6 @@ void MapWindow::UpdateCaches(const bool force) {
 
 
 void MapWindow::DrawThreadLoop(bool first_time) {
-
   if (!dirtyEvent.test() && !first_time) {
     // redraw old screen, must have been a request for fast refresh
     get_canvas().copy(hdcDrawWindow);
