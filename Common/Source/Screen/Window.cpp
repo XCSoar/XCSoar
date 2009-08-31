@@ -160,6 +160,11 @@ Window::on_key_up(unsigned key_code)
   return false;
 }
 
+bool
+Window::on_command(HWND hWnd, unsigned id, unsigned code)
+{
+}
+
 LRESULT
 Window::on_message(HWND _hWnd, UINT message,
                        WPARAM wParam, LPARAM lParam)
@@ -196,6 +201,13 @@ Window::on_message(HWND _hWnd, UINT message,
 
   case WM_KEYUP:
     if (on_key_up(wParam)) return true;
+    break;
+
+  case WM_COMMAND:
+    if (on_command((HWND)lParam, LOWORD(wParam), HIWORD(wParam))) {
+      /* true returned: message was handled */
+      return 0;
+    }
     break;
   }
 

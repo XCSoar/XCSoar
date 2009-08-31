@@ -201,6 +201,7 @@ protected:
   virtual bool on_mouse_double(unsigned x, unsigned y);
   virtual bool on_key_down(unsigned key_code);
   virtual bool on_key_up(unsigned key_code);
+  virtual bool on_command(HWND hWnd, unsigned id, unsigned code);
 
   virtual LRESULT on_message(HWND hWnd, UINT message,
                              WPARAM wParam, LPARAM lParam);
