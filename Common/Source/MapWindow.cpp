@@ -397,7 +397,7 @@ bool MapWindow::register_class(HINSTANCE hInstance, const TCHAR* szWindowClass) 
 
   wc.hInstance = hInstance;
   wc.style = CS_VREDRAW | CS_HREDRAW | CS_DBLCLKS;
-  wc.lpfnWndProc = ::DefWindowProc;
+  wc.lpfnWndProc = Window::WndProc;
   wc.cbClsExtra = 0;
 #if (WINDOWSPC>0)
   wc.cbWndExtra = 0 ;
@@ -423,7 +423,6 @@ bool MapWindow::checkLabelBlock(const RECT brect) {
 /////////////////////////////////////////
 
 bool MapWindow::on_resize(unsigned width, unsigned height) {
-  StartupStore(TEXT("onsize\n"));
   resize(width, height);
 
   hdcDrawWindow.resize(width, height);
@@ -441,7 +440,6 @@ bool MapWindow::on_resize(unsigned width, unsigned height) {
 
 bool MapWindow::on_create()
 {
-  StartupStore(TEXT("on create\n"));
   hdcDrawWindow.set(get_canvas());
   hDCTemp.set(get_canvas());
   buffer_canvas.set(get_canvas());
@@ -451,7 +449,6 @@ bool MapWindow::on_create()
 
 bool MapWindow::on_destroy()
 {
-  StartupStore(TEXT("destroy\n"));
   hdcDrawWindow.reset();
   hDCTemp.reset();
   buffer_canvas.reset();

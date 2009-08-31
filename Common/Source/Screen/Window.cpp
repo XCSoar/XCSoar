@@ -280,8 +280,9 @@ Window::WndProc(HWND _hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     window = (Window *)cs->lpCreateParams;
     window->created(_hWnd);
     window->set_userdata(window);
-  } else
+  } else {
     window = (Window *)get_userdata_pointer(_hWnd);
+  }
 
   return window->on_message(_hWnd, message, wParam, lParam);
 }
