@@ -39,6 +39,7 @@ Copyright_License {
 #include "XCSoar.h"
 #include "Protection.hpp"
 #include "LogFile.hpp"
+#include "Interface.hpp"
 #include "MapWindowProjection.hpp"
 #include "ReplayLogger.hpp"
 #include "Math/FastMath.h"
@@ -71,7 +72,7 @@ static Color colTextBackgnd;
 #define ARROWYSIZE IBLSCALE(3)
 #define ARROWXSIZE IBLSCALE(7)
 
-GaugeVario::GaugeVario(ContainerWindow &parent)
+GaugeVario::GaugeVario(ContainerWindow &parent, const RECT MapRectBig)
  :polys(NULL), lines(NULL)
 {
   diValueTop.InitDone = false;
@@ -82,8 +83,6 @@ GaugeVario::GaugeVario(ContainerWindow &parent)
   diLabelBottom.InitDone = false;
 
   StartupStore(TEXT("Create Vario\n"));
-
-  RECT MapRectBig = MapWindowProjection::GetMapRect();
 
   set(parent,
       InfoBoxLayout::landscape

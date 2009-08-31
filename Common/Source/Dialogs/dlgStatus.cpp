@@ -52,6 +52,7 @@ Copyright_License {
 #include "Screen/MainWindow.hpp"
 #include "Calculations.h" // TODO danger! FAIFinishHeight
 #include "Math/SunEphemeris.hpp"
+#include "MapWindow.h"
 
 #include <assert.h>
 
@@ -655,7 +656,8 @@ void dlgStatusShowModal(int start_page){
     }
   }
 
-  nearest_waypoint = FindNearestWayPoint(GPS_INFO.Longitude,
+  nearest_waypoint = FindNearestWayPoint(map_window,
+					 GPS_INFO.Longitude,
                                          GPS_INFO.Latitude,
                                          100000.0, true); // big range limit
 

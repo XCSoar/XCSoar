@@ -478,13 +478,13 @@ bool TextInBoxMoveInView(POINT *offset, RECT *brect, const RECT &MapRect){
 
 // returns true if really wrote something
 bool TextInBox(Canvas &canvas, const TCHAR* Value, int x, int y,
-	       int size, TextInBoxMode_t Mode, bool noOverlap) {
+	       TextInBoxMode_t Mode, const RECT MapRect,
+	       LabelBlock *label_block) {
 
   RECT brect;
   POINT org;
   bool drawn=false;
-
-  RECT MapRect = MapWindowProjection::GetMapRect();
+  bool noOverlap = (label_block==NULL);
 
   if ((x<MapRect.left-WPCIRCLESIZE) ||
       (x>MapRect.right+(WPCIRCLESIZE*3)) ||
@@ -496,9 +496,7 @@ bool TextInBox(Canvas &canvas, const TCHAR* Value, int x, int y,
   org.x = x;
   org.y = y;
 
-  if (size==0) {
-    size = _tcslen(Value);
-  }
+  int size = _tcslen(Value);
 
   canvas.white_brush();
 
@@ -545,9 +543,13 @@ bool TextInBox(Canvas &canvas, const TCHAR* Value, int x, int y,
       y += offset.y;
     }
 
-    notoverlapping = MapWindow::checkLabelBlock(brect);
+    if (label_block) {
+      notoverlapping = label_block->check(brect);
+    } else {
+      notoverlapping = true;
+    }
 
-    if (!noOverlap || notoverlapping) {
+    if (notoverlapping) {
       HPEN oldPen;
       if (Mode.AsFlag.Border) {
         canvas.select(MapGfx.hpMapScale);
@@ -583,9 +585,13 @@ bool TextInBox(Canvas &canvas, const TCHAR* Value, int x, int y,
       y += offset.y;
     }
 
-    notoverlapping = MapWindow::checkLabelBlock(brect);
+    if (label_block) {
+      notoverlapping = label_block->check(brect);
+    } else {
+      notoverlapping = true;
+    }
 
-    if (!noOverlap || notoverlapping) {
+    if (notoverlapping) {
       canvas.set_background_color(Color(0xff, 0xff, 0xff));
       canvas.text_opaque(x, y, &brect, Value);
       drawn=true;
@@ -598,9 +604,13 @@ bool TextInBox(Canvas &canvas, const TCHAR* Value, int x, int y,
     brect.top = y+((tsize.cy+4)>>3)-2;
     brect.bottom = brect.top+3+tsize.cy-((tsize.cy+4)>>3);
 
-    notoverlapping = MapWindow::checkLabelBlock(brect);
+    if (label_block) {
+      notoverlapping = label_block->check(brect);
+    } else {
+      notoverlapping = true;
+    }
 
-    if (!noOverlap || notoverlapping) {
+    if (notoverlapping) {
       canvas.set_text_color(Color(0xff,0xff,0xff));
 
 #if (WINDOWSPC>0)
@@ -636,9 +646,13 @@ bool TextInBox(Canvas &canvas, const TCHAR* Value, int x, int y,
     brect.top = y+((tsize.cy+4)>>3)-2;
     brect.bottom = brect.top+3+tsize.cy-((tsize.cy+4)>>3);
 
-    notoverlapping = MapWindow::checkLabelBlock(brect);
+    if (label_block) {
+      notoverlapping = label_block->check(brect);
+    } else {
+      notoverlapping = true;
+    }
 
-    if (!noOverlap || notoverlapping) {
+    if (notoverlapping) {
 #if (WINDOWSPC>0)
       canvas.background_transparent();
       canvas.text(x, y, Value);

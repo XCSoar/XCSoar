@@ -96,7 +96,7 @@ void MapWindow::RenderMapWindowBg(Canvas &canvas, const RECT rc,
       BigZoom = true;
     }
     mutexTerrainData.Lock();
-    DrawTerrain(canvas, rc, sunazimuth, sunelevation,
+    DrawTerrain(canvas, *this, sunazimuth, sunelevation,
 		DrawInfo.Longitude, DrawInfo.Latitude,
 	        BigZoom);
 
@@ -111,7 +111,7 @@ void MapWindow::RenderMapWindowBg(Canvas &canvas, const RECT rc,
   }
 
   if (EnableTopology) {
-    DrawTopology(canvas, rc);
+    DrawTopology(canvas, *this, rc);
   }
 
   // reset label over-write preventer
@@ -179,7 +179,7 @@ void MapWindow::RenderMapWindowBg(Canvas &canvas, const RECT rc,
 
   if ((EnableTerrain && (DerivedDrawInfo.TerrainValid))
       || RasterTerrain::render_weather) {
-    DrawSpotHeights(canvas);
+    DrawSpotHeights(canvas, *this, label_block);
   }
 
   if (extGPSCONNECT) {
@@ -216,7 +216,7 @@ void MapWindow::RenderMapWindowBg(Canvas &canvas, const RECT rc,
   }
 
   // marks on top...
-  DrawMarks(canvas, rc);
+  DrawMarks(canvas, *this, rc);
 }
 
 
@@ -273,3 +273,88 @@ void MapWindow::RenderMapWindow(Canvas &canvas, const RECT rc)
 
   DrawGPSStatus(canvas, rc);
 }
+
+
+///////
+
+
+//////////////////////////////////////////////////
+
+TerrainRenderer *terrain_renderer = NULL;
+
+void DrawTerrain(Canvas &canvas, 
+		 MapWindowProjection &map_projection,
+		 const double sunazimuth, const double sunelevation,
+		 const double lon, const double lat,
+		 const bool isBigZoom)
+{
+  // TODO feature: sun-based rendering option
+
+  if (!RasterTerrain::isTerrainLoaded()) {
+    return;
+  }
+
+  if (!terrain_renderer) {
+    terrain_renderer = new TerrainRenderer(map_projection.GetMapRectBig());
+  }
+  terrain_renderer->Draw(canvas, map_projection, sunazimuth, sunelevation,
+			 lon, lat, isBigZoom);
+}
+
+
+void CloseTerrainRenderer() {
+  if (terrain_renderer) {
+    delete terrain_renderer;
+  }
+}
+
+
+static void DrawSpotHeight_Internal(Canvas &canvas, 
+				    MapWindowProjection &map_projection,
+				    LabelBlock &label_block,
+				    TCHAR *Buffer, POINT pt) {
+  int size = _tcslen(Buffer);
+  if (size==0) {
+    return;
+  }
+  POINT orig = map_projection.GetOrigScreen();
+  RECT brect;
+  SIZE tsize = canvas.text_size(Buffer);
+
+  pt.x+= 2+orig.x;
+  pt.y+= 2+orig.y;
+  brect.left = pt.x;
+  brect.right = brect.left+tsize.cx;
+  brect.top = pt.y;
+  brect.bottom = brect.top+tsize.cy;
+
+  if (!label_block.check(brect))
+    return;
+
+  canvas.text(pt.x, pt.y, Buffer);
+}
+
+#include "RasterWeather.h"
+
+void DrawSpotHeights(Canvas &canvas, 
+		     MapWindowProjection &map_projection,
+		     LabelBlock &label_block) {
+  // JMW testing, display of spot max/min
+  if (!RasterTerrain::render_weather)
+    return;
+  if (!terrain_renderer)
+    return;
+
+  canvas.select(TitleWindowFont);
+
+  TCHAR Buffer[20];
+
+  RASP.ValueToText(Buffer, terrain_renderer->spot_max_val);
+  DrawSpotHeight_Internal(canvas, map_projection, label_block, 
+			  Buffer, terrain_renderer->spot_max_pt);
+
+  RASP.ValueToText(Buffer, terrain_renderer->spot_min_val);
+  DrawSpotHeight_Internal(canvas, map_projection, label_block,
+			  Buffer, terrain_renderer->spot_min_pt);
+}
+

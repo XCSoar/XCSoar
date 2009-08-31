@@ -128,8 +128,8 @@ void MapWindow::MapWaypointLabelSortAndRender(Canvas &canvas) {
     // otherwise, does comparison
     if (E->inTask) {
       TextInBox(canvas, E->Name, E->Pos.x,
-                E->Pos.y, 0, E->Mode,
-                false);
+                E->Pos.y, E->Mode, MapRect,
+                NULL);
     }
   }
 
@@ -139,8 +139,7 @@ void MapWindow::MapWaypointLabelSortAndRender(Canvas &canvas) {
     MapWaypointLabel_t *E = &MapWaypointLabelList[j];
     if (!E->inTask) {
       TextInBox(canvas, E->Name, E->Pos.x,
-                E->Pos.y, 0, E->Mode,
-                true);
+                E->Pos.y, E->Mode, MapRect, &label_block);
     }
   }
 }

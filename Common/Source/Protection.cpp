@@ -93,9 +93,9 @@ void TriggerAll(void) {
 }
 
 void TriggerRedraws() {
-  if (MapWindow::IsDisplayRunning()) {
+  if (map_window.IsDisplayRunning()) {
     if (gpsUpdatedTriggerEvent.test()) {
-      MapWindow::dirtyEvent.trigger();
+      map_window.dirtyEvent.trigger();
       if (!drawTriggerEvent.test()) {
 	drawTriggerEvent.trigger();
       }
@@ -113,7 +113,7 @@ void TriggerRedraws() {
 DWORD InstrumentThread (LPVOID lpvoid) {
 	(void)lpvoid;
   // wait for proper startup signal
-  while (!MapWindow::IsDisplayRunning()) {
+  while (!map_window.IsDisplayRunning()) {
     Sleep(100);
   }
 
@@ -124,7 +124,7 @@ DWORD InstrumentThread (LPVOID lpvoid) {
       continue;
     }
 
-    if (MapWindow::IsDisplayRunning()) {
+    if (map_window.IsDisplayRunning()) {
       if (EnableVarioGauge) {
 	gauge_vario->Render();
       }
@@ -146,7 +146,7 @@ DWORD CalculationThread (LPVOID lpvoid) {
   need_calculations_slow = false;
 
   // wait for proper startup signal
-  while (!MapWindow::IsDisplayRunning()) {
+  while (!map_window.IsDisplayRunning()) {
     Sleep(100);
   }
 
@@ -192,7 +192,7 @@ DWORD CalculationThread (LPVOID lpvoid) {
 
     if (gpsUpdatedTriggerEvent.test()) {
       if(DoCalculations(&tmp_GPS_INFO,&tmp_CALCULATED_INFO)){
-	MapWindow::dirtyEvent.trigger();
+	map_window.dirtyEvent.trigger();
         need_calculations_slow = true;
       }
       InfoBoxManager::SetDirty(true);
@@ -207,7 +207,7 @@ DWORD CalculationThread (LPVOID lpvoid) {
       break; // drop out on exit
 
     if (need_calculations_slow) {
-      DoCalculationsSlow(&tmp_GPS_INFO,&tmp_CALCULATED_INFO);
+      DoCalculationsSlow(&tmp_GPS_INFO,&tmp_CALCULATED_INFO, map_window);
       need_calculations_slow = false;
     }
 

@@ -208,7 +208,7 @@ void MapWindow::DrawMapScale(Canvas &canvas, const RECT rc /* the Map Rect*/,
     #ifdef DRAWLOAD
     canvas.select(MapWindowFont);
     _stprintf(Scale,TEXT("            %d %d ms"), timestats_av,
-              misc_tick_count);
+              0);
     canvas.text(rc.left, rc.top, Scale);
     #endif
   }

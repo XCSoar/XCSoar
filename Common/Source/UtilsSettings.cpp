@@ -57,7 +57,7 @@ extern MapWindow map_window;
 
 
 void SettingsEnter() {
-  MapWindowBase::SuspendDrawingThread();
+  map_window.SuspendDrawingThread();
   // This prevents the map and calculation threads from doing anything
   // with shared data while it is being changed (also prevents drawing)
 
@@ -117,14 +117,14 @@ void SettingsLeave() {
       RasterTerrain::ServiceFullReload(GPS_INFO.Latitude,
                                        GPS_INFO.Longitude);
 
-      MapWindow::ForceVisibilityScan();
+      map_window.ForceVisibilityScan();
     }
 
   if (TOPOLOGYFILECHANGED)
     {
       CloseTopology();
       OpenTopology();
-      MapWindow::ForceVisibilityScan();
+      map_window.ForceVisibilityScan();
     }
 
   if(AIRSPACEFILECHANGED)
@@ -132,7 +132,7 @@ void SettingsLeave() {
       CloseAirspace();
       ReadAirspace();
       SortAirspace();
-      MapWindow::ForceVisibilityScan();
+      map_window.ForceVisibilityScan();
     }
 
   if (POLARFILECHANGED) {
@@ -158,7 +158,7 @@ void SettingsLeave() {
     devRestart();
   }
 
-  MapWindowBase::ResumeDrawingThread();
+  map_window.ResumeDrawingThread();
   // allow map and calculations threads to continue on their merry way
 }
 

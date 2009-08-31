@@ -1000,14 +1000,15 @@ void InputEvents::ShowMenu() {
 
 #include "MapWindowProjection.hpp"
 #include "InfoBoxManager.h"
+#include "MapWindow.h"
 
 void InputEvents::ProcessMenuTimer() {
   if (InfoBoxManager::IsFocus()) {
     InputEvents::setMode(TEXT("infobox"));
   } else {
     if(MenuTimeOut==MenuTimeoutMax) {
-      if (MapWindowProjection::isPan()
-	  && !MapWindowProjection::isTargetPan()) {
+      if (map_window.isPan()
+	  && !map_window.isTargetPan()) {
 	InputEvents::setMode(TEXT("pan"));
       } else {
 	InputEvents::setMode(TEXT("default"));

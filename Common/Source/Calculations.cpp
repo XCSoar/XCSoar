@@ -180,7 +180,8 @@ void AnnounceWayPointSwitch(DERIVED_INFO *Calculated, bool do_advance) {
 }
 
 
-void DoCalculationsSlow(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
+void DoCalculationsSlow(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
+			MapWindowProjection &map_projection) {
   // do slow part of calculations (cleanup of caches etc, nothing
   // that changes the state)
 
@@ -197,7 +198,7 @@ void DoCalculationsSlow(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
     AirspaceWarning(Basic, Calculated);
   }
 
-  TerrainFootprint(Basic, Calculated);
+  TerrainFootprint(Basic, Calculated, map_projection);
 
   DoBestAlternateSlow(Basic, Calculated);
 

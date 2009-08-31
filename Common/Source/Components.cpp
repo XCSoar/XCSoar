@@ -272,7 +272,7 @@ bool Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
 
   StartupStore(TEXT("Create map window\n"));
 
-  MapWindow::SetMapRect(rcsmall);
+  map_window.SetMapRect(rcsmall);
   map_window.register_class(hInst, TEXT("MapWindowClass"));
   map_window.set(main_window, TEXT("MapWindowClass"),
                  0, 0, rc.right - rc.left, rc.bottom-rc.top);
@@ -316,7 +316,7 @@ bool Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
 
   GaugeCDI::Create();
 
-  gauge_vario = new GaugeVario(main_window);
+  gauge_vario = new GaugeVario(main_window, rc);
 
   LoadWindFromRegistry();
   CalculateNewPolarCoef();
@@ -372,7 +372,7 @@ bool Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
 
   // Finally ready to go
   StartupStore(TEXT("CreateDrawingThread\n"));
-  MapWindow::CreateDrawingThread();
+  map_window.CreateDrawingThread();
   StartupStore(TEXT("ShowInfoBoxes\n"));
   InfoBoxManager::Show();
 
@@ -441,7 +441,7 @@ void Shutdown(void) {
   TriggerAll();
 
   StartupStore(TEXT("CloseDrawingThread\n"));
-  MapWindowBase::CloseDrawingThread();
+  map_window.CloseDrawingThread();
 
   // Clear data
 

@@ -49,31 +49,25 @@ Copyright_License {
 
 int GliderScreenPosition = 20; // 20% from bottom
 DisplayOrientation_t DisplayOrientation = TRACKUP;
-bool MapWindowProjection::GliderCenter=false;
 
-rectObj MapWindowProjection::screenbounds_latlon;
-RECT MapWindowProjection::MapRect;
-RECT MapWindowProjection::MapRectBig;
-RECT MapWindowProjection::MapRectSmall;
-POINT MapWindowProjection::Orig_Screen;
-double MapWindowProjection::PanLatitude = 0.0;
-double MapWindowProjection::PanLongitude = 0.0;
-double MapWindowProjection::DisplayAngle = 0.0;
-double MapWindowProjection::DrawScale;
-double MapWindowProjection::InvDrawScale;
-double MapWindowProjection::RequestMapScale=5;
-double MapWindowProjection::MapScale=5;
-double MapWindowProjection::MapScaleOverDistanceModify=5/DISTANCEMODIFY;
-double MapWindowProjection::ResMapScaleOverDistanceModify = 0.0;
-double MapWindowProjection::DisplayAircraftAngle = 0.0;
-int MapWindowProjection::ScaleListCount = 0;
-double MapWindowProjection::ScaleList[];
-int MapWindowProjection::ScaleCurrent;
-bool MapWindowProjection::EnablePan = false;
+MapWindowProjection::MapWindowProjection():
+  GliderCenter(false),
+  PanLatitude ( 0.0),
+  PanLongitude ( 0.0),
+  DisplayAngle ( 0.0),
+  RequestMapScale(5),
+  MapScale(5),
+  MapScaleOverDistanceModify(5/DISTANCEMODIFY),
+  ResMapScaleOverDistanceModify ( 0.0),
+  DisplayAircraftAngle ( 0.0),
+  ScaleListCount ( 0),
+  EnablePan ( false),
+  TargetPan ( false),
+  TargetPanIndex ( 0),
+  TargetZoomDistance ( 500.0)
+{
 
-bool MapWindowProjection::TargetPan = false;
-int MapWindowProjection::TargetPanIndex = 0;
-double MapWindowProjection::TargetZoomDistance = 500.0;
+}
 
 #include "WayPoint.hpp"
 

@@ -49,18 +49,24 @@ Copyright_License {
 
 class MapWindowBase {
  public:
-  static Trigger  dirtyEvent;
-  static void     CloseDrawingThread(void);
-  static void     SuspendDrawingThread(void);
-  static void     ResumeDrawingThread(void);
-  static bool     IsDisplayRunning();
-  static void     CreateDrawingThread(void);
-  static Mutex    mutexRun;
+  MapWindowBase():
+    dirtyEvent(TEXT("mapDirty")),
+    window_initialised(false),
+    hDrawThread(0),
+    dwDrawThreadID(0) {};
+
+  Trigger  dirtyEvent;
+  void     CloseDrawingThread(void);
+  void     SuspendDrawingThread(void);
+  void     ResumeDrawingThread(void);
+  bool     IsDisplayRunning();
+  void     CreateDrawingThread(void);
+  Mutex    mutexRun;
  protected:
-  static DWORD    dwDrawThreadID;
-  static HANDLE   hDrawThread;
-  static Mutex    mutexStart;
-  static bool     window_initialised;
+  DWORD    dwDrawThreadID;
+  HANDLE   hDrawThread;
+  Mutex    mutexStart;
+  bool     window_initialised;
 };
 
 
@@ -68,171 +74,180 @@ class MapWindow
 : public PaintWindow, public MapWindowBase,
   public MapWindowProjection {
  public:
+  MapWindow();
 
   bool register_class(HINSTANCE hInstance, const TCHAR* szWindowClass);
 
   // inter-process, used only on file change
-  static void ForceVisibilityScan() {
+  void ForceVisibilityScan() {
     askVisibilityScan = true;
   }
 
   // used by dlgTarget
-  static bool TargetDragged(double *longitude, double *latitude);
-  static bool SetTargetPan(bool dopan, int task_index);
+  bool TargetDragged(double *longitude, double *latitude);
+  bool SetTargetPan(bool dopan, int task_index);
 
   // used only by XCSoar.cpp on instantiation
   static LRESULT CALLBACK MapWndProc (HWND hWnd, UINT uMsg,
 				      WPARAM wParam,LPARAM lParam);
 
   // use at startup
-  static void SetMapRect(RECT rc) {
+  void SetMapRect(RECT rc) {
     MapRect = rc;
   }
 
-  static bool isMapFullScreen(); // gui feedback
+  bool isMapFullScreen(); // gui feedback
 
-  static void RequestToggleFullScreen();
-  static void RequestFullScreen(bool full);
+  void RequestToggleFullScreen();
+  void RequestFullScreen(bool full);
 
   // used by topology store
-  static void ScanVisibility(rectObj *bounds_active);
-  static bool RenderTimeAvailable(); // used only by TopologyStore.cpp
+  void ScanVisibility(rectObj *bounds_active);
+  bool RenderTimeAvailable(); // used only by TopologyStore.cpp
 
   // input events or reused code
-  static void Event_SetZoom(double value);
-  static void Event_ScaleZoom(int vswitch);
-  static void Event_Pan(int vswitch);
-  static void Event_TerrainTopology(int vswitch);
-  static void Event_AutoZoom(int vswitch);
-  static void Event_PanCursor(int dx, int dy);
+  void Event_SetZoom(double value);
+  void Event_ScaleZoom(int vswitch);
+  void Event_Pan(int vswitch);
+  void Event_TerrainTopology(int vswitch);
+  void Event_AutoZoom(int vswitch);
+  void Event_PanCursor(int dx, int dy);
 
   // Drawing primitives (should go outside this class if reusable)
   // (only used by Topology)
-  static void DrawBitmapIn(Canvas &canvas, const POINT &sc, const Bitmap &h);
+  void DrawBitmapIn(Canvas &canvas, const POINT &sc, const Bitmap &h);
 
   // used by MapWindowBase
   static DWORD DrawThread (LPVOID);
+  DWORD _DrawThread ();
 
   ////////////////////////////////////////////////////////////////////
  private:
 
-  static void DrawThreadLoop (const bool first);
-  static void DrawThreadInitialise (void);
+  void DrawThreadLoop (const bool first);
+  void DrawThreadInitialise (void);
 
   // state
-  static BOOL     Initialised;
-  static bool     user_asked_redraw;
+  BOOL     Initialised;
+  bool     user_asked_redraw;
 
-  static void     UpdateInfo(NMEA_INFO *nmea_info,
-			     DERIVED_INFO *derived_info);
+  void     UpdateInfo(NMEA_INFO *nmea_info,
+		      DERIVED_INFO *derived_info);
 
   // display management
-  static void          RefreshMap();
-  static void          SwitchZoomClimb(void);
+  void          RefreshMap();
+  void          SwitchZoomClimb(void);
 
   // state/localcopy/local data
-  static double        TargetDrag_Latitude;
-  static double        TargetDrag_Longitude;
-  static int           TargetDrag_State;
-  static POINT         Groundline[NUMTERRAINSWEEPS+1];
-  static bool          LandableReachable;
+  double        TargetDrag_Latitude;
+  double        TargetDrag_Longitude;
+  int           TargetDrag_State;
+  POINT         Groundline[NUMTERRAINSWEEPS+1];
+  bool          LandableReachable;
 
   // projection
-  static bool      BigZoom;
-  static bool      askFullScreen;
-  static bool      MapFullScreen;
-  static bool      askVisibilityScan; // called only by XCSoar.cpp on
+  bool      BigZoom;
+  bool      askFullScreen;
+  bool      MapFullScreen;
+  bool      askVisibilityScan; // called only by XCSoar.cpp on
 			              // settings reload
-  static void      StoreRestoreFullscreen(bool);
-  static void      ToggleFullScreenStart();
+  void      StoreRestoreFullscreen(bool);
+  void      ToggleFullScreenStart();
 
-  static double    findMapScaleBarSize(const RECT rc);
+  double    findMapScaleBarSize(const RECT rc);
 
   // other
-  static DWORD     fpsTime0;
-  static DWORD     timestamp_newdata;
-  static void      UpdateTimeStats(bool start);
+  DWORD     fpsTime0;
+  DWORD     timestamp_newdata;
+  void      UpdateTimeStats(bool start);
 
   // interface handlers
-  static int ProcessVirtualKey(int X, int Y, long keytime, short vkmode);
+  int ProcessVirtualKey(int X, int Y, long keytime, short vkmode);
 
   // display element functions
 
-  static void ScanVisibilityWaypoints(rectObj *bounds_active);
-  static void ScanVisibilityAirspace(rectObj *bounds_active);
+  void ScanVisibilityWaypoints(rectObj *bounds_active);
+  void ScanVisibilityAirspace(rectObj *bounds_active);
 
-  static void CalculateScreenPositions(POINT Orig, RECT rc,
+  void CalculateScreenPositions(POINT Orig, RECT rc,
                                        POINT *Orig_Aircraft);
-  static void CalculateScreenPositionsTask();
-  static void CalculateScreenPositionsWaypoints();
-  static void CalculateScreenPositionsGroundline();
-  static void CalculateScreenPositionsAirspace();
-  static void CalculateScreenPositionsAirspaceCircle(AIRSPACE_CIRCLE& circ);
-  static void CalculateScreenPositionsAirspaceArea(AIRSPACE_AREA& area);
-  static void CalculateScreenPositionsThermalSources();
-  static void CalculateWaypointReachable(void);
-  static bool WaypointInTask(int ind);
-  static void MapWaypointLabelSortAndRender(Canvas &canvas);
+  void CalculateScreenPositionsTask();
+  void CalculateScreenPositionsWaypoints();
+  void CalculateScreenPositionsGroundline();
+  void CalculateScreenPositionsAirspace();
+  void CalculateScreenPositionsAirspaceCircle(AIRSPACE_CIRCLE& circ);
+  void CalculateScreenPositionsAirspaceArea(AIRSPACE_AREA& area);
+  void CalculateScreenPositionsThermalSources();
+  void CalculateWaypointReachable(void);
+  bool WaypointInTask(int ind);
+  void MapWaypointLabelSortAndRender(Canvas &canvas);
 
   // display renderers
-  static void DrawAircraft(Canvas &canvas, const POINT Orig);
-  static void DrawCrossHairs(Canvas &canvas, const POINT Orig, const RECT rc);
-  static void DrawGlideCircle(Canvas &canvas, const POINT Orig, const RECT rc); // VENTA3
-  static void DrawBestCruiseTrack(Canvas &canvas, const POINT Orig);
-  static void DrawCompass(Canvas &canvas, const RECT rc);
-  static void DrawHorizon(Canvas &canvas, const RECT rc);
-  static void DrawWindAtAircraft2(Canvas &canvas, POINT Orig, RECT rc);
-  static void DrawAirSpace(Canvas &canvas, const RECT rc, Canvas &buffer);
-  static void DrawWaypoints(Canvas &canvas, const RECT rc);
-  static void DrawWaypointsNew(Canvas &canvas, const RECT rc); // VENTA5
-  static void DrawLook8000(Canvas &canvas, const RECT rc); // VENTA5
-  static void DrawFlightMode(Canvas &canvas, const RECT rc);
-  static void DrawGPSStatus(Canvas &canvas, const RECT rc);
-  static double DrawTrail(Canvas &canvas, const POINT Orig, const RECT rc);
-  static void DrawTeammate(Canvas &canvas, const RECT rc);
-  static void DrawTrailFromTask(Canvas &canvas, const RECT rc, const double);
-  static void DrawOffTrackIndicator(Canvas &canvas, const RECT rc);
-  static void DrawProjectedTrack(Canvas &canvas, const RECT rc, const POINT Orig);
-  static void DrawStartSector(Canvas &canvas, const RECT rc, POINT &Start,
+  void DrawAircraft(Canvas &canvas, const POINT Orig);
+  void DrawCrossHairs(Canvas &canvas, const POINT Orig, const RECT rc);
+  void DrawGlideCircle(Canvas &canvas, const POINT Orig, const RECT rc); // VENTA3
+  void DrawBestCruiseTrack(Canvas &canvas, const POINT Orig);
+  void DrawCompass(Canvas &canvas, const RECT rc);
+  void DrawHorizon(Canvas &canvas, const RECT rc);
+  void DrawWindAtAircraft2(Canvas &canvas, POINT Orig, RECT rc);
+  void DrawAirSpace(Canvas &canvas, const RECT rc, Canvas &buffer);
+  void DrawWaypoints(Canvas &canvas, const RECT rc);
+  void DrawWaypointsNew(Canvas &canvas, const RECT rc); // VENTA5
+  void DrawLook8000(Canvas &canvas, const RECT rc); // VENTA5
+  void DrawFlightMode(Canvas &canvas, const RECT rc);
+  void DrawGPSStatus(Canvas &canvas, const RECT rc);
+  double DrawTrail(Canvas &canvas, const POINT Orig, const RECT rc);
+  void DrawTeammate(Canvas &canvas, const RECT rc);
+  void DrawTrailFromTask(Canvas &canvas, const RECT rc, const double);
+  void DrawOffTrackIndicator(Canvas &canvas, const RECT rc);
+  void DrawProjectedTrack(Canvas &canvas, const RECT rc, const POINT Orig);
+  void DrawStartSector(Canvas &canvas, const RECT rc, POINT &Start,
                               POINT &End, int Index);
-  static void DrawTask(Canvas &canvas, RECT rc, const POINT &Orig_Aircraft);
-  static void DrawThermalEstimate(Canvas &canvas, const RECT rc);
-  static void DrawTaskAAT(Canvas &canvas, const RECT rc, Canvas &buffer);
-  static void DrawAbortedTask(Canvas &canvas, const RECT rc, const POINT Orig);
+  void DrawTask(Canvas &canvas, RECT rc, const POINT &Orig_Aircraft);
+  void DrawThermalEstimate(Canvas &canvas, const RECT rc);
+  void DrawTaskAAT(Canvas &canvas, const RECT rc, Canvas &buffer);
+  void DrawAbortedTask(Canvas &canvas, const RECT rc, const POINT Orig);
 
-  static void DrawBearing(Canvas &canvas, const RECT rc, int bBearingValid);
-  static void DrawMapScale(Canvas &canvas, const RECT rc,
+  void DrawBearing(Canvas &canvas, const RECT rc, int bBearingValid);
+  void DrawMapScale(Canvas &canvas, const RECT rc,
 			   const bool ScaleChangeFeedback);
-  static void DrawMapScale2(Canvas &canvas, const RECT rc,
+  void DrawMapScale2(Canvas &canvas, const RECT rc,
 			    const POINT Orig_Aircraft);
-  static void DrawFinalGlide(Canvas &canvas, const RECT rc);
-  static void DrawThermalBand(Canvas &canvas, const RECT rc);
-  static void DrawGlideThroughTerrain(Canvas &canvas, const RECT rc);
-  static void DrawTerrainAbove(Canvas &hDC, const RECT rc, Canvas &buffer);
-  static void DrawCDI();
-  //  static void DrawSpeedToFly(HDC hDC, RECT rc);
-  static void DrawFLARMTraffic(Canvas &canvas, RECT rc, POINT Orig_Aircraft);
+  void DrawFinalGlide(Canvas &canvas, const RECT rc);
+  void DrawThermalBand(Canvas &canvas, const RECT rc);
+  void DrawGlideThroughTerrain(Canvas &canvas, const RECT rc);
+  void DrawTerrainAbove(Canvas &hDC, const RECT rc, Canvas &buffer);
+  void DrawCDI();
+  //  void DrawSpeedToFly(HDC hDC, RECT rc);
+  void DrawFLARMTraffic(Canvas &canvas, RECT rc, POINT Orig_Aircraft);
 
-  static void ClearAirSpace(Canvas &dc, bool fill);
+  void ClearAirSpace(Canvas &dc, bool fill);
 
   // thread, main functions
-  static void RenderMapWindow(Canvas &canvas, const RECT rc);
-  static void RenderMapWindowBg(Canvas &canvas, const RECT rc,
+  void RenderMapWindow(Canvas &canvas, const RECT rc);
+  void RenderMapWindowBg(Canvas &canvas, const RECT rc,
 				const POINT &Orig,
 				const POINT &Orig_Aircraft);
-  static void UpdateCaches(const bool force=false);
+  void UpdateCaches(const bool force=false);
 
   // graphics vars
 
-  static BufferCanvas hdcDrawWindow;
-  static BitmapCanvas hDCTemp;
-  static BufferCanvas buffer_canvas;
-  static BufferCanvas hDCMask;
+  BufferCanvas hdcDrawWindow;
+  BitmapCanvas hDCTemp;
+  BufferCanvas buffer_canvas;
+  BufferCanvas hDCMask;
 
   //
-  static LabelBlock label_block;
+  LabelBlock label_block;
  public:
-  static bool checkLabelBlock(RECT rc);
+  bool checkLabelBlock(RECT rc);
+  LabelBlock *getLabelBlock() {
+    return &label_block;
+  }
+ protected:
+  void on_size(int width, int height);
+  void on_create(HWND hWnd);
+  void on_destroy();
 };
 
 #endif

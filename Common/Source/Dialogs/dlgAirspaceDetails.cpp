@@ -48,6 +48,7 @@ Copyright_License {
 #include "Math/Earth.hpp"
 #include "Math/Units.h"
 #include "Screen/MainWindow.hpp"
+#include "MapWindow.h"
 
 #include <assert.h>
 
@@ -130,7 +131,8 @@ static void SetValues(void) {
 				index_area);
     range =
       RangeAirspaceArea(GPS_INFO.Longitude, GPS_INFO.Latitude,
-			index_area, &bearing);
+			index_area, &bearing,
+			map_window);
   }
   if (index_circle >=0) {
     atype = AirspaceCircle[index_circle].Type;

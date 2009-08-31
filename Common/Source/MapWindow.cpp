@@ -115,43 +115,25 @@ ScreenGraphics MapGfx;
 
 ///
 
-int misc_tick_count=0;
+MapWindow::MapWindow()
+  :MapWindowProjection(),
+   TargetDrag_State(0),
+   TargetDrag_Latitude(0),
+   TargetDrag_Longitude(0),
+   BigZoom(true),
+   LandableReachable(false),
+   fpsTime0(0),
+   MapFullScreen(false),
+   askFullScreen(false),
+   askVisibilityScan(false),
+   user_asked_redraw(false)
+{
 
-int MapWindow::TargetDrag_State = 0;
-double MapWindow::TargetDrag_Latitude = 0;
-double MapWindow::TargetDrag_Longitude = 0;
+}
 
-///////////////////
-NMEA_INFO MapWindowData::DrawInfo;
-DERIVED_INFO MapWindowData::DerivedDrawInfo;
-
-///////////////////
-
-bool  MapWindow::BigZoom = true;
-bool  MapWindow::LandableReachable = false;
-POINT MapWindow::Groundline[NUMTERRAINSWEEPS+1];
-DWORD MapWindow::fpsTime0 = 0;
-bool  MapWindow::MapFullScreen = false;
-bool  MapWindow::askFullScreen = false;
-bool  MapWindow::askVisibilityScan = false;
-
-/////////////////////////////////
-
-BufferCanvas MapWindow::hdcDrawWindow;
-BitmapCanvas MapWindow::hDCTemp;
-BufferCanvas MapWindow::buffer_canvas;
-BufferCanvas MapWindow::hDCMask;
-LabelBlock MapWindow::label_block;
-
-extern void ShowMenu();
-
-///////////////////
 
 int timestats_av = 0;
-
-DWORD MapWindow::timestamp_newdata=0;
 int cpuload=0;
-
 bool timestats_dirty=false;
 
 void MapWindow::UpdateTimeStats(bool start) {
@@ -175,7 +157,6 @@ void MapWindow::UpdateTimeStats(bool start) {
 }
 
 
-bool MapWindow::user_asked_redraw = false;
 
 
 void MapWindow::RefreshMap() {
@@ -216,56 +197,274 @@ void MapWindow::StoreRestoreFullscreen(bool store) {
 ///////////////////////////////////////////////////////////////////////////
 
 
-static void SetFontInfo(Canvas &canvas, FontHeightInfo_t *FontHeightInfo){
-  TEXTMETRIC tm;
-  int x,y=0;
-  RECT  rec;
-  int top, bottom;
+bool MapWindow::RenderTimeAvailable() {
+  DWORD fpsTime = ::GetTickCount();
 
-  GetTextMetrics(canvas, &tm);
-  FontHeightInfo->Height = tm.tmHeight;
-  FontHeightInfo->AscentHeight = tm.tmAscent;
-  FontHeightInfo->CapitalHeight = 0;
+  if (dirtyEvent.test())
+    return false;
 
-  canvas.background_opaque();
-  canvas.set_background_color(Color(0xff,0xff,0xff));
-  canvas.set_text_color(Color(0x00,0x00,0x00));
-  rec.left = 0;
-  rec.top = 0;
-  rec.right = tm.tmAveCharWidth;
-  rec.bottom = tm.tmHeight;
-  canvas.text_opaque(0, 0, &rec, TEXT("M"));
-
-  top = tm.tmHeight;
-  bottom = 0;
-
-  FontHeightInfo->CapitalHeight = 0;
-  for (x=0; x<tm.tmAveCharWidth; x++){
-    for (y=0; y<tm.tmHeight; y++){
-      if (canvas.get_pixel(x, y) != canvas.map(Color(0xff,0xff,0xff))) {
-        if (top > y)
-          top = y;
-        if (bottom < y)
-          bottom = y;
-      }
-    }
+  if (fpsTime-timestamp_newdata<700) {
+    // it's been less than 700 ms since last data
+    // was posted
+    return true;
+  } else {
+    return false;
   }
-
-#ifdef GNAV
-  // JMW: don't know why we need this in GNAV, but we do.
-  if (FontHeightInfo->CapitalHeight<y)
-    FontHeightInfo->CapitalHeight = bottom - top + 1;
-#endif
-  // This works for PPC
-  if (FontHeightInfo->CapitalHeight <= 0)
-    FontHeightInfo->CapitalHeight = tm.tmAscent - 1 -(tm.tmHeight/10);
-
-  //  int lx = GetDeviceCaps(hDC,LOGPIXELSX);
-  // dpi
 }
 
 
-extern MapWindow map_window; // TODO try to avoid this
+
+void MapWindow::UpdateInfo(NMEA_INFO *nmea_info,
+                           DERIVED_INFO *derived_info) {
+  mutexFlightData.Lock();
+  memcpy(&DrawInfo,nmea_info,sizeof(NMEA_INFO));
+  memcpy(&DerivedDrawInfo,derived_info,sizeof(DERIVED_INFO));
+  UpdateMapScale(); // done here to avoid double latency due to locks
+
+  DisplayMode_t lastDisplayMode = DisplayMode;
+  switch (UserForceDisplayMode) {
+  case dmCircling:
+    DisplayMode = dmCircling;
+    break;
+  case dmCruise:
+    DisplayMode = dmCruise;
+    break;
+  case dmFinalGlide:
+    DisplayMode = dmFinalGlide;
+    break;
+  case dmNone:
+    if (DerivedDrawInfo.Circling){
+      DisplayMode = dmCircling;
+    } else if (DerivedDrawInfo.FinalGlide){
+      DisplayMode = dmFinalGlide;
+    } else
+      DisplayMode = dmCruise;
+    break;
+  }
+  if (lastDisplayMode != DisplayMode){
+    SwitchZoomClimb();
+  }
+
+  mutexFlightData.Unlock();
+}
+
+
+void MapWindow::UpdateCaches(const bool force) {
+  // map was dirtied while we were drawing, so skip slow process
+  // (unless we haven't done it for 2000 ms)
+  DWORD fpsTimeThis = ::GetTickCount();
+  static double lastTime = 0;
+  static DWORD fpsTimeMapCenter = 0;
+  bool do_force = force | askVisibilityScan;
+
+  askVisibilityScan = false; // reset
+
+  // have some time, do shape file cache update if necessary
+  mutexTerrainData.Lock();
+  SetTopologyBounds(*this, MapRect, do_force);
+  mutexTerrainData.Unlock();
+
+  // JMW experimental jpeg2000 rendering/tile management
+  // Must do this even if terrain is not displayed, because
+  // raster terrain is used by terrain footprint etc.
+  if (lastTime>DrawInfo.Time) {
+    lastTime = DrawInfo.Time;
+  }
+
+  if (do_force || (fpsTimeThis - fpsTimeMapCenter > 5000)) {
+
+    fpsTimeThis = fpsTimeMapCenter;
+    RasterTerrain::ServiceTerrainCenter(DrawInfo.Latitude,
+                                        DrawInfo.Longitude);
+  }
+
+  fpsTimeThis = ::GetTickCount();
+  static DWORD fpsTimeLast_terrain=0;
+
+  if (RenderTimeAvailable() ||
+      (fpsTimeThis-fpsTimeLast_terrain>5000) || do_force) {
+    // have some time, do graphics terrain cache update if necessary
+    if (EnableTerrain) {
+      fpsTimeLast_terrain = fpsTimeThis;
+      RasterTerrain::ServiceCache();
+    }
+  }
+}
+
+
+void MapWindow::DrawThreadLoop(bool first_time) {
+
+  if (!dirtyEvent.test() && !first_time) {
+    // redraw old screen, must have been a request for fast refresh
+    get_canvas().copy(hdcDrawWindow);
+    return;
+  }
+
+  mutexRun.Lock(); // take control
+
+  dirtyEvent.reset();
+
+  UpdateInfo(&GPS_INFO, &CALCULATED_INFO);
+
+  if (BigZoom) {
+    // quickly draw zoom level on top
+    DrawMapScale(get_canvas(), MapRect, true);
+  }
+
+  if (askFullScreen != MapFullScreen) {
+    ToggleFullScreenStart();
+  }
+
+  if (gauge_flarm != NULL)
+    gauge_flarm->Render(&DrawInfo);
+
+  RenderMapWindow(hdcDrawWindow, MapRect);
+
+  if (!first_time) {
+    get_canvas().copy(hdcDrawWindow);
+    update(MapRect);
+  }
+
+  UpdateTimeStats(false);
+  UpdateCaches(first_time);
+
+  mutexRun.Unlock(); // release control
+}
+
+
+void MapWindow::DrawThreadInitialise(void) {
+  // initialise other systems
+  InitialiseScaleList(); // should really be done before the thread
+			 // has started, so it happens from main thread
+
+  // set main rectangles
+  MapRectBig = get_client_rect();
+  MapRectSmall = MapRect;
+  MapRect = MapRectSmall;
+
+  UpdateTimeStats(true);
+
+  // set initial display mode
+  hdcDrawWindow.background_transparent();
+  hDCTemp.background_opaque();
+  hDCMask.background_opaque();
+
+  // paint draw window black to start
+  hdcDrawWindow.black_pen();
+  hdcDrawWindow.rectangle(MapRectBig.left, MapRectBig.top,
+                          MapRectBig.right, MapRectBig.bottom);
+
+  get_canvas().copy(hdcDrawWindow);
+
+  ////// This is just here to give fully rendered start screen
+  UpdateInfo(&GPS_INFO, &CALCULATED_INFO);
+  dirtyEvent.trigger();
+  UpdateTimeStats(true);
+  //////
+
+  RequestMapScale = MapScale;
+  UpdateMapScale(); // first call
+  ToggleFullScreenStart();
+}
+
+
+DWORD MapWindow::_DrawThread ()
+{
+  while (!globalRunningEvent.test()) {
+    // wait for start
+    Sleep(100);
+  }
+
+  DrawThreadInitialise();
+
+  DrawThreadLoop(true); // first time draw
+
+  // this is the main drawing loop
+
+  do {
+    DrawThreadLoop(false);
+    drawTriggerEvent.wait(5000);
+  } while (!closeTriggerEvent.test());
+
+  mutexStart.Unlock(); // release lock
+  return 0;
+}
+
+
+bool MapWindow::register_class(HINSTANCE hInstance, const TCHAR* szWindowClass) {
+
+  WNDCLASS wc;
+
+  wc.hInstance = hInstance;
+  wc.style = CS_VREDRAW | CS_HREDRAW | CS_DBLCLKS;
+  wc.lpfnWndProc = (WNDPROC)MapWindow::MapWndProc;
+  wc.cbClsExtra = 0;
+#if (WINDOWSPC>0)
+  wc.cbWndExtra = 0 ;
+#else
+  WNDCLASS dc;
+  GetClassInfo(hInstance,TEXT("DIALOG"),&dc);
+  wc.cbWndExtra = dc.cbWndExtra ;
+#endif
+  wc.hIcon = (HICON)NULL;
+  wc.hCursor = NULL;
+  wc.hbrBackground = (HBRUSH)GetStockObject (WHITE_BRUSH);
+  wc.lpszMenuName = 0;
+  wc.lpszClassName = szWindowClass;
+
+  return (RegisterClass(&wc)!= FALSE);
+}
+
+bool MapWindow::checkLabelBlock(const RECT brect) {
+  return label_block.check(brect);
+}
+
+
+/////////////////////////////////////////
+
+
+void MapWindow::on_size(int width, int height) {
+  resize(width, height);
+
+  hdcDrawWindow.resize(width, height);
+  buffer_canvas.resize(width, height);
+  hDCMask.resize(width + 1, height + 1);
+
+  SetFontInfoAll(get_canvas());
+
+  // Signal that draw thread can run now
+  mutexStart.Lock();
+  window_initialised = true;
+  mutexStart.Unlock(); // release lock
+}
+
+void MapWindow::on_create(HWND hWnd)
+{
+  created(hWnd);
+
+  hdcDrawWindow.set(get_canvas());
+  hDCTemp.set(get_canvas());
+  buffer_canvas.set(get_canvas());
+  hDCMask.set(hdcDrawWindow, 1, 1);
+}
+
+void MapWindow::on_destroy()
+{
+  hdcDrawWindow.reset();
+  hDCTemp.reset();
+  buffer_canvas.reset();
+  hDCMask.reset();
+  PostQuitMessage (0);
+}
+
+//////////////////////////
+//
+
+DWORD MapWindow::DrawThread (LPVOID lpvoid)
+{
+  map_window._DrawThread();
+}
+
 
 LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
                                         LPARAM lParam)
@@ -284,88 +483,18 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
 
   switch (uMsg)
     {
-      /* JMW THIS IS BAD!  Now done with GCE_AIRSPACE
-	 case WM_USER+1:
-	 dlgAirspaceWarningShowDlg(false);
-	 return(0);
-      */
     case WM_ERASEBKGND:
-      // JMW trying to reduce flickering
-      /*
-	if (first || MapDirty) {
-	first = false;
-	MapDirty = true;
-	return (DefWindowProc (hWnd, uMsg, wParam, lParam));
-	} else
-	return TRUE;
-      */
       return TRUE;
-
     case WM_SIZE:
-      map_window.resize(width, height);
-
-      hdcDrawWindow.resize(width, height);
-      buffer_canvas.resize(width, height);
-
-      hDCMask.resize(width + 1, height + 1);
-
-      {
-        VirtualCanvas canvas(map_window.get_canvas(), 1, 1);
-
-        canvas.select(TitleWindowFont);
-        SetFontInfo(canvas, &Appearance.TitleWindowFont);
-
-        canvas.select(MapWindowFont);
-        SetFontInfo(canvas, &Appearance.MapWindowFont);
-
-        canvas.select(MapWindowBoldFont);
-        SetFontInfo(canvas, &Appearance.MapWindowBoldFont);
-
-        canvas.select(InfoWindowFont);
-        SetFontInfo(canvas, &Appearance.InfoWindowFont);
-
-        canvas.select(CDIWindowFont);
-        SetFontInfo(canvas, &Appearance.CDIWindowFont);
-//VENTA6
-        canvas.select(StatisticsFont);
-        SetFontInfo(canvas, &Appearance.StatisticsFont);
-
-        canvas.select(MapLabelFont);
-        SetFontInfo(canvas, &Appearance.MapLabelFont);
-
-        canvas.select(TitleSmallWindowFont);
-        SetFontInfo(canvas, &Appearance.TitleSmallWindowFont);
-
-      }
-
-      // Signal that draw thread can run now
-      mutexStart.Lock();
-      window_initialised = true;
-      mutexStart.Unlock(); // release lock
-
+      map_window.on_size(width, height);
       break;
-
     case WM_CREATE:
-      map_window.created(hWnd);
-
-      hdcDrawWindow.set(map_window.get_canvas());
-      hDCTemp.set(map_window.get_canvas());
-      buffer_canvas.set(map_window.get_canvas());
-      hDCMask.set(hdcDrawWindow, 1, 1);
-
+      map_window.on_create(hWnd);
       break;
-
     case WM_DESTROY:
-
-      hdcDrawWindow.reset();
-      hDCTemp.reset();
-      buffer_canvas.reset();
-      hDCMask.reset();
-
-      PostQuitMessage (0);
-
+      map_window.on_destroy();
       break;
-
+      /*
     case WM_LBUTTONDBLCLK:
       // Added by ARH to show menu button when mapwindow is double clicked.
       //
@@ -450,11 +579,6 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
       dwUpTime = GetTickCount();
       dwInterval=dwUpTime-dwDownTime;
       dwDownTime=0; // do it once forever
-/*
-	TCHAR buf[80];
-	wsprintf(buf,_T("Interval %ldms"),dwInterval);
-        DoStatusMessage(buf);
-*/
 
       mutexTaskData.Lock();
       my_target_pan = TargetPan;
@@ -593,230 +717,8 @@ Wirth:
 	return TRUE; // don't go to default handler
       }
       // break; unreachable!
+*/
     }
 
   return (DefWindowProc (hWnd, uMsg, wParam, lParam));
-}
-
-
-bool MapWindow::RenderTimeAvailable() {
-  DWORD fpsTime = ::GetTickCount();
-
-  if (dirtyEvent.test())
-    return false;
-
-  if (fpsTime-timestamp_newdata<700) {
-    // it's been less than 700 ms since last data
-    // was posted
-    return true;
-  } else {
-    return false;
-  }
-}
-
-
-
-void MapWindow::UpdateInfo(NMEA_INFO *nmea_info,
-                           DERIVED_INFO *derived_info) {
-  mutexFlightData.Lock();
-  memcpy(&DrawInfo,nmea_info,sizeof(NMEA_INFO));
-  memcpy(&DerivedDrawInfo,derived_info,sizeof(DERIVED_INFO));
-  UpdateMapScale(); // done here to avoid double latency due to locks
-
-  DisplayMode_t lastDisplayMode = DisplayMode;
-  switch (UserForceDisplayMode) {
-  case dmCircling:
-    DisplayMode = dmCircling;
-    break;
-  case dmCruise:
-    DisplayMode = dmCruise;
-    break;
-  case dmFinalGlide:
-    DisplayMode = dmFinalGlide;
-    break;
-  case dmNone:
-    if (DerivedDrawInfo.Circling){
-      DisplayMode = dmCircling;
-    } else if (DerivedDrawInfo.FinalGlide){
-      DisplayMode = dmFinalGlide;
-    } else
-      DisplayMode = dmCruise;
-    break;
-  }
-  if (lastDisplayMode != DisplayMode){
-    SwitchZoomClimb();
-  }
-
-  mutexFlightData.Unlock();
-}
-
-
-void MapWindow::UpdateCaches(const bool force) {
-  // map was dirtied while we were drawing, so skip slow process
-  // (unless we haven't done it for 2000 ms)
-  DWORD fpsTimeThis = ::GetTickCount();
-  static double lastTime = 0;
-  static DWORD fpsTimeMapCenter = 0;
-  bool do_force = force | askVisibilityScan;
-
-  askVisibilityScan = false; // reset
-
-  // have some time, do shape file cache update if necessary
-  mutexTerrainData.Lock();
-  SetTopologyBounds(MapRect, do_force);
-  mutexTerrainData.Unlock();
-
-  // JMW experimental jpeg2000 rendering/tile management
-  // Must do this even if terrain is not displayed, because
-  // raster terrain is used by terrain footprint etc.
-  if (lastTime>DrawInfo.Time) {
-    lastTime = DrawInfo.Time;
-  }
-
-  if (do_force || (fpsTimeThis - fpsTimeMapCenter > 5000)) {
-
-    fpsTimeThis = fpsTimeMapCenter;
-    RasterTerrain::ServiceTerrainCenter(DrawInfo.Latitude,
-                                        DrawInfo.Longitude);
-  }
-
-  fpsTimeThis = ::GetTickCount();
-  static DWORD fpsTimeLast_terrain=0;
-
-  if (RenderTimeAvailable() ||
-      (fpsTimeThis-fpsTimeLast_terrain>5000) || do_force) {
-    // have some time, do graphics terrain cache update if necessary
-    if (EnableTerrain) {
-      fpsTimeLast_terrain = fpsTimeThis;
-      RasterTerrain::ServiceCache();
-    }
-  }
-}
-
-
-void MapWindow::DrawThreadLoop(bool first_time) {
-
-  if (!dirtyEvent.test() && !first_time) {
-    // redraw old screen, must have been a request for fast refresh
-    map_window.get_canvas().copy(hdcDrawWindow);
-    return;
-  }
-
-  mutexRun.Lock(); // take control
-
-  dirtyEvent.reset();
-
-  UpdateInfo(&GPS_INFO, &CALCULATED_INFO);
-
-  if (BigZoom) {
-    // quickly draw zoom level on top
-    DrawMapScale(map_window.get_canvas(), MapRect, true);
-  }
-
-  if (askFullScreen != MapFullScreen) {
-    ToggleFullScreenStart();
-  }
-
-  if (gauge_flarm != NULL)
-    gauge_flarm->Render(&DrawInfo);
-
-  RenderMapWindow(hdcDrawWindow, MapRect);
-
-  if (!first_time) {
-    map_window.get_canvas().copy(hdcDrawWindow);
-    map_window.update(MapRect);
-  }
-
-  UpdateTimeStats(false);
-  UpdateCaches(first_time);
-
-  mutexRun.Unlock(); // release control
-}
-
-
-void MapWindow::DrawThreadInitialise(void) {
-  // initialise other systems
-  InitialiseScaleList(); // should really be done before the thread
-			 // has started, so it happens from main thread
-
-  // set main rectangles
-  MapRectBig = map_window.get_client_rect();
-  MapRectSmall = MapRect;
-  MapRect = MapRectSmall;
-
-  UpdateTimeStats(true);
-
-  // set initial display mode
-  hdcDrawWindow.background_transparent();
-  hDCTemp.background_opaque();
-  hDCMask.background_opaque();
-
-  // paint draw window black to start
-  hdcDrawWindow.black_pen();
-  hdcDrawWindow.rectangle(MapRectBig.left, MapRectBig.top,
-                          MapRectBig.right, MapRectBig.bottom);
-
-  map_window.get_canvas().copy(hdcDrawWindow);
-
-  ////// This is just here to give fully rendered start screen
-  UpdateInfo(&GPS_INFO, &CALCULATED_INFO);
-  dirtyEvent.trigger();
-  UpdateTimeStats(true);
-  //////
-
-  RequestMapScale = MapScale;
-  UpdateMapScale(); // first call
-  ToggleFullScreenStart();
-}
-
-
-DWORD MapWindow::DrawThread (LPVOID lpvoid)
-{
-  while (!globalRunningEvent.test()) {
-    // wait for start
-    Sleep(100);
-  }
-
-  DrawThreadInitialise();
-
-  DrawThreadLoop(true); // first time draw
-
-  // this is the main drawing loop
-
-  do {
-    DrawThreadLoop(false);
-    drawTriggerEvent.wait(5000);
-  } while (!closeTriggerEvent.test());
-
-  mutexStart.Unlock(); // release lock
-  return 0;
-}
-
-
-bool MapWindow::register_class(HINSTANCE hInstance, const TCHAR* szWindowClass) {
-
-  WNDCLASS wc;
-
-  wc.hInstance = hInstance;
-  wc.style = CS_VREDRAW | CS_HREDRAW | CS_DBLCLKS;
-  wc.lpfnWndProc = (WNDPROC)MapWindow::MapWndProc;
-  wc.cbClsExtra = 0;
-#if (WINDOWSPC>0)
-  wc.cbWndExtra = 0 ;
-#else
-  WNDCLASS dc;
-  GetClassInfo(hInstance,TEXT("DIALOG"),&dc);
-  wc.cbWndExtra = dc.cbWndExtra ;
-#endif
-  wc.hIcon = (HICON)NULL;
-  wc.hCursor = NULL;
-  wc.hbrBackground = (HBRUSH)GetStockObject (WHITE_BRUSH);
-  wc.lpszMenuName = 0;
-  wc.lpszClassName = szWindowClass;
-
-  return (RegisterClass(&wc)!= FALSE);
-}
-
-bool MapWindow::checkLabelBlock(const RECT brect) {
-  return label_block.check(brect);
 }

@@ -38,14 +38,15 @@ Copyright_License {
 #ifndef TOPOLOGY_STORE_H
 #define TOPOLOGY_STORE_H
 
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
+#include "XCSoar.h"
 
 class Canvas;
+class MapWindow;
 
-void SetTopologyBounds(const RECT rcin, const bool force=false);
+void SetTopologyBounds(MapWindow &m_window, 
+		       const RECT rcin, const bool force=false);
 void OpenTopology();
 void CloseTopology();
-void DrawTopology(Canvas &canvas, const RECT rc);
+void DrawTopology(Canvas &canvas, MapWindow &m_window, const RECT rc);
 
 #endif

@@ -794,7 +794,8 @@ void SetHome(bool reset)
 }
 
 
-int FindNearestWayPoint(double X, double Y, double MaxRange,
+int FindNearestWayPoint(MapWindowProjection &map_projection,
+			double X, double Y, double MaxRange,
                         bool exhaustive)
 {
   unsigned int i;
@@ -811,7 +812,7 @@ int FindNearestWayPoint(double X, double Y, double MaxRange,
 
     if (WayPointList[i].Visible) {
 
-      if (MapWindowProjection::WaypointInRange(i)) {
+      if (map_projection.WaypointInRange(i)) {
 
         // only look for visible waypoints
         // feature added by Samuel Gisiger

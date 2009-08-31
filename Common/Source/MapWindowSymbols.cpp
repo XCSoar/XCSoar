@@ -211,7 +211,7 @@ void MapWindow::DrawGPSStatus(Canvas &canvas, const RECT rc)
     TextInBox(canvas, gettext(gpswarningtext1),
               rc.left+IBLSCALE(24),
               rc.bottom+IBLSCALE(Appearance.GPSStatusOffset.y-19),
-              0, TextInBoxMode);
+              TextInBoxMode, rc);
 
   } else
     if (DrawInfo.NAVWarning || (DrawInfo.SatellitesUsed == 0)) {
@@ -224,7 +224,7 @@ void MapWindow::DrawGPSStatus(Canvas &canvas, const RECT rc)
                 rc.left+IBLSCALE(24),
                 rc.bottom+
                 IBLSCALE(Appearance.GPSStatusOffset.y-19),
-                0, TextInBoxMode);
+                TextInBoxMode, rc);
 
     }
 
@@ -431,9 +431,9 @@ void MapWindow::DrawWindAtAircraft2(Canvas &canvas, const POINT Orig, const RECT
 
   TextInBoxMode_t TextInBoxMode = { 16 | 32 }; // JMW test {2 | 16};
   if (Arrow[5].y>=Arrow[6].y) {
-    TextInBox(canvas, sTmp, Arrow[5].x-kx, Arrow[5].y, 0, TextInBoxMode);
+    TextInBox(canvas, sTmp, Arrow[5].x-kx, Arrow[5].y, TextInBoxMode, rc);
   } else {
-    TextInBox(canvas, sTmp, Arrow[6].x-kx, Arrow[6].y, 0, TextInBoxMode);
+    TextInBox(canvas, sTmp, Arrow[6].x-kx, Arrow[6].y, TextInBoxMode, rc);
   }
 }
 
@@ -700,7 +700,7 @@ void MapWindow::DrawFinalGlide(Canvas &canvas, const RECT rc)
         }
 
         TextInBoxMode_t TextInBoxMode = {1|8};
-        TextInBox(canvas, Value, 0, (int)Offset, 0, TextInBoxMode);
+        TextInBox(canvas, Value, 0, (int)Offset, TextInBoxMode, rc);
 
       } else
         if (Appearance.IndFinalGlide == fgFinalGlideAltA){

@@ -242,6 +242,8 @@ void PopupWaypointDetails()
 }
 
 
+#include "Interface.hpp"
+#include "MapWindow.h"
 
 bool PopupNearestWaypointDetails(double lon, double lat,
                                              double range,
@@ -255,12 +257,13 @@ bool PopupNearestWaypointDetails(double lon, double lat,
   */
 
   int i;
-  if (!pan || !MapWindowProjection::isPan()) {
-    i=FindNearestWayPoint(lon, lat, range);
+  if (!pan || !map_window.isPan()) {
+    i=FindNearestWayPoint(map_window, lon, lat, range);
   } else {
     // nearest to center of screen if in pan mode
-    i=FindNearestWayPoint(MapWindowProjection::GetPanLongitude(),
-			  MapWindowProjection::GetPanLatitude(), range);
+    i=FindNearestWayPoint(map_window, 
+			  map_window.GetPanLongitude(),
+			  map_window.GetPanLatitude(), range);
   }
   if(i != -1) {
     SelectedWaypoint = i;

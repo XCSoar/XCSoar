@@ -38,19 +38,86 @@ Copyright_License {
 #ifndef TERRAIN_RENDERER_H
 #define TERRAIN_RENDERER_H
 
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
+#include "XCSoar.h"
+#include "Screen/Ramp.hpp"
 
+
+class CSTScreenBuffer;
 class Canvas;
+class BGRColor;
+class RasterMap;
+class MapWindowProjection;
+class LabelBlock;
 
-extern short TerrainContrast;
-extern short TerrainBrightness;
-extern short TerrainRamp;
-void DrawTerrain(Canvas &canvas, const RECT rc,
+//////////////////////////
+
+class TerrainRenderer {
+public:
+  TerrainRenderer(RECT rc);
+  ~TerrainRenderer();
+
+public:
+  POINT spot_max_pt;
+  POINT spot_min_pt;
+  short spot_max_val;
+  short spot_min_val;
+
+private:
+
+  unsigned int ixs, iys; // screen dimensions in coarse pixels
+  unsigned int dtquant;
+  unsigned int epx; // step size used for slope calculations
+
+  RECT rect_visible;
+
+  CSTScreenBuffer *sbuf;
+
+  double pixelsize_d;
+
+  int oversampling;
+  int blursize;
+
+  unsigned short *hBuf;
+  BGRColor *colorBuf;
+  bool do_shading;
+  bool do_water;
+  RasterMap *DisplayMap;
+  bool is_terrain;
+  int interp_levels;
+  COLORRAMP* color_ramp;
+  unsigned int height_scale;
+
+private:
+  void Height(MapWindowProjection &map_projection, bool isBigZoom);
+  void ScanSpotHeights(const int X0, const int Y0, const int X1, const int Y1);
+  void FillHeightBuffer(MapWindowProjection &map_projection,
+			const int X0, const int Y0, const int X1, const int Y1);
+  void Slope(const int sx, const int sy, const int sz);
+  void ColorTable();
+  void Draw(Canvas &canvas, RECT rc);
+  bool SetMap(double lon, double lat);
+ public:
+  bool Draw(Canvas &canvas, 
+	    MapWindowProjection &map_projection,
+	    const double sunazimuth, const double sunelevation,
+	    const double lon, const double lat,
+	    const bool isBigZoom);
+};
+
+
+//////////////////////////
+//
+//
+
+void DrawTerrain(Canvas &canvas, 
+		 MapWindowProjection &map_projection,
 		 const double sunazimuth, const double sunelevation,
-		 double lon, double lat,
+		 const double lon, const double lat,
 		 const bool isBigZoom);
-void DrawSpotHeights(Canvas &canvas);
+
+void DrawSpotHeights(Canvas &canvas,
+		     MapWindowProjection &map_projection,
+		     LabelBlock &label_block);
 void CloseTerrainRenderer();
 
 #endif

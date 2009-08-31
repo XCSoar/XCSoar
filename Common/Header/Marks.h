@@ -38,15 +38,14 @@ Copyright_License {
 #ifndef MARKS_H
 #define MARKS_H
 
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
-
+#include "XCSoar.h"
 class Canvas;
+class MapWindow;
 
 extern bool reset_marks;
 void InitialiseMarks();
 void CloseMarks();
-void DrawMarks(Canvas &canvas, const RECT rc);
+void DrawMarks(Canvas &canvas, MapWindow &m_window, const RECT rc);
 void MarkLocation(const double lon, const double lat);
 
 #endif

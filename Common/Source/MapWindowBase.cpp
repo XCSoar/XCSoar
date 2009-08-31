@@ -40,14 +40,6 @@ Copyright_License {
 #include "Protection.hpp"
 #include "Screen/Blank.hpp"
 
-Trigger MapWindowBase::dirtyEvent(TEXT("mapDirty"));
-DWORD  MapWindowBase::dwDrawThreadID;
-HANDLE MapWindowBase::hDrawThread;
-Mutex MapWindowBase::mutexRun;
-Mutex MapWindowBase::mutexStart;
-
-bool     MapWindowBase::window_initialised = false;
-
 bool MapWindowBase::IsDisplayRunning() {
   return (globalRunningEvent.test()
 	  && !ScreenBlanked);

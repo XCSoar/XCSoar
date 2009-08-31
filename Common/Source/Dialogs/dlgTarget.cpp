@@ -93,7 +93,7 @@ static void MoveTarget(double adjust_angle) {
     distance = max(Task[target_point].AATCircleRadius/20.0,distance);
   }
 
-  bearing = AngleLimit360(MapWindow::GetDisplayAngle() + adjust_angle);
+  bearing = AngleLimit360(map_window.GetDisplayAngle() + adjust_angle);
   FindLatitudeLongitude (Task[target_point].AATTargetLat,
                          Task[target_point].AATTargetLon,
                          bearing,
@@ -408,7 +408,7 @@ static void RefreshCalculator(void) {
 static int OnTimerNotify(WindowControl * Sender) {
   (void)Sender;
   double lon, lat;
-  if (MapWindow::TargetDragged(&lon, &lat)) {
+  if (map_window.TargetDragged(&lon, &lat)) {
     DragTarget(lon, lat);
   }
   if (TargetModified) {
@@ -510,7 +510,7 @@ static void RefreshTargetPoint(void) {
   mutexTaskData.Lock();
   target_point = max(target_point, ActiveWayPoint);
   if (ValidTaskPoint(target_point)) {
-    MapWindow::SetTargetPan(true, target_point);
+    map_window.SetTargetPan(true, target_point);
     Range = Task[target_point].AATTargetOffsetRadius;
     Radial = Task[target_point].AATTargetOffsetRadial;
   } else {
@@ -599,7 +599,7 @@ void dlgTarget(void) {
     WndFrame *wf2 = (WndFrame*)wf->FindByName(TEXT("frmTarget"));
     if (wf2)
     {
-      RECT MapRectBig = MapWindow::GetMapRectBig();
+      RECT MapRectBig = map_window.GetMapRectBig();
       wf->SetLeft(MapRectBig.right- wf2->GetWidth());
     }
   }
@@ -642,7 +642,7 @@ void dlgTarget(void) {
 
   wf->ShowModal(true); // enable map
 
-  MapWindow::SetTargetPan(false, 0);
+  map_window.SetTargetPan(false, 0);
 
   TargetDialogOpen = false;
 

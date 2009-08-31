@@ -42,6 +42,7 @@ Copyright_License {
 #include "ButtonLabel.h"
 #include "Registry.hpp"
 #include "Asset.hpp"
+#include "Screen/VirtualCanvas.hpp"
 
 // Display Gobals
 Font InfoWindowFont;
@@ -656,4 +657,83 @@ void DeleteFonts() {
   MapWindowBoldFont.reset();
   StatisticsFont.reset();
   TitleSmallWindowFont.reset();
+}
+
+
+void SetFontInfo(Canvas &canvas, FontHeightInfo_t *FontHeightInfo){
+  TEXTMETRIC tm;
+  int x,y=0;
+  RECT  rec;
+  int top, bottom;
+
+  GetTextMetrics(canvas, &tm);
+  FontHeightInfo->Height = tm.tmHeight;
+  FontHeightInfo->AscentHeight = tm.tmAscent;
+  FontHeightInfo->CapitalHeight = 0;
+
+  canvas.background_opaque();
+  canvas.set_background_color(Color(0xff,0xff,0xff));
+  canvas.set_text_color(Color(0x00,0x00,0x00));
+  rec.left = 0;
+  rec.top = 0;
+  rec.right = tm.tmAveCharWidth;
+  rec.bottom = tm.tmHeight;
+  canvas.text_opaque(0, 0, &rec, TEXT("M"));
+
+  top = tm.tmHeight;
+  bottom = 0;
+
+  FontHeightInfo->CapitalHeight = 0;
+  for (x=0; x<tm.tmAveCharWidth; x++){
+    for (y=0; y<tm.tmHeight; y++){
+      if (canvas.get_pixel(x, y) != canvas.map(Color(0xff,0xff,0xff))) {
+        if (top > y)
+          top = y;
+        if (bottom < y)
+          bottom = y;
+      }
+    }
+  }
+
+#ifdef GNAV
+  // JMW: don't know why we need this in GNAV, but we do.
+  if (FontHeightInfo->CapitalHeight<y)
+    FontHeightInfo->CapitalHeight = bottom - top + 1;
+#endif
+  // This works for PPC
+  if (FontHeightInfo->CapitalHeight <= 0)
+    FontHeightInfo->CapitalHeight = tm.tmAscent - 1 -(tm.tmHeight/10);
+
+  //  int lx = GetDeviceCaps(hDC,LOGPIXELSX);
+  // dpi
+}
+
+void SetFontInfoAll(const Canvas &real_canvas)
+{
+  VirtualCanvas canvas(real_canvas, 1, 1);
+  
+  canvas.select(TitleWindowFont);
+  SetFontInfo(canvas, &Appearance.TitleWindowFont);
+  
+  canvas.select(MapWindowFont);
+  SetFontInfo(canvas, &Appearance.MapWindowFont);
+  
+  canvas.select(MapWindowBoldFont);
+  SetFontInfo(canvas, &Appearance.MapWindowBoldFont);
+  
+  canvas.select(InfoWindowFont);
+  SetFontInfo(canvas, &Appearance.InfoWindowFont);
+  
+  canvas.select(CDIWindowFont);
+  SetFontInfo(canvas, &Appearance.CDIWindowFont);
+  //VENTA6
+  canvas.select(StatisticsFont);
+  SetFontInfo(canvas, &Appearance.StatisticsFont);
+  
+  canvas.select(MapLabelFont);
+  SetFontInfo(canvas, &Appearance.MapLabelFont);
+  
+  canvas.select(TitleSmallWindowFont);
+  SetFontInfo(canvas, &Appearance.TitleSmallWindowFont);
+
 }

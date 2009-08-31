@@ -129,13 +129,6 @@ int FindAirspaceArea(double Longditude,double Lattitude,
 BOOL CheckAirspaceAltitude(const double &Base, const double &Top);
 void CloseAirspace(void);
 
-void FindNearestAirspace(double longitude,
-			 double latitude,
-			 double *nearestdistance,
-			 double *nearestbearing,
-			 int *foundcircle,
-			 int *foundarea,
-			 double *height=NULL);
 
 void SortAirspace(void);
 extern int AirspacePriority[AIRSPACECLASSCOUNT];
@@ -200,14 +193,27 @@ bool dlgAirspaceWarningShowDlg(bool Force);
 
 bool ValidAirspace(void);
 
+class MapWindowProjection;
+
 double RangeAirspaceCircle(const double &longitude,
 			   const double &latitude,
 			   int i);
 
 double RangeAirspaceArea(const double &longitude,
 			 const double &latitude,
-			 int i, double *bearing);
+			 int i, double *bearing,
+			 MapWindowProjection &map_projection);
 
 bool CheckAirspacePoint(int Idx);
+
+void FindNearestAirspace(MapWindowProjection& map_projection,
+			 double longitude,
+			 double latitude,
+			 double *nearestdistance,
+			 double *nearestbearing,
+			 int *foundcircle,
+			 int *foundarea,
+			 double *height=NULL);
+
 
 #endif

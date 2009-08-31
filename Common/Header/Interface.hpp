@@ -40,6 +40,7 @@ Copyright_License {
 #include "XCSoar.h"
 
 class MainWindow;
+class MapWindow;
 class GaugeVario;
 class GaugeFLARM;
 
@@ -50,6 +51,7 @@ extern HINSTANCE hInst;
 
 // windows
 extern MainWindow main_window;
+extern MapWindow map_window;
 
 extern GaugeVario *gauge_vario;
 extern GaugeFLARM *gauge_flarm;

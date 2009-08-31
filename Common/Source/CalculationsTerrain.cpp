@@ -106,7 +106,9 @@ void CheckFinalGlideThroughTerrain(NMEA_INFO *Basic,
 }
 
 
-void TerrainFootprint(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
+void TerrainFootprint(NMEA_INFO *Basic, 
+		      DERIVED_INFO *Calculated,
+		      MapWindowProjection &map_projection) {
 
   if (FinalGlideTerrain) {
 
@@ -117,7 +119,7 @@ void TerrainFootprint(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
     // estimate max range (only interested in at most one screen distance away)
     // except we need to scan for terrain base, so 20km search minimum is required
     double mymaxrange = max(20000.0,
-			    MapWindowProjection::GetApproxScreenRange());
+			    map_projection.GetApproxScreenRange());
 
     Calculated->TerrainBase = Calculated->TerrainAlt;
 

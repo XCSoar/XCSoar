@@ -43,6 +43,7 @@ Copyright_License {
 #include "Screen/Util.hpp"
 #include "UtilsText.hpp"
 #include "MapWindow.h"
+#include "MapWindowProjection.hpp"
 #include "Screen/Graphics.hpp"
 #include "Screen/Fonts.hpp"
 #include "Screen/LabelBlock.hpp"
@@ -139,12 +140,12 @@ Topology::~Topology() {
 }
 
 
-bool Topology::CheckScale(void) {
-  return (MapWindow::GetMapScale() <= scaleThreshold);
+bool Topology::CheckScale(MapWindowProjection &map_projection) {
+  return (map_projection.GetMapScale() <= scaleThreshold);
 }
 
-void Topology::TriggerIfScaleNowVisible(void) {
-  triggerUpdateCache |= (CheckScale() != in_scale);
+void Topology::TriggerIfScaleNowVisible(MapWindowProjection &map_projection) {
+  triggerUpdateCache |= (CheckScale(map_projection) != in_scale);
 }
 
 void Topology::flushCache() {
@@ -154,13 +155,14 @@ void Topology::flushCache() {
   shapes_visible_count = 0;
 }
 
-void Topology::updateCache(rectObj thebounds, bool purgeonly) {
+void Topology::updateCache(MapWindowProjection &map_projection,
+			   rectObj thebounds, bool purgeonly) {
 
   if (!triggerUpdateCache) return;
 
   if (!shapefileopen) return;
 
-  in_scale = CheckScale();
+  in_scale = CheckScale(map_projection);
 
   if (!in_scale) {
     // not visible, so flush the cache
@@ -224,11 +226,14 @@ bool Topology::checkVisible(shapeObj& shape, rectObj &screenRect) {
 
 ///////////////
 
-void Topology::Paint(Canvas &canvas, RECT rc) {
+void Topology::Paint(Canvas &canvas, MapWindow &m_window, const RECT rc) {
 
   if (!shapefileopen) return;
 
-  if (MapWindow::GetMapScale() > scaleThreshold)
+  MapWindowProjection &map_projection = m_window;
+  LabelBlock *label_block = m_window.getLabelBlock();
+
+  if (map_projection.GetMapScale() > scaleThreshold)
     return;
 
   // TODO code: only draw inside screen!
@@ -244,17 +249,17 @@ void Topology::Paint(Canvas &canvas, RECT rc) {
 
   int iskip = 1;
 
-  if (MapWindow::GetMapScale()>0.25*scaleThreshold) {
+  if (map_projection.GetMapScale()>0.25*scaleThreshold) {
     iskip = 2;
   }
-  if (MapWindow::GetMapScale()>0.5*scaleThreshold) {
+  if (map_projection.GetMapScale()>0.5*scaleThreshold) {
     iskip = 3;
   }
-  if (MapWindow::GetMapScale()>0.75*scaleThreshold) {
+  if (map_projection.GetMapScale()>0.75*scaleThreshold) {
     iskip = 4;
   }
 
-  rectObj screenRect = MapWindow::CalculateScreenBounds(0.0);
+  rectObj screenRect = map_projection.CalculateScreenBounds(0.0);
 
   static POINT pt[MAXCLIPPOLYGON];
 
@@ -277,12 +282,12 @@ void Topology::Paint(Canvas &canvas, RECT rc) {
             for (int jj=0; jj< shape->line[tt].numpoints; jj++) {
 
               POINT sc;
-              MapWindow::LatLon2Screen(shape->line[tt].point[jj].x,
+              map_projection.LatLon2Screen(shape->line[tt].point[jj].x,
                                        shape->line[tt].point[jj].y,
                                        sc);
-              MapWindow::DrawBitmapIn(canvas, sc, hBitmap);
+              map_window.DrawBitmapIn(canvas, sc, hBitmap);
 
-              cshape->renderSpecial(canvas, sc.x, sc.y);
+              cshape->renderSpecial(canvas, *label_block, sc.x, sc.y);
 
           }
         }
@@ -298,8 +303,8 @@ void Topology::Paint(Canvas &canvas, RECT rc) {
           int miny = rc.bottom;
           int msize = min(shape->line[tt].numpoints, MAXCLIPPOLYGON);
 
-	  MapWindow::LatLon2Screen(shape->line[tt].point,
-				   pt, msize, 1);
+	  map_projection.LatLon2Screen(shape->line[tt].point,
+				       pt, msize, 1);
           for (int jj=0; jj< msize; jj++) {
             if (pt[jj].x<=minx) {
               minx = pt[jj].x;
@@ -308,7 +313,7 @@ void Topology::Paint(Canvas &canvas, RECT rc) {
 	  }
 
           canvas.clipped_polygon(pt, msize, rc, false);
-          cshape->renderSpecial(canvas, minx, miny);
+          cshape->renderSpecial(canvas, *label_block, minx, miny);
         }
       break;
 
@@ -321,8 +326,8 @@ void Topology::Paint(Canvas &canvas, RECT rc) {
           int miny = rc.bottom;
           int msize = min(shape->line[tt].numpoints/iskip, MAXCLIPPOLYGON);
 
-	  MapWindow::LatLon2Screen(shape->line[tt].point,
-				   pt, msize*iskip, iskip);
+	  map_projection.LatLon2Screen(shape->line[tt].point,
+				       pt, msize*iskip, iskip);
 
           for (int jj=0; jj< msize; jj++) {
             if (pt[jj].x<=minx) {
@@ -331,7 +336,7 @@ void Topology::Paint(Canvas &canvas, RECT rc) {
             }
 	  }
           canvas.clipped_polygon(pt, msize, rc, true);
-          cshape->renderSpecial(canvas, minx, miny);
+          cshape->renderSpecial(canvas, *label_block, minx, miny);
         }
       break;
 
@@ -371,7 +376,7 @@ XShape* TopologyLabel::addShape(const int i) {
 }
 
 
-void XShapeLabel::renderSpecial(Canvas &canvas, int x, int y) {
+void XShapeLabel::renderSpecial(Canvas &canvas, LabelBlock &label_block, int x, int y) {
   if (label && (DeclutterLabels<2)) {
 
     TCHAR Temp[100];
@@ -400,7 +405,7 @@ void XShapeLabel::renderSpecial(Canvas &canvas, int x, int y) {
     brect.top = y;
     brect.bottom = brect.top+tsize.cy;
 
-    if (!MapWindow::checkLabelBlock(brect))
+    if (!label_block.check(brect))
       return;
 
     canvas.set_text_color(Color(0x20,0x20,0x20));

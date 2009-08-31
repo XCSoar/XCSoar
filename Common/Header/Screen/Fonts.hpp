@@ -39,6 +39,7 @@ Copyright_License {
 
 #include "StdAfx.h"
 #include "Screen/Font.hpp"
+#include "Screen/Canvas.hpp"
 
 void DeleteFonts();
 void InitialiseFonts(HWND hwnd, RECT rc);
@@ -53,5 +54,8 @@ extern Font MapLabelFont;
 extern Font StatisticsFont;
 
 extern int UseCustomFonts;
+
+void SetFontInfo(Canvas &canvas, FontHeightInfo_t *FontHeightInfo);
+void SetFontInfoAll(const Canvas &real_canvas);
 
 #endif

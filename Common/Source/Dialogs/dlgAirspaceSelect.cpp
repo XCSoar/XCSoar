@@ -50,7 +50,7 @@ Copyright_License {
 #include "Screen/Util.hpp"
 #include "Screen/MainWindow.hpp"
 #include "DataField/Base.hpp"
-
+#include "MapWindow.h"
 #include <assert.h>
 #include <stdlib.h>
 
@@ -276,7 +276,8 @@ static void PrepareData(void){
 
     AirspaceSelectInfo[index].Distance = DISTANCEMODIFY*
       RangeAirspaceArea(Longitude, Latitude, i,
-                        &AirspaceSelectInfo[index].Direction);
+                        &AirspaceSelectInfo[index].Direction,
+			map_window);
 
     _tcsncpy(sTmp, AirspaceArea[i].Name, 4);
     sTmp[4] = '\0';

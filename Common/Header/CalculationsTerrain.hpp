@@ -40,8 +40,11 @@ Copyright_License {
 
 #include "Calculations.h"
 
+class MapWindowProjection;
+
 void TerrainHeight(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
-void TerrainFootprint(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
+void TerrainFootprint(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
+		      MapWindowProjection &map_projection);
 void CheckFinalGlideThroughTerrain(NMEA_INFO *Basic,
 				   DERIVED_INFO *Calculated,
 				   double LegToGo,

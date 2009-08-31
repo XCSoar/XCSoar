@@ -134,7 +134,7 @@ void MarkLocation(const double lon, const double lat)
 
 }
 
-void DrawMarks(Canvas &canvas, const RECT rc)
+void DrawMarks(Canvas &canvas, MapWindow &m_window, const RECT rc)
 {
 
   mutexMapData.Lock();
@@ -143,7 +143,7 @@ void DrawMarks(Canvas &canvas, const RECT rc)
       topo_marks->Reset();
       reset_marks = false;
     }
-    topo_marks->Paint(canvas, rc);
+    topo_marks->Paint(canvas, m_window, rc);
   }
   mutexMapData.Unlock();
 

@@ -464,18 +464,19 @@ int FindNearestAirspaceCircle(double longitude, double latitude,
 // this one uses screen coordinates to avoid as many trig functions
 // as possible.. it means it is approximate but for our use it is ok.
 double ScreenCrossTrackError(double lon1, double lat1,
-		     double lon2, double lat2,
-		     double lon3, double lat3,
-		     double *lon4, double *lat4) {
+			     double lon2, double lat2,
+			     double lon3, double lat3,
+			     double *lon4, double *lat4,
+			     MapWindowProjection &map_projection) {
   POINT p1, p2, p3, p4;
 
-  MapWindowProjection::LatLon2Screen(lon1, lat1, p1);
-  MapWindowProjection::LatLon2Screen(lon2, lat2, p2);
-  MapWindowProjection::LatLon2Screen(lon3, lat3, p3);
+  map_projection.LatLon2Screen(lon1, lat1, p1);
+  map_projection.LatLon2Screen(lon2, lat2, p2);
+  map_projection.LatLon2Screen(lon3, lat3, p3);
 
   ScreenClosestPoint(p1, p2, p3, &p4, 0);
 
-  MapWindowProjection::Screen2LatLon(p4.x, p4.y, *lon4, *lat4);
+  map_projection.Screen2LatLon(p4.x, p4.y, *lon4, *lat4);
 
   // compute accurate distance
   double tmpd;
@@ -486,7 +487,8 @@ double ScreenCrossTrackError(double lon1, double lat1,
 
 double RangeAirspaceArea(const double &longitude,
 			 const double &latitude,
-			 int i, double *bearing) {
+			 int i, double *bearing,
+			 MapWindowProjection &map_projection) {
 
   // find nearest distance to line segment
   int j;
@@ -507,7 +509,8 @@ double RangeAirspaceArea(const double &longitude,
 				 AirspacePoint[p2].Longitude,
 				 AirspacePoint[p2].Latitude,
 				 longitude, latitude,
-				 &lon4, &lat4);
+				 &lon4, &lat4,
+				 map_projection);
     if ((dist<nearestdistance)||(j==0)) {
       nearestdistance = dist;
 
@@ -524,7 +527,8 @@ double RangeAirspaceArea(const double &longitude,
 
 
 
-int FindNearestAirspaceArea(double longitude,
+int FindNearestAirspaceArea(MapWindowProjection& map_projection,
+			    double longitude,
 			    double latitude,
 			    double *nearestdistance,
 			    double *nearestbearing,
@@ -576,7 +580,7 @@ int FindNearestAirspaceArea(double longitude,
       inside = InsideAirspaceArea(longitude, latitude, i);
       double dist, bearing;
 
-      dist = RangeAirspaceArea(longitude, latitude, i, &bearing);
+      dist = RangeAirspaceArea(longitude, latitude, i, &bearing, map_projection);
 
       if (dist< *nearestdistance) {
 	*nearestdistance = dist;
@@ -610,7 +614,8 @@ int FindNearestAirspaceArea(double longitude,
 //
 // This only searches within a range of 100km of the target
 
-void FindNearestAirspace(double longitude, double latitude,
+void FindNearestAirspace(MapWindowProjection& map_projection,
+			 double longitude, double latitude,
 			 double *nearestdistance, double *nearestbearing,
 			 int *foundcircle, int *foundarea,
 			 double *height)
@@ -627,7 +632,8 @@ void FindNearestAirspace(double longitude, double latitude,
 					   &nearestt,
 					   height);
 
-  *foundarea = FindNearestAirspaceArea(longitude, latitude,
+  *foundarea = FindNearestAirspaceArea(map_projection,
+				       longitude, latitude,
 				       &nearestd2, &nearestb2,
 				       &nearestt,
 				       height);

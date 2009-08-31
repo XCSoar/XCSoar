@@ -251,20 +251,20 @@ void InputEvents::eventScreenModes(const TCHAR *misc) {
   //  -- normal infobox
 
   if (_tcscmp(misc, TEXT("normal")) == 0) {
-    MapWindow::RequestFullScreen(false);
+    map_window.RequestFullScreen(false);
     EnableAuxiliaryInfo = false;
   } else if (_tcscmp(misc, TEXT("auxilary")) == 0) {
-    MapWindow::RequestFullScreen(false);
+    map_window.RequestFullScreen(false);
     EnableAuxiliaryInfo = true;
   } else if (_tcscmp(misc, TEXT("toggleauxiliary")) == 0) {
-    MapWindow::RequestFullScreen(false);
+    map_window.RequestFullScreen(false);
     EnableAuxiliaryInfo = !EnableAuxiliaryInfo;
   } else if (_tcscmp(misc, TEXT("full")) == 0) {
-    MapWindow::RequestFullScreen(true);
+    map_window.RequestFullScreen(true);
   } else if (_tcscmp(misc, TEXT("togglefull")) == 0) {
-    MapWindow::RequestToggleFullScreen();
+    map_window.RequestToggleFullScreen();
   } else if (_tcscmp(misc, TEXT("show")) == 0) {
-    if (MapWindow::isMapFullScreen())
+    if (map_window.isMapFullScreen())
       Message::AddMessage(TEXT("Screen Mode Full"));
     else if (EnableAuxiliaryInfo)
       Message::AddMessage(TEXT("Screen Mode Auxiliary"));
@@ -285,7 +285,7 @@ void InputEvents::eventScreenModes(const TCHAR *misc) {
       short pnascrollstatus;
       pnascrollstatus=1;
       if ( InfoBoxLayout::fullscreen == true ) pnascrollstatus=3;
-      if ( MapWindow::isMapFullScreen() ) pnascrollstatus=4;
+      if ( map_window.isMapFullScreen() ) pnascrollstatus=4;
       if ( EnableAuxiliaryInfo == true ) pnascrollstatus=2;
 
       switch (pnascrollstatus) {
@@ -305,12 +305,12 @@ void InputEvents::eventScreenModes(const TCHAR *misc) {
 	if (EnableSoundModes) PlayResource(TEXT("IDR_WAV_CLICK"));
 #endif
 	EnableAuxiliaryInfo = false;
-	MapWindow::RequestFullScreen(true);
+	map_window.RequestFullScreen(true);
 	break;
       case 4:
 	//	InfoBoxLayout::fullscreen = false;
 	EnableAuxiliaryInfo = false;
-	MapWindow::RequestFullScreen(false);
+	map_window.RequestFullScreen(false);
 #ifndef DISABLEAUDIO
 	if (EnableSoundModes) PlayResource(TEXT("IDR_WAV_BELL"));
 #endif
@@ -325,11 +325,11 @@ void InputEvents::eventScreenModes(const TCHAR *misc) {
 #ifndef DISABLEAUDIO
 	  if (EnableSoundModes) PlayResource(TEXT("IDR_WAV_CLICK"));
 #endif
-	  MapWindow::RequestToggleFullScreen();
+	  map_window.RequestToggleFullScreen();
 	  EnableAuxiliaryInfo = false;
 	} else {
-	  if (MapWindow::isMapFullScreen()) {
-	    MapWindow::RequestToggleFullScreen();
+	  if (map_window.isMapFullScreen()) {
+	    map_window.RequestToggleFullScreen();
 #ifndef DISABLEAUDIO
 	    if (EnableSoundModes) PlayResource(TEXT("IDR_WAV_BELL"));
 #endif
@@ -347,11 +347,11 @@ void InputEvents::eventScreenModes(const TCHAR *misc) {
 #ifndef DISABLEAUDIO
       if (EnableSoundModes) PlayResource(TEXT("IDR_WAV_CLICK"));
 #endif
-      MapWindow::RequestToggleFullScreen();
+      map_window.RequestToggleFullScreen();
       EnableAuxiliaryInfo = false;
     } else {
-      if (MapWindow::isMapFullScreen()) {
-	MapWindow::RequestToggleFullScreen();
+      if (map_window.isMapFullScreen()) {
+	map_window.RequestToggleFullScreen();
 
 #ifndef DISABLEAUDIO  // VENTA-ADDON SOUND CYCLING SCREENS
 	if (EnableSoundModes) PlayResource(TEXT("IDR_WAV_BELL"));
@@ -389,11 +389,11 @@ void InputEvents::eventZoom(const TCHAR* misc) {
   float zoom;
 
   if (_tcscmp(misc, TEXT("auto toggle")) == 0)
-    MapWindow::Event_AutoZoom(-1);
+    map_window.Event_AutoZoom(-1);
   else if (_tcscmp(misc, TEXT("auto on")) == 0)
-    MapWindow::Event_AutoZoom(1);
+    map_window.Event_AutoZoom(1);
   else if (_tcscmp(misc, TEXT("auto off")) == 0)
-    MapWindow::Event_AutoZoom(0);
+    map_window.Event_AutoZoom(0);
   else if (_tcscmp(misc, TEXT("auto show")) == 0) {
     if (AutoZoom)
       Message::AddMessage(TEXT("AutoZoom ON"));
@@ -401,23 +401,23 @@ void InputEvents::eventZoom(const TCHAR* misc) {
       Message::AddMessage(TEXT("AutoZoom OFF"));
   }
   else if (_tcscmp(misc, TEXT("slowout")) == 0)
-    MapWindow::Event_ScaleZoom(-4);
+    map_window.Event_ScaleZoom(-4);
   else if (_tcscmp(misc, TEXT("slowin")) == 0)
-    MapWindow::Event_ScaleZoom(4);
+    map_window.Event_ScaleZoom(4);
   else if (_tcscmp(misc, TEXT("out")) == 0)
-    MapWindow::Event_ScaleZoom(-1);
+    map_window.Event_ScaleZoom(-1);
   else if (_tcscmp(misc, TEXT("in")) == 0)
-    MapWindow::Event_ScaleZoom(1);
+    map_window.Event_ScaleZoom(1);
   else if (_tcscmp(misc, TEXT("-")) == 0)
-    MapWindow::Event_ScaleZoom(-1);
+    map_window.Event_ScaleZoom(-1);
   else if (_tcscmp(misc, TEXT("+")) == 0)
-    MapWindow::Event_ScaleZoom(1);
+    map_window.Event_ScaleZoom(1);
   else if (_tcscmp(misc, TEXT("--")) == 0)
-    MapWindow::Event_ScaleZoom(-2);
+    map_window.Event_ScaleZoom(-2);
   else if (_tcscmp(misc, TEXT("++")) == 0)
-    MapWindow::Event_ScaleZoom(2);
+    map_window.Event_ScaleZoom(2);
   else if (_stscanf(misc, TEXT("%f"), &zoom) == 1)
-    MapWindow::Event_SetZoom((double)zoom);
+    map_window.Event_SetZoom((double)zoom);
 
   else if (_tcscmp(misc, TEXT("circlezoom toggle")) == 0) {
     CircleZoom = !CircleZoom;
@@ -447,31 +447,31 @@ void InputEvents::eventZoom(const TCHAR* misc) {
 //	TODO feature: ???	Go to waypoint (eg: next, named)
 void InputEvents::eventPan(const TCHAR *misc) {
   if (_tcscmp(misc, TEXT("toggle")) == 0)
-    MapWindow::Event_Pan(-1);
+    map_window.Event_Pan(-1);
   else if (_tcscmp(misc, TEXT("supertoggle")) == 0)
-    MapWindow::Event_Pan(-2);
+    map_window.Event_Pan(-2);
   else if (_tcscmp(misc, TEXT("on")) == 0)
-    MapWindow::Event_Pan(1);
+    map_window.Event_Pan(1);
   else if (_tcscmp(misc, TEXT("off")) == 0)
-    MapWindow::Event_Pan(0);
+    map_window.Event_Pan(0);
 
 #if defined(PNA) || defined(FIVV)   // VENTA-ADDON  let pan mode scroll wheel zooming with HP31X. VENTA-TODO: make it different for other PNAs
  else if (_tcscmp(misc, TEXT("up")) == 0)
-			MapWindow::Event_ScaleZoom(1);
+			map_window.Event_ScaleZoom(1);
 else if (_tcscmp(misc, TEXT("down")) == 0)
-			MapWindow::Event_ScaleZoom(-1); // fixed v58
+			map_window.Event_ScaleZoom(-1); // fixed v58
 #else
   else if (_tcscmp(misc, TEXT("up")) == 0)
-    MapWindow::Event_PanCursor(0,1);
+    map_window.Event_PanCursor(0,1);
   else if (_tcscmp(misc, TEXT("down")) == 0)
-    MapWindow::Event_PanCursor(0,-1);
+    map_window.Event_PanCursor(0,-1);
 #endif   // END VENTA
   else if (_tcscmp(misc, TEXT("left")) == 0)
-    MapWindow::Event_PanCursor(1,0);
+    map_window.Event_PanCursor(1,0);
   else if (_tcscmp(misc, TEXT("right")) == 0)
-    MapWindow::Event_PanCursor(-1,0);
+    map_window.Event_PanCursor(-1,0);
   else if (_tcscmp(misc, TEXT("show")) == 0) {
-    if (MapWindow::isPan())
+    if (map_window.isPan())
       Message::AddMessage(TEXT("Pan mode ON"));
     else
       Message::AddMessage(TEXT("Pan mode OFF"));
@@ -483,28 +483,28 @@ else if (_tcscmp(misc, TEXT("down")) == 0)
 void InputEvents::eventTerrainTopology(const TCHAR *misc) {
 
   if (_tcscmp(misc, TEXT("terrain toggle")) == 0)
-    MapWindow::Event_TerrainTopology(-2);
+    map_window.Event_TerrainTopology(-2);
 
   else if (_tcscmp(misc, TEXT("toplogy toggle")) == 0)
-    MapWindow::Event_TerrainTopology(-3);
+    map_window.Event_TerrainTopology(-3);
 
   else if (_tcscmp(misc, TEXT("terrain on")) == 0)
-    MapWindow::Event_TerrainTopology(3);
+    map_window.Event_TerrainTopology(3);
 
   else if (_tcscmp(misc, TEXT("terrain off")) == 0)
-    MapWindow::Event_TerrainTopology(4);
+    map_window.Event_TerrainTopology(4);
 
   else if (_tcscmp(misc, TEXT("topology on")) == 0)
-    MapWindow::Event_TerrainTopology(1);
+    map_window.Event_TerrainTopology(1);
 
   else if (_tcscmp(misc, TEXT("topology off")) == 0)
-    MapWindow::Event_TerrainTopology(2);
+    map_window.Event_TerrainTopology(2);
 
   else if (_tcscmp(misc, TEXT("show")) == 0)
-    MapWindow::Event_TerrainTopology(0);
+    map_window.Event_TerrainTopology(0);
 
   else if (_tcscmp(misc, TEXT("toggle")) == 0)
-    MapWindow::Event_TerrainTopology(-1);
+    map_window.Event_TerrainTopology(-1);
 
 }
 
@@ -516,8 +516,8 @@ void InputEvents::eventClearWarningsOrTerrainTopology(const TCHAR *misc) {
     return;
   }
   // Else toggle TerrainTopology - and show the results
-  MapWindow::Event_TerrainTopology(-1);
-  MapWindow::Event_TerrainTopology(0);
+  map_window.Event_TerrainTopology(-1);
+  map_window.Event_TerrainTopology(0);
 }
 
 // ClearAirspaceWarnings
@@ -1272,7 +1272,8 @@ void InputEvents::eventNearestAirspaceDetails(const TCHAR *misc) {
   }
 
   StartHourglassCursor();
-  FindNearestAirspace(GPS_INFO.Longitude, GPS_INFO.Latitude,
+  FindNearestAirspace(map_window,
+		      GPS_INFO.Longitude, GPS_INFO.Latitude,
 		      &nearestdistance, &nearestbearing,
 		      &foundcircle, &foundarea);
   StopHourglassCursor();
@@ -1749,7 +1750,7 @@ eventPressure		- Increase, Decrease, show, Set pressure value
 eventDeclare			- (JMW separate from internal logger)
 eventAirspaceDisplay	- all, below nnn, below me, auto nnn
 eventAirspaceWarnings- on, off, time nn, ack nn
-eventTerrain			- see MapWindow::Event_Terrain
+eventTerrain			- see map_window.Event_Terrain
 eventCompass			- on, off, cruise on, crusie off, climb on, climb off
 eventVario			- on, off // JMW what does this do?
 eventOrientation		- north, track,  ???

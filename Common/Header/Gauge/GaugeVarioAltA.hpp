@@ -91,7 +91,7 @@ private:
   POINT BitmapUnitSize;
 
  public:
-  GaugeVario(ContainerWindow &parent);
+  GaugeVario(ContainerWindow &parent, const RECT rc);
   ~GaugeVario();
 
   void Render();

@@ -46,6 +46,9 @@ Copyright_License {
 #include "Screen/Bitmap.hpp"
 
 class Canvas;
+class MapWindowProjection;
+class MapWindow;
+class LabelBlock;
 
 class XShape {
  public:
@@ -54,7 +57,7 @@ class XShape {
 
   virtual void load(shapefileObj* shpfile, int i);
   virtual void clear();
-  virtual void renderSpecial(Canvas &canvas, int x, int y) {
+  virtual void renderSpecial(Canvas &canvas, LabelBlock &label_block, int x, int y) {
     (void)canvas; (void)x; (void)y;
   };
 
@@ -73,7 +76,7 @@ class XShapeLabel: public XShape {
   virtual void clear();
   char *label;
   void setlabel(const char* src);
-  virtual void renderSpecial(Canvas &canvas, int x, int y);
+  virtual void renderSpecial(Canvas &canvas, LabelBlock &label_block, int x, int y);
 };
 
 
@@ -87,30 +90,33 @@ class Topology {
 
   void Open();
   void Close();
+  void TriggerIfScaleNowVisible(MapWindowProjection &map_projection);
 
-  void updateCache(rectObj thebounds, bool purgeonly=false);
-  void Paint(Canvas &canvas, RECT rc);
+  void updateCache(MapWindowProjection &map_projection,
+		   rectObj thebounds, bool purgeonly=false);
+  void Paint(Canvas &canvas, MapWindow &m_window, const RECT rc);
 
   double scaleThreshold;
-
-  bool CheckScale();
-  void TriggerIfScaleNowVisible();
-
+  void loadBitmap(const int);
   bool triggerUpdateCache;
+  int getNumVisible() {
+    return shapes_visible_count;
+  }
+ private:
+
+  bool CheckScale(MapWindowProjection &map_projection);
+
   int shapes_visible_count;
 
   XShape** shpCache;
 
   bool checkVisible(shapeObj& shape, rectObj &screenRect);
 
-  void loadBitmap(const int);
-
-  char filename[MAX_PATH];
-
   virtual void removeShape(const int i);
   virtual XShape* addShape(const int i);
 
  protected:
+  char filename[MAX_PATH];
 
   void flushCache();
 

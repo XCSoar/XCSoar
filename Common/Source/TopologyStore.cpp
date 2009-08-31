@@ -74,13 +74,14 @@ bool RectangleIsInside(rectObj r_exterior, rectObj r_interior) {
     return false;
 }
 
-void SetTopologyBounds(const RECT rcin, const bool force) {
+void SetTopologyBounds(MapWindow &m_window,
+		       const RECT rcin, const bool force) {
   static rectObj bounds_active;
   static double range_active = 1.0;
   rectObj bounds_screen;
   (void)rcin;
 
-  bounds_screen = MapWindowProjection::CalculateScreenBounds(1.0);
+  bounds_screen = m_window.CalculateScreenBounds(1.0);
 
   bool recompute = false;
 
@@ -110,7 +111,7 @@ void SetTopologyBounds(const RECT rcin, const bool force) {
     } else {
       scale = BORDERFACTOR;
     }
-    bounds_active = MapWindowProjection::CalculateScreenBounds(scale);
+    bounds_active = m_window.CalculateScreenBounds(scale);
 
     range_active = max((bounds_active.maxx-bounds_active.minx),
 		       (bounds_active.maxy-bounds_active.miny));
@@ -125,21 +126,21 @@ void SetTopologyBounds(const RECT rcin, const bool force) {
     }
 
     // now update visibility of objects in the map window
-    MapWindow::ScanVisibility(&bounds_active);
+    m_window.ScanVisibility(&bounds_active);
 
   }
 
   // check if things have come into or out of scale limit
   for (int z=0; z<MAXTOPOLOGY; z++) {
     if (TopoStore[z]) {
-      TopoStore[z]->TriggerIfScaleNowVisible();
+      TopoStore[z]->TriggerIfScaleNowVisible(m_window);
     }
   }
 
   // ok, now update the caches
 
   if (topo_marks) {
-    topo_marks->updateCache(bounds_active);
+    topo_marks->updateCache(m_window, bounds_active);
   }
 
   if (EnableTopology) {
@@ -154,12 +155,12 @@ void SetTopologyBounds(const RECT rcin, const bool force) {
     int total_shapes_visible = 0;
     for (int z=0; z<MAXTOPOLOGY; z++) {
       if (TopoStore[z]) {
-	rta = MapWindow::RenderTimeAvailable() || force || !sneaked;
+	rta = m_window.RenderTimeAvailable() || force || !sneaked;
 	if (TopoStore[z]->triggerUpdateCache) {
 	  sneaked = true;
 	}
-	TopoStore[z]->updateCache(bounds_active, !rta);
-	total_shapes_visible += TopoStore[z]->shapes_visible_count;
+	TopoStore[z]->updateCache(m_window, bounds_active, !rta);
+	total_shapes_visible += TopoStore[z]->getNumVisible();
       }
     }
 #ifdef DEBUG_GRAPHICS
@@ -183,13 +184,13 @@ void CloseTopology() {
 }
 
 
-void DrawTopology(Canvas &canvas, const RECT rc)
+void DrawTopology(Canvas &canvas, MapWindow &m_window, const RECT rc)
 {
   mutexMapData.Lock();
 
   for (int z=0; z<MAXTOPOLOGY; z++) {
     if (TopoStore[z]) {
-      TopoStore[z]->Paint(canvas,rc);
+      TopoStore[z]->Paint(canvas,m_window,rc);
     }
   }
   mutexMapData.Unlock();

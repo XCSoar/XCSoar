@@ -45,6 +45,7 @@ Copyright_License {
 #include "Screen/Canvas.hpp"
 #include "XCSoar.h"
 #include "Airspace.h"
+#include "LabelBlock.hpp"
 
 typedef union{
   unsigned int AsInt;
@@ -187,11 +188,8 @@ public:
 
 extern ScreenGraphics MapGfx;
 
-void ClipDrawLine(Canvas &canvas, Pen::style PenStyle, const int width,
-		  const POINT ptStart, const POINT ptEnd,
-                  const Color cr, const RECT rc);
-
-bool TextInBox(Canvas &canvas, const TCHAR *Value, int x, int y, int size,
-	       TextInBoxMode_t Mode, bool noOverlap=false);
+bool TextInBox(Canvas &canvas, const TCHAR *Value, int x, int y,
+	       TextInBoxMode_t Mode, const RECT MapRect, 
+	       LabelBlock *label_block=NULL);
 
 #endif

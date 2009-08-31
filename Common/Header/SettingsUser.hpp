@@ -120,6 +120,11 @@ extern bool EnableAuxiliaryInfo;
 extern int  UserLevel; // used by dlgConfiguration
 extern int  ActiveAlternate;
 
+// terrain
+extern short TerrainContrast;
+extern short TerrainBrightness;
+extern short TerrainRamp;
+
 // safety protection
 extern bool LockSettingsInFlight;
 

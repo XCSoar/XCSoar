@@ -51,6 +51,9 @@ Copyright_License {
 
 #include "simpleList.h"
 
+#include "MapWindow.h"
+#include "Interface.hpp"
+
 #include <stdlib.h>
 
 static bool NewAirspaceWarnings = false;
@@ -164,11 +167,6 @@ int AirspaceWarnGetItemCount(void){
 }
 
 
-
-double RangeAirspaceCircle(const double &longitude, const double &latitude, int i);
-double RangeAirspaceArea(const double &longitude, const double &latitude, int i, double *bearing);
-
-
 static void AirspaceWarnListDoNotify(AirspaceWarningNotifyAction_t Action, AirspaceInfo_c *AirSpace){
   for (List<AirspaceWarningNotifier_t>::Node* it = AirspaceWarningNotifierList.begin(); it; it = it->next ){
     (it->data)(Action, AirSpace);
@@ -213,7 +211,8 @@ static void AirspaceWarnListCalcDistance(NMEA_INFO *Basic, DERIVED_INFO *Calcula
       // inside aera -> but RangeAirspaceCircle does!
       double fBearing;
       *hDistance = (int)RangeAirspaceArea(Basic->Longitude, Basic->Latitude,
-                                          AsIdx, &fBearing);
+                                          AsIdx, &fBearing,
+					  map_window);
       *Bearing = (int)fBearing;
     } else {
       *hDistance = 0;
