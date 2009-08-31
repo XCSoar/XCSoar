@@ -841,7 +841,6 @@ int WindowControl::WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam){
       */
     break;
 
-    case WM_QUIT:
     case WM_CLOSE:
       Close();
     return(0);
