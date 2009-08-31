@@ -135,8 +135,6 @@ WindowControl *ActiveControl = NULL;
 WindowControl *LastFocusControl = NULL;
 
 void InitWindowControlModule(void);
-LRESULT CALLBACK WindowControlWndProc(HWND hwnd, UINT uMsg,
-                                      WPARAM wParam, LPARAM lParam);
 
 static COLORREF bkColor = clWhite;
 static COLORREF fgColor = clBlack;
@@ -212,8 +210,7 @@ WindowControl::WindowControl(WindowControl *Owner,
   mBoundRect.right = GetWidth();
   mBoundRect.bottom = GetHeight();
 
-  set_userdata(this);
-  set_wndproc(WindowControlWndProc);
+  install_wndproc();
 
   mBorderSize = 1;
 
@@ -522,7 +519,7 @@ bool WindowControl::SetReadOnly(bool Value){
   bool res = mReadOnly;
   if (mReadOnly != Value){
     mReadOnly = Value;
-    Paint(GetCanvas());
+    on_paint(GetCanvas());
   }
   return(res);
 }
@@ -532,7 +529,7 @@ COLORREF WindowControl::SetForeColor(COLORREF Value){
   if (mColorFore != Value){
     mColorFore = Value;
     if (mVisible)
-      Paint(GetCanvas());
+      on_paint(GetCanvas());
   }
   return(res);
 }
@@ -543,7 +540,7 @@ COLORREF WindowControl::SetBackColor(COLORREF Value){
     mColorBack = Value;
     mhBrushBk.set(mColorBack);
     if (mVisible)
-      Paint(GetCanvas());
+      on_paint(GetCanvas());
   }
   return(res);
 }
@@ -607,8 +604,15 @@ int WindowControl::OnHelp() {
 #endif
 };
 
+bool
+WindowControl::on_close(void)
+{
+  Close();
+  return true;
+}
+
 void
-WindowControl::Paint(Canvas &canvas)
+WindowControl::on_paint(Canvas &canvas)
 {
 
   RECT rc;
@@ -708,92 +712,17 @@ WindowControl *WindowControl::FocusPrev(WindowControl *Sender){
   return(NULL);
 }
 
-LRESULT CALLBACK WindowControlWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam){
-
-	WindowControl *w = (WindowControl *) GetWindowLong(hwnd, GWL_USERDATA);
-
-	if (w)
-		return (w->WndProc(hwnd, uMsg, wParam, lParam));
-	else
-		return (DefWindowProc(hwnd, uMsg, wParam, lParam));
-}
-
-
-
-int WindowControl::WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam){
-
-  PAINTSTRUCT ps;            // structure for paint info
-
+LRESULT
+WindowControl::on_message(HWND hwnd, UINT uMsg,
+                          WPARAM wParam, LPARAM lParam)
+{
   switch (uMsg){
-
-
-    case WM_ERASEBKGND:
-      // we don't need one, we just paint over the top
-    return TRUE;
-
-    case WM_PAINT:
-      {
-        PaintCanvas canvas(*this, hwnd);
-        Paint(canvas);
-      }
-    return(0);
-
-    case WM_WINDOWPOSCHANGED:
-      //ib = (WindowControl *)GetWindowLong(hwnd, GWL_USERDATA);
-      //ib->Paint(ib->GetDeviceContext());
-    return 0;
-
-    case WM_CREATE:
-    break;
-
-    case WM_DESTROY:
-    break;
-
-    case WM_COMMAND:
-      if (OnCommand(wParam, lParam)) return(0);
-    break;
-
-    case WM_LBUTTONDBLCLK:
-      InterfaceTimeoutReset();
-      if (!OnLButtonDoubleClick(wParam, lParam)) {
-        ResetDisplayTimeOut();
-        return(0);
-      }
-    break;
-
-    case WM_LBUTTONDOWN:
-      InterfaceTimeoutReset();
-      if (!OnLButtonDown(wParam, lParam)) {
-        ResetDisplayTimeOut();
-        return(0);
-      }
-      // TODO enhancement: need to be able to focus list items here...
-    break;
-
-    case WM_LBUTTONUP:
-      InterfaceTimeoutReset();
-      if (!OnLButtonUp(wParam, lParam)) {
-        ResetDisplayTimeOut();
-        return(0);
-      }
-    break;
-
     case WM_KEYDOWN:
-      InterfaceTimeoutReset();
       // JMW: HELP
       KeyTimer(true, wParam & 0xffff);
-
-      // return(OnKeyDown(wParam, lParam));
-      // experimental 20060516:sgi
-      if (!OnKeyDown(wParam, lParam)) {
-        ResetDisplayTimeOut();
-        return(0);
-      }
       break;
 
     case WM_KEYUP:
-      ResetDisplayTimeOut();
-      InterfaceTimeoutReset();
       // JMW: detect long enter release
       // VENTA4: PNAs don't have Enter, so it should be better to find an alternate solution
 	if (KeyTimer(false, wParam & 0xffff)) {
@@ -802,17 +731,6 @@ int WindowControl::WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam){
 	    if (OnHelp()) return (0);
 	  }
 	}
-      // return(OnKeyUp(wParam, lParam));
-      // experimental 20060516:sgi
-        if (!OnKeyUp(wParam, lParam)) {
-          ResetDisplayTimeOut();
-          return(0);
-        }
-      break;
-
-    case WM_MOUSEMOVE:
-      OnMouseMove(wParam, lParam);
-      return (0);
       break;
 
     case WM_SETFOCUS:
@@ -823,20 +741,15 @@ int WindowControl::WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam){
       SetFocused(false, (HWND) wParam);
     return(0);
 
-    case WM_ACTIVATE:
-      /*
-      if (wParam == WA_ACTIVE){
-        if (LastFocusControl != NULL)
-          SetFocus(LastFocusControl->GetHandle());
-      }
-      return(0);
-      */
-    break;
-
-    case WM_CLOSE:
-      Close();
-    return(0);
-
+  case WM_ERASEBKGND:
+  case WM_PAINT:
+  case WM_WINDOWPOSCHANGED:
+  case WM_CREATE:
+  case WM_DESTROY:
+  case WM_ACTIVATE:
+  case WM_CLOSE:
+    /* exclude these from OnUnhandledMessage() */
+    return ContainerWindow::on_message(hwnd, uMsg, wParam, lParam);
   }
 
   if (mTopOwner != NULL){
@@ -847,7 +760,7 @@ int WindowControl::WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam){
      return(0);
   }
 
-  return (DefWindowProc (hwnd, uMsg, wParam, lParam));
+  return ContainerWindow::on_message(hwnd, uMsg, wParam, lParam);
 }
 
 
@@ -950,16 +863,16 @@ void WndForm::AddClient(WindowControl *Client){      // add client window
 }
 
 
-int WndForm::OnCommand(WPARAM wParam, LPARAM lParam){
-   (void)lParam;
-
+bool
+WndForm::on_command(HWND hWnd, unsigned id, unsigned code)
+{
    // VENTA- DEBUG HARDWARE KEY PRESSED
 #ifdef VENTA_DEBUG_KEY
 	TCHAR ventabuffer[80];
-	wsprintf(ventabuffer,TEXT("ONCKEY WPARAM %d"), wParam);
+        wsprintf(ventabuffer, TEXT("ONCKEY id=%d code=%d"), id, code);
 	DoStatusMessage(ventabuffer);
 #endif
-   if ((wParam & 0xffff) == VK_ESCAPE){
+   if (id == VK_ESCAPE){
      mModalResult = mrCancel;
      return(0);
    }
@@ -1208,7 +1121,7 @@ int WndForm::ShowModal(bool bEnableMap) {
 }
 
 void
-WndForm::Paint(Canvas &canvas)
+WndForm::on_paint(Canvas &canvas)
 {
 
   RECT rcClient;
@@ -1440,16 +1353,17 @@ void WndButton::Destroy(void){
 }
 
 
-int WndButton::OnLButtonUp(WPARAM wParam, LPARAM lParam){
+bool
+WndButton::on_mouse_up(unsigned x, unsigned y)
+{
   POINT Pos;
-  (void)wParam;
 
   mDown = false;
-  Paint(get_canvas());
+  on_paint(get_canvas());
   ReleaseCapture();
 
-  Pos.x = lParam & 0x0000ffff;
-  Pos.y = (lParam >> 16)& 0x0000ffff;
+  Pos.x = x;
+  Pos.y = y;
 
   //POINTSTOPOINT(Pos, MAKEPOINTS(lParam));
 
@@ -1462,18 +1376,19 @@ int WndButton::OnLButtonUp(WPARAM wParam, LPARAM lParam){
     }
   }
 
-  return(1);
+  return true;
 };
 
 
-int WndButton::OnKeyDown(WPARAM wParam, LPARAM lParam){
-	(void)lParam;
+bool
+WndButton::on_key_down(unsigned key_code)
+{
 #ifdef VENTA_DEBUG_EVENT
 	TCHAR ventabuffer[80];
-	wsprintf(ventabuffer,TEXT("ONKEYDOWN WPARAM %d"), wParam); // VENTA-
+	wsprintf(ventabuffer,TEXT("ONKEYDOWN key_code=%d"), key_code); // VENTA-
 	DoStatusMessage(ventabuffer);
 #endif
-  switch (wParam){
+  switch (key_code){
 #ifdef GNAV
     // JMW added this to make data entry easier
     case VK_F4:
@@ -1482,16 +1397,18 @@ int WndButton::OnKeyDown(WPARAM wParam, LPARAM lParam){
     case VK_SPACE:
       if (!mDown){
         mDown = true;
-        Paint(get_canvas());
+        on_paint(get_canvas());
       }
-    return(0);
+      return true;
   }
-  return(1);
+
+  return WindowControl::on_key_down(key_code);
 }
 
-int WndButton::OnKeyUp(WPARAM wParam, LPARAM lParam){
-	(void)lParam;
-  switch (wParam){
+bool
+WndButton::on_key_up(unsigned key_code)
+{
+  switch (key_code){
 #ifdef GNAV
     // JMW added this to make data entry easier
     case VK_F4:
@@ -1501,7 +1418,7 @@ int WndButton::OnKeyUp(WPARAM wParam, LPARAM lParam){
       if (!Debounce()) return(1); // prevent false trigger
       if (mDown){
         mDown = false;
-        Paint(get_canvas());
+        on_paint(get_canvas());
         if (mOnClickNotify != NULL) {
           RECT mRc;
           GetWindowRect(GetHandle(), &mRc);
@@ -1509,13 +1426,16 @@ int WndButton::OnKeyUp(WPARAM wParam, LPARAM lParam){
           (mOnClickNotify)(this);
         }
       }
-    return(0);
+      return true;
   }
-  return(1);
+
+  return WindowControl::on_key_up(key_code);
 }
 
-int WndButton::OnLButtonDown(WPARAM wParam, LPARAM lParam){
-	(void)lParam; (void)wParam;
+bool
+WndButton::on_mouse_down(unsigned x, unsigned y)
+{
+  (void)x; (void)y;
   mDown = true;
   if (!GetFocused())
     SetFocus(GetHandle());
@@ -1524,28 +1444,30 @@ int WndButton::OnLButtonDown(WPARAM wParam, LPARAM lParam){
     update();
   }
   SetCapture(GetHandle());
-  return(1);
+  return true;
 };
 
-int WndButton::OnLButtonDoubleClick(WPARAM wParam, LPARAM lParam){
-	(void)lParam; (void)wParam;
+bool
+WndButton::on_mouse_double(unsigned x, unsigned y)
+{
+  (void)x; (void)y;
   mDown = true;
   update(*GetBoundRect());
   update();
   SetCapture(GetHandle());
-  return(1);
+  return true;
 };
 
 
 void
-WndButton::Paint(Canvas &canvas)
+WndButton::on_paint(Canvas &canvas)
 {
 
   RECT rc;
 
   if (!GetVisible()) return;
 
-  WindowControl::Paint(canvas);
+  WindowControl::on_paint(canvas);
 
   CopyRect(&rc, GetBoundRect());
   InflateRect(&rc, -2, -2); // todo border width
@@ -1614,7 +1536,6 @@ WndButton::Paint(Canvas &canvas)
 // 20060518:sgi old version
 //  ExtTextOut(hDC, org.x, org.y,
 //    /*ETO_OPAQUE | */ETO_CLIPPED, &r, mCaption, _tcslen(mCaption), NULL);
-
 }
 
 
@@ -1802,7 +1723,7 @@ int WndProperty::WndProcEditControl(HWND hwnd, UINT uMsg,
       if ((wParam & 0xffff) == VK_RETURN || (wParam & 0xffff) == VK_F23) { // Compaq uses VKF23
         if (this->mDialogStyle) {
           InterfaceTimeoutReset();
-          if (!OnLButtonDown(wParam, lParam)) {
+          if (on_mouse_down(LOWORD(lParam), HIWORD(lParam))) {
             ResetDisplayTimeOut();
             return(0);
           }
@@ -1843,7 +1764,7 @@ int WndProperty::WndProcEditControl(HWND hwnd, UINT uMsg,
       // if it's an Combopicker field, then call the combopicker routine
       if (this->mDialogStyle) {
         InterfaceTimeoutReset();
-        if (!OnLButtonDown(wParam, lParam)) {
+        if (on_mouse_down(LOWORD(lParam), HIWORD(lParam))) {
           ResetDisplayTimeOut();
           return(0);
         }
@@ -1940,22 +1861,24 @@ int WndProperty::OnEditKeyDown(WPARAM wParam, LPARAM lParam){
   return(1);
 }
 
-int WndProperty::OnKeyDown(WPARAM wParam, LPARAM lParam){
-  (void)lParam;
-  switch (wParam){
+bool
+WndProperty::on_key_down(unsigned key_code)
+{
+  switch (key_code){
     case VK_RIGHT:
       IncValue();
-    return(0);
+      return true;
     case VK_LEFT:
       DecValue();
-    return(0);
+      return true;
   }
 
-  return(1);
+  return WindowControl::on_key_down(key_code);
 };
 
-int WndProperty::OnLButtonDown(WPARAM wParam, LPARAM lParam){
-  (void)wParam;
+bool
+WndProperty::on_mouse_down(unsigned x, unsigned y)
+{
   POINT Pos;
 
   if (mDialogStyle)
@@ -1974,11 +1897,11 @@ int WndProperty::OnLButtonDown(WPARAM wParam, LPARAM lParam){
 
     if (!GetFocused()){
       set_focus();
-      return(0);
+      return true;
     }
 
-    Pos.x = lParam & 0x0000ffff;
-    Pos.y = (lParam >> 16)& 0x0000ffff;
+    Pos.x = x;
+    Pos.y = y;
     //POINTSTOPOINT(Pos, MAKEPOINTS(lParam));
 
     mDownDown = (PtInRect(&mHitRectDown, Pos) != 0);
@@ -1998,19 +1921,19 @@ int WndProperty::OnLButtonDown(WPARAM wParam, LPARAM lParam){
     }
     set_capture();
   }
-  return(0);
+
+  return true;
 };
 
-int WndProperty::OnLButtonDoubleClick(WPARAM wParam, LPARAM lParam){
-
-  return(OnLButtonDown(wParam, lParam));
-
+bool
+WndProperty::on_mouse_double(unsigned x, unsigned y)
+{
+  return on_mouse_down(x, y);
 }
 
-int WndProperty::OnLButtonUp(WPARAM wParam, LPARAM lParam){
-	(void)lParam;
-	(void)wParam;
-
+bool
+WndProperty::on_mouse_up(unsigned x, unsigned y)
+{
   if (mDialogStyle)
   {
   }
@@ -2030,7 +1953,7 @@ int WndProperty::OnLButtonUp(WPARAM wParam, LPARAM lParam){
 
   }
   release_capture();
-  return(0);
+  return true;
 }
 
 
@@ -2060,7 +1983,7 @@ int WndProperty::DecValue(void){
 
 
 void
-WndProperty::Paint(Canvas &canvas)
+WndProperty::on_paint(Canvas &canvas)
 {
 
   RECT r;
@@ -2068,10 +1991,9 @@ WndProperty::Paint(Canvas &canvas)
   POINT org;
   HBITMAP oldBmp;
 
-
   if (!GetVisible()) return;
 
-  WindowControl::Paint(canvas);
+  WindowControl::on_paint(canvas);
 
   r.left = 0;
   r.top = 0;
@@ -2192,12 +2114,11 @@ DataField *WndProperty::SetDataField(DataField *Value){
 
 
 void
-WndOwnerDrawFrame::Paint(Canvas &canvas)
+WndOwnerDrawFrame::on_paint(Canvas &canvas)
 {
-
   if (!GetVisible()) return;
 
-  WndFrame::Paint(canvas);
+  WndFrame::on_paint(canvas);
 
   canvas.select(*GetFont());
 
@@ -2219,26 +2140,28 @@ void WndFrame::Destroy(void){
 }
 
 
-int WndFrame::OnKeyDown(WPARAM wParam, LPARAM lParam){
+bool
+WndFrame::on_key_down(unsigned key_code)
+{
   if (mIsListItem && GetOwner()!=NULL){
     RECT mRc = get_position();
     SetSourceRectangle(mRc);
-    return(((WndListFrame*)GetOwner())->OnItemKeyDown(this, wParam, lParam));
+    return(((WndListFrame*)GetOwner())->OnItemKeyDown(this, key_code, 0));
   }
-  return(1);
+
+  return WindowControl::on_key_down(key_code);
 }
 
 void
-WndFrame::Paint(Canvas &canvas)
+WndFrame::on_paint(Canvas &canvas)
 {
-
   if (!GetVisible()) return;
 
   if (mIsListItem && GetOwner()!=NULL) {
     ((WndListFrame*)GetOwner())->PrepareItemDraw();
   }
 
-  WindowControl::Paint(canvas);
+  WindowControl::on_paint(canvas);
 
   if (mCaption != 0){
 
@@ -2259,7 +2182,6 @@ WndFrame::Paint(Canvas &canvas)
       mCaptionStyle // | DT_CALCRECT
     );
   }
-
 }
 
 void WndFrame::SetCaption(const TCHAR *Value){
@@ -2345,7 +2267,7 @@ void WndListFrame::Destroy(void){
 
 
 void
-WndListFrame::Paint(Canvas &canvas)
+WndListFrame::on_paint(Canvas &canvas)
 {
   int i;
 
@@ -2361,7 +2283,7 @@ WndListFrame::Paint(Canvas &canvas)
 */
   }
 
-  WndFrame::Paint(canvas);
+  WndFrame::on_paint(canvas);
 
   if (mClientCount > 0){
     Viewport viewport(canvas, mClients[0]->GetWidth(),
@@ -2383,7 +2305,7 @@ WndListFrame::Paint(Canvas &canvas)
       }
 
       mClients[0]->PaintSelector(true);
-      mClients[0]->Paint(canvas2);
+      mClients[0]->on_paint(canvas2);
       mClients[0]->PaintSelector(false);
 
       viewport.commit();
@@ -2794,21 +2716,19 @@ int WndListFrame::PrepareItemDraw(void){
   return(1);
 }
 
-int WndListFrame::OnLButtonUp(WPARAM wParam, LPARAM lParam) {
+bool
+WndListFrame::on_mouse_up(unsigned x, unsigned y)
+{
     mMouseDown=false;
-    return 1;
+    return false;
 }
 
 static bool isselect = false;
 
-int WndFrame::OnLButtonUp(WPARAM wParam, LPARAM lParam) {
-  return 1;
-}
-
 // JMW needed to support mouse/touchscreen
-int WndFrame::OnLButtonDown(WPARAM wParam, LPARAM lParam) {
-	(void)wParam;
-
+bool
+WndFrame::on_mouse_down(unsigned xPos, unsigned yPos)
+{
   if (mIsListItem && GetOwner()!=NULL) {
 
     if (!GetFocused()) {
@@ -2820,14 +2740,12 @@ int WndFrame::OnLButtonDown(WPARAM wParam, LPARAM lParam) {
       update();
     //}
 
-    int xPos = LOWORD(lParam);  // horizontal position of cursor
-    int yPos = HIWORD(lParam);  // vertical position of cursor
     WndListFrame* wlf = ((WndListFrame*)GetOwner());
     RECT mRc = get_position();
     wlf->SelectItemFromScreen(xPos, yPos, &mRc);
   }
   isselect = false;
-  return(1);
+  return false;
 }
 
 
@@ -2884,7 +2802,9 @@ void WndListFrame::SelectItemFromScreen(int xPos, int yPos,
 }
 
 
-int WndListFrame::OnMouseMove(WPARAM wParam, LPARAM lParam) {
+bool
+WndListFrame::on_mouse_move(unsigned x, unsigned y, unsigned keys)
+{
   static bool bMoving = false;
 
   int dT = GetTickCount()-LastMouseMoveTime;
@@ -2893,8 +2813,8 @@ int WndListFrame::OnMouseMove(WPARAM wParam, LPARAM lParam) {
     bMoving=true;
 
     POINT Pos;
-    Pos.x = LOWORD(lParam);
-    Pos.y = HIWORD(lParam);
+    Pos.x = x;
+    Pos.y = y;
 
     if (mMouseDown && PtInRect(&rcScrollBar, Pos))
     {
@@ -2916,14 +2836,15 @@ int WndListFrame::OnMouseMove(WPARAM wParam, LPARAM lParam) {
     LastMouseMoveTime = GetTickCount();
     bMoving=false;
   } // Tickcount
-  return(1);
+  return false;
 }
 
-int WndListFrame::OnLButtonDown(WPARAM wParam, LPARAM lParam) {
-
+bool
+WndListFrame::on_mouse_down(unsigned x, unsigned y)
+{
   POINT Pos;
-  Pos.x = LOWORD(lParam);
-  Pos.y = HIWORD(lParam);
+  Pos.x = x;
+  Pos.y = y;
   mMouseDown=false;
 
   if (PtInRect(&rcScrollBarButton, Pos))  // see if click is on scrollbar handle
@@ -2954,10 +2875,10 @@ int WndListFrame::OnLButtonDown(WPARAM wParam, LPARAM lParam) {
   if (mClientCount > 0)
   {
     isselect = true;
-    ((WndFrame *)mClients[0])->OnLButtonDown(wParam, lParam);
+    ((WndFrame *)mClients[0])->on_mouse_down(x, y);
   }
 
-  return(1);
+  return false;
 }
 
 inline int WndListFrame::GetScrollBarHeight (void)
