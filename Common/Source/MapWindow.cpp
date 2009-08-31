@@ -463,7 +463,7 @@ static int XstartScreen, YstartScreen;
 static bool ignorenext=true;
 static DWORD dwDownTime= 0L, dwUpTime= 0L, dwInterval= 0L;
 
-bool MapWindow::on_mouse_double(unsigned x, unsigned y)
+bool MapWindow::on_mouse_double(int x, int y)
 {
   // Added by ARH to show menu button when mapwindow is double clicked.
   //
@@ -479,7 +479,7 @@ bool MapWindow::on_mouse_double(unsigned x, unsigned y)
   return true;
 }
 
-bool MapWindow::on_mouse_move(unsigned x, unsigned y)
+bool MapWindow::on_mouse_move(int x, int y)
 {
   mutexTaskData.Lock();
   if (AATEnabled && TargetPan && (TargetDrag_State>0)) {
@@ -504,7 +504,7 @@ bool MapWindow::on_mouse_move(unsigned x, unsigned y)
   return true;
 }
 
-bool MapWindow::on_mouse_down(unsigned x, unsigned y)
+bool MapWindow::on_mouse_down(int x, int y)
 {
   ResetDisplayTimeOut();
   dwDownTime = GetTickCount();
@@ -542,7 +542,7 @@ bool MapWindow::on_mouse_down(unsigned x, unsigned y)
 
 
 
-bool MapWindow::on_mouse_up(unsigned x, unsigned y)
+bool MapWindow::on_mouse_up(int x, int y)
 {
   if (ignorenext||dwDownTime==0) {
     ignorenext=false;

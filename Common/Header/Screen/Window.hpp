@@ -64,13 +64,11 @@ public:
   }
 
   void set(ContainerWindow *parent, LPCTSTR cls, LPCTSTR text,
-           unsigned left, unsigned top,
-           unsigned width, unsigned height,
+           int left, int top, unsigned width, unsigned height,
            DWORD style, DWORD ex_style=0);
 
   void set(ContainerWindow *parent, LPCTSTR cls, LPCTSTR text,
-           unsigned left, unsigned top,
-           unsigned width, unsigned height,
+           int left, int top, unsigned width, unsigned height,
            bool center = false, bool notify = false, bool show = true,
            bool tabstop = false, bool border = false);
 
@@ -197,10 +195,10 @@ protected:
   virtual bool on_destroy();
   virtual bool on_close();
   virtual bool on_resize(unsigned width, unsigned height);
-  virtual bool on_mouse_move(unsigned x, unsigned y, unsigned keys);
-  virtual bool on_mouse_down(unsigned x, unsigned y);
-  virtual bool on_mouse_up(unsigned x, unsigned y);
-  virtual bool on_mouse_double(unsigned x, unsigned y);
+  virtual bool on_mouse_move(int x, int y, unsigned keys);
+  virtual bool on_mouse_down(int x, int y);
+  virtual bool on_mouse_up(int x, int y);
+  virtual bool on_mouse_double(int x, int y);
   virtual bool on_key_down(unsigned key_code);
   virtual bool on_key_up(unsigned key_code);
   virtual bool on_command(HWND hWnd, unsigned id, unsigned code);

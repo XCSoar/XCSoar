@@ -50,8 +50,7 @@ public:
   bool find(LPCTSTR cls, LPCTSTR text);
 
   void set(LPCTSTR cls, LPCTSTR text,
-           unsigned left, unsigned top,
-           unsigned width, unsigned height);
+           int left, int top, unsigned width, unsigned height);
 
   void full_screen();
 

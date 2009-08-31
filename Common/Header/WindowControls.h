@@ -286,7 +286,7 @@ class WndFrame:public WindowControl{
     void SetIsListItem(bool Value){mIsListItem = Value;};
 
     /* events from class Window */
-    virtual bool on_mouse_down(unsigned x, unsigned y);
+    virtual bool on_mouse_down(int x, int y);
 
   protected:
 
@@ -326,7 +326,7 @@ class WndListFrame:public WndFrame{
 
     virtual void Destroy(void);
 
-    bool on_mouse_move(unsigned x, unsigned y, unsigned keys);
+    bool on_mouse_move(int x, int y, unsigned keys);
     int OnItemKeyDown(WindowControl *Sender, WPARAM wParam, LPARAM lParam);
     int PrepareItemDraw(void);
     void ResetList(void);
@@ -347,8 +347,8 @@ class WndListFrame:public WndFrame{
     int ScrollbarTop;
     int ScrollbarWidth;
 
-    virtual bool on_mouse_down(unsigned x, unsigned y);
-    virtual bool on_mouse_up(unsigned x, unsigned y);
+    virtual bool on_mouse_down(int x, int y);
+    virtual bool on_mouse_up(int x, int y);
 
     OnListCallback_t mOnListCallback;
     OnListCallback_t mOnListEnterCallback;
@@ -507,9 +507,9 @@ class WndButton:public WindowControl{
     virtual void Destroy(void);
 
     /* override event methods from class Window */
-    virtual bool on_mouse_up(unsigned x, unsigned y);
-    virtual bool on_mouse_down(unsigned x, unsigned y);
-    virtual bool on_mouse_double(unsigned x, unsigned y);
+    virtual bool on_mouse_up(int x, int y);
+    virtual bool on_mouse_down(int x, int y);
+    virtual bool on_mouse_double(int x, int y);
     virtual bool on_key_down(unsigned key_code);
     virtual bool on_key_up(unsigned key_code);
 
@@ -583,9 +583,9 @@ class WndProperty:public WindowControl{
 
     virtual bool on_key_down(unsigned key_code);
     int OnEditKeyDown(WPARAM wParam, LPARAM lParam);
-    virtual bool on_mouse_down(unsigned x, unsigned y);
-    virtual bool on_mouse_up(unsigned x, unsigned y);
-    virtual bool on_mouse_double(unsigned x, unsigned y);
+    virtual bool on_mouse_down(int x, int y);
+    virtual bool on_mouse_up(int x, int y);
+    virtual bool on_mouse_double(int x, int y);
 
 //    int GetAsInteger(void){return(mValue);};
 //    int SetAsInteger(int Value);

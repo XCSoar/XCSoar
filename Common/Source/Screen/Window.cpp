@@ -49,8 +49,7 @@ Copyright_License {
 
 void
 Window::set(ContainerWindow *parent, LPCTSTR cls, LPCTSTR text,
-            unsigned left, unsigned top,
-            unsigned width, unsigned height,
+            int left, int top, unsigned width, unsigned height,
             DWORD style, DWORD ex_style)
 {
   hWnd = ::CreateWindowEx(ex_style, cls, text, style,
@@ -61,8 +60,7 @@ Window::set(ContainerWindow *parent, LPCTSTR cls, LPCTSTR text,
 
 void
 Window::set(ContainerWindow *parent, LPCTSTR cls, LPCTSTR text,
-            unsigned left, unsigned top,
-            unsigned width, unsigned height,
+            int left, int top, unsigned width, unsigned height,
             bool center, bool notify, bool show,
             bool tabstop, bool border)
 {
@@ -138,26 +136,26 @@ Window::on_resize(unsigned width, unsigned height)
 }
 
 bool
-Window::on_mouse_move(unsigned x, unsigned y, unsigned keys)
+Window::on_mouse_move(int x, int y, unsigned keys)
 {
   /* not handled here */
   return false;
 }
 
 bool
-Window::on_mouse_down(unsigned x, unsigned y)
+Window::on_mouse_down(int x, int y)
 {
   return false;
 }
 
 bool
-Window::on_mouse_up(unsigned x, unsigned y)
+Window::on_mouse_up(int x, int y)
 {
   return false;
 }
 
 bool
-Window::on_mouse_double(unsigned x, unsigned y)
+Window::on_mouse_double(int x, int y)
 {
   return false;
 }

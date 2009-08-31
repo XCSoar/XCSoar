@@ -63,8 +63,8 @@ void WindowCanvas::reset()
 }
 
 void
-PaintWindow::set(ContainerWindow *parent, unsigned left, unsigned top,
-                 unsigned width, unsigned height,
+PaintWindow::set(ContainerWindow *parent,
+                 int left, int top, unsigned width, unsigned height,
                  bool center, bool notify, bool show,
                  bool tabstop, bool border)
 {
@@ -79,8 +79,8 @@ PaintWindow::set(ContainerWindow *parent, unsigned left, unsigned top,
 }
 
 void
-PaintWindow::set(ContainerWindow &parent, unsigned left, unsigned top,
-                 unsigned width, unsigned height,
+PaintWindow::set(ContainerWindow &parent,
+                 int left, int top, unsigned width, unsigned height,
                  bool center, bool notify, bool show,
                  bool tabstop, bool border)
 {

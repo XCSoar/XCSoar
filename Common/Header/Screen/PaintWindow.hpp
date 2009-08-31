@@ -70,18 +70,17 @@ private:
 
 public:
   void set(ContainerWindow &parent, LPCTSTR cls,
-           unsigned left, unsigned top,
-           unsigned width, unsigned height) {
+           int left, int top, unsigned width, unsigned height) {
     Window::set(&parent, cls, NULL, left, top, width, height);
   }
 
-  void set(ContainerWindow *parent, unsigned left, unsigned top,
-           unsigned width, unsigned height,
+  void set(ContainerWindow *parent,
+           int left, int top, unsigned width, unsigned height,
            bool center = false, bool notify = false, bool show = true,
            bool tabstop = false, bool border = false);
 
-  void set(ContainerWindow &parent, unsigned left, unsigned top,
-           unsigned width, unsigned height,
+  void set(ContainerWindow &parent,
+           int left, int top, unsigned width, unsigned height,
            bool center = false, bool notify = false, bool show = true,
            bool tabstop = false, bool border = false);
 
@@ -109,27 +108,27 @@ public:
     return canvas.get_height();
   }
 
-  unsigned get_left() const {
+  int get_left() const {
     return 0;
   }
 
-  unsigned get_top() const {
+  int get_top() const {
     return 0;
   }
 
-  unsigned get_right() const {
+  int get_right() const {
     return get_left() + get_width();
   }
 
-  unsigned get_bottom() const {
+  int get_bottom() const {
     return get_top() + get_height();
   }
 
-  unsigned get_hmiddle() const {
+  int get_hmiddle() const {
     return (get_left() + get_right()) / 2;
   }
 
-  unsigned get_vmiddle() const {
+  int get_vmiddle() const {
     return (get_top() + get_bottom()) / 2;
   }
 

@@ -681,7 +681,7 @@ void InfoBox::InitializeDrawHelpers(void){
 
 }
 
-bool InfoBox::on_mouse_down(unsigned x, unsigned y)
+bool InfoBox::on_mouse_down(int x, int y)
 {
   /* synthetic double click detection with no proximity , good for
      infoboxes */
@@ -702,7 +702,7 @@ bool InfoBox::on_mouse_down(unsigned x, unsigned y)
   return true;
 }
 
-bool InfoBox::on_mouse_double(unsigned x, unsigned y)
+bool InfoBox::on_mouse_double(int x, int y)
 {
 #ifndef GNAV
   // JMW capture double click, so infoboxes double clicked also bring up menu

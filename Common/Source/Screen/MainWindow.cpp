@@ -63,8 +63,7 @@ MainWindow::find(LPCTSTR cls, LPCTSTR text)
 
 void
 MainWindow::set(LPCTSTR cls, LPCTSTR text,
-                unsigned left, unsigned top,
-                unsigned width, unsigned height)
+                int left, int top, unsigned width, unsigned height)
 {
   Window::set(NULL, cls, text, left, top, width, height,
               (DWORD)(WS_SYSMENU|WS_CLIPCHILDREN|WS_CLIPSIBLINGS));

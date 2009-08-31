@@ -50,14 +50,13 @@ private:
 
 public:
   void set(ContainerWindow &parent, LPCTSTR cls,
-           unsigned left, unsigned top,
-           unsigned width, unsigned height) {
+           int left, int top, unsigned width, unsigned height) {
     PaintWindow::set(parent, cls, left, top, width, height);
     buffer.set(PaintWindow::get_canvas(), width, height);
   }
 
-  void set(ContainerWindow *parent, unsigned left, unsigned top,
-           unsigned width, unsigned height,
+  void set(ContainerWindow *parent,
+           int left, int top, unsigned width, unsigned height,
            bool center = false, bool notify = false, bool show = true,
            bool tabstop = false, bool border = false) {
     PaintWindow::set(parent, left, top, width, height,
@@ -65,8 +64,8 @@ public:
     buffer.set(PaintWindow::get_canvas(), width, height);
   }
 
-  void set(ContainerWindow &parent, unsigned left, unsigned top,
-           unsigned width, unsigned height,
+  void set(ContainerWindow &parent,
+           int left, int top, unsigned width, unsigned height,
            bool center = false, bool notify = false, bool show = true,
            bool tabstop = false, bool border = false) {
     PaintWindow::set(parent, left, top, width, height,

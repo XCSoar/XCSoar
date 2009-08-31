@@ -38,8 +38,8 @@ Copyright_License {
 #include "Screen/TextWindow.hpp"
 
 void
-TextWindow::set(ContainerWindow &parent, unsigned left, unsigned top,
-                unsigned width, unsigned height,
+TextWindow::set(ContainerWindow &parent,
+                int left, int top, unsigned width, unsigned height,
                 bool center, bool notify, bool show,
                 bool tabstop, bool border)
 {
