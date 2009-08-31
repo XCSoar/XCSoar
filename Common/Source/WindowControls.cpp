@@ -1627,8 +1627,8 @@ WndButton::Paint(Canvas &canvas)
 
 
 
-HBITMAP WndProperty::hBmpLeft32=NULL;
-HBITMAP WndProperty::hBmpRight32=NULL;
+Bitmap WndProperty::hBmpLeft32;
+Bitmap WndProperty::hBmpRight32;
 
 int     WndProperty::InstCount=0;
 
@@ -1683,8 +1683,8 @@ WndProperty::WndProperty(WindowControl *Parent,
   SetBackColor(GetOwner()->GetBackColor());
 
   if (InstCount == 0){
-    hBmpLeft32 = LoadBitmap(hInst, MAKEINTRESOURCE(IDB_DLGBUTTONLEFT32));
-    hBmpRight32 = LoadBitmap(hInst, MAKEINTRESOURCE(IDB_DLGBUTTONRIGHT32));
+    hBmpLeft32.load(MAKEINTRESOURCE(IDB_DLGBUTTONLEFT32));
+    hBmpRight32.load(MAKEINTRESOURCE(IDB_DLGBUTTONRIGHT32));
   }
   InstCount++;
 
@@ -1701,8 +1701,8 @@ void WndProperty::Destroy(void){
 
   InstCount--;
   if (InstCount == 0){
-    DeleteObject(hBmpLeft32);
-    DeleteObject(hBmpRight32);
+    hBmpLeft32.reset();
+    hBmpRight32.reset();
   }
 
   if (mDataField != NULL){
@@ -2123,14 +2123,14 @@ WndProperty::Paint(Canvas &canvas)
 
       if (GetFocused() && !GetReadOnly()){
 
-      oldBmp = (HBITMAP)SelectObject(GetTempDeviceContext(), hBmpLeft32);
+      GetTempDeviceContext().select(hBmpLeft32);
 
       canvas.stretch(mHitRectDown.left, mHitRectDown.top,
                      mBitmapSize, mBitmapSize,
                      GetTempDeviceContext(),
                      mDownDown ? 32 : 0, 0, 32, 32);
 
-      SelectObject(GetTempDeviceContext(), hBmpRight32);
+      GetTempDeviceContext().select(hBmpRight32);
 
       canvas.stretch(mHitRectUp.left, mHitRectUp.top,
                      mBitmapSize, mBitmapSize,

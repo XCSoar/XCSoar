@@ -551,8 +551,8 @@ class WndProperty:public WindowControl{
 
   private:
 
-    static HBITMAP hBmpLeft32;
-    static HBITMAP hBmpRight32;
+    static Bitmap hBmpLeft32;
+    static Bitmap hBmpRight32;
     static int InstCount;
 
     EditWindow edit;
