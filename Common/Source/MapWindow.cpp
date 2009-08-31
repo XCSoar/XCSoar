@@ -443,7 +443,7 @@ bool MapWindow::on_create()
   hDCTemp.set(get_canvas());
   buffer_canvas.set(get_canvas());
   hDCMask.set(hdcDrawWindow, 1, 1);
-  return false;
+  return true;
 }
 
 bool MapWindow::on_destroy()
@@ -453,7 +453,7 @@ bool MapWindow::on_destroy()
   buffer_canvas.reset();
   hDCMask.reset();
   PostQuitMessage (0);
-  return false;
+  return true;
 }
 
 ///////
