@@ -65,6 +65,7 @@ Copyright_License {
 #include "InfoBoxManager.h"
 #include "RasterTerrain.h"
 #include "Gauge/GaugeFLARM.hpp"
+#include "Message.h"
 #include "Calculations.h" // TODO danger! for InAATTurnSector
 
 #ifdef PNA
@@ -565,7 +566,7 @@ bool MapWindow::on_mouse_up(unsigned x, unsigned y)
 
   if (dwInterval == 0) {
 #ifdef DEBUG_VIRTUALKEYS
-    DoStatusMessage(_T("dwInterval==0 impossible!"));
+    Message::AddMessage(_T("dwInterval==0 impossible!"));
 #endif
     return true; // should be impossible
   }
@@ -578,8 +579,8 @@ bool MapWindow::on_mouse_up(unsigned x, unsigned y)
   TCHAR buf[80]; char sbuf[80];
   sprintf(sbuf,"%.0f",distance);
   _stprintf(buf,_T("XY=%d,%d dist=%S Up=%ld Down=%ld Int=%ld"),
-	    X,Y,sbuf,dwUpTime,dwDownTime,dwInterval);
-  DoStatusMessage(buf);
+	    x,y,sbuf,dwUpTime,dwDownTime,dwInterval);
+  Message::AddMessage(buf);
 #endif
 
   // Caution, timed clicks from PC with a mouse are different
@@ -591,7 +592,7 @@ bool MapWindow::on_mouse_up(unsigned x, unsigned y)
     unsigned wParam=ProcessVirtualKey(x,y,dwInterval,0);
     if (wParam==0) {
 #ifdef DEBUG_VIRTUALKEYS
-      DoStatusMessage(_T("E02 INVALID Virtual Key!"));
+      Message::AddMessage(_T("E02 INVALID Virtual Key!"));
 #endif
       return true;
     }
