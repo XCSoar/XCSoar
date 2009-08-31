@@ -129,14 +129,14 @@ PaintWindow::on_message(HWND hWnd, UINT message,
   switch (message) {
   case WM_ERASEBKGND:
     // we don't need one, we just paint over the top
-    return true;
+    return 0;
 
   case WM_PAINT:
     {
       PaintCanvas canvas(*this, hWnd);
       on_paint(canvas);
     }
-    return true;
+    return 0;
   }
 
   return Window::on_message(hWnd, message, wParam, lParam);
