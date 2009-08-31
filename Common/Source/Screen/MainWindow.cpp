@@ -240,7 +240,7 @@ bool MainWindow::on_close() {
     }
     Shutdown();
   }
-  return true;
+  return false;
 }
 
 LRESULT MainWindow::on_message(HWND _hWnd, UINT message,
@@ -258,6 +258,9 @@ LRESULT MainWindow::on_message(HWND _hWnd, UINT message,
     return on_colour((HDC)wParam, get_userdata((HWND)lParam));
     break;
     */
+  case WM_SETFOCUS:
+    InfoBoxManager::Focus();
+    break;
   case WM_ACTIVATE:
     if(LOWORD(wParam) != WA_INACTIVE) {
       full_screen();

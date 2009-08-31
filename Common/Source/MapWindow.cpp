@@ -446,7 +446,7 @@ bool MapWindow::on_create(HWND hWnd)
   hDCTemp.set(get_canvas());
   buffer_canvas.set(get_canvas());
   hDCMask.set(hdcDrawWindow, 1, 1);
-  return true;
+  return false;
 }
 
 bool MapWindow::on_destroy()
@@ -517,6 +517,8 @@ bool MapWindow::on_mouse_down(unsigned x, unsigned y)
   // really need Xstart and Ystart so we save precious
   // milliseconds waiting for BUTTONUP GetTickCount
   Screen2LatLon(x, y, Xstart, Ystart);
+  XstartScreen = x;
+  YstartScreen = y;
 
   mutexTaskData.Lock();
   if (AATEnabled && TargetPan) {
@@ -558,6 +560,8 @@ bool MapWindow::on_mouse_up(unsigned x, unsigned y)
   mutexTaskData.Lock();
   my_target_pan = TargetPan;
   mutexTaskData.Unlock();
+
+  InfoBoxManager::Defocus();
 
   if (dwInterval == 0) {
 #ifdef DEBUG_VIRTUALKEYS
@@ -617,6 +621,7 @@ bool MapWindow::on_mouse_up(unsigned x, unsigned y)
     RefreshMap();
     return true;
   }
+
 #ifdef _SIM_
   if (!ReplayLogger::IsEnabled() && !my_target_pan && (distance>IBLSCALE(36))) {
     // This drag moves the aircraft (changes speed and direction)
@@ -638,9 +643,10 @@ bool MapWindow::on_mouse_up(unsigned x, unsigned y)
     return true;
   }
 #endif
+
   if (!my_target_pan) {
-    if (InfoBoxManager::Defocus()) { //
-      return true;
+    if (InfoBoxManager::Defocus()) {
+      return false;
     }
     if (VirtualKeys==(VirtualKeys_t)vkEnabled) {
       if(dwInterval < VKSHORTCLICK) {
