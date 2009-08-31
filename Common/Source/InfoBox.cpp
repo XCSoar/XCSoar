@@ -681,7 +681,7 @@ void InfoBox::InitializeDrawHelpers(void){
 
 }
 
-void InfoBox::on_mouse_down(unsigned x, unsigned y)
+bool InfoBox::on_mouse_down(unsigned x, unsigned y)
 {
   /* synthetic double click detection with no proximity , good for
      infoboxes */
@@ -692,16 +692,17 @@ void InfoBox::on_mouse_down(unsigned x, unsigned y)
     DoStatusMessage(_T("synth DBLCLK InfoBox!")); // VENTA3
 #endif
     InputEvents::ShowMenu();
-    return;
+    return true;
   }
 
 #ifdef DEBUG_DBLCLK
   DoStatusMessage(_T("BDOWN InfoBox")); // VENTA3
 #endif
   GetParent().send_command(GetHandle());
+  return true;
 }
 
-void InfoBox::on_mouse_double(unsigned x, unsigned y)
+bool InfoBox::on_mouse_double(unsigned x, unsigned y)
 {
 #ifndef GNAV
   // JMW capture double click, so infoboxes double clicked also bring up menu
@@ -712,12 +713,14 @@ void InfoBox::on_mouse_double(unsigned x, unsigned y)
 #endif
   InputEvents::ShowMenu();
 #endif
+  return true;
 }
 
-void InfoBox::on_paint(Canvas &canvas)
+bool InfoBox::on_paint(Canvas &canvas)
 {
   canvas.copy(buffer);
   PaintSelector(canvas);
+  return true;
 }
 
 void InitInfoBoxModule(void){

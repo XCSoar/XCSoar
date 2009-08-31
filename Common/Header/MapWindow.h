@@ -245,14 +245,14 @@ class MapWindow
     return &label_block;
   }
  protected:
-  void on_size(int width, int height);
-  void on_create(HWND hWnd);
-  void on_destroy();
-  void on_mouse_double(unsigned x, unsigned y);
-  void on_mouse_move(unsigned x, unsigned y);
-  void on_mouse_down(unsigned x, unsigned y);
-  void on_mouse_up(unsigned x, unsigned y);
-  void on_key_down(unsigned key_code);
+  bool on_size(int width, int height);
+  bool on_create(HWND hWnd);
+  bool on_destroy();
+  bool on_mouse_double(unsigned x, unsigned y);
+  bool on_mouse_move(unsigned x, unsigned y);
+  bool on_mouse_down(unsigned x, unsigned y);
+  bool on_mouse_up(unsigned x, unsigned y);
+  bool on_key_down(unsigned key_code);
 };
 
 #endif

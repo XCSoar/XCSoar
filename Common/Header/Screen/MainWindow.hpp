@@ -70,13 +70,13 @@ protected:
                              WPARAM wParam, LPARAM lParam);
 
   LRESULT on_colour(HDC hdc, int wdata);
-  LRESULT on_command(HWND wmControl);
-  void on_timer();
   int _timer_id;
-  void on_create();
-  void on_key_down(unsigned key_code);
-  void on_destroy();
-  void on_close();
+  bool on_command(HWND wmControl);
+  bool on_timer();
+  bool on_create();
+  bool on_key_down(unsigned key_code);
+  bool on_destroy();
+  bool on_close();
 public:
   void install_timer();
 };

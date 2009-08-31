@@ -112,44 +112,52 @@ Window::reset()
   DestroyWindow(hWnd);
 }
 
-void
+bool
 Window::on_create()
 {
+  return false;
 }
 
-void
+bool
 Window::on_destroy()
 {
+  return false;
 }
 
-void
+bool
 Window::on_resize(unsigned width, unsigned height)
 {
+  return false;
 }
 
-void
+bool
 Window::on_mouse_down(unsigned x, unsigned y)
 {
+  return false;
 }
 
-void
+bool
 Window::on_mouse_up(unsigned x, unsigned y)
 {
+  return false;
 }
 
-void
+bool
 Window::on_mouse_double(unsigned x, unsigned y)
 {
+  return false;
 }
 
-void
+bool
 Window::on_key_down(unsigned key_code)
 {
+  return false;
 }
 
-void
+bool
 Window::on_key_up(unsigned key_code)
 {
+  return false;
 }
 
 LRESULT
@@ -159,35 +167,35 @@ Window::on_message(HWND _hWnd, UINT message,
   switch (message) {
   case WM_CREATE:
     created(_hWnd);
-    on_create();
+    if (on_create()) return true;
     break;
 
   case WM_DESTROY:
-    on_destroy();
+    if (on_destroy()) return true;
     break;
 
   case WM_SIZE:
-    on_resize(LOWORD(lParam), HIWORD(lParam));
+    if (on_resize(LOWORD(lParam), HIWORD(lParam))) return true;
     break;
 
   case WM_LBUTTONDOWN:
-    on_mouse_down(LOWORD(lParam), HIWORD(lParam));
+    if (on_mouse_down(LOWORD(lParam), HIWORD(lParam))) return true;
     break;
 
   case WM_LBUTTONUP:
-    on_mouse_up(LOWORD(lParam), HIWORD(lParam));
+    if (on_mouse_up(LOWORD(lParam), HIWORD(lParam))) return true;
     break;
 
   case WM_LBUTTONDBLCLK:
-    on_mouse_double(LOWORD(lParam), HIWORD(lParam));
+    if (on_mouse_double(LOWORD(lParam), HIWORD(lParam))) return true;
     break;
 
   case WM_KEYDOWN:
-    on_key_down(wParam);
+    if (on_key_down(wParam)) return true;
     break;
 
   case WM_KEYUP:
-    on_key_up(wParam);
+    if (on_key_up(wParam)) return true;
     break;
   }
 

@@ -139,23 +139,23 @@ MainWindow::register_class(HINSTANCE hInstance, const TCHAR* szWindowClass)
 #include "ProcessTimer.hpp"
 #include "LogFile.hpp"
 
-LRESULT MainWindow::on_command(HWND wmControl)
+bool MainWindow::on_command(HWND wmControl)
 {
   if (wmControl && globalRunningEvent.test()) {
 
     full_screen();
 
     if (InfoBoxManager::Click(wmControl)) {
-      return TRUE; // don't continue processing..
+      return true; // don't continue processing..
     }
 
     Message::CheckTouch(wmControl);
     
     if (ButtonLabel::CheckButtonPress(wmControl)) {
-      return TRUE; // don't continue processing..
+      return true; // don't continue processing..
     }
   }
-  return FALSE;
+  return false;
 }
 
 
@@ -191,7 +191,7 @@ LRESULT MainWindow::on_colour(HDC hdc, int wdata)
   }
 }
 
-void MainWindow::on_timer(void)
+bool MainWindow::on_timer(void)
 {
   if (globalRunningEvent.test()) {
     AfterStartup();
@@ -201,9 +201,10 @@ void MainWindow::on_timer(void)
     ProcessTimer();
 #endif
   }
+  return true;
 }
 
-void MainWindow::on_create(void)
+bool MainWindow::on_create(void)
 {
   // strange, this never gets called..
 #ifdef HAVE_ACTIVATE_INFO
@@ -213,6 +214,7 @@ void MainWindow::on_create(void)
   if (_timer_id == 0) {
     _timer_id = SetTimer(hWnd,1000,500,NULL); // 2 times per second
   }
+  return true;
 }
 
 void MainWindow::install_timer(void) {
@@ -220,15 +222,17 @@ void MainWindow::install_timer(void) {
   on_create();
 }
 
-void MainWindow::on_key_down(unsigned key_code) {
+bool MainWindow::on_key_down(unsigned key_code) {
   InterfaceTimeoutReset();
+  return true;
 }
 
-void MainWindow::on_destroy(void) {
+bool MainWindow::on_destroy(void) {
   PostQuitMessage(0);
+  return false;
 }
 
-void MainWindow::on_close() {
+bool MainWindow::on_close() {
   if (CheckShutdown()) {
     if(_timer_id) {
       ::KillTimer(hWnd, _timer_id);
@@ -236,6 +240,7 @@ void MainWindow::on_close() {
     }
     Shutdown();
   }
+  return true;
 }
 
 LRESULT MainWindow::on_message(HWND _hWnd, UINT message,
@@ -243,10 +248,10 @@ LRESULT MainWindow::on_message(HWND _hWnd, UINT message,
   switch (message) {
   case WM_CREATE:
     created(_hWnd);
-    on_create();
+    if (on_create()) return true;
     break;
   case WM_COMMAND:
-    return on_command((HWND)lParam);
+    if (on_command((HWND)lParam)) return true;
     break;
     /*
   case WM_CTLCOLORSTATIC:
@@ -267,11 +272,11 @@ LRESULT MainWindow::on_message(HWND _hWnd, UINT message,
 #endif
     break;
   case WM_TIMER:
-    on_timer();
+    if (on_timer()) return true;
     break;
   case WM_CLOSE:
-    on_close();
-    return FALSE;
+    if (on_close()) return true;
+    //    return FALSE;
     break;
   };
   return ContainerWindow::on_message(_hWnd, message, wParam, lParam);

@@ -193,14 +193,14 @@ public:
   }
 
 protected:
-  virtual void on_create();
-  virtual void on_destroy();
-  virtual void on_resize(unsigned width, unsigned height);
-  virtual void on_mouse_down(unsigned x, unsigned y);
-  virtual void on_mouse_up(unsigned x, unsigned y);
-  virtual void on_mouse_double(unsigned x, unsigned y);
-  virtual void on_key_down(unsigned key_code);
-  virtual void on_key_up(unsigned key_code);
+  virtual bool on_create();
+  virtual bool on_destroy();
+  virtual bool on_resize(unsigned width, unsigned height);
+  virtual bool on_mouse_down(unsigned x, unsigned y);
+  virtual bool on_mouse_up(unsigned x, unsigned y);
+  virtual bool on_mouse_double(unsigned x, unsigned y);
+  virtual bool on_key_down(unsigned key_code);
+  virtual bool on_key_up(unsigned key_code);
 
   virtual LRESULT on_message(HWND hWnd, UINT message,
                              WPARAM wParam, LPARAM lParam);

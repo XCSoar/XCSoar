@@ -422,7 +422,7 @@ bool MapWindow::checkLabelBlock(const RECT brect) {
 /////////////////////////////////////////
 
 
-void MapWindow::on_size(int width, int height) {
+bool MapWindow::on_size(int width, int height) {
   resize(width, height);
 
   hdcDrawWindow.resize(width, height);
@@ -435,9 +435,10 @@ void MapWindow::on_size(int width, int height) {
   mutexStart.Lock();
   window_initialised = true;
   mutexStart.Unlock(); // release lock
+  return true;
 }
 
-void MapWindow::on_create(HWND hWnd)
+bool MapWindow::on_create(HWND hWnd)
 {
   created(hWnd);
 
@@ -445,15 +446,17 @@ void MapWindow::on_create(HWND hWnd)
   hDCTemp.set(get_canvas());
   buffer_canvas.set(get_canvas());
   hDCMask.set(hdcDrawWindow, 1, 1);
+  return true;
 }
 
-void MapWindow::on_destroy()
+bool MapWindow::on_destroy()
 {
   hdcDrawWindow.reset();
   hDCTemp.reset();
   buffer_canvas.reset();
   hDCMask.reset();
   PostQuitMessage (0);
+  return false;
 }
 
 ///////
@@ -463,7 +466,7 @@ static int XstartScreen, YstartScreen;
 static bool ignorenext=true;
 static DWORD dwDownTime= 0L, dwUpTime= 0L, dwInterval= 0L;
 
-void MapWindow::on_mouse_double(unsigned x, unsigned y)
+bool MapWindow::on_mouse_double(unsigned x, unsigned y)
 {
   // Added by ARH to show menu button when mapwindow is double clicked.
   //
@@ -475,9 +478,11 @@ void MapWindow::on_mouse_double(unsigned x, unsigned y)
   if (EnableSoundModes) PlayResource(TEXT("IDR_WAV_CLICK"));
 #endif
   InputEvents::ShowMenu();
+  ignorenext = true;
+  return true;
 }
 
-void MapWindow::on_mouse_move(unsigned x, unsigned y)
+bool MapWindow::on_mouse_move(unsigned x, unsigned y)
 {
   mutexTaskData.Lock();
   if (AATEnabled && TargetPan && (TargetDrag_State>0)) {
@@ -499,13 +504,14 @@ void MapWindow::on_mouse_move(unsigned x, unsigned y)
     }
   }
   mutexTaskData.Unlock();
+  return true;
 }
 
-void MapWindow::on_mouse_down(unsigned x, unsigned y)
+bool MapWindow::on_mouse_down(unsigned x, unsigned y)
 {
   ResetDisplayTimeOut();
   dwDownTime = GetTickCount();
-  if (ignorenext) return;
+  if (ignorenext) return true;
 
   // TODO VNT move Screen2LatLon in LBUTTONUP after making sure we
   // really need Xstart and Ystart so we save precious
@@ -531,16 +537,17 @@ void MapWindow::on_mouse_down(unsigned x, unsigned y)
     }
   }
   mutexTaskData.Unlock();
+  return true;
 }
 
 
 
 
-void MapWindow::on_mouse_up(unsigned x, unsigned y)
+bool MapWindow::on_mouse_up(unsigned x, unsigned y)
 {
   if (ignorenext||dwDownTime==0) {
     ignorenext=false;
-    return;
+    return true;
   }
   RECT rc = MapRect;
   bool my_target_pan;
@@ -556,7 +563,7 @@ void MapWindow::on_mouse_up(unsigned x, unsigned y)
 #ifdef DEBUG_VIRTUALKEYS
     DoStatusMessage(_T("dwInterval==0 impossible!"));
 #endif
-    return; // should be impossible
+    return true; // should be impossible
   }
 
   double distance = isqrt4((long)((XstartScreen-x)*(XstartScreen-x)+
@@ -582,7 +589,7 @@ void MapWindow::on_mouse_up(unsigned x, unsigned y)
 #ifdef DEBUG_VIRTUALKEYS
       DoStatusMessage(_T("E02 INVALID Virtual Key!"));
 #endif
-      return;
+      return true;
     }
     //    dwDownTime= 0L;
     //    InputEvents::processKey(wParam);
@@ -601,14 +608,14 @@ void MapWindow::on_mouse_up(unsigned x, unsigned y)
       TargetDrag_Longitude = Xlat;
     }
     mutexTaskData.Unlock();
-    return;
+    return true;
   }
  
   if (!my_target_pan && EnablePan && (distance>IBLSCALE(36))) {
     PanLongitude += Xstart-Xlat;
     PanLatitude  += Ystart-Ylat;
     RefreshMap();
-    return;
+    return true;
   }
 #ifdef _SIM_
   if (!ReplayLogger::IsEnabled() && !my_target_pan && (distance>IBLSCALE(36))) {
@@ -628,41 +635,43 @@ void MapWindow::on_mouse_up(unsigned x, unsigned y)
     
     // JMW trigger recalcs immediately
     TriggerGPSUpdate();
-    return;
+    return true;
   }
 #endif
   if (!my_target_pan) {
     if (InfoBoxManager::Defocus()) { //
-      return;
+      return true;
     }
     if (VirtualKeys==(VirtualKeys_t)vkEnabled) {
       if(dwInterval < VKSHORTCLICK) {
 	//100ms is NOT enough for a short click since GetTickCount
 	//is OEM custom!
 	if (PopupNearestWaypointDetails(Xstart, Ystart, 500*MapScale, false)) {
-	  return;
+	  return true;
 	}
       } else {
 	if (PopupInteriorAirspaceDetails(Xstart, Ystart)) {
-	  return;
+	  return true;
 	}
       }
     } else {
       if(dwInterval < AIRSPACECLICK) { // original and untouched interval
 	if (PopupNearestWaypointDetails(Xstart, Ystart, 500*MapScale, false)) {
-	  return;
+	  return true;
 	}
       } else {
 	if (PopupInteriorAirspaceDetails(Xstart, Ystart)) {
-	  return;
+	  return true;
 	}
       }
     } // VK enabled
   } // !TargetPan
+
+  return false;
 }
 
 
-void MapWindow::on_key_down(unsigned key_code)
+bool MapWindow::on_key_down(unsigned key_code)
 {
   // VENTA-TODO careful here, keyup no more trapped for PNA.
   // Forbidden usage of keypress timing.
@@ -673,13 +682,14 @@ void MapWindow::on_key_down(unsigned key_code)
 #if defined(GNAV)
   if (key_code == 0xF5){
     SignalShutdown(false);
-    return;
+    return true;
   }
 #endif
   dwDownTime= 0L;
   if (InputEvents::processKey(key_code)) {
-    //    return TRUE; // don't go to default handler
+    return true; // don't go to default handler
   }
+  return true;
 }
 
 
@@ -692,43 +702,39 @@ DWORD MapWindow::DrawThread (LPVOID lpvoid)
 }
 
 
-LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
+LRESULT CALLBACK MapWindow::MapWndProc (HWND _hWnd, UINT uMsg, WPARAM wParam,
                                         LPARAM lParam)
 {
   switch (uMsg)
     {
-    case WM_ERASEBKGND:
-      return TRUE;
     case WM_SIZE:
-      map_window.on_size(LOWORD(lParam), HIWORD(lParam));
+      if (map_window.on_size(LOWORD(lParam), HIWORD(lParam))) return true;
       break;
     case WM_CREATE:
-      map_window.on_create(hWnd);
+      if (map_window.on_create(_hWnd)) return true;
       break;
     case WM_DESTROY:
-      map_window.on_destroy();
+      if (map_window.on_destroy()) return true;
       break;
     case WM_LBUTTONDBLCLK:
-      map_window.on_mouse_double(LOWORD(lParam), HIWORD(lParam));
+      if (map_window.on_mouse_double(LOWORD(lParam), HIWORD(lParam))) return true;
       break;
     case WM_MOUSEMOVE:
-      map_window.on_mouse_move(LOWORD(lParam), HIWORD(lParam));
+      if (map_window.on_mouse_move(LOWORD(lParam), HIWORD(lParam))) return true;
       break;
     case WM_LBUTTONDOWN:
-      map_window.on_mouse_down(LOWORD(lParam), HIWORD(lParam));
+      if (map_window.on_mouse_down(LOWORD(lParam), HIWORD(lParam))) return true;
       break;
     case WM_LBUTTONUP:
-      map_window.on_mouse_up(LOWORD(lParam), HIWORD(lParam));
+      if (map_window.on_mouse_up(LOWORD(lParam), HIWORD(lParam))) return true;
       break;
 #if defined(GNAV) || defined(PNA) // VENTA FIXED PNA SCROLL WHEEL
     case WM_KEYDOWN: // JMW was keyup
 #else
     case WM_KEYUP: // JMW was keyup
 #endif
-      map_window.on_key_down(wParam);
+      if (map_window.on_key_down(wParam)) return true;
       break;
-    default:
-      return ::DefWindowProc (hWnd, uMsg, wParam, lParam);
     }
-  return FALSE;
+  return map_window.on_message (_hWnd, uMsg, wParam, lParam);
 }
