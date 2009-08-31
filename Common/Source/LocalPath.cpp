@@ -38,6 +38,8 @@ Copyright_License {
 #include "LocalPath.hpp"
 #include "XCSoar.h"
 #include "Appearance.hpp"
+#include "Compatibility/path.h"
+
 #include <stdio.h>
 
 // Get local My Documents path - optionally include file to add and location
@@ -84,11 +86,11 @@ CSIDL_PROGRAM_FILES 0x0026   The program files folder.
 #else
   // everything else that's not special
   SHGetSpecialFolderPath(NULL, buffer, loc, false);
-  _tcscat(buffer,TEXT("\\"));
+  _tcscat(buffer, _T(DIR_SEPARATOR_S));
   _tcscat(buffer,TEXT(XCSDATADIR));
 #endif
   if (_tcslen(file)>0) {
-    _tcsncat(buffer, TEXT("\\"), MAX_PATH);
+    _tcsncat(buffer, _T(DIR_SEPARATOR_S), MAX_PATH);
     _tcsncat(buffer, file, MAX_PATH);
   }
 }
