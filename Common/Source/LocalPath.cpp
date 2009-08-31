@@ -83,6 +83,13 @@ CSIDL_PROGRAM_FILES 0x0026   The program files folder.
 // VENTA2 FIX PC BUG
 #elif defined (FIVV) && (!defined(WINDOWSPC) || (WINDOWSPC <=0) )
   _stprintf(buffer,TEXT("%s%S"),gmfpathname(), XCSDATADIR );
+#elif !defined(_WIN32) || defined(__WINE__)
+  /* on Unix or WINE, use ~/.xcsoar */
+  const char *home = getenv("HOME");
+  if (home != NULL)
+    _stprintf(buffer, _T("%s/.xcsoar"), home);
+  else
+    _tcscat(buffer, _T("/etc/xcsoar"));
 #else
   // everything else that's not special
   SHGetSpecialFolderPath(NULL, buffer, loc, false);
