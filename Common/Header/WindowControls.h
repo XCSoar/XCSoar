@@ -97,7 +97,6 @@ class WindowControl {
 
     WindowControl *mOwner;
     WindowControl *mTopOwner;
-    BitmapCanvas mHdcTemp;
     HBITMAP mBmpMem;
     int  mBorderKind;
     COLORREF mColorBack;
@@ -249,7 +248,6 @@ class WindowControl {
     ContainerWindow &GetWindow(void) { return window; }
     virtual ContainerWindow &GetClientAreaWindow(void) { return window; }
     Canvas &GetCanvas(void) { return window.get_canvas(); }
-    BitmapCanvas &GetTempDeviceContext(void) { return mHdcTemp; }
     WindowControl *GetOwner(void){return(mOwner);};
 
     int GetTag(void){return(mTag);};

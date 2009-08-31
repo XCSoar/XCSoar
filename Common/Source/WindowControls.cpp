@@ -215,13 +215,6 @@ WindowControl::WindowControl(WindowControl *Owner,
   window.set_userdata(this);
   window.set_wndproc(WindowControlWndProc);
 
-  mHdcTemp.set(window.get_canvas());
-
-  /* JMW debugging
-  mBmpMem = CreateCompatibleBitmap(mHdc, mWidth, mHeight);
-  SelectObject(mHdcTemp, mBmpMem);
-  */
-
   mBorderSize = 1;
 
   mBorderKind = 0; //BORDERRIGHT | BORDERBOTTOM;
@@ -256,7 +249,6 @@ void WindowControl::Destroy(void){
   mhPenBorder.reset();
   mhPenSelector.reset();
 
-  mHdcTemp.reset();
   /* JMW debugging
   DeleteObject(mBmpMem);
   */
@@ -2122,22 +2114,19 @@ WndProperty::Paint(Canvas &canvas)
     {
 
       if (GetFocused() && !GetReadOnly()){
+      BitmapCanvas bitmap_canvas(canvas);
 
-      GetTempDeviceContext().select(hBmpLeft32);
-
+      bitmap_canvas.select(hBmpLeft32);
       canvas.stretch(mHitRectDown.left, mHitRectDown.top,
                      mBitmapSize, mBitmapSize,
-                     GetTempDeviceContext(),
+                     bitmap_canvas,
                      mDownDown ? 32 : 0, 0, 32, 32);
 
-      GetTempDeviceContext().select(hBmpRight32);
-
+      bitmap_canvas.select(hBmpRight32);
       canvas.stretch(mHitRectUp.left, mHitRectUp.top,
                      mBitmapSize, mBitmapSize,
-                     GetTempDeviceContext(),
+                     bitmap_canvas,
                      mUpDown ? 32 : 0, 0, 32, 32);
-
-      SelectObject(GetTempDeviceContext(), oldBmp);
     }
   }
 }
@@ -2548,37 +2537,38 @@ void WndListFrame::DrawScrollBar(Canvas &canvas) {
   else
     ctScroll=SRCCOPY;  //Copies the source rectangle directly to the destination rectangle.
 
+  BitmapCanvas bitmap_canvas(canvas);
 
   // TOP Dn Button 32x32
   // BOT Up Button 32x32
   if (ScrollbarWidth == SCROLLBARWIDTH_INITIAL)
     {
-      GetTempDeviceContext().select(hScrollBarBitmapTop);
+      bitmap_canvas.select(hScrollBarBitmapTop);
       canvas.copy(w, ScrollbarTop,
                   SCROLLBARWIDTH_INITIAL, SCROLLBARWIDTH_INITIAL,
-                  GetTempDeviceContext(), 0, 0,
+                  bitmap_canvas, 0, 0,
                   bTransparentUpDown);
 
-      GetTempDeviceContext().select(hScrollBarBitmapBot);
+      bitmap_canvas.select(hScrollBarBitmapBot);
       canvas.copy(w, h - SCROLLBARWIDTH_INITIAL + ScrollbarTop,
                   SCROLLBARWIDTH_INITIAL, SCROLLBARWIDTH_INITIAL,
-                  GetTempDeviceContext(), 0, 0,
+                  bitmap_canvas, 0, 0,
                   bTransparentUpDown);
     }
   else
     {
-      GetTempDeviceContext().select(hScrollBarBitmapTop);
+      bitmap_canvas.select(hScrollBarBitmapTop);
       canvas.stretch(w, ScrollbarTop,
                      ScrollbarWidth, ScrollbarWidth,
-                     GetTempDeviceContext(),
+                     bitmap_canvas,
                      0, 0, SCROLLBARWIDTH_INITIAL, SCROLLBARWIDTH_INITIAL,
                      bTransparentUpDown);
 
       // BOT Up Button 32x32
-      GetTempDeviceContext().select(hScrollBarBitmapBot);
+      bitmap_canvas.select(hScrollBarBitmapBot);
       canvas.stretch(w, h - ScrollbarWidth + ScrollbarTop,
                      ScrollbarWidth, ScrollbarWidth,
-                     GetTempDeviceContext(),
+                     bitmap_canvas,
                      0, 0, SCROLLBARWIDTH_INITIAL, SCROLLBARWIDTH_INITIAL,
                      bTransparentUpDown);
     }
@@ -2587,11 +2577,11 @@ void WndListFrame::DrawScrollBar(Canvas &canvas) {
   if (mListInfo.ItemCount > mListInfo.ItemInViewCount){
 
     // handle on slider
-    GetTempDeviceContext().select(hScrollBarBitmapMid);
+    bitmap_canvas.select(hScrollBarBitmapMid);
     if (ScrollbarWidth == SCROLLBARWIDTH_INITIAL)
       {
         canvas.copy_and(w + 1, rc.top + GetScrollBarHeight() / 2 - 14, 30, 28,
-                        GetTempDeviceContext(), 0, 0);
+                        bitmap_canvas, 0, 0);
         // always SRCAND b/c on top of scrollbutton texture
       }
     else
@@ -2607,7 +2597,7 @@ void WndListFrame::DrawScrollBar(Canvas &canvas) {
 
         canvas.stretch_and(w + 1, rc.top + GetScrollBarHeight() / 2 - SCButtonY,
                            SCButtonW, SCButtonH,
-                           GetTempDeviceContext(), 0, 0, 30, 28);
+                           bitmap_canvas, 0, 0, 30, 28);
         // always SRCAND b/c on top of scrollbutton texture
       }
 
