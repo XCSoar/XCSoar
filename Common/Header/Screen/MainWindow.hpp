@@ -66,7 +66,7 @@ public:
   bool register_class(HINSTANCE hInstance, const TCHAR* szWindowClass);
 
 protected:
-  virtual LRESULT on_message(HWND hWnd, UINT message,
+  virtual LRESULT on_message(HWND _hWnd, UINT message,
                              WPARAM wParam, LPARAM lParam);
 
   LRESULT on_colour(HDC hdc, int wdata);

@@ -87,9 +87,10 @@ class MapWindow
   bool TargetDragged(double *longitude, double *latitude);
   bool SetTargetPan(bool dopan, int task_index);
 
+
   // used only by XCSoar.cpp on instantiation
-  static LRESULT CALLBACK MapWndProc (HWND hWnd, UINT uMsg,
-				      WPARAM wParam,LPARAM lParam);
+  virtual LRESULT on_message(HWND _hWnd, UINT message,
+                             WPARAM wParam, LPARAM lParam);
 
   // use at startup
   void SetMapRect(RECT rc) {

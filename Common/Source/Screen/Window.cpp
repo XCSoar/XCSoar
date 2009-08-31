@@ -106,10 +106,13 @@ Window::created(HWND _hWnd)
   hWnd = _hWnd;
 }
 
+#include "LogFile.hpp"
 void
 Window::reset()
 {
+  StartupStore(TEXT("test c\n"));
   DestroyWindow(hWnd);
+  StartupStore(TEXT("test d\n"));
 }
 
 bool

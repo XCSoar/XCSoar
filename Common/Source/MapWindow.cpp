@@ -396,7 +396,7 @@ bool MapWindow::register_class(HINSTANCE hInstance, const TCHAR* szWindowClass) 
 
   wc.hInstance = hInstance;
   wc.style = CS_VREDRAW | CS_HREDRAW | CS_DBLCLKS;
-  wc.lpfnWndProc = (WNDPROC)MapWindow::MapWndProc;
+  wc.lpfnWndProc = ::DefWindowProc;
   wc.cbClsExtra = 0;
 #if (WINDOWSPC>0)
   wc.cbWndExtra = 0 ;
@@ -708,39 +708,39 @@ DWORD MapWindow::DrawThread (LPVOID lpvoid)
 }
 
 
-LRESULT CALLBACK MapWindow::MapWndProc (HWND _hWnd, UINT uMsg, WPARAM wParam,
-                                        LPARAM lParam)
+LRESULT MapWindow::on_message(HWND _hWnd, UINT uMsg,
+			      WPARAM wParam, LPARAM lParam) 
 {
   switch (uMsg)
     {
     case WM_SIZE:
-      if (map_window.on_size(LOWORD(lParam), HIWORD(lParam))) return true;
+      if (on_size(LOWORD(lParam), HIWORD(lParam))) return true;
       break;
     case WM_CREATE:
-      if (map_window.on_create(_hWnd)) return true;
+      if (on_create(_hWnd)) return true;
       break;
     case WM_DESTROY:
-      if (map_window.on_destroy()) return true;
+      if (on_destroy()) return true;
       break;
     case WM_LBUTTONDBLCLK:
-      if (map_window.on_mouse_double(LOWORD(lParam), HIWORD(lParam))) return true;
+      if (on_mouse_double(LOWORD(lParam), HIWORD(lParam))) return true;
       break;
     case WM_MOUSEMOVE:
-      if (map_window.on_mouse_move(LOWORD(lParam), HIWORD(lParam))) return true;
+      if (on_mouse_move(LOWORD(lParam), HIWORD(lParam))) return true;
       break;
     case WM_LBUTTONDOWN:
-      if (map_window.on_mouse_down(LOWORD(lParam), HIWORD(lParam))) return true;
+      if (on_mouse_down(LOWORD(lParam), HIWORD(lParam))) return true;
       break;
     case WM_LBUTTONUP:
-      if (map_window.on_mouse_up(LOWORD(lParam), HIWORD(lParam))) return true;
+      if (on_mouse_up(LOWORD(lParam), HIWORD(lParam))) return true;
       break;
 #if defined(GNAV) || defined(PNA) // VENTA FIXED PNA SCROLL WHEEL
     case WM_KEYDOWN: // JMW was keyup
 #else
     case WM_KEYUP: // JMW was keyup
 #endif
-      if (map_window.on_key_down(wParam)) return true;
+      if (on_key_down(wParam)) return true;
       break;
     }
-  return map_window.on_message (_hWnd, uMsg, wParam, lParam);
+  return PaintWindow::on_message (_hWnd, uMsg, wParam, lParam);
 }

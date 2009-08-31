@@ -103,7 +103,7 @@ MainWindow::register_class(HINSTANCE hInstance, const TCHAR* szWindowClass)
   WNDCLASS wc;
 
   wc.style                      = CS_HREDRAW | CS_VREDRAW;
-  wc.lpfnWndProc                = ::DefWindowProc; // (WNDPROC) MainWndProc;
+  wc.lpfnWndProc                = ::DefWindowProc;
   wc.cbClsExtra                 = 0;
 #if (WINDOWSPC>0)
   wc.cbWndExtra = 0;
