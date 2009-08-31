@@ -113,13 +113,12 @@ PaintWindow::on_resize(unsigned width, unsigned height)
   return true;
 }
 
-bool
+void
 PaintWindow::on_paint(Canvas &canvas)
 {
   /* to be implemented by a subclass */
   /* this is not an abstract method yet until the OO transition of all
      PaintWindow users is complete */
-  return false;
 }
 
 LRESULT
