@@ -55,7 +55,7 @@ Window::set(ContainerWindow *parent, LPCTSTR cls, LPCTSTR text,
   hWnd = ::CreateWindowEx(ex_style, cls, text, style,
                           left, top, width, height,
                           parent != NULL ? parent->hWnd : NULL,
-                          NULL, hInst, NULL);
+                          NULL, hInst, this);
 }
 
 void
@@ -177,7 +177,6 @@ Window::on_message(HWND _hWnd, UINT message,
 {
   switch (message) {
   case WM_CREATE:
-    created(_hWnd);
     if (on_create()) return true;
     break;
 
@@ -229,7 +228,20 @@ Window::on_message(HWND _hWnd, UINT message,
 LRESULT CALLBACK
 Window::WndProc(HWND _hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-  Window *widget = (Window *)get_userdata_pointer(_hWnd);
+  if (message == WM_GETMINMAXINFO)
+    /* WM_GETMINMAXINFO is called before WM_CREATE, and we havn't set
+       a Window pointer yet - let DefWindowProc() handle it */
+    return ::DefWindowProc(_hWnd, message, wParam, lParam);
 
-  return widget->on_message(_hWnd, message, wParam, lParam);
+  Window *window;
+  if (message == WM_NCCREATE) {
+    LPCREATESTRUCT cs = (LPCREATESTRUCT)lParam;
+
+    window = (Window *)cs->lpCreateParams;
+    window->created(_hWnd);
+    window->set_userdata(window);
+  } else
+    window = (Window *)get_userdata_pointer(_hWnd);
+
+  return window->on_message(_hWnd, message, wParam, lParam);
 }
