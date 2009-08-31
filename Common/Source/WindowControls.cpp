@@ -201,8 +201,8 @@ WindowControl::WindowControl(WindowControl *Owner,
   }
   InstCount++;
 
-  window.set(Parent, mX, mY, mWidth, mHeight,
-             false, false, false, false, false);
+  set(Parent, mX, mY, mWidth, mHeight,
+      false, false, false, false, false);
 
   if (mOwner != NULL)
     mOwner->AddClient(this);
@@ -212,17 +212,17 @@ WindowControl::WindowControl(WindowControl *Owner,
   mBoundRect.right = GetWidth();
   mBoundRect.bottom = GetHeight();
 
-  window.set_userdata(this);
-  window.set_wndproc(WindowControlWndProc);
+  set_userdata(this);
+  set_wndproc(WindowControlWndProc);
 
   mBorderSize = 1;
 
   mBorderKind = 0; //BORDERRIGHT | BORDERBOTTOM;
 
-  window.get_canvas().background_transparent();
+  get_canvas().background_transparent();
 
   if (mVisible)
-    window.show();
+    show();
 }
 
 WindowControl::~WindowControl(void){
@@ -254,7 +254,7 @@ void WindowControl::Destroy(void){
   */
 
   // ShowWindow(GetHandle(), SW_SHOW);
-  window.reset();
+  reset();
 
   InstCount--;
   if (InstCount==0){
@@ -272,7 +272,7 @@ void WindowControl::UpdatePosSize(void){
   mBoundRect.right = GetWidth();
   mBoundRect.bottom = GetHeight();
 
-  window.move(mX, mY, mWidth, mHeight);
+  move(mX, mY, mWidth, mHeight);
 }
 
 void WindowControl::SetTop(int Value){
@@ -331,7 +331,7 @@ void WindowControl::AddClient(WindowControl *Client){
       Client->mY =
 	mClients[mClientCount-2]->mY
 	+ mClients[mClientCount-2]->mHeight;
-      Client->GetWindow().move(Client->mX, Client->mY);
+      Client->move(Client->mX, Client->mY);
     }
   }
 
@@ -412,8 +412,8 @@ void WindowControl::SetCaption(const TCHAR *Value){
 
     _tcscpy(mCaption, Value);
 
-    window.update(*GetBoundRect());
-    window.update();
+    update(*GetBoundRect());
+    update();
   }
 
 }
@@ -431,9 +431,9 @@ bool WindowControl::SetFocused(bool Value, HWND FromTo){
       rc.top = 0;
       rc.right = GetWidth();
       rc.bottom = GetHeight();
-      window.update(rc);
+      update(rc);
       // todo, only paint the selector edges
-      window.update();
+      update();
       // Paint(GetDeviceContext());
     }
 
@@ -480,11 +480,11 @@ bool WindowControl::SetVisible(bool Value){
     */
 
     if (mVisible){
-      window.update(*GetBoundRect());
-      window.update();
-      window.show();
+      update(*GetBoundRect());
+      update();
+      show();
     } else {
-      window.hide();
+      hide();
     }
 
   }
@@ -503,8 +503,8 @@ int WindowControl::SetBorderKind(int Value){
   int res = mBorderKind;
   if (mBorderKind != Value){
     mBorderKind = Value;
-    window.update(*GetBoundRect());
-    window.update();
+    update(*GetBoundRect());
+    update();
   }
   return(res);
 }
@@ -577,8 +577,8 @@ WindowControl::PaintSelector(Canvas &canvas)
 
 void WindowControl::Redraw(void){
   if (GetVisible()){
-    window.update(*GetBoundRect());
-    window.update();
+    update(*GetBoundRect());
+    update();
   }
 }
 
@@ -671,7 +671,7 @@ WindowControl *WindowControl::FocusNext(WindowControl *Sender){
 
   for (; idx<mClientCount; idx++){
     if ((W = mClients[idx]->GetCanFocus()) != NULL){
-      W->GetWindow().set_focus();
+      W->set_focus();
       return(W);
     }
   }
@@ -697,7 +697,7 @@ WindowControl *WindowControl::FocusPrev(WindowControl *Sender){
 
   for (; idx>=0; idx--)
     if ((W=mClients[idx]->GetCanFocus()) != NULL){
-      W->GetWindow().set_focus();
+      W->set_focus();
       return(W);
     }
 
@@ -733,7 +733,7 @@ int WindowControl::WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam){
 
     case WM_PAINT:
       {
-        PaintCanvas canvas(window, hwnd);
+        PaintCanvas canvas(*this, hwnd);
         Paint(canvas);
       }
     return(0);
@@ -890,7 +890,7 @@ WndForm::WndForm(ContainerWindow *Parent,
 
   mhBrushTitle = (HBRUSH)CreateSolidBrush(mColorTitle);
 
-  mClientWindow = new WindowControl(this, &GetWindow(),
+  mClientWindow = new WindowControl(this, this,
                                     TEXT(""), 20, 20, Width, Height);
   mClientWindow->SetBackColor(GetBackColor());
   mClientWindow->SetCanFocus(false);
@@ -900,7 +900,7 @@ WndForm::WndForm(ContainerWindow *Parent,
   mClientRect.bottom=Width;
   mClientRect.right=Height;
 
-  cbTimerID = window.set_timer(1001, 500);
+  cbTimerID = set_timer(1001, 500);
 
   mModalResult = 0;
   if (Caption != NULL)
@@ -921,7 +921,7 @@ void WndForm::Destroy(void){
   if (mClientWindow)
     mClientWindow->SetVisible(false);
 
-  window.kill_timer(cbTimerID);
+  kill_timer(cbTimerID);
 
   DestroyAcceleratorTable(mhAccelTable);
   DeleteObject(mhBrushTitle);
@@ -936,9 +936,9 @@ WndForm::GetClientAreaWindow(void)
 {
 
   if (mClientWindow != NULL)
-    return mClientWindow->GetWindow();
+    return *mClientWindow;
   else
-    return window;
+    return *this;
 };
 
 
@@ -986,8 +986,8 @@ WndForm::SetTitleFont(const Font &font)
 
 void WndForm::SetToForeground(void)
 {
-  window.bring_to_top();
-  window.set_active();
+  bring_to_top();
+  set_active();
 }
 
 int WndForm::ShowModal(void){
@@ -1006,7 +1006,7 @@ int WndForm::ShowModal(bool bEnableMap) {
   Message::BlockRender(true);
 #endif
 
-  RECT mRc = window.get_position();
+  RECT mRc = get_position();
   DrawWireRects(&mRc, 5);
 
   SetVisible(true);
@@ -1259,8 +1259,8 @@ void WndForm::SetCaption(const TCHAR *Value){
 
   if (_tcscmp(mCaption, Value) != 0){
     _tcscpy(mCaption, Value);
-    window.update(mTitleRect);
-    window.update();
+    update(mTitleRect);
+    update();
   }
 
 }
@@ -1445,7 +1445,7 @@ int WndButton::OnLButtonUp(WPARAM wParam, LPARAM lParam){
   (void)wParam;
 
   mDown = false;
-  Paint(window.get_canvas());
+  Paint(get_canvas());
   ReleaseCapture();
 
   Pos.x = lParam & 0x0000ffff;
@@ -1482,7 +1482,7 @@ int WndButton::OnKeyDown(WPARAM wParam, LPARAM lParam){
     case VK_SPACE:
       if (!mDown){
         mDown = true;
-        Paint(window.get_canvas());
+        Paint(get_canvas());
       }
     return(0);
   }
@@ -1501,7 +1501,7 @@ int WndButton::OnKeyUp(WPARAM wParam, LPARAM lParam){
       if (!Debounce()) return(1); // prevent false trigger
       if (mDown){
         mDown = false;
-        Paint(window.get_canvas());
+        Paint(get_canvas());
         if (mOnClickNotify != NULL) {
           RECT mRc;
           GetWindowRect(GetHandle(), &mRc);
@@ -1520,8 +1520,8 @@ int WndButton::OnLButtonDown(WPARAM wParam, LPARAM lParam){
   if (!GetFocused())
     SetFocus(GetHandle());
   else {
-    window.update(*GetBoundRect());
-    window.update();
+    update(*GetBoundRect());
+    update();
   }
   SetCapture(GetHandle());
   return(1);
@@ -1530,8 +1530,8 @@ int WndButton::OnLButtonDown(WPARAM wParam, LPARAM lParam){
 int WndButton::OnLButtonDoubleClick(WPARAM wParam, LPARAM lParam){
 	(void)lParam; (void)wParam;
   mDown = true;
-  window.update(*GetBoundRect());
-  window.update();
+  update(*GetBoundRect());
+  update();
   SetCapture(GetHandle());
   return(1);
 };
@@ -1661,7 +1661,7 @@ WndProperty::WndProperty(WindowControl *Parent,
 
   UpdateButtonData(mBitmapSize);
 
-  edit.set(window, mEditPos.x, mEditPos.y, mEditSize.x, mEditSize.y,
+  edit.set(*this, mEditPos.x, mEditPos.y, mEditSize.x, mEditSize.y,
            MultiLine);
 
   edit.set_userdata(this);
@@ -1785,8 +1785,8 @@ int WndProperty::SetButtonSize(int Value){
     edit.move(mEditPos.x, mEditPos.y, mEditSize.x, mEditSize.y);
 
     if (GetVisible()){
-      window.update(*GetBoundRect());
-      window.update();
+      update(*GetBoundRect());
+      update();
     }
   }
   return(res);
@@ -1973,7 +1973,7 @@ int WndProperty::OnLButtonDown(WPARAM wParam, LPARAM lParam){
   {
 
     if (!GetFocused()){
-      window.set_focus();
+      set_focus();
       return(0);
     }
 
@@ -1985,18 +1985,18 @@ int WndProperty::OnLButtonDown(WPARAM wParam, LPARAM lParam){
 
     if (mDownDown) {
       DecValue();
-      window.update(mHitRectDown);
-      window.update();
+      update(mHitRectDown);
+      update();
     }
 
     mUpDown = (PtInRect(&mHitRectUp, Pos) != 0);
 
     if (mUpDown) {
       IncValue();
-      window.update(mHitRectUp);
-      window.update();
+      update(mHitRectUp);
+      update();
     }
-    window.set_capture();
+    set_capture();
   }
   return(0);
 };
@@ -2019,17 +2019,17 @@ int WndProperty::OnLButtonUp(WPARAM wParam, LPARAM lParam){
 
     if (mDownDown){
       mDownDown = false;
-      window.update(mHitRectDown);
-      window.update();
+      update(mHitRectDown);
+      update();
     }
     if (mUpDown){
       mUpDown = false;
-      window.update(mHitRectUp);
-      window.update();
+      update(mHitRectUp);
+      update();
     }
 
   }
-  window.release_capture();
+  release_capture();
   return(0);
 }
 
@@ -2221,7 +2221,7 @@ void WndFrame::Destroy(void){
 
 int WndFrame::OnKeyDown(WPARAM wParam, LPARAM lParam){
   if (mIsListItem && GetOwner()!=NULL){
-    RECT mRc = window.get_position();
+    RECT mRc = get_position();
     SetSourceRectangle(mRc);
     return(((WndListFrame*)GetOwner())->OnItemKeyDown(this, wParam, lParam));
   }
@@ -2268,8 +2268,8 @@ void WndFrame::SetCaption(const TCHAR *Value){
 
   if (_tcscmp(mCaption, Value) != 0){
     _tcscpy(mCaption, Value);  // todo size check
-    window.update(*GetBoundRect());
-    window.update();
+    update(*GetBoundRect());
+    update();
   }
 }
 
@@ -2278,8 +2278,8 @@ UINT WndFrame::SetCaptionStyle(UINT Value){
   if (res != Value){
     mCaptionStyle = Value;
 
-    window.update(*GetBoundRect());
-    window.update();
+    update(*GetBoundRect());
+    update();
   }
   return(res);
 }
@@ -2812,18 +2812,18 @@ int WndFrame::OnLButtonDown(WPARAM wParam, LPARAM lParam) {
   if (mIsListItem && GetOwner()!=NULL) {
 
     if (!GetFocused()) {
-      window.set_focus();
+      set_focus();
       //return(1);
     }
     //else {  // always doing this allows selected item in list to remain selected.
-      window.update(*GetBoundRect());
-      window.update();
+      update(*GetBoundRect());
+      update();
     //}
 
     int xPos = LOWORD(lParam);  // horizontal position of cursor
     int yPos = HIWORD(lParam);  // vertical position of cursor
     WndListFrame* wlf = ((WndListFrame*)GetOwner());
-    RECT mRc = window.get_position();
+    RECT mRc = get_position();
     wlf->SelectItemFromScreen(xPos, yPos, &mRc);
   }
   isselect = false;
@@ -2867,7 +2867,7 @@ void WndListFrame::SelectItemFromScreen(int xPos, int yPos,
   }
 */
   int index;
-  *rect = window.get_position();
+  *rect = get_position();
   index = yPos/mClients[0]->GetHeight(); // yPos is offset within ListEntry item!
 
   if ((index>=0)&&(index<mListInfo.BottomIndex)) {

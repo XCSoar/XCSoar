@@ -84,7 +84,7 @@ typedef enum{
   bkLeft
 }BorderKind_t;
 
-class WindowControl {
+class WindowControl : public ContainerWindow {
  public:
     typedef void (*OnHelpCallback_t)(WindowControl * Sender);
 
@@ -127,7 +127,6 @@ class WindowControl {
 
   protected:
 
-    ContainerWindow window;
     bool mCanFocus;
     TCHAR mCaption[254];
     bool mDontPaintSelector;
@@ -244,10 +243,9 @@ class WindowControl {
     virtual void SetCaption(const TCHAR *Value);
     void SetHelpText(const TCHAR *Value);
 
-    HWND GetHandle(void) { return window; }
-    ContainerWindow &GetWindow(void) { return window; }
-    virtual ContainerWindow &GetClientAreaWindow(void) { return window; }
-    Canvas &GetCanvas(void) { return window.get_canvas(); }
+    HWND GetHandle(void) { return *this; }
+    virtual ContainerWindow &GetClientAreaWindow(void) { return *this; }
+    Canvas &GetCanvas(void) { return get_canvas(); }
     WindowControl *GetOwner(void){return(mOwner);};
 
     int GetTag(void){return(mTag);};
