@@ -125,6 +125,12 @@ Window::on_destroy()
 }
 
 bool
+Window::on_close()
+{
+  return false;
+}
+
+bool
 Window::on_resize(unsigned width, unsigned height)
 {
   return false;
@@ -177,6 +183,12 @@ Window::on_message(HWND _hWnd, UINT message,
 
   case WM_DESTROY:
     if (on_destroy()) return true;
+    break;
+
+  case WM_CLOSE:
+    if (on_close())
+      /* true returned: message was handled */
+      return 0;
     break;
 
   case WM_SIZE:

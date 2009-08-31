@@ -195,6 +195,7 @@ public:
 protected:
   virtual bool on_create();
   virtual bool on_destroy();
+  virtual bool on_close();
   virtual bool on_resize(unsigned width, unsigned height);
   virtual bool on_mouse_down(unsigned x, unsigned y);
   virtual bool on_mouse_up(unsigned x, unsigned y);
