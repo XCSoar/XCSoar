@@ -563,16 +563,13 @@ OBJS	:=\
 	$(SRC)/Screen/PaintCanvas.o \
 	$(SRC)/Screen/Font.o \
 	$(SRC)/Screen/Pen.o \
+	$(SRC)/Screen/LabelBlock.o \
 	$(SRC)/Screen/Window.o \
 	$(SRC)/Screen/BufferWindow.o \
 	$(SRC)/Screen/PaintWindow.o \
 	$(SRC)/Screen/TextWindow.o \
 	$(SRC)/Screen/EditWindow.o \
 	$(SRC)/Screen/MainWindow.o \
-	\
-	$(SRC)/Polar/WinPilot.o 	\
-	$(SRC)/Polar/BuiltIn.o 		\
-	$(SRC)/Polar/Historical.o 	\
 	\
 	$(SRC)/Screen/shapelib/mapbits.o 	\
 	$(SRC)/Screen/shapelib/maperror.o 	\
@@ -581,6 +578,10 @@ OBJS	:=\
 	$(SRC)/Screen/shapelib/mapshape.o 	\
 	$(SRC)/Screen/shapelib/maptree.o 	\
 	$(SRC)/Screen/shapelib/mapxbase.o 	\
+	\
+	$(SRC)/Polar/WinPilot.o 	\
+	$(SRC)/Polar/BuiltIn.o 		\
+	$(SRC)/Polar/Historical.o 	\
 	\
 	$(SRC)/StdAfx.o			\
 	$(SRC)/Protection.o 		\

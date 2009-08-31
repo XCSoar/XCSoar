@@ -45,6 +45,7 @@ Copyright_License {
 #include "Screen/BufferCanvas.hpp"
 #include "Screen/BitmapCanvas.hpp"
 #include "Screen/PaintWindow.hpp"
+#include "Screen/LabelBlock.hpp"
 
 class MapWindowBase {
  public:
@@ -227,6 +228,11 @@ class MapWindow
   static BitmapCanvas hDCTemp;
   static BufferCanvas buffer_canvas;
   static BufferCanvas hDCMask;
+
+  //
+  static LabelBlock label_block;
+ public:
+  static bool checkLabelBlock(RECT rc);
 };
 
 #endif

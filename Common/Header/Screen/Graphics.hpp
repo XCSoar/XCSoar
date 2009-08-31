@@ -199,8 +199,4 @@ void ClipDrawLine(Canvas &canvas, Pen::style PenStyle, const int width,
 bool TextInBox(Canvas &canvas, const TCHAR *Value, int x, int y, int size,
 	       TextInBoxMode_t Mode, bool noOverlap=false);
 
-bool checkLabelBlock(RECT rc);
-
-void LabelBlockReset();
-
 #endif

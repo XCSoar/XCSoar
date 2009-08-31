@@ -58,6 +58,7 @@ Copyright_License {
 #include "Screen/Graphics.hpp"
 #include "Screen/Util.hpp"
 #include "Screen/Fonts.hpp"
+#include "Screen/LabelBlock.hpp"
 #include "Compatibility/gdi.h"
 #include "TopologyStore.h"
 #include "Gauge/GaugeFLARM.hpp"
@@ -140,6 +141,8 @@ BufferCanvas MapWindow::hdcDrawWindow;
 BitmapCanvas MapWindow::hDCTemp;
 BufferCanvas MapWindow::buffer_canvas;
 BufferCanvas MapWindow::hDCMask;
+LabelBlock MapWindow::label_block;
+
 extern void ShowMenu();
 
 ///////////////////
@@ -736,8 +739,6 @@ void MapWindow::DrawThreadInitialise(void) {
   InitialiseScaleList(); // should really be done before the thread
 			 // has started, so it happens from main thread
 
-  LabelBlockReset();
-
   // set main rectangles
   MapRectBig = map_window.get_client_rect();
   MapRectSmall = MapRect;
@@ -814,4 +815,8 @@ bool MapWindow::register_class(HINSTANCE hInstance, const TCHAR* szWindowClass) 
   wc.lpszClassName = szWindowClass;
 
   return (RegisterClass(&wc)!= FALSE);
+}
+
+bool MapWindow::checkLabelBlock(const RECT brect) {
+  return label_block.check(brect);
 }

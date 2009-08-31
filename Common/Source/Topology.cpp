@@ -45,6 +45,7 @@ Copyright_License {
 #include "MapWindow.h"
 #include "Screen/Graphics.hpp"
 #include "Screen/Fonts.hpp"
+#include "Screen/LabelBlock.hpp"
 #include "SettingsUser.hpp"
 
 #include <stdlib.h>
@@ -399,7 +400,7 @@ void XShapeLabel::renderSpecial(Canvas &canvas, int x, int y) {
     brect.top = y;
     brect.bottom = brect.top+tsize.cy;
 
-    if (!checkLabelBlock(brect))
+    if (!MapWindow::checkLabelBlock(brect))
       return;
 
     canvas.set_text_color(Color(0x20,0x20,0x20));

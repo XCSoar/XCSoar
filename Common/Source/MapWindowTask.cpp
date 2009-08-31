@@ -43,6 +43,7 @@ Copyright_License {
 #include "Screen/Util.hpp"
 #include "Screen/Graphics.hpp"
 #include "Screen/Fonts.hpp"
+#include "Screen/LabelBlock.hpp"
 #include "InfoBoxLayout.h"
 #include "AATDistance.h"
 #include "Math/FastMath.h"
@@ -543,7 +544,7 @@ void MapWindow::DrawOffTrackIndicator(Canvas &canvas, const RECT rc) {
       brect.top = sc.y-4;
       brect.bottom = brect.top+tsize.cy+4;
 
-      if (checkLabelBlock(brect)) {
+      if (label_block.check(brect)) {
         canvas.text(sc.x - tsize.cx / 2, sc.y - tsize.cy / 2, Buffer);
 	ilast = idist;
       }

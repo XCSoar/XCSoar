@@ -40,6 +40,7 @@ Copyright_License {
 #include "SettingsTask.hpp"
 #include "Screen/Graphics.hpp"
 #include "Screen/Fonts.hpp"
+#include "Screen/LabelBlock.hpp"
 #include "Marks.h"
 #include "TerrainRenderer.h"
 #include "RasterTerrain.h"
@@ -114,7 +115,7 @@ void MapWindow::RenderMapWindowBg(Canvas &canvas, const RECT rc,
   }
 
   // reset label over-write preventer
-  LabelBlockReset();
+  label_block.reset();
 
   if (!TaskIsTemporary()) {
     DrawTaskAAT(canvas, rc, buffer_canvas);

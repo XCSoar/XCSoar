@@ -47,6 +47,8 @@ Copyright_License {
 #include "SettingsUser.hpp"
 #include "SettingsAirspace.hpp"
 #include "Units.h"
+#include "Screen/LabelBlock.hpp"
+#include "MapWindow.h"
 
 #define NUMSNAILRAMP 6
 
@@ -64,12 +66,15 @@ const COLORRAMP snail_colors[] = {
 const Color ScreenGraphics::GetAirspaceColour(const int i) {
   return Colours[i];
 }
+
 const Brush &ScreenGraphics::GetAirspaceBrush(const int i) {
   return hAirspaceBrushes[i];
 }
+
 const Color ScreenGraphics::GetAirspaceColourByClass(const int i) {
   return Colours[iAirspaceColour[i]];
 }
+
 const Brush &ScreenGraphics::GetAirspaceBrushByClass(const int i) {
   return hAirspaceBrushes[iAirspaceBrush[i]];
 }
@@ -115,6 +120,8 @@ const Color ScreenGraphics::Colours[] =
   Color(0x00,0x00,0x00),
 };
 
+// JMW TODO: some of these should be loaded after settings are loaded
+//
 void ScreenGraphics::Initialise(HINSTANCE hInstance) {
   int i;
 
@@ -164,6 +171,32 @@ void ScreenGraphics::Initialise(HINSTANCE hInstance) {
   }
   hAboveTerrainBrush.set(hAboveTerrainBitmap);
 
+#if (MONOCHROME_SCREEN > 0)
+  hbWind.set(Color(0x80,0x80,0x80));
+#else
+  hbWind.set(Color(0x80,0x80,0x80));
+#endif
+
+  hBmpMapScale.load(IDB_MAPSCALE_A);
+  hBrushFlyingModeAbort.set(Color(0xff,0x00,0x00));
+
+  hBmpThermalSource.load(IDB_THERMALSOURCE);
+  hBmpTarget.load(IDB_TARGET);
+
+#if (MONOCHROME_SCREEN > 0)
+  hbCompass.set(Color(0xff,0xff,0xff));
+#else
+  hbCompass.set(Color(0x40,0x40,0xFF));
+#endif
+  hbThermalBand.set(Color(0x80,0x80,0xFF));
+  hbBestCruiseTrack.set(Color(0x0,0x0,0xFF));
+  hbFinalGlideBelow.set(Color(0xFF,0x00,0x00));
+  hbFinalGlideBelowLandable.set(Color(0xFF,180,0x00));
+  hbFinalGlideAbove.set(Color(0x00,0xFF,0x00));
+
+  /////////////////////////////////////////////////////////////////
+  // all below depend on settings!
+
   BYTE Red,Green,Blue;
   int iwidth;
   int minwidth;
@@ -186,11 +219,7 @@ void ScreenGraphics::Initialise(HINSTANCE hInstance) {
 
   }
 
-  /* JMW created all re-used pens here */
-
   hpCompassBorder.set(IBLSCALE(3), Color(0xff,0xff,0xff));
-
-  // testing only    Appearance.InverseAircraft = true;
 
   if (Appearance.InverseAircraft) {
     hpAircraft.set(IBLSCALE(3), Color(0x00,0x00,0x00));
@@ -233,34 +262,13 @@ void ScreenGraphics::Initialise(HINSTANCE hInstance) {
   hpStartFinishThin.set(IBLSCALE(1), Color(255,0,0));
 
   hpMapScale.set(IBLSCALE(1), Color(0,0,0));
-  hpTerrainLine.set(Pen::DASH, 1, Color(0x30,0x30,0x30));
-  hpTerrainLineBg.set(1, Color(0xFF,0xFF,0xFF));
+  hpTerrainLine.set(Pen::DASH, IBLSCALE(1), Color(0x30,0x30,0x30));
+  hpTerrainLineBg.set(IBLSCALE(1), Color(0xFF,0xFF,0xFF));
   // VENTA3
-  hpVisualGlideLightBlack.set(Pen::DASH, 1, Color(0x0,0x0,0x0));
-  hpVisualGlideHeavyBlack.set(Pen::DASH, 2, Color(0x0,0x0,0x0));
-  hpVisualGlideLightRed.set(Pen::DASH, 1, Color(0xff,0x0,0x0));
-  hpVisualGlideHeavyRed.set(Pen::DASH, 2, Color(0xff,0x0,0x0));
-
-#if (MONOCHROME_SCREEN > 0)
-  hbCompass.set(Color(0xff,0xff,0xff));
-#else
-  hbCompass.set(Color(0x40,0x40,0xFF));
-#endif
-  hbThermalBand.set(Color(0x80,0x80,0xFF));
-  hbBestCruiseTrack.set(Color(0x0,0x0,0xFF));
-  hbFinalGlideBelow.set(Color(0xFF,0x00,0x00));
-  hbFinalGlideBelowLandable.set(Color(0xFF,180,0x00));
-  hbFinalGlideAbove.set(Color(0x00,0xFF,0x00));
-
-#if (MONOCHROME_SCREEN > 0)
-  hbWind.set(Color(0x80,0x80,0x80));
-#else
-  hbWind.set(Color(0x80,0x80,0x80));
-#endif
-
-  hBmpMapScale.load(IDB_MAPSCALE_A);
-
-  hBrushFlyingModeAbort.set(Color(0xff,0x00,0x00));
+  hpVisualGlideLightBlack.set(Pen::DASH, IBLSCALE(1), Color(0x0,0x0,0x0));
+  hpVisualGlideHeavyBlack.set(Pen::DASH, IBLSCALE(2), Color(0x0,0x0,0x0));
+  hpVisualGlideLightRed.set(Pen::DASH, IBLSCALE(1), Color(0xff,0x0,0x0));
+  hpVisualGlideHeavyRed.set(Pen::DASH, IBLSCALE(2), Color(0xff,0x0,0x0));
 
   if (Appearance.IndLandable == wpLandableDefault){
     hBmpAirportReachable.load(IDB_REACHABLE);
@@ -273,9 +281,6 @@ void ScreenGraphics::Initialise(HINSTANCE hInstance) {
     hBmpFieldReachable.load(IDB_OUTFILED_REACHABLE);
     hBmpFieldUnReachable.load(IDB_OUTFILED_UNREACHABLE);
   }
-
-  hBmpThermalSource.load(IDB_THERMALSOURCE);
-  hBmpTarget.load(IDB_TARGET);
 
   for (int i=0; i<AIRSPACECLASSCOUNT; i++) {
     hAirspacePens[i].set(IBLSCALE(2), GetAirspaceColourByClass(i));
@@ -376,7 +381,6 @@ void ScreenGraphics::Destroy() {
   buttonBrush.reset();
 
   Units::UnLoadUnitBitmap();
-
 }
 
 
@@ -669,7 +673,7 @@ bool TextInBox(Canvas &canvas, const TCHAR* Value, int x, int y,
       y += offset.y;
     }
 
-    notoverlapping = checkLabelBlock(brect);
+    notoverlapping = MapWindow::checkLabelBlock(brect);
 
     if (!noOverlap || notoverlapping) {
       HPEN oldPen;
@@ -707,7 +711,7 @@ bool TextInBox(Canvas &canvas, const TCHAR* Value, int x, int y,
       y += offset.y;
     }
 
-    notoverlapping = checkLabelBlock(brect);
+    notoverlapping = MapWindow::checkLabelBlock(brect);
 
     if (!noOverlap || notoverlapping) {
       canvas.set_background_color(Color(0xff, 0xff, 0xff));
@@ -722,7 +726,7 @@ bool TextInBox(Canvas &canvas, const TCHAR* Value, int x, int y,
     brect.top = y+((tsize.cy+4)>>3)-2;
     brect.bottom = brect.top+3+tsize.cy-((tsize.cy+4)>>3);
 
-    notoverlapping = checkLabelBlock(brect);
+    notoverlapping = MapWindow::checkLabelBlock(brect);
 
     if (!noOverlap || notoverlapping) {
       canvas.set_text_color(Color(0xff,0xff,0xff));
@@ -760,7 +764,7 @@ bool TextInBox(Canvas &canvas, const TCHAR* Value, int x, int y,
     brect.top = y+((tsize.cy+4)>>3)-2;
     brect.bottom = brect.top+3+tsize.cy-((tsize.cy+4)>>3);
 
-    notoverlapping = checkLabelBlock(brect);
+    notoverlapping = MapWindow::checkLabelBlock(brect);
 
     if (!noOverlap || notoverlapping) {
 #if (WINDOWSPC>0)
@@ -777,31 +781,4 @@ bool TextInBox(Canvas &canvas, const TCHAR* Value, int x, int y,
   return drawn;
 
 }
-
-// simple code to prevent text writing over map city names
-
-static int nLabelBlocks;
-static RECT LabelBlockCoords[MAXLABELBLOCKS];
-
-void LabelBlockReset() {
-  nLabelBlocks = 0;
-}
-
-
-bool checkLabelBlock(RECT rc) {
-  bool ok = true;
-
-  for (int i=0; i<nLabelBlocks; i++) {
-    if (CheckRectOverlap(LabelBlockCoords[i],rc)) {
-      ok = false;
-      continue;
-    }
-  }
-  if (nLabelBlocks<MAXLABELBLOCKS-1) {
-    LabelBlockCoords[nLabelBlocks]= rc;
-    nLabelBlocks++;
-  }
-  return ok;
-}
-
 

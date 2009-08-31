@@ -39,6 +39,7 @@ Copyright_License {
 #include "XCSoar.h"
 #include "RasterTerrain.h"
 #include "RasterWeather.h"
+#include "MapWindow.h"
 #include "MapWindowProjection.hpp"
 #include "Topology.h"
 #include "Screen/STScreenBuffer.h"
@@ -50,6 +51,7 @@ Copyright_License {
 #include "Registry.hpp"
 #include "Screen/Ramp.hpp"
 #include "Screen/Graphics.hpp"
+#include "Screen/LabelBlock.hpp"
 #include "LocalPath.hpp"
 #include "LogFile.hpp"
 
@@ -930,7 +932,7 @@ static void DrawSpotHeight_Internal(Canvas &canvas, TCHAR *Buffer, POINT pt) {
   brect.top = pt.y;
   brect.bottom = brect.top+tsize.cy;
 
-  if (!checkLabelBlock(brect))
+  if (!MapWindow::checkLabelBlock(brect))
     return;
 
   canvas.text(pt.x, pt.y, Buffer);
