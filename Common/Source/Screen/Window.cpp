@@ -138,6 +138,13 @@ Window::on_resize(unsigned width, unsigned height)
 }
 
 bool
+Window::on_mouse_move(unsigned x, unsigned y, unsigned keys)
+{
+  /* not handled here */
+  return false;
+}
+
+bool
 Window::on_mouse_down(unsigned x, unsigned y)
 {
   return false;
@@ -193,6 +200,11 @@ Window::on_message(HWND _hWnd, UINT message,
 
   case WM_SIZE:
     if (on_resize(LOWORD(lParam), HIWORD(lParam))) return true;
+    break;
+
+  case WM_MOUSEMOVE:
+    if (on_mouse_move(LOWORD(lParam), HIWORD(lParam), wParam))
+      return 0;
     break;
 
   case WM_LBUTTONDOWN:
