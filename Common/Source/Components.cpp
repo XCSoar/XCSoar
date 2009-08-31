@@ -316,7 +316,7 @@ bool Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
 
   GaugeCDI::Create();
 
-  gauge_vario = new GaugeVario(main_window, rc);
+  gauge_vario = new GaugeVario(main_window, map_window.GetMapRect());
 
   LoadWindFromRegistry();
   CalculateNewPolarCoef();

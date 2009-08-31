@@ -471,7 +471,6 @@ void MapWindow::on_mouse_double(unsigned x, unsigned y)
   // Only handle timed clicks in BUTTONDOWN with no proximity.
   //
   dwDownTime = GetTickCount();
-  
 #ifndef DISABLEAUDIO
   if (EnableSoundModes) PlayResource(TEXT("IDR_WAV_CLICK"));
 #endif
@@ -585,9 +584,9 @@ void MapWindow::on_mouse_up(unsigned x, unsigned y)
 #endif
       return;
     }
-    dwDownTime= 0L;
-    InputEvents::processKey(wParam);
-    return;
+    //    dwDownTime= 0L;
+    //    InputEvents::processKey(wParam);
+    //    return;
   }
 
   double Xlat, Ylat;
@@ -605,8 +604,7 @@ void MapWindow::on_mouse_up(unsigned x, unsigned y)
     return;
   }
  
-  if (!my_target_pan && EnablePan && (distance>36)) {
-    // TODO FIX should be IBLSCALE 36 instead?
+  if (!my_target_pan && EnablePan && (distance>IBLSCALE(36))) {
     PanLongitude += Xstart-Xlat;
     PanLatitude  += Ystart-Ylat;
     RefreshMap();
@@ -630,7 +628,6 @@ void MapWindow::on_mouse_up(unsigned x, unsigned y)
     
     // JMW trigger recalcs immediately
     TriggerGPSUpdate();
-    
     return;
   }
 #endif
@@ -733,6 +730,5 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
     default:
       return ::DefWindowProc (hWnd, uMsg, wParam, lParam);
     }
-  return ::DefWindowProc (hWnd, uMsg, wParam, lParam);
-  //  return TRUE;
+  return FALSE;
 }
