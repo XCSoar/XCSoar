@@ -229,7 +229,6 @@ bool Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
   main_window.set(szWindowClass, szTitle,
 		  WindowSize.left, WindowSize.top,
 		  WindowSize.right, WindowSize.bottom);
-
   main_window.install_wndproc();
 
   if (!main_window.defined()) {
@@ -274,10 +273,9 @@ bool Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
 
   map_window.SetMapRect(rcsmall);
   map_window.register_class(hInst, TEXT("MapWindowClass"));
+  map_window.install_wndproc();
   map_window.set(main_window, TEXT("MapWindowClass"),
                  0, 0, rc.right - rc.left, rc.bottom-rc.top);
-  map_window.install_wndproc();
-
   map_window.set_font(MapWindowFont);
 
   ///////////////////////////////////////////////////////

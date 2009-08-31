@@ -422,8 +422,8 @@ bool MapWindow::checkLabelBlock(const RECT brect) {
 
 /////////////////////////////////////////
 
-
-bool MapWindow::on_size(int width, int height) {
+bool MapWindow::on_resize(unsigned width, unsigned height) {
+  StartupStore(TEXT("onsize\n"));
   resize(width, height);
 
   hdcDrawWindow.resize(width, height);
@@ -439,10 +439,9 @@ bool MapWindow::on_size(int width, int height) {
   return true;
 }
 
-bool MapWindow::on_create(HWND hWnd)
+bool MapWindow::on_create()
 {
-  created(hWnd);
-
+  StartupStore(TEXT("on create\n"));
   hdcDrawWindow.set(get_canvas());
   hDCTemp.set(get_canvas());
   buffer_canvas.set(get_canvas());
@@ -452,6 +451,7 @@ bool MapWindow::on_create(HWND hWnd)
 
 bool MapWindow::on_destroy()
 {
+  StartupStore(TEXT("destroy\n"));
   hdcDrawWindow.reset();
   hDCTemp.reset();
   buffer_canvas.reset();
@@ -708,40 +708,3 @@ DWORD MapWindow::DrawThread (LPVOID lpvoid)
   map_window._DrawThread();
 }
 
-
-LRESULT MapWindow::on_message(HWND _hWnd, UINT uMsg,
-			      WPARAM wParam, LPARAM lParam) 
-{
-  switch (uMsg)
-    {
-    case WM_SIZE:
-      if (on_size(LOWORD(lParam), HIWORD(lParam))) return true;
-      break;
-    case WM_CREATE:
-      if (on_create(_hWnd)) return true;
-      break;
-    case WM_DESTROY:
-      if (on_destroy()) return true;
-      break;
-    case WM_LBUTTONDBLCLK:
-      if (on_mouse_double(LOWORD(lParam), HIWORD(lParam))) return true;
-      break;
-    case WM_MOUSEMOVE:
-      if (on_mouse_move(LOWORD(lParam), HIWORD(lParam))) return true;
-      break;
-    case WM_LBUTTONDOWN:
-      if (on_mouse_down(LOWORD(lParam), HIWORD(lParam))) return true;
-      break;
-    case WM_LBUTTONUP:
-      if (on_mouse_up(LOWORD(lParam), HIWORD(lParam))) return true;
-      break;
-#if defined(GNAV) || defined(PNA) // VENTA FIXED PNA SCROLL WHEEL
-    case WM_KEYDOWN: // JMW was keyup
-#else
-    case WM_KEYUP: // JMW was keyup
-#endif
-      if (on_key_down(wParam)) return true;
-      break;
-    }
-  return PaintWindow::on_message (_hWnd, uMsg, wParam, lParam);
-}

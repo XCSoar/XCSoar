@@ -220,8 +220,6 @@ bool MainWindow::on_create(void)
 }
 
 void MainWindow::install_timer(void) {
-  // cheat
-  on_create();
 }
 
 bool MainWindow::on_key_down(unsigned key_code) {
@@ -244,6 +242,7 @@ bool MainWindow::on_close() {
   }
   return false;
 }
+
 
 LRESULT MainWindow::on_message(HWND _hWnd, UINT message,
 			       WPARAM wParam, LPARAM lParam) {

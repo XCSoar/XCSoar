@@ -107,13 +107,10 @@ Window::created(HWND _hWnd)
   hWnd = _hWnd;
 }
 
-#include "LogFile.hpp"
 void
 Window::reset()
 {
-  StartupStore(TEXT("test c\n"));
   DestroyWindow(hWnd);
-  StartupStore(TEXT("test d\n"));
 }
 
 bool
@@ -188,11 +185,11 @@ Window::on_message(HWND _hWnd, UINT message,
 {
   switch (message) {
   case WM_CREATE:
-    if (on_create()) return true;
+    if (on_create()) return 0;
     break;
 
   case WM_DESTROY:
-    if (on_destroy()) return true;
+    if (on_destroy()) return 0;
     break;
 
   case WM_CLOSE:
@@ -202,7 +199,7 @@ Window::on_message(HWND _hWnd, UINT message,
     break;
 
   case WM_SIZE:
-    if (on_resize(LOWORD(lParam), HIWORD(lParam))) return true;
+    if (on_resize(LOWORD(lParam), HIWORD(lParam))) return 0;
     break;
 
   case WM_MOUSEMOVE:

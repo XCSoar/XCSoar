@@ -87,11 +87,6 @@ class MapWindow
   bool TargetDragged(double *longitude, double *latitude);
   bool SetTargetPan(bool dopan, int task_index);
 
-
-  // used only by XCSoar.cpp on instantiation
-  virtual LRESULT on_message(HWND _hWnd, UINT message,
-                             WPARAM wParam, LPARAM lParam);
-
   // use at startup
   void SetMapRect(RECT rc) {
     MapRect = rc;
@@ -246,14 +241,14 @@ class MapWindow
     return &label_block;
   }
  protected:
-  bool on_size(int width, int height);
-  bool on_create(HWND hWnd);
-  bool on_destroy();
-  bool on_mouse_double(unsigned x, unsigned y);
-  bool on_mouse_move(unsigned x, unsigned y);
-  bool on_mouse_down(unsigned x, unsigned y);
-  bool on_mouse_up(unsigned x, unsigned y);
-  bool on_key_down(unsigned key_code);
+  virtual bool on_create();
+  virtual bool on_destroy();
+  virtual bool on_resize(unsigned width, unsigned height);
+  virtual bool on_mouse_double(unsigned x, unsigned y);
+  virtual bool on_mouse_move(unsigned x, unsigned y);
+  virtual bool on_mouse_down(unsigned x, unsigned y);
+  virtual bool on_mouse_up(unsigned x, unsigned y);
+  virtual bool on_key_down(unsigned key_code);
 };
 
 #endif
