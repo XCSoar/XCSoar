@@ -89,20 +89,22 @@ PaintWindow::set(ContainerWindow &parent,
 }
 
 void
-PaintWindow::created(HWND _hWnd)
-{
-  assert(!canvas.defined());
-
-  Window::created(_hWnd);
-  canvas.set(hWnd, 1, 1);
-}
-
-
-void
 PaintWindow::reset()
 {
   canvas.reset();
   Window::reset();
+}
+
+bool
+PaintWindow::on_create()
+{
+  assert(!canvas.defined());
+
+  if (!Window::on_create())
+    return false;
+
+  canvas.set(hWnd, 1, 1);
+  return true;
 }
 
 bool

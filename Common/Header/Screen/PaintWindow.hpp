@@ -84,8 +84,6 @@ public:
            bool center = false, bool notify = false, bool show = true,
            bool tabstop = false, bool border = false);
 
-  void created(HWND _hWnd);
-
   void reset();
 
   void resize(unsigned width, unsigned height) {
@@ -154,6 +152,8 @@ public:
   }
 
 protected:
+  virtual bool on_create();
+
   virtual bool on_resize(unsigned width, unsigned height);
 
   virtual void on_paint(Canvas &canvas);
