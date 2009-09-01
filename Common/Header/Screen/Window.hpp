@@ -54,6 +54,9 @@ protected:
 
 public:
   Window():hWnd(NULL), prev_wndproc(NULL) {}
+  ~Window() {
+    reset();
+  }
 
   operator HWND() const {
     return hWnd;
