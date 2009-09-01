@@ -421,7 +421,8 @@ bool MapWindow::checkLabelBlock(const RECT brect) {
 /////////////////////////////////////////
 
 bool MapWindow::on_resize(unsigned width, unsigned height) {
-  resize(width, height);
+  PaintWindow::on_resize(width, height);
+
   draw_canvas.resize(width, height);
   buffer_canvas.resize(width, height);
   mask_canvas.resize(width, height);
@@ -437,6 +438,9 @@ bool MapWindow::on_resize(unsigned width, unsigned height) {
 
 bool MapWindow::on_create()
 {
+  if (!PaintWindow::on_create())
+    return false;
+
   draw_canvas.set(get_canvas());
   buffer_canvas.set(get_canvas());
   mask_canvas.set(draw_canvas);
@@ -448,6 +452,8 @@ bool MapWindow::on_destroy()
   draw_canvas.reset();
   mask_canvas.reset();
   buffer_canvas.reset();
+
+  PaintWindow::on_destroy();
 
   PostQuitMessage (0);
   return true;
@@ -689,7 +695,8 @@ bool MapWindow::on_key_down(unsigned key_code)
   if (InputEvents::processKey(key_code)) {
     return true; // don't go to default handler
   }
-  return true;
+
+  return PaintWindow::on_key_down(key_code);
 }
 
 void MapWindow::on_paint(Canvas& _canvas) {
