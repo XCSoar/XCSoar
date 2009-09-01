@@ -41,12 +41,10 @@ Copyright_License {
 #include "NMEA/Info.h"
 #include "NMEA/Derived.hpp"
 
-class MapWindowProjection;
-
 BOOL DoCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 BOOL DoCalculationsVario(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 void DoCalculationsSlow(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
-			MapWindowProjection &map_projection);
+			double screen_distance);
 
 double CalculateWaypointArrivalAltitude(NMEA_INFO *Basic, 
 					DERIVED_INFO *Calculated, 

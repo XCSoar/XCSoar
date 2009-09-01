@@ -181,7 +181,7 @@ void AnnounceWayPointSwitch(DERIVED_INFO *Calculated, bool do_advance) {
 
 
 void DoCalculationsSlow(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
-			MapWindowProjection &map_projection) {
+			double screen_distance) {
   // do slow part of calculations (cleanup of caches etc, nothing
   // that changes the state)
 
@@ -198,7 +198,7 @@ void DoCalculationsSlow(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
     AirspaceWarning(Basic, Calculated);
   }
 
-  TerrainFootprint(Basic, Calculated, map_projection);
+  TerrainFootprint(Basic, Calculated, screen_distance);
 
   DoBestAlternateSlow(Basic, Calculated);
 

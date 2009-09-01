@@ -171,6 +171,7 @@ DWORD CalculationThread (LPVOID lpvoid) {
     memcpy(&tmp_CALCULATED_INFO,&CALCULATED_INFO,sizeof(DERIVED_INFO));
 
     bool has_vario = GPS_INFO.VarioAvailable;
+    double screen_distance = map_window.GetScreenDistanceMeters();
     mutexFlightData.Unlock();
 
     // Do vario first to reduce audio latency
@@ -207,7 +208,7 @@ DWORD CalculationThread (LPVOID lpvoid) {
       break; // drop out on exit
 
     if (need_calculations_slow) {
-      DoCalculationsSlow(&tmp_GPS_INFO,&tmp_CALCULATED_INFO, map_window);
+      DoCalculationsSlow(&tmp_GPS_INFO,&tmp_CALCULATED_INFO, screen_distance);
       need_calculations_slow = false;
     }
 

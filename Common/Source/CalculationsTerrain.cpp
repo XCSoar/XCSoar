@@ -38,10 +38,8 @@ Copyright_License {
 
 #include "CalculationsTerrain.hpp"
 #include "GlideSolvers.hpp"
-#include "MapWindowProjection.hpp"
 #include "RasterTerrain.h"
 #include "Math/Earth.hpp"
-
 #include "SettingsUser.hpp" // for FinalGlideTerrain, read-only
 
 void TerrainHeight(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
@@ -108,7 +106,7 @@ void CheckFinalGlideThroughTerrain(NMEA_INFO *Basic,
 
 void TerrainFootprint(NMEA_INFO *Basic, 
 		      DERIVED_INFO *Calculated,
-		      MapWindowProjection &map_projection) {
+		      double screen_range) {
 
   if (FinalGlideTerrain) {
 
@@ -118,8 +116,7 @@ void TerrainFootprint(NMEA_INFO *Basic,
 
     // estimate max range (only interested in at most one screen distance away)
     // except we need to scan for terrain base, so 20km search minimum is required
-    double mymaxrange = max(20000.0,
-			    map_projection.GetScreenDistanceMeters());
+    double mymaxrange = max(20000.0, screen_range);
 
     Calculated->TerrainBase = Calculated->TerrainAlt;
 
