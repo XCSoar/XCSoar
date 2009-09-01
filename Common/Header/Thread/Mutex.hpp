@@ -53,7 +53,7 @@ public:
    *
    * @param name an application specific name for this trigger
    */
-  Mutex():refcount(0) {
+  Mutex() {
     ::InitializeCriticalSection(&handle);
   }
   ~Mutex() {
@@ -62,14 +62,10 @@ public:
 public:
   void Lock() {
     EnterCriticalSection(&handle);
-    refcount++;
   };
   void Unlock() {
-    refcount--;
     LeaveCriticalSection(&handle);
   }
-private:
-  int refcount;
 };
 
 // JMW testing an easy/clear way of handling mutexes
