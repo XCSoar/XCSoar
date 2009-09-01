@@ -108,7 +108,15 @@ Window::created(HWND _hWnd)
 void
 Window::reset()
 {
-  DestroyWindow(hWnd);
+  if (hWnd != NULL) {
+    ::DestroyWindow(hWnd);
+
+    /* the on_destroy() method must have cleared the variable by
+       now */
+    assert(prev_wndproc == NULL || hWnd == NULL);
+
+    hWnd = NULL;
+  }
 }
 
 bool
@@ -120,7 +128,10 @@ Window::on_create()
 bool
 Window::on_destroy()
 {
-  return false;
+  assert(hWnd != NULL);
+
+  hWnd = NULL;
+  return true;
 }
 
 bool
@@ -260,7 +271,9 @@ Window::on_message(HWND _hWnd, UINT message,
     break;
   }
 
-  return ::DefWindowProc(_hWnd, message, wParam, lParam);
+  return prev_wndproc != NULL
+    ? ::CallWindowProc(prev_wndproc, _hWnd, message, wParam, lParam)
+    : ::DefWindowProc(_hWnd, message, wParam, lParam);
 }
 
 LRESULT CALLBACK

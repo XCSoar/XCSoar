@@ -69,6 +69,8 @@ private:
   WindowCanvas canvas;
 
 public:
+  static bool register_class(HINSTANCE hInstance);
+
   void set(ContainerWindow &parent, LPCTSTR cls,
            int left, int top, unsigned width, unsigned height) {
     Window::set(&parent, cls, NULL, left, top, width, height);

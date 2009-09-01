@@ -50,9 +50,13 @@ class ContainerWindow;
 class Window {
 protected:
   HWND hWnd;
+  WNDPROC prev_wndproc;
 
 public:
-  Window():hWnd(NULL) {}
+  Window():hWnd(NULL), prev_wndproc(NULL) {}
+  ~Window() {
+    reset();
+  }
 
   operator HWND() const {
     return hWnd;
@@ -225,7 +229,7 @@ public:
    */
   void install_wndproc() {
     set_userdata(this);
-    set_wndproc(WndProc);
+    prev_wndproc = set_wndproc(WndProc);
   }
 };
 

@@ -801,8 +801,6 @@ WndForm::WndForm(ContainerWindow *Parent,
 
   mhTitleFont = GetFont();
 
-  mhBrushTitle = (HBRUSH)CreateSolidBrush(mColorTitle);
-
   mClientWindow = new WindowControl(this, this,
                                     TEXT(""), 20, 20, Width, Height);
   mClientWindow->SetBackColor(GetBackColor());
@@ -837,7 +835,6 @@ void WndForm::Destroy(void){
   kill_timer(cbTimerID);
 
   DestroyAcceleratorTable(mhAccelTable);
-  DeleteObject(mhBrushTitle);
 
   WindowControl::Destroy();  // delete all childs
 
@@ -1539,15 +1536,108 @@ WndButton::on_paint(Canvas &canvas)
 }
 
 
+bool
+WndProperty::Editor::on_mouse_down(int x, int y)
+{
+  // if it's an Combopicker field, then call the combopicker routine
+  if (parent->mDialogStyle) {
+    InterfaceTimeoutReset();
+    if (parent->on_mouse_down(x, y)) {
+      ResetDisplayTimeOut();
+      return true;
+    }
+  } //end combopicker
+
+  return false;
+}
+
+bool
+WndProperty::Editor::on_key_down(unsigned key_code)
+{
+  if (key_code == VK_RETURN || key_code == VK_F23) { // Compaq uses VKF23
+    if (parent->mDialogStyle) {
+      InterfaceTimeoutReset();
+      if (parent->on_mouse_down(0, 0)) {
+        ResetDisplayTimeOut();
+        return true;
+      }
+    } //end combopicker
+  }
+  // tmep hack, do not process nav keys
+  if (KeyTimer(true, key_code)) {
+    // activate tool tips if hit return for long time
+    if (key_code == VK_RETURN || key_code == VK_F23) { // Compaq uses VKF23
+      if (parent->OnHelp())
+        return true;
+    }
+  }
+
+  if (key_code == VK_UP || key_code == VK_DOWN){
+    WindowControl *owner = parent->GetOwner();
+    if (owner != NULL)
+      // XXX what's the correct lParam value here?
+      PostMessage(owner->GetClientAreaWindow(),
+                  WM_KEYDOWN, key_code, 0);
+    // pass the message to the parent window;
+    return true;
+  }
+
+  if (parent->OnEditKeyDown(key_code))
+    return true;
+
+  return false;
+}
+
+bool
+WndProperty::Editor::on_key_up(unsigned key_code)
+{
+  if (KeyTimer(false, key_code)) {
+    // activate tool tips if hit return for long time
+    if (key_code == VK_RETURN || key_code == VK_F23) { // Compaq uses VKF23
+      if (parent->OnHelp())
+        return true;
+    }
+  } else if (key_code == VK_RETURN) {
+    if (parent->CallSpecial())
+      return true;
+  }
+
+  return false;
+}
+
+LRESULT
+WndProperty::Editor::on_message(HWND hWnd, UINT message,
+                                WPARAM wParam, LPARAM lParam)
+{
+  switch (message) {
+    case WM_SETFOCUS:
+      KeyTimer(true, 0);
+      if (parent->GetReadOnly()) {
+        SetFocus((HWND)wParam);
+        return(0);
+      } else {
+        if ((HWND)wParam != parent->GetHandle()) {
+          parent->SetFocused(true, (HWND) wParam);
+        }
+      }
+    break;
+
+    case WM_KILLFOCUS:
+      KeyTimer(true, 0);
+      if ((HWND)wParam != parent->GetHandle()){
+        parent->SetFocused(false, (HWND) wParam);
+      }
+    break;
+  }
+
+  return EditWindow::on_message(hWnd, message, wParam, lParam);
+}
+
 
 Bitmap WndProperty::hBmpLeft32;
 Bitmap WndProperty::hBmpRight32;
 
 int     WndProperty::InstCount=0;
-
-
-LRESULT CALLBACK WndPropertyEditWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
-
 
 WndProperty::WndProperty(WindowControl *Parent,
 			 TCHAR *Name,
@@ -1560,7 +1650,8 @@ WndProperty::WndProperty(WindowControl *Parent,
 			 int MultiLine):
   WindowControl(Parent,
 		NULL /*Parent->GetHandle()*/,
-		Name, X, Y, Width, Height){
+		Name, X, Y, Width, Height),
+  edit(this) {
 
   mOnClickUpNotify = NULL;
   mOnClickDownNotify = NULL;
@@ -1584,9 +1675,7 @@ WndProperty::WndProperty(WindowControl *Parent,
 
   edit.set(*this, mEditPos.x, mEditPos.y, mEditSize.x, mEditSize.y,
            MultiLine);
-
-  edit.set_userdata(this);
-  mEditWindowProcedure = edit.set_wndproc(WndPropertyEditWndProc);
+  edit.install_wndproc();
 
   edit.set_font(*mhValueFont);
 
@@ -1627,8 +1716,6 @@ void WndProperty::Destroy(void){
     }
   }
 
-  edit.set_wndproc(mEditWindowProcedure);
-
   edit.reset();
 
   WindowControl::Destroy();
@@ -1639,16 +1726,6 @@ void WndProperty::Destroy(void){
 
 void WndProperty::SetText(const TCHAR *Value){
   edit.set_text(Value);
-}
-
-
-LRESULT CALLBACK WndPropertyEditWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam){
-
-	WndProperty *w = (WndProperty *) GetWindowLong(hwnd, GWL_USERDATA);
-	if (w)
-		return (w->WndProcEditControl(hwnd, uMsg, wParam, lParam));
-	else
-		return (DefWindowProc(hwnd, uMsg, wParam, lParam));
 }
 
 const Font *WndProperty::SetFont(const Font &Value){
@@ -1713,88 +1790,6 @@ int WndProperty::SetButtonSize(int Value){
   return(res);
 };
 
-
-int WndProperty::WndProcEditControl(HWND hwnd, UINT uMsg,
-                                    WPARAM wParam, LPARAM lParam) {
-
-  switch (uMsg){
-
-    case WM_KEYDOWN:
-      if ((wParam & 0xffff) == VK_RETURN || (wParam & 0xffff) == VK_F23) { // Compaq uses VKF23
-        if (this->mDialogStyle) {
-          InterfaceTimeoutReset();
-          if (on_mouse_down(LOWORD(lParam), HIWORD(lParam))) {
-            ResetDisplayTimeOut();
-            return(0);
-          }
-        } //end combopicker
-      }
-      // tmep hack, do not process nav keys
-      if (KeyTimer(true, wParam & 0xffff)) {
-	// activate tool tips if hit return for long time
-        if ((wParam & 0xffff) == VK_RETURN || (wParam & 0xffff) == VK_F23) { // Compaq uses VKF23
-	  if (OnHelp()) return (0);
-	}
-      }
-
-      if (wParam == VK_UP || wParam == VK_DOWN){
-        WindowControl *owner = GetOwner();
-        if (owner != NULL)
-          PostMessage(owner->GetClientAreaWindow(), uMsg, wParam, lParam);
-	// pass the message to the parent window;
-        return(0);
-        // return(1);
-      }
-      if (!OnEditKeyDown(wParam, lParam))
-        return(1);
-    break;
-
-    case WM_KEYUP:
-	if (KeyTimer(false, wParam & 0xffff)) {
-	  // activate tool tips if hit return for long time
-    if ((wParam & 0xffff) == VK_RETURN || (wParam & 0xffff) == VK_F23) { // Compaq uses VKF23
-	    if (OnHelp()) return (0);
-	  }
-	} else if ((wParam & 0xffff) == VK_RETURN) {
-	  if (CallSpecial()) return (0);
-	}
-    break;
-
-    case WM_LBUTTONDOWN:
-      // if it's an Combopicker field, then call the combopicker routine
-      if (this->mDialogStyle) {
-        InterfaceTimeoutReset();
-        if (on_mouse_down(LOWORD(lParam), HIWORD(lParam))) {
-          ResetDisplayTimeOut();
-          return(0);
-        }
-      } //end combopicker
-      break;
-
-    case WM_SETFOCUS:
-      KeyTimer(true, 0);
-      if (GetReadOnly()){
-        SetFocus((HWND)wParam);
-        return(0);
-      } else {
-        if ((HWND)wParam != GetHandle()){
-          SetFocused(true, (HWND) wParam);
-        }
-      }
-    break;
-
-    case WM_KILLFOCUS:
-      KeyTimer(true, 0);
-      if ((HWND)wParam != GetHandle()){
-        SetFocused(false, (HWND) wParam);
-      }
-    break;
-  }
-
-  return(CallWindowProc(mEditWindowProcedure, hwnd, uMsg, wParam, lParam));
-
-}
-
 bool WndProperty::SetReadOnly(bool Value){
 
   bool res = GetReadOnly();
@@ -1811,7 +1806,7 @@ bool WndProperty::SetReadOnly(bool Value){
 bool WndProperty::SetFocused(bool Value, HWND FromTo){
 
   const HWND mhEdit = edit;
-  TCHAR sTmp[STRINGVALUESIZE];
+  TCHAR sTmp[128];
 
   if (Value && GetReadOnly()){  // keep focus on last control
     if (FromTo != mhEdit)
@@ -1847,18 +1842,19 @@ bool WndProperty::SetFocused(bool Value, HWND FromTo){
   return(0);
 }
 
-int WndProperty::OnEditKeyDown(WPARAM wParam, LPARAM lParam){
-  (void)lParam;
-  switch (wParam){
+bool
+WndProperty::OnEditKeyDown(unsigned key_code)
+{
+  switch (key_code){
     case VK_RIGHT:
       IncValue();
-    return(0);
+      return true;
     case VK_LEFT:
       DecValue();
-    return(0);
+      return true;
   }
 
-  return(1);
+  return false;
 }
 
 bool

@@ -452,8 +452,6 @@ bool MapWindow::on_destroy()
   buffer_canvas.reset();
 
   MaskedPaintWindow::on_destroy();
-
-  PostQuitMessage (0);
   return true;
 }
 

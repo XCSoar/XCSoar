@@ -216,6 +216,7 @@ bool Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
   if (main_window.find(szWindowClass, szTitle))
     return false;
 
+  PaintWindow::register_class(hInst);
   main_window.register_class(hInst, szWindowClass);
 
   // other startup...
@@ -229,7 +230,6 @@ bool Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
   main_window.set(szWindowClass, szTitle,
 		  WindowSize.left, WindowSize.top,
 		  WindowSize.right, WindowSize.bottom);
-  main_window.install_wndproc();
 
   if (!main_window.defined()) {
     return false;
