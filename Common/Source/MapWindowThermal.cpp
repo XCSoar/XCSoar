@@ -66,7 +66,7 @@ void MapWindow::CalculateScreenPositionsThermalSources() {
                             DerivedDrawInfo.WindBearing,
                             -DerivedDrawInfo.WindSpeed*t,
                             &lat, &lon);
-      if (PointVisible(lon,lat)) {
+      if (LonLatVisible(lon,lat)) {
         LatLon2Screen(lon,
                       lat,
                       DerivedDrawInfo.ThermalSources[i].Screen);

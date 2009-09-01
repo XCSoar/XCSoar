@@ -812,7 +812,7 @@ int FindNearestWayPoint(MapWindowProjection &map_projection,
 
     if (WayPointList[i].Visible) {
 
-      if (map_projection.WaypointInRange(i)) {
+      if (map_projection.WaypointInScaleFilter(i)) {
 
         // only look for visible waypoints
         // feature added by Samuel Gisiger

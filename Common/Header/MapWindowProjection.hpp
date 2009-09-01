@@ -68,8 +68,10 @@ class MapWindowProjection: public MapWindowData {
   double  GetPanLatitude() { return PanLatitude; }
   double  GetPanLongitude() { return PanLongitude; }
   double  GetDisplayAngle() { return DisplayAngle; }
+
   rectObj CalculateScreenBounds(double scale);
-  double  GetApproxScreenRange(void);
+
+  double  GetScreenDistanceMeters(void);
 
   double GetScreenScaleToLatLon() {
     return InvDrawScale;
@@ -80,8 +82,6 @@ class MapWindowProjection: public MapWindowData {
   double GetMapScaleKM() {
     return MapScale*0.001/DISTANCEMODIFY;
   }
-
-  int GetMapResolutionFactor();
 
   bool isPan() {
     return EnablePan;
@@ -97,7 +97,7 @@ class MapWindowProjection: public MapWindowData {
   }
 
   // used by waypoint nearest routine
-  bool    WaypointInRange(int i);
+  bool    WaypointInScaleFilter(int i);
 
   // drawing functions
   void DrawGreatCircle(Canvas &canvas,
@@ -108,9 +108,9 @@ class MapWindowProjection: public MapWindowData {
  protected:
   // helpers
   bool PointVisible(const POINT &P);
-  bool PointVisible(const double &lon, const double &lat);
-  bool PointInRect(const double &lon, const double &lat,
-			  const rectObj &bounds);
+  bool LonLatVisible(const double &lon, const double &lat);
+  bool PointInRect(const double &x, const double &y,
+		   const rectObj &bounds);
   rectObj   screenbounds_latlon;
   RECT   MapRectSmall;
   RECT   MapRectBig;
@@ -185,6 +185,7 @@ class MapWindowProjection: public MapWindowData {
   int       ScaleCurrent;
   double    ScaleList[SCALELISTSIZE];
   int       ScaleListCount;
+  int       GetMapResolutionFactor();
 };
 
 #endif

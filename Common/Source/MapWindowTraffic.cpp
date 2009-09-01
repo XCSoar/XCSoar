@@ -66,7 +66,7 @@ void MapWindow::DrawFLARMTraffic(Canvas &canvas, RECT rc, POINT Orig_Aircraft) {
   TextInBoxMode_t displaymode;
   displaymode.AsInt = 0;
 
-  double screenrange = GetApproxScreenRange();
+  double screenrange = GetScreenDistanceMeters();
   double scalefact = screenrange/6000.0;
 
   Brush redBrush(Color(0xFF,0x00,0x00));
@@ -249,7 +249,7 @@ void MapWindow::DrawTeammate(Canvas &canvas, RECT rc)
 
   if (TeammateCodeValid)
     {
-      if(PointVisible(TeammateLongitude, TeammateLatitude) )
+      if(LonLatVisible(TeammateLongitude, TeammateLatitude) )
 	{
 	  LatLon2Screen(TeammateLongitude, TeammateLatitude, point);
 

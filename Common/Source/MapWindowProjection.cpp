@@ -77,28 +77,28 @@ void MapWindowProjection::InitialiseScaleList(void) {
   _RequestedMapScale = LimitMapScale(_RequestedMapScale);
 }
 
-bool MapWindowProjection::WaypointInRange(int i) {
+bool MapWindowProjection::WaypointInScaleFilter(int i) {
   return ((WayPointList[i].Zoom >= MapScale*10)
           || (WayPointList[i].Zoom == 0))
     && (MapScale <= 10);
 }
 
 
-bool MapWindowProjection::PointInRect(const double &lon,
-			    const double &lat,
-                            const rectObj &bounds) {
-  if ((lon> bounds.minx) &&
-      (lon< bounds.maxx) &&
-      (lat> bounds.miny) &&
-      (lat< bounds.maxy))
+bool MapWindowProjection::PointInRect(const double &x,
+				      const double &y,
+				      const rectObj &bounds) {
+  if ((x> bounds.minx) &&
+      (x< bounds.maxx) &&
+      (y> bounds.miny) &&
+      (y< bounds.maxy))
     return true;
   else
     return false;
 }
 
 
-bool MapWindowProjection::PointVisible(const double &lon,
-				       const double &lat) {
+bool MapWindowProjection::LonLatVisible(const double &lon,
+					const double &lat) {
   if ((lon> screenbounds_latlon.minx) &&
       (lon< screenbounds_latlon.maxx) &&
       (lat> screenbounds_latlon.miny) &&
@@ -119,9 +119,9 @@ bool MapWindowProjection::PointVisible(const POINT &P)
      &&
      ( P.y <= MapRect.bottom  )
      )
-    return TRUE;
+    return true;
   else
-    return FALSE;
+    return false;
 }
 
 
@@ -386,10 +386,9 @@ void MapWindow::Event_Pan(int vswitch) {
 }
 
 
-double MapWindowProjection::GetApproxScreenRange() {
-  return (MapScale * max(MapRectBig.right-MapRectBig.left,
-                         MapRectBig.bottom-MapRectBig.top))
-    *1000.0/GetMapResolutionFactor();
+double MapWindowProjection::GetScreenDistanceMeters() {
+  return DistancePixelsToMeters(max(MapRectBig.right-MapRectBig.left,
+				    MapRectBig.bottom-MapRectBig.top));
 }
 
 

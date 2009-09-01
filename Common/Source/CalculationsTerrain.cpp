@@ -119,7 +119,7 @@ void TerrainFootprint(NMEA_INFO *Basic,
     // estimate max range (only interested in at most one screen distance away)
     // except we need to scan for terrain base, so 20km search minimum is required
     double mymaxrange = max(20000.0,
-			    map_projection.GetApproxScreenRange());
+			    map_projection.GetScreenDistanceMeters());
 
     Calculated->TerrainBase = Calculated->TerrainAlt;
 

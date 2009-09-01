@@ -105,7 +105,7 @@ void MapWindow::DrawWaypoints(Canvas &canvas, const RECT rc)
 
 	    TextDisplayMode.AsInt = 0;
 
-	    irange = WaypointInRange(i);
+	    irange = WaypointInScaleFilter(i);
 
 	    Bitmap *wp_bmp = &MapGfx.hSmall;
 
@@ -459,7 +459,7 @@ void MapWindow::CalculateScreenPositionsWaypoints() {
       {
         WayPointList[i].Visible = false;
         if (!WayPointList[i].FarVisible) continue;
-        if(PointVisible(WayPointList[i].Longitude, WayPointList[i].Latitude) )
+        if(LonLatVisible(WayPointList[i].Longitude, WayPointList[i].Latitude) )
           {
             LatLon2Screen(WayPointList[i].Longitude, WayPointList[i].Latitude,
                           WayPointList[i].Screen);

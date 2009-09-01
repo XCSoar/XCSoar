@@ -93,7 +93,7 @@ void MapWindow::DrawGlideThroughTerrain(Canvas &canvas, const RECT rc) {
         &&(DerivedDrawInfo.TerrainWarningLongitude != 0.0)) {
 
       POINT sc;
-      if (PointVisible(DerivedDrawInfo.TerrainWarningLongitude,
+      if (LonLatVisible(DerivedDrawInfo.TerrainWarningLongitude,
                        DerivedDrawInfo.TerrainWarningLatitude)) {
         LatLon2Screen(DerivedDrawInfo.TerrainWarningLongitude,
                       DerivedDrawInfo.TerrainWarningLatitude, sc);

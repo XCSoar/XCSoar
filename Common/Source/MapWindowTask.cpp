@@ -477,7 +477,7 @@ void MapWindow::DrawOffTrackIndicator(Canvas &canvas, const RECT rc) {
   }
 
   double distance_max = min(DerivedDrawInfo.WaypointDistance,
-			    GetApproxScreenRange()*0.7);
+			    GetScreenDistanceMeters()*0.7);
   if (distance_max < 5000.0) {
     // too short to bother
     return;
@@ -590,7 +590,7 @@ MapWindow::DrawProjectedTrack(Canvas &canvas, const RECT rc, const POINT Orig)
   }
   POINT pt[2] = {{0,-75},{0,-400}};
   if (TargetPan) {
-    double screen_range = GetApproxScreenRange();
+    double screen_range = GetScreenDistanceMeters();
     double flow = 0.4;
     double fhigh = 1.5;
     screen_range = max(screen_range, DerivedDrawInfo.WaypointDistance);
