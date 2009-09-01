@@ -692,8 +692,6 @@ bool MapWindow::on_key_down(unsigned key_code)
   return true;
 }
 
-#include "Screen/PaintCanvas.hpp"
-
 void MapWindow::on_paint(Canvas& _canvas) {
   _canvas.copy(draw_canvas);
 }
