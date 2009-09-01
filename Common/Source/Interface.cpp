@@ -90,8 +90,6 @@ void SignalShutdown(bool force) {
   }
 }
 
-#include "LogFile.hpp"
-
 bool CheckShutdown(void) {
   bool retval = false;
   if (ShutdownRequested) {
@@ -105,9 +103,6 @@ bool CheckShutdown(void) {
     }
     doForceShutdown = false;
     ShutdownRequested = false;
-  }
-  if (retval) {
-    StartupStore(TEXT("shutdown\n"));
   }
   return retval;
 }
