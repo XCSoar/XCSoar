@@ -206,6 +206,12 @@ Canvas::text(int x, int y, const TCHAR *text)
 }
 
 void
+Canvas::text_opaque(int x, int y, const TCHAR *text, size_t length)
+{
+  ::ExtTextOut(dc, x, y, ETO_OPAQUE, NULL, text, length, NULL);
+}
+
+void
 Canvas::text_opaque(int x, int y, const RECT* lprc, const TCHAR *text)
 {
   ::ExtTextOut(dc, x, y, ETO_OPAQUE, lprc, text, _tcslen(text), NULL);
