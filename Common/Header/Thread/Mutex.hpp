@@ -71,14 +71,14 @@ public:
 // JMW testing an easy/clear way of handling mutexes
 class ScopeLock {
 public:
-  ScopeLock(Mutex* the_mutex):scope_mutex(the_mutex) {
-    scope_mutex->Lock();
+  ScopeLock(Mutex& the_mutex):scope_mutex(the_mutex) {
+    scope_mutex.Lock();
   };
   ~ScopeLock() {
-    scope_mutex->Unlock();
+    scope_mutex.Unlock();
   }
 private:
-  Mutex *scope_mutex;
+  Mutex &scope_mutex;
 };
 
 #endif

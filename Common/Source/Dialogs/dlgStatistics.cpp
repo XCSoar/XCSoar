@@ -84,7 +84,7 @@ static void OnAnalysisPaint(WindowControl *Sender, Canvas &canvas)
 {
   RECT  rcgfx;
   HFONT hfOld;
-  ScopeLock protect(&mutexGlideComputer);
+  ScopeLock protect(mutexGlideComputer);
 
   CopyRect(&rcgfx, Sender->GetBoundRect());
 
@@ -148,7 +148,7 @@ static void Update(void){
   int dt=1;
   double d=0;
 
-  ScopeLock protect(&mutexGlideComputer);
+  ScopeLock protect(mutexGlideComputer);
 
   switch(page){
     case ANALYSIS_PAGE_BAROGRAPH:
