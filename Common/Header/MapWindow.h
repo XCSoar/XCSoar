@@ -247,8 +247,6 @@ class MapWindow
   virtual bool on_mouse_down(int x, int y);
   virtual bool on_mouse_up(int x, int y);
   virtual bool on_key_down(unsigned key_code);
-  virtual LRESULT on_message(HWND hWnd, UINT message,
-			     WPARAM wParam, LPARAM lParam);
   virtual void on_paint(Canvas& canvas);
 
 };

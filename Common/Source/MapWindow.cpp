@@ -710,25 +710,3 @@ DWORD MapWindow::DrawThread (LPVOID lpvoid)
   MapWindow *mw = (MapWindow *)lpvoid;
   mw->_DrawThread();
 }
-
-
-LRESULT
-MapWindow::on_message(HWND hWnd, UINT message,
-		      WPARAM wParam, LPARAM lParam)
-{
-  switch (message) {
-    /*
-  case WM_ERASEBKGND:
-    // we don't need one, we just paint over the top
-    return 0;
-
-  case WM_PAINT:
-    {
-      PaintCanvas _canvas(*this, hWnd);
-      on_paint(_canvas);
-    }
-    return 0;
-    */
-  }
-  return Window::on_message(hWnd, message, wParam, lParam);
-}
