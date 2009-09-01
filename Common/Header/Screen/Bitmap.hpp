@@ -52,6 +52,12 @@ protected:
 
 public:
   Bitmap():bitmap(NULL) {}
+  Bitmap(const TCHAR *name):bitmap(NULL) {
+    load(name);
+  }
+  Bitmap(WORD id):bitmap(NULL) {
+    load(id);
+  }
   ~Bitmap();
 
 public:
