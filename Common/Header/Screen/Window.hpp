@@ -52,6 +52,11 @@ protected:
   HWND hWnd;
   WNDPROC prev_wndproc;
 
+private:
+  /* copy constructor not allowed */
+  Window(const Window &window) {}
+  Window &operator=(const Window &window) {}
+
 public:
   Window():hWnd(NULL), prev_wndproc(NULL) {}
   ~Window() {

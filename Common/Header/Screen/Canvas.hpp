@@ -65,6 +65,11 @@ protected:
   HDC dc;
   unsigned width, height;
 
+private:
+  /* copy constructor not allowed */
+  Canvas(const Canvas &canvas) {}
+  Canvas &operator=(const Canvas &canvas) {}
+
 public:
   Canvas():dc(NULL) {}
   Canvas(HDC _dc, unsigned _width, unsigned _height)
