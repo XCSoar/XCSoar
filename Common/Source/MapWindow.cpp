@@ -345,7 +345,8 @@ void MapWindow::DrawThreadInitialise(void) {
 
   // set initial display mode
   draw_canvas.background_transparent();
-  mask_canvas.background_opaque();
+  get_mask().background_opaque();
+  get_mask().set_text_color(Color(0xff,0xff, 0xff));
 
   // paint draw window black to start
   draw_canvas.black_pen();
@@ -421,11 +422,10 @@ bool MapWindow::checkLabelBlock(const RECT brect) {
 /////////////////////////////////////////
 
 bool MapWindow::on_resize(unsigned width, unsigned height) {
-  PaintWindow::on_resize(width, height);
+  MaskedPaintWindow::on_resize(width, height);
 
   draw_canvas.resize(width, height);
   buffer_canvas.resize(width, height);
-  mask_canvas.resize(width, height);
 
   SetFontInfoAll(get_canvas());
 
@@ -438,22 +438,20 @@ bool MapWindow::on_resize(unsigned width, unsigned height) {
 
 bool MapWindow::on_create()
 {
-  if (!PaintWindow::on_create())
+  if (!MaskedPaintWindow::on_create())
     return false;
 
   draw_canvas.set(get_canvas());
   buffer_canvas.set(get_canvas());
-  mask_canvas.set(draw_canvas);
   return true;
 }
 
 bool MapWindow::on_destroy()
 {
   draw_canvas.reset();
-  mask_canvas.reset();
   buffer_canvas.reset();
 
-  PaintWindow::on_destroy();
+  MaskedPaintWindow::on_destroy();
 
   PostQuitMessage (0);
   return true;
@@ -696,7 +694,7 @@ bool MapWindow::on_key_down(unsigned key_code)
     return true; // don't go to default handler
   }
 
-  return PaintWindow::on_key_down(key_code);
+  return MaskedPaintWindow::on_key_down(key_code);
 }
 
 void MapWindow::on_paint(Canvas& _canvas) {

@@ -43,8 +43,7 @@ Copyright_License {
 #include "Trigger.hpp"
 #include "Mutex.hpp"
 #include "Screen/BufferCanvas.hpp"
-#include "Screen/BitmapCanvas.hpp"
-#include "Screen/PaintWindow.hpp"
+#include "Screen/MaskedPaintWindow.hpp"
 #include "Screen/LabelBlock.hpp"
 
 class MapWindowBase {
@@ -71,7 +70,7 @@ class MapWindowBase {
 
 
 class MapWindow
-: public PaintWindow, public MapWindowBase,
+: public MaskedPaintWindow, public MapWindowBase,
   public MapWindowProjection {
  public:
   MapWindow();
@@ -229,7 +228,6 @@ class MapWindow
   // graphics vars
 
   BufferCanvas draw_canvas;
-  BitmapCanvas mask_canvas;
   BufferCanvas buffer_canvas;
 
   LabelBlock label_block;
