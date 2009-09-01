@@ -241,7 +241,7 @@ bool MainWindow::on_close() {
     }
     Shutdown();
   }
-  return false;
+  return true;
 }
 
 
