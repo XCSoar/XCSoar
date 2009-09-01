@@ -585,7 +585,7 @@ void TerrainRenderer::FillHeightBuffer(MapWindowProjection &map_projection,
   
   const double PanLatitude =  map_projection.GetPanLatitude();
   const double PanLongitude = map_projection.GetPanLongitude();
-  const double InvDrawScale = map_projection.GetInvDrawScale()/1024.0;
+  const double InvDrawScale = map_projection.GetScreenScaleToLatLon()/1024.0;
   const double DisplayAngle = map_projection.GetDisplayAngle();
   const int cost = ifastcosine(DisplayAngle);
   const int sint = ifastsine(DisplayAngle);

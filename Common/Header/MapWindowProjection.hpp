@@ -68,14 +68,20 @@ class MapWindowProjection: public MapWindowData {
   double  GetPanLatitude() { return PanLatitude; }
   double  GetPanLongitude() { return PanLongitude; }
   double  GetDisplayAngle() { return DisplayAngle; }
-  double  GetInvDrawScale() { return InvDrawScale; }
   rectObj CalculateScreenBounds(double scale);
   double  GetApproxScreenRange(void);
 
-  double GetMapScale() { // Topology
+  double GetScreenScaleToLatLon() {
+    return InvDrawScale;
+  }
+  double GetMapScaleUser() { // Topology
     return MapScale;
   }
-  int     GetMapResolutionFactor();
+  double GetMapScaleKM() {
+    return MapScale*0.001/DISTANCEMODIFY;
+  }
+
+  int GetMapResolutionFactor();
 
   bool isPan() {
     return EnablePan;
@@ -95,9 +101,9 @@ class MapWindowProjection: public MapWindowData {
 
   // drawing functions
   void DrawGreatCircle(Canvas &canvas,
-			      double lon_start, double lat_start,
-			      double lon_end, double lat_end,
-			      const RECT rc);
+		       double lon_start, double lat_start,
+		       double lon_end, double lat_end,
+		       const RECT rc);
 
  protected:
   // helpers
@@ -131,10 +137,6 @@ class MapWindowProjection: public MapWindowData {
 
   unsigned DistanceMetersToScreen(const double x) {
     return iround(_scale_meters_to_screen*x);
-  }
-
-  double GetMapScaleKM() {
-    return MapScale*0.001/DISTANCEMODIFY;
   }
 
   // 4 = x*30/1000

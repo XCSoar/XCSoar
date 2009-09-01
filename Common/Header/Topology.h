@@ -104,7 +104,7 @@ class Topology {
   }
  private:
 
-  bool CheckScale(MapWindowProjection &map_projection);
+  bool CheckScale(double map_scale);
 
   int shapes_visible_count;
 

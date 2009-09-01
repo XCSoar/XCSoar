@@ -68,9 +68,9 @@ void MapWindow::SwitchZoomClimb(void) {
     if (my_target_pan) {
       // save starting values
       if (isclimb) {
-        ClimbMapScale = GetMapScale();
+        ClimbMapScale = GetMapScaleUser();
       } else {
-        CruiseMapScale = GetMapScale();
+        CruiseMapScale = GetMapScaleUser();
       }
     } else {
       // restore scales
@@ -89,13 +89,13 @@ void MapWindow::SwitchZoomClimb(void) {
     if (isclimb != last_isclimb) {
       if (isclimb) {
         // save cruise scale
-        CruiseMapScale = GetMapScale();
+        CruiseMapScale = GetMapScaleUser();
         // switch to climb scale
         RequestMapScale(ClimbMapScale);
       } else {
         // leaving climb
         // save cruise scale
-        ClimbMapScale = GetMapScale();
+        ClimbMapScale = GetMapScaleUser();
         RequestMapScale(CruiseMapScale);
         // switch to climb scale
       }
@@ -242,7 +242,7 @@ void MapWindow::Event_TerrainTopology(int vswitch) {
 
 
 void MapWindow::Event_SetZoom(double value) {
-  if (GetMapScale() != RequestMapScale(value)) {
+  if (GetMapScaleUser() != RequestMapScale(value)) {
     BigZoom = true;
     RefreshMap();
   }

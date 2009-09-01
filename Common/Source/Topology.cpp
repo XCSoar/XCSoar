@@ -140,12 +140,12 @@ Topology::~Topology() {
 }
 
 
-bool Topology::CheckScale(MapWindowProjection &map_projection) {
-  return (map_projection.GetMapScale() <= scaleThreshold);
+bool Topology::CheckScale(double map_scale) {
+  return (map_scale <= scaleThreshold);
 }
 
 void Topology::TriggerIfScaleNowVisible(MapWindowProjection &map_projection) {
-  triggerUpdateCache |= (CheckScale(map_projection) != in_scale);
+  triggerUpdateCache |= (CheckScale(map_projection.GetMapScaleUser()) != in_scale);
 }
 
 void Topology::flushCache() {
@@ -162,7 +162,7 @@ void Topology::updateCache(MapWindowProjection &map_projection,
 
   if (!shapefileopen) return;
 
-  in_scale = CheckScale(map_projection);
+  in_scale = CheckScale(map_projection.GetMapScaleUser());
 
   if (!in_scale) {
     // not visible, so flush the cache
@@ -233,7 +233,9 @@ void Topology::Paint(Canvas &canvas, MapWindow &m_window, const RECT rc) {
   MapWindowProjection &map_projection = m_window;
   LabelBlock *label_block = m_window.getLabelBlock();
 
-  if (map_projection.GetMapScale() > scaleThreshold)
+  double map_scale = map_projection.GetMapScaleUser();
+
+  if (map_scale > scaleThreshold)
     return;
 
   // TODO code: only draw inside screen!
@@ -249,13 +251,13 @@ void Topology::Paint(Canvas &canvas, MapWindow &m_window, const RECT rc) {
 
   int iskip = 1;
 
-  if (map_projection.GetMapScale()>0.25*scaleThreshold) {
+  if (map_scale>0.25*scaleThreshold) {
     iskip = 2;
   }
-  if (map_projection.GetMapScale()>0.5*scaleThreshold) {
+  if (map_scale>0.5*scaleThreshold) {
     iskip = 3;
   }
-  if (map_projection.GetMapScale()>0.75*scaleThreshold) {
+  if (map_scale>0.75*scaleThreshold) {
     iskip = 4;
   }
 
