@@ -74,7 +74,7 @@ void MapWindow::CalculateScreenPositionsAirspaceCircle(AIRSPACE_CIRCLE &circ) {
         LatLon2Screen(circ.Longitude,
                       circ.Latitude,
                       circ.Screen);
-        circ.ScreenR = iround(circ.Radius*ResMapScaleOverDistanceModify);
+        circ.ScreenR = DistanceMetersToScreen(circ.Radius);
       }
     }
   }

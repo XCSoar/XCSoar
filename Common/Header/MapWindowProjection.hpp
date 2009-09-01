@@ -41,6 +41,7 @@ Copyright_License {
 #include "NMEA/Info.h"
 #include "NMEA/Derived.hpp"
 #include "Screen/Canvas.hpp"
+#include "Math/FastMath.h"
 
 class MapWindowData {
  public:
@@ -118,7 +119,6 @@ class MapWindowProjection: public MapWindowData {
   double MapScale;
   double DisplayAircraftAngle;
   double MapScaleOverDistanceModify; // speedup
-  double ResMapScaleOverDistanceModify; // speedup
   double RequestMapScale;
 
   void   CalculateOrigin(const RECT rc, POINT *Orig);
@@ -139,7 +139,12 @@ class MapWindowProjection: public MapWindowData {
   double    LimitMapScale(double value);
   void      InitialiseScaleList();
 
+  unsigned DistanceMetersToScreen(const double x) {
+    return iround(ResMapScaleOverDistanceModify*x);
+  }
  private:
+  double ResMapScaleOverDistanceModify; // speedup
+
   void   ModifyMapScale();
   void   CalculateOrientationTargetPan(void);
   void   CalculateOrientationNormal(void);

@@ -84,8 +84,6 @@ void MapWindow::DrawAbortedTask(Canvas &canvas, const RECT rc, const POINT me)
 void MapWindow::DrawStartSector(Canvas &canvas, const RECT rc,
                                 POINT &Start,
                                 POINT &End, int Index) {
-  double tmp;
-
   if(StartLine) {
     canvas.select(MapGfx.hpStartFinishThick);
     canvas.clipped_line(WayPointList[Index].Screen, Start, rc);
@@ -94,14 +92,14 @@ void MapWindow::DrawStartSector(Canvas &canvas, const RECT rc,
     canvas.clipped_line(WayPointList[Index].Screen, Start, rc);
     canvas.clipped_line(WayPointList[Index].Screen, End, rc);
   } else {
-    tmp = StartRadius*ResMapScaleOverDistanceModify;
+    unsigned tmp = DistanceMetersToScreen(StartRadius);
     canvas.hollow_brush();
     canvas.select(MapGfx.hpStartFinishThick);
     canvas.circle(WayPointList[Index].Screen.x, WayPointList[Index].Screen.y,
-                  (int)tmp, rc, false, false);
+                  tmp, rc, false, false);
     canvas.select(MapGfx.hpStartFinishThin);
     canvas.circle(WayPointList[Index].Screen.x, WayPointList[Index].Screen.y,
-                  (int)tmp, rc, false, false);
+                  tmp, rc, false, false);
   }
 
 }
@@ -110,7 +108,6 @@ void MapWindow::DrawStartSector(Canvas &canvas, const RECT rc,
 void MapWindow::DrawTask(Canvas &canvas, RECT rc, const POINT &Orig_Aircraft)
 {
   int i;
-  double tmp;
 
   if (!WayPointList) return;
   Pen pent1(Pen::SOLID, IBLSCALE(1), MapGfx.TaskColor);
@@ -154,16 +151,16 @@ void MapWindow::DrawTask(Canvas &canvas, RECT rc, const POINT &Orig_Aircraft)
 	    canvas.clipped_line(WayPointList[Task[i].Index].Screen,
 				Task[i].End, rc);
 	  } else {
-            tmp = FinishRadius*ResMapScaleOverDistanceModify;
+            unsigned tmp = DistanceMetersToScreen(FinishRadius);
             canvas.hollow_brush();
             canvas.select(MapGfx.hpStartFinishThick);
             canvas.circle(WayPointList[Task[i].Index].Screen.x,
                           WayPointList[Task[i].Index].Screen.y,
-                          (int)tmp, rc, false, false);
+                          tmp, rc, false, false);
             canvas.select(MapGfx.hpStartFinishThin);
             canvas.circle(WayPointList[Task[i].Index].Screen.x,
                           WayPointList[Task[i].Index].Screen.y,
-                          (int)tmp, rc, false, false);
+                          tmp, rc, false, false);
 	  }
 	}
       }
@@ -179,32 +176,30 @@ void MapWindow::DrawTask(Canvas &canvas, RECT rc, const POINT &Orig_Aircraft)
           canvas.hollow_brush();
           canvas.black_pen();
 	  if(SectorType== 0) {
-	    tmp = SectorRadius*ResMapScaleOverDistanceModify;
+	    unsigned tmp = DistanceMetersToScreen(SectorRadius);
 	    canvas.circle(WayPointList[Task[i].Index].Screen.x,
                           WayPointList[Task[i].Index].Screen.y,
-                          (int)tmp, rc, false, false);
+                          tmp, rc, false, false);
 	  }
 	  if(SectorType==1) {
-	    tmp = SectorRadius*ResMapScaleOverDistanceModify;
+	    unsigned tmp = DistanceMetersToScreen(SectorRadius);
 	    canvas.segment(WayPointList[Task[i].Index].Screen.x,
-                           WayPointList[Task[i].Index].Screen.y,(int)tmp, rc,
+                           WayPointList[Task[i].Index].Screen.y,tmp, rc,
                            Task[i].AATStartRadial-DisplayAngle,
                            Task[i].AATFinishRadial-DisplayAngle);
 	  }
 	  if(SectorType== 2) {
 	    // JMW added german rules
-	    tmp = 500*ResMapScaleOverDistanceModify;
+	    unsigned tmp = DistanceMetersToScreen(500);
 	    canvas.circle(WayPointList[Task[i].Index].Screen.x,
                           WayPointList[Task[i].Index].Screen.y,
-                          (int)tmp, rc, false, false);
+                          tmp, rc, false, false);
 
-	    tmp = 10e3*ResMapScaleOverDistanceModify;
-
+	    tmp = DistanceMetersToScreen(10000);
 	    canvas.segment(WayPointList[Task[i].Index].Screen.x,
-                           WayPointList[Task[i].Index].Screen.y,(int)tmp, rc,
+                           WayPointList[Task[i].Index].Screen.y, tmp, rc,
                            Task[i].AATStartRadial-DisplayAngle,
                            Task[i].AATFinishRadial-DisplayAngle);
-
 	  }
 	} else {
 	  // JMW added iso lines
@@ -323,7 +318,7 @@ void MapWindow::DrawTaskAAT(Canvas &canvas, const RECT rc, Canvas &buffer)
 	if(ValidTaskPoint(i) && ValidTaskPoint(i+1)) {
 	  if(Task[i].AATType == CIRCLE)
 	    {
-	      tmp = Task[i].AATCircleRadius*ResMapScaleOverDistanceModify;
+	      tmp = DistanceMetersToScreen(Task[i].AATCircleRadius);
 
 	      // this color is used as the black bit
               buffer.set_text_color(MapGfx.Colours[iAirspaceColour[AATASK]]);
@@ -358,10 +353,10 @@ void MapWindow::DrawTaskAAT(Canvas &canvas, const RECT rc, Canvas &buffer)
 	      }
               buffer.black_pen();
 
-	      tmp = Task[i].AATSectorRadius*ResMapScaleOverDistanceModify;
+	      tmp = DistanceMetersToScreen(Task[i].AATSectorRadius);
 
               buffer.segment(WayPointList[Task[i].Index].Screen.x,
-                             WayPointList[Task[i].Index].Screen.y,(int)tmp, rc,
+                             WayPointList[Task[i].Index].Screen.y, tmp, rc,
                              Task[i].AATStartRadial-DisplayAngle,
                              Task[i].AATFinishRadial-DisplayAngle);
 

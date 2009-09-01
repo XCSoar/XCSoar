@@ -117,7 +117,7 @@ void MapWindow::DrawGlideThroughTerrain(Canvas &canvas, const RECT rc) {
  */
 void MapWindow::DrawGlideCircle(Canvas &canvas, POINT Orig, RECT rc)
 {
-  double tmp=0;
+  unsigned tmp=0;
   TCHAR gtext[100];
   char text[20]; // TODO size it
 
@@ -163,20 +163,19 @@ void MapWindow::DrawGlideCircle(Canvas &canvas, POINT Orig, RECT rc)
 	 && (DisplayMode != dmCircling) )
       {
 	if ( VisualGlide == 1 ) {
-	  tmp = i*gunit*cruise*ResMapScaleOverDistanceModify;
-          canvas.arc(Orig.x, Orig.y, (int)tmp, rc, 315, 45);
+	  tmp = DistanceMetersToScreen(i*gunit*cruise);
+          canvas.arc(Orig.x, Orig.y, tmp, rc, 315, 45);
 	} else
 	  {
-	    tmp = i*gunit*cruise*ResMapScaleOverDistanceModify;
-            canvas.arc(Orig.x, Orig.y, (int)tmp, rc,
+	    tmp = DistanceMetersToScreen(i*gunit*cruise);
+            canvas.arc(Orig.x, Orig.y, tmp, rc,
                        330 + spread, 30 + spread);
 	  }
       } else
       {
-	tmp = i*gunit*cruise*ResMapScaleOverDistanceModify;
-        canvas.circle(Orig.x, Orig.y, (int)tmp, rc, true, false);
+	tmp = DistanceMetersToScreen(i*gunit*cruise);
+        canvas.circle(Orig.x, Orig.y, tmp, rc, true, false);
       }
-
 
     canvas.set_text_color(turn > 0 || true
                           ? Color(0x0,0x0,0x0)
@@ -187,7 +186,7 @@ void MapWindow::DrawGlideCircle(Canvas &canvas, POINT Orig, RECT rc)
       else
         _stprintf(gtext, _T("-%dft"), i * 300);
       if (count<5)
-        canvas.text(Orig.x + 35, Orig.y - 5 - (int)tmp, gtext);
+        canvas.text(Orig.x + 35, Orig.y - 5 - tmp, gtext);
     }
 
     canvas.set_text_color(turn > 0 || true
@@ -208,7 +207,7 @@ void MapWindow::DrawGlideCircle(Canvas &canvas, POINT Orig, RECT rc)
 
       _stprintf(gtext, _T("%S"), text);
       if (count<5)
-        canvas.text(Orig.x - 100, Orig.y - 5 - (int)tmp, gtext);
+        canvas.text(Orig.x - 100, Orig.y - 5 - tmp, gtext);
     }
   }
 
