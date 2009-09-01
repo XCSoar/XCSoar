@@ -62,6 +62,30 @@ void WindowCanvas::reset()
     ::ReleaseDC(wnd, dc);
 }
 
+bool
+PaintWindow::register_class(HINSTANCE hInstance)
+{
+  WNDCLASS wc;
+
+  wc.hInstance = hInstance;
+  wc.style = CS_VREDRAW | CS_HREDRAW | CS_DBLCLKS;
+
+  /* not registering Window::WndProc() here, because this would break
+     all users who call install_wndproc(); once we get rid of this
+     hack, we can do it properly */
+  wc.lpfnWndProc = DefWindowProc;
+
+  wc.cbClsExtra = 0;
+  wc.cbWndExtra = 0;
+  wc.hIcon = (HICON)NULL;
+  wc.hCursor = NULL;
+  wc.hbrBackground = NULL;
+  wc.lpszMenuName = 0;
+  wc.lpszClassName = "PaintWindow";
+
+  return RegisterClass(&wc) != 0;
+}
+
 void
 PaintWindow::set(ContainerWindow *parent,
                  int left, int top, unsigned width, unsigned height,
@@ -70,7 +94,7 @@ PaintWindow::set(ContainerWindow *parent,
 {
   canvas.reset();
 
-  Window::set(parent, TEXT("STATIC"), TEXT(" "),
+  Window::set(parent, TEXT("PaintWindow"), TEXT(" "),
               left, top, width, height,
               center, notify, show, tabstop, border);
 

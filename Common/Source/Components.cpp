@@ -216,6 +216,7 @@ bool Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
   if (main_window.find(szWindowClass, szTitle))
     return false;
 
+  PaintWindow::register_class(hInst);
   main_window.register_class(hInst, szWindowClass);
 
   // other startup...
