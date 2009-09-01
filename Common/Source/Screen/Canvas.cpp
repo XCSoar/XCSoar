@@ -48,6 +48,9 @@ Copyright_License {
 #include <stdlib.h> /* for abs() */
 
 
+// TODO: ClipPolygon is not thread safe (uses a static array)!  
+// We need to make it so.
+
 void
 Canvas::clipped_polygon(const POINT* lppt, unsigned cPoints, const RECT rc,
                         bool fill)

@@ -201,33 +201,27 @@ void MapWindow::DrawGPSStatus(Canvas &canvas, const RECT rc)
   TCHAR gpswarningtext1[] = TEXT("GPS not connected");
   TCHAR gpswarningtext2[] = TEXT("GPS waiting for fix");
   TextInBoxMode_t TextInBoxMode = {2};
+  TCHAR *txt=NULL;
+  Bitmap *bmp=NULL;
 
   if (!extGPSCONNECT) {
-    get_mask().select(MapGfx.hGPSStatus2);
-    canvas.scale_and(rc.left + IBLSCALE(2),
-                     rc.bottom +IBLSCALE(Appearance.GPSStatusOffset.y - 22),
-                     get_mask(), 0, 0, 20, 20);
-
-    TextInBox(canvas, gettext(gpswarningtext1),
-              rc.left+IBLSCALE(24),
-              rc.bottom+IBLSCALE(Appearance.GPSStatusOffset.y-19),
-              TextInBoxMode, rc);
-
+    bmp = &MapGfx.hGPSStatus2;
+    txt = gpswarningtext1;
   } else
     if (DrawInfo.NAVWarning || (DrawInfo.SatellitesUsed == 0)) {
-      get_mask().select(MapGfx.hGPSStatus1);
-      canvas.scale_and(rc.left + IBLSCALE(2),
-                       rc.bottom +IBLSCALE(Appearance.GPSStatusOffset.y - 22),
-                       get_mask(), 0, 0, 20, 20);
-
-      TextInBox(canvas, gettext(gpswarningtext2),
-                rc.left+IBLSCALE(24),
-                rc.bottom+
-                IBLSCALE(Appearance.GPSStatusOffset.y-19),
-                TextInBoxMode, rc);
-
+      bmp = &MapGfx.hGPSStatus2;
+      txt = gpswarningtext2;
+    } else {
+      return; // early exit
     }
-
+  draw_bitmap(canvas, *bmp, 
+	      rc.left + IBLSCALE(2),
+	      rc.bottom +IBLSCALE(Appearance.GPSStatusOffset.y - 22),
+	      0, 0, 20, 20, false);
+  TextInBox(canvas, gettext(txt),
+	    rc.left+IBLSCALE(24),
+	    rc.bottom+IBLSCALE(Appearance.GPSStatusOffset.y-19),
+	    TextInBoxMode, rc);
 }
 
 
@@ -257,41 +251,33 @@ void MapWindow::DrawFlightMode(Canvas &canvas, const RECT rc)
     if (drawlogger) {
       offset -= 7;
 
-      get_mask().select(LoggerActive && flip
-                     ? MapGfx.hLogger : MapGfx.hLoggerOff);
-      //changed draw mode & icon for higher opacity 12aug -st
-      canvas.scale_or_and(rc.right + IBLSCALE(offset + Appearance.FlightModeOffset.x),
-                          rc.bottom + IBLSCALE(-7 + Appearance.FlightModeOffset.y),
-                          get_mask(), 7, 7);
+      draw_masked_bitmap(canvas, 
+			 (LoggerActive && flip)
+			 ? MapGfx.hLogger : MapGfx.hLoggerOff,
+			 rc.right + IBLSCALE(offset + Appearance.FlightModeOffset.x),
+			 rc.bottom + IBLSCALE(-7 + Appearance.FlightModeOffset.y),
+			 7, 7, false);
     }
   }
 
   if (Appearance.FlightModeIcon == apFlightModeIconDefault){
-
+    Bitmap *bmp;
     if (TaskAborted) {
-      get_mask().select(MapGfx.hAbort);
+      bmp = &MapGfx.hAbort;
+    } else if (DisplayMode == dmCircling) {
+      bmp = &MapGfx.hClimb;
+    } else if (DisplayMode == dmFinalGlide) {
+      bmp = &MapGfx.hFinalGlide;
     } else {
-      if (DisplayMode == dmCircling) {
-        get_mask().select(MapGfx.hClimb);
-      } else if (DisplayMode == dmFinalGlide) {
-        get_mask().select(MapGfx.hFinalGlide);
-      } else {
-        get_mask().select(MapGfx.hCruise);
-      }
+      bmp = &MapGfx.hCruise;
     }
-    // Code already commented as of 12aug05 - redundant? -st
-    //          BitBlt(hdc,rc.right-35,5,24,20,
-    //                           get_mask(),20,0,SRCAND);
-
-    // code for pre 12aug icons - st
-    //BitBlt(hdc,rc.right-24-3,rc.bottom-20-3,24,20,
-    //  get_mask(),0,0,SRCAND);
 
     offset -= 24;
 
-    canvas.scale_or_and(rc.right + IBLSCALE(offset - 1 + Appearance.FlightModeOffset.x),
-                        rc.bottom + IBLSCALE(-20 - 1 + Appearance.FlightModeOffset.y),
-                        get_mask(), 24, 20);
+    draw_masked_bitmap(canvas, *bmp, 
+		       rc.right + IBLSCALE(offset - 1 + Appearance.FlightModeOffset.x),
+		       rc.bottom + IBLSCALE(-20 - 1 + Appearance.FlightModeOffset.y),
+		       24, 20, false);
 
   } else if (Appearance.FlightModeIcon == apFlightModeIconAltA){
 
@@ -354,19 +340,15 @@ void MapWindow::DrawFlightMode(Canvas &canvas, const RECT rc)
 
 
   if (!Appearance.DontShowAutoMacCready && DerivedDrawInfo.AutoMacCready) {
-    get_mask().select(MapGfx.hAutoMacCready);
 
     offset -= 24;
 
     //changed draw mode & icon for higher opacity 12aug -st
 
-    canvas.scale_or_and(rc.right + IBLSCALE(offset - 3 + Appearance.FlightModeOffset.x),
-                        rc.bottom + IBLSCALE(-20 - 3 + Appearance.FlightModeOffset.y),
-                        get_mask(), 24, 20);
-
-    //  commented @ 12aug st
-    //  BitBlt(hdc,rc.right-48-3,rc.bottom-20-3,24,20,
-    //    get_mask(),0,0,SRCAND);
+    draw_masked_bitmap(canvas, MapGfx.hAutoMacCready,
+		       rc.right + IBLSCALE(offset - 3 + Appearance.FlightModeOffset.x),
+		       rc.bottom + IBLSCALE(-20 - 3 + Appearance.FlightModeOffset.y),
+		       24, 20, false);
   };
 
 }
@@ -734,10 +716,10 @@ void MapWindow::DrawFinalGlide(Canvas &canvas, const RECT rc)
                       Value);
 
           if (Units::GetUnitBitmap(Units::GetUserAltitudeUnit(), &Bmp, &BmpPos, &BmpSize, 0)){
-            get_mask().select(*Bmp);
-            canvas.scale_copy(x + TextSize.cx + IBLSCALE(1), y,
-                              get_mask(), BmpPos.x, BmpPos.y, BmpSize.x, BmpSize.y);
-            get_mask().clear();
+	    draw_bitmap(canvas, *Bmp, 
+			x + TextSize.cx + IBLSCALE(1), y,
+			BmpPos.x, BmpPos.y, 
+			BmpSize.x, BmpSize.y, false);
           }
         }
     }

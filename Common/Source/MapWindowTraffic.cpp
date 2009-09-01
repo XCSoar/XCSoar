@@ -253,10 +253,8 @@ void MapWindow::DrawTeammate(Canvas &canvas, RECT rc)
 	{
 	  LatLon2Screen(TeammateLongitude, TeammateLatitude, point);
 
-          get_mask().select(MapGfx.hBmpTeammatePosition);
-          canvas.scale_or_and(point.x - IBLSCALE(10),  point.y - IBLSCALE(10),
-                              get_mask(), 20, 20);
-          get_mask().clear();
+	  draw_masked_bitmap(canvas, MapGfx.hBmpTeammatePosition,
+			     point.x, point.y, 20, 20);
 	}
     }
 }

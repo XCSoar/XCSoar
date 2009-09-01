@@ -107,8 +107,10 @@ void MapWindow::DrawWaypoints(Canvas &canvas, const RECT rc)
 
 	    irange = WaypointInRange(i);
 
+	    Bitmap *wp_bmp = &MapGfx.hSmall;
+
 	    if(MapScale > 20) {
-              get_mask().select(MapGfx.hSmall);
+	      wp_bmp = &MapGfx.hSmall;
 	    } else if( ((WayPointList[i].Flags & AIRPORT) == AIRPORT)
 		       || ((WayPointList[i].Flags & LANDPOINT) == LANDPOINT) ) {
 	      islandable = true; // so we can always draw them
@@ -127,17 +129,21 @@ void MapWindow::DrawWaypoints(Canvas &canvas, const RECT rc)
 		}
 
 		if ((WayPointList[i].Flags & AIRPORT) == AIRPORT)
-                  get_mask().select(MapGfx.hBmpAirportReachable);
+		  wp_bmp = &MapGfx.hBmpAirportReachable;
 		else
-                  get_mask().select(MapGfx.hBmpFieldReachable);
+		  wp_bmp = &MapGfx.hBmpFieldReachable;
 	      } else {
 		if ((WayPointList[i].Flags & AIRPORT) == AIRPORT)
-		  get_mask().select(MapGfx.hBmpAirportUnReachable);
+		  wp_bmp = &MapGfx.hBmpAirportUnReachable;
 		else
-		  get_mask().select(MapGfx.hBmpFieldUnReachable);
+		  wp_bmp = &MapGfx.hBmpFieldUnReachable;
 	      }
 	    } else {
-              get_mask().select(MapScale > 4 ? MapGfx.hSmall : MapGfx.hTurnPoint);
+	      if (MapScale>4) {
+		wp_bmp = &MapGfx.hTurnPoint;
+	      } else {
+		wp_bmp = &MapGfx.hSmall;
+	      }
             }
 
 	    if (intask) { // VNT
@@ -145,9 +151,10 @@ void MapWindow::DrawWaypoints(Canvas &canvas, const RECT rc)
 	    }
 
 	    if(irange || intask || islandable || dowrite) {
-              canvas.scale_or_and(WayPointList[i].Screen.x - IBLSCALE(10),
-                                  WayPointList[i].Screen.y - IBLSCALE(10),
-                                  get_mask(), 20, 20);
+	      draw_masked_bitmap(canvas, *wp_bmp, 
+				 WayPointList[i].Screen.x,
+				 WayPointList[i].Screen.y,
+				 20, 20);
             }
 
 	    if(intask || irange || dowrite) {

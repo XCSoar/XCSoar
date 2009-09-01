@@ -345,8 +345,6 @@ void MapWindow::DrawThreadInitialise(void) {
 
   // set initial display mode
   draw_canvas.background_transparent();
-  get_mask().background_opaque();
-  get_mask().set_text_color(Color(0xff,0xff, 0xff));
 
   // paint draw window black to start
   draw_canvas.black_pen();

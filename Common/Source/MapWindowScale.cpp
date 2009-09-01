@@ -250,23 +250,20 @@ void MapWindow::DrawMapScale(Canvas &canvas, const RECT rc /* the Map Rect*/,
                 rc.bottom - Appearance.MapWindowBoldFont.AscentHeight - IBLSCALE(1),
                 ScaleInfo);
 
-    get_mask().select(MapGfx.hBmpMapScale);
-
-    canvas.scale_copy(0, rc.bottom - Height, get_mask(), 0, 0, 6, 11);
-    canvas.scale_copy(IBLSCALE(14) + TextSize.cx,  rc.bottom - Height,
-                      get_mask(), 6, 0, 8, 11);
-
-    get_mask().clear();
+    draw_bitmap(canvas, MapGfx.hBmpMapScale, 
+		0, rc.bottom-Height, 
+		0, 0, 6, 11, false);
+    draw_bitmap(canvas, MapGfx.hBmpMapScale, 
+		IBLSCALE(14)+TextSize.cx, rc.bottom-Height,
+		6, 0, 8, 11, false);
 
     if (!ScaleChangeFeedback){
       const Bitmap *Bmp;
       POINT   BmpPos, BmpSize;
 
       if (Units::GetUnitBitmap(Unit, &Bmp, &BmpPos, &BmpSize, 0)){
-        get_mask().select(*Bmp);
-        canvas.scale_copy(IBLSCALE(8) + TextSize.cx, rc.bottom - Height,
-                          get_mask(), BmpPos.x, BmpPos.y, BmpSize.x, BmpSize.y);
-        get_mask().clear();
+	draw_bitmap(canvas, *Bmp, IBLSCALE(8) + TextSize.cx, rc.bottom - Height,
+		    BmpPos.x, BmpPos.y, BmpSize.x, BmpSize.y, false);
       }
     }
 
@@ -317,7 +314,6 @@ void MapWindow::DrawMapScale(Canvas &canvas, const RECT rc /* the Map Rect*/,
     canvas.text(rc.left, rc.top, ScaleInfo);
     #endif
 
-    get_mask().clear();
   }
 
 }
