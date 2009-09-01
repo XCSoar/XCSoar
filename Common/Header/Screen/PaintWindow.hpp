@@ -66,7 +66,7 @@ class ContainerWindow;
  */
 class PaintWindow : public Window {
 private:
-  WindowCanvas __canvas;
+  WindowCanvas canvas;
 
 public:
   void set(ContainerWindow &parent, LPCTSTR cls,
@@ -89,23 +89,23 @@ public:
   void reset();
 
   void resize(unsigned width, unsigned height) {
-    __canvas.resize(width, height);
+    canvas.resize(width, height);
   }
 
   Canvas &get_canvas() {
-    return __canvas;
+    return canvas;
   }
 
   const Canvas &get_canvas() const {
-    return __canvas;
+    return canvas;
   }
 
   unsigned get_width() const {
-    return __canvas.get_width();
+    return canvas.get_width();
   }
 
   unsigned get_height() const {
-    return __canvas.get_height();
+    return canvas.get_height();
   }
 
   int get_left() const {

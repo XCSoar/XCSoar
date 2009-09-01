@@ -68,14 +68,14 @@ PaintWindow::set(ContainerWindow *parent,
                  bool center, bool notify, bool show,
                  bool tabstop, bool border)
 {
-  __canvas.reset();
+  canvas.reset();
 
   Window::set(parent, TEXT("STATIC"), TEXT(" "),
               left, top, width, height,
               center, notify, show, tabstop, border);
 
-  if (!__canvas.defined())
-    __canvas.set(hWnd, width, height);
+  if (!canvas.defined())
+    canvas.set(hWnd, width, height);
 }
 
 void
@@ -91,17 +91,17 @@ PaintWindow::set(ContainerWindow &parent,
 void
 PaintWindow::created(HWND _hWnd)
 {
-  assert(!__canvas.defined());
+  assert(!canvas.defined());
 
   Window::created(_hWnd);
-  __canvas.set(hWnd, 1, 1);
+  canvas.set(hWnd, 1, 1);
 }
 
 
 void
 PaintWindow::reset()
 {
-  __canvas.reset();
+  canvas.reset();
   Window::reset();
 }
 
