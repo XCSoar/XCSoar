@@ -1811,7 +1811,7 @@ bool WndProperty::SetReadOnly(bool Value){
 bool WndProperty::SetFocused(bool Value, HWND FromTo){
 
   const HWND mhEdit = edit;
-  TCHAR sTmp[STRINGVALUESIZE];
+  TCHAR sTmp[128];
 
   if (Value && GetReadOnly()){  // keep focus on last control
     if (FromTo != mhEdit)

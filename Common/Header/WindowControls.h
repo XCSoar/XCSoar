@@ -521,9 +521,6 @@ class WndButton:public WindowControl{
 };
 
 
-
-#define STRINGVALUESIZE         128
-
 class WndProperty:public WindowControl{
 
   private:
