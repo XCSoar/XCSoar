@@ -585,15 +585,15 @@ void Chart::ScaleMakeSquare() {
 }
 
 long Chart::screenX(double x) {
-  return (x-x_min)*xscale+rc.left+BORDER_X;
+  return (long)((x - x_min) * xscale) + rc.left + BORDER_X;
 }
 
 long Chart::screenY(double y) {
-  return (y_max-y)*yscale+rc.top;
+  return (long)((y_max - y) * yscale) + rc.top;
 }
 
 long Chart::screenS(double s) {
-  return s*yscale;
+  return (long)(s * yscale);
 }
 
 
