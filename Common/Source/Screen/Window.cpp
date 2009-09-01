@@ -260,7 +260,9 @@ Window::on_message(HWND _hWnd, UINT message,
     break;
   }
 
-  return ::DefWindowProc(_hWnd, message, wParam, lParam);
+  return prev_wndproc != NULL
+    ? ::CallWindowProc(prev_wndproc, _hWnd, message, wParam, lParam)
+    : ::DefWindowProc(_hWnd, message, wParam, lParam);
 }
 
 LRESULT CALLBACK
