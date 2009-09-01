@@ -44,10 +44,10 @@ Copyright_License {
 
 class Chart {
  private:
-  Canvas canvas;
+  Canvas &canvas;
   RECT rc;
  public:
-  Chart(const Canvas the_canvas, const RECT the_rc);
+  Chart(Canvas &the_canvas, const RECT the_rc);
 
   static const COLORREF GROUND_COLOUR;
 

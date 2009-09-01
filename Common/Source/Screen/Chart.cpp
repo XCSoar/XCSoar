@@ -62,7 +62,7 @@ void Chart::ResetScale() {
   y_max = 0;
 }
 
-Chart::Chart(const Canvas the_canvas, const RECT the_rc)
+Chart::Chart(Canvas &the_canvas, const RECT the_rc)
   :canvas(the_canvas),rc(the_rc) {
 
   ResetScale();
