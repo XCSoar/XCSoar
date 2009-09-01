@@ -58,24 +58,21 @@ Copyright_License {
 double MapWindow::findMapScaleBarSize(const RECT rc) {
 
   int range = rc.bottom-rc.top;
-//  int nbars = 0;
-//  int nscale = 1;
-  double pixelsize = MapScale/GetMapResolutionFactor(); // km/pixel
+  double pixelsize = DistanceScreenToUser(1); // units/pixel
+  double half_displaysize = DistanceScreenToUser((rc.bottom-rc.top)/2); // units
 
-  // find largest bar size that will fit in display
+  // find largest bar size that will fit two of (black and white) in display
 
-  double displaysize = range*pixelsize/2; // km
-
-  if (displaysize>100.0) {
+  if (half_displaysize>100.0) {
     return 100.0/pixelsize;
   }
-  if (displaysize>10.0) {
+  if (half_displaysize>10.0) {
     return 10.0/pixelsize;
   }
-  if (displaysize>1.0) {
+  if (half_displaysize>1.0) {
     return 1.0/pixelsize;
   }
-  if (displaysize>0.1) {
+  if (half_displaysize>0.1) {
     return 0.1/pixelsize;
   }
   // this is as far as is reasonable
@@ -137,82 +134,7 @@ void MapWindow::DrawMapScale2(Canvas &canvas, const RECT rc,
 void MapWindow::DrawMapScale(Canvas &canvas, const RECT rc /* the Map Rect*/,
                              const bool ScaleChangeFeedback)
 {
-
-
-  if (Appearance.MapScale == apMsDefault){
-
-    TCHAR Scale[80];
-    TCHAR TEMP[20];
-    POINT Start, End;
-    canvas.select(MapGfx.hpMapScale);
-
-    Start.x = rc.right-IBLSCALE(6); End.x = rc.right-IBLSCALE(6);
-    Start.y = rc.bottom-IBLSCALE(30); End.y = Start.y - IBLSCALE(30);
-    canvas.clipped_line(Start, End, rc);
-
-    Start.x = rc.right-IBLSCALE(11); End.x = rc.right-IBLSCALE(6);
-    End.y = Start.y;
-    canvas.clipped_line(Start, End, rc);
-
-    Start.y = Start.y - IBLSCALE(30); End.y = Start.y;
-    canvas.clipped_line(Start, End, rc);
-
-    if(MapScale <0.1)
-    {
-      _stprintf(Scale,TEXT("%1.2f"),MapScale);
-    }
-    else if(MapScale <3)
-    {
-      _stprintf(Scale,TEXT("%1.1f"),MapScale);
-    }
-    else
-    {
-      _stprintf(Scale,TEXT("%1.0f"),MapScale);
-    }
-
-    _tcscat(Scale, Units::GetDistanceName());
-
-    if (AutoZoom) {
-      _tcscat(Scale,TEXT(" A"));
-    }
-    if (EnablePan) {
-      _tcscat(Scale,TEXT(" PAN"));
-    }
-    if (EnableAuxiliaryInfo) {
-      _tcscat(Scale,TEXT(" AUX"));
-    }
-    if (ReplayLogger::IsEnabled()) {
-      _tcscat(Scale,TEXT(" REPLAY"));
-    }
-    if (BallastTimerActive) {
-      _stprintf(TEMP,TEXT(" BALLAST %3.0f LITERS"), GlidePolar::GetBallastLitres());
-      _tcscat(Scale, TEMP);
-    }
-    TCHAR Buffer[20];
-    RASP.ItemLabel(RasterTerrain::render_weather, Buffer);
-    if (_tcslen(Buffer)) {
-      _tcscat(Scale,TEXT(" "));
-      _tcscat(Scale, Buffer);
-    }
-
-    SIZE tsize = canvas.text_size(Scale);
-
-    canvas.set_text_color(Color(0xd0, 0xd0, 0xd0));
-    canvas.text(rc.right - IBLSCALE(11) - tsize.cx, End.y + IBLSCALE(8),
-                Scale);
-
-    canvas.set_text_color(Color(0x20, 0x20, 0x20));
-    canvas.text(rc.right - IBLSCALE(10) - tsize.cx, End.y + IBLSCALE(7),
-                Scale);
-
-    #ifdef DRAWLOAD
-    canvas.select(MapWindowFont);
-    _stprintf(Scale,TEXT("            %d %d ms"), timestats_av,
-              0);
-    canvas.text(rc.left, rc.top, Scale);
-    #endif
-  }
-  if (Appearance.MapScale == apMsAltA){
+  if (Appearance.MapScale == apMsAltA) {
 
     static int LastMapWidth = 0;
     double MapWidth;
@@ -223,9 +145,9 @@ void MapWindow::DrawMapScale(Canvas &canvas, const RECT rc /* the Map Rect*/,
     Units_t        Unit;
 
     if (ScaleChangeFeedback)
-      MapWidth = (RequestMapScale * rc.right)/DISTANCEMODIFY/GetMapResolutionFactor();
+      MapWidth = RequestDistancePixelsToMeters(rc.right-rc.left);
     else
-      MapWidth = (MapScale * rc.right)/DISTANCEMODIFY/GetMapResolutionFactor();
+      MapWidth = DistancePixelsToMeters(rc.right-rc.left);
 
     canvas.select(MapWindowBoldFont);
     Units::FormatUserMapScale(&Unit, MapWidth, ScaleInfo,

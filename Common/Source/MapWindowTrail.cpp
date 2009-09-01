@@ -173,7 +173,7 @@ double MapWindow::DrawTrail(Canvas &canvas, const POINT Orig, const RECT rc)
   const int sint = ISINETABLE[deg];
   const int xxs = Orig_Screen.x*1024-512;
   const int yys = Orig_Screen.y*1024+512;
-  const double mDrawScale = DrawScale;
+  const double mDrawScale = GetLatLonToScreenScale();
   const double mPanLongitude = PanLongitude;
   const double mPanLatitude = PanLatitude;
 

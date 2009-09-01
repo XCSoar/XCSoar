@@ -359,7 +359,6 @@ void MapWindow::DrawThreadInitialise(void) {
   UpdateTimeStats(true);
   //////
 
-  RequestMapScale = MapScale;
   UpdateMapScale(); // first call
   ToggleFullScreenStart();
 }
@@ -645,7 +644,8 @@ bool MapWindow::on_mouse_up(int x, int y)
       if(dwInterval < VKSHORTCLICK) {
 	//100ms is NOT enough for a short click since GetTickCount
 	//is OEM custom!
-	if (PopupNearestWaypointDetails(Xstart, Ystart, 500*MapScale, false)) {
+	if (PopupNearestWaypointDetails(Xstart, Ystart, 
+					DistancePixelsToMeters(IBLSCALE(10)), false)) {
 	  return true;
 	}
       } else {
@@ -655,7 +655,8 @@ bool MapWindow::on_mouse_up(int x, int y)
       }
     } else {
       if(dwInterval < AIRSPACECLICK) { // original and untouched interval
-	if (PopupNearestWaypointDetails(Xstart, Ystart, 500*MapScale, false)) {
+	if (PopupNearestWaypointDetails(Xstart, Ystart, 
+					DistancePixelsToMeters(IBLSCALE(10)), false)) {
 	  return true;
 	}
       } else {

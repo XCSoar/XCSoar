@@ -96,7 +96,7 @@ void MapWindow::DrawThermalEstimate(Canvas &canvas, const RECT rc) {
                     screen);
       draw_masked_bitmap(canvas, MapGfx.hBmpThermalSource, screen.x, screen.y, 10, 10, true);
     }
-  } else if (MapScale <= 4) {
+  } else if (GetMapScaleKM() <= 4) {
     for (int i=0; i<MAX_THERMAL_SOURCES; i++) {
       if (DerivedDrawInfo.ThermalSources[i].Visible) {
 	draw_masked_bitmap(canvas, MapGfx.hBmpThermalSource, 

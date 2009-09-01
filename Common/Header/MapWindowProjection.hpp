@@ -112,14 +112,9 @@ class MapWindowProjection: public MapWindowData {
   double PanLatitude;
   double PanLongitude;
   POINT  Orig_Screen;
-  double DrawScale;
-  double InvDrawScale;
+
   double DisplayAngle;
-  bool   GliderCenter;
-  double MapScale;
   double DisplayAircraftAngle;
-  double MapScaleOverDistanceModify; // speedup
-  double RequestMapScale;
 
   void   CalculateOrigin(const RECT rc, POINT *Orig);
 
@@ -131,23 +126,63 @@ class MapWindowProjection: public MapWindowData {
   // scale stuff
   void      UpdateMapScale();
 
-  int       ScaleListCount;
-  int       ScaleCurrent;
-  double    ScaleList[SCALELISTSIZE];
   double    StepMapScale(int Step);
-  double    FindMapScale(double Value);
-  double    LimitMapScale(double value);
   void      InitialiseScaleList();
 
   unsigned DistanceMetersToScreen(const double x) {
-    return iround(ResMapScaleOverDistanceModify*x);
+    return iround(_scale_meters_to_screen*x);
+  }
+
+  double GetMapScaleKM() {
+    return MapScale*0.001/DISTANCEMODIFY;
+  }
+
+  // 4 = x*30/1000
+  double DistancePixelsToMeters(const double x) {
+    return x*MapScale/(DISTANCEMODIFY*GetMapResolutionFactor());
+  }
+  //
+  double RequestDistancePixelsToMeters(const double x) {
+    return x*_RequestedMapScale/(DISTANCEMODIFY*GetMapResolutionFactor());
+  }
+  double DistanceScreenToUser(const unsigned x) {
+    return x*MapScale/GetMapResolutionFactor();
+  }
+  double RequestMapScale(double x) {
+    _RequestedMapScale = LimitMapScale(x);
+    return _RequestedMapScale;
+  }
+  double GetRequestedMapScale() {
+    return _RequestedMapScale;
+  }
+  double GetLatLonToScreenScale() {
+    return DrawScale;
+  }
+  bool IsOriginCentered() {
+    return _origin_centered;
+  }
+  bool HaveScaleList() {
+    return ScaleListCount>0;
   }
  private:
-  double ResMapScaleOverDistanceModify; // speedup
+
+  double DrawScale;
+  double InvDrawScale;
+
+  double _scale_meters_to_screen; // speedup
+  double MapScaleOverDistanceModify; // speedup
+  double MapScale;
+  double _RequestedMapScale;
 
   void   ModifyMapScale();
   void   CalculateOrientationTargetPan(void);
   void   CalculateOrientationNormal(void);
+  bool   _origin_centered;
+  double    LimitMapScale(double value);
+  double    FindMapScale(double Value);
+  int       ScaleCurrent;
+  double    ScaleList[SCALELISTSIZE];
+  int       ScaleListCount;
 };
 
 #endif

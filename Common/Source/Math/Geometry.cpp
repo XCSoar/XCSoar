@@ -247,3 +247,4 @@ double BiSector(double InBound, double OutBound)
     }
   return result;
 }
+

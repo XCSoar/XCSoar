@@ -53,10 +53,8 @@ Copyright_License {
 
 void MapWindow::SwitchZoomClimb(void) {
 
-  //static double CruiseMapScale = 10;
-  static double CruiseMapScale = MapWindow::RequestMapScale*2; // VNT 090621
-  //static double ClimbMapScale = 0.25;
-  static double ClimbMapScale = MapWindow::RequestMapScale/20;
+  static double CruiseMapScale = 10;
+  static double ClimbMapScale = 0.25;
   static bool last_isclimb = false;
   static bool last_targetpan = false;
 
@@ -70,16 +68,16 @@ void MapWindow::SwitchZoomClimb(void) {
     if (my_target_pan) {
       // save starting values
       if (isclimb) {
-        ClimbMapScale = MapScale;
+        ClimbMapScale = GetMapScale();
       } else {
-        CruiseMapScale = MapScale;
+        CruiseMapScale = GetMapScale();
       }
     } else {
       // restore scales
       if (isclimb) {
-        RequestMapScale = LimitMapScale(ClimbMapScale);
+        RequestMapScale(ClimbMapScale);
       } else {
-        RequestMapScale = LimitMapScale(CruiseMapScale);
+        RequestMapScale(CruiseMapScale);
       }
       BigZoom = true;
     }
@@ -91,14 +89,14 @@ void MapWindow::SwitchZoomClimb(void) {
     if (isclimb != last_isclimb) {
       if (isclimb) {
         // save cruise scale
-        CruiseMapScale = MapScale;
+        CruiseMapScale = GetMapScale();
         // switch to climb scale
-        RequestMapScale = LimitMapScale(ClimbMapScale);
+        RequestMapScale(ClimbMapScale);
       } else {
         // leaving climb
         // save cruise scale
-        ClimbMapScale = MapScale;
-        RequestMapScale = LimitMapScale(CruiseMapScale);
+        ClimbMapScale = GetMapScale();
+        RequestMapScale(CruiseMapScale);
         // switch to climb scale
       }
       BigZoom = true;
@@ -244,12 +242,7 @@ void MapWindow::Event_TerrainTopology(int vswitch) {
 
 
 void MapWindow::Event_SetZoom(double value) {
-
-  static double lastRequestMapScale = RequestMapScale;
-
-  RequestMapScale = LimitMapScale(value);
-  if (lastRequestMapScale != RequestMapScale){
-    lastRequestMapScale = RequestMapScale;
+  if (GetMapScale() != RequestMapScale(value)) {
     BigZoom = true;
     RefreshMap();
   }
@@ -257,23 +250,11 @@ void MapWindow::Event_SetZoom(double value) {
 
 
 void MapWindow::Event_ScaleZoom(int vswitch) {
-
-  static double lastRequestMapScale = RequestMapScale;
-  double value = RequestMapScale;
-  static int nslow=0;
-
-  // For best results, zooms should be multiples or roots of 2
-
-  if (ScaleListCount > 0){
-    value = FindMapScale(RequestMapScale);
+  double value = GetRequestedMapScale();
+  if (HaveScaleList()){
     value = StepMapScale(-vswitch);
   } else {
-
     if (abs(vswitch)>=4) {
-      nslow++;
-      if (nslow %2 != 0) {
-        // JMW disabled        return;
-      }
       if (vswitch==4) {
         vswitch = 1;
       }
@@ -295,16 +276,7 @@ void MapWindow::Event_ScaleZoom(int vswitch) {
     }
 
   }
-  RequestMapScale = LimitMapScale(value);
-
-  if (lastRequestMapScale != RequestMapScale){
-    lastRequestMapScale = RequestMapScale;
-    BigZoom = true;
-    RefreshMap();
-
-    //    DrawMapScale(hdcScreen, MapRect, true);
-    // JMW this is bad, happening from wrong thread.
-  }
+  Event_SetZoom(value);
 }
 
 /////////////////////////////////////////////////////////////////////////

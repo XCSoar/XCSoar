@@ -69,7 +69,7 @@ void MapWindow::CalculateScreenPositions(POINT Orig, RECT rc,
 
   if (!EnablePan) {
 
-    if (GliderCenter
+    if (IsOriginCentered()
         && DerivedDrawInfo.Circling
         && (EnableThermalLocator==2)) {
 

@@ -51,14 +51,14 @@ int GliderScreenPosition = 20; // 20% from bottom
 DisplayOrientation_t DisplayOrientation = TRACKUP;
 
 MapWindowProjection::MapWindowProjection():
-  GliderCenter(false),
+  _origin_centered(false),
   PanLatitude ( 0.0),
   PanLongitude ( 0.0),
   DisplayAngle ( 0.0),
-  RequestMapScale(5),
+  _RequestedMapScale(5),
   MapScale(5),
   MapScaleOverDistanceModify(5/DISTANCEMODIFY),
-  ResMapScaleOverDistanceModify ( 0.0),
+  _scale_meters_to_screen ( 0.0),
   DisplayAircraftAngle ( 0.0),
   ScaleListCount ( 0),
   EnablePan ( false),
@@ -74,7 +74,7 @@ MapWindowProjection::MapWindowProjection():
 
 void MapWindowProjection::InitialiseScaleList(void) {
   ScaleListCount = propGetScaleList(ScaleList, sizeof(ScaleList)/sizeof(ScaleList[0]));
-  RequestMapScale = LimitMapScale(RequestMapScale);
+  _RequestedMapScale = LimitMapScale(_RequestedMapScale);
 }
 
 bool MapWindowProjection::WaypointInRange(int i) {
@@ -284,7 +284,7 @@ void MapWindowProjection::CalculateOrientationNormal(void) {
         ||(DisplayOrientation==TRACKCIRCLE))
        && (DisplayMode == dmCircling) )
       ) {
-    GliderCenter = true;
+    _origin_centered = true;
 
     if (DisplayOrientation == TRACKCIRCLE) {
       DisplayAngle = DerivedDrawInfo.WaypointBearing;
@@ -295,7 +295,7 @@ void MapWindowProjection::CalculateOrientationNormal(void) {
     }
   } else {
     // normal, glider forward
-    GliderCenter = false;
+    _origin_centered = false;
     DisplayAngle = trackbearing;
     DisplayAircraftAngle = 0.0;
   }
@@ -308,7 +308,7 @@ void MapWindowProjection::CalculateOrientationTargetPan(void) {
   // Target pan mode, show track up when looking at current task point,
   // otherwise north up.  If circling, orient towards target.
 
-  GliderCenter = true;
+  _origin_centered = true;
   if ((ActiveWayPoint==TargetPanIndex)
       &&(DisplayOrientation != NORTHUP)
       &&(DisplayOrientation != NORTHTRACK)
@@ -342,7 +342,7 @@ void MapWindowProjection::CalculateOrigin(const RECT rc, POINT *Orig)
   }
   mutexTaskData.Unlock();
 
-  if (GliderCenter || EnablePan) {
+  if (_origin_centered || EnablePan) {
     Orig->x = (rc.left + rc.right)/2;
     Orig->y = (rc.bottom + rc.top)/2;
   } else {
@@ -424,12 +424,8 @@ double MapWindowProjection::LimitMapScale(double value) {
 
 
 double MapWindowProjection::StepMapScale(int Step){
-  static int nslow=0;
   if (abs(Step)>=4) {
-    nslow++;
-    //    if (nslow %2 == 0) {
     ScaleCurrent += Step/4;
-    //    }
   } else {
     ScaleCurrent += Step;
   }
@@ -466,15 +462,16 @@ double MapWindowProjection::FindMapScale(double Value){
 
 void MapWindowProjection::ModifyMapScale(void) {
   // limit zoomed in so doesn't reach silly levels
-  RequestMapScale = LimitMapScale(RequestMapScale); // FIX VENTA remove limit
-  MapScaleOverDistanceModify = RequestMapScale/DISTANCEMODIFY;
-  ResMapScaleOverDistanceModify =
-    GetMapResolutionFactor()/MapScaleOverDistanceModify;
+  _RequestedMapScale = LimitMapScale(_RequestedMapScale); // FIX VENTA remove limit
+  MapScale = _RequestedMapScale;
+
+  MapScaleOverDistanceModify = MapScale/DISTANCEMODIFY;
+  _scale_meters_to_screen =
+    GetMapResolutionFactor()*DISTANCEMODIFY/MapScale;
   DrawScale = MapScaleOverDistanceModify;
   DrawScale = DrawScale/111194;
   DrawScale = GetMapResolutionFactor()/DrawScale;
   InvDrawScale = 1.0/DrawScale;
-  MapScale = RequestMapScale;
 }
 
 
@@ -491,7 +488,7 @@ void MapWindowProjection::UpdateMapScale()
   mutexTaskData.Unlock();
 
   // if there is user intervention in the scale
-  if(MapScale != RequestMapScale) {
+  if(MapScale != _RequestedMapScale) {
     ModifyMapScale();
     user_asked_for_change = true;
   }
@@ -505,8 +502,7 @@ void MapWindowProjection::UpdateMapScale()
   if (my_target_pan) {
     // set scale exactly so that waypoint distance is the zoom factor
     // across the screen
-    RequestMapScale = LimitMapScale(wpd
-                                    *DISTANCEMODIFY/ 4.0);
+    _RequestedMapScale = LimitMapScale(wpd*DISTANCEMODIFY/4.0);
     ModifyMapScale();
     return;
   }
@@ -514,7 +510,6 @@ void MapWindowProjection::UpdateMapScale()
   if (AutoZoom) {
     if(wpd > 0)
       {
-
 	if(
 	   (((DisplayOrientation == NORTHTRACK)
 	     &&(DisplayMode != dmCircling))
@@ -550,8 +545,7 @@ void MapWindowProjection::UpdateMapScale()
 
 	    // set scale exactly so that waypoint distance is the zoom factor
 	    // across the screen
-	    RequestMapScale = LimitMapScale(wpd
-					    *DISTANCEMODIFY/ AutoZoomFactor);
+	    _RequestedMapScale = LimitMapScale(wpd*DISTANCEMODIFY/ AutoZoomFactor);
 	    ModifyMapScale();
 
 	  } else {
@@ -596,7 +590,8 @@ void MapWindowProjection::UpdateMapScale()
 
 	// zoom back out to where we were before
 	if (StartingAutoMapScale> 0.0) {
-	  RequestMapScale = StartingAutoMapScale;
+	  _RequestedMapScale = StartingAutoMapScale;
+	  ModifyMapScale();
 	}
 
 	// reset search for new starting zoom level

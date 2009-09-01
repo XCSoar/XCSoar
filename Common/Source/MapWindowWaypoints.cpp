@@ -109,7 +109,7 @@ void MapWindow::DrawWaypoints(Canvas &canvas, const RECT rc)
 
 	    Bitmap *wp_bmp = &MapGfx.hSmall;
 
-	    if(MapScale > 20) {
+	    if(GetMapScaleKM() > 20) {
 	      wp_bmp = &MapGfx.hSmall;
 	    } else if( ((WayPointList[i].Flags & AIRPORT) == AIRPORT)
 		       || ((WayPointList[i].Flags & LANDPOINT) == LANDPOINT) ) {
@@ -139,7 +139,7 @@ void MapWindow::DrawWaypoints(Canvas &canvas, const RECT rc)
 		  wp_bmp = &MapGfx.hBmpFieldUnReachable;
 	      }
 	    } else {
-	      if (MapScale>4) {
+	      if (GetMapScaleKM()>4) {
 		wp_bmp = &MapGfx.hTurnPoint;
 	      } else {
 		wp_bmp = &MapGfx.hSmall;
