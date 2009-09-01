@@ -186,11 +186,17 @@ Canvas::segment(int x, int y, unsigned radius, const RECT rc,
 }
 
 const SIZE
-Canvas::text_size(const TCHAR *text) const
+Canvas::text_size(const TCHAR *text, size_t length) const
 {
   SIZE size;
-  ::GetTextExtentPoint(dc, text, _tcslen(text), &size);
+  ::GetTextExtentPoint(dc, text, length, &size);
   return size;
+}
+
+const SIZE
+Canvas::text_size(const TCHAR *text) const
+{
+  return text_size(text, _tcslen(text));
 }
 
 void

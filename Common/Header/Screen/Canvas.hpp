@@ -242,6 +242,7 @@ public:
   void segment(int x, int y, unsigned radius, const RECT rc,
                double start, double end, bool horizon=false);
 
+  const SIZE text_size(const TCHAR *text, size_t length) const;
   const SIZE text_size(const TCHAR *text) const;
   void text(int x, int y, const TCHAR *text);
   void text_opaque(int x, int y, const RECT* lprc, const TCHAR *text);
