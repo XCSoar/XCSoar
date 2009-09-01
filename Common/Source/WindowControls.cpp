@@ -136,8 +136,8 @@ WindowControl *LastFocusControl = NULL;
 
 void InitWindowControlModule(void);
 
-static COLORREF bkColor = clWhite;
-static COLORREF fgColor = clBlack;
+static Color bkColor = clWhite;
+static Color fgColor = clBlack;
 int WindowControl::InstCount=0;
 Brush WindowControl::hBrushDefaultBk;
 Pen WindowControl::hPenDefaultBorder;
@@ -524,8 +524,9 @@ bool WindowControl::SetReadOnly(bool Value){
   return(res);
 }
 
-COLORREF WindowControl::SetForeColor(COLORREF Value){
-  COLORREF res = mColorFore;
+Color WindowControl::SetForeColor(Color Value)
+{
+  Color res = mColorFore;
   if (mColorFore != Value){
     mColorFore = Value;
     if (mVisible)
@@ -534,8 +535,9 @@ COLORREF WindowControl::SetForeColor(COLORREF Value){
   return(res);
 }
 
-COLORREF WindowControl::SetBackColor(COLORREF Value){
-  COLORREF res = mColorBack;
+Color WindowControl::SetBackColor(Color Value)
+{
+  Color res = mColorBack;
   if (mColorBack != Value){
     mColorBack = Value;
     mhBrushBk.set(mColorBack);
@@ -628,7 +630,7 @@ WindowControl::on_paint(Canvas &canvas)
 
   // JMW added highlighting, useful for lists
   if (!mDontPaintSelector && mCanFocus && mHasFocus){
-    COLORREF ff = (GetBackColor()+0x00ffffff*3)/4;
+    Color ff = (GetBackColor()+0x00ffffff*3)/4;
     Brush brush(ff);
     rc.left += 0;
     rc.right -= 2;
@@ -1172,13 +1174,15 @@ void WndForm::SetCaption(const TCHAR *Value){
 
 }
 
-COLORREF WndForm::SetForeColor(COLORREF Value){
+Color WndForm::SetForeColor(Color Value)
+{
   if (mClientWindow)
     mClientWindow->SetForeColor(Value);
   return(WindowControl::SetForeColor(Value));
 }
 
-COLORREF WndForm::SetBackColor(COLORREF Value){
+Color WndForm::SetBackColor(Color Value)
+{
   if (mClientWindow)
   mClientWindow->SetBackColor(Value);
   return(WindowControl::SetBackColor(Value));

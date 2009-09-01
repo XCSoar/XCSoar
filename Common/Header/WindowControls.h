@@ -53,24 +53,24 @@ Copyright_License {
 #define BORDERBOTTOM (1<<bkBottom)
 #define BORDERLEFT   (1<<bkLeft)
 
-#define clBlack   RGB(0x00,0x00,0x00)
-#define clMaroon  RGB(0x00,0x00,0x80)
-#define clGreen   RGB(0x00,0x80,0x00)
-#define clOlive   RGB(0x00,0x80,0x80)
-#define clNavy    RGB(0x80,0x00,0x00)
-#define clPurple  RGB(0x80,0x00,0x80)
-#define clTeal    RGB(0x80,0x80,0x00)
-#define clGray    RGB(0x80,0x80,0x80)
-#define clSilver  RGB(0xC0,0xC0,0xC0)
-#define clRed     RGB(0xFF,0x00,0xFF)
-#define clLime    RGB(0x00,0xFF,0x00)
-#define clYellow  RGB(0x00,0xFF,0xFF)
-#define clBlue    RGB(0xFF,0x00,0x00)
-#define clFuchsia RGB(0xFF,0x00,0xFF)
-#define clAqua    RGB(0xFF,0xFF,0x00)
-#define clLtGray  RGB(0xC0,0xC0,0xC0)
-#define clDkGray  RGB(0x80,0x80,0x80)
-#define clWhite   RGB(0xFF,0xFF,0xFF)
+#define clBlack   Color(0x00,0x00,0x00)
+#define clMaroon  Color(0x00,0x00,0x80)
+#define clGreen   Color(0x00,0x80,0x00)
+#define clOlive   Color(0x00,0x80,0x80)
+#define clNavy    Color(0x80,0x00,0x00)
+#define clPurple  Color(0x80,0x00,0x80)
+#define clTeal    Color(0x80,0x80,0x00)
+#define clGray    Color(0x80,0x80,0x80)
+#define clSilver  Color(0xC0,0xC0,0xC0)
+#define clRed     Color(0xFF,0x00,0xFF)
+#define clLime    Color(0x00,0xFF,0x00)
+#define clYellow  Color(0x00,0xFF,0xFF)
+#define clBlue    Color(0xFF,0x00,0x00)
+#define clFuchsia Color(0xFF,0x00,0xFF)
+#define clAqua    Color(0xFF,0xFF,0x00)
+#define clLtGray  Color(0xC0,0xC0,0xC0)
+#define clDkGray  Color(0x80,0x80,0x80)
+#define clWhite   Color(0xFF,0xFF,0xFF)
 #define clNone    0x1FFFFFFF
 #define clDefault 0x20000000
 
@@ -99,8 +99,8 @@ class WindowControl : public ContainerWindow {
     WindowControl *mTopOwner;
     HBITMAP mBmpMem;
     int  mBorderKind;
-    COLORREF mColorBack;
-    COLORREF mColorFore;
+    Color mColorBack;
+    Color mColorFore;
     Brush mhBrushBk;
     Pen mhPenBorder;
     Pen mhPenSelector;
@@ -195,11 +195,11 @@ class WindowControl : public ContainerWindow {
       return SetFont(*font);
     }
 
-    virtual COLORREF SetForeColor(COLORREF Value);
-    COLORREF GetForeColor(void){return(mColorFore);};
+    virtual Color SetForeColor(Color Value);
+    Color GetForeColor(void){return(mColorFore);};
 
-    virtual COLORREF SetBackColor(COLORREF Value);
-    COLORREF GetBackColor(void){return(mColorBack);};
+    virtual Color SetBackColor(Color Value);
+    Color GetBackColor(void){return(mColorBack);};
 
     Brush &GetBackBrush(void) {
       return mhBrushBk.defined()
@@ -407,7 +407,7 @@ class WndForm:public WindowControl{
 
     int mModalResult;
     HACCEL mhAccelTable;
-    COLORREF mColorTitle;
+    Color mColorTitle;
     const Font *mhTitleFont;
     WindowControl *mClientWindow;
     RECT mClientRect;
@@ -470,8 +470,8 @@ class WndForm:public WindowControl{
     /** from class Window */
     virtual bool on_command(HWND hWnd, unsigned id, unsigned code);
 
-    COLORREF SetForeColor(COLORREF Value);
-    COLORREF SetBackColor(COLORREF Value);
+    Color SetForeColor(Color Value);
+    Color SetBackColor(Color Value);
     const Font *SetFont(const Font &Value);
 
     void SetKeyDownNotify(int (*KeyDownNotify)(WindowControl * Sender, WPARAM wParam, LPARAM lParam));
