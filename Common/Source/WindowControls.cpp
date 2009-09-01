@@ -246,10 +246,6 @@ void WindowControl::Destroy(void){
   mhPenBorder.reset();
   mhPenSelector.reset();
 
-  /* JMW debugging
-  DeleteObject(mBmpMem);
-  */
-
   // ShowWindow(GetHandle(), SW_SHOW);
   reset();
 

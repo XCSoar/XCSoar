@@ -97,7 +97,6 @@ class WindowControl : public ContainerWindow {
 
     WindowControl *mOwner;
     WindowControl *mTopOwner;
-    HBITMAP mBmpMem;
     int  mBorderKind;
     Color mColorBack;
     Color mColorFore;
