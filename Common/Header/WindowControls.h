@@ -522,6 +522,19 @@ class WndButton:public WindowControl{
 
 
 class WndProperty:public WindowControl{
+  class Editor : public EditWindow {
+  private:
+    WndProperty *parent;
+
+  public:
+    Editor(WndProperty *_parent):parent(_parent) {}
+
+    virtual bool on_mouse_down(int x, int y);
+    virtual bool on_key_down(unsigned key_code);
+    virtual bool on_key_up(unsigned key_code);
+    virtual LRESULT on_message(HWND hWnd, UINT message,
+                               WPARAM wParam, LPARAM lParam);
+  };
 
   private:
 
@@ -529,7 +542,7 @@ class WndProperty:public WindowControl{
     static Bitmap hBmpRight32;
     static int InstCount;
 
-    EditWindow edit;
+    Editor edit;
     POINT mEditSize;
     POINT mEditPos;
     const Font *mhCaptionFont;
@@ -552,7 +565,6 @@ class WndProperty:public WindowControl{
     int CallSpecial(void);
     int IncValue(void);
     int DecValue(void);
-    WNDPROC mEditWindowProcedure;
 
     DataField *mDataField;
 
@@ -567,8 +579,6 @@ class WndProperty:public WindowControl{
     WndProperty(WindowControl *Parent, TCHAR *Name, TCHAR *Caption, int X, int Y, int Width, int Height, int CaptionWidth, int (*DataChangeNotify)(WindowControl * Sender, int Mode, int Value), int MultiLine=false);
     ~WndProperty(void);
     virtual void Destroy(void);
-
-    int WndProcEditControl(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
     bool SetFocused(bool Value, HWND FromTo);
 
