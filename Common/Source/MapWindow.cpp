@@ -113,7 +113,16 @@ int WindArrowStyle = 0;
 
 ScreenGraphics MapGfx;
 
-///
+//////////////////////////
+
+
+void MapWindowBlackboard::ExchangeBlackboard(const NMEA_INFO &nmea_info,
+					     const DERIVED_INFO &derived_info) 
+{
+  memcpy(&DrawInfo,&nmea_info,sizeof(NMEA_INFO));
+  memcpy(&DerivedDrawInfo,&derived_info,sizeof(DERIVED_INFO));
+}
+
 
 MapWindow::MapWindow()
   :MapWindowProjection(),
@@ -213,13 +222,10 @@ bool MapWindow::RenderTimeAvailable() {
 }
 
 
-
-void MapWindow::UpdateInfo(NMEA_INFO *nmea_info,
-                           DERIVED_INFO *derived_info) {
+void MapWindow::ExchangeBlackboard(const NMEA_INFO &nmea_info,
+				   const DERIVED_INFO &derived_info) {
   mutexFlightData.Lock();
-  memcpy(&DrawInfo,nmea_info,sizeof(NMEA_INFO));
-  memcpy(&DerivedDrawInfo,derived_info,sizeof(DERIVED_INFO));
-  UpdateMapScale(); // done here to avoid double latency due to locks
+  MapWindowBlackboard::ExchangeBlackboard(nmea_info, derived_info);
 
   DisplayMode_t lastDisplayMode = DisplayMode;
   switch (UserForceDisplayMode) {
@@ -245,6 +251,7 @@ void MapWindow::UpdateInfo(NMEA_INFO *nmea_info,
     SwitchZoomClimb();
   }
 
+  MapWindowProjection::ExchangeBlackboard(nmea_info, derived_info);
   mutexFlightData.Unlock();
 }
 
@@ -303,7 +310,7 @@ void MapWindow::DrawThreadLoop(bool first_time) {
 
   dirtyEvent.reset();
 
-  UpdateInfo(&GPS_INFO, &CALCULATED_INFO);
+  ExchangeBlackboard(GPS_INFO, CALCULATED_INFO);
 
   if (BigZoom) {
     // quickly draw zoom level on top
@@ -354,12 +361,11 @@ void MapWindow::DrawThreadInitialise(void) {
   get_canvas().copy(draw_canvas);
 
   ////// This is just here to give fully rendered start screen
-  UpdateInfo(&GPS_INFO, &CALCULATED_INFO);
+  ExchangeBlackboard(GPS_INFO, CALCULATED_INFO);
   dirtyEvent.trigger();
   UpdateTimeStats(true);
   //////
 
-  UpdateMapScale(); // first call
   ToggleFullScreenStart();
 }
 

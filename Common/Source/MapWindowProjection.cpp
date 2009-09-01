@@ -42,8 +42,8 @@ Copyright_License {
 #include "InfoBoxLayout.h"
 #include "SettingsUser.hpp"
 #include "SettingsTask.hpp"
+#include "SettingsComputer.hpp"
 #include "InputEvents.h"
-#include "SettingsUser.hpp"
 #include "UtilsProfile.hpp"
 #include <stdlib.h>
 
@@ -282,7 +282,8 @@ void MapWindowProjection::LonLat2Screen(pointObj *ptin,
 ////////////////////////////////////////////////////////////////////
 
 
-void MapWindowProjection::CalculateOrientationNormal(void) {
+void MapWindowProjection::CalculateOrientationNormal(const NMEA_INFO &DrawInfo,
+						     const DERIVED_INFO &DerivedDrawInfo) {
   double trackbearing = DrawInfo.TrackBearing;
 
   if( (DisplayOrientation == NORTHUP)
@@ -315,7 +316,8 @@ void MapWindowProjection::CalculateOrientationNormal(void) {
 }
 
 
-void MapWindowProjection::CalculateOrientationTargetPan(void) {
+void MapWindowProjection::CalculateOrientationTargetPan(const NMEA_INFO &DrawInfo,
+							const DERIVED_INFO &DerivedDrawInfo) {
   // Target pan mode, show track up when looking at current task point,
   // otherwise north up.  If circling, orient towards target.
 
@@ -342,26 +344,74 @@ void MapWindowProjection::CalculateOrientationTargetPan(void) {
 }
 
 
-void MapWindowProjection::CalculateOrigin(const RECT rc, POINT *Orig)
+void MapWindowProjection::CalculateOrigin(const RECT rc,
+					  const NMEA_INFO &DrawInfo,
+					  const DERIVED_INFO &DerivedDrawInfo)
 {
 
   mutexTaskData.Lock();
   if (TargetPan) {
-    CalculateOrientationTargetPan();
+    CalculateOrientationTargetPan(DrawInfo, DerivedDrawInfo);
   } else {
-    CalculateOrientationNormal();
+    CalculateOrientationNormal(DrawInfo, DerivedDrawInfo);
   }
   mutexTaskData.Unlock();
 
   if (_origin_centered || EnablePan) {
-    Orig->x = (rc.left + rc.right)/2;
-    Orig->y = (rc.bottom + rc.top)/2;
+    Orig_Screen.x = (rc.left + rc.right)/2;
+    Orig_Screen.y = (rc.bottom + rc.top)/2;
   } else {
-    Orig->x = (rc.left + rc.right)/2;
-    Orig->y = ((rc.top - rc.bottom )*GliderScreenPosition/100)+rc.bottom;
+    Orig_Screen.x = (rc.left + rc.right)/2;
+    Orig_Screen.y = ((rc.top - rc.bottom )*GliderScreenPosition/100)+rc.bottom;
   }
-}
 
+  //
+  if (!EnablePan) {
+
+    if (IsOriginCentered()
+        && DerivedDrawInfo.Circling
+        && (EnableThermalLocator==2)) {
+
+      if (DerivedDrawInfo.ThermalEstimate_R>0) {
+        PanLongitude = DerivedDrawInfo.ThermalEstimate_Longitude;
+        PanLatitude = DerivedDrawInfo.ThermalEstimate_Latitude;
+        // TODO enhancement: only pan if distance of center to
+        // aircraft is smaller than one third screen width
+
+        POINT screen;
+        LonLat2Screen(PanLongitude,
+                      PanLatitude,
+                      screen);
+
+        LonLat2Screen(DrawInfo.Longitude,
+                      DrawInfo.Latitude,
+                      Orig_Aircraft);
+
+        if ((fabs((double)Orig_Aircraft.x-screen.x)<(rc.right-rc.left)/3)
+            && (fabs((double)Orig_Aircraft.y-screen.y)<(rc.bottom-rc.top)/3)) {
+
+        } else {
+          // out of bounds, center on aircraft
+          PanLongitude = DrawInfo.Longitude;
+          PanLatitude = DrawInfo.Latitude;
+        }
+      } else {
+        PanLongitude = DrawInfo.Longitude;
+        PanLatitude = DrawInfo.Latitude;
+      }
+    } else {
+      // Pan is off
+      PanLongitude = DrawInfo.Longitude;
+      PanLatitude = DrawInfo.Latitude;
+    }
+  }
+
+  LonLat2Screen(DrawInfo.Longitude,
+                DrawInfo.Latitude,
+                Orig_Aircraft);
+
+  screenbounds_latlon = CalculateScreenBounds(0.0);
+}
 
 void MapWindow::Event_Pan(int vswitch) {
   //  static bool oldfullscreen = 0;  never assigned!
@@ -485,7 +535,8 @@ void MapWindowProjection::ModifyMapScale(void) {
 }
 
 
-void MapWindowProjection::UpdateMapScale()
+void MapWindowProjection::UpdateMapScale(const NMEA_INFO &DrawInfo,
+					 const DERIVED_INFO &DerivedDrawInfo)
 {
   static int AutoMapScaleWaypointIndex = -1;
   static double StartingAutoMapScale=0.0;
@@ -615,8 +666,16 @@ void MapWindowProjection::UpdateMapScale()
      {
        mutexTaskData.Unlock();
      }
-
 }
+
+
+void MapWindowProjection::ExchangeBlackboard(const NMEA_INFO &nmea_info,
+					     const DERIVED_INFO &derived_info) 
+{
+  UpdateMapScale(nmea_info, derived_info); 
+  // done here to avoid double latency due to locks
+}
+
 
 #include "Screen/Graphics.hpp"
 
@@ -709,3 +768,5 @@ void MapWindowProjection::DrawGreatCircle(Canvas &canvas,
 
 #endif
 }
+
+

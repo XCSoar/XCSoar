@@ -52,7 +52,7 @@ Copyright_License {
 #include "Compatibility/gdi.h"
 #include <math.h>
 
-void MapWindow::DrawAbortedTask(Canvas &canvas, const RECT rc, const POINT me)
+void MapWindow::DrawAbortedTask(Canvas &canvas, const RECT rc)
 {
   int i;
   if (!WayPointList) return;
@@ -68,7 +68,7 @@ void MapWindow::DrawAbortedTask(Canvas &canvas, const RECT rc, const POINT me)
 	  {
             canvas.clipped_dashed_line(IBLSCALE(1),
 			 WayPointList[index].Screen,
-			 me,
+			 Orig_Aircraft,
 			 MapGfx.TaskColor, rc);
 	  }
       }
@@ -105,7 +105,7 @@ void MapWindow::DrawStartSector(Canvas &canvas, const RECT rc,
 }
 
 
-void MapWindow::DrawTask(Canvas &canvas, RECT rc, const POINT &Orig_Aircraft)
+void MapWindow::DrawTask(Canvas &canvas, RECT rc)
 {
   int i;
 
@@ -549,7 +549,7 @@ void MapWindow::DrawOffTrackIndicator(Canvas &canvas, const RECT rc) {
 
 
 void
-MapWindow::DrawProjectedTrack(Canvas &canvas, const RECT rc, const POINT Orig)
+MapWindow::DrawProjectedTrack(Canvas &canvas, const RECT rc)
 {
   if ((ActiveWayPoint<=0) || !ValidTaskPoint(ActiveWayPoint) || !AATEnabled) {
     return;
@@ -612,7 +612,7 @@ MapWindow::DrawProjectedTrack(Canvas &canvas, const RECT rc, const POINT Orig)
   } else {
     pt[1].y = (long)(-max(MapRectBig.right-MapRectBig.left,
 			  MapRectBig.bottom-MapRectBig.top)*1.2);
-    PolygonRotateShift(pt, 2, Orig.x, Orig.y,
+    PolygonRotateShift(pt, 2, Orig_Aircraft.x, Orig_Aircraft.y,
 		       bearing-DisplayAngle);
   }
   canvas.clipped_dashed_line(IBLSCALE(2), pt[0], pt[1], Color(0,0,0), rc);

@@ -50,7 +50,7 @@ Copyright_License {
 
 #define fSnailColour(cv) max(0,min((short)(NUMSNAILCOLORS-1), (short)((cv+1.0)/2.0*NUMSNAILCOLORS)))
 
-void MapWindow::DrawFLARMTraffic(Canvas &canvas, RECT rc, POINT Orig_Aircraft) {
+void MapWindow::DrawFLARMTraffic(Canvas &canvas, RECT rc) {
 
   if (!EnableFLARMMap) return;
 
@@ -106,9 +106,11 @@ void MapWindow::DrawFLARMTraffic(Canvas &canvas, RECT rc, POINT Orig_Aircraft) {
 
       // TODO feature: draw direction, rel height?
       POINT sc, sc_name, sc_av;
-      LonLat2Screen(target_lon,
-                    target_lat,
-                    sc);
+      if (!LonLat2ScreenIfVisible(target_lon,
+				  target_lat,
+				  &sc)) {
+	continue;
+      }
 
       sc_name = sc;
 

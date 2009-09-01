@@ -43,13 +43,8 @@ Copyright_License {
 #include "Screen/Canvas.hpp"
 #include "Math/FastMath.h"
 
-class MapWindowData {
- public:
-  NMEA_INFO     DrawInfo;
-  DERIVED_INFO  DerivedDrawInfo;
-};
 
-class MapWindowProjection: public MapWindowData {
+class MapWindowProjection {
  public:
   MapWindowProjection();
 
@@ -65,6 +60,7 @@ class MapWindowProjection: public MapWindowData {
 			       const int skip);
 
   POINT   GetOrigScreen(void) { return Orig_Screen; }
+  POINT   GetOrigAircraft(void) { return Orig_Aircraft; }
   double  GetPanLatitude() { return PanLatitude; }
   double  GetPanLongitude() { return PanLongitude; }
   double  GetDisplayAngle() { return DisplayAngle; }
@@ -105,6 +101,9 @@ class MapWindowProjection: public MapWindowData {
 		       double lon_end, double lat_end,
 		       const RECT rc);
 
+  // called on receipt of new data, to trigger projection/scale change functions
+  void ExchangeBlackboard(const NMEA_INFO &nmea_info,
+			  const DERIVED_INFO &derived_info);
  protected:
   // helpers
   bool PointVisible(const POINT &P);
@@ -121,20 +120,20 @@ class MapWindowProjection: public MapWindowData {
   RECT   MapRect;
   double PanLatitude;
   double PanLongitude;
-  POINT  Orig_Screen;
+  POINT  Orig_Screen, Orig_Aircraft;
 
   double DisplayAngle;
   double DisplayAircraftAngle;
-
-  void   CalculateOrigin(const RECT rc, POINT *Orig);
 
   bool   EnablePan;
   bool   TargetPan;
   int    TargetPanIndex;
   double TargetZoomDistance;
 
-  // scale stuff
-  void      UpdateMapScale();
+  // scale/display stuff
+  void   CalculateOrigin(const RECT rc,
+			 const NMEA_INFO &nmea_info,
+			 const DERIVED_INFO &derived_info);
 
   double    StepMapScale(int Step);
   void      InitialiseScaleList();
@@ -181,8 +180,14 @@ class MapWindowProjection: public MapWindowData {
   double _RequestedMapScale;
 
   void   ModifyMapScale();
-  void   CalculateOrientationTargetPan(void);
-  void   CalculateOrientationNormal(void);
+
+  void   UpdateMapScale(const NMEA_INFO &nmea_info,
+			const DERIVED_INFO &derived_info);
+  void   CalculateOrientationTargetPan(const NMEA_INFO &nmea_info,
+				       const DERIVED_INFO &derived_info);
+  void   CalculateOrientationNormal(const NMEA_INFO &nmea_info,
+				    const DERIVED_INFO &derived_info);
+
   bool   _origin_centered;
   double    LimitMapScale(double value);
   double    FindMapScale(double Value);

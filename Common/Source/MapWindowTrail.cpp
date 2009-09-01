@@ -56,7 +56,7 @@ Copyright_License {
 #define fSnailColour(cv) max(0,min((short)(NUMSNAILCOLORS-1), (short)((cv+1.0)/2.0*NUMSNAILCOLORS)))
 
 // This function is slow...
-double MapWindow::DrawTrail(Canvas &canvas, const POINT Orig, const RECT rc)
+double MapWindow::DrawTrail(Canvas &canvas, const RECT rc)
 {
   int i, snail_index;
   SNAIL_POINT P1;
@@ -318,9 +318,9 @@ double MapWindow::DrawTrail(Canvas &canvas, const POINT Orig, const RECT rc)
   // draw final point to glider
   if (last_visible) {
 #ifndef NOLINETO
-    canvas.line_to(Orig.x, Orig.y);
+    canvas.line_to(Orig_Aircraft.x, Orig_Aircraft.y);
 #else
-    canvas.clipped_line(Orig, point_lastdrawn, rc);
+    canvas.clipped_line(Orig_Aircraft, point_lastdrawn, rc);
 #endif
   }
 

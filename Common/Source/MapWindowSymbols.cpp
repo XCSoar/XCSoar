@@ -55,29 +55,29 @@ Copyright_License {
 
 #include "Blackboard.hpp"
 
-void MapWindow::DrawCrossHairs(Canvas &canvas, const POINT Orig,
+void MapWindow::DrawCrossHairs(Canvas &canvas,
 			       const RECT rc)
 {
   POINT o1, o2;
 
-  o1.x = Orig.x+20;
-  o2.x = Orig.x-20;
-  o1.y = Orig.y;
-  o2.y = Orig.y;
+  o1.x = Orig_Screen.x+20;
+  o2.x = Orig_Screen.x-20;
+  o1.y = Orig_Screen.y;
+  o2.y = Orig_Screen.y;
 
   canvas.clipped_dashed_line(1, o1, o2, Color(50,50,50), rc);
 
-  o1.x = Orig.x;
-  o2.x = Orig.x;
-  o1.y = Orig.y+20;
-  o2.y = Orig.y-20;
+  o1.x = Orig_Screen.x;
+  o2.x = Orig_Screen.x;
+  o1.y = Orig_Screen.y+20;
+  o2.y = Orig_Screen.y-20;
 
   canvas.clipped_dashed_line(1, o1, o2, Color(50,50,50), rc);
 
 }
 
 
-void MapWindow::DrawAircraft(Canvas &canvas, const POINT Orig)
+void MapWindow::DrawAircraft(Canvas &canvas)
 {
 
   if (Appearance.Aircraft == afAircraftDefault){
@@ -117,7 +117,7 @@ void MapWindow::DrawAircraft(Canvas &canvas, const POINT Orig)
     canvas.select(hbAircraftSolidBg);
     canvas.select(MapGfx.hpAircraft);
 
-    PolygonRotateShift(Aircraft, NUMAIRCRAFTPOINTS, Orig.x+1, Orig.y+1,
+    PolygonRotateShift(Aircraft, NUMAIRCRAFTPOINTS, Orig_Aircraft.x+1, Orig_Aircraft.y+1,
                        DisplayAircraftAngle+
                        (DerivedDrawInfo.Heading-DrawInfo.TrackBearing));
 
@@ -174,7 +174,7 @@ void MapWindow::DrawAircraft(Canvas &canvas, const POINT Orig)
 	(DerivedDrawInfo.Heading-DrawInfo.TrackBearing);
 
       PolygonRotateShift(Aircraft, n,
-			 Orig.x-1, Orig.y, angle);
+			 Orig_Aircraft.x-1, Orig_Aircraft.y, angle);
 
       canvas.select(MapGfx.hpAircraft);
       canvas.polygon(Aircraft, n);
@@ -798,7 +798,7 @@ void MapWindow::DrawCompass(Canvas &canvas, const RECT rc)
 
 
 
-void MapWindow::DrawBestCruiseTrack(Canvas &canvas, const POINT Orig)
+void MapWindow::DrawBestCruiseTrack(Canvas &canvas)
 {
   if (ActiveWayPoint<0) {
     return; // nothing to draw..
@@ -823,7 +823,7 @@ void MapWindow::DrawBestCruiseTrack(Canvas &canvas, const POINT Orig)
     Arrow[4].y -= dy;
     Arrow[5].y -= dy;
 
-    PolygonRotateShift(Arrow, 7, Orig.x, Orig.y,
+    PolygonRotateShift(Arrow, 7, Orig_Aircraft.x, Orig_Aircraft.y,
                        DerivedDrawInfo.BestCruiseTrack-DisplayAngle);
 
     canvas.polygon(Arrow, 7);
@@ -834,7 +834,7 @@ void MapWindow::DrawBestCruiseTrack(Canvas &canvas, const POINT Orig)
     POINT Arrow[] = { {-1,-40}, {-1,-62}, {-6,-62}, {0,-70}, {6,-62}, {1,-62}, {1,-40}, {-1,-40}};
 
     PolygonRotateShift(Arrow, sizeof(Arrow)/sizeof(Arrow[0]),
-                       Orig.x, Orig.y,
+                       Orig_Aircraft.x, Orig_Aircraft.y,
                        DerivedDrawInfo.BestCruiseTrack-DisplayAngle);
     canvas.polygon(Arrow, sizeof(Arrow) / sizeof(Arrow[0]));
   }

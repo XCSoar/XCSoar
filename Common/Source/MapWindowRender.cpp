@@ -48,9 +48,7 @@ Copyright_License {
 #include "TopologyStore.h"
 #include "Blackboard.hpp"
 
-void MapWindow::RenderMapWindowBg(Canvas &canvas, const RECT rc,
-				  const POINT &Orig,
-				  const POINT &Orig_Aircraft)
+void MapWindow::RenderMapWindowBg(Canvas &canvas, const RECT rc)
 {
   // do slow calculations before clearing the screen
   // to reduce flicker
@@ -131,7 +129,7 @@ void MapWindow::RenderMapWindowBg(Canvas &canvas, const RECT rc,
     // TODO enhancement: For some reason, the shadow drawing of the
     // trail doesn't work in portrait mode.  No idea why.
     if (1) {
-      double TrailFirstTime = DrawTrail(canvas, Orig_Aircraft, rc);
+      double TrailFirstTime = DrawTrail(canvas, rc);
       DrawTrailFromTask(canvas, rc, TrailFirstTime);
     } else {
       /*
@@ -163,9 +161,9 @@ void MapWindow::RenderMapWindowBg(Canvas &canvas, const RECT rc,
   DrawThermalEstimate(canvas, rc);
 
   if (TaskAborted) {
-    DrawAbortedTask(canvas, rc, Orig_Aircraft);
+    DrawAbortedTask(canvas, rc);
   } else {
-    DrawTask(canvas, rc, Orig_Aircraft);
+    DrawTask(canvas, rc);
   }
 
   // draw red cross on glide through terrain marker
@@ -184,9 +182,9 @@ void MapWindow::RenderMapWindowBg(Canvas &canvas, const RECT rc,
 
   if (extGPSCONNECT) {
     // TODO enhancement: don't draw offtrack indicator if showing spot heights
-    DrawProjectedTrack(canvas, rc, Orig_Aircraft);
+    DrawProjectedTrack(canvas, rc);
     DrawOffTrackIndicator(canvas, rc);
-    DrawBestCruiseTrack(canvas, Orig_Aircraft);
+    DrawBestCruiseTrack(canvas);
   }
   DrawBearing(canvas, rc, extGPSCONNECT);
 
@@ -195,25 +193,27 @@ void MapWindow::RenderMapWindowBg(Canvas &canvas, const RECT rc,
   if (!EnablePan) {
     DrawWindAtAircraft2(canvas, Orig_Aircraft, rc);
   } else if (TargetPan) {
-    DrawWindAtAircraft2(canvas, Orig, rc);
+    DrawWindAtAircraft2(canvas, Orig_Screen, rc);
   }
 
   // Draw traffic
-  DrawFLARMTraffic(canvas, rc, Orig_Aircraft);
+  DrawFLARMTraffic(canvas, rc);
 
   // finally, draw you!
 
   if (EnablePan && !TargetPan) {
-    DrawCrossHairs(canvas, Orig, rc);
+    DrawCrossHairs(canvas, rc);
   }
 
   if (extGPSCONNECT) {
-    DrawAircraft(canvas, Orig_Aircraft);
+    DrawAircraft(canvas);
   }
 
+  /*
   if ( (!TargetPan) && (!EnablePan) && (VisualGlide>0) ) {
-    DrawGlideCircle(canvas, Orig, rc);
+    DrawGlideCircle(canvas, rc);
   }
+  */
 
   // marks on top...
   DrawMarks(canvas, *this, rc);
@@ -235,13 +235,11 @@ void MapWindow::RenderMapWindow(Canvas &canvas, const RECT rc)
   }
   MapWindow::UpdateTimeStats(true);
 
-  POINT Orig, Orig_Aircraft;
+  CalculateOrigin(rc, DrawInfo, DerivedDrawInfo);
+  CalculateScreenPositionsWaypoints();
+  CalculateScreenPositionsTask();
 
-  CalculateOrigin(rc, &Orig);
-
-  CalculateScreenPositions(Orig, rc, &Orig_Aircraft);
-
-  RenderMapWindowBg(canvas, rc, Orig, Orig_Aircraft);
+  RenderMapWindowBg(canvas, rc);
 
   // overlays
   DrawCDI();
@@ -249,8 +247,7 @@ void MapWindow::RenderMapWindow(Canvas &canvas, const RECT rc)
   canvas.select(MapWindowFont);
 
   DrawMapScale(canvas, rc, BigZoom);
-
-  DrawMapScale2(canvas, rc, Orig_Aircraft);
+  DrawMapScale2(canvas, rc);
 
   DrawCompass(canvas, rc);
 

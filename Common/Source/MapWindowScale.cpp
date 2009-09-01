@@ -80,8 +80,7 @@ double MapWindow::findMapScaleBarSize(const RECT rc) {
 }
 
 
-void MapWindow::DrawMapScale2(Canvas &canvas, const RECT rc,
-			      const POINT Orig_Aircraft)
+void MapWindow::DrawMapScale2(Canvas &canvas, const RECT rc)
 {
 
   if (Appearance.MapScale2 == apMs2None) return;

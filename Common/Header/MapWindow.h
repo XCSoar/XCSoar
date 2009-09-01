@@ -69,9 +69,20 @@ class MapWindowBase {
 };
 
 
+class MapWindowBlackboard {
+ public:
+  NMEA_INFO     DrawInfo;
+  DERIVED_INFO  DerivedDrawInfo;
+ protected:
+  void ExchangeBlackboard(const NMEA_INFO &nmea_info,
+			  const DERIVED_INFO &derived_info);
+};
+
+
 class MapWindow
 : public MaskedPaintWindow, public MapWindowBase,
-  public MapWindowProjection {
+  public MapWindowProjection,
+  public MapWindowBlackboard {
  public:
   MapWindow();
 
@@ -122,8 +133,8 @@ class MapWindow
   BOOL     Initialised;
   bool     user_asked_redraw;
 
-  void     UpdateInfo(NMEA_INFO *nmea_info,
-		      DERIVED_INFO *derived_info);
+  void     ExchangeBlackboard(const NMEA_INFO &nmea_info,
+			      const DERIVED_INFO &derived_info);
 
   // display management
   void          RefreshMap();
@@ -174,10 +185,10 @@ class MapWindow
   void MapWaypointLabelSortAndRender(Canvas &canvas);
 
   // display renderers
-  void DrawAircraft(Canvas &canvas, const POINT Orig);
-  void DrawCrossHairs(Canvas &canvas, const POINT Orig, const RECT rc);
+  void DrawAircraft(Canvas &canvas);
+  void DrawCrossHairs(Canvas &canvas, const RECT rc);
   void DrawGlideCircle(Canvas &canvas, const POINT Orig, const RECT rc); // VENTA3
-  void DrawBestCruiseTrack(Canvas &canvas, const POINT Orig);
+  void DrawBestCruiseTrack(Canvas &canvas);
   void DrawCompass(Canvas &canvas, const RECT rc);
   void DrawHorizon(Canvas &canvas, const RECT rc);
   void DrawWindAtAircraft2(Canvas &canvas, POINT Orig, RECT rc);
@@ -187,38 +198,35 @@ class MapWindow
   void DrawLook8000(Canvas &canvas, const RECT rc); // VENTA5
   void DrawFlightMode(Canvas &canvas, const RECT rc);
   void DrawGPSStatus(Canvas &canvas, const RECT rc);
-  double DrawTrail(Canvas &canvas, const POINT Orig, const RECT rc);
+  double DrawTrail(Canvas &canvas, const RECT rc);
   void DrawTeammate(Canvas &canvas, const RECT rc);
   void DrawTrailFromTask(Canvas &canvas, const RECT rc, const double);
   void DrawOffTrackIndicator(Canvas &canvas, const RECT rc);
-  void DrawProjectedTrack(Canvas &canvas, const RECT rc, const POINT Orig);
+  void DrawProjectedTrack(Canvas &canvas, const RECT rc);
   void DrawStartSector(Canvas &canvas, const RECT rc, POINT &Start,
                               POINT &End, int Index);
-  void DrawTask(Canvas &canvas, RECT rc, const POINT &Orig_Aircraft);
+  void DrawTask(Canvas &canvas, RECT rc);
   void DrawThermalEstimate(Canvas &canvas, const RECT rc);
   void DrawTaskAAT(Canvas &canvas, const RECT rc, Canvas &buffer);
-  void DrawAbortedTask(Canvas &canvas, const RECT rc, const POINT Orig);
+  void DrawAbortedTask(Canvas &canvas, const RECT rc);
 
   void DrawBearing(Canvas &canvas, const RECT rc, int bBearingValid);
   void DrawMapScale(Canvas &canvas, const RECT rc,
 			   const bool ScaleChangeFeedback);
-  void DrawMapScale2(Canvas &canvas, const RECT rc,
-			    const POINT Orig_Aircraft);
+  void DrawMapScale2(Canvas &canvas, const RECT rc);
   void DrawFinalGlide(Canvas &canvas, const RECT rc);
   void DrawThermalBand(Canvas &canvas, const RECT rc);
   void DrawGlideThroughTerrain(Canvas &canvas, const RECT rc);
   void DrawTerrainAbove(Canvas &hDC, const RECT rc, Canvas &buffer);
   void DrawCDI();
   //  void DrawSpeedToFly(HDC hDC, RECT rc);
-  void DrawFLARMTraffic(Canvas &canvas, RECT rc, POINT Orig_Aircraft);
+  void DrawFLARMTraffic(Canvas &canvas, RECT rc);
 
   void ClearAirSpace(Canvas &dc, bool fill);
 
   // thread, main functions
   void RenderMapWindow(Canvas &canvas, const RECT rc);
-  void RenderMapWindowBg(Canvas &canvas, const RECT rc,
-				const POINT &Orig,
-				const POINT &Orig_Aircraft);
+  void RenderMapWindowBg(Canvas &canvas, const RECT rc);
   void UpdateCaches(const bool force=false);
 
   // graphics vars
