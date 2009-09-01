@@ -408,7 +408,6 @@ class WndForm:public WindowControl{
     int mModalResult;
     HACCEL mhAccelTable;
     COLORREF mColorTitle;
-    HBRUSH mhBrushTitle;
     const Font *mhTitleFont;
     WindowControl *mClientWindow;
     RECT mClientRect;

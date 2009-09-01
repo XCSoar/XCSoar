@@ -801,8 +801,6 @@ WndForm::WndForm(ContainerWindow *Parent,
 
   mhTitleFont = GetFont();
 
-  mhBrushTitle = (HBRUSH)CreateSolidBrush(mColorTitle);
-
   mClientWindow = new WindowControl(this, this,
                                     TEXT(""), 20, 20, Width, Height);
   mClientWindow->SetBackColor(GetBackColor());
@@ -837,7 +835,6 @@ void WndForm::Destroy(void){
   kill_timer(cbTimerID);
 
   DestroyAcceleratorTable(mhAccelTable);
-  DeleteObject(mhBrushTitle);
 
   WindowControl::Destroy();  // delete all childs
 
