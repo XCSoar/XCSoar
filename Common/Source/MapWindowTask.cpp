@@ -297,7 +297,7 @@ void MapWindow::DrawTask(Canvas &canvas, RECT rc)
 void MapWindow::DrawTaskAAT(Canvas &canvas, const RECT rc, Canvas &buffer)
 {
   int i;
-  double tmp;
+  unsigned tmp;
 
   if (!WayPointList) return;
   if (!AATEnabled) return;
@@ -335,7 +335,7 @@ void MapWindow::DrawTaskAAT(Canvas &canvas, const RECT rc, Canvas &buffer)
 
               buffer.circle(WayPointList[Task[i].Index].Screen.x,
                             WayPointList[Task[i].Index].Screen.y,
-                            (int)tmp, rc, true, true);
+                            tmp, rc, true, true);
 	    }
 	  else
 	    {

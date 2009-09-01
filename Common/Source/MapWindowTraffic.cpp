@@ -173,7 +173,7 @@ void MapWindow::DrawFLARMTraffic(Canvas &canvas, RECT rc) {
 	canvas.set_text_color(Color(0,0,0));
 
 	if (_tcslen(label_name)>0) {
-          canvas.text_opaque(sc_name.x, sc_name.y, NULL, label_name);
+          canvas.text_opaque(sc_name.x, sc_name.y, label_name);
 	}
 
 	if (_tcslen(label_avg)>0) {
@@ -198,7 +198,7 @@ void MapWindow::DrawFLARMTraffic(Canvas &canvas, RECT rc) {
           canvas.background_transparent();
           canvas.text(sc_av.x, sc_av.y, label_avg);
 #else
-          canvas.text_opaque(sc_av.x, sc_av.y, NULL, label_avg);
+          canvas.text_opaque(sc_av.x, sc_av.y, label_avg);
 #endif
 	}
       }

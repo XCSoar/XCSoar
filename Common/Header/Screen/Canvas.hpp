@@ -65,6 +65,11 @@ protected:
   HDC dc;
   unsigned width, height;
 
+private:
+  /* copy constructor not allowed */
+  Canvas(const Canvas &canvas) {}
+  Canvas &operator=(const Canvas &canvas) {}
+
 public:
   Canvas():dc(NULL) {}
   Canvas(HDC _dc, unsigned _width, unsigned _height)
@@ -237,9 +242,20 @@ public:
   void segment(int x, int y, unsigned radius, const RECT rc,
                double start, double end, bool horizon=false);
 
+  const SIZE text_size(const TCHAR *text, size_t length) const;
   const SIZE text_size(const TCHAR *text) const;
+  unsigned text_width(const TCHAR *text) const {
+    return text_size(text).cx;
+  }
+
   void text(int x, int y, const TCHAR *text);
+  void text_opaque(int x, int y, const TCHAR *text, size_t length);
   void text_opaque(int x, int y, const RECT* lprc, const TCHAR *text);
+  void text_opaque(int x, int y, const TCHAR *text) {
+    text_opaque(x, y, NULL, text);
+  }
+
+  void text_clipped(int x, int y, const RECT &rc, const TCHAR *text);
   void text_clipped(int x, int y, unsigned width, const TCHAR *text);
 
   void bottom_right_text(int x, int y, const TCHAR *text);

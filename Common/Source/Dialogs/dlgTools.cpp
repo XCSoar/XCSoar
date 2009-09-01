@@ -119,7 +119,7 @@ int WINAPI MessageBoxX(LPCTSTR lpText, LPCTSTR lpCaption, UINT uType){
                    (TCHAR*)lpCaption, X, Y, Width, Height);
   wf->SetFont(MapWindowBoldFont);
   wf->SetTitleFont(MapWindowBoldFont);
-  wf->SetBackColor(RGB(0xDA, 0xDB, 0xAB));
+  wf->SetBackColor(Color(0xDA, 0xDB, 0xAB));
 
   wText = new WndFrame(wf,
                        TEXT("frmMessageDlgText"),
@@ -529,13 +529,13 @@ WndForm *dlgLoadFromXML(CallBackTableEntry_t *LookUpTable,
     if (Font != -1)
       theForm->SetFont(*FontMap[Font]);
     if (BackColor != 0xffffffff){
-      BackColor = RGB((BackColor>>16)&0xff,
+      BackColor = Color((BackColor>>16)&0xff,
                       (BackColor>>8)&0xff,
                       (BackColor>>0)&0xff);
       theForm->SetBackColor(BackColor);
     }
     if (ForeColor != 0xffffffff){
-      ForeColor = RGB((ForeColor>>16)&0xff,
+      ForeColor = Color((ForeColor>>16)&0xff,
                       (ForeColor>>8)&0xff,
                       (ForeColor>>0)&0xff);
       theForm->SetForeColor(ForeColor);
@@ -601,12 +601,12 @@ void LoadChildsFromXML(WindowControl *Parent,
                                 0xffffffff);
     Visible = StringToIntDflt(childNode.getAttribute(TEXT("Visible")), 1) == 1;
     if (BackColor != 0xffffffff){
-      BackColor = RGB((BackColor>>16)&0xff,
+      BackColor = Color((BackColor>>16)&0xff,
                       (BackColor>>8)&0xff,
                       (BackColor>>0)&0xff);
     }
     if (ForeColor != 0xffffffff){
-      ForeColor = RGB((ForeColor>>16)&0xff,
+      ForeColor = Color((ForeColor>>16)&0xff,
                       (ForeColor>>8)&0xff,
                       (ForeColor>>0)&0xff);
     }

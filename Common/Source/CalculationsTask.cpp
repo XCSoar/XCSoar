@@ -54,13 +54,7 @@ Copyright_License {
 #include "GlideComputer.hpp"
 #include "InputEvents.h"
 #include "GlideRatio.hpp"
-
-
-void CheckFinalGlideThroughTerrain(NMEA_INFO *Basic,
-				   DERIVED_INFO *Calculated,
-				   double LegToGo,
-				   double LegBearing);
-
+#include "CalculationsTerrain.hpp"
 
 #ifdef DEBUG
 #define DEBUGTASKSPEED

@@ -74,7 +74,9 @@ static void Update(){
 }
 
 
-static void OnPaintDetailsListItem(WindowControl * Sender, HDC hDC){
+static void
+OnPaintDetailsListItem(WindowControl *Sender, Canvas &canvas)
+{
   (void)Sender;
   if (DrawListIndex < FLARM_MAX_TRAFFIC){
     TCHAR tmp[100];
@@ -107,15 +109,9 @@ static void OnPaintDetailsListItem(WindowControl * Sender, HDC hDC){
 	     bear,
 	     (DISTANCEMODIFY * range));
 
-    int txtLen = _tcslen(text);
-    if (txtLen>0 && GPS_INFO.FLARM_Traffic[DrawListIndex].ID != 0)
-      {
-	ExtTextOut(hDC, 2*InfoBoxLayout::scale, 2*InfoBoxLayout::scale,
-		   ETO_OPAQUE, NULL,
-		   text,
-		   txtLen,
-		   NULL);
-      }
+    if (GPS_INFO.FLARM_Traffic[DrawListIndex].ID != 0)
+      canvas.text_opaque(2 * InfoBoxLayout::scale, 2 * InfoBoxLayout::scale,
+                         text);
     mutexFlightData.Unlock();
   }
 }

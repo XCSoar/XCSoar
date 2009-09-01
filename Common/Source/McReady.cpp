@@ -42,7 +42,7 @@ Copyright_License {
 #include "Math/FastMath.h"
 #include "Math/Geometry.hpp"
 #include "Device/device.h"
-#include "Mutex.hpp"
+#include "Thread/Mutex.hpp"
 #include <tchar.h>
 #include <math.h>
 #include <windows.h>
@@ -72,7 +72,7 @@ bool GlidePolar::AbortSafetyUseCurrent = false;
 
 static int iSAFETYSPEED=0;
 
-Mutex mutexGlidePolar;
+static Mutex mutexGlidePolar;
 
 //Flight Data Globals
 double        GlidePolar::MACCREADY = 0; // JMW now in SI units (m/s) for consistency

@@ -651,7 +651,6 @@ void InputEvents::setMode(const TCHAR *mode) {
 				);
     }
   }
-  drawTriggerEvent.trigger();
   */
 
   lastmode = thismode;
@@ -673,7 +672,6 @@ void InputEvents::drawButtons(int Mode){
 
     }
   }
-  drawTriggerEvent.trigger();
 }
 
 TCHAR* InputEvents::getMode() {

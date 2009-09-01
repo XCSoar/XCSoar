@@ -9,8 +9,6 @@
 
 <WndForm Name="frmAirspaceColours" Type="Dialog" X=0 Y=0 Width=240 Height=320 Caption="Select colour" Font=2  BackColor=0xDADBAB>
 
-  <WndFrame X=0 Y=0 Width=100 Height=20 Font=2 />
-
   <WndButton   Name="cmdClose" Caption="Close"    X=2 Y=270 Width=98  Height=28 Font=2 OnClickNotify="OnCloseClicked"/>
 
   <WndListFrame Name="frmAirspaceColoursList" X=5 Y=0 Width=230 Height=250 Font=2 OnListInfo="OnAirspaceColoursListInfo">

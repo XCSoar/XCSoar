@@ -208,8 +208,6 @@ void Message::Resize() {
       //      SetSourceRectangle(mRc);
       //      mRc.top=0; mRc.bottom=0;
       //      DrawWireRects(&mRc, 5);
-
-      drawTriggerEvent.trigger();
     }
     hidden = true;
   } else {
@@ -258,9 +256,6 @@ void Message::Resize() {
 		 rthis.bottom-rthis.top,
 		 SWP_SHOWWINDOW);
     hidden = false;
-
-    // window has resized potentially, so redraw map to reduce artifacts
-    drawTriggerEvent.trigger();
   }
 
 }

@@ -84,13 +84,13 @@ static void OnAnalysisPaint(WindowControl *Sender, Canvas &canvas)
 {
   RECT  rcgfx;
   HFONT hfOld;
-  ScopeLock protect(&mutexGlideComputer);
+  ScopeLock protect(mutexGlideComputer);
 
   CopyRect(&rcgfx, Sender->GetBoundRect());
 
   // background is painted in the base-class
 
-  hfOld = (HFONT)SelectObject(canvas, Sender->GetFont()->native());
+  canvas.select(*Sender->GetFont());
 
   canvas.background_transparent();
   canvas.set_text_color(Sender->GetForeColor());
@@ -136,8 +136,6 @@ static void OnAnalysisPaint(WindowControl *Sender, Canvas &canvas)
     // should never get here!
     break;
   }
-  SelectObject(canvas, hfOld);
-
 }
 
 
@@ -145,10 +143,9 @@ static void OnAnalysisPaint(WindowControl *Sender, Canvas &canvas)
 static void Update(void){
   TCHAR sTmp[1000];
   //  WndProperty *wp;
-  int dt=1;
   double d=0;
 
-  ScopeLock protect(&mutexGlideComputer);
+  ScopeLock protect(mutexGlideComputer);
 
   switch(page){
     case ANALYSIS_PAGE_BAROGRAPH:
@@ -336,7 +333,7 @@ static void Update(void){
     wf->SetCaption(sTmp);
 
     TCHAR sFinished[20];
-    double score;
+    double dt, score;
     bool olcvalid; 
     bool olcfinished;
 
@@ -354,7 +351,7 @@ static void Update(void){
 
     if (olcvalid) {
       TCHAR timetext1[100];
-      Units::TimeToText(timetext1, dt);
+      Units::TimeToText(timetext1, (int)dt);
       if (InfoBoxLayout::landscape) {
         _stprintf(sTmp,
                   TEXT("%s\r\n%s:\r\n  %5.0f %s\r\n%s: %s\r\n%s: %3.0f %s\r\n%s: %.2f\r\n"),

@@ -76,7 +76,7 @@ void FlightStatistics::Reset() {
 void FlightStatistics::RenderBarograph(Canvas &canvas, const RECT rc)
 {
   Chart chart(canvas, rc);
-  ScopeLock protect(&mutexTaskData);
+  ScopeLock protect(mutexTaskData);
 
   if (Altitude.sum_n<2) {
     chart.DrawNoData();
@@ -131,7 +131,7 @@ void FlightStatistics::RenderBarograph(Canvas &canvas, const RECT rc)
 void FlightStatistics::RenderSpeed(Canvas &canvas, const RECT rc)
 {
   Chart chart(canvas, rc);
-  ScopeLock protect(&mutexTaskData);
+  ScopeLock protect(mutexTaskData);
 
   if ((Task_Speed.sum_n<2)
       || !ValidTaskPoint(ActiveWayPoint)) {
@@ -207,7 +207,7 @@ void FlightStatistics::RenderGlidePolar(Canvas &canvas, const RECT rc)
 {
   int i;
   Chart chart(canvas, rc);
-  ScopeLock protect(&mutexFlightData);
+  ScopeLock protect(mutexFlightData);
 
   chart.ScaleYFromValue( 0);
   chart.ScaleYFromValue( GlidePolar::SinkRateFast(0,(int)(SAFTEYSPEED-1))*1.1);
@@ -266,13 +266,11 @@ void FlightStatistics::RenderGlidePolar(Canvas &canvas, const RECT rc)
 
   _stprintf(text,TEXT("Weight %.0f kg"),
 	    GlidePolar::GetAUW());
-  canvas.text_opaque(rc.left+IBLSCALE(30), rc.bottom-IBLSCALE(55),
-		     NULL, text);
+  canvas.text_opaque(rc.left + IBLSCALE(30), rc.bottom - IBLSCALE(55), text);
 
   _stprintf(text,TEXT("Wing loading %.1f kg/m2"),
 	    GlidePolar::WingLoading);
-  canvas.text_opaque(rc.left+IBLSCALE(30), rc.bottom-IBLSCALE(40),
-		     NULL, text);
+  canvas.text_opaque(rc.left + IBLSCALE(30), rc.bottom - IBLSCALE(40), text);
 
   canvas.background_transparent();
 }
@@ -282,7 +280,7 @@ void FlightStatistics::RenderTask(Canvas &canvas, const RECT rc, const bool olcm
 {
   int i;
   Chart chart(canvas, rc);
-  ScopeLock protect(&mutexTaskData);
+  ScopeLock protect(mutexTaskData);
 
   double lat1 = 0;
   double lon1 = 0;

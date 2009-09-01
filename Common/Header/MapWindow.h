@@ -40,8 +40,8 @@ Copyright_License {
 #include "XCSoar.h"
 #include "MapWindowProjection.hpp"
 #include "Airspace.h"
-#include "Trigger.hpp"
-#include "Mutex.hpp"
+#include "Thread/Trigger.hpp"
+#include "Thread/Mutex.hpp"
 #include "Screen/BufferCanvas.hpp"
 #include "Screen/MaskedPaintWindow.hpp"
 #include "Screen/LabelBlock.hpp"
@@ -50,7 +50,6 @@ class MapWindowBase {
  public:
   MapWindowBase():
     dirtyEvent(TEXT("mapDirty")),
-    window_initialised(false),
     hDrawThread(0),
     dwDrawThreadID(0) {};
 
@@ -64,8 +63,6 @@ class MapWindowBase {
  protected:
   DWORD    dwDrawThreadID;
   HANDLE   hDrawThread;
-  Mutex    mutexStart;
-  bool     window_initialised;
 };
 
 

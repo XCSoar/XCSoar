@@ -52,7 +52,6 @@ Copyright_License {
 #include "SettingsUser.hpp"
 #include "Audio/VarioSound.h"
 #include "InputEvents.h"
-#include "Trigger.hpp"
 #include "ReplayLogger.hpp"
 #include "Screen/Blank.hpp"
 #include "Screen/Graphics.hpp"
@@ -372,10 +371,8 @@ void MapWindow::DrawThreadInitialise(void) {
 
 DWORD MapWindow::_DrawThread ()
 {
-  while (!globalRunningEvent.test()) {
-    // wait for start
-    Sleep(100);
-  }
+  // wait for start
+  globalRunningEvent.wait();
 
   DrawThreadInitialise();
 
@@ -388,7 +385,6 @@ DWORD MapWindow::_DrawThread ()
     drawTriggerEvent.wait(5000);
   } while (!closeTriggerEvent.test());
 
-  mutexStart.Unlock(); // release lock
   return 0;
 }
 
@@ -432,10 +428,6 @@ bool MapWindow::on_resize(unsigned width, unsigned height) {
 
   SetFontInfoAll(get_canvas());
 
-  // Signal that draw thread can run now
-  mutexStart.Lock();
-  window_initialised = true;
-  mutexStart.Unlock(); // release lock
   return true;
 }
 

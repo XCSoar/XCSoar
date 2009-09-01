@@ -38,8 +38,8 @@ Copyright_License {
 #ifndef XCSOAR_PROTECTION_HPP
 #define XCSOAR_PROTECTION_HPP
 
-#include "Trigger.hpp"
-#include "Mutex.hpp"
+#include "Thread/Trigger.hpp"
+#include "Thread/Mutex.hpp"
 
 extern Mutex mutexFlightData;
 extern Mutex mutexGlideComputer;

@@ -186,11 +186,17 @@ Canvas::segment(int x, int y, unsigned radius, const RECT rc,
 }
 
 const SIZE
-Canvas::text_size(const TCHAR *text) const
+Canvas::text_size(const TCHAR *text, size_t length) const
 {
   SIZE size;
-  ::GetTextExtentPoint(dc, text, _tcslen(text), &size);
+  ::GetTextExtentPoint(dc, text, length, &size);
   return size;
+}
+
+const SIZE
+Canvas::text_size(const TCHAR *text) const
+{
+  return text_size(text, _tcslen(text));
 }
 
 void
@@ -200,9 +206,21 @@ Canvas::text(int x, int y, const TCHAR *text)
 }
 
 void
+Canvas::text_opaque(int x, int y, const TCHAR *text, size_t length)
+{
+  ::ExtTextOut(dc, x, y, ETO_OPAQUE, NULL, text, length, NULL);
+}
+
+void
 Canvas::text_opaque(int x, int y, const RECT* lprc, const TCHAR *text)
 {
   ::ExtTextOut(dc, x, y, ETO_OPAQUE, lprc, text, _tcslen(text), NULL);
+}
+
+void
+Canvas::text_clipped(int x, int y, const RECT &rc, const TCHAR *text)
+{
+  ::ExtTextOut(dc, x, y, ETO_CLIPPED, &rc, text, _tcslen(text), NULL);
 }
 
 void
@@ -212,7 +230,7 @@ Canvas::text_clipped(int x, int y, unsigned width, const TCHAR *text)
 
   RECT rc;
   ::SetRect(&rc, x, y, x + min(width, size.cx), y + size.cy);
-  ::ExtTextOut(dc, x, y, ETO_CLIPPED, &rc, text, _tcslen(text), NULL);
+  text_clipped(x, y, rc, text);
 }
 
 void

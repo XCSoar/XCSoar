@@ -576,7 +576,9 @@ static void OnFilterType(DataField *Sender,
 
 static int DrawListIndex=0;
 
-static void OnPaintListItem(WindowControl * Sender, HDC hDC){
+static void
+OnPaintListItem(WindowControl *Sender, Canvas &canvas)
+{
   (void)Sender;
   int n = UpLimit - LowLimit;
   TCHAR sTmp[12];
@@ -601,14 +603,14 @@ static void OnPaintListItem(WindowControl * Sender, HDC hDC){
       } else {
         w0 = 225*InfoBoxLayout::scale;
       }
-      w1 = GetTextWidth(hDC, TEXT("XXX"));
-      w2 = GetTextWidth(hDC, TEXT(" 000km"));
-      w3 = GetTextWidth(hDC, TEXT(" 000")TEXT(DEG));
+      w1 = canvas.text_width(TEXT("XXX"));
+      w2 = canvas.text_width(TEXT(" 000km"));
+      w3 = canvas.text_width(TEXT(" 000")TEXT(DEG));
 
       x1 = w0-w1-w2-w3;
 
-      ExtTextOutClip(hDC, 2*InfoBoxLayout::scale, 2*InfoBoxLayout::scale,
-                     Name, x1-InfoBoxLayout::scale*5);
+      canvas.text_clipped(2 * InfoBoxLayout::scale, 2 * InfoBoxLayout::scale,
+                          x1 - InfoBoxLayout::scale * 5, Name);
 
       sTmp[0] = '\0';
       sTmp[1] = '\0';
@@ -663,34 +665,27 @@ static void OnPaintListItem(WindowControl * Sender, HDC hDC){
 
       // left justified
 
-      ExtTextOut(hDC, x1, 2*InfoBoxLayout::scale,
-                 ETO_OPAQUE, NULL,
-                 sTmp, _tcslen(sTmp), NULL);
+      canvas.text_opaque(x1, 2 * InfoBoxLayout::scale, sTmp);
 
       // right justified after airspace type
       _stprintf(sTmp, TEXT("%.0f%s"),
                 AirspaceSelectInfo[i].Distance,
                 Units::GetDistanceName());
-      x2 = w0-w3-GetTextWidth(hDC, sTmp);
-      ExtTextOut(hDC, x2, 2*InfoBoxLayout::scale,
-                 ETO_OPAQUE, NULL,
-                 sTmp, _tcslen(sTmp), NULL);
+      x2 = w0 - w3 - canvas.text_width(sTmp);
+      canvas.text_opaque(x2, 2 * InfoBoxLayout::scale, sTmp);
 
       // right justified after distance
       _stprintf(sTmp, TEXT("%d")TEXT(DEG),  iround(AirspaceSelectInfo[i].Direction));
-      x3 = w0-GetTextWidth(hDC, sTmp);
-      ExtTextOut(hDC, x3, 2*InfoBoxLayout::scale,
-                 ETO_OPAQUE, NULL,
-                 sTmp, _tcslen(sTmp), NULL);
+      x3 = w0 - canvas.text_width(sTmp);
+      canvas.text_opaque(x3, 2 * InfoBoxLayout::scale, sTmp);
     } else {
       // should never get here!
     }
   } else {
     if (DrawListIndex == 0){
       _stprintf(sTmp, TEXT("%s"), gettext(TEXT("No Match!")));
-      ExtTextOut(hDC, 2*InfoBoxLayout::scale, 2*InfoBoxLayout::scale,
-                 ETO_OPAQUE, NULL,
-                 sTmp, _tcslen(sTmp), NULL);
+      canvas.text_opaque(2 * InfoBoxLayout::scale, 2 * InfoBoxLayout::scale,
+                         sTmp);
     }
   }
 }

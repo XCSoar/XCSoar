@@ -562,7 +562,7 @@ bool TextInBox(Canvas &canvas, const TCHAR* Value, int x, int y,
       canvas.background_transparent();
       canvas.text(x, y, Value);
 #else
-      canvas.text_opaque(x, y, NULL, Value);
+      canvas.text_opaque(x, y, Value);
 #endif
       drawn=true;
     }
@@ -626,15 +626,15 @@ bool TextInBox(Canvas &canvas, const TCHAR* Value, int x, int y,
       canvas.text(x, y, Value);
 
 #else
-      canvas.text_opaque(x+2, y, NULL, Value);
-      canvas.text_opaque(x+1, y, NULL, Value);
-      canvas.text_opaque(x-1, y, NULL, Value);
-      canvas.text_opaque(x-2, y, NULL, Value);
-      canvas.text_opaque(x, y+1, NULL, Value);
-      canvas.text_opaque(x, y-1, NULL, Value);
+      canvas.text_opaque(x+2, y, Value);
+      canvas.text_opaque(x+1, y, Value);
+      canvas.text_opaque(x-1, y, Value);
+      canvas.text_opaque(x-2, y, Value);
+      canvas.text_opaque(x, y+1, Value);
+      canvas.text_opaque(x, y-1, Value);
       canvas.set_text_color(Color(0x00,0x00,0x00));
 
-      canvas.text_opaque(x, y, NULL, Value);
+      canvas.text_opaque(x, y, Value);
 #endif
       drawn=true;
     }
@@ -657,7 +657,7 @@ bool TextInBox(Canvas &canvas, const TCHAR* Value, int x, int y,
       canvas.background_transparent();
       canvas.text(x, y, Value);
 #else
-      canvas.text_opaque(x, y, NULL, Value);
+      canvas.text_opaque(x, y, Value);
 #endif
       drawn=true;
     }

@@ -124,7 +124,9 @@ static void UpdateCaption (void) {
 }
 
 
-static void OnTaskPaintListItem(WindowControl * Sender, HDC hDC){
+static void
+OnTaskPaintListItem(WindowControl *Sender, Canvas &canvas)
+{
   (void)Sender;
   int n = UpLimit - LowLimit;
   TCHAR sTmp[120];
@@ -136,8 +138,8 @@ static void OnTaskPaintListItem(WindowControl * Sender, HDC hDC){
   } else {
     w0 = 210*InfoBoxLayout::scale;
   }
-  int w1 = GetTextWidth(hDC, TEXT(" 000km"));
-  int w2 = GetTextWidth(hDC, TEXT("  000")TEXT(DEG));
+  int w1 = canvas.text_width(TEXT(" 000km"));
+  int w2 = canvas.text_width(TEXT("  000")TEXT(DEG));
 
   int p1 = w0-w1-w2; // 125*InfoBoxLayout::scale;
   int p2 = w0-w2;    // 175*InfoBoxLayout::scale;
@@ -162,38 +164,31 @@ static void OnTaskPaintListItem(WindowControl * Sender, HDC hDC){
                   WayPointList[Task[i].Index].Name);
       }
 
-      ExtTextOutClip(hDC, 2*InfoBoxLayout::scale, 2*InfoBoxLayout::scale,
-		     sTmp, p1-4*InfoBoxLayout::scale);
+      canvas.text_clipped(2 * InfoBoxLayout::scale, 2 * InfoBoxLayout::scale,
+                          p1 - 4 * InfoBoxLayout::scale, sTmp);
 
       _stprintf(sTmp, TEXT("%.0f %s"),
 		Task[i].Leg*DISTANCEMODIFY,
 		Units::GetDistanceName());
-      ExtTextOut(hDC, p1+w1-GetTextWidth(hDC, sTmp),
-                 2*InfoBoxLayout::scale,
-                 ETO_OPAQUE, NULL,
-                 sTmp, _tcslen(sTmp), NULL);
+      canvas.text_opaque(p1 + w1 - canvas.text_width(sTmp),
+                         2 * InfoBoxLayout::scale, sTmp);
 
       _stprintf(sTmp, TEXT("%d")TEXT(DEG),  iround(Task[i].InBound));
-      ExtTextOut(hDC, p2+w2-GetTextWidth(hDC, sTmp),
-                 2*InfoBoxLayout::scale,
-                 ETO_OPAQUE, NULL,
-                 sTmp, _tcslen(sTmp), NULL);
-
+      canvas.text_opaque(p2 + w2 - canvas.text_width(sTmp),
+                         2 * InfoBoxLayout::scale, sTmp);
     }
 
   } else {
     if (DrawListIndex==n) {
       _stprintf(sTmp, TEXT("  (%s)"), gettext(TEXT("add waypoint")));
-      ExtTextOut(hDC, 2*InfoBoxLayout::scale, 2*InfoBoxLayout::scale,
-		 ETO_OPAQUE, NULL,
-		 sTmp, _tcslen(sTmp), NULL);
+      canvas.text_opaque(2 * InfoBoxLayout::scale, 2 * InfoBoxLayout::scale,
+                         sTmp);
     } else if ((DrawListIndex==n+1) && ValidTaskPoint(0)) {
 
       if (!AATEnabled) {
 	_stprintf(sTmp, gettext(TEXT("Total:")));
-	ExtTextOut(hDC, 2*InfoBoxLayout::scale, 2*InfoBoxLayout::scale,
-		   ETO_OPAQUE, NULL,
-		   sTmp, _tcslen(sTmp), NULL);
+        canvas.text_opaque(2 * InfoBoxLayout::scale, 2 * InfoBoxLayout::scale,
+                           sTmp);
 
 	if (fai_ok) {
 	  _stprintf(sTmp, TEXT("%.0f %s FAI"), lengthtotal*DISTANCEMODIFY,
@@ -202,10 +197,8 @@ static void OnTaskPaintListItem(WindowControl * Sender, HDC hDC){
 	  _stprintf(sTmp, TEXT("%.0f %s"), lengthtotal*DISTANCEMODIFY,
 		    Units::GetDistanceName());
 	}
-	ExtTextOut(hDC, p1+w1-GetTextWidth(hDC, sTmp),
-                   2*InfoBoxLayout::scale,
-		   ETO_OPAQUE, NULL,
-		   sTmp, _tcslen(sTmp), NULL);
+        canvas.text_opaque(p1 + w1 - canvas.text_width(sTmp),
+                           2 * InfoBoxLayout::scale, sTmp);
 
       } else {
 
@@ -221,9 +214,8 @@ static void OnTaskPaintListItem(WindowControl * Sender, HDC hDC){
 		  DISTANCEMODIFY*lengthtotal,
 		  DISTANCEMODIFY*d1,
 		  Units::GetDistanceName());
-	ExtTextOut(hDC, 2*InfoBoxLayout::scale, 2*InfoBoxLayout::scale,
-		   ETO_OPAQUE, NULL,
-		   sTmp, _tcslen(sTmp), NULL);
+        canvas.text_opaque(2 * InfoBoxLayout::scale, 2 * InfoBoxLayout::scale,
+                           sTmp);
       }
     }
   }

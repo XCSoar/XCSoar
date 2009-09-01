@@ -62,25 +62,24 @@ static void OnCloseClicked(WindowControl * Sender){
 }
 
 
-static void OnTextPaint(WindowControl *Sender, HDC hDC) {
+static void
+OnTextPaint(WindowControl *Sender, Canvas &canvas)
+{
   RECT  rcgfx;
   HFONT hfOld;
 
   CopyRect(&rcgfx, Sender->GetBoundRect());
   // background is painted in the base-class
-  hfOld = (HFONT)SelectObject(hDC, Sender->GetFont()->native());
-  SetBkMode(hDC, TRANSPARENT);
-  SetTextColor(hDC, Sender->GetForeColor());
+  canvas.select(*Sender->GetFont());
+  canvas.background_transparent();
+  canvas.set_text_color(Sender->GetForeColor());
 
   ////
   // Do the actual painting of the text
 
-  SIZE tsize;
-  GetTextExtentPoint(hDC, edittext, _tcslen(edittext), &tsize);
-  SIZE tsizec;
-  GetTextExtentPoint(hDC, edittext, cursor, &tsizec);
-  SIZE tsizea;
-  GetTextExtentPoint(hDC, edittext, cursor+1, &tsizea);
+  SIZE tsize = canvas.text_size(edittext);
+  SIZE tsizec = canvas.text_size(edittext, cursor);
+  SIZE tsizea = canvas.text_size(edittext, cursor + 1);
 
   POINT p[5];
   p[0].x = 10;
@@ -98,21 +97,16 @@ static void OnTextPaint(WindowControl *Sender, HDC hDC) {
   p[4].x = p[3].x;
   p[4].y = p[3].y-2;
 
-  SelectObject(hDC, GetStockObject(WHITE_PEN));
-  Polyline(hDC, p+1, 4);
+  canvas.white_pen();
+  canvas.polyline(p + 1, 4);
 
   /*
   int x = (int)((xv-x_min)*xscale)+rc.left-tsize.cx/2;
   int y = (int)((y_max-yv)*yscale)+rc.top-tsize.cy/2;
   */
-  SetBkMode(hDC, OPAQUE);
-  ExtTextOut(hDC, p[0].x, p[0].y, ETO_OPAQUE, NULL,
-             edittext, _tcslen(edittext), NULL);
-  SetBkMode(hDC, TRANSPARENT);
-
-  ////
-
-  SelectObject(hDC, hfOld);
+  canvas.background_opaque();
+  canvas.text_opaque(p[0].x, p[0].y, NULL, edittext);
+  canvas.background_transparent();
 }
 
 

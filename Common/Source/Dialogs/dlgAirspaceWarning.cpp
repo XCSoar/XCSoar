@@ -55,10 +55,10 @@ Copyright_License {
 static WndForm *wf=NULL;
 static WndListFrame *wAirspaceList=NULL;
 static WndOwnerDrawFrame *wAirspaceListEntry = NULL;
-static HBRUSH hBrushInsideBk;
-static HBRUSH hBrushNearBk;
-static HBRUSH hBrushInsideAckBk;
-static HBRUSH hBrushNearAckBk;
+static Brush hBrushInsideBk;
+static Brush hBrushNearBk;
+static Brush hBrushInsideAckBk;
+static Brush hBrushNearAckBk;
 //static HWND   hActiveWindow;
 
 static int Count=0;
@@ -115,7 +115,6 @@ static void OnEnableClicked(WindowControl * Sender){
 static void OnCloseClicked(WindowControl * Sender){
 	(void)Sender;
   wf->SetVisible(false);
-  drawTriggerEvent.trigger();
 //  SetFocus(hWndMainWindow);
 //  SetFocus(hWndMapWindow);
 
@@ -289,7 +288,9 @@ static TCHAR *fmtAirspaceAlt(TCHAR *Buffer, AIRSPACE_ALT *alt){
   return(Buffer);
 }
 
-static void OnAirspaceListItemPaint(WindowControl * Sender, HDC hDC){
+static void
+OnAirspaceListItemPaint(WindowControl *Sender, Canvas &canvas)
+{
   TCHAR sTmp[128];
 
   if (Count != 0){
@@ -310,7 +311,7 @@ static void OnAirspaceListItemPaint(WindowControl * Sender, HDC hDC){
     int          Col1Left = 120;
     RECT         rc;
     RECT         rcTextClip;
-    HBRUSH       hBrushBk = NULL;
+    Brush *hBrushBk = NULL;
 
     if (i>=Count) return;
 
@@ -348,28 +349,28 @@ static void OnAirspaceListItemPaint(WindowControl * Sender, HDC hDC){
 
     if (pAS.Inside){
       if (pAS.Acknowledge >= 3)
-        hBrushBk = hBrushInsideAckBk;
+        hBrushBk = &hBrushInsideAckBk;
       else
-        hBrushBk = hBrushInsideBk;
+        hBrushBk = &hBrushInsideBk;
     } else {
       if ((pAS.hDistance < 2500) && (abs(pAS.vDistance) < 250))
         if (pAS.Acknowledge >= 1)
-          hBrushBk = hBrushNearAckBk;
+          hBrushBk = &hBrushNearAckBk;
         else
-          hBrushBk = hBrushNearBk;
+          hBrushBk = &hBrushNearBk;
     }
 
 
     if (SelectedIdx == DrawListIndex){
       InflateRect(&rc, 1, 1);
-      SelectObject(hDC, (HPEN)GetStockObject(BLACK_PEN));
-      Rectangle(hDC, rc.left, rc.top, rc.right, rc.bottom);
-    } else {
-      FillRect(hDC, &rc, hBrushBk);
+      canvas.black_pen();
+      canvas.rectangle(rc.left, rc.top, rc.right, rc.bottom);
+    } else if (hBrushBk != NULL) {
+      canvas.fill_rectangle(rc, *hBrushBk);
     }
 
     if ((pAS.Acknowledge > 0) && (pAS.Acknowledge >= pAS.WarnLevel)){
-      SetTextColor(hDC, clGray);
+      canvas.set_text_color(clGray);
     }
 
     #ifndef NDEBUG
@@ -378,18 +379,15 @@ static void OnAirspaceListItemPaint(WindowControl * Sender, HDC hDC){
     wsprintf(sTmp, TEXT("%-20s"), sName);
     #endif
 
-    ExtTextOut(hDC, IBLSCALE(Col0Left), IBLSCALE(TextTop),
-      ETO_CLIPPED, &rcTextClip, sTmp, _tcslen(sTmp), NULL);
+    canvas.text_clipped(IBLSCALE(Col0Left), IBLSCALE(TextTop),
+                        rcTextClip, sTmp);
 
     wsprintf(sTmp, TEXT("%-20s"), sTop);
-
-    ExtTextOut(hDC, IBLSCALE(Col1Left), IBLSCALE(TextTop),
-      ETO_OPAQUE, NULL, sTmp, _tcslen(sTmp), NULL);
+    canvas.text_opaque(IBLSCALE(Col1Left), IBLSCALE(TextTop), sTmp);
 
     wsprintf(sTmp, TEXT("%-20s"), sBase);
-
-    ExtTextOut(hDC, IBLSCALE(Col1Left), IBLSCALE(TextTop+TextHeight),
-      ETO_OPAQUE, NULL, sTmp, _tcslen(sTmp), NULL);
+    canvas.text_opaque(IBLSCALE(Col1Left), IBLSCALE(TextTop + TextHeight),
+                       sTmp);
 
     if (pAS.Inside){
       wsprintf(sTmp, TEXT("> %c %s"), sAckIndicator[pAS.Acknowledge], sType);
@@ -439,15 +437,13 @@ static void OnAirspaceListItemPaint(WindowControl * Sender, HDC hDC){
       }
     }
 
-    ExtTextOut(hDC, IBLSCALE(Col0Left), IBLSCALE(TextTop+TextHeight),
-      ETO_CLIPPED, &rcTextClip, sTmp, _tcslen(sTmp), NULL);
+    canvas.text_clipped(IBLSCALE(Col0Left), IBLSCALE(TextTop + TextHeight),
+                        rcTextClip, sTmp);
 
   } else {
     if (DrawListIndex == 0){
       _stprintf(sTmp, TEXT("%s"), gettext(TEXT("No Warnings")));
-      ExtTextOut(hDC, IBLSCALE(2), IBLSCALE(2),
-        ETO_OPAQUE, NULL,
-        sTmp, _tcslen(sTmp), NULL);
+      canvas.text_opaque(IBLSCALE(2), IBLSCALE(2), sTmp);
     }
   }
 }
@@ -688,10 +684,10 @@ int dlgAirspaceWarningInit(void){
       wf->SetUserMsgNotify(UserMsgNotify);
       wf->SetTimerNotify(OnTimer);
 
-      hBrushInsideBk = (HBRUSH)CreateSolidBrush(RGB(254,50,50));
-      hBrushNearBk = (HBRUSH)CreateSolidBrush(RGB(254,254,50));
-      hBrushInsideAckBk = (HBRUSH)CreateSolidBrush(RGB(254,100,100));
-      hBrushNearAckBk = (HBRUSH)CreateSolidBrush(RGB(254,254,100));
+      hBrushInsideBk.set(Color(254,50,50));
+      hBrushNearBk.set(Color(254,254,50));
+      hBrushInsideAckBk.set(Color(254,100,100));
+      hBrushNearAckBk.set(Color(254,254,100));
 
       wAirspaceList = (WndListFrame*)wf->FindByName(TEXT("frmAirspaceWarningList"));
       wAirspaceListEntry = (WndOwnerDrawFrame*)wf->FindByName(TEXT("frmAirspaceWarningListEntry"));

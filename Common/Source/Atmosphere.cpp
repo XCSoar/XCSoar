@@ -40,6 +40,7 @@ Copyright_License {
 #include "RasterTerrain.h"
 
 #include <math.h>
+#include <stdlib.h> /* for abs() */
 
 unsigned short CuSonde::last_level=0;
 double CuSonde::thermalHeight = 0;

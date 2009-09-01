@@ -187,7 +187,7 @@ int ConnectionProcessTimer(int itimeout) {
 
 	  InputEvents::processGlideComputer(GCE_COMMPORT_RESTART);
 
-	  RestartCommPorts();
+	  devRestart();
 #endif
 #endif
 	  itimeout = 0;

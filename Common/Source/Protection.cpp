@@ -38,7 +38,6 @@ Copyright_License {
 #include "XCSoar.h"
 #include "Blackboard.hpp"
 #include "MapWindow.h"
-#include "Trigger.hpp"
 #include "Protection.hpp"
 #include "InfoBoxManager.h"
 #include "Settings.hpp"
@@ -56,7 +55,7 @@ static Trigger gpsUpdatedTriggerEvent(TEXT("gpsUpdatedTriggerEvent"));
 static Trigger dataTriggerEvent(TEXT("dataTriggerEvent"));
 static Trigger varioTriggerEvent(TEXT("varioTriggerEvent"));
 Trigger closeTriggerEvent(TEXT("mapCloseEvent"));
-Trigger drawTriggerEvent(TEXT("drawTriggerEvent"));
+Trigger drawTriggerEvent(TEXT("drawTriggerEvent"), false);
 Trigger globalRunningEvent(TEXT("globalRunning"));
 Trigger airspaceWarningEvent(TEXT("airspaceWarning"));
 
@@ -96,15 +95,7 @@ void TriggerRedraws() {
   if (map_window.IsDisplayRunning()) {
     if (gpsUpdatedTriggerEvent.test()) {
       map_window.dirtyEvent.trigger();
-      if (!drawTriggerEvent.test()) {
-	drawTriggerEvent.trigger();
-      }
-      // only ask for redraw if the thread was waiting,
-      // this causes the map thread to try to synchronise
-      // with the calculation thread, which is desirable
-      // to reduce latency
-      // it also ensures that if the display is lagging,
-      // it will have a chance to catch up.
+      drawTriggerEvent.trigger();
     }
   }
 }
@@ -119,10 +110,8 @@ DWORD InstrumentThread (LPVOID lpvoid) {
 
   while (!closeTriggerEvent.test()) {
 
-    if (!varioTriggerEvent.test()) {
-      Sleep(100);
+    if (!varioTriggerEvent.wait(100))
       continue;
-    }
 
     if (map_window.IsDisplayRunning()) {
       if (EnableVarioGauge) {
@@ -152,10 +141,8 @@ DWORD CalculationThread (LPVOID lpvoid) {
 
   while (!closeTriggerEvent.test()) {
 
-    if (!dataTriggerEvent.test()) {
-      Sleep(100);
+    if (!dataTriggerEvent.wait(100))
       continue;
-    }
 
     // set timer to determine latency (including calculations)
     if (gpsUpdatedTriggerEvent.test()) {
