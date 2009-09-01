@@ -95,15 +95,7 @@ void TriggerRedraws() {
   if (map_window.IsDisplayRunning()) {
     if (gpsUpdatedTriggerEvent.test()) {
       map_window.dirtyEvent.trigger();
-      if (!drawTriggerEvent.test()) {
-	drawTriggerEvent.trigger();
-      }
-      // only ask for redraw if the thread was waiting,
-      // this causes the map thread to try to synchronise
-      // with the calculation thread, which is desirable
-      // to reduce latency
-      // it also ensures that if the display is lagging,
-      // it will have a chance to catch up.
+      drawTriggerEvent.trigger();
     }
   }
 }
