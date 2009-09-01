@@ -114,7 +114,7 @@ Window::reset()
 bool
 Window::on_create()
 {
-  return false;
+  return true;
 }
 
 bool
@@ -183,7 +183,7 @@ Window::on_message(HWND _hWnd, UINT message,
 {
   switch (message) {
   case WM_CREATE:
-    if (on_create()) return 0;
+    return on_create() ? 0 : -1;
     break;
 
   case WM_DESTROY:

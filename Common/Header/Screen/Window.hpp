@@ -191,7 +191,12 @@ public:
   }
 
 protected:
+  /**
+   * @return true on success, false if the window should not be
+   * created
+   */
   virtual bool on_create();
+
   virtual bool on_destroy();
   virtual bool on_close();
   virtual bool on_resize(unsigned width, unsigned height);
