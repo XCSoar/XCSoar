@@ -47,7 +47,7 @@ Copyright_License {
 
 void MapWindow::CalculateScreenPositionsGroundline(void) {
   if (FinalGlideTerrain) {
-    LatLon2Screen(DerivedDrawInfo.GlideFootPrint,
+    LonLat2Screen(DerivedDrawInfo.GlideFootPrint,
 		  Groundline, NUMTERRAINSWEEPS+1, 1);
   }
 }
@@ -92,13 +92,10 @@ void MapWindow::DrawGlideThroughTerrain(Canvas &canvas, const RECT rc) {
     if ((DerivedDrawInfo.TerrainWarningLatitude != 0.0)
         &&(DerivedDrawInfo.TerrainWarningLongitude != 0.0)) {
 
-      POINT sc;
-      if (LonLatVisible(DerivedDrawInfo.TerrainWarningLongitude,
-                       DerivedDrawInfo.TerrainWarningLatitude)) {
-        LatLon2Screen(DerivedDrawInfo.TerrainWarningLongitude,
-                      DerivedDrawInfo.TerrainWarningLatitude, sc);
-	draw_masked_bitmap(canvas, MapGfx.hTerrainWarning, sc.x, sc.y, 10, 10, true);
-      }
+      draw_masked_bitmap_if_visible(canvas, MapGfx.hTerrainWarning,
+				    DerivedDrawInfo.TerrainWarningLongitude,
+				    DerivedDrawInfo.TerrainWarningLatitude,
+				    10, 10);
     }
   }
 }

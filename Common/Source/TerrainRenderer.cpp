@@ -464,20 +464,20 @@ void TerrainRenderer::Height(MapWindowProjection &map_projection, bool isBigZoom
   
   x = (X0+X1)/2;
   y = (Y0+Y1)/2;
-  map_projection.Screen2LatLon(x, y, X, Y);
+  map_projection.Screen2LonLat(x, y, X, Y);
   double xmiddle = X;
   double ymiddle = Y;
   int dd = (int)lround(dtquant*rfact);
   
   x = (X0+X1)/2+dd;
   y = (Y0+Y1)/2;
-  map_projection.Screen2LatLon(x, y, X, Y);
+  map_projection.Screen2LonLat(x, y, X, Y);
   float Xrounding = (float)fabs(X-xmiddle);
   DistanceBearing(ymiddle, xmiddle, Y, X, &pixelDX, NULL);
   
   x = (X0+X1)/2;
   y = (Y0+Y1)/2+dd;
-  map_projection.Screen2LatLon(x, y, X, Y);
+  map_projection.Screen2LonLat(x, y, X, Y);
   float Yrounding = (float)fabs(Y-ymiddle);
   DistanceBearing(ymiddle, xmiddle, Y, X, &pixelDY, NULL);
   
@@ -585,7 +585,7 @@ void TerrainRenderer::FillHeightBuffer(MapWindowProjection &map_projection,
   
   const double PanLatitude =  map_projection.GetPanLatitude();
   const double PanLongitude = map_projection.GetPanLongitude();
-  const double InvDrawScale = map_projection.GetScreenScaleToLatLon()/1024.0;
+  const double InvDrawScale = map_projection.GetScreenScaleToLonLat()/1024.0;
   const double DisplayAngle = map_projection.GetDisplayAngle();
   const int cost = ifastcosine(DisplayAngle);
   const int sint = ifastsine(DisplayAngle);
@@ -614,7 +614,7 @@ void TerrainRenderer::FillHeightBuffer(MapWindowProjection &map_projection,
   double X, Y;
   for (int y = Y0; y<Y1; y+= dtquant) {
     for (int x = X0; x<X1; x+= dtquant) {
-      map_projection.Screen2LatLon(x,y,X,Y);
+      map_projection.Screen2LonLat(x,y,X,Y);
         *myhbuf++ = max(0, DisplayMap->GetField(Y, X));
     }
   }

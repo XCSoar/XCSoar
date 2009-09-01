@@ -173,7 +173,7 @@ double MapWindow::DrawTrail(Canvas &canvas, const POINT Orig, const RECT rc)
   const int sint = ISINETABLE[deg];
   const int xxs = Orig_Screen.x*1024-512;
   const int yys = Orig_Screen.y*1024+512;
-  const double mDrawScale = GetLatLonToScreenScale();
+  const double mDrawScale = GetLonLatToScreenScale();
   const double mPanLongitude = PanLongitude;
   const double mPanLatitude = PanLatitude;
 
@@ -262,7 +262,7 @@ double MapWindow::DrawTrail(Canvas &canvas, const POINT Orig, const RECT rc)
     P1.Screen.x = (xxs-X*cost + Y*sint)/1024;
     P1.Screen.y = (Y*cost + X*sint + yys)/1024;
 #else
-    LatLon2Screen(this_lon,
+    LonLat2Screen(this_lon,
 		  this_lat,
 		  P1.Screen);
 #endif
@@ -347,7 +347,7 @@ void MapWindow::DrawTrailFromTask(Canvas &canvas, const RECT rc,
   for (i=0; i<n; i++) {
     if (GlideComputer::olc.getTime(i)>= mTrailFirstTime)
       break;
-    LatLon2Screen(GlideComputer::olc.getLongitude(i),
+    LonLat2Screen(GlideComputer::olc.getLongitude(i),
                   GlideComputer::olc.getLatitude(i),
                   ptin[j]);
     j++;

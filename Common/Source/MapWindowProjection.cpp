@@ -108,6 +108,17 @@ bool MapWindowProjection::LonLatVisible(const double &lon,
     return false;
 }
 
+bool MapWindowProjection::LonLat2ScreenIfVisible(const double &lon, const double &lat,
+						 POINT *sc) 
+{
+  if (LonLatVisible(lon, lat)) {
+    LonLat2Screen(lon, lat, *sc);
+    return PointVisible(*sc);
+  } else {
+    return false;
+  }
+}
+
 
 bool MapWindowProjection::PointVisible(const POINT &P)
 {
@@ -131,7 +142,7 @@ rectObj MapWindowProjection::CalculateScreenBounds(double scale) {
 
   if (scale>= 1.0) {
     POINT screen_center;
-    LatLon2Screen(PanLongitude,
+    LonLat2Screen(PanLongitude,
                   PanLatitude,
                   screen_center);
 
@@ -159,7 +170,7 @@ rectObj MapWindowProjection::CalculateScreenBounds(double scale) {
       double X, Y;
       p.x = screen_center.x + iround(fastcosine(ang)*maxsc*scale);
       p.y = screen_center.y + iround(fastsine(ang)*maxsc*scale);
-      Screen2LatLon(p.x, p.y, X, Y);
+      Screen2LonLat(p.x, p.y, X, Y);
       sb.minx = min(X, sb.minx);
       sb.miny = min(Y, sb.miny);
       sb.maxx = max(X, sb.maxx);
@@ -174,25 +185,25 @@ rectObj MapWindowProjection::CalculateScreenBounds(double scale) {
 
     x = MapRect.left;
     y = MapRect.top;
-    Screen2LatLon(x, y, X, Y);
+    Screen2LonLat(x, y, X, Y);
     xmin = X; xmax = X;
     ymin = Y; ymax = Y;
 
     x = MapRect.right;
     y = MapRect.top;
-    Screen2LatLon(x, y, X, Y);
+    Screen2LonLat(x, y, X, Y);
     xmin = min(xmin, X); xmax = max(xmax, X);
     ymin = min(ymin, Y); ymax = max(ymax, Y);
 
     x = MapRect.right;
     y = MapRect.bottom;
-    Screen2LatLon(x, y, X, Y);
+    Screen2LonLat(x, y, X, Y);
     xmin = min(xmin, X); xmax = max(xmax, X);
     ymin = min(ymin, Y); ymax = max(ymax, Y);
 
     x = MapRect.left;
     y = MapRect.bottom;
-    Screen2LatLon(x, y, X, Y);
+    Screen2LonLat(x, y, X, Y);
     xmin = min(xmin, X); xmax = max(xmax, X);
     ymin = min(ymin, Y); ymax = max(ymax, Y);
 
@@ -211,7 +222,7 @@ rectObj MapWindowProjection::CalculateScreenBounds(double scale) {
 // RETURNS Longitude, Latitude!
 
 
-void MapWindowProjection::Screen2LatLon(const int &x,
+void MapWindowProjection::Screen2LonLat(const int &x,
 					const int &y,
 					double &X, double &Y)
 {
@@ -222,7 +233,7 @@ void MapWindowProjection::Screen2LatLon(const int &x,
   X= PanLongitude + sx*invfastcosine(Y)*InvDrawScale;
 }
 
-void MapWindowProjection::LatLon2Screen(const double &lon,
+void MapWindowProjection::LonLat2Screen(const double &lon,
 					const double &lat,
 					POINT &sc) {
 
@@ -236,7 +247,7 @@ void MapWindowProjection::LatLon2Screen(const double &lon,
 }
 
 // This one is optimised for long polygons
-void MapWindowProjection::LatLon2Screen(pointObj *ptin,
+void MapWindowProjection::LonLat2Screen(pointObj *ptin,
 					POINT *ptout,
 					const int n,
 					const int skip) {
@@ -640,10 +651,10 @@ void MapWindowProjection::DrawGreatCircle(Canvas &canvas,
 
   POINT StartP;
   POINT EndP;
-  LatLon2Screen(startLon,
+  LonLat2Screen(startLon,
 		startLat,
 		StartP);
-  LatLon2Screen(targetLon,
+  LonLat2Screen(targetLon,
 		targetLat,
 		EndP);
 
@@ -669,7 +680,7 @@ void MapWindowProjection::DrawGreatCircle(Canvas &canvas,
                       &distance,
                       &Bearing);
 
-      LatLon2Screen(tlon1,
+      LonLat2Screen(tlon1,
                     tlat1,
                     EndP);
 
@@ -688,10 +699,10 @@ void MapWindowProjection::DrawGreatCircle(Canvas &canvas,
 
   canvas.select(MapGfx.hpBearing);
   POINT pt[2];
-  LatLon2Screen(startLon,
+  LonLat2Screen(startLon,
                 startLat,
                 pt[0]);
-  LatLon2Screen(targetLon,
+  LonLat2Screen(targetLon,
                 targetLat,
                 pt[1]);
   canvas.clipped_polygon(pt, 2, rc, false);

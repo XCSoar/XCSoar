@@ -423,49 +423,42 @@ void MapWindow::ScanVisibilityWaypoints(rectObj *bounds_active) {
 
 
 void MapWindow::CalculateScreenPositionsWaypoints() {
-  unsigned int i;
+  unsigned int j;
+  int i;
   mutexTaskData.Lock();
 
   if (WayPointList) {
-    int index;
-    for (i=0; i<MAXTASKPOINTS; i++) {
-      index = Task[i].Index;
-      if (index>=0) {
-
-        LatLon2Screen(WayPointList[index].Longitude,
-                      WayPointList[index].Latitude,
-                      WayPointList[index].Screen);
-        WayPointList[index].Visible =
-          PointVisible(WayPointList[index].Screen);
+    for (j=0; j<MAXTASKPOINTS; j++) {
+      i = Task[j].Index;
+      if (i>=0) {
+	LonLat2Screen(WayPointList[i].Longitude, 
+		      WayPointList[i].Latitude,
+		      WayPointList[i].Screen);
+	WayPointList[i].Visible = PointVisible(WayPointList[i].Screen);
       }
     }
     if (EnableMultipleStartPoints) {
-      for(i=0;i<MAXSTARTPOINTS-1;i++) {
-        index = StartPoints[i].Index;
-        if (StartPoints[i].Active && (index>=0)) {
-
-          LatLon2Screen(WayPointList[index].Longitude,
-                        WayPointList[index].Latitude,
-                        WayPointList[index].Screen);
-          WayPointList[index].Visible =
-            PointVisible(WayPointList[index].Screen);
+      for(j=0;j<MAXSTARTPOINTS-1;j++) {
+        i = StartPoints[j].Index;
+        if (StartPoints[j].Active && (i>=0)) {
+	  LonLat2Screen(WayPointList[i].Longitude, 
+			WayPointList[i].Latitude,
+			WayPointList[i].Screen);
+	  WayPointList[i].Visible = PointVisible(WayPointList[i].Screen);
         }
       }
     }
-
     // only calculate screen coordinates for waypoints that are visible
-
-    for(i=0;i<NumberOfWayPoints;i++)
-      {
-        WayPointList[i].Visible = false;
-        if (!WayPointList[i].FarVisible) continue;
-        if(LonLatVisible(WayPointList[i].Longitude, WayPointList[i].Latitude) )
-          {
-            LatLon2Screen(WayPointList[i].Longitude, WayPointList[i].Latitude,
-                          WayPointList[i].Screen);
-            WayPointList[i].Visible = PointVisible(WayPointList[i].Screen);
-          }
+    for(i=0;i<NumberOfWayPoints;i++) {
+      if (!WayPointList[i].FarVisible) {
+	WayPointList[i].Visible = false;
+	continue;
+      } else {
+	WayPointList[i].Visible = LonLat2ScreenIfVisible(WayPointList[i].Longitude, 
+							 WayPointList[i].Latitude,
+							 &WayPointList[i].Screen);
       }
+    }
   }
   mutexTaskData.Unlock();
 }

@@ -162,11 +162,11 @@ void MapWindow::Event_PanCursor(int dx, int dy) {
   int Y= (MapRect.bottom+MapRect.top)/2;
   double Xstart, Ystart, Xnew, Ynew;
 
-  Screen2LatLon(X, Y, Xstart, Ystart);
+  Screen2LonLat(X, Y, Xstart, Ystart);
 
   X+= (MapRect.right-MapRect.left)*dx/4;
   Y+= (MapRect.bottom-MapRect.top)*dy/4;
-  Screen2LatLon(X, Y, Xnew, Ynew);
+  Screen2LonLat(X, Y, Xnew, Ynew);
 
   if (EnablePan) {
     PanLongitude += Xstart-Xnew;

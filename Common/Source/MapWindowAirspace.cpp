@@ -61,6 +61,7 @@ void MapWindow::CalculateScreenPositionsAirspaceCircle(AIRSPACE_CIRCLE &circ) {
       topalt = circ.Top.AGL + DerivedDrawInfo.TerrainAlt;
     }
     if(CheckAirspaceAltitude(basealt, topalt)) {
+
       if (msRectOverlap(&circ.bounds, &screenbounds_latlon)
           || msRectContained(&screenbounds_latlon, &circ.bounds)) {
 
@@ -71,7 +72,7 @@ void MapWindow::CalculateScreenPositionsAirspaceCircle(AIRSPACE_CIRCLE &circ) {
 	  circ.Visible = 1;
 	}
 
-        LatLon2Screen(circ.Longitude,
+        LonLat2Screen(circ.Longitude,
                       circ.Latitude,
                       circ.Screen);
         circ.ScreenR = DistanceMetersToScreen(circ.Radius);
@@ -104,7 +105,7 @@ void MapWindow::CalculateScreenPositionsAirspaceArea(AIRSPACE_AREA &area) {
         POINT* sp= AirspaceScreenPoint+area.FirstPoint;
         while (ap < ep) {
 	  // JMW optimise!
-            LatLon2Screen(ap->Longitude,
+            LonLat2Screen(ap->Longitude,
                           ap->Latitude,
                           *sp);
             ap++;

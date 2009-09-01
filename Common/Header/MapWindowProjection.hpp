@@ -55,12 +55,12 @@ class MapWindowProjection: public MapWindowData {
 
   // used by terrain renderer, topology and airspace
 
-  void    Screen2LatLon(const int &x, const int &y,
+  void    Screen2LonLat(const int &x, const int &y,
 			       double &X, double &Y);
 
-  void    LatLon2Screen(const double &lon, const double &lat,
+  void    LonLat2Screen(const double &lon, const double &lat,
 			       POINT &sc);
-  void    LatLon2Screen(pointObj *ptin, POINT *ptout,
+  void    LonLat2Screen(pointObj *ptin, POINT *ptout,
 			       const int n,
 			       const int skip);
 
@@ -73,7 +73,7 @@ class MapWindowProjection: public MapWindowData {
 
   double  GetScreenDistanceMeters(void);
 
-  double GetScreenScaleToLatLon() {
+  double GetScreenScaleToLonLat() {
     return InvDrawScale;
   }
   double GetMapScaleUser() { // Topology
@@ -111,6 +111,10 @@ class MapWindowProjection: public MapWindowData {
   bool LonLatVisible(const double &lon, const double &lat);
   bool PointInRect(const double &x, const double &y,
 		   const rectObj &bounds);
+
+  bool LonLat2ScreenIfVisible(const double &lon, const double &lat,
+			      POINT *sc);
+
   rectObj   screenbounds_latlon;
   RECT   MapRectSmall;
   RECT   MapRectBig;
@@ -157,7 +161,7 @@ class MapWindowProjection: public MapWindowData {
   double GetRequestedMapScale() {
     return _RequestedMapScale;
   }
-  double GetLatLonToScreenScale() {
+  double GetLonLatToScreenScale() {
     return DrawScale;
   }
   bool IsOriginCentered() {

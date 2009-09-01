@@ -106,7 +106,7 @@ void MapWindow::DrawFLARMTraffic(Canvas &canvas, RECT rc, POINT Orig_Aircraft) {
 
       // TODO feature: draw direction, rel height?
       POINT sc, sc_name, sc_av;
-      LatLon2Screen(target_lon,
+      LonLat2Screen(target_lon,
                     target_lat,
                     sc);
 
@@ -245,16 +245,9 @@ void MapWindow::DrawFLARMTraffic(Canvas &canvas, RECT rc, POINT Orig_Aircraft) {
 
 void MapWindow::DrawTeammate(Canvas &canvas, RECT rc)
 {
-  POINT point;
-
-  if (TeammateCodeValid)
-    {
-      if(LonLatVisible(TeammateLongitude, TeammateLatitude) )
-	{
-	  LatLon2Screen(TeammateLongitude, TeammateLatitude, point);
-
-	  draw_masked_bitmap(canvas, MapGfx.hBmpTeammatePosition,
-			     point.x, point.y, 20, 20);
-	}
-    }
+  if (TeammateCodeValid) {
+    draw_masked_bitmap_if_visible(canvas, MapGfx.hBmpTeammatePosition,
+				  TeammateLongitude, TeammateLatitude,
+				  20, 20);
+  }
 }

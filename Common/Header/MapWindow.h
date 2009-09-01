@@ -232,6 +232,13 @@ class MapWindow
   LabelBlock *getLabelBlock() {
     return &label_block;
   }
+  bool draw_masked_bitmap_if_visible(Canvas &canvas,
+				     Bitmap &bitmap,
+				     const double &lon,
+				     const double &lat,
+				     unsigned width,
+				     unsigned height,
+				     POINT *sc=NULL);
  protected:
   virtual bool on_create();
   virtual bool on_destroy();

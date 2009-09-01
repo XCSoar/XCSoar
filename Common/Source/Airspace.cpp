@@ -470,13 +470,13 @@ double ScreenCrossTrackError(double lon1, double lat1,
 			     MapWindowProjection &map_projection) {
   POINT p1, p2, p3, p4;
 
-  map_projection.LatLon2Screen(lon1, lat1, p1);
-  map_projection.LatLon2Screen(lon2, lat2, p2);
-  map_projection.LatLon2Screen(lon3, lat3, p3);
+  map_projection.LonLat2Screen(lon1, lat1, p1);
+  map_projection.LonLat2Screen(lon2, lat2, p2);
+  map_projection.LonLat2Screen(lon3, lat3, p3);
 
   ScreenClosestPoint(p1, p2, p3, &p4, 0);
 
-  map_projection.Screen2LatLon(p4.x, p4.y, *lon4, *lat4);
+  map_projection.Screen2LonLat(p4.x, p4.y, *lon4, *lat4);
 
   // compute accurate distance
   double tmpd;

@@ -80,11 +80,11 @@ void MapWindow::CalculateScreenPositions(POINT Orig, RECT rc,
         // aircraft is smaller than one third screen width
 
         POINT screen;
-        LatLon2Screen(PanLongitude,
+        LonLat2Screen(PanLongitude,
                       PanLatitude,
                       screen);
 
-        LatLon2Screen(DrawInfo.Longitude,
+        LonLat2Screen(DrawInfo.Longitude,
                       DrawInfo.Latitude,
                       *Orig_Aircraft);
 
@@ -107,7 +107,7 @@ void MapWindow::CalculateScreenPositions(POINT Orig, RECT rc,
     }
   }
 
-  LatLon2Screen(DrawInfo.Longitude,
+  LonLat2Screen(DrawInfo.Longitude,
                 DrawInfo.Latitude,
                 *Orig_Aircraft);
 

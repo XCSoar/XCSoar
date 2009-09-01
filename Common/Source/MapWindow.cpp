@@ -483,7 +483,7 @@ bool MapWindow::on_mouse_move(int x, int y)
     // sector
     if (TargetDrag_State == 1) {
       double mouseMovelon, mouseMovelat;
-      Screen2LatLon((int)x, (int)y, mouseMovelon, mouseMovelat);
+      Screen2LonLat((int)x, (int)y, mouseMovelon, mouseMovelat);
       if (InAATTurnSector(mouseMovelon, mouseMovelat, TargetPanIndex)) {
 	// update waypoints so if we drag out of the cylinder, it
 	// will remain adjacent to the edge
@@ -505,10 +505,10 @@ bool MapWindow::on_mouse_down(int x, int y)
   dwDownTime = GetTickCount();
   if (ignorenext) return true;
 
-  // TODO VNT move Screen2LatLon in LBUTTONUP after making sure we
+  // TODO VNT move Screen2LonLat in LBUTTONUP after making sure we
   // really need Xstart and Ystart so we save precious
   // milliseconds waiting for BUTTONUP GetTickCount
-  Screen2LatLon(x, y, Xstart, Ystart);
+  Screen2LonLat(x, y, Xstart, Ystart);
   XstartScreen = x;
   YstartScreen = y;
 
@@ -516,7 +516,7 @@ bool MapWindow::on_mouse_down(int x, int y)
   if (AATEnabled && TargetPan) {
     if (ValidTaskPoint(TargetPanIndex)) {
       POINT tscreen;
-      LatLon2Screen(Task[TargetPanIndex].AATTargetLon,
+      LonLat2Screen(Task[TargetPanIndex].AATTargetLon,
 		    Task[TargetPanIndex].AATTargetLat,
 		    tscreen);
       double distance = isqrt4((long)((XstartScreen-tscreen.x)
@@ -593,7 +593,7 @@ bool MapWindow::on_mouse_up(int x, int y)
   }
 
   double Xlat, Ylat;
-  Screen2LatLon(x, y, Xlat, Ylat);
+  Screen2LonLat(x, y, Xlat, Ylat);
 
   if (AATEnabled && my_target_pan && (TargetDrag_State>0)) {
     mutexTaskData.Lock();
@@ -704,4 +704,26 @@ DWORD MapWindow::DrawThread (LPVOID lpvoid)
 {
   MapWindow *mw = (MapWindow *)lpvoid;
   mw->_DrawThread();
+}
+
+
+//////////////////////////////
+
+
+bool MapWindow::draw_masked_bitmap_if_visible(Canvas &canvas,
+					      Bitmap &bitmap,
+					      const double &lon,
+					      const double &lat,
+					      unsigned width,
+					      unsigned height,
+					      POINT *scin)
+{
+  POINT sc;
+  POINT *scp = (scin!=NULL)? (scin):(&sc);
+
+  if (LonLat2ScreenIfVisible(lon, lat, scp)) {
+    draw_masked_bitmap(canvas, bitmap, scp->x, scp->y, width, height, true);
+    return true;
+  }
+  return false;
 }

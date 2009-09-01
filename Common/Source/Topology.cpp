@@ -278,19 +278,19 @@ void Topology::Paint(Canvas &canvas, MapWindow &m_window, const RECT rc) {
         ///////////////////////////////////////
       case(MS_SHAPE_POINT):{
 
-        if (checkVisible(*shape, screenRect))
+        if (checkVisible(*shape, screenRect)) {
           for (int tt = 0; tt < shape->numlines; tt++) {
 
             for (int jj=0; jj< shape->line[tt].numpoints; jj++) {
 
               POINT sc;
-              map_projection.LatLon2Screen(shape->line[tt].point[jj].x,
-                                       shape->line[tt].point[jj].y,
-                                       sc);
-	      m_window.draw_masked_bitmap(canvas, hBitmap, sc.x, sc.y, 10, 10, true);
-
-              cshape->renderSpecial(canvas, *label_block, sc.x, sc.y);
-
+	      if (m_window.draw_masked_bitmap_if_visible(canvas, hBitmap, 
+							 shape->line[tt].point[jj].x,
+							 shape->line[tt].point[jj].y,
+							 10, 10, &sc)) {
+		cshape->renderSpecial(canvas, *label_block, sc.x, sc.y);
+	      }
+	    }
           }
         }
 
@@ -305,7 +305,7 @@ void Topology::Paint(Canvas &canvas, MapWindow &m_window, const RECT rc) {
           int miny = rc.bottom;
           int msize = min(shape->line[tt].numpoints, MAXCLIPPOLYGON);
 
-	  map_projection.LatLon2Screen(shape->line[tt].point,
+	  map_projection.LonLat2Screen(shape->line[tt].point,
 				       pt, msize, 1);
           for (int jj=0; jj< msize; jj++) {
             if (pt[jj].x<=minx) {
@@ -328,7 +328,7 @@ void Topology::Paint(Canvas &canvas, MapWindow &m_window, const RECT rc) {
           int miny = rc.bottom;
           int msize = min(shape->line[tt].numpoints/iskip, MAXCLIPPOLYGON);
 
-	  map_projection.LatLon2Screen(shape->line[tt].point,
+	  map_projection.LonLat2Screen(shape->line[tt].point,
 				       pt, msize*iskip, iskip);
 
           for (int jj=0; jj< msize; jj++) {

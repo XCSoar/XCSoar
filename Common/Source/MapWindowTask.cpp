@@ -237,10 +237,10 @@ void MapWindow::DrawTask(Canvas &canvas, RECT rc, const POINT &Orig_Aircraft)
 	double bearing = Task[i].OutBound;
 	POINT sct1, sct2;
 	if (AATEnabled && !TargetPan) {
-	  LatLon2Screen(Task[i].AATTargetLon,
+	  LonLat2Screen(Task[i].AATTargetLon,
 			Task[i].AATTargetLat,
 			sct1);
-	  LatLon2Screen(Task[i+1].AATTargetLon,
+	  LonLat2Screen(Task[i+1].AATTargetLon,
 			Task[i+1].AATTargetLat,
 			sct2);
 	  DistanceBearing(Task[i].AATTargetLat,
@@ -446,13 +446,12 @@ void MapWindow::DrawBearing(Canvas &canvas, const RECT rc, int bBearingValid)
     mutexTaskData.Lock();
     for (int i=ActiveWayPoint; i<MAXTASKPOINTS; i++) {
       // RLD skip invalid targets and targets at start and finish
-      if(ValidTaskPoint(i) && ValidTaskPoint(i+1) && i > 0) {
+      if((i>0) && ValidTaskPoint(i) && ValidTaskPoint(i+1)) {
         if (i>= ActiveWayPoint) {
-          POINT sct;
-          LatLon2Screen(Task[i].AATTargetLon,
-                        Task[i].AATTargetLat,
-                        sct);
-	  draw_masked_bitmap(canvas, MapGfx.hBmpTarget, sct.x, sct.y, 10, 10, true);
+	  draw_masked_bitmap_if_visible(canvas, MapGfx.hBmpTarget, 
+					Task[i].AATTargetLon,
+					Task[i].AATTargetLat, 
+					10, 10);
         }
       }
     }
@@ -530,7 +529,7 @@ void MapWindow::DrawOffTrackIndicator(Canvas &canvas, const RECT rc) {
       _stprintf(Buffer, TEXT("%d"), idist);
       POINT sc;
       RECT brect;
-      LatLon2Screen(dLon, dLat, sc);
+      LonLat2Screen(dLon, dLat, sc);
       SIZE tsize = canvas.text_size(Buffer);
 
       brect.left = sc.x-4;
@@ -605,8 +604,8 @@ MapWindow::DrawProjectedTrack(Canvas &canvas, const RECT rc, const POINT Orig)
     FindLatitudeLongitude(startLat, startLon,
 			  bearing, fhigh*screen_range,
 			  &p2Lat, &p2Lon);
-    LatLon2Screen(p1Lon, p1Lat, pt[0]);
-    LatLon2Screen(p2Lon, p2Lat, pt[1]);
+    LonLat2Screen(p1Lon, p1Lat, pt[0]);
+    LonLat2Screen(p2Lon, p2Lat, pt[1]);
   } else if (fabs(bearing-DerivedDrawInfo.WaypointBearing)<10) {
     // too small an error to bother
     return;
@@ -628,9 +627,9 @@ void MapWindow::CalculateScreenPositionsTask() {
   if (EnableMultipleStartPoints) {
     for(i=0;i<MAXSTARTPOINTS-1;i++) {
       if (StartPoints[i].Active && ValidWayPoint(StartPoints[i].Index)) {
-        LatLon2Screen(StartPoints[i].SectorEndLon,
+        LonLat2Screen(StartPoints[i].SectorEndLon,
                       StartPoints[i].SectorEndLat, StartPoints[i].End);
-        LatLon2Screen(StartPoints[i].SectorStartLon,
+        LonLat2Screen(StartPoints[i].SectorStartLon,
                       StartPoints[i].SectorStartLat, StartPoints[i].Start);
       }
     }
@@ -641,32 +640,32 @@ void MapWindow::CalculateScreenPositionsTask() {
     bool this_valid = ValidTaskPoint(i);
     bool next_valid = ValidTaskPoint(i+1);
     if (AATEnabled && this_valid) {
-      LatLon2Screen(Task[i].AATTargetLon, Task[i].AATTargetLat,
+      LonLat2Screen(Task[i].AATTargetLon, Task[i].AATTargetLat,
                     Task[i].Target);
     }
 
     if(this_valid && !next_valid)
     {
       // finish
-      LatLon2Screen(Task[i].SectorEndLon, Task[i].SectorEndLat, Task[i].End);
-      LatLon2Screen(Task[i].SectorStartLon, Task[i].SectorStartLat, Task[i].Start);
+      LonLat2Screen(Task[i].SectorEndLon, Task[i].SectorEndLat, Task[i].End);
+      LonLat2Screen(Task[i].SectorStartLon, Task[i].SectorStartLat, Task[i].Start);
     }
     if(this_valid && next_valid)
     {
-      LatLon2Screen(Task[i].SectorEndLon, Task[i].SectorEndLat, Task[i].End);
-      LatLon2Screen(Task[i].SectorStartLon, Task[i].SectorStartLat, Task[i].Start);
+      LonLat2Screen(Task[i].SectorEndLon, Task[i].SectorEndLat, Task[i].End);
+      LonLat2Screen(Task[i].SectorStartLon, Task[i].SectorStartLat, Task[i].Start);
 
       if((AATEnabled) && (Task[i].AATType == SECTOR))
       {
-        LatLon2Screen(Task[i].AATStartLon, Task[i].AATStartLat, Task[i].AATStart);
-        LatLon2Screen(Task[i].AATFinishLon, Task[i].AATFinishLat, Task[i].AATFinish);
+        LonLat2Screen(Task[i].AATStartLon, Task[i].AATStartLat, Task[i].AATStart);
+        LonLat2Screen(Task[i].AATFinishLon, Task[i].AATFinishLat, Task[i].AATFinish);
       }
       if (AATEnabled && (((int)i==ActiveWayPoint) ||
 			 (TargetPan && ((int)i==TargetPanIndex)))) {
 
 	for (int j=0; j<MAXISOLINES; j++) {
 	  if (TaskStats[i].IsoLine_valid[j]) {
-	    LatLon2Screen(TaskStats[i].IsoLine_Longitude[j],
+	    LonLat2Screen(TaskStats[i].IsoLine_Longitude[j],
 			  TaskStats[i].IsoLine_Latitude[j],
 			  TaskStats[i].IsoLine_Screen[j]);
 	  }
