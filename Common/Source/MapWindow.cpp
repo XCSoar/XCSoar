@@ -293,7 +293,6 @@ void MapWindow::UpdateCaches(const bool force) {
 
 
 void MapWindow::DrawThreadLoop(bool first_time) {
-
   if (!dirtyEvent.test() && !first_time) {
     // redraw old screen, must have been a request for fast refresh
     get_canvas().copy(draw_canvas);
@@ -444,9 +443,8 @@ bool MapWindow::on_create()
 
   draw_canvas.set(get_canvas());
   buffer_canvas.set(get_canvas());
-  mask_canvas.set(get_canvas());
-
-  return false;
+  mask_canvas.set(draw_canvas);
+  return true;
 }
 
 bool MapWindow::on_destroy()
@@ -456,7 +454,7 @@ bool MapWindow::on_destroy()
   buffer_canvas.reset();
 
   PostQuitMessage (0);
-  return false;
+  return true;
 }
 
 ///////
@@ -466,7 +464,7 @@ static int XstartScreen, YstartScreen;
 static bool ignorenext=true;
 static DWORD dwDownTime= 0L, dwUpTime= 0L, dwInterval= 0L;
 
-bool MapWindow::on_mouse_double(unsigned x, unsigned y)
+bool MapWindow::on_mouse_double(int x, int y)
 {
   // Added by ARH to show menu button when mapwindow is double clicked.
   //
@@ -482,7 +480,7 @@ bool MapWindow::on_mouse_double(unsigned x, unsigned y)
   return true;
 }
 
-bool MapWindow::on_mouse_move(unsigned x, unsigned y)
+bool MapWindow::on_mouse_move(int x, int y)
 {
   mutexTaskData.Lock();
   if (AATEnabled && TargetPan && (TargetDrag_State>0)) {
@@ -507,7 +505,7 @@ bool MapWindow::on_mouse_move(unsigned x, unsigned y)
   return true;
 }
 
-bool MapWindow::on_mouse_down(unsigned x, unsigned y)
+bool MapWindow::on_mouse_down(int x, int y)
 {
   ResetDisplayTimeOut();
   dwDownTime = GetTickCount();
@@ -545,7 +543,7 @@ bool MapWindow::on_mouse_down(unsigned x, unsigned y)
 
 
 
-bool MapWindow::on_mouse_up(unsigned x, unsigned y)
+bool MapWindow::on_mouse_up(int x, int y)
 {
   if (ignorenext||dwDownTime==0) {
     ignorenext=false;
@@ -709,7 +707,8 @@ void MapWindow::on_paint(Canvas& _canvas) {
 
 DWORD MapWindow::DrawThread (LPVOID lpvoid)
 {
-  map_window._DrawThread();
+  MapWindow *mw = (MapWindow *)lpvoid;
+  mw->_DrawThread();
 }
 
 

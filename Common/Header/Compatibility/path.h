@@ -35,49 +35,19 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_MAIN_WINDOW_HXX
-#define XCSOAR_SCREEN_MAIN_WINDOW_HXX
+#ifndef XCSOAR_COMPATIBILITY_PATH_H
+#define XCSOAR_COMPATIBILITY_PATH_H
 
-#include "Screen/ContainerWindow.hpp"
+#if defined(_WIN32) && !defined(__WINE__)
 
-/**
- * The main window of the application.
- */
-class MainWindow : public ContainerWindow {
-public:
-  MainWindow():_timer_id(0) {};
+#define DIR_SEPARATOR '\\'
+#define DIR_SEPARATOR_S "\\"
 
-  bool find(LPCTSTR cls, LPCTSTR text);
+#else /* !_WIN32 */
 
-  void set(LPCTSTR cls, LPCTSTR text,
-           int left, int top, unsigned width, unsigned height);
+#define DIR_SEPARATOR '/'
+#define DIR_SEPARATOR_S "/"
 
-  void full_screen();
-
-  void update() {
-    ::UpdateWindow(hWnd);
-  }
-
-  void close() {
-    ::SendMessage(hWnd, WM_CLOSE, 0, 0);
-  }
-
-  bool register_class(HINSTANCE hInstance, const TCHAR* szWindowClass);
-
-protected:
-  virtual LRESULT on_message(HWND _hWnd, UINT message,
-                             WPARAM wParam, LPARAM lParam);
-
-  LRESULT on_colour(HDC hdc, int wdata);
-  int _timer_id;
-  virtual bool on_command(HWND hWnd, unsigned id, unsigned code);
-  bool on_timer();
-  bool on_create();
-  bool on_key_down(unsigned key_code);
-  bool on_destroy();
-  bool on_close();
-public:
-  void install_timer();
-};
+#endif /* !_WIN32 */
 
 #endif

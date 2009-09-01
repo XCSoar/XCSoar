@@ -1354,7 +1354,7 @@ void WndButton::Destroy(void){
 
 
 bool
-WndButton::on_mouse_up(unsigned x, unsigned y)
+WndButton::on_mouse_up(int x, int y)
 {
   POINT Pos;
 
@@ -1433,7 +1433,7 @@ WndButton::on_key_up(unsigned key_code)
 }
 
 bool
-WndButton::on_mouse_down(unsigned x, unsigned y)
+WndButton::on_mouse_down(int x, int y)
 {
   (void)x; (void)y;
   mDown = true;
@@ -1448,7 +1448,7 @@ WndButton::on_mouse_down(unsigned x, unsigned y)
 };
 
 bool
-WndButton::on_mouse_double(unsigned x, unsigned y)
+WndButton::on_mouse_double(int x, int y)
 {
   (void)x; (void)y;
   mDown = true;
@@ -1877,7 +1877,7 @@ WndProperty::on_key_down(unsigned key_code)
 };
 
 bool
-WndProperty::on_mouse_down(unsigned x, unsigned y)
+WndProperty::on_mouse_down(int x, int y)
 {
   POINT Pos;
 
@@ -1926,13 +1926,13 @@ WndProperty::on_mouse_down(unsigned x, unsigned y)
 };
 
 bool
-WndProperty::on_mouse_double(unsigned x, unsigned y)
+WndProperty::on_mouse_double(int x, int y)
 {
   return on_mouse_down(x, y);
 }
 
 bool
-WndProperty::on_mouse_up(unsigned x, unsigned y)
+WndProperty::on_mouse_up(int x, int y)
 {
   if (mDialogStyle)
   {
@@ -2717,7 +2717,7 @@ int WndListFrame::PrepareItemDraw(void){
 }
 
 bool
-WndListFrame::on_mouse_up(unsigned x, unsigned y)
+WndListFrame::on_mouse_up(int x, int y)
 {
     mMouseDown=false;
     return false;
@@ -2727,7 +2727,7 @@ static bool isselect = false;
 
 // JMW needed to support mouse/touchscreen
 bool
-WndFrame::on_mouse_down(unsigned xPos, unsigned yPos)
+WndFrame::on_mouse_down(int xPos, int yPos)
 {
   if (mIsListItem && GetOwner()!=NULL) {
 
@@ -2803,7 +2803,7 @@ void WndListFrame::SelectItemFromScreen(int xPos, int yPos,
 
 
 bool
-WndListFrame::on_mouse_move(unsigned x, unsigned y, unsigned keys)
+WndListFrame::on_mouse_move(int x, int y, unsigned keys)
 {
   static bool bMoving = false;
 
@@ -2840,7 +2840,7 @@ WndListFrame::on_mouse_move(unsigned x, unsigned y, unsigned keys)
 }
 
 bool
-WndListFrame::on_mouse_down(unsigned x, unsigned y)
+WndListFrame::on_mouse_down(int x, int y)
 {
   POINT Pos;
   Pos.x = x;

@@ -38,6 +38,8 @@ Copyright_License {
 #include "LocalPath.hpp"
 #include "XCSoar.h"
 #include "Appearance.hpp"
+#include "Compatibility/path.h"
+
 #include <stdio.h>
 
 // Get local My Documents path - optionally include file to add and location
@@ -81,14 +83,21 @@ CSIDL_PROGRAM_FILES 0x0026   The program files folder.
 // VENTA2 FIX PC BUG
 #elif defined (FIVV) && (!defined(WINDOWSPC) || (WINDOWSPC <=0) )
   _stprintf(buffer,TEXT("%s%S"),gmfpathname(), XCSDATADIR );
+#elif !defined(_WIN32) || defined(__WINE__)
+  /* on Unix or WINE, use ~/.xcsoar */
+  const char *home = getenv("HOME");
+  if (home != NULL)
+    _stprintf(buffer, _T("%s/.xcsoar"), home);
+  else
+    _tcscat(buffer, _T("/etc/xcsoar"));
 #else
   // everything else that's not special
   SHGetSpecialFolderPath(NULL, buffer, loc, false);
-  _tcscat(buffer,TEXT("\\"));
+  _tcscat(buffer, _T(DIR_SEPARATOR_S));
   _tcscat(buffer,TEXT(XCSDATADIR));
 #endif
   if (_tcslen(file)>0) {
-    _tcsncat(buffer, TEXT("\\"), MAX_PATH);
+    _tcsncat(buffer, _T(DIR_SEPARATOR_S), MAX_PATH);
     _tcsncat(buffer, file, MAX_PATH);
   }
 }

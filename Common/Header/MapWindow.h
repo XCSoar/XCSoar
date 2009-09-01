@@ -242,10 +242,10 @@ class MapWindow
   virtual bool on_create();
   virtual bool on_destroy();
   virtual bool on_resize(unsigned width, unsigned height);
-  virtual bool on_mouse_double(unsigned x, unsigned y);
-  virtual bool on_mouse_move(unsigned x, unsigned y);
-  virtual bool on_mouse_down(unsigned x, unsigned y);
-  virtual bool on_mouse_up(unsigned x, unsigned y);
+  virtual bool on_mouse_double(int x, int y);
+  virtual bool on_mouse_move(int x, int y);
+  virtual bool on_mouse_down(int x, int y);
+  virtual bool on_mouse_up(int x, int y);
   virtual bool on_key_down(unsigned key_code);
   virtual LRESULT on_message(HWND hWnd, UINT message,
 			     WPARAM wParam, LPARAM lParam);

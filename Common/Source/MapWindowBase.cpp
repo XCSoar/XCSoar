@@ -59,7 +59,7 @@ void MapWindowBase::CreateDrawingThread(void)
   hDrawThread = CreateThread (NULL, 0,
                               (LPTHREAD_START_ROUTINE )
 			      MapWindow::DrawThread,
-                              0, 0, &dwDrawThreadID);
+                              (MapWindow *)this, 0, &dwDrawThreadID);
   SetThreadPriority(hDrawThread,THREAD_PRIORITY_NORMAL);
 }
 
