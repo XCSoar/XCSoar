@@ -151,11 +151,11 @@ OnAirspacePaintListItem(WindowControl *Sender, Canvas &canvas)
       isdisplay = ((iAirspaceMode[i]%2)>0);
       if (iswarn) {
         _tcscpy(label, gettext(TEXT("Warn")));
-        canvas.text_opaque(w0-w1-w2, 2*InfoBoxLayout::scale, NULL, label);
+        canvas.text_opaque(w0-w1-w2, 2*InfoBoxLayout::scale, label);
       }
       if (isdisplay) {
         _tcscpy(label, gettext(TEXT("Display")));
-        canvas.text_opaque(w0-w2, 2*InfoBoxLayout::scale, NULL, label);
+        canvas.text_opaque(w0-w2, 2*InfoBoxLayout::scale, label);
       }
 
     }

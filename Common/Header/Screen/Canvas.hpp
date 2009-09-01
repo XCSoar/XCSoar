@@ -250,6 +250,10 @@ public:
 
   void text(int x, int y, const TCHAR *text);
   void text_opaque(int x, int y, const RECT* lprc, const TCHAR *text);
+  void text_opaque(int x, int y, const TCHAR *text) {
+    text_opaque(x, y, NULL, text);
+  }
+
   void text_clipped(int x, int y, const RECT &rc, const TCHAR *text);
   void text_clipped(int x, int y, unsigned width, const TCHAR *text);
 

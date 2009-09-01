@@ -222,7 +222,7 @@ void Chart::DrawLabel(const TCHAR *text,
   int x = (int)((xv-x_min)*xscale)+rc.left-tsize.cx/2+BORDER_X;
   int y = (int)((y_max-yv)*yscale)+rc.top-tsize.cy/2;
   canvas.background_opaque();
-  canvas.text_opaque(x, y, NULL, text);
+  canvas.text_opaque(x, y, text);
   canvas.background_transparent();
 }
 
@@ -236,7 +236,7 @@ void Chart::DrawNoData() {
   int x = (int)(rc.left+rc.right-tsize.cx)/2;
   int y = (int)(rc.top+rc.bottom-tsize.cy)/2;
   canvas.background_opaque();
-  canvas.text_opaque(x, y, NULL, text);
+  canvas.text_opaque(x, y, text);
   canvas.background_transparent();
 }
 
@@ -247,7 +247,7 @@ void Chart::DrawXLabel(const TCHAR *text) {
   GetTextExtentPoint(canvas, text, _tcslen(text), &tsize);
   int x = rc.right-tsize.cx-IBLSCALE(3);
   int y = rc.bottom-tsize.cy;
-  canvas.text_opaque(x, y, NULL, text);
+  canvas.text_opaque(x, y, text);
 }
 
 
@@ -257,7 +257,7 @@ void Chart::DrawYLabel(const TCHAR *text) {
   GetTextExtentPoint(canvas, text, _tcslen(text), &tsize);
   int x = max(2,rc.left-tsize.cx);
   int y = rc.top;
-  canvas.text_opaque(x, y, NULL, text);
+  canvas.text_opaque(x, y, text);
 }
 
 
@@ -447,7 +447,7 @@ void Chart::DrawXGrid(const double tic_step,
 	TCHAR unit_text[MAX_PATH];
 	FormatTicText(unit_text, xval*unit_step/tic_step, unit_step);
 	canvas.background_opaque();
-	canvas.text_opaque(xmin, ymax-IBLSCALE(17), NULL, unit_text);
+        canvas.text_opaque(xmin, ymax - IBLSCALE(17), unit_text);
 	canvas.background_transparent();
       }
     }
@@ -476,7 +476,7 @@ void Chart::DrawXGrid(const double tic_step,
 	TCHAR unit_text[MAX_PATH];
 	FormatTicText(unit_text, xval*unit_step/tic_step, unit_step);
 	canvas.background_opaque();
-	canvas.text_opaque(xmin, ymax-IBLSCALE(17), NULL, unit_text);
+        canvas.text_opaque(xmin, ymax - IBLSCALE(17), unit_text);
 	canvas.background_transparent();
       }
     }
@@ -517,7 +517,7 @@ void Chart::DrawYGrid(const double tic_step,
 	TCHAR unit_text[MAX_PATH];
 	FormatTicText(unit_text, yval*unit_step/tic_step, unit_step);
 	canvas.background_opaque();
-	canvas.text_opaque(xmin+IBLSCALE(8), ymin, NULL, unit_text);
+        canvas.text_opaque(xmin + IBLSCALE(8), ymin, unit_text);
 	canvas.background_transparent();
       }
     }
@@ -544,7 +544,7 @@ void Chart::DrawYGrid(const double tic_step,
 	TCHAR unit_text[MAX_PATH];
 	FormatTicText(unit_text, yval*unit_step/tic_step, unit_step);
 	canvas.background_opaque();
-	canvas.text_opaque(xmin+IBLSCALE(8), ymin, NULL, unit_text);
+        canvas.text_opaque(xmin + IBLSCALE(8), ymin, unit_text);
 	canvas.background_transparent();
       }
     }

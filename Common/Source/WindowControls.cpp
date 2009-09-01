@@ -2020,7 +2020,7 @@ WndProperty::on_paint(Canvas &canvas)
 
   // JMW TODO: use stretch functions for bigger displays, since these icons are too small for them.
 
-  canvas.text_opaque(org.x, org.y, NULL, mCaption);
+  canvas.text_opaque(org.x, org.y, mCaption);
 
     if (mDialogStyle) // can't but dlgComboPicker here b/c it calls paint when combopicker closes too
     {     // so it calls dlgCombopicker on the click/focus handlers for the wndproperty & label
