@@ -56,8 +56,6 @@ Copyright_License {
 
 #include <assert.h>
 
-extern void DrawJPG(HDC hdc, RECT rc);
-
 #ifndef CECORE
 #ifndef GNAV
 #include "Screen/VOIMAGE.h"
