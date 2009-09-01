@@ -227,8 +227,10 @@ bool MainWindow::on_key_down(unsigned key_code) {
 }
 
 bool MainWindow::on_destroy(void) {
+  PaintWindow::on_destroy();
+
   PostQuitMessage(0);
-  return false;
+  return true;
 }
 
 bool MainWindow::on_close() {
