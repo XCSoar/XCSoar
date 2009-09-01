@@ -47,7 +47,6 @@ Copyright_License {
 
 #include <commctrl.h>
 #if (WINDOWSPC<1)
-#include <sipapi.h>
 #if !defined(CECORE) || UNDER_CE >= 300 || _WIN32_WCE >= 0x0300
 #include <aygshell.h>
 #endif
