@@ -145,7 +145,6 @@ static void OnAnalysisPaint(WindowControl *Sender, Canvas &canvas)
 static void Update(void){
   TCHAR sTmp[1000];
   //  WndProperty *wp;
-  int dt=1;
   double d=0;
 
   ScopeLock protect(mutexGlideComputer);
@@ -336,7 +335,7 @@ static void Update(void){
     wf->SetCaption(sTmp);
 
     TCHAR sFinished[20];
-    double score;
+    double dt, score;
     bool olcvalid; 
     bool olcfinished;
 
@@ -354,7 +353,7 @@ static void Update(void){
 
     if (olcvalid) {
       TCHAR timetext1[100];
-      Units::TimeToText(timetext1, dt);
+      Units::TimeToText(timetext1, (int)dt);
       if (InfoBoxLayout::landscape) {
         _stprintf(sTmp,
                   TEXT("%s\r\n%s:\r\n  %5.0f %s\r\n%s: %s\r\n%s: %3.0f %s\r\n%s: %.2f\r\n"),
