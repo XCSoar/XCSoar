@@ -44,6 +44,7 @@ Copyright_License {
 #include "Battery.h"
 #include "Dialogs.h"
 #include "LogFile.hpp"
+#include "Message.h"
 
 // GDI Escapes for ExtEscape()
 #define QUERYESCSUPPORT    8
@@ -140,7 +141,7 @@ void BlankDisplay(bool doblank) {
             if ((LocalWarningTime - BatteryWarningTime) > BATTERY_REMINDER) {
               BatteryWarningTime = LocalWarningTime;
               // TODO feature: Show the user what the batt status is.
-              DoStatusMessage(TEXT("Organiser Battery Low"));
+              Message::AddMessage(TEXT("Organiser Battery Low"));
             }
           } else {
             BatteryWarningTime = 0;
