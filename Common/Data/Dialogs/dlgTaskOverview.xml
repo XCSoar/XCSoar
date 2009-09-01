@@ -9,8 +9,6 @@
 
 <WndForm Name="frmTaskOverview" Type="Dialog" X=0 Y=0 Width=320 Height=240 Caption="Task Overview" Font=2  BackColor=0xDADBAB>
 
-  <WndFrame X=0 Y=0 Width=100 Height=20 Font=2 />
-
   <WndButton   Name="cmdClose" Caption="Close"    X=2 Y=2 Width=98  Height=22 Font=2 OnClickNotify="OnCloseClicked"/>
 
   <WndProperty Name="prpAATEst" Caption="ETE" X=2 Y=-1  Width=98 Height=22 CaptionWidth=35 Font=2 ReadOnly=1 min=0 max=600 step=10>

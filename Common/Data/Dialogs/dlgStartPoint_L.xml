@@ -9,8 +9,6 @@
 
 <WndForm Name="frmStartPoint" Type="Dialog" X=0 Y=0 Width=240 Height=320 Caption="Alternate Start Points" Font=2  BackColor=0xDADBAB>
 
-  <WndFrame X=0 Y=0 Width=0 Height=10 Font=2 />
-
   <WndButton   Name="cmdClose" Caption="Close"    X=2 Y=240 Width=98  Height=22 Font=2 OnClickNotify="OnCloseClicked"/>
 
   <WndButton   Name="cmdClear" Caption="Clear"    X=2 Y=-1 Width=98  Height=22 Font=2 OnClickNotify="OnClearClicked"/>

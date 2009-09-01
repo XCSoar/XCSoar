@@ -9,7 +9,6 @@
 
 <WndForm Name="frmTaskWaypoint" Type="Dialog" X=0 Y=0 Width=240 Height=320 Caption="Waypoint" Font=2  BackColor=0xDADBAB>
 
-  <WndFrame X=0 Y=0 Width=75 Height=20 Font=2 />
   <WndButton   Caption="Close"    X=2 Y=0 Width=70  Height=22 Font=2 OnClickNotify="OnCloseClicked"/>
   <WndButton  Name="butSelect"   Caption="Select"    X=2 Y=25 Width=70  Height=22 Font=2 OnClickNotify="OnSelectClicked"/>
   <WndButton  Name="butRemove" Caption="Remove"    X=2 Y=50 Width=70  Height=22 Font=2 OnClickNotify="OnRemoveClicked"/>
