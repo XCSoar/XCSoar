@@ -38,15 +38,12 @@ Copyright_License {
 #include "Screen/MainWindow.hpp"
 #include "resource.h"
 
-#ifndef CECORE
-#include <aygshell.h>
-#endif
-
 #if (((UNDER_CE >= 300)||(_WIN32_WCE >= 0x0300)) && (WINDOWSPC<1))
 #define HAVE_ACTIVATE_INFO
 #endif
 
 #ifdef HAVE_ACTIVATE_INFO
+#include <aygshell.h>
 static SHACTIVATEINFO s_sai;
 #endif
 
