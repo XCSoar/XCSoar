@@ -45,7 +45,7 @@ Copyright_License {
 
 bool LockSettingsInFlight = true;
 
-Mutex mutexInterfaceTimeout;
+static Mutex mutexInterfaceTimeout;
 
 static int interface_timeout;
 

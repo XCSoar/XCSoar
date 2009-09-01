@@ -72,7 +72,7 @@ bool GlidePolar::AbortSafetyUseCurrent = false;
 
 static int iSAFETYSPEED=0;
 
-Mutex mutexGlidePolar;
+static Mutex mutexGlidePolar;
 
 //Flight Data Globals
 double        GlidePolar::MACCREADY = 0; // JMW now in SI units (m/s) for consistency
