@@ -1745,8 +1745,8 @@ int WndProperty::WndProcEditControl(HWND hwnd, UINT uMsg,
         return(0);
         // return(1);
       }
-      if (!OnEditKeyDown(wParam, lParam))
-        return(1);
+      if (OnEditKeyDown(wParam))
+        return 0;
     break;
 
     case WM_KEYUP:
@@ -1847,18 +1847,19 @@ bool WndProperty::SetFocused(bool Value, HWND FromTo){
   return(0);
 }
 
-int WndProperty::OnEditKeyDown(WPARAM wParam, LPARAM lParam){
-  (void)lParam;
-  switch (wParam){
+bool
+WndProperty::OnEditKeyDown(unsigned key_code)
+{
+  switch (key_code){
     case VK_RIGHT:
       IncValue();
-    return(0);
+      return true;
     case VK_LEFT:
       DecValue();
-    return(0);
+      return true;
   }
 
-  return(1);
+  return false;
 }
 
 bool

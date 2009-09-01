@@ -579,7 +579,7 @@ class WndProperty:public WindowControl{
     const Font *SetFont(const Font &font);
 
     virtual bool on_key_down(unsigned key_code);
-    int OnEditKeyDown(WPARAM wParam, LPARAM lParam);
+    bool OnEditKeyDown(unsigned key_code);
     virtual bool on_mouse_down(int x, int y);
     virtual bool on_mouse_up(int x, int y);
     virtual bool on_mouse_double(int x, int y);
