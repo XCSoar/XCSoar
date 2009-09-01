@@ -387,7 +387,6 @@ DWORD MapWindow::_DrawThread ()
     drawTriggerEvent.wait(5000);
   } while (!closeTriggerEvent.test());
 
-  mutexStart.Unlock(); // release lock
   return 0;
 }
 
@@ -431,10 +430,6 @@ bool MapWindow::on_resize(unsigned width, unsigned height) {
 
   SetFontInfoAll(get_canvas());
 
-  // Signal that draw thread can run now
-  mutexStart.Lock();
-  window_initialised = true;
-  mutexStart.Unlock(); // release lock
   return true;
 }
 
