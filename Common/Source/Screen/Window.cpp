@@ -279,13 +279,21 @@ Window::on_message(HWND _hWnd, UINT message,
 LRESULT CALLBACK
 Window::WndProc(HWND _hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
+  enum {
+#if WINDOWSPC > 0
+    WM_VERY_FIRST = WM_NCCREATE,
+#else
+    WM_VERY_FIRST = WM_CREATE,
+#endif
+  };
+
   if (message == WM_GETMINMAXINFO)
     /* WM_GETMINMAXINFO is called before WM_CREATE, and we havn't set
        a Window pointer yet - let DefWindowProc() handle it */
     return ::DefWindowProc(_hWnd, message, wParam, lParam);
 
   Window *window;
-  if (message == WM_NCCREATE) {
+  if (message == WM_VERY_FIRST) {
     LPCREATESTRUCT cs = (LPCREATESTRUCT)lParam;
 
     window = (Window *)cs->lpCreateParams;
