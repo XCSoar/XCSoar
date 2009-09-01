@@ -371,10 +371,8 @@ void MapWindow::DrawThreadInitialise(void) {
 
 DWORD MapWindow::_DrawThread ()
 {
-  while (!globalRunningEvent.test()) {
-    // wait for start
-    Sleep(100);
-  }
+  // wait for start
+  globalRunningEvent.wait();
 
   DrawThreadInitialise();
 

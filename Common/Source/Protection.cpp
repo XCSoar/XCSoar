@@ -110,10 +110,8 @@ DWORD InstrumentThread (LPVOID lpvoid) {
 
   while (!closeTriggerEvent.test()) {
 
-    if (!varioTriggerEvent.test()) {
-      Sleep(100);
+    if (!varioTriggerEvent.wait(100))
       continue;
-    }
 
     if (map_window.IsDisplayRunning()) {
       if (EnableVarioGauge) {
@@ -143,10 +141,8 @@ DWORD CalculationThread (LPVOID lpvoid) {
 
   while (!closeTriggerEvent.test()) {
 
-    if (!dataTriggerEvent.test()) {
-      Sleep(100);
+    if (!dataTriggerEvent.wait(100))
       continue;
-    }
 
     // set timer to determine latency (including calculations)
     if (gpsUpdatedTriggerEvent.test()) {
