@@ -54,8 +54,8 @@ public:
    *
    * @param name an application specific name for this trigger
    */
-  Trigger(LPCTSTR name)
-    :handle(::CreateEvent(NULL, true, false, name)) {}
+  Trigger(LPCTSTR name, bool manual_reset = true)
+    :handle(::CreateEvent(NULL, manual_reset, false, name)) {}
   ~Trigger() {
     ::CloseHandle(handle);
   }
@@ -72,7 +72,6 @@ public:
   bool wait(unsigned timeout_ms) {
     if (::WaitForSingleObject(handle, timeout_ms) != WAIT_OBJECT_0)
       return false;
-    ::ResetEvent(handle);
     return true;
   }
 

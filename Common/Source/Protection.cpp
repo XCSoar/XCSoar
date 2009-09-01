@@ -55,7 +55,7 @@ static Trigger gpsUpdatedTriggerEvent(TEXT("gpsUpdatedTriggerEvent"));
 static Trigger dataTriggerEvent(TEXT("dataTriggerEvent"));
 static Trigger varioTriggerEvent(TEXT("varioTriggerEvent"));
 Trigger closeTriggerEvent(TEXT("mapCloseEvent"));
-Trigger drawTriggerEvent(TEXT("drawTriggerEvent"));
+Trigger drawTriggerEvent(TEXT("drawTriggerEvent"), false);
 Trigger globalRunningEvent(TEXT("globalRunning"));
 Trigger airspaceWarningEvent(TEXT("airspaceWarning"));
 
