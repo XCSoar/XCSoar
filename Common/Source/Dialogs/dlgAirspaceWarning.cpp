@@ -115,7 +115,6 @@ static void OnEnableClicked(WindowControl * Sender){
 static void OnCloseClicked(WindowControl * Sender){
 	(void)Sender;
   wf->SetVisible(false);
-  drawTriggerEvent.trigger();
 //  SetFocus(hWndMainWindow);
 //  SetFocus(hWndMapWindow);
 

@@ -1107,9 +1107,6 @@ int WndForm::ShowModal(bool bEnableMap) {
   SetFocus(oldFocusHwnd);
 
 #ifndef ALTAIRSYNC
-  // JMW added to make sure screen is redrawn
-  drawTriggerEvent.trigger();
-
   Message::BlockRender(false);
 #endif
 
