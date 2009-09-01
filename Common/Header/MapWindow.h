@@ -228,12 +228,10 @@ class MapWindow
 
   // graphics vars
 
-  BufferCanvas hdcDrawWindow;
-  BitmapCanvas hDCTemp;
+  BufferCanvas draw_canvas;
+  BitmapCanvas mask_canvas;
   BufferCanvas buffer_canvas;
-  BufferCanvas hDCMask;
 
-  //
   LabelBlock label_block;
  public:
   bool checkLabelBlock(RECT rc);
@@ -249,6 +247,10 @@ class MapWindow
   virtual bool on_mouse_down(unsigned x, unsigned y);
   virtual bool on_mouse_up(unsigned x, unsigned y);
   virtual bool on_key_down(unsigned key_code);
+  virtual LRESULT on_message(HWND hWnd, UINT message,
+			     WPARAM wParam, LPARAM lParam);
+  virtual void on_paint(Canvas& canvas);
+
 };
 
 #endif

@@ -250,23 +250,23 @@ void MapWindow::DrawMapScale(Canvas &canvas, const RECT rc /* the Map Rect*/,
                 rc.bottom - Appearance.MapWindowBoldFont.AscentHeight - IBLSCALE(1),
                 ScaleInfo);
 
-    hDCTemp.select(MapGfx.hBmpMapScale);
+    mask_canvas.select(MapGfx.hBmpMapScale);
 
-    canvas.scale_copy(0, rc.bottom - Height, hDCTemp, 0, 0, 6, 11);
+    canvas.scale_copy(0, rc.bottom - Height, mask_canvas, 0, 0, 6, 11);
     canvas.scale_copy(IBLSCALE(14) + TextSize.cx,  rc.bottom - Height,
-                      hDCTemp, 6, 0, 8, 11);
+                      mask_canvas, 6, 0, 8, 11);
 
-    hDCTemp.clear();
+    mask_canvas.clear();
 
     if (!ScaleChangeFeedback){
       const Bitmap *Bmp;
       POINT   BmpPos, BmpSize;
 
       if (Units::GetUnitBitmap(Unit, &Bmp, &BmpPos, &BmpSize, 0)){
-        hDCTemp.select(*Bmp);
+        mask_canvas.select(*Bmp);
         canvas.scale_copy(IBLSCALE(8) + TextSize.cx, rc.bottom - Height,
-                          hDCTemp, BmpPos.x, BmpPos.y, BmpSize.x, BmpSize.y);
-        hDCTemp.clear();
+                          mask_canvas, BmpPos.x, BmpPos.y, BmpSize.x, BmpSize.y);
+        mask_canvas.clear();
       }
     }
 
@@ -317,7 +317,7 @@ void MapWindow::DrawMapScale(Canvas &canvas, const RECT rc /* the Map Rect*/,
     canvas.text(rc.left, rc.top, ScaleInfo);
     #endif
 
-    hDCTemp.clear();
+    mask_canvas.clear();
   }
 
 }

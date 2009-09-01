@@ -150,11 +150,11 @@ void MapWindow::RenderMapWindowBg(Canvas &canvas, const RECT rc,
       BitBlt(hDCMask, 0, 0, rc.right-rc.left, rc.bottom-rc.top,
       hDCTemp, rc.left, rc.top, SRCCOPY);
 
-      BitBlt(hdcDrawWindowBg, rc.left, rc.top, rc.right, rc.bottom,
+      BitBlt(draw_canvasBg, rc.left, rc.top, rc.right, rc.bottom,
       hDCMask, 1, 1, SRCAND);
-      BitBlt(hdcDrawWindowBg, rc.left, rc.top, rc.right, rc.bottom,
+      BitBlt(draw_canvasBg, rc.left, rc.top, rc.right, rc.bottom,
       hDCTemp, rc.left, rc.top, SRCPAINT);
-      BitBlt(hdcDrawWindowBg, rc.left, rc.top, rc.right, rc.bottom,
+      BitBlt(draw_canvasBg, rc.left, rc.top, rc.right, rc.bottom,
       hDCTemp, rc.left, rc.top, SRCAND);
       */
     }
@@ -267,7 +267,7 @@ void MapWindow::RenderMapWindow(Canvas &canvas, const RECT rc)
 
   DrawThermalBand(canvas, rc);
 
-  DrawFinalGlide(hdcDrawWindow,rc);
+  DrawFinalGlide(canvas,rc);
 
   //  DrawSpeedToFly(canvas, rc);
 

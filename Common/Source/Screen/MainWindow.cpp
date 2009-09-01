@@ -269,7 +269,7 @@ LRESULT MainWindow::on_message(HWND _hWnd, UINT message,
 #endif
     break;
   case WM_TIMER:
-    if (on_timer()) return true;
+    if (on_timer()) return 0;
     break;
   };
   return ContainerWindow::on_message(_hWnd, message, wParam, lParam);

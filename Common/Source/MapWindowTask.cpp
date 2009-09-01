@@ -112,7 +112,7 @@ void MapWindow::DrawTask(Canvas &canvas, RECT rc, const POINT &Orig_Aircraft)
   int i;
   double tmp;
 
-  hDCTemp.set_text_color(Color(0xff,0xff, 0xff));
+  mask_canvas.set_text_color(Color(0xff,0xff, 0xff));
 
   if (!WayPointList) return;
   Pen pent1(Pen::SOLID, IBLSCALE(1), MapGfx.TaskColor);

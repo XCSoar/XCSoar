@@ -296,7 +296,7 @@ void MapWindow::DrawThreadLoop(bool first_time) {
 
   if (!dirtyEvent.test() && !first_time) {
     // redraw old screen, must have been a request for fast refresh
-    get_canvas().copy(hdcDrawWindow);
+    get_canvas().copy(draw_canvas);
     return;
   }
 
@@ -318,10 +318,10 @@ void MapWindow::DrawThreadLoop(bool first_time) {
   if (gauge_flarm != NULL)
     gauge_flarm->Render(&DrawInfo);
 
-  RenderMapWindow(hdcDrawWindow, MapRect);
+  RenderMapWindow(draw_canvas, MapRect);
 
   if (!first_time) {
-    get_canvas().copy(hdcDrawWindow);
+    get_canvas().copy(draw_canvas);
     update(MapRect);
   }
 
@@ -345,16 +345,15 @@ void MapWindow::DrawThreadInitialise(void) {
   UpdateTimeStats(true);
 
   // set initial display mode
-  hdcDrawWindow.background_transparent();
-  hDCTemp.background_opaque();
-  hDCMask.background_opaque();
+  draw_canvas.background_transparent();
+  mask_canvas.background_opaque();
 
   // paint draw window black to start
-  hdcDrawWindow.black_pen();
-  hdcDrawWindow.rectangle(MapRectBig.left, MapRectBig.top,
-                          MapRectBig.right, MapRectBig.bottom);
+  draw_canvas.black_pen();
+  draw_canvas.rectangle(MapRectBig.left, MapRectBig.top,
+			MapRectBig.right, MapRectBig.bottom);
 
-  get_canvas().copy(hdcDrawWindow);
+  get_canvas().copy(draw_canvas);
 
   ////// This is just here to give fully rendered start screen
   UpdateInfo(&GPS_INFO, &CALCULATED_INFO);
@@ -397,7 +396,7 @@ bool MapWindow::register_class(HINSTANCE hInstance, const TCHAR* szWindowClass) 
 
   wc.hInstance = hInstance;
   wc.style = CS_VREDRAW | CS_HREDRAW | CS_DBLCLKS;
-  wc.lpfnWndProc = Window::WndProc;
+  wc.lpfnWndProc = MapWindow::WndProc;
   wc.cbClsExtra = 0;
 #if (WINDOWSPC>0)
   wc.cbWndExtra = 0 ;
@@ -423,11 +422,12 @@ bool MapWindow::checkLabelBlock(const RECT brect) {
 /////////////////////////////////////////
 
 bool MapWindow::on_resize(unsigned width, unsigned height) {
-  resize(width, height);
+  StartupStore(TEXT("on_resize %d %d\n"),width,height);
 
-  hdcDrawWindow.resize(width, height);
+  resize(width, height);
+  draw_canvas.resize(width, height);
   buffer_canvas.resize(width, height);
-  hDCMask.resize(width + 1, height + 1);
+  mask_canvas.resize(width, height);
 
   SetFontInfoAll(get_canvas());
 
@@ -435,24 +435,26 @@ bool MapWindow::on_resize(unsigned width, unsigned height) {
   mutexStart.Lock();
   window_initialised = true;
   mutexStart.Unlock(); // release lock
-  return true;
+  return false;
 }
 
 bool MapWindow::on_create()
 {
-  hdcDrawWindow.set(get_canvas());
-  hDCTemp.set(get_canvas());
+  StartupStore(TEXT("on_create\n"));
+
+  draw_canvas.set(get_canvas());
   buffer_canvas.set(get_canvas());
-  hDCMask.set(hdcDrawWindow, 1, 1);
+  mask_canvas.set(get_canvas());
+
   return false;
 }
 
 bool MapWindow::on_destroy()
 {
-  hdcDrawWindow.reset();
-  hDCTemp.reset();
+  draw_canvas.reset();
+  mask_canvas.reset();
   buffer_canvas.reset();
-  hDCMask.reset();
+
   PostQuitMessage (0);
   return false;
 }
@@ -497,7 +499,7 @@ bool MapWindow::on_mouse_move(unsigned x, unsigned y)
 	TargetDrag_Latitude = mouseMovelat;
 	TargetDrag_Longitude = mouseMovelon;
 	POINT Pos; Pos.x = x; Pos.y = y;
-	DrawBitmapIn(map_window.get_canvas(), Pos, MapGfx.hBmpTarget);
+	DrawBitmapIn(get_canvas(), Pos, MapGfx.hBmpTarget);
       }
     }
   }
@@ -696,6 +698,11 @@ bool MapWindow::on_key_down(unsigned key_code)
   return true;
 }
 
+#include "Screen/PaintCanvas.hpp"
+
+void MapWindow::on_paint(Canvas& _canvas) {
+  _canvas.copy(get_canvas());
+}
 
 //////////////////////////
 //
@@ -705,3 +712,24 @@ DWORD MapWindow::DrawThread (LPVOID lpvoid)
   map_window._DrawThread();
 }
 
+
+LRESULT
+MapWindow::on_message(HWND hWnd, UINT message,
+		      WPARAM wParam, LPARAM lParam)
+{
+  switch (message) {
+    /*
+  case WM_ERASEBKGND:
+    // we don't need one, we just paint over the top
+    return 0;
+
+  case WM_PAINT:
+    {
+      PaintCanvas _canvas(*this, hWnd);
+      on_paint(_canvas);
+    }
+    return 0;
+    */
+  }
+  return Window::on_message(hWnd, message, wParam, lParam);
+}

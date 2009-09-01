@@ -47,11 +47,9 @@ void
 MapWindow::DrawBitmapIn(Canvas &canvas, const POINT &sc, const Bitmap &h)
 {
   if (!PointVisible(sc)) return;
-
-  hDCTemp.select(h);
-
+  mask_canvas.select(h);
   canvas.scale_or_and(sc.x - IBLSCALE(5), sc.y - IBLSCALE(5),
-                      hDCTemp, 10, 10);
+                      mask_canvas, 10, 10);
 }
 
 

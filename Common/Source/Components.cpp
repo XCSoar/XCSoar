@@ -280,11 +280,12 @@ bool Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
 
   ///////////////////////////////////////////////////////
   // initial show
-  map_window.show();
-  map_window.update();
 
   main_window.show();
   main_window.update();
+
+  map_window.show();
+  map_window.update();
 
   ///////////////////////////////////////////////////////
   // other initialisation...

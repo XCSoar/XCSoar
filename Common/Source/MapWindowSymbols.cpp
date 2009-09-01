@@ -203,10 +203,10 @@ void MapWindow::DrawGPSStatus(Canvas &canvas, const RECT rc)
   TextInBoxMode_t TextInBoxMode = {2};
 
   if (!extGPSCONNECT) {
-    hDCTemp.select(MapGfx.hGPSStatus2);
+    mask_canvas.select(MapGfx.hGPSStatus2);
     canvas.scale_and(rc.left + IBLSCALE(2),
                      rc.bottom +IBLSCALE(Appearance.GPSStatusOffset.y - 22),
-                     hDCTemp, 0, 0, 20, 20);
+                     mask_canvas, 0, 0, 20, 20);
 
     TextInBox(canvas, gettext(gpswarningtext1),
               rc.left+IBLSCALE(24),
@@ -215,10 +215,10 @@ void MapWindow::DrawGPSStatus(Canvas &canvas, const RECT rc)
 
   } else
     if (DrawInfo.NAVWarning || (DrawInfo.SatellitesUsed == 0)) {
-      hDCTemp.select(MapGfx.hGPSStatus1);
+      mask_canvas.select(MapGfx.hGPSStatus1);
       canvas.scale_and(rc.left + IBLSCALE(2),
                        rc.bottom +IBLSCALE(Appearance.GPSStatusOffset.y - 22),
-                       hDCTemp, 0, 0, 20, 20);
+                       mask_canvas, 0, 0, 20, 20);
 
       TextInBox(canvas, gettext(gpswarningtext2),
                 rc.left+IBLSCALE(24),
@@ -257,41 +257,41 @@ void MapWindow::DrawFlightMode(Canvas &canvas, const RECT rc)
     if (drawlogger) {
       offset -= 7;
 
-      hDCTemp.select(LoggerActive && flip
+      mask_canvas.select(LoggerActive && flip
                      ? MapGfx.hLogger : MapGfx.hLoggerOff);
       //changed draw mode & icon for higher opacity 12aug -st
       canvas.scale_or_and(rc.right + IBLSCALE(offset + Appearance.FlightModeOffset.x),
                           rc.bottom + IBLSCALE(-7 + Appearance.FlightModeOffset.y),
-                          hDCTemp, 7, 7);
+                          mask_canvas, 7, 7);
     }
   }
 
   if (Appearance.FlightModeIcon == apFlightModeIconDefault){
 
     if (TaskAborted) {
-      hDCTemp.select(MapGfx.hAbort);
+      mask_canvas.select(MapGfx.hAbort);
     } else {
       if (DisplayMode == dmCircling) {
-        hDCTemp.select(MapGfx.hClimb);
+        mask_canvas.select(MapGfx.hClimb);
       } else if (DisplayMode == dmFinalGlide) {
-        hDCTemp.select(MapGfx.hFinalGlide);
+        mask_canvas.select(MapGfx.hFinalGlide);
       } else {
-        hDCTemp.select(MapGfx.hCruise);
+        mask_canvas.select(MapGfx.hCruise);
       }
     }
     // Code already commented as of 12aug05 - redundant? -st
     //          BitBlt(hdc,rc.right-35,5,24,20,
-    //                           hDCTemp,20,0,SRCAND);
+    //                           mask_canvas,20,0,SRCAND);
 
     // code for pre 12aug icons - st
     //BitBlt(hdc,rc.right-24-3,rc.bottom-20-3,24,20,
-    //  hDCTemp,0,0,SRCAND);
+    //  mask_canvas,0,0,SRCAND);
 
     offset -= 24;
 
     canvas.scale_or_and(rc.right + IBLSCALE(offset - 1 + Appearance.FlightModeOffset.x),
                         rc.bottom + IBLSCALE(-20 - 1 + Appearance.FlightModeOffset.y),
-                        hDCTemp, 24, 20);
+                        mask_canvas, 24, 20);
 
   } else if (Appearance.FlightModeIcon == apFlightModeIconAltA){
 
@@ -354,7 +354,7 @@ void MapWindow::DrawFlightMode(Canvas &canvas, const RECT rc)
 
 
   if (!Appearance.DontShowAutoMacCready && DerivedDrawInfo.AutoMacCready) {
-    hDCTemp.select(MapGfx.hAutoMacCready);
+    mask_canvas.select(MapGfx.hAutoMacCready);
 
     offset -= 24;
 
@@ -362,11 +362,11 @@ void MapWindow::DrawFlightMode(Canvas &canvas, const RECT rc)
 
     canvas.scale_or_and(rc.right + IBLSCALE(offset - 3 + Appearance.FlightModeOffset.x),
                         rc.bottom + IBLSCALE(-20 - 3 + Appearance.FlightModeOffset.y),
-                        hDCTemp, 24, 20);
+                        mask_canvas, 24, 20);
 
     //  commented @ 12aug st
     //  BitBlt(hdc,rc.right-48-3,rc.bottom-20-3,24,20,
-    //    hDCTemp,0,0,SRCAND);
+    //    mask_canvas,0,0,SRCAND);
   };
 
 }
@@ -734,10 +734,10 @@ void MapWindow::DrawFinalGlide(Canvas &canvas, const RECT rc)
                       Value);
 
           if (Units::GetUnitBitmap(Units::GetUserAltitudeUnit(), &Bmp, &BmpPos, &BmpSize, 0)){
-            hDCTemp.select(*Bmp);
+            mask_canvas.select(*Bmp);
             canvas.scale_copy(x + TextSize.cx + IBLSCALE(1), y,
-                              hDCTemp, BmpPos.x, BmpPos.y, BmpSize.x, BmpSize.y);
-            hDCTemp.clear();
+                              mask_canvas, BmpPos.x, BmpPos.y, BmpSize.x, BmpSize.y);
+            mask_canvas.clear();
           }
         }
     }

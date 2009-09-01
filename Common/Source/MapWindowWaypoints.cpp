@@ -108,7 +108,7 @@ void MapWindow::DrawWaypoints(Canvas &canvas, const RECT rc)
 	    irange = WaypointInRange(i);
 
 	    if(MapScale > 20) {
-              hDCTemp.select(MapGfx.hSmall);
+              mask_canvas.select(MapGfx.hSmall);
 	    } else if( ((WayPointList[i].Flags & AIRPORT) == AIRPORT)
 		       || ((WayPointList[i].Flags & LANDPOINT) == LANDPOINT) ) {
 	      islandable = true; // so we can always draw them
@@ -127,17 +127,17 @@ void MapWindow::DrawWaypoints(Canvas &canvas, const RECT rc)
 		}
 
 		if ((WayPointList[i].Flags & AIRPORT) == AIRPORT)
-                  hDCTemp.select(MapGfx.hBmpAirportReachable);
+                  mask_canvas.select(MapGfx.hBmpAirportReachable);
 		else
-                  hDCTemp.select(MapGfx.hBmpFieldReachable);
+                  mask_canvas.select(MapGfx.hBmpFieldReachable);
 	      } else {
 		if ((WayPointList[i].Flags & AIRPORT) == AIRPORT)
-		  hDCTemp.select(MapGfx.hBmpAirportUnReachable);
+		  mask_canvas.select(MapGfx.hBmpAirportUnReachable);
 		else
-		  hDCTemp.select(MapGfx.hBmpFieldUnReachable);
+		  mask_canvas.select(MapGfx.hBmpFieldUnReachable);
 	      }
 	    } else {
-              hDCTemp.select(MapScale > 4 ? MapGfx.hSmall : MapGfx.hTurnPoint);
+              mask_canvas.select(MapScale > 4 ? MapGfx.hSmall : MapGfx.hTurnPoint);
             }
 
 	    if (intask) { // VNT
@@ -147,7 +147,7 @@ void MapWindow::DrawWaypoints(Canvas &canvas, const RECT rc)
 	    if(irange || intask || islandable || dowrite) {
               canvas.scale_or_and(WayPointList[i].Screen.x - IBLSCALE(10),
                                   WayPointList[i].Screen.y - IBLSCALE(10),
-                                  hDCTemp, 20, 20);
+                                  mask_canvas, 20, 20);
             }
 
 	    if(intask || irange || dowrite) {
