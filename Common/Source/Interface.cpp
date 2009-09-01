@@ -35,7 +35,7 @@ Copyright_License {
 }
 */
 #include "Interface.hpp"
-#include "Mutex.hpp"
+#include "Thread/Mutex.hpp"
 #include "Screen/MainWindow.hpp"
 #include "Language.hpp"
 #include "Dialogs.h"

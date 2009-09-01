@@ -35,8 +35,8 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_MUTEX_HXX
-#define XCSOAR_MUTEX_HXX
+#ifndef XCSOAR_THREAD_MUTEX_HXX
+#define XCSOAR_THREAD_MUTEX_HXX
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>

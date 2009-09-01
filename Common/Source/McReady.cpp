@@ -42,7 +42,7 @@ Copyright_License {
 #include "Math/FastMath.h"
 #include "Math/Geometry.hpp"
 #include "Device/device.h"
-#include "Mutex.hpp"
+#include "Thread/Mutex.hpp"
 #include <tchar.h>
 #include <math.h>
 #include <windows.h>

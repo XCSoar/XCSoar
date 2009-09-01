@@ -52,7 +52,6 @@ Copyright_License {
 #include "SettingsUser.hpp"
 #include "Audio/VarioSound.h"
 #include "InputEvents.h"
-#include "Trigger.hpp"
 #include "ReplayLogger.hpp"
 #include "Screen/Blank.hpp"
 #include "Screen/Graphics.hpp"
