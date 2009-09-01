@@ -1723,7 +1723,7 @@ int WndProperty::WndProcEditControl(HWND hwnd, UINT uMsg,
       if ((wParam & 0xffff) == VK_RETURN || (wParam & 0xffff) == VK_F23) { // Compaq uses VKF23
         if (this->mDialogStyle) {
           InterfaceTimeoutReset();
-          if (on_mouse_down(LOWORD(lParam), HIWORD(lParam))) {
+          if (on_mouse_down(0, 0)) {
             ResetDisplayTimeOut();
             return(0);
           }
