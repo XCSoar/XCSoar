@@ -212,13 +212,19 @@ Canvas::text_opaque(int x, int y, const RECT* lprc, const TCHAR *text)
 }
 
 void
+Canvas::text_clipped(int x, int y, const RECT &rc, const TCHAR *text)
+{
+  ::ExtTextOut(dc, x, y, ETO_CLIPPED, &rc, text, _tcslen(text), NULL);
+}
+
+void
 Canvas::text_clipped(int x, int y, unsigned width, const TCHAR *text)
 {
   const SIZE size = text_size(text);
 
   RECT rc;
   ::SetRect(&rc, x, y, x + min(width, size.cx), y + size.cy);
-  ::ExtTextOut(dc, x, y, ETO_CLIPPED, &rc, text, _tcslen(text), NULL);
+  text_clipped(x, y, rc, text);
 }
 
 void
