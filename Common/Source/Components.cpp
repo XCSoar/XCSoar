@@ -229,7 +229,6 @@ bool Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
   main_window.set(szWindowClass, szTitle,
 		  WindowSize.left, WindowSize.top,
 		  WindowSize.right, WindowSize.bottom);
-  main_window.install_wndproc();
 
   if (!main_window.defined()) {
     return false;
