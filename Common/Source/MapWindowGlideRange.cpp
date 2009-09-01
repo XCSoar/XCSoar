@@ -97,7 +97,7 @@ void MapWindow::DrawGlideThroughTerrain(Canvas &canvas, const RECT rc) {
                        DerivedDrawInfo.TerrainWarningLatitude)) {
         LatLon2Screen(DerivedDrawInfo.TerrainWarningLongitude,
                       DerivedDrawInfo.TerrainWarningLatitude, sc);
-        DrawBitmapIn(canvas, sc, MapGfx.hTerrainWarning);
+	draw_masked_bitmap(canvas, MapGfx.hTerrainWarning, sc.x, sc.y, 10, 10, true);
       }
     }
   }

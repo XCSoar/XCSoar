@@ -285,7 +285,7 @@ void Topology::Paint(Canvas &canvas, MapWindow &m_window, const RECT rc) {
               map_projection.LatLon2Screen(shape->line[tt].point[jj].x,
                                        shape->line[tt].point[jj].y,
                                        sc);
-              map_window.DrawBitmapIn(canvas, sc, hBitmap);
+	      m_window.draw_masked_bitmap(canvas, hBitmap, sc.x, sc.y, 10, 10, true);
 
               cshape->renderSpecial(canvas, *label_block, sc.x, sc.y);
 

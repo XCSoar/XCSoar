@@ -457,7 +457,7 @@ void MapWindow::DrawBearing(Canvas &canvas, const RECT rc, int bBearingValid)
           LatLon2Screen(Task[i].AATTargetLon,
                         Task[i].AATTargetLat,
                         sct);
-          DrawBitmapIn(canvas, sct, MapGfx.hBmpTarget);
+	  draw_masked_bitmap(canvas, MapGfx.hBmpTarget, sct.x, sct.y, 10, 10, true);
         }
       }
     }

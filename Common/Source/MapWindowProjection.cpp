@@ -210,16 +210,6 @@ rectObj MapWindowProjection::CalculateScreenBounds(double scale) {
 ////////////////////////////////////////////////////////////////////
 // RETURNS Longitude, Latitude!
 
-void MapWindowProjection::OrigScreen2LatLon(const int &x, const int &y,
-					    double &X, double &Y)
-{
-  int sx = x;
-  int sy = y;
-  irotate(sx, sy, DisplayAngle);
-  Y= PanLatitude  - sy*InvDrawScale;
-  X= PanLongitude + sx*invfastcosine(Y)*InvDrawScale;
-}
-
 
 void MapWindowProjection::Screen2LatLon(const int &x,
 					const int &y,

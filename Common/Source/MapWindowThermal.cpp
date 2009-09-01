@@ -94,25 +94,15 @@ void MapWindow::DrawThermalEstimate(Canvas &canvas, const RECT rc) {
       LatLon2Screen(DerivedDrawInfo.ThermalEstimate_Longitude,
                     DerivedDrawInfo.ThermalEstimate_Latitude,
                     screen);
-      DrawBitmapIn(canvas,
-		   screen,
-                   MapGfx.hBmpThermalSource);
-      /*
-	SelectObject(hdc, GetStockObject(HOLLOW_BRUSH));
-	SelectObject(hdc, GetStockObject(BLACK_PEN));
-	Circle(hdc,
-	screen.x,
-	screen.y, IBLSCALE(5), rc);
-      */
+      draw_masked_bitmap(canvas, MapGfx.hBmpThermalSource, screen.x, screen.y, 10, 10, true);
     }
-  } else {
-    if (MapScale <= 4) {
-      for (int i=0; i<MAX_THERMAL_SOURCES; i++) {
-        if (DerivedDrawInfo.ThermalSources[i].Visible) {
-          DrawBitmapIn(canvas,
-                       DerivedDrawInfo.ThermalSources[i].Screen,
-                       MapGfx.hBmpThermalSource);
-        }
+  } else if (MapScale <= 4) {
+    for (int i=0; i<MAX_THERMAL_SOURCES; i++) {
+      if (DerivedDrawInfo.ThermalSources[i].Visible) {
+	draw_masked_bitmap(canvas, MapGfx.hBmpThermalSource, 
+			   DerivedDrawInfo.ThermalSources[i].Screen.x,
+			   DerivedDrawInfo.ThermalSources[i].Screen.y,
+			   10, 10, true);
       }
     }
   }

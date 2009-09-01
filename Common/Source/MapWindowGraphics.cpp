@@ -42,12 +42,3 @@ Copyright_License {
 #include "Screen/Graphics.hpp"
 #include "Screen/Fonts.hpp"
 
-
-void
-MapWindow::DrawBitmapIn(Canvas &canvas, const POINT &sc, const Bitmap &h)
-{
-  if (!PointVisible(sc)) return;
-  draw_masked_bitmap(canvas, h, sc.x, sc.y, 10, 10);
-}
-
-

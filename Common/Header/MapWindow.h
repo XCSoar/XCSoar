@@ -108,10 +108,6 @@ class MapWindow
   void Event_AutoZoom(int vswitch);
   void Event_PanCursor(int dx, int dy);
 
-  // Drawing primitives (should go outside this class if reusable)
-  // (only used by Topology)
-  void DrawBitmapIn(Canvas &canvas, const POINT &sc, const Bitmap &h);
-
   // used by MapWindowBase
   static DWORD DrawThread (LPVOID);
   DWORD _DrawThread ();

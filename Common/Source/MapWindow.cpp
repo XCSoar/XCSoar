@@ -492,8 +492,7 @@ bool MapWindow::on_mouse_move(int x, int y)
 	Task[TargetPanIndex].AATTargetLon = mouseMovelon;
 	TargetDrag_Latitude = mouseMovelat;
 	TargetDrag_Longitude = mouseMovelon;
-	POINT Pos; Pos.x = x; Pos.y = y;
-	DrawBitmapIn(get_canvas(), Pos, MapGfx.hBmpTarget);
+	draw_masked_bitmap(get_canvas(), MapGfx.hBmpTarget, x, y, 10, 10, true);
       }
     }
   }

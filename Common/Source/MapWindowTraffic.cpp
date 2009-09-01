@@ -204,7 +204,7 @@ void MapWindow::DrawFLARMTraffic(Canvas &canvas, RECT rc, POINT Orig_Aircraft) {
 #endif
       if ((DrawInfo.FLARM_Traffic[i].AlarmLevel>0)
 	  && (DrawInfo.FLARM_Traffic[i].AlarmLevel<4)) {
-        DrawBitmapIn(canvas, sc, MapGfx.hFLARMTraffic);
+	draw_masked_bitmap(canvas, MapGfx.hFLARMTraffic, sc.x, sc.y, 10, 10, true);
       }
 
       Arrow[0].x = -4;

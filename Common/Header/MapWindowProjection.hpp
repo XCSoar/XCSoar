@@ -53,8 +53,7 @@ class MapWindowProjection: public MapWindowData {
   MapWindowProjection();
 
   // used by terrain renderer, topology and airspace
-  void    OrigScreen2LatLon(const int &x, const int &y,
-                                double &X, double &Y);
+
   void    Screen2LatLon(const int &x, const int &y,
 			       double &X, double &Y);
 

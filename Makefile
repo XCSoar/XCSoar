@@ -493,7 +493,6 @@ OBJS	:=\
 	$(SRC)/MapWindowBase.o 		\
 	$(SRC)/MapWindowEvents.o	\
 	$(SRC)/MapWindowGlideRange.o 	\
-	$(SRC)/MapWindowGraphics.o 	\
 	$(SRC)/MapWindowLabels.o 	\
 	$(SRC)/MapWindowProjection.o 	\
 	$(SRC)/MapWindowRender.o 	\
