@@ -153,7 +153,9 @@ static void NextPage(int Step){
 }
 
 
-static void OnPaintDetailsListItem(WindowControl * Sender, HDC hDC){
+static void
+OnPaintDetailsListItem(WindowControl * Sender, Canvas &canvas)
+{
   (void)Sender;
   if (DrawListIndex < nTextLines){
     TCHAR* text = WayPointList[SelectedWaypoint].Details;
@@ -172,11 +174,8 @@ static void OnPaintDetailsListItem(WindowControl * Sender, HDC hDC){
       nlen--;
     }
     if (nlen>0) {
-      ExtTextOut(hDC, 2*InfoBoxLayout::scale, 2*InfoBoxLayout::scale,
-		 ETO_OPAQUE, NULL,
-		 text+nstart,
-		 nlen,
-		 NULL);
+      canvas.text_opaque(2 * InfoBoxLayout::scale, 2 * InfoBoxLayout::scale,
+                         text + nstart, nlen);
     }
   }
 }

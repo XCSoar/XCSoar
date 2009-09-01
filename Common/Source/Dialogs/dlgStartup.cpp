@@ -50,24 +50,15 @@ static WndOwnerDrawFrame *wSplash=NULL;
 static HBITMAP hSplash;
 extern HINSTANCE hInst;
 
-static void OnSplashPaint(WindowControl * Sender, HDC hDC){
-
+static void
+OnSplashPaint(WindowControl *Sender, Canvas &canvas)
+{
   RECT  rc;
-
-  hSplash=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_DISCLAIMER));
-
   CopyRect(&rc, Sender->GetBoundRect());
-  HDC hDCTemp = CreateCompatibleDC(hDC);
 
-  SelectObject(hDCTemp, hSplash);
-  StretchBlt(hDC,
-	     rc.left, rc.top,
-	     rc.right, rc.bottom,
-	     hDCTemp, 0, 0, 318, 163, SRCCOPY);
-
-  DeleteObject(hSplash);
-  DeleteDC(hDCTemp);
-
+  Bitmap splash_bitmap(IDB_DISCLAIMER);
+  BitmapCanvas bitmap_canvas(canvas, splash_bitmap);
+  canvas.stretch(bitmap_canvas, 0, 0, 318, 163);
 }
 
 static void OnCloseClicked(WindowControl * Sender){

@@ -90,7 +90,7 @@ static void OnAnalysisPaint(WindowControl *Sender, Canvas &canvas)
 
   // background is painted in the base-class
 
-  hfOld = (HFONT)SelectObject(canvas, Sender->GetFont()->native());
+  canvas.select(*Sender->GetFont());
 
   canvas.background_transparent();
   canvas.set_text_color(Sender->GetForeColor());
@@ -136,8 +136,6 @@ static void OnAnalysisPaint(WindowControl *Sender, Canvas &canvas)
     // should never get here!
     break;
   }
-  SelectObject(canvas, hfOld);
-
 }
 
 

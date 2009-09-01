@@ -126,12 +126,12 @@ OnAirspacePaintListItem(WindowControl *Sender, Canvas &canvas)
     } else {
       w0 = 225*InfoBoxLayout::scale;
     }
-    w1 = GetTextWidth(canvas, gettext(TEXT("Warn")))+InfoBoxLayout::scale*10;
-    w2 = GetTextWidth(canvas, gettext(TEXT("Display")))+InfoBoxLayout::scale*10;
+    w1 = canvas.text_width(gettext(TEXT("Warn"))) + InfoBoxLayout::scale*10;
+    w2 = canvas.text_width(gettext(TEXT("Display"))) + InfoBoxLayout::scale*10;
     x0 = w0-w1-w2;
 
-    ExtTextOutClip(canvas, 2*InfoBoxLayout::scale, 2*InfoBoxLayout::scale,
-                   label, x0-InfoBoxLayout::scale*10);
+    canvas.text_clipped(2 * InfoBoxLayout::scale, 2 * InfoBoxLayout::scale,
+                        x0 - InfoBoxLayout::scale * 10, label);
 
     if (colormode) {
 

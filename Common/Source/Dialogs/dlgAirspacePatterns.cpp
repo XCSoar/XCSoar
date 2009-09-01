@@ -65,12 +65,11 @@ OnAirspacePatternsPaintListItem(WindowControl *Sender, Canvas &canvas)
   (void)Sender;
   if ((DrawListIndex < NUMAIRSPACEBRUSHES) &&(DrawListIndex>=0)) {
     int i = DrawListIndex;
-    SelectObject(canvas, GetStockObject(WHITE_BRUSH));
-    SelectObject(canvas, GetStockObject(BLACK_PEN));
-    SetBkColor(canvas,
-	       RGB(0xFF, 0xFF, 0xFF));
+
+    canvas.black_pen();
+    canvas.set_background_color(Color(0xFF, 0xFF, 0xFF));
     canvas.select(MapGfx.GetAirspaceBrush(i));
-    SetTextColor(canvas, RGB(0x00,0x00, 0x00));
+    canvas.set_text_color(Color(0x00,0x00, 0x00));
     Rectangle(canvas,
               100*InfoBoxLayout::scale,
               2*InfoBoxLayout::scale,

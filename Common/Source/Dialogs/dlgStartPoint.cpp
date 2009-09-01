@@ -58,7 +58,9 @@ static void UpdateList(void){
 
 static int DrawListIndex=0;
 
-static void OnStartPointPaintListItem(WindowControl * Sender, HDC hDC){
+static void
+OnStartPointPaintListItem(WindowControl * Sender, Canvas &canvas)
+{
 	(void)Sender;
 
   TCHAR label[MAX_PATH];
@@ -83,13 +85,9 @@ static void OnStartPointPaintListItem(WindowControl * Sender, HDC hDC){
         _tcscpy(label, TEXT(" "));
       }
     }
-    ExtTextOut(hDC,
-	       2*InfoBoxLayout::scale,
-	       2*InfoBoxLayout::scale,
-	       ETO_OPAQUE, NULL,
-	       label,
-	       _tcslen(label),
-	       NULL);
+
+    canvas.text_opaque(2 * InfoBoxLayout::scale, 2 * InfoBoxLayout::scale,
+                       label);
   }
 }
 
