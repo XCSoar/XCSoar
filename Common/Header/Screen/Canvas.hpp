@@ -244,6 +244,10 @@ public:
 
   const SIZE text_size(const TCHAR *text, size_t length) const;
   const SIZE text_size(const TCHAR *text) const;
+  unsigned text_width(const TCHAR *text) const {
+    return text_size(text).cx;
+  }
+
   void text(int x, int y, const TCHAR *text);
   void text_opaque(int x, int y, const RECT* lprc, const TCHAR *text);
   void text_clipped(int x, int y, unsigned width, const TCHAR *text);
