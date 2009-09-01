@@ -433,7 +433,7 @@ bool MapWindow::on_resize(unsigned width, unsigned height) {
   mutexStart.Lock();
   window_initialised = true;
   mutexStart.Unlock(); // release lock
-  return false;
+  return true;
 }
 
 bool MapWindow::on_create()
