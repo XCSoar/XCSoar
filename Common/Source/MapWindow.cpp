@@ -421,8 +421,6 @@ bool MapWindow::checkLabelBlock(const RECT brect) {
 /////////////////////////////////////////
 
 bool MapWindow::on_resize(unsigned width, unsigned height) {
-  StartupStore(TEXT("on_resize %d %d\n"),width,height);
-
   resize(width, height);
   draw_canvas.resize(width, height);
   buffer_canvas.resize(width, height);
@@ -439,8 +437,6 @@ bool MapWindow::on_resize(unsigned width, unsigned height) {
 
 bool MapWindow::on_create()
 {
-  StartupStore(TEXT("on_create\n"));
-
   draw_canvas.set(get_canvas());
   buffer_canvas.set(get_canvas());
   mask_canvas.set(draw_canvas);
