@@ -271,7 +271,7 @@ bool Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
   Message::Initialize(rc); // creates window, sets fonts
 
   ///////////////////////////////////////////////////////
-  ///
+  /// 
   marks = new Marks("xcsoar-marks");
   topology = new TopologyStore(marks->GetTopology());
 
@@ -377,7 +377,7 @@ bool Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
 
   DoSunEphemeris(GPS_INFO.Longitude, GPS_INFO.Latitude);
 
-  // Finally ready to go
+  // Finally ready to go.. all structures must be present before this.
   StartupStore(TEXT("CreateDrawingThread\n"));
   map_window.CreateDrawingThread();
   StartupStore(TEXT("ShowInfoBoxes\n"));
