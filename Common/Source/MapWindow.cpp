@@ -405,7 +405,7 @@ bool MapWindow::register_class(HINSTANCE hInstance, const TCHAR* szWindowClass) 
   wc.cbWndExtra = dc.cbWndExtra ;
 #endif
   wc.hIcon = (HICON)NULL;
-  wc.hCursor = NULL;
+  wc.hCursor = LoadCursor(NULL, IDC_ARROW);
   wc.hbrBackground = (HBRUSH)GetStockObject (WHITE_BRUSH);
   wc.lpszMenuName = 0;
   wc.lpszClassName = szWindowClass;
