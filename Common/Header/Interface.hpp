@@ -43,6 +43,8 @@ class MainWindow;
 class MapWindow;
 class GaugeVario;
 class GaugeFLARM;
+class Marks;
+class TopologyStore;
 
 bool Debounce();
 
@@ -53,6 +55,9 @@ extern HINSTANCE hInst;
 extern MainWindow main_window;
 extern MapWindow map_window;
 
+// other global objects
+extern Marks *marks;
+extern TopologyStore *topology;
 extern GaugeVario *gauge_vario;
 extern GaugeFLARM *gauge_flarm;
 

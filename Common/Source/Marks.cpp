@@ -55,15 +55,9 @@ Copyright_License {
 
 //////////////////////////////////////////////////
 
-TopologyWriter *topo_marks = NULL;
-
-bool Marks::reset_marks = false;
-
-void Marks::InitialiseMarks() {
-
+void Marks::Initialise() {
   StartupStore(TEXT("Initialise marks\n"));
-
-  mutexMapData.Lock();
+  ScopeLock protect(mutexMapData);
 
   // TODO code: - This convert to non-unicode will not support all languages
   //		(some may use more complicated PATH names, containing Unicode)
@@ -82,25 +76,27 @@ void Marks::InitialiseMarks() {
     topo_marks->scaleThreshold = 30.0;
     topo_marks->loadBitmap(IDB_MARK);
   }
-  mutexMapData.Unlock();
 }
 
+void Marks::Reset() {
+  ScopeLock protect(mutexMapData);
+  reset_marks = true;
+}
 
-void Marks::CloseMarks() {
+void Marks::Close() {
   StartupStore(TEXT("CloseMarks\n"));
-  mutexMapData.Lock();
+  ScopeLock protect(mutexMapData);
   if (topo_marks) {
     topo_marks->DeleteFiles();
     delete topo_marks;
     topo_marks = NULL;
   }
-  mutexMapData.Unlock();
 }
 
 
 void Marks::MarkLocation(const double lon, const double lat)
 {
-  mutexMapData.Lock();
+  ScopeLock protect(mutexMapData);
 
 #ifndef DISABLEAUDIO
   if (EnableSoundModes) {
@@ -111,10 +107,6 @@ void Marks::MarkLocation(const double lon, const double lat)
     topo_marks->addPoint(lon, lat);
     topo_marks->triggerUpdateCache = true;
   }
-  mutexMapData.Unlock();
-
-  //////////
-
   char message[160];
 
   sprintf(message,"Lon:%f Lat:%f\r\n", lon, lat);
@@ -127,17 +119,12 @@ void Marks::MarkLocation(const double lon, const double lat)
     fwrite(message,strlen(message),1,stream);
     fclose(stream);
   }
-
-#if (EXPERIMENTAL > 0)
-  bsms.SendSMS(message);
-#endif
-
 }
 
-void Marks::DrawMarks(Canvas &canvas, MapWindow &m_window, const RECT rc)
-{
 
-  mutexMapData.Lock();
+void Marks::Draw(Canvas &canvas, MapWindow &m_window, const RECT rc)
+{
+  ScopeLock protect(mutexMapData);
   if (topo_marks) {
     if (reset_marks) {
       topo_marks->Reset();
@@ -145,6 +132,4 @@ void Marks::DrawMarks(Canvas &canvas, MapWindow &m_window, const RECT rc)
     }
     topo_marks->Paint(canvas, m_window, rc);
   }
-  mutexMapData.Unlock();
-
 }

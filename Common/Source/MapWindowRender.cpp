@@ -48,6 +48,7 @@ Copyright_License {
 #include "Task.h"
 #include "TopologyStore.h"
 #include "Blackboard.hpp"
+#include "Interface.hpp"
 
 void MapWindow::RenderMapWindowBg(Canvas &canvas, const RECT rc)
 {
@@ -108,7 +109,7 @@ void MapWindow::RenderMapWindowBg(Canvas &canvas, const RECT rc)
   }
 
   if (EnableTopology) {
-    TopologyStore::DrawTopology(canvas, *this, rc);
+    topology->Draw(canvas, *this, rc);
   }
 
   // reset label over-write preventer
@@ -215,7 +216,7 @@ void MapWindow::RenderMapWindowBg(Canvas &canvas, const RECT rc)
   */
 
   // marks on top...
-  Marks::DrawMarks(canvas, *this, rc);
+  marks->Draw(canvas, *this, rc);
 }
 
 

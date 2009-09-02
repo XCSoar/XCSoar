@@ -52,6 +52,8 @@ Copyright_License {
 #include "Device/device.h"
 #include "Message.h"
 #include "Polar/Historical.hpp"
+#include "TopologyStore.h"
+#include "Interface.hpp"
 
 extern MapWindow map_window;
 
@@ -122,8 +124,8 @@ void SettingsLeave() {
 
   if (TOPOLOGYFILECHANGED)
     {
-      TopologyStore::CloseTopology();
-      TopologyStore::OpenTopology();
+      topology->Close();
+      topology->Open();
       map_window.ForceVisibilityScan();
     }
 

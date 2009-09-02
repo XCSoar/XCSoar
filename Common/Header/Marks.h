@@ -43,14 +43,22 @@ Copyright_License {
 
 class Canvas;
 class MapWindow;
+class TopologyWriter;
 
 class Marks: public MapDataClient {
  public:
-  static bool reset_marks;
-  static void InitialiseMarks();
-  static void CloseMarks();
-  static void DrawMarks(Canvas &canvas, MapWindow &m_window, const RECT rc);
-  static void MarkLocation(const double lon, const double lat);
+  Marks():reset_marks(false),topo_marks(NULL) {};
+    void Reset();
+    void Initialise();
+    void Close();
+    void Draw(Canvas &canvas, MapWindow &m_window, const RECT rc);
+    void MarkLocation(const double lon, const double lat);
+    TopologyWriter* GetTopology() {
+      return topo_marks;
+    }
+ private:
+   bool reset_marks;
+   TopologyWriter *topo_marks;
 };
 
 #endif

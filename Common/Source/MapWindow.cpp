@@ -267,7 +267,7 @@ void MapWindow::UpdateCaches(const bool force) {
   askVisibilityScan = false; // reset
 
   // have some time, do shape file cache update if necessary
-  TopologyStore::SetTopologyBounds(*this, MapRect, do_force);
+  topology->SetTopologyBounds(*this, MapRect, do_force);
 
   // JMW experimental jpeg2000 rendering/tile management
   // Must do this even if terrain is not displayed, because

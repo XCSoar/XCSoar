@@ -45,7 +45,6 @@ Copyright_License {
 #include "Screen/BufferCanvas.hpp"
 #include "Screen/MaskedPaintWindow.hpp"
 #include "Screen/LabelBlock.hpp"
-
 #include "Protection.hpp"
 
 class MapWindowBase {

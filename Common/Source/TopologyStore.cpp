@@ -48,18 +48,12 @@ Copyright_License {
 #include "UtilsText.hpp"
 #include "LogFile.hpp"
 #include "SettingsUser.hpp" // for EnableTopology
-
 #include <assert.h>
 
 #include "wcecompat/ts_string.h"
 // TODO code: check ts_string does the right thing
 
 //////////////////////////////////////////////////
-
-
-Topology* TopoStore[MAXTOPOLOGY];
-
-extern TopologyWriter *topo_marks;
 
 #define MINRANGE 0.2
 
@@ -80,6 +74,8 @@ void TopologyStore::SetTopologyBounds(MapWindow &m_window,
   static double range_active = 1.0;
   rectObj bounds_screen;
   (void)rcin;
+
+  ScopeLock protect(mutexMapData);
 
   bounds_screen = m_window.CalculateScreenBounds(1.0);
 
@@ -117,8 +113,8 @@ void TopologyStore::SetTopologyBounds(MapWindow &m_window,
 		       (bounds_active.maxy-bounds_active.miny));
 
     for (int z=0; z<MAXTOPOLOGY; z++) {
-      if (TopoStore[z]) {
-	TopoStore[z]->triggerUpdateCache=true;
+      if (topology_store[z]) {
+	topology_store[z]->triggerUpdateCache=true;
       }
     }
     if (topo_marks) {
@@ -132,8 +128,8 @@ void TopologyStore::SetTopologyBounds(MapWindow &m_window,
 
   // check if things have come into or out of scale limit
   for (int z=0; z<MAXTOPOLOGY; z++) {
-    if (TopoStore[z]) {
-      TopoStore[z]->TriggerIfScaleNowVisible(m_window);
+    if (topology_store[z]) {
+      topology_store[z]->TriggerIfScaleNowVisible(m_window);
     }
   }
 
@@ -154,13 +150,13 @@ void TopologyStore::SetTopologyBounds(MapWindow &m_window,
 
     int total_shapes_visible = 0;
     for (int z=0; z<MAXTOPOLOGY; z++) {
-      if (TopoStore[z]) {
+      if (topology_store[z]) {
 	rta = m_window.RenderTimeAvailable() || force || !sneaked;
-	if (TopoStore[z]->triggerUpdateCache) {
+	if (topology_store[z]->triggerUpdateCache) {
 	  sneaked = true;
 	}
-	TopoStore[z]->updateCache(m_window, bounds_active, !rta);
-	total_shapes_visible += TopoStore[z]->getNumVisible();
+	topology_store[z]->updateCache(m_window, bounds_active, !rta);
+	total_shapes_visible += topology_store[z]->getNumVisible();
       }
     }
 #ifdef DEBUG_GRAPHICS
@@ -171,46 +167,41 @@ void TopologyStore::SetTopologyBounds(MapWindow &m_window,
 }
 
 
-void TopologyStore::CloseTopology() {
-  StartupStore(TEXT("CloseTopology\n"));
-
-  mutexMapData.Lock();
-  for (int z=0; z<MAXTOPOLOGY; z++) {
-    if (TopoStore[z]) {
-      delete TopoStore[z];
-    }
-  }
-  mutexMapData.Unlock();
-}
-
-
-void TopologyStore::DrawTopology(Canvas &canvas, MapWindow &m_window, const RECT rc)
+void TopologyStore::Close() 
 {
-  mutexMapData.Lock();
-
+  StartupStore(TEXT("CloseTopology\n"));
+  ScopeLock protect(mutexMapData);
   for (int z=0; z<MAXTOPOLOGY; z++) {
-    if (TopoStore[z]) {
-      TopoStore[z]->Paint(canvas,m_window,rc);
+    if (topology_store[z]) {
+      delete topology_store[z];
     }
   }
-  mutexMapData.Unlock();
 }
 
 
+void TopologyStore::Draw(Canvas &canvas, MapWindow &m_window, const RECT rc)
+{
+  ScopeLock protect(mutexMapData);
+  for (int z=0; z<MAXTOPOLOGY; z++) {
+    if (topology_store[z]) {
+      topology_store[z]->Paint(canvas,m_window,rc);
+    }
+  }
+}
 
-void TopologyStore::OpenTopology() {
+
+void TopologyStore::Open() {
   StartupStore(TEXT("OpenTopology\n"));
   CreateProgressDialog(gettext(TEXT("Loading Topology File...")));
+  ScopeLock protect(mutexMapData);
 
   // Start off by getting the names and paths
   static TCHAR  szOrigFile[MAX_PATH] = TEXT("\0");
   static TCHAR  szFile[MAX_PATH] = TEXT("\0");
   static  TCHAR Directory[MAX_PATH] = TEXT("\0");
 
-  mutexMapData.Lock();
-
   for (int z=0; z<MAXTOPOLOGY; z++) {
-    TopoStore[z] = 0;
+    topology_store[z] = 0;
   }
 
   GetRegistryString(szRegistryTopologyFile, szFile, MAX_PATH);
@@ -335,29 +326,26 @@ void TopologyStore::OpenTopology() {
         if (ShapeField<0) {
           Topology* newtopo;
           newtopo = new Topology(ShapeFilename, RGB(red,green,blue));
-          TopoStore[numtopo] = newtopo;
+          topology_store[numtopo] = newtopo;
         } else {
           TopologyLabel *newtopol;
           newtopol = new TopologyLabel(ShapeFilename,
                                        RGB(red,green,blue),
                                        ShapeField);
-          TopoStore[numtopo] = newtopol;
+          topology_store[numtopo] = newtopol;
         }
         if (ShapeIcon!=0)
-          TopoStore[numtopo]->loadBitmap(ShapeIcon);
+          topology_store[numtopo]->loadBitmap(ShapeIcon);
 
-        TopoStore[numtopo]->scaleThreshold = ShapeRange;
+        topology_store[numtopo]->scaleThreshold = ShapeRange;
 
         numtopo++;
       }
   }
 
-  //  CloseHandle (hFile);
   zzip_fclose(zFile);
 
   // file was OK, so save it
   SetRegistryString(szRegistryTopologyFile, szOrigFile);
-
-  mutexMapData.Unlock();
-
 }
+

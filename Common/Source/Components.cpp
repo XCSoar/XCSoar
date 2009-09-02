@@ -74,6 +74,7 @@ Copyright_License {
 #include "Marks.h"
 #include "Device/device.h"
 #include "TopologyStore.h"
+#include "Topology.h"
 #include "TerrainRenderer.h"
 #include "Audio/VarioSound.h"
 #include "Screen/Graphics.hpp"
@@ -85,6 +86,9 @@ Copyright_License {
 
 GaugeVario *gauge_vario;
 GaugeFLARM *gauge_flarm;
+Marks *marks;
+TopologyStore *topology;
+
 MapWindow map_window;
 NMEA_INFO     GPS_INFO;
 DERIVED_INFO  CALCULATED_INFO;
@@ -324,8 +328,10 @@ bool Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
 
   StartupInfo();
 
-  TopologyStore::OpenTopology();
-  Marks::InitialiseMarks();
+  marks = new Marks();
+  topology = new TopologyStore(marks->GetTopology());
+  topology->Open();
+  marks->Initialise();
   RasterTerrain::OpenTerrain();
 
   ReadWayPoints();
@@ -463,9 +469,12 @@ void Shutdown(void) {
 
   RASP.Close();
   RasterTerrain::CloseTerrain();
-  TopologyStore::CloseTopology();
-  Marks::CloseMarks();
+  topology->Close();
+  marks->Close();
   CloseTerrainRenderer();
+
+  delete topology;
+  delete marks;
 
   devShutdown();
 
@@ -492,9 +501,7 @@ void Shutdown(void) {
 
   GaugeCDI::Destroy();
   delete gauge_vario;
-  gauge_vario = NULL;
   delete gauge_flarm;
-  gauge_flarm = NULL;
 
   StartupStore(TEXT("Close Messages\n"));
   Message::Destroy();

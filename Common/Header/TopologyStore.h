@@ -43,14 +43,20 @@ Copyright_License {
 
 class Canvas;
 class MapWindow;
+class Topology;
+class TopologyWriter;
 
 class TopologyStore: public MapDataClient {
  public:
-  static void SetTopologyBounds(MapWindow &m_window, 
-				const RECT rcin, const bool force=false);
-  static void OpenTopology();
-  static void CloseTopology();
-  static void DrawTopology(Canvas &canvas, MapWindow &m_window, const RECT rc);
+  TopologyStore(TopologyWriter* _marks):topo_marks(_marks) {};
+  void SetTopologyBounds(MapWindow &m_window, 
+			 const RECT rcin, const bool force=false);
+  void Open();
+  void Close();
+  void Draw(Canvas &canvas, MapWindow &m_window, const RECT rc);
+ private:
+  Topology* topology_store[MAXTOPOLOGY];
+  TopologyWriter* topo_marks;
 };
 
 #endif
