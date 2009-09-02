@@ -40,7 +40,7 @@ Copyright_License {
 #include "Protection.hpp"
 #include "Topology.h"
 #include "Dialogs.h"
-#include "Settings.hpp"
+#include "SettingsComputer.hpp"
 #include "SettingsUser.hpp"
 #include "Compatibility/string.h"
 #include "Registry.hpp"

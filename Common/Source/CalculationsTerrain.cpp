@@ -40,7 +40,7 @@ Copyright_License {
 #include "GlideSolvers.hpp"
 #include "RasterTerrain.h"
 #include "Math/Earth.hpp"
-#include "SettingsUser.hpp" // for FinalGlideTerrain, read-only
+#include "SettingsComputer.hpp"
 
 void TerrainHeight(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 {

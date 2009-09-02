@@ -53,6 +53,7 @@ Copyright_License {
 #include "DataField/Enum.hpp"
 #include "Screen/MainWindow.hpp"
 #include "WayPoint.hpp"
+#include "Protection.hpp"
 
 static WndForm *wf=NULL;
 static WindowControl *btnMove = NULL;
@@ -63,9 +64,6 @@ static double Range = 0;
 static double Radial = 0;
 static int target_point = 0;
 static bool TargetMoveMode = false;
-
-bool TargetDialogOpen = false;
-
 
 static void OnOKClicked(WindowControl * Sender){
   (void)Sender;
@@ -591,7 +589,7 @@ void dlgTarget(void) {
 
   if (!wf) return;
 
-  TargetDialogOpen = true;
+  targetManipEvent.trigger();
   TargetMoveMode = false;
 
   if (InfoBoxLayout::landscape)
@@ -644,7 +642,7 @@ void dlgTarget(void) {
 
   map_window.SetTargetPan(false, 0);
 
-  TargetDialogOpen = false;
+  targetManipEvent.reset();
 
   delete wf;
   wf = NULL;

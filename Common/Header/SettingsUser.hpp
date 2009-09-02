@@ -85,7 +85,6 @@ extern int UTCOffset;
 extern bool CircleZoom;
 extern bool EnableTopology;
 extern bool EnableTerrain;
-extern int  FinalGlideTerrain;
 extern DisplayOrientation_t DisplayOrientation;
 extern DisplayTextType_t  DisplayTextType;
 extern bool EnableCDICruise;
@@ -104,13 +103,6 @@ extern bool EnableTrailDrift;
 extern bool bAirspaceBlackOutline;
 
 extern int GliderScreenPosition;
-
-// sound stuff not used?
-extern bool EnableSoundVario;
-extern bool EnableSoundTask;
-extern bool EnableSoundModes;
-extern int  SoundVolume;
-extern int  SoundDeadband;
 
 // airspace display stuff
 
@@ -135,6 +127,8 @@ extern bool LockSettingsInFlight;
 
 // temporary
 extern bool RequestAirspaceWarningForce;
-extern bool TargetDialogOpen;
+
+// set by interface, processed by interface
+extern bool RequestAirspaceWarningDialog;
 
 #endif

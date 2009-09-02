@@ -40,6 +40,7 @@ Copyright_License {
 #include "Blackboard.hpp"
 #include "SettingsTask.hpp"
 #include "SettingsUser.hpp"
+#include "SettingsComputer.hpp"
 #include "Screen/Util.hpp"
 #include "Screen/Graphics.hpp"
 #include "Compatibility/gdi.h"

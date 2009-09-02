@@ -52,6 +52,7 @@ Copyright_License {
 #include "UtilsSystem.hpp"
 #include "LogFile.hpp"
 #include "SettingsUser.hpp"
+#include "SettingsComputer.hpp"
 #include "Language.hpp"
 /*
 

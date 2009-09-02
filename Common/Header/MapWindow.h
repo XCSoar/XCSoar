@@ -141,6 +141,7 @@ class MapWindow
   double        TargetDrag_Latitude;
   double        TargetDrag_Longitude;
   int           TargetDrag_State;
+
   POINT         Groundline[NUMTERRAINSWEEPS+1];
   bool          LandableReachable;
 

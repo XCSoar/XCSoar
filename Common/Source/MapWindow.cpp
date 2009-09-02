@@ -50,6 +50,7 @@ Copyright_License {
 #include "Settings.hpp"
 #include "SettingsTask.hpp"
 #include "SettingsUser.hpp"
+#include "SettingsComputer.hpp"
 #include "Audio/VarioSound.h"
 #include "InputEvents.h"
 #include "ReplayLogger.hpp"

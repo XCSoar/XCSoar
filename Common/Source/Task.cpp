@@ -47,7 +47,6 @@ Copyright_License {
 #include "Settings.hpp"
 #include "SettingsComputer.hpp"
 #include "SettingsTask.hpp"
-#include "SettingsUser.hpp"
 #include "Calculations.h" // TODO danger! InAATTurnSector
 #include "Waypointparser.h"
 #include "McReady.h"
@@ -55,8 +54,9 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "Asset.hpp"
 #include "Units.hpp"
-
 #include <math.h>
+
+#include "Interface.hpp"
 
 bool EnableMultipleStartPoints = false;
 bool TaskModified = false;
@@ -781,7 +781,7 @@ void CalculateAATTaskSectors()
   }
 
   CalculateAATIsoLines();
-  if (!TargetDialogOpen) {
+  if (!targetManipEvent.test()) {
     TargetModified = false;
     // allow target dialog to detect externally changed targets
   }

@@ -175,9 +175,6 @@ static void RefreshCalculator(void) {
   }
 }
 
-
-extern bool TargetDialogOpen;
-
 static void DoOptimise(void) {
   double myrange= Range;
   double RangeLast= Range;
@@ -187,7 +184,7 @@ static void DoOptimise(void) {
 
   mutexFlightData.Lock();
   mutexTaskData.Lock();
-  TargetDialogOpen = true;
+  targetManipEvent.trigger();
   do {
     myrange = Range;
     AdjustAATTargets(Range);
@@ -231,7 +228,8 @@ static void DoOptimise(void) {
   AdjustAATTargets(Range);
   RefreshCalculator();
 
-  TargetDialogOpen = false;
+  targetManipEvent.reset();
+
   mutexTaskData.Unlock();
   mutexFlightData.Unlock();
 }

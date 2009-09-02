@@ -48,7 +48,6 @@ extern double TeammateLongitude;
 
 // changed by gui or calculation thread
 extern bool LoggerActive;
-extern bool RequestAirspaceWarningDialog;
 
 // waypoint data (by gui or calculation thread)
 extern int  Alternate1; // VENTA3

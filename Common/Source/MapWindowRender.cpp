@@ -38,6 +38,7 @@ Copyright_License {
 #include "Protection.hpp"
 #include "SettingsUser.hpp"
 #include "SettingsTask.hpp"
+#include "SettingsComputer.hpp"
 #include "Screen/Graphics.hpp"
 #include "Screen/Fonts.hpp"
 #include "Screen/LabelBlock.hpp"

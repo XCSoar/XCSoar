@@ -379,8 +379,6 @@ void InitCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   mutexGlideComputer.Unlock();
 }
 
-extern bool TargetDialogOpen;
-
 
 BOOL DoCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 {
@@ -398,7 +396,7 @@ BOOL DoCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   if (TaskAborted) {
     SortLandableWaypoints(Basic, Calculated);
   }
-  if (!TargetDialogOpen) {
+  if (!targetManipEvent.test()) {
     // don't calculate these if optimise function being invoked or
     // target is being adjusted
     TaskStatistics(Basic, Calculated, mc, ce);

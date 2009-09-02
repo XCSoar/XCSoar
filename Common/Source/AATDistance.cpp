@@ -42,11 +42,11 @@ Copyright_License {
 #include "Task.h"
 #include "Math/Geometry.hpp"
 #include "SettingsTask.hpp"
-#include "SettingsUser.hpp"
 #include "Math/Earth.hpp"
 #include "WayPoint.hpp"
 #include "Calculations.h" // TODO danger using InAATTurnSector
 #include <math.h>
+#include "Interface.hpp"
 
 #define DISTANCETHRESHOLD 500
 
@@ -253,7 +253,7 @@ void AATDistance::ShiftTargetFromBehind(double longitude, double latitude,
                               int taskwaypoint) {
 
   // JMWAAT if being extrnally updated e.g. from task dialog, don't move it
-  if (TargetDialogOpen) return;
+  if (targetManipEvent.test()) return;
   if (taskwaypoint==0) return;
 
   // best is decreasing or first entry in sector, so project

@@ -43,7 +43,6 @@ Copyright_License {
 #include "Math/FastMath.h"
 #include "Settings.hpp"
 #include "SettingsComputer.hpp"
-#include "SettingsUser.hpp"
 #include "SettingsTask.hpp"
 #include "McReady.h"
 #include "Message.h"

@@ -58,6 +58,7 @@ Trigger closeTriggerEvent(TEXT("mapCloseEvent"));
 Trigger drawTriggerEvent(TEXT("drawTriggerEvent"), false);
 Trigger globalRunningEvent(TEXT("globalRunning"));
 Trigger airspaceWarningEvent(TEXT("airspaceWarning"));
+Trigger targetManipEvent(TEXT("targetManip"));
 
 Mutex mutexFlightData;
 // protect GPS_INFO, mcready etc,

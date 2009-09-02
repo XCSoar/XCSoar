@@ -39,11 +39,12 @@ Copyright_License {
 #define XCSOAR_SETTINGS_COMPUTER_HPP
 
 // control of calculations, these only changed by user interface
-// but are used by calculations
+// but are used read-only by calculations
 
 // All of these should be protected by LockFlightData() when setting from outside
 // calculation thread; calculation thread should not set these values
 
+extern int    FinalGlideTerrain;
 extern int    AutoMcMode;
 extern bool   EnableCalibration;
 extern bool   ForceFinalGlide;
@@ -77,6 +78,13 @@ extern int TeamCodeRefWaypoint;
 extern bool TeammateCodeValid;
 extern bool TeamFlarmTracking;
 extern TCHAR TeamFlarmCNTarget[4]; // CN of the glider to track
+
+// sound stuff not used?
+extern bool EnableSoundVario;
+extern bool EnableSoundTask;
+extern bool EnableSoundModes;
+extern int  SoundVolume;
+extern int  SoundDeadband;
 
 #endif
 
