@@ -55,42 +55,30 @@ Copyright_License {
 
 //////////////////////////////////////////////////
 
-void Marks::Initialise() {
-  StartupStore(TEXT("Initialise marks\n"));
+Marks::Marks():topo_marks("xcsoar-marks", Color(0xD0,0xD0,0xD0)) {
   ScopeLock protect(mutexMapData);
+  StartupStore(TEXT("Initialise marks\n"));
+  topo_marks.scaleThreshold = 30.0;
+  topo_marks.loadBitmap(IDB_MARK);
+  Reset();
+};  
 
-  // TODO code: - This convert to non-unicode will not support all languages
-  //		(some may use more complicated PATH names, containing Unicode)
-  //  char buffer[MAX_PATH];
-  //  ConvertTToC(buffer, LocalPath(TEXT("xcsoar-marks")));
-  // DISABLED LocalPath
-  // JMW localpath does NOT work for the shapefile renderer!
-
-  if (topo_marks) {
-    topo_marks->DeleteFiles();
-    delete topo_marks;
-  }
-
-  topo_marks = new TopologyWriter("xcsoar-marks", Color(0xD0,0xD0,0xD0));
-  if (topo_marks) {
-    topo_marks->scaleThreshold = 30.0;
-    topo_marks->loadBitmap(IDB_MARK);
-  }
-}
+// TODO code: - This convert to non-unicode will not support all languages
+//		(some may use more complicated PATH names, containing Unicode)
+//  char buffer[MAX_PATH];
+//  ConvertTToC(buffer, LocalPath(TEXT("xcsoar-marks")));
+// DISABLED LocalPath
+// JMW localpath does NOT work for the shapefile renderer!
 
 void Marks::Reset() {
   ScopeLock protect(mutexMapData);
-  reset_marks = true;
+  topo_marks.Reset();
 }
 
-void Marks::Close() {
+Marks::~Marks() {
   StartupStore(TEXT("CloseMarks\n"));
   ScopeLock protect(mutexMapData);
-  if (topo_marks) {
-    topo_marks->DeleteFiles();
-    delete topo_marks;
-    topo_marks = NULL;
-  }
+  topo_marks.DeleteFiles();
 }
 
 
@@ -103,10 +91,9 @@ void Marks::MarkLocation(const double lon, const double lat)
     PlayResource(TEXT("IDR_WAV_CLEAR"));
   }
 #endif
-  if (topo_marks) {
-    topo_marks->addPoint(lon, lat);
-    topo_marks->triggerUpdateCache = true;
-  }
+  topo_marks.addPoint(lon, lat);
+  topo_marks.triggerUpdateCache = true;
+
   char message[160];
 
   sprintf(message,"Lon:%f Lat:%f\r\n", lon, lat);
@@ -125,11 +112,6 @@ void Marks::MarkLocation(const double lon, const double lat)
 void Marks::Draw(Canvas &canvas, MapWindow &m_window, const RECT rc)
 {
   ScopeLock protect(mutexMapData);
-  if (topo_marks) {
-    if (reset_marks) {
-      topo_marks->Reset();
-      reset_marks = false;
-    }
-    topo_marks->Paint(canvas, m_window, rc);
-  }
+  StartupStore(TEXT("mark location\n"));    
+  topo_marks.Paint(canvas, m_window, rc);
 }

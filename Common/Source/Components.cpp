@@ -271,6 +271,11 @@ bool Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
   Message::Initialize(rc); // creates window, sets fonts
 
   ///////////////////////////////////////////////////////
+  ///
+  marks = new Marks();
+  topology = new TopologyStore(marks->GetTopology());
+
+  ///////////////////////////////////////////////////////
   //// create map window
 
   StartupStore(TEXT("Create map window\n"));
@@ -328,10 +333,7 @@ bool Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
 
   StartupInfo();
 
-  marks = new Marks();
-  topology = new TopologyStore(marks->GetTopology());
   topology->Open();
-  marks->Initialise();
   RasterTerrain::OpenTerrain();
 
   ReadWayPoints();
@@ -470,7 +472,6 @@ void Shutdown(void) {
   RASP.Close();
   RasterTerrain::CloseTerrain();
   topology->Close();
-  marks->Close();
   CloseTerrainRenderer();
 
   delete topology;

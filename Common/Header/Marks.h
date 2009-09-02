@@ -40,25 +40,25 @@ Copyright_License {
 
 #include "XCSoar.h"
 #include "Protection.hpp"
+#include "Topology.h"
 
 class Canvas;
 class MapWindow;
-class TopologyWriter;
 
 class Marks: public MapDataClient {
  public:
-  Marks():reset_marks(false),topo_marks(NULL) {};
-    void Reset();
-    void Initialise();
-    void Close();
-    void Draw(Canvas &canvas, MapWindow &m_window, const RECT rc);
-    void MarkLocation(const double lon, const double lat);
-    TopologyWriter* GetTopology() {
-      return topo_marks;
-    }
+  Marks();
+  ~Marks();
+  void Reset();
+  void Initialise();
+  void Close();
+  void Draw(Canvas &canvas, MapWindow &m_window, const RECT rc);
+  void MarkLocation(const double lon, const double lat);
+  TopologyWriter* GetTopology() {
+    return &topo_marks;
+  }
  private:
-   bool reset_marks;
-   TopologyWriter *topo_marks;
+   TopologyWriter topo_marks;
 };
 
 #endif
