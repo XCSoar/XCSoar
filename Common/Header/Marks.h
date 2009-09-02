@@ -47,7 +47,7 @@ class MapWindow;
 
 class Marks: public MapDataClient {
  public:
-  Marks();
+  Marks(const char* name);
   ~Marks();
   void Reset();
   void Initialise();

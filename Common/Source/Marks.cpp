@@ -55,7 +55,7 @@ Copyright_License {
 
 //////////////////////////////////////////////////
 
-Marks::Marks():topo_marks("xcsoar-marks", Color(0xD0,0xD0,0xD0)) {
+Marks::Marks(const char* name):topo_marks(name, Color(0xD0,0xD0,0xD0)) {
   ScopeLock protect(mutexMapData);
   StartupStore(TEXT("Initialise marks\n"));
   topo_marks.scaleThreshold = 30.0;
@@ -112,6 +112,5 @@ void Marks::MarkLocation(const double lon, const double lat)
 void Marks::Draw(Canvas &canvas, MapWindow &m_window, const RECT rc)
 {
   ScopeLock protect(mutexMapData);
-  StartupStore(TEXT("mark location\n"));    
   topo_marks.Paint(canvas, m_window, rc);
 }

@@ -272,7 +272,7 @@ bool Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
 
   ///////////////////////////////////////////////////////
   ///
-  marks = new Marks();
+  marks = new Marks("xcsoar-marks");
   topology = new TopologyStore(marks->GetTopology());
 
   ///////////////////////////////////////////////////////
