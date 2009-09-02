@@ -54,8 +54,4 @@ extern int  Alternate1; // VENTA3
 extern int  Alternate2;
 extern int  BestAlternate;
 
-// external control of user interface (changed potentially by gui thread)
-extern bool ExternalTriggerCruise;
-extern bool ExternalTriggerCircling;
-
 #endif

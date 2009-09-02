@@ -74,8 +74,6 @@ Copyright_License {
 
 bool EnableNavBaroAltitude=false;
 int EnableExternalTriggerCruise=false;
-bool ExternalTriggerCruise= false;
-bool ExternalTriggerCircling= false;
 bool ForceFinalGlide= false;
 bool AutoForceFinalGlide= false;
 bool EnableFAIFinishHeight = false;

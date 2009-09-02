@@ -203,12 +203,8 @@ void Turning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   bool forcecruise = false;
   bool forcecircling = false;
   if (EnableExternalTriggerCruise && !(ReplayLogger::IsEnabled())) {
-    if (ExternalTriggerCruise && ExternalTriggerCircling) {
-      // this should never happen
-      ExternalTriggerCircling = false;
-    }
-    forcecruise = ExternalTriggerCruise;
-    forcecircling = ExternalTriggerCircling;
+    forcecruise = triggerCruiseEvent.test();
+    forcecircling = !forcecruise;
   }
 
   switch(MODE) {

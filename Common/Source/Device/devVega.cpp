@@ -136,14 +136,10 @@ static BOOL PDSWC(PDeviceDescriptor_t d, const TCHAR *String,
       break;
     }
     if (is_circling) {
-      ExternalTriggerCruise = false;
-      ExternalTriggerCircling = true;
+      triggerCruiseEvent.reset();
     } else {
-      ExternalTriggerCruise = true;
-      ExternalTriggerCircling = false;
+      triggerCruiseEvent.trigger();
     }
-  } else {
-    ExternalTriggerCruise = false;
   }
 
   long up_switchinputs;

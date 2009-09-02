@@ -182,6 +182,8 @@ static void DoOptimise(void) {
   int steps = 0;
   if (!AATEnabled) return;
 
+  // should do a GUI::ExchangeBlackboard() here and use local storage
+
   mutexFlightData.Lock();
   mutexTaskData.Lock();
   targetManipEvent.trigger();

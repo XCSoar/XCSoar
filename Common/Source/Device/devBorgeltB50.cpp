@@ -182,16 +182,10 @@ BOOL PBB50(const TCHAR *String, NMEA_INFO *GPS_INFO)
 
   GPS_INFO->SwitchState.VarioCircling = (climb==1);
 
-  if (EnableExternalTriggerCruise) {
-    if (climb) {
-      ExternalTriggerCruise = false;
-      ExternalTriggerCircling = true;
-    } else {
-      ExternalTriggerCruise = true;
-      ExternalTriggerCircling = false;
-    }
+  if (climb) {
+    triggerCruiseEvent.reset();
   } else {
-    ExternalTriggerCruise = false;
+    triggerCruiseEvent.trigger();
   }
 
   GPS_INFO->AirspeedAvailable = TRUE;
