@@ -38,13 +38,11 @@ Copyright_License {
 #ifndef RASTERWEATHER_H
 #define RASTERWEATHER_H
 
-#include "Sizes.h"
+#include "XCSoar.h"
 #include "RasterMap.h"
+#include "Protection.hpp"
 
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
-
-class RasterWeather {
+class RasterWeather: public MapDataClient {
 public:
   RasterWeather() {
     int i;
@@ -55,27 +53,34 @@ public:
     for (i=0; i<MAX_WEATHER_TIMES; i++) {
       weather_available[i]= false;
     }
-    weather_time = 0;
-    RenderWeatherParameter = 0;
+    _weather_time = 0;
+    _parameter = 0;
   }
   ~RasterWeather() {
     Close();
   }
- public:
   void Close();
+
+  void ValueToText(TCHAR* Buffer, short val);
+  void SetViewCenter(double lat, double lon);
+  void ItemLabel(int i, TCHAR* Buffer);
+  RasterMap* GetMap();
+  unsigned GetParameter();
+  void SetParameter(unsigned i);
   void Reload(double lat, double lon);
-  int weather_time;
-  unsigned  RenderWeatherParameter; // was terrain.render_weather
+  void ScanAll(double lat, double lon);
+  bool isWeatherAvailable(unsigned t);
+  unsigned GetTime();
+  void SetTime(unsigned i);
+  int IndexToTime(int x);
+ private:
+  unsigned _parameter; // was terrain.render_weather
+  unsigned _weather_time;
   RasterMap* weather_map[MAX_WEATHER_MAP];
   void RASP_filename(char* rasp_filename, const TCHAR* name);
   bool LoadItem(int item, const TCHAR* name);
-  void SetViewCenter(double lat, double lon);
   void ServiceFullReload(double lat, double lon);
-  void ValueToText(TCHAR* Buffer, short val);
-  void ItemLabel(int i, TCHAR* Buffer);
-  void Scan(double lat, double lon);
   bool weather_available[MAX_WEATHER_TIMES];
-  int IndexToTime(int x);
  private:
   bool bsratio;
 };

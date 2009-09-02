@@ -199,7 +199,6 @@ void RasterTerrain::SetTerrainRounding(double x, double y) {
 
 void RasterTerrain::ServiceTerrainCenter(double lat, double lon) {
   Lock();
-
   if (TerrainMap) {
     TerrainMap->SetViewCenter(lat, lon);
   }

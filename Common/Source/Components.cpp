@@ -348,7 +348,7 @@ bool Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
 
   CreateProgressDialog(gettext(TEXT("Scanning weather forecast")));
   StartupStore(TEXT("RASP load\n"));
-  RASP.Scan(GPS_INFO.Latitude, GPS_INFO.Longitude);
+  RASP.ScanAll(GPS_INFO.Latitude, GPS_INFO.Longitude);
 
   ReadAirspace();
   SortAirspace();

@@ -47,7 +47,7 @@ Copyright_License {
 #include "Registry.hpp"
 #include "LocalPath.hpp"
 #include "LocalTime.hpp"
-
+#include <assert.h>
 #include "wcecompat/ts_string.h"
 
 #include "RasterTerrain.h" // JMW TODO decouple
@@ -61,18 +61,70 @@ int RasterWeather::IndexToTime(int x) {
   }
 }
 
+void RasterWeather::SetParameter(unsigned i) {
+  Lock();
+  _parameter=i;
+  Unlock();
+}
+
+void RasterWeather::SetTime(unsigned i) {
+  Lock();
+  _weather_time=i;
+  Unlock();
+}
+
+RasterMap* RasterWeather::GetMap() {
+  RasterMap* retval;
+  Lock();
+  if (_parameter) {
+    assert(_parameter<=MAX_WEATHER_MAP);
+    retval = weather_map[min(MAX_WEATHER_MAP,_parameter)-1];
+  } else {
+    assert(1);
+    retval = NULL;
+  }
+  Unlock();
+  return retval;
+}
+
+unsigned RasterWeather::GetParameter() {
+  unsigned i;
+  Lock();
+  i= _parameter;
+  Unlock();
+  return i;
+}
+
+unsigned RasterWeather::GetTime() {
+  unsigned i;
+  Lock();
+  i= _weather_time;
+  Unlock();
+  return i;
+}
+
+bool RasterWeather::isWeatherAvailable(unsigned t) {
+  bool retval;
+  Lock();
+  assert(t<MAX_WEATHER_TIMES);
+  retval = weather_available[min(MAX_WEATHER_TIMES,t-1)];
+  Unlock();
+  return retval;
+}
 
 void RasterWeather::RASP_filename(char* rasp_filename,
                                   const TCHAR* name) {
   TCHAR fname[MAX_PATH];
   _stprintf(fname,
             TEXT("xcsoar-rasp.dat/%s.curr.%04dlst.d2.jp2"),
-            name, IndexToTime(weather_time));
+            name, IndexToTime(_weather_time));
   LocalPathS(rasp_filename, fname);
 }
 
 bool RasterWeather::LoadItem(int item, const TCHAR* name) {
   char rasp_filename[MAX_PATH];
+  bool retval = true;
+  Lock();
   RASP_filename(rasp_filename, name);
   weather_map[item] = new RasterMapJPG2000();
   weather_map[item]->Open(rasp_filename);
@@ -80,16 +132,18 @@ bool RasterWeather::LoadItem(int item, const TCHAR* name) {
     weather_map[item]->Close();
     delete weather_map[item];
     weather_map[item]= 0;
-    return false;
+    retval = false;
   }
-  return true;
+  Unlock();
+  return retval;
 };
 
 
-void RasterWeather::Scan(double lat, double lon) {
+void RasterWeather::ScanAll(double lat, double lon) {
   int i;
+  Lock();
   for (i=0; i<MAX_WEATHER_TIMES; i++) {
-    weather_time = i;
+    _weather_time = i;
     weather_available[i] = LoadItem(0,TEXT("wstar"));
     if (!weather_available[i]) {
       weather_available[i] = LoadItem(0,TEXT("wstar_bsratio"));
@@ -99,7 +153,8 @@ void RasterWeather::Scan(double lat, double lon) {
     }
     Close();
   }
-  weather_time = 0;
+  _weather_time = 0;
+  Unlock();
 }
 
 
@@ -108,37 +163,37 @@ void RasterWeather::Reload(double lat, double lon) {
   bool found = false;
   bool now = false;
 
-  if (RenderWeatherParameter == 0) {
+  if (_parameter == 0) {
     // will be drawing terrain
     return;
   }
-
-  if (weather_time== 0) {
+  Lock();
+  if (_weather_time== 0) {
     // "Now" time, so find time in half hours
     int dsecs = (int)TimeLocal((long)GPS_INFO.Time);
     int half_hours = (dsecs/1800) % 48;
-    weather_time = max(weather_time, half_hours);
+    _weather_time = max(_weather_time, half_hours);
     now = true;
   }
 
   // limit values, for safety
-  weather_time = min(MAX_WEATHER_TIMES-1, max(0, weather_time));
+  _weather_time = min(MAX_WEATHER_TIMES-1, max(0, _weather_time));
 
-  if (weather_time == last_weather_time) {
+  if (_weather_time == last_weather_time) {
     // no change, quick exit.
     if (now) {
       // must return to 0 = Now time on exit
-      weather_time = 0;
+      _weather_time = 0;
     }
     return;
   } else {
-    last_weather_time = weather_time;
+    last_weather_time = _weather_time;
   }
 
   // scan forward to next valid time
-  while ((weather_time<MAX_WEATHER_TIMES) && (!found)) {
-    if (!weather_available[weather_time]) {
-      weather_time++;
+  while ((_weather_time<MAX_WEATHER_TIMES) && (!found)) {
+    if (!weather_available[_weather_time]) {
+      _weather_time++;
     } else {
       found = true;
 
@@ -161,16 +216,17 @@ void RasterWeather::Reload(double lat, double lon) {
 
   // can't find valid time, so reset to zero
   if (!found || now) {
-    weather_time = 0;
+    _weather_time = 0;
   }
 
   SetViewCenter(lat, lon);
   ServiceFullReload(lat, lon);
+  Unlock();
 }
 
 
 void RasterWeather::Close() {
-  // todo: locking!
+  Lock();
   int i;
   for (i=0; i<MAX_WEATHER_MAP; i++) {
     if (weather_map[i]) {
@@ -179,24 +235,29 @@ void RasterWeather::Close() {
       weather_map[i]=0;
     }
   }
+  Unlock();
 }
 
 
 void RasterWeather::SetViewCenter(double lat, double lon) {
+  Lock();
   for (int i=0; i<MAX_WEATHER_MAP; i++) {
     if (weather_map[i]) {
       weather_map[i]->SetViewCenter(lat, lon);
     }
   }
+  Unlock();
 }
 
 
 void RasterWeather::ServiceFullReload(double lat, double lon) {
+  Lock();
   for (int i=0; i<MAX_WEATHER_MAP; i++) {
     if (weather_map[i]) {
       weather_map[i]->ServiceFullReload(lat, lon);
     }
   }
+  Unlock();
 }
 
 
@@ -242,7 +303,7 @@ void RasterWeather::ItemLabel(int i, TCHAR* Buffer) {
 
 void RasterWeather::ValueToText(TCHAR* Buffer, short val) {
   Buffer[0]=0;
-  switch (RenderWeatherParameter) {
+  switch (_parameter) {
   case 0:
     return;
   case 1: // wstar

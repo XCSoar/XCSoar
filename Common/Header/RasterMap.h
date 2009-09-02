@@ -102,12 +102,14 @@ class RasterMap: public TerrainDataClient {
 
   virtual bool Open(char* filename) = 0;
   virtual void Close() = 0;
-  void Lock() { mutexTerrainData.Lock(); };
-  void Unlock() { mutexTerrainData.Unlock(); };
   virtual void ServiceCache() {};
   virtual void ServiceFullReload(double lat, double lon) {};
   bool IsDirectAccess(void) { return DirectAccess; };
   bool IsPaged(void) { return Paged; };
+
+  // export methods to global, take care!
+  void Lock() { TerrainDataClient::Lock(); };
+  void Unlock() { TerrainDataClient::Unlock(); };
 
  protected:
   int xlleft;

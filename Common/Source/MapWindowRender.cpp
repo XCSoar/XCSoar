@@ -83,7 +83,7 @@ void MapWindow::RenderMapWindowBg(Canvas &canvas, const RECT rc)
 
   if ((EnableTerrain && (DerivedDrawInfo.TerrainValid)
        && terrain.isTerrainLoaded())
-      || RASP.RenderWeatherParameter) {
+      || RASP.GetParameter()) {
     double sunelevation = 40.0;
     double sunazimuth = DisplayAngle-DerivedDrawInfo.WindBearing;
 
@@ -177,7 +177,7 @@ void MapWindow::RenderMapWindowBg(Canvas &canvas, const RECT rc)
   DrawTeammate(canvas, rc);
 
   if ((EnableTerrain && (DerivedDrawInfo.TerrainValid))
-      || RASP.RenderWeatherParameter) {
+      || RASP.GetParameter()) {
     DrawSpotHeights(canvas, *this, label_block);
   }
 
@@ -338,7 +338,7 @@ void DrawSpotHeights(Canvas &canvas,
 		     MapWindowProjection &map_projection,
 		     LabelBlock &label_block) {
   // JMW testing, display of spot max/min
-  if (!RASP.RenderWeatherParameter)
+  if (!RASP.GetParameter())
     return;
   if (!terrain_renderer)
     return;

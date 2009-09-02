@@ -50,11 +50,31 @@ extern Mutex mutexTaskData;
 
 class TerrainDataClient {
 protected:
+  void Lock() {
+    mutexTerrainData.Lock();
+  }
+  void Unlock() {
+    mutexTerrainData.Unlock();
+  }
+  Mutex* GetMutex() {
+    return &mutexTerrainData;
+  }
+private:
   static Mutex mutexTerrainData;
 };
 
 class MapDataClient {
 protected:
+  void Lock() {
+    mutexMapData.Lock();
+  }
+  void Unlock() {
+    mutexMapData.Unlock();
+  }
+  Mutex* GetMutex() {
+    return &mutexMapData;
+  }
+private:
   static Mutex mutexMapData;
 };
 

@@ -75,7 +75,7 @@ void TopologyStore::SetTopologyBounds(MapWindow &m_window,
   rectObj bounds_screen;
   (void)rcin;
 
-  ScopeLock protect(mutexMapData);
+  ScopeLock protect(*GetMutex());
 
   bounds_screen = m_window.CalculateScreenBounds(1.0);
 
@@ -170,7 +170,7 @@ void TopologyStore::SetTopologyBounds(MapWindow &m_window,
 void TopologyStore::Close() 
 {
   StartupStore(TEXT("CloseTopology\n"));
-  ScopeLock protect(mutexMapData);
+  ScopeLock protect(*GetMutex());
   for (int z=0; z<MAXTOPOLOGY; z++) {
     if (topology_store[z]) {
       delete topology_store[z];
@@ -181,7 +181,7 @@ void TopologyStore::Close()
 
 void TopologyStore::Draw(Canvas &canvas, MapWindow &m_window, const RECT rc)
 {
-  ScopeLock protect(mutexMapData);
+  ScopeLock protect(*GetMutex());
   for (int z=0; z<MAXTOPOLOGY; z++) {
     if (topology_store[z]) {
       topology_store[z]->Paint(canvas,m_window,rc);
@@ -193,7 +193,7 @@ void TopologyStore::Draw(Canvas &canvas, MapWindow &m_window, const RECT rc)
 void TopologyStore::Open() {
   StartupStore(TEXT("OpenTopology\n"));
   CreateProgressDialog(gettext(TEXT("Loading Topology File...")));
-  ScopeLock protect(mutexMapData);
+  ScopeLock protect(*GetMutex());
 
   // Start off by getting the names and paths
   static TCHAR  szOrigFile[MAX_PATH] = TEXT("\0");
@@ -218,7 +218,6 @@ void TopologyStore::Open() {
     static TCHAR  szMapFile[MAX_PATH] = TEXT("\0");
     GetRegistryString(szRegistryMapFile, szMapFile, MAX_PATH);
     if (_tcslen(szMapFile)==0) {
-      mutexMapData.Unlock();
       return;
     }
     ExpandLocalPath(szMapFile);
@@ -241,7 +240,6 @@ void TopologyStore::Open() {
   unicode2ascii(szFile, zfilename, MAX_PATH);
   zFile = zzip_fopen(zfilename, "rt");
   if (!zFile) {
-    mutexMapData.Unlock();
     StartupStore(TEXT("No topology file\n%s\n"), szFile);
     return;
   }
@@ -259,7 +257,8 @@ void TopologyStore::Open() {
 
   while(ReadString(zFile,READLINE_LENGTH,TempString)) {
 
-    if(_tcslen(TempString) > 0 && _tcsstr(TempString,TEXT("*")) != TempString) // Look For Comment
+    if((_tcslen(TempString) > 0) 
+       && (_tcsstr(TempString,TEXT("*")) != TempString)) // Look For Comment
       {
 
         BYTE red, green, blue;

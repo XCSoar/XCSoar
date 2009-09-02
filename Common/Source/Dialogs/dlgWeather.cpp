@@ -60,11 +60,11 @@ static void OnDisplayItemData(DataField *Sender,
 
   switch(Mode){
     case DataField::daGet:
-      Sender->Set((int)RASP.RenderWeatherParameter);
+      Sender->Set((int)RASP.GetParameter());
     break;
     case DataField::daPut:
     case DataField::daChange:
-      RASP.RenderWeatherParameter = Sender->GetAsInteger();
+      RASP.SetParameter(Sender->GetAsInteger());
     break;
   }
 }
@@ -75,8 +75,8 @@ static void RASPGetTime(DataField *Sender) {
   dfe = (DataFieldEnum*)Sender;
   int index=0;
   for (int i=0; i<MAX_WEATHER_TIMES; i++) {
-    if (RASP.weather_available[i]) {
-      if (RASP.weather_time == i) {
+    if (RASP.isWeatherAvailable(i)) {
+      if (RASP.GetTime() == i) {
         Sender->Set(index);
       }
       index++;
@@ -86,14 +86,14 @@ static void RASPGetTime(DataField *Sender) {
 
 static void RASPSetTime(DataField *Sender) {
   int index = 0;
-  if (Sender->GetAsInteger()==0) {
-    RASP.weather_time = 0;
+  if (Sender->GetAsInteger()<=0) {
+    RASP.SetTime(0);
     return;
   }
   for (int i=0; i<MAX_WEATHER_TIMES; i++) {
-    if (RASP.weather_available[i]) {
+    if (RASP.isWeatherAvailable(i)) {
       if (index == Sender->GetAsInteger()) {
-        RASP.weather_time = i;
+        RASP.SetTime(i);
       }
       index++;
     }
@@ -187,7 +187,7 @@ void dlgWeatherShowModal(void){
       dfe = (DataFieldEnum*)wp->GetDataField();
       dfe->addEnumText(TEXT("Now"));
       for (int i=1; i<MAX_WEATHER_TIMES; i++) {
-        if (RASP.weather_available[i]) {
+        if (RASP.isWeatherAvailable(i)) {
           TCHAR timetext[10];
           _stprintf(timetext,TEXT("%04d"), RASP.IndexToTime(i));
           dfe->addEnumText(timetext);
@@ -212,7 +212,7 @@ void dlgWeatherShowModal(void){
           dfe->addEnumText(Buffer);
         }
       }
-      dfe->Set(RASP.RenderWeatherParameter);
+      dfe->Set(RASP.GetParameter());
       wp->RefreshDisplay();
     }
 
@@ -227,8 +227,7 @@ void dlgWeatherShowModal(void){
 
     wp = (WndProperty*)wf->FindByName(TEXT("prpDisplayItem"));
     if (wp) {
-      RASP.RenderWeatherParameter =
-        wp->GetDataField()->GetAsInteger();
+      RASP.SetParameter(wp->GetDataField()->GetAsInteger());
     }
 
     delete wf;
