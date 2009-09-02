@@ -35,7 +35,7 @@ Copyright_License {
 }
 */
 
-#include "Gauge/GaugeVarioAltA.hpp"
+#include "Gauge/GaugeVario.hpp"
 #include "XCSoar.h"
 #include "Asset.hpp"
 #include "Protection.hpp"

@@ -39,7 +39,7 @@ Copyright_License {
 #include "UtilsSystem.hpp"
 #include "SettingsUser.hpp"
 #include "SettingsComputer.hpp"
-#include "Gauge/GaugeVarioAltA.hpp"
+#include "Gauge/GaugeVario.hpp"
 #include "InfoBoxManager.h"
 #include "Protection.hpp"
 #include "InputEvents.h"

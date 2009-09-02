@@ -46,7 +46,7 @@ Copyright_License {
 #include "RasterWeather.h"
 #include "Gauge/GaugeCDI.hpp"
 #include "Gauge/GaugeFLARM.hpp"
-#include "Gauge/GaugeVarioAltA.hpp"
+#include "Gauge/GaugeVario.hpp"
 #include "InputEvents.h"
 #include "Atmosphere.h"
 #include "Device/Geoid.h"

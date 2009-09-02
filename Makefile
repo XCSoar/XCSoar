@@ -458,7 +458,7 @@ OBJS	:=\
 	\
 	$(SRC)/Gauge/GaugeCDI.o \
 	$(SRC)/Gauge/GaugeFLARM.o \
-	$(SRC)/Gauge/GaugeVarioAltA.o \
+	$(SRC)/Gauge/GaugeVario.o \
 	\
 	$(SRC)/AirfieldDetails.o 	\
 	$(SRC)/ButtonLabel.o 		\

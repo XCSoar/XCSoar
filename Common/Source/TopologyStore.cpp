@@ -70,7 +70,7 @@ bool RectangleIsInside(rectObj r_exterior, rectObj r_interior) {
 
 void TopologyStore::SetTopologyBounds(MapWindow &m_window,
 				      const bool force) {
-  static rectObj bounds_active;
+  static rectObj _bounds_active;
   static double range_active = 1.0;
 
   ScopeLock protect(*GetMutex());
@@ -83,7 +83,7 @@ void TopologyStore::SetTopologyBounds(MapWindow &m_window,
   // need to have some trigger for this..
 
   // trigger if the border goes outside the stored area
-  if (!RectangleIsInside(bounds_active, bounds_screen)) {
+  if (!RectangleIsInside(_bounds_active, bounds_screen)) {
     recompute = true;
   }
 
@@ -105,10 +105,10 @@ void TopologyStore::SetTopologyBounds(MapWindow &m_window,
     } else {
       scale = BORDERFACTOR;
     }
-    bounds_active = m_window.CalculateScreenBounds(scale);
+    _bounds_active = m_window.CalculateScreenBounds(scale);
 
-    range_active = max((bounds_active.maxx-bounds_active.minx),
-		       (bounds_active.maxy-bounds_active.miny));
+    range_active = max((_bounds_active.maxx-_bounds_active.minx),
+		       (_bounds_active.maxy-_bounds_active.miny));
 
     for (int z=0; z<MAXTOPOLOGY; z++) {
       if (topology_store[z]) {
@@ -120,7 +120,7 @@ void TopologyStore::SetTopologyBounds(MapWindow &m_window,
     }
 
     // now update visibility of objects in the map window
-    m_window.ScanVisibility(&bounds_active);
+    m_window.ScanVisibility(&_bounds_active);
 
   }
 
@@ -134,7 +134,7 @@ void TopologyStore::SetTopologyBounds(MapWindow &m_window,
   // ok, now update the caches
 
   if (topo_marks) {
-    topo_marks->updateCache(m_window, bounds_active);
+    topo_marks->updateCache(m_window, _bounds_active);
   }
 
   if (EnableTopology) {
@@ -153,7 +153,7 @@ void TopologyStore::SetTopologyBounds(MapWindow &m_window,
 	if (topology_store[z]->triggerUpdateCache) {
 	  sneaked = true;
 	}
-	topology_store[z]->updateCache(m_window, bounds_active, !rta);
+	topology_store[z]->updateCache(m_window, _bounds_active, !rta);
 	total_shapes_visible += topology_store[z]->getNumVisible();
       }
     }
