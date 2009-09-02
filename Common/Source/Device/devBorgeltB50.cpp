@@ -183,9 +183,9 @@ BOOL PBB50(const TCHAR *String, NMEA_INFO *GPS_INFO)
   GPS_INFO->SwitchState.VarioCircling = (climb==1);
 
   if (climb) {
-    triggerCruiseEvent.reset();
+    triggerClimbEvent.trigger();
   } else {
-    triggerCruiseEvent.trigger();
+    triggerClimbEvent.reset();
   }
 
   GPS_INFO->AirspeedAvailable = TRUE;

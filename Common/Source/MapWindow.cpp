@@ -382,8 +382,9 @@ DWORD MapWindow::_DrawThread ()
   // this is the main drawing loop
 
   do {
+    if (!drawTriggerEvent.wait(MIN_WAIT_TIME))
+      continue;
     DrawThreadLoop(false);
-    drawTriggerEvent.wait(5000);
   } while (!closeTriggerEvent.test());
 
   return 0;

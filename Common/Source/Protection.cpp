@@ -55,11 +55,11 @@ static Trigger gpsUpdatedTriggerEvent(TEXT("gpsUpdatedTriggerEvent"));
 static Trigger dataTriggerEvent(TEXT("dataTriggerEvent"));
 static Trigger varioTriggerEvent(TEXT("varioTriggerEvent"));
 Trigger closeTriggerEvent(TEXT("mapCloseEvent"));
-Trigger drawTriggerEvent(TEXT("drawTriggerEvent"), false);
+Trigger drawTriggerEvent(TEXT("drawTriggerEvent"),false);
 Trigger globalRunningEvent(TEXT("globalRunning"));
 Trigger airspaceWarningEvent(TEXT("airspaceWarning"));
 Trigger targetManipEvent(TEXT("targetManip"));
-Trigger triggerCruiseEvent(TEXT("triggerCruise"));
+Trigger triggerClimbEvent(TEXT("triggerClimb"));
 
 Mutex mutexFlightData;
 // protect GPS_INFO, mcready etc,
@@ -107,12 +107,12 @@ DWORD InstrumentThread (LPVOID lpvoid) {
 	(void)lpvoid;
   // wait for proper startup signal
   while (!map_window.IsDisplayRunning()) {
-    Sleep(100);
+    Sleep(MIN_WAIT_TIME);
   }
 
   while (!closeTriggerEvent.test()) {
 
-    if (!varioTriggerEvent.wait(100))
+    if (!varioTriggerEvent.wait(MIN_WAIT_TIME))
       continue;
 
     if (map_window.IsDisplayRunning()) {
@@ -138,12 +138,12 @@ DWORD CalculationThread (LPVOID lpvoid) {
 
   // wait for proper startup signal
   while (!map_window.IsDisplayRunning()) {
-    Sleep(100);
+    Sleep(MIN_WAIT_TIME);
   }
 
   while (!closeTriggerEvent.test()) {
 
-    if (!dataTriggerEvent.wait(100))
+    if (!dataTriggerEvent.wait(MIN_WAIT_TIME))
       continue;
 
     // set timer to determine latency (including calculations)

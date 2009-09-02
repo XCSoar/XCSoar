@@ -125,21 +125,19 @@ static BOOL PDSWC(PDeviceDescriptor_t d, const TCHAR *String,
   GPS_INFO->SwitchState.FlapLanding =
     (switchoutputs & (1<<OUTPUT_BIT_FLAP_LANDING))>0;
 
-  if (EnableExternalTriggerCruise != 0) {
-    bool is_circling = false;
-    switch (EnableExternalTriggerCruise) {
-    case 1:
-      is_circling = GPS_INFO->SwitchState.FlapLanding;
-      break;
-    case 2:
-      is_circling = GPS_INFO->SwitchState.SpeedCommand;
-      break;
-    }
-    if (is_circling) {
-      triggerCruiseEvent.reset();
-    } else {
-      triggerCruiseEvent.trigger();
-    }
+  bool is_circling = false;
+  switch (EnableExternalTriggerCruise) {
+  case 1:
+    is_circling = GPS_INFO->SwitchState.FlapLanding;
+    break;
+  case 2:
+    is_circling = GPS_INFO->SwitchState.SpeedCommand;
+    break;
+  }
+  if (is_circling) {
+    triggerClimbEvent.trigger();
+  } else {
+    triggerClimbEvent.reset();
   }
 
   long up_switchinputs;
