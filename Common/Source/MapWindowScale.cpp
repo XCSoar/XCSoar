@@ -214,7 +214,7 @@ void MapWindow::DrawMapScale(Canvas &canvas, const RECT rc /* the Map Rect*/,
         _tcscat(ScaleInfo, TEMP);
       }
       TCHAR Buffer[20];
-      RASP.ItemLabel(terrain.render_weather, Buffer);
+      RASP.ItemLabel(RASP.RenderWeatherParameter, Buffer);
       if (_tcslen(Buffer)) {
         _tcscat(ScaleInfo, Buffer);
       }

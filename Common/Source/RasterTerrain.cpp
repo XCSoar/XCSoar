@@ -47,13 +47,10 @@ Copyright_License {
 
 #include "wcecompat/ts_string.h"
 
-RasterWeather RASP;
-
 ///////////////////// General, open/close ///////////////////////////////
 
 void RasterTerrain::OpenTerrain(void)
 {
-  render_weather = 0;
   terrain_initialised = false;
 
   StartupStore(TEXT("OpenTerrain\n"));
@@ -131,9 +128,6 @@ bool RasterTerrain::CreateTerrainMap(char *zfilename) {
 void RasterTerrain::CloseTerrain(void)
 {
   StartupStore(TEXT("CloseTerrain\n"));
-
-  render_weather = 0;
-
   // TODO code: lock it first?
 
   if (terrain_initialised) {
@@ -205,8 +199,6 @@ void RasterTerrain::SetTerrainRounding(double x, double y) {
 
 void RasterTerrain::ServiceTerrainCenter(double lat, double lon) {
   Lock();
-
-  RASP.SetViewCenter(lat, lon);
 
   if (TerrainMap) {
     TerrainMap->SetViewCenter(lat, lon);

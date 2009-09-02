@@ -353,72 +353,72 @@ TerrainRenderer::~TerrainRenderer() {
 }
 
 bool TerrainRenderer::SetMap(double lon, double lat) {
-  if (terrain.render_weather) {
+  if (RASP.RenderWeatherParameter) {
     RASP.Reload(lat, lon);
   }
   interp_levels = 5;
-  switch (terrain.render_weather) {
+  switch (RASP.RenderWeatherParameter) {
   case 1: // wstar
     is_terrain = false;
     do_water = false;
     height_scale = 2; // max range 256*(2**2) = 1024 cm/s = 10 m/s
-    DisplayMap = RASP.weather_map[terrain.render_weather-1];
+    DisplayMap = RASP.weather_map[RASP.RenderWeatherParameter-1];
     color_ramp = (COLORRAMP*)&weather_colors[0][0];
     break;
   case 2: // bl wind spd
     is_terrain = false;
     do_water = false;
     height_scale = 3;
-    DisplayMap = RASP.weather_map[terrain.render_weather-1];
+    DisplayMap = RASP.weather_map[RASP.RenderWeatherParameter-1];
     color_ramp = (COLORRAMP*)&weather_colors[1][0];
     break;
   case 3: // hbl
     is_terrain = false;
     do_water = false;
     height_scale = 4;
-    DisplayMap = RASP.weather_map[terrain.render_weather-1];
+    DisplayMap = RASP.weather_map[RASP.RenderWeatherParameter-1];
     color_ramp = (COLORRAMP*)&weather_colors[2][0];
     break;
   case 4: // dwcrit
     is_terrain = false;
     do_water = false;
     height_scale = 4;
-    DisplayMap = RASP.weather_map[terrain.render_weather-1];
+    DisplayMap = RASP.weather_map[RASP.RenderWeatherParameter-1];
     color_ramp = (COLORRAMP*)&weather_colors[2][0];
     break;
   case 5: // blcloudpct
     is_terrain = false;
     do_water = true;
     height_scale = 0;
-    DisplayMap = RASP.weather_map[terrain.render_weather-1];
+    DisplayMap = RASP.weather_map[RASP.RenderWeatherParameter-1];
     color_ramp = (COLORRAMP*)&weather_colors[3][0];
     break;
   case 6: // sfctemp
     is_terrain = false;
     do_water = false;
     height_scale = 0;
-    DisplayMap = RASP.weather_map[terrain.render_weather-1];
+    DisplayMap = RASP.weather_map[RASP.RenderWeatherParameter-1];
     color_ramp = (COLORRAMP*)&weather_colors[4][0];
     break;
   case 7: // hwcrit
     is_terrain = false;
     do_water = false;
     height_scale = 4;
-    DisplayMap = RASP.weather_map[terrain.render_weather-1];
+    DisplayMap = RASP.weather_map[RASP.RenderWeatherParameter-1];
     color_ramp = (COLORRAMP*)&weather_colors[2][0];
     break;
   case 8: // wblmaxmin
     is_terrain = false;
     do_water = false;
     height_scale = 1; // max range 256*(1**2) = 512 cm/s = 5.0 m/s
-    DisplayMap = RASP.weather_map[terrain.render_weather-1];
+    DisplayMap = RASP.weather_map[RASP.RenderWeatherParameter-1];
     color_ramp = (COLORRAMP*)&weather_colors[5][0];
     break;
   case 9: // blcwbase
     is_terrain = false;
     do_water = false;
     height_scale = 4;
-    DisplayMap = RASP.weather_map[terrain.render_weather-1];
+    DisplayMap = RASP.weather_map[RASP.RenderWeatherParameter-1];
     color_ramp = (COLORRAMP*)&weather_colors[2][0];
     break;
   default:
@@ -519,7 +519,7 @@ void TerrainRenderer::Height(MapWindowProjection &map_projection, bool isBigZoom
   
   DisplayMap->Unlock();
   
-  if (terrain.render_weather) {
+  if (RASP.RenderWeatherParameter) {
     ScanSpotHeights(X0-orig.x, Y0-orig.y, X1-orig.x, Y1-orig.y);
   }
 }

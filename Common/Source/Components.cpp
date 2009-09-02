@@ -89,6 +89,7 @@ GaugeFLARM *gauge_flarm;
 Marks *marks;
 TopologyStore *topology;
 RasterTerrain terrain;
+RasterWeather RASP;
 
 MapWindow map_window;
 NMEA_INFO     GPS_INFO;

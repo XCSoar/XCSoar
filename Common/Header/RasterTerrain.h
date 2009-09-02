@@ -50,7 +50,6 @@ public:
 
   RasterTerrain():
     terrain_initialised(false),
-    render_weather(0),
     TerrainMap(NULL) {
   };
 
@@ -82,7 +81,6 @@ public:
    bool WaypointIsInTerrainRange(double latitude, double longitude);
    bool GetTerrainCenter(double *latitude,
                                double *longitude);
-   int render_weather;
 };
 
 #endif

@@ -56,6 +56,7 @@ public:
       weather_available[i]= false;
     }
     weather_time = 0;
+    RenderWeatherParameter = 0;
   }
   ~RasterWeather() {
     Close();
@@ -64,6 +65,7 @@ public:
   void Close();
   void Reload(double lat, double lon);
   int weather_time;
+  unsigned  RenderWeatherParameter; // was terrain.render_weather
   RasterMap* weather_map[MAX_WEATHER_MAP];
   void RASP_filename(char* rasp_filename, const TCHAR* name);
   bool LoadItem(int item, const TCHAR* name);
@@ -77,7 +79,5 @@ public:
  private:
   bool bsratio;
 };
-
-extern RasterWeather RASP;
 
 #endif

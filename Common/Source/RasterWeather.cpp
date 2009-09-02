@@ -108,7 +108,7 @@ void RasterWeather::Reload(double lat, double lon) {
   bool found = false;
   bool now = false;
 
-  if (terrain.render_weather == 0) {
+  if (RenderWeatherParameter == 0) {
     // will be drawing terrain
     return;
   }
@@ -242,7 +242,7 @@ void RasterWeather::ItemLabel(int i, TCHAR* Buffer) {
 
 void RasterWeather::ValueToText(TCHAR* Buffer, short val) {
   Buffer[0]=0;
-  switch (terrain.render_weather) {
+  switch (RenderWeatherParameter) {
   case 0:
     return;
   case 1: // wstar

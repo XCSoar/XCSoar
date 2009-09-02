@@ -60,11 +60,11 @@ static void OnDisplayItemData(DataField *Sender,
 
   switch(Mode){
     case DataField::daGet:
-      Sender->Set(terrain.render_weather);
+      Sender->Set((int)RASP.RenderWeatherParameter);
     break;
     case DataField::daPut:
     case DataField::daChange:
-      terrain.render_weather = Sender->GetAsInteger();
+      RASP.RenderWeatherParameter = Sender->GetAsInteger();
     break;
   }
 }
@@ -212,7 +212,7 @@ void dlgWeatherShowModal(void){
           dfe->addEnumText(Buffer);
         }
       }
-      dfe->Set(terrain.render_weather);
+      dfe->Set(RASP.RenderWeatherParameter);
       wp->RefreshDisplay();
     }
 
@@ -227,7 +227,7 @@ void dlgWeatherShowModal(void){
 
     wp = (WndProperty*)wf->FindByName(TEXT("prpDisplayItem"));
     if (wp) {
-      terrain.render_weather =
+      RASP.RenderWeatherParameter =
         wp->GetDataField()->GetAsInteger();
     }
 

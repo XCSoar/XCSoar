@@ -67,6 +67,7 @@ Copyright_License {
 #include "Gauge/GaugeFLARM.hpp"
 #include "Message.h"
 #include "Calculations.h" // TODO danger! for InAATTurnSector
+#include "RasterWeather.h"
 
 #ifdef PNA
 #include "Asset.hpp"
@@ -281,6 +282,8 @@ void MapWindow::UpdateCaches(const bool force) {
     fpsTimeThis = fpsTimeMapCenter;
     terrain.ServiceTerrainCenter(DrawInfo.Latitude,
 				 DrawInfo.Longitude);
+    RASP.SetViewCenter(DrawInfo.Latitude,
+		       DrawInfo.Longitude);
   }
 
   fpsTimeThis = ::GetTickCount();

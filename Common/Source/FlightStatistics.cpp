@@ -56,7 +56,7 @@ Copyright_License {
 #include "Task.h"
 #include "WayPoint.hpp"
 #include "Units.hpp"
-
+#include "Interface.hpp"
 
 void FlightStatistics::Reset() {
   ThermalAverage.Reset();
@@ -754,19 +754,19 @@ void FlightStatistics::RenderAirspace(Canvas &canvas, const RECT rc) {
   int d_airspace[AIRSPACE_SCANSIZE_H][AIRSPACE_SCANSIZE_X];
   int i,j;
 
-  RasterTerrain::Lock();
+  terrain.Lock();
   // want most accurate rounding here
-  RasterTerrain::SetTerrainRounding(0,0);
+  terrain.SetTerrainRounding(0,0);
 
   for (j=0; j< AIRSPACE_SCANSIZE_X; j++) { // scan range
     fj = j*1.0/(AIRSPACE_SCANSIZE_X-1);
     FindLatitudeLongitude(aclat, aclon, acb, range*fj,
                           &d_lat[j], &d_lon[j]);
-    d_alt[j] = RasterTerrain::GetTerrainHeight(d_lat[j],
+    d_alt[j] = terrain.GetTerrainHeight(d_lat[j],
 					       d_lon[j]);
     hmax = max(hmax, d_alt[j]);
   }
-  RasterTerrain::Unlock();
+  terrain.Unlock();
 
   double fh = (ach-hmin)/(hmax-hmin);
 

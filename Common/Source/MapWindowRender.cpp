@@ -49,6 +49,7 @@ Copyright_License {
 #include "TopologyStore.h"
 #include "Blackboard.hpp"
 #include "Interface.hpp"
+#include "RasterWeather.h"
 
 void MapWindow::RenderMapWindowBg(Canvas &canvas, const RECT rc)
 {
@@ -82,7 +83,7 @@ void MapWindow::RenderMapWindowBg(Canvas &canvas, const RECT rc)
 
   if ((EnableTerrain && (DerivedDrawInfo.TerrainValid)
        && terrain.isTerrainLoaded())
-      || terrain.render_weather) {
+      || RASP.RenderWeatherParameter) {
     double sunelevation = 40.0;
     double sunazimuth = DisplayAngle-DerivedDrawInfo.WindBearing;
 
@@ -176,7 +177,7 @@ void MapWindow::RenderMapWindowBg(Canvas &canvas, const RECT rc)
   DrawTeammate(canvas, rc);
 
   if ((EnableTerrain && (DerivedDrawInfo.TerrainValid))
-      || terrain.render_weather) {
+      || RASP.RenderWeatherParameter) {
     DrawSpotHeights(canvas, *this, label_block);
   }
 
@@ -337,7 +338,7 @@ void DrawSpotHeights(Canvas &canvas,
 		     MapWindowProjection &map_projection,
 		     LabelBlock &label_block) {
   // JMW testing, display of spot max/min
-  if (!terrain.render_weather)
+  if (!RASP.RenderWeatherParameter)
     return;
   if (!terrain_renderer)
     return;
