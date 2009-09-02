@@ -42,7 +42,7 @@ Copyright_License {
 #include "InputEvents.h"  // used for altair beep hack
 #include "SettingsTask.hpp"
 #include "Device/device.h"
-
+#include "Units.hpp"
 #include <tchar.h>
 #include <math.h>
 

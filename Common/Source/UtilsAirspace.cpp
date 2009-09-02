@@ -40,10 +40,11 @@ Copyright_License {
 #include "Dialogs.h"
 #include "Language.hpp"
 #include "Settings.hpp"
-#include "Units.h"
+#include "Units.hpp"
 #include "Math/Pressure.h"
 #include "Math/Units.h"
 #include <assert.h>
+#include "Units.hpp"
 
 
 void ConvertFlightLevels(void)

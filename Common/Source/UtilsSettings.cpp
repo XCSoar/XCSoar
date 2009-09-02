@@ -229,9 +229,6 @@ int SoundVolume = 80;
 int SoundDeadband = 5;
 bool EnableVarioGauge = false;
 
-//IGC Logger
-bool LoggerActive = false;
-
 // Others
 BOOL COMPORTCHANGED = FALSE;
 BOOL MAPFILECHANGED = FALSE;

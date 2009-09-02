@@ -37,7 +37,7 @@ Copyright_License {
 
 #include "XCSoar.h"
 #include "Interface.hpp"
-#include "Units.h"
+#include "Units.hpp"
 #include "Waypointparser.h"
 #include "Dialogs/dlgTools.h"
 #include "Screen/MainWindow.hpp"

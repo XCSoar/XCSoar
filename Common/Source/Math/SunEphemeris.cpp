@@ -48,6 +48,7 @@ Copyright_License {
 #include <math.h>
 #include "Blackboard.hpp"
 #include "LocalTime.hpp"
+#include "Units.hpp"
 
 class SunEphemeris {
 

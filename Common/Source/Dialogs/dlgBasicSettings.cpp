@@ -42,7 +42,7 @@ Copyright_License {
 #include "Blackboard.hpp"
 #include "Settings.hpp"
 #include "SettingsComputer.hpp"
-#include "Units.h"
+#include "Units.hpp"
 #include "McReady.h"
 #include "Atmosphere.h"
 #include "Dialogs/dlgTools.h"

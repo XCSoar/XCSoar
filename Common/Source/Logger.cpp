@@ -58,6 +58,8 @@
 #include "Blackboard.hpp"
 
 
+//IGC Logger
+bool LoggerActive = false;
 bool DisableAutoLogger = false;
 bool LoggerShortName = false;
 

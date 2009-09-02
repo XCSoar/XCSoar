@@ -37,7 +37,7 @@ Copyright_License {
 #ifndef INFOBOX_H
 #define INFOBOX_H
 
-#include "Units.h"
+#include "Units.hpp"
 #include "Screen/Font.hpp"
 #include "Screen/BufferCanvas.hpp"
 #include "Screen/PaintWindow.hpp"

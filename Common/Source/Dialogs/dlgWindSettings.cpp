@@ -41,7 +41,7 @@ Copyright_License {
 #include "Blackboard.hpp"
 #include "SettingsUser.hpp"
 #include "SettingsComputer.hpp"
-#include "Units.h"
+#include "Units.hpp"
 #include "Dialogs/dlgTools.h"
 #include "Registry.hpp"
 #include "DataField/Enum.hpp"

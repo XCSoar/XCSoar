@@ -38,7 +38,7 @@ Copyright_License {
 #include "XCSoar.h"
 #include "Dialogs.h"
 #include "Language.hpp"
-#include "Units.h"
+#include "Units.hpp"
 #include "LocalTime.hpp"
 #include "RasterTerrain.h"
 #include "RasterWeather.h"

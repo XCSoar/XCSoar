@@ -41,6 +41,7 @@ Copyright_License {
 #include "Dialogs/dlgTools.h"
 #include "Screen/MainWindow.hpp"
 #include "Compatibility/string.h"
+#include "SettingsUser.hpp"
 
 static WndForm *wf=NULL;
 static WndOwnerDrawFrame *wGrid=NULL;

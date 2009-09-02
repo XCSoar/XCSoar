@@ -42,7 +42,7 @@ Copyright_License {
 #include "NMEA/Derived.hpp"
 #include "Screen/Canvas.hpp"
 #include "Math/FastMath.h"
-
+#include "Units.hpp"
 
 class MapWindowProjection {
  public:

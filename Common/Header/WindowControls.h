@@ -43,7 +43,7 @@ Copyright_License {
 #include "Screen/EditWindow.hpp"
 #include "Dialogs.h"
 #include <malloc.h>
-#include "Units.h"
+#include "Units.hpp"
 
 #include <tchar.h>
 #define IsEmptyString(x)        ((x==NULL) || (x[0]=='\0'))

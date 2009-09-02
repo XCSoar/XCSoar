@@ -55,6 +55,7 @@ Copyright_License {
 */
 #include "windstore.h"
 #include "XCSoar.h"
+#include "Units.hpp"
 
 #include <math.h>
 

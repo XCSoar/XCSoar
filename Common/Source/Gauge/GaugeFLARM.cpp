@@ -50,6 +50,7 @@ Copyright_License {
 #include "Screen/PaintCanvas.hpp"
 #include "Screen/MainWindow.hpp"
 #include <stdlib.h>
+#include "SettingsUser.hpp"
 
 bool  EnableFLARMGauge = true;
 DWORD EnableFLARMMap = 1;

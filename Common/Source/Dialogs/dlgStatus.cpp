@@ -44,7 +44,7 @@ Copyright_License {
 #include "SettingsTask.hpp"
 #include "Math/Earth.hpp"
 #include "Battery.h"
-#include "Units.h"
+#include "Units.hpp"
 #include "Waypointparser.h"
 #include "Logger.h"
 #include "Math/FastMath.h"

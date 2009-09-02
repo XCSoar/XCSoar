@@ -37,7 +37,7 @@ Copyright_License {
 
 #include "XCSoar.h"
 #include "Interface.hpp"
-#include "Units.h"
+#include "Units.hpp"
 #include "Device/device.h"
 #include "InputEvents.h"
 #include "WindowControls.h"

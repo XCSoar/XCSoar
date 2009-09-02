@@ -46,7 +46,7 @@ Copyright_License {
 #include <stdlib.h>
 #include "SettingsUser.hpp"
 #include "SettingsAirspace.hpp"
-#include "Units.h"
+#include "Units.hpp"
 #include "Screen/LabelBlock.hpp"
 #include "MapWindow.h"
 

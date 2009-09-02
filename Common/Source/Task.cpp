@@ -54,6 +54,7 @@ Copyright_License {
 #include "Math/Earth.hpp"
 #include "LogFile.hpp"
 #include "Asset.hpp"
+#include "Units.hpp"
 
 #include <math.h>
 

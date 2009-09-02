@@ -42,7 +42,7 @@ Copyright_License {
 #include <math.h>
 #include "Blackboard.hpp"
 #include "SettingsTask.hpp"
-#include "Units.h"
+#include "Units.hpp"
 #include "Math/Earth.hpp"
 #include "LogFile.hpp"
 #include "Dialogs/dlgTools.h"

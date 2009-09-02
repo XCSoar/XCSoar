@@ -43,6 +43,7 @@ Copyright_License {
 #include "Registry.hpp"
 #include "Asset.hpp"
 #include "Screen/VirtualCanvas.hpp"
+#include "SettingsUser.hpp"
 
 // Display Gobals
 Font InfoWindowFont;

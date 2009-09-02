@@ -38,35 +38,25 @@ Copyright_License {
 #ifndef XCSOAR_SETTINGS_HPP
 #define XCSOAR_SETTINGS_HPP
 
-// changed only in config or by user interface /////////////////////////////
-
-// ?
-
-// Team code
-extern TCHAR TeammateCode[10];
+#include "XCSoar.h"
 
 // changed in task/flight or by calc thread /////////////////////////////////
+extern int TeamFlarmIdTarget;    // FlarmId of the glider to track
+extern TCHAR TeammateCode[10];
+extern double TeammateLatitude;
+extern double TeammateLongitude;
 
+// changed by gui or calculation thread
+extern bool LoggerActive;
 extern bool RequestAirspaceWarningDialog;
 
-extern bool LoggerActive;
-
-// waypoint data
+// waypoint data (by gui or calculation thread)
 extern int  Alternate1; // VENTA3
 extern int  Alternate2;
 extern int  BestAlternate;
 
-// external control of user interface
+// external control of user interface (changed potentially by gui thread)
 extern bool ExternalTriggerCruise;
 extern bool ExternalTriggerCircling;
-
-extern int TeamFlarmIdTarget;    // FlarmId of the glider to track
-
-extern double TeammateLatitude;
-extern double TeammateLongitude;
-
-// unsorted ///////////////////////////////////////////////////////////////////
-
-
 
 #endif

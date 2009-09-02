@@ -79,7 +79,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "InfoBoxEvents.h"
 #include "Device/device.h"
 #include "Message.h"
-#include "Units.h"
+#include "Units.hpp"
 #include "MapWindow.h"
 #include "Atmosphere.h"
 #include "Gauge/GaugeFLARM.hpp"

@@ -43,6 +43,7 @@ Copyright_License {
 #include "Math/Geometry.hpp"
 #include "Device/device.h"
 #include "Thread/Mutex.hpp"
+#include "Units.hpp"
 #include <tchar.h>
 #include <math.h>
 #include <windows.h>

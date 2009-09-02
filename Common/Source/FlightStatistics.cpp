@@ -55,6 +55,7 @@ Copyright_License {
 #include "SettingsComputer.hpp"
 #include "Task.h"
 #include "WayPoint.hpp"
+#include "Units.hpp"
 
 
 void FlightStatistics::Reset() {
