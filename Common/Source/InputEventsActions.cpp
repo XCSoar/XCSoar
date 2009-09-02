@@ -124,11 +124,11 @@ int DLLCache_Count = 0;
 // TODO code: Keep marker text for use in log file etc.
 void InputEvents::eventMarkLocation(const TCHAR *misc) {
   if (_tcscmp(misc, TEXT("reset")) == 0) {
-    reset_marks = true;
+    Marks::reset_marks = true;
   } else {
     mutexComm.Lock(); // Must LockComm to prevent deadlock
     mutexFlightData.Lock();
-    MarkLocation(GPS_INFO.Longitude, GPS_INFO.Latitude);
+    Marks::MarkLocation(GPS_INFO.Longitude, GPS_INFO.Latitude);
     mutexFlightData.Unlock();
     mutexComm.Unlock();
   }

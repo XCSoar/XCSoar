@@ -122,8 +122,8 @@ void SettingsLeave() {
 
   if (TOPOLOGYFILECHANGED)
     {
-      CloseTopology();
-      OpenTopology();
+      TopologyStore::CloseTopology();
+      TopologyStore::OpenTopology();
       map_window.ForceVisibilityScan();
     }
 

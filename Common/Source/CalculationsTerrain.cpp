@@ -70,7 +70,6 @@ void TerrainHeight(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   if (!FinalGlideTerrain) {
     Calculated->TerrainBase = Calculated->TerrainAlt;
   }
-
 }
 
 void CheckFinalGlideThroughTerrain(NMEA_INFO *Basic,

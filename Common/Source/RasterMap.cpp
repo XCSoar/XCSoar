@@ -261,8 +261,6 @@ short RasterMap::GetField(const double &Lattitude,
 //////////// Cached load on demand ////////////////////////////////
 
 //////////// Cache map ////////////////////////////////////////////////
-CRITICAL_SECTION RasterMapCache::CritSec_TerrainFile;
-
 int RasterMapCache::ref_count = 0;
 
 ZZIP_FILE *RasterMapCache::fpTerrain;
@@ -276,16 +274,6 @@ void RasterMapCache::ServiceCache(void) {
   SetCacheTime();
 
   Unlock();
-}
-
-
-void RasterMapCache::Lock(void) {
-  EnterCriticalSection(&CritSec_TerrainFile);
-}
-
-
-void RasterMapCache::Unlock(void) {
-  LeaveCriticalSection(&CritSec_TerrainFile);
 }
 
 
@@ -431,22 +419,8 @@ short RasterMapCache::LookupTerrainCache(const long &SeekPos) {
   return (Alt);
 }
 
-//////////// Raw //////////////////////////////////////////////////
-
-
-void RasterMapRaw::Lock(void) {
-  EnterCriticalSection(&CritSec_TerrainFile);
-}
-
-void RasterMapRaw::Unlock(void) {
-  LeaveCriticalSection(&CritSec_TerrainFile);
-}
-
-
 
 //////////// JPG2000 //////////////////////////////////////////////////
-
-CRITICAL_SECTION RasterMapJPG2000::CritSec_TerrainFile;
 
 void RasterMapJPG2000::ServiceFullReload(double lat, double lon) {
   ReloadJPG2000Full(lat, lon);
@@ -460,7 +434,6 @@ RasterMapJPG2000::RasterMapJPG2000() {
   Paged = true;
   if (ref_count==0) {
     jas_init();
-    InitializeCriticalSection(&CritSec_TerrainFile);
   }
   ref_count++;
 }
@@ -469,20 +442,11 @@ RasterMapJPG2000::~RasterMapJPG2000() {
   ref_count--;
   if (ref_count==0) {
     jas_cleanup();
-    DeleteCriticalSection(&CritSec_TerrainFile);
   }
 }
 
 
 int RasterMapJPG2000::ref_count = 0;
-
-void RasterMapJPG2000::Lock(void) {
-  EnterCriticalSection(&CritSec_TerrainFile);
-}
-
-void RasterMapJPG2000::Unlock(void) {
-  LeaveCriticalSection(&CritSec_TerrainFile);
-}
 
 
 void RasterMapJPG2000::ReloadJPG2000Full(double latitude,

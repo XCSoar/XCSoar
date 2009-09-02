@@ -74,8 +74,8 @@ bool RectangleIsInside(rectObj r_exterior, rectObj r_interior) {
     return false;
 }
 
-void SetTopologyBounds(MapWindow &m_window,
-		       const RECT rcin, const bool force) {
+void TopologyStore::SetTopologyBounds(MapWindow &m_window,
+				      const RECT rcin, const bool force) {
   static rectObj bounds_active;
   static double range_active = 1.0;
   rectObj bounds_screen;
@@ -171,7 +171,7 @@ void SetTopologyBounds(MapWindow &m_window,
 }
 
 
-void CloseTopology() {
+void TopologyStore::CloseTopology() {
   StartupStore(TEXT("CloseTopology\n"));
 
   mutexMapData.Lock();
@@ -184,7 +184,7 @@ void CloseTopology() {
 }
 
 
-void DrawTopology(Canvas &canvas, MapWindow &m_window, const RECT rc)
+void TopologyStore::DrawTopology(Canvas &canvas, MapWindow &m_window, const RECT rc)
 {
   mutexMapData.Lock();
 
@@ -198,7 +198,7 @@ void DrawTopology(Canvas &canvas, MapWindow &m_window, const RECT rc)
 
 
 
-void OpenTopology() {
+void TopologyStore::OpenTopology() {
   StartupStore(TEXT("OpenTopology\n"));
   CreateProgressDialog(gettext(TEXT("Loading Topology File...")));
 

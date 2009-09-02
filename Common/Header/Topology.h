@@ -39,7 +39,7 @@ Copyright_License {
 #ifndef TOPOLOGY_H
 #define TOPOLOGY_H
 
-#include "StdAfx.h"
+#include "XCSoar.h"
 #include "Screen/shapelib/mapshape.h"
 #include "Screen/Pen.hpp"
 #include "Screen/Brush.hpp"

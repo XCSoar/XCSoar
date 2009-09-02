@@ -39,14 +39,18 @@ Copyright_License {
 #define TOPOLOGY_STORE_H
 
 #include "XCSoar.h"
+#include "Protection.hpp"
 
 class Canvas;
 class MapWindow;
 
-void SetTopologyBounds(MapWindow &m_window, 
-		       const RECT rcin, const bool force=false);
-void OpenTopology();
-void CloseTopology();
-void DrawTopology(Canvas &canvas, MapWindow &m_window, const RECT rc);
+class TopologyStore: public MapDataClient {
+ public:
+  static void SetTopologyBounds(MapWindow &m_window, 
+				const RECT rcin, const bool force=false);
+  static void OpenTopology();
+  static void CloseTopology();
+  static void DrawTopology(Canvas &canvas, MapWindow &m_window, const RECT rc);
+};
 
 #endif

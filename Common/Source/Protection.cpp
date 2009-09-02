@@ -68,8 +68,10 @@ Mutex mutexGlideComputer;
 // protect GlideComputer data
 
 Mutex mutexEventQueue;
-Mutex mutexTerrainData;
-Mutex mutexMapData;
+
+Mutex TerrainDataClient::mutexTerrainData;
+Mutex MapDataClient::mutexMapData;
+
 Mutex mutexNavBox;
 Mutex mutexComm;
 Mutex mutexTaskData;

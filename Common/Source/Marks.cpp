@@ -35,7 +35,7 @@ Copyright_License {
 }
 */
 
-#include "Terrain.h"
+#include "Marks.h"
 #include "XCSoar.h"
 #include "Protection.hpp"
 #include "Topology.h"
@@ -57,9 +57,9 @@ Copyright_License {
 
 TopologyWriter *topo_marks = NULL;
 
-bool reset_marks = false;
+bool Marks::reset_marks = false;
 
-void InitialiseMarks() {
+void Marks::InitialiseMarks() {
 
   StartupStore(TEXT("Initialise marks\n"));
 
@@ -86,7 +86,7 @@ void InitialiseMarks() {
 }
 
 
-void CloseMarks() {
+void Marks::CloseMarks() {
   StartupStore(TEXT("CloseMarks\n"));
   mutexMapData.Lock();
   if (topo_marks) {
@@ -98,7 +98,7 @@ void CloseMarks() {
 }
 
 
-void MarkLocation(const double lon, const double lat)
+void Marks::MarkLocation(const double lon, const double lat)
 {
   mutexMapData.Lock();
 
@@ -134,7 +134,7 @@ void MarkLocation(const double lon, const double lat)
 
 }
 
-void DrawMarks(Canvas &canvas, MapWindow &m_window, const RECT rc)
+void Marks::DrawMarks(Canvas &canvas, MapWindow &m_window, const RECT rc)
 {
 
   mutexMapData.Lock();

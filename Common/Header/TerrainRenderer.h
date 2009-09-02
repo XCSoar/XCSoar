@@ -39,8 +39,8 @@ Copyright_License {
 #define TERRAIN_RENDERER_H
 
 #include "XCSoar.h"
+#include "Protection.hpp"
 #include "Screen/Ramp.hpp"
-
 
 class CSTScreenBuffer;
 class Canvas;
@@ -51,7 +51,7 @@ class LabelBlock;
 
 //////////////////////////
 
-class TerrainRenderer {
+class TerrainRenderer: public TerrainDataClient {
 public:
   TerrainRenderer(RECT rc);
   ~TerrainRenderer();

@@ -64,8 +64,9 @@ public:
   static bool CreateTerrainMap(char *zfilename);
 
  public:
-  static void Lock(void);
-  static void Unlock(void);
+  static void Lock(void); // should be protected, friend of TerrainDataClient
+  static void Unlock(void); // should be protected, friend of TerrainDataClient
+
   static short GetTerrainHeight(const double &Latitude,
                                 const double &Longitude);
   static bool IsDirectAccess(void);

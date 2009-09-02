@@ -324,8 +324,8 @@ bool Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
 
   StartupInfo();
 
-  OpenTopology();
-  InitialiseMarks();
+  TopologyStore::OpenTopology();
+  Marks::InitialiseMarks();
   RasterTerrain::OpenTerrain();
 
   ReadWayPoints();
@@ -463,8 +463,8 @@ void Shutdown(void) {
 
   RASP.Close();
   RasterTerrain::CloseTerrain();
-  CloseTopology();
-  CloseMarks();
+  TopologyStore::CloseTopology();
+  Marks::CloseMarks();
   CloseTerrainRenderer();
 
   devShutdown();

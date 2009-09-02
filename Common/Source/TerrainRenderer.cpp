@@ -817,6 +817,7 @@ bool TerrainRenderer::Draw(Canvas &canvas,
   if (!SetMap(lon, lat)) {
     return false;
   }
+  mutexTerrainData.Lock();
 
   // step 1: calculate sunlight vector
   double fudgeelevation = (10.0+80.0*TerrainBrightness/255.0);
@@ -837,6 +838,8 @@ bool TerrainRenderer::Draw(Canvas &canvas,
 
   // step 5: draw
   Draw(canvas, map_projection.GetMapRectBig());
+
+  mutexTerrainData.Unlock();
 
   return true;
 }

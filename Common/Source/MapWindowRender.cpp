@@ -94,7 +94,6 @@ void MapWindow::RenderMapWindowBg(Canvas &canvas, const RECT rc)
       // map has been dirtied since we started drawing, so hurry up
       BigZoom = true;
     }
-    mutexTerrainData.Lock();
     DrawTerrain(canvas, *this, sunazimuth, sunelevation,
 		DrawInfo.Longitude, DrawInfo.Latitude,
 	        BigZoom);
@@ -102,7 +101,6 @@ void MapWindow::RenderMapWindowBg(Canvas &canvas, const RECT rc)
     if ((FinalGlideTerrain==2) && DerivedDrawInfo.TerrainValid) {
       DrawTerrainAbove(canvas, rc, buffer_canvas);
     }
-    mutexTerrainData.Unlock();
 
     if (BigZoom) {
       BigZoom = false;
@@ -110,7 +108,7 @@ void MapWindow::RenderMapWindowBg(Canvas &canvas, const RECT rc)
   }
 
   if (EnableTopology) {
-    DrawTopology(canvas, *this, rc);
+    TopologyStore::DrawTopology(canvas, *this, rc);
   }
 
   // reset label over-write preventer
@@ -217,7 +215,7 @@ void MapWindow::RenderMapWindowBg(Canvas &canvas, const RECT rc)
   */
 
   // marks on top...
-  DrawMarks(canvas, *this, rc);
+  Marks::DrawMarks(canvas, *this, rc);
 }
 
 

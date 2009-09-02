@@ -46,6 +46,8 @@ Copyright_License {
 #include "Screen/MaskedPaintWindow.hpp"
 #include "Screen/LabelBlock.hpp"
 
+#include "Protection.hpp"
+
 class MapWindowBase {
  public:
   MapWindowBase():
@@ -79,7 +81,8 @@ class MapWindowBlackboard {
 class MapWindow
 : public MaskedPaintWindow, public MapWindowBase,
   public MapWindowProjection,
-  public MapWindowBlackboard {
+  public MapWindowBlackboard,
+  public MapDataClient {
  public:
   MapWindow();
 

@@ -38,12 +38,10 @@ Copyright_License {
 #ifndef RASTERMAP_H
 #define RASTERMAP_H
 
-#include "Sizes.h"
+#include "XCSoar.h"
 #include <zzip/lib.h>
 #include "jasper/RasterTile.h"
-
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
+#include "Protection.hpp"
 
 typedef struct _TERRAIN_INFO
 {
@@ -65,7 +63,7 @@ typedef struct _TERRAIN_CACHE
 } TERRAIN_CACHE;
 
 
-class RasterMap {
+class RasterMap: public TerrainDataClient {
  public:
   RasterMap() {
     terrain_valid = false;
@@ -104,8 +102,8 @@ class RasterMap {
 
   virtual bool Open(char* filename) = 0;
   virtual void Close() = 0;
-  virtual void Lock() = 0;
-  virtual void Unlock() = 0;
+  void Lock() { mutexTerrainData.Lock(); };
+  void Unlock() { mutexTerrainData.Unlock(); };
   virtual void ServiceCache() {};
   virtual void ServiceFullReload(double lat, double lon) {};
   bool IsDirectAccess(void) { return DirectAccess; };
@@ -137,16 +135,12 @@ class RasterMapCache: public RasterMap {
     DirectAccess = false;
     if (ref_count==0) {
       fpTerrain = NULL;
-      InitializeCriticalSection(&CritSec_TerrainFile);
     }
     ref_count++;
   }
 
   ~RasterMapCache() {
     ref_count--;
-    if (ref_count==0) {
-      DeleteCriticalSection(&CritSec_TerrainFile);
-    }
   }
 
   // shared!
@@ -163,10 +157,7 @@ class RasterMapCache: public RasterMap {
 
   virtual bool Open(char* filename);
   virtual void Close();
-  void Lock();
-  void Unlock();
  protected:
-  static CRITICAL_SECTION CritSec_TerrainFile;
   TERRAIN_CACHE TerrainCache[MAXTERRAINCACHE];
 
   int terraincacheefficiency;
@@ -186,21 +177,16 @@ class RasterMapRaw: public RasterMap {
   RasterMapRaw() {
     TerrainMem = NULL;
     DirectAccess = true;
-    InitializeCriticalSection(&CritSec_TerrainFile);
   }
   ~RasterMapRaw() {
-    DeleteCriticalSection(&CritSec_TerrainFile);
   }
   short *TerrainMem;
   virtual void SetFieldRounding(double xr, double yr);
   virtual bool Open(char* filename);
   virtual void Close();
-  void Lock();
-  void Unlock();
  protected:
   virtual short _GetFieldAtXY(unsigned int lx,
                               unsigned int ly);
-  CRITICAL_SECTION  CritSec_TerrainFile;
 };
 
 
@@ -217,8 +203,6 @@ class RasterMapJPG2000: public RasterMap {
   virtual void SetFieldRounding(double xr, double yr);
   virtual bool Open(char* filename);
   virtual void Close();
-  void Lock();
-  void Unlock();
   void ServiceFullReload(double lat, double lon);
 
  protected:
@@ -226,7 +210,6 @@ class RasterMapJPG2000: public RasterMap {
   virtual short _GetFieldAtXY(unsigned int lx,
                               unsigned int ly);
   bool TriggerJPGReload;
-  static CRITICAL_SECTION  CritSec_TerrainFile;
   static int ref_count;
   RasterTileCache raster_tile_cache;
 };

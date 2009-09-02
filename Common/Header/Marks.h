@@ -39,13 +39,18 @@ Copyright_License {
 #define MARKS_H
 
 #include "XCSoar.h"
+#include "Protection.hpp"
+
 class Canvas;
 class MapWindow;
 
-extern bool reset_marks;
-void InitialiseMarks();
-void CloseMarks();
-void DrawMarks(Canvas &canvas, MapWindow &m_window, const RECT rc);
-void MarkLocation(const double lon, const double lat);
+class Marks: public MapDataClient {
+ public:
+  static bool reset_marks;
+  static void InitialiseMarks();
+  static void CloseMarks();
+  static void DrawMarks(Canvas &canvas, MapWindow &m_window, const RECT rc);
+  static void MarkLocation(const double lon, const double lat);
+};
 
 #endif

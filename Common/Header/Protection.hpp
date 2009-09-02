@@ -44,11 +44,20 @@ Copyright_License {
 extern Mutex mutexFlightData;
 extern Mutex mutexGlideComputer;
 extern Mutex mutexEventQueue;
-extern Mutex mutexTerrainData;
-extern Mutex mutexMapData;
 extern Mutex mutexNavBox;
 extern Mutex mutexComm;
 extern Mutex mutexTaskData;
+
+class TerrainDataClient {
+protected:
+  static Mutex mutexTerrainData;
+};
+
+class MapDataClient {
+protected:
+  static Mutex mutexMapData;
+};
+
 
 void TriggerGPSUpdate();
 void TriggerVarioUpdate();
