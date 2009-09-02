@@ -35,32 +35,50 @@ Copyright_License {
 }
 */
 
-#ifndef TOPOLOGY_STORE_H
-#define TOPOLOGY_STORE_H
-
+#include "MapWindowTimer.hpp"
 #include "XCSoar.h"
-#include "Protection.hpp"
-#include "Screen/shapelib/mapshape.h"
+#include "UtilsSystem.hpp"
 
-class Canvas;
-class MapWindow;
-class MapWindowProjection;
-class Topology;
-class TopologyWriter;
+MapWindowTimer::MapWindowTimer():
+  timestats_av(0),
+  cpuload(0),
+  timestats_dirty(false),
+  tottime(0)
+{
+}
 
-class TopologyStore: public MapDataClient {
- public:
-  TopologyStore(TopologyWriter* _marks):topo_marks(_marks) {};
-  void ScanVisibility(MapWindow &m_window, 
-		      rectObj &_bounds_active,
-		      const bool force=false);
-  void TriggerUpdateCaches();
-  void Open();
-  void Close();
-  void Draw(Canvas &canvas, MapWindow &m_window, const RECT rc);
- private:
-  Topology* topology_store[MAXTOPOLOGY];
-  TopologyWriter* topo_marks;
-};
+void MapWindowTimer::StartTimer() {
+  timestamp_newdata = ::GetTickCount();
+  timestats_dirty = false;
+}
 
+bool MapWindowTimer::RenderTimeAvailable() {
+  DWORD fpsTime = ::GetTickCount();
+  if (fpsTime-timestamp_newdata<700) {
+    // it's been less than 700 ms since last data
+    // was posted
+    return true;
+  } else {
+    return false;
+  }
+}
+
+void MapWindowTimer::InterruptTimer() {
+  timestats_dirty = true;
+  timestamp_newdata = ::GetTickCount()-700; // cause to expire
+}
+
+void MapWindowTimer::StopTimer() {
+  timestamp_draw = ::GetTickCount();
+  if (!timestats_dirty) {
+    tottime = (2*tottime+(timestamp_draw-timestamp_newdata))/3;
+    timestats_av = tottime;
+    cpuload=0;
+#ifdef DEBUG_MEM
+    cpuload= MeasureCPULoad();
+    DebugStore("%d # mem\n%d # latency\n", CheckFreeRam()/1024, timestats_av);
 #endif
+  }
+  timestats_dirty = false;
+}
+

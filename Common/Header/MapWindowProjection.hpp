@@ -101,6 +101,10 @@ class MapWindowProjection {
 		       double lon_end, double lat_end,
 		       const RECT rc);
 
+  rectObj* getSmartBounds() {
+    return &smart_bounds_active;
+  }
+
   // called on receipt of new data, to trigger projection/scale change functions
   void ExchangeBlackboard(const NMEA_INFO &nmea_info,
 			  const DERIVED_INFO &derived_info);
@@ -169,6 +173,9 @@ class MapWindowProjection {
   bool HaveScaleList() {
     return ScaleListCount>0;
   }
+
+  bool SmartBounds(const bool force);
+
  private:
 
   double DrawScale;
@@ -195,6 +202,9 @@ class MapWindowProjection {
   double    ScaleList[SCALELISTSIZE];
   int       ScaleListCount;
   int       GetMapResolutionFactor();
+
+  rectObj smart_bounds_active;
+  double smart_range_active;
 };
 
 #endif

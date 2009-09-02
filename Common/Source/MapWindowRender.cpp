@@ -223,19 +223,6 @@ void MapWindow::RenderMapWindowBg(Canvas &canvas, const RECT rc)
 
 void MapWindow::RenderMapWindow(Canvas &canvas, const RECT rc)
 {
-  bool drawmap = false;
-  HFONT hfOld;
-
-  DWORD fpsTime = ::GetTickCount();
-
-  // only redraw map part every 800 s unless triggered
-  if (((fpsTime-fpsTime0)>800)||(fpsTime0== 0)||(user_asked_redraw)) {
-    fpsTime0 = fpsTime;
-    drawmap = true;
-    user_asked_redraw = false;
-  }
-  MapWindow::UpdateTimeStats(true);
-
   CalculateOrigin(rc, DrawInfo, DerivedDrawInfo);
   CalculateScreenPositionsWaypoints();
   CalculateScreenPositionsTask();

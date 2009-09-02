@@ -55,74 +55,23 @@ Copyright_License {
 
 //////////////////////////////////////////////////
 
-#define MINRANGE 0.2
-
-
-bool RectangleIsInside(rectObj r_exterior, rectObj r_interior) {
-  if ((r_interior.minx >= r_exterior.minx)&&
-      (r_interior.maxx <= r_exterior.maxx)&&
-      (r_interior.miny >= r_exterior.miny)&&
-      (r_interior.maxy <= r_exterior.maxy))
-    return true;
-  else
-    return false;
+void TopologyStore::TriggerUpdateCaches() {
+  ScopeLock protect(*GetMutex());
+  for (int z=0; z<MAXTOPOLOGY; z++) {
+    if (topology_store[z]) {
+      topology_store[z]->triggerUpdateCache=true;
+    }
+  }
+  if (topo_marks) {
+    topo_marks->triggerUpdateCache = true;
+  }
 }
 
-void TopologyStore::SetTopologyBounds(MapWindow &m_window,
-				      const bool force) {
-  static rectObj _bounds_active;
-  static double range_active = 1.0;
 
+void TopologyStore::ScanVisibility(MapWindow &m_window,
+				   rectObj &_bounds_active,
+				   const bool force) {
   ScopeLock protect(*GetMutex());
-
-  rectObj bounds_screen = m_window.CalculateScreenBounds(1.0);
-
-  bool recompute = false;
-
-  // only recalculate which shapes when bounds change significantly
-  // need to have some trigger for this..
-
-  // trigger if the border goes outside the stored area
-  if (!RectangleIsInside(_bounds_active, bounds_screen)) {
-    recompute = true;
-  }
-
-  // also trigger if the scale has changed heaps
-  double range_real = max((bounds_screen.maxx-bounds_screen.minx),
-			  (bounds_screen.maxy-bounds_screen.miny));
-  double range = max(MINRANGE,range_real);
-
-  double scale = range/range_active;
-  if (max(scale, 1.0/scale)>4) {
-    recompute = true;
-  }
-
-  if (recompute || force) {
-
-    // make bounds bigger than screen
-    if (range_real<MINRANGE) {
-      scale = BORDERFACTOR*MINRANGE/range_real;
-    } else {
-      scale = BORDERFACTOR;
-    }
-    _bounds_active = m_window.CalculateScreenBounds(scale);
-
-    range_active = max((_bounds_active.maxx-_bounds_active.minx),
-		       (_bounds_active.maxy-_bounds_active.miny));
-
-    for (int z=0; z<MAXTOPOLOGY; z++) {
-      if (topology_store[z]) {
-	topology_store[z]->triggerUpdateCache=true;
-      }
-    }
-    if (topo_marks) {
-      topo_marks->triggerUpdateCache = true;
-    }
-
-    // now update visibility of objects in the map window
-    m_window.ScanVisibility(&_bounds_active);
-
-  }
 
   // check if things have come into or out of scale limit
   for (int z=0; z<MAXTOPOLOGY; z++) {
@@ -130,12 +79,11 @@ void TopologyStore::SetTopologyBounds(MapWindow &m_window,
       topology_store[z]->TriggerIfScaleNowVisible(m_window);
     }
   }
-
   // ok, now update the caches
 
   if (topo_marks) {
     topo_marks->updateCache(m_window, _bounds_active);
-  }
+  } // projection, bounds
 
   if (EnableTopology) {
     // check if any needs to have cache updates because wasnt
@@ -160,7 +108,6 @@ void TopologyStore::SetTopologyBounds(MapWindow &m_window,
 #ifdef DEBUG_GRAPHICS
     DebugStore("%d # shapes\n", total_shapes_visible);
 #endif
-
   }
 }
 

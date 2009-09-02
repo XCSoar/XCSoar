@@ -132,47 +132,17 @@ MapWindow::MapWindow()
    TargetDrag_Longitude(0),
    BigZoom(true),
    LandableReachable(false),
-   fpsTime0(0),
    MapFullScreen(false),
    askFullScreen(false),
-   askVisibilityScan(false),
-   user_asked_redraw(false)
+   askVisibilityScan(false)
 {
 
 }
 
 
-int timestats_av = 0;
-int cpuload=0;
-bool timestats_dirty=false;
-
-void MapWindow::UpdateTimeStats(bool start) {
-  static long tottime=0;
-  if (start) {
-    timestamp_newdata = ::GetTickCount();
-    timestats_dirty = false;
-  } else {
-    if (!timestats_dirty) {
-      DWORD time = ::GetTickCount();
-      tottime = (2*tottime+(time-timestamp_newdata))/3;
-      timestats_av = tottime;
-      cpuload=0;
-#ifdef DEBUG_MEM
-      cpuload= MeasureCPULoad();
-      DebugStore("%d # mem\n%d # latency\n", CheckFreeRam()/1024, timestats_av);
-#endif
-    }
-    timestats_dirty = false;
-  }
-}
-
-
-
-
 void MapWindow::RefreshMap() {
+  MapWindowTimer::InterruptTimer();
   dirtyEvent.trigger();
-  user_asked_redraw = true;
-  timestats_dirty = true;
   drawTriggerEvent.trigger();
 }
 
@@ -205,23 +175,6 @@ void MapWindow::StoreRestoreFullscreen(bool store) {
 
 
 ///////////////////////////////////////////////////////////////////////////
-
-
-bool MapWindow::RenderTimeAvailable() {
-  DWORD fpsTime = ::GetTickCount();
-
-  if (dirtyEvent.test())
-    return false;
-
-  if (fpsTime-timestamp_newdata<700) {
-    // it's been less than 700 ms since last data
-    // was posted
-    return true;
-  } else {
-    return false;
-  }
-}
-
 
 void MapWindow::ExchangeBlackboard(const NMEA_INFO &nmea_info,
 				   const DERIVED_INFO &derived_info) {
@@ -267,7 +220,12 @@ void MapWindow::UpdateCaches(const bool force) {
   askVisibilityScan = false; // reset
 
   // have some time, do shape file cache update if necessary
-  topology->SetTopologyBounds(*this, do_force);
+
+  if (SmartBounds(do_force)) {
+    topology->TriggerUpdateCaches();
+    ScanVisibility(getSmartBounds());
+  }
+  topology->ScanVisibility(*this, *getSmartBounds(), do_force);
 
   // JMW experimental jpeg2000 rendering/tile management
   // Must do this even if terrain is not displayed, because
@@ -285,7 +243,7 @@ void MapWindow::UpdateCaches(const bool force) {
   fpsTimeThis = ::GetTickCount();
   static DWORD fpsTimeLast_terrain=0;
 
-  if (do_force || RenderTimeAvailable() ||
+  if (do_force || (!dirtyEvent.test() && RenderTimeAvailable()) ||
       (fpsTimeThis-fpsTimeLast_terrain>5000)) {
     // have some time, do graphics terrain cache update if necessary
     fpsTimeLast_terrain = fpsTimeThis;
@@ -301,6 +259,7 @@ void MapWindow::DrawThreadLoop(bool first_time) {
     return;
   }
 
+  StartTimer();
   mutexRun.Lock(); // take control
 
   dirtyEvent.reset();
@@ -325,8 +284,8 @@ void MapWindow::DrawThreadLoop(bool first_time) {
     get_canvas().copy(draw_canvas);
     update(MapRect);
   }
+  StopTimer();
 
-  UpdateTimeStats(false);
   UpdateCaches(first_time);
 
   mutexRun.Unlock(); // release control
@@ -343,8 +302,6 @@ void MapWindow::DrawThreadInitialise(void) {
   MapRectSmall = MapRect;
   MapRect = MapRectSmall;
 
-  UpdateTimeStats(true);
-
   // set initial display mode
   draw_canvas.background_transparent();
 
@@ -358,7 +315,6 @@ void MapWindow::DrawThreadInitialise(void) {
   ////// This is just here to give fully rendered start screen
   ExchangeBlackboard(GPS_INFO, CALCULATED_INFO);
   dirtyEvent.trigger();
-  UpdateTimeStats(true);
   //////
 
   ToggleFullScreenStart();

@@ -39,6 +39,7 @@ Copyright_License {
 
 #include "XCSoar.h"
 #include "MapWindowProjection.hpp"
+#include "MapWindowTimer.hpp"
 #include "Airspace.h"
 #include "Thread/Trigger.hpp"
 #include "Thread/Mutex.hpp"
@@ -81,6 +82,7 @@ class MapWindow
 : public MaskedPaintWindow, public MapWindowBase,
   public MapWindowProjection,
   public MapWindowBlackboard,
+  public MapWindowTimer,
   public MapDataClient {
  public:
   MapWindow();
@@ -108,7 +110,6 @@ class MapWindow
 
   // used by topology store
   void ScanVisibility(rectObj *bounds_active);
-  bool RenderTimeAvailable(); // used only by TopologyStore.cpp
 
   // input events or reused code
   void Event_SetZoom(double value);
@@ -123,6 +124,7 @@ class MapWindow
   DWORD _DrawThread ();
 
   ////////////////////////////////////////////////////////////////////
+
  private:
 
   void DrawThreadLoop (const bool first);
@@ -130,7 +132,6 @@ class MapWindow
 
   // state
   BOOL     Initialised;
-  bool     user_asked_redraw;
 
   void     ExchangeBlackboard(const NMEA_INFO &nmea_info,
 			      const DERIVED_INFO &derived_info);
@@ -157,11 +158,6 @@ class MapWindow
   void      ToggleFullScreenStart();
 
   double    findMapScaleBarSize(const RECT rc);
-
-  // other
-  DWORD     fpsTime0;
-  DWORD     timestamp_newdata;
-  void      UpdateTimeStats(bool start);
 
   // interface handlers
   int ProcessVirtualKey(int X, int Y, long keytime, short vkmode);

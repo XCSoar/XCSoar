@@ -46,6 +46,7 @@ Copyright_License {
 #include "InputEvents.h"
 #include "UtilsProfile.hpp"
 #include <stdlib.h>
+#include "WayPoint.hpp"
 
 int GliderScreenPosition = 20; // 20% from bottom
 DisplayOrientation_t DisplayOrientation = TRACKUP;
@@ -64,12 +65,11 @@ MapWindowProjection::MapWindowProjection():
   EnablePan ( false),
   TargetPan ( false),
   TargetPanIndex ( 0),
-  TargetZoomDistance ( 500.0)
+  TargetZoomDistance ( 500.0),
+  smart_range_active(1.0)
 {
 
 }
-
-#include "WayPoint.hpp"
 
 
 void MapWindowProjection::InitialiseScaleList(void) {
@@ -412,6 +412,7 @@ void MapWindowProjection::CalculateOrigin(const RECT rc,
 
   screenbounds_latlon = CalculateScreenBounds(0.0);
 }
+
 
 void MapWindow::Event_Pan(int vswitch) {
   //  static bool oldfullscreen = 0;  never assigned!
@@ -768,5 +769,64 @@ void MapWindowProjection::DrawGreatCircle(Canvas &canvas,
 
 #endif
 }
+
+
+///////////
+
+
+#define MINRANGE 0.2
+
+bool RectangleIsInside(rectObj r_exterior, rectObj r_interior) {
+  if ((r_interior.minx >= r_exterior.minx)&&
+      (r_interior.maxx <= r_exterior.maxx)&&
+      (r_interior.miny >= r_exterior.miny)&&
+      (r_interior.maxy <= r_exterior.maxy))
+    return true;
+  else
+    return false;
+}
+
+bool MapWindowProjection::SmartBounds(const bool force) {
+  rectObj bounds_screen = CalculateScreenBounds(1.0);
+  bool recompute = false;
+
+  // only recalculate which shapes when bounds change significantly
+  // need to have some trigger for this..
+
+  // trigger if the border goes outside the stored area
+  if (!RectangleIsInside(smart_bounds_active, bounds_screen)) {
+    recompute = true;
+  }
+
+  // also trigger if the scale has changed heaps
+  double range_real = max((bounds_screen.maxx-bounds_screen.minx),
+			  (bounds_screen.maxy-bounds_screen.miny));
+  double range = max(MINRANGE,range_real);
+
+  double scale = range/smart_range_active;
+  if (max(scale, 1.0/scale)>4) {
+    recompute = true;
+  }
+
+  if (recompute || force) {
+
+    // make bounds bigger than screen
+    if (range_real<MINRANGE) {
+      scale = BORDERFACTOR*MINRANGE/range_real;
+    } else {
+      scale = BORDERFACTOR;
+    }
+    smart_bounds_active = CalculateScreenBounds(scale);
+
+    smart_range_active = max((smart_bounds_active.maxx-smart_bounds_active.minx),
+			     (smart_bounds_active.maxy-smart_bounds_active.miny));
+
+    // now update visibility of objects in the map window
+    return true;
+  } else {
+    return false;
+  }
+}
+
 
 

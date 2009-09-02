@@ -500,6 +500,7 @@ OBJS	:=\
 	$(SRC)/MapWindowTask.o 		\
 	$(SRC)/MapWindowTarget.o	\
 	$(SRC)/MapWindowThermal.o 	\
+	$(SRC)/MapWindowTimer.o 	\
 	$(SRC)/MapWindowTraffic.o 	\
 	$(SRC)/MapWindowTrail.o 	\
 	$(SRC)/MapWindowWaypoints.o 	\

@@ -34,33 +34,27 @@ Copyright_License {
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
 */
-
-#ifndef TOPOLOGY_STORE_H
-#define TOPOLOGY_STORE_H
+#ifndef MAP_WINDOW_TIMER_HPP
+#define MAP_WINDOW_TIMER_HPP
 
 #include "XCSoar.h"
-#include "Protection.hpp"
-#include "Screen/shapelib/mapshape.h"
 
-class Canvas;
-class MapWindow;
-class MapWindowProjection;
-class Topology;
-class TopologyWriter;
 
-class TopologyStore: public MapDataClient {
- public:
-  TopologyStore(TopologyWriter* _marks):topo_marks(_marks) {};
-  void ScanVisibility(MapWindow &m_window, 
-		      rectObj &_bounds_active,
-		      const bool force=false);
-  void TriggerUpdateCaches();
-  void Open();
-  void Close();
-  void Draw(Canvas &canvas, MapWindow &m_window, const RECT rc);
- private:
-  Topology* topology_store[MAXTOPOLOGY];
-  TopologyWriter* topo_marks;
+class MapWindowTimer {
+public:
+  MapWindowTimer();
+  virtual bool RenderTimeAvailable();
+protected:
+  void StartTimer();
+  void StopTimer();
+  void InterruptTimer();
+private:
+  DWORD timestamp_newdata;
+  DWORD timestamp_draw;
+  int timestats_av;
+  int cpuload;
+  bool timestats_dirty;
+  long tottime;
 };
 
 #endif
