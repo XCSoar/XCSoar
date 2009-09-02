@@ -56,7 +56,7 @@ Copyright_License {
 
 #include <tchar.h>
 
-#include "NavFunctions.h" // used for team code
+#include "Math/NavFunctions.hpp" // used for team code
 
 #include <stdio.h>
 

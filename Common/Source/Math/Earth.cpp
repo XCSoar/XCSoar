@@ -37,7 +37,7 @@ Copyright_License {
 
 #include "Math/Earth.hpp"
 #include "Math/Geometry.hpp"
-#include "NavFunctions.h"
+#include "Math/NavFunctions.hpp"
 
 #include <assert.h>
 #include <windef.h>

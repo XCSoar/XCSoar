@@ -57,7 +57,7 @@ Copyright_License {
 #include "TeamCodeCalculation.h"
 #include <tchar.h>
 #include "GlideComputer.hpp"
-#include "NavFunctions.h" // used for team code
+#include "Math/NavFunctions.hpp" // used for team code
 #include "Calculations2.h"
 #ifdef NEWCLIMBAV
 #include "ClimbAverageCalculator.h" // JMW new

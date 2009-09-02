@@ -443,7 +443,6 @@ OBJS	:=\
 	$(SRC)/LoggerSign.o 		\
 	$(SRC)/ReplayLogger.o 		\
 	$(SRC)/McReady.o 		\
-	$(SRC)/NavFunctions.o		\
 	$(SRC)/OnLineContest.o 		\
 	$(SRC)/Persist.o 		\
 	$(SRC)/SnailTrail.o 		\
@@ -540,6 +539,7 @@ OBJS	:=\
 	$(SRC)/Math/Geometry.o 		\
 	$(SRC)/Math/leastsqs.o 		\
 	$(SRC)/Math/LowPassFilter.o 	\
+	$(SRC)/Math/NavFunctions.o	\
 	$(SRC)/Math/Pressure.o 		\
 	$(SRC)/Math/Screen.o 		\
 	$(SRC)/Math/SunEphemeris.o 	\
