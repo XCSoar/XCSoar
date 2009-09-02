@@ -187,19 +187,4 @@ typedef enum{
 
 extern short ScreenSize; // VENTA6
 
-#if defined(PNA) || defined(FIVV)  // VENTA2- ADD GlobalEllipse
-extern int	GlobalModelType;
-extern TCHAR	GlobalModelName[];
-extern float	GlobalEllipse;
-extern TCHAR *	gmfpathname();
-extern TCHAR *	gmfbasename();
-extern int		GetGlobalModelName();
-extern void		SmartGlobalModelType();
-extern short		InstallFonts();
-extern bool		CheckDataDir();
-extern bool		CheckRegistryProfile();
-extern void		ConvToUpper( TCHAR *);
-
-#endif
-
 #endif

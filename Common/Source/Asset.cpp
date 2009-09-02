@@ -35,8 +35,8 @@ Copyright_License {
 }
 */
 
-#include "Asset.hpp"
 #include "XCSoar.h"
+#include "Asset.hpp"
 #include "Registry.hpp"
 #include "UtilsText.hpp"
 #include "LogFile.hpp"

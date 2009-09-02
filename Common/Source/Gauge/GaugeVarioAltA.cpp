@@ -37,6 +37,7 @@ Copyright_License {
 
 #include "Gauge/GaugeVarioAltA.hpp"
 #include "XCSoar.h"
+#include "Asset.hpp"
 #include "Protection.hpp"
 #include "LogFile.hpp"
 #include "Interface.hpp"

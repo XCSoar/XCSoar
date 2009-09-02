@@ -69,15 +69,13 @@ bool RectangleIsInside(rectObj r_exterior, rectObj r_interior) {
 }
 
 void TopologyStore::SetTopologyBounds(MapWindow &m_window,
-				      const RECT rcin, const bool force) {
+				      const bool force) {
   static rectObj bounds_active;
   static double range_active = 1.0;
-  rectObj bounds_screen;
-  (void)rcin;
 
   ScopeLock protect(*GetMutex());
 
-  bounds_screen = m_window.CalculateScreenBounds(1.0);
+  rectObj bounds_screen = m_window.CalculateScreenBounds(1.0);
 
   bool recompute = false;
 

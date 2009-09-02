@@ -39,6 +39,7 @@ Copyright_License {
 
 #include "XCSoar.h"
 
+
 // asset/registration data
 extern TCHAR strAssetNumber[];
 extern TCHAR strRegKey[];
@@ -48,6 +49,21 @@ void ReadCompaqID(void);
 void ReadUUID(void);
 
 // model info
+
+#if defined(PNA) || defined(FIVV)  // VENTA2- ADD GlobalEllipse
+extern int	GlobalModelType;
+extern TCHAR	GlobalModelName[];
+extern float	GlobalEllipse;
+extern TCHAR *	gmfpathname();
+extern TCHAR *	gmfbasename();
+extern int		GetGlobalModelName();
+extern void		SmartGlobalModelType();
+extern short		InstallFonts();
+extern bool		CheckDataDir();
+extern bool		CheckRegistryProfile();
+extern void		ConvToUpper( TCHAR *);
+
+#endif
 
 /*
     Here we declare Model Types for embedded custom versions. Initially for PNAs only.

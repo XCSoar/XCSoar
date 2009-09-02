@@ -50,7 +50,7 @@ class TopologyStore: public MapDataClient {
  public:
   TopologyStore(TopologyWriter* _marks):topo_marks(_marks) {};
   void SetTopologyBounds(MapWindow &m_window, 
-			 const RECT rcin, const bool force=false);
+			 const bool force=false);
   void Open();
   void Close();
   void Draw(Canvas &canvas, MapWindow &m_window, const RECT rc);

@@ -39,7 +39,7 @@ Copyright_License {
 #include "XCSoar.h"
 #include "Appearance.hpp"
 #include "Compatibility/path.h"
-
+#include "Asset.hpp"
 #include <stdio.h>
 
 // Get local My Documents path - optionally include file to add and location

@@ -261,21 +261,17 @@ void MapWindow::UpdateCaches(const bool force) {
   // map was dirtied while we were drawing, so skip slow process
   // (unless we haven't done it for 2000 ms)
   DWORD fpsTimeThis = ::GetTickCount();
-  static double lastTime = 0;
   static DWORD fpsTimeMapCenter = 0;
   bool do_force = force | askVisibilityScan;
 
   askVisibilityScan = false; // reset
 
   // have some time, do shape file cache update if necessary
-  topology->SetTopologyBounds(*this, MapRect, do_force);
+  topology->SetTopologyBounds(*this, do_force);
 
   // JMW experimental jpeg2000 rendering/tile management
   // Must do this even if terrain is not displayed, because
   // raster terrain is used by terrain footprint etc.
-  if (lastTime>DrawInfo.Time) {
-    lastTime = DrawInfo.Time;
-  }
 
   if (do_force || (fpsTimeThis - fpsTimeMapCenter > 5000)) {
 
@@ -289,8 +285,8 @@ void MapWindow::UpdateCaches(const bool force) {
   fpsTimeThis = ::GetTickCount();
   static DWORD fpsTimeLast_terrain=0;
 
-  if (RenderTimeAvailable() ||
-      (fpsTimeThis-fpsTimeLast_terrain>5000) || do_force) {
+  if (do_force || RenderTimeAvailable() ||
+      (fpsTimeThis-fpsTimeLast_terrain>5000)) {
     // have some time, do graphics terrain cache update if necessary
     fpsTimeLast_terrain = fpsTimeThis;
     terrain.ServiceCache();
