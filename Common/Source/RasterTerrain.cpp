@@ -51,10 +51,6 @@ RasterWeather RASP;
 
 ///////////////////// General, open/close ///////////////////////////////
 
-RasterMap* RasterTerrain::TerrainMap = NULL;
-bool RasterTerrain::terrain_initialised = false;
-int RasterTerrain::render_weather = 0;
-
 void RasterTerrain::OpenTerrain(void)
 {
   render_weather = 0;

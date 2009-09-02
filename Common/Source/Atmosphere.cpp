@@ -38,6 +38,7 @@ Copyright_License {
 #include "Atmosphere.h"
 #include "XCSoar.h"
 #include "RasterTerrain.h"
+#include "Interface.hpp"
 
 #include <math.h>
 #include <stdlib.h> /* for abs() */
@@ -127,10 +128,10 @@ void CuSonde::updateMeasurements(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
     return; // nothing to do, wait until level transition
   }
 
-  RasterTerrain::Lock();
+  terrain.Lock();
   hGround =
-    RasterTerrain::GetTerrainHeight(Basic->Latitude, Basic->Longitude);
-  RasterTerrain::Unlock();
+    terrain.GetTerrainHeight(Basic->Latitude, Basic->Longitude);
+  terrain.Unlock();
 
   if (level>last_level) {
     // going up

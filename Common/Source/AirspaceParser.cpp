@@ -48,7 +48,7 @@ Copyright_License {
 #include "Registry.hpp"
 #include "Math/Pressure.h"
 #include "LocalPath.hpp"
-
+#include "Interface.hpp"
 #include "Calculations.h" // TODO danger! ClearAirspaceWarnings
 
 #include <windows.h>
@@ -765,12 +765,12 @@ static void AirspaceAGLLookup(AIRSPACE_ALT *Top, AIRSPACE_ALT *Base,
 			      double av_lat, double av_lon) {
   if (((Base->Base == abAGL) || (Top->Base == abAGL))) {
 
-    RasterTerrain::Lock();
+    terrain.Lock();
     // want most accurate rounding here
-    RasterTerrain::SetTerrainRounding(0,0);
+    terrain.SetTerrainRounding(0,0);
 
     double th =
-      RasterTerrain::GetTerrainHeight(av_lat, av_lon);
+      terrain.GetTerrainHeight(av_lat, av_lon);
 
     if (Base->Base == abAGL) {
       if (Base->AGL>=0) {
@@ -791,7 +791,7 @@ static void AirspaceAGLLookup(AIRSPACE_ALT *Top, AIRSPACE_ALT *Base,
       }
     }
     // JMW TODO enhancement: complain if out of terrain range (th<0)
-    RasterTerrain::Unlock();
+    terrain.Unlock();
   }
 }
 

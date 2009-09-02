@@ -279,8 +279,8 @@ void MapWindow::UpdateCaches(const bool force) {
   if (do_force || (fpsTimeThis - fpsTimeMapCenter > 5000)) {
 
     fpsTimeThis = fpsTimeMapCenter;
-    RasterTerrain::ServiceTerrainCenter(DrawInfo.Latitude,
-                                        DrawInfo.Longitude);
+    terrain.ServiceTerrainCenter(DrawInfo.Latitude,
+				 DrawInfo.Longitude);
   }
 
   fpsTimeThis = ::GetTickCount();
@@ -289,10 +289,8 @@ void MapWindow::UpdateCaches(const bool force) {
   if (RenderTimeAvailable() ||
       (fpsTimeThis-fpsTimeLast_terrain>5000) || do_force) {
     // have some time, do graphics terrain cache update if necessary
-    if (EnableTerrain) {
-      fpsTimeLast_terrain = fpsTimeThis;
-      RasterTerrain::ServiceCache();
-    }
+    fpsTimeLast_terrain = fpsTimeThis;
+    terrain.ServiceCache();
   }
 }
 

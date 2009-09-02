@@ -48,39 +48,41 @@ Copyright_License {
 class RasterTerrain {
 public:
 
-  RasterTerrain() {
-    terrain_initialised = false;
-  }
+  RasterTerrain():
+    terrain_initialised(false),
+    render_weather(0),
+    TerrainMap(NULL) {
+  };
 
-  static void SetViewCenter(const double &Latitude,
+   void SetViewCenter(const double &Latitude,
                             const double &Longitude);
-  static void OpenTerrain();
-  static void CloseTerrain();
-  static bool terrain_initialised;
-  static bool isTerrainLoaded() {
+   void OpenTerrain();
+   void CloseTerrain();
+   bool terrain_initialised;
+   bool isTerrainLoaded() {
     return terrain_initialised;
   }
-  static RasterMap* TerrainMap;
-  static bool CreateTerrainMap(char *zfilename);
+   RasterMap* TerrainMap;
+   bool CreateTerrainMap(char *zfilename);
 
  public:
-  static void Lock(void); // should be protected, friend of TerrainDataClient
-  static void Unlock(void); // should be protected, friend of TerrainDataClient
+   void Lock(void); // should be protected, friend of TerrainDataClient
+   void Unlock(void); // should be protected, friend of TerrainDataClient
 
-  static short GetTerrainHeight(const double &Latitude,
+   short GetTerrainHeight(const double &Latitude,
                                 const double &Longitude);
-  static bool IsDirectAccess(void);
-  static bool IsPaged(void);
-  static void SetTerrainRounding(double x, double y);
-  static void ServiceCache();
-  static void ServiceTerrainCenter(double latitude, double longitude);
-  static void ServiceFullReload(double latitude, double longitude);
-  static int GetEffectivePixelSize(double *pixel_D,
+   bool IsDirectAccess(void);
+   bool IsPaged(void);
+   void SetTerrainRounding(double x, double y);
+   void ServiceCache();
+   void ServiceTerrainCenter(double latitude, double longitude);
+   void ServiceFullReload(double latitude, double longitude);
+   int GetEffectivePixelSize(double *pixel_D,
                                    double latitude, double longitude);
-  static bool WaypointIsInTerrainRange(double latitude, double longitude);
-  static bool GetTerrainCenter(double *latitude,
+   bool WaypointIsInTerrainRange(double latitude, double longitude);
+   bool GetTerrainCenter(double *latitude,
                                double *longitude);
-  static int render_weather;
+   int render_weather;
 };
 
 #endif

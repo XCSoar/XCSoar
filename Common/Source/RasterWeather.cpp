@@ -51,7 +51,7 @@ Copyright_License {
 #include "wcecompat/ts_string.h"
 
 #include "RasterTerrain.h" // JMW TODO decouple
-
+#include "Interface.hpp"
 
 int RasterWeather::IndexToTime(int x) {
   if (x % 2 == 0) {
@@ -108,7 +108,7 @@ void RasterWeather::Reload(double lat, double lon) {
   bool found = false;
   bool now = false;
 
-  if (RasterTerrain::render_weather == 0) {
+  if (terrain.render_weather == 0) {
     // will be drawing terrain
     return;
   }
@@ -242,7 +242,7 @@ void RasterWeather::ItemLabel(int i, TCHAR* Buffer) {
 
 void RasterWeather::ValueToText(TCHAR* Buffer, short val) {
   Buffer[0]=0;
-  switch (RasterTerrain::render_weather) {
+  switch (terrain.render_weather) {
   case 0:
     return;
   case 1: // wstar

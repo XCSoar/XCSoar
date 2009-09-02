@@ -54,7 +54,7 @@ Copyright_License {
 #include "LocalPath.hpp"
 #include "LogFile.hpp"
 #include "MapWindowProjection.hpp"
-
+#include "Interface.hpp"
 #include <assert.h>
 
 ///////////////////////////////////////////////////
@@ -303,7 +303,7 @@ inline void TerrainShading(const short illum, BYTE &r, BYTE &g, BYTE &b)
 
 TerrainRenderer::TerrainRenderer(RECT rc) {
 
-  if (!RasterTerrain::IsDirectAccess()) {
+  if (!terrain.IsDirectAccess()) {
     dtquant = 6;
   } else {
     // SAM: experiment with dtquant between 2 and 4
@@ -353,72 +353,72 @@ TerrainRenderer::~TerrainRenderer() {
 }
 
 bool TerrainRenderer::SetMap(double lon, double lat) {
-  if (RasterTerrain::render_weather) {
+  if (terrain.render_weather) {
     RASP.Reload(lat, lon);
   }
   interp_levels = 5;
-  switch (RasterTerrain::render_weather) {
+  switch (terrain.render_weather) {
   case 1: // wstar
     is_terrain = false;
     do_water = false;
     height_scale = 2; // max range 256*(2**2) = 1024 cm/s = 10 m/s
-    DisplayMap = RASP.weather_map[RasterTerrain::render_weather-1];
+    DisplayMap = RASP.weather_map[terrain.render_weather-1];
     color_ramp = (COLORRAMP*)&weather_colors[0][0];
     break;
   case 2: // bl wind spd
     is_terrain = false;
     do_water = false;
     height_scale = 3;
-    DisplayMap = RASP.weather_map[RasterTerrain::render_weather-1];
+    DisplayMap = RASP.weather_map[terrain.render_weather-1];
     color_ramp = (COLORRAMP*)&weather_colors[1][0];
     break;
   case 3: // hbl
     is_terrain = false;
     do_water = false;
     height_scale = 4;
-    DisplayMap = RASP.weather_map[RasterTerrain::render_weather-1];
+    DisplayMap = RASP.weather_map[terrain.render_weather-1];
     color_ramp = (COLORRAMP*)&weather_colors[2][0];
     break;
   case 4: // dwcrit
     is_terrain = false;
     do_water = false;
     height_scale = 4;
-    DisplayMap = RASP.weather_map[RasterTerrain::render_weather-1];
+    DisplayMap = RASP.weather_map[terrain.render_weather-1];
     color_ramp = (COLORRAMP*)&weather_colors[2][0];
     break;
   case 5: // blcloudpct
     is_terrain = false;
     do_water = true;
     height_scale = 0;
-    DisplayMap = RASP.weather_map[RasterTerrain::render_weather-1];
+    DisplayMap = RASP.weather_map[terrain.render_weather-1];
     color_ramp = (COLORRAMP*)&weather_colors[3][0];
     break;
   case 6: // sfctemp
     is_terrain = false;
     do_water = false;
     height_scale = 0;
-    DisplayMap = RASP.weather_map[RasterTerrain::render_weather-1];
+    DisplayMap = RASP.weather_map[terrain.render_weather-1];
     color_ramp = (COLORRAMP*)&weather_colors[4][0];
     break;
   case 7: // hwcrit
     is_terrain = false;
     do_water = false;
     height_scale = 4;
-    DisplayMap = RASP.weather_map[RasterTerrain::render_weather-1];
+    DisplayMap = RASP.weather_map[terrain.render_weather-1];
     color_ramp = (COLORRAMP*)&weather_colors[2][0];
     break;
   case 8: // wblmaxmin
     is_terrain = false;
     do_water = false;
     height_scale = 1; // max range 256*(1**2) = 512 cm/s = 5.0 m/s
-    DisplayMap = RASP.weather_map[RasterTerrain::render_weather-1];
+    DisplayMap = RASP.weather_map[terrain.render_weather-1];
     color_ramp = (COLORRAMP*)&weather_colors[5][0];
     break;
   case 9: // blcwbase
     is_terrain = false;
     do_water = false;
     height_scale = 4;
-    DisplayMap = RASP.weather_map[RasterTerrain::render_weather-1];
+    DisplayMap = RASP.weather_map[terrain.render_weather-1];
     color_ramp = (COLORRAMP*)&weather_colors[2][0];
     break;
   default:
@@ -427,7 +427,7 @@ bool TerrainRenderer::SetMap(double lon, double lat) {
     is_terrain = true;
     do_water = true;
     height_scale = 4;
-    DisplayMap = RasterTerrain::TerrainMap;
+    DisplayMap = terrain.TerrainMap;
     color_ramp = (COLORRAMP*)&terrain_colors[TerrainRamp][0];
     break;
   }
@@ -454,7 +454,7 @@ void TerrainRenderer::Height(MapWindowProjection &map_projection, bool isBigZoom
   
   unsigned int rfact=1;
   
-  if (isBigZoom && !RasterTerrain::IsDirectAccess()) {
+  if (isBigZoom && !terrain.IsDirectAccess()) {
     // first time displaying this data, so do it at half resolution
     // to avoid too many cache misses
     rfact = 2;
@@ -486,8 +486,6 @@ void TerrainRenderer::Height(MapWindowProjection &map_projection, bool isBigZoom
   // OK, ready to start loading height
   
   DisplayMap->Lock();
-  
-  // TODO code: not needed   RasterTerrain::SetCacheTime();
   
   // set resolution
   
@@ -521,7 +519,7 @@ void TerrainRenderer::Height(MapWindowProjection &map_projection, bool isBigZoom
   
   DisplayMap->Unlock();
   
-  if (RasterTerrain::render_weather) {
+  if (terrain.render_weather) {
     ScanSpotHeights(X0-orig.x, Y0-orig.y, X1-orig.x, Y1-orig.y);
   }
 }

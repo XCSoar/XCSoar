@@ -60,7 +60,7 @@ void MapWindow::RenderMapWindowBg(Canvas &canvas, const RECT rc)
   CalculateScreenPositionsGroundline();
 
   if (!EnableTerrain || !DerivedDrawInfo.TerrainValid
-      || !RasterTerrain::isTerrainLoaded() ) {
+      || !terrain.isTerrainLoaded() ) {
 
     // JMW this isn't needed any more unless we're not drawing terrain
 
@@ -81,8 +81,8 @@ void MapWindow::RenderMapWindowBg(Canvas &canvas, const RECT rc)
   }
 
   if ((EnableTerrain && (DerivedDrawInfo.TerrainValid)
-       && RasterTerrain::isTerrainLoaded())
-      || RasterTerrain::render_weather) {
+       && terrain.isTerrainLoaded())
+      || terrain.render_weather) {
     double sunelevation = 40.0;
     double sunazimuth = DisplayAngle-DerivedDrawInfo.WindBearing;
 
@@ -176,7 +176,7 @@ void MapWindow::RenderMapWindowBg(Canvas &canvas, const RECT rc)
   DrawTeammate(canvas, rc);
 
   if ((EnableTerrain && (DerivedDrawInfo.TerrainValid))
-      || RasterTerrain::render_weather) {
+      || terrain.render_weather) {
     DrawSpotHeights(canvas, *this, label_block);
   }
 
@@ -287,7 +287,7 @@ void DrawTerrain(Canvas &canvas,
 {
   // TODO feature: sun-based rendering option
 
-  if (!RasterTerrain::isTerrainLoaded()) {
+  if (!terrain.isTerrainLoaded()) {
     return;
   }
 
@@ -337,7 +337,7 @@ void DrawSpotHeights(Canvas &canvas,
 		     MapWindowProjection &map_projection,
 		     LabelBlock &label_block) {
   // JMW testing, display of spot max/min
-  if (!RasterTerrain::render_weather)
+  if (!terrain.render_weather)
     return;
   if (!terrain_renderer)
     return;

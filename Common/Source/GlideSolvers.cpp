@@ -47,7 +47,7 @@ Copyright_License {
 #include "Math/FastMath.h"
 #include "Math/Earth.hpp"
 #include "WayPoint.hpp"
-
+#include "Interface.hpp"
 
 //////////////////////////////////////////////////////////
 // Final glide through terrain and footprint calculations
@@ -91,7 +91,7 @@ double FinalGlideThroughTerrain(const double this_bearing,
   double last_dh=0;
   double altitude;
 
-  RasterTerrain::Lock();
+  terrain.Lock();
   double retval = 0;
   int i=0;
   bool start_under = false;
@@ -103,13 +103,13 @@ double FinalGlideThroughTerrain(const double this_bearing,
 
   double Xrounding = fabs(lon-start_lon)/2;
   double Yrounding = fabs(lat-start_lat)/2;
-  RasterTerrain::SetTerrainRounding(Xrounding, Yrounding);
+  terrain.SetTerrainRounding(Xrounding, Yrounding);
 
   lat = last_lat = start_lat;
   lon = last_lon = start_lon;
 
   altitude = Calculated->NavAltitude;
-  h =  max(0, RasterTerrain::GetTerrainHeight(lat, lon));
+  h =  max(0, terrain.GetTerrainHeight(lat, lon));
   dh = altitude - h - SAFETYALTITUDETERRAIN;
   last_dh = dh;
   if (dh<0) {
@@ -161,7 +161,7 @@ double FinalGlideThroughTerrain(const double this_bearing,
     lon += dlon;
 
     // find height over terrain
-    h =  max(0,RasterTerrain::GetTerrainHeight(lat, lon));
+    h =  max(0,terrain.GetTerrainHeight(lat, lon));
 
     dh = altitude - h - SAFETYALTITUDETERRAIN;
 
@@ -210,7 +210,7 @@ double FinalGlideThroughTerrain(const double this_bearing,
   retval = glide_max_range;
 
  OnExit:
-  RasterTerrain::Unlock();
+  terrain.Unlock();
   return retval;
 }
 

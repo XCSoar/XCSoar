@@ -45,6 +45,7 @@ class GaugeVario;
 class GaugeFLARM;
 class Marks;
 class TopologyStore;
+class RasterTerrain;
 
 bool Debounce();
 
@@ -60,6 +61,7 @@ extern Marks *marks;
 extern TopologyStore *topology;
 extern GaugeVario *gauge_vario;
 extern GaugeFLARM *gauge_flarm;
+extern RasterTerrain terrain;
 
 bool InterfaceTimeoutZero(void);
 void InterfaceTimeoutReset(void);

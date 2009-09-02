@@ -102,8 +102,8 @@ void SettingsLeave() {
       ClearTask();
 
       // re-load terrain
-      RasterTerrain::CloseTerrain();
-      RasterTerrain::OpenTerrain();
+      terrain.CloseTerrain();
+      terrain.OpenTerrain();
 
       // re-load waypoints
       ReadWayPoints();
@@ -116,8 +116,8 @@ void SettingsLeave() {
       }
 
       //
-      RasterTerrain::ServiceFullReload(GPS_INFO.Latitude,
-                                       GPS_INFO.Longitude);
+      terrain.ServiceFullReload(GPS_INFO.Latitude,
+				GPS_INFO.Longitude);
 
       map_window.ForceVisibilityScan();
     }

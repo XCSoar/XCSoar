@@ -40,7 +40,7 @@ Copyright_License {
 #include "RasterTerrain.h"
 #include "Math/FastMath.h"
 #include "Math/Earth.hpp"
-
+#include "Interface.hpp"
 #include <math.h>
 
 int EnableThermalLocator = 1;
@@ -301,7 +301,7 @@ void ThermalLocator::EstimateThermalBase(double Thermal_Longitude,
   Tmax = (altitude/wthermal);
   double dt = Tmax/10;
 
-  RasterTerrain::Lock();
+  terrain.Lock();
 
   double lat, lon;
   FindLatitudeLongitude(Thermal_Latitude, Thermal_Longitude,
@@ -310,7 +310,7 @@ void ThermalLocator::EstimateThermalBase(double Thermal_Longitude,
                         &lat, &lon);
   double Xrounding = fabs(lon-Thermal_Longitude)/2;
   double Yrounding = fabs(lat-Thermal_Latitude)/2;
-  RasterTerrain::SetTerrainRounding(Xrounding, Yrounding);
+  terrain.SetTerrainRounding(Xrounding, Yrounding);
 
 //  double latlast = lat;
 //  double lonlast = lon;
@@ -323,7 +323,7 @@ void ThermalLocator::EstimateThermalBase(double Thermal_Longitude,
                           wind_speed*t, &lat, &lon);
 
     double hthermal = altitude-wthermal*t;
-    hground = RasterTerrain::GetTerrainHeight(lat, lon);
+    hground = terrain.GetTerrainHeight(lat, lon);
     double dh = hthermal-hground;
     if (dh<0) {
       t = t+dh/wthermal;
@@ -333,8 +333,8 @@ void ThermalLocator::EstimateThermalBase(double Thermal_Longitude,
       break;
     }
   }
-  hground = RasterTerrain::GetTerrainHeight(lat, lon);
-  RasterTerrain::Unlock();
+  hground = terrain.GetTerrainHeight(lat, lon);
+  terrain.Unlock();
 
   *ground_longitude = lon;
   *ground_latitude = lat;

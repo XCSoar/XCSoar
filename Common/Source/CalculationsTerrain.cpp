@@ -41,17 +41,18 @@ Copyright_License {
 #include "RasterTerrain.h"
 #include "Math/Earth.hpp"
 #include "SettingsComputer.hpp"
+#include "Interface.hpp"
 
 void TerrainHeight(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 {
   short Alt = 0;
 
-  RasterTerrain::Lock();
+  terrain.Lock();
   // want most accurate rounding here
-  RasterTerrain::SetTerrainRounding(0,0);
-  Alt = RasterTerrain::GetTerrainHeight(Basic->Latitude,
-                                        Basic->Longitude);
-  RasterTerrain::Unlock();
+  terrain.SetTerrainRounding(0,0);
+  Alt = terrain.GetTerrainHeight(Basic->Latitude,
+				 Basic->Longitude);
+  terrain.Unlock();
 
   if(Alt<0) {
     Alt = 0;
@@ -137,13 +138,4 @@ void TerrainFootprint(NMEA_INFO *Basic,
     }
     Calculated->Experimental = Calculated->TerrainBase;
   }
-
-  static double LastOptimiseTime = 0;
-  // moved from Calculations.cpp
-
-  if(Basic->Time> LastOptimiseTime+0.0)
-    {
-      LastOptimiseTime = Basic->Time;
-      RasterTerrain::ServiceCache();
-    }
 }

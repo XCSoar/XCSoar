@@ -54,6 +54,7 @@ Copyright_License {
 #include "MapWindowProjection.hpp"
 #include "RasterTerrain.h"
 #include "LogFile.hpp"
+#include "Interface.hpp"
 
 #include <windows.h>
 #include <commctrl.h>
@@ -107,12 +108,12 @@ static bool WaypointInTerrainRange(WAYPOINT *List) {
     return(true);
   }
 
-  if (!RasterTerrain::isTerrainLoaded()) {
+  if (!terrain.isTerrainLoaded()) {
     return(true);
   }
 
-  if (RasterTerrain::WaypointIsInTerrainRange(List->Latitude,
-                                              List->Longitude)) {
+  if (terrain.WaypointIsInTerrainRange(List->Latitude,
+				       List->Longitude)) {
     return true;
   } else {
     if (WaypointOutOfTerrainRangeDontAskAgain == 0){
@@ -347,18 +348,18 @@ static void ReadWayPointFile(ZZIP_FILE *fp, const TCHAR *CurrentWpFileName)
 
 void WaypointAltitudeFromTerrain(WAYPOINT* Temp) {
   double myalt;
-  RasterTerrain::Lock();
-  RasterTerrain::SetTerrainRounding(0.0,0.0);
+  terrain.Lock();
+  terrain.SetTerrainRounding(0.0,0.0);
 
   myalt =
-    RasterTerrain::GetTerrainHeight(Temp->Latitude,
-                                    Temp->Longitude);
+    terrain.GetTerrainHeight(Temp->Latitude,
+			     Temp->Longitude);
   if (myalt>0) {
     Temp->Altitude = myalt;
   } else {
     // error, can't find altitude for waypoint!
   }
-  RasterTerrain::Unlock();
+  terrain.Unlock();
 
 }
 
@@ -775,7 +776,7 @@ void SetHome(bool reset)
 
     // no home at all, so set it from center of terrain if available
     double lon, lat;
-    if (RasterTerrain::GetTerrainCenter(&lat, &lon)) {
+    if (terrain.GetTerrainCenter(&lat, &lon)) {
       GPS_INFO.Latitude = lat;
       GPS_INFO.Longitude = lon;
       GPS_INFO.Altitude = 0;

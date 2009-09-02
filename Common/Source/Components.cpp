@@ -88,11 +88,11 @@ GaugeVario *gauge_vario;
 GaugeFLARM *gauge_flarm;
 Marks *marks;
 TopologyStore *topology;
+RasterTerrain terrain;
 
 MapWindow map_window;
 NMEA_INFO     GPS_INFO;
 DERIVED_INFO  CALCULATED_INFO;
-
 
 /////////////////////////////////////////////////////////////////////////////////
 
@@ -334,7 +334,7 @@ bool Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
   StartupInfo();
 
   topology->Open();
-  RasterTerrain::OpenTerrain();
+  terrain.OpenTerrain();
 
   ReadWayPoints();
   InitWayPointCalc();
@@ -342,8 +342,8 @@ bool Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
   ReadAirfieldFile();
   SetHome(false);
 
-  RasterTerrain::ServiceFullReload(GPS_INFO.Latitude,
-                                   GPS_INFO.Longitude);
+  terrain.ServiceFullReload(GPS_INFO.Latitude,
+			    GPS_INFO.Longitude);
 
   CreateProgressDialog(gettext(TEXT("Scanning weather forecast")));
   StartupStore(TEXT("RASP load\n"));
@@ -470,7 +470,7 @@ void Shutdown(void) {
   StartupStore(TEXT("CloseTerrainTopology\n"));
 
   RASP.Close();
-  RasterTerrain::CloseTerrain();
+  terrain.CloseTerrain();
   topology->Close();
   CloseTerrainRenderer();
 
