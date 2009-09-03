@@ -202,11 +202,11 @@ double RangeAirspaceCircle(const double &longitude,
 double RangeAirspaceArea(const double &longitude,
 			 const double &latitude,
 			 int i, double *bearing,
-			 MapWindowProjection &map_projection);
+			 const MapWindowProjection &map_projection);
 
 bool CheckAirspacePoint(int Idx);
 
-void FindNearestAirspace(MapWindowProjection& map_projection,
+void FindNearestAirspace(const MapWindowProjection &map_projection,
 			 double longitude,
 			 double latitude,
 			 double *nearestdistance,

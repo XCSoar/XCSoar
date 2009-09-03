@@ -36,8 +36,6 @@ Copyright_License {
 */
 
 #include "MapWindowTimer.hpp"
-#include "XCSoar.h"
-#include "UtilsSystem.hpp"
 
 MapWindowTimer::MapWindowTimer():
   timestats_av(0),

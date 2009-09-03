@@ -41,7 +41,10 @@ Copyright_License {
 #include "NMEA/Derived.hpp"
 
 void CalibrationInit(void);
-void CalibrationUpdate(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
+
+void
+CalibrationUpdate(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated);
+
 void CalibrationSave(void);
 
 #endif

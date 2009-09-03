@@ -35,9 +35,8 @@ Copyright_License {
 }
 */
 
-#include "XCSoar.h"
 #include "Protection.hpp"
-#include "MapWindow.h"
+#include "MainWindow.hpp"
 #include "SettingsComputer.hpp"
 #include "SettingsUser.hpp"
 #include "SettingsTask.hpp"
@@ -55,11 +54,8 @@ Copyright_License {
 #include "TopologyStore.h"
 #include "Interface.hpp"
 
-extern MapWindow map_window;
-
-
 void SettingsEnter() {
-  map_window.SuspendDrawingThread();
+  main_window.map.SuspendDrawingThread();
   // This prevents the map and calculation threads from doing anything
   // with shared data while it is being changed (also prevents drawing)
 
@@ -80,7 +76,7 @@ void SettingsEnter() {
 void SettingsLeave() {
   if (!globalRunningEvent.test()) return;
 
-  map_window.set_focus();
+  main_window.map.set_focus();
 
   // mutexing.Lock everything here prevents the calculation thread from running,
   // while shared data is potentially reloaded.
@@ -145,7 +141,7 @@ void SettingsLeave() {
       || TOPOLOGYFILECHANGED
       ) {
     CloseProgressDialog();
-    map_window.set_focus();
+    main_window.map.set_focus();
   }
 
   mutexNavBox.Unlock();
@@ -156,7 +152,7 @@ void SettingsLeave() {
     devRestart();
   }
 
-  map_window.ResumeDrawingThread();
+  main_window.map.ResumeDrawingThread();
   // allow map and calculations threads to continue on their merry way
 }
 

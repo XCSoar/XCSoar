@@ -38,7 +38,8 @@ Copyright_License {
 #ifndef REPLAY_LOGGER_HPP
 #define REPLAY_LOGGER_HPP
 
-#include "XCSoar.h"
+#include <tchar.h>
+#include <windef.h> /* for MAX_PATH */
 
 class ReplayLogger {
  public:

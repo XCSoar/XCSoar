@@ -36,7 +36,6 @@ Copyright_License {
 */
 
 #include "InfoBox.h"
-#include "XCSoar.h"
 #include "Protection.hpp"
 #include "Dialogs.h"
 #include "InfoBoxLayout.h"
@@ -49,6 +48,7 @@ Copyright_License {
 #include "Screen/Fonts.hpp"
 #include "Screen/BitmapCanvas.hpp"
 #include "SettingsUser.hpp"
+#include "Defines.h"
 
 static Color fgColor = RGB(0x0,0x0,0x0);
 static Color bkColor = RGB(0xff,0xff,0xff);

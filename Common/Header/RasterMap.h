@@ -38,7 +38,7 @@ Copyright_License {
 #ifndef RASTERMAP_H
 #define RASTERMAP_H
 
-#include "XCSoar.h"
+#include "Sizes.h"
 #include <zzip/lib.h>
 #include "jasper/RasterTile.h"
 #include "Protection.hpp"

@@ -33,37 +33,22 @@ Copyright_License {
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
+
 */
 
-#ifndef FLIGHT_STATISTICS_HPP
-#define FLIGHT_STATISTICS_HPP
+#ifndef XCSOAR_CALCULATIONS_AIRSPACE_HPP
+#define XCSOAR_CALCULATIONS_AIRSPACE_HPP
 
-#include "Math/leastsqs.h"
-#include "Task.h"
-#include "Screen/Canvas.hpp"
+#include "NMEA/Info.h"
+#include "NMEA/Derived.hpp"
 
-class FlightStatistics {
-public:
-  void Reset();
+class MapWindowProjection;
 
-  LeastSquares ThermalAverage;
-  LeastSquares Wind_x;
-  LeastSquares Wind_y;
-  LeastSquares Altitude;
-  LeastSquares Altitude_Base;
-  LeastSquares Altitude_Ceiling;
-  LeastSquares Task_Speed;
-  double       LegStartTime[MAXTASKPOINTS];
-  LeastSquares Altitude_Terrain;
+void
+PredictNextPosition(const NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 
-  void RenderAirspace(Canvas &canvas, const RECT rc);
-  void RenderBarograph(Canvas &canvas, const RECT rc);
-  void RenderClimb(Canvas &canvas, const RECT rc);
-  void RenderGlidePolar(Canvas &canvas, const RECT rc);
-  void RenderWind(Canvas &canvas, const RECT rc);
-  void RenderTemperature(Canvas &canvas, const RECT rc);
-  void RenderTask(Canvas &canvas, const RECT rc, const bool olcmode);
-  void RenderSpeed(Canvas &canvas, const RECT rc);
-};
+void
+AirspaceWarning(const NMEA_INFO *Basic, DERIVED_INFO *Calculated,
+                const MapWindowProjection &map_projection);
 
 #endif

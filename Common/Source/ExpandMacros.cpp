@@ -41,7 +41,7 @@ Copyright_License {
 #include "Gauge/GaugeFLARM.hpp"
 #include "Logger.h"
 #include "ReplayLogger.hpp"
-#include "MapWindow.h"
+#include "MainWindow.hpp"
 #include "Interface.hpp"
 #include "Blackboard.hpp"
 #include "Settings.hpp"
@@ -327,7 +327,9 @@ bool ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size){
     }
   }
 
-  CondReplaceInString(map_window.isMapFullScreen(), OutBuffer, TEXT("$(FullScreenToggleActionName)"), TEXT("Off"), TEXT("On"), Size);
+  CondReplaceInString(main_window.map.isMapFullScreen(), OutBuffer,
+                      TEXT("$(FullScreenToggleActionName)"),
+                      TEXT("Off"), TEXT("On"), Size);
   CondReplaceInString(AutoZoom, OutBuffer, TEXT("$(ZoomAutoToggleActionName)"), TEXT("Manual"), TEXT("Auto"), Size);
   CondReplaceInString(EnableTopology, OutBuffer, TEXT("$(TopologyToggleActionName)"), TEXT("Off"), TEXT("On"), Size);
   CondReplaceInString(EnableTerrain, OutBuffer, TEXT("$(TerrainToggleActionName)"), TEXT("Off"), TEXT("On"), Size);

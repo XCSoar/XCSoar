@@ -66,27 +66,28 @@ static void OnAcknowledgeClicked(WindowControl * Sender){
     Name = AirspaceArea[index_area].Name;
   }
   if (Name) {
+    MapWindow &map_window = main_window.map;
     UINT answer;
     answer = MessageBoxX(Name,
 			 gettext(TEXT("Acknowledge for day?")),
 			 MB_YESNOCANCEL|MB_ICONQUESTION);
     if (answer == IDYES) {
       if (index_circle>=0) {
-	AirspaceWarnListAdd(&GPS_INFO, &CALCULATED_INFO, false, true,
-			    index_circle, true);
+	AirspaceWarnListAdd(&GPS_INFO, &CALCULATED_INFO, map_window,
+                            false, true, index_circle, true);
       } else if (index_area>=0) {
-	AirspaceWarnListAdd(&GPS_INFO, &CALCULATED_INFO, false, false,
-			    index_area, true);
+	AirspaceWarnListAdd(&GPS_INFO, &CALCULATED_INFO, map_window,
+                            false, false, index_area, true);
       }
       wf->SetModalResult(mrOK);
     } else if (answer == IDNO) {
       // this will cancel a daily ack
       if (index_circle>=0) {
-	AirspaceWarnListAdd(&GPS_INFO, &CALCULATED_INFO, true, true,
-			    index_circle, true);
+	AirspaceWarnListAdd(&GPS_INFO, &CALCULATED_INFO, map_window,
+                            true, true, index_circle, true);
       } else if (index_area>=0) {
-	AirspaceWarnListAdd(&GPS_INFO, &CALCULATED_INFO, true, false,
-			    index_area, true);
+	AirspaceWarnListAdd(&GPS_INFO, &CALCULATED_INFO, map_window,
+                            true, false, index_area, true);
       }
       wf->SetModalResult(mrOK);
     }
@@ -123,6 +124,8 @@ static void SetValues(void) {
   double bearing;
 
   if (index_area >=0) {
+    MapWindow &map_window = main_window.map;
+
     atype = AirspaceArea[index_area].Type;
     top = &AirspaceArea[index_area].Top;
     base = &AirspaceArea[index_area].Base;

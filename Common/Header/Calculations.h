@@ -41,27 +41,35 @@ Copyright_License {
 #include "NMEA/Info.h"
 #include "NMEA/Derived.hpp"
 
-BOOL DoCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
-BOOL DoCalculationsVario(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
-void DoCalculationsSlow(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
-			double screen_distance);
+class MapWindowProjection;
 
-double CalculateWaypointArrivalAltitude(NMEA_INFO *Basic, 
-					DERIVED_INFO *Calculated, 
-					int thepoint); // VENTA3
+BOOL
+DoCalculations(const NMEA_INFO *Basic, DERIVED_INFO *Calculated);
+
+BOOL DoCalculationsVario(const NMEA_INFO *Basic, DERIVED_INFO *Calculated);
+void DoCalculationsSlow(const NMEA_INFO *Basic, DERIVED_INFO *Calculated,
+                        const MapWindowProjection &map_projection);
 
 bool ClearAirspaceWarnings(const bool ack, const bool allday=false);
 void RefreshTaskStatistics(void);
-void  SetWindEstimate(const double speed, const double bearing, const int quality=6);
 
-void StartTask(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
-                      const bool doadvance, const bool doannounce);
 
 bool  InAATTurnSector(const double longitude, const double latitude, const int thepoint);
 
-void IterateEffectiveMacCready(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
+void
+IterateEffectiveMacCready(const NMEA_INFO *Basic,
+                          const DERIVED_INFO *Calculated);
 
-void BallastDump();
+double
+FAIFinishHeight(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated,
+                int wp);
+
+bool
+InsideStartHeight(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated);
+
+bool
+ValidStartSpeed(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated);
+
 
 #define TAKEOFFSPEEDTHRESHOLD (0.5*GlidePolar::Vminsink)
 

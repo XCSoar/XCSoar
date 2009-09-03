@@ -35,35 +35,14 @@ Copyright_License {
 }
 */
 
-#ifndef FLIGHT_STATISTICS_HPP
-#define FLIGHT_STATISTICS_HPP
+#ifndef XCSOAR_CONDITION_MONITOR_HPP
+#define XCSOAR_CONDITION_MONITOR_HPP
 
-#include "Math/leastsqs.h"
-#include "Task.h"
-#include "Screen/Canvas.hpp"
+#include "NMEA/Info.h"
+#include "NMEA/Derived.hpp"
 
-class FlightStatistics {
-public:
-  void Reset();
-
-  LeastSquares ThermalAverage;
-  LeastSquares Wind_x;
-  LeastSquares Wind_y;
-  LeastSquares Altitude;
-  LeastSquares Altitude_Base;
-  LeastSquares Altitude_Ceiling;
-  LeastSquares Task_Speed;
-  double       LegStartTime[MAXTASKPOINTS];
-  LeastSquares Altitude_Terrain;
-
-  void RenderAirspace(Canvas &canvas, const RECT rc);
-  void RenderBarograph(Canvas &canvas, const RECT rc);
-  void RenderClimb(Canvas &canvas, const RECT rc);
-  void RenderGlidePolar(Canvas &canvas, const RECT rc);
-  void RenderWind(Canvas &canvas, const RECT rc);
-  void RenderTemperature(Canvas &canvas, const RECT rc);
-  void RenderTask(Canvas &canvas, const RECT rc, const bool olcmode);
-  void RenderSpeed(Canvas &canvas, const RECT rc);
-};
+void
+ConditionMonitorsUpdate(const NMEA_INFO *Basic,
+                        const DERIVED_INFO *Calculated);
 
 #endif

@@ -71,6 +71,10 @@ Copyright_License {
 #include "BestAlternate.hpp"
 #include "Persist.hpp"
 #include "Airspace.h"
+#include "CalculationsAirspace.hpp"
+#include "CalculationsAbort.hpp"
+#include "ConditionMonitor.hpp"
+#include "MapWindowProjection.hpp"
 
 bool EnableNavBaroAltitude=false;
 int EnableExternalTriggerCruise=false;
@@ -87,31 +91,22 @@ bool WasFlying = false; // VENTA3 used by auto QFE: do not reset QFE
 			//   zero at once!
 extern int FastLogNum; // number of points to log at high rate
 
-extern void ConditionMonitorsUpdate(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
+static void
+Heading(const NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 
-static void TakeoffLanding(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 
 #include "CalculationsClimb.hpp"
 #include "CalculationsTask.hpp"
 #include "CalculationsTerrain.hpp"
 
-// now in CalculationsAirspace.cpp
-void PredictNextPosition(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
-void AirspaceWarning(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
-
-// now in CalculationsAbort.cpp
-void SortLandableWaypoints(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
-
-// now in CalculationsBallast.cpp
-void BallastDump(NMEA_INFO *Basic);
-
 /////////////////////////////////////////////////////////////////////////////////////
 
 
 
-
-void DoCalculationsSlow(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
-			double screen_distance) {
+void
+DoCalculationsSlow(const NMEA_INFO *Basic, DERIVED_INFO *Calculated,
+                   const MapWindowProjection &map_projection)
+{
   // do slow part of calculations (cleanup of caches etc, nothing
   // that changes the state)
 
@@ -125,23 +120,19 @@ void DoCalculationsSlow(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
     lastTime = Basic->Time-6;
   } else {
     // calculate airspace warnings every 6 seconds
-    AirspaceWarning(Basic, Calculated);
+    AirspaceWarning(Basic, Calculated, map_projection);
   }
 
-  TerrainFootprint(Basic, Calculated, screen_distance);
+  TerrainFootprint(Basic, Calculated, map_projection.GetScreenDistanceMeters());
 
   DoBestAlternateSlow(Basic, Calculated);
 
 }
 
 
-void ResetFlightStats(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
-                      bool full=true) {
-  glide_computer.ResetFlight(full);
-}
-
-
-bool FlightTimes(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
+bool
+FlightTimes(const NMEA_INFO *Basic, DERIVED_INFO *Calculated)
+{
   static double LastTime = 0;
 
   if ((Basic->Time != 0) && (Basic->Time <= LastTime))
@@ -151,7 +142,7 @@ bool FlightTimes(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
 
       if ((Basic->Time<LastTime) && (!Basic->NAVWarning)) {
 	// Reset statistics.. (probably due to being in IGC replay mode)
-        ResetFlightStats(Basic, Calculated);
+        ResetFlightStats(Calculated);
       }
 
       LastTime = Basic->Time;
@@ -171,14 +162,8 @@ bool FlightTimes(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
 }
 
 
-void InitCalculations() {
-  StartupStore(TEXT("InitCalculations\n"));
-  ///////////////
-  glide_computer.Initialise();
-}
-
-
-BOOL DoCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
+BOOL
+DoCalculations(const NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 {
   double mc = GlidePolar::GetMacCready();
   double ce = GlidePolar::GetCruiseEfficiency();
@@ -232,10 +217,10 @@ BOOL DoCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   return TRUE;
 }
 
-////////////////////////////////
 
-
-void DoAutoQNH(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
+static void
+DoAutoQNH(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated)
+{
   static int done_autoqnh = 0;
 
   // Reject if already done
@@ -267,8 +252,9 @@ void DoAutoQNH(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   }
 }
 
-
-void TakeoffLanding(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
+static void
+TakeoffLanding(const NMEA_INFO *Basic, DERIVED_INFO *Calculated)
+{
   static int time_in_flight = 0;
   static int time_on_ground = 0;
 
@@ -313,7 +299,7 @@ void TakeoffLanding(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
       WasFlying=true; // VENTA3
       InputEvents::processGlideComputer(GCE_TAKEOFF);
       // reset stats on takeoff
-      ResetFlightStats(Basic, Calculated);
+      ResetFlightStats(Calculated);
 
       Calculated->TakeOffTime= Basic->Time;
 
@@ -354,7 +340,10 @@ void TakeoffLanding(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
 
 
 
-void IterateEffectiveMacCready(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
+void
+IterateEffectiveMacCready(const NMEA_INFO *Basic,
+                          const DERIVED_INFO *Calculated)
+{
   // nothing yet.
 }
 

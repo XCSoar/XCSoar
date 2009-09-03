@@ -36,7 +36,6 @@ Copyright_License {
 */
 
 #include "TerrainRenderer.h"
-#include "XCSoar.h"
 #include "RasterTerrain.h"
 #include "RasterWeather.h"
 #include "Screen/LabelBlock.hpp"

@@ -38,12 +38,11 @@ Copyright_License {
 #ifndef WINDZIGZAG_H
 #define WINDZIGZAG_H
 
-#include "XCSoar.h"
 #include "NMEA/Info.h"
 #include "NMEA/Derived.hpp"
 
-int WindZigZagUpdate(NMEA_INFO* Basic, DERIVED_INFO* Calculated,
-		      double *zzwindspeed, double *zzwindbearing);
-
+int
+WindZigZagUpdate(const NMEA_INFO* Basic, const DERIVED_INFO* Calculated,
+                 double *zzwindspeed, double *zzwindbearing);
 
 #endif

@@ -76,9 +76,11 @@ WindStore::~WindStore(){
   * good the measurement is. Higher quality measurements are more
   * important in the end result and stay in the store longer.
   */
-void WindStore::slot_measurement(NMEA_INFO *nmeaInfo,
-                                 DERIVED_INFO *derivedInfo,
-                                 Vector windvector, int quality){
+void
+WindStore::slot_measurement(const NMEA_INFO *nmeaInfo,
+                            DERIVED_INFO *derivedInfo,
+                            Vector windvector, int quality)
+{
   updated = true;
   windlist->addMeasurement(nmeaInfo->Time, windvector, nmeaInfo->Altitude, quality);
   //we may have a new wind value, so make sure it's emitted if needed!
@@ -92,9 +94,10 @@ void WindStore::slot_measurement(NMEA_INFO *nmeaInfo,
   * newWind signal.
   */
 
-void WindStore::slot_Altitude(NMEA_INFO *nmeaInfo,
-                              DERIVED_INFO *derivedInfo){
-
+void
+WindStore::slot_Altitude(const NMEA_INFO *nmeaInfo,
+                         DERIVED_INFO *derivedInfo)
+{
   if ((fabs(nmeaInfo->Altitude-_lastAltitude)>100.0)||(updated)) {
     //only recalculate if there is a significant change
     recalculateWind(nmeaInfo, derivedInfo);
@@ -112,8 +115,10 @@ Vector WindStore::getWind(double Time, double h, bool *found) {
 /** Recalculates the wind from the stored measurements.
   * May result in a newWind signal. */
 
-void WindStore::recalculateWind(NMEA_INFO *nmeaInfo,
-                                DERIVED_INFO *derivedInfo) {
+void
+WindStore::recalculateWind(const NMEA_INFO *nmeaInfo,
+                           DERIVED_INFO *derivedInfo)
+{
   bool found;
   Vector CurWind= windlist->getWind(nmeaInfo->Time,
                                     nmeaInfo->Altitude, &found);
@@ -133,8 +138,10 @@ void WindStore::recalculateWind(NMEA_INFO *nmeaInfo,
 }
 
 
-void WindStore::newWind(NMEA_INFO *nmeaInfo, DERIVED_INFO *derivedInfo,
-                        Vector &wind) {
+void
+WindStore::newWind(const NMEA_INFO *nmeaInfo, DERIVED_INFO *derivedInfo,
+                   Vector &wind)
+{
   //
   double mag = sqrt(wind.x*wind.x+wind.y*wind.y);
   double bearing;

@@ -36,7 +36,6 @@ Copyright_License {
 */
 
 #include "Registry.hpp"
-#include "XCSoar.h"
 #include "Screen/Animation.hpp"
 #include "Screen/Blank.hpp"
 #include "Airspace.h"
@@ -62,6 +61,7 @@ Copyright_License {
 #include "InfoBoxManager.h"
 #include "Asset.hpp"
 #include "GlideRatio.hpp"
+#include "CalculationsWind.hpp"
 
 #include <assert.h>
 #include <stdlib.h>

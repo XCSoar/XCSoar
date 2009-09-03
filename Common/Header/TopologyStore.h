@@ -38,9 +38,9 @@ Copyright_License {
 #ifndef TOPOLOGY_STORE_H
 #define TOPOLOGY_STORE_H
 
-#include "XCSoar.h"
 #include "Protection.hpp"
 #include "Screen/shapelib/mapshape.h"
+#include "Sizes.h"
 
 class Canvas;
 class MapWindow;

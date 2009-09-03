@@ -38,7 +38,6 @@ Copyright_License {
 #ifndef CHART_HPP
 #define CHART_HPP
 
-#include "XCSoar.h"
 #include "Math/leastsqs.h"
 #include "Screen/Canvas.hpp"
 

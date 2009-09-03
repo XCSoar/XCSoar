@@ -38,7 +38,6 @@ Copyright_License {
 #ifndef XCSOAR_SNAIL_TRAIL_HPP
 #define XCSOAR_SNAIL_TRAIL_HPP
 
-#include "XCSoar.h"
 #include "NMEA/Info.h"
 #include "NMEA/Derived.hpp"
 #include "Screen/shapelib/mapshape.h"
@@ -59,7 +58,7 @@ typedef struct _SNAIL_POINT
 class SnailTrail {
 public:
   SnailTrail();
-  void AddPoint(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
+  void AddPoint(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated);
   int getIndex() {
     return indexNext;
   }

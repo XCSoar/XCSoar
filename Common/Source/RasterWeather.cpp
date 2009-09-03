@@ -37,7 +37,6 @@ Copyright_License {
 
 #include "RasterWeather.h"
 #include "LogFile.hpp"
-#include "XCSoar.h"
 #include "Dialogs.h"
 #include "Language.hpp"
 #include "Units.hpp"

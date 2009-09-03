@@ -49,8 +49,7 @@ Copyright_License {
 #include "GlideSolvers.hpp"
 #include "UtilsSystem.hpp"
 #include "Math/Earth.hpp"
-
-
+#include "CalculationsAbort.hpp"
 
 // Alternates VENTA3
 int Alternate1 = -1;
@@ -59,16 +58,6 @@ int BestAlternate = -1;
 bool EnableBestAlternate=false;
 bool EnableAlternate1=false;
 bool EnableAlternate2=false;
-
-
-// in Calculations.cpp
-#include "Calculations.h"
-
-void LatLon2Flat(double lon, double lat, int *scx, int *scy);
-
-int CalculateWaypointApproxDistance(int scx_aircraft, int scy_aircraft,
-                                    int i);
-
 
 /*
  * ===========================================
@@ -82,10 +71,11 @@ int CalculateWaypointApproxDistance(int scx_aircraft, int scy_aircraft,
 			// searched for, among a preliminar list of
 			// MAXBEST * 2 - CPU HOGGING ALERT!
 
-void AlertBestAlternate(NMEA_INFO *Basic, short soundmode);
+static void
+AlertBestAlternate(const NMEA_INFO *Basic, short soundmode);
 
-void SearchBestAlternate(NMEA_INFO *Basic,
-			 DERIVED_INFO *Calculated)
+static void
+SearchBestAlternate(const NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 {
   int SortedLandableIndex[MAXBEST];
   double SortedArrivalAltitude[MAXBEST];
@@ -461,8 +451,9 @@ void SearchBestAlternate(NMEA_INFO *Basic,
 /*
  * Do not disturb too much. Play alert sound only once every x minutes, not more.
  */
-void AlertBestAlternate(NMEA_INFO *Basic, short soundmode) {
-
+static void
+AlertBestAlternate(const NMEA_INFO *Basic, short soundmode)
+{
   static double LastAlertTime=0;
 
   if ( Basic->Time > LastAlertTime + 180.0 ) {
@@ -494,7 +485,9 @@ void AlertBestAlternate(NMEA_INFO *Basic, short soundmode) {
   }
 }
 
-void DoBestAlternateSlow(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
+void
+DoBestAlternateSlow(const NMEA_INFO *Basic, DERIVED_INFO *Calculated)
+{
   static double LastSearchBestTime = 0; // VENTA3
 
  // VENTA3 best landing slow calculation
@@ -519,7 +512,10 @@ void DoBestAlternateSlow(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
  * Colors VGR are disabled, but available
  */
 
-void DoAlternates(NMEA_INFO *Basic, DERIVED_INFO *Calculated, int AltWaypoint) { // VENTA3
+void
+DoAlternates(const NMEA_INFO *Basic, DERIVED_INFO *Calculated,
+             int AltWaypoint)
+{
   if (!ValidWayPoint(AltWaypoint)) {
     return;
   }

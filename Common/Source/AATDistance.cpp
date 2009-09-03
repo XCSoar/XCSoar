@@ -37,7 +37,6 @@ Copyright_License {
 */
 
 #include "AATDistance.h"
-#include "XCSoar.h"
 #include "Protection.hpp"
 #include "Task.h"
 #include "Math/Geometry.hpp"

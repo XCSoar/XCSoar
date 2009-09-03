@@ -38,7 +38,7 @@ Copyright_License {
 #ifndef XCSOAR_SETTINGS_HPP
 #define XCSOAR_SETTINGS_HPP
 
-#include "XCSoar.h"
+#include <tchar.h>
 
 // changed in task/flight or by calc thread /////////////////////////////////
 extern int TeamFlarmIdTarget;    // FlarmId of the glider to track

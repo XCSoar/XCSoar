@@ -54,9 +54,9 @@ int  AutoMcMode = 0;
 // 1: Set to average if in climb mode
 // 2: Average if in climb mode, final glide in final glide mode
 
-
-void GlideComputer::DoAutoMacCready(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
-				    double mc_setting)
+void
+GlideComputer::DoAutoMacCready(const NMEA_INFO *Basic, DERIVED_INFO *Calculated,
+                               double mc_setting)
 {
   bool is_final_glide = false;
 

@@ -37,6 +37,7 @@ Copyright_License {
 */
 
 #include "Calculations.h"
+#include "CalculationsWind.hpp"
 #include "Settings.hpp"
 #include "SettingsComputer.hpp"
 #include "Device/device.h"
@@ -63,24 +64,21 @@ Copyright_License {
 #define ClimbCruiseSwitch 10
 #define THERMAL_TIME_MIN 45.0
 
+static void
+ThermalBand(const NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 
-static void ThermalBand(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
-void DoWindCirclingMode(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
-			bool left);
-void DoWindCirclingSample(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
-void DoWindCirclingAltitude(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
-
-
-void SwitchZoomClimb(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
-                     bool isclimb, bool left) {
-
+static void
+SwitchZoomClimb(const NMEA_INFO *Basic, DERIVED_INFO *Calculated,
+                bool isclimb, bool left)
+{
   // this is calculation stuff, leave it there
   DoWindCirclingMode(Basic, Calculated, left);
 }
 
-
-void PercentCircling(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
-                     const double Rate) {
+static void
+PercentCircling(const NMEA_INFO *Basic, DERIVED_INFO *Calculated,
+                const double Rate)
+{
   // JMW circling % only when really circling,
   // to prevent bad stats due to flap switches and dolphin soaring
 
@@ -103,8 +101,8 @@ void PercentCircling(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
   }
 }
 
-
-void Turning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
+void
+Turning(const NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 {
   static double LastTrack = 0;
   static double StartTime  = 0;
@@ -346,8 +344,9 @@ void Turning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 
 }
 
-
-static void ThermalSources(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
+static void
+ThermalSources(const NMEA_INFO *Basic, DERIVED_INFO *Calculated)
+{
   double ground_longitude;
   double ground_latitude;
   double ground_altitude;
@@ -391,8 +390,8 @@ static void ThermalSources(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   }
 }
 
-
-void LastThermalStats(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
+void
+LastThermalStats(const NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 {
   static int LastCircling = FALSE;
 
@@ -435,8 +434,8 @@ void LastThermalStats(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   LastCircling = Calculated->Circling;
 }
 
-
-void ThermalBand(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
+void
+ThermalBand(const NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 {
   static double LastTime = 0;
   if(Basic->Time <= LastTime)

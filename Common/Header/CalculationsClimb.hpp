@@ -40,7 +40,7 @@ Copyright_License {
 
 #include "CalculationsClimb.hpp"
 
-void Turning(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
-void LastThermalStats(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
+void Turning(const NMEA_INFO *Basic, DERIVED_INFO *Calculated);
+void LastThermalStats(const NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 
 #endif

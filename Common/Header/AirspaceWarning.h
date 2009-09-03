@@ -37,15 +37,20 @@ Copyright_License {
 #ifndef AIRSPACE_WARNING_H
 #define AIRSPACE_WARNING_H
 
-#include "XCSoar.h"
 #include "NMEA/Info.h"
 #include "NMEA/Derived.hpp"
 
-extern void AirspaceWarnListAdd(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
-                                bool Predicted, bool IsCircle, int AsIdx,
-                                bool ackDay=false);
+class MapWindowProjection;
 
-extern void AirspaceWarnListProcess(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
+extern void
+AirspaceWarnListAdd(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated,
+                    const MapWindowProjection &map_projection,
+                    bool Predicted, bool IsCircle, int AsIdx,
+                    bool ackDay=false);
 
+extern void
+AirspaceWarnListProcess(const NMEA_INFO *Basic,
+                        const DERIVED_INFO *Calculated,
+                        const MapWindowProjection &map_projection);
 
 #endif

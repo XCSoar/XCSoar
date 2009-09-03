@@ -49,6 +49,7 @@ Copyright_License {
 #include "Units.hpp"
 #include "Screen/LabelBlock.hpp"
 #include "MapWindow.h"
+#include "resource.h"
 
 #define NUMSNAILRAMP 6
 

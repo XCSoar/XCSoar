@@ -36,7 +36,6 @@ Copyright_License {
 */
 
 #include "Marks.h"
-#include "XCSoar.h"
 #include "Protection.hpp"
 #include "Topology.h"
 #include "Dialogs.h"
@@ -47,6 +46,7 @@ Copyright_License {
 #include "LocalPath.hpp"
 #include "UtilsSystem.hpp"
 #include "LogFile.hpp"
+#include "resource.h"
 
 #include <assert.h>
 

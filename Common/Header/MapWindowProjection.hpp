@@ -37,12 +37,12 @@ Copyright_License {
 #if !defined(XCSOAR_MAPWINDOW_PROJECTION_H)
 #define XCSOAR_MAPWINDOW_PROJECTION_H
 
-#include "XCSoar.h"
 #include "NMEA/Info.h"
 #include "NMEA/Derived.hpp"
-#include "Screen/Canvas.hpp"
 #include "Math/FastMath.h"
 #include "Units.hpp"
+
+class Canvas;
 
 class MapWindowProjection {
  public:
@@ -51,49 +51,49 @@ class MapWindowProjection {
   // used by terrain renderer, topology and airspace
 
   void    Screen2LonLat(const int &x, const int &y,
-			       double &X, double &Y);
+                        double &X, double &Y) const;
 
   void    LonLat2Screen(const double &lon, const double &lat,
-			       POINT &sc);
+                        POINT &sc) const;
   void    LonLat2Screen(pointObj *ptin, POINT *ptout,
 			       const int n,
-			       const int skip);
+                        const int skip) const;
 
-  POINT   GetOrigScreen(void) { return Orig_Screen; }
-  POINT   GetOrigAircraft(void) { return Orig_Aircraft; }
-  double  GetPanLatitude() { return PanLatitude; }
-  double  GetPanLongitude() { return PanLongitude; }
-  double  GetDisplayAngle() { return DisplayAngle; }
+  POINT   GetOrigScreen(void) const { return Orig_Screen; }
+  POINT   GetOrigAircraft(void) const { return Orig_Aircraft; }
+  double  GetPanLatitude() const { return PanLatitude; }
+  double  GetPanLongitude() const { return PanLongitude; }
+  double  GetDisplayAngle() const { return DisplayAngle; }
 
-  rectObj CalculateScreenBounds(double scale);
+  rectObj CalculateScreenBounds(double scale) const;
 
-  double  GetScreenDistanceMeters(void);
+  double  GetScreenDistanceMeters(void) const;
 
-  double GetScreenScaleToLonLat() {
+  double GetScreenScaleToLonLat() const {
     return InvDrawScale;
   }
-  double GetMapScaleUser() { // Topology
+  double GetMapScaleUser() const { // Topology
     return MapScale;
   }
-  double GetMapScaleKM() {
+  double GetMapScaleKM() const {
     return MapScale*0.001/DISTANCEMODIFY;
   }
 
-  bool isPan() {
+  bool isPan() const {
     return EnablePan;
   }
-  bool isTargetPan(void) {
+  bool isTargetPan(void) const {
     return TargetPan;
   }
-  RECT GetMapRectBig() {
+  RECT GetMapRectBig() const {
     return MapRectBig;
   }
-  RECT GetMapRect() {
+  RECT GetMapRect() const {
     return MapRect;
   }
 
   // used by waypoint nearest routine
-  bool    WaypointInScaleFilter(int i);
+  bool WaypointInScaleFilter(int i) const;
 
   // drawing functions
   void DrawGreatCircle(Canvas &canvas,
@@ -109,13 +109,13 @@ class MapWindowProjection {
 			  const DERIVED_INFO &derived_info);
  protected:
   // helpers
-  bool PointVisible(const POINT &P);
-  bool LonLatVisible(const double &lon, const double &lat);
+  bool PointVisible(const POINT &P) const;
+  bool LonLatVisible(const double &lon, const double &lat) const;
   bool PointInRect(const double &x, const double &y,
-		   const rectObj &bounds);
+		   const rectObj &bounds) const;
 
   bool LonLat2ScreenIfVisible(const double &lon, const double &lat,
-			      POINT *sc);
+			      POINT *sc) const;
 
   rectObj   screenbounds_latlon;
   RECT   MapRectSmall;
@@ -146,30 +146,30 @@ class MapWindowProjection {
   }
 
   // 4 = x*30/1000
-  double DistancePixelsToMeters(const double x) {
+  double DistancePixelsToMeters(const double x) const {
     return x*MapScale/(DISTANCEMODIFY*GetMapResolutionFactor());
   }
   //
-  double RequestDistancePixelsToMeters(const double x) {
+  double RequestDistancePixelsToMeters(const double x) const {
     return x*_RequestedMapScale/(DISTANCEMODIFY*GetMapResolutionFactor());
   }
-  double DistanceScreenToUser(const unsigned x) {
+  double DistanceScreenToUser(const unsigned x) const {
     return x*MapScale/GetMapResolutionFactor();
   }
   double RequestMapScale(double x) {
     _RequestedMapScale = LimitMapScale(x);
     return _RequestedMapScale;
   }
-  double GetRequestedMapScale() {
+  double GetRequestedMapScale() const {
     return _RequestedMapScale;
   }
-  double GetLonLatToScreenScale() {
+  double GetLonLatToScreenScale() const {
     return DrawScale;
   }
-  bool IsOriginCentered() {
+  bool IsOriginCentered() const {
     return _origin_centered;
   }
-  bool HaveScaleList() {
+  bool HaveScaleList() const {
     return ScaleListCount>0;
   }
 
@@ -200,7 +200,7 @@ class MapWindowProjection {
   int       ScaleCurrent;
   double    ScaleList[SCALELISTSIZE];
   int       ScaleListCount;
-  int       GetMapResolutionFactor();
+  int GetMapResolutionFactor() const;
 
   rectObj smart_bounds_active;
   double smart_range_active;

@@ -46,7 +46,8 @@ Copyright_License {
 bool BallastTimerActive = false;
 int BallastSecsToEmpty = 120;
 
-void BallastDump (NMEA_INFO *Basic)
+void
+BallastDump(const NMEA_INFO *Basic)
 {
   static double BallastTimeLast = -1;
 

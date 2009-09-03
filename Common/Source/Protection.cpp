@@ -37,6 +37,7 @@ Copyright_License {
 
 #include "XCSoar.h"
 #include "Blackboard.hpp"
+#include "MainWindow.hpp"
 #include "MapWindow.h"
 #include "Protection.hpp"
 #include "InfoBoxManager.h"
@@ -96,7 +97,7 @@ void TriggerAll(void) {
 }
 
 void TriggerRedraws() {
-  if (map_window.IsDisplayRunning()) {
+  if (main_window.map.IsDisplayRunning()) {
     if (gpsUpdatedTriggerEvent.test()) {
       drawTriggerEvent.trigger();
     }
@@ -107,7 +108,7 @@ void TriggerRedraws() {
 DWORD InstrumentThread (LPVOID lpvoid) {
 	(void)lpvoid;
   // wait for proper startup signal
-  while (!map_window.IsDisplayRunning()) {
+  while (!main_window.map.IsDisplayRunning()) {
     Sleep(MIN_WAIT_TIME);
   }
 
@@ -116,7 +117,7 @@ DWORD InstrumentThread (LPVOID lpvoid) {
     if (!varioTriggerEvent.wait(MIN_WAIT_TIME))
       continue;
 
-    if (map_window.IsDisplayRunning()) {
+    if (main_window.map.IsDisplayRunning()) {
       if (EnableVarioGauge) {
 	gauge_vario->Render();
       }
@@ -138,7 +139,7 @@ DWORD CalculationThread (LPVOID lpvoid) {
   need_calculations_slow = false;
 
   // wait for proper startup signal
-  while (!map_window.IsDisplayRunning()) {
+  while (!main_window.map.IsDisplayRunning()) {
     Sleep(MIN_WAIT_TIME);
   }
 
@@ -161,7 +162,6 @@ DWORD CalculationThread (LPVOID lpvoid) {
     memcpy(&tmp_CALCULATED_INFO,&CALCULATED_INFO,sizeof(DERIVED_INFO));
 
     bool has_vario = GPS_INFO.VarioAvailable;
-    double screen_distance = map_window.GetScreenDistanceMeters();
     mutexFlightData.Unlock();
 
     // Do vario first to reduce audio latency
@@ -197,7 +197,7 @@ DWORD CalculationThread (LPVOID lpvoid) {
       break; // drop out on exit
 
     if (need_calculations_slow) {
-      DoCalculationsSlow(&tmp_GPS_INFO,&tmp_CALCULATED_INFO, screen_distance);
+      DoCalculationsSlow(&tmp_GPS_INFO, &tmp_CALCULATED_INFO, main_window.map);
       need_calculations_slow = false;
     }
 

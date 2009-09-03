@@ -71,11 +71,11 @@ int CalculateWaypointApproxDistance(int scx_aircraft, int scy_aircraft,
   return isqrt4(dx*dx+dy*dy);
 }
 
-
-
-double CalculateWaypointArrivalAltitude(NMEA_INFO *Basic,
-                                        DERIVED_INFO *Calculated,
-                                        int i) {
+double
+CalculateWaypointArrivalAltitude(const NMEA_INFO *Basic,
+                                 const DERIVED_INFO *Calculated,
+                                 int i)
+{
   double AltReqd;
   double wDistance, wBearing;
 
@@ -104,10 +104,9 @@ double CalculateWaypointArrivalAltitude(NMEA_INFO *Basic,
           - WayPointList[i].Altitude - SAFETYALTITUDEARRIVAL);
 }
 
-
-
-void SortLandableWaypoints(NMEA_INFO *Basic,
-                           DERIVED_INFO *Calculated)
+void
+SortLandableWaypoints(const NMEA_INFO *Basic,
+                      const DERIVED_INFO *Calculated)
 {
   int SortedLandableIndex[MAXTASKPOINTS];
   double SortedArrivalAltitude[MAXTASKPOINTS];

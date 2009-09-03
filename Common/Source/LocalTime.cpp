@@ -36,7 +36,6 @@ Copyright_License {
 */
 
 #include "LocalTime.hpp"
-#include "XCSoar.h"
 #include "Device/Parser.h"
 #include "SettingsTask.hpp"
 #include "WayPoint.hpp"
@@ -55,13 +54,16 @@ int TimeLocal(int localtime) {
   return localtime;
 }
 
-int DetectCurrentTime(NMEA_INFO *Basic) {
+int
+DetectCurrentTime(const NMEA_INFO *Basic)
+{
   int localtime = (int)(Basic->Time);
   return TimeLocal(localtime);
 }
 
-
-int DetectStartTime(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
+int
+DetectStartTime(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated)
+{
   // JMW added restart ability
   //
   // we want this to display landing time until next takeoff

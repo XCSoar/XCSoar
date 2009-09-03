@@ -36,7 +36,6 @@ Copyright_License {
 */
 
 #include "TopologyStore.h"
-#include "XCSoar.h"
 #include "Protection.hpp"
 #include "MapWindow.h"
 #include "Topology.h"

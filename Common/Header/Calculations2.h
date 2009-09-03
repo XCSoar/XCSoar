@@ -39,7 +39,11 @@ Copyright_License {
 #define CALCULATIONS2_H
 #include "Calculations.h"
 
-void CalculateOwnTeamCode(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
-void CalculateTeammateBearingRange(NMEA_INFO *Basic, DERIVED_INFO *Calculated) ;
+void
+CalculateOwnTeamCode(const NMEA_INFO *Basic, DERIVED_INFO *Calculated);
+
+void
+CalculateTeammateBearingRange(const NMEA_INFO *Basic,
+                              DERIVED_INFO *Calculated);
 
 #endif

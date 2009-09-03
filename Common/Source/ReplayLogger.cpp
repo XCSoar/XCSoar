@@ -37,7 +37,6 @@
 
 #include "ReplayLogger.hpp"
 #include "Logger.h"
-#include "XCSoar.h"
 #include "Protection.hpp"
 #include "Dialogs.h"
 #include "Language.hpp"

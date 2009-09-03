@@ -39,13 +39,29 @@ Copyright_License {
 #define XCSOAR_MAIN_WINDOW_HXX
 
 #include "Screen/TopWindow.hpp"
+#include "MapWindow.h"
 
 /**
  * The XCSoar main window.
  */
 class MainWindow : public TopWindow {
 public:
-  bool register_class(HINSTANCE hInstance, const TCHAR* szWindowClass);
+  MapWindow map;
+
+public:
+  static bool find(LPCTSTR text) {
+    return TopWindow::find(_T("XCSoarMain"), text);
+  }
+
+  static bool register_class(HINSTANCE hInstance);
+
+  void set(LPCTSTR text,
+           int left, int top, unsigned width, unsigned height);
+
+  void reset() {
+    map.reset();
+    TopWindow::reset();
+  }
 
 protected:
   virtual LRESULT on_message(HWND _hWnd, UINT message,

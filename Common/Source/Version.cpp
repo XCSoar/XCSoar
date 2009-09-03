@@ -35,7 +35,7 @@ Copyright_License {
 }
 */
 #include "Version.hpp"
-#include <tchar.h>
+#include "Language.hpp"
 
 TCHAR XCSoar_Version[256] = TEXT("");
 

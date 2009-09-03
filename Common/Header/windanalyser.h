@@ -57,20 +57,20 @@ public:
     /**
      * Called if the flightmode changes
      */
-    void slot_newFlightMode(NMEA_INFO *nmeaInfo,
-                            DERIVED_INFO *derivedInfo,
+    void slot_newFlightMode(const NMEA_INFO *nmeaInfo,
+                            const DERIVED_INFO *derivedInfo,
                             bool left, int);
     /**
      * Called if a new sample is available in the samplelist.
      */
-    void slot_newSample(NMEA_INFO *nmeaInfo,
+    void slot_newSample(const NMEA_INFO *nmeaInfo,
                         DERIVED_INFO *derivedInfo);
 
     // used to update output if altitude changes
-    void slot_Altitude(NMEA_INFO *nmeaInfo,
+    void slot_Altitude(const NMEA_INFO *nmeaInfo,
                        DERIVED_INFO *derivedInfo);
 
-    void slot_newEstimate(NMEA_INFO *nmeaInfo,
+    void slot_newEstimate(const NMEA_INFO *nmeaInfo,
                           DERIVED_INFO *derivedInfo,
                           Vector v, int quality);
 
@@ -101,7 +101,7 @@ private: // Private attributes
     int numwindsamples;
 
 private: // Private memberfunctions
-    void _calcWind(NMEA_INFO *nmeaInfo,
+    void _calcWind(const NMEA_INFO *nmeaInfo,
                    DERIVED_INFO *derivedInfo);
 
 };

@@ -71,6 +71,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "LocalPath.hpp"
 #include "McReady.h"
 #include "UtilsText.hpp"
+#include "MainWindow.hpp"
 
 #include <assert.h>
 #include <ctype.h>
@@ -998,15 +999,14 @@ void InputEvents::ShowMenu() {
 
 #include "MapWindowProjection.hpp"
 #include "InfoBoxManager.h"
-#include "MapWindow.h"
 
 void InputEvents::ProcessMenuTimer() {
   if (InfoBoxManager::IsFocus()) {
     InputEvents::setMode(TEXT("infobox"));
   } else {
     if(MenuTimeOut==MenuTimeoutMax) {
-      if (map_window.isPan()
-	  && !map_window.isTargetPan()) {
+      if (main_window.map.isPan()
+	  && !main_window.map.isTargetPan()) {
 	InputEvents::setMode(TEXT("pan"));
       } else {
 	InputEvents::setMode(TEXT("default"));

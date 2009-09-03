@@ -38,7 +38,6 @@ Copyright_License {
 #ifndef MARKS_H
 #define MARKS_H
 
-#include "XCSoar.h"
 #include "Protection.hpp"
 #include "Topology.h"
 

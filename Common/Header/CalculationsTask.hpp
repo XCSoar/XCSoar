@@ -40,18 +40,30 @@ Copyright_License {
 
 #include "Calculations.h"
 
-void DistanceToNext(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
-void TaskSpeed(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
-	       const double this_maccready,
-	       const double cruise_efficiency);
-void AltitudeRequired(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
-		      const double this_maccready,
-		      const double cruise_efficiency);
-void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated, 
-		    const double this_maccready,
-		    const double cruise_efficiency);
-void InSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
-void AATStats(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
+void
+DistanceToNext(const NMEA_INFO *Basic, DERIVED_INFO *Calculated);
+
+void
+TaskSpeed(const NMEA_INFO *Basic, DERIVED_INFO *Calculated,
+          const double this_maccready,
+          const double cruise_efficiency);
+
+void
+AltitudeRequired(const NMEA_INFO *Basic, DERIVED_INFO *Calculated,
+                 const double this_maccready,
+                 const double cruise_efficiency);
+
+void
+TaskStatistics(const NMEA_INFO *Basic, DERIVED_INFO *Calculated,
+               const double this_maccready,
+               const double cruise_efficiency);
+
+void
+InSector(const NMEA_INFO *Basic, DERIVED_INFO *Calculated);
+
+void
+AATStats(const NMEA_INFO *Basic, DERIVED_INFO *Calculated);
+
 //static void FinalGlideAlert(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 
 #endif

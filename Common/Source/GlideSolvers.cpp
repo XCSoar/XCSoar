@@ -52,14 +52,14 @@ Copyright_License {
 //////////////////////////////////////////////////////////
 // Final glide through terrain and footprint calculations
 
-
-double FinalGlideThroughTerrain(const double this_bearing,
-				NMEA_INFO *Basic,
-                                DERIVED_INFO *Calculated,
-                                double *retlat, double *retlon,
-                                const double max_range,
-				bool *out_of_range,
-				double *TerrainBase)
+double
+FinalGlideThroughTerrain(const double this_bearing,
+                         const NMEA_INFO *Basic,
+                         const DERIVED_INFO *Calculated,
+                         double *retlat, double *retlon,
+                         const double max_range,
+                         bool *out_of_range,
+                         double *TerrainBase)
 {
   double mc = GlidePolar::GetMacCready();
   double irange = GlidePolar::MacCreadyAltitude(mc,
@@ -214,12 +214,11 @@ double FinalGlideThroughTerrain(const double this_bearing,
   return retval;
 }
 
-
-double PirkerAnalysis(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
-                      const double this_bearing,
-                      const double GlideSlope) {
-
-
+double
+PirkerAnalysis(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated,
+               const double this_bearing,
+               const double GlideSlope)
+{
 //  bool maxfound = false;
 //  bool first = true;
   double pirker_mc = 0.0;
@@ -275,12 +274,12 @@ double PirkerAnalysis(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
   return -1.0; // no solution found, unreachable without further climb
 }
 
-
-double MacCreadyTimeLimit(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
-			  const double this_bearing,
-			  const double time_remaining,
-			  const double h_final) {
-
+double
+MacCreadyTimeLimit(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated,
+                   const double this_bearing,
+                   const double time_remaining,
+                   const double h_final)
+{
   // find highest Mc to achieve greatest distance in remaining time and height
   (void)Basic;
 
@@ -317,10 +316,10 @@ double MacCreadyTimeLimit(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
   return mc_best;
 }
 
-
-static double EffectiveMacCready_internal(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
-					  bool cruise_efficiency_mode) {
-
+static double
+EffectiveMacCready_internal(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated,
+                            bool cruise_efficiency_mode)
+{
   if (Calculated->ValidFinish) return 0;
   if (ActiveWayPoint<=0) return 0; // no e mc before start
   if (!Calculated->ValidStart) return 0;
@@ -478,8 +477,10 @@ static double EffectiveMacCready_internal(NMEA_INFO *Basic, DERIVED_INFO *Calcul
   return value_found;
 }
 
-
-double EffectiveCruiseEfficiency(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
+double
+EffectiveCruiseEfficiency(const NMEA_INFO *Basic,
+                          const DERIVED_INFO *Calculated)
+{
   double value = EffectiveMacCready_internal(Basic, Calculated, true);
   if (value<0.75) {
     return 0.75;
@@ -487,7 +488,8 @@ double EffectiveCruiseEfficiency(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   return value;
 }
 
-
-double EffectiveMacCready(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
+double
+EffectiveMacCready(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated)
+{
   return EffectiveMacCready_internal(Basic, Calculated, false);
 }

@@ -39,7 +39,7 @@ Copyright_License {
 #include "UtilsText.hpp"
 #include "LogFile.hpp"
 #include "LocalPath.hpp"
-
+#include "Sizes.h"
 
 #ifdef NEWFLARMDB
 #include "FlarmIdFile.h"

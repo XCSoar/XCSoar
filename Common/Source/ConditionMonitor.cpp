@@ -36,7 +36,7 @@ Copyright_License {
 
 */
 
-//#include "ConditionMonitor.h"
+#include "ConditionMonitor.hpp"
 #include "XCSoar.h"
 #include "Calculations.h"
 #include <math.h>
@@ -59,7 +59,7 @@ public:
     LastTime_Check = -1;
   }
 
-  void Update(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
+  void Update(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated) {
     if (!Calculated->Flying)
       return;
 
@@ -87,7 +87,8 @@ protected:
 
 private:
 
-  virtual bool CheckCondition(NMEA_INFO *Basic, DERIVED_INFO *Calculated) = 0;
+  virtual bool CheckCondition(const NMEA_INFO *Basic,
+                              const DERIVED_INFO *Calculated) = 0;
   virtual void Notify(void) = 0;
   virtual void SaveLast(void) = 0;
 
@@ -135,7 +136,8 @@ public:
   }
 protected:
 
-  bool CheckCondition(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
+  bool CheckCondition(const NMEA_INFO *Basic,
+                      const DERIVED_INFO *Calculated) {
 
     wind_mag = Calculated->WindSpeed;
     wind_bearing = Calculated->WindBearing;
@@ -184,7 +186,7 @@ public:
   }
 protected:
 
-  bool CheckCondition(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
+  bool CheckCondition(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated) {
     if (!Calculated->Flying || !ValidTaskPoint(ActiveWayPoint)) {
       return false;
     }
@@ -247,7 +249,7 @@ public:
   }
 protected:
 
-  bool CheckCondition(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
+  bool CheckCondition(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated) {
     if (!ValidTaskPoint(ActiveWayPoint) || !Calculated->Flying) {
       return false;
     }
@@ -292,7 +294,7 @@ public:
   }
 protected:
 
-  bool CheckCondition(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
+  bool CheckCondition(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated) {
     if (!AATEnabled || !ValidTaskPoint(ActiveWayPoint) || TaskIsTemporary()
         || !(Calculated->ValidStart && !Calculated->ValidFinish)
         || !Calculated->Flying) {
@@ -330,7 +332,7 @@ public:
   }
 protected:
 
-  bool CheckCondition(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
+  bool CheckCondition(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated) {
     if (!ValidTaskPoint(ActiveWayPoint) || !Calculated->Flying
         || (ActiveWayPoint>0) || !ValidTaskPoint(ActiveWayPoint+1)) {
       return false;
@@ -374,7 +376,7 @@ public:
 
 protected:
 
-  bool CheckCondition(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
+  bool CheckCondition(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated) {
     if (!Calculated->Flying || !ValidTaskPoint(ActiveWayPoint)) {
       return false;
     }
@@ -413,7 +415,10 @@ ConditionMonitorAATTime    cm_aattime;
 ConditionMonitorStartRules cm_startrules;
 ConditionMonitorGlideTerrain cm_glideterrain;
 
-void ConditionMonitorsUpdate(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
+void
+ConditionMonitorsUpdate(const NMEA_INFO *Basic,
+                        const DERIVED_INFO *Calculated)
+{
   cm_wind.Update(Basic, Calculated);
   cm_finalglide.Update(Basic, Calculated);
   cm_sunset.Update(Basic, Calculated);

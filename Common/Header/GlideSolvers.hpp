@@ -41,23 +41,30 @@ Copyright_License {
 #include "NMEA/Info.h"
 #include "NMEA/Derived.hpp"
 
-double FinalGlideThroughTerrain(const double bearing, NMEA_INFO *Basic,
-                                DERIVED_INFO *Calculated,
-                                double *retlat, double *retlon,
-                                const double maxrange,
-				bool *outofrange,
-				double *TerrainBase = NULL);
+double
+FinalGlideThroughTerrain(const double bearing, const NMEA_INFO *Basic,
+                         const DERIVED_INFO *Calculated,
+                         double *retlat, double *retlon,
+                         const double maxrange,
+                         bool *outofrange,
+                         double *TerrainBase = NULL);
 
-double PirkerAnalysis(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
-		      const double bearing,
-		      const double GlideSlope);
+double
+PirkerAnalysis(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated,
+               const double bearing,
+               const double GlideSlope);
 
-double MacCreadyTimeLimit(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
-			  const double bearing,
-			  const double timeremaining,
-			  const double hfinal);
+double
+MacCreadyTimeLimit(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated,
+                   const double bearing,
+                   const double timeremaining,
+                   const double hfinal);
 
-double EffectiveMacCready(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
-double EffectiveCruiseEfficiency(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
+double
+EffectiveCruiseEfficiency(const NMEA_INFO *Basic,
+                          const DERIVED_INFO *Calculated);
+
+double
+EffectiveMacCready(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated);
 
 #endif

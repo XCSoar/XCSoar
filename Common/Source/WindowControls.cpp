@@ -36,16 +36,13 @@ Copyright_License {
 */
 
 #include "WindowControls.h"
-#include "XCSoar.h"
 #include "Interface.hpp"
 #include "Dialogs/dlgTools.h"
 #ifndef ALTAIRSYNC
 #include "Message.h"
 #include "Protection.hpp"
 #include "InfoBoxLayout.h"
-#include "MapWindow.h"
-extern MapWindow map_window; // TODO try to avoid this
-
+#include "MainWindow.hpp"
 #endif
 #include "Math/FastMath.h"
 #include "Compatibility/string.h"
@@ -56,6 +53,7 @@ extern MapWindow map_window; // TODO try to avoid this
 #include "Screen/Viewport.hpp"
 #include "Screen/PaintCanvas.hpp"
 #include "DataField/Base.hpp"
+#include "resource.h"
 
 #ifdef PNA
 #include "Asset.hpp"
@@ -962,7 +960,7 @@ int WndForm::ShowModal(bool bEnableMap) {
 #ifndef GNAV
         &&  !( // exception
               bEnableMap
-              && msg.hwnd == map_window
+              && msg.hwnd == main_window.map
               && (
                 msg.message == WM_LBUTTONDOWN
                 || msg.message == WM_LBUTTONUP

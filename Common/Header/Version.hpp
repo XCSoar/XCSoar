@@ -36,7 +36,8 @@ Copyright_License {
 */
 #ifndef XCSOAR_VERSION_HPP
 #define XCSOAR_VERSION_HPP
-#include "XCSoar.h"
+
+#include <tchar.h>
 
 extern TCHAR XCSoar_Version[256];
 void Version();

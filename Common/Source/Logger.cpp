@@ -36,7 +36,6 @@
 */
 
 #include "Logger.h"
-#include "XCSoar.h"
 #include "Version.hpp"
 #include "Protection.hpp"
 #include "Dialogs.h"
@@ -243,11 +242,11 @@ void StopLogger(void) {
   }
 }
 
-
-void LogPointToBuffer(double Latitude, double Longitude, double Altitude,
-                      double BaroAltitude, short Hour, short Minute, short Second,
-                      int SatelliteIDs[]) {
-
+static void
+LogPointToBuffer(double Latitude, double Longitude, double Altitude,
+                 double BaroAltitude, short Hour, short Minute, short Second,
+                 const int SatelliteIDs[])
+{
   if (NumLoggerBuffered== MAX_LOGGER_BUFFER) {
     for (int i= 0; i< NumLoggerBuffered-1; i++) {
       LoggerBuffer[i]= LoggerBuffer[i+1];
@@ -352,7 +351,9 @@ void LogPoint(double Latitude, double Longitude, double Altitude,
   }
 }
 
-bool LogFRecordToFile(int SatelliteIDs[], short Hour, short Minute, short Second, bool bAlways)
+bool
+LogFRecordToFile(const int SatelliteIDs[], short Hour, short Minute,
+                 short Second, bool bAlways)
 { // bAlways forces write when completing header for restart
   // only writes record if constallation has changed unless bAlways set
 
@@ -422,8 +423,8 @@ bool LogFRecordToFile(int SatelliteIDs[], short Hour, short Minute, short Second
 #endif
 }
 
-
-bool LogFRecord(int SatelliteIDs[], bool bAlways )
+bool
+LogFRecord(const int SatelliteIDs[], bool bAlways)
 {
   if (LoggerActive || bAlways)
     {

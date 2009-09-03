@@ -37,7 +37,6 @@ Copyright_License {
 
 #include "StatusMessage.hpp"
 #include "Message.h"
-#include "XCSoar.h"
 #include "UtilsText.hpp"
 #include "LogFile.hpp"
 #include "SettingsUser.hpp"

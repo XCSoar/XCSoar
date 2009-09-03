@@ -36,7 +36,6 @@ Copyright_License {
 */
 
 #include "InfoBoxEvents.h"
-#include "XCSoar.h"
 #include "Protection.hpp"
 #include "Device/Parser.h"
 #include "Blackboard.hpp"
@@ -56,7 +55,8 @@ Copyright_License {
 #include "MapWindow.h"
 #include "McReady.h"
 #include "Interface.hpp"
-#include "Calculations.h" // TODO danger! SetWindEstimate
+#include "CalculationsWind.hpp"
+
 #include <stdlib.h>
 #include "GlideComputer.hpp"
 

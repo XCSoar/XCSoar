@@ -119,9 +119,10 @@ double Magnitude(Vector v) {
 
 
 /** Called if a new sample is available in the samplelist. */
-void WindAnalyser::slot_newSample(NMEA_INFO *nmeaInfo,
-                                  DERIVED_INFO *derivedInfo){
-
+void
+WindAnalyser::slot_newSample(const NMEA_INFO *nmeaInfo,
+                             DERIVED_INFO *derivedInfo)
+{
   if (!active) return; //only work if we are in active mode
 
 
@@ -217,17 +218,21 @@ void WindAnalyser::slot_newSample(NMEA_INFO *nmeaInfo,
 }
 
 
-void WindAnalyser::slot_Altitude(NMEA_INFO *nmeaInfo,
-                                 DERIVED_INFO *derivedInfo) {
+void
+WindAnalyser::slot_Altitude(const NMEA_INFO *nmeaInfo,
+                            DERIVED_INFO *derivedInfo)
+{
   windstore.slot_Altitude(nmeaInfo, derivedInfo);
 }
 
 
 
 /** Called if the flightmode changes */
-void WindAnalyser::slot_newFlightMode(NMEA_INFO *nmeaInfo,
-                                      DERIVED_INFO *derivedInfo,
-                                      bool left, int marker){
+void
+WindAnalyser::slot_newFlightMode(const NMEA_INFO *nmeaInfo,
+                                 const DERIVED_INFO *derivedInfo,
+                                 bool left, int marker)
+{
     active=false;  //we are inactive by default
     circleCount=0; //reset the circlecounter for each flightmode
 		   //change. The important thing to measure is the
@@ -286,8 +291,10 @@ double angleDiff(Vector a, Vector b) {
 }
 
 
-void WindAnalyser::_calcWind(NMEA_INFO *nmeaInfo,
-                             DERIVED_INFO *derivedInfo) {
+void
+WindAnalyser::_calcWind(const NMEA_INFO *nmeaInfo,
+                        DERIVED_INFO *derivedInfo)
+{
   int i;
   double av=0;
   if (!numwindsamples) return;
@@ -393,9 +400,10 @@ void WindAnalyser::_calcWind(NMEA_INFO *nmeaInfo,
 }
 
 
-void WindAnalyser::slot_newEstimate(NMEA_INFO *nmeaInfo,
-                                    DERIVED_INFO *derivedInfo,
-                                    Vector a, int quality)
+void
+WindAnalyser::slot_newEstimate(const NMEA_INFO *nmeaInfo,
+                               DERIVED_INFO *derivedInfo,
+                               Vector a, int quality)
 {
 
 #ifdef DEBUG_WIND

@@ -463,11 +463,13 @@ int FindNearestAirspaceCircle(double longitude, double latitude,
 
 // this one uses screen coordinates to avoid as many trig functions
 // as possible.. it means it is approximate but for our use it is ok.
-double ScreenCrossTrackError(double lon1, double lat1,
-			     double lon2, double lat2,
-			     double lon3, double lat3,
-			     double *lon4, double *lat4,
-			     MapWindowProjection &map_projection) {
+static double
+ScreenCrossTrackError(double lon1, double lat1,
+                      double lon2, double lat2,
+                      double lon3, double lat3,
+                      double *lon4, double *lat4,
+                      const MapWindowProjection &map_projection)
+{
   POINT p1, p2, p3, p4;
 
   map_projection.LonLat2Screen(lon1, lat1, p1);
@@ -488,8 +490,8 @@ double ScreenCrossTrackError(double lon1, double lat1,
 double RangeAirspaceArea(const double &longitude,
 			 const double &latitude,
 			 int i, double *bearing,
-			 MapWindowProjection &map_projection) {
-
+			 const MapWindowProjection &map_projection)
+{
   // find nearest distance to line segment
   int j;
   double dist= 0;
@@ -523,17 +525,12 @@ double RangeAirspaceArea(const double &longitude,
   return nearestdistance;
 }
 
-
-
-
-
-int FindNearestAirspaceArea(MapWindowProjection& map_projection,
-			    double longitude,
-			    double latitude,
-			    double *nearestdistance,
-			    double *nearestbearing,
-			    double *nearestt,
-			    double *height=NULL)
+static int
+FindNearestAirspaceArea(const MapWindowProjection& map_projection,
+                        double longitude, double latitude,
+                        double *nearestdistance, double *nearestbearing,
+                        double *nearestt,
+                        double *height=NULL)
 {
   unsigned i;
   int ifound = -1;
@@ -614,7 +611,7 @@ int FindNearestAirspaceArea(MapWindowProjection& map_projection,
 //
 // This only searches within a range of 100km of the target
 
-void FindNearestAirspace(MapWindowProjection& map_projection,
+void FindNearestAirspace(const MapWindowProjection& map_projection,
 			 double longitude, double latitude,
 			 double *nearestdistance, double *nearestbearing,
 			 int *foundcircle, int *foundarea,

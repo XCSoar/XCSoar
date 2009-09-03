@@ -37,12 +37,15 @@ Copyright_License {
 #ifndef LOCALTIME_H
 #define LOCALTIME_H
 
-#include "XCSoar.h"
 #include "NMEA/Info.h"
 #include "NMEA/Derived.hpp"
 
-int DetectStartTime(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
-int DetectCurrentTime(NMEA_INFO *Basic);
+int
+DetectStartTime(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated);
+
+int
+DetectCurrentTime(const NMEA_INFO *Basic);
+
 int TimeLocal(int d);
 long GetUTCOffset(void);
 

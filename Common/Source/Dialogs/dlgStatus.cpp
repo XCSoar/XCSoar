@@ -656,7 +656,7 @@ void dlgStatusShowModal(int start_page){
     }
   }
 
-  nearest_waypoint = FindNearestWayPoint(map_window,
+  nearest_waypoint = FindNearestWayPoint(main_window.map,
 					 GPS_INFO.Longitude,
                                          GPS_INFO.Latitude,
                                          100000.0, true); // big range limit

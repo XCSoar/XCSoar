@@ -36,7 +36,6 @@ Copyright_License {
 */
 
 #include "Screen/Chart.hpp"
-#include "XCSoar.h"
 #include "Screen/Fonts.hpp"
 #include "Screen/Graphics.hpp"
 #include "InfoBoxLayout.h"

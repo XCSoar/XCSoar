@@ -38,7 +38,6 @@ Copyright_License {
 #ifndef ATMOSPHERE_H
 #define ATMOSPHERE_H
 
-#include "XCSoar.h"
 #include "NMEA/Info.h"
 #include "NMEA/Derived.hpp"
 
@@ -72,7 +71,8 @@ public:
   static double maxGroundTemperature;
   static double hGround;
   static unsigned short last_level;
-  static void updateMeasurements(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
+  static void updateMeasurements(const NMEA_INFO *Basic,
+                                 const DERIVED_INFO *Calculated);
   static CuSondeLevel cslevels[CUSONDE_NUMLEVELS];
   static void findCloudBase(unsigned short level);
   static void findThermalHeight(unsigned short level);

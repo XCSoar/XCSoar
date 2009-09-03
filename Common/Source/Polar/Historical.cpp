@@ -36,7 +36,6 @@ Copyright_License {
 */
 
 #include "Polar/Historical.hpp"
-#include "XCSoar.h"
 #include "Polar/WinPilot.hpp"
 #include "Polar/BuiltIn.hpp"
 #include "LogFile.hpp"

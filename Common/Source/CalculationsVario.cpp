@@ -50,9 +50,11 @@ Copyright_License {
 #include "Calculations2.h"
 
 
-void SpeedToFly(NMEA_INFO *Basic, DERIVED_INFO *Calculated, 
-		const double mc_setting,
-		const double cruise_efficiency) {
+void
+SpeedToFly(const NMEA_INFO *Basic, DERIVED_INFO *Calculated,
+           const double mc_setting,
+           const double cruise_efficiency)
+{
   double n;
   // get load factor
   if (Basic->AccelerationAvailable) {
@@ -136,9 +138,9 @@ void SpeedToFly(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
   Calculated->STFMode = !Calculated->Circling;
 }
 
-
-void NettoVario(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
-
+static void
+NettoVario(const NMEA_INFO *Basic, DERIVED_INFO *Calculated)
+{
   double n;
   // get load factor
   if (Basic->AccelerationAvailable) {
@@ -176,7 +178,9 @@ void NettoVario(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
 
 // int          NettoSpeed = 1000;
 
-void AudioVario(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
+static void
+AudioVario(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated)
+{
   /* JMW disabled, no longer used
 #define AUDIOSCALE 100/7.5  // +/- 7.5 m/s range
 
@@ -214,7 +218,8 @@ void AudioVario(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
 }
 
 
-BOOL DoCalculationsVario(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
+BOOL
+DoCalculationsVario(const NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 {
   static double LastTime = 0;
   const double mc = GlidePolar::GetMacCready();

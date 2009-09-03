@@ -38,7 +38,9 @@ Copyright_License {
 #if !defined(XCSOAR_LANGUAGE_HPP)
 #define XCSOAR_LANGUAGE_HPP
 
-#include "XCSoar.h"
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+#include <tchar.h>
 
 void ReadLanguageFile(void);
 

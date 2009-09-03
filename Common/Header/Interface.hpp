@@ -37,7 +37,9 @@ Copyright_License {
 
 #if !defined(XCSOAR_INTERFACE_HPP)
 #define XCSOAR_INTERFACE_HPP
-#include "XCSoar.h"
+
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
 
 class MainWindow;
 class MapWindow;
@@ -56,7 +58,6 @@ extern HINSTANCE hInst;
 
 // windows
 extern MainWindow main_window;
-extern MapWindow map_window;
 
 // other global objects
 extern Marks *marks;

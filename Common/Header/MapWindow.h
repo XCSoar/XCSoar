@@ -37,7 +37,6 @@ Copyright_License {
 #if !defined(XCSOAR_MAPWINDOW_H)
 #define XCSOAR_MAPWINDOW_H
 
-#include "XCSoar.h"
 #include "MapWindowProjection.hpp"
 #include "MapWindowTimer.hpp"
 #include "Airspace.h"
@@ -85,14 +84,14 @@ class MapWindow
  public:
   MapWindow();
 
-  bool register_class(HINSTANCE hInstance, const TCHAR* szWindowClass);
+  static bool register_class(HINSTANCE hInstance);
 
-  void set(ContainerWindow &parent, LPCTSTR cls,
+  void set(ContainerWindow &parent,
            const RECT _MapRectSmall, const RECT _MapRectBig) {
     MapRectSmall = _MapRectSmall;
     MapRect = MapRectBig = _MapRectBig;
 
-    MaskedPaintWindow::set(parent, cls, MapRect.left, MapRect.top,
+    MaskedPaintWindow::set(parent, _T("XCSoarMap"), MapRect.left, MapRect.top,
                            MapRect.right - MapRect.left,
                            MapRect.bottom - MapRect.top);
   }

@@ -37,7 +37,9 @@ Copyright_License {
 
 #ifndef XCSOAR_COMPONENTS_HPP
 #define XCSOAR_COMPONENTS_HPP
-#include "XCSoar.h"
+
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
 
 void AfterStartup();
 void Shutdown();

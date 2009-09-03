@@ -37,7 +37,6 @@ Copyright_License {
 */
 
 #include "InfoBoxManager.h"
-#include "XCSoar.h"
 #include "InfoBox.h"
 #include "WindowControls.h"
 #include "Protection.hpp"
@@ -68,8 +67,7 @@ Copyright_License {
 #include "UtilsSystem.hpp"
 #include "MainWindow.hpp"
 #include "MapWindow.h"
-
-extern MapWindow map_window;
+#include "Defines.h"
 
 // user setting
 bool EnableAuxiliaryInfo = false;
@@ -350,7 +348,7 @@ bool InfoBoxManager::Defocus() {
 #ifndef DISABLEAUDIO
     if (EnableSoundModes) PlayResource(TEXT("IDR_WAV_CLICK"));
 #endif
-    map_window.set_focus();
+    main_window.map.set_focus();
   }
   return retval;
 }
@@ -924,7 +922,7 @@ void PopUpSelect(int Index)
   StoreType(Index, InfoType[Index]);
   //  ShowWindow(hWndCB,SW_HIDE);
   //  FullScreen();
-  map_window.set_focus();
+  main_window.map.set_focus();
 }
 
 bool InfoBoxManager::Click(HWND wmControl) {
@@ -962,7 +960,7 @@ void InfoBoxManager::Focus(void) {
   if (InfoWindowActive) {
     FocusOnWindow(InfoFocus,true);
   } else {
-    map_window.set_focus();
+    main_window.map.set_focus();
   }
 }
 

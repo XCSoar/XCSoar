@@ -36,7 +36,6 @@ Copyright_License {
 */
 
 #include "Topology.h"
-#include "XCSoar.h"
 #include <ctype.h> // needed for Wine
 #include "Interface.hpp"
 #include "wcecompat/ts_string.h"

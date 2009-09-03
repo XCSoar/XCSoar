@@ -60,12 +60,11 @@ Copyright_License {
 #include <stdio.h>
 
 
-/////////
-
 static PeriodClock last_team_code_update;
 DWORD lastTeamCodeUpdateTime = GetTickCount();
 
-void CalculateOwnTeamCode(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
+void
+CalculateOwnTeamCode(const NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 {
   if (!WayPointList) return;
   if (TeamCodeRefWaypoint < 0) return;
@@ -93,8 +92,8 @@ void CalculateOwnTeamCode(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   _tcsncpy(Calculated->OwnTeamCode, code, 5);
 }
 
-
-void CalculateTeammateBearingRange(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
+void
+CalculateTeammateBearingRange(const NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 {
   // JMW TODO: locking
 

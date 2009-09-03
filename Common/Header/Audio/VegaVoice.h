@@ -130,7 +130,7 @@ public:
 
 public:
 
-  bool Update(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
+  bool Update(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated);
 
 };
 
@@ -142,7 +142,7 @@ public:
 
   VegaVoiceMessage message[VV_MESSAGE_COUNT];
 
-  void Update(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
+  void Update(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated);
 
   // called when notified by Altair that the message has been spoken
   void MessageSpoken(int id_this, double time);
