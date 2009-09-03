@@ -104,7 +104,10 @@ void CuSonde::adjustForecastTemperature(double delta) {
 }
 
 
-void CuSonde::updateMeasurements(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
+void
+CuSonde::updateMeasurements(const NMEA_INFO *Basic,
+                            const DERIVED_INFO *Calculated)
+{
   if (!Calculated->Flying)
     return; // nothing to do..
   if (!Basic->TemperatureAvailable ||
