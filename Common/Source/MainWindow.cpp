@@ -109,6 +109,8 @@ bool MainWindow::on_timer(void)
 
 bool MainWindow::on_create(void)
 {
+  TopWindow::on_create();
+
   if (_timer_id == 0) {
     _timer_id = SetTimer(hWnd,1000,500,NULL); // 2 times per second
   }
