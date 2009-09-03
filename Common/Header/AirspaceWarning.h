@@ -41,11 +41,14 @@ Copyright_License {
 #include "NMEA/Info.h"
 #include "NMEA/Derived.hpp"
 
-extern void AirspaceWarnListAdd(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
-                                bool Predicted, bool IsCircle, int AsIdx,
-                                bool ackDay=false);
+extern void
+AirspaceWarnListAdd(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated,
+                    bool Predicted, bool IsCircle, int AsIdx,
+                    bool ackDay=false);
 
-extern void AirspaceWarnListProcess(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
+extern void
+AirspaceWarnListProcess(const NMEA_INFO *Basic,
+                        const DERIVED_INFO *Calculated);
 
 
 #endif

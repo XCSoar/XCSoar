@@ -174,8 +174,12 @@ static void AirspaceWarnListDoNotify(AirspaceWarningNotifyAction_t Action, Airsp
 }
 
 
-static void AirspaceWarnListCalcDistance(NMEA_INFO *Basic, DERIVED_INFO *Calculated, bool IsCircle, int AsIdx, int *hDistance, int *Bearing, int *vDistance){
-
+static void
+AirspaceWarnListCalcDistance(const NMEA_INFO *Basic,
+                             const DERIVED_INFO *Calculated,
+                             bool IsCircle, int AsIdx,
+                             int *hDistance, int *Bearing, int *vDistance)
+{
   int vDistanceBase;
   int vDistanceTop;
   int alt;
@@ -270,10 +274,11 @@ static bool calcWarnLevel(AirspaceInfo_c *asi){
 
 }
 
-void AirspaceWarnListAdd(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
-                         bool Predicted, bool IsCircle, int AsIdx,
-                         bool ackDay){
-
+void
+AirspaceWarnListAdd(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated,
+                    bool Predicted, bool IsCircle, int AsIdx,
+                    bool ackDay)
+{
   static int  Sequence = 0;
 
   if (!Predicted){
@@ -439,7 +444,10 @@ void AirspaceWarnListSort(void){
 }
 
 
-void AirspaceWarnListProcess(NMEA_INFO *Basic, DERIVED_INFO *Calculated){
+void
+AirspaceWarnListProcess(const NMEA_INFO *Basic,
+                        const DERIVED_INFO *Calculated)
+{
 
   if (!InitDone) return;
 
