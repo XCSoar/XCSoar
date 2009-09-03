@@ -94,10 +94,12 @@ void MapWindow::RenderMapLayer(Canvas &canvas, const RECT rc)
       sunazimuth = DisplayAngle + 45.0;
     }
 
-    if (dirtyEvent.test()) {
-      // map has been dirtied since we started drawing, so hurry up
-      BigZoom = true;
-    }
+    //    if (dirtyEvent.test()) {
+    //      // map has been dirtied since we started drawing, so hurry up
+    //      BigZoom = true;
+    //    }
+    // TODO: implement a workaround
+
     DrawTerrain(canvas, *this, sunazimuth, sunelevation,
 		DrawInfo.Longitude, DrawInfo.Latitude,
 	        BigZoom);

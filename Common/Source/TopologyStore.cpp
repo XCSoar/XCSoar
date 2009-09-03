@@ -55,7 +55,7 @@ Copyright_License {
 
 //////////////////////////////////////////////////
 
-void TopologyStore::TriggerUpdateCaches() {
+void TopologyStore::TriggerUpdateCaches(MapWindowProjection &m_projection) {
   ScopeLock protect(*GetMutex());
   for (int z=0; z<MAXTOPOLOGY; z++) {
     if (topology_store[z]) {
@@ -65,51 +65,44 @@ void TopologyStore::TriggerUpdateCaches() {
   if (topo_marks) {
     topo_marks->triggerUpdateCache = true;
   }
-}
-
-
-void TopologyStore::ScanVisibility(MapWindowProjection &m_projection,
-				   MapWindowTimer &m_timer,
-				   rectObj &_bounds_active,
-				   const bool force) {
-  ScopeLock protect(*GetMutex());
-
   // check if things have come into or out of scale limit
   for (int z=0; z<MAXTOPOLOGY; z++) {
     if (topology_store[z]) {
       topology_store[z]->TriggerIfScaleNowVisible(m_projection);
     }
   }
-  // ok, now update the caches
+}
 
-  if (topo_marks) {
+
+bool TopologyStore::ScanVisibility(MapWindowProjection &m_projection,
+				   rectObj &_bounds_active,
+				   const bool force) {
+  ScopeLock protect(*GetMutex());
+
+  if (topo_marks && topo_marks->triggerUpdateCache) {
     topo_marks->updateCache(m_projection, _bounds_active);
-  } // projection, bounds
+  } 
 
-  if (EnableTopology) {
-    // check if any needs to have cache updates because wasnt
-    // visible previously when bounds moved
-    bool sneaked= false;
-    bool rta;
+  // check if any needs to have cache updates because wasnt
+  // visible previously when bounds moved
+  bool first= true;
+  bool remaining = false;
 
-    // we will make sure we update at least one cache per call
-    // to make sure eventually everything gets refreshed
+  // we will make sure we update at least one cache per call
+  // to make sure eventually everything gets refreshed
 
-    int total_shapes_visible = 0;
-    for (int z=0; z<MAXTOPOLOGY; z++) {
-      if (topology_store[z]) {
-	rta = m_timer.RenderTimeAvailable() || force || !sneaked;
-	if (topology_store[z]->triggerUpdateCache) {
-	  sneaked = true;
-	}
-	topology_store[z]->updateCache(m_projection, _bounds_active, !rta);
-	total_shapes_visible += topology_store[z]->getNumVisible();
+  for (int z=0; z<MAXTOPOLOGY; z++) {
+    if (topology_store[z]) {
+      bool update = force || first;
+      bool purge_only = !update;
+      if (topology_store[z]->triggerUpdateCache) {
+	first = false;
       }
+      topology_store[z]->updateCache(m_projection, _bounds_active, purge_only);
+      remaining |= (topology_store[z]->triggerUpdateCache);
     }
-#ifdef DEBUG_GRAPHICS
-    DebugStore("%d # shapes\n", total_shapes_visible);
-#endif
   }
+  return remaining;
 }
 
 

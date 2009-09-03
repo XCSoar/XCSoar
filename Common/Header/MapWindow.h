@@ -51,11 +51,9 @@ Copyright_License {
 class MapWindowBase {
  public:
   MapWindowBase():
-    dirtyEvent(TEXT("mapDirty")),
     hDrawThread(0),
     dwDrawThreadID(0) {};
 
-  Trigger  dirtyEvent;
   void     CloseDrawingThread(void);
   void     SuspendDrawingThread(void);
   void     ResumeDrawingThread(void);
@@ -122,7 +120,7 @@ class MapWindow
 
  private:
 
-  void DrawThreadLoop (const bool first);
+  void DrawThreadLoop ();
   void DrawThreadInitialise (void);
 
   // state
@@ -215,7 +213,7 @@ class MapWindow
 
   // thread, main functions
   void Render(Canvas &canvas, const RECT rc);
-  void Idle(const bool force=false);
+  bool Idle(const bool force=false);
 
   // graphics vars
 

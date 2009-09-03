@@ -98,7 +98,6 @@ void TriggerAll(void) {
 void TriggerRedraws() {
   if (map_window.IsDisplayRunning()) {
     if (gpsUpdatedTriggerEvent.test()) {
-      map_window.dirtyEvent.trigger();
       drawTriggerEvent.trigger();
     }
   }
@@ -184,7 +183,6 @@ DWORD CalculationThread (LPVOID lpvoid) {
 
     if (gpsUpdatedTriggerEvent.test()) {
       if(DoCalculations(&tmp_GPS_INFO,&tmp_CALCULATED_INFO)){
-	map_window.dirtyEvent.trigger();
         need_calculations_slow = true;
       }
       InfoBoxManager::SetDirty(true);

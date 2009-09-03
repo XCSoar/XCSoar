@@ -74,10 +74,6 @@ void MapWindowTimer::StopTimer() {
     tottime = (2*tottime+(timestamp_draw-timestamp_newdata))/3;
     timestats_av = tottime;
     cpuload=0;
-#ifdef DEBUG_MEM
-    cpuload= MeasureCPULoad();
-    DebugStore("%d # mem\n%d # latency\n", CheckFreeRam()/1024, timestats_av);
-#endif
   }
   timestats_dirty = false;
 }

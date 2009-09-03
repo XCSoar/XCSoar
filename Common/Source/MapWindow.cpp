@@ -141,7 +141,6 @@ MapWindow::MapWindow()
 
 void MapWindow::RefreshMap() {
   MapWindowTimer::InterruptTimer();
-  dirtyEvent.trigger();
   drawTriggerEvent.trigger();
 }
 
@@ -209,56 +208,79 @@ void MapWindow::ExchangeBlackboard(const NMEA_INFO &nmea_info,
 }
 
 
-void MapWindow::Idle(const bool do_force) {
-  // map was dirtied while we were drawing, so skip slow process
-  // (unless we haven't done it for 2000 ms)
-  DWORD fpsTimeThis = ::GetTickCount();
-  static DWORD fpsTimeMapCenter = 0;
+typedef struct {
+  DWORD time_last;
+  bool dirty;
+} MapIdleTrigger;
 
-  // have some time, do shape file cache update if necessary
 
-  if (SmartBounds(do_force)) {
-    topology->TriggerUpdateCaches();
-    ScanVisibility(getSmartBounds());
+// This idle function allows progressive scanning of visibility etc
+// 
+bool MapWindow::Idle(const bool do_force) {
+  bool still_dirty=false;
+
+  StartTimer();
+
+  static MapIdleTrigger main_idle;
+  static MapIdleTrigger terrain_idle;
+  static MapIdleTrigger topology_idle;
+  static MapIdleTrigger rasp_idle;
+
+  if (do_force) {
+    main_idle.dirty = true;
+    terrain_idle.dirty = true;
+    topology_idle.dirty = true;
+    rasp_idle.dirty = true;
+    topology->TriggerUpdateCaches(*this);
+    return true;
   }
-  topology->ScanVisibility(*this, *this, *getSmartBounds(), do_force);
 
-  // JMW experimental jpeg2000 rendering/tile management
-  // Must do this even if terrain is not displayed, because
-  // raster terrain is used by terrain footprint etc.
+  do {
 
-  if (do_force || (fpsTimeThis - fpsTimeMapCenter > 5000)) {
+    // scan main object visibility
+    if (main_idle.dirty) {
+      main_idle.dirty = false;
+      ScanVisibility(getSmartBounds());
+      continue;
+    }
+    
+    if (topology_idle.dirty) {
+      if (EnableTopology) {
+	topology_idle.dirty = 
+	  topology->ScanVisibility(*this, *getSmartBounds(), do_force);
+      } else {
+	topology_idle.dirty = false;
+      }
+      continue;
+    }
 
-    fpsTimeThis = fpsTimeMapCenter;
-    terrain.ServiceTerrainCenter(DrawInfo.Latitude,
-				 DrawInfo.Longitude);
-    RASP.SetViewCenter(DrawInfo.Latitude,
-		       DrawInfo.Longitude);
-  }
+    if (terrain_idle.dirty) {
+      terrain.ServiceTerrainCenter(DrawInfo.Latitude,
+				   DrawInfo.Longitude);
+      terrain.ServiceCache();
+      terrain_idle.dirty = false;
+      continue;
+    }
 
-  fpsTimeThis = ::GetTickCount();
-  static DWORD fpsTimeLast_terrain=0;
+    if (rasp_idle.dirty) {
+      RASP.SetViewCenter(DrawInfo.Latitude,
+			 DrawInfo.Longitude);
+      rasp_idle.dirty = false;
+      continue;
+    }
 
-  if (do_force || (!dirtyEvent.test() && RenderTimeAvailable()) ||
-      (fpsTimeThis-fpsTimeLast_terrain>5000)) {
-    // have some time, do graphics terrain cache update if necessary
-    fpsTimeLast_terrain = fpsTimeThis;
-    terrain.ServiceCache();
-  }
+  } while (RenderTimeAvailable() && 
+	   (still_dirty = 
+	      main_idle.dirty 
+	    | terrain_idle.dirty 
+	    | topology_idle.dirty
+	    | rasp_idle.dirty));
+
+  return still_dirty;
 }
 
 
-void MapWindow::DrawThreadLoop(bool first_time) {
-  if (!dirtyEvent.test() && !first_time) {
-    // redraw old screen, must have been a request for fast refresh
-    get_canvas().copy(draw_canvas);
-    return;
-  }
-
-  StartTimer();
-  mutexRun.Lock(); // take control
-
-  dirtyEvent.reset();
+void MapWindow::DrawThreadLoop(void) {
 
   ExchangeBlackboard(GPS_INFO, CALCULATED_INFO);
 
@@ -276,15 +298,10 @@ void MapWindow::DrawThreadLoop(bool first_time) {
 
   Render(draw_canvas, MapRect);
 
-  if (!first_time) {
-    get_canvas().copy(draw_canvas);
-    update(MapRect);
-  }
-  StopTimer();
+  // copy to canvas
+  get_canvas().copy(draw_canvas);
+  update(MapRect);
 
-  Idle(first_time);
-
-  mutexRun.Unlock(); // release control
 }
 
 
@@ -310,8 +327,6 @@ void MapWindow::DrawThreadInitialise(void) {
 
   ////// This is just here to give fully rendered start screen
   ExchangeBlackboard(GPS_INFO, CALCULATED_INFO);
-  dirtyEvent.trigger();
-  //////
 
   ToggleFullScreenStart();
 }
@@ -319,19 +334,43 @@ void MapWindow::DrawThreadInitialise(void) {
 
 DWORD MapWindow::_DrawThread ()
 {
+  bool bounds_dirty = false;
+
   // wait for start
   globalRunningEvent.wait();
 
   DrawThreadInitialise();
 
-  DrawThreadLoop(true); // first time draw
+  mutexRun.Lock(); // take control
+  DrawThreadLoop(); // first time draw
+  bounds_dirty = SmartBounds(true);
+  Idle(true);
+  while (Idle(false)) {};
+  DrawThreadLoop(); // first time draw
+  mutexRun.Unlock(); // release control
 
+  StartupStore(TEXT("hello\n"));
   // this is the main drawing loop
 
   do {
-    if (!drawTriggerEvent.wait(MIN_WAIT_TIME))
+    if (drawTriggerEvent.wait(MIN_WAIT_TIME)) {
+      mutexRun.Lock(); // take control
+      StartTimer();
+      DrawThreadLoop();
+      bool force_dirty = SmartBounds(false);
+      bounds_dirty = Idle(force_dirty); // this call is quick
+      mutexRun.Unlock(); // release control
+      StopTimer();
       continue;
-    DrawThreadLoop(false);
+    } 
+    if (bounds_dirty && !drawTriggerEvent.test()) {
+      mutexRun.Lock(); // take control
+      bounds_dirty = Idle(false);
+      mutexRun.Unlock(); // release control
+      continue;
+    } 
+    // don't spend too much time checking bounds_dirty
+    Sleep(100);
   } while (!closeTriggerEvent.test());
 
   return 0;
