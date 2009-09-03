@@ -551,7 +551,8 @@ void ConvertCToT(TCHAR* pszDest, const CHAR* pszSrc)
 }
 
 
-int TextToLineOffsets(TCHAR* text, int* LineOffsets, int maxLines) {
+int TextToLineOffsets(const TCHAR *text, int *LineOffsets, int maxLines)
+{
   int nTextLines=0;
   LineOffsets[0]= 0;
   if (text) {
@@ -559,7 +560,7 @@ int TextToLineOffsets(TCHAR* text, int* LineOffsets, int maxLines) {
 
       int delta = 0;
       int cumul = 0;
-      TCHAR* vind = text;
+      const TCHAR *vind = text;
 
       while (nTextLines<maxLines) {
 	delta = _tcscspn(vind+cumul, TEXT("\n"));

@@ -60,7 +60,7 @@ TCHAR* StringMallocParse(const TCHAR* old_string);
 void ConvertTToC(CHAR* pszDest, const TCHAR* pszSrc);
 void ConvertCToT(TCHAR* pszDest, const CHAR* pszSrc);
 
-int TextToLineOffsets(TCHAR* text, int* LineOffsets, int maxLines);
+int TextToLineOffsets(const TCHAR *text, int *LineOffsets, int maxLines);
 double HexStrToDouble(TCHAR *Source, TCHAR **Stop);
 
 bool MatchesExtension(const TCHAR *filename, const TCHAR* extension);
