@@ -66,6 +66,7 @@ static void OnAcknowledgeClicked(WindowControl * Sender){
     Name = AirspaceArea[index_area].Name;
   }
   if (Name) {
+    MapWindow &map_window = main_window.map;
     UINT answer;
     answer = MessageBoxX(Name,
 			 gettext(TEXT("Acknowledge for day?")),
@@ -123,6 +124,8 @@ static void SetValues(void) {
   double bearing;
 
   if (index_area >=0) {
+    MapWindow &map_window = main_window.map;
+
     atype = AirspaceArea[index_area].Type;
     top = &AirspaceArea[index_area].Top;
     base = &AirspaceArea[index_area].Base;

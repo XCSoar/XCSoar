@@ -8,6 +8,13 @@
 #include "Screen/Graphics.hpp"
 #include "Components.hpp"
 #include "ProcessTimer.hpp"
+#include "LogFile.hpp"
+#include "InfoBoxLayout.h"
+#include "Screen/Fonts.hpp"
+
+#if WINDOWSPC > 0
+#include "Asset.hpp" /* for SCREENWIDTH and SCREENHEIGHT */
+#endif
 
 bool
 MainWindow::register_class(HINSTANCE hInstance)
@@ -43,6 +50,36 @@ MainWindow::set(LPCTSTR text,
                 int left, int top, unsigned width, unsigned height)
 {
   TopWindow::set(_T("XCSoarMain"), text, left, top, width, height);
+
+  RECT rc;
+#if WINDOWSPC > 0
+  rc.left = 0;
+  rc.right = SCREENWIDTH;
+  rc.top = 0;
+  rc.bottom = SCREENHEIGHT;
+#else
+  rc = get_client_rect();
+#endif
+
+  StartupStore(TEXT("InfoBox geometry\n"));
+  InfoBoxLayout::ScreenGeometry(rc);
+
+  // color/pattern chart (must have infobox geometry before this)
+  MapGfx.Initialise(hInst);
+
+  StartupStore(TEXT("Create info boxes\n"));
+  RECT rcsmall = InfoBoxManager::Create(rc);
+
+  StartupStore(TEXT("Create button labels\n"));
+  ButtonLabel::CreateButtonLabels(rc);
+  ButtonLabel::SetLabelText(0,TEXT("MODE"));
+
+  StartupStore(TEXT("Initialise fonts\n"));
+  InitialiseFonts(*this, rc);
+
+  map.set(main_window, rcsmall, rc);
+  map.set_font(MapWindowFont);
+  map.SetMapRect(rcsmall);
 }
 
 ///////////////////////////////////////////////////////////////////////////

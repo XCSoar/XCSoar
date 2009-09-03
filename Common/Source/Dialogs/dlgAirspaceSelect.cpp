@@ -136,6 +136,7 @@ static void OnAirspaceListEnter(WindowControl * Sender,
           Name = AirspaceArea[index_area].Name;
         }
         if (Name) {
+          MapWindow &map_window = main_window.map;
 	  UINT answer;
           answer = MessageBoxX(Name,
 			       gettext(TEXT("Acknowledge for day?")),
@@ -271,6 +272,8 @@ static void PrepareData(void){
   }
 
   for (i=0; i<(int)NumberOfAirspaceAreas; i++){
+    MapWindow &map_window = main_window.map;
+
     AirspaceSelectInfo[index].Index_Circle = -1;
     AirspaceSelectInfo[index].Index_Area = i;
 

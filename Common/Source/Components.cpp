@@ -39,7 +39,6 @@ Copyright_License {
 #include "Interface.hpp"
 #include "UtilsProfile.hpp"
 #include "Asset.hpp"
-#include "InfoBoxLayout.h"
 #include "InfoBox.h"
 #include "InfoBoxManager.h"
 #include "RasterTerrain.h"
@@ -91,7 +90,6 @@ TopologyStore *topology;
 RasterTerrain terrain;
 RasterWeather RASP;
 
-MapWindow map_window;
 NMEA_INFO     GPS_INFO;
 DERIVED_INFO  CALCULATED_INFO;
 
@@ -209,7 +207,6 @@ void StartupInfo() {
 bool Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
 {
   TCHAR szTitle[MAX_LOADSTRING];                        // The title bar text
-  RECT rc;
 
   hInst = hInstance;            // Store instance handle in our global variable
 
@@ -240,35 +237,11 @@ bool Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
   }
   main_window.install_timer();
 
-  rc = main_window.get_client_rect();
-#if (WINDOWSPC>0)
-  rc.left = 0;
-  rc.right = SCREENWIDTH;
-  rc.top = 0;
-  rc.bottom = SCREENHEIGHT;
-#endif
-
-  StartupStore(TEXT("InfoBox geometry\n"));
-
-  InfoBoxLayout::ScreenGeometry(rc);
-  // color/pattern chart (must have infobox geometry before this)
-  MapGfx.Initialise(hInstance);
-
-  StartupStore(TEXT("Create info boxes\n"));
-  RECT rcsmall = InfoBoxManager::Create(rc);
-
-  StartupStore(TEXT("Create button labels\n"));
-  ButtonLabel::CreateButtonLabels(rc);
-  ButtonLabel::SetLabelText(0,TEXT("MODE"));
-
-  StartupStore(TEXT("Initialise fonts\n"));
-  InitialiseFonts(main_window, rc);
-
   StartupStore(TEXT("Create FLARM gauge\n"));
   gauge_flarm = new GaugeFLARM(main_window);
 
   StartupStore(TEXT("Initialise message system\n"));
-  Message::Initialize(rc); // creates window, sets fonts
+  Message::Initialize(main_window.map.GetMapRectBig()); // creates window, sets fonts
 
   ///////////////////////////////////////////////////////
   /// 
@@ -280,18 +253,14 @@ bool Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
 
   StartupStore(TEXT("Create map window\n"));
 
-  map_window.set(main_window, rcsmall, rc);
-  map_window.set_font(MapWindowFont);
-  map_window.SetMapRect(rcsmall);
-
   ///////////////////////////////////////////////////////
   // initial show
 
   main_window.show();
   main_window.update();
 
-  map_window.show();
-  map_window.update();
+  main_window.map.show();
+  main_window.map.update();
 
   ///////////////////////////////////////////////////////
   // other initialisation...
@@ -322,7 +291,7 @@ bool Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
 
   GaugeCDI::Create();
 
-  gauge_vario = new GaugeVario(main_window, map_window.GetMapRect());
+  gauge_vario = new GaugeVario(main_window, main_window.map.GetMapRect());
 
   LoadWindFromRegistry();
   CalculateNewPolarCoef();
@@ -377,7 +346,7 @@ bool Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
 
   // Finally ready to go.. all structures must be present before this.
   StartupStore(TEXT("CreateDrawingThread\n"));
-  map_window.CreateDrawingThread();
+  main_window.map.CreateDrawingThread();
   StartupStore(TEXT("ShowInfoBoxes\n"));
   InfoBoxManager::Show();
 
@@ -396,7 +365,7 @@ bool Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
   StartupStore(TEXT("ProgramStarted\n"));
 
   // map gets initial focus
-  map_window.set_focus();
+  main_window.map.set_focus();
 
   globalRunningEvent.trigger();
 
@@ -446,7 +415,7 @@ void Shutdown(void) {
   TriggerAll();
 
   StartupStore(TEXT("CloseDrawingThread\n"));
-  map_window.CloseDrawingThread();
+  main_window.map.CloseDrawingThread();
 
   // Clear data
 
@@ -528,8 +497,6 @@ void Shutdown(void) {
 
   CloseGeoid();
 
-  StartupStore(TEXT("Close Windows - map\n"));
-  map_window.reset();
   StartupStore(TEXT("Close Windows - main \n"));
   main_window.reset();
   StartupStore(TEXT("Close Graphics\n"));

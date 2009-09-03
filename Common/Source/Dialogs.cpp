@@ -255,6 +255,7 @@ bool PopupNearestWaypointDetails(double lon, double lat,
     dlgWayPointSelect(PanLongitude, PanLatitude, 0, 1);
     }
   */
+  MapWindowProjection &map_window = main_window.map;
 
   int i;
   if (!pan || !map_window.isPan()) {

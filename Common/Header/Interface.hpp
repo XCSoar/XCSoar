@@ -55,7 +55,6 @@ extern HINSTANCE hInst;
 
 // windows
 extern MainWindow main_window;
-extern MapWindow map_window;
 
 // other global objects
 extern Marks *marks;

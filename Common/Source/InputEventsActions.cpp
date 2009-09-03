@@ -80,7 +80,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Device/device.h"
 #include "Message.h"
 #include "Units.hpp"
-#include "MapWindow.h"
+#include "MainWindow.hpp"
 #include "Atmosphere.h"
 #include "Gauge/GaugeFLARM.hpp"
 #include "Waypointparser.h"
@@ -249,6 +249,7 @@ void InputEvents::eventScreenModes(const TCHAR *misc) {
   //  -- auxiliary infobox
   //  -- full screen
   //  -- normal infobox
+  MapWindow &map_window = main_window.map;
 
   if (_tcscmp(misc, TEXT("normal")) == 0) {
     map_window.RequestFullScreen(false);
@@ -386,6 +387,7 @@ void InputEvents::eventZoom(const TCHAR* misc) {
   // -1 means toggle
   // 0 means off
   // 1 means on
+  MapWindow &map_window = main_window.map;
   float zoom;
 
   if (_tcscmp(misc, TEXT("auto toggle")) == 0)
@@ -446,6 +448,8 @@ void InputEvents::eventZoom(const TCHAR* misc) {
 //	TODO feature: ???	Go to particular point
 //	TODO feature: ???	Go to waypoint (eg: next, named)
 void InputEvents::eventPan(const TCHAR *misc) {
+  MapWindow &map_window = main_window.map;
+
   if (_tcscmp(misc, TEXT("toggle")) == 0)
     map_window.Event_Pan(-1);
   else if (_tcscmp(misc, TEXT("supertoggle")) == 0)
@@ -481,6 +485,7 @@ else if (_tcscmp(misc, TEXT("down")) == 0)
 
 // Do JUST Terrain/Toplogy (toggle any, on/off any, show)
 void InputEvents::eventTerrainTopology(const TCHAR *misc) {
+  MapWindow &map_window = main_window.map;
 
   if (_tcscmp(misc, TEXT("terrain toggle")) == 0)
     map_window.Event_TerrainTopology(-2);
@@ -516,6 +521,7 @@ void InputEvents::eventClearWarningsOrTerrainTopology(const TCHAR *misc) {
     return;
   }
   // Else toggle TerrainTopology - and show the results
+  MapWindow &map_window = main_window.map;
   map_window.Event_TerrainTopology(-1);
   map_window.Event_TerrainTopology(0);
 }
@@ -1272,7 +1278,7 @@ void InputEvents::eventNearestAirspaceDetails(const TCHAR *misc) {
   }
 
   StartHourglassCursor();
-  FindNearestAirspace(map_window,
+  FindNearestAirspace(main_window.map,
 		      GPS_INFO.Longitude, GPS_INFO.Latitude,
 		      &nearestdistance, &nearestbearing,
 		      &foundcircle, &foundarea);
