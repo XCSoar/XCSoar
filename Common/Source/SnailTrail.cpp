@@ -46,7 +46,8 @@ SnailTrail::SnailTrail() {
 
 // called by calculation thread
 
-void SnailTrail::AddPoint(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
+void
+SnailTrail::AddPoint(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated)
 {
   if (!Calculated->Flying) return;
 

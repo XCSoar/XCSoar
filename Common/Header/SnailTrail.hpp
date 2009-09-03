@@ -59,7 +59,7 @@ typedef struct _SNAIL_POINT
 class SnailTrail {
 public:
   SnailTrail();
-  void AddPoint(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
+  void AddPoint(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated);
   int getIndex() {
     return indexNext;
   }
