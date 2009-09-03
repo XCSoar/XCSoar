@@ -61,8 +61,13 @@ bool IGCWriteRecord(const char *szIn, const TCHAR *);
 void LinkGRecordDLL(void);
 bool LoggerGActive();
 
-bool LogFRecordToFile(int SatelliteIDs[], short Hour, short Minute, short Second, bool bAlways);
-bool LogFRecord(int SatelliteIDs[], bool bAlways ) ;
+bool
+LogFRecordToFile(const int SatelliteIDs[], short Hour, short Minute,
+                 short Second, bool bAlways);
+
+bool
+LogFRecord(const int SatelliteIDs[], bool bAlways);
+
 void SetFRecordLastTime(double dTime);
 double GetFRecordLastTime(void);
 void ResetFRecord(void);
