@@ -281,11 +281,10 @@ bool Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
 
   StartupStore(TEXT("Create map window\n"));
 
-  map_window.SetMapRect(rcsmall);
   map_window.register_class(hInst, TEXT("MapWindowClass"));
-  map_window.set(main_window, TEXT("MapWindowClass"),
-                 0, 0, rc.right - rc.left, rc.bottom-rc.top);
+  map_window.set(main_window, TEXT("MapWindowClass"), rcsmall, rc);
   map_window.set_font(MapWindowFont);
+  map_window.SetMapRect(rcsmall);
 
   ///////////////////////////////////////////////////////
   // initial show

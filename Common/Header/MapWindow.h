@@ -89,6 +89,16 @@ class MapWindow
 
   bool register_class(HINSTANCE hInstance, const TCHAR* szWindowClass);
 
+  void set(ContainerWindow &parent, LPCTSTR cls,
+           const RECT _MapRectSmall, const RECT _MapRectBig) {
+    MapRectSmall = _MapRectSmall;
+    MapRect = MapRectBig = _MapRectBig;
+
+    MaskedPaintWindow::set(parent, cls, MapRect.left, MapRect.top,
+                           MapRect.right - MapRect.left,
+                           MapRect.bottom - MapRect.top);
+  }
+
   // used by dlgTarget
   bool TargetDragged(double *longitude, double *latitude);
   bool SetTargetPan(bool dopan, int task_index);

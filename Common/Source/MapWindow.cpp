@@ -289,11 +289,6 @@ void MapWindow::DrawThreadInitialise(void) {
   InitialiseScaleList(); // should really be done before the thread
 			 // has started, so it happens from main thread
 
-  // set main rectangles
-  MapRectBig = get_client_rect();
-  MapRectSmall = MapRect;
-  MapRect = MapRectSmall;
-
   // set initial display mode
   draw_canvas.background_transparent();
 
