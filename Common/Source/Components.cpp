@@ -220,7 +220,8 @@ bool Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
     return false;
 
   PaintWindow::register_class(hInst);
-  main_window.register_class(hInst);
+  MainWindow::register_class(hInst);
+  MapWindow::register_class(hInst);
 
   // other startup...
 
@@ -279,7 +280,6 @@ bool Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
 
   StartupStore(TEXT("Create map window\n"));
 
-  map_window.register_class(hInst);
   map_window.set(main_window, rcsmall, rc);
   map_window.set_font(MapWindowFont);
   map_window.SetMapRect(rcsmall);

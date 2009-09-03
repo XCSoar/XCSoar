@@ -85,7 +85,7 @@ class MapWindow
  public:
   MapWindow();
 
-  bool register_class(HINSTANCE hInstance);
+  static bool register_class(HINSTANCE hInstance);
 
   void set(ContainerWindow &parent,
            const RECT _MapRectSmall, const RECT _MapRectBig) {

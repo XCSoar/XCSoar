@@ -49,7 +49,7 @@ public:
     return TopWindow::find(_T("XCSoarMain"), text);
   }
 
-  bool register_class(HINSTANCE hInstance);
+  static bool register_class(HINSTANCE hInstance);
 
   void set(LPCTSTR text,
            int left, int top, unsigned width, unsigned height);
