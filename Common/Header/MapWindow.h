@@ -105,7 +105,8 @@ class MapWindow
 
   // use at startup
   void SetMapRect(RECT rc) {
-    MapRect = rc;
+    move(rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top);
+    SetRect(&MapRect, 0, 0, rc.right - rc.left, rc.bottom - rc.top);
   }
 
   bool isMapFullScreen(); // gui feedback

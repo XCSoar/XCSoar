@@ -116,10 +116,10 @@ void MapWindow::ToggleFullScreenStart() {
   // show infoboxes immediately
 
   if (MapFullScreen) {
-    MapRect = MapRectBig;
+    SetMapRect(MapRectBig);
     InfoBoxManager::Hide();
   } else {
-    MapRect = MapRectSmall;
+    SetMapRect(MapRectSmall);
     InfoBoxManager::Show();
   }
 
