@@ -38,15 +38,13 @@ Copyright_License {
 #include "Screen/MainWindow.hpp"
 #include "resource.h"
 
-#if (((UNDER_CE >= 300)||(_WIN32_WCE >= 0x0300)) && (WINDOWSPC<1))
-#define HAVE_ACTIVATE_INFO
-#endif
-
+MainWindow::MainWindow()
+ :_timer_id(0) {
 #ifdef HAVE_ACTIVATE_INFO
-#include <aygshell.h>
-static SHACTIVATEINFO s_sai;
+  memset(&s_sai, 0, sizeof(s_sai));
+  s_sai.cbSize = sizeof(s_sai);
 #endif
-
+}
 
 bool
 MainWindow::find(LPCTSTR cls, LPCTSTR text)
@@ -205,10 +203,6 @@ bool MainWindow::on_timer(void)
 bool MainWindow::on_create(void)
 {
   // strange, this never gets called..
-#ifdef HAVE_ACTIVATE_INFO
-  memset (&s_sai, 0, sizeof (s_sai));
-  s_sai.cbSize = sizeof (s_sai);
-#endif
   if (_timer_id == 0) {
     _timer_id = SetTimer(hWnd,1000,500,NULL); // 2 times per second
   }

@@ -40,12 +40,24 @@ Copyright_License {
 
 #include "Screen/ContainerWindow.hpp"
 
+#if (((UNDER_CE >= 300)||(_WIN32_WCE >= 0x0300)) && (WINDOWSPC<1))
+#define HAVE_ACTIVATE_INFO
+#endif
+
+#ifdef HAVE_ACTIVATE_INFO
+#include <aygshell.h>
+#endif
+
 /**
  * The main window of the application.
  */
 class MainWindow : public ContainerWindow {
+#ifdef HAVE_ACTIVATE_INFO
+  SHACTIVATEINFO s_sai;
+#endif
+
 public:
-  MainWindow():_timer_id(0) {};
+  MainWindow();
 
   bool find(LPCTSTR cls, LPCTSTR text);
 
