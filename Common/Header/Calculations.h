@@ -46,10 +46,6 @@ BOOL DoCalculationsVario(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 void DoCalculationsSlow(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
 			double screen_distance);
 
-double CalculateWaypointArrivalAltitude(NMEA_INFO *Basic, 
-					DERIVED_INFO *Calculated, 
-					int thepoint); // VENTA3
-
 bool ClearAirspaceWarnings(const bool ack, const bool allday=false);
 void RefreshTaskStatistics(void);
 void  SetWindEstimate(const double speed, const double bearing, const int quality=6);

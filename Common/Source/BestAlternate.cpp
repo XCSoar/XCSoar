@@ -49,8 +49,7 @@ Copyright_License {
 #include "GlideSolvers.hpp"
 #include "UtilsSystem.hpp"
 #include "Math/Earth.hpp"
-
-
+#include "CalculationsAbort.hpp"
 
 // Alternates VENTA3
 int Alternate1 = -1;
@@ -59,16 +58,6 @@ int BestAlternate = -1;
 bool EnableBestAlternate=false;
 bool EnableAlternate1=false;
 bool EnableAlternate2=false;
-
-
-// in Calculations.cpp
-#include "Calculations.h"
-
-void LatLon2Flat(double lon, double lat, int *scx, int *scy);
-
-int CalculateWaypointApproxDistance(int scx_aircraft, int scy_aircraft,
-                                    int i);
-
 
 /*
  * ===========================================
