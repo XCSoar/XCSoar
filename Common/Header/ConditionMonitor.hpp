@@ -42,6 +42,7 @@ Copyright_License {
 #include "NMEA/Derived.hpp"
 
 void
-ConditionMonitorsUpdate(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
+ConditionMonitorsUpdate(const NMEA_INFO *Basic,
+                        const DERIVED_INFO *Calculated);
 
 #endif
