@@ -523,7 +523,8 @@ void TestZigZagLoop() {
 
 
 
-static bool WindZigZagCheckAirData(NMEA_INFO* Basic, DERIVED_INFO* Calculated)
+static bool
+WindZigZagCheckAirData(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated)
 {
   static double tLast = -1;
   static double bearingLast=0;
@@ -566,8 +567,10 @@ static bool WindZigZagCheckAirData(NMEA_INFO* Basic, DERIVED_INFO* Calculated)
   return true;
 }
 
-int WindZigZagUpdate(NMEA_INFO* Basic, DERIVED_INFO* Calculated,
-		      double *zzwindspeed, double *zzwindbearing) {
+int
+WindZigZagUpdate(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated,
+                 double *zzwindspeed, double *zzwindbearing)
+{
   static double tLastEstimate = -1;
 
   if (!Basic->AirspeedAvailable) {
