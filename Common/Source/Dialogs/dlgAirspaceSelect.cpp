@@ -142,20 +142,20 @@ static void OnAirspaceListEnter(WindowControl * Sender,
 			       MB_YESNOCANCEL|MB_ICONQUESTION);
 	  if (answer == IDYES) {
 	    if (index_circle>=0) {
-              AirspaceWarnListAdd(&GPS_INFO, &CALCULATED_INFO, false, true,
-                                  index_circle, true);
+              AirspaceWarnListAdd(&GPS_INFO, &CALCULATED_INFO, map_window,
+                                  false, true, index_circle, true);
             } else if (index_area>=0) {
-              AirspaceWarnListAdd(&GPS_INFO, &CALCULATED_INFO, false, false,
-                                  index_area, true);
+              AirspaceWarnListAdd(&GPS_INFO, &CALCULATED_INFO, map_window,
+                                  false, false, index_area, true);
             }
           } else if (answer == IDNO) {
 	    // this will cancel a daily ack
 	    if (index_circle>=0) {
-              AirspaceWarnListAdd(&GPS_INFO, &CALCULATED_INFO, true, true,
-                                  index_circle, true);
+              AirspaceWarnListAdd(&GPS_INFO, &CALCULATED_INFO, map_window,
+                                  true, true, index_circle, true);
             } else if (index_area>=0) {
-              AirspaceWarnListAdd(&GPS_INFO, &CALCULATED_INFO, true, false,
-                                  index_area, true);
+              AirspaceWarnListAdd(&GPS_INFO, &CALCULATED_INFO, map_window,
+                                  true, false, index_area, true);
             }
 	  }
         }

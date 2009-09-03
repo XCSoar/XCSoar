@@ -42,10 +42,13 @@ Copyright_License {
 #include "NMEA/Info.h"
 #include "NMEA/Derived.hpp"
 
+class MapWindowProjection;
+
 void
 PredictNextPosition(const NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 
 void
-AirspaceWarning(const NMEA_INFO *Basic, DERIVED_INFO *Calculated);
+AirspaceWarning(const NMEA_INFO *Basic, DERIVED_INFO *Calculated,
+                const MapWindowProjection &map_projection);
 
 #endif

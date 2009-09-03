@@ -74,6 +74,7 @@ Copyright_License {
 #include "CalculationsAirspace.hpp"
 #include "CalculationsAbort.hpp"
 #include "ConditionMonitor.hpp"
+#include "MapWindowProjection.hpp"
 
 bool EnableNavBaroAltitude=false;
 int EnableExternalTriggerCruise=false;
@@ -177,7 +178,7 @@ void AnnounceWayPointSwitch(DERIVED_INFO *Calculated, bool do_advance) {
 
 void
 DoCalculationsSlow(const NMEA_INFO *Basic, DERIVED_INFO *Calculated,
-                   double screen_distance)
+                   const MapWindowProjection &map_projection)
 {
   // do slow part of calculations (cleanup of caches etc, nothing
   // that changes the state)
@@ -192,10 +193,10 @@ DoCalculationsSlow(const NMEA_INFO *Basic, DERIVED_INFO *Calculated,
     lastTime = Basic->Time-6;
   } else {
     // calculate airspace warnings every 6 seconds
-    AirspaceWarning(Basic, Calculated);
+    AirspaceWarning(Basic, Calculated, map_projection);
   }
 
-  TerrainFootprint(Basic, Calculated, screen_distance);
+  TerrainFootprint(Basic, Calculated, map_projection.GetScreenDistanceMeters());
 
   DoBestAlternateSlow(Basic, Calculated);
 

@@ -40,14 +40,17 @@ Copyright_License {
 #include "NMEA/Info.h"
 #include "NMEA/Derived.hpp"
 
+class MapWindowProjection;
+
 extern void
 AirspaceWarnListAdd(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated,
+                    const MapWindowProjection &map_projection,
                     bool Predicted, bool IsCircle, int AsIdx,
                     bool ackDay=false);
 
 extern void
 AirspaceWarnListProcess(const NMEA_INFO *Basic,
-                        const DERIVED_INFO *Calculated);
-
+                        const DERIVED_INFO *Calculated,
+                        const MapWindowProjection &map_projection);
 
 #endif

@@ -51,9 +51,6 @@ Copyright_License {
 
 #include "simpleList.h"
 
-#include "MapWindow.h"
-#include "Interface.hpp"
-
 #include <stdlib.h>
 
 static bool NewAirspaceWarnings = false;
@@ -178,7 +175,8 @@ static void
 AirspaceWarnListCalcDistance(const NMEA_INFO *Basic,
                              const DERIVED_INFO *Calculated,
                              bool IsCircle, int AsIdx,
-                             int *hDistance, int *Bearing, int *vDistance)
+                             int *hDistance, int *Bearing, int *vDistance,
+                             const MapWindowProjection &map_projection)
 {
   int vDistanceBase;
   int vDistanceTop;
@@ -216,7 +214,7 @@ AirspaceWarnListCalcDistance(const NMEA_INFO *Basic,
       double fBearing;
       *hDistance = (int)RangeAirspaceArea(Basic->Longitude, Basic->Latitude,
                                           AsIdx, &fBearing,
-					  map_window);
+					  map_projection);
       *Bearing = (int)fBearing;
     } else {
       *hDistance = 0;
@@ -276,6 +274,7 @@ static bool calcWarnLevel(AirspaceInfo_c *asi){
 
 void
 AirspaceWarnListAdd(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated,
+                    const MapWindowProjection &map_projection,
                     bool Predicted, bool IsCircle, int AsIdx,
                     bool ackDay)
 {
@@ -294,7 +293,8 @@ AirspaceWarnListAdd(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated,
 
   if (Predicted){  // ToDo calculate predicted data
     AirspaceWarnListCalcDistance(Basic, Calculated, IsCircle, AsIdx, &hDistance,
-				 &Bearing, &vDistance);
+				 &Bearing, &vDistance,
+                                 map_projection);
   }
   LockList();
   __try{
@@ -446,7 +446,8 @@ void AirspaceWarnListSort(void){
 
 void
 AirspaceWarnListProcess(const NMEA_INFO *Basic,
-                        const DERIVED_INFO *Calculated)
+                        const DERIVED_INFO *Calculated,
+                        const MapWindowProjection &map_projection)
 {
 
   if (!InitDone) return;
@@ -471,7 +472,8 @@ AirspaceWarnListProcess(const NMEA_INFO *Basic,
         AirspaceWarnListCalcDistance(Basic, Calculated,
 				     it->data.IsCircle,
 				     it->data.AirspaceIndex,
-				     &hDistance, &Bearing, &vDistance);
+				     &hDistance, &Bearing, &vDistance,
+                                     map_projection);
 
         it->data.hDistance = hDistance; // for all: update data
         it->data.vDistance = vDistance;

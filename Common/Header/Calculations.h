@@ -41,12 +41,14 @@ Copyright_License {
 #include "NMEA/Info.h"
 #include "NMEA/Derived.hpp"
 
+class MapWindowProjection;
+
 BOOL
 DoCalculations(const NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 
 BOOL DoCalculationsVario(const NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 void DoCalculationsSlow(const NMEA_INFO *Basic, DERIVED_INFO *Calculated,
-			double screen_distance);
+                        const MapWindowProjection &map_projection);
 
 bool ClearAirspaceWarnings(const bool ack, const bool allday=false);
 void RefreshTaskStatistics(void);

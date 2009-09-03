@@ -114,7 +114,8 @@ bool ClearAirspaceWarnings(const bool acknowledge, const bool ack_all_day) {
 
 
 void
-AirspaceWarning(const NMEA_INFO *Basic, DERIVED_INFO *Calculated)
+AirspaceWarning(const NMEA_INFO *Basic, DERIVED_INFO *Calculated,
+                const MapWindowProjection &map_projection)
 {
   unsigned int i;
 
@@ -169,7 +170,8 @@ AirspaceWarning(const NMEA_INFO *Basic, DERIVED_INFO *Calculated)
         if ((iAirspaceMode[AirspaceCircle[i].Type] >= 2) &&
 	    InsideAirspaceCircle(lon, lat, i)) {
 
-          AirspaceWarnListAdd(Basic, Calculated, position_is_predicted, 1, i, false);
+          AirspaceWarnListAdd(Basic, Calculated, map_projection,
+                              position_is_predicted, 1, i, false);
         }
 
       }
@@ -190,14 +192,15 @@ AirspaceWarning(const NMEA_INFO *Basic, DERIVED_INFO *Calculated)
         if ((iAirspaceMode[AirspaceArea[i].Type] >= 2)
             && InsideAirspaceArea(lon, lat, i)){
 
-          AirspaceWarnListAdd(Basic, Calculated, position_is_predicted, 0, i, false);
+          AirspaceWarnListAdd(Basic, Calculated, map_projection,
+                              position_is_predicted, 0, i, false);
         }
 
       }
     }
   }
 
-  AirspaceWarnListProcess(Basic, Calculated);
+  AirspaceWarnListProcess(Basic, Calculated, map_projection);
 
   //  UnlockFlightData();
 
