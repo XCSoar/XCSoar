@@ -68,6 +68,7 @@ Copyright_License {
 #include "Message.h"
 #include "Calculations.h" // TODO danger! for InAATTurnSector
 #include "RasterWeather.h"
+#include "options.h" /* for DEBUG_VIRTUALKEYS */
 
 #ifdef PNA
 #include "Asset.hpp"
@@ -80,11 +81,6 @@ Copyright_License {
 
 #if (WINDOWSPC>0)
 #include <wingdi.h>
-#endif
-
-#ifndef NDEBUG
-#define DRAWLOAD
-#define DEBUG_VIRTUALKEYS
 #endif
 
 ///////////////////////////////// Settings

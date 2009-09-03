@@ -125,6 +125,13 @@ Copyright_License {
 #define LOOK8000
 #endif
 
+#ifndef NDEBUG
+
+// display debug messages for virtual keys
+/* #define DEBUG_VIRTUALKEYS */
+
+#endif
+
 #endif
 
 /*
