@@ -50,7 +50,9 @@ Copyright_License {
 
 #define fSnailColour(cv) max(0,min((short)(NUMSNAILCOLORS-1), (short)((cv+1.0)/2.0*NUMSNAILCOLORS)))
 
-void MapWindow::DrawFLARMTraffic(Canvas &canvas, RECT rc) {
+void
+MapWindow::DrawFLARMTraffic(Canvas &canvas)
+{
 
   if (!EnableFLARMMap) return;
 
@@ -245,7 +247,8 @@ void MapWindow::DrawFLARMTraffic(Canvas &canvas, RECT rc) {
 }
 
 
-void MapWindow::DrawTeammate(Canvas &canvas, RECT rc)
+void
+MapWindow::DrawTeammate(Canvas &canvas)
 {
   if (TeammateCodeValid) {
     draw_masked_bitmap_if_visible(canvas, MapGfx.hBmpTeammatePosition,

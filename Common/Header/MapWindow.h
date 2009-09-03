@@ -186,41 +186,38 @@ class MapWindow
 
   // display renderers
   void DrawAircraft(Canvas &canvas);
-  void DrawCrossHairs(Canvas &canvas, const RECT rc);
+  void DrawCrossHairs(Canvas &canvas);
   void DrawGlideCircle(Canvas &canvas, const POINT Orig, const RECT rc); // VENTA3
   void DrawBestCruiseTrack(Canvas &canvas);
   void DrawCompass(Canvas &canvas, const RECT rc);
   void DrawHorizon(Canvas &canvas, const RECT rc);
   void DrawWindAtAircraft2(Canvas &canvas, POINT Orig, RECT rc);
   void DrawAirSpace(Canvas &canvas, const RECT rc, Canvas &buffer);
-  void DrawWaypoints(Canvas &canvas, const RECT rc);
-  void DrawWaypointsNew(Canvas &canvas, const RECT rc); // VENTA5
-  void DrawLook8000(Canvas &canvas, const RECT rc); // VENTA5
+  void DrawWaypoints(Canvas &canvas);
   void DrawFlightMode(Canvas &canvas, const RECT rc);
   void DrawGPSStatus(Canvas &canvas, const RECT rc);
-  double DrawTrail(Canvas &canvas, const RECT rc);
-  void DrawTeammate(Canvas &canvas, const RECT rc);
-  void DrawTrailFromTask(Canvas &canvas, const RECT rc, const double);
-  void DrawOffTrackIndicator(Canvas &canvas, const RECT rc);
-  void DrawProjectedTrack(Canvas &canvas, const RECT rc);
-  void DrawStartSector(Canvas &canvas, const RECT rc, POINT &Start,
-                              POINT &End, int Index);
+  double DrawTrail(Canvas &canvas);
+  void DrawTeammate(Canvas &canvas);
+  void DrawTrailFromTask(Canvas &canvas, const double TrailFirstTime);
+  void DrawOffTrackIndicator(Canvas &canvas);
+  void DrawProjectedTrack(Canvas &canvas);
+  void DrawStartSector(Canvas &canvas, POINT &Start, POINT &End, int Index);
   void DrawTask(Canvas &canvas, RECT rc);
-  void DrawThermalEstimate(Canvas &canvas, const RECT rc);
+  void DrawThermalEstimate(Canvas &canvas);
   void DrawTaskAAT(Canvas &canvas, const RECT rc, Canvas &buffer);
-  void DrawAbortedTask(Canvas &canvas, const RECT rc);
+  void DrawAbortedTask(Canvas &canvas);
 
-  void DrawBearing(Canvas &canvas, const RECT rc, int bBearingValid);
+  void DrawBearing(Canvas &canvas, int bBearingValid);
   void DrawMapScale(Canvas &canvas, const RECT rc,
 			   const bool ScaleChangeFeedback);
   void DrawMapScale2(Canvas &canvas, const RECT rc);
   void DrawFinalGlide(Canvas &canvas, const RECT rc);
   void DrawThermalBand(Canvas &canvas, const RECT rc);
-  void DrawGlideThroughTerrain(Canvas &canvas, const RECT rc);
+  void DrawGlideThroughTerrain(Canvas &canvas);
   void DrawTerrainAbove(Canvas &hDC, const RECT rc, Canvas &buffer);
   void DrawCDI();
   //  void DrawSpeedToFly(HDC hDC, RECT rc);
-  void DrawFLARMTraffic(Canvas &canvas, RECT rc);
+  void DrawFLARMTraffic(Canvas &canvas);
 
   void ClearAirSpace(Canvas &dc, bool fill);
 

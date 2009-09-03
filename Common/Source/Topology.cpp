@@ -314,7 +314,7 @@ void Topology::Paint(Canvas &canvas, MapWindow &m_window, const RECT rc) {
             }
 	  }
 
-          canvas.clipped_polygon(pt, msize, rc, false);
+          canvas.polyline(pt, msize);
           cshape->renderSpecial(canvas, *label_block, minx, miny);
         }
       break;
@@ -337,7 +337,7 @@ void Topology::Paint(Canvas &canvas, MapWindow &m_window, const RECT rc) {
               miny = pt[jj].y;
             }
 	  }
-          canvas.clipped_polygon(pt, msize, rc, true);
+          canvas.polygon(pt, msize);
           cshape->renderSpecial(canvas, *label_block, minx, miny);
         }
       break;

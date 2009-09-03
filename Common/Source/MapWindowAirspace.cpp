@@ -173,8 +173,7 @@ void MapWindow::DrawAirSpace(Canvas &canvas, const RECT rc, Canvas &buffer)
         // get brush, can be solid or a 1bpp bitmap
         buffer.select(MapGfx.hAirspaceBrushes[iAirspaceBrush[AirspaceCircle[i].Type]]);
         buffer.circle(AirspaceCircle[i].Screen.x, AirspaceCircle[i].Screen.y,
-                      AirspaceCircle[i].ScreenR,
-                      rc, true, true);
+                      AirspaceCircle[i].ScreenR);
       }
     }
   }
@@ -189,8 +188,8 @@ void MapWindow::DrawAirSpace(Canvas &canvas, const RECT rc, Canvas &buffer)
         // this color is used as the black bit
         buffer.set_text_color(MapGfx.Colours[iAirspaceColour[AirspaceArea[i].Type]]);
         buffer.select(MapGfx.hAirspaceBrushes[iAirspaceBrush[AirspaceArea[i].Type]]);
-        buffer.clipped_polygon(AirspaceScreenPoint+AirspaceArea[i].FirstPoint,
-                               AirspaceArea[i].NumPoints, rc, true);
+        buffer.polygon(AirspaceScreenPoint+AirspaceArea[i].FirstPoint,
+                               AirspaceArea[i].NumPoints);
       }
     }
   }
@@ -215,7 +214,7 @@ void MapWindow::DrawAirSpace(Canvas &canvas, const RECT rc, Canvas &buffer)
           buffer.select(MapGfx.hAirspacePens[AirspaceCircle[i].Type]);
         }
         buffer.circle(AirspaceCircle[i].Screen.x, AirspaceCircle[i].Screen.y,
-                      AirspaceCircle[i].ScreenR, rc, true, false);
+                      AirspaceCircle[i].ScreenR);
       }
     }
   }
@@ -234,7 +233,7 @@ void MapWindow::DrawAirSpace(Canvas &canvas, const RECT rc, Canvas &buffer)
         }
 
 	POINT *pstart = AirspaceScreenPoint+AirspaceArea[i].FirstPoint;
-        buffer.clipped_polygon(pstart, AirspaceArea[i].NumPoints, rc, false);
+        buffer.polyline(pstart, AirspaceArea[i].NumPoints);
 
 	if (AirspaceArea[i].NumPoints>2) {
 	  // JMW close if open
@@ -243,7 +242,7 @@ void MapWindow::DrawAirSpace(Canvas &canvas, const RECT rc, Canvas &buffer)
 	    POINT ps[2];
 	    ps[0] = pstart[0];
 	    ps[1] = pstart[AirspaceArea[i].NumPoints-1];
-            buffer.clipped_polyline(ps, 2, rc);
+            buffer.polyline(ps, 2);
 	  }
 	}
 

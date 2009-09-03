@@ -98,8 +98,7 @@ class MapWindowProjection {
   // drawing functions
   void DrawGreatCircle(Canvas &canvas,
 		       double lon_start, double lat_start,
-		       double lon_end, double lat_end,
-		       const RECT rc);
+		       double lon_end, double lat_end);
 
   rectObj* getSmartBounds() {
     return &smart_bounds_active;
