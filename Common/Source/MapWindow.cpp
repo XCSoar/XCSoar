@@ -228,7 +228,6 @@ bool MapWindow::Idle(const bool do_force) {
     topology_idle.dirty = true;
     rasp_idle.dirty = true;
     topology->TriggerUpdateCaches(*this);
-    return true;
   }
 
   do {
@@ -238,6 +237,13 @@ bool MapWindow::Idle(const bool do_force) {
       main_idle.dirty = false;
       ScanVisibility(getSmartBounds());
       continue;
+    }
+
+    if (do_force) {
+      // exit after important object visibilities are scanned
+      // this ensures waypoints/airspace are visible after a significant
+      // shift of the map
+      return true;
     }
     
     if (topology_idle.dirty) {
@@ -348,8 +354,9 @@ DWORD MapWindow::_DrawThread ()
       mutexRun.Lock(); // take control
       StartTimer();
       DrawThreadLoop();
-      bool force_dirty = SmartBounds(false);
-      bounds_dirty = Idle(force_dirty); // this call is quick
+      if (SmartBounds(false)) {
+	bounds_dirty = Idle(true); // this call is quick
+      }
       mutexRun.Unlock(); // release control
       StopTimer();
       continue;
