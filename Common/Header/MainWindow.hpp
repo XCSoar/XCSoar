@@ -35,45 +35,16 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_MAIN_WINDOW_HXX
-#define XCSOAR_SCREEN_MAIN_WINDOW_HXX
+#ifndef XCSOAR_MAIN_WINDOW_HXX
+#define XCSOAR_MAIN_WINDOW_HXX
 
-#include "Screen/ContainerWindow.hpp"
-
-#if (((UNDER_CE >= 300)||(_WIN32_WCE >= 0x0300)) && (WINDOWSPC<1))
-#define HAVE_ACTIVATE_INFO
-#endif
-
-#ifdef HAVE_ACTIVATE_INFO
-#include <aygshell.h>
-#endif
+#include "Screen/TopWindow.hpp"
 
 /**
- * The main window of the application.
+ * The XCSoar main window.
  */
-class MainWindow : public ContainerWindow {
-#ifdef HAVE_ACTIVATE_INFO
-  SHACTIVATEINFO s_sai;
-#endif
-
+class MainWindow : public TopWindow {
 public:
-  MainWindow();
-
-  bool find(LPCTSTR cls, LPCTSTR text);
-
-  void set(LPCTSTR cls, LPCTSTR text,
-           int left, int top, unsigned width, unsigned height);
-
-  void full_screen();
-
-  void update() {
-    ::UpdateWindow(hWnd);
-  }
-
-  void close() {
-    ::SendMessage(hWnd, WM_CLOSE, 0, 0);
-  }
-
   bool register_class(HINSTANCE hInstance, const TCHAR* szWindowClass);
 
 protected:

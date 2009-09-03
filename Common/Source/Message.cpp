@@ -43,7 +43,7 @@ Copyright_License {
 #include "Protection.hpp"
 #include "InfoBoxLayout.h"
 #include "Screen/Fonts.hpp"
-#include "Screen/MainWindow.hpp"
+#include "MainWindow.hpp"
 #include "LocalPath.hpp"
 #include "Registry.hpp"
 #include <tchar.h>

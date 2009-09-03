@@ -42,7 +42,7 @@ Copyright_License {
 #include "Version.hpp"
 #include "LogFile.hpp"
 #include "MapWindowProjection.hpp"
-#include "Screen/MainWindow.hpp"
+#include "MainWindow.hpp"
 #include "Waypointparser.h"
 #include "SettingsTask.hpp"
 #include "Airspace.h"

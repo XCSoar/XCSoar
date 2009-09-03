@@ -35,65 +35,48 @@ Copyright_License {
 }
 */
 
-#include "XCSoar.h"
-#include "Interface.hpp"
-#include "Units.hpp"
-#include "InputEvents.h"
-#include "Dialogs/dlgTools.h"
-#include "InfoBoxLayout.h"
-#include "MainWindow.hpp"
-#include "Compatibility/string.h"
+#ifndef XCSOAR_SCREEN_TOP_WINDOW_HXX
+#define XCSOAR_SCREEN_TOP_WINDOW_HXX
 
-static WndForm *wf=NULL;
+#include "Screen/ContainerWindow.hpp"
 
-static void OnCloseClicked(WindowControl * Sender){
-	(void)Sender;
-  wf->SetModalResult(mrOK);
-}
+#if (((UNDER_CE >= 300)||(_WIN32_WCE >= 0x0300)) && (WINDOWSPC<1))
+#define HAVE_ACTIVATE_INFO
+#endif
 
+#ifdef HAVE_ACTIVATE_INFO
+#include <aygshell.h>
+#endif
 
-static CallBackTableEntry_t CallBackTable[]={
-  DeclareCallBackEntry(OnCloseClicked),
-  DeclareCallBackEntry(NULL)
+/**
+ * A top-level full-screen window.
+ */
+class TopWindow : public ContainerWindow {
+#ifdef HAVE_ACTIVATE_INFO
+  SHACTIVATEINFO s_sai;
+#endif
+
+public:
+  TopWindow();
+
+  bool find(LPCTSTR cls, LPCTSTR text);
+
+  void set(LPCTSTR cls, LPCTSTR text,
+           int left, int top, unsigned width, unsigned height);
+
+  void full_screen();
+
+  void update() {
+    ::UpdateWindow(hWnd);
+  }
+
+  void close() {
+    ::SendMessage(hWnd, WM_CLOSE, 0, 0);
+  }
+
+protected:
+  virtual LRESULT on_message(HWND _hWnd, UINT message,
+                             WPARAM wParam, LPARAM lParam);
 };
 
-
-
-void dlgHelpShowModal(const TCHAR* Caption, const TCHAR* HelpText) {
-  if (!Caption || !HelpText) {
-    return;
-  }
-
-  if (!InfoBoxLayout::landscape) {
-    wf = dlgLoadFromXML(CallBackTable,
-                        TEXT("dlgHelp_L.xml"),
-                        main_window,
-                        TEXT("IDR_XML_HELP_L"));
-  } else {
-    wf = dlgLoadFromXML(CallBackTable,
-                        TEXT("dlgHelp.xml"),
-                        main_window,
-                        TEXT("IDR_XML_HELP"));
-  }
-  WndProperty* wp;
-
-  if (wf) {
-
-    TCHAR fullcaption[100];
-    _stprintf(fullcaption,TEXT("Help: %s"), Caption);
-
-    wf->SetCaption(fullcaption);
-
-    wp = (WndProperty*)wf->FindByName(TEXT("prpHelpText"));
-    if (wp) {
-      wp->SetText(HelpText);
-      wp->RefreshDisplay();
-    }
-    wf->ShowModal();
-    delete wf;
-  }
-  wf = NULL;
-
-}
-
-
+#endif

@@ -49,7 +49,7 @@ Copyright_License {
 #include "Logger.h"
 #include "Math/FastMath.h"
 #include "LocalTime.hpp"
-#include "Screen/MainWindow.hpp"
+#include "MainWindow.hpp"
 #include "Calculations.h" // TODO danger! FAIFinishHeight
 #include "Math/SunEphemeris.hpp"
 #include "MapWindow.h"

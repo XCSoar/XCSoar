@@ -41,7 +41,7 @@ Copyright_License {
 #include "Components.hpp"
 #include "LogFile.hpp"
 #include "UtilsSystem.hpp"
-#include "Screen/MainWindow.hpp"
+#include "MainWindow.hpp"
 #include "Message.h"
 #include "Asset.hpp"
 

@@ -47,7 +47,7 @@ Copyright_License {
 #include "Math/Geometry.hpp"
 #include "Math/Earth.hpp"
 #include "Math/Units.h"
-#include "Screen/MainWindow.hpp"
+#include "MainWindow.hpp"
 #include "MapWindow.h"
 
 #include <assert.h>

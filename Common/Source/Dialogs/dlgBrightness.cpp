@@ -42,7 +42,7 @@ Copyright_License {
 #include "Dialogs/dlgTools.h"
 #include "Math/FastMath.h"
 #include "DataField/Base.hpp"
-#include "Screen/MainWindow.hpp"
+#include "MainWindow.hpp"
 #include "Compatibility/string.h"
 
 static WndForm *wf=NULL;

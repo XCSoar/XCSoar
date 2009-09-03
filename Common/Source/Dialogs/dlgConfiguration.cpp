@@ -58,7 +58,7 @@ Copyright_License {
 #include "Device/device.h"
 #include "Screen/Animation.hpp"
 #include "Screen/Blank.hpp"
-#include "Screen/MainWindow.hpp"
+#include "MainWindow.hpp"
 #include "Registry.hpp"
 #include "LocalTime.hpp"
 #include "McReady.h"

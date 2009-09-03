@@ -48,7 +48,6 @@ Copyright_License {
 #include "Screen/Fonts.hpp"
 #include "Screen/BitmapCanvas.hpp"
 #include "Screen/PaintCanvas.hpp"
-#include "Screen/MainWindow.hpp"
 #include <stdlib.h>
 #include "SettingsUser.hpp"
 

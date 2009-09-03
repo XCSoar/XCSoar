@@ -40,7 +40,7 @@ Copyright_License {
 #include "Language.hpp"
 #include "Math/Earth.hpp"
 #include "Screen/Util.hpp"
-#include "Screen/MainWindow.hpp"
+#include "MainWindow.hpp"
 #include "Blackboard.hpp"
 #include "Dialogs/dlgTools.h"
 #include "InfoBoxLayout.h"

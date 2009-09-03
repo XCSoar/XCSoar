@@ -51,7 +51,7 @@ Copyright_License {
 #include "InfoBoxLayout.h"
 #include "Math/Geometry.hpp"
 #include "DataField/Enum.hpp"
-#include "Screen/MainWindow.hpp"
+#include "MainWindow.hpp"
 #include "WayPoint.hpp"
 #include "Protection.hpp"
 

@@ -82,7 +82,7 @@ Copyright_License {
 #include "Polar/Historical.hpp"
 #include "Persist.hpp"
 #include "Device/Parser.h"
-#include "Screen/MainWindow.hpp"
+#include "MainWindow.hpp"
 
 GaugeVario *gauge_vario;
 GaugeFLARM *gauge_flarm;

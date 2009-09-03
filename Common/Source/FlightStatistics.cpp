@@ -39,7 +39,6 @@ Copyright_License {
 #include "XCSoar.h"
 #include "Screen/Fonts.hpp"
 #include "Screen/Graphics.hpp"
-#include "Screen/MainWindow.hpp"
 #include "Math/FastMath.h"
 #include "Math/Geometry.hpp"
 #include "Math/Earth.hpp"

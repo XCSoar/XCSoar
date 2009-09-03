@@ -48,7 +48,7 @@ Copyright_License {
 #include "GlideSolvers.hpp"
 #include "Dialogs.h"
 #include "DataField/Base.hpp"
-#include "Screen/MainWindow.hpp"
+#include "MainWindow.hpp"
 
 static WndForm *wf=NULL;
 

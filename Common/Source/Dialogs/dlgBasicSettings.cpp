@@ -49,7 +49,7 @@ Copyright_License {
 #include "Device/device.h"
 #include "DataField/Base.hpp"
 #include "Airspace.h"
-#include "Screen/MainWindow.hpp"
+#include "MainWindow.hpp"
 
 #include <math.h>
 
