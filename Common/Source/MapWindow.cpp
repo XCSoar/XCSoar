@@ -284,6 +284,8 @@ bool MapWindow::Idle(const bool do_force) {
 
 void MapWindow::DrawThreadLoop(void) {
 
+  StartTimer();
+
   ExchangeBlackboard(GPS_INFO, CALCULATED_INFO);
 
   if (BigZoom) {
@@ -304,6 +306,7 @@ void MapWindow::DrawThreadLoop(void) {
   get_canvas().copy(draw_canvas);
   update(MapRect);
 
+  StopTimer();
 }
 
 
@@ -352,9 +355,7 @@ DWORD MapWindow::_DrawThread ()
   do {
     if (drawTriggerEvent.wait(MIN_WAIT_TIME)) {
       mutexRun.Lock(); // take control
-      StartTimer();
       DrawThreadLoop();
-      StopTimer();
       if (SmartBounds(false)) {
 	bounds_dirty = Idle(true); // this call is quick
       }

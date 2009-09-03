@@ -44,6 +44,9 @@ class MapWindowTimer {
 public:
   MapWindowTimer();
   virtual bool RenderTimeAvailable();
+  int GetAverageTime() {
+    return timestats_av;
+  }
 protected:
   void StartTimer();
   void StopTimer();
