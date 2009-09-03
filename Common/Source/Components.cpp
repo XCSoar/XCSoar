@@ -218,7 +218,7 @@ bool Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
   LoadString(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
 
   //If it is already running, then focus on the window
-  if (main_window.find(szWindowClass, szTitle))
+  if (MainWindow::find(szWindowClass, szTitle))
     return false;
 
   PaintWindow::register_class(hInst);
