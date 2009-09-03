@@ -218,11 +218,6 @@ bool MainWindow::on_create(void)
 void MainWindow::install_timer(void) {
 }
 
-bool MainWindow::on_key_down(unsigned key_code) {
-  InterfaceTimeoutReset();
-  return true;
-}
-
 bool MainWindow::on_destroy(void) {
   PaintWindow::on_destroy();
 

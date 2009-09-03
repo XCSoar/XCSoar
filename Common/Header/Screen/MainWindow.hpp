@@ -73,7 +73,6 @@ protected:
   virtual bool on_command(HWND hWnd, unsigned id, unsigned code);
   bool on_timer();
   bool on_create();
-  bool on_key_down(unsigned key_code);
   bool on_destroy();
   bool on_close();
 public:
