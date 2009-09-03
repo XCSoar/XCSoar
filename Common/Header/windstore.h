@@ -43,19 +43,19 @@ public: // Public slots
     * measurement is. Higher quality measurements are more important in the
     * end result and stay in the store longer.
     */
-  void slot_measurement(NMEA_INFO *basic, DERIVED_INFO *derived,
+  void slot_measurement(const NMEA_INFO *basic, DERIVED_INFO *derived,
                         Vector windvector, int quality);
   /** Called if the altitude changes.
     * Determines where measurements are stored and may result in a newWind
     * signal. */
-  void slot_Altitude(NMEA_INFO *basic, DERIVED_INFO *derived);
+  void slot_Altitude(const NMEA_INFO *basic, DERIVED_INFO *derived);
 
   // signals
   /**
     * Send if a new wind vector has been established. This may happen as
     * new measurements flow in, but also if the altitude changes.
     */
-  void newWind(NMEA_INFO *basic, DERIVED_INFO *derived,
+  void newWind(const NMEA_INFO *basic, DERIVED_INFO *derived,
                Vector& wind);
 
   Vector getWind(double Time, double h, bool *found);
@@ -68,7 +68,7 @@ private:
 
   /** Recalculates the wind from the stored measurements.
     * May result in a newWind signal. */
-  void recalculateWind(NMEA_INFO *basic, DERIVED_INFO *derived);
+  void recalculateWind(const NMEA_INFO *basic, DERIVED_INFO *derived);
 
   bool updated;
 
