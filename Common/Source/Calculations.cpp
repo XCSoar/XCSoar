@@ -73,6 +73,7 @@ Copyright_License {
 #include "Airspace.h"
 #include "CalculationsAirspace.hpp"
 #include "CalculationsAbort.hpp"
+#include "ConditionMonitor.hpp"
 
 bool EnableNavBaroAltitude=false;
 int EnableExternalTriggerCruise=false;
@@ -88,8 +89,6 @@ bool WasFlying = false; // VENTA3 used by auto QFE: do not reset QFE
 			//   QFE on the ground, otherwise it turns to
 			//   zero at once!
 extern int FastLogNum; // number of points to log at high rate
-
-extern void ConditionMonitorsUpdate(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 
 static void Heading(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 

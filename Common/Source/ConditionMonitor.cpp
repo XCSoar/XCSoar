@@ -36,7 +36,7 @@ Copyright_License {
 
 */
 
-//#include "ConditionMonitor.h"
+#include "ConditionMonitor.hpp"
 #include "XCSoar.h"
 #include "Calculations.h"
 #include <math.h>
