@@ -50,50 +50,6 @@ Copyright_License {
 #include "Calculations2.h"
 
 
-void Vario(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
-{
-  static double LastTime = 0;
-  static double LastAlt = 0;
-  static double LastAltTE = 0;
-  static double h0last = 0;
-
-  if(Basic->Time <= LastTime) {
-    LastTime = Basic->Time;
-  } else {
-    double Gain = Calculated->NavAltitude - LastAlt;
-    double GainTE = (Calculated->EnergyHeight+Basic->Altitude) - LastAltTE;
-    double dT = (Basic->Time - LastTime);
-    // estimate value from GPS
-    Calculated->GPSVario = Gain / dT;
-    Calculated->GPSVarioTE = GainTE / dT;
-
-    double dv = (Calculated->TaskAltitudeDifference-h0last)
-      /(Basic->Time-LastTime);
-    Calculated->DistanceVario = LowPassFilter(Calculated->DistanceVario,
-                                              dv, 0.1);
-
-    h0last = Calculated->TaskAltitudeDifference;
-
-    LastAlt = Calculated->NavAltitude;
-    LastAltTE = Calculated->EnergyHeight+Basic->Altitude;
-    LastTime = Basic->Time;
-
-  }
-
-  if (!Basic->VarioAvailable || ReplayLogger::IsEnabled()) {
-    Calculated->Vario = Calculated->GPSVario;
-
-  } else {
-    // get value from instrument
-    Calculated->Vario = Basic->Vario;
-    // we don't bother with sound here as it is polled at a
-    // faster rate in the DoVarioCalcs methods
-
-    CalibrationUpdate(Basic, Calculated);
-  }
-}
-
-
 void SpeedToFly(NMEA_INFO *Basic, DERIVED_INFO *Calculated, 
 		const double mc_setting,
 		const double cruise_efficiency) {

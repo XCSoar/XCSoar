@@ -54,22 +54,12 @@ bool ClearAirspaceWarnings(const bool ack, const bool allday=false);
 void RefreshTaskStatistics(void);
 void  SetWindEstimate(const double speed, const double bearing, const int quality=6);
 
-void CloseCalculations(void);
-void InitCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
-
 void StartTask(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
                       const bool doadvance, const bool doannounce);
 
 bool  InAATTurnSector(const double longitude, const double latitude, const int thepoint);
 
 void IterateEffectiveMacCready(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
-
-double FAIFinishHeight(NMEA_INFO *Basic, DERIVED_INFO *Calculated, int wp);
-bool InsideStartHeight(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
-bool ValidStartSpeed(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
-bool InsideStartHeight(NMEA_INFO *Basic, DERIVED_INFO *Calculated, DWORD Margin);
-bool ValidStartSpeed(NMEA_INFO *Basic, DERIVED_INFO *Calculated, DWORD Margin);
-
 
 void BallastDump();
 

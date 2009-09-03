@@ -37,14 +37,88 @@ Copyright_License {
 */
 
 #include "GlideComputer.hpp"
+#include "McReady.h"
+#include "Protection.hpp"
+#include "SettingsComputer.hpp"
+#include "NMEA/Info.h"
+#include "NMEA/Derived.hpp"
+#include "Persist.hpp"
 
-ldrotary_s           GlideComputer::rotaryLD;
-FlightStatistics     GlideComputer::flightstats;
-AATDistance    GlideComputer::aatdistance;
-OLCOptimizer   GlideComputer::olc;
-DERIVED_INFO   GlideComputer::Finish_Derived_Info;
-VegaVoice      GlideComputer::vegavoice;
-ThermalLocator GlideComputer::thermallocator;
-WindAnalyser*  GlideComputer::windanalyser = NULL;
-SnailTrail     GlideComputer::snail_trail;
+GlideComputer::GlideComputer()
+{
 
+}
+
+
+void GlideComputer::ResetFlight(const bool full)
+{
+  ScopeLock protect(mutexGlideComputer);
+
+  GlideComputerBlackboard::ResetFlight(full);
+  GlideComputerAirData::ResetFlight(full);
+  GlideComputerTask::ResetFlight(full);
+  GlideComputerStats::ResetFlight(full);
+}
+
+
+void GlideComputer::StartTask(const bool do_advance,
+			      const bool do_announce) {
+
+  //  GlideComputerBlackboard::StartTask();
+  GlideComputerStats::StartTask();
+
+  if (do_announce) {
+    AnnounceWayPointSwitch(do_advance);
+  } else {
+    GlideComputerTask::StartTask(do_advance, do_announce);
+  }
+}
+
+void GlideComputer::Initialise()
+{
+  ScopeLock protect(mutexGlideComputer);
+
+  GlideComputerBlackboard::Initialise();
+  GlideComputerAirData::Initialise();
+  GlideComputerStats::Initialise();
+  ResetFlight(true);
+
+  LoadCalculationsPersist(&calculated_info);
+  DeleteCalculationsPersist();
+  // required to allow fail-safe operation
+  // if the persistent file is corrupt and causes a crash
+
+  ResetFlight(false);
+
+}
+
+
+void GlideComputer::DoLogging()
+{
+  if (GlideComputerStats::DoLogging()) {
+    GlideComputerTask::DoLogging();
+  }
+}
+
+
+void GlideComputer::ProcessGPS()
+{
+  double mc = GlidePolar::GetMacCready();
+  double ce = GlidePolar::GetCruiseEfficiency();
+
+  ProcessBasic();
+  ProcessBasicTask(mc, ce);
+  ProcessVertical();
+}
+
+
+void GlideComputer::ProcessVario()
+{
+
+}
+
+
+void GlideComputer::SaveTaskSpeed(double val)
+{
+  GlideComputerStats::SaveTaskSpeed(val);
+}

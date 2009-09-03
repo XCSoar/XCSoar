@@ -411,6 +411,11 @@ VOLKS	:=\
 
 OBJS	:=\
 	\
+	$(SRC)/GlideComputer.o 		\
+	$(SRC)/GlideComputerAirData.o 	\
+	$(SRC)/GlideComputerBlackboard.o 	\
+	$(SRC)/GlideComputerStats.o 	\
+	$(SRC)/GlideComputerTask.o 	\
 	$(SRC)/AATDistance.o 		\
 	$(SRC)/Airspace.o 		\
 	$(SRC)/AirspaceParser.o 	\
@@ -427,16 +432,11 @@ OBJS	:=\
 	$(SRC)/CalculationsAutoMc.o 	\
 	$(SRC)/CalculationsBallast.o 	\
 	$(SRC)/CalculationsClimb.o 	\
-	$(SRC)/CalculationsSector.o 	\
-	$(SRC)/CalculationsTask.o 	\
 	$(SRC)/CalculationsTerrain.o 	\
 	$(SRC)/CalculationsVario.o 	\
-	$(SRC)/CalculationsVertical.o 	\
-	$(SRC)/CalculationsWind.o 	\
 	$(SRC)/FlarmIdFile.o 		\
 	$(SRC)/FlarmCalculations.o 	\
 	$(SRC)/FlightStatistics.o 	\
-	$(SRC)/GlideComputer.o 		\
 	$(SRC)/GlideRatio.o 		\
 	$(SRC)/GlideSolvers.o 		\
 	$(SRC)/Logger.o 		\

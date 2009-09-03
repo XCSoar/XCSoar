@@ -50,26 +50,158 @@ Copyright_License {
 #include "windanalyser.h"
 #include "SnailTrail.hpp"
 
-class GlideComputer {
+// TODO: replace copy constructors so copies of these structures
+// do not replicate the large items or items that should be singletons
+// OR: just make them static?
+
+class GlideComputerBlackboard {
 public:
-  static  ldrotary_s     rotaryLD;
-  static  FlightStatistics     flightstats;
-  static  AATDistance    aatdistance;
-  static  OLCOptimizer   olc;
-  static  ThermalLocator thermallocator;
-  static  WindAnalyser   *windanalyser;
-  static  SnailTrail     snail_trail;
+  NMEA_INFO     gps_info;
+  DERIVED_INFO  calculated_info;
+protected:
+  void ResetFlight(const bool full=true);
+  void StartTask();
+  void Initialise();
+  void SaveFinish();
 
-  static void DoLogging(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 
+  virtual double GetAverageThermal();
+private:
+  DERIVED_INFO Finish_Derived_Info;
+};
+
+class GlideComputerAirData: virtual public GlideComputerBlackboard {
+public:
+  GlideComputerAirData();
+  ldrotary_s           rotaryLD;
+  ThermalLocator thermallocator;
+  WindAnalyser   windanalyser;
+protected:
+
+  void ResetFlight(const bool full=true);
+  void Initialise();
+  void ProcessVertical();
+  void ProcessBasic();
+  ///
+
+  void DoWindCirclingMode(const bool left);
+  void DoWindCirclingSample();
+  void DoWindCirclingAltitude();
+  void SetWindEstimate(const double wind_speed,
+		       const double wind_bearing,
+		       const int quality);
+private:
+  void AverageClimbRate();
+  void Average30s();
+  void AverageThermal();
+  void MaxHeightGain();
+  void ThermalGain();
+  void LD();
+  void CruiseLD();
+  void Heading();
+  void DoWindZigZag();
+  void TerrainHeight();
+  void EnergyHeightNavAltitude();
+  void Vario();
+};
+
+class GlideComputerStats: virtual public GlideComputerBlackboard {
+public:
+  FlightStatistics     flightstats;
+  SnailTrail           snail_trail;
+protected:
+  void ResetFlight(const bool full=true);
+  void StartTask();
+  void Initialise();
+  bool DoLogging();
+  virtual double GetAverageThermal();
+protected:
+  virtual void SaveTaskSpeed(double val);
+};
+
+class GlideComputerTask: virtual public GlideComputerBlackboard {
+public:
+  AATDistance          aatdistance;
+  OLCOptimizer         olc;
   // CalculationsAutoMc
-  static void DoAutoMacCready(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
-			      double mc_setting);
+  static void DoAutoMacCready(double mc_setting);
+protected:
+  void ProcessBasicTask(const double mc_setting, 
+			const double cruise_efficiency);
+  void ResetFlight(const bool full=true);
+  virtual void StartTask(const bool do_advance,
+			 const bool do_announce);
+  virtual void AnnounceWayPointSwitch(bool do_advance);
+  bool DoLogging();
+private:
+  void DistanceToHome();
+  void DistanceToNext();
+  void AltitudeRequired(const double mc_setting,
+			const double cruise_efficiency);
+  double AATCloseBearing();
+  double FAIFinishHeight(int wp);
+  bool InsideStartHeight(const DWORD Margin=0);
+  bool ValidStartSpeed(const DWORD Margin=0);
+  bool InTurnSector(const int the_turnpoint);
+  bool InFinishSector(const int i);
+  bool ValidFinish();
+  bool InStartSector_Internal(int Index,
+			      double OutBound,
+			      bool &LastInSector);
+  bool InStartSector(int &index,
+		     BOOL *CrossedStart);
+  bool ReadyToStart();
+  bool ReadyToAdvance(bool reset=true, bool restart=false);
+  void CheckStart(int *LastStartSector);
+  BOOL CheckRestart(int *LastStartSector);
+  void CheckFinish();
+  void AddAATPoint(int taskwaypoint);
+  void CheckInSector();
+  void InSector();
+  void TaskStatistics(const double this_maccready,
+		      const double cruise_efficiency);
+  void AATStats_Time();
+  void AATStats_Distance();
+  void AATStats();
+  void CheckTransitionFinalGlide();
+  void DebugTaskCalculations();
+  void TaskSpeed(const double this_maccready,
+		 const double cruise_efficiency);
+  void LDNext(const double LegToGo);
+  void CheckForceFinalGlide();
+  double SpeedHeight();
+  bool TaskAltitudeRequired(double this_maccready, double *Vfinal,
+			    double *TotalTime, double *TotalDistance,
+			    int *ifinal,
+			    const double cruise_efficiency);
+  double MacCreadyOrAvClimbRate(double this_maccready);
+  // TODO: some of these can move into task class
+protected:
+  virtual void SaveTaskSpeed(double val);
+};
+
+
+class GlideComputer: public 
+  GlideComputerAirData,
+  GlideComputerTask,
+  GlideComputerStats
+{
+public:
+  GlideComputer();
 
   //protected:
-  static  VegaVoice    vegavoice;
-  static  DERIVED_INFO Finish_Derived_Info;
-
+  VegaVoice    vegavoice;
+  void ResetFlight(const bool full=true);
+protected:
+  virtual void StartTask(const bool do_advance,
+			 const bool do_announce);
+  void DoLogging();
+  virtual void SaveTaskSpeed(double val);
+public:
+  void Initialise();
+  void ProcessGPS();
+  void ProcessVario();
 };
 
 #endif
+

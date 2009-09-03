@@ -43,35 +43,6 @@ Copyright_License {
 #include "SettingsComputer.hpp"
 #include "Interface.hpp"
 
-void TerrainHeight(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
-{
-  short Alt = 0;
-
-  terrain.Lock();
-  // want most accurate rounding here
-  terrain.SetTerrainRounding(0,0);
-  Alt = terrain.GetTerrainHeight(Basic->Latitude,
-				 Basic->Longitude);
-  terrain.Unlock();
-
-  if(Alt<0) {
-    Alt = 0;
-    if (Alt <= TERRAIN_INVALID) {
-      Calculated->TerrainValid = false;
-    } else {
-      Calculated->TerrainValid = true;
-    }
-    Calculated->TerrainAlt = 0;
-  } else {
-    Calculated->TerrainValid = true;
-    Calculated->TerrainAlt = Alt;
-  }
-  Calculated->AltitudeAGL = Calculated->NavAltitude - Calculated->TerrainAlt;
-
-  if (!FinalGlideTerrain) {
-    Calculated->TerrainBase = Calculated->TerrainAlt;
-  }
-}
 
 void CheckFinalGlideThroughTerrain(NMEA_INFO *Basic,
 				   DERIVED_INFO *Calculated,

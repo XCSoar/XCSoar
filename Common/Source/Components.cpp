@@ -90,6 +90,7 @@ Marks *marks;
 TopologyStore *topology;
 RasterTerrain terrain;
 RasterWeather RASP;
+GlideComputer glide_computer;
 
 MapWindow map_window;
 NMEA_INFO     GPS_INFO;
