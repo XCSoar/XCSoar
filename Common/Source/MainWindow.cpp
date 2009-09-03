@@ -10,7 +10,7 @@
 #include "ProcessTimer.hpp"
 
 bool
-MainWindow::register_class(HINSTANCE hInstance, const TCHAR* szWindowClass)
+MainWindow::register_class(HINSTANCE hInstance)
 {
   WNDCLASS wc;
 
@@ -33,9 +33,16 @@ MainWindow::register_class(HINSTANCE hInstance, const TCHAR* szWindowClass)
   wc.hCursor                    = 0;
   wc.hbrBackground              = (HBRUSH) GetStockObject(WHITE_BRUSH);
   wc.lpszMenuName               = 0;
-  wc.lpszClassName              = szWindowClass;
+  wc.lpszClassName = _T("XCSoarMain");
 
   return (RegisterClass(&wc)!= FALSE);
+}
+
+void
+MainWindow::set(LPCTSTR text,
+                int left, int top, unsigned width, unsigned height)
+{
+  TopWindow::set(_T("XCSoarMain"), text, left, top, width, height);
 }
 
 ///////////////////////////////////////////////////////////////////////////

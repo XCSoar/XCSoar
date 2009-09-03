@@ -298,7 +298,6 @@ IDR_RASTER_EGM96S       RASTERDATA DISCARDABLE  "Bitmaps\\egm96s.dem"
 STRINGTABLE DISCARDABLE
 BEGIN
     IDS_APP_TITLE           "XCSoar"
-    IDC_XCSOAR              "XCSOAR"
     IDS_CONNECTWAIT         "testing testing testing"
 END
 

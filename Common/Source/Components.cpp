@@ -209,20 +209,18 @@ void StartupInfo() {
 bool Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
 {
   TCHAR szTitle[MAX_LOADSTRING];                        // The title bar text
-  TCHAR szWindowClass[MAX_LOADSTRING];                  // The window class name
   RECT rc;
 
   hInst = hInstance;            // Store instance handle in our global variable
 
-  LoadString(hInstance, IDC_XCSOAR, szWindowClass, MAX_LOADSTRING);
   LoadString(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
 
   //If it is already running, then focus on the window
-  if (MainWindow::find(szWindowClass, szTitle))
+  if (MainWindow::find(szTitle))
     return false;
 
   PaintWindow::register_class(hInst);
-  main_window.register_class(hInst, szWindowClass);
+  main_window.register_class(hInst);
 
   // other startup...
 
@@ -232,7 +230,7 @@ bool Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
   StartupStore(TEXT("Create main window\n"));
 
   RECT WindowSize = SystemWindowSize();
-  main_window.set(szWindowClass, szTitle,
+  main_window.set(szTitle,
 		  WindowSize.left, WindowSize.top,
 		  WindowSize.right, WindowSize.bottom);
 
@@ -281,8 +279,8 @@ bool Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
 
   StartupStore(TEXT("Create map window\n"));
 
-  map_window.register_class(hInst, TEXT("MapWindowClass"));
-  map_window.set(main_window, TEXT("MapWindowClass"), rcsmall, rc);
+  map_window.register_class(hInst);
+  map_window.set(main_window, rcsmall, rc);
   map_window.set_font(MapWindowFont);
   map_window.SetMapRect(rcsmall);
 

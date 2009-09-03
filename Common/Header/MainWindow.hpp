@@ -45,7 +45,14 @@ Copyright_License {
  */
 class MainWindow : public TopWindow {
 public:
-  bool register_class(HINSTANCE hInstance, const TCHAR* szWindowClass);
+  static bool find(LPCTSTR text) {
+    return TopWindow::find(_T("XCSoarMain"), text);
+  }
+
+  bool register_class(HINSTANCE hInstance);
+
+  void set(LPCTSTR text,
+           int left, int top, unsigned width, unsigned height);
 
 protected:
   virtual LRESULT on_message(HWND _hWnd, UINT message,

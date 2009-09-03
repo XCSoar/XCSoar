@@ -376,7 +376,9 @@ DWORD MapWindow::_DrawThread ()
 }
 
 
-bool MapWindow::register_class(HINSTANCE hInstance, const TCHAR* szWindowClass) {
+bool
+MapWindow::register_class(HINSTANCE hInstance)
+{
 
   WNDCLASS wc;
 
@@ -395,7 +397,7 @@ bool MapWindow::register_class(HINSTANCE hInstance, const TCHAR* szWindowClass) 
   wc.hCursor = LoadCursor(NULL, IDC_ARROW);
   wc.hbrBackground = (HBRUSH)GetStockObject (WHITE_BRUSH);
   wc.lpszMenuName = 0;
-  wc.lpszClassName = szWindowClass;
+  wc.lpszClassName = _T("XCSoarMap");
 
   return (RegisterClass(&wc)!= FALSE);
 }
