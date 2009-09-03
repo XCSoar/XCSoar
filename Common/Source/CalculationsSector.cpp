@@ -52,15 +52,12 @@ Copyright_License {
 #include "InputEvents.h"
 #include "GlideComputer.hpp"
 
-bool  InFinishSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated, const int i);
-bool  InTurnSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated, const int i);
-
 void AnnounceWayPointSwitch(DERIVED_INFO *Calculated, bool do_advance);
 
-void StartTask(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
-	       const bool do_advance,
-               const bool do_announce) {
-
+void
+StartTask(const NMEA_INFO *Basic, DERIVED_INFO *Calculated,
+          const bool do_advance, const bool do_announce)
+{
   Calculated->ValidFinish = false;
   Calculated->TaskStartTime = Basic->Time ;
   Calculated->TaskStartSpeed = Basic->Speed;
@@ -102,8 +99,9 @@ void StartTask(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
   }
 }
 
-
-bool InTurnSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated, const int the_turnpoint)
+static bool
+InTurnSector(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated,
+             const int the_turnpoint)
 {
   double AircraftBearing;
 
@@ -193,8 +191,9 @@ bool InAATTurnSector(const double longitude, const double latitude,
   return retval;
 }
 
-
-bool ValidFinish(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
+static bool
+ValidFinish(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated)
+{
   (void)Basic;
   if ((FinishMinHeight>0)
       &&(Calculated->TerrainValid)
@@ -205,9 +204,9 @@ bool ValidFinish(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   }
 }
 
-
-bool InFinishSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
-		    const int i)
+static bool
+InFinishSector(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated,
+               const int i)
 {
   static int LastInSector = FALSE;
   double AircraftBearing;
@@ -294,7 +293,10 @@ bool InFinishSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
 
 */
 
-bool ValidStartSpeed(NMEA_INFO *Basic, DERIVED_INFO *Calculated, DWORD Margin) {
+bool
+ValidStartSpeed(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated,
+                DWORD Margin)
+{
   bool valid = true;
   if (StartMaxSpeed!=0) {
     if (Basic->AirspeedAvailable) {
@@ -308,11 +310,16 @@ bool ValidStartSpeed(NMEA_INFO *Basic, DERIVED_INFO *Calculated, DWORD Margin) {
   return valid;
 }
 
-bool ValidStartSpeed(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
+bool
+ValidStartSpeed(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated)
+{
   return ValidStartSpeed(Basic, Calculated, 0);
 }
 
-bool InsideStartHeight(NMEA_INFO *Basic, DERIVED_INFO *Calculated, DWORD Margin) {
+bool
+InsideStartHeight(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated,
+                  DWORD Margin)
+{
   bool valid = true;
   if ((StartMaxHeight!=0)&&(Calculated->TerrainValid)) {
     if (StartHeightRef == 0) {
@@ -326,14 +333,15 @@ bool InsideStartHeight(NMEA_INFO *Basic, DERIVED_INFO *Calculated, DWORD Margin)
   return valid;
 }
 
-bool InsideStartHeight(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
+bool
+InsideStartHeight(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated)
+{
   return InsideStartHeight(Basic, Calculated, 0);
 }
 
-bool InStartSector_Internal(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
-                           int Index,
-                           double OutBound,
-                           bool &LastInSector)
+static bool
+InStartSector_Internal(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated,
+                       int Index, double OutBound, bool &LastInSector)
 {
   (void)Calculated;
   if (!ValidWayPoint(Index)) return false;
@@ -382,9 +390,9 @@ bool InStartSector_Internal(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
   return false;
 }
 
-
-static bool InStartSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated, int &index,
-			  BOOL *CrossedStart)
+static bool
+InStartSector(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated,
+              int &index, BOOL *CrossedStart)
 {
   static bool LastInSector = false;
   static int EntryStartSector = index;
@@ -543,11 +551,10 @@ bool ReadyToAdvance(DERIVED_INFO *Calculated, bool reset=true, bool restart=fals
   return false;
 }
 
-
-
-
-static void CheckStart(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
-                       int *LastStartSector) {
+static void
+CheckStart(const NMEA_INFO *Basic, DERIVED_INFO *Calculated,
+           int *LastStartSector)
+{
   BOOL StartCrossed= false;
 
   if (InStartSector(Basic,Calculated,*LastStartSector, &StartCrossed)) {
@@ -627,9 +634,10 @@ static void CheckStart(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
   }
 }
 
-
-static BOOL CheckRestart(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
-                         int *LastStartSector) {
+static BOOL
+CheckRestart(const NMEA_INFO *Basic, DERIVED_INFO *Calculated,
+             int *LastStartSector)
+{
   if((Basic->Time - Calculated->TaskStartTime < 3600)
      &&(ActiveWayPoint<=1)) {
 
@@ -649,8 +657,9 @@ static BOOL CheckRestart(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
   return FALSE;
 }
 
-
-static void CheckFinish(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
+static void
+CheckFinish(const NMEA_INFO *Basic, DERIVED_INFO *Calculated)
+{
   if (InFinishSector(Basic,Calculated, ActiveWayPoint)) {
     Calculated->IsInSector = true;
     GlideComputer::aatdistance.AddPoint(Basic->Longitude,
@@ -666,9 +675,10 @@ static void CheckFinish(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   }
 }
 
-
-static void AddAATPoint(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
-                        int taskwaypoint) {
+static void
+AddAATPoint(const NMEA_INFO *Basic, DERIVED_INFO *Calculated,
+            int taskwaypoint)
+{
   bool insector = false;
   if (taskwaypoint>0) {
     if (AATEnabled) {
@@ -688,9 +698,9 @@ static void AddAATPoint(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
   }
 }
 
-
-static void CheckInSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
-
+static void
+CheckInSector(const NMEA_INFO *Basic, DERIVED_INFO *Calculated)
+{
   if (ActiveWayPoint>0) {
     AddAATPoint(Basic, Calculated, ActiveWayPoint-1);
   }
@@ -713,8 +723,8 @@ static void CheckInSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   mutexGlideComputer.Unlock();
 }
 
-
-void InSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
+void
+InSector(const NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 {
   static int LastStartSector = -1;
 

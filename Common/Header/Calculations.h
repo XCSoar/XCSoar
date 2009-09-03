@@ -52,19 +52,29 @@ void RefreshTaskStatistics(void);
 void CloseCalculations(void);
 void InitCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 
-void StartTask(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
-                      const bool doadvance, const bool doannounce);
+void
+StartTask(const NMEA_INFO *Basic, DERIVED_INFO *Calculated,
+          const bool doadvance, const bool doannounce);
 
 bool  InAATTurnSector(const double longitude, const double latitude, const int thepoint);
 
 void IterateEffectiveMacCready(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 
 double FAIFinishHeight(NMEA_INFO *Basic, DERIVED_INFO *Calculated, int wp);
-bool InsideStartHeight(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
-bool ValidStartSpeed(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
-bool InsideStartHeight(NMEA_INFO *Basic, DERIVED_INFO *Calculated, DWORD Margin);
-bool ValidStartSpeed(NMEA_INFO *Basic, DERIVED_INFO *Calculated, DWORD Margin);
 
+bool
+InsideStartHeight(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated);
+
+bool
+ValidStartSpeed(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated);
+
+bool
+InsideStartHeight(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated,
+                  DWORD Margin);
+
+bool
+ValidStartSpeed(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated,
+                DWORD Margin);
 
 void BallastDump();
 

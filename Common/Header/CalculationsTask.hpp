@@ -50,7 +50,7 @@ void AltitudeRequired(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
 void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated, 
 		    const double this_maccready,
 		    const double cruise_efficiency);
-void InSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
+void InSector(const NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 void AATStats(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 //static void FinalGlideAlert(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 
