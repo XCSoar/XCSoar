@@ -198,10 +198,10 @@ void DoCalculationsSlow(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
 }
 
 
-void ResetFlightStats(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
-                      bool full=true) {
+static void
+ResetFlightStats(DERIVED_INFO *Calculated, bool full=true)
+{
   int i;
-  (void)Basic;
 
   GlidePolar::SetCruiseEfficiency(1.0);
 
@@ -271,7 +271,7 @@ bool FlightTimes(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
 
       if ((Basic->Time<LastTime) && (!Basic->NAVWarning)) {
 	// Reset statistics.. (probably due to being in IGC replay mode)
-        ResetFlightStats(Basic, Calculated);
+        ResetFlightStats(Calculated);
       }
 
       LastTime = Basic->Time;
@@ -340,7 +340,7 @@ void InitCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   ///////////////
 
   CalibrationInit();
-  ResetFlightStats(Basic, Calculated, true);
+  ResetFlightStats(Calculated, true);
 #ifndef FIVV
   LoadCalculationsPersist(Calculated); // VNT  not for fivv, confusing people
 #endif
@@ -348,7 +348,7 @@ void InitCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   // required to allow fail-safe operation
   // if the persistent file is corrupt and causes a crash
 
-  ResetFlightStats(Basic, Calculated, false);
+  ResetFlightStats(Calculated, false);
   Calculated->Flying = false;
   Calculated->Circling = false;
   Calculated->FinalGlide = false;
@@ -635,7 +635,7 @@ void TakeoffLanding(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
       WasFlying=true; // VENTA3
       InputEvents::processGlideComputer(GCE_TAKEOFF);
       // reset stats on takeoff
-      ResetFlightStats(Basic, Calculated);
+      ResetFlightStats(Calculated);
 
       Calculated->TakeOffTime= Basic->Time;
 
