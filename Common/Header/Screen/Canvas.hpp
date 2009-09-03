@@ -233,6 +233,10 @@ public:
   void move_to(int x, int y);
   void line_to(int x, int y);
 
+  void circle(int x, int y, unsigned radius) {
+    ::Ellipse(dc, x - radius, y - radius, x + radius, y + radius);
+  }
+
   void circle(int x, int y, unsigned radius,
               const RECT rc, bool clip=false, bool fill=true);
 
