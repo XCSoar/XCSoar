@@ -136,7 +136,7 @@ void Message::Initialize(RECT rc) {
 
   hWndMessageWindow = CreateWindow(// WS_EX_CLIENTEDGE,
 				     TEXT("EDIT"), TEXT(" "),
-				   WS_VISIBLE|WS_CHILD|ES_MULTILINE|ES_CENTER
+				   WS_CHILD|ES_MULTILINE|ES_CENTER
 				   |WS_BORDER|ES_READONLY | WS_CLIPCHILDREN
 				   | WS_CLIPSIBLINGS,
 				   0,0,0,0, main_window, NULL, hInst, NULL);
@@ -144,8 +144,7 @@ void Message::Initialize(RECT rc) {
   SetWindowPos(hWndMessageWindow, HWND_TOP,
 	       rcmsg.left, rcmsg.top,
 	       rcmsg.right-rcmsg.left, rcmsg.bottom-rcmsg.top,
-	       SWP_SHOWWINDOW);
-  ShowWindow(hWndMessageWindow, SW_HIDE);
+	       SWP_HIDEWINDOW);
 
   SendMessage(hWndMessageWindow, WM_SETFONT,
 	      (WPARAM)MapWindowBoldFont.native(),MAKELPARAM(TRUE,0));
