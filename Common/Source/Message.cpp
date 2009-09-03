@@ -38,7 +38,6 @@ Copyright_License {
 */
 
 #include "Message.h"
-#include "XCSoar.h"
 #include "Interface.hpp"
 #include "Protection.hpp"
 #include "InfoBoxLayout.h"
