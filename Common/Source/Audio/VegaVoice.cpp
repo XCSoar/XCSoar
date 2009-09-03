@@ -339,7 +339,10 @@ void VegaVoiceMessage::DoSend(double time, TCHAR *text) {
 }
 
 
-bool VegaVoiceMessage::Update(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
+bool
+VegaVoiceMessage::Update(const NMEA_INFO *Basic,
+                         const DERIVED_INFO *Calculated)
+{
   TCHAR text[80];
   static int LastWayPoint = -1;
 
@@ -546,7 +549,9 @@ void VegaVoice::UnLock() {
   LeaveCriticalSection(&CritSec_Voice);
 }
 
-void VegaVoice::Update(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
+void
+VegaVoice::Update(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated)
+{
 
   if (!AirspaceNotifierInstalled){
     AirspaceNotifierInstalled = true;
