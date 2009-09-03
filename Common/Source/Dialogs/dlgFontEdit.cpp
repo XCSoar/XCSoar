@@ -44,7 +44,7 @@ Copyright_License {
 #include "DataField/Enum.hpp"
 #include "DataField/Integer.hpp"
 #include "Screen/Fonts.hpp"
-#include "Screen/MainWindow.hpp"
+#include "MainWindow.hpp"
 
 extern void InitializeOneFont(Font *theFont,
                               const TCHAR FontRegKey[] ,

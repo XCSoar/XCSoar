@@ -50,7 +50,7 @@ Copyright_License {
 #include "DataField/Integer.hpp"
 #include "DataField/String.hpp"
 #include "UtilsSystem.hpp"
-#include "Screen/MainWindow.hpp"
+#include "MainWindow.hpp"
 #include "Screen/Fonts.hpp"
 
 #include <assert.h>

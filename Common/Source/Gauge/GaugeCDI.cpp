@@ -44,7 +44,8 @@ Copyright_License {
 #include "InfoBoxLayout.h"
 #include "Screen/Fonts.hpp"
 #include "Screen/TextWindow.hpp"
-#include "Screen/MainWindow.hpp"
+#include "MainWindow.hpp"
+
 #include <tchar.h>
 
 TextWindow GaugeCDI::window;

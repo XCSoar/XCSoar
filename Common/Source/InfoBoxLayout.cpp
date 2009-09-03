@@ -42,7 +42,6 @@ Copyright_License {
 #include "XCSoar.h"
 #include "SettingsUser.hpp"
 #include "Screen/Animation.hpp"
-#include "Screen/MainWindow.hpp"
 #include "Registry.hpp"
 #include "InfoBox.h"
 #include "WindowControls.h"

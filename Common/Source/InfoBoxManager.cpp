@@ -66,7 +66,7 @@ Copyright_License {
 #include "Battery.h"
 #include "Calculations.h" // TODO danger! IsFlarmTargetCNInRange
 #include "UtilsSystem.hpp"
-#include "Screen/MainWindow.hpp"
+#include "MainWindow.hpp"
 #include "MapWindow.h"
 
 extern MapWindow map_window;

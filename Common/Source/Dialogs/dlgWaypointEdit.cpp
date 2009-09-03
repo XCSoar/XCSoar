@@ -45,7 +45,7 @@ Copyright_License {
 #include "Waypointparser.h"
 #include "Math/FastMath.h"
 #include "DataField/Enum.hpp"
-#include "Screen/MainWindow.hpp"
+#include "MainWindow.hpp"
 #include "Compatibility/string.h"
 
 static WndForm *wf=NULL;

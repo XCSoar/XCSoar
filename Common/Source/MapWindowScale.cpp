@@ -102,7 +102,7 @@ void MapWindow::DrawMapScale2(Canvas &canvas, const RECT rc)
       canvas.black_pen();
     }
     if (!first) {
-      canvas.clipped_line(Start, End, rc);
+      canvas.line(Start, End);
     } else {
       first=false;
     }
@@ -119,7 +119,7 @@ void MapWindow::DrawMapScale2(Canvas &canvas, const RECT rc)
       canvas.black_pen();
     }
     if (!first) {
-      canvas.clipped_line(Start, End, rc);
+      canvas.line(Start, End);
     } else {
       first=false;
     }

@@ -137,20 +137,20 @@ void MapWindow::RenderAreas(Canvas &canvas, const RECT rc)
 void MapWindow::RenderTrail(Canvas &canvas, const RECT rc)
 {
   if(TrailActive) {
-    double TrailFirstTime = DrawTrail(canvas, rc);
-    DrawTrailFromTask(canvas, rc, TrailFirstTime);
+    double TrailFirstTime = DrawTrail(canvas);
+    DrawTrailFromTask(canvas, TrailFirstTime);
   }
-  DrawThermalEstimate(canvas, rc);
+  DrawThermalEstimate(canvas);
 }
 
 void MapWindow::RenderTask(Canvas &canvas, const RECT rc)
 {
   if (TaskAborted) {
-    DrawAbortedTask(canvas, rc);
+    DrawAbortedTask(canvas);
   } else {
     DrawTask(canvas, rc);
   }
-  DrawWaypoints(canvas, rc);
+  DrawWaypoints(canvas);
   marks->Draw(canvas, *this, rc);
 }
 
@@ -159,7 +159,7 @@ void MapWindow::RenderGlide(Canvas &canvas, const RECT rc)
 {
   // draw red cross on glide through terrain marker
   if (FinalGlideTerrain && DerivedDrawInfo.TerrainValid) {
-    DrawGlideThroughTerrain(canvas, rc);
+    DrawGlideThroughTerrain(canvas);
   }
   /*
   if ( (!TargetPan) && (!EnablePan) && (VisualGlide>0) ) {
@@ -183,13 +183,13 @@ void MapWindow::RenderAirborne(Canvas &canvas, const RECT rc)
   }
 
   // Draw traffic
-  DrawTeammate(canvas, rc);
-  DrawFLARMTraffic(canvas, rc);
+  DrawTeammate(canvas);
+  DrawFLARMTraffic(canvas);
 
   // finally, draw you!
 
   if (EnablePan && !TargetPan) {
-    DrawCrossHairs(canvas, rc);
+    DrawCrossHairs(canvas);
   }
 
   if (extGPSCONNECT) {
@@ -225,11 +225,11 @@ void MapWindow::RenderSymbology_lower(Canvas &canvas, const RECT rc)
 {
   if (extGPSCONNECT) {
     // TODO enhancement: don't draw offtrack indicator if showing spot heights
-    DrawProjectedTrack(canvas, rc);
-    DrawOffTrackIndicator(canvas, rc);
+    DrawProjectedTrack(canvas);
+    DrawOffTrackIndicator(canvas);
     DrawBestCruiseTrack(canvas);
   }
-  DrawBearing(canvas, rc, extGPSCONNECT);
+  DrawBearing(canvas, extGPSCONNECT);
 }
 
 void MapWindow::Render(Canvas &canvas, const RECT rc)

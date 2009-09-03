@@ -45,7 +45,7 @@
 #include "Blackboard.hpp"
 #include "InfoBoxLayout.h"
 #include "DataField/Base.hpp"
-#include "Screen/MainWindow.hpp"
+#include "MainWindow.hpp"
 
 static WndForm *wf=NULL;
 

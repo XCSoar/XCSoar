@@ -52,7 +52,7 @@ Copyright_License {
 #include "Dialogs/dlgTools.h"
 #include "InfoBoxLayout.h"
 #include "Math/FastMath.h"
-#include "Screen/MainWindow.hpp"
+#include "MainWindow.hpp"
 
 #include <assert.h>
 

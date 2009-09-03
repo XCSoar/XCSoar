@@ -56,7 +56,7 @@ Copyright_License {
 #define fSnailColour(cv) max(0,min((short)(NUMSNAILCOLORS-1), (short)((cv+1.0)/2.0*NUMSNAILCOLORS)))
 
 // This function is slow...
-double MapWindow::DrawTrail(Canvas &canvas, const RECT rc)
+double MapWindow::DrawTrail(Canvas &canvas)
 {
   int i, snail_index;
   SNAIL_POINT P1;
@@ -308,7 +308,7 @@ double MapWindow::DrawTrail(Canvas &canvas, const RECT rc)
 #ifndef NOLINETO
       canvas.line_to(P1.Screen.x, P1.Screen.y);
 #else
-      canvas.clipped_line(P1.Screen, point_lastdrawn, rc);
+      canvas.line(P1.Screen, point_lastdrawn);
 #endif
     }
     point_lastdrawn = P1.Screen;
@@ -320,7 +320,7 @@ double MapWindow::DrawTrail(Canvas &canvas, const RECT rc)
 #ifndef NOLINETO
     canvas.line_to(Orig_Aircraft.x, Orig_Aircraft.y);
 #else
-    canvas.clipped_line(Orig_Aircraft, point_lastdrawn, rc);
+    canvas.line(Orig_Aircraft, point_lastdrawn);
 #endif
   }
 
@@ -330,8 +330,9 @@ double MapWindow::DrawTrail(Canvas &canvas, const RECT rc)
 }
 
 
-void MapWindow::DrawTrailFromTask(Canvas &canvas, const RECT rc,
-				  const double TrailFirstTime) {
+void
+MapWindow::DrawTrailFromTask(Canvas &canvas, const double TrailFirstTime)
+{
   static POINT ptin[MAXCLIPPOLYGON];
 
   if((TrailActive!=3) || (DisplayMode == dmCircling) || (TrailFirstTime<0))
@@ -355,7 +356,7 @@ void MapWindow::DrawTrailFromTask(Canvas &canvas, const RECT rc,
   mutexGlideComputer.Unlock();
   if (j>=2) {
     canvas.select(MapGfx.hSnailPens[NUMSNAILCOLORS / 2]);
-    canvas.clipped_polygon(ptin, j, rc, false);
+    canvas.polyline(ptin, j);
   }
 }
 

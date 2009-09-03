@@ -55,27 +55,16 @@ Copyright_License {
 
 #include "Blackboard.hpp"
 
-void MapWindow::DrawCrossHairs(Canvas &canvas,
-			       const RECT rc)
+void MapWindow::DrawCrossHairs(Canvas &canvas)
 {
-  POINT o1, o2;
+  Pen dash_pen(Pen::DASH, 1, Color(50, 50, 50));
+  canvas.select(dash_pen);
 
-  o1.x = Orig_Screen.x+20;
-  o2.x = Orig_Screen.x-20;
-  o1.y = Orig_Screen.y;
-  o2.y = Orig_Screen.y;
-
-  canvas.clipped_dashed_line(1, o1, o2, Color(50,50,50), rc);
-
-  o1.x = Orig_Screen.x;
-  o2.x = Orig_Screen.x;
-  o1.y = Orig_Screen.y+20;
-  o2.y = Orig_Screen.y-20;
-
-  canvas.clipped_dashed_line(1, o1, o2, Color(50,50,50), rc);
-
+  canvas.line(Orig_Screen.x + 20, Orig_Screen.x - 20,
+              Orig_Screen.y, Orig_Screen.y);
+  canvas.line(Orig_Screen.x, Orig_Screen.x,
+              Orig_Screen.y + 20, Orig_Screen.y - 20);
 }
-
 
 void MapWindow::DrawAircraft(Canvas &canvas)
 {
@@ -405,7 +394,9 @@ void MapWindow::DrawWindAtAircraft2(Canvas &canvas, const POINT Orig, const RECT
     }
 
     // optionally draw dashed line
-    canvas.clipped_dashed_line(1, Tail[0], Tail[1], Color(0,0,0), rc);
+    Pen dash_pen(Pen::DASH, 1, Color(0, 0, 0));
+    canvas.select(dash_pen);
+    canvas.line(Tail[0], Tail[1]);
   }
 
 
@@ -466,15 +457,11 @@ void MapWindow::DrawHorizon(Canvas &canvas, const RECT rc)
             a1, a2, RGB(0,0,0));
   */
 
-  a1.x = Start.x+radius/2;
-  a1.y = Start.y;
-  a2.x = Start.x-radius/2;
-  a2.y = Start.y;
-  canvas.clipped_dashed_line(2, a1, a2, Color(0,0,0), rc);
+  Pen dash_pen(Pen::DASH, 2, Color(0, 0, 0));
+  canvas.select(dash_pen);
 
-  a1.x = Start.x;
-  a1.y = Start.y-radius/4;
-  canvas.clipped_dashed_line(2, a1, Start, Color(0,0,0), rc);
+  canvas.line(Start.x + radius / 2, Start.y, Start.x - radius / 2, Start.y);
+  canvas.line(Start.x, Start.y - radius / 4, Start.x - radius / 2, Start.y);
 
   //
 
@@ -483,33 +470,19 @@ void MapWindow::DrawHorizon(Canvas &canvas, const RECT rc)
   int rr2p = lround(radius*ROOT2+IBLSCALE(1));
   int rr2n = lround(radius*ROOT2);
 
-  a1.x = Start.x+rr2p;
-  a1.y = Start.y-rr2p;
-  a2.x = Start.x+rr2n;
-  a2.y = Start.y-rr2n;
-
   Pen penb1(Pen::SOLID, 1, Color(0,0,0));
   canvas.select(penb1);
-  canvas.clipped_line(a1, a2, rc);
-
-  a1.x = Start.x-rr2p;
-  a1.y = Start.y-rr2p;
-  a2.x = Start.x-rr2n;
-  a2.y = Start.y-rr2n;
-
-  canvas.clipped_line(a1, a2, rc);
+  canvas.line(Start.x + rr2p, Start.y - rr2p, Start.x + rr2n, Start.y - rr2n);
+  canvas.line(Start.x - rr2p, Start.y - rr2p, Start.x - rr2n, Start.y - rr2n);
 
   // JMW experimental, display stall sensor
   double s = max(0.0,min(1.0,DrawInfo.StallRatio));
   long m = (long)((rc.bottom-rc.top)*s*s);
-  a1.x = rc.right-1;
-  a1.y = rc.bottom-m;
-  a2.x = a1.x-10;
-  a2.y = a1.y;
 
   Pen penr2(Pen::SOLID, 1, Color(0,0,0));
   canvas.select(penr2);
-  canvas.clipped_line(a1, a2, rc);
+  canvas.line(rc.right - 1, rc.bottom - m,
+              rc.right - 11, rc.bottom - m);
 }
 
 

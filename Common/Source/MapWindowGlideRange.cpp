@@ -80,13 +80,15 @@ void MapWindow::DrawTerrainAbove(Canvas &canvas, const RECT rc, Canvas &buffer) 
 }
 
 
-void MapWindow::DrawGlideThroughTerrain(Canvas &canvas, const RECT rc) {
+void
+MapWindow::DrawGlideThroughTerrain(Canvas &canvas)
+{
   canvas.select(MapGfx.hpTerrainLineBg);
-  canvas.clipped_polyline(Groundline, NUMTERRAINSWEEPS + 1, rc);
+  canvas.polyline(Groundline, NUMTERRAINSWEEPS + 1);
   if ((FinalGlideTerrain==1) ||
       ((!EnableTerrain || !DerivedDrawInfo.Flying) && (FinalGlideTerrain==2))) {
     canvas.select(MapGfx.hpTerrainLine);
-    canvas.clipped_polyline(Groundline, NUMTERRAINSWEEPS + 1, rc);
+    canvas.polyline(Groundline, NUMTERRAINSWEEPS + 1);
   }
 
   if (DerivedDrawInfo.Flying && ValidTaskPoint(ActiveWayPoint)) {
@@ -172,7 +174,7 @@ void MapWindow::DrawGlideCircle(Canvas &canvas, POINT Orig, RECT rc)
       } else
       {
 	tmp = DistanceMetersToScreen(i*gunit*cruise);
-        canvas.circle(Orig.x, Orig.y, tmp, rc, true, false);
+        canvas.circle(Orig.x, Orig.y, tmp);
       }
 
     canvas.set_text_color(turn > 0 || true

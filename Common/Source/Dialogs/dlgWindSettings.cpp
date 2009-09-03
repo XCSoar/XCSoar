@@ -47,7 +47,7 @@ Copyright_License {
 #include "DataField/Enum.hpp"
 #include "Math/Units.h"
 #include "Calculations.h" // TODO danger! for SetWindEstimate
-#include "Screen/MainWindow.hpp"
+#include "MainWindow.hpp"
 
 static WndForm *wf=NULL;
 

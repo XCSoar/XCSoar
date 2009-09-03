@@ -52,54 +52,43 @@ Copyright_License {
 #include "Compatibility/gdi.h"
 #include <math.h>
 
-void MapWindow::DrawAbortedTask(Canvas &canvas, const RECT rc)
+void
+MapWindow::DrawAbortedTask(Canvas &canvas)
 {
   int i;
   if (!WayPointList) return;
 
-  mutexTaskData.Lock();  // protect from extrnal task changes
-#ifdef HAVEEXCEPTIONS
-  __try{
-#endif
-    for(i=0;i<MAXTASKPOINTS-1;i++)
-      {
-	int index = Task[i].Index;
-	if(ValidWayPoint(index))
-	  {
-            canvas.clipped_dashed_line(IBLSCALE(1),
-			 WayPointList[index].Screen,
-			 Orig_Aircraft,
-			 MapGfx.TaskColor, rc);
-	  }
-      }
-#ifdef HAVEEXCEPTIONS
-  }__finally
-#endif
-     {
-       mutexTaskData.Unlock();
-     }
+  ScopeLock scopeLock(mutexTaskData); // protect from extrnal task changes
+  Pen dash_pen(Pen::DASH, IBLSCALE(1), MapGfx.TaskColor);
+  canvas.select(dash_pen);
+
+  for(i = 0; i < MAXTASKPOINTS - 1; i++) {
+    int index = Task[i].Index;
+    if (ValidWayPoint(index))
+      canvas.line(WayPointList[index].Screen, Orig_Aircraft);
+  }
 }
 
 
-void MapWindow::DrawStartSector(Canvas &canvas, const RECT rc,
-                                POINT &Start,
-                                POINT &End, int Index) {
+void
+MapWindow::DrawStartSector(Canvas &canvas, POINT &Start, POINT &End, int Index)
+{
   if(StartLine) {
     canvas.select(MapGfx.hpStartFinishThick);
-    canvas.clipped_line(WayPointList[Index].Screen, Start, rc);
-    canvas.clipped_line(WayPointList[Index].Screen, End, rc);
+    canvas.line(WayPointList[Index].Screen, Start);
+    canvas.line(WayPointList[Index].Screen, End);
     canvas.select(MapGfx.hpStartFinishThin);
-    canvas.clipped_line(WayPointList[Index].Screen, Start, rc);
-    canvas.clipped_line(WayPointList[Index].Screen, End, rc);
+    canvas.line(WayPointList[Index].Screen, Start);
+    canvas.line(WayPointList[Index].Screen, End);
   } else {
     unsigned tmp = DistanceMetersToScreen(StartRadius);
     canvas.hollow_brush();
     canvas.select(MapGfx.hpStartFinishThick);
     canvas.circle(WayPointList[Index].Screen.x, WayPointList[Index].Screen.y,
-                  tmp, rc, false, false);
+                  tmp);
     canvas.select(MapGfx.hpStartFinishThin);
     canvas.circle(WayPointList[Index].Screen.x, WayPointList[Index].Screen.y,
-                  tmp, rc, false, false);
+                  tmp);
   }
 
 }
@@ -113,184 +102,165 @@ void MapWindow::DrawTask(Canvas &canvas, RECT rc)
   Pen pent1(Pen::SOLID, IBLSCALE(1), MapGfx.TaskColor);
   Pen penb2(Pen::SOLID, IBLSCALE(2), Color(0,0,255));
 
-  mutexTaskData.Lock();  // protect from extrnal task changes
-#ifdef HAVEEXCEPTIONS
-  __try{
-#endif
+  ScopeLock scopeLock(mutexTaskData); // protect from extrnal task changes
 
-    if(ValidTaskPoint(0) && ValidTaskPoint(1) && (ActiveWayPoint<2))
-      {
-        DrawStartSector(canvas, rc, Task[0].Start, Task[0].End, Task[0].Index);
-	if (EnableMultipleStartPoints) {
-	  for (i=0; i<MAXSTARTPOINTS; i++) {
-	    if (StartPoints[i].Active && ValidWayPoint(StartPoints[i].Index)) {
-              DrawStartSector(canvas, rc,
-			      StartPoints[i].Start,
-			      StartPoints[i].End, StartPoints[i].Index);
-	    }
-	  }
-	}
+  if (ValidTaskPoint(0) && ValidTaskPoint(1) && (ActiveWayPoint<2)) {
+    DrawStartSector(canvas, Task[0].Start, Task[0].End, Task[0].Index);
+    if (EnableMultipleStartPoints) {
+      for (i=0; i<MAXSTARTPOINTS; i++) {
+        if (StartPoints[i].Active && ValidWayPoint(StartPoints[i].Index)) {
+          DrawStartSector(canvas,
+                          StartPoints[i].Start,
+                          StartPoints[i].End, StartPoints[i].Index);
+        }
       }
+    }
+  }
 
-    for(i=1;i<MAXTASKPOINTS-1;i++) {
+  Pen dash_pen5(Pen::DASH, IBLSCALE(5), MapGfx.TaskColor);
 
-      if(ValidTaskPoint(i) && !ValidTaskPoint(i+1)) { // final waypoint
-	if (ActiveWayPoint>1) {
-	  // only draw finish line when past the first
-	  // waypoint.
-	  if(FinishLine) {
-	    canvas.clipped_dashed_line(IBLSCALE(5), 
-				    WayPointList[Task[i].Index].Screen,
-				    Task[i].Start, MapGfx.TaskColor, rc);
-	    canvas.clipped_dashed_line(IBLSCALE(5), 
-				       WayPointList[Task[i].Index].Screen,
-				       Task[i].End, MapGfx.TaskColor, rc);
-	    canvas.select(MapGfx.hpStartFinishThin);
-	    canvas.clipped_line(WayPointList[Task[i].Index].Screen,
-				Task[i].Start, rc);
-	    canvas.clipped_line(WayPointList[Task[i].Index].Screen,
-				Task[i].End, rc);
-	  } else {
-            unsigned tmp = DistanceMetersToScreen(FinishRadius);
-            canvas.hollow_brush();
-            canvas.select(MapGfx.hpStartFinishThick);
-            canvas.circle(WayPointList[Task[i].Index].Screen.x,
-                          WayPointList[Task[i].Index].Screen.y,
-                          tmp, rc, false, false);
-            canvas.select(MapGfx.hpStartFinishThin);
-            canvas.circle(WayPointList[Task[i].Index].Screen.x,
-                          WayPointList[Task[i].Index].Screen.y,
-                          tmp, rc, false, false);
-	  }
-	}
-      }
-      if(ValidTaskPoint(i) && ValidTaskPoint(i+1)) { // normal sector
-	if(AATEnabled != TRUE) {
-          canvas.clipped_dashed_line(IBLSCALE(2),
-		       WayPointList[Task[i].Index].Screen,
-                                     Task[i].Start, Color(127,127,127), rc);
-          canvas.clipped_dashed_line(IBLSCALE(2),
-		       WayPointList[Task[i].Index].Screen,
-                                     Task[i].End, Color(127,127,127), rc);
+  for(i=1;i<MAXTASKPOINTS-1;i++) {
 
+    if(ValidTaskPoint(i) && !ValidTaskPoint(i+1)) { // final waypoint
+      if (ActiveWayPoint>1) {
+        // only draw finish line when past the first
+        // waypoint.
+        if(FinishLine) {
+          canvas.select(dash_pen5);
+          canvas.two_lines(Task[i].Start, WayPointList[Task[i].Index].Screen,
+                           Task[i].End);
+          canvas.select(MapGfx.hpStartFinishThin);
+          canvas.two_lines(Task[i].Start, WayPointList[Task[i].Index].Screen,
+                           Task[i].End);
+        } else {
+          unsigned tmp = DistanceMetersToScreen(FinishRadius);
           canvas.hollow_brush();
-          canvas.black_pen();
-	  if(SectorType== 0) {
-	    unsigned tmp = DistanceMetersToScreen(SectorRadius);
-	    canvas.circle(WayPointList[Task[i].Index].Screen.x,
-                          WayPointList[Task[i].Index].Screen.y,
-                          tmp, rc, false, false);
-	  }
-	  if(SectorType==1) {
-	    unsigned tmp = DistanceMetersToScreen(SectorRadius);
-	    canvas.segment(WayPointList[Task[i].Index].Screen.x,
-                           WayPointList[Task[i].Index].Screen.y,tmp, rc,
-                           Task[i].AATStartRadial-DisplayAngle,
-                           Task[i].AATFinishRadial-DisplayAngle);
-	  }
-	  if(SectorType== 2) {
-	    // JMW added german rules
-	    unsigned tmp = DistanceMetersToScreen(500);
-	    canvas.circle(WayPointList[Task[i].Index].Screen.x,
-                          WayPointList[Task[i].Index].Screen.y,
-                          tmp, rc, false, false);
-
-	    tmp = DistanceMetersToScreen(10000);
-	    canvas.segment(WayPointList[Task[i].Index].Screen.x,
-                           WayPointList[Task[i].Index].Screen.y, tmp, rc,
-                           Task[i].AATStartRadial-DisplayAngle,
-                           Task[i].AATFinishRadial-DisplayAngle);
-	  }
-	} else {
-	  // JMW added iso lines
-	  if ((i==ActiveWayPoint) || (TargetPan && (i==TargetPanIndex))) {
-	    // JMW 20080616 flash arc line if very close to target
-	    static bool flip = false;
-
-	    if (DerivedDrawInfo.WaypointDistance<AATCloseDistance()*2.0) {
-	      flip = !flip;
-	    } else {
-	      flip = true;
-	    }
-	    if (flip) {
-	      for (int j=0; j<MAXISOLINES-1; j++) {
-		if (TaskStats[i].IsoLine_valid[j]
-		    && TaskStats[i].IsoLine_valid[j+1]) {		  
-		  canvas.select(penb2);
-		  canvas.clipped_line(TaskStats[i].IsoLine_Screen[j],
-				      TaskStats[i].IsoLine_Screen[j+1],
-				      rc);
-		}
-	      }
-	    }
-	  }
-	}
+          canvas.select(MapGfx.hpStartFinishThick);
+          canvas.circle(WayPointList[Task[i].Index].Screen.x,
+                        WayPointList[Task[i].Index].Screen.y,
+                        tmp);
+          canvas.select(MapGfx.hpStartFinishThin);
+          canvas.circle(WayPointList[Task[i].Index].Screen.x,
+                        WayPointList[Task[i].Index].Screen.y,
+                        tmp);
+        }
       }
     }
 
-    for(i=0;i<MAXTASKPOINTS-1;i++) {
-      if(ValidTaskPoint(i) && ValidTaskPoint(i+1)) {
-	bool is_first = (Task[i].Index < Task[i+1].Index);
-	int imin = min(Task[i].Index,Task[i+1].Index);
-	int imax = max(Task[i].Index,Task[i+1].Index);
-	// JMW AAT!
-	double bearing = Task[i].OutBound;
-	POINT sct1, sct2;
-	if (AATEnabled && !TargetPan) {
-	  LonLat2Screen(Task[i].AATTargetLon,
-			Task[i].AATTargetLat,
-			sct1);
-	  LonLat2Screen(Task[i+1].AATTargetLon,
-			Task[i+1].AATTargetLat,
-			sct2);
-	  DistanceBearing(Task[i].AATTargetLat,
-			  Task[i].AATTargetLon,
-			  Task[i+1].AATTargetLat,
-			  Task[i+1].AATTargetLon,
-			  NULL, &bearing);
+    if(ValidTaskPoint(i) && ValidTaskPoint(i+1)) { // normal sector
+      if(AATEnabled != TRUE) {
+        Pen dash_pen2(Pen::DASH, IBLSCALE(2), Color(127, 127, 127));
+        canvas.select(dash_pen2);
+        canvas.two_lines(Task[i].Start, WayPointList[Task[i].Index].Screen,
+                         Task[i].End);
 
-	  // draw nominal track line
-          canvas.clipped_dashed_line(IBLSCALE(1),
-		       WayPointList[imin].Screen,
-		       WayPointList[imax].Screen,
-		       MapGfx.TaskColor, rc);
-	} else {
-	  sct1 = WayPointList[Task[i].Index].Screen;
-	  sct2 = WayPointList[Task[i+1].Index].Screen;
-	}
+        canvas.hollow_brush();
+        canvas.black_pen();
+        if(SectorType== 0) {
+          unsigned tmp = DistanceMetersToScreen(SectorRadius);
+          canvas.circle(WayPointList[Task[i].Index].Screen.x,
+                        WayPointList[Task[i].Index].Screen.y,
+                        tmp);
+        }
+        if(SectorType==1) {
+          unsigned tmp = DistanceMetersToScreen(SectorRadius);
+          canvas.segment(WayPointList[Task[i].Index].Screen.x,
+                         WayPointList[Task[i].Index].Screen.y,tmp, rc,
+                         Task[i].AATStartRadial-DisplayAngle,
+                         Task[i].AATFinishRadial-DisplayAngle);
+        }
+        if(SectorType== 2) {
+          // JMW added german rules
+          unsigned tmp = DistanceMetersToScreen(500);
+          canvas.circle(WayPointList[Task[i].Index].Screen.x,
+                        WayPointList[Task[i].Index].Screen.y,
+                        tmp);
 
-	if (is_first) {
-          canvas.clipped_dashed_line(IBLSCALE(3),
-		       sct1,
-		       sct2,
-		       MapGfx.TaskColor, rc);
-	} else {
-          canvas.clipped_dashed_line(IBLSCALE(3),
-		       sct2,
-		       sct1,
-		       MapGfx.TaskColor, rc);
-	}
+          tmp = DistanceMetersToScreen(10000);
+          canvas.segment(WayPointList[Task[i].Index].Screen.x,
+                         WayPointList[Task[i].Index].Screen.y, tmp, rc,
+                         Task[i].AATStartRadial-DisplayAngle,
+                         Task[i].AATFinishRadial-DisplayAngle);
+        }
+      } else {
+        // JMW added iso lines
+        if ((i==ActiveWayPoint) || (TargetPan && (i==TargetPanIndex))) {
+          // JMW 20080616 flash arc line if very close to target
+          static bool flip = false;
 
-	// draw small arrow along task direction
-	POINT p_p;
-	POINT Arrow[3] = { {6,6}, {-6,6}, {0,0} };
-	ScreenClosestPoint(sct1, sct2,
-			   Orig_Aircraft, &p_p, IBLSCALE(25));
-	PolygonRotateShift(Arrow, 2, p_p.x, p_p.y,
-			   bearing-DisplayAngle);
-	Arrow[2] = Arrow[1];
-	Arrow[1] = p_p;
-
-	canvas.select(pent1);
-	canvas.clipped_polyline(Arrow, 3, rc);
+          if (DerivedDrawInfo.WaypointDistance<AATCloseDistance()*2.0) {
+            flip = !flip;
+          } else {
+            flip = true;
+          }
+          if (flip) {
+            for (int j=0; j<MAXISOLINES-1; j++) {
+              if (TaskStats[i].IsoLine_valid[j]
+                  && TaskStats[i].IsoLine_valid[j+1]) {
+                canvas.select(penb2);
+                canvas.line(TaskStats[i].IsoLine_Screen[j],
+                            TaskStats[i].IsoLine_Screen[j + 1]);
+              }
+            }
+          }
+        }
       }
     }
-#ifdef HAVEEXCEPTIONS
-  }__finally
-#endif
-     {
-       mutexTaskData.Unlock();
-     }
+  }
+
+  Pen dash_pen3(Pen::DASH, IBLSCALE(3), MapGfx.TaskColor);
+
+  for(i=0;i<MAXTASKPOINTS-1;i++) {
+    if(ValidTaskPoint(i) && ValidTaskPoint(i+1)) {
+      bool is_first = (Task[i].Index < Task[i+1].Index);
+      int imin = min(Task[i].Index,Task[i+1].Index);
+      int imax = max(Task[i].Index,Task[i+1].Index);
+      // JMW AAT!
+      double bearing = Task[i].OutBound;
+      POINT sct1, sct2;
+
+      canvas.select(dash_pen3);
+
+      if (AATEnabled && !TargetPan) {
+        LonLat2Screen(Task[i].AATTargetLon,
+                      Task[i].AATTargetLat,
+                      sct1);
+        LonLat2Screen(Task[i+1].AATTargetLon,
+                      Task[i+1].AATTargetLat,
+                      sct2);
+        DistanceBearing(Task[i].AATTargetLat,
+                        Task[i].AATTargetLon,
+                        Task[i+1].AATTargetLat,
+                        Task[i+1].AATTargetLon,
+                        NULL, &bearing);
+
+        // draw nominal track line
+        canvas.line(WayPointList[imin].Screen, WayPointList[imax].Screen);
+      } else {
+        sct1 = WayPointList[Task[i].Index].Screen;
+        sct2 = WayPointList[Task[i+1].Index].Screen;
+      }
+
+      if (is_first) {
+        canvas.line(sct1, sct2);
+      } else {
+        canvas.line(sct2, sct1);
+      }
+
+      // draw small arrow along task direction
+      POINT p_p;
+      POINT Arrow[3] = { {6,6}, {-6,6}, {0,0} };
+      ScreenClosestPoint(sct1, sct2,
+                         Orig_Aircraft, &p_p, IBLSCALE(25));
+      PolygonRotateShift(Arrow, 2, p_p.x, p_p.y,
+                         bearing-DisplayAngle);
+      Arrow[2] = Arrow[1];
+      Arrow[1] = p_p;
+
+      canvas.select(pent1);
+      canvas.polyline(Arrow, 3);
+    }
+  }
 }
 
 
@@ -302,87 +272,69 @@ void MapWindow::DrawTaskAAT(Canvas &canvas, const RECT rc, Canvas &buffer)
   if (!WayPointList) return;
   if (!AATEnabled) return;
 
-  mutexTaskData.Lock();  // protect from extrnal task changes
-#ifdef HAVEEXCEPTIONS
-  __try{
-#endif
+  ScopeLock scopeLock(mutexTaskData); // protect from extrnal task changes
 
-    Color whitecolor = Color(0xff,0xff, 0xff);
-    buffer.set_text_color(whitecolor);
-    buffer.white_pen();
-    buffer.white_brush();
-    buffer.rectangle(rc.left, rc.top, rc.right, rc.bottom);
+  Color whitecolor = Color(0xff,0xff, 0xff);
+  buffer.set_text_color(whitecolor);
+  buffer.white_pen();
+  buffer.white_brush();
+  buffer.rectangle(rc.left, rc.top, rc.right, rc.bottom);
 
-    for(i=MAXTASKPOINTS-2;i>0;i--)
-      {
-	if(ValidTaskPoint(i) && ValidTaskPoint(i+1)) {
-	  if(Task[i].AATType == CIRCLE)
-	    {
-	      tmp = DistanceMetersToScreen(Task[i].AATCircleRadius);
+  for (i = MAXTASKPOINTS - 2; i > 0; i--) {
+    if(ValidTaskPoint(i) && ValidTaskPoint(i+1)) {
+      if(Task[i].AATType == CIRCLE) {
+        tmp = DistanceMetersToScreen(Task[i].AATCircleRadius);
 
-	      // this color is used as the black bit
-              buffer.set_text_color(MapGfx.Colours[iAirspaceColour[AATASK]]);
+        // this color is used as the black bit
+        buffer.set_text_color(MapGfx.Colours[iAirspaceColour[AATASK]]);
 
-	      // this color is the transparent bit
-              buffer.set_background_color(whitecolor);
+        // this color is the transparent bit
+        buffer.set_background_color(whitecolor);
 
-	      if (i<ActiveWayPoint) {
-                buffer.hollow_brush();
-	      } else {
-                buffer.select(MapGfx.hAirspaceBrushes[iAirspaceBrush[AATASK]]);
-	      }
-              buffer.black_pen();
+        if (i<ActiveWayPoint) {
+          buffer.hollow_brush();
+        } else {
+          buffer.select(MapGfx.hAirspaceBrushes[iAirspaceBrush[AATASK]]);
+        }
+        buffer.black_pen();
 
-              buffer.circle(WayPointList[Task[i].Index].Screen.x,
-                            WayPointList[Task[i].Index].Screen.y,
-                            tmp, rc, true, true);
-	    }
-	  else
-	    {
+        buffer.circle(WayPointList[Task[i].Index].Screen.x,
+                      WayPointList[Task[i].Index].Screen.y,
+                      tmp);
+      } else {
 
-	      // this color is used as the black bit
-              buffer.set_text_color(MapGfx.Colours[iAirspaceColour[AATASK]]);
+        // this color is used as the black bit
+        buffer.set_text_color(MapGfx.Colours[iAirspaceColour[AATASK]]);
 
-	      // this color is the transparent bit
-              buffer.set_background_color(whitecolor);
+        // this color is the transparent bit
+        buffer.set_background_color(whitecolor);
 
-	      if (i<ActiveWayPoint) {
-                buffer.hollow_brush();
-	      } else {
-                buffer.select(MapGfx.hAirspaceBrushes[iAirspaceBrush[AATASK]]);
-	      }
-              buffer.black_pen();
+        if (i<ActiveWayPoint) {
+          buffer.hollow_brush();
+        } else {
+          buffer.select(MapGfx.hAirspaceBrushes[iAirspaceBrush[AATASK]]);
+        }
+        buffer.black_pen();
 
-	      tmp = DistanceMetersToScreen(Task[i].AATSectorRadius);
+        tmp = DistanceMetersToScreen(Task[i].AATSectorRadius);
 
-              buffer.segment(WayPointList[Task[i].Index].Screen.x,
-                             WayPointList[Task[i].Index].Screen.y, tmp, rc,
-                             Task[i].AATStartRadial-DisplayAngle,
-                             Task[i].AATFinishRadial-DisplayAngle);
+        buffer.segment(WayPointList[Task[i].Index].Screen.x,
+                       WayPointList[Task[i].Index].Screen.y, tmp, rc,
+                       Task[i].AATStartRadial-DisplayAngle,
+                       Task[i].AATFinishRadial-DisplayAngle);
 
-              buffer.clipped_line(WayPointList[Task[i].Index].Screen,
-                                  Task[i].AATStart, rc);
-              buffer.clipped_line(WayPointList[Task[i].Index].Screen,
-                                  Task[i].AATFinish, rc);
-	    }
-
-	}
+        buffer.two_lines(Task[i].AATStart, WayPointList[Task[i].Index].Screen,
+                         Task[i].AATFinish);
       }
 
-    //////
+    }
+  }
 
-    canvas.copy_transparent_white(buffer, rc);
-
-#ifdef HAVEEXCEPTIONS
-  }__finally
-#endif
-     {
-       mutexTaskData.Unlock();
-     }
+  canvas.copy_transparent_white(buffer, rc);
 }
 
 
-void MapWindow::DrawBearing(Canvas &canvas, const RECT rc, int bBearingValid)
+void MapWindow::DrawBearing(Canvas &canvas, int bBearingValid)
 { /* RLD bearing is invalid if GPS not connected and in non-sim mode,
    but we can still draw targets */
 
@@ -407,14 +359,14 @@ void MapWindow::DrawBearing(Canvas &canvas, const RECT rc, int bBearingValid)
   mutexTaskData.Unlock();
   if (bBearingValid) {
       DrawGreatCircle(canvas, startLon, startLat,  // RLD skip if bearing invalid
-		      targetLon, targetLat, rc);// RLD bc Lat/Lon invalid
+		      targetLon, targetLat);// RLD bc Lat/Lon invalid
 
     if (TargetPan) {
       // Draw all of task if in target pan mode
       startLat = targetLat;
       startLon = targetLon;
 
-      mutexTaskData.Lock();
+      ScopeLock scopeLock(mutexTaskData);
 
       for (int i=ActiveWayPoint+1; i<MAXTASKPOINTS; i++) {
         if (ValidTaskPoint(i)) {
@@ -428,22 +380,20 @@ void MapWindow::DrawBearing(Canvas &canvas, const RECT rc, int bBearingValid)
           }
 
           DrawGreatCircle(canvas, startLon, startLat,
-                          targetLon, targetLat, rc);
+                          targetLon, targetLat);
 
           startLat = targetLat;
           startLon = targetLon;
         }
       }
-
-      mutexTaskData.Unlock();
-
     } // TargetPan
   } // bearing valid
 
   // JMW draw symbol at target, makes it easier to see
   // RLD always draw all targets ahead so visible in pan mode
   if (AATEnabled) {
-    mutexTaskData.Lock();
+    ScopeLock scopeLock(mutexTaskData);
+
     for (int i=ActiveWayPoint; i<MAXTASKPOINTS; i++) {
       // RLD skip invalid targets and targets at start and finish
       if((i>0) && ValidTaskPoint(i) && ValidTaskPoint(i+1)) {
@@ -455,14 +405,15 @@ void MapWindow::DrawBearing(Canvas &canvas, const RECT rc, int bBearingValid)
         }
       }
     }
-    mutexTaskData.Unlock();
   }
 
 }
 
 
 
-void MapWindow::DrawOffTrackIndicator(Canvas &canvas, const RECT rc) {
+void
+MapWindow::DrawOffTrackIndicator(Canvas &canvas)
+{
   if ((ActiveWayPoint<=0) || !ValidTaskPoint(ActiveWayPoint)) {
     return;
   }
@@ -549,7 +500,7 @@ void MapWindow::DrawOffTrackIndicator(Canvas &canvas, const RECT rc) {
 
 
 void
-MapWindow::DrawProjectedTrack(Canvas &canvas, const RECT rc)
+MapWindow::DrawProjectedTrack(Canvas &canvas)
 {
   if ((ActiveWayPoint<=0) || !ValidTaskPoint(ActiveWayPoint) || !AATEnabled) {
     return;
@@ -615,14 +566,17 @@ MapWindow::DrawProjectedTrack(Canvas &canvas, const RECT rc)
     PolygonRotateShift(pt, 2, Orig_Aircraft.x, Orig_Aircraft.y,
 		       bearing-DisplayAngle);
   }
-  canvas.clipped_dashed_line(IBLSCALE(2), pt[0], pt[1], Color(0,0,0), rc);
+
+  Pen dash_pen(Pen::DASH, IBLSCALE(2), Color(0, 0, 0));
+  canvas.select(dash_pen);
+  canvas.line(pt[0], pt[1]);
 }
 
 
 void MapWindow::CalculateScreenPositionsTask() {
   unsigned int i;
 
-  mutexTaskData.Lock();
+  ScopeLock scopeLock(mutexTaskData);
 
   if (EnableMultipleStartPoints) {
     for(i=0;i<MAXSTARTPOINTS-1;i++) {
@@ -673,7 +627,5 @@ void MapWindow::CalculateScreenPositionsTask() {
       }
     }
   }
-
-  mutexTaskData.Unlock();
 }
 

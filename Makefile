@@ -570,7 +570,7 @@ OBJS	:=\
 	$(SRC)/Screen/MaskedPaintWindow.o \
 	$(SRC)/Screen/TextWindow.o \
 	$(SRC)/Screen/EditWindow.o \
-	$(SRC)/Screen/MainWindow.o \
+	$(SRC)/Screen/TopWindow.o \
 	\
 	$(SRC)/Screen/shapelib/mapbits.o 	\
 	$(SRC)/Screen/shapelib/maperror.o 	\
@@ -587,6 +587,7 @@ OBJS	:=\
 	$(SRC)/StdAfx.o			\
 	$(SRC)/Protection.o 		\
 	$(SRC)/ProcessTimer.o 		\
+	$(SRC)/MainWindow.o \
 	$(SRC)/Components.o 		\
 	$(SRC)/XCSoar.o 		\
 	\

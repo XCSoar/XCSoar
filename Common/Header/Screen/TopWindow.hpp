@@ -34,35 +34,49 @@ Copyright_License {
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
 */
-#if !defined(XCSOAR_UTILS_TEXT_H)
-#define XCSOAR_UTILS_TEXT_H
 
-#define WIN32_LEAN_AND_MEAN		// Exclude rarely-used stuff from Windows headers
-#include <windows.h>
-#include <stdio.h>
-#include <zzip/lib.h>
+#ifndef XCSOAR_SCREEN_TOP_WINDOW_HXX
+#define XCSOAR_SCREEN_TOP_WINDOW_HXX
 
-BOOL ReadString(ZZIP_FILE* zFile, int Max, TCHAR *String);
-BOOL ReadStringX(FILE *fp, int Max, TCHAR *String);
+#include "Screen/ContainerWindow.hpp"
 
-double StrToDouble(const TCHAR *Source, const TCHAR **Stop);
-void PExtractParameter(const TCHAR *Source, TCHAR *Destination,
-                       int DesiredFieldNumber);
+#if (((UNDER_CE >= 300)||(_WIN32_WCE >= 0x0300)) && (WINDOWSPC<1))
+#define HAVE_ACTIVATE_INFO
+#endif
 
-void ExtractDirectory(TCHAR *Dest, const TCHAR *Source);
+#ifdef HAVE_ACTIVATE_INFO
+#include <aygshell.h>
+#endif
 
-void *bsearch(void *key, void *base0, size_t nmemb, size_t size, int (*compar)(const void *elem1, const void *elem2));
-TCHAR *strtok_r(TCHAR *s, const TCHAR *delim, TCHAR **lasts);
+/**
+ * A top-level full-screen window.
+ */
+class TopWindow : public ContainerWindow {
+#ifdef HAVE_ACTIVATE_INFO
+  SHACTIVATEINFO s_sai;
+#endif
 
-// Parse string (new lines etc) and malloc the string
-TCHAR* StringMallocParse(const TCHAR* old_string);
+public:
+  TopWindow();
 
-void ConvertTToC(CHAR* pszDest, const TCHAR* pszSrc);
-void ConvertCToT(TCHAR* pszDest, const CHAR* pszSrc);
+  bool find(LPCTSTR cls, LPCTSTR text);
 
-int TextToLineOffsets(const TCHAR *text, int *LineOffsets, int maxLines);
-double HexStrToDouble(TCHAR *Source, TCHAR **Stop);
+  void set(LPCTSTR cls, LPCTSTR text,
+           int left, int top, unsigned width, unsigned height);
 
-bool MatchesExtension(const TCHAR *filename, const TCHAR* extension);
+  void full_screen();
+
+  void update() {
+    ::UpdateWindow(hWnd);
+  }
+
+  void close() {
+    ::SendMessage(hWnd, WM_CLOSE, 0, 0);
+  }
+
+protected:
+  virtual LRESULT on_message(HWND _hWnd, UINT message,
+                             WPARAM wParam, LPARAM lParam);
+};
 
 #endif

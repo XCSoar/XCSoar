@@ -682,8 +682,7 @@ void MapWindowProjection::ExchangeBlackboard(const NMEA_INFO &nmea_info,
 
 void MapWindowProjection::DrawGreatCircle(Canvas &canvas,
 					  double startLon, double startLat,
-					  double targetLon, double targetLat,
-					  const RECT rc) {
+					  double targetLon, double targetLat) {
 
 #if OLD_GREAT_CIRCLE
   // TODO accuracy: this is actually wrong, it should recalculate the
@@ -719,7 +718,7 @@ void MapWindowProjection::DrawGreatCircle(Canvas &canvas,
 		EndP);
 
   if (d_distance>distanceTotal) {
-    canvas.clipped_line(StartP, EndP, rc);
+    canvas.line(StartP, EndP);
   } else {
 
     for (int i=0; i<= 10; i++) {
@@ -744,7 +743,7 @@ void MapWindowProjection::DrawGreatCircle(Canvas &canvas,
                     tlat1,
                     EndP);
 
-      canvas.clipped_line(StartP, EndP, rc);
+      canvas.line(StartP, EndP);
 
       StartP.x = EndP.x;
       StartP.y = EndP.y;
@@ -765,7 +764,7 @@ void MapWindowProjection::DrawGreatCircle(Canvas &canvas,
   LonLat2Screen(targetLon,
                 targetLat,
                 pt[1]);
-  canvas.clipped_polygon(pt, 2, rc, false);
+  canvas.polyline(pt, 2);
 
 #endif
 }

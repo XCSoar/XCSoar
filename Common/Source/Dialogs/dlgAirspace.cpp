@@ -45,7 +45,7 @@ Copyright_License {
 #include "UtilsProfile.hpp"
 #include "Screen/Util.hpp"
 #include "Screen/Graphics.hpp"
-#include "Screen/MainWindow.hpp"
+#include "MainWindow.hpp"
 #include "SettingsAirspace.hpp"
 
 #include <assert.h>

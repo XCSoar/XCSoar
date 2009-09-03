@@ -44,7 +44,7 @@ Copyright_License {
 #include "Dialogs/dlgTools.h"
 #include "InfoBoxLayout.h"
 #include "Screen/Util.hpp"
-#include "Screen/MainWindow.hpp"
+#include "MainWindow.hpp"
 #include "DataField/Base.hpp"
 #include "DataField/ComboList.hpp"
 

@@ -68,6 +68,7 @@ Copyright_License {
 #include "Message.h"
 #include "Calculations.h" // TODO danger! for InAATTurnSector
 #include "RasterWeather.h"
+#include "options.h" /* for DEBUG_VIRTUALKEYS */
 
 #ifdef PNA
 #include "Asset.hpp"
@@ -80,11 +81,6 @@ Copyright_License {
 
 #if (WINDOWSPC>0)
 #include <wingdi.h>
-#endif
-
-#ifndef NDEBUG
-#define DRAWLOAD
-#define DEBUG_VIRTUALKEYS
 #endif
 
 ///////////////////////////////// Settings
@@ -309,11 +305,6 @@ void MapWindow::DrawThreadInitialise(void) {
   // initialise other systems
   InitialiseScaleList(); // should really be done before the thread
 			 // has started, so it happens from main thread
-
-  // set main rectangles
-  MapRectBig = get_client_rect();
-  MapRectSmall = MapRect;
-  MapRect = MapRectSmall;
 
   // set initial display mode
   draw_canvas.background_transparent();

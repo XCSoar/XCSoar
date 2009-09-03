@@ -49,7 +49,7 @@ Copyright_License {
 #include "Math/Earth.hpp"
 #include "Screen/Fonts.hpp"
 #include "Screen/Graphics.hpp"
-#include "Screen/MainWindow.hpp"
+#include "MainWindow.hpp"
 #include "GlideComputer.hpp"
 #include "Atmosphere.h"
 #include "Blackboard.hpp"

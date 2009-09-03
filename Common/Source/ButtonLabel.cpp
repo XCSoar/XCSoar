@@ -42,7 +42,7 @@ Copyright_License {
 #include "Dialogs.h"
 #include "Language.hpp"
 #include "Screen/Animation.hpp"
-#include "Screen/MainWindow.hpp"
+#include "MainWindow.hpp"
 #include "Registry.hpp"
 #include "InfoBox.h"
 #include "WindowControls.h"

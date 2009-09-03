@@ -228,10 +228,21 @@ public:
                            const Color color, const RECT rc);
 
   void line(int ax, int ay, int bx, int by);
+  void line(const POINT a, const POINT b) {
+    line(a.x, a.y, b.x, b.y);
+  }
+
   void two_lines(int ax, int ay, int bx, int by, int cx, int cy);
+  void two_lines(const POINT a, const POINT b, const POINT c) {
+    two_lines(a.x, a.y, b.x, b.y, c.x, c.y);
+  }
 
   void move_to(int x, int y);
   void line_to(int x, int y);
+
+  void circle(int x, int y, unsigned radius) {
+    ::Ellipse(dc, x - radius, y - radius, x + radius, y + radius);
+  }
 
   void circle(int x, int y, unsigned radius,
               const RECT rc, bool clip=false, bool fill=true);

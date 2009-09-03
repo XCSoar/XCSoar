@@ -66,7 +66,7 @@ void MapWaypointLabelAdd(TCHAR *Name, int X, int Y,
 void MapWaypointLabelClear();
 
 
-void MapWindow::DrawWaypoints(Canvas &canvas, const RECT rc)
+void MapWindow::DrawWaypoints(Canvas &canvas)
 {
   unsigned int i;
   TCHAR Buffer[32];

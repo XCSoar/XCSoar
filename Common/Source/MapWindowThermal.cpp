@@ -84,7 +84,9 @@ void MapWindow::CalculateScreenPositionsThermalSources() {
 
 
 
-void MapWindow::DrawThermalEstimate(Canvas &canvas, const RECT rc) {
+void
+MapWindow::DrawThermalEstimate(Canvas &canvas)
+{
   if (!EnableThermalLocator)
     return;
 
