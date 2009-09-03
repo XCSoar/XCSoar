@@ -40,14 +40,27 @@ Copyright_License {
 
 #include "Calculations.h"
 
-void AverageClimbRate(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
-void Vario(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
-void LD(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
-void CruiseLD(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
-void Average30s(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
-void AverageThermal(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
-void ThermalGain(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
-void MaxHeightGain(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
+void
+AverageClimbRate(const NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 
+void Vario(const NMEA_INFO *Basic, DERIVED_INFO *Calculated);
+
+void
+LD(const NMEA_INFO *Basic, DERIVED_INFO *Calculated);
+
+void
+CruiseLD(const NMEA_INFO *Basic, DERIVED_INFO *Calculated);
+
+void
+Average30s(const NMEA_INFO *Basic, DERIVED_INFO *Calculated);
+
+void
+AverageThermal(const NMEA_INFO *Basic, DERIVED_INFO *Calculated);
+
+void
+ThermalGain(const NMEA_INFO *Basic, DERIVED_INFO *Calculated);
+
+void
+ MaxHeightGain(const NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 
 #endif

@@ -65,7 +65,9 @@ int FastLogNum = 0; // number of points to log at high rate
 int LoggerTimeStepCruise=5;
 int LoggerTimeStepCircling=1;
 
-void GlideComputer::DoLogging(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
+void
+GlideComputer::DoLogging(const NMEA_INFO *Basic, DERIVED_INFO *Calculated)
+{
   static double LogLastTime=0;
   static double StatsLastTime=0;
   static double OLCLastTime = 0;
@@ -198,7 +200,8 @@ void GlideComputer::DoLogging(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
 static PeriodClock last_team_code_update;
 DWORD lastTeamCodeUpdateTime = GetTickCount();
 
-void CalculateOwnTeamCode(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
+void
+CalculateOwnTeamCode(const NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 {
   if (!WayPointList) return;
   if (TeamCodeRefWaypoint < 0) return;
@@ -226,8 +229,8 @@ void CalculateOwnTeamCode(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   _tcsncpy(Calculated->OwnTeamCode, code, 5);
 }
 
-
-void CalculateTeammateBearingRange(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
+void
+CalculateTeammateBearingRange(const NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 {
   // JMW TODO: locking
 

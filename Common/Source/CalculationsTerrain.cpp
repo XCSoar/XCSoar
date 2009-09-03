@@ -43,7 +43,8 @@ Copyright_License {
 #include "SettingsComputer.hpp"
 #include "Interface.hpp"
 
-void TerrainHeight(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
+void
+TerrainHeight(const NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 {
   short Alt = 0;
 
@@ -73,11 +74,11 @@ void TerrainHeight(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   }
 }
 
-void CheckFinalGlideThroughTerrain(NMEA_INFO *Basic,
-				   DERIVED_INFO *Calculated,
-				   double LegToGo,
-				   double LegBearing) {
-
+void
+CheckFinalGlideThroughTerrain(const NMEA_INFO *Basic,
+                              DERIVED_INFO *Calculated,
+                              double LegToGo, double LegBearing)
+{
   // Final glide through terrain updates
   if (Calculated->FinalGlide) {
 
@@ -104,10 +105,11 @@ void CheckFinalGlideThroughTerrain(NMEA_INFO *Basic,
 }
 
 
-void TerrainFootprint(NMEA_INFO *Basic, 
-		      DERIVED_INFO *Calculated,
-		      double screen_range) {
-
+void
+TerrainFootprint(const NMEA_INFO *Basic, 
+                 DERIVED_INFO *Calculated,
+                 double screen_range)
+{
   if (FinalGlideTerrain) {
 
     double bearing, distance;

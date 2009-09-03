@@ -43,7 +43,8 @@ Copyright_License {
 #include "Message.h"
 #include "Math/Earth.hpp"
 
-void PredictNextPosition(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
+void
+PredictNextPosition(const NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 {
   if(Calculated->Circling)
     {
@@ -112,7 +113,9 @@ bool ClearAirspaceWarnings(const bool acknowledge, const bool ack_all_day) {
 }
 
 
-void AirspaceWarning(NMEA_INFO *Basic, DERIVED_INFO *Calculated){
+void
+AirspaceWarning(const NMEA_INFO *Basic, DERIVED_INFO *Calculated)
+{
   unsigned int i;
 
   if(!AIRSPACEWARNINGS)

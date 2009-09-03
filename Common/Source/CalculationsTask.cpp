@@ -60,8 +60,10 @@ Copyright_License {
 #define DEBUGTASKSPEED
 #endif
 
-static void CheckTransitionFinalGlide(NMEA_INFO *Basic,
-                                      DERIVED_INFO *Calculated) {
+static void
+CheckTransitionFinalGlide(const NMEA_INFO *Basic,
+                          DERIVED_INFO *Calculated)
+{
   int FinalWayPoint = getFinalWaypoint();
   // update final glide mode status
   if (((ActiveWayPoint == FinalWayPoint)
@@ -80,7 +82,9 @@ static void CheckTransitionFinalGlide(NMEA_INFO *Basic,
 }
 
 
-static double SpeedHeight(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
+static double
+SpeedHeight(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated)
+{
   (void)Basic;
   if (Calculated->TaskDistanceToGo<=0) {
     return 0;
@@ -99,8 +103,8 @@ static double SpeedHeight(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
     - (dh_start*(1.0-d_fraction)+dh_finish*(d_fraction));
 }
 
-
-void DebugTaskCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
+static void
+DebugTaskCalculations(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated)
 {
 #ifdef DEBUGTASKSPEED
   if ((Calculated->TaskStartTime>0)
@@ -127,8 +131,9 @@ void DebugTaskCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 #endif
 }
 
-
-double AATCloseBearing(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
+static double
+AATCloseBearing(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated)
+{
   // ensure waypoint goes in direction of track if very close
   double course_bearing;
   DistanceBearing(Task[ActiveWayPoint-1].AATTargetLat,
@@ -142,7 +147,8 @@ double AATCloseBearing(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   return course_bearing;
 }
 
-void DistanceToNext(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
+void
+DistanceToNext(const NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 {
   mutexTaskData.Lock();
 
@@ -208,10 +214,10 @@ void DistanceToNext(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   mutexTaskData.Unlock();
 }
 
-
-void AltitudeRequired(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
-                      const double this_maccready,
-		      const double cruise_efficiency)
+void
+AltitudeRequired(const NMEA_INFO *Basic, DERIVED_INFO *Calculated,
+                 const double this_maccready,
+                 const double cruise_efficiency)
 {
   (void)Basic;
   mutexTaskData.Lock();
@@ -270,12 +276,12 @@ void AltitudeRequired(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
   mutexTaskData.Unlock();
 }
 
-
-static bool TaskAltitudeRequired(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
-                                 double this_maccready, double *Vfinal,
-                                 double *TotalTime, double *TotalDistance,
-                                 int *ifinal,
-				 const double cruise_efficiency)
+static bool
+TaskAltitudeRequired(const NMEA_INFO *Basic, DERIVED_INFO *Calculated,
+                     double this_maccready, double *Vfinal,
+                     double *TotalTime, double *TotalDistance,
+                     int *ifinal,
+                     const double cruise_efficiency)
 {
   int i;
   double w1lat;
@@ -376,9 +382,9 @@ static bool TaskAltitudeRequired(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
   return retval;
 }
 
-
-double MacCreadyOrAvClimbRate(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
-                              double this_maccready)
+static double
+MacCreadyOrAvClimbRate(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated,
+                       double this_maccready)
 {
   double mc_val = this_maccready;
   bool is_final_glide = false;
@@ -412,9 +418,10 @@ double MacCreadyOrAvClimbRate(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
 }
 
 
-void TaskSpeed(NMEA_INFO *Basic, DERIVED_INFO *Calculated, 
-	       const double this_maccready,
-	       const double cruise_efficiency)
+void
+TaskSpeed(const NMEA_INFO *Basic, DERIVED_INFO *Calculated, 
+          const double this_maccready,
+          const double cruise_efficiency)
 {
   int ifinal;
   static double LastTime = 0;
@@ -698,8 +705,9 @@ void TaskSpeed(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
 
 }
 
-
-void LDNext(NMEA_INFO *Basic, DERIVED_INFO *Calculated, const double LegToGo) {
+void
+LDNext(const NMEA_INFO *Basic, DERIVED_INFO *Calculated, const double LegToGo)
+{
   double height_above_leg = Calculated->NavAltitude+Calculated->EnergyHeight
     - FAIFinishHeight(Basic, Calculated, ActiveWayPoint);
 
@@ -709,8 +717,9 @@ void LDNext(NMEA_INFO *Basic, DERIVED_INFO *Calculated, const double LegToGo) {
                                 0.5);
 }
 
-
-static void CheckForceFinalGlide(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
+static void
+CheckForceFinalGlide(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated)
+{
   // Auto Force Final Glide forces final glide mode
   // if above final glide...
   if (TaskAborted) {
@@ -734,10 +743,10 @@ static void CheckForceFinalGlide(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   }
 }
 
-
-void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
-                    const double this_maccready,
-		    const double cruise_efficiency)
+void
+TaskStatistics(const NMEA_INFO *Basic, DERIVED_INFO *Calculated,
+               const double this_maccready,
+               const double cruise_efficiency)
 {
 
   if (!ValidTaskPoint(ActiveWayPoint) ||
@@ -1154,8 +1163,9 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
 
 }
 
-
-void AATStats_Time(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
+static void
+AATStats_Time(const NMEA_INFO *Basic, DERIVED_INFO *Calculated)
+{
   // Task time to go calculations
 
   double aat_tasktime_elapsed = Basic->Time - Calculated->TaskStartTime;
@@ -1181,8 +1191,9 @@ void AATStats_Time(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   }
 }
 
-
-void AATStats_Distance(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
+static void
+AATStats_Distance(const NMEA_INFO *Basic, DERIVED_INFO *Calculated)
+{
   int i;
   double MaxDistance, MinDistance, TargetDistance;
 
@@ -1295,8 +1306,8 @@ void AATStats_Distance(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   mutexTaskData.Unlock();
 }
 
-
-void AATStats(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
+void
+AATStats(const NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 {
 
   if (!WayPointList

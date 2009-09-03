@@ -48,7 +48,8 @@ Copyright_License {
 
 ldrotary_s rotaryLD;
 
-void AverageClimbRate(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
+void
+AverageClimbRate(const NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 {
   if (Basic->AirspeedAvailable && Basic->VarioAvailable
       && (!Calculated->Circling)) {
@@ -81,7 +82,9 @@ void AverageClimbRate(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 
 #ifdef NEWCLIMBAV
 ClimbAverageCalculator climbAverageCalculator;
-void Average30s(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
+
+void
+Average30s(const NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 {
 	Calculated->Average30s = climbAverageCalculator.GetAverage(Basic->Time, Basic->Altitude, 30);
 	Calculated->NettoAverage30s = Calculated->Average30s;
@@ -89,7 +92,8 @@ void Average30s(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 
 #endif
 
-void Average30s(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
+void
+Average30s(const NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 {
   static double LastTime = 0;
   static double Altitude[30];
@@ -188,7 +192,8 @@ void Average30s(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   LastTime = Basic->Time;
 }
 
-void AverageThermal(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
+void
+AverageThermal(const NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 {
   if (Calculated->ClimbStartTime>=0) {
     if(Basic->Time > Calculated->ClimbStartTime)
@@ -202,7 +207,8 @@ void AverageThermal(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   }
 }
 
-void MaxHeightGain(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
+void
+MaxHeightGain(const NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 {
   if (!Calculated->Flying) return;
 
@@ -215,8 +221,8 @@ void MaxHeightGain(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   Calculated->MinAltitude = min(Calculated->NavAltitude, Calculated->MinAltitude);
 }
 
-
-void ThermalGain(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
+void
+ThermalGain(const NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 {
   if (Calculated->ClimbStartTime>=0) {
     if(Basic->Time >= Calculated->ClimbStartTime)
@@ -228,7 +234,8 @@ void ThermalGain(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   }
 }
 
-void LD(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
+void
+LD(const NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 {
   static double LastLat = 0;
   static double LastLon = 0;
@@ -272,7 +279,8 @@ void LD(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 }
 
 
-void CruiseLD(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
+void
+CruiseLD(const NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 {
 
   if(!Calculated->Circling)

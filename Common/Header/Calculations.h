@@ -41,9 +41,11 @@ Copyright_License {
 #include "NMEA/Info.h"
 #include "NMEA/Derived.hpp"
 
-BOOL DoCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
-BOOL DoCalculationsVario(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
-void DoCalculationsSlow(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
+BOOL
+DoCalculations(const NMEA_INFO *Basic, DERIVED_INFO *Calculated);
+
+BOOL DoCalculationsVario(const NMEA_INFO *Basic, DERIVED_INFO *Calculated);
+void DoCalculationsSlow(const NMEA_INFO *Basic, DERIVED_INFO *Calculated,
 			double screen_distance);
 
 bool ClearAirspaceWarnings(const bool ack, const bool allday=false);
@@ -58,9 +60,13 @@ StartTask(const NMEA_INFO *Basic, DERIVED_INFO *Calculated,
 
 bool  InAATTurnSector(const double longitude, const double latitude, const int thepoint);
 
-void IterateEffectiveMacCready(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
+void
+IterateEffectiveMacCready(const NMEA_INFO *Basic,
+                          const DERIVED_INFO *Calculated);
 
-double FAIFinishHeight(NMEA_INFO *Basic, DERIVED_INFO *Calculated, int wp);
+double
+FAIFinishHeight(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated,
+                int wp);
 
 bool
 InsideStartHeight(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated);
@@ -76,7 +82,8 @@ bool
 ValidStartSpeed(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated,
                 DWORD Margin);
 
-void BallastDump();
+void
+BallastDump(const NMEA_INFO *Basic);
 
 #define TAKEOFFSPEEDTHRESHOLD (0.5*GlidePolar::Vminsink)
 

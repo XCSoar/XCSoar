@@ -90,14 +90,18 @@ bool WasFlying = false; // VENTA3 used by auto QFE: do not reset QFE
 			//   zero at once!
 extern int FastLogNum; // number of points to log at high rate
 
-static void Heading(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
+static void
+Heading(const NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 
-static void EnergyHeightNavAltitude(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
+static void
+EnergyHeightNavAltitude(const NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 
-static void DistanceToHome(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
+static void
+DistanceToHome(const NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 
 
-static void TakeoffLanding(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
+static void
+TakeoffLanding(const NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 
 #include "CalculationsClimb.hpp"
 #include "CalculationsTask.hpp"
@@ -105,13 +109,12 @@ static void TakeoffLanding(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 #include "CalculationsTerrain.hpp"
 #include "CalculationsWind.hpp"
 
-// now in CalculationsBallast.cpp
-void BallastDump(NMEA_INFO *Basic);
-
 /////////////////////////////////////////////////////////////////////////////////////
 
 
-double FAIFinishHeight(NMEA_INFO *Basic, DERIVED_INFO *Calculated, int wp) {
+double
+FAIFinishHeight(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated, int wp)
+{
   int FinalWayPoint = getFinalWaypoint();
   if (wp== -1) {
     wp = FinalWayPoint;
@@ -172,9 +175,10 @@ void AnnounceWayPointSwitch(DERIVED_INFO *Calculated, bool do_advance) {
   FastLogNum = 5;
 }
 
-
-void DoCalculationsSlow(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
-			double screen_distance) {
+void
+DoCalculationsSlow(const NMEA_INFO *Basic, DERIVED_INFO *Calculated,
+                   double screen_distance)
+{
   // do slow part of calculations (cleanup of caches etc, nothing
   // that changes the state)
 
@@ -261,7 +265,9 @@ ResetFlightStats(DERIVED_INFO *Calculated, bool full=true)
 }
 
 
-bool FlightTimes(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
+bool
+FlightTimes(const NMEA_INFO *Basic, DERIVED_INFO *Calculated)
+{
   static double LastTime = 0;
 
   if ((Basic->Time != 0) && (Basic->Time <= LastTime))
@@ -372,7 +378,8 @@ void InitCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
 }
 
 
-BOOL DoCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
+BOOL
+DoCalculations(const NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 {
   double mc = GlidePolar::GetMacCready();
   double ce = GlidePolar::GetCruiseEfficiency();
@@ -448,7 +455,8 @@ BOOL DoCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 /////////////////////
 
 
-void Heading(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
+static void
+Heading(const NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 {
   double x0, y0, mag;
   static double LastTime = 0;
@@ -503,9 +511,9 @@ void Heading(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 
 }
 
-
-// VENTA3 added radial
-void DistanceToHome(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
+static void
+DistanceToHome(const NMEA_INFO *Basic, DERIVED_INFO *Calculated)
+{
   int home_waypoint = HomeWaypoint;
 
   if (!ValidWayPoint(home_waypoint)) {
@@ -525,8 +533,8 @@ void DistanceToHome(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
 
 }
 
-
-void EnergyHeightNavAltitude(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
+static void
+EnergyHeightNavAltitude(const NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 {
   // Determine which altitude to use for nav functions
   if (EnableNavBaroAltitude && Basic->BaroAltitudeAvailable) {
@@ -557,7 +565,9 @@ void EnergyHeightNavAltitude(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 ////////////////////////////////
 
 
-void DoAutoQNH(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
+static void
+DoAutoQNH(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated)
+{
   static int done_autoqnh = 0;
 
   // Reject if already done
@@ -589,8 +599,9 @@ void DoAutoQNH(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   }
 }
 
-
-void TakeoffLanding(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
+static void
+TakeoffLanding(const NMEA_INFO *Basic, DERIVED_INFO *Calculated)
+{
   static int time_in_flight = 0;
   static int time_on_ground = 0;
 
@@ -676,7 +687,10 @@ void TakeoffLanding(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
 
 
 
-void IterateEffectiveMacCready(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
+void
+IterateEffectiveMacCready(const NMEA_INFO *Basic,
+                          const DERIVED_INFO *Calculated)
+{
   // nothing yet.
 }
 

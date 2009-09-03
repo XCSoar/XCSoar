@@ -43,17 +43,19 @@ Copyright_License {
 
 void InitialiseCalculationsWind();
 void CloseCalculationsWind();
-void DoWindZigZag(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 
 void
-DoWindCirclingMode(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
+DoWindZigZag(const NMEA_INFO *Basic, DERIVED_INFO *Calculated);
+
+void
+DoWindCirclingMode(const NMEA_INFO *Basic, DERIVED_INFO *Calculated,
                    bool left);
 
 void
-DoWindCirclingSample(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
+DoWindCirclingSample(const NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 
 void
-DoWindCirclingAltitude(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
+DoWindCirclingAltitude(const NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 
 void
 SetWindEstimate(const double speed, const double bearing, const int quality=6);

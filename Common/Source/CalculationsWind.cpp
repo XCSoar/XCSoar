@@ -76,9 +76,9 @@ void CloseCalculationsWind() {
   mutexGlideComputer.Unlock();
 }
 
-//// WIND
-
-void DoWindZigZag(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
+void
+DoWindZigZag(const NMEA_INFO *Basic, DERIVED_INFO *Calculated)
+{
   // update zigzag wind
   if (((AutoWindMode & D_AUTOWIND_ZIGZAG)==D_AUTOWIND_ZIGZAG)
       && (!ReplayLogger::IsEnabled())) {
@@ -102,9 +102,10 @@ void DoWindZigZag(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   }
 }
 
-
-void DoWindCirclingMode(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
-			bool left) {
+void
+DoWindCirclingMode(const NMEA_INFO *Basic, DERIVED_INFO *Calculated,
+                   bool left)
+{
   if ((AutoWindMode & D_AUTOWIND_CIRCLING)==D_AUTOWIND_CIRCLING) {
     mutexGlideComputer.Lock();
     if (GlideComputer::windanalyser) {
@@ -114,7 +115,9 @@ void DoWindCirclingMode(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
   }
 }
 
-void DoWindCirclingSample(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
+void
+DoWindCirclingSample(const NMEA_INFO *Basic, DERIVED_INFO *Calculated)
+{
   if ((AutoWindMode & D_AUTOWIND_CIRCLING)==D_AUTOWIND_CIRCLING) {
     mutexGlideComputer.Lock();
     if (GlideComputer::windanalyser) {
@@ -124,7 +127,9 @@ void DoWindCirclingSample(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   }
 }
 
-void DoWindCirclingAltitude(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
+void
+DoWindCirclingAltitude(const NMEA_INFO *Basic, DERIVED_INFO *Calculated)
+{
   if (AutoWindMode>0) {
     mutexGlideComputer.Lock();
     if (GlideComputer::windanalyser) {

@@ -41,7 +41,11 @@ Copyright_License {
 #include "NMEA/Info.h"
 #include "NMEA/Derived.hpp"
 
-void DoBestAlternateSlow(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
-void DoAlternates(NMEA_INFO *Basic, DERIVED_INFO *Calculated, int AltWaypoint);
+void
+DoBestAlternateSlow(const NMEA_INFO *Basic, DERIVED_INFO *Calculated);
+
+void
+DoAlternates(const NMEA_INFO *Basic, DERIVED_INFO *Calculated,
+             int AltWaypoint);
 
 #endif

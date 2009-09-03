@@ -49,12 +49,12 @@ CalculateWaypointApproxDistance(int scx_aircraft, int scy_aircraft,
                                 int i);
 
 double
-CalculateWaypointArrivalAltitude(NMEA_INFO *Basic,
-                                 DERIVED_INFO *Calculated,
+CalculateWaypointArrivalAltitude(const NMEA_INFO *Basic,
+                                 const DERIVED_INFO *Calculated,
                                  int i);
 
 void
-SortLandableWaypoints(NMEA_INFO *Basic,
-                      DERIVED_INFO *Calculated);
+SortLandableWaypoints(const NMEA_INFO *Basic,
+                      const DERIVED_INFO *Calculated);
 
 #endif

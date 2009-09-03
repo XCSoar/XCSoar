@@ -43,9 +43,9 @@ Copyright_License {
 #include "NMEA/Derived.hpp"
 
 void
-PredictNextPosition(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
+PredictNextPosition(const NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 
 void
-AirspaceWarning(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
+AirspaceWarning(const NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 
 #endif

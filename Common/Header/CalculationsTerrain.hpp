@@ -42,13 +42,17 @@ Copyright_License {
 
 class MapWindowProjection;
 
-void TerrainHeight(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
-void TerrainFootprint(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
-		      double screen_distance);
-void CheckFinalGlideThroughTerrain(NMEA_INFO *Basic,
-				   DERIVED_INFO *Calculated,
-				   double LegToGo,
-				   double LegBearing);
+void
+TerrainHeight(const NMEA_INFO *Basic, DERIVED_INFO *Calculated);
+
+void
+TerrainFootprint(const NMEA_INFO *Basic, DERIVED_INFO *Calculated,
+                 double screen_distance);
+
+void
+CheckFinalGlideThroughTerrain(const NMEA_INFO *Basic,
+                              DERIVED_INFO *Calculated,
+                              double LegToGo, double LegBearing);
 
 
 #endif
