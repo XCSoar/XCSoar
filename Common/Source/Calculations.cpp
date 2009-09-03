@@ -71,6 +71,7 @@ Copyright_License {
 #include "BestAlternate.hpp"
 #include "Persist.hpp"
 #include "Airspace.h"
+#include "CalculationsAirspace.hpp"
 
 bool EnableNavBaroAltitude=false;
 int EnableExternalTriggerCruise=false;
@@ -103,10 +104,6 @@ static void TakeoffLanding(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 #include "CalculationsVertical.hpp"
 #include "CalculationsTerrain.hpp"
 #include "CalculationsWind.hpp"
-
-// now in CalculationsAirspace.cpp
-void PredictNextPosition(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
-void AirspaceWarning(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 
 // now in CalculationsAbort.cpp
 void SortLandableWaypoints(NMEA_INFO *Basic, DERIVED_INFO *Calculated);

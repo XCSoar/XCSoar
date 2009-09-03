@@ -36,15 +36,12 @@ Copyright_License {
 
 */
 
-#include "Calculations.h"
+#include "CalculationsAirspace.hpp"
 #include "Blackboard.hpp"
 #include "Airspace.h"
 #include "AirspaceWarning.h"
-#include "Math/Geometry.hpp"
 #include "Message.h"
 #include "Math/Earth.hpp"
-#include "SettingsAirspace.hpp"
-
 
 void PredictNextPosition(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 {
