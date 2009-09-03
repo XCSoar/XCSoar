@@ -51,21 +51,26 @@ Copyright_License {
 #include "Interface.hpp"
 #include "RasterWeather.h"
 
-void MapWindow::RenderMapWindowBg(Canvas &canvas, const RECT rc)
+
+void MapWindow::RenderStart(Canvas &canvas, const RECT rc)
 {
-  // do slow calculations before clearing the screen
-  // to reduce flicker
-  CalculateWaypointReachable();
+  CalculateOrigin(rc, DrawInfo, DerivedDrawInfo);
+  CalculateScreenPositionsWaypoints();
+  CalculateScreenPositionsTask();
   CalculateScreenPositionsAirspace();
   CalculateScreenPositionsThermalSources();
   CalculateScreenPositionsGroundline();
+  CalculateWaypointReachable();
+  if (BigZoom) {
+    BigZoom = false;
+  }
+}
 
+
+void MapWindow::RenderBackground(Canvas &canvas, const RECT rc)
+{
   if (!EnableTerrain || !DerivedDrawInfo.TerrainValid
       || !terrain.isTerrainLoaded() ) {
-
-    // JMW this isn't needed any more unless we're not drawing terrain
-
-    // display border and fill background..
     canvas.select(MapGfx.hBackgroundBrush);
     canvas.white_pen();
     canvas.rectangle(rc.left, rc.top, rc.right, rc.bottom);
@@ -74,13 +79,10 @@ void MapWindow::RenderMapWindowBg(Canvas &canvas, const RECT rc)
   canvas.black_brush();
   canvas.black_pen();
   canvas.select(MapWindowFont);
+}
 
-  // ground first...
-
-  if (BigZoom) {
-    BigZoom = false;
-  }
-
+void MapWindow::RenderMapLayer(Canvas &canvas, const RECT rc)
+{
   if ((EnableTerrain && (DerivedDrawInfo.TerrainValid)
        && terrain.isTerrainLoaded())
       || RASP.GetParameter()) {
@@ -115,81 +117,62 @@ void MapWindow::RenderMapWindowBg(Canvas &canvas, const RECT rc)
 
   // reset label over-write preventer
   label_block.reset();
+}
 
+
+void MapWindow::RenderAreas(Canvas &canvas, const RECT rc)
+{
   if (!TaskIsTemporary()) {
     DrawTaskAAT(canvas, rc, buffer_canvas);
   }
 
   // then airspace..
   if (OnAirSpace > 0) {
-    // VENTA3 default is true, always true at startup no regsave
     DrawAirSpace(canvas, rc, buffer_canvas);
   }
+}
 
+void MapWindow::RenderTrail(Canvas &canvas, const RECT rc)
+{
   if(TrailActive) {
-    // TODO enhancement: For some reason, the shadow drawing of the
-    // trail doesn't work in portrait mode.  No idea why.
-    if (1) {
-      double TrailFirstTime = DrawTrail(canvas, rc);
-      DrawTrailFromTask(canvas, rc, TrailFirstTime);
-    } else {
-      /*
-      //  Draw trail with white outline --- very slow!
-      // clear background bitmap
-      SelectObject(hDCTemp, GetStockObject(WHITE_BRUSH));
-      Rectangle(hDCTemp, rc.left, rc.top, rc.right, rc.bottom);
-
-      SetBkColor(hDCMask, RGB(0xff,0xff,0xff));
-
-      // draw trail on background bitmap
-      DrawTrail(hDCTemp, Orig_Aircraft, rc);
-      DrawTrailFromTask(hDCTemp, rc);
-
-      // make mask
-      BitBlt(hDCMask, 0, 0, rc.right-rc.left, rc.bottom-rc.top,
-      hDCTemp, rc.left, rc.top, SRCCOPY);
-
-      BitBlt(draw_canvasBg, rc.left, rc.top, rc.right, rc.bottom,
-      hDCMask, 1, 1, SRCAND);
-      BitBlt(draw_canvasBg, rc.left, rc.top, rc.right, rc.bottom,
-      hDCTemp, rc.left, rc.top, SRCPAINT);
-      BitBlt(draw_canvasBg, rc.left, rc.top, rc.right, rc.bottom,
-      hDCTemp, rc.left, rc.top, SRCAND);
-      */
-    }
+    double TrailFirstTime = DrawTrail(canvas, rc);
+    DrawTrailFromTask(canvas, rc, TrailFirstTime);
   }
-
   DrawThermalEstimate(canvas, rc);
+}
 
+void MapWindow::RenderTask(Canvas &canvas, const RECT rc)
+{
   if (TaskAborted) {
     DrawAbortedTask(canvas, rc);
   } else {
     DrawTask(canvas, rc);
   }
+  DrawWaypoints(canvas, rc);
+  marks->Draw(canvas, *this, rc);
+}
 
+
+void MapWindow::RenderGlide(Canvas &canvas, const RECT rc)
+{
   // draw red cross on glide through terrain marker
   if (FinalGlideTerrain && DerivedDrawInfo.TerrainValid) {
     DrawGlideThroughTerrain(canvas, rc);
   }
-
-  DrawWaypoints(canvas, rc);
-
-  DrawTeammate(canvas, rc);
-
+  /*
+  if ( (!TargetPan) && (!EnablePan) && (VisualGlide>0) ) {
+    DrawGlideCircle(canvas, rc);
+  }
+  */
   if ((EnableTerrain && (DerivedDrawInfo.TerrainValid))
       || RASP.GetParameter()) {
     DrawSpotHeights(canvas, *this, label_block);
   }
-
-  if (extGPSCONNECT) {
-    // TODO enhancement: don't draw offtrack indicator if showing spot heights
-    DrawProjectedTrack(canvas, rc);
-    DrawOffTrackIndicator(canvas, rc);
-    DrawBestCruiseTrack(canvas);
-  }
-  DrawBearing(canvas, rc, extGPSCONNECT);
+}
 
 
+void MapWindow::RenderAirborne(Canvas &canvas, const RECT rc)
+{
   // draw wind vector at aircraft
   if (!EnablePan) {
     DrawWindAtAircraft2(canvas, Orig_Aircraft, rc);
@@ -198,6 +181,7 @@ void MapWindow::RenderMapWindowBg(Canvas &canvas, const RECT rc)
   }
 
   // Draw traffic
+  DrawTeammate(canvas, rc);
   DrawFLARMTraffic(canvas, rc);
 
   // finally, draw you!
@@ -209,62 +193,61 @@ void MapWindow::RenderMapWindowBg(Canvas &canvas, const RECT rc)
   if (extGPSCONNECT) {
     DrawAircraft(canvas);
   }
-
-  /*
-  if ( (!TargetPan) && (!EnablePan) && (VisualGlide>0) ) {
-    DrawGlideCircle(canvas, rc);
-  }
-  */
-
-  // marks on top...
-  marks->Draw(canvas, *this, rc);
 }
 
-
-void MapWindow::RenderMapWindow(Canvas &canvas, const RECT rc)
+void MapWindow::RenderSymbology_upper(Canvas &canvas, const RECT rc)
 {
-  CalculateOrigin(rc, DrawInfo, DerivedDrawInfo);
-  CalculateScreenPositionsWaypoints();
-  CalculateScreenPositionsTask();
-
-  RenderMapWindowBg(canvas, rc);
-
   // overlays
   DrawCDI();
 
   canvas.select(MapWindowFont);
-
   DrawMapScale(canvas, rc, BigZoom);
   DrawMapScale2(canvas, rc);
-
   DrawCompass(canvas, rc);
 
   // JMW Experimental only! EXPERIMENTAL
 #if 0
-  //  #ifdef GNAV
   if (EnableAuxiliaryInfo) {
     DrawHorizon(canvas, rc);
   }
-  //  #endif
 #endif
 
   DrawFlightMode(canvas, rc);
-
   DrawThermalBand(canvas, rc);
-
   DrawFinalGlide(canvas,rc);
-
   //  DrawSpeedToFly(canvas, rc);
-
   DrawGPSStatus(canvas, rc);
 }
 
+void MapWindow::RenderSymbology_lower(Canvas &canvas, const RECT rc)
+{
+  if (extGPSCONNECT) {
+    // TODO enhancement: don't draw offtrack indicator if showing spot heights
+    DrawProjectedTrack(canvas, rc);
+    DrawOffTrackIndicator(canvas, rc);
+    DrawBestCruiseTrack(canvas);
+  }
+  DrawBearing(canvas, rc, extGPSCONNECT);
+}
 
-///////
+void MapWindow::Render(Canvas &canvas, const RECT rc)
+{
+  RenderStart(canvas, rc);
+  RenderBackground(canvas, rc);
+  RenderMapLayer(canvas, rc);
+  RenderAreas(canvas, rc);
+  RenderTrail(canvas, rc);
+  RenderTask(canvas, rc);
+  RenderGlide(canvas, rc);
 
+  RenderSymbology_lower(canvas, rc);
+  RenderAirborne(canvas, rc);
+  RenderSymbology_upper(canvas, rc);
+}
 
 //////////////////////////////////////////////////
 
+// TODO: make this a member 
 TerrainRenderer *terrain_renderer = NULL;
 
 void DrawTerrain(Canvas &canvas, 

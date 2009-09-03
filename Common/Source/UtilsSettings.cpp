@@ -118,15 +118,12 @@ void SettingsLeave() {
       //
       terrain.ServiceFullReload(GPS_INFO.Latitude,
 				GPS_INFO.Longitude);
-
-      map_window.ForceVisibilityScan();
     }
 
   if (TOPOLOGYFILECHANGED)
     {
       topology->Close();
       topology->Open();
-      map_window.ForceVisibilityScan();
     }
 
   if(AIRSPACEFILECHANGED)
@@ -134,7 +131,6 @@ void SettingsLeave() {
       CloseAirspace();
       ReadAirspace();
       SortAirspace();
-      map_window.ForceVisibilityScan();
     }
 
   if (POLARFILECHANGED) {

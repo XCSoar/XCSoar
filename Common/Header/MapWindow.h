@@ -89,11 +89,6 @@ class MapWindow
 
   bool register_class(HINSTANCE hInstance, const TCHAR* szWindowClass);
 
-  // inter-process, used only on file change
-  void ForceVisibilityScan() {
-    askVisibilityScan = true;
-  }
-
   // used by dlgTarget
   bool TargetDragged(double *longitude, double *latitude);
   bool SetTargetPan(bool dopan, int task_index);
@@ -152,8 +147,6 @@ class MapWindow
   bool      BigZoom;
   bool      askFullScreen;
   bool      MapFullScreen;
-  bool      askVisibilityScan; // called only by XCSoar.cpp on
-			              // settings reload
   void      StoreRestoreFullscreen(bool);
   void      ToggleFullScreenStart();
 
@@ -221,9 +214,8 @@ class MapWindow
   void ClearAirSpace(Canvas &dc, bool fill);
 
   // thread, main functions
-  void RenderMapWindow(Canvas &canvas, const RECT rc);
-  void RenderMapWindowBg(Canvas &canvas, const RECT rc);
-  void UpdateCaches(const bool force=false);
+  void Render(Canvas &canvas, const RECT rc);
+  void Idle(const bool force=false);
 
   // graphics vars
 
@@ -253,7 +245,17 @@ class MapWindow
   virtual bool on_mouse_up(int x, int y);
   virtual bool on_key_down(unsigned key_code);
   virtual void on_paint(Canvas& canvas);
-
+ private:
+  void RenderStart(Canvas &canvas, const RECT rc);
+  void RenderBackground(Canvas &canvas, const RECT rc);
+  void RenderMapLayer(Canvas &canvas, const RECT rc);
+  void RenderAreas(Canvas &canvas, const RECT rc);
+  void RenderTrail(Canvas &canvas, const RECT rc);
+  void RenderTask(Canvas &canvas, const RECT rc);
+  void RenderGlide(Canvas &canvas, const RECT rc);
+  void RenderAirborne(Canvas &canvas, const RECT rc);
+  void RenderSymbology_upper(Canvas &canvas, const RECT rc);
+  void RenderSymbology_lower(Canvas &canvas, const RECT rc);
 };
 
 #endif

@@ -133,8 +133,7 @@ MapWindow::MapWindow()
    BigZoom(true),
    LandableReachable(false),
    MapFullScreen(false),
-   askFullScreen(false),
-   askVisibilityScan(false)
+   askFullScreen(false)
 {
 
 }
@@ -210,14 +209,11 @@ void MapWindow::ExchangeBlackboard(const NMEA_INFO &nmea_info,
 }
 
 
-void MapWindow::UpdateCaches(const bool force) {
+void MapWindow::Idle(const bool do_force) {
   // map was dirtied while we were drawing, so skip slow process
   // (unless we haven't done it for 2000 ms)
   DWORD fpsTimeThis = ::GetTickCount();
   static DWORD fpsTimeMapCenter = 0;
-  bool do_force = force | askVisibilityScan;
-
-  askVisibilityScan = false; // reset
 
   // have some time, do shape file cache update if necessary
 
@@ -225,7 +221,7 @@ void MapWindow::UpdateCaches(const bool force) {
     topology->TriggerUpdateCaches();
     ScanVisibility(getSmartBounds());
   }
-  topology->ScanVisibility(*this, *getSmartBounds(), do_force);
+  topology->ScanVisibility(*this, *this, *getSmartBounds(), do_force);
 
   // JMW experimental jpeg2000 rendering/tile management
   // Must do this even if terrain is not displayed, because
@@ -278,7 +274,7 @@ void MapWindow::DrawThreadLoop(bool first_time) {
   if (gauge_flarm != NULL)
     gauge_flarm->Render(&DrawInfo);
 
-  RenderMapWindow(draw_canvas, MapRect);
+  Render(draw_canvas, MapRect);
 
   if (!first_time) {
     get_canvas().copy(draw_canvas);
@@ -286,7 +282,7 @@ void MapWindow::DrawThreadLoop(bool first_time) {
   }
   StopTimer();
 
-  UpdateCaches(first_time);
+  Idle(first_time);
 
   mutexRun.Unlock(); // release control
 }

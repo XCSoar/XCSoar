@@ -68,7 +68,8 @@ void TopologyStore::TriggerUpdateCaches() {
 }
 
 
-void TopologyStore::ScanVisibility(MapWindow &m_window,
+void TopologyStore::ScanVisibility(MapWindowProjection &m_projection,
+				   MapWindowTimer &m_timer,
 				   rectObj &_bounds_active,
 				   const bool force) {
   ScopeLock protect(*GetMutex());
@@ -76,13 +77,13 @@ void TopologyStore::ScanVisibility(MapWindow &m_window,
   // check if things have come into or out of scale limit
   for (int z=0; z<MAXTOPOLOGY; z++) {
     if (topology_store[z]) {
-      topology_store[z]->TriggerIfScaleNowVisible(m_window);
+      topology_store[z]->TriggerIfScaleNowVisible(m_projection);
     }
   }
   // ok, now update the caches
 
   if (topo_marks) {
-    topo_marks->updateCache(m_window, _bounds_active);
+    topo_marks->updateCache(m_projection, _bounds_active);
   } // projection, bounds
 
   if (EnableTopology) {
@@ -97,11 +98,11 @@ void TopologyStore::ScanVisibility(MapWindow &m_window,
     int total_shapes_visible = 0;
     for (int z=0; z<MAXTOPOLOGY; z++) {
       if (topology_store[z]) {
-	rta = m_window.RenderTimeAvailable() || force || !sneaked;
+	rta = m_timer.RenderTimeAvailable() || force || !sneaked;
 	if (topology_store[z]->triggerUpdateCache) {
 	  sneaked = true;
 	}
-	topology_store[z]->updateCache(m_window, _bounds_active, !rta);
+	topology_store[z]->updateCache(m_projection, _bounds_active, !rta);
 	total_shapes_visible += topology_store[z]->getNumVisible();
       }
     }
