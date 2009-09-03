@@ -37,6 +37,7 @@ Copyright_License {
 */
 
 #include "Calculations.h"
+#include "CalculationsWind.hpp"
 #include "Settings.hpp"
 #include "SettingsComputer.hpp"
 #include "Device/device.h"
@@ -65,11 +66,6 @@ Copyright_License {
 
 
 static void ThermalBand(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
-void DoWindCirclingMode(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
-			bool left);
-void DoWindCirclingSample(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
-void DoWindCirclingAltitude(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
-
 
 void SwitchZoomClimb(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
                      bool isclimb, bool left) {

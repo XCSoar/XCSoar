@@ -62,6 +62,7 @@ Copyright_License {
 #include "InfoBoxManager.h"
 #include "Asset.hpp"
 #include "GlideRatio.hpp"
+#include "CalculationsWind.hpp"
 
 #include <assert.h>
 #include <stdlib.h>

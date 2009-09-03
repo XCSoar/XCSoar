@@ -56,7 +56,8 @@ Copyright_License {
 #include "MapWindow.h"
 #include "McReady.h"
 #include "Interface.hpp"
-#include "Calculations.h" // TODO danger! SetWindEstimate
+#include "CalculationsWind.hpp"
+
 #include <stdlib.h>
 #include "GlideComputer.hpp"
 

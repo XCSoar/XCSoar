@@ -38,10 +38,24 @@ Copyright_License {
 #ifndef CALCULATIONS_WIND_HPP
 #define CALCULATIONS_WIND_HPP
 
-#include "Calculations.h"
+#include "NMEA/Info.h"
+#include "NMEA/Derived.hpp"
 
 void InitialiseCalculationsWind();
 void CloseCalculationsWind();
 void DoWindZigZag(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
+
+void
+DoWindCirclingMode(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
+                   bool left);
+
+void
+DoWindCirclingSample(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
+
+void
+DoWindCirclingAltitude(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
+
+void
+SetWindEstimate(const double speed, const double bearing, const int quality=6);
 
 #endif
