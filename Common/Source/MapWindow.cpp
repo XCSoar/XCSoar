@@ -354,11 +354,11 @@ DWORD MapWindow::_DrawThread ()
       mutexRun.Lock(); // take control
       StartTimer();
       DrawThreadLoop();
+      StopTimer();
       if (SmartBounds(false)) {
 	bounds_dirty = Idle(true); // this call is quick
       }
       mutexRun.Unlock(); // release control
-      StopTimer();
       continue;
     } 
     if (bounds_dirty && !drawTriggerEvent.test()) {
