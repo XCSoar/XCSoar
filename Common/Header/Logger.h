@@ -38,7 +38,7 @@ Copyright_License {
 #if !defined(AFX_LOGGER_H__695AAC30_F401_4CFF_9BD9_FE62A2A2D0D2__INCLUDED_)
 #define AFX_LOGGER_H__695AAC30_F401_4CFF_9BD9_FE62A2A2D0D2__INCLUDED_
 
-#include "XCSoar.h"
+#include <tchar.h>
 
 extern bool DisableAutoLogger;
 

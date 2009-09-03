@@ -36,7 +36,6 @@ Copyright_License {
 */
 
 #include "InfoBoxEvents.h"
-#include "XCSoar.h"
 #include "Protection.hpp"
 #include "Device/Parser.h"
 #include "Blackboard.hpp"

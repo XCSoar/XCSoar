@@ -38,8 +38,10 @@ Copyright_License {
 #if !defined(XCSOAR_DIALOGS_H)
 #define XCSOAR_DIALOGS_H
 
-#include "XCSoar.h"
 #include "WayPoint.hpp"
+
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
 
 void StartupScreen();
 

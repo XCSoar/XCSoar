@@ -37,7 +37,6 @@ Copyright_License {
 */
 
 #include "InfoBoxManager.h"
-#include "XCSoar.h"
 #include "InfoBox.h"
 #include "WindowControls.h"
 #include "Protection.hpp"
@@ -68,6 +67,7 @@ Copyright_License {
 #include "UtilsSystem.hpp"
 #include "MainWindow.hpp"
 #include "MapWindow.h"
+#include "Defines.h"
 
 // user setting
 bool EnableAuxiliaryInfo = false;

@@ -38,7 +38,10 @@ Copyright_License {
 #ifndef SCREEN_LABELBLOCK_HPP
 #define SCREEN_LABELBLOCK_HPP
 
-#include "XCSoar.h"
+#include "Sizes.h"
+
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
 
 class LabelBlock {
 public:

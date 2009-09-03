@@ -38,7 +38,6 @@ Copyright_License {
 #if !defined(XCSOAR_GLIDECOMPUTER_HPP)
 #define XCSOAR_GLIDECOMPUTER_HPP
 
-#include "XCSoar.h"
 #include "NMEA/Info.h"
 #include "NMEA/Derived.hpp"
 #include "FlightStatistics.hpp"

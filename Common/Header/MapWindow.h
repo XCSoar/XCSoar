@@ -37,7 +37,6 @@ Copyright_License {
 #if !defined(XCSOAR_MAPWINDOW_H)
 #define XCSOAR_MAPWINDOW_H
 
-#include "XCSoar.h"
 #include "MapWindowProjection.hpp"
 #include "MapWindowTimer.hpp"
 #include "Airspace.h"

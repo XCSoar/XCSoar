@@ -35,7 +35,6 @@ Copyright_License {
 }
 */
 
-#include "XCSoar.h"
 #include "Protection.hpp"
 #include "MainWindow.hpp"
 #include "SettingsComputer.hpp"

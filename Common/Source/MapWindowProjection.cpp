@@ -35,6 +35,7 @@ Copyright_License {
 }
 */
 
+#include "MapWindowProjection.hpp"
 #include "MapWindow.h"
 #include "Protection.hpp"
 #include "Math/FastMath.h"

@@ -37,7 +37,8 @@ Copyright_License {
 #ifndef INFOBOXLAYOUT_H
 #define INFOBOXLAYOUT_H
 
-#include "XCSoar.h"
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
 
 class InfoBoxLayout {
  public:

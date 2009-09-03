@@ -35,9 +35,8 @@ Copyright_License {
 }
 */
 
-#include "XCSoar.h"
-#include "Protection.hpp"
 #include "McReady.h"
+#include "Protection.hpp"
 #include "SettingsComputer.hpp"
 #include "Math/FastMath.h"
 #include "Math/Geometry.hpp"

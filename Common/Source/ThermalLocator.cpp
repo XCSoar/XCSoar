@@ -35,7 +35,6 @@ Copyright_License {
 }
 */
 
-#include "XCSoar.h"
 #include "ThermalLocator.h"
 #include "RasterTerrain.h"
 #include "Math/FastMath.h"

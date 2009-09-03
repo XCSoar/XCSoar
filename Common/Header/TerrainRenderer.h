@@ -38,7 +38,6 @@ Copyright_License {
 #ifndef TERRAIN_RENDERER_H
 #define TERRAIN_RENDERER_H
 
-#include "XCSoar.h"
 #include "Protection.hpp"
 #include "Screen/Ramp.hpp"
 

@@ -36,7 +36,6 @@ Copyright_License {
 */
 
 #include "Atmosphere.h"
-#include "XCSoar.h"
 #include "RasterTerrain.h"
 #include "Interface.hpp"
 

@@ -42,6 +42,7 @@ Copyright_License {
 #include "Screen/Canvas.hpp"
 #include "Screen/Window.hpp"
 #include "InfoBoxLayout.h"
+#include "options.h" /* for IBLSCALE() */
 
 #include <assert.h>
 

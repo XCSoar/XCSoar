@@ -37,8 +37,7 @@ Copyright_License {
 #ifndef ASSET_H
 #define ASSET_H
 
-#include "XCSoar.h"
-
+#include <tchar.h>
 
 // asset/registration data
 extern TCHAR strAssetNumber[];

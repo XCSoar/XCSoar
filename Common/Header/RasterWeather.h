@@ -38,7 +38,6 @@ Copyright_License {
 #ifndef RASTERWEATHER_H
 #define RASTERWEATHER_H
 
-#include "XCSoar.h"
 #include "RasterMap.h"
 #include "Protection.hpp"
 

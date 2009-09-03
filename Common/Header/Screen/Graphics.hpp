@@ -43,7 +43,6 @@ Copyright_License {
 #include "Screen/Color.hpp"
 #include "Screen/Pen.hpp"
 #include "Screen/Canvas.hpp"
-#include "XCSoar.h"
 #include "Airspace.h"
 #include "LabelBlock.hpp"
 

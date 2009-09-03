@@ -18,7 +18,6 @@
 #ifndef WINDSTORE_H
 #define WINDSTORE_H
 
-#include "XCSoar.h"
 #include "windmeasurementlist.h"
 #include "NMEA/Info.h"
 #include "NMEA/Derived.hpp"

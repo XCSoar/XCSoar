@@ -82,6 +82,7 @@ Copyright_License {
 #include "Persist.hpp"
 #include "Device/Parser.h"
 #include "MainWindow.hpp"
+#include "resource.h"
 
 GaugeVario *gauge_vario;
 GaugeFLARM *gauge_flarm;

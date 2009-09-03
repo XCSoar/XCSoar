@@ -36,7 +36,6 @@
 */
 
 #include "Logger.h"
-#include "XCSoar.h"
 #include "Version.hpp"
 #include "Protection.hpp"
 #include "Dialogs.h"

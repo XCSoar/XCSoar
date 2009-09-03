@@ -37,12 +37,12 @@ Copyright_License {
 #if !defined(XCSOAR_MAPWINDOW_PROJECTION_H)
 #define XCSOAR_MAPWINDOW_PROJECTION_H
 
-#include "XCSoar.h"
 #include "NMEA/Info.h"
 #include "NMEA/Derived.hpp"
-#include "Screen/Canvas.hpp"
 #include "Math/FastMath.h"
 #include "Units.hpp"
+
+class Canvas;
 
 class MapWindowProjection {
  public:

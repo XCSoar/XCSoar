@@ -39,7 +39,6 @@ Copyright_License {
 #include "InfoBoxManager.h"
 #include "ButtonLabel.h"
 #include "LogFile.hpp"
-#include "XCSoar.h"
 #include "SettingsUser.hpp"
 #include "Screen/Animation.hpp"
 #include "Registry.hpp"

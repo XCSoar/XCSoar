@@ -36,7 +36,6 @@ Copyright_License {
 */
 
 #include "Task.h"
-#include "XCSoar.h"
 #include "Protection.hpp"
 #include "Logger.h"
 #include "ReplayLogger.hpp"

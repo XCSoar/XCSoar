@@ -35,7 +35,6 @@ Copyright_License {
 }
 */
 
-#include "XCSoar.h"
 #include "Asset.hpp"
 #include "Registry.hpp"
 #include "UtilsText.hpp"
@@ -43,6 +42,7 @@ Copyright_License {
 #include "uniqueid.h"
 #include "UtilsSystem.hpp"
 #include "LocalPath.hpp"
+#include "Sizes.h"
 
 // Registration Data
 TCHAR strAssetNumber[MAX_LOADSTRING] = TEXT(""); //4G17DW31L0HY");

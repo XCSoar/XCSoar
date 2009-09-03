@@ -36,7 +36,6 @@ Copyright_License {
 */
 
 #include "WindowControls.h"
-#include "XCSoar.h"
 #include "Interface.hpp"
 #include "Dialogs/dlgTools.h"
 #ifndef ALTAIRSYNC
@@ -54,6 +53,7 @@ Copyright_License {
 #include "Screen/Viewport.hpp"
 #include "Screen/PaintCanvas.hpp"
 #include "DataField/Base.hpp"
+#include "resource.h"
 
 #ifdef PNA
 #include "Asset.hpp"

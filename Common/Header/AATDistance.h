@@ -39,7 +39,6 @@ Copyright_License {
 #ifndef AATDISTANCE_H
 #define AATDISTANCE_H
 
-#include "XCSoar.h"
 #include "NMEA/Info.h"
 #include "NMEA/Derived.hpp"
 

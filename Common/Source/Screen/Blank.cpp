@@ -36,7 +36,6 @@ Copyright_License {
 */
 
 #include "Screen/Blank.hpp"
-#include "XCSoar.h"
 
 #ifdef HAVE_BLANK
 

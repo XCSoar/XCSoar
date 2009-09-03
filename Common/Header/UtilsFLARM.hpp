@@ -37,7 +37,7 @@ Copyright_License {
 #if !defined(XCSOAR_UTILS_FLARM_H)
 #define XCSOAR_UTILS_FLARM_H
 
-#include "XCSoar.h"
+#include <tchar.h>
 
 void OpenFLARMDetails();
 void CloseFLARMDetails();

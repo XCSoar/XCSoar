@@ -35,10 +35,8 @@ Copyright_License {
 }
 */
 
-
-#include "XCSoar.h"
-#include "Protection.hpp"
 #include "OnLineContest.h"
+#include "Protection.hpp"
 #include "Math/FastMath.h"
 #include "McReady.h"
 #include "Math/Earth.hpp"

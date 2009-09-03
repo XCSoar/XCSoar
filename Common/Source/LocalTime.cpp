@@ -36,7 +36,6 @@ Copyright_License {
 */
 
 #include "LocalTime.hpp"
-#include "XCSoar.h"
 #include "Device/Parser.h"
 #include "SettingsTask.hpp"
 #include "WayPoint.hpp"

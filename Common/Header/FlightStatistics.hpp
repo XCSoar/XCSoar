@@ -38,7 +38,6 @@ Copyright_License {
 #ifndef FLIGHT_STATISTICS_HPP
 #define FLIGHT_STATISTICS_HPP
 
-#include "XCSoar.h"
 #include "Math/leastsqs.h"
 #include "Task.h"
 #include "Screen/Canvas.hpp"

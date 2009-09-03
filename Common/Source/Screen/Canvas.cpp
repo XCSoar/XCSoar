@@ -39,6 +39,7 @@ Copyright_License {
 #include "Screen/Util.hpp"
 #include "InfoBoxLayout.h"
 #include "Compatibility/gdi.h"
+#include "options.h" /* for IBLSCALE() */
 
 #ifdef PNA
 #include "Asset.hpp" /* for needclipping */

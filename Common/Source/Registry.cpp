@@ -36,7 +36,6 @@ Copyright_License {
 */
 
 #include "Registry.hpp"
-#include "XCSoar.h"
 #include "Screen/Animation.hpp"
 #include "Screen/Blank.hpp"
 #include "Airspace.h"

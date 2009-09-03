@@ -37,7 +37,8 @@ Copyright_License {
 
 #ifndef XCSOAR_POLAR_HISTORICAL_HPP
 #define XCSOAR_POLAR_HISTORICAL_HPP
-#include "XCSoar.h"
+
+#include <tchar.h>
 
 #define  POLARUSEWINPILOTFILE  6    // if this polat is selected use the winpilot file
 

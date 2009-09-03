@@ -42,6 +42,7 @@ Copyright_License {
 #include "UtilsText.hpp"
 #include "LogFile.hpp"
 #include "Registry.hpp"
+#include "Sizes.h"
 
 typedef struct {
 	TCHAR *key;

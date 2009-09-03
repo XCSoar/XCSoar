@@ -36,7 +36,6 @@ Copyright_License {
 */
 
 #include "MapWindow.h"
-#include "XCSoar.h"
 #include "Interface.hpp"
 #include "LogFile.hpp"
 #include "Protection.hpp"
@@ -69,6 +68,7 @@ Copyright_License {
 #include "Calculations.h" // TODO danger! for InAATTurnSector
 #include "RasterWeather.h"
 #include "options.h" /* for DEBUG_VIRTUALKEYS */
+#include "Defines.h" /* for DEBUG_VIRTUALKEYS */
 
 #ifdef PNA
 #include "Asset.hpp"
