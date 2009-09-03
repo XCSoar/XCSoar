@@ -77,7 +77,8 @@ void MapWindowProjection::InitialiseScaleList(void) {
   _RequestedMapScale = LimitMapScale(_RequestedMapScale);
 }
 
-bool MapWindowProjection::WaypointInScaleFilter(int i) {
+bool MapWindowProjection::WaypointInScaleFilter(int i) const
+{
   return ((WayPointList[i].Zoom >= MapScale*10)
           || (WayPointList[i].Zoom == 0))
     && (MapScale <= 10);
@@ -86,7 +87,8 @@ bool MapWindowProjection::WaypointInScaleFilter(int i) {
 
 bool MapWindowProjection::PointInRect(const double &x,
 				      const double &y,
-				      const rectObj &bounds) {
+				      const rectObj &bounds) const
+{
   if ((x> bounds.minx) &&
       (x< bounds.maxx) &&
       (y> bounds.miny) &&
@@ -98,7 +100,8 @@ bool MapWindowProjection::PointInRect(const double &x,
 
 
 bool MapWindowProjection::LonLatVisible(const double &lon,
-					const double &lat) {
+					const double &lat) const
+{
   if ((lon> screenbounds_latlon.minx) &&
       (lon< screenbounds_latlon.maxx) &&
       (lat> screenbounds_latlon.miny) &&
@@ -109,7 +112,7 @@ bool MapWindowProjection::LonLatVisible(const double &lon,
 }
 
 bool MapWindowProjection::LonLat2ScreenIfVisible(const double &lon, const double &lat,
-						 POINT *sc) 
+						 POINT *sc) const
 {
   if (LonLatVisible(lon, lat)) {
     LonLat2Screen(lon, lat, *sc);
@@ -120,7 +123,8 @@ bool MapWindowProjection::LonLat2ScreenIfVisible(const double &lon, const double
 }
 
 
-bool MapWindowProjection::PointVisible(const POINT &P)
+bool
+MapWindowProjection::PointVisible(const POINT &P) const
 {
   if(( P.x >= MapRect.left )
      &&
@@ -136,7 +140,9 @@ bool MapWindowProjection::PointVisible(const POINT &P)
 }
 
 
-rectObj MapWindowProjection::CalculateScreenBounds(double scale) {
+rectObj
+MapWindowProjection::CalculateScreenBounds(double scale) const
+{
   // compute lat lon extents of visible screen
   rectObj sb;
 
@@ -224,7 +230,7 @@ rectObj MapWindowProjection::CalculateScreenBounds(double scale) {
 
 void MapWindowProjection::Screen2LonLat(const int &x,
 					const int &y,
-					double &X, double &Y)
+					double &X, double &Y) const
 {
   int sx = x-(int)Orig_Screen.x;
   int sy = y-(int)Orig_Screen.y;
@@ -235,8 +241,8 @@ void MapWindowProjection::Screen2LonLat(const int &x,
 
 void MapWindowProjection::LonLat2Screen(const double &lon,
 					const double &lat,
-					POINT &sc) {
-
+					POINT &sc) const
+{
   int Y = Real2Int((PanLatitude-lat)*DrawScale);
   int X = Real2Int((PanLongitude-lon)*fastcosine(lat)*DrawScale);
 
@@ -250,7 +256,8 @@ void MapWindowProjection::LonLat2Screen(const double &lon,
 void MapWindowProjection::LonLat2Screen(pointObj *ptin,
 					POINT *ptout,
 					const int n,
-					const int skip) {
+					const int skip) const
+{
   static double lastangle = -1;
   static int cost=1024, sint=0;
   const double mDisplayAngle = DisplayAngle;
@@ -448,13 +455,16 @@ void MapWindow::Event_Pan(int vswitch) {
 }
 
 
-double MapWindowProjection::GetScreenDistanceMeters() {
+double
+MapWindowProjection::GetScreenDistanceMeters() const
+{
   return DistancePixelsToMeters(max(MapRectBig.right-MapRectBig.left,
 				    MapRectBig.bottom-MapRectBig.top));
 }
 
-
-int MapWindowProjection::GetMapResolutionFactor(void) {
+int
+MapWindowProjection::GetMapResolutionFactor(void) const
+{
   return IBLSCALE(30);
 }
 
