@@ -47,11 +47,9 @@ void ReadLanguageFile(void);
 void SetWindowText_gettext(HWND hDlg, int entry);
 const TCHAR* gettext(const TCHAR* text);
 
-#ifdef WINDOWSPC
-#ifndef NDEBUG
+#if defined(WINDOWSPC) && !defined(NDEBUG) && defined(_MSC_VER)
 //#define DEBUG_TRANSLATIONS
 #pragma warning( disable : 4786 ) 
-#endif
 #endif
 
 void WriteMissingTranslations(void);
