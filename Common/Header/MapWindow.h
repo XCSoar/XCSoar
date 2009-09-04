@@ -47,6 +47,7 @@ Copyright_License {
 #include "Screen/LabelBlock.hpp"
 #include "Protection.hpp"
 #include "Blackboard.hpp"
+#include "PeriodClock.hpp"
 
 class MapWindowBase {
  public:
@@ -72,6 +73,8 @@ class MapWindow
   public MapWindowBlackboard,
   public MapWindowTimer,
   public MapDataClient {
+  PeriodClock mouse_down_clock;
+
  public:
   MapWindow();
 

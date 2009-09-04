@@ -431,7 +431,6 @@ bool MapWindow::on_destroy()
 static double Xstart, Ystart;
 static int XstartScreen, YstartScreen;
 static bool ignorenext=true;
-static DWORD dwDownTime= 0L, dwUpTime= 0L, dwInterval= 0L;
 
 bool MapWindow::on_mouse_double(int x, int y)
 {
@@ -440,7 +439,7 @@ bool MapWindow::on_mouse_double(int x, int y)
   // VNT TODO: do not handle this event and remove CS_DBLCLKS in register class.
   // Only handle timed clicks in BUTTONDOWN with no proximity.
   //
-  dwDownTime = GetTickCount();
+  mouse_down_clock.update();
 #ifndef DISABLEAUDIO
   if (EnableSoundModes) PlayResource(TEXT("IDR_WAV_CLICK"));
 #endif
@@ -476,7 +475,7 @@ bool MapWindow::on_mouse_move(int x, int y)
 bool MapWindow::on_mouse_down(int x, int y)
 {
   ResetDisplayTimeOut();
-  dwDownTime = GetTickCount();
+  mouse_down_clock.update();
   if (ignorenext) return true;
 
   // TODO VNT move Screen2LonLat in LBUTTONUP after making sure we
@@ -513,15 +512,18 @@ bool MapWindow::on_mouse_down(int x, int y)
 
 bool MapWindow::on_mouse_up(int x, int y)
 {
-  if (ignorenext||dwDownTime==0) {
+  if (ignorenext) {
     ignorenext=false;
     return true;
   }
+
+  int dwInterval = mouse_down_clock.elapsed();
+  mouse_down_clock.reset();
+  if (dwInterval < 0)
+    return true;
+
   RECT rc = MapRect;
   bool my_target_pan;
-  dwUpTime = GetTickCount();
-  dwInterval=dwUpTime-dwDownTime;
-  dwDownTime=0; // do it once forever
 
   mutexTaskData.Lock();
   my_target_pan = TargetPan;
@@ -659,7 +661,7 @@ bool MapWindow::on_key_down(unsigned key_code)
     return true;
   }
 #endif
-  dwDownTime= 0L;
+  mouse_down_clock.reset();
   if (InputEvents::processKey(key_code)) {
     return true; // don't go to default handler
   }
