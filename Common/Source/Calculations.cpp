@@ -70,7 +70,6 @@ Copyright_License {
 #include "BestAlternate.hpp"
 #include "Persist.hpp"
 #include "Airspace.h"
-#include "CalculationsAirspace.hpp"
 #include "ConditionMonitor.hpp"
 #include "MapWindowProjection.hpp"
 

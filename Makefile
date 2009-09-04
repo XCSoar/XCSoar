@@ -422,7 +422,6 @@ OBJS	:=\
 	$(SRC)/ConditionMonitor.o 	\
 	$(SRC)/Calibration.o 		\
 	$(SRC)/Calculations.o 		\
-	$(SRC)/CalculationsAutoMc.o 	\
 	$(SRC)/FlarmIdFile.o 		\
 	$(SRC)/FlarmCalculations.o 	\
 	$(SRC)/GlideComputer.o 		\
