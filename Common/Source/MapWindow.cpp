@@ -357,9 +357,7 @@ DWORD MapWindow::_DrawThread ()
       mutexRun.Unlock(); // release control
       continue;
     } 
-    // don't spend too much time checking bounds_dirty
-    Sleep(100);
-  } while (!closeTriggerEvent.test());
+  } while (!closeTriggerEvent.wait(500));
 
   return 0;
 }
