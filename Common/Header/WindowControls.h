@@ -360,7 +360,6 @@ class WndListFrame:public WndFrame{
 	  RECT rcScrollBar;
     int mMouseScrollBarYOffset; // where in the scrollbar button was mouse down at
     bool mMouseDown;
-    int LastMouseMoveTime;
 };
 
 class WndOwnerDrawFrame:public WndFrame{

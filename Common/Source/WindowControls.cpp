@@ -2233,7 +2233,6 @@ WndListFrame::WndListFrame(WindowControl *Owner, TCHAR *Name, int X, int Y,
   SetForeColor(GetOwner()->GetForeColor());
   SetBackColor(GetOwner()->GetBackColor());
   mMouseDown = false;
-  LastMouseMoveTime=0;
   ScrollbarWidth=-1;
   ScrollbarTop=-1;
 
@@ -2798,8 +2797,7 @@ WndListFrame::on_mouse_move(int x, int y, unsigned keys)
 {
   static bool bMoving = false;
 
-  int dT = GetTickCount()-LastMouseMoveTime;
-  if (dT > -1 && !bMoving)
+  if (!bMoving)
   {
     bMoving=true;
 
@@ -2824,7 +2822,6 @@ WndListFrame::on_mouse_move(int x, int y, unsigned keys)
     {
       mMouseDown = false; // force re-click of scroll bar
     }
-    LastMouseMoveTime = GetTickCount();
     bMoving=false;
   } // Tickcount
   return false;
