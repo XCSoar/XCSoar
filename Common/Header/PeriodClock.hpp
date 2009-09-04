@@ -59,6 +59,24 @@ public:
   PeriodClock():last(0) {}
 
   /**
+   * Resets the clock.
+   */
+  void reset() {
+    last = 0;
+  }
+
+  /**
+   * Returns the number of milliseconds elapsed since the last
+   * update().  Returns -1 if update() was never called.
+   */
+  int elapsed() const {
+    if (last == 0)
+      return -1;
+
+    return ::GetTickCount() - last;
+  }
+
+  /**
    * Checks whether the specified duration has passed since the last
    * update.
    *
