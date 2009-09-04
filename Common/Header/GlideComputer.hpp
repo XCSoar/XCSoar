@@ -218,6 +218,7 @@ protected:
   virtual void SaveTaskSpeed(double val);
   virtual void SetLegStart();
   virtual void AnnounceWayPointSwitch(bool do_advance);
+
 public:
   void Initialise();
   bool ProcessGPS(); // returns true if idle needs processing
@@ -234,6 +235,9 @@ public:
   SnailTrail &GetSnailTrail() { return snail_trail; };
   OLCOptimizer &GetOLC() { return olc; };
   FlightStatistics &GetFlightStats() { return flightstats; };
+private:
+  void CalculateTeammateBearingRange();
+  void CalculateOwnTeamCode();
 };
 
 

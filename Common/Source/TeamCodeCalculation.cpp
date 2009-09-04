@@ -231,3 +231,4 @@ void CalcTeammateBearingRange(double ownBear, double ownDist, TCHAR *TeamMateCod
 
 	CalcTeamMatePos(ownBear, ownDist, calcBearing, calcRange, bearToMate, distToMate);
 }
+

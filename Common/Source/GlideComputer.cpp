@@ -119,8 +119,8 @@ bool GlideComputer::ProcessGPS()
   }
   ProcessVertical();
 
-  CalculateOwnTeamCode(&Basic(), &SetCalculated());
-  CalculateTeammateBearingRange(&Basic(), &SetCalculated());
+  CalculateOwnTeamCode();
+  CalculateTeammateBearingRange();
 
   DoLogging();
   vegavoice.Update(&Basic(), &Calculated());
@@ -186,3 +186,111 @@ GlideComputer::SetLegStart()
     GlideComputerTask::SetLegStart();
     GlideComputerStats::SetLegStart();
 }
+
+
+/////
+#include "Math/NavFunctions.hpp" // used for team code
+#include "InputEvents.h"
+#include "SettingsComputer.hpp"
+#include "Settings.hpp"
+#include "WayPoint.hpp"
+#include "PeriodClock.hpp"
+#include "Math/Earth.hpp"
+
+static PeriodClock last_team_code_update;
+DWORD lastTeamCodeUpdateTime = GetTickCount();
+
+void
+GlideComputer::CalculateOwnTeamCode()
+{
+  if (!WayPointList) return;
+  if (TeamCodeRefWaypoint < 0) return;
+
+  if (!last_team_code_update.check_update(10000))
+    return;
+
+  // JMW TODO: locking
+  double distance = 0;
+  double bearing = 0;
+  TCHAR code[10];
+
+  LL_to_BearRange(WayPointList[TeamCodeRefWaypoint].Latitude,
+                  WayPointList[TeamCodeRefWaypoint].Longitude,
+                  Basic().Latitude,
+                  Basic().Longitude,
+                  &bearing, &distance);
+
+  GetTeamCode(code, bearing, distance);
+
+  SetCalculated().TeammateBearing = bearing;
+  SetCalculated().TeammateRange = distance;
+
+  _tcsncpy(SetCalculated().OwnTeamCode, code, 5);
+}
+
+void
+GlideComputer::CalculateTeammateBearingRange()
+{
+  // JMW TODO: locking
+
+  static bool InTeamSector = false;
+
+  if (!WayPointList) return;
+  if (TeamCodeRefWaypoint < 0) return;
+
+  double ownDistance = 0;
+  double ownBearing = 0;
+  double mateDistance = 0;
+  double mateBearing = 0;
+
+  LL_to_BearRange(WayPointList[TeamCodeRefWaypoint].Latitude,
+                  WayPointList[TeamCodeRefWaypoint].Longitude,
+                  Basic().Latitude,
+                  Basic().Longitude,
+                  &ownBearing, &ownDistance);
+
+  if (TeammateCodeValid)
+    {
+
+      CalcTeammateBearingRange(ownBearing, ownDistance,
+                               TeammateCode,
+                               &mateBearing, &mateDistance);
+
+      // TODO code ....change the result of CalcTeammateBearingRange to do this !
+      if (mateBearing > 180)
+        {
+          mateBearing -= 180;
+        }
+      else
+        {
+          mateBearing += 180;
+        }
+
+
+      SetCalculated().TeammateBearing = mateBearing;
+      SetCalculated().TeammateRange = mateDistance;
+
+      FindLatitudeLongitude(Basic().Latitude,
+                            Basic().Longitude,
+                            mateBearing,
+                            mateDistance,
+                            &TeammateLatitude,
+                            &TeammateLongitude);
+
+      if (mateDistance < 100 && InTeamSector==false)
+        {
+          InTeamSector=true;
+          InputEvents::processGlideComputer(GCE_TEAM_POS_REACHED);
+        }
+      else if (mateDistance > 300)
+        {
+          InTeamSector = false;
+        }
+    }
+  else
+    {
+      SetCalculated().TeammateBearing = 0;
+      SetCalculated().TeammateRange = 0;
+    }
+}
+
