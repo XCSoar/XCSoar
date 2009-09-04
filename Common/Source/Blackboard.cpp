@@ -163,6 +163,7 @@ DeviceBlackboard::SetNAVWarning(bool val)
   mutexFlightData.Unlock();
 }
 
+#ifdef _SIM_
 void
 DeviceBlackboard::ProcessSimulation()
 {
@@ -181,7 +182,7 @@ DeviceBlackboard::ProcessSimulation()
   SetBasic().Second = (tsec-Basic().Hour*3600-Basic().Minute*60);
   mutexFlightData.Unlock();
 }
-
+#endif /* _SIM_ */
 
 void
 DeviceBlackboard::SetSpeed(double val)
