@@ -68,7 +68,7 @@ protected:
 private:
   /* copy constructor not allowed */
   Canvas(const Canvas &canvas) {}
-  Canvas &operator=(const Canvas &canvas) {}
+  Canvas &operator=(const Canvas &canvas) { return *this; }
 
 public:
   Canvas():dc(NULL) {}

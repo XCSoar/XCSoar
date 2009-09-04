@@ -55,7 +55,7 @@ protected:
 private:
   /* copy constructor not allowed */
   Window(const Window &window) {}
-  Window &operator=(const Window &window) {}
+  Window &operator=(const Window &window) { return *this; }
 
 public:
   Window():hWnd(NULL), prev_wndproc(NULL) {}
