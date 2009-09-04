@@ -198,7 +198,6 @@ GlideComputer::SetLegStart()
 #include "Math/Earth.hpp"
 
 static PeriodClock last_team_code_update;
-DWORD lastTeamCodeUpdateTime = GetTickCount();
 
 void
 GlideComputer::CalculateOwnTeamCode()
