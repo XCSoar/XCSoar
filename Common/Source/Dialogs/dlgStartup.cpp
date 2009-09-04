@@ -48,7 +48,6 @@ Copyright_License {
 static WndForm *wf=NULL;
 static WndOwnerDrawFrame *wSplash=NULL;
 static HBITMAP hSplash;
-extern HINSTANCE hInst;
 
 static void
 OnSplashPaint(WindowControl *Sender, Canvas &canvas)
