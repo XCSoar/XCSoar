@@ -141,7 +141,7 @@ void SettingsLeave() {
       || TERRAINFILECHANGED
       || TOPOLOGYFILECHANGED
       ) {
-    CloseProgressDialog();
+    XCSoarInterface::CloseProgressDialog();
     XCSoarInterface::main_window.map.set_focus();
   }
 

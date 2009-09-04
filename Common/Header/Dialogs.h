@@ -45,13 +45,6 @@ Copyright_License {
 
 void StartupScreen();
 
-HWND CreateProgressDialog(const TCHAR *text);
-void CloseProgressDialog();
-void StepProgressDialog();
-BOOL SetProgressStepSize(int nSize);
-void StartHourglassCursor();
-void StopHourglassCursor();
-
 bool dlgAirspaceWarningShowDlg(bool force);
 int dlgWayPointSelect(double lon=0.0, double lat=90.0, int type=-1, int FilterNear=0);
 int dlgAirspaceColoursShowModal(void);

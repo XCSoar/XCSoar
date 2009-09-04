@@ -47,6 +47,7 @@ Copyright_License {
 #include "LocalPath.hpp"
 #include "LogFile.hpp"
 #include "WayPoint.hpp"
+#include "Interface.hpp"
 
 #include <zzip/lib.h>
 #include "wcecompat/ts_string.h"
@@ -222,7 +223,7 @@ void ParseAirfieldDetails() {
 	inDetails = TRUE;
 
         if (k % 20 == 0) {
-          StepProgressDialog();
+	  XCSoarInterface::StepProgressDialog();
         }
         k++;
 
@@ -263,7 +264,7 @@ void ReadAirfieldFile() {
 
   StartupStore(TEXT("ReadAirfieldFile\n"));
 
-  CreateProgressDialog(gettext(TEXT("Loading Airfield Details File...")));
+  XCSoarInterface::CreateProgressDialog(gettext(TEXT("Loading Airfield Details File...")));
 
   {
     OpenAirfieldDetails();

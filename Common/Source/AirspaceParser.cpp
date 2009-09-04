@@ -38,6 +38,7 @@ Copyright_License {
 */
 
 #include "Airspace.h"
+#include "Interface.hpp"
 #include "Dialogs.h"
 #include "Language.hpp"
 #include "UtilsText.hpp"
@@ -192,16 +193,16 @@ void ReadAirspace(ZZIP_FILE *fp)
 
   airspace_QNH = QNH;
 
-  CreateProgressDialog(gettext(TEXT("Loading Airspace File...")));
+  XCSoarInterface::CreateProgressDialog(gettext(TEXT("Loading Airspace File...")));
   // Need step size finer than default 10
-  SetProgressStepSize(5);
+  XCSoarInterface::SetProgressStepSize(5);
   dwStep = zzip_file_size(fp) / 10L;
 
   TempArea.FirstPoint = NumberOfAirspacePoints;	// JG 10-Nov-2005
 
   bFillMode = false;
   bWaiting = true;
-  StepProgressDialog();
+  XCSoarInterface::StepProgressDialog();
   while((nLineType = GetNextLine(fp, TempString)) >= 0)
   {
     Tock++;
@@ -211,7 +212,7 @@ void ReadAirspace(ZZIP_FILE *fp)
         dwPos = zzip_tell(fp);
         if ((dwPos - dwOldPos) >= dwStep)
           {
-            StepProgressDialog();
+	    XCSoarInterface::StepProgressDialog();
             dwOldPos = dwPos;
           }
       }
@@ -319,7 +320,7 @@ void ReadAirspace(ZZIP_FILE *fp)
   bFillMode = true;
   bWaiting = true;
   dwOldPos	= 0L;
-  StepProgressDialog();
+  XCSoarInterface::StepProgressDialog();
   CenterY = CenterX = 0;
   Rotation = 1;
 
@@ -332,7 +333,7 @@ void ReadAirspace(ZZIP_FILE *fp)
         dwPos = zzip_tell(fp);
         if ((dwPos - dwOldPos) >= dwStep)
           {
-            StepProgressDialog();
+            XCSoarInterface::StepProgressDialog();
             dwOldPos = dwPos;
           }
       }

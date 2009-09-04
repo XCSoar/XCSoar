@@ -272,7 +272,7 @@ static void ReadWayPointFile(ZZIP_FILE *fp, const TCHAR *CurrentWpFileName)
 
   HWND hProgress;
 
-  hProgress = CreateProgressDialog(gettext(TEXT("Loading Waypoints File...")));
+  hProgress = XCSoarInterface::CreateProgressDialog(gettext(TEXT("Loading Waypoints File...")));
 
   fSize = zzip_file_size(fp);
 
@@ -297,7 +297,7 @@ static void ReadWayPointFile(ZZIP_FILE *fp, const TCHAR *CurrentWpFileName)
 
     if (nTrigger < (int)fPos){
       nTrigger += (fSize/10);
-      StepProgressDialog();
+      XCSoarInterface::StepProgressDialog();
     }
 
     if (_tcsstr(TempString, TEXT("**")) == TempString) // Look For Comment

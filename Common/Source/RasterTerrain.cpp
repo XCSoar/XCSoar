@@ -38,7 +38,7 @@ Copyright_License {
 #include "RasterTerrain.h"
 #include "RasterWeather.h"
 #include "LogFile.hpp"
-#include "Dialogs.h"
+#include "Interface.hpp"
 #include "Language.hpp"
 #include "Math/FastMath.h"
 #include "Registry.hpp"
@@ -53,8 +53,8 @@ void RasterTerrain::OpenTerrain(void)
   terrain_initialised = false;
 
   StartupStore(TEXT("OpenTerrain\n"));
-  CreateProgressDialog(gettext(TEXT("Loading Terrain File...")));
-  SetProgressStepSize(2);
+  XCSoarInterface::CreateProgressDialog(gettext(TEXT("Loading Terrain File...")));
+  XCSoarInterface::SetProgressStepSize(2);
 
   TCHAR  szFile[MAX_PATH] = TEXT("\0");
 
@@ -209,7 +209,7 @@ void RasterTerrain::ServiceFullReload(double lat, double lon) {
 
   Lock();
   if (TerrainMap) {
-    CreateProgressDialog(gettext(TEXT("Loading terrain tiles...")));
+    XCSoarInterface::CreateProgressDialog(gettext(TEXT("Loading terrain tiles...")));
     TerrainMap->ServiceFullReload(lat, lon);
   }
   Unlock();

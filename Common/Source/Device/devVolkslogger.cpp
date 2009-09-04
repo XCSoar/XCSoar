@@ -44,7 +44,7 @@ Copyright_License {
 #include "Device/device.h"
 #include "XCSoar.h"
 #include "Protection.hpp"
-#include "Dialogs.h"
+#include "Interface.hpp"
 #include "Language.hpp"
 #include "SettingsTask.hpp"
 #include "UtilsText.hpp"
@@ -128,7 +128,7 @@ BOOL VLDeclAddWayPoint(PDeviceDescriptor_t d, const WAYPOINT *wp);
 
 BOOL VLDeclare(PDeviceDescriptor_t d, Declaration_t *decl){
 
-  CreateProgressDialog(gettext(TEXT("Comms with Volkslogger")));
+  XCSoarInterface::CreateProgressDialog(gettext(TEXT("Comms with Volkslogger")));
 
   vl.set_device(d);
   nturnpoints = 0;
@@ -257,7 +257,7 @@ BOOL VLDeclare(PDeviceDescriptor_t d, Declaration_t *decl){
 
   vl.close(1);
 
-  CloseProgressDialog();
+  XCSoarInterface::CloseProgressDialog();
 
   return ok;
 }

@@ -1,9 +1,12 @@
 #include "jasper/jpc_rtc.h"
 #include "jasper/RasterTile.h"
+#include "Interface.hpp"
 
 RasterTileCache *raster_tile_current = 0;
 
-extern void StepProgressDialog(void);
+static void StepProgressDialog(void) {
+  XCSoarInterface::StepProgressDialog();
+}
 
 extern "C" {
 

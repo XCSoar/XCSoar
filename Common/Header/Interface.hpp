@@ -79,9 +79,20 @@ public:
   static void AfterStartup();
   static void Shutdown();
   static bool Startup (HINSTANCE, LPTSTR lpCmdLine);
+
+  static HWND CreateProgressDialog(const TCHAR *text);
+  static void CloseProgressDialog();
+  static void StepProgressDialog();
+  static BOOL SetProgressStepSize(int nSize);
+  static void StartHourglassCursor();
+  static void StopHourglassCursor();
+
 private:
   static void PreloadInitialisation(bool ask);
   static void StartupInfo();
+  static HWND hProgress;
+  static HWND hWndCurtain;
+  static HCURSOR oldCursor;
 };
 
 #endif

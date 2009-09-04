@@ -775,7 +775,7 @@ static CallBackTableEntry_t CallBackTable[]={
 
 void dlgAirspaceSelect(void) {
 
-  StartHourglassCursor();
+  XCSoarInterface::StartHourglassCursor();
 
   UpLimit = 0;
   LowLimit = 0;
@@ -826,7 +826,7 @@ void dlgAirspaceSelect(void) {
 
   wf->SetTimerNotify(OnTimerNotify);
 
-  StopHourglassCursor();
+  XCSoarInterface::StopHourglassCursor();
   wf->ShowModal();
 
   free(AirspaceSelectInfo);

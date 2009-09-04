@@ -45,7 +45,7 @@ Copyright_License {
 #include "Registry.hpp"
 #include "DataField/Enum.hpp"
 #include "MainWindow.hpp"
-
+#include "Interface.hpp"
 #include <assert.h>
 
 extern void dlgVegaDemoShowModal(void);
@@ -92,7 +92,7 @@ static bool VegaConfigurationUpdated(const TCHAR *name, bool first,
 
 #if (WINDOWSPC<1)
   if (first) {
-    StepProgressDialog();
+    XCSoarInterface::StepProgressDialog();
   }
 #endif
 
@@ -1080,13 +1080,13 @@ bool dlgConfigurationVarioShowModal(void){
 
   /////////
 
-  CreateProgressDialog(gettext(TEXT("Reading vario settings...")));
+  XCSoarInterface::CreateProgressDialog(gettext(TEXT("Reading vario settings...")));
   // Need step size finer than default 10
-  SetProgressStepSize(2);
+  XCSoarInterface::SetProgressStepSize(2);
 
   UpdateParameters(true);
 
-  CloseProgressDialog();
+  XCSoarInterface::CloseProgressDialog();
 
   /////////
 

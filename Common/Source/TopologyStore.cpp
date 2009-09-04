@@ -48,6 +48,7 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "SettingsUser.hpp" // for EnableTopology
 #include <assert.h>
+#include "Interface.hpp"
 
 #include "wcecompat/ts_string.h"
 // TODO code: check ts_string does the right thing
@@ -130,7 +131,7 @@ void TopologyStore::Draw(Canvas &canvas, MapWindow &m_window, const RECT rc)
 
 void TopologyStore::Open() {
   StartupStore(TEXT("OpenTopology\n"));
-  CreateProgressDialog(gettext(TEXT("Loading Topology File...")));
+  XCSoarInterface::CreateProgressDialog(gettext(TEXT("Loading Topology File...")));
   ScopeLock protect(*GetMutex());
 
   // Start off by getting the names and paths

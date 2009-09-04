@@ -102,12 +102,11 @@ LRESULT CALLBACK Progress(HWND hDlg, UINT message,
   return FALSE;
 }
 
-static HWND hProgress = NULL;
-static HWND hWndCurtain = NULL;
+HWND XCSoarInterface::hProgress = NULL;
+HWND XCSoarInterface::hWndCurtain = NULL;
+HCURSOR XCSoarInterface::oldCursor = NULL;
 
-static HCURSOR oldCursor = NULL;
-
-void StartHourglassCursor(void) {
+void XCSoarInterface::StartHourglassCursor(void) {
   HCURSOR newc = LoadCursor(NULL, IDC_WAIT);
   oldCursor = (HCURSOR)SetCursor(newc);
 #ifdef GNAV
@@ -115,7 +114,7 @@ void StartHourglassCursor(void) {
 #endif
 }
 
-void StopHourglassCursor(void) {
+void XCSoarInterface::StopHourglassCursor(void) {
   SetCursor(oldCursor);
 #ifdef GNAV
   SetCursorPos(640,480);
@@ -123,7 +122,7 @@ void StopHourglassCursor(void) {
   oldCursor = NULL;
 }
 
-void CloseProgressDialog() {
+void XCSoarInterface::CloseProgressDialog() {
   if (hProgress) {
     DestroyWindow(hProgress);
     hProgress = NULL;
@@ -134,7 +133,7 @@ void CloseProgressDialog() {
   }
 }
 
-void StepProgressDialog(void) {
+void XCSoarInterface::StepProgressDialog(void) {
   if (hProgress) {
     SendMessage(GetDlgItem(hProgress, IDC_PROGRESS1), PBM_STEPIT,
 		(WPARAM)0, (LPARAM)0);
@@ -142,7 +141,7 @@ void StepProgressDialog(void) {
   }
 }
 
-BOOL SetProgressStepSize(int nSize) {
+BOOL XCSoarInterface::SetProgressStepSize(int nSize) {
   nSize = 5;
   if (hProgress)
     if (nSize < 100)
@@ -152,26 +151,25 @@ BOOL SetProgressStepSize(int nSize) {
 }
 
 
-HWND CreateProgressDialog(const TCHAR* text) {
+HWND XCSoarInterface::CreateProgressDialog(const TCHAR* text) {
 #if (WINDOWSPC>2)
   hProgress = NULL;
   return NULL;
 #endif
   if (hProgress) {
   } else {
-
     if (InfoBoxLayout::landscape) {
       hProgress=
-	CreateDialog(XCSoarInterface::hInst,
+	CreateDialog(hInst,
 		     (LPCTSTR)IDD_PROGRESS_LANDSCAPE,
-		     XCSoarInterface::main_window,
+		     main_window,
 		     (DLGPROC)Progress);
 
     } else {
       hProgress=
-	CreateDialog(XCSoarInterface::hInst,
+	CreateDialog(hInst,
 		     (LPCTSTR)IDD_PROGRESS,
-		     XCSoarInterface::main_window,
+		     main_window,
 		     (DLGPROC)Progress);
     }
 
@@ -180,14 +178,14 @@ HWND CreateProgressDialog(const TCHAR* text) {
     SetWindowText(GetDlgItem(hProgress,IDC_VERSION),Temp);
 
     RECT rc;
-    GetClientRect(XCSoarInterface::main_window, &rc);
+    GetClientRect(main_window, &rc);
 
 #if (WINDOWSPC<1)
     hWndCurtain = CreateWindow(TEXT("STATIC"), TEXT(" "),
 			       WS_VISIBLE | WS_CHILD,
                                0, 0, (rc.right - rc.left),
 			       (rc.bottom-rc.top),
-                               XCSoarInterface::main_window, NULL, hInst, NULL);
+                               main_window, NULL, hInst, NULL);
     SetWindowPos(hWndCurtain,HWND_TOP,0,0,0,0,
                  SWP_NOMOVE|SWP_NOSIZE|SWP_SHOWWINDOW);
     ShowWindow(hWndCurtain,SW_SHOW);
@@ -198,7 +196,7 @@ HWND CreateProgressDialog(const TCHAR* text) {
 #if (WINDOWSPC>0)
     RECT rcp;
     GetClientRect(hProgress, &rcp);
-    GetWindowRect(XCSoarInterface::main_window, &rc);
+    GetWindowRect(main_window, &rc);
     SetWindowPos(hProgress,HWND_TOP,
                  rc.left, rc.top, (rcp.right - rcp.left), (rcp.bottom-rcp.top),
                  SWP_SHOWWINDOW);

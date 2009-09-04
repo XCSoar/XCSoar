@@ -2522,8 +2522,7 @@ static void setVariables(void) {
 void dlgConfigurationShowModal(void){
 
   WndProperty *wp;
-
-  StartHourglassCursor();
+  XCSoarInterface::StartHourglassCursor();
 
   if (!InfoBoxLayout::landscape) {
     wf = dlgLoadFromXML(CallBackTable,
@@ -2537,7 +2536,10 @@ void dlgConfigurationShowModal(void){
                         TEXT("IDR_XML_CONFIGURATION"));
   }
 
-  if (!wf) return;
+  if (!wf) {
+    XCSoarInterface::StopHourglassCursor();
+    return;
+  }
 
   wf->SetKeyDownNotify(FormKeyDown);
 
@@ -2621,7 +2623,7 @@ void dlgConfigurationShowModal(void){
   utcchanged = false;
   waypointneedsave = false;
 
-  StopHourglassCursor();
+  XCSoarInterface::StopHourglassCursor();
   wf->ShowModal();
 
   // TODO enhancement: implement a cancel button that skips all this

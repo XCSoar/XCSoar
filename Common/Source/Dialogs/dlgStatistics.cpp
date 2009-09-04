@@ -481,9 +481,9 @@ static void OnCalcClicked(WindowControl * Sender,
     wf->SetVisible(true);
   }
   if (page==ANALYSIS_PAGE_OLC) {
-    StartHourglassCursor();
+    XCSoarInterface::StartHourglassCursor();
     glide_computer.GetOLC().Optimize((XCSoarInterface::Calculated().Flying==1));
-    StopHourglassCursor();
+    XCSoarInterface::StopHourglassCursor();
   }
   if (page==ANALYSIS_PAGE_AIRSPACE) {
     dlgAirspaceWarningShowDlg(true);
