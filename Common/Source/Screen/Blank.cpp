@@ -132,7 +132,7 @@ void BlankDisplay(bool doblank) {
         if ((PDABatteryPercent < BATTERY_EXIT)) {
           StartupStore(TEXT("Battery low exit...\n"));
           // TODO feature: Warning message on battery shutdown
-	  SignalShutdown(true);
+	  XCSInterface::SignalShutdown(true);
         } else
 #endif
           if (PDABatteryPercent < BATTERY_WARNING) {
