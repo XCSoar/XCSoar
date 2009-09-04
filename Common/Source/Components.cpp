@@ -84,6 +84,7 @@ Copyright_License {
 #include "MainWindow.hpp"
 #include "resource.h"
 #include "GlideComputer.hpp"
+#include "options.h"
 
 GaugeVario *gauge_vario;
 GaugeFLARM *gauge_flarm;
