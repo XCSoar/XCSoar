@@ -42,6 +42,8 @@ Copyright_License {
 #include "Screen/ContainerWindow.hpp"
 #include "Screen/EditWindow.hpp"
 #include "Dialogs.h"
+#include "PeriodClock.hpp"
+
 #include <malloc.h>
 #include "Units.hpp"
 
@@ -480,7 +482,7 @@ class WndForm:public WindowControl{
 
     void SetUserMsgNotify(int (*OnUserMsgNotify)(WindowControl * Sender, MSG *msg));
 private:
-    static DWORD timeAnyOpenClose; // when any dlg opens or child closes
+    static PeriodClock timeAnyOpenClose; // when any dlg opens or child closes
 
 };
 

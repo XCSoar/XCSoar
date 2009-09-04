@@ -773,7 +773,8 @@ void InitWindowControlModule(void){
 
 }
 
-DWORD WndForm::timeAnyOpenClose=0;
+PeriodClock WndForm::timeAnyOpenClose;
+
 ACCEL  WndForm::mAccel[] = {
   {0, VK_ESCAPE,  VK_ESCAPE},
   {0, VK_RETURN,  VK_RETURN},
@@ -926,7 +927,7 @@ int WndForm::ShowModal(bool bEnableMap) {
   FocusNext(NULL);
 
   bool hastimed = false;
-  WndForm::timeAnyOpenClose = GetTickCount(); // when current dlg opens or child closes
+  WndForm::timeAnyOpenClose.update(); // when current dlg opens or child closes
 
   while ((mModalResult == 0) && GetMessage(&msg, NULL, 0, 0)) {
     DWORD timeMsg = GetTickCount();
@@ -1030,7 +1031,10 @@ int WndForm::ShowModal(bool bEnableMap) {
       }
 
       TranslateMessage(&msg);
-      if (msg.message != WM_LBUTTONUP || ((timeMsg - WndForm::timeAnyOpenClose) > OPENCLOSESUPPRESSTIME) ) // prevents child click from being repeat-handled by parent if buttons overlap
+      if (msg.message != WM_LBUTTONUP ||
+          // prevents child click from being repeat-handled by parent
+          // if buttons overlap
+          WndForm::timeAnyOpenClose.elapsed() > OPENCLOSESUPPRESSTIME)
       {
         if (DispatchMessage(&msg)){
 
@@ -1086,7 +1090,9 @@ int WndForm::ShowModal(bool bEnableMap) {
 #endif
     }
   } // End Modal Loop
-  WndForm::timeAnyOpenClose = GetTickCount(); // static.  this is current open/close or child open/close
+
+  // static.  this is current open/close or child open/close
+  WndForm::timeAnyOpenClose.update();
 
   //  SetSourceRectangle(mRc);
   //  DrawWireRects(&aniRect, 5);
