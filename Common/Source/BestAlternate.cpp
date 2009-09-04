@@ -49,7 +49,7 @@ Copyright_License {
 #include "GlideSolvers.hpp"
 #include "UtilsSystem.hpp"
 #include "Math/Earth.hpp"
-#include "CalculationsAbort.hpp"
+#include "Abort.hpp"
 
 // Alternates VENTA3
 int Alternate1 = -1;

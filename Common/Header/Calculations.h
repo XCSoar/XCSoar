@@ -46,10 +46,6 @@ void RefreshTaskStatistics(void);
 
 #define TAKEOFFSPEEDTHRESHOLD (0.5*GlidePolar::Vminsink)
 
-int FindFlarmSlot(const NMEA_INFO &GPS_INFO, const int flarmId);
-int FindFlarmSlot(const NMEA_INFO &GPS_INFO, const TCHAR *flarmCN);
-bool IsFlarmTargetCNInRange(const NMEA_INFO &GPS_INFO);
-
 void
 DoAutoQNH(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated);
 

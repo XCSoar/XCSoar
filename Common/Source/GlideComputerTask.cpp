@@ -48,9 +48,8 @@ Copyright_License {
 #include "Math/LowPassFilter.hpp"
 #include "McReady.h"
 #include "GlideRatio.hpp"
-#include "CalculationsTerrain.hpp"
 #include "GlideSolvers.hpp"
-#include "CalculationsAbort.hpp"
+#include "Abort.hpp"
 #include "BestAlternate.hpp"
 
 #include "InputEvents.h"

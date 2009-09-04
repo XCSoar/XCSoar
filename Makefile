@@ -418,6 +418,7 @@ OBJS	:=\
 	$(SRC)/GlideComputerStats.o 	\
 	$(SRC)/GlideComputerTask.o 	\
 	$(SRC)/AATDistance.o 		\
+	$(SRC)/Abort.o 			\
 	$(SRC)/Airspace.o 		\
 	$(SRC)/AirspaceParser.o 	\
 	$(SRC)/AirspaceWarning.o 	\
@@ -428,7 +429,6 @@ OBJS	:=\
 	$(SRC)/Calibration.o 		\
 	$(SRC)/Calculations.o 		\
 	$(SRC)/Calculations2.o 		\
-	$(SRC)/CalculationsAbort.o 	\
 	$(SRC)/CalculationsAutoMc.o 	\
 	$(SRC)/FlarmIdFile.o 		\
 	$(SRC)/FlarmCalculations.o 	\

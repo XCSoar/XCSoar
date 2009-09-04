@@ -62,7 +62,6 @@ Copyright_License {
 #include "MapWindowProjection.hpp"
 #include "InputEvents.h"
 #include "Components.hpp"
-#include "CalculationsClimb.hpp"
 #include "Interface.hpp"
 #include "Atmosphere.h"
 #include "LogFile.hpp"

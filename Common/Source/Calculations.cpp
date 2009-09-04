@@ -72,7 +72,6 @@ Copyright_License {
 #include "Persist.hpp"
 #include "Airspace.h"
 #include "CalculationsAirspace.hpp"
-#include "CalculationsAbort.hpp"
 #include "ConditionMonitor.hpp"
 #include "MapWindowProjection.hpp"
 
@@ -84,22 +83,6 @@ bool EnableFAIFinishHeight = false;
 
 int FinishLine=1;
 DWORD FinishRadius=1000;
-
-#include "CalculationsClimb.hpp"
-#include "CalculationsTask.hpp"
-#include "CalculationsTerrain.hpp"
-
-/////////////////////////////////////////////////////////////////////////////////////
-
-
-BOOL
-DoCalculations(const NMEA_INFO *Basic, DERIVED_INFO *Calculated)
-{
-  glide_computer.ProcessGPS();
-
-
-  return TRUE;
-}
 
 
 void
@@ -137,49 +120,6 @@ DoAutoQNH(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated)
 }
 
 ///////////////////////////////////////////////
-
-int FindFlarmSlot(const NMEA_INFO &GPS_INFO, int flarmId)
-{
-  for(int z = 0; z < FLARM_MAX_TRAFFIC; z++)
-    {
-      if (GPS_INFO.FLARM_Traffic[z].ID == flarmId)
-	{
-	  return z;
-	}
-    }
-  return -1;
-}
-
-int FindFlarmSlot(const NMEA_INFO &GPS_INFO, TCHAR *flarmCN)
-{
-  for(int z = 0; z < FLARM_MAX_TRAFFIC; z++)
-    {
-      if (_tcscmp(GPS_INFO.FLARM_Traffic[z].Name, flarmCN) == 0)
-	{
-	  return z;
-	}
-    }
-  return -1;
-}
-
-bool IsFlarmTargetCNInRange(const NMEA_INFO &GPS_INFO)
-{
-  bool FlarmTargetContact = false;
-  for(int z = 0; z < FLARM_MAX_TRAFFIC; z++)
-    {
-      if (GPS_INFO.FLARM_Traffic[z].ID != 0)
-	{
-	  if (GPS_INFO.FLARM_Traffic[z].ID == TeamFlarmIdTarget)
-	    {
-	      TeamFlarmIdTarget = GPS_INFO.FLARM_Traffic[z].ID;
-	      FlarmTargetContact = true;
-	      break;
-	    }
-	}
-    }
-  return FlarmTargetContact;
-}
-
 
 void RefreshTaskStatistics(void) {
   /* JMW incomplete

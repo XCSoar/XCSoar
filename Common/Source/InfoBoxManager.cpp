@@ -62,11 +62,13 @@ Copyright_License {
 #include "SettingsComputer.hpp"
 #include "Interface.hpp"
 #include "Battery.h"
-#include "Calculations.h" // TODO danger! IsFlarmTargetCNInRange
+#include "FlarmCalculations.h" 
 #include "UtilsSystem.hpp"
 #include "MainWindow.hpp"
 #include "MapWindow.h"
 #include "Defines.h"
+
+#include "XCSoar.h"
 
 // user setting
 bool EnableAuxiliaryInfo = false;
@@ -409,6 +411,9 @@ void InfoBoxManager::setTypeAll(const int i, const int j) {
   // TODO: check it's within range
 }
 
+#define m_min(a,b)     (((a)<(b))?(a):(b))
+#define m_max(a,b)	(((a)>(b))?(a):(b))
+
 
 int InfoBoxManager::getType(const int i) {
   int retval = 0;
@@ -425,7 +430,7 @@ int InfoBoxManager::getType(const int i) {
       retval = getType(i,1); // cruise
     }
   }
-  return min(NUMSELECTSTRINGS-1, retval);
+  return m_min(NUMSELECTSTRINGS-1, retval);
 }
 
 
@@ -902,7 +907,7 @@ void InfoBoxManager::ProcessKey(int keycode) {
   mutexNavBox.Lock(); 
   {
     i = getType(InfoFocus);
-    Data_Options[min(NUMSELECTSTRINGS-1,i)].Process(keycode);
+    Data_Options[m_min(NUMSELECTSTRINGS-1,i)].Process(keycode);
   }
   mutexNavBox.Unlock();
 
@@ -1071,7 +1076,7 @@ void InfoBoxManager::Paint(void) {
       }
       fw = rw/(double)InfoBoxLayout::ControlWidth;
       fh = rh/(double)InfoBoxLayout::ControlHeight;
-      double f = min(fw, fh);
+      double f = m_min(fw, fh);
       rw = (int)(f*InfoBoxLayout::ControlWidth);
       rh = (int)(f*InfoBoxLayout::ControlHeight);
 

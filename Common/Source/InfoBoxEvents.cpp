@@ -57,6 +57,7 @@ Copyright_License {
 #include "Components.hpp"
 #include <stdlib.h>
 #include "GlideComputer.hpp"
+#include "FlarmCalculations.h"
 
 // JMW added key codes,
 // so -1 down
