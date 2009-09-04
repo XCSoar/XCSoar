@@ -190,9 +190,6 @@ int AirspaceWarnFindIndexByID(int ID);
 void AirspaceWarnListInit(void);
 void AirspaceWarnListDeInit(void);
 
-// MapWindow interface ...
-bool dlgAirspaceWarningShowDlg(bool Force);
-
 bool ValidAirspace(void);
 
 class MapWindowProjection;

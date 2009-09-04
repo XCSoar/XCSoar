@@ -73,9 +73,6 @@ struct zzip_dir
 int      __zzip_try_open (zzip_char_t* filename, int filemode,
                           zzip_strings_t* ext, zzip_plugin_io_t io);
 
-ZZIP_DIR *
-zzip_dir_fdopen(int fd, zzip_error_t * errcode_p);
-
 ZZIP_DIR*
 zzip_dir_fdopen_ext_io(int fd, zzip_error_t * errorcode_p,
                        zzip_strings_t* ext, const zzip_plugin_io_t io);

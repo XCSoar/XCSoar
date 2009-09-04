@@ -58,7 +58,6 @@ void dlgConfigurationShowModal(void);
 void dlgVegaDemoShowModal(void);
 bool dlgConfigurationVarioShowModal(void);
 void dlgLoggerReplayShowModal(void);
-void dlgBasicSettingsShowModal(void);
 void dlgStartupShowModal(void);
 void dlgTaskCalculatorShowModal(void);
 void dlgWindSettingsShowModal(void);
