@@ -1560,9 +1560,9 @@ double GlideComputerTask::SpeedHeight() {
 }
 
 
+#ifdef DEBUGTASKSPEED
 void GlideComputerTask::DebugTaskCalculations()
 {
-#ifdef DEBUGTASKSPEED
   if ((Calculated().TaskStartTime>0)
       && (Basic().Time-Calculated().TaskStartTime>0)) {
       if (Calculated().Flying) {
@@ -1584,8 +1584,8 @@ void GlideComputerTask::DebugTaskCalculations()
                 Calculated().GPSVario);
       }
     }
-#endif
 }
+#endif
 
 
 bool GlideComputerTask::TaskAltitudeRequired(double this_maccready, double *Vfinal,
