@@ -72,7 +72,7 @@ public:
 
   TERRAIN_INFO TerrainInfo;
 
-  virtual void SetViewCenter(const GEOPOINT &location) {};
+  virtual void SetViewCenter(const GEOPOINT &location) = 0;
 
   bool GetMapCenter(GEOPOINT *loc) const;
 
@@ -87,7 +87,7 @@ public:
     const RasterRounding &rounding);
 
   virtual void ServiceCache() {};
-  virtual void ServiceFullReload(const GEOPOINT &location) {};
+  virtual void ServiceFullReload(const GEOPOINT &location) = 0;
 
   bool IsDirectAccess(void) const {
     return DirectAccess;
