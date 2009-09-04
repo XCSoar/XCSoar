@@ -41,6 +41,10 @@ Copyright_License {
 #include "Math/Earth.hpp"
 #include "UtilsSystem.hpp"
 
+#if defined(_SIM_) && !defined(NDEBUG)
+#include "Device/Parser.h"
+#endif
+
 DeviceBlackboard device_blackboard;
 InterfaceBlackboard InstrumentBlackboard::blackboard;
 
@@ -180,6 +184,14 @@ DeviceBlackboard::ProcessSimulation()
   SetBasic().Hour = tsec/3600;
   SetBasic().Minute = (tsec-Basic().Hour*3600)/60;
   SetBasic().Second = (tsec-Basic().Hour*3600-Basic().Minute*60);
+
+#ifndef NDEBUG
+  // use this to test FLARM parsing/display
+#ifndef GNAV
+  NMEAParser::TestRoutine(&SetBasic());
+#endif
+#endif
+
   mutexFlightData.Unlock();
 }
 #endif /* _SIM_ */

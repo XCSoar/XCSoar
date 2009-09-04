@@ -286,13 +286,6 @@ void ProcessTimer::SIMProcess(void)
 
   if (i%2==0) return;
 
-#ifndef NDEBUG
-  // use this to test FLARM parsing/display
-#ifndef GNAV
-  NMEAParser::TestRoutine(&Basic());
-#endif
-#endif
-
   TriggerGPSUpdate();
 }
 #endif
