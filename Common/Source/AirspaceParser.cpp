@@ -1361,7 +1361,7 @@ void DumpAirspaceFile(void){
         _ftprintf(fp, TEXT("Unknown"));
     }
 
-    _ftprintf(fp, TEXT(")\r\n"), i);
+    _ftprintf(fp, TEXT(")\r\n"));
 
     switch (AirspaceArea[i].Top.Base){
       case abUndef:
@@ -1393,7 +1393,7 @@ void DumpAirspaceFile(void){
       break;
     }
 
-    _ftprintf(fp, TEXT("\r\n"), i);
+    _ftprintf(fp, TEXT("\r\n"));
   }
 
   for (i=0; i < (int)NumberOfAirspaceCircles; i++){
@@ -1429,7 +1429,7 @@ void DumpAirspaceFile(void){
         _ftprintf(fp, TEXT("Unknown"));
     }
 
-    _ftprintf(fp, TEXT(")\r\n"), i);
+    _ftprintf(fp, TEXT(")\r\n"));
 
     switch (AirspaceCircle[i].Top.Base){
       case abUndef:
@@ -1461,7 +1461,7 @@ void DumpAirspaceFile(void){
       break;
     }
 
-  _ftprintf(fp, TEXT("\r\n"), i);
+    _ftprintf(fp, TEXT("\r\n"));
 
   }
 
