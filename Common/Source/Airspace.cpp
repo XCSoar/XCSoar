@@ -393,11 +393,11 @@ int FindAirspaceArea(double Longitude,double Latitude, bool visibleonly)
 /////////////////////////////////////////////////////////////////////////////////
 
 
-int FindNearestAirspaceCircle(double longitude, double latitude,
-			      double *nearestdistance,
-			      double *nearestbearing,
-			      double *nearestt,
-			      double *height=NULL)
+static int
+FindNearestAirspaceCircle(double longitude, double latitude,
+                          double *nearestdistance,
+                          double *nearestbearing,
+                          double *height=NULL)
 {
   unsigned int i;
 //  int NearestIndex = 0;
@@ -530,7 +530,6 @@ static int
 FindNearestAirspaceArea(const MapWindowProjection& map_projection,
                         double longitude, double latitude,
                         double *nearestdistance, double *nearestbearing,
-                        double *nearestt,
                         double *height=NULL)
 {
   unsigned i;
@@ -623,17 +622,13 @@ void FindNearestAirspace(const MapWindowProjection& map_projection,
   double nearestb1 = 0;
   double nearestb2 = 0;
 
-  double nearestt = 100000;
-
   *foundcircle = FindNearestAirspaceCircle(longitude, latitude,
 					   &nearestd1, &nearestb1,
-					   &nearestt,
 					   height);
 
   *foundarea = FindNearestAirspaceArea(map_projection,
 				       longitude, latitude,
 				       &nearestd2, &nearestb2,
-				       &nearestt,
 				       height);
 
   if ((*foundcircle>=0)&&(*foundarea<0)) {
