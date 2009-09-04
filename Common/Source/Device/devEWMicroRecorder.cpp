@@ -49,6 +49,8 @@ Copyright_License {
 #include <tchar.h>
 #include <stdio.h>
 
+#define debugIGNORERESPONCE 0
+
 // Additional sentance for EW support
 
 static int nDeclErrorCode = 0;
