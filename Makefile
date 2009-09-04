@@ -579,7 +579,6 @@ OBJS	:=\
 	$(SRC)/Polar/BuiltIn.o 		\
 	$(SRC)/Polar/Historical.o 	\
 	\
-	$(SRC)/StdAfx.o			\
 	$(SRC)/Blackboard.o 		\
 	$(SRC)/Protection.o 		\
 	$(SRC)/ProcessTimer.o 		\
