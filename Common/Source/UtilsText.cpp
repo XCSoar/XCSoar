@@ -335,7 +335,7 @@ double HexStrToDouble(TCHAR *Source, TCHAR **Stop)
 }
 
 
-
+#ifdef ENABLE_UNUSED_CODE
 static int ByteCRC16(int value, int crcin)
 {
     int k = (((crcin >> 8) ^ value) & 255) << 8;
@@ -353,7 +353,6 @@ static int ByteCRC16(int value, int crcin)
     return ((crcin << 8) ^ crc);
 }
 
-#ifdef ENABLE_UNUSED_CODE
 WORD crcCalc(void *Buffer, size_t size){
 
   int crc = 0;
