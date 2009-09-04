@@ -348,7 +348,9 @@ bool InfoBoxManager::Defocus() {
 #ifndef DISABLEAUDIO
     if (EnableSoundModes) PlayResource(TEXT("IDR_WAV_CLICK"));
 #endif
-    main_window.map.set_focus();
+    // JMW do we really need to set focus like this?
+    // what if it steals focus from a dialog?
+    XCSoarInterface::main_window.map.set_focus();
   }
   return retval;
 }
@@ -497,6 +499,7 @@ void InfoBoxManager::FocusOnWindow(int i, bool selected) {
   InfoBoxes[i]->SetFocus(selected);
   // todo defocus all other?
 }
+
 
 void InfoBoxManager::DisplayInfoBox(void)
 {
@@ -657,23 +660,23 @@ void InfoBoxManager::DisplayInfoBox(void)
       InfoBoxes[i]->SetComment(TEXT(""));
       break;
     case 10:
-      if (CALCULATED_INFO.AutoMacCready)
+      if (XCSoarInterface::Calculated().AutoMacCready)
 	InfoBoxes[i]->SetComment(TEXT("AUTO"));
       else
 	InfoBoxes[i]->SetComment(TEXT("MANUAL"));
       break;
     case 0: // GPS Alt
-      Units::FormatAlternateUserAltitude(GPS_INFO.Altitude,
+      Units::FormatAlternateUserAltitude(XCSoarInterface::Basic().Altitude,
 					 sTmp, sizeof(sTmp)/sizeof(sTmp[0]));
       InfoBoxes[i]->SetComment(sTmp);
       break;
     case 1: // AGL
-      Units::FormatAlternateUserAltitude(CALCULATED_INFO.AltitudeAGL,
+      Units::FormatAlternateUserAltitude(XCSoarInterface::Calculated().AltitudeAGL,
 					 sTmp, sizeof(sTmp)/sizeof(sTmp[0]));
       InfoBoxes[i]->SetComment(sTmp);
       break;
     case 33:
-      Units::FormatAlternateUserAltitude(GPS_INFO.BaroAltitude,
+      Units::FormatAlternateUserAltitude(XCSoarInterface::Basic().BaroAltitude,
 					 sTmp, sizeof(sTmp)/sizeof(sTmp[0]));
       InfoBoxes[i]->SetComment(sTmp);
       break;
@@ -705,7 +708,7 @@ void InfoBoxManager::DisplayInfoBox(void)
       InfoBoxes[i]->SetComment(TeammateCode);
       if (TeamFlarmTracking)
 	{
-	  if (IsFlarmTargetCNInRange())
+	  if (IsFlarmTargetCNInRange(XCSoarInterface::Basic()))
 	    {
 	      InfoBoxes[i]->SetColorBottom(2);
 	    }
@@ -737,7 +740,7 @@ void InfoBoxManager::DisplayInfoBox(void)
 	  InfoBoxes[i]->SetComment(TEXT("---"));
 	}
 
-      if (IsFlarmTargetCNInRange())
+      if (IsFlarmTargetCNInRange(XCSoarInterface::Basic()))
 	{
 	  InfoBoxes[i]->SetColorBottom(2);
 	}
@@ -764,7 +767,7 @@ void InfoBoxManager::DisplayInfoBox(void)
 	{
 	  InfoBoxes[i]->SetComment(TEXT("---"));
 	}
-      if (IsFlarmTargetCNInRange())
+      if (IsFlarmTargetCNInRange(XCSoarInterface::Basic()))
 	{
 	  InfoBoxes[i]->SetColorBottom(2);
 	}
@@ -791,7 +794,7 @@ void InfoBoxManager::DisplayInfoBox(void)
 	{
 	  InfoBoxes[i]->SetComment(TEXT("---"));
 	}
-      if (IsFlarmTargetCNInRange())
+      if (IsFlarmTargetCNInRange(XCSoarInterface::Basic()))
 	{
 	  InfoBoxes[i]->SetColorBottom(2);
 	}
@@ -803,9 +806,9 @@ void InfoBoxManager::DisplayInfoBox(void)
       break;
 	// VENTA3 wind speed + bearing bottom line
 	case 25:
-	  if ( CALCULATED_INFO.WindBearing == 0 )
+	  if ( XCSoarInterface::Calculated().WindBearing == 0 )
 	    _stprintf(sTmp,_T("0%s"),_T(DEG)); else
-	    _stprintf(sTmp,_T("%1.0d%s"),(int)CALCULATED_INFO.WindBearing,_T(DEG));
+	    _stprintf(sTmp,_T("%1.0d%s"),(int)XCSoarInterface::Calculated().WindBearing,_T(DEG));
 	  InfoBoxes[i]->SetComment(sTmp);
 	  break;
 
@@ -815,10 +818,10 @@ void InfoBoxManager::DisplayInfoBox(void)
 	    InfoBoxes[i]->SetComment(TEXT(""));
 	    break;
 	  }
-	  if ( CALCULATED_INFO.HomeRadial == 0 ) {
+	  if ( XCSoarInterface::Calculated().HomeRadial == 0 ) {
 	    _stprintf(sTmp,_T("0%s"),_T(DEG)); 
 	  } else {
-	    _stprintf(sTmp,_T("%1.0d%s"),(int)CALCULATED_INFO.HomeRadial,_T(DEG));
+	    _stprintf(sTmp,_T("%1.0d%s"),(int)XCSoarInterface::Calculated().HomeRadial,_T(DEG));
 	  }
 	  InfoBoxes[i]->SetComment(sTmp);
 	  break;
@@ -869,8 +872,8 @@ void InfoBoxManager::DisplayInfoBox(void)
 			InfoBoxes[i]->SetComment(sTmp);
 		} else {
 		*/
-		//Units::FormatUserArrival(GPS_INFO.Altitude,
-		Units::FormatUserAltitude(GPS_INFO.Altitude,
+		//Units::FormatUserArrival(XCSoarInterface::Basic().Altitude,
+		Units::FormatUserAltitude(XCSoarInterface::Basic().Altitude,
 			 sTmp, sizeof(sTmp)/sizeof(sTmp[0]));
 		InfoBoxes[i]->SetComment(sTmp);
 		break;
@@ -922,7 +925,7 @@ void PopUpSelect(int Index)
   StoreType(Index, InfoType[Index]);
   //  ShowWindow(hWndCB,SW_HIDE);
   //  FullScreen();
-  main_window.map.set_focus();
+  XCSoarInterface::main_window.map.set_focus();
 }
 
 bool InfoBoxManager::Click(HWND wmControl) {
@@ -960,7 +963,7 @@ void InfoBoxManager::Focus(void) {
   if (InfoWindowActive) {
     FocusOnWindow(InfoFocus,true);
   } else {
-    main_window.map.set_focus();
+    XCSoarInterface::main_window.map.set_focus();
   }
 }
 
@@ -1108,7 +1111,8 @@ RECT InfoBoxManager::Create(RECT rc) {
   sizex=rc.right-rc.left;
   sizey=rc.bottom-rc.top;
 
-  InfoBoxes[numInfoWindows] = new InfoBox(main_window, xoff, yoff, sizex, sizey);
+  InfoBoxes[numInfoWindows] = new InfoBox(XCSoarInterface::main_window, 
+					  xoff, yoff, sizex, sizey);
   InfoBoxes[numInfoWindows]->SetBorderKind(0);
 
   // create infobox windows
@@ -1117,7 +1121,8 @@ RECT InfoBoxManager::Create(RECT rc) {
     {
       InfoBoxLayout::GetInfoBoxPosition(i, rc, &xoff, &yoff, &sizex, &sizey);
 
-      InfoBoxes[i] = new InfoBox(main_window, xoff, yoff, sizex, sizey);
+      InfoBoxes[i] = new InfoBox(XCSoarInterface::main_window, 
+				 xoff, yoff, sizex, sizey);
 
       int Border=0;
       if (InfoBoxLayout::gnav){

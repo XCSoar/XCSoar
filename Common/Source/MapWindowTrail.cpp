@@ -52,6 +52,7 @@ Copyright_License {
 #include "Screen/Graphics.hpp"
 #include "GlideComputer.hpp"
 #include "Protection.hpp"
+#include "Components.hpp"
 
 #define fSnailColour(cv) max(0,min((short)(NUMSNAILCOLORS-1), (short)((cv+1.0)/2.0*NUMSNAILCOLORS)))
 
@@ -85,13 +86,13 @@ double MapWindow::DrawTrail(Canvas &canvas)
   if (EnableTrailDrift && (DisplayMode == dmCircling)) {
     double tlat1, tlon1;
 
-    FindLatitudeLongitude(DrawInfo.Latitude,
-                          DrawInfo.Longitude,
-                          DerivedDrawInfo.WindBearing,
-                          DerivedDrawInfo.WindSpeed,
+    FindLatitudeLongitude(Basic().Latitude,
+                          Basic().Longitude,
+                          Calculated().WindBearing,
+                          Calculated().WindSpeed,
                           &tlat1, &tlon1);
-    traildrift_lat = (DrawInfo.Latitude-tlat1);
-    traildrift_lon = (DrawInfo.Longitude-tlon1);
+    traildrift_lat = (Basic().Latitude-tlat1);
+    traildrift_lon = (Basic().Longitude-tlon1);
   } else {
     traildrift_lat = 0.0;
     traildrift_lon = 0.0;
@@ -125,7 +126,7 @@ double MapWindow::DrawTrail(Canvas &canvas)
   int skip_border = skip_divisor;
   int skip_level= 3; // TODO code: try lower level?
 
-  int snail_offset = TRAILSIZE+GlideComputer::snail_trail.getIndex()-num_trail_max;
+  int snail_offset = TRAILSIZE+glide_computer.GetSnailTrail().getIndex()-num_trail_max;
   while (snail_offset>= TRAILSIZE) {
     snail_offset -= TRAILSIZE;
   }
@@ -135,7 +136,7 @@ double MapWindow::DrawTrail(Canvas &canvas)
   const int zero_offset = (TRAILSIZE-snail_offset);
   skip_border += zero_offset % skip_level;
 
-  int index_skip = ((int)DrawInfo.Time)%skip_level;
+  int index_skip = ((int)Basic().Time)%skip_level;
 
   // TODO code: Divide by time step cruise/circling for zero_offset
 
@@ -154,7 +155,7 @@ double MapWindow::DrawTrail(Canvas &canvas)
   ///////////// Constants for speedups
 
   const bool display_circling = DisplayMode == dmCircling;
-  const double display_time = DrawInfo.Time;
+  const double display_time = Basic().Time;
 
   // expand bounds so in strong winds the appropriate snail points are
   // still visible (since they are being tested before drift is applied)
@@ -203,7 +204,7 @@ double MapWindow::DrawTrail(Canvas &canvas)
       snail_index-= TRAILSIZE;
     }
 
-    P1 = GlideComputer::snail_trail.getPoint(snail_index);
+    P1 = glide_computer.GetSnailTrail().getPoint(snail_index);
 
     /////// Mark first time of display point
 
@@ -338,18 +339,18 @@ MapWindow::DrawTrailFromTask(Canvas &canvas, const double TrailFirstTime)
   if((TrailActive!=3) || (DisplayMode == dmCircling) || (TrailFirstTime<0))
     return;
 
-  const double mTrailFirstTime = TrailFirstTime - DerivedDrawInfo.TakeOffTime;
-  // since olc keeps track of time wrt takeoff
+  const double mTrailFirstTime = TrailFirstTime - Calculated().TakeOffTime;
+  // since.GetOLC() keeps track of time wrt takeoff
 
   mutexGlideComputer.Lock();
-  GlideComputer::olc.SetLine();
-  int n = min(MAXCLIPPOLYGON, GlideComputer::olc.getN());
+  glide_computer.GetOLC().SetLine();
+  int n = min(MAXCLIPPOLYGON, glide_computer.GetOLC().getN());
   int i, j=0;
   for (i=0; i<n; i++) {
-    if (GlideComputer::olc.getTime(i)>= mTrailFirstTime)
+    if (glide_computer.GetOLC().getTime(i)>= mTrailFirstTime)
       break;
-    LonLat2Screen(GlideComputer::olc.getLongitude(i),
-                  GlideComputer::olc.getLatitude(i),
+    LonLat2Screen(glide_computer.GetOLC().getLongitude(i),
+                  glide_computer.GetOLC().getLatitude(i),
                   ptin[j]);
     j++;
   }

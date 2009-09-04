@@ -41,14 +41,104 @@ Copyright_License {
 #include "NMEA/Info.h"
 #include "NMEA/Derived.hpp"
 
+class BaseBlackboard {
+  // all blackboards can be read as const
+public:
+  const NMEA_INFO& Basic() const { return gps_info; }
+  const DERIVED_INFO& Calculated() const { return calculated_info; }
+protected:
+  NMEA_INFO     gps_info;
+  DERIVED_INFO  calculated_info;
+};
+
+
+class GlideComputerBlackboard: public BaseBlackboard {
+public:
+  void ReadBlackboard(const NMEA_INFO &nmea_info);
+protected:
+  void ResetFlight(const bool full=true);
+  void StartTask();
+  void Initialise();
+  void SaveFinish();
+  void RestoreFinish();
+
+  virtual const double GetAverageThermal() const;
+  virtual void OnClimbBase(double StartAlt) = 0;
+  virtual void OnClimbCeiling() = 0;
+  virtual void OnDepartedThermal() = 0;
+
+  // only the glide computer can write to calculated
+  DERIVED_INFO& SetCalculated() { return calculated_info; }
+private:
+  DERIVED_INFO Finish_Derived_Info;
+};
+
+
+class DeviceBlackboard: public BaseBlackboard {
+public:
+  void Initialise();
+  void ReadBlackboard(const DERIVED_INFO &derived_info);
+
+  // only the device blackboard can write to gps
+  friend class ComPort;
+protected:
+  NMEA_INFO& SetBasic() { return gps_info; }
+public:
+  void SetStartupLocation(double lon, double lat, double alt);
+  // used by replay logger
+  void SetLocation(double lon, double lat, double speed, double bearing,
+		   double alt, double baroalt, double t);
+  void ProcessSimulation();
+  void StopReplay();
+  void FLARM_RefreshSlots();
+  void SetBaroAlt(double x) {
+    SetBasic().BaroAltitude = x;
+  }
+  void SetNAVWarning(bool val);
+  void SetTrackBearing(double val);
+  void SetSpeed(double val);
+};
+
+
+class MapWindowBlackboard: public BaseBlackboard {
+protected:
+  virtual void ReadBlackboard(const NMEA_INFO &nmea_info,
+			      const DERIVED_INFO &derived_info);
+};
+
+
+class InterfaceBlackboard: public BaseBlackboard {
+public:
+  void ReadBlackboardBasic(const NMEA_INFO &nmea_info);
+  void ReadBlackboardCalculated(const DERIVED_INFO &derived_info);
+};
+
+
+class InstrumentBlackboard {
+protected:
+  static const NMEA_INFO& Basic() { return blackboard.Basic(); }
+  static const DERIVED_INFO& Calculated() { return blackboard.Calculated(); }
+public:
+  static void ReadBlackboardBasic(const NMEA_INFO& nmea_info) {
+    blackboard.ReadBlackboardBasic(nmea_info);
+  }
+  static void ReadBlackboardCalculated(const DERIVED_INFO& derived_info) {
+    blackboard.ReadBlackboardCalculated(derived_info);
+  }
+private:
+  static InterfaceBlackboard blackboard;
+};
+
 // master flight data
-extern NMEA_INFO GPS_INFO;
-extern DERIVED_INFO CALCULATED_INFO;
+//extern NMEA_INFO GPS_INFO;
+//extern DERIVED_INFO CALCULATED_INFO;
 
 // gps detection
 extern BOOL GPSCONNECT;
 extern BOOL VARIOCONNECT;
 
 extern BOOL extGPSCONNECT;
+
+extern DeviceBlackboard device_blackboard;
 
 #endif

@@ -47,114 +47,109 @@ Copyright_License {
 static WndForm *wf=NULL;
 
 
-//
-//
-
-extern NMEA_INFO GPS_INFO;
-
 static void UpdateValues() {
   WndProperty* wp;
   wp = (WndProperty*)wf->FindByName(TEXT("prpFlapLanding"));
   if (wp) {
     if (wp->GetDataField()->GetAsBoolean() !=
-	GPS_INFO.SwitchState.FlapLanding) {
-      wp->GetDataField()->Set(GPS_INFO.SwitchState.FlapLanding);
+	XCSoarInterface::Basic().SwitchState.FlapLanding) {
+      wp->GetDataField()->Set(XCSoarInterface::Basic().SwitchState.FlapLanding);
       wp->RefreshDisplay();
     }
   }
   wp = (WndProperty*)wf->FindByName(TEXT("prpAirbrakeExtended"));
   if (wp) {
     if (wp->GetDataField()->GetAsBoolean() !=
-	GPS_INFO.SwitchState.AirbrakeLocked) {
-      wp->GetDataField()->Set(GPS_INFO.SwitchState.AirbrakeLocked);
+	XCSoarInterface::Basic().SwitchState.AirbrakeLocked) {
+      wp->GetDataField()->Set(XCSoarInterface::Basic().SwitchState.AirbrakeLocked);
       wp->RefreshDisplay();
     }
   }
   wp = (WndProperty*)wf->FindByName(TEXT("prpFlapPositive"));
   if (wp) {
     if (wp->GetDataField()->GetAsBoolean() !=
-	GPS_INFO.SwitchState.FlapPositive) {
-      wp->GetDataField()->Set(GPS_INFO.SwitchState.FlapPositive);
+	XCSoarInterface::Basic().SwitchState.FlapPositive) {
+      wp->GetDataField()->Set(XCSoarInterface::Basic().SwitchState.FlapPositive);
       wp->RefreshDisplay();
     }
   }
   wp = (WndProperty*)wf->FindByName(TEXT("prpFlapNeutral"));
   if (wp) {
     if (wp->GetDataField()->GetAsBoolean() !=
-	GPS_INFO.SwitchState.FlapNeutral) {
-      wp->GetDataField()->Set(GPS_INFO.SwitchState.FlapNeutral);
+	XCSoarInterface::Basic().SwitchState.FlapNeutral) {
+      wp->GetDataField()->Set(XCSoarInterface::Basic().SwitchState.FlapNeutral);
       wp->RefreshDisplay();
     }
   }
   wp = (WndProperty*)wf->FindByName(TEXT("prpFlapNegative"));
   if (wp) {
     if (wp->GetDataField()->GetAsBoolean() !=
-	GPS_INFO.SwitchState.FlapNegative) {
-      wp->GetDataField()->Set(GPS_INFO.SwitchState.FlapNegative);
+	XCSoarInterface::Basic().SwitchState.FlapNegative) {
+      wp->GetDataField()->Set(XCSoarInterface::Basic().SwitchState.FlapNegative);
       wp->RefreshDisplay();
     }
   }
   wp = (WndProperty*)wf->FindByName(TEXT("prpGearExtended"));
   if (wp) {
     if (wp->GetDataField()->GetAsBoolean() !=
-	GPS_INFO.SwitchState.GearExtended) {
-      wp->GetDataField()->Set(GPS_INFO.SwitchState.GearExtended);
+	XCSoarInterface::Basic().SwitchState.GearExtended) {
+      wp->GetDataField()->Set(XCSoarInterface::Basic().SwitchState.GearExtended);
       wp->RefreshDisplay();
     }
   }
   wp = (WndProperty*)wf->FindByName(TEXT("prpAcknowledge"));
   if (wp) {
     if (wp->GetDataField()->GetAsBoolean() !=
-	GPS_INFO.SwitchState.Acknowledge) {
-      wp->GetDataField()->Set(GPS_INFO.SwitchState.Acknowledge);
+	XCSoarInterface::Basic().SwitchState.Acknowledge) {
+      wp->GetDataField()->Set(XCSoarInterface::Basic().SwitchState.Acknowledge);
       wp->RefreshDisplay();
     }
   }
   wp = (WndProperty*)wf->FindByName(TEXT("prpRepeat"));
   if (wp) {
     if (wp->GetDataField()->GetAsBoolean() !=
-	GPS_INFO.SwitchState.Repeat) {
-      wp->GetDataField()->Set(GPS_INFO.SwitchState.Repeat);
+	XCSoarInterface::Basic().SwitchState.Repeat) {
+      wp->GetDataField()->Set(XCSoarInterface::Basic().SwitchState.Repeat);
       wp->RefreshDisplay();
     }
   }
   wp = (WndProperty*)wf->FindByName(TEXT("prpSpeedCommand"));
   if (wp) {
     if (wp->GetDataField()->GetAsBoolean() !=
-	GPS_INFO.SwitchState.SpeedCommand) {
-      wp->GetDataField()->Set(GPS_INFO.SwitchState.SpeedCommand);
+	XCSoarInterface::Basic().SwitchState.SpeedCommand) {
+      wp->GetDataField()->Set(XCSoarInterface::Basic().SwitchState.SpeedCommand);
       wp->RefreshDisplay();
     }
   }
   wp = (WndProperty*)wf->FindByName(TEXT("prpUserSwitchUp"));
   if (wp) {
     if (wp->GetDataField()->GetAsBoolean() !=
-	GPS_INFO.SwitchState.UserSwitchUp) {
-      wp->GetDataField()->Set(GPS_INFO.SwitchState.UserSwitchUp);
+	XCSoarInterface::Basic().SwitchState.UserSwitchUp) {
+      wp->GetDataField()->Set(XCSoarInterface::Basic().SwitchState.UserSwitchUp);
       wp->RefreshDisplay();
     }
   }
   wp = (WndProperty*)wf->FindByName(TEXT("prpUserSwitchMiddle"));
   if (wp) {
     if (wp->GetDataField()->GetAsBoolean() !=
-	GPS_INFO.SwitchState.UserSwitchMiddle) {
-      wp->GetDataField()->Set(GPS_INFO.SwitchState.UserSwitchMiddle);
+	XCSoarInterface::Basic().SwitchState.UserSwitchMiddle) {
+      wp->GetDataField()->Set(XCSoarInterface::Basic().SwitchState.UserSwitchMiddle);
       wp->RefreshDisplay();
     }
   }
   wp = (WndProperty*)wf->FindByName(TEXT("prpUserSwitchDown"));
   if (wp) {
     if (wp->GetDataField()->GetAsBoolean() !=
-	GPS_INFO.SwitchState.UserSwitchDown) {
-      wp->GetDataField()->Set(GPS_INFO.SwitchState.UserSwitchDown);
+	XCSoarInterface::Basic().SwitchState.UserSwitchDown) {
+      wp->GetDataField()->Set(XCSoarInterface::Basic().SwitchState.UserSwitchDown);
       wp->RefreshDisplay();
     }
   }
   wp = (WndProperty*)wf->FindByName(TEXT("prpVarioCircling"));
   if (wp) {
     if (wp->GetDataField()->GetAsBoolean() !=
-	GPS_INFO.SwitchState.VarioCircling) {
-      wp->GetDataField()->Set(GPS_INFO.SwitchState.VarioCircling);
+	XCSoarInterface::Basic().SwitchState.VarioCircling) {
+      wp->GetDataField()->Set(XCSoarInterface::Basic().SwitchState.VarioCircling);
       wp->RefreshDisplay();
     }
   }
@@ -182,7 +177,7 @@ static CallBackTableEntry_t CallBackTable[]={
 void dlgSwitchesShowModal(void){
   wf = dlgLoadFromXML(CallBackTable,
                       TEXT("dlgSwitches.xml"),
-		      main_window,
+		      XCSoarInterface::main_window,
 		      TEXT("IDR_XML_SWITCHES"));
 
   if (wf) {

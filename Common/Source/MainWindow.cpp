@@ -65,7 +65,7 @@ MainWindow::set(LPCTSTR text,
   InfoBoxLayout::ScreenGeometry(rc);
 
   // color/pattern chart (must have infobox geometry before this)
-  MapGfx.Initialise(hInst);
+  MapGfx.Initialise(XCSoarInterface::hInst);
 
   StartupStore(TEXT("Create info boxes\n"));
   RECT rcsmall = InfoBoxManager::Create(rc);
@@ -77,7 +77,7 @@ MainWindow::set(LPCTSTR text,
   StartupStore(TEXT("Initialise fonts\n"));
   InitialiseFonts(*this, rc);
 
-  map.set(main_window, rcsmall, rc);
+  map.set(XCSoarInterface::main_window, rcsmall, rc);
   map.set_font(MapWindowFont);
   map.SetMapRect(rcsmall);
 }
@@ -141,7 +141,7 @@ LRESULT MainWindow::on_colour(HDC hdc, int wdata)
 bool MainWindow::on_timer(void)
 {
   if (globalRunningEvent.test()) {
-    AfterStartup();
+    XCSoarInterface::AfterStartup();
 #ifdef _SIM_
     SIMProcessTimer();
 #else
@@ -172,12 +172,12 @@ bool MainWindow::on_destroy(void) {
 }
 
 bool MainWindow::on_close() {
-  if (CheckShutdown()) {
+  if (XCSoarInterface::CheckShutdown()) {
     if(_timer_id) {
       ::KillTimer(hWnd, _timer_id);
       _timer_id = 0;
     }
-    Shutdown();
+    XCSoarInterface::Shutdown();
   }
   return true;
 }

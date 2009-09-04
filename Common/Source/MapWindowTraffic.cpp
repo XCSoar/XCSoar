@@ -56,7 +56,7 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas)
 
   if (!EnableFLARMMap) return;
 
-  if (!DrawInfo.FLARM_Available) return;
+  if (!Basic().FLARM_Available) return;
 
   Pen thinBlackPen(IBLSCALE(1), Color(0, 0, 0));
   POINT Arrow[5];
@@ -78,27 +78,27 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas)
   const double MACCREADY = GlidePolar::GetMacCready();
 
   for (i=0; i<FLARM_MAX_TRAFFIC; i++) {
-    if (DrawInfo.FLARM_Traffic[i].ID!=0) {
+    if (Basic().FLARM_Traffic[i].ID!=0) {
 
       double target_lon;
       double target_lat;
 
-      target_lon = DrawInfo.FLARM_Traffic[i].Longitude;
-      target_lat = DrawInfo.FLARM_Traffic[i].Latitude;
+      target_lon = Basic().FLARM_Traffic[i].Longitude;
+      target_lat = Basic().FLARM_Traffic[i].Latitude;
 
       if ((EnableFLARMMap==2)&&(scalefact>1.0)) {
         double distance;
         double bearing;
 
-        DistanceBearing(DrawInfo.Latitude,
-                        DrawInfo.Longitude,
+        DistanceBearing(Basic().Latitude,
+                        Basic().Longitude,
                         target_lat,
                         target_lon,
                         &distance,
                         &bearing);
 
-        FindLatitudeLongitude(DrawInfo.Latitude,
-                              DrawInfo.Longitude,
+        FindLatitudeLongitude(Basic().Latitude,
+                              Basic().Longitude,
                               bearing,
                               distance*scalefact,
                               &target_lat,
@@ -120,8 +120,8 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas)
       sc_av = sc_name;
 
 #ifndef FLARM_AVERAGE
-      if (DrawInfo.FLARM_Traffic[i].Name) {
-        TextInBox(hDC, DrawInfo.FLARM_Traffic[i].Name, sc.x+IBLSCALE(3),
+      if (Basic().FLARM_Traffic[i].Name) {
+        TextInBox(hDC, Basic().FLARM_Traffic[i].Name, sc.x+IBLSCALE(3),
                   sc.y, 0, displaymode,
                   true);
       }
@@ -131,16 +131,16 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas)
 
       sc_av.x += IBLSCALE(3);
 
-      if (DrawInfo.FLARM_Traffic[i].Name) {
+      if (Basic().FLARM_Traffic[i].Name) {
 	sc_name.y -= IBLSCALE(8);
-	_stprintf(label_name, TEXT("%s"), DrawInfo.FLARM_Traffic[i].Name);
+	_stprintf(label_name, TEXT("%s"), Basic().FLARM_Traffic[i].Name);
       } else {
 	label_name[0]= _T('\0');
       }
 
-      if (DrawInfo.FLARM_Traffic[i].Average30s>=0.1) {
+      if (Basic().FLARM_Traffic[i].Average30s>=0.1) {
 	_stprintf(label_avg, TEXT("%.1f"),
-		  LIFTMODIFY*DrawInfo.FLARM_Traffic[i].Average30s);
+		  LIFTMODIFY*Basic().FLARM_Traffic[i].Average30s);
       } else {
 	label_avg[0]= _T('\0');
       }
@@ -154,7 +154,7 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas)
       float vmax = (float)(1.5*min(5.0, max(MACCREADY,0.5)));
       float vmin = (float)(-1.5*min(5.0, max(MACCREADY,2.0)));
 
-      float cv = DrawInfo.FLARM_Traffic[i].Average30s;
+      float cv = Basic().FLARM_Traffic[i].Average30s;
       if (cv<0) {
         cv /= (-vmin); // JMW fixed bug here
       } else {
@@ -206,8 +206,8 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas)
       }
 
 #endif
-      if ((DrawInfo.FLARM_Traffic[i].AlarmLevel>0)
-	  && (DrawInfo.FLARM_Traffic[i].AlarmLevel<4)) {
+      if ((Basic().FLARM_Traffic[i].AlarmLevel>0)
+	  && (Basic().FLARM_Traffic[i].AlarmLevel<4)) {
 	draw_masked_bitmap(canvas, MapGfx.hFLARMTraffic, sc.x, sc.y, 10, 10, true);
       }
 
@@ -222,9 +222,9 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas)
       Arrow[4].x = -4;
       Arrow[4].y = 5;
 
-      //      double vmag = max(1.0,min(15.0,DrawInfo.FLARM_Traffic[i].Speed/5.0))*2;
+      //      double vmag = max(1.0,min(15.0,Basic().FLARM_Traffic[i].Speed/5.0))*2;
 
-      switch (DrawInfo.FLARM_Traffic[i].AlarmLevel) {
+      switch (Basic().FLARM_Traffic[i].AlarmLevel) {
       case 1:
 	  canvas.select(yellowBrush);
 	  break;
@@ -239,7 +239,7 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas)
       }
 
       PolygonRotateShift(Arrow, 5, sc.x, sc.y,
-                         DrawInfo.FLARM_Traffic[i].TrackBearing - DisplayAngle);
+                         Basic().FLARM_Traffic[i].TrackBearing - DisplayAngle);
       canvas.polygon(Arrow, 5);
 
     }

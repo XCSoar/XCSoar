@@ -40,16 +40,15 @@ Copyright_License {
 #include "McReady.h"
 #include "Protection.hpp"
 #include "SettingsComputer.hpp"
+#include "SettingsTask.hpp"
 #include "NMEA/Info.h"
 #include "NMEA/Derived.hpp"
 #include "Logger.h"
 #include "Math/Earth.hpp"
 
-
 int FastLogNum = 0; // number of points to log at high rate
 int LoggerTimeStepCruise=5;
 int LoggerTimeStepCircling=1;
-
 
 void GlideComputerStats::ResetFlight(const bool full)
 {
@@ -59,8 +58,8 @@ void GlideComputerStats::ResetFlight(const bool full)
 }
 
 void GlideComputerStats::StartTask() {
-  flightstats.LegStartTime[0] = gps_info.Time;
-  flightstats.LegStartTime[1] = gps_info.Time;
+  flightstats.LegStartTime[0] = Basic().Time;
+  flightstats.LegStartTime[1] = Basic().Time;
   // JMW clear thermal climb average on task start
   flightstats.ThermalAverage.Reset();
   flightstats.Task_Speed.Reset();
@@ -75,18 +74,18 @@ bool GlideComputerStats::DoLogging() {
   double dtStats = 60.0;
   double dtFRecord = 270; // 4.5 minutes (required minimum every 5)
 
-  if(gps_info.Time <= LogLastTime) {
-    LogLastTime = gps_info.Time;
+  if(Basic().Time <= LogLastTime) {
+    LogLastTime = Basic().Time;
   }
-  if(gps_info.Time <= StatsLastTime) {
-    StatsLastTime = gps_info.Time;
+  if(Basic().Time <= StatsLastTime) {
+    StatsLastTime = Basic().Time;
   }
-  if(gps_info.Time <= GetFRecordLastTime()) {
-    SetFRecordLastTime(gps_info.Time);
+  if(Basic().Time <= GetFRecordLastTime()) {
+    SetFRecordLastTime(Basic().Time);
   }
 
   // draw snail points more often in circling mode
-  if (calculated_info.Circling) {
+  if (Calculated().Circling) {
     dtLog = LoggerTimeStepCircling;
     dtSnail = 1.0;
   } else {
@@ -102,70 +101,70 @@ bool GlideComputerStats::DoLogging() {
   static double Latitude_last = 10;
   double distance;
 
-  DistanceBearing(gps_info.Latitude, gps_info.Longitude,
+  DistanceBearing(Basic().Latitude, Basic().Longitude,
 		  Latitude_last, Longitude_last,
 		  &distance, NULL);
-  Latitude_last = gps_info.Latitude;
-  Longitude_last = gps_info.Longitude;
+  Latitude_last = Basic().Latitude;
+  Longitude_last = Basic().Longitude;
 
   if (distance>200.0) {
     return false;
   }
 
-  if (gps_info.Time - LogLastTime >= dtLog) {
+  if (Basic().Time - LogLastTime >= dtLog) {
     double balt = -1;
-    if (gps_info.BaroAltitudeAvailable) {
-      balt = gps_info.BaroAltitude;
+    if (Basic().BaroAltitudeAvailable) {
+      balt = Basic().BaroAltitude;
     } else {
-      balt = gps_info.Altitude;
+      balt = Basic().Altitude;
     }
-    LogPoint(gps_info.Latitude , gps_info.Longitude , gps_info.Altitude,
+    LogPoint(Basic().Latitude , Basic().Longitude , Basic().Altitude,
              balt);
     LogLastTime += dtLog;
-    if (LogLastTime< gps_info.Time-dtLog) {
-      LogLastTime = gps_info.Time-dtLog;
+    if (LogLastTime< Basic().Time-dtLog) {
+      LogLastTime = Basic().Time-dtLog;
     }
     if (FastLogNum) FastLogNum--;
   }
 
-  if (gps_info.Time - GetFRecordLastTime() >= dtFRecord)
+  if (Basic().Time - GetFRecordLastTime() >= dtFRecord)
   {
-    if (LogFRecord(gps_info.SatelliteIDs,false))
+    if (LogFRecord(Basic().SatelliteIDs,false))
     {  // need F record every 5 minutes so if write fails or
        // constellation is invalid, don't update timer and try again
        // next cycle
       SetFRecordLastTime(GetFRecordLastTime() + dtFRecord);
       // the FRecordLastTime is reset when the logger restarts so it
       // is always at the start of the file
-      if (GetFRecordLastTime() < gps_info.Time-dtFRecord)
-        SetFRecordLastTime(gps_info.Time-dtFRecord);
+      if (GetFRecordLastTime() < Basic().Time-dtFRecord)
+        SetFRecordLastTime(Basic().Time-dtFRecord);
     }
   }
 
-  if (snail_trail.CheckAdvance(gps_info.Time, dtSnail)) {
+  if (snail_trail.CheckAdvance(Basic().Time, dtSnail)) {
     mutexGlideComputer.Lock();
-    snail_trail.AddPoint(&gps_info, &calculated_info);
+    snail_trail.AddPoint(&Basic(), &Calculated());
     mutexGlideComputer.Unlock();
   }
 
-  if (calculated_info.Flying) {
-    if (gps_info.Time - StatsLastTime >= dtStats) {
+  if (Calculated().Flying) {
+    if (Basic().Time - StatsLastTime >= dtStats) {
 
       mutexGlideComputer.Lock();
       flightstats.Altitude_Terrain.
         least_squares_update(max(0,
-                                 gps_info.Time-calculated_info.TakeOffTime)/3600.0,
-                             calculated_info.TerrainAlt);
+                                 Basic().Time-Calculated().TakeOffTime)/3600.0,
+                             Calculated().TerrainAlt);
 
       flightstats.Altitude.
         least_squares_update(max(0,
-                                 gps_info.Time-calculated_info.TakeOffTime)/3600.0,
-                             calculated_info.NavAltitude);
+                                 Basic().Time-Calculated().TakeOffTime)/3600.0,
+                             Calculated().NavAltitude);
       mutexGlideComputer.Unlock();
 
       StatsLastTime += dtStats;
-      if (StatsLastTime< gps_info.Time-dtStats) {
-        StatsLastTime = gps_info.Time-dtStats;
+      if (StatsLastTime< Basic().Time-dtStats) {
+        StatsLastTime = Basic().Time-dtStats;
       }
     }
   }
@@ -173,16 +172,22 @@ bool GlideComputerStats::DoLogging() {
 }
 
 
-double GlideComputerStats::GetAverageThermal() {
-  double mc_val;
-  mutexGlideComputer.Lock();
+const double GlideComputerStats::GetAverageThermal() const {
+  double mc_stats, mc_current;
+  ScopeLock protect(mutexGlideComputer);
+
+  mc_current = GlideComputerBlackboard::GetAverageThermal();
   if (flightstats.ThermalAverage.y_ave>0) {
-    mc_val = flightstats.ThermalAverage.y_ave;
+    if ((mc_current>0) && Calculated().Circling) {
+      mc_stats = (flightstats.ThermalAverage.sum_n*flightstats.ThermalAverage.y_ave
+		  +mc_current)/(flightstats.ThermalAverage.sum_n+1);
+    } else {
+      mc_stats = flightstats.ThermalAverage.y_ave;
+    }
   } else {
-    mc_val = GlideComputerBlackboard::GetAverageThermal();
+    mc_stats = mc_current;
   }
-  mutexGlideComputer.Unlock();
-  return mc_val;
+  return mc_stats;
 }
 
 
@@ -192,4 +197,68 @@ void GlideComputerStats::SaveTaskSpeed(double val)
   mutexGlideComputer.Lock();
   flightstats.Task_Speed.least_squares_update(val);
   mutexGlideComputer.Unlock();
+}
+
+void GlideComputerStats::SetLegStart() 
+{
+  mutexGlideComputer.Lock();
+  if (flightstats.LegStartTime[ActiveWayPoint]<0) {
+    flightstats.LegStartTime[ActiveWayPoint] = Basic().Time;
+  }
+  mutexGlideComputer.Unlock();
+}
+
+
+void
+GlideComputerStats::OnClimbBase(double StartAlt)
+{
+  ScopeLock protect(mutexGlideComputer);
+  if (flightstats.Altitude_Ceiling.sum_n>0) {
+    // only update base if have already climbed, otherwise
+    // we will catch the takeoff height as the base.
+    
+    flightstats.Altitude_Base.
+      least_squares_update(max(0,Calculated().ClimbStartTime
+			       - Calculated().TakeOffTime)/3600.0,
+			   StartAlt);
+  }
+}
+
+
+void
+GlideComputerStats::OnClimbCeiling()
+{
+  ScopeLock protect(mutexGlideComputer);
+  flightstats.Altitude_Ceiling.
+    least_squares_update(max(0,Calculated().CruiseStartTime
+			     - Calculated().TakeOffTime)/3600.0,
+			 Calculated().CruiseStartAlt);
+}
+
+
+void
+GlideComputerStats::OnDepartedThermal()
+{
+  ScopeLock protect(mutexGlideComputer);
+  flightstats.ThermalAverage.
+    least_squares_update(Calculated().LastThermalAverage);
+
+#ifdef DEBUG_STATS
+  DebugStore("%f %f # thermal stats\n",
+	     flightstats.ThermalAverage.m,
+	     flightstats.ThermalAverage.b
+	     );
+#endif
+}
+
+void
+GlideComputerStats::Initialise()
+{
+
+}
+
+void
+GlideComputerStats::SetFastLogging()
+{
+  FastLogNum = 5;
 }

@@ -122,7 +122,6 @@ double AdjustAATTargets(double desired);
 void RefreshTaskWaypoint(int i);
 void RefreshTask(void);
 void CalculateTaskSectors(void);
-void CalculateAATTaskSectors(void);
 
 void guiStartLogger(bool noAsk = false);
 void guiStopLogger(bool noAsk = false);
@@ -165,5 +164,8 @@ int getFinalWaypoint(void);
 bool ActiveIsFinalWaypoint(void);
 
 bool IsFinalWaypoint(void);
+
+bool InAATTurnSector(const double longitude, const double latitude,
+		     const int the_turnpoint);
 
 #endif

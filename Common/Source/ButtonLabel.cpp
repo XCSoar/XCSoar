@@ -177,7 +177,7 @@ void ButtonLabel::CreateButtonLabels(RECT rc) {
 
   for (i=0; i<NUMBUTTONLABELS; i++) {
     GetButtonPosition(i, rc, &x, &y, &xsize, &ysize);
-    hWndButtonWindow[i].set(main_window, x, y, xsize, ysize,
+    hWndButtonWindow[i].set(XCSoarInterface::main_window, x, y, xsize, ysize,
                             true, true, false, true, true);
     hWndButtonWindow[i].insert_after(HWND_TOP, true);
 

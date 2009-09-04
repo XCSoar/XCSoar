@@ -48,13 +48,13 @@ Copyright_License {
 #include "Task.h"
 #include "TopologyStore.h"
 #include "Blackboard.hpp"
-#include "Interface.hpp"
+#include "Components.hpp"
 #include "RasterWeather.h"
 
 
 void MapWindow::RenderStart(Canvas &canvas, const RECT rc)
 {
-  CalculateOrigin(rc, DrawInfo, DerivedDrawInfo);
+  CalculateOrigin(rc, Basic(), Calculated());
   CalculateScreenPositionsWaypoints();
   CalculateScreenPositionsTask();
   CalculateScreenPositionsAirspace();
@@ -69,7 +69,7 @@ void MapWindow::RenderStart(Canvas &canvas, const RECT rc)
 
 void MapWindow::RenderBackground(Canvas &canvas, const RECT rc)
 {
-  if (!EnableTerrain || !DerivedDrawInfo.TerrainValid
+  if (!EnableTerrain || !Calculated().TerrainValid
       || !terrain.isTerrainLoaded() ) {
     canvas.select(MapGfx.hBackgroundBrush);
     canvas.white_pen();
@@ -83,14 +83,14 @@ void MapWindow::RenderBackground(Canvas &canvas, const RECT rc)
 
 void MapWindow::RenderMapLayer(Canvas &canvas, const RECT rc)
 {
-  if ((EnableTerrain && (DerivedDrawInfo.TerrainValid)
+  if ((EnableTerrain && (Calculated().TerrainValid)
        && terrain.isTerrainLoaded())
       || RASP.GetParameter()) {
     double sunelevation = 40.0;
-    double sunazimuth = DisplayAngle-DerivedDrawInfo.WindBearing;
+    double sunazimuth = DisplayAngle-Calculated().WindBearing;
 
     // draw sun from constant angle if very low wind speed
-    if (DerivedDrawInfo.WindSpeed<0.5) {
+    if (Calculated().WindSpeed<0.5) {
       sunazimuth = DisplayAngle + 45.0;
     }
 
@@ -101,10 +101,10 @@ void MapWindow::RenderMapLayer(Canvas &canvas, const RECT rc)
     // TODO: implement a workaround
 
     DrawTerrain(canvas, *this, sunazimuth, sunelevation,
-		DrawInfo.Longitude, DrawInfo.Latitude,
+		Basic().Longitude, Basic().Latitude,
 	        BigZoom);
 
-    if ((FinalGlideTerrain==2) && DerivedDrawInfo.TerrainValid) {
+    if ((FinalGlideTerrain==2) && Calculated().TerrainValid) {
       DrawTerrainAbove(canvas, rc, buffer_canvas);
     }
 
@@ -158,7 +158,7 @@ void MapWindow::RenderTask(Canvas &canvas, const RECT rc)
 void MapWindow::RenderGlide(Canvas &canvas, const RECT rc)
 {
   // draw red cross on glide through terrain marker
-  if (FinalGlideTerrain && DerivedDrawInfo.TerrainValid) {
+  if (FinalGlideTerrain && Calculated().TerrainValid) {
     DrawGlideThroughTerrain(canvas);
   }
   /*
@@ -166,7 +166,7 @@ void MapWindow::RenderGlide(Canvas &canvas, const RECT rc)
     DrawGlideCircle(canvas, rc);
   }
   */
-  if ((EnableTerrain && (DerivedDrawInfo.TerrainValid))
+  if ((EnableTerrain && (Calculated().TerrainValid))
       || RASP.GetParameter()) {
     DrawSpotHeights(canvas, *this, label_block);
   }

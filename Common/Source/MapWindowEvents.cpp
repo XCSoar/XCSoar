@@ -45,7 +45,7 @@ Copyright_License {
 #include "InputEvents.h"
 #include "Language.hpp"
 #include "Message.h"
-#include "Interface.hpp"
+#include "Components.hpp"
 
 #include <stdlib.h>
 

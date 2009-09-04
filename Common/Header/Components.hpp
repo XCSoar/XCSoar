@@ -41,8 +41,22 @@ Copyright_License {
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
-void AfterStartup();
-void Shutdown();
-bool Startup (HINSTANCE, LPTSTR lpCmdLine);
+class MapWindow;
+class GaugeVario;
+class GaugeFLARM;
+class Marks;
+class TopologyStore;
+class RasterTerrain;
+class RasterWeather;
+class GlideComputer;
+
+// other global objects
+extern Marks *marks;
+extern TopologyStore *topology;
+extern GaugeVario *gauge_vario;
+extern GaugeFLARM *gauge_flarm;
+extern RasterTerrain terrain;
+extern RasterWeather RASP;
+extern GlideComputer glide_computer;
 
 #endif

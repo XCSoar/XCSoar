@@ -45,6 +45,10 @@ Copyright_License {
 
 #include "Persist.hpp"
 
+void GlideComputerBlackboard::Initialise()
+{
+}
+
 void GlideComputerBlackboard::ResetFlight(const bool full) {
   unsigned i;
   if (full) {
@@ -143,46 +147,18 @@ void GlideComputerBlackboard::SaveFinish()
   memcpy(&Finish_Derived_Info, &calculated_info, sizeof(DERIVED_INFO));
 }
 
-void GlideComputerBlackboard::Initialise()
+void GlideComputerBlackboard::RestoreFinish()
 {
-  memset( &gps_info, 0, sizeof(NMEA_INFO));
-  memset( &calculated_info, 0, sizeof(DERIVED_INFO));
-
-  gps_info.NAVWarning = true; // default, no gps at all!
-  gps_info.SwitchState.AirbrakeLocked = false;
-  gps_info.SwitchState.FlapPositive = false;
-  gps_info.SwitchState.FlapNeutral = false;
-  gps_info.SwitchState.FlapNegative = false;
-  gps_info.SwitchState.GearExtended = false;
-  gps_info.SwitchState.Acknowledge = false;
-  gps_info.SwitchState.Repeat = false;
-  gps_info.SwitchState.SpeedCommand = false;
-  gps_info.SwitchState.UserSwitchUp = false;
-  gps_info.SwitchState.UserSwitchMiddle = false;
-  gps_info.SwitchState.UserSwitchDown = false;
-  gps_info.SwitchState.VarioCircling = false;
-
-  SYSTEMTIME pda_time;
-  GetSystemTime(&pda_time);
-  gps_info.Time  = pda_time.wHour*3600+pda_time.wMinute*60+pda_time.wSecond;
-  gps_info.Year  = pda_time.wYear;
-  gps_info.Month = pda_time.wMonth;
-  gps_info.Day	 = pda_time.wDay;
-  gps_info.Hour  = pda_time.wHour;
-  gps_info.Minute = pda_time.wMinute;
-  gps_info.Second = pda_time.wSecond;
-
-#ifdef _SIM_
-  #if _SIM_STARTUPSPEED
-  gps_info.Speed = _SIM_STARTUPSPEED;
-  #endif
-  #if _SIM_STARTUPALTITUDE
-  gps_info.Altitude = _SIM_STARTUPALTITUDE;
-  #endif
-#endif
+  double flighttime = calculated_info.FlightTime;
+  double takeofftime = calculated_info.TakeOffTime;
+  memcpy(&calculated_info, &Finish_Derived_Info, sizeof(DERIVED_INFO));
+  calculated_info.FlightTime = flighttime;
+  calculated_info.TakeOffTime = takeofftime;
 }
 
 
-double GlideComputerBlackboard::GetAverageThermal() {
+const double GlideComputerBlackboard::GetAverageThermal() const {
   return max(0.0,calculated_info.AverageThermal);
 }
+
+

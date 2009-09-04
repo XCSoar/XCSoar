@@ -38,7 +38,7 @@ Copyright_License {
 #include "Atmosphere.h"
 #include "RasterTerrain.h"
 #include "Interface.hpp"
-
+#include "Components.hpp"
 #include <math.h>
 #include <stdlib.h> /* for abs() */
 

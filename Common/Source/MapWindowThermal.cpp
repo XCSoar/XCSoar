@@ -50,35 +50,37 @@ Copyright_License {
 
 
 void MapWindow::CalculateScreenPositionsThermalSources() {
+  /* JMW incomplete/illegal
   for (int i=0; i<MAX_THERMAL_SOURCES; i++) {
-    if (DerivedDrawInfo.ThermalSources[i].LiftRate>0) {
-      double dh = DerivedDrawInfo.NavAltitude
-        -DerivedDrawInfo.ThermalSources[i].GroundHeight;
+    if (Calculated().ThermalSources[i].LiftRate>0) {
+      double dh = Calculated().NavAltitude
+        -Calculated().ThermalSources[i].GroundHeight;
       if (dh<0) {
-        DerivedDrawInfo.ThermalSources[i].Visible = false;
+        Calculated().ThermalSources[i].Visible = false;
         continue;
       }
 
-      double t = dh/DerivedDrawInfo.ThermalSources[i].LiftRate;
+      double t = dh/Calculated().ThermalSources[i].LiftRate;
       double lat, lon;
-      FindLatitudeLongitude(DerivedDrawInfo.ThermalSources[i].Latitude,
-                            DerivedDrawInfo.ThermalSources[i].Longitude,
-                            DerivedDrawInfo.WindBearing,
-                            -DerivedDrawInfo.WindSpeed*t,
+      FindLatitudeLongitude(Calculated().ThermalSources[i].Latitude,
+                            Calculated().ThermalSources[i].Longitude,
+                            Calculated().WindBearing,
+                            -Calculated().WindSpeed*t,
                             &lat, &lon);
       if (LonLatVisible(lon,lat)) {
         LonLat2Screen(lon,
                       lat,
-                      DerivedDrawInfo.ThermalSources[i].Screen);
-        DerivedDrawInfo.ThermalSources[i].Visible =
-          PointVisible(DerivedDrawInfo.ThermalSources[i].Screen);
+                      Calculated().ThermalSources[i].Screen);
+        Calculated().ThermalSources[i].Visible =
+          PointVisible(Calculated().ThermalSources[i].Screen);
       } else {
-        DerivedDrawInfo.ThermalSources[i].Visible = false;
+        Calculated().ThermalSources[i].Visible = false;
       }
     } else {
-      DerivedDrawInfo.ThermalSources[i].Visible = false;
+      Calculated().ThermalSources[i].Visible = false;
     }
   }
+  */
 }
 
 
@@ -91,18 +93,18 @@ MapWindow::DrawThermalEstimate(Canvas &canvas)
     return;
 
   if (DisplayMode == dmCircling) {
-    if (DerivedDrawInfo.ThermalEstimate_R>0) {
+    if (Calculated().ThermalEstimate_R>0) {
       draw_masked_bitmap_if_visible(canvas, MapGfx.hBmpThermalSource,
-				    DerivedDrawInfo.ThermalEstimate_Longitude,
-				    DerivedDrawInfo.ThermalEstimate_Latitude,
+				    Calculated().ThermalEstimate_Longitude,
+				    Calculated().ThermalEstimate_Latitude,
 				    10, 10);
     }
   } else if (GetMapScaleKM() <= 4) {
     for (int i=0; i<MAX_THERMAL_SOURCES; i++) {
-      if (DerivedDrawInfo.ThermalSources[i].Visible) {
+      if (Calculated().ThermalSources[i].Visible) {
 	draw_masked_bitmap(canvas, MapGfx.hBmpThermalSource, 
-			   DerivedDrawInfo.ThermalSources[i].Screen.x,
-			   DerivedDrawInfo.ThermalSources[i].Screen.y,
+			   Calculated().ThermalSources[i].Screen.x,
+			   Calculated().ThermalSources[i].Screen.y,
 			   10, 10, true);
       }
     }
@@ -114,7 +116,7 @@ void MapWindow::DrawThermalBand(Canvas &canvas, const RECT rc)
 {
   POINT GliderBand[5] = { {0,0},{23,0},{22,0},{24,0},{0,0} };
 
-  if ((DerivedDrawInfo.TaskAltitudeDifference>50)
+  if ((Calculated().TaskAltitudeDifference>50)
       &&(DisplayMode == dmFinalGlide)) {
     return;
   }
@@ -122,7 +124,7 @@ void MapWindow::DrawThermalBand(Canvas &canvas, const RECT rc)
   // JMW TODO accuracy: gather proper statistics
   // note these should/may also be relative to ground
   int i;
-  double mth = DerivedDrawInfo.MaxThermalHeight;
+  double mth = Calculated().MaxThermalHeight;
   double maxh, minh;
   double h;
   double Wt[NUMTHERMALBUCKETS];
@@ -132,16 +134,16 @@ void MapWindow::DrawThermalBand(Canvas &canvas, const RECT rc)
 #define TBSCALEX 20
 
   // calculate height above safety altitude
-  double hoffset = SAFETYALTITUDEBREAKOFF+DerivedDrawInfo.TerrainBase;
-  h = DerivedDrawInfo.NavAltitude-hoffset;
+  double hoffset = SAFETYALTITUDEBREAKOFF+Calculated().TerrainBase;
+  h = Calculated().NavAltitude-hoffset;
 
   bool draw_start_height = ((ActiveWayPoint==0) && (ValidTaskPoint(0))
 			    && (StartMaxHeight!=0)
-			    && (DerivedDrawInfo.TerrainValid));
+			    && (Calculated().TerrainValid));
   double hstart=0;
   if (draw_start_height) {
     if (StartHeightRef == 0) {
-      hstart = StartMaxHeight+DerivedDrawInfo.TerrainAlt;
+      hstart = StartMaxHeight+Calculated().TerrainAlt;
     } else {
       hstart = StartMaxHeight;
     }
@@ -181,11 +183,11 @@ void MapWindow::DrawThermalBand(Canvas &canvas, const RECT rc)
     double hi = i*mth/NUMTHERMALBUCKETS;
     double hp = ((hi-minh)/(maxh-minh));
 
-    if (DerivedDrawInfo.ThermalProfileN[i]>5) {
+    if (Calculated().ThermalProfileN[i]>5) {
       // now requires 10 items in bucket before displaying,
       // to eliminate kinks
-      wthis = DerivedDrawInfo.ThermalProfileW[i]
-                 /DerivedDrawInfo.ThermalProfileN[i];
+      wthis = Calculated().ThermalProfileW[i]
+                 /Calculated().ThermalProfileN[i];
     }
     if (wthis>0.0) {
       ht[numtherm]= hp;

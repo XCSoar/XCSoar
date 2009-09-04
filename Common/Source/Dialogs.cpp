@@ -162,16 +162,16 @@ HWND CreateProgressDialog(const TCHAR* text) {
 
     if (InfoBoxLayout::landscape) {
       hProgress=
-	CreateDialog(hInst,
+	CreateDialog(XCSoarInterface::hInst,
 		     (LPCTSTR)IDD_PROGRESS_LANDSCAPE,
-		     main_window,
+		     XCSoarInterface::main_window,
 		     (DLGPROC)Progress);
 
     } else {
       hProgress=
-	CreateDialog(hInst,
+	CreateDialog(XCSoarInterface::hInst,
 		     (LPCTSTR)IDD_PROGRESS,
-		     main_window,
+		     XCSoarInterface::main_window,
 		     (DLGPROC)Progress);
     }
 
@@ -180,14 +180,14 @@ HWND CreateProgressDialog(const TCHAR* text) {
     SetWindowText(GetDlgItem(hProgress,IDC_VERSION),Temp);
 
     RECT rc;
-    GetClientRect(main_window, &rc);
+    GetClientRect(XCSoarInterface::main_window, &rc);
 
 #if (WINDOWSPC<1)
     hWndCurtain = CreateWindow(TEXT("STATIC"), TEXT(" "),
 			       WS_VISIBLE | WS_CHILD,
                                0, 0, (rc.right - rc.left),
 			       (rc.bottom-rc.top),
-                               main_window, NULL, hInst, NULL);
+                               XCSoarInterface::main_window, NULL, hInst, NULL);
     SetWindowPos(hWndCurtain,HWND_TOP,0,0,0,0,
                  SWP_NOMOVE|SWP_NOSIZE|SWP_SHOWWINDOW);
     ShowWindow(hWndCurtain,SW_SHOW);
@@ -198,7 +198,7 @@ HWND CreateProgressDialog(const TCHAR* text) {
 #if (WINDOWSPC>0)
     RECT rcp;
     GetClientRect(hProgress, &rcp);
-    GetWindowRect(main_window, &rc);
+    GetWindowRect(XCSoarInterface::main_window, &rc);
     SetWindowPos(hProgress,HWND_TOP,
                  rc.left, rc.top, (rcp.right - rcp.left), (rcp.bottom-rcp.top),
                  SWP_SHOWWINDOW);
@@ -255,7 +255,7 @@ bool PopupNearestWaypointDetails(double lon, double lat,
     dlgWayPointSelect(PanLongitude, PanLatitude, 0, 1);
     }
   */
-  MapWindowProjection &map_window = main_window.map;
+  MapWindowProjection &map_window = XCSoarInterface::main_window.map;
 
   int i;
   if (!pan || !map_window.isPan()) {

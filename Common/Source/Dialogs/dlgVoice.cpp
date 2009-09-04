@@ -65,7 +65,7 @@ static CallBackTableEntry_t CallBackTable[]={
 void dlgVoiceShowModal(void){
   wf = dlgLoadFromXML(CallBackTable,
                       TEXT("dlgVoice.xml"),
-		      main_window,
+		      XCSoarInterface::main_window,
 		      TEXT("IDR_XML_VOICE"));
 
   WndProperty* wp;

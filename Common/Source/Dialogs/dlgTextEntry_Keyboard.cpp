@@ -127,13 +127,13 @@ void dlgTextEntryKeyboardShowModal(TCHAR *text, int width)
   {
     wf = dlgLoadFromXML(CallBackTable,
                         TEXT("frmTextEntry_Keyboard_L.xml"),
-			main_window,
+			XCSoarInterface::main_window,
 			TEXT("IDR_XML_TEXTENTRY_KEYBOARD_L"));
     if (!wf) return;
   } else {
     wf = dlgLoadFromXML(CallBackTable,
                         TEXT("frmTextEntry_Keyboard.xml"),
-			main_window,
+			XCSoarInterface::main_window,
 			TEXT("IDR_XML_TEXTENTRY_KEYBOARD"));
     if (!wf) return;
   }

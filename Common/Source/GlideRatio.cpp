@@ -83,7 +83,7 @@ short i, bsize;
 
 
 
-void InsertLDRotary(DERIVED_INFO *Calculated, ldrotary_s *buf, int distance, int altitude) {
+void InsertLDRotary(const DERIVED_INFO *Calculated, ldrotary_s *buf, int distance, int altitude) {
 static short errs=0;
 
 	if (Calculated->OnGround == TRUE) {
@@ -119,7 +119,7 @@ static short errs=0;
  * returns 0 if invalid, 999 if too high
 
  */
-int CalculateLDRotary(DERIVED_INFO *Calculated, ldrotary_s *buf ) {
+int CalculateLDRotary(const DERIVED_INFO *Calculated, ldrotary_s *buf ) {
 
 	int altdiff, eff;
 	short bcold;

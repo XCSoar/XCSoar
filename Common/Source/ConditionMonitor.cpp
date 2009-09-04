@@ -52,6 +52,8 @@ Copyright_License {
 #include "InputEvents.h"
 #include "WayPoint.hpp"
 
+#include "GlideComputer.hpp"
+
 class ConditionMonitor {
 public:
   ConditionMonitor() {
@@ -59,16 +61,16 @@ public:
     LastTime_Check = -1;
   }
 
-  void Update(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated) {
-    if (!Calculated->Flying)
+  void Update(const GlideComputer& cmp) {
+    if (!cmp.Calculated().Flying)
       return;
 
     bool restart = false;
-    if (Ready_Time_Check(Basic->Time, &restart)) {
-      LastTime_Check = Basic->Time;
-      if (CheckCondition(Basic, Calculated)) {
-	if (Ready_Time_Notification(Basic->Time) && !restart) {
-	  LastTime_Notification = Basic->Time;
+    if (Ready_Time_Check(cmp.Basic().Time, &restart)) {
+      LastTime_Check = cmp.Basic().Time;
+      if (CheckCondition(cmp)) {
+	if (Ready_Time_Notification(cmp.Basic().Time) && !restart) {
+	  LastTime_Notification = cmp.Basic().Time;
 	  Notify();
 	  SaveLast();
 	}
@@ -87,8 +89,7 @@ protected:
 
 private:
 
-  virtual bool CheckCondition(const NMEA_INFO *Basic,
-                              const DERIVED_INFO *Calculated) = 0;
+  virtual bool CheckCondition(const GlideComputer& cmp) = 0;
   virtual void Notify(void) = 0;
   virtual void SaveLast(void) = 0;
 
@@ -136,13 +137,12 @@ public:
   }
 protected:
 
-  bool CheckCondition(const NMEA_INFO *Basic,
-                      const DERIVED_INFO *Calculated) {
+  bool CheckCondition(const GlideComputer& cmp) {
 
-    wind_mag = Calculated->WindSpeed;
-    wind_bearing = Calculated->WindBearing;
+    wind_mag = cmp.Calculated().WindSpeed;
+    wind_bearing = cmp.Calculated().WindBearing;
 
-    if (!Calculated->Flying) {
+    if (!cmp.Calculated().Flying) {
       last_wind_mag = wind_mag;
       last_wind_bearing = wind_bearing;
       return false;
@@ -186,15 +186,15 @@ public:
   }
 protected:
 
-  bool CheckCondition(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated) {
-    if (!Calculated->Flying || !ValidTaskPoint(ActiveWayPoint)) {
+  bool CheckCondition(const GlideComputer& cmp) {
+    if (!cmp.Calculated().Flying || !ValidTaskPoint(ActiveWayPoint)) {
       return false;
     }
 
-    tad = Calculated->TaskAltitudeDifference*0.2+0.8*tad;
+    tad = cmp.Calculated().TaskAltitudeDifference*0.2+0.8*tad;
 
     bool BeforeFinalGlide =
-      (ValidTaskPoint(ActiveWayPoint+1) && !Calculated->FinalGlide);
+      (ValidTaskPoint(ActiveWayPoint+1) && !cmp.Calculated().FinalGlide);
 
     if (BeforeFinalGlide) {
       Interval_Notification = 60*5;
@@ -206,7 +206,7 @@ protected:
       }
     } else {
       Interval_Notification = 60;
-      if (Calculated->FinalGlide) {
+      if (cmp.Calculated().FinalGlide) {
         if ((last_tad< -50) && (tad>1)) {
           // just reached final glide, previously well below
           return true;
@@ -249,8 +249,8 @@ public:
   }
 protected:
 
-  bool CheckCondition(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated) {
-    if (!ValidTaskPoint(ActiveWayPoint) || !Calculated->Flying) {
+  bool CheckCondition(const GlideComputer& cmp) {
+    if (!ValidTaskPoint(ActiveWayPoint) || !cmp.Calculated().Flying) {
       return false;
     }
 
@@ -260,8 +260,9 @@ protected:
       = DoSunEphemeris(
                        WayPointList[Task[ActiveWayPoint].Index].Longitude,
                        WayPointList[Task[ActiveWayPoint].Index].Latitude);
-    double d1 = (Calculated->TaskTimeToGo+DetectCurrentTime(Basic))/3600;
-    double d0 = (DetectCurrentTime(Basic))/3600;
+    double d1 = (cmp.Calculated().TaskTimeToGo
+		 +DetectCurrentTime(&cmp.Basic()))/3600;
+    double d0 = (DetectCurrentTime(&cmp.Basic()))/3600;
 
     mutexTaskData.Unlock();
 
@@ -294,10 +295,10 @@ public:
   }
 protected:
 
-  bool CheckCondition(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated) {
+  bool CheckCondition(const GlideComputer& cmp) {
     if (!AATEnabled || !ValidTaskPoint(ActiveWayPoint) || TaskIsTemporary()
-        || !(Calculated->ValidStart && !Calculated->ValidFinish)
-        || !Calculated->Flying) {
+        || !(cmp.Calculated().ValidStart && !cmp.Calculated().ValidFinish)
+        || !cmp.Calculated().Flying) {
       return false;
     }
     bool OnFinalWaypoint = !ValidTaskPoint(ActiveWayPoint);
@@ -305,7 +306,7 @@ protected:
       // can't do much about it now, so don't give a warning
       return false;
     }
-    if (Calculated->TaskTimeToGo < Calculated->AATTimeToGo) {
+    if (cmp.Calculated().TaskTimeToGo < cmp.Calculated().AATTimeToGo) {
       return true;
     } else {
       return false;
@@ -332,22 +333,23 @@ public:
   }
 protected:
 
-  bool CheckCondition(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated) {
-    if (!ValidTaskPoint(ActiveWayPoint) || !Calculated->Flying
+  bool CheckCondition(const GlideComputer& cmp) {
+    if (!ValidTaskPoint(ActiveWayPoint) || !cmp.Calculated().Flying
         || (ActiveWayPoint>0) || !ValidTaskPoint(ActiveWayPoint+1)) {
       return false;
     }
-    if (Calculated->LegDistanceToGo>StartRadius) {
+    if (cmp.Calculated().LegDistanceToGo>StartRadius) {
       return false;
     }
-    if (ValidStartSpeed(Basic, Calculated, StartMaxSpeedMargin) && InsideStartHeight(Basic, Calculated, StartMaxHeightMargin))
+    if (cmp.ValidStartSpeed(StartMaxSpeedMargin) 
+	&& cmp.InsideStartHeight(StartMaxHeightMargin))
     {
       withinMargin = true;
     } else {
       withinMargin = false;
     }
-    return !(ValidStartSpeed(Basic, Calculated)
-	     && InsideStartHeight(Basic, Calculated));
+    return !(cmp.ValidStartSpeed()
+	     && cmp.InsideStartHeight());
   };
 
   void Notify(void) {
@@ -376,15 +378,16 @@ public:
 
 protected:
 
-  bool CheckCondition(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated) {
-    if (!Calculated->Flying || !ValidTaskPoint(ActiveWayPoint)) {
+  bool CheckCondition(const GlideComputer& cmp) {
+    if (!cmp.Calculated().Flying || !ValidTaskPoint(ActiveWayPoint)) {
       return false;
     }
 
-    fgtt = !((Calculated->TerrainWarningLatitude == 0.0) &&
-	     (Calculated->TerrainWarningLongitude == 0.0));
+    fgtt = !((cmp.Calculated().TerrainWarningLatitude == 0.0) &&
+	     (cmp.Calculated().TerrainWarningLongitude == 0.0));
 
-    if (!Calculated->FinalGlide || (Calculated->TaskAltitudeDifference<-50)) {
+    if (!cmp.Calculated().FinalGlide 
+	|| (cmp.Calculated().TaskAltitudeDifference<-50)) {
       fgtt_last = false;
     } else if ((fgtt) && (!fgtt_last)) {
       // just reached final glide, previously well below
@@ -406,8 +409,6 @@ private:
   bool fgtt_last;
 };
 
-
-
 ConditionMonitorWind       cm_wind;
 ConditionMonitorFinalGlide cm_finalglide;
 ConditionMonitorSunset     cm_sunset;
@@ -416,13 +417,12 @@ ConditionMonitorStartRules cm_startrules;
 ConditionMonitorGlideTerrain cm_glideterrain;
 
 void
-ConditionMonitorsUpdate(const NMEA_INFO *Basic,
-                        const DERIVED_INFO *Calculated)
+ConditionMonitorsUpdate(const GlideComputer& cmp)
 {
-  cm_wind.Update(Basic, Calculated);
-  cm_finalglide.Update(Basic, Calculated);
-  cm_sunset.Update(Basic, Calculated);
-  cm_aattime.Update(Basic, Calculated);
-  cm_startrules.Update(Basic, Calculated);
-  cm_glideterrain.Update(Basic, Calculated);
+  cm_wind.Update(cmp);
+  cm_finalglide.Update(cmp);
+  cm_sunset.Update(cmp);
+  cm_aattime.Update(cmp);
+  cm_startrules.Update(cmp);
+  cm_glideterrain.Update(cmp);
 }

@@ -136,26 +136,26 @@ static void OnAirspaceListEnter(WindowControl * Sender,
           Name = AirspaceArea[index_area].Name;
         }
         if (Name) {
-          MapWindow &map_window = main_window.map;
+          MapWindow &map_window = XCSoarInterface::main_window.map;
 	  UINT answer;
           answer = MessageBoxX(Name,
 			       gettext(TEXT("Acknowledge for day?")),
 			       MB_YESNOCANCEL|MB_ICONQUESTION);
 	  if (answer == IDYES) {
 	    if (index_circle>=0) {
-              AirspaceWarnListAdd(&GPS_INFO, &CALCULATED_INFO, map_window,
+              AirspaceWarnListAdd(&XCSoarInterface::Basic(), &XCSoarInterface::Calculated(), map_window,
                                   false, true, index_circle, true);
             } else if (index_area>=0) {
-              AirspaceWarnListAdd(&GPS_INFO, &CALCULATED_INFO, map_window,
+              AirspaceWarnListAdd(&XCSoarInterface::Basic(), &XCSoarInterface::Calculated(), map_window,
                                   false, false, index_area, true);
             }
           } else if (answer == IDNO) {
 	    // this will cancel a daily ack
 	    if (index_circle>=0) {
-              AirspaceWarnListAdd(&GPS_INFO, &CALCULATED_INFO, map_window,
+              AirspaceWarnListAdd(&XCSoarInterface::Basic(), &XCSoarInterface::Calculated(), map_window,
                                   true, true, index_circle, true);
             } else if (index_area>=0) {
-              AirspaceWarnListAdd(&GPS_INFO, &CALCULATED_INFO, map_window,
+              AirspaceWarnListAdd(&XCSoarInterface::Basic(), &XCSoarInterface::Calculated(), map_window,
                                   true, false, index_area, true);
             }
 	  }
@@ -198,7 +198,7 @@ static int _cdecl AirspaceDirectionCompare(const void *elem1, const void *elem2 
 
   a = DirectionFilter[DirectionFilterIdx];
   if (a == DirHDG){
-    a = iround(CALCULATED_INFO.Heading);
+    a = iround(XCSoarInterface::Calculated().Heading);
     lastHeading = a;
   }
 
@@ -272,7 +272,7 @@ static void PrepareData(void){
   }
 
   for (i=0; i<(int)NumberOfAirspaceAreas; i++){
-    MapWindow &map_window = main_window.map;
+    MapWindow &map_window = XCSoarInterface::main_window.map;
 
     AirspaceSelectInfo[index].Index_Circle = -1;
     AirspaceSelectInfo[index].Index_Area = i;
@@ -500,7 +500,7 @@ static void SetDirectionData(DataField *Sender){
   if (DirectionFilterIdx == 0)
     _stprintf(sTmp, TEXT("%c"), '*');
   else if (DirectionFilterIdx == 1){
-    int a = iround(CALCULATED_INFO.Heading);
+    int a = iround(XCSoarInterface::Calculated().Heading);
     if (a <=0)
       a += 360;
     _stprintf(sTmp, TEXT("HDG(%d")TEXT(DEG)TEXT(")"), a);
@@ -719,7 +719,7 @@ static int OnTimerNotify(WindowControl * Sender) {
   (void)Sender;
   if (DirectionFilterIdx == 1){
     int a;
-    a = (lastHeading - iround(CALCULATED_INFO.Heading));
+    a = (lastHeading - iround(XCSoarInterface::Calculated().Heading));
     if (abs(a) > 0){
       UpdateList();
       SetDirectionData(NULL);
@@ -783,18 +783,18 @@ void dlgAirspaceSelect(void) {
 
   NumberOfAirspaces = NumberOfAirspaceCircles + NumberOfAirspaceAreas;
 
-  Latitude = GPS_INFO.Latitude;
-  Longitude = GPS_INFO.Longitude;
+  Latitude = XCSoarInterface::Basic().Latitude;
+  Longitude = XCSoarInterface::Basic().Longitude;
 
   if (!InfoBoxLayout::landscape) {
     wf = dlgLoadFromXML(CallBackTable,
                         TEXT("dlgAirspaceSelect_L.xml"),
-                        main_window,
+                        XCSoarInterface::main_window,
                         TEXT("IDR_XML_AIRSPACESELECT_L"));
   } else {
     wf = dlgLoadFromXML(CallBackTable,
                         TEXT("dlgAirspaceSelect.xml"),
-                        main_window,
+                        XCSoarInterface::main_window,
                         TEXT("IDR_XML_AIRSPACESELECT"));
   }
 

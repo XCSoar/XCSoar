@@ -115,12 +115,13 @@ BOOL devHasBaroSource(void) {
 }
 
 
+
 BOOL devGetBaroAltitude(double *Value){
   // hack, just return GPS_INFO->BaroAltitude
   if (Value == NULL)
     return(FALSE);
-  if (GPS_INFO.BaroAltitudeAvailable)
-    *Value = GPS_INFO.BaroAltitude;
+  if (device_blackboard.Basic().BaroAltitudeAvailable)
+    *Value = device_blackboard.Basic().BaroAltitude;
   return(TRUE);
 
   // ToDo

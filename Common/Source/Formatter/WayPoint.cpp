@@ -44,7 +44,7 @@ Copyright_License {
 #include "SettingsTask.hpp"
 #include "SettingsUser.hpp"
 #include <stdio.h>
-#include "Blackboard.hpp"
+#include "Interface.hpp"
 
 const TCHAR *FormatterWaypoint::Render(int *color) {
   int thewaypoint = ActiveWayPoint;
@@ -225,15 +225,15 @@ void FormatterAlternate::AssignValue(int i) {
 }
 
 
-/////////
+
 
 const TCHAR *FormatterDiffBearing::Render(int *color) {
 
   if (ValidTaskPoint(ActiveWayPoint)
-      && CALCULATED_INFO.WaypointDistance > 10.0) {
+      && XCSoarInterface::Calculated().WaypointDistance > 10.0) {
     Valid = true;
 
-    Value = CALCULATED_INFO.WaypointBearing -  GPS_INFO.TrackBearing;
+    Value = XCSoarInterface::Calculated().WaypointBearing -  XCSoarInterface::Basic().TrackBearing;
 
     if (Value < -180.0)
       Value += 360.0;

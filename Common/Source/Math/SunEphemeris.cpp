@@ -52,7 +52,6 @@ Copyright_License {
 
 class SunEphemeris {
 
-
   double L,g,daylen;
 
   //   Get the days to J2000
@@ -132,8 +131,10 @@ class SunEphemeris {
 
   double twam,altmax,noont,settm,riset,twpm;
 
-  int CalcSunTimes(float longit, float latit){
-
+  int CalcSunTimes(float longit, float latit,
+		   const NMEA_INFO &GPS_INFO,
+		   const DERIVED_INFO &CALCULATED_INFO)
+  {
     //    float intz;
     double tzone,d,lambda;
     double obliq,alpha,delta,LL,equation,ha,hb,twx;
@@ -236,12 +237,13 @@ class SunEphemeris {
 };
 
 #include "Math/SunEphemeris.hpp"
+#include "Interface.hpp"
 
 SunEphemeris mysun;
 
 double DoSunEphemeris(double lon, double lat) {
-
-  mysun.CalcSunTimes((float)lon, (float)lat);
+  mysun.CalcSunTimes((float)lon, (float)lat, XCSoarInterface::Basic(),
+		     XCSoarInterface::Calculated());
   return (double)mysun.settm;
 
 };

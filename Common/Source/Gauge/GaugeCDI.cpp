@@ -45,7 +45,7 @@ Copyright_License {
 #include "Screen/Fonts.hpp"
 #include "Screen/TextWindow.hpp"
 #include "MainWindow.hpp"
-
+#include "Interface.hpp"
 #include <tchar.h>
 
 TextWindow GaugeCDI::window;
@@ -54,7 +54,7 @@ void GaugeCDI::Create() {
   // start of new code for displaying CDI window
   StartupStore(TEXT("Create CDI\n"));
 
-  window.set(main_window,
+  window.set(XCSoarInterface::main_window,
              (int)(InfoBoxLayout::ControlWidth*0.6),
              (int)(InfoBoxLayout::ControlHeight+1),
              (int)(InfoBoxLayout::ControlWidth*2.8),

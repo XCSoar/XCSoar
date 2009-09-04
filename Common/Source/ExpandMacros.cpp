@@ -178,7 +178,7 @@ bool ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size){
   }
 
   if (_tcsstr(OutBuffer, TEXT("$(CheckReplay)"))) {
-    if (!ReplayLogger::IsEnabled() && GPS_INFO.MovementDetected) {
+    if (!ReplayLogger::IsEnabled() && XCSoarInterface::Basic().MovementDetected) {
       invalid = true;
     }
     ReplaceInString(OutBuffer, TEXT("$(CheckReplay)"), TEXT(""), Size);
@@ -192,7 +192,7 @@ bool ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size){
   }
   if (_tcsstr(OutBuffer, TEXT("$(CheckSettingsLockout)"))) {
 #ifndef _SIM_
-    if (LockSettingsInFlight && CALCULATED_INFO.Flying) {
+    if (LockSettingsInFlight && XCSoarInterface::Calculated().Flying) {
       invalid = true;
     }
 #endif
@@ -218,13 +218,13 @@ bool ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size){
     ReplaceInString(OutBuffer, TEXT("$(CheckAirspace)"), TEXT(""), Size);
   }
   if (_tcsstr(OutBuffer, TEXT("$(CheckFLARM)"))) {
-    if (!GPS_INFO.FLARM_Available) {
+    if (!XCSoarInterface::Basic().FLARM_Available) {
       invalid = true;
     }
     ReplaceInString(OutBuffer, TEXT("$(CheckFLARM)"), TEXT(""), Size);
   }
   if (_tcsstr(OutBuffer, TEXT("$(CheckTerrain)"))) {
-    if (!CALCULATED_INFO.TerrainValid) {
+    if (!XCSoarInterface::Calculated().TerrainValid) {
       invalid = true;
     }
     ReplaceInString(OutBuffer, TEXT("$(CheckTerrain)"), TEXT(""), Size);
@@ -327,7 +327,7 @@ bool ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size){
     }
   }
 
-  CondReplaceInString(main_window.map.isMapFullScreen(), OutBuffer,
+  CondReplaceInString(XCSoarInterface::main_window.map.isMapFullScreen(), OutBuffer,
                       TEXT("$(FullScreenToggleActionName)"),
                       TEXT("Off"), TEXT("On"), Size);
   CondReplaceInString(AutoZoom, OutBuffer, TEXT("$(ZoomAutoToggleActionName)"), TEXT("Manual"), TEXT("Auto"), Size);
@@ -351,7 +351,7 @@ bool ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size){
     }
   }
 
-  CondReplaceInString(CALCULATED_INFO.AutoMacCready != 0, OutBuffer, TEXT("$(MacCreadyToggleActionName)"), TEXT("Manual"), TEXT("Auto"), Size);
+  CondReplaceInString(XCSoarInterface::Calculated().AutoMacCready != 0, OutBuffer, TEXT("$(MacCreadyToggleActionName)"), TEXT("Manual"), TEXT("Auto"), Size);
   CondReplaceInString(EnableAuxiliaryInfo, OutBuffer, TEXT("$(AuxInfoToggleActionName)"), TEXT("Off"), TEXT("On"), Size);
 
   CondReplaceInString(UserForceDisplayMode == dmCircling, OutBuffer, TEXT("$(DispModeClimbShortIndicator)"), TEXT("(*)"), TEXT(""), Size);

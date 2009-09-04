@@ -494,12 +494,12 @@ void dlgTaskWaypointShowModal(int itemindex, int tasktype, bool addonly){
   if (!InfoBoxLayout::landscape) {
     wf = dlgLoadFromXML(CallBackTable,
                         TEXT("dlgTaskWaypoint_L.xml"),
-                        main_window,
+                        XCSoarInterface::main_window,
                         TEXT("IDR_XML_TASKWAYPOINT_L"));
   } else {
     wf = dlgLoadFromXML(CallBackTable,
                         TEXT("dlgTaskWaypoint.xml"),
-                        main_window,
+                        XCSoarInterface::main_window,
                         TEXT("IDR_XML_TASKWAYPOINT"));
   }
 

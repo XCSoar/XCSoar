@@ -46,6 +46,7 @@ Copyright_License {
 #include "Screen/MaskedPaintWindow.hpp"
 #include "Screen/LabelBlock.hpp"
 #include "Protection.hpp"
+#include "Blackboard.hpp"
 
 class MapWindowBase {
  public:
@@ -62,16 +63,6 @@ class MapWindowBase {
  protected:
   DWORD    dwDrawThreadID;
   HANDLE   hDrawThread;
-};
-
-
-class MapWindowBlackboard {
- public:
-  NMEA_INFO     DrawInfo;
-  DERIVED_INFO  DerivedDrawInfo;
- protected:
-  void ExchangeBlackboard(const NMEA_INFO &nmea_info,
-			  const DERIVED_INFO &derived_info);
 };
 
 
@@ -136,8 +127,8 @@ class MapWindow
   // state
   BOOL     Initialised;
 
-  void     ExchangeBlackboard(const NMEA_INFO &nmea_info,
-			      const DERIVED_INFO &derived_info);
+  void     ReadBlackboard(const NMEA_INFO &nmea_info,
+			  const DERIVED_INFO &derived_info);
 
   // display management
   void          RefreshMap();

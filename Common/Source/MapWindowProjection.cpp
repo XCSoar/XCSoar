@@ -254,7 +254,7 @@ void MapWindowProjection::LonLat2Screen(const double &lon,
 }
 
 // This one is optimised for long polygons
-void MapWindowProjection::LonLat2Screen(pointObj *ptin,
+void MapWindowProjection::LonLat2Screen(const pointObj* const ptin,
 					POINT *ptout,
 					const int n,
 					const int skip) const
@@ -274,7 +274,7 @@ void MapWindowProjection::LonLat2Screen(pointObj *ptin,
   const double mDrawScale = DrawScale;
   const double mPanLongitude = PanLongitude;
   const double mPanLatitude = PanLatitude;
-  pointObj* p = ptin;
+  pointObj const * p = ptin;
   const pointObj* ptend = ptin+n;
 
   while (p<ptend) {
@@ -446,8 +446,8 @@ void MapWindow::Event_Pan(int vswitch) {
 
   if (EnablePan != oldPan) {
     if (EnablePan) {
-      PanLongitude = DrawInfo.Longitude;
-      PanLatitude = DrawInfo.Latitude;
+      PanLongitude = Basic().Longitude;
+      PanLatitude = Basic().Latitude;
       InputEvents::setMode(TEXT("pan"));
     } else
       InputEvents::setMode(TEXT("default"));

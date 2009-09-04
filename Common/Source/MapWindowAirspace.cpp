@@ -53,12 +53,12 @@ void MapWindow::CalculateScreenPositionsAirspaceCircle(AIRSPACE_CIRCLE &circ) {
     if (circ.Base.Base != abAGL) {
       basealt = circ.Base.Altitude;
     } else {
-      basealt = circ.Base.AGL + DerivedDrawInfo.TerrainAlt;
+      basealt = circ.Base.AGL + Calculated().TerrainAlt;
     }
     if (circ.Top.Base != abAGL) {
       topalt = circ.Top.Altitude;
     } else {
-      topalt = circ.Top.AGL + DerivedDrawInfo.TerrainAlt;
+      topalt = circ.Top.AGL + Calculated().TerrainAlt;
     }
     if(CheckAirspaceAltitude(basealt, topalt)) {
 
@@ -90,12 +90,12 @@ void MapWindow::CalculateScreenPositionsAirspaceArea(AIRSPACE_AREA &area) {
     if (area.Base.Base != abAGL) {
       basealt = area.Base.Altitude;
     } else {
-      basealt = area.Base.AGL + DerivedDrawInfo.TerrainAlt;
+      basealt = area.Base.AGL + Calculated().TerrainAlt;
     }
     if (area.Top.Base != abAGL) {
       topalt = area.Top.Altitude;
     } else {
-      topalt = area.Top.AGL + DerivedDrawInfo.TerrainAlt;
+      topalt = area.Top.AGL + Calculated().TerrainAlt;
     }
     if(CheckAirspaceAltitude(basealt, topalt)) {
       if (msRectOverlap(&area.bounds, &screenbounds_latlon)

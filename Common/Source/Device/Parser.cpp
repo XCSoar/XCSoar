@@ -59,6 +59,7 @@ Copyright_License {
 #include "Settings.hpp"
 #include "ReplayLogger.hpp"
 #include "Interface.hpp"
+#include "Components.hpp" // bad
 
 #include <ctype.h>
 #include <stdlib.h>
@@ -442,7 +443,7 @@ bool NMEAParser::GLL(const TCHAR *String,
 
   if (ReplayLogger::IsEnabled()) {
     // block actual GPS signal
-    InterfaceTimeoutReset();
+    XCSoarInterface::InterfaceTimeoutReset();
     return true;
   }
 
@@ -844,35 +845,6 @@ bool NMEAParser::PTAS1(const TCHAR *String,
 
 double AccelerometerZero=100.0;
 
-////////////// FLARM
-
-void FLARM_RefreshSlots(NMEA_INFO *GPS_INFO) {
-  int i;
-  bool present = false;
-  if (GPS_INFO->FLARM_Available) {
-
-    for (i=0; i<FLARM_MAX_TRAFFIC; i++) {
-      if (GPS_INFO->FLARM_Traffic[i].ID>0) {
-	if ((GPS_INFO->Time> GPS_INFO->FLARM_Traffic[i].Time_Fix+2)
-	    || (GPS_INFO->Time< GPS_INFO->FLARM_Traffic[i].Time_Fix)) {
-	  // clear this slot if it is too old (2 seconds), or if
-	  // time has gone backwards (due to replay)
-	  GPS_INFO->FLARM_Traffic[i].ID= 0;
-	  GPS_INFO->FLARM_Traffic[i].Name[0] = 0;
-	} else {
-          if (gauge_flarm != NULL && GPS_INFO->FLARM_Traffic[i].AlarmLevel > 0)
-            gauge_flarm->Suppress = false;
-
-	  present = true;
-	}
-      }
-    }
-  }
-
-  if (gauge_flarm != NULL)
-    gauge_flarm->TrafficPresent(present);
-}
-
 
 #include "InputEvents.h"
 
@@ -1143,3 +1115,37 @@ bool NMEAParser::PortIsFlarm(int device) {
     return false;
   };
 }
+
+
+//////
+
+////////////// FLARM
+// JMW TODO, handle gauge within own thread
+
+void DeviceBlackboard::FLARM_RefreshSlots() {
+  int i;
+  bool present = false;
+  if (Basic().FLARM_Available) {
+
+    for (i=0; i<FLARM_MAX_TRAFFIC; i++) {
+      if (Basic().FLARM_Traffic[i].ID>0) {
+	if ((Basic().Time> Basic().FLARM_Traffic[i].Time_Fix+2)
+	    || (Basic().Time< Basic().FLARM_Traffic[i].Time_Fix)) {
+	  // clear this slot if it is too old (2 seconds), or if
+	  // time has gone backwards (due to replay)
+	  SetBasic().FLARM_Traffic[i].ID= 0;
+	  SetBasic().FLARM_Traffic[i].Name[0] = 0;
+	} else {
+          if (gauge_flarm != NULL && Basic().FLARM_Traffic[i].AlarmLevel > 0)
+            gauge_flarm->Suppress = false;
+
+	  present = true;
+	}
+      }
+    }
+  }
+
+  if (gauge_flarm != NULL)
+    gauge_flarm->TrafficPresent(present);
+}
+

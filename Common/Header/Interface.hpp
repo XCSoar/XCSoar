@@ -40,38 +40,43 @@ Copyright_License {
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
+#include "Blackboard.hpp"
 
 class MainWindow;
-class MapWindow;
-class GaugeVario;
-class GaugeFLARM;
-class Marks;
-class TopologyStore;
-class RasterTerrain;
-class RasterWeather;
-class GlideComputer;
 
-bool Debounce();
+class XCSoarInterface {
+public:
+  static bool Debounce();
+  // instance of main program
+  static HINSTANCE hInst;
 
-// instance of main program
-extern HINSTANCE hInst;
+// window.. make this protected TODO so have to subclass to get access
+  static MainWindow main_window;
 
-// windows
-extern MainWindow main_window;
+  static bool InterfaceTimeoutZero(void);
+  static void InterfaceTimeoutReset(void);
+  static bool InterfaceTimeoutCheck(void);
+  static void SignalShutdown(bool force);
+  static bool CheckShutdown(void);
 
-// other global objects
-extern Marks *marks;
-extern TopologyStore *topology;
-extern GaugeVario *gauge_vario;
-extern GaugeFLARM *gauge_flarm;
-extern RasterTerrain terrain;
-extern RasterWeather RASP;
-extern GlideComputer glide_computer;
+  static void AfterStartup();
+  static void Shutdown();
+  static bool Startup (HINSTANCE, LPTSTR lpCmdLine);
 
-bool InterfaceTimeoutZero(void);
-void InterfaceTimeoutReset(void);
-bool InterfaceTimeoutCheck(void);
-void SignalShutdown(bool force);
-bool CheckShutdown(void);
+  // TODO: make this protected
+  static const NMEA_INFO& Basic() { return blackboard.Basic(); }
+  static const DERIVED_INFO& Calculated() { return blackboard.Calculated(); }
+  static void ReadBlackboardBasic(const NMEA_INFO& nmea_info) {
+    blackboard.ReadBlackboardBasic(nmea_info);
+  }
+  static void ReadBlackboardCalculated(const DERIVED_INFO& derived_info) {
+    blackboard.ReadBlackboardCalculated(derived_info);
+  }
+private:
+  static void PreloadInitialisation(bool ask);
+  static void StartupInfo();
+private:
+  static InterfaceBlackboard blackboard;
+};
 
 #endif

@@ -39,13 +39,14 @@ Copyright_License {
 #include "Task.h"
 #include "SettingsComputer.hpp"
 #include "Blackboard.hpp"
+#include "Interface.hpp"
 
 const TCHAR *FormatterTeamCode::Render(int *color) {
 
   if(ValidWayPoint(TeamCodeRefWaypoint))
     {
       *color = 0; // black text
-       _tcsncpy(Text,CALCULATED_INFO.OwnTeamCode,5);
+       _tcsncpy(Text,XCSoarInterface::Calculated().OwnTeamCode,5);
        Text[5] = '\0';
     }
   else
@@ -62,7 +63,7 @@ const TCHAR *FormatterDiffTeamBearing::Render(int *color) {
   if(ValidWayPoint(TeamCodeRefWaypoint) && TeammateCodeValid) {
     Valid = true;
 
-    Value = CALCULATED_INFO.TeammateBearing -  GPS_INFO.TrackBearing;
+    Value = XCSoarInterface::Calculated().TeammateBearing -  XCSoarInterface::Basic().TrackBearing;
 
     if (Value < -180.0)
       Value += 360.0;

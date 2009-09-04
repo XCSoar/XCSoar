@@ -44,6 +44,7 @@ Copyright_License {
 #include "MainWindow.hpp"
 #include "Message.h"
 #include "Asset.hpp"
+#include "Interface.hpp"
 
 #include <commctrl.h>
 #if (WINDOWSPC<1)
@@ -53,9 +54,6 @@ Copyright_License {
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
-HINSTANCE hInst; // The current instance
-MainWindow main_window;
-
 
 // Main message loop
 WPARAM WindowsMessageLoop(HINSTANCE hInstance) 
@@ -92,7 +90,7 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   StartupStore(TEXT("Initialise application instance\n"));
 
   // Perform application initialization and run loop
-  if (Startup (hInstance, lpCmdLine)) {
+  if (XCSoarInterface::Startup (hInstance, lpCmdLine)) {
     return WindowsMessageLoop(hInstance);
   } else {
     return FALSE;

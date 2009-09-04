@@ -38,11 +38,9 @@ Copyright_License {
 #ifndef XCSOAR_CONDITION_MONITOR_HPP
 #define XCSOAR_CONDITION_MONITOR_HPP
 
-#include "NMEA/Info.h"
-#include "NMEA/Derived.hpp"
+class GlideComputer;
 
 void
-ConditionMonitorsUpdate(const NMEA_INFO *Basic,
-                        const DERIVED_INFO *Calculated);
+ConditionMonitorsUpdate(const GlideComputer& cmp);
 
 #endif

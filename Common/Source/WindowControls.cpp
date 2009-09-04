@@ -943,7 +943,7 @@ int WndForm::ShowModal(bool bEnableMap) {
     */
 
     if (msg.message == WM_KEYDOWN) {
-      InterfaceTimeoutReset();
+      XCSoarInterface::InterfaceTimeoutReset();
     }
 
     if ((msg.message == WM_KEYDOWN) && ((msg.wParam & 0xffff) == VK_ESCAPE))
@@ -960,7 +960,7 @@ int WndForm::ShowModal(bool bEnableMap) {
 #ifndef GNAV
         &&  !( // exception
               bEnableMap
-              && msg.hwnd == main_window.map
+              && msg.hwnd == XCSoarInterface::main_window.map
               && (
                 msg.message == WM_LBUTTONDOWN
                 || msg.message == WM_LBUTTONUP
@@ -1243,7 +1243,7 @@ int WndForm::OnUnhandledMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
   if (msg.message == WM_KEYUP){
   }
   if (msg.message == WM_KEYDOWN){
-    InterfaceTimeoutReset();
+    XCSoarInterface::InterfaceTimeoutReset();
     if (mOnKeyDownNotify != NULL)
       if (!(mOnKeyDownNotify)(this, msg.wParam, msg.lParam))
         return(0);
@@ -1256,7 +1256,7 @@ int WndForm::OnUnhandledMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
   }
   if (msg.message == WM_LBUTTONUP){
     bLButtonDown=false;
-    InterfaceTimeoutReset();
+    XCSoarInterface::InterfaceTimeoutReset();
     if (mOnLButtonUpNotify != NULL)
       if (!(mOnLButtonUpNotify)(this, msg.wParam, msg.lParam))
         return(0);
@@ -1272,7 +1272,7 @@ int WndForm::OnUnhandledMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
   }
 
   if (uMsg == WM_KEYDOWN){
-    InterfaceTimeoutReset();
+    XCSoarInterface::InterfaceTimeoutReset();
     if (ActiveControl != NULL){
       switch(wParam & 0xffff){
         case VK_UP:
@@ -1407,7 +1407,7 @@ WndButton::on_key_up(unsigned key_code)
 #endif
     case VK_RETURN:
     case VK_SPACE:
-      if (!Debounce()) return(1); // prevent false trigger
+      if (!XCSoarInterface::Debounce()) return(1); // prevent false trigger
       if (mDown){
         mDown = false;
         on_paint(get_canvas());
@@ -1536,7 +1536,7 @@ WndProperty::Editor::on_mouse_down(int x, int y)
 {
   // if it's an Combopicker field, then call the combopicker routine
   if (parent->mDialogStyle) {
-    InterfaceTimeoutReset();
+    XCSoarInterface::InterfaceTimeoutReset();
     if (parent->on_mouse_down(x, y)) {
       ResetDisplayTimeOut();
       return true;
@@ -1551,7 +1551,7 @@ WndProperty::Editor::on_key_down(unsigned key_code)
 {
   if (key_code == VK_RETURN || key_code == VK_F23) { // Compaq uses VKF23
     if (parent->mDialogStyle) {
-      InterfaceTimeoutReset();
+      XCSoarInterface::InterfaceTimeoutReset();
       if (parent->on_mouse_down(0, 0)) {
         ResetDisplayTimeOut();
         return true;

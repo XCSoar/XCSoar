@@ -151,7 +151,7 @@ static int _cdecl WaypointDirectionCompare(const void *elem1, const void *elem2 
 
   a = DirectionFilter[DirectionFilterIdx];
   if (a == DirHDG){
-    a = iround(CALCULATED_INFO.Heading);
+    a = iround(XCSoarInterface::Calculated().Heading);
     lastHeading = a;
   }
 
@@ -454,7 +454,7 @@ static void SetDirectionData(DataField *Sender){
   if (DirectionFilterIdx == 0)
     _stprintf(sTmp, TEXT("%c"), '*');
   else if (DirectionFilterIdx == 1){
-    int a = iround(CALCULATED_INFO.Heading);
+    int a = iround(XCSoarInterface::Calculated().Heading);
     if (a <=0)
       a += 360;
     _stprintf(sTmp, TEXT("HDG(%d")TEXT(DEG)TEXT(")"), a);
@@ -631,7 +631,7 @@ static int OnTimerNotify(WindowControl * Sender) {
   (void)Sender;
   if (DirectionFilterIdx == 1){
     int a;
-    a = (lastHeading - iround(CALCULATED_INFO.Heading));
+    a = (lastHeading - iround(XCSoarInterface::Calculated().Heading));
     if (abs(a) > 0){
       UpdateList();
       SetDirectionData(NULL);
@@ -691,8 +691,8 @@ int dlgWayPointSelect(double lon, double lat, int type, int FilterNear){
   ItemIndex = -1;
 
   if (lon==0.0 && lat==90.0) {
-    Latitude = GPS_INFO.Latitude;
-    Longitude = GPS_INFO.Longitude;
+    Latitude = XCSoarInterface::Basic().Latitude;
+    Longitude = XCSoarInterface::Basic().Longitude;
   } else {
     Latitude = lat;
     Longitude = lon;
@@ -707,12 +707,12 @@ int dlgWayPointSelect(double lon, double lat, int type, int FilterNear){
   if (!InfoBoxLayout::landscape) {
     wf = dlgLoadFromXML(CallBackTable,
                         TEXT("dlgWayPointSelect_L.xml"),
-                        main_window,
+                        XCSoarInterface::main_window,
                         TEXT("IDR_XML_WAYPOINTSELECT_L"));
   } else {
     wf = dlgLoadFromXML(CallBackTable,
                         TEXT("dlgWayPointSelect.xml"),
-                        main_window,
+                        XCSoarInterface::main_window,
                         TEXT("IDR_XML_WAYPOINTSELECT"));
   }
 

@@ -41,40 +41,16 @@ Copyright_License {
 #include "NMEA/Info.h"
 #include "NMEA/Derived.hpp"
 
-class MapWindowProjection;
-
-BOOL
-DoCalculations(const NMEA_INFO *Basic, DERIVED_INFO *Calculated);
-
-BOOL DoCalculationsVario(const NMEA_INFO *Basic, DERIVED_INFO *Calculated);
-void DoCalculationsSlow(const NMEA_INFO *Basic, DERIVED_INFO *Calculated,
-                        const MapWindowProjection &map_projection);
-
 bool ClearAirspaceWarnings(const bool ack, const bool allday=false);
 void RefreshTaskStatistics(void);
 
-
-bool  InAATTurnSector(const double longitude, const double latitude, const int thepoint);
-
-void
-IterateEffectiveMacCready(const NMEA_INFO *Basic,
-                          const DERIVED_INFO *Calculated);
-
-double
-FAIFinishHeight(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated,
-                int wp);
-
-bool
-InsideStartHeight(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated);
-
-bool
-ValidStartSpeed(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated);
-
-
 #define TAKEOFFSPEEDTHRESHOLD (0.5*GlidePolar::Vminsink)
 
-int FindFlarmSlot(const int flarmId);
-int FindFlarmSlot(const TCHAR *flarmCN);
-bool IsFlarmTargetCNInRange(void);
+int FindFlarmSlot(const NMEA_INFO &GPS_INFO, const int flarmId);
+int FindFlarmSlot(const NMEA_INFO &GPS_INFO, const TCHAR *flarmCN);
+bool IsFlarmTargetCNInRange(const NMEA_INFO &GPS_INFO);
+
+void
+DoAutoQNH(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated);
 
 #endif

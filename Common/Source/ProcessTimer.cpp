@@ -52,6 +52,7 @@ Copyright_License {
 #include "MapWindow.h"
 #include "Math/Earth.hpp"
 #include "Blackboard.hpp"
+#include "Components.hpp"
 
 BOOL GPSCONNECT = FALSE;
 BOOL extGPSCONNECT = FALSE; // this one used by extrnal functions
@@ -105,7 +106,6 @@ void CommonProcessTimer()
 
 ////////////////
 
-
 int ConnectionProcessTimer(int itimeout) {
   mutexComm.Lock();
   NMEAParser::UpdateMonitor();
@@ -128,17 +128,15 @@ int ConnectionProcessTimer(int itimeout) {
   if (!extGPSCONNECT) {
     // if gps is not connected, set navwarning to true so
     // calculations flight timers don't get updated
-    mutexFlightData.Lock();
-    GPS_INFO.NAVWarning = true;
-    mutexFlightData.Unlock();
+    device_blackboard.SetNAVWarning(true);
   }
 
   GPSCONNECT = FALSE;
-  BOOL navwarning = (BOOL)(GPS_INFO.NAVWarning);
+  BOOL navwarning = (BOOL)(XCSoarInterface::Basic().NAVWarning);
 
   if (gpsconnect && navwarning) {
     // If GPS connected but no lock, must be in hangar
-    if (InterfaceTimeoutCheck()) {
+    if (XCSoarInterface::InterfaceTimeoutCheck()) {
 #ifdef GNAV
       // TODO feature: ask question about shutdown or give warning
       // then shutdown if no activity.
@@ -252,14 +250,13 @@ void ProcessTimer(void)
   ReplayLogger::Update();
   if (ReplayLogger::IsEnabled()) {
     static double timeLast = 0;
-    if (GPS_INFO.Time-timeLast>=1.0) {
+    if (XCSoarInterface::Basic().Time-timeLast>=1.0) {
       TriggerGPSUpdate();
     }
-    timeLast = GPS_INFO.Time;
+    timeLast = XCSoarInterface::Basic().Time;
     GPSCONNECT = TRUE;
     extGPSCONNECT = TRUE;
-    GPS_INFO.NAVWarning = FALSE;
-    GPS_INFO.SatellitesUsed = 6;
+    device_blackboard.SetNAVWarning(false);
     return;
   }
 
@@ -283,24 +280,8 @@ void SIMProcessTimer(void)
   i++;
 
   if (!ReplayLogger::Update()) {
-
     if (i%2==0) return;
-
-    mutexFlightData.Lock();
-
-    GPS_INFO.NAVWarning = FALSE;
-    GPS_INFO.SatellitesUsed = 6;
-    FindLatitudeLongitude(GPS_INFO.Latitude, GPS_INFO.Longitude,
-                          GPS_INFO.TrackBearing, GPS_INFO.Speed*1.0,
-                          &GPS_INFO.Latitude,
-                          &GPS_INFO.Longitude);
-    GPS_INFO.Time+= 1.0;
-    long tsec = (long)GPS_INFO.Time;
-    GPS_INFO.Hour = tsec/3600;
-    GPS_INFO.Minute = (tsec-GPS_INFO.Hour*3600)/60;
-    GPS_INFO.Second = (tsec-GPS_INFO.Hour*3600-GPS_INFO.Minute*60);
-
-    mutexFlightData.Unlock();
+    device_blackboard.ProcessSimulation();
   }
 
   if (i%2==0) return;
@@ -308,7 +289,7 @@ void SIMProcessTimer(void)
 #ifndef NDEBUG
   // use this to test FLARM parsing/display
 #ifndef GNAV
-  NMEAParser::TestRoutine(&GPS_INFO);
+  NMEAParser::TestRoutine(&XCSoarInterface::Basic());
 #endif
 #endif
 

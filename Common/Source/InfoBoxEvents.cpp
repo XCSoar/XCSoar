@@ -55,8 +55,7 @@ Copyright_License {
 #include "MapWindow.h"
 #include "McReady.h"
 #include "Interface.hpp"
-#include "CalculationsWind.hpp"
-
+#include "Components.hpp"
 #include <stdlib.h>
 #include "GlideComputer.hpp"
 
@@ -64,6 +63,7 @@ Copyright_License {
 // so -1 down
 //     1 up
 //     0 enter
+
 
 void	AirspeedProcessing(int UpDown)
 {
@@ -81,7 +81,7 @@ void	AirspeedProcessing(int UpDown)
 void	TeamCodeProcessing(int UpDown)
 {
 	int tryCount = 0;
-	int searchSlot = FindFlarmSlot(TeamFlarmIdTarget);
+	int searchSlot = FindFlarmSlot(XCSoarInterface::Basic(), TeamFlarmIdTarget);
 	int newFlarmSlot = -1;
 
 
@@ -104,7 +104,7 @@ void	TeamCodeProcessing(int UpDown)
 			}
 		}
 
-		if (GPS_INFO.FLARM_Traffic[searchSlot].ID != 0)
+		if (XCSoarInterface::Basic().FLARM_Traffic[searchSlot].ID != 0)
 		{
 			newFlarmSlot = searchSlot;
 			break; // a new flarmSlot with a valid flarm traffic record was found !
@@ -114,16 +114,16 @@ void	TeamCodeProcessing(int UpDown)
 
 	if (newFlarmSlot != -1)
 	{
-		TeamFlarmIdTarget = GPS_INFO.FLARM_Traffic[newFlarmSlot].ID;
+		TeamFlarmIdTarget = XCSoarInterface::Basic().FLARM_Traffic[newFlarmSlot].ID;
 
-		if (_tcslen(GPS_INFO.FLARM_Traffic[newFlarmSlot].Name) != 0)
+		if (_tcslen(XCSoarInterface::Basic().FLARM_Traffic[newFlarmSlot].Name) != 0)
 		{
 			// copy the 3 first chars from the name to TeamFlarmCNTarget
 			for (int z = 0; z < 3; z++)
 			{
-				if (GPS_INFO.FLARM_Traffic[newFlarmSlot].Name[z] != 0)
+				if (XCSoarInterface::Basic().FLARM_Traffic[newFlarmSlot].Name[z] != 0)
 				{
-					TeamFlarmCNTarget[z] = GPS_INFO.FLARM_Traffic[newFlarmSlot].Name[z];
+					TeamFlarmCNTarget[z] = XCSoarInterface::Basic().FLARM_Traffic[newFlarmSlot].Name[z];
 				}
 				else
 				{
@@ -148,20 +148,22 @@ void	TeamCodeProcessing(int UpDown)
 
 void	AltitudeProcessing(int UpDown)
 {
+  /* JMW illegal
 	#ifdef _SIM_
 	if(UpDown==1) {
-	  GPS_INFO.Altitude += (100/ALTITUDEMODIFY);
+	  XCSoarInterface::Basic().Altitude += (100/ALTITUDEMODIFY);
 	}	else if (UpDown==-1)
 	  {
-	    GPS_INFO.Altitude -= (100/ALTITUDEMODIFY);
-	    if(GPS_INFO.Altitude < 0)
-	      GPS_INFO.Altitude = 0;
+	    XCSoarInterface::Basic().Altitude -= (100/ALTITUDEMODIFY);
+	    if(XCSoarInterface::Basic().Altitude < 0)
+	      XCSoarInterface::Basic().Altitude = 0;
 	  } else if (UpDown==-2) {
 	  DirectionProcessing(-1);
 	} else if (UpDown==2) {
 	  DirectionProcessing(1);
 	}
 #endif
+  */
 	return;
 }
 
@@ -169,7 +171,7 @@ void	AltitudeProcessing(int UpDown)
 void	QFEAltitudeProcessing(int UpDown)
 {
 	short step;
-	if ( ( GPS_INFO.Altitude - QFEAltitudeOffset ) <10 ) step=1; else step=10;
+	if ( ( XCSoarInterface::Basic().Altitude - QFEAltitudeOffset ) <10 ) step=1; else step=10;
 	if(UpDown==1) {
 	   QFEAltitudeOffset -= (step/ALTITUDEMODIFY);
 	}	else if (UpDown==-1)
@@ -222,18 +224,20 @@ void BestAlternateProcessing(int UpDown)
 void	SpeedProcessing(int UpDown)
 {
 	#ifdef _SIM_
+  /* JMW illegal
 		if(UpDown==1)
-			GPS_INFO.Speed += (10/SPEEDMODIFY);
+			XCSoarInterface::Basic().Speed += (10/SPEEDMODIFY);
 		else if (UpDown==-1)
 		{
-			GPS_INFO.Speed -= (10/SPEEDMODIFY);
-			if(GPS_INFO.Speed < 0)
-				GPS_INFO.Speed = 0;
+			XCSoarInterface::Basic().Speed -= (10/SPEEDMODIFY);
+			if(XCSoarInterface::Basic().Speed < 0)
+				XCSoarInterface::Basic().Speed = 0;
 		} else if (UpDown==-2) {
 			DirectionProcessing(-1);
 		} else if (UpDown==2) {
 			DirectionProcessing(1);
 		}
+  */
 	#endif
 	return;
 }
@@ -243,7 +247,7 @@ void	AccelerometerProcessing(int UpDown)
 {
   DWORD Temp;
   if (UpDown==0) {
-    AccelerometerZero*= GPS_INFO.Gload;
+    AccelerometerZero*= XCSoarInterface::Basic().Gload;
     if (AccelerometerZero<1) {
       AccelerometerZero = 100;
     }
@@ -254,40 +258,41 @@ void	AccelerometerProcessing(int UpDown)
 
 void	WindDirectionProcessing(int UpDown)
 {
-
-	if(UpDown==1)
+/* JMW ILLEGAL/incomplete
+  if(UpDown==1)
+    {
+      XCSoarInterface::Calculated().WindBearing  += 5;
+      while (XCSoarInterface::Calculated().WindBearing  >= 360)
 	{
-		CALCULATED_INFO.WindBearing  += 5;
-		while (CALCULATED_INFO.WindBearing  >= 360)
-		{
-			CALCULATED_INFO.WindBearing  -= 360;
-		}
+	  XCSoarInterface::Calculated().WindBearing  -= 360;
 	}
-	else if (UpDown==-1)
+    }
+  else if (UpDown==-1)
+    {
+      XCSoarInterface::Calculated().WindBearing  -= 5;
+      while (XCSoarInterface::Calculated().WindBearing  < 0)
 	{
-		CALCULATED_INFO.WindBearing  -= 5;
-		while (CALCULATED_INFO.WindBearing  < 0)
-		{
-			CALCULATED_INFO.WindBearing  += 360;
-		}
-	} else if (UpDown == 0) {
-          SetWindEstimate(CALCULATED_INFO.WindSpeed,
-                          CALCULATED_INFO.WindBearing);
-	  SaveWindToRegistry();
+	  XCSoarInterface::Calculated().WindBearing  += 360;
 	}
-	return;
+    } else if (UpDown == 0) {
+    glide_computer.SetWindEstimate(XCSoarInterface::Calculated().WindSpeed,
+				   XCSoarInterface::Calculated().WindBearing);
+    SaveWindToRegistry();
+  }
+  return;
+*/
 }
-
 
 void	WindSpeedProcessing(int UpDown)
 {
+/* JMW ILLEGAL/incomplete
 	if(UpDown==1)
-		CALCULATED_INFO.WindSpeed += (1/SPEEDMODIFY);
+		XCSoarInterface::Calculated().WindSpeed += (1/SPEEDMODIFY);
 	else if (UpDown== -1)
 	{
-		CALCULATED_INFO.WindSpeed -= (1/SPEEDMODIFY);
-		if(CALCULATED_INFO.WindSpeed < 0)
-			CALCULATED_INFO.WindSpeed = 0;
+		XCSoarInterface::Calculated().WindSpeed -= (1/SPEEDMODIFY);
+		if(XCSoarInterface::Calculated().WindSpeed < 0)
+			XCSoarInterface::Calculated().WindSpeed = 0;
 	}
 	// JMW added faster way of changing wind direction
 	else if (UpDown== -2) {
@@ -295,33 +300,35 @@ void	WindSpeedProcessing(int UpDown)
 	} else if (UpDown== 2) {
 		WindDirectionProcessing(1);
 	} else if (UpDown == 0) {
-          SetWindEstimate(CALCULATED_INFO.WindSpeed,
-                          CALCULATED_INFO.WindBearing);
+          glide_computer.SetWindEstimate(XCSoarInterface::Calculated().WindSpeed,
+					 XCSoarInterface::Calculated().WindBearing);
 	  SaveWindToRegistry();
 	}
+*/
 	return;
 }
 
 void	DirectionProcessing(int UpDown)
 {
 	#ifdef _SIM_
-
+  /* JMW illegal/incomplete
 		if(UpDown==1)
 		{
-			GPS_INFO.TrackBearing   += 5;
-			while (GPS_INFO.TrackBearing  >= 360)
+			XCSoarInterface::Basic().TrackBearing   += 5;
+			while (XCSoarInterface::Basic().TrackBearing  >= 360)
 			{
-				GPS_INFO.TrackBearing  -= 360;
+				XCSoarInterface::Basic().TrackBearing  -= 360;
 			}
 		}
 		else if (UpDown==-1)
 		{
-			GPS_INFO.TrackBearing  -= 5;
-			while (GPS_INFO.TrackBearing  < 0)
+			XCSoarInterface::Basic().TrackBearing  -= 5;
+			while (XCSoarInterface::Basic().TrackBearing  < 0)
 			{
-				GPS_INFO.TrackBearing  += 360;
+				XCSoarInterface::Basic().TrackBearing  += 360;
 			}
 		}
+  */
 	#endif
 	return;
 }
@@ -347,21 +354,24 @@ void	MacCreadyProcessing(int UpDown)
 	  MACCREADY = 0;
 	}
     GlidePolar::SetMacCready(MACCREADY);
-  } else if (UpDown==0)
+  }
+  /* JMW illegal
+ else if (UpDown==0)
     {
-      CALCULATED_INFO.AutoMacCready = !CALCULATED_INFO.AutoMacCready;
-      // JMW toggle automacready
-	}
+      XCSoarInterface::Calculated().AutoMacCready 
+	= !XCSoarInterface::Calculated().AutoMacCready;
+    }
   else if (UpDown==-2)
     {
-      CALCULATED_INFO.AutoMacCready = false;  // SDP on auto maccready
+      XCSoarInterface::Calculated().AutoMacCready = false;  // SDP on auto maccready
 
     }
   else if (UpDown==+2)
     {
-      CALCULATED_INFO.AutoMacCready = true;	// SDP off auto maccready
+      XCSoarInterface::Calculated().AutoMacCready = true;	// SDP off auto maccready
 
     }
+  */
 
   // JMW TODO check scope
   devPutMacCready(devA(), MACCREADY);
@@ -401,13 +411,17 @@ void NextUpDown(int UpDown)
 	  // manual start
 	  // TODO bug: allow restart
 	  // TODO bug: make this work only for manual
-	  if (CALCULATED_INFO.TaskStartTime==0) {
-	    CALCULATED_INFO.TaskStartTime = GPS_INFO.Time;
+	  /* JMW ILLEGAL
+	  if (XCSoarInterface::Calculated().TaskStartTime==0) {
+	    XCSoarInterface::Calculated().TaskStartTime = XCSoarInterface::Basic().Time;
 	  }
+	  */
 	}
 	ActiveWayPoint ++;
 	AdvanceArmed = false;
-	CALCULATED_INFO.LegStartTime = GPS_INFO.Time ;
+	  /* JMW ILLEGAL
+	XCSoarInterface::Calculated().LegStartTime = XCSoarInterface::Basic().Time ;
+	  */
       }
       // No more, try first
       else
@@ -419,14 +433,16 @@ void NextUpDown(int UpDown)
 
             // TODO bug: This should trigger reset of flight stats, but
             // should ask first...
-            if (CALCULATED_INFO.TaskStartTime==0) {
-              CALCULATED_INFO.TaskStartTime = GPS_INFO.Time ;
+            if (XCSoarInterface::Calculated().TaskStartTime==0) {
+              XCSoarInterface::Calculated().TaskStartTime = XCSoarInterface::Basic().Time ;
             }
           }
           */
           AdvanceArmed = false;
           ActiveWayPoint = 0;
-          CALCULATED_INFO.LegStartTime = GPS_INFO.Time ;
+	  /* JMW illegal
+          XCSoarInterface::Calculated().LegStartTime = XCSoarInterface::Basic().Time ;
+	  */
         }
     }
   }
@@ -445,12 +461,10 @@ void NextUpDown(int UpDown)
         RotateStartPoints();
 
 	// restarted task..
-	//	TODO bug: not required? CALCULATED_INFO.TaskStartTime = 0;
+	//	TODO bug: not required? XCSoarInterface::Calculated().TaskStartTime = 0;
       }
     }
-    mutexGlideComputer.Lock();
-    GlideComputer::aatdistance.ResetEnterTrigger(ActiveWayPoint);
-    mutexGlideComputer.Unlock();
+    glide_computer.ResetEnter();
   }
   else if (UpDown==0) {
     SelectedWaypoint = Task[ActiveWayPoint].Index;

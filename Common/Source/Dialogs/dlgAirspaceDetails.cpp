@@ -66,27 +66,27 @@ static void OnAcknowledgeClicked(WindowControl * Sender){
     Name = AirspaceArea[index_area].Name;
   }
   if (Name) {
-    MapWindow &map_window = main_window.map;
+    MapWindow &map_window = XCSoarInterface::main_window.map;
     UINT answer;
     answer = MessageBoxX(Name,
 			 gettext(TEXT("Acknowledge for day?")),
 			 MB_YESNOCANCEL|MB_ICONQUESTION);
     if (answer == IDYES) {
       if (index_circle>=0) {
-	AirspaceWarnListAdd(&GPS_INFO, &CALCULATED_INFO, map_window,
+	AirspaceWarnListAdd(&XCSoarInterface::Basic(), &XCSoarInterface::Calculated(), map_window,
                             false, true, index_circle, true);
       } else if (index_area>=0) {
-	AirspaceWarnListAdd(&GPS_INFO, &CALCULATED_INFO, map_window,
+	AirspaceWarnListAdd(&XCSoarInterface::Basic(), &XCSoarInterface::Calculated(), map_window,
                             false, false, index_area, true);
       }
       wf->SetModalResult(mrOK);
     } else if (answer == IDNO) {
       // this will cancel a daily ack
       if (index_circle>=0) {
-	AirspaceWarnListAdd(&GPS_INFO, &CALCULATED_INFO, map_window,
+	AirspaceWarnListAdd(&XCSoarInterface::Basic(), &XCSoarInterface::Calculated(), map_window,
                             true, true, index_circle, true);
       } else if (index_area>=0) {
-	AirspaceWarnListAdd(&GPS_INFO, &CALCULATED_INFO, map_window,
+	AirspaceWarnListAdd(&XCSoarInterface::Basic(), &XCSoarInterface::Calculated(), map_window,
                             true, false, index_area, true);
       }
       wf->SetModalResult(mrOK);
@@ -124,16 +124,16 @@ static void SetValues(void) {
   double bearing;
 
   if (index_area >=0) {
-    MapWindow &map_window = main_window.map;
+    MapWindow &map_window = XCSoarInterface::main_window.map;
 
     atype = AirspaceArea[index_area].Type;
     top = &AirspaceArea[index_area].Top;
     base = &AirspaceArea[index_area].Base;
     name = AirspaceArea[index_area].Name;
-    inside = InsideAirspaceArea(GPS_INFO.Longitude, GPS_INFO.Latitude,
+    inside = InsideAirspaceArea(XCSoarInterface::Basic().Longitude, XCSoarInterface::Basic().Latitude,
 				index_area);
     range =
-      RangeAirspaceArea(GPS_INFO.Longitude, GPS_INFO.Latitude,
+      RangeAirspaceArea(XCSoarInterface::Basic().Longitude, XCSoarInterface::Basic().Latitude,
 			index_area, &bearing,
 			map_window);
   }
@@ -142,14 +142,14 @@ static void SetValues(void) {
     top = &AirspaceCircle[index_circle].Top;
     base = &AirspaceCircle[index_circle].Base;
     name = AirspaceCircle[index_circle].Name;
-    inside = InsideAirspaceCircle(GPS_INFO.Longitude, GPS_INFO.Latitude,
+    inside = InsideAirspaceCircle(XCSoarInterface::Basic().Longitude, XCSoarInterface::Basic().Latitude,
 				  index_circle);
     range =
-      RangeAirspaceCircle(GPS_INFO.Longitude, GPS_INFO.Latitude,
+      RangeAirspaceCircle(XCSoarInterface::Basic().Longitude, XCSoarInterface::Basic().Latitude,
 			  index_circle);
 
-    DistanceBearing(GPS_INFO.Latitude,
-		    GPS_INFO.Longitude,
+    DistanceBearing(XCSoarInterface::Basic().Latitude,
+		    XCSoarInterface::Basic().Longitude,
 		    AirspaceCircle[index_circle].Latitude,
 		    AirspaceCircle[index_circle].Longitude,
 		    NULL, &bearing);
@@ -319,7 +319,7 @@ void dlgAirspaceDetails(int the_circle, int the_area) {
 
   wf = dlgLoadFromXML(CallBackTable,
                       TEXT("dlgAirspaceDetails.xml"),
-		      main_window,
+		      XCSoarInterface::main_window,
 		      TEXT("IDR_XML_AIRSPACEDETAILS"));
 
   if (!wf) return;

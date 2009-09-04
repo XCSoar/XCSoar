@@ -223,13 +223,13 @@ BOOL PlayResource (const TCHAR* lpName)
   } else {
 
     // Find the wave resource.
-    hResInfo = FindResource (hInst, lpName, TEXT("WAVE"));
+    hResInfo = FindResource (XCSoarInterface::hInst, lpName, TEXT("WAVE"));
 
     if (hResInfo == NULL)
       return FALSE;
 
     // Load the wave resource.
-    hRes = LoadResource (hInst, (HRSRC)hResInfo);
+    hRes = LoadResource (XCSoarInterface::hInst, (HRSRC)hResInfo);
 
     if (hRes == NULL)
       return FALSE;

@@ -55,6 +55,7 @@ Copyright_License {
 #include "Task.h"
 #include "WayPoint.hpp"
 #include "Units.hpp"
+#include "Components.hpp"
 #include "Interface.hpp"
 
 void FlightStatistics::Reset() {
@@ -92,7 +93,7 @@ void FlightStatistics::RenderBarograph(Canvas &canvas, const RECT rc)
   for(int j=1;j<MAXTASKPOINTS;j++) {
     if (ValidTaskPoint(j) && (LegStartTime[j]>=0)) {
       double xx =
-        (LegStartTime[j]-CALCULATED_INFO.TakeOffTime)/3600.0;
+        (LegStartTime[j]-XCSoarInterface::Calculated().TakeOffTime)/3600.0;
       if (xx>=0) {
         chart.DrawLine(xx, chart.getYmin(),
 		       xx, chart.getYmax(),
@@ -148,7 +149,7 @@ void FlightStatistics::RenderSpeed(Canvas &canvas, const RECT rc)
   for(int j=1;j<MAXTASKPOINTS;j++) {
     if (ValidTaskPoint(j) && (LegStartTime[j]>=0)) {
       double xx =
-        (LegStartTime[j]-CALCULATED_INFO.TaskStartTime)/3600.0;
+        (LegStartTime[j]-XCSoarInterface::Calculated().TaskStartTime)/3600.0;
       if (xx>=0) {
         chart.DrawLine(xx, chart.getYmin(),
 		       xx, chart.getYmax(),
@@ -233,9 +234,9 @@ void FlightStatistics::RenderGlidePolar(Canvas &canvas, const RECT rc)
 		   i+1, sinkrate1,
 		   Chart::STYLE_MEDIUMBLACK);
 
-    if (CALCULATED_INFO.AverageClimbRateN[i]>0) {
-      v1= CALCULATED_INFO.AverageClimbRate[i]
-        /CALCULATED_INFO.AverageClimbRateN[i];
+    if (XCSoarInterface::Calculated().AverageClimbRateN[i]>0) {
+      v1= XCSoarInterface::Calculated().AverageClimbRate[i]
+        /XCSoarInterface::Calculated().AverageClimbRateN[i];
 
       if (v0valid) {
         chart.DrawLine(i0, v0 ,
@@ -250,9 +251,9 @@ void FlightStatistics::RenderGlidePolar(Canvas &canvas, const RECT rc)
 
   double MACCREADY = GlidePolar::GetMacCready();
 
-  double ff = SAFTEYSPEED/max(1.0, CALCULATED_INFO.VMacCready);
-  double sb = GlidePolar::SinkRate(CALCULATED_INFO.VMacCready);
-  ff= (sb-MACCREADY)/max(1.0, CALCULATED_INFO.VMacCready);
+  double ff = SAFTEYSPEED/max(1.0, XCSoarInterface::Calculated().VMacCready);
+  double sb = GlidePolar::SinkRate(XCSoarInterface::Calculated().VMacCready);
+  ff= (sb-MACCREADY)/max(1.0, XCSoarInterface::Calculated().VMacCready);
 
   chart.DrawLine(0, MACCREADY,
 		 SAFTEYSPEED, MACCREADY+ff*SAFTEYSPEED,
@@ -311,21 +312,21 @@ void FlightStatistics::RenderTask(Canvas &canvas, const RECT rc, const bool olcm
     return;
   }
 
-  GlideComputer::olc.SetLine();
-  int nolc = GlideComputer::olc.getN();
-  bool olcvalid = GlideComputer::olc.getValid();
-  bool olcfinished = GlideComputer::olc.getFinished();
+  glide_computer.GetOLC().SetLine();
+  int nolc = glide_computer.GetOLC().getN();
+  bool olcvalid = glide_computer.GetOLC().getValid();
+  bool olcfinished = glide_computer.GetOLC().getFinished();
 
   if (olcvalid) {
     for (i=0; i< nolc; i++) {
-      lat1 = GlideComputer::olc.getLatitude(i);
-      lon1 = GlideComputer::olc.getLongitude(i);
+      lat1 = glide_computer.GetOLC().getLatitude(i);
+      lon1 = glide_computer.GetOLC().getLongitude(i);
       chart.ScaleYFromValue( lat1);
       chart.ScaleXFromValue(lon1);
     }
     if (!olcfinished) {
-      lat1 = GlideComputer::olc.lat_proj;
-      lon1 = GlideComputer::olc.lon_proj;
+      lat1 = glide_computer.GetOLC().lat_proj;
+      lon1 = glide_computer.GetOLC().lon_proj;
       chart.ScaleYFromValue( lat1);
       chart.ScaleXFromValue(lon1);
     }
@@ -339,8 +340,8 @@ void FlightStatistics::RenderTask(Canvas &canvas, const RECT rc, const bool olcm
   // find scale
   chart.ResetScale();
 
-  lat1 = GPS_INFO.Latitude;
-  lon1 = GPS_INFO.Longitude;
+  lat1 = XCSoarInterface::Basic().Latitude;
+  lon1 = XCSoarInterface::Basic().Longitude;
   x1 = (lon1-lon_c)*fastcosine(lat1);
   y1 = (lat1-lat_c);
   chart.ScaleXFromValue(x1);
@@ -390,8 +391,8 @@ void FlightStatistics::RenderTask(Canvas &canvas, const RECT rc, const bool olcm
     }
   }
   for (i=0; i< nolc; i++) {
-    lat1 = GlideComputer::olc.getLatitude(i);
-    lon1 = GlideComputer::olc.getLongitude(i);
+    lat1 = glide_computer.GetOLC().getLatitude(i);
+    lon1 = glide_computer.GetOLC().getLongitude(i);
     x1 = (lon1-lon_c)*fastcosine(lat1);
     y1 = (lat1-lat_c);
     chart.ScaleXFromValue(x1);
@@ -437,10 +438,10 @@ void FlightStatistics::RenderTask(Canvas &canvas, const RECT rc, const bool olcm
   // draw track
 
   for (i=0; i< nolc-1; i++) {
-    lat1 = GlideComputer::olc.getLatitude(i);
-    lon1 = GlideComputer::olc.getLongitude(i);
-    lat2 = GlideComputer::olc.getLatitude(i+1);
-    lon2 = GlideComputer::olc.getLongitude(i+1);
+    lat1 = glide_computer.GetOLC().getLatitude(i);
+    lon1 = glide_computer.GetOLC().getLongitude(i);
+    lat2 = glide_computer.GetOLC().getLatitude(i+1);
+    lon2 = glide_computer.GetOLC().getLongitude(i+1);
     x1 = (lon1-lon_c)*fastcosine(lat1);
     y1 = (lat1-lat_c);
     x2 = (lon2-lon_c)*fastcosine(lat2);
@@ -457,8 +458,8 @@ void FlightStatistics::RenderTask(Canvas &canvas, const RECT rc, const bool olcm
         lat1 = WayPointList[Task[i-1].Index].Latitude;
 	lon1 = WayPointList[Task[i-1].Index].Longitude;
 	if (TaskIsTemporary()) {
-	  lat2 = GPS_INFO.Latitude;
-	  lon2 = GPS_INFO.Longitude;
+	  lat2 = XCSoarInterface::Basic().Latitude;
+	  lon2 = XCSoarInterface::Basic().Longitude;
 	} else {
 	  lat2 = WayPointList[Task[i].Index].Latitude;
 	  lon2 = WayPointList[Task[i].Index].Longitude;
@@ -481,8 +482,8 @@ void FlightStatistics::RenderTask(Canvas &canvas, const RECT rc, const bool olcm
 	}
 
 	if ((i==ActiveWayPoint)&&(!AATEnabled)) {
-	  lat1 = GPS_INFO.Latitude;
-	  lon1 = GPS_INFO.Longitude;
+	  lat1 = XCSoarInterface::Basic().Latitude;
+	  lon1 = XCSoarInterface::Basic().Longitude;
 	  x1 = (lon1-lon_c)*fastcosine(lat1);
 	  y1 = (lat1-lat_c);
 	  chart.DrawLine(x1, y1, x2, y2,
@@ -509,8 +510,8 @@ void FlightStatistics::RenderTask(Canvas &canvas, const RECT rc, const bool olcm
 
           /*
 	  if (i==ActiveWayPoint) {
-	    lat1 = GPS_INFO.Latitude;
-	    lon1 = GPS_INFO.Longitude;
+	    lat1 = XCSoarInterface::Basic().Latitude;
+	    lon1 = XCSoarInterface::Basic().Longitude;
 	  }
           */
 
@@ -530,22 +531,22 @@ void FlightStatistics::RenderTask(Canvas &canvas, const RECT rc, const bool olcm
     for (i=0; i< 7-1; i++) {
       switch(OLCRules) {
       case 0:
-	lat1 = GlideComputer::olc.data.solution_FAI_sprint.latitude[i];
-	lon1 = GlideComputer::olc.data.solution_FAI_sprint.longitude[i];
-	lat2 = GlideComputer::olc.data.solution_FAI_sprint.latitude[i+1];
-	lon2 = GlideComputer::olc.data.solution_FAI_sprint.longitude[i+1];
+	lat1 = glide_computer.GetOLC().data.solution_FAI_sprint.latitude[i];
+	lon1 = glide_computer.GetOLC().data.solution_FAI_sprint.longitude[i];
+	lat2 = glide_computer.GetOLC().data.solution_FAI_sprint.latitude[i+1];
+	lon2 = glide_computer.GetOLC().data.solution_FAI_sprint.longitude[i+1];
 	break;
       case 1:
-	lat1 = GlideComputer::olc.data.solution_FAI_triangle.latitude[i];
-	lon1 = GlideComputer::olc.data.solution_FAI_triangle.longitude[i];
-	lat2 = GlideComputer::olc.data.solution_FAI_triangle.latitude[i+1];
-	lon2 = GlideComputer::olc.data.solution_FAI_triangle.longitude[i+1];
+	lat1 = glide_computer.GetOLC().data.solution_FAI_triangle.latitude[i];
+	lon1 = glide_computer.GetOLC().data.solution_FAI_triangle.longitude[i];
+	lat2 = glide_computer.GetOLC().data.solution_FAI_triangle.latitude[i+1];
+	lon2 = glide_computer.GetOLC().data.solution_FAI_triangle.longitude[i+1];
 	break;
       case 2:
-	lat1 = GlideComputer::olc.data.solution_FAI_classic.latitude[i];
-	lon1 = GlideComputer::olc.data.solution_FAI_classic.longitude[i];
-	lat2 = GlideComputer::olc.data.solution_FAI_classic.latitude[i+1];
-	lon2 = GlideComputer::olc.data.solution_FAI_classic.longitude[i+1];
+	lat1 = glide_computer.GetOLC().data.solution_FAI_classic.latitude[i];
+	lon1 = glide_computer.GetOLC().data.solution_FAI_classic.longitude[i];
+	lat2 = glide_computer.GetOLC().data.solution_FAI_classic.latitude[i+1];
+	lon2 = glide_computer.GetOLC().data.solution_FAI_classic.longitude[i+1];
 	break;
       }
       x1 = (lon1-lon_c)*fastcosine(lat1);
@@ -556,16 +557,16 @@ void FlightStatistics::RenderTask(Canvas &canvas, const RECT rc, const bool olcm
 		     Chart::STYLE_REDTHICK);
     }
     if (!olcfinished) {
-      x1 = (GlideComputer::olc.lon_proj-lon_c)*fastcosine(lat1);
-      y1 = (GlideComputer::olc.lat_proj-lat_c);
+      x1 = (glide_computer.GetOLC().lon_proj-lon_c)*fastcosine(lat1);
+      y1 = (glide_computer.GetOLC().lat_proj-lat_c);
       chart.DrawLine(x1, y1, x2, y2,
 		     Chart::STYLE_BLUETHIN);
     }
   }
 
   // Draw aircraft on top
-  lat1 = GPS_INFO.Latitude;
-  lon1 = GPS_INFO.Longitude;
+  lat1 = XCSoarInterface::Basic().Latitude;
+  lon1 = XCSoarInterface::Basic().Longitude;
   x1 = (lon1-lon_c)*fastcosine(lat1);
   y1 = (lat1-lat_c);
   chart.DrawLabel(TEXT("+"), x1, y1);
@@ -681,7 +682,7 @@ void FlightStatistics::RenderWind(Canvas &canvas, const RECT rc)
 	 -Altitude_Base.y_min)*
       i/(double)(numsteps-1)+Altitude_Base.y_min;
 
-    wind = GlideComputer::windanalyser->windstore.getWind(GPS_INFO.Time, h, &found);
+    wind = glide_computer.windanalyser.windstore.getWind(XCSoarInterface::Basic().Time, h, &found);
     mag = sqrt(wind.x*wind.x+wind.y*wind.y);
 
     windstats_mag.least_squares_update(mag, h);
@@ -715,7 +716,7 @@ void FlightStatistics::RenderWind(Canvas &canvas, const RECT rc)
 	 -Altitude_Base.y_min)*
       hfact+Altitude_Base.y_min;
 
-    wind = GlideComputer::windanalyser->windstore.getWind(GPS_INFO.Time, h, &found);
+    wind = glide_computer.windanalyser.windstore.getWind(XCSoarInterface::Basic().Time, h, &found);
     if (windstats_mag.x_max == 0)
       windstats_mag.x_max=1;  // prevent /0 problems
     wind.x /= windstats_mag.x_max;
@@ -739,12 +740,12 @@ void FlightStatistics::RenderAirspace(Canvas &canvas, const RECT rc) {
   double range = 50.0*1000; // km
   double aclat, aclon, ach, acb;
   double fi, fj;
-  aclat = GPS_INFO.Latitude;
-  aclon = GPS_INFO.Longitude;
-  ach = GPS_INFO.Altitude;
-  acb = GPS_INFO.TrackBearing;
-  double hmin = max(0,GPS_INFO.Altitude-3300);
-  double hmax = max(3300,GPS_INFO.Altitude+1000);
+  aclat = XCSoarInterface::Basic().Latitude;
+  aclon = XCSoarInterface::Basic().Longitude;
+  ach = XCSoarInterface::Basic().Altitude;
+  acb = XCSoarInterface::Basic().TrackBearing;
+  double hmin = max(0,XCSoarInterface::Basic().Altitude-3300);
+  double hmax = max(3300,XCSoarInterface::Basic().Altitude+1000);
 
   double d_lat[AIRSPACE_SCANSIZE_X];
   double d_lon[AIRSPACE_SCANSIZE_X];
@@ -835,9 +836,9 @@ void FlightStatistics::RenderAirspace(Canvas &canvas, const RECT rc) {
   }
 
   POINT line[4];
-  if (GPS_INFO.Speed>10.0) {
-    double t = range/GPS_INFO.Speed;
-    double gfh = (ach+CALCULATED_INFO.Average30s*t-hmin)/(hmax-hmin);
+  if (XCSoarInterface::Basic().Speed>10.0) {
+    double t = range/XCSoarInterface::Basic().Speed;
+    double gfh = (ach+XCSoarInterface::Calculated().Average30s*t-hmin)/(hmax-hmin);
     line[0].x = rc.left;
     line[0].y = chart.screenY(fh);
     line[1].x = rc.right;

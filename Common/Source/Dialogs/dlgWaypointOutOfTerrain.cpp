@@ -84,7 +84,7 @@ int dlgWaypointOutOfTerrain(const TCHAR *Message){
 
     wf = dlgLoadFromXML(CallBackTable,
                         TEXT("dlgWaypointOutOfTerrain.xml"),
-		        main_window,
+		        XCSoarInterface::main_window,
 		        TEXT("IDR_XML_WAYPOINTTERRAIN"));
 
     if (wf) {

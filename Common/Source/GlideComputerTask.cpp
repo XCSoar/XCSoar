@@ -49,6 +49,9 @@ Copyright_License {
 #include "McReady.h"
 #include "GlideRatio.hpp"
 #include "CalculationsTerrain.hpp"
+#include "GlideSolvers.hpp"
+#include "CalculationsAbort.hpp"
+#include "BestAlternate.hpp"
 
 #include "InputEvents.h"
 // JMW TODO: abstract up to higher layer so a base copy of this won't 
@@ -87,27 +90,35 @@ void GlideComputerTask::ProcessBasicTask(const double mc,
   }
 }
 
+bool GlideComputerTask::ProcessIdle(const MapWindowProjection &map_projection)
+{
+  if (TaskAborted) { 
+    SortLandableWaypoints(&Basic(), &Calculated());
+  }
+  DoBestAlternateSlow(&Basic(), &SetCalculated());
+}
+
 bool GlideComputerTask::DoLogging() {
   static double OLCLastTime = 0;
   double dtOLC = 5.0;
 
-  if(gps_info.Time <= OLCLastTime) {
-    OLCLastTime = gps_info.Time;
+  if(Basic().Time <= OLCLastTime) {
+    OLCLastTime = Basic().Time;
   }
-  if (calculated_info.Flying) {
-    if (calculated_info.Flying && (gps_info.Time - OLCLastTime >= dtOLC)) {
+  if (Calculated().Flying) {
+    if (Calculated().Flying && (Basic().Time - OLCLastTime >= dtOLC)) {
       mutexGlideComputer.Lock();
-      bool restart = olc.addPoint(gps_info.Longitude,
-			     gps_info.Latitude,
-			     calculated_info.NavAltitude,
-			     calculated_info.WaypointBearing,
-			     gps_info.Time-calculated_info.TakeOffTime);
+      bool restart = olc.addPoint(Basic().Longitude,
+			     Basic().Latitude,
+			     Calculated().NavAltitude,
+			     Calculated().WaypointBearing,
+			     Basic().Time-Calculated().TakeOffTime);
       mutexGlideComputer.Unlock();
 
       if (restart && EnableOLC) {
-	calculated_info.ValidFinish = false;
+	SetCalculated().ValidFinish = false;
 	StartTask(false, false);
-	calculated_info.ValidStart = true;
+	SetCalculated().ValidStart = true;
       }
       OLCLastTime += dtOLC;
       return true;
@@ -122,26 +133,26 @@ void GlideComputerTask::DistanceToHome() {
   int home_waypoint = HomeWaypoint;
 
   if (!ValidWayPoint(home_waypoint)) {
-    calculated_info.HomeDistance = 0.0;
-    calculated_info.HomeRadial = 0.0; // VENTA3
+    SetCalculated().HomeDistance = 0.0;
+    SetCalculated().HomeRadial = 0.0; // VENTA3
     return;
   }
 
   double w1lat = WayPointList[home_waypoint].Latitude;
   double w1lon = WayPointList[home_waypoint].Longitude;
-  double w0lat = gps_info.Latitude;
-  double w0lon = gps_info.Longitude;
+  double w0lat = Basic().Latitude;
+  double w0lon = Basic().Longitude;
 
   DistanceBearing(w1lat, w1lon,
                   w0lat, w0lon,
-                  &calculated_info.HomeDistance, &calculated_info.HomeRadial);
+                  &SetCalculated().HomeDistance, &SetCalculated().HomeRadial);
 
 }
 
 
 void GlideComputerTask::DistanceToNext()
 {
-  mutexTaskData.Lock();
+  ScopeLock protect(mutexTaskData);
 
   if(ValidTaskPoint(ActiveWayPoint))
     {
@@ -150,12 +161,12 @@ void GlideComputerTask::DistanceToNext()
 
       w0lat = WayPointList[Task[ActiveWayPoint].Index].Latitude;
       w0lon = WayPointList[Task[ActiveWayPoint].Index].Longitude;
-      DistanceBearing(gps_info.Latitude, gps_info.Longitude,
+      DistanceBearing(Basic().Latitude, Basic().Longitude,
                       w0lat, w0lon,
-                      &calculated_info.WaypointDistance,
-                      &calculated_info.WaypointBearing);
+                      &SetCalculated().WaypointDistance,
+                      &SetCalculated().WaypointBearing);
 
-      calculated_info.ZoomDistance = calculated_info.WaypointDistance;
+      SetCalculated().ZoomDistance = Calculated().WaypointDistance;
 
       if (AATEnabled && !TaskIsTemporary()
 	  && (ActiveWayPoint>0) &&
@@ -164,20 +175,20 @@ void GlideComputerTask::DistanceToNext()
         w1lat = Task[ActiveWayPoint].AATTargetLat;
         w1lon = Task[ActiveWayPoint].AATTargetLon;
 
-        DistanceBearing(gps_info.Latitude, gps_info.Longitude,
+        DistanceBearing(Basic().Latitude, Basic().Longitude,
                         w1lat, w1lon,
-                        &calculated_info.WaypointDistance,
-                        &calculated_info.WaypointBearing);
+                        &SetCalculated().WaypointDistance,
+                        &SetCalculated().WaypointBearing);
 
-        if (calculated_info.WaypointDistance>AATCloseDistance()*3.0) {
-          calculated_info.ZoomDistance = max(calculated_info.WaypointDistance,
-                                         calculated_info.ZoomDistance);
+        if (Calculated().WaypointDistance>AATCloseDistance()*3.0) {
+          SetCalculated().ZoomDistance = max(Calculated().WaypointDistance,
+                                         Calculated().ZoomDistance);
         } else {
-	  calculated_info.WaypointBearing = AATCloseBearing();
+	  SetCalculated().WaypointBearing = AATCloseBearing();
         }
 
       } else if ((ActiveWayPoint==0) && (ValidTaskPoint(ActiveWayPoint+1))
-                 && (calculated_info.IsInSector) &&
+                 && (Calculated().IsInSector) &&
 		 !TaskIsTemporary()) {
 
         // JMW set waypoint bearing to start direction if in start sector
@@ -190,38 +201,37 @@ void GlideComputerTask::DistanceToNext()
           w1lon = WayPointList[Task[ActiveWayPoint+1].Index].Longitude;
         }
 
-        DistanceBearing(gps_info.Latitude, gps_info.Longitude,
+        DistanceBearing(Basic().Latitude, Basic().Longitude,
                         w1lat, w1lon,
                         NULL,
-                        &calculated_info.WaypointBearing);
+                        &SetCalculated().WaypointBearing);
       }
     }
   else
     {
-      calculated_info.ZoomDistance = 0;
-      calculated_info.WaypointDistance = 0;
-      calculated_info.WaypointBearing = 0;
+      SetCalculated().ZoomDistance = 0;
+      SetCalculated().WaypointDistance = 0;
+      SetCalculated().WaypointBearing = 0;
     }
-  mutexTaskData.Unlock();
 }
 
 
 void GlideComputerTask::AltitudeRequired(const double this_maccready,
 					 const double cruise_efficiency)
 {
-  mutexTaskData.Lock();
+  ScopeLock protect(mutexTaskData);
   if(ValidTaskPoint(ActiveWayPoint))
     {
       double wp_alt = FAIFinishHeight(ActiveWayPoint);
       double height_above_wp =
-	calculated_info.NavAltitude + calculated_info.EnergyHeight
+	Calculated().NavAltitude + Calculated().EnergyHeight
 	- wp_alt;
 
-      calculated_info.NextAltitudeRequired =
+      SetCalculated().NextAltitudeRequired =
         GlidePolar::MacCreadyAltitude(this_maccready,
-                        calculated_info.WaypointDistance,
-                        calculated_info.WaypointBearing,
-                        calculated_info.WindSpeed, calculated_info.WindBearing,
+                        Calculated().WaypointDistance,
+                        Calculated().WaypointBearing,
+                        Calculated().WindSpeed, Calculated().WindBearing,
                         0, 0,
 			true,
 			NULL, height_above_wp, cruise_efficiency
@@ -229,13 +239,14 @@ void GlideComputerTask::AltitudeRequired(const double this_maccready,
       // JMW CHECK FGAMT
 
 	// VENTA6
-	if (this_maccready==0 ) calculated_info.NextAltitudeRequired0=calculated_info.NextAltitudeRequired;
+	if (this_maccready==0 ) 
+	  SetCalculated().NextAltitudeRequired0=Calculated().NextAltitudeRequired;
         else
-	      calculated_info.NextAltitudeRequired0 =
+	  SetCalculated().NextAltitudeRequired0 =
 		GlidePolar::MacCreadyAltitude(0,
-				calculated_info.WaypointDistance,
-				calculated_info.WaypointBearing,
-				calculated_info.WindSpeed, calculated_info.WindBearing,
+				Calculated().WaypointDistance,
+				Calculated().WaypointBearing,
+				Calculated().WindSpeed, Calculated().WindBearing,
 				0, 0,
 				true,
 				NULL, height_above_wp, cruise_efficiency
@@ -243,36 +254,35 @@ void GlideComputerTask::AltitudeRequired(const double this_maccready,
 
 
 
-      calculated_info.NextAltitudeRequired += wp_alt;
-      calculated_info.NextAltitudeRequired0 += wp_alt; // VENTA6
+      SetCalculated().NextAltitudeRequired += wp_alt;
+      SetCalculated().NextAltitudeRequired0 += wp_alt; // VENTA6
 
-      calculated_info.NextAltitudeDifference =
-        calculated_info.NavAltitude
-        + calculated_info.EnergyHeight
-        - calculated_info.NextAltitudeRequired;
+      SetCalculated().NextAltitudeDifference =
+        Calculated().NavAltitude
+        + Calculated().EnergyHeight
+        - Calculated().NextAltitudeRequired;
 
-      calculated_info.NextAltitudeDifference0 =
-        calculated_info.NavAltitude
-        + calculated_info.EnergyHeight
-        - calculated_info.NextAltitudeRequired0;
+      SetCalculated().NextAltitudeDifference0 =
+        Calculated().NavAltitude
+        + Calculated().EnergyHeight
+        - Calculated().NextAltitudeRequired0;
     }
   else
     {
-      calculated_info.NextAltitudeRequired = 0;
-      calculated_info.NextAltitudeDifference = 0;
-      calculated_info.NextAltitudeDifference0 = 0; // VENTA6
+      SetCalculated().NextAltitudeRequired = 0;
+      SetCalculated().NextAltitudeDifference = 0;
+      SetCalculated().NextAltitudeDifference0 = 0; // VENTA6
     }
-  mutexTaskData.Unlock();
 }
 
 
-double GlideComputerTask::AATCloseBearing() {
+const double GlideComputerTask::AATCloseBearing() const {
   // ensure waypoint goes in direction of track if very close
   double course_bearing;
   DistanceBearing(Task[ActiveWayPoint-1].AATTargetLat,
 		  Task[ActiveWayPoint-1].AATTargetLon,
-		  gps_info.Latitude,
-		  gps_info.Longitude,
+		  Basic().Latitude,
+		  Basic().Longitude,
 		  NULL, &course_bearing);
 
   course_bearing = AngleLimit360(course_bearing+
@@ -281,7 +291,8 @@ double GlideComputerTask::AATCloseBearing() {
 }
 
 
-double GlideComputerTask::FAIFinishHeight(int wp) {
+const double FAIFinishHeight(const DERIVED_INFO& Calculated,
+			     int wp) {
   int FinalWayPoint = getFinalWaypoint();
   if (wp== -1) {
     wp = FinalWayPoint;
@@ -296,7 +307,7 @@ double GlideComputerTask::FAIFinishHeight(int wp) {
   if (!TaskIsTemporary() && (wp==FinalWayPoint)) {
     if (EnableFAIFinishHeight && !AATEnabled) {
       return max(max(FinishMinHeight, SAFETYALTITUDEARRIVAL)+ wp_alt,
-                 calculated_info.TaskStartAltitude-1000.0);
+                 Calculated.TaskStartAltitude-1000.0);
     } else {
       return max(FinishMinHeight, SAFETYALTITUDEARRIVAL)+wp_alt;
     }
@@ -305,8 +316,12 @@ double GlideComputerTask::FAIFinishHeight(int wp) {
   }
 }
 
+const double GlideComputerTask::FAIFinishHeight(int wp) const {
+  return ::FAIFinishHeight(Calculated(), wp);
+}
 
-bool GlideComputerTask::InTurnSector(const int the_turnpoint)
+
+const bool GlideComputerTask::InTurnSector(const int the_turnpoint) const
 {
   double AircraftBearing;
 
@@ -314,7 +329,7 @@ bool GlideComputerTask::InTurnSector(const int the_turnpoint)
 
   if(SectorType==0)
     {
-      if(calculated_info.WaypointDistance < SectorRadius)
+      if(Calculated().WaypointDistance < SectorRadius)
         {
           return true;
         }
@@ -324,8 +339,8 @@ bool GlideComputerTask::InTurnSector(const int the_turnpoint)
       mutexTaskData.Lock();
       DistanceBearing(WayPointList[Task[the_turnpoint].Index].Latitude,
                       WayPointList[Task[the_turnpoint].Index].Longitude,
-                      gps_info.Latitude ,
-                      gps_info.Longitude,
+                      Basic().Latitude ,
+                      Basic().Longitude,
                       NULL, &AircraftBearing);
       mutexTaskData.Unlock();
 
@@ -339,20 +354,20 @@ bool GlideComputerTask::InTurnSector(const int the_turnpoint)
 
       if (SectorType==2) {
         // JMW added german rules
-        if (calculated_info.WaypointDistance<500) {
+        if (Calculated().WaypointDistance<500) {
           return true;
         }
       }
       if( (AircraftBearing >= -45) && (AircraftBearing <= 45))
         {
           if (SectorType==1) {
-            if(calculated_info.WaypointDistance < SectorRadius)
+            if(Calculated().WaypointDistance < SectorRadius)
               {
                 return true;
               }
           } else {
             // JMW added german rules
-            if(calculated_info.WaypointDistance < 10000)
+            if(Calculated().WaypointDistance < 10000)
               {
                 return true;
               }
@@ -362,46 +377,12 @@ bool GlideComputerTask::InTurnSector(const int the_turnpoint)
   return false;
 }
 
-bool InAATTurnSector(const double longitude, const double latitude,
-                    const int the_turnpoint)
-{
-  double AircraftBearing;
-  bool retval = false;
 
-  if (!ValidTaskPoint(the_turnpoint)) {
-    return false;
-  }
-
-  double distance;
-  mutexTaskData.Lock();
-  DistanceBearing(WayPointList[Task[the_turnpoint].Index].Latitude,
-                  WayPointList[Task[the_turnpoint].Index].Longitude,
-                  latitude,
-                  longitude,
-                  &distance, &AircraftBearing);
-
-  if(Task[the_turnpoint].AATType ==  CIRCLE) {
-    if(distance < Task[the_turnpoint].AATCircleRadius) {
-      retval = true;
-    }
-  } else if(distance < Task[the_turnpoint].AATSectorRadius) {
-    if (AngleInRange(Task[the_turnpoint].AATStartRadial,
-                     Task[the_turnpoint].AATFinishRadial,
-                     AngleLimit360(AircraftBearing), true)) {
-      retval = true;
-    }
-  }
-
-  mutexTaskData.Unlock();
-  return retval;
-}
-
-
-bool GlideComputerTask::ValidFinish( ) 
+const bool GlideComputerTask::ValidFinish( ) const
 {
   if ((FinishMinHeight>0)
-      &&(calculated_info.TerrainValid)
-      &&(calculated_info.AltitudeAGL<FinishMinHeight)) {
+      &&(Calculated().TerrainValid)
+      &&(Calculated().AltitudeAGL<FinishMinHeight)) {
     return false;
   } else {
     return true;
@@ -426,8 +407,8 @@ bool GlideComputerTask::InFinishSector(const int i)
   mutexTaskData.Lock();
 
   // distance from aircraft to start point
-  DistanceBearing(gps_info.Latitude,
-                  gps_info.Longitude,
+  DistanceBearing(Basic().Latitude,
+                  Basic().Longitude,
                   WayPointList[Task[i].Index].Latitude,
                   WayPointList[Task[i].Index].Longitude,
                   &FirstPointDistance,
@@ -496,14 +477,14 @@ bool GlideComputerTask::InFinishSector(const int i)
 
 */
 
-bool GlideComputerTask::ValidStartSpeed(const DWORD Margin) {
+const bool GlideComputerTask::ValidStartSpeed(const DWORD Margin) const {
   bool valid = true;
   if (StartMaxSpeed!=0) {
-    if (gps_info.AirspeedAvailable) {
-      if (gps_info.IndicatedAirspeed>(StartMaxSpeed+Margin))
+    if (Basic().AirspeedAvailable) {
+      if (Basic().IndicatedAirspeed>(StartMaxSpeed+Margin))
         valid = false;
     } else {
-      if (gps_info.Speed>(StartMaxSpeed+Margin))
+      if (Basic().Speed>(StartMaxSpeed+Margin))
         valid = false;
     }
   }
@@ -511,14 +492,14 @@ bool GlideComputerTask::ValidStartSpeed(const DWORD Margin) {
 }
 
 
-bool GlideComputerTask::InsideStartHeight(const DWORD Margin) {
+const bool GlideComputerTask::InsideStartHeight(const DWORD Margin) const {
   bool valid = true;
-  if ((StartMaxHeight!=0)&&(calculated_info.TerrainValid)) {
+  if ((StartMaxHeight!=0)&&(Calculated().TerrainValid)) {
     if (StartHeightRef == 0) {
-      if (calculated_info.AltitudeAGL>(StartMaxHeight+Margin))
+      if (Calculated().AltitudeAGL>(StartMaxHeight+Margin))
 	valid = false;
     } else {
-      if (calculated_info.NavAltitude>(StartMaxHeight+Margin))
+      if (Calculated().NavAltitude>(StartMaxHeight+Margin))
 	valid = false;
     }
   }
@@ -537,8 +518,8 @@ bool GlideComputerTask::InStartSector_Internal(int Index,
   double FirstPointDistance;
 
   // distance from aircraft to start point
-  DistanceBearing(gps_info.Latitude,
-                  gps_info.Longitude,
+  DistanceBearing(Basic().Latitude,
+                  Basic().Longitude,
                   WayPointList[Index].Latitude,
                   WayPointList[Index].Longitude,
                   &FirstPointDistance,
@@ -585,7 +566,7 @@ bool GlideComputerTask::InStartSector(int &index,
   bool isInSector= false;
   bool retval=false;
 
-  if (!calculated_info.Flying ||
+  if (!Calculated().Flying ||
       !ValidTaskPoint(ActiveWayPoint) ||
       !ValidTaskPoint(0))
     return false;
@@ -659,7 +640,7 @@ bool GlideComputerTask::InStartSector(int &index,
 #define AUTOADVANCE_ARMSTART 3
 
 bool GlideComputerTask::ReadyToStart() {
-  if (!calculated_info.Flying) {
+  if (!Calculated().Flying) {
     return false;
   }
   if (AutoAdvance== AUTOADVANCE_AUTO) {
@@ -684,7 +665,7 @@ bool GlideComputerTask::ReadyToAdvance(bool reset, bool restart) {
   // 2: Arm
   // 3: Arm start
 
-  if (!calculated_info.Flying) {
+  if (!Calculated().Flying) {
     lastReady = -1;
     lastActive = -1;
     return false;
@@ -739,12 +720,13 @@ void GlideComputerTask::CheckStart(int *LastStartSector) {
   BOOL StartCrossed= false;
 
   if (InStartSector(*LastStartSector, &StartCrossed)) {
-    calculated_info.IsInSector = true;
+    SetCalculated().IsInSector = true;
 
     if (ReadyToStart()) {
-      aatdistance.AddPoint(gps_info.Longitude,
-			   gps_info.Latitude,
-			   0);
+      aatdistance.AddPoint(Basic().Longitude,
+			   Basic().Latitude,
+			   0,
+			   AATCloseDistance());
     }
     // ToLo: we are ready to start even when outside start rules but within margin
     if (ValidStartSpeed(StartMaxSpeedMargin)) {
@@ -758,14 +740,14 @@ void GlideComputerTask::CheckStart(int *LastStartSector) {
 
       // This is set whether ready to advance or not, because it will
       // appear in the flight log, so if it's valid, it's valid.
-      calculated_info.ValidStart = true;
+      SetCalculated().ValidStart = true;
 
       if (ReadyToAdvance(true, true)) {
         ActiveWayPoint=0; // enforce this since it may be 1
         StartTask(true, true);
       }
-      if (calculated_info.Flying) {
-        calculated_info.ValidFinish = false;
+      if (Calculated().Flying) {
+        SetCalculated().ValidFinish = false;
       }
       // JMW TODO accuracy: This causes Vaverage to go bonkers
       // if the user has already passed the start
@@ -779,14 +761,14 @@ void GlideComputerTask::CheckStart(int *LastStartSector) {
 
       if ((ActiveWayPoint<=1)
           && !IsFinalWaypoint()
-          && (calculated_info.ValidStart==false)
-          && (calculated_info.Flying)) {
+          && (Calculated().ValidStart==false)
+          && (Calculated().Flying)) {
 
         // need to detect bad starts, just to get the statistics
         // in case the bad start is the best available, or the user
         // manually started
         StartTask(false, false);
-//        calculated_info.ValidStart = false;
+//        Calculated().ValidStart = false;
 
         bool startTaskAnyway = false;
 
@@ -796,9 +778,9 @@ void GlideComputerTask::CheckStart(int *LastStartSector) {
 	     OF RUNNING A DIALOG FROM THE CALCULATIONS THREAD 
           //DoStatusMessage(TEXT("Start Anyway?"));
           dlgStartTaskShowModal(&startTaskAnyway,
-                                calculated_info.TaskStartTime,
-                                calculated_info.TaskStartSpeed,
-                                calculated_info.TaskStartAltitude);
+                                Calculated().TaskStartTime,
+                                Calculated().TaskStartSpeed,
+                                Calculated().TaskStartAltitude);
 	  */
           if (startTaskAnyway) {
             ActiveWayPoint=0; // enforce this since it may be 1
@@ -806,10 +788,10 @@ void GlideComputerTask::CheckStart(int *LastStartSector) {
           }
         }
 
-        calculated_info.ValidStart = startTaskAnyway;
+        SetCalculated().ValidStart = startTaskAnyway;
 
-        if (calculated_info.Flying) {
-          calculated_info.ValidFinish = false;
+        if (Calculated().Flying) {
+          SetCalculated().ValidFinish = false;
         }
 
 	// TODO: Display infobox when only a bit over start rules
@@ -822,13 +804,13 @@ void GlideComputerTask::CheckStart(int *LastStartSector) {
 
 BOOL GlideComputerTask::CheckRestart(int *LastStartSector) 
 {
-  if((gps_info.Time - calculated_info.TaskStartTime < 3600)
+  if((Basic().Time - Calculated().TaskStartTime < 3600)
      &&(ActiveWayPoint<=1)) {
 
     /*
     BOOL StartCrossed;
     if(InStartSector(*LastStartSector, &StartCrossed)) {
-      calculated_info.IsInSector = true;
+      Calculated().IsInSector = true;
 
       // this allows restart if returned to start sector before
       // 10 minutes after task start
@@ -844,12 +826,13 @@ BOOL GlideComputerTask::CheckRestart(int *LastStartSector)
 
 void GlideComputerTask::CheckFinish( ) {
   if (InFinishSector(ActiveWayPoint)) {
-    calculated_info.IsInSector = true;
-    aatdistance.AddPoint(gps_info.Longitude,
-                         gps_info.Latitude,
-                         ActiveWayPoint);
-    if (!calculated_info.ValidFinish) {
-      calculated_info.ValidFinish = true;
+    SetCalculated().IsInSector = true;
+    aatdistance.AddPoint(Basic().Longitude,
+                         Basic().Latitude,
+                         ActiveWayPoint,
+			 AATCloseDistance());
+    if (!Calculated().ValidFinish) {
+      SetCalculated().ValidFinish = true;
       AnnounceWayPointSwitch(false);
       SaveFinish();
     }
@@ -861,18 +844,19 @@ void GlideComputerTask::AddAATPoint(int taskwaypoint) {
   bool insector = false;
   if (taskwaypoint>0) {
     if (AATEnabled) {
-      insector = InAATTurnSector(gps_info.Longitude,
-                                 gps_info.Latitude, taskwaypoint);
+      insector = InAATTurnSector(Basic().Longitude,
+                                 Basic().Latitude, taskwaypoint);
     } else {
       insector = InTurnSector(taskwaypoint);
     }
     if(insector) {
       if (taskwaypoint == ActiveWayPoint) {
-        calculated_info.IsInSector = true;
+        SetCalculated().IsInSector = true;
       }
-      aatdistance.AddPoint(gps_info.Longitude,
-                           gps_info.Latitude,
-                           taskwaypoint);
+      aatdistance.AddPoint(Basic().Longitude,
+                           Basic().Latitude,
+                           taskwaypoint,
+			   AATCloseDistance());
     }
   }
 }
@@ -893,8 +877,8 @@ void GlideComputerTask::CheckInSector() {
     if (ReadyToAdvance(true, false)) {
       AnnounceWayPointSwitch(true);
     }
-    if (calculated_info.Flying) {
-      calculated_info.ValidFinish = false;
+    if (Calculated().Flying) {
+      SetCalculated().ValidFinish = false;
     }
   }
   mutexGlideComputer.Unlock();
@@ -909,7 +893,7 @@ void GlideComputerTask::InSector()
 
   mutexTaskData.Lock();
 
-  calculated_info.IsInSector = false;
+  SetCalculated().IsInSector = false;
 
   if(ActiveWayPoint == 0) {
     CheckStart(&LastStartSector);
@@ -934,13 +918,13 @@ void GlideComputerTask::InSector()
 ////
 
 void GlideComputerTask::LDNext(const double LegToGo) {
-  double height_above_leg = calculated_info.NavAltitude+calculated_info.EnergyHeight
+  double height_above_leg = Calculated().NavAltitude+Calculated().EnergyHeight
     - FAIFinishHeight(ActiveWayPoint);
 
-  calculated_info.LDNext = UpdateLD(calculated_info.LDNext,
-                                LegToGo,
-                                height_above_leg,
-                                0.5);
+  SetCalculated().LDNext = UpdateLD(Calculated().LDNext,
+				    LegToGo,
+				    height_above_leg,
+				    0.5);
 }
 
 
@@ -951,14 +935,14 @@ void GlideComputerTask::CheckForceFinalGlide() {
     ForceFinalGlide = false;
   } else {
     if (AutoForceFinalGlide) {
-      if (!calculated_info.FinalGlide) {
-        if (calculated_info.TaskAltitudeDifference>120) {
+      if (!Calculated().FinalGlide) {
+        if (Calculated().TaskAltitudeDifference>120) {
           ForceFinalGlide = true;
         } else {
           ForceFinalGlide = false;
         }
       } else {
-        if (calculated_info.TaskAltitudeDifference<-120) {
+        if (Calculated().TaskAltitudeDifference<-120) {
           ForceFinalGlide = false;
         } else {
           ForceFinalGlide = true;
@@ -976,45 +960,45 @@ void GlideComputerTask::TaskStatistics(const double this_maccready,
   if (!ValidTaskPoint(ActiveWayPoint) ||
       ((ActiveWayPoint>0) && !ValidTaskPoint(ActiveWayPoint-1))) {
 
-    calculated_info.LegSpeed = 0;
-    calculated_info.LegDistanceToGo = 0;
-    calculated_info.LegDistanceCovered = 0;
-    calculated_info.LegTimeToGo = 0;
+    SetCalculated().LegSpeed = 0;
+    SetCalculated().LegDistanceToGo = 0;
+    SetCalculated().LegDistanceCovered = 0;
+    SetCalculated().LegTimeToGo = 0;
 
     if (!AATEnabled) {
-      calculated_info.AATTimeToGo = 0;
+      SetCalculated().AATTimeToGo = 0;
     }
 
-    //    calculated_info.TaskSpeed = 0;
+    //    Calculated().TaskSpeed = 0;
 
-    calculated_info.TaskDistanceToGo = 0;
-    calculated_info.TaskDistanceCovered = 0;
-    calculated_info.TaskTimeToGo = 0;
-    calculated_info.TaskTimeToGoTurningNow = -1;
+    SetCalculated().TaskDistanceToGo = 0;
+    SetCalculated().TaskDistanceCovered = 0;
+    SetCalculated().TaskTimeToGo = 0;
+    SetCalculated().TaskTimeToGoTurningNow = -1;
 
-    calculated_info.TaskAltitudeRequired = 0;
-    calculated_info.TaskAltitudeDifference = 0;
-    calculated_info.TaskAltitudeDifference0 = 0;
+    SetCalculated().TaskAltitudeRequired = 0;
+    SetCalculated().TaskAltitudeDifference = 0;
+    SetCalculated().TaskAltitudeDifference0 = 0;
 
-    calculated_info.TerrainWarningLatitude = 0.0;
-    calculated_info.TerrainWarningLongitude = 0.0;
+    SetCalculated().TerrainWarningLatitude = 0.0;
+    SetCalculated().TerrainWarningLongitude = 0.0;
 
-    calculated_info.LDFinish = INVALID_GR;
-    calculated_info.GRFinish = INVALID_GR; // VENTA-ADDON
-    calculated_info.LDNext = INVALID_GR;
+    SetCalculated().LDFinish = INVALID_GR;
+    SetCalculated().GRFinish = INVALID_GR; // VENTA-ADDON
+    SetCalculated().LDNext = INVALID_GR;
 
-    calculated_info.FinalGlide = 0;
+    SetCalculated().FinalGlide = 0;
     CheckFinalGlideThroughTerrain(0.0, 0.0);
 
     // no task selected, so work things out at current heading
 
     GlidePolar::MacCreadyAltitude(this_maccready, 100.0,
-                                  gps_info.TrackBearing,
-                                  calculated_info.WindSpeed,
-                                  calculated_info.WindBearing,
-                                  &(calculated_info.BestCruiseTrack),
-                                  &(calculated_info.VMacCready),
-                                  (calculated_info.FinalGlide==1),
+                                  Basic().TrackBearing,
+                                  Calculated().WindSpeed,
+                                  Calculated().WindBearing,
+                                  &(SetCalculated().BestCruiseTrack),
+                                  &(SetCalculated().VMacCready),
+                                  (Calculated().FinalGlide==1),
                                   NULL, 1.0e6, cruise_efficiency);
 
     return;
@@ -1044,14 +1028,14 @@ void GlideComputerTask::TaskStatistics(const double this_maccready,
     w1lon = WayPointList[Task[ActiveWayPoint].Index].Longitude;
   }
 
-  DistanceBearing(gps_info.Latitude,
-                  gps_info.Longitude,
+  DistanceBearing(Basic().Latitude,
+                  Basic().Longitude,
                   w1lat,
                   w1lon,
                   &LegToGo, &LegBearing);
 
   if (AATEnabled && (ActiveWayPoint>0) && ValidTaskPoint(ActiveWayPoint+1)
-      && calculated_info.IsInSector && (this_maccready>0.1) &&
+      && Calculated().IsInSector && (this_maccready>0.1) &&
       !TaskIsTemporary()) {
     calc_turning_now = true;
   } else {
@@ -1081,8 +1065,8 @@ void GlideComputerTask::TaskStatistics(const double this_maccready,
 
     LegCovered = ProjectedDistance(w0lon, w0lat,
                                    w1lon, w1lat,
-                                   gps_info.Longitude,
-                                   gps_info.Latitude);
+                                   Basic().Longitude,
+                                   Basic().Latitude);
 
     if ((StartLine==0) && (ActiveWayPoint==1)) {
       // Correct speed calculations for radius
@@ -1092,18 +1076,14 @@ void GlideComputerTask::TaskStatistics(const double this_maccready,
     }
   }
 
-  calculated_info.LegDistanceToGo = LegToGo;
-  calculated_info.LegDistanceCovered = LegCovered;
-  calculated_info.TaskDistanceCovered = LegCovered;
+  SetCalculated().LegDistanceToGo = LegToGo;
+  SetCalculated().LegDistanceCovered = LegCovered;
+  SetCalculated().TaskDistanceCovered = LegCovered;
 
-  if (gps_info.Time > calculated_info.LegStartTime) {
-    mutexGlideComputer.Lock();
-    if (flightstats.LegStartTime[ActiveWayPoint]<0) {
-      flightstats.LegStartTime[ActiveWayPoint] = gps_info.Time;
-    }
-    mutexGlideComputer.Unlock();
-    calculated_info.LegSpeed = calculated_info.LegDistanceCovered
-      / (gps_info.Time - calculated_info.LegStartTime);
+  if (Basic().Time > Calculated().LegStartTime) {
+    SetLegStart();
+    SetCalculated().LegSpeed = Calculated().LegDistanceCovered
+      / (Basic().Time - Calculated().LegStartTime);
   }
 
   ///////////////////////////////////////////////////
@@ -1126,15 +1106,16 @@ void GlideComputerTask::TaskStatistics(const double this_maccready,
                           w0lat,
                           w0lon,
                           &LegDistance, NULL);
-          calculated_info.TaskDistanceCovered += LegDistance;
+          SetCalculated().TaskDistanceCovered += LegDistance;
         }
     } else if (ActiveWayPoint>0) {
       // JMW added correction for distance covered
       mutexGlideComputer.Lock();
-      calculated_info.TaskDistanceCovered =
-        aatdistance.DistanceCovered(gps_info.Longitude,
-                                    gps_info.Latitude,
-                                    ActiveWayPoint);
+      SetCalculated().TaskDistanceCovered =
+        aatdistance.DistanceCovered(Basic().Longitude,
+                                    Basic().Latitude,
+                                    ActiveWayPoint,
+				    AATCloseDistance());
       mutexGlideComputer.Unlock();
     }
   }
@@ -1146,9 +1127,9 @@ void GlideComputerTask::TaskStatistics(const double this_maccready,
   // accumulators
   double TaskAltitudeRequired = 0;
   double TaskAltitudeRequired0 = 0;
-  calculated_info.TaskDistanceToGo = 0;
-  calculated_info.TaskTimeToGo = 0;
-  calculated_info.TaskTimeToGoTurningNow = 0;
+  SetCalculated().TaskDistanceToGo = 0;
+  SetCalculated().TaskTimeToGo = 0;
+  SetCalculated().TaskTimeToGoTurningNow = 0;
 
   double LegTime0;
 
@@ -1156,8 +1137,8 @@ void GlideComputerTask::TaskStatistics(const double this_maccready,
 
   int FinalWayPoint = getFinalWaypoint();
 
-  double height_above_finish = calculated_info.NavAltitude+
-    calculated_info.EnergyHeight-FAIFinishHeight(-1);
+  double height_above_finish = Calculated().NavAltitude+
+    Calculated().EnergyHeight-FAIFinishHeight(-1);
 
   //////////////////
   // Now add it for remaining waypoints
@@ -1196,8 +1177,8 @@ void GlideComputerTask::TaskStatistics(const double this_maccready,
       double LegAltitude = GlidePolar::
 	MacCreadyAltitude(this_maccready,
 			  NextLegDistance, NextLegBearing,
-			  calculated_info.WindSpeed,
-			  calculated_info.WindBearing,
+			  Calculated().WindSpeed,
+			  Calculated().WindBearing,
 			  0, 0,
 			  this_is_final,
 			  &this_LegTimeToGo,
@@ -1206,8 +1187,8 @@ void GlideComputerTask::TaskStatistics(const double this_maccready,
       double LegAltitude0 = GlidePolar::
 	MacCreadyAltitude(0,
 			  NextLegDistance, NextLegBearing,
-			  calculated_info.WindSpeed,
-			  calculated_info.WindBearing,
+			  Calculated().WindSpeed,
+			  Calculated().WindBearing,
 			  0, 0,
 			  true,
 			  &LegTime0, 1.0e6, cruise_efficiency
@@ -1221,8 +1202,8 @@ void GlideComputerTask::TaskStatistics(const double this_maccready,
       TaskAltitudeRequired += LegAltitude;
       TaskAltitudeRequired0 += LegAltitude0;
 
-      calculated_info.TaskDistanceToGo += NextLegDistance;
-      calculated_info.TaskTimeToGo += this_LegTimeToGo;
+      SetCalculated().TaskDistanceToGo += NextLegDistance;
+      SetCalculated().TaskTimeToGo += this_LegTimeToGo;
 
       if (task_index==1) {
 	StartBestCruiseTrack = NextLegBearing;
@@ -1234,8 +1215,8 @@ void GlideComputerTask::TaskStatistics(const double this_maccready,
 	  double NextLegDistanceTurningNow, NextLegBearingTurningNow;
 	  double this_LegTimeToGo_turningnow=0;
 
-	  DistanceBearing(gps_info.Latitude,
-			  gps_info.Longitude,
+	  DistanceBearing(Basic().Latitude,
+			  Basic().Longitude,
 			  w1lat,
 			  w1lon,
 			  &NextLegDistanceTurningNow,
@@ -1245,15 +1226,15 @@ void GlideComputerTask::TaskStatistics(const double this_maccready,
 	    MacCreadyAltitude(this_maccready,
 			      NextLegDistanceTurningNow,
 			      NextLegBearingTurningNow,
-			      calculated_info.WindSpeed,
-			      calculated_info.WindBearing,
+			      Calculated().WindSpeed,
+			      Calculated().WindBearing,
 			      0, 0,
 			      this_is_final,
 			      &this_LegTimeToGo_turningnow,
 			      height_above_finish, cruise_efficiency);
-	  calculated_info.TaskTimeToGoTurningNow += this_LegTimeToGo_turningnow;
+	  SetCalculated().TaskTimeToGoTurningNow += this_LegTimeToGo_turningnow;
 	} else {
-	  calculated_info.TaskTimeToGoTurningNow += this_LegTimeToGo;
+	  SetCalculated().TaskTimeToGoTurningNow += this_LegTimeToGo;
 	}
       }
 
@@ -1269,8 +1250,8 @@ void GlideComputerTask::TaskStatistics(const double this_maccready,
 
   if (AATEnabled && !TaskIsTemporary()
       && (ActiveWayPoint>0) &&
-      ValidTaskPoint(ActiveWayPoint+1) && calculated_info.IsInSector) {
-    if (calculated_info.WaypointDistance<AATCloseDistance()*3.0) {
+      ValidTaskPoint(ActiveWayPoint+1) && Calculated().IsInSector) {
+    if (Calculated().WaypointDistance<AATCloseDistance()*3.0) {
       LegBearing = AATCloseBearing();
     }
   }
@@ -1280,32 +1261,32 @@ void GlideComputerTask::TaskStatistics(const double this_maccready,
     GlidePolar::MacCreadyAltitude(this_maccready,
                                   LegToGo,
                                   LegBearing,
-                                  calculated_info.WindSpeed,
-                                  calculated_info.WindBearing,
-                                  &(calculated_info.BestCruiseTrack),
-                                  &(calculated_info.VMacCready),
+                                  Calculated().WindSpeed,
+                                  Calculated().WindBearing,
+                                  &(SetCalculated().BestCruiseTrack),
+                                  &(SetCalculated().VMacCready),
 
-				  // (calculated_info.FinalGlide==1),
+				  // (Calculated().FinalGlide==1),
 				  true,  // JMW CHECK FGAMT
 
-                                  &(calculated_info.LegTimeToGo),
+                                  &(SetCalculated().LegTimeToGo),
                                   height_above_finish, cruise_efficiency);
 
   double LegAltitude0 =
     GlidePolar::MacCreadyAltitude(0,
                                   LegToGo,
                                   LegBearing,
-                                  calculated_info.WindSpeed,
-                                  calculated_info.WindBearing,
+                                  Calculated().WindSpeed,
+                                  Calculated().WindBearing,
                                   0,
                                   0,
                                   true,
                                   &LegTime0, 1.0e6, cruise_efficiency
                                   );
 
-  if (calculated_info.IsInSector && (ActiveWayPoint==0) && !TaskIsTemporary()) {
+  if (Calculated().IsInSector && (ActiveWayPoint==0) && !TaskIsTemporary()) {
     // set best cruise track to first leg bearing when in start sector
-    calculated_info.BestCruiseTrack = StartBestCruiseTrack;
+    SetCalculated().BestCruiseTrack = StartBestCruiseTrack;
   }
 
   // JMW TODO accuracy: Use safetymc where appropriate
@@ -1319,41 +1300,41 @@ void GlideComputerTask::TaskStatistics(const double this_maccready,
 
   TaskAltitudeRequired += LegAltitude;
   TaskAltitudeRequired0 += LegAltitude0;
-  calculated_info.TaskDistanceToGo += LegToGo;
-  calculated_info.TaskTimeToGo += calculated_info.LegTimeToGo;
+  SetCalculated().TaskDistanceToGo += LegToGo;
+  SetCalculated().TaskTimeToGo += Calculated().LegTimeToGo;
 
   height_above_finish-= LegAltitude;
 
   ////////////////
 
   if (calc_turning_now) {
-    calculated_info.TaskTimeToGoTurningNow +=
-      gps_info.Time-calculated_info.TaskStartTime;
+    SetCalculated().TaskTimeToGoTurningNow +=
+      Basic().Time-Calculated().TaskStartTime;
   } else {
-    calculated_info.TaskTimeToGoTurningNow = -1;
+    SetCalculated().TaskTimeToGoTurningNow = -1;
   }
 
   double final_height = FAIFinishHeight(-1);
 
-  double total_energy_height = calculated_info.NavAltitude
-    + calculated_info.EnergyHeight;
+  double total_energy_height = Calculated().NavAltitude
+    + Calculated().EnergyHeight;
 
-  calculated_info.TaskAltitudeRequired = TaskAltitudeRequired + final_height;
+  SetCalculated().TaskAltitudeRequired = TaskAltitudeRequired + final_height;
 
   TaskAltitudeRequired0 += final_height;
 
-  calculated_info.TaskAltitudeDifference = total_energy_height
-    - calculated_info.TaskAltitudeRequired;
+  SetCalculated().TaskAltitudeDifference = total_energy_height
+    - Calculated().TaskAltitudeRequired;
 
-  calculated_info.TaskAltitudeDifference0 = total_energy_height
+  SetCalculated().TaskAltitudeDifference0 = total_energy_height
     - TaskAltitudeRequired0;
 
   // VENTA6
-  calculated_info.NextAltitudeDifference0 = total_energy_height
-    - calculated_info.NextAltitudeRequired0;
+  SetCalculated().NextAltitudeDifference0 = total_energy_height
+    - Calculated().NextAltitudeRequired0;
 
-  calculated_info.LDFinish = UpdateLD(calculated_info.LDFinish,
-                                  calculated_info.TaskDistanceToGo,
+  SetCalculated().LDFinish = UpdateLD(Calculated().LDFinish,
+                                  Calculated().TaskDistanceToGo,
                                   total_energy_height-final_height,
                                   0.5);
 
@@ -1367,13 +1348,16 @@ void GlideComputerTask::TaskStatistics(const double this_maccready,
    * . The infobox value has a decimal point if it is between 1 and
    * 99, otherwise it's a simple integer.
    */
-  double GRsafecalc = calculated_info.NavAltitude - final_height;
-  if (GRsafecalc <=0) calculated_info.GRFinish = INVALID_GR;
+  double GRsafecalc = Calculated().NavAltitude - final_height;
+  if (GRsafecalc <=0) 
+    SetCalculated().GRFinish = INVALID_GR;
   else {
-    calculated_info.GRFinish = calculated_info.TaskDistanceToGo / GRsafecalc;
-    if ( calculated_info.GRFinish >ALTERNATE_MAXVALIDGR || calculated_info.GRFinish <0 ) calculated_info.GRFinish = INVALID_GR;
+    SetCalculated().GRFinish = Calculated().TaskDistanceToGo / GRsafecalc;
+    if ( Calculated().GRFinish >ALTERNATE_MAXVALIDGR || Calculated().GRFinish <0 ) 
+      SetCalculated().GRFinish = INVALID_GR;
     else
-      if ( calculated_info.GRFinish <1 ) calculated_info.GRFinish = 1;
+      if ( Calculated().GRFinish <1 ) 
+	SetCalculated().GRFinish = 1;
   }
   // END VENTA-ADDON
 
@@ -1389,26 +1373,26 @@ void GlideComputerTask::TaskStatistics(const double this_maccready,
 void GlideComputerTask::AATStats_Time() {
   // Task time to go calculations
 
-  double aat_tasktime_elapsed = gps_info.Time - calculated_info.TaskStartTime;
+  double aat_tasktime_elapsed = Basic().Time - Calculated().TaskStartTime;
   double aat_tasklength_seconds = AATTaskLength*60;
 
   if (ActiveWayPoint==0) {
-    if (calculated_info.AATTimeToGo==0) {
-      calculated_info.AATTimeToGo = aat_tasklength_seconds;
+    if (Calculated().AATTimeToGo==0) {
+      SetCalculated().AATTimeToGo = aat_tasklength_seconds;
     }
   } else if (aat_tasktime_elapsed>=0) {
-    calculated_info.AATTimeToGo = max(0,
+    SetCalculated().AATTimeToGo = max(0,
 				  aat_tasklength_seconds
 				  - aat_tasktime_elapsed);
   }
 
-  if(ValidTaskPoint(ActiveWayPoint) && (calculated_info.AATTimeToGo>0)) {
-    calculated_info.AATMaxSpeed =
-      calculated_info.AATMaxDistance / calculated_info.AATTimeToGo;
-    calculated_info.AATMinSpeed =
-      calculated_info.AATMinDistance / calculated_info.AATTimeToGo;
-    calculated_info.AATTargetSpeed =
-      calculated_info.AATTargetDistance / calculated_info.AATTimeToGo;
+  if(ValidTaskPoint(ActiveWayPoint) && (Calculated().AATTimeToGo>0)) {
+    SetCalculated().AATMaxSpeed =
+      Calculated().AATMaxDistance / Calculated().AATTimeToGo;
+    SetCalculated().AATMinSpeed =
+      Calculated().AATMinDistance / Calculated().AATTimeToGo;
+    SetCalculated().AATTargetSpeed =
+      Calculated().AATTargetDistance / Calculated().AATTimeToGo;
   }
 }
 
@@ -1430,12 +1414,12 @@ void GlideComputerTask::AATStats_Distance()
       double LegToGo=0, TargetLegToGo=0;
 
       if (i > 0 ) { //RLD only include distance from glider to next leg if we've started the task
-        DistanceBearing(gps_info.Latitude , gps_info.Longitude ,
+        DistanceBearing(Basic().Latitude , Basic().Longitude ,
                         WayPointList[Task[i].Index].Latitude,
                         WayPointList[Task[i].Index].Longitude,
                         &LegToGo, NULL);
 
-        DistanceBearing(gps_info.Latitude , gps_info.Longitude ,
+        DistanceBearing(Basic().Latitude , Basic().Longitude ,
                         Task[i].AATTargetLat,
                         Task[i].AATTargetLon,
                         &TargetLegToGo, NULL);
@@ -1520,9 +1504,9 @@ void GlideComputerTask::AATStats_Distance()
       // JMW TODO accuracy: make these calculations more accurate, because
       // currently they are very approximate.
 
-      calculated_info.AATMaxDistance = MaxDistance;
-      calculated_info.AATMinDistance = MinDistance;
-      calculated_info.AATTargetDistance = TargetDistance;
+      SetCalculated().AATMaxDistance = MaxDistance;
+      SetCalculated().AATMinDistance = MinDistance;
+      SetCalculated().AATTargetDistance = TargetDistance;
     }
   mutexTaskData.Unlock();
 }
@@ -1532,7 +1516,7 @@ void GlideComputerTask::AATStats()
 {
   if (!WayPointList
       || !AATEnabled
-      || calculated_info.ValidFinish) return ;
+      || Calculated().ValidFinish) return ;
 
   AATStats_Distance();
   AATStats_Time();
@@ -1546,33 +1530,33 @@ void GlideComputerTask::CheckTransitionFinalGlide() {
        ||(ForceFinalGlide))
       && (ValidTaskPoint(ActiveWayPoint))) {
 
-    if (calculated_info.FinalGlide == 0)
+    if (Calculated().FinalGlide == 0)
       InputEvents::processGlideComputer(GCE_FLIGHTMODE_FINALGLIDE);
-    calculated_info.FinalGlide = 1;
+    SetCalculated().FinalGlide = 1;
   } else {
-    if (calculated_info.FinalGlide == 1)
+    if (Calculated().FinalGlide == 1)
       InputEvents::processGlideComputer(GCE_FLIGHTMODE_CRUISE);
-    calculated_info.FinalGlide = 0;
+    SetCalculated().FinalGlide = 0;
   }
 
 }
 
 
 double GlideComputerTask::SpeedHeight() {
-  if (calculated_info.TaskDistanceToGo<=0) {
+  if (Calculated().TaskDistanceToGo<=0) {
     return 0;
   }
 
   // Fraction of task distance covered
-  double d_fraction = calculated_info.TaskDistanceCovered/
-    (calculated_info.TaskDistanceCovered+calculated_info.TaskDistanceToGo);
+  double d_fraction = Calculated().TaskDistanceCovered/
+    (Calculated().TaskDistanceCovered+Calculated().TaskDistanceToGo);
 
-  double dh_start = calculated_info.TaskStartAltitude;
+  double dh_start = Calculated().TaskStartAltitude;
 
   double dh_finish = FAIFinishHeight(-1);
 
   // Excess height
-  return calculated_info.NavAltitude
+  return Calculated().NavAltitude
     - (dh_start*(1.0-d_fraction)+dh_finish*(d_fraction));
 }
 
@@ -1580,25 +1564,25 @@ double GlideComputerTask::SpeedHeight() {
 void GlideComputerTask::DebugTaskCalculations()
 {
 #ifdef DEBUGTASKSPEED
-  if ((calculated_info.TaskStartTime>0)
-      && (gps_info.Time-calculated_info.TaskStartTime>0)) {
-      if (calculated_info.Flying) {
+  if ((Calculated().TaskStartTime>0)
+      && (Basic().Time-Calculated().TaskStartTime>0)) {
+      if (Calculated().Flying) {
 
         double effective_mc = EffectiveMacCready();
         DebugStore("%g %g %g %g %g %g %g %g %g %g %d %g %g # taskspeed\r\n",
-                gps_info.Time-calculated_info.TaskStartTime,
-                calculated_info.TaskDistanceCovered,
-                calculated_info.TaskDistanceToGo,
-                calculated_info.TaskAltitudeRequired,
-                calculated_info.NavAltitude,
-                calculated_info.TaskSpeedAchieved,
-                calculated_info.TaskSpeed,
-                calculated_info.TaskSpeedInstantaneous,
+                Basic().Time-Calculated().TaskStartTime,
+                Calculated().TaskDistanceCovered,
+                Calculated().TaskDistanceToGo,
+                Calculated().TaskAltitudeRequired,
+                Calculated().NavAltitude,
+                Calculated().TaskSpeedAchieved,
+                Calculated().TaskSpeed,
+                Calculated().TaskSpeedInstantaneous,
                 MACCREADY,
                 effective_mc,
                 ActiveWayPoint,
-                calculated_info.DistanceVario,
-                calculated_info.GPSVario);
+                Calculated().DistanceVario,
+                Calculated().GPSVario);
       }
     }
 #endif
@@ -1660,8 +1644,8 @@ bool GlideComputerTask::TaskAltitudeRequired(double this_maccready, double *Vfin
       GlidePolar::MacCreadyAltitude(this_maccready,
                                     LegDistance,
                                     LegBearing,
-                                    calculated_info.WindSpeed,
-                                    calculated_info.WindBearing,
+                                    Calculated().WindSpeed,
+                                    Calculated().WindBearing,
                                     0,
                                     0,
                                     true,
@@ -1698,10 +1682,10 @@ bool GlideComputerTask::TaskAltitudeRequired(double this_maccready, double *Vfin
   TotalAltitude += FAIFinishHeight( -1);
 
   if (!ValidTaskPoint(*ifinal)) {
-    calculated_info.TaskAltitudeRequiredFromStart = TotalAltitude;
+    SetCalculated().TaskAltitudeRequiredFromStart = TotalAltitude;
     retval = false;
   } else {
-    calculated_info.TaskAltitudeRequiredFromStart = TotalAltitude;
+    SetCalculated().TaskAltitudeRequiredFromStart = TotalAltitude;
     retval = true;
   }
  OnExit:
@@ -1715,7 +1699,7 @@ double GlideComputerTask::MacCreadyOrAvClimbRate(double this_maccready)
   double mc_val = this_maccready;
   bool is_final_glide = false;
 
-  if (calculated_info.FinalGlide) {
+  if (Calculated().FinalGlide) {
     is_final_glide = true;
   }
 
@@ -1724,7 +1708,7 @@ double GlideComputerTask::MacCreadyOrAvClimbRate(double this_maccready)
   // auto Mc, use the average climb rate achieved so far.
 
   if ((mc_val<0.1) ||
-      (calculated_info.AutoMacCready &&
+      (Calculated().AutoMacCready &&
        ((AutoMcMode==0) ||
         ((AutoMcMode==2)&&(is_final_glide))
         ))
@@ -1747,15 +1731,15 @@ void GlideComputerTask::TaskSpeed(const double this_maccready,
 
   if (!ValidTaskPoint(ActiveWayPoint)) return;
   if (TaskIsTemporary()) return;
-  if (calculated_info.ValidFinish) return;
-  if (!calculated_info.Flying) return;
+  if (Calculated().ValidFinish) return;
+  if (!Calculated().Flying) return;
 
   // in case we leave early due to error
-  calculated_info.TaskSpeedAchieved = 0;
-  calculated_info.TaskSpeed = 0;
+  SetCalculated().TaskSpeedAchieved = 0;
+  SetCalculated().TaskSpeed = 0;
 
   if (ActiveWayPoint<=0) { // no task speed before start
-    calculated_info.TaskSpeedInstantaneous = 0;
+    SetCalculated().TaskSpeedInstantaneous = 0;
     return;
   }
 
@@ -1768,16 +1752,16 @@ void GlideComputerTask::TaskSpeed(const double this_maccready,
     double t0 = TotalTime;
     // total time expected for task
 
-    double t1 = gps_info.Time-calculated_info.TaskStartTime;
+    double t1 = Basic().Time-Calculated().TaskStartTime;
     // time elapsed since start
 
     double d0 = TotalDistance;
     // total task distance
 
-    double d1 = calculated_info.TaskDistanceCovered;
+    double d1 = Calculated().TaskDistanceCovered;
     // actual distance covered
 
-    double dr = calculated_info.TaskDistanceToGo;
+    double dr = Calculated().TaskDistanceToGo;
     // distance remaining
 
     double t2;
@@ -1788,11 +1772,11 @@ void GlideComputerTask::TaskSpeed(const double this_maccready,
 
     double hf = FAIFinishHeight( -1);
 
-    double h0 = calculated_info.TaskAltitudeRequiredFromStart-hf;
+    double h0 = Calculated().TaskAltitudeRequiredFromStart-hf;
     // total height required from start (takes safety arrival alt
     // and finish waypoint altitude into account)
 
-    double h1 = max(0,calculated_info.NavAltitude-hf);
+    double h1 = max(0,Calculated().NavAltitude-hf);
     // height above target
 
     double dFinal;
@@ -1803,8 +1787,8 @@ void GlideComputerTask::TaskSpeed(const double this_maccready,
 
     if ((t1<=0) || (d1<=0) || (d0<=0) || (t0<=0) || (h0<=0)) {
       // haven't started yet or not a real task
-      calculated_info.TaskSpeedInstantaneous = 0;
-      //?      calculated_info.TaskSpeed = 0;
+      SetCalculated().TaskSpeedInstantaneous = 0;
+      //?      Calculated().TaskSpeed = 0;
       goto OnExit;
     }
 
@@ -1813,11 +1797,11 @@ void GlideComputerTask::TaskSpeed(const double this_maccready,
     double t1mod = t1-hx/MacCreadyOrAvClimbRate(this_maccready);
     // only valid if flown for 5 minutes or more
     if (t1mod>300.0) {
-      calculated_info.TaskSpeedAchieved = d1/t1mod;
+      SetCalculated().TaskSpeedAchieved = d1/t1mod;
     } else {
-      calculated_info.TaskSpeedAchieved = d1/t1;
+      SetCalculated().TaskSpeedAchieved = d1/t1;
     }
-    calculated_info.TaskSpeed = calculated_info.TaskSpeedAchieved;
+    SetCalculated().TaskSpeed = Calculated().TaskSpeedAchieved;
 
     if (Vfinal<=0) {
       // can't reach target at current mc
@@ -1832,7 +1816,7 @@ void GlideComputerTask::TaskSpeed(const double this_maccready,
 
     dFinal = min(dr, d0*min(1.0,max(0.0,h1/h0)));
 
-    if (calculated_info.ValidFinish) {
+    if (Calculated().ValidFinish) {
       dFinal = 0;
     }
 
@@ -1851,7 +1835,7 @@ void GlideComputerTask::TaskSpeed(const double this_maccready,
 #ifdef OLDTASKSPEED
     // average speed to end of final glide from here
     v2 = d2/t2;
-    calculated_info.TaskSpeed = max(v1,v2);
+    Calculated().TaskSpeed = max(v1,v2);
 #else
     // average speed to end of final glide from here, weighted
     // according to how much extra time would be spent in cruise/climb
@@ -1867,7 +1851,7 @@ void GlideComputerTask::TaskSpeed(const double this_maccready,
     } else {
       v2 = (d1+dFinal)/(t1+dFinal/Vfinal);
     }
-    calculated_info.TaskSpeed = v2;
+    SetCalculated().TaskSpeed = v2;
 #endif
 
     double konst = 1.1;
@@ -1882,14 +1866,14 @@ void GlideComputerTask::TaskSpeed(const double this_maccready,
 	termikLigaPoints = konst*(0.015*0.001*d1-(400.0/(0.001*d1))+12.0)*v1*3.6*100.0/(double)Handicap;
       }
 
-    calculated_info.TermikLigaPoints = termikLigaPoints;
+    SetCalculated().TermikLigaPoints = termikLigaPoints;
 
-    if(gps_info.Time < LastTime) {
-      LastTime = gps_info.Time;
-    } else if (gps_info.Time-LastTime >=1.0) {
+    if(Basic().Time < LastTime) {
+      LastTime = Basic().Time;
+    } else if (Basic().Time-LastTime >=1.0) {
 
-      double dt = gps_info.Time-LastTime;
-      LastTime = gps_info.Time;
+      double dt = Basic().Time-LastTime;
+      LastTime = Basic().Time;
 
       // Calculate contribution to average task speed.
       // This is equal to the change in virtual distance
@@ -1918,22 +1902,22 @@ void GlideComputerTask::TaskSpeed(const double this_maccready,
       static double dr_last = 0;
 
       double mc_safe = max(0.1,this_maccready);
-      double Vstar = max(1.0,calculated_info.VMacCready);
-      double vthis = (calculated_info.LegDistanceCovered-dr_last)/dt;
-      vthis /= AirDensityRatio(calculated_info.NavAltitude);
+      double Vstar = max(1.0,Calculated().VMacCready);
+      double vthis = (Calculated().LegDistanceCovered-dr_last)/dt;
+      vthis /= AirDensityRatio(Calculated().NavAltitude);
 
-      dr_last = calculated_info.LegDistanceCovered;
-      double ttg = max(1,calculated_info.LegTimeToGo);
+      dr_last = Calculated().LegDistanceCovered;
+      double ttg = max(1,Calculated().LegTimeToGo);
       //      double Vav = d0/max(1.0,t0);
-      double Vrem = calculated_info.LegDistanceToGo/ttg;
+      double Vrem = Calculated().LegDistanceToGo/ttg;
       double Vref = // Vav;
 	Vrem;
       double sr = -GlidePolar::SinkRate(Vstar);
-      double height_diff = max(0,-calculated_info.TaskAltitudeDifference);
+      double height_diff = max(0,-Calculated().TaskAltitudeDifference);
 
-      if (calculated_info.timeCircling>30) {
+      if (Calculated().timeCircling>30) {
 	mc_safe = max(this_maccready,
-		      calculated_info.TotalHeightClimb/calculated_info.timeCircling);
+		      Calculated().TotalHeightClimb/Calculated().timeCircling);
       }
       // circling percentage during cruise/climb
       double rho_cruise = max(0.0,min(1.0,mc_safe/(sr+mc_safe)));
@@ -1943,12 +1927,12 @@ void GlideComputerTask::TaskSpeed(const double this_maccready,
       // calculate amount of time in cruise/climb glide
       double rho_c = max(0,min(1,time_climb/ttg));
 
-      if (calculated_info.FinalGlide) {
+      if (Calculated().FinalGlide) {
 	if (rho_climb>0) {
 	  rho_c = max(0,min(1,rho_c/rho_climb));
 	}
-	if (!calculated_info.Circling) {
-	  if (calculated_info.TaskAltitudeDifference>0) {
+	if (!Calculated().Circling) {
+	  if (Calculated().TaskAltitudeDifference>0) {
 	    rho_climb *= rho_c;
 	    rho_cruise *= rho_c;
 	    // Vref = Vrem;
@@ -1956,55 +1940,55 @@ void GlideComputerTask::TaskSpeed(const double this_maccready,
 	}
       }
 
-      double w_comp = min(10.0,max(-10.0,calculated_info.Vario/mc_safe));
+      double w_comp = min(10.0,max(-10.0,Calculated().Vario/mc_safe));
       double vdiff = vthis/Vstar + w_comp*rho_cruise + rho_climb;
 
       if (vthis > SAFTEYSPEED*2) {
 	vdiff = 1.0;
 	// prevent funny numbers when starting mid-track
       }
-      //      calculated_info.Experimental = vdiff*100.0;
+      //      Calculated().Experimental = vdiff*100.0;
 
       vdiff *= Vref;
 
       if (t1<5) {
-        calculated_info.TaskSpeedInstantaneous = vdiff;
+        SetCalculated().TaskSpeedInstantaneous = vdiff;
         // initialise
       } else {
         static int lastActiveWayPoint = 0;
 	static double tsi_av = 0;
 	static int n_av = 0;
         if ((ActiveWayPoint==lastActiveWayPoint)
-	    && (calculated_info.LegDistanceToGo>1000.0)
-	    && (calculated_info.LegDistanceCovered>1000.0)) {
+	    && (Calculated().LegDistanceToGo>1000.0)
+	    && (Calculated().LegDistanceCovered>1000.0)) {
 
-          calculated_info.TaskSpeedInstantaneous =
-            LowPassFilter(calculated_info.TaskSpeedInstantaneous, vdiff, 0.1);
+          SetCalculated().TaskSpeedInstantaneous =
+            LowPassFilter(Calculated().TaskSpeedInstantaneous, vdiff, 0.1);
 
           // update stats
-          if(gps_info.Time < LastTimeStats) {
-            LastTimeStats = gps_info.Time;
+          if(Basic().Time < LastTimeStats) {
+            LastTimeStats = Basic().Time;
 	    tsi_av = 0;
 	    n_av = 0;
           } else if (n_av>=60) {
 	    tsi_av/= n_av;
 
-	    SaveTaskSpeed(max((gps_info.Time-calculated_info.TaskStartTime)/3600.0,
+	    SaveTaskSpeed(max((Basic().Time-Calculated().TaskStartTime)/3600.0,
 			      max(0,min(100.0,tsi_av))));
 
-            LastTimeStats = gps_info.Time;
+            LastTimeStats = Basic().Time;
 	    tsi_av = 0;
 	    n_av = 0;
           }
-	  tsi_av += calculated_info.TaskSpeedInstantaneous;
+	  tsi_av += Calculated().TaskSpeedInstantaneous;
 	  n_av ++;
 
         } else {
 
-          calculated_info.TaskSpeedInstantaneous =
-            LowPassFilter(calculated_info.TaskSpeedInstantaneous, vdiff, 0.5);
+          SetCalculated().TaskSpeedInstantaneous =
+            LowPassFilter(Calculated().TaskSpeedInstantaneous, vdiff, 0.5);
 
-	  //	  calculated_info.TaskSpeedInstantaneous = vdiff;
+	  //	  Calculated().TaskSpeedInstantaneous = vdiff;
 	  tsi_av = 0;
 	  n_av = 0;
 	}
@@ -2017,4 +2001,138 @@ void GlideComputerTask::TaskSpeed(const double this_maccready,
 
 }
 
+
+void
+GlideComputerTask::CheckFinalGlideThroughTerrain(double LegToGo, double LegBearing)
+{
+  // Final glide through terrain updates
+  if (Calculated().FinalGlide) {
+
+    double lat, lon;
+    bool out_of_range;
+    double distance_soarable =
+      FinalGlideThroughTerrain(LegBearing,
+                               &Basic(), &Calculated(),
+                               &lat,
+                               &lon,
+                               LegToGo, &out_of_range, NULL);
+
+    if ((!out_of_range)&&(distance_soarable< LegToGo)) {
+      SetCalculated().TerrainWarningLatitude = lat;
+      SetCalculated().TerrainWarningLongitude = lon;
+    } else {
+      SetCalculated().TerrainWarningLatitude = 0.0;
+      SetCalculated().TerrainWarningLongitude = 0.0;
+    }
+  } else {
+    SetCalculated().TerrainWarningLatitude = 0.0;
+    SetCalculated().TerrainWarningLongitude = 0.0;
+  }
+}
+
+
+void 
+GlideComputerTask::ResetEnter()
+{
+  mutexGlideComputer.Lock();
+  aatdistance.ResetEnterTrigger(ActiveWayPoint);
+  mutexGlideComputer.Unlock();
+}
+
+
+int  AutoMcMode = 0;
+// 0: Final glide only
+// 1: Set to average if in climb mode
+// 2: Average if in climb mode, final glide in final glide mode
+
+void
+GlideComputerTask::DoAutoMacCready(double mc_setting)
+{
+  bool is_final_glide = false;
+
+  if (!Calculated().AutoMacCready) return;
+
+  mutexTaskData.Lock();
+
+  double mc_new = mc_setting;
+  static bool first_mc = true;
+
+  if (Calculated().FinalGlide && ActiveIsFinalWaypoint()) {
+    is_final_glide = true;
+  } else {
+    first_mc = true;
+  }
+
+  double av_thermal = GetAverageThermal();
+
+  if (!ValidTaskPoint(ActiveWayPoint)) {
+    if (av_thermal>0) {
+      mc_new = av_thermal;
+    }
+  } else if ( ((AutoMcMode==0)||(AutoMcMode==2)) && is_final_glide) {
+
+    double time_remaining = Basic().Time-Calculated().TaskStartTime-9000;
+    if (EnableOLC
+	&& (OLCRules==0)
+	&& (Calculated().NavAltitude>Calculated().TaskStartAltitude)
+	&& (time_remaining>0)) {
+
+      mc_new = MacCreadyTimeLimit(&Basic(), &Calculated(),
+				  Calculated().WaypointBearing,
+				  time_remaining,
+				  Calculated().TaskStartAltitude);
+
+    } else if (Calculated().TaskAltitudeDifference0>0) {
+
+      // only change if above final glide with zero Mc
+      // otherwise when we are well below, it will wind Mc back to
+      // zero
+
+      double slope =
+	(Calculated().NavAltitude + Calculated().EnergyHeight
+	 - FAIFinishHeight(ActiveWayPoint))/
+	(Calculated().WaypointDistance+1);
+
+      double mc_pirker = PirkerAnalysis(&Basic(), &Calculated(),
+					Calculated().WaypointBearing,
+					slope);
+      mc_pirker = max(0.0, mc_pirker);
+      if (first_mc) {
+	// don't allow Mc to wind down to zero when first achieving
+	// final glide; but do allow it to wind down after that
+	if (mc_pirker >= mc_new) {
+	  mc_new = mc_pirker;
+	  first_mc = false;
+	} else if (AutoMcMode==2) {
+	  // revert to averager based auto Mc
+	  if (av_thermal>0) {
+	    mc_new = av_thermal;
+	  }
+	}
+      } else {
+	mc_new = mc_pirker;
+      }
+    } else { // below final glide at zero Mc, never achieved final glide
+      if (first_mc && (AutoMcMode==2)) {
+	// revert to averager based auto Mc
+	if (av_thermal>0) {
+	  mc_new = av_thermal;
+	}
+      }
+    }
+  } else if ( (AutoMcMode==1) || ((AutoMcMode==2)&& !is_final_glide) ) {
+    if (av_thermal>0) {
+      mc_new = av_thermal;
+    }
+  }
+
+  mutexTaskData.Unlock();
+  GlidePolar::SetMacCready(LowPassFilter(mc_setting, mc_new, 0.15));
+}
+
+void 
+GlideComputerTask::SetLegStart()
+{
+  SetCalculated().LegStartTime = Basic().Time;
+}
 

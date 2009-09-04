@@ -46,7 +46,6 @@ Copyright_License {
 #include "Registry.hpp"
 #include "DataField/Enum.hpp"
 #include "Math/Units.h"
-#include "CalculationsWind.hpp"
 #include "MainWindow.hpp"
 
 static WndForm *wf=NULL;
@@ -67,13 +66,15 @@ static void UpdateWind(bool set) {
   if (wp) {
     wb = wp->GetDataField()->GetAsFloat();
   }
-  if ((ws != CALCULATED_INFO.WindSpeed)
-      ||(wb != CALCULATED_INFO.WindBearing)) {
+  if ((ws != XCSoarInterface::Calculated().WindSpeed)
+      ||(wb != XCSoarInterface::Calculated().WindBearing)) {
+    /* JMW illegal
     if (set) {
       SetWindEstimate(ws, wb);
     }
-    CALCULATED_INFO.WindSpeed = ws;
-    CALCULATED_INFO.WindBearing = wb;
+    XCSoarInterface::Calculated().WindSpeed = ws;
+    XCSoarInterface::Calculated().WindBearing = wb;
+    */
   }
 }
 
@@ -91,7 +92,7 @@ static void OnWindSpeedData(DataField *Sender, DataField::DataAccessKind_t Mode)
   switch(Mode){
     case DataField::daGet:
       Sender->SetMax(SPEEDMODIFY*(200.0/TOKPH));
-      Sender->Set(SPEEDMODIFY*CALCULATED_INFO.WindSpeed);
+      Sender->Set(SPEEDMODIFY*XCSoarInterface::Calculated().WindSpeed);
     break;
     case DataField::daPut:
       UpdateWind(false);
@@ -108,7 +109,7 @@ static void OnWindDirectionData(DataField *Sender, DataField::DataAccessKind_t M
 
   switch(Mode){
     case DataField::daGet:
-      lastWind = CALCULATED_INFO.WindBearing;
+      lastWind = XCSoarInterface::Calculated().WindBearing;
       if (lastWind < 0.5)
         lastWind = 360.0;
       Sender->Set(lastWind);
@@ -137,7 +138,7 @@ static CallBackTableEntry_t CallBackTable[]={
 void dlgWindSettingsShowModal(void){
   wf = dlgLoadFromXML(CallBackTable,
                       TEXT("dlgWindSettings.xml"),
-		      main_window,
+		      XCSoarInterface::main_window,
 		      TEXT("IDR_XML_WINDSETTINGS"));
 
   if (wf) {

@@ -55,7 +55,7 @@
 #include "InputEvents.h"
 #include "Compatibility/string.h"
 #include "Blackboard.hpp"
-
+#include "Interface.hpp"
 
 //IGC Logger
 bool LoggerActive = false;
@@ -242,6 +242,7 @@ void StopLogger(void) {
   }
 }
 
+
 static void
 LogPointToBuffer(double Latitude, double Longitude, double Altitude,
                  double BaroAltitude, short Hour, short Minute, short Second,
@@ -261,9 +262,9 @@ LogPointToBuffer(double Latitude, double Longitude, double Altitude,
   LoggerBuffer[NumLoggerBuffered-1].Hour = Hour;
   LoggerBuffer[NumLoggerBuffered-1].Minute = Minute;
   LoggerBuffer[NumLoggerBuffered-1].Second = Second;
-  LoggerBuffer[NumLoggerBuffered-1].Year = GPS_INFO.Year;
-  LoggerBuffer[NumLoggerBuffered-1].Month = GPS_INFO.Month;
-  LoggerBuffer[NumLoggerBuffered-1].Day = GPS_INFO.Day;
+  LoggerBuffer[NumLoggerBuffered-1].Year = XCSoarInterface::Basic().Year;
+  LoggerBuffer[NumLoggerBuffered-1].Month = XCSoarInterface::Basic().Month;
+  LoggerBuffer[NumLoggerBuffered-1].Day = XCSoarInterface::Basic().Day;
 
   for (int iSat=0; iSat < MAXSATELLITES; iSat++)
     LoggerBuffer[NumLoggerBuffered-1].SatelliteIDs[iSat]=SatelliteIDs[iSat];
@@ -321,10 +322,10 @@ void LogPointToFile(double Latitude, double Longitude, double Altitude,
 void LogPoint(double Latitude, double Longitude, double Altitude,
               double BaroAltitude) {
   if (!LoggerActive) {
-    if (!GPS_INFO.NAVWarning) {
+    if (!XCSoarInterface::Basic().NAVWarning) {
       LogPointToBuffer(Latitude, Longitude, Altitude, BaroAltitude,
-                       GPS_INFO.Hour, GPS_INFO.Minute, GPS_INFO.Second,
-                       GPS_INFO.SatelliteIDs);
+                       XCSoarInterface::Basic().Hour, XCSoarInterface::Basic().Minute, XCSoarInterface::Basic().Second,
+                       XCSoarInterface::Basic().SatelliteIDs);
     }
   } else if (NumLoggerBuffered) {
 
@@ -347,7 +348,7 @@ void LogPoint(double Latitude, double Longitude, double Altitude,
   }
   if (LoggerActive) {
     LogPointToFile(Latitude, Longitude, Altitude, BaroAltitude,
-                   GPS_INFO.Hour, GPS_INFO.Minute, GPS_INFO.Second);
+                   XCSoarInterface::Basic().Hour, XCSoarInterface::Basic().Minute, XCSoarInterface::Basic().Second);
   }
 }
 
@@ -429,7 +430,7 @@ LogFRecord(const int SatelliteIDs[], bool bAlways)
   if (LoggerActive || bAlways)
     {
       return LogFRecordToFile(SatelliteIDs,
-			      GPS_INFO.Hour, GPS_INFO.Minute, GPS_INFO.Second, bAlways);
+			      XCSoarInterface::Basic().Hour, XCSoarInterface::Basic().Minute, XCSoarInterface::Basic().Second, bAlways);
     }
   else
     return false;  // track whether we succussfully write it, else we retry
@@ -482,9 +483,9 @@ void StartLogger(const TCHAR *astrAssetNumber)
         _stprintf(szFLoggerFileName,
                  TEXT("%s\\%04d-%02d-%02d-XCS-%c%c%c-%02d.IGC"),
                  path,
-                 GPS_INFO.Year,
-                 GPS_INFO.Month,
-                 GPS_INFO.Day,
+                 XCSoarInterface::Basic().Year,
+                 XCSoarInterface::Basic().Month,
+                 XCSoarInterface::Basic().Day,
                  cAsset[0],
                  cAsset[1],
                  cAsset[2],
@@ -493,9 +494,9 @@ void StartLogger(const TCHAR *astrAssetNumber)
         _stprintf(szFLoggerFileNameRoot,
                  TEXT("%s\\%04d-%02d-%02d-XCS-%c%c%c-%02d.IGC"),
                  TEXT(""), // this creates it in root if MoveFile() fails
-                 GPS_INFO.Year,
-                 GPS_INFO.Month,
-                 GPS_INFO.Day,
+                 XCSoarInterface::Basic().Year,
+                 XCSoarInterface::Basic().Month,
+                 XCSoarInterface::Basic().Day,
                  cAsset[0],
                  cAsset[1],
                  cAsset[2],
@@ -503,9 +504,9 @@ void StartLogger(const TCHAR *astrAssetNumber)
       } else {
         // Short file name
         TCHAR cyear, cmonth, cday, cflight;
-        cyear = NumToIGCChar((int)GPS_INFO.Year % 10);
-        cmonth = NumToIGCChar(GPS_INFO.Month);
-        cday = NumToIGCChar(GPS_INFO.Day);
+        cyear = NumToIGCChar((int)XCSoarInterface::Basic().Year % 10);
+        cmonth = NumToIGCChar(XCSoarInterface::Basic().Month);
+        cday = NumToIGCChar(XCSoarInterface::Basic().Day);
         cflight = NumToIGCChar(i);
         _stprintf(szFLoggerFileName,
                  TEXT("%s\\%c%c%cX%c%c%c%c.IGC"),
@@ -570,9 +571,9 @@ void LoggerHeader(void)
   IGCWriteRecord(temp, szLoggerFileName);
 
   sprintf(temp,"HFDTE%02d%02d%02d\r\n",
-	  GPS_INFO.Day,
-	  GPS_INFO.Month,
-	  GPS_INFO.Year % 100);
+	  XCSoarInterface::Basic().Day,
+	  XCSoarInterface::Basic().Month,
+	  XCSoarInterface::Basic().Year % 100);
   IGCWriteRecord(temp, szLoggerFileName);
 
   GetRegistryString(szRegistryPilotName, PilotName, 100);
@@ -603,12 +604,12 @@ void StartDeclaration(int ntp)
   char temp[100];
 
   if (NumLoggerBuffered==0) {
-    FirstPoint.Year = GPS_INFO.Year;
-    FirstPoint.Month = GPS_INFO.Month;
-    FirstPoint.Day = GPS_INFO.Day;
-    FirstPoint.Hour = GPS_INFO.Hour;
-    FirstPoint.Minute = GPS_INFO.Minute;
-    FirstPoint.Second = GPS_INFO.Second;
+    FirstPoint.Year = XCSoarInterface::Basic().Year;
+    FirstPoint.Month = XCSoarInterface::Basic().Month;
+    FirstPoint.Day = XCSoarInterface::Basic().Day;
+    FirstPoint.Hour = XCSoarInterface::Basic().Hour;
+    FirstPoint.Minute = XCSoarInterface::Basic().Minute;
+    FirstPoint.Second = XCSoarInterface::Basic().Second;
   }
 
   // JMW added task start declaration line
@@ -903,7 +904,7 @@ FILETIME LogFileDate(TCHAR* filename) {
 		     asset,
 		     &cflight);
   if (matches==5) {
-    int iyear = (int)GPS_INFO.Year;
+    int iyear = (int)XCSoarInterface::Basic().Year;
     int syear = iyear % 10;
     int yearzero = iyear - syear;
     int yearthis = IGCCharToNum(cyear) + yearzero;
@@ -1046,4 +1047,97 @@ bool LoggerClearFreeSpace(void) {
   }
 }
 
+
+
+
+#include "Interface.hpp"
+#include "ReplayLogger.hpp"
+
+void guiStartLogger(bool noAsk) {
+  int i;
+  if (!LoggerActive) {
+    if (ReplayLogger::IsEnabled()) {
+      if (LoggerActive)
+        guiStopLogger(true);
+      return;
+    }
+    TCHAR TaskMessage[1024];
+    _tcscpy(TaskMessage,TEXT("Start Logger With Declaration\r\n"));
+    for(i=0;i<MAXTASKPOINTS;i++)
+      {
+	if(Task[i].Index == -1)
+	  {
+	    if(i==0)
+	      _tcscat(TaskMessage,TEXT("None"));
+
+	    break;
+	  }
+	_tcscat(TaskMessage,WayPointList[ Task[i].Index ].Name);
+	_tcscat(TaskMessage,TEXT("\r\n"));
+      }
+
+    if(noAsk ||
+       (MessageBoxX(TaskMessage,gettext(TEXT("Start Logger")),
+		    MB_YESNO|MB_ICONQUESTION) == IDYES))
+      {
+
+	if (LoggerClearFreeSpace()) {
+
+	  StartLogger(strAssetNumber);
+	  LoggerHeader();
+	  LoggerActive = true; // start logger after Header is completed.  Concurrency
+
+	  int ntp=0;
+	  for(i=0;i<MAXTASKPOINTS;i++)
+	    {
+	      if(Task[i].Index == -1) {
+		break;
+	      }
+	      ntp++;
+	    }
+	  StartDeclaration(ntp);
+	  for(i=0;i<MAXTASKPOINTS;i++)
+	    {
+	      if(Task[i].Index == -1) {
+		break;
+	      }
+	      AddDeclaration(WayPointList[Task[i].Index].Latitude,
+			     WayPointList[Task[i].Index].Longitude,
+			     WayPointList[Task[i].Index].Name );
+	    }
+	  EndDeclaration();
+	  ResetFRecord(); // reset timer & lastRecord string so if
+			  // logger is restarted, FRec appears at top
+			  // of file
+	} else {
+
+	  MessageBoxX(
+		      gettext(TEXT("Logger inactive, insufficient storage!")),
+		      gettext(TEXT("Logger Error")), MB_OK| MB_ICONERROR);
+	  StartupStore(TEXT("Logger not started: Insufficient Storage\r\n"));
+	}
+      }
+  }
+}
+
+
+void guiStopLogger(bool noAsk) {
+  if (LoggerActive) {
+    if(noAsk ||
+       (MessageBoxX(gettext(TEXT("Stop Logger")),
+		    gettext(TEXT("Stop Logger")),
+		    MB_YESNO|MB_ICONQUESTION) == IDYES)) {
+      StopLogger();
+    }
+  }
+}
+
+
+void guiToggleLogger(bool noAsk) {
+  if (LoggerActive) {
+    guiStopLogger(noAsk);
+  } else {
+    guiStartLogger(noAsk);
+  }
+}
 

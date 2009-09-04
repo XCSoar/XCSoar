@@ -83,6 +83,7 @@ Copyright_License {
 #include "Device/Parser.h"
 #include "MainWindow.hpp"
 #include "resource.h"
+#include "GlideComputer.hpp"
 
 GaugeVario *gauge_vario;
 GaugeFLARM *gauge_flarm;
@@ -92,12 +93,12 @@ RasterTerrain terrain;
 RasterWeather RASP;
 GlideComputer glide_computer;
 
-NMEA_INFO     GPS_INFO;
-DERIVED_INFO  CALCULATED_INFO;
+HINSTANCE XCSoarInterface::hInst; // The current instance
+MainWindow XCSoarInterface::main_window;
 
 /////////////////////////////////////////////////////////////////////////////////
 
-static void PreloadInitialisation(bool ask) {
+void XCSoarInterface::PreloadInitialisation(bool ask) {
   if (ask) {
 #ifdef PNA
     CleanRegistry(); // VENTA2-FIX for PNA we can't delete all registries..by now
@@ -139,7 +140,7 @@ static void PreloadInitialisation(bool ask) {
 }
 
 
-void AfterStartup() {
+void XCSoarInterface::AfterStartup() {
   static bool first = true;
   if (!first) {
     return;
@@ -176,7 +177,7 @@ void AfterStartup() {
 }
 
 
-void StartupInfo() {
+void XCSoarInterface::StartupInfo() {
 #ifdef CREDITS_FIVV
   CreateProgressDialog(gettext(TEXT("Special ITA version")));
   Sleep(1000);
@@ -206,7 +207,7 @@ void StartupInfo() {
 }
 
 
-bool Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
+bool XCSoarInterface::Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
 {
   TCHAR szTitle[MAX_LOADSTRING];                        // The title bar text
 
@@ -245,6 +246,7 @@ bool Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
   StartupStore(TEXT("Initialise message system\n"));
   Message::Initialize(main_window.map.GetMapRectBig()); // creates window, sets fonts
 
+  device_blackboard.Initialise();
   ///////////////////////////////////////////////////////
   /// 
   marks = new Marks("xcsoar-marks");
@@ -284,7 +286,7 @@ bool Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
   // Initialise main blackboard data
 
   ClearTask();
-  InitCalculations(&GPS_INFO,&CALCULATED_INFO);
+  glide_computer.Initialise();
   LinkGRecordDLL(); // try to link DLL if it exists
   OpenGeoid();
 
@@ -311,12 +313,12 @@ bool Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
   ReadAirfieldFile();
   SetHome(false);
 
-  terrain.ServiceFullReload(GPS_INFO.Latitude,
-			    GPS_INFO.Longitude);
+  terrain.ServiceFullReload(Basic().Latitude,
+			    Basic().Longitude);
 
   CreateProgressDialog(gettext(TEXT("Scanning weather forecast")));
   StartupStore(TEXT("RASP load\n"));
-  RASP.ScanAll(GPS_INFO.Latitude, GPS_INFO.Longitude);
+  RASP.ScanAll(Basic().Latitude, Basic().Longitude);
 
   ReadAirspace();
   SortAirspace();
@@ -344,7 +346,7 @@ bool Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
 
   // just about done....
 
-  DoSunEphemeris(GPS_INFO.Longitude, GPS_INFO.Latitude);
+  DoSunEphemeris(Basic().Longitude, Basic().Latitude);
 
   // Finally ready to go.. all structures must be present before this.
   StartupStore(TEXT("CreateDrawingThread\n"));
@@ -375,7 +377,7 @@ bool Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
 }
 
 
-void Shutdown(void) {
+void XCSoarInterface::Shutdown(void) {
   int i;
 
   CreateProgressDialog(gettext(TEXT("Shutdown, please wait...")));
@@ -448,7 +450,7 @@ void Shutdown(void) {
 
   devShutdown();
 
-  SaveCalculationsPersist(&CALCULATED_INFO);
+  SaveCalculationsPersist(&Calculated());
 #if (EXPERIMENTAL > 0)
   //  CalibrationSave();
 #endif
@@ -493,9 +495,6 @@ void Shutdown(void) {
   StartupStore(TEXT("Close Progress Dialog\n"));
 
   CloseProgressDialog();
-
-  StartupStore(TEXT("Close Calculations\n"));
-  CloseCalculations();
 
   CloseGeoid();
 

@@ -47,7 +47,7 @@ void
 Bitmap::load(const TCHAR *name)
 {
   reset();
-  bitmap = LoadBitmap(hInst, name);
+  bitmap = LoadBitmap(XCSoarInterface::hInst, name);
 }
 
 void

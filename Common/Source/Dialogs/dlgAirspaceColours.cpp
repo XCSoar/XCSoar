@@ -125,12 +125,12 @@ int dlgAirspaceColoursShowModal(void){
   if (!InfoBoxLayout::landscape) {
     wf = dlgLoadFromXML(CallBackTable,
                         TEXT("dlgAirspaceColours_L.xml"),
-                        main_window,
+                        XCSoarInterface::main_window,
                         TEXT("IDR_XML_AIRSPACECOLOURS_L"));
   } else {
     wf = dlgLoadFromXML(CallBackTable,
                         TEXT("dlgAirspaceColours.xml"),
-                        main_window,
+                        XCSoarInterface::main_window,
                         TEXT("IDR_XML_AIRSPACECOLOURS"));
   }
 

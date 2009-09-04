@@ -49,6 +49,8 @@ Copyright_License {
 #include "Logger.h"
 #include "Calculations.h"
 #include "Interface.hpp"
+#include "Components.hpp"
+#include "GlideComputer.hpp"
 
 #include <assert.h>
 
@@ -97,7 +99,7 @@ void TriggerAll(void) {
 }
 
 void TriggerRedraws() {
-  if (main_window.map.IsDisplayRunning()) {
+  if (XCSoarInterface::main_window.map.IsDisplayRunning()) {
     if (gpsUpdatedTriggerEvent.test()) {
       drawTriggerEvent.trigger();
     }
@@ -108,7 +110,7 @@ void TriggerRedraws() {
 DWORD InstrumentThread (LPVOID lpvoid) {
 	(void)lpvoid;
   // wait for proper startup signal
-  while (!main_window.map.IsDisplayRunning()) {
+  while (!XCSoarInterface::main_window.map.IsDisplayRunning()) {
     Sleep(MIN_WAIT_TIME);
   }
 
@@ -117,8 +119,13 @@ DWORD InstrumentThread (LPVOID lpvoid) {
     if (!varioTriggerEvent.wait(MIN_WAIT_TIME))
       continue;
 
-    if (main_window.map.IsDisplayRunning()) {
+    if (XCSoarInterface::main_window.map.IsDisplayRunning()) {
       if (EnableVarioGauge) {
+
+	mutexFlightData.Lock();
+	gauge_vario->ReadBlackboardBasic(device_blackboard.Basic());
+	gauge_vario->ReadBlackboardCalculated(device_blackboard.Calculated());
+	mutexFlightData.Unlock();
 	gauge_vario->Render();
       }
     }
@@ -133,13 +140,10 @@ DWORD CalculationThread (LPVOID lpvoid) {
 	(void)lpvoid;
   bool need_calculations_slow;
 
-  NMEA_INFO     tmp_GPS_INFO;
-  DERIVED_INFO  tmp_CALCULATED_INFO;
-
   need_calculations_slow = false;
 
   // wait for proper startup signal
-  while (!main_window.map.IsDisplayRunning()) {
+  while (!XCSoarInterface::main_window.map.IsDisplayRunning()) {
     Sleep(MIN_WAIT_TIME);
   }
 
@@ -156,33 +160,30 @@ DWORD CalculationThread (LPVOID lpvoid) {
     // make local copy before editing...
     mutexFlightData.Lock();
     if (gpsUpdatedTriggerEvent.test()) { // timeout on FLARM objects
-      FLARM_RefreshSlots(&GPS_INFO);
+      device_blackboard.FLARM_RefreshSlots();
     }
-    memcpy(&tmp_GPS_INFO,&GPS_INFO,sizeof(NMEA_INFO));
-    memcpy(&tmp_CALCULATED_INFO,&CALCULATED_INFO,sizeof(DERIVED_INFO));
-
-    bool has_vario = GPS_INFO.VarioAvailable;
+    glide_computer.ReadBlackboard(device_blackboard.Basic());
+    XCSoarInterface::ReadBlackboardBasic(device_blackboard.Basic());
     mutexFlightData.Unlock();
+
+    TriggerRedraws(); // just the map
+
+    bool has_vario = glide_computer.Basic().VarioAvailable;
 
     // Do vario first to reduce audio latency
     if (has_vario) {
-      if (DoCalculationsVario(&tmp_GPS_INFO,&tmp_CALCULATED_INFO)) {
-
-      }
-      // assume new vario data has arrived, so infoboxes
-      // need to be redrawn
+      glide_computer.ProcessVario();
     } else {
       // run the function anyway, because this gives audio functions
       // if no vario connected
       if (gpsUpdatedTriggerEvent.test()) {
-	if (DoCalculationsVario(&tmp_GPS_INFO,&tmp_CALCULATED_INFO)) {
-	}
+	glide_computer.ProcessVario();
 	TriggerVarioUpdate(); // emulate vario update
       }
     }
 
     if (gpsUpdatedTriggerEvent.test()) {
-      if(DoCalculations(&tmp_GPS_INFO,&tmp_CALCULATED_INFO)){
+      if (glide_computer.ProcessGPS()){
         need_calculations_slow = true;
       }
       InfoBoxManager::SetDirty(true);
@@ -191,13 +192,11 @@ DWORD CalculationThread (LPVOID lpvoid) {
     if (closeTriggerEvent.test())
       break; // drop out on exit
 
-    TriggerRedraws();
-
     if (closeTriggerEvent.test())
       break; // drop out on exit
 
     if (need_calculations_slow) {
-      DoCalculationsSlow(&tmp_GPS_INFO, &tmp_CALCULATED_INFO, main_window.map);
+      glide_computer.ProcessIdle(XCSoarInterface::main_window.map);
       need_calculations_slow = false;
     }
 
@@ -208,7 +207,8 @@ DWORD CalculationThread (LPVOID lpvoid) {
     // should be changed in DoCalculations, so we only need to write
     // that one back (otherwise we may write over new data)
     mutexFlightData.Lock();
-    memcpy(&CALCULATED_INFO,&tmp_CALCULATED_INFO,sizeof(DERIVED_INFO));
+    device_blackboard.ReadBlackboard(glide_computer.Calculated());
+    XCSoarInterface::ReadBlackboardCalculated(glide_computer.Calculated());
     mutexFlightData.Unlock();
 
     // reset triggers
@@ -222,6 +222,17 @@ DWORD CalculationThread (LPVOID lpvoid) {
 void CreateCalculationThread(void) {
   HANDLE hCalculationThread;
   DWORD dwCalcThreadID;
+
+
+  glide_computer.ReadBlackboard(device_blackboard.Basic());
+  XCSoarInterface::ReadBlackboardBasic(device_blackboard.Basic());
+  glide_computer.ProcessGPS();
+  XCSoarInterface::ReadBlackboardCalculated(glide_computer.Calculated());
+  device_blackboard.ReadBlackboard(glide_computer.Calculated());
+  if (gauge_vario) {
+    gauge_vario->ReadBlackboardBasic(device_blackboard.Basic());
+    gauge_vario->ReadBlackboardCalculated(device_blackboard.Calculated());
+  }
 
   // Create a read thread for performing calculations
   if ((hCalculationThread =

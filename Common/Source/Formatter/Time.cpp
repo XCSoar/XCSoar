@@ -37,9 +37,10 @@ Copyright_License {
 
 #include "Formatter/Time.hpp"
 #include "LocalTime.hpp"
-#include "Blackboard.hpp"
 #include "SettingsTask.hpp"
 #include <stdlib.h>
+#include "Interface.hpp"
+
 
 void FormatterTime::SecsToDisplayTime(int d) {
   bool negative = (d<0);
@@ -65,21 +66,21 @@ void FormatterTime::SecsToDisplayTime(int d) {
 void FormatterTime::AssignValue(int i) {
   switch (i) {
   case 9:
-    SecsToDisplayTime((int)CALCULATED_INFO.LastThermalTime);
+    SecsToDisplayTime((int)XCSoarInterface::Calculated().LastThermalTime);
     break;
   case 36:
-    SecsToDisplayTime((int)CALCULATED_INFO.FlightTime);
+    SecsToDisplayTime((int)XCSoarInterface::Calculated().FlightTime);
     break;
   case 39:
-    SecsToDisplayTime(DetectCurrentTime(&GPS_INFO));
+    SecsToDisplayTime(DetectCurrentTime(&XCSoarInterface::Basic()));
     break;
   case 40:
-    SecsToDisplayTime((int)(GPS_INFO.Time));
+    SecsToDisplayTime((int)(XCSoarInterface::Basic().Time));
     break;
   case 46:
-    SecsToDisplayTime((int)(CALCULATED_INFO.LegTimeToGo+DetectCurrentTime(&GPS_INFO)));
+    SecsToDisplayTime((int)(XCSoarInterface::Calculated().LegTimeToGo+DetectCurrentTime(&XCSoarInterface::Basic())));
     Valid = ValidTaskPoint(ActiveWayPoint) &&
-      (CALCULATED_INFO.LegTimeToGo< 0.9*ERROR_TIME);
+      (XCSoarInterface::Calculated().LegTimeToGo< 0.9*ERROR_TIME);
     break;
   default:
     break;
@@ -90,16 +91,16 @@ void FormatterTime::AssignValue(int i) {
 void FormatterAATTime::AssignValue(int i) {
   double dd;
   if (AATEnabled && ValidTaskPoint(ActiveWayPoint)) {
-    dd = CALCULATED_INFO.TaskTimeToGo;
-    if ((CALCULATED_INFO.TaskStartTime>0.0) && (CALCULATED_INFO.Flying)
+    dd = XCSoarInterface::Calculated().TaskTimeToGo;
+    if ((XCSoarInterface::Calculated().TaskStartTime>0.0) && (XCSoarInterface::Calculated().Flying)
         &&(ActiveWayPoint>0)) {
-      dd += GPS_INFO.Time-CALCULATED_INFO.TaskStartTime;
+      dd += XCSoarInterface::Basic().Time-XCSoarInterface::Calculated().TaskStartTime;
     }
     dd= max(0,min(24.0*3600.0,dd))-AATTaskLength*60;
     if (dd<0) {
       status = 1; // red
     } else {
-      if (CALCULATED_INFO.TaskTimeToGoTurningNow > (AATTaskLength+5)*60) {
+      if (XCSoarInterface::Calculated().TaskTimeToGoTurningNow > (AATTaskLength+5)*60) {
         status = 2; // blue
       } else {
         status = 0;  // black
@@ -112,24 +113,24 @@ void FormatterAATTime::AssignValue(int i) {
 
   switch (i) {
   case 27:
-    SecsToDisplayTime((int)CALCULATED_INFO.AATTimeToGo);
+    SecsToDisplayTime((int)XCSoarInterface::Calculated().AATTimeToGo);
     Valid = (ValidTaskPoint(ActiveWayPoint) && AATEnabled
-	     && (CALCULATED_INFO.AATTimeToGo< 0.9*ERROR_TIME));
+	     && (XCSoarInterface::Calculated().AATTimeToGo< 0.9*ERROR_TIME));
     break;
   case 41:
-    SecsToDisplayTime((int)(CALCULATED_INFO.TaskTimeToGo));
+    SecsToDisplayTime((int)(XCSoarInterface::Calculated().TaskTimeToGo));
     Valid = ValidTaskPoint(ActiveWayPoint)
-      && (CALCULATED_INFO.TaskTimeToGo< 0.9*ERROR_TIME);
+      && (XCSoarInterface::Calculated().TaskTimeToGo< 0.9*ERROR_TIME);
     break;
   case 42:
-    SecsToDisplayTime((int)(CALCULATED_INFO.LegTimeToGo));
+    SecsToDisplayTime((int)(XCSoarInterface::Calculated().LegTimeToGo));
     Valid = ValidTaskPoint(ActiveWayPoint)
-      && (CALCULATED_INFO.LegTimeToGo< 0.9*ERROR_TIME);
+      && (XCSoarInterface::Calculated().LegTimeToGo< 0.9*ERROR_TIME);
     break;
   case 45:
-    SecsToDisplayTime((int)(CALCULATED_INFO.TaskTimeToGo+DetectCurrentTime(&GPS_INFO)));
+    SecsToDisplayTime((int)(XCSoarInterface::Calculated().TaskTimeToGo+DetectCurrentTime(&XCSoarInterface::Basic())));
     Valid = ValidTaskPoint(ActiveWayPoint)
-      && (CALCULATED_INFO.TaskTimeToGo< 0.9*ERROR_TIME);
+      && (XCSoarInterface::Calculated().TaskTimeToGo< 0.9*ERROR_TIME);
     break;
   case 62:
     if (AATEnabled && ValidTaskPoint(ActiveWayPoint)) {

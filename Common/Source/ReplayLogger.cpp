@@ -57,6 +57,7 @@
 
 #include "Blackboard.hpp"
 #include "GlideComputer.hpp"
+#include "Components.hpp"
 
 extern int NumLoggerBuffered; // from Logger
 
@@ -303,8 +304,6 @@ private:
 };
 
 
-
-
 bool ReplayLogger::UpdateInternal(void) {
   static bool init=true;
 
@@ -373,19 +372,10 @@ bool ReplayLogger::UpdateInternal(void) {
     if ((SpeedX>0) && (LatX != LatX1) && (LonX != LonX1)) {
 
       if (init) {
-	mutexGlideComputer.Lock();
-	GlideComputer::flightstats.Reset();
-	mutexGlideComputer.Unlock();
+	glide_computer.ResetFlight();
       }
-      mutexFlightData.Lock();
-      GPS_INFO.Latitude = LatX;
-      GPS_INFO.Longitude = LonX;
-      GPS_INFO.Speed = SpeedX;
-      GPS_INFO.TrackBearing = BearingX;
-      GPS_INFO.Altitude = AltX;
-      GPS_INFO.BaroAltitude = AltX;
-      GPS_INFO.Time = tthis;
-      mutexFlightData.Unlock();
+      device_blackboard.SetLocation(LonX, LatX, SpeedX, BearingX,
+				    AltX, AltX, tthis);
     } else {
       // This is required in case the integrator fails,
       // which can occur due to parsing faults
@@ -406,11 +396,8 @@ bool ReplayLogger::UpdateInternal(void) {
 void ReplayLogger::Stop(void) {
   ReadLine(NULL); // close the file
   if (Enabled) {
-    mutexFlightData.Lock();
-    GPS_INFO.Speed = 0;
-    //    GPS_INFO.Time = 0;
+    device_blackboard.StopReplay();
     NumLoggerBuffered = 0;
-    mutexFlightData.Unlock();
   }
   Enabled = false;
 }
@@ -423,7 +410,7 @@ void ReplayLogger::Start(void) {
   NumLoggerBuffered = 0;
 
   mutexGlideComputer.Lock();
-  GlideComputer::flightstats.Reset();
+  glide_computer.ResetFlight();
   mutexGlideComputer.Unlock();
 
   if (!UpdateInternal()) {

@@ -641,3 +641,39 @@ int AirspaceWarnFindIndexByID(int ID){
   return(res);
 }
 
+///////
+#include "Message.h"
+#include "Interface.hpp"
+extern bool GlobalClearAirspaceWarnings;
+// JMW this code needs a better home
+
+bool ClearAirspaceWarnings(const bool acknowledge, const bool ack_all_day) {
+  unsigned int i;
+  if (acknowledge) {
+    GlobalClearAirspaceWarnings = true;
+    if (AirspaceCircle) {
+      for (i=0; i<NumberOfAirspaceCircles; i++) {
+        if (AirspaceCircle[i].WarningLevel>0) {
+          AirspaceCircle[i].Ack.AcknowledgementTime = XCSoarInterface::Basic().Time;
+          if (ack_all_day) {
+            AirspaceCircle[i].Ack.AcknowledgedToday = true;
+          }
+          AirspaceCircle[i].WarningLevel = 0;
+        }
+      }
+    }
+    if (AirspaceArea) {
+      for (i=0; i<NumberOfAirspaceAreas; i++) {
+        if (AirspaceArea[i].WarningLevel>0) {
+          AirspaceArea[i].Ack.AcknowledgementTime = XCSoarInterface::Basic().Time;
+          if (ack_all_day) {
+            AirspaceArea[i].Ack.AcknowledgedToday = true;
+          }
+          AirspaceArea[i].WarningLevel = 0;
+        }
+      }
+    }
+    return Message::Acknowledge(Message::MSG_AIRSPACE);
+  }
+  return false;
+}

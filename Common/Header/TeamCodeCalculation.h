@@ -38,11 +38,20 @@ Copyright_License {
 #ifndef	TEAMCALCULATION_H
 #define	TEAMCALCULATION_H
 
-#include <tchar.h>
+#include "XCSoar.h"
+#include "NMEA/Info.h"
+#include "NMEA/Derived.hpp"
 
 void GetTeamCode(TCHAR *code, double bearing, double range);
 void CalcTeammateBearingRange(double ownDist, double ownBear, TCHAR *TeamMateCode,  double *distToMate, double *bearToMate);
 double GetTeammateBearingFromRef(TCHAR *code );
 double GetTeammateRangeFromRef(TCHAR *code );
+
+void
+CalculateOwnTeamCode(const NMEA_INFO *Basic, DERIVED_INFO *Calculated);
+
+void
+CalculateTeammateBearingRange(const NMEA_INFO *Basic,
+                              DERIVED_INFO *Calculated);
 
 #endif

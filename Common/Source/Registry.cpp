@@ -61,7 +61,6 @@ Copyright_License {
 #include "InfoBoxManager.h"
 #include "Asset.hpp"
 #include "GlideRatio.hpp"
-#include "CalculationsWind.hpp"
 
 #include <assert.h>
 #include <stdlib.h>
@@ -1318,26 +1317,28 @@ void SaveSoundSettings()
   SetToRegistry(szRegistrySoundModes, EnableSoundModes);
 }
 
+
 void SaveWindToRegistry() {
   DWORD Temp;
-  Temp = iround(CALCULATED_INFO.WindSpeed);
+  Temp = iround(XCSoarInterface::Calculated().WindSpeed);
   SetToRegistry(szRegistryWindSpeed,Temp);
-  Temp = iround(CALCULATED_INFO.WindBearing);
+  Temp = iround(XCSoarInterface::Calculated().WindBearing);
   SetToRegistry(szRegistryWindBearing,Temp);
-  SetWindEstimate(CALCULATED_INFO.WindSpeed, CALCULATED_INFO.WindBearing);
-
+  //TODO  SetWindEstimate(XCSoarInterface::Calculated().WindSpeed, XCSoarInterface::Calculated().WindBearing);
 }
 
 void LoadWindFromRegistry() {
   StartupStore(TEXT("Load wind from registry\n"));
 
+  /* JMW incomplete
   DWORD Temp;
   Temp=0;
   GetFromRegistry(szRegistryWindSpeed,&Temp);
-  CALCULATED_INFO.WindSpeed = Temp;
+  XCSoarInterface::Calculated().WindSpeed = Temp;
   Temp=0;
   GetFromRegistry(szRegistryWindBearing,&Temp);
-  CALCULATED_INFO.WindBearing = Temp;
+  XCSoarInterface::Calculated().WindBearing = Temp;
+  */
 }
 
 void ReadDeviceSettings(const int devIdx, TCHAR *Name){

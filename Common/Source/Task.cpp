@@ -366,6 +366,7 @@ void ReplaceWaypoint(int index) {
   mutexTaskData.Unlock();
 }
 
+static void CalculateAATTaskSectors(const NMEA_INFO &gps_info);
 
 void RefreshTask() {
   double lengthtotal = 0.0;
@@ -428,7 +429,7 @@ void RefreshTask() {
   }
 
   CalculateTaskSectors();
-  CalculateAATTaskSectors();
+  CalculateAATTaskSectors(XCSoarInterface::Basic());
   mutexTaskData.Unlock();
 }
 
@@ -622,11 +623,7 @@ double AdjustAATTargets(double desired) {
 }
 
 
-extern NMEA_INFO GPS_INFO;
-extern DERIVED_INFO CALCULATED_INFO;
-
-
-void CalculateAATTaskSectors()
+void CalculateAATTaskSectors(const NMEA_INFO &gps_info)
 {
   int i;
   int awp = ActiveWayPoint;
@@ -634,8 +631,8 @@ void CalculateAATTaskSectors()
   if(AATEnabled == FALSE)
     return;
 
-  double latitude = GPS_INFO.Latitude;
-  double longitude = GPS_INFO.Longitude;
+  double latitude = gps_info.Latitude;
+  double longitude = gps_info.Longitude;
 
   mutexTaskData.Lock();
 
@@ -786,101 +783,6 @@ void CalculateAATTaskSectors()
   }
 
   mutexTaskData.Unlock();
-}
-
-
-////////////
-
-#include "Interface.hpp"
-
-void guiStartLogger(bool noAsk) {
-  int i;
-  if (!LoggerActive) {
-    if (ReplayLogger::IsEnabled()) {
-      if (LoggerActive)
-        guiStopLogger(true);
-      return;
-    }
-    TCHAR TaskMessage[1024];
-    _tcscpy(TaskMessage,TEXT("Start Logger With Declaration\r\n"));
-    for(i=0;i<MAXTASKPOINTS;i++)
-      {
-	if(Task[i].Index == -1)
-	  {
-	    if(i==0)
-	      _tcscat(TaskMessage,TEXT("None"));
-
-	    Debounce();
-	    break;
-	  }
-	_tcscat(TaskMessage,WayPointList[ Task[i].Index ].Name);
-	_tcscat(TaskMessage,TEXT("\r\n"));
-      }
-
-    if(noAsk ||
-       (MessageBoxX(TaskMessage,gettext(TEXT("Start Logger")),
-		    MB_YESNO|MB_ICONQUESTION) == IDYES))
-      {
-
-	if (LoggerClearFreeSpace()) {
-
-	  StartLogger(strAssetNumber);
-	  LoggerHeader();
-	  LoggerActive = true; // start logger after Header is completed.  Concurrency
-
-	  int ntp=0;
-	  for(i=0;i<MAXTASKPOINTS;i++)
-	    {
-	      if(Task[i].Index == -1) {
-		break;
-	      }
-	      ntp++;
-	    }
-	  StartDeclaration(ntp);
-	  for(i=0;i<MAXTASKPOINTS;i++)
-	    {
-	      if(Task[i].Index == -1) {
-		Debounce();
-		break;
-	      }
-	      AddDeclaration(WayPointList[Task[i].Index].Latitude,
-			     WayPointList[Task[i].Index].Longitude,
-			     WayPointList[Task[i].Index].Name );
-	    }
-	  EndDeclaration();
-	  ResetFRecord(); // reset timer & lastRecord string so if
-			  // logger is restarted, FRec appears at top
-			  // of file
-	} else {
-
-	  MessageBoxX(
-		      gettext(TEXT("Logger inactive, insufficient storage!")),
-		      gettext(TEXT("Logger Error")), MB_OK| MB_ICONERROR);
-	  StartupStore(TEXT("Logger not started: Insufficient Storage\r\n"));
-	}
-      }
-  }
-}
-
-
-void guiStopLogger(bool noAsk) {
-  if (LoggerActive) {
-    if(noAsk ||
-       (MessageBoxX(gettext(TEXT("Stop Logger")),
-		    gettext(TEXT("Stop Logger")),
-		    MB_YESNO|MB_ICONQUESTION) == IDYES)) {
-      StopLogger();
-    }
-  }
-}
-
-
-void guiToggleLogger(bool noAsk) {
-  if (LoggerActive) {
-    guiStopLogger(noAsk);
-  } else {
-    guiStartLogger(noAsk);
-  }
 }
 
 
@@ -1689,6 +1591,41 @@ bool IsFinalWaypoint(void) {
   } else {
     retval = true;
   }
+  mutexTaskData.Unlock();
+  return retval;
+}
+
+
+bool InAATTurnSector(const double longitude, const double latitude,
+                    const int the_turnpoint)
+{
+  double AircraftBearing;
+  bool retval = false;
+
+  if (!ValidTaskPoint(the_turnpoint)) {
+    return false;
+  }
+
+  double distance;
+  mutexTaskData.Lock();
+  DistanceBearing(WayPointList[Task[the_turnpoint].Index].Latitude,
+                  WayPointList[Task[the_turnpoint].Index].Longitude,
+                  latitude,
+                  longitude,
+                  &distance, &AircraftBearing);
+
+  if(Task[the_turnpoint].AATType ==  CIRCLE) {
+    if(distance < Task[the_turnpoint].AATCircleRadius) {
+      retval = true;
+    }
+  } else if(distance < Task[the_turnpoint].AATSectorRadius) {
+    if (AngleInRange(Task[the_turnpoint].AATStartRadial,
+                     Task[the_turnpoint].AATFinishRadial,
+                     AngleLimit360(AircraftBearing), true)) {
+      retval = true;
+    }
+  }
+
   mutexTaskData.Unlock();
   return retval;
 }

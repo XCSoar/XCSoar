@@ -53,7 +53,7 @@ Copyright_License {
 #include "Calculations.h" // TODO danger! FAIFinishHeight
 #include "Math/SunEphemeris.hpp"
 #include "MapWindow.h"
-
+#include "GlideComputer.hpp"
 #include <assert.h>
 
 extern BOOL extGPSCONNECT;
@@ -149,35 +149,35 @@ static bool first = true;
 
 static void UpdateValuesSystem() {
   static int extGPSCONNECT_last = extGPSCONNECT;
-  static int NAVWarning_last = GPS_INFO.NAVWarning;
-  static int SatellitesUsed_last = GPS_INFO.SatellitesUsed;
-  static int VarioAvailable_last = GPS_INFO.VarioAvailable;
-  static int FLARM_Available_last = GPS_INFO.FLARM_Available;
+  static int NAVWarning_last = XCSoarInterface::Basic().NAVWarning;
+  static int SatellitesUsed_last = XCSoarInterface::Basic().SatellitesUsed;
+  static int VarioAvailable_last = XCSoarInterface::Basic().VarioAvailable;
+  static int FLARM_Available_last = XCSoarInterface::Basic().FLARM_Available;
   static bool LoggerActive_last = LoggerActive;
   static bool DeclaredToDevice_last = DeclaredToDevice;
-  static double SupplyBatteryVoltage_last = GPS_INFO.SupplyBatteryVoltage;
+  static double SupplyBatteryVoltage_last = XCSoarInterface::Basic().SupplyBatteryVoltage;
   static int PDABatteryPercent_last = PDABatteryPercent;
 
   if (first ||
       (extGPSCONNECT_last != extGPSCONNECT) ||
-      (NAVWarning_last != GPS_INFO.NAVWarning) ||
-      (SatellitesUsed_last != GPS_INFO.SatellitesUsed) ||
-      (VarioAvailable_last != GPS_INFO.VarioAvailable) ||
-      (FLARM_Available_last != GPS_INFO.FLARM_Available) ||
+      (NAVWarning_last != XCSoarInterface::Basic().NAVWarning) ||
+      (SatellitesUsed_last != XCSoarInterface::Basic().SatellitesUsed) ||
+      (VarioAvailable_last != XCSoarInterface::Basic().VarioAvailable) ||
+      (FLARM_Available_last != XCSoarInterface::Basic().FLARM_Available) ||
       (LoggerActive_last != LoggerActive) ||
       (DeclaredToDevice_last != DeclaredToDevice) ||
-      (SupplyBatteryVoltage_last != GPS_INFO.SupplyBatteryVoltage) ||
+      (SupplyBatteryVoltage_last != XCSoarInterface::Basic().SupplyBatteryVoltage) ||
       (PDABatteryPercent_last != PDABatteryPercent)) {
     first = false;
 
     extGPSCONNECT_last = extGPSCONNECT;
-    NAVWarning_last = GPS_INFO.NAVWarning;
-    SatellitesUsed_last = GPS_INFO.SatellitesUsed;
-    VarioAvailable_last = GPS_INFO.VarioAvailable;
-    FLARM_Available_last = GPS_INFO.FLARM_Available;
+    NAVWarning_last = XCSoarInterface::Basic().NAVWarning;
+    SatellitesUsed_last = XCSoarInterface::Basic().SatellitesUsed;
+    VarioAvailable_last = XCSoarInterface::Basic().VarioAvailable;
+    FLARM_Available_last = XCSoarInterface::Basic().FLARM_Available;
     LoggerActive_last = LoggerActive;
     DeclaredToDevice_last = DeclaredToDevice;
-    SupplyBatteryVoltage_last = GPS_INFO.SupplyBatteryVoltage;
+    SupplyBatteryVoltage_last = XCSoarInterface::Basic().SupplyBatteryVoltage;
     PDABatteryPercent_last = PDABatteryPercent;
 
   } else {
@@ -191,10 +191,10 @@ static void UpdateValuesSystem() {
   wp = (WndProperty*)wf->FindByName(TEXT("prpGPS"));
   if (wp) {
     if (extGPSCONNECT) {
-      if (GPS_INFO.NAVWarning) {
+      if (XCSoarInterface::Basic().NAVWarning) {
         wp->SetText(gettext(TEXT("Fix invalid")));
       } else {
-        if (GPS_INFO.SatellitesUsed==0) {
+        if (XCSoarInterface::Basic().SatellitesUsed==0) {
           wp->SetText(gettext(TEXT("No fix")));
         } else {
           wp->SetText(gettext(TEXT("3D fix")));
@@ -204,8 +204,8 @@ static void UpdateValuesSystem() {
 
       wp = (WndProperty*)wf->FindByName(TEXT("prpNumSat"));
       if (wp) {
-        if (GPS_INFO.SatellitesUsed >= 0) {  // known numer of sats
-          _stprintf(Temp,TEXT("%d"),GPS_INFO.SatellitesUsed);
+        if (XCSoarInterface::Basic().SatellitesUsed >= 0) {  // known numer of sats
+          _stprintf(Temp,TEXT("%d"),XCSoarInterface::Basic().SatellitesUsed);
         } else { // valid but unknown number of sats
           _stprintf(Temp,TEXT(">3"));
         }
@@ -220,7 +220,7 @@ static void UpdateValuesSystem() {
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpVario"));
   if (wp) {
-    if (GPS_INFO.VarioAvailable) {
+    if (XCSoarInterface::Basic().VarioAvailable) {
       wp->SetText(gettext(TEXT("Connected")));
     } else {
       wp->SetText(gettext(TEXT("Disconnected")));
@@ -230,7 +230,7 @@ static void UpdateValuesSystem() {
 
   if (wp) {
     wp = (WndProperty*)wf->FindByName(TEXT("prpFLARM"));
-    if (GPS_INFO.FLARM_Available) {
+    if (XCSoarInterface::Basic().FLARM_Available) {
       wp->SetText(gettext(TEXT("Connected")));
     } else {
       wp->SetText(gettext(TEXT("Disconnected")));
@@ -277,10 +277,10 @@ static void UpdateValuesSystem() {
     _tcscat(Temp, Temp2);
 #endif
 #endif
-    if (GPS_INFO.SupplyBatteryVoltage == 0) {
+    if (XCSoarInterface::Basic().SupplyBatteryVoltage == 0) {
       _stprintf(Temp2,TEXT("\0"));
     } else {
-      _stprintf(Temp2,TEXT("%.1f V"),GPS_INFO.SupplyBatteryVoltage);
+      _stprintf(Temp2,TEXT("%.1f V"),XCSoarInterface::Basic().SupplyBatteryVoltage);
     }
     _tcscat(Temp, Temp2);
 
@@ -297,8 +297,8 @@ static void UpdateValuesTimes(void) {
   int sunsethours;
   int sunsetmins;
 
-  sunsettime = DoSunEphemeris(GPS_INFO.Longitude,
-                              GPS_INFO.Latitude);
+  sunsettime = DoSunEphemeris(XCSoarInterface::Basic().Longitude,
+                              XCSoarInterface::Basic().Latitude);
   sunsethours = (int)sunsettime;
   sunsetmins = (int)((sunsettime-sunsethours)*60);
 
@@ -310,15 +310,15 @@ static void UpdateValuesTimes(void) {
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpLocalTime"));
   if (wp) {
-    Units::TimeToText(Temp, (int)DetectCurrentTime(&GPS_INFO));
+    Units::TimeToText(Temp, (int)DetectCurrentTime(&XCSoarInterface::Basic()));
     wp->SetText(Temp);
   }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpTakeoffTime"));
   if (wp) {
-    if (CALCULATED_INFO.FlightTime>0) {
+    if (XCSoarInterface::Calculated().FlightTime>0) {
       Units::TimeToText(Temp,
-                        (int)TimeLocal((long)CALCULATED_INFO.TakeOffTime));
+                        (int)TimeLocal((long)XCSoarInterface::Calculated().TakeOffTime));
       wp->SetText(Temp);
     } else {
       wp->SetText(TEXT(""));
@@ -327,10 +327,10 @@ static void UpdateValuesTimes(void) {
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpLandingTime"));
   if (wp) {
-    if (!CALCULATED_INFO.Flying) {
+    if (!XCSoarInterface::Calculated().Flying) {
       Units::TimeToText(Temp,
-                        (int)TimeLocal((long)(CALCULATED_INFO.TakeOffTime
-                                              +CALCULATED_INFO.FlightTime)));
+                        (int)TimeLocal((long)(XCSoarInterface::Calculated().TakeOffTime
+                                              +XCSoarInterface::Calculated().FlightTime)));
       wp->SetText(Temp);
     } else {
       wp->SetText(TEXT(""));
@@ -339,8 +339,8 @@ static void UpdateValuesTimes(void) {
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpFlightTime"));
   if (wp) {
-    if (CALCULATED_INFO.FlightTime > 0){
-      Units::TimeToText(Temp, (int)CALCULATED_INFO.FlightTime);
+    if (XCSoarInterface::Calculated().FlightTime > 0){
+      Units::TimeToText(Temp, (int)XCSoarInterface::Calculated().FlightTime);
       wp->SetText(Temp);
     } else {
       wp->SetText(TEXT(""));
@@ -360,8 +360,8 @@ static void UpdateValuesFlight(void) {
   TCHAR sLongitude[16];
   TCHAR sLatitude[16];
 
-  Units::LongitudeToString(GPS_INFO.Longitude, sLongitude, sizeof(sLongitude)-1);
-  Units::LatitudeToString(GPS_INFO.Latitude, sLatitude, sizeof(sLatitude)-1);
+  Units::LongitudeToString(XCSoarInterface::Basic().Longitude, sLongitude, sizeof(sLongitude)-1);
+  Units::LatitudeToString(XCSoarInterface::Basic().Latitude, sLatitude, sizeof(sLatitude)-1);
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpLongitude"));
   if (wp) {
@@ -376,7 +376,7 @@ static void UpdateValuesFlight(void) {
   wp = (WndProperty*)wf->FindByName(TEXT("prpAltitude"));
   if (wp) {
     _stprintf(Temp, TEXT("%.0f %s"),
-              GPS_INFO.Altitude*ALTITUDEMODIFY,
+              XCSoarInterface::Basic().Altitude*ALTITUDEMODIFY,
               Units::GetAltitudeName());
     wp->SetText(Temp);
   }
@@ -384,15 +384,15 @@ static void UpdateValuesFlight(void) {
   wp = (WndProperty*)wf->FindByName(TEXT("prpMaxHeightGain"));
   if (wp) {
     _stprintf(Temp, TEXT("%.0f %s"),
-              CALCULATED_INFO.MaxHeightGain*ALTITUDEMODIFY,
+              XCSoarInterface::Calculated().MaxHeightGain*ALTITUDEMODIFY,
               Units::GetAltitudeName());
     wp->SetText(Temp);
   }
 
   if (nearest_waypoint>=0) {
 
-    DistanceBearing(GPS_INFO.Latitude,
-                    GPS_INFO.Longitude,
+    DistanceBearing(XCSoarInterface::Basic().Latitude,
+                    XCSoarInterface::Basic().Longitude,
                     WayPointList[nearest_waypoint].Latitude,
                     WayPointList[nearest_waypoint].Longitude,
                     &distance,
@@ -440,7 +440,7 @@ static void UpdateValuesRules(void) {
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpValidStart"));
   if (wp) {
-    if (CALCULATED_INFO.ValidStart) {
+    if (XCSoarInterface::Calculated().ValidStart) {
       wp->SetText(gettext(TEXT("TRUE")));
     } else {
       wp->SetText(gettext(TEXT("FALSE")));
@@ -448,7 +448,7 @@ static void UpdateValuesRules(void) {
   }
   wp = (WndProperty*)wf->FindByName(TEXT("prpValidFinish"));
   if (wp) {
-    if (CALCULATED_INFO.ValidFinish) {
+    if (XCSoarInterface::Calculated().ValidFinish) {
       wp->SetText(gettext(TEXT("TRUE")));
     } else {
       wp->SetText(gettext(TEXT("FALSE")));
@@ -457,8 +457,8 @@ static void UpdateValuesRules(void) {
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpStartTime"));
   if (wp) {
-    if (CALCULATED_INFO.TaskStartTime>0) {
-      Units::TimeToText(Temp, (int)TimeLocal((int)(CALCULATED_INFO.TaskStartTime)));
+    if (XCSoarInterface::Calculated().TaskStartTime>0) {
+      Units::TimeToText(Temp, (int)TimeLocal((int)(XCSoarInterface::Calculated().TaskStartTime)));
       wp->SetText(Temp);
     } else {
       wp->SetText(TEXT(""));
@@ -467,9 +467,9 @@ static void UpdateValuesRules(void) {
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpStartSpeed"));
   if (wp) {
-    if (CALCULATED_INFO.TaskStartTime>0) {
+    if (XCSoarInterface::Calculated().TaskStartTime>0) {
       _stprintf(Temp, TEXT("%.0f %s"),
-                TASKSPEEDMODIFY*CALCULATED_INFO.TaskStartSpeed,
+                TASKSPEEDMODIFY*XCSoarInterface::Calculated().TaskStartSpeed,
                 Units::GetTaskSpeedName());
       wp->SetText(Temp);
     } else {
@@ -497,9 +497,9 @@ static void UpdateValuesRules(void) {
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpStartHeight"));
   if (wp) {
-    if (CALCULATED_INFO.TaskStartTime>0) {
+    if (XCSoarInterface::Calculated().TaskStartTime>0) {
       _stprintf(Temp, TEXT("%.0f %s"),
-                (CALCULATED_INFO.TaskStartAltitude)*ALTITUDEMODIFY,
+                (XCSoarInterface::Calculated().TaskStartAltitude)*ALTITUDEMODIFY,
                 Units::GetAltitudeName());
       wp->SetText(Temp);
     } else {
@@ -509,7 +509,8 @@ static void UpdateValuesRules(void) {
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpFinishAlt"));
   if (wp) {
-    double finish_min = FAIFinishHeight(&GPS_INFO, &CALCULATED_INFO, -1);
+    double finish_min = 
+      FAIFinishHeight(XCSoarInterface::Calculated(), -1);
     _stprintf(Temp, TEXT("%.0f %s"),
               finish_min*ALTITUDEMODIFY,
               Units::GetAltitudeName());
@@ -534,9 +535,9 @@ static void UpdateValuesTask(void) {
     }
   }
 
-  double dd = CALCULATED_INFO.TaskTimeToGo;
-  if (CALCULATED_INFO.TaskStartTime>0.0) {
-    dd += GPS_INFO.Time-CALCULATED_INFO.TaskStartTime;
+  double dd = XCSoarInterface::Calculated().TaskTimeToGo;
+  if (XCSoarInterface::Calculated().TaskStartTime>0.0) {
+    dd += XCSoarInterface::Basic().Time-XCSoarInterface::Calculated().TaskStartTime;
   }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpETETime"));
@@ -547,15 +548,15 @@ static void UpdateValuesTask(void) {
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpRemainingTime"));
   if (wp) {
-    Units::TimeToText(Temp, (int)CALCULATED_INFO.TaskTimeToGo);
+    Units::TimeToText(Temp, (int)XCSoarInterface::Calculated().TaskTimeToGo);
     wp->SetText(Temp);
   }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpTaskDistance"));
   if (wp) {
     _stprintf(Temp, TEXT("%.0f %s"), DISTANCEMODIFY*
-              (CALCULATED_INFO.TaskDistanceToGo
-               +CALCULATED_INFO.TaskDistanceCovered),
+              (XCSoarInterface::Calculated().TaskDistanceToGo
+               +XCSoarInterface::Calculated().TaskDistanceCovered),
               Units::GetDistanceName());
     wp->SetText(Temp);
   }
@@ -564,19 +565,19 @@ static void UpdateValuesTask(void) {
   if (wp) {
     if (AATEnabled) {
       _stprintf(Temp, TEXT("%.0f %s"),
-                DISTANCEMODIFY*CALCULATED_INFO.AATTargetDistance,
+                DISTANCEMODIFY*XCSoarInterface::Calculated().AATTargetDistance,
                 Units::GetDistanceName());
     } else {
       _stprintf(Temp, TEXT("%.0f %s"),
-                DISTANCEMODIFY*CALCULATED_INFO.TaskDistanceToGo,
+                DISTANCEMODIFY*XCSoarInterface::Calculated().TaskDistanceToGo,
                 Units::GetDistanceName());
     }
     wp->SetText(Temp);
   }
 
   double d1 =
-    (CALCULATED_INFO.TaskDistanceToGo
-     +CALCULATED_INFO.TaskDistanceCovered)/dd;
+    (XCSoarInterface::Calculated().TaskDistanceToGo
+     +XCSoarInterface::Calculated().TaskDistanceCovered)/dd;
   // TODO bug: this fails for OLC
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpEstimatedSpeed"));
@@ -589,7 +590,7 @@ static void UpdateValuesTask(void) {
   wp = (WndProperty*)wf->FindByName(TEXT("prpAverageSpeed"));
   if (wp) {
     _stprintf(Temp, TEXT("%.0f %s"),
-              TASKSPEEDMODIFY*CALCULATED_INFO.TaskSpeed,
+              TASKSPEEDMODIFY*XCSoarInterface::Calculated().TaskSpeed,
               Units::GetTaskSpeedName());
     wp->SetText(Temp);
   }
@@ -621,7 +622,7 @@ void dlgStatusShowModal(int start_page){
 
   wf = dlgLoadFromXML(CallBackTable,
                       TEXT("dlgStatus.xml"),
-		      main_window,
+		      XCSoarInterface::main_window,
 		      TEXT("IDR_XML_STATUS"));
 
   if (!wf) return;
@@ -656,9 +657,9 @@ void dlgStatusShowModal(int start_page){
     }
   }
 
-  nearest_waypoint = FindNearestWayPoint(main_window.map,
-					 GPS_INFO.Longitude,
-                                         GPS_INFO.Latitude,
+  nearest_waypoint = FindNearestWayPoint(XCSoarInterface::main_window.map,
+					 XCSoarInterface::Basic().Longitude,
+                                         XCSoarInterface::Basic().Latitude,
                                          100000.0, true); // big range limit
 
   UpdateValuesSystem();

@@ -47,7 +47,7 @@ Copyright_License {
 #include "Math/FastMath.h"
 #include "Math/Earth.hpp"
 #include "WayPoint.hpp"
-#include "Interface.hpp"
+#include "Components.hpp"
 
 //////////////////////////////////////////////////////////
 // Final glide through terrain and footprint calculations

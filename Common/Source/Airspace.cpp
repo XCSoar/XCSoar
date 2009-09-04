@@ -45,6 +45,7 @@ Copyright_License {
 #include "Math/Units.h"
 #include "Math/Pressure.h"
 #include "SettingsAirspace.hpp"
+#include "Interface.hpp" // JMW remove (need to separate out blackboard)
 
 //#include <windows.h>
 //#include <commctrl.h>
@@ -158,12 +159,12 @@ int FindAirspaceCircle(double Longitude,double Latitude, bool visibleonly)
       if (AirspaceCircle[i].Base.Base != abAGL) {
           basealt = AirspaceCircle[i].Base.Altitude;
         } else {
-          basealt = AirspaceCircle[i].Base.AGL + CALCULATED_INFO.TerrainAlt;
+          basealt = AirspaceCircle[i].Base.AGL + XCSoarInterface::Calculated().TerrainAlt;
         }
       if (AirspaceCircle[i].Top.Base != abAGL) {
           topalt = AirspaceCircle[i].Top.Altitude;
         } else {
-          topalt = AirspaceCircle[i].Top.AGL + CALCULATED_INFO.TerrainAlt;
+          topalt = AirspaceCircle[i].Top.AGL + XCSoarInterface::Calculated().TerrainAlt;
         }
       if(CheckAirspaceAltitude(basealt, topalt)) {
         if (InsideAirspaceCircle(Longitude,Latitude,i)) {
@@ -179,10 +180,10 @@ int FindAirspaceCircle(double Longitude,double Latitude, bool visibleonly)
 BOOL CheckAirspaceAltitude(const double &Base, const double &Top)
 {
   double alt;
-  if (GPS_INFO.BaroAltitudeAvailable) {
-    alt = GPS_INFO.BaroAltitude;
+  if (XCSoarInterface::Basic().BaroAltitudeAvailable) {
+    alt = XCSoarInterface::Basic().BaroAltitude;
   } else {
-    alt = GPS_INFO.Altitude;
+    alt = XCSoarInterface::Basic().Altitude;
   }
 
   switch (AltitudeMode)
@@ -367,12 +368,12 @@ int FindAirspaceArea(double Longitude,double Latitude, bool visibleonly)
       if (AirspaceArea[i].Base.Base != abAGL) {
           basealt = AirspaceArea[i].Base.Altitude;
       } else {
-          basealt = AirspaceArea[i].Base.AGL + CALCULATED_INFO.TerrainAlt;
+          basealt = AirspaceArea[i].Base.AGL + XCSoarInterface::Calculated().TerrainAlt;
       }
       if (AirspaceArea[i].Top.Base != abAGL) {
           topalt = AirspaceArea[i].Top.Altitude;
       } else {
-          topalt = AirspaceArea[i].Top.AGL + CALCULATED_INFO.TerrainAlt;
+          topalt = AirspaceArea[i].Top.AGL + XCSoarInterface::Calculated().TerrainAlt;
       }
       if(CheckAirspaceAltitude(basealt, topalt)) {
         if (InsideAirspaceArea(Longitude,Latitude,i)) {
@@ -424,12 +425,12 @@ int FindNearestAirspaceCircle(double longitude, double latitude,
     if (AirspaceCircle[i].Base.Base != abAGL) {
       basealt = AirspaceCircle[i].Base.Altitude;
     } else {
-      basealt = AirspaceCircle[i].Base.AGL + CALCULATED_INFO.TerrainAlt;
+      basealt = AirspaceCircle[i].Base.AGL + XCSoarInterface::Calculated().TerrainAlt;
     }
     if (AirspaceCircle[i].Top.Base != abAGL) {
       topalt = AirspaceCircle[i].Top.Altitude;
     } else {
-      topalt = AirspaceCircle[i].Top.AGL + CALCULATED_INFO.TerrainAlt;
+      topalt = AirspaceCircle[i].Top.AGL + XCSoarInterface::Calculated().TerrainAlt;
     }
 
     bool altok;
@@ -559,12 +560,12 @@ FindNearestAirspaceArea(const MapWindowProjection& map_projection,
     if (AirspaceArea[i].Base.Base != abAGL) {
       basealt = AirspaceArea[i].Base.Altitude;
     } else {
-      basealt = AirspaceArea[i].Base.AGL + CALCULATED_INFO.TerrainAlt;
+      basealt = AirspaceArea[i].Base.AGL + XCSoarInterface::Calculated().TerrainAlt;
     }
     if (AirspaceArea[i].Top.Base != abAGL) {
       topalt = AirspaceArea[i].Top.Altitude;
     } else {
-      topalt = AirspaceArea[i].Top.AGL + CALCULATED_INFO.TerrainAlt;
+      topalt = AirspaceArea[i].Top.AGL + XCSoarInterface::Calculated().TerrainAlt;
     }
 
     bool altok;

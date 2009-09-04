@@ -138,7 +138,8 @@ void Message::Initialize(RECT rc) {
 				   WS_CHILD|ES_MULTILINE|ES_CENTER
 				   |WS_BORDER|ES_READONLY | WS_CLIPCHILDREN
 				   | WS_CLIPSIBLINGS,
-				   0,0,0,0, main_window, NULL, hInst, NULL);
+				     0,0,0,0, XCSoarInterface::main_window, NULL, 
+				     XCSoarInterface::hInst, NULL);
 
   SetWindowPos(hWndMessageWindow, HWND_TOP,
 	       rcmsg.left, rcmsg.top,

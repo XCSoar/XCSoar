@@ -890,7 +890,7 @@ static void SetLocalTime(void) {
   WndProperty* wp;
   TCHAR temp[20];
   Units::TimeToText(temp,
-		    (int)TimeLocal((int)(GPS_INFO.Time)));
+		    (int)TimeLocal((int)(XCSoarInterface::Basic().Time)));
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpLocalTime"));
   if (wp) {
@@ -984,8 +984,8 @@ static void OnWaypointNewClicked(WindowControl * Sender){
   (void)Sender;
 
   WAYPOINT edit_waypoint;
-  edit_waypoint.Latitude = GPS_INFO.Latitude;
-  edit_waypoint.Longitude = GPS_INFO.Longitude;
+  edit_waypoint.Latitude = XCSoarInterface::Basic().Latitude;
+  edit_waypoint.Longitude = XCSoarInterface::Basic().Longitude;
   edit_waypoint.FileNum = 0; // default, put into primary waypoint file
   edit_waypoint.Flags = 0;
   edit_waypoint.Comment[0] = 0;
@@ -2528,12 +2528,12 @@ void dlgConfigurationShowModal(void){
   if (!InfoBoxLayout::landscape) {
     wf = dlgLoadFromXML(CallBackTable,
                         TEXT("dlgConfiguration_L.xml"),
-                        main_window,
+                        XCSoarInterface::main_window,
                         TEXT("IDR_XML_CONFIGURATION_L"));
   } else {
     wf = dlgLoadFromXML(CallBackTable,
                         TEXT("dlgConfiguration.xml"),
-                        main_window,
+                        XCSoarInterface::main_window,
                         TEXT("IDR_XML_CONFIGURATION"));
   }
 
@@ -3444,7 +3444,7 @@ void dlgConfigurationShowModal(void){
       SetToRegistry(szRegistryAverEffTime,
 		    (DWORD)(AverEffTime));
       changed = true;
-      InitLDRotary(&rotaryLD);
+      requirerestart = true;
     }
   }
 
@@ -3905,7 +3905,7 @@ void dlgConfigurationShowModal(void){
   }
 
 #ifdef FIVV
-//  if ( CALCULATED_INFO.OnGround == TRUE ) {
+//  if ( XCSoarInterface::Calculated().OnGround == TRUE ) {
 	  wp = (WndProperty*)wf->FindByName(TEXT("prpGPSAltitudeOffset")); // VENTA3
 	  if (wp) GPSAltitudeOffset = wp->GetDataField()->GetAsInteger();
 //  }

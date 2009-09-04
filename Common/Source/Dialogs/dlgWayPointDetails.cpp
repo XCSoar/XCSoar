@@ -363,13 +363,13 @@ void dlgWayPointDetailsShowModal(void){
   if (!InfoBoxLayout::landscape) {
     wf = dlgLoadFromXML(CallBackTable,
                         TEXT("dlgWayPointDetails_L.xml"),
-                        main_window,
+                        XCSoarInterface::main_window,
                         TEXT("IDR_XML_WAYPOINTDETAILS_L"));
 
   } else {
     wf = dlgLoadFromXML(CallBackTable,
                         TEXT("dlgWayPointDetails.xml"),
-                        main_window,
+                        XCSoarInterface::main_window,
                         TEXT("IDR_XML_WAYPOINTDETAILS"));
   }
   nTextLines = 0;
@@ -417,8 +417,8 @@ void dlgWayPointDetailsShowModal(void){
     ->SetText(sTmp);
 
   double distance, bearing;
-  DistanceBearing(GPS_INFO.Latitude,
-                  GPS_INFO.Longitude,
+  DistanceBearing(XCSoarInterface::Basic().Latitude,
+                  XCSoarInterface::Basic().Longitude,
                   WayPointList[SelectedWaypoint].Latitude,
                   WayPointList[SelectedWaypoint].Longitude,
                   &distance,
@@ -437,12 +437,12 @@ void dlgWayPointDetailsShowModal(void){
 
   // alt reqd at mc 0
 
-  alt = CALCULATED_INFO.NavAltitude -
+  alt = XCSoarInterface::Calculated().NavAltitude -
     GlidePolar::MacCreadyAltitude(0.0,
 				  distance,
 				  bearing,
-				  CALCULATED_INFO.WindSpeed,
-				  CALCULATED_INFO.WindBearing,
+				  XCSoarInterface::Calculated().WindSpeed,
+				  XCSoarInterface::Calculated().WindBearing,
 				  0, 0, true,
 				  0)-SAFETYALTITUDEARRIVAL-
     WayPointList[SelectedWaypoint].Altitude;
@@ -455,12 +455,12 @@ void dlgWayPointDetailsShowModal(void){
 
   // alt reqd at safety mc
 
-  alt = CALCULATED_INFO.NavAltitude -
+  alt = XCSoarInterface::Calculated().NavAltitude -
     GlidePolar::MacCreadyAltitude(GlidePolar::AbortSafetyMacCready(),
 				  distance,
 				  bearing,
-				  CALCULATED_INFO.WindSpeed,
-				  CALCULATED_INFO.WindBearing,
+				  XCSoarInterface::Calculated().WindSpeed,
+				  XCSoarInterface::Calculated().WindBearing,
 				  0, 0, true,
 				  0)-SAFETYALTITUDEARRIVAL-
     WayPointList[SelectedWaypoint].Altitude;
@@ -470,12 +470,12 @@ void dlgWayPointDetailsShowModal(void){
 
   // alt reqd at current mc
 
-  alt = CALCULATED_INFO.NavAltitude -
+  alt = XCSoarInterface::Calculated().NavAltitude -
     GlidePolar::MacCreadyAltitude(GlidePolar::GetMacCready(),
 				  distance,
 				  bearing,
-				  CALCULATED_INFO.WindSpeed,
-				  CALCULATED_INFO.WindBearing,
+				  XCSoarInterface::Calculated().WindSpeed,
+				  XCSoarInterface::Calculated().WindBearing,
 				  0, 0, true,
 				  0)-SAFETYALTITUDEARRIVAL-
     WayPointList[SelectedWaypoint].Altitude;

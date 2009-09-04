@@ -48,7 +48,7 @@ Copyright_License {
 #include "Screen/Graphics.hpp"
 #include "Screen/Fonts.hpp"
 #include "McReady.h"
-#include "Interface.hpp"
+#include "Components.hpp"
 
 #include "RasterTerrain.h"
 #include "RasterWeather.h"

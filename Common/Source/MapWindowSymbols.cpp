@@ -108,7 +108,7 @@ void MapWindow::DrawAircraft(Canvas &canvas)
 
     PolygonRotateShift(Aircraft, NUMAIRCRAFTPOINTS, Orig_Aircraft.x+1, Orig_Aircraft.y+1,
                        DisplayAircraftAngle+
-                       (DerivedDrawInfo.Heading-DrawInfo.TrackBearing));
+                       (Calculated().Heading-Basic().TrackBearing));
 
     canvas.polygon(Aircraft, NUMAIRCRAFTPOINTS);
 
@@ -148,10 +148,10 @@ void MapWindow::DrawAircraft(Canvas &canvas)
 
       /* Experiment, when turning show the high wing larger,
 	 low wing smaller
-	 if (DerivedDrawInfo.TurnRate>10) {
+	 if (Calculated().TurnRate>10) {
 	 Aircraft[3].y = 0;
 	 Aircraft[12].y = 2;
-	 } else if (DerivedDrawInfo.TurnRate<-10) {
+	 } else if (Calculated().TurnRate<-10) {
 	 Aircraft[3].y = 2;
 	 Aircraft[12].y = 0;
 	 }
@@ -160,7 +160,7 @@ void MapWindow::DrawAircraft(Canvas &canvas)
       int n = sizeof(Aircraft)/sizeof(Aircraft[0]);
 
       double angle = DisplayAircraftAngle+
-	(DerivedDrawInfo.Heading-DrawInfo.TrackBearing);
+	(Calculated().Heading-Basic().TrackBearing);
 
       PolygonRotateShift(Aircraft, n,
 			 Orig_Aircraft.x-1, Orig_Aircraft.y, angle);
@@ -183,7 +183,7 @@ void MapWindow::DrawAircraft(Canvas &canvas)
 void MapWindow::DrawGPSStatus(Canvas &canvas, const RECT rc)
 {
 
-  if (extGPSCONNECT && !(DrawInfo.NAVWarning) && (DrawInfo.SatellitesUsed != 0))
+  if (extGPSCONNECT && !(Basic().NAVWarning) && (Basic().SatellitesUsed != 0))
     // nothing to do
     return;
 
@@ -197,7 +197,7 @@ void MapWindow::DrawGPSStatus(Canvas &canvas, const RECT rc)
     bmp = &MapGfx.hGPSStatus2;
     txt = gpswarningtext1;
   } else
-    if (DrawInfo.NAVWarning || (DrawInfo.SatellitesUsed == 0)) {
+    if (Basic().NAVWarning || (Basic().SatellitesUsed == 0)) {
       bmp = &MapGfx.hGPSStatus2;
       txt = gpswarningtext2;
     } else {
@@ -225,8 +225,8 @@ void MapWindow::DrawFlightMode(Canvas &canvas, const RECT rc)
   if (!Appearance.DontShowLoggerIndicator){
 
     // has GPS time advanced?
-    if(DrawInfo.Time <= LastTime) {
-      LastTime = DrawInfo.Time;
+    if(Basic().Time <= LastTime) {
+      LastTime = Basic().Time;
     } else {
       flip = !flip;
 
@@ -328,7 +328,7 @@ void MapWindow::DrawFlightMode(Canvas &canvas, const RECT rc)
   }
 
 
-  if (!Appearance.DontShowAutoMacCready && DerivedDrawInfo.AutoMacCready) {
+  if (!Appearance.DontShowAutoMacCready && Calculated().AutoMacCready) {
 
     offset -= 24;
 
@@ -350,7 +350,7 @@ void MapWindow::DrawWindAtAircraft2(Canvas &canvas, const POINT Orig, const RECT
   TCHAR sTmp[12];
   static SIZE tsize = {0,0};
 
-  if (DerivedDrawInfo.WindSpeed<1) {
+  if (Calculated().WindSpeed<1) {
     return; // JMW don't bother drawing it if not significant
   }
 
@@ -363,7 +363,7 @@ void MapWindow::DrawWindAtAircraft2(Canvas &canvas, const POINT Orig, const RECT
   canvas.select(MapGfx.hpWind);
   canvas.select(MapGfx.hbWind);
 
-  int wmag = iround(4.0*DerivedDrawInfo.WindSpeed);
+  int wmag = iround(4.0*Calculated().WindSpeed);
 
   Start.y = Orig.y;
   Start.x = Orig.x;
@@ -379,12 +379,12 @@ void MapWindow::DrawWindAtAircraft2(Canvas &canvas, const POINT Orig, const RECT
     Arrow[i].y -= wmag;
 
   PolygonRotateShift(Arrow, 7, Start.x, Start.y,
-		     DerivedDrawInfo.WindBearing-DisplayAngle);
+		     Calculated().WindBearing-DisplayAngle);
   canvas.polygon(Arrow, 5);
 
   if (WindArrowStyle==1) {
     POINT Tail[2] = {{0,-20}, {0,-26-min(20,wmag)*3}};
-    double angle = AngleLimit360(DerivedDrawInfo.WindBearing-DisplayAngle);
+    double angle = AngleLimit360(Calculated().WindBearing-DisplayAngle);
     for(i=0; i<2; i++) {
       if (InfoBoxLayout::scale>1) {
         Tail[i].x *= InfoBoxLayout::scale;
@@ -400,7 +400,7 @@ void MapWindow::DrawWindAtAircraft2(Canvas &canvas, const POINT Orig, const RECT
   }
 
 
-  _stprintf(sTmp, TEXT("%i"), iround(DerivedDrawInfo.WindSpeed * SPEEDMODIFY));
+  _stprintf(sTmp, TEXT("%i"), iround(Calculated().WindSpeed * SPEEDMODIFY));
 
   TextInBoxMode_t TextInBoxMode = { 16 | 32 }; // JMW test {2 | 16};
   if (Arrow[5].y>=Arrow[6].y) {
@@ -429,9 +429,9 @@ void MapWindow::DrawHorizon(Canvas &canvas, const RECT rc)
   Brush hbHorizonGround(Color(157,101,60));
 
   int radius = IBLSCALE(17);
-  double phi = max(-89,min(89,DerivedDrawInfo.BankAngle));
+  double phi = max(-89,min(89,Calculated().BankAngle));
   double alpha = RAD_TO_DEG
-    *acos(max(-1.0,min(1.0,DerivedDrawInfo.PitchAngle/50.0)));
+    *acos(max(-1.0,min(1.0,Calculated().PitchAngle/50.0)));
   double alpha1 = 180-alpha-phi;
   double alpha2 = 180+alpha-phi;
 
@@ -476,7 +476,7 @@ void MapWindow::DrawHorizon(Canvas &canvas, const RECT rc)
   canvas.line(Start.x - rr2p, Start.y - rr2p, Start.x - rr2n, Start.y - rr2n);
 
   // JMW experimental, display stall sensor
-  double s = max(0.0,min(1.0,DrawInfo.StallRatio));
+  double s = max(0.0,min(1.0,Basic().StallRatio));
   long m = (long)((rc.bottom-rc.top)*s*s);
 
   Pen penr2(Pen::SOLID, 1, Color(0,0,0));
@@ -525,8 +525,8 @@ void MapWindow::DrawFinalGlide(Canvas &canvas, const RECT rc)
 
       // 60 units is size, div by 8 means 60*8 = 480 meters.
 
-      Offset = ((int)DerivedDrawInfo.TaskAltitudeDifference)/8;
-      Offset0 = ((int)DerivedDrawInfo.TaskAltitudeDifference0)/8;
+      Offset = ((int)Calculated().TaskAltitudeDifference)/8;
+      Offset0 = ((int)Calculated().TaskAltitudeDifference0)/8;
       // TODO feature: should be an angle if in final glide mode
 
       if(Offset > 60) Offset = 60;
@@ -623,9 +623,9 @@ void MapWindow::DrawFinalGlide(Canvas &canvas, const RECT rc)
 
       // JMW draw x on final glide bar if unreachable at current Mc
       // hpAircraftBorder
-      if ((DerivedDrawInfo.TaskTimeToGo>0.9*ERROR_TIME)
+      if ((Calculated().TaskTimeToGo>0.9*ERROR_TIME)
 	  || ((GlidePolar::GetMacCready()<0.01) 
-	      && (DerivedDrawInfo.TaskAltitudeDifference<0))) {
+	      && (Calculated().TaskAltitudeDifference<0))) {
         canvas.select(MapGfx.hpAircraftBorder);
 	POINT Cross[4] = { {-5, -5},
 			   { 5,  5},
@@ -642,7 +642,7 @@ void MapWindow::DrawFinalGlide(Canvas &canvas, const RECT rc)
       if (Appearance.IndFinalGlide == fgFinalGlideDefault){
 
         _stprintf(Value,TEXT("%1.0f "),
-                  ALTITUDEMODIFY*DerivedDrawInfo.TaskAltitudeDifference);
+                  ALTITUDEMODIFY*Calculated().TaskAltitudeDifference);
 
         if (Offset>=0) {
           Offset = GlideBar[2].y+Offset+IBLSCALE(5);
@@ -670,7 +670,7 @@ void MapWindow::DrawFinalGlide(Canvas &canvas, const RECT rc)
           POINT  BmpSize;
 
           _stprintf(Value, TEXT("%1.0f"),
-                    Units::ToUserAltitude(DerivedDrawInfo.TaskAltitudeDifference));
+                    Units::ToUserAltitude(Calculated().TaskAltitudeDifference));
 
           canvas.select(MapWindowBoldFont);
           TextSize = canvas.text_size(Value);
@@ -780,7 +780,7 @@ void MapWindow::DrawBestCruiseTrack(Canvas &canvas)
     return;
   }
 
-  if (DerivedDrawInfo.WaypointDistance < 0.010)
+  if (Calculated().WaypointDistance < 0.010)
     return;
 
   canvas.select(MapGfx.hpBestCruiseTrack);
@@ -797,7 +797,7 @@ void MapWindow::DrawBestCruiseTrack(Canvas &canvas)
     Arrow[5].y -= dy;
 
     PolygonRotateShift(Arrow, 7, Orig_Aircraft.x, Orig_Aircraft.y,
-                       DerivedDrawInfo.BestCruiseTrack-DisplayAngle);
+                       Calculated().BestCruiseTrack-DisplayAngle);
 
     canvas.polygon(Arrow, 7);
 
@@ -808,7 +808,7 @@ void MapWindow::DrawBestCruiseTrack(Canvas &canvas)
 
     PolygonRotateShift(Arrow, sizeof(Arrow)/sizeof(Arrow[0]),
                        Orig_Aircraft.x, Orig_Aircraft.y,
-                       DerivedDrawInfo.BestCruiseTrack-DisplayAngle);
+                       Calculated().BestCruiseTrack-DisplayAngle);
     canvas.polygon(Arrow, sizeof(Arrow) / sizeof(Arrow[0]));
   }
 }
@@ -824,16 +824,16 @@ void MapWindow::DrawSpeedToFly(HDC hDC, RECT rc) {
   //  TCHAR Value[10];
   int i;
 
-  if (Appearance.DontShowSpeedToFly || !DerivedDrawInfo.Flying)
+  if (Appearance.DontShowSpeedToFly || !Calculated().Flying)
     return;
 
 #ifndef _SIM_
-  if (!(DrawInfo.AirspeedAvailable && DrawInfo.VarioAvailable)) {
+  if (!(Basic().AirspeedAvailable && Basic().VarioAvailable)) {
     return;
   }
 #else
   // cheat
-  DrawInfo.IndicatedAirspeed = DrawInfo.Speed;
+  Basic().IndicatedAirspeed = Basic().Speed;
 #endif
 
   hbOld = (HBRUSH)SelectObject(hDC, GetStockObject(WHITE_BRUSH));
@@ -842,7 +842,7 @@ void MapWindow::DrawSpeedToFly(HDC hDC, RECT rc) {
   double vdiff;
   int vsize = (rc.bottom-rc.top)/2;
 
-  vdiff = (DerivedDrawInfo.VOpt - DrawInfo.IndicatedAirspeed)/40.0;
+  vdiff = (Calculated().VOpt - Basic().IndicatedAirspeed)/40.0;
   // 25.0 m/s is maximum scale
   vdiff = max(-0.5,min(0.5,vdiff)); // limit it
 
@@ -897,13 +897,13 @@ void MapWindow::DrawSpeedToFly(HDC hDC, RECT rc) {
 #include "Gauge/GaugeCDI.hpp"
 
 void MapWindow::DrawCDI() {
-  bool dodrawcdi = DerivedDrawInfo.Circling
+  bool dodrawcdi = Calculated().Circling
     ? EnableCDICircling
     : EnableCDICruise;
 
   if (dodrawcdi) {
     GaugeCDI::Show();
-    GaugeCDI::Update(DrawInfo.TrackBearing, DerivedDrawInfo.WaypointBearing);
+    GaugeCDI::Update(Basic().TrackBearing, Calculated().WaypointBearing);
   } else {
     GaugeCDI::Hide();
   }

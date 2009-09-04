@@ -425,7 +425,7 @@ bool dlgFontEditShowModal(const TCHAR * FontDescription,
 
   wf = dlgLoadFromXML(CallBackTable,
                       TEXT("dlgFontEdit.xml"),
-		      main_window,
+		      XCSoarInterface::main_window,
 		      TEXT("IDR_XML_FONTEDIT"));
 
   int UseCustomFonts_old = UseCustomFonts;

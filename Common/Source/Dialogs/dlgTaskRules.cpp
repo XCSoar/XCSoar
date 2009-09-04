@@ -143,7 +143,7 @@ bool dlgTaskRules(void){
 
   wf = dlgLoadFromXML(CallBackTable,
                       TEXT("dlgTaskRules.xml"),
-		      main_window,
+		      XCSoarInterface::main_window,
 		      TEXT("IDR_XML_TASKRULES"));
 
   if (!wf) return false;

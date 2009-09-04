@@ -412,8 +412,9 @@ VOLKS	:=\
 OBJS	:=\
 	\
 	$(SRC)/GlideComputer.o 		\
-	$(SRC)/GlideComputerAirData.o 	\
 	$(SRC)/GlideComputerBlackboard.o 	\
+	$(SRC)/GlideComputerAirData.o 	\
+	$(SRC)/GlideComputerInterface.o \
 	$(SRC)/GlideComputerStats.o 	\
 	$(SRC)/GlideComputerTask.o 	\
 	$(SRC)/AATDistance.o 		\
@@ -428,15 +429,9 @@ OBJS	:=\
 	$(SRC)/Calculations.o 		\
 	$(SRC)/Calculations2.o 		\
 	$(SRC)/CalculationsAbort.o 	\
-	$(SRC)/CalculationsAirspace.o 	\
 	$(SRC)/CalculationsAutoMc.o 	\
-	$(SRC)/CalculationsBallast.o 	\
-	$(SRC)/CalculationsClimb.o 	\
-	$(SRC)/CalculationsTerrain.o 	\
-	$(SRC)/CalculationsVario.o 	\
 	$(SRC)/FlarmIdFile.o 		\
 	$(SRC)/FlarmCalculations.o 	\
-	$(SRC)/FlightStatistics.o 	\
 	$(SRC)/GlideRatio.o 		\
 	$(SRC)/GlideSolvers.o 		\
 	$(SRC)/Logger.o 		\
@@ -444,7 +439,6 @@ OBJS	:=\
 	$(SRC)/ReplayLogger.o 		\
 	$(SRC)/McReady.o 		\
 	$(SRC)/OnLineContest.o 		\
-	$(SRC)/Persist.o 		\
 	$(SRC)/SnailTrail.o 		\
 	$(SRC)/Task.o			\
 	$(SRC)/TeamCodeCalculation.o 	\
@@ -499,7 +493,7 @@ OBJS	:=\
 	$(SRC)/MapWindowSymbols.o 	\
 	$(SRC)/MapWindowTask.o 		\
 	$(SRC)/MapWindowTarget.o	\
-	$(SRC)/MapWindowThermal.o 	\
+	$(SRC)/MapWindowThermal.o	\
 	$(SRC)/MapWindowTimer.o 	\
 	$(SRC)/MapWindowTraffic.o 	\
 	$(SRC)/MapWindowTrail.o 	\
@@ -513,6 +507,9 @@ OBJS	:=\
 	$(SRC)/RasterWeather.o 		\
 	$(SRC)/TerrainRenderer.o	\
 	$(SRC)/Marks.o 			\
+	\
+	$(SRC)/Persist.o 		\
+	$(SRC)/FlightStatistics.o 	\
 	\
 	$(SRC)/Asset.o 			\
 	$(SRC)/Appearance.o 		\
@@ -585,6 +582,7 @@ OBJS	:=\
 	$(SRC)/Polar/Historical.o 	\
 	\
 	$(SRC)/StdAfx.o			\
+	$(SRC)/Blackboard.o 		\
 	$(SRC)/Protection.o 		\
 	$(SRC)/ProcessTimer.o 		\
 	$(SRC)/MainWindow.o \

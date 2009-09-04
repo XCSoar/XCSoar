@@ -49,8 +49,10 @@ public:
   AATDistance();
   void Reset();
 
-  void AddPoint(double longitude, double latitude, int taskwaypoint);
-  double DistanceCovered(double longitude, double latitude, int taskwaypoint);
+  void AddPoint(double longitude, double latitude, int taskwaypoint,
+		const double aatclosedistance);
+  double DistanceCovered(double longitude, double latitude, int taskwaypoint,
+			 const double aatclosedistance);
   double LegDistanceAchieved(int taskwaypoint);
   bool HasEntered(int taskwaypoint);
   void ResetEnterTrigger(int taskwaypoint);
@@ -58,9 +60,12 @@ public:
 private:
 
   double DistanceCovered_internal(double longitude, double latitude,
-                                  bool insector);
-  double DistanceCovered_inside(double longitude, double latitude);
-  double DistanceCovered_outside(double longitude, double latitude);
+                                  bool insector,
+				  const double aatclosedistance);
+  double DistanceCovered_inside(double longitude, double latitude,
+				const double aatclosedistance);
+  double DistanceCovered_outside(double longitude, double latitude,
+				 const double aatclosedistance);
   double distance_achieved(int taskwaypoint, int jbest,
                            double longitude, double latitude);
 
@@ -83,14 +88,12 @@ private:
   int num_points[MAXTASKPOINTS];
 
   void ShiftTargetFromBehind(double longitude, double latitude,
-                             int taskwaypoint);
+                             int taskwaypoint, const double aatclosedistance);
   void ShiftTargetFromInFront(double longitude, double latitude,
-                              int taskwaypoint);
+                              int taskwaypoint, const double aatclosedistance);
   void ShiftTargetOutside(double longitude, double latitude,
                           int taskwaypoint);
 };
-
-double AATCloseDistance(void);
 
 #endif
 

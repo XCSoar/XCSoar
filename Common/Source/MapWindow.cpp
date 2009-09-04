@@ -36,6 +36,7 @@ Copyright_License {
 */
 
 #include "MapWindow.h"
+#include "Components.hpp"
 #include "Interface.hpp"
 #include "LogFile.hpp"
 #include "Protection.hpp"
@@ -113,14 +114,6 @@ ScreenGraphics MapGfx;
 //////////////////////////
 
 
-void MapWindowBlackboard::ExchangeBlackboard(const NMEA_INFO &nmea_info,
-					     const DERIVED_INFO &derived_info) 
-{
-  memcpy(&DrawInfo,&nmea_info,sizeof(NMEA_INFO));
-  memcpy(&DerivedDrawInfo,&derived_info,sizeof(DERIVED_INFO));
-}
-
-
 MapWindow::MapWindow()
   :MapWindowProjection(),
    TargetDrag_State(0),
@@ -170,10 +163,10 @@ void MapWindow::StoreRestoreFullscreen(bool store) {
 
 ///////////////////////////////////////////////////////////////////////////
 
-void MapWindow::ExchangeBlackboard(const NMEA_INFO &nmea_info,
-				   const DERIVED_INFO &derived_info) {
+void MapWindow::ReadBlackboard(const NMEA_INFO &nmea_info,
+			       const DERIVED_INFO &derived_info) {
   mutexFlightData.Lock();
-  MapWindowBlackboard::ExchangeBlackboard(nmea_info, derived_info);
+  MapWindowBlackboard::ReadBlackboard(nmea_info, derived_info);
 
   DisplayMode_t lastDisplayMode = DisplayMode;
   switch (UserForceDisplayMode) {
@@ -187,9 +180,9 @@ void MapWindow::ExchangeBlackboard(const NMEA_INFO &nmea_info,
     DisplayMode = dmFinalGlide;
     break;
   case dmNone:
-    if (DerivedDrawInfo.Circling){
+    if (Calculated().Circling){
       DisplayMode = dmCircling;
-    } else if (DerivedDrawInfo.FinalGlide){
+    } else if (Calculated().FinalGlide){
       DisplayMode = dmFinalGlide;
     } else
       DisplayMode = dmCruise;
@@ -257,16 +250,16 @@ bool MapWindow::Idle(const bool do_force) {
     }
 
     if (terrain_idle.dirty) {
-      terrain.ServiceTerrainCenter(DrawInfo.Latitude,
-				   DrawInfo.Longitude);
+      terrain.ServiceTerrainCenter(Basic().Latitude,
+				   Basic().Longitude);
       terrain.ServiceCache();
       terrain_idle.dirty = false;
       continue;
     }
 
     if (rasp_idle.dirty) {
-      RASP.SetViewCenter(DrawInfo.Latitude,
-			 DrawInfo.Longitude);
+      RASP.SetViewCenter(Basic().Latitude,
+			 Basic().Longitude);
       rasp_idle.dirty = false;
       continue;
     }
@@ -286,7 +279,9 @@ void MapWindow::DrawThreadLoop(void) {
 
   StartTimer();
 
-  ExchangeBlackboard(GPS_INFO, CALCULATED_INFO);
+  mutexFlightData.Lock();
+  ReadBlackboard(device_blackboard.Basic(), device_blackboard.Calculated());
+  mutexFlightData.Unlock();
 
   if (BigZoom) {
     // quickly draw zoom level on top
@@ -298,7 +293,7 @@ void MapWindow::DrawThreadLoop(void) {
   }
 
   if (gauge_flarm != NULL)
-    gauge_flarm->Render(&DrawInfo);
+    gauge_flarm->Render(&Basic());
 
   Render(draw_canvas, MapRect);
 
@@ -325,10 +320,6 @@ void MapWindow::DrawThreadInitialise(void) {
 
   get_canvas().copy(draw_canvas);
 
-  ////// This is just here to give fully rendered start screen
-  ExchangeBlackboard(GPS_INFO, CALCULATED_INFO);
-
-  ToggleFullScreenStart();
 }
 
 
@@ -348,9 +339,6 @@ DWORD MapWindow::_DrawThread ()
   while (Idle(false)) {};
   DrawThreadLoop(); // first time draw
   mutexRun.Unlock(); // release control
-
-  StartupStore(TEXT("hello\n"));
-  // this is the main drawing loop
 
   do {
     if (drawTriggerEvent.wait(MIN_WAIT_TIME)) {
@@ -605,15 +593,15 @@ bool MapWindow::on_mouse_up(int x, int y)
   if (!ReplayLogger::IsEnabled() && !my_target_pan && (distance>IBLSCALE(36))) {
     // This drag moves the aircraft (changes speed and direction)
     double newbearing;
-    double oldbearing = GPS_INFO.TrackBearing;
+    double oldbearing = XCSoarInterface::Basic().TrackBearing;
     double minspeed = 1.1*GlidePolar::Vminsink;
     DistanceBearing(Ystart, Xstart, Ylat, Xlat, NULL, &newbearing);
     if ((fabs(AngleLimit180(newbearing-oldbearing))<30)
-	|| (GPS_INFO.Speed<minspeed)) {
-      GPS_INFO.Speed = min(100.0,max(minspeed,distance/3));
-      // 20080817 JMW change speed only if in direction
+	|| (XCSoarInterface::Basic().Speed<minspeed)) {
+
+      device_blackboard.SetSpeed(min(100.0,max(minspeed,distance/3)));
     }
-    GPS_INFO.TrackBearing = newbearing;
+    device_blackboard.SetTrackBearing(newbearing);
     // change bearing without changing speed if direction change > 30
     // 20080815 JMW prevent dragging to stop glider
     
@@ -664,7 +652,7 @@ bool MapWindow::on_key_down(unsigned key_code)
   // Forbidden usage of keypress timing.
   
   ResetDisplayTimeOut();
-  InterfaceTimeoutReset();
+  XCSoarInterface::InterfaceTimeoutReset();
   key_code = TranscodeKey(key_code);
 #if defined(GNAV)
   if (key_code == 0xF5){

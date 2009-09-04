@@ -91,7 +91,8 @@ void AATDistance::ResetEnterTrigger(int taskwaypoint) {
 }
 
 void AATDistance::AddPoint(double longitude, double latitude,
-                           int taskwaypoint) {
+                           int taskwaypoint,
+			   const double aatclosedistance) {
   if (taskwaypoint<0) return;
 
   bool was_entered = has_entered[taskwaypoint];
@@ -172,7 +173,7 @@ void AATDistance::AddPoint(double longitude, double latitude,
         UpdateSearch(i);
       }
       if (taskwaypoint == ActiveWayPoint) {
-        DistanceCovered_internal(longitude, latitude, true);
+        DistanceCovered_internal(longitude, latitude, true, aatclosedistance);
       }
     }
   }
@@ -209,7 +210,8 @@ void AATDistance::ShiftTargetOutside(double longitude, double latitude,
 
 
 void AATDistance::ShiftTargetFromInFront(double longitude, double latitude,
-                                         int taskwaypoint) {
+                                         int taskwaypoint,
+					 double aatclosedistance) {
 
   double course_bearing;
 
@@ -238,7 +240,7 @@ void AATDistance::ShiftTargetFromInFront(double longitude, double latitude,
                                  Task[taskwaypoint].AATTargetOffsetRadial);
 
   FindLatitudeLongitude(latitude, longitude,
-                        course_bearing, AATCloseDistance(),
+                        course_bearing, aatclosedistance,
                         &Task[taskwaypoint].AATTargetLat,
                         &Task[taskwaypoint].AATTargetLon);
   // JMW, distance here was 100m, now changed to speed * 2
@@ -249,7 +251,8 @@ void AATDistance::ShiftTargetFromInFront(double longitude, double latitude,
 
 
 void AATDistance::ShiftTargetFromBehind(double longitude, double latitude,
-                              int taskwaypoint) {
+					int taskwaypoint,
+					double aatclosedistance) {
 
   // JMWAAT if being extrnally updated e.g. from task dialog, don't move it
   if (targetManipEvent.test()) return;
@@ -271,9 +274,9 @@ void AATDistance::ShiftTargetFromBehind(double longitude, double latitude,
                                    Task[taskwaypoint].AATTargetLon,
                                    Task[taskwaypoint].AATTargetLat);
 
-  if (d_total_this>d_total_orig-2.0*AATCloseDistance()) {
+  if (d_total_this>d_total_orig-2.0*aatclosedistance) {
     // this is better than the previous best! (or very close)
-    ShiftTargetFromInFront(longitude, latitude, taskwaypoint);
+    ShiftTargetFromInFront(longitude, latitude, taskwaypoint, aatclosedistance);
     return;
   }
 
@@ -405,7 +408,8 @@ void AATDistance::ShiftTargetFromBehind(double longitude, double latitude,
 
 double AATDistance::DistanceCovered_internal(double longitude,
                                              double latitude,
-                                             bool insector) {
+                                             bool insector,
+					     const double aatclosedistance) {
   double achieved;
   if (!ValidTaskPoint(ActiveWayPoint) || (ActiveWayPoint==0)) {
     //   max_achieved_distance = 0;
@@ -413,9 +417,9 @@ double AATDistance::DistanceCovered_internal(double longitude,
   }
   mutexTaskData.Lock();
   if (insector) {
-    achieved = DistanceCovered_inside(longitude, latitude);
+    achieved = DistanceCovered_inside(longitude, latitude, aatclosedistance);
   } else {
-    achieved = DistanceCovered_outside(longitude, latitude);
+    achieved = DistanceCovered_outside(longitude, latitude, aatclosedistance);
   }
 
   mutexTaskData.Unlock();
@@ -425,7 +429,8 @@ double AATDistance::DistanceCovered_internal(double longitude,
 
 
 double AATDistance::DistanceCovered_inside(double longitude,
-                                           double latitude) {
+                                           double latitude,
+					   double aatclosedistance) {
 
   int taskwaypoint = ActiveWayPoint;
 
@@ -443,7 +448,7 @@ double AATDistance::DistanceCovered_inside(double longitude,
       }
     }
     if (ValidTaskPoint(taskwaypoint+1)) {
-      ShiftTargetFromBehind(longitude, latitude, taskwaypoint);
+      ShiftTargetFromBehind(longitude, latitude, taskwaypoint, aatclosedistance);
     }
     return distance_achieved(taskwaypoint, kbest, longitude, latitude);
   } else {
@@ -480,7 +485,8 @@ double AATDistance::distance_achieved(int taskwaypoint, int jbest,
 
 
 double AATDistance::DistanceCovered_outside(double longitude,
-                                            double latitude) {
+                                            double latitude,
+					    const double aatclosedistance) {
   if (ActiveWayPoint<=0) {
     return 0.0;
   }
@@ -556,11 +562,13 @@ JMW
 
 double AATDistance::DistanceCovered(double longitude,
                                     double latitude,
-                                    int taskwaypoint) {
+                                    int taskwaypoint,
+				    const double aatclosedistance) {
   (void)taskwaypoint; // unused
   double retval;
   mutexTaskData.Lock();
-  retval= DistanceCovered_internal(longitude, latitude, false);
+  retval= DistanceCovered_internal(longitude, latitude, false,
+				   aatclosedistance);
   mutexTaskData.Unlock();
   return retval;
 }
@@ -669,9 +677,3 @@ void AATDistance::ThinData(int taskwaypoint) {
   mutexTaskData.Unlock();
 }
 
-//////////
-#include "Blackboard.hpp"
-
-double AATCloseDistance(void) {
-  return max(100,GPS_INFO.Speed*1.5);
-}

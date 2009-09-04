@@ -87,29 +87,29 @@ OnPaintDetailsListItem(WindowControl *Sender, Canvas &canvas)
 
     mutexFlightData.Lock();
 
-    DistanceBearing(GPS_INFO.Latitude,
-		    GPS_INFO.Longitude,
-		    GPS_INFO.FLARM_Traffic[DrawListIndex].Latitude,
-		    GPS_INFO.FLARM_Traffic[DrawListIndex].Longitude,
+    DistanceBearing(XCSoarInterface::Basic().Latitude,
+		    XCSoarInterface::Basic().Longitude,
+		    XCSoarInterface::Basic().FLARM_Traffic[DrawListIndex].Latitude,
+		    XCSoarInterface::Basic().FLARM_Traffic[DrawListIndex].Longitude,
 		    &range,
 		    &bear);
 
     wsprintf(tmp, TEXT("%3s %3ld %+3.1lf %5ld"),
-	     GPS_INFO.FLARM_Traffic[DrawListIndex].Name,
-	     (int)(SPEEDMODIFY * GPS_INFO.FLARM_Traffic[DrawListIndex].Speed),
+	     XCSoarInterface::Basic().FLARM_Traffic[DrawListIndex].Name,
+	     (int)(SPEEDMODIFY * XCSoarInterface::Basic().FLARM_Traffic[DrawListIndex].Speed),
 #ifdef FLARM_AVERAGE
-	     LIFTMODIFY * GPS_INFO.FLARM_Traffic[DrawListIndex].Average30s,
+	     LIFTMODIFY * XCSoarInterface::Basic().FLARM_Traffic[DrawListIndex].Average30s,
 #else
 	     0.0,
 #endif
-	     (int)(ALTITUDEMODIFY * GPS_INFO.FLARM_Traffic[DrawListIndex].Altitude)
+	     (int)(ALTITUDEMODIFY * XCSoarInterface::Basic().FLARM_Traffic[DrawListIndex].Altitude)
 	     );
     wsprintf(text, TEXT("%s %3.0lf %2.1lf"),
 	     tmp,
 	     bear,
 	     (DISTANCEMODIFY * range));
 
-    if (GPS_INFO.FLARM_Traffic[DrawListIndex].ID != 0)
+    if (XCSoarInterface::Basic().FLARM_Traffic[DrawListIndex].ID != 0)
       canvas.text_opaque(2 * InfoBoxLayout::scale, 2 * InfoBoxLayout::scale,
                          text);
     mutexFlightData.Unlock();
@@ -121,7 +121,7 @@ int GetActiveFlarmTrafficCount()
   int count = 0;
   for (int i=0; i<FLARM_MAX_TRAFFIC; i++)
     {
-      if (GPS_INFO.FLARM_Traffic[i].ID!=0)
+      if (XCSoarInterface::Basic().FLARM_Traffic[i].ID!=0)
 	{
 	  count++;
 	}
@@ -137,9 +137,9 @@ static void OnDetailsListInfo(WindowControl * Sender, WndListFrame::ListInfo_t *
     DrawListIndex = ListInfo->DrawIndex+ListInfo->ScrollIndex;
     if (DrawListIndex != -1)
       {
-	if (GPS_INFO.FLARM_Traffic[DrawListIndex].ID != 0)
+	if (XCSoarInterface::Basic().FLARM_Traffic[DrawListIndex].ID != 0)
 	  {
-	    if (LookupFLARMDetails(GPS_INFO.FLARM_Traffic[DrawListIndex].ID) == NULL)
+	    if (LookupFLARMDetails(XCSoarInterface::Basic().FLARM_Traffic[DrawListIndex].ID) == NULL)
 	      {
 		// not existing en primary or secondary flarm id list
 		((WndButton *)wf->FindByName(TEXT("cmdSetCN")))->SetCaption(TEXT("Set CN"));
@@ -148,7 +148,7 @@ static void OnDetailsListInfo(WindowControl * Sender, WndListFrame::ListInfo_t *
 	    else
 	      {
 		// the id was found - is it from secondary list ?
-		int index = LookupSecondaryFLARMId(GPS_INFO.FLARM_Traffic[DrawListIndex].ID);
+		int index = LookupSecondaryFLARMId(XCSoarInterface::Basic().FLARM_Traffic[DrawListIndex].ID);
 
 		if (index != -1)
 		  {
@@ -176,7 +176,7 @@ void SelectAsTeamTrack()
   int index = wDetails->GetItemIndex();
   if (index != -1)
     {
-      if (GPS_INFO.FLARM_Traffic[index].Name[0] == 0)
+      if (XCSoarInterface::Basic().FLARM_Traffic[index].Name[0] == 0)
 	{
 	  TeamFlarmCNTarget[0] = 0;
 	}
@@ -185,12 +185,12 @@ void SelectAsTeamTrack()
 	  // copy the 3 first chars from the name
 	  for (int z = 0; z < 3; z++)
 	    {
-	      TeamFlarmCNTarget[z] = GPS_INFO.FLARM_Traffic[index].Name[z];
+	      TeamFlarmCNTarget[z] = XCSoarInterface::Basic().FLARM_Traffic[index].Name[z];
 	    }
 	  TeamFlarmCNTarget[3] = 0;
 	}
       // now tracking !
-      TeamFlarmIdTarget = GPS_INFO.FLARM_Traffic[index].ID;
+      TeamFlarmIdTarget = XCSoarInterface::Basic().FLARM_Traffic[index].ID;
       TeamFlarmTracking = true;
       TeammateCodeValid = false;
     }
@@ -214,7 +214,7 @@ static void OnSetCNClicked(WindowControl * Sender)
       newName[0] = 0;
       dlgTextEntryShowModal(newName, 4);
 
-      AddFlarmLookupItem(GPS_INFO.FLARM_Traffic[index].ID, newName, true);
+      AddFlarmLookupItem(XCSoarInterface::Basic().FLARM_Traffic[index].ID, newName, true);
     }
 }
 
@@ -280,12 +280,12 @@ void dlgFlarmTrafficShowModal(void){
   if (InfoBoxLayout::landscape) {
     wf = dlgLoadFromXML(CallBackTable,
                         TEXT("dlgFlarmTraffic_L.xml"),
-			main_window,
+			XCSoarInterface::main_window,
 			TEXT("IDR_XML_FLARMTRAFFIC_L"));
   } else {
     wf = dlgLoadFromXML(CallBackTable,
                         TEXT("dlgFlarmTraffic.xml"),
-			main_window,
+			XCSoarInterface::main_window,
 			TEXT("IDR_XML_FLARMTRAFFIC"));
   }
 

@@ -44,7 +44,7 @@ Copyright_License {
 #include "NMEA/Derived.hpp"
 
 void LoadCalculationsPersist(DERIVED_INFO *Calculated);
-void SaveCalculationsPersist(DERIVED_INFO *Calculated);
+void SaveCalculationsPersist(const DERIVED_INFO *Calculated);
 void DeleteCalculationsPersist(void);
 
 

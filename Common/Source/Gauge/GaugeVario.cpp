@@ -255,28 +255,28 @@ void GaugeVario::Render() {
     InitDone = true;
   }
 
-  if (GPS_INFO.VarioAvailable && !ReplayLogger::IsEnabled()) {
-    vval = GPS_INFO.Vario;
+  if (Basic().VarioAvailable && !ReplayLogger::IsEnabled()) {
+    vval = Basic().Vario;
   } else {
-    vval = CALCULATED_INFO.Vario;
+    vval = Calculated().Vario;
   }
 
   double vvaldisplay = min(99.9,max(-99.9,vval*LIFTMODIFY));
 
   if (Appearance.GaugeVarioAvgText) {
     // JMW averager now displays netto average if not circling
-    if (!CALCULATED_INFO.Circling) {
+    if (!Calculated().Circling) {
       RenderValue(hdcDrawWindow, orgTop.x, orgTop.y, &diValueTop, &diLabelTop,
-		  CALCULATED_INFO.NettoAverage30s*LIFTMODIFY, TEXT("NetAvg"));
+		  Calculated().NettoAverage30s*LIFTMODIFY, TEXT("NetAvg"));
     } else {
       RenderValue(hdcDrawWindow, orgTop.x, orgTop.y, &diValueTop, &diLabelTop,
-		  CALCULATED_INFO.Average30s*LIFTMODIFY, TEXT("Avg"));
+		  Calculated().Average30s*LIFTMODIFY, TEXT("Avg"));
     }
   }
 
   if (Appearance.GaugeVarioMc) {
     double mc = GlidePolar::GetMacCready()*LIFTMODIFY;
-    if (CALCULATED_INFO.AutoMacCready)
+    if (Calculated().AutoMacCready)
       RenderValue(hdcDrawWindow, orgBottom.x, orgBottom.y,
 		  &diValueBottom, &diLabelBottom,
 		  mc, TEXT("Auto Mc"));
@@ -308,12 +308,12 @@ void GaugeVario::Render() {
   static int ival_last = 0;
 
   ival = ValueToNeedlePos(vval);
-  sval = ValueToNeedlePos(CALCULATED_INFO.GliderSinkRate);
+  sval = ValueToNeedlePos(Calculated().GliderSinkRate);
   if (Appearance.GaugeVarioAveNeedle) {
-    if (!CALCULATED_INFO.Circling) {
-      ival_av = ValueToNeedlePos(CALCULATED_INFO.NettoAverage30s);
+    if (!Calculated().Circling) {
+      ival_av = ValueToNeedlePos(Calculated().NettoAverage30s);
     } else {
-      ival_av = ValueToNeedlePos(CALCULATED_INFO.Average30s);
+      ival_av = ValueToNeedlePos(Calculated().Average30s);
     }
   }
 
@@ -443,11 +443,11 @@ void GaugeVario::RenderClimb(Canvas &canvas)
   int x = get_right() - IBLSCALE(14);
   int y = get_bottom() - IBLSCALE(24);
 
-  // testing  GPS_INFO.SwitchState.VarioCircling = true;
+  // testing  Basic().SwitchState.VarioCircling = true;
 
   if (!dirty) return;
 
-  if (!GPS_INFO.SwitchState.VarioCircling) {
+  if (!Basic().SwitchState.VarioCircling) {
     if (Appearance.InverseInfoBox){
       canvas.black_brush();
       canvas.black_pen();
@@ -709,12 +709,9 @@ void GaugeVario::RenderSpeedToFly(Canvas &canvas, int x, int y)
   #define  DeltaVlimit 16
 
 #ifndef _SIM_
-  if (!(GPS_INFO.AirspeedAvailable && GPS_INFO.VarioAvailable)) {
+  if (!(Basic().AirspeedAvailable && Basic().VarioAvailable)) {
     return;
   }
-#else
-  // cheat
-  GPS_INFO.IndicatedAirspeed = GPS_INFO.Speed;
 #endif
 
   static double lastVdiff;
@@ -733,12 +730,12 @@ void GaugeVario::RenderSpeedToFly(Canvas &canvas, int x, int y)
 
   // only draw speed command if flying and vario is not circling
   //
-  if ((CALCULATED_INFO.Flying)
+  if ((Calculated().Flying)
 #ifdef _SIM_
-      && !CALCULATED_INFO.Circling
+      && !Calculated().Circling
 #endif
-      && !GPS_INFO.SwitchState.VarioCircling) {
-    vdiff = (CALCULATED_INFO.VOpt - GPS_INFO.IndicatedAirspeed);
+      && !Basic().SwitchState.VarioCircling) {
+    vdiff = (Calculated().VOpt - Basic().IndicatedAirspeed);
     vdiff = max(-DeltaVlimit, min(DeltaVlimit, vdiff)); // limit it
     vdiff = iround(vdiff/DeltaVstep) * DeltaVstep;
   } else

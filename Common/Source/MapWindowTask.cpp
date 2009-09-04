@@ -188,7 +188,7 @@ void MapWindow::DrawTask(Canvas &canvas, RECT rc)
           // JMW 20080616 flash arc line if very close to target
           static bool flip = false;
 
-          if (DerivedDrawInfo.WaypointDistance<AATCloseDistance()*2.0) {
+          if (Calculated().WaypointDistance<200.0) { // JMW hardcoded AATCloseDistance
             flip = !flip;
           } else {
             flip = true;
@@ -344,8 +344,8 @@ void MapWindow::DrawBearing(Canvas &canvas, int bBearingValid)
 
   mutexTaskData.Lock();  // protect from extrnal task changes
 
-  double startLat = DrawInfo.Latitude;
-  double startLon = DrawInfo.Longitude;
+  double startLat = Basic().Latitude;
+  double startLon = Basic().Longitude;
   double targetLat;
   double targetLon;
 
@@ -417,16 +417,16 @@ MapWindow::DrawOffTrackIndicator(Canvas &canvas)
   if ((ActiveWayPoint<=0) || !ValidTaskPoint(ActiveWayPoint)) {
     return;
   }
-  if (fabs(DrawInfo.TrackBearing-DerivedDrawInfo.WaypointBearing)<10) {
+  if (fabs(Basic().TrackBearing-Calculated().WaypointBearing)<10) {
     // insignificant error
     return;
   }
-  if (DerivedDrawInfo.Circling || TaskIsTemporary() || TargetPan) {
+  if (Calculated().Circling || TaskIsTemporary() || TargetPan) {
     // don't display in various modes
     return;
   }
 
-  double distance_max = min(DerivedDrawInfo.WaypointDistance,
+  double distance_max = min(Calculated().WaypointDistance,
 			    GetScreenDistanceMeters()*0.7);
   if (distance_max < 5000.0) {
     // too short to bother
@@ -435,8 +435,8 @@ MapWindow::DrawOffTrackIndicator(Canvas &canvas)
 
   mutexTaskData.Lock();  // protect from extrnal task changes
 
-  double startLat = DrawInfo.Latitude;
-  double startLon = DrawInfo.Longitude;
+  double startLat = Basic().Latitude;
+  double startLon = Basic().Longitude;
   double targetLat;
   double targetLon;
   double dLat, dLon;
@@ -458,7 +458,7 @@ MapWindow::DrawOffTrackIndicator(Canvas &canvas)
     double distance0, distance1;
 
     FindLatitudeLongitude(startLat, startLon,
-			  DrawInfo.TrackBearing,
+			  Basic().TrackBearing,
 			  distance_max*d,
 			  &dLat, &dLon);
 
@@ -471,7 +471,7 @@ MapWindow::DrawOffTrackIndicator(Canvas &canvas)
 		    &distance1,
 		    NULL);
 
-    double distance = (distance0+distance1)/DerivedDrawInfo.WaypointDistance;
+    double distance = (distance0+distance1)/Calculated().WaypointDistance;
     int idist = iround((distance-1.0)*100);
 
     if ((idist != ilast) && (idist>0) && (idist<1000)) {
@@ -505,7 +505,7 @@ MapWindow::DrawProjectedTrack(Canvas &canvas)
   if ((ActiveWayPoint<=0) || !ValidTaskPoint(ActiveWayPoint) || !AATEnabled) {
     return;
   }
-  if (DerivedDrawInfo.Circling || TaskIsTemporary()) {
+  if (Calculated().Circling || TaskIsTemporary()) {
     // don't display in various modes
     return;
   }
@@ -515,8 +515,8 @@ MapWindow::DrawProjectedTrack(Canvas &canvas)
 
   mutexTaskData.Lock();  // protect from extrnal task changes
 
-  double startLat = DrawInfo.Latitude;
-  double startLon = DrawInfo.Longitude;
+  double startLat = Basic().Latitude;
+  double startLon = Basic().Longitude;
   double previousLat;
   double previousLon;
   if (AATEnabled) {
@@ -535,7 +535,7 @@ MapWindow::DrawProjectedTrack(Canvas &canvas)
 		  &bearing);
 
   if (distance_from_previous < 100.0) {
-    bearing = DrawInfo.TrackBearing;
+    bearing = Basic().TrackBearing;
     // too short to have valid data
   }
   POINT pt[2] = {{0,-75},{0,-400}};
@@ -543,7 +543,7 @@ MapWindow::DrawProjectedTrack(Canvas &canvas)
     double screen_range = GetScreenDistanceMeters();
     double flow = 0.4;
     double fhigh = 1.5;
-    screen_range = max(screen_range, DerivedDrawInfo.WaypointDistance);
+    screen_range = max(screen_range, Calculated().WaypointDistance);
 
     double p1Lat;
     double p1Lon;
@@ -557,7 +557,7 @@ MapWindow::DrawProjectedTrack(Canvas &canvas)
 			  &p2Lat, &p2Lon);
     LonLat2Screen(p1Lon, p1Lat, pt[0]);
     LonLat2Screen(p2Lon, p2Lat, pt[1]);
-  } else if (fabs(bearing-DerivedDrawInfo.WaypointBearing)<10) {
+  } else if (fabs(bearing-Calculated().WaypointBearing)<10) {
     // too small an error to bother
     return;
   } else {

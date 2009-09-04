@@ -263,8 +263,8 @@ void MapWindow::DrawWaypoints(Canvas &canvas)
 
 // JMW this is slow way to do things...
 
-static bool CheckLandableReachableTerrain(NMEA_INFO *Basic,
-                                          DERIVED_INFO *Calculated,
+static bool CheckLandableReachableTerrain(const NMEA_INFO *Basic,
+                                          const DERIVED_INFO *Calculated,
                                           double LegToGo,
                                           double LegBearing) {
   double lat, lon;
@@ -304,8 +304,8 @@ void MapWindow::CalculateWaypointReachable(void)
 	  ))
 	|| WaypointInTask(i) ) {
 
-      DistanceBearing(DrawInfo.Latitude,
-		      DrawInfo.Longitude,
+      DistanceBearing(Basic().Latitude,
+		      Basic().Longitude,
 		      WayPointList[i].Latitude,
 		      WayPointList[i].Longitude,
 		      &WaypointDistance,
@@ -316,19 +316,19 @@ void MapWindow::CalculateWaypointReachable(void)
 	(GlidePolar::SafetyMacCready,
 	 WaypointDistance,
 	 WaypointBearing,
-	 DerivedDrawInfo.WindSpeed,
-	 DerivedDrawInfo.WindBearing,
+	 Calculated().WindSpeed,
+	 Calculated().WindBearing,
 	 0,0,true,0);
       AltitudeRequired = AltitudeRequired + SAFETYALTITUDEARRIVAL
 	+ WayPointList[i].Altitude ;
-      AltitudeDifference = DerivedDrawInfo.NavAltitude - AltitudeRequired;
+      AltitudeDifference = Calculated().NavAltitude - AltitudeRequired;
       WayPointList[i].AltArivalAGL = AltitudeDifference;
 
       if(AltitudeDifference >=0){
 	WayPointList[i].Reachable = TRUE;
 	if (!LandableReachable || ((int)i==ActiveWayPoint)) {
-	  if (CheckLandableReachableTerrain(&DrawInfo,
-					    &DerivedDrawInfo,
+	  if (CheckLandableReachableTerrain(&Basic(),
+					    &Calculated(),
 					    WaypointDistance,
 					    WaypointBearing)) {
 	    LandableReachable = true;
@@ -354,8 +354,8 @@ void MapWindow::CalculateWaypointReachable(void)
             if(  ((WayPointList[i].Flags & AIRPORT) == AIRPORT)
                  || ((WayPointList[i].Flags & LANDPOINT) == LANDPOINT) )
               {
-                DistanceBearing(DrawInfo.Latitude,
-                                DrawInfo.Longitude,
+                DistanceBearing(Basic().Latitude,
+                                Basic().Longitude,
                                 WayPointList[i].Latitude,
                                 WayPointList[i].Longitude,
                                 &WaypointDistance,
@@ -367,20 +367,20 @@ void MapWindow::CalculateWaypointReachable(void)
                     (GlidePolar::SafetyMacCready,
                      WaypointDistance,
                      WaypointBearing,
-                     DerivedDrawInfo.WindSpeed,
-                     DerivedDrawInfo.WindBearing,
+                     Calculated().WindSpeed,
+                     Calculated().WindBearing,
                      0,0,true,0);
 
                   AltitudeRequired = AltitudeRequired + SAFETYALTITUDEARRIVAL
                     + WayPointList[i].Altitude ;
-                  AltitudeDifference = DerivedDrawInfo.NavAltitude - AltitudeRequired;
+                  AltitudeDifference = Calculated().NavAltitude - AltitudeRequired;
                   WayPointList[i].AltArivalAGL = AltitudeDifference;
 
                   if(AltitudeDifference >=0){
                     WayPointList[i].Reachable = TRUE;
                     if (!LandableReachable) {
-                      if (CheckLandableReachableTerrain(&DrawInfo,
-                                                        &DerivedDrawInfo,
+                      if (CheckLandableReachableTerrain(&Basic(),
+                                                        &Calculated(),
                                                         WaypointDistance,
                                                         WaypointBearing)) {
                         LandableReachable = true;

@@ -98,7 +98,10 @@ int WINAPI MessageBoxX(LPCTSTR lpText, LPCTSTR lpCaption, UINT uType){
   assert(lpText != NULL);
   assert(lpCaption != NULL);
 
-  rc = main_window.get_position();
+  // JMW this makes the first key if pressed quickly, ignored
+  XCSoarInterface::Debounce();
+
+  rc = XCSoarInterface::main_window.get_position();
 
 #ifdef ALTAIRSYNC
   Width = DLGSCALE(220);
@@ -115,7 +118,7 @@ int WINAPI MessageBoxX(LPCTSTR lpText, LPCTSTR lpCaption, UINT uType){
   w = DLGSCALE(60);
   h = DLGSCALE(32);
 
-  wf = new WndForm(&main_window, TEXT("frmXcSoarMessageDlg"),
+  wf = new WndForm(&XCSoarInterface::main_window, TEXT("frmXcSoarMessageDlg"),
                    (TCHAR*)lpCaption, X, Y, Width, Height);
   wf->SetFont(MapWindowBoldFont);
   wf->SetTitleFont(MapWindowBoldFont);
@@ -299,8 +302,6 @@ static Font *FontMap[5] = {
 #include <stdio.h>
 
 
-extern HINSTANCE hInst;
-
 XMLNode xmlLoadFromResource(const TCHAR* lpName,
                             LPCTSTR tag,
                             XMLResults *pResults) {
@@ -310,7 +311,7 @@ XMLNode xmlLoadFromResource(const TCHAR* lpName,
   int l, len;
 
   // Find the xml resource.
-  hResInfo = FindResource (hInst, lpName, TEXT("XMLDialog"));
+  hResInfo = FindResource (XCSoarInterface::hInst, lpName, TEXT("XMLDialog"));
 
   if (hResInfo == NULL) {
     MessageBoxX(
@@ -323,7 +324,7 @@ XMLNode xmlLoadFromResource(const TCHAR* lpName,
   }
 
   // Load the wave resource.
-  hRes = LoadResource (hInst, hResInfo);
+  hRes = LoadResource (XCSoarInterface::hInst, hResInfo);
 
   if (hRes == NULL) {
     MessageBoxX(
@@ -339,7 +340,7 @@ XMLNode xmlLoadFromResource(const TCHAR* lpName,
   lpRes = (LPTSTR)LockResource (hRes);
 
   if (lpRes) {
-    l = SizeofResource(hInst,hResInfo);
+    l = SizeofResource(XCSoarInterface::hInst,hResInfo);
     if (l>0) {
       char *buf= (char*)malloc(l+2);
       if (!buf) {

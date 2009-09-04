@@ -43,21 +43,29 @@ Copyright_License {
 #include "NMEA/Info.h"
 #include "NMEA/Derived.hpp"
 #include "Persist.hpp"
+#include "ConditionMonitor.hpp"
+#include "TeamCodeCalculation.h"
 
 GlideComputer::GlideComputer()
 {
 
 }
 
+#include "LogFile.hpp"
 
 void GlideComputer::ResetFlight(const bool full)
 {
   ScopeLock protect(mutexGlideComputer);
 
+  StartupStore(TEXT("resetflight 1\n"));
   GlideComputerBlackboard::ResetFlight(full);
+  StartupStore(TEXT("resetflight 2\n"));
   GlideComputerAirData::ResetFlight(full);
+  StartupStore(TEXT("resetflight 3\n"));
   GlideComputerTask::ResetFlight(full);
+  StartupStore(TEXT("resetflight 4\n"));
   GlideComputerStats::ResetFlight(full);
+  StartupStore(TEXT("resetflight 5\n"));
 }
 
 
@@ -80,10 +88,11 @@ void GlideComputer::Initialise()
 
   GlideComputerBlackboard::Initialise();
   GlideComputerAirData::Initialise();
+  GlideComputerTask::Initialise();
   GlideComputerStats::Initialise();
   ResetFlight(true);
 
-  LoadCalculationsPersist(&calculated_info);
+  LoadCalculationsPersist(&SetCalculated());
   DeleteCalculationsPersist();
   // required to allow fail-safe operation
   // if the persistent file is corrupt and causes a crash
@@ -101,24 +110,85 @@ void GlideComputer::DoLogging()
 }
 
 
-void GlideComputer::ProcessGPS()
+bool GlideComputer::ProcessGPS()
 {
+
   double mc = GlidePolar::GetMacCready();
   double ce = GlidePolar::GetCruiseEfficiency();
 
   ProcessBasic();
+
   ProcessBasicTask(mc, ce);
+
+  if (!FlightTimes()) {
+    return false;
+  }
   ProcessVertical();
+
+  CalculateOwnTeamCode(&Basic(), &SetCalculated());
+  CalculateTeammateBearingRange(&Basic(), &SetCalculated());
+
+  DoLogging();
+  vegavoice.Update(&Basic(), &Calculated());
+  ConditionMonitorsUpdate(*this);
+
+  return true;
 }
 
 
-void GlideComputer::ProcessVario()
+bool GlideComputer::ProcessVario()
 {
-
+  return GlideComputerAirData::ProcessVario();
 }
 
 
 void GlideComputer::SaveTaskSpeed(double val)
 {
   GlideComputerStats::SaveTaskSpeed(val);
+}
+
+
+bool GlideComputer::ProcessIdle(const MapWindowProjection &map) {
+  /*
+  // VENTA3 Alternates
+  if ( EnableAlternate1 == true ) DoAlternates(Basic, Calculated,Alternate1);
+  if ( EnableAlternate2 == true ) DoAlternates(Basic, Calculated,Alternate2);
+  if ( EnableBestAlternate == true ) DoAlternates(Basic, Calculated,BestAlternate);
+  */
+
+  if (!TaskIsTemporary()) {
+    double mc = GlidePolar::GetMacCready();
+    InSector();
+    DoAutoMacCready(mc);
+    IterateEffectiveMacCready();
+  }
+
+  return GlideComputerAirData::ProcessIdle(map);
+}
+
+
+
+const bool 
+GlideComputer::InsideStartHeight(const DWORD Margin) const
+{
+  return GlideComputerTask::InsideStartHeight(Margin);
+}
+
+const bool 
+GlideComputer::ValidStartSpeed(const DWORD Margin) const
+{
+  return GlideComputerTask::ValidStartSpeed(Margin);
+}
+
+bool
+GlideComputer::IterateEffectiveMacCready()
+{
+
+}
+
+void
+GlideComputer::SetLegStart()
+{
+    GlideComputerTask::SetLegStart();
+    GlideComputerStats::SetLegStart();
 }

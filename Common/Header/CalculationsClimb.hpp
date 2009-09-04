@@ -38,7 +38,7 @@ Copyright_License {
 #ifndef CALCULATIONS_CLIMB_HPP
 #define CALCULATIONS_CLIMB_HPP
 
-#include "CalculationsClimb.hpp"
+#include "Calculations.h"
 
 void Turning(const NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 void LastThermalStats(const NMEA_INFO *Basic, DERIVED_INFO *Calculated);

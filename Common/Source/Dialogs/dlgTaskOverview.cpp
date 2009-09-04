@@ -202,10 +202,10 @@ OnTaskPaintListItem(WindowControl *Sender, Canvas &canvas)
 
       } else {
 
-	double d1 = (CALCULATED_INFO.TaskDistanceToGo
-		     +CALCULATED_INFO.TaskDistanceCovered);
+	double d1 = (XCSoarInterface::Calculated().TaskDistanceToGo
+		     +XCSoarInterface::Calculated().TaskDistanceCovered);
 	if (d1==0.0) {
-	  d1 = CALCULATED_INFO.AATTargetDistance;
+	  d1 = XCSoarInterface::Calculated().AATTargetDistance;
 	}
 
 	_stprintf(sTmp, TEXT("%s %.0f min %.0f (%.0f) %s"),
@@ -261,9 +261,9 @@ static void OverviewRefreshTask(void) {
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpAATEst"));
   if (wp) {
-    double dd = CALCULATED_INFO.TaskTimeToGo;
-    if ((CALCULATED_INFO.TaskStartTime>0.0)&&(CALCULATED_INFO.Flying)) {
-      dd += GPS_INFO.Time-CALCULATED_INFO.TaskStartTime;
+    double dd = XCSoarInterface::Calculated().TaskTimeToGo;
+    if ((XCSoarInterface::Calculated().TaskStartTime>0.0)&&(XCSoarInterface::Calculated().Flying)) {
+      dd += XCSoarInterface::Basic().Time-XCSoarInterface::Calculated().TaskStartTime;
     }
     wp->GetDataField()->SetAsFloat(dd/60.0);
     wp->RefreshDisplay();
@@ -539,12 +539,12 @@ void dlgTaskOverviewShowModal(void){
   if (!InfoBoxLayout::landscape) {
     wf = dlgLoadFromXML(CallBackTable,
                         TEXT("dlgTaskOverview_L.xml"),
-                        main_window,
+                        XCSoarInterface::main_window,
                         TEXT("IDR_XML_TASKOVERVIEW_L"));
   } else {
     wf = dlgLoadFromXML(CallBackTable,
                         TEXT("dlgTaskOverview.xml"),
-                        main_window,
+                        XCSoarInterface::main_window,
                         TEXT("IDR_XML_TASKOVERVIEW"));
   }
 
@@ -581,7 +581,7 @@ void dlgTaskOverviewShowModal(void){
   }
   UpdateFilePointer();
 
-  // CALCULATED_INFO.AATTimeToGo
+  // XCSoarInterface::Calculated().AATTimeToGo
   //
 
   // initialise and turn on the display

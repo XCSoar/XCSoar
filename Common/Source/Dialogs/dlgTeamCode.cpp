@@ -56,12 +56,12 @@ static void Update()
 {
   WndProperty* wp;
   TCHAR Text[100];
-  double teammateBearing = CALCULATED_INFO.TeammateBearing;
-  double teammateRange = CALCULATED_INFO.TeammateRange;
+  double teammateBearing = XCSoarInterface::Calculated().TeammateBearing;
+  double teammateRange = XCSoarInterface::Calculated().TeammateRange;
 
   if((TeamCodeRefWaypoint >=0)&&(WayPointList))
     {
-      double Value = CALCULATED_INFO.TeammateBearing -  GPS_INFO.TrackBearing;
+      double Value = XCSoarInterface::Calculated().TeammateBearing -  XCSoarInterface::Basic().TrackBearing;
 
       if (Value < -180.0)
         Value += 360.0;
@@ -99,7 +99,7 @@ static void Update()
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpOwnCode"));
   if (wp) {
-    _tcsncpy(Text,CALCULATED_INFO.OwnTeamCode,5);
+    _tcsncpy(Text,XCSoarInterface::Calculated().OwnTeamCode,5);
     Text[5] = '\0';
     wp->SetText(Text);
     wp->RefreshDisplay();
@@ -194,7 +194,7 @@ void dlgTeamCodeShowModal(void)
     {
       wf = dlgLoadFromXML(CallBackTable,
                           TEXT("dlgTeamCode_L.xml"),
-			  main_window,
+			  XCSoarInterface::main_window,
 			  TEXT("IDR_XML_TEAMCODE_L"));
       if (!wf) return;
     }
@@ -202,7 +202,7 @@ void dlgTeamCodeShowModal(void)
     {
       wf = dlgLoadFromXML(CallBackTable,
                           TEXT("dlgTeamCode.xml"),
-			  main_window,
+			  XCSoarInterface::main_window,
 			  TEXT("IDR_XML_TEAMCODE"));
       if (!wf) return;
     }

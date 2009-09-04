@@ -424,15 +424,17 @@ BOOL vgaPutVoice(PDeviceDescriptor_t d, const TCHAR *Sentence)
   return(TRUE);
 }
 
+#include "Blackboard.hpp"
+
 static void _VarioWriteSettings(DeviceDescriptor_t *d) {
 
     TCHAR mcbuf[100];
 
     wsprintf(mcbuf, TEXT("PDVMC,%d,%d,%d,%d,%d"),
 	     iround(GlidePolar::GetMacCready()*10),
-	     iround(CALCULATED_INFO.VOpt*10),
-	     CALCULATED_INFO.Circling,
-	     iround(CALCULATED_INFO.TerrainAlt),
+	     iround(device_blackboard.Calculated().VOpt*10),
+	     device_blackboard.Calculated().Circling,
+	     iround(device_blackboard.Calculated().TerrainAlt),
 	     10132); // JMW 20080716 bug
 	     //	     iround(QNH*10));
 
@@ -451,7 +453,7 @@ BOOL vgaPutQNH(DeviceDescriptor_t *d, double NewQNH){
 
 BOOL vgaOnSysTicker(DeviceDescriptor_t *d){
 
-  if (GPS_INFO.VarioAvailable)
+  if (device_blackboard.Basic().VarioAvailable)
     _VarioWriteSettings(d);
 
   return(TRUE);

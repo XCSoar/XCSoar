@@ -39,7 +39,7 @@ Copyright_License {
 #include "RasterTerrain.h"
 #include "Math/FastMath.h"
 #include "Math/Earth.hpp"
-#include "Interface.hpp"
+#include "Components.hpp"
 #include <math.h>
 
 int EnableThermalLocator = 1;

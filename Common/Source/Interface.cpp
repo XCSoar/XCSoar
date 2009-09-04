@@ -40,16 +40,21 @@ Copyright_License {
 #include "Language.hpp"
 #include "Dialogs.h"
 
-////////////////////////////////////
-// JMW TODO: protect with mutex
-
 bool LockSettingsInFlight = true;
+int debounceTimeout=200;
 
 static Mutex mutexInterfaceTimeout;
-
 static int interface_timeout;
+static bool doForceShutdown = false;
+static bool ShutdownRequested = false;
 
-bool InterfaceTimeoutZero(void) {
+///
+
+InterfaceBlackboard XCSoarInterface::blackboard;
+
+///
+
+bool XCSoarInterface::InterfaceTimeoutZero(void) {
   bool retval;
   mutexInterfaceTimeout.Lock();
   retval= (interface_timeout==0);
@@ -57,14 +62,14 @@ bool InterfaceTimeoutZero(void) {
   retval;
 }
 
-void InterfaceTimeoutReset(void) {
+void XCSoarInterface::InterfaceTimeoutReset(void) {
   mutexInterfaceTimeout.Lock();
   interface_timeout = 0;
   mutexInterfaceTimeout.Unlock();
 }
 
 
-bool InterfaceTimeoutCheck(void) {
+bool XCSoarInterface::InterfaceTimeoutCheck(void) {
   bool retval;
   mutexInterfaceTimeout.Lock();
   if (interface_timeout > 60*10) {
@@ -78,11 +83,7 @@ bool InterfaceTimeoutCheck(void) {
   return retval;
 }
 
-
-static bool doForceShutdown = false;
-static bool ShutdownRequested = false;
-
-void SignalShutdown(bool force) {
+void XCSoarInterface::SignalShutdown(bool force) {
   if (!ShutdownRequested) {
     doForceShutdown = force;
     ShutdownRequested = true;
@@ -90,7 +91,7 @@ void SignalShutdown(bool force) {
   }
 }
 
-bool CheckShutdown(void) {
+bool XCSoarInterface::CheckShutdown(void) {
   bool retval = false;
   if (ShutdownRequested) {
     if(doForceShutdown ||
@@ -116,9 +117,7 @@ bool CheckShutdown(void) {
 #include "PeriodClock.hpp"
 #include "Screen/Blank.hpp"
 
-int debounceTimeout=200;
-
-bool Debounce(void) {
+bool XCSoarInterface::Debounce(void) {
   static PeriodClock fps_last;
 
   ResetDisplayTimeOut();

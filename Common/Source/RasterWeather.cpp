@@ -169,7 +169,7 @@ void RasterWeather::Reload(double lat, double lon) {
   Lock();
   if (_weather_time== 0) {
     // "Now" time, so find time in half hours
-    int dsecs = (int)TimeLocal((long)GPS_INFO.Time);
+    int dsecs = (int)TimeLocal((long)XCSoarInterface::Basic().Time);
     int half_hours = (dsecs/1800) % 48;
     _weather_time = max(_weather_time, half_hours);
     now = true;

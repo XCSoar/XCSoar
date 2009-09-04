@@ -102,11 +102,12 @@ BOOL atrDeclare(PDeviceDescriptor_t d, Declaration_t *decl){
 
 }
 
+#include "Blackboard.hpp"
 
 BOOL atrPutQNH(DeviceDescriptor_t *d, double NewQNH){
   (void)NewQNH; // TODO code: JMW check sending QNH to Altair
   if (d == pDevPrimaryBaroSource){
-    GPS_INFO.BaroAltitude = AltitudeToQNHAltitude(lastAlt);
+    device_blackboard.SetBaroAlt(AltitudeToQNHAltitude(lastAlt));
   }
 
   return(TRUE);

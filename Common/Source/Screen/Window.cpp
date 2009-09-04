@@ -55,7 +55,7 @@ Window::set(ContainerWindow *parent, LPCTSTR cls, LPCTSTR text,
   hWnd = ::CreateWindowEx(ex_style, cls, text, style,
                           left, top, width, height,
                           parent != NULL ? parent->hWnd : NULL,
-                          NULL, hInst, this);
+                          NULL, XCSoarInterface::hInst, this);
 }
 
 void
@@ -217,7 +217,7 @@ Window::on_message(HWND _hWnd, UINT message,
     break;
 
   case WM_LBUTTONDOWN:
-    InterfaceTimeoutReset();
+    XCSoarInterface::InterfaceTimeoutReset();
     if (on_mouse_down(LOWORD(lParam), HIWORD(lParam))) {
       /* true returned: message was handled */
       ResetDisplayTimeOut();
@@ -226,7 +226,7 @@ Window::on_message(HWND _hWnd, UINT message,
     break;
 
   case WM_LBUTTONUP:
-    InterfaceTimeoutReset();
+    XCSoarInterface::InterfaceTimeoutReset();
     if (on_mouse_up(LOWORD(lParam), HIWORD(lParam))) {
       /* true returned: message was handled */
       ResetDisplayTimeOut();
@@ -235,7 +235,7 @@ Window::on_message(HWND _hWnd, UINT message,
     break;
 
   case WM_LBUTTONDBLCLK:
-    InterfaceTimeoutReset();
+    XCSoarInterface::InterfaceTimeoutReset();
     if (on_mouse_double(LOWORD(lParam), HIWORD(lParam))) {
       /* true returned: message was handled */
       ResetDisplayTimeOut();
@@ -244,7 +244,7 @@ Window::on_message(HWND _hWnd, UINT message,
     break;
 
   case WM_KEYDOWN:
-    InterfaceTimeoutReset();
+    XCSoarInterface::InterfaceTimeoutReset();
     if (on_key_down(wParam)) {
       /* true returned: message was handled */
       ResetDisplayTimeOut();
@@ -253,7 +253,7 @@ Window::on_message(HWND _hWnd, UINT message,
     break;
 
   case WM_KEYUP:
-    InterfaceTimeoutReset();
+    XCSoarInterface::InterfaceTimeoutReset();
     if (on_key_up(wParam)) {
       /* true returned: message was handled */
       ResetDisplayTimeOut();
@@ -262,7 +262,7 @@ Window::on_message(HWND _hWnd, UINT message,
     break;
 
   case WM_COMMAND:
-    InterfaceTimeoutReset();
+    XCSoarInterface::InterfaceTimeoutReset();
     if (on_command((HWND)lParam, LOWORD(wParam), HIWORD(wParam))) {
       /* true returned: message was handled */
       ResetDisplayTimeOut();

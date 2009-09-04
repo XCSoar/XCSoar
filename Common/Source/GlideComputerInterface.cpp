@@ -38,28 +38,33 @@ Copyright_License {
 
 #include "GlideComputer.hpp"
 #include "Units.hpp"
-#include "InputEvents.hpp"
+#include "InputEvents.h"
+#include "Task.h"
+#include "Message.h"
+#include "SettingsTask.hpp"
+#include "LocalTime.hpp"
 
-void GlideComputerInterface::AnnounceWayPointSwitch(bool do_advance) {
+void GlideComputer::AnnounceWayPointSwitch(bool do_advance) {
   if (ActiveWayPoint == 0) {
 //    InputEvents::processGlideComputer(GCE_TASK_START);
 // JMW why commented out?
     TCHAR TempTime[40];
     TCHAR TempAlt[40];
     TCHAR TempSpeed[40];
-    Units::TimeToText(TempTime, (int)TimeLocal((int)Calculated->TaskStartTime));
+    Units::TimeToText(TempTime, (int)TimeLocal((int)Calculated().TaskStartTime));
     _stprintf(TempAlt, TEXT("%.0f %s"),
-              Calculated->TaskStartAltitude*ALTITUDEMODIFY,
+              Calculated().TaskStartAltitude*ALTITUDEMODIFY,
               Units::GetAltitudeName());
     _stprintf(TempSpeed, TEXT("%.0f %s"),
-             Calculated->TaskStartSpeed*TASKSPEEDMODIFY,
+	      Calculated().TaskStartSpeed*TASKSPEEDMODIFY,
              Units::GetTaskSpeedName());
 
     TCHAR TempAll[120];
-    _stprintf(TempAll, TEXT("\r\nAltitude: %s\r\nSpeed:%s\r\nTime: %s"), TempAlt, TempSpeed, TempTime);
+    _stprintf(TempAll, TEXT("\r\nAltitude: %s\r\nSpeed:%s\r\nTime: %s"), 
+          TempAlt, TempSpeed, TempTime);
     Message::AddMessage(TEXT("Task Start"), TempAll);
 
-  } else if (Calculated->ValidFinish && IsFinalWaypoint()) {
+  } else if (Calculated().ValidFinish && IsFinalWaypoint()) {
     InputEvents::processGlideComputer(GCE_TASK_FINISH);
   } else {
     InputEvents::processGlideComputer(GCE_TASK_NEXTWAYPOINT);
@@ -69,17 +74,11 @@ void GlideComputerInterface::AnnounceWayPointSwitch(bool do_advance) {
   // JMW Task....
   if (do_advance) {
     ActiveWayPoint++;
-    
-    // JMW is this the best place for this?
-    calculated_info.LegStartTime = gps_info.Time;
-    flightstats.LegStartTime[ActiveWayPoint] = gps_info.Time;
+    SetLegStart();
   }
   SelectedWaypoint = ActiveWayPoint;
   // set waypoint detail to active task WP
 
-  //JMW  GlideComputerStats::  // start logging data at faster rate
-  FastLogNum = 5;
-
+  GlideComputerStats::SetFastLogging();
 }
-
 

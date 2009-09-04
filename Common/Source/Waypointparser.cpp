@@ -55,7 +55,7 @@ Copyright_License {
 #include "RasterTerrain.h"
 #include "LogFile.hpp"
 #include "Interface.hpp"
-
+#include "Components.hpp"
 #include <windows.h>
 #include <commctrl.h>
 
@@ -769,17 +769,15 @@ void SetHome(bool reset)
 
   if (ValidWayPoint(HomeWaypoint)) {
     // OK, passed all checks now
-    GPS_INFO.Latitude = WayPointList[HomeWaypoint].Latitude;
-    GPS_INFO.Longitude = WayPointList[HomeWaypoint].Longitude;
-    GPS_INFO.Altitude = WayPointList[HomeWaypoint].Altitude;
+    device_blackboard.SetStartupLocation(WayPointList[HomeWaypoint].Longitude,
+					 WayPointList[HomeWaypoint].Latitude,
+					 WayPointList[HomeWaypoint].Altitude);
   } else {
 
     // no home at all, so set it from center of terrain if available
     double lon, lat;
     if (terrain.GetTerrainCenter(&lat, &lon)) {
-      GPS_INFO.Latitude = lat;
-      GPS_INFO.Longitude = lon;
-      GPS_INFO.Altitude = 0;
+      device_blackboard.SetStartupLocation(lon, lat, 0);
     }
   }
 

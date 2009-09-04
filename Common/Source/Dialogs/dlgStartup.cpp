@@ -80,12 +80,12 @@ void dlgStartupShowModal(void){
   if (!InfoBoxLayout::landscape) {
     wf = dlgLoadFromXML(CallBackTable,
                         TEXT("dlgStartup_L.xml"),
-                        main_window,
+                        XCSoarInterface::main_window,
                         TEXT("IDR_XML_STARTUP_L"));
   } else {
     wf = dlgLoadFromXML(CallBackTable,
                         TEXT("dlgStartup.xml"),
-                        main_window,
+                        XCSoarInterface::main_window,
                         TEXT("IDR_XML_STARTUP"));
   }
   if (!wf) return;

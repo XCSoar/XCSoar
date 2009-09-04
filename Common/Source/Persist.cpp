@@ -50,6 +50,7 @@ Copyright_License {
 #include "GlideComputer.hpp"
 #include "Calculations.h"
 #include "Protection.hpp"
+#include "Components.hpp"
 
 static TCHAR szCalculationsPersistFileName[MAX_PATH]= TEXT("\0");
 static TCHAR szCalculationsPersistDirectory[MAX_PATH]= TEXT("\0");
@@ -91,25 +92,25 @@ void LoadCalculationsPersist(DERIVED_INFO *Calculated) {
     fread(Calculated, sizeof(*Calculated), 1, file);
 
     fread(&sizein, sizeof(sizein), 1, file);
-    if (sizein != sizeof(GlideComputer::flightstats)) {
+    if (sizein != sizeof(glide_computer.GetFlightStats())) {
 
-      GlideComputer::flightstats.Reset();
+      glide_computer.ResetFlight();
       fclose(file);
       mutexGlideComputer.Unlock();
       return;
     }
 
-    fread(&GlideComputer::flightstats, sizeof(GlideComputer::flightstats), 1, file);
+    fread(&glide_computer.GetFlightStats(), sizeof(glide_computer.GetFlightStats()), 1, file);
 
     fread(&sizein, sizeof(sizein), 1, file);
-    if (sizein != sizeof(GlideComputer::olc.data)) {
-      GlideComputer::olc.ResetFlight();
+    if (sizein != sizeof(glide_computer.GetOLC().data)) {
+      glide_computer.GetOLC().ResetFlight();
       fclose(file);
       mutexGlideComputer.Unlock();
       return;
     }
 
-    fread(&GlideComputer::olc.data, sizeof(GlideComputer::olc.data), 1, file);
+    fread(&glide_computer.GetOLC().data, sizeof(glide_computer.GetOLC().data), 1, file);
 
     fread(&sizein, sizeof(sizein), 1, file);
     if (sizein != 5 * sizeof(double)) {
@@ -152,7 +153,7 @@ void LoadCalculationsPersist(DERIVED_INFO *Calculated) {
 }
 
 
-void SaveCalculationsPersist(DERIVED_INFO *Calculated) {
+void SaveCalculationsPersist(const DERIVED_INFO *Calculated) {
   DWORD size;
 
   LoggerClearFreeSpace();
@@ -177,11 +178,11 @@ void SaveCalculationsPersist(DERIVED_INFO *Calculated) {
 
     size = sizeof(FlightStatistics);
     fwrite(&size, sizeof(size), 1, file);
-    fwrite(&GlideComputer::flightstats, size, 1, file);
+    fwrite(&glide_computer.GetFlightStats(), size, 1, file);
 
     size = sizeof(OLCData);
     fwrite(&size, sizeof(size), 1, file);
-    fwrite(&GlideComputer::olc.data, size, 1, file);
+    fwrite(&glide_computer.GetOLC().data, size, 1, file);
 
     double MACCREADY = GlidePolar::GetMacCready();
     double BUGS = GlidePolar::GetBugs();

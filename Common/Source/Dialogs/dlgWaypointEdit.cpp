@@ -462,12 +462,12 @@ void dlgWaypointEditShowModal(WAYPOINT *wpt) {
   if (!InfoBoxLayout::landscape) {
     wf = dlgLoadFromXML(CallBackTable,
                         TEXT("dlgWaypointEdit_L.xml"),
-                        main_window,
+                        XCSoarInterface::main_window,
                         TEXT("IDR_XML_WAYPOINTEDIT_L"));
   } else {
     wf = dlgLoadFromXML(CallBackTable,
                         TEXT("dlgWaypointEdit.xml"),
-                        main_window,
+                        XCSoarInterface::main_window,
                         TEXT("IDR_XML_WAYPOINTEDIT"));
   }
 

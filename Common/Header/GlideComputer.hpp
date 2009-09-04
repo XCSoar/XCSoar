@@ -38,8 +38,7 @@ Copyright_License {
 #if !defined(XCSOAR_GLIDECOMPUTER_HPP)
 #define XCSOAR_GLIDECOMPUTER_HPP
 
-#include "NMEA/Info.h"
-#include "NMEA/Derived.hpp"
+#include "Blackboard.hpp"
 #include "FlightStatistics.hpp"
 #include "AATDistance.h"
 #include "OnLineContest.h"
@@ -49,25 +48,12 @@ Copyright_License {
 #include "windanalyser.h"
 #include "SnailTrail.hpp"
 
+class MapWindowProjection;
+
 // TODO: replace copy constructors so copies of these structures
 // do not replicate the large items or items that should be singletons
 // OR: just make them static?
 
-class GlideComputerBlackboard {
-public:
-  NMEA_INFO     gps_info;
-  DERIVED_INFO  calculated_info;
-protected:
-  void ResetFlight(const bool full=true);
-  void StartTask();
-  void Initialise();
-  void SaveFinish();
-
-
-  virtual double GetAverageThermal();
-private:
-  DERIVED_INFO Finish_Derived_Info;
-};
 
 class GlideComputerAirData: virtual public GlideComputerBlackboard {
 public:
@@ -75,20 +61,25 @@ public:
   ldrotary_s           rotaryLD;
   ThermalLocator thermallocator;
   WindAnalyser   windanalyser;
+  virtual bool ProcessIdle(const MapWindowProjection &map);
+
+  void SetWindEstimate(const double wind_speed,
+		       const double wind_bearing,
+		       const int quality=3); // JMW check
+
 protected:
 
   void ResetFlight(const bool full=true);
   void Initialise();
-  void ProcessVertical();
   void ProcessBasic();
-  ///
+  void ProcessVertical();
+
+  virtual bool ProcessVario();
 
   void DoWindCirclingMode(const bool left);
   void DoWindCirclingSample();
   void DoWindCirclingAltitude();
-  void SetWindEstimate(const double wind_speed,
-		       const double wind_bearing,
-		       const int quality);
+  bool FlightTimes();
 private:
   void AverageClimbRate();
   void Average30s();
@@ -102,6 +93,22 @@ private:
   void TerrainHeight();
   void EnergyHeightNavAltitude();
   void Vario();
+  void SpeedToFly(const double mc_setting, 
+		  const double cruise_efficiency);
+  void NettoVario();
+  void TakeoffLanding();
+  void OnTakeoff();
+  void OnLanding();
+  void PredictNextPosition();
+  void AirspaceWarning(const MapWindowProjection &map_projection);
+  void TerrainFootprint(const double max_dist);
+  void BallastDump();
+  void ThermalSources();
+  void LastThermalStats();
+  void ThermalBand();
+  void PercentCircling(const double Rate);
+  void SwitchZoomClimb(bool isclimb, bool left);
+  void Turning();
 };
 
 class GlideComputerStats: virtual public GlideComputerBlackboard {
@@ -113,37 +120,42 @@ protected:
   void StartTask();
   void Initialise();
   bool DoLogging();
-  virtual double GetAverageThermal();
+  void SetFastLogging();
+  virtual const double GetAverageThermal() const;
 protected:
   virtual void SaveTaskSpeed(double val);
+  virtual void SetLegStart();
+  virtual void OnClimbBase(double StartAlt);
+  virtual void OnClimbCeiling();
+  virtual void OnDepartedThermal();
 };
 
 class GlideComputerTask: virtual public GlideComputerBlackboard {
 public:
   AATDistance          aatdistance;
   OLCOptimizer         olc;
-  // CalculationsAutoMc
-  static void DoAutoMacCready(double mc_setting);
+  void DoAutoMacCready(double mc_setting);
+  virtual const bool InsideStartHeight(const DWORD Margin=0) const;
+  virtual const bool ValidStartSpeed(const DWORD Margin=0) const;
 protected:
+  void Initialise() {}
   void ProcessBasicTask(const double mc_setting, 
 			const double cruise_efficiency);
   void ResetFlight(const bool full=true);
   virtual void StartTask(const bool do_advance,
 			 const bool do_announce);
-  virtual void AnnounceWayPointSwitch(bool do_advance);
+  virtual void AnnounceWayPointSwitch(bool do_advance)= 0;
   bool DoLogging();
+  void InSector();
 private:
   void DistanceToHome();
   void DistanceToNext();
   void AltitudeRequired(const double mc_setting,
 			const double cruise_efficiency);
-  double AATCloseBearing();
-  double FAIFinishHeight(int wp);
-  bool InsideStartHeight(const DWORD Margin=0);
-  bool ValidStartSpeed(const DWORD Margin=0);
-  bool InTurnSector(const int the_turnpoint);
+  const double AATCloseBearing() const;
+  const bool InTurnSector(const int the_turnpoint) const;
   bool InFinishSector(const int i);
-  bool ValidFinish();
+  const bool ValidFinish() const;
   bool InStartSector_Internal(int Index,
 			      double OutBound,
 			      bool &LastInSector);
@@ -156,7 +168,6 @@ private:
   void CheckFinish();
   void AddAATPoint(int taskwaypoint);
   void CheckInSector();
-  void InSector();
   void TaskStatistics(const double this_maccready,
 		      const double cruise_efficiency);
   void AATStats_Time();
@@ -174,9 +185,18 @@ private:
 			    int *ifinal,
 			    const double cruise_efficiency);
   double MacCreadyOrAvClimbRate(double this_maccready);
+  void CheckFinalGlideThroughTerrain(double LegToGo, double LegBearing);
   // TODO: some of these can move into task class
 protected:
-  virtual void SaveTaskSpeed(double val);
+  virtual void SaveTaskSpeed(double val) = 0;
+  virtual void SetLegStart();
+  virtual bool ProcessIdle(const MapWindowProjection &map);
+  const double FAIFinishHeight(int wp) const;
+public:
+  virtual void ResetEnter();
+  const double AATCloseDistance(void) const {
+    return max(100,Basic().Speed*1.5);
+  }
 };
 
 
@@ -196,11 +216,28 @@ protected:
 			 const bool do_announce);
   void DoLogging();
   virtual void SaveTaskSpeed(double val);
+  virtual void SetLegStart();
+  virtual void AnnounceWayPointSwitch(bool do_advance);
 public:
   void Initialise();
-  void ProcessGPS();
-  void ProcessVario();
+  bool ProcessGPS(); // returns true if idle needs processing
+  virtual bool ProcessIdle(const MapWindowProjection &map);
+  virtual bool ProcessVario();
+  virtual const bool InsideStartHeight(const DWORD Margin=0) const;
+  virtual const bool ValidStartSpeed(const DWORD Margin=0) const;
+  virtual bool IterateEffectiveMacCready();
+  virtual void ResetEnter() {
+    GlideComputerTask::ResetEnter();
+  }
+
+  // TODO: make these consts
+  SnailTrail &GetSnailTrail() { return snail_trail; };
+  OLCOptimizer &GetOLC() { return olc; };
+  FlightStatistics &GetFlightStats() { return flightstats; };
 };
+
+
+const double FAIFinishHeight(const DERIVED_INFO& Calculated, int wp);
 
 #endif
 

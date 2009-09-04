@@ -53,6 +53,7 @@ Copyright_License {
 #include "GlideComputer.hpp"
 #include "Atmosphere.h"
 #include "Blackboard.hpp"
+#include "Components.hpp"
 
 #define MAXPAGE 8
 
@@ -98,39 +99,39 @@ static void OnAnalysisPaint(WindowControl *Sender, Canvas &canvas)
   switch (page) {
   case ANALYSIS_PAGE_BAROGRAPH:
     SetCalcCaption(TEXT("Settings"));
-    GlideComputer::flightstats.RenderBarograph(canvas, rcgfx);
+    glide_computer.GetFlightStats().RenderBarograph(canvas, rcgfx);
     break;
   case ANALYSIS_PAGE_CLIMB:
     SetCalcCaption(TEXT("Task calc"));
-    GlideComputer::flightstats.RenderClimb(canvas, rcgfx);
+    glide_computer.GetFlightStats().RenderClimb(canvas, rcgfx);
     break;
   case ANALYSIS_PAGE_WIND:
     SetCalcCaption(TEXT("Set wind"));
-    GlideComputer::flightstats.RenderWind(canvas, rcgfx);
+    glide_computer.GetFlightStats().RenderWind(canvas, rcgfx);
     break;
   case ANALYSIS_PAGE_POLAR:
     SetCalcCaption(TEXT("Settings"));
-    GlideComputer::flightstats.RenderGlidePolar(canvas, rcgfx);
+    glide_computer.GetFlightStats().RenderGlidePolar(canvas, rcgfx);
     break;
   case ANALYSIS_PAGE_TEMPTRACE:
     SetCalcCaption(TEXT("Settings"));
-    GlideComputer::flightstats.RenderTemperature(canvas, rcgfx);
+    glide_computer.GetFlightStats().RenderTemperature(canvas, rcgfx);
     break;
   case ANALYSIS_PAGE_TASK:
     SetCalcCaption(TEXT("Task calc"));
-    GlideComputer::flightstats.RenderTask(canvas, rcgfx, false);
+    glide_computer.GetFlightStats().RenderTask(canvas, rcgfx, false);
     break;
   case ANALYSIS_PAGE_OLC:
     SetCalcCaption(TEXT("Optimise"));
-    GlideComputer::flightstats.RenderTask(canvas, rcgfx, true);
+    glide_computer.GetFlightStats().RenderTask(canvas, rcgfx, true);
     break;
   case ANALYSIS_PAGE_AIRSPACE:
     SetCalcCaption(TEXT("Warnings"));
-    GlideComputer::flightstats.RenderAirspace(canvas, rcgfx);
+    glide_computer.GetFlightStats().RenderAirspace(canvas, rcgfx);
     break;
   case ANALYSIS_PAGE_TASK_SPEED:
     SetCalcCaption(TEXT("Task calc"));
-    GlideComputer::flightstats.RenderSpeed(canvas, rcgfx);
+    glide_computer.GetFlightStats().RenderSpeed(canvas, rcgfx);
     break;
   default:
     // should never get here!
@@ -153,24 +154,24 @@ static void Update(void){
                 gettext(TEXT("Analysis")),
                 gettext(TEXT("Barograph")));
       wf->SetCaption(sTmp);
-      if (GlideComputer::flightstats.Altitude_Ceiling.sum_n<2) {
+      if (glide_computer.GetFlightStats().Altitude_Ceiling.sum_n<2) {
         _stprintf(sTmp, TEXT("\0"));
-      } else if (GlideComputer::flightstats.Altitude_Ceiling.sum_n<4) {
+      } else if (glide_computer.GetFlightStats().Altitude_Ceiling.sum_n<4) {
         _stprintf(sTmp, TEXT("%s:\r\n  %.0f-%.0f %s"),
                   gettext(TEXT("Working band")),
-                  GlideComputer::flightstats.Altitude_Base.y_ave*ALTITUDEMODIFY,
-                  GlideComputer::flightstats.Altitude_Ceiling.y_ave*ALTITUDEMODIFY,
+                  glide_computer.GetFlightStats().Altitude_Base.y_ave*ALTITUDEMODIFY,
+                  glide_computer.GetFlightStats().Altitude_Ceiling.y_ave*ALTITUDEMODIFY,
                   Units::GetAltitudeName());
 
       } else {
 
         _stprintf(sTmp, TEXT("%s:\r\n  %.0f-%.0f %s\r\n\r\n%s:\r\n  %.0f %s/hr"),
                   gettext(TEXT("Working band")),
-                  GlideComputer::flightstats.Altitude_Base.y_ave*ALTITUDEMODIFY,
-                  GlideComputer::flightstats.Altitude_Ceiling.y_ave*ALTITUDEMODIFY,
+                  glide_computer.GetFlightStats().Altitude_Base.y_ave*ALTITUDEMODIFY,
+                  glide_computer.GetFlightStats().Altitude_Ceiling.y_ave*ALTITUDEMODIFY,
                   Units::GetAltitudeName(),
                   gettext(TEXT("Ceiling trend")),
-                  GlideComputer::flightstats.Altitude_Ceiling.m*ALTITUDEMODIFY,
+                  glide_computer.GetFlightStats().Altitude_Ceiling.m*ALTITUDEMODIFY,
                   Units::GetAltitudeName());
       }
       wInfo->SetCaption(sTmp);
@@ -182,21 +183,21 @@ static void Update(void){
                 gettext(TEXT("Climb")));
       wf->SetCaption(sTmp);
 
-      if (GlideComputer::flightstats.ThermalAverage.sum_n==0) {
+      if (glide_computer.GetFlightStats().ThermalAverage.sum_n==0) {
         _stprintf(sTmp, TEXT("\0"));
-      } else if (GlideComputer::flightstats.ThermalAverage.sum_n==1) {
+      } else if (glide_computer.GetFlightStats().ThermalAverage.sum_n==1) {
         _stprintf(sTmp, TEXT("%s:\r\n  %3.1f %s"),
                   gettext(TEXT("Av climb")),
-                  GlideComputer::flightstats.ThermalAverage.y_ave*LIFTMODIFY,
+                  glide_computer.GetFlightStats().ThermalAverage.y_ave*LIFTMODIFY,
                   Units::GetVerticalSpeedName()
                   );
       } else {
         _stprintf(sTmp, TEXT("%s:\r\n  %3.1f %s\r\n\r\n%s:\r\n  %3.2f %s"),
                   gettext(TEXT("Av climb")),
-                  GlideComputer::flightstats.ThermalAverage.y_ave*LIFTMODIFY,
+                  glide_computer.GetFlightStats().ThermalAverage.y_ave*LIFTMODIFY,
                   Units::GetVerticalSpeedName(),
                   gettext(TEXT("Climb trend")),
-                  GlideComputer::flightstats.ThermalAverage.m*LIFTMODIFY,
+                  glide_computer.GetFlightStats().ThermalAverage.m*LIFTMODIFY,
                   Units::GetVerticalSpeedName()
                   );
       }
@@ -282,8 +283,8 @@ static void Update(void){
       TCHAR timetext1[100];
       TCHAR timetext2[100];
       if (AATEnabled) {
-        Units::TimeToText(timetext1, (int)CALCULATED_INFO.TaskTimeToGo);
-        Units::TimeToText(timetext2, (int)CALCULATED_INFO.AATTimeToGo);
+        Units::TimeToText(timetext1, (int)XCSoarInterface::Calculated().TaskTimeToGo);
+        Units::TimeToText(timetext2, (int)XCSoarInterface::Calculated().AATTimeToGo);
 
         if (InfoBoxLayout::landscape) {
           _stprintf(sTmp,
@@ -293,10 +294,10 @@ static void Update(void){
                     gettext(TEXT("AAT to go")),
                     timetext2,
                     gettext(TEXT("Distance to go")),
-                    DISTANCEMODIFY*CALCULATED_INFO.AATTargetDistance,
+                    DISTANCEMODIFY*XCSoarInterface::Calculated().AATTargetDistance,
                     Units::GetDistanceName(),
                     gettext(TEXT("Target speed")),
-                    TASKSPEEDMODIFY*CALCULATED_INFO.AATTargetSpeed,
+                    TASKSPEEDMODIFY*XCSoarInterface::Calculated().AATTargetSpeed,
                     Units::GetTaskSpeedName()
                     );
         } else {
@@ -307,20 +308,20 @@ static void Update(void){
                     gettext(TEXT("AAT to go")),
                     timetext2,
                     gettext(TEXT("Distance to go")),
-                    DISTANCEMODIFY*CALCULATED_INFO.AATTargetDistance,
+                    DISTANCEMODIFY*XCSoarInterface::Calculated().AATTargetDistance,
                     Units::GetDistanceName(),
                     gettext(TEXT("Target speed")),
-                    TASKSPEEDMODIFY*CALCULATED_INFO.AATTargetSpeed,
+                    TASKSPEEDMODIFY*XCSoarInterface::Calculated().AATTargetSpeed,
                     Units::GetTaskSpeedName()
                     );
         }
       } else {
-        Units::TimeToText(timetext1, (int)CALCULATED_INFO.TaskTimeToGo);
+        Units::TimeToText(timetext1, (int)XCSoarInterface::Calculated().TaskTimeToGo);
         _stprintf(sTmp, TEXT("%s: %s\r\n%s: %5.0f %s\r\n"),
                   gettext(TEXT("Task to go")),
                   timetext1,
                   gettext(TEXT("Distance to go")),
-                  DISTANCEMODIFY*CALCULATED_INFO.TaskDistanceToGo,
+                  DISTANCEMODIFY*XCSoarInterface::Calculated().TaskDistanceToGo,
                   Units::GetDistanceName());
       }
     }
@@ -337,11 +338,11 @@ static void Update(void){
     bool olcvalid; 
     bool olcfinished;
 
-    dt = GlideComputer::olc.getDt();
-    d = GlideComputer::olc.getD();
-    olcvalid = GlideComputer::olc.getValid();
-    score = GlideComputer::olc.getScore();
-    olcfinished = GlideComputer::olc.getFinished();
+    dt = glide_computer.GetOLC().getDt();
+    d = glide_computer.GetOLC().getD();
+    olcvalid = glide_computer.GetOLC().getValid();
+    score = glide_computer.GetOLC().getScore();
+    olcfinished = glide_computer.GetOLC().getFinished();
 
     if (olcfinished) {
       _tcscpy(sFinished,TEXT("Finished"));
@@ -481,7 +482,7 @@ static void OnCalcClicked(WindowControl * Sender,
   }
   if (page==ANALYSIS_PAGE_OLC) {
     StartHourglassCursor();
-    GlideComputer::olc.Optimize((CALCULATED_INFO.Flying==1));
+    glide_computer.GetOLC().Optimize((XCSoarInterface::Calculated().Flying==1));
     StopHourglassCursor();
   }
   if (page==ANALYSIS_PAGE_AIRSPACE) {
@@ -511,12 +512,12 @@ void dlgAnalysisShowModal(void){
   if (!InfoBoxLayout::landscape) {
     wf = dlgLoadFromXML(CallBackTable,
                         TEXT("dlgAnalysis_L.xml"),
-                        main_window,
+                        XCSoarInterface::main_window,
                         TEXT("IDR_XML_ANALYSIS_L"));
   } else  {
     wf = dlgLoadFromXML(CallBackTable,
                         TEXT("dlgAnalysis.xml"),
-                        main_window,
+                        XCSoarInterface::main_window,
                         TEXT("IDR_XML_ANALYSIS"));
   }
 

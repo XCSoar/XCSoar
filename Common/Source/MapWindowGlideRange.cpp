@@ -48,7 +48,7 @@ Copyright_License {
 
 void MapWindow::CalculateScreenPositionsGroundline(void) {
   if (FinalGlideTerrain) {
-    LonLat2Screen(DerivedDrawInfo.GlideFootPrint,
+    LonLat2Screen(Calculated().GlideFootPrint,
 		  Groundline, NUMTERRAINSWEEPS+1, 1);
   }
 }
@@ -56,7 +56,7 @@ void MapWindow::CalculateScreenPositionsGroundline(void) {
 
 void MapWindow::DrawTerrainAbove(Canvas &canvas, const RECT rc, Canvas &buffer) {
 
-  if (!DerivedDrawInfo.Flying) return;
+  if (!Calculated().Flying) return;
 
   buffer.background_transparent();
   buffer.set_background_color(Color(0xff,0xff,0xff));
@@ -86,18 +86,18 @@ MapWindow::DrawGlideThroughTerrain(Canvas &canvas)
   canvas.select(MapGfx.hpTerrainLineBg);
   canvas.polyline(Groundline, NUMTERRAINSWEEPS + 1);
   if ((FinalGlideTerrain==1) ||
-      ((!EnableTerrain || !DerivedDrawInfo.Flying) && (FinalGlideTerrain==2))) {
+      ((!EnableTerrain || !Calculated().Flying) && (FinalGlideTerrain==2))) {
     canvas.select(MapGfx.hpTerrainLine);
     canvas.polyline(Groundline, NUMTERRAINSWEEPS + 1);
   }
 
-  if (DerivedDrawInfo.Flying && ValidTaskPoint(ActiveWayPoint)) {
-    if ((DerivedDrawInfo.TerrainWarningLatitude != 0.0)
-        &&(DerivedDrawInfo.TerrainWarningLongitude != 0.0)) {
+  if (Calculated().Flying && ValidTaskPoint(ActiveWayPoint)) {
+    if ((Calculated().TerrainWarningLatitude != 0.0)
+        &&(Calculated().TerrainWarningLongitude != 0.0)) {
 
       draw_masked_bitmap_if_visible(canvas, MapGfx.hTerrainWarning,
-				    DerivedDrawInfo.TerrainWarningLongitude,
-				    DerivedDrawInfo.TerrainWarningLatitude,
+				    Calculated().TerrainWarningLongitude,
+				    Calculated().TerrainWarningLatitude,
 				    10, 10);
     }
   }
@@ -121,7 +121,7 @@ void MapWindow::DrawGlideCircle(Canvas &canvas, POINT Orig, RECT rc)
   TCHAR gtext[100];
   char text[20]; // TODO size it
 
-  double cruise= CALCULATED_INFO.AverageLD;
+  double cruise= Calculated().AverageLD;
   static double maxcruise=(GlidePolar::bestld);
   static double mincruise=(GlidePolar::bestld/4);
   int i;

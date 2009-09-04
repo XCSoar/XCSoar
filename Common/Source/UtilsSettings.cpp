@@ -52,10 +52,11 @@ Copyright_License {
 #include "Message.h"
 #include "Polar/Historical.hpp"
 #include "TopologyStore.h"
+#include "Components.hpp"
 #include "Interface.hpp"
 
 void SettingsEnter() {
-  main_window.map.SuspendDrawingThread();
+  XCSoarInterface::main_window.map.SuspendDrawingThread();
   // This prevents the map and calculation threads from doing anything
   // with shared data while it is being changed (also prevents drawing)
 
@@ -76,7 +77,7 @@ void SettingsEnter() {
 void SettingsLeave() {
   if (!globalRunningEvent.test()) return;
 
-  main_window.map.set_focus();
+  XCSoarInterface::main_window.map.set_focus();
 
   // mutexing.Lock everything here prevents the calculation thread from running,
   // while shared data is potentially reloaded.
@@ -112,8 +113,8 @@ void SettingsLeave() {
       }
 
       //
-      terrain.ServiceFullReload(GPS_INFO.Latitude,
-				GPS_INFO.Longitude);
+      terrain.ServiceFullReload(XCSoarInterface::Basic().Latitude,
+				XCSoarInterface::Basic().Longitude);
     }
 
   if (TOPOLOGYFILECHANGED)
@@ -141,7 +142,7 @@ void SettingsLeave() {
       || TOPOLOGYFILECHANGED
       ) {
     CloseProgressDialog();
-    main_window.map.set_focus();
+    XCSoarInterface::main_window.map.set_focus();
   }
 
   mutexNavBox.Unlock();
@@ -152,14 +153,14 @@ void SettingsLeave() {
     devRestart();
   }
 
-  main_window.map.ResumeDrawingThread();
+  XCSoarInterface::main_window.map.ResumeDrawingThread();
   // allow map and calculations threads to continue on their merry way
 }
 
 
 void SystemConfiguration(void) {
 #ifndef _SIM_
-  if (LockSettingsInFlight && CALCULATED_INFO.Flying) {
+  if (LockSettingsInFlight && XCSoarInterface::Calculated().Flying) {
     Message::AddMessage(TEXT("Settings locked in flight"));
     return;
   }

@@ -37,21 +37,21 @@ Copyright_License {
 
 #include "XCSoar.h"
 #include "Math/FastMath.h"
-
+#include "Interface.hpp"
 #include <stdlib.h>
 
 #define EGM96SIZE 16200
 
 unsigned char* egm96data= NULL;
 
-extern HINSTANCE hInst;
 
 void OpenGeoid(void) {
   LPTSTR lpRes;
   HRSRC hResInfo;
   HGLOBAL hRes;
   int len;
-  hResInfo = FindResource (hInst, TEXT("IDR_RASTER_EGM96S"), TEXT("RASTERDATA"));
+  hResInfo = FindResource (XCSoarInterface::hInst, 
+			   TEXT("IDR_RASTER_EGM96S"), TEXT("RASTERDATA"));
 
   if (hResInfo == NULL) {
     // unable to find the resource
@@ -59,7 +59,7 @@ void OpenGeoid(void) {
     return;
   }
   // Load the wave resource.
-  hRes = LoadResource (hInst, hResInfo);
+  hRes = LoadResource (XCSoarInterface::hInst, hResInfo);
   if (hRes == NULL) {
     // unable to load the resource
     egm96data = NULL;
@@ -70,7 +70,7 @@ void OpenGeoid(void) {
   lpRes = (LPTSTR)LockResource (hRes);
 
   if (lpRes) {
-    len = SizeofResource(hInst,hResInfo);
+    len = SizeofResource(XCSoarInterface::hInst,hResInfo);
     if (len==EGM96SIZE) {
       egm96data = (unsigned char*)malloc(len);
       strncpy((char*)egm96data,(char*)lpRes,len);

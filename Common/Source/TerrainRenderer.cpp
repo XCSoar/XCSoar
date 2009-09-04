@@ -53,7 +53,7 @@ Copyright_License {
 #include "LocalPath.hpp"
 #include "LogFile.hpp"
 #include "MapWindowProjection.hpp"
-#include "Interface.hpp"
+#include "Components.hpp"
 #include <assert.h>
 
 ///////////////////////////////////////////////////

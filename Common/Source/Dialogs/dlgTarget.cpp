@@ -91,7 +91,7 @@ static void MoveTarget(double adjust_angle) {
     distance = max(Task[target_point].AATCircleRadius/20.0,distance);
   }
 
-  bearing = AngleLimit360(main_window.map.GetDisplayAngle() + adjust_angle);
+  bearing = AngleLimit360(XCSoarInterface::main_window.map.GetDisplayAngle() + adjust_angle);
   FindLatitudeLongitude (Task[target_point].AATTargetLat,
                          Task[target_point].AATTargetLon,
                          bearing,
@@ -100,17 +100,17 @@ static void MoveTarget(double adjust_angle) {
                          &target_longitude);
 
   if (InAATTurnSector(target_longitude, target_latitude, target_point)) {
-    if (CALCULATED_INFO.IsInSector && (target_point == ActiveWayPoint)) {
+    if (XCSoarInterface::Calculated().IsInSector && (target_point == ActiveWayPoint)) {
       // set range/radial for inside sector
       double course_bearing, target_bearing;
       DistanceBearing(Task[target_point-1].AATTargetLat,
                       Task[target_point-1].AATTargetLon,
-                      GPS_INFO.Latitude,
-                      GPS_INFO.Longitude,
+                      XCSoarInterface::Basic().Latitude,
+                      XCSoarInterface::Basic().Longitude,
                       NULL, &course_bearing);
 
-      DistanceBearing(GPS_INFO.Latitude,
-                      GPS_INFO.Longitude,
+      DistanceBearing(XCSoarInterface::Basic().Latitude,
+                      XCSoarInterface::Basic().Longitude,
                       target_latitude,
                       target_longitude,
                       &distance, &target_bearing);
@@ -122,8 +122,8 @@ static void MoveTarget(double adjust_angle) {
         Radial = bearing;
         Task[target_point].AATTargetOffsetRadial = Radial;
         Range =
-          FindInsideAATSectorRange(GPS_INFO.Latitude,
-                                   GPS_INFO.Longitude,
+          FindInsideAATSectorRange(XCSoarInterface::Basic().Latitude,
+                                   XCSoarInterface::Basic().Longitude,
                                    target_point,
                                    target_bearing,
                                    distance);
@@ -175,17 +175,17 @@ static void DragTarget(double target_longitude, double target_latitude) {
   double distance, bearing;
 
   if (InAATTurnSector(target_longitude, target_latitude, target_point)) {
-    if (CALCULATED_INFO.IsInSector && (target_point == ActiveWayPoint)) {
+    if (XCSoarInterface::Calculated().IsInSector && (target_point == ActiveWayPoint)) {
       // set range/radial for inside sector
       double course_bearing, target_bearing;
       DistanceBearing(Task[target_point-1].AATTargetLat,
                       Task[target_point-1].AATTargetLon,
-                      GPS_INFO.Latitude,
-                      GPS_INFO.Longitude,
+                      XCSoarInterface::Basic().Latitude,
+                      XCSoarInterface::Basic().Longitude,
                       NULL, &course_bearing);
 
-      DistanceBearing(GPS_INFO.Latitude,
-                      GPS_INFO.Longitude,
+      DistanceBearing(XCSoarInterface::Basic().Latitude,
+                      XCSoarInterface::Basic().Longitude,
                       target_latitude,
                       target_longitude,
                       &distance, &target_bearing);
@@ -197,8 +197,8 @@ static void DragTarget(double target_longitude, double target_latitude) {
         Radial = bearing;
         Task[target_point].AATTargetOffsetRadial = Radial;
         Range =
-          FindInsideAATSectorRange(GPS_INFO.Latitude,
-                                   GPS_INFO.Longitude,
+          FindInsideAATSectorRange(XCSoarInterface::Basic().Latitude,
+                                   XCSoarInterface::Basic().Longitude,
                                    target_point,
                                    target_bearing,
                                    distance);
@@ -357,9 +357,9 @@ static void RefreshCalculator(void) {
   }
 
   // update outputs
-  double dd = CALCULATED_INFO.TaskTimeToGo;
-  if ((CALCULATED_INFO.TaskStartTime>0.0)&&(CALCULATED_INFO.Flying)) {
-    dd += GPS_INFO.Time-CALCULATED_INFO.TaskStartTime;
+  double dd = XCSoarInterface::Calculated().TaskTimeToGo;
+  if ((XCSoarInterface::Calculated().TaskStartTime>0.0)&&(XCSoarInterface::Calculated().Flying)) {
+    dd += XCSoarInterface::Basic().Time-XCSoarInterface::Calculated().TaskStartTime;
   }
   dd= min(24.0*60.0,dd/60.0);
   wp = (WndProperty*)wf->FindByName(TEXT("prpAATEst"));
@@ -379,9 +379,9 @@ static void RefreshCalculator(void) {
   }
 
   double v1;
-  if (CALCULATED_INFO.TaskTimeToGo>0) {
-    v1 = CALCULATED_INFO.TaskDistanceToGo/
-      CALCULATED_INFO.TaskTimeToGo;
+  if (XCSoarInterface::Calculated().TaskTimeToGo>0) {
+    v1 = XCSoarInterface::Calculated().TaskDistanceToGo/
+      XCSoarInterface::Calculated().TaskTimeToGo;
   } else {
     v1 = 0;
   }
@@ -395,7 +395,7 @@ static void RefreshCalculator(void) {
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpSpeedAchieved"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(CALCULATED_INFO.TaskSpeed*TASKSPEEDMODIFY);
+    wp->GetDataField()->SetAsFloat(XCSoarInterface::Calculated().TaskSpeed*TASKSPEEDMODIFY);
     wp->GetDataField()->SetUnits(Units::GetTaskSpeedName());
     wp->RefreshDisplay();
   }
@@ -406,7 +406,7 @@ static void RefreshCalculator(void) {
 static int OnTimerNotify(WindowControl * Sender) {
   (void)Sender;
   double lon, lat;
-  if (main_window.map.TargetDragged(&lon, &lat)) {
+  if (XCSoarInterface::main_window.map.TargetDragged(&lon, &lat)) {
     DragTarget(lon, lat);
   }
   if (TargetModified) {
@@ -470,7 +470,7 @@ static void OnRadialData(DataField *Sender, DataField::DataAccessKind_t Mode) {
     case DataField::daChange:
       mutexTaskData.Lock();
       if (target_point>=ActiveWayPoint) {
-        if (!CALCULATED_INFO.IsInSector || (target_point != ActiveWayPoint)) {
+        if (!XCSoarInterface::Calculated().IsInSector || (target_point != ActiveWayPoint)) {
           dowrap = true;
         }
         RadialNew = Sender->GetAsFloat();
@@ -508,7 +508,7 @@ static void RefreshTargetPoint(void) {
   mutexTaskData.Lock();
   target_point = max(target_point, ActiveWayPoint);
   if (ValidTaskPoint(target_point)) {
-    main_window.map.SetTargetPan(true, target_point);
+    XCSoarInterface::main_window.map.SetTargetPan(true, target_point);
     Range = Task[target_point].AATTargetOffsetRadius;
     Radial = Task[target_point].AATTargetOffsetRadial;
   } else {
@@ -578,12 +578,12 @@ void dlgTarget(void) {
   if (!InfoBoxLayout::landscape) {
     wf = dlgLoadFromXML(CallBackTable,
                         TEXT("dlgTarget_L.xml"),
-                        main_window,
+                        XCSoarInterface::main_window,
                         TEXT("IDR_XML_TARGET_L"));
   } else {
     wf = dlgLoadFromXML(CallBackTable,
                         TEXT("dlgTarget.xml"),
-                        main_window,
+                        XCSoarInterface::main_window,
                         TEXT("IDR_XML_TARGET"));
   }
 
@@ -597,7 +597,7 @@ void dlgTarget(void) {
     WndFrame *wf2 = (WndFrame*)wf->FindByName(TEXT("frmTarget"));
     if (wf2)
     {
-      RECT MapRectBig = main_window.map.GetMapRectBig();
+      RECT MapRectBig = XCSoarInterface::main_window.map.GetMapRectBig();
       wf->SetLeft(MapRectBig.right- wf2->GetWidth());
     }
   }
@@ -640,7 +640,7 @@ void dlgTarget(void) {
 
   wf->ShowModal(true); // enable map
 
-  main_window.map.SetTargetPan(false, 0);
+  XCSoarInterface::main_window.map.SetTargetPan(false, 0);
 
   targetManipEvent.reset();
 

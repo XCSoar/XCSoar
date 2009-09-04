@@ -92,7 +92,7 @@ static void OnQnhData(DataField *Sender, DataField::DataAccessKind_t Mode){
       wp = (WndProperty*)wf->FindByName(TEXT("prpAltitude"));
       if (wp) {
 	wp->GetDataField()->
-	  SetAsFloat(Units::ToUserAltitude(GPS_INFO.BaroAltitude));
+	  SetAsFloat(Units::ToUserAltitude(XCSoarInterface::Basic().BaroAltitude));
 	wp->RefreshDisplay();
       }
     break;
@@ -106,7 +106,7 @@ static void OnAltitudeData(DataField *Sender, DataField::DataAccessKind_t Mode){
   switch(Mode){
     case DataField::daGet:
       mutexFlightData.Lock();
-      Sender->Set(Units::ToUserAltitude(GPS_INFO.BaroAltitude));
+      Sender->Set(Units::ToUserAltitude(XCSoarInterface::Basic().BaroAltitude));
       mutexFlightData.Unlock();
     break;
     case DataField::daPut:
@@ -149,9 +149,9 @@ static int OnTimerNotify(WindowControl * Sender) {
   static double BallastTimeLast = -1;
 
   if (BallastTimerActive) {
-    if (GPS_INFO.Time > BallastTimeLast) {
+    if (XCSoarInterface::Basic().Time > BallastTimeLast) {
       double BALLAST_last = BALLAST;
-      double dt = GPS_INFO.Time - BallastTimeLast;
+      double dt = XCSoarInterface::Basic().Time - BallastTimeLast;
       double percent_per_second = 1.0/max(10.0, BallastSecsToEmpty);
       BALLAST -= dt*percent_per_second;
       if (BALLAST<0) {
@@ -162,25 +162,25 @@ static int OnTimerNotify(WindowControl * Sender) {
 	SetBallast();
       }
     }
-    BallastTimeLast = GPS_INFO.Time;
+    BallastTimeLast = XCSoarInterface::Basic().Time;
   } else {
-    BallastTimeLast = GPS_INFO.Time;
+    BallastTimeLast = XCSoarInterface::Basic().Time;
   }
 */
 
   SetBallast();
 
-  static double altlast = GPS_INFO.BaroAltitude;
-  if (fabs(GPS_INFO.BaroAltitude-altlast)>1) {
+  static double altlast = XCSoarInterface::Basic().BaroAltitude;
+  if (fabs(XCSoarInterface::Basic().BaroAltitude-altlast)>1) {
     WndProperty* wp;
     wp = (WndProperty*)wf->FindByName(TEXT("prpAltitude"));
     if (wp) {
       wp->GetDataField()->
-	SetAsFloat(Units::ToUserAltitude(GPS_INFO.BaroAltitude));
+	SetAsFloat(Units::ToUserAltitude(XCSoarInterface::Basic().BaroAltitude));
       wp->RefreshDisplay();
     }
   }
-  altlast = GPS_INFO.BaroAltitude;
+  altlast = XCSoarInterface::Basic().BaroAltitude;
 
   return 0;
 }
@@ -271,7 +271,7 @@ static CallBackTableEntry_t CallBackTable[]={
 void dlgBasicSettingsShowModal(void){
   wf = dlgLoadFromXML(CallBackTable,
                       TEXT("dlgBasicSettings.xml"),
-		      main_window,
+		      XCSoarInterface::main_window,
 		      TEXT("IDR_XML_BASICSETTINGS"));
 
   WndProperty* wp;
@@ -288,7 +288,7 @@ void dlgBasicSettingsShowModal(void){
     wp = (WndProperty*)wf->FindByName(TEXT("prpAltitude"));
     if (wp) {
       wp->GetDataField()->SetAsFloat(
-	       Units::ToUserAltitude(GPS_INFO.BaroAltitude));
+	       Units::ToUserAltitude(XCSoarInterface::Basic().BaroAltitude));
       wp->GetDataField()->SetUnits(Units::GetAltitudeName());
       wp->RefreshDisplay();
     }

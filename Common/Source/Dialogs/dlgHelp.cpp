@@ -67,12 +67,12 @@ void dlgHelpShowModal(const TCHAR* Caption, const TCHAR* HelpText) {
   if (!InfoBoxLayout::landscape) {
     wf = dlgLoadFromXML(CallBackTable,
                         TEXT("dlgHelp_L.xml"),
-                        main_window,
+                        XCSoarInterface::main_window,
                         TEXT("IDR_XML_HELP_L"));
   } else {
     wf = dlgLoadFromXML(CallBackTable,
                         TEXT("dlgHelp.xml"),
-                        main_window,
+                        XCSoarInterface::main_window,
                         TEXT("IDR_XML_HELP"));
   }
   WndProperty* wp;

@@ -168,12 +168,12 @@ int dlgComboPicker(WndProperty* theProperty){
     if (!InfoBoxLayout::landscape) {
       wf = dlgLoadFromXML(CallBackTable,
                           TEXT("dlgComboPicker_L.xml"),
-                          main_window,
+                          XCSoarInterface::main_window,
                           TEXT("IDR_XML_COMBOPICKER_L"));
     } else {
       wf = dlgLoadFromXML(CallBackTable,
                           TEXT("dlgWayComboPicker.xml"),
-                          main_window,
+                          XCSoarInterface::main_window,
                           TEXT("IDR_XML_COMBOPICKER"));
     }
 

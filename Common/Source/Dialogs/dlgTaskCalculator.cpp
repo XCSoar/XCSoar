@@ -70,11 +70,11 @@ static double Range = 0;
 
 
 static void GetCruiseEfficiency(void) {
-  if ((CALCULATED_INFO.Flying) && (CALCULATED_INFO.TaskStartTime>0) &&
-      !(CALCULATED_INFO.FinalGlide &&
-	(CALCULATED_INFO.TaskAltitudeDifference>0))) {
+  if ((XCSoarInterface::Calculated().Flying) && (XCSoarInterface::Calculated().TaskStartTime>0) &&
+      !(XCSoarInterface::Calculated().FinalGlide &&
+	(XCSoarInterface::Calculated().TaskAltitudeDifference>0))) {
 
-    cruise_efficiency = EffectiveCruiseEfficiency(&GPS_INFO, &CALCULATED_INFO);
+    cruise_efficiency = EffectiveCruiseEfficiency(&XCSoarInterface::Basic(), &XCSoarInterface::Calculated());
   } else {
     cruise_efficiency = GlidePolar::GetCruiseEfficiency();
   }
@@ -89,9 +89,9 @@ static void RefreshCalculator(void) {
   // update outputs
   wp = (WndProperty*)wf->FindByName(TEXT("prpAATEst"));
   if (wp) {
-    double dd = CALCULATED_INFO.TaskTimeToGo;
-    if ((CALCULATED_INFO.TaskStartTime>0.0)&&(CALCULATED_INFO.Flying)) {
-      dd += GPS_INFO.Time-CALCULATED_INFO.TaskStartTime;
+    double dd = XCSoarInterface::Calculated().TaskTimeToGo;
+    if ((XCSoarInterface::Calculated().TaskStartTime>0.0)&&(XCSoarInterface::Calculated().Flying)) {
+      dd += XCSoarInterface::Basic().Time-XCSoarInterface::Calculated().TaskStartTime;
     }
     dd= min(24.0*60.0,dd/60.0);
     wp->GetDataField()->SetAsFloat(dd);
@@ -109,10 +109,10 @@ static void RefreshCalculator(void) {
       wp->RefreshDisplay();
   }
 
-  double d1 = (CALCULATED_INFO.TaskDistanceToGo
-	       +CALCULATED_INFO.TaskDistanceCovered);
+  double d1 = (XCSoarInterface::Calculated().TaskDistanceToGo
+	       +XCSoarInterface::Calculated().TaskDistanceCovered);
   if (AATEnabled && (d1==0.0)) {
-    d1 = CALCULATED_INFO.AATTargetDistance;
+    d1 = XCSoarInterface::Calculated().AATTargetDistance;
   }
   wp = (WndProperty*)wf->FindByName(TEXT("prpDistance"));
   if (wp) {
@@ -147,9 +147,9 @@ static void RefreshCalculator(void) {
   }
 
   double v1;
-  if (CALCULATED_INFO.TaskTimeToGo>0) {
-    v1 = CALCULATED_INFO.TaskDistanceToGo/
-      CALCULATED_INFO.TaskTimeToGo;
+  if (XCSoarInterface::Calculated().TaskTimeToGo>0) {
+    v1 = XCSoarInterface::Calculated().TaskDistanceToGo/
+      XCSoarInterface::Calculated().TaskTimeToGo;
   } else {
     v1 = 0;
   }
@@ -163,7 +163,7 @@ static void RefreshCalculator(void) {
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpSpeedAchieved"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(CALCULATED_INFO.TaskSpeed*TASKSPEEDMODIFY);
+    wp->GetDataField()->SetAsFloat(XCSoarInterface::Calculated().TaskSpeed*TASKSPEEDMODIFY);
     wp->GetDataField()->SetUnits(Units::GetTaskSpeedName());
     wp->RefreshDisplay();
   }
@@ -192,9 +192,9 @@ static void DoOptimise(void) {
     AdjustAATTargets(Range);
     RefreshTask();
     RefreshTaskStatistics();
-    double deltaT = CALCULATED_INFO.TaskTimeToGo;
-    if ((CALCULATED_INFO.TaskStartTime>0.0)&&(CALCULATED_INFO.Flying)) {
-      deltaT += GPS_INFO.Time-CALCULATED_INFO.TaskStartTime;
+    double deltaT = XCSoarInterface::Calculated().TaskTimeToGo;
+    if ((XCSoarInterface::Calculated().TaskStartTime>0.0)&&(XCSoarInterface::Calculated().Flying)) {
+      deltaT += XCSoarInterface::Basic().Time-XCSoarInterface::Calculated().TaskStartTime;
     }
     deltaT= min(24.0*60.0,deltaT/60.0)-AATTaskLength-5;
 
@@ -253,9 +253,9 @@ static void OnMacCreadyData(DataField *Sender,
   double MACCREADY;
   switch(Mode){
   case DataField::daSpecial:
-    if (CALCULATED_INFO.timeCircling>0) {
-      MACCREADY = CALCULATED_INFO.TotalHeightClimb
-	/CALCULATED_INFO.timeCircling;
+    if (XCSoarInterface::Calculated().timeCircling>0) {
+      MACCREADY = XCSoarInterface::Calculated().TotalHeightClimb
+	/XCSoarInterface::Calculated().timeCircling;
       Sender->Set(MACCREADY*LIFTMODIFY);
       GlidePolar::SetMacCready(MACCREADY);
       RefreshCalculator();
@@ -340,7 +340,7 @@ static CallBackTableEntry_t CallBackTable[]={
 void dlgTaskCalculatorShowModal(void){
   wf = dlgLoadFromXML(CallBackTable,
                       TEXT("dlgTaskCalculator.xml"),
-		      main_window,
+		      XCSoarInterface::main_window,
 		      TEXT("IDR_XML_TASKCALCULATOR"));
 
   if (!wf) return;
@@ -348,7 +348,8 @@ void dlgTaskCalculatorShowModal(void){
   double MACCREADY_enter = GlidePolar::GetMacCready();
   double CRUISE_EFFICIENCY_enter = GlidePolar::GetCruiseEfficiency();
 
-  emc = EffectiveMacCready(&GPS_INFO, &CALCULATED_INFO);
+  emc = EffectiveMacCready(&XCSoarInterface::Basic(), 
+			   &XCSoarInterface::Calculated());
 
   cruise_efficiency = CRUISE_EFFICIENCY_enter;
 

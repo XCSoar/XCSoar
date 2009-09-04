@@ -43,7 +43,8 @@ Copyright_License {
 #include "Math/Earth.hpp"
 #include "SettingsComputer.hpp"
 #include "SettingsUser.hpp"
-
+#include "GlideComputer.hpp"
+#include "Components.hpp"
 
 void MapWindow::ScanVisibility(rectObj *bounds_active) {
   // received when the SetTopoBounds determines the visibility
@@ -52,7 +53,7 @@ void MapWindow::ScanVisibility(rectObj *bounds_active) {
   // (saves from having to do it every screen redraw)
 
   mutexGlideComputer.Lock();
-  GlideComputer::snail_trail.ScanVisibility(bounds_active);
+  glide_computer.GetSnailTrail().ScanVisibility(bounds_active);
   mutexGlideComputer.Unlock();
 
   ScanVisibilityWaypoints(bounds_active);

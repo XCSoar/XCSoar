@@ -111,8 +111,6 @@ class NMEAParser {
 extern double AccelerometerZero;
 extern bool SetSystemTimeFromGPS;
 
-void FLARM_RefreshSlots(NMEA_INFO *GPS_INFO);
-
 extern bool EnableLogNMEA;
 void LogNMEA(const TCHAR* text);
 
