@@ -177,7 +177,7 @@ int FindAirspaceCircle(double Longitude,double Latitude, bool visibleonly)
 }
 
 
-BOOL CheckAirspaceAltitude(const double &Base, const double &Top)
+bool CheckAirspaceAltitude(const double &Base, const double &Top)
 {
   double alt;
   if (XCSoarInterface::Basic().BaroAltitudeAvailable) {
@@ -188,34 +188,34 @@ BOOL CheckAirspaceAltitude(const double &Base, const double &Top)
 
   switch (AltitudeMode)
     {
-    case ALLON : return TRUE;
+    case ALLON : return true;
 
     case CLIP :
       if(Base < ClipAltitude)
-	return TRUE;
+	return true;
       else
-	return FALSE;
+	return false;
 
     case AUTO:
       if( ( alt > (Base - AltWarningMargin) )
 	  && ( alt < (Top + AltWarningMargin) ))
-	return TRUE;
+	return true;
       else
-	return FALSE;
+	return false;
 
     case ALLBELOW:
       if(  (Base - AltWarningMargin) < alt )
-	return  TRUE;
+	return  true;
       else
-	return FALSE;
+	return false;
     case INSIDE:
       if( ( alt >= (Base) ) && ( alt < (Top) ))
-	return TRUE;
+	return true;
       else
-        return FALSE;
-    case ALLOFF : return FALSE;
+        return false;
+    case ALLOFF : return false;
     }
-  return TRUE;
+  return true;
 }
 
 double airspace_QNH;
@@ -437,7 +437,7 @@ int FindNearestAirspaceCircle(double longitude, double latitude,
     if (height) {
       altok = ((*height > basealt) && (*height < topalt));
     } else {
-      altok = CheckAirspaceAltitude(basealt, topalt)==TRUE;
+      altok = CheckAirspaceAltitude(basealt, topalt)==true;
     }
     if(altok) {
 
@@ -570,7 +570,7 @@ FindNearestAirspaceArea(const MapWindowProjection& map_projection,
 
     bool altok;
     if (!height) {
-      altok = CheckAirspaceAltitude(basealt, topalt)==TRUE;
+      altok = CheckAirspaceAltitude(basealt, topalt)==true;
     } else {
       altok = ((*height < topalt) && (*height > basealt));
     }
