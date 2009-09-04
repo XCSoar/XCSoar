@@ -39,7 +39,6 @@ Copyright_License {
 #define VEGAVOICE_H
 
 #include "NMEA/Info.h"
-#include "StdAfx.h"
 #include <windows.h>
 #include "Calculations.h"
 

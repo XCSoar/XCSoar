@@ -47,7 +47,7 @@ Copyright_License {
 #include "Math/Earth.hpp"
 #include "McReady.h"
 #include "Screen/Graphics.hpp"
-
+#include "options.h" /* for IBLSCALE() */
 
 void MapWindow::CalculateScreenPositionsThermalSources() {
   /* JMW incomplete/illegal

@@ -37,7 +37,6 @@ Copyright_License {
 #ifndef BUTTON_LABEL_H
 #define BUTTON_LABEL_H
 
-#include "StdAfx.h"
 #include "Sizes.h"
 #include "Screen/TextWindow.hpp"
 #include "Interface.hpp"

@@ -50,6 +50,8 @@ Copyright_License {
 #include "Math/Screen.hpp"
 #include "Math/Earth.hpp"
 #include "Compatibility/gdi.h"
+#include "options.h" /* for IBLSCALE() */
+
 #include <math.h>
 
 void

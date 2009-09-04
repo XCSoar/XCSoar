@@ -38,7 +38,6 @@ Copyright_License {
 #ifndef MESSAGE_H
 #define MESSAGE_H
 
-#include "StdAfx.h"
 #include "Interface.hpp"
 
 #define MAXMESSAGES 20

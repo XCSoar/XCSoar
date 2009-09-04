@@ -51,6 +51,8 @@ Copyright_License {
 #include "SettingsTask.hpp"
 #include "SettingsUser.hpp"
 #include "SettingsComputer.hpp"
+#include "options.h" /* for IBLSCALE() */
+
 #include <stdlib.h>
 
 #include "Blackboard.hpp"

@@ -67,6 +67,7 @@ Copyright_License {
 #include "MainWindow.hpp"
 #include "MapWindow.h"
 #include "Defines.h"
+#include "options.h" /* for IBLSCALE() */
 
 #include "XCSoar.h"
 

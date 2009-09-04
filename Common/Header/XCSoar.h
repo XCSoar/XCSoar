@@ -38,7 +38,6 @@ Copyright_License {
 #if !defined(AFX_XCSOAR_H__695AAC30_F401_4CFF_9BD9_FE62A2A2D0D2__INCLUDED_)
 #define AFX_XCSOAR_H__695AAC30_F401_4CFF_9BD9_FE62A2A2D0D2__INCLUDED_
 
-#include "StdAfx.h"
 // #include "options.h" already in StdAfx.h
 #include "Defines.h"
 #include "resource.h"

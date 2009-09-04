@@ -57,6 +57,7 @@ Copyright_License {
 #include "Units.hpp"
 #include "Components.hpp"
 #include "Interface.hpp"
+#include "options.h" /* for IBLSCALE() */
 
 void FlightStatistics::Reset() {
   ThermalAverage.Reset();

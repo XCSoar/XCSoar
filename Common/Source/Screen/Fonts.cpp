@@ -44,6 +44,7 @@ Copyright_License {
 #include "Asset.hpp"
 #include "Screen/VirtualCanvas.hpp"
 #include "SettingsUser.hpp"
+#include "options.h" /* for IBLSCALE() */
 
 // Display Gobals
 Font InfoWindowFont;

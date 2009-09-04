@@ -50,6 +50,7 @@ Copyright_License {
 #include "Screen/LabelBlock.hpp"
 #include "MapWindow.h"
 #include "resource.h"
+#include "options.h" /* for IBLSCALE() */
 
 #define NUMSNAILRAMP 6
 

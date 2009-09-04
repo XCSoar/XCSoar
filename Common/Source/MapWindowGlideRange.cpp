@@ -44,7 +44,7 @@ Copyright_License {
 #include "Screen/Util.hpp"
 #include "Screen/Graphics.hpp"
 #include "Compatibility/gdi.h"
-
+#include "options.h" /* for IBLSCALE() */
 
 void MapWindow::CalculateScreenPositionsGroundline(void) {
   if (FinalGlideTerrain) {

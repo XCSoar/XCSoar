@@ -51,6 +51,7 @@ Copyright_License {
 #include "LocalPath.hpp"
 #include "Components.hpp"
 #include "Calculations.h" // TODO danger! ClearAirspaceWarnings
+#include "options.h"
 
 #include <windows.h>
 #include <commctrl.h>

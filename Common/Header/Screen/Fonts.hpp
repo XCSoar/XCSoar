@@ -37,7 +37,6 @@ Copyright_License {
 #ifndef XCSOAR_FONTS_HPP
 #define XCSOAR_FONTS_HPP
 
-#include "StdAfx.h"
 #include "Screen/Font.hpp"
 #include "Screen/Canvas.hpp"
 

@@ -48,6 +48,7 @@ Copyright_License {
 #include "MainWindow.hpp"
 #include "Dialogs/dlgTools.h"
 #include "Compatibility/vk.h"
+#include "options.h" /* for IBLSCALE() */
 
 #include <assert.h>
 #include <stdlib.h>

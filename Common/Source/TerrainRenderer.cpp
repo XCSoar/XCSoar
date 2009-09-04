@@ -54,6 +54,8 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "MapWindowProjection.hpp"
 #include "Components.hpp"
+#include "options.h" /* for IBLSCALE() */
+
 #include <assert.h>
 
 ///////////////////////////////////////////////////

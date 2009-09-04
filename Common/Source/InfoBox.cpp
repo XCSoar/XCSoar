@@ -49,6 +49,7 @@ Copyright_License {
 #include "Screen/BitmapCanvas.hpp"
 #include "SettingsUser.hpp"
 #include "Defines.h"
+#include "options.h" /* for IBLSCALE() */
 
 static Color fgColor = RGB(0x0,0x0,0x0);
 static Color bkColor = RGB(0xff,0xff,0xff);

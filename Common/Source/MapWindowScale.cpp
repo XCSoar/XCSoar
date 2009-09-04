@@ -49,7 +49,7 @@ Copyright_License {
 #include "Screen/Fonts.hpp"
 #include "McReady.h"
 #include "Components.hpp"
-
+#include "options.h" /* for IBLSCALE() */
 #include "RasterTerrain.h"
 #include "RasterWeather.h"
 #include "Logger.h"

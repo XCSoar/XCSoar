@@ -46,6 +46,7 @@ Copyright_License {
 #include "SettingsComputer.hpp"
 #include "InputEvents.h"
 #include "UtilsProfile.hpp"
+#include "options.h" /* for IBLSCALE() */
 #include <stdlib.h>
 #include "WayPoint.hpp"
 

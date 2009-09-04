@@ -38,11 +38,13 @@ Copyright_License {
 #if !defined(XCSOAR_AIRSPACE_H)
 #define XCSOAR_AIRSPACE_H
 
-#include "StdAfx.h"
 #include "Sizes.h"
 #include "SettingsAirspace.hpp"
 #include "Screen/shapelib/mapshape.h"
 
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+#include <tchar.h>
 
 typedef struct _AIRSPACE_ACK
 {

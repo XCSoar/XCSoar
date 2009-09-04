@@ -49,6 +49,7 @@ Copyright_License {
 #include "ExpandMacros.hpp"
 #include "Interface.hpp"
 #include "Compatibility/string.h"
+#include "options.h" /* for IBLSCALE() */
 
 #ifdef PNA
 #include "Asset.hpp"

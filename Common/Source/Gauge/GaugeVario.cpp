@@ -53,7 +53,7 @@ Copyright_License {
 #include "Screen/ContainerWindow.hpp"
 #include "Math/Geometry.hpp"
 #include "McReady.h"
-
+#include "options.h" /* for IBLSCALE() */
 #include "SettingsUser.hpp"
 #include "SettingsComputer.hpp"
 

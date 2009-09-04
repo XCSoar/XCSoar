@@ -57,7 +57,7 @@ Copyright_License {
 #include "XCSoar.h"
 #include "Math/FastMath.h"
 #include <stdlib.h>
-
+#include <windef.h> /* for min() */
 
 WindMeasurementList::WindMeasurementList(){
   nummeasurementlist = 0;

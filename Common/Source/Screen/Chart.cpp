@@ -42,7 +42,7 @@ Copyright_License {
 #include "Language.hpp"
 #include "Math/FastMath.h"
 #include "Math/Geometry.hpp"
-
+#include "options.h" /* for IBLSCALE() */
 
 #define BORDER_X 24
 #define BORDER_Y 19
