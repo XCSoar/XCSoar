@@ -37,13 +37,12 @@ Copyright_License {
 #if !defined(XCSOAR_UTILS_TEXT_H)
 #define XCSOAR_UTILS_TEXT_H
 
-#define WIN32_LEAN_AND_MEAN		// Exclude rarely-used stuff from Windows headers
-#include <windows.h>
+#include <tchar.h>
 #include <stdio.h>
 #include <zzip/lib.h>
 
-BOOL ReadString(ZZIP_FILE* zFile, int Max, TCHAR *String);
-BOOL ReadStringX(FILE *fp, int Max, TCHAR *String);
+bool ReadString(ZZIP_FILE* zFile, int Max, TCHAR *String);
+bool ReadStringX(FILE *fp, int Max, TCHAR *String);
 
 double StrToDouble(const TCHAR *Source, const TCHAR **Stop);
 void PExtractParameter(const TCHAR *Source, TCHAR *Destination,
@@ -57,8 +56,8 @@ TCHAR *strtok_r(TCHAR *s, const TCHAR *delim, TCHAR **lasts);
 // Parse string (new lines etc) and malloc the string
 TCHAR* StringMallocParse(const TCHAR* old_string);
 
-void ConvertTToC(CHAR* pszDest, const TCHAR* pszSrc);
-void ConvertCToT(TCHAR* pszDest, const CHAR* pszSrc);
+void ConvertTToC(char *pszDest, const TCHAR *pszSrc);
+void ConvertCToT(TCHAR *pszDest, const char *pszSrc);
 
 int TextToLineOffsets(const TCHAR *text, int *LineOffsets, int maxLines);
 double HexStrToDouble(TCHAR *Source, TCHAR **Stop);

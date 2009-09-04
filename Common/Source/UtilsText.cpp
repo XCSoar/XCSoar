@@ -41,6 +41,8 @@ Copyright_License {
 
 #include <assert.h>
 #include <stdlib.h>
+#include <string.h>
+#include <windef.h>
 
 void PExtractParameter(const TCHAR *Source, TCHAR *Destination,
                        int DesiredFieldNumber)
@@ -77,7 +79,7 @@ void PExtractParameter(const TCHAR *Source, TCHAR *Destination,
 
 // JMW added support for zzip files
 
-BOOL ReadString(ZZIP_FILE *zFile, int Max, TCHAR *String)
+bool ReadString(ZZIP_FILE *zFile, int Max, TCHAR *String)
 {
   char sTmp[READLINE_LENGTH+1];
   char FileBuffer[READLINE_LENGTH+1];
@@ -91,15 +93,15 @@ BOOL ReadString(ZZIP_FILE *zFile, int Max, TCHAR *String)
   assert(Max<sizeof(sTmp));
 
   if (Max >= sizeof(sTmp))
-    return(FALSE);
+    return false;
   if (!zFile)
-    return(FALSE);
+    return false;
 
   dwFilePos = zzip_tell(zFile);
 
   dwNumBytesRead = zzip_fread(FileBuffer, 1, Max, zFile);
   if (dwNumBytesRead <= 0)
-    return(FALSE);
+    return false;
 
   int i = 0;
   int j = 0;
@@ -136,7 +138,7 @@ BOOL ReadString(ZZIP_FILE *zFile, int Max, TCHAR *String)
 // String: pointer to string buffer
 // return: True if at least one byte was read from file
 //         False Max > MAX_PATH or EOF or read error
-BOOL ReadString(HANDLE hFile, int Max, TCHAR *String)
+bool ReadString(HANDLE hFile, int Max, TCHAR *String)
 {
   char sTmp[READLINE_LENGTH+1];
   DWORD dwNumBytesRead=0;
@@ -150,16 +152,16 @@ BOOL ReadString(HANDLE hFile, int Max, TCHAR *String)
   assert(Max<sizeof(sTmp));
 
   if (Max >= sizeof(sTmp))
-    return(FALSE);
+    return false;
 
   dwFilePos = SetFilePointer(hFile, 0, NULL, FILE_CURRENT);
 
   if (hFile == INVALID_HANDLE_VALUE)
-    return(FALSE);
+    return false;
 
   if (ReadFile(hFile, FileBuffer, sizeof(FileBuffer),
 	       &dwNumBytesRead, (OVERLAPPED *)NULL) == 0)
-    return(FALSE);
+    return false;
 
   int i = 0;
   int j = 0;
@@ -191,7 +193,7 @@ BOOL ReadString(HANDLE hFile, int Max, TCHAR *String)
 }
 #endif /* ENABLE_UNUSED_CODE */
 
-BOOL ReadStringX(FILE *fp, int Max, TCHAR *String){
+bool ReadStringX(FILE *fp, int Max, TCHAR *String){
   if (fp == NULL || Max < 1 || String == NULL) {
     if (String) {
       String[0]= '\0';
@@ -208,11 +210,10 @@ BOOL ReadStringX(FILE *fp, int Max, TCHAR *String){
       pWC--;
     }
 
-    return (1);
+    return true;
   }
 
-  return (0);
-
+  return false;
 }
 
 
@@ -537,13 +538,13 @@ StringMallocParse(const TCHAR* old_string)
   return new_string;
 }
 
-void ConvertTToC(CHAR* pszDest, const TCHAR* pszSrc)
+void ConvertTToC(char *pszDest, const TCHAR *pszSrc)
 {
 	for(unsigned int i = 0; i < _tcslen(pszSrc); i++)
-		pszDest[i] = (CHAR) pszSrc[i];
+		pszDest[i] = (char) pszSrc[i];
 }
 
-void ConvertCToT(TCHAR* pszDest, const CHAR* pszSrc)
+void ConvertCToT(TCHAR *pszDest, const char *pszSrc)
 {
 	for(unsigned int i = 0; i < strlen(pszSrc); i++)
 		pszDest[i] = (TCHAR) pszSrc[i];
