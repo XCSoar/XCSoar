@@ -44,6 +44,16 @@ Copyright_License {
 #include <string.h>
 #include <windef.h>
 
+void StringChomp(TCHAR *p)
+{
+  size_t length = _tcslen(p);
+
+  while (length > 0 && _istspace(p[length - 1]))
+    --length;
+
+  p[length] = 0;
+}
+
 void PExtractParameter(const TCHAR *Source, TCHAR *Destination,
                        int DesiredFieldNumber)
 {
@@ -202,14 +212,7 @@ bool ReadStringX(FILE *fp, int Max, TCHAR *String){
   }
 
   if (_fgetts(String, Max, fp) != NULL){     // 20060512/sgi change 200 to max
-    TCHAR *pWC = &String[max(0,_tcslen(String)-1)];
-    // 20060512/sgi change add -1 to set pWC at the end of the string
-
-    while (pWC > String && (*pWC == '\r' || *pWC == '\n')){
-      *pWC = '\0';
-      pWC--;
-    }
-
+    StringChomp(String);
     return true;
   }
 

@@ -41,6 +41,11 @@ Copyright_License {
 #include <stdio.h>
 #include <zzip/lib.h>
 
+/**
+ * Strips trailing whitespace.
+ */
+void StringChomp(TCHAR *p);
+
 bool ReadString(ZZIP_FILE* zFile, int Max, TCHAR *String);
 bool ReadStringX(FILE *fp, int Max, TCHAR *String);
 
