@@ -320,6 +320,7 @@ void MapWindow::DrawThreadInitialise(void) {
 
   get_canvas().copy(draw_canvas);
 
+  ToggleFullScreenStart();
 }
 
 

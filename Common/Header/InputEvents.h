@@ -41,12 +41,13 @@ Copyright_License {
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
+#include "Interface.hpp"
 
 typedef void (*pt2Event)(const TCHAR *);
 
 HINSTANCE _loadDLL(TCHAR *name);
 
-class InputEvents {
+class InputEvents: public XCSoarInterface {
  private:
   static int MenuTimeOut;
  public:

@@ -39,6 +39,7 @@ Copyright_License {
 #define MESSAGE_H
 
 #include "StdAfx.h"
+#include "Interface.hpp"
 
 #define MAXMESSAGES 20
 
@@ -51,7 +52,7 @@ struct singleMessage {
 };
 
 
-class Message {
+class Message: public CommonInterface {
  public:
 
   enum {

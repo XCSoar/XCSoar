@@ -38,7 +38,6 @@ Copyright_License {
 #include "InfoBoxEvents.h"
 #include "Protection.hpp"
 #include "Device/Parser.h"
-#include "Blackboard.hpp"
 #include "Settings.hpp"
 #include "SettingsComputer.hpp"
 #include "SettingsTask.hpp"
@@ -64,6 +63,7 @@ Copyright_License {
 //     1 up
 //     0 enter
 
+// TODO: make a proper class
 
 void	AirspeedProcessing(int UpDown)
 {

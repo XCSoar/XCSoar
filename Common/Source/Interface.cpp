@@ -50,9 +50,9 @@ static bool ShutdownRequested = false;
 
 ///
 
-InterfaceBlackboard XCSoarInterface::blackboard;
-
-///
+InterfaceBlackboard CommonInterface::blackboard;
+HINSTANCE CommonInterface::hInst; // The current instance
+MainWindow CommonInterface::main_window;
 
 bool XCSoarInterface::InterfaceTimeoutZero(void) {
   bool retval;

@@ -44,14 +44,31 @@ Copyright_License {
 
 class MainWindow;
 
-class XCSoarInterface {
+class CommonInterface {
 public:
-  static bool Debounce();
   // instance of main program
   static HINSTANCE hInst;
-
 // window.. make this protected TODO so have to subclass to get access
   static MainWindow main_window;
+
+  // TODO: make this protected
+  static const NMEA_INFO& Basic() { return blackboard.Basic(); }
+  static const DERIVED_INFO& Calculated() { return blackboard.Calculated(); }
+
+  static void ReadBlackboardBasic(const NMEA_INFO& nmea_info) {
+    blackboard.ReadBlackboardBasic(nmea_info);
+  }
+  static void ReadBlackboardCalculated(const DERIVED_INFO& derived_info) {
+    blackboard.ReadBlackboardCalculated(derived_info);
+  }
+private:
+  static InterfaceBlackboard blackboard;
+};
+
+
+class XCSoarInterface: public CommonInterface {
+public:
+  static bool Debounce();
 
   static bool InterfaceTimeoutZero(void);
   static void InterfaceTimeoutReset(void);
@@ -62,21 +79,9 @@ public:
   static void AfterStartup();
   static void Shutdown();
   static bool Startup (HINSTANCE, LPTSTR lpCmdLine);
-
-  // TODO: make this protected
-  static const NMEA_INFO& Basic() { return blackboard.Basic(); }
-  static const DERIVED_INFO& Calculated() { return blackboard.Calculated(); }
-  static void ReadBlackboardBasic(const NMEA_INFO& nmea_info) {
-    blackboard.ReadBlackboardBasic(nmea_info);
-  }
-  static void ReadBlackboardCalculated(const DERIVED_INFO& derived_info) {
-    blackboard.ReadBlackboardCalculated(derived_info);
-  }
 private:
   static void PreloadInitialisation(bool ask);
   static void StartupInfo();
-private:
-  static InterfaceBlackboard blackboard;
 };
 
 #endif

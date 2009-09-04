@@ -66,21 +66,21 @@ void FormatterTime::SecsToDisplayTime(int d) {
 void FormatterTime::AssignValue(int i) {
   switch (i) {
   case 9:
-    SecsToDisplayTime((int)XCSoarInterface::Calculated().LastThermalTime);
+    SecsToDisplayTime((int)Calculated().LastThermalTime);
     break;
   case 36:
-    SecsToDisplayTime((int)XCSoarInterface::Calculated().FlightTime);
+    SecsToDisplayTime((int)Calculated().FlightTime);
     break;
   case 39:
-    SecsToDisplayTime(DetectCurrentTime(&XCSoarInterface::Basic()));
+    SecsToDisplayTime(DetectCurrentTime(&Basic()));
     break;
   case 40:
-    SecsToDisplayTime((int)(XCSoarInterface::Basic().Time));
+    SecsToDisplayTime((int)(Basic().Time));
     break;
   case 46:
-    SecsToDisplayTime((int)(XCSoarInterface::Calculated().LegTimeToGo+DetectCurrentTime(&XCSoarInterface::Basic())));
+    SecsToDisplayTime((int)(Calculated().LegTimeToGo+DetectCurrentTime(&Basic())));
     Valid = ValidTaskPoint(ActiveWayPoint) &&
-      (XCSoarInterface::Calculated().LegTimeToGo< 0.9*ERROR_TIME);
+      (Calculated().LegTimeToGo< 0.9*ERROR_TIME);
     break;
   default:
     break;
@@ -91,16 +91,16 @@ void FormatterTime::AssignValue(int i) {
 void FormatterAATTime::AssignValue(int i) {
   double dd;
   if (AATEnabled && ValidTaskPoint(ActiveWayPoint)) {
-    dd = XCSoarInterface::Calculated().TaskTimeToGo;
-    if ((XCSoarInterface::Calculated().TaskStartTime>0.0) && (XCSoarInterface::Calculated().Flying)
+    dd = Calculated().TaskTimeToGo;
+    if ((Calculated().TaskStartTime>0.0) && (Calculated().Flying)
         &&(ActiveWayPoint>0)) {
-      dd += XCSoarInterface::Basic().Time-XCSoarInterface::Calculated().TaskStartTime;
+      dd += Basic().Time-Calculated().TaskStartTime;
     }
     dd= max(0,min(24.0*3600.0,dd))-AATTaskLength*60;
     if (dd<0) {
       status = 1; // red
     } else {
-      if (XCSoarInterface::Calculated().TaskTimeToGoTurningNow > (AATTaskLength+5)*60) {
+      if (Calculated().TaskTimeToGoTurningNow > (AATTaskLength+5)*60) {
         status = 2; // blue
       } else {
         status = 0;  // black
@@ -113,24 +113,24 @@ void FormatterAATTime::AssignValue(int i) {
 
   switch (i) {
   case 27:
-    SecsToDisplayTime((int)XCSoarInterface::Calculated().AATTimeToGo);
+    SecsToDisplayTime((int)Calculated().AATTimeToGo);
     Valid = (ValidTaskPoint(ActiveWayPoint) && AATEnabled
-	     && (XCSoarInterface::Calculated().AATTimeToGo< 0.9*ERROR_TIME));
+	     && (Calculated().AATTimeToGo< 0.9*ERROR_TIME));
     break;
   case 41:
-    SecsToDisplayTime((int)(XCSoarInterface::Calculated().TaskTimeToGo));
+    SecsToDisplayTime((int)(Calculated().TaskTimeToGo));
     Valid = ValidTaskPoint(ActiveWayPoint)
-      && (XCSoarInterface::Calculated().TaskTimeToGo< 0.9*ERROR_TIME);
+      && (Calculated().TaskTimeToGo< 0.9*ERROR_TIME);
     break;
   case 42:
-    SecsToDisplayTime((int)(XCSoarInterface::Calculated().LegTimeToGo));
+    SecsToDisplayTime((int)(Calculated().LegTimeToGo));
     Valid = ValidTaskPoint(ActiveWayPoint)
-      && (XCSoarInterface::Calculated().LegTimeToGo< 0.9*ERROR_TIME);
+      && (Calculated().LegTimeToGo< 0.9*ERROR_TIME);
     break;
   case 45:
-    SecsToDisplayTime((int)(XCSoarInterface::Calculated().TaskTimeToGo+DetectCurrentTime(&XCSoarInterface::Basic())));
+    SecsToDisplayTime((int)(Calculated().TaskTimeToGo+DetectCurrentTime(&Basic())));
     Valid = ValidTaskPoint(ActiveWayPoint)
-      && (XCSoarInterface::Calculated().TaskTimeToGo< 0.9*ERROR_TIME);
+      && (Calculated().TaskTimeToGo< 0.9*ERROR_TIME);
     break;
   case 62:
     if (AATEnabled && ValidTaskPoint(ActiveWayPoint)) {

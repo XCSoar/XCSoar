@@ -93,72 +93,72 @@ void InfoBoxFormatter::RenderInvalid(int *color) {
 void InfoBoxFormatter::AssignValue(int i) {
   switch (i) {
   case 0:
-    Value = ALTITUDEMODIFY*XCSoarInterface::Basic().Altitude;
+    Value = ALTITUDEMODIFY*Basic().Altitude;
     break;
   case 1:
-    Value = ALTITUDEMODIFY*XCSoarInterface::Calculated().AltitudeAGL  ;
-    Valid = XCSoarInterface::Calculated().TerrainValid;
+    Value = ALTITUDEMODIFY*Calculated().AltitudeAGL  ;
+    Valid = Calculated().TerrainValid;
     break;
   case 2:
-    Value = LIFTMODIFY*XCSoarInterface::Calculated().Average30s;
+    Value = LIFTMODIFY*Calculated().Average30s;
     break;
   case 3:
-    Value = XCSoarInterface::Calculated().WaypointBearing;
-    Valid = XCSoarInterface::Calculated().WaypointDistance > 10.0;
+    Value = Calculated().WaypointBearing;
+    Valid = Calculated().WaypointDistance > 10.0;
     break;
   case 4:
-    if (XCSoarInterface::Calculated().LD== 999) {
+    if (Calculated().LD== 999) {
       Valid = false;
     } else {
       Valid = true;
-      Value = XCSoarInterface::Calculated().LD;
+      Value = Calculated().LD;
     }
     break;
   case 5:
-    if (XCSoarInterface::Calculated().CruiseLD== 999) {
+    if (Calculated().CruiseLD== 999) {
       Valid = false;
     } else {
       Valid = true;
-      Value = XCSoarInterface::Calculated().CruiseLD;
+      Value = Calculated().CruiseLD;
     }
     break;
   case 6:
-    Value = SPEEDMODIFY*XCSoarInterface::Basic().Speed;
+    Value = SPEEDMODIFY*Basic().Speed;
     break;
   case 7:
-    Value = LIFTMODIFY*XCSoarInterface::Calculated().LastThermalAverage;
+    Value = LIFTMODIFY*Calculated().LastThermalAverage;
     break;
   case 8:
-    Value = ALTITUDEMODIFY*XCSoarInterface::Calculated().LastThermalGain;
+    Value = ALTITUDEMODIFY*Calculated().LastThermalGain;
     break;
   case 10:
     Value = iround(LIFTMODIFY*GlidePolar::GetMacCready()*10)/10.0;
     break;
   case 11:
-    Value = DISTANCEMODIFY*XCSoarInterface::Calculated().WaypointDistance;
+    Value = DISTANCEMODIFY*Calculated().WaypointDistance;
     Valid = ValidTaskPoint(ActiveWayPoint);
     break;
   case 12:
-    Value = ALTITUDEMODIFY*XCSoarInterface::Calculated().NextAltitudeDifference;
+    Value = ALTITUDEMODIFY*Calculated().NextAltitudeDifference;
     Valid = ValidTaskPoint(ActiveWayPoint);
     break;
   case 13:
-    Value = ALTITUDEMODIFY*XCSoarInterface::Calculated().NextAltitudeRequired;
+    Value = ALTITUDEMODIFY*Calculated().NextAltitudeRequired;
     Valid = ValidTaskPoint(ActiveWayPoint);
     break;
   case 14:
     Value = 0; // Next Waypoint Text
     break;
   case 15:
-    Value = ALTITUDEMODIFY*XCSoarInterface::Calculated().TaskAltitudeDifference;
+    Value = ALTITUDEMODIFY*Calculated().TaskAltitudeDifference;
     Valid = ValidTaskPoint(ActiveWayPoint);
     break;
   case 16:
-    Value = ALTITUDEMODIFY*XCSoarInterface::Calculated().TaskAltitudeRequired;
+    Value = ALTITUDEMODIFY*Calculated().TaskAltitudeRequired;
     Valid = ValidTaskPoint(ActiveWayPoint);
     break;
   case 17:
-    Value = TASKSPEEDMODIFY*XCSoarInterface::Calculated().TaskSpeed;
+    Value = TASKSPEEDMODIFY*Calculated().TaskSpeed;
     if (ActiveWayPoint>=1) {
       Valid = ValidTaskPoint(ActiveWayPoint);
     } else {
@@ -166,146 +166,146 @@ void InfoBoxFormatter::AssignValue(int i) {
     }
     break;
   case 18:
-    if (XCSoarInterface::Calculated().ValidFinish) {
-      Value = DISTANCEMODIFY*XCSoarInterface::Calculated().WaypointDistance;
+    if (Calculated().ValidFinish) {
+      Value = DISTANCEMODIFY*Calculated().WaypointDistance;
     } else {
-      Value = DISTANCEMODIFY*XCSoarInterface::Calculated().TaskDistanceToGo;
+      Value = DISTANCEMODIFY*Calculated().TaskDistanceToGo;
     }
     Valid = ValidTaskPoint(ActiveWayPoint);
     break;
   case 19:
-    if (XCSoarInterface::Calculated().LDFinish== 999) {
+    if (Calculated().LDFinish== 999) {
       Valid = false;
     } else {
       Valid = ValidTaskPoint(ActiveWayPoint);
-      if (XCSoarInterface::Calculated().ValidFinish) {
+      if (Calculated().ValidFinish) {
         Value = 0;
       } else {
-        Value = XCSoarInterface::Calculated().LDFinish;
+        Value = Calculated().LDFinish;
       }
     }
     break;
   case 20:
-    Value = ALTITUDEMODIFY*XCSoarInterface::Calculated().TerrainAlt ;
-    Valid = XCSoarInterface::Calculated().TerrainValid;
+    Value = ALTITUDEMODIFY*Calculated().TerrainAlt ;
+    Valid = Calculated().TerrainValid;
     break;
   case 21:
-    Value = LIFTMODIFY*XCSoarInterface::Calculated().AverageThermal;
+    Value = LIFTMODIFY*Calculated().AverageThermal;
     break;
   case 22:
-    Value = ALTITUDEMODIFY*XCSoarInterface::Calculated().ThermalGain;
+    Value = ALTITUDEMODIFY*Calculated().ThermalGain;
     break;
   case 23:
-    Value = XCSoarInterface::Basic().TrackBearing;
+    Value = Basic().TrackBearing;
     break;
   case 24:
-    if (XCSoarInterface::Basic().VarioAvailable) {
-      Value = LIFTMODIFY*XCSoarInterface::Basic().Vario;
+    if (Basic().VarioAvailable) {
+      Value = LIFTMODIFY*Basic().Vario;
     } else {
-      Value = LIFTMODIFY*XCSoarInterface::Calculated().Vario;
+      Value = LIFTMODIFY*Calculated().Vario;
     }
     break;
   case 25:
-    Value = SPEEDMODIFY*XCSoarInterface::Calculated().WindSpeed;
+    Value = SPEEDMODIFY*Calculated().WindSpeed;
     break;
   case 26:
-    Value = XCSoarInterface::Calculated().WindBearing;
+    Value = Calculated().WindBearing;
     break;
   case 28:
-    Value = DISTANCEMODIFY*XCSoarInterface::Calculated().AATMaxDistance ;
+    Value = DISTANCEMODIFY*Calculated().AATMaxDistance ;
     Valid = ValidTaskPoint(ActiveWayPoint) && AATEnabled;
     break;
   case 29:
-    Value = DISTANCEMODIFY*XCSoarInterface::Calculated().AATMinDistance ;
+    Value = DISTANCEMODIFY*Calculated().AATMinDistance ;
     Valid = ValidTaskPoint(ActiveWayPoint) && AATEnabled;
     break;
   case 30:
-    Value = TASKSPEEDMODIFY*XCSoarInterface::Calculated().AATMaxSpeed;
+    Value = TASKSPEEDMODIFY*Calculated().AATMaxSpeed;
     Valid = ValidTaskPoint(ActiveWayPoint) && AATEnabled;
-    if (XCSoarInterface::Calculated().AATTimeToGo<1) {
+    if (Calculated().AATTimeToGo<1) {
       Valid = false;
     }
     break;
   case 31:
-    Value = TASKSPEEDMODIFY*XCSoarInterface::Calculated().AATMinSpeed;
+    Value = TASKSPEEDMODIFY*Calculated().AATMinSpeed;
     Valid = ValidTaskPoint(ActiveWayPoint) && AATEnabled;
-    if (XCSoarInterface::Calculated().AATTimeToGo<1) {
+    if (Calculated().AATTimeToGo<1) {
       Valid = false;
     }
     break;
   case 32:
-    Valid = XCSoarInterface::Basic().AirspeedAvailable;
-    Value = SPEEDMODIFY*XCSoarInterface::Basic().IndicatedAirspeed;
+    Valid = Basic().AirspeedAvailable;
+    Value = SPEEDMODIFY*Basic().IndicatedAirspeed;
     break;
   case 33:
-    Valid = XCSoarInterface::Basic().BaroAltitudeAvailable;
-    Value = ALTITUDEMODIFY*XCSoarInterface::Basic().BaroAltitude;
+    Valid = Basic().BaroAltitudeAvailable;
+    Value = ALTITUDEMODIFY*Basic().BaroAltitude;
     break;
   case 34:
-    Value = SPEEDMODIFY*XCSoarInterface::Calculated().VMacCready;
+    Value = SPEEDMODIFY*Calculated().VMacCready;
     break;
   case 35:
-    Value = XCSoarInterface::Calculated().PercentCircling;
+    Value = Calculated().PercentCircling;
     break;
   case 37:
-    Valid = XCSoarInterface::Basic().AccelerationAvailable;
-    Value = XCSoarInterface::Basic().Gload;
+    Valid = Basic().AccelerationAvailable;
+    Value = Basic().Gload;
     break;
   case 38:
-    if (XCSoarInterface::Calculated().LDNext== 999) {
+    if (Calculated().LDNext== 999) {
       Valid = false;
     } else {
       Valid = ValidTaskPoint(ActiveWayPoint);
-      Value = XCSoarInterface::Calculated().LDNext;
+      Value = Calculated().LDNext;
     }
     break;
   case 43:
-    //    Valid = XCSoarInterface::Basic().AirspeedAvailable;
-    Value = XCSoarInterface::Calculated().VOpt*SPEEDMODIFY;
+    //    Valid = Basic().AirspeedAvailable;
+    Value = Calculated().VOpt*SPEEDMODIFY;
     break;
   case 44:
-    //    Valid = XCSoarInterface::Basic().AirspeedAvailable;
-    Value = XCSoarInterface::Calculated().NettoVario*LIFTMODIFY;
+    //    Valid = Basic().AirspeedAvailable;
+    Value = Calculated().NettoVario*LIFTMODIFY;
     break;
   case 48:
-    Value = XCSoarInterface::Basic().OutsideAirTemperature;
+    Value = Basic().OutsideAirTemperature;
     break;
   case 49:
-    Value = XCSoarInterface::Basic().RelativeHumidity;
+    Value = Basic().RelativeHumidity;
     break;
   case 50:
     Value = CuSonde::maxGroundTemperature;
     break;
   case 51:
-    Value = DISTANCEMODIFY*XCSoarInterface::Calculated().AATTargetDistance ;
+    Value = DISTANCEMODIFY*Calculated().AATTargetDistance ;
     Valid = ValidTaskPoint(ActiveWayPoint) && AATEnabled;
     break;
   case 52:
-    Value = TASKSPEEDMODIFY*XCSoarInterface::Calculated().AATTargetSpeed;
+    Value = TASKSPEEDMODIFY*Calculated().AATTargetSpeed;
     Valid = ValidTaskPoint(ActiveWayPoint) && AATEnabled;
-    if (XCSoarInterface::Calculated().AATTimeToGo<1) {
+    if (Calculated().AATTimeToGo<1) {
       Valid = false;
     }
     break;
   case 53:
-    if (XCSoarInterface::Calculated().LDvario== 999) {
+    if (Calculated().LDvario== 999) {
       Valid = false;
     } else {
-      Valid = XCSoarInterface::Basic().VarioAvailable && XCSoarInterface::Basic().AirspeedAvailable;
-      Value = XCSoarInterface::Calculated().LDvario;
+      Valid = Basic().VarioAvailable && Basic().AirspeedAvailable;
+      Value = Calculated().LDvario;
     }
     break;
   case 54:
-    Valid = XCSoarInterface::Basic().AirspeedAvailable;
-    Value = SPEEDMODIFY*XCSoarInterface::Basic().TrueAirspeed;
+    Valid = Basic().AirspeedAvailable;
+    Value = SPEEDMODIFY*Basic().TrueAirspeed;
     break;
   case 56: // team bearing
-    Value = XCSoarInterface::Calculated().TeammateBearing;
+    Value = Calculated().TeammateBearing;
     Valid = true;
   case 58: // team range
 	  if (TeammateCodeValid)
 	  {
-    Value = DISTANCEMODIFY*XCSoarInterface::Calculated().TeammateRange;
+    Value = DISTANCEMODIFY*Calculated().TeammateRange;
     if (Value > 100)
       {
         _tcscpy(Format, _T("%.0lf"));
@@ -322,7 +322,7 @@ void InfoBoxFormatter::AssignValue(int i) {
 	  }
     break;
   case 59:
-    Value = TASKSPEEDMODIFY*XCSoarInterface::Calculated().TaskSpeedInstantaneous;
+    Value = TASKSPEEDMODIFY*Calculated().TaskSpeedInstantaneous;
     if (ActiveWayPoint>=1) {
       Valid = ValidTaskPoint(ActiveWayPoint);
     } else {
@@ -330,7 +330,7 @@ void InfoBoxFormatter::AssignValue(int i) {
     }
     break;
   case 60:
-    Value = DISTANCEMODIFY*XCSoarInterface::Calculated().HomeDistance ;
+    Value = DISTANCEMODIFY*Calculated().HomeDistance ;
     if (HomeWaypoint>=0) {
       Valid = ValidWayPoint(HomeWaypoint);
     } else {
@@ -338,7 +338,7 @@ void InfoBoxFormatter::AssignValue(int i) {
     }
     break;
   case 61:
-    Value = TASKSPEEDMODIFY*XCSoarInterface::Calculated().TaskSpeedAchieved;
+    Value = TASKSPEEDMODIFY*Calculated().TaskSpeedAchieved;
     if (ActiveWayPoint>=1) {
       Valid = ValidTaskPoint(ActiveWayPoint);
     } else {
@@ -346,9 +346,9 @@ void InfoBoxFormatter::AssignValue(int i) {
     }
     break;
   case 63:
-    if (XCSoarInterface::Calculated().timeCircling>0) {
-      Value = LIFTMODIFY*XCSoarInterface::Calculated().TotalHeightClimb
-        /XCSoarInterface::Calculated().timeCircling;
+    if (Calculated().timeCircling>0) {
+      Value = LIFTMODIFY*Calculated().TotalHeightClimb
+        /Calculated().timeCircling;
       Valid = true;
     } else {
       Value = 0.0;
@@ -356,7 +356,7 @@ void InfoBoxFormatter::AssignValue(int i) {
     }
     break;
   case 64:
-    Value = LIFTMODIFY*XCSoarInterface::Calculated().DistanceVario;
+    Value = LIFTMODIFY*Calculated().DistanceVario;
     if (ActiveWayPoint>=1) {
       Valid = ValidTaskPoint(ActiveWayPoint);
     } else {
@@ -369,7 +369,7 @@ void InfoBoxFormatter::AssignValue(int i) {
     Value = PDABatteryPercent;
     Valid = true;
 #else
-    Value = XCSoarInterface::Basic().SupplyBatteryVoltage;
+    Value = Basic().SupplyBatteryVoltage;
     if (Value>0.0) {
       Valid = true;
     } else {
@@ -382,14 +382,14 @@ void InfoBoxFormatter::AssignValue(int i) {
 #endif
     break;
   case 66: // VENTA-ADDON added GR Final
-    if (XCSoarInterface::Calculated().GRFinish== 999) {
+    if (Calculated().GRFinish== 999) {
       Valid = false;
     } else {
       Valid = ValidTaskPoint(ActiveWayPoint);
-      if (XCSoarInterface::Calculated().ValidFinish) {
+      if (Calculated().ValidFinish) {
 	Value = 0;
       } else {
-	Value = XCSoarInterface::Calculated().GRFinish;
+	Value = Calculated().GRFinish;
 	if (Value >100 )
 	  {
 	    _tcscpy(Format, _T("%1.0f"));
@@ -402,15 +402,15 @@ void InfoBoxFormatter::AssignValue(int i) {
     }
     break;
   case 70:	// VENTA3 QFE
-//    Valid = XCSoarInterface::Basic().Altitude;
-    Value = ALTITUDEMODIFY* (XCSoarInterface::Basic().Altitude-QFEAltitudeOffset);
+//    Valid = Basic().Altitude;
+    Value = ALTITUDEMODIFY* (Basic().Altitude-QFEAltitudeOffset);
     break;
   case 71:
-    if ( XCSoarInterface::Calculated().AverageLD == 0) {
+    if ( Calculated().AverageLD == 0) {
       Valid = false;
     } else {
       Valid = true;
-      Value = XCSoarInterface::Calculated().AverageLD;
+      Value = Calculated().AverageLD;
       if (Value<0)
 	    _tcscpy(Format, _T("^^^"));
       else if (Value>=999)
@@ -421,14 +421,14 @@ void InfoBoxFormatter::AssignValue(int i) {
     }
     break;
   case 72:
-    Value = XCSoarInterface::Calculated().Experimental;
+    Value = Calculated().Experimental;
     Valid = true;
     break;
     /* TODO feature: add extra infoboxes from Lars
   case 68: // distance flown
-    if (XCSoarInterface::Calculated().TaskDistanceCovered != 0)
+    if (Calculated().TaskDistanceCovered != 0)
       {
-	Value = DISTANCEMODIFY*XCSoarInterface::Calculated().TaskDistanceCovered;
+	Value = DISTANCEMODIFY*Calculated().TaskDistanceCovered;
 	Valid = true;
       }
     else
@@ -438,9 +438,9 @@ void InfoBoxFormatter::AssignValue(int i) {
       }
     break;
   case 67: // termik liga points
-    if (XCSoarInterface::Calculated().TermikLigaPoints != 0)
+    if (Calculated().TermikLigaPoints != 0)
       {
-	Value = XCSoarInterface::Calculated().TermikLigaPoints;
+	Value = Calculated().TermikLigaPoints;
 	Valid = true;
       }
     else

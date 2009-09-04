@@ -40,8 +40,9 @@ Copyright_License {
 #include "StdAfx.h"
 #include "Sizes.h"
 #include "Screen/TextWindow.hpp"
+#include "Interface.hpp"
 
-class ButtonLabel {
+class ButtonLabel: public CommonInterface {
  public:
   static int ButtonLabelGeometry;
   static TextWindow hWndButtonWindow[NUMBUTTONLABELS];

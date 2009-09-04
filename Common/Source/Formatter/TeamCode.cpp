@@ -46,7 +46,7 @@ const TCHAR *FormatterTeamCode::Render(int *color) {
   if(ValidWayPoint(TeamCodeRefWaypoint))
     {
       *color = 0; // black text
-       _tcsncpy(Text,XCSoarInterface::Calculated().OwnTeamCode,5);
+       _tcsncpy(Text,Calculated().OwnTeamCode,5);
        Text[5] = '\0';
     }
   else
@@ -63,7 +63,7 @@ const TCHAR *FormatterDiffTeamBearing::Render(int *color) {
   if(ValidWayPoint(TeamCodeRefWaypoint) && TeammateCodeValid) {
     Valid = true;
 
-    Value = XCSoarInterface::Calculated().TeammateBearing -  XCSoarInterface::Basic().TrackBearing;
+    Value = Calculated().TeammateBearing -  Basic().TrackBearing;
 
     if (Value < -180.0)
       Value += 360.0;

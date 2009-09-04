@@ -102,25 +102,17 @@ void GlideComputerAirData::ProcessBasic() {
 
 
 void GlideComputerAirData::ProcessVertical() {
-  StartupStore(TEXT("aaa\n"));
 
   Turning();
-
   LastThermalStats();
-  StartupStore(TEXT("bbb\n"));
-
   LD();
   CruiseLD();
   SetCalculated().AverageLD= CalculateLDRotary(&Calculated(), &rotaryLD); // AverageLD
   Average30s();
 
-  StartupStore(TEXT("ccc\n"));
-
   AverageClimbRate();
   AverageThermal();
   ThermalGain();
-
-  StartupStore(TEXT("ddd\n"));
 
 }
 

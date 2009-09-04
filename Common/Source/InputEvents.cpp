@@ -705,7 +705,7 @@ bool InputEvents::processButton(int bindex) {
       int lastMode = thismode;
 
       // JMW need a debounce method here..
-      if (!XCSoarInterface::Debounce()) return true;
+      if (!Debounce()) return true;
 
       if (!ButtonLabel::ButtonDisabled[bindex]) {
         ButtonLabel::AnimateButton(bindex);
@@ -735,7 +735,7 @@ bool InputEvents::processButton(int bindex) {
 bool InputEvents::processKey(int dWord) {
   if (!globalRunningEvent.test()) return false; 
 
-  XCSoarInterface::InterfaceTimeoutReset();
+  InterfaceTimeoutReset();
 
   int event_id;
 
@@ -768,7 +768,7 @@ bool InputEvents::processKey(int dWord) {
     int lastMode = mode;
     const TCHAR *pLabelText = NULL;
 
-    if (!XCSoarInterface::Debounce()) return true;
+    if (!Debounce()) return true;
 
     int i;
     for (i = ModeLabel_count[mode]; i >= 0; i--) {
@@ -820,7 +820,7 @@ bool InputEvents::processNmea_real(int ne_id) {
   if (!globalRunningEvent.test()) return false; 
   int event_id = 0;
 
-  XCSoarInterface::InterfaceTimeoutReset();
+  InterfaceTimeoutReset();
 
   // Valid input ?
   if ((ne_id < 0) || (ne_id >= NE_COUNT))
@@ -1005,8 +1005,8 @@ void InputEvents::ProcessMenuTimer() {
     InputEvents::setMode(TEXT("infobox"));
   } else {
     if(MenuTimeOut==MenuTimeoutMax) {
-      if (XCSoarInterface::main_window.map.isPan()
-	  && !XCSoarInterface::main_window.map.isTargetPan()) {
+      if (main_window.map.isPan()
+	  && !main_window.map.isTargetPan()) {
 	InputEvents::setMode(TEXT("pan"));
       } else {
 	InputEvents::setMode(TEXT("default"));

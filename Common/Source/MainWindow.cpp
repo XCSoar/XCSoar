@@ -143,9 +143,9 @@ bool MainWindow::on_timer(void)
   if (globalRunningEvent.test()) {
     XCSoarInterface::AfterStartup();
 #ifdef _SIM_
-    SIMProcessTimer();
+    ProcessTimer::SIMProcess();
 #else
-    ProcessTimer();
+    ProcessTimer::Process();
 #endif
   }
   return true;

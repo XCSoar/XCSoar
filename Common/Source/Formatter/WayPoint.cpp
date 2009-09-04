@@ -230,10 +230,10 @@ void FormatterAlternate::AssignValue(int i) {
 const TCHAR *FormatterDiffBearing::Render(int *color) {
 
   if (ValidTaskPoint(ActiveWayPoint)
-      && XCSoarInterface::Calculated().WaypointDistance > 10.0) {
+      && Calculated().WaypointDistance > 10.0) {
     Valid = true;
 
-    Value = XCSoarInterface::Calculated().WaypointBearing -  XCSoarInterface::Basic().TrackBearing;
+    Value = Calculated().WaypointBearing -  Basic().TrackBearing;
 
     if (Value < -180.0)
       Value += 360.0;

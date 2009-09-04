@@ -39,10 +39,10 @@ Copyright_License {
 #define XCSOAR_FORMATTER_BASE_HPP
 
 #include "Sizes.h"
-
 #include <tchar.h>
+#include "Interface.hpp"
 
-class InfoBoxFormatter {
+class InfoBoxFormatter: public CommonInterface {
  public:
   InfoBoxFormatter(const TCHAR *theformat);
 

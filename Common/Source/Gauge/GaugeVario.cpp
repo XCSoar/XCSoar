@@ -208,6 +208,8 @@ GaugeVario::~GaugeVario()
 #define GAUGEVARIORANGE 5.0 //2.50 // 5 m/s
 #define GAUGEVARIOSWEEP 180 // degrees total sweep
 
+#include "LogFile.hpp"
+
 void GaugeVario::Render() {
 
   static POINT orgTop     = {-1,-1};

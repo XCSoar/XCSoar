@@ -51,21 +51,15 @@ GlideComputer::GlideComputer()
 
 }
 
-#include "LogFile.hpp"
 
 void GlideComputer::ResetFlight(const bool full)
 {
   ScopeLock protect(mutexGlideComputer);
 
-  StartupStore(TEXT("resetflight 1\n"));
   GlideComputerBlackboard::ResetFlight(full);
-  StartupStore(TEXT("resetflight 2\n"));
   GlideComputerAirData::ResetFlight(full);
-  StartupStore(TEXT("resetflight 3\n"));
   GlideComputerTask::ResetFlight(full);
-  StartupStore(TEXT("resetflight 4\n"));
   GlideComputerStats::ResetFlight(full);
-  StartupStore(TEXT("resetflight 5\n"));
 }
 
 

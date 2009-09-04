@@ -70,7 +70,7 @@ static void HeapCompactTimer()
   }
 }
 
-void CommonProcessTimer()
+void ProcessTimer::CommonProcessTimer()
 {
   // service the GCE and NMEA queue
   if (globalRunningEvent.test()) {
@@ -106,7 +106,7 @@ void CommonProcessTimer()
 
 ////////////////
 
-int ConnectionProcessTimer(int itimeout) {
+int ProcessTimer::ConnectionProcessTimer(int itimeout) {
   mutexComm.Lock();
   NMEAParser::UpdateMonitor();
   mutexComm.Unlock();
@@ -132,11 +132,11 @@ int ConnectionProcessTimer(int itimeout) {
   }
 
   GPSCONNECT = FALSE;
-  BOOL navwarning = (BOOL)(XCSoarInterface::Basic().NAVWarning);
+  BOOL navwarning = (BOOL)(Basic().NAVWarning);
 
   if (gpsconnect && navwarning) {
     // If GPS connected but no lock, must be in hangar
-    if (XCSoarInterface::InterfaceTimeoutCheck()) {
+    if (InterfaceTimeoutCheck()) {
 #ifdef GNAV
       // TODO feature: ask question about shutdown or give warning
       // then shutdown if no activity.
@@ -228,7 +228,7 @@ int ConnectionProcessTimer(int itimeout) {
 
 
 #ifndef _SIM_
-void ProcessTimer(void)
+void ProcessTimer::Process(void)
 {
 
   if (!GPSCONNECT && DisplayTimeOutIsFresh()) {
@@ -250,10 +250,10 @@ void ProcessTimer(void)
   ReplayLogger::Update();
   if (ReplayLogger::IsEnabled()) {
     static double timeLast = 0;
-    if (XCSoarInterface::Basic().Time-timeLast>=1.0) {
+    if (Basic().Time-timeLast>=1.0) {
       TriggerGPSUpdate();
     }
-    timeLast = XCSoarInterface::Basic().Time;
+    timeLast = Basic().Time;
     GPSCONNECT = TRUE;
     extGPSCONNECT = TRUE;
     device_blackboard.SetNAVWarning(false);
@@ -269,7 +269,7 @@ void ProcessTimer(void)
 
 
 #ifdef _SIM_
-void SIMProcessTimer(void)
+void ProcessTimer::SIMProcess(void)
 {
 
   CommonProcessTimer();
@@ -289,7 +289,7 @@ void SIMProcessTimer(void)
 #ifndef NDEBUG
   // use this to test FLARM parsing/display
 #ifndef GNAV
-  NMEAParser::TestRoutine(&XCSoarInterface::Basic());
+  NMEAParser::TestRoutine(&Basic());
 #endif
 #endif
 

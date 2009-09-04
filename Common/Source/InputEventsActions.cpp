@@ -63,7 +63,6 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Protection.hpp"
 #include "LogFile.hpp"
 #include "Device/Parser.h"
-#include "Blackboard.hpp"
 #include "Settings.hpp"
 #include "SettingsComputer.hpp"
 #include "SettingsTask.hpp"
@@ -130,7 +129,7 @@ void InputEvents::eventMarkLocation(const TCHAR *misc) {
   } else {
     mutexComm.Lock(); // Must LockComm to prevent deadlock
     mutexFlightData.Lock();
-    marks->MarkLocation(XCSoarInterface::Basic().Longitude, XCSoarInterface::Basic().Latitude);
+    marks->MarkLocation(Basic().Longitude, Basic().Latitude);
     mutexFlightData.Unlock();
     mutexComm.Unlock();
   }
@@ -251,7 +250,7 @@ void InputEvents::eventScreenModes(const TCHAR *misc) {
   //  -- auxiliary infobox
   //  -- full screen
   //  -- normal infobox
-  MapWindow &map_window = XCSoarInterface::main_window.map;
+  MapWindow &map_window = main_window.map;
 
   if (_tcscmp(misc, TEXT("normal")) == 0) {
     map_window.RequestFullScreen(false);
@@ -389,7 +388,7 @@ void InputEvents::eventZoom(const TCHAR* misc) {
   // -1 means toggle
   // 0 means off
   // 1 means on
-  MapWindow &map_window = XCSoarInterface::main_window.map;
+  MapWindow &map_window = main_window.map;
   float zoom;
 
   if (_tcscmp(misc, TEXT("auto toggle")) == 0)
@@ -450,7 +449,7 @@ void InputEvents::eventZoom(const TCHAR* misc) {
 //	TODO feature: ???	Go to particular point
 //	TODO feature: ???	Go to waypoint (eg: next, named)
 void InputEvents::eventPan(const TCHAR *misc) {
-  MapWindow &map_window = XCSoarInterface::main_window.map;
+  MapWindow &map_window = main_window.map;
 
   if (_tcscmp(misc, TEXT("toggle")) == 0)
     map_window.Event_Pan(-1);
@@ -487,7 +486,7 @@ else if (_tcscmp(misc, TEXT("down")) == 0)
 
 // Do JUST Terrain/Toplogy (toggle any, on/off any, show)
 void InputEvents::eventTerrainTopology(const TCHAR *misc) {
-  MapWindow &map_window = XCSoarInterface::main_window.map;
+  MapWindow &map_window = main_window.map;
 
   if (_tcscmp(misc, TEXT("terrain toggle")) == 0)
     map_window.Event_TerrainTopology(-2);
@@ -523,7 +522,7 @@ void InputEvents::eventClearWarningsOrTerrainTopology(const TCHAR *misc) {
     return;
   }
   // Else toggle TerrainTopology - and show the results
-  MapWindow &map_window = XCSoarInterface::main_window.map;
+  MapWindow &map_window = main_window.map;
   map_window.Event_TerrainTopology(-1);
   map_window.Event_TerrainTopology(0);
 }
@@ -806,7 +805,7 @@ void InputEvents::eventMacCready(const TCHAR *misc) {
   } else if (_tcscmp(misc, TEXT("auto off")) == 0) {
     MacCreadyProcessing(-2);
   } else if (_tcscmp(misc, TEXT("auto show")) == 0) {
-    if (XCSoarInterface::Calculated().AutoMacCready) {
+    if (Calculated().AutoMacCready) {
       Message::AddMessage(TEXT("Auto MacCready ON"));
     } else {
       Message::AddMessage(TEXT("Auto MacCready OFF"));
@@ -988,7 +987,7 @@ void InputEvents::eventAdjustVarioFilter(const TCHAR *misc) {
     return;
   }
   if (_tcscmp(misc, TEXT("zero"))==0) {
-    if (!XCSoarInterface::Calculated().Flying) {
+    if (!Calculated().Flying) {
       VarioWriteNMEA(TEXT("PDVSC,S,ZeroASI,1"));
     }
     // zero, no mixing
@@ -1000,7 +999,7 @@ void InputEvents::eventAdjustVarioFilter(const TCHAR *misc) {
   }
 
   // accel calibration
-  if (!XCSoarInterface::Calculated().Flying) {
+  if (!Calculated().Flying) {
     if (_tcscmp(misc, TEXT("X1"))==0) {
       VarioWriteNMEA(TEXT("PDVSC,S,CalibrateAccel,1"));
       return;
@@ -1280,8 +1279,8 @@ void InputEvents::eventNearestAirspaceDetails(const TCHAR *misc) {
   }
 
   StartHourglassCursor();
-  FindNearestAirspace(XCSoarInterface::main_window.map,
-		      XCSoarInterface::Basic().Longitude, XCSoarInterface::Basic().Latitude,
+  FindNearestAirspace(main_window.map,
+		      Basic().Longitude, Basic().Latitude,
 		      &nearestdistance, &nearestbearing,
 		      &foundcircle, &foundarea);
   StopHourglassCursor();
@@ -1322,8 +1321,8 @@ void InputEvents::eventNearestAirspaceDetails(const TCHAR *misc) {
   TCHAR DistanceText[MAX_PATH];
   Units::FormatUserDistance(nearestdistance, DistanceText, 10);
 
-  if (inside && (XCSoarInterface::Calculated().NavAltitude <= AirspaceArea[i].Top.Altitude)
-      && (XCSoarInterface::Calculated().NavAltitude >= AirspaceArea[i].Base.Altitude)) {
+  if (inside && (Calculated().NavAltitude <= AirspaceArea[i].Top.Altitude)
+      && (Calculated().NavAltitude >= AirspaceArea[i].Base.Altitude)) {
 
     _stprintf(text,
               TEXT("Inside airspace: %s\r\n%s\r\nExit: %s\r\nBearing %d")
@@ -1358,14 +1357,14 @@ void InputEvents::eventNearestAirspaceDetails(const TCHAR *misc) {
 //  pan: the waypoint nearest to the pan cursor
 void InputEvents::eventNearestWaypointDetails(const TCHAR *misc) {
   if (_tcscmp(misc, TEXT("aircraft")) == 0) {
-    PopupNearestWaypointDetails(XCSoarInterface::Basic().Longitude,
-				XCSoarInterface::Basic().Latitude,
+    PopupNearestWaypointDetails(Basic().Longitude,
+				Basic().Latitude,
 				1.0e5, // big range..
 				false);
   }
   if (_tcscmp(misc, TEXT("pan")) == 0) {
-    PopupNearestWaypointDetails(XCSoarInterface::Basic().Longitude,
-				XCSoarInterface::Basic().Latitude,
+    PopupNearestWaypointDetails(Basic().Longitude,
+				Basic().Latitude,
 				1.0e5, // big range..
 				true);
   }
@@ -1453,7 +1452,7 @@ void InputEvents::eventSetup(const TCHAR *misc) {
   } else if (_tcscmp(misc,TEXT("Weather"))==0){
     dlgWeatherShowModal();
   } else if (_tcscmp(misc,TEXT("Replay"))==0){
-    if (!XCSoarInterface::Basic().MovementDetected) {
+    if (!Basic().MovementDetected) {
       dlgLoggerReplayShowModal();
     }
   } else if (_tcscmp(misc,TEXT("Switches"))==0){
@@ -1635,7 +1634,7 @@ void InputEvents::eventBrightness(const TCHAR *misc) {
 
 void InputEvents::eventExit(const TCHAR *misc) {
   (void)misc;
-  XCSoarInterface::SignalShutdown(false);
+  SignalShutdown(false);
 }
 
 void InputEvents::eventUserDisplayModeForce(const TCHAR *misc){
@@ -1681,9 +1680,9 @@ void InputEvents::eventAddWaypoint(const TCHAR *misc) {
   static int tmpWaypointNum = 0;
   WAYPOINT edit_waypoint;
   mutexTaskData.Lock();
-  edit_waypoint.Latitude = XCSoarInterface::Basic().Latitude;
-  edit_waypoint.Longitude = XCSoarInterface::Basic().Longitude;
-  edit_waypoint.Altitude = XCSoarInterface::Calculated().TerrainAlt;
+  edit_waypoint.Latitude = Basic().Latitude;
+  edit_waypoint.Longitude = Basic().Longitude;
+  edit_waypoint.Altitude = Calculated().TerrainAlt;
   edit_waypoint.FileNum = 2; // don't put into file
   edit_waypoint.Flags = 0;
   if (_tcscmp(misc, TEXT("landable")) == 0) {

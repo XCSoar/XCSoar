@@ -93,8 +93,6 @@ RasterTerrain terrain;
 RasterWeather RASP;
 GlideComputer glide_computer;
 
-HINSTANCE XCSoarInterface::hInst; // The current instance
-MainWindow XCSoarInterface::main_window;
 
 /////////////////////////////////////////////////////////////////////////////////
 

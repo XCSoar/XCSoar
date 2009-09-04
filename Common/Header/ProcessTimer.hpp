@@ -37,11 +37,18 @@ Copyright_License {
 #ifndef XCSOAR_PROCESS_TIMER_H
 #define XCSOAR_PROCESS_TIMER_H
 
-void CommonProcessTimer    (void);
+#include "Interface.hpp"
+
+class ProcessTimer: public XCSoarInterface {
+public:
 #ifdef _SIM_
-void SIMProcessTimer(void);
+  static void SIMProcess();
 #else
-void ProcessTimer    (void);
+  static void Process    ();
 #endif
+private:
+  static void CommonProcessTimer    (void);
+  static int ConnectionProcessTimer(int itimeout);
+};
 
 #endif

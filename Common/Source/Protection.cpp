@@ -121,12 +121,13 @@ DWORD InstrumentThread (LPVOID lpvoid) {
 
     if (XCSoarInterface::main_window.map.IsDisplayRunning()) {
       if (EnableVarioGauge) {
-
+	
 	mutexFlightData.Lock();
 	gauge_vario->ReadBlackboardBasic(device_blackboard.Basic());
 	gauge_vario->ReadBlackboardCalculated(device_blackboard.Calculated());
 	mutexFlightData.Unlock();
 	gauge_vario->Render();
+	
       }
     }
 

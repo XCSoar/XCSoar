@@ -48,10 +48,10 @@ void FormatterLowWarning::AssignValue(int i) {
     minimum = ALTITUDEMODIFY*SAFETYALTITUDETERRAIN;
     break;
   case 2:
-    minimum = 0.5*LIFTMODIFY*XCSoarInterface::Calculated().MacCreadyRisk;
+    minimum = 0.5*LIFTMODIFY*Calculated().MacCreadyRisk;
     break;
   case 21:
-    minimum = 0.667*LIFTMODIFY*XCSoarInterface::Calculated().MacCreadyRisk;
+    minimum = 0.667*LIFTMODIFY*Calculated().MacCreadyRisk;
     break;
   default:
     break;

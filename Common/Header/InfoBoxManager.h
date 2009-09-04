@@ -43,7 +43,9 @@ Copyright_License {
 extern int  numInfoWindows;
 extern const int NUMSELECTSTRINGS;
 
-class InfoBoxManager {
+#include "Interface.hpp"
+
+class InfoBoxManager: public CommonInterface {
  private:
   static void FocusSetMaxTimeOut(void);
   static void ResetInfoBoxes(void);
