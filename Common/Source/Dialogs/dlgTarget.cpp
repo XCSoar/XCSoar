@@ -46,7 +46,7 @@ Copyright_License {
 #include "Math/Earth.hpp"
 #include "LogFile.hpp"
 #include "Dialogs/dlgTools.h"
-#include "Calculations2.h"
+#include "Calculations.h"
 #include "MapWindow.h"
 #include "InfoBoxLayout.h"
 #include "Math/Geometry.hpp"
