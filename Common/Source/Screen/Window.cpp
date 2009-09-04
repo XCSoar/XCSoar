@@ -280,7 +280,7 @@ LRESULT CALLBACK
 Window::WndProc(HWND _hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
   enum {
-#if WINDOWSPC > 0
+#ifdef WINDOWSPC
     WM_VERY_FIRST = WM_NCCREATE,
 #else
     WM_VERY_FIRST = WM_CREATE,

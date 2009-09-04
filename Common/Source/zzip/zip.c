@@ -646,7 +646,7 @@ __zzip_dir_parse (ZZIP_DIR* dir)
     zzip_error_t rv;
     zzip_off_t filesize;
     struct _disk_trailer trailer;
-#if (WINDOWSPC<1)||defined(__MINGW32__)
+#if !defined(WINDOWSPC) || defined(__MINGW32__)
     struct stat st; // JMW
 #endif
 
@@ -656,7 +656,7 @@ __zzip_dir_parse (ZZIP_DIR* dir)
 
     HINT2("------------------ fd=%i", (int) dir->fd);
 
-#if (WINDOWSPC<1)||defined(__MINGW32__)
+#if !defined(WINDOWSPC) || defined(__MINGW32__)
     if (stat(jmw_filename,&st) <0)
         { rv = ZZIP_DIR_STAT; goto error; }
     else

@@ -50,7 +50,7 @@ Copyright_License {
 #include <commdlg.h>
 #include <commctrl.h>
 
-#if !WINDOWSPC
+#ifndef WINDOWSPC
 #include "aygshell.h"
 #endif
 
@@ -77,7 +77,7 @@ LRESULT CALLBACK Progress(HWND hDlg, UINT message,
   switch (message)
     {
     case WM_INITDIALOG:
-#if (WINDOWSPC>0)
+#ifdef WINDOWSPC
       GetClientRect(hDlg, &rc);
       MoveWindow(hDlg, 0, 0, rc.right-rc.left, rc.bottom-rc.top, TRUE);
 #endif
@@ -152,10 +152,6 @@ BOOL XCSoarInterface::SetProgressStepSize(int nSize) {
 
 
 HWND XCSoarInterface::CreateProgressDialog(const TCHAR* text) {
-#if (WINDOWSPC>2)
-  hProgress = NULL;
-  return NULL;
-#endif
   if (hProgress) {
   } else {
     if (InfoBoxLayout::landscape) {
@@ -180,7 +176,7 @@ HWND XCSoarInterface::CreateProgressDialog(const TCHAR* text) {
     RECT rc;
     GetClientRect(main_window, &rc);
 
-#if (WINDOWSPC<1)
+#ifndef WINDOWSPC
     hWndCurtain = CreateWindow(TEXT("STATIC"), TEXT(" "),
 			       WS_VISIBLE | WS_CHILD,
                                0, 0, (rc.right - rc.left),
@@ -193,7 +189,7 @@ HWND XCSoarInterface::CreateProgressDialog(const TCHAR* text) {
     UpdateWindow(hWndCurtain);
 #endif
 
-#if (WINDOWSPC>0)
+#ifdef WINDOWSPC
     RECT rcp;
     GetClientRect(hProgress, &rcp);
     GetWindowRect(main_window, &rc);

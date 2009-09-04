@@ -6,7 +6,7 @@
 
 /* perhaps want to show on syslog(3) ?? */
 
-#if (WINDOWSPC>0)
+#ifdef WINDOWSPC
 #ifdef DEBUG
 #include <stdio.h>
 #define DBG1(X1) ZZIP_FOR1 { \

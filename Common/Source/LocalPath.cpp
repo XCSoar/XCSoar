@@ -60,7 +60,7 @@ CSIDL_PROGRAM_FILES 0x0026   The program files folder.
 */
 #if defined(GNAV) && !defined(PCGNAV)
   _tcscpy(buffer,TEXT("\\NOR Flash"));
-#elif defined (PNA) && (!defined(WINDOWSPC) || (WINDOWSPC <=0) )
+#elif defined (PNA) && !defined(WINDOWSPC)
  /*
   * VENTA-ADDON "smartpath" for PNA only
   *
@@ -81,7 +81,7 @@ CSIDL_PROGRAM_FILES 0x0026   The program files folder.
    */
   _stprintf(buffer,TEXT("%s%S"),gmfpathname(), XCSDATADIR );
 // VENTA2 FIX PC BUG
-#elif defined (FIVV) && (!defined(WINDOWSPC) || (WINDOWSPC <=0) )
+#elif defined (FIVV) && !defined(WINDOWSPC)
   _stprintf(buffer,TEXT("%s%S"),gmfpathname(), XCSDATADIR );
 #elif !defined(_WIN32) || defined(__WINE__)
   /* on Unix or WINE, use ~/.xcsoar */

@@ -80,7 +80,7 @@ Copyright_License {
 #include <math.h>
 #include <tchar.h>
 
-#if (WINDOWSPC>0)
+#ifdef WINDOWSPC
 #include <wingdi.h>
 #endif
 
@@ -373,7 +373,7 @@ MapWindow::register_class(HINSTANCE hInstance)
   wc.style = CS_VREDRAW | CS_HREDRAW | CS_DBLCLKS;
   wc.lpfnWndProc = MapWindow::WndProc;
   wc.cbClsExtra = 0;
-#if (WINDOWSPC>0)
+#ifdef WINDOWSPC
   wc.cbWndExtra = 0 ;
 #else
   WNDCLASS dc;

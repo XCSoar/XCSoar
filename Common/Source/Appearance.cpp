@@ -42,7 +42,7 @@ Copyright_License {
   #define MapScale2  apMs2Default
 #endif
 
-#if SAMGI
+#ifdef SAMGI
 Appearance_t Appearance = {
   apMsAltA,
   apMs2None,

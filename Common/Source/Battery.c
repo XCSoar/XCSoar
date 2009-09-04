@@ -37,7 +37,7 @@ Copyright_License {
 
 #include "Battery.h"
 
-#if !defined(GNAV) && WINDOWSPC < 1
+#if !defined(GNAV) && !defined(WINDOWSPC)
 
 int PDABatteryPercent = 100;
 int PDABatteryTemperature = 0;

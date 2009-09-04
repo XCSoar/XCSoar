@@ -12,7 +12,7 @@
 #include "InfoBoxLayout.h"
 #include "Screen/Fonts.hpp"
 
-#if WINDOWSPC > 0
+#ifdef WINDOWSPC
 #include "Asset.hpp" /* for SCREENWIDTH and SCREENHEIGHT */
 #endif
 
@@ -24,7 +24,7 @@ MainWindow::register_class(HINSTANCE hInstance)
   wc.style                      = CS_HREDRAW | CS_VREDRAW;
   wc.lpfnWndProc = Window::WndProc;
   wc.cbClsExtra                 = 0;
-#if (WINDOWSPC>0)
+#ifdef WINDOWSPC
   wc.cbWndExtra = 0;
 #else
   WNDCLASS dc;
@@ -52,7 +52,7 @@ MainWindow::set(LPCTSTR text,
   TopWindow::set(_T("XCSoarMain"), text, left, top, width, height);
 
   RECT rc;
-#if WINDOWSPC > 0
+#ifdef WINDOWSPC
   rc.left = 0;
   rc.right = SCREENWIDTH;
   rc.top = 0;

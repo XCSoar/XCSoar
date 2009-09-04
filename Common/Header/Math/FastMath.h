@@ -48,7 +48,7 @@ Copyright_License {
 // =================================================================================
 static inline int Real2Int(double val)
 {
-#if (WINDOWS_PC>0)
+#ifdef WINDOWSPC
   val += 68719476736.0*1.5;
   return *((long*)&val) >> 16;
 #else

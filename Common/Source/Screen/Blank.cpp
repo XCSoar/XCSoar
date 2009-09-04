@@ -175,7 +175,7 @@ void BlankDisplay(bool doblank) {
 
 void CheckDisplayTimeOut(bool sticky)
 {
-#if (WINDOWSPC<1)
+#ifndef WINDOWSPC
   SystemIdleTimerReset();
 #endif
 

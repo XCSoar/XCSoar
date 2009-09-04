@@ -839,7 +839,7 @@ void InfoBoxManager::DisplayInfoBox(void)
 
 	// TODO: check temperature too high and set a warning flag to
 	// be used by an event or something
-	#if (WINDOWSPC<1)
+	#ifndef WINDOWSPC
 	case 65:
 	  if ( PDABatteryTemperature >0 ) {
 	    _stprintf(sTmp,_T("%1.0d%SC"),(int)PDABatteryTemperature,_T(DEG));

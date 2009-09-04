@@ -129,7 +129,7 @@ typedef enum{
 }ScreenSize_t;
 
 
-#if (WINDOWSPC>0)
+#ifdef WINDOWSPC
 extern int SCREENWIDTH;
 extern int SCREENHEIGHT;
 #endif

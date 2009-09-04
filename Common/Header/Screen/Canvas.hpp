@@ -48,7 +48,7 @@ Copyright_License {
 
 #include <tchar.h>
 
-#if WINDOWSPC > 0
+#ifdef WINDOWSPC
 #define HAVE_VIEWPORT
 #define HAVE_OFFSET_VIEWPORT
 #elif defined(_WIN32_WCE) && _WIN32_WCE >= 0x0500

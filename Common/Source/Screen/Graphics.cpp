@@ -560,7 +560,7 @@ bool TextInBox(Canvas &canvas, const TCHAR* Value, int x, int y,
       }
       canvas.round_rectangle(brect.left, brect.top, brect.right, brect.bottom,
                              IBLSCALE(8), IBLSCALE(8));
-#if (WINDOWSPC>0)
+#ifdef WINDOWSPC
       canvas.background_transparent();
       canvas.text(x, y, Value);
 #else
@@ -615,7 +615,7 @@ bool TextInBox(Canvas &canvas, const TCHAR* Value, int x, int y,
     if (notoverlapping) {
       canvas.set_text_color(Color(0xff,0xff,0xff));
 
-#if (WINDOWSPC>0)
+#ifdef WINDOWSPC
       canvas.background_transparent();
       canvas.text(x+1, y, Value);
       canvas.text(x+2, y, Value);
@@ -655,7 +655,7 @@ bool TextInBox(Canvas &canvas, const TCHAR* Value, int x, int y,
     }
 
     if (notoverlapping) {
-#if (WINDOWSPC>0)
+#ifdef WINDOWSPC
       canvas.background_transparent();
       canvas.text(x, y, Value);
 #else

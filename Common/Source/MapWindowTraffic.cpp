@@ -196,7 +196,7 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas)
                                  brect.right, brect.bottom,
                                  IBLSCALE(8), IBLSCALE(8));
 
-#if (WINDOWSPC>0)
+#ifdef WINDOWSPC
           canvas.background_transparent();
           canvas.text(sc_av.x, sc_av.y, label_avg);
 #else

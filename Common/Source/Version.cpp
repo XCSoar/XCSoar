@@ -43,10 +43,10 @@ void Version() {
   // Version String
 #ifdef GNAV
   _tcscat(XCSoar_Version, TEXT("Altair "));
-#elif PNA  // VENTA-ADDON
+#elif defined(PNA)
   _tcscat(XCSoar_Version, TEXT("PNA "));
 #else
-#if (WINDOWSPC>0)
+#ifdef WINDOWSPC
   _tcscat(XCSoar_Version, TEXT("PC "));
 #else
   _tcscat(XCSoar_Version, TEXT("PPC "));

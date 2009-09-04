@@ -26,7 +26,7 @@
 
 
 #if defined(__MINGW32__)
-//(WINDOWSPC>0)&&
+//defined(WINDOWSPC)&&
 // JMW needed otherwise seek/tell won't work!
 #ifndef __WINE__
 #undef _fmode
@@ -746,7 +746,7 @@ zzip_open_shared_io (ZZIP_FILE* stream,
 	int fd = os->fd.open(filename, o_flags); /* io->fd.open */
         if (fd != -1)
         {
-#if (WINDOWSPC<1)||defined(__MINGW32__)
+#if !defined(WINDOWSPC) || defined(__MINGW32__)
             struct stat st; // JMW
 #endif
             ZZIP_FILE* fp = calloc (1, sizeof(ZZIP_FILE));
@@ -758,7 +758,7 @@ zzip_open_shared_io (ZZIP_FILE* stream,
             fp->fd = fd;
             fp->io = os;
 
-#if (WINDOWSPC<1)||defined(__MINGW32__)
+#if !defined(WINDOWSPC) || defined(__MINGW32__)
             if (stat(filename,&st) >=0)
                 fp->usize = st.st_size;
 #else

@@ -135,7 +135,7 @@ typedef struct
   searching a directory.
 */
 
-#if (WINDOWSPC<1)
+#ifndef WINDOWSPC
 #include <sys/stat.h>
 #define _stat stat
 #endif

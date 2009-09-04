@@ -47,7 +47,7 @@ Copyright_License {
 #include "Interface.hpp"
 
 #include <commctrl.h>
-#if (WINDOWSPC<1)
+#ifndef WINDOWSPC
 #if !defined(CECORE) || UNDER_CE >= 300 || _WIN32_WCE >= 0x0300
 #include <aygshell.h>
 #endif
@@ -106,7 +106,7 @@ int WINAPI WinMain(     HINSTANCE hInstance,
  // _crtBreakAlloc = -1;     // Set this to the number in {} brackets to
                              // break on a memory leak
 #endif
-#if (WINDOWSPC>0)
+#ifdef WINDOWSPC
 #if _DEBUG
   _CrtCheckMemory();
   _CrtDumpMemoryLeaks();

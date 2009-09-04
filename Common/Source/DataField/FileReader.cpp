@@ -69,7 +69,7 @@ void DataFieldFileReader::ScanDirectoryTop(const TCHAR* filter) {
   LocalPath(buffer);
   ScanDirectories(buffer,filter);
 #ifndef GNAV
-#if (WINDOWSPC<1) && !defined(__MINGW32__)
+#if !defined(WINDOWSPC) && !defined(__MINGW32__)
 #ifndef OLDPPC
 // non altair, (non windowspc e non mingw32) e non ppc2002
   static bool first = true;
@@ -107,7 +107,7 @@ void DataFieldFileReader::ScanDirectoryTop(const TCHAR* filter) {
   first = false;
 #endif
 #else // mingw32 and PC
-#if (WINDOWSPC<1)
+#ifndef WINDOWSPC
 // VENTA2-FIVV SDCARD FIX
 #ifdef FIVV
   // Scan only XCSoarData in the root directory where the xcsoar.exe is placed!
@@ -131,7 +131,7 @@ void DataFieldFileReader::ScanDirectoryTop(const TCHAR* filter) {
   ScanDirectories(TEXT("\\Speicherkarte\\XCSoarData"),filter);
   ScanDirectories(TEXT("\\SDMMC\\XCSoarData"),filter);
 #endif // FIVV
-#endif // WINDOWSPC<1
+#endif // !WINDOWSPC
 #endif // MINGW
 #endif // NOT OLDPPC
 #endif // NOT ALTAIRSYNC

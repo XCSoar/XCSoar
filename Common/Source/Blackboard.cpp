@@ -79,10 +79,10 @@ DeviceBlackboard::Initialise()
   gps_info.Second = pda_time.wSecond;
 
 #ifdef _SIM_
-  #if _SIM_STARTUPSPEED
+  #ifdef _SIM_STARTUPSPEED
   gps_info.Speed = _SIM_STARTUPSPEED;
   #endif
-  #if _SIM_STARTUPALTITUDE
+  #ifdef _SIM_STARTUPALTITUDE
   gps_info.Altitude = _SIM_STARTUPALTITUDE;
   #endif
 #endif

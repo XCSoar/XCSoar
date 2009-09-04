@@ -117,7 +117,7 @@ long GetUTCOffset(void) {
   if (tzi==TIME_ZONE_ID_DAYLIGHT) {
     utcoffset -= TimeZoneInformation.DaylightBias*60;
   }
-#if (WINDOWSPC>0)
+#ifdef WINDOWSPC
   return UTCOffset;
 #else
   return utcoffset;

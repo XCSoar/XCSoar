@@ -105,7 +105,7 @@ int zzip_fstat (ZZIP_FILE* file, ZZIP_STAT* zs)
     if (ZZIP_file_real(file))
     {
 		// JMW TODO!
-#if (WINDOWSPC>0)
+#ifdef WINDOWSPC
 	struct stat st;
 	if (fstat (file->fd, &st) < 0) return -1;
 	zs->st_size = st.st_size;

@@ -469,7 +469,7 @@ ZigZag myzigzag;
 
 
 #ifdef DEBUG_ZIGZAG
-#if (WINDOWSPC>0)
+#ifdef WINDOWSPC
 
 void TestZigZag(double V_wind, double theta_wind) {
   double t, V_tas, V_gps, theta_gps, theta_glider;
@@ -577,7 +577,7 @@ WindZigZagUpdate(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated,
     return 0;
   }
 
-#if (WINDOWSPC>0)
+#ifdef WINDOWSPC
 #ifdef DEBUG_ZIGZAG
   TestZigZagLoop();
 #endif

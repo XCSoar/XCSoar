@@ -302,7 +302,7 @@ static void NextPage(int Step){
 static void OnSetupDeviceAClicked(WindowControl * Sender){
   (void)Sender;
 
-  #if (ToDo)
+  #ifdef ToDo
     devA()->DoSetup();
     wf->FocusNext(NULL);
   #endif
@@ -328,7 +328,7 @@ static void OnSetupDeviceAClicked(WindowControl * Sender){
 static void OnSetupDeviceBClicked(WindowControl * Sender){
   (void)Sender;
 
-  #if (ToDo)
+  #ifdef ToDo
     devB()->DoSetup();
     wf->FocusNext(NULL);
   #endif
@@ -2131,7 +2131,7 @@ static void setVariables(void) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
 // VENTA2- PC model
-#if (WINDOWSPC>0)
+#ifdef WINDOWSPC
     dfe->addEnumText(gettext(TEXT("PC/normal")));
     #ifdef FIVV
    	 wp->SetVisible(true); // no more gaps in menus
@@ -2341,7 +2341,7 @@ static void setVariables(void) {
 #ifdef GNAV
     wp->SetVisible(false);
 #endif
-#if (WINDOWSPC>0)
+#ifdef WINDOWSPC
     wp->SetVisible(false);
 #endif
     wp->GetDataField()->Set(EnableAutoBlank);
@@ -3940,7 +3940,7 @@ void dlgConfigurationShowModal(void){
     RefreshTask();
   }
 
-#if (WINDOWSPC>0)
+#ifdef WINDOWSPC
   if (COMPORTCHANGED) {
     requirerestart = true;
   }

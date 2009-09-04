@@ -38,7 +38,7 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_BLANK_HPP
 #define XCSOAR_SCREEN_BLANK_HPP
 
-#if (WINDOWSPC<1) && !defined(GNAV)
+#if !defined(WINDOWSPC) && !defined(GNAV)
 #define HAVE_BLANK
 
 extern bool EnableAutoBlank;

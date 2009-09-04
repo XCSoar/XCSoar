@@ -491,7 +491,7 @@ DoBestAlternateSlow(const NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   static double LastSearchBestTime = 0; // VENTA3
 
  // VENTA3 best landing slow calculation
-#if (WINDOWSPC>0)
+#ifdef WINDOWSPC
   if ( (EnableBestAlternate) && (Basic->Time > LastSearchBestTime+10.0) ) // VENTA3
 #else
   if ( (EnableBestAlternate) && (Basic->Time > LastSearchBestTime+BESTALTERNATEINTERVAL) ) // VENTA3

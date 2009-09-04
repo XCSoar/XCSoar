@@ -47,15 +47,10 @@ Copyright_License {
                                               // ie TEXT("-logA=\\Speicherkarte\\logA.log ""-logB=\\SD Card\\logB.log""")
 #define   AIRSPACEUSEBINFILE    0             // use and maintain binary airspace file
 
-// define this to be true for windows PC port
-#if !defined(WINDOWSPC)
-#define   WINDOWSPC             0
-#endif
-
 #define   FONTQUALITY           NONANTIALIASED_QUALITY
 
-#if (WINDOWSPC>0)
-#if _DEBUG
+#ifdef WINDOWSPC
+#ifdef _DEBUG
 // leak checking
 #define CRTDBG_MAP_ALLOC
 #define _CRTDBG_MAP_ALLOC
@@ -91,7 +86,7 @@ Copyright_License {
 #endif
 
 #ifdef __MINGW32__
-#if (WINDOWSPC==0)
+#ifndef WINDOWSPC
 #define NEWFLARMDB
 #endif
 #endif

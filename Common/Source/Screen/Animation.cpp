@@ -37,7 +37,7 @@ Copyright_License {
 
 #include "Screen/Animation.hpp"
 
-#if (WINDOWSPC<1)
+#ifndef WINDOWSPC
 #define GdiFlush() do { } while (0)
 #endif
 

@@ -59,7 +59,7 @@ void ReadAssetNumber(void)
 
   StartupStore(TEXT("Asset ID: "));
 
-#if (WINDOWSPC>0)
+#ifdef WINDOWSPC
   return;
 #endif
 
@@ -138,7 +138,7 @@ void ReadCompaqID(void)
 
 void ReadUUID(void)
 {
-#if !(defined(__MINGW32__) && (WINDOWSPC>0))
+#if !(defined(__MINGW32__) && defined(WINDOWSPC))
   BOOL fRes;
 
 #define GUIDBuffsize 100

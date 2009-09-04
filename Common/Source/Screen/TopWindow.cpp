@@ -37,7 +37,7 @@ Copyright_License {
 
 #include "Screen/TopWindow.hpp"
 
-#if (((UNDER_CE >= 300)||(_WIN32_WCE >= 0x0300)) && (WINDOWSPC<1))
+#if (((UNDER_CE >= 300)||(_WIN32_WCE >= 0x0300)) && !defined(WINDOWSPC))
 #define HAVE_ACTIVATE_INFO
 #endif
 
@@ -84,7 +84,7 @@ void
 TopWindow::full_screen()
 {
   ::SetForegroundWindow(hWnd);
-#if (WINDOWSPC>0)
+#ifdef WINDOWSPC
   ::SetWindowPos(hWnd, HWND_TOP, 0, 0, 0, 0,
                  SWP_SHOWWINDOW|SWP_NOMOVE|SWP_NOSIZE);
 #else

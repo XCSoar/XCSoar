@@ -411,7 +411,7 @@ void InitialiseFontsAuto(HWND hwnd,
 
   // next font..
 
-#if (WINDOWSPC>0)
+#ifdef WINDOWSPC
   FontHeight= (int)(FontHeight/1.35);
   FontWidth= (int)(FontWidth/1.35);
 #endif

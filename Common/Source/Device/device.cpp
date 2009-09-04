@@ -925,7 +925,7 @@ void devShutdown()
 void devRestart() {
 #ifndef _SIM_
   /*
-#if (WINDOWSPC>0)
+#ifdef WINDOWSPC
   static bool first = true;
   if (!first) {
     NMEAParser::Reset();

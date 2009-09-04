@@ -62,7 +62,7 @@ Copyright_License {
 #ifndef ALTAIRSYNC
 
 #ifndef GNAV
-#if (WINDOWSPC<1)
+#ifndef WINDOWSPC
 #ifndef __MINGW32__
 #include <projects.h>
 #endif
@@ -632,7 +632,7 @@ WindowControl::on_paint(Canvas &canvas)
     rc.bottom -= 2;
     canvas.fill_rectangle(rc, brush);
 
-#if (WINDOWSPC>0)
+#ifdef WINDOWSPC
   // JMW make it look nice on wine
     canvas.set_background_color(ff);
 #endif
@@ -1999,7 +1999,7 @@ WndProperty::on_paint(Canvas &canvas)
 
   canvas.set_text_color(GetForeColor());
 
-#if (WINDOWSPC>0)
+#ifdef WINDOWSPC
   // JMW make it look nice on wine
   if (!GetFocused()) {
     canvas.set_background_color(GetBackColor());

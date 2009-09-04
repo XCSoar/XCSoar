@@ -696,7 +696,7 @@ void MapWindowProjection::DrawGreatCircle(Canvas &canvas,
 					  double startLon, double startLat,
 					  double targetLon, double targetLat) {
 
-#if OLD_GREAT_CIRCLE
+#ifdef OLD_GREAT_CIRCLE
   // TODO accuracy: this is actually wrong, it should recalculate the
   // bearing each step
   double distance=0;

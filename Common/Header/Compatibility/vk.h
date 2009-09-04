@@ -48,7 +48,7 @@ Copyright_License {
 #define VK_APP5 VK_F5
 #define VK_APP6 VK_F6
 
-#elif WINDOWSPC > 0
+#elif defined(WINDOWSPC)
 
 #define VK_APP1 0x31
 #define VK_APP2 0x32

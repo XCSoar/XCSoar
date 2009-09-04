@@ -181,9 +181,9 @@ void InputEvents::readFile() {
   if (!InitONCE) {
 #ifdef FIVV
 #include "InputEvents_fivv.cpp"   // VENTA3
-#elif (WINDOWSPC>0)
+#elif defined(WINDOWSPC)
 #include "InputEvents_pc.cpp"
-#elif GNAV
+#elif defined(GNAV)
 #include "InputEvents_altair.cpp"
 #else
 #include "InputEvents_defaults.cpp"

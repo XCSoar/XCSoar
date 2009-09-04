@@ -54,23 +54,23 @@ Copyright_License {
 #if defined(CECORE)
 #include "winbase.h"
 #endif
-#if (WINDOWSPC<1)
+#ifndef WINDOWSPC
 #include "projects.h"
 #endif
 #endif
 
-#if (WINDOWSPC>0)
+#ifdef WINDOWSPC
 int SCREENWIDTH=640;
 int SCREENHEIGHT=480;
 #endif
 
-#if !defined(GNAV) || (WINDOWSPC>0)
+#if !defined(GNAV) || defined(WINDOWSPC)
 typedef DWORD (_stdcall *GetIdleTimeProc) (void);
 GetIdleTimeProc GetIdleTime;
 #endif
 
 int MeasureCPULoad() {
-#if (!defined(GNAV) || (WINDOWSPC>0)) && !defined(__MINGW32__)
+#if (!defined(GNAV) || defined(WINDOWSPC)) && !defined(__MINGW32__)
   static bool init=false;
   if (!init) {
     // get the pointer to the function
@@ -125,16 +125,16 @@ long CheckFreeRam(void) {
 }
 
 
-#if (WINDOWSPC>0)
-#if _DEBUG
+#ifdef WINDOWSPC
+#ifdef _DEBUG
 _CrtMemState memstate_s1;
 #endif
 #endif
 
 void MemCheckPoint()
 {
-#if (WINDOWSPC>0)
-#if _DEBUG
+#ifdef WINDOWSPC
+#ifdef _DEBUG
   _CrtMemCheckpoint( &memstate_s1 );
 #endif
 #endif
@@ -142,8 +142,8 @@ void MemCheckPoint()
 
 
 void MemLeakCheck() {
-#if (WINDOWSPC>0)
-#if _DEBUG
+#ifdef WINDOWSPC
+#ifdef _DEBUG
   _CrtMemState memstate_s2, memstate_s3;
 
    // Store a 2nd memory checkpoint in s2
@@ -166,7 +166,7 @@ void MemLeakCheck() {
 // memory defragmentation, since on pocket pc platforms there is no
 // automatic defragmentation.
 void MyCompactHeaps() {
-#if (WINDOWSPC>0)||(defined(GNAV) && !defined(__MINGW32__))
+#if defined(WINDOWSPC)||(defined(GNAV) && !defined(__MINGW32__))
   HeapCompact(GetProcessHeap(),0);
 #else
   typedef DWORD (_stdcall *CompactAllHeapsFn) (void);
@@ -288,7 +288,7 @@ bool FileExistsA(const char *FileName){
 
 
 bool RotateScreen() {
-#if (WINDOWSPC>0)
+#ifdef WINDOWSPC
   return false;
 #else
   //
@@ -747,7 +747,7 @@ void XCSoarGetOpts(LPTSTR CommandLine) {
   TCHAR extrnProfileFile[MAX_PATH];
   extrnProfileFile[0] = 0;
 
-#if (WINDOWSPC>0)
+#ifdef WINDOWSPC
   SCREENWIDTH=640;
   SCREENHEIGHT=480;
 
@@ -784,7 +784,7 @@ void XCSoarGetOpts(LPTSTR CommandLine) {
         extrnProfileFile[pCe-pC] = '\0';
       }
     }
-#if (WINDOWSPC>0)
+#ifdef WINDOWSPC
     pC = _tcsstr(MyCommandLine, TEXT("-800x480"));
     if (pC != NULL){
       SCREENWIDTH=800;
@@ -915,7 +915,7 @@ WPARAM TranscodeKey(WPARAM wParam) {
 
 RECT SystemWindowSize(void) {
   RECT WindowSize;
-#if (WINDOWSPC>0)
+#ifdef WINDOWSPC
   WindowSize.right = SCREENWIDTH
     + 2*GetSystemMetrics( SM_CXFIXEDFRAME);
   WindowSize.left = (GetSystemMetrics(SM_CXSCREEN) - WindowSize.right) / 2;

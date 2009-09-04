@@ -90,7 +90,7 @@ static bool VegaConfigurationUpdated(const TCHAR *name, bool first,
 
   WndProperty* wp;
 
-#if (WINDOWSPC<1)
+#ifndef WINDOWSPC
   if (first) {
     XCSoarInterface::StepProgressDialog();
   }

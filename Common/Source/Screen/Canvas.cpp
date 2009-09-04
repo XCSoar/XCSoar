@@ -272,7 +272,7 @@ Canvas::copy_transparent_white(const Canvas &src, const RECT &rc)
 {
   static COLORREF whitecolor = RGB(0xff,0xff,0xff);
 
-#if WINDOWSPC < 1
+#if !defined(WINDOWSPC)
   ::TransparentImage(dc,
                      rc.left, rc.top,
                      rc.right - rc.left, rc.bottom - rc.top,

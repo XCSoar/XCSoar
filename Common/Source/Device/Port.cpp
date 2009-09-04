@@ -147,7 +147,7 @@ BOOL ComPort::Initialize(LPCTSTR lpszPortName, DWORD dwPortSpeed)
     // Could not create the read thread.
     CloseHandle(hPort);
     hPort = INVALID_HANDLE_VALUE;
-#if (WINDOWSPC>0)
+#ifdef WINDOWSPC
     Sleep(2000); // needed for windows bug
 #endif
     // TODO code: SCOTT I18N - Fix this to sep the TEXT from PORT, TEXT can be
@@ -172,7 +172,7 @@ BOOL ComPort::Initialize(LPCTSTR lpszPortName, DWORD dwPortSpeed)
   if (!StartRxThread()){
     CloseHandle(hPort);
     hPort = INVALID_HANDLE_VALUE;
-#if (WINDOWSPC>0)
+#ifdef WINDOWSPC
     Sleep(2000); // needed for windows bug
 #endif
     return FALSE;
@@ -247,7 +247,7 @@ DWORD ComPort::ReadThread()
 	 (!closeTriggerEvent.test()) && (!CloseThread))
   {
 
-#if (WINDOWSPC>0)
+#ifdef WINDOWSPC
     Sleep(50);  // ToDo rewrite the whole driver to use overlaped IO
                 // on W2K or higher
 #else
@@ -324,7 +324,7 @@ BOOL ComPort::Close()
       dwError = GetLastError();
       return FALSE;
     } else {
-#if (WINDOWSPC>0)
+#ifdef WINDOWSPC
       Sleep(2000); // needed for windows bug
 #endif
       hPort = INVALID_HANDLE_VALUE;
@@ -373,7 +373,7 @@ BOOL ComPort::StopRxThread()
   CloseThread = TRUE;
 
   DWORD tm = GetTickCount()+20000l;
-#if (WINDOWSPC>0)
+#ifdef WINDOWSPC
   while (!fRxThreadTerminated && (long)(tm-GetTickCount()) > 0) {
     Sleep(10);
   }
@@ -493,7 +493,7 @@ int ComPort::SetRxTimeout(int Timeout)
      // Could not create the read thread.
     CloseHandle(hPort);
     hPort = INVALID_HANDLE_VALUE;
-#if (WINDOWSPC>0)
+#ifdef WINDOWSPC
     Sleep(2000); // needed for windows bug
 #endif
     ComPort_StatusMessage(MB_OK, TEXT("Error"), TEXT("%s %s"),

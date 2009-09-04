@@ -432,7 +432,7 @@ jas_stream_t *jas_stream_fdopen(int fd, const char *mode)
 	  files in text mode.  For example, in the Cygwin environment,
 	  shells often open files in text mode when I/O redirection is
 	  used.  Grr... */
-#if (WINDOWSPC>0)
+#ifdef WINDOWSPC
 #ifdef HAVE_MSVCRT
 	if (stream->openmode_ & JAS_STREAM_BINARY) {
 		_setmode(fd, O_BINARY);

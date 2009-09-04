@@ -176,7 +176,7 @@ int ProcessTimer::ConnectionProcessTimer(int itimeout) {
 	  // no activity for 30 seconds, so assume PDA has been
 	  // switched off and on again
 	  //
-#if (WINDOWSPC<1)
+#ifndef WINDOWSPC
 #ifndef GNAV
 
 	  extGPSCONNECT = FALSE;

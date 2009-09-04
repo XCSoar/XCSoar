@@ -357,7 +357,7 @@ XMLNode xmlLoadFromResource(const TCHAR* lpName,
 
 #if defined(WIN32) || defined(UNDER_CE)
 #ifdef _UNICODE
-#if !defined(UNDER_CE) && (WINDOWSPC<1)
+#if !defined(UNDER_CE) && !defined(WINDOWSPC)
       if (!IsTextUnicode(buf,mmin(l,10000),NULL))
         {
 #endif
@@ -372,7 +372,7 @@ XMLNode xmlLoadFromResource(const TCHAR* lpName,
           buf=(char*)b2;
           buf[l*2]= 0;
           buf[l*2+1]= 0;
-#if !defined(UNDER_CE) && (WINDOWSPC<1)
+#if !defined(UNDER_CE) && !defined(WINDOWSPC)
         }
 #endif
 #else
@@ -441,7 +441,7 @@ load_xml_file_or_resource(const TCHAR *name, const TCHAR* resource)
   XMLNode xMainNode;
 
 /* -> filename is allready localized
-#if (WINDOWSPC<1)
+#ifndef WINDOWSPC
   xMainNode=XMLNode::openFileHelper(FileName ,TEXT("PMML"));
 #else
   char winname[200];

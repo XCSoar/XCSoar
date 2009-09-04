@@ -231,7 +231,7 @@ void MapWindow::DrawWaypoints(Canvas &canvas)
 		else
 		  Buffer[0]= '\0';
 	      default:
-#if (WINDOWSPC<1)
+#ifndef WINDOWSPC
 		assert(0);
 #endif
 		break;

@@ -48,7 +48,7 @@ extern void     __zzip_set64b(zzip_byte_t * s, uint64_t v);
 # endif
 #else /* little endian is the original zip format byteorder */
   // JMW need to use these as otherwise get data misalignment exceptions
-#if (WINDOWSPC<1)
+#ifndef WINDOWSPC
 # define ZZIP_GET64(__p)     (__zzip_get64((__p)))
 # define ZZIP_GET32(__p)     (__zzip_get32((__p)))
 # define ZZIP_GET16(__p)     (__zzip_get16((__p)))
