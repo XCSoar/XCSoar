@@ -64,7 +64,7 @@ public:
    *
    * @param duration the duration in milliseconds
    */
-  bool check(unsigned duration) {
+  bool check(unsigned duration) const {
     DWORD now = ::GetTickCount();
     return now >= last + duration;
   }
