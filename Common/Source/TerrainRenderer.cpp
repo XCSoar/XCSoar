@@ -315,7 +315,7 @@ TerrainRenderer::TerrainRenderer(RECT rc) {
     // dtquant=3, latency=136 ms
     // dtquant=4, latency= 93 ms
   }
-  blursize = max(0, (dtquant-1)/2);
+  blursize = (dtquant - 1) / 2;
   oversampling = max(1,(blursize+1)/2+1);
   if (blursize==0) {
     oversampling = 1; // no point in oversampling, just let stretchblt do the scaling

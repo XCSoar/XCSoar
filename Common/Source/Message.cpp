@@ -530,7 +530,7 @@ void Message::LoadFile() {
 	 && ((found = _stscanf(buffer, TEXT("%[^#=]=%[^\n]\n"), key, value)) != EOF)
 	 ) {
     // Check valid line? If not valid, assume next record (primative, but works ok!)
-    if ((found != 2) || !key || !value) {
+    if ((found != 2) || key[0] == 0 || value[0] == 0) {
 
       // Global counter (only if the last entry had some data)
       if (some_data) {

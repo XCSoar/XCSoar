@@ -176,7 +176,7 @@ void RasterWeather::Reload(double lat, double lon) {
   }
 
   // limit values, for safety
-  _weather_time = min(MAX_WEATHER_TIMES-1, max(0, _weather_time));
+  _weather_time = min(MAX_WEATHER_TIMES-1, _weather_time);
 
   if (_weather_time == last_weather_time) {
     // no change, quick exit.

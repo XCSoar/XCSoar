@@ -349,7 +349,7 @@ void InputEvents::readFile() {
       d_location = 0;
       new_label = NULL;
 
-    } else if ((found != 2) || !key || !value) {
+    } else if ((found != 2) || key[0] == 0 || value[0] == 0) {
       // Do nothing - we probably just have a comment line
       // JG removed "void;" - causes warning (void is declaration and needs variable)
       // NOTE: Do NOT display buffer to user as it may contain an invalid stirng !

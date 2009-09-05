@@ -187,7 +187,7 @@ void ReadLanguageFile() {
 	 && ((found = _stscanf(buffer, TEXT("%[^#=]=%[^\r\n][\r\n]"), key, value)) != EOF)
          ) {
     // Check valid line?
-    if ((found != 2) || !key || !value) continue;
+    if ((found != 2) || key[0] == 0 || value[0] == 0) continue;
 
     GetTextData[GetTextData_Size].key = StringMallocParse(key);
     GetTextData[GetTextData_Size].text = StringMallocParse(value);
