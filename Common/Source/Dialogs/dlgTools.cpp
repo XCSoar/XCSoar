@@ -481,8 +481,6 @@ WndForm *dlgLoadFromXML(CallBackTableEntry_t *LookUpTable,
   // ist that ok?  JMW: No, I think that it is better to use main UI thread for
   // everything.  See changes regarding RequestAirspaceDialog in AirspaceWarning.cpp
 
-// T:\\Project\\WINCE\\TNAV\\XCSoar\\
-
   // this open and parse the XML file:
 
   XMLNode xMainNode = load_xml_file_or_resource(FileName, resource);
