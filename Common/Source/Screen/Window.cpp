@@ -201,6 +201,12 @@ Window::on_killfocus()
   return false;
 }
 
+bool
+Window::on_timer(unsigned id)
+{
+  return false;
+}
+
 LRESULT
 Window::on_message(HWND _hWnd, UINT message,
                        WPARAM wParam, LPARAM lParam)
@@ -290,6 +296,11 @@ Window::on_message(HWND _hWnd, UINT message,
 
   case WM_KILLFOCUS:
     if (on_killfocus())
+      return 0;
+    break;
+
+  case WM_TIMER:
+    if (on_timer(wParam))
       return 0;
     break;
   }
