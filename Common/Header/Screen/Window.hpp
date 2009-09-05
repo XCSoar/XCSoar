@@ -106,10 +106,6 @@ public:
     ::BringWindowToTop(hWnd);
   }
 
-  void set_active() {
-    ::SetActiveWindow(hWnd);
-  }
-
   void set_font(const Font &font) {
     ::SendMessage(hWnd, WM_SETFONT,
                   (WPARAM)font.native(), MAKELPARAM(TRUE,0));

@@ -64,6 +64,10 @@ public:
   void set(LPCTSTR cls, LPCTSTR text,
            int left, int top, unsigned width, unsigned height);
 
+  void set_active() {
+    ::SetActiveWindow(hWnd);
+  }
+
   void full_screen();
 
   void update() {
