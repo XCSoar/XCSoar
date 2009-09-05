@@ -312,11 +312,6 @@ SCREEN_INFO Data_Options[] = {
 
 const int NUMSELECTSTRINGS = 74;
 
-
-/////////////////
-
-static void FocusOnWindow(int i, bool selected);
-
 // TODO locking
 void InfoBoxManager::Hide() {
   int i;
