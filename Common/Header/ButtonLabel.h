@@ -56,6 +56,8 @@ class ButtonLabel: public CommonInterface {
   static void GetButtonPosition(int i, RECT rc,
 				int *x, int *y,
 				int *sizex, int *sizey);
+
+  static bool ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size);
 };
 
 #endif

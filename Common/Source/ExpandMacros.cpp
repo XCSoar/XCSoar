@@ -35,7 +35,7 @@ Copyright_License {
 }
 */
 
-#include "ExpandMacros.hpp"
+#include "ButtonLabel.h"
 #include "XCSoar.h"
 #include "Language.hpp"
 #include "Gauge/GaugeFLARM.hpp"
@@ -50,7 +50,6 @@ Copyright_License {
 #include "Compatibility/string.h"
 #include "InfoBoxManager.h"
 #include "SettingsUser.hpp"
-
 #include <stdlib.h>
 
 static void ReplaceInString(TCHAR *String, const TCHAR *ToReplace,
@@ -78,7 +77,8 @@ static void CondReplaceInString(bool Condition, TCHAR *Buffer,
     ReplaceInString(Buffer, Macro, FalseText, Size);
 }
 
-bool ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size){
+bool ButtonLabel::ExpandMacros(const TCHAR *In, 
+			       TCHAR *OutBuffer, size_t Size) {
   // ToDo, check Buffer Size
   bool invalid = false;
   _tcsncpy(OutBuffer, In, Size);
@@ -178,7 +178,7 @@ bool ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size){
   }
 
   if (_tcsstr(OutBuffer, TEXT("$(CheckReplay)"))) {
-    if (!ReplayLogger::IsEnabled() && XCSoarInterface::Basic().MovementDetected) {
+    if (!ReplayLogger::IsEnabled() && Basic().MovementDetected) {
       invalid = true;
     }
     ReplaceInString(OutBuffer, TEXT("$(CheckReplay)"), TEXT(""), Size);
@@ -192,7 +192,7 @@ bool ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size){
   }
   if (_tcsstr(OutBuffer, TEXT("$(CheckSettingsLockout)"))) {
 #ifndef _SIM_
-    if (LockSettingsInFlight && XCSoarInterface::Calculated().Flying) {
+    if (LockSettingsInFlight && Calculated().Flying) {
       invalid = true;
     }
 #endif
@@ -218,21 +218,21 @@ bool ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size){
     ReplaceInString(OutBuffer, TEXT("$(CheckAirspace)"), TEXT(""), Size);
   }
   if (_tcsstr(OutBuffer, TEXT("$(CheckFLARM)"))) {
-    if (!XCSoarInterface::Basic().FLARM_Available) {
+    if (!Basic().FLARM_Available) {
       invalid = true;
     }
     ReplaceInString(OutBuffer, TEXT("$(CheckFLARM)"), TEXT(""), Size);
   }
   if (_tcsstr(OutBuffer, TEXT("$(CheckTerrain)"))) {
-    if (!XCSoarInterface::Calculated().TerrainValid) {
+    if (!Calculated().TerrainValid) {
       invalid = true;
     }
     ReplaceInString(OutBuffer, TEXT("$(CheckTerrain)"), TEXT(""), Size);
   }
   if (_tcsstr(OutBuffer, TEXT("$(CheckAutoMc)"))) {
     if (!ValidTaskPoint(ActiveWayPoint)
-        && ((XCSoarInterface::SettingsComputer().AutoMcMode==0)
-	    || (XCSoarInterface::SettingsComputer().AutoMcMode==2))) {
+        && ((SettingsComputer().AutoMcMode==0)
+	    || (SettingsComputer().AutoMcMode==2))) {
       invalid = true;
     }
     ReplaceInString(OutBuffer, TEXT("$(CheckAutoMc)"), TEXT(""), Size);
@@ -322,12 +322,12 @@ bool ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size){
                         TEXT("$(FinalForceToggleActionName)"),
                         TEXT("Unforce"),
                         TEXT("Force"), Size);
-    if (XCSoarInterface::SettingsComputer().AutoForceFinalGlide) {
+    if (SettingsComputer().AutoForceFinalGlide) {
       invalid = true;
     }
   }
 
-  CondReplaceInString(XCSoarInterface::main_window.map.isMapFullScreen(), OutBuffer,
+  CondReplaceInString(main_window.map.isMapFullScreen(), OutBuffer,
                       TEXT("$(FullScreenToggleActionName)"),
                       TEXT("Off"), TEXT("On"), Size);
   CondReplaceInString(AutoZoom, OutBuffer, TEXT("$(ZoomAutoToggleActionName)"), TEXT("Manual"), TEXT("Auto"), Size);
@@ -351,7 +351,7 @@ bool ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size){
     }
   }
 
-  CondReplaceInString(XCSoarInterface::Calculated().AutoMacCready != 0, OutBuffer, TEXT("$(MacCreadyToggleActionName)"), TEXT("Manual"), TEXT("Auto"), Size);
+  CondReplaceInString(SettingsComputer().AutoMacCready != 0, OutBuffer, TEXT("$(MacCreadyToggleActionName)"), TEXT("Manual"), TEXT("Auto"), Size);
   CondReplaceInString(EnableAuxiliaryInfo, OutBuffer, TEXT("$(AuxInfoToggleActionName)"), TEXT("Off"), TEXT("On"), Size);
 
   CondReplaceInString(UserForceDisplayMode == dmCircling, OutBuffer, TEXT("$(DispModeClimbShortIndicator)"), TEXT("(*)"), TEXT(""), Size);
