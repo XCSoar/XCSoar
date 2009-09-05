@@ -218,6 +218,8 @@ bool XCSoarInterface::Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
   if (MainWindow::find(szTitle))
     return false;
 
+  DefaultSettings();
+
   PaintWindow::register_class(hInst);
   MainWindow::register_class(hInst);
   MapWindow::register_class(hInst);

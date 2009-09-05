@@ -72,12 +72,11 @@ static void HeapCompactTimer()
 
 void ProcessTimer::CommonProcessTimer()
 {
-  SendSettings();
-
   // service the GCE and NMEA queue
   if (globalRunningEvent.test()) {
 
     InputEvents::DoQueuedEvents();
+
     if (airspaceWarningEvent.test()) {
       airspaceWarningEvent.reset();
       ResetDisplayTimeOut();
@@ -88,6 +87,7 @@ void ProcessTimer::CommonProcessTimer()
     if (gauge_flarm != NULL)
       gauge_flarm->Show();
   }
+  SendSettings();
   InfoBoxManager::ProcessTimer();
 
   InputEvents::ProcessMenuTimer();

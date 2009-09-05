@@ -54,6 +54,15 @@ InterfaceBlackboard CommonInterface::blackboard;
 HINSTANCE CommonInterface::hInst; // The current instance
 MainWindow CommonInterface::main_window;
 
+
+void XCSoarInterface::DefaultSettings() 
+{
+
+  SetSettingsComputer().AutoWindMode= D_AUTOWIND_CIRCLING;
+  SetSettingsComputer().AutoMcMode = 0;
+}
+
+
 void XCSoarInterface::SendSettings() {
   // send computer settings to the device because we know
   // that it won't be reading from them if we lock it, and

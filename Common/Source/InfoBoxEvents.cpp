@@ -63,7 +63,7 @@ Copyright_License {
 // so -1 down
 //     1 up
 //     0 enter
-
+//
 // TODO: make a proper class
 
 void	AirspeedProcessing(int UpDown)

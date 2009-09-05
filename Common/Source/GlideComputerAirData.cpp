@@ -117,18 +117,9 @@ void GlideComputerAirData::ProcessVertical() {
 }
 
 
-#define D_AUTOWIND_CIRCLING 1
-#define D_AUTOWIND_ZIGZAG 2
-
-int AutoWindMode= D_AUTOWIND_CIRCLING;
-// 0: Manual
-// 1: Circling
-// 2: ZigZag
-// 3: Both
-
 void GlideComputerAirData::DoWindZigZag() {
   // update zigzag wind
-  if (((AutoWindMode & D_AUTOWIND_ZIGZAG)==D_AUTOWIND_ZIGZAG)
+  if (((SettingsComputer().AutoWindMode & D_AUTOWIND_ZIGZAG)==D_AUTOWIND_ZIGZAG)
       && (!ReplayLogger::IsEnabled())) {
     double zz_wind_speed;
     double zz_wind_bearing;
@@ -150,7 +141,7 @@ void GlideComputerAirData::DoWindZigZag() {
 
 
 void GlideComputerAirData::DoWindCirclingMode(const bool left) {
-  if ((AutoWindMode & D_AUTOWIND_CIRCLING)==D_AUTOWIND_CIRCLING) {
+  if ((SettingsComputer().AutoWindMode & D_AUTOWIND_CIRCLING)==D_AUTOWIND_CIRCLING) {
     windanalyser.slot_newFlightMode(&Basic(), 
 				    &Calculated(),
 				    left, 0);
@@ -160,7 +151,7 @@ void GlideComputerAirData::DoWindCirclingMode(const bool left) {
 
 void GlideComputerAirData::DoWindCirclingSample() {
   ScopeLock protect(mutexGlideComputer);
-  if ((AutoWindMode & D_AUTOWIND_CIRCLING)==D_AUTOWIND_CIRCLING) {
+  if ((SettingsComputer().AutoWindMode & D_AUTOWIND_CIRCLING)==D_AUTOWIND_CIRCLING) {
     windanalyser.slot_newSample(&Basic(), 
 				&SetCalculated());
   }
@@ -168,7 +159,7 @@ void GlideComputerAirData::DoWindCirclingSample() {
 
 
 void GlideComputerAirData::DoWindCirclingAltitude() {
-  if (AutoWindMode>0) {
+  if (SettingsComputer().AutoWindMode>0) {
     ScopeLock protect(mutexGlideComputer);
     windanalyser.slot_Altitude(&Basic(), 
 			       &SetCalculated());

@@ -49,6 +49,20 @@ Copyright_License {
 // from outside calculation thread; calculation thread should not set
 // these values
 
+// AutoWindMode
+#define D_AUTOWIND_CIRCLING 1
+#define D_AUTOWIND_ZIGZAG 2
+// 0: Manual
+// 1: Circling
+// 2: ZigZag
+// 3: Both
+
+// AutoMcMode
+// 0: Final glide only
+// 1: Set to average if in climb mode
+// 2: Average if in climb mode, final glide in final glide mode
+
+
 typedef struct _SETTINGS_COMPUTER {
 
  int    FinalGlideTerrain;
@@ -86,8 +100,6 @@ typedef struct _SETTINGS_COMPUTER {
  int    SoundVolume;
  int    SoundDeadband;
 } SETTINGS_COMPUTER;
-
-
 
 #endif
 

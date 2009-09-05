@@ -94,6 +94,7 @@ public:
 private:
   static void PreloadInitialisation(bool ask);
   static void StartupInfo();
+  static void DefaultSettings();
   static HWND hProgress;
   static HWND hWndCurtain;
   static HCURSOR oldCursor;
