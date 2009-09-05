@@ -1341,9 +1341,7 @@ void InputEvents::eventNearestAirspaceDetails(const TCHAR *misc) {
 
   // TODO code: No control via status data (ala DoStatusMEssage)
   // - can we change this?
-  Message::Lock();
   Message::AddMessage(5000, Message::MSG_AIRSPACE, text);
-  Message::Unlock();
 }
 
 // NearestWaypointDetails
