@@ -253,14 +253,21 @@ bool MapWindow::Idle(const bool do_force) {
       terrain.ServiceTerrainCenter(Basic().Latitude,
 				   Basic().Longitude);
       terrain.ServiceCache();
-      terrain_idle.dirty = false;
+      
+      if (!do_force) {
+	// JMW this currently isn't working with the smart bounds
+	terrain_idle.dirty = false;
+      }
       continue;
     }
 
     if (rasp_idle.dirty) {
       RASP.SetViewCenter(Basic().Latitude,
 			 Basic().Longitude);
-      rasp_idle.dirty = false;
+      if (!do_force) {
+	// JMW this currently isn't working with the smart bounds
+	rasp_idle.dirty = false;
+      }
       continue;
     }
 
