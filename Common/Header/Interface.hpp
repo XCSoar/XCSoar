@@ -65,6 +65,24 @@ public:
   static void ReadBlackboardCalculated(const DERIVED_INFO& derived_info) {
     blackboard.ReadBlackboardCalculated(derived_info);
   }
+public: 
+  // ideally these should be protected
+  static void on_key_None(int UpDown);
+  static void on_key_WindSpeed(int UpDown);
+  static void on_key_WindDirection(int UpDown);
+  static void on_key_MacCready(int UpDown);
+  static void on_key_Accelerometer(int UpDown);
+  static void on_key_Waypoint(int UpDown);
+  static void on_key_Speed(int UpDown);
+  static void on_key_Direction(int UpDown);
+  static void on_key_Altitude(int UpDown);
+  static void on_key_QFEAltitude(int UpDown); // VENTA3
+  static void on_key_Alternate1(int UpDown); // VENTA3
+  static void on_key_Alternate2(int UpDown); // VENTA3
+  static void on_key_BestAlternate(int UpDown); // VENTA3
+  static void on_key_Airspeed(int UpDown);
+  static void on_key_TeamCode(int UpDown);
+  static void on_key_ForecastTemperature(int UpDown);
 private:
   static InterfaceBlackboard blackboard;
 };
@@ -98,6 +116,7 @@ private:
   static HWND hProgress;
   static HWND hWndCurtain;
   static HCURSOR oldCursor;
+protected:
 };
 
 #endif

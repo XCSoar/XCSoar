@@ -45,6 +45,7 @@ extern const unsigned NUMSELECTSTRINGS;
 
 #include "Interface.hpp"
 
+
 class InfoBoxManager: public CommonInterface {
  private:
   static void FocusSetMaxTimeOut(void);
@@ -83,6 +84,7 @@ public:
   static void setTypeAll(unsigned i, unsigned j);
 
   static bool IsFocus();
+  //
 };
 
 #endif

@@ -35,7 +35,7 @@ Copyright_License {
 }
 */
 
-#include "InfoBoxEvents.h"
+#include "InfoBoxManager.h"
 #include "Protection.hpp"
 #include "Device/Parser.h"
 #include "Settings.hpp"
@@ -66,7 +66,7 @@ Copyright_License {
 //
 // TODO: make a proper class
 
-void	AirspeedProcessing(int UpDown)
+void	CommonInterface::on_key_Airspeed(int UpDown)
 {
   /* JMW illegal
   if (UpDown==0) {
@@ -82,7 +82,7 @@ void	AirspeedProcessing(int UpDown)
   */
 }
 
-void	TeamCodeProcessing(int UpDown)
+void	CommonInterface::on_key_TeamCode(int UpDown)
 {
   int tryCount = 0;
   int searchSlot = FindFlarmSlot(XCSoarInterface::Basic(), TeamFlarmIdTarget);
@@ -152,7 +152,7 @@ void	TeamCodeProcessing(int UpDown)
   */
 }
 
-void	AltitudeProcessing(int UpDown)
+void	CommonInterface::on_key_Altitude(int UpDown)
 {
   /* JMW illegal
 	#ifdef _SIM_
@@ -164,9 +164,9 @@ void	AltitudeProcessing(int UpDown)
 	    if(XCSoarInterface::Basic().Altitude < 0)
 	      XCSoarInterface::Basic().Altitude = 0;
 	  } else if (UpDown==-2) {
-	  DirectionProcessing(-1);
+	  on_key_Direction(-1);
 	} else if (UpDown==2) {
-	  DirectionProcessing(1);
+	  on_key_Direction(1);
 	}
 #endif
   */
@@ -174,7 +174,7 @@ void	AltitudeProcessing(int UpDown)
 }
 
 // VENTA3 QFE
-void	QFEAltitudeProcessing(int UpDown)
+void	CommonInterface::on_key_QFEAltitude(int UpDown)
 {
 	short step;
 	if ( ( XCSoarInterface::Basic().Altitude - QFEAltitudeOffset ) <10 ) step=1; else step=10;
@@ -188,15 +188,15 @@ void	QFEAltitudeProcessing(int UpDown)
 	      QFEAltitudeOffset = 0;
 */
 	  } else if (UpDown==-2) {
-	  DirectionProcessing(-1);
+	  on_key_Direction(-1);
 	} else if (UpDown==2) {
-	  DirectionProcessing(1);
+	  on_key_Direction(1);
 	}
 	return;
 }
 
 // VENTA3 Alternates processing updown
-void Alternate1Processing(int UpDown)
+void CommonInterface::on_key_Alternate1(int UpDown)
 {
    if (UpDown==0) {
      if ( Alternate1 <0 ) return;
@@ -206,7 +206,7 @@ void Alternate1Processing(int UpDown)
      mutexTaskData.Unlock();
   }
 }
-void Alternate2Processing(int UpDown)
+void CommonInterface::on_key_Alternate2(int UpDown)
 {
    if (UpDown==0) {
      if ( Alternate2 <0 ) return;
@@ -216,7 +216,7 @@ void Alternate2Processing(int UpDown)
      mutexTaskData.Unlock();
   }
 }
-void BestAlternateProcessing(int UpDown)
+void CommonInterface::on_key_BestAlternate(int UpDown)
 {
    if (UpDown==0) {
      if ( BestAlternate <0 ) return;
@@ -227,7 +227,7 @@ void BestAlternateProcessing(int UpDown)
   }
 }
 
-void	SpeedProcessing(int UpDown)
+void	CommonInterface::on_key_Speed(int UpDown)
 {
 	#ifdef _SIM_
   /* JMW illegal
@@ -239,9 +239,9 @@ void	SpeedProcessing(int UpDown)
 			if(XCSoarInterface::Basic().Speed < 0)
 				XCSoarInterface::Basic().Speed = 0;
 		} else if (UpDown==-2) {
-			DirectionProcessing(-1);
+			on_key_Direction(-1);
 		} else if (UpDown==2) {
-			DirectionProcessing(1);
+			on_key_Direction(1);
 		}
   */
 	#endif
@@ -249,7 +249,7 @@ void	SpeedProcessing(int UpDown)
 }
 
 
-void	AccelerometerProcessing(int UpDown)
+void	CommonInterface::on_key_Accelerometer(int UpDown)
 {
   DWORD Temp;
   if (UpDown==0) {
@@ -262,7 +262,7 @@ void	AccelerometerProcessing(int UpDown)
   }
 }
 
-void	WindDirectionProcessing(int UpDown)
+void	CommonInterface::on_key_WindDirection(int UpDown)
 {
 /* JMW ILLEGAL/incomplete
   if(UpDown==1)
@@ -289,7 +289,7 @@ void	WindDirectionProcessing(int UpDown)
 */
 }
 
-void	WindSpeedProcessing(int UpDown)
+void	CommonInterface::on_key_WindSpeed(int UpDown)
 {
 /* JMW ILLEGAL/incomplete
 	if(UpDown==1)
@@ -302,9 +302,9 @@ void	WindSpeedProcessing(int UpDown)
 	}
 	// JMW added faster way of changing wind direction
 	else if (UpDown== -2) {
-		WindDirectionProcessing(-1);
+		on_key_WindDirection(-1);
 	} else if (UpDown== 2) {
-		WindDirectionProcessing(1);
+		on_key_WindDirection(1);
 	} else if (UpDown == 0) {
           glide_computer.SetWindEstimate(XCSoarInterface::Calculated().WindSpeed,
 					 XCSoarInterface::Calculated().WindBearing);
@@ -314,7 +314,7 @@ void	WindSpeedProcessing(int UpDown)
 	return;
 }
 
-void	DirectionProcessing(int UpDown)
+void	CommonInterface::on_key_Direction(int UpDown)
 {
 	#ifdef _SIM_
   /* JMW illegal/incomplete
@@ -340,7 +340,7 @@ void	DirectionProcessing(int UpDown)
 }
 
 
-void	MacCreadyProcessing(int UpDown)
+void	CommonInterface::on_key_MacCready(int UpDown)
 {
   double MACCREADY = GlidePolar::GetMacCready();
   if(UpDown==1) {
@@ -387,7 +387,7 @@ void	MacCreadyProcessing(int UpDown)
 }
 
 
-void	ForecastTemperatureProcessing(int UpDown)
+void	CommonInterface::on_key_ForecastTemperature(int UpDown)
 {
   if (UpDown==1) {
     CuSonde::adjustForecastTemperature(0.5);
@@ -405,7 +405,7 @@ void	ForecastTemperatureProcessing(int UpDown)
 	2	Next waypoint with wrap around
 	-2	Previous waypoint with wrap around
 */
-void NextUpDown(int UpDown)
+void CommonInterface::on_key_Waypoint(int UpDown)
 {
   mutexTaskData.Lock();
 
@@ -483,7 +483,7 @@ void NextUpDown(int UpDown)
 }
 
 
-void NoProcessing(int UpDown)
+void CommonInterface::on_key_None(int UpDown)
 {
   (void)UpDown;
   return;

@@ -42,7 +42,6 @@ Copyright_License {
 #include "Protection.hpp"
 #include "InfoBox.h"
 #include "InfoBoxLayout.h"
-#include "InfoBoxEvents.h"
 #include "Formatter/TeamCode.hpp"
 #include "Formatter/WayPoint.hpp"
 #include "Formatter/LowWarning.hpp"
@@ -112,8 +111,6 @@ static int InfoType[MAXINFOWINDOWS] =
    1644825};
 #endif
 
-
-
 typedef struct _SCREEN_INFO
 {
   UnitGroup_t UnitGroup;
@@ -137,175 +134,175 @@ typedef struct _SCREEN_INFO
 //   Waypoint 14,36,39,40,41,42,45,46
 SCREEN_INFO Data_Options[] = {
           // 0
-	  {ugAltitude,        TEXT("Height GPS"), TEXT("H GPS"), new InfoBoxFormatter(TEXT("%2.0f")), AltitudeProcessing, 1, 33},
+	  {ugAltitude,        TEXT("Height GPS"), TEXT("H GPS"), new InfoBoxFormatter(TEXT("%2.0f")), CommonInterface::on_key_Altitude, 1, 33},
 	  // 1
-	  {ugAltitude,        TEXT("Height AGL"), TEXT("H AGL"), new FormatterLowWarning(TEXT("%2.0f"),0.0), NoProcessing, 20, 0},
+	  {ugAltitude,        TEXT("Height AGL"), TEXT("H AGL"), new FormatterLowWarning(TEXT("%2.0f"),0.0), CommonInterface::on_key_None, 20, 0},
 	  // 2
-	  {ugVerticalSpeed,   TEXT("Thermal last 30 sec"), TEXT("TC 30s"), new FormatterLowWarning(TEXT("%-2.1f"),0.0), NoProcessing, 7, 44},
+	  {ugVerticalSpeed,   TEXT("Thermal last 30 sec"), TEXT("TC 30s"), new FormatterLowWarning(TEXT("%-2.1f"),0.0), CommonInterface::on_key_None, 7, 44},
 	  // 3
 #ifdef FIVV
-	  {ugNone,            TEXT("Bearing"), TEXT("Bearing"), new InfoBoxFormatter(TEXT("%2.0f")TEXT(DEG)), NoProcessing, 6, 54},
+	  {ugNone,            TEXT("Bearing"), TEXT("Bearing"), new InfoBoxFormatter(TEXT("%2.0f")TEXT(DEG)), CommonInterface::on_key_None, 6, 54},
 #else
-	  {ugNone,            TEXT("Bearing"), TEXT("Bearing"), new InfoBoxFormatter(TEXT("%2.0f")TEXT(DEG)TEXT("T")), NoProcessing, 6, 54},
+	  {ugNone,            TEXT("Bearing"), TEXT("Bearing"), new InfoBoxFormatter(TEXT("%2.0f")TEXT(DEG)TEXT("T")), CommonInterface::on_key_None, 6, 54},
 #endif
 	  // 4
-	  {ugNone,            TEXT("L/D instantaneous"), TEXT("L/D Inst"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 5, 38},
+	  {ugNone,            TEXT("L/D instantaneous"), TEXT("L/D Inst"), new InfoBoxFormatter(TEXT("%2.0f")), CommonInterface::on_key_None, 5, 38},
 	  // 5
-	  {ugNone,            TEXT("L/D cruise"), TEXT("L/D Cru"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 19, 4},
+	  {ugNone,            TEXT("L/D cruise"), TEXT("L/D Cru"), new InfoBoxFormatter(TEXT("%2.0f")), CommonInterface::on_key_None, 19, 4},
 	  // 6
-	  {ugHorizontalSpeed, TEXT("Speed ground"), TEXT("V Gnd"), new InfoBoxFormatter(TEXT("%2.0f")), SpeedProcessing, 23, 3},
+	  {ugHorizontalSpeed, TEXT("Speed ground"), TEXT("V Gnd"), new InfoBoxFormatter(TEXT("%2.0f")), CommonInterface::on_key_Speed, 23, 3},
 	  // 7
-	  {ugVerticalSpeed,   TEXT("Last Thermal Average"), TEXT("TL Avg"), new InfoBoxFormatter(TEXT("%-2.1f")), NoProcessing, 8, 2},
+	  {ugVerticalSpeed,   TEXT("Last Thermal Average"), TEXT("TL Avg"), new InfoBoxFormatter(TEXT("%-2.1f")), CommonInterface::on_key_None, 8, 2},
 	  // 8
-	  {ugAltitude,        TEXT("Last Thermal Gain"), TEXT("TL Gain"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 9, 7},
+	  {ugAltitude,        TEXT("Last Thermal Gain"), TEXT("TL Gain"), new InfoBoxFormatter(TEXT("%2.0f")), CommonInterface::on_key_None, 9, 7},
 	  // 9
-	  {ugNone,            TEXT("Last Thermal Time"), TEXT("TL Time"), new FormatterTime(TEXT("%04.0f")), NoProcessing, 21, 8},
+	  {ugNone,            TEXT("Last Thermal Time"), TEXT("TL Time"), new FormatterTime(TEXT("%04.0f")), CommonInterface::on_key_None, 21, 8},
 	  // 10
-	  {ugVerticalSpeed,   TEXT("MacCready Setting"), TEXT("MacCready"), new InfoBoxFormatter(TEXT("%2.1f")), MacCreadyProcessing, 34, 43},
+	  {ugVerticalSpeed,   TEXT("MacCready Setting"), TEXT("MacCready"), new InfoBoxFormatter(TEXT("%2.1f")), CommonInterface::on_key_MacCready, 34, 43},
 	  // 11
-	  {ugDistance,        TEXT("Next Distance"), TEXT("WP Dist"), new InfoBoxFormatter(TEXT("%2.1f")), NoProcessing, 12, 31},
+	  {ugDistance,        TEXT("Next Distance"), TEXT("WP Dist"), new InfoBoxFormatter(TEXT("%2.1f")), CommonInterface::on_key_None, 12, 31},
 	  // 12
-	  {ugAltitude,        TEXT("Next Altitude Difference"), TEXT("WP AltD"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 13, 11},
+	  {ugAltitude,        TEXT("Next Altitude Difference"), TEXT("WP AltD"), new InfoBoxFormatter(TEXT("%2.0f")), CommonInterface::on_key_None, 13, 11},
 	  // 13
-	  {ugAltitude,        TEXT("Next Altitude Required"), TEXT("WP AltR"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 15, 12},
+	  {ugAltitude,        TEXT("Next Altitude Required"), TEXT("WP AltR"), new InfoBoxFormatter(TEXT("%2.0f")), CommonInterface::on_key_None, 15, 12},
 	  // 14
-	  {ugNone,            TEXT("Next Waypoint"), TEXT("Next"), new FormatterWaypoint(TEXT("\0")), NextUpDown, 36, 46},
+	  {ugNone,            TEXT("Next Waypoint"), TEXT("Next"), new FormatterWaypoint(TEXT("\0")), CommonInterface::on_key_Waypoint, 36, 46},
 	  // 15
-	  {ugAltitude,        TEXT("Final Altitude Difference"), TEXT("Fin AltD"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 16, 13},
+	  {ugAltitude,        TEXT("Final Altitude Difference"), TEXT("Fin AltD"), new InfoBoxFormatter(TEXT("%2.0f")), CommonInterface::on_key_None, 16, 13},
 	  // 16
-	  {ugAltitude,        TEXT("Final Altitude Required"), TEXT("Fin AltR"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 17, 15},
+	  {ugAltitude,        TEXT("Final Altitude Required"), TEXT("Fin AltR"), new InfoBoxFormatter(TEXT("%2.0f")), CommonInterface::on_key_None, 17, 15},
 	  // 17
-	  {ugTaskSpeed, TEXT("Speed Task Average"), TEXT("V Task Av"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 18, 16},
+	  {ugTaskSpeed, TEXT("Speed Task Average"), TEXT("V Task Av"), new InfoBoxFormatter(TEXT("%2.0f")), CommonInterface::on_key_None, 18, 16},
 	  // 18
-	  {ugDistance,        TEXT("Final Distance"), TEXT("Fin Dis"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 27, 17},
+	  {ugDistance,        TEXT("Final Distance"), TEXT("Fin Dis"), new InfoBoxFormatter(TEXT("%2.0f")), CommonInterface::on_key_None, 27, 17},
 	  // 19
-	  {ugNone,            TEXT("Final LD"), TEXT("Fin LD"), new InfoBoxFormatter(TEXT("%1.0f")), NoProcessing, 38, 5},
+	  {ugNone,            TEXT("Final LD"), TEXT("Fin LD"), new InfoBoxFormatter(TEXT("%1.0f")), CommonInterface::on_key_None, 38, 5},
 	  // 20
-	  {ugAltitude,        TEXT("Terrain Elevation"), TEXT("H Gnd"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 33, 1},
+	  {ugAltitude,        TEXT("Terrain Elevation"), TEXT("H Gnd"), new InfoBoxFormatter(TEXT("%2.0f")), CommonInterface::on_key_None, 33, 1},
 	  // 21
-	  {ugVerticalSpeed,   TEXT("Thermal Average"), TEXT("TC Avg"), new FormatterLowWarning(TEXT("%-2.1f"),0.0), NoProcessing, 22, 9},
+	  {ugVerticalSpeed,   TEXT("Thermal Average"), TEXT("TC Avg"), new FormatterLowWarning(TEXT("%-2.1f"),0.0), CommonInterface::on_key_None, 22, 9},
 	  // 22
-	  {ugAltitude,        TEXT("Thermal Gain"), TEXT("TC Gain"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 24, 21},
+	  {ugAltitude,        TEXT("Thermal Gain"), TEXT("TC Gain"), new InfoBoxFormatter(TEXT("%2.0f")), CommonInterface::on_key_None, 24, 21},
 	  // 23
 #ifdef FIVV
-	  {ugNone,            TEXT("Track"), TEXT("Track"), new InfoBoxFormatter(TEXT("%2.0f")TEXT(DEG)), DirectionProcessing, 32, 6},
+	  {ugNone,            TEXT("Track"), TEXT("Track"), new InfoBoxFormatter(TEXT("%2.0f")TEXT(DEG)), CommonInterface::on_key_Direction, 32, 6},
 #else
-	  {ugNone,            TEXT("Track"), TEXT("Track"), new InfoBoxFormatter(TEXT("%2.0f")TEXT(DEG)TEXT("T")), DirectionProcessing, 32, 6},
+	  {ugNone,            TEXT("Track"), TEXT("Track"), new InfoBoxFormatter(TEXT("%2.0f")TEXT(DEG)TEXT("T")), CommonInterface::on_key_Direction, 32, 6},
 #endif
 	  // 24
-	  {ugVerticalSpeed,   TEXT("Vario"), TEXT("Vario"), new InfoBoxFormatter(TEXT("%-2.1f")), NoProcessing, 44, 22},
+	  {ugVerticalSpeed,   TEXT("Vario"), TEXT("Vario"), new InfoBoxFormatter(TEXT("%-2.1f")), CommonInterface::on_key_None, 44, 22},
 	  // 25
-	  {ugWindSpeed,       TEXT("Wind Speed"), TEXT("Wind V"), new InfoBoxFormatter(TEXT("%2.0f")), WindSpeedProcessing, 26, 50},
+	  {ugWindSpeed,       TEXT("Wind Speed"), TEXT("Wind V"), new InfoBoxFormatter(TEXT("%2.0f")), CommonInterface::on_key_WindSpeed, 26, 50},
 	  // 26
 #ifdef FIVV
-	  {ugNone,            TEXT("Wind Bearing"), TEXT("Wind B"), new InfoBoxFormatter(TEXT("%2.0f")TEXT(DEG)), WindDirectionProcessing, 48, 25},
+	  {ugNone,            TEXT("Wind Bearing"), TEXT("Wind B"), new InfoBoxFormatter(TEXT("%2.0f")TEXT(DEG)), CommonInterface::on_key_WindDirection, 48, 25},
 #else
-	  {ugNone,            TEXT("Wind Bearing"), TEXT("Wind B"), new InfoBoxFormatter(TEXT("%2.0f")TEXT(DEG)TEXT("T")), WindDirectionProcessing, 48, 25},
+	  {ugNone,            TEXT("Wind Bearing"), TEXT("Wind B"), new InfoBoxFormatter(TEXT("%2.0f")TEXT(DEG)TEXT("T")), CommonInterface::on_key_WindDirection, 48, 25},
 #endif
 	  // 27
-	  {ugNone,            TEXT("AA Time"), TEXT("AA Time"), new FormatterAATTime(TEXT("%2.0f")), NoProcessing, 28, 18},
+	  {ugNone,            TEXT("AA Time"), TEXT("AA Time"), new FormatterAATTime(TEXT("%2.0f")), CommonInterface::on_key_None, 28, 18},
 	  // 28
-	  {ugDistance,        TEXT("AA Distance Max"), TEXT("AA Dmax"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 29, 27},
+	  {ugDistance,        TEXT("AA Distance Max"), TEXT("AA Dmax"), new InfoBoxFormatter(TEXT("%2.0f")), CommonInterface::on_key_None, 29, 27},
 	  // 29
-	  {ugDistance,        TEXT("AA Distance Min"), TEXT("AA Dmin"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 30, 28},
+	  {ugDistance,        TEXT("AA Distance Min"), TEXT("AA Dmin"), new InfoBoxFormatter(TEXT("%2.0f")), CommonInterface::on_key_None, 30, 28},
 	  // 30
-	  {ugTaskSpeed, TEXT("AA Speed Max"), TEXT("AA Vmax"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 31, 29},
+	  {ugTaskSpeed, TEXT("AA Speed Max"), TEXT("AA Vmax"), new InfoBoxFormatter(TEXT("%2.0f")), CommonInterface::on_key_None, 31, 29},
 	  // 31
-	  {ugTaskSpeed, TEXT("AA Speed Min"), TEXT("AA Vmin"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 51, 30},
+	  {ugTaskSpeed, TEXT("AA Speed Min"), TEXT("AA Vmin"), new InfoBoxFormatter(TEXT("%2.0f")), CommonInterface::on_key_None, 51, 30},
 	  // 32
-	  {ugHorizontalSpeed, TEXT("Airspeed IAS"), TEXT("V IAS"), new InfoBoxFormatter(TEXT("%2.0f")), AirspeedProcessing, 37, 23},
+	  {ugHorizontalSpeed, TEXT("Airspeed IAS"), TEXT("V IAS"), new InfoBoxFormatter(TEXT("%2.0f")), CommonInterface::on_key_Airspeed, 37, 23},
 	  // 33
-	  {ugAltitude,        TEXT("Pressure Altitude"), TEXT("H Baro"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 0, 20},
+	  {ugAltitude,        TEXT("Pressure Altitude"), TEXT("H Baro"), new InfoBoxFormatter(TEXT("%2.0f")), CommonInterface::on_key_None, 0, 20},
 	  // 34
-	  {ugHorizontalSpeed, TEXT("Speed MacReady"), TEXT("V Mc"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 35, 10},
+	  {ugHorizontalSpeed, TEXT("Speed MacReady"), TEXT("V Mc"), new InfoBoxFormatter(TEXT("%2.0f")), CommonInterface::on_key_None, 35, 10},
 	  // 35
-	  {ugNone,            TEXT("Percentage climb"), TEXT("% Climb"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 43, 34},
+	  {ugNone,            TEXT("Percentage climb"), TEXT("% Climb"), new InfoBoxFormatter(TEXT("%2.0f")), CommonInterface::on_key_None, 43, 34},
 	  // 36
-	  {ugNone,            TEXT("Time of flight"), TEXT("Time flt"), new FormatterTime(TEXT("%04.0f")), NoProcessing, 39, 14},
+	  {ugNone,            TEXT("Time of flight"), TEXT("Time flt"), new FormatterTime(TEXT("%04.0f")), CommonInterface::on_key_None, 39, 14},
 	  // 37
-	  {ugNone,            TEXT("G load"), TEXT("G"), new InfoBoxFormatter(TEXT("%2.2f")), AccelerometerProcessing, 47, 32},
+	  {ugNone,            TEXT("G load"), TEXT("G"), new InfoBoxFormatter(TEXT("%2.2f")), CommonInterface::on_key_Accelerometer, 47, 32},
 	  // 38
-	  {ugNone,            TEXT("Next LD"), TEXT("WP LD"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 53, 19},
+	  {ugNone,            TEXT("Next LD"), TEXT("WP LD"), new InfoBoxFormatter(TEXT("%2.0f")), CommonInterface::on_key_None, 53, 19},
 	  // 39
-	  {ugNone,            TEXT("Time local"), TEXT("Time loc"), new FormatterTime(TEXT("%04.0f")), NoProcessing, 40, 36},
+	  {ugNone,            TEXT("Time local"), TEXT("Time loc"), new FormatterTime(TEXT("%04.0f")), CommonInterface::on_key_None, 40, 36},
 	  // 40
-	  {ugNone,            TEXT("Time UTC"), TEXT("Time UTC"), new FormatterTime(TEXT("%04.0f")), NoProcessing, 41, 39},
+	  {ugNone,            TEXT("Time UTC"), TEXT("Time UTC"), new FormatterTime(TEXT("%04.0f")), CommonInterface::on_key_None, 41, 39},
 	  // 41
-	  {ugNone,            TEXT("Task Time To Go"), TEXT("Fin ETE"), new FormatterAATTime(TEXT("%04.0f")), NoProcessing, 42, 40},
+	  {ugNone,            TEXT("Task Time To Go"), TEXT("Fin ETE"), new FormatterAATTime(TEXT("%04.0f")), CommonInterface::on_key_None, 42, 40},
 	  // 42
-	  {ugNone,            TEXT("Next Time To Go"), TEXT("WP ETE"), new FormatterAATTime(TEXT("%04.0f")), NoProcessing, 45, 41},
+	  {ugNone,            TEXT("Next Time To Go"), TEXT("WP ETE"), new FormatterAATTime(TEXT("%04.0f")), CommonInterface::on_key_None, 45, 41},
 	  // 43
-	  {ugHorizontalSpeed, TEXT("Speed Dolphin"), TEXT("V Opt"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 10, 35},
+	  {ugHorizontalSpeed, TEXT("Speed Dolphin"), TEXT("V Opt"), new InfoBoxFormatter(TEXT("%2.0f")), CommonInterface::on_key_None, 10, 35},
 	  // 44
-	  {ugVerticalSpeed,   TEXT("Netto Vario"), TEXT("Netto"), new InfoBoxFormatter(TEXT("%-2.1f")), NoProcessing, 2, 24},
+	  {ugVerticalSpeed,   TEXT("Netto Vario"), TEXT("Netto"), new InfoBoxFormatter(TEXT("%-2.1f")), CommonInterface::on_key_None, 2, 24},
 	  // 45
-	  {ugNone,            TEXT("Task Arrival Time"), TEXT("Fin ETA"), new FormatterAATTime(TEXT("%04.0f")), NoProcessing, 46, 42},
+	  {ugNone,            TEXT("Task Arrival Time"), TEXT("Fin ETA"), new FormatterAATTime(TEXT("%04.0f")), CommonInterface::on_key_None, 46, 42},
 	  // 46
-	  {ugNone,            TEXT("Next Arrival Time"), TEXT("WP ETA"), new FormatterTime(TEXT("%04.0f")), NoProcessing, 14, 45},
+	  {ugNone,            TEXT("Next Arrival Time"), TEXT("WP ETA"), new FormatterTime(TEXT("%04.0f")), CommonInterface::on_key_None, 14, 45},
 	  // 47
-	  {ugNone,            TEXT("Bearing Difference"), TEXT("Brng D"), new FormatterDiffBearing(TEXT("")), NoProcessing, 54, 37},
+	  {ugNone,            TEXT("Bearing Difference"), TEXT("Brng D"), new FormatterDiffBearing(TEXT("")), CommonInterface::on_key_None, 54, 37},
 	  // 48
-	  {ugNone,            TEXT("Outside Air Temperature"), TEXT("OAT"), new InfoBoxFormatter(TEXT("%2.1f")TEXT(DEG)), NoProcessing, 49, 26},
+	  {ugNone,            TEXT("Outside Air Temperature"), TEXT("OAT"), new InfoBoxFormatter(TEXT("%2.1f")TEXT(DEG)), CommonInterface::on_key_None, 49, 26},
 	  // 49
-	  {ugNone,            TEXT("Relative Humidity"), TEXT("RelHum"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 50, 48},
+	  {ugNone,            TEXT("Relative Humidity"), TEXT("RelHum"), new InfoBoxFormatter(TEXT("%2.0f")), CommonInterface::on_key_None, 50, 48},
 	  // 50
-	  {ugNone,            TEXT("Forecast Temperature"), TEXT("MaxTemp"), new InfoBoxFormatter(TEXT("%2.1f")TEXT(DEG)), ForecastTemperatureProcessing, 49, 25},
+	  {ugNone,            TEXT("Forecast Temperature"), TEXT("MaxTemp"), new InfoBoxFormatter(TEXT("%2.1f")TEXT(DEG)), CommonInterface::on_key_ForecastTemperature, 49, 25},
 	  // 51
-	  {ugDistance,        TEXT("AA Distance Tgt"), TEXT("AA Dtgt"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 52, 31},
+	  {ugDistance,        TEXT("AA Distance Tgt"), TEXT("AA Dtgt"), new InfoBoxFormatter(TEXT("%2.0f")), CommonInterface::on_key_None, 52, 31},
 	  // 52
-	  {ugTaskSpeed, TEXT("AA Speed Tgt"), TEXT("AA Vtgt"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 11, 51},
+	  {ugTaskSpeed, TEXT("AA Speed Tgt"), TEXT("AA Vtgt"), new InfoBoxFormatter(TEXT("%2.0f")), CommonInterface::on_key_None, 11, 51},
 	  // 53
-	  {ugNone,            TEXT("L/D vario"), TEXT("L/D vario"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 4, 38},
+	  {ugNone,            TEXT("L/D vario"), TEXT("L/D vario"), new InfoBoxFormatter(TEXT("%2.0f")), CommonInterface::on_key_None, 4, 38},
 	  // 54
-	  {ugHorizontalSpeed, TEXT("Airspeed TAS"), TEXT("V TAS"), new InfoBoxFormatter(TEXT("%2.0f")), AirspeedProcessing, 3, 47},
+	  {ugHorizontalSpeed, TEXT("Airspeed TAS"), TEXT("V TAS"), new InfoBoxFormatter(TEXT("%2.0f")), CommonInterface::on_key_Airspeed, 3, 47},
 	  // 55
-	  {ugNone,            TEXT("Own Team Code"), TEXT("TeamCode"), new FormatterTeamCode(TEXT("\0")), TeamCodeProcessing, 56, 54},
+	  {ugNone,            TEXT("Own Team Code"), TEXT("TeamCode"), new FormatterTeamCode(TEXT("\0")), CommonInterface::on_key_TeamCode, 56, 54},
 	  // 56
 #ifdef FIVV
-	  {ugNone,            TEXT("Team Bearing"), TEXT("Tm Brng"), new InfoBoxFormatter(TEXT("%2.0f")TEXT(DEG)), NoProcessing, 57, 55},
+	  {ugNone,            TEXT("Team Bearing"), TEXT("Tm Brng"), new InfoBoxFormatter(TEXT("%2.0f")TEXT(DEG)), CommonInterface::on_key_None, 57, 55},
 #else
-	  {ugNone,            TEXT("Team Bearing"), TEXT("Tm Brng"), new InfoBoxFormatter(TEXT("%2.0f")TEXT(DEG)TEXT("T")), NoProcessing, 57, 55},
+	  {ugNone,            TEXT("Team Bearing"), TEXT("Tm Brng"), new InfoBoxFormatter(TEXT("%2.0f")TEXT(DEG)TEXT("T")), CommonInterface::on_key_None, 57, 55},
 #endif
 	  // 57
-	  {ugNone,            TEXT("Team Bearing Diff"), TEXT("Team Bd"), new FormatterDiffTeamBearing(TEXT("")), NoProcessing, 58, 56},
+	  {ugNone,            TEXT("Team Bearing Diff"), TEXT("Team Bd"), new FormatterDiffTeamBearing(TEXT("")), CommonInterface::on_key_None, 58, 56},
 	  // 58
-	  {ugNone,            TEXT("Team Range"), TEXT("Team Dis"), new InfoBoxFormatter(TEXT("%2.1f")), NoProcessing, 55, 57},
+	  {ugNone,            TEXT("Team Range"), TEXT("Team Dis"), new InfoBoxFormatter(TEXT("%2.1f")), CommonInterface::on_key_None, 55, 57},
           // 59
-	  {ugTaskSpeed, TEXT("Speed Task Instantaneous"), TEXT("V Tsk Ins"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 18, 16},
+	  {ugTaskSpeed, TEXT("Speed Task Instantaneous"), TEXT("V Tsk Ins"), new InfoBoxFormatter(TEXT("%2.0f")), CommonInterface::on_key_None, 18, 16},
           // 60
-	  {ugDistance, TEXT("Distance Home"), TEXT("Home Dis"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 18, 16},
+	  {ugDistance, TEXT("Distance Home"), TEXT("Home Dis"), new InfoBoxFormatter(TEXT("%2.0f")), CommonInterface::on_key_None, 18, 16},
 	  // 61
-	  {ugTaskSpeed, TEXT("Speed Task Achieved"), TEXT("V Tsk Ach"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 18, 16},
+	  {ugTaskSpeed, TEXT("Speed Task Achieved"), TEXT("V Tsk Ach"), new InfoBoxFormatter(TEXT("%2.0f")), CommonInterface::on_key_None, 18, 16},
           // 62
-	  {ugNone,            TEXT("AA Delta Time"), TEXT("AA dT"), new FormatterAATTime(TEXT("%2.0f")), NoProcessing, 28, 18},
+	  {ugNone,            TEXT("AA Delta Time"), TEXT("AA dT"), new FormatterAATTime(TEXT("%2.0f")), CommonInterface::on_key_None, 28, 18},
           // 63
-	  {ugVerticalSpeed,   TEXT("Thermal All"), TEXT("TC All"), new InfoBoxFormatter(TEXT("%-2.1f")), NoProcessing, 8, 2},
+	  {ugVerticalSpeed,   TEXT("Thermal All"), TEXT("TC All"), new InfoBoxFormatter(TEXT("%-2.1f")), CommonInterface::on_key_None, 8, 2},
           // 64
-	  {ugVerticalSpeed,   TEXT("Distance Vario"), TEXT("D Vario"), new InfoBoxFormatter(TEXT("%-2.1f")), NoProcessing, 8, 2},
+	  {ugVerticalSpeed,   TEXT("Distance Vario"), TEXT("D Vario"), new InfoBoxFormatter(TEXT("%-2.1f")), CommonInterface::on_key_None, 8, 2},
 	  // 65
 #ifndef GNAV
-	  {ugNone,            TEXT("Battery Percent"), TEXT("Battery"), new InfoBoxFormatter(TEXT("%2.0f%%")), NoProcessing, 49, 26},
+	  {ugNone,            TEXT("Battery Percent"), TEXT("Battery"), new InfoBoxFormatter(TEXT("%2.0f%%")), CommonInterface::on_key_None, 49, 26},
 #else
-	  {ugNone,            TEXT("Battery Voltage"), TEXT("Battery"), new InfoBoxFormatter(TEXT("%2.1fV")), NoProcessing, 49, 26},
+	  {ugNone,            TEXT("Battery Voltage"), TEXT("Battery"), new InfoBoxFormatter(TEXT("%2.1fV")), CommonInterface::on_key_None, 49, 26},
 #endif
 	  // 66  VENTA-ADDON added Final GR
 	  // VENTA-TODO: fix those 38,5 numbers to point correctly menu items
-	  {ugNone,            TEXT("Final GR"), TEXT("Fin GR"), new InfoBoxFormatter(TEXT("%1.1f")), NoProcessing, 38, 5},
+	  {ugNone,            TEXT("Final GR"), TEXT("Fin GR"), new InfoBoxFormatter(TEXT("%1.1f")), CommonInterface::on_key_None, 38, 5},
 
 	  // 67 VENTA3-ADDON Alternate1 destinations infoboxes  TODO> fix 36 46 to something correct
-	  {ugNone,            TEXT("Alternate1 GR"), TEXT("Altern 1"), new FormatterAlternate(TEXT("\0")), Alternate1Processing, 36, 46},
+	  {ugNone,            TEXT("Alternate1 GR"), TEXT("Altern 1"), new FormatterAlternate(TEXT("\0")), CommonInterface::on_key_Alternate1, 36, 46},
 	  // 68 Alternate 2
-	  {ugNone,            TEXT("Alternate2 GR"), TEXT("Altern 2"), new FormatterAlternate(TEXT("\0")), Alternate2Processing, 36, 46},
+	  {ugNone,            TEXT("Alternate2 GR"), TEXT("Altern 2"), new FormatterAlternate(TEXT("\0")), CommonInterface::on_key_Alternate2, 36, 46},
 	  // 69 BestAlternate aka BestLanding
-	  {ugNone,            TEXT("Best Alternate"), TEXT("BestAltn"), new FormatterAlternate(TEXT("\0")), BestAlternateProcessing, 36, 46},
+	  {ugNone,            TEXT("Best Alternate"), TEXT("BestAltn"), new FormatterAlternate(TEXT("\0")), CommonInterface::on_key_BestAlternate, 36, 46},
           // 70
-	  {ugAltitude,        TEXT("QFE GPS"), TEXT("QFE GPS"), new InfoBoxFormatter(TEXT("%2.0f")), QFEAltitudeProcessing, 1, 33},
+	  {ugAltitude,        TEXT("QFE GPS"), TEXT("QFE GPS"), new InfoBoxFormatter(TEXT("%2.0f")), CommonInterface::on_key_QFEAltitude, 1, 33},
           // 71 TODO FIX those 19,4 values
-	  {ugNone,            TEXT("L/D Average"), TEXT("L/D Avg"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 19, 4},
+	  {ugNone,            TEXT("L/D Average"), TEXT("L/D Avg"), new InfoBoxFormatter(TEXT("%2.0f")), CommonInterface::on_key_None, 19, 4},
 	  // 72 //
-	  {ugNone,   TEXT("Experimental1"), TEXT("Exp1"), new InfoBoxFormatter(TEXT("%-2.1f")), NoProcessing, 8, 2},
+	  {ugNone,   TEXT("Experimental1"), TEXT("Exp1"), new InfoBoxFormatter(TEXT("%-2.1f")), CommonInterface::on_key_None, 8, 2},
 	  // 73 //
-	  {ugNone,   TEXT("Experimental2"), TEXT("Exp2"), new InfoBoxFormatter(TEXT("%-2.1f")), NoProcessing, 8, 2},
+	  {ugNone,   TEXT("Experimental2"), TEXT("Exp2"), new InfoBoxFormatter(TEXT("%-2.1f")), CommonInterface::on_key_None, 8, 2},
 	};
 
 const unsigned NUMSELECTSTRINGS = 74;

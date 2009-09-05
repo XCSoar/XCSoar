@@ -75,7 +75,6 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Airspace.h"
 #include "InfoBoxLayout.h"
 #include "InfoBoxManager.h"
-#include "InfoBoxEvents.h"
 #include "Device/device.h"
 #include "Message.h"
 #include "Units.hpp"
@@ -790,15 +789,15 @@ void InputEvents::eventPlaySound(const TCHAR *misc) {
 // up, down, auto on, auto off, auto toggle, auto show
 void InputEvents::eventMacCready(const TCHAR *misc) {
   if (_tcscmp(misc, TEXT("up")) == 0) {
-    MacCreadyProcessing(1);
+    on_key_MacCready(1);
   } else if (_tcscmp(misc, TEXT("down")) == 0) {
-    MacCreadyProcessing(-1);
+    on_key_MacCready(-1);
   } else if (_tcscmp(misc, TEXT("auto toggle")) == 0) {
-    MacCreadyProcessing(0);
+    on_key_MacCready(0);
   } else if (_tcscmp(misc, TEXT("auto on")) == 0) {
-    MacCreadyProcessing(+2);
+    on_key_MacCready(+2);
   } else if (_tcscmp(misc, TEXT("auto off")) == 0) {
-    MacCreadyProcessing(-2);
+    on_key_MacCready(-2);
   } else if (_tcscmp(misc, TEXT("auto show")) == 0) {
     if (Calculated().AutoMacCready) {
       Message::AddMessage(TEXT("Auto MacCready ON"));
@@ -850,19 +849,19 @@ void InputEvents::eventFlightMode(const TCHAR *misc) {
 //	(may sound silly - but future may get SMS event that then sets wind)
 void InputEvents::eventWind(const TCHAR *misc) {
   if (_tcscmp(misc, TEXT("up")) == 0) {
-    WindSpeedProcessing(1);
+    on_key_WindSpeed(1);
   }
   if (_tcscmp(misc, TEXT("down")) == 0) {
-    WindSpeedProcessing(-1);
+    on_key_WindSpeed(-1);
   }
   if (_tcscmp(misc, TEXT("left")) == 0) {
-    WindSpeedProcessing(-2);
+    on_key_WindSpeed(-2);
   }
   if (_tcscmp(misc, TEXT("right")) == 0) {
-    WindSpeedProcessing(2);
+    on_key_WindSpeed(2);
   }
   if (_tcscmp(misc, TEXT("save")) == 0) {
-    WindSpeedProcessing(0);
+    on_key_WindSpeed(0);
   }
 }
 
@@ -1048,13 +1047,13 @@ void InputEvents::eventAudioDeadband(const TCHAR *misc) {
 //  previouswrap: selects the previous waypoint, wrapping to final after start
 void InputEvents::eventAdjustWaypoint(const TCHAR *misc) {
   if (_tcscmp(misc, TEXT("next")) == 0) {
-    NextUpDown(1); // next
+    on_key_Waypoint(1); // next
   } else if (_tcscmp(misc, TEXT("nextwrap")) == 0) {
-    NextUpDown(2); // next - with wrap
+    on_key_Waypoint(2); // next - with wrap
   } else if (_tcscmp(misc, TEXT("previous")) == 0) {
-    NextUpDown(-1); // previous
+    on_key_Waypoint(-1); // previous
   } else if (_tcscmp(misc, TEXT("previouswrap")) == 0) {
-    NextUpDown(-2); // previous with wrap
+    on_key_Waypoint(-2); // previous with wrap
   }
 }
 
