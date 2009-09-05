@@ -139,7 +139,7 @@ CommonInterface::on_key_Altitude(int UpDown)
   if(UpDown==1) {
     device_blackboard.SetAltitude(Basic().Altitude+100/ALTITUDEMODIFY);
   } else if (UpDown==-1) {
-    device_blackboard.SetAltitude(m_max(0,Basic().Altitude+100/ALTITUDEMODIFY));
+    device_blackboard.SetAltitude(m_max(0,Basic().Altitude-100/ALTITUDEMODIFY));
   } else if (UpDown==-2) {
     on_key_Direction(-1);
   } else if (UpDown==2) {
@@ -211,7 +211,7 @@ CommonInterface::on_key_Speed(int UpDown)
   if(UpDown==1)
     device_blackboard.SetSpeed(Basic().Speed+10/SPEEDMODIFY);
   else if (UpDown==-1) {
-    device_blackboard.SetSpeed(m_max(0,Basic().Speed+10/SPEEDMODIFY));
+    device_blackboard.SetSpeed(m_max(0,Basic().Speed-10/SPEEDMODIFY));
   } else if (UpDown==-2) {
     on_key_Direction(-1);
   } else if (UpDown==2) {
