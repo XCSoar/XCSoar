@@ -283,6 +283,9 @@ CXXFLAGS += -Wno-non-virtual-dtor
 # InputEvents_defaults.cpp should be fixed
 CXXFLAGS += -Wno-char-subscripts
 
+# FastMath.h does dirty aliasing tricks
+CXXFLAGS += -Wno-strict-aliasing
+
 # make warnings fatal (for perfectionists)
 #CXXFLAGS += -Werror
 #CXXFLAGS += -pedantic
