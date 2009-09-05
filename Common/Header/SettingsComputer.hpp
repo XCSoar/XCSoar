@@ -89,6 +89,7 @@ typedef struct _SETTINGS_COMPUTER {
  int    BallastSecsToEmpty;
  bool   BallastTimerActive;
  bool   AutoMacCready;
+
  int    TeamCodeRefWaypoint;
  bool   TeamFlarmTracking;
  TCHAR  TeamFlarmCNTarget[4]; // CN of the glider to track

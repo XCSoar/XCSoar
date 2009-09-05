@@ -176,17 +176,10 @@ void SystemConfiguration(void) {
 // settings
 int    AutoAdvance = 1;
 bool   AdvanceArmed = false;
-bool   EnableBlockSTF = false;
 bool   TaskAborted = false;
-double SAFETYALTITUDEARRIVAL = 500;
-double SAFETYALTITUDEBREAKOFF = 700;
-double SAFETYALTITUDETERRAIN = 200;
-double SAFTEYSPEED = 50.0;
 
 // Team code info
-int TeamCodeRefWaypoint = -1;
 TCHAR TeammateCode[10];
-bool TeamFlarmTracking = false;
 TCHAR TeamFlarmCNTarget[4]; // CN of the glider to track
 int TeamFlarmIdTarget;      // FlarmId of the glider to track
 double TeammateLatitude;
@@ -199,6 +192,7 @@ int SectorType = 1; // FAI sector
 DWORD SectorRadius = 500;
 int StartLine = TRUE;
 DWORD StartRadius = 3000;
+
 int HomeWaypoint = -1;
 int AirfieldsHomeWaypoint = -1; // VENTA3 force Airfields home to be HomeWaypoint if
                                 // an H flag in waypoints file is not available..
@@ -212,7 +206,7 @@ bool EnableAutoBacklight=true;
 bool EnableAutoSoundVolume=true;
 bool ExtendedVisualGlide=false;
 bool VirtualKeys=false;
-short AverEffTime=0;
+
 // user interface settings
 bool CircleZoom = false;
 bool EnableTopology = false;
@@ -221,8 +215,6 @@ int FinalGlideTerrain = 0;
 bool EnableSoundVario = true;
 bool EnableSoundModes = true;
 bool EnableSoundTask = true;
-int SoundVolume = 80;
-int SoundDeadband = 5;
 bool EnableVarioGauge = false;
 
 // Others

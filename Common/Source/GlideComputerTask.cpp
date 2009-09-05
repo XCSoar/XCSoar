@@ -56,6 +56,12 @@ Copyright_License {
 // JMW TODO: abstract up to higher layer so a base copy of this won't 
 // call any event
 
+#define AUTOADVANCE_MANUAL 0
+#define AUTOADVANCE_AUTO 1
+#define AUTOADVANCE_ARM 2
+#define AUTOADVANCE_ARMSTART 3
+
+
 void GlideComputerTask::ResetFlight(const bool full)
 {
   if (full) {
@@ -641,11 +647,6 @@ bool GlideComputerTask::InStartSector(int &index,
   mutexTaskData.Unlock();
   return isInSector;
 }
-
-#define AUTOADVANCE_MANUAL 0
-#define AUTOADVANCE_AUTO 1
-#define AUTOADVANCE_ARM 2
-#define AUTOADVANCE_ARMSTART 3
 
 bool GlideComputerTask::ReadyToStart() {
   if (!Calculated().Flying) {
@@ -2049,10 +2050,6 @@ GlideComputerTask::ResetEnter()
 }
 
 
-int  AutoMcMode = 0;
-// 0: Final glide only
-// 1: Set to average if in climb mode
-// 2: Average if in climb mode, final glide in final glide mode
 
 void
 GlideComputerTask::DoAutoMacCready(double mc_setting)
@@ -2078,7 +2075,8 @@ GlideComputerTask::DoAutoMacCready(double mc_setting)
     if (av_thermal>0) {
       mc_new = av_thermal;
     }
-  } else if ( ((AutoMcMode==0)||(AutoMcMode==2)) && is_final_glide) {
+  } else if ( ((SettingsComputer().AutoMcMode==0)
+	       ||(SettingsComputer().AutoMcMode==2)) && is_final_glide) {
 
     double time_remaining = Basic().Time-Calculated().TaskStartTime-9000;
     if (EnableOLC
@@ -2112,7 +2110,7 @@ GlideComputerTask::DoAutoMacCready(double mc_setting)
 	if (mc_pirker >= mc_new) {
 	  mc_new = mc_pirker;
 	  first_mc = false;
-	} else if (AutoMcMode==2) {
+	} else if (SettingsComputer().AutoMcMode==2) {
 	  // revert to averager based auto Mc
 	  if (av_thermal>0) {
 	    mc_new = av_thermal;
@@ -2122,14 +2120,15 @@ GlideComputerTask::DoAutoMacCready(double mc_setting)
 	mc_new = mc_pirker;
       }
     } else { // below final glide at zero Mc, never achieved final glide
-      if (first_mc && (AutoMcMode==2)) {
+      if (first_mc && (SettingsComputer().AutoMcMode==2)) {
 	// revert to averager based auto Mc
 	if (av_thermal>0) {
 	  mc_new = av_thermal;
 	}
       }
     }
-  } else if ( (AutoMcMode==1) || ((AutoMcMode==2)&& !is_final_glide) ) {
+  } else if ( (SettingsComputer().AutoMcMode==1) 
+	      || ((SettingsComputer().AutoMcMode==2)&& !is_final_glide) ) {
     if (av_thermal>0) {
       mc_new = av_thermal;
     }

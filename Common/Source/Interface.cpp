@@ -60,6 +60,17 @@ void XCSoarInterface::DefaultSettings()
 
   SetSettingsComputer().AutoWindMode= D_AUTOWIND_CIRCLING;
   SetSettingsComputer().AutoMcMode = 0;
+  SetSettingsComputer().SAFETYALTITUDEARRIVAL = 500;
+  SetSettingsComputer().SAFETYALTITUDEBREAKOFF = 700;
+  SetSettingsComputer().SAFETYALTITUDETERRAIN = 200;
+  SetSettingsComputer().SAFTEYSPEED = 50.0;
+  SetSettingsComputer().EnableBlockSTF = false;
+  SetSettingsComputer().TeamCodeRefWaypoint = -1;
+  SetSettingsComputer().TeamFlarmTracking = false;
+  SetSettingsComputer().AverEffTime=0;
+  SetSettingsComputer().SoundVolume = 80;
+  SetSettingsComputer().SoundDeadband = 5;
+
 }
 
 
