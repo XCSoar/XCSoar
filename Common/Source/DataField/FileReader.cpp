@@ -304,11 +304,13 @@ int DataFieldFileReader::GetNumFiles(void) {
   return nFiles;
 }
 
-TCHAR* DataFieldFileReader::GetPathFile(void) {
+const TCHAR *
+DataFieldFileReader::GetPathFile(void) const
+{
   if ((mValue<=nFiles)&&(mValue)) {
     return fields[mValue].mTextPathFile;
   }
-  return (TCHAR*)TEXT("\0");
+  return TEXT("\0");
 }
 
 
