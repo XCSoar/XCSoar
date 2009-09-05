@@ -167,9 +167,6 @@ void ButtonLabel::CreateButtonLabels(RECT rc) {
   int i;
   int x, y, xsize, ysize;
 
-  int buttonWidth = IBLSCALE(50);
-  int buttonHeight = IBLSCALE(15);
-
   if (InfoBoxLayout::gnav) {
     ButtonLabelGeometry = 1;
   } else {

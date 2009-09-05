@@ -67,7 +67,6 @@ static void
 OnTextPaint(WindowControl *Sender, Canvas &canvas)
 {
   RECT  rcgfx;
-  HFONT hfOld;
 
   CopyRect(&rcgfx, Sender->GetBoundRect());
   // background is painted in the base-class

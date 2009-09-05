@@ -447,9 +447,8 @@ void MapWindow::DrawHorizon(Canvas &canvas, const RECT rc)
 
   canvas.segment(Start.x, Start.y, radius, rc, alpha1, alpha2, true);
 
-  POINT a1, a2;
-
   /*
+  POINT a1, a2;
   a1.x = Start.x + fastsine(alpha1)*radius;
   a1.y = Start.y - fastcosine(alpha1)*radius;
   a2.x = Start.x + fastsine(alpha2)*radius;
@@ -505,9 +504,6 @@ void MapWindow::DrawFinalGlide(Canvas &canvas, const RECT rc)
     { {0,0},{9,-9},{18,0},{18,0},{9,0},{0,0} };
   POINT GlideBar0[6] =
     { {0,0},{9,-9},{18,0},{18,0},{9,0},{0,0} };
-
-  HPEN hpOld;
-  HBRUSH hbOld;
 
   TCHAR Value[10];
 

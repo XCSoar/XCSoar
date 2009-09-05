@@ -306,11 +306,8 @@ int MapWindow::ProcessVirtualKey(int X, int Y, long keytime, short vkmode) {
 #endif
   
   short sizeup=MapRect.bottom-MapRect.top;
-  short sizeright=MapRect.right-MapRect.left;
   short yup=(sizeup/3)+MapRect.top;
   short ydown=MapRect.bottom-(sizeup/3);
-  short xleft=sizeright/3; // TODO FIX
-  short xright=sizeright-xleft;
   
   if (Y<yup) {
 #ifndef DISABLEAUDIO

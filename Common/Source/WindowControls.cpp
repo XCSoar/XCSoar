@@ -930,8 +930,6 @@ int WndForm::ShowModal(bool bEnableMap) {
   WndForm::timeAnyOpenClose.update(); // when current dlg opens or child closes
 
   while ((mModalResult == 0) && GetMessage(&msg, NULL, 0, 0)) {
-    DWORD timeMsg = GetTickCount();
-
 //hack!
 
     // JMW update display timeout so we don't get blanking
@@ -1122,8 +1120,6 @@ WndForm::on_paint(Canvas &canvas)
 
   RECT rcClient;
   SIZE tsize;
-  HPEN oldPen;
-  HBRUSH oldBrush;
 
   if (!GetVisible()) return;
 
@@ -1986,7 +1982,6 @@ WndProperty::on_paint(Canvas &canvas)
   RECT r;
   SIZE tsize;
   POINT org;
-  HBITMAP oldBmp;
 
   if (!GetVisible()) return;
 

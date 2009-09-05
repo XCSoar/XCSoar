@@ -57,8 +57,6 @@ Copyright_License {
 
 
 double MapWindow::findMapScaleBarSize(const RECT rc) {
-
-  int range = rc.bottom-rc.top;
   double pixelsize = DistanceScreenToUser(1); // units/pixel
   double half_displaysize = DistanceScreenToUser((rc.bottom-rc.top)/2); // units
 

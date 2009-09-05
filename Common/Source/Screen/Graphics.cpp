@@ -486,7 +486,6 @@ bool TextInBox(Canvas &canvas, const TCHAR* Value, int x, int y,
   RECT brect;
   POINT org;
   bool drawn=false;
-  bool noOverlap = (label_block==NULL);
 
   if ((x<MapRect.left-WPCIRCLESIZE) ||
       (x>MapRect.right+(WPCIRCLESIZE*3)) ||
@@ -497,8 +496,6 @@ bool TextInBox(Canvas &canvas, const TCHAR* Value, int x, int y,
 
   org.x = x;
   org.y = y;
-
-  int size = _tcslen(Value);
 
   canvas.white_brush();
 
@@ -552,7 +549,6 @@ bool TextInBox(Canvas &canvas, const TCHAR* Value, int x, int y,
     }
 
     if (notoverlapping) {
-      HPEN oldPen;
       if (Mode.AsFlag.Border) {
         canvas.select(MapGfx.hpMapScale);
       } else {

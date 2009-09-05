@@ -84,7 +84,6 @@ static void SetCalcCaption(const TCHAR* caption) {
 static void OnAnalysisPaint(WindowControl *Sender, Canvas &canvas)
 {
   RECT  rcgfx;
-  HFONT hfOld;
   ScopeLock protect(mutexGlideComputer);
 
   CopyRect(&rcgfx, Sender->GetBoundRect());

@@ -740,7 +740,7 @@ void FlightStatistics::RenderWind(Canvas &canvas, const RECT rc)
 void FlightStatistics::RenderAirspace(Canvas &canvas, const RECT rc) {
   double range = 50.0*1000; // km
   double aclat, aclon, ach, acb;
-  double fi, fj;
+  double fj;
   aclat = XCSoarInterface::Basic().Latitude;
   aclon = XCSoarInterface::Basic().Longitude;
   ach = XCSoarInterface::Basic().Altitude;

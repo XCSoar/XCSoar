@@ -127,10 +127,8 @@ void MapWindow::DrawGlideCircle(Canvas &canvas, POINT Orig, RECT rc)
   int i;
   double gunit;
   static int spread=0;
-  //static short rcx=rc.left+rc.right/2-30;
-  //static short rcy=rc.top+rc.bottom-35;
-  short rcx=rc.left+rc.right/2-IBLSCALE(20);
-  short rcy=rc.bottom-IBLSCALE(15); // 35
+  //short rcx=rc.left+rc.right/2-IBLSCALE(20);
+  //short rcy=rc.bottom-IBLSCALE(15); // 35
 
   if ( cruise < 0 ) cruise = GlidePolar::bestld;
   if ( cruise < mincruise ) return;

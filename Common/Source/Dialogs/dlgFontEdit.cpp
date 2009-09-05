@@ -420,7 +420,7 @@ bool dlgFontEditShowModal(const TCHAR * FontDescription,
                           LOGFONT autoLogFont){
 
   bool bRetVal=false;
-  char filename[MAX_PATH];
+
   IsInitialized=false;
 
   wf = dlgLoadFromXML(CallBackTable,

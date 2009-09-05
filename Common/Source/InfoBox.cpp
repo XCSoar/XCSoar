@@ -407,7 +407,6 @@ void InfoBox::PaintValue(Canvas &canvas){
 
   SIZE tsize;
   int x,y;
-  unsigned int len = _tcslen(mValue);
 
   canvas.set_background_color(mColorValueBk);
 

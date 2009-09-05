@@ -377,8 +377,6 @@ bool XCSoarInterface::Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
 
 
 void XCSoarInterface::Shutdown(void) {
-  int i;
-
   CreateProgressDialog(gettext(TEXT("Shutdown, please wait...")));
   StartHourglassCursor();
 

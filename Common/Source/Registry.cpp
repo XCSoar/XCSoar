@@ -1498,8 +1498,6 @@ void LoadRegistryFromFile(const TCHAR *szFile) {
 void SaveRegistryToFile(const TCHAR *szFile)
 {
   TCHAR lpstrName[nMaxKeyNameSize+1];
-  char sName[nMaxKeyNameSize+1];
-  char sValue[nMaxValueValueSize+1];
   //  TCHAR lpstrClass[nMaxClassSize+1];
 #ifdef __MINGW32__
   union {

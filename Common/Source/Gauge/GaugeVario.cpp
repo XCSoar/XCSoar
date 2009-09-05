@@ -473,7 +473,6 @@ void GaugeVario::RenderClimb(Canvas &canvas)
 
 void GaugeVario::RenderZero(Canvas &canvas)
 {
-  static POINT lp[2];
   if (Appearance.InverseInfoBox){
     canvas.white_brush();
     canvas.white_pen();

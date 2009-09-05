@@ -172,7 +172,6 @@ static void EWMicroRecorderWriteWayPoint(PDeviceDescriptor_t d,
                                          const WAYPOINT *wp,
                                          const TCHAR* EWType)
 {
-  TCHAR EWRecord[128];
   int DegLat, DegLon;
   double tmp, MinLat, MinLon;
   TCHAR NoS, EoW;
