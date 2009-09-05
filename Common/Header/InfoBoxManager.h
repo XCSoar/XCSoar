@@ -59,7 +59,7 @@ public:
   static void Event_Select(int i);
   static void Event_Change(int i);
 
-  static TCHAR *GetTypeDescription(unsigned i);
+  static const TCHAR *GetTypeDescription(unsigned i);
 
   static void ProcessKey(int keycode);
   static bool Click(HWND wmControl);
