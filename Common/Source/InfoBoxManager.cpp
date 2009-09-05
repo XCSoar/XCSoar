@@ -944,7 +944,8 @@ bool InfoBoxManager::Click(HWND wmControl) {
       InfoWindowActive = true;
       if( i!= InfoFocus) {
 	FocusOnWindow(i,true);
-	FocusOnWindow(InfoFocus,false);
+        if (InfoFocus >= 0)
+          FocusOnWindow(InfoFocus,false);
 	InfoFocus = i;
 	InfoWindowActive = true;
       }
