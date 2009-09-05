@@ -156,8 +156,8 @@ void MapWindow::DrawGlideCircle(Canvas &canvas, POINT Orig, RECT rc)
     /*
      * TRACKUP, NORTHUP, NORTHCIRCLE, TRACKCIRCLE, NORTHTRACK
      */
-    if ( ( DisplayOrientation == TRACKUP) || (DisplayOrientation == NORTHCIRCLE)
-	 || (DisplayOrientation == TRACKCIRCLE)
+    if (((DisplayOrientation == TRACKUP) || (DisplayOrientation == NORTHCIRCLE)
+         || (DisplayOrientation == TRACKCIRCLE))
 	 && (DisplayMode != dmCircling) )
       {
 	if ( VisualGlide == 1 ) {
