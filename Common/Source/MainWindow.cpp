@@ -140,7 +140,22 @@ LRESULT MainWindow::on_colour(HDC hdc, int wdata)
   return 0;
 }
 
-bool MainWindow::on_timer(void)
+bool
+MainWindow::on_setfocus()
+{
+  InfoBoxManager::Focus();
+  return true;
+}
+
+bool
+MainWindow::on_activate()
+{
+  full_screen();
+  return true;
+}
+
+bool
+MainWindow::on_timer(unsigned id)
 {
   if (globalRunningEvent.test()) {
     XCSoarInterface::AfterStartup();
@@ -193,17 +208,6 @@ LRESULT MainWindow::on_message(HWND _hWnd, UINT message,
     return on_colour((HDC)wParam, get_userdata((HWND)lParam));
     break;
     */
-  case WM_SETFOCUS:
-    InfoBoxManager::Focus();
-    break;
-  case WM_ACTIVATE:
-    if(LOWORD(wParam) != WA_INACTIVE) {
-      full_screen();
-    }
-    break;
-  case WM_TIMER:
-    if (on_timer()) return 0;
-    break;
   };
 
   return TopWindow::on_message(_hWnd, message, wParam, lParam);

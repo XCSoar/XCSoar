@@ -70,7 +70,9 @@ protected:
   LRESULT on_colour(HDC hdc, int wdata);
   int _timer_id;
   virtual bool on_command(HWND hWnd, unsigned id, unsigned code);
-  bool on_timer();
+  bool on_setfocus();
+  bool on_activate();
+  bool on_timer(unsigned id);
   bool on_create();
   bool on_destroy();
   bool on_close();
