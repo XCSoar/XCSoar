@@ -343,7 +343,8 @@ error:
 	return -1;
 }
 
-int jp2_write_codestream(jas_image_t *image, jas_stream_t *out, char *optstr)
+int jp2_write_codestream(jas_image_t *image, jas_stream_t *out,
+                         const char *optstr)
 {
 	jp2_box_t *box;
 	char buf[4096];
@@ -384,7 +385,7 @@ error:
 	return -1;
 }
 
-int jp2_encode(jas_image_t *image, jas_stream_t *out, char *optstr)
+int jp2_encode(jas_image_t *image, jas_stream_t *out, const char *optstr)
 {
   jp2_box_t *uuid_box = NULL;
 

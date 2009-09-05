@@ -238,7 +238,7 @@ LPTSTR fromXMLString(LPCTSTR s, int lo)
 
     d=(LPTSTR)malloc((ll+1)*sizeof(TCHAR));
     assert(d);
-    s=d;
+    TCHAR *result = d;
     while (ll--)
     {
         if (*ss==_T('&'))
@@ -253,7 +253,7 @@ LPTSTR fromXMLString(LPCTSTR s, int lo)
         } else { *(d++)=*ss; ss++; }
     }
     *d=0;
-    return (LPTSTR)s;
+    return result;
 }
 
 // private:
@@ -736,7 +736,7 @@ int XMLNode::ParseClearTag(void *px, void *pa)
     LPCTSTR lpszXML = &pXML->lpXML[pXML->nIndex];
 
     // Find the closing tag
-    lpszTemp = _tcsstr((TCHAR*)lpszXML, pClear->lpszClose);
+    lpszTemp = _tcsstr(lpszXML, pClear->lpszClose);
 
     // Iterate through the tokens until we find the closing tag.
     if (lpszTemp)

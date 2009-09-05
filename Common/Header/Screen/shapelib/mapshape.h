@@ -143,8 +143,8 @@ typedef struct {
 #ifndef SWIG
 
 // shapefileObj function prototypes
-int msSHPOpenFile(shapefileObj *shpfile, char *mode, char *filename);
-int msSHPCreateFile(shapefileObj *shpfile, char *filename, int type);
+int msSHPOpenFile(shapefileObj *shpfile, const char *mode, const char *filename);
+int msSHPCreateFile(shapefileObj *shpfile, const char *filename, int type);
 void msSHPCloseFile(shapefileObj *shpfile);
 int msSHPWhichShapes(shapefileObj *shpfile, rectObj rect, int debug);
 

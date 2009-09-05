@@ -1291,7 +1291,8 @@ int msSHPReadBounds( SHPHandle psSHP, int hEntity, rectObj *padBounds)
   return(0);
 }
 
-int msSHPOpenFile(shapefileObj *shpfile, char *mode, char *filename)
+int msSHPOpenFile(shapefileObj *shpfile, const char *mode,
+                  const char *filename)
 {
   int i;
   char *dbfFilename;
@@ -1348,7 +1349,7 @@ int msSHPOpenFile(shapefileObj *shpfile, char *mode, char *filename)
 }
 
 // Creates a new shapefile
-int msSHPCreateFile(shapefileObj *shpfile, char *filename, int type)
+int msSHPCreateFile(shapefileObj *shpfile, const char *filename, int type)
 {
   if(type != SHP_POINT && type != SHP_MULTIPOINT && type != SHP_ARC &&
      type != SHP_POLYGON && type != SHP_POINTM && type != SHP_MULTIPOINTM &&

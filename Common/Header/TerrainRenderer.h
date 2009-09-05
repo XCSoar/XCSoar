@@ -83,7 +83,7 @@ private:
   RasterMap *DisplayMap;
   bool is_terrain;
   int interp_levels;
-  COLORRAMP* color_ramp;
+  const COLORRAMP *color_ramp;
   unsigned int height_scale;
 
 private:

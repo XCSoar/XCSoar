@@ -204,7 +204,7 @@ static int jpc_dec_process_ppt(jpc_dec_t *dec, jpc_ms_t *ms);
 static int jpc_dec_process_com(jpc_dec_t *dec, jpc_ms_t *ms);
 static int jpc_dec_process_unk(jpc_dec_t *dec, jpc_ms_t *ms);
 static int jpc_dec_process_crg(jpc_dec_t *dec, jpc_ms_t *ms);
-static int jpc_dec_parseopts(char *optstr, jpc_dec_importopts_t *opts);
+static int jpc_dec_parseopts(const char *optstr, jpc_dec_importopts_t *opts);
 
 static jpc_dec_mstabent_t *jpc_dec_mstab_lookup(uint_fast16_t id);
 
@@ -239,7 +239,7 @@ jpc_dec_mstabent_t jpc_dec_mstab[] = {
  * The main entry point for the JPEG-2000 decoder.
 \******************************************************************************/
 
-jas_image_t *jpc_decode(jas_stream_t *in, char *optstr)
+jas_image_t *jpc_decode(jas_stream_t *in, const char *optstr)
 {
   jpc_dec_importopts_t opts;
   jpc_dec_t *dec;
@@ -321,7 +321,7 @@ jas_taginfo_t decopts[] = {
   {-1, 0}
 };
 
-static int jpc_dec_parseopts(char *optstr, jpc_dec_importopts_t *opts)
+static int jpc_dec_parseopts(const char *optstr, jpc_dec_importopts_t *opts)
 {
   jas_tvparser_t *tvp;
 

@@ -99,7 +99,7 @@ static int jp2_getct(int colorspace, int type, int assoc);
  * Functions.
 \******************************************************************************/
 
-jas_image_t *jp2_decode(jas_stream_t *in, char *optstr)
+jas_image_t *jp2_decode(jas_stream_t *in, const char *optstr)
 {
   jp2_box_t *box;
   int found;

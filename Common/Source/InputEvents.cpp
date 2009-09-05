@@ -118,7 +118,7 @@ static int N2Event[MAX_MODE][NE_COUNT];
 // Events - What do you want to DO
 typedef struct {
   pt2Event event; // Which function to call (can be any, but should be here)
-  TCHAR *misc;    // Parameters
+  const TCHAR *misc; // Parameters
   int next;       // Next in event list - eg: Macros
 } EventSTRUCT;
 
@@ -544,7 +544,7 @@ int InputEvents::makeEvent(void (*event)(const TCHAR *), const TCHAR *misc, int 
   }
   Events_count++;	// NOTE - Starts at 1 - 0 is a noop
   Events[Events_count].event = event;
-  Events[Events_count].misc = (TCHAR*)misc;
+  Events[Events_count].misc = misc;
   Events[Events_count].next = next;
 
   return Events_count;

@@ -279,10 +279,10 @@ typedef struct {
 
 typedef struct {
 
-	jas_image_t *(*decode)(jas_stream_t *in, char *opts);
+	jas_image_t *(*decode)(jas_stream_t *in, const char *opts);
 	/* Decode image data from a stream. */
 
-	int (*encode)(jas_image_t *image, jas_stream_t *out, char *opts);
+	int (*encode)(jas_image_t *image, jas_stream_t *out, const char *opts);
 	/* Encode image data to a stream. */
 
 	int (*validate)(jas_stream_t *in);
@@ -422,11 +422,11 @@ void jas_image_destroy(jas_image_t *image);
 uint_fast32_t jas_image_rawsize(jas_image_t *image);
 
 /* Create an image from a stream in some specified format. */
-jas_image_t *jas_image_decode(jas_stream_t *in, int fmt, char *optstr);
+jas_image_t *jas_image_decode(jas_stream_t *in, int fmt, const char *optstr);
 
 /* Write an image to a stream in a specified format. */
 int jas_image_encode(jas_image_t *image, jas_stream_t *out, int fmt,
-  char *optstr);
+  const char *optstr);
 
 /* Read a rectangular region of an image component. */
 /* The position and size of the rectangular region to be read is specified
@@ -476,7 +476,7 @@ int jas_image_getcmptbytype(jas_image_t *image, int ctype);
 void jas_image_clearfmts(void);
 
 /* Add entry to table of image formats. */
-int jas_image_addfmt(int id, char *name, char *ext, char *desc,
+int jas_image_addfmt(int id, const char *name, const char *ext, const char *desc,
   jas_image_fmtops_t *ops);
 
 /* Get the ID for the image format with the specified name. */
@@ -521,64 +521,64 @@ void jas_image_dump(jas_image_t *image, FILE *out);
 
 #if !defined(EXCLUDE_JPG_SUPPORT)
 /* Format-dependent operations for JPG support. */
-jas_image_t *jpg_decode(jas_stream_t *in, char *optstr);
-int jpg_encode(jas_image_t *image, jas_stream_t *out, char *optstr);
+jas_image_t *jpg_decode(jas_stream_t *in, const char *optstr);
+int jpg_encode(jas_image_t *image, jas_stream_t *out, const char *optstr);
 int jpg_validate(jas_stream_t *in);
 #endif
 
 #if !defined(EXCLUDE_MIF_SUPPORT)
 /* Format-dependent operations for MIF support. */
-jas_image_t *mif_decode(jas_stream_t *in, char *optstr);
-int mif_encode(jas_image_t *image, jas_stream_t *out, char *optstr);
+jas_image_t *mif_decode(jas_stream_t *in, const char *optstr);
+int mif_encode(jas_image_t *image, jas_stream_t *out, const char *optstr);
 int mif_validate(jas_stream_t *in);
 #endif
 
 #if !defined(EXCLUDE_PNM_SUPPORT)
 /* Format-dependent operations for PNM support. */
-jas_image_t *pnm_decode(jas_stream_t *in, char *optstr);
-int pnm_encode(jas_image_t *image, jas_stream_t *out, char *optstr);
+jas_image_t *pnm_decode(jas_stream_t *in, const char *optstr);
+int pnm_encode(jas_image_t *image, jas_stream_t *out, const char *optstr);
 int pnm_validate(jas_stream_t *in);
 #endif
 
 #if !defined(EXCLUDE_RAS_SUPPORT)
 /* Format-dependent operations for Sun Rasterfile support. */
-jas_image_t *ras_decode(jas_stream_t *in, char *optstr);
-int ras_encode(jas_image_t *image, jas_stream_t *out, char *optstr);
+jas_image_t *ras_decode(jas_stream_t *in, const char *optstr);
+int ras_encode(jas_image_t *image, jas_stream_t *out, const char *optstr);
 int ras_validate(jas_stream_t *in);
 #endif
 
 #if !defined(EXCLUDE_BMP_SUPPORT)
 /* Format-dependent operations for BMP support. */
-jas_image_t *bmp_decode(jas_stream_t *in, char *optstr);
-int bmp_encode(jas_image_t *image, jas_stream_t *out, char *optstr);
+jas_image_t *bmp_decode(jas_stream_t *in, const char *optstr);
+int bmp_encode(jas_image_t *image, jas_stream_t *out, const char *optstr);
 int bmp_validate(jas_stream_t *in);
 #endif
 
 #if !defined(EXCLUDE_JP2_SUPPORT)
 /* Format-dependent operations for JP2 support. */
-jas_image_t *jp2_decode(jas_stream_t *in, char *optstr);
-int jp2_encode(jas_image_t *image, jas_stream_t *out, char *optstr);
+jas_image_t *jp2_decode(jas_stream_t *in, const char *optstr);
+int jp2_encode(jas_image_t *image, jas_stream_t *out, const char *optstr);
 int jp2_validate(jas_stream_t *in);
 #endif
 
 #if !defined(EXCLUDE_JPC_SUPPORT)
 /* Format-dependent operations for JPEG-2000 code stream support. */
-jas_image_t *jpc_decode(jas_stream_t *in, char *optstr);
-int jpc_encode(jas_image_t *image, jas_stream_t *out, char *optstr);
+jas_image_t *jpc_decode(jas_stream_t *in, const char *optstr);
+int jpc_encode(jas_image_t *image, jas_stream_t *out, const char *optstr);
 int jpc_validate(jas_stream_t *in);
 #endif
 
 #if !defined(EXCLUDE_PGX_SUPPORT)
 /* Format-dependent operations for PGX support. */
-jas_image_t *pgx_decode(jas_stream_t *in, char *optstr);
-int pgx_encode(jas_image_t *image, jas_stream_t *out, char *optstr);
+jas_image_t *pgx_decode(jas_stream_t *in, const char *optstr);
+int pgx_encode(jas_image_t *image, jas_stream_t *out, const char *optstr);
 int pgx_validate(jas_stream_t *in);
 #endif
 
 #if !defined(EXCLUDE_TIFF_SUPPORT)
 /* Format-dependent operations for TIFF support. */
-jas_image_t *tiff_decode(jas_stream_t *in, char *optstr);
-int tiff_encode(jas_image_t *image, jas_stream_t *out, char *optstr);
+jas_image_t *tiff_decode(jas_stream_t *in, const char *optstr);
+int tiff_encode(jas_image_t *image, jas_stream_t *out, const char *optstr);
 int tiff_validate(jas_stream_t *in);
 #endif
 

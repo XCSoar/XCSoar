@@ -102,11 +102,11 @@ void Topology::Open() {
   shapefileopen = false;
 
   if (append) {
-    if (msSHPOpenFile(&shpfile, (char*)"rb+", filename) == -1) {
+    if (msSHPOpenFile(&shpfile, "rb+", filename) == -1) {
       return;
     }
   } else {
-    if (msSHPOpenFile(&shpfile, (char*)"rb", filename) == -1) {
+    if (msSHPOpenFile(&shpfile, "rb", filename) == -1) {
       return;
     }
   }

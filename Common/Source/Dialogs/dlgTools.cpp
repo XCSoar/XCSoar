@@ -119,7 +119,7 @@ int WINAPI MessageBoxX(LPCTSTR lpText, LPCTSTR lpCaption, UINT uType){
   h = DLGSCALE(32);
 
   wf = new WndForm(&XCSoarInterface::main_window, TEXT("frmXcSoarMessageDlg"),
-                   (TCHAR*)lpCaption, X, Y, Width, Height);
+                   lpCaption, X, Y, Width, Height);
   wf->SetFont(MapWindowBoldFont);
   wf->SetTitleFont(MapWindowBoldFont);
   wf->SetBackColor(Color(0xDA, 0xDB, 0xAB));
@@ -130,7 +130,7 @@ int WINAPI MessageBoxX(LPCTSTR lpText, LPCTSTR lpCaption, UINT uType){
                        DLGSCALE(5),
                        Width,
                        Height);
-  wText->SetCaption((TCHAR*)lpText);
+  wText->SetCaption(lpText);
   wText->SetFont(MapWindowBoldFont);
   wText->SetCaptionStyle(
         DT_EXPANDTABS

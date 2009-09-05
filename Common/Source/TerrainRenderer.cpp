@@ -364,63 +364,63 @@ bool TerrainRenderer::SetMap(double lon, double lat) {
     do_water = false;
     height_scale = 2; // max range 256*(2**2) = 1024 cm/s = 10 m/s
     DisplayMap = RASP.GetMap();
-    color_ramp = (COLORRAMP*)&weather_colors[0][0];
+    color_ramp = &weather_colors[0][0];
     break;
   case 2: // bl wind spd
     is_terrain = false;
     do_water = false;
     height_scale = 3;
     DisplayMap = RASP.GetMap();
-    color_ramp = (COLORRAMP*)&weather_colors[1][0];
+    color_ramp = &weather_colors[1][0];
     break;
   case 3: // hbl
     is_terrain = false;
     do_water = false;
     height_scale = 4;
     DisplayMap = RASP.GetMap();
-    color_ramp = (COLORRAMP*)&weather_colors[2][0];
+    color_ramp = &weather_colors[2][0];
     break;
   case 4: // dwcrit
     is_terrain = false;
     do_water = false;
     height_scale = 4;
     DisplayMap = RASP.GetMap();
-    color_ramp = (COLORRAMP*)&weather_colors[2][0];
+    color_ramp = &weather_colors[2][0];
     break;
   case 5: // blcloudpct
     is_terrain = false;
     do_water = true;
     height_scale = 0;
     DisplayMap = RASP.GetMap();
-    color_ramp = (COLORRAMP*)&weather_colors[3][0];
+    color_ramp = &weather_colors[3][0];
     break;
   case 6: // sfctemp
     is_terrain = false;
     do_water = false;
     height_scale = 0;
     DisplayMap = RASP.GetMap();
-    color_ramp = (COLORRAMP*)&weather_colors[4][0];
+    color_ramp = &weather_colors[4][0];
     break;
   case 7: // hwcrit
     is_terrain = false;
     do_water = false;
     height_scale = 4;
     DisplayMap = RASP.GetMap();
-    color_ramp = (COLORRAMP*)&weather_colors[2][0];
+    color_ramp = &weather_colors[2][0];
     break;
   case 8: // wblmaxmin
     is_terrain = false;
     do_water = false;
     height_scale = 1; // max range 256*(1**2) = 512 cm/s = 5.0 m/s
     DisplayMap = RASP.GetMap();
-    color_ramp = (COLORRAMP*)&weather_colors[5][0];
+    color_ramp = &weather_colors[5][0];
     break;
   case 9: // blcwbase
     is_terrain = false;
     do_water = false;
     height_scale = 4;
     DisplayMap = RASP.GetMap();
-    color_ramp = (COLORRAMP*)&weather_colors[2][0];
+    color_ramp = &weather_colors[2][0];
     break;
   default:
   case 0:
@@ -429,7 +429,7 @@ bool TerrainRenderer::SetMap(double lon, double lat) {
     do_water = true;
     height_scale = 4;
     DisplayMap = terrain.TerrainMap;
-    color_ramp = (COLORRAMP*)&terrain_colors[TerrainRamp][0];
+    color_ramp = &terrain_colors[TerrainRamp][0];
     break;
   }
   
@@ -762,7 +762,7 @@ void TerrainRenderer::Slope(const int sx, const int sy, const int sz) {
 };
 
 void TerrainRenderer::ColorTable() {
-  static COLORRAMP* lastColorRamp = NULL;
+  static const COLORRAMP *lastColorRamp = NULL;
   if (color_ramp == lastColorRamp) {
     // no need to update the color table
     return;

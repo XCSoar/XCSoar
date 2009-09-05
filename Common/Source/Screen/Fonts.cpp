@@ -105,7 +105,7 @@ void InitializeOneFont(Font *theFont,
   memset ((char *)&logfont, 0, sizeof (LOGFONT));
 
   if (UseCustomFonts) {
-    propGetFontSettings((TCHAR * )FontRegKey, &logfont);
+    propGetFontSettings(FontRegKey, &logfont);
     if (!IsNullLogFont(logfont)) {
       theFont->set(&logfont);
       if (theFont->defined()) {
