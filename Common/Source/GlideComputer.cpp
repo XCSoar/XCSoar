@@ -142,7 +142,9 @@ void GlideComputer::SaveTaskSpeed(double val)
 }
 
 
-bool GlideComputer::ProcessIdle(const MapWindowProjection &map) {
+void
+GlideComputer::ProcessIdle(const MapWindowProjection &map)
+{
   /*
   // VENTA3 Alternates
   if ( EnableAlternate1 == true ) DoAlternates(Basic, Calculated,Alternate1);
@@ -157,7 +159,7 @@ bool GlideComputer::ProcessIdle(const MapWindowProjection &map) {
     IterateEffectiveMacCready();
   }
 
-  return GlideComputerAirData::ProcessIdle(map);
+  GlideComputerAirData::ProcessIdle(map);
 }
 
 

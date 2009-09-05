@@ -61,7 +61,7 @@ public:
   ldrotary_s           rotaryLD;
   ThermalLocator thermallocator;
   WindAnalyser   windanalyser;
-  virtual bool ProcessIdle(const MapWindowProjection &map);
+  virtual void ProcessIdle(const MapWindowProjection &map);
 
   void SetWindEstimate(const double wind_speed,
 		       const double wind_bearing,
@@ -190,7 +190,7 @@ private:
 protected:
   virtual void SaveTaskSpeed(double val) = 0;
   virtual void SetLegStart();
-  virtual bool ProcessIdle(const MapWindowProjection &map);
+  virtual void ProcessIdle(const MapWindowProjection &map);
   const double FAIFinishHeight(int wp) const;
 public:
   virtual void ResetEnter();
@@ -222,7 +222,7 @@ protected:
 public:
   void Initialise();
   bool ProcessGPS(); // returns true if idle needs processing
-  virtual bool ProcessIdle(const MapWindowProjection &map);
+  virtual void ProcessIdle(const MapWindowProjection &map);
   virtual bool ProcessVario();
   virtual const bool InsideStartHeight(const DWORD Margin=0) const;
   virtual const bool ValidStartSpeed(const DWORD Margin=0) const;

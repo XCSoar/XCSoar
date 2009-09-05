@@ -784,7 +784,7 @@ GlideComputerAirData::FlightTimes()
   return true;
 }
 
-bool
+void
 GlideComputerAirData::ProcessIdle(const MapWindowProjection &map_projection)
 {
   TerrainFootprint(map_projection.GetScreenDistanceMeters());
