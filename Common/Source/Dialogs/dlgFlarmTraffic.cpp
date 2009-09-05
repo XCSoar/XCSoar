@@ -59,12 +59,8 @@ static WndOwnerDrawFrame *wDetailsEntry = NULL;
 
 #define MAXLINES 100
 #define MAXLISTS 20
-static int LineOffsets[MAXLINES];
 static int DrawListIndex=0;
 static int nTextLines=0;
-static int nLists=0;
-static TCHAR *ChecklistText[MAXLISTS];
-static TCHAR *ChecklistTitle[MAXLISTS];
 
 static void Update(){
 
