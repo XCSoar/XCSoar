@@ -894,7 +894,6 @@ WndForm::SetTitleFont(const Font &font)
 void WndForm::SetToForeground(void)
 {
   bring_to_top();
-  set_active();
 }
 
 int WndForm::ShowModal(void){
