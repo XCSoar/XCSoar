@@ -60,12 +60,12 @@ void MapWindow::CalculateScreenPositionsThermalSources() {
         continue;
       }
       
-      double t = dh/Calculated().ThermalSources[i].LiftRate;
+      double t = -dh/Calculated().ThermalSources[i].LiftRate;
       double lat, lon;
       FindLatitudeLongitude(Calculated().ThermalSources[i].Latitude,
                             Calculated().ThermalSources[i].Longitude,
                             Calculated().WindBearing,
-                            -Calculated().WindSpeed*t,
+                            Calculated().WindSpeed*t,
                             &lat, &lon);
       ThermalSources[i].Visible = 
 	LonLat2ScreenIfVisible(lon,lat,
