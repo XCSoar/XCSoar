@@ -278,7 +278,7 @@ void GaugeVario::Render() {
 
   if (Appearance.GaugeVarioMc) {
     double mc = GlidePolar::GetMacCready()*LIFTMODIFY;
-    if (Calculated().AutoMacCready)
+    if (SettingsComputer().AutoMacCready)
       RenderValue(hdcDrawWindow, orgBottom.x, orgBottom.y,
 		  &diValueBottom, &diLabelBottom,
 		  mc, TEXT("Auto Mc"));
@@ -441,7 +441,6 @@ void GaugeVario::MakeAllPolygons() {
 
 void GaugeVario::RenderClimb(Canvas &canvas)
 {
-
   int x = get_right() - IBLSCALE(14);
   int y = get_bottom() - IBLSCALE(24);
 

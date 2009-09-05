@@ -330,7 +330,7 @@ void MapWindow::DrawFlightMode(Canvas &canvas, const RECT rc)
   }
 
 
-  if (!Appearance.DontShowAutoMacCready && Calculated().AutoMacCready) {
+  if (!Appearance.DontShowAutoMacCready && SettingsComputer().AutoMacCready) {
 
     offset -= 24;
 

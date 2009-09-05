@@ -56,9 +56,6 @@ Copyright_License {
 int Alternate1 = -1;
 int Alternate2 = -1;
 int BestAlternate = -1;
-bool EnableBestAlternate=false;
-bool EnableAlternate1=false;
-bool EnableAlternate2=false;
 
 /*
  * ===========================================
@@ -493,9 +490,9 @@ GlideComputerTask::DoBestAlternateSlow()
 
  // VENTA3 best landing slow calculation
 #ifdef WINDOWSPC
-  if ( (EnableBestAlternate) && (Basic().Time > LastSearchBestTime+10.0) ) // VENTA3
+  if ( (SettingsComputer().EnableBestAlternate) && (Basic().Time > LastSearchBestTime+10.0) ) // VENTA3
 #else
-  if ( (EnableBestAlternate) && (Basic().Time > LastSearchBestTime+BESTALTERNATEINTERVAL) ) // VENTA3
+  if ( (SettingsComputer().EnableBestAlternate) && (Basic().Time > LastSearchBestTime+BESTALTERNATEINTERVAL) ) // VENTA3
 #endif
     {
       LastSearchBestTime = Basic().Time;

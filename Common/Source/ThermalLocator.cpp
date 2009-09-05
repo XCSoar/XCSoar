@@ -42,7 +42,6 @@ Copyright_License {
 #include "Components.hpp"
 #include <math.h>
 
-int EnableThermalLocator = 1;
 
 #define SFACT 111195
 

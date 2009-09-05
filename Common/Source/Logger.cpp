@@ -59,8 +59,6 @@
 
 //IGC Logger
 bool LoggerActive = false;
-bool DisableAutoLogger = false;
-bool LoggerShortName = false;
 
 TCHAR NumToIGCChar(int n) {
   if (n<10) {
@@ -478,7 +476,7 @@ void StartLogger(const TCHAR *astrAssetNumber)
       // long filename form of IGC file.
       // XXX represents manufacturer code
 
-      if (!LoggerShortName) {
+      if (!XCSoarInterface::SettingsComputer().LoggerShortName) {
         // Long file name
         _stprintf(szFLoggerFileName,
                  TEXT("%s\\%04d-%02d-%02d-XCS-%c%c%c-%02d.IGC"),

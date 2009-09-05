@@ -1104,12 +1104,12 @@ void ReadRegistrySettings(void)
   GetFromRegistry(szRegistryWindArrowStyle,&Temp);
   WindArrowStyle = Temp;
 
-  Temp = DisableAutoLogger;
+  Temp = XCSoarInterface::SettingsComputer().DisableAutoLogger;
   GetFromRegistry(szRegistryDisableAutoLogger,&Temp);
   if (Temp)
-    DisableAutoLogger = true;
+    XCSoarInterface::SetSettingsComputer().DisableAutoLogger = true;
   else
-    DisableAutoLogger = false;
+    XCSoarInterface::SetSettingsComputer().DisableAutoLogger = false;
 }
 
 //

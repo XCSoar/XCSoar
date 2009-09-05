@@ -1058,24 +1058,22 @@ GlideComputerAirData::TerrainFootprint(double screen_range)
 }
 
 
-bool BallastTimerActive = false;
-int BallastSecsToEmpty = 120;
-
 void
 GlideComputerAirData::BallastDump()
 {
   static double BallastTimeLast = -1;
 
-  if (BallastTimerActive) {
+  if (SettingsComputer().BallastTimerActive) {
     // JMW only update every 5 seconds to stop flooding the devices
     if (Basic().Time > BallastTimeLast+5) {
       double BALLAST = GlidePolar::GetBallast();
       double BALLAST_last = BALLAST;
       double dt = Basic().Time - BallastTimeLast;
-      double percent_per_second = 1.0/max(10.0, BallastSecsToEmpty);
+      double percent_per_second = 1.0/max(10.0, 
+				SettingsComputer().BallastSecsToEmpty);
       BALLAST -= dt*percent_per_second;
       if (BALLAST<0) {
-	BallastTimerActive = false;
+	// JMW illegal	BallastTimerActive = false;
 	BALLAST = 0.0;
       }
       GlidePolar::SetBallast(BALLAST);

@@ -73,15 +73,10 @@ Copyright_License {
 #include "ConditionMonitor.hpp"
 #include "MapWindowProjection.hpp"
 
-bool EnableNavBaroAltitude=false;
-int EnableExternalTriggerCruise=false;
 bool ForceFinalGlide= false;
-bool AutoForceFinalGlide= false;
 bool EnableFAIFinishHeight = false;
-
 int FinishLine=1;
 DWORD FinishRadius=1000;
-
 
 void
 DoAutoQNH(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated)

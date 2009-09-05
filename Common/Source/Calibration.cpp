@@ -47,13 +47,10 @@ Copyright_License {
 #define NUM_CAL_VARIO 101
 #define NUM_CAL_VSPEED 50
 
-bool EnableCalibration = false;
-
 static double calibration_tevario_val[NUM_CAL_SPEED][NUM_CAL_VARIO];
 static unsigned int calibration_tevario_num[NUM_CAL_SPEED][NUM_CAL_VARIO];
 static double calibration_speed_val[NUM_CAL_VSPEED];
 static unsigned int calibration_speed_num[NUM_CAL_VSPEED];
-
 
 void CalibrationInit(void) {
   int i, j;
@@ -133,5 +130,3 @@ CalibrationUpdate(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated)
   calibration_speed_num[index_vspeed] ++;
 
 }
-
-//////////////////////

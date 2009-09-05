@@ -128,6 +128,8 @@ class InstrumentBlackboard {
 protected:
   static const NMEA_INFO& Basic() { return blackboard.Basic(); }
   static const DERIVED_INFO& Calculated() { return blackboard.Calculated(); }
+  const SETTINGS_COMPUTER& SettingsComputer()  
+  { return blackboard.SettingsComputer(); }
 public:
   static void ReadBlackboardBasic(const NMEA_INFO& nmea_info) {
     blackboard.ReadBlackboardBasic(nmea_info);

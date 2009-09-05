@@ -321,23 +321,20 @@ CommonInterface::on_key_MacCready(int UpDown)
     }
     GlidePolar::SetMacCready(MACCREADY);
   }
-  /* JMW illegal
  else if (UpDown==0)
     {
-      Calculated().AutoMacCready 
-	= !Calculated().AutoMacCready;
+      SetSettingsComputer().AutoMacCready 
+	= !SettingsComputer().AutoMacCready;
     }
   else if (UpDown==-2)
     {
-      Calculated().AutoMacCready = false;  // SDP on auto maccready
+      SetSettingsComputer().AutoMacCready = false;  // SDP on auto maccready
 
     }
   else if (UpDown==+2)
     {
-      Calculated().AutoMacCready = true;	// SDP off auto maccready
-
+      SetSettingsComputer().AutoMacCready = true;	// SDP off auto maccready
     }
-  */
 
   // JMW TODO check scope
   devPutMacCready(devA(), MACCREADY);

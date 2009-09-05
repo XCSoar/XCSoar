@@ -64,7 +64,7 @@ Copyright_License {
 
 
 typedef struct _SETTINGS_COMPUTER {
-
+  bool AutoMacCready;
  int    FinalGlideTerrain;
  int    AutoMcMode;
  bool   EnableCalibration;
@@ -76,6 +76,7 @@ typedef struct _SETTINGS_COMPUTER {
  int    LoggerTimeStepCruise;
  int    LoggerTimeStepCircling;
  bool   LoggerShortName;
+  bool  DisableAutoLogger;
  double SAFETYALTITUDEARRIVAL;
  double SAFETYALTITUDEBREAKOFF;
  double SAFETYALTITUDETERRAIN;
@@ -88,7 +89,6 @@ typedef struct _SETTINGS_COMPUTER {
   // polar info
  int    BallastSecsToEmpty;
  bool   BallastTimerActive;
- bool   AutoMacCready;
 
  int    TeamCodeRefWaypoint;
  bool   TeamFlarmTracking;

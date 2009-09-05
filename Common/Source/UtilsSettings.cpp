@@ -178,14 +178,6 @@ int    AutoAdvance = 1;
 bool   AdvanceArmed = false;
 bool   TaskAborted = false;
 
-// Team code info
-TCHAR TeammateCode[10];
-TCHAR TeamFlarmCNTarget[4]; // CN of the glider to track
-int TeamFlarmIdTarget;      // FlarmId of the glider to track
-double TeammateLatitude;
-double TeammateLongitude;
-bool TeammateCodeValid = false;
-
 
 // Waypoint Database
 int SectorType = 1; // FAI sector

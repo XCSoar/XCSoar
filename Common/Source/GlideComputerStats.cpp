@@ -47,8 +47,6 @@ Copyright_License {
 #include "Math/Earth.hpp"
 
 int FastLogNum = 0; // number of points to log at high rate
-int LoggerTimeStepCruise=5;
-int LoggerTimeStepCircling=1;
 
 void GlideComputerStats::ResetFlight(const bool full)
 {
@@ -86,10 +84,10 @@ bool GlideComputerStats::DoLogging() {
 
   // draw snail points more often in circling mode
   if (Calculated().Circling) {
-    dtLog = LoggerTimeStepCircling;
+    dtLog = SettingsComputer().LoggerTimeStepCircling;
     dtSnail = 1.0;
   } else {
-    dtLog = LoggerTimeStepCruise;
+    dtLog = SettingsComputer().LoggerTimeStepCruise;
     dtSnail = 5.0;
   }
   if (FastLogNum) {

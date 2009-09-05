@@ -54,10 +54,21 @@ InterfaceBlackboard CommonInterface::blackboard;
 HINSTANCE CommonInterface::hInst; // The current instance
 MainWindow CommonInterface::main_window;
 
+/////
+
+// Team code info
+TCHAR TeammateCode[10];
+TCHAR TeamFlarmCNTarget[4]; // CN of the glider to track
+int TeamFlarmIdTarget;      // FlarmId of the glider to track
+double TeammateLatitude;
+double TeammateLongitude;
+bool TeammateCodeValid = false;
+
+
 
 void XCSoarInterface::DefaultSettings() 
 {
-
+  SetSettingsComputer().AutoMacCready = false;
   SetSettingsComputer().AutoWindMode= D_AUTOWIND_CIRCLING;
   SetSettingsComputer().AutoMcMode = 0;
   SetSettingsComputer().SAFETYALTITUDEARRIVAL = 500;
@@ -65,12 +76,28 @@ void XCSoarInterface::DefaultSettings()
   SetSettingsComputer().SAFETYALTITUDETERRAIN = 200;
   SetSettingsComputer().SAFTEYSPEED = 50.0;
   SetSettingsComputer().EnableBlockSTF = false;
+
   SetSettingsComputer().TeamCodeRefWaypoint = -1;
   SetSettingsComputer().TeamFlarmTracking = false;
+  SetSettingsComputer().TeamFlarmCNTarget[0] = 0;
+
   SetSettingsComputer().AverEffTime=0;
   SetSettingsComputer().SoundVolume = 80;
   SetSettingsComputer().SoundDeadband = 5;
-
+  SetSettingsComputer().EnableNavBaroAltitude=false;
+  SetSettingsComputer().EnableExternalTriggerCruise=false;
+  SetSettingsComputer().AutoForceFinalGlide= false;
+  SetSettingsComputer().EnableCalibration = false;
+  SetSettingsComputer().EnableThermalLocator = 1;
+  SetSettingsComputer().LoggerTimeStepCruise=5;
+  SetSettingsComputer().LoggerTimeStepCircling=1;
+  SetSettingsComputer().DisableAutoLogger = false;
+  SetSettingsComputer().LoggerShortName = false;
+  SetSettingsComputer().EnableBestAlternate=false;
+  SetSettingsComputer().EnableAlternate1=false;
+  SetSettingsComputer().EnableAlternate2=false;
+  SetSettingsComputer().BallastTimerActive = false;
+  SetSettingsComputer().BallastSecsToEmpty = 120;
 }
 
 

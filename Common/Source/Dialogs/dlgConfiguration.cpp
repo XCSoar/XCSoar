@@ -1773,7 +1773,7 @@ static void setVariables(void) {
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpDisableAutoLogger"));
   if (wp) {
-    wp->GetDataField()->Set(!DisableAutoLogger);
+    wp->GetDataField()->Set(!XCSoarInterface::SettingsComputer().DisableAutoLogger);
     wp->RefreshDisplay();
   }
 
@@ -2642,12 +2642,12 @@ void dlgConfigurationShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpDisableAutoLogger"));
   if (wp) {
-    if (!DisableAutoLogger
+    if (!XCSoarInterface::SettingsComputer().DisableAutoLogger
 	!= wp->GetDataField()->GetAsBoolean()) {
-      DisableAutoLogger =
+      XCSoarInterface::SetSettingsComputer().DisableAutoLogger =
 	!(wp->GetDataField()->GetAsBoolean());
       SetToRegistry(szRegistryDisableAutoLogger,
-		    DisableAutoLogger);
+		    XCSoarInterface::SettingsComputer().DisableAutoLogger);
       changed = true;
     }
   }
