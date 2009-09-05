@@ -931,11 +931,11 @@ void PopUpSelect(int Index)
   XCSoarInterface::main_window.map.set_focus();
 }
 
-bool InfoBoxManager::Click(HWND wmControl) {
+bool InfoBoxManager::Click(InfoBox &ib) {
   InfoBoxFocusTimeOut = 0;
 
   for(unsigned i = 0; i < numInfoWindows; i++) {
-    if(wmControl == InfoBoxes[i]->GetHandle()) {
+    if (&ib == InfoBoxes[i]) {
       InfoWindowActive = true;
       if ((int)i != InfoFocus) {
 	FocusOnWindow(i,true);

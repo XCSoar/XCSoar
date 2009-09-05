@@ -92,10 +92,6 @@ MainWindow::on_command(HWND wmControl, unsigned id, unsigned code)
 
     full_screen();
 
-    if (InfoBoxManager::Click(wmControl)) {
-      return true; // don't continue processing..
-    }
-
     Message::CheckTouch(wmControl);
     
     if (ButtonLabel::CheckButtonPress(wmControl)) {

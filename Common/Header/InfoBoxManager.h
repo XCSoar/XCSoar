@@ -45,6 +45,7 @@ extern const unsigned NUMSELECTSTRINGS;
 
 #include "Interface.hpp"
 
+class InfoBox;
 
 class InfoBoxManager: public CommonInterface {
  private:
@@ -63,7 +64,7 @@ public:
   static const TCHAR *GetTypeDescription(unsigned i);
 
   static void ProcessKey(int keycode);
-  static bool Click(HWND wmControl);
+  static bool Click(InfoBox &ib);
 
   static void Focus();
   static bool Defocus(void);

@@ -50,6 +50,7 @@ Copyright_License {
 #include "SettingsUser.hpp"
 #include "Defines.h"
 #include "options.h" /* for IBLSCALE() */
+#include "InfoBoxManager.h"
 
 static Color fgColor = RGB(0x0,0x0,0x0);
 static Color bkColor = RGB(0xff,0xff,0xff);
@@ -691,8 +692,7 @@ bool InfoBox::on_mouse_down(int x, int y)
 #ifdef DEBUG_DBLCLK
   DoStatusMessage(_T("BDOWN InfoBox")); // VENTA3
 #endif
-  GetParent().send_command(GetHandle());
-  return true;
+  return InfoBoxManager::Click(*this);
 }
 
 bool InfoBox::on_mouse_double(int x, int y)
