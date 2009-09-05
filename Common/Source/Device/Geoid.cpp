@@ -39,6 +39,7 @@ Copyright_License {
 #include "Math/FastMath.h"
 #include "Interface.hpp"
 #include <stdlib.h>
+#include <tchar.h>
 
 #define EGM96SIZE 16200
 
@@ -46,7 +47,7 @@ unsigned char* egm96data= NULL;
 
 
 void OpenGeoid(void) {
-  LPTSTR lpRes;
+  const TCHAR *lpRes;
   HRSRC hResInfo;
   HGLOBAL hRes;
   int len;
@@ -67,13 +68,13 @@ void OpenGeoid(void) {
   }
 
   // Lock the wave resource and do something with it.
-  lpRes = (LPTSTR)LockResource (hRes);
+  lpRes = (const TCHAR *)LockResource (hRes);
 
   if (lpRes) {
     len = SizeofResource(XCSoarInterface::hInst,hResInfo);
     if (len==EGM96SIZE) {
       egm96data = (unsigned char*)malloc(len);
-      strncpy((char*)egm96data,(char*)lpRes,len);
+      strncpy((char*)egm96data,(const char*)lpRes,len);
     } else {
       egm96data = NULL;
       return;
