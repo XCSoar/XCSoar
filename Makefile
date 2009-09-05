@@ -647,7 +647,6 @@ JASPER	:=\
 
 COMPATSRC:=$(SRC)/wcecompat
 COMPAT	:=\
-	$(COMPATSRC)/string_extras.c \
 	$(COMPATSRC)/ts_string.cpp
 
 ifneq ($(CONFIG_WINE),y)
