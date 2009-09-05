@@ -917,7 +917,7 @@ static bool LoadTaskWaypoints(FILE *file) {
 
 
 // loads a new task from scratch.
-void LoadNewTask(TCHAR *szFileName)
+void LoadNewTask(const TCHAR *szFileName)
 {
   TASK_POINT Temp;
   START_POINT STemp;
@@ -1129,7 +1129,7 @@ bool ValidTaskPoint(int i) {
   return retval;
 }
 
-void SaveTask(TCHAR *szFileName)
+void SaveTask(const TCHAR *szFileName)
 {
   if (!WayPointList) return; // this should never happen, but just to be safe...
 

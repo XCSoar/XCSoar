@@ -127,8 +127,8 @@ void guiStartLogger(bool noAsk = false);
 void guiStopLogger(bool noAsk = false);
 void guiToggleLogger(bool noAsk = false);
 
-void LoadNewTask(TCHAR *FileName);
-void SaveTask(TCHAR *FileName);
+void LoadNewTask(const TCHAR *FileName);
+void SaveTask(const TCHAR *FileName);
 void DefaultTask(void);
 void ClearTask(void);
 void RotateStartPoints(void);
