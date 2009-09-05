@@ -70,7 +70,7 @@ static int Count=0;
 #define SELECTORWIDTH         (DEFAULTBORDERPENWIDTH+IBLSCALE(4))
 
 InfoBox::InfoBox(ContainerWindow &parent, int X, int Y, int Width, int Height)
-  :mParent(parent), focus_timer(0)
+  :focus_timer(0)
 {
   mX = X;
   mY = Y;
@@ -302,10 +302,6 @@ void InfoBox::SetComment(const TCHAR *Value){
 
 PaintWindow &InfoBox::GetHandle(void){
   return *this;
-}
-
-ContainerWindow &InfoBox::GetParent(void){
-  return(mParent);
 }
 
 void InfoBox::SetSmallerFont(bool smallerFont)

@@ -60,7 +60,6 @@ class InfoBox : public BufferWindow {
     int mY;
     int mWidth;
     int mHeight;
-    ContainerWindow &mParent;
     int  mBorderKind;
     Color mColorBack;
     Color mColorFore;
@@ -139,7 +138,6 @@ class InfoBox : public BufferWindow {
     int SetBorderKind(int Value);
 
     PaintWindow &GetHandle(void);
-    ContainerWindow &GetParent(void);
 
     void SetColor(int Value);
     void SetColorBottom(int Value);
