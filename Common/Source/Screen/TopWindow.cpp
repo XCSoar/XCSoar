@@ -94,6 +94,18 @@ TopWindow::full_screen()
 #endif
 }
 
+bool
+TopWindow::on_activate()
+{
+  return false;
+}
+
+bool
+TopWindow::on_deactivate()
+{
+  return false;
+}
+
 LRESULT TopWindow::on_message(HWND _hWnd, UINT message,
 			       WPARAM wParam, LPARAM lParam) {
   switch (message) {
@@ -101,7 +113,11 @@ LRESULT TopWindow::on_message(HWND _hWnd, UINT message,
 #ifdef HAVE_ACTIVATE_INFO
     SHHandleWMActivate(_hWnd, wParam, lParam, &s_sai, FALSE);
 #endif
+
+    if (wParam == WA_INACTIVE ? on_deactivate() : on_activate())
+      return true;
     break;
+
   case WM_SETTINGCHANGE:
 #ifdef HAVE_ACTIVATE_INFO
     SHHandleWMSettingChange(_hWnd, wParam, lParam, &s_sai);

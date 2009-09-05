@@ -79,6 +79,9 @@ public:
   }
 
 protected:
+  virtual bool on_activate();
+  virtual bool on_deactivate();
+
   virtual LRESULT on_message(HWND _hWnd, UINT message,
                              WPARAM wParam, LPARAM lParam);
 };
