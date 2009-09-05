@@ -78,11 +78,8 @@ BufferWindow InfoBoxManager::full_window;
 bool EnableAuxiliaryInfo = false;
 int ActiveAlternate = -1;
 
-static int  InfoBoxFocusTimeOut = 0;
 static bool InfoBoxesDirty= false;
 static bool InfoBoxesHidden = false;
-static int InfoFocus = 0;
-static bool InfoWindowActive = true;
 static double LastFlipBoxTime = 0; // VENTA3
 
 unsigned numInfoWindows = 8;
@@ -325,59 +322,36 @@ void InfoBoxManager::Show() {
   for (unsigned i = 0; i < numInfoWindows; i++) {
     InfoBoxes[i]->SetVisible(true);
   }
-  Defocus();
 }
 
+int InfoBoxManager::FindInfoBox(HWND hWnd)
+{
+  for (unsigned i = 0; i < numInfoWindows; i++)
+    if (hWnd == (HWND)*InfoBoxes[i])
+      return i;
 
-bool InfoBoxManager::Defocus() {
-  bool retval = (InfoFocus>=0);
-  // JMW TODO this needs to be reworked
-  if (retval) {
-    FocusOnWindow(InfoFocus,false);
-    InfoFocus = -1;
-    InfoWindowActive = false;
-    InputEvents::HideMenu();
-    FocusSetMaxTimeOut();
-    InfoBoxesDirty = true;
-#ifndef DISABLEAUDIO
-    if (SettingsComputer().EnableSoundModes) 
-      PlayResource(TEXT("IDR_WAV_CLICK"));
-#endif
-    // JMW do we really need to set focus like this?
-    // what if it steals focus from a dialog?
-    main_window.map.set_focus();
-  }
-  return retval;
+  return -1;
 }
-
 
 void InfoBoxManager::Event_Select(int i) {
-//  int oldinfofocus = InfoFocus;
+  int InfoFocus = FindInfoBox(::GetFocus());
 
-  // must do this
-  InfoBoxFocusTimeOut = 0;
+  if (InfoFocus < 0) {
+    InfoFocus = i >= 0 ? 0 : numInfoWindows - 1;
+  } else {
+    InfoFocus += i;
 
-  if (InfoFocus>= 0) {
-    FocusOnWindow(InfoFocus,false);
-  }
-  InfoFocus+= i;
-  if (InfoFocus >= (int)numInfoWindows) {
-    InfoFocus = -1; // deactivate if wrap around
-  }
-  if (InfoFocus<0) {
-    InfoFocus = -1; // deactivate if wrap around
-  }
-  if (InfoFocus<0) {
-    Defocus();
-    return;
+    if (InfoFocus < 0 || (unsigned)InfoFocus >= numInfoWindows)
+      InfoFocus = -1;
   }
 
-  //  SetFocus(hWndInfoWindow[InfoFocus]);
-  FocusOnWindow(InfoFocus,true);
-  InfoWindowActive = true;
-  DisplayInfoBox();
-
-  InputEvents::setMode(TEXT("infobox"));
+  if (InfoFocus >= 0) {
+    main_window.map.set_focus();
+  } else {
+    InfoBoxes[i]->set_focus();
+    DisplayInfoBox();
+    InputEvents::setMode(TEXT("infobox"));
+  }
 }
 
 
@@ -479,6 +453,7 @@ void InfoBoxManager::setType(unsigned i, char j)
 void InfoBoxManager::Event_Change(int i) {
   int j=0, k;
 
+  int InfoFocus = FindInfoBox(::GetFocus());
   if (InfoFocus<0) {
     return;
   }
@@ -498,17 +473,6 @@ void InfoBoxManager::Event_Change(int i) {
 
 }
 
-////////////////////
-
-
-void InfoBoxManager::FocusOnWindow(unsigned i, bool selected) {
-  assert(i < numInfoWindows);
-
-  InfoBoxes[i]->SetFocus(selected);
-  // todo defocus all other?
-}
-
-
 void InfoBoxManager::DisplayInfoBox(void)
 {
   if (InfoBoxesHidden)
@@ -516,7 +480,6 @@ void InfoBoxManager::DisplayInfoBox(void)
 
   static int DisplayType[MAXINFOWINDOWS];
   static bool first=true;
-  static int InfoFocusLast = -1;
   static int DisplayTypeLast[MAXINFOWINDOWS];
   static bool FlipBoxValue = false;
 
@@ -529,14 +492,6 @@ void InfoBoxManager::DisplayInfoBox(void)
   mutexNavBox.Lock();
 
   // JMW note: this is updated every GPS time step
-
-  if (InfoFocus != InfoFocusLast) {
-    first = true; // force re-setting title
-  }
-  if ((InfoFocusLast>=0)&&(!InfoWindowActive)) {
-    first = true;
-  }
-  InfoFocusLast = InfoFocus;
 
   for (unsigned i = 0; i < numInfoWindows; i++) {
 
@@ -903,6 +858,7 @@ void InfoBoxManager::DisplayInfoBox(void)
 void InfoBoxManager::ProcessKey(int keycode) {
   unsigned i;
 
+  int InfoFocus = FindInfoBox(::GetFocus());
   if (InfoFocus<0) return; // paranoid
 
   InputEvents::HideMenu();
@@ -918,32 +874,9 @@ void InfoBoxManager::ProcessKey(int keycode) {
 
   TriggerGPSUpdate(); // emulate update to trigger calculations
 
-  InfoBoxFocusTimeOut = 0;
   ResetDisplayTimeOut();
 
 }
-
-bool InfoBoxManager::Click(InfoBox &ib) {
-  InfoBoxFocusTimeOut = 0;
-
-  for(unsigned i = 0; i < numInfoWindows; i++) {
-    if (&ib == InfoBoxes[i]) {
-      InfoWindowActive = true;
-      if ((int)i != InfoFocus) {
-	FocusOnWindow(i,true);
-        if (InfoFocus >= 0)
-          FocusOnWindow(InfoFocus,false);
-	InfoFocus = i;
-	InfoWindowActive = true;
-      }
-      DisplayInfoBox();
-      InputEvents::setMode(TEXT("infobox"));
-      return 1;
-    }
-  }
-  return 0;
-}
-
 
 void InfoBoxManager::DestroyInfoBoxFormatters() {
   //  CommandBar_Destroy(hWndCB);
@@ -952,16 +885,8 @@ void InfoBoxManager::DestroyInfoBoxFormatters() {
   }
 }
 
-void InfoBoxManager::Focus(void) {
-  if (InfoWindowActive) {
-    FocusOnWindow(InfoFocus,true);
-  } else {
-    main_window.map.set_focus();
-  }
-}
-
 bool InfoBoxManager::IsFocus() {
-  return InfoWindowActive;
+  return FindInfoBox(::GetFocus()) >= 0;
 }
 
 void InfoBoxManager::InfoBoxDrawIfDirty(void) {
@@ -975,28 +900,12 @@ void InfoBoxManager::InfoBoxDrawIfDirty(void) {
   }
 }
 
-void InfoBoxManager::FocusSetMaxTimeOut(void) {
-  if (InfoBoxFocusTimeOut< FOCUSTIMEOUTMAX) {
-    InfoBoxFocusTimeOut = FOCUSTIMEOUTMAX;
-  }
-}
-
 void InfoBoxManager::SetDirty(bool is_dirty) {
   InfoBoxesDirty = is_dirty;
 }
 
 
 void InfoBoxManager::ProcessTimer(void) {
-  if(InfoWindowActive) {
-    if (!dlgAirspaceWarningVisible()) {
-      // JMW prevent switching to map window if in airspace warning dialog
-      InfoBoxFocusTimeOut ++;
-
-      if(InfoBoxFocusTimeOut >= FOCUSTIMEOUTMAX) {
-	Defocus();
-      }
-    }
-  }
   InfoBoxDrawIfDirty();
   LastFlipBoxTime++;
 }

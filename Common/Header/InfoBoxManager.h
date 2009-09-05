@@ -54,7 +54,6 @@ class InfoBoxManager: public CommonInterface {
   static BufferWindow full_window;
 
  private:
-  static void FocusSetMaxTimeOut(void);
   static void ResetInfoBoxes(void);
   static int getType(unsigned i);
   static void setType(unsigned i, char j);
@@ -62,6 +61,7 @@ class InfoBoxManager: public CommonInterface {
   static void DisplayInfoBox(void);
   static void InfoBoxDrawIfDirty();
   static void DestroyInfoBoxFormatters();
+  static int FindInfoBox(HWND hWnd);
 public:
   static void Event_Select(int i);
   static void Event_Change(int i);
@@ -71,7 +71,6 @@ public:
   static void ProcessKey(int keycode);
   static bool Click(InfoBox &ib);
 
-  static void Focus();
   static bool Defocus(void);
 
   static void ProcessTimer(void);

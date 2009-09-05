@@ -44,6 +44,7 @@ Copyright_License {
 #include "PeriodClock.hpp"
 #include "WindowControls.h"
 #include "Interface.hpp"
+#include "MainWindow.hpp"
 #include "Screen/Graphics.hpp"
 #include "Screen/Fonts.hpp"
 #include "Screen/BitmapCanvas.hpp"
@@ -51,6 +52,7 @@ Copyright_License {
 #include "Defines.h"
 #include "options.h" /* for IBLSCALE() */
 #include "InfoBoxManager.h"
+#include "UtilsSystem.hpp"
 
 static Color fgColor = RGB(0x0,0x0,0x0);
 static Color bkColor = RGB(0xff,0xff,0xff);
@@ -68,7 +70,7 @@ static int Count=0;
 #define SELECTORWIDTH         (DEFAULTBORDERPENWIDTH+IBLSCALE(4))
 
 InfoBox::InfoBox(ContainerWindow &parent, int X, int Y, int Width, int Height)
-  :mParent(parent)
+  :mParent(parent), focus_timer(0)
 {
   mX = X;
   mY = Y;
@@ -675,6 +677,20 @@ void InfoBox::InitializeDrawHelpers(void){
 
 }
 
+bool
+InfoBox::on_key_down(unsigned key_code)
+{
+  if (InputEvents::processKey(TranscodeKey(key_code))) {
+    /* restart focus timer if not idle */
+    if (focus_timer != 0)
+      kill_timer(focus_timer);
+    focus_timer = set_timer(100, FOCUSTIMEOUTMAX * 500);
+    return true;
+  }
+
+  return BufferWindow::on_key_down(key_code);
+}
+
 bool InfoBox::on_mouse_down(int x, int y)
 {
   /* synthetic double click detection with no proximity , good for
@@ -692,7 +708,8 @@ bool InfoBox::on_mouse_down(int x, int y)
 #ifdef DEBUG_DBLCLK
   DoStatusMessage(_T("BDOWN InfoBox")); // VENTA3
 #endif
-  return InfoBoxManager::Click(*this);
+  set_focus();
+  return true;
 }
 
 bool InfoBox::on_mouse_double(int x, int y)
@@ -714,4 +731,47 @@ InfoBox::on_paint(Canvas &canvas)
 {
   BufferWindow::on_paint(canvas);
   PaintSelector(canvas);
+}
+
+bool
+InfoBox::on_setfocus()
+{
+  BufferWindow::on_setfocus();
+
+  mHasFocus = true;
+
+  /* automatically return focus back to MapWindow if idle */
+  focus_timer = set_timer(100, FOCUSTIMEOUTMAX * 500);
+
+  InputEvents::setMode(TEXT("infobox"));
+
+  PaintFast();
+  return true;
+}
+
+bool
+InfoBox::on_killfocus()
+{
+  BufferWindow::on_setfocus();
+  mHasFocus = false;
+  if (focus_timer != 0) {
+    kill_timer(focus_timer);
+    focus_timer = 0;
+  }
+
+  PaintFast();
+  return true;
+}
+
+bool
+InfoBox::on_timer(unsigned id)
+{
+  if (id != focus_timer)
+    return BufferWindow::on_timer(id);
+
+  kill_timer(focus_timer);
+  focus_timer = 0;
+
+  CommonInterface::main_window.map.set_focus();
+  return true;
 }

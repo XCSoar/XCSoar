@@ -137,13 +137,6 @@ LRESULT MainWindow::on_colour(HDC hdc, int wdata)
 }
 
 bool
-MainWindow::on_setfocus()
-{
-  InfoBoxManager::Focus();
-  return true;
-}
-
-bool
 MainWindow::on_activate()
 {
   full_screen();
