@@ -42,7 +42,6 @@ Copyright_License {
 #include "Protection.hpp"
 #include "InfoBoxManager.h"
 #include "Settings.hpp"
-#include "SettingsComputer.hpp"
 #include "SettingsUser.hpp"
 #include "Device/Parser.h"
 #include "Gauge/GaugeVario.hpp"
@@ -125,6 +124,7 @@ DWORD InstrumentThread (LPVOID lpvoid) {
 	mutexFlightData.Lock();
 	gauge_vario->ReadBlackboardBasic(device_blackboard.Basic());
 	gauge_vario->ReadBlackboardCalculated(device_blackboard.Calculated());
+	gauge_vario->ReadSettingsComputer(device_blackboard.SettingsComputer());
 	mutexFlightData.Unlock();
 	gauge_vario->Render();
 	
@@ -164,6 +164,7 @@ DWORD CalculationThread (LPVOID lpvoid) {
       device_blackboard.FLARM_RefreshSlots();
     }
     glide_computer.ReadBlackboard(device_blackboard.Basic());
+    glide_computer.ReadSettingsComputer(device_blackboard.SettingsComputer());
     XCSoarInterface::ReadBlackboardBasic(device_blackboard.Basic());
     mutexFlightData.Unlock();
 
@@ -224,15 +225,20 @@ void CreateCalculationThread(void) {
   HANDLE hCalculationThread;
   DWORD dwCalcThreadID;
 
+  device_blackboard.ReadSettingsComputer(XCSoarInterface::SettingsComputer());
 
   glide_computer.ReadBlackboard(device_blackboard.Basic());
-  XCSoarInterface::ReadBlackboardBasic(device_blackboard.Basic());
+  glide_computer.ReadSettingsComputer(device_blackboard.SettingsComputer());
   glide_computer.ProcessGPS();
+
+  XCSoarInterface::ReadBlackboardBasic(device_blackboard.Basic());
   XCSoarInterface::ReadBlackboardCalculated(glide_computer.Calculated());
+
   device_blackboard.ReadBlackboard(glide_computer.Calculated());
   if (gauge_vario) {
     gauge_vario->ReadBlackboardBasic(device_blackboard.Basic());
     gauge_vario->ReadBlackboardCalculated(device_blackboard.Calculated());
+    gauge_vario->ReadSettingsComputer(device_blackboard.SettingsComputer());
   }
 
   // Create a read thread for performing calculations

@@ -127,6 +127,13 @@ void DeviceBlackboard::StopReplay() {
 //////////////////
 
 void 
+MapWindowBlackboard::ReadSettingsComputer(const SETTINGS_COMPUTER 
+					      &settings) 
+{
+  memcpy(&settings_computer,&settings,sizeof(SETTINGS_COMPUTER));
+}
+
+void 
 MapWindowBlackboard::ReadBlackboard(const NMEA_INFO &nmea_info,
 				    const DERIVED_INFO &derived_info) 
 {
@@ -139,6 +146,13 @@ void
 GlideComputerBlackboard::ReadBlackboard(const NMEA_INFO &nmea_info) 
 {
   memcpy(&gps_info,&nmea_info,sizeof(NMEA_INFO));
+}
+
+void 
+GlideComputerBlackboard::ReadSettingsComputer(const SETTINGS_COMPUTER 
+					      &settings) 
+{
+  memcpy(&settings_computer,&settings,sizeof(SETTINGS_COMPUTER));
 }
 
 void 
@@ -218,3 +232,21 @@ DeviceBlackboard::SetTrackBearing(double val)
   SetBasic().TrackBearing = val;
   mutexFlightData.Unlock();
 }
+
+////
+
+void 
+DeviceBlackboard::ReadSettingsComputer(const SETTINGS_COMPUTER 
+					      &settings) 
+{
+  memcpy(&settings_computer,&settings,sizeof(SETTINGS_COMPUTER));
+}
+
+
+void 
+InterfaceBlackboard::ReadSettingsComputer(const SETTINGS_COMPUTER 
+					  &settings) 
+{
+  memcpy(&settings_computer,&settings,sizeof(SETTINGS_COMPUTER));
+}
+

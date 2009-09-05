@@ -68,83 +68,88 @@ Copyright_License {
 
 void	AirspeedProcessing(int UpDown)
 {
+  /* JMW illegal
   if (UpDown==0) {
-    EnableCalibration = !EnableCalibration;
+    SetSettingsComputer().EnableCalibration = 
+      !SettingsComputer().EnableCalibration;
+
 	// XXX InputEvents - Is this an automatic or user thing - either way, needs moving
-    if (EnableCalibration)
+    if (SettingsComputer().EnableCalibration)
       Message::AddMessage(TEXT("Calibrate ON"));
     else
       Message::AddMessage(TEXT("Calibrate OFF"));
   }
-
+  */
 }
 
 void	TeamCodeProcessing(int UpDown)
 {
-	int tryCount = 0;
-	int searchSlot = FindFlarmSlot(XCSoarInterface::Basic(), TeamFlarmIdTarget);
-	int newFlarmSlot = -1;
-
-
-	while (tryCount < FLARM_MAX_TRAFFIC)
+  int tryCount = 0;
+  int searchSlot = FindFlarmSlot(XCSoarInterface::Basic(), TeamFlarmIdTarget);
+  int newFlarmSlot = -1;
+  
+  
+  while (tryCount < FLARM_MAX_TRAFFIC)
+    {
+      if (UpDown == 1)
 	{
-		if (UpDown == 1)
-		{
-			searchSlot++;
-			if (searchSlot > FLARM_MAX_TRAFFIC - 1)
-			{
-				searchSlot = 0;
-			}
-		}
-		else if (UpDown == -1)
-		{
-			searchSlot--;
-			if (searchSlot < 0)
-			{
-				searchSlot = FLARM_MAX_TRAFFIC - 1;
-			}
-		}
-
-		if (XCSoarInterface::Basic().FLARM_Traffic[searchSlot].ID != 0)
-		{
-			newFlarmSlot = searchSlot;
-			break; // a new flarmSlot with a valid flarm traffic record was found !
-		}
-		tryCount++;
+	  searchSlot++;
+	  if (searchSlot > FLARM_MAX_TRAFFIC - 1)
+	    {
+	      searchSlot = 0;
+	    }
 	}
-
-	if (newFlarmSlot != -1)
+      else if (UpDown == -1)
 	{
-		TeamFlarmIdTarget = XCSoarInterface::Basic().FLARM_Traffic[newFlarmSlot].ID;
-
-		if (_tcslen(XCSoarInterface::Basic().FLARM_Traffic[newFlarmSlot].Name) != 0)
-		{
-			// copy the 3 first chars from the name to TeamFlarmCNTarget
-			for (int z = 0; z < 3; z++)
-			{
-				if (XCSoarInterface::Basic().FLARM_Traffic[newFlarmSlot].Name[z] != 0)
-				{
-					TeamFlarmCNTarget[z] = XCSoarInterface::Basic().FLARM_Traffic[newFlarmSlot].Name[z];
-				}
-				else
-				{
-					TeamFlarmCNTarget[z] = 32; // add space char
-				}
-			}
-			TeamFlarmCNTarget[3] = 0;
-		}
-		else
-		{
-			TeamFlarmCNTarget[0] = 0;
-		}
+	  searchSlot--;
+	  if (searchSlot < 0)
+	    {
+	      searchSlot = FLARM_MAX_TRAFFIC - 1;
+	    }
 	}
-	else
+      
+      if (XCSoarInterface::Basic().FLARM_Traffic[searchSlot].ID != 0)
 	{
-			// no flarm traffic to select!
-			TeamFlarmIdTarget = 0;
-			TeamFlarmCNTarget[0] = 0;
-			return;
+	  newFlarmSlot = searchSlot;
+	  break; // a new flarmSlot with a valid flarm traffic record was found !
 	}
+      tryCount++;
+    }
+
+  /* JMW illegal  
+  if (newFlarmSlot != -1)
+    {
+      SetSettingsComputer().TeamFlarmIdTarget = XCSoarInterface::Basic().FLARM_Traffic[newFlarmSlot].ID;
+      
+      if (_tcslen(XCSoarInterface::Basic().FLARM_Traffic[newFlarmSlot].Name) != 0)
+	{
+	  // copy the 3 first chars from the name to TeamFlarmCNTarget
+	  for (int z = 0; z < 3; z++)
+	    {
+	      if (XCSoarInterface::Basic().FLARM_Traffic[newFlarmSlot].Name[z] != 0)
+		{
+		  SetSettingsComputer().TeamFlarmCNTarget[z] = XCSoarInterface::Basic().FLARM_Traffic[newFlarmSlot].Name[z];
+		}
+	      else
+		{
+		  SetSettingsComputer().TeamFlarmCNTarget[z] = 32; // add space char
+		}
+	    }
+	  SetSettingsComputer().TeamFlarmCNTarget[3] = 0;
+	}
+      else
+	{
+	  SetSettingsComputer().TeamFlarmCNTarget[0] = 0;
+	}
+    }
+  else
+    {
+      // no flarm traffic to select!
+      SetSettingsComputer().TeamFlarmIdTarget = 0;
+      SetSettingsComputer().TeamFlarmCNTarget[0] = 0;
+      return;
+    }
+  */
 }
 
 void	AltitudeProcessing(int UpDown)

@@ -510,7 +510,8 @@ static void UpdateValuesRules(void) {
   wp = (WndProperty*)wf->FindByName(TEXT("prpFinishAlt"));
   if (wp) {
     double finish_min = 
-      FAIFinishHeight(XCSoarInterface::Calculated(), -1);
+      FAIFinishHeight(XCSoarInterface::SettingsComputer(), 
+		      XCSoarInterface::Calculated(), -1);
     _stprintf(Temp, TEXT("%.0f %s"),
               finish_min*ALTITUDEMODIFY,
               Units::GetAltitudeName());

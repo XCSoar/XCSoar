@@ -41,6 +41,7 @@ Copyright_License {
 #include "NMEA/Info.h"
 #include "NMEA/Derived.hpp"
 #include "Defines.h"
+#include "SettingsComputer.hpp"
 
 typedef enum{
 	ae15seconds=0,
@@ -61,7 +62,7 @@ typedef struct {
 	bool	valid;
 } ldrotary_s;
 
-void InitLDRotary(ldrotary_s *buf);
+void InitLDRotary(const SETTINGS_COMPUTER& settings, ldrotary_s *buf);
 void	InsertLDRotary(const DERIVED_INFO *Calculated, ldrotary_s *buf, int distance, int altitude);
 int	CalculateLDRotary(const DERIVED_INFO *Calculated, ldrotary_s *buf);
 

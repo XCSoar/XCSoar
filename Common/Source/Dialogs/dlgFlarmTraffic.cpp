@@ -174,20 +174,20 @@ void SelectAsTeamTrack()
     {
       if (XCSoarInterface::Basic().FLARM_Traffic[index].Name[0] == 0)
 	{
-	  TeamFlarmCNTarget[0] = 0;
+	  XCSoarInterface::SetSettingsComputer().TeamFlarmCNTarget[0] = 0;
 	}
       else
 	{
 	  // copy the 3 first chars from the name
 	  for (int z = 0; z < 3; z++)
 	    {
-	      TeamFlarmCNTarget[z] = XCSoarInterface::Basic().FLARM_Traffic[index].Name[z];
+	      XCSoarInterface::SetSettingsComputer().TeamFlarmCNTarget[z] = XCSoarInterface::Basic().FLARM_Traffic[index].Name[z];
 	    }
-	  TeamFlarmCNTarget[3] = 0;
+	  XCSoarInterface::SetSettingsComputer().TeamFlarmCNTarget[3] = 0;
 	}
       // now tracking !
       TeamFlarmIdTarget = XCSoarInterface::Basic().FLARM_Traffic[index].ID;
-      TeamFlarmTracking = true;
+      XCSoarInterface::SetSettingsComputer().TeamFlarmTracking = true;
       TeammateCodeValid = false;
     }
 }

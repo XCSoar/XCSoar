@@ -109,7 +109,8 @@ void SettingsLeave() {
 
       // re-set home
       if (WAYPOINTFILECHANGED || TERRAINFILECHANGED) {
-	SetHome(WAYPOINTFILECHANGED==TRUE);
+	SetHome(XCSoarInterface::SetSettingsComputer(),
+		WAYPOINTFILECHANGED==TRUE);
       }
 
       //
@@ -132,7 +133,7 @@ void SettingsLeave() {
 
   if (POLARFILECHANGED) {
     CalculateNewPolarCoef();
-    GlidePolar::UpdatePolar(false);
+    GlidePolar::UpdatePolar(false, XCSoarInterface::SettingsComputer());
   }
 
   if (AIRFIELDFILECHANGED

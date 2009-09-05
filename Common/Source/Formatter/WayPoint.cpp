@@ -170,8 +170,9 @@ void FormatterAlternate::AssignValue(int i) {
   mutexTaskData.Lock();
    switch (i) {
    case 67:
-     if (!EnableAlternate1) { // first run, activate calculations
-       EnableAlternate1 = true;
+     if (!SettingsComputer().EnableAlternate1) { 
+       // first run, activate calculations
+       SetSettingsComputer().EnableAlternate1 = true;
        Value=INVALID_GR;
      } else {
        if ( ValidWayPoint(Alternate1) ) Value=WayPointCalc[Alternate1].GR;
@@ -184,8 +185,8 @@ void FormatterAlternate::AssignValue(int i) {
        break;
      */
    case 68:
-     if (!EnableAlternate2) { // first run, activate calculations
-       EnableAlternate2 = true;
+     if (!SettingsComputer().EnableAlternate2) { // first run, activate calculations
+       SetSettingsComputer().EnableAlternate2 = true;
        Value=INVALID_GR;
      } else {
        if ( ValidWayPoint(Alternate2) ) Value=WayPointCalc[Alternate2].GR;
@@ -193,8 +194,9 @@ void FormatterAlternate::AssignValue(int i) {
      }
      break;
    case 69:
-     if (!EnableBestAlternate) { // first run, waiting for slowcalculation loop
-       EnableBestAlternate = true;	  // activate it
+     if (!SettingsComputer().EnableBestAlternate) { 
+       // first run, waiting for slowcalculation loop
+       SetSettingsComputer().EnableBestAlternate = true;	  // activate it
        Value=INVALID_GR;
      } else {
        if ( ValidWayPoint(BestAlternate))

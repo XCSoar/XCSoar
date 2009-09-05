@@ -54,7 +54,11 @@ public:
   // TODO: make this protected
   static const NMEA_INFO& Basic() { return blackboard.Basic(); }
   static const DERIVED_INFO& Calculated() { return blackboard.Calculated(); }
-
+  static const SETTINGS_COMPUTER& SettingsComputer()
+  { return blackboard.SettingsComputer(); }
+  static SETTINGS_COMPUTER& SetSettingsComputer()
+  { return blackboard.SetSettingsComputer(); }
+    
   static void ReadBlackboardBasic(const NMEA_INFO& nmea_info) {
     blackboard.ReadBlackboardBasic(nmea_info);
   }
@@ -86,7 +90,7 @@ public:
   static BOOL SetProgressStepSize(int nSize);
   static void StartHourglassCursor();
   static void StopHourglassCursor();
-
+  static void SendSettings();
 private:
   static void PreloadInitialisation(bool ask);
   static void StartupInfo();

@@ -1009,14 +1009,14 @@ bool NMEAParser::PFLAA(const TCHAR *String,
   }
 
   if ((GPS_INFO->FLARM_Traffic[flarm_slot].ID == TeamFlarmIdTarget)
-      && ValidWayPoint(TeamCodeRefWaypoint)) {
+      && ValidWayPoint(device_blackboard.SettingsComputer().TeamCodeRefWaypoint)) {
     double bearing;
     double distance;
 
     TeammateLatitude = GPS_INFO->FLARM_Traffic[flarm_slot].Latitude;
     TeammateLongitude = GPS_INFO->FLARM_Traffic[flarm_slot].Longitude;
-    DistanceBearing(WayPointList[TeamCodeRefWaypoint].Latitude,
-		    WayPointList[TeamCodeRefWaypoint].Longitude,
+    DistanceBearing(WayPointList[device_blackboard.SettingsComputer().TeamCodeRefWaypoint].Latitude,
+		    WayPointList[device_blackboard.SettingsComputer().TeamCodeRefWaypoint].Longitude,
 		    GPS_INFO->FLARM_Traffic[flarm_slot].Latitude,
 		    GPS_INFO->FLARM_Traffic[flarm_slot].Longitude,
 		    &distance,

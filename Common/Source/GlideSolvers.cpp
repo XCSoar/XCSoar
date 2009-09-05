@@ -56,6 +56,7 @@ double
 FinalGlideThroughTerrain(const double this_bearing,
                          const NMEA_INFO *Basic,
                          const DERIVED_INFO *Calculated,
+			 const SETTINGS_COMPUTER &settings,
                          double *retlat, double *retlon,
                          const double max_range,
                          bool *out_of_range,
@@ -110,7 +111,7 @@ FinalGlideThroughTerrain(const double this_bearing,
 
   altitude = Calculated->NavAltitude;
   h =  max(0, terrain.GetTerrainHeight(lat, lon));
-  dh = altitude - h - SAFETYALTITUDETERRAIN;
+  dh = altitude - h - settings.SAFETYALTITUDETERRAIN;
   last_dh = dh;
   if (dh<0) {
     start_under = true;
@@ -163,7 +164,7 @@ FinalGlideThroughTerrain(const double this_bearing,
     // find height over terrain
     h =  max(0,terrain.GetTerrainHeight(lat, lon));
 
-    dh = altitude - h - SAFETYALTITUDETERRAIN;
+    dh = altitude - h - settings.SAFETYALTITUDETERRAIN;
 
     if (TerrainBase && (dh>0) && (h>0)) {
       *TerrainBase = min(*TerrainBase, h);

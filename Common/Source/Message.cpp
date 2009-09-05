@@ -620,7 +620,7 @@ void Message::AddMessage(const TCHAR* text, const TCHAR *data) {
     }
   }
 
-  if (EnableSoundModes && LocalMessage.doSound)
+  if (SettingsComputer().EnableSoundModes && LocalMessage.doSound)
     PlayResource(LocalMessage.sound);
 
   // TODO code: consider what is a sensible size?

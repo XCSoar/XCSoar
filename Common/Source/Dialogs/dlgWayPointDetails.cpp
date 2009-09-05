@@ -278,8 +278,8 @@ static void OnSetAlternate2Clicked(WindowControl * Sender){
 static void OnClearAlternatesClicked(WindowControl * Sender){
 	(void)Sender;
   mutexTaskData.Lock();
-  Alternate1 = -1; EnableAlternate1=false;
-  Alternate2 = -1; EnableAlternate2=false;
+  Alternate1 = -1; XCSoarInterface::SetSettingsComputer().EnableAlternate1=false;
+  Alternate2 = -1; XCSoarInterface::SetSettingsComputer().EnableAlternate2=false;
   SetToRegistry(szRegistryAlternate1, Alternate1);
   SetToRegistry(szRegistryAlternate2, Alternate2);
   RefreshTask();
@@ -290,8 +290,10 @@ static void OnClearAlternatesClicked(WindowControl * Sender){
 
 static void OnTeamCodeClicked(WindowControl * Sender){
 	(void)Sender;
-  TeamCodeRefWaypoint = SelectedWaypoint;
-  SetToRegistry(szRegistryTeamcodeRefWaypoint, TeamCodeRefWaypoint);
+  XCSoarInterface::SetSettingsComputer().TeamCodeRefWaypoint = 
+    SelectedWaypoint;
+  SetToRegistry(szRegistryTeamcodeRefWaypoint, 
+		XCSoarInterface::SettingsComputer().TeamCodeRefWaypoint);
   wf->SetModalResult(mrOK);
 }
 
@@ -444,8 +446,9 @@ void dlgWayPointDetailsShowModal(void){
 				  XCSoarInterface::Calculated().WindSpeed,
 				  XCSoarInterface::Calculated().WindBearing,
 				  0, 0, true,
-				  0)-SAFETYALTITUDEARRIVAL-
-    WayPointList[SelectedWaypoint].Altitude;
+				  0)
+    -XCSoarInterface::SettingsComputer().SAFETYALTITUDEARRIVAL
+    -WayPointList[SelectedWaypoint].Altitude;
 
   _stprintf(sTmp, TEXT("%.0f %s"), alt*ALTITUDEMODIFY,
 	    Units::GetAltitudeName());
@@ -462,8 +465,9 @@ void dlgWayPointDetailsShowModal(void){
 				  XCSoarInterface::Calculated().WindSpeed,
 				  XCSoarInterface::Calculated().WindBearing,
 				  0, 0, true,
-				  0)-SAFETYALTITUDEARRIVAL-
-    WayPointList[SelectedWaypoint].Altitude;
+				  0)
+    -XCSoarInterface::SettingsComputer().SAFETYALTITUDEARRIVAL
+    -WayPointList[SelectedWaypoint].Altitude;
 
   wp = ((WndProperty *)wf->FindByName(TEXT("prpMc1")));
   if (wp) wp->SetText(sTmp);
@@ -477,8 +481,9 @@ void dlgWayPointDetailsShowModal(void){
 				  XCSoarInterface::Calculated().WindSpeed,
 				  XCSoarInterface::Calculated().WindBearing,
 				  0, 0, true,
-				  0)-SAFETYALTITUDEARRIVAL-
-    WayPointList[SelectedWaypoint].Altitude;
+				  0)
+    -XCSoarInterface::SettingsComputer().SAFETYALTITUDEARRIVAL
+    -WayPointList[SelectedWaypoint].Altitude;
 
   _stprintf(sTmp, TEXT("%.0f %s"), alt*ALTITUDEMODIFY,
 	    Units::GetAltitudeName());

@@ -38,53 +38,56 @@ Copyright_License {
 #ifndef XCSOAR_SETTINGS_COMPUTER_HPP
 #define XCSOAR_SETTINGS_COMPUTER_HPP
 
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+#include <tchar.h>
+
 // control of calculations, these only changed by user interface
 // but are used read-only by calculations
 
-// All of these should be protected by LockFlightData() when setting from outside
-// calculation thread; calculation thread should not set these values
+// All of these should be protected by LockFlightData() when setting
+// from outside calculation thread; calculation thread should not set
+// these values
 
-extern int    FinalGlideTerrain;
-extern int    AutoMcMode;
-extern bool   EnableCalibration;
-extern bool   ForceFinalGlide;
-extern bool   AutoForceFinalGlide;
-extern int    AutoWindMode;
-extern bool   EnableNavBaroAltitude;
-extern bool   EnableBlockSTF; // block speed to fly instead of dolphin
-extern int    EnableThermalLocator;
-extern int    LoggerTimeStepCruise;
-extern int    LoggerTimeStepCircling;
-extern bool   LoggerShortName;
-extern double SAFETYALTITUDEARRIVAL;
-extern double SAFETYALTITUDEBREAKOFF;
-extern double SAFETYALTITUDETERRAIN;
-extern double SAFTEYSPEED;
-extern int    EnableExternalTriggerCruise;
+typedef struct _SETTINGS_COMPUTER {
 
-extern short  AverEffTime;
-extern double QFEAltitudeOffset; // VENTA3
+ int    FinalGlideTerrain;
+ int    AutoMcMode;
+ bool   EnableCalibration;
+ bool   AutoForceFinalGlide;
+ int    AutoWindMode;
+ bool   EnableNavBaroAltitude;
+ bool   EnableBlockSTF; // block speed to fly instead of dolphin
+ int    EnableThermalLocator;
+ int    LoggerTimeStepCruise;
+ int    LoggerTimeStepCircling;
+ bool   LoggerShortName;
+ double SAFETYALTITUDEARRIVAL;
+ double SAFETYALTITUDEBREAKOFF;
+ double SAFETYALTITUDETERRAIN;
+ double SAFTEYSPEED;
+ int    EnableExternalTriggerCruise;
+ short  AverEffTime;
+ bool   EnableBestAlternate;
+ bool   EnableAlternate1;
+ bool   EnableAlternate2;
+  // polar info
+ int    BallastSecsToEmpty;
+ bool   BallastTimerActive;
+ bool   AutoMacCready;
+ int    TeamCodeRefWaypoint;
+ bool   TeamFlarmTracking;
+ TCHAR  TeamFlarmCNTarget[4]; // CN of the glider to track
+  
+  // sound stuff not used?
+ bool   EnableSoundVario;
+ bool   EnableSoundTask;
+ bool   EnableSoundModes;
+ int    SoundVolume;
+ int    SoundDeadband;
+} SETTINGS_COMPUTER;
 
-extern bool   EnableBestAlternate;
-extern bool   EnableAlternate1;
-extern bool   EnableAlternate2;
 
-// polar info
-extern int    BallastSecsToEmpty;
-extern bool   BallastTimerActive;
-extern bool   AutoMacCready;
-
-extern int TeamCodeRefWaypoint;
-extern bool TeammateCodeValid;
-extern bool TeamFlarmTracking;
-extern TCHAR TeamFlarmCNTarget[4]; // CN of the glider to track
-
-// sound stuff not used?
-extern bool EnableSoundVario;
-extern bool EnableSoundTask;
-extern bool EnableSoundModes;
-extern int  SoundVolume;
-extern int  SoundDeadband;
 
 #endif
 

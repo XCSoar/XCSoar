@@ -47,6 +47,7 @@ Copyright_License {
 #include "McReady.h"
 #include "GlideSolvers.hpp"
 #include "Message.h"
+#include "GlideComputer.hpp"
 
 //////////////////////////////////////////////////////////////////
 
@@ -57,8 +58,10 @@ void LatLon2Flat(double lon, double lat, int *scx, int *scy) {
 }
 
 
-int CalculateWaypointApproxDistance(int scx_aircraft, int scy_aircraft,
-                                    int i) {
+int 
+GlideComputerTask::CalculateWaypointApproxDistance(int scx_aircraft, 
+						   int scy_aircraft,
+						   int i) {
 
   // Do preliminary fast search, by converting to screen coordinates
   int sc_x, sc_y;
@@ -72,15 +75,13 @@ int CalculateWaypointApproxDistance(int scx_aircraft, int scy_aircraft,
 }
 
 double
-CalculateWaypointArrivalAltitude(const NMEA_INFO *Basic,
-                                 const DERIVED_INFO *Calculated,
-                                 int i)
+GlideComputerTask::CalculateWaypointArrivalAltitude(int i)
 {
   double AltReqd;
   double wDistance, wBearing;
 
-  DistanceBearing(Basic->Latitude,
-                  Basic->Longitude,
+  DistanceBearing(Basic().Latitude,
+                  Basic().Longitude,
                   WayPointList[i].Latitude,
                   WayPointList[i].Longitude,
                   &wDistance, &wBearing);
@@ -89,8 +90,8 @@ CalculateWaypointArrivalAltitude(const NMEA_INFO *Basic,
     (GlidePolar::AbortSafetyMacCready(),
      wDistance,
      wBearing,
-     Calculated->WindSpeed,
-     Calculated->WindBearing,
+     Calculated().WindSpeed,
+     Calculated().WindBearing,
      0,
      0,
      true,
@@ -100,13 +101,13 @@ CalculateWaypointArrivalAltitude(const NMEA_INFO *Basic,
   WayPointCalc[i].Bearing  = wBearing; // VENTA3
   WayPointCalc[i].AltReqd  = AltReqd;  // VENTA3
 
-  return ((Calculated->NavAltitude) - AltReqd
-          - WayPointList[i].Altitude - SAFETYALTITUDEARRIVAL);
+  return ((Calculated().NavAltitude) - AltReqd
+          - WayPointList[i].Altitude - 
+	  SettingsComputer().SAFETYALTITUDEARRIVAL);
 }
 
 void
-SortLandableWaypoints(const NMEA_INFO *Basic,
-                      const DERIVED_INFO *Calculated)
+GlideComputerTask::SortLandableWaypoints()
 {
   int SortedLandableIndex[MAXTASKPOINTS];
   double SortedArrivalAltitude[MAXTASKPOINTS];
@@ -124,7 +125,7 @@ SortLandableWaypoints(const NMEA_INFO *Basic,
 
   // Do preliminary fast search
   int scx_aircraft, scy_aircraft;
-  LatLon2Flat(Basic->Longitude, Basic->Latitude, &scx_aircraft, &scy_aircraft);
+  LatLon2Flat(Basic().Longitude, Basic().Latitude, &scx_aircraft, &scy_aircraft);
 
   // Clear search lists
   for (i=0; i<MAXTASKPOINTS*2; i++) {
@@ -192,9 +193,7 @@ SortLandableWaypoints(const NMEA_INFO *Basic,
       }
 
       arrival_altitude =
-        CalculateWaypointArrivalAltitude(Basic,
-                                         Calculated,
-                                         SortedApproxIndex[i]);
+        CalculateWaypointArrivalAltitude(SortedApproxIndex[i]);
 
       if (scan_airports_slot==0) {
         if (arrival_altitude<0) {
@@ -217,14 +216,15 @@ SortLandableWaypoints(const NMEA_INFO *Basic,
           {
 
             double wp_distance, wp_bearing;
-            DistanceBearing(Basic->Latitude , Basic->Longitude ,
+            DistanceBearing(Basic().Latitude , Basic().Longitude ,
                             WayPointList[SortedApproxIndex[i]].Latitude,
                             WayPointList[SortedApproxIndex[i]].Longitude,
                             &wp_distance, &wp_bearing);
 
             bool out_of_range;
             double distance_soarable =
-              FinalGlideThroughTerrain(wp_bearing, Basic, Calculated,
+              FinalGlideThroughTerrain(wp_bearing, &Basic(), &Calculated(),
+				       SettingsComputer(),
                                        NULL,
                                        NULL,
                                        wp_distance,
@@ -271,9 +271,7 @@ SortLandableWaypoints(const NMEA_INFO *Basic,
   if ((found_home_waypoint == -1)&&(HomeWaypoint>=0)) {
     // home not found in top list, so see if we can sneak it in
 
-    arrival_altitude = CalculateWaypointArrivalAltitude(Basic,
-                                                        Calculated,
-                                                        HomeWaypoint);
+    arrival_altitude = CalculateWaypointArrivalAltitude(HomeWaypoint);
     if (arrival_altitude>0) {
       // only put it in if reachable
       SortedLandableIndex[MAXTASKPOINTS-2] = HomeWaypoint;
@@ -288,8 +286,7 @@ SortLandableWaypoints(const NMEA_INFO *Basic,
     // if not found, keep on field or set active waypoint to closest
     if (ValidTaskPoint(ActiveWayPoint)){
       arrival_altitude =
-        CalculateWaypointArrivalAltitude(Basic, Calculated,
-                                         Task[ActiveWayPoint].Index);
+        CalculateWaypointArrivalAltitude(Task[ActiveWayPoint].Index);
     } else {
       arrival_altitude = 0;
     }

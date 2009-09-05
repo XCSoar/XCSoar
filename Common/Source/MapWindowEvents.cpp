@@ -310,18 +310,12 @@ int MapWindow::ProcessVirtualKey(int X, int Y, long keytime, short vkmode) {
   short ydown=MapRect.bottom-(sizeup/3);
   
   if (Y<yup) {
-#ifndef DISABLEAUDIO
-    if (EnableSoundModes) PlayResource(TEXT("IDR_WAV_CLICK"));
-#endif
     if (keytime>=VKTIMELONG)
       return 0xc1;
     else
       return 38;
   }
   if (Y>ydown) {
-#ifndef DISABLEAUDIO
-    if (EnableSoundModes) PlayResource(TEXT("IDR_WAV_CLICK"));
-#endif
     if (keytime>=VKTIMELONG)
       return 0xc2;
     else

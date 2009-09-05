@@ -205,7 +205,7 @@ void
 GlideComputer::CalculateOwnTeamCode()
 {
   if (!WayPointList) return;
-  if (TeamCodeRefWaypoint < 0) return;
+  if (SettingsComputer().TeamCodeRefWaypoint < 0) return;
 
   if (!last_team_code_update.check_update(10000))
     return;
@@ -215,8 +215,8 @@ GlideComputer::CalculateOwnTeamCode()
   double bearing = 0;
   TCHAR code[10];
 
-  LL_to_BearRange(WayPointList[TeamCodeRefWaypoint].Latitude,
-                  WayPointList[TeamCodeRefWaypoint].Longitude,
+  LL_to_BearRange(WayPointList[SettingsComputer().TeamCodeRefWaypoint].Latitude,
+                  WayPointList[SettingsComputer().TeamCodeRefWaypoint].Longitude,
                   Basic().Latitude,
                   Basic().Longitude,
                   &bearing, &distance);
@@ -237,15 +237,15 @@ GlideComputer::CalculateTeammateBearingRange()
   static bool InTeamSector = false;
 
   if (!WayPointList) return;
-  if (TeamCodeRefWaypoint < 0) return;
+  if (SettingsComputer().TeamCodeRefWaypoint < 0) return;
 
   double ownDistance = 0;
   double ownBearing = 0;
   double mateDistance = 0;
   double mateBearing = 0;
 
-  LL_to_BearRange(WayPointList[TeamCodeRefWaypoint].Latitude,
-                  WayPointList[TeamCodeRefWaypoint].Longitude,
+  LL_to_BearRange(WayPointList[SettingsComputer().TeamCodeRefWaypoint].Latitude,
+                  WayPointList[SettingsComputer().TeamCodeRefWaypoint].Longitude,
                   Basic().Latitude,
                   Basic().Longitude,
                   &ownBearing, &ownDistance);

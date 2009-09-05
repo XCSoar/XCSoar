@@ -40,10 +40,13 @@ Copyright_License {
 
 #include "NMEA/Info.h"
 #include "NMEA/Derived.hpp"
+#include "SettingsComputer.hpp"
 
 double
-FinalGlideThroughTerrain(const double bearing, const NMEA_INFO *Basic,
+FinalGlideThroughTerrain(const double bearing, 
+			 const NMEA_INFO *Basic,
                          const DERIVED_INFO *Calculated,
+			 const SETTINGS_COMPUTER &settings,
                          double *retlat, double *retlon,
                          const double maxrange,
                          bool *outofrange,

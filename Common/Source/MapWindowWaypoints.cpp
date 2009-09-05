@@ -265,6 +265,7 @@ void MapWindow::DrawWaypoints(Canvas &canvas)
 
 static bool CheckLandableReachableTerrain(const NMEA_INFO *Basic,
                                           const DERIVED_INFO *Calculated,
+					  const SETTINGS_COMPUTER &settings,
                                           double LegToGo,
                                           double LegBearing) {
   double lat, lon;
@@ -272,6 +273,7 @@ static bool CheckLandableReachableTerrain(const NMEA_INFO *Basic,
   double distance_soarable =
     FinalGlideThroughTerrain(LegBearing,
                              Basic, Calculated,
+			     settings,
                              &lat,
                              &lon,
                              LegToGo, &out_of_range, NULL);
@@ -319,7 +321,8 @@ void MapWindow::CalculateWaypointReachable(void)
 	 Calculated().WindSpeed,
 	 Calculated().WindBearing,
 	 0,0,true,0);
-      AltitudeRequired = AltitudeRequired + SAFETYALTITUDEARRIVAL
+      AltitudeRequired = AltitudeRequired + 
+	SettingsComputer().SAFETYALTITUDEARRIVAL
 	+ WayPointList[i].Altitude ;
       AltitudeDifference = Calculated().NavAltitude - AltitudeRequired;
       WayPointList[i].AltArivalAGL = AltitudeDifference;
@@ -329,6 +332,7 @@ void MapWindow::CalculateWaypointReachable(void)
 	if (!LandableReachable || ((int)i==ActiveWayPoint)) {
 	  if (CheckLandableReachableTerrain(&Basic(),
 					    &Calculated(),
+					    SettingsComputer(),
 					    WaypointDistance,
 					    WaypointBearing)) {
 	    LandableReachable = true;
@@ -371,7 +375,8 @@ void MapWindow::CalculateWaypointReachable(void)
                      Calculated().WindBearing,
                      0,0,true,0);
 
-                  AltitudeRequired = AltitudeRequired + SAFETYALTITUDEARRIVAL
+                  AltitudeRequired = AltitudeRequired + 
+		    SettingsComputer().SAFETYALTITUDEARRIVAL
                     + WayPointList[i].Altitude ;
                   AltitudeDifference = Calculated().NavAltitude - AltitudeRequired;
                   WayPointList[i].AltArivalAGL = AltitudeDifference;
@@ -381,6 +386,7 @@ void MapWindow::CalculateWaypointReachable(void)
                     if (!LandableReachable) {
                       if (CheckLandableReachableTerrain(&Basic(),
                                                         &Calculated(),
+							SettingsComputer(),
                                                         WaypointDistance,
                                                         WaypointBearing)) {
                         LandableReachable = true;

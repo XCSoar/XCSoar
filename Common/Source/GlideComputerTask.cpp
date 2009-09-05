@@ -38,8 +38,8 @@ Copyright_License {
 
 #include "GlideComputer.hpp"
 #include "Protection.hpp"
-#include "SettingsComputer.hpp"
 #include "Task.h"
+#include "Settings.hpp"
 #include "SettingsTask.hpp"
 #include "WayPoint.hpp"
 #include "Math/Earth.hpp"
@@ -93,9 +93,9 @@ void
 GlideComputerTask::ProcessIdle(const MapWindowProjection &map_projection)
 {
   if (TaskAborted) { 
-    SortLandableWaypoints(&Basic(), &Calculated());
+    SortLandableWaypoints();
   }
-  DoBestAlternateSlow(&Basic(), &SetCalculated());
+  DoBestAlternateSlow();
 }
 
 bool GlideComputerTask::DoLogging() {
@@ -293,7 +293,8 @@ double GlideComputerTask::AATCloseBearing() const
 
 
 double
-FAIFinishHeight(const DERIVED_INFO& Calculated, int wp)
+FAIFinishHeight(const SETTINGS_COMPUTER &settings,
+		const DERIVED_INFO& Calculated, int wp)
 {
   int FinalWayPoint = getFinalWaypoint();
   if (wp== -1) {
@@ -308,19 +309,21 @@ FAIFinishHeight(const DERIVED_INFO& Calculated, int wp)
 
   if (!TaskIsTemporary() && (wp==FinalWayPoint)) {
     if (EnableFAIFinishHeight && !AATEnabled) {
-      return max(max(FinishMinHeight, SAFETYALTITUDEARRIVAL)+ wp_alt,
+      return max(max(FinishMinHeight, 
+		     settings.SAFETYALTITUDEARRIVAL)+ wp_alt,
                  Calculated.TaskStartAltitude-1000.0);
     } else {
-      return max(FinishMinHeight, SAFETYALTITUDEARRIVAL)+wp_alt;
+      return max(FinishMinHeight, 
+		 settings.SAFETYALTITUDEARRIVAL)+wp_alt;
     }
   } else {
-    return wp_alt + SAFETYALTITUDEARRIVAL;
+    return wp_alt + settings.SAFETYALTITUDEARRIVAL;
   }
 }
 
 double GlideComputerTask::FAIFinishHeight(int wp) const
 {
-  return ::FAIFinishHeight(Calculated(), wp);
+  return ::FAIFinishHeight(SettingsComputer(), Calculated(), wp);
 }
 
 
@@ -939,7 +942,7 @@ void GlideComputerTask::CheckForceFinalGlide() {
   if (TaskAborted) {
     ForceFinalGlide = false;
   } else {
-    if (AutoForceFinalGlide) {
+    if (SettingsComputer().AutoForceFinalGlide) {
       if (!Calculated().FinalGlide) {
         if (Calculated().TaskAltitudeDifference>120) {
           ForceFinalGlide = true;
@@ -1714,8 +1717,8 @@ double GlideComputerTask::MacCreadyOrAvClimbRate(double this_maccready)
 
   if ((mc_val<0.1) ||
       (Calculated().AutoMacCready &&
-       ((AutoMcMode==0) ||
-        ((AutoMcMode==2)&&(is_final_glide))
+       ((SettingsComputer().AutoMcMode==0) ||
+        ((SettingsComputer().AutoMcMode==2)&&(is_final_glide))
         ))
       ) {
 
@@ -1948,7 +1951,7 @@ void GlideComputerTask::TaskSpeed(const double this_maccready,
       double w_comp = min(10.0,max(-10.0,Calculated().Vario/mc_safe));
       double vdiff = vthis/Vstar + w_comp*rho_cruise + rho_climb;
 
-      if (vthis > SAFTEYSPEED*2) {
+      if (vthis > SettingsComputer().SAFTEYSPEED*2) {
 	vdiff = 1.0;
 	// prevent funny numbers when starting mid-track
       }
@@ -2018,6 +2021,7 @@ GlideComputerTask::CheckFinalGlideThroughTerrain(double LegToGo, double LegBeari
     double distance_soarable =
       FinalGlideThroughTerrain(LegBearing,
                                &Basic(), &Calculated(),
+			       SettingsComputer(),
                                &lat,
                                &lon,
                                LegToGo, &out_of_range, NULL);

@@ -54,7 +54,7 @@ Copyright_License {
 
 void MapWindow::RenderStart(Canvas &canvas, const RECT rc)
 {
-  CalculateOrigin(rc, Basic(), Calculated());
+  CalculateOrigin(rc, Basic(), Calculated(), SettingsComputer());
   CalculateScreenPositionsWaypoints();
   CalculateScreenPositionsTask();
   CalculateScreenPositionsAirspace();
@@ -104,7 +104,8 @@ void MapWindow::RenderMapLayer(Canvas &canvas, const RECT rc)
 		Basic().Longitude, Basic().Latitude,
 	        BigZoom);
 
-    if ((FinalGlideTerrain==2) && Calculated().TerrainValid) {
+    if ((SettingsComputer().FinalGlideTerrain==2) 
+	&& Calculated().TerrainValid) {
       DrawTerrainAbove(canvas, rc, buffer_canvas);
     }
 
@@ -158,7 +159,7 @@ void MapWindow::RenderTask(Canvas &canvas, const RECT rc)
 void MapWindow::RenderGlide(Canvas &canvas, const RECT rc)
 {
   // draw red cross on glide through terrain marker
-  if (FinalGlideTerrain && Calculated().TerrainValid) {
+  if (SettingsComputer().FinalGlideTerrain && Calculated().TerrainValid) {
     DrawGlideThroughTerrain(canvas);
   }
   /*

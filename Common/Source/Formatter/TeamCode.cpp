@@ -40,10 +40,11 @@ Copyright_License {
 #include "SettingsComputer.hpp"
 #include "Blackboard.hpp"
 #include "Interface.hpp"
+#include "Settings.hpp"
 
 const TCHAR *FormatterTeamCode::Render(int *color) {
 
-  if(ValidWayPoint(TeamCodeRefWaypoint))
+  if(ValidWayPoint(SettingsComputer().TeamCodeRefWaypoint))
     {
       *color = 0; // black text
        _tcsncpy(Text,Calculated().OwnTeamCode,5);
@@ -60,7 +61,8 @@ const TCHAR *FormatterTeamCode::Render(int *color) {
 
 const TCHAR *FormatterDiffTeamBearing::Render(int *color) {
 
-  if(ValidWayPoint(TeamCodeRefWaypoint) && TeammateCodeValid) {
+  if(ValidWayPoint(SettingsComputer().TeamCodeRefWaypoint) 
+     && TeammateCodeValid) {
     Valid = true;
 
     Value = Calculated().TeammateBearing -  Basic().TrackBearing;

@@ -38,13 +38,13 @@ Copyright_License {
 #include "Formatter/Base.hpp"
 #include "XCSoar.h"
 #include "SettingsTask.hpp"
-#include "SettingsComputer.hpp"
 #include "Math/FastMath.h"
 #include "Atmosphere.h"
 #include "Battery.h"
 #include "McReady.h"
 #include "Units.hpp"
 #include "Interface.hpp"
+#include "Settings.hpp"
 #include <stdio.h>
 
 InfoBoxFormatter::InfoBoxFormatter(const TCHAR *theformat) {
@@ -303,7 +303,7 @@ void InfoBoxFormatter::AssignValue(int i) {
     Value = Calculated().TeammateBearing;
     Valid = true;
   case 58: // team range
-	  if (TeammateCodeValid)
+    if (TeammateCodeValid)
 	  {
     Value = DISTANCEMODIFY*Calculated().TeammateRange;
     if (Value > 100)

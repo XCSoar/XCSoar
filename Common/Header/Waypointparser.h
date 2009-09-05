@@ -39,7 +39,7 @@ Copyright_License {
 #define AFX_WAYPOINTPARSER_H__695AAC30_F401_4CFF_9BD9_FE62A2A2D0D2__INCLUDED_
 
 #include "WayPoint.hpp"
-
+#include "SettingsComputer.hpp"
 #include <windows.h>
 
 #define wpTerrainBoundsYes    100
@@ -51,7 +51,8 @@ class MapWindowProjection;
 
 void ReadWayPointFile(HANDLE hFile);
 void ReadWayPoints(void);
-void SetHome(const bool reset, const bool set_location=false);
+void SetHome(SETTINGS_COMPUTER &settings,
+	     const bool reset, const bool set_location=false);
 int FindNearestWayPoint(MapWindowProjection &map_projection,
 			double X, double Y, double MaxRange, bool exhaustive=false);
 void CloseWayPoints(void);

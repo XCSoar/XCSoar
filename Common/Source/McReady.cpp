@@ -69,6 +69,7 @@ double GlidePolar::WingLoading = 0.0;
 
 double GlidePolar::SafetyMacCready= 0.0;
 bool GlidePolar::AbortSafetyUseCurrent = false;
+int GlidePolar::MAXSPEED=0;
 
 static int iSAFETYSPEED=0;
 
@@ -177,7 +178,8 @@ void GlidePolar::SetBallast(double val) {
   Unlock();
 }
 
-void GlidePolar::UpdatePolar(bool send) {
+void GlidePolar::UpdatePolar(bool send,
+			     const SETTINGS_COMPUTER &settings) {
 
   Lock();
   double BallastWeight;
@@ -204,12 +206,14 @@ void GlidePolar::UpdatePolar(bool send) {
   bestld = 0.0;
   int i;
 
-  if ((SAFTEYSPEED==0)||(SAFTEYSPEED>=MAXSAFETYSPEED)) {
-    SAFTEYSPEED=MAXSAFETYSPEED-1;
+  if ((settings.SAFTEYSPEED==0)||(settings.SAFTEYSPEED>=MAXSAFETYSPEED)) {
+    iSAFETYSPEED=MAXSAFETYSPEED-1;
+  } else {
+    iSAFETYSPEED=(int)settings.SAFTEYSPEED;
   }
-  iSAFETYSPEED=(int)SAFTEYSPEED;
+  MAXSPEED = iSAFETYSPEED;
 
-  for(i=4;i<=iSAFETYSPEED;i++)
+  for(i=4;i<=MAXSPEED;i++)
     {
       double vtrack = (double)i; // TAS along bearing in cruise
       double thesinkrate
@@ -422,7 +426,7 @@ double GlidePolar::MacCreadyAltitude_internal(double emcready,
     }
 
     if (bestfound) {
-      BestSpeed = min(SAFTEYSPEED, vtrack_real);
+      BestSpeed = min(MAXSPEED, vtrack_real);
       if (BestCruiseTrack) {
 	// best track bearing is the track along cruise that
 	// compensates for the drift during climb

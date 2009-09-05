@@ -47,7 +47,7 @@ Copyright_License {
 #include "options.h" /* for IBLSCALE() */
 
 void MapWindow::CalculateScreenPositionsGroundline(void) {
-  if (FinalGlideTerrain) {
+  if (SettingsComputer().FinalGlideTerrain) {
     LonLat2Screen(Calculated().GlideFootPrint,
 		  Groundline, NUMTERRAINSWEEPS+1, 1);
   }
@@ -85,8 +85,9 @@ MapWindow::DrawGlideThroughTerrain(Canvas &canvas)
 {
   canvas.select(MapGfx.hpTerrainLineBg);
   canvas.polyline(Groundline, NUMTERRAINSWEEPS + 1);
-  if ((FinalGlideTerrain==1) ||
-      ((!EnableTerrain || !Calculated().Flying) && (FinalGlideTerrain==2))) {
+  if ((SettingsComputer().FinalGlideTerrain==1) ||
+      ((!EnableTerrain || !Calculated().Flying) && 
+       (SettingsComputer().FinalGlideTerrain==2))) {
     canvas.select(MapGfx.hpTerrainLine);
     canvas.polyline(Groundline, NUMTERRAINSWEEPS + 1);
   }

@@ -59,7 +59,7 @@ static void Update()
   double teammateBearing = XCSoarInterface::Calculated().TeammateBearing;
   double teammateRange = XCSoarInterface::Calculated().TeammateRange;
 
-  if((TeamCodeRefWaypoint >=0)&&(WayPointList))
+  if((XCSoarInterface::SettingsComputer().TeamCodeRefWaypoint >=0)&&(WayPointList))
     {
       double Value = XCSoarInterface::Calculated().TeammateBearing -  XCSoarInterface::Basic().TrackBearing;
 
@@ -141,11 +141,11 @@ static void OnFlarmLockClicked(WindowControl * Sender)
 {
   (void)Sender;
 
-  dlgTextEntryShowModal(TeamFlarmCNTarget, 4);
+  dlgTextEntryShowModal(XCSoarInterface::SetSettingsComputer().TeamFlarmCNTarget, 4);
 
   TeammateCodeValid = false;
 
-  int flarmId = LookupFLARMDetails(TeamFlarmCNTarget);
+  int flarmId = LookupFLARMDetails(XCSoarInterface::SettingsComputer().TeamFlarmCNTarget);
 
   if (flarmId == 0)
     {
@@ -153,14 +153,14 @@ static void OnFlarmLockClicked(WindowControl * Sender)
 		  gettext(TEXT("Not Found")),
 		  MB_OK|MB_ICONINFORMATION);
 
-      TeamFlarmTracking = false;
+      XCSoarInterface::SetSettingsComputer().TeamFlarmTracking = false;
       TeamFlarmIdTarget = 0;
-      TeamFlarmCNTarget[0] = 0;
+      XCSoarInterface::SetSettingsComputer().TeamFlarmCNTarget[0] = 0;
     }
   else
     {
       TeamFlarmIdTarget = flarmId;
-      TeamFlarmTracking = true;
+      XCSoarInterface::SetSettingsComputer().TeamFlarmTracking = true;
     }
 }
 

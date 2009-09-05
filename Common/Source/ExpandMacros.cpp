@@ -231,8 +231,8 @@ bool ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size){
   }
   if (_tcsstr(OutBuffer, TEXT("$(CheckAutoMc)"))) {
     if (!ValidTaskPoint(ActiveWayPoint)
-        && ((AutoMcMode==0)
-	    || (AutoMcMode==2))) {
+        && ((XCSoarInterface::SettingsComputer().AutoMcMode==0)
+	    || (XCSoarInterface::SettingsComputer().AutoMcMode==2))) {
       invalid = true;
     }
     ReplaceInString(OutBuffer, TEXT("$(CheckAutoMc)"), TEXT(""), Size);
@@ -322,7 +322,7 @@ bool ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size){
                         TEXT("$(FinalForceToggleActionName)"),
                         TEXT("Unforce"),
                         TEXT("Force"), Size);
-    if (AutoForceFinalGlide) {
+    if (XCSoarInterface::SettingsComputer().AutoForceFinalGlide) {
       invalid = true;
     }
   }

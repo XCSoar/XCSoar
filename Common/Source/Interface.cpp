@@ -54,6 +54,17 @@ InterfaceBlackboard CommonInterface::blackboard;
 HINSTANCE CommonInterface::hInst; // The current instance
 MainWindow CommonInterface::main_window;
 
+void XCSoarInterface::SendSettings() {
+  // send computer settings to the device because we know
+  // that it won't be reading from them if we lock it, and
+  // then others can retrieve from it at their convenience.
+  mutexFlightData.Lock();
+  device_blackboard.ReadSettingsComputer(SettingsComputer());
+  mutexFlightData.Unlock();
+  // TODO: trigger refresh if the settings are changed
+}
+
+
 bool XCSoarInterface::InterfaceTimeoutZero(void) {
   bool retval;
   mutexInterfaceTimeout.Lock();

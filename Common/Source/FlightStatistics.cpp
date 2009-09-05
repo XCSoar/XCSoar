@@ -212,9 +212,11 @@ void FlightStatistics::RenderGlidePolar(Canvas &canvas, const RECT rc)
   ScopeLock protect(mutexFlightData);
 
   chart.ScaleYFromValue( 0);
-  chart.ScaleYFromValue( GlidePolar::SinkRateFast(0,(int)(SAFTEYSPEED-1))*1.1);
+  chart.ScaleYFromValue(GlidePolar::SinkRateFast(0,
+       (int)(XCSoarInterface::SettingsComputer().SAFTEYSPEED-1))*1.1);
   chart.ScaleXFromValue(GlidePolar::Vminsink*0.8);
-  chart.ScaleXFromValue(SAFTEYSPEED+2);
+  chart.ScaleXFromValue(
+			XCSoarInterface::SettingsComputer().SAFTEYSPEED+2);
 
   chart.DrawXGrid(10.0/SPEEDMODIFY, 0,
 		  Chart::STYLE_THINDASHPAPER, 10.0, true);
@@ -226,7 +228,7 @@ void FlightStatistics::RenderGlidePolar(Canvas &canvas, const RECT rc)
   bool v0valid = false;
   int i0=0;
 
-  for (i= GlidePolar::Vminsink; i< SAFTEYSPEED-1;
+  for (i= GlidePolar::Vminsink; i< XCSoarInterface::SettingsComputer().SAFTEYSPEED-1;
        i++) {
 
     sinkrate0 = GlidePolar::SinkRateFast(0,i);
@@ -252,12 +254,14 @@ void FlightStatistics::RenderGlidePolar(Canvas &canvas, const RECT rc)
 
   double MACCREADY = GlidePolar::GetMacCready();
 
-  double ff = SAFTEYSPEED/max(1.0, XCSoarInterface::Calculated().VMacCready);
+  double ff = XCSoarInterface::SettingsComputer().SAFTEYSPEED
+    /max(1.0, XCSoarInterface::Calculated().VMacCready);
   double sb = GlidePolar::SinkRate(XCSoarInterface::Calculated().VMacCready);
   ff= (sb-MACCREADY)/max(1.0, XCSoarInterface::Calculated().VMacCready);
 
   chart.DrawLine(0, MACCREADY,
-		 SAFTEYSPEED, MACCREADY+ff*SAFTEYSPEED,
+		 XCSoarInterface::SettingsComputer().SAFTEYSPEED, 
+		 MACCREADY+ff*XCSoarInterface::SettingsComputer().SAFTEYSPEED,
 		 Chart::STYLE_REDTHICK);
 
   chart.DrawXLabel(TEXT("V"));

@@ -126,7 +126,7 @@ static BOOL PDSWC(PDeviceDescriptor_t d, const TCHAR *String,
     (switchoutputs & (1<<OUTPUT_BIT_FLAP_LANDING))>0;
 
   bool is_circling = false;
-  switch (EnableExternalTriggerCruise) {
+  switch (device_blackboard.SettingsComputer().EnableExternalTriggerCruise) {
   case 1:
     is_circling = GPS_INFO->SwitchState.FlapLanding;
     break;
@@ -304,7 +304,7 @@ static BOOL PDVDS(PDeviceDescriptor_t d, const TCHAR *String,
     GPS_INFO->NettoVarioAvailable = FALSE;
   }
 
-  if (EnableCalibration) {
+  if (device_blackboard.SettingsComputer().EnableCalibration) {
     DebugStore("%g %g %g %g %g %g #te net\r\n",
 	    GPS_INFO->IndicatedAirspeed,
 	    GPS_INFO->BaroAltitude,

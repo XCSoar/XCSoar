@@ -41,6 +41,7 @@ Copyright_License {
 #include "NMEA/Derived.hpp"
 #include "Math/FastMath.h"
 #include "Units.hpp"
+#include "SettingsComputer.hpp"
 
 class Canvas;
 
@@ -136,7 +137,8 @@ class MapWindowProjection {
   // scale/display stuff
   void   CalculateOrigin(const RECT rc,
 			 const NMEA_INFO &nmea_info,
-			 const DERIVED_INFO &derived_info);
+			 const DERIVED_INFO &derived_info,
+			 const SETTINGS_COMPUTER &settings);
 
   double    StepMapScale(int Step);
   void      InitialiseScaleList();

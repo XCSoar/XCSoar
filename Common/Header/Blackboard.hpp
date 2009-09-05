@@ -40,21 +40,26 @@ Copyright_License {
 
 #include "NMEA/Info.h"
 #include "NMEA/Derived.hpp"
+#include "SettingsComputer.hpp"
 
 class BaseBlackboard {
   // all blackboards can be read as const
 public:
   const NMEA_INFO& Basic() const { return gps_info; }
   const DERIVED_INFO& Calculated() const { return calculated_info; }
+  const SETTINGS_COMPUTER& SettingsComputer() const 
+  { return settings_computer; }
 protected:
   NMEA_INFO     gps_info;
   DERIVED_INFO  calculated_info;
+  SETTINGS_COMPUTER settings_computer;
 };
 
 
 class GlideComputerBlackboard: public BaseBlackboard {
 public:
   void ReadBlackboard(const NMEA_INFO &nmea_info);
+  void ReadSettingsComputer(const SETTINGS_COMPUTER &settings);
 protected:
   void ResetFlight(const bool full=true);
   void StartTask();
@@ -78,6 +83,7 @@ class DeviceBlackboard: public BaseBlackboard {
 public:
   void Initialise();
   void ReadBlackboard(const DERIVED_INFO &derived_info);
+  void ReadSettingsComputer(const SETTINGS_COMPUTER &settings);
 
   // only the device blackboard can write to gps
   friend class ComPort;
@@ -104,6 +110,7 @@ class MapWindowBlackboard: public BaseBlackboard {
 protected:
   virtual void ReadBlackboard(const NMEA_INFO &nmea_info,
 			      const DERIVED_INFO &derived_info);
+  void ReadSettingsComputer(const SETTINGS_COMPUTER &settings);
 };
 
 
@@ -111,6 +118,8 @@ class InterfaceBlackboard: public BaseBlackboard {
 public:
   void ReadBlackboardBasic(const NMEA_INFO &nmea_info);
   void ReadBlackboardCalculated(const DERIVED_INFO &derived_info);
+  SETTINGS_COMPUTER& SetSettingsComputer() { return settings_computer; }
+  void ReadSettingsComputer(const SETTINGS_COMPUTER &settings);
 };
 
 
@@ -124,6 +133,9 @@ public:
   }
   static void ReadBlackboardCalculated(const DERIVED_INFO& derived_info) {
     blackboard.ReadBlackboardCalculated(derived_info);
+  }
+  static void ReadSettingsComputer(const SETTINGS_COMPUTER &settings) {
+    blackboard.ReadSettingsComputer(settings);
   }
 private:
   static InterfaceBlackboard blackboard;

@@ -41,10 +41,12 @@ Copyright_License {
 #include <tchar.h>
 
 // changed in task/flight or by calc thread /////////////////////////////////
+// or by device
 extern int TeamFlarmIdTarget;    // FlarmId of the glider to track
 extern TCHAR TeammateCode[10];
 extern double TeammateLatitude;
 extern double TeammateLongitude;
+extern bool   TeammateCodeValid;
 
 // changed by gui or calculation thread
 extern bool LoggerActive;
@@ -53,5 +55,7 @@ extern bool LoggerActive;
 extern int  Alternate1; // VENTA3
 extern int  Alternate2;
 extern int  BestAlternate;
+extern double QFEAltitudeOffset; // VENTA3
+extern bool   ForceFinalGlide;
 
 #endif

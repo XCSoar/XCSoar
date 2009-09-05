@@ -81,13 +81,14 @@ Marks::~Marks() {
   topo_marks.DeleteFiles();
 }
 
+#include "Interface.hpp"
 
 void Marks::MarkLocation(const double lon, const double lat)
 {
   ScopeLock protect(*GetMutex());
 
 #ifndef DISABLEAUDIO
-  if (EnableSoundModes) {
+  if (XCSoarInterface::SettingsComputer().EnableSoundModes) {
     PlayResource(TEXT("IDR_WAV_CLEAR"));
   }
 #endif

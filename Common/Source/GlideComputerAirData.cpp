@@ -65,6 +65,7 @@ Copyright_License {
 #include "Interface.hpp"
 #include "Atmosphere.h"
 #include "LogFile.hpp"
+#include "Settings.hpp"
 
 bool WasFlying = false; // VENTA3 used by auto QFE: do not reset QFE
 			//   if previously in flight. So you can check
@@ -73,7 +74,7 @@ bool WasFlying = false; // VENTA3 used by auto QFE: do not reset QFE
 
 GlideComputerAirData::GlideComputerAirData()
 {
-  InitLDRotary(&rotaryLD);
+  InitLDRotary(SettingsComputer(), &rotaryLD);
 
   //JMW TODO enhancement: seed initial wind store with start conditions
   // SetWindEstimate(Calculated().WindSpeed, Calculated().WindBearing, 1);
@@ -198,7 +199,7 @@ void GlideComputerAirData::AverageClimbRate()
 
     int vi = iround(Basic().IndicatedAirspeed);
 
-    if ((vi<=0) || (vi>= SAFTEYSPEED)) {
+    if ((vi<=0) || (vi>= SettingsComputer().SAFTEYSPEED)) {
       // out of range
       return;
     }
@@ -503,7 +504,8 @@ void GlideComputerAirData::Heading()
 void GlideComputerAirData::EnergyHeightNavAltitude()
 {
   // Determine which altitude to use for nav functions
-  if (EnableNavBaroAltitude && Basic().BaroAltitudeAvailable) {
+  if (SettingsComputer().EnableNavBaroAltitude 
+      && Basic().BaroAltitudeAvailable) {
     SetCalculated().NavAltitude = Basic().BaroAltitude;
   } else {
     SetCalculated().NavAltitude = Basic().Altitude;
@@ -553,7 +555,7 @@ void GlideComputerAirData::TerrainHeight()
   }
   SetCalculated().AltitudeAGL = Calculated().NavAltitude - Calculated().TerrainAlt;
 
-  if (!FinalGlideTerrain) {
+  if (!SettingsComputer().FinalGlideTerrain) {
     SetCalculated().TerrainBase = Calculated().TerrainAlt;
   }
 }
@@ -631,13 +633,14 @@ GlideComputerAirData::SpeedToFly(const double mc_setting,
   } else {
     risk_mc =
       GlidePolar::MacCreadyRisk(Calculated().NavAltitude+Calculated().EnergyHeight
-                                -SAFETYALTITUDEBREAKOFF-Calculated().TerrainBase,
+                                -SettingsComputer().SAFETYALTITUDEBREAKOFF
+				-Calculated().TerrainBase,
                                 Calculated().MaxThermalHeight,
                                 mc_setting);
   }
   SetCalculated().MacCreadyRisk = risk_mc;
 
-  if (EnableBlockSTF) {
+  if (SettingsComputer().EnableBlockSTF) {
     delta_mc = risk_mc;
   } else {
     delta_mc = risk_mc-Calculated().NettoVario;
@@ -1029,7 +1032,7 @@ GlideComputerAirData::AirspaceWarning(const MapWindowProjection &map_projection)
 void
 GlideComputerAirData::TerrainFootprint(double screen_range)
 {
-  if (FinalGlideTerrain) {
+  if (SettingsComputer().FinalGlideTerrain) {
 
     double bearing, distance;
     double lat, lon;
@@ -1045,7 +1048,9 @@ GlideComputerAirData::TerrainFootprint(double screen_range)
       bearing = (i*360.0)/NUMTERRAINSWEEPS;
       distance = FinalGlideThroughTerrain(bearing,
 					  &Basic(),
-					  &Calculated(), &lat, &lon,
+					  &Calculated(), 
+					  SettingsComputer(),
+					  &lat, &lon,
 					  mymaxrange, &out_of_range,
 					  &SetCalculated().TerrainBase);
       if (out_of_range) {
@@ -1084,7 +1089,7 @@ GlideComputerAirData::BallastDump()
       }
       GlidePolar::SetBallast(BALLAST);
       if (fabs(BALLAST-BALLAST_last)>0.05) { // JMW update on 5 percent!
-	GlidePolar::UpdatePolar(true);
+	GlidePolar::UpdatePolar(true,SettingsComputer());
       }
       BallastTimeLast = Basic().Time;
     }
@@ -1238,7 +1243,8 @@ GlideComputerAirData::Turning()
 
   bool forcecruise = false;
   bool forcecircling = false;
-  if (EnableExternalTriggerCruise && !(ReplayLogger::IsEnabled())) {
+  if (SettingsComputer().EnableExternalTriggerCruise 
+      && !(ReplayLogger::IsEnabled())) {
     forcecircling = triggerClimbEvent.test();
     forcecruise = !forcecircling;
   }
@@ -1321,7 +1327,7 @@ GlideComputerAirData::Turning()
         SetCalculated().CruiseStartAlt = StartAlt;
         SetCalculated().CruiseStartTime = StartTime;
 
- 	InitLDRotary(&rotaryLD);
+ 	InitLDRotary(SettingsComputer(), &rotaryLD);
 
 	OnClimbCeiling();
 
@@ -1348,7 +1354,7 @@ GlideComputerAirData::Turning()
   // estimate is available
   DoWindCirclingAltitude();
 
-  if (EnableThermalLocator) {
+  if (SettingsComputer().EnableThermalLocator) {
     if (Calculated().Circling) {
       ScopeLock protect(mutexGlideComputer);
       thermallocator.AddPoint(Basic().Time, Basic().Longitude, Basic().Latitude,
@@ -1444,7 +1450,7 @@ GlideComputerAirData::LastThermalStats()
 
 	      OnDepartedThermal();
 
-              if (EnableThermalLocator) {
+              if (SettingsComputer().EnableThermalLocator) {
                 ThermalSources();
               }
             }
@@ -1468,7 +1474,7 @@ GlideComputerAirData::ThermalBand()
   // JMW TODO accuracy: Should really work out dt here,
   //           but i'm assuming constant time steps
   double dheight = Calculated().NavAltitude
-    -SAFETYALTITUDEBREAKOFF
+    -SettingsComputer().SAFETYALTITUDEBREAKOFF
     -Calculated().TerrainBase; // JMW EXPERIMENTAL
 
   int index, i, j;

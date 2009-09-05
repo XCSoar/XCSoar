@@ -147,6 +147,9 @@ protected:
   virtual void AnnounceWayPointSwitch(bool do_advance)= 0;
   bool DoLogging();
   void InSector();
+
+  // abort stuff
+  void SortLandableWaypoints();
 private:
   void DistanceToHome();
   void DistanceToNext();
@@ -187,6 +190,16 @@ private:
   double MacCreadyOrAvClimbRate(double this_maccready);
   void CheckFinalGlideThroughTerrain(double LegToGo, double LegBearing);
   // TODO: some of these can move into task class
+  // abort stuff
+  int CalculateWaypointApproxDistance(int scx_aircraft, 
+				       int scy_aircraft,
+				       int i);
+  double CalculateWaypointArrivalAltitude(int i);
+  // best alternate
+  void AlertBestAlternate(short soundmode);
+  void DoBestAlternateSlow();
+  void DoAlternates(int AltWaypoint);
+  void SearchBestAlternate();
 protected:
   virtual void SaveTaskSpeed(double val) = 0;
   virtual void SetLegStart();
@@ -241,7 +254,8 @@ private:
 };
 
 
-double FAIFinishHeight(const DERIVED_INFO& Calculated, int wp);
+double FAIFinishHeight(const SETTINGS_COMPUTER &settings,
+		       const DERIVED_INFO& Calculated, int wp);
 
 #endif
 

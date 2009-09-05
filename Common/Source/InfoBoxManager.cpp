@@ -339,7 +339,8 @@ bool InfoBoxManager::Defocus() {
     FocusSetMaxTimeOut();
     InfoBoxesDirty = true;
 #ifndef DISABLEAUDIO
-    if (EnableSoundModes) PlayResource(TEXT("IDR_WAV_CLICK"));
+    if (SettingsComputer().EnableSoundModes) 
+      PlayResource(TEXT("IDR_WAV_CLICK"));
 #endif
     // JMW do we really need to set focus like this?
     // what if it steals focus from a dialog?
@@ -703,7 +704,7 @@ void InfoBoxManager::DisplayInfoBox(void)
       }
       break;
     case 43:
-      if (EnableBlockSTF) {
+      if (SettingsComputer().EnableBlockSTF) {
 	InfoBoxes[i]->SetComment(TEXT("BLOCK"));
       } else {
 	InfoBoxes[i]->SetComment(TEXT("DOLPHIN"));
@@ -711,7 +712,7 @@ void InfoBoxManager::DisplayInfoBox(void)
       break;
     case 55: // own team code
       InfoBoxes[i]->SetComment(TeammateCode);
-      if (TeamFlarmTracking)
+      if (SettingsComputer().TeamFlarmTracking)
 	{
 	  if (IsFlarmTargetCNInRange(Basic()))
 	    {
@@ -731,9 +732,9 @@ void InfoBoxManager::DisplayInfoBox(void)
 
       if (TeamFlarmIdTarget != 0)
 	{
-	  if (_tcslen(TeamFlarmCNTarget) != 0)
+	  if (_tcslen(SettingsComputer().TeamFlarmCNTarget) != 0)
 	    {
-	      InfoBoxes[i]->SetComment(TeamFlarmCNTarget);
+	      InfoBoxes[i]->SetComment(SettingsComputer().TeamFlarmCNTarget);
 	    }
 	  else
 	    {
@@ -759,9 +760,9 @@ void InfoBoxManager::DisplayInfoBox(void)
 
       if (TeamFlarmIdTarget != 0)
 	{
-	  if (_tcslen(TeamFlarmCNTarget) != 0)
+	  if (_tcslen(SettingsComputer().TeamFlarmCNTarget) != 0)
 	    {
-	      InfoBoxes[i]->SetComment(TeamFlarmCNTarget);
+	      InfoBoxes[i]->SetComment(SettingsComputer().TeamFlarmCNTarget);
 	    }
 	  else
 	    {
@@ -786,9 +787,9 @@ void InfoBoxManager::DisplayInfoBox(void)
 
       if (TeamFlarmIdTarget != 0)
 	{
-	  if (_tcslen(TeamFlarmCNTarget) != 0)
+	  if (_tcslen(SettingsComputer().TeamFlarmCNTarget) != 0)
 	    {
-	      InfoBoxes[i]->SetComment(TeamFlarmCNTarget);
+	      InfoBoxes[i]->SetComment(SettingsComputer().TeamFlarmCNTarget);
 	    }
 	  else
 	    {

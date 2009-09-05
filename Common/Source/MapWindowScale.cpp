@@ -207,8 +207,9 @@ void MapWindow::DrawMapScale(Canvas &canvas, const RECT rc /* the Map Rect*/,
       if (ReplayLogger::IsEnabled()) {
         _tcscat(ScaleInfo, TEXT("REPLAY "));
       }
-      if (BallastTimerActive) {
-        _stprintf(TEMP,TEXT("BALLAST %3.0f LITERS"), GlidePolar::GetBallastLitres());
+      if (SettingsComputer().BallastTimerActive) {
+        _stprintf(TEMP,TEXT("BALLAST %3.0f LITERS"), 
+		  GlidePolar::GetBallastLitres());
         _tcscat(ScaleInfo, TEMP);
       }
       TCHAR Buffer[20];

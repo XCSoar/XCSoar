@@ -355,7 +355,8 @@ void MapWindowProjection::CalculateOrientationTargetPan(const NMEA_INFO &DrawInf
 
 void MapWindowProjection::CalculateOrigin(const RECT rc,
 					  const NMEA_INFO &DrawInfo,
-					  const DERIVED_INFO &DerivedDrawInfo)
+					  const DERIVED_INFO &DerivedDrawInfo,
+					  const SETTINGS_COMPUTER &settings)
 {
 
   mutexTaskData.Lock();
@@ -379,7 +380,7 @@ void MapWindowProjection::CalculateOrigin(const RECT rc,
 
     if (IsOriginCentered()
         && DerivedDrawInfo.Circling
-        && (EnableThermalLocator==2)) {
+        && (settings.EnableThermalLocator==2)) {
 
       if (DerivedDrawInfo.ThermalEstimate_R>0) {
         PanLongitude = DerivedDrawInfo.ThermalEstimate_Longitude;

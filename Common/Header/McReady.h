@@ -41,10 +41,12 @@ Copyright_License {
 #define MAXSAFETYSPEED 200
 
 #include "Sizes.h"
+#include "SettingsComputer.hpp"
 
 extern unsigned POLARID;
 extern double POLAR[POLARSIZE];
 extern double WEIGHTS[POLARSIZE];
+
 
 class GlidePolar {
  public:
@@ -123,6 +125,7 @@ class GlidePolar {
   static void Unlock();
   static double BallastLitres;
   static double CRUISE_EFFICIENCY;
+  static int MAXSPEED;
  public:
   static double GetMacCready();
   static double GetBugs();
@@ -134,7 +137,7 @@ class GlidePolar {
   static void SetMacCready(double);
   static void SetBallast(double);
   static void SetBugs(double);
-  static void UpdatePolar(bool send);
+  static void UpdatePolar(bool send, const SETTINGS_COMPUTER &settings);
 };
 
 #endif

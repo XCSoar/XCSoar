@@ -299,7 +299,7 @@ bool XCSoarInterface::Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
   LoadWindFromRegistry();
   CalculateNewPolarCoef();
   StartupStore(TEXT("GlidePolar::UpdatePolar\n"));
-  GlidePolar::UpdatePolar(false);
+  GlidePolar::UpdatePolar(false, SettingsComputer());
 
   StartupInfo();
 
@@ -310,7 +310,7 @@ bool XCSoarInterface::Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
   InitWayPointCalc();
 
   ReadAirfieldFile();
-  SetHome(false, true);
+  SetHome(SetSettingsComputer(), false, true);
 
   // need to re-synchronise blackboards here since SetHome touches them
   ReadBlackboardBasic(device_blackboard.Basic());
@@ -342,7 +342,7 @@ bool XCSoarInterface::Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
 
   // re-set polar in case devices need the data
   StartupStore(TEXT("GlidePolar::UpdatePolar\n"));
-  GlidePolar::UpdatePolar(true);
+  GlidePolar::UpdatePolar(true, SettingsComputer());
 
   CreateProgressDialog(gettext(TEXT("Initialising display")));
 

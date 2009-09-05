@@ -724,7 +724,8 @@ void ReadWayPoints(void)
 }
 
 
-void SetHome(const bool reset, const bool set_location)
+void SetHome(SETTINGS_COMPUTER &settings,
+	     const bool reset, const bool set_location)
 {
   StartupStore(TEXT("SetHome\n"));
 
@@ -740,8 +741,8 @@ void SetHome(const bool reset, const bool set_location)
     Alternate1= -1; Alternate2= -1;
   }
   // check invalid task ref waypoint or forced reset due to file change
-  if (reset || !ValidWayPoint(TeamCodeRefWaypoint)) {
-    TeamCodeRefWaypoint = -1;
+  if (reset || !ValidWayPoint(settings.TeamCodeRefWaypoint)) {
+    settings.TeamCodeRefWaypoint = -1;
   }
 
 // VENTA3 NOTE: this should be pointed out to the users, many of them
@@ -764,8 +765,8 @@ void SetHome(const bool reset, const bool set_location)
       }
   }
   // set team code reference waypoint if we don't have one
-  if (TeamCodeRefWaypoint== -1) {
-    TeamCodeRefWaypoint = HomeWaypoint;
+  if (settings.TeamCodeRefWaypoint== -1) {
+    settings.TeamCodeRefWaypoint = HomeWaypoint;
   }
 
   if (set_location) {
@@ -794,7 +795,7 @@ void SetHome(const bool reset, const bool set_location)
   SetToRegistry(szRegistryHomeWaypoint,HomeWaypoint);
   SetToRegistry(szRegistryAlternate1,Alternate1);
   SetToRegistry(szRegistryAlternate2,Alternate2);
-  SetToRegistry(szRegistryTeamcodeRefWaypoint,TeamCodeRefWaypoint);
+  SetToRegistry(szRegistryTeamcodeRefWaypoint,settings.TeamCodeRefWaypoint);
 }
 
 

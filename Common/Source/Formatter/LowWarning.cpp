@@ -45,7 +45,7 @@ void FormatterLowWarning::AssignValue(int i) {
   InfoBoxFormatter::AssignValue(i);
   switch (i) {
   case 1:
-    minimum = ALTITUDEMODIFY*SAFETYALTITUDETERRAIN;
+    minimum = ALTITUDEMODIFY*SettingsComputer().SAFETYALTITUDETERRAIN;
     break;
   case 2:
     minimum = 0.5*LIFTMODIFY*Calculated().MacCreadyRisk;

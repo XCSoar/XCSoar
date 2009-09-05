@@ -50,6 +50,7 @@ Copyright_License {
 #include "UtilsSystem.hpp"
 #include "Math/Earth.hpp"
 #include "Abort.hpp"
+#include "GlideComputer.hpp"
 
 // Alternates VENTA3
 int Alternate1 = -1;
@@ -71,11 +72,8 @@ bool EnableAlternate2=false;
 			// searched for, among a preliminar list of
 			// MAXBEST * 2 - CPU HOGGING ALERT!
 
-static void
-AlertBestAlternate(const NMEA_INFO *Basic, short soundmode);
-
-static void
-SearchBestAlternate(const NMEA_INFO *Basic, DERIVED_INFO *Calculated)
+void
+GlideComputerTask::SearchBestAlternate()
 {
   int SortedLandableIndex[MAXBEST];
   double SortedArrivalAltitude[MAXBEST];
@@ -99,7 +97,9 @@ SearchBestAlternate(const NMEA_INFO *Basic, DERIVED_INFO *Calculated)
    * ApproxDistance is in km, very approximate
    */
 
-  double searchrange=(Basic->Altitude-SAFETYALTITUDEARRIVAL)* GlidePolar::bestld /1000;
+  double searchrange=(Basic().Altitude-
+		      SettingsComputer().SAFETYALTITUDEARRIVAL)
+    *GlidePolar::bestld /1000;
   if (searchrange <= 0)
     searchrange=2; // lock to home airport at once
   if (searchrange > ALTERNATE_MAXRANGE)
@@ -110,7 +110,7 @@ SearchBestAlternate(const NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 
   // Do preliminary fast search
   int scx_aircraft, scy_aircraft;
-  LatLon2Flat(Basic->Longitude, Basic->Latitude, &scx_aircraft, &scy_aircraft);
+  LatLon2Flat(Basic().Longitude, Basic().Latitude, &scx_aircraft, &scy_aircraft);
 
   // Clear search lists
   for (i=0; i<MAXBEST*2; i++) {
@@ -181,9 +181,7 @@ SearchBestAlternate(const NMEA_INFO *Basic, DERIVED_INFO *Calculated)
       }
 
       arrival_altitude =
-        CalculateWaypointArrivalAltitude(Basic,
-                                         Calculated,
-                                         SortedApproxIndex[i]);
+        CalculateWaypointArrivalAltitude(SortedApproxIndex[i]);
 
       WayPointCalc[SortedApproxIndex[i]].AltArriv = arrival_altitude;
       // This is holding the real arrival value
@@ -214,7 +212,7 @@ SearchBestAlternate(const NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 	  // with same
           {
             double wp_distance, wp_bearing;
-            DistanceBearing(Basic->Latitude , Basic->Longitude ,
+            DistanceBearing(Basic().Latitude , Basic().Longitude ,
                             WayPointList[SortedApproxIndex[i]].Latitude,
                             WayPointList[SortedApproxIndex[i]].Longitude,
                             &wp_distance, &wp_bearing);
@@ -224,7 +222,9 @@ SearchBestAlternate(const NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 
             bool out_of_range;
             double distance_soarable =
-              FinalGlideThroughTerrain(wp_bearing, Basic, Calculated,
+              FinalGlideThroughTerrain(wp_bearing, 
+				       &Basic(), &Calculated(),
+				       SettingsComputer(),
                                        NULL,
                                        NULL,
                                        wp_distance,
@@ -256,7 +256,8 @@ SearchBestAlternate(const NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   // extended part by Paolo
 
   bestalternate=-1;  // reset the good choice
-  double safecalc = Calculated->NavAltitude - SAFETYALTITUDEARRIVAL;
+  double safecalc = Calculated().NavAltitude - 
+    SettingsComputer().SAFETYALTITUDEARRIVAL;
   static double grpolar = GlidePolar::bestld *SAFELD_FACTOR;
   int curwp, curbestairport=-1, curbestoutlanding=-1;
   double curgr=0, curbestgr=INVALID_GR;
@@ -410,7 +411,7 @@ SearchBestAlternate(const NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 	if ( bestalternate >0 &&
 	     ((safecalc-WayPointList[bestalternate].Altitude) >ALTERNATE_QUIETMARGIN)) {
 	  if ( WayPointList[bestalternate].AltArivalAGL <100 )
-	    AlertBestAlternate(Basic, 2);
+	    AlertBestAlternate(2);
 	  //	if (EnableSoundModes) PlayResource(TEXT("IDR_WAV_RED"));
 	}
       }
@@ -431,7 +432,7 @@ SearchBestAlternate(const NMEA_INFO *Basic, DERIVED_INFO *Calculated)
     // If still invalid, i.e. not -1, then there's a big problem
     if ( !ValidWayPoint(bestalternate) ) {
       //if (EnableSoundModes) PlayResource(TEXT("IDR_WAV_RED"));
-      AlertBestAlternate(Basic, 2);
+      AlertBestAlternate(2);
       Message::AddMessage(_T("Error, invalid best alternate!"));
       // todo: immediate disable function
     }
@@ -441,7 +442,7 @@ SearchBestAlternate(const NMEA_INFO *Basic, DERIVED_INFO *Calculated)
     BestAlternate = bestalternate;
     if ( bestalternate >0 &&
 	 ((safecalc-WayPointList[bestalternate].Altitude) >ALTERNATE_QUIETMARGIN))
-      AlertBestAlternate(Basic, 1);
+      AlertBestAlternate(1);
     //		if (EnableSoundModes) PlayResource(TEXT("IDR_WAV_GREEN"));
   }
 
@@ -451,14 +452,14 @@ SearchBestAlternate(const NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 /*
  * Do not disturb too much. Play alert sound only once every x minutes, not more.
  */
-static void
-AlertBestAlternate(const NMEA_INFO *Basic, short soundmode)
+void
+GlideComputerTask::AlertBestAlternate(short soundmode)
 {
   static double LastAlertTime=0;
 
-  if ( Basic->Time > LastAlertTime + 180.0 ) {
-    if (EnableSoundModes) {
-      LastAlertTime = Basic->Time;
+  if ( Basic().Time > LastAlertTime + 180.0 ) {
+    if (SettingsComputer().EnableSoundModes) {
+      LastAlertTime = Basic().Time;
       switch (soundmode) {
       case 0:
 	break;
@@ -486,19 +487,19 @@ AlertBestAlternate(const NMEA_INFO *Basic, short soundmode)
 }
 
 void
-DoBestAlternateSlow(const NMEA_INFO *Basic, DERIVED_INFO *Calculated)
+GlideComputerTask::DoBestAlternateSlow()
 {
   static double LastSearchBestTime = 0; // VENTA3
 
  // VENTA3 best landing slow calculation
 #ifdef WINDOWSPC
-  if ( (EnableBestAlternate) && (Basic->Time > LastSearchBestTime+10.0) ) // VENTA3
+  if ( (EnableBestAlternate) && (Basic().Time > LastSearchBestTime+10.0) ) // VENTA3
 #else
-  if ( (EnableBestAlternate) && (Basic->Time > LastSearchBestTime+BESTALTERNATEINTERVAL) ) // VENTA3
+  if ( (EnableBestAlternate) && (Basic().Time > LastSearchBestTime+BESTALTERNATEINTERVAL) ) // VENTA3
 #endif
     {
-      LastSearchBestTime = Basic->Time;
-      SearchBestAlternate(Basic, Calculated);
+      LastSearchBestTime = Basic().Time;
+      SearchBestAlternate();
     }
 
 }
@@ -513,16 +514,15 @@ DoBestAlternateSlow(const NMEA_INFO *Basic, DERIVED_INFO *Calculated)
  */
 
 void
-DoAlternates(const NMEA_INFO *Basic, DERIVED_INFO *Calculated,
-             int AltWaypoint)
+GlideComputerTask::DoAlternates(int AltWaypoint)
 {
   if (!ValidWayPoint(AltWaypoint)) {
     return;
   }
   double w1lat = WayPointList[AltWaypoint].Latitude;
   double w1lon = WayPointList[AltWaypoint].Longitude;
-  double w0lat = Basic->Latitude;
-  double w0lon = Basic->Longitude;
+  double w0lat = Basic().Latitude;
+  double w0lon = Basic().Longitude;
   double *altwp_dist = &WayPointCalc[AltWaypoint].Distance;
   double *altwp_gr   = &WayPointCalc[AltWaypoint].GR;
   double *altwp_arrival = &WayPointCalc[AltWaypoint].AltArriv;
@@ -532,7 +532,9 @@ DoAlternates(const NMEA_INFO *Basic, DERIVED_INFO *Calculated,
                   w0lat, w0lon,
                   altwp_dist, NULL);
 
-  double GRsafecalc = Calculated->NavAltitude - (WayPointList[AltWaypoint].Altitude + SAFETYALTITUDEARRIVAL);
+  double GRsafecalc = Calculated().NavAltitude - 
+    (WayPointList[AltWaypoint].Altitude + 
+     SettingsComputer().SAFETYALTITUDEARRIVAL);
 
   if (GRsafecalc <=0) *altwp_gr = INVALID_GR;
   else {
@@ -545,7 +547,7 @@ DoAlternates(const NMEA_INFO *Basic, DERIVED_INFO *Calculated,
   // We need to calculate arrival also for BestAlternate, since the last "reachable" could be
   // even 60 seconds old and things may have changed drastically
 
-  *altwp_arrival = CalculateWaypointArrivalAltitude(Basic, Calculated, AltWaypoint);
+  *altwp_arrival = CalculateWaypointArrivalAltitude(AltWaypoint);
   if ( (*altwp_arrival - ALTERNATE_OVERSAFETY) >0 ) {
   	if ( *altwp_gr <= (GlidePolar::bestld *SAFELD_FACTOR) ) *altwp_vgr = 1; // full green vgr
   	else

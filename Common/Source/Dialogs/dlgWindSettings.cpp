@@ -158,7 +158,7 @@ void dlgWindSettingsShowModal(void){
       dfe->addEnumText(gettext(TEXT("Circling")));
       dfe->addEnumText(gettext(TEXT("ZigZag")));
       dfe->addEnumText(gettext(TEXT("Both")));
-      wp->GetDataField()->Set(AutoWindMode);
+      wp->GetDataField()->Set(XCSoarInterface::SettingsComputer().AutoWindMode);
       wp->RefreshDisplay();
 
       wp = (WndProperty*)wf->FindByName(TEXT("prpTrailDrift"));
@@ -172,9 +172,9 @@ void dlgWindSettingsShowModal(void){
 
     wp = (WndProperty*)wf->FindByName(TEXT("prpAutoWind"));
     if (wp) {
-      if (AutoWindMode != wp->GetDataField()->GetAsInteger()) {
-	AutoWindMode = wp->GetDataField()->GetAsInteger();
-	SetToRegistry(szRegistryAutoWind, AutoWindMode);
+      if (XCSoarInterface::SettingsComputer().AutoWindMode != wp->GetDataField()->GetAsInteger()) {
+	XCSoarInterface::SetSettingsComputer().AutoWindMode = wp->GetDataField()->GetAsInteger();
+	SetToRegistry(szRegistryAutoWind, XCSoarInterface::SettingsComputer().AutoWindMode);
       }
     }
     wp = (WndProperty*)wf->FindByName(TEXT("prpTrailDrift"));

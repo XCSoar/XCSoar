@@ -46,7 +46,6 @@ Copyright_License {
 #include "Math/Earth.hpp"
 #include "McReady.h"
 #include "Dialogs.h"
-#include "Blackboard.hpp"
 #include "Settings.hpp"
 #include "SettingsTask.hpp"
 #include "SettingsUser.hpp"
@@ -167,6 +166,7 @@ void MapWindow::ReadBlackboard(const NMEA_INFO &nmea_info,
 			       const DERIVED_INFO &derived_info) {
   mutexFlightData.Lock();
   MapWindowBlackboard::ReadBlackboard(nmea_info, derived_info);
+  ReadSettingsComputer(device_blackboard.SettingsComputer());
 
   DisplayMode_t lastDisplayMode = DisplayMode;
   switch (UserForceDisplayMode) {
@@ -447,9 +447,6 @@ bool MapWindow::on_mouse_double(int x, int y)
   // Only handle timed clicks in BUTTONDOWN with no proximity.
   //
   mouse_down_clock.update();
-#ifndef DISABLEAUDIO
-  if (EnableSoundModes) PlayResource(TEXT("IDR_WAV_CLICK"));
-#endif
   InputEvents::ShowMenu();
   ignorenext = true;
   return true;

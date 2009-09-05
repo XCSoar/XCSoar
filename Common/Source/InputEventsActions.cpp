@@ -140,13 +140,14 @@ void InputEvents::eventSounds(const TCHAR *misc) {
  // bool OldEnableSoundVario = EnableSoundVario;
 
   if (_tcscmp(misc, TEXT("toggle")) == 0)
-    EnableSoundVario = !EnableSoundVario;
+    SetSettingsComputer().EnableSoundVario = 
+      !SettingsComputer().EnableSoundVario;
   else if (_tcscmp(misc, TEXT("on")) == 0)
-    EnableSoundVario = true;
+    SetSettingsComputer().EnableSoundVario = true;
   else if (_tcscmp(misc, TEXT("off")) == 0)
-    EnableSoundVario = false;
+    SetSettingsComputer().EnableSoundVario = false;
   else if (_tcscmp(misc, TEXT("show")) == 0) {
-    if (EnableSoundVario)
+    if (SettingsComputer().EnableSoundVario)
       Message::AddMessage(TEXT("Vario Sounds ON"));
     else
       Message::AddMessage(TEXT("Vario Sounds OFF"));
@@ -347,21 +348,15 @@ void InputEvents::eventScreenModes(const TCHAR *misc) {
 #else // UNDEFINED PNA
     if (EnableAuxiliaryInfo) {
 #ifndef DISABLEAUDIO
-      if (EnableSoundModes) PlayResource(TEXT("IDR_WAV_CLICK"));
+      if (SettingsComputer().EnableSoundModes) 
+	PlayResource(TEXT("IDR_WAV_CLICK"));
 #endif
       map_window.RequestToggleFullScreen();
       EnableAuxiliaryInfo = false;
     } else {
       if (map_window.isMapFullScreen()) {
 	map_window.RequestToggleFullScreen();
-
-#ifndef DISABLEAUDIO  // VENTA-ADDON SOUND CYCLING SCREENS
-	if (EnableSoundModes) PlayResource(TEXT("IDR_WAV_BELL"));
-#endif
       } else {
-#ifndef DISABLEAUDIO
-	if (EnableSoundModes) PlayResource(TEXT("IDR_WAV_CLICK"));
-#endif
 	EnableAuxiliaryInfo = true;
       }
     }
@@ -1029,12 +1024,13 @@ void InputEvents::eventAdjustVarioFilter(const TCHAR *misc) {
 // -: decreases deadband
 void InputEvents::eventAudioDeadband(const TCHAR *misc) {
   if (_tcscmp(misc, TEXT("+"))) {
-    SoundDeadband++;
+    SetSettingsComputer().SoundDeadband++;
   }
   if (_tcscmp(misc, TEXT("-"))) {
-    SoundDeadband--;
+    SetSettingsComputer().SoundDeadband--;
   }
-  SoundDeadband = min(40,max(SoundDeadband,0));
+  SetSettingsComputer().SoundDeadband = min(40,
+			  max(SettingsComputer().SoundDeadband,0));
   /*
   VarioSound_SetVdead(SoundDeadband);
   */
@@ -1125,7 +1121,7 @@ void InputEvents::eventBugs(const TCHAR *misc) {
   if (BUGS != oldBugs) {
     BUGS= min(1.0,max(0.5,BUGS));
     GlidePolar::SetBugs(BUGS);
-    GlidePolar::UpdatePolar(true);
+    GlidePolar::UpdatePolar(true, SettingsComputer());
   }
   mutexFlightData.Unlock();
   mutexComm.Unlock();
@@ -1163,7 +1159,7 @@ void InputEvents::eventBallast(const TCHAR *misc) {
   if (BALLAST != oldBallast) {
     BALLAST=min(1.0,max(0.0,BALLAST));
     GlidePolar::SetBallast(BALLAST);
-    GlidePolar::UpdatePolar(true);
+    GlidePolar::UpdatePolar(true, SettingsComputer());
   }
   mutexFlightData.Unlock();
   mutexComm.Unlock();
