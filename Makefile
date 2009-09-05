@@ -272,6 +272,22 @@ endif
 CXXFLAGS	:=$(OPTIMIZE) -fno-exceptions $(PROFILE)
 CFLAGS		:=$(OPTIMIZE) $(PROFILE)
 
+CXXFLAGS += -Wall -Wextra
+CXXFLAGS += -Wwrite-strings -Wcast-qual -Wpointer-arith -Wsign-compare
+CXXFLAGS += -Wmissing-noreturn -Wundef
+
+# disable some warnings, we're not ready for them yet
+CXXFLAGS += -Wno-unused-parameter -Wno-format -Wno-reorder -Wno-missing-field-initializers -Wno-switch
+CXXFLAGS += -Wno-non-virtual-dtor
+
+# InputEvents_defaults.cpp should be fixed
+CXXFLAGS += -Wno-char-subscripts
+
+# make warnings fatal (for perfectionists)
+#CXXFLAGS += -Werror
+#CXXFLAGS += -pedantic
+#CXXFLAGS += -pedantic-errors
+
 ####### linker configuration
 
 ifneq ($(CONFIG_WINE),y)
