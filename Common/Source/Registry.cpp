@@ -1378,10 +1378,10 @@ void WriteDeviceSettings(const int devIdx, const TCHAR *Name){
 // Registry file handling
 /////////////////
 
-const static int nMaxValueNameSize = MAX_PATH + 6; //255 + 1 + /r/n
-const static int nMaxValueValueSize = MAX_PATH * 2 + 6; // max regkey name is 256 chars + " = "
-const static int nMaxClassSize = MAX_PATH + 6;
-const static int nMaxKeyNameSize = MAX_PATH + 6;
+const static size_t nMaxValueNameSize = MAX_PATH + 6; //255 + 1 + /r/n
+const static size_t nMaxValueValueSize = MAX_PATH * 2 + 6; // max regkey name is 256 chars + " = "
+const static size_t nMaxClassSize = MAX_PATH + 6;
+const static size_t nMaxKeyNameSize = MAX_PATH + 6;
 
 static bool LoadRegistryFromFile_inner(const TCHAR *szFile, bool wide=true)
 {

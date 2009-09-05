@@ -89,13 +89,13 @@ void PExtractParameter(const TCHAR *Source, TCHAR *Destination,
 
 // JMW added support for zzip files
 
-bool ReadString(ZZIP_FILE *zFile, int Max, TCHAR *String)
+bool ReadString(ZZIP_FILE *zFile, size_t Max, TCHAR *String)
 {
   char sTmp[READLINE_LENGTH+1];
   char FileBuffer[READLINE_LENGTH+1];
-  long dwNumBytesRead=0;
-  long dwTotalNumBytesRead=0;
-  long dwFilePos;
+  zzip_size_t dwNumBytesRead;
+  size_t dwTotalNumBytesRead=0;
+  zzip_off_t dwFilePos;
 
   String[0] = '\0';
   sTmp[0] = 0;
@@ -113,9 +113,8 @@ bool ReadString(ZZIP_FILE *zFile, int Max, TCHAR *String)
   if (dwNumBytesRead <= 0)
     return false;
 
-  int i = 0;
-  int j = 0;
-  while((i<Max) && (j<(int)dwNumBytesRead)) {
+  size_t i = 0, j = 0;
+  while (i < Max && j < dwNumBytesRead) {
 
     char c = FileBuffer[j];
     j++;
@@ -203,7 +202,7 @@ bool ReadString(HANDLE hFile, int Max, TCHAR *String)
 }
 #endif /* ENABLE_UNUSED_CODE */
 
-bool ReadStringX(FILE *fp, int Max, TCHAR *String){
+bool ReadStringX(FILE *fp, size_t Max, TCHAR *String){
   if (fp == NULL || Max < 1 || String == NULL) {
     if (String) {
       String[0]= '\0';
