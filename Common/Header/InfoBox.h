@@ -39,8 +39,7 @@ Copyright_License {
 
 #include "Units.hpp"
 #include "Screen/Font.hpp"
-#include "Screen/BufferCanvas.hpp"
-#include "Screen/PaintWindow.hpp"
+#include "Screen/BufferWindow.hpp"
 
 #define BORDERTOP    (1<<bkTop)
 #define BORDERRIGHT  (1<<bkRight)
@@ -53,7 +52,7 @@ Copyright_License {
 #define COMMENTSIZE  32
 
 
-class InfoBox : public PaintWindow {
+class InfoBox : public BufferWindow {
  public:
  private:
 
@@ -62,7 +61,6 @@ class InfoBox : public PaintWindow {
     int mWidth;
     int mHeight;
     ContainerWindow &mParent;
-    BufferCanvas buffer;
     int  mBorderKind;
     Color mColorBack;
     Color mColorFore;

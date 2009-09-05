@@ -108,9 +108,6 @@ InfoBox::InfoBox(ContainerWindow &parent, int X, int Y, int Width, int Height)
     hPenSelector.set(DEFAULTBORDERPENWIDTH + 2, mColorFore);
   }
 
-  // JMW added double buffering to reduce flicker
-  buffer.set(get_canvas(), mWidth, mHeight);
-
   install_wndproc();
 
   mhBrushBk = hBrushDefaultBackGround;
@@ -123,7 +120,7 @@ InfoBox::InfoBox(ContainerWindow &parent, int X, int Y, int Width, int Height)
   rc.top = 0;
   rc.right = 0 + mWidth;
   rc.bottom = 0 + mHeight;
-  buffer.fill_rectangle(0, 0, mWidth, mHeight, mhBrushBk);
+  get_canvas().fill_rectangle(0, 0, mWidth, mHeight, mhBrushBk);
 
   mBorderSize = 1;
   if (Appearance.InfoBoxBorder == apIbTab) {
@@ -164,7 +161,7 @@ InfoBox::InfoBox(ContainerWindow &parent, int X, int Y, int Width, int Height)
   mBitmapUnitSize.x = 0;
   mBitmapUnitSize.y = 0;
 
-  buffer.background_transparent();
+  get_canvas().background_transparent();
 
   SetVisible(true);
 
@@ -186,8 +183,6 @@ InfoBox::~InfoBox(void){
     hPenSelector.reset();
 
   }
-
-  buffer.reset();
 }
 
 void InfoBox::SetFocus(bool Value){
@@ -590,6 +585,8 @@ void InfoBox::Paint(){
     InitDone = false;
   }
 
+  Canvas &buffer = get_canvas();
+
   buffer.fill_rectangle(0, mTitleChanged ? 0 : recTitle.bottom,
                         mWidth, mHeight, mhBrushBk);
 
@@ -620,18 +617,18 @@ void InfoBox::Paint(){
 }
 
 void InfoBox::PaintFast(void) {
-  on_paint(get_canvas());
+  on_paint(PaintWindow::get_canvas());
 }
 
 void
 InfoBox::PaintInto(Canvas &dest, int xoff, int yoff, int width, int height)
 {
   dest.stretch(xoff, yoff, width, height,
-               buffer, 0, 0, mWidth, mHeight);
+               get_canvas(), 0, 0, mWidth, mHeight);
 }
 
 Canvas &InfoBox::GetCanvas(void) {
-  return buffer;
+  return get_canvas();
 }
 
 void InfoBox::InitializeDrawHelpers(void){
@@ -715,6 +712,6 @@ bool InfoBox::on_mouse_double(int x, int y)
 void
 InfoBox::on_paint(Canvas &canvas)
 {
-  canvas.copy(buffer);
+  BufferWindow::on_paint(canvas);
   PaintSelector(canvas);
 }
