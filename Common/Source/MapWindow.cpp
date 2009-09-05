@@ -53,7 +53,6 @@ Copyright_License {
 #include "Audio/VarioSound.h"
 #include "InputEvents.h"
 #include "ReplayLogger.hpp"
-#include "Screen/Blank.hpp"
 #include "Screen/Graphics.hpp"
 #include "Screen/Util.hpp"
 #include "Screen/Fonts.hpp"
@@ -478,7 +477,6 @@ bool MapWindow::on_mouse_move(int x, int y)
 
 bool MapWindow::on_mouse_down(int x, int y)
 {
-  ResetDisplayTimeOut();
   mouse_down_clock.update();
   if (ignorenext) return true;
 
@@ -656,8 +654,6 @@ bool MapWindow::on_key_down(unsigned key_code)
   // VENTA-TODO careful here, keyup no more trapped for PNA.
   // Forbidden usage of keypress timing.
   
-  ResetDisplayTimeOut();
-  XCSoarInterface::InterfaceTimeoutReset();
   key_code = TranscodeKey(key_code);
 #if defined(GNAV)
   if (key_code == 0xF5){

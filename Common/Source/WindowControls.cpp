@@ -49,7 +49,6 @@ Copyright_License {
 #include "PeriodClock.hpp"
 #include "Screen/Animation.hpp"
 #include "Screen/Fonts.hpp"
-#include "Screen/Blank.hpp"
 #include "Screen/Viewport.hpp"
 #include "Screen/PaintCanvas.hpp"
 #include "DataField/Base.hpp"
@@ -1239,7 +1238,6 @@ int WndForm::OnUnhandledMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
   if (msg.message == WM_KEYUP){
   }
   if (msg.message == WM_KEYDOWN){
-    XCSoarInterface::InterfaceTimeoutReset();
     if (mOnKeyDownNotify != NULL)
       if (!(mOnKeyDownNotify)(this, msg.wParam, msg.lParam))
         return(0);
@@ -1252,7 +1250,6 @@ int WndForm::OnUnhandledMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
   }
   if (msg.message == WM_LBUTTONUP){
     bLButtonDown=false;
-    XCSoarInterface::InterfaceTimeoutReset();
     if (mOnLButtonUpNotify != NULL)
       if (!(mOnLButtonUpNotify)(this, msg.wParam, msg.lParam))
         return(0);
@@ -1268,7 +1265,6 @@ int WndForm::OnUnhandledMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
   }
 
   if (uMsg == WM_KEYDOWN){
-    XCSoarInterface::InterfaceTimeoutReset();
     if (ActiveControl != NULL){
       switch(wParam & 0xffff){
         case VK_UP:
@@ -1532,9 +1528,7 @@ WndProperty::Editor::on_mouse_down(int x, int y)
 {
   // if it's an Combopicker field, then call the combopicker routine
   if (parent->mDialogStyle) {
-    XCSoarInterface::InterfaceTimeoutReset();
     if (parent->on_mouse_down(x, y)) {
-      ResetDisplayTimeOut();
       return true;
     }
   } //end combopicker
@@ -1547,9 +1541,7 @@ WndProperty::Editor::on_key_down(unsigned key_code)
 {
   if (key_code == VK_RETURN || key_code == VK_F23) { // Compaq uses VKF23
     if (parent->mDialogStyle) {
-      XCSoarInterface::InterfaceTimeoutReset();
       if (parent->on_mouse_down(0, 0)) {
-        ResetDisplayTimeOut();
         return true;
       }
     } //end combopicker
