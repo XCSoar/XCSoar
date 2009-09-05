@@ -33,7 +33,7 @@ char *utoa(unsigned value, char *digits, int base)
         char *p;
         for (p = utoa(value / ((unsigned)base), digits, base);
              *p;
-             p++);
+             p++) {}
         utoa( value % ((unsigned)base), p, base);
     }
     return digits;

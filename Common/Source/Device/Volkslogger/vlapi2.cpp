@@ -354,7 +354,7 @@ VLA_ERROR VLA_XFR::dbbput(lpb dbbbuffer, int32 dbbsize) {
   serial_empty_io_buffers();
   sendcommand(cmd_PDB,0,0); // muß noch mit Timeout versehen werden
   // auf Löschende warten
-  while ( serial_in(&c) && !test_user_break() );
+  while (serial_in(&c) && !test_user_break()) {}
   // Fehlerbehandlung
   if (test_user_break())
     if (clear_user_break() == 1) {
@@ -381,7 +381,7 @@ VLA_ERROR VLA_XFR::dbbput(lpb dbbbuffer, int32 dbbsize) {
   serial_out(crc16%256);
   wait_ms(td);
   // auf Bestätigung warten
-  while ( serial_in(&c) && !test_user_break());
+  while (serial_in(&c) && !test_user_break()) {}
   // Fehlerbehandlung
   if (test_user_break()) {
     if (clear_user_break() == 1) {
