@@ -164,13 +164,13 @@ GlideComputer::ProcessIdle(const MapWindowProjection &map)
 
 
 
-const bool 
+bool
 GlideComputer::InsideStartHeight(const DWORD Margin) const
 {
   return GlideComputerTask::InsideStartHeight(Margin);
 }
 
-const bool 
+bool
 GlideComputer::ValidStartSpeed(const DWORD Margin) const
 {
   return GlideComputerTask::ValidStartSpeed(Margin);

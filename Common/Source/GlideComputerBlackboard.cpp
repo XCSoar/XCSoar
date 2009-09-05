@@ -156,8 +156,8 @@ void GlideComputerBlackboard::RestoreFinish()
   calculated_info.TakeOffTime = takeofftime;
 }
 
-
-const double GlideComputerBlackboard::GetAverageThermal() const {
+double GlideComputerBlackboard::GetAverageThermal() const
+{
   return max(0.0,calculated_info.AverageThermal);
 }
 

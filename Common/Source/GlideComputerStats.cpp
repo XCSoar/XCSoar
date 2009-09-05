@@ -172,7 +172,8 @@ bool GlideComputerStats::DoLogging() {
 }
 
 
-const double GlideComputerStats::GetAverageThermal() const {
+double GlideComputerStats::GetAverageThermal() const
+{
   double mc_stats, mc_current;
   ScopeLock protect(mutexGlideComputer);
 

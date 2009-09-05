@@ -276,7 +276,8 @@ void GlideComputerTask::AltitudeRequired(const double this_maccready,
 }
 
 
-const double GlideComputerTask::AATCloseBearing() const {
+double GlideComputerTask::AATCloseBearing() const
+{
   // ensure waypoint goes in direction of track if very close
   double course_bearing;
   DistanceBearing(Task[ActiveWayPoint-1].AATTargetLat,
@@ -291,8 +292,9 @@ const double GlideComputerTask::AATCloseBearing() const {
 }
 
 
-const double FAIFinishHeight(const DERIVED_INFO& Calculated,
-			     int wp) {
+double
+FAIFinishHeight(const DERIVED_INFO& Calculated, int wp)
+{
   int FinalWayPoint = getFinalWaypoint();
   if (wp== -1) {
     wp = FinalWayPoint;
@@ -316,12 +318,13 @@ const double FAIFinishHeight(const DERIVED_INFO& Calculated,
   }
 }
 
-const double GlideComputerTask::FAIFinishHeight(int wp) const {
+double GlideComputerTask::FAIFinishHeight(int wp) const
+{
   return ::FAIFinishHeight(Calculated(), wp);
 }
 
 
-const bool GlideComputerTask::InTurnSector(const int the_turnpoint) const
+bool GlideComputerTask::InTurnSector(const int the_turnpoint) const
 {
   double AircraftBearing;
 
@@ -378,7 +381,7 @@ const bool GlideComputerTask::InTurnSector(const int the_turnpoint) const
 }
 
 
-const bool GlideComputerTask::ValidFinish( ) const
+bool GlideComputerTask::ValidFinish( ) const
 {
   if ((FinishMinHeight>0)
       &&(Calculated().TerrainValid)
@@ -477,7 +480,8 @@ bool GlideComputerTask::InFinishSector(const int i)
 
 */
 
-const bool GlideComputerTask::ValidStartSpeed(const DWORD Margin) const {
+bool GlideComputerTask::ValidStartSpeed(const DWORD Margin) const
+{
   bool valid = true;
   if (StartMaxSpeed!=0) {
     if (Basic().AirspeedAvailable) {
@@ -492,7 +496,8 @@ const bool GlideComputerTask::ValidStartSpeed(const DWORD Margin) const {
 }
 
 
-const bool GlideComputerTask::InsideStartHeight(const DWORD Margin) const {
+bool GlideComputerTask::InsideStartHeight(const DWORD Margin) const
+{
   bool valid = true;
   if ((StartMaxHeight!=0)&&(Calculated().TerrainValid)) {
     if (StartHeightRef == 0) {

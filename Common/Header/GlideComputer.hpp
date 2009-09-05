@@ -121,7 +121,7 @@ protected:
   void Initialise();
   bool DoLogging();
   void SetFastLogging();
-  virtual const double GetAverageThermal() const;
+  virtual double GetAverageThermal() const;
 protected:
   virtual void SaveTaskSpeed(double val);
   virtual void SetLegStart();
@@ -135,8 +135,8 @@ public:
   AATDistance          aatdistance;
   OLCOptimizer         olc;
   void DoAutoMacCready(double mc_setting);
-  virtual const bool InsideStartHeight(const DWORD Margin=0) const;
-  virtual const bool ValidStartSpeed(const DWORD Margin=0) const;
+  virtual bool InsideStartHeight(const DWORD Margin=0) const;
+  virtual bool ValidStartSpeed(const DWORD Margin=0) const;
 protected:
   void Initialise() {}
   void ProcessBasicTask(const double mc_setting, 
@@ -152,10 +152,10 @@ private:
   void DistanceToNext();
   void AltitudeRequired(const double mc_setting,
 			const double cruise_efficiency);
-  const double AATCloseBearing() const;
-  const bool InTurnSector(const int the_turnpoint) const;
+  double AATCloseBearing() const;
+  bool InTurnSector(const int the_turnpoint) const;
   bool InFinishSector(const int i);
-  const bool ValidFinish() const;
+  bool ValidFinish() const;
   bool InStartSector_Internal(int Index,
 			      double OutBound,
 			      bool &LastInSector);
@@ -191,10 +191,10 @@ protected:
   virtual void SaveTaskSpeed(double val) = 0;
   virtual void SetLegStart();
   virtual void ProcessIdle(const MapWindowProjection &map);
-  const double FAIFinishHeight(int wp) const;
+  double FAIFinishHeight(int wp) const;
 public:
   virtual void ResetEnter();
-  const double AATCloseDistance(void) const {
+  double AATCloseDistance(void) const {
     return max(100,Basic().Speed*1.5);
   }
 };
@@ -224,8 +224,8 @@ public:
   bool ProcessGPS(); // returns true if idle needs processing
   virtual void ProcessIdle(const MapWindowProjection &map);
   virtual bool ProcessVario();
-  virtual const bool InsideStartHeight(const DWORD Margin=0) const;
-  virtual const bool ValidStartSpeed(const DWORD Margin=0) const;
+  virtual bool InsideStartHeight(const DWORD Margin=0) const;
+  virtual bool ValidStartSpeed(const DWORD Margin=0) const;
   virtual void IterateEffectiveMacCready();
   virtual void ResetEnter() {
     GlideComputerTask::ResetEnter();
@@ -241,7 +241,7 @@ private:
 };
 
 
-const double FAIFinishHeight(const DERIVED_INFO& Calculated, int wp);
+double FAIFinishHeight(const DERIVED_INFO& Calculated, int wp);
 
 #endif
 

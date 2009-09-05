@@ -62,7 +62,7 @@ protected:
   void SaveFinish();
   void RestoreFinish();
 
-  virtual const double GetAverageThermal() const;
+  virtual double GetAverageThermal() const;
   virtual void OnClimbBase(double StartAlt) = 0;
   virtual void OnClimbCeiling() = 0;
   virtual void OnDepartedThermal() = 0;
