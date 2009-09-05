@@ -314,7 +314,6 @@ static void ReadWayPointFile(ZZIP_FILE *fp, const TCHAR *CurrentWpFileName)
     __try{
 #endif
       if (ParseWayPointString(TempString, new_waypoint)) {
-
         if (WaypointInTerrainRange(new_waypoint)) {
           new_waypoint = GrowWaypointList();
           if (!new_waypoint) {
@@ -399,6 +398,7 @@ int ParseWayPointString(const TCHAR *String,WAYPOINT *Temp)
   //ExtractParameter(TempString,ctemp,2); //Longitude
   if ((pToken = strtok_r(NULL, TEXT(","), &pWClast)) == NULL)
     return FALSE;
+  StartupStore(TEXT("huh %s\n"), pToken);
   Temp->Longitude  = CalculateAngle(pToken);
   if((Temp->Longitude  > 180) || (Temp->Longitude  < -180))
     {
@@ -535,10 +535,10 @@ static double CalculateAngle(const TCHAR *temp)
 
   Degrees += (Mins/60);
 
-  if((*StopC == 'N') || (*StopC == 'E'))
+  if((*Stop == 'N') || (*Stop == 'E'))
     {
     }
-  else if((*StopC == 'S') || (*StopC == 'W'))
+  else if((*Stop == 'S') || (*Stop == 'W'))
     {
       Degrees *= -1;
     }
