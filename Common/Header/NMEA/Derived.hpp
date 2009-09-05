@@ -47,12 +47,10 @@ Copyright_License {
 
 typedef struct _THERMAL_SOURCE_INFO
 {
-  POINT Screen;
   double Latitude;
   double Longitude;
   double GroundHeight;
   double LiftRate;
-  bool Visible;
   double Time;
 } THERMAL_SOURCE_INFO;
 

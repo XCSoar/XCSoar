@@ -65,6 +65,13 @@ class MapWindowBase {
 };
 
 
+typedef struct _THERMAL_SOURCE_VIEW
+{
+  POINT Screen;
+  bool Visible;
+} THERMAL_SOURCE_VIEW;
+
+
 class MapWindow
 : public MaskedPaintWindow, public MapWindowBase,
   public MapWindowProjection,
@@ -142,6 +149,8 @@ class MapWindow
 
   POINT         Groundline[NUMTERRAINSWEEPS+1];
   bool          LandableReachable;
+
+ THERMAL_SOURCE_VIEW ThermalSources[MAX_THERMAL_SOURCES];
 
   // projection
   bool      BigZoom;

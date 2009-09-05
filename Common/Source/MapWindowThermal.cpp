@@ -49,17 +49,17 @@ Copyright_License {
 #include "Screen/Graphics.hpp"
 #include "options.h" /* for IBLSCALE() */
 
+
 void MapWindow::CalculateScreenPositionsThermalSources() {
-  /* JMW incomplete/illegal
   for (int i=0; i<MAX_THERMAL_SOURCES; i++) {
     if (Calculated().ThermalSources[i].LiftRate>0) {
       double dh = Calculated().NavAltitude
         -Calculated().ThermalSources[i].GroundHeight;
       if (dh<0) {
-        Calculated().ThermalSources[i].Visible = false;
+        ThermalSources[i].Visible = false;
         continue;
       }
-
+      
       double t = dh/Calculated().ThermalSources[i].LiftRate;
       double lat, lon;
       FindLatitudeLongitude(Calculated().ThermalSources[i].Latitude,
@@ -67,23 +67,14 @@ void MapWindow::CalculateScreenPositionsThermalSources() {
                             Calculated().WindBearing,
                             -Calculated().WindSpeed*t,
                             &lat, &lon);
-      if (LonLatVisible(lon,lat)) {
-        LonLat2Screen(lon,
-                      lat,
-                      Calculated().ThermalSources[i].Screen);
-        Calculated().ThermalSources[i].Visible =
-          PointVisible(Calculated().ThermalSources[i].Screen);
-      } else {
-        Calculated().ThermalSources[i].Visible = false;
-      }
+      ThermalSources[i].Visible = 
+	LonLat2ScreenIfVisible(lon,lat,
+			       &ThermalSources[i].Screen);
     } else {
-      Calculated().ThermalSources[i].Visible = false;
+      ThermalSources[i].Visible = false;
     }
   }
-  */
 }
-
-
 
 
 void
@@ -101,10 +92,10 @@ MapWindow::DrawThermalEstimate(Canvas &canvas)
     }
   } else if (GetMapScaleKM() <= 4) {
     for (int i=0; i<MAX_THERMAL_SOURCES; i++) {
-      if (Calculated().ThermalSources[i].Visible) {
+      if (ThermalSources[i].Visible) {
 	draw_masked_bitmap(canvas, MapGfx.hBmpThermalSource, 
-			   Calculated().ThermalSources[i].Screen.x,
-			   Calculated().ThermalSources[i].Screen.y,
+			   ThermalSources[i].Screen.x,
+			   ThermalSources[i].Screen.y,
 			   10, 10, true);
       }
     }
