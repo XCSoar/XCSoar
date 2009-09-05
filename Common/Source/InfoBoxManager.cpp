@@ -84,10 +84,6 @@ static int InfoFocus = 0;
 static bool InfoWindowActive = true;
 static double LastFlipBoxTime = 0; // VENTA3
 
-
-// fwd declarations
-void DisplayInfoBox(void);
-
 unsigned numInfoWindows = 8;
 
 InfoBox *InfoBoxes[MAXINFOWINDOWS];
