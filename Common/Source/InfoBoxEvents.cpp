@@ -67,7 +67,7 @@ Copyright_License {
 // TODO: make a proper class
 
 void
-CommonInterface::on_key_Airspeed(int UpDown)
+ActionInterface::on_key_Airspeed(int UpDown)
 {
   if (UpDown==0) {
     SetSettingsComputer().EnableCalibration = 
@@ -81,7 +81,7 @@ CommonInterface::on_key_Airspeed(int UpDown)
 }
 
 void	
-CommonInterface::on_key_TeamCode(int UpDown)
+ActionInterface::on_key_TeamCode(int UpDown)
 {
   int tryCount = 0;
   int searchSlot = FindFlarmSlot(Basic(), TeamFlarmIdTarget);
@@ -133,7 +133,7 @@ CommonInterface::on_key_TeamCode(int UpDown)
 }
 
 void	
-CommonInterface::on_key_Altitude(int UpDown)
+ActionInterface::on_key_Altitude(int UpDown)
 {
 #ifdef _SIM_
   if(UpDown==1) {
@@ -151,7 +151,7 @@ CommonInterface::on_key_Altitude(int UpDown)
 
 // VENTA3 QFE
 void	
-CommonInterface::on_key_QFEAltitude(int UpDown)
+ActionInterface::on_key_QFEAltitude(int UpDown)
 {
   short step;
   if ( ( Basic().Altitude - QFEAltitudeOffset ) <10 ) step=1; else step=10;
@@ -169,7 +169,7 @@ CommonInterface::on_key_QFEAltitude(int UpDown)
 
 // VENTA3 Alternates processing updown
 void 
-CommonInterface::on_key_Alternate1(int UpDown)
+ActionInterface::on_key_Alternate1(int UpDown)
 {
    if (UpDown==0) {
      if ( Alternate1 <0 ) return;
@@ -181,7 +181,7 @@ CommonInterface::on_key_Alternate1(int UpDown)
 }
 
 void 
-CommonInterface::on_key_Alternate2(int UpDown)
+ActionInterface::on_key_Alternate2(int UpDown)
 {
    if (UpDown==0) {
      if ( Alternate2 <0 ) return;
@@ -193,7 +193,7 @@ CommonInterface::on_key_Alternate2(int UpDown)
 }
 
 void 
-CommonInterface::on_key_BestAlternate(int UpDown)
+ActionInterface::on_key_BestAlternate(int UpDown)
 {
    if (UpDown==0) {
      if ( BestAlternate <0 ) return;
@@ -205,7 +205,7 @@ CommonInterface::on_key_BestAlternate(int UpDown)
 }
 
 void	
-CommonInterface::on_key_Speed(int UpDown)
+ActionInterface::on_key_Speed(int UpDown)
 {
 #ifdef _SIM_
   if(UpDown==1)
@@ -223,7 +223,7 @@ CommonInterface::on_key_Speed(int UpDown)
 
 
 void	
-CommonInterface::on_key_Accelerometer(int UpDown)
+ActionInterface::on_key_Accelerometer(int UpDown)
 {
   DWORD Temp;
   if (UpDown==0) {
@@ -237,7 +237,7 @@ CommonInterface::on_key_Accelerometer(int UpDown)
 }
 
 void	
-CommonInterface::on_key_WindDirection(int UpDown)
+ActionInterface::on_key_WindDirection(int UpDown)
 {
 /* JMW ILLEGAL/incomplete
   if(UpDown==1)
@@ -264,7 +264,7 @@ CommonInterface::on_key_WindDirection(int UpDown)
 */
 }
 
-void	CommonInterface::on_key_WindSpeed(int UpDown)
+void	ActionInterface::on_key_WindSpeed(int UpDown)
 {
 /* JMW ILLEGAL/incomplete
 	if(UpDown==1)
@@ -290,7 +290,7 @@ void	CommonInterface::on_key_WindSpeed(int UpDown)
 }
 
 void	
-CommonInterface::on_key_Direction(int UpDown)
+ActionInterface::on_key_Direction(int UpDown)
 {
 #ifdef _SIM_
   if(UpDown==1) {
@@ -304,7 +304,7 @@ CommonInterface::on_key_Direction(int UpDown)
 
 
 void	
-CommonInterface::on_key_MacCready(int UpDown)
+ActionInterface::on_key_MacCready(int UpDown)
 {
   double MACCREADY = GlidePolar::GetMacCready();
   if(UpDown==1) {
@@ -345,7 +345,7 @@ CommonInterface::on_key_MacCready(int UpDown)
 
 
 void	
-CommonInterface::on_key_ForecastTemperature(int UpDown)
+ActionInterface::on_key_ForecastTemperature(int UpDown)
 {
   if (UpDown==1) {
     CuSonde::adjustForecastTemperature(0.5);
@@ -364,7 +364,7 @@ CommonInterface::on_key_ForecastTemperature(int UpDown)
 	-2	Previous waypoint with wrap around
 */
 void 
-CommonInterface::on_key_Waypoint(int UpDown)
+ActionInterface::on_key_Waypoint(int UpDown)
 {
   mutexTaskData.Lock();
 
@@ -443,7 +443,7 @@ CommonInterface::on_key_Waypoint(int UpDown)
 
 
 void 
-CommonInterface::on_key_None(int UpDown)
+ActionInterface::on_key_None(int UpDown)
 {
   (void)UpDown;
   return;

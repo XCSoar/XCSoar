@@ -704,8 +704,10 @@ bool InputEvents::processButton(int bindex) {
 
       int lastMode = thismode;
 
+      /* JMW illegal, should be done by gui handler loop
       // JMW need a debounce method here..
       if (!Debounce()) return true;
+      */
 
       if (!ButtonLabel::ButtonDisabled[bindex]) {
         ButtonLabel::AnimateButton(bindex);
@@ -735,7 +737,9 @@ bool InputEvents::processButton(int bindex) {
 bool InputEvents::processKey(int dWord) {
   if (!globalRunningEvent.test()) return false; 
 
+  /* JMW illegal, should be done by gui handler loop
   InterfaceTimeoutReset();
+  */
 
   int event_id;
 
@@ -768,7 +772,8 @@ bool InputEvents::processKey(int dWord) {
     int lastMode = mode;
     const TCHAR *pLabelText = NULL;
 
-    if (!Debounce()) return true;
+    // JMW should be done by gui handler
+    // if (!Debounce()) return true;
 
     int i;
     for (i = ModeLabel_count[mode]; i >= 0; i--) {
@@ -820,7 +825,8 @@ bool InputEvents::processNmea_real(int ne_id) {
   if (!globalRunningEvent.test()) return false; 
   int event_id = 0;
 
-  InterfaceTimeoutReset();
+  // JMW not required
+  //  InterfaceTimeoutReset();
 
   // Valid input ?
   if ((ne_id < 0) || (ne_id >= NE_COUNT))

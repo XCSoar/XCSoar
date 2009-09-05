@@ -41,7 +41,7 @@ Copyright_License {
 #include "Screen/TextWindow.hpp"
 #include "Interface.hpp"
 
-class ButtonLabel: public CommonInterface {
+class ButtonLabel: public ActionInterface {
  public:
   static int ButtonLabelGeometry;
   static TextWindow hWndButtonWindow[NUMBUTTONLABELS];

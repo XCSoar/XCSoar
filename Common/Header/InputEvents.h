@@ -47,7 +47,7 @@ typedef void (*pt2Event)(const TCHAR *);
 
 HINSTANCE _loadDLL(TCHAR *name);
 
-class InputEvents: public XCSoarInterface {
+class InputEvents: public ActionInterface {
  private:
   static int MenuTimeOut;
  public:

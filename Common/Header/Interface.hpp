@@ -65,6 +65,12 @@ public:
   static void ReadBlackboardCalculated(const DERIVED_INFO& derived_info) {
     blackboard.ReadBlackboardCalculated(derived_info);
   }
+private:
+  static InterfaceBlackboard blackboard;
+};
+
+
+class ActionInterface: public CommonInterface {
 public: 
   // ideally these should be protected
   static void on_key_None(int UpDown);
@@ -83,19 +89,22 @@ public:
   static void on_key_Airspeed(int UpDown);
   static void on_key_TeamCode(int UpDown);
   static void on_key_ForecastTemperature(int UpDown);
+  static void StartHourglassCursor();
+  static void StopHourglassCursor();
+protected:
+  static void SignalShutdown(bool force);
 private:
-  static InterfaceBlackboard blackboard;
+  static HCURSOR oldCursor;
 };
 
 
-class XCSoarInterface: public CommonInterface {
+class XCSoarInterface: public ActionInterface {
 public:
   static bool Debounce();
 
   static bool InterfaceTimeoutZero(void);
   static void InterfaceTimeoutReset(void);
   static bool InterfaceTimeoutCheck(void);
-  static void SignalShutdown(bool force);
   static bool CheckShutdown(void);
 
   static void AfterStartup();
@@ -106,8 +115,6 @@ public:
   static void CloseProgressDialog();
   static void StepProgressDialog();
   static BOOL SetProgressStepSize(int nSize);
-  static void StartHourglassCursor();
-  static void StopHourglassCursor();
   static void SendSettings();
 private:
   static void PreloadInitialisation(bool ask);
@@ -115,7 +122,6 @@ private:
   static void DefaultSettings();
   static HWND hProgress;
   static HWND hWndCurtain;
-  static HCURSOR oldCursor;
 protected:
 };
 

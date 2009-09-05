@@ -104,9 +104,10 @@ LRESULT CALLBACK Progress(HWND hDlg, UINT message,
 
 HWND XCSoarInterface::hProgress = NULL;
 HWND XCSoarInterface::hWndCurtain = NULL;
-HCURSOR XCSoarInterface::oldCursor = NULL;
 
-void XCSoarInterface::StartHourglassCursor(void) {
+HCURSOR ActionInterface::oldCursor = NULL;
+
+void ActionInterface::StartHourglassCursor(void) {
   HCURSOR newc = LoadCursor(NULL, IDC_WAIT);
   oldCursor = (HCURSOR)SetCursor(newc);
 #ifdef GNAV
@@ -114,7 +115,7 @@ void XCSoarInterface::StartHourglassCursor(void) {
 #endif
 }
 
-void XCSoarInterface::StopHourglassCursor(void) {
+void ActionInterface::StopHourglassCursor(void) {
   SetCursor(oldCursor);
 #ifdef GNAV
   SetCursorPos(640,480);

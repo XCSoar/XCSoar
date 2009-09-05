@@ -49,7 +49,7 @@ extern const unsigned NUMSELECTSTRINGS;
 
 class InfoBox;
 
-class InfoBoxManager: public CommonInterface {
+class InfoBoxManager: public ActionInterface {
   /** the window for displaying infoboxes full-screen */
   static BufferWindow full_window;
 

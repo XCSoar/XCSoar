@@ -141,7 +141,7 @@ bool XCSoarInterface::InterfaceTimeoutCheck(void) {
   return retval;
 }
 
-void XCSoarInterface::SignalShutdown(bool force) {
+void ActionInterface::SignalShutdown(bool force) {
   if (!ShutdownRequested) {
     doForceShutdown = force;
     ShutdownRequested = true;
