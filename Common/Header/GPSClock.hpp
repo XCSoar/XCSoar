@@ -76,7 +76,7 @@ public:
       last=now;
       return -1;
     }
-    if (now-last>dt) {
+    if (now-last>=dt) {
       last= now;
       return dt;
     } else {

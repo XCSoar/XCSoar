@@ -91,7 +91,6 @@ public:
   static void on_key_ForecastTemperature(int UpDown);
   static void StartHourglassCursor();
   static void StopHourglassCursor();
-protected:
   static void SignalShutdown(bool force);
 private:
   static HCURSOR oldCursor;
