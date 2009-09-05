@@ -35,25 +35,68 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SETTINGS_HPP
-#define XCSOAR_SETTINGS_HPP
+#ifndef XCSOAR_GPS_CLOCK_HPP
+#define XCSOAR_GPS_CLOCK_HPP
 
-#include <tchar.h>
+class GPSClock {
+private:
+  double last;
+  double dt;
 
-// changed in task/flight or by calc thread /////////////////////////////////
-// or by device
-extern int TeamFlarmIdTarget;    // FlarmId of the glider to track
-extern TCHAR TeammateCode[10];
-extern double TeammateLatitude;
-extern double TeammateLongitude;
-extern bool   TeammateCodeValid;
+public:
+  /**
+   * Initializes the object, setting the last time stamp to "0",
+   * i.e. a check() will always succeed.  If you do not want this
+   * default behaviour, call update() immediately after creating the
+   * object.
+   */
+  GPSClock(const double _minstep):last(0),dt(_minstep) {}
 
-// changed by gui or calculation thread
-extern bool LoggerActive;
-extern int  Alternate1; // VENTA3
-extern int  Alternate2;
-extern int  BestAlternate;
-extern double QFEAltitudeOffset; // VENTA3
-extern bool   ForceFinalGlide;
+  /**
+   * Resets the clock.
+   */
+  void reset() {
+    last = 0;
+  }
+
+  bool check_reverse(const double now) {
+    if (now<last) {
+      last=now;
+      return true;
+    } else {
+      return false;
+    }
+  }
+  bool check_advance(const double now) {
+    return check_advance(now, dt);
+  }
+  double delta_advance(const double now) {
+    double dt=now-last;
+    if (last>now) {
+      last=now;
+      return -1;
+    }
+    if (now-last>dt) {
+      last= now;
+      return dt;
+    } else {
+      return 0;
+    }
+  }
+
+  /**
+   * Checks whether the specified duration has passed since the last
+   * update.  If yes, it updates the time stamp.
+   *
+   * @param duration the duration in milliseconds
+   */
+  bool check_advance(const double now, const double duration) {
+    if (now >= last + duration) {
+      last = now;
+      return true;
+    } else
+      return false;
+  }
+};
 
 #endif

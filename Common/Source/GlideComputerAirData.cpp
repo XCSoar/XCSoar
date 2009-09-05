@@ -67,7 +67,7 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "Settings.hpp"
 
-bool WasFlying = false; // VENTA3 used by auto QFE: do not reset QFE
+static bool WasFlying = false; // VENTA3 used by auto QFE: do not reset QFE
 			//   if previously in flight. So you can check
 			//   QFE on the ground, otherwise it turns to
 			//   zero at once!
@@ -216,12 +216,12 @@ void GlideComputerAirData::AverageClimbRate()
 ClimbAverageCalculator climbAverageCalculator;
 void GlideComputerAirData::Average30s()
 {
-  Calculated().Average30s = climbAverageCalculator.GetAverage(Basic().Time, 
-								 Basic().Altitude, 30);
+  Calculated().Average30s = 
+    climbAverageCalculator.GetAverage(Basic().Time, 
+				      Basic().Altitude, 30);
   Calculated().NettoAverage30s = Calculated().Average30s;
 }
-
-#endif
+#else
 
 void GlideComputerAirData::Average30s()
 {
@@ -322,6 +322,9 @@ void GlideComputerAirData::Average30s()
   LastTime = Basic().Time;
 }
 
+#endif
+
+
 void GlideComputerAirData::AverageThermal()
 {
   if (Calculated().ClimbStartTime>=0) {
@@ -363,46 +366,44 @@ void GlideComputerAirData::ThermalGain()
 }
 
 
+#include "GPSClock.hpp"
 
 void GlideComputerAirData::LD()
 {
   static double LastLat = 0;
   static double LastLon = 0;
-  static double LastTime = 0;
   static double LastAlt = 0;
+  static GPSClock clock(1.0);
 
-  if (Basic().Time<LastTime) {
-    LastTime = Basic().Time;
+  if (clock.check_reverse(Basic().Time)) {
     SetCalculated().LDvario = INVALID_GR;
     SetCalculated().LD = INVALID_GR;
   }
-  if(Basic().Time >= LastTime+1.0)
-    {
-      double DistanceFlown;
-      DistanceBearing(Basic().Latitude, Basic().Longitude,
-                      LastLat, LastLon,
-                      &DistanceFlown, NULL);
-
-      SetCalculated().LD = UpdateLD(Calculated().LD,
-				    DistanceFlown,
-				    LastAlt - Calculated().NavAltitude, 0.1);
-
-      InsertLDRotary(&Calculated(), 
-		     &rotaryLD,(int)DistanceFlown, (int)Calculated().NavAltitude);
-
-      LastLat = Basic().Latitude;
-      LastLon = Basic().Longitude;
-      LastAlt = Calculated().NavAltitude;
-      LastTime = Basic().Time;
-    }
+  if(clock.check_advance(Basic().Time)) {
+    double DistanceFlown;
+    DistanceBearing(Basic().Latitude, Basic().Longitude,
+		    LastLat, LastLon,
+		    &DistanceFlown, NULL);
+    
+    SetCalculated().LD = UpdateLD(Calculated().LD,
+				  DistanceFlown,
+				  LastAlt - Calculated().NavAltitude, 0.1);
+    
+    InsertLDRotary(&Calculated(), 
+		   &rotaryLD,(int)DistanceFlown, (int)Calculated().NavAltitude);
+    
+    LastLat = Basic().Latitude;
+    LastLon = Basic().Longitude;
+    LastAlt = Calculated().NavAltitude;
+  }
 
   // LD instantaneous from vario, updated every reading..
   if (Basic().VarioAvailable && Basic().AirspeedAvailable
       && Calculated().Flying) {
     SetCalculated().LDvario = UpdateLD(Calculated().LDvario,
-                                   Basic().IndicatedAirspeed,
-                                   -Basic().Vario,
-                                   0.3);
+				       Basic().IndicatedAirspeed,
+				       -Basic().Vario,
+				       0.3);
   } else {
     SetCalculated().LDvario = INVALID_GR;
   }
@@ -440,7 +441,7 @@ void GlideComputerAirData::CruiseLD()
 void GlideComputerAirData::Heading()
 {
   double x0, y0, mag;
-  static double LastTime = 0;
+  static GPSClock clock(0.0);
   static double lastHeading = 0;
 
   if ((Basic().Speed>0)||(Calculated().WindSpeed>0)) {
@@ -458,15 +459,12 @@ void GlideComputerAirData::Heading()
     }
 
     // calculate turn rate in wind coordinates
-    if(Basic().Time > LastTime) {
-      double dT = Basic().Time - LastTime;
-
+    double dT = clock.delta_advance(Basic().Time);
+    if (dT>0) {
       SetCalculated().TurnRateWind = AngleLimit180(Calculated().Heading
-                                               - lastHeading)/dT;
-
+						   - lastHeading)/dT;
       lastHeading = Calculated().Heading;
     }
-    LastTime = Basic().Time;
 
     // calculate estimated true airspeed
     mag = isqrt4((unsigned long)(x0*x0*100+y0*y0*100))/10.0;
@@ -554,23 +552,19 @@ void GlideComputerAirData::TerrainHeight()
 
 void GlideComputerAirData::Vario()
 {
-  static double LastTime = 0;
   static double LastAlt = 0;
   static double LastAltTE = 0;
   static double h0last = 0;
-
-  if(Basic().Time <= LastTime) {
-    LastTime = Basic().Time;
-  } else {
+  static GPSClock clock(1.0);
+  double dT = clock.delta_advance(Basic().Time);
+  if(dT>0) {
     double Gain = Calculated().NavAltitude - LastAlt;
     double GainTE = (Calculated().EnergyHeight+Basic().Altitude) - LastAltTE;
-    double dT = (Basic().Time - LastTime);
     // estimate value from GPS
     SetCalculated().GPSVario = Gain / dT;
     SetCalculated().GPSVarioTE = GainTE / dT;
 
-    double dv = (Calculated().TaskAltitudeDifference-h0last)
-      /(Basic().Time-LastTime);
+    double dv = (Calculated().TaskAltitudeDifference-h0last)/dT;
     SetCalculated().DistanceVario = LowPassFilter(Calculated().DistanceVario,
                                               dv, 0.1);
 
@@ -578,8 +572,6 @@ void GlideComputerAirData::Vario()
 
     LastAlt = Calculated().NavAltitude;
     LastAltTE = Calculated().EnergyHeight+Basic().Altitude;
-    LastTime = Basic().Time;
-
   }
 
   if (!Basic().VarioAvailable || ReplayLogger::IsEnabled()) {
@@ -728,7 +720,7 @@ GlideComputerAirData::NettoVario()
 bool
 GlideComputerAirData::ProcessVario()
 {
-  static double LastTime = 0;
+  static GPSClock clock(0);
   const double mc = GlidePolar::GetMacCready();
   const double ce = GlidePolar::GetCruiseEfficiency();
 
@@ -736,38 +728,29 @@ GlideComputerAirData::ProcessVario()
   SpeedToFly(mc, ce);
 
   // has GPS time advanced?
-  if(Basic().Time <= LastTime)
-    {
-      LastTime = Basic().Time;
-      return false;
-    }
-  LastTime = Basic().Time;
-
-  return true;
+  if(clock.delta_advance(Basic().Time)<=0) {
+    return false;
+  } else {
+    return true;
+  }
 }
 
 
 bool
 GlideComputerAirData::FlightTimes()
 {
-  static double LastTime = 0;
+  static GPSClock clock(0);
+  double dt = clock.delta_advance(Basic().Time);
 
-  if ((Basic().Time != 0) && (Basic().Time <= LastTime))
+  if ((Basic().Time != 0) && (dt<0)) {
     // 20060519:sgi added (Basic().Time != 0) dueto alwas return here
     // if no GPS time available
-    {
-
-      if ((Basic().Time<LastTime) && (!Basic().NAVWarning)) {
-	// Reset statistics.. (probably due to being in IGC replay mode)
-        ResetFlight(false);
-      }
-
-      LastTime = Basic().Time;
-      return false;
+    if (!Basic().NAVWarning) {
+      // Reset statistics.. (probably due to being in IGC replay mode)
+      ResetFlight(false);
     }
-
-  LastTime = Basic().Time;
-
+    return false;
+  }
   double t = DetectStartTime(&Basic(), &Calculated());
   if (t>0) {
     SetCalculated().FlightTime = t;
@@ -781,13 +764,10 @@ GlideComputerAirData::FlightTimes()
 void
 GlideComputerAirData::ProcessIdle(const MapWindowProjection &map_projection)
 {
-  TerrainFootprint(map_projection.GetScreenDistanceMeters());
+  static GPSClock clock(6.0);
 
-  static double lastTime = 0;
-  if (Basic().Time<= lastTime) {
-    lastTime = Basic().Time-6;
-  } else {
-    // calculate airspace warnings every 6 seconds
+  TerrainFootprint(map_projection.GetScreenDistanceMeters());
+  if (clock.check_advance(Basic().Time)) {
     AirspaceWarning(map_projection);
   }
 }
@@ -1061,29 +1041,25 @@ GlideComputerAirData::TerrainFootprint(double screen_range)
 void
 GlideComputerAirData::BallastDump()
 {
-  static double BallastTimeLast = -1;
+  // only update every 5 seconds to stop flooding the devices
+  static GPSClock clock(5);
+  double dt = clock.delta_advance(Basic().Time);
 
-  if (SettingsComputer().BallastTimerActive) {
-    // JMW only update every 5 seconds to stop flooding the devices
-    if (Basic().Time > BallastTimeLast+5) {
-      double BALLAST = GlidePolar::GetBallast();
-      double BALLAST_last = BALLAST;
-      double dt = Basic().Time - BallastTimeLast;
-      double percent_per_second = 1.0/max(10.0, 
-				SettingsComputer().BallastSecsToEmpty);
-      BALLAST -= dt*percent_per_second;
-      if (BALLAST<0) {
-	// JMW illegal	BallastTimerActive = false;
-	BALLAST = 0.0;
-      }
-      GlidePolar::SetBallast(BALLAST);
-      if (fabs(BALLAST-BALLAST_last)>0.05) { // JMW update on 5 percent!
-	GlidePolar::UpdatePolar(true,SettingsComputer());
-      }
-      BallastTimeLast = Basic().Time;
+  if (SettingsComputer().BallastTimerActive && (dt>0)) {
+
+    double BALLAST = GlidePolar::GetBallast();
+    double BALLAST_last = BALLAST;
+    double percent_per_second = 1.0/max(10.0, 
+					SettingsComputer().BallastSecsToEmpty);
+    BALLAST -= dt*percent_per_second;
+    if (BALLAST<0) {
+      // JMW illegal	BallastTimerActive = false;
+      BALLAST = 0.0;
     }
-  } else {
-    BallastTimeLast = Basic().Time;
+    GlidePolar::SetBallast(BALLAST);
+    if (fabs(BALLAST-BALLAST_last)>0.05) { // JMW update on 5 percent!
+      GlidePolar::UpdatePolar(true,SettingsComputer());
+    }
   }
 }
 
@@ -1136,28 +1112,24 @@ GlideComputerAirData::PercentCircling(const double Rate)
 void
 GlideComputerAirData::Turning()
 {
+  static GPSClock clock(0.0);
   static double LastTrack = 0;
   static double StartTime  = 0;
   static double StartLong = 0;
   static double StartLat = 0;
   static double StartAlt = 0;
   static double StartEnergyHeight = 0;
-  static double LastTime = 0;
   static int MODE = CRUISE;
   static bool LEFT = FALSE;
   double Rate;
   static double LastRate=0;
   double dRate;
-  double dT;
 
   if (!Calculated().Flying) return;
 
-  if(Basic().Time <= LastTime) {
-    LastTime = Basic().Time;
+  double dT = clock.delta_advance(Basic().Time);
+  if (dT<=0) 
     return;
-  }
-  dT = Basic().Time - LastTime;
-  LastTime = Basic().Time;
 
   Rate = AngleLimit180(Basic().TrackBearing-LastTrack)/dT;
 
@@ -1452,13 +1424,10 @@ GlideComputerAirData::LastThermalStats()
 void
 GlideComputerAirData::ThermalBand()
 {
-  static double LastTime = 0;
-  if(Basic().Time <= LastTime)
-    {
-      LastTime = Basic().Time;
-      return;
-    }
-  LastTime = Basic().Time;
+  static GPSClock clock(1.0);
+  if (!clock.check_advance(Basic().Time)) {
+    return;
+  }
 
   // JMW TODO accuracy: Should really work out dt here,
   //           but i'm assuming constant time steps
