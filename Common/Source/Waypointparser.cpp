@@ -724,9 +724,8 @@ void ReadWayPoints(void)
 }
 
 
-void SetHome(bool reset)
+void SetHome(const bool reset, const bool set_location)
 {
-
   StartupStore(TEXT("SetHome\n"));
 
   unsigned int i;
@@ -734,19 +733,20 @@ void SetHome(bool reset)
   // check invalid home waypoint or forced reset due to file change
   // VENTA3 make AirfieldsHomeWaypoint survive a Waypoint reset
   if (reset || !ValidWayPoint(0) || !ValidWayPoint(HomeWaypoint) ) {
-	    HomeWaypoint = -1;
+    HomeWaypoint = -1;
   }
   // VENTA3 -- reset Alternates
   if (reset || !ValidWayPoint(Alternate1) || !ValidWayPoint(Alternate2) ) {
-      Alternate1= -1; Alternate2= -1;
+    Alternate1= -1; Alternate2= -1;
   }
   // check invalid task ref waypoint or forced reset due to file change
   if (reset || !ValidWayPoint(TeamCodeRefWaypoint)) {
     TeamCodeRefWaypoint = -1;
   }
 
-// VENTA3 NOTE: this should be pointed out to the users, many of them already used to
-// set back manually home after a wp reset, and not very happy!
+// VENTA3 NOTE: this should be pointed out to the users, many of them
+// already used to set back manually home after a wp reset, and not
+// very happy!
   if ( ValidWayPoint(AirfieldsHomeWaypoint) ) {
 	HomeWaypoint = AirfieldsHomeWaypoint;
   }
@@ -768,17 +768,21 @@ void SetHome(bool reset)
     TeamCodeRefWaypoint = HomeWaypoint;
   }
 
-  if (ValidWayPoint(HomeWaypoint)) {
-    // OK, passed all checks now
-    device_blackboard.SetStartupLocation(WayPointList[HomeWaypoint].Longitude,
-					 WayPointList[HomeWaypoint].Latitude,
-					 WayPointList[HomeWaypoint].Altitude);
-  } else {
-
-    // no home at all, so set it from center of terrain if available
-    double lon, lat;
-    if (terrain.GetTerrainCenter(&lat, &lon)) {
-      device_blackboard.SetStartupLocation(lon, lat, 0);
+  if (set_location) {
+    if (ValidWayPoint(HomeWaypoint)) {
+      // OK, passed all checks now
+      StartupStore(TEXT("Start at home waypoint\n"));
+      device_blackboard.SetStartupLocation(WayPointList[HomeWaypoint].Longitude,
+					   WayPointList[HomeWaypoint].Latitude,
+					   WayPointList[HomeWaypoint].Altitude);
+    } else {
+      
+      // no home at all, so set it from center of terrain if available
+      double lon, lat;
+      if (terrain.GetTerrainCenter(&lat, &lon)) {
+	StartupStore(TEXT("Start at terrain center\n"));
+	device_blackboard.SetStartupLocation(lon, lat, 0);
+      }
     }
   }
 

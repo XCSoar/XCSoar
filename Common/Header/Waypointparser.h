@@ -51,7 +51,7 @@ class MapWindowProjection;
 
 void ReadWayPointFile(HANDLE hFile);
 void ReadWayPoints(void);
-void SetHome(bool reset);
+void SetHome(const bool reset, const bool set_location=false);
 int FindNearestWayPoint(MapWindowProjection &map_projection,
 			double X, double Y, double MaxRange, bool exhaustive=false);
 void CloseWayPoints(void);

@@ -88,7 +88,10 @@ DeviceBlackboard::Initialise()
 #endif
 }
 
-void DeviceBlackboard::SetStartupLocation(double lon, double lat, double alt) {
+void 
+DeviceBlackboard::SetStartupLocation(double lon, double lat, 
+				     double alt) 
+{
   mutexFlightData.Lock();
   SetBasic().Longitude = lon;
   SetBasic().Latitude = lat;
@@ -97,8 +100,11 @@ void DeviceBlackboard::SetStartupLocation(double lon, double lat, double alt) {
 }
 
 // used by replay logger
-void DeviceBlackboard::SetLocation(double lon, double lat, double speed, double bearing,
-		 double alt, double baroalt, double t) {
+void 
+DeviceBlackboard::SetLocation(double lon, double lat, 
+			      double speed, double bearing,
+			      double alt, double baroalt, double t) 
+{
   mutexFlightData.Lock();
   SetBasic().Longitude = lon;
   SetBasic().Latitude = lat;

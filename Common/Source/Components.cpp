@@ -310,7 +310,10 @@ bool XCSoarInterface::Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
   InitWayPointCalc();
 
   ReadAirfieldFile();
-  SetHome(false);
+  SetHome(false, true);
+
+  // need to re-synchronise blackboards here since SetHome touches them
+  ReadBlackboardBasic(device_blackboard.Basic());
 
   terrain.ServiceFullReload(Basic().Latitude,
 			    Basic().Longitude);
