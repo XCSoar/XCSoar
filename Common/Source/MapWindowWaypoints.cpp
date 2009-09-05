@@ -424,12 +424,11 @@ void MapWindow::ScanVisibilityWaypoints(rectObj *bounds_active) {
 
 void MapWindow::CalculateScreenPositionsWaypoints() {
   unsigned int j;
-  int i;
   mutexTaskData.Lock();
 
   if (WayPointList) {
     for (j=0; j<MAXTASKPOINTS; j++) {
-      i = Task[j].Index;
+      int i = Task[j].Index;
       if (i>=0) {
 	LonLat2Screen(WayPointList[i].Longitude, 
 		      WayPointList[i].Latitude,
@@ -439,7 +438,7 @@ void MapWindow::CalculateScreenPositionsWaypoints() {
     }
     if (EnableMultipleStartPoints) {
       for(j=0;j<MAXSTARTPOINTS-1;j++) {
-        i = StartPoints[j].Index;
+        int i = StartPoints[j].Index;
         if (StartPoints[j].Active && (i>=0)) {
 	  LonLat2Screen(WayPointList[i].Longitude, 
 			WayPointList[i].Latitude,
@@ -449,7 +448,7 @@ void MapWindow::CalculateScreenPositionsWaypoints() {
       }
     }
     // only calculate screen coordinates for waypoints that are visible
-    for(i=0;i<NumberOfWayPoints;i++) {
+    for (unsigned i = 0; i < NumberOfWayPoints; i++) {
       if (!WayPointList[i].FarVisible) {
 	WayPointList[i].Visible = false;
 	continue;

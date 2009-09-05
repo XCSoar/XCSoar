@@ -75,7 +75,7 @@ static void RASPGetTime(DataField *Sender) {
   DataFieldEnum* dfe;
   dfe = (DataFieldEnum*)Sender;
   int index=0;
-  for (int i=0; i<MAX_WEATHER_TIMES; i++) {
+  for (unsigned i = 0; i < MAX_WEATHER_TIMES; i++) {
     if (RASP.isWeatherAvailable(i)) {
       if (RASP.GetTime() == i) {
         Sender->Set(index);

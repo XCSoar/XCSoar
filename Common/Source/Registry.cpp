@@ -560,7 +560,7 @@ void ReadRegistrySettings(void)
   Temp = POLARID;
   GetFromRegistry(szRegistryPolarID,
 		  &Temp);
-  POLARID = (int)Temp;
+  POLARID = Temp;
 
   GetRegistryString(szRegistryRegKey, strRegKey, 65);
 
@@ -1271,7 +1271,7 @@ void WritePort3Settings(DWORD PortIndex, DWORD SpeedIndex)
   SetToRegistry(szRegistrySpeed3Index, SpeedIndex);
 }
 
-#define CheckIndex(x, i)    assert((i>=0) && (sizeof(x)/sizeof(x[0]) > i));
+#define CheckIndex(x, i)    assert((i>=0) && (sizeof(x)/sizeof(x[0]) > (unsigned)i));
 
 void SetRegistryColour(int i, DWORD c)
 {

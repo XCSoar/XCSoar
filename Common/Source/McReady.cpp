@@ -80,7 +80,7 @@ double        GlidePolar::BUGS = 1;
 double        GlidePolar::BALLAST = 0;
 double        GlidePolar::CRUISE_EFFICIENCY = 1.0;
 
-int           POLARID = 0;
+unsigned POLARID = 0;
 double        POLAR[POLARSIZE] = {0,0,0};
 double        WEIGHTS[POLARSIZE] = {250,70,100};
 bool          AutoMacCready = false;

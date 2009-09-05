@@ -163,14 +163,15 @@ WinPilotPolarInternal WinPilotPolars[] =
 
 };
 
-const TCHAR* GetWinPilotPolarInternalName(int i) {
+const TCHAR* GetWinPilotPolarInternalName(unsigned i)
+{
   if (i>=sizeof(WinPilotPolars)/sizeof(WinPilotPolarInternal)) {
     return NULL; // error
   }
   return WinPilotPolars[i].name;
 }
 
-bool ReadWinPilotPolarInternal(int i) {
+bool ReadWinPilotPolarInternal(unsigned i) {
   double POLARV[3];
   double POLARW[3];
   double ww[2];

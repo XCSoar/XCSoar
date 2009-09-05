@@ -69,23 +69,23 @@ static WndListFrame *wWayPointList=NULL;
 static WndOwnerDrawFrame *wWayPointListEntry = NULL;
 
 static const TCHAR NameFilter[] = TEXT("*ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_");
-static int NameFilterIdx=0;
+static unsigned NameFilterIdx=0;
 
 static double DistanceFilter[] = {0.0, 25.0, 50.0, 75.0, 100.0, 150.0, 250.0, 500.0, 1000.0};
-static int DistanceFilterIdx=0;
+static unsigned DistanceFilterIdx=0;
 
 #define DirHDG -1
 
 static int DirectionFilter[] = {0, DirHDG, 360, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330};
-static int DirectionFilterIdx=0;
+static unsigned DirectionFilterIdx=0;
 static int lastHeading=0;
 
 static const TCHAR *TypeFilter[] = {TEXT("*"), TEXT("Airport"), TEXT("Landable"),
 				    TEXT("Turnpoint"), TEXT("File 1"), TEXT("File 2")};
-static int TypeFilterIdx=0;
+static unsigned TypeFilterIdx=0;
 
-static int UpLimit=0;
-static int LowLimit=0;
+static unsigned UpLimit=0;
+static unsigned LowLimit=0;
 
 static int ItemIndex = -1;
 
@@ -228,7 +228,7 @@ static void PrepareData(void){
 static void UpdateList(void){
 
 //  TCHAR sTmp[128];
-  int i;
+  unsigned i;
   bool distancemode = false;
 
   ItemIndex = 0;
@@ -239,7 +239,7 @@ static void UpdateList(void){
   if (TypeFilterIdx == 1){
     qsort(WayPointSelectInfo, NumberOfWayPoints,
         sizeof(WayPointSelectInfo_t), WaypointAirportCompare);
-    for (i=0; i<(int)NumberOfWayPoints; i++){
+    for (i = 0; i < NumberOfWayPoints; i++){
       if (!(WayPointSelectInfo[i].Type & (AIRPORT))){
         UpLimit = i;
         break;
@@ -250,7 +250,7 @@ static void UpdateList(void){
   if (TypeFilterIdx == 2){
     qsort(WayPointSelectInfo, NumberOfWayPoints,
         sizeof(WayPointSelectInfo_t), WaypointLandableCompare);
-    for (i=0; i<(int)NumberOfWayPoints; i++){
+    for (i = 0; i < NumberOfWayPoints; i++){
       if (!(WayPointSelectInfo[i].Type & (AIRPORT | LANDPOINT))){
         UpLimit = i;
         break;
@@ -261,7 +261,7 @@ static void UpdateList(void){
   if (TypeFilterIdx == 3){
     qsort(WayPointSelectInfo, NumberOfWayPoints,
         sizeof(WayPointSelectInfo_t), WaypointWayPointCompare);
-    for (i=0; i<(int)NumberOfWayPoints; i++){
+    for (i = 0; i < NumberOfWayPoints; i++){
       if (!(WayPointSelectInfo[i].Type & (TURNPOINT))){
         UpLimit = i;
         break;
@@ -274,7 +274,7 @@ static void UpdateList(void){
     SelectedWayPointFileIdx = TypeFilterIdx-4;
     qsort(WayPointSelectInfo, NumberOfWayPoints,
         sizeof(WayPointSelectInfo_t), WaypointFileIdxCompare);
-    for (i=0; i<(int)NumberOfWayPoints; i++){
+    for (i = 0; i < NumberOfWayPoints; i++){
       if (WayPointSelectInfo[i].FileIdx != SelectedWayPointFileIdx){
         UpLimit = i;
         break;
@@ -286,7 +286,7 @@ static void UpdateList(void){
     distancemode = true;
     qsort(WayPointSelectInfo, UpLimit,
         sizeof(WayPointSelectInfo_t), WaypointDistanceCompare);
-    for (i=0; i<(int)UpLimit; i++){
+    for (i = 0; i < UpLimit; i++){
       if (WayPointSelectInfo[i].Distance > DistanceFilter[DistanceFilterIdx]){
         UpLimit = i;
         break;
@@ -390,9 +390,10 @@ static void OnFilterName(DataField *Sender, DataField::DataAccessKind_t Mode){
       UpdateList();
     break;
     case DataField::daDec:
-      NameFilterIdx--;
-      if (NameFilterIdx < 0)
+      if (NameFilterIdx == 0)
         NameFilterIdx = sizeof(NameFilter)/sizeof(NameFilter[0])-1;
+      else
+        NameFilterIdx--;
       FilterMode(true);
       UpdateList();
     break;
@@ -425,9 +426,10 @@ static void OnFilterDistance(DataField *Sender, DataField::DataAccessKind_t Mode
       UpdateList();
     break;
     case DataField::daDec:
-      DistanceFilterIdx--;
-      if (DistanceFilterIdx < 0)
+      if (DistanceFilterIdx == 0)
         DistanceFilterIdx = sizeof(DistanceFilter)/sizeof(DistanceFilter[0])-1;
+      else
+        DistanceFilterIdx--;
       FilterMode(false);
       UpdateList();
     break;
@@ -483,9 +485,10 @@ static void OnFilterDirection(DataField *Sender, DataField::DataAccessKind_t Mod
       UpdateList();
     break;
     case DataField::daDec:
-      DirectionFilterIdx--;
-      if (DirectionFilterIdx < 0)
+      if (DirectionFilterIdx == 0)
         DirectionFilterIdx = sizeof(DirectionFilter)/sizeof(DirectionFilter[0])-1;
+      else
+        DirectionFilterIdx--;
       FilterMode(false);
       UpdateList();
     break;
@@ -515,9 +518,10 @@ static void OnFilterType(DataField *Sender, DataField::DataAccessKind_t Mode){
       UpdateList();
     break;
     case DataField::daDec:
-      TypeFilterIdx--;
-      if (TypeFilterIdx < 0)
+      if (TypeFilterIdx == 0)
         TypeFilterIdx = sizeof(TypeFilter)/sizeof(TypeFilter[0])-1;
+      else
+        TypeFilterIdx--;
       FilterMode(false);
       UpdateList();
     break;
@@ -644,7 +648,7 @@ static int OnTimerNotify(WindowControl * Sender) {
 static int FormKeyDown(WindowControl * Sender, WPARAM wParam, LPARAM lParam){
 
   WndProperty* wp;
-  int NewIndex = TypeFilterIdx;
+  unsigned NewIndex = TypeFilterIdx;
 
   (void)lParam;
   (void)Sender;
@@ -744,9 +748,9 @@ int dlgWayPointSelect(double lon, double lat, int type, int FilterNear){
 
   wf->SetTimerNotify(OnTimerNotify);
 
-  if ((wf->ShowModal() == mrOK) && (UpLimit - LowLimit > 0) &&
+  if ((wf->ShowModal() == mrOK) && (UpLimit > LowLimit) &&
       (ItemIndex >= 0)  // JMW fixed bug, was >0
-      && (ItemIndex < (UpLimit - LowLimit))) {
+      && ((unsigned)ItemIndex < (UpLimit - LowLimit))) {
     ItemIndex = WayPointSelectInfo[LowLimit + ItemIndex].Index;
   }else
     ItemIndex = -1;

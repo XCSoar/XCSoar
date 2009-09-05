@@ -42,7 +42,7 @@ Copyright_License {
 
 #include "Sizes.h"
 
-extern int POLARID;
+extern unsigned POLARID;
 extern double POLAR[POLARSIZE];
 extern double WEIGHTS[POLARSIZE];
 

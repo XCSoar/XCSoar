@@ -40,8 +40,8 @@ Copyright_License {
 
 #include <tchar.h>
 
-const TCHAR *GetWinPilotPolarInternalName(int i);
+const TCHAR *GetWinPilotPolarInternalName(unsigned i);
 
-bool ReadWinPilotPolarInternal(int i);
+bool ReadWinPilotPolarInternal(unsigned i);
 
 #endif

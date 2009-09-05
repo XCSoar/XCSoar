@@ -314,7 +314,8 @@ BOOL cai302Declare(PDeviceDescriptor_t d, Declaration_t *decl){
 
   d->Com->WriteString(TEXT("O 0\r"));  // 0=active pilot
   Sleep(1000); // some params come up 0 if we don't wait!
-  d->Com->Read(&cai302_OdataPilot, min(sizeof(cai302_OdataPilot),cai302_OdataNoArgs.PilotRecordSize+3));
+  d->Com->Read(&cai302_OdataPilot, min(sizeof(cai302_OdataPilot),
+                                       (size_t)cai302_OdataNoArgs.PilotRecordSize+3));
   if (!ExpectString(d, TEXT("up>"))){
     nDeclErrorCode = 1;
     return(FALSE);

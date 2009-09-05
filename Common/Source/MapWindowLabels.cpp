@@ -55,7 +55,7 @@ typedef struct{
 
 int _cdecl MapWaypointLabelListCompare(const void *elem1, const void *elem2 );
 MapWaypointLabel_t MapWaypointLabelList[50];
-int MapWaypointLabelListCount=0;
+unsigned MapWaypointLabelListCount = 0;
 
 
 //static int _cdecl MapWaypointLabelListCompare(const void *elem1, const void *elem2 ){
@@ -118,11 +118,9 @@ void MapWindow::MapWaypointLabelSortAndRender(Canvas &canvas) {
         sizeof(MapWaypointLabel_t),
         MapWaypointLabelListCompare);
 
-  int j;
-
   // now draw task/landable waypoints in order of range (closest last)
   // writing unconditionally
-  for (j=MapWaypointLabelListCount-1; j>=0; j--){
+  for (int j = MapWaypointLabelListCount - 1; j >= 0; j--){
     MapWaypointLabel_t *E = &MapWaypointLabelList[j];
     // draws if they are in task unconditionally,
     // otherwise, does comparison
@@ -135,8 +133,8 @@ void MapWindow::MapWaypointLabelSortAndRender(Canvas &canvas) {
 
   // now draw normal waypoints in order of range (furthest away last)
   // without writing over each other (or the task ones)
-  for (j=0; j<MapWaypointLabelListCount; j++) {
-    MapWaypointLabel_t *E = &MapWaypointLabelList[j];
+  for (unsigned i = 0; i < MapWaypointLabelListCount; i++) {
+    MapWaypointLabel_t *E = &MapWaypointLabelList[i];
     if (!E->inTask) {
       TextInBox(canvas, E->Name, E->Pos.x,
                 E->Pos.y, E->Mode, MapRect, &label_block);

@@ -2726,9 +2726,9 @@ void dlgConfigurationShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpPolarType"));
   if (wp) {
-    if (POLARID != wp->GetDataField()->GetAsInteger()) {
+    if (POLARID != (unsigned)wp->GetDataField()->GetAsInteger()) {
       POLARID = wp->GetDataField()->GetAsInteger();
-      SetToRegistry(szRegistryPolarID, POLARID);
+      SetToRegistry(szRegistryPolarID, (int &)POLARID);
       GlidePolar::UpdatePolar(false);
       POLARFILECHANGED = true;
       changed = true;

@@ -116,7 +116,6 @@ void VLA_XFR::set_databaud(int32 db) {
 // send command to VOLKSLOGGER
 //
 int16 VLA_XFR::sendcommand(byte cmd, byte param1, byte param2) {
-  int16       	i;
   byte	        c=255;
   const int16   d = 2;  //Verzögerungszeit 2ms
   byte 		cmdarray[8];
@@ -128,7 +127,7 @@ int16 VLA_XFR::sendcommand(byte cmd, byte param1, byte param2) {
   serial_empty_io_buffers();
 
   // Kommandointerpreter im VL zurücksetzen
-  for(i=0; i<6; i++) {
+  for (unsigned i =0 ; i < 6; i++) {
     serial_out(CAN);
     wait_ms(d);
   }
@@ -145,7 +144,7 @@ int16 VLA_XFR::sendcommand(byte cmd, byte param1, byte param2) {
   // Kommando verschicken ( ENQ,Daten,CRC )
   serial_out(ENQ);
   wait_ms(d);
-  for(i=0; i<sizeof(cmdarray); i++) {
+  for (unsigned i = 0; i < sizeof(cmdarray); i++) {
     crc16 = UpdateCRC(cmdarray[i],crc16);
     serial_out(cmdarray[i]);
     wait_ms(d);

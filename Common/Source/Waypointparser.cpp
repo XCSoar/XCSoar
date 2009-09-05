@@ -1084,7 +1084,7 @@ int FindMatchingWaypoint(WAYPOINT *waypoint) {
 
 // VENTA3
 void InitWayPointCalc() {
-  for (int i=0; i< NumberOfWayPoints; i++) {
+  for (unsigned i = 0; i < NumberOfWayPoints; i++) {
 	WayPointCalc[i].Preferred = false;
 	WayPointCalc[i].Distance=-1;
 	WayPointCalc[i].AltArriv=-1;

@@ -112,7 +112,7 @@ OnTextPaint(WindowControl *Sender, Canvas &canvas)
 
 
 static void UpdateCursor(void) {
-  if (lettercursor>=MAXENTRYLETTERS)
+  if (lettercursor >= (int)MAXENTRYLETTERS)
     lettercursor = 0;
   if (lettercursor<0)
     lettercursor = MAXENTRYLETTERS-1;
@@ -128,7 +128,7 @@ static void MoveCursor(void) {
   if (cursor>=_tcslen(edittext)) {
     edittext[cursor+1] = 0;
   }
-  for (lettercursor=0; lettercursor< MAXENTRYLETTERS; lettercursor++) {
+  for (lettercursor = 0; lettercursor < (int)MAXENTRYLETTERS; lettercursor++) {
     if (edittext[cursor]== EntryLetters[lettercursor])
       break;
   }

@@ -230,7 +230,7 @@ Canvas::text_clipped(int x, int y, unsigned width, const TCHAR *text)
   const SIZE size = text_size(text);
 
   RECT rc;
-  ::SetRect(&rc, x, y, x + min(width, size.cx), y + size.cy);
+  ::SetRect(&rc, x, y, x + min(width, (unsigned)size.cx), y + size.cy);
   text_clipped(x, y, rc, text);
 }
 

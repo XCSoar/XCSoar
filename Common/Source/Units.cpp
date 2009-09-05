@@ -676,10 +676,8 @@ bool Units::LoadUnitBitmap(HINSTANCE hInst){
 }
 
 bool Units::UnLoadUnitBitmap(void){
-
-  int i;
-
-  for (i=1; i<sizeof(UnitDescriptors)/sizeof(UnitDescriptors[0]); i++){
+  for (unsigned i = 1; i <
+         sizeof(UnitDescriptors) / sizeof(UnitDescriptors[0]); i++) {
     UnitDescriptors[unUndef].bitmap.reset();
   }
 

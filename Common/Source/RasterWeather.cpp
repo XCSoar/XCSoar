@@ -158,7 +158,7 @@ void RasterWeather::ScanAll(double lat, double lon) {
 
 
 void RasterWeather::Reload(double lat, double lon) {
-  static int last_weather_time = -1;
+  static unsigned last_weather_time;
   bool found = false;
   bool now = false;
 
@@ -169,8 +169,8 @@ void RasterWeather::Reload(double lat, double lon) {
   Lock();
   if (_weather_time== 0) {
     // "Now" time, so find time in half hours
-    int dsecs = (int)TimeLocal((long)XCSoarInterface::Basic().Time);
-    int half_hours = (dsecs/1800) % 48;
+    unsigned dsecs = (int)TimeLocal((long)XCSoarInterface::Basic().Time);
+    unsigned half_hours = (dsecs/1800) % 48;
     _weather_time = max(_weather_time, half_hours);
     now = true;
   }

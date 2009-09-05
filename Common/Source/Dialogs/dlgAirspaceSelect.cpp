@@ -72,20 +72,20 @@ static WndListFrame *wAirspaceList=NULL;
 static WndOwnerDrawFrame *wAirspaceListEntry = NULL;
 
 static TCHAR NameFilter[] = TEXT("*ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_");
-static int NameFilterIdx=0;
+static unsigned NameFilterIdx=0;
 
 static double DistanceFilter[] = {0.0, 25.0, 50.0, 75.0, 100.0, 150.0,
                                   250.0, 500.0, 1000.0};
-static int DistanceFilterIdx=0;
+static unsigned DistanceFilterIdx=0;
 
 #define DirHDG -1
 
 static int DirectionFilter[] = {0, DirHDG, 360, 30, 60, 90, 120, 150,
                                 180, 210, 240, 270, 300, 330};
-static int DirectionFilterIdx=0;
+static unsigned DirectionFilterIdx=0;
 static int lastHeading=0;
 
-static int NumberOfAirspaces = 0;
+static unsigned NumberOfAirspaces = 0;
 
 static const TCHAR *TypeFilter[] = {TEXT("*"),
 				    TEXT("Other"),
@@ -104,10 +104,10 @@ static const TCHAR *TypeFilter[] = {TEXT("*"),
 				    TEXT("Class F"),
 };
 
-static int TypeFilterIdx=0;
+static unsigned TypeFilterIdx=0;
 
-static int UpLimit=0;
-static int LowLimit=0;
+static unsigned UpLimit=0;
+static unsigned LowLimit=0;
 
 static int ItemIndex = -1;
 
@@ -120,9 +120,9 @@ static void OnAirspaceListEnter(WindowControl * Sender,
 
   if (ItemIndex != -1) {
 
-    if ((UpLimit-LowLimit>0)
+    if (UpLimit > LowLimit
         && (ItemIndex >= 0)  // JMW fixed bug, was >0
-        && (ItemIndex < (UpLimit - LowLimit))) {
+        && ((unsigned)ItemIndex < (UpLimit - LowLimit))) {
 
       int index_circle = AirspaceSelectInfo[LowLimit+ItemIndex].Index_Circle;
       int index_area = AirspaceSelectInfo[LowLimit+ItemIndex].Index_Area;
@@ -186,7 +186,7 @@ static int _cdecl AirspaceDistanceCompare(const void *elem1, const void *elem2 )
 }
 
 static int _cdecl AirspaceTypeCompare(const void *elem1, const void *elem2 ){
-  if (((AirspaceSelectInfo_t *)elem1)->Type == TypeFilterIdx-1)
+  if (((AirspaceSelectInfo_t *)elem1)->Type == (int)TypeFilterIdx - 1)
     return (-1);
   return (+1);
 }
@@ -240,10 +240,10 @@ static void PrepareData(void){
   AirspaceSelectInfo = (AirspaceSelectInfo_t*)
     malloc(sizeof(AirspaceSelectInfo_t) * NumberOfAirspaces);
 
-  int index=0;
-  int i;
+  unsigned index=0;
+  unsigned i;
 
-  for (i=0; i<(int)NumberOfAirspaceCircles; i++){
+  for (i = 0; i < NumberOfAirspaceCircles; i++) {
     AirspaceSelectInfo[index].Index_Circle = i;
     AirspaceSelectInfo[index].Index_Area = -1;
 
@@ -271,7 +271,7 @@ static void PrepareData(void){
     index++;
   }
 
-  for (i=0; i<(int)NumberOfAirspaceAreas; i++){
+  for (i = 0; i < NumberOfAirspaceAreas; i++) {
     MapWindow &map_window = XCSoarInterface::main_window.map;
 
     AirspaceSelectInfo[index].Index_Circle = -1;
@@ -306,7 +306,7 @@ static void PrepareData(void){
 static void UpdateList(void){
 
 //  TCHAR sTmp[128];
-  int i;
+  unsigned i;
   bool distancemode = false;
 
   ItemIndex = 0;
@@ -318,8 +318,8 @@ static void UpdateList(void){
 
     qsort(AirspaceSelectInfo, NumberOfAirspaces,
         sizeof(AirspaceSelectInfo_t), AirspaceTypeCompare);
-    for (i=0; i<(int)NumberOfAirspaces; i++){
-      if (!(AirspaceSelectInfo[i].Type == TypeFilterIdx-1)){
+    for (i = 0; i < NumberOfAirspaces; i++) {
+      if (!(AirspaceSelectInfo[i].Type == (int)TypeFilterIdx - 1)){
         UpLimit = i;
         break;
       }
@@ -330,7 +330,7 @@ static void UpdateList(void){
     distancemode = true;
     qsort(AirspaceSelectInfo, UpLimit,
         sizeof(AirspaceSelectInfo_t), AirspaceDistanceCompare);
-    for (i=0; i<(int)UpLimit; i++){
+    for (i = 0; i < UpLimit; i++){
       if (AirspaceSelectInfo[i].Distance > DistanceFilter[DistanceFilterIdx]){
         UpLimit = i;
         break;
@@ -435,9 +435,10 @@ static void OnFilterName(DataField *Sender, DataField::DataAccessKind_t Mode){
       UpdateList();
     break;
     case DataField::daDec:
-      NameFilterIdx--;
-      if (NameFilterIdx < 0)
+      if (NameFilterIdx == 0)
         NameFilterIdx = sizeof(NameFilter)/sizeof(NameFilter[0])-1;
+      else
+        NameFilterIdx--;
       FilterMode(true);
       UpdateList();
     break;
@@ -471,9 +472,10 @@ static void OnFilterDistance(DataField *Sender,
       UpdateList();
     break;
     case DataField::daDec:
-      DistanceFilterIdx--;
-      if (DistanceFilterIdx < 0)
+      if (DistanceFilterIdx == 0)
         DistanceFilterIdx = sizeof(DistanceFilter)/sizeof(DistanceFilter[0])-1;
+      else
+        DistanceFilterIdx--;
       FilterMode(false);
       UpdateList();
     break;
@@ -530,9 +532,10 @@ static void OnFilterDirection(DataField *Sender,
       UpdateList();
     break;
     case DataField::daDec:
-      DirectionFilterIdx--;
-      if (DirectionFilterIdx < 0)
+      if (DirectionFilterIdx == 0)
         DirectionFilterIdx = sizeof(DirectionFilter)/sizeof(DirectionFilter[0])-1;
+      else
+        DirectionFilterIdx--;
       FilterMode(false);
       UpdateList();
     break;
@@ -563,9 +566,10 @@ static void OnFilterType(DataField *Sender,
       UpdateList();
     break;
     case DataField::daDec:
-      TypeFilterIdx--;
-      if (TypeFilterIdx < 0)
+      if (TypeFilterIdx == 0)
         TypeFilterIdx = sizeof(TypeFilter)/sizeof(TypeFilter[0])-1;
+      else
+        TypeFilterIdx--;
       FilterMode(false);
       UpdateList();
     break;
@@ -732,7 +736,7 @@ static int OnTimerNotify(WindowControl * Sender) {
 static int FormKeyDown(WindowControl * Sender, WPARAM wParam, LPARAM lParam){
 
   WndProperty* wp;
-  int NewIndex = TypeFilterIdx;
+  unsigned NewIndex = TypeFilterIdx;
 
   (void)lParam;
   (void)Sender;
