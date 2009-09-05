@@ -1413,9 +1413,11 @@ static bool LoadRegistryFromFile_inner(const TCHAR *szFile, bool wide=true)
     if (wide) {
 #endif
       while (_fgetts(winval, nMaxValueValueSize, fp)) {
+#ifdef _UNICODE
         if (winval[0] > 255) { // not reading corectly, probably narrow file.
           break;
         }
+#endif /* _UNICODE */
         if (_stscanf(winval, TEXT("%[^#=\r\n ]=\"%[^\r\n\"]\"[\r\n]"), wname, wvalue) == 2) {
 	  if (_tcslen(wname)>0) {
 	    SetRegistryString(wname, wvalue);
