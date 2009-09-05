@@ -174,7 +174,7 @@ GlideComputer::ValidStartSpeed(const DWORD Margin) const
   return GlideComputerTask::ValidStartSpeed(Margin);
 }
 
-bool
+void
 GlideComputer::IterateEffectiveMacCready()
 {
 

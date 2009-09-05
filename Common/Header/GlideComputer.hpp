@@ -226,7 +226,7 @@ public:
   virtual bool ProcessVario();
   virtual const bool InsideStartHeight(const DWORD Margin=0) const;
   virtual const bool ValidStartSpeed(const DWORD Margin=0) const;
-  virtual bool IterateEffectiveMacCready();
+  virtual void IterateEffectiveMacCready();
   virtual void ResetEnter() {
     GlideComputerTask::ResetEnter();
   }
