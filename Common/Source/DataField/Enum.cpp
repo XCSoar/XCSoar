@@ -51,7 +51,7 @@ DataFieldEnum::~DataFieldEnum()
 }
 
 int DataFieldEnum::GetAsInteger(void){
-  if ((mValue>=0) && (mValue<nEnums)) {
+  if (mValue <nEnums) {
     return mEntries[mValue].index;
   } else {
     return 0; // JMW shouldn't get here
@@ -69,7 +69,7 @@ void DataFieldEnum::addEnumText(const TCHAR *Text) {
 
 
 TCHAR *DataFieldEnum::GetAsString(void){
-  if ((mValue>=0) && (mValue<nEnums)) {
+  if (mValue < nEnums) {
     return(mEntries[mValue].mText);
   } else {
     return NULL;
