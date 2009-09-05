@@ -60,7 +60,6 @@ class InfoBox : public BufferWindow {
     int mY;
     int mWidth;
     int mHeight;
-    ContainerWindow &mParent;
     int  mBorderKind;
     Color mColorBack;
     Color mColorFore;
@@ -92,6 +91,11 @@ class InfoBox : public BufferWindow {
     FontHeightInfo_t *mpFontHeightValue;
     FontHeightInfo_t *mpFontHeightComment;
     bool   mHasFocus;
+
+    /** a timer which returns keyboard focus back to the map window
+        after a while */
+    unsigned focus_timer;
+
     RECT   recTitle;
     RECT   recValue;
     RECT   recComment;
@@ -134,7 +138,6 @@ class InfoBox : public BufferWindow {
     int SetBorderKind(int Value);
 
     PaintWindow &GetHandle(void);
-    ContainerWindow &GetParent(void);
 
     void SetColor(int Value);
     void SetColorBottom(int Value);
@@ -146,9 +149,13 @@ class InfoBox : public BufferWindow {
     Canvas &GetCanvas(void);
 
 protected:
+  virtual bool on_key_down(unsigned key_code);
   virtual bool on_mouse_down(int x, int y);
   virtual bool on_mouse_double(int x, int y);
   virtual void on_paint(Canvas &canvas);
+  virtual bool on_setfocus();
+  virtual bool on_killfocus();
+  virtual bool on_timer(unsigned id);
 };
 
 #endif

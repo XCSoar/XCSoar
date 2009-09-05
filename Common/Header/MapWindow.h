@@ -251,6 +251,7 @@ class MapWindow
   virtual bool on_mouse_up(int x, int y);
   virtual bool on_key_down(unsigned key_code);
   virtual void on_paint(Canvas& canvas);
+  virtual bool on_setfocus();
  private:
   void RenderStart(Canvas &canvas, const RECT rc);
   void RenderBackground(Canvas &canvas, const RECT rc);

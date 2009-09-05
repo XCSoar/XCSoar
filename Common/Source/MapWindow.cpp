@@ -480,6 +480,8 @@ bool MapWindow::on_mouse_down(int x, int y)
   mouse_down_clock.update();
   if (ignorenext) return true;
 
+  set_focus();
+
   // TODO VNT move Screen2LonLat in LBUTTONUP after making sure we
   // really need Xstart and Ystart so we save precious
   // milliseconds waiting for BUTTONUP GetTickCount
@@ -530,8 +532,6 @@ bool MapWindow::on_mouse_up(int x, int y)
   mutexTaskData.Lock();
   my_target_pan = TargetPan;
   mutexTaskData.Unlock();
-
-  InfoBoxManager::Defocus();
 
   if (dwInterval == 0) {
 #ifdef DEBUG_VIRTUALKEYS
@@ -615,9 +615,6 @@ bool MapWindow::on_mouse_up(int x, int y)
 #endif
 
   if (!my_target_pan) {
-    if (InfoBoxManager::Defocus()) {
-      return false;
-    }
     if (VirtualKeys==(VirtualKeys_t)vkEnabled) {
       if(dwInterval < VKSHORTCLICK) {
 	//100ms is NOT enough for a short click since GetTickCount
@@ -671,6 +668,18 @@ bool MapWindow::on_key_down(unsigned key_code)
 
 void MapWindow::on_paint(Canvas& _canvas) {
   _canvas.copy(draw_canvas);
+}
+
+bool
+MapWindow::on_setfocus()
+{
+  MaskedPaintWindow::on_setfocus();
+
+  InputEvents::setMode(isPan() && !isTargetPan()
+                       ? TEXT("pan")
+                       : TEXT("default"));
+
+  return true;
 }
 
 //////////////////////////
