@@ -486,6 +486,9 @@ static void AirspaceWarningNotify(AirspaceWarningNotifyAction_t Action, Airspace
     return;
 
   switch (Action){
+  case asaNull:
+  case asaProcessBegin:
+    break;
 
     case asaItemAdded:
 
