@@ -71,6 +71,8 @@ Copyright_License {
 
 #include "XCSoar.h"
 
+#include <assert.h>
+
 // user setting
 bool EnableAuxiliaryInfo = false;
 int ActiveAlternate = -1;
@@ -386,6 +388,8 @@ void InfoBoxManager::Event_Select(int i) {
 ////////////////////////////////////
 
 int InfoBoxManager::getType(const int i, const int layer) {
+  assert(layer >= 0 && layer < 4);
+
   switch(layer) {
   case 0:
     return InfoType[i] & 0xff;         // climb
@@ -396,6 +400,8 @@ int InfoBoxManager::getType(const int i, const int layer) {
   case 3:
     return (InfoType[i] >> 24) & 0xff; // auxiliary
   };
+
+  return 0xdeadbeef; /* not reachable */
 }
 
 int InfoBoxManager::getTypeAll(const int i) {

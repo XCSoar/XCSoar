@@ -59,7 +59,7 @@ bool XCSoarInterface::InterfaceTimeoutZero(void) {
   mutexInterfaceTimeout.Lock();
   retval= (interface_timeout==0);
   mutexInterfaceTimeout.Unlock();
-  retval;
+  return retval;
 }
 
 void XCSoarInterface::InterfaceTimeoutReset(void) {

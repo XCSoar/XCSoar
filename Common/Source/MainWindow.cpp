@@ -136,6 +136,8 @@ LRESULT MainWindow::on_colour(HDC hdc, int wdata)
     SetTextColor(hdc, MapGfx.ColorMidGrey);
     return (LRESULT)MapGfx.buttonBrush.native();
   }
+
+  return 0;
 }
 
 bool MainWindow::on_timer(void)

@@ -186,6 +186,7 @@ Window::on_key_up(unsigned key_code)
 bool
 Window::on_command(HWND hWnd, unsigned id, unsigned code)
 {
+  return false;
 }
 
 LRESULT

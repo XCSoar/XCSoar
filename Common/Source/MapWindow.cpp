@@ -680,6 +680,7 @@ DWORD MapWindow::DrawThread (LPVOID lpvoid)
 {
   MapWindow *mw = (MapWindow *)lpvoid;
   mw->_DrawThread();
+  return 0;
 }
 
 
