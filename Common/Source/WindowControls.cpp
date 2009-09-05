@@ -891,11 +891,6 @@ WndForm::SetTitleFont(const Font &font)
 
 }
 
-void WndForm::SetToForeground(void)
-{
-  bring_to_top();
-}
-
 int WndForm::ShowModal(void){
   return ShowModal(false);
 }
@@ -917,7 +912,7 @@ int WndForm::ShowModal(bool bEnableMap) {
 
   SetVisible(true);
 
-  SetToForeground();
+  bring_to_top();
 
   mModalResult = 0;
 
@@ -1310,7 +1305,7 @@ void WndForm::Show(void){
 
   WindowControl::Show();
 
-  SetToForeground();
+  bring_to_top();
 
 //  SetFocus(GetTopWindow(GetHandle()));
 

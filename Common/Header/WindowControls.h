@@ -454,8 +454,6 @@ class WndForm:public WindowControl{
 
     DWORD enterTime;
 
-    void SetToForeground(void);
-
     int GetModalResult(void){return(mModalResult);};
     int SetModalResult(int Value){mModalResult = Value;return(Value);};
 
