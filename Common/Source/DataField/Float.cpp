@@ -73,12 +73,13 @@ double DataFieldFloat::SetMin(double Value){
   double res = mMin;
   mMin = Value;
   return(res);
-};
+}
+
 double DataFieldFloat::SetMax(double Value){
   double res = mMax;
   mMax = Value;
   return(res);
-};
+}
 
 bool DataFieldFloat::SetAsBoolean(bool Value){
   bool res = GetAsBoolean();

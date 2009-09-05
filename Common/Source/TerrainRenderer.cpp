@@ -759,7 +759,7 @@ void TerrainRenderer::Slope(const int sx, const int sy, const int sz) {
       }
     }
   }
-};
+}
 
 void TerrainRenderer::ColorTable() {
   static const COLORRAMP *lastColorRamp = NULL;

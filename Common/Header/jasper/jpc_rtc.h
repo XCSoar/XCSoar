@@ -18,7 +18,7 @@ extern "C" {
   void jas_rtc_stepprogress(void);
 
 #ifdef __cplusplus
-};
+}
 #endif
 
 #endif

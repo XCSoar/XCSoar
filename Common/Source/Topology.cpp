@@ -357,7 +357,7 @@ TopologyLabel::TopologyLabel(const char* shpname, const Color thecolor,
   //sjt 02nov05 - enabled label fields
   setField(max(0,field1));
   // JMW this is causing XCSoar to crash on my system!
-};
+}
 
 TopologyLabel::~TopologyLabel()
 {

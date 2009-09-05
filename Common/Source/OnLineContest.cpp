@@ -88,7 +88,7 @@ OLCOptimizer::OLCOptimizer() {
 OLCOptimizer::~OLCOptimizer() {
   Clear();
   ResetFlight();
-};
+}
 
 
 void OLCOptimizer::ResetFlight() {
@@ -461,7 +461,7 @@ bool OLCOptimizer::addPoint(double lon, double lat, double alt,
   // maybe make start above safety arrival height?
   //
   // also detect task finish here?
-};
+}
 
 
 int OLCOptimizer::getN() {

@@ -61,7 +61,7 @@ void ThermalLocator_Point::Drift(double t_0,
   xiw = iround(x*SFACT*iweight);
   yiw = iround(y*SFACT*iweight);
 
-};
+}
 
 
 ThermalLocator::ThermalLocator() {

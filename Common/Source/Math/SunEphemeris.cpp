@@ -246,5 +246,5 @@ double DoSunEphemeris(double lon, double lat) {
 		     XCSoarInterface::Calculated());
   return (double)mysun.settm;
 
-};
+}
 

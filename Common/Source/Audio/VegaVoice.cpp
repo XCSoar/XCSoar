@@ -469,7 +469,7 @@ VegaVoiceMessage::Update(const NMEA_INFO *Basic,
     break;
   };
   return false;
-};
+}
 
 
 int VegaVoiceMessage::id_active = -1;
@@ -584,6 +584,6 @@ void VegaVoice::MessageSpoken(int id_this, double time) {
     message[id_this].MessageSpoken(time);
   }
   UnLock();
-};
+}
 
 

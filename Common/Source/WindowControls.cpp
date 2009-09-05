@@ -308,7 +308,7 @@ WindowControl *WindowControl::GetCanFocus(void){
     }
   }
   return(NULL);
-};
+}
 
 void WindowControl::AddClient(WindowControl *Client){
   mClients[mClientCount] = Client;
@@ -598,7 +598,7 @@ int WindowControl::OnHelp() {
       }
     }
 #endif
-};
+}
 
 bool
 WindowControl::on_close(void)
@@ -814,7 +814,7 @@ WndForm::WndForm(ContainerWindow *Parent,
   if (Caption != NULL)
     _tcscpy(mCaption, Caption);
 
-};
+}
 
 WndForm::~WndForm(void){
   Destroy();
@@ -846,7 +846,7 @@ WndForm::GetClientAreaWindow(void)
     return *mClientWindow;
   else
     return *this;
-};
+}
 
 
 void WndForm::AddClient(WindowControl *Client){      // add client window
@@ -872,7 +872,7 @@ WndForm::on_command(HWND hWnd, unsigned id, unsigned code)
    }
    return(1);
 
-};
+}
 
 const Font *
 WndForm::SetTitleFont(const Font &font)
@@ -1338,7 +1338,7 @@ WndButton::WndButton(WindowControl *Parent, const TCHAR *Name, const TCHAR *Capt
 
   mLastDrawTextHeight = -1;
 
-};
+}
 
 void WndButton::Destroy(void){
 
@@ -1371,7 +1371,7 @@ WndButton::on_mouse_up(int x, int y)
   }
 
   return true;
-};
+}
 
 
 bool
@@ -1439,7 +1439,7 @@ WndButton::on_mouse_down(int x, int y)
   }
   SetCapture(GetHandle());
   return true;
-};
+}
 
 bool
 WndButton::on_mouse_double(int x, int y)
@@ -1450,7 +1450,7 @@ WndButton::on_mouse_double(int x, int y)
   update();
   SetCapture(GetHandle());
   return true;
-};
+}
 
 
 void
@@ -1690,7 +1690,7 @@ WndProperty::WndProperty(WindowControl *Parent,
   mDownDown = false;
   mUpDown = false;
 
-};
+}
 
 
 WndProperty::~WndProperty(void){
@@ -1785,7 +1785,7 @@ int WndProperty::SetButtonSize(int Value){
     }
   }
   return(res);
-};
+}
 
 bool WndProperty::SetReadOnly(bool Value){
 
@@ -1867,7 +1867,7 @@ WndProperty::on_key_down(unsigned key_code)
   }
 
   return WindowControl::on_key_down(key_code);
-};
+}
 
 bool
 WndProperty::on_mouse_down(int x, int y)
@@ -1916,7 +1916,7 @@ WndProperty::on_mouse_down(int x, int y)
   }
 
   return true;
-};
+}
 
 bool
 WndProperty::on_mouse_double(int x, int y)
@@ -2247,7 +2247,7 @@ WndListFrame::WndListFrame(WindowControl *Owner, TCHAR *Name, int X, int Y,
   rcScrollBar.top=0;
   rcScrollBar.bottom=0;
 
-};
+}
 
 
 void WndListFrame::Destroy(void){

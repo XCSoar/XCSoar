@@ -1748,7 +1748,7 @@ LPTSTR XMLNode::createXMLString(int nFormat, int *pnSize)
 XMLNode::~XMLNode()
 {
     destroyCurrentBuffer(d);
-};
+}
 
 void XMLNode::destroyCurrentBuffer(XMLNodeData *d)
 {

@@ -159,7 +159,7 @@ CuSonde::updateMeasurements(const NMEA_INFO *Basic,
 
   last_level = level;
 
-};
+}
 
 
 void CuSonde::findThermalHeight(unsigned short level) {

@@ -107,7 +107,7 @@ bool MapWindow::SetTargetPan(bool do_pan, int target_point) {
   mutexTaskData.Unlock();
 
   return old_pan;
-};
+}
 
 
 bool MapWindow::TargetDragged(double *longitude, double *latitude) {

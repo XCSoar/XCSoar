@@ -798,7 +798,7 @@ FlarmDeclareSetGet(PDeviceDescriptor_t d, TCHAR *Buffer) {
   } else {
     return TRUE;
   }
-};
+}
 
 
 BOOL FlarmDeclare(PDeviceDescriptor_t d, Declaration_t *decl){

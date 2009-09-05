@@ -83,7 +83,7 @@ void OpenAirfieldDetails() {
   if (strlen(zfilename)>0) {
     zAirfieldDetails = zzip_fopen(zfilename,"rb");
   }
-};
+}
 
 
 void CloseAirfieldDetails() {
@@ -96,7 +96,7 @@ void CloseAirfieldDetails() {
 
   zzip_fclose(zAirfieldDetails);
   zAirfieldDetails = NULL;
-};
+}
 
 
 /*

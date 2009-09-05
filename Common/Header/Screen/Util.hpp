@@ -48,7 +48,7 @@ Copyright_License {
 class Canvas;
 
 enum {
-  MAXCLIPPOLYGON = 5000,
+  MAXCLIPPOLYGON = 5000
 };
 
 void ClipPolygon(Canvas &canvas, const POINT *m_ptin, unsigned int inLength,

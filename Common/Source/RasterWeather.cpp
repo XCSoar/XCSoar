@@ -135,7 +135,7 @@ bool RasterWeather::LoadItem(int item, const TCHAR* name) {
   }
   Unlock();
   return retval;
-};
+}
 
 
 void RasterWeather::ScanAll(double lat, double lon) {

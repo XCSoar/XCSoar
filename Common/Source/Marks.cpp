@@ -61,7 +61,7 @@ Marks::Marks(const char* name):topo_marks(name, Color(0xD0,0xD0,0xD0)) {
   topo_marks.scaleThreshold = 30.0;
   topo_marks.loadBitmap(IDB_MARK);
   Reset();
-};  
+}
 
 // TODO code: - This convert to non-unicode will not support all languages
 //		(some may use more complicated PATH names, containing Unicode)
