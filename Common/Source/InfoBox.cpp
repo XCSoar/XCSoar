@@ -66,9 +66,6 @@ static int Count=0;
 #define DEFAULTBORDERPENWIDTH IBLSCALE(1)
 #define SELECTORWIDTH         (DEFAULTBORDERPENWIDTH+IBLSCALE(4))
 
-
-void InitInfoBoxModule(void);
-
 InfoBox::InfoBox(ContainerWindow &parent, int X, int Y, int Width, int Height)
   :mParent(parent)
 {
@@ -79,8 +76,6 @@ InfoBox::InfoBox(ContainerWindow &parent, int X, int Y, int Width, int Height)
 
   mTitleChanged = true;
   mSmallerFont = false;
-
-  InitInfoBoxModule();
 
   color = 0;
   colorTop = 0;
@@ -722,14 +717,4 @@ InfoBox::on_paint(Canvas &canvas)
 {
   canvas.copy(buffer);
   PaintSelector(canvas);
-}
-
-void InitInfoBoxModule(void){
-
-  static bool InitDone = false;
-
-  if (InitDone)
-    return;
-
-  InitDone = true;
 }
