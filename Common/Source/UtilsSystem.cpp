@@ -446,7 +446,7 @@ bool SetModelName(DWORD Temp) {
  * example:  \sdmmc\   \SD CARD\
  * In case of double slash, it is assumed currently as a single "\" .
  */
-TCHAR * gmfpathname ()
+const TCHAR *gmfpathname ()
 {
   static TCHAR gmfpathname_buffer[MAXPATHBASENAME];
   TCHAR  *p;
@@ -470,14 +470,14 @@ TCHAR * gmfpathname ()
   }
   *++p = '\0';
 
-  return (TCHAR *) gmfpathname_buffer;
+  return gmfpathname_buffer;
 }
 
 /*
  * gmfbasename returns the filename of the current executed program, without leading path.
  * Example:  xcsoar.exe
  */
-TCHAR * gmfbasename ()
+const TCHAR *gmfbasename()
 {
   static TCHAR gmfbasename_buffer[MAXPATHBASENAME];
   TCHAR *p, *lp;
