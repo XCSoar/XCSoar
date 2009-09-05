@@ -531,14 +531,15 @@ static double CalculateAngle(const TCHAR *temp)
   Mins = (double)StrToDouble(Colon, &StopC);
   if (*StopC == ':') {
     Mins += ((double)_tcstol(++StopC, &Stop, 10)/60.0);
+    StopC = Stop;
   }
 
   Degrees += (Mins/60);
 
-  if((*Stop == 'N') || (*Stop == 'E'))
+  if((*StopC == 'N') || (*StopC == 'E'))
     {
     }
-  else if((*Stop == 'S') || (*Stop == 'W'))
+  else if((*StopC == 'S') || (*StopC == 'W'))
     {
       Degrees *= -1;
     }
