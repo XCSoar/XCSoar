@@ -673,6 +673,18 @@ void MapWindow::on_paint(Canvas& _canvas) {
   _canvas.copy(draw_canvas);
 }
 
+bool
+MapWindow::on_setfocus()
+{
+  MaskedPaintWindow::on_setfocus();
+
+  InputEvents::setMode(isPan() && !isTargetPan()
+                       ? TEXT("pan")
+                       : TEXT("default"));
+
+  return true;
+}
+
 //////////////////////////
 //
 
