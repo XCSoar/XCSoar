@@ -923,18 +923,6 @@ void InfoBoxManager::ProcessKey(int keycode) {
 
 }
 
-
-static int CurrentInfoType;
-
-void PopUpSelect(int Index)
-{
-  CurrentInfoType = InfoType[Index];
-  StoreType(Index, InfoType[Index]);
-  //  ShowWindow(hWndCB,SW_HIDE);
-  //  FullScreen();
-  XCSoarInterface::main_window.map.set_focus();
-}
-
 bool InfoBoxManager::Click(InfoBox &ib) {
   InfoBoxFocusTimeOut = 0;
 
