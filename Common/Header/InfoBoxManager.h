@@ -37,6 +37,8 @@ Copyright_License {
 #ifndef INFOBOX_MANAGER_H
 #define INFOBOX_MANAGER_H
 
+#include "Screen/BufferWindow.hpp"
+
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
@@ -48,6 +50,9 @@ extern const unsigned NUMSELECTSTRINGS;
 class InfoBox;
 
 class InfoBoxManager: public CommonInterface {
+  /** the window for displaying infoboxes full-screen */
+  static BufferWindow full_window;
+
  private:
   static void FocusSetMaxTimeOut(void);
   static void ResetInfoBoxes(void);

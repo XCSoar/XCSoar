@@ -72,6 +72,8 @@ Copyright_License {
 
 #include <assert.h>
 
+BufferWindow InfoBoxManager::full_window;
+
 // user setting
 bool EnableAuxiliaryInfo = false;
 int ActiveAlternate = -1;
@@ -310,9 +312,11 @@ const unsigned NUMSELECTSTRINGS = 74;
 // TODO locking
 void InfoBoxManager::Hide() {
   InfoBoxesHidden = true;
-  for (unsigned i = 0; i <= numInfoWindows; i++) {
+  for (unsigned i = 0; i < numInfoWindows; i++) {
     InfoBoxes[i]->SetVisible(false);
   }
+
+  full_window.hide();
 }
 
 
@@ -1051,11 +1055,17 @@ void InfoBoxManager::Paint(void) {
     InfoBoxes[i]->Paint();
 
   if (!InfoBoxLayout::fullscreen) {
-    InfoBoxes[numInfoWindows]->SetVisible(false);
+    full_window.hide();
+
     for (i=0; i<numInfoWindows; i++)
       InfoBoxes[i]->PaintFast();
   } else {
-    InfoBoxes[numInfoWindows]->SetVisible(true);
+    Canvas &canvas = full_window.get_canvas();
+
+    canvas.white_brush();
+    canvas.white_pen();
+    canvas.rectangle(0, 0, canvas.get_width(), canvas.get_height());
+
     for (i=0; i<numInfoWindows; i++) {
 
       // JMW TODO: make these calculated once only.
@@ -1092,10 +1102,12 @@ void InfoBoxManager::Paint(void) {
         y = (rh)*ry;
 
       }
-      InfoBoxes[i]->PaintInto(InfoBoxes[numInfoWindows]->GetCanvas(),
+      InfoBoxes[i]->PaintInto(canvas,
                               IBLSCALE(x), IBLSCALE(y), IBLSCALE(rw), IBLSCALE(rh));
     }
-    InfoBoxes[numInfoWindows]->PaintFast();
+
+    full_window.show();
+    full_window.commit_buffer();
   }
 }
 
@@ -1111,9 +1123,8 @@ RECT InfoBoxManager::Create(RECT rc) {
   sizex=rc.right-rc.left;
   sizey=rc.bottom-rc.top;
 
-  InfoBoxes[numInfoWindows] = new InfoBox(main_window, 
-					  xoff, yoff, sizex, sizey);
-  InfoBoxes[numInfoWindows]->SetBorderKind(0);
+  full_window.set(main_window, xoff, yoff, sizex, sizey,
+                  false, false, false);
 
   // create infobox windows
 
@@ -1148,9 +1159,12 @@ RECT InfoBoxManager::Create(RECT rc) {
 }
 
 void InfoBoxManager::Destroy(void){
-  for (unsigned i = 0; i <= numInfoWindows; i++){
+  for (unsigned i = 0; i < numInfoWindows; i++){
     delete (InfoBoxes[i]);
   }
+
+  full_window.reset();
+
   DestroyInfoBoxFormatters();
 }
 
