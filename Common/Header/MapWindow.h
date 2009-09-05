@@ -52,8 +52,7 @@ Copyright_License {
 class MapWindowBase {
  public:
   MapWindowBase():
-    hDrawThread(0),
-    dwDrawThreadID(0) {};
+    hDrawThread(NULL) {};
 
   void     CloseDrawingThread(void);
   void     SuspendDrawingThread(void);
@@ -62,7 +61,6 @@ class MapWindowBase {
   void     CreateDrawingThread(void);
   Mutex    mutexRun;
  protected:
-  DWORD    dwDrawThreadID;
   HANDLE   hDrawThread;
 };
 
