@@ -40,6 +40,7 @@ Copyright_License {
 #include "Protection.hpp"
 #include "Math/Earth.hpp"
 #include "UtilsSystem.hpp"
+#include "Math/Geometry.hpp"
 
 #if defined(_SIM_) && !defined(NDEBUG)
 #include "Device/Parser.h"
@@ -229,7 +230,16 @@ void
 DeviceBlackboard::SetTrackBearing(double val)
 {
   mutexFlightData.Lock();
-  SetBasic().TrackBearing = val;
+  SetBasic().TrackBearing = AngleLimit360(val);
+  mutexFlightData.Unlock();
+}
+
+void
+DeviceBlackboard::SetAltitude(double val)
+{
+  mutexFlightData.Lock();
+  SetBasic().Altitude = val;
+  SetBasic().BaroAltitude = val;
   mutexFlightData.Unlock();
 }
 

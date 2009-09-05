@@ -103,6 +103,7 @@ public:
   void SetNAVWarning(bool val);
   void SetTrackBearing(double val);
   void SetSpeed(double val);
+  void SetAltitude(double alt);
 };
 
 

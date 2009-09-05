@@ -46,7 +46,6 @@ Copyright_License {
 #include "Dialogs.h"
 #include "Message.h"
 #include "Device/Port.h"
-#include "AATDistance.h"
 #include "Atmosphere.h"
 #include "Battery.h"
 #include "WayPoint.hpp"
@@ -55,10 +54,11 @@ Copyright_License {
 #include "McReady.h"
 #include "Interface.hpp"
 #include "Components.hpp"
-#include <stdlib.h>
 #include "GlideComputer.hpp"
+#include <stdlib.h>
 #include "FlarmCalculations.h"
 
+#define m_max(a,b)	(((a)>(b))?(a):(b))
 // JMW added key codes,
 // so -1 down
 //     1 up
@@ -66,13 +66,13 @@ Copyright_License {
 //
 // TODO: make a proper class
 
-void	CommonInterface::on_key_Airspeed(int UpDown)
+void
+CommonInterface::on_key_Airspeed(int UpDown)
 {
   if (UpDown==0) {
     SetSettingsComputer().EnableCalibration = 
       !SettingsComputer().EnableCalibration;
 
-    // XXX InputEvents - Is this an automatic or user thing - either way, needs moving
     if (SettingsComputer().EnableCalibration)
       Message::AddMessage(TEXT("Calibrate ON"));
     else
@@ -80,119 +80,96 @@ void	CommonInterface::on_key_Airspeed(int UpDown)
   }
 }
 
-void	CommonInterface::on_key_TeamCode(int UpDown)
+void	
+CommonInterface::on_key_TeamCode(int UpDown)
 {
   int tryCount = 0;
   int searchSlot = FindFlarmSlot(Basic(), TeamFlarmIdTarget);
   int newFlarmSlot = -1;
   
-  
-  while (tryCount < FLARM_MAX_TRAFFIC)
-    {
-      if (UpDown == 1)
-	{
-	  searchSlot++;
-	  if (searchSlot > FLARM_MAX_TRAFFIC - 1)
-	    {
-	      searchSlot = 0;
-	    }
-	}
-      else if (UpDown == -1)
-	{
-	  searchSlot--;
-	  if (searchSlot < 0)
-	    {
-	      searchSlot = FLARM_MAX_TRAFFIC - 1;
-	    }
-	}
-      
-      if (Basic().FLARM_Traffic[searchSlot].ID != 0)
-	{
-	  newFlarmSlot = searchSlot;
-	  break; // a new flarmSlot with a valid flarm traffic record was found !
-	}
-      tryCount++;
+  while (tryCount < FLARM_MAX_TRAFFIC) {
+    if (UpDown == 1) {
+      searchSlot++;
+      if (searchSlot > FLARM_MAX_TRAFFIC - 1) {
+	searchSlot = 0;
+      }
+    } else if (UpDown == -1) {
+      searchSlot--;
+      if (searchSlot < 0) {
+	searchSlot = FLARM_MAX_TRAFFIC - 1;
+      }
     }
+      
+    if (Basic().FLARM_Traffic[searchSlot].ID != 0) {
+      newFlarmSlot = searchSlot;
+      break; // a new flarmSlot with a valid flarm traffic record was found !
+    }
+    tryCount++;
+  }
 
-  if (newFlarmSlot != -1)
-    {
-      TeamFlarmIdTarget = Basic().FLARM_Traffic[newFlarmSlot].ID;
+  if (newFlarmSlot != -1) {
+    TeamFlarmIdTarget = Basic().FLARM_Traffic[newFlarmSlot].ID;
       
-      if (_tcslen(Basic().FLARM_Traffic[newFlarmSlot].Name) != 0)
-	{
-	  // copy the 3 first chars from the name to TeamFlarmCNTarget
-	  for (int z = 0; z < 3; z++)
-	    {
-	      if (Basic().FLARM_Traffic[newFlarmSlot].Name[z] != 0)
-		{
-		  SetSettingsComputer().TeamFlarmCNTarget[z] = Basic().FLARM_Traffic[newFlarmSlot].Name[z];
-		}
-	      else
-		{
-		  SetSettingsComputer().TeamFlarmCNTarget[z] = 32; // add space char
-		}
-	    }
-	  SetSettingsComputer().TeamFlarmCNTarget[3] = 0;
+    if (_tcslen(Basic().FLARM_Traffic[newFlarmSlot].Name) != 0) { 
+      // copy the 3 first chars from the name to TeamFlarmCNTarget
+      for (int z = 0; z < 3; z++) {
+	if (Basic().FLARM_Traffic[newFlarmSlot].Name[z] != 0) {
+	  SetSettingsComputer().TeamFlarmCNTarget[z] = 
+	    Basic().FLARM_Traffic[newFlarmSlot].Name[z];
+	} else {
+	  SetSettingsComputer().TeamFlarmCNTarget[z] = 32; // add space char
 	}
-      else
-	{
-	  SetSettingsComputer().TeamFlarmCNTarget[0] = 0;
-	}
-    }
-  else
-    {
-      // no flarm traffic to select!
-      TeamFlarmIdTarget = 0;
+      }
+      SetSettingsComputer().TeamFlarmCNTarget[3] = 0;
+    } else {
       SetSettingsComputer().TeamFlarmCNTarget[0] = 0;
-      return;
     }
+  } else {
+    // no flarm traffic to select!
+    TeamFlarmIdTarget = 0;
+    SetSettingsComputer().TeamFlarmCNTarget[0] = 0;
+    return;
+  }
 }
 
-void	CommonInterface::on_key_Altitude(int UpDown)
+void	
+CommonInterface::on_key_Altitude(int UpDown)
 {
-  /* JMW illegal
-	#ifdef _SIM_
-	if(UpDown==1) {
-	  Basic().Altitude += (100/ALTITUDEMODIFY);
-	}	else if (UpDown==-1)
-	  {
-	    Basic().Altitude -= (100/ALTITUDEMODIFY);
-	    if(Basic().Altitude < 0)
-	      Basic().Altitude = 0;
-	  } else if (UpDown==-2) {
-	  on_key_Direction(-1);
-	} else if (UpDown==2) {
-	  on_key_Direction(1);
-	}
+#ifdef _SIM_
+  if(UpDown==1) {
+    device_blackboard.SetAltitude(Basic().Altitude+100/ALTITUDEMODIFY);
+  } else if (UpDown==-1) {
+    device_blackboard.SetAltitude(m_max(0,Basic().Altitude+100/ALTITUDEMODIFY));
+  } else if (UpDown==-2) {
+    on_key_Direction(-1);
+  } else if (UpDown==2) {
+    on_key_Direction(1);
+  }
 #endif
-  */
-	return;
+  return;
 }
 
 // VENTA3 QFE
-void	CommonInterface::on_key_QFEAltitude(int UpDown)
+void	
+CommonInterface::on_key_QFEAltitude(int UpDown)
 {
-	short step;
-	if ( ( Basic().Altitude - QFEAltitudeOffset ) <10 ) step=1; else step=10;
-	if(UpDown==1) {
-	   QFEAltitudeOffset -= (step/ALTITUDEMODIFY);
-	}	else if (UpDown==-1)
-	  {
-	    QFEAltitudeOffset += (step/ALTITUDEMODIFY);
-/*
-	    if(QFEAltitudeOffset < 0)
-	      QFEAltitudeOffset = 0;
-*/
-	  } else if (UpDown==-2) {
-	  on_key_Direction(-1);
-	} else if (UpDown==2) {
-	  on_key_Direction(1);
-	}
-	return;
+  short step;
+  if ( ( Basic().Altitude - QFEAltitudeOffset ) <10 ) step=1; else step=10;
+  if(UpDown==1) {
+    QFEAltitudeOffset -= (step/ALTITUDEMODIFY);
+  } else if (UpDown==-1) {
+    QFEAltitudeOffset += (step/ALTITUDEMODIFY);
+  } else if (UpDown==-2) {
+    on_key_Direction(-1);
+  } else if (UpDown==2) {
+    on_key_Direction(1);
+  }
+  return;
 }
 
 // VENTA3 Alternates processing updown
-void CommonInterface::on_key_Alternate1(int UpDown)
+void 
+CommonInterface::on_key_Alternate1(int UpDown)
 {
    if (UpDown==0) {
      if ( Alternate1 <0 ) return;
@@ -202,7 +179,9 @@ void CommonInterface::on_key_Alternate1(int UpDown)
      mutexTaskData.Unlock();
   }
 }
-void CommonInterface::on_key_Alternate2(int UpDown)
+
+void 
+CommonInterface::on_key_Alternate2(int UpDown)
 {
    if (UpDown==0) {
      if ( Alternate2 <0 ) return;
@@ -212,7 +191,9 @@ void CommonInterface::on_key_Alternate2(int UpDown)
      mutexTaskData.Unlock();
   }
 }
-void CommonInterface::on_key_BestAlternate(int UpDown)
+
+void 
+CommonInterface::on_key_BestAlternate(int UpDown)
 {
    if (UpDown==0) {
      if ( BestAlternate <0 ) return;
@@ -223,29 +204,26 @@ void CommonInterface::on_key_BestAlternate(int UpDown)
   }
 }
 
-void	CommonInterface::on_key_Speed(int UpDown)
+void	
+CommonInterface::on_key_Speed(int UpDown)
 {
-	#ifdef _SIM_
-  /* JMW illegal
-		if(UpDown==1)
-			Basic().Speed += (10/SPEEDMODIFY);
-		else if (UpDown==-1)
-		{
-			Basic().Speed -= (10/SPEEDMODIFY);
-			if(Basic().Speed < 0)
-				Basic().Speed = 0;
-		} else if (UpDown==-2) {
-			on_key_Direction(-1);
-		} else if (UpDown==2) {
-			on_key_Direction(1);
-		}
-  */
-	#endif
-	return;
+#ifdef _SIM_
+  if(UpDown==1)
+    device_blackboard.SetSpeed(Basic().Speed+10/SPEEDMODIFY);
+  else if (UpDown==-1) {
+    device_blackboard.SetSpeed(m_max(0,Basic().Speed+10/SPEEDMODIFY));
+  } else if (UpDown==-2) {
+    on_key_Direction(-1);
+  } else if (UpDown==2) {
+    on_key_Direction(1);
+  }
+#endif
+  return;
 }
 
 
-void	CommonInterface::on_key_Accelerometer(int UpDown)
+void	
+CommonInterface::on_key_Accelerometer(int UpDown)
 {
   DWORD Temp;
   if (UpDown==0) {
@@ -258,7 +236,8 @@ void	CommonInterface::on_key_Accelerometer(int UpDown)
   }
 }
 
-void	CommonInterface::on_key_WindDirection(int UpDown)
+void	
+CommonInterface::on_key_WindDirection(int UpDown)
 {
 /* JMW ILLEGAL/incomplete
   if(UpDown==1)
@@ -310,51 +289,36 @@ void	CommonInterface::on_key_WindSpeed(int UpDown)
 	return;
 }
 
-void	CommonInterface::on_key_Direction(int UpDown)
+void	
+CommonInterface::on_key_Direction(int UpDown)
 {
-	#ifdef _SIM_
-  /* JMW illegal/incomplete
-		if(UpDown==1)
-		{
-			Basic().TrackBearing   += 5;
-			while (Basic().TrackBearing  >= 360)
-			{
-				Basic().TrackBearing  -= 360;
-			}
-		}
-		else if (UpDown==-1)
-		{
-			Basic().TrackBearing  -= 5;
-			while (Basic().TrackBearing  < 0)
-			{
-				Basic().TrackBearing  += 360;
-			}
-		}
-  */
-	#endif
-	return;
+#ifdef _SIM_
+  if(UpDown==1) {
+    device_blackboard.SetTrackBearing(Basic().TrackBearing+5);
+  } else if (UpDown==-1) {
+    device_blackboard.SetTrackBearing(Basic().TrackBearing-5);
+  }
+#endif
+  return;
 }
 
 
-void	CommonInterface::on_key_MacCready(int UpDown)
+void	
+CommonInterface::on_key_MacCready(int UpDown)
 {
   double MACCREADY = GlidePolar::GetMacCready();
   if(UpDown==1) {
-
     MACCREADY += (double)0.1;
-
     if (MACCREADY>5.0) { // JMW added sensible limit
       MACCREADY=5.0;
     }
     GlidePolar::SetMacCready(MACCREADY);
   }
-  else if(UpDown==-1)
-    {
-      MACCREADY -= (double)0.1;
-      if(MACCREADY < 0)
-	{
-	  MACCREADY = 0;
-	}
+  else if(UpDown==-1) {
+    MACCREADY -= (double)0.1;
+    if(MACCREADY < 0) {
+      MACCREADY = 0;
+    }
     GlidePolar::SetMacCready(MACCREADY);
   }
   /* JMW illegal
@@ -383,7 +347,8 @@ void	CommonInterface::on_key_MacCready(int UpDown)
 }
 
 
-void	CommonInterface::on_key_ForecastTemperature(int UpDown)
+void	
+CommonInterface::on_key_ForecastTemperature(int UpDown)
 {
   if (UpDown==1) {
     CuSonde::adjustForecastTemperature(0.5);
@@ -401,7 +366,8 @@ void	CommonInterface::on_key_ForecastTemperature(int UpDown)
 	2	Next waypoint with wrap around
 	-2	Previous waypoint with wrap around
 */
-void CommonInterface::on_key_Waypoint(int UpDown)
+void 
+CommonInterface::on_key_Waypoint(int UpDown)
 {
   mutexTaskData.Lock();
 
@@ -479,7 +445,8 @@ void CommonInterface::on_key_Waypoint(int UpDown)
 }
 
 
-void CommonInterface::on_key_None(int UpDown)
+void 
+CommonInterface::on_key_None(int UpDown)
 {
   (void)UpDown;
   return;
