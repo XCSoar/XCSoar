@@ -354,11 +354,12 @@ OnAirspaceListItemPaint(WindowControl *Sender, Canvas &canvas)
       else
         hBrushBk = &hBrushInsideBk;
     } else {
-      if ((pAS.hDistance < 2500) && (abs(pAS.vDistance) < 250))
+      if ((pAS.hDistance < 2500) && (abs(pAS.vDistance) < 250)) {
         if (pAS.Acknowledge >= 1)
           hBrushBk = &hBrushNearAckBk;
         else
           hBrushBk = &hBrushNearBk;
+      }
     }
 
 

@@ -863,7 +863,7 @@ void VLAPI_DATA::WPT::put(lpb p) {
   // Koordinaten zurückschreiben
   llat = labs((long)(lat * 60000.0));
   llon = labs((long)(lon * 60000.0));
-  p[6] = typ&0x7f | ((lon<0)?0x80:0);
+  p[6] = (typ&0x7f) | ((lon<0)?0x80:0);
   p[7] = (byte)((llat >> 16) | ((lat<0)?0x80:0));
   llat = llat & 0x0000ffff;
   p[8] = (byte) (llat >> 8);
