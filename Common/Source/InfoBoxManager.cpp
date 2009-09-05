@@ -88,7 +88,7 @@ static double LastFlipBoxTime = 0; // VENTA3
 // fwd declarations
 void DisplayInfoBox(void);
 
-int numInfoWindows = 8;
+unsigned numInfoWindows = 8;
 
 InfoBox *InfoBoxes[MAXINFOWINDOWS];
 
@@ -312,22 +312,20 @@ SCREEN_INFO Data_Options[] = {
 	  {ugNone,   TEXT("Experimental2"), TEXT("Exp2"), new InfoBoxFormatter(TEXT("%-2.1f")), NoProcessing, 8, 2},
 	};
 
-const int NUMSELECTSTRINGS = 74;
+const unsigned NUMSELECTSTRINGS = 74;
 
 // TODO locking
 void InfoBoxManager::Hide() {
-  int i;
   InfoBoxesHidden = true;
-  for (i=0; i<numInfoWindows+1; i++) {
+  for (unsigned i = 0; i <= numInfoWindows; i++) {
     InfoBoxes[i]->SetVisible(false);
   }
 }
 
 
 void InfoBoxManager::Show() {
-  int i;
   InfoBoxesHidden = false;
-  for (i=0; i<numInfoWindows; i++) {
+  for (unsigned i = 0; i < numInfoWindows; i++) {
     InfoBoxes[i]->SetVisible(true);
   }
   Defocus();
@@ -365,7 +363,7 @@ void InfoBoxManager::Event_Select(int i) {
     FocusOnWindow(InfoFocus,false);
   }
   InfoFocus+= i;
-  if (InfoFocus>=numInfoWindows) {
+  if (InfoFocus >= (int)numInfoWindows) {
     InfoFocus = -1; // deactivate if wrap around
   }
   if (InfoFocus<0) {
@@ -387,8 +385,9 @@ void InfoBoxManager::Event_Select(int i) {
 
 ////////////////////////////////////
 
-int InfoBoxManager::getType(const int i, const int layer) {
-  assert(layer >= 0 && layer < 4);
+int InfoBoxManager::getType(unsigned i, unsigned layer) {
+  assert(i < MAXINFOWINDOWS);
+  assert(layer < 4);
 
   switch(layer) {
   case 0:
@@ -404,11 +403,15 @@ int InfoBoxManager::getType(const int i, const int layer) {
   return 0xdeadbeef; /* not reachable */
 }
 
-int InfoBoxManager::getTypeAll(const int i) {
+int InfoBoxManager::getTypeAll(unsigned i) {
+  assert(i < MAXINFOWINDOWS);
+
   return InfoType[i];
 }
 
-void InfoBoxManager::setTypeAll(const int i, const int j) {
+void InfoBoxManager::setTypeAll(unsigned i, unsigned j) {
+  assert(i < MAXINFOWINDOWS);
+
   InfoType[i] = j;
   // TODO: check it's within range
 }
@@ -417,9 +420,8 @@ void InfoBoxManager::setTypeAll(const int i, const int j) {
 #define m_max(a,b)	(((a)>(b))?(a):(b))
 
 
-int InfoBoxManager::getType(const int i) {
-  int retval = 0;
-  if (i<0) return 0; // error
+int InfoBoxManager::getType(unsigned i) {
+  unsigned retval = 0;
 
   if (EnableAuxiliaryInfo) {
     retval = getType(i,3);
@@ -432,11 +434,14 @@ int InfoBoxManager::getType(const int i) {
       retval = getType(i,1); // cruise
     }
   }
-  return m_min(NUMSELECTSTRINGS-1, retval);
+  return m_min(NUMSELECTSTRINGS - 1, retval);
 }
 
 
-void InfoBoxManager::setType(const int i, const char j, const int layer) {
+void InfoBoxManager::setType(unsigned i, char j, unsigned layer)
+{
+  assert(i < MAXINFOWINDOWS);
+
   switch(layer) {
   case 0:
     InfoType[i] &= 0xffffff00;
@@ -457,9 +462,8 @@ void InfoBoxManager::setType(const int i, const char j, const int layer) {
   };
 }
 
-void InfoBoxManager::setType(const int i, const char j) {
-  if (i<0) return; // error
-
+void InfoBoxManager::setType(unsigned i, char j)
+{
   if (EnableAuxiliaryInfo) {
     setType(i, 3, j);
   } else {
@@ -499,9 +503,9 @@ void InfoBoxManager::Event_Change(int i) {
 ////////////////////
 
 
-void InfoBoxManager::FocusOnWindow(int i, bool selected) {
-  if (i<0)
-    return; // error
+void InfoBoxManager::FocusOnWindow(unsigned i, bool selected) {
+  assert(i < numInfoWindows);
+
   InfoBoxes[i]->SetFocus(selected);
   // todo defocus all other?
 }
@@ -512,7 +516,6 @@ void InfoBoxManager::DisplayInfoBox(void)
   if (InfoBoxesHidden)
     return;
 
-  int i;
   static int DisplayType[MAXINFOWINDOWS];
   static bool first=true;
   static int InfoFocusLast = -1;
@@ -537,7 +540,7 @@ void InfoBoxManager::DisplayInfoBox(void)
   }
   InfoFocusLast = InfoFocus;
 
-  for(i=0;i<numInfoWindows;i++) {
+  for (unsigned i = 0; i < numInfoWindows; i++) {
 
     // VENTA3
     // All calculations are made in a separate thread. Slow calculations should apply to
@@ -900,7 +903,7 @@ void InfoBoxManager::DisplayInfoBox(void)
 
 
 void InfoBoxManager::ProcessKey(int keycode) {
-  int i;
+  unsigned i;
 
   if (InfoFocus<0) return; // paranoid
 
@@ -909,7 +912,7 @@ void InfoBoxManager::ProcessKey(int keycode) {
   mutexNavBox.Lock(); 
   {
     i = getType(InfoFocus);
-    Data_Options[m_min(NUMSELECTSTRINGS-1,i)].Process(keycode);
+    Data_Options[m_min(NUMSELECTSTRINGS - 1, i)].Process(keycode);
   }
   mutexNavBox.Unlock();
 
@@ -935,14 +938,12 @@ void PopUpSelect(int Index)
 }
 
 bool InfoBoxManager::Click(HWND wmControl) {
-  int i;
-
   InfoBoxFocusTimeOut = 0;
 
-  for(i=0;i<numInfoWindows;i++) {
+  for(unsigned i = 0; i < numInfoWindows; i++) {
     if(wmControl == InfoBoxes[i]->GetHandle()) {
       InfoWindowActive = true;
-      if( i!= InfoFocus) {
+      if ((int)i != InfoFocus) {
 	FocusOnWindow(i,true);
         if (InfoFocus >= 0)
           FocusOnWindow(InfoFocus,false);
@@ -959,9 +960,8 @@ bool InfoBoxManager::Click(HWND wmControl) {
 
 
 void InfoBoxManager::DestroyInfoBoxFormatters() {
-  int i;
   //  CommandBar_Destroy(hWndCB);
-  for (i=0; i<NUMSELECTSTRINGS; i++) {
+  for (unsigned i = 0; i < NUMSELECTSTRINGS; i++) {
     delete Data_Options[i].Formatter;
   }
 }
@@ -1039,7 +1039,7 @@ void InfoBoxManager::ResetInfoBoxes(void) {
 #endif
 }
 
-TCHAR *InfoBoxManager::GetTypeDescription(int i) {
+TCHAR *InfoBoxManager::GetTypeDescription(unsigned i) {
   return Data_Options[i].Description;
 }
 
@@ -1052,8 +1052,8 @@ extern InfoBox *InfoBoxes[MAXINFOWINDOWS];
 
 
 void InfoBoxManager::Paint(void) {
-  int i;
-  for (i=0; i<numInfoWindows; i++)
+  unsigned i;
+  for (i = 0; i < numInfoWindows; i++)
     InfoBoxes[i]->Paint();
 
   if (!InfoBoxLayout::fullscreen) {
@@ -1107,7 +1107,6 @@ void InfoBoxManager::Paint(void) {
 
 
 RECT InfoBoxManager::Create(RECT rc) {
-  int i;
   int xoff, yoff, sizex, sizey;
 
   RECT retval = InfoBoxLayout::GetInfoBoxSizes(rc);
@@ -1124,7 +1123,7 @@ RECT InfoBoxManager::Create(RECT rc) {
 
   // create infobox windows
 
-  for(i=0;i<numInfoWindows;i++)
+  for (unsigned i = 0; i < numInfoWindows; i++)
     {
       InfoBoxLayout::GetInfoBoxPosition(i, rc, &xoff, &yoff, &sizex, &sizey);
 
@@ -1155,8 +1154,7 @@ RECT InfoBoxManager::Create(RECT rc) {
 }
 
 void InfoBoxManager::Destroy(void){
-  int i;
-  for(i=0; i<numInfoWindows+1; i++){
+  for (unsigned i = 0; i <= numInfoWindows; i++){
     delete (InfoBoxes[i]);
   }
   DestroyInfoBoxFormatters();

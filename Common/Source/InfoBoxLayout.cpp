@@ -80,7 +80,7 @@ InfoBox 0 (x,y,sx,sy)
 */
 
 
-int InfoBoxLayout::InfoBoxGeometry = 0;
+unsigned InfoBoxLayout::InfoBoxGeometry = 0;
 int InfoBoxLayout::ControlWidth;
 int InfoBoxLayout::ControlHeight;
 int InfoBoxLayout::TitleHeight;
@@ -96,19 +96,19 @@ bool InfoBoxLayout::landscape = false;
 bool InfoBoxLayout::square = false;
 bool InfoBoxLayout::fullscreen = false;
 
-void InfoBoxLayout::GetInfoBoxPosition(int i, RECT rc,
+void InfoBoxLayout::GetInfoBoxPosition(unsigned i, RECT rc,
 				       int *x, int *y,
-				       int *sizex, int *sizey) {
+                                       int *sizex, int *sizey) {
   TCHAR reggeompx[50];
   TCHAR reggeompy[50];
   TCHAR reggeomsx[50];
   TCHAR reggeomsy[50];
   DWORD Temp=0;
 
-  _stprintf(reggeompx, TEXT("InfoBoxPositionPosX%d"), i);
-  _stprintf(reggeompy, TEXT("InfoBoxPositionPosY%d"), i);
-  _stprintf(reggeomsx, TEXT("InfoBoxPositionSizeX%d"), i);
-  _stprintf(reggeomsy, TEXT("InfoBoxPositionSizeY%d"), i);
+  _stprintf(reggeompx, TEXT("InfoBoxPositionPosX%u"), i);
+  _stprintf(reggeompy, TEXT("InfoBoxPositionPosY%u"), i);
+  _stprintf(reggeomsx, TEXT("InfoBoxPositionSizeX%u"), i);
+  _stprintf(reggeomsy, TEXT("InfoBoxPositionSizeY%u"), i);
 
   GetFromRegistry(reggeompx,&Temp); *x = Temp;
   GetFromRegistry(reggeompy,&Temp); *y = Temp;
@@ -207,8 +207,8 @@ void InfoBoxLayout::GetInfoBoxPosition(int i, RECT rc,
 
     SetToRegistry(reggeompx,*x);
     SetToRegistry(reggeompy,*y);
-    SetToRegistry(reggeomsx,*sizex);
-    SetToRegistry(reggeomsy,*sizey);
+    SetToRegistry(reggeomsx, (int &)*sizex);
+    SetToRegistry(reggeomsy, (int &)*sizey);
 
   };
 }
@@ -289,7 +289,7 @@ void InfoBoxLayout::ScreenGeometry(RECT rc) {
     }
   }
 
-  SetToRegistry(szRegistryInfoBoxGeometry,InfoBoxGeometry);
+  SetToRegistry(szRegistryInfoBoxGeometry, (int &)InfoBoxGeometry);
 
   // JMW testing
   if (InfoBoxGeometry==6) {
@@ -328,8 +328,8 @@ RECT InfoBoxLayout::GetInfoBoxSizes(RECT rc) {
   case 0: // portrait
     // calculate control dimensions
     ControlWidth = 2*(rc.right - rc.left) / numInfoWindows;
-    ControlHeight = (int)((rc.bottom - rc.top) / CONTROLHEIGHTRATIO);
-    TitleHeight = (int)(ControlHeight/TITLEHEIGHTRATIO);
+    ControlHeight = (unsigned)((rc.bottom - rc.top) / CONTROLHEIGHTRATIO);
+    TitleHeight = (unsigned)(ControlHeight/TITLEHEIGHTRATIO);
 
     // calculate small map screen size
 
@@ -343,8 +343,8 @@ RECT InfoBoxLayout::GetInfoBoxSizes(RECT rc) {
     // calculate control dimensions
 
     ControlWidth = 2*(rc.right - rc.left) / numInfoWindows;
-    ControlHeight = (int)((rc.bottom - rc.top) / CONTROLHEIGHTRATIO);
-    TitleHeight = (int)(ControlHeight/TITLEHEIGHTRATIO);
+    ControlHeight = (unsigned)((rc.bottom - rc.top) / CONTROLHEIGHTRATIO);
+    TitleHeight = (unsigned)(ControlHeight/TITLEHEIGHTRATIO);
 
     // calculate small map screen size
 
@@ -358,8 +358,8 @@ RECT InfoBoxLayout::GetInfoBoxSizes(RECT rc) {
     // calculate control dimensions
 
     ControlWidth = 2*(rc.right - rc.left) / numInfoWindows;
-    ControlHeight = (int)((rc.bottom - rc.top) / CONTROLHEIGHTRATIO);
-    TitleHeight = (int)(ControlHeight/TITLEHEIGHTRATIO);
+    ControlHeight = (unsigned)((rc.bottom - rc.top) / CONTROLHEIGHTRATIO);
+    TitleHeight = (unsigned)(ControlHeight/TITLEHEIGHTRATIO);
 
     // calculate small map screen size
 
@@ -372,9 +372,9 @@ RECT InfoBoxLayout::GetInfoBoxSizes(RECT rc) {
   case 3: // not used
     // calculate control dimensions
 
-    ControlWidth = (int)((rc.right - rc.left) / CONTROLHEIGHTRATIO*1.3);
-    ControlHeight = (int)(2*(rc.bottom - rc.top) / numInfoWindows);
-    TitleHeight = (int)(ControlHeight/TITLEHEIGHTRATIO);
+    ControlWidth = (unsigned)((rc.right - rc.left) / CONTROLHEIGHTRATIO*1.3);
+    ControlHeight = (unsigned)(2*(rc.bottom - rc.top) / numInfoWindows);
+    TitleHeight = (unsigned)(ControlHeight/TITLEHEIGHTRATIO);
 
     // calculate small map screen size
 
@@ -387,9 +387,9 @@ RECT InfoBoxLayout::GetInfoBoxSizes(RECT rc) {
   case 4:
     // calculate control dimensions
 
-    ControlWidth = (int)((rc.right - rc.left) / CONTROLHEIGHTRATIO*1.3);
-    ControlHeight = (int)(2*(rc.bottom - rc.top) / numInfoWindows);
-    TitleHeight = (int)(ControlHeight/TITLEHEIGHTRATIO);
+    ControlWidth = (unsigned)((rc.right - rc.left) / CONTROLHEIGHTRATIO*1.3);
+    ControlHeight = (unsigned)(2*(rc.bottom - rc.top) / numInfoWindows);
+    TitleHeight = (unsigned)(ControlHeight/TITLEHEIGHTRATIO);
 
     // calculate small map screen size
 
@@ -402,9 +402,9 @@ RECT InfoBoxLayout::GetInfoBoxSizes(RECT rc) {
   case 5: // not used
     // calculate control dimensions
 
-    ControlWidth = (int)((rc.right - rc.left) / CONTROLHEIGHTRATIO*1.3);
-    ControlHeight = (int)(2*(rc.bottom - rc.top) / numInfoWindows);
-    TitleHeight = (int)(ControlHeight/TITLEHEIGHTRATIO);
+    ControlWidth = (unsigned)((rc.right - rc.left) / CONTROLHEIGHTRATIO*1.3);
+    ControlHeight = (unsigned)(2*(rc.bottom - rc.top) / numInfoWindows);
+    TitleHeight = (unsigned)(ControlHeight/TITLEHEIGHTRATIO);
 
     // calculate small map screen size
 
@@ -417,9 +417,9 @@ RECT InfoBoxLayout::GetInfoBoxSizes(RECT rc) {
   case 6: // landscape
     // calculate control dimensions
 
-    ControlHeight = (int)((rc.bottom - rc.top)/6);
-    ControlWidth=(int)(ControlHeight*1.44); // preserve relative shape
-    TitleHeight = (int)(ControlHeight/TITLEHEIGHTRATIO);
+    ControlHeight = (unsigned)((rc.bottom - rc.top)/6);
+    ControlWidth=(unsigned)(ControlHeight*1.44); // preserve relative shape
+    TitleHeight = (unsigned)(ControlHeight/TITLEHEIGHTRATIO);
 
     // calculate small map screen size
 
@@ -433,9 +433,9 @@ RECT InfoBoxLayout::GetInfoBoxSizes(RECT rc) {
   case 7: // square
     // calculate control dimensions
 
-    ControlWidth = (int)((rc.right - rc.left)*0.2);
-    ControlHeight = (int)((rc.bottom - rc.top)/5);
-    TitleHeight = (int)(ControlHeight/TITLEHEIGHTRATIO);
+    ControlWidth = (unsigned)((rc.right - rc.left)*0.2);
+    ControlHeight = (unsigned)((rc.bottom - rc.top)/5);
+    TitleHeight = (unsigned)(ControlHeight/TITLEHEIGHTRATIO);
 
     // calculate small map screen size
 

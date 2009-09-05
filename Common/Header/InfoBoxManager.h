@@ -40,8 +40,8 @@ Copyright_License {
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
-extern int  numInfoWindows;
-extern const int NUMSELECTSTRINGS;
+extern unsigned numInfoWindows;
+extern const unsigned NUMSELECTSTRINGS;
 
 #include "Interface.hpp"
 
@@ -49,9 +49,9 @@ class InfoBoxManager: public CommonInterface {
  private:
   static void FocusSetMaxTimeOut(void);
   static void ResetInfoBoxes(void);
-  static int  getType(const int i);
-  static void setType(const int i, const char j);
-  static void FocusOnWindow(int i, bool selected);
+  static int getType(unsigned i);
+  static void setType(unsigned i, char j);
+  static void FocusOnWindow(unsigned i, bool selected);
   static void DisplayInfoBox(void);
   static void InfoBoxDrawIfDirty();
   static void DestroyInfoBoxFormatters();
@@ -59,7 +59,7 @@ public:
   static void Event_Select(int i);
   static void Event_Change(int i);
 
-  static TCHAR *GetTypeDescription(int i);
+  static TCHAR *GetTypeDescription(unsigned i);
 
   static void ProcessKey(int keycode);
   static bool Click(HWND wmControl);
@@ -76,11 +76,11 @@ public:
   static void Show();
   static void Hide();
 
-  static int getType(const int i, const int layer);
-  static void setType(const int i, const char j, const int layer);
+  static int getType(unsigned i, unsigned layer);
+  static void setType(unsigned i, char j, unsigned layer);
   
-  static int getTypeAll(const int i);
-  static void setTypeAll(const int i, const int j);
+  static int getTypeAll(unsigned i);
+  static void setTypeAll(unsigned i, unsigned j);
 
   static bool IsFocus();
 };

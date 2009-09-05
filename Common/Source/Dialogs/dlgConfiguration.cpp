@@ -834,7 +834,7 @@ static void OnCopy(WindowControl *Sender) {
     return;
   }
 
-  for (int item=0; item<numInfoWindows; item++) {
+  for (unsigned item = 0; item < numInfoWindows; item++) {
     InfoBoxPropName(name, item, mode);
     WndProperty *wp;
     wp = (WndProperty*)wf->FindByName(name);
@@ -856,11 +856,12 @@ static void OnPaste(WindowControl *Sender) {
 		 gettext(TEXT("InfoBox paste")),
 		 MB_YESNO|MB_ICONQUESTION) == IDYES) {
 
-    for (int item=0; item<numInfoWindows; item++) {
+    for (unsigned item = 0; item < numInfoWindows; item++) {
       InfoBoxPropName(name, item, mode);
       WndProperty *wp;
       wp = (WndProperty*)wf->FindByName(name);
-      if (wp && (cpyInfoBox[item]>=0)&&(cpyInfoBox[item]<NUMSELECTSTRINGS)) {
+      if (wp && (cpyInfoBox[item] >=0 ) &&
+          ((unsigned)cpyInfoBox[item] < NUMSELECTSTRINGS)) {
 	wp->GetDataField()->Set(cpyInfoBox[item]);
 	wp->RefreshDisplay();
       }
@@ -1102,7 +1103,7 @@ static CallBackTableEntry_t CallBackTable[]={
 
 
 
-static void SetInfoBoxSelector(int item, int mode)
+static void SetInfoBoxSelector(unsigned item, int mode)
 {
   TCHAR name[80];
   InfoBoxPropName(name, item, mode);
@@ -1112,7 +1113,7 @@ static void SetInfoBoxSelector(int item, int mode)
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    for (int i=0; i<NUMSELECTSTRINGS; i++) {
+    for (unsigned i = 0; i < NUMSELECTSTRINGS; i++) {
       dfe->addEnumText(gettext(InfoBoxManager::GetTypeDescription(i)));
     }
     dfe->Sort(0);
@@ -1139,7 +1140,7 @@ static void SetInfoBoxSelector(int item, int mode)
 }
 
 
-static void GetInfoBoxSelector(int item, int mode)
+static void GetInfoBoxSelector(unsigned item, int mode)
 {
   TCHAR name[80];
   InfoBoxPropName(name, item, mode);
@@ -1283,15 +1284,13 @@ static void setVariables(void) {
 			     TEXT("19200"),TEXT("38400"),TEXT("57600"),TEXT("115200")};
 //  DWORD dwSpeed[] = {1200,2400,4800,9600,19200,38400,57600,115200};
 
-  int i;
-
   ReadPort1Settings(&dwPortIndex1,&dwSpeedIndex1);
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpComPort1"));
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    for (i=0; i<11; i++) {
+    for (unsigned i = 0; i < 11; i++) {
       dfe->addEnumText((COMMPort[i]));
     }
     dfe->Set(dwPortIndex1);
@@ -1302,7 +1301,7 @@ static void setVariables(void) {
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    for (i=0; i<8; i++) {
+    for (unsigned i = 0; i < 8; i++) {
       dfe->addEnumText((tSpeed[i]));
     }
     dfe->Set(dwSpeedIndex1);
@@ -1320,7 +1319,7 @@ static void setVariables(void) {
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    for (i=0; i<DeviceRegisterCount; i++) {
+    for (int i = 0; i < DeviceRegisterCount; i++) {
       devRegisterGetName(i, DeviceName);
       dfe->addEnumText((DeviceName));
 #ifndef _SIM_
@@ -1344,7 +1343,7 @@ static void setVariables(void) {
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    for (i=0; i<11; i++) {
+    for (unsigned i = 0; i < 11; i++) {
       dfe->addEnumText((COMMPort[i]));
     }
     dfe->Set(dwPortIndex2);
@@ -1355,7 +1354,7 @@ static void setVariables(void) {
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    for (i=0; i<8; i++) {
+    for (unsigned i = 0; i < 8; i++) {
       dfe->addEnumText((tSpeed[i]));
     }
     dfe->Set(dwSpeedIndex2);
@@ -1367,7 +1366,7 @@ static void setVariables(void) {
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    for (i=0; i<DeviceRegisterCount; i++) {
+    for (int i = 0; i < DeviceRegisterCount; i++) {
       devRegisterGetName(i, DeviceName);
       dfe->addEnumText((DeviceName));
 #ifndef _SIM_
@@ -1839,10 +1838,10 @@ static void setVariables(void) {
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    for (i=0; i<NUMPOLARS; i++) {
+    for (unsigned i = 0; i < NUMPOLARS; i++) {
       dfe->addEnumText(PolarLabels[i]);
     }
-    i=0;
+    unsigned i = 0;
     bool ok = true;
     while (ok) {
       const TCHAR *name;
@@ -2509,8 +2508,8 @@ static void setVariables(void) {
 
 
   ////
-  for (i=0; i<4; i++) {
-    for (int j=0; j<numInfoWindows; j++) {
+  for (unsigned i = 0; i < 4; i++) {
+    for (unsigned j=0; j<numInfoWindows; j++) {
       SetInfoBoxSelector(j, i);
     }
   }
@@ -3919,9 +3918,8 @@ void dlgConfigurationShowModal(void){
     WritePort2Settings(dwPortIndex2,dwSpeedIndex2);
   }
 
-  int i,j;
-  for (i=0; i<4; i++) {
-    for (j=0; j<numInfoWindows; j++) {
+  for (unsigned i = 0; i < 4; i++) {
+    for (unsigned j = 0; j < numInfoWindows; j++) {
       GetInfoBoxSelector(j, i);
     }
   }
