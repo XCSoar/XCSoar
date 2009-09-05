@@ -212,6 +212,8 @@ protected:
   virtual bool on_key_down(unsigned key_code);
   virtual bool on_key_up(unsigned key_code);
   virtual bool on_command(HWND hWnd, unsigned id, unsigned code);
+  virtual bool on_setfocus();
+  virtual bool on_killfocus();
 
   virtual LRESULT on_message(HWND hWnd, UINT message,
                              WPARAM wParam, LPARAM lParam);

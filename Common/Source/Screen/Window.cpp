@@ -189,6 +189,18 @@ Window::on_command(HWND hWnd, unsigned id, unsigned code)
   return false;
 }
 
+bool
+Window::on_setfocus()
+{
+  return false;
+}
+
+bool
+Window::on_killfocus()
+{
+  return false;
+}
+
 LRESULT
 Window::on_message(HWND _hWnd, UINT message,
                        WPARAM wParam, LPARAM lParam)
@@ -269,6 +281,16 @@ Window::on_message(HWND _hWnd, UINT message,
       ResetDisplayTimeOut();
       return 0;
     }
+    break;
+
+  case WM_SETFOCUS:
+    if (on_setfocus())
+      return 0;
+    break;
+
+  case WM_KILLFOCUS:
+    if (on_killfocus())
+      return 0;
     break;
   }
 
