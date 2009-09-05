@@ -39,11 +39,7 @@ Copyright_License {
 
 #if (((UNDER_CE >= 300)||(_WIN32_WCE >= 0x0300)) && !defined(WINDOWSPC))
 #define HAVE_ACTIVATE_INFO
-#endif
-
-#ifdef HAVE_ACTIVATE_INFO
 #include <aygshell.h>
-static SHACTIVATEINFO s_sai;
 #endif
 
 TopWindow::TopWindow() {
