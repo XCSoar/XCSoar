@@ -68,24 +68,22 @@ Copyright_License {
 
 void	CommonInterface::on_key_Airspeed(int UpDown)
 {
-  /* JMW illegal
   if (UpDown==0) {
     SetSettingsComputer().EnableCalibration = 
       !SettingsComputer().EnableCalibration;
 
-	// XXX InputEvents - Is this an automatic or user thing - either way, needs moving
+    // XXX InputEvents - Is this an automatic or user thing - either way, needs moving
     if (SettingsComputer().EnableCalibration)
       Message::AddMessage(TEXT("Calibrate ON"));
     else
       Message::AddMessage(TEXT("Calibrate OFF"));
   }
-  */
 }
 
 void	CommonInterface::on_key_TeamCode(int UpDown)
 {
   int tryCount = 0;
-  int searchSlot = FindFlarmSlot(XCSoarInterface::Basic(), TeamFlarmIdTarget);
+  int searchSlot = FindFlarmSlot(Basic(), TeamFlarmIdTarget);
   int newFlarmSlot = -1;
   
   
@@ -108,7 +106,7 @@ void	CommonInterface::on_key_TeamCode(int UpDown)
 	    }
 	}
       
-      if (XCSoarInterface::Basic().FLARM_Traffic[searchSlot].ID != 0)
+      if (Basic().FLARM_Traffic[searchSlot].ID != 0)
 	{
 	  newFlarmSlot = searchSlot;
 	  break; // a new flarmSlot with a valid flarm traffic record was found !
@@ -116,19 +114,18 @@ void	CommonInterface::on_key_TeamCode(int UpDown)
       tryCount++;
     }
 
-  /* JMW illegal  
   if (newFlarmSlot != -1)
     {
-      SetSettingsComputer().TeamFlarmIdTarget = XCSoarInterface::Basic().FLARM_Traffic[newFlarmSlot].ID;
+      TeamFlarmIdTarget = Basic().FLARM_Traffic[newFlarmSlot].ID;
       
-      if (_tcslen(XCSoarInterface::Basic().FLARM_Traffic[newFlarmSlot].Name) != 0)
+      if (_tcslen(Basic().FLARM_Traffic[newFlarmSlot].Name) != 0)
 	{
 	  // copy the 3 first chars from the name to TeamFlarmCNTarget
 	  for (int z = 0; z < 3; z++)
 	    {
-	      if (XCSoarInterface::Basic().FLARM_Traffic[newFlarmSlot].Name[z] != 0)
+	      if (Basic().FLARM_Traffic[newFlarmSlot].Name[z] != 0)
 		{
-		  SetSettingsComputer().TeamFlarmCNTarget[z] = XCSoarInterface::Basic().FLARM_Traffic[newFlarmSlot].Name[z];
+		  SetSettingsComputer().TeamFlarmCNTarget[z] = Basic().FLARM_Traffic[newFlarmSlot].Name[z];
 		}
 	      else
 		{
@@ -145,11 +142,10 @@ void	CommonInterface::on_key_TeamCode(int UpDown)
   else
     {
       // no flarm traffic to select!
-      SetSettingsComputer().TeamFlarmIdTarget = 0;
+      TeamFlarmIdTarget = 0;
       SetSettingsComputer().TeamFlarmCNTarget[0] = 0;
       return;
     }
-  */
 }
 
 void	CommonInterface::on_key_Altitude(int UpDown)
@@ -157,12 +153,12 @@ void	CommonInterface::on_key_Altitude(int UpDown)
   /* JMW illegal
 	#ifdef _SIM_
 	if(UpDown==1) {
-	  XCSoarInterface::Basic().Altitude += (100/ALTITUDEMODIFY);
+	  Basic().Altitude += (100/ALTITUDEMODIFY);
 	}	else if (UpDown==-1)
 	  {
-	    XCSoarInterface::Basic().Altitude -= (100/ALTITUDEMODIFY);
-	    if(XCSoarInterface::Basic().Altitude < 0)
-	      XCSoarInterface::Basic().Altitude = 0;
+	    Basic().Altitude -= (100/ALTITUDEMODIFY);
+	    if(Basic().Altitude < 0)
+	      Basic().Altitude = 0;
 	  } else if (UpDown==-2) {
 	  on_key_Direction(-1);
 	} else if (UpDown==2) {
@@ -177,7 +173,7 @@ void	CommonInterface::on_key_Altitude(int UpDown)
 void	CommonInterface::on_key_QFEAltitude(int UpDown)
 {
 	short step;
-	if ( ( XCSoarInterface::Basic().Altitude - QFEAltitudeOffset ) <10 ) step=1; else step=10;
+	if ( ( Basic().Altitude - QFEAltitudeOffset ) <10 ) step=1; else step=10;
 	if(UpDown==1) {
 	   QFEAltitudeOffset -= (step/ALTITUDEMODIFY);
 	}	else if (UpDown==-1)
@@ -232,12 +228,12 @@ void	CommonInterface::on_key_Speed(int UpDown)
 	#ifdef _SIM_
   /* JMW illegal
 		if(UpDown==1)
-			XCSoarInterface::Basic().Speed += (10/SPEEDMODIFY);
+			Basic().Speed += (10/SPEEDMODIFY);
 		else if (UpDown==-1)
 		{
-			XCSoarInterface::Basic().Speed -= (10/SPEEDMODIFY);
-			if(XCSoarInterface::Basic().Speed < 0)
-				XCSoarInterface::Basic().Speed = 0;
+			Basic().Speed -= (10/SPEEDMODIFY);
+			if(Basic().Speed < 0)
+				Basic().Speed = 0;
 		} else if (UpDown==-2) {
 			on_key_Direction(-1);
 		} else if (UpDown==2) {
@@ -253,7 +249,7 @@ void	CommonInterface::on_key_Accelerometer(int UpDown)
 {
   DWORD Temp;
   if (UpDown==0) {
-    AccelerometerZero*= XCSoarInterface::Basic().Gload;
+    AccelerometerZero*= Basic().Gload;
     if (AccelerometerZero<1) {
       AccelerometerZero = 100;
     }
@@ -267,22 +263,22 @@ void	CommonInterface::on_key_WindDirection(int UpDown)
 /* JMW ILLEGAL/incomplete
   if(UpDown==1)
     {
-      XCSoarInterface::Calculated().WindBearing  += 5;
-      while (XCSoarInterface::Calculated().WindBearing  >= 360)
+      Calculated().WindBearing  += 5;
+      while (Calculated().WindBearing  >= 360)
 	{
-	  XCSoarInterface::Calculated().WindBearing  -= 360;
+	  Calculated().WindBearing  -= 360;
 	}
     }
   else if (UpDown==-1)
     {
-      XCSoarInterface::Calculated().WindBearing  -= 5;
-      while (XCSoarInterface::Calculated().WindBearing  < 0)
+      Calculated().WindBearing  -= 5;
+      while (Calculated().WindBearing  < 0)
 	{
-	  XCSoarInterface::Calculated().WindBearing  += 360;
+	  Calculated().WindBearing  += 360;
 	}
     } else if (UpDown == 0) {
-    glide_computer.SetWindEstimate(XCSoarInterface::Calculated().WindSpeed,
-				   XCSoarInterface::Calculated().WindBearing);
+    glide_computer.SetWindEstimate(Calculated().WindSpeed,
+				   Calculated().WindBearing);
     SaveWindToRegistry();
   }
   return;
@@ -293,12 +289,12 @@ void	CommonInterface::on_key_WindSpeed(int UpDown)
 {
 /* JMW ILLEGAL/incomplete
 	if(UpDown==1)
-		XCSoarInterface::Calculated().WindSpeed += (1/SPEEDMODIFY);
+		Calculated().WindSpeed += (1/SPEEDMODIFY);
 	else if (UpDown== -1)
 	{
-		XCSoarInterface::Calculated().WindSpeed -= (1/SPEEDMODIFY);
-		if(XCSoarInterface::Calculated().WindSpeed < 0)
-			XCSoarInterface::Calculated().WindSpeed = 0;
+		Calculated().WindSpeed -= (1/SPEEDMODIFY);
+		if(Calculated().WindSpeed < 0)
+			Calculated().WindSpeed = 0;
 	}
 	// JMW added faster way of changing wind direction
 	else if (UpDown== -2) {
@@ -306,8 +302,8 @@ void	CommonInterface::on_key_WindSpeed(int UpDown)
 	} else if (UpDown== 2) {
 		on_key_WindDirection(1);
 	} else if (UpDown == 0) {
-          glide_computer.SetWindEstimate(XCSoarInterface::Calculated().WindSpeed,
-					 XCSoarInterface::Calculated().WindBearing);
+          glide_computer.SetWindEstimate(Calculated().WindSpeed,
+					 Calculated().WindBearing);
 	  SaveWindToRegistry();
 	}
 */
@@ -320,18 +316,18 @@ void	CommonInterface::on_key_Direction(int UpDown)
   /* JMW illegal/incomplete
 		if(UpDown==1)
 		{
-			XCSoarInterface::Basic().TrackBearing   += 5;
-			while (XCSoarInterface::Basic().TrackBearing  >= 360)
+			Basic().TrackBearing   += 5;
+			while (Basic().TrackBearing  >= 360)
 			{
-				XCSoarInterface::Basic().TrackBearing  -= 360;
+				Basic().TrackBearing  -= 360;
 			}
 		}
 		else if (UpDown==-1)
 		{
-			XCSoarInterface::Basic().TrackBearing  -= 5;
-			while (XCSoarInterface::Basic().TrackBearing  < 0)
+			Basic().TrackBearing  -= 5;
+			while (Basic().TrackBearing  < 0)
 			{
-				XCSoarInterface::Basic().TrackBearing  += 360;
+				Basic().TrackBearing  += 360;
 			}
 		}
   */
@@ -364,17 +360,17 @@ void	CommonInterface::on_key_MacCready(int UpDown)
   /* JMW illegal
  else if (UpDown==0)
     {
-      XCSoarInterface::Calculated().AutoMacCready 
-	= !XCSoarInterface::Calculated().AutoMacCready;
+      Calculated().AutoMacCready 
+	= !Calculated().AutoMacCready;
     }
   else if (UpDown==-2)
     {
-      XCSoarInterface::Calculated().AutoMacCready = false;  // SDP on auto maccready
+      Calculated().AutoMacCready = false;  // SDP on auto maccready
 
     }
   else if (UpDown==+2)
     {
-      XCSoarInterface::Calculated().AutoMacCready = true;	// SDP off auto maccready
+      Calculated().AutoMacCready = true;	// SDP off auto maccready
 
     }
   */
@@ -418,15 +414,15 @@ void CommonInterface::on_key_Waypoint(int UpDown)
 	  // TODO bug: allow restart
 	  // TODO bug: make this work only for manual
 	  /* JMW ILLEGAL
-	  if (XCSoarInterface::Calculated().TaskStartTime==0) {
-	    XCSoarInterface::Calculated().TaskStartTime = XCSoarInterface::Basic().Time;
+	  if (Calculated().TaskStartTime==0) {
+	    Calculated().TaskStartTime = Basic().Time;
 	  }
 	  */
 	}
 	ActiveWayPoint ++;
 	AdvanceArmed = false;
 	  /* JMW ILLEGAL
-	XCSoarInterface::Calculated().LegStartTime = XCSoarInterface::Basic().Time ;
+	Calculated().LegStartTime = Basic().Time ;
 	  */
       }
       // No more, try first
@@ -439,15 +435,15 @@ void CommonInterface::on_key_Waypoint(int UpDown)
 
             // TODO bug: This should trigger reset of flight stats, but
             // should ask first...
-            if (XCSoarInterface::Calculated().TaskStartTime==0) {
-              XCSoarInterface::Calculated().TaskStartTime = XCSoarInterface::Basic().Time ;
+            if (Calculated().TaskStartTime==0) {
+              Calculated().TaskStartTime = Basic().Time ;
             }
           }
           */
           AdvanceArmed = false;
           ActiveWayPoint = 0;
 	  /* JMW illegal
-          XCSoarInterface::Calculated().LegStartTime = XCSoarInterface::Basic().Time ;
+          Calculated().LegStartTime = Basic().Time ;
 	  */
         }
     }
@@ -467,7 +463,7 @@ void CommonInterface::on_key_Waypoint(int UpDown)
         RotateStartPoints();
 
 	// restarted task..
-	//	TODO bug: not required? XCSoarInterface::Calculated().TaskStartTime = 0;
+	//	TODO bug: not required? Calculated().TaskStartTime = 0;
       }
     }
     glide_computer.ResetEnter();
