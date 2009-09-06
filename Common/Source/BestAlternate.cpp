@@ -461,20 +461,14 @@ GlideComputerTask::AlertBestAlternate(short soundmode)
       case 0:
 	break;
       case 1:
-#ifndef DISABLEAUDIO
 	PlayResource(TEXT("IDR_WAV_GREEN"));
-#endif
 	break;
       case 2:
-#ifndef DISABLEAUDIO
 	PlayResource(TEXT("IDR_WAV_RED"));
-#endif
 	break;
       case 11:
-#ifndef DISABLEAUDIO
 	PlayResource(TEXT("IDR_WAV_GREEN"));
 	PlayResource(TEXT("IDR_WAV_GREEN"));
-#endif
 	break;
       default:
 	break;

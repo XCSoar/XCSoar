@@ -87,11 +87,9 @@ void Marks::MarkLocation(const double lon, const double lat)
 {
   ScopeLock protect(*GetMutex());
 
-#ifndef DISABLEAUDIO
   if (XCSoarInterface::SettingsComputer().EnableSoundModes) {
     PlayResource(TEXT("IDR_WAV_CLEAR"));
   }
-#endif
   topo_marks.addPoint(lon, lat);
   topo_marks.triggerUpdateCache = true;
 

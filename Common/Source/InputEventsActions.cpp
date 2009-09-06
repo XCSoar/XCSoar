@@ -292,10 +292,8 @@ void InputEvents::eventScreenModes(const TCHAR *misc) {
 
       switch (pnascrollstatus) {
       case 1:
-#ifndef DISABLEAUDIO
 	if (SettingsComputer().EnableSoundModes)
           PlayResource(TEXT("IDR_WAV_CLICK"));
-#endif
 	EnableAuxiliaryInfo = true;
 	break;
       case 2:
@@ -304,10 +302,8 @@ void InputEvents::eventScreenModes(const TCHAR *misc) {
 	//	break;
       case 3:
 	//	InfoBoxLayout::fullscreen = false;
-#ifndef DISABLEAUDIO
 	if (SettingsComputer().EnableSoundModes)
           PlayResource(TEXT("IDR_WAV_CLICK"));
-#endif
 	EnableAuxiliaryInfo = false;
 	map_window.RequestFullScreen(true);
 	break;
@@ -315,10 +311,8 @@ void InputEvents::eventScreenModes(const TCHAR *misc) {
 	//	InfoBoxLayout::fullscreen = false;
 	EnableAuxiliaryInfo = false;
 	map_window.RequestFullScreen(false);
-#ifndef DISABLEAUDIO
 	if (SettingsComputer().EnableSoundModes)
           PlayResource(TEXT("IDR_WAV_BELL"));
-#endif
 	break;
       default:
 	break;
@@ -327,24 +321,18 @@ void InputEvents::eventScreenModes(const TCHAR *misc) {
     else
       {
 	if (EnableAuxiliaryInfo) {
-#ifndef DISABLEAUDIO
 	  if (SettingsComputer().EnableSoundModes)
             PlayResource(TEXT("IDR_WAV_CLICK"));
-#endif
 	  map_window.RequestToggleFullScreen();
 	  EnableAuxiliaryInfo = false;
 	} else {
 	  if (map_window.isMapFullScreen()) {
 	    map_window.RequestToggleFullScreen();
-#ifndef DISABLEAUDIO
 	    if (SettingsComputer().EnableSoundModes)
               PlayResource(TEXT("IDR_WAV_BELL"));
-#endif
 	  } else {
-#ifndef DISABLEAUDIO
 	    if (SettingsComputer().EnableSoundModes)
               PlayResource(TEXT("IDR_WAV_CLICK"));
-#endif
 	    EnableAuxiliaryInfo = true;
 	  }
 	}
@@ -352,10 +340,8 @@ void InputEvents::eventScreenModes(const TCHAR *misc) {
 
 #else // UNDEFINED PNA
     if (EnableAuxiliaryInfo) {
-#ifndef DISABLEAUDIO
       if (SettingsComputer().EnableSoundModes) 
 	PlayResource(TEXT("IDR_WAV_CLICK"));
-#endif
       map_window.RequestToggleFullScreen();
       EnableAuxiliaryInfo = false;
     } else {
