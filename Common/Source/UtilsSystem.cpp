@@ -532,7 +532,7 @@ bool SetBacklight() // VENTA4
   HRESULT hRes;
   bool doevent=false;
 
-  if (EnableAutoBacklight == false ) return false;
+  if (CommonInterface::EnableAutoBacklight == false ) return false;
 
   hRes = RegOpenKeyEx(HKEY_CURRENT_USER, _T("ControlPanel\\Backlight"), 0,  0, &hKey);
   if (hRes != ERROR_SUCCESS) return false;
@@ -568,7 +568,7 @@ bool SetBacklight() // VENTA4
 bool SetSoundVolume() // VENTA4
 {
 
-  if (EnableAutoSoundVolume == false ) return false;
+  if (CommonInterface::EnableAutoSoundVolume == false ) return false;
 
 /*
  * This does not work, dunno why

@@ -57,6 +57,8 @@ bool ActionInterface::LockSettingsInFlight = true;
 unsigned  ActionInterface::UserLevel=0; // used by dlgConfiguration
 unsigned XCSoarInterface::debounceTimeout=200;
 int ActionInterface::MenuTimeoutMax = MENUTIMEOUTMAX;
+bool CommonInterface::EnableAutoBacklight=true;
+bool CommonInterface::EnableAutoSoundVolume=true;
 /////
 
 // Team code info

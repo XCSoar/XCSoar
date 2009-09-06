@@ -195,8 +195,6 @@ int OnAirSpace=1; // VENTA3 toggle DrawAirSpace, normal behaviour is "true"
 #if defined(PNA) || defined(FIVV)
 bool needclipping=false; // flag to activate extra clipping for some PNAs
 #endif
-bool EnableAutoBacklight=true;
-bool EnableAutoSoundVolume=true;
 bool ExtendedVisualGlide=false;
 
 // user interface settings

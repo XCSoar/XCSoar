@@ -2353,7 +2353,7 @@ static void setVariables(void) {
     if (GlobalModelType == MODELTYPE_PNA_HP31X )
     	wp->SetVisible(true);
 #endif
-    wp->GetDataField()->Set(EnableAutoBacklight);
+    wp->GetDataField()->Set(CommonInterface::EnableAutoBacklight);
     wp->RefreshDisplay();
   }
 
@@ -2363,7 +2363,7 @@ static void setVariables(void) {
 #if ( !defined(WINDOWSPC) || WINDOWSPC==0 )
     	wp->SetVisible(true);
 #endif
-    wp->GetDataField()->Set(EnableAutoSoundVolume);
+    wp->GetDataField()->Set(CommonInterface::EnableAutoSoundVolume);
     wp->RefreshDisplay();
   }
 
@@ -3704,18 +3704,24 @@ void dlgConfigurationShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpAutoBacklight")); // VENTA4
   if (wp) {
-    if (EnableAutoBacklight != (wp->GetDataField()->GetAsInteger()!=0)) {
-      EnableAutoBacklight = (wp->GetDataField()->GetAsInteger() != 0);
-      SetToRegistry(szRegistryAutoBacklight, EnableAutoBacklight);
+    if (CommonInterface::EnableAutoBacklight 
+	!= (wp->GetDataField()->GetAsInteger()!=0)) {
+      CommonInterface::EnableAutoBacklight = 
+	(wp->GetDataField()->GetAsInteger() != 0);
+      SetToRegistry(szRegistryAutoBacklight, 
+		    CommonInterface::EnableAutoBacklight);
       changed = true;
     }
   }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpAutoSoundVolume")); // VENTA4
   if (wp) {
-    if (EnableAutoSoundVolume != (wp->GetDataField()->GetAsInteger()!=0)) {
-      EnableAutoSoundVolume = (wp->GetDataField()->GetAsInteger() != 0);
-      SetToRegistry(szRegistryAutoSoundVolume, EnableAutoSoundVolume);
+    if (CommonInterface::EnableAutoSoundVolume != 
+	(wp->GetDataField()->GetAsInteger()!=0)) {
+      CommonInterface::EnableAutoSoundVolume = 
+	(wp->GetDataField()->GetAsInteger() != 0);
+      SetToRegistry(szRegistryAutoSoundVolume, 
+		    CommonInterface::EnableAutoSoundVolume);
       changed = true;
     }
   }

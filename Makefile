@@ -10,7 +10,7 @@
 #   TARGET      The name of the target platform.  See the TARGETS variable
 #               below for a list of valid target platforms.
 #
-
+#
 #   DEBUG       If set to "y", the debugging version of XCSoar is built.
 #
 #   V           Verbosity; 1 is the default, and prints terse information.

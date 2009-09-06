@@ -739,11 +739,11 @@ void ReadRegistrySettings(void)
 
   Temp = 1;
   GetFromRegistry(szRegistryAutoBacklight,&Temp); // VENTA4
-  EnableAutoBacklight = (Temp == 1);
+  CommonInterface::EnableAutoBacklight = (Temp == 1);
 
   Temp = 1;
   GetFromRegistry(szRegistryAutoSoundVolume,&Temp); // VENTA4
-  EnableAutoSoundVolume = (Temp == 1);
+  CommonInterface::EnableAutoSoundVolume = (Temp == 1);
 
   Temp = 0;
   GetFromRegistry(szRegistryExtendedVisualGlide,&Temp); // VENTA4
