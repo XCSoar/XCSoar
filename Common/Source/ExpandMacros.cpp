@@ -327,7 +327,7 @@ bool ButtonLabel::ExpandMacros(const TCHAR *In,
     }
   }
 
-  CondReplaceInString(main_window.map.isMapFullScreen(), OutBuffer,
+  CondReplaceInString(SettingsMap().FullScreen, OutBuffer,
                       TEXT("$(FullScreenToggleActionName)"),
                       TEXT("Off"), TEXT("On"), Size);
   CondReplaceInString(SettingsMap().AutoZoom, OutBuffer, 

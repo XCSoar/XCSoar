@@ -107,8 +107,7 @@ MapWindow::MapWindow()
    TargetDrag_Longitude(0),
    BigZoom(true),
    LandableReachable(false),
-   MapFullScreen(false),
-   askFullScreen(false)
+   FullScreen(false)
 {
 
 }
@@ -120,14 +119,8 @@ void MapWindow::RefreshMap() {
 }
 
 
-bool MapWindow::isMapFullScreen() {
-  // SDP - Seems that RequestFullScreen
-  // is always more accurate (MapFullSCreen is delayed)
-  return askFullScreen;
-}
-
-
 void MapWindow::StoreRestoreFullscreen(bool store) {
+  /* JMW broken, will need new implementation
   static bool oldfullscreen = 0;
   static bool SuperPan = false;
   if (store) {
@@ -144,6 +137,7 @@ void MapWindow::StoreRestoreFullscreen(bool store) {
       SuperPan = false;
     }
   }
+  */
 }
 
 
@@ -155,6 +149,7 @@ void MapWindow::ReadBlackboard(const NMEA_INFO &nmea_info,
   MapWindowBlackboard::ReadBlackboard(nmea_info, derived_info);
   ReadSettingsComputer(device_blackboard.SettingsComputer());
   ReadSettingsMap(device_blackboard.SettingsMap());
+  ApplyScreenSize();
 
   DisplayMode_t lastDisplayMode = DisplayMode;
   switch (SettingsMap().UserForceDisplayMode) {
@@ -282,17 +277,15 @@ void MapWindow::DrawThreadLoop(void) {
     DrawMapScale(get_canvas(), MapRect, true);
   }
 
-  if (askFullScreen != MapFullScreen) {
-    ToggleFullScreenStart();
-  }
-
   if (gauge_flarm != NULL)
     gauge_flarm->Render(&Basic());
 
   Render(draw_canvas, MapRect);
 
   // copy to canvas
+  mutexBuffer.Lock();
   get_canvas().copy(draw_canvas);
+  mutexBuffer.Unlock();
   update(MapRect);
 
   StopTimer();
@@ -315,7 +308,7 @@ void MapWindow::DrawThreadInitialise(void) {
 
   get_canvas().copy(draw_canvas);
 
-  ToggleFullScreenStart();
+  ApplyScreenSize();
 }
 
 
@@ -656,7 +649,9 @@ bool MapWindow::on_key_down(unsigned key_code)
 }
 
 void MapWindow::on_paint(Canvas& _canvas) {
+  mutexBuffer.Lock();
   _canvas.copy(draw_canvas);
+  mutexBuffer.Unlock();
 }
 
 bool

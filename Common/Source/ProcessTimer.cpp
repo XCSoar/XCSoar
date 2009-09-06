@@ -41,6 +41,7 @@ Copyright_License {
 #include "InputEvents.h"
 #include "ReplayLogger.hpp"
 #include "Gauge/GaugeFLARM.hpp"
+#include "Gauge/GaugeVario.hpp"
 #include "Device/device.h"
 #include "Device/Parser.h"
 #include "Dialogs.h"
@@ -87,6 +88,10 @@ void ProcessTimer::CommonProcessTimer()
   SendSettingsMap();
 
   InfoBoxManager::ProcessTimer();
+
+  // it's ok to do this in this thread
+  if (gauge_vario != NULL)
+    gauge_vario->Show(!SettingsMap().FullScreen);
 
   InputEvents::ProcessMenuTimer();
 

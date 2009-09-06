@@ -66,10 +66,14 @@ bool MapWindow::SetTargetPan(bool do_pan, int target_point) {
     old_pan = EnablePan;
     EnablePan = true;
     TargetPan = do_pan;
-    old_fullscreen = askFullScreen;
+
+    /* JMW broken/illegal
+    old_fullscreen = SettingsMap().FullScreen;
     if (askFullScreen) {
       askFullScreen = false;
     }
+    */
+
     SwitchZoomClimb();
   }
   if (do_pan) {
@@ -97,9 +101,11 @@ bool MapWindow::SetTargetPan(bool do_pan, int target_point) {
     PanLatitude = old_latitude;
     EnablePan = old_pan;
     TargetPan = do_pan;
+    /* JMW broken/illegal
     if (old_fullscreen) {
       askFullScreen = true;
     }
+    */
     SwitchZoomClimb();
   }
   TargetPan = do_pan;

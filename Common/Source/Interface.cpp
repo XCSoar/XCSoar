@@ -129,6 +129,7 @@ void XCSoarInterface::DefaultSettings()
   SetSettingsMap().OnAirSpace = 1;
   SetSettingsMap().EnableAuxiliaryInfo = 0;
   SetSettingsMap().UserForceDisplayMode = dmNone;
+  SetSettingsMap().FullScreen = false;
 }
 
 

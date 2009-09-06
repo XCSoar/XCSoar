@@ -456,7 +456,7 @@ void MapWindow::Event_Pan(int vswitch) {
     // new mode
     EnablePan = !EnablePan;
     if (EnablePan) { // pan now on, so go fullscreen
-      askFullScreen = true;
+      //JMW illegal      askFullScreen = true;
     }
 
   } else if (vswitch == -1) {

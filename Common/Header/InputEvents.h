@@ -89,6 +89,10 @@ private:
   static void drawButtons(mode Mode);
 
 
+  // helpers (temporary)
+
+  static void sub_TerrainTopology(int vswitch);
+
   // -------
 
   static void eventAbortTask(const TCHAR *misc);

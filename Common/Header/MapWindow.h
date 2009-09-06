@@ -105,11 +105,6 @@ class MapWindow
     SetRect(&MapRect, 0, 0, rc.right - rc.left, rc.bottom - rc.top);
   }
 
-  bool isMapFullScreen(); // gui feedback
-
-  void RequestToggleFullScreen();
-  void RequestFullScreen(bool full);
-
   // used by topology store
   void ScanVisibility(rectObj *bounds_active);
 
@@ -117,7 +112,6 @@ class MapWindow
   void Event_SetZoom(double value);
   void Event_ScaleZoom(int vswitch);
   void Event_Pan(int vswitch);
-  void Event_TerrainTopology(int vswitch);
   void Event_AutoZoom(int vswitch);
   void Event_PanCursor(int dx, int dy);
 
@@ -131,6 +125,7 @@ class MapWindow
 
   void DrawThreadLoop ();
   void DrawThreadInitialise (void);
+  Mutex    mutexBuffer;
 
   // state
   BOOL     Initialised;
@@ -154,10 +149,9 @@ class MapWindow
 
   // projection
   bool      BigZoom;
-  bool      askFullScreen;
-  bool      MapFullScreen;
+  bool      FullScreen;
   void      StoreRestoreFullscreen(bool);
-  void      ToggleFullScreenStart();
+  void      ApplyScreenSize();
 
   double    findMapScaleBarSize(const RECT rc);
 

@@ -905,6 +905,11 @@ void InfoBoxManager::SetDirty(bool is_dirty) {
 
 
 void InfoBoxManager::ProcessTimer(void) {
+  if (SettingsMap().FullScreen) {
+    Hide();
+  } else {
+    Show();
+  }
   InfoBoxDrawIfDirty();
   LastFlipBoxTime++;
 }

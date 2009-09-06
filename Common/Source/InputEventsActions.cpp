@@ -91,6 +91,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Interface.hpp"
 #include "Calculations.h" // TODO danger! ClearAirspaceWarnings
 #include "Components.hpp"
+#include "Language.hpp"
 
 #ifdef PNA
 #include "Asset.hpp"
@@ -251,23 +252,22 @@ void InputEvents::eventScreenModes(const TCHAR *misc) {
   //  -- auxiliary infobox
   //  -- full screen
   //  -- normal infobox
-  MapWindow &map_window = main_window.map;
 
   if (_tcscmp(misc, TEXT("normal")) == 0) {
-    map_window.RequestFullScreen(false);
+    SetSettingsMap().FullScreen = false;
     SetSettingsMap().EnableAuxiliaryInfo = false;
   } else if (_tcscmp(misc, TEXT("auxilary")) == 0) {
-    map_window.RequestFullScreen(false);
+    SetSettingsMap().FullScreen = false;
     SetSettingsMap().EnableAuxiliaryInfo = true;
   } else if (_tcscmp(misc, TEXT("toggleauxiliary")) == 0) {
-    map_window.RequestFullScreen(false);
+    SetSettingsMap().FullScreen = false;
     SetSettingsMap().EnableAuxiliaryInfo = !SettingsMap().EnableAuxiliaryInfo;
   } else if (_tcscmp(misc, TEXT("full")) == 0) {
-    map_window.RequestFullScreen(true);
+    SetSettingsMap().FullScreen = true;
   } else if (_tcscmp(misc, TEXT("togglefull")) == 0) {
-    map_window.RequestToggleFullScreen();
+    SetSettingsMap().FullScreen = !SettingsMap().FullScreen;
   } else if (_tcscmp(misc, TEXT("show")) == 0) {
-    if (map_window.isMapFullScreen())
+    if (SettingsMap().FullScreen)
       Message::AddMessage(TEXT("Screen Mode Full"));
     else if (SettingsMap().EnableAuxiliaryInfo)
       Message::AddMessage(TEXT("Screen Mode Auxiliary"));
@@ -343,11 +343,11 @@ void InputEvents::eventScreenModes(const TCHAR *misc) {
     if (SettingsMap().EnableAuxiliaryInfo) {
       if (SettingsComputer().EnableSoundModes) 
 	PlayResource(TEXT("IDR_WAV_CLICK"));
-      map_window.RequestToggleFullScreen();
+      SetSettingsMap().FullScreen = !SettingsMap().FullScreen;
       SetSettingsMap().EnableAuxiliaryInfo = false;
     } else {
-      if (map_window.isMapFullScreen()) {
-	map_window.RequestToggleFullScreen();
+      if (SettingsMap().FullScreen) {
+	SetSettingsMap().FullScreen = false;
       } else {
 	SetSettingsMap().EnableAuxiliaryInfo = true;
       }
@@ -473,31 +473,29 @@ else if (_tcscmp(misc, TEXT("down")) == 0)
 
 // Do JUST Terrain/Toplogy (toggle any, on/off any, show)
 void InputEvents::eventTerrainTopology(const TCHAR *misc) {
-  MapWindow &map_window = main_window.map;
 
   if (_tcscmp(misc, TEXT("terrain toggle")) == 0)
-    map_window.Event_TerrainTopology(-2);
-
+    sub_TerrainTopology(-2);
   else if (_tcscmp(misc, TEXT("toplogy toggle")) == 0)
-    map_window.Event_TerrainTopology(-3);
+    sub_TerrainTopology(-3);
 
   else if (_tcscmp(misc, TEXT("terrain on")) == 0)
-    map_window.Event_TerrainTopology(3);
+    sub_TerrainTopology(3);
 
   else if (_tcscmp(misc, TEXT("terrain off")) == 0)
-    map_window.Event_TerrainTopology(4);
+    sub_TerrainTopology(4);
 
   else if (_tcscmp(misc, TEXT("topology on")) == 0)
-    map_window.Event_TerrainTopology(1);
+    sub_TerrainTopology(1);
 
   else if (_tcscmp(misc, TEXT("topology off")) == 0)
-    map_window.Event_TerrainTopology(2);
+    sub_TerrainTopology(2);
 
   else if (_tcscmp(misc, TEXT("show")) == 0)
-    map_window.Event_TerrainTopology(0);
+    sub_TerrainTopology(0);
 
   else if (_tcscmp(misc, TEXT("toggle")) == 0)
-    map_window.Event_TerrainTopology(-1);
+    sub_TerrainTopology(-1);
 
 }
 
@@ -509,9 +507,8 @@ void InputEvents::eventClearWarningsOrTerrainTopology(const TCHAR *misc) {
     return;
   }
   // Else toggle TerrainTopology - and show the results
-  MapWindow &map_window = main_window.map;
-  map_window.Event_TerrainTopology(-1);
-  map_window.Event_TerrainTopology(0);
+  sub_TerrainTopology(-1);
+  sub_TerrainTopology(0);
 }
 
 // ClearAirspaceWarnings
@@ -1752,3 +1749,74 @@ eventSounds			- Include Task and Modes sounds along with Vario
 - Include master nn, deadband nn, netto trigger mph/kts/...
 
 */
+
+
+
+////// helpers
+
+
+
+/* Event_TerrainToplogy Changes
+   0       Show
+   1       Toplogy = ON
+   2       Toplogy = OFF
+   3       Terrain = ON
+   4       Terrain = OFF
+   -1      Toggle through 4 stages (off/off, off/on, on/off, on/on)
+   -2      Toggle terrain
+   -3      Toggle toplogy
+*/
+
+void InputEvents::sub_TerrainTopology(int vswitch) {
+  char val;
+
+  if (vswitch== -1) { // toggle through 4 possible options
+    val = 0;
+    if (SettingsMap().EnableTopology) val++;
+    if (SettingsMap().EnableTerrain) val += (char)2;
+    val++;
+    if (val>3) val=0;
+    SetSettingsMap().EnableTopology = ((val & 0x01) == 0x01);
+    SetSettingsMap().EnableTerrain  = ((val & 0x02) == 0x02);
+    //    RefreshMap();
+
+  } else if (vswitch == -2) { // toggle terrain
+    SetSettingsMap().EnableTerrain = !SettingsMap().EnableTerrain;
+    //    RefreshMap();
+
+  } else if (vswitch == -3) { // toggle topology
+    SetSettingsMap().EnableTopology = !SettingsMap().EnableTopology;
+    //    RefreshMap();
+
+  } else if (vswitch == 1) { // Turn on toplogy
+    SetSettingsMap().EnableTopology = true;
+    //    RefreshMap();
+
+  } else if (vswitch == 2) { // Turn off toplogy
+    SetSettingsMap().EnableTopology = false;
+    //    RefreshMap();
+
+  } else if (vswitch == 3) { // Turn on terrain
+    SetSettingsMap().EnableTerrain = true;
+    //    RefreshMap();
+
+  } else if (vswitch == 4) { // Turn off terrain
+    SetSettingsMap().EnableTerrain = false;
+    //    RefreshMap();
+
+  } else if (vswitch == 0) { // Show terrain/Topology
+    // ARH Let user know what's happening
+    TCHAR buf[128];
+
+    if (SettingsMap().EnableTopology)
+      _stprintf(buf, TEXT("\r\n%s / "), gettext(TEXT("ON")));
+    else
+      _stprintf(buf, TEXT("\r\n%s / "), gettext(TEXT("OFF")));
+
+    if (SettingsMap().EnableTerrain)
+      _stprintf(buf+_tcslen(buf), TEXT("%s"), gettext(TEXT("ON")));
+    else
+      _stprintf(buf+_tcslen(buf), TEXT("%s"), gettext(TEXT("OFF")));
+    Message::AddMessage(TEXT("Topology / Terrain"), buf);
+  }
+}

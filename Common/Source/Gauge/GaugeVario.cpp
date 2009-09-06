@@ -188,7 +188,6 @@ void GaugeVario::Show(bool doshow) {
     }
     lastvisible = EnableVarioGauge;
   }
-
 }
 
 

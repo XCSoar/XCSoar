@@ -105,7 +105,7 @@ typedef struct SETTINGS_MAP_ {
   int OnAirSpace; // VENTA3 toggle DrawAirSpace
   bool EnableAuxiliaryInfo;
   DisplayMode_t UserForceDisplayMode;
-
+  bool FullScreen;
 } SETTINGS_MAP;
 
 // display mode stuff
