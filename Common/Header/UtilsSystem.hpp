@@ -57,7 +57,7 @@ void MemCheckPoint();
 void MemLeakCheck();
 void MyCompactHeaps();
 unsigned long FindFreeSpace(const TCHAR *path);
-BOOL PlayResource (const TCHAR* lpName);
+bool PlayResource (const TCHAR* lpName);
 void CreateDirectoryIfAbsent(const TCHAR *filename);
 
 #ifdef __cplusplus
