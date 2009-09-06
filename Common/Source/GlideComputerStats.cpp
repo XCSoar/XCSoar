@@ -47,10 +47,18 @@ Copyright_License {
 #include "Math/Earth.hpp"
 #include "GPSClock.hpp"
 
-int FastLogNum = 0; // number of points to log at high rate
+
+GlideComputerStats::GlideComputerStats():
+ log_clock(5.0),
+ stats_clock(60.0)
+{
+
+}
+
 
 void GlideComputerStats::ResetFlight(const bool full)
 {
+  FastLogNum = 0; 
   if (full) {
     flightstats.Reset();
   }
@@ -66,21 +74,12 @@ void GlideComputerStats::StartTask() {
 
 
 bool GlideComputerStats::DoLogging() {
-  static GPSClock log_clock(5.0);
-  static GPSClock stats_clock(60.0);
-  static GPSClock frecord_clock(270.0); // 4.5 minutes (required
-					// minimum every 5)
 
   // prevent bad fixes from being logged or added to OLC store
-  static double Longitude_last = 10;
-  static double Latitude_last = 10;
   double distance;
-
   DistanceBearing(Basic().Latitude, Basic().Longitude,
-		  Latitude_last, Longitude_last,
+		  LastBasic().Latitude, LastBasic().Longitude,
 		  &distance, NULL);
-  Latitude_last = Basic().Latitude;
-  Longitude_last = Basic().Longitude;
 
   if (distance>200.0) {
     return false;
@@ -96,6 +95,7 @@ bool GlideComputerStats::DoLogging() {
   }
   if (FastLogNum) {
     log_clock.set_dt(1.0);
+    FastLogNum--;
   }
 
   if (log_clock.check_advance(Basic().Time)) {
@@ -107,10 +107,13 @@ bool GlideComputerStats::DoLogging() {
     }
     LogPoint(Basic().Latitude , Basic().Longitude , Basic().Altitude,
              balt);
-    if (FastLogNum) FastLogNum--;
   }
 
   /* JMW TODO update this code incomplete
+
+  static GPSClock frecord_clock(270.0); // 4.5 minutes (required
+					// minimum every 5)
+
   if (Basic().Time - GetFRecordLastTime() >= dtFRecord)
   {
     if (LogFRecord(Basic().SatelliteIDs,false))
@@ -159,8 +162,10 @@ double GlideComputerStats::GetAverageThermal() const
   mc_current = GlideComputerBlackboard::GetAverageThermal();
   if (flightstats.ThermalAverage.y_ave>0) {
     if ((mc_current>0) && Calculated().Circling) {
-      mc_stats = (flightstats.ThermalAverage.sum_n*flightstats.ThermalAverage.y_ave
-		  +mc_current)/(flightstats.ThermalAverage.sum_n+1);
+      mc_stats = (flightstats.ThermalAverage.sum_n
+		  *flightstats.ThermalAverage.y_ave
+		  +mc_current)
+	/(flightstats.ThermalAverage.sum_n+1);
     } else {
       mc_stats = flightstats.ThermalAverage.y_ave;
     }

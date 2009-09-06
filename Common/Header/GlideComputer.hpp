@@ -116,6 +116,7 @@ private:
 
 class GlideComputerStats: virtual public GlideComputerBlackboard {
 public:
+  GlideComputerStats();
   FlightStatistics     flightstats;
   SnailTrail           snail_trail;
 protected:
@@ -131,6 +132,10 @@ protected:
   virtual void OnClimbBase(double StartAlt);
   virtual void OnClimbCeiling();
   virtual void OnDepartedThermal();
+private:
+  GPSClock log_clock;
+  GPSClock stats_clock;
+  unsigned FastLogNum; // number of points to log at high rate
 };
 
 class GlideComputerTask: virtual public GlideComputerBlackboard {
