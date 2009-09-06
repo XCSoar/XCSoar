@@ -550,6 +550,7 @@ OBJS	:=\
 	$(SRC)/Compatibility/string.o 	\
 	$(SRC)/Registry.o 		\
 	$(SRC)/xmlParser.o 		\
+	$(SRC)/Thread/Thread.o \
 	\
 	$(SRC)/Math/Earth.o 		\
 	$(SRC)/Math/FastMath.o 		\
