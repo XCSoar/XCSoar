@@ -676,7 +676,7 @@ all: all-$(TARGET)
 # if no TARGET is set, build all targets
 all-: $(addprefix call-,$(TARGETS))
 call-%:
-	$(MAKE) TARGET=$(patsubst call-%,%,$@)
+	$(MAKE) TARGET=$(patsubst call-%,%,$@) DEBUG=$(DEBUG) V=$(V)
 
 $(addprefix all-,$(TARGETS)): all-%: $(OUTPUTS)
 
