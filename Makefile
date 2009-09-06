@@ -613,10 +613,10 @@ OBJS	:=\
 	\
 	$(DLGS:.cpp=.o) 		\
 	$(VOLKS:.cpp=.o) 		\
-	$(SRC)/XCSoar.rsc 		\
-	$(SRC)/jasper.a 		\
-	$(SRC)/zzip.a 			\
-	$(SRC)/compat.a
+	$(SRC)/XCSoar-$(TARGET).rsc \
+	$(SRC)/jasper-$(TARGET).a \
+	$(SRC)/zzip-$(TARGET).a \
+	$(SRC)/compat-$(TARGET).a
 
 #	$(SRC)/VarioSound.o \
 #	$(SRC)/WaveThread.o \
@@ -720,15 +720,15 @@ XCSoarLaunch.dll: $(XCSOARLAUNCH_OBJS)
 #
 # Create libraries for zzip, jasper and compatibility stuff
 #
-$(SRC)/zzip.a: $(patsubst %.cpp,%.o,$(ZZIP:.c=.o))
+$(SRC)/zzip-$(TARGET).a: $(patsubst %.cpp,%-$(TARGET).o,$(ZZIP:.c=-$(TARGET).o))
 	@$(NQ)echo "  AR      $@"
 	$(Q)$(AR) $(ARFLAGS) $@ $^
 
-$(SRC)/jasper.a: $(patsubst %.cpp,%.o,$(JASPER:.c=.o))
+$(SRC)/jasper-$(TARGET).a: $(patsubst %.cpp,%-$(TARGET).o,$(JASPER:.c=-$(TARGET).o))
 	@$(NQ)echo "  AR      $@"
 	$(Q)$(AR) $(ARFLAGS) $@ $^
 
-$(SRC)/compat.a: $(patsubst %.cpp,%.o,$(COMPAT:.c=.o))
+$(SRC)/compat-$(TARGET).a: $(patsubst %.cpp,%-$(TARGET).o,$(COMPAT:.c=-$(TARGET).o))
 	@$(NQ)echo "  AR      $@"
 	$(Q)$(AR) $(ARFLAGS) $@ $^
 
@@ -736,7 +736,7 @@ $(SRC)/compat.a: $(patsubst %.cpp,%.o,$(COMPAT:.c=.o))
 #
 # Tell make how to create a compiled resource object (rsc)
 #
-%.rsc: %.rc
+%-$(TARGET).rsc: %.rc
 	@sed -e 's,[Bb]itmaps\\\\,Bitmaps/,g' \
 	    -e 's,XCSoar.ICO,xcsoar.ico,g' \
 	    -e 's,\.\.\\\\Data\\\\Dialogs\\\\,../Data/Dialogs/,g' \
