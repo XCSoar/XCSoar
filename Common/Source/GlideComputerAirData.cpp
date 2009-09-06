@@ -60,7 +60,6 @@ Copyright_License {
 #include "SettingsTask.hpp"
 #include "LocalTime.hpp"
 #include "MapWindowProjection.hpp"
-#include "InputEvents.h"
 #include "Components.hpp"
 #include "Interface.hpp"
 #include "Atmosphere.h"
@@ -805,8 +804,6 @@ GlideComputerAirData::TakeoffLanding()
 
 void GlideComputerAirData::OnLanding()
 {
-  InputEvents::processGlideComputer(GCE_LANDING);
-
   // JMWX  restore data calculated at finish so
   // user can review flight as at finish line
   
@@ -825,7 +822,6 @@ void GlideComputerAirData::OnTakeoff()
 {
   SetCalculated().Flying = true;
   WasFlying=true; // VENTA3
-  InputEvents::processGlideComputer(GCE_TAKEOFF);
   // reset stats on takeoff
   ResetFlight();
   
@@ -1047,11 +1043,6 @@ GlideComputerAirData::SwitchClimbMode(bool isclimb, bool left)
 {
   InitLDRotary(SettingsComputer(), &rotaryLD);
   DoWindCirclingMode(left);
-  if (isclimb) {
-    InputEvents::processGlideComputer(GCE_FLIGHTMODE_CLIMB);
-  } else {
-    InputEvents::processGlideComputer(GCE_FLIGHTMODE_CRUISE);
-  }
 }
 
 void

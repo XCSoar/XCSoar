@@ -76,6 +76,9 @@ protected:
   void ProcessVertical();
 
   virtual bool ProcessVario();
+  virtual void OnTakeoff();
+  virtual void OnLanding();
+  virtual void SwitchClimbMode(bool isclimb, bool left);
 
   void DoWindCirclingMode(const bool left);
   void DoWindCirclingSample();
@@ -98,8 +101,6 @@ private:
 		  const double cruise_efficiency);
   void NettoVario();
   void TakeoffLanding();
-  void OnTakeoff();
-  void OnLanding();
   void PredictNextPosition();
   void AirspaceWarning(const MapWindowProjection &map_projection);
   void TerrainFootprint(const double max_dist);
@@ -108,7 +109,6 @@ private:
   void LastThermalStats();
   void ThermalBand();
   void PercentCircling(const double Rate);
-  void SwitchClimbMode(bool isclimb, bool left);
   void Turning();
   GPSClock airspace_clock;
   GPSClock ballast_clock;
@@ -209,6 +209,7 @@ private:
   void DoAlternates(int AltWaypoint);
   void SearchBestAlternate();
 protected:
+
   virtual void SaveTaskSpeed(double val) = 0;
   virtual void SetLegStart();
   virtual void ProcessIdle(const MapWindowProjection &map);
@@ -241,6 +242,9 @@ protected:
   virtual void SaveTaskSpeed(double val);
   virtual void SetLegStart();
   virtual void AnnounceWayPointSwitch(bool do_advance);
+  virtual void OnTakeoff();
+  virtual void OnLanding();
+  virtual void SwitchClimbMode(bool isclimb, bool left);
 
 public:
   void Initialise();

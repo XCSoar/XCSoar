@@ -296,3 +296,28 @@ GlideComputer::CalculateTeammateBearingRange()
     }
 }
 
+
+void 
+GlideComputer::OnTakeoff()
+{
+  GlideComputerAirData::OnTakeoff();
+  InputEvents::processGlideComputer(GCE_TAKEOFF);
+}
+
+void 
+GlideComputer::OnLanding()
+{
+  GlideComputerAirData::OnLanding();
+  InputEvents::processGlideComputer(GCE_LANDING);
+}
+
+void 
+GlideComputer::SwitchClimbMode(bool isclimb, bool left)
+{
+  GlideComputerAirData::SwitchClimbMode(isclimb, left);
+  if (isclimb) {
+    InputEvents::processGlideComputer(GCE_FLIGHTMODE_CLIMB);
+  } else {
+    InputEvents::processGlideComputer(GCE_FLIGHTMODE_CRUISE);
+  }
+}
