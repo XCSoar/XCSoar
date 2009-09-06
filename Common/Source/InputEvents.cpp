@@ -103,8 +103,16 @@ int input_errors_count = 0;
 
 // Current modes - map mode to integer (primitive hash)
 static TCHAR mode_current[MAX_MODE_STRING] = TEXT("default");		// Current mode
-static TCHAR mode_map[MAX_MODE][MAX_MODE_STRING];					// Map mode to location
-static int mode_map_count = 0;
+
+/** Map mode to location */
+static TCHAR mode_map[MAX_MODE][MAX_MODE_STRING] = {
+  _T("default"),
+  _T("pan"),
+  _T("infobox"),
+  _T("Menu"),
+};
+
+static int mode_map_count = 4;
 
 // Key map to Event - Keys (per mode) mapped to events
 static int Key2Event[MAX_MODE][MAX_KEY];		// Points to Events location
