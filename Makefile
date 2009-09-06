@@ -536,6 +536,7 @@ OBJS	:=\
 	$(SRC)/UtilsSystem.o		\
 	$(SRC)/UtilsText.o		\
 	$(SRC)/Version.o 		\
+	$(SRC)/Audio/Sound.o \
 	$(SRC)/Audio/VegaVoice.o	\
 	$(SRC)/Compatibility/string.o 	\
 	$(SRC)/Registry.o 		\

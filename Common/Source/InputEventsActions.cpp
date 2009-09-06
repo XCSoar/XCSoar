@@ -86,7 +86,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "LocalPath.hpp"
 #include "UtilsProfile.hpp"
 #include "UtilsText.hpp"
-#include "UtilsSystem.hpp"
+#include "Audio/Sound.hpp"
 #include "McReady.h"
 #include "Interface.hpp"
 #include "Calculations.h" // TODO danger! ClearAirspaceWarnings

@@ -202,52 +202,6 @@ unsigned long FindFreeSpace(const TCHAR *path) {
   }
 }
 
-#ifndef DISABLEAUDIO
-#include "mmsystem.h"
-#endif
-
-bool PlayResource (const TCHAR* lpName)
-{
-#ifdef DISABLEAUDIO
-  return false;
-#else
-  BOOL bRtn;
-  LPTSTR lpRes;
-  HANDLE hResInfo, hRes;
-
-  // TODO code: Modify to allow use of WAV Files and/or Embedded files
-
-  if (_tcsstr(lpName, TEXT(".wav"))) {
-    bRtn = sndPlaySound (lpName, SND_ASYNC | SND_NODEFAULT );
-
-  } else {
-
-    // Find the wave resource.
-    hResInfo = FindResource (XCSoarInterface::hInst, lpName, TEXT("WAVE"));
-
-    if (hResInfo == NULL)
-      return false;
-
-    // Load the wave resource.
-    hRes = LoadResource (XCSoarInterface::hInst, (HRSRC)hResInfo);
-
-    if (hRes == NULL)
-      return false;
-
-    // Lock the wave resource and play it.
-    lpRes = (LPTSTR)LockResource ((HGLOBAL)hRes);
-
-    if (lpRes != NULL)
-      {
-	bRtn = sndPlaySound (lpRes, SND_MEMORY | SND_ASYNC | SND_NODEFAULT );
-      }
-    else
-      bRtn = 0;
-  }
-  return bRtn;
-#endif
-}
-
 void CreateDirectoryIfAbsent(const TCHAR *filename) {
   TCHAR fullname[MAX_PATH];
 

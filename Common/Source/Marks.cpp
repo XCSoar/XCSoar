@@ -44,7 +44,7 @@ Copyright_License {
 #include "Compatibility/string.h"
 #include "Registry.hpp"
 #include "LocalPath.hpp"
-#include "UtilsSystem.hpp"
+#include "Audio/Sound.hpp"
 #include "LogFile.hpp"
 #include "resource.h"
 

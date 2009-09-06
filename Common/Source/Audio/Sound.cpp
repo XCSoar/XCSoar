@@ -34,53 +34,55 @@ Copyright_License {
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
 */
-#if !defined(XCSOAR_UTILS_SYSTEM_H)
-#define XCSOAR_UTILS_SYSTEM_H
 
-#define WIN32_LEAN_AND_MEAN		// Exclude rarely-used stuff from Windows headers
+#include "Audio/Sound.hpp"
+#include "Interface.hpp"
+
+#define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
-#ifdef PNA
-bool SetBacklight(); // VENTA4-ADDON for PNA
-bool SetSoundVolume(); // VENTA4-ADDON for PNA
+#ifndef DISABLEAUDIO
+#include <mmsystem.h>
 #endif
 
-#if defined(PNA) || defined(FIVV)  // VENTA-ADDON
-void SetModelType();
-bool SetModelName(DWORD Temp);
-#endif
-
-void XCSoarGetOpts(LPTSTR CommandLine);
-int MeasureCPULoad();
-long CheckFreeRam(void);
-void MemCheckPoint();
-void MemLeakCheck();
-void MyCompactHeaps();
-unsigned long FindFreeSpace(const TCHAR *path);
-void CreateDirectoryIfAbsent(const TCHAR *filename);
-
-#ifdef __cplusplus
-extern "C"{
-#endif
-
-bool FileExistsW(const TCHAR *FileName);
-bool FileExistsA(const char *FileName);
-
-#ifdef _UNICODE
-#define FileExists FileExistsW
+bool PlayResource (const TCHAR* lpName)
+{
+#ifdef DISABLEAUDIO
+  return false;
 #else
-#define FileExists FileExistsA
-#endif
+  BOOL bRtn;
+  LPTSTR lpRes;
+  HANDLE hResInfo, hRes;
 
-#ifdef __cplusplus
+  // TODO code: Modify to allow use of WAV Files and/or Embedded files
+
+  if (_tcsstr(lpName, TEXT(".wav"))) {
+    bRtn = sndPlaySound (lpName, SND_ASYNC | SND_NODEFAULT );
+
+  } else {
+
+    // Find the wave resource.
+    hResInfo = FindResource (XCSoarInterface::hInst, lpName, TEXT("WAVE"));
+
+    if (hResInfo == NULL)
+      return false;
+
+    // Load the wave resource.
+    hRes = LoadResource (XCSoarInterface::hInst, (HRSRC)hResInfo);
+
+    if (hRes == NULL)
+      return false;
+
+    // Lock the wave resource and play it.
+    lpRes = (LPTSTR)LockResource ((HGLOBAL)hRes);
+
+    if (lpRes != NULL)
+      {
+	bRtn = sndPlaySound (lpRes, SND_MEMORY | SND_ASYNC | SND_NODEFAULT );
+      }
+    else
+      bRtn = 0;
+  }
+  return bRtn;
+#endif
 }
-#endif
-
-bool RotateScreen(void);
-
-void StartupLogFreeRamAndStorage();
-
-WPARAM TranscodeKey(WPARAM wParam);
-RECT SystemWindowSize(void);
-
-#endif

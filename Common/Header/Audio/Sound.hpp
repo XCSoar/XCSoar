@@ -34,53 +34,12 @@ Copyright_License {
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
 */
-#if !defined(XCSOAR_UTILS_SYSTEM_H)
-#define XCSOAR_UTILS_SYSTEM_H
 
-#define WIN32_LEAN_AND_MEAN		// Exclude rarely-used stuff from Windows headers
-#include <windows.h>
+#ifndef XCSOAR_AUDIO_SOUND_HPP
+#define XCSOAR_AUDIO_SOUND_HPP
 
-#ifdef PNA
-bool SetBacklight(); // VENTA4-ADDON for PNA
-bool SetSoundVolume(); // VENTA4-ADDON for PNA
-#endif
+#include <tchar.h>
 
-#if defined(PNA) || defined(FIVV)  // VENTA-ADDON
-void SetModelType();
-bool SetModelName(DWORD Temp);
-#endif
-
-void XCSoarGetOpts(LPTSTR CommandLine);
-int MeasureCPULoad();
-long CheckFreeRam(void);
-void MemCheckPoint();
-void MemLeakCheck();
-void MyCompactHeaps();
-unsigned long FindFreeSpace(const TCHAR *path);
-void CreateDirectoryIfAbsent(const TCHAR *filename);
-
-#ifdef __cplusplus
-extern "C"{
-#endif
-
-bool FileExistsW(const TCHAR *FileName);
-bool FileExistsA(const char *FileName);
-
-#ifdef _UNICODE
-#define FileExists FileExistsW
-#else
-#define FileExists FileExistsA
-#endif
-
-#ifdef __cplusplus
-}
-#endif
-
-bool RotateScreen(void);
-
-void StartupLogFreeRamAndStorage();
-
-WPARAM TranscodeKey(WPARAM wParam);
-RECT SystemWindowSize(void);
+bool PlayResource(const TCHAR* lpName);
 
 #endif
