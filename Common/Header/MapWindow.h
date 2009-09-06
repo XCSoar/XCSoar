@@ -86,14 +86,7 @@ class MapWindow
   static bool register_class(HINSTANCE hInstance);
 
   void set(ContainerWindow &parent,
-           const RECT _MapRectSmall, const RECT _MapRectBig) {
-    MapRectSmall = _MapRectSmall;
-    MapRect = MapRectBig = _MapRectBig;
-
-    MaskedPaintWindow::set(parent, _T("XCSoarMap"), MapRect.left, MapRect.top,
-                           MapRect.right - MapRect.left,
-                           MapRect.bottom - MapRect.top);
-  }
+           const RECT _MapRectSmall, const RECT _MapRectBig);
 
   // used by dlgTarget
   bool TargetDragged(double *longitude, double *latitude);
