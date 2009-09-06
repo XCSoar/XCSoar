@@ -102,9 +102,17 @@ int input_errors_count = 0;
 #endif
 
 // Current modes - map mode to integer (primitive hash)
-static TCHAR mode_current[MAX_MODE_STRING] = TEXT("default");		// Current mode
-static TCHAR mode_map[MAX_MODE][MAX_MODE_STRING];					// Map mode to location
-static int mode_map_count = 0;
+InputEvents::mode InputEvents::current_mode = InputEvents::MODE_DEFAULT;
+
+/** Map mode to location */
+static TCHAR mode_map[MAX_MODE][MAX_MODE_STRING] = {
+  _T("default"),
+  _T("pan"),
+  _T("infobox"),
+  _T("Menu"),
+};
+
+static int mode_map_count = 4;
 
 // Key map to Event - Keys (per mode) mapped to events
 static int Key2Event[MAX_MODE][MAX_KEY];		// Points to Events location
@@ -280,8 +288,8 @@ void InputEvents::readFile() {
 	while( token != NULL ) {
 
 	  // All modes are valid at this point
-	  int mode_id = mode2int(token, true);
-	  assert(mode_id >= 0);
+          mode mode_id = mode2int(token, true);
+          assert(mode_id != MODE_INVALID);
 
 	  // Make label event
 	  // TODO code: Consider Reuse existing entries...
@@ -585,46 +593,40 @@ void InputEvents::makeLabel(int mode_id, const TCHAR* label, int location, int e
 }
 
 // Return 0 for anything else - should probably return -1 !
-int InputEvents::mode2int(const TCHAR *mode, bool create) {
+InputEvents::mode
+InputEvents::mode2int(const TCHAR *mode, bool create)
+{
   int i = 0;
 
   // Better checks !
   if ((mode == NULL))
-    return -1;
+    return MODE_INVALID;
 
   for (i = 0; i < mode_map_count; i++) {
     if (_tcscmp(mode, mode_map[i]) == 0)
-      return i;
+      return (InputEvents::mode)i;
   }
 
   if (create) {
     // Keep a copy
     _tcsncpy(mode_map[mode_map_count], mode, 25);
-    mode_map_count++;
-    return mode_map_count - 1;
+    return (InputEvents::mode)mode_map_count++;
   }
 
   // Should never reach this point
   assert(false);
-  return -1;
+  return MODE_INVALID;
 }
 
 
-void InputEvents::setMode(const TCHAR *mode) {
-  static int lastmode = -1;
-  int thismode;
+void InputEvents::setMode(mode mode)
+{
+  assert(mode < mode_map_count);
 
-  assert(mode != NULL);
+  if (mode == current_mode)
+    return;
 
-  _tcsncpy(mode_current, mode, MAX_MODE_STRING);
-
-  // Mode must already exist to use it here...
-  thismode = mode2int(mode,false);
-  if (thismode < 0)	// Technically an error in config (eg
-			// event=Mode DoesNotExist)
-    return;	// TODO enhancement: Add debugging here
-
-  if (thismode == lastmode) return;
+  current_mode = mode;
 
   // TODO code: Enable this in debug modes
   // for debugging at least, set mode indicator on screen
@@ -637,7 +639,7 @@ void InputEvents::setMode(const TCHAR *mode) {
   */
   ButtonLabel::SetLabelText(0,NULL);
 
-  drawButtons(thismode);
+  drawButtons(current_mode);
   /*
   // Set button labels
   int i;
@@ -653,12 +655,25 @@ void InputEvents::setMode(const TCHAR *mode) {
     }
   }
   */
-
-  lastmode = thismode;
-
 }
 
-void InputEvents::drawButtons(int Mode){
+void InputEvents::setMode(const TCHAR *mode) {
+  InputEvents::mode thismode;
+
+  assert(mode != NULL);
+
+  // Mode must already exist to use it here...
+  thismode = mode2int(mode,false);
+  if (thismode == MODE_INVALID) // Technically an error in config (eg
+			// event=Mode DoesNotExist)
+    return;	// TODO enhancement: Add debugging here
+
+  setMode(thismode);
+}
+
+void
+InputEvents::drawButtons(mode Mode)
+{
   int i;
 
   if (!globalRunningEvent.test()) return; 
@@ -675,12 +690,8 @@ void InputEvents::drawButtons(int Mode){
   }
 }
 
-TCHAR* InputEvents::getMode() {
-  return mode_current;
-}
-
-int InputEvents::getModeID() {
-  return InputEvents::mode2int(InputEvents::getMode(), false);
+InputEvents::mode InputEvents::getModeID() {
+  return current_mode;
 }
 
 // -----------------------------------------------------------------------
@@ -692,7 +703,7 @@ int InputEvents::getModeID() {
 bool InputEvents::processButton(int bindex) {
   if (!globalRunningEvent.test()) return false; 
 
-  int thismode = getModeID();
+  mode thismode = getModeID();
 
   int i;
   // Note - reverse order - last one wins
@@ -702,7 +713,7 @@ bool InputEvents::processButton(int bindex) {
 	// JMW removed requirement of having a label!
 	) {
 
-      int lastMode = thismode;
+      mode lastMode = thismode;
 
       /* JMW illegal, should be done by gui handler loop
       // JMW need a debounce method here..
@@ -748,7 +759,7 @@ bool InputEvents::processKey(int dWord) {
     return false;
 
   // get current mode
-  int mode = InputEvents::getModeID();
+  InputEvents::mode mode = InputEvents::getModeID();
 
 
 
@@ -769,7 +780,7 @@ bool InputEvents::processKey(int dWord) {
   if (event_id > 0) {
 
     int bindex = -1;
-    int lastMode = mode;
+    InputEvents::mode lastMode = mode;
     const TCHAR *pLabelText = NULL;
 
     // JMW should be done by gui handler
@@ -833,7 +844,7 @@ bool InputEvents::processNmea_real(int ne_id) {
     return false;
 
   // get current mode
-  int mode = InputEvents::getModeID();
+  InputEvents::mode mode = InputEvents::getModeID();
 
   // Which key - can be defined locally or at default (fall back to default)
   event_id = N2Event[mode][ne_id];
@@ -929,7 +940,7 @@ bool InputEvents::processGlideComputer_real(int gce_id) {
     return false;
 
   // get current mode
-  int mode = InputEvents::getModeID();
+  InputEvents::mode mode = InputEvents::getModeID();
 
   // Which key - can be defined locally or at default (fall back to default)
   event_id = GC2Event[mode][gce_id];
@@ -995,7 +1006,7 @@ void InputEvents::ShowMenu() {
 #if !defined(GNAV) && !defined(PCGNAV)
   // Popup exit button if in .xci
   // setMode(TEXT("Exit"));
-  setMode(TEXT("Menu")); // VENTA3
+  setMode(MODE_MENU); // VENTA3
 #endif
   ResetDisplayTimeOut();
   MenuTimeOut = 0;
@@ -1007,14 +1018,14 @@ void InputEvents::ShowMenu() {
 
 void InputEvents::ProcessMenuTimer() {
   if (InfoBoxManager::IsFocus()) {
-    InputEvents::setMode(TEXT("infobox"));
+    InputEvents::setMode(MODE_INFOBOX);
   } else {
     if(MenuTimeOut==MenuTimeoutMax) {
       if (main_window.map.isPan()
 	  && !main_window.map.isTargetPan()) {
-	InputEvents::setMode(TEXT("pan"));
+        InputEvents::setMode(MODE_PAN);
       } else {
-	InputEvents::setMode(TEXT("default"));
+        InputEvents::setMode(MODE_DEFAULT);
       }
     }
     MenuTimeOut++;

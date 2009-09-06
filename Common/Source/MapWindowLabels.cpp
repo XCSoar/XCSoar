@@ -89,9 +89,6 @@ void MapWaypointLabelAdd(TCHAR *Name, int X, int Y,
 
   if (MapWaypointLabelListCount >=
       (sizeof(MapWaypointLabelList)/sizeof(MapWaypointLabel_t))-1){
-#ifndef WINDOWSPC
-    assert(0);
-#endif
     return;
   }
 

@@ -739,7 +739,7 @@ InfoBox::on_setfocus()
   /* automatically return focus back to MapWindow if idle */
   focus_timer = set_timer(100, FOCUSTIMEOUTMAX * 500);
 
-  InputEvents::setMode(TEXT("infobox"));
+  InputEvents::setMode(InputEvents::MODE_INFOBOX);
 
   PaintFast();
   return true;

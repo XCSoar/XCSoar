@@ -665,8 +665,8 @@ MapWindow::on_setfocus()
   MaskedPaintWindow::on_setfocus();
 
   InputEvents::setMode(isPan() && !isTargetPan()
-                       ? TEXT("pan")
-                       : TEXT("default"));
+                       ? InputEvents::MODE_PAN
+                       : InputEvents::MODE_DEFAULT);
 
   return true;
 }
