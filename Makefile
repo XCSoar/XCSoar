@@ -666,8 +666,10 @@ endif
 
 all: all-$(TARGET)
 
-all-:
-	$(error No target specified.  Set the variable TARGET to one of: $(TARGETS))
+# if no TARGET is set, build all targets
+all-: $(addprefix call-,$(TARGETS))
+call-%:
+	$(MAKE) TARGET=$(patsubst call-%,%,$@)
 
 $(addprefix all-,$(TARGETS)): all-%: $(OUTPUTS)
 
