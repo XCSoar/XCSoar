@@ -232,6 +232,7 @@ void CreateCalculationThread(void) {
 
   XCSoarInterface::ReadBlackboardBasic(device_blackboard.Basic());
   XCSoarInterface::ReadBlackboardCalculated(glide_computer.Calculated());
+  XCSoarInterface::SendSettingsMap();
 
   device_blackboard.ReadBlackboard(glide_computer.Calculated());
   if (gauge_vario) {

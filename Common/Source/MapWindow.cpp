@@ -154,6 +154,7 @@ void MapWindow::ReadBlackboard(const NMEA_INFO &nmea_info,
   mutexFlightData.Lock();
   MapWindowBlackboard::ReadBlackboard(nmea_info, derived_info);
   ReadSettingsComputer(device_blackboard.SettingsComputer());
+  ReadSettingsMap(device_blackboard.SettingsMap());
 
   DisplayMode_t lastDisplayMode = DisplayMode;
   switch (SettingsMap().UserForceDisplayMode) {
