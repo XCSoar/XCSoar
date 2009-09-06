@@ -107,6 +107,9 @@ void GlideComputerAirData::ProcessBasic() {
 void GlideComputerAirData::ProcessVertical() {
 
   Turning();
+  Wind();
+  ProcessThermalLocator();
+  CuSonde::updateMeasurements(&Basic(), &Calculated());
   LastThermalStats();
   LD();
   CruiseLD();
@@ -121,7 +124,14 @@ void GlideComputerAirData::ProcessVertical() {
 }
 
 
-void GlideComputerAirData::DoWindZigZag() {
+void GlideComputerAirData::Wind() {
+
+  if (!Calculated().Flying || !time_advanced()) return;
+
+  // generate new wind vector if altitude changes or a new
+  // estimate is available
+  DoWindCirclingAltitude();
+
   // update zigzag wind
   if (((SettingsComputer().AutoWindMode 
 	& D_AUTOWIND_ZIGZAG)==D_AUTOWIND_ZIGZAG)
@@ -464,8 +474,6 @@ void GlideComputerAirData::Heading()
     SetCalculated().PitchAngle = RAD_TO_DEG*
       atan2(Calculated().GPSVario-Calculated().Vario,
 	    Calculated().TrueAirspeedEstimated);
-
-    DoWindZigZag();
 
   } else {
     SetCalculated().Heading = Basic().TrackBearing;
@@ -1072,6 +1080,30 @@ GlideComputerAirData::PercentCircling(const double Rate)
 
 
 void
+GlideComputerAirData::ProcessThermalLocator()
+{
+  if (SettingsComputer().EnableThermalLocator) {
+    if (Calculated().Circling) {
+      ScopeLock protect(mutexGlideComputer);
+      thermallocator.AddPoint(Basic().Time, Basic().Longitude, Basic().Latitude,
+			      Calculated().NettoVario);
+      thermallocator.Update(Basic().Time, Basic().Longitude, Basic().Latitude,
+			    Calculated().WindSpeed, Calculated().WindBearing,
+			    Basic().TrackBearing,
+			    &SetCalculated().ThermalEstimate_Longitude,
+			    &SetCalculated().ThermalEstimate_Latitude,
+			    &SetCalculated().ThermalEstimate_W,
+			    &SetCalculated().ThermalEstimate_R);
+    } else {
+      SetCalculated().ThermalEstimate_W = 0;
+      SetCalculated().ThermalEstimate_R = -1;
+      ScopeLock protect(mutexGlideComputer);
+      thermallocator.Reset();
+    }
+  }
+}
+
+void
 GlideComputerAirData::Turning()
 {
   static bool LEFT = false;
@@ -1249,34 +1281,6 @@ GlideComputerAirData::Turning()
     // error, go to cruise
     SetCalculated().TurnMode = CRUISE;
   }
-
-  // generate new wind vector if altitude changes or a new
-  // estimate is available
-  DoWindCirclingAltitude();
-
-  if (SettingsComputer().EnableThermalLocator) {
-    if (Calculated().Circling) {
-      ScopeLock protect(mutexGlideComputer);
-      thermallocator.AddPoint(Basic().Time, Basic().Longitude, Basic().Latitude,
-			      Calculated().NettoVario);
-      thermallocator.Update(Basic().Time, Basic().Longitude, Basic().Latitude,
-			    Calculated().WindSpeed, Calculated().WindBearing,
-			    Basic().TrackBearing,
-			    &SetCalculated().ThermalEstimate_Longitude,
-			    &SetCalculated().ThermalEstimate_Latitude,
-			    &SetCalculated().ThermalEstimate_W,
-			    &SetCalculated().ThermalEstimate_R);
-    } else {
-      SetCalculated().ThermalEstimate_W = 0;
-      SetCalculated().ThermalEstimate_R = -1;
-      ScopeLock protect(mutexGlideComputer);
-      thermallocator.Reset();
-    }
-  }
-
-  // update atmospheric model
-  CuSonde::updateMeasurements(&Basic(), &Calculated());
-
 }
 
 

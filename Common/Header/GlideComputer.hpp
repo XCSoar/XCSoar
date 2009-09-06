@@ -93,7 +93,7 @@ private:
   void LD();
   void CruiseLD();
   void Heading();
-  void DoWindZigZag();
+  void Wind();
   void TerrainHeight();
   void EnergyHeightNavAltitude();
   void Vario();
@@ -110,6 +110,7 @@ private:
   void ThermalBand();
   void PercentCircling(const double Rate);
   void Turning();
+  void ProcessThermalLocator();
   GPSClock airspace_clock;
   GPSClock ballast_clock;
 };
