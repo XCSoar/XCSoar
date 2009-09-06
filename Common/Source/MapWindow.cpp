@@ -122,6 +122,19 @@ MapWindow::set(ContainerWindow &parent,
   MaskedPaintWindow::set(parent, _T("XCSoarMap"), MapRect.left, MapRect.top,
                          MapRect.right - MapRect.left,
                          MapRect.bottom - MapRect.top);
+
+  // initialise other systems
+  InitialiseScaleList(SettingsMap());
+
+  // set initial display mode
+  draw_canvas.background_transparent();
+
+  // paint draw window black to start
+  draw_canvas.black_pen();
+  draw_canvas.rectangle(MapRectBig.left, MapRectBig.top,
+                        MapRectBig.right, MapRectBig.bottom);
+
+  get_canvas().copy(draw_canvas);
 }
 
 void MapWindow::RefreshMap() {
@@ -305,21 +318,6 @@ void MapWindow::DrawThreadLoop(void) {
 
 
 void MapWindow::DrawThreadInitialise(void) {
-  // initialise other systems
-  InitialiseScaleList(SettingsMap()); 
-  // should really be done before the thread has started, so it happens
-  // from main thread
-
-  // set initial display mode
-  draw_canvas.background_transparent();
-
-  // paint draw window black to start
-  draw_canvas.black_pen();
-  draw_canvas.rectangle(MapRectBig.left, MapRectBig.top,
-			MapRectBig.right, MapRectBig.bottom);
-
-  get_canvas().copy(draw_canvas);
-
   ApplyScreenSize();
 }
 
