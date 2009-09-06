@@ -60,6 +60,8 @@ class GlideComputerBlackboard: public BaseBlackboard {
 public:
   void ReadBlackboard(const NMEA_INFO &nmea_info);
   void ReadSettingsComputer(const SETTINGS_COMPUTER &settings);
+  const NMEA_INFO& LastBasic() const { return last_gps_info; }
+  const DERIVED_INFO& LastCalculated() const { return last_calculated_info; }
 protected:
   void ResetFlight(const bool full=true);
   void StartTask();
@@ -76,6 +78,8 @@ protected:
   DERIVED_INFO& SetCalculated() { return calculated_info; }
 private:
   DERIVED_INFO Finish_Derived_Info;
+  NMEA_INFO     last_gps_info;
+  DERIVED_INFO last_calculated_info;
 };
 
 

@@ -146,7 +146,17 @@ MapWindowBlackboard::ReadBlackboard(const NMEA_INFO &nmea_info,
 void 
 GlideComputerBlackboard::ReadBlackboard(const NMEA_INFO &nmea_info) 
 {
+  if (nmea_info.Time< gps_info.Time) {
+    // backwards in time, so reset last
+    memcpy(&last_gps_info,&nmea_info,sizeof(NMEA_INFO));
+    memcpy(&last_calculated_info,&calculated_info,sizeof(DERIVED_INFO));
+  } else if (nmea_info.Time> gps_info.Time) {
+    // forwards in time, so save state
+    memcpy(&last_gps_info,&gps_info,sizeof(NMEA_INFO));
+    memcpy(&last_calculated_info,&calculated_info,sizeof(DERIVED_INFO));
+  }
   memcpy(&gps_info,&nmea_info,sizeof(NMEA_INFO));
+  // if time hasn't advanced, don't copy last calculated
 }
 
 void 

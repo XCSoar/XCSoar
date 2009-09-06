@@ -39,7 +39,8 @@ Copyright_License {
 #include <math.h>
 
 
-SnailTrail::SnailTrail() {
+SnailTrail::SnailTrail(): clock(2.0)
+{
   indexNext = 0;
   memset(&TrailPoints[0],0,TRAILSIZE*sizeof(SNAIL_POINT));
 }
@@ -87,21 +88,4 @@ void SnailTrail::ScanVisibility(rectObj *bounds_active) {
 		      (sv->Latitude< bounds.maxy));
     sv++;
   }
-}
-
-bool SnailTrail::CheckAdvance(const double gps_time, const double dt) {
-
-  if(gps_time <= SnailLastTime)  {
-    SnailLastTime = gps_time;
-  }
-  if (gps_time-SnailLastTime>= dt) {
-
-    SnailLastTime += dt;
-    if (SnailLastTime< gps_time-dt) {
-      SnailLastTime = gps_time-dt;
-    }
-
-    return true;
-  }
-  return false;
 }

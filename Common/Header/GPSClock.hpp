@@ -67,13 +67,15 @@ public:
       return false;
     }
   }
+  void set_dt(const double _dt) {
+    dt = _dt;
+  }
   bool check_advance(const double now) {
     return check_advance(now, dt);
   }
   double delta_advance(const double now) {
     double dt=now-last;
-    if (last>now) {
-      last=now;
+    if (check_reverse(now)) {
       return -1;
     }
     if (now-last>=dt) {
@@ -90,8 +92,11 @@ public:
    *
    * @param duration the duration in milliseconds
    */
-  bool check_advance(const double now, const double duration) {
-    if (now >= last + duration) {
+  bool check_advance(const double now, const double dt) {
+    if (check_reverse(now)) {
+      return false;
+    }
+    if (now >= last + dt) {
       last = now;
       return true;
     } else

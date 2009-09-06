@@ -105,14 +105,10 @@ GlideComputerTask::ProcessIdle(const MapWindowProjection &map_projection)
 }
 
 bool GlideComputerTask::DoLogging() {
-  static double OLCLastTime = 0;
-  double dtOLC = 5.0;
+  static GPSClock olc_clock(5.0);
 
-  if(Basic().Time <= OLCLastTime) {
-    OLCLastTime = Basic().Time;
-  }
   if (Calculated().Flying) {
-    if (Calculated().Flying && (Basic().Time - OLCLastTime >= dtOLC)) {
+    if (olc_clock.check_advance(Basic().Time)) {
       mutexGlideComputer.Lock();
       bool restart = olc.addPoint(Basic().Longitude,
 			     Basic().Latitude,
@@ -126,7 +122,6 @@ bool GlideComputerTask::DoLogging() {
 	StartTask(false, false);
 	SetCalculated().ValidStart = true;
       }
-      OLCLastTime += dtOLC;
       return true;
     }
   }
@@ -136,16 +131,15 @@ bool GlideComputerTask::DoLogging() {
 
 // VENTA3 added radial
 void GlideComputerTask::DistanceToHome() {
-  int home_waypoint = HomeWaypoint;
 
-  if (!ValidWayPoint(home_waypoint)) {
+  if (!ValidWayPoint(HomeWaypoint)) {
     SetCalculated().HomeDistance = 0.0;
     SetCalculated().HomeRadial = 0.0; // VENTA3
     return;
   }
 
-  double w1lat = WayPointList[home_waypoint].Latitude;
-  double w1lon = WayPointList[home_waypoint].Longitude;
+  double w1lat = WayPointList[HomeWaypoint].Latitude;
+  double w1lon = WayPointList[HomeWaypoint].Longitude;
   double w0lat = Basic().Latitude;
   double w0lon = Basic().Longitude;
 
@@ -1734,8 +1728,9 @@ void GlideComputerTask::TaskSpeed(const double this_maccready,
 				  const double cruise_efficiency)
 {
   int ifinal;
-  static double LastTime = 0;
-  static double LastTimeStats = 0;
+
+  static GPSClock speed_clock(1.0);
+  static GPSClock stats_clock(0.0);
   double TotalTime=0, TotalDistance=0, Vfinal=0;
 
   if (!ValidTaskPoint(ActiveWayPoint)) return;
@@ -1877,12 +1872,8 @@ void GlideComputerTask::TaskSpeed(const double this_maccready,
 
     SetCalculated().TermikLigaPoints = termikLigaPoints;
 
-    if(Basic().Time < LastTime) {
-      LastTime = Basic().Time;
-    } else if (Basic().Time-LastTime >=1.0) {
-
-      double dt = Basic().Time-LastTime;
-      LastTime = Basic().Time;
+    double dt = speed_clock.delta_advance(Basic().Time);
+    if (dt>0) {
 
       // Calculate contribution to average task speed.
       // This is equal to the change in virtual distance
@@ -1975,8 +1966,7 @@ void GlideComputerTask::TaskSpeed(const double this_maccready,
             LowPassFilter(Calculated().TaskSpeedInstantaneous, vdiff, 0.1);
 
           // update stats
-          if(Basic().Time < LastTimeStats) {
-            LastTimeStats = Basic().Time;
+	  if (stats_clock.check_reverse(Basic().Time)) {
 	    tsi_av = 0;
 	    n_av = 0;
           } else if (n_av>=60) {
@@ -1985,7 +1975,6 @@ void GlideComputerTask::TaskSpeed(const double this_maccready,
 	    SaveTaskSpeed(max((Basic().Time-Calculated().TaskStartTime)/3600.0,
 			      max(0,min(100.0,tsi_av))));
 
-            LastTimeStats = Basic().Time;
 	    tsi_av = 0;
 	    n_av = 0;
           }

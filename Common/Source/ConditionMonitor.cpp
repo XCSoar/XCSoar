@@ -54,6 +54,8 @@ Copyright_License {
 
 #include "GlideComputer.hpp"
 
+// JMW TODO: make this use GPSClock (code re-use)
+
 class ConditionMonitor {
 public:
   ConditionMonitor() {

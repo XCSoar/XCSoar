@@ -154,6 +154,7 @@ typedef struct _DERIVED_INFO
 
   // Turn rate in global coordinates
   double TurnRate;
+  double SmoothedTurnRate;
 
   // reflects whether aircraft is in a start/finish/aat/turn sector
   bool IsInSector;

@@ -41,6 +41,7 @@ Copyright_License {
 #include "NMEA/Info.h"
 #include "NMEA/Derived.hpp"
 #include "Screen/shapelib/mapshape.h"
+#include "GPSClock.hpp"
 
 typedef struct _SNAIL_POINT
 {
@@ -66,11 +67,10 @@ public:
     return TrailPoints[index];
   }
   void ScanVisibility(rectObj *bounds);
-  bool CheckAdvance(const double gps_time, const double dt);
+  GPSClock clock;
 private:
   SNAIL_POINT TrailPoints[TRAILSIZE];
   int indexNext;
-  double SnailLastTime;
 };
 
 #endif

@@ -45,6 +45,7 @@ Copyright_License {
 #include "NMEA/Derived.hpp"
 #include "Logger.h"
 #include "Math/Earth.hpp"
+#include "GPSClock.hpp"
 
 int FastLogNum = 0; // number of points to log at high rate
 
@@ -65,34 +66,10 @@ void GlideComputerStats::StartTask() {
 
 
 bool GlideComputerStats::DoLogging() {
-  static double LogLastTime=0;
-  static double StatsLastTime=0;
-  double dtLog = 5.0;
-  double dtSnail = 2.0;
-  double dtStats = 60.0;
-  double dtFRecord = 270; // 4.5 minutes (required minimum every 5)
-
-  if(Basic().Time <= LogLastTime) {
-    LogLastTime = Basic().Time;
-  }
-  if(Basic().Time <= StatsLastTime) {
-    StatsLastTime = Basic().Time;
-  }
-  if(Basic().Time <= GetFRecordLastTime()) {
-    SetFRecordLastTime(Basic().Time);
-  }
-
-  // draw snail points more often in circling mode
-  if (Calculated().Circling) {
-    dtLog = SettingsComputer().LoggerTimeStepCircling;
-    dtSnail = 1.0;
-  } else {
-    dtLog = SettingsComputer().LoggerTimeStepCruise;
-    dtSnail = 5.0;
-  }
-  if (FastLogNum) {
-    dtLog = 1.0;
-  }
+  static GPSClock log_clock(5.0);
+  static GPSClock stats_clock(60.0);
+  static GPSClock frecord_clock(270.0); // 4.5 minutes (required
+					// minimum every 5)
 
   // prevent bad fixes from being logged or added to OLC store
   static double Longitude_last = 10;
@@ -109,7 +86,19 @@ bool GlideComputerStats::DoLogging() {
     return false;
   }
 
-  if (Basic().Time - LogLastTime >= dtLog) {
+  // draw snail points more often in circling mode
+  if (Calculated().Circling) {
+    log_clock.set_dt(SettingsComputer().LoggerTimeStepCircling);
+    snail_trail.clock.set_dt(1.0);
+  } else {
+    log_clock.set_dt(SettingsComputer().LoggerTimeStepCruise);
+    snail_trail.clock.set_dt(5.0);
+  }
+  if (FastLogNum) {
+    log_clock.set_dt(1.0);
+  }
+
+  if (log_clock.check_advance(Basic().Time)) {
     double balt = -1;
     if (Basic().BaroAltitudeAvailable) {
       balt = Basic().BaroAltitude;
@@ -118,13 +107,10 @@ bool GlideComputerStats::DoLogging() {
     }
     LogPoint(Basic().Latitude , Basic().Longitude , Basic().Altitude,
              balt);
-    LogLastTime += dtLog;
-    if (LogLastTime< Basic().Time-dtLog) {
-      LogLastTime = Basic().Time-dtLog;
-    }
     if (FastLogNum) FastLogNum--;
   }
 
+  /* JMW TODO update this code incomplete
   if (Basic().Time - GetFRecordLastTime() >= dtFRecord)
   {
     if (LogFRecord(Basic().SatelliteIDs,false))
@@ -138,17 +124,18 @@ bool GlideComputerStats::DoLogging() {
         SetFRecordLastTime(Basic().Time-dtFRecord);
     }
   }
+  */
 
-  if (snail_trail.CheckAdvance(Basic().Time, dtSnail)) {
+  if (snail_trail.clock.check_advance(Basic().Time)) {
     mutexGlideComputer.Lock();
     snail_trail.AddPoint(&Basic(), &Calculated());
     mutexGlideComputer.Unlock();
   }
 
   if (Calculated().Flying) {
-    if (Basic().Time - StatsLastTime >= dtStats) {
+    if (stats_clock.check_advance(Basic().Time)) {
 
-      mutexGlideComputer.Lock();
+      ScopeLock protect(mutexGlideComputer);
       flightstats.Altitude_Terrain.
         least_squares_update(max(0,
                                  Basic().Time-Calculated().TakeOffTime)/3600.0,
@@ -158,12 +145,6 @@ bool GlideComputerStats::DoLogging() {
         least_squares_update(max(0,
                                  Basic().Time-Calculated().TakeOffTime)/3600.0,
                              Calculated().NavAltitude);
-      mutexGlideComputer.Unlock();
-
-      StatsLastTime += dtStats;
-      if (StatsLastTime< Basic().Time-dtStats) {
-        StatsLastTime = Basic().Time-dtStats;
-      }
     }
   }
   return true;
