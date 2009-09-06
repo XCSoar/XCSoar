@@ -42,11 +42,6 @@ Copyright_License {
 #include "resource.h" /* for IDI_XCSOARSWIFT */
 #endif
 
-#if (((UNDER_CE >= 300)||(_WIN32_WCE >= 0x0300)) && !defined(WINDOWSPC))
-#define HAVE_ACTIVATE_INFO
-#include <aygshell.h>
-#endif
-
 TopWindow::TopWindow() {
 #ifdef HAVE_ACTIVATE_INFO
   memset(&s_sai, 0, sizeof(s_sai));
@@ -90,7 +85,7 @@ TopWindow::full_screen()
   ::SetWindowPos(hWnd, HWND_TOP, 0, 0, 0, 0,
                  SWP_SHOWWINDOW|SWP_NOMOVE|SWP_NOSIZE);
 #else
-#ifndef CECORE
+#if !defined(CECORE) && !defined(GNAV)
   ::SHFullScreen(hWnd, SHFS_HIDETASKBAR|SHFS_HIDESIPBUTTON|SHFS_HIDESTARTICON);
 #endif
   ::SetWindowPos(hWnd, HWND_TOP, 0, 0,

@@ -40,7 +40,7 @@ Copyright_License {
 
 #include "Screen/ContainerWindow.hpp"
 
-#if (((UNDER_CE >= 300)||(_WIN32_WCE >= 0x0300)) && !defined(WINDOWSPC))
+#if !defined(WINDOWSPC) && !defined(GNAV) && (UNDER_CE >= 300 || _WIN32_WCE >= 0x0300)
 #define HAVE_ACTIVATE_INFO
 #endif
 

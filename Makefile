@@ -613,9 +613,6 @@ OBJS	:=\
 #	$(SRC)/VarioSound.o \
 #	$(SRC)/WaveThread.o \
 
-ifeq ($(CONFIG_ALTAIR),y)
-OBJS += PPC2005/aygShellWrp.o
-endif
 
 XCSOARSETUP_OBJS=\
 	$(SRC)/XcSoarSetup.o
