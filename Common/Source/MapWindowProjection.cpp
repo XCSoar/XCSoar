@@ -450,9 +450,9 @@ void MapWindow::Event_Pan(int vswitch) {
     if (EnablePan) {
       PanLongitude = Basic().Longitude;
       PanLatitude = Basic().Latitude;
-      InputEvents::setMode(TEXT("pan"));
+      InputEvents::setMode(InputEvents::MODE_PAN);
     } else
-      InputEvents::setMode(TEXT("default"));
+      InputEvents::setMode(InputEvents::MODE_DEFAULT);
   }
   RefreshMap();
 }

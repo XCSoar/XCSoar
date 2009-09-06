@@ -150,7 +150,7 @@ void MapWindow::Event_AutoZoom(int vswitch) {
   if (AutoZoom) {
     if (EnablePan) {
       EnablePan = false;
-      InputEvents::setMode(TEXT("default"));
+      InputEvents::setMode(InputEvents::MODE_DEFAULT);
       StoreRestoreFullscreen(false);
     }
   }

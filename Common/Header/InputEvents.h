@@ -48,6 +48,15 @@ typedef void (*pt2Event)(const TCHAR *);
 HINSTANCE _loadDLL(TCHAR *name);
 
 class InputEvents: public ActionInterface {
+public:
+  enum mode {
+    MODE_INVALID = -1,
+    MODE_DEFAULT,
+    MODE_PAN,
+    MODE_INFOBOX,
+    MODE_MENU
+  };
+
  private:
   static int MenuTimeOut;
  public:
@@ -57,10 +66,11 @@ class InputEvents: public ActionInterface {
   static void ProcessMenuTimer();
 
   static void readFile();
-  static int mode2int(const TCHAR *mode, bool create);
+  static mode mode2int(const TCHAR *mode, bool create);
+  static void setMode(mode mode);
   static void setMode(const TCHAR *mode);
   static TCHAR* getMode();
-  static int getModeID();
+  static mode getModeID();
   static int findKey(const TCHAR *data);
   static int findGCE(const TCHAR *data);
   static int findNE(const TCHAR *data);
@@ -74,7 +84,7 @@ class InputEvents: public ActionInterface {
   static int  makeEvent(void (*event)(const TCHAR *), const TCHAR *misc, int next = 0);
   static void makeLabel(int mode_id, const TCHAR *label, int location, int event_id);
 
-  static void drawButtons(int Mode);
+  static void drawButtons(mode Mode);
 
 
   // -------
