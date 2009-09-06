@@ -812,10 +812,20 @@ cxx-flags	=$(DEPFLAGS) $(CXXFLAGS) $(CPPFLAGS) $(CPPFLAGS_$(dirtarget)) $(TARGET
 
 IGNORE	:= \( -name .svn -o -name CVS -o -name .git \) -prune -o
 
-clean: cleani FORCE
+clean-WINE:
+	$(RM) XCSoar-WINE XCSoarSimulator-WINE
+	$(RM) XCSoar-WINE.exe.so XCSoarSimulator-WINE.exe.so
+
+clean-%: TARGET=$(patsubst clean-%,%,$@)
+$(addprefix clean-,$(filter-out WINE,$(TARGETS))): clean-%:
+	$(RM) XCSoar-$(TARGET)$(NOSTRIP_SUFFIX)$(TARGET_EXEEXT) XCSoarSimulator-$(TARGET)$(NOSTRIP_SUFFIX)$(TARGET_EXEEXT)
+	$(RM) XCSoar-$(TARGET)$(TARGET_EXEEXT) XCSoarSimulator-$(TARGET)$(TARGET_EXEEXT)
+
+clean-: $(addprefix clean-,$(TARGETS))
+
+clean: clean-$(TARGET) cleani FORCE
 	find . $(IGNORE) \( -name '*.[oa]' -o -name '*.rsc' -o -name '.*.d' \) \
 	-type f -print | xargs -r $(RM)
-	$(RM) XCSoar-$(TARGET)$(NOSTRIP_SUFFIX)$(TARGET_EXEEXT) XCSoarSimulator-$(TARGET)$(NOSTRIP_SUFFIX)$(TARGET_EXEEXT)
 
 cleani: FORCE
 	find . $(IGNORE) \( -name '*.i' \) \
