@@ -57,6 +57,9 @@ public:
     MODE_MENU
   };
 
+private:
+  static mode current_mode;
+
  private:
   static int MenuTimeOut;
  public:
@@ -69,7 +72,6 @@ public:
   static mode mode2int(const TCHAR *mode, bool create);
   static void setMode(mode mode);
   static void setMode(const TCHAR *mode);
-  static TCHAR* getMode();
   static mode getModeID();
   static int findKey(const TCHAR *data);
   static int findGCE(const TCHAR *data);

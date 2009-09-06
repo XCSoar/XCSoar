@@ -102,7 +102,7 @@ int input_errors_count = 0;
 #endif
 
 // Current modes - map mode to integer (primitive hash)
-static TCHAR mode_current[MAX_MODE_STRING] = TEXT("default");		// Current mode
+InputEvents::mode InputEvents::current_mode = InputEvents::MODE_DEFAULT;
 
 /** Map mode to location */
 static TCHAR mode_map[MAX_MODE][MAX_MODE_STRING] = {
@@ -623,24 +623,10 @@ void InputEvents::setMode(mode mode)
 {
   assert(mode < mode_map_count);
 
-  setMode(mode_map[mode]);
-}
+  if (mode == current_mode)
+    return;
 
-void InputEvents::setMode(const TCHAR *mode) {
-  static InputEvents::mode lastmode = MODE_INVALID;
-  InputEvents::mode thismode;
-
-  assert(mode != NULL);
-
-  _tcsncpy(mode_current, mode, MAX_MODE_STRING);
-
-  // Mode must already exist to use it here...
-  thismode = mode2int(mode,false);
-  if (thismode == MODE_INVALID) // Technically an error in config (eg
-			// event=Mode DoesNotExist)
-    return;	// TODO enhancement: Add debugging here
-
-  if (thismode == lastmode) return;
+  current_mode = mode;
 
   // TODO code: Enable this in debug modes
   // for debugging at least, set mode indicator on screen
@@ -653,7 +639,7 @@ void InputEvents::setMode(const TCHAR *mode) {
   */
   ButtonLabel::SetLabelText(0,NULL);
 
-  drawButtons(thismode);
+  drawButtons(current_mode);
   /*
   // Set button labels
   int i;
@@ -669,9 +655,20 @@ void InputEvents::setMode(const TCHAR *mode) {
     }
   }
   */
+}
 
-  lastmode = thismode;
+void InputEvents::setMode(const TCHAR *mode) {
+  InputEvents::mode thismode;
 
+  assert(mode != NULL);
+
+  // Mode must already exist to use it here...
+  thismode = mode2int(mode,false);
+  if (thismode == MODE_INVALID) // Technically an error in config (eg
+			// event=Mode DoesNotExist)
+    return;	// TODO enhancement: Add debugging here
+
+  setMode(thismode);
 }
 
 void
@@ -693,12 +690,8 @@ InputEvents::drawButtons(mode Mode)
   }
 }
 
-TCHAR* InputEvents::getMode() {
-  return mode_current;
-}
-
 InputEvents::mode InputEvents::getModeID() {
-  return InputEvents::mode2int(InputEvents::getMode(), false);
+  return current_mode;
 }
 
 // -----------------------------------------------------------------------
