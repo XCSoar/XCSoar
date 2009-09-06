@@ -421,7 +421,7 @@ void InputEvents::eventZoom(const TCHAR* misc) {
     else
       Message::AddMessage(TEXT("Circling Zoom OFF"));
   }
-
+  XCSoarInterface::SendSettingsMap();
 }
 
 // Pan
