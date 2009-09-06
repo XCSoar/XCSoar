@@ -38,10 +38,6 @@ Copyright_License {
 #ifndef XCSOAR_COMPONENTS_HPP
 #define XCSOAR_COMPONENTS_HPP
 
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
-
-class MapWindow;
 class GaugeVario;
 class GaugeFLARM;
 class Marks;
