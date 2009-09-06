@@ -142,6 +142,14 @@ void XCSoarInterface::SendSettingsComputer() {
 }
 
 
+void XCSoarInterface::SendSettingsMap() {
+  mutexFlightData.Lock();
+  device_blackboard.ReadSettingsMap(SettingsMap());
+  mutexFlightData.Unlock();
+  // TODO: trigger refresh if the settings are changed
+}
+
+
 bool XCSoarInterface::InterfaceTimeoutZero(void) {
   bool retval;
   mutexInterfaceTimeout.Lock();

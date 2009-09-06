@@ -84,6 +84,8 @@ void ProcessTimer::CommonProcessTimer()
       gauge_flarm->Show();
   }
   SendSettingsComputer();
+  SendSettingsMap();
+
   InfoBoxManager::ProcessTimer();
 
   InputEvents::ProcessMenuTimer();
