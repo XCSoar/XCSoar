@@ -312,12 +312,19 @@ GlideComputer::OnLanding()
 }
 
 void 
-GlideComputer::SwitchClimbMode(bool isclimb, bool left)
+GlideComputer::OnSwitchClimbMode(bool isclimb, bool left)
 {
-  GlideComputerAirData::SwitchClimbMode(isclimb, left);
+  GlideComputerAirData::OnSwitchClimbMode(isclimb, left);
   if (isclimb) {
     InputEvents::processGlideComputer(GCE_FLIGHTMODE_CLIMB);
   } else {
     InputEvents::processGlideComputer(GCE_FLIGHTMODE_CRUISE);
   }
+}
+
+void
+GlideComputer::OnDepartedThermal()
+{
+  GlideComputerAirData::OnDepartedThermal();
+  GlideComputerStats::OnDepartedThermal();
 }

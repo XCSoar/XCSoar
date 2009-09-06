@@ -67,6 +67,19 @@ Copyright_License {
 #include "Settings.hpp"
 #include "GPSClock.hpp"
 
+
+////
+#define CRUISE 0
+#define WAITCLIMB 1
+#define CLIMB 2
+#define WAITCRUISE 3
+
+#define MinTurnRate  4
+#define CruiseClimbSwitch 15
+#define ClimbCruiseSwitch 10
+#define THERMAL_TIME_MIN 45.0
+
+
 static bool WasFlying = false; // VENTA3 used by auto QFE: do not reset QFE
 			//   if previously in flight. So you can check
 			//   QFE on the ground, otherwise it turns to
@@ -123,10 +136,15 @@ void GlideComputerAirData::ProcessVertical() {
 
 }
 
+/////////////////////////////////////////////////////////////
 
 void GlideComputerAirData::Wind() {
 
   if (!Calculated().Flying || !time_advanced()) return;
+
+  if (Calculated().TurnMode == CLIMB) {
+    DoWindCirclingSample();
+  }
 
   // generate new wind vector if altitude changes or a new
   // estimate is available
@@ -199,12 +217,13 @@ void GlideComputerAirData::SetWindEstimate(const double wind_speed,
 }
 
 
-///////////
+////////////////////////////////////////////////////////////////////
 
 
 void GlideComputerAirData::AverageClimbRate()
 {
-  if (Basic().AirspeedAvailable && Basic().VarioAvailable
+  if (Basic().AirspeedAvailable 
+      && Basic().VarioAvailable
       && (!Calculated().Circling)) {
 
     int vi = iround(Basic().IndicatedAirspeed);
@@ -356,11 +375,13 @@ void GlideComputerAirData::MaxHeightGain()
 
   if (Calculated().MinAltitude>0) {
     double height_gain = Calculated().NavAltitude - Calculated().MinAltitude;
-    SetCalculated().MaxHeightGain = max(height_gain, Calculated().MaxHeightGain);
+    SetCalculated().MaxHeightGain = max(height_gain, 
+					Calculated().MaxHeightGain);
   } else {
     SetCalculated().MinAltitude = Calculated().NavAltitude;
   }
-  SetCalculated().MinAltitude = min(Calculated().NavAltitude, Calculated().MinAltitude);
+  SetCalculated().MinAltitude = min(Calculated().NavAltitude, 
+				    Calculated().MinAltitude);
 }
 
 
@@ -477,6 +498,11 @@ void GlideComputerAirData::Heading()
 
   } else {
     SetCalculated().Heading = Basic().TrackBearing;
+    SetCalculated().BankAngle = 0;
+    SetCalculated().Gload = 1.0;
+    SetCalculated().PitchAngle = 0.0;
+    SetCalculated().TrueAirspeedEstimated = 0.0;
+    SetCalculated().TurnRateWind = 0.0;
   }
 }
 
@@ -1033,21 +1059,9 @@ GlideComputerAirData::BallastDump()
 }
 
 
-////
-
-
-#define CRUISE 0
-#define WAITCLIMB 1
-#define CLIMB 2
-#define WAITCRUISE 3
-
-#define MinTurnRate  4
-#define CruiseClimbSwitch 15
-#define ClimbCruiseSwitch 10
-#define THERMAL_TIME_MIN 45.0
 
 void
-GlideComputerAirData::SwitchClimbMode(bool isclimb, bool left)
+GlideComputerAirData::OnSwitchClimbMode(bool isclimb, bool left)
 {
   InitLDRotary(SettingsComputer(), &rotaryLD);
   DoWindCirclingMode(left);
@@ -1222,7 +1236,7 @@ GlideComputerAirData::Turning()
         // into InputEvents instead?
         // JMW: NO.  Core functionality must be built into the
         // main program, unable to be overridden.
-        SwitchClimbMode(true, LEFT);
+        OnSwitchClimbMode(true, LEFT);
       }
     } else {
       // nope, not turning, so go back to cruise
@@ -1230,8 +1244,6 @@ GlideComputerAirData::Turning()
     }
     break;
   case CLIMB:
-    DoWindCirclingSample();
-
     if((Rate < MinTurnRate)||(forcecruise)) {
       SetCalculated().TurnStartTime = Basic().Time;
       SetCalculated().TurnStartLongitude = Basic().Longitude;
@@ -1252,7 +1264,8 @@ GlideComputerAirData::Turning()
       break;
     }
     if((Rate < MinTurnRate) || forcecruise) {
-      if( ((Basic().Time  - Calculated().TurnStartTime) > ClimbCruiseSwitch) || forcecruise) {
+      if( ((Basic().Time  - Calculated().TurnStartTime) 
+	   > ClimbCruiseSwitch) || forcecruise) {
         SetCalculated().Circling = false;
 
         // Transition to cruise
@@ -1264,7 +1277,7 @@ GlideComputerAirData::Turning()
 
 	OnClimbCeiling();
 
-        SwitchClimbMode(false, LEFT);
+        OnSwitchClimbMode(false, LEFT);
       }
 
       //if ((Basic().Time  - Calculated().TurnStartTime) > ClimbCruiseSwitch/3) {
@@ -1332,34 +1345,35 @@ GlideComputerAirData::ThermalSources()
 void
 GlideComputerAirData::LastThermalStats()
 {
-
   if((Calculated().Circling == false) && (LastCalculated().Circling == true)
-     && (Calculated().ClimbStartTime>=0))
-    {
-      double ThermalTime = Calculated().CruiseStartTime
-        - Calculated().ClimbStartTime;
+     && (Calculated().ClimbStartTime>=0)) {
 
-      if(ThermalTime >0)
-        {
-          double ThermalGain = Calculated().CruiseStartAlt + Calculated().EnergyHeight
-            - Calculated().ClimbStartAlt;
+    double ThermalTime = 
+      Calculated().CruiseStartTime-Calculated().ClimbStartTime;
+    
+    if(ThermalTime >0) {
+      double ThermalGain = Calculated().CruiseStartAlt 
+	+ Calculated().EnergyHeight
+	- Calculated().ClimbStartAlt;
 
-          if (ThermalGain>0) {
-            if (ThermalTime>THERMAL_TIME_MIN) {
-
-	      SetCalculated().LastThermalAverage = ThermalGain/ThermalTime;
-	      SetCalculated().LastThermalGain = ThermalGain;
-	      SetCalculated().LastThermalTime = ThermalTime;
-
-	      OnDepartedThermal();
-
-              if (SettingsComputer().EnableThermalLocator) {
-                ThermalSources();
-              }
-            }
-	  }
-	}
+      if ((ThermalGain>0) && (ThermalTime>THERMAL_TIME_MIN)) {
+	  
+	SetCalculated().LastThermalAverage = ThermalGain/ThermalTime;
+	SetCalculated().LastThermalGain = ThermalGain;
+	SetCalculated().LastThermalTime = ThermalTime;
+	
+	OnDepartedThermal();
+      }
     }
+  }
+}
+
+void
+GlideComputerAirData::OnDepartedThermal()
+{
+  if (SettingsComputer().EnableThermalLocator) {
+    ThermalSources();
+  }
 }
 
 void

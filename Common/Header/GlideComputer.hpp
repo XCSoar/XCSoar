@@ -78,13 +78,14 @@ protected:
   virtual bool ProcessVario();
   virtual void OnTakeoff();
   virtual void OnLanding();
-  virtual void SwitchClimbMode(bool isclimb, bool left);
+  virtual void OnDepartedThermal();
+  virtual void OnSwitchClimbMode(bool isclimb, bool left);
 
+  bool FlightTimes();
+private:
   void DoWindCirclingMode(const bool left);
   void DoWindCirclingSample();
   void DoWindCirclingAltitude();
-  bool FlightTimes();
-private:
   void AverageClimbRate();
   void Average30s();
   void AverageThermal();
@@ -245,7 +246,8 @@ protected:
   virtual void AnnounceWayPointSwitch(bool do_advance);
   virtual void OnTakeoff();
   virtual void OnLanding();
-  virtual void SwitchClimbMode(bool isclimb, bool left);
+  virtual void OnSwitchClimbMode(bool isclimb, bool left);
+  virtual void OnDepartedThermal();
 
 public:
   void Initialise();
