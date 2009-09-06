@@ -1113,7 +1113,7 @@ GlideComputerAirData::Turning()
 
   // JMW limit rate to 50 deg per second otherwise a big spike
   // will cause spurious lock on circling for a long time
-  double Rate = max(50,min(-50,Calculated().TurnRate));
+  double Rate = max(-50,min(50,Calculated().TurnRate));
 
   // average rate, to detect essing
   // TODO: use rotary buffer
@@ -1133,7 +1133,6 @@ GlideComputerAirData::Turning()
 
   Rate=  LowPassFilter(LastCalculated().SmoothedTurnRate,Rate,0.3);
   SetCalculated().SmoothedTurnRate = Rate;
-  StartupStore(TEXT("turn rate %g %g\n"), Rate, Calculated().TurnRate);
   
   if(Rate <0) {
     if (LEFT) {
