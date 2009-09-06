@@ -62,7 +62,6 @@ MapWindowProjection::MapWindowProjection():
   _scale_meters_to_screen ( 0.0),
   DisplayAircraftAngle ( 0.0),
   ScaleListCount ( 0),
-  EnablePan ( false),
   TargetPan ( false),
   TargetPanIndex ( 0),
   TargetZoomDistance ( 500.0),
@@ -385,7 +384,7 @@ MapWindowProjection::CalculateOrigin
   }
   mutexTaskData.Unlock();
 
-  if (_origin_centered || EnablePan) {
+  if (_origin_centered || settings_map.EnablePan) {
     Orig_Screen.x = (rc.left + rc.right)/2;
     Orig_Screen.y = (rc.bottom + rc.top)/2;
   } else {
@@ -395,7 +394,10 @@ MapWindowProjection::CalculateOrigin
   }
 
   //
-  if (!EnablePan) {
+  if (settings_map.EnablePan) {
+    PanLongitude = settings_map.PanLongitude;
+    PanLatitude = settings_map.PanLatitude;
+  } else {
 
     if (IsOriginCentered()
         && DerivedDrawInfo.Circling
@@ -443,38 +445,6 @@ MapWindowProjection::CalculateOrigin
 }
 
 
-void MapWindow::Event_Pan(int vswitch) {
-  //  static bool oldfullscreen = 0;  never assigned!
-  bool oldPan = EnablePan;
-  if (vswitch == -2) { // superpan, toggles fullscreen also
-
-    if (!EnablePan) {
-      StoreRestoreFullscreen(true);
-    } else {
-      StoreRestoreFullscreen(false);
-    }
-    // new mode
-    EnablePan = !EnablePan;
-    if (EnablePan) { // pan now on, so go fullscreen
-      //JMW illegal      askFullScreen = true;
-    }
-
-  } else if (vswitch == -1) {
-    EnablePan = !EnablePan;
-  } else {
-    EnablePan = (vswitch != 0); // 0 off, 1 on
-  }
-
-  if (EnablePan != oldPan) {
-    if (EnablePan) {
-      PanLongitude = Basic().Longitude;
-      PanLatitude = Basic().Latitude;
-      InputEvents::setMode(InputEvents::MODE_PAN);
-    } else
-      InputEvents::setMode(InputEvents::MODE_DEFAULT);
-  }
-  RefreshMap();
-}
 
 
 double

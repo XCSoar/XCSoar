@@ -198,7 +198,7 @@ void MapWindow::DrawMapScale(Canvas &canvas, const RECT rc /* the Map Rect*/,
       }
       if (TargetPan) {
         _tcscat(ScaleInfo, TEXT("TARGET "));
-      } else if (EnablePan) {
+      } else if (SettingsMap().EnablePan) {
         _tcscat(ScaleInfo, TEXT("PAN "));
       }
       if (SettingsMap().EnableAuxiliaryInfo) {

@@ -567,7 +567,8 @@ bool MapWindow::on_mouse_up(int x, int y)
     return true;
   }
  
-  if (!my_target_pan && EnablePan && (distance>IBLSCALE(36))) {
+  if (!my_target_pan && SettingsMap().EnablePan && (distance>IBLSCALE(36))) {
+    // JMW broken!
     PanLongitude += Xstart-Xlat;
     PanLatitude  += Ystart-Ylat;
     RefreshMap();
@@ -659,7 +660,7 @@ MapWindow::on_setfocus()
 {
   MaskedPaintWindow::on_setfocus();
 
-  InputEvents::setMode(isPan() && !isTargetPan()
+  InputEvents::setMode(SettingsMap().EnablePan && !isTargetPan()
                        ? InputEvents::MODE_PAN
                        : InputEvents::MODE_DEFAULT);
 

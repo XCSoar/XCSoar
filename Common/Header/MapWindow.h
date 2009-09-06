@@ -111,9 +111,7 @@ class MapWindow
   // input events or reused code
   void Event_SetZoom(double value);
   void Event_ScaleZoom(int vswitch);
-  void Event_Pan(int vswitch);
   void Event_AutoZoom(int vswitch);
-  void Event_PanCursor(int dx, int dy);
 
   // used by MapWindowBase
   static DWORD DrawThread (LPVOID);

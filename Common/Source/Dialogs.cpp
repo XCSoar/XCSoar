@@ -255,7 +255,7 @@ bool PopupNearestWaypointDetails(double lon, double lat,
   MapWindowProjection &map_window = XCSoarInterface::main_window.map;
 
   int i;
-  if (!pan || !map_window.isPan()) {
+  if (!pan || !XCSoarInterface::SettingsMap().EnablePan) {
     i=FindNearestWayPoint(map_window, lon, lat, range);
   } else {
     // nearest to center of screen if in pan mode

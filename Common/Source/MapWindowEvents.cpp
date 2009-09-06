@@ -143,27 +143,6 @@ void MapWindow::Event_AutoZoom(int vswitch) {
 }
 
 
-void MapWindow::Event_PanCursor(int dx, int dy) {
-  /* JMW illegal
-  int X= (MapRect.right+MapRect.left)/2;
-  int Y= (MapRect.bottom+MapRect.top)/2;
-  double Xstart, Ystart, Xnew, Ynew;
-
-  Screen2LonLat(X, Y, Xstart, Ystart);
-
-  X+= (MapRect.right-MapRect.left)*dx/4;
-  Y+= (MapRect.bottom-MapRect.top)*dy/4;
-  Screen2LonLat(X, Y, Xnew, Ynew);
-
-  if (EnablePan) {
-    PanLongitude += Xstart-Xnew;
-    PanLatitude += Ystart-Ynew;
-  }
-  RefreshMap();
-  */
-}
-
-
 void MapWindow::Event_SetZoom(double value) {
   /* JMW illegal
   if (GetMapScaleUser() != RequestMapScale(value)) {

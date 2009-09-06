@@ -76,7 +76,7 @@ void MapWindow::DrawWaypoints(Canvas &canvas)
 
   // if pan mode, show full names
   int pDisplayTextType = SettingsMap().DisplayTextType;
-  if (EnablePan) {
+  if (SettingsMap().EnablePan) {
     pDisplayTextType = DISPLAYNAME;
   }
 

@@ -436,16 +436,14 @@ void InputEvents::eventZoom(const TCHAR* misc) {
 //	TODO feature: ???	Go to particular point
 //	TODO feature: ???	Go to waypoint (eg: next, named)
 void InputEvents::eventPan(const TCHAR *misc) {
-  MapWindow &map_window = main_window.map;
-
   if (_tcscmp(misc, TEXT("toggle")) == 0)
-    map_window.Event_Pan(-1);
+    sub_Pan(-1);
   else if (_tcscmp(misc, TEXT("supertoggle")) == 0)
-    map_window.Event_Pan(-2);
+    sub_Pan(-2);
   else if (_tcscmp(misc, TEXT("on")) == 0)
-    map_window.Event_Pan(1);
+    sub_Pan(1);
   else if (_tcscmp(misc, TEXT("off")) == 0)
-    map_window.Event_Pan(0);
+    sub_Pan(0);
 
 #if defined(PNA) || defined(FIVV)   // VENTA-ADDON  let pan mode scroll wheel zooming with HP31X. VENTA-TODO: make it different for other PNAs
  else if (_tcscmp(misc, TEXT("up")) == 0)
@@ -454,16 +452,16 @@ else if (_tcscmp(misc, TEXT("down")) == 0)
 			map_window.Event_ScaleZoom(-1); // fixed v58
 #else
   else if (_tcscmp(misc, TEXT("up")) == 0)
-    map_window.Event_PanCursor(0,1);
+    sub_PanCursor(0,1);
   else if (_tcscmp(misc, TEXT("down")) == 0)
-    map_window.Event_PanCursor(0,-1);
+    sub_PanCursor(0,-1);
 #endif   // END VENTA
   else if (_tcscmp(misc, TEXT("left")) == 0)
-    map_window.Event_PanCursor(1,0);
+    sub_PanCursor(1,0);
   else if (_tcscmp(misc, TEXT("right")) == 0)
-    map_window.Event_PanCursor(-1,0);
+    sub_PanCursor(-1,0);
   else if (_tcscmp(misc, TEXT("show")) == 0) {
-    if (map_window.isPan())
+    if (SettingsMap().EnablePan)
       Message::AddMessage(TEXT("Pan mode ON"));
     else
       Message::AddMessage(TEXT("Pan mode OFF"));
@@ -1769,7 +1767,6 @@ eventSounds			- Include Task and Modes sounds along with Vario
 
 void InputEvents::sub_TerrainTopology(int vswitch) {
   char val;
-
   if (vswitch== -1) { // toggle through 4 possible options
     val = 0;
     if (SettingsMap().EnableTopology) val++;
@@ -1778,32 +1775,19 @@ void InputEvents::sub_TerrainTopology(int vswitch) {
     if (val>3) val=0;
     SetSettingsMap().EnableTopology = ((val & 0x01) == 0x01);
     SetSettingsMap().EnableTerrain  = ((val & 0x02) == 0x02);
-    //    RefreshMap();
-
   } else if (vswitch == -2) { // toggle terrain
     SetSettingsMap().EnableTerrain = !SettingsMap().EnableTerrain;
-    //    RefreshMap();
-
   } else if (vswitch == -3) { // toggle topology
     SetSettingsMap().EnableTopology = !SettingsMap().EnableTopology;
-    //    RefreshMap();
-
   } else if (vswitch == 1) { // Turn on toplogy
     SetSettingsMap().EnableTopology = true;
-    //    RefreshMap();
-
   } else if (vswitch == 2) { // Turn off toplogy
     SetSettingsMap().EnableTopology = false;
-    //    RefreshMap();
-
   } else if (vswitch == 3) { // Turn on terrain
     SetSettingsMap().EnableTerrain = true;
-    //    RefreshMap();
 
   } else if (vswitch == 4) { // Turn off terrain
     SetSettingsMap().EnableTerrain = false;
-    //    RefreshMap();
-
   } else if (vswitch == 0) { // Show terrain/Topology
     // ARH Let user know what's happening
     TCHAR buf[128];
@@ -1820,3 +1804,59 @@ void InputEvents::sub_TerrainTopology(int vswitch) {
     Message::AddMessage(TEXT("Topology / Terrain"), buf);
   }
 }
+
+
+void InputEvents::sub_Pan(int vswitch) {
+  //  static bool oldfullscreen = 0;  never assigned!
+  bool oldPan = SettingsMap().EnablePan;
+  if (vswitch == -2) { // superpan, toggles fullscreen also
+
+    /* JMW broken/illegal
+    if (!EnablePan) {
+      StoreRestoreFullscreen(true);
+    } else {
+      StoreRestoreFullscreen(false);
+    }
+    */
+    // new mode
+    SetSettingsMap().EnablePan = !SettingsMap().EnablePan;
+    if (SettingsMap().EnablePan) { // pan now on, so go fullscreen
+      //JMW illegal      askFullScreen = true;
+    }
+
+  } else if (vswitch == -1) {
+    SetSettingsMap().EnablePan = !SettingsMap().EnablePan;
+  } else {
+    SetSettingsMap().EnablePan = (vswitch !=0);
+  }
+  if (SettingsMap().EnablePan != oldPan) {
+    if (SettingsMap().EnablePan) {
+      SetSettingsMap().PanLongitude = Basic().Longitude;
+      SetSettingsMap().PanLatitude = Basic().Latitude;
+      setMode(MODE_PAN);
+    } else
+      setMode(MODE_DEFAULT);
+  }
+}
+
+
+void InputEvents::sub_PanCursor(int dx, int dy) {
+  /* JMW illegal
+  int X= (MapRect.right+MapRect.left)/2;
+  int Y= (MapRect.bottom+MapRect.top)/2;
+  double Xstart, Ystart, Xnew, Ynew;
+
+  Screen2LonLat(X, Y, Xstart, Ystart);
+
+  X+= (MapRect.right-MapRect.left)*dx/4;
+  Y+= (MapRect.bottom-MapRect.top)*dy/4;
+  Screen2LonLat(X, Y, Xnew, Ynew);
+
+  if (SettingsMap().EnablePan) {
+    SetSettingsMap().PanLongitude += Xstart-Xnew;
+    SetSettingsMap().PanLatitude += Ystart-Ynew;
+  }
+  RefreshMap();
+  */
+}
+

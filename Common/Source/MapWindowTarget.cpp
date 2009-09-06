@@ -63,8 +63,8 @@ bool MapWindow::SetTargetPan(bool do_pan, int target_point) {
   if (do_pan && !TargetPan) {
     old_latitude = PanLatitude;
     old_longitude = PanLongitude;
-    old_pan = EnablePan;
-    EnablePan = true;
+    old_pan = SettingsMap().EnablePan;
+    //JMW broken    EnablePan = true;
     TargetPan = do_pan;
 
     /* JMW broken/illegal
@@ -99,7 +99,7 @@ bool MapWindow::SetTargetPan(bool do_pan, int target_point) {
   } else if (TargetPan) {
     PanLongitude = old_longitude;
     PanLatitude = old_latitude;
-    EnablePan = old_pan;
+    // JMW broken    EnablePan = old_pan;
     TargetPan = do_pan;
     /* JMW broken/illegal
     if (old_fullscreen) {

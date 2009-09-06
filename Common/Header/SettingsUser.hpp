@@ -106,6 +106,9 @@ typedef struct SETTINGS_MAP_ {
   bool EnableAuxiliaryInfo;
   DisplayMode_t UserForceDisplayMode;
   bool FullScreen;
+  bool EnablePan;
+  double PanLongitude;
+  double PanLatitude;
 } SETTINGS_MAP;
 
 // display mode stuff

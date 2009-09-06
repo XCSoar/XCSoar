@@ -1018,14 +1018,14 @@ void InputEvents::ShowMenu() {
 
 void InputEvents::ProcessMenuTimer() {
   if (InfoBoxManager::IsFocus()) {
-    InputEvents::setMode(MODE_INFOBOX);
+    setMode(MODE_INFOBOX);
   } else {
     if(MenuTimeOut==MenuTimeoutMax) {
-      if (main_window.map.isPan()
+      if (SettingsMap().EnablePan
 	  && !main_window.map.isTargetPan()) {
-        InputEvents::setMode(MODE_PAN);
+        setMode(MODE_PAN);
       } else {
-        InputEvents::setMode(MODE_DEFAULT);
+        setMode(MODE_DEFAULT);
       }
     }
     MenuTimeOut++;

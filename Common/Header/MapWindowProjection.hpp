@@ -80,10 +80,6 @@ class MapWindowProjection {
   double GetMapScaleKM() const {
     return MapScale*0.001/DISTANCEMODIFY;
   }
-
-  bool isPan() const {
-    return EnablePan;
-  }
   bool isTargetPan(void) const {
     return TargetPan;
   }
@@ -131,7 +127,6 @@ class MapWindowProjection {
   double DisplayAngle;
   double DisplayAircraftAngle;
 
-  bool   EnablePan;
   bool   TargetPan;
   int    TargetPanIndex;
   double TargetZoomDistance;

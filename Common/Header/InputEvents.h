@@ -92,6 +92,8 @@ private:
   // helpers (temporary)
 
   static void sub_TerrainTopology(int vswitch);
+  static void sub_Pan(int vswitch);
+  static void sub_PanCursor(int dx, int dy);
 
   // -------
 

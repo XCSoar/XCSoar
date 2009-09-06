@@ -130,6 +130,9 @@ void XCSoarInterface::DefaultSettings()
   SetSettingsMap().EnableAuxiliaryInfo = 0;
   SetSettingsMap().UserForceDisplayMode = dmNone;
   SetSettingsMap().FullScreen = false;
+  SetSettingsMap().EnablePan = false;
+  SetSettingsMap().PanLongitude = 0;
+  SetSettingsMap().PanLatitude = 0;
 }
 
 
