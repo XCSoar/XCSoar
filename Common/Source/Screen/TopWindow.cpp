@@ -37,6 +37,11 @@ Copyright_License {
 
 #include "Screen/TopWindow.hpp"
 
+#if defined(GNAV) && !defined(PCGNAV)
+#include "Interface.hpp" /* for XCSoarInterface::hInst */
+#include "resource.h" /* for IDI_XCSOARSWIFT */
+#endif
+
 #if (((UNDER_CE >= 300)||(_WIN32_WCE >= 0x0300)) && !defined(WINDOWSPC))
 #define HAVE_ACTIVATE_INFO
 #include <aygshell.h>
@@ -68,7 +73,8 @@ TopWindow::set(LPCTSTR cls, LPCTSTR text,
 
 #if defined(GNAV) && !defined(PCGNAV)
   // TODO code: release the handle?
-  HANDLE hTmp = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_XCSOARSWIFT));
+  HANDLE hTmp = LoadIcon(XCSoarInterface::hInst,
+                         MAKEINTRESOURCE(IDI_XCSOARSWIFT));
   SendMessage(hWnd, WM_SETICON,
 	      (WPARAM)ICON_BIG, (LPARAM)hTmp);
   SendMessage(hWnd, WM_SETICON,
