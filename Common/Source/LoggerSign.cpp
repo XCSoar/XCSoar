@@ -51,6 +51,9 @@
 #include "InputEvents.h"
 #include "Compatibility/string.h"
 
+#ifdef GNAV
+#include "UtilsSystem.hpp" // for FileExistsW()
+#endif
 
 HINSTANCE GRecordDLLHandle = NULL;
 
