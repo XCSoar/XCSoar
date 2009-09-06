@@ -66,6 +66,7 @@ Copyright_License {
 #include "Atmosphere.h"
 #include "LogFile.hpp"
 #include "Settings.hpp"
+#include "GPSClock.hpp"
 
 static bool WasFlying = false; // VENTA3 used by auto QFE: do not reset QFE
 			//   if previously in flight. So you can check
@@ -97,7 +98,6 @@ void GlideComputerAirData::ProcessBasic() {
   TerrainHeight();
   Vario();
   PredictNextPosition();
-  BallastDump();
 }
 
 
@@ -356,27 +356,23 @@ void GlideComputerAirData::MaxHeightGain()
 void GlideComputerAirData::ThermalGain()
 {
   if (Calculated().ClimbStartTime>=0) {
-    if(Basic().Time >= Calculated().ClimbStartTime)
-      {
-        SetCalculated().ThermalGain =
-          Calculated().NavAltitude + Calculated().EnergyHeight
-          - Calculated().ClimbStartAlt;
-      }
+    if(Basic().Time >= Calculated().ClimbStartTime) {
+      SetCalculated().ThermalGain =
+	Calculated().NavAltitude + Calculated().EnergyHeight
+	- Calculated().ClimbStartAlt;
+    }
   }
 }
 
 
-#include "GPSClock.hpp"
 
 void GlideComputerAirData::LD()
 {
-  static GPSClock clock(1.0);
-
-  if (clock.check_reverse(Basic().Time)) {
+  if (time_retreated()) {
     SetCalculated().LDvario = INVALID_GR;
     SetCalculated().LD = INVALID_GR;
   }
-  if (Basic().Time-LastBasic().Time>0) {
+  if (time_advanced()) {
     double DistanceFlown;
     DistanceBearing(Basic().Latitude, Basic().Longitude,
 		    LastBasic().Latitude, LastBasic().Longitude,
@@ -407,26 +403,24 @@ void GlideComputerAirData::LD()
 
 void GlideComputerAirData::CruiseLD()
 {
-  if(!Calculated().Circling)
-    {
-
-      if (Calculated().CruiseStartTime<0) {
-        SetCalculated().CruiseStartLat = Basic().Latitude;
-        SetCalculated().CruiseStartLong = Basic().Longitude;
-        SetCalculated().CruiseStartAlt = Calculated().NavAltitude;
-        SetCalculated().CruiseStartTime = Basic().Time;
-      } else {
-	double DistanceFlown;
-        DistanceBearing(Basic().Latitude, Basic().Longitude,
-                        Calculated().CruiseStartLat,
-                        Calculated().CruiseStartLong, &DistanceFlown, NULL);
-        SetCalculated().CruiseLD =
-          UpdateLD(Calculated().CruiseLD,
-                   DistanceFlown,
-                   Calculated().CruiseStartAlt - Calculated().NavAltitude,
-                   0.5);
-      }
+  if(!Calculated().Circling) {
+    if (Calculated().CruiseStartTime<0) {
+      SetCalculated().CruiseStartLat = Basic().Latitude;
+      SetCalculated().CruiseStartLong = Basic().Longitude;
+      SetCalculated().CruiseStartAlt = Calculated().NavAltitude;
+      SetCalculated().CruiseStartTime = Basic().Time;
+    } else {
+      double DistanceFlown;
+      DistanceBearing(Basic().Latitude, Basic().Longitude,
+		      Calculated().CruiseStartLat,
+		      Calculated().CruiseStartLong, &DistanceFlown, NULL);
+      SetCalculated().CruiseLD =
+	UpdateLD(Calculated().CruiseLD,
+		 DistanceFlown,
+		 Calculated().CruiseStartAlt - Calculated().NavAltitude,
+		 0.5);
     }
+  }
 }
 
 
@@ -699,7 +693,6 @@ GlideComputerAirData::NettoVario()
 bool
 GlideComputerAirData::ProcessVario()
 {
-  static GPSClock clock(0);
   const double mc = GlidePolar::GetMacCready();
   const double ce = GlidePolar::GetCruiseEfficiency();
 
@@ -707,21 +700,14 @@ GlideComputerAirData::ProcessVario()
   SpeedToFly(mc, ce);
 
   // has GPS time advanced?
-  if(clock.delta_advance(Basic().Time)<=0) {
-    return false;
-  } else {
-    return true;
-  }
+  return time_advanced();
 }
 
 
 bool
 GlideComputerAirData::FlightTimes()
 {
-  static GPSClock clock(0);
-  double dt = clock.delta_advance(Basic().Time);
-
-  if ((Basic().Time != 0) && (dt<0)) {
+  if ((Basic().Time != 0) && time_retreated()) {
     // 20060519:sgi added (Basic().Time != 0) dueto alwas return here
     // if no GPS time available
     if (!Basic().NAVWarning) {
@@ -745,6 +731,7 @@ GlideComputerAirData::ProcessIdle(const MapWindowProjection &map_projection)
 {
   static GPSClock clock(6.0);
 
+  BallastDump();
   TerrainFootprint(map_projection.GetScreenDistanceMeters());
   if (clock.check_advance(Basic().Time)) {
     AirspaceWarning(map_projection);
@@ -755,29 +742,30 @@ GlideComputerAirData::ProcessIdle(const MapWindowProjection &map_projection)
 void
 GlideComputerAirData::TakeoffLanding()
 {
-  static int time_in_flight = 0;
-  static int time_on_ground = 0;
-
+  if (time_retreated()) {
+    SetCalculated().TimeInFlight=0;
+    SetCalculated().TimeOnGround=0;
+  }
   if (Basic().Speed>1.0) {
     // stop system from shutting down if moving
     XCSoarInterface::InterfaceTimeoutReset();
   }
   if (!Basic().NAVWarning) {
     if (Basic().Speed> TAKEOFFSPEEDTHRESHOLD) {
-      time_in_flight++;
-      time_on_ground=0;
+      SetCalculated().TimeInFlight= LastCalculated().TimeInFlight+1;
+      SetCalculated().TimeOnGround= 0;
     } else {
       if ((Calculated().AltitudeAGL<300)&&(Calculated().TerrainValid)) {
-        time_in_flight--;
+	SetCalculated().TimeInFlight= LastCalculated().TimeInFlight-1;
       } else if (!Calculated().TerrainValid) {
-        time_in_flight--;
+	SetCalculated().TimeInFlight= LastCalculated().TimeInFlight-1;
       }
-      time_on_ground++;
+      SetCalculated().TimeOnGround= LastCalculated().TimeOnGround+1;
     }
   }
 
-  time_in_flight = min(60, max(0,time_in_flight));
-  time_on_ground = min(30, max(0,time_on_ground));
+  SetCalculated().TimeOnGround= min(30,max(0,Calculated().TimeOnGround));
+  SetCalculated().TimeInFlight= min(60,max(0,Calculated().TimeInFlight));
 
   // JMW logic to detect takeoff and landing is as follows:
   //   detect takeoff when above threshold speed for 10 seconds
@@ -787,17 +775,17 @@ GlideComputerAirData::TakeoffLanding()
   // TODO accuracy: make this more robust by making use of terrain height data
   // if available
 
-  if ((time_on_ground<=10)||(ReplayLogger::IsEnabled())) {
+  if ((Calculated().TimeOnGround<=10)||(ReplayLogger::IsEnabled())) {
     // Don't allow 'OnGround' calculations if in IGC replay mode
     SetCalculated().OnGround = FALSE;
   }
 
   if (!Calculated().Flying) {
     // detect takeoff
-    if (time_in_flight>10) {
+    if (Calculated().TimeInFlight>10) {
       OnTakeoff();
     }
-    if (time_on_ground>10) {
+    if (Calculated().TimeOnGround>10) {
       SetCalculated().OnGround = TRUE;
       DoAutoQNH(&Basic(), &Calculated());
       // Do not reset QFE after landing.
@@ -807,7 +795,7 @@ GlideComputerAirData::TakeoffLanding()
     }
   } else {
     // detect landing
-    if (time_in_flight==0) {
+    if (Calculated().TimeInFlight==0) {
       // have been stationary for a minute
       OnLanding();
     }
@@ -1091,7 +1079,6 @@ GlideComputerAirData::PercentCircling(const double Rate)
 void
 GlideComputerAirData::Turning()
 {
-  static GPSClock clock(0.0);
   static double StartTime  = 0;
   static double StartLong = 0;
   static double StartLat = 0;
@@ -1100,12 +1087,9 @@ GlideComputerAirData::Turning()
   static int MODE = CRUISE;
   static bool LEFT = FALSE;
 
-  if (!Calculated().Flying) return;
+  if (!Calculated().Flying || !time_advanced()) return;
 
-  double dT = clock.delta_advance(Basic().Time);
-  if (dT<=0) 
-    return;
-
+  double dT = Basic().Time-LastBasic().Time;
   SetCalculated().TurnRate = 
     AngleLimit180(Basic().TrackBearing-LastBasic().TrackBearing)/dT;
 
@@ -1388,8 +1372,7 @@ GlideComputerAirData::LastThermalStats()
 void
 GlideComputerAirData::ThermalBand()
 {
-  static GPSClock clock(1.0);
-  if (!clock.check_advance(Basic().Time)) {
+  if (!Basic().Time>LastBasic().Time) {
     return;
   }
 

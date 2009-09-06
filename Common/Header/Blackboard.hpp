@@ -63,6 +63,12 @@ public:
   const NMEA_INFO& LastBasic() const { return last_gps_info; }
   const DERIVED_INFO& LastCalculated() const { return last_calculated_info; }
 protected:
+  bool time_advanced() {
+    return (Basic().Time-LastBasic().Time>0);
+  }
+  bool time_retreated() {
+    return _time_retreated;
+  }
   void ResetFlight(const bool full=true);
   void StartTask();
   void Initialise();
@@ -80,6 +86,7 @@ private:
   DERIVED_INFO Finish_Derived_Info;
   NMEA_INFO     last_gps_info;
   DERIVED_INFO last_calculated_info;
+  bool _time_retreated;
 };
 
 

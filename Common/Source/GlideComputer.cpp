@@ -122,7 +122,6 @@ bool GlideComputer::ProcessGPS()
   CalculateOwnTeamCode();
   CalculateTeammateBearingRange();
 
-  DoLogging();
   vegavoice.Update(&Basic(), &Calculated());
   ConditionMonitorsUpdate(*this);
 
@@ -151,6 +150,8 @@ GlideComputer::ProcessIdle(const MapWindowProjection &map)
   if ( EnableAlternate2 == true ) DoAlternates(Basic, Calculated,Alternate2);
   if ( EnableBestAlternate == true ) DoAlternates(Basic, Calculated,BestAlternate);
   */
+
+  DoLogging();
 
   if (!TaskIsTemporary()) {
     double mc = GlidePolar::GetMacCready();

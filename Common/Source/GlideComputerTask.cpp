@@ -1728,9 +1728,6 @@ void GlideComputerTask::TaskSpeed(const double this_maccready,
 				  const double cruise_efficiency)
 {
   int ifinal;
-
-  static GPSClock speed_clock(1.0);
-  static GPSClock stats_clock(0.0);
   double TotalTime=0, TotalDistance=0, Vfinal=0;
 
   if (!ValidTaskPoint(ActiveWayPoint)) return;
@@ -1872,9 +1869,8 @@ void GlideComputerTask::TaskSpeed(const double this_maccready,
 
     SetCalculated().TermikLigaPoints = termikLigaPoints;
 
-    double dt = speed_clock.delta_advance(Basic().Time);
-    if (dt>0) {
-
+    if (time_advanced()) {
+      double dt = Basic().Time-LastBasic().Time;
       // Calculate contribution to average task speed.
       // This is equal to the change in virtual distance
       // divided by the time step
@@ -1966,7 +1962,7 @@ void GlideComputerTask::TaskSpeed(const double this_maccready,
             LowPassFilter(Calculated().TaskSpeedInstantaneous, vdiff, 0.1);
 
           // update stats
-	  if (stats_clock.check_reverse(Basic().Time)) {
+	  if (time_retreated()) {
 	    tsi_av = 0;
 	    n_av = 0;
           } else if (n_av>=60) {
