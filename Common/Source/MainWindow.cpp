@@ -192,11 +192,9 @@ bool MainWindow::on_close() {
 LRESULT MainWindow::on_message(HWND _hWnd, UINT message,
 			       WPARAM wParam, LPARAM lParam) {
   switch (message) {
-    /*
   case WM_CTLCOLORSTATIC:
     return on_colour((HDC)wParam, get_userdata((HWND)lParam));
     break;
-    */
   };
 
   return TopWindow::on_message(_hWnd, message, wParam, lParam);
