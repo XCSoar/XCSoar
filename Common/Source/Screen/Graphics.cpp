@@ -124,9 +124,13 @@ const Color ScreenGraphics::Colours[] =
 
 // JMW TODO: some of these should be loaded after settings are loaded
 //
+#include "LogFile.hpp"  // debug
+
 void ScreenGraphics::Initialise(HINSTANCE hInstance,
 				const SETTINGS_MAP &settings_map) {
   int i;
+
+  StartupStore(TEXT("Initialise graphics\n"));
 
   Units::LoadUnitBitmap(hInstance);
 

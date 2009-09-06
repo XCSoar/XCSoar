@@ -219,6 +219,7 @@ bool XCSoarInterface::Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
     return false;
 
   DefaultSettings();
+  SendSettingsMap();
 
   PaintWindow::register_class(hInst);
   MainWindow::register_class(hInst);
@@ -229,7 +230,7 @@ bool XCSoarInterface::Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
   InitSineTable();
   PreloadInitialisation(true);
 
-  XCSoarInterface::SendSettingsMap();
+  SendSettingsMap();
 
   StartupStore(TEXT("Create main window\n"));
 

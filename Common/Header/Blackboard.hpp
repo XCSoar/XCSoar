@@ -197,16 +197,6 @@ private:
   static InterfaceBlackboard blackboard;
 };
 
-// master flight data
-//extern NMEA_INFO GPS_INFO;
-//extern DERIVED_INFO CALCULATED_INFO;
-
-// gps detection
-extern BOOL GPSCONNECT;
-extern BOOL VARIOCONNECT;
-
-extern BOOL extGPSCONNECT;
-
 extern DeviceBlackboard device_blackboard;
 
 #endif

@@ -398,7 +398,7 @@ int ParseWayPointString(const TCHAR *String,WAYPOINT *Temp)
   //ExtractParameter(TempString,ctemp,2); //Longitude
   if ((pToken = strtok_r(NULL, TEXT(","), &pWClast)) == NULL)
     return FALSE;
-  StartupStore(TEXT("huh %s\n"), pToken);
+
   Temp->Longitude  = CalculateAngle(pToken);
   if((Temp->Longitude  > 180) || (Temp->Longitude  < -180))
     {

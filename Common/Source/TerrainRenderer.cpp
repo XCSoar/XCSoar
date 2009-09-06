@@ -299,6 +299,10 @@ inline void TerrainShading(const short illum, BYTE &r, BYTE &g, BYTE &b)
 
 TerrainRenderer::TerrainRenderer(RECT rc) {
 
+  TerrainContrast = 150;
+  TerrainBrightness = 36;
+  TerrainRamp = 0;
+
   if (!terrain.IsDirectAccess()) {
     dtquant = 6;
   } else {

@@ -72,10 +72,13 @@ MapWindowProjection::MapWindowProjection():
 }
 
 
-void MapWindowProjection::InitialiseScaleList(void) {
+void 
+MapWindowProjection::InitialiseScaleList
+(const SETTINGS_MAP &settings_map) 
+{
   ScaleListCount = propGetScaleList(ScaleList, 
 				    sizeof(ScaleList)/sizeof(ScaleList[0]));
-  ScaleCurrent = 3;
+  _RequestedMapScale = LimitMapScale(_RequestedMapScale, settings_map);
 }
 
 bool MapWindowProjection::WaypointInScaleFilter(int i) const
@@ -100,8 +103,9 @@ bool MapWindowProjection::PointInRect(const double &x,
 }
 
 
-bool MapWindowProjection::LonLatVisible(const double &lon,
-					const double &lat) const
+bool 
+MapWindowProjection::LonLatVisible(const double &lon,
+				   const double &lat) const
 {
   if ((lon> screenbounds_latlon.minx) &&
       (lon< screenbounds_latlon.maxx) &&
@@ -112,8 +116,10 @@ bool MapWindowProjection::LonLatVisible(const double &lon,
     return false;
 }
 
-bool MapWindowProjection::LonLat2ScreenIfVisible(const double &lon, const double &lat,
-						 POINT *sc) const
+bool 
+MapWindowProjection::LonLat2ScreenIfVisible(const double &lon, 
+					    const double &lat,
+					    POINT *sc) const
 {
   if (LonLatVisible(lon, lat)) {
     LonLat2Screen(lon, lat, *sc);

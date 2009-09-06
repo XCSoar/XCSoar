@@ -228,9 +228,8 @@ DeviceBlackboard::LowerConnection()
 void
 DeviceBlackboard::RaiseConnection()
 {
-  mutexFlightData.Lock();
+  ScopeLock protect(mutexFlightData);
   SetBasic().Connected = 2;
-  mutexFlightData.Unlock();
 }
 
 #ifdef _SIM_

@@ -75,7 +75,6 @@ Copyright_License {
 BufferWindow InfoBoxManager::full_window;
 
 // user setting
-bool EnableAuxiliaryInfo = false;
 int ActiveAlternate = -1;
 
 static bool InfoBoxesDirty= false;
@@ -395,7 +394,7 @@ void InfoBoxManager::setTypeAll(unsigned i, unsigned j) {
 int InfoBoxManager::getType(unsigned i) {
   unsigned retval = 0;
 
-  if (EnableAuxiliaryInfo) {
+  if (XCSoarInterface::SettingsMap().EnableAuxiliaryInfo) {
     retval = getType(i,3);
   } else {
     if (DisplayMode == dmCircling)
@@ -436,7 +435,7 @@ void InfoBoxManager::setType(unsigned i, char j, unsigned layer)
 
 void InfoBoxManager::setType(unsigned i, char j)
 {
-  if (EnableAuxiliaryInfo) {
+  if (XCSoarInterface::SettingsMap().EnableAuxiliaryInfo) {
     setType(i, 3, j);
   } else {
     if (DisplayMode == dmCircling) {

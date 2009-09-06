@@ -275,9 +275,7 @@ void MapWindow::DrawThreadLoop(void) {
 
   StartTimer();
 
-  mutexFlightData.Lock();
   ReadBlackboard(device_blackboard.Basic(), device_blackboard.Calculated());
-  mutexFlightData.Unlock();
 
   if (BigZoom) {
     // quickly draw zoom level on top
@@ -303,8 +301,9 @@ void MapWindow::DrawThreadLoop(void) {
 
 void MapWindow::DrawThreadInitialise(void) {
   // initialise other systems
-  InitialiseScaleList(); // should really be done before the thread
-			 // has started, so it happens from main thread
+  InitialiseScaleList(SettingsMap()); 
+  // should really be done before the thread has started, so it happens
+  // from main thread
 
   // set initial display mode
   draw_canvas.background_transparent();

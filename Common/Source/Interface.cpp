@@ -69,10 +69,11 @@ double TeammateLatitude;
 double TeammateLongitude;
 bool TeammateCodeValid = false;
 
-
+#include "LogFile.hpp"
 
 void XCSoarInterface::DefaultSettings() 
 {
+  StartupStore(TEXT("Default settings\n"));
   SetSettingsComputer().AutoMacCready = false;
   SetSettingsComputer().AutoWindMode= D_AUTOWIND_CIRCLING;
   SetSettingsComputer().AutoMcMode = 0;

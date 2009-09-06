@@ -105,6 +105,9 @@ void MapWindow::SwitchZoomClimb(void) {
 
 /////////////////////////////////////////
 // called from UI
+// illegal stuff below
+#include "InfoBoxManager.h"
+#include "Gauge/GaugeVario.hpp"
 
 void MapWindow::ToggleFullScreenStart() {
   // ok, save the state.
@@ -116,7 +119,6 @@ void MapWindow::ToggleFullScreenStart() {
     SetMapRect(MapRectSmall);
   }
 
-  /* JMW illegal
   if (MapFullScreen) {
     InfoBoxManager::Hide();
   } else {
@@ -124,7 +126,6 @@ void MapWindow::ToggleFullScreenStart() {
   }
   if (gauge_vario != NULL)
     gauge_vario->Show(!MapFullScreen);
-  */
 }
 
 

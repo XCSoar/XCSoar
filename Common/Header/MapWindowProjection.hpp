@@ -144,7 +144,7 @@ class MapWindowProjection {
 			 const SETTINGS_MAP &settings_map);
 
   double    StepMapScale(int Step);
-  void      InitialiseScaleList();
+  void      InitialiseScaleList(const SETTINGS_MAP &settings);
 
   unsigned DistanceMetersToScreen(const double x) {
     return iround(_scale_meters_to_screen*x);
