@@ -303,3 +303,9 @@ DeviceBlackboard::ReadSettingsMap(const SETTINGS_MAP
 }
 
 
+void 
+MapProjectionBlackboard::ReadMapProjection
+(const MapWindowProjection &map)
+{
+  map_projection = map;
+}

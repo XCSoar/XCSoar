@@ -136,6 +136,23 @@ void XCSoarInterface::DefaultSettings()
 }
 
 
+void XCSoarInterface::ExchangeBlackboard() {
+  mutexFlightData.Lock();
+  ReceiveBlackboard();
+  ReceiveMapProjection();
+  SendSettingsComputer();
+  SendSettingsMap();
+  mutexFlightData.Unlock();
+}
+
+void XCSoarInterface::ReceiveBlackboard() {
+  mutexFlightData.Lock();
+  ReadBlackboardBasic(device_blackboard.Basic());
+  ReadBlackboardCalculated(device_blackboard.Calculated());
+  mutexFlightData.Unlock();
+}
+
+
 void XCSoarInterface::SendSettingsComputer() {
   // send computer settings to the device because we know
   // that it won't be reading from them if we lock it, and
@@ -146,6 +163,12 @@ void XCSoarInterface::SendSettingsComputer() {
   // TODO: trigger refresh if the settings are changed
 }
 
+void XCSoarInterface::ReceiveMapProjection() 
+{
+  mutexFlightData.Lock();
+  ReadMapProjection(device_blackboard.MapProjection());
+  mutexFlightData.Unlock();
+}
 
 void XCSoarInterface::SendSettingsMap() {
   mutexFlightData.Lock();

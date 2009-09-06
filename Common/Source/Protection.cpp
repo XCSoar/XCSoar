@@ -164,7 +164,6 @@ DWORD CalculationThread (LPVOID lpvoid) {
     }
     glide_computer.ReadBlackboard(device_blackboard.Basic());
     glide_computer.ReadSettingsComputer(device_blackboard.SettingsComputer());
-    XCSoarInterface::ReadBlackboardBasic(device_blackboard.Basic());
     mutexFlightData.Unlock();
 
     TriggerRedraws(); // just the map
@@ -197,7 +196,7 @@ DWORD CalculationThread (LPVOID lpvoid) {
       break; // drop out on exit
 
     if (need_calculations_slow) {
-      glide_computer.ProcessIdle(XCSoarInterface::main_window.map);
+      glide_computer.ProcessIdle();
       need_calculations_slow = false;
     }
 
@@ -209,7 +208,7 @@ DWORD CalculationThread (LPVOID lpvoid) {
     // that one back (otherwise we may write over new data)
     mutexFlightData.Lock();
     device_blackboard.ReadBlackboard(glide_computer.Calculated());
-    XCSoarInterface::ReadBlackboardCalculated(glide_computer.Calculated());
+    glide_computer.ReadMapProjection(device_blackboard.MapProjection());
     mutexFlightData.Unlock();
 
     // reset triggers

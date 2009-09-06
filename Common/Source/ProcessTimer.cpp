@@ -69,6 +69,8 @@ static void HeapCompactTimer()
 
 void ProcessTimer::CommonProcessTimer()
 {
+  ExchangeBlackboard();
+
   // service the GCE and NMEA queue
   if (globalRunningEvent.test()) {
 
@@ -84,8 +86,6 @@ void ProcessTimer::CommonProcessTimer()
     if (gauge_flarm != NULL)
       gauge_flarm->Show();
   }
-  SendSettingsComputer();
-  SendSettingsMap();
 
   InfoBoxManager::ProcessTimer();
 

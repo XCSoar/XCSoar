@@ -96,7 +96,7 @@ void GlideComputerTask::ProcessBasicTask(const double mc,
 }
 
 void
-GlideComputerTask::ProcessIdle(const MapWindowProjection &map_projection)
+GlideComputerTask::ProcessIdle()
 {
   if (TaskAborted) { 
     SortLandableWaypoints();

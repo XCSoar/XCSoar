@@ -177,6 +177,7 @@ void MapWindow::ReadBlackboard(const NMEA_INFO &nmea_info,
 
   MapWindowProjection::ExchangeBlackboard(nmea_info, derived_info,
 					  SettingsMap());
+  device_blackboard.ReadMapProjection(*this);
   mutexFlightData.Unlock();
 }
 

@@ -762,12 +762,12 @@ GlideComputerAirData::FlightTimes()
 }
 
 void
-GlideComputerAirData::ProcessIdle(const MapWindowProjection &map_projection)
+GlideComputerAirData::ProcessIdle()
 {
   BallastDump();
-  TerrainFootprint(map_projection.GetScreenDistanceMeters());
+  TerrainFootprint(MapProjection().GetScreenDistanceMeters());
   if (airspace_clock.check_advance(Basic().Time)) {
-    AirspaceWarning(map_projection);
+    AirspaceWarning();
   }
 }
 
@@ -903,7 +903,7 @@ bool GlobalClearAirspaceWarnings = false;
 
 
 void
-GlideComputerAirData::AirspaceWarning(const MapWindowProjection &map_projection)
+GlideComputerAirData::AirspaceWarning()
 {
   unsigned int i;
 
@@ -960,7 +960,7 @@ GlideComputerAirData::AirspaceWarning(const MapWindowProjection &map_projection)
         if ((iAirspaceMode[AirspaceCircle[i].Type] >= 2) &&
 	    InsideAirspaceCircle(lon, lat, i)) {
 
-          AirspaceWarnListAdd(&Basic(), &Calculated(), map_projection,
+          AirspaceWarnListAdd(&Basic(), &Calculated(), MapProjection(),
                               position_is_predicted, 1, i, false);
         }
       }

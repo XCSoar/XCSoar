@@ -54,6 +54,9 @@ public:
   // TODO: make this protected
   static const NMEA_INFO& Basic() { return blackboard.Basic(); }
   static const DERIVED_INFO& Calculated() { return blackboard.Calculated(); }
+  static const MapWindowProjection& MapProjection()
+  { return blackboard.MapProjection(); }
+
   static const SETTINGS_COMPUTER& SettingsComputer()
   { return blackboard.SettingsComputer(); }
   static SETTINGS_COMPUTER& SetSettingsComputer()
@@ -63,7 +66,10 @@ public:
   { return blackboard.SettingsMap(); }
   static SETTINGS_MAP& SetSettingsMap()
   { return blackboard.SetSettingsMap(); }
-    
+
+  static void ReadMapProjection(const MapWindowProjection &map) {
+    blackboard.ReadMapProjection(map);
+  }
   static void ReadBlackboardBasic(const NMEA_INFO& nmea_info) {
     blackboard.ReadBlackboardBasic(nmea_info);
   }
@@ -133,8 +139,12 @@ public:
   static void CloseProgressDialog();
   static void StepProgressDialog();
   static BOOL SetProgressStepSize(int nSize);
+
+  static void ExchangeBlackboard();
   static void SendSettingsComputer();
   static void SendSettingsMap();
+  static void ReceiveMapProjection();
+  static void ReceiveBlackboard();
 private:
   static void PreloadInitialisation(bool ask);
   static void StartupInfo();

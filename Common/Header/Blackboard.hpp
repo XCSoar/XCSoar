@@ -42,7 +42,7 @@ Copyright_License {
 #include "NMEA/Derived.hpp"
 #include "SettingsComputer.hpp"
 #include "SettingsUser.hpp"
-
+#include "MapWindowProjection.hpp"
 
 class BaseBlackboard 
 {
@@ -75,10 +75,21 @@ protected:
   SETTINGS_MAP settings_map;
 };
 
+class MapProjectionBlackboard
+{
+protected:
+  MapWindowProjection map_projection;
+public:
+  const MapWindowProjection &MapProjection() const
+  { return map_projection; };
+  void ReadMapProjection(const MapWindowProjection &map);
+};
+
 
 class GlideComputerBlackboard: 
   public BaseBlackboard,
-  public SettingsComputerBlackboard
+  public SettingsComputerBlackboard,
+  public MapProjectionBlackboard
 {
 public:
   void ReadBlackboard(const NMEA_INFO &nmea_info);
@@ -118,7 +129,8 @@ private:
 class DeviceBlackboard: 
   public BaseBlackboard,
   public SettingsComputerBlackboard,
-  public SettingsMapBlackboard
+  public SettingsMapBlackboard,
+  public MapProjectionBlackboard
 {
 public:
   void Initialise();
@@ -166,7 +178,8 @@ protected:
 class InterfaceBlackboard: 
   public BaseBlackboard,
   public SettingsComputerBlackboard,
-  public SettingsMapBlackboard
+  public SettingsMapBlackboard,
+  public MapProjectionBlackboard
 {
 public:
   void ReadBlackboardBasic(const NMEA_INFO &nmea_info);
