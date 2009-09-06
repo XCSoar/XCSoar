@@ -17,7 +17,7 @@
 #               0 means quiet, and 2 prints the full compiler commands.
 #
 
-TARGETS = PC PPC2002 PPC2003 PPC2003X PNA WM5 WINE ALTAIR ALTAIRPORTRAIT
+TARGETS = PC PPC2002 PPC2003 PPC2003X PNA WM5 ALTAIR ALTAIRPORTRAIT WINE 
 
 #
 SRC=Common/Source
@@ -778,7 +778,7 @@ cxx-flags	=$(DEPFLAGS) $(CXXFLAGS) $(CPPFLAGS) $(CPPFLAGS_$(dirtarget)) $(TARGET
 	@$(NQ)echo "  CXX     $@"
 	$(Q)$(CXX) $(cxx-flags) -c $(OUTPUT_OPTION) $<
 	@sed -i '1s,^[^ :]*,$@,' $(DEPFILE)
-	etags -a $<
+#	etags -a $<
 
 %-$(TARGET).o: %.cxx
 	@$(NQ)echo "  CXX     $@"

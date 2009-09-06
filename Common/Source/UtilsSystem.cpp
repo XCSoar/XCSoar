@@ -48,6 +48,7 @@ Copyright_License {
 #ifdef PNA
 #include "LogFile.hpp"
 #include "SettingsUser.hpp"
+#include "Audio/WaveThread.h"
 #endif
 
 #ifndef __MINGW32__
