@@ -192,7 +192,7 @@ bool ButtonLabel::ExpandMacros(const TCHAR *In,
   }
   if (_tcsstr(OutBuffer, TEXT("$(CheckSettingsLockout)"))) {
 #ifndef _SIM_
-    if (LockSettingsInFlight && Calculated().Flying) {
+    if (XCSoarInterface::LockSettingsInFlight && Calculated().Flying) {
       invalid = true;
     }
 #endif

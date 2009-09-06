@@ -112,21 +112,11 @@ extern int debounceTimeout;
 
 // display mode stuff
 extern bool EnableAuxiliaryInfo;
-extern int  UserLevel; // used by dlgConfiguration
 extern int  ActiveAlternate;
 
 // terrain
 extern short TerrainContrast;
 extern short TerrainBrightness;
 extern short TerrainRamp;
-
-// safety protection
-extern bool LockSettingsInFlight;
-
-// temporary
-extern bool RequestAirspaceWarningForce;
-
-// set by interface, processed by interface
-extern bool RequestAirspaceWarningDialog;
 
 #endif

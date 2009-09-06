@@ -106,8 +106,6 @@ extern bool dlgFontEditShowModal(const TCHAR * FontDescription,
                           const TCHAR * FontRegKey,
                           LOGFONT autoLogFont);
 
-int UserLevel = 0;
-
 static bool changed = false;
 static bool taskchanged = false;
 static bool requirerestart = false;
@@ -391,11 +389,12 @@ static void OnUserLevel(DataField *Sender, DataField::DataAccessKind_t Mode){
     case DataField::daChange:
       wp = (WndProperty*)wf->FindByName(TEXT("prpUserLevel"));
       if (wp) {
-        if (wp->GetDataField()->GetAsInteger() != UserLevel) {
-          UserLevel = wp->GetDataField()->GetAsInteger();
+        if (wp->GetDataField()->GetAsInteger() != 
+	    (int)XCSoarInterface::UserLevel) {
+          XCSoarInterface::UserLevel = wp->GetDataField()->GetAsInteger();
           changed = true;
-          SetToRegistry(szRegistryUserLevel,UserLevel);
-          wf->FilterAdvanced(UserLevel>0);
+          SetToRegistry(szRegistryUserLevel,(int)XCSoarInterface::UserLevel);
+          wf->FilterAdvanced(XCSoarInterface::UserLevel>0);
         }
       }
     break;
@@ -1271,7 +1270,7 @@ static void setVariables(void) {
     dfe = (DataFieldEnum*)wp->GetDataField();
     dfe->addEnumText(gettext(TEXT("Basic")));
     dfe->addEnumText(gettext(TEXT("Expert")));
-    dfe->Set(UserLevel);
+    dfe->Set(XCSoarInterface::UserLevel);
     wp->RefreshDisplay();
   }
 
@@ -1432,7 +1431,7 @@ static void setVariables(void) {
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpLockSettingsInFlight"));
   if (wp) {
-    wp->GetDataField()->Set(LockSettingsInFlight);
+    wp->GetDataField()->Set(XCSoarInterface::LockSettingsInFlight);
     wp->RefreshDisplay();
   }
 
@@ -2590,7 +2589,7 @@ void dlgConfigurationShowModal(void){
   assert(wConfig21!=NULL);
   assert(wConfig22!=NULL);
 
-  wf->FilterAdvanced(UserLevel>0);
+  wf->FilterAdvanced(XCSoarInterface::UserLevel>0);
 
 // VENTA2- FIVV special version
 #if !defined(PNA) && !defined(FIVV)
@@ -2745,11 +2744,12 @@ void dlgConfigurationShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpLockSettingsInFlight"));
   if (wp) {
-    if (LockSettingsInFlight !=
+    if (XCSoarInterface::LockSettingsInFlight !=
 	wp->GetDataField()->GetAsBoolean()) {
-      LockSettingsInFlight = wp->GetDataField()->GetAsBoolean();
+      XCSoarInterface::LockSettingsInFlight = 
+	wp->GetDataField()->GetAsBoolean();
       SetToRegistry(szRegistryLockSettingsInFlight,
-		    LockSettingsInFlight);
+		    XCSoarInterface::LockSettingsInFlight);
       changed = true;
     }
   }

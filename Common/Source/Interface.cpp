@@ -40,19 +40,20 @@ Copyright_License {
 #include "Language.hpp"
 #include "Dialogs.h"
 
-bool LockSettingsInFlight = true;
 int debounceTimeout=200;
 
 static Mutex mutexInterfaceTimeout;
 static int interface_timeout;
 static bool doForceShutdown = false;
 static bool ShutdownRequested = false;
-
 ///
 
 InterfaceBlackboard CommonInterface::blackboard;
 HINSTANCE CommonInterface::hInst; // The current instance
 MainWindow CommonInterface::main_window;
+bool ActionInterface::RequestAirspaceWarningForce = false;
+bool ActionInterface::LockSettingsInFlight = true;
+unsigned  ActionInterface::UserLevel=0; // used by dlgConfiguration
 
 /////
 

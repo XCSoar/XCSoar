@@ -92,6 +92,9 @@ public:
   static void StartHourglassCursor();
   static void StopHourglassCursor();
   static void SignalShutdown(bool force);
+  static bool RequestAirspaceWarningForce;
+  static bool LockSettingsInFlight;
+  static unsigned UserLevel;
 private:
   static HCURSOR oldCursor;
 };
@@ -121,7 +124,7 @@ private:
   static void DefaultSettings();
   static HWND hProgress;
   static HWND hWndCurtain;
-protected:
+
 };
 
 #endif

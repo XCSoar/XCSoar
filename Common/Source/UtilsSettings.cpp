@@ -161,7 +161,8 @@ void SettingsLeave() {
 
 void SystemConfiguration(void) {
 #ifndef _SIM_
-  if (LockSettingsInFlight && XCSoarInterface::Calculated().Flying) {
+  if (XCSoarInterface::LockSettingsInFlight 
+      && XCSoarInterface::Calculated().Flying) {
     Message::AddMessage(TEXT("Settings locked in flight"));
     return;
   }

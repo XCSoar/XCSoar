@@ -54,7 +54,6 @@ Copyright_License {
 #include "Blackboard.hpp"
 #include "Components.hpp"
 
-bool RequestAirspaceWarningForce=false;
 
 static void HeapCompactTimer()
 {

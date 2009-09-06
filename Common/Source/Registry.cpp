@@ -964,7 +964,7 @@ void ReadRegistrySettings(void)
 
   Temp = 1;
   GetFromRegistry(szRegistryLockSettingsInFlight,&Temp);
-  LockSettingsInFlight = (Temp == 1);
+  XCSoarInterface::LockSettingsInFlight = (Temp == 1);
 
   Temp = 0;
   GetFromRegistry(szRegistryLoggerShort,&Temp);
@@ -1092,9 +1092,9 @@ void ReadRegistrySettings(void)
   GetFromRegistry(szRegistrySafetyMacCready,&Temp);
   GlidePolar::SafetyMacCready = Temp/10.0;
 
-  Temp  = UserLevel;
+  Temp  = XCSoarInterface::UserLevel;
   GetFromRegistry(szRegistryUserLevel,&Temp);
-  UserLevel = Temp;
+  XCSoarInterface::UserLevel = Temp;
 
   Temp  = iround(GlidePolar::RiskGamma*10);
   GetFromRegistry(szRegistryRiskGamma,&Temp);
