@@ -86,7 +86,7 @@ MapWindow::DrawGlideThroughTerrain(Canvas &canvas)
   canvas.select(MapGfx.hpTerrainLineBg);
   canvas.polyline(Groundline, NUMTERRAINSWEEPS + 1);
   if ((SettingsComputer().FinalGlideTerrain==1) ||
-      ((!EnableTerrain || !Calculated().Flying) && 
+      ((!SettingsMap().EnableTerrain || !Calculated().Flying) && 
        (SettingsComputer().FinalGlideTerrain==2))) {
     canvas.select(MapGfx.hpTerrainLine);
     canvas.polyline(Groundline, NUMTERRAINSWEEPS + 1);
@@ -157,11 +157,12 @@ void MapWindow::DrawGlideCircle(Canvas &canvas, POINT Orig, RECT rc)
     /*
      * TRACKUP, NORTHUP, NORTHCIRCLE, TRACKCIRCLE, NORTHTRACK
      */
-    if (((DisplayOrientation == TRACKUP) || (DisplayOrientation == NORTHCIRCLE)
-         || (DisplayOrientation == TRACKCIRCLE))
+    if (((SettingsMap().DisplayOrientation == TRACKUP) 
+	 || (SettingsMap().DisplayOrientation == NORTHCIRCLE)
+         || (SettingsMap().DisplayOrientation == TRACKCIRCLE))
 	 && (DisplayMode != dmCircling) )
       {
-	if ( VisualGlide == 1 ) {
+	if ( SettingsMap().VisualGlide == 1 ) {
 	  tmp = DistanceMetersToScreen(i*gunit*cruise);
           canvas.arc(Orig.x, Orig.y, tmp, rc, 315, 45);
 	} else

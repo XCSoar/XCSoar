@@ -124,7 +124,8 @@ const Color ScreenGraphics::Colours[] =
 
 // JMW TODO: some of these should be loaded after settings are loaded
 //
-void ScreenGraphics::Initialise(HINSTANCE hInstance) {
+void ScreenGraphics::Initialise(HINSTANCE hInstance,
+				const SETTINGS_MAP &settings_map) {
   int i;
 
   Units::LoadUnitBitmap(hInstance);
@@ -202,7 +203,7 @@ void ScreenGraphics::Initialise(HINSTANCE hInstance) {
   BYTE Red,Green,Blue;
   int iwidth;
   int minwidth;
-  minwidth = max(IBLSCALE(2),IBLSCALE(SnailWidthScale)/16);
+  minwidth = max(IBLSCALE(2),IBLSCALE(settings_map.SnailWidthScale)/16);
   for (i=0; i<NUMSNAILCOLORS; i++) {
     short ih = i*200/(NUMSNAILCOLORS-1);
     ColorRampLookup(ih,
@@ -213,7 +214,7 @@ void ScreenGraphics::Initialise(HINSTANCE hInstance) {
     } else {
       iwidth = max(minwidth,
 		   (i-NUMSNAILCOLORS/2)
-		   *IBLSCALE(SnailWidthScale)/NUMSNAILCOLORS);
+		   *IBLSCALE(settings_map.SnailWidthScale)/NUMSNAILCOLORS);
     }
 
     hSnailColours[i] = Color((BYTE)Red, (BYTE)Green, (BYTE)Blue);

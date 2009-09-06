@@ -60,7 +60,6 @@ Copyright_License {
 #include "Compatibility/gdi.h"
 #include "TopologyStore.h"
 #include "InfoBoxLayout.h"
-#include "InfoBoxManager.h"
 #include "RasterTerrain.h"
 #include "Gauge/GaugeFLARM.hpp"
 #include "Message.h"
@@ -84,16 +83,7 @@ Copyright_License {
 
 ///////////////////////////////// Settings
 
-DisplayTextType_t    DisplayTextType = DISPLAYNONE;
-int TrailActive = true;
-int VisualGlide = 0;
-DisplayMode_t UserForceDisplayMode = dmNone;
 DisplayMode_t DisplayMode = dmCruise;
-bool EnableTrailDrift=false;
-bool bAirspaceBlackOutline = false;
-bool EnableCDICruise = false;
-bool EnableCDICircling = false;
-unsigned char DeclutterLabels = 0;
 // 12 is number of airspace types
 int      iAirspaceBrush[AIRSPACECLASSCOUNT] =
   {2,0,0,0,3,3,3,3,0,3,2,3,3,3};
@@ -101,9 +91,7 @@ int      iAirspaceColour[AIRSPACECLASSCOUNT] =
   {5,0,0,10,0,0,10,2,0,10,9,3,7,7};
 int      iAirspaceMode[AIRSPACECLASSCOUNT] =
   {0,0,0,0,0,0,0,0,0,0,0,1,1,0};
-bool AutoZoom = false;
-int SnailWidthScale = 16;
-int WindArrowStyle = 0;
+
 
 ///////////////////////////////// Initialisation
 
@@ -168,7 +156,7 @@ void MapWindow::ReadBlackboard(const NMEA_INFO &nmea_info,
   ReadSettingsComputer(device_blackboard.SettingsComputer());
 
   DisplayMode_t lastDisplayMode = DisplayMode;
-  switch (UserForceDisplayMode) {
+  switch (SettingsMap().UserForceDisplayMode) {
   case dmCircling:
     DisplayMode = dmCircling;
     break;
@@ -191,7 +179,8 @@ void MapWindow::ReadBlackboard(const NMEA_INFO &nmea_info,
     SwitchZoomClimb();
   }
 
-  MapWindowProjection::ExchangeBlackboard(nmea_info, derived_info);
+  MapWindowProjection::ExchangeBlackboard(nmea_info, derived_info,
+					  SettingsMap());
   mutexFlightData.Unlock();
 }
 
@@ -239,7 +228,7 @@ bool MapWindow::Idle(const bool do_force) {
     }
     
     if (topology_idle.dirty) {
-      if (EnableTopology) {
+      if (SettingsMap().EnableTopology) {
 	topology_idle.dirty = 
 	  topology->ScanVisibility(*this, *getSmartBounds(), do_force);
       } else {

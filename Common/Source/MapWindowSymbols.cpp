@@ -386,7 +386,7 @@ void MapWindow::DrawWindAtAircraft2(Canvas &canvas, const POINT Orig, const RECT
 		     Calculated().WindBearing-DisplayAngle);
   canvas.polygon(Arrow, 5);
 
-  if (WindArrowStyle==1) {
+  if (SettingsMap().WindArrowStyle==1) {
     POINT Tail[2] = {{0,-20}, {0,-26-min(20,wmag)*3}};
     double angle = AngleLimit360(Calculated().WindBearing-DisplayAngle);
     for(i=0; i<2; i++) {
@@ -898,8 +898,8 @@ void MapWindow::DrawSpeedToFly(HDC hDC, RECT rc) {
 
 void MapWindow::DrawCDI() {
   bool dodrawcdi = Calculated().Circling
-    ? EnableCDICircling
-    : EnableCDICruise;
+    ? SettingsMap().EnableCDICircling
+    : SettingsMap().EnableCDICruise;
 
   if (dodrawcdi) {
     GaugeCDI::Show();

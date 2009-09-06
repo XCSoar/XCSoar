@@ -1419,13 +1419,13 @@ static void setVariables(void) {
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpAutoZoom"));
   if (wp) {
-    wp->GetDataField()->Set(AutoZoom);
+    wp->GetDataField()->Set(XCSoarInterface::SettingsMap().AutoZoom);
     wp->RefreshDisplay();
   }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpAirspaceOutline"));
   if (wp) {
-    wp->GetDataField()->Set(bAirspaceBlackOutline);
+    wp->GetDataField()->Set(XCSoarInterface::SettingsMap().bAirspaceBlackOutline);
     wp->RefreshDisplay();
   }
 
@@ -1493,25 +1493,25 @@ static void setVariables(void) {
     dfe->addEnumText(gettext(TEXT("None")));
     dfe->addEnumText(gettext(TEXT("First 3")));
     dfe->addEnumText(gettext(TEXT("Names in task")));
-    dfe->Set(DisplayTextType);
+    dfe->Set(XCSoarInterface::SettingsMap().DisplayTextType);
     wp->RefreshDisplay();
   }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpEnableTerrain"));
   if (wp) {
-    wp->GetDataField()->Set(EnableTerrain);
+    wp->GetDataField()->Set(XCSoarInterface::SettingsMap().EnableTerrain);
     wp->RefreshDisplay();
   }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpEnableTopology"));
   if (wp) {
-    wp->GetDataField()->Set(EnableTopology);
+    wp->GetDataField()->Set(XCSoarInterface::SettingsMap().EnableTopology);
     wp->RefreshDisplay();
   }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpCirclingZoom"));
   if (wp) {
-    wp->GetDataField()->Set(CircleZoom);
+    wp->GetDataField()->Set(XCSoarInterface::SettingsMap().CircleZoom);
     wp->RefreshDisplay();
   }
 
@@ -1524,7 +1524,7 @@ static void setVariables(void) {
     dfe->addEnumText(gettext(TEXT("North circling")));
     dfe->addEnumText(gettext(TEXT("Target circling")));
     dfe->addEnumText(gettext(TEXT("North/track")));
-    dfe->Set(DisplayOrientation);
+    dfe->Set(XCSoarInterface::SettingsMap().DisplayOrientation);
     wp->RefreshDisplay();
   }
 
@@ -1578,7 +1578,7 @@ static void setVariables(void) {
     dfe = (DataFieldEnum*)wp->GetDataField();
     dfe->addEnumText(gettext(TEXT("Arrow head")));
     dfe->addEnumText(gettext(TEXT("Full arrow")));
-    wp->GetDataField()->Set(WindArrowStyle);
+    wp->GetDataField()->Set(XCSoarInterface::SettingsMap().WindArrowStyle);
     wp->RefreshDisplay();
   }
 
@@ -1742,7 +1742,7 @@ static void setVariables(void) {
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpTrailDrift"));
   if (wp) {
-    wp->GetDataField()->Set(EnableTrailDrift);
+    wp->GetDataField()->Set(XCSoarInterface::SettingsMap().EnableTrailDrift);
     wp->RefreshDisplay();
   }
 
@@ -1804,7 +1804,7 @@ static void setVariables(void) {
     dfe->addEnumText(gettext(TEXT("Long")));
     dfe->addEnumText(gettext(TEXT("Short")));
     dfe->addEnumText(gettext(TEXT("Full")));
-    dfe->Set(TrailActive);
+    dfe->Set(XCSoarInterface::SettingsMap().TrailActive);
     wp->RefreshDisplay();
   }
 
@@ -1816,7 +1816,7 @@ static void setVariables(void) {
     dfe->addEnumText(gettext(TEXT("Off")));
     dfe->addEnumText(gettext(TEXT("Steady")));
     dfe->addEnumText(gettext(TEXT("Moving")));
-    dfe->Set(VisualGlide);
+    dfe->Set(XCSoarInterface::SettingsMap().VisualGlide);
     wp->RefreshDisplay();
   }
 
@@ -2156,7 +2156,7 @@ static void setVariables(void) {
     dfe->addEnumText(gettext(TEXT("Normal")));
     dfe->addEnumText(gettext(TEXT("Extended")));
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->Set(ExtendedVisualGlide);
+    dfe->Set(XCSoarInterface::SettingsMap().ExtendedVisualGlide);
     wp->RefreshDisplay();
   }
 
@@ -2255,19 +2255,19 @@ static void setVariables(void) {
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpGliderScreenPosition"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(GliderScreenPosition);
+    wp->GetDataField()->SetAsFloat(XCSoarInterface::SettingsMap().GliderScreenPosition);
     wp->RefreshDisplay();
   }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpTerrainContrast"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(iround(TerrainContrast*100/255));
+    wp->GetDataField()->SetAsFloat(iround(XCSoarInterface::SettingsMap().TerrainContrast*100/255));
     wp->RefreshDisplay();
   }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpTerrainBrightness"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(iround(TerrainBrightness*100/255));
+    wp->GetDataField()->SetAsFloat(iround(XCSoarInterface::SettingsMap().TerrainBrightness*100/255));
     wp->RefreshDisplay();
   }
 
@@ -2282,7 +2282,7 @@ static void setVariables(void) {
     dfe->addEnumText(gettext(TEXT("Imhof 12")));
     dfe->addEnumText(gettext(TEXT("Imhof Atlas")));
     dfe->addEnumText(gettext(TEXT("ICAO")));
-    dfe->Set(TerrainRamp);
+    dfe->Set(XCSoarInterface::SettingsMap().TerrainRamp);
     wp->RefreshDisplay();
   }
 
@@ -2492,7 +2492,7 @@ static void setVariables(void) {
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpSnailWidthScale"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(SnailWidthScale);
+    wp->GetDataField()->SetAsFloat(XCSoarInterface::SettingsMap().SnailWidthScale);
     wp->RefreshDisplay();
   }
 
@@ -2695,9 +2695,9 @@ void dlgConfigurationShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpTrailDrift"));
   if (wp) {
-    if (EnableTrailDrift != wp->GetDataField()->GetAsBoolean()) {
-      EnableTrailDrift = wp->GetDataField()->GetAsBoolean();
-      SetToRegistry(szRegistryTrailDrift, EnableTrailDrift);
+    if (XCSoarInterface::SettingsMap().EnableTrailDrift != wp->GetDataField()->GetAsBoolean()) {
+      XCSoarInterface::SetSettingsMap().EnableTrailDrift = wp->GetDataField()->GetAsBoolean();
+      SetToRegistry(szRegistryTrailDrift, XCSoarInterface::SettingsMap().EnableTrailDrift);
       changed = true;
     }
   }
@@ -2713,9 +2713,9 @@ void dlgConfigurationShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpTrail"));
   if (wp) {
-    if (TrailActive != wp->GetDataField()->GetAsInteger()) {
-      TrailActive = wp->GetDataField()->GetAsInteger();
-      SetToRegistry(szRegistrySnailTrail, TrailActive);
+    if (XCSoarInterface::SettingsMap().TrailActive != wp->GetDataField()->GetAsInteger()) {
+      XCSoarInterface::SetSettingsMap().TrailActive = wp->GetDataField()->GetAsInteger();
+      SetToRegistry(szRegistrySnailTrail, XCSoarInterface::SettingsMap().TrailActive);
       changed = true;
     }
   }
@@ -2798,22 +2798,22 @@ void dlgConfigurationShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpAirspaceOutline"));
   if (wp) {
-    if (bAirspaceBlackOutline !=
+    if (XCSoarInterface::SettingsMap().bAirspaceBlackOutline !=
 	wp->GetDataField()->GetAsBoolean()) {
-      bAirspaceBlackOutline = wp->GetDataField()->GetAsBoolean();
+      XCSoarInterface::SetSettingsMap().bAirspaceBlackOutline = wp->GetDataField()->GetAsBoolean();
       SetToRegistry(szRegistryAirspaceBlackOutline,
-		    bAirspaceBlackOutline);
+		    XCSoarInterface::SettingsMap().bAirspaceBlackOutline);
       changed = true;
     }
   }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpAutoZoom"));
   if (wp) {
-    if (AutoZoom !=
+    if (XCSoarInterface::SettingsMap().AutoZoom !=
 	wp->GetDataField()->GetAsBoolean()) {
-      AutoZoom = wp->GetDataField()->GetAsBoolean();
+      XCSoarInterface::SetSettingsMap().AutoZoom = wp->GetDataField()->GetAsBoolean();
       SetToRegistry(szRegistryAutoZoom,
-		    AutoZoom);
+		    XCSoarInterface::SettingsMap().AutoZoom);
       changed = true;
     }
   }
@@ -2884,45 +2884,54 @@ void dlgConfigurationShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpWaypointLabels"));
   if (wp) {
-    if (DisplayTextType != wp->GetDataField()->GetAsInteger()) {
-      DisplayTextType = (DisplayTextType_t)(wp->GetDataField()->GetAsInteger());
-      SetToRegistry(szRegistryDisplayText,DisplayTextType);
+    if (XCSoarInterface::SettingsMap().DisplayTextType 
+	!= wp->GetDataField()->GetAsInteger()) {
+      XCSoarInterface::SetSettingsMap().DisplayTextType = 
+	(DisplayTextType_t)(wp->GetDataField()->GetAsInteger());
+      SetToRegistry(szRegistryDisplayText,
+		    XCSoarInterface::SettingsMap().DisplayTextType);
       changed = true;
     }
   }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpEnableTerrain"));
   if (wp) {
-    if (EnableTerrain != wp->GetDataField()->GetAsBoolean()) {
-      EnableTerrain = wp->GetDataField()->GetAsBoolean();
-      SetToRegistry(szRegistryDrawTerrain, EnableTerrain);
+    if (XCSoarInterface::SettingsMap().EnableTerrain != wp->GetDataField()->GetAsBoolean()) {
+      XCSoarInterface::SetSettingsMap().EnableTerrain = wp->GetDataField()->GetAsBoolean();
+      SetToRegistry(szRegistryDrawTerrain, 
+		    XCSoarInterface::SettingsMap().EnableTerrain);
       changed = true;
     }
   }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpEnableTopology"));
   if (wp) {
-    if (EnableTopology != wp->GetDataField()->GetAsBoolean()) {
-      EnableTopology = wp->GetDataField()->GetAsBoolean();
-      SetToRegistry(szRegistryDrawTopology, EnableTopology);
+    if (XCSoarInterface::SettingsMap().EnableTopology != wp->GetDataField()->GetAsBoolean()) {
+      XCSoarInterface::SetSettingsMap().EnableTopology = wp->GetDataField()->GetAsBoolean();
+      SetToRegistry(szRegistryDrawTopology, 
+		    XCSoarInterface::SetSettingsMap().EnableTopology);
       changed = true;
     }
   }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpCirclingZoom"));
   if (wp) {
-    if (CircleZoom != wp->GetDataField()->GetAsBoolean()) {
-      CircleZoom = wp->GetDataField()->GetAsBoolean();
-      SetToRegistry(szRegistryCircleZoom, CircleZoom);
+    if (XCSoarInterface::SettingsMap().CircleZoom 
+	!= wp->GetDataField()->GetAsBoolean()) {
+      XCSoarInterface::SetSettingsMap().CircleZoom = 
+	wp->GetDataField()->GetAsBoolean();
+      SetToRegistry(szRegistryCircleZoom, 
+		    XCSoarInterface::SettingsMap().CircleZoom);
       changed = true;
     }
   }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpOrientation"));
   if (wp) {
-    if (DisplayOrientation != wp->GetDataField()->GetAsInteger()) {
-      DisplayOrientation = (DisplayOrientation_t)wp->GetDataField()->GetAsInteger();
-      SetToRegistry(szRegistryDisplayUpValue,DisplayOrientation);
+    if (XCSoarInterface::SettingsMap().DisplayOrientation != wp->GetDataField()->GetAsInteger()) {
+      XCSoarInterface::SetSettingsMap().DisplayOrientation = (DisplayOrientation_t)wp->GetDataField()->GetAsInteger();
+      SetToRegistry(szRegistryDisplayUpValue,
+		    XCSoarInterface::SettingsMap().DisplayOrientation);
       changed = true;
     }
   }
@@ -2980,9 +2989,9 @@ void dlgConfigurationShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpWindArrowStyle"));
   if (wp) {
-    if (WindArrowStyle != wp->GetDataField()->GetAsInteger()) {
-      WindArrowStyle = wp->GetDataField()->GetAsInteger();
-      SetToRegistry(szRegistryWindArrowStyle, WindArrowStyle);
+    if (XCSoarInterface::SettingsMap().WindArrowStyle != wp->GetDataField()->GetAsInteger()) {
+      XCSoarInterface::SetSettingsMap().WindArrowStyle = wp->GetDataField()->GetAsInteger();
+      SetToRegistry(szRegistryWindArrowStyle, XCSoarInterface::SettingsMap().WindArrowStyle);
       changed = true;
     }
   }
@@ -3415,12 +3424,12 @@ void dlgConfigurationShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpExtendedVisualGlide")); // VENTA4
   if (wp) {
-    if (ExtendedVisualGlide != (ExtendedVisualGlide_t)
+    if (XCSoarInterface::SettingsMap().ExtendedVisualGlide != (ExtendedVisualGlide_t)
 	(wp->GetDataField()->GetAsInteger())) {
-      ExtendedVisualGlide = (ExtendedVisualGlide_t)
+      XCSoarInterface::SetSettingsMap().ExtendedVisualGlide = (ExtendedVisualGlide_t)
 	(wp->GetDataField()->GetAsInteger());
       SetToRegistry(szRegistryExtendedVisualGlide,
-		    (DWORD)(ExtendedVisualGlide));
+		    (DWORD)(XCSoarInterface::SettingsMap().ExtendedVisualGlide));
       changed = true;
     }
   }
@@ -3592,11 +3601,11 @@ void dlgConfigurationShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpGliderScreenPosition"));
   if (wp) {
-    if (GliderScreenPosition !=
+    if (XCSoarInterface::SettingsMap().GliderScreenPosition !=
 	wp->GetDataField()->GetAsInteger()) {
-      GliderScreenPosition = wp->GetDataField()->GetAsInteger();
+      XCSoarInterface::SetSettingsMap().GliderScreenPosition = wp->GetDataField()->GetAsInteger();
       SetToRegistry(szRegistryGliderScreenPosition,
-		    GliderScreenPosition);
+		    XCSoarInterface::SettingsMap().GliderScreenPosition);
       changed = true;
     }
   }
@@ -3729,29 +3738,31 @@ void dlgConfigurationShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpTerrainContrast"));
   if (wp) {
-    if (iround(TerrainContrast*100/255) !=
+    if (iround(XCSoarInterface::SettingsMap().TerrainContrast*100/255) !=
 	wp->GetDataField()->GetAsInteger()) {
-      TerrainContrast = (short)iround(wp->GetDataField()->GetAsInteger()*255.0/100);
-      SetToRegistry(szRegistryTerrainContrast,TerrainContrast);
+      XCSoarInterface::SetSettingsMap().TerrainContrast = (short)iround(wp->GetDataField()->GetAsInteger()*255.0/100);
+      SetToRegistry(szRegistryTerrainContrast,XCSoarInterface::SettingsMap().TerrainContrast);
       changed = true;
     }
   }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpTerrainBrightness"));
   if (wp) {
-    if (iround(TerrainBrightness*100/255) !=
+    if (iround(XCSoarInterface::SettingsMap().TerrainBrightness*100/255) !=
 	wp->GetDataField()->GetAsInteger()) {
-      TerrainBrightness = (short)iround(wp->GetDataField()->GetAsInteger()*255.0/100);
-      SetToRegistry(szRegistryTerrainBrightness,TerrainBrightness);
+      XCSoarInterface::SetSettingsMap().TerrainBrightness = (short)iround(wp->GetDataField()->GetAsInteger()*255.0/100);
+      SetToRegistry(szRegistryTerrainBrightness,
+		    XCSoarInterface::SettingsMap().TerrainBrightness);
       changed = true;
     }
   }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpTerrainRamp"));
   if (wp) {
-    if (TerrainRamp != wp->GetDataField()->GetAsInteger()) {
-      TerrainRamp = wp->GetDataField()->GetAsInteger();
-      SetToRegistry(szRegistryTerrainRamp, TerrainRamp);
+    if (XCSoarInterface::SettingsMap().TerrainRamp != wp->GetDataField()->GetAsInteger()) {
+      XCSoarInterface::SetSettingsMap().TerrainRamp = wp->GetDataField()->GetAsInteger();
+      SetToRegistry(szRegistryTerrainRamp, 
+		    XCSoarInterface::SettingsMap().TerrainRamp);
       changed = true;
     }
   }
@@ -3903,9 +3914,10 @@ void dlgConfigurationShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpSnailWidthScale"));
   if (wp) {
-    if (SnailWidthScale != wp->GetDataField()->GetAsInteger()) {
-      SnailWidthScale = wp->GetDataField()->GetAsInteger();
-      SetToRegistry(szRegistrySnailWidthScale, SnailWidthScale);
+    if (XCSoarInterface::SettingsMap().SnailWidthScale != wp->GetDataField()->GetAsInteger()) {
+      XCSoarInterface::SetSettingsMap().SnailWidthScale = wp->GetDataField()->GetAsInteger();
+      SetToRegistry(szRegistrySnailWidthScale, 
+		    XCSoarInterface::SettingsMap().SnailWidthScale);
       changed = true;
       requirerestart = true;
     }

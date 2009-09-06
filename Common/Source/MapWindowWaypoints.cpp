@@ -75,7 +75,7 @@ void MapWindow::DrawWaypoints(Canvas &canvas)
   TextInBoxMode_t TextDisplayMode;
 
   // if pan mode, show full names
-  int pDisplayTextType = DisplayTextType;
+  int pDisplayTextType = SettingsMap().DisplayTextType;
   if (EnablePan) {
     pDisplayTextType = DISPLAYNAME;
   }
@@ -118,9 +118,9 @@ void MapWindow::DrawWaypoints(Canvas &canvas)
 
 		TextDisplayMode.AsFlag.Reachable = 1;
 
-		if ((DeclutterLabels<2)||intask) {
+		if ((SettingsMap().DeclutterLabels<2)||intask) {
 
-		  if (intask || (DeclutterLabels<1)) {
+		  if (intask || (SettingsMap().DeclutterLabels<1)) {
 		    TextDisplayMode.AsFlag.Border = 1;
 		  }
 		  // show all reachable landing fields unless we want a decluttered
@@ -159,7 +159,7 @@ void MapWindow::DrawWaypoints(Canvas &canvas)
 
 	    if(intask || irange || dowrite) {
 	      bool draw_alt = TextDisplayMode.AsFlag.Reachable
-		&& ((DeclutterLabels<1) || intask);
+		&& ((SettingsMap().DeclutterLabels<1) || intask);
 
 	      switch(pDisplayTextType) {
 	      case DISPLAYNAMEIFINTASK:
@@ -175,7 +175,7 @@ void MapWindow::DrawWaypoints(Canvas &canvas)
 		}
 		break;
 	      case DISPLAYNAME:
-		dowrite = (DeclutterLabels<2) || intask;
+		dowrite = (SettingsMap().DeclutterLabels<2) || intask;
 		if (draw_alt)
                   _stprintf(Buffer, TEXT("%s:%d%s"),
                             WayPointList[i].Name,
@@ -186,7 +186,7 @@ void MapWindow::DrawWaypoints(Canvas &canvas)
 
 		break;
 	      case DISPLAYNUMBER:
-		dowrite = (DeclutterLabels<2) || intask;
+		dowrite = (SettingsMap().DeclutterLabels<2) || intask;
 		if (draw_alt)
                   _stprintf(Buffer, TEXT("%d:%d%s"),
                             WayPointList[i].Number,
@@ -197,7 +197,7 @@ void MapWindow::DrawWaypoints(Canvas &canvas)
 
 		break;
 	      case DISPLAYFIRSTFIVE:
-		dowrite = (DeclutterLabels<2) || intask;
+		dowrite = (SettingsMap().DeclutterLabels<2) || intask;
 		_tcsncpy(Buffer2, WayPointList[i].Name, 5);
 		Buffer2[5] = '\0';
 		if (draw_alt)
@@ -210,7 +210,7 @@ void MapWindow::DrawWaypoints(Canvas &canvas)
 
 		break;
 	      case DISPLAYFIRSTTHREE:
-		dowrite = (DeclutterLabels<2) || intask;
+		dowrite = (SettingsMap().DeclutterLabels<2) || intask;
 		_tcsncpy(Buffer2, WayPointList[i].Name, 3);
 		Buffer2[3] = '\0';
 		if (draw_alt)
@@ -223,7 +223,7 @@ void MapWindow::DrawWaypoints(Canvas &canvas)
 
 		break;
 	      case DISPLAYNONE:
-		dowrite = (DeclutterLabels<2) || intask;
+		dowrite = (SettingsMap().DeclutterLabels<2) || intask;
 		if (draw_alt)
                   _stprintf(Buffer, TEXT("%d%s"),
                             (int)(WayPointList[i].AltArivalAGL*ALTITUDEMODIFY),

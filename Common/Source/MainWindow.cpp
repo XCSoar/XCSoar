@@ -65,7 +65,8 @@ MainWindow::set(LPCTSTR text,
   InfoBoxLayout::ScreenGeometry(rc);
 
   // color/pattern chart (must have infobox geometry before this)
-  MapGfx.Initialise(XCSoarInterface::hInst);
+  MapGfx.Initialise(XCSoarInterface::hInst, 
+		    XCSoarInterface::SettingsMap());
 
   StartupStore(TEXT("Create info boxes\n"));
   RECT rcsmall = InfoBoxManager::Create(rc);

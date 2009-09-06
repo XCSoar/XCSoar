@@ -161,28 +161,28 @@ void InputEvents::eventSounds(const TCHAR *misc) {
 void InputEvents::eventSnailTrail(const TCHAR *misc) {
 
   if (_tcscmp(misc, TEXT("toggle")) == 0) {
-    TrailActive ++;
-    if (TrailActive>3) {
-      TrailActive=0;
+    SetSettingsMap().TrailActive ++;
+    if (SettingsMap().TrailActive>3) {
+      SetSettingsMap().TrailActive=0;
     }
   }
   else if (_tcscmp(misc, TEXT("off")) == 0)
-    TrailActive = 0;
+    SetSettingsMap().TrailActive = 0;
   else if (_tcscmp(misc, TEXT("long")) == 0)
-    TrailActive = 1;
+    SetSettingsMap().TrailActive = 1;
   else if (_tcscmp(misc, TEXT("short")) == 0)
-    TrailActive = 2;
+    SetSettingsMap().TrailActive = 2;
   else if (_tcscmp(misc, TEXT("full")) == 0)
-    TrailActive = 3;
+    SetSettingsMap().TrailActive = 3;
 
   else if (_tcscmp(misc, TEXT("show")) == 0) {
-    if (TrailActive==0)
+    if (SettingsMap().TrailActive==0)
       Message::AddMessage(TEXT("SnailTrail OFF"));
-    if (TrailActive==1)
+    if (SettingsMap().TrailActive==1)
       Message::AddMessage(TEXT("SnailTrail ON Long"));
-    if (TrailActive==2)
+    if (SettingsMap().TrailActive==2)
       Message::AddMessage(TEXT("SnailTrail ON Short"));
-    if (TrailActive==3)
+    if (SettingsMap().TrailActive==3)
       Message::AddMessage(TEXT("SnailTrail ON Full"));
   }
 }
@@ -191,25 +191,26 @@ void InputEvents::eventSnailTrail(const TCHAR *misc) {
 void InputEvents::eventVisualGlide(const TCHAR *misc) {
 
   if (_tcscmp(misc, TEXT("toggle")) == 0) {
-    VisualGlide ++;
-    if (VisualGlide==2 && !ExtendedVisualGlide) VisualGlide=0;
-    if (VisualGlide>2) {
-      VisualGlide=0;
+    SetSettingsMap().VisualGlide ++;
+    if (SettingsMap().VisualGlide==2 && 
+	!SettingsMap().ExtendedVisualGlide) SetSettingsMap().VisualGlide=0;
+    if (SettingsMap().VisualGlide>2) {
+      SetSettingsMap().VisualGlide=0;
     }
   }
   else if (_tcscmp(misc, TEXT("off")) == 0)
-    VisualGlide = 0;
+    SetSettingsMap().VisualGlide = 0;
   else if (_tcscmp(misc, TEXT("steady")) == 0)
-    VisualGlide = 1;
+    SetSettingsMap().VisualGlide = 1;
   else if (_tcscmp(misc, TEXT("moving")) == 0)
-    VisualGlide = 2;
+    SetSettingsMap().VisualGlide = 2;
 
   else if (_tcscmp(misc, TEXT("show")) == 0) {
-    if (VisualGlide==0)
+    if (SettingsMap().VisualGlide==0)
       Message::AddMessage(TEXT("VisualGlide OFF"));
-    if (VisualGlide==1)
+    if (SettingsMap().VisualGlide==1)
       Message::AddMessage(TEXT("VisualGlide Steady"));
-    if (VisualGlide==2)
+    if (SettingsMap().VisualGlide==2)
       Message::AddMessage(TEXT("VisualGlide Moving"));
   }
 }
@@ -227,20 +228,20 @@ void InputEvents::eventVisualGlide(const TCHAR *misc) {
  */
 void InputEvents::eventAirSpace(const TCHAR *misc) {
   if (_tcscmp(misc, TEXT("toggle")) == 0) {
-    OnAirSpace ++;
-    if (OnAirSpace>1) {
-      OnAirSpace=0;
+    SetSettingsMap().OnAirSpace ++;
+    if (SettingsMap().OnAirSpace>1) {
+      SetSettingsMap().OnAirSpace=0;
     }
   }
   else if (_tcscmp(misc, TEXT("off")) == 0)
-    OnAirSpace = 0;
+    SetSettingsMap().OnAirSpace = 0;
   else if (_tcscmp(misc, TEXT("on")) == 0)
-    OnAirSpace = 1;
+    SetSettingsMap().OnAirSpace = 1;
   else if (_tcscmp(misc, TEXT("show")) == 0) {
-    if (OnAirSpace==0)
-      Message::AddMessage(TEXT("Show AirSpace OFF"));
-    if (OnAirSpace==1)
-      Message::AddMessage(TEXT("Show AirSpace ON"));
+    if (SetSettingsMap().OnAirSpace==0)
+      Message::AddMessage(TEXT("Show Airspace OFF"));
+    if (SetSettingsMap().OnAirSpace==1)
+      Message::AddMessage(TEXT("Show Airspace ON"));
   }
 }
 
@@ -254,13 +255,13 @@ void InputEvents::eventScreenModes(const TCHAR *misc) {
 
   if (_tcscmp(misc, TEXT("normal")) == 0) {
     map_window.RequestFullScreen(false);
-    EnableAuxiliaryInfo = false;
+    SetSettingsMap().EnableAuxiliaryInfo = false;
   } else if (_tcscmp(misc, TEXT("auxilary")) == 0) {
     map_window.RequestFullScreen(false);
-    EnableAuxiliaryInfo = true;
+    SetSettingsMap().EnableAuxiliaryInfo = true;
   } else if (_tcscmp(misc, TEXT("toggleauxiliary")) == 0) {
     map_window.RequestFullScreen(false);
-    EnableAuxiliaryInfo = !EnableAuxiliaryInfo;
+    SetSettingsMap().EnableAuxiliaryInfo = !SettingsMap().EnableAuxiliaryInfo;
   } else if (_tcscmp(misc, TEXT("full")) == 0) {
     map_window.RequestFullScreen(true);
   } else if (_tcscmp(misc, TEXT("togglefull")) == 0) {
@@ -268,7 +269,7 @@ void InputEvents::eventScreenModes(const TCHAR *misc) {
   } else if (_tcscmp(misc, TEXT("show")) == 0) {
     if (map_window.isMapFullScreen())
       Message::AddMessage(TEXT("Screen Mode Full"));
-    else if (EnableAuxiliaryInfo)
+    else if (SettingsMap().EnableAuxiliaryInfo)
       Message::AddMessage(TEXT("Screen Mode Auxiliary"));
     else
       Message::AddMessage(TEXT("Screen Mode Normal"));
@@ -339,16 +340,16 @@ void InputEvents::eventScreenModes(const TCHAR *misc) {
       } // fallback for other PNAs
 
 #else // UNDEFINED PNA
-    if (EnableAuxiliaryInfo) {
+    if (SettingsMap().EnableAuxiliaryInfo) {
       if (SettingsComputer().EnableSoundModes) 
 	PlayResource(TEXT("IDR_WAV_CLICK"));
       map_window.RequestToggleFullScreen();
-      EnableAuxiliaryInfo = false;
+      SetSettingsMap().EnableAuxiliaryInfo = false;
     } else {
       if (map_window.isMapFullScreen()) {
 	map_window.RequestToggleFullScreen();
       } else {
-	EnableAuxiliaryInfo = true;
+	SetSettingsMap().EnableAuxiliaryInfo = true;
       }
     }
 #endif // def/undef PNA
@@ -384,7 +385,7 @@ void InputEvents::eventZoom(const TCHAR* misc) {
   else if (_tcscmp(misc, TEXT("auto off")) == 0)
     map_window.Event_AutoZoom(0);
   else if (_tcscmp(misc, TEXT("auto show")) == 0) {
-    if (AutoZoom)
+    if (SettingsMap().AutoZoom)
       Message::AddMessage(TEXT("AutoZoom ON"));
     else
       Message::AddMessage(TEXT("AutoZoom OFF"));
@@ -409,13 +410,13 @@ void InputEvents::eventZoom(const TCHAR* misc) {
     map_window.Event_SetZoom((double)zoom);
 
   else if (_tcscmp(misc, TEXT("circlezoom toggle")) == 0) {
-    CircleZoom = !CircleZoom;
+    SetSettingsMap().CircleZoom = !SettingsMap().CircleZoom;
   } else if (_tcscmp(misc, TEXT("circlezoom on")) == 0) {
-    CircleZoom = true;
+    SetSettingsMap().CircleZoom = true;
   } else if (_tcscmp(misc, TEXT("circlezoom off")) == 0) {
-    CircleZoom = false;
+    SetSettingsMap().CircleZoom = false;
   } else if (_tcscmp(misc, TEXT("circlezoom show")) == 0) {
-    if (CircleZoom)
+    if (SettingsMap().CircleZoom)
       Message::AddMessage(TEXT("Circling Zoom ON"));
     else
       Message::AddMessage(TEXT("Circling Zoom OFF"));
@@ -1590,18 +1591,18 @@ void InputEvents::eventRun(const TCHAR *misc) {
 
 void InputEvents::eventDeclutterLabels(const TCHAR *misc) {
   if (_tcscmp(misc, TEXT("toggle")) == 0) {
-    DeclutterLabels ++;
-    DeclutterLabels = DeclutterLabels % 3;
+    SetSettingsMap().DeclutterLabels ++;
+    SetSettingsMap().DeclutterLabels = SettingsMap().DeclutterLabels % 3;
   } else if (_tcscmp(misc, TEXT("on")) == 0)
-    DeclutterLabels = 2;
+    SetSettingsMap().DeclutterLabels = 2;
   else if (_tcscmp(misc, TEXT("off")) == 0)
-    DeclutterLabels = 0;
+    SetSettingsMap().DeclutterLabels = 0;
   else if (_tcscmp(misc, TEXT("mid")) == 0)
-    DeclutterLabels = 1;
+    SetSettingsMap().DeclutterLabels = 1;
   else if (_tcscmp(misc, TEXT("show")) == 0) {
-    if (DeclutterLabels==0)
+    if (SettingsMap().DeclutterLabels==0)
       Message::AddMessage(TEXT("Map labels ON"));
-    else if (DeclutterLabels==1)
+    else if (SettingsMap().DeclutterLabels==1)
       Message::AddMessage(TEXT("Map labels MID"));
     else
       Message::AddMessage(TEXT("Map labels OFF"));
@@ -1625,16 +1626,16 @@ void InputEvents::eventExit(const TCHAR *misc) {
 void InputEvents::eventUserDisplayModeForce(const TCHAR *misc){
 
   if (_tcscmp(misc, TEXT("unforce")) == 0){
-    UserForceDisplayMode = dmNone;
+    SetSettingsMap().UserForceDisplayMode = dmNone;
   }
   else if (_tcscmp(misc, TEXT("forceclimb")) == 0){
-    UserForceDisplayMode = dmCircling;
+    SetSettingsMap().UserForceDisplayMode = dmCircling;
   }
   else if (_tcscmp(misc, TEXT("forcecruise")) == 0){
-    UserForceDisplayMode = dmCruise;
+    SetSettingsMap().UserForceDisplayMode = dmCruise;
   }
   else if (_tcscmp(misc, TEXT("forcefinal")) == 0){
-    UserForceDisplayMode = dmFinalGlide;
+    SetSettingsMap().UserForceDisplayMode = dmFinalGlide;
   }
   else if (_tcscmp(misc, TEXT("show")) == 0){
     Message::AddMessage(TEXT("Map labels ON"));
@@ -1692,19 +1693,19 @@ void InputEvents::eventAddWaypoint(const TCHAR *misc) {
 
 void InputEvents::eventOrientation(const TCHAR *misc){
   if (_tcscmp(misc, TEXT("northup")) == 0){
-    DisplayOrientation = NORTHUP;
+    SetSettingsMap().DisplayOrientation = NORTHUP;
   }
   else if (_tcscmp(misc, TEXT("northcircle")) == 0){
-    DisplayOrientation = NORTHCIRCLE;
+    SetSettingsMap().DisplayOrientation = NORTHCIRCLE;
   }
   else if (_tcscmp(misc, TEXT("trackcircle")) == 0){
-    DisplayOrientation = TRACKCIRCLE;
+    SetSettingsMap().DisplayOrientation = TRACKCIRCLE;
   }
   else if (_tcscmp(misc, TEXT("trackup")) == 0){
-    DisplayOrientation = TRACKUP;
+    SetSettingsMap().DisplayOrientation = TRACKUP;
   }
   else if (_tcscmp(misc, TEXT("northtrack")) == 0){
-    DisplayOrientation = NORTHTRACK;
+    SetSettingsMap().DisplayOrientation = NORTHTRACK;
   }
 }
 

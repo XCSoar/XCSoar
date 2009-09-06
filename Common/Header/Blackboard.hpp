@@ -41,22 +41,45 @@ Copyright_License {
 #include "NMEA/Info.h"
 #include "NMEA/Derived.hpp"
 #include "SettingsComputer.hpp"
+#include "SettingsUser.hpp"
 
-class BaseBlackboard {
+
+class BaseBlackboard 
+{
   // all blackboards can be read as const
 public:
   const NMEA_INFO& Basic() const { return gps_info; }
   const DERIVED_INFO& Calculated() const { return calculated_info; }
-  const SETTINGS_COMPUTER& SettingsComputer() const 
-  { return settings_computer; }
 protected:
   NMEA_INFO     gps_info;
   DERIVED_INFO  calculated_info;
+};
+
+
+class SettingsComputerBlackboard 
+{
+public:
+  const SETTINGS_COMPUTER& SettingsComputer() const 
+  { return settings_computer; }
+protected:
   SETTINGS_COMPUTER settings_computer;
 };
 
 
-class GlideComputerBlackboard: public BaseBlackboard {
+class SettingsMapBlackboard 
+{
+public:
+  const SETTINGS_MAP& SettingsMap() const 
+  { return settings_map; };
+protected:
+  SETTINGS_MAP settings_map;
+};
+
+
+class GlideComputerBlackboard: 
+  public BaseBlackboard,
+  public SettingsComputerBlackboard
+{
 public:
   void ReadBlackboard(const NMEA_INFO &nmea_info);
   void ReadSettingsComputer(const SETTINGS_COMPUTER &settings);
@@ -90,11 +113,18 @@ private:
 };
 
 
-class DeviceBlackboard: public BaseBlackboard {
+// the deviceblackboard is used as the global ground truth-state
+// since it is accessed quickly with only one mutex (flight)
+class DeviceBlackboard: 
+  public BaseBlackboard,
+  public SettingsComputerBlackboard,
+  public SettingsMapBlackboard
+{
 public:
   void Initialise();
   void ReadBlackboard(const DERIVED_INFO &derived_info);
   void ReadSettingsComputer(const SETTINGS_COMPUTER &settings);
+  void ReadSettingsMap(const SETTINGS_MAP &settings);
 
   // only the device blackboard can write to gps
   friend class ComPort;
@@ -120,19 +150,29 @@ public:
 };
 
 
-class MapWindowBlackboard: public BaseBlackboard {
+class MapWindowBlackboard: 
+  public BaseBlackboard,
+  public SettingsComputerBlackboard,
+  public SettingsMapBlackboard
+{
 protected:
   virtual void ReadBlackboard(const NMEA_INFO &nmea_info,
 			      const DERIVED_INFO &derived_info);
-  void ReadSettingsComputer(const SETTINGS_COMPUTER &settings);
+  virtual void ReadSettingsComputer(const SETTINGS_COMPUTER &settings);
+  virtual void ReadSettingsMap(const SETTINGS_MAP &settings);
 };
 
 
-class InterfaceBlackboard: public BaseBlackboard {
+class InterfaceBlackboard: 
+  public BaseBlackboard,
+  public SettingsComputerBlackboard,
+  public SettingsMapBlackboard
+{
 public:
   void ReadBlackboardBasic(const NMEA_INFO &nmea_info);
   void ReadBlackboardCalculated(const DERIVED_INFO &derived_info);
   SETTINGS_COMPUTER& SetSettingsComputer() { return settings_computer; }
+  SETTINGS_MAP& SetSettingsMap() { return settings_map; }
   void ReadSettingsComputer(const SETTINGS_COMPUTER &settings);
 };
 

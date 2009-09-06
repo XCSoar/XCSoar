@@ -265,4 +265,18 @@ class MapWindow
   void RenderSymbology_lower(Canvas &canvas, const RECT rc);
 };
 
+
+
+void DrawTerrain(Canvas &canvas, 
+		 MapWindowProjection &map_projection,
+		 const double sunazimuth, const double sunelevation,
+		 const double lon, const double lat,
+		 const bool isBigZoom,
+		 const SETTINGS_MAP &settings);
+
+void DrawSpotHeights(Canvas &canvas,
+		     MapWindowProjection &map_projection,
+		     LabelBlock &label_block);
+void CloseTerrainRenderer();
+
 #endif

@@ -208,7 +208,7 @@ void MapWindow::DrawAirSpace(Canvas &canvas, const RECT rc, Canvas &buffer)
 	  ClearAirSpace(buffer, false);
 	  found = true;
 	}
-        if (bAirspaceBlackOutline) {
+        if (SettingsMap().bAirspaceBlackOutline) {
           buffer.black_pen();
         } else {
           buffer.select(MapGfx.hAirspacePens[AirspaceCircle[i].Type]);
@@ -226,7 +226,7 @@ void MapWindow::DrawAirSpace(Canvas &canvas, const RECT rc, Canvas &buffer)
 	  ClearAirSpace(buffer, false);
 	  found = true;
 	}
-        if (bAirspaceBlackOutline) {
+        if (SettingsMap().bAirspaceBlackOutline) {
           buffer.black_pen();
         } else {
           buffer.select(MapGfx.hAirspacePens[AirspaceArea[i].Type]);

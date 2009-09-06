@@ -69,7 +69,7 @@ double MapWindow::DrawTrail(Canvas &canvas)
 
   double TrailFirstTime = -1;
 
-  if(!TrailActive)
+  if(!SettingsMap().TrailActive)
     return -1;
 
   mutexGlideComputer.Lock();
@@ -84,7 +84,7 @@ double MapWindow::DrawTrail(Canvas &canvas)
   double traildrift_lat = 0.0;
   double traildrift_lon = 0.0;
 
-  if (EnableTrailDrift && (DisplayMode == dmCircling)) {
+  if (SettingsMap().EnableTrailDrift && (DisplayMode == dmCircling)) {
     double tlat1, tlon1;
 
     FindLatitudeLongitude(Basic().Latitude,
@@ -104,7 +104,7 @@ double MapWindow::DrawTrail(Canvas &canvas)
   /////////////  Trail size
 
   int num_trail_max;
-  if (TrailActive!=2) {
+  if (SettingsMap().TrailActive!=2) {
     num_trail_max = TRAILSIZE;
   } else {
     num_trail_max = TRAILSIZE/TRAILSHRINK;
@@ -337,7 +337,9 @@ MapWindow::DrawTrailFromTask(Canvas &canvas, const double TrailFirstTime)
 {
   static POINT ptin[MAXCLIPPOLYGON];
 
-  if((TrailActive!=3) || (DisplayMode == dmCircling) || (TrailFirstTime<0))
+  if((SettingsMap().TrailActive!=3) 
+     || (DisplayMode == dmCircling) 
+     || (TrailFirstTime<0))
     return;
 
   const double mTrailFirstTime = TrailFirstTime - Calculated().TakeOffTime;

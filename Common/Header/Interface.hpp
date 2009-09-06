@@ -58,6 +58,11 @@ public:
   { return blackboard.SettingsComputer(); }
   static SETTINGS_COMPUTER& SetSettingsComputer()
   { return blackboard.SetSettingsComputer(); }
+
+  static const SETTINGS_MAP& SettingsMap()
+  { return blackboard.SettingsMap(); }
+  static SETTINGS_MAP& SetSettingsMap()
+  { return blackboard.SetSettingsMap(); }
     
   static void ReadBlackboardBasic(const NMEA_INFO& nmea_info) {
     blackboard.ReadBlackboardBasic(nmea_info);
@@ -128,7 +133,8 @@ public:
   static void CloseProgressDialog();
   static void StepProgressDialog();
   static BOOL SetProgressStepSize(int nSize);
-  static void SendSettings();
+  static void SendSettingsComputer();
+  static void SendSettingsMap();
 private:
   static void PreloadInitialisation(bool ask);
   static void StartupInfo();

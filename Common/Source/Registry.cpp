@@ -502,23 +502,34 @@ void ReadRegistrySettings(void)
   GetFromRegistry(szRegistryDisplayUpValue,&Temp);
   switch(Temp)
     {
-    case TRACKUP : DisplayOrientation = TRACKUP; break;
-    case NORTHUP : DisplayOrientation = NORTHUP;break;
-    case NORTHCIRCLE : DisplayOrientation = NORTHCIRCLE;break;
-    case TRACKCIRCLE : DisplayOrientation = TRACKCIRCLE;break;
-    case NORTHTRACK : DisplayOrientation = NORTHTRACK;break;
+    case TRACKUP : 
+      XCSoarInterface::SetSettingsMap().DisplayOrientation = TRACKUP; break;
+    case NORTHUP : 
+      XCSoarInterface::SetSettingsMap().DisplayOrientation = NORTHUP;break;
+    case NORTHCIRCLE : 
+      XCSoarInterface::SetSettingsMap().DisplayOrientation = NORTHCIRCLE;break;
+    case TRACKCIRCLE : 
+      XCSoarInterface::SetSettingsMap().DisplayOrientation = TRACKCIRCLE;break;
+    case NORTHTRACK : 
+      XCSoarInterface::SetSettingsMap().DisplayOrientation = NORTHTRACK;break;
     }
 
   Temp=0;
   GetFromRegistry(szRegistryDisplayText,&Temp);
   switch(Temp)
     {
-    case 0 : DisplayTextType = DISPLAYNAME; break;
-    case 1 : DisplayTextType = DISPLAYNUMBER;break;
-    case 2 : DisplayTextType = DISPLAYFIRSTFIVE; break;
-    case 3 : DisplayTextType = DISPLAYNONE;break;
-    case 4 : DisplayTextType = DISPLAYFIRSTTHREE; break;
-    case 5 : DisplayTextType = DISPLAYNAMEIFINTASK; break;
+    case 0 : 
+      XCSoarInterface::SetSettingsMap().DisplayTextType = DISPLAYNAME; break;
+    case 1 : 
+      XCSoarInterface::SetSettingsMap().DisplayTextType = DISPLAYNUMBER;break;
+    case 2 : 
+      XCSoarInterface::SetSettingsMap().DisplayTextType = DISPLAYFIRSTFIVE; break;
+    case 3 : 
+      XCSoarInterface::SetSettingsMap().DisplayTextType = DISPLAYNONE;break;
+    case 4 : 
+      XCSoarInterface::SetSettingsMap().DisplayTextType = DISPLAYFIRSTTHREE; break;
+    case 5 : 
+      XCSoarInterface::SetSettingsMap().DisplayTextType = DISPLAYNAMEIFINTASK; break;
     }
 
   Temp=AltitudeMode;
@@ -586,17 +597,17 @@ void ReadRegistrySettings(void)
 
     }
 
-  Temp = bAirspaceBlackOutline;
+  Temp = XCSoarInterface::SettingsMap().bAirspaceBlackOutline;
   GetFromRegistry(szRegistryAirspaceBlackOutline,&Temp);
-  bAirspaceBlackOutline = (Temp == 1);
+  XCSoarInterface::SetSettingsMap().bAirspaceBlackOutline = (Temp == 1);
 
-  Temp = TrailActive;
+  Temp = XCSoarInterface::SettingsMap().TrailActive;
   GetFromRegistry(szRegistrySnailTrail,&Temp);
-  TrailActive = Temp;
+  XCSoarInterface::SetSettingsMap().TrailActive = Temp;
 
-  Temp = EnableTrailDrift;
+  Temp = XCSoarInterface::SettingsMap().EnableTrailDrift;
   GetFromRegistry(szRegistryTrailDrift,&Temp);
-  EnableTrailDrift = (Temp==1);
+  XCSoarInterface::SetSettingsMap().EnableTrailDrift = (Temp==1);
 
   Temp = XCSoarInterface::SettingsComputer().EnableThermalLocator;
   GetFromRegistry(szRegistryThermalLocator,&Temp);
@@ -607,13 +618,13 @@ void ReadRegistrySettings(void)
   GetFromRegistry(szRegistryAnimation,&Temp);
   EnableAnimation = (Temp==1);
 
-  Temp  = EnableTopology;
+  Temp  = XCSoarInterface::SettingsMap().EnableTopology;
   GetFromRegistry(szRegistryDrawTopology,&Temp);
-  EnableTopology = (Temp == 1);
+  XCSoarInterface::SetSettingsMap().EnableTopology = (Temp == 1);
 
-  Temp  = EnableTerrain;
+  Temp  = XCSoarInterface::SettingsMap().EnableTerrain;
   GetFromRegistry(szRegistryDrawTerrain,&Temp);
-  EnableTerrain = (Temp == 1);
+  XCSoarInterface::SetSettingsMap().EnableTerrain = (Temp == 1);
 
   Temp  = XCSoarInterface::SettingsComputer().FinalGlideTerrain;
   GetFromRegistry(szRegistryFinalGlideTerrain,&Temp);
@@ -623,9 +634,9 @@ void ReadRegistrySettings(void)
   GetFromRegistry(szRegistryAutoWind,&Temp);
   XCSoarInterface::SetSettingsComputer().AutoWindMode = Temp;
 
-  Temp  = CircleZoom;
+  Temp  = XCSoarInterface::SettingsMap().CircleZoom;
   GetFromRegistry(szRegistryCircleZoom,&Temp);
-  CircleZoom = (Temp == 1);
+  XCSoarInterface::SetSettingsMap().CircleZoom = (Temp == 1);
 
   Temp = HomeWaypoint;
   if (GetFromRegistry(szRegistryHomeWaypoint,&Temp)==ERROR_SUCCESS) {
@@ -656,9 +667,9 @@ void ReadRegistrySettings(void)
   }
 
 
-  Temp = SnailWidthScale;
+  Temp = XCSoarInterface::SettingsMap().SnailWidthScale;
   GetFromRegistry(szRegistrySnailWidthScale,&Temp);
-  SnailWidthScale = Temp;
+  XCSoarInterface::SetSettingsMap().SnailWidthScale = Temp;
 
   Temp = XCSoarInterface::SettingsComputer().TeamCodeRefWaypoint;
   GetFromRegistry(szRegistryTeamcodeRefWaypoint,&Temp);
@@ -718,8 +729,8 @@ void ReadRegistrySettings(void)
   NettoSpeed = Temp;
   */
 
-  EnableCDICruise = 0;
-  EnableCDICircling = 0;
+  XCSoarInterface::SetSettingsMap().EnableCDICruise = 0;
+  XCSoarInterface::SetSettingsMap().EnableCDICircling = 0;
 
   /* JMW temporarily disabled these because they are not updated for 4.7+
   Temp = 0;
@@ -747,8 +758,7 @@ void ReadRegistrySettings(void)
 
   Temp = 0;
   GetFromRegistry(szRegistryExtendedVisualGlide,&Temp); // VENTA4
-  ExtendedVisualGlide = Temp;
-
+  XCSoarInterface::SetSettingsMap().ExtendedVisualGlide = Temp;
 
 #ifdef PNA
   Temp = 1;
@@ -956,7 +966,7 @@ void ReadRegistrySettings(void)
 
   Temp = 0;
   GetFromRegistry(szRegistryAutoZoom,&Temp);
-  AutoZoom = (Temp == 1);
+  XCSoarInterface::SetSettingsMap().AutoZoom = (Temp == 1);
 
   Temp = XCSoarInterface::MenuTimeoutMax;
   GetFromRegistry(szRegistryMenuTimeout,&Temp);
@@ -978,21 +988,21 @@ void ReadRegistrySettings(void)
   GetFromRegistry(szRegistryEnableFLARMGauge,&Temp);
   EnableFLARMGauge = (Temp==1);
 
-  Temp = TerrainContrast;
+  Temp = XCSoarInterface::SettingsMap().TerrainContrast;
   GetFromRegistry(szRegistryTerrainContrast,&Temp);
-  TerrainContrast = (short)Temp;
+  XCSoarInterface::SetSettingsMap().TerrainContrast = (short)Temp;
 
-  Temp = TerrainBrightness;
+  Temp = XCSoarInterface::SettingsMap().TerrainBrightness;
   GetFromRegistry(szRegistryTerrainBrightness,&Temp);
-  TerrainBrightness = (short)Temp;
+  XCSoarInterface::SetSettingsMap().TerrainBrightness = (short)Temp;
 
-  Temp = TerrainRamp;
+  Temp = XCSoarInterface::SettingsMap().TerrainRamp;
   GetFromRegistry(szRegistryTerrainRamp,&Temp);
-  TerrainRamp = (short)Temp;
+  XCSoarInterface::SetSettingsMap().TerrainRamp = (short)Temp;
 
-  Temp = GliderScreenPosition;
+  Temp = XCSoarInterface::SettingsMap().GliderScreenPosition;
   GetFromRegistry(szRegistryGliderScreenPosition,&Temp);
-  GliderScreenPosition = (int)Temp;
+  XCSoarInterface::SetSettingsMap().GliderScreenPosition = (int)Temp;
 
   Temp = XCSoarInterface::SettingsComputer().BallastSecsToEmpty;
   GetFromRegistry(szRegistryBallastSecsToEmpty,&Temp);
@@ -1005,7 +1015,6 @@ void ReadRegistrySettings(void)
   Temp = XCSoarInterface::SettingsComputer().AutoForceFinalGlide;
   GetFromRegistry(szRegistryAutoForceFinalGlide,&Temp);
   XCSoarInterface::SetSettingsComputer().AutoForceFinalGlide = (Temp!=0);
-
 
   Temp = 0; // fonts
   GetFromRegistry(szRegistryUseCustomFonts,&Temp);
@@ -1102,7 +1111,7 @@ void ReadRegistrySettings(void)
 
   Temp=(CompassAppearance_t)apCompassAltA; // VNT9 default
   GetFromRegistry(szRegistryWindArrowStyle,&Temp);
-  WindArrowStyle = Temp;
+  XCSoarInterface::SetSettingsMap().WindArrowStyle = Temp;
 
   Temp = XCSoarInterface::SettingsComputer().DisableAutoLogger;
   GetFromRegistry(szRegistryDisableAutoLogger,&Temp);

@@ -45,6 +45,7 @@ Copyright_License {
 #include "Screen/Canvas.hpp"
 #include "Airspace.h"
 #include "LabelBlock.hpp"
+#include "SettingsUser.hpp"
 
 typedef union{
   unsigned int AsInt;
@@ -70,7 +71,8 @@ typedef union{
 
 class ScreenGraphics {
 public:
-  void Initialise(HINSTANCE hInstance);
+  void Initialise(HINSTANCE hInstance,
+		  const SETTINGS_MAP &settings_map);
   void Destroy();
 
   // airspace brushes/colours

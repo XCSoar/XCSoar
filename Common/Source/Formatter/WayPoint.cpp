@@ -57,12 +57,12 @@ const TCHAR *FormatterWaypoint::Render(int *color) {
       } else {
 	*color = 0; // black text
       }
-      if ( DisplayTextType == DISPLAYFIRSTTHREE)
+      if ( SettingsMap().DisplayTextType == DISPLAYFIRSTTHREE)
         {
           _tcsncpy(Text,WayPointList[index].Name,3);
           Text[3] = '\0';
         }
-      else if( DisplayTextType == DISPLAYNUMBER)
+      else if( SettingsMap().DisplayTextType == DISPLAYNUMBER)
         {
           _stprintf(Text,_T("%d"),
 		    WayPointList[index].Number );
@@ -90,12 +90,12 @@ const TCHAR *FormatterAlternate::RenderTitle(int *color) {
   mutexTaskData.Lock();
   if(ValidWayPoint(ActiveAlternate))
     {
-      if ( DisplayTextType == DISPLAYFIRSTTHREE)
+      if ( SettingsMap().DisplayTextType == DISPLAYFIRSTTHREE)
         {
           _tcsncpy(Text,WayPointList[ActiveAlternate].Name,3);
           Text[3] = '\0';
         }
-      else if( DisplayTextType == DISPLAYNUMBER)
+      else if( SettingsMap().DisplayTextType == DISPLAYNUMBER)
         {
           _stprintf(Text,_T("%d"),
 		    WayPointList[ActiveAlternate].Number );

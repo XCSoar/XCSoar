@@ -42,6 +42,7 @@ Copyright_License {
 #include "Math/FastMath.h"
 #include "Units.hpp"
 #include "SettingsComputer.hpp"
+#include "SettingsUser.hpp"
 
 class Canvas;
 
@@ -107,7 +108,8 @@ class MapWindowProjection {
 
   // called on receipt of new data, to trigger projection/scale change functions
   void ExchangeBlackboard(const NMEA_INFO &nmea_info,
-			  const DERIVED_INFO &derived_info);
+			  const DERIVED_INFO &derived_info,
+			  const SETTINGS_MAP &settings_map);
  protected:
   // helpers
   bool PointVisible(const POINT &P) const;
@@ -138,7 +140,8 @@ class MapWindowProjection {
   void   CalculateOrigin(const RECT rc,
 			 const NMEA_INFO &nmea_info,
 			 const DERIVED_INFO &derived_info,
-			 const SETTINGS_COMPUTER &settings);
+			 const SETTINGS_COMPUTER &settings_computer,
+			 const SETTINGS_MAP &settings_map);
 
   double    StepMapScale(int Step);
   void      InitialiseScaleList();
@@ -158,8 +161,8 @@ class MapWindowProjection {
   double DistanceScreenToUser(const unsigned x) const {
     return x*MapScale/GetMapResolutionFactor();
   }
-  double RequestMapScale(double x) {
-    _RequestedMapScale = LimitMapScale(x);
+  double RequestMapScale(double x, const SETTINGS_MAP &settings_map) {
+    _RequestedMapScale = LimitMapScale(x, settings_map);
     return _RequestedMapScale;
   }
   double GetRequestedMapScale() const {
@@ -187,17 +190,21 @@ class MapWindowProjection {
   double MapScale;
   double _RequestedMapScale;
 
-  void   ModifyMapScale();
+  void   ModifyMapScale(const SETTINGS_MAP &settings_map);
 
   void   UpdateMapScale(const NMEA_INFO &nmea_info,
-			const DERIVED_INFO &derived_info);
+			const DERIVED_INFO &derived_info,
+			const SETTINGS_MAP &settings_map);
   void   CalculateOrientationTargetPan(const NMEA_INFO &nmea_info,
-				       const DERIVED_INFO &derived_info);
+				       const DERIVED_INFO &derived_info,
+				       const SETTINGS_MAP &settings);
   void   CalculateOrientationNormal(const NMEA_INFO &nmea_info,
-				    const DERIVED_INFO &derived_info);
+				    const DERIVED_INFO &derived_info,
+				    const SETTINGS_MAP &settings);
 
   bool   _origin_centered;
-  double    LimitMapScale(double value);
+  double    LimitMapScale(double value,
+			  const SETTINGS_MAP &settings);
   double    FindMapScale(double Value);
   int       ScaleCurrent;
   double    ScaleList[SCALELISTSIZE];

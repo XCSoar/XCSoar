@@ -266,11 +266,6 @@ const COLORRAMP terrain_colors[7][NUM_COLOR_RAMP_LEVELS] = {
 };
 
 
-short TerrainContrast = 150;
-short TerrainBrightness = 36;
-short TerrainRamp = 0;
-
-
 #define MIX(x,y,i) (BYTE)((x*i+y*((1<<7)-i))>>7)
 
 inline void TerrainShading(const short illum, BYTE &r, BYTE &g, BYTE &b)

@@ -39,8 +39,6 @@ Copyright_License {
 #include "UtilsSystem.hpp"
 #include "SettingsUser.hpp"
 #include "SettingsComputer.hpp"
-#include "Gauge/GaugeVario.hpp"
-#include "InfoBoxManager.h"
 #include "Protection.hpp"
 #include "InputEvents.h"
 #include "Language.hpp"
@@ -50,7 +48,6 @@ Copyright_License {
 #include <stdlib.h>
 
 /////////////////////////////////////////
-// called from calculation thread!!
 
 void MapWindow::SwitchZoomClimb(void) {
 
@@ -76,9 +73,9 @@ void MapWindow::SwitchZoomClimb(void) {
     } else {
       // restore scales
       if (isclimb) {
-        RequestMapScale(ClimbMapScale);
+        RequestMapScale(ClimbMapScale, SettingsMap());
       } else {
-        RequestMapScale(CruiseMapScale);
+        RequestMapScale(CruiseMapScale, SettingsMap());
       }
       BigZoom = true;
     }
@@ -86,18 +83,18 @@ void MapWindow::SwitchZoomClimb(void) {
     return;
   }
 
-  if (!my_target_pan && CircleZoom) {
+  if (!my_target_pan && SettingsMap().CircleZoom) {
     if (isclimb != last_isclimb) {
       if (isclimb) {
         // save cruise scale
         CruiseMapScale = GetMapScaleUser();
         // switch to climb scale
-        RequestMapScale(ClimbMapScale);
+        RequestMapScale(ClimbMapScale, SettingsMap());
       } else {
         // leaving climb
         // save cruise scale
         ClimbMapScale = GetMapScaleUser();
-        RequestMapScale(CruiseMapScale);
+        RequestMapScale(CruiseMapScale, SettingsMap());
         // switch to climb scale
       }
       BigZoom = true;
@@ -113,8 +110,13 @@ void MapWindow::ToggleFullScreenStart() {
   // ok, save the state.
   MapFullScreen = askFullScreen;
 
-  // show infoboxes immediately
+  if (MapFullScreen) {
+    SetMapRect(MapRectBig);
+  } else {
+    SetMapRect(MapRectSmall);
+  }
 
+  /* JMW illegal
   if (MapFullScreen) {
     SetMapRect(MapRectBig);
     InfoBoxManager::Hide();
@@ -125,29 +127,35 @@ void MapWindow::ToggleFullScreenStart() {
 
   if (gauge_vario != NULL)
     gauge_vario->Show(!MapFullScreen);
+  */
 }
 
 
 void MapWindow::RequestToggleFullScreen() {
+  /* JMW illegal
   askFullScreen = !askFullScreen;
   RefreshMap();
+  */
 }
 
 void MapWindow::RequestFullScreen(bool full) {
+  /* JMW illegal
   askFullScreen = full;
   RefreshMap();
+  */
 }
 
 // called from UI or input event handler (same thread)
 
 void MapWindow::Event_AutoZoom(int vswitch) {
+  /* JMW illegal 
   if (vswitch== -1) {
-    AutoZoom = !AutoZoom;
+    SetSettingsMap().AutoZoom = !SettingsMap().AutoZoom;
   } else {
-    AutoZoom = (vswitch != 0); // 0 off, 1 on
+    SetSettingsMap().AutoZoom = (vswitch != 0); // 0 off, 1 on
   }
 
-  if (AutoZoom) {
+  if (SettingsMap().AutoZoom) {
     if (EnablePan) {
       EnablePan = false;
       InputEvents::setMode(TEXT("default"));
@@ -155,10 +163,12 @@ void MapWindow::Event_AutoZoom(int vswitch) {
     }
   }
   RefreshMap();
+  */
 }
 
 
 void MapWindow::Event_PanCursor(int dx, int dy) {
+  /* JMW illegal
   int X= (MapRect.right+MapRect.left)/2;
   int Y= (MapRect.bottom+MapRect.top)/2;
   double Xstart, Ystart, Xnew, Ynew;
@@ -174,6 +184,7 @@ void MapWindow::Event_PanCursor(int dx, int dy) {
     PanLatitude += Ystart-Ynew;
   }
   RefreshMap();
+  */
 }
 
 
@@ -188,6 +199,7 @@ void MapWindow::Event_PanCursor(int dx, int dy) {
    -3      Toggle toplogy
 */
 void MapWindow::Event_TerrainTopology(int vswitch) {
+  /* JMW illegal
   char val;
 
   if (vswitch== -1) { // toggle through 4 possible options
@@ -239,18 +251,22 @@ void MapWindow::Event_TerrainTopology(int vswitch) {
       _stprintf(buf+_tcslen(buf), TEXT("%s"), gettext(TEXT("OFF")));
     Message::AddMessage(TEXT("Topology / Terrain"), buf);
   }
+  */
 }
 
 
 void MapWindow::Event_SetZoom(double value) {
+  /* JMW illegal
   if (GetMapScaleUser() != RequestMapScale(value)) {
     BigZoom = true;
     RefreshMap();
   }
+  */
 }
 
 
 void MapWindow::Event_ScaleZoom(int vswitch) {
+  /* JMW illegal
   double value = GetRequestedMapScale();
   if (HaveScaleList()){
     value = StepMapScale(-vswitch);
@@ -278,6 +294,7 @@ void MapWindow::Event_ScaleZoom(int vswitch) {
 
   }
   Event_SetZoom(value);
+  */
 }
 
 /////////////////////////////////////////////////////////////////////////

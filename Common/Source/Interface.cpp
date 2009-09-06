@@ -103,10 +103,35 @@ void XCSoarInterface::DefaultSettings()
   SetSettingsComputer().EnableAlternate2=false;
   SetSettingsComputer().BallastTimerActive = false;
   SetSettingsComputer().BallastSecsToEmpty = 120;
+
+  SetSettingsMap().CircleZoom = false;
+  SetSettingsMap().ExtendedVisualGlide=false;
+  SetSettingsMap().EnableTopology = false;
+  SetSettingsMap().EnableTerrain = false;
+  SetSettingsMap().DeclutterLabels = 0;
+  SetSettingsMap().EnableTrailDrift = false;
+
+  SetSettingsMap().EnableCDICruise = false;
+  SetSettingsMap().EnableCDICircling = false;
+  SetSettingsMap().AutoZoom = false;
+  SetSettingsMap().SnailWidthScale = 16;
+  SetSettingsMap().WindArrowStyle = 0;
+  SetSettingsMap().DisplayTextType = DISPLAYNONE;
+  SetSettingsMap().TrailActive = 1;
+  SetSettingsMap().VisualGlide = 0;
+  SetSettingsMap().bAirspaceBlackOutline = false;
+  SetSettingsMap().GliderScreenPosition = 20; // 20% from bottom
+  SetSettingsMap().DisplayOrientation = TRACKUP;
+  SetSettingsMap().TerrainContrast = 150;
+  SetSettingsMap().TerrainBrightness = 36;
+  SetSettingsMap().TerrainRamp = 0;
+  SetSettingsMap().OnAirSpace = 1;
+  SetSettingsMap().EnableAuxiliaryInfo = 0;
+  SetSettingsMap().UserForceDisplayMode = dmNone;
 }
 
 
-void XCSoarInterface::SendSettings() {
+void XCSoarInterface::SendSettingsComputer() {
   // send computer settings to the device because we know
   // that it won't be reading from them if we lock it, and
   // then others can retrieve from it at their convenience.

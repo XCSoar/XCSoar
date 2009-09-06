@@ -50,8 +50,6 @@ Copyright_License {
 #include <stdlib.h>
 #include "WayPoint.hpp"
 
-int GliderScreenPosition = 20; // 20% from bottom
-DisplayOrientation_t DisplayOrientation = TRACKUP;
 
 MapWindowProjection::MapWindowProjection():
   _origin_centered(false),
@@ -76,7 +74,7 @@ MapWindowProjection::MapWindowProjection():
 
 void MapWindowProjection::InitialiseScaleList(void) {
   ScaleListCount = propGetScaleList(ScaleList, sizeof(ScaleList)/sizeof(ScaleList[0]));
-  _RequestedMapScale = LimitMapScale(_RequestedMapScale);
+
 }
 
 bool MapWindowProjection::WaypointInScaleFilter(int i) const
@@ -291,23 +289,28 @@ void MapWindowProjection::LonLat2Screen(const pointObj* const ptin,
 ////////////////////////////////////////////////////////////////////
 
 
-void MapWindowProjection::CalculateOrientationNormal(const NMEA_INFO &DrawInfo,
-						     const DERIVED_INFO &DerivedDrawInfo) {
+void 
+MapWindowProjection::CalculateOrientationNormal
+(const NMEA_INFO &DrawInfo,
+ const DERIVED_INFO &DerivedDrawInfo,
+ const SETTINGS_MAP &settings) 
+
+{
   double trackbearing = DrawInfo.TrackBearing;
 
-  if( (DisplayOrientation == NORTHUP)
+  if( (settings.DisplayOrientation == NORTHUP)
       ||
-      ((DisplayOrientation == NORTHTRACK)
+      ((settings.DisplayOrientation == NORTHTRACK)
        &&(DisplayMode != dmCircling))
       ||
       (
-       ((DisplayOrientation == NORTHCIRCLE)
-        ||(DisplayOrientation==TRACKCIRCLE))
+       ((settings.DisplayOrientation == NORTHCIRCLE)
+        ||(settings.DisplayOrientation==TRACKCIRCLE))
        && (DisplayMode == dmCircling) )
       ) {
     _origin_centered = true;
 
-    if (DisplayOrientation == TRACKCIRCLE) {
+    if (settings.DisplayOrientation == TRACKCIRCLE) {
       DisplayAngle = DerivedDrawInfo.WaypointBearing;
       DisplayAircraftAngle = trackbearing-DisplayAngle;
     } else {
@@ -325,15 +328,20 @@ void MapWindowProjection::CalculateOrientationNormal(const NMEA_INFO &DrawInfo,
 }
 
 
-void MapWindowProjection::CalculateOrientationTargetPan(const NMEA_INFO &DrawInfo,
-							const DERIVED_INFO &DerivedDrawInfo) {
+void 
+MapWindowProjection::CalculateOrientationTargetPan
+(const NMEA_INFO &DrawInfo,
+ const DERIVED_INFO &DerivedDrawInfo,
+ const SETTINGS_MAP &settings) 
+
+{
   // Target pan mode, show track up when looking at current task point,
   // otherwise north up.  If circling, orient towards target.
 
   _origin_centered = true;
   if ((ActiveWayPoint==TargetPanIndex)
-      &&(DisplayOrientation != NORTHUP)
-      &&(DisplayOrientation != NORTHTRACK)
+      &&(settings.DisplayOrientation != NORTHUP)
+      &&(settings.DisplayOrientation != NORTHTRACK)
       )    {
     if (DisplayMode == dmCircling) {
       // target-up
@@ -353,17 +361,20 @@ void MapWindowProjection::CalculateOrientationTargetPan(const NMEA_INFO &DrawInf
 }
 
 
-void MapWindowProjection::CalculateOrigin(const RECT rc,
-					  const NMEA_INFO &DrawInfo,
-					  const DERIVED_INFO &DerivedDrawInfo,
-					  const SETTINGS_COMPUTER &settings)
+void 
+MapWindowProjection::CalculateOrigin
+(const RECT rc,
+ const NMEA_INFO &DrawInfo,
+ const DERIVED_INFO &DerivedDrawInfo,
+ const SETTINGS_COMPUTER &settings_computer,
+ const SETTINGS_MAP &settings_map)
 {
 
   mutexTaskData.Lock();
   if (TargetPan) {
-    CalculateOrientationTargetPan(DrawInfo, DerivedDrawInfo);
+    CalculateOrientationTargetPan(DrawInfo, DerivedDrawInfo, settings_map);
   } else {
-    CalculateOrientationNormal(DrawInfo, DerivedDrawInfo);
+    CalculateOrientationNormal(DrawInfo, DerivedDrawInfo, settings_map);
   }
   mutexTaskData.Unlock();
 
@@ -372,7 +383,8 @@ void MapWindowProjection::CalculateOrigin(const RECT rc,
     Orig_Screen.y = (rc.bottom + rc.top)/2;
   } else {
     Orig_Screen.x = (rc.left + rc.right)/2;
-    Orig_Screen.y = ((rc.top - rc.bottom )*GliderScreenPosition/100)+rc.bottom;
+    Orig_Screen.y = ((rc.top - rc.bottom )*
+		     settings_map.GliderScreenPosition/100)+rc.bottom;
   }
 
   //
@@ -380,7 +392,7 @@ void MapWindowProjection::CalculateOrigin(const RECT rc,
 
     if (IsOriginCentered()
         && DerivedDrawInfo.Circling
-        && (settings.EnableThermalLocator==2)) {
+        && (settings_computer.EnableThermalLocator==2)) {
 
       if (DerivedDrawInfo.ThermalEstimate_R>0) {
         PanLongitude = DerivedDrawInfo.ThermalEstimate_Longitude;
@@ -475,13 +487,14 @@ MapWindowProjection::GetMapResolutionFactor(void) const
 /////
 
 
-double MapWindowProjection::LimitMapScale(double value) {
+double MapWindowProjection::LimitMapScale(double value,
+					  const SETTINGS_MAP& settings_map) {
 
   double minreasonable;
 
   minreasonable = 0.05;
 
-  if (AutoZoom && DisplayMode != dmCircling) {
+  if (settings_map.AutoZoom && DisplayMode != dmCircling) {
     if (AATEnabled && (ActiveWayPoint>0)) {
       minreasonable = 0.88;
     } else {
@@ -534,9 +547,12 @@ double MapWindowProjection::FindMapScale(double Value){
 
 
 
-void MapWindowProjection::ModifyMapScale(void) {
+void MapWindowProjection::ModifyMapScale
+(const SETTINGS_MAP &settings_map) 
+{
   // limit zoomed in so doesn't reach silly levels
-  _RequestedMapScale = LimitMapScale(_RequestedMapScale); // FIX VENTA remove limit
+  _RequestedMapScale = 
+    LimitMapScale(_RequestedMapScale, settings_map);
   MapScale = _RequestedMapScale;
 
   MapScaleOverDistanceModify = MapScale/DISTANCEMODIFY;
@@ -550,7 +566,8 @@ void MapWindowProjection::ModifyMapScale(void) {
 
 
 void MapWindowProjection::UpdateMapScale(const NMEA_INFO &DrawInfo,
-					 const DERIVED_INFO &DerivedDrawInfo)
+					 const DERIVED_INFO &DerivedDrawInfo,
+					 const SETTINGS_MAP &settings_map)
 {
   static int AutoMapScaleWaypointIndex = -1;
   static double StartingAutoMapScale=0.0;
@@ -564,7 +581,7 @@ void MapWindowProjection::UpdateMapScale(const NMEA_INFO &DrawInfo,
 
   // if there is user intervention in the scale
   if(MapScale != _RequestedMapScale) {
-    ModifyMapScale();
+    ModifyMapScale(settings_map);
     user_asked_for_change = true;
   }
 
@@ -577,65 +594,59 @@ void MapWindowProjection::UpdateMapScale(const NMEA_INFO &DrawInfo,
   if (my_target_pan) {
     // set scale exactly so that waypoint distance is the zoom factor
     // across the screen
-    _RequestedMapScale = LimitMapScale(wpd*DISTANCEMODIFY/4.0);
-    ModifyMapScale();
+    _RequestedMapScale = LimitMapScale(wpd*DISTANCEMODIFY/4.0, settings_map);
+    ModifyMapScale(settings_map);
     return;
   }
 
-  if (AutoZoom) {
-    if(wpd > 0)
-      {
-	if(
-	   (((DisplayOrientation == NORTHTRACK)
-	     &&(DisplayMode != dmCircling))
-	    ||(DisplayOrientation == NORTHUP)
-	    ||
-	    (((DisplayOrientation == NORTHCIRCLE)
-	      || (DisplayOrientation == TRACKCIRCLE))
-	     && (DisplayMode == dmCircling) ))
-	   && !my_target_pan
-	   )
-	  {
-	    AutoZoomFactor = 2.5;
-	  }
-	else
-	  {
-	    AutoZoomFactor = 4;
-	  }
-
-	if(
-	   (wpd < ( AutoZoomFactor * MapScaleOverDistanceModify))
-	   ||
-	   (StartingAutoMapScale==0.0))
-	  {
-	    // waypoint is too close, so zoom in
-	    // OR just turned waypoint
-
-	    // this is the first time this waypoint has gotten close,
+  if (settings_map.AutoZoom) {
+    if(wpd > 0) {
+      if(
+	 (((settings_map.DisplayOrientation == NORTHTRACK)
+	   &&(DisplayMode != dmCircling))
+	  ||(settings_map.DisplayOrientation == NORTHUP)
+	  ||
+	  (((settings_map.DisplayOrientation == NORTHCIRCLE)
+	    || (settings_map.DisplayOrientation == TRACKCIRCLE))
+	   && (DisplayMode == dmCircling) ))
+	 && !my_target_pan
+	 ) {
+	AutoZoomFactor = 2.5;
+      } else {
+	AutoZoomFactor = 4;
+      }
+      
+      if(
+	 (wpd < ( AutoZoomFactor * MapScaleOverDistanceModify))
+	 ||
+	 (StartingAutoMapScale==0.0)) {
+	  // waypoint is too close, so zoom in
+	  // OR just turned waypoint
+	  
+	  // this is the first time this waypoint has gotten close,
 	    // so save original map scale
 
-	    if (StartingAutoMapScale==0.0) {
-	      StartingAutoMapScale = MapScale;
-	    }
-
-	    // set scale exactly so that waypoint distance is the zoom factor
-	    // across the screen
-	    _RequestedMapScale = LimitMapScale(wpd*DISTANCEMODIFY/ AutoZoomFactor);
-	    ModifyMapScale();
-
-	  } else {
-
-	  if (user_asked_for_change) {
-
-	    // user asked for a zoom change and it was achieved, so
-	    // reset starting map scale
-	    ////?TODO enhancement: for frank          StartingAutoMapScale = MapScale;
-	  }
-
+	if (StartingAutoMapScale==0.0) {
+	  StartingAutoMapScale = MapScale;
 	}
+	
+	// set scale exactly so that waypoint distance is the zoom factor
+	// across the screen
+	_RequestedMapScale = 
+	  LimitMapScale(wpd*DISTANCEMODIFY/ AutoZoomFactor, settings_map);
+	ModifyMapScale(settings_map);
+	
+      } else {
+	if (user_asked_for_change) {
+	  
+	  // user asked for a zoom change and it was achieved, so
+	  // reset starting map scale
+	  ////?TODO enhancement: for frank          StartingAutoMapScale = MapScale;
+	}
+	
       }
+    }
   } else {
-
     // reset starting map scale for auto zoom if momentarily switch
     // off autozoom
     //    StartingAutoMapScale = RequestMapScale;
@@ -666,7 +677,7 @@ void MapWindowProjection::UpdateMapScale(const NMEA_INFO &DrawInfo,
 	// zoom back out to where we were before
 	if (StartingAutoMapScale> 0.0) {
 	  _RequestedMapScale = StartingAutoMapScale;
-	  ModifyMapScale();
+	  ModifyMapScale(settings_map);
 	}
 
 	// reset search for new starting zoom level
@@ -684,9 +695,10 @@ void MapWindowProjection::UpdateMapScale(const NMEA_INFO &DrawInfo,
 
 
 void MapWindowProjection::ExchangeBlackboard(const NMEA_INFO &nmea_info,
-					     const DERIVED_INFO &derived_info) 
+					     const DERIVED_INFO &derived_info,
+					     const SETTINGS_MAP &settings_map) 
 {
-  UpdateMapScale(nmea_info, derived_info); 
+  UpdateMapScale(nmea_info, derived_info, settings_map); 
   // done here to avoid double latency due to locks
 }
 

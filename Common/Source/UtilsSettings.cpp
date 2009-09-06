@@ -191,17 +191,11 @@ int AirfieldsHomeWaypoint = -1; // VENTA3 force Airfields home to be HomeWaypoin
                                 // an H flag in waypoints file is not available..
 // Specials
 double QFEAltitudeOffset = 0;
-int OnAirSpace=1; // VENTA3 toggle DrawAirSpace, normal behaviour is "true"
 #if defined(PNA) || defined(FIVV)
 bool needclipping=false; // flag to activate extra clipping for some PNAs
 #endif
-bool ExtendedVisualGlide=false;
 
 // user interface settings
-bool CircleZoom = false;
-bool EnableTopology = false;
-bool EnableTerrain = false;
-int FinalGlideTerrain = 0;
 bool EnableSoundVario = true;
 bool EnableSoundModes = true;
 bool EnableSoundTask = true;

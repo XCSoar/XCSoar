@@ -163,7 +163,7 @@ void dlgWindSettingsShowModal(void){
 
       wp = (WndProperty*)wf->FindByName(TEXT("prpTrailDrift"));
       if (wp) {
-        wp->GetDataField()->Set(EnableTrailDrift);
+        wp->GetDataField()->Set(XCSoarInterface::SettingsMap().EnableTrailDrift);
         wp->RefreshDisplay();
       }
     }
@@ -179,8 +179,8 @@ void dlgWindSettingsShowModal(void){
     }
     wp = (WndProperty*)wf->FindByName(TEXT("prpTrailDrift"));
     if (wp) {
-      if (EnableTrailDrift != wp->GetDataField()->GetAsBoolean()) {
-        EnableTrailDrift = wp->GetDataField()->GetAsBoolean();
+      if (XCSoarInterface::SettingsMap().EnableTrailDrift != wp->GetDataField()->GetAsBoolean()) {
+        XCSoarInterface::SetSettingsMap().EnableTrailDrift = wp->GetDataField()->GetAsBoolean();
         // SetToRegistry(szRegistryTrailDrift, EnableTrailDrift);
       }
     }

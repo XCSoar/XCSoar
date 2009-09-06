@@ -54,7 +54,9 @@ Copyright_License {
 
 void MapWindow::RenderStart(Canvas &canvas, const RECT rc)
 {
-  CalculateOrigin(rc, Basic(), Calculated(), SettingsComputer());
+  CalculateOrigin(rc, Basic(), Calculated(), 
+		  SettingsComputer(),
+		  SettingsMap());
   CalculateScreenPositionsWaypoints();
   CalculateScreenPositionsTask();
   CalculateScreenPositionsAirspace();
@@ -69,7 +71,7 @@ void MapWindow::RenderStart(Canvas &canvas, const RECT rc)
 
 void MapWindow::RenderBackground(Canvas &canvas, const RECT rc)
 {
-  if (!EnableTerrain || !Calculated().TerrainValid
+  if (!SettingsMap().EnableTerrain || !Calculated().TerrainValid
       || !terrain.isTerrainLoaded() ) {
     canvas.select(MapGfx.hBackgroundBrush);
     canvas.white_pen();
@@ -83,7 +85,7 @@ void MapWindow::RenderBackground(Canvas &canvas, const RECT rc)
 
 void MapWindow::RenderMapLayer(Canvas &canvas, const RECT rc)
 {
-  if ((EnableTerrain && (Calculated().TerrainValid)
+  if ((SettingsMap().EnableTerrain && (Calculated().TerrainValid)
        && terrain.isTerrainLoaded())
       || RASP.GetParameter()) {
     double sunelevation = 40.0;
@@ -102,7 +104,7 @@ void MapWindow::RenderMapLayer(Canvas &canvas, const RECT rc)
 
     DrawTerrain(canvas, *this, sunazimuth, sunelevation,
 		Basic().Longitude, Basic().Latitude,
-	        BigZoom);
+	        BigZoom, SettingsMap());
 
     if ((SettingsComputer().FinalGlideTerrain==2) 
 	&& Calculated().TerrainValid) {
@@ -114,7 +116,7 @@ void MapWindow::RenderMapLayer(Canvas &canvas, const RECT rc)
     }
   }
 
-  if (EnableTopology) {
+  if (SettingsMap().EnableTopology) {
     topology->Draw(canvas, *this, rc);
   }
 
@@ -130,14 +132,14 @@ void MapWindow::RenderAreas(Canvas &canvas, const RECT rc)
   }
 
   // then airspace..
-  if (OnAirSpace > 0) {
+  if (SettingsMap().OnAirSpace > 0) {
     DrawAirSpace(canvas, rc, buffer_canvas);
   }
 }
 
 void MapWindow::RenderTrail(Canvas &canvas, const RECT rc)
 {
-  if(TrailActive) {
+  if(SettingsMap().TrailActive) {
     double TrailFirstTime = DrawTrail(canvas);
     DrawTrailFromTask(canvas, TrailFirstTime);
   }
@@ -167,7 +169,7 @@ void MapWindow::RenderGlide(Canvas &canvas, const RECT rc)
     DrawGlideCircle(canvas, rc);
   }
   */
-  if ((EnableTerrain && (Calculated().TerrainValid))
+  if ((SettingsMap().EnableTerrain && (Calculated().TerrainValid))
       || RASP.GetParameter()) {
     DrawSpotHeights(canvas, *this, label_block);
   }
@@ -257,7 +259,8 @@ void DrawTerrain(Canvas &canvas,
 		 MapWindowProjection &map_projection,
 		 const double sunazimuth, const double sunelevation,
 		 const double lon, const double lat,
-		 const bool isBigZoom)
+		 const bool isBigZoom,
+		 const SETTINGS_MAP &settings)
 {
   // TODO feature: sun-based rendering option
 
@@ -268,6 +271,10 @@ void DrawTerrain(Canvas &canvas,
   if (!terrain_renderer) {
     terrain_renderer = new TerrainRenderer(map_projection.GetMapRectBig());
   }
+  terrain_renderer->SetSettings(settings.TerrainRamp, 
+				settings.TerrainContrast,
+				settings.TerrainBrightness);
+
   terrain_renderer->Draw(canvas, map_projection, sunazimuth, sunelevation,
 			 lon, lat, isBigZoom);
 }

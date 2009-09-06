@@ -263,6 +263,7 @@ void Topology::Paint(Canvas &canvas, MapWindow &m_window, const RECT rc) {
   rectObj screenRect = map_projection.CalculateScreenBounds(0.0);
 
   static POINT pt[MAXCLIPPOLYGON];
+  const bool render_labels = (m_window.SettingsMap().DeclutterLabels<2);
 
   for (int ixshp = 0; ixshp < shpfile.numshapes; ixshp++) {
 
@@ -287,7 +288,8 @@ void Topology::Paint(Canvas &canvas, MapWindow &m_window, const RECT rc) {
 							 shape->line[tt].point[jj].x,
 							 shape->line[tt].point[jj].y,
 							 10, 10, &sc)) {
-		cshape->renderSpecial(canvas, *label_block, sc.x, sc.y);
+		if (render_labels) 
+		  cshape->renderSpecial(canvas, *label_block, sc.x, sc.y);
 	      }
 	    }
           }
@@ -314,7 +316,8 @@ void Topology::Paint(Canvas &canvas, MapWindow &m_window, const RECT rc) {
 	  }
 
           canvas.polyline(pt, msize);
-          cshape->renderSpecial(canvas, *label_block, minx, miny);
+	  if (render_labels) 
+	    cshape->renderSpecial(canvas, *label_block, minx, miny);
         }
       break;
 
@@ -337,7 +340,8 @@ void Topology::Paint(Canvas &canvas, MapWindow &m_window, const RECT rc) {
             }
 	  }
           canvas.polygon(pt, msize);
-          cshape->renderSpecial(canvas, *label_block, minx, miny);
+	  if (render_labels) 
+	    cshape->renderSpecial(canvas, *label_block, minx, miny);
         }
       break;
 
@@ -378,7 +382,7 @@ XShape* TopologyLabel::addShape(const int i) {
 
 
 void XShapeLabel::renderSpecial(Canvas &canvas, LabelBlock &label_block, int x, int y) {
-  if (label && (DeclutterLabels<2)) {
+  if (label) {
 
     TCHAR Temp[100];
     _stprintf(Temp,TEXT("%S"),label);

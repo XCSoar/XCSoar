@@ -135,6 +135,13 @@ MapWindowBlackboard::ReadSettingsComputer(const SETTINGS_COMPUTER
 }
 
 void 
+MapWindowBlackboard::ReadSettingsMap(const SETTINGS_MAP 
+				     &settings) 
+{
+  memcpy(&settings_map,&settings,sizeof(SETTINGS_MAP));
+}
+
+void 
 MapWindowBlackboard::ReadBlackboard(const NMEA_INFO &nmea_info,
 				    const DERIVED_INFO &derived_info) 
 {
@@ -168,11 +175,7 @@ GlideComputerBlackboard::ReadSettingsComputer(const SETTINGS_COMPUTER
   memcpy(&settings_computer,&settings,sizeof(SETTINGS_COMPUTER));
 }
 
-void 
-DeviceBlackboard::ReadBlackboard(const DERIVED_INFO &derived_info)
-{
-  memcpy(&calculated_info,&derived_info,sizeof(DERIVED_INFO));
-}
+//////
 
 
 void 
@@ -187,6 +190,15 @@ InterfaceBlackboard::ReadBlackboardBasic(const NMEA_INFO &nmea_info)
   memcpy(&gps_info,&nmea_info,sizeof(NMEA_INFO));
 }
 
+void 
+InterfaceBlackboard::ReadSettingsComputer(const SETTINGS_COMPUTER 
+					  &settings) 
+{
+  memcpy(&settings_computer,&settings,sizeof(SETTINGS_COMPUTER));
+}
+
+
+///////
 
 void 
 DeviceBlackboard::SetNAVWarning(bool val)
@@ -280,7 +292,11 @@ DeviceBlackboard::SetAltitude(double val)
   mutexFlightData.Unlock();
 }
 
-////
+void 
+DeviceBlackboard::ReadBlackboard(const DERIVED_INFO &derived_info)
+{
+  memcpy(&calculated_info,&derived_info,sizeof(DERIVED_INFO));
+}
 
 void 
 DeviceBlackboard::ReadSettingsComputer(const SETTINGS_COMPUTER 
@@ -289,11 +305,11 @@ DeviceBlackboard::ReadSettingsComputer(const SETTINGS_COMPUTER
   memcpy(&settings_computer,&settings,sizeof(SETTINGS_COMPUTER));
 }
 
-
 void 
-InterfaceBlackboard::ReadSettingsComputer(const SETTINGS_COMPUTER 
-					  &settings) 
+DeviceBlackboard::ReadSettingsMap(const SETTINGS_MAP 
+				  &settings) 
 {
-  memcpy(&settings_computer,&settings,sizeof(SETTINGS_COMPUTER));
+  memcpy(&settings_map,&settings,sizeof(SETTINGS_MAP));
 }
+
 

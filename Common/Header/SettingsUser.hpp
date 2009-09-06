@@ -67,9 +67,6 @@ typedef enum {
   dmFinalGlide
 } DisplayMode_t;
 
-extern int TrailActive;
-extern int VisualGlide;
-extern DisplayMode_t UserForceDisplayMode;
 extern DisplayMode_t DisplayMode;
 
 // user interface options
@@ -80,36 +77,38 @@ extern DisplayMode_t DisplayMode;
 // local time adjustment
 extern int UTCOffset;
 
-extern bool CircleZoom;
-extern bool EnableTopology;
-extern bool EnableTerrain;
-extern DisplayOrientation_t DisplayOrientation;
-extern DisplayTextType_t  DisplayTextType;
-extern bool EnableCDICruise;
-extern bool EnableCDICircling;
-extern bool EnableVarioGauge;
-extern bool ExtendedVisualGlide;
-extern int OnAirSpace; // VENTA3 toggle DrawAirSpace
+extern   bool  EnableVarioGauge;
 
-extern unsigned char DeclutterLabels;
-extern bool EnableTrailDrift;
-extern bool bAirspaceBlackOutline;
+typedef struct SETTINGS_MAP_ {
+  bool  CircleZoom;
+  bool  ExtendedVisualGlide;
+  bool  EnableTopology;
+  bool  EnableTerrain;
+  unsigned char  DeclutterLabels;
+  bool  EnableTrailDrift;
+  bool  EnableCDICruise;
+  bool  EnableCDICircling;
+  bool  AutoZoom;
+  int   SnailWidthScale;
+  int   WindArrowStyle;
+  DisplayTextType_t  DisplayTextType;
+  int   TrailActive;
+  int   VisualGlide;
+  bool  bAirspaceBlackOutline;
 
-extern int GliderScreenPosition;
+  int   GliderScreenPosition;
+  DisplayOrientation_t DisplayOrientation;
 
-// airspace display stuff
+  short TerrainContrast;
+  short TerrainBrightness;
+  short TerrainRamp;
+  int OnAirSpace; // VENTA3 toggle DrawAirSpace
+  bool EnableAuxiliaryInfo;
+  DisplayMode_t UserForceDisplayMode;
 
-extern bool   AutoZoom;
-extern int    SnailWidthScale;
-extern int    WindArrowStyle;
+} SETTINGS_MAP;
 
 // display mode stuff
-extern bool EnableAuxiliaryInfo;
 extern int  ActiveAlternate;
-
-// terrain
-extern short TerrainContrast;
-extern short TerrainBrightness;
-extern short TerrainRamp;
 
 #endif

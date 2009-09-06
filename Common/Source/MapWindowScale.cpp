@@ -193,7 +193,7 @@ void MapWindow::DrawMapScale(Canvas &canvas, const RECT rc /* the Map Rect*/,
       // bool FontSelected = false;
       // TODO code: gettext these
       ScaleInfo[0] = 0;
-      if (AutoZoom) {
+      if (SettingsMap().AutoZoom) {
         _tcscat(ScaleInfo, TEXT("AUTO "));
       }
       if (TargetPan) {
@@ -201,7 +201,7 @@ void MapWindow::DrawMapScale(Canvas &canvas, const RECT rc /* the Map Rect*/,
       } else if (EnablePan) {
         _tcscat(ScaleInfo, TEXT("PAN "));
       }
-      if (EnableAuxiliaryInfo) {
+      if (SettingsMap().EnableAuxiliaryInfo) {
         _tcscat(ScaleInfo, TEXT("AUX "));
       }
       if (ReplayLogger::IsEnabled()) {
