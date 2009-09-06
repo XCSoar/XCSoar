@@ -52,6 +52,8 @@ InterfaceBlackboard InstrumentBlackboard::blackboard;
 void 
 DeviceBlackboard::Initialise() 
 {
+  ScopeLock protect(mutexFlightData);
+
   memset( &gps_info, 0, sizeof(NMEA_INFO));
   memset( &calculated_info, 0, sizeof(DERIVED_INFO));
 
@@ -93,11 +95,10 @@ void
 DeviceBlackboard::SetStartupLocation(double lon, double lat, 
 				     double alt) 
 {
-  mutexFlightData.Lock();
+  ScopeLock protect(mutexFlightData);
   SetBasic().Longitude = lon;
   SetBasic().Latitude = lat;
   SetBasic().Altitude = alt;
-  mutexFlightData.Unlock();
 }
 
 // used by replay logger
@@ -106,7 +107,7 @@ DeviceBlackboard::SetLocation(double lon, double lat,
 			      double speed, double bearing,
 			      double alt, double baroalt, double t) 
 {
-  mutexFlightData.Lock();
+  ScopeLock protect(mutexFlightData);
   SetBasic().Longitude = lon;
   SetBasic().Latitude = lat;
   SetBasic().Speed = speed;
@@ -115,7 +116,6 @@ DeviceBlackboard::SetLocation(double lon, double lat,
   SetBasic().Altitude = alt;
   SetBasic().BaroAltitude = baroalt;
   SetBasic().Time = t;
-  mutexFlightData.Unlock();
 };
 
 void DeviceBlackboard::StopReplay() {
@@ -198,25 +198,22 @@ InterfaceBlackboard::ReadSettingsComputer(const SETTINGS_COMPUTER
 }
 
 
-///////
-
 void 
 DeviceBlackboard::SetNAVWarning(bool val)
 {
-  mutexFlightData.Lock();
+  ScopeLock protect(mutexFlightData);
   SetBasic().NAVWarning = val;
   if (!val) {
     // externally forced
     SetBasic().SatellitesUsed = 6;
   }
-  mutexFlightData.Unlock();
 }
 
 bool
 DeviceBlackboard::LowerConnection()
 {
+  ScopeLock protect(mutexFlightData);
   bool retval;
-  mutexFlightData.Lock();
   if (Basic().Connected) {
     SetBasic().Connected--;
   }
@@ -225,7 +222,6 @@ DeviceBlackboard::LowerConnection()
   } else {
     retval = false;
   }
-  mutexFlightData.Unlock();
   return retval;
 }
 
@@ -241,8 +237,8 @@ DeviceBlackboard::RaiseConnection()
 void
 DeviceBlackboard::ProcessSimulation()
 {
+  ScopeLock protect(mutexFlightData);
   SetNAVWarning(false);
-  mutexFlightData.Lock();
   FindLatitudeLongitude(Basic().Latitude, 
 			Basic().Longitude,
 			Basic().TrackBearing, 
@@ -261,35 +257,30 @@ DeviceBlackboard::ProcessSimulation()
   NMEAParser::TestRoutine(&SetBasic());
 #endif
 #endif
-
-  mutexFlightData.Unlock();
 }
 #endif /* _SIM_ */
 
 void
 DeviceBlackboard::SetSpeed(double val)
 {
-  mutexFlightData.Lock();
+  ScopeLock protect(mutexFlightData);
   SetBasic().Speed = val;
   SetBasic().IndicatedAirspeed = val;
-  mutexFlightData.Unlock();
 }
 
 void
 DeviceBlackboard::SetTrackBearing(double val)
 {
-  mutexFlightData.Lock();
+  ScopeLock protect(mutexFlightData);
   SetBasic().TrackBearing = AngleLimit360(val);
-  mutexFlightData.Unlock();
 }
 
 void
 DeviceBlackboard::SetAltitude(double val)
 {
-  mutexFlightData.Lock();
+  ScopeLock protect(mutexFlightData);
   SetBasic().Altitude = val;
   SetBasic().BaroAltitude = val;
-  mutexFlightData.Unlock();
 }
 
 void 

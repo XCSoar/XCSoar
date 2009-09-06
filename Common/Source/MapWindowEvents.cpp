@@ -118,13 +118,10 @@ void MapWindow::ToggleFullScreenStart() {
 
   /* JMW illegal
   if (MapFullScreen) {
-    SetMapRect(MapRectBig);
     InfoBoxManager::Hide();
   } else {
-    SetMapRect(MapRectSmall);
     InfoBoxManager::Show();
   }
-
   if (gauge_vario != NULL)
     gauge_vario->Show(!MapFullScreen);
   */
@@ -132,17 +129,15 @@ void MapWindow::ToggleFullScreenStart() {
 
 
 void MapWindow::RequestToggleFullScreen() {
-  /* JMW illegal
+  // JMW illegal
   askFullScreen = !askFullScreen;
   RefreshMap();
-  */
 }
 
 void MapWindow::RequestFullScreen(bool full) {
-  /* JMW illegal
+  // JMW illegal
   askFullScreen = full;
   RefreshMap();
-  */
 }
 
 // called from UI or input event handler (same thread)

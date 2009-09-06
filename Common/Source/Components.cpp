@@ -229,6 +229,8 @@ bool XCSoarInterface::Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
   InitSineTable();
   PreloadInitialisation(true);
 
+  XCSoarInterface::SendSettingsMap();
+
   StartupStore(TEXT("Create main window\n"));
 
   RECT WindowSize = SystemWindowSize();

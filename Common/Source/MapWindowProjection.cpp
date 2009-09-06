@@ -73,8 +73,9 @@ MapWindowProjection::MapWindowProjection():
 
 
 void MapWindowProjection::InitialiseScaleList(void) {
-  ScaleListCount = propGetScaleList(ScaleList, sizeof(ScaleList)/sizeof(ScaleList[0]));
-
+  ScaleListCount = propGetScaleList(ScaleList, 
+				    sizeof(ScaleList)/sizeof(ScaleList[0]));
+  ScaleCurrent = 3;
 }
 
 bool MapWindowProjection::WaypointInScaleFilter(int i) const
