@@ -52,16 +52,7 @@ Copyright_License {
 
 class MapWindowBase {
  public:
-  MapWindowBase();
-
-  void     CloseDrawingThread(void);
-  void     SuspendDrawingThread(void);
-  void     ResumeDrawingThread(void);
   bool     IsDisplayRunning();
-  void     CreateDrawingThread(void);
-
- protected:
-  DrawThread draw_thread;
 };
 
 

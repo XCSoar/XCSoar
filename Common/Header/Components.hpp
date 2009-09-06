@@ -45,6 +45,7 @@ class TopologyStore;
 class RasterTerrain;
 class RasterWeather;
 class GlideComputer;
+class DrawThread;
 
 // other global objects
 extern Marks *marks;
@@ -54,5 +55,6 @@ extern GaugeFLARM *gauge_flarm;
 extern RasterTerrain terrain;
 extern RasterWeather RASP;
 extern GlideComputer glide_computer;
+extern DrawThread *draw_thread;
 
 #endif

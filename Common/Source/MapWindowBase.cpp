@@ -40,33 +40,7 @@ Copyright_License {
 #include "Protection.hpp"
 #include "Screen/Blank.hpp"
 
-MapWindowBase::MapWindowBase():draw_thread((MapWindow &)*this) {}
-
 bool MapWindowBase::IsDisplayRunning() {
   return (globalRunningEvent.test()
 	  && !ScreenBlanked);
-}
-
-void MapWindowBase::CreateDrawingThread(void)
-{
-  closeTriggerEvent.reset();
-  draw_thread.start();
-}
-
-void MapWindowBase::SuspendDrawingThread(void)
-{
-  draw_thread.suspend();
-}
-
-void MapWindowBase::ResumeDrawingThread(void)
-{
-  draw_thread.resume();
-}
-
-void MapWindowBase::CloseDrawingThread(void)
-{
-  closeTriggerEvent.trigger();
-  drawTriggerEvent.trigger(); // wake self up
-  SuspendDrawingThread();
-  draw_thread.join();
 }
