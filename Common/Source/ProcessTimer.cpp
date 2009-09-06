@@ -54,9 +54,6 @@ Copyright_License {
 #include "Blackboard.hpp"
 #include "Components.hpp"
 
-BOOL GPSCONNECT = FALSE;
-BOOL extGPSCONNECT = FALSE; // this one used by extrnal functions
-
 bool RequestAirspaceWarningForce=false;
 
 static void HeapCompactTimer()
@@ -112,30 +109,33 @@ int ProcessTimer::ConnectionProcessTimer(int itimeout) {
   NMEAParser::UpdateMonitor();
   mutexComm.Unlock();
 
-  static BOOL LastGPSCONNECT = FALSE;
-  static BOOL CONNECTWAIT = FALSE;
-  static BOOL LOCKWAIT = FALSE;
-
+  static bool connected_last = false;
+  static bool wait_connect = false;
+  static bool wait_lock = false;
   //
   // replace bool with BOOL to correct warnings and match variable
   // declarations RB
   //
-  BOOL gpsconnect = GPSCONNECT;
 
-  if (GPSCONNECT) {
-    extGPSCONNECT = TRUE;
-  }
-
-  if (!extGPSCONNECT) {
+  if (!Basic().Connected) {
     // if gps is not connected, set navwarning to true so
     // calculations flight timers don't get updated
     device_blackboard.SetNAVWarning(true);
   }
+  bool connected_now = device_blackboard.LowerConnection();
 
-  GPSCONNECT = FALSE;
-  BOOL navwarning = (BOOL)(Basic().NAVWarning);
+  if (connected_now && Basic().NAVWarning) {
 
-  if (gpsconnect && navwarning) {
+    if (!wait_lock) {
+      // waiting for lock first time
+      wait_lock = true;
+      itimeout = 0;
+      InputEvents::processGlideComputer(GCE_GPS_FIX_WAIT);
+#ifndef DISABLEAUDIO
+      MessageBeep(MB_ICONEXCLAMATION);
+#endif
+    }
+
     // If GPS connected but no lock, must be in hangar
     if (InterfaceTimeoutCheck()) {
 #ifdef GNAV
@@ -144,86 +144,43 @@ int ProcessTimer::ConnectionProcessTimer(int itimeout) {
       // Shutdown();
 #endif
     }
+  } else if (connected_now) { // !navwarning
+    wait_connect = false;
+    wait_lock = false;
+    itimeout = 0;
+  } else { // not connected
+    wait_lock = false;
   }
 
-  if((gpsconnect == FALSE) && (LastGPSCONNECT == FALSE))
-    {
-      // re-draw screen every five seconds even if no GPS
-      TriggerGPSUpdate();
+  if(!connected_now && !connected_last) {
+    // re-draw screen every five seconds even if no GPS
+    TriggerGPSUpdate();
 
-      devLinkTimeout(devAll());
+    devLinkTimeout(devAll());
 
-      if(LOCKWAIT == TRUE)
-	{
-	  // gps was waiting for fix, now waiting for connection
-	  LOCKWAIT = FALSE;
-	}
-      if(!CONNECTWAIT)
-	{
-	  // gps is waiting for connection first time
-
-	  extGPSCONNECT = FALSE;
-          InputEvents::processGlideComputer(GCE_GPS_CONNECTION_WAIT);
-
-	  CONNECTWAIT = TRUE;
+    if(!wait_connect) {
+      // gps is waiting for connection first time
+      wait_connect = true;
+      InputEvents::processGlideComputer(GCE_GPS_CONNECTION_WAIT);
 #ifndef DISABLEAUDIO
-	  MessageBeep(MB_ICONEXCLAMATION);
+      MessageBeep(MB_ICONEXCLAMATION);
 #endif
-	} else {
-
-	if (itimeout % 30 == 0) {
-	  // we've been waiting for connection a long time
-
-	  // no activity for 30 seconds, so assume PDA has been
-	  // switched off and on again
-	  //
+    } else if (itimeout % 30 == 0) {
+      itimeout = 0;
+      // we've been waiting for connection a long time
+      // no activity for 30 seconds, so assume PDA has been
+      // switched off and on again
+      //
 #ifndef WINDOWSPC
 #ifndef GNAV
-
-	  extGPSCONNECT = FALSE;
-
-	  InputEvents::processGlideComputer(GCE_COMMPORT_RESTART);
-
-	  devRestart();
+      InputEvents::processGlideComputer(GCE_COMMPORT_RESTART);
+      devRestart();
 #endif
 #endif
-	  itimeout = 0;
-	}
-      }
     }
+  }
 
-  if((gpsconnect == TRUE) && (LastGPSCONNECT == FALSE))
-    {
-      itimeout = 0; // reset timeout
-
-      if(CONNECTWAIT)
-	{
-	  TriggerGPSUpdate();
-	  CONNECTWAIT = FALSE;
-	}
-    }
-
-  if((gpsconnect == TRUE) && (LastGPSCONNECT == TRUE))
-    {
-      if((navwarning == TRUE) && (LOCKWAIT == FALSE))
-	{
-	  InputEvents::processGlideComputer(GCE_GPS_FIX_WAIT);
-
-	  TriggerGPSUpdate();
-
-	  LOCKWAIT = TRUE;
-#ifndef DISABLEAUDIO
-	  MessageBeep(MB_ICONEXCLAMATION);
-#endif
-	}
-      else if((navwarning == FALSE) && (LOCKWAIT == TRUE))
-	{
-	  TriggerGPSUpdate();
-	  LOCKWAIT = FALSE;
-	}
-    }
-
-  LastGPSCONNECT = gpsconnect;
+  connected_last = connected_now;
   return itimeout;
 }
 
@@ -232,7 +189,7 @@ int ProcessTimer::ConnectionProcessTimer(int itimeout) {
 void ProcessTimer::Process(void)
 {
 
-  if (!GPSCONNECT && DisplayTimeOutIsFresh()) {
+  if (!Basic().Connected && DisplayTimeOutIsFresh()) {
     // JMW 20071207
     // re-draw screen every five seconds even if no GPS
     // this prevents sluggish screen when inside hangar..
@@ -255,8 +212,7 @@ void ProcessTimer::Process(void)
       TriggerGPSUpdate();
     }
     timeLast = Basic().Time;
-    GPSCONNECT = TRUE;
-    extGPSCONNECT = TRUE;
+    device_blackboard.RaiseConnection();
     device_blackboard.SetNAVWarning(false);
     return;
   }
@@ -275,8 +231,7 @@ void ProcessTimer::SIMProcess(void)
 
   CommonProcessTimer();
 
-  GPSCONNECT = TRUE;
-  extGPSCONNECT = TRUE;
+  device_blackboard.RaiseConnection();
   static int i=0;
   i++;
 

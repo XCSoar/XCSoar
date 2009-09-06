@@ -511,7 +511,7 @@ bool NMEAParser::RMC(const TCHAR *String, const TCHAR **params, size_t nparams,
 
   gpsValid = !NAVWarn(params[1][0]);
 
-  GPSCONNECT = true;
+  GPS_INFO->Connected = 2;
 
   if (!activeGPS)
     return true;
@@ -1028,7 +1028,6 @@ bool NMEAParser::PFLAA(const TCHAR *String,
 
   return false;
 }
-
 
 //////
 

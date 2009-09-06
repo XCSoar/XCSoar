@@ -193,7 +193,7 @@ void MapWindow::RenderAirborne(Canvas &canvas, const RECT rc)
     DrawCrossHairs(canvas);
   }
 
-  if (extGPSCONNECT) {
+  if (Basic().Connected) {
     DrawAircraft(canvas);
   }
 }
@@ -224,13 +224,13 @@ void MapWindow::RenderSymbology_upper(Canvas &canvas, const RECT rc)
 
 void MapWindow::RenderSymbology_lower(Canvas &canvas, const RECT rc)
 {
-  if (extGPSCONNECT) {
+  if (Basic().Connected) {
     // TODO enhancement: don't draw offtrack indicator if showing spot heights
     DrawProjectedTrack(canvas);
     DrawOffTrackIndicator(canvas);
     DrawBestCruiseTrack(canvas);
   }
-  DrawBearing(canvas, extGPSCONNECT);
+  DrawBearing(canvas, Basic().Connected);
 }
 
 void MapWindow::Render(Canvas &canvas, const RECT rc)

@@ -586,7 +586,6 @@ void GlideComputerAirData::Vario()
 
   if (!Basic().VarioAvailable || ReplayLogger::IsEnabled()) {
     SetCalculated().Vario = Calculated().GPSVario;
-
   } else {
     // get value from instrument
     SetCalculated().Vario = Basic().Vario;
@@ -623,7 +622,8 @@ GlideComputerAirData::SpeedToFly(const double mc_setting,
     risk_mc = mc_setting;
   } else {
     risk_mc =
-      GlidePolar::MacCreadyRisk(Calculated().NavAltitude+Calculated().EnergyHeight
+      GlidePolar::MacCreadyRisk(Calculated().NavAltitude
+				+Calculated().EnergyHeight
                                 -SettingsComputer().SAFETYALTITUDEBREAKOFF
 				-Calculated().TerrainBase,
                                 Calculated().MaxThermalHeight,
@@ -836,7 +836,8 @@ GlideComputerAirData::TakeoffLanding()
 }
 
 
-void GlideComputerAirData::OnLanding()
+void 
+GlideComputerAirData::OnLanding()
 {
   // JMWX  restore data calculated at finish so
   // user can review flight as at finish line
@@ -852,7 +853,8 @@ void GlideComputerAirData::OnLanding()
 
 
 
-void GlideComputerAirData::OnTakeoff()
+void 
+GlideComputerAirData::OnTakeoff()
 {
   SetCalculated().Flying = true;
   WasFlying=true; // VENTA3
@@ -870,34 +872,31 @@ void GlideComputerAirData::OnTakeoff()
 void
 GlideComputerAirData::PredictNextPosition()
 {
-  if(Calculated().Circling)
-    {
-      SetCalculated().NextLatitude = Basic().Latitude;
-      SetCalculated().NextLongitude = Basic().Longitude;
+  if(Calculated().Circling) {
+    SetCalculated().NextLatitude = Basic().Latitude;
+    SetCalculated().NextLongitude = Basic().Longitude;
+    SetCalculated().NextAltitude =
+      Calculated().NavAltitude + Calculated().Average30s * WarningTime;
+ } else {
+    FindLatitudeLongitude(Basic().Latitude,
+			  Basic().Longitude,
+			  Basic().TrackBearing,
+			  Basic().Speed*WarningTime,
+			  &SetCalculated().NextLatitude,
+			  &SetCalculated().NextLongitude);
+
+    if (Basic().BaroAltitudeAvailable) {
       SetCalculated().NextAltitude =
-        Calculated().NavAltitude + Calculated().Average30s * WarningTime;
+	Basic().BaroAltitude + Calculated().Average30s * WarningTime;
+    } else {
+      SetCalculated().NextAltitude =
+	Calculated().NavAltitude + Calculated().Average30s * WarningTime;
     }
-  else
-    {
-      FindLatitudeLongitude(Basic().Latitude,
-                            Basic().Longitude,
-                            Basic().TrackBearing,
-                            Basic().Speed*WarningTime,
-                            &SetCalculated().NextLatitude,
-                            &SetCalculated().NextLongitude);
-
-      if (Basic().BaroAltitudeAvailable) {
-        SetCalculated().NextAltitude =
-          Basic().BaroAltitude + Calculated().Average30s * WarningTime;
-      } else {
-        SetCalculated().NextAltitude =
-          Calculated().NavAltitude + Calculated().Average30s * WarningTime;
-      }
-    }
-    // MJJ TODO Predict terrain altitude
-    SetCalculated().NextAltitudeAGL = 
-      Calculated().NextAltitude - Calculated().TerrainAlt;
-
+  }
+  // MJJ TODO Predict terrain altitude
+  SetCalculated().NextAltitudeAGL = 
+    Calculated().NextAltitude - Calculated().TerrainAlt;
+  
 }
 
 bool GlobalClearAirspaceWarnings = false;
@@ -1000,38 +999,41 @@ GlideComputerAirData::AirspaceWarning(const MapWindowProjection &map_projection)
 void
 GlideComputerAirData::TerrainFootprint(double screen_range)
 {
-  if (SettingsComputer().FinalGlideTerrain) {
-
-    double bearing, distance;
-    double lat, lon;
-    bool out_of_range;
-
-    // estimate max range (only interested in at most one screen distance away)
-    // except we need to scan for terrain base, so 20km search minimum is required
-    double mymaxrange = max(20000.0, screen_range);
-
-    SetCalculated().TerrainBase = Calculated().TerrainAlt;
-
-    for (int i=0; i<=NUMTERRAINSWEEPS; i++) {
-      bearing = (i*360.0)/NUMTERRAINSWEEPS;
-      distance = FinalGlideThroughTerrain(bearing,
-					  &Basic(),
-					  &Calculated(), 
-					  SettingsComputer(),
-					  &lat, &lon,
-					  mymaxrange, &out_of_range,
-					  &SetCalculated().TerrainBase);
-      if (out_of_range) {
-	FindLatitudeLongitude(Basic().Latitude, Basic().Longitude,
-			      bearing,
-			      mymaxrange*20,
-			      &lat, &lon);
-      }
-      SetCalculated().GlideFootPrint[i].x = lon;
-      SetCalculated().GlideFootPrint[i].y = lat;
-    }
-    SetCalculated().Experimental = Calculated().TerrainBase;
+  if (!SettingsComputer().FinalGlideTerrain) {
+    return;
   }
+
+  double bearing, distance;
+  double lat, lon;
+  bool out_of_range;
+  
+  // estimate max range (only interested in at most one screen
+  // distance away) except we need to scan for terrain base, so 20km
+  // search minimum is required
+  
+  double mymaxrange = max(20000.0, screen_range);
+  
+  SetCalculated().TerrainBase = Calculated().TerrainAlt;
+  
+  for (int i=0; i<=NUMTERRAINSWEEPS; i++) {
+    bearing = (i*360.0)/NUMTERRAINSWEEPS;
+    distance = FinalGlideThroughTerrain(bearing,
+					&Basic(),
+					&Calculated(), 
+					SettingsComputer(),
+					&lat, &lon,
+					mymaxrange, &out_of_range,
+					&SetCalculated().TerrainBase);
+    if (out_of_range) {
+      FindLatitudeLongitude(Basic().Latitude, Basic().Longitude,
+			    bearing,
+			    mymaxrange*20,
+			    &lat, &lon);
+    }
+    SetCalculated().GlideFootPrint[i].x = lon;
+    SetCalculated().GlideFootPrint[i].y = lat;
+  }
+  SetCalculated().Experimental = Calculated().TerrainBase;
 }
 
 
@@ -1040,21 +1042,22 @@ GlideComputerAirData::BallastDump()
 {
   double dt = ballast_clock.delta_advance(Basic().Time);
 
-  if (SettingsComputer().BallastTimerActive && (dt>0)) {
+  if (!SettingsComputer().BallastTimerActive || (dt<=0)) {
+    return;
+  }
 
-    double BALLAST = GlidePolar::GetBallast();
-    double BALLAST_last = BALLAST;
-    double percent_per_second = 1.0/max(10.0, 
-					SettingsComputer().BallastSecsToEmpty);
-    BALLAST -= dt*percent_per_second;
-    if (BALLAST<0) {
-      // JMW illegal	BallastTimerActive = false;
-      BALLAST = 0.0;
-    }
-    GlidePolar::SetBallast(BALLAST);
-    if (fabs(BALLAST-BALLAST_last)>0.05) { // JMW update on 5 percent!
-      GlidePolar::UpdatePolar(true,SettingsComputer());
-    }
+  double BALLAST = GlidePolar::GetBallast();
+  double BALLAST_last = BALLAST;
+  double percent_per_second = 1.0/max(10.0, 
+				      SettingsComputer().BallastSecsToEmpty);
+  BALLAST -= dt*percent_per_second;
+  if (BALLAST<0) {
+    // JMW illegal	BallastTimerActive = false;
+    BALLAST = 0.0;
+  }
+  GlidePolar::SetBallast(BALLAST);
+  if (fabs(BALLAST-BALLAST_last)>0.05) { // JMW update on 5 percent!
+    GlidePolar::UpdatePolar(true,SettingsComputer());
   }
 }
 
@@ -1096,24 +1099,25 @@ GlideComputerAirData::PercentCircling(const double Rate)
 void
 GlideComputerAirData::ProcessThermalLocator()
 {
-  if (SettingsComputer().EnableThermalLocator) {
-    if (Calculated().Circling) {
-      ScopeLock protect(mutexGlideComputer);
-      thermallocator.AddPoint(Basic().Time, Basic().Longitude, Basic().Latitude,
-			      Calculated().NettoVario);
-      thermallocator.Update(Basic().Time, Basic().Longitude, Basic().Latitude,
-			    Calculated().WindSpeed, Calculated().WindBearing,
-			    Basic().TrackBearing,
-			    &SetCalculated().ThermalEstimate_Longitude,
-			    &SetCalculated().ThermalEstimate_Latitude,
-			    &SetCalculated().ThermalEstimate_W,
-			    &SetCalculated().ThermalEstimate_R);
-    } else {
-      SetCalculated().ThermalEstimate_W = 0;
-      SetCalculated().ThermalEstimate_R = -1;
-      ScopeLock protect(mutexGlideComputer);
-      thermallocator.Reset();
-    }
+  if (!SettingsComputer().EnableThermalLocator) {
+    return;
+  }
+  if (Calculated().Circling) {
+    ScopeLock protect(mutexGlideComputer);
+    thermallocator.AddPoint(Basic().Time, Basic().Longitude, Basic().Latitude,
+			    Calculated().NettoVario);
+    thermallocator.Update(Basic().Time, Basic().Longitude, Basic().Latitude,
+			  Calculated().WindSpeed, Calculated().WindBearing,
+			  Basic().TrackBearing,
+			  &SetCalculated().ThermalEstimate_Longitude,
+			  &SetCalculated().ThermalEstimate_Latitude,
+			  &SetCalculated().ThermalEstimate_W,
+			  &SetCalculated().ThermalEstimate_R);
+  } else {
+    SetCalculated().ThermalEstimate_W = 0;
+    SetCalculated().ThermalEstimate_R = -1;
+    ScopeLock protect(mutexGlideComputer);
+    thermallocator.Reset();
   }
 }
 
@@ -1449,6 +1453,4 @@ GlideComputerAirData::ThermalBand()
   SetCalculated().ThermalProfileW[index]+= Calculated().Vario;
   SetCalculated().ThermalProfileN[index]++;
 }
-
-
 

@@ -399,17 +399,17 @@ devParseNMEA(PDeviceDescriptor_t d, const TCHAR *String, NMEA_INFO *GPS_INFO)
   }
 
   if (d->Driver && d->Driver->ParseNMEA)
-    if ((d->Driver->ParseNMEA)(d, String, GPS_INFO))
+    if ((d->Driver->ParseNMEA)(d, String, GPS_INFO)) {
+      GPS_INFO->Connected = 2;
       return(TRUE);
-
-  if(String[0]=='$')  // Additional "if" to find GPS strings
-    {
-      if(NMEAParser::ParseNMEAString(d->Port, String, GPS_INFO))
-        {
-          GPSCONNECT  = TRUE;
-          return(TRUE);
-        }
     }
+
+  if(String[0]=='$') {  // Additional "if" to find GPS strings
+    if(NMEAParser::ParseNMEAString(d->Port, String, GPS_INFO)) {
+      GPS_INFO->Connected = 2;
+      return(TRUE);
+    }
+  }
 
   return(FALSE);
 

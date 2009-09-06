@@ -185,8 +185,10 @@ void MapWindow::DrawAircraft(Canvas &canvas)
 void MapWindow::DrawGPSStatus(Canvas &canvas, const RECT rc)
 {
 
-  if (extGPSCONNECT && !(Basic().NAVWarning) && (Basic().SatellitesUsed != 0))
-    // nothing to do
+  if (Basic().Connected 
+      && !Basic().NAVWarning
+      && Basic().SatellitesUsed)
+    // nothing to do, all OK
     return;
 
   TCHAR gpswarningtext1[] = TEXT("GPS not connected");
@@ -195,7 +197,7 @@ void MapWindow::DrawGPSStatus(Canvas &canvas, const RECT rc)
   TCHAR *txt=NULL;
   Bitmap *bmp=NULL;
 
-  if (!extGPSCONNECT) {
+  if (!Basic().Connected) {
     bmp = &MapGfx.hGPSStatus2;
     txt = gpswarningtext1;
   } else

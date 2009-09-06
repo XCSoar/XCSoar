@@ -56,8 +56,6 @@ Copyright_License {
 #include "GlideComputer.hpp"
 #include <assert.h>
 
-extern BOOL extGPSCONNECT;
-
 #include "Dialogs/dlgTools.h"
 
 static WndForm *wf=NULL;
@@ -148,7 +146,7 @@ static CallBackTableEntry_t CallBackTable[]={
 static bool first = true;
 
 static void UpdateValuesSystem() {
-  static int extGPSCONNECT_last = extGPSCONNECT;
+  static unsigned extGPSCONNECT_last = XCSoarInterface::Basic().Connected;
   static int NAVWarning_last = XCSoarInterface::Basic().NAVWarning;
   static int SatellitesUsed_last = XCSoarInterface::Basic().SatellitesUsed;
   static int VarioAvailable_last = XCSoarInterface::Basic().VarioAvailable;
@@ -159,7 +157,7 @@ static void UpdateValuesSystem() {
   static int PDABatteryPercent_last = PDABatteryPercent;
 
   if (first ||
-      (extGPSCONNECT_last != extGPSCONNECT) ||
+      (extGPSCONNECT_last != XCSoarInterface::Basic().Connected) ||
       (NAVWarning_last != XCSoarInterface::Basic().NAVWarning) ||
       (SatellitesUsed_last != XCSoarInterface::Basic().SatellitesUsed) ||
       (VarioAvailable_last != XCSoarInterface::Basic().VarioAvailable) ||
@@ -170,7 +168,7 @@ static void UpdateValuesSystem() {
       (PDABatteryPercent_last != PDABatteryPercent)) {
     first = false;
 
-    extGPSCONNECT_last = extGPSCONNECT;
+    extGPSCONNECT_last = XCSoarInterface::Basic().Connected;
     NAVWarning_last = XCSoarInterface::Basic().NAVWarning;
     SatellitesUsed_last = XCSoarInterface::Basic().SatellitesUsed;
     VarioAvailable_last = XCSoarInterface::Basic().VarioAvailable;
@@ -190,7 +188,7 @@ static void UpdateValuesSystem() {
   WndProperty* wp;
   wp = (WndProperty*)wf->FindByName(TEXT("prpGPS"));
   if (wp) {
-    if (extGPSCONNECT) {
+    if (XCSoarInterface::Basic().Connected) {
       if (XCSoarInterface::Basic().NAVWarning) {
         wp->SetText(gettext(TEXT("Fix invalid")));
       } else {

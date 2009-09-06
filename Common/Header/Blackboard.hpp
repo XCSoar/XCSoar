@@ -106,6 +106,8 @@ public:
   void SetLocation(double lon, double lat, double speed, double bearing,
 		   double alt, double baroalt, double t);
   void ProcessSimulation();
+  bool LowerConnection(); // decrement
+  void RaiseConnection(); // set to 2
   void StopReplay();
   void FLARM_RefreshSlots();
   void SetBaroAlt(double x) {

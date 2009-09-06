@@ -50,7 +50,6 @@ Copyright_License {
 #include "Interface.hpp"
 #include "Components.hpp"
 #include "GlideComputer.hpp"
-
 #include <assert.h>
 
 static Trigger gpsUpdatedTriggerEvent(TEXT("gpsUpdatedTriggerEvent"));

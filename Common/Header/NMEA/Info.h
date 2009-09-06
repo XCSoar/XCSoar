@@ -62,7 +62,7 @@ typedef struct _SWITCH_INFO
 
 typedef struct _NMEA_INFO
 {
-
+  unsigned Connected;
   double Latitude;
   double Longitude;
   double TrackBearing;

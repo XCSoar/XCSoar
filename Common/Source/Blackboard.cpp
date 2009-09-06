@@ -200,6 +200,31 @@ DeviceBlackboard::SetNAVWarning(bool val)
   mutexFlightData.Unlock();
 }
 
+bool
+DeviceBlackboard::LowerConnection()
+{
+  bool retval;
+  mutexFlightData.Lock();
+  if (Basic().Connected) {
+    SetBasic().Connected--;
+  }
+  if (Basic().Connected) {
+    retval = true;
+  } else {
+    retval = false;
+  }
+  mutexFlightData.Unlock();
+  return retval;
+}
+
+void
+DeviceBlackboard::RaiseConnection()
+{
+  mutexFlightData.Lock();
+  SetBasic().Connected = 2;
+  mutexFlightData.Unlock();
+}
+
 #ifdef _SIM_
 void
 DeviceBlackboard::ProcessSimulation()
