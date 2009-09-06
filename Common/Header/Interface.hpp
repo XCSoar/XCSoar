@@ -67,10 +67,16 @@ public:
   }
 private:
   static InterfaceBlackboard blackboard;
+public:
+  // settings
+  static bool VirtualKeys;
 };
 
 
 class ActionInterface: public CommonInterface {
+public:
+  // settings
+  static int  MenuTimeoutMax;
 public: 
   // ideally these should be protected
   static void on_key_None(int UpDown);
@@ -102,6 +108,7 @@ private:
 
 class XCSoarInterface: public ActionInterface {
 public:
+  // settings
   static unsigned debounceTimeout;
 public:
   static bool Debounce();

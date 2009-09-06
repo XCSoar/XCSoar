@@ -556,7 +556,7 @@ bool MapWindow::on_mouse_up(int x, int y)
   // from real touchscreen devices
   
   if ((distance<50) 
-       && (VirtualKeys==(VirtualKeys_t)vkEnabled) 
+       && (CommonInterface::VirtualKeys==(VirtualKeys_t)vkEnabled) 
        && (dwInterval>= DOUBLECLICKINTERVAL)) {
     unsigned wParam=ProcessVirtualKey(x,y,dwInterval,0);
     if (wParam==0) {
@@ -615,7 +615,7 @@ bool MapWindow::on_mouse_up(int x, int y)
 #endif
 
   if (!my_target_pan) {
-    if (VirtualKeys==(VirtualKeys_t)vkEnabled) {
+    if (CommonInterface::VirtualKeys==(VirtualKeys_t)vkEnabled) {
       if(dwInterval < VKSHORTCLICK) {
 	//100ms is NOT enough for a short click since GetTickCount
 	//is OEM custom!

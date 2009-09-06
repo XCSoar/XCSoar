@@ -49,11 +49,14 @@ static bool ShutdownRequested = false;
 InterfaceBlackboard CommonInterface::blackboard;
 HINSTANCE CommonInterface::hInst; // The current instance
 MainWindow CommonInterface::main_window;
+
+// settings used only by interface thread scope
+bool CommonInterface::VirtualKeys=false;
 bool ActionInterface::RequestAirspaceWarningForce = false;
 bool ActionInterface::LockSettingsInFlight = true;
 unsigned  ActionInterface::UserLevel=0; // used by dlgConfiguration
 unsigned XCSoarInterface::debounceTimeout=200;
-
+int ActionInterface::MenuTimeoutMax = MENUTIMEOUTMAX;
 /////
 
 // Team code info

@@ -756,7 +756,7 @@ void ReadRegistrySettings(void)
   Temp = 0;
 #endif
   GetFromRegistry(szRegistryVirtualKeys,&Temp);
-  VirtualKeys = Temp;
+  CommonInterface::VirtualKeys = Temp;
 
   Temp = (AverEffTime_t)ae2minutes;
   GetFromRegistry(szRegistryAverEffTime,&Temp);
@@ -958,9 +958,9 @@ void ReadRegistrySettings(void)
   GetFromRegistry(szRegistryAutoZoom,&Temp);
   AutoZoom = (Temp == 1);
 
-  Temp = MenuTimeoutMax;
+  Temp = XCSoarInterface::MenuTimeoutMax;
   GetFromRegistry(szRegistryMenuTimeout,&Temp);
-  MenuTimeoutMax = Temp;
+  XCSoarInterface::MenuTimeoutMax = Temp;
 
   Temp = 1;
   GetFromRegistry(szRegistryLockSettingsInFlight,&Temp);

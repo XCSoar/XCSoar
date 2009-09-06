@@ -979,7 +979,6 @@ void InputEvents::processGo(int eventid) {
 #include "Screen/Blank.hpp"
 
 int InputEvents::MenuTimeOut = 0;
-int MenuTimeoutMax = MENUTIMEOUTMAX;
 
 void InputEvents::HideMenu() {
   MenuTimeOut = MenuTimeoutMax;

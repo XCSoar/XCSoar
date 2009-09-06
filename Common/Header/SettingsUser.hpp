@@ -88,13 +88,10 @@ extern DisplayTextType_t  DisplayTextType;
 extern bool EnableCDICruise;
 extern bool EnableCDICircling;
 extern bool EnableVarioGauge;
-extern int  MenuTimeoutMax;
 extern bool EnableAutoBacklight; // VENTA4
 extern bool EnableAutoSoundVolume; // VENTA4
 extern bool ExtendedVisualGlide;
 extern int OnAirSpace; // VENTA3 toggle DrawAirSpace
-
-extern bool VirtualKeys;
 
 extern unsigned char DeclutterLabels;
 extern bool EnableTrailDrift;

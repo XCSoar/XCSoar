@@ -1530,7 +1530,7 @@ static void setVariables(void) {
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpMenuTimeout"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(MenuTimeoutMax/2);
+    wp->GetDataField()->SetAsFloat(XCSoarInterface::MenuTimeoutMax/2);
     wp->RefreshDisplay();
   }
 
@@ -2167,7 +2167,7 @@ static void setVariables(void) {
     dfe->addEnumText(gettext(TEXT("Disabled")));
     dfe->addEnumText(gettext(TEXT("Enabled")));
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->Set(VirtualKeys);
+    dfe->Set(CommonInterface::VirtualKeys);
     wp->RefreshDisplay();
   }
 
@@ -2929,9 +2929,9 @@ void dlgConfigurationShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpMenuTimeout"));
   if (wp) {
-    if (MenuTimeoutMax != wp->GetDataField()->GetAsInteger()*2) {
-      MenuTimeoutMax = wp->GetDataField()->GetAsInteger()*2;
-      SetToRegistry(szRegistryMenuTimeout,MenuTimeoutMax);
+    if (XCSoarInterface::MenuTimeoutMax != wp->GetDataField()->GetAsInteger()*2) {
+      XCSoarInterface::MenuTimeoutMax = wp->GetDataField()->GetAsInteger()*2;
+      SetToRegistry(szRegistryMenuTimeout,XCSoarInterface::MenuTimeoutMax);
       changed = true;
     }
   }
@@ -3426,12 +3426,12 @@ void dlgConfigurationShowModal(void){
   }
   wp = (WndProperty*)wf->FindByName(TEXT("prpVirtualKeys")); // VENTA6
   if (wp) {
-    if (VirtualKeys != (VirtualKeys_t)
+    if (CommonInterface::VirtualKeys != (VirtualKeys_t)
 	(wp->GetDataField()->GetAsInteger())) {
-      VirtualKeys = (VirtualKeys_t)
+      CommonInterface::VirtualKeys = (VirtualKeys_t)
 	(wp->GetDataField()->GetAsInteger());
       SetToRegistry(szRegistryVirtualKeys,
-		    (DWORD)(VirtualKeys));
+		    (DWORD)(CommonInterface::VirtualKeys));
       changed = true;
     }
   }

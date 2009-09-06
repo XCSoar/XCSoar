@@ -198,7 +198,6 @@ bool needclipping=false; // flag to activate extra clipping for some PNAs
 bool EnableAutoBacklight=true;
 bool EnableAutoSoundVolume=true;
 bool ExtendedVisualGlide=false;
-bool VirtualKeys=false;
 
 // user interface settings
 bool CircleZoom = false;
