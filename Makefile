@@ -175,15 +175,23 @@ endif
 
 ######## output files
 
-OUTPUTS 	:= XCSoar-$(TARGET).exe XCSoarSimulator-$(TARGET).exe
+TARGET_EXEEXT = .exe
+NOSTRIP_SUFFIX = -ns
+
+ifeq ($(CONFIG_WINE),y)
+TARGET_EXEEXT :=
+NOSTRIP_SUFFIX :=
+endif
+
+OUTPUTS 	:= XCSoar-$(TARGET)$(TARGET_EXEEXT) XCSoarSimulator-$(TARGET)$(TARGET_EXEEXT)
 ifeq ($(CONFIG_ALTAIR),y)
-OUTPUTS 	:= XCSoar-$(TARGET).exe
+OUTPUTS 	:= XCSoar-$(TARGET)$(TARGET_EXEEXT)
 endif
 ifeq ($(ALTAIR_PORTRAIT),y)
-OUTPUTS 	:= XCSoar-$(TARGET).exe
+OUTPUTS 	:= XCSoar-$(TARGET)$(TARGET_EXEEXT)
 endif
 ifeq ($(CONFIG_PNA),y)
-OUTPUTS 	:= XCSoar-$(TARGET).exe
+OUTPUTS 	:= XCSoar-$(TARGET)$(TARGET_EXEEXT)
 endif
 
 ######## tools
@@ -690,21 +698,23 @@ cab:	XCSoar-$(TARGET).exe XCSoarSimulator-$(TARGET).exe
 
 #	wine ezsetup.exe -l english -i XCSoar$(TARGET).ini -r installmsg.txt -e gpl.txt -o InstallXCSoar-$(TARGET).exe
 
-XCSoar-$(TARGET).exe: XCSoar-$(TARGET)-ns.exe
+ifneq ($(NOSTRIP_SUFFIX),)
+XCSoar-$(TARGET)$(TARGET_EXEEXT): XCSoar-$(TARGET)$(NOSTRIP_SUFFIX)$(TARGET_EXEEXT)
 	@$(NQ)echo "  STRIP   $@"
 	$(Q)$(STRIP) $< -o $@
 	$(Q)$(SIZE) $@
 
-XCSoarSimulator-$(TARGET).exe: XCSoarSimulator-$(TARGET)-ns.exe
+XCSoarSimulator-$(TARGET)$(TARGET_EXEEXT): XCSoarSimulator-$(TARGET)$(NOSTRIP_SUFFIX)$(TARGET_EXEEXT)
 	@$(NQ)echo "  STRIP   $@"
 	$(Q)$(STRIP) $< -o $@
 	$(Q)$(SIZE) $@
+endif
 
-XCSoar-$(TARGET)-ns.exe: $(OBJS:.o=-$(TARGET).o)
+XCSoar-$(TARGET)$(NOSTRIP_SUFFIX)$(TARGET_EXEEXT): $(OBJS:.o=-$(TARGET).o)
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
-XCSoarSimulator-$(TARGET)-ns.exe: $(OBJS:.o=-$(TARGET)-Simulator.o)
+XCSoarSimulator-$(TARGET)$(NOSTRIP_SUFFIX)$(TARGET_EXEEXT): $(OBJS:.o=-$(TARGET)-Simulator.o)
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
@@ -805,7 +815,7 @@ IGNORE	:= \( -name .svn -o -name CVS -o -name .git \) -prune -o
 clean: cleani FORCE
 	find . $(IGNORE) \( -name '*.[oa]' -o -name '*.rsc' -o -name '.*.d' \) \
 	-type f -print | xargs -r $(RM)
-	$(RM) XCSoar-$(TARGET)-ns.exe XCSoarSimulator-$(TARGET)-ns.exe
+	$(RM) XCSoar-$(TARGET)$(NOSTRIP_SUFFIX)$(TARGET_EXEEXT) XCSoarSimulator-$(TARGET)$(NOSTRIP_SUFFIX)$(TARGET_EXEEXT)
 
 cleani: FORCE
 	find . $(IGNORE) \( -name '*.i' \) \
