@@ -293,7 +293,8 @@ void InputEvents::eventScreenModes(const TCHAR *misc) {
       switch (pnascrollstatus) {
       case 1:
 #ifndef DISABLEAUDIO
-	if (EnableSoundModes) PlayResource(TEXT("IDR_WAV_CLICK"));
+	if (SettingsComputer().EnableSoundModes)
+          PlayResource(TEXT("IDR_WAV_CLICK"));
 #endif
 	EnableAuxiliaryInfo = true;
 	break;
@@ -304,7 +305,8 @@ void InputEvents::eventScreenModes(const TCHAR *misc) {
       case 3:
 	//	InfoBoxLayout::fullscreen = false;
 #ifndef DISABLEAUDIO
-	if (EnableSoundModes) PlayResource(TEXT("IDR_WAV_CLICK"));
+	if (SettingsComputer().EnableSoundModes)
+          PlayResource(TEXT("IDR_WAV_CLICK"));
 #endif
 	EnableAuxiliaryInfo = false;
 	map_window.RequestFullScreen(true);
@@ -314,7 +316,8 @@ void InputEvents::eventScreenModes(const TCHAR *misc) {
 	EnableAuxiliaryInfo = false;
 	map_window.RequestFullScreen(false);
 #ifndef DISABLEAUDIO
-	if (EnableSoundModes) PlayResource(TEXT("IDR_WAV_BELL"));
+	if (SettingsComputer().EnableSoundModes)
+          PlayResource(TEXT("IDR_WAV_BELL"));
 #endif
 	break;
       default:
@@ -325,7 +328,8 @@ void InputEvents::eventScreenModes(const TCHAR *misc) {
       {
 	if (EnableAuxiliaryInfo) {
 #ifndef DISABLEAUDIO
-	  if (EnableSoundModes) PlayResource(TEXT("IDR_WAV_CLICK"));
+	  if (SettingsComputer().EnableSoundModes)
+            PlayResource(TEXT("IDR_WAV_CLICK"));
 #endif
 	  map_window.RequestToggleFullScreen();
 	  EnableAuxiliaryInfo = false;
@@ -333,11 +337,13 @@ void InputEvents::eventScreenModes(const TCHAR *misc) {
 	  if (map_window.isMapFullScreen()) {
 	    map_window.RequestToggleFullScreen();
 #ifndef DISABLEAUDIO
-	    if (EnableSoundModes) PlayResource(TEXT("IDR_WAV_BELL"));
+	    if (SettingsComputer().EnableSoundModes)
+              PlayResource(TEXT("IDR_WAV_BELL"));
 #endif
 	  } else {
 #ifndef DISABLEAUDIO
-	    if (EnableSoundModes) PlayResource(TEXT("IDR_WAV_CLICK"));
+	    if (SettingsComputer().EnableSoundModes)
+              PlayResource(TEXT("IDR_WAV_CLICK"));
 #endif
 	    EnableAuxiliaryInfo = true;
 	  }
