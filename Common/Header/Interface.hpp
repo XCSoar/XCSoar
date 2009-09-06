@@ -102,6 +102,8 @@ private:
 
 class XCSoarInterface: public ActionInterface {
 public:
+  static unsigned debounceTimeout;
+public:
   static bool Debounce();
 
   static bool InterfaceTimeoutZero(void);
@@ -124,7 +126,6 @@ private:
   static void DefaultSettings();
   static HWND hProgress;
   static HWND hWndCurtain;
-
 };
 
 #endif

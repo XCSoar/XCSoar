@@ -774,7 +774,7 @@ void ReadRegistrySettings(void)
   Temp = 250;
 #endif
   GetFromRegistry(szRegistryDebounceTimeout, &Temp);
-  debounceTimeout = Temp;
+  XCSoarInterface::debounceTimeout = Temp;
 
   Temp = 100;
   GetFromRegistry(szRegistryAccelerometerZero,&Temp);

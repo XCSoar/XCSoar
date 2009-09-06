@@ -40,8 +40,6 @@ Copyright_License {
 #include "Language.hpp"
 #include "Dialogs.h"
 
-int debounceTimeout=200;
-
 static Mutex mutexInterfaceTimeout;
 static int interface_timeout;
 static bool doForceShutdown = false;
@@ -54,6 +52,7 @@ MainWindow CommonInterface::main_window;
 bool ActionInterface::RequestAirspaceWarningForce = false;
 bool ActionInterface::LockSettingsInFlight = true;
 unsigned  ActionInterface::UserLevel=0; // used by dlgConfiguration
+unsigned XCSoarInterface::debounceTimeout=200;
 
 /////
 

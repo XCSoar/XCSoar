@@ -1443,7 +1443,7 @@ static void setVariables(void) {
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpDebounceTimeout"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(debounceTimeout);
+    wp->GetDataField()->SetAsFloat(XCSoarInterface::debounceTimeout);
     wp->RefreshDisplay();
   }
 
@@ -2789,9 +2789,9 @@ void dlgConfigurationShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpDebounceTimeout"));
   if (wp) {
-    if (debounceTimeout != wp->GetDataField()->GetAsInteger()) {
-      debounceTimeout = wp->GetDataField()->GetAsInteger();
-      SetToRegistry(szRegistryDebounceTimeout, debounceTimeout);
+    if ((int)XCSoarInterface::debounceTimeout != wp->GetDataField()->GetAsInteger()) {
+      XCSoarInterface::debounceTimeout = wp->GetDataField()->GetAsInteger();
+      SetToRegistry(szRegistryDebounceTimeout, (int)XCSoarInterface::debounceTimeout);
       changed = true;
     }
   }
