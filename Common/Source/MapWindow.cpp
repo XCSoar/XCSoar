@@ -654,7 +654,7 @@ bool MapWindow::on_key_down(unsigned key_code)
   key_code = TranscodeKey(key_code);
 #if defined(GNAV)
   if (key_code == 0xF5){
-    SignalShutdown(false);
+    XCSoarInterface::SignalShutdown(false);
     return true;
   }
 #endif

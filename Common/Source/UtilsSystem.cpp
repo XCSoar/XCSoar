@@ -202,52 +202,6 @@ unsigned long FindFreeSpace(const TCHAR *path) {
   }
 }
 
-#ifndef DISABLEAUDIO
-#include "mmsystem.h"
-#endif
-
-BOOL PlayResource (const TCHAR* lpName)
-{
-#ifdef DISABLEAUDIO
-  return false;
-#else
-  BOOL bRtn;
-  LPTSTR lpRes;
-  HANDLE hResInfo, hRes;
-
-  // TODO code: Modify to allow use of WAV Files and/or Embedded files
-
-  if (_tcsstr(lpName, TEXT(".wav"))) {
-    bRtn = sndPlaySound (lpName, SND_ASYNC | SND_NODEFAULT );
-
-  } else {
-
-    // Find the wave resource.
-    hResInfo = FindResource (XCSoarInterface::hInst, lpName, TEXT("WAVE"));
-
-    if (hResInfo == NULL)
-      return FALSE;
-
-    // Load the wave resource.
-    hRes = LoadResource (XCSoarInterface::hInst, (HRSRC)hResInfo);
-
-    if (hRes == NULL)
-      return FALSE;
-
-    // Lock the wave resource and play it.
-    lpRes = (LPTSTR)LockResource ((HGLOBAL)hRes);
-
-    if (lpRes != NULL)
-      {
-	bRtn = sndPlaySound (lpRes, SND_MEMORY | SND_ASYNC | SND_NODEFAULT );
-      }
-    else
-      bRtn = 0;
-  }
-  return bRtn;
-#endif
-}
-
 void CreateDirectoryIfAbsent(const TCHAR *filename) {
   TCHAR fullname[MAX_PATH];
 
@@ -268,11 +222,11 @@ void CreateDirectoryIfAbsent(const TCHAR *filename) {
 bool FileExistsW(const TCHAR *FileName){
   FILE *file = _tfopen(FileName, TEXT("r"));
   if (file == NULL)
-    return(FALSE);
+    return(false);
 
   fclose(file);
 
-  return(TRUE);
+  return(true);
 
 }
 
@@ -280,9 +234,9 @@ bool FileExistsA(const char *FileName){
   FILE *file = fopen(FileName, "r");
   if (file != NULL) {
     fclose(file);
-    return(TRUE);
+    return(true);
   }
-  return FALSE;
+  return false;
 }
 
 
@@ -604,7 +558,7 @@ bool SetBacklight() // VENTA4
 
   RegCloseKey(hKey); if (doevent==false) return false;
 
-  HANDLE BLEvent = CreateEvent(NULL, FALSE, FALSE, TEXT("BacklightChangeEvent"));
+  HANDLE BLEvent = CreateEvent(NULL, false, false, TEXT("BacklightChangeEvent"));
   if ( SetEvent(BLEvent) == 0) doevent=false;
   	else CloseHandle(BLEvent);
   return doevent;
@@ -690,20 +644,20 @@ short InstallFonts() {
   _stprintf(dstfile,TEXT("%s\\DejaVuSansCondensed2.ttf"),dstdir);
   //if (  GetFileAttributes(srcfile) != FILE_ATTRIBUTE_NORMAL) return 3;
   if (  GetFileAttributes(dstfile) != 0xffffffff ) return 4;
-  if ( !CopyFile(srcfile, dstfile, TRUE)) return 5;
+  if ( !CopyFile(srcfile, dstfile, true)) return 5;
 
   // From now on we attempt to copy without overwriting
   _stprintf(srcfile,TEXT("%s\\DejaVuSansCondensed-Bold2.ttf"),srcdir);
   _stprintf(dstfile,TEXT("%s\\DejaVuSansCondensed-Bold2.ttf"),dstdir);
-  CopyFile(srcfile,dstfile,TRUE);
+  CopyFile(srcfile,dstfile,true);
 
   _stprintf(srcfile,TEXT("%s\\DejaVuSansCondensed-BoldOblique2.ttf"),srcdir);
   _stprintf(dstfile,TEXT("%s\\DejaVuSansCondensed-BoldOblique2.ttf"),dstdir);
-  CopyFile(srcfile,dstfile,TRUE);
+  CopyFile(srcfile,dstfile,true);
 
   _stprintf(srcfile,TEXT("%s\\DejaVuSansCondensed-Oblique2.ttf"),srcdir);
   _stprintf(dstfile,TEXT("%s\\DejaVuSansCondensed-Oblique2.ttf"),dstdir);
-  CopyFile(srcfile,dstfile,TRUE);
+  CopyFile(srcfile,dstfile,true);
 
   return 0;
 }

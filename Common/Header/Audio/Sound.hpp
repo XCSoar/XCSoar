@@ -35,55 +35,11 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_TOP_WINDOW_HXX
-#define XCSOAR_SCREEN_TOP_WINDOW_HXX
+#ifndef XCSOAR_AUDIO_SOUND_HPP
+#define XCSOAR_AUDIO_SOUND_HPP
 
-#include "Screen/ContainerWindow.hpp"
+#include <tchar.h>
 
-#if !defined(WINDOWSPC) && !defined(GNAV) && (UNDER_CE >= 300 || _WIN32_WCE >= 0x0300)
-#define HAVE_ACTIVATE_INFO
-#endif
-
-#ifdef HAVE_ACTIVATE_INFO
-#include <aygshell.h>
-#endif
-
-/**
- * A top-level full-screen window.
- */
-class TopWindow : public ContainerWindow {
-#ifdef HAVE_ACTIVATE_INFO
-  SHACTIVATEINFO s_sai;
-#endif
-
-public:
-  TopWindow();
-
-  static bool find(LPCTSTR cls, LPCTSTR text);
-
-  void set(LPCTSTR cls, LPCTSTR text,
-           int left, int top, unsigned width, unsigned height);
-
-  void set_active() {
-    ::SetActiveWindow(hWnd);
-  }
-
-  void full_screen();
-
-  void update() {
-    ::UpdateWindow(hWnd);
-  }
-
-  void close() {
-    ::SendMessage(hWnd, WM_CLOSE, 0, 0);
-  }
-
-protected:
-  virtual bool on_activate();
-  virtual bool on_deactivate();
-
-  virtual LRESULT on_message(HWND _hWnd, UINT message,
-                             WPARAM wParam, LPARAM lParam);
-};
+bool PlayResource(const TCHAR* lpName);
 
 #endif

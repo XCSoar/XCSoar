@@ -35,55 +35,54 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_TOP_WINDOW_HXX
-#define XCSOAR_SCREEN_TOP_WINDOW_HXX
+#include "Audio/Sound.hpp"
+#include "Interface.hpp"
 
-#include "Screen/ContainerWindow.hpp"
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
 
-#if !defined(WINDOWSPC) && !defined(GNAV) && (UNDER_CE >= 300 || _WIN32_WCE >= 0x0300)
-#define HAVE_ACTIVATE_INFO
+#ifndef DISABLEAUDIO
+#include <mmsystem.h>
 #endif
 
-#ifdef HAVE_ACTIVATE_INFO
-#include <aygshell.h>
-#endif
+bool PlayResource (const TCHAR* lpName)
+{
+#ifdef DISABLEAUDIO
+  return false;
+#else
+  BOOL bRtn;
+  LPTSTR lpRes;
+  HANDLE hResInfo, hRes;
 
-/**
- * A top-level full-screen window.
- */
-class TopWindow : public ContainerWindow {
-#ifdef HAVE_ACTIVATE_INFO
-  SHACTIVATEINFO s_sai;
-#endif
+  // TODO code: Modify to allow use of WAV Files and/or Embedded files
 
-public:
-  TopWindow();
+  if (_tcsstr(lpName, TEXT(".wav"))) {
+    bRtn = sndPlaySound (lpName, SND_ASYNC | SND_NODEFAULT );
 
-  static bool find(LPCTSTR cls, LPCTSTR text);
+  } else {
 
-  void set(LPCTSTR cls, LPCTSTR text,
-           int left, int top, unsigned width, unsigned height);
+    // Find the wave resource.
+    hResInfo = FindResource (XCSoarInterface::hInst, lpName, TEXT("WAVE"));
 
-  void set_active() {
-    ::SetActiveWindow(hWnd);
+    if (hResInfo == NULL)
+      return false;
+
+    // Load the wave resource.
+    hRes = LoadResource (XCSoarInterface::hInst, (HRSRC)hResInfo);
+
+    if (hRes == NULL)
+      return false;
+
+    // Lock the wave resource and play it.
+    lpRes = (LPTSTR)LockResource ((HGLOBAL)hRes);
+
+    if (lpRes != NULL)
+      {
+	bRtn = sndPlaySound (lpRes, SND_MEMORY | SND_ASYNC | SND_NODEFAULT );
+      }
+    else
+      bRtn = 0;
   }
-
-  void full_screen();
-
-  void update() {
-    ::UpdateWindow(hWnd);
-  }
-
-  void close() {
-    ::SendMessage(hWnd, WM_CLOSE, 0, 0);
-  }
-
-protected:
-  virtual bool on_activate();
-  virtual bool on_deactivate();
-
-  virtual LRESULT on_message(HWND _hWnd, UINT message,
-                             WPARAM wParam, LPARAM lParam);
-};
-
+  return bRtn;
 #endif
+}

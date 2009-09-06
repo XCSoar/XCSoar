@@ -44,7 +44,7 @@ Copyright_License {
 #include "Compatibility/string.h"
 #include "Registry.hpp"
 #include "LocalPath.hpp"
-#include "UtilsSystem.hpp"
+#include "Audio/Sound.hpp"
 #include "LogFile.hpp"
 #include "resource.h"
 
@@ -87,11 +87,9 @@ void Marks::MarkLocation(const double lon, const double lat)
 {
   ScopeLock protect(*GetMutex());
 
-#ifndef DISABLEAUDIO
   if (XCSoarInterface::SettingsComputer().EnableSoundModes) {
     PlayResource(TEXT("IDR_WAV_CLEAR"));
   }
-#endif
   topo_marks.addPoint(lon, lat);
   topo_marks.triggerUpdateCache = true;
 

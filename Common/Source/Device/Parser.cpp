@@ -61,6 +61,10 @@ Copyright_License {
 #include "Interface.hpp"
 #include "Components.hpp" // bad
 
+#if defined(GNAV) && !defined(WINDOWSPC)
+#include "SettingsUser.hpp" /* for UTCOffset */
+#endif
+
 #include <ctype.h>
 #include <stdlib.h>
 
@@ -580,7 +584,7 @@ bool NMEAParser::RMC(const TCHAR *String, const TCHAR **params, size_t nparams,
   static bool sysTimeInitialised = false;
 
   if (!GPS_INFO->NAVWarning && (gpsValid)) {
-#if defined(GNAV) && (!defined(WINDOWSPC) || (WINDOWSPC==0))
+#if defined(GNAV) && !defined(WINDOWSPC)
     SetSystemTimeFromGPS = true;
 #endif
     if (SetSystemTimeFromGPS) {
@@ -600,7 +604,7 @@ bool NMEAParser::RMC(const TCHAR *String, const TCHAR **params, size_t nparams,
         sysTime.wMilliseconds = 0;
         sysTimeInitialised = (::SetSystemTime(&sysTime)==true);
 
-#if defined(GNAV) && (!defined(WINDOWSPC) || (WINDOWSPC==0))
+#if defined(GNAV) && !defined(WINDOWSPC)
         TIME_ZONE_INFORMATION tzi;
         tzi.Bias = -UTCOffset/60;
         _tcscpy(tzi.StandardName,TEXT("Altair"));

@@ -198,10 +198,12 @@ HWND XCSoarInterface::CreateProgressDialog(const TCHAR* text) {
                  rc.left, rc.top, (rcp.right - rcp.left), (rcp.bottom-rcp.top),
                  SWP_SHOWWINDOW);
 #else
+#ifndef GNAV
     SHFullScreen(hProgress,
 		 SHFS_HIDETASKBAR
 		 |SHFS_HIDESIPBUTTON
 		 |SHFS_HIDESTARTICON);
+#endif
     SetWindowPos(hProgress,HWND_TOP,0,0,0,0,
                  SWP_NOMOVE|SWP_NOSIZE|SWP_SHOWWINDOW);
 #endif

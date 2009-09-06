@@ -86,7 +86,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "LocalPath.hpp"
 #include "UtilsProfile.hpp"
 #include "UtilsText.hpp"
-#include "UtilsSystem.hpp"
+#include "Audio/Sound.hpp"
 #include "McReady.h"
 #include "Interface.hpp"
 #include "Calculations.h" // TODO danger! ClearAirspaceWarnings
@@ -292,9 +292,8 @@ void InputEvents::eventScreenModes(const TCHAR *misc) {
 
       switch (pnascrollstatus) {
       case 1:
-#ifndef DISABLEAUDIO
-	if (EnableSoundModes) PlayResource(TEXT("IDR_WAV_CLICK"));
-#endif
+	if (SettingsComputer().EnableSoundModes)
+          PlayResource(TEXT("IDR_WAV_CLICK"));
 	EnableAuxiliaryInfo = true;
 	break;
       case 2:
@@ -303,9 +302,8 @@ void InputEvents::eventScreenModes(const TCHAR *misc) {
 	//	break;
       case 3:
 	//	InfoBoxLayout::fullscreen = false;
-#ifndef DISABLEAUDIO
-	if (EnableSoundModes) PlayResource(TEXT("IDR_WAV_CLICK"));
-#endif
+	if (SettingsComputer().EnableSoundModes)
+          PlayResource(TEXT("IDR_WAV_CLICK"));
 	EnableAuxiliaryInfo = false;
 	map_window.RequestFullScreen(true);
 	break;
@@ -313,9 +311,8 @@ void InputEvents::eventScreenModes(const TCHAR *misc) {
 	//	InfoBoxLayout::fullscreen = false;
 	EnableAuxiliaryInfo = false;
 	map_window.RequestFullScreen(false);
-#ifndef DISABLEAUDIO
-	if (EnableSoundModes) PlayResource(TEXT("IDR_WAV_BELL"));
-#endif
+	if (SettingsComputer().EnableSoundModes)
+          PlayResource(TEXT("IDR_WAV_BELL"));
 	break;
       default:
 	break;
@@ -324,21 +321,18 @@ void InputEvents::eventScreenModes(const TCHAR *misc) {
     else
       {
 	if (EnableAuxiliaryInfo) {
-#ifndef DISABLEAUDIO
-	  if (EnableSoundModes) PlayResource(TEXT("IDR_WAV_CLICK"));
-#endif
+	  if (SettingsComputer().EnableSoundModes)
+            PlayResource(TEXT("IDR_WAV_CLICK"));
 	  map_window.RequestToggleFullScreen();
 	  EnableAuxiliaryInfo = false;
 	} else {
 	  if (map_window.isMapFullScreen()) {
 	    map_window.RequestToggleFullScreen();
-#ifndef DISABLEAUDIO
-	    if (EnableSoundModes) PlayResource(TEXT("IDR_WAV_BELL"));
-#endif
+	    if (SettingsComputer().EnableSoundModes)
+              PlayResource(TEXT("IDR_WAV_BELL"));
 	  } else {
-#ifndef DISABLEAUDIO
-	    if (EnableSoundModes) PlayResource(TEXT("IDR_WAV_CLICK"));
-#endif
+	    if (SettingsComputer().EnableSoundModes)
+              PlayResource(TEXT("IDR_WAV_CLICK"));
 	    EnableAuxiliaryInfo = true;
 	  }
 	}
@@ -346,10 +340,8 @@ void InputEvents::eventScreenModes(const TCHAR *misc) {
 
 #else // UNDEFINED PNA
     if (EnableAuxiliaryInfo) {
-#ifndef DISABLEAUDIO
       if (SettingsComputer().EnableSoundModes) 
 	PlayResource(TEXT("IDR_WAV_CLICK"));
-#endif
       map_window.RequestToggleFullScreen();
       EnableAuxiliaryInfo = false;
     } else {
