@@ -35,38 +35,44 @@ Copyright_License {
 }
 */
 
+#include "DrawThread.hpp"
 #include "MapWindow.h"
-#include "Interface.hpp"
-#include "Protection.hpp"
-#include "Screen/Blank.hpp"
+#include "Gauge/GaugeFLARM.hpp"
 
-MapWindowBase::MapWindowBase():draw_thread((MapWindow &)*this) {}
-
-bool MapWindowBase::IsDisplayRunning() {
-  return (globalRunningEvent.test()
-	  && !ScreenBlanked);
-}
-
-void MapWindowBase::CreateDrawingThread(void)
+void
+DrawThread::run()
 {
-  closeTriggerEvent.reset();
-  draw_thread.start();
-}
+  bool bounds_dirty = false;
 
-void MapWindowBase::SuspendDrawingThread(void)
-{
-  draw_thread.suspend();
-}
+  // wait for start
+  globalRunningEvent.wait();
 
-void MapWindowBase::ResumeDrawingThread(void)
-{
-  draw_thread.resume();
-}
+  map.ApplyScreenSize();
 
-void MapWindowBase::CloseDrawingThread(void)
-{
-  closeTriggerEvent.trigger();
-  drawTriggerEvent.trigger(); // wake self up
-  SuspendDrawingThread();
-  draw_thread.join();
+  mutexRun.Lock(); // take control
+  map.DrawThreadLoop(); // first time draw
+  bounds_dirty = map.SmartBounds(true);
+  map.Idle(true);
+  while (map.Idle(false)) {};
+  map.DrawThreadLoop(); // first time draw
+  mutexRun.Unlock(); // release control
+
+  do {
+    if (drawTriggerEvent.wait(MIN_WAIT_TIME)) {
+      mutexRun.Lock(); // take control
+      map.DrawThreadLoop();
+      if (map.SmartBounds(false)) {
+        bounds_dirty = map.Idle(true); // this call is quick
+      }
+      mutexRun.Unlock(); // release control
+      continue;
+    }
+
+    if (bounds_dirty && !drawTriggerEvent.test()) {
+      mutexRun.Lock(); // take control
+      bounds_dirty = map.Idle(false);
+      mutexRun.Unlock(); // release control
+      continue;
+    }
+  } while (!closeTriggerEvent.wait(500));
 }

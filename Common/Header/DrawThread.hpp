@@ -35,38 +35,35 @@ Copyright_License {
 }
 */
 
-#include "MapWindow.h"
-#include "Interface.hpp"
-#include "Protection.hpp"
-#include "Screen/Blank.hpp"
+#ifndef XCSOAR_DRAW_THREAD_HPP
+#define XCSOAR_DRAW_THREAD_HPP
 
-MapWindowBase::MapWindowBase():draw_thread((MapWindow &)*this) {}
+#include "Thread/Thread.hpp"
+#include "Thread/Mutex.hpp"
+#include "Thread/Trigger.hpp"
 
-bool MapWindowBase::IsDisplayRunning() {
-  return (globalRunningEvent.test()
-	  && !ScreenBlanked);
-}
+class MapWindow;
+class GaugeFLARM;
 
-void MapWindowBase::CreateDrawingThread(void)
-{
-  closeTriggerEvent.reset();
-  draw_thread.start();
-}
+class DrawThread : public Thread {
+  Mutex mutexRun;
 
-void MapWindowBase::SuspendDrawingThread(void)
-{
-  draw_thread.suspend();
-}
+  MapWindow &map;
 
-void MapWindowBase::ResumeDrawingThread(void)
-{
-  draw_thread.resume();
-}
+public:
+  DrawThread(MapWindow &_map)
+    :map(_map) {}
 
-void MapWindowBase::CloseDrawingThread(void)
-{
-  closeTriggerEvent.trigger();
-  drawTriggerEvent.trigger(); // wake self up
-  SuspendDrawingThread();
-  draw_thread.join();
-}
+  void suspend() {
+    mutexRun.Lock();
+  }
+
+  void resume() {
+    mutexRun.Unlock();
+  }
+
+protected:
+  virtual void run();
+};
+
+#endif

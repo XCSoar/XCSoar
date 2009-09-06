@@ -517,6 +517,7 @@ OBJS	:=\
 	$(SRC)/MapWindowTrail.o 	\
 	$(SRC)/MapWindowWaypoints.o 	\
 	$(SRC)/MapWindow2.o 		\
+	$(SRC)/DrawThread.o \
 	\
 	$(SRC)/Topology.o		\
 	$(SRC)/TopologyStore.o		\
