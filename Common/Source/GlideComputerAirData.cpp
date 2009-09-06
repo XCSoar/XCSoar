@@ -73,7 +73,11 @@ static bool WasFlying = false; // VENTA3 used by auto QFE: do not reset QFE
 			//   QFE on the ground, otherwise it turns to
 			//   zero at once!
 
-GlideComputerAirData::GlideComputerAirData()
+GlideComputerAirData::GlideComputerAirData(): 
+  airspace_clock(6.0), // scan airspace every 6 seconds
+  ballast_clock(5)  // only update every 5 seconds to stop flooding
+		    // the devices
+
 {
   InitLDRotary(SettingsComputer(), &rotaryLD);
 
@@ -107,7 +111,8 @@ void GlideComputerAirData::ProcessVertical() {
   LastThermalStats();
   LD();
   CruiseLD();
-  SetCalculated().AverageLD= CalculateLDRotary(&Calculated(), &rotaryLD); // AverageLD
+  SetCalculated().AverageLD= 
+    CalculateLDRotary(&Calculated(), &rotaryLD); // AverageLD
   Average30s();
 
   AverageClimbRate();
@@ -119,7 +124,8 @@ void GlideComputerAirData::ProcessVertical() {
 
 void GlideComputerAirData::DoWindZigZag() {
   // update zigzag wind
-  if (((SettingsComputer().AutoWindMode & D_AUTOWIND_ZIGZAG)==D_AUTOWIND_ZIGZAG)
+  if (((SettingsComputer().AutoWindMode 
+	& D_AUTOWIND_ZIGZAG)==D_AUTOWIND_ZIGZAG)
       && (!ReplayLogger::IsEnabled())) {
     double zz_wind_speed;
     double zz_wind_bearing;
@@ -141,7 +147,8 @@ void GlideComputerAirData::DoWindZigZag() {
 
 
 void GlideComputerAirData::DoWindCirclingMode(const bool left) {
-  if ((SettingsComputer().AutoWindMode & D_AUTOWIND_CIRCLING)==D_AUTOWIND_CIRCLING) {
+  if ((SettingsComputer().AutoWindMode 
+       & D_AUTOWIND_CIRCLING)==D_AUTOWIND_CIRCLING) {
     windanalyser.slot_newFlightMode(&Basic(), 
 				    &Calculated(),
 				    left, 0);
@@ -151,7 +158,8 @@ void GlideComputerAirData::DoWindCirclingMode(const bool left) {
 
 void GlideComputerAirData::DoWindCirclingSample() {
   ScopeLock protect(mutexGlideComputer);
-  if ((SettingsComputer().AutoWindMode & D_AUTOWIND_CIRCLING)==D_AUTOWIND_CIRCLING) {
+  if ((SettingsComputer().AutoWindMode 
+       & D_AUTOWIND_CIRCLING)==D_AUTOWIND_CIRCLING) {
     windanalyser.slot_newSample(&Basic(), 
 				&SetCalculated());
   }
@@ -173,10 +181,12 @@ void GlideComputerAirData::SetWindEstimate(const double wind_speed,
   Vector v_wind;
   v_wind.x = wind_speed*cos(wind_bearing*3.1415926/180.0);
   v_wind.y = wind_speed*sin(wind_bearing*3.1415926/180.0);
-  ScopeLock protect(mutexGlideComputer);
-  windanalyser.slot_newEstimate(&Basic(), 
-				&SetCalculated(),
-				v_wind, quality);
+  {
+    ScopeLock protect(mutexGlideComputer);
+    windanalyser.slot_newEstimate(&Basic(), 
+				  &SetCalculated(),
+				  v_wind, quality);
+  }
 }
 
 
@@ -233,93 +243,85 @@ void GlideComputerAirData::Average30s()
   long index = 0;
   double Gain;
   static int num_samples = 0;
-  static BOOL lastCircling = false;
 
-  if(Basic().Time > LastTime)
-    {
+  if (time_advanced()) {
 
-      if (Calculated().Circling != lastCircling) {
-        num_samples = 0;
-        // reset!
+    if (Calculated().Circling != LastCalculated().Circling) {
+      num_samples = 0;
+      // reset!
+    }
+
+    Elapsed = (int)(Basic().Time - LastBasic().Time);
+    for(i=0;i<Elapsed;i++) {
+      index = (long)LastTime + i;
+      index %= 30;
+	
+      Altitude[index] = Calculated().NavAltitude;
+      if (Basic().NettoVarioAvailable) {
+	NettoVario[index] = Basic().NettoVario;
+      } else {
+	NettoVario[index] = Calculated().NettoVario;
       }
-      lastCircling = Calculated().Circling;
-
-      Elapsed = (int)(Basic().Time - LastTime);
-      for(i=0;i<Elapsed;i++)
-        {
-          index = (long)LastTime + i;
-          index %= 30;
-
-          Altitude[index] = Calculated().NavAltitude;
-	  if (Basic().NettoVarioAvailable) {
-	    NettoVario[index] = Basic().NettoVario;
-	  } else {
-	    NettoVario[index] = Calculated().NettoVario;
-	  }
-	  if (Basic().VarioAvailable) {
-	    Vario[index] = Basic().Vario;
-	  } else {
-	    Vario[index] = Calculated().Vario;
-	  }
-
-          if (num_samples<30) {
-            num_samples ++;
-          }
-
-        }
-
-      double Vave = 0;
-      double NVave = 0;
-      int j;
-      for (i=0; i< num_samples; i++) {
-        j = (index - i) % 30;
-        if (j<0) {
-          j += 30;
-        }
-        Vave += Vario[j];
-	NVave += NettoVario[j];
+      if (Basic().VarioAvailable) {
+	Vario[index] = Basic().Vario;
+      } else {
+	Vario[index] = Calculated().Vario;
       }
-      if (num_samples) {
-        Vave /= num_samples;
-        NVave /= num_samples;
+      
+      if (num_samples<30) {
+	num_samples ++;
       }
-
-      if (!Basic().VarioAvailable) {
-        index = ((long)Basic().Time - 1)%30;
-        Gain = Altitude[index];
-
-        index = ((long)Basic().Time)%30;
-        Gain = Gain - Altitude[index];
-
-        Vave = Gain/30;
+      
+    }
+    
+    double Vave = 0;
+    double NVave = 0;
+    int j;
+    for (i=0; i< num_samples; i++) {
+      j = (index - i) % 30;
+      if (j<0) {
+	j += 30;
       }
-      SetCalculated().Average30s =
-        LowPassFilter(Calculated().Average30s,Vave,0.8);
-      SetCalculated().NettoAverage30s =
-        LowPassFilter(Calculated().NettoAverage30s,NVave,0.8);
-
+      Vave += Vario[j];
+      NVave += NettoVario[j];
+    }
+    if (num_samples) {
+      Vave /= num_samples;
+      NVave /= num_samples;
+    }
+    
+    if (!Basic().VarioAvailable) {
+      index = ((long)Basic().Time - 1)%30;
+      Gain = Altitude[index];
+      
+      index = ((long)Basic().Time)%30;
+      Gain = Gain - Altitude[index];
+      
+      Vave = Gain/30;
+    }
+    SetCalculated().Average30s =
+      LowPassFilter(Calculated().Average30s,Vave,0.8);
+    SetCalculated().NettoAverage30s =
+      LowPassFilter(Calculated().NettoAverage30s,NVave,0.8);
+    
 #ifdef DEBUGAVERAGER
-      if (Calculated().Flying) {
-        DebugStore("%d %g %g %g # averager\r\n",
-                num_samples,
-                Calculated().Vario,
-                Calculated().Average30s, Calculated().NettoAverage30s);
-      }
+    if (Calculated().Flying) {
+      DebugStore("%d %g %g %g # averager\r\n",
+		 num_samples,
+		 Calculated().Vario,
+		 Calculated().Average30s, Calculated().NettoAverage30s);
+    }
 #endif
-
-    }
-  else
-    {
-      if (Basic().Time<LastTime) {
-	// gone back in time
-	for (i=0; i<30; i++) {
-	  Altitude[i]= 0;
-	  Vario[i]=0;
-	  NettoVario[i]=0;
-	}
+    
+  } else {
+    if (time_retreated()) {
+      for (i=0; i<30; i++) {
+	Altitude[i]= 0;
+	Vario[i]=0;
+	NettoVario[i]=0;
       }
     }
-  LastTime = Basic().Time;
+  }
 }
 
 #endif
@@ -729,11 +731,9 @@ GlideComputerAirData::FlightTimes()
 void
 GlideComputerAirData::ProcessIdle(const MapWindowProjection &map_projection)
 {
-  static GPSClock clock(6.0);
-
   BallastDump();
   TerrainFootprint(map_projection.GetScreenDistanceMeters());
-  if (clock.check_advance(Basic().Time)) {
+  if (airspace_clock.check_advance(Basic().Time)) {
     AirspaceWarning(map_projection);
   }
 }
@@ -777,7 +777,7 @@ GlideComputerAirData::TakeoffLanding()
 
   if ((Calculated().TimeOnGround<=10)||(ReplayLogger::IsEnabled())) {
     // Don't allow 'OnGround' calculations if in IGC replay mode
-    SetCalculated().OnGround = FALSE;
+    SetCalculated().OnGround = false;
   }
 
   if (!Calculated().Flying) {
@@ -786,7 +786,7 @@ GlideComputerAirData::TakeoffLanding()
       OnTakeoff();
     }
     if (Calculated().TimeOnGround>10) {
-      SetCalculated().OnGround = TRUE;
+      SetCalculated().OnGround = true;
       DoAutoQNH(&Basic(), &Calculated());
       // Do not reset QFE after landing.
       if (!WasFlying) {
@@ -816,14 +816,14 @@ void GlideComputerAirData::OnLanding()
   if (Calculated().ValidFinish) {
     RestoreFinish();
   }
-  SetCalculated().Flying = FALSE;
+  SetCalculated().Flying = false;
 }
 
 
 
 void GlideComputerAirData::OnTakeoff()
 {
-  SetCalculated().Flying = TRUE;
+  SetCalculated().Flying = true;
   WasFlying=true; // VENTA3
   InputEvents::processGlideComputer(GCE_TAKEOFF);
   // reset stats on takeoff
@@ -1008,9 +1008,7 @@ GlideComputerAirData::TerrainFootprint(double screen_range)
 void
 GlideComputerAirData::BallastDump()
 {
-  // only update every 5 seconds to stop flooding the devices
-  static GPSClock clock(5);
-  double dt = clock.delta_advance(Basic().Time);
+  double dt = ballast_clock.delta_advance(Basic().Time);
 
   if (SettingsComputer().BallastTimerActive && (dt>0)) {
 
@@ -1045,9 +1043,15 @@ GlideComputerAirData::BallastDump()
 #define THERMAL_TIME_MIN 45.0
 
 void
-GlideComputerAirData::SwitchZoomClimb(bool isclimb, bool left)
+GlideComputerAirData::SwitchClimbMode(bool isclimb, bool left)
 {
+  InitLDRotary(SettingsComputer(), &rotaryLD);
   DoWindCirclingMode(left);
+  if (isclimb) {
+    InputEvents::processGlideComputer(GCE_FLIGHTMODE_CLIMB);
+  } else {
+    InputEvents::processGlideComputer(GCE_FLIGHTMODE_CRUISE);
+  }
 }
 
 void
@@ -1079,13 +1083,7 @@ GlideComputerAirData::PercentCircling(const double Rate)
 void
 GlideComputerAirData::Turning()
 {
-  static double StartTime  = 0;
-  static double StartLong = 0;
-  static double StartLat = 0;
-  static double StartAlt = 0;
-  static double StartEnergyHeight = 0;
-  static int MODE = CRUISE;
-  static bool LEFT = FALSE;
+  static bool LEFT = false;
 
   if (!Calculated().Flying || !time_advanced()) return;
 
@@ -1118,6 +1116,7 @@ GlideComputerAirData::Turning()
   double Rate = max(50,min(-50,Calculated().TurnRate));
 
   // average rate, to detect essing
+  // TODO: use rotary buffer
   static double rate_history[60];
   double rate_ave=0;
   for (int i=59; i>0; i--) {
@@ -1134,6 +1133,7 @@ GlideComputerAirData::Turning()
 
   Rate=  LowPassFilter(LastCalculated().SmoothedTurnRate,Rate,0.3);
   SetCalculated().SmoothedTurnRate = Rate;
+  StartupStore(TEXT("turn rate %g %g\n"), Rate, Calculated().TurnRate);
   
   if(Rate <0) {
     if (LEFT) {
@@ -1160,105 +1160,104 @@ GlideComputerAirData::Turning()
     forcecruise = !forcecircling;
   }
 
-  switch(MODE) {
+  switch(Calculated().TurnMode) {
   case CRUISE:
     if((Rate >= MinTurnRate)||(forcecircling)) {
-      StartTime = Basic().Time;
-      StartLong = Basic().Longitude;
-      StartLat  = Basic().Latitude;
-      StartAlt  = Calculated().NavAltitude;
-      StartEnergyHeight  = Calculated().EnergyHeight;
-      MODE = WAITCLIMB;
+      SetCalculated().TurnStartTime = Basic().Time;
+      SetCalculated().TurnStartLongitude = Basic().Longitude;
+      SetCalculated().TurnStartLatitude  = Basic().Latitude;
+      SetCalculated().TurnStartAltitude  = Calculated().NavAltitude;
+      SetCalculated().TurnStartEnergyHeight  = Calculated().EnergyHeight;
+      SetCalculated().TurnMode = WAITCLIMB;
     }
     if (forcecircling) {
-      MODE = WAITCLIMB;
+      SetCalculated().TurnMode = WAITCLIMB;
     } else {
       break;
     }
   case WAITCLIMB:
     if (forcecruise) {
-      MODE = CRUISE;
+      SetCalculated().TurnMode = CRUISE;
       break;
     }
     if((Rate >= MinTurnRate)||(forcecircling)) {
-      if( ((Basic().Time  - StartTime) > CruiseClimbSwitch)|| forcecircling) {
-        SetCalculated().Circling = TRUE;
-        // JMW Transition to climb
-        MODE = CLIMB;
-        SetCalculated().ClimbStartLat = StartLat;
-        SetCalculated().ClimbStartLong = StartLong;
-        SetCalculated().ClimbStartAlt = StartAlt+StartEnergyHeight;
-        SetCalculated().ClimbStartTime = StartTime;
+      if( ((Basic().Time  - Calculated().TurnStartTime) 
+	   > CruiseClimbSwitch)|| forcecircling) {
 
-	OnClimbBase(StartAlt);
+        SetCalculated().Circling = true;
+        // JMW Transition to climb
+        SetCalculated().TurnMode = CLIMB;
+        SetCalculated().ClimbStartLat = Calculated().TurnStartLatitude;
+        SetCalculated().ClimbStartLong = Calculated().TurnStartLongitude;
+        SetCalculated().ClimbStartAlt = Calculated().TurnStartAltitude
+	  +Calculated().TurnStartEnergyHeight;
+        SetCalculated().ClimbStartTime = Calculated().TurnStartTime;
+
+	OnClimbBase(Calculated().TurnStartAltitude);
 
         // consider code: InputEvents GCE - Move this to InputEvents
         // Consider a way to take the CircleZoom and other logic
         // into InputEvents instead?
         // JMW: NO.  Core functionality must be built into the
         // main program, unable to be overridden.
-        SwitchZoomClimb(true, LEFT);
-        InputEvents::processGlideComputer(GCE_FLIGHTMODE_CLIMB);
+        SwitchClimbMode(true, LEFT);
       }
     } else {
       // nope, not turning, so go back to cruise
-      MODE = CRUISE;
+      SetCalculated().TurnMode = CRUISE;
     }
     break;
   case CLIMB:
     DoWindCirclingSample();
 
     if((Rate < MinTurnRate)||(forcecruise)) {
-      StartTime = Basic().Time;
-      StartLong = Basic().Longitude;
-      StartLat  = Basic().Latitude;
-      StartAlt  = Calculated().NavAltitude;
-      StartEnergyHeight  = Calculated().EnergyHeight;
+      SetCalculated().TurnStartTime = Basic().Time;
+      SetCalculated().TurnStartLongitude = Basic().Longitude;
+      SetCalculated().TurnStartLatitude  = Basic().Latitude;
+      SetCalculated().TurnStartAltitude  = Calculated().NavAltitude;
+      SetCalculated().TurnStartEnergyHeight  = Calculated().EnergyHeight;
       // JMW Transition to cruise, due to not properly turning
-      MODE = WAITCRUISE;
+      SetCalculated().TurnMode = WAITCRUISE;
     }
     if (forcecruise) {
-      MODE = WAITCRUISE;
+      SetCalculated().TurnMode = WAITCRUISE;
     } else {
       break;
     }
   case WAITCRUISE:
     if (forcecircling) {
-      MODE = CLIMB;
+      SetCalculated().TurnMode = CLIMB;
       break;
     }
     if((Rate < MinTurnRate) || forcecruise) {
-      if( ((Basic().Time  - StartTime) > ClimbCruiseSwitch) || forcecruise) {
-        SetCalculated().Circling = FALSE;
+      if( ((Basic().Time  - Calculated().TurnStartTime) > ClimbCruiseSwitch) || forcecruise) {
+        SetCalculated().Circling = false;
 
         // Transition to cruise
-        MODE = CRUISE;
-        SetCalculated().CruiseStartLat = StartLat;
-        SetCalculated().CruiseStartLong = StartLong;
-        SetCalculated().CruiseStartAlt = StartAlt;
-        SetCalculated().CruiseStartTime = StartTime;
-
- 	InitLDRotary(SettingsComputer(), &rotaryLD);
+        SetCalculated().TurnMode = CRUISE;
+        SetCalculated().CruiseStartLat = Calculated().TurnStartLatitude;
+        SetCalculated().CruiseStartLong = Calculated().TurnStartLongitude;
+        SetCalculated().CruiseStartAlt = Calculated().TurnStartAltitude;
+        SetCalculated().CruiseStartTime = Calculated().TurnStartTime;
 
 	OnClimbCeiling();
 
-        SwitchZoomClimb(false, LEFT);
-        InputEvents::processGlideComputer(GCE_FLIGHTMODE_CRUISE);
+        SwitchClimbMode(false, LEFT);
       }
 
-      //if ((Basic().Time  - StartTime) > ClimbCruiseSwitch/3) {
+      //if ((Basic().Time  - Calculated().TurnStartTime) > ClimbCruiseSwitch/3) {
       // reset thermal locator if changing thermal cores
       // thermallocator.Reset();
       //}
 
     } else {
       // JMW Transition back to climb, because we are turning again
-      MODE = CLIMB;
+      SetCalculated().TurnMode = CLIMB;
     }
     break;
   default:
     // error, go to cruise
-    MODE = CRUISE;
+    SetCalculated().TurnMode = CRUISE;
   }
 
   // generate new wind vector if altitude changes or a new
@@ -1340,7 +1339,7 @@ void
 GlideComputerAirData::LastThermalStats()
 {
 
-  if((Calculated().Circling == FALSE) && (LastCalculated().Circling == TRUE)
+  if((Calculated().Circling == false) && (LastCalculated().Circling == true)
      && (Calculated().ClimbStartTime>=0))
     {
       double ThermalTime = Calculated().CruiseStartTime

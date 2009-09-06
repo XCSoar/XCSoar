@@ -47,6 +47,7 @@ Copyright_License {
 #include "ThermalLocator.h"
 #include "windanalyser.h"
 #include "SnailTrail.hpp"
+#include "GPSClock.hpp"
 
 class MapWindowProjection;
 
@@ -107,8 +108,10 @@ private:
   void LastThermalStats();
   void ThermalBand();
   void PercentCircling(const double Rate);
-  void SwitchZoomClimb(bool isclimb, bool left);
+  void SwitchClimbMode(bool isclimb, bool left);
   void Turning();
+  GPSClock airspace_clock;
+  GPSClock ballast_clock;
 };
 
 class GlideComputerStats: virtual public GlideComputerBlackboard {
@@ -132,6 +135,7 @@ protected:
 
 class GlideComputerTask: virtual public GlideComputerBlackboard {
 public:
+  GlideComputerTask(): olc_clock(5.0) {};
   AATDistance          aatdistance;
   OLCOptimizer         olc;
   void DoAutoMacCready(double mc_setting);
@@ -162,12 +166,11 @@ private:
   bool InStartSector_Internal(int Index,
 			      double OutBound,
 			      bool &LastInSector);
-  bool InStartSector(int &index,
-		     BOOL *CrossedStart);
+  bool InStartSector(bool *CrossedStart);
   bool ReadyToStart();
   bool ReadyToAdvance(bool reset=true, bool restart=false);
-  void CheckStart(int *LastStartSector);
-  BOOL CheckRestart(int *LastStartSector);
+  void CheckStart();
+  void CheckRestart();
   void CheckFinish();
   void AddAATPoint(int taskwaypoint);
   void CheckInSector();
@@ -205,6 +208,8 @@ protected:
   virtual void SetLegStart();
   virtual void ProcessIdle(const MapWindowProjection &map);
   double FAIFinishHeight(int wp) const;
+private:
+  GPSClock olc_clock;
 public:
   virtual void ResetEnter();
   double AATCloseDistance(void) const {

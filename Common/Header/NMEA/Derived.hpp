@@ -158,9 +158,22 @@ typedef struct _DERIVED_INFO
   double TurnRate;
   double SmoothedTurnRate;
 
+  double TurnStartTime;
+  double TurnStartLongitude;
+  double TurnStartLatitude;
+  double TurnStartAltitude;
+  double TurnStartEnergyHeight;
+  int TurnMode;
+
   // reflects whether aircraft is in a start/finish/aat/turn sector
   bool IsInSector;
   bool IsInAirspace;
+  bool InFinishSector;
+  bool InStartSector;
+  int StartSectorWaypoint;
+
+  int ActiveWayPoint; 
+  int ReadyWayPoint;
 
   // detects when glider is on ground for several seconds
   bool OnGround;

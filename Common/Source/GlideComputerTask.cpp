@@ -105,27 +105,24 @@ GlideComputerTask::ProcessIdle(const MapWindowProjection &map_projection)
 }
 
 bool GlideComputerTask::DoLogging() {
-  static GPSClock olc_clock(5.0);
-
-  if (Calculated().Flying) {
-    if (olc_clock.check_advance(Basic().Time)) {
-      mutexGlideComputer.Lock();
-      bool restart = olc.addPoint(Basic().Longitude,
-			     Basic().Latitude,
-			     Calculated().NavAltitude,
-			     Calculated().WaypointBearing,
-			     Basic().Time-Calculated().TakeOffTime);
-      mutexGlideComputer.Unlock();
-
-      if (restart && EnableOLC) {
-	SetCalculated().ValidFinish = false;
-	StartTask(false, false);
-	SetCalculated().ValidStart = true;
-      }
-      return true;
+  if (Calculated().Flying && olc_clock.check_advance(Basic().Time)) {
+    mutexGlideComputer.Lock();
+    bool restart = olc.addPoint(Basic().Longitude,
+				Basic().Latitude,
+				Calculated().NavAltitude,
+				Calculated().WaypointBearing,
+				Basic().Time-Calculated().TakeOffTime);
+    mutexGlideComputer.Unlock();
+    
+    if (restart && EnableOLC) {
+      SetCalculated().ValidFinish = false;
+      StartTask(false, false);
+      SetCalculated().ValidStart = true;
     }
+    return true;
+  } else {
+    return false;
   }
-  return false;
 }
 
 
@@ -398,17 +395,16 @@ bool GlideComputerTask::ValidFinish( ) const
 
 bool GlideComputerTask::InFinishSector(const int i)
 {
-  static int LastInSector = FALSE;
   double AircraftBearing;
   double FirstPointDistance;
   bool retval = false;
 
-  if (!WayPointList) return FALSE;
+  if (!WayPointList) return false;
 
-  if (!ValidFinish()) return FALSE;
+  if (!ValidFinish()) return false;
 
   // Finish invalid
-  if (!ValidTaskPoint(i)) return FALSE;
+  if (!ValidTaskPoint(i)) return false;
 
   mutexTaskData.Lock();
 
@@ -419,10 +415,13 @@ bool GlideComputerTask::InFinishSector(const int i)
                   WayPointList[Task[i].Index].Longitude,
                   &FirstPointDistance,
                   &AircraftBearing);
+
+  bool InFinishSector = LastCalculated().InFinishSector;
+
   bool inrange = false;
   inrange = (FirstPointDistance<FinishRadius);
   if (!inrange) {
-    LastInSector = false;
+    InFinishSector = false;
   }
 
   if(!FinishLine) // Start Circle
@@ -446,25 +445,26 @@ bool GlideComputerTask::InFinishSector(const int i)
 
   if (inrange) {
 
-    if (LastInSector) {
+    if (InFinishSector) {
       // previously approaching the finish line
       if (!approaching) {
         // now moving away from finish line
-        LastInSector = false;
-        retval = TRUE;
+        InFinishSector = false;
+        retval = true;
         goto OnExit;
       }
     } else {
       if (approaching) {
         // now approaching the finish line
-        LastInSector = true;
+        InFinishSector = true;
       }
     }
 
   } else {
-    LastInSector = false;
+    InFinishSector = false;
   }
  OnExit:
+  SetCalculated().InFinishSector = InFinishSector;
   mutexTaskData.Unlock();
   return retval;
 }
@@ -565,11 +565,9 @@ bool GlideComputerTask::InStartSector_Internal(int Index,
 }
 
 
-bool GlideComputerTask::InStartSector(int &index,
-				      BOOL *CrossedStart)
+bool GlideComputerTask::InStartSector(bool *CrossedStart)
 {
-  static bool LastInSector = false;
-  static int EntryStartSector = index;
+  bool LastInStartSector = LastCalculated().InStartSector;
 
   bool isInSector= false;
   bool retval=false;
@@ -590,20 +588,20 @@ bool GlideComputerTask::InStartSector(int &index,
     goto OnExit;
   }
 
-// ToLo: do "soft" check for height only
   in_height = InsideStartHeight(StartMaxHeightMargin);
 
-  if ((Task[0].Index != EntryStartSector) && (EntryStartSector>=0)) {
-    LastInSector = false;
-    EntryStartSector = Task[0].Index;
+  if ((Task[0].Index != Calculated().StartSectorWaypoint) 
+      && (Calculated().StartSectorWaypoint>=0)) {
+    LastInStartSector = false;
+    SetCalculated().StartSectorWaypoint = Task[0].Index;
   }
 
-  isInSector = InStartSector_Internal(Task[0].Index, Task[0].OutBound,
-                                      LastInSector);
-  isInSector &= in_height;
+  isInSector = in_height & InStartSector_Internal(Task[0].Index, 
+						  Task[0].OutBound,
+						  LastInStartSector);
 
-  *CrossedStart = LastInSector && !isInSector;
-  LastInSector = isInSector;
+  *CrossedStart = LastInStartSector && !isInSector;
+  LastInStartSector = isInSector;
   if (*CrossedStart) {
     goto OnExit;
   }
@@ -613,20 +611,19 @@ bool GlideComputerTask::InStartSector(int &index,
       if (StartPoints[i].Active && (StartPoints[i].Index>=0)
           && (StartPoints[i].Index != Task[0].Index)) {
 
-        retval = InStartSector_Internal(StartPoints[i].Index,
-                                        StartPoints[i].OutBound,
-                                        StartPoints[i].InSector);
-	retval &= in_height;
+        retval = in_height & InStartSector_Internal(StartPoints[i].Index,
+						    StartPoints[i].OutBound,
+						    StartPoints[i].InSector);
         isInSector |= retval;
 
-        index = StartPoints[i].Index;
+        int index = StartPoints[i].Index;
         *CrossedStart = StartPoints[i].InSector && !retval;
         StartPoints[i].InSector = retval;
         if (*CrossedStart) {
           if (Task[0].Index != index) {
             Task[0].Index = index;
-            LastInSector = false;
-            EntryStartSector = index;
+            LastInStartSector = false;
+            SetCalculated().StartSectorWaypoint = index;
             RefreshTask();
           }
           goto OnExit;
@@ -637,7 +634,7 @@ bool GlideComputerTask::InStartSector(int &index,
   }
 
  OnExit:
-
+  SetCalculated().InStartSector = LastInStartSector;
   mutexTaskData.Unlock();
   return isInSector;
 }
@@ -659,8 +656,6 @@ bool GlideComputerTask::ReadyToStart() {
 
 
 bool GlideComputerTask::ReadyToAdvance(bool reset, bool restart) {
-  static int lastReady = -1;
-  static int lastActive = -1;
   bool say_ready = false;
 
   // 0: Manual
@@ -668,14 +663,17 @@ bool GlideComputerTask::ReadyToAdvance(bool reset, bool restart) {
   // 2: Arm
   // 3: Arm start
 
+  SetCalculated().ActiveWayPoint = ActiveWayPoint;
+
   if (!Calculated().Flying) {
-    lastReady = -1;
-    lastActive = -1;
+    SetCalculated().ReadyWayPoint = -1;
     return false;
   }
 
   if (AutoAdvance== AUTOADVANCE_AUTO) {
-    if (reset) AdvanceArmed = false;
+    if (reset) {
+      AdvanceArmed = false;
+    }
     return true;
   }
   if (AutoAdvance== AUTOADVANCE_ARM) {
@@ -687,7 +685,7 @@ bool GlideComputerTask::ReadyToAdvance(bool reset, bool restart) {
     }
   }
   if (AutoAdvance== AUTOADVANCE_ARMSTART) {
-    if ((ActiveWayPoint == 0) || restart) {
+    if ((Calculated().ActiveWayPoint == 0) || restart) {
       if (!AdvanceArmed) {
         say_ready = true;
       } else if (reset) {
@@ -696,7 +694,7 @@ bool GlideComputerTask::ReadyToAdvance(bool reset, bool restart) {
       }
     } else {
       // JMW fixed 20070528
-      if (ActiveWayPoint>0) {
+      if (Calculated().ActiveWayPoint>0) {
         if (reset) AdvanceArmed = false;
         return true;
       }
@@ -704,25 +702,24 @@ bool GlideComputerTask::ReadyToAdvance(bool reset, bool restart) {
   }
 
   // see if we've gone back a waypoint (e.g. restart)
-  if (ActiveWayPoint < lastActive) {
-    lastReady = -1;
+  if (Calculated().ActiveWayPoint < LastCalculated().ActiveWayPoint) {
+    SetCalculated().ReadyWayPoint = -1;
   }
-  lastActive = ActiveWayPoint;
 
   if (say_ready) {
-    if (ActiveWayPoint != lastReady) {
+    if (Calculated().ActiveWayPoint != LastCalculated().ReadyWayPoint) {
       InputEvents::processGlideComputer(GCE_ARM_READY);
-      lastReady = ActiveWayPoint;
+      SetCalculated().ReadyWayPoint = Calculated().ActiveWayPoint;
     }
   }
   return false;
 }
 
 
-void GlideComputerTask::CheckStart(int *LastStartSector) {
-  BOOL StartCrossed= false;
+void GlideComputerTask::CheckStart() {
+  bool StartCrossed= false;
 
-  if (InStartSector(*LastStartSector, &StartCrossed)) {
+  if (InStartSector(&StartCrossed)) {
     SetCalculated().IsInSector = true;
 
     if (ReadyToStart()) {
@@ -731,14 +728,16 @@ void GlideComputerTask::CheckStart(int *LastStartSector) {
 			   0,
 			   AATCloseDistance());
     }
-    // ToLo: we are ready to start even when outside start rules but within margin
+    // TODO: we are ready to start even when outside start rules but
+    // within margin
     if (ValidStartSpeed(StartMaxSpeedMargin)) {
       ReadyToAdvance(false, true);
     }
     // TODO accuracy: monitor start speed throughout time in start sector
   }
   if (StartCrossed) {
-    // ToLo: Check weather speed and height are within the rules or not (zero margin)
+    // TODO: Check whether speed and height are within the rules or
+    // not (zero margin)
     if(!IsFinalWaypoint() && ValidStartSpeed() && InsideStartHeight()) {
 
       // This is set whether ready to advance or not, because it will
@@ -759,7 +758,8 @@ void GlideComputerTask::CheckStart(int *LastStartSector) {
       // Note: pilot must have armed advance
       // for the start to be registered
 
-    // ToLo: If speed and height are outside the rules they must be within the margin...
+      // ToLo: If speed and height are outside the rules they must be
+      // within the margin...
     } else {
 
       if ((ActiveWayPoint<=1)
@@ -805,29 +805,16 @@ void GlideComputerTask::CheckStart(int *LastStartSector) {
 }
 
 
-BOOL GlideComputerTask::CheckRestart(int *LastStartSector) 
+void GlideComputerTask::CheckRestart() 
 {
   if((Basic().Time - Calculated().TaskStartTime < 3600)
      &&(ActiveWayPoint<=1)) {
-
-    /*
-    BOOL StartCrossed;
-    if(InStartSector(*LastStartSector, &StartCrossed)) {
-      Calculated().IsInSector = true;
-
-      // this allows restart if returned to start sector before
-      // 10 minutes after task start
-      ActiveWayPoint = 0;
-      return TRUE;
-    }
-    */
-    CheckStart(LastStartSector);
+    CheckStart();
   }
-  return FALSE;
 }
 
 
-void GlideComputerTask::CheckFinish( ) {
+void GlideComputerTask::CheckFinish() {
   if (InFinishSector(ActiveWayPoint)) {
     SetCalculated().IsInSector = true;
     aatdistance.AddPoint(Basic().Longitude,
@@ -890,8 +877,6 @@ void GlideComputerTask::CheckInSector() {
 
 void GlideComputerTask::InSector()
 {
-  static int LastStartSector = -1;
-
   if (ActiveWayPoint<0) return;
 
   mutexTaskData.Lock();
@@ -899,17 +884,15 @@ void GlideComputerTask::InSector()
   SetCalculated().IsInSector = false;
 
   if(ActiveWayPoint == 0) {
-    CheckStart(&LastStartSector);
+    CheckStart();
   } else {
     if(IsFinalWaypoint()) {
-      LastStartSector = -1;
       AddAATPoint(ActiveWayPoint-1);
       CheckFinish();
     } else {
-      CheckRestart(&LastStartSector);
+      CheckRestart();
       if (ActiveWayPoint>0) {
         CheckInSector();
-        LastStartSector = -1;
       }
     }
   }
@@ -1895,14 +1878,12 @@ void GlideComputerTask::TaskSpeed(const double this_maccready,
       // Therefore, it shows well whether at any time the glider
       // is wasting time.
 
-      static double dr_last = 0;
-
       double mc_safe = max(0.1,this_maccready);
       double Vstar = max(1.0,Calculated().VMacCready);
-      double vthis = (Calculated().LegDistanceCovered-dr_last)/dt;
+      double vthis = (Calculated().LegDistanceCovered-
+		      LastCalculated().LegDistanceCovered)/dt;
       vthis /= AirDensityRatio(Calculated().NavAltitude);
 
-      dr_last = Calculated().LegDistanceCovered;
       double ttg = max(1,Calculated().LegTimeToGo);
       //      double Vav = d0/max(1.0,t0);
       double Vrem = Calculated().LegDistanceToGo/ttg;
@@ -1951,10 +1932,9 @@ void GlideComputerTask::TaskSpeed(const double this_maccready,
         SetCalculated().TaskSpeedInstantaneous = vdiff;
         // initialise
       } else {
-        static int lastActiveWayPoint = 0;
 	static double tsi_av = 0;
 	static int n_av = 0;
-        if ((ActiveWayPoint==lastActiveWayPoint)
+        if ((ActiveWayPoint==LastCalculated().ActiveWayPoint)
 	    && (Calculated().LegDistanceToGo>1000.0)
 	    && (Calculated().LegDistanceCovered>1000.0)) {
 
@@ -1986,7 +1966,6 @@ void GlideComputerTask::TaskSpeed(const double this_maccready,
 	  tsi_av = 0;
 	  n_av = 0;
 	}
-        lastActiveWayPoint = ActiveWayPoint;
       }
     }
   }
