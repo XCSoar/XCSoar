@@ -43,27 +43,50 @@ Copyright_License {
 
 Thread::~Thread()
 {
+#ifndef HAVE_POSIX
   if (handle != NULL)
     ::CloseHandle(handle);
+#endif
 }
 
 bool
 Thread::start()
 {
+#ifdef HAVE_POSIX
+  return pthread_create(&handle, NULL, thread_proc, this) == 0;
+#else
   assert(handle == NULL);
 
   handle = ::CreateThread(NULL, 0, thread_proc, this, 0, NULL);
 
   return handle != NULL;
+#endif
 }
 
 void
 Thread::join()
 {
+#ifdef HAVE_POSIX
+  pthread_join(handle, NULL);
+#else
   assert(handle != NULL);
 
   ::WaitForSingleObject(handle, INFINITE);
+#endif
 }
+
+#ifdef HAVE_POSIX
+
+void *
+Thread::thread_proc(void *p)
+{
+  Thread *thread = (Thread *)p;
+
+  thread->run();
+  return NULL;
+}
+
+#else /* !HAVE_POSIX */
 
 DWORD WINAPI
 Thread::thread_proc(LPVOID lpParameter)
@@ -73,3 +96,5 @@ Thread::thread_proc(LPVOID lpParameter)
   thread->run();
   return 0;
 }
+
+#endif /* !HAVE_POSIX */
