@@ -59,8 +59,17 @@ DrawThread::run()
 
   do {
     if (drawTriggerEvent.wait(MIN_WAIT_TIME)) {
+      mutexFlightData.Lock();
+      NMEA_INFO nmea_info = device_blackboard.Basic();
+      mutexFlightData.Unlock();
+
       map.ExchangeBlackboard();
+
       mutexRun.Lock(); // take control
+
+      if (flarm != NULL)
+        flarm->Render(&nmea_info);
+
       map.DrawThreadLoop();
       if (map.SmartBounds(false)) {
         bounds_dirty = map.Idle(true); // this call is quick

@@ -61,7 +61,6 @@ Copyright_License {
 #include "TopologyStore.h"
 #include "InfoBoxLayout.h"
 #include "RasterTerrain.h"
-#include "Gauge/GaugeFLARM.hpp"
 #include "Message.h"
 #include "Calculations.h" // TODO danger! for InAATTurnSector
 #include "RasterWeather.h"
@@ -306,9 +305,6 @@ void MapWindow::DrawThreadLoop(void) {
     // quickly draw zoom level on top
     DrawMapScale(get_canvas(), MapRect, true);
   }
-
-  if (gauge_flarm != NULL)
-    gauge_flarm->Render(&Basic());
 
   Render(draw_canvas, MapRect);
 

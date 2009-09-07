@@ -357,7 +357,7 @@ bool XCSoarInterface::Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
 
   // Finally ready to go.. all structures must be present before this.
   StartupStore(TEXT("CreateDrawingThread\n"));
-  draw_thread = new DrawThread(main_window.map);
+  draw_thread = new DrawThread(main_window.map, gauge_flarm);
   draw_thread->start();
 
   StartupStore(TEXT("ShowInfoBoxes\n"));
