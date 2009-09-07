@@ -49,6 +49,11 @@ public:
 private:
   static void CommonProcessTimer    (void);
   static int ConnectionProcessTimer(int itimeout);
+  static void DisplayProcessTimer(void);
+  static void SystemProcessTimer(void);
+  static void HeapCompact(void);
+  static void MessageProcessTimer();
+  static void AirspaceProcessTimer();
 };
 
 #endif

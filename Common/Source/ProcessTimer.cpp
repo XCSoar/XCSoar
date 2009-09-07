@@ -56,7 +56,8 @@ Copyright_License {
 #include "Components.hpp"
 
 
-static void HeapCompactTimer()
+void 
+ProcessTimer::HeapCompact()
 {
   static int iheapcompact = 0;
   // called 2 times per second, compact heap every minute.
@@ -67,36 +68,28 @@ static void HeapCompactTimer()
   }
 }
 
-void ProcessTimer::CommonProcessTimer()
+void
+ProcessTimer::DisplayProcessTimer()
 {
-  ExchangeBlackboard();
-
-  // service the GCE and NMEA queue
-  if (globalRunningEvent.test()) {
-
-    InputEvents::DoQueuedEvents();
-
-    if (airspaceWarningEvent.test()) {
-      airspaceWarningEvent.reset();
-      ResetDisplayTimeOut();
-      dlgAirspaceWarningShowDlg(RequestAirspaceWarningForce);
-      RequestAirspaceWarningForce = false;
-    }
-    // update FLARM display (show/hide)
-    if (gauge_flarm != NULL)
-      gauge_flarm->Show();
-  }
-
-  InfoBoxManager::ProcessTimer();
-
   // it's ok to do this in this thread
   if (gauge_vario != NULL)
     gauge_vario->Show(!SettingsMap().FullScreen);
-
-  InputEvents::ProcessMenuTimer();
+  // update FLARM display (show/hide)
+  if (gauge_flarm != NULL)
+    gauge_flarm->Show();
 
   CheckDisplayTimeOut(false);
+}
 
+void
+ProcessTimer::SystemProcessTimer()
+{
+  HeapCompact();
+}
+
+void
+ProcessTimer::MessageProcessTimer()
+{
   // don't display messages if airspace warning dialog is active
   if (!dlgAirspaceWarningVisible()) {
     if (Message::Render()) {
@@ -104,8 +97,29 @@ void ProcessTimer::CommonProcessTimer()
       ResetDisplayTimeOut();
     }
   }
+}
 
-  HeapCompactTimer();
+void
+ProcessTimer::AirspaceProcessTimer()
+{
+  if (globalRunningEvent.test()) {
+    if (airspaceWarningEvent.test()) {
+      airspaceWarningEvent.reset();
+      ResetDisplayTimeOut();
+      dlgAirspaceWarningShowDlg(RequestAirspaceWarningForce);
+      RequestAirspaceWarningForce = false;
+    }
+  }
+}
+
+void ProcessTimer::CommonProcessTimer()
+{
+  ExchangeBlackboard();
+  InputEvents::ProcessTimer();
+  AirspaceProcessTimer();
+  InfoBoxManager::ProcessTimer();
+  DisplayProcessTimer();
+  MessageProcessTimer();
 }
 
 ////////////////

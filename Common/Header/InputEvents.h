@@ -63,11 +63,13 @@ private:
   static Mutex mutexEventQueue;
  private:
   static int MenuTimeOut;
+  static void ProcessMenuTimer();
+  static void DoQueuedEvents(void);
  public:
+  static void ProcessTimer();
   static void ShowMenu();
   static void HideMenu();
   static void ResetMenuTimeOut();
-  static void ProcessMenuTimer();
 
   static void readFile();
   static mode mode2int(const TCHAR *mode, bool create);
@@ -82,7 +84,6 @@ private:
   static bool processNmea(int key);
   static bool processButton(int bindex);
   static bool processGlideComputer(int);
-  static void DoQueuedEvents(void);
   static void processGo(int event_id);
   static int  makeEvent(void (*event)(const TCHAR *), const TCHAR *misc, int next = 0);
   static void makeLabel(int mode_id, const TCHAR *label, int location, int event_id);

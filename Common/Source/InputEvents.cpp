@@ -1023,3 +1023,11 @@ void InputEvents::ProcessMenuTimer() {
     MenuTimeOut++;
   }
 }
+
+void 
+InputEvents::ProcessTimer() {
+  if (globalRunningEvent.test()) {
+    DoQueuedEvents();
+  }
+  ProcessMenuTimer();
+}
