@@ -53,8 +53,6 @@ Copyright_License {
 #include "RasterTerrain.h"
 #include "RasterWeather.h"
 #include "Logger.h"
-#include "ReplayLogger.hpp"
-
 
 double MapWindow::findMapScaleBarSize(const RECT rc) {
   double pixelsize = DistanceScreenToUser(1); // units/pixel
@@ -204,7 +202,7 @@ void MapWindow::DrawMapScale(Canvas &canvas, const RECT rc /* the Map Rect*/,
       if (SettingsMap().EnableAuxiliaryInfo) {
         _tcscat(ScaleInfo, TEXT("AUX "));
       }
-      if (ReplayLogger::IsEnabled()) {
+      if (Basic().Replay) {
         _tcscat(ScaleInfo, TEXT("REPLAY "));
       }
       if (SettingsComputer().BallastTimerActive) {

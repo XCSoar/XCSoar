@@ -57,7 +57,6 @@ Copyright_License {
 #include "Task.h" // TODO danger!
 #include "SettingsComputer.hpp"
 #include "Settings.hpp"
-#include "ReplayLogger.hpp"
 #include "Interface.hpp"
 #include "Components.hpp" // bad
 #include "MainWindow.hpp" // also bad
@@ -417,7 +416,7 @@ bool NMEAParser::GSA(const TCHAR *String,
 {
   int iSatelliteCount =0;
 
-  if (ReplayLogger::IsEnabled()) {
+  if (GPS_INFO->Replay) {
     return true;
   }
 
@@ -446,9 +445,8 @@ bool NMEAParser::GLL(const TCHAR *String,
   if (!activeGPS)
     return true;
 
-  if (ReplayLogger::IsEnabled()) {
+  if (GPS_INFO->Replay) {
     // block actual GPS signal
-    XCSoarInterface::InterfaceTimeoutReset();
     return true;
   }
 
@@ -525,13 +523,12 @@ bool NMEAParser::RMC(const TCHAR *String, const TCHAR **params, size_t nparams,
 
   if (speed>2.0) {
     GPS_INFO->MovementDetected = true;
-    if (ReplayLogger::IsEnabled()) {
-      // stop logger replay if aircraft is actually moving.
-      ReplayLogger::Stop();
+    if (GPS_INFO->Replay) {
+      return true;
     }
   } else {
     GPS_INFO->MovementDetected = false;
-    if (ReplayLogger::IsEnabled()) {
+    if (GPS_INFO->Replay) {
       // block actual GPS signal if not moving and a log is being replayed
       return true;
     }
@@ -623,7 +620,7 @@ bool NMEAParser::RMC(const TCHAR *String, const TCHAR **params, size_t nparams,
     }
   }
 
-  if (!ReplayLogger::IsEnabled()) {
+  if (!GPS_INFO->Replay) {
     if(RMZAvailable)
       {
 	// JMW changed from Altitude to BaroAltitude
@@ -653,7 +650,7 @@ bool NMEAParser::GGA(const TCHAR *String, const TCHAR **params, size_t nparams,
                      NMEA_INFO *GPS_INFO)
 {
 
-  if (ReplayLogger::IsEnabled()) {
+  if (GPS_INFO->Replay) {
     return true;
   }
 
@@ -743,7 +740,7 @@ bool NMEAParser::RMZ(const TCHAR *String, const TCHAR **params, size_t nparams,
 
   if (!devHasBaroSource()) {
     // JMW no in-built baro sources, so use this generic one
-    if (!ReplayLogger::IsEnabled()) {
+    if (!GPS_INFO->Replay) {
       GPS_INFO->BaroAltitudeAvailable = true;
       GPS_INFO->BaroAltitude = RMZAltitude;
     }
@@ -764,7 +761,7 @@ bool NMEAParser::RMA(const TCHAR *String, const TCHAR **params, size_t nparams,
   GPS_INFO->BaroAltitudeAvailable = true;
 
   if (!devHasBaroSource()) {
-    if (!ReplayLogger::IsEnabled()) {
+    if (!GPS_INFO->Replay) {
       // JMW no in-built baro sources, so use this generic one
       GPS_INFO->BaroAltitudeAvailable = true;
       GPS_INFO->BaroAltitude = RMAAltitude;
@@ -997,10 +994,11 @@ bool NMEAParser::PFLAA(const TCHAR *String,
 
 
 #ifdef FLARM_AVERAGE
-  GPS_INFO->FLARM_Traffic[flarm_slot].Average30s = flarmCalculations.Average30s(
-	  GPS_INFO->FLARM_Traffic[flarm_slot].ID,
-	  GPS_INFO->Time,
-	  GPS_INFO->FLARM_Traffic[flarm_slot].Altitude);
+  GPS_INFO->FLARM_Traffic[flarm_slot].Average30s = 
+    flarmCalculations.Average30s(
+				 GPS_INFO->FLARM_Traffic[flarm_slot].ID,
+				 GPS_INFO->Time,
+				 GPS_INFO->FLARM_Traffic[flarm_slot].Altitude);
 #endif
 
   TCHAR *name = GPS_INFO->FLARM_Traffic[flarm_slot].Name;
@@ -1014,6 +1012,7 @@ bool NMEAParser::PFLAA(const TCHAR *String,
     }
   }
 
+  // JMW TODO: this is dangerous, it uses the task!
   if ((GPS_INFO->FLARM_Traffic[flarm_slot].ID == TeamFlarmIdTarget)
       && ValidWayPoint(device_blackboard.SettingsComputer().TeamCodeRefWaypoint)) {
     double bearing;

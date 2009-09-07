@@ -41,7 +41,6 @@ Copyright_License {
 #include "WindZigZag.h"
 #include "windanalyser.h"
 #include <math.h>
-#include "ReplayLogger.hpp"
 #include "GlideComputer.hpp"
 #include "Protection.hpp"
 #include "Units.hpp"
@@ -159,7 +158,7 @@ void GlideComputerAirData::Wind() {
   // update zigzag wind
   if (((SettingsComputer().AutoWindMode 
 	& D_AUTOWIND_ZIGZAG)==D_AUTOWIND_ZIGZAG)
-      && (!ReplayLogger::IsEnabled())) {
+      && (!Basic().Replay)) {
     double zz_wind_speed;
     double zz_wind_bearing;
     int quality;
@@ -590,7 +589,7 @@ void GlideComputerAirData::Vario()
                                               dv, 0.1);
   }
 
-  if (!Basic().VarioAvailable || ReplayLogger::IsEnabled()) {
+  if (!Basic().VarioAvailable || Basic().Replay) {
     SetCalculated().Vario = Calculated().GPSVario;
   } else {
     // get value from instrument
@@ -705,7 +704,7 @@ GlideComputerAirData::NettoVario()
 
   // calculate sink rate of glider for calculating netto vario
 
-  bool replay_disabled = !ReplayLogger::IsEnabled();
+  bool replay_disabled = !Basic().Replay;
 
   double glider_sink_rate;
   if (Basic().AirspeedAvailable && replay_disabled) {
@@ -814,7 +813,7 @@ GlideComputerAirData::TakeoffLanding()
   // TODO accuracy: make this more robust by making use of terrain height data
   // if available
 
-  if ((Calculated().TimeOnGround<=10)||(ReplayLogger::IsEnabled())) {
+  if ((Calculated().TimeOnGround<=10)||(Basic().Replay)) {
     // Don't allow 'OnGround' calculations if in IGC replay mode
     SetCalculated().OnGround = false;
   }
@@ -1201,7 +1200,7 @@ GlideComputerAirData::Turning()
   bool forcecruise = false;
   bool forcecircling = false;
   if (SettingsComputer().EnableExternalTriggerCruise 
-      && !(ReplayLogger::IsEnabled())) {
+      && !(Basic().Replay)) {
     forcecircling = triggerClimbEvent.test();
     forcecruise = !forcecircling;
   }
@@ -1471,7 +1470,7 @@ DoAutoQNH(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated)
   if (done_autoqnh==10) return;
 
   // Reject if in IGC logger mode
-  if (ReplayLogger::IsEnabled()) return;
+  if (Basic->Replay) return;
 
   // Reject if no valid GPS fix
   if (Basic->NAVWarning) return;

@@ -171,10 +171,6 @@ TCHAR ReplayLogger::FileName[MAX_PATH];
 bool ReplayLogger::Enabled = false;
 double ReplayLogger::TimeScale = 1.0;
 
-bool ReplayLogger::IsEnabled(void) {
-  return Enabled;
-}
-
 
 typedef struct _LOGGER_INTERP_POINT
 {

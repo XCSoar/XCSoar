@@ -972,14 +972,13 @@ bool LoggerClearFreeSpace(const NMEA_INFO &gps_info) {
 
 
 #include "Interface.hpp"
-#include "ReplayLogger.hpp"
 
 void guiStartLogger(const NMEA_INFO& gps_info, 
 		    const SETTINGS_COMPUTER& settings,
 		    bool noAsk) {
   int i;
   if (!LoggerActive) {
-    if (ReplayLogger::IsEnabled()) {
+    if (gps_info.Replay) {
       if (LoggerActive)
         guiStopLogger(gps_info, true);
       return;

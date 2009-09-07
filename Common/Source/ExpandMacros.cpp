@@ -178,7 +178,7 @@ bool ButtonLabel::ExpandMacros(const TCHAR *In,
   }
 
   if (_tcsstr(OutBuffer, TEXT("$(CheckReplay)"))) {
-    if (!ReplayLogger::IsEnabled() && Basic().MovementDetected) {
+    if (!Basic().Replay && Basic().MovementDetected) {
       invalid = true;
     }
     ReplaceInString(OutBuffer, TEXT("$(CheckReplay)"), TEXT(""), Size);

@@ -116,11 +116,13 @@ DeviceBlackboard::SetLocation(double lon, double lat,
   SetBasic().Altitude = alt;
   SetBasic().BaroAltitude = baroalt;
   SetBasic().Time = t;
+  SetBasic().Replay = true;
 };
 
 void DeviceBlackboard::StopReplay() {
   ScopeLock protect(mutexFlightData);
   SetBasic().Speed = 0;
+  SetBasic().Replay = false;
 }
 
 

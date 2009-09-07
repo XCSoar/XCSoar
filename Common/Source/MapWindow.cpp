@@ -52,7 +52,6 @@ Copyright_License {
 #include "SettingsComputer.hpp"
 #include "Audio/VarioSound.h"
 #include "InputEvents.h"
-#include "ReplayLogger.hpp"
 #include "Screen/Graphics.hpp"
 #include "Screen/Util.hpp"
 #include "Screen/Fonts.hpp"
@@ -552,7 +551,7 @@ bool MapWindow::on_mouse_up(int x, int y)
   }
 
 #ifdef _SIM_
-  if (!ReplayLogger::IsEnabled() && !my_target_pan && (distance>IBLSCALE(36))) {
+  if (!Basic().Replay && !my_target_pan && (distance>IBLSCALE(36))) {
     // This drag moves the aircraft (changes speed and direction)
     double newbearing;
     double oldbearing = XCSoarInterface::Basic().TrackBearing;

@@ -218,6 +218,9 @@ void ProcessTimer::Process(void)
 
   // also service replay logger
   if (ReplayLogger::Update()) {
+    if (Basic().MovementDetected) {
+      ReplayLogger::Stop();
+    }
     device_blackboard.RaiseConnection();
     device_blackboard.SetNAVWarning(false);
     return;

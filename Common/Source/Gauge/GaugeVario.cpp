@@ -256,7 +256,7 @@ void GaugeVario::Render() {
     InitDone = true;
   }
 
-  if (Basic().VarioAvailable && !ReplayLogger::IsEnabled()) {
+  if (Basic().VarioAvailable && !Basic().Replay) {
     vval = Basic().Vario;
   } else {
     vval = Calculated().Vario;

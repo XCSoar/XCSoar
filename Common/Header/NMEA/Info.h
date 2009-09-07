@@ -121,6 +121,7 @@ typedef struct _NMEA_INFO
   bool MovementDetected;
 
   double StallRatio;
+  bool Replay;
 
 } NMEA_INFO;
 
