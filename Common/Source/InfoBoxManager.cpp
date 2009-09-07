@@ -897,6 +897,13 @@ void InfoBoxManager::SetDirty(bool is_dirty) {
 
 
 void InfoBoxManager::ProcessTimer(void) {
+  static double lasttime;
+
+  if (Basic().Time != lasttime) {
+    SetDirty(true);
+    lasttime = Basic().Time;
+  }
+
   if (SettingsMap().FullScreen) {
     Hide();
   } else {

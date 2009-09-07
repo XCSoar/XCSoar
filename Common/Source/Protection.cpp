@@ -40,7 +40,6 @@ Copyright_License {
 #include "MainWindow.hpp"
 #include "MapWindow.h"
 #include "Protection.hpp"
-#include "InfoBoxManager.h"
 #include "Settings.hpp"
 #include "SettingsUser.hpp"
 #include "Device/Parser.h"
@@ -175,7 +174,6 @@ DWORD CalculationThread (LPVOID lpvoid) {
       if (glide_computer.ProcessGPS()){
         need_calculations_slow = true;
       }
-      InfoBoxManager::SetDirty(true);
     }
 
     if (closeTriggerEvent.test())
