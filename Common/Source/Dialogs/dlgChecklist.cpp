@@ -60,8 +60,8 @@ static int LineOffsets[MAXLINES];
 static int DrawListIndex=0;
 static int nTextLines=0;
 static int nLists=0;
-static TCHAR *ChecklistText[MAXLISTS];
-static TCHAR *ChecklistTitle[MAXLISTS];
+static TCHAR *ChecklistText[MAXDETAILS];
+static TCHAR *ChecklistTitle[MAXTITLE];
 
 static void NextPage(int Step){
   TCHAR buffer[80];
