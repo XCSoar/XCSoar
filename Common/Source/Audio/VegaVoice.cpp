@@ -527,7 +527,6 @@ static void AirspaceWarningNotify(AirspaceWarningNotifyAction_t Action, Airspace
 
 
 VegaVoice::VegaVoice() {
-  InitializeCriticalSection(&CritSec_Voice);
   for (int i=0; i<VV_MESSAGE_COUNT; i++) {
     message[i].Initialise(i);
   }
@@ -541,15 +540,14 @@ VegaVoice::~VegaVoice() {
     AirspaceWarnListRemoveNotifier(AirspaceWarningNotify);
   }
 
-  DeleteCriticalSection(&CritSec_Voice);
 }
 
 void VegaVoice::Lock() {
-  EnterCriticalSection(&CritSec_Voice);
+  mutexVoice.Lock();
 }
 
 void VegaVoice::UnLock() {
-  LeaveCriticalSection(&CritSec_Voice);
+  mutexVoice.Unlock();
 }
 
 void

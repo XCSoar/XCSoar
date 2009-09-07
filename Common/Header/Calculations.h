@@ -44,9 +44,4 @@ Copyright_License {
 bool ClearAirspaceWarnings(const bool ack, const bool allday=false);
 void RefreshTaskStatistics(void);
 
-#define TAKEOFFSPEEDTHRESHOLD (0.5*GlidePolar::Vminsink)
-
-void
-DoAutoQNH(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated);
-
 #endif

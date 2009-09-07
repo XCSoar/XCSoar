@@ -56,4 +56,15 @@ extern int  BestAlternate;
 extern double QFEAltitudeOffset; // VENTA3
 extern bool   ForceFinalGlide;
 
+/// vegavoice stuff
+
+extern bool EnableVoiceClimbRate;
+extern bool EnableVoiceTerrain;
+extern bool EnableVoiceWaypointDistance;
+extern bool EnableVoiceTaskAltitudeDifference;
+extern bool EnableVoiceMacCready;
+extern bool EnableVoiceNewWaypoint;
+extern bool EnableVoiceInSector;
+extern bool EnableVoiceAirspace;
+
 #endif

@@ -67,6 +67,11 @@ Copyright_License {
 #include "Settings.hpp"
 #include "GPSClock.hpp"
 
+#define TAKEOFFSPEEDTHRESHOLD (0.5*GlidePolar::Vminsink)
+
+
+void
+DoAutoQNH(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated);
 
 ////
 #define CRUISE 0
@@ -1454,3 +1459,38 @@ GlideComputerAirData::ThermalBand()
   SetCalculated().ThermalProfileN[index]++;
 }
 
+#include "Math/Pressure.h"
+
+void
+DoAutoQNH(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated)
+{
+  static int done_autoqnh = 0;
+
+  // Reject if already done
+  if (done_autoqnh==10) return;
+
+  // Reject if in IGC logger mode
+  if (ReplayLogger::IsEnabled()) return;
+
+  // Reject if no valid GPS fix
+  if (Basic->NAVWarning) return;
+
+  // Reject if no baro altitude
+  if (!Basic->BaroAltitudeAvailable) return;
+
+  // Reject if terrain height is invalid
+  if (!Calculated->TerrainValid) return;
+
+  if (Basic->Speed<TAKEOFFSPEEDTHRESHOLD) {
+    done_autoqnh++;
+  } else {
+    done_autoqnh= 0; // restart...
+  }
+
+  if (done_autoqnh==10) {
+    double fixaltitude = Calculated->TerrainAlt;
+
+    QNH = FindQNH(Basic->BaroAltitude, fixaltitude);
+    AirspaceQnhChangeNotify(QNH);
+  }
+}

@@ -39,17 +39,12 @@ Copyright_License {
 #define VEGAVOICE_H
 
 #include "NMEA/Info.h"
-#include <windows.h>
-#include "Calculations.h"
+#include "NMEA/Derived.hpp"
 
-extern bool EnableVoiceClimbRate;
-extern bool EnableVoiceTerrain;
-extern bool EnableVoiceWaypointDistance;
-extern bool EnableVoiceTaskAltitudeDifference;
-extern bool EnableVoiceMacCready;
-extern bool EnableVoiceNewWaypoint;
-extern bool EnableVoiceInSector;
-extern bool EnableVoiceAirspace;
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+
+#include "Thread/Mutex.hpp"
 
 // These messages are listed in order of priotity,
 // first message to be active is spoken.
@@ -147,7 +142,7 @@ public:
   void MessageSpoken(int id_this, double time);
 
 private:
-  CRITICAL_SECTION  CritSec_Voice;
+  Mutex mutexVoice;
   void Lock();
   void UnLock();
  private:
