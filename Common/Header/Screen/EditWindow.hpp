@@ -55,6 +55,10 @@ public:
   void set_ro_ml(ContainerWindow &parent, int left, int top,
                  unsigned width, unsigned height);
 
+  unsigned get_row_count() const {
+    return ::SendMessage(hWnd, EM_GETLINECOUNT, 0, 0);
+  }
+
   void set_text(const TCHAR *text) {
     ::SetWindowText(hWnd, text);
   }
