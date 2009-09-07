@@ -71,8 +71,7 @@ Copyright_License {
 
 */
 
-CRITICAL_SECTION  CritSec_Messages;
-
+Mutex Message::mutexMessage;
 RECT Message::rcmsg;
 HWND Message::hWndMessageWindow;
 HDC Message::hdc;
@@ -126,9 +125,6 @@ LRESULT CALLBACK MessageWindowProc(HWND hwnd, UINT message,
 int Message::block_ref = 0;
 
 void Message::Initialize(RECT rc) {
-
-  InitializeCriticalSection(&CritSec_Messages);
-
   block_ref = 0;
 
   rcmsg = rc; // default; message window can be full size of screen
@@ -180,16 +176,15 @@ void Message::Destroy() {
   // destroy window
   ReleaseDC(hWndMessageWindow, hdc);
   DestroyWindow(hWndMessageWindow);
-  DeleteCriticalSection(&CritSec_Messages);
 }
 
 
 void Message::Lock() {
-  EnterCriticalSection(&CritSec_Messages);
+  mutexMessage.Lock();
 }
 
 void Message::Unlock() {
-  LeaveCriticalSection(&CritSec_Messages);
+  mutexMessage.Unlock();
 }
 
 
@@ -263,7 +258,7 @@ void Message::Resize() {
 
 
 void Message::BlockRender(bool doblock) {
-  //Lock();
+  Lock();
   if (doblock) {
     block_ref++;
   } else {
@@ -271,15 +266,15 @@ void Message::BlockRender(bool doblock) {
   }
   // TODO code: add blocked time to messages' timers so they come
   // up once unblocked.
-  //Unlock();
+  Unlock();
 }
 
 
 bool Message::Render() {
   if (!globalRunningEvent.test()) return false;
-  if (block_ref) return false;
 
   Lock();
+  if (block_ref) return false;
   DWORD	fpsTime = ::GetTickCount() - startTime;
 
   // this has to be done quickly, since it happens in GUI thread
@@ -372,8 +367,7 @@ int Message::GetEmptySlot() {
 
 
 void Message::AddMessage(DWORD tshow, int type, TCHAR* Text) {
-
-  Lock();
+  ScopeLock protect(mutexMessage);
 
   int i;
   DWORD	fpsTime = ::GetTickCount() - startTime;
@@ -385,8 +379,6 @@ void Message::AddMessage(DWORD tshow, int type, TCHAR* Text) {
   messages[i].texpiry = fpsTime;
   _tcscpy(messages[i].text, Text);
 
-  Unlock();
-  //  Render(); // NO this causes crashes (don't know why..)
 }
 
 void Message::Repeat(int type) {
@@ -429,9 +421,8 @@ void Message::CheckTouch(HWND wmControl) {
 
 
 bool Message::Acknowledge(int type) {
-  Lock();
+  ScopeLock protect(mutexMessage);
   int i;
-  bool ret = false;	// Did we acknowledge?
   DWORD	fpsTime = ::GetTickCount() - startTime;
 
   for (i=0; i<MAXMESSAGES; i++) {
@@ -439,13 +430,10 @@ bool Message::Acknowledge(int type) {
 	&& ((type==0)||(type==messages[i].type))) {
       // message was previously visible, so make it expire now.
       messages[i].texpiry = fpsTime-1;
-	  ret = true;
+	  return true;
     }
   }
-
-  Unlock();
-  //  Render(); NO! this can cause crashes
-  return ret;
+  return false;
 }
 
 
@@ -606,7 +594,7 @@ void _init_Status(int num) {
 // TODO code: (need to discuss) Consider moving almost all this functionality into AddMessage ?
 
 void Message::AddMessage(const TCHAR* text, const TCHAR *data) {
-  Lock();
+  ScopeLock protect(mutexMessage);
 
   StatusMessageSTRUCT LocalMessage;
   LocalMessage = StatusMessageData[0];
@@ -635,8 +623,6 @@ void Message::AddMessage(const TCHAR* text, const TCHAR *data) {
 
     AddMessage(LocalMessage.delay_ms, MSG_USERINTERFACE, msgcache);
   }
-
-  Unlock();
 }
 
 

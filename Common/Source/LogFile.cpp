@@ -36,12 +36,14 @@ Copyright_License {
 */
 
 #include "LogFile.hpp"
-#include "Protection.hpp"
+#include "Thread/Mutex.hpp"
 #include "LocalPath.hpp"
 #include "Interface.hpp"
 
 #include <stdio.h>
 #include <stdarg.h>
+
+Mutex mutexLogFile;
 
 #if !defined(NDEBUG) && !defined(GNAV)
 void DebugStore(const char *Str, ...)
@@ -54,7 +56,7 @@ void DebugStore(const char *Str, ...)
   len = vsprintf(buf, Str, ap);
   va_end(ap);
 
-  mutexFlightData.Lock();
+  mutexLogFile.Lock();
   FILE *stream;
   TCHAR szFileName[] = TEXT("xcsoar-debug.log");
   static bool initialised = false;
@@ -68,7 +70,7 @@ void DebugStore(const char *Str, ...)
   fwrite(buf,len,1,stream);
 
   fclose(stream);
-  mutexFlightData.Unlock();
+  mutexLogFile.Unlock();
 }
 #endif /* !NDEBUG */
 
@@ -81,7 +83,7 @@ void StartupStore(const TCHAR *Str, ...)
   _vstprintf(buf, Str, ap);
   va_end(ap);
 
-  mutexFlightData.Lock();
+  mutexLogFile.Lock();
   FILE *startupStoreFile = NULL;
   static TCHAR szFileName[MAX_PATH];
   static bool initialised = false;
@@ -102,5 +104,5 @@ void StartupStore(const TCHAR *Str, ...)
     fprintf(startupStoreFile, "%S", buf);
     fclose(startupStoreFile);
   }
-  mutexFlightData.Unlock();
+  mutexLogFile.Unlock();
 }

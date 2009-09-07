@@ -39,6 +39,7 @@ Copyright_License {
 #define MESSAGE_H
 
 #include "Interface.hpp"
+#include "Thread/Mutex.hpp"
 
 #define MAXMESSAGES 20
 
@@ -76,9 +77,6 @@ class Message: public CommonInterface {
   // clears all visible messages (of specified type or if type=0, all)
   static bool Acknowledge(int type);
 
-  static void Lock();
-  static void Unlock();
-
   static void CheckTouch(HWND wmControl);
 
   static void BlockRender(bool doblock);
@@ -99,7 +97,9 @@ class Message: public CommonInterface {
   static bool hidden;
   static int nvisible;
   static int block_ref;
-
+  static Mutex mutexMessage;
+  static void Lock();
+  static void Unlock();
 };
 
 #endif
