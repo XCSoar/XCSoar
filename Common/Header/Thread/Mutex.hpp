@@ -60,13 +60,22 @@ public:
     ::DeleteCriticalSection(&handle);
   }
 public:
-  void Lock() {
+  virtual void Lock() {
     EnterCriticalSection(&handle);
   };
-  void Unlock() {
+  virtual void Unlock() {
     LeaveCriticalSection(&handle);
   }
 };
+
+class DummyMutex: public Mutex {
+public:
+  void Lock() {
+  };
+  void Unlock() {
+  }
+};
+
 
 // JMW testing an easy/clear way of handling mutexes
 class ScopeLock {

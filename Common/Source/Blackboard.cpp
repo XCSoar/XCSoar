@@ -308,3 +308,37 @@ MapProjectionBlackboard::ReadMapProjection
 {
   map_projection = map;
 }
+
+
+////
+// JMW TODO, handle gauge within own thread
+#include "Gauge/GaugeFLARM.hpp"
+#include "Components.hpp"
+
+void DeviceBlackboard::FLARM_RefreshSlots() {
+  int i;
+  bool present = false;
+  if (Basic().FLARM_Available) {
+
+    for (i=0; i<FLARM_MAX_TRAFFIC; i++) {
+      if (Basic().FLARM_Traffic[i].ID>0) {
+	if ((Basic().Time> Basic().FLARM_Traffic[i].Time_Fix+2)
+	    || (Basic().Time< Basic().FLARM_Traffic[i].Time_Fix)) {
+	  // clear this slot if it is too old (2 seconds), or if
+	  // time has gone backwards (due to replay)
+	  SetBasic().FLARM_Traffic[i].ID= 0;
+	  SetBasic().FLARM_Traffic[i].Name[0] = 0;
+	} else {
+          if (gauge_flarm != NULL && Basic().FLARM_Traffic[i].AlarmLevel > 0)
+            gauge_flarm->Suppress = false;
+
+	  present = true;
+	}
+      }
+    }
+  }
+
+  if (gauge_flarm != NULL)
+    gauge_flarm->TrafficPresent(present);
+}
+
