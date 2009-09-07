@@ -106,9 +106,7 @@ static void OnQnhData(DataField *Sender, DataField::DataAccessKind_t Mode){
 static void OnAltitudeData(DataField *Sender, DataField::DataAccessKind_t Mode){
   switch(Mode){
     case DataField::daGet:
-      mutexFlightData.Lock();
       Sender->Set(Units::ToUserAltitude(XCSoarInterface::Basic().BaroAltitude));
-      mutexFlightData.Unlock();
     break;
     case DataField::daPut:
     break;

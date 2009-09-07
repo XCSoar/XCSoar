@@ -184,7 +184,6 @@ static void DoOptimise(void) {
 
   // should do a GUI::ExchangeBlackboard() here and use local storage
 
-  mutexFlightData.Lock();
   mutexTaskData.Lock();
   targetManipEvent.trigger();
   do {
@@ -233,7 +232,6 @@ static void DoOptimise(void) {
   targetManipEvent.reset();
 
   mutexTaskData.Unlock();
-  mutexFlightData.Unlock();
 }
 
 

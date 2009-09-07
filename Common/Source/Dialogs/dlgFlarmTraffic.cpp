@@ -81,8 +81,6 @@ OnPaintDetailsListItem(WindowControl *Sender, Canvas &canvas)
     double range;
     double bear;
 
-    mutexFlightData.Lock();
-
     DistanceBearing(XCSoarInterface::Basic().Latitude,
 		    XCSoarInterface::Basic().Longitude,
 		    XCSoarInterface::Basic().FLARM_Traffic[DrawListIndex].Latitude,
@@ -108,7 +106,6 @@ OnPaintDetailsListItem(WindowControl *Sender, Canvas &canvas)
     if (XCSoarInterface::Basic().FLARM_Traffic[DrawListIndex].ID != 0)
       canvas.text_opaque(2 * InfoBoxLayout::scale, 2 * InfoBoxLayout::scale,
                          text);
-    mutexFlightData.Unlock();
   }
 }
 
