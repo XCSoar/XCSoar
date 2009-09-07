@@ -980,13 +980,13 @@ void ReadRegistrySettings(void)
   GetFromRegistry(szRegistryLoggerShort,&Temp);
   XCSoarInterface::SetSettingsComputer().LoggerShortName = (Temp == 1);
 
-  Temp = EnableFLARMMap;
+  Temp = XCSoarInterface::SettingsMap().EnableFLARMMap;
   GetFromRegistry(szRegistryEnableFLARMMap,&Temp);
-  EnableFLARMMap = Temp;
+  XCSoarInterface::SetSettingsMap().EnableFLARMMap = Temp;
 
-  Temp = EnableFLARMGauge;
+  Temp = XCSoarInterface::SettingsMap().EnableFLARMGauge;
   GetFromRegistry(szRegistryEnableFLARMGauge,&Temp);
-  EnableFLARMGauge = (Temp==1);
+  XCSoarInterface::SetSettingsMap().EnableFLARMGauge = (Temp==1);
 
   Temp = XCSoarInterface::SettingsMap().TerrainContrast;
   GetFromRegistry(szRegistryTerrainContrast,&Temp);

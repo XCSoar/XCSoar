@@ -113,6 +113,8 @@ typedef struct SETTINGS_MAP_ {
   int    TargetPanIndex;
   double TargetZoomDistance;
   double MapScale;
+  bool  EnableFLARMGauge;
+  DWORD EnableFLARMMap;
 } SETTINGS_MAP;
 
 // display mode stuff

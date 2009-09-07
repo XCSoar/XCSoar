@@ -52,8 +52,6 @@ Copyright_License {
 #include <stdlib.h>
 #include "SettingsUser.hpp"
 
-bool  EnableFLARMGauge = true;
-DWORD EnableFLARMMap = 1;
 
 static Color colTextGray;
 static Color colText;
@@ -88,7 +86,7 @@ void GaugeFLARM::RenderBg(Canvas &canvas) {
 
 #include "WindowControls.h" // just to get colors
 
-void GaugeFLARM::RenderTraffic(Canvas &canvas, const NMEA_INFO *gps_info)
+void GaugeFLARM::RenderTraffic(Canvas &canvas, const NMEA_INFO &gps_info)
 {
   // TODO enhancement: support red/green Color blind pilots
 
@@ -97,9 +95,9 @@ void GaugeFLARM::RenderTraffic(Canvas &canvas, const NMEA_INFO *gps_info)
   canvas.set_background_color(Color(0xff,0xff,0xff));
 
   for (int i=0; i<FLARM_MAX_TRAFFIC; i++) {
-    if (gps_info->FLARM_Traffic[i].ID>0) {
+    if (gps_info.FLARM_Traffic[i].ID>0) {
 
-      switch (gps_info->FLARM_Traffic[i].AlarmLevel) {
+      switch (gps_info.FLARM_Traffic[i].AlarmLevel) {
       case 1:
         canvas.select(MapGfx.yellowBrush);
 	  break;
@@ -114,8 +112,8 @@ void GaugeFLARM::RenderTraffic(Canvas &canvas, const NMEA_INFO *gps_info)
       }
 
       double x, y;
-      x = gps_info->FLARM_Traffic[i].RelativeEast;
-      y = -gps_info->FLARM_Traffic[i].RelativeNorth;
+      x = gps_info.FLARM_Traffic[i].RelativeEast;
+      y = -gps_info.FLARM_Traffic[i].RelativeNorth;
       double d = sqrt(x*x+y*y);
       if (d>0) {
 	x/= d;
@@ -124,12 +122,12 @@ void GaugeFLARM::RenderTraffic(Canvas &canvas, const NMEA_INFO *gps_info)
 	x= 0;
 	y= 0;
       }
-      double dh = gps_info->FLARM_Traffic[i].RelativeAltitude;
+      double dh = gps_info.FLARM_Traffic[i].RelativeAltitude;
       double slope = atan2(dh,d)*2.0/3.14159; // (-1,1)
 
       slope = max(-1.0,min(1.0,slope*2)); // scale so 45 degrees or more=90
 
-      double DisplayAngle = -gps_info->TrackBearing;
+      double DisplayAngle = -gps_info.TrackBearing;
       rotate(x, y, DisplayAngle); 	// or use .Heading?
       double scale = RangeScale(d);
 
@@ -137,7 +135,7 @@ void GaugeFLARM::RenderTraffic(Canvas &canvas, const NMEA_INFO *gps_info)
       sc.x = center.x + iround(x*scale);
       sc.y = center.y + iround(y*scale);
 
-      if (gps_info->FLARM_Traffic[i].AlarmLevel>0) {
+      if (gps_info.FLARM_Traffic[i].AlarmLevel>0) {
         // Draw line through target
         canvas.line(sc.x, sc.y,
                     center.x + iround(radius*x),
@@ -158,12 +156,12 @@ void GaugeFLARM::RenderTraffic(Canvas &canvas, const NMEA_INFO *gps_info)
       Arrow[4].y = 4;
 
       PolygonRotateShift(Arrow, 5, sc.x, sc.y,
-                         gps_info->FLARM_Traffic[i].TrackBearing
+                         gps_info.FLARM_Traffic[i].TrackBearing
                          + DisplayAngle);
       canvas.polygon(Arrow, 5);
 
       short relalt =
-	iround(gps_info->FLARM_Traffic[i].RelativeAltitude*ALTITUDEMODIFY/100);
+	iround(gps_info.FLARM_Traffic[i].RelativeAltitude*ALTITUDEMODIFY/100);
 
       if (relalt != 0) {
 	TCHAR Buffer[10];
@@ -200,7 +198,7 @@ void GaugeFLARM::RenderTraffic(Canvas &canvas, const NMEA_INFO *gps_info)
 }
 
 
-void GaugeFLARM::Render(const NMEA_INFO *gps_info)
+void GaugeFLARM::Render(const NMEA_INFO &gps_info)
 {
   if (Visible) {
     RenderBg(get_canvas());
@@ -253,7 +251,7 @@ GaugeFLARM::GaugeFLARM(ContainerWindow &parent)
 
   RenderBg(get_canvas());
 
-  Show();
+  Show(false);
 }
 
 
@@ -262,8 +260,8 @@ void GaugeFLARM::TrafficPresent(bool present) {
 }
 
 
-void GaugeFLARM::Show() {
-  Visible = ForceVisible || (Traffic && EnableFLARMGauge && !Suppress);
+void GaugeFLARM::Show(const bool enable_gauge) {
+  Visible = ForceVisible || (Traffic && enable_gauge && !Suppress);
   static bool lastvisible = true;
   if (Visible && !lastvisible) {
     show();

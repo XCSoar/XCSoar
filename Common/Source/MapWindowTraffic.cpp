@@ -54,7 +54,7 @@ void
 MapWindow::DrawFLARMTraffic(Canvas &canvas)
 {
 
-  if (!EnableFLARMMap) return;
+  if (!SettingsMap().EnableFLARMMap) return;
 
   if (!Basic().FLARM_Available) return;
 
@@ -86,7 +86,7 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas)
       target_lon = Basic().FLARM_Traffic[i].Longitude;
       target_lat = Basic().FLARM_Traffic[i].Latitude;
 
-      if ((EnableFLARMMap==2)&&(scalefact>1.0)) {
+      if ((SettingsMap().EnableFLARMMap==2)&&(scalefact>1.0)) {
         double distance;
         double bearing;
 

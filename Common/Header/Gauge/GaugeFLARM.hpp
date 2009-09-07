@@ -56,18 +56,15 @@ public:
 
 public:
   GaugeFLARM(ContainerWindow &parent);
-  void Render(const NMEA_INFO *gps_info);
-  void RenderTraffic(Canvas &canvas, const NMEA_INFO *gps_info);
+  void Render(const NMEA_INFO &gps_info);
+  void RenderTraffic(Canvas &canvas, const NMEA_INFO &gps_info);
   void RenderBg(Canvas &canvas);
-  void Show();
+  void Show(const bool enable_gauge);
   void TrafficPresent(bool traffic);
  private:
   int RangeScale(double d);
 
   friend LRESULT CALLBACK GaugeFLARMWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 };
-
-extern bool EnableFLARMGauge;
-extern DWORD EnableFLARMMap;
 
 #endif

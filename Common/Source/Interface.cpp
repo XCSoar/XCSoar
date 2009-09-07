@@ -137,6 +137,8 @@ void XCSoarInterface::DefaultSettings()
   SetSettingsMap().TargetPanIndex = 0;
   SetSettingsMap().TargetZoomDistance = 500;
   SetSettingsMap().MapScale = 5;
+  SetSettingsMap().EnableFLARMGauge = true;
+  SetSettingsMap().EnableFLARMMap = 1;
 }
 
 

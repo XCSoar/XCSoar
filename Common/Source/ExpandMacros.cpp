@@ -380,7 +380,7 @@ bool ButtonLabel::ExpandMacros(const TCHAR *In,
   CondReplaceInString(SettingsMap().OnAirSpace  == 0, OutBuffer, TEXT("$(AirSpaceOffShortIndicator)"), TEXT("(*)"), TEXT(""), Size);
   CondReplaceInString(SettingsMap().OnAirSpace  == 1, OutBuffer, TEXT("$(AirSpaceOnShortIndicator)"), TEXT("(*)"), TEXT(""), Size);
 
-  CondReplaceInString(EnableFLARMGauge != 0, OutBuffer, TEXT("$(FlarmDispToggleActionName)"), TEXT("Off"), TEXT("On"), Size);
+  CondReplaceInString(SettingsMap().EnableFLARMGauge != 0, OutBuffer, TEXT("$(FlarmDispToggleActionName)"), TEXT("Off"), TEXT("On"), Size);
 
   return invalid;
 }

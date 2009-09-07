@@ -68,8 +68,8 @@ DrawThread::run()
 	  flarm->Suppress = false;
 	}
 	flarm->TrafficPresent(map.Basic().FLARMTraffic); 
-	flarm->Show();
-        flarm->Render(&map.Basic());
+	flarm->Show(map.SettingsMap().EnableFLARMGauge);
+        flarm->Render(map.Basic());
       }
 
       map.DrawThreadLoop();

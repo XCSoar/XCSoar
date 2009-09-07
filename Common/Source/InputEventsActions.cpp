@@ -547,7 +547,8 @@ void InputEvents::eventFLARMRadar(const TCHAR *misc) {
 
   if (_tcscmp(misc, TEXT("ForceToggle")) == 0) {
     gauge_flarm->ForceVisible = !gauge_flarm->ForceVisible;
-    EnableFLARMGauge = gauge_flarm->ForceVisible;
+    SetSettingsMap().EnableFLARMGauge = 
+      gauge_flarm->ForceVisible;
   } else
     gauge_flarm->Suppress = !gauge_flarm->Suppress;
   // the result of this will get triggered by refreshslots

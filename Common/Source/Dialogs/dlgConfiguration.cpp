@@ -1454,13 +1454,13 @@ static void setVariables(void) {
     dfe->addEnumText(gettext(TEXT("OFF")));
     dfe->addEnumText(gettext(TEXT("ON/Fixed")));
     dfe->addEnumText(gettext(TEXT("ON/Scaled")));
-    dfe->Set(EnableFLARMMap);
+    dfe->Set(XCSoarInterface::SettingsMap().EnableFLARMMap);
     wp->RefreshDisplay();
   }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpEnableFLARMGauge"));
   if (wp) {
-    wp->GetDataField()->Set(EnableFLARMGauge);
+    wp->GetDataField()->Set(XCSoarInterface::SettingsMap().EnableFLARMGauge);
     wp->RefreshDisplay();
   }
 
@@ -2767,22 +2767,22 @@ void dlgConfigurationShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpEnableFLARMMap"));
   if (wp) {
-    if ((int)EnableFLARMMap !=
+    if ((int)XCSoarInterface::SettingsMap().EnableFLARMMap !=
 	wp->GetDataField()->GetAsInteger()) {
-      EnableFLARMMap = wp->GetDataField()->GetAsInteger();
+      XCSoarInterface::SetSettingsMap().EnableFLARMMap = wp->GetDataField()->GetAsInteger();
       SetToRegistry(szRegistryEnableFLARMMap,
-		    EnableFLARMMap);
+		    XCSoarInterface::SettingsMap().EnableFLARMMap);
       changed = true;
     }
   }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpEnableFLARMGauge"));
   if (wp) {
-    if (EnableFLARMGauge !=
+    if (XCSoarInterface::SettingsMap().EnableFLARMGauge !=
 	wp->GetDataField()->GetAsBoolean()) {
-      EnableFLARMGauge = wp->GetDataField()->GetAsBoolean();
+      XCSoarInterface::SetSettingsMap().EnableFLARMGauge = wp->GetDataField()->GetAsBoolean();
       SetToRegistry(szRegistryEnableFLARMGauge,
-		    EnableFLARMGauge);
+		    XCSoarInterface::SettingsMap().EnableFLARMGauge);
       changed = true;
     }
   }
