@@ -43,12 +43,14 @@ Copyright_License {
 #include "Blackboard.hpp"
 
 class MainWindow;
+class StatusMessageList;
 
 class CommonInterface {
 public:
   // instance of main program
   static HINSTANCE hInst;
 // window.. make this protected TODO so have to subclass to get access
+  static StatusMessageList status_messages;
   static MainWindow main_window;
 
   // TODO: make this protected

@@ -38,54 +38,38 @@ Copyright_License {
 #ifndef MESSAGE_H
 #define MESSAGE_H
 
-#include "PopupMessage.hpp"
+#include "MainWindow.hpp"
 
 class StatusMessageList;
 
 class Message : public PopupMessage {
-  static StatusMessageList status_messages;
-  static PopupMessage *instance;
-
  public:
-  static void Initialize(RECT rc);
-
-  static void Destroy();
-
   static bool Render() {
-    return instance->Render();
+    return main_window.popup.Render();
   }
 
   static void AddMessage(DWORD tshow, int type, TCHAR *Text) {
-    instance->AddMessage(tshow, type, Text);
+    main_window.popup.AddMessage(tshow, type, Text);
   }
 
   static void AddMessage(const TCHAR* text, const TCHAR *data=NULL) {
-    instance->AddMessage(text, data);
+    main_window.popup.AddMessage(text, data);
   }
 
   // repeats last non-visible message of specified type (or any message
   // type=0)
   static void Repeat(int type) {
-    instance->Repeat(type);
+    main_window.popup.Repeat(type);
   }
 
   // clears all visible messages (of specified type or if type=0, all)
   static bool Acknowledge(int type) {
-    return instance->Acknowledge(type);
-  }
-
-  static void CheckTouch(HWND wmControl) {
-    instance->CheckTouch(wmControl);
+    return main_window.popup.Acknowledge(type);
   }
 
   static void BlockRender(bool doblock) {
-    instance->BlockRender(doblock);
+    main_window.popup.BlockRender(doblock);
   }
-
-  // used by main
-  static void Startup(bool first);
-  static void LoadFile(void);
-  static void InitFile(void);
 };
 
 #endif

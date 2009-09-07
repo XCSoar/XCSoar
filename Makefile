@@ -501,7 +501,6 @@ OBJS	:=\
 	$(SRC)/InputEventsActions.o 	\
 	$(SRC)/StatusMessage.o \
 	$(SRC)/PopupMessage.o \
-	$(SRC)/Message.o 		\
 	$(SRC)/WindowControls.o 	\
 	$(SRC)/LogFile.o 		\
 	\
