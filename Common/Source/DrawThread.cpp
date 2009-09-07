@@ -47,7 +47,7 @@ DrawThread::run()
   // wait for start
   globalRunningEvent.wait();
 
-  map.ApplyScreenSize();
+  map.ExchangeBlackboard();
 
   mutexRun.Lock(); // take control
   map.DrawThreadLoop(); // first time draw
@@ -67,10 +67,10 @@ DrawThread::run()
       }
       mutexRun.Unlock(); // release control
       continue;
-    } else if (bounds_dirty) {
-      //      mutexRun.Lock(); // take control
+    } else if (0 && bounds_dirty) {
+      mutexRun.Lock(); // take control
       bounds_dirty = map.Idle(false);
-      //      mutexRun.Unlock(); // release control
+      mutexRun.Unlock(); // release control
       continue;
     }
   } while (!closeTriggerEvent.wait(500));

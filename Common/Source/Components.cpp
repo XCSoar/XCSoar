@@ -166,9 +166,8 @@ void XCSoarInterface::AfterStartup() {
   CloseProgressDialog();
 
   main_window.full_screen();
-  TriggerAll();
   InfoBoxManager::SetDirty(true);
-  TriggerRedraws();
+  TriggerAll();
 
   Message::Startup(false);
 #ifdef _INPUTDEBUG_

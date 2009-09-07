@@ -79,7 +79,6 @@ private:
 
 void TriggerGPSUpdate();
 void TriggerVarioUpdate();
-void TriggerRedraws(void);
 void TriggerAll(void);
 void CreateCalculationThread(void);
 

@@ -139,10 +139,8 @@ void MapWindow::RenderAreas(Canvas &canvas, const RECT rc)
 
 void MapWindow::RenderTrail(Canvas &canvas, const RECT rc)
 {
-  if(SettingsMap().TrailActive) {
-    double TrailFirstTime = DrawTrail(canvas);
-    DrawTrailFromTask(canvas, TrailFirstTime);
-  }
+  double TrailFirstTime = DrawTrail(canvas);
+  DrawTrailFromTask(canvas, TrailFirstTime);
   DrawThermalEstimate(canvas);
 }
 

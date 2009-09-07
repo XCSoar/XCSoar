@@ -163,7 +163,7 @@ bool MainWindow::on_create(void)
   TopWindow::on_create();
 
   if (_timer_id == 0) {
-    _timer_id = SetTimer(hWnd,1000,500,NULL); // 2 times per second
+    _timer_id = SetTimer(hWnd,1000,250,NULL); // 4 times per second
   }
   return true;
 }

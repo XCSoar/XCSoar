@@ -650,9 +650,6 @@ void InputEvents::eventDoInfoKey(const TCHAR *misc) {
 void InputEvents::eventMode(const TCHAR *misc) {
   assert(misc != NULL);
   InputEvents::setMode(misc);
-
-  // trigger redraw of screen to reduce blank area under windows
-  drawTriggerEvent.trigger();
 }
 
 // Don't think we need this.

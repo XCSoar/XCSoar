@@ -91,14 +91,6 @@ void TriggerAll(void) {
   varioTriggerEvent.trigger();
 }
 
-void TriggerRedraws() {
-  if (XCSoarInterface::main_window.map.IsDisplayRunning()) {
-    if (gpsUpdatedTriggerEvent.test()) {
-      drawTriggerEvent.trigger();
-    }
-  }
-}
-
 
 DWORD InstrumentThread (LPVOID lpvoid) {
 	(void)lpvoid;
@@ -161,7 +153,9 @@ DWORD CalculationThread (LPVOID lpvoid) {
     glide_computer.ReadSettingsComputer(device_blackboard.SettingsComputer());
     mutexFlightData.Unlock();
 
-    TriggerRedraws(); // just the map
+    if (gpsUpdatedTriggerEvent.test()) {
+      drawTriggerEvent.trigger();
+    }
 
     bool has_vario = glide_computer.Basic().VarioAvailable;
 

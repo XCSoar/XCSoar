@@ -77,7 +77,7 @@ ProcessTimer::DisplayProcessTimer()
   // update FLARM display (show/hide)
   if (gauge_flarm != NULL)
     gauge_flarm->Show();
-
+  
   CheckDisplayTimeOut(false);
 }
 
@@ -118,7 +118,7 @@ void ProcessTimer::CommonProcessTimer()
   InputEvents::ProcessTimer();
   AirspaceProcessTimer();
   InfoBoxManager::ProcessTimer();
-  DisplayProcessTimer();
+  //  DisplayProcessTimer();
   MessageProcessTimer();
 }
 
@@ -185,7 +185,7 @@ int ProcessTimer::ConnectionProcessTimer(int itimeout) {
 #ifndef DISABLEAUDIO
       MessageBeep(MB_ICONEXCLAMATION);
 #endif
-    } else if (itimeout % 30 == 0) {
+    } else if (itimeout % 60 == 0) {
       itimeout = 0;
       // we've been waiting for connection a long time
       // no activity for 30 seconds, so assume PDA has been
@@ -237,7 +237,7 @@ void ProcessTimer::Process(void)
     return;
   }
 
-  if (itimeout % 10 == 0) {
+  if (itimeout % 20 == 0) {
     // check connection status every 5 seconds
     itimeout = ConnectionProcessTimer(itimeout);
   }
@@ -246,22 +246,30 @@ void ProcessTimer::Process(void)
 
 
 #ifdef _SIM_
+#include "PeriodClock.hpp"
+
 void ProcessTimer::SIMProcess(void)
 {
 
   CommonProcessTimer();
 
   device_blackboard.RaiseConnection();
-  static int i=0;
-  i++;
 
-  if (!ReplayLogger::Update()) {
-    if (i%2==0) return;
-    device_blackboard.ProcessSimulation();
+  static PeriodClock m_clock;
+
+  if (m_clock.elapsed()<0) {
+    m_clock.update();
   }
 
-  if (i%2==0) return;
-
-  TriggerGPSUpdate();
+  if (ReplayLogger::Update()) {
+    TriggerGPSUpdate();
+    m_clock.update();
+  } else {
+    if (m_clock.elapsed()>=1000) {
+      m_clock.update();
+      device_blackboard.ProcessSimulation();
+      TriggerGPSUpdate();
+    }
+  }
 }
 #endif
