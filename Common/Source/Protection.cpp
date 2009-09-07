@@ -50,10 +50,10 @@ Copyright_License {
 #include "Components.hpp"
 #include "GlideComputer.hpp"
 #include "CalculationThread.hpp"
+#include "InstrumentThread.hpp"
 
 #include <assert.h>
 
-static Trigger varioTriggerEvent(TEXT("varioTriggerEvent"));
 Trigger closeTriggerEvent(TEXT("mapCloseEvent"));
 Trigger drawTriggerEvent(TEXT("drawTriggerEvent"),false);
 Trigger globalRunningEvent(TEXT("globalRunning"));
@@ -81,48 +81,14 @@ void TriggerGPSUpdate()
 
 void TriggerVarioUpdate()
 {
-  varioTriggerEvent.trigger(); // was pulse
+  instrument_thread->trigger_vario();
 }
 
 void TriggerAll(void) {
   calculation_thread->trigger_data();
   drawTriggerEvent.trigger();
-  varioTriggerEvent.trigger();
+  instrument_thread->trigger_vario();
 }
-
-
-DWORD InstrumentThread (LPVOID lpvoid) {
-	(void)lpvoid;
-  // wait for proper startup signal
-  while (!XCSoarInterface::main_window.map.IsDisplayRunning()) {
-    Sleep(MIN_WAIT_TIME);
-  }
-
-  while (!closeTriggerEvent.test()) {
-
-    if (!varioTriggerEvent.wait(MIN_WAIT_TIME))
-      continue;
-
-    if (XCSoarInterface::main_window.map.IsDisplayRunning()) {
-      GaugeVario *gauge_vario = XCSoarInterface::main_window.vario;
-
-      if (EnableVarioGauge && gauge_vario != NULL) {
-	
-	mutexFlightData.Lock();
-	gauge_vario->ReadBlackboardBasic(device_blackboard.Basic());
-	gauge_vario->ReadBlackboardCalculated(device_blackboard.Calculated());
-	gauge_vario->ReadSettingsComputer(device_blackboard.SettingsComputer());
-	mutexFlightData.Unlock();
-	gauge_vario->Render();
-	
-      }
-    }
-
-    varioTriggerEvent.reset();
-  }
-  return 0;
-}
-
 
 void CreateCalculationThread(void) {
   device_blackboard.ReadSettingsComputer(XCSoarInterface::SettingsComputer());
@@ -148,18 +114,6 @@ void CreateCalculationThread(void) {
   calculation_thread = new CalculationThread(&glide_computer);
   calculation_thread->start();
 
-  HANDLE hInstrumentThread;
-  DWORD dwInstThreadID;
-
-  if ((hInstrumentThread =
-      CreateThread (NULL, 0,
-       (LPTHREAD_START_ROUTINE )InstrumentThread,
-        0, 0, &dwInstThreadID)) != NULL)
-  {
-    SetThreadPriority(hInstrumentThread, THREAD_PRIORITY_NORMAL);
-    CloseHandle (hInstrumentThread);
-  } else {
-    assert(1);
-  }
-
+  instrument_thread = new InstrumentThread(gauge_vario);
+  instrument_thread->start();
 }

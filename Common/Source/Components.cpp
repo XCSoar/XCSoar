@@ -92,6 +92,7 @@ RasterWeather RASP;
 GlideComputer glide_computer;
 DrawThread *draw_thread;
 CalculationThread *calculation_thread;
+InstrumentThread *instrument_thread;
 
 /////////////////////////////////////////////////////////////////////////////////
 

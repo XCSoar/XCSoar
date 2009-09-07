@@ -35,28 +35,28 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_COMPONENTS_HPP
-#define XCSOAR_COMPONENTS_HPP
+#ifndef XCSOAR_INSTRUMENT_THREAD_HPP
+#define XCSOAR_INSTRUMENT_THREAD_HPP
+
+#include "Thread/Thread.hpp"
+#include "Thread/Trigger.hpp"
 
 class GaugeVario;
-class GaugeFLARM;
-class Marks;
-class TopologyStore;
-class RasterTerrain;
-class RasterWeather;
-class GlideComputer;
-class DrawThread;
-class CalculationThread;
-class InstrumentThread;
 
-// other global objects
-extern Marks *marks;
-extern TopologyStore *topology;
-extern RasterTerrain terrain;
-extern RasterWeather RASP;
-extern GlideComputer glide_computer;
-extern DrawThread *draw_thread;
-extern CalculationThread *calculation_thread;
-extern InstrumentThread *instrument_thread;
+class InstrumentThread : public Thread {
+  Trigger vario_trigger;
+
+  GaugeVario *vario;
+
+public:
+  InstrumentThread(GaugeVario *_vario);
+
+  void trigger_vario() {
+    vario_trigger.trigger();
+  }
+
+protected:
+  virtual void run();
+};
 
 #endif

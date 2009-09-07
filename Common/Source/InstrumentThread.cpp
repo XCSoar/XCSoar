@@ -35,28 +35,39 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_COMPONENTS_HPP
-#define XCSOAR_COMPONENTS_HPP
+#include "InstrumentThread.hpp"
+#include "Gauge/GaugeVario.hpp"
+#include "Interface.hpp"
+#include "MainWindow.hpp" /* XXX to be removed */
+#include "Components.hpp" /* XXX to be removed */
 
-class GaugeVario;
-class GaugeFLARM;
-class Marks;
-class TopologyStore;
-class RasterTerrain;
-class RasterWeather;
-class GlideComputer;
-class DrawThread;
-class CalculationThread;
-class InstrumentThread;
+InstrumentThread::InstrumentThread(GaugeVario *_vario)
+  :vario_trigger(TEXT("varioTriggerEvent")), vario(_vario) {}
 
-// other global objects
-extern Marks *marks;
-extern TopologyStore *topology;
-extern RasterTerrain terrain;
-extern RasterWeather RASP;
-extern GlideComputer glide_computer;
-extern DrawThread *draw_thread;
-extern CalculationThread *calculation_thread;
-extern InstrumentThread *instrument_thread;
+void
+InstrumentThread::run()
+{
+  // wait for proper startup signal
+  while (!XCSoarInterface::main_window.map.IsDisplayRunning()) {
+    Sleep(MIN_WAIT_TIME);
+  }
 
-#endif
+  while (!closeTriggerEvent.test()) {
+    if (!vario_trigger.wait(MIN_WAIT_TIME))
+      continue;
+
+    if (XCSoarInterface::main_window.map.IsDisplayRunning() &&
+        EnableVarioGauge && vario != NULL) {
+      mutexFlightData.Lock();
+      vario->ReadBlackboardBasic(device_blackboard.Basic());
+      vario->ReadBlackboardCalculated(device_blackboard.Calculated());
+      vario->ReadSettingsComputer(device_blackboard.SettingsComputer());
+      mutexFlightData.Unlock();
+      vario->Render();
+    }
+
+    vario_trigger.reset();
+  }
+}
+
+
