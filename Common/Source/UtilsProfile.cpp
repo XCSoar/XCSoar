@@ -113,9 +113,8 @@ void ReadProfile(const TCHAR *szFile)
 
 
 int propGetScaleList(double *List, size_t Size){
-
+  static const TCHAR Name[] = TEXT("ScaleList");
   TCHAR Buffer[128];
-  TCHAR Name[] = TEXT("ScaleList");
   TCHAR *pWClast, *pToken;
   int   Idx = 0;
   double vlast=0;
@@ -124,7 +123,7 @@ int propGetScaleList(double *List, size_t Size){
   assert(List != NULL);
   assert(Size > 0);
 
-  SetRegistryString(TEXT("ScaleList"),
+  SetRegistryString(Name,
    TEXT("0.5,1,2,5,10,20,50,100,150,200,500,1000"));
 
   if (GetRegistryString(Name, Buffer, sizeof(Buffer)/sizeof(TCHAR)) == 0){

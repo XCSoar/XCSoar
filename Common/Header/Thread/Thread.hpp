@@ -35,26 +35,30 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_COMPONENTS_HPP
-#define XCSOAR_COMPONENTS_HPP
+#ifndef XCSOAR_THREAD_THREAD_HPP
+#define XCSOAR_THREAD_THREAD_HPP
 
-class GaugeVario;
-class GaugeFLARM;
-class Marks;
-class TopologyStore;
-class RasterTerrain;
-class RasterWeather;
-class GlideComputer;
-class DrawThread;
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
 
-// other global objects
-extern Marks *marks;
-extern TopologyStore *topology;
-extern GaugeVario *gauge_vario;
-extern GaugeFLARM *gauge_flarm;
-extern RasterTerrain terrain;
-extern RasterWeather RASP;
-extern GlideComputer glide_computer;
-extern DrawThread *draw_thread;
+/**
+ * This class provides an OS independent view on a thread.
+ */
+class Thread {
+  HANDLE handle;
+
+public:
+  Thread():handle(NULL) {}
+  virtual ~Thread();
+
+  bool start();
+  void join();
+
+protected:
+  virtual void run() = 0;
+
+private:
+  static DWORD WINAPI thread_proc(LPVOID lpParameter);
+};
 
 #endif

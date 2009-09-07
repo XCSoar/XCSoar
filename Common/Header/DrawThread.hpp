@@ -35,26 +35,35 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_COMPONENTS_HPP
-#define XCSOAR_COMPONENTS_HPP
+#ifndef XCSOAR_DRAW_THREAD_HPP
+#define XCSOAR_DRAW_THREAD_HPP
 
-class GaugeVario;
+#include "Thread/Thread.hpp"
+#include "Thread/Mutex.hpp"
+#include "Thread/Trigger.hpp"
+
+class MapWindow;
 class GaugeFLARM;
-class Marks;
-class TopologyStore;
-class RasterTerrain;
-class RasterWeather;
-class GlideComputer;
-class DrawThread;
 
-// other global objects
-extern Marks *marks;
-extern TopologyStore *topology;
-extern GaugeVario *gauge_vario;
-extern GaugeFLARM *gauge_flarm;
-extern RasterTerrain terrain;
-extern RasterWeather RASP;
-extern GlideComputer glide_computer;
-extern DrawThread *draw_thread;
+class DrawThread : public Thread {
+  Mutex mutexRun;
+
+  MapWindow &map;
+
+public:
+  DrawThread(MapWindow &_map)
+    :map(_map) {}
+
+  void suspend() {
+    mutexRun.Lock();
+  }
+
+  void resume() {
+    mutexRun.Unlock();
+  }
+
+protected:
+  virtual void run();
+};
 
 #endif

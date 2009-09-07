@@ -56,7 +56,7 @@ Copyright_License {
 #include "Interface.hpp"
 
 void SettingsEnter() {
-  XCSoarInterface::main_window.map.SuspendDrawingThread();
+  draw_thread->suspend();
   // This prevents the map and calculation threads from doing anything
   // with shared data while it is being changed (also prevents drawing)
 
@@ -152,7 +152,7 @@ void SettingsLeave() {
     devRestart();
   }
 
-  XCSoarInterface::main_window.map.ResumeDrawingThread();
+  draw_thread->resume();
   // allow map and calculations threads to continue on their merry way
 }
 

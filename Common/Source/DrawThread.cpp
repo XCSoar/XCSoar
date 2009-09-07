@@ -35,26 +35,44 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_COMPONENTS_HPP
-#define XCSOAR_COMPONENTS_HPP
+#include "DrawThread.hpp"
+#include "MapWindow.h"
+#include "Gauge/GaugeFLARM.hpp"
 
-class GaugeVario;
-class GaugeFLARM;
-class Marks;
-class TopologyStore;
-class RasterTerrain;
-class RasterWeather;
-class GlideComputer;
-class DrawThread;
+void
+DrawThread::run()
+{
+  bool bounds_dirty = false;
 
-// other global objects
-extern Marks *marks;
-extern TopologyStore *topology;
-extern GaugeVario *gauge_vario;
-extern GaugeFLARM *gauge_flarm;
-extern RasterTerrain terrain;
-extern RasterWeather RASP;
-extern GlideComputer glide_computer;
-extern DrawThread *draw_thread;
+  // wait for start
+  globalRunningEvent.wait();
 
-#endif
+  map.ApplyScreenSize();
+
+  mutexRun.Lock(); // take control
+  map.DrawThreadLoop(); // first time draw
+  bounds_dirty = map.SmartBounds(true);
+  map.Idle(true);
+  while (map.Idle(false)) {};
+  map.DrawThreadLoop(); // first time draw
+  mutexRun.Unlock(); // release control
+
+  do {
+    if (drawTriggerEvent.wait(MIN_WAIT_TIME)) {
+      mutexRun.Lock(); // take control
+      map.DrawThreadLoop();
+      if (map.SmartBounds(false)) {
+        bounds_dirty = map.Idle(true); // this call is quick
+      }
+      mutexRun.Unlock(); // release control
+      continue;
+    }
+
+    if (bounds_dirty && !drawTriggerEvent.test()) {
+      mutexRun.Lock(); // take control
+      bounds_dirty = map.Idle(false);
+      mutexRun.Unlock(); // release control
+      continue;
+    }
+  } while (!closeTriggerEvent.wait(500));
+}

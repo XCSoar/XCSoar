@@ -35,26 +35,38 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_COMPONENTS_HPP
-#define XCSOAR_COMPONENTS_HPP
+#include "Thread/Thread.hpp"
 
-class GaugeVario;
-class GaugeFLARM;
-class Marks;
-class TopologyStore;
-class RasterTerrain;
-class RasterWeather;
-class GlideComputer;
-class DrawThread;
+#include <assert.h>
 
-// other global objects
-extern Marks *marks;
-extern TopologyStore *topology;
-extern GaugeVario *gauge_vario;
-extern GaugeFLARM *gauge_flarm;
-extern RasterTerrain terrain;
-extern RasterWeather RASP;
-extern GlideComputer glide_computer;
-extern DrawThread *draw_thread;
+Thread::~Thread()
+{
+  if (handle != NULL)
+    ::CloseHandle(handle);
+}
 
-#endif
+bool
+Thread::start()
+{
+  assert(handle == NULL);
+
+  handle = ::CreateThread(NULL, 0, thread_proc, this, 0, NULL);
+  return handle != NULL;
+}
+
+void
+Thread::join()
+{
+  assert(handle != NULL);
+
+  ::WaitForSingleObject(handle, INFINITE);
+}
+
+DWORD WINAPI
+Thread::thread_proc(LPVOID lpParameter)
+{
+  Thread *thread = (Thread *)lpParameter;
+
+  thread->run();
+  return 0;
+}

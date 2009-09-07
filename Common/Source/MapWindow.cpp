@@ -112,6 +112,30 @@ MapWindow::MapWindow()
 
 }
 
+void
+MapWindow::set(ContainerWindow &parent,
+               const RECT _MapRectSmall, const RECT _MapRectBig)
+{
+  MapRectSmall = _MapRectSmall;
+  MapRect = MapRectBig = _MapRectBig;
+
+  MaskedPaintWindow::set(parent, _T("XCSoarMap"), MapRect.left, MapRect.top,
+                         MapRect.right - MapRect.left,
+                         MapRect.bottom - MapRect.top);
+
+  // initialise other systems
+  InitialiseScaleList(SettingsMap());
+
+  // set initial display mode
+  draw_canvas.background_transparent();
+
+  // paint draw window black to start
+  draw_canvas.black_pen();
+  draw_canvas.rectangle(MapRectBig.left, MapRectBig.top,
+                        MapRectBig.right, MapRectBig.bottom);
+
+  get_canvas().copy(draw_canvas);
+}
 
 void MapWindow::RefreshMap() {
   MapWindowTimer::InterruptTimer();
@@ -291,66 +315,6 @@ void MapWindow::DrawThreadLoop(void) {
 
   StopTimer();
 }
-
-
-void MapWindow::DrawThreadInitialise(void) {
-  // initialise other systems
-  InitialiseScaleList(SettingsMap()); 
-  // should really be done before the thread has started, so it happens
-  // from main thread
-
-  // set initial display mode
-  draw_canvas.background_transparent();
-
-  // paint draw window black to start
-  draw_canvas.black_pen();
-  draw_canvas.rectangle(MapRectBig.left, MapRectBig.top,
-			MapRectBig.right, MapRectBig.bottom);
-
-  get_canvas().copy(draw_canvas);
-
-  ApplyScreenSize();
-}
-
-
-DWORD MapWindow::_DrawThread ()
-{
-  bool bounds_dirty = false;
-
-  // wait for start
-  globalRunningEvent.wait();
-
-  DrawThreadInitialise();
-
-  mutexRun.Lock(); // take control
-  DrawThreadLoop(); // first time draw
-  bounds_dirty = SmartBounds(true);
-  Idle(true);
-  while (Idle(false)) {};
-  DrawThreadLoop(); // first time draw
-  mutexRun.Unlock(); // release control
-
-  do {
-    if (drawTriggerEvent.wait(MIN_WAIT_TIME)) {
-      mutexRun.Lock(); // take control
-      DrawThreadLoop();
-      if (SmartBounds(false)) {
-	bounds_dirty = Idle(true); // this call is quick
-      }
-      mutexRun.Unlock(); // release control
-      continue;
-    } 
-    if (bounds_dirty && !drawTriggerEvent.test()) {
-      mutexRun.Lock(); // take control
-      bounds_dirty = Idle(false);
-      mutexRun.Unlock(); // release control
-      continue;
-    } 
-  } while (!closeTriggerEvent.wait(500));
-
-  return 0;
-}
-
 
 bool
 MapWindow::register_class(HINSTANCE hInstance)
@@ -667,20 +631,6 @@ MapWindow::on_setfocus()
 
   return true;
 }
-
-//////////////////////////
-//
-
-DWORD MapWindow::DrawThread (LPVOID lpvoid)
-{
-  MapWindow *mw = (MapWindow *)lpvoid;
-  mw->_DrawThread();
-  return 0;
-}
-
-
-//////////////////////////////
-
 
 bool MapWindow::draw_masked_bitmap_if_visible(Canvas &canvas,
 					      Bitmap &bitmap,

@@ -48,20 +48,11 @@ Copyright_License {
 #include "Protection.hpp"
 #include "Blackboard.hpp"
 #include "PeriodClock.hpp"
+#include "DrawThread.hpp"
 
 class MapWindowBase {
  public:
-  MapWindowBase():
-    hDrawThread(NULL) {};
-
-  void     CloseDrawingThread(void);
-  void     SuspendDrawingThread(void);
-  void     ResumeDrawingThread(void);
   bool     IsDisplayRunning();
-  void     CreateDrawingThread(void);
-  Mutex    mutexRun;
- protected:
-  HANDLE   hDrawThread;
 };
 
 
@@ -86,14 +77,7 @@ class MapWindow
   static bool register_class(HINSTANCE hInstance);
 
   void set(ContainerWindow &parent,
-           const RECT _MapRectSmall, const RECT _MapRectBig) {
-    MapRectSmall = _MapRectSmall;
-    MapRect = MapRectBig = _MapRectBig;
-
-    MaskedPaintWindow::set(parent, _T("XCSoarMap"), MapRect.left, MapRect.top,
-                           MapRect.right - MapRect.left,
-                           MapRect.bottom - MapRect.top);
-  }
+           const RECT _MapRectSmall, const RECT _MapRectBig);
 
   // used by dlgTarget
   bool TargetDragged(double *longitude, double *latitude);
@@ -112,10 +96,6 @@ class MapWindow
   void Event_SetZoom(double value);
   void Event_ScaleZoom(int vswitch);
   void Event_AutoZoom(int vswitch);
-
-  // used by MapWindowBase
-  static DWORD DrawThread (LPVOID);
-  DWORD _DrawThread ();
 
   ////////////////////////////////////////////////////////////////////
 
@@ -255,6 +235,8 @@ class MapWindow
   void RenderAirborne(Canvas &canvas, const RECT rc);
   void RenderSymbology_upper(Canvas &canvas, const RECT rc);
   void RenderSymbology_lower(Canvas &canvas, const RECT rc);
+
+  friend class DrawThread;
 };
 
 

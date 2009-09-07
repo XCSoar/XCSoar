@@ -44,31 +44,3 @@ bool MapWindowBase::IsDisplayRunning() {
   return (globalRunningEvent.test()
 	  && !ScreenBlanked);
 }
-
-void MapWindowBase::CreateDrawingThread(void)
-{
-  closeTriggerEvent.reset();
-  hDrawThread = CreateThread (NULL, 0,
-                              (LPTHREAD_START_ROUTINE )
-			      MapWindow::DrawThread,
-                              (MapWindow *)this, 0, NULL);
-  SetThreadPriority(hDrawThread,THREAD_PRIORITY_NORMAL);
-}
-
-void MapWindowBase::SuspendDrawingThread(void)
-{
-  mutexRun.Lock();
-}
-
-void MapWindowBase::ResumeDrawingThread(void)
-{
-  mutexRun.Unlock();
-}
-
-void MapWindowBase::CloseDrawingThread(void)
-{
-  closeTriggerEvent.trigger();
-  drawTriggerEvent.trigger(); // wake self up
-  SuspendDrawingThread();
-  WaitForSingleObject(hDrawThread, INFINITE);
-}

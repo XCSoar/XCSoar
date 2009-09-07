@@ -84,6 +84,7 @@ Copyright_License {
 #include "MainWindow.hpp"
 #include "resource.h"
 #include "GlideComputer.hpp"
+#include "DrawThread.hpp"
 #include "options.h"
 
 GaugeVario *gauge_vario;
@@ -93,7 +94,7 @@ TopologyStore *topology;
 RasterTerrain terrain;
 RasterWeather RASP;
 GlideComputer glide_computer;
-
+DrawThread *draw_thread;
 
 /////////////////////////////////////////////////////////////////////////////////
 
@@ -357,7 +358,9 @@ bool XCSoarInterface::Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
 
   // Finally ready to go.. all structures must be present before this.
   StartupStore(TEXT("CreateDrawingThread\n"));
-  main_window.map.CreateDrawingThread();
+  draw_thread = new DrawThread(main_window.map);
+  draw_thread->start();
+
   StartupStore(TEXT("ShowInfoBoxes\n"));
   InfoBoxManager::Show();
 
@@ -424,7 +427,11 @@ void XCSoarInterface::Shutdown(void) {
   TriggerAll();
 
   StartupStore(TEXT("CloseDrawingThread\n"));
-  main_window.map.CloseDrawingThread();
+  closeTriggerEvent.trigger();
+  drawTriggerEvent.trigger(); // wake self up
+  draw_thread->suspend();
+  draw_thread->join();
+  delete draw_thread;
 
   // Clear data
 
