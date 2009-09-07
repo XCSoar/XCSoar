@@ -44,7 +44,8 @@ Copyright_License {
 #include "NMEA/Derived.hpp"
 
 void LoadCalculationsPersist(DERIVED_INFO *Calculated);
-void SaveCalculationsPersist(const DERIVED_INFO *Calculated);
+void SaveCalculationsPersist(const NMEA_INFO &gps_info,
+			     const DERIVED_INFO &Calculated);
 void DeleteCalculationsPersist(void);
 
 

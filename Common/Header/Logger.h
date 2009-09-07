@@ -40,22 +40,24 @@ Copyright_License {
 
 #include <tchar.h>
 #include "NMEA/Info.h"
+#include "SettingsComputer.hpp"
 
-extern bool DeclaredToDevice;
-
-void StartLogger(const TCHAR *strAssetNumber);
+void StartLogger(const NMEA_INFO &gps_info, 
+		 const SETTINGS_COMPUTER &settings,
+		 const TCHAR *strAssetNumber);
 void LogPoint(const NMEA_INFO &gps_info);
 void AddDeclaration(double Lattitude, double Longditude, const TCHAR *ID);
-void StartDeclaration(int numturnpoints);
+void StartDeclaration(const NMEA_INFO &gps_info, 
+		 int numturnpoints);
 void EndDeclaration(void);
-void LoggerHeader(void);
+void LoggerHeader(const NMEA_INFO &gps_info);
 void LoggerNote(const TCHAR *text);
 void LoggerDeviceDeclare();
 
 bool CheckDeclaration(void);
 
-bool LoggerClearFreeSpace();
-void StopLogger(void);
+bool LoggerClearFreeSpace(const NMEA_INFO &gps_info);
+void StopLogger(const NMEA_INFO &gps_info);
 bool IGCWriteRecord(const char *szIn, const TCHAR *);
 void LinkGRecordDLL(void);
 bool LoggerGActive();
@@ -65,12 +67,20 @@ LogFRecordToFile(const int SatelliteIDs[], short Hour, short Minute,
                  short Second, bool bAlways);
 
 bool
-LogFRecord(const int SatelliteIDs[], bool bAlways);
+LogFRecord(const NMEA_INFO &gps_info, bool bAlways);
 
 void SetFRecordLastTime(double dTime);
 double GetFRecordLastTime(void);
 void ResetFRecord(void);
 
+void guiStartLogger(const NMEA_INFO& gps_info, 
+		    const SETTINGS_COMPUTER& settings,
+		    bool noAsk = false);
+void guiStopLogger(const NMEA_INFO &gps_info,
+		   bool noAsk = false);
+void guiToggleLogger(const NMEA_INFO& gps_info, 
+		     const SETTINGS_COMPUTER& settings,
+		     bool noAsk = false);
 
 #endif
 

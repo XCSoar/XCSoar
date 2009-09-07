@@ -123,10 +123,6 @@ void RefreshTaskWaypoint(int i);
 void RefreshTask(void);
 void CalculateTaskSectors(void);
 
-void guiStartLogger(bool noAsk = false);
-void guiStopLogger(bool noAsk = false);
-void guiToggleLogger(bool noAsk = false);
-
 void LoadNewTask(const TCHAR *FileName);
 void SaveTask(const TCHAR *FileName);
 void DefaultTask(void);

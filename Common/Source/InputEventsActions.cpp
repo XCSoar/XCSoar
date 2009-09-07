@@ -1173,22 +1173,22 @@ void InputEvents::eventLogger(const TCHAR *misc) {
   StartupStore(szMessage);
 
   if (_tcscmp(misc, TEXT("start ask")) == 0) {
-    guiStartLogger();
+    guiStartLogger(Basic(),SettingsComputer());
     return;
   } else if (_tcscmp(misc, TEXT("start")) == 0) {
-    guiStartLogger(true);
+    guiStartLogger(Basic(),SettingsComputer(),true);
     return;
   } else if (_tcscmp(misc, TEXT("stop ask")) == 0) {
-    guiStopLogger();
+    guiStopLogger(Basic());
     return;
   } else if (_tcscmp(misc, TEXT("stop")) == 0) {
-    guiStopLogger(true);
+    guiStopLogger(Basic(),true);
     return;
   } else if (_tcscmp(misc, TEXT("toggle ask")) == 0) {
-    guiToggleLogger();
+    guiToggleLogger(Basic(),SettingsComputer());
     return;
   } else if (_tcscmp(misc, TEXT("toggle")) == 0) {
-    guiToggleLogger(true);
+    guiToggleLogger(Basic(), SettingsComputer(),true);
     return;
   } else if (_tcscmp(misc, TEXT("nmea")) == 0) {
     EnableLogNMEA = !EnableLogNMEA;

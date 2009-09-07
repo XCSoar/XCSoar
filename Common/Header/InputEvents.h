@@ -198,6 +198,7 @@ enum {
   GCE_TASK_FINISH,
   GCE_TEAM_POS_REACHED,
   GCE_ARM_READY,
+  GCE_POLAR_CHANGED,
   GCE_COUNT			// How many we have for arrays etc
 };
 

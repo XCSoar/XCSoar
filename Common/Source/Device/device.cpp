@@ -522,6 +522,10 @@ BOOL devPutVoice(PDeviceDescriptor_t d, TCHAR *Sentence)
 {
   BOOL result = FALSE;
 
+#ifdef _SIM_
+  return TRUE;
+#endif
+
   mutexComm.Lock();
   if (d == NULL){
     for (int i=0; i<NUMDEV; i++){
@@ -658,6 +662,10 @@ BOOL devCloseLog(PDeviceDescriptor_t d){
 BOOL devPutQNH(DeviceDescriptor_t *d, double NewQNH)
 {
   BOOL result = FALSE;
+
+#ifdef _SIM_
+  return TRUE;
+#endif
 
   mutexComm.Lock();
   if (d == NULL){

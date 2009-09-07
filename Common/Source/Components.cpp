@@ -404,7 +404,7 @@ void XCSoarInterface::Shutdown(void) {
 
   CreateProgressDialog(gettext(TEXT("Shutdown, saving logs...")));
   // stop logger
-  guiStopLogger(true);
+  guiStopLogger(Basic(),true);
 
   CreateProgressDialog(gettext(TEXT("Shutdown, saving profile...")));
   // Save settings
@@ -462,7 +462,7 @@ void XCSoarInterface::Shutdown(void) {
 
   devShutdown();
 
-  SaveCalculationsPersist(&Calculated());
+  SaveCalculationsPersist(Basic(),Calculated());
 #if (EXPERIMENTAL > 0)
   //  CalibrationSave();
 #endif

@@ -153,13 +153,14 @@ void LoadCalculationsPersist(DERIVED_INFO *Calculated) {
 }
 
 
-void SaveCalculationsPersist(const DERIVED_INFO *Calculated) {
+void SaveCalculationsPersist(const NMEA_INFO &gps_info,
+			     const DERIVED_INFO &Calculated) {
   DWORD size;
 
-  LoggerClearFreeSpace();
+  LoggerClearFreeSpace(gps_info);
 
   if (FindFreeSpace(szCalculationsPersistDirectory)<MINFREESTORAGE) {
-    if (!LoggerClearFreeSpace()) {
+    if (!LoggerClearFreeSpace(gps_info)) {
       StartupStore(TEXT("SaveCalculationsPersist insufficient storage\n"));
       return;
     } else {
@@ -174,7 +175,7 @@ void SaveCalculationsPersist(const DERIVED_INFO *Calculated) {
     mutexGlideComputer.Lock();
     size = sizeof(DERIVED_INFO);
     fwrite(&size, sizeof(size), 1, file);
-    fwrite(Calculated, size, 1, file);
+    fwrite(&Calculated, size, 1, file);
 
     size = sizeof(FlightStatistics);
     fwrite(&size, sizeof(size), 1, file);

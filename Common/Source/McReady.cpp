@@ -36,11 +36,9 @@ Copyright_License {
 */
 
 #include "McReady.h"
-#include "Protection.hpp"
 #include "SettingsComputer.hpp"
 #include "Math/FastMath.h"
 #include "Math/Geometry.hpp"
-#include "Device/device.h"
 #include "Thread/Mutex.hpp"
 #include "Units.hpp"
 #include <tchar.h>
@@ -262,10 +260,13 @@ void GlidePolar::UpdatePolar(bool send,
   */
 
   if (send) {
+    /* JMW 
+       should call GCE_POLAR_CHANGED
     devPutBallast(devA(), BALLAST);
     devPutBallast(devB(), BALLAST);
     devPutBugs(devA(), BUGS);
     devPutBugs(devB(), BUGS);
+    */
   }
 }
 
