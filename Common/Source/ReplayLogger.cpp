@@ -409,9 +409,7 @@ void ReplayLogger::Start(void) {
   }
   NumLoggerBuffered = 0;
 
-  mutexGlideComputer.Lock();
   glide_computer.ResetFlight();
-  mutexGlideComputer.Unlock();
 
   if (!UpdateInternal()) {
     MessageBoxX(gettext(TEXT("Could not open IGC file!")),
