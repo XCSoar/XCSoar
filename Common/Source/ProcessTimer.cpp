@@ -118,7 +118,7 @@ void ProcessTimer::CommonProcessTimer()
   InputEvents::ProcessTimer();
   AirspaceProcessTimer();
   InfoBoxManager::ProcessTimer();
-  //  DisplayProcessTimer();
+  DisplayProcessTimer();
   MessageProcessTimer();
 }
 
@@ -242,6 +242,7 @@ void ProcessTimer::Process(void)
     m_clock.update();
     device_blackboard.ProcessSimulation();
     TriggerGPSUpdate();
+    device_blackboard.RaiseConnection();
   }
 #endif /* _SIM_ */
 }

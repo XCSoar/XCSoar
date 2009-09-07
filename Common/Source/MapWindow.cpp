@@ -296,10 +296,11 @@ void MapWindow::ExchangeBlackboard(void)
 }
 
 void MapWindow::DrawThreadLoop(void) {
-  static PeriodClock mclock;
   StartTimer();
-  printf("draw %d\n",mclock.elapsed());
-  mclock.update();
+
+  //  static PeriodClock mclock;
+  //  printf("draw %d\n",mclock.elapsed());
+  //  mclock.update();
 
   if (BigZoom) {
     // quickly draw zoom level on top
