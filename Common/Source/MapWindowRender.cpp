@@ -62,7 +62,6 @@ void MapWindow::RenderStart(Canvas &canvas, const RECT rc)
   CalculateScreenPositionsAirspace();
   CalculateScreenPositionsThermalSources();
   CalculateScreenPositionsGroundline();
-  CalculateWaypointReachable();
   if (BigZoom) {
     BigZoom = false;
   }

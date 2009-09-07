@@ -120,7 +120,6 @@ class MapWindow
   int           TargetDrag_State;
 
   POINT         Groundline[NUMTERRAINSWEEPS+1];
-  bool          LandableReachable;
 
  THERMAL_SOURCE_VIEW ThermalSources[MAX_THERMAL_SOURCES];
 
@@ -149,8 +148,6 @@ class MapWindow
   void CalculateScreenPositionsAirspaceCircle(AIRSPACE_CIRCLE& circ);
   void CalculateScreenPositionsAirspaceArea(AIRSPACE_AREA& area);
   void CalculateScreenPositionsThermalSources();
-  void CalculateWaypointReachable(void);
-  bool WaypointInTask(int ind);
   void MapWaypointLabelSortAndRender(Canvas &canvas);
 
   // display renderers

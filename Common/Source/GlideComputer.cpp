@@ -149,6 +149,8 @@ GlideComputer::ProcessIdle()
 
   DoLogging();
 
+  CalculateWaypointReachable();
+
   if (!TaskIsTemporary()) {
     double mc = GlidePolar::GetMacCready();
     InSector();

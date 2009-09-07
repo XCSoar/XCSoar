@@ -91,6 +91,7 @@ typedef struct _DERIVED_INFO
   int    Flying;
   int    TimeOnGround;
   int    TimeInFlight;
+  bool   LandableReachable;
   double NextAltitudeRequired;
   double NextAltitudeRequired0; // mc=0
   double NextAltitudeDifference;

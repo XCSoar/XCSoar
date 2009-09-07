@@ -1626,3 +1626,9 @@ bool InAATTurnSector(const double longitude, const double latitude,
   mutexTaskData.Unlock();
   return retval;
 }
+
+
+bool WaypointInTask(const int ind) {
+  if (!WayPointList || (ind<0)) return false;
+  return WayPointList[ind].InTask;
+}

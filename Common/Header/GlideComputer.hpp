@@ -164,6 +164,8 @@ protected:
 
   // abort stuff
   void SortLandableWaypoints();
+  // stuff for display
+  void CalculateWaypointReachable(void);
 private:
   void DistanceToHome();
   void DistanceToNext();

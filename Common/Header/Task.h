@@ -122,6 +122,7 @@ double AdjustAATTargets(double desired);
 void RefreshTaskWaypoint(int i);
 void RefreshTask(void);
 void CalculateTaskSectors(void);
+bool WaypointInTask(const int ind);
 
 void LoadNewTask(const TCHAR *FileName);
 void SaveTask(const TCHAR *FileName);

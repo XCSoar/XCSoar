@@ -106,7 +106,6 @@ MapWindow::MapWindow()
    TargetDrag_Latitude(0),
    TargetDrag_Longitude(0),
    BigZoom(true),
-   LandableReachable(false),
    FullScreen(false)
 {
 

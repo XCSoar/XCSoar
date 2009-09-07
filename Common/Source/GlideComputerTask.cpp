@@ -2085,3 +2085,144 @@ GlideComputerTask::SetLegStart()
   SetCalculated().LegStartTime = Basic().Time;
 }
 
+
+// JMW this is slow way to do things...
+static bool CheckLandableReachableTerrain(const NMEA_INFO *Basic,
+                                          const DERIVED_INFO *Calculated,
+					  const SETTINGS_COMPUTER &settings,
+                                          double LegToGo,
+                                          double LegBearing) {
+  double lat, lon;
+  bool out_of_range;
+  double distance_soarable =
+    FinalGlideThroughTerrain(LegBearing,
+                             Basic, Calculated,
+			     settings,
+                             &lat,
+                             &lon,
+                             LegToGo, &out_of_range, NULL);
+
+  if ((out_of_range)||(distance_soarable> LegToGo)) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+
+void
+GlideComputerTask::CalculateWaypointReachable(void)
+{
+  unsigned int i;
+  double WaypointDistance, WaypointBearing, 
+    AltitudeRequired,AltitudeDifference;
+
+  SetCalculated().LandableReachable = false;
+
+  if (!WayPointList) return;
+
+  ScopeLock protect(mutexTaskData);
+
+  for(i=0;i<NumberOfWayPoints;i++) {
+    if ((WayPointList[i].Visible &&
+	 (
+	  ((WayPointList[i].Flags & AIRPORT) == AIRPORT) ||
+	  ((WayPointList[i].Flags & LANDPOINT) == LANDPOINT)
+	  ))
+	|| WaypointInTask(i) ) {
+
+      DistanceBearing(Basic().Latitude,
+		      Basic().Longitude,
+		      WayPointList[i].Latitude,
+		      WayPointList[i].Longitude,
+		      &WaypointDistance,
+		      &WaypointBearing);
+
+      AltitudeRequired =
+	GlidePolar::MacCreadyAltitude
+	(GlidePolar::SafetyMacCready,
+	 WaypointDistance,
+	 WaypointBearing,
+	 Calculated().WindSpeed,
+	 Calculated().WindBearing,
+	 0,0,true,0);
+      AltitudeRequired = AltitudeRequired + 
+	SettingsComputer().SAFETYALTITUDEARRIVAL
+	+ WayPointList[i].Altitude ;
+      AltitudeDifference = Calculated().NavAltitude - AltitudeRequired;
+      WayPointList[i].AltArivalAGL = AltitudeDifference;
+
+      if(AltitudeDifference >=0){
+	WayPointList[i].Reachable = TRUE;
+	if (!Calculated().LandableReachable || ((int)i==ActiveWayPoint)) {
+	  if (CheckLandableReachableTerrain(&Basic(),
+					    &Calculated(),
+					    SettingsComputer(),
+					    WaypointDistance,
+					    WaypointBearing)) {
+	    SetCalculated().LandableReachable = true;
+	  } else if ((int)i==ActiveWayPoint) {
+	    WayPointList[i].Reachable = FALSE;
+	  }
+	}
+      } else {
+	WayPointList[i].Reachable = FALSE;
+      }
+    }
+  }
+
+  if (!Calculated().LandableReachable) {
+    // widen search to far visible waypoints
+    // (only do this if can't see one at present)
+
+    for(i=0;i<NumberOfWayPoints;i++)
+      {
+        if(!WayPointList[i].Visible && WayPointList[i].FarVisible)
+          // visible but only at a distance (limit this to 100km radius)
+          {
+            if(  ((WayPointList[i].Flags & AIRPORT) == AIRPORT)
+                 || ((WayPointList[i].Flags & LANDPOINT) == LANDPOINT) )
+              {
+                DistanceBearing(Basic().Latitude,
+                                Basic().Longitude,
+                                WayPointList[i].Latitude,
+                                WayPointList[i].Longitude,
+                                &WaypointDistance,
+                                &WaypointBearing);
+
+                if (WaypointDistance<100000.0) {
+                  AltitudeRequired =
+                    GlidePolar::MacCreadyAltitude
+                    (GlidePolar::SafetyMacCready,
+                     WaypointDistance,
+                     WaypointBearing,
+                     Calculated().WindSpeed,
+                     Calculated().WindBearing,
+                     0,0,true,0);
+
+                  AltitudeRequired = AltitudeRequired + 
+		    SettingsComputer().SAFETYALTITUDEARRIVAL
+                    + WayPointList[i].Altitude ;
+                  AltitudeDifference = Calculated().NavAltitude - AltitudeRequired;
+                  WayPointList[i].AltArivalAGL = AltitudeDifference;
+
+                  if(AltitudeDifference >=0){
+                    WayPointList[i].Reachable = TRUE;
+                    if (!Calculated().LandableReachable) {
+                      if (CheckLandableReachableTerrain(&Basic(),
+                                                        &Calculated(),
+							SettingsComputer(),
+                                                        WaypointDistance,
+                                                        WaypointBearing)) {
+                        SetCalculated().LandableReachable = true;
+                      }
+                    }
+                  } else {
+                    WayPointList[i].Reachable = FALSE;
+                  }
+                }
+              }
+          }
+      }
+  }
+}
