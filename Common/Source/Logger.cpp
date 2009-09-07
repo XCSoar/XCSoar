@@ -254,6 +254,9 @@ LogPointToBuffer(const NMEA_INFO &gps_info)
   LoggerBuffer[NumLoggerBuffered-1].Longitude = gps_info.Longitude;
   LoggerBuffer[NumLoggerBuffered-1].Altitude = gps_info.Altitude;
   LoggerBuffer[NumLoggerBuffered-1].BaroAltitude = gps_info.BaroAltitude;
+  if (!gps_info.BaroAltitudeAvailable) {
+    LoggerBuffer[NumLoggerBuffered-1].BaroAltitude = gps_info.Altitude;
+  }
   LoggerBuffer[NumLoggerBuffered-1].Hour = gps_info.Hour;
   LoggerBuffer[NumLoggerBuffered-1].Minute = gps_info.Minute;
   LoggerBuffer[NumLoggerBuffered-1].Second = gps_info.Second;
