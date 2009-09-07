@@ -40,6 +40,7 @@ Copyright_License {
 
 #include "Interface.hpp"
 #include "Thread/Mutex.hpp"
+#include "Screen/EditWindow.hpp"
 
 #define MAXMESSAGES 20
 
@@ -53,6 +54,8 @@ struct singleMessage {
 
 
 class Message: public CommonInterface {
+  static EditWindow window;
+
  public:
 
   enum {
@@ -89,9 +92,7 @@ class Message: public CommonInterface {
  private:
   static struct singleMessage messages[MAXMESSAGES];
   static RECT rcmsg; // maximum message size
-  static HWND hWndMessageWindow;
   static TCHAR msgText[2000];
-  static HDC hdc;
   static void Resize();
   static int GetEmptySlot();
   static bool hidden;
