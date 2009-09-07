@@ -96,6 +96,9 @@ private:
   static void sub_TerrainTopology(int vswitch);
   static void sub_Pan(int vswitch);
   static void sub_PanCursor(int dx, int dy);
+  static void sub_AutoZoom(int vswitch);
+  static void sub_ScaleZoom(int vswitch);
+  static void sub_SetZoom(double value);
 
   // -------
 

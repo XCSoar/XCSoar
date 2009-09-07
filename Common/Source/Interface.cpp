@@ -136,6 +136,7 @@ void XCSoarInterface::DefaultSettings()
   SetSettingsMap().TargetPan = false;
   SetSettingsMap().TargetPanIndex = 0;
   SetSettingsMap().TargetZoomDistance = 500;
+  SetSettingsMap().MapScale = 5;
 }
 
 
@@ -169,9 +170,12 @@ void XCSoarInterface::ReceiveMapProjection()
   ReadMapProjection(device_blackboard.MapProjection());
 }
 
-void XCSoarInterface::SendSettingsMap() {
+void XCSoarInterface::SendSettingsMap(const bool trigger_draw) {
   ScopeLock protect(mutexFlightData);
   device_blackboard.ReadSettingsMap(SettingsMap());
+  if (trigger_draw) {
+    drawTriggerEvent.trigger();
+  }
   // TODO: trigger refresh if the settings are changed
 }
 

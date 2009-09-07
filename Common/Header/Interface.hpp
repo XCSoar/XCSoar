@@ -142,7 +142,7 @@ public:
 
   static void ExchangeBlackboard();
   static void SendSettingsComputer();
-  static void SendSettingsMap();
+  static void SendSettingsMap(const bool trigger_draw=false);
   static void ReceiveMapProjection();
   static void ReceiveBlackboard();
 private:

@@ -131,7 +131,6 @@ class MapWindowProjection {
 			 const SETTINGS_COMPUTER &settings_computer,
 			 const SETTINGS_MAP &settings_map);
 
-  double    StepMapScale(int Step);
   void      InitialiseScaleList(const SETTINGS_MAP &settings);
 
   unsigned DistanceMetersToScreen(const double x) {
@@ -162,11 +161,14 @@ class MapWindowProjection {
   bool IsOriginCentered() const {
     return _origin_centered;
   }
+
+  bool SmartBounds(const bool force);
+  double    StepMapScale(int Step) const;
+public:
   bool HaveScaleList() const {
     return ScaleListCount>0;
   }
-
-  bool SmartBounds(const bool force);
+  double    StepMapScale(int Step);
 
  private:
 

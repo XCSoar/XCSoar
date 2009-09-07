@@ -373,15 +373,14 @@ void InputEvents::eventZoom(const TCHAR* misc) {
   // -1 means toggle
   // 0 means off
   // 1 means on
-  MapWindow &map_window = main_window.map;
   float zoom;
 
   if (_tcscmp(misc, TEXT("auto toggle")) == 0)
-    map_window.Event_AutoZoom(-1);
+    sub_AutoZoom(-1);
   else if (_tcscmp(misc, TEXT("auto on")) == 0)
-    map_window.Event_AutoZoom(1);
+    sub_AutoZoom(1);
   else if (_tcscmp(misc, TEXT("auto off")) == 0)
-    map_window.Event_AutoZoom(0);
+    sub_AutoZoom(0);
   else if (_tcscmp(misc, TEXT("auto show")) == 0) {
     if (SettingsMap().AutoZoom)
       Message::AddMessage(TEXT("AutoZoom ON"));
@@ -389,23 +388,23 @@ void InputEvents::eventZoom(const TCHAR* misc) {
       Message::AddMessage(TEXT("AutoZoom OFF"));
   }
   else if (_tcscmp(misc, TEXT("slowout")) == 0)
-    map_window.Event_ScaleZoom(-4);
+    sub_ScaleZoom(-4);
   else if (_tcscmp(misc, TEXT("slowin")) == 0)
-    map_window.Event_ScaleZoom(4);
+    sub_ScaleZoom(4);
   else if (_tcscmp(misc, TEXT("out")) == 0)
-    map_window.Event_ScaleZoom(-1);
+    sub_ScaleZoom(-1);
   else if (_tcscmp(misc, TEXT("in")) == 0)
-    map_window.Event_ScaleZoom(1);
+    sub_ScaleZoom(1);
   else if (_tcscmp(misc, TEXT("-")) == 0)
-    map_window.Event_ScaleZoom(-1);
+    sub_ScaleZoom(-1);
   else if (_tcscmp(misc, TEXT("+")) == 0)
-    map_window.Event_ScaleZoom(1);
+    sub_ScaleZoom(1);
   else if (_tcscmp(misc, TEXT("--")) == 0)
-    map_window.Event_ScaleZoom(-2);
+    sub_ScaleZoom(-2);
   else if (_tcscmp(misc, TEXT("++")) == 0)
-    map_window.Event_ScaleZoom(2);
+    sub_ScaleZoom(2);
   else if (_stscanf(misc, TEXT("%f"), &zoom) == 1)
-    map_window.Event_SetZoom((double)zoom);
+    sub_SetZoom((double)zoom);
 
   else if (_tcscmp(misc, TEXT("circlezoom toggle")) == 0) {
     SetSettingsMap().CircleZoom = !SettingsMap().CircleZoom;
@@ -419,7 +418,7 @@ void InputEvents::eventZoom(const TCHAR* misc) {
     else
       Message::AddMessage(TEXT("Circling Zoom OFF"));
   }
-  XCSoarInterface::SendSettingsMap();
+  XCSoarInterface::SendSettingsMap(true);
 }
 
 // Pan
@@ -468,6 +467,7 @@ else if (_tcscmp(misc, TEXT("down")) == 0)
     else
       Message::AddMessage(TEXT("Pan mode OFF"));
   }
+  XCSoarInterface::SendSettingsMap(true);
 
 }
 
@@ -496,6 +496,7 @@ void InputEvents::eventTerrainTopology(const TCHAR *misc) {
 
   else if (_tcscmp(misc, TEXT("toggle")) == 0)
     sub_TerrainTopology(-1);
+  XCSoarInterface::SendSettingsMap(true);
 
 }
 
@@ -1850,3 +1851,55 @@ void InputEvents::sub_PanCursor(int dx, int dy) {
   }
 }
 
+
+
+// called from UI or input event handler (same thread)
+void InputEvents::sub_AutoZoom(int vswitch) {
+  if (vswitch== -1) {
+    SetSettingsMap().AutoZoom = !SettingsMap().AutoZoom;
+  } else {
+    SetSettingsMap().AutoZoom = (vswitch != 0); // 0 off, 1 on
+  }
+  if (SettingsMap().AutoZoom) {
+    if (SettingsMap().EnablePan) {
+      SetSettingsMap().EnablePan = false;
+      //      StoreRestoreFullscreen(false);
+    }
+  }
+}
+
+
+void InputEvents::sub_SetZoom(double value) {
+  SetSettingsMap().MapScale = value;
+}
+
+
+void InputEvents::sub_ScaleZoom(int vswitch) {
+  double value = MapProjection().GetMapScaleUser();
+  MapWindowProjection copy = MapProjection();
+  if (copy.HaveScaleList()){
+    value = copy.StepMapScale(-vswitch);
+  } else {
+    if (abs(vswitch)>=4) {
+      if (vswitch==4) {
+        vswitch = 1;
+      }
+      if (vswitch==-4) {
+        vswitch = -1;
+      }
+    }
+    if (vswitch==1) { // zoom in a little
+      value /= 1.414;
+    }
+    if (vswitch== -1) { // zoom out a little
+      value *= 1.414;
+    }
+    if (vswitch==2) { // zoom in a lot
+      value /= 2.0;
+    }
+    if (vswitch== -2) { // zoom out a lot
+      value *= 2.0;
+    }
+  }
+  sub_SetZoom(value);
+}

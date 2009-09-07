@@ -49,7 +49,7 @@ Copyright_License {
 #include "options.h" /* for IBLSCALE() */
 #include <stdlib.h>
 #include "WayPoint.hpp"
-
+#include <math.h>
 
 MapWindowProjection::MapWindowProjection():
   _origin_centered(false),
@@ -545,14 +545,16 @@ void MapWindowProjection::UpdateMapScale(const NMEA_INFO &DrawInfo,
   static double StartingAutoMapScale=0.0;
   double AutoZoomFactor;
 
-  bool user_asked_for_change = false;
-
   bool my_target_pan = settings_map.TargetPan;
 
   // if there is user intervention in the scale
+  double ext_mapscale = LimitMapScale(settings_map.MapScale, settings_map);
+  if ((fabs(_RequestedMapScale-ext_mapscale)>0.05) && 
+      (ext_mapscale>0.0)) {
+    _RequestedMapScale = ext_mapscale;
+  }
   if(MapScale != _RequestedMapScale) {
     ModifyMapScale(settings_map);
-    user_asked_for_change = true;
   }
 
   double wpd;
@@ -605,14 +607,6 @@ void MapWindowProjection::UpdateMapScale(const NMEA_INFO &DrawInfo,
 	_RequestedMapScale = 
 	  LimitMapScale(wpd*DISTANCEMODIFY/ AutoZoomFactor, settings_map);
 	ModifyMapScale(settings_map);
-	
-      } else {
-	if (user_asked_for_change) {
-	  
-	  // user asked for a zoom change and it was achieved, so
-	  // reset starting map scale
-	  ////?TODO enhancement: for frank          StartingAutoMapScale = MapScale;
-	}
 	
       }
     }

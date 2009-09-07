@@ -86,13 +86,7 @@ class MapWindow
     SetRect(&MapRect, 0, 0, rc.right - rc.left, rc.bottom - rc.top);
   }
 
-  // used by topology store
-  void ScanVisibility(rectObj *bounds_active);
-
   // input events or reused code
-  void Event_SetZoom(double value);
-  void Event_ScaleZoom(int vswitch);
-  void Event_AutoZoom(int vswitch);
   void ExchangeBlackboard();
 
   ////////////////////////////////////////////////////////////////////
@@ -128,8 +122,6 @@ class MapWindow
   void      StoreRestoreFullscreen(bool);
   void      ApplyScreenSize();
 
-  double    findMapScaleBarSize(const RECT rc);
-
   // interface handlers
   int ProcessVirtualKey(int X, int Y, long keytime, short vkmode);
 
@@ -137,6 +129,7 @@ class MapWindow
 
   void ScanVisibilityWaypoints(rectObj *bounds_active);
   void ScanVisibilityAirspace(rectObj *bounds_active);
+  void ScanVisibility(rectObj *bounds_active);
 
   void CalculateScreenPositions(POINT Orig, RECT rc,
                                        POINT *Orig_Aircraft);
@@ -183,7 +176,7 @@ class MapWindow
   void DrawCDI();
   //  void DrawSpeedToFly(HDC hDC, RECT rc);
   void DrawFLARMTraffic(Canvas &canvas);
-
+  double    findMapScaleBarSize(const RECT rc);
   void ClearAirSpace(Canvas &dc, bool fill);
 
   // thread, main functions
