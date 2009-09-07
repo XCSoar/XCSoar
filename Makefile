@@ -499,6 +499,7 @@ OBJS	:=\
 	$(SRC)/InfoBoxManager.o 	\
 	$(SRC)/InputEvents.o 		\
 	$(SRC)/InputEventsActions.o 	\
+	$(SRC)/StatusMessage.o \
 	$(SRC)/Message.o 		\
 	$(SRC)/WindowControls.o 	\
 	$(SRC)/LogFile.o 		\
