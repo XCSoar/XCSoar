@@ -58,9 +58,7 @@ void MapWindow::SwitchZoomClimb(void) {
 
   bool isclimb = (DisplayMode == dmCircling);
 
-  mutexTaskData.Lock();
   bool my_target_pan = TargetPan;
-  mutexTaskData.Unlock();
 
   if (my_target_pan != last_targetpan) {
     if (my_target_pan) {

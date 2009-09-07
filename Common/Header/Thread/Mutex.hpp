@@ -38,15 +38,24 @@ Copyright_License {
 #ifndef XCSOAR_THREAD_MUTEX_HXX
 #define XCSOAR_THREAD_MUTEX_HXX
 
+#ifdef HAVE_POSIX
+#include <pthread.h>
+#else
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
+#endif
 
 /**
  * This class wraps an OS specific mutex.  It is an object which one
  * thread can wait for, and another thread can wake it up.
  */
 class Mutex {
+#ifdef HAVE_POSIX
+  pthread_mutex_t mutex;
+#else
   CRITICAL_SECTION handle;
+#endif
+
 public:
   /**
    * Initializes the trigger.
@@ -54,17 +63,39 @@ public:
    * @param name an application specific name for this trigger
    */
   Mutex() {
+#ifdef HAVE_POSIX
+    /* the XCSoar code assumes that recursive locking of a Mutex is
+       legal */
+    pthread_mutexattr_t recursive;
+    pthread_mutexattr_init(&recursive);
+    pthread_mutexattr_settype(&recursive, PTHREAD_MUTEX_RECURSIVE_NP);
+    pthread_mutex_init(&mutex, &recursive);
+    pthread_mutexattr_destroy(&recursive);
+#else
     ::InitializeCriticalSection(&handle);
+#endif
   }
   ~Mutex() {
+#ifdef HAVE_POSIX
+    pthread_mutex_destroy(&mutex);
+#else
     ::DeleteCriticalSection(&handle);
+#endif
   }
 public:
   virtual void Lock() {
+#ifdef HAVE_POSIX
+    pthread_mutex_lock(&mutex);
+#else
     EnterCriticalSection(&handle);
+#endif
   };
   virtual void Unlock() {
+#ifdef HAVE_POSIX
+    pthread_mutex_unlock(&mutex);
+#else
     LeaveCriticalSection(&handle);
+#endif
   }
 };
 

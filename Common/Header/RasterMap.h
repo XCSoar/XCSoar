@@ -43,6 +43,8 @@ Copyright_License {
 #include "jasper/RasterTile.h"
 #include "Protection.hpp"
 
+#include <windef.h> /* for MAX_PATH */
+
 typedef struct _TERRAIN_INFO
 {
   double Left;

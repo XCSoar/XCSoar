@@ -38,14 +38,22 @@ Copyright_License {
 #ifndef XCSOAR_THREAD_THREAD_HPP
 #define XCSOAR_THREAD_THREAD_HPP
 
+#ifdef HAVE_POSIX
+#include <pthread.h>
+#else
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
+#endif
 
 /**
  * This class provides an OS independent view on a thread.
  */
 class Thread {
+#ifdef HAVE_POSIX
+  pthread_t handle;
+#else
   HANDLE handle;
+#endif
 
 public:
   Thread():handle(NULL) {}
@@ -58,7 +66,11 @@ protected:
   virtual void run() = 0;
 
 private:
+#ifdef HAVE_POSIX
+  static void *thread_proc(void *lpParameter);
+#else
   static DWORD WINAPI thread_proc(LPVOID lpParameter);
+#endif
 };
 
 #endif

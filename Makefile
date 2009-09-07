@@ -260,7 +260,9 @@ CPPFLAGS	+= -DFORCEPORTRAIT
   endif
 endif
 
-ifneq ($(CONFIG_WINE),y)
+ifeq ($(CONFIG_WINE),y)
+CPPFLAGS += -DHAVE_POSIX
+else
 CPPFLAGS += -DHAVE_MSVCRT
 endif
 
@@ -300,6 +302,8 @@ LDFLAGS		+=-Wl,--minor-subsystem-version=$(CE_MINOR)
 ifeq ($(CONFIG_PC),y)
 LDFLAGS		+=-Wl,-subsystem,windows
 endif
+else
+LDFLAGS += -lpthread
 endif
 
 LDFLAGS		+=$(PROFILE)
