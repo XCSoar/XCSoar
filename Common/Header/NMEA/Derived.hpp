@@ -239,6 +239,7 @@ typedef struct _DERIVED_INFO
 			// Note: we don't need GRNext since this value is used when going to a landing
 			// point, which is always a final glide.
 
+  double TimeSunset;
   double Experimental;
   // JMW note, new items should go at the bottom of this struct before experimental!
 } DERIVED_INFO;

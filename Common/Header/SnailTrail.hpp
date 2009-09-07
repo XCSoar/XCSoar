@@ -42,6 +42,7 @@ Copyright_License {
 #include "NMEA/Derived.hpp"
 #include "Screen/shapelib/mapshape.h"
 #include "GPSClock.hpp"
+#include "Thread/Mutex.hpp"
 
 typedef struct _SNAIL_POINT
 {
@@ -68,9 +69,16 @@ public:
   }
   void ScanVisibility(rectObj *bounds);
   GPSClock clock;
+  void Lock() {
+    mutexSnail.Lock();
+  }
+  void Unlock() {
+    mutexSnail.Unlock();
+  }
 private:
   SNAIL_POINT TrailPoints[TRAILSIZE];
   int indexNext;
+  Mutex mutexSnail;
 };
 
 #endif

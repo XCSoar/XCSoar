@@ -50,7 +50,7 @@ SnailTrail::SnailTrail(): clock(2.0)
 void
 SnailTrail::AddPoint(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated)
 {
-  if (!Calculated->Flying) return;
+  ScopeLock protect(mutexSnail);
 
   TrailPoints[indexNext].Latitude = (float)(Basic->Latitude);
   TrailPoints[indexNext].Longitude = (float)(Basic->Longitude);
@@ -89,3 +89,6 @@ void SnailTrail::ScanVisibility(rectObj *bounds_active) {
     sv++;
   }
 }
+
+////
+

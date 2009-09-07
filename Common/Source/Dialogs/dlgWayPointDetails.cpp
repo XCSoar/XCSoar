@@ -42,6 +42,7 @@ Copyright_License {
 #include "Math/Earth.hpp"
 #include "Registry.hpp"
 #include "LocalPath.hpp"
+#include "LocalTime.hpp"
 #include "UtilsText.hpp"
 #include "Math/SunEphemeris.hpp"
 #include "Blackboard.hpp"
@@ -408,9 +409,13 @@ void dlgWayPointDetailsShowModal(void){
   Units::FormatUserAltitude(WayPointList[SelectedWaypoint].Altitude, sTmp, sizeof(sTmp)-1);
   ((WndProperty *)wf->FindByName(TEXT("prpAltitude")))
     ->SetText(sTmp);
-
-  sunsettime = DoSunEphemeris(WayPointList[SelectedWaypoint].Longitude,
-                              WayPointList[SelectedWaypoint].Latitude);
+  
+  SunEphemeris sun;
+  sunsettime = sun.CalcSunTimes
+    (WayPointList[SelectedWaypoint].Longitude,
+     WayPointList[SelectedWaypoint].Latitude,
+     XCSoarInterface::Basic(), XCSoarInterface::Calculated(),
+     GetUTCOffset()/3600);
   sunsethours = (int)sunsettime;
   sunsetmins = (int)((sunsettime-sunsethours)*60);
 

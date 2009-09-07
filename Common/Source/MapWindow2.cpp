@@ -43,7 +43,6 @@ Copyright_License {
 #include "Math/Earth.hpp"
 #include "SettingsComputer.hpp"
 #include "SettingsUser.hpp"
-#include "GlideComputer.hpp"
 #include "Components.hpp"
 
 void MapWindow::ScanVisibility(rectObj *bounds_active) {

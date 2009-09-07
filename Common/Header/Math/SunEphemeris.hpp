@@ -37,6 +37,48 @@ Copyright_License {
 #if !defined(SUN_EPHEMERIS_HPP)
 #define SUN_EPHEMERIS_HPP
 
-double DoSunEphemeris(double lon, double lat);
+#include "NMEA/Info.h"
+#include "NMEA/Derived.hpp"
+
+class SunEphemeris {
+
+  double L,g,daylen;
+
+  //   Get the days to J2000
+  //   h is UT in decimal hours
+  //   FNday only works between 1901 to 2099 - see Meeus chapter 7
+
+  double FNday (int y, int m, int d, float h);
+
+  //   the function below returns an angle in the range
+  //   0 to 2*PI
+
+  double FNrange (double x);
+
+  // Calculating the hourangle
+  //
+  double f0(double lat, double declin);
+
+  // Calculating the hourangle for twilight times
+  //
+  double f1(double lat, double declin);
+
+  //   Find the ecliptic longitude of the Sun
+
+  double FNsun (double d);
+
+  // Display decimal hours in hours and minutes
+  void showhrmn(double dhr);
+
+ public:
+
+  double twam,altmax,noont,settm,riset,twpm;
+
+  int CalcSunTimes(float longit, float latit,
+		   const NMEA_INFO &GPS_INFO,
+		   const DERIVED_INFO &CALCULATED_INFO,
+		   double tzone);
+};
+
 
 #endif

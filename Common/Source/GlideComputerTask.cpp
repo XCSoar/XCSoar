@@ -106,13 +106,11 @@ GlideComputerTask::ProcessIdle()
 
 bool GlideComputerTask::DoLogging() {
   if (Calculated().Flying && olc_clock.check_advance(Basic().Time)) {
-    mutexGlideComputer.Lock();
     bool restart = olc.addPoint(Basic().Longitude,
 				Basic().Latitude,
 				Calculated().NavAltitude,
 				Calculated().WaypointBearing,
 				Basic().Time-Calculated().TakeOffTime);
-    mutexGlideComputer.Unlock();
     
     if (restart && EnableOLC) {
       SetCalculated().ValidFinish = false;
@@ -406,7 +404,7 @@ bool GlideComputerTask::InFinishSector(const int i)
   // Finish invalid
   if (!ValidTaskPoint(i)) return false;
 
-  mutexTaskData.Lock();
+  ScopeLock protect(mutexTaskData);
 
   // distance from aircraft to start point
   DistanceBearing(Basic().Latitude,
@@ -465,7 +463,6 @@ bool GlideComputerTask::InFinishSector(const int i)
   }
  OnExit:
   SetCalculated().InFinishSector = InFinishSector;
-  mutexTaskData.Unlock();
   return retval;
 }
 
@@ -577,7 +574,7 @@ bool GlideComputerTask::InStartSector(bool *CrossedStart)
       !ValidTaskPoint(0))
     return false;
 
-  mutexTaskData.Lock();
+  ScopeLock protect(mutexTaskData);
 
   bool in_height = true;
 
@@ -635,7 +632,6 @@ bool GlideComputerTask::InStartSector(bool *CrossedStart)
 
  OnExit:
   SetCalculated().InStartSector = LastInStartSector;
-  mutexTaskData.Unlock();
   return isInSector;
 }
 
@@ -861,8 +857,6 @@ void GlideComputerTask::CheckInSector() {
 
   // JMW Start bug XXX
 
-  mutexGlideComputer.Lock();
-
   if (aatdistance.HasEntered(ActiveWayPoint)) {
     if (ReadyToAdvance(true, false)) {
       AnnounceWayPointSwitch(true);
@@ -871,15 +865,12 @@ void GlideComputerTask::CheckInSector() {
       SetCalculated().ValidFinish = false;
     }
   }
-  mutexGlideComputer.Unlock();
 }
 
 
 void GlideComputerTask::InSector()
 {
   if (ActiveWayPoint<0) return;
-
-  mutexTaskData.Lock();
 
   SetCalculated().IsInSector = false;
 
@@ -896,7 +887,6 @@ void GlideComputerTask::InSector()
       }
     }
   }
-  mutexTaskData.Unlock();
 }
 
 
@@ -990,7 +980,7 @@ void GlideComputerTask::TaskStatistics(const double this_maccready,
     return;
   }
 
-  mutexTaskData.Lock();
+  ScopeLock protect(mutexTaskData);
 
   ///////////////////////////////////////////////
   // Calculate Task Distances
@@ -1096,13 +1086,11 @@ void GlideComputerTask::TaskStatistics(const double this_maccready,
         }
     } else if (ActiveWayPoint>0) {
       // JMW added correction for distance covered
-      mutexGlideComputer.Lock();
       SetCalculated().TaskDistanceCovered =
         aatdistance.DistanceCovered(Basic().Longitude,
                                     Basic().Latitude,
                                     ActiveWayPoint,
 				    AATCloseDistance());
-      mutexGlideComputer.Unlock();
     }
   }
 
@@ -1350,9 +1338,6 @@ void GlideComputerTask::TaskStatistics(const double this_maccready,
   CheckFinalGlideThroughTerrain(LegToGo, LegBearing);
 
   CheckForceFinalGlide();
-
-  mutexTaskData.Unlock();
-
 }
 
 
@@ -1596,7 +1581,7 @@ bool GlideComputerTask::TaskAltitudeRequired(double this_maccready, double *Vfin
   *TotalTime = 0; *TotalDistance = 0;
   *ifinal = 0;
 
-  mutexTaskData.Lock();
+  ScopeLock protect(mutexTaskData);
 
   double height_above_finish = FAIFinishHeight( 0)-
     FAIFinishHeight( -1);
@@ -1646,7 +1631,6 @@ bool GlideComputerTask::TaskAltitudeRequired(double this_maccready, double *Vfin
     TotalAltitude += LegAltitude;
 
     if (LegTime<0) {
-      mutexTaskData.Unlock();
       return false;
     } else {
       *TotalTime += LegTime;
@@ -1675,7 +1659,6 @@ bool GlideComputerTask::TaskAltitudeRequired(double this_maccready, double *Vfin
     retval = true;
   }
  OnExit:
-  mutexTaskData.Unlock();
   return retval;
 }
 
@@ -1727,7 +1710,7 @@ void GlideComputerTask::TaskSpeed(const double this_maccready,
     return;
   }
 
-  mutexTaskData.Lock();
+  ScopeLock protect(mutexTaskData);
 
   if (TaskAltitudeRequired(this_maccready, &Vfinal,
                            &TotalTime, &TotalDistance, &ifinal, 
@@ -1970,8 +1953,7 @@ void GlideComputerTask::TaskSpeed(const double this_maccready,
     }
   }
  OnExit:
-  mutexTaskData.Unlock();
-
+  {};
 }
 
 
@@ -2008,9 +1990,7 @@ GlideComputerTask::CheckFinalGlideThroughTerrain(double LegToGo, double LegBeari
 void 
 GlideComputerTask::ResetEnter()
 {
-  mutexGlideComputer.Lock();
   aatdistance.ResetEnterTrigger(ActiveWayPoint);
-  mutexGlideComputer.Unlock();
 }
 
 
@@ -2022,7 +2002,7 @@ GlideComputerTask::DoAutoMacCready(double mc_setting)
 
   if (!SettingsComputer().AutoMacCready) return;
 
-  mutexTaskData.Lock();
+  ScopeLock protect(mutexTaskData);
 
   double mc_new = mc_setting;
   static bool first_mc = true;
@@ -2098,7 +2078,6 @@ GlideComputerTask::DoAutoMacCready(double mc_setting)
     }
   }
 
-  mutexTaskData.Unlock();
   GlidePolar::SetMacCready(LowPassFilter(mc_setting, mc_new, 0.15));
 }
 

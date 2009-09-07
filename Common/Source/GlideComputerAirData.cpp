@@ -119,6 +119,7 @@ void GlideComputerAirData::ProcessBasic() {
   TerrainHeight();
   Vario();
   PredictNextPosition();
+  ProcessSun();
 }
 
 
@@ -1493,4 +1494,14 @@ DoAutoQNH(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated)
     QNH = FindQNH(Basic->BaroAltitude, fixaltitude);
     AirspaceQnhChangeNotify(QNH);
   }
+}
+
+
+void 
+GlideComputerAirData::ProcessSun()
+{
+  sun.CalcSunTimes(Basic().Longitude, 
+		   Basic().Latitude, Basic(),
+		   Calculated(), GetUTCOffset()/3600);
+  SetCalculated().TimeSunset = sun.settm;
 }

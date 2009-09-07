@@ -122,13 +122,10 @@ bool GlideComputerStats::DoLogging() {
   }
   */
 
-  if (snail_trail.clock.check_advance(Basic().Time)) {
-    mutexGlideComputer.Lock();
-    snail_trail.AddPoint(&Basic(), &Calculated());
-    mutexGlideComputer.Unlock();
-  }
-
   if (Calculated().Flying) {
+    if (snail_trail.clock.check_advance(Basic().Time)) {
+      snail_trail.AddPoint(&Basic(), &Calculated());
+    }
     if (stats_clock.check_advance(Basic().Time)) {
 
       ScopeLock protect(mutexGlideComputer);

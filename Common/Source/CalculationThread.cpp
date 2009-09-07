@@ -90,6 +90,7 @@ CalculationThread::run()
       // run the function anyway, because this gives audio functions
       // if no vario connected
       if (gps_trigger.test()) {
+	printf("do vario\n");
 	glide_computer->ProcessVario();
 	TriggerVarioUpdate(); // emulate vario update
       }
@@ -105,6 +106,7 @@ CalculationThread::run()
       break; // drop out on exit
 
     if (need_calculations_slow) {
+      printf("do slow\n");
       glide_computer->ProcessIdle();
       need_calculations_slow = false;
     }

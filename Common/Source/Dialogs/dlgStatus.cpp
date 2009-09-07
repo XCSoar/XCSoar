@@ -51,7 +51,6 @@ Copyright_License {
 #include "LocalTime.hpp"
 #include "MainWindow.hpp"
 #include "Calculations.h" // TODO danger! FAIFinishHeight
-#include "Math/SunEphemeris.hpp"
 #include "MapWindow.h"
 #include "GlideComputer.hpp"
 #include <assert.h>
@@ -295,8 +294,7 @@ static void UpdateValuesTimes(void) {
   int sunsethours;
   int sunsetmins;
 
-  sunsettime = DoSunEphemeris(XCSoarInterface::Basic().Longitude,
-                              XCSoarInterface::Basic().Latitude);
+  sunsettime = XCSoarInterface::Calculated().TimeSunset;
   sunsethours = (int)sunsettime;
   sunsetmins = (int)((sunsettime-sunsethours)*60);
 

@@ -72,7 +72,7 @@ double MapWindow::DrawTrail(Canvas &canvas)
   if(!SettingsMap().TrailActive)
     return -1;
 
-  mutexGlideComputer.Lock();
+  glide_computer.GetSnailTrail().Lock();
 
   if ((DisplayMode == dmCircling) != last_circling) {
     need_colour = true;
@@ -326,7 +326,7 @@ double MapWindow::DrawTrail(Canvas &canvas)
 #endif
   }
 
-  mutexGlideComputer.Unlock();
+  glide_computer.GetSnailTrail().Unlock();
 
   return TrailFirstTime;
 }

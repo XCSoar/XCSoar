@@ -380,6 +380,8 @@ bool OLCOptimizer::addPoint(double lon, double lat, double alt,
   static int alt1 = 0;
   static int alt2 = 0;
 
+  ScopeLock protect(mutexOLC);
+
   if (data.pnts_in==0) {
     latlast = lat;
     lonlast = lon;

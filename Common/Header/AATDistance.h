@@ -41,6 +41,8 @@ Copyright_License {
 
 #include "NMEA/Info.h"
 #include "NMEA/Derived.hpp"
+#include "Thread/Mutex.hpp"
+#include "Protection.hpp"
 
 #define MAXNUM_AATDISTANCE 50
 
@@ -93,6 +95,16 @@ private:
                               int taskwaypoint, const double aatclosedistance);
   void ShiftTargetOutside(double longitude, double latitude,
                           int taskwaypoint);
+ private:
+  Mutex mutexAAT;
+  void Lock() {
+    mutexTaskData.Lock();
+    mutexAAT.Lock();
+  }
+  void Unlock() {
+    mutexAAT.Unlock();
+    mutexTaskData.Unlock();
+  }
 };
 
 #endif

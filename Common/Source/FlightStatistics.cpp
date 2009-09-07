@@ -209,7 +209,6 @@ void FlightStatistics::RenderGlidePolar(Canvas &canvas, const RECT rc)
 {
   int i;
   Chart chart(canvas, rc);
-  ScopeLock protect(mutexFlightData);
 
   chart.ScaleYFromValue( 0);
   chart.ScaleYFromValue(GlidePolar::SinkRateFast(0,

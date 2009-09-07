@@ -46,7 +46,6 @@ Copyright_License {
 #include "InputEvents.h"
 #include "Atmosphere.h"
 #include "Device/Geoid.h"
-#include "Math/SunEphemeris.hpp"
 #include "Dialogs.h"
 #include "Waypointparser.h"
 #include "Airspace.h"
@@ -340,10 +339,6 @@ bool XCSoarInterface::Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
   GlidePolar::UpdatePolar(true, SettingsComputer());
 
   CreateProgressDialog(gettext(TEXT("Initialising display")));
-
-  // just about done....
-
-  DoSunEphemeris(Basic().Longitude, Basic().Latitude);
 
   // Finally ready to go.. all structures must be present before this.
   StartupStore(TEXT("CreateDrawingThread\n"));

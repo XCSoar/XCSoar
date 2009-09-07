@@ -48,6 +48,7 @@ Copyright_License {
 #include "windanalyser.h"
 #include "SnailTrail.hpp"
 #include "GPSClock.hpp"
+#include "Math/SunEphemeris.hpp"
 
 class MapWindowProjection;
 
@@ -62,6 +63,7 @@ public:
   ldrotary_s           rotaryLD;
   ThermalLocator thermallocator;
   WindAnalyser   windanalyser;
+  SunEphemeris sun;
   virtual void ProcessIdle();
 
   void SetWindEstimate(const double wind_speed,
@@ -112,6 +114,7 @@ private:
   void PercentCircling(const double Rate);
   void Turning();
   void ProcessThermalLocator();
+  void ProcessSun();
   GPSClock airspace_clock;
   GPSClock ballast_clock;
 };

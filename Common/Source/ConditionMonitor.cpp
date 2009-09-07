@@ -51,7 +51,7 @@ Copyright_License {
 #include "LocalTime.hpp"
 #include "InputEvents.h"
 #include "WayPoint.hpp"
-
+#include "Math/SunEphemeris.hpp"
 #include "GlideComputer.hpp"
 
 // JMW TODO: make this use GPSClock (code re-use)
@@ -250,6 +250,7 @@ public:
     Interval_Check = 60;
   }
 protected:
+  SunEphemeris sun;
 
   bool CheckCondition(const GlideComputer& cmp) {
     if (!ValidTaskPoint(ActiveWayPoint) || !cmp.Calculated().Flying) {
@@ -258,10 +259,10 @@ protected:
 
     mutexTaskData.Lock();
 
-    double sunsettime
-      = DoSunEphemeris(
-                       WayPointList[Task[ActiveWayPoint].Index].Longitude,
-                       WayPointList[Task[ActiveWayPoint].Index].Latitude);
+    double sunsettime = sun.CalcSunTimes
+      (WayPointList[Task[ActiveWayPoint].Index].Longitude,
+       WayPointList[Task[ActiveWayPoint].Index].Latitude,
+       cmp.Basic(), cmp.Calculated(), GetUTCOffset()/3600);
     double d1 = (cmp.Calculated().TaskTimeToGo
 		 +DetectCurrentTime(&cmp.Basic()))/3600;
     double d0 = (DetectCurrentTime(&cmp.Basic()))/3600;
