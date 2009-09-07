@@ -37,8 +37,6 @@ Copyright_License {
 
 #include "Task.h"
 #include "Protection.hpp"
-#include "Logger.h"
-#include "ReplayLogger.hpp"
 #include "Math/Geometry.hpp"
 #include "LocalPath.hpp"
 #include "Dialogs.h"
@@ -46,7 +44,6 @@ Copyright_License {
 #include "Settings.hpp"
 #include "SettingsComputer.hpp"
 #include "SettingsTask.hpp"
-#include "Calculations.h" // TODO danger! InAATTurnSector
 #include "Waypointparser.h"
 #include "McReady.h"
 #include "Math/Earth.hpp"
@@ -54,7 +51,7 @@ Copyright_License {
 #include "Asset.hpp"
 #include "Units.hpp"
 #include <math.h>
-
+#include "Logger.h"
 #include "Interface.hpp"
 
 bool EnableMultipleStartPoints = false;

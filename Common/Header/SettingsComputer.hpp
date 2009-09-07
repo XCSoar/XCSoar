@@ -76,7 +76,7 @@ typedef struct _SETTINGS_COMPUTER {
  int    LoggerTimeStepCruise;
  int    LoggerTimeStepCircling;
  bool   LoggerShortName;
-  bool  DisableAutoLogger;
+ bool   DisableAutoLogger;
  double SAFETYALTITUDEARRIVAL;
  double SAFETYALTITUDEBREAKOFF;
  double SAFETYALTITUDETERRAIN;

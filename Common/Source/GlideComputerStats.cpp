@@ -99,14 +99,7 @@ bool GlideComputerStats::DoLogging() {
   }
 
   if (log_clock.check_advance(Basic().Time)) {
-    double balt = -1;
-    if (Basic().BaroAltitudeAvailable) {
-      balt = Basic().BaroAltitude;
-    } else {
-      balt = Basic().Altitude;
-    }
-    LogPoint(Basic().Latitude , Basic().Longitude , Basic().Altitude,
-             balt);
+    LogPoint(Basic());
   }
 
   /* JMW TODO update this code incomplete

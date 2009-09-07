@@ -242,9 +242,7 @@ void StopLogger(void) {
 
 
 static void
-LogPointToBuffer(double Latitude, double Longitude, double Altitude,
-                 double BaroAltitude, short Hour, short Minute, short Second,
-                 const int SatelliteIDs[])
+LogPointToBuffer(const NMEA_INFO &gps_info)
 {
   if (NumLoggerBuffered== MAX_LOGGER_BUFFER) {
     for (int i= 0; i< NumLoggerBuffered-1; i++) {
@@ -253,19 +251,21 @@ LogPointToBuffer(double Latitude, double Longitude, double Altitude,
   } else {
     NumLoggerBuffered++;
   }
-  LoggerBuffer[NumLoggerBuffered-1].Latitude = Latitude;
-  LoggerBuffer[NumLoggerBuffered-1].Longitude = Longitude;
-  LoggerBuffer[NumLoggerBuffered-1].Altitude = Altitude;
-  LoggerBuffer[NumLoggerBuffered-1].BaroAltitude = BaroAltitude;
-  LoggerBuffer[NumLoggerBuffered-1].Hour = Hour;
-  LoggerBuffer[NumLoggerBuffered-1].Minute = Minute;
-  LoggerBuffer[NumLoggerBuffered-1].Second = Second;
-  LoggerBuffer[NumLoggerBuffered-1].Year = XCSoarInterface::Basic().Year;
-  LoggerBuffer[NumLoggerBuffered-1].Month = XCSoarInterface::Basic().Month;
-  LoggerBuffer[NumLoggerBuffered-1].Day = XCSoarInterface::Basic().Day;
+
+  LoggerBuffer[NumLoggerBuffered-1].Latitude = gps_info.Latitude;
+  LoggerBuffer[NumLoggerBuffered-1].Longitude = gps_info.Longitude;
+  LoggerBuffer[NumLoggerBuffered-1].Altitude = gps_info.Altitude;
+  LoggerBuffer[NumLoggerBuffered-1].BaroAltitude = gps_info.BaroAltitude;
+  LoggerBuffer[NumLoggerBuffered-1].Hour = gps_info.Hour;
+  LoggerBuffer[NumLoggerBuffered-1].Minute = gps_info.Minute;
+  LoggerBuffer[NumLoggerBuffered-1].Second = gps_info.Second;
+  LoggerBuffer[NumLoggerBuffered-1].Year = gps_info.Year;
+  LoggerBuffer[NumLoggerBuffered-1].Month = gps_info.Month;
+  LoggerBuffer[NumLoggerBuffered-1].Day = gps_info.Day;
 
   for (int iSat=0; iSat < MAXSATELLITES; iSat++)
-    LoggerBuffer[NumLoggerBuffered-1].SatelliteIDs[iSat]=SatelliteIDs[iSat];
+    LoggerBuffer[NumLoggerBuffered-1].SatelliteIDs[iSat]=
+      gps_info.SatelliteIDs[iSat];
 
   // This is the first point that will be output to file.
   // Declaration must happen before this, so must save this time.
@@ -273,8 +273,7 @@ LogPointToBuffer(double Latitude, double Longitude, double Altitude,
 }
 
 
-void LogPointToFile(double Latitude, double Longitude, double Altitude,
-                    double BaroAltitude, short Hour, short Minute, short Second)
+void LogPointToFile(const NMEA_INFO& gps_info)
 {
   char szBRecord[500];
 
@@ -282,12 +281,10 @@ void LogPointToFile(double Latitude, double Longitude, double Altitude,
   double MinLat, MinLon;
   char NoS, EoW;
 
-  if ((Altitude<0) && (BaroAltitude<0)) return;
-  Altitude = max(0,Altitude);
-  BaroAltitude = max(0,BaroAltitude);
+  if ((gps_info.Altitude<0) || (gps_info.BaroAltitude<0)) return;
 
-  DegLat = (int)Latitude;
-  MinLat = Latitude - DegLat;
+  DegLat = (int)gps_info.Latitude;
+  MinLat = gps_info.Latitude - DegLat;
   NoS = 'N';
   if((MinLat<0) || ((MinLat-DegLat==0) && (DegLat<0)))
     {
@@ -297,8 +294,8 @@ void LogPointToFile(double Latitude, double Longitude, double Altitude,
   MinLat *= 60;
   MinLat *= 1000;
 
-  DegLon = (int)Longitude ;
-  MinLon = Longitude  - DegLon;
+  DegLon = (int)gps_info.Longitude ;
+  MinLon = gps_info.Longitude  - DegLon;
   EoW = 'E';
   if((MinLon<0) || ((MinLon-DegLon==0) && (DegLon<0)))
     {
@@ -309,21 +306,18 @@ void LogPointToFile(double Latitude, double Longitude, double Altitude,
   MinLon *= 1000;
 
   sprintf(szBRecord,"B%02d%02d%02d%02d%05.0f%c%03d%05.0f%cA%05d%05d\r\n",
-          Hour, Minute, Second,
+          gps_info.Hour, gps_info.Minute, gps_info.Second,
           DegLat, MinLat, NoS, DegLon, MinLon, EoW,
-          (int)BaroAltitude,(int)Altitude);
+          (int)gps_info.BaroAltitude,(int)gps_info.Altitude);
 
   IGCWriteRecord(szBRecord, szLoggerFileName);
 }
 
 
-void LogPoint(double Latitude, double Longitude, double Altitude,
-              double BaroAltitude) {
+void LogPoint(const NMEA_INFO& gps_info) {
   if (!LoggerActive) {
     if (!XCSoarInterface::Basic().NAVWarning) {
-      LogPointToBuffer(Latitude, Longitude, Altitude, BaroAltitude,
-                       XCSoarInterface::Basic().Hour, XCSoarInterface::Basic().Minute, XCSoarInterface::Basic().Second,
-                       XCSoarInterface::Basic().SatelliteIDs);
+      LogPointToBuffer(gps_info);
     }
   } else if (NumLoggerBuffered) {
 
@@ -334,19 +328,27 @@ void LogPoint(double Latitude, double Longitude, double Altitude,
                    true);
 
     for (int i=0; i<NumLoggerBuffered; i++) {
-      LogPointToFile(LoggerBuffer[i].Latitude,
-                     LoggerBuffer[i].Longitude,
-                     LoggerBuffer[i].Altitude,
-                     LoggerBuffer[i].BaroAltitude,
-                     LoggerBuffer[i].Hour,
-                     LoggerBuffer[i].Minute,
-                     LoggerBuffer[i].Second);
+      NMEA_INFO tmp_info;
+      tmp_info.Latitude = LoggerBuffer[i].Latitude;
+      tmp_info.Longitude = LoggerBuffer[i].Longitude;
+      tmp_info.Altitude = LoggerBuffer[i].Altitude;
+      tmp_info.BaroAltitude = LoggerBuffer[i].BaroAltitude;
+      tmp_info.Hour = LoggerBuffer[i].Hour;
+      tmp_info.Minute = LoggerBuffer[i].Minute;
+      tmp_info.Second = LoggerBuffer[i].Second;
+      tmp_info.Year = LoggerBuffer[i].Year;
+      tmp_info.Month = LoggerBuffer[i].Month;
+      tmp_info.Day = LoggerBuffer[i].Day;
+
+      for (int iSat=0; iSat < MAXSATELLITES; iSat++)
+	tmp_info.SatelliteIDs[iSat] = LoggerBuffer[i].SatelliteIDs[iSat];
+    
+      LogPointToFile(tmp_info);
     }
     NumLoggerBuffered = 0;
   }
   if (LoggerActive) {
-    LogPointToFile(Latitude, Longitude, Altitude, BaroAltitude,
-                   XCSoarInterface::Basic().Hour, XCSoarInterface::Basic().Minute, XCSoarInterface::Basic().Second);
+    LogPointToFile(gps_info);
   }
 }
 
