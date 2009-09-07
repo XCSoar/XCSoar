@@ -1683,7 +1683,7 @@ double GlideComputerTask::MacCreadyOrAvClimbRate(double this_maccready)
         ))
       ) {
 
-    mc_val = GetAverageThermal();
+    mc_val = Calculated().AdjustedAverageThermal;
   }
   return max(0.1, mc_val);
 
@@ -2013,11 +2013,9 @@ GlideComputerTask::DoAutoMacCready(double mc_setting)
     first_mc = true;
   }
 
-  double av_thermal = GetAverageThermal();
-
   if (!ValidTaskPoint(ActiveWayPoint)) {
-    if (av_thermal>0) {
-      mc_new = av_thermal;
+    if (Calculated().AdjustedAverageThermal>0) {
+      mc_new = Calculated().AdjustedAverageThermal;
     }
   } else if ( ((SettingsComputer().AutoMcMode==0)
 	       ||(SettingsComputer().AutoMcMode==2)) && is_final_glide) {
@@ -2056,8 +2054,8 @@ GlideComputerTask::DoAutoMacCready(double mc_setting)
 	  first_mc = false;
 	} else if (SettingsComputer().AutoMcMode==2) {
 	  // revert to averager based auto Mc
-	  if (av_thermal>0) {
-	    mc_new = av_thermal;
+	  if (Calculated().AdjustedAverageThermal>0) {
+	    mc_new = Calculated().AdjustedAverageThermal;
 	  }
 	}
       } else {
@@ -2066,15 +2064,15 @@ GlideComputerTask::DoAutoMacCready(double mc_setting)
     } else { // below final glide at zero Mc, never achieved final glide
       if (first_mc && (SettingsComputer().AutoMcMode==2)) {
 	// revert to averager based auto Mc
-	if (av_thermal>0) {
-	  mc_new = av_thermal;
+	if (Calculated().AdjustedAverageThermal>0) {
+	  mc_new = Calculated().AdjustedAverageThermal;
 	}
       }
     }
   } else if ( (SettingsComputer().AutoMcMode==1) 
 	      || ((SettingsComputer().AutoMcMode==2)&& !is_final_glide) ) {
-    if (av_thermal>0) {
-      mc_new = av_thermal;
+    if (Calculated().AdjustedAverageThermal>0) {
+      mc_new = Calculated().AdjustedAverageThermal;
     }
   }
 

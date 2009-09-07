@@ -367,10 +367,6 @@ bool ReplayLogger::UpdateInternal(void) {
 
     if ((SpeedX>0) && (LatX != LatX1) && (LonX != LonX1)) {
 
-      if (init) {
-	// JMW this might be dangerous to call from this thread..
-	glide_computer.ResetFlight();
-      }
       if ((int)tthis != (int)tlast) {
 	device_blackboard.SetLocation(LonX, LatX, SpeedX, BearingX,
 				      AltX, AltX, tthis);
@@ -408,8 +404,6 @@ void ReplayLogger::Start(void) {
     Stop();
   }
   NumLoggerBuffered = 0;
-
-  glide_computer.ResetFlight();
 
   if (!UpdateInternal()) {
     MessageBoxX(gettext(TEXT("Could not open IGC file!")),

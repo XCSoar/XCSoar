@@ -59,7 +59,6 @@ CalculationThread::run()
 
     if (!data_trigger.wait(MIN_WAIT_TIME))
       continue;
-    printf("data trigger\n");
 
     // set timer to determine latency (including calculations)
     if (gps_trigger.test()) {
@@ -67,7 +66,6 @@ CalculationThread::run()
     }
 
     // make local copy before editing...
-    printf("flight lock\n");
     mutexFlightData.Lock();
     if (gps_trigger.test()) { // timeout on FLARM objects
       device_blackboard.FLARM_RefreshSlots();
@@ -75,7 +73,6 @@ CalculationThread::run()
     glide_computer->ReadBlackboard(device_blackboard.Basic());
     glide_computer->ReadSettingsComputer(device_blackboard.SettingsComputer());
     mutexFlightData.Unlock();
-    printf("flight unlock\n");
 
     if (gps_trigger.test()) {
       drawTriggerEvent.trigger();
@@ -90,7 +87,6 @@ CalculationThread::run()
       // run the function anyway, because this gives audio functions
       // if no vario connected
       if (gps_trigger.test()) {
-	printf("do vario\n");
 	glide_computer->ProcessVario();
 	TriggerVarioUpdate(); // emulate vario update
       }
@@ -106,7 +102,6 @@ CalculationThread::run()
       break; // drop out on exit
 
     if (need_calculations_slow) {
-      printf("do slow\n");
       glide_computer->ProcessIdle();
       need_calculations_slow = false;
     }
@@ -117,12 +112,10 @@ CalculationThread::run()
     // values changed, so copy them back now: ONLY CALCULATED INFO
     // should be changed in DoCalculations, so we only need to write
     // that one back (otherwise we may write over new data)
-    printf("flight2 lock\n");
     mutexFlightData.Lock();
     device_blackboard.ReadBlackboard(glide_computer->Calculated());
     glide_computer->ReadMapProjection(device_blackboard.MapProjection());
     mutexFlightData.Unlock();
-    printf("flight2 unlock\n");
 
     // reset triggers
     data_trigger.reset();

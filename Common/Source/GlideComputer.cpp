@@ -110,29 +110,20 @@ bool GlideComputer::ProcessGPS()
   double mc = GlidePolar::GetMacCready();
   double ce = GlidePolar::GetCruiseEfficiency();
 
-      printf("do gps 1\n");
   ProcessBasic();
-
-
-      printf("do gps 2\n");
   ProcessBasicTask(mc, ce);
 
-      printf("do gps 3\n");
   if (!FlightTimes()) {
     return false;
   }
-      printf("do gps 4\n");
+
   ProcessVertical();
 
-      printf("do gps 5\n");
   CalculateOwnTeamCode();
   CalculateTeammateBearingRange();
 
-      printf("do gps 6\n");
   vegavoice.Update(&Basic(), &Calculated());
-      printf("do gps 7\n");
-      //  ConditionMonitorsUpdate(*this);
-      printf("do gps 8\n");
+  ConditionMonitorsUpdate(*this);
 
   return true;
 }

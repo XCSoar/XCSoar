@@ -66,6 +66,7 @@ typedef struct _DERIVED_INFO
   double NettoAverage30s;
   double BestCruiseTrack;
   double AverageThermal;
+  double AdjustedAverageThermal;
   double ThermalGain;
   double LastThermalAverage;
   double LastThermalGain;

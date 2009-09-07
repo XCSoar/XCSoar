@@ -78,6 +78,7 @@ SnailTrail::AddPoint(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated)
 
 
 void SnailTrail::ScanVisibility(rectObj *bounds_active) {
+  ScopeLock protect(mutexSnail);
   SNAIL_POINT *sv= TrailPoints;
   const rectObj bounds = *bounds_active;
   const SNAIL_POINT *se = sv+TRAILSIZE;

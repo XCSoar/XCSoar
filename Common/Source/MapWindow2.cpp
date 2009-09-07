@@ -51,9 +51,7 @@ void MapWindow::ScanVisibility(rectObj *bounds_active) {
   // This happens rarely, so it is good pre-filtering of what is visible.
   // (saves from having to do it every screen redraw)
 
-  mutexGlideComputer.Lock();
   glide_computer.GetSnailTrail().ScanVisibility(bounds_active);
-  mutexGlideComputer.Unlock();
 
   ScanVisibilityWaypoints(bounds_active);
   ScanVisibilityAirspace(bounds_active);

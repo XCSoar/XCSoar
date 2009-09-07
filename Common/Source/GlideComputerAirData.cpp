@@ -119,6 +119,7 @@ void GlideComputerAirData::ProcessBasic() {
   Vario();
   PredictNextPosition();
   ProcessSun();
+  SetCalculated().AdjustedAverageThermal = GetAverageThermal();
 }
 
 
@@ -755,6 +756,10 @@ GlideComputerAirData::FlightTimes()
       ResetFlight(false);
     }
     return false;
+  }
+  if (Basic().Replay != LastBasic().Replay) {
+    // reset flight before/after replay logger 
+    ResetFlight(false);
   }
   double t = DetectStartTime(&Basic(), &Calculated());
   if (t>0) {
