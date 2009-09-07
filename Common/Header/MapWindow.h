@@ -50,12 +50,6 @@ Copyright_License {
 #include "PeriodClock.hpp"
 #include "DrawThread.hpp"
 
-class MapWindowBase {
- public:
-  bool     IsDisplayRunning();
-};
-
-
 typedef struct _THERMAL_SOURCE_VIEW
 {
   POINT Screen;
@@ -65,7 +59,7 @@ typedef struct _THERMAL_SOURCE_VIEW
 class GaugeCDI;
 
 class MapWindow
-: public MaskedPaintWindow, public MapWindowBase,
+: public MaskedPaintWindow,
   public MapWindowProjection,
   public MapWindowBlackboard,
   public MapWindowTimer,

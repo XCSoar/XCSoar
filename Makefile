@@ -501,7 +501,6 @@ OBJS	:=\
 	\
 	$(SRC)/MapWindow.o 		\
 	$(SRC)/MapWindowAirspace.o 	\
-	$(SRC)/MapWindowBase.o 		\
 	$(SRC)/MapWindowEvents.o	\
 	$(SRC)/MapWindowGlideRange.o 	\
 	$(SRC)/MapWindowLabels.o 	\
