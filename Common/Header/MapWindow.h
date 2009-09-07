@@ -79,7 +79,6 @@ class MapWindow
 
   // used by dlgTarget
   bool TargetDragged(double *longitude, double *latitude);
-  bool SetTargetPan(bool dopan, int task_index);
 
   // use at startup
   void SetMapRect(RECT rc) {

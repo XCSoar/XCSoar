@@ -80,9 +80,6 @@ class MapWindowProjection {
   double GetMapScaleKM() const {
     return MapScale*0.001/DISTANCEMODIFY;
   }
-  bool isTargetPan(void) const {
-    return TargetPan;
-  }
   RECT GetMapRectBig() const {
     return MapRectBig;
   }
@@ -126,10 +123,6 @@ class MapWindowProjection {
 
   double DisplayAngle;
   double DisplayAircraftAngle;
-
-  bool   TargetPan;
-  int    TargetPanIndex;
-  double TargetZoomDistance;
 
   // scale/display stuff
   void   CalculateOrigin(const RECT rc,

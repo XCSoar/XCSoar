@@ -508,7 +508,8 @@ static void RefreshTargetPoint(void) {
   mutexTaskData.Lock();
   target_point = max(target_point, ActiveWayPoint);
   if (ValidTaskPoint(target_point)) {
-    XCSoarInterface::main_window.map.SetTargetPan(true, target_point);
+    XCSoarInterface::SetSettingsMap().TargetPanIndex = target_point;
+    XCSoarInterface::SetSettingsMap().TargetPan = true;
     Range = Task[target_point].AATTargetOffsetRadius;
     Radial = Task[target_point].AATTargetOffsetRadial;
   } else {
@@ -640,7 +641,7 @@ void dlgTarget(void) {
 
   wf->ShowModal(true); // enable map
 
-  XCSoarInterface::main_window.map.SetTargetPan(false, 0);
+  XCSoarInterface::SetSettingsMap().TargetPan = false;
 
   targetManipEvent.reset();
 

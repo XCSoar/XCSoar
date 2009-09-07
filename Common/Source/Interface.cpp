@@ -133,6 +133,9 @@ void XCSoarInterface::DefaultSettings()
   SetSettingsMap().EnablePan = false;
   SetSettingsMap().PanLongitude = 0;
   SetSettingsMap().PanLatitude = 0;
+  SetSettingsMap().TargetPan = false;
+  SetSettingsMap().TargetPanIndex = 0;
+  SetSettingsMap().TargetZoomDistance = 500;
 }
 
 

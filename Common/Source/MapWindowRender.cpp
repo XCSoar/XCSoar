@@ -177,7 +177,7 @@ void MapWindow::RenderAirborne(Canvas &canvas, const RECT rc)
   // draw wind vector at aircraft
   if (!SettingsMap().EnablePan) {
     DrawWindAtAircraft2(canvas, Orig_Aircraft, rc);
-  } else if (TargetPan) {
+  } else if (SettingsMap().TargetPan) {
     DrawWindAtAircraft2(canvas, Orig_Screen, rc);
   }
 
@@ -187,7 +187,7 @@ void MapWindow::RenderAirborne(Canvas &canvas, const RECT rc)
 
   // finally, draw you!
 
-  if (SettingsMap().EnablePan && !TargetPan) {
+  if (SettingsMap().EnablePan && !SettingsMap().TargetPan) {
     DrawCrossHairs(canvas);
   }
 

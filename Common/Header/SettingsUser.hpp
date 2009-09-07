@@ -109,6 +109,9 @@ typedef struct SETTINGS_MAP_ {
   bool EnablePan;
   double PanLongitude;
   double PanLatitude;
+  bool   TargetPan;
+  int    TargetPanIndex;
+  double TargetZoomDistance;
 } SETTINGS_MAP;
 
 // display mode stuff

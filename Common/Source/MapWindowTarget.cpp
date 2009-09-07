@@ -46,19 +46,19 @@ Copyright_License {
 //////////////////////// TARGET STUFF /////////
 
 // JMW to be used for target preview
+  /* This whole thing needs rework now that stuff is being passed in
+     via the SettingsMap
+
 bool MapWindow::SetTargetPan(bool do_pan, int target_point) {
   static double old_latitude;
   static double old_longitude;
   static bool old_pan=false;
   static bool old_fullscreen=false;
 
-  mutexTaskData.Lock(); // protect thread because some target stuff used in mapwindow thread
-
-  if (!TargetPan || (TargetPanIndex != target_point)) {
+  if (!SettingsMap().TargetPan 
+      || (SettingsMap().TargetPanIndex != target_point)) {
     TargetDrag_State = 0;
   }
-
-  TargetPanIndex = target_point;
 
   if (do_pan && !TargetPan) {
     old_latitude = PanLatitude;
@@ -67,13 +67,10 @@ bool MapWindow::SetTargetPan(bool do_pan, int target_point) {
     //JMW broken    EnablePan = true;
     TargetPan = do_pan;
 
-    /* JMW broken/illegal
     old_fullscreen = SettingsMap().FullScreen;
     if (askFullScreen) {
       askFullScreen = false;
     }
-    */
-
     SwitchZoomClimb();
   }
   if (do_pan) {
@@ -101,19 +98,17 @@ bool MapWindow::SetTargetPan(bool do_pan, int target_point) {
     PanLatitude = old_latitude;
     // JMW broken    EnablePan = old_pan;
     TargetPan = do_pan;
-    /* JMW broken/illegal
     if (old_fullscreen) {
       askFullScreen = true;
     }
-    */
     SwitchZoomClimb();
   }
   TargetPan = do_pan;
 
   mutexTaskData.Unlock();
-
   return old_pan;
 }
+  */
 
 
 bool MapWindow::TargetDragged(double *longitude, double *latitude) {

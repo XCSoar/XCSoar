@@ -1014,7 +1014,7 @@ void InputEvents::ProcessMenuTimer() {
   } else {
     if(MenuTimeOut==MenuTimeoutMax) {
       if (SettingsMap().EnablePan
-	  && !main_window.map.isTargetPan()) {
+	  && !SettingsMap().TargetPan) {
         setMode(MODE_PAN);
       } else {
         setMode(MODE_DEFAULT);

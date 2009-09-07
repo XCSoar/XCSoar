@@ -62,9 +62,6 @@ MapWindowProjection::MapWindowProjection():
   _scale_meters_to_screen ( 0.0),
   DisplayAircraftAngle ( 0.0),
   ScaleListCount ( 0),
-  TargetPan ( false),
-  TargetPanIndex ( 0),
-  TargetZoomDistance ( 500.0),
   smart_range_active(1.0)
 {
 
@@ -345,7 +342,7 @@ MapWindowProjection::CalculateOrientationTargetPan
   // otherwise north up.  If circling, orient towards target.
 
   _origin_centered = true;
-  if ((ActiveWayPoint==TargetPanIndex)
+  if ((ActiveWayPoint==settings.TargetPanIndex)
       &&(settings.DisplayOrientation != NORTHUP)
       &&(settings.DisplayOrientation != NORTHTRACK)
       )    {
@@ -376,7 +373,7 @@ MapWindowProjection::CalculateOrigin
  const SETTINGS_MAP &settings_map)
 {
 
-  if (TargetPan) {
+  if (settings_map.TargetPan) {
     CalculateOrientationTargetPan(DrawInfo, DerivedDrawInfo, settings_map);
   } else {
     CalculateOrientationNormal(DrawInfo, DerivedDrawInfo, settings_map);
@@ -550,7 +547,7 @@ void MapWindowProjection::UpdateMapScale(const NMEA_INFO &DrawInfo,
 
   bool user_asked_for_change = false;
 
-  bool my_target_pan = TargetPan;
+  bool my_target_pan = settings_map.TargetPan;
 
   // if there is user intervention in the scale
   if(MapScale != _RequestedMapScale) {
@@ -560,7 +557,7 @@ void MapWindowProjection::UpdateMapScale(const NMEA_INFO &DrawInfo,
 
   double wpd;
   if (my_target_pan) {
-    wpd = TargetZoomDistance;
+    wpd = settings_map.TargetZoomDistance;
   } else {
     wpd = DerivedDrawInfo.ZoomDistance;
   }

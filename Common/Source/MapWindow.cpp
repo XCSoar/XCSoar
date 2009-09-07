@@ -410,17 +410,18 @@ bool MapWindow::on_mouse_double(int x, int y)
 bool MapWindow::on_mouse_move(int x, int y)
 {
   mutexTaskData.Lock();
-  if (AATEnabled && TargetPan && (TargetDrag_State>0)) {
+  if (AATEnabled && SettingsMap().TargetPan && (TargetDrag_State>0)) {
     // target follows "finger" so easier to drop near edge of
     // sector
     if (TargetDrag_State == 1) {
       double mouseMovelon, mouseMovelat;
       Screen2LonLat((int)x, (int)y, mouseMovelon, mouseMovelat);
-      if (InAATTurnSector(mouseMovelon, mouseMovelat, TargetPanIndex)) {
+      if (InAATTurnSector(mouseMovelon, mouseMovelat, 
+			  SettingsMap().TargetPanIndex)) {
 	// update waypoints so if we drag out of the cylinder, it
 	// will remain adjacent to the edge
-	Task[TargetPanIndex].AATTargetLat = mouseMovelat;
-	Task[TargetPanIndex].AATTargetLon = mouseMovelon;
+	Task[SettingsMap().TargetPanIndex].AATTargetLat = mouseMovelat;
+	Task[SettingsMap().TargetPanIndex].AATTargetLon = mouseMovelon;
 	TargetDrag_Latitude = mouseMovelat;
 	TargetDrag_Longitude = mouseMovelon;
 	draw_masked_bitmap(get_canvas(), MapGfx.hBmpTarget, x, y, 10, 10, true);
@@ -446,11 +447,11 @@ bool MapWindow::on_mouse_down(int x, int y)
   YstartScreen = y;
 
   mutexTaskData.Lock();
-  if (AATEnabled && TargetPan) {
-    if (ValidTaskPoint(TargetPanIndex)) {
+  if (AATEnabled && SettingsMap().TargetPan) {
+    if (ValidTaskPoint(SettingsMap().TargetPanIndex)) {
       POINT tscreen;
-      LonLat2Screen(Task[TargetPanIndex].AATTargetLon,
-		    Task[TargetPanIndex].AATTargetLat,
+      LonLat2Screen(Task[SettingsMap().TargetPanIndex].AATTargetLon,
+		    Task[SettingsMap().TargetPanIndex].AATTargetLat,
 		    tscreen);
       double distance = isqrt4((long)((XstartScreen-tscreen.x)
 			       *(XstartScreen-tscreen.x)+
@@ -483,11 +484,7 @@ bool MapWindow::on_mouse_up(int x, int y)
     return true;
 
   RECT rc = MapRect;
-  bool my_target_pan;
-
-  mutexTaskData.Lock();
-  my_target_pan = TargetPan;
-  mutexTaskData.Unlock();
+  bool my_target_pan = SettingsMap().TargetPan;
 
   if (dwInterval == 0) {
 #ifdef DEBUG_VIRTUALKEYS
@@ -532,7 +529,7 @@ bool MapWindow::on_mouse_up(int x, int y)
   if (AATEnabled && my_target_pan && (TargetDrag_State>0)) {
     mutexTaskData.Lock();
     TargetDrag_State = 2;
-    if (InAATTurnSector(Xlat, Ylat, TargetPanIndex)) {
+    if (InAATTurnSector(Xlat, Ylat, SettingsMap().TargetPanIndex)) {
       // if release mouse out of sector, don't update w/ bad coords
       TargetDrag_Latitude = Ylat;
       TargetDrag_Longitude = Xlat;

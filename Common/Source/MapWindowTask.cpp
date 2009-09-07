@@ -186,7 +186,9 @@ void MapWindow::DrawTask(Canvas &canvas, RECT rc)
         }
       } else {
         // JMW added iso lines
-        if ((i==ActiveWayPoint) || (TargetPan && (i==TargetPanIndex))) {
+        if ((i==ActiveWayPoint) 
+	    || (SettingsMap().TargetPan 
+		&& (i==SettingsMap().TargetPanIndex))) {
           // JMW 20080616 flash arc line if very close to target
           static bool flip = false;
 
@@ -223,7 +225,7 @@ void MapWindow::DrawTask(Canvas &canvas, RECT rc)
 
       canvas.select(dash_pen3);
 
-      if (AATEnabled && !TargetPan) {
+      if (AATEnabled && !SettingsMap().TargetPan) {
         LonLat2Screen(Task[i].AATTargetLon,
                       Task[i].AATTargetLat,
                       sct1);
@@ -363,7 +365,7 @@ void MapWindow::DrawBearing(Canvas &canvas, int bBearingValid)
       DrawGreatCircle(canvas, startLon, startLat,  // RLD skip if bearing invalid
 		      targetLon, targetLat);// RLD bc Lat/Lon invalid
 
-    if (TargetPan) {
+    if (SettingsMap().TargetPan) {
       // Draw all of task if in target pan mode
       startLat = targetLat;
       startLon = targetLon;
@@ -423,7 +425,8 @@ MapWindow::DrawOffTrackIndicator(Canvas &canvas)
     // insignificant error
     return;
   }
-  if (Calculated().Circling || TaskIsTemporary() || TargetPan) {
+  if (Calculated().Circling || TaskIsTemporary() || 
+      SettingsMap().TargetPan) {
     // don't display in various modes
     return;
   }
@@ -541,7 +544,7 @@ MapWindow::DrawProjectedTrack(Canvas &canvas)
     // too short to have valid data
   }
   POINT pt[2] = {{0,-75},{0,-400}};
-  if (TargetPan) {
+  if (SettingsMap().TargetPan) {
     double screen_range = GetScreenDistanceMeters();
     double flow = 0.4;
     double fhigh = 1.5;
@@ -617,7 +620,8 @@ void MapWindow::CalculateScreenPositionsTask() {
         LonLat2Screen(Task[i].AATFinishLon, Task[i].AATFinishLat, Task[i].AATFinish);
       }
       if (AATEnabled && (((int)i==ActiveWayPoint) ||
-			 (TargetPan && ((int)i==TargetPanIndex)))) {
+			 (SettingsMap().TargetPan 
+			  && ((int)i==SettingsMap().TargetPanIndex)))) {
 
 	for (int j=0; j<MAXISOLINES; j++) {
 	  if (TaskStats[i].IsoLine_valid[j]) {

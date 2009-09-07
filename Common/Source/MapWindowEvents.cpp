@@ -58,7 +58,7 @@ void MapWindow::SwitchZoomClimb(void) {
 
   bool isclimb = (DisplayMode == dmCircling);
 
-  bool my_target_pan = TargetPan;
+  bool my_target_pan = SettingsMap().TargetPan;
 
   if (my_target_pan != last_targetpan) {
     if (my_target_pan) {

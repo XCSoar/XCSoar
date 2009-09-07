@@ -193,7 +193,7 @@ void MapWindow::DrawMapScale(Canvas &canvas, const RECT rc /* the Map Rect*/,
       if (SettingsMap().AutoZoom) {
         _tcscat(ScaleInfo, TEXT("AUTO "));
       }
-      if (TargetPan) {
+      if (SettingsMap().TargetPan) {
         _tcscat(ScaleInfo, TEXT("TARGET "));
       } else if (SettingsMap().EnablePan) {
         _tcscat(ScaleInfo, TEXT("PAN "));
