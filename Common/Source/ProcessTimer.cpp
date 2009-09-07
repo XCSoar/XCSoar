@@ -188,11 +188,11 @@ int ProcessTimer::ConnectionProcessTimer(int itimeout) {
 }
 
 
-#ifndef _SIM_
 void ProcessTimer::Process(void)
 {
   CommonProcessTimer();
 
+#ifndef _SIM_
   // now check GPS status
   devTick();
 
@@ -216,16 +216,7 @@ void ProcessTimer::Process(void)
     // check connection status every 5 seconds
     itimeout = ConnectionProcessTimer(itimeout);
   }
-}
-#endif // end processing of non-simulation mode
-
-
-#ifdef _SIM_
-void ProcessTimer::SIMProcess(void)
-{
-
-  CommonProcessTimer();
-
+#else /* _SIM_ */
   device_blackboard.RaiseConnection();
   static int i=0;
   i++;
@@ -238,5 +229,5 @@ void ProcessTimer::SIMProcess(void)
   if (i%2==0) return;
 
   TriggerGPSUpdate();
+#endif /* _SIM_ */
 }
-#endif

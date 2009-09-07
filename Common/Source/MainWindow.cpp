@@ -149,11 +149,7 @@ MainWindow::on_timer(unsigned id)
 {
   if (globalRunningEvent.test()) {
     XCSoarInterface::AfterStartup();
-#ifdef _SIM_
-    ProcessTimer::SIMProcess();
-#else
     ProcessTimer::Process();
-#endif
   }
   return true;
 }
