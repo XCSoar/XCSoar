@@ -1013,6 +1013,7 @@ bool NMEAParser::PFLAA(const TCHAR *String,
   }
 
   // JMW TODO: this is dangerous, it uses the task!
+  // it should be done outside the parser/comms thread
   if ((GPS_INFO->FLARM_Traffic[flarm_slot].ID == TeamFlarmIdTarget)
       && ValidWayPoint(device_blackboard.SettingsComputer().TeamCodeRefWaypoint)) {
     double bearing;

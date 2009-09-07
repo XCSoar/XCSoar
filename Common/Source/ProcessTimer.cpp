@@ -77,9 +77,15 @@ ProcessTimer::DisplayProcessTimer()
   if (gauge_vario != NULL)
     gauge_vario->Show(!SettingsMap().FullScreen);
   // update FLARM display (show/hide)
+
   GaugeFLARM *gauge_flarm = XCSoarInterface::main_window.flarm;
-  if (gauge_flarm != NULL)
+  if (gauge_flarm != NULL) {
+    if (Basic().FLARM_AlarmLevel > 0) {
+      gauge_flarm->Suppress = false;
+    }
+    gauge_flarm->TrafficPresent(Basic().FLARMTraffic); 
     gauge_flarm->Show();
+  }
   
   CheckDisplayTimeOut(false);
 }
