@@ -42,6 +42,8 @@ Copyright_License {
 #include "Screen/shapelib/mapshape.h"
 #include "Sizes.h"
 
+#include <windef.h> /* for RECT */
+
 class Canvas;
 class MapWindow;
 class MapWindowProjection;
