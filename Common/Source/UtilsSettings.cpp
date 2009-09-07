@@ -181,7 +181,7 @@ bool   TaskAborted = false;
 // Waypoint Database
 int SectorType = 1; // FAI sector
 DWORD SectorRadius = 500;
-int StartLine = TRUE;
+int StartLine = 1;
 DWORD StartRadius = 3000;
 
 int HomeWaypoint = -1;
