@@ -41,6 +41,8 @@ Copyright_License {
 #define MAX_OLC_POINTS 300
 #define MATSIZE (MAX_OLC_POINTS+1)*(MAX_OLC_POINTS/2) // for even MAX_OLC_POINTS
 
+#include "Mutex.hpp"
+
 typedef struct _OLCSolution
 {
   double latitude[7];
@@ -149,6 +151,10 @@ private:
   int scan_sprint_inprogress();
   int scan_sprint_finished();
   int scan_classic();
+  Mutex mutexOLC;
+ public:
+  void Lock() { mutexOLC.Lock(); }
+  void Unlock() { mutexOLC.Unlock(); }
 };
 
 #endif /* ONLINECONTEST_H */

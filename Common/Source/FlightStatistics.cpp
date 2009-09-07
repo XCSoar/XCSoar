@@ -317,6 +317,7 @@ void FlightStatistics::RenderTask(Canvas &canvas, const RECT rc, const bool olcm
     return;
   }
 
+  glide_computer.GetOLC().Lock();
   glide_computer.GetOLC().SetLine();
   int nolc = glide_computer.GetOLC().getN();
   bool olcvalid = glide_computer.GetOLC().getValid();
@@ -575,6 +576,7 @@ void FlightStatistics::RenderTask(Canvas &canvas, const RECT rc, const bool olcm
   x1 = (lon1-lon_c)*fastcosine(lat1);
   y1 = (lat1-lat_c);
   chart.DrawLabel(TEXT("+"), x1, y1);
+  glide_computer.GetOLC().Unlock();
 }
 
 

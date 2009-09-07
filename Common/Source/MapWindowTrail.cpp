@@ -345,7 +345,7 @@ MapWindow::DrawTrailFromTask(Canvas &canvas, const double TrailFirstTime)
   const double mTrailFirstTime = TrailFirstTime - Calculated().TakeOffTime;
   // since.GetOLC() keeps track of time wrt takeoff
 
-  mutexGlideComputer.Lock();
+  glide_computer.GetOLC().Lock();
   glide_computer.GetOLC().SetLine();
   int n = min(MAXCLIPPOLYGON, glide_computer.GetOLC().getN());
   int i, j=0;
@@ -357,7 +357,7 @@ MapWindow::DrawTrailFromTask(Canvas &canvas, const double TrailFirstTime)
                   ptin[j]);
     j++;
   }
-  mutexGlideComputer.Unlock();
+  glide_computer.GetOLC().Unlock();
   if (j>=2) {
     canvas.select(MapGfx.hSnailPens[NUMSNAILCOLORS / 2]);
     canvas.polyline(ptin, j);
