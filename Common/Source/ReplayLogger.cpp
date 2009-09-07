@@ -341,7 +341,7 @@ bool ReplayLogger::UpdateInternal(void) {
     tlast = tthis;
     cli.Reset();
   }
-
+  tlast = tthis;
   tthis += TimeScale*deltatimereal;
 
   double mintime = cli.GetMinTime(); // li_lat.GetMinTime();
@@ -374,8 +374,11 @@ bool ReplayLogger::UpdateInternal(void) {
       if (init) {
 	glide_computer.ResetFlight();
       }
-      device_blackboard.SetLocation(LonX, LatX, SpeedX, BearingX,
-				    AltX, AltX, tthis);
+      if ((int)tthis != (int)tlast) {
+	device_blackboard.SetLocation(LonX, LatX, SpeedX, BearingX,
+				      AltX, AltX, tthis);
+	TriggerGPSUpdate();
+      }
     } else {
       // This is required in case the integrator fails,
       // which can occur due to parsing faults

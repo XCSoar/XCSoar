@@ -217,13 +217,7 @@ void ProcessTimer::Process(void)
   itimeout++;
 
   // also service replay logger
-  ReplayLogger::Update();
-  if (ReplayLogger::IsEnabled()) {
-    static double timeLast = 0;
-    if (Basic().Time-timeLast>=1.0) {
-      TriggerGPSUpdate();
-    }
-    timeLast = Basic().Time;
+  if (ReplayLogger::Update()) {
     device_blackboard.RaiseConnection();
     device_blackboard.SetNAVWarning(false);
     return;
@@ -240,7 +234,6 @@ void ProcessTimer::Process(void)
   }
   if (ReplayLogger::Update()) {
     m_clock.update();
-    TriggerGPSUpdate();
   } else if (m_clock.elapsed()>=1000) {
     m_clock.update();
     device_blackboard.ProcessSimulation();
