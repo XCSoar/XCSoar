@@ -624,10 +624,6 @@ MapWindow::on_setfocus()
 {
   MaskedPaintWindow::on_setfocus();
 
-  InputEvents::setMode(SettingsMap().EnablePan && !isTargetPan()
-                       ? InputEvents::MODE_PAN
-                       : InputEvents::MODE_DEFAULT);
-
   return true;
 }
 
