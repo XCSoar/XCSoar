@@ -39,6 +39,7 @@ Copyright_License {
 #include "MainWindow.hpp"
 #include "Language.hpp"
 #include "Dialogs.h"
+#include "StatusMessage.hpp"
 
 static Mutex mutexInterfaceTimeout;
 static int interface_timeout;
@@ -48,7 +49,8 @@ static bool ShutdownRequested = false;
 
 InterfaceBlackboard CommonInterface::blackboard;
 HINSTANCE CommonInterface::hInst; // The current instance
-MainWindow CommonInterface::main_window;
+StatusMessageList CommonInterface::status_messages;
+MainWindow CommonInterface::main_window(status_messages);
 
 // settings used only by interface thread scope
 bool CommonInterface::VirtualKeys=false;

@@ -95,6 +95,9 @@ MainWindow::set(LPCTSTR text,
 
   vario = new GaugeVario(*this, map.GetMapRect());
   flarm = new GaugeFLARM(*this);
+
+  StartupStore(TEXT("Initialise message system\n"));
+  popup.set(rc);
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -107,7 +110,7 @@ MainWindow::on_command(HWND wmControl, unsigned id, unsigned code)
 
     full_screen();
 
-    Message::CheckTouch(wmControl);
+    popup.CheckTouch(wmControl);
     
     if (ButtonLabel::CheckButtonPress(wmControl)) {
       return true; // don't continue processing..
