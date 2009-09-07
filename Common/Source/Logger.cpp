@@ -37,12 +37,9 @@
 
 #include "Logger.h"
 #include "Version.hpp"
-#include "Protection.hpp"
 #include "Dialogs.h"
 #include "Language.hpp"
-#include "Device/Port.h"
 #include "Settings.hpp"
-#include "SettingsComputer.hpp"
 #include "SettingsTask.hpp"
 #include "Registry.hpp"
 #include "Math/Earth.hpp"
