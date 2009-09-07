@@ -84,44 +84,6 @@ TCHAR Message::msgText[2000];
 // Get start time to reduce overrun errors
 DWORD startTime = ::GetTickCount();
 
-// Intercept messages destined for the Status Message window
-LRESULT CALLBACK MessageWindowProc(HWND hwnd, UINT message,
-				   WPARAM wParam, LPARAM lParam)
-{
-
-  POINT pt;
-  RECT  rc;
-  static bool capturedMouse = false;
-
-  switch (message) {
-  case WM_LBUTTONDOWN:
-
-    // Intercept mouse messages while stylus is being dragged
-    // This is necessary to simulate a WM_LBUTTONCLK event
-    SetCapture(hwnd);
-    capturedMouse = TRUE;
-
-    return 0;
-  case WM_LBUTTONUP :
-
-    ReleaseCapture();
-    if (!capturedMouse) return 0;
-    capturedMouse = FALSE;
-
-    // Is stylus still within this window?
-    pt.x = LOWORD(lParam);
-    pt.y = HIWORD(lParam);
-    GetClientRect(hwnd, &rc);
-
-    if (!PtInRect(&rc, pt)) return 0;
-
-    DestroyWindow(hwnd);
-    return 0;
-  }
-  return DefWindowProc(hwnd, message, wParam, lParam);
-}
-
-
 int Message::block_ref = 0;
 
 void Message::Initialize(RECT rc) {
@@ -147,8 +109,6 @@ void Message::Initialize(RECT rc) {
 	      (WPARAM)MapWindowBoldFont.native(),MAKELPARAM(TRUE,0));
 
   /*
-  SetWindowLong(hWndMessageWindow, GWL_WNDPROC,
-		(LONG) MessageWindowProc);
   EnableWindow(hWndMessageWindow, FALSE); // prevent window receiving
 					  // keyboard/mouse input
   */
