@@ -41,11 +41,40 @@ Copyright_License {
 #include "Math/leastsqs.h"
 #include "Task.h"
 #include "Screen/Canvas.hpp"
+#include "Thread/Mutex.hpp"
 
 class FlightStatistics {
 public:
+  void StartTask(double starttime);
+  double AverageThermalAdjusted(const double wthis, const bool circling);
+  void AddAltitude(const double tflight,
+		   const double alt);
+  void AddAltitudeTerrain(const double tflight,
+			  const double terrainalt);
+  void SaveTaskSpeed(const double val);
+  void SetLegStart(const int activewaypoint,
+		   const double time);
+  void AddClimbBase(const double tflight,
+		    const double alt);
+  void AddClimbCeiling(const double tflight,
+		       const double alt);
+  void AddThermalAverage(const double v);
+public:
   void Reset();
-
+  void RenderAirspace(Canvas &canvas, const RECT rc);
+  void RenderBarograph(Canvas &canvas, const RECT rc);
+  void RenderClimb(Canvas &canvas, const RECT rc);
+  void RenderGlidePolar(Canvas &canvas, const RECT rc);
+  void RenderWind(Canvas &canvas, const RECT rc);
+  void RenderTemperature(Canvas &canvas, const RECT rc);
+  void RenderTask(Canvas &canvas, const RECT rc, const bool olcmode);
+  void RenderSpeed(Canvas &canvas, const RECT rc);
+  void CaptionBarograph( TCHAR *sTmp);
+  void CaptionClimb( TCHAR* sTmp);
+  void CaptionPolar( TCHAR *sTmp);
+  void CaptionTempTrace( TCHAR *sTmp);
+  void CaptionTask( TCHAR *sTmp);
+private:
   LeastSquares ThermalAverage;
   LeastSquares Wind_x;
   LeastSquares Wind_y;
@@ -55,15 +84,13 @@ public:
   LeastSquares Task_Speed;
   double       LegStartTime[MAXTASKPOINTS];
   LeastSquares Altitude_Terrain;
-
-  void RenderAirspace(Canvas &canvas, const RECT rc);
-  void RenderBarograph(Canvas &canvas, const RECT rc);
-  void RenderClimb(Canvas &canvas, const RECT rc);
-  void RenderGlidePolar(Canvas &canvas, const RECT rc);
-  void RenderWind(Canvas &canvas, const RECT rc);
-  void RenderTemperature(Canvas &canvas, const RECT rc);
-  void RenderTask(Canvas &canvas, const RECT rc, const bool olcmode);
-  void RenderSpeed(Canvas &canvas, const RECT rc);
+  Mutex mutexStats;
+  void Lock() {
+    mutexStats.Lock();
+  }
+  void Unlock() {
+    mutexStats.Unlock();
+  }
 };
 
 #endif

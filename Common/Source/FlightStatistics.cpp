@@ -60,6 +60,7 @@ Copyright_License {
 #include "options.h" /* for IBLSCALE() */
 
 void FlightStatistics::Reset() {
+  Lock();
   ThermalAverage.Reset();
   Wind_x.Reset();
   Wind_y.Reset();
@@ -71,6 +72,7 @@ void FlightStatistics::Reset() {
   for(int j=0;j<MAXTASKPOINTS;j++) {
     LegStartTime[j] = -1;
   }
+  Unlock();
 }
 
 #include "Screen/Chart.hpp"
@@ -879,4 +881,264 @@ void FlightStatistics::RenderAirspace(Canvas &canvas, const RECT rc) {
 
   chart.DrawXLabel(TEXT("D"));
   chart.DrawYLabel(TEXT("h"));
+}
+
+
+//////
+
+void
+FlightStatistics::StartTask(double starttime)
+{
+  Lock();
+  LegStartTime[0] = starttime;
+  LegStartTime[1] = starttime;
+  // JMW clear thermal climb average on task start
+  ThermalAverage.Reset();
+  Task_Speed.Reset();
+  Unlock();
+}
+
+
+void
+FlightStatistics::AddAltitudeTerrain(const double tflight,
+				     const double terrainalt)
+{
+  Lock();
+  Altitude_Terrain.least_squares_update
+    (max(0,tflight/3600.0),terrainalt);
+  Unlock();
+}
+
+void
+FlightStatistics::AddAltitude(const double tflight,
+			      const double alt)
+{
+  Lock();
+  Altitude.least_squares_update
+    (max(0,tflight/3600.0),alt);
+  Unlock();
+}
+
+double
+FlightStatistics::AverageThermalAdjusted
+(const double mc_current,
+ const bool circling) 
+{
+  double mc_stats;
+  Lock();
+  if (ThermalAverage.y_ave>0) {
+    if ((mc_current>0) && circling) {
+      mc_stats = (ThermalAverage.sum_n*ThermalAverage.y_ave
+		  +mc_current)/(ThermalAverage.sum_n+1);
+    } else {
+      mc_stats = ThermalAverage.y_ave;
+    }
+  } else {
+    mc_stats = mc_current;
+  }
+  Unlock();
+  return mc_stats;
+}
+
+void
+FlightStatistics::SaveTaskSpeed(const double val) 
+{
+  Task_Speed.least_squares_update(val);
+}
+
+
+void
+FlightStatistics::SetLegStart(const int activewaypoint,
+			      const double time)
+{
+  Lock();
+  if (LegStartTime[ActiveWayPoint]<0) {
+    LegStartTime[ActiveWayPoint] = time;
+  }
+  Unlock();
+}
+
+void
+FlightStatistics::AddClimbBase(const double tflight,
+			       const double alt)
+{
+  Lock();
+  if (Altitude_Ceiling.sum_n>0) {
+    // only update base if have already climbed, otherwise
+    // we will catch the takeoff height as the base.
+    
+    Altitude_Base.least_squares_update(max(0,tflight)/3600.0,
+				       alt);
+  }
+  Unlock();
+}
+
+
+void
+FlightStatistics::AddClimbCeiling(const double tflight,
+			       const double alt)
+{
+  Lock();
+  Altitude_Ceiling.least_squares_update(max(0,tflight)/3600.0,
+					alt);
+  Unlock();
+}
+
+void
+FlightStatistics::AddThermalAverage(const double v)
+{
+  Lock();
+  ThermalAverage.least_squares_update(v);
+  Unlock();
+}
+
+
+///
+
+void
+FlightStatistics::CaptionBarograph(TCHAR *sTmp)
+{
+  Lock();
+  if (Altitude_Ceiling.sum_n<2) {
+    _stprintf(sTmp, TEXT("\0"));
+  } else if (Altitude_Ceiling.sum_n<4) {
+    _stprintf(sTmp, TEXT("%s:\r\n  %.0f-%.0f %s"),
+	      gettext(TEXT("Working band")),
+	      Altitude_Base.y_ave*ALTITUDEMODIFY,
+	      Altitude_Ceiling.y_ave*ALTITUDEMODIFY,
+	      Units::GetAltitudeName());
+  } else {
+    _stprintf(sTmp, TEXT("%s:\r\n  %.0f-%.0f %s\r\n\r\n%s:\r\n  %.0f %s/hr"),
+	      gettext(TEXT("Working band")),
+	      Altitude_Base.y_ave*ALTITUDEMODIFY,
+              Altitude_Ceiling.y_ave*ALTITUDEMODIFY,
+	      Units::GetAltitudeName(),
+	      gettext(TEXT("Ceiling trend")),
+	      Altitude_Ceiling.m*ALTITUDEMODIFY,
+	      Units::GetAltitudeName());
+  }
+  Unlock();
+}
+
+void
+FlightStatistics::CaptionClimb( TCHAR* sTmp)
+{
+  Lock();
+  if (ThermalAverage.sum_n==0) {
+    _stprintf(sTmp, TEXT("\0"));
+  } else if (ThermalAverage.sum_n==1) {
+    _stprintf(sTmp, TEXT("%s:\r\n  %3.1f %s"),
+	      gettext(TEXT("Av climb")),
+	      ThermalAverage.y_ave*LIFTMODIFY,
+	      Units::GetVerticalSpeedName()
+	      );
+  } else {
+    _stprintf(sTmp, TEXT("%s:\r\n  %3.1f %s\r\n\r\n%s:\r\n  %3.2f %s"),
+	      gettext(TEXT("Av climb")),
+	      ThermalAverage.y_ave*LIFTMODIFY,
+	      Units::GetVerticalSpeedName(),
+	      gettext(TEXT("Climb trend")),
+	      ThermalAverage.m*LIFTMODIFY,
+	      Units::GetVerticalSpeedName()
+	      );
+  }
+  Unlock();
+}
+
+
+void 
+FlightStatistics::CaptionPolar(TCHAR *sTmp)
+{
+  if (InfoBoxLayout::landscape) {
+    _stprintf(sTmp, TEXT("%s:\r\n  %3.0f\r\n  at %3.0f %s\r\n\r\n%s:\r\n%3.2f %s\r\n  at %3.0f %s"),
+	      gettext(TEXT("Best LD")),
+	      GlidePolar::bestld,
+	      GlidePolar::Vbestld*SPEEDMODIFY,
+	      Units::GetHorizontalSpeedName(),
+	      gettext(TEXT("Min sink")),
+	      GlidePolar::minsink*LIFTMODIFY,
+	      Units::GetVerticalSpeedName(),
+	      GlidePolar::Vminsink*SPEEDMODIFY,
+	      Units::GetHorizontalSpeedName()
+	      );
+  } else {
+    _stprintf(sTmp, TEXT("%s:\r\n  %3.0f at %3.0f %s\r\n%s:\r\n  %3.2f %s at %3.0f %s"),
+	      gettext(TEXT("Best LD")),
+	      GlidePolar::bestld,
+	      GlidePolar::Vbestld*SPEEDMODIFY,
+	      Units::GetHorizontalSpeedName(),
+	      gettext(TEXT("Min sink")),
+	      GlidePolar::minsink*LIFTMODIFY,
+	      Units::GetVerticalSpeedName(),
+	      GlidePolar::Vminsink*SPEEDMODIFY,
+	      Units::GetHorizontalSpeedName());
+  }
+}
+
+
+void
+FlightStatistics::CaptionTempTrace(TCHAR *sTmp)
+{
+  _stprintf(sTmp, TEXT("%s:\r\n  %5.0f %s\r\n\r\n%s:\r\n  %5.0f %s\r\n"),
+	    gettext(TEXT("Thermal height")),
+	    CuSonde::thermalHeight*ALTITUDEMODIFY,
+	    Units::GetAltitudeName(),
+	    gettext(TEXT("Cloud base")),
+	    CuSonde::cloudBase*ALTITUDEMODIFY,
+	    Units::GetAltitudeName());
+}
+
+void
+FlightStatistics::CaptionTask(TCHAR *sTmp)
+{
+  if (!ValidTaskPoint(ActiveWayPoint)) {
+    _stprintf(sTmp, gettext(TEXT("No task")));
+  } else {
+    TCHAR timetext1[100];
+    TCHAR timetext2[100];
+    if (AATEnabled) {
+      Units::TimeToText(timetext1, 
+			(int)XCSoarInterface::Calculated().TaskTimeToGo);
+      Units::TimeToText(timetext2, 
+			(int)XCSoarInterface::Calculated().AATTimeToGo);
+      
+      if (InfoBoxLayout::landscape) {
+	_stprintf(sTmp,
+		  TEXT("%s:\r\n  %s\r\n%s:\r\n  %s\r\n%s:\r\n  %5.0f %s\r\n%s:\r\n  %5.0f %s\r\n"),
+		  gettext(TEXT("Task to go")),
+		  timetext1,
+                    gettext(TEXT("AAT to go")),
+		  timetext2,
+		  gettext(TEXT("Distance to go")),
+		  DISTANCEMODIFY*XCSoarInterface::Calculated().AATTargetDistance,
+		  Units::GetDistanceName(),
+		  gettext(TEXT("Target speed")),
+		  TASKSPEEDMODIFY*XCSoarInterface::Calculated().AATTargetSpeed,
+		  Units::GetTaskSpeedName()
+		  );
+      } else {
+	_stprintf(sTmp,
+		  TEXT("%s: %s\r\n%s: %s\r\n%s: %5.0f %s\r\n%s: %5.0f %s\r\n"),
+		  gettext(TEXT("Task to go")),
+		  timetext1,
+		  gettext(TEXT("AAT to go")),
+		  timetext2,
+		  gettext(TEXT("Distance to go")),
+		  DISTANCEMODIFY*XCSoarInterface::Calculated().AATTargetDistance,
+		  Units::GetDistanceName(),
+		  gettext(TEXT("Target speed")),
+		  TASKSPEEDMODIFY*XCSoarInterface::Calculated().AATTargetSpeed,
+		  Units::GetTaskSpeedName()
+		  );
+      }
+    } else {
+      Units::TimeToText(timetext1, (int)XCSoarInterface::Calculated().TaskTimeToGo);
+      _stprintf(sTmp, TEXT("%s: %s\r\n%s: %5.0f %s\r\n"),
+		gettext(TEXT("Task to go")),
+		timetext1,
+		gettext(TEXT("Distance to go")),
+		DISTANCEMODIFY*XCSoarInterface::Calculated().TaskDistanceToGo,
+		Units::GetDistanceName());
+    }
+  }
 }

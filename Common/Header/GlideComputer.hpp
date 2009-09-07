@@ -130,7 +130,7 @@ protected:
   void Initialise();
   bool DoLogging();
   void SetFastLogging();
-  virtual double GetAverageThermal() const;
+  virtual double GetAverageThermal();
 protected:
   virtual void SaveTaskSpeed(double val);
   virtual void SetLegStart();

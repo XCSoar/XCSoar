@@ -65,11 +65,7 @@ void GlideComputerStats::ResetFlight(const bool full)
 }
 
 void GlideComputerStats::StartTask() {
-  flightstats.LegStartTime[0] = Basic().Time;
-  flightstats.LegStartTime[1] = Basic().Time;
-  // JMW clear thermal climb average on task start
-  flightstats.ThermalAverage.Reset();
-  flightstats.Task_Speed.Reset();
+  flightstats.StartTask(Basic().Time);
 }
 
 
@@ -127,103 +123,59 @@ bool GlideComputerStats::DoLogging() {
       snail_trail.AddPoint(&Basic(), &Calculated());
     }
     if (stats_clock.check_advance(Basic().Time)) {
-
-      ScopeLock protect(mutexGlideComputer);
-      flightstats.Altitude_Terrain.
-        least_squares_update(max(0,
-                                 Basic().Time-Calculated().TakeOffTime)/3600.0,
-                             Calculated().TerrainAlt);
-
-      flightstats.Altitude.
-        least_squares_update(max(0,
-                                 Basic().Time-Calculated().TakeOffTime)/3600.0,
-                             Calculated().NavAltitude);
+      flightstats.AddAltitudeTerrain(Basic().Time-Calculated().TakeOffTime,
+				     Calculated().TerrainAlt);
+      flightstats.AddAltitude(Basic().Time-Calculated().TakeOffTime,
+			      Calculated().NavAltitude);
     }
   }
   return true;
 }
 
 
-double GlideComputerStats::GetAverageThermal() const
+double GlideComputerStats::GetAverageThermal() 
 {
-  double mc_stats, mc_current;
-  ScopeLock protect(mutexGlideComputer);
+  double mc_current;
 
   mc_current = GlideComputerBlackboard::GetAverageThermal();
-  if (flightstats.ThermalAverage.y_ave>0) {
-    if ((mc_current>0) && Calculated().Circling) {
-      mc_stats = (flightstats.ThermalAverage.sum_n
-		  *flightstats.ThermalAverage.y_ave
-		  +mc_current)
-	/(flightstats.ThermalAverage.sum_n+1);
-    } else {
-      mc_stats = flightstats.ThermalAverage.y_ave;
-    }
-  } else {
-    mc_stats = mc_current;
-  }
-  return mc_stats;
+  return flightstats.AverageThermalAdjusted(mc_current,
+					    Calculated().Circling);
 }
 
 
 
 void GlideComputerStats::SaveTaskSpeed(double val) 
 {
-  mutexGlideComputer.Lock();
-  flightstats.Task_Speed.least_squares_update(val);
-  mutexGlideComputer.Unlock();
+  flightstats.SaveTaskSpeed(val);
 }
 
 void GlideComputerStats::SetLegStart() 
 {
-  mutexGlideComputer.Lock();
-  if (flightstats.LegStartTime[ActiveWayPoint]<0) {
-    flightstats.LegStartTime[ActiveWayPoint] = Basic().Time;
-  }
-  mutexGlideComputer.Unlock();
+  flightstats.SetLegStart(ActiveWayPoint, Basic().Time);
 }
 
 
 void
 GlideComputerStats::OnClimbBase(double StartAlt)
 {
-  ScopeLock protect(mutexGlideComputer);
-  if (flightstats.Altitude_Ceiling.sum_n>0) {
-    // only update base if have already climbed, otherwise
-    // we will catch the takeoff height as the base.
-    
-    flightstats.Altitude_Base.
-      least_squares_update(max(0,Calculated().ClimbStartTime
-			       - Calculated().TakeOffTime)/3600.0,
-			   StartAlt);
-  }
+  flightstats.AddClimbBase(Calculated().ClimbStartTime
+			   - Calculated().TakeOffTime, StartAlt);
 }
 
 
 void
 GlideComputerStats::OnClimbCeiling()
 {
-  ScopeLock protect(mutexGlideComputer);
-  flightstats.Altitude_Ceiling.
-    least_squares_update(max(0,Calculated().CruiseStartTime
-			     - Calculated().TakeOffTime)/3600.0,
-			 Calculated().CruiseStartAlt);
+  flightstats.AddClimbCeiling(Calculated().CruiseStartTime
+			      -Calculated().TakeOffTime,
+			      Calculated().CruiseStartAlt);
 }
 
 
 void
 GlideComputerStats::OnDepartedThermal()
 {
-  ScopeLock protect(mutexGlideComputer);
-  flightstats.ThermalAverage.
-    least_squares_update(Calculated().LastThermalAverage);
-
-#ifdef DEBUG_STATS
-  DebugStore("%f %f # thermal stats\n",
-	     flightstats.ThermalAverage.m,
-	     flightstats.ThermalAverage.b
-	     );
-#endif
+  flightstats.AddThermalAverage(Calculated().LastThermalAverage);
 }
 
 void

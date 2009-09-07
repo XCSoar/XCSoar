@@ -146,34 +146,13 @@ static void Update(void){
   //  WndProperty *wp;
   double d=0;
 
-  ScopeLock protect(mutexGlideComputer);
-
   switch(page){
     case ANALYSIS_PAGE_BAROGRAPH:
       _stprintf(sTmp, TEXT("%s: %s"),
                 gettext(TEXT("Analysis")),
                 gettext(TEXT("Barograph")));
       wf->SetCaption(sTmp);
-      if (glide_computer.GetFlightStats().Altitude_Ceiling.sum_n<2) {
-        _stprintf(sTmp, TEXT("\0"));
-      } else if (glide_computer.GetFlightStats().Altitude_Ceiling.sum_n<4) {
-        _stprintf(sTmp, TEXT("%s:\r\n  %.0f-%.0f %s"),
-                  gettext(TEXT("Working band")),
-                  glide_computer.GetFlightStats().Altitude_Base.y_ave*ALTITUDEMODIFY,
-                  glide_computer.GetFlightStats().Altitude_Ceiling.y_ave*ALTITUDEMODIFY,
-                  Units::GetAltitudeName());
-
-      } else {
-
-        _stprintf(sTmp, TEXT("%s:\r\n  %.0f-%.0f %s\r\n\r\n%s:\r\n  %.0f %s/hr"),
-                  gettext(TEXT("Working band")),
-                  glide_computer.GetFlightStats().Altitude_Base.y_ave*ALTITUDEMODIFY,
-                  glide_computer.GetFlightStats().Altitude_Ceiling.y_ave*ALTITUDEMODIFY,
-                  Units::GetAltitudeName(),
-                  gettext(TEXT("Ceiling trend")),
-                  glide_computer.GetFlightStats().Altitude_Ceiling.m*ALTITUDEMODIFY,
-                  Units::GetAltitudeName());
-      }
+      glide_computer.GetFlightStats().CaptionBarograph(sTmp);
       wInfo->SetCaption(sTmp);
 
     break;
@@ -182,26 +161,7 @@ static void Update(void){
                 gettext(TEXT("Analysis")),
                 gettext(TEXT("Climb")));
       wf->SetCaption(sTmp);
-
-      if (glide_computer.GetFlightStats().ThermalAverage.sum_n==0) {
-        _stprintf(sTmp, TEXT("\0"));
-      } else if (glide_computer.GetFlightStats().ThermalAverage.sum_n==1) {
-        _stprintf(sTmp, TEXT("%s:\r\n  %3.1f %s"),
-                  gettext(TEXT("Av climb")),
-                  glide_computer.GetFlightStats().ThermalAverage.y_ave*LIFTMODIFY,
-                  Units::GetVerticalSpeedName()
-                  );
-      } else {
-        _stprintf(sTmp, TEXT("%s:\r\n  %3.1f %s\r\n\r\n%s:\r\n  %3.2f %s"),
-                  gettext(TEXT("Av climb")),
-                  glide_computer.GetFlightStats().ThermalAverage.y_ave*LIFTMODIFY,
-                  Units::GetVerticalSpeedName(),
-                  gettext(TEXT("Climb trend")),
-                  glide_computer.GetFlightStats().ThermalAverage.m*LIFTMODIFY,
-                  Units::GetVerticalSpeedName()
-                  );
-      }
-
+      glide_computer.GetFlightStats().CaptionClimb(sTmp);
       wInfo->SetCaption(sTmp);
 
     break;
@@ -219,31 +179,7 @@ static void Update(void){
                 gettext(TEXT("Glide Polar")),
                 GlidePolar::GetAUW());
       wf->SetCaption(sTmp);
-      if (InfoBoxLayout::landscape) {
-        _stprintf(sTmp, TEXT("%s:\r\n  %3.0f\r\n  at %3.0f %s\r\n\r\n%s:\r\n%3.2f %s\r\n  at %3.0f %s"),
-                  gettext(TEXT("Best LD")),
-                  GlidePolar::bestld,
-                  GlidePolar::Vbestld*SPEEDMODIFY,
-                  Units::GetHorizontalSpeedName(),
-                  gettext(TEXT("Min sink")),
-                  GlidePolar::minsink*LIFTMODIFY,
-                  Units::GetVerticalSpeedName(),
-                  GlidePolar::Vminsink*SPEEDMODIFY,
-                  Units::GetHorizontalSpeedName()
-                  );
-      } else {
-        _stprintf(sTmp, TEXT("%s:\r\n  %3.0f at %3.0f %s\r\n%s:\r\n  %3.2f %s at %3.0f %s"),
-                  gettext(TEXT("Best LD")),
-                  GlidePolar::bestld,
-                  GlidePolar::Vbestld*SPEEDMODIFY,
-                  Units::GetHorizontalSpeedName(),
-                  gettext(TEXT("Min sink")),
-                  GlidePolar::minsink*LIFTMODIFY,
-                  Units::GetVerticalSpeedName(),
-                  GlidePolar::Vminsink*SPEEDMODIFY,
-                  Units::GetHorizontalSpeedName());
-      }
-
+      glide_computer.GetFlightStats().CaptionPolar(sTmp);
       wInfo->SetCaption(sTmp);
     break;
   case ANALYSIS_PAGE_TEMPTRACE:
@@ -251,15 +187,7 @@ static void Update(void){
               gettext(TEXT("Analysis")),
               gettext(TEXT("Temp trace")));
     wf->SetCaption(sTmp);
-
-    _stprintf(sTmp, TEXT("%s:\r\n  %5.0f %s\r\n\r\n%s:\r\n  %5.0f %s\r\n"),
-	      gettext(TEXT("Thermal height")),
-	      CuSonde::thermalHeight*ALTITUDEMODIFY,
-	      Units::GetAltitudeName(),
-	      gettext(TEXT("Cloud base")),
-	      CuSonde::cloudBase*ALTITUDEMODIFY,
-	      Units::GetAltitudeName());
-
+    glide_computer.GetFlightStats().CaptionTempTrace(sTmp);
     wInfo->SetCaption(sTmp);
     break;
   case ANALYSIS_PAGE_TASK_SPEED:
@@ -274,57 +202,8 @@ static void Update(void){
               gettext(TEXT("Analysis")),
               gettext(TEXT("Task")));
     wf->SetCaption(sTmp);
-
     RefreshTaskStatistics();
-
-    if (!ValidTaskPoint(ActiveWayPoint)) {
-      _stprintf(sTmp, gettext(TEXT("No task")));
-    } else {
-      TCHAR timetext1[100];
-      TCHAR timetext2[100];
-      if (AATEnabled) {
-        Units::TimeToText(timetext1, (int)XCSoarInterface::Calculated().TaskTimeToGo);
-        Units::TimeToText(timetext2, (int)XCSoarInterface::Calculated().AATTimeToGo);
-
-        if (InfoBoxLayout::landscape) {
-          _stprintf(sTmp,
-                    TEXT("%s:\r\n  %s\r\n%s:\r\n  %s\r\n%s:\r\n  %5.0f %s\r\n%s:\r\n  %5.0f %s\r\n"),
-                    gettext(TEXT("Task to go")),
-                    timetext1,
-                    gettext(TEXT("AAT to go")),
-                    timetext2,
-                    gettext(TEXT("Distance to go")),
-                    DISTANCEMODIFY*XCSoarInterface::Calculated().AATTargetDistance,
-                    Units::GetDistanceName(),
-                    gettext(TEXT("Target speed")),
-                    TASKSPEEDMODIFY*XCSoarInterface::Calculated().AATTargetSpeed,
-                    Units::GetTaskSpeedName()
-                    );
-        } else {
-          _stprintf(sTmp,
-                    TEXT("%s: %s\r\n%s: %s\r\n%s: %5.0f %s\r\n%s: %5.0f %s\r\n"),
-                    gettext(TEXT("Task to go")),
-                    timetext1,
-                    gettext(TEXT("AAT to go")),
-                    timetext2,
-                    gettext(TEXT("Distance to go")),
-                    DISTANCEMODIFY*XCSoarInterface::Calculated().AATTargetDistance,
-                    Units::GetDistanceName(),
-                    gettext(TEXT("Target speed")),
-                    TASKSPEEDMODIFY*XCSoarInterface::Calculated().AATTargetSpeed,
-                    Units::GetTaskSpeedName()
-                    );
-        }
-      } else {
-        Units::TimeToText(timetext1, (int)XCSoarInterface::Calculated().TaskTimeToGo);
-        _stprintf(sTmp, TEXT("%s: %s\r\n%s: %5.0f %s\r\n"),
-                  gettext(TEXT("Task to go")),
-                  timetext1,
-                  gettext(TEXT("Distance to go")),
-                  DISTANCEMODIFY*XCSoarInterface::Calculated().TaskDistanceToGo,
-                  Units::GetDistanceName());
-      }
-    }
+    glide_computer.GetFlightStats().CaptionTask(sTmp);
     wInfo->SetCaption(sTmp);
     break;
   case ANALYSIS_PAGE_OLC:
