@@ -73,8 +73,7 @@ Copyright_License {
 
 Mutex Message::mutexMessage;
 RECT Message::rcmsg;
-HWND Message::hWndMessageWindow;
-HDC Message::hdc;
+EditWindow Message::window;
 struct singleMessage Message::messages[MAXMESSAGES];
 bool Message::hidden=false;
 int Message::nvisible=0;
@@ -91,35 +90,12 @@ void Message::Initialize(RECT rc) {
 
   rcmsg = rc; // default; message window can be full size of screen
 
-  hWndMessageWindow = CreateWindow(// WS_EX_CLIENTEDGE,
-				     TEXT("EDIT"), TEXT(" "),
-				   WS_CHILD|ES_MULTILINE|ES_CENTER
-				   |WS_BORDER|ES_READONLY | WS_CLIPCHILDREN
-				   | WS_CLIPSIBLINGS,
-				     0,0,0,0, 
-				     main_window, NULL, 
-				     hInst, NULL);
-
-  SetWindowPos(hWndMessageWindow, HWND_TOP,
-	       rcmsg.left, rcmsg.top,
-	       rcmsg.right-rcmsg.left, rcmsg.bottom-rcmsg.top,
-	       SWP_HIDEWINDOW);
-
-  SendMessage(hWndMessageWindow, WM_SETFONT,
-	      (WPARAM)MapWindowBoldFont.native(),MAKELPARAM(TRUE,0));
-
-  /*
-  EnableWindow(hWndMessageWindow, FALSE); // prevent window receiving
-					  // keyboard/mouse input
-  */
-
-  hdc = GetDC(hWndMessageWindow);
+  window.set_ro_ml(main_window, rcmsg.left, rcmsg.top,
+                   rcmsg.right - rcmsg.left, rcmsg.bottom - rcmsg.top);
+  window.set_font(MapWindowBoldFont);
 
   hidden = false;
   nvisible = 0;
-
-  //  for (x=0; TabStops[x] != 0 && x < 10; x++);
-  //  SendMessage(hWnd, EM_SETTABSTOPS, (WPARAM)x, (LPARAM)TabStops);
 
   int i;
   for (i=0; i<MAXMESSAGES; i++) {
@@ -134,8 +110,7 @@ void Message::Initialize(RECT rc) {
 
 void Message::Destroy() {
   // destroy window
-  ReleaseDC(hWndMessageWindow, hdc);
-  DestroyWindow(hWndMessageWindow);
+  window.reset();
 }
 
 
@@ -150,14 +125,13 @@ void Message::Unlock() {
 
 
 void Message::Resize() {
-  SIZE tsize;
   int size = _tcslen(msgText);
   RECT rthis;
   //  RECT mRc;
 
   if (size==0) {
     if (!hidden) {
-      ShowWindow(hWndMessageWindow, SW_HIDE);
+      window.hide();
 
       // animation
       //      GetWindowRect(hWndMessageWindow, &mRc);
@@ -167,12 +141,10 @@ void Message::Resize() {
     }
     hidden = true;
   } else {
-    SetWindowText(hWndMessageWindow, msgText);
-    GetTextExtentPoint(hdc, msgText, size, &tsize);
+    window.set_text(msgText);
+    SIZE tsize = main_window.get_canvas().text_size(msgText);
 
-    int linecount = max(nvisible,max(1,
-			SendMessage(hWndMessageWindow,
-				    EM_GETLINECOUNT, 0, 0)));
+    int linecount = max((unsigned)nvisible, max(1, window.get_row_count()));
 
     int width =// min((rcmsg.right-rcmsg.left)*0.8,tsize.cx);
       (int)((rcmsg.right-rcmsg.left)*0.9);
@@ -206,11 +178,11 @@ void Message::Resize() {
     }
     */
 
-    SetWindowPos(hWndMessageWindow, HWND_TOP,
-		 rthis.left, rthis.top,
-		 rthis.right-rthis.left,
-		 rthis.bottom-rthis.top,
-		 SWP_SHOWWINDOW);
+    window.move(rthis.left, rthis.top,
+                rthis.right - rthis.left,
+                rthis.bottom - rthis.top);
+    window.bring_to_top();
+    window.show();
     hidden = false;
   }
 
@@ -373,7 +345,7 @@ void Message::Repeat(int type) {
 
 
 void Message::CheckTouch(HWND wmControl) {
-  if (wmControl == hWndMessageWindow) {
+  if (wmControl == (HWND)window) {
     // acknowledge with click/touch
     Acknowledge(0);
   }
