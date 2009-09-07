@@ -42,7 +42,7 @@ Copyright_License {
 #include "Components.hpp" /* XXX to be removed */
 
 InstrumentThread::InstrumentThread(GaugeVario *_vario)
-  :vario_trigger(TEXT("varioTriggerEvent")), vario(_vario) {}
+  :vario_trigger(TEXT("varioTriggerEvent"), false), vario(_vario) {}
 
 void
 InstrumentThread::run()
@@ -65,8 +65,6 @@ InstrumentThread::run()
       mutexFlightData.Unlock();
       vario->Render();
     }
-
-    vario_trigger.reset();
   }
 }
 
