@@ -555,9 +555,9 @@ void ComPort::ProcessChar(char c) {
 
     if(c=='\n') {
       BuildingString[bi] = '\0';
-      mutexFlightData.Lock();
+      mutexBlackboard.Lock();
       devParseNMEA(dev, BuildingString, &device_blackboard.SetBasic());
-      mutexFlightData.Unlock();
+      mutexBlackboard.Unlock();
     } else {
       return;
     }

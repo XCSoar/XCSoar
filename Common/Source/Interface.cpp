@@ -141,7 +141,7 @@ void XCSoarInterface::DefaultSettings()
 
 
 void XCSoarInterface::ExchangeBlackboard() {
-  ScopeLock protect(mutexFlightData);
+  ScopeLock protect(mutexBlackboard);
   ReceiveBlackboard();
   ReceiveMapProjection();
   SendSettingsComputer();
@@ -149,14 +149,14 @@ void XCSoarInterface::ExchangeBlackboard() {
 }
 
 void XCSoarInterface::ReceiveBlackboard() {
-  ScopeLock protect(mutexFlightData);
+  ScopeLock protect(mutexBlackboard);
   ReadBlackboardBasic(device_blackboard.Basic());
   ReadBlackboardCalculated(device_blackboard.Calculated());
 }
 
 
 void XCSoarInterface::SendSettingsComputer() {
-  ScopeLock protect(mutexFlightData);
+  ScopeLock protect(mutexBlackboard);
   // send computer settings to the device because we know
   // that it won't be reading from them if we lock it, and
   // then others can retrieve from it at their convenience.
@@ -166,12 +166,12 @@ void XCSoarInterface::SendSettingsComputer() {
 
 void XCSoarInterface::ReceiveMapProjection() 
 {
-  ScopeLock protect(mutexFlightData);
+  ScopeLock protect(mutexBlackboard);
   ReadMapProjection(device_blackboard.MapProjection());
 }
 
 void XCSoarInterface::SendSettingsMap(const bool trigger_draw) {
-  ScopeLock protect(mutexFlightData);
+  ScopeLock protect(mutexBlackboard);
   device_blackboard.ReadSettingsMap(SettingsMap());
   if (trigger_draw) {
     drawTriggerEvent.trigger();

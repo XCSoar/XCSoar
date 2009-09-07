@@ -61,7 +61,7 @@ Trigger airspaceWarningEvent(TEXT("airspaceWarning"));
 Trigger targetManipEvent(TEXT("targetManip"));
 Trigger triggerClimbEvent(TEXT("triggerClimb"));
 
-Mutex mutexFlightData;
+Mutex mutexBlackboard;
 // protect GPS_INFO, mcready etc,
 // should be fast
 Mutex TerrainDataClient::mutexTerrainData;

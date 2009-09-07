@@ -52,7 +52,7 @@ InterfaceBlackboard InstrumentBlackboard::blackboard;
 void 
 DeviceBlackboard::Initialise() 
 {
-  ScopeLock protect(mutexFlightData);
+  ScopeLock protect(mutexBlackboard);
 
   memset( &gps_info, 0, sizeof(NMEA_INFO));
   memset( &calculated_info, 0, sizeof(DERIVED_INFO));
@@ -95,7 +95,7 @@ void
 DeviceBlackboard::SetStartupLocation(double lon, double lat, 
 				     double alt) 
 {
-  ScopeLock protect(mutexFlightData);
+  ScopeLock protect(mutexBlackboard);
   SetBasic().Longitude = lon;
   SetBasic().Latitude = lat;
   SetBasic().Altitude = alt;
@@ -107,7 +107,7 @@ DeviceBlackboard::SetLocation(double lon, double lat,
 			      double speed, double bearing,
 			      double alt, double baroalt, double t) 
 {
-  ScopeLock protect(mutexFlightData);
+  ScopeLock protect(mutexBlackboard);
   SetBasic().Longitude = lon;
   SetBasic().Latitude = lat;
   SetBasic().Speed = speed;
@@ -120,7 +120,7 @@ DeviceBlackboard::SetLocation(double lon, double lat,
 };
 
 void DeviceBlackboard::StopReplay() {
-  ScopeLock protect(mutexFlightData);
+  ScopeLock protect(mutexBlackboard);
   SetBasic().Speed = 0;
   SetBasic().Replay = false;
 }
@@ -202,7 +202,7 @@ InterfaceBlackboard::ReadSettingsComputer(const SETTINGS_COMPUTER
 void 
 DeviceBlackboard::SetNAVWarning(bool val)
 {
-  ScopeLock protect(mutexFlightData);
+  ScopeLock protect(mutexBlackboard);
   SetBasic().NAVWarning = val;
   if (!val) {
     // externally forced
@@ -213,7 +213,7 @@ DeviceBlackboard::SetNAVWarning(bool val)
 bool
 DeviceBlackboard::LowerConnection()
 {
-  ScopeLock protect(mutexFlightData);
+  ScopeLock protect(mutexBlackboard);
   bool retval;
   if (Basic().Connected) {
     SetBasic().Connected--;
@@ -229,7 +229,7 @@ DeviceBlackboard::LowerConnection()
 void
 DeviceBlackboard::RaiseConnection()
 {
-  ScopeLock protect(mutexFlightData);
+  ScopeLock protect(mutexBlackboard);
   SetBasic().Connected = 2;
 }
 
@@ -237,7 +237,7 @@ DeviceBlackboard::RaiseConnection()
 void
 DeviceBlackboard::ProcessSimulation()
 {
-  ScopeLock protect(mutexFlightData);
+  ScopeLock protect(mutexBlackboard);
   SetNAVWarning(false);
   FindLatitudeLongitude(Basic().Latitude, 
 			Basic().Longitude,
@@ -263,7 +263,7 @@ DeviceBlackboard::ProcessSimulation()
 void
 DeviceBlackboard::SetSpeed(double val)
 {
-  ScopeLock protect(mutexFlightData);
+  ScopeLock protect(mutexBlackboard);
   SetBasic().Speed = val;
   SetBasic().IndicatedAirspeed = val;
 }
@@ -271,14 +271,14 @@ DeviceBlackboard::SetSpeed(double val)
 void
 DeviceBlackboard::SetTrackBearing(double val)
 {
-  ScopeLock protect(mutexFlightData);
+  ScopeLock protect(mutexBlackboard);
   SetBasic().TrackBearing = AngleLimit360(val);
 }
 
 void
 DeviceBlackboard::SetAltitude(double val)
 {
-  ScopeLock protect(mutexFlightData);
+  ScopeLock protect(mutexBlackboard);
   SetBasic().Altitude = val;
   SetBasic().BaroAltitude = val;
 }

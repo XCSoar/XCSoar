@@ -54,11 +54,11 @@ InstrumentThread::run()
       continue;
 
     if (!ScreenBlanked && EnableVarioGauge && vario != NULL) {
-      mutexFlightData.Lock();
+      mutexBlackboard.Lock();
       vario->ReadBlackboardBasic(device_blackboard.Basic());
       vario->ReadBlackboardCalculated(device_blackboard.Calculated());
       vario->ReadSettingsComputer(device_blackboard.SettingsComputer());
-      mutexFlightData.Unlock();
+      mutexBlackboard.Unlock();
       vario->Render();
     }
   }

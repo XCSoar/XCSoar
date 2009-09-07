@@ -59,16 +59,18 @@ DrawThread::run()
 
   do {
     if (drawTriggerEvent.wait(MIN_WAIT_TIME)) {
-      mutexFlightData.Lock();
-      NMEA_INFO nmea_info = device_blackboard.Basic();
-      mutexFlightData.Unlock();
-
       map.ExchangeBlackboard();
 
       mutexRun.Lock(); // take control
 
-      if (flarm != NULL)
-        flarm->Render(&nmea_info);
+      if (flarm != NULL) {
+	if (map.Basic().FLARM_AlarmLevel > 0) {
+	  flarm->Suppress = false;
+	}
+	flarm->TrafficPresent(map.Basic().FLARMTraffic); 
+	flarm->Show();
+        flarm->Render(&map.Basic());
+      }
 
       map.DrawThreadLoop();
       if (map.SmartBounds(false)) {
@@ -76,7 +78,7 @@ DrawThread::run()
       }
       mutexRun.Unlock(); // release control
       continue;
-    } else if (0 && bounds_dirty) {
+    } else if (bounds_dirty) {
       mutexRun.Lock(); // take control
       bounds_dirty = map.Idle(false);
       mutexRun.Unlock(); // release control

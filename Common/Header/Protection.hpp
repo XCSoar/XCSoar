@@ -41,7 +41,7 @@ Copyright_License {
 #include "Thread/Trigger.hpp"
 #include "Thread/Mutex.hpp"
 
-extern Mutex mutexFlightData;
+extern Mutex mutexBlackboard;
 extern Mutex mutexComm;
 extern Mutex mutexTaskData;
 

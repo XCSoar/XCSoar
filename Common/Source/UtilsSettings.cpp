@@ -82,7 +82,7 @@ void SettingsLeave() {
   // mutexing.Lock everything here prevents the calculation thread from running,
   // while shared data is potentially reloaded.
 
-  mutexFlightData.Lock();
+  mutexBlackboard.Lock();
   mutexTaskData.Lock();
 
   if(MAPFILECHANGED) {
@@ -146,7 +146,7 @@ void SettingsLeave() {
   }
 
   mutexTaskData.Unlock();
-  mutexFlightData.Unlock();
+  mutexBlackboard.Unlock();
 
   if(COMPORTCHANGED) {
     devRestart();

@@ -171,7 +171,7 @@ void MapWindow::StoreRestoreFullscreen(bool store) {
 
 void MapWindow::ReadBlackboard(const NMEA_INFO &nmea_info,
 			       const DERIVED_INFO &derived_info) {
-  ScopeLock protect(mutexFlightData);
+  ScopeLock protect(mutexBlackboard);
   MapWindowBlackboard::ReadBlackboard(nmea_info, derived_info);
   ReadSettingsComputer(device_blackboard.SettingsComputer());
   ReadSettingsMap(device_blackboard.SettingsMap());

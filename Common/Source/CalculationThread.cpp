@@ -66,13 +66,13 @@ CalculationThread::run()
     }
 
     // make local copy before editing...
-    mutexFlightData.Lock();
+    mutexBlackboard.Lock();
     if (gps_trigger.test()) { // timeout on FLARM objects
       device_blackboard.FLARM_RefreshSlots();
     }
     glide_computer->ReadBlackboard(device_blackboard.Basic());
     glide_computer->ReadSettingsComputer(device_blackboard.SettingsComputer());
-    mutexFlightData.Unlock();
+    mutexBlackboard.Unlock();
 
     if (gps_trigger.test()) {
       drawTriggerEvent.trigger();
@@ -112,10 +112,10 @@ CalculationThread::run()
     // values changed, so copy them back now: ONLY CALCULATED INFO
     // should be changed in DoCalculations, so we only need to write
     // that one back (otherwise we may write over new data)
-    mutexFlightData.Lock();
+    mutexBlackboard.Lock();
     device_blackboard.ReadBlackboard(glide_computer->Calculated());
     glide_computer->ReadMapProjection(device_blackboard.MapProjection());
-    mutexFlightData.Unlock();
+    mutexBlackboard.Unlock();
 
     // reset triggers
     data_trigger.reset();

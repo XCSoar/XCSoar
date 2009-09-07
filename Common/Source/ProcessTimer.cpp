@@ -40,7 +40,6 @@ Copyright_License {
 #include "Interface.hpp"
 #include "InputEvents.h"
 #include "ReplayLogger.hpp"
-#include "Gauge/GaugeFLARM.hpp"
 #include "Gauge/GaugeVario.hpp"
 #include "Device/device.h"
 #include "Device/Parser.h"
@@ -76,16 +75,6 @@ ProcessTimer::DisplayProcessTimer()
   GaugeVario *gauge_vario = XCSoarInterface::main_window.vario;
   if (gauge_vario != NULL)
     gauge_vario->Show(!SettingsMap().FullScreen);
-  // update FLARM display (show/hide)
-
-  GaugeFLARM *gauge_flarm = XCSoarInterface::main_window.flarm;
-  if (gauge_flarm != NULL) {
-    if (Basic().FLARM_AlarmLevel > 0) {
-      gauge_flarm->Suppress = false;
-    }
-    gauge_flarm->TrafficPresent(Basic().FLARMTraffic); 
-    gauge_flarm->Show();
-  }
   
   CheckDisplayTimeOut(false);
 }
