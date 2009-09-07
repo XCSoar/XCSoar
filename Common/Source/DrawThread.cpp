@@ -59,6 +59,7 @@ DrawThread::run()
 
   do {
     if (drawTriggerEvent.wait(MIN_WAIT_TIME)) {
+      map.ExchangeBlackboard();
       mutexRun.Lock(); // take control
       map.DrawThreadLoop();
       if (map.SmartBounds(false)) {
@@ -66,12 +67,10 @@ DrawThread::run()
       }
       mutexRun.Unlock(); // release control
       continue;
-    }
-
-    if (bounds_dirty && !drawTriggerEvent.test()) {
-      mutexRun.Lock(); // take control
+    } else if (bounds_dirty) {
+      //      mutexRun.Lock(); // take control
       bounds_dirty = map.Idle(false);
-      mutexRun.Unlock(); // release control
+      //      mutexRun.Unlock(); // release control
       continue;
     }
   } while (!closeTriggerEvent.wait(500));

@@ -158,7 +158,7 @@ void InputEvents::eventSounds(const TCHAR *misc) {
 void InputEvents::eventSnailTrail(const TCHAR *misc) {
 
   if (_tcscmp(misc, TEXT("toggle")) == 0) {
-    SetSettingsMap().TrailActive ++;
+    SetSettingsMap().TrailActive = SettingsMap().TrailActive+1;
     if (SettingsMap().TrailActive>3) {
       SetSettingsMap().TrailActive=0;
     }

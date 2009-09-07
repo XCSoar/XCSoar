@@ -290,11 +290,14 @@ bool MapWindow::Idle(const bool do_force) {
 }
 
 
+void MapWindow::ExchangeBlackboard(void) 
+{
+  ReadBlackboard(device_blackboard.Basic(), device_blackboard.Calculated());
+}
+
 void MapWindow::DrawThreadLoop(void) {
 
   StartTimer();
-
-  ReadBlackboard(device_blackboard.Basic(), device_blackboard.Calculated());
 
   if (BigZoom) {
     // quickly draw zoom level on top

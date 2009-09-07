@@ -96,6 +96,7 @@ class MapWindow
   void Event_SetZoom(double value);
   void Event_ScaleZoom(int vswitch);
   void Event_AutoZoom(int vswitch);
+  void ExchangeBlackboard();
 
   ////////////////////////////////////////////////////////////////////
 
