@@ -41,7 +41,7 @@ Copyright_License {
 #define MAX_OLC_POINTS 300
 #define MATSIZE (MAX_OLC_POINTS+1)*(MAX_OLC_POINTS/2) // for even MAX_OLC_POINTS
 
-#include "Mutex.hpp"
+#include "Thread/Mutex.hpp"
 
 typedef struct _OLCSolution
 {
