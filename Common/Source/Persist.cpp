@@ -80,12 +80,10 @@ void LoadCalculationsPersist(DERIVED_INFO *Calculated) {
 
   FILE *file = _tfopen(szCalculationsPersistFileName, _T("rb"));
   if (file != NULL) {
-    mutexGlideComputer.Lock();
 
     fread(&sizein, sizeof(sizein), 1, file);
     if (sizein != sizeof(*Calculated)) {
       fclose(file);
-      mutexGlideComputer.Unlock();
       return;
     }
 
@@ -96,7 +94,6 @@ void LoadCalculationsPersist(DERIVED_INFO *Calculated) {
 
       glide_computer.ResetFlight();
       fclose(file);
-      mutexGlideComputer.Unlock();
       return;
     }
 
@@ -106,7 +103,6 @@ void LoadCalculationsPersist(DERIVED_INFO *Calculated) {
     if (sizein != sizeof(glide_computer.GetOLC().data)) {
       glide_computer.GetOLC().ResetFlight();
       fclose(file);
-      mutexGlideComputer.Unlock();
       return;
     }
 
@@ -115,7 +111,6 @@ void LoadCalculationsPersist(DERIVED_INFO *Calculated) {
     fread(&sizein, sizeof(sizein), 1, file);
     if (sizein != 5 * sizeof(double)) {
       fclose(file);
-      mutexGlideComputer.Unlock();
       return;
     }
 
@@ -146,7 +141,6 @@ void LoadCalculationsPersist(DERIVED_INFO *Calculated) {
     StartupStore(TEXT("LoadCalculationsPersist OK\n"));
 
     fclose(file);
-    mutexGlideComputer.Unlock();
   } else {
     StartupStore(TEXT("LoadCalculationsPersist file not found\n"));
   }
@@ -172,7 +166,6 @@ void SaveCalculationsPersist(const NMEA_INFO &gps_info,
 
   FILE *file = _tfopen(szCalculationsPersistFileName, _T("wb"));
   if (file != NULL) {
-    mutexGlideComputer.Lock();
     size = sizeof(DERIVED_INFO);
     fwrite(&size, sizeof(size), 1, file);
     fwrite(&Calculated, size, 1, file);
@@ -204,7 +197,6 @@ void SaveCalculationsPersist(const NMEA_INFO &gps_info,
     StartupStore(TEXT("SaveCalculationsPersist ok\n"));
 
     fclose(file);
-    mutexGlideComputer.Unlock();
   } else {
     StartupStore(TEXT("SaveCalculationsPersist can't create file\n"));
   }

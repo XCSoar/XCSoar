@@ -64,8 +64,6 @@ Trigger triggerClimbEvent(TEXT("triggerClimb"));
 Mutex mutexFlightData;
 // protect GPS_INFO, mcready etc,
 // should be fast
-Mutex mutexGlideComputer;
-// protect GlideComputer data
 Mutex TerrainDataClient::mutexTerrainData;
 Mutex MapDataClient::mutexMapData;
 Mutex mutexComm;

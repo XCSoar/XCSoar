@@ -61,15 +61,15 @@ class GlideComputerAirData: virtual public GlideComputerBlackboard {
 public:
   GlideComputerAirData();
   ldrotary_s           rotaryLD;
-  ThermalLocator thermallocator;
-  WindAnalyser   windanalyser;
   SunEphemeris sun;
   virtual void ProcessIdle();
 
   void SetWindEstimate(const double wind_speed,
 		       const double wind_bearing,
 		       const int quality=3); // JMW check
-
+  WindAnalyser   windanalyser; // JMW TODO, private and lock-protected
+private:
+  ThermalLocator thermallocator;
 protected:
 
   void ResetFlight(const bool full=true);

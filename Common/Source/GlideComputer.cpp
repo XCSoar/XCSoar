@@ -54,8 +54,6 @@ GlideComputer::GlideComputer()
 
 void GlideComputer::ResetFlight(const bool full)
 {
-  ScopeLock protect(mutexGlideComputer);
-
   GlideComputerBlackboard::ResetFlight(full);
   GlideComputerAirData::ResetFlight(full);
   GlideComputerTask::ResetFlight(full);
@@ -78,8 +76,6 @@ void GlideComputer::StartTask(const bool do_advance,
 
 void GlideComputer::Initialise()
 {
-  ScopeLock protect(mutexGlideComputer);
-
   GlideComputerBlackboard::Initialise();
   GlideComputerAirData::Initialise();
   GlideComputerTask::Initialise();

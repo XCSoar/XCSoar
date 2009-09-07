@@ -86,16 +86,10 @@ void RefreshTaskStatistics(void) {
   const double mc = GlidePolar::GetMacCready();
   const double ce = GlidePolar::GetCruiseEfficiency();
 
-  mutexGlideComputer.Lock();
-  mutexFlightData.Lock();
-  mutexTaskData.Lock();
   TaskStatistics(&GPS_INFO, &CALCULATED_INFO, mc, ce);
   AATStats(&GPS_INFO, &CALCULATED_INFO);
   TaskSpeed(&GPS_INFO, &CALCULATED_INFO, mc, ce);
   IterateEffectiveMacCready(&GPS_INFO, &CALCULATED_INFO);
-  mutexTaskData.Unlock();
-  mutexFlightData.Unlock();
-  mutexGlideComputer.Unlock();
   */
 }
 

@@ -36,7 +36,6 @@ Copyright_License {
 */
 
 #include "XCSoar.h"
-#include "Protection.hpp"
 #include "Dialogs.h"
 #include "Language.hpp"
 #include "InfoBoxLayout.h"
@@ -85,7 +84,6 @@ static void SetCalcCaption(const TCHAR* caption) {
 static void OnAnalysisPaint(WindowControl *Sender, Canvas &canvas)
 {
   RECT  rcgfx;
-  ScopeLock protect(mutexGlideComputer);
 
   CopyRect(&rcgfx, Sender->GetBoundRect());
 

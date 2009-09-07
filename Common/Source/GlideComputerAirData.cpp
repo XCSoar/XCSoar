@@ -190,7 +190,6 @@ void GlideComputerAirData::DoWindCirclingMode(const bool left) {
 
 
 void GlideComputerAirData::DoWindCirclingSample() {
-  ScopeLock protect(mutexGlideComputer);
   if ((SettingsComputer().AutoWindMode 
        & D_AUTOWIND_CIRCLING)==D_AUTOWIND_CIRCLING) {
     windanalyser.slot_newSample(&Basic(), 
@@ -201,7 +200,6 @@ void GlideComputerAirData::DoWindCirclingSample() {
 
 void GlideComputerAirData::DoWindCirclingAltitude() {
   if (SettingsComputer().AutoWindMode>0) {
-    ScopeLock protect(mutexGlideComputer);
     windanalyser.slot_Altitude(&Basic(), 
 			       &SetCalculated());
   }
@@ -215,7 +213,6 @@ void GlideComputerAirData::SetWindEstimate(const double wind_speed,
   v_wind.x = wind_speed*cos(wind_bearing*3.1415926/180.0);
   v_wind.y = wind_speed*sin(wind_bearing*3.1415926/180.0);
   {
-    ScopeLock protect(mutexGlideComputer);
     windanalyser.slot_newEstimate(&Basic(), 
 				  &SetCalculated(),
 				  v_wind, quality);
@@ -1113,7 +1110,6 @@ GlideComputerAirData::ProcessThermalLocator()
     return;
   }
   if (Calculated().Circling) {
-    ScopeLock protect(mutexGlideComputer);
     thermallocator.AddPoint(Basic().Time, Basic().Longitude, Basic().Latitude,
 			    Calculated().NettoVario);
     thermallocator.Update(Basic().Time, Basic().Longitude, Basic().Latitude,
@@ -1126,7 +1122,6 @@ GlideComputerAirData::ProcessThermalLocator()
   } else {
     SetCalculated().ThermalEstimate_W = 0;
     SetCalculated().ThermalEstimate_R = -1;
-    ScopeLock protect(mutexGlideComputer);
     thermallocator.Reset();
   }
 }
@@ -1321,7 +1316,6 @@ GlideComputerAirData::ThermalSources()
   double ground_altitude;
 
   {
-    ScopeLock protect(mutexGlideComputer);
     thermallocator.EstimateThermalBase(Calculated().ThermalEstimate_Longitude,
 				       Calculated().ThermalEstimate_Latitude,
 				       Calculated().NavAltitude,

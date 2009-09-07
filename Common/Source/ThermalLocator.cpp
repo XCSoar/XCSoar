@@ -70,6 +70,7 @@ ThermalLocator::ThermalLocator() {
 
 
 void ThermalLocator::Reset() {
+  ScopeLock protect(mutexThermalLocator);
   if (initialised) {
     initialised = false;
 
@@ -83,7 +84,11 @@ void ThermalLocator::Reset() {
 }
 
 
-void ThermalLocator::AddPoint(double t, double longitude, double latitude, double w) {
+void ThermalLocator::AddPoint(double t, 
+			      double longitude, 
+			      double latitude, double w) {
+  ScopeLock protect(mutexThermalLocator);
+
   points[nindex].longitude = longitude;
   points[nindex].latitude = latitude;
   points[nindex].t = t;
@@ -119,6 +124,8 @@ void ThermalLocator::Update(double t_0,
 			    double *Thermal_Latitude,
 			    double *Thermal_W,
 			    double *Thermal_R) {
+
+  ScopeLock protect(mutexThermalLocator);
 
   if (npoints<TLOCATOR_NMIN) {
     *Thermal_R = -1;
@@ -287,6 +294,7 @@ void ThermalLocator::EstimateThermalBase(double Thermal_Longitude,
 					 double *ground_longitude,
 					 double *ground_latitude,
 					 double *ground_alt) {
+  ScopeLock protect(mutexThermalLocator);
 
   if ((Thermal_Longitude == 0.0)||(Thermal_Latitude==0.0)||(wthermal<1.0)) {
     *ground_longitude = 0.0;

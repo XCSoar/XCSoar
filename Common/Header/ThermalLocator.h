@@ -42,6 +42,7 @@ Copyright_License {
 #define TLOCATOR_NMAX 60
 
 #include "Math/leastsqs.h"
+#include "Thread/Mutex.hpp"
 
 class ThermalLocator_Point {
  public:
@@ -121,7 +122,7 @@ class ThermalLocator {
   bool initialised;
   int nindex;
   int npoints;
-
+  Mutex mutexThermalLocator;
 };
 
 #endif
