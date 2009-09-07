@@ -40,17 +40,11 @@ Copyright_License {
 
 #include "Screen/TextWindow.hpp"
 
-class GaugeCDI {
-  static TextWindow window;
-
+class GaugeCDI : public TextWindow {
  public:
-  static void Create();
-  static void Destroy();
+  GaugeCDI(ContainerWindow &parent);
 
-  static void Show();
-  static void Hide();
-
-  static void Update(double TrackBearing, double WaypointBearing);
+  void Update(double TrackBearing, double WaypointBearing);
 };
 
 #endif

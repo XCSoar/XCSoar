@@ -13,6 +13,7 @@
 #include "Screen/Fonts.hpp"
 #include "Gauge/GaugeFLARM.hpp"
 #include "Gauge/GaugeVario.hpp"
+#include "Gauge/GaugeCDI.hpp"
 
 #ifdef WINDOWSPC
 #include "Asset.hpp" /* for SCREENWIDTH and SCREENHEIGHT */

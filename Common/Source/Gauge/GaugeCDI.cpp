@@ -37,50 +37,27 @@ Copyright_License {
 */
 
 #include "Gauge/GaugeCDI.hpp"
-#include "XCSoar.h"
-#include "Interface.hpp"
 #include "LogFile.hpp"
 #include "Math/FastMath.h"
 #include "InfoBoxLayout.h"
 #include "Screen/Fonts.hpp"
-#include "Screen/TextWindow.hpp"
-#include "MainWindow.hpp"
-#include "Interface.hpp"
+
 #include <tchar.h>
 
-TextWindow GaugeCDI::window;
-
-void GaugeCDI::Create() {
+GaugeCDI::GaugeCDI(ContainerWindow &parent)
+{
   // start of new code for displaying CDI window
   StartupStore(TEXT("Create CDI\n"));
 
-  window.set(XCSoarInterface::main_window,
-             (int)(InfoBoxLayout::ControlWidth*0.6),
-             (int)(InfoBoxLayout::ControlHeight+1),
-             (int)(InfoBoxLayout::ControlWidth*2.8),
-             (int)(InfoBoxLayout::TitleHeight*1.4));
-  window.insert_after(HWND_TOP);
-  window.set_font(CDIWindowFont);
+  set(parent,
+      (int)(InfoBoxLayout::ControlWidth * 0.6),
+      (int)(InfoBoxLayout::ControlHeight + 1),
+      (int)(InfoBoxLayout::ControlWidth * 2.8),
+      (int)(InfoBoxLayout::TitleHeight * 1.4));
+  insert_after(HWND_TOP);
+  set_font(CDIWindowFont);
 
-  // end of new code for drawing CDI window (see below for destruction of objects)
-
-  window.hide();
-}
-
-
-
-void GaugeCDI::Destroy() {
-  window.reset();
-}
-
-void GaugeCDI::Show()
-{
-  window.show();
-}
-
-void GaugeCDI::Hide()
-{
-  window.hide();
+  hide();
 }
 
 void GaugeCDI::Update(double TrackBearing, double WaypointBearing)
@@ -121,6 +98,6 @@ void GaugeCDI::Update(double TrackBearing, double WaypointBearing)
     CDIDisplay[2]='<';
   }
 
-  window.set_text(CDIDisplay);
+  set_text(CDIDisplay);
   // end of new code to display CDI scale
 }

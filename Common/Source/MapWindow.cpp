@@ -66,6 +66,7 @@ Copyright_License {
 #include "RasterWeather.h"
 #include "options.h" /* for DEBUG_VIRTUALKEYS */
 #include "Defines.h" /* for DEBUG_VIRTUALKEYS */
+#include "Gauge/GaugeCDI.hpp"
 
 #ifdef PNA
 #include "Asset.hpp"
@@ -101,6 +102,7 @@ ScreenGraphics MapGfx;
 
 MapWindow::MapWindow()
   :MapWindowProjection(),
+   cdi(NULL),
    TargetDrag_State(0),
    TargetDrag_Latitude(0),
    TargetDrag_Longitude(0),
@@ -109,6 +111,12 @@ MapWindow::MapWindow()
    FullScreen(false)
 {
 
+}
+
+MapWindow::~MapWindow()
+{
+  if (cdi != NULL)
+    delete cdi;
 }
 
 void
@@ -134,6 +142,8 @@ MapWindow::set(ContainerWindow &parent,
                         MapRectBig.right, MapRectBig.bottom);
 
   get_canvas().copy(draw_canvas);
+
+  cdi = new GaugeCDI(parent); /* XXX better attach to "this"? */
 }
 
 void MapWindow::RefreshMap() {

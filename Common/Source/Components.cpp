@@ -43,7 +43,6 @@ Copyright_License {
 #include "InfoBoxManager.h"
 #include "RasterTerrain.h"
 #include "RasterWeather.h"
-#include "Gauge/GaugeCDI.hpp"
 #include "InputEvents.h"
 #include "Atmosphere.h"
 #include "Device/Geoid.h"
@@ -292,8 +291,6 @@ bool XCSoarInterface::Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
   PreloadInitialisation(false);
   ////////////////////////////////////////////////////////
 
-  GaugeCDI::Create();
-
   LoadWindFromRegistry();
   CalculateNewPolarCoef();
   StartupStore(TEXT("GlidePolar::UpdatePolar\n"));
@@ -472,10 +469,6 @@ void XCSoarInterface::Shutdown(void) {
   CloseFLARMDetails();
 
   // Kill windows
-
-  StartupStore(TEXT("Close Gauges\n"));
-
-  GaugeCDI::Destroy();
 
   StartupStore(TEXT("Close Messages\n"));
   Message::Destroy();

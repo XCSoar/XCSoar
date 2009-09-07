@@ -62,6 +62,7 @@ typedef struct _THERMAL_SOURCE_VIEW
   bool Visible;
 } THERMAL_SOURCE_VIEW;
 
+class GaugeCDI;
 
 class MapWindow
 : public MaskedPaintWindow, public MapWindowBase,
@@ -71,8 +72,11 @@ class MapWindow
   public MapDataClient {
   PeriodClock mouse_down_clock;
 
+  GaugeCDI *cdi;
+
  public:
   MapWindow();
+  virtual ~MapWindow();
 
   static bool register_class(HINSTANCE hInstance);
 
