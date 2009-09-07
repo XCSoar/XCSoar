@@ -36,8 +36,8 @@ Copyright_License {
 */
 
 #include "MapWindowProjection.hpp"
-#include "MapWindow.h"
 #include "Protection.hpp"
+#include "MapWindow.h"
 #include "Math/FastMath.h"
 #include "Math/Geometry.hpp"
 #include "InfoBoxLayout.h"
@@ -376,13 +376,11 @@ MapWindowProjection::CalculateOrigin
  const SETTINGS_MAP &settings_map)
 {
 
-  mutexTaskData.Lock();
   if (TargetPan) {
     CalculateOrientationTargetPan(DrawInfo, DerivedDrawInfo, settings_map);
   } else {
     CalculateOrientationNormal(DrawInfo, DerivedDrawInfo, settings_map);
   }
-  mutexTaskData.Unlock();
 
   if (_origin_centered || settings_map.EnablePan) {
     Orig_Screen.x = (rc.left + rc.right)/2;
@@ -552,9 +550,7 @@ void MapWindowProjection::UpdateMapScale(const NMEA_INFO &DrawInfo,
 
   bool user_asked_for_change = false;
 
-  mutexTaskData.Lock();
   bool my_target_pan = TargetPan;
-  mutexTaskData.Unlock();
 
   // if there is user intervention in the scale
   if(MapScale != _RequestedMapScale) {
