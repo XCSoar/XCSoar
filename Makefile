@@ -260,7 +260,9 @@ CPPFLAGS	+= -DFORCEPORTRAIT
   endif
 endif
 
-ifneq ($(CONFIG_WINE),y)
+ifeq ($(CONFIG_WINE),y)
+CPPFLAGS += -DHAVE_POSIX
+else
 CPPFLAGS += -DHAVE_MSVCRT
 endif
 
