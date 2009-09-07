@@ -11,10 +11,20 @@
 #include "LogFile.hpp"
 #include "InfoBoxLayout.h"
 #include "Screen/Fonts.hpp"
+#include "Gauge/GaugeFLARM.hpp"
+#include "Gauge/GaugeVario.hpp"
 
 #ifdef WINDOWSPC
 #include "Asset.hpp" /* for SCREENWIDTH and SCREENHEIGHT */
 #endif
+
+MainWindow::~MainWindow()
+{
+  if (vario != NULL)
+    delete vario;
+  if (flarm != NULL)
+    delete flarm;
+}
 
 bool
 MainWindow::register_class(HINSTANCE hInstance)
@@ -81,6 +91,9 @@ MainWindow::set(LPCTSTR text,
   map.set(XCSoarInterface::main_window, rcsmall, rc);
   map.set_font(MapWindowFont);
   map.SetMapRect(rcsmall);
+
+  vario = new GaugeVario(*this, map.GetMapRect());
+  flarm = new GaugeFLARM(*this);
 }
 
 ///////////////////////////////////////////////////////////////////////////

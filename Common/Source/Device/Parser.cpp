@@ -60,6 +60,7 @@ Copyright_License {
 #include "ReplayLogger.hpp"
 #include "Interface.hpp"
 #include "Components.hpp" // bad
+#include "MainWindow.hpp" // also bad
 
 #if defined(GNAV) && !defined(WINDOWSPC)
 #include "SettingsUser.hpp" /* for UTCOffset */
@@ -933,6 +934,7 @@ int FLARM_FindSlot(NMEA_INFO *GPS_INFO, long Id)
   for (i=0; i<FLARM_MAX_TRAFFIC; i++) {
     if (GPS_INFO->FLARM_Traffic[i].ID==0) {
       // this is a new target
+      GaugeFLARM *gauge_flarm = XCSoarInterface::main_window.flarm;
       if (gauge_flarm != NULL)
         gauge_flarm->Suppress = false;
       return i;
@@ -1139,6 +1141,7 @@ void DeviceBlackboard::FLARM_RefreshSlots() {
 	  SetBasic().FLARM_Traffic[i].ID= 0;
 	  SetBasic().FLARM_Traffic[i].Name[0] = 0;
 	} else {
+          GaugeFLARM *gauge_flarm = XCSoarInterface::main_window.flarm;
           if (gauge_flarm != NULL && Basic().FLARM_Traffic[i].AlarmLevel > 0)
             gauge_flarm->Suppress = false;
 
@@ -1148,6 +1151,7 @@ void DeviceBlackboard::FLARM_RefreshSlots() {
     }
   }
 
+  GaugeFLARM *gauge_flarm = XCSoarInterface::main_window.flarm;
   if (gauge_flarm != NULL)
     gauge_flarm->TrafficPresent(present);
 }

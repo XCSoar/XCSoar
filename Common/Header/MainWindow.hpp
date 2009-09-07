@@ -41,14 +41,22 @@ Copyright_License {
 #include "Screen/TopWindow.hpp"
 #include "MapWindow.h"
 
+class GaugeVario;
+class GaugeFLARM;
+
 /**
  * The XCSoar main window.
  */
 class MainWindow : public TopWindow {
 public:
   MapWindow map;
+  GaugeVario *vario;
+  GaugeFLARM *flarm;
 
 public:
+  MainWindow():vario(NULL), flarm(NULL) {}
+  virtual ~MainWindow();
+
   static bool find(LPCTSTR text) {
     return TopWindow::find(_T("XCSoarMain"), text);
   }

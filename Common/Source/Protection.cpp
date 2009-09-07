@@ -104,7 +104,9 @@ DWORD InstrumentThread (LPVOID lpvoid) {
       continue;
 
     if (XCSoarInterface::main_window.map.IsDisplayRunning()) {
-      if (EnableVarioGauge) {
+      GaugeVario *gauge_vario = XCSoarInterface::main_window.vario;
+
+      if (EnableVarioGauge && gauge_vario != NULL) {
 	
 	mutexFlightData.Lock();
 	gauge_vario->ReadBlackboardBasic(device_blackboard.Basic());
@@ -221,6 +223,8 @@ void CreateCalculationThread(void) {
   XCSoarInterface::SendSettingsMap();
 
   device_blackboard.ReadBlackboard(glide_computer.Calculated());
+
+  GaugeVario *gauge_vario = XCSoarInterface::main_window.vario;
   if (gauge_vario) {
     gauge_vario->ReadBlackboardBasic(device_blackboard.Basic());
     gauge_vario->ReadBlackboardCalculated(device_blackboard.Calculated());

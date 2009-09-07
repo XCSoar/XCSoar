@@ -540,6 +540,7 @@ void InputEvents::eventFLARMRadar(const TCHAR *misc) {
 	(void)misc;
   //  if (_tcscmp(misc, TEXT("on")) == 0) {
 
+  GaugeFLARM *gauge_flarm = XCSoarInterface::main_window.flarm;
   if (gauge_flarm == NULL)
     return;
 

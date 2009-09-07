@@ -50,8 +50,6 @@ class DrawThread;
 // other global objects
 extern Marks *marks;
 extern TopologyStore *topology;
-extern GaugeVario *gauge_vario;
-extern GaugeFLARM *gauge_flarm;
 extern RasterTerrain terrain;
 extern RasterWeather RASP;
 extern GlideComputer glide_computer;

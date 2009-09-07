@@ -44,8 +44,6 @@ Copyright_License {
 #include "RasterTerrain.h"
 #include "RasterWeather.h"
 #include "Gauge/GaugeCDI.hpp"
-#include "Gauge/GaugeFLARM.hpp"
-#include "Gauge/GaugeVario.hpp"
 #include "InputEvents.h"
 #include "Atmosphere.h"
 #include "Device/Geoid.h"
@@ -87,8 +85,6 @@ Copyright_License {
 #include "DrawThread.hpp"
 #include "options.h"
 
-GaugeVario *gauge_vario;
-GaugeFLARM *gauge_flarm;
 Marks *marks;
 TopologyStore *topology;
 RasterTerrain terrain;
@@ -244,9 +240,6 @@ bool XCSoarInterface::Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
   }
   main_window.install_timer();
 
-  StartupStore(TEXT("Create FLARM gauge\n"));
-  gauge_flarm = new GaugeFLARM(main_window);
-
   StartupStore(TEXT("Initialise message system\n"));
   Message::Initialize(main_window.map.GetMapRectBig()); // creates window, sets fonts
 
@@ -298,8 +291,6 @@ bool XCSoarInterface::Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
   ////////////////////////////////////////////////////////
 
   GaugeCDI::Create();
-
-  gauge_vario = new GaugeVario(main_window, main_window.map.GetMapRect());
 
   LoadWindFromRegistry();
   CalculateNewPolarCoef();
@@ -357,7 +348,7 @@ bool XCSoarInterface::Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
 
   // Finally ready to go.. all structures must be present before this.
   StartupStore(TEXT("CreateDrawingThread\n"));
-  draw_thread = new DrawThread(main_window.map, gauge_flarm);
+  draw_thread = new DrawThread(main_window.map, main_window.flarm);
   draw_thread->start();
 
   StartupStore(TEXT("ShowInfoBoxes\n"));
@@ -483,8 +474,6 @@ void XCSoarInterface::Shutdown(void) {
   StartupStore(TEXT("Close Gauges\n"));
 
   GaugeCDI::Destroy();
-  delete gauge_vario;
-  delete gauge_flarm;
 
   StartupStore(TEXT("Close Messages\n"));
   Message::Destroy();
