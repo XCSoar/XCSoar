@@ -282,6 +282,7 @@ bool MapWindow::Idle(const bool do_force) {
     }
 
   } while (RenderTimeAvailable() && 
+	   !drawTriggerEvent.test() &&
 	   (still_dirty = 
 	      main_idle.dirty 
 	    | terrain_idle.dirty 
