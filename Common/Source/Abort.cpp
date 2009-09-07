@@ -119,8 +119,8 @@ GlideComputerTask::SortLandableWaypoints()
 
   if (!WayPointList) return;
 
-  //  LockFlightData();
-  mutexTaskData.Lock();
+  ScopeLock protect(mutexTaskData);
+
   active_waypoint_on_entry = ActiveWayPoint;
 
   // Do preliminary fast search
@@ -359,6 +359,4 @@ GlideComputerTask::SortLandableWaypoints()
   if (active_waypoint_on_entry != ActiveWayPoint){
     SelectedWaypoint = ActiveWayPoint;
   }
-  mutexTaskData.Unlock();
-  //  UnlockFlightData();
 }

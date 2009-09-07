@@ -1081,9 +1081,6 @@ void InputEvents::eventBugs(const TCHAR *misc) {
   double BUGS = GlidePolar::GetBugs();
   double oldBugs = BUGS;
 
-  mutexComm.Lock(); // Must LockComm to prevent deadlock
-  mutexFlightData.Lock();
-
   if (_tcscmp(misc, TEXT("up")) == 0) {
     BUGS = iround(BUGS*100+10) / 100.0;
   }
@@ -1106,8 +1103,6 @@ void InputEvents::eventBugs(const TCHAR *misc) {
     GlidePolar::SetBugs(BUGS);
     GlidePolar::UpdatePolar(true, SettingsComputer());
   }
-  mutexFlightData.Unlock();
-  mutexComm.Unlock();
 }
 
 // Ballast
@@ -1120,8 +1115,7 @@ void InputEvents::eventBugs(const TCHAR *misc) {
 void InputEvents::eventBallast(const TCHAR *misc) {
   double BALLAST = GlidePolar::GetBallast();
   double oldBallast= BALLAST;
-  mutexComm.Lock(); // Must mutexComm.Lock to prevent deadlock
-  mutexFlightData.Lock();
+
   if (_tcscmp(misc, TEXT("up")) == 0) {
     BALLAST = iround(BALLAST*100.0+10) / 100.0;
   }
@@ -1144,8 +1138,6 @@ void InputEvents::eventBallast(const TCHAR *misc) {
     GlidePolar::SetBallast(BALLAST);
     GlidePolar::UpdatePolar(true, SettingsComputer());
   }
-  mutexFlightData.Unlock();
-  mutexComm.Unlock();
 }
 
 #include "Task.h"

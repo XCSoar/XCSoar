@@ -137,74 +137,62 @@ void XCSoarInterface::DefaultSettings()
 
 
 void XCSoarInterface::ExchangeBlackboard() {
-  mutexFlightData.Lock();
+  ScopeLock protect(mutexFlightData);
   ReceiveBlackboard();
   ReceiveMapProjection();
   SendSettingsComputer();
   SendSettingsMap();
-  mutexFlightData.Unlock();
 }
 
 void XCSoarInterface::ReceiveBlackboard() {
-  mutexFlightData.Lock();
+  ScopeLock protect(mutexFlightData);
   ReadBlackboardBasic(device_blackboard.Basic());
   ReadBlackboardCalculated(device_blackboard.Calculated());
-  mutexFlightData.Unlock();
 }
 
 
 void XCSoarInterface::SendSettingsComputer() {
+  ScopeLock protect(mutexFlightData);
   // send computer settings to the device because we know
   // that it won't be reading from them if we lock it, and
   // then others can retrieve from it at their convenience.
-  mutexFlightData.Lock();
   device_blackboard.ReadSettingsComputer(SettingsComputer());
-  mutexFlightData.Unlock();
   // TODO: trigger refresh if the settings are changed
 }
 
 void XCSoarInterface::ReceiveMapProjection() 
 {
-  mutexFlightData.Lock();
+  ScopeLock protect(mutexFlightData);
   ReadMapProjection(device_blackboard.MapProjection());
-  mutexFlightData.Unlock();
 }
 
 void XCSoarInterface::SendSettingsMap() {
-  mutexFlightData.Lock();
+  ScopeLock protect(mutexFlightData);
   device_blackboard.ReadSettingsMap(SettingsMap());
-  mutexFlightData.Unlock();
   // TODO: trigger refresh if the settings are changed
 }
 
 
 bool XCSoarInterface::InterfaceTimeoutZero(void) {
-  bool retval;
-  mutexInterfaceTimeout.Lock();
-  retval= (interface_timeout==0);
-  mutexInterfaceTimeout.Unlock();
-  return retval;
+  ScopeLock protect(mutexInterfaceTimeout);
+  return (interface_timeout==0);
 }
 
 void XCSoarInterface::InterfaceTimeoutReset(void) {
-  mutexInterfaceTimeout.Lock();
+  ScopeLock protect(mutexInterfaceTimeout);
   interface_timeout = 0;
-  mutexInterfaceTimeout.Unlock();
 }
 
 
 bool XCSoarInterface::InterfaceTimeoutCheck(void) {
-  bool retval;
-  mutexInterfaceTimeout.Lock();
+  ScopeLock protect(mutexInterfaceTimeout);
   if (interface_timeout > 60*10) {
     interface_timeout = 0;
-    retval= true;
+    return true;
   } else {
     interface_timeout++;
-    retval= false;
+    return false;
   }
-  mutexInterfaceTimeout.Unlock();
-  return retval;
 }
 
 void ActionInterface::SignalShutdown(bool force) {

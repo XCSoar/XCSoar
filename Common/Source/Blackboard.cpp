@@ -119,9 +119,8 @@ DeviceBlackboard::SetLocation(double lon, double lat,
 };
 
 void DeviceBlackboard::StopReplay() {
-  mutexFlightData.Lock();
+  ScopeLock protect(mutexFlightData);
   SetBasic().Speed = 0;
-  mutexFlightData.Unlock();
 }
 
 
