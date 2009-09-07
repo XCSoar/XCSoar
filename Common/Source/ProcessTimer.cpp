@@ -221,7 +221,7 @@ void ProcessTimer::Process(void)
     return;
   }
 
-  if (itimeout % 20 == 0) {
+  if (itimeout % 10 == 0) {
     // check connection status every 5 seconds
     itimeout = ConnectionProcessTimer(itimeout);
   }
