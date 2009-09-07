@@ -83,16 +83,7 @@ Copyright_License {
 
 static  const TCHAR *COMMPort[] = {TEXT("COM1:"),TEXT("COM2:"),TEXT("COM3:"),TEXT("COM4:"),TEXT("COM5:"),TEXT("COM6:"),TEXT("COM7:"),TEXT("COM8:"),TEXT("COM9:"),TEXT("COM10:"),TEXT("COM0:")};
 static  const DWORD   dwSpeed[] = {1200,2400,4800,9600,19200,38400,57600,115200};
-static  DWORD PortIndex1 = 0;
-static  DWORD SpeedIndex1 = 2;
-static  DWORD PortIndex2 = 0;
-static  DWORD SpeedIndex2 = 2;
 
-#ifdef _SIM_
-static BOOL fSimMode = TRUE;
-#else
-static BOOL fSimMode = FALSE;
-#endif
 
 DeviceRegister_t   DeviceRegister[NUMREGDEV];
 DeviceDescriptor_t DeviceList[NUMDEV];
@@ -206,8 +197,9 @@ BOOL devInitOne(PDeviceDescriptor_t dev, int index, const TCHAR *port,
 {
   TCHAR DeviceName[DEVNAMESIZE];
 
-  if (fSimMode)
+#ifdef _SIM_
     return FALSE;
+#endif
 
   ReadDeviceSettings(index, DeviceName);
 
@@ -258,6 +250,7 @@ BOOL devInit(LPCTSTR CommandLine){
   pDevPrimaryBaroSource = NULL;
   pDevSecondaryBaroSource=NULL;
 
+  DWORD PortIndex1, PortIndex2, SpeedIndex1, SpeedIndex2;
 #ifdef GNAV
   PortIndex1 = 2; SpeedIndex1 = 5;
   PortIndex2 = 0; SpeedIndex2 = 5;
@@ -420,8 +413,10 @@ BOOL devPutMacCready(PDeviceDescriptor_t d, double MacCready)
 {
   BOOL result = TRUE;
 
-  if (fSimMode)
-    return TRUE;
+#ifdef _SIM_
+  return TRUE;
+#endif
+
   mutexComm.Lock();
   if (d && d->Driver && d->Driver->PutMacCready)
     result = d->Driver->PutMacCready(d, MacCready);
@@ -434,8 +429,10 @@ BOOL devPutBugs(PDeviceDescriptor_t d, double Bugs)
 {
   BOOL result = TRUE;
 
-  if (fSimMode)
-    return TRUE;
+#ifdef _SIM_
+  return TRUE;
+#endif
+
   mutexComm.Lock();
   if (d && d->Driver && d->Driver->PutBugs)
     result = d->Driver->PutBugs(d, Bugs);
@@ -448,8 +445,10 @@ BOOL devPutBallast(PDeviceDescriptor_t d, double Ballast)
 {
   BOOL result = TRUE;
 
-  if (fSimMode)
-    return TRUE;
+#ifdef _SIM_
+  return TRUE;
+#endif
+
   mutexComm.Lock();
   if (d && d->Driver && d->Driver->PutBallast)
     result = d->Driver->PutBallast(d, Ballast);
@@ -497,8 +496,10 @@ BOOL devLinkTimeout(PDeviceDescriptor_t d)
 {
   BOOL result = FALSE;
 
-  if (fSimMode)
-    return TRUE;
+#ifdef _SIM_
+  return TRUE;
+#endif
+
   mutexComm.Lock();
   if (d == NULL){
     for (int i=0; i<NUMDEV; i++){
@@ -542,8 +543,10 @@ BOOL devDeclare(PDeviceDescriptor_t d, Declaration_t *decl)
 {
   BOOL result = FALSE;
 
-  if (fSimMode)
-    return TRUE;
+#ifdef _SIM_
+  return TRUE;
+#endif
+
   mutexComm.Lock();
   if (d) {
     if ((d->Driver) && (d->Driver->Declare != NULL))
@@ -742,8 +745,10 @@ BOOL devPutVolume(PDeviceDescriptor_t d, int Volume)
 {
   BOOL result = TRUE;
 
-  if (fSimMode)
-    return TRUE;
+#ifdef _SIM_
+  return TRUE;
+#endif
+
   mutexComm.Lock();
   if (d && d->Driver && d->Driver->PutVolume != NULL)
     result = d->Driver->PutVolume(d, Volume);
@@ -756,8 +761,10 @@ BOOL devPutFreqActive(PDeviceDescriptor_t d, double Freq)
 {
   BOOL result = TRUE;
 
-  if (fSimMode)
-    return TRUE;
+#ifdef _SIM_
+  return TRUE;
+#endif
+
   mutexComm.Lock();
   if (d && d->Driver && d->Driver->PutFreqActive != NULL)
     result = d->Driver->PutFreqActive(d, Freq);
@@ -770,8 +777,10 @@ BOOL devPutFreqStandby(PDeviceDescriptor_t d, double Freq)
 {
   BOOL result = TRUE;
 
-  if (fSimMode)
-    return TRUE;
+#ifdef _SIM_
+  return TRUE;
+#endif
+
   mutexComm.Lock();
   if (d && d->Driver && d->Driver->PutFreqStandby != NULL)
     result = d->Driver->PutFreqStandby(d, Freq);
