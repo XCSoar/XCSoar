@@ -52,8 +52,10 @@ struct singleMessage {
   DWORD tshow; // time message is visible for
 };
 
+class StatusMessageList;
 
 class Message: public CommonInterface {
+  static StatusMessageList status_messages;
   static EditWindow window;
 
  public:
