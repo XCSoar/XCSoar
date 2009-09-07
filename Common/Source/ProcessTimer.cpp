@@ -159,9 +159,6 @@ int ProcessTimer::ConnectionProcessTimer(int itimeout) {
   }
 
   if(!connected_now && !connected_last) {
-    // re-draw screen every five seconds even if no GPS
-    TriggerGPSUpdate();
-
     devLinkTimeout(devAll());
 
     if(!wait_connect) {
@@ -194,14 +191,6 @@ int ProcessTimer::ConnectionProcessTimer(int itimeout) {
 #ifndef _SIM_
 void ProcessTimer::Process(void)
 {
-
-  if (!Basic().Connected && DisplayTimeOutIsFresh()) {
-    // JMW 20071207
-    // re-draw screen every five seconds even if no GPS
-    // this prevents sluggish screen when inside hangar..
-    TriggerGPSUpdate();
-  }
-
   CommonProcessTimer();
 
   // now check GPS status
