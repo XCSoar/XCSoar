@@ -169,6 +169,7 @@ const TCHAR *Text2GCE[GCE_COUNT+1];
 // Mapping text names of events to the real thing
 const TCHAR *Text2NE[NE_COUNT+1];
 
+Mutex InputEvents::mutexEventQueue;
 
 // Read the data files
 void InputEvents::readFile() {
@@ -864,16 +865,9 @@ bool InputEvents::processNmea_real(int ne_id) {
 
 // This should be called ONLY by the GUI thread.
 void InputEvents::DoQueuedEvents(void) {
-  static bool blockqueue = false;
   int GCE_Queue_copy[MAX_GCE_QUEUE];
   int NMEA_Queue_copy[MAX_NMEA_QUEUE];
   int i;
-
-  if (blockqueue) return;
-  // prevent this being re-entered by gui thread while
-  // still processing
-
-  blockqueue = true;
 
   // copy the queue first, blocking
   mutexEventQueue.Lock();
@@ -906,8 +900,6 @@ void InputEvents::DoQueuedEvents(void) {
     NMEA_Queue[i]= -1;
   }
   mutexEventQueue.Unlock();
-
-  blockqueue = false; // ok, ready to go on.
 
 }
 

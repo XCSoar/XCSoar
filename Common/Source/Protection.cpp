@@ -67,7 +67,6 @@ Mutex mutexFlightData;
 // should be fast
 Mutex mutexGlideComputer;
 // protect GlideComputer data
-Mutex mutexEventQueue;
 Mutex TerrainDataClient::mutexTerrainData;
 Mutex MapDataClient::mutexMapData;
 Mutex mutexComm;

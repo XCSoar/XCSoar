@@ -42,6 +42,7 @@ Copyright_License {
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include "Interface.hpp"
+#include "Thread/Mutex.hpp"
 
 typedef void (*pt2Event)(const TCHAR *);
 
@@ -59,7 +60,7 @@ public:
 
 private:
   static mode current_mode;
-
+  static Mutex mutexEventQueue;
  private:
   static int MenuTimeOut;
  public:
