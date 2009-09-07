@@ -40,9 +40,11 @@ Copyright_License {
 
 #include "Screen/TopWindow.hpp"
 #include "MapWindow.h"
+#include "PopupMessage.hpp"
 
 class GaugeVario;
 class GaugeFLARM;
+class StatusMessageList;
 
 /**
  * The XCSoar main window.
@@ -52,9 +54,11 @@ public:
   MapWindow map;
   GaugeVario *vario;
   GaugeFLARM *flarm;
+  PopupMessage popup;
 
 public:
-  MainWindow():vario(NULL), flarm(NULL) {}
+  MainWindow(const StatusMessageList &status_messages)
+    :vario(NULL), flarm(NULL), popup(status_messages, *this) {}
   virtual ~MainWindow();
 
   static bool find(LPCTSTR text) {

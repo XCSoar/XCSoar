@@ -38,68 +38,38 @@ Copyright_License {
 #ifndef MESSAGE_H
 #define MESSAGE_H
 
-#include "Interface.hpp"
-#include "Thread/Mutex.hpp"
+#include "MainWindow.hpp"
 
-#define MAXMESSAGES 20
+class StatusMessageList;
 
-struct singleMessage {
-  TCHAR text[1000];
-  int type;
-  DWORD tstart; // time message was created
-  DWORD texpiry; // time message will expire
-  DWORD tshow; // time message is visible for
-};
-
-
-class Message: public CommonInterface {
+class Message : public PopupMessage {
  public:
+  static bool Render() {
+    return main_window.popup.Render();
+  }
 
-  enum {
-    MSG_UNKNOWN=0,
-    MSG_AIRSPACE=1,
-    MSG_USERINTERFACE=2,
-    MSG_GLIDECOMPUTER=3,
-    MSG_COMMS=4
-  };
+  static void AddMessage(DWORD tshow, int type, TCHAR *Text) {
+    main_window.popup.AddMessage(tshow, type, Text);
+  }
 
-  static void Initialize(RECT rc);
-  static void Destroy();
-  static bool Render(); // returns true if messages have changed
-
-  static void AddMessage(DWORD tshow, int type, TCHAR *Text);
-  static void AddMessage(const TCHAR* text, const TCHAR *data=NULL);
+  static void AddMessage(const TCHAR* text, const TCHAR *data=NULL) {
+    main_window.popup.AddMessage(text, data);
+  }
 
   // repeats last non-visible message of specified type (or any message
   // type=0)
-  static void Repeat(int type);
+  static void Repeat(int type) {
+    main_window.popup.Repeat(type);
+  }
 
   // clears all visible messages (of specified type or if type=0, all)
-  static bool Acknowledge(int type);
+  static bool Acknowledge(int type) {
+    return main_window.popup.Acknowledge(type);
+  }
 
-  static void CheckTouch(HWND wmControl);
-
-  static void BlockRender(bool doblock);
-
-  // used by main
-  static void Startup(bool first);
-  static void LoadFile(void);
-  static void InitFile(void);
-
- private:
-  static struct singleMessage messages[MAXMESSAGES];
-  static RECT rcmsg; // maximum message size
-  static HWND hWndMessageWindow;
-  static TCHAR msgText[2000];
-  static HDC hdc;
-  static void Resize();
-  static int GetEmptySlot();
-  static bool hidden;
-  static int nvisible;
-  static int block_ref;
-  static Mutex mutexMessage;
-  static void Lock();
-  static void Unlock();
+  static void BlockRender(bool doblock) {
+    main_window.popup.BlockRender(doblock);
+  }
 };
 
 #endif

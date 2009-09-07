@@ -81,6 +81,7 @@ Copyright_License {
 #include "resource.h"
 #include "GlideComputer.hpp"
 #include "DrawThread.hpp"
+#include "StatusMessage.hpp"
 #include "options.h"
 
 Marks *marks;
@@ -112,7 +113,6 @@ void XCSoarInterface::PreloadInitialisation(bool ask) {
   if (ask) {
     RestoreRegistry();
     ReadRegistrySettings();
-    Message::InitFile();
 
     //    CreateProgressDialog(gettext(TEXT("Initialising")));
 
@@ -129,7 +129,7 @@ void XCSoarInterface::PreloadInitialisation(bool ask) {
 #ifndef DEBUG_TRANSLATIONS
     ReadLanguageFile();
 #endif
-    Message::LoadFile();
+    status_messages.LoadFile();
     InputEvents::readFile();
   }
 
@@ -145,7 +145,7 @@ void XCSoarInterface::AfterStartup() {
   StartupStore(TEXT("ProgramStarted=3\n"));
   StartupLogFreeRamAndStorage();
 
-  Message::Startup(true);
+  status_messages.Startup(true);
 #ifdef _SIM_
   StartupStore(TEXT("GCE_STARTUP_SIMULATOR\n"));
   InputEvents::processGlideComputer(GCE_STARTUP_SIMULATOR);
@@ -165,7 +165,7 @@ void XCSoarInterface::AfterStartup() {
   InfoBoxManager::SetDirty(true);
   TriggerAll();
 
-  Message::Startup(false);
+  status_messages.Startup(false);
 #ifdef _INPUTDEBUG_
   InputEvents::showErrors();
 #endif
@@ -239,9 +239,6 @@ bool XCSoarInterface::Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
     return false;
   }
   main_window.install_timer();
-
-  StartupStore(TEXT("Initialise message system\n"));
-  Message::Initialize(main_window.map.GetMapRectBig()); // creates window, sets fonts
 
   device_blackboard.Initialise();
   ///////////////////////////////////////////////////////
@@ -464,9 +461,6 @@ void XCSoarInterface::Shutdown(void) {
   CloseFLARMDetails();
 
   // Kill windows
-
-  StartupStore(TEXT("Close Messages\n"));
-  Message::Destroy();
 
   StartupStore(TEXT("Destroy Info Boxes\n"));
   InfoBoxManager::Destroy();

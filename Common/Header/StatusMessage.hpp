@@ -35,48 +35,47 @@ Copyright_License {
 }
 */
 
-#include "Screen/EditWindow.hpp"
+#ifndef XCSOAR_STATUS_MESSAGE_H
+#define XCSOAR_STATUS_MESSAGE_H
 
-#ifdef PNA
-#include "Appearance.hpp" // for GlobalModelType
-#include "Asset.hpp" // for MODELTYPE_*
+#include "Sizes.h"
+
+#include <tchar.h>
+
+typedef struct {
+	const TCHAR *key;		/* English key */
+	const TCHAR *sound;		/* What sound entry to play */
+	const TCHAR *nmea_gps;		/* NMEA Sentence - to GPS serial */
+	const TCHAR *nmea_vario;		/* NMEA Sentence - to Vario serial */
+	bool doStatus;
+	bool doSound;
+	int delay_ms;		/* Delay for DoStatusMessage */
+	int iFontHeightRatio;	// TODO - not yet used
+	bool docenter;		// TODO - not yet used
+	int *TabStops;		// TODO - not yet used
+	int disabled;		/* Disabled - currently during run time */
+} StatusMessageSTRUCT;
+
+class StatusMessageList {
+  StatusMessageSTRUCT StatusMessageData[MAXSTATUSMESSAGECACHE];
+  int StatusMessageData_Size;
+  int olddelay;
+
+public:
+  StatusMessageList();
+
+  void LoadFile();
+
+  void Startup(bool first);
+
+  const StatusMessageSTRUCT &First() const {
+    return StatusMessageData[0];
+  }
+
+  const StatusMessageSTRUCT *Find(const TCHAR *key) const;
+
+private:
+  void _init_Status(int num);
+};
+
 #endif
-
-void
-EditWindow::set(ContainerWindow &parent, int left, int top,
-                unsigned width, unsigned height,
-                bool multiline)
-{
-  DWORD style = WS_BORDER | WS_VISIBLE | WS_CHILD
-    | ES_LEFT
-    | WS_CLIPCHILDREN
-    | WS_CLIPSIBLINGS;
-  DWORD ex_style = 0;
-
-  if (multiline)
-    style |= ES_MULTILINE | WS_VSCROLL;
-  else
-    style |= ES_AUTOHSCROLL;
-
-#ifdef PNA // VENTA3 FIX
-  if (GlobalModelType == MODELTYPE_PNA_HP31X)
-    ex_style |= WS_EX_CLIENTEDGE;
-#endif
-
-  Window::set(&parent, TEXT("EDIT"), TEXT("\0"),
-              left, top, width, height, style, ex_style);
-}
-
-void
-EditWindow::set_ro_ml(ContainerWindow &parent, int left, int top,
-                      unsigned width, unsigned height)
-{
-  DWORD style = WS_BORDER | WS_CHILD
-    | ES_CENTER | ES_MULTILINE | ES_READONLY
-    | WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
-  DWORD ex_style = 0;
-
-  Window::set(&parent, TEXT("EDIT"), TEXT("\0"),
-              left, top, width, height, style, ex_style);
-
-}
