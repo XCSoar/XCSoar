@@ -127,11 +127,7 @@ void InputEvents::eventMarkLocation(const TCHAR *misc) {
   if (_tcscmp(misc, TEXT("reset")) == 0) {
     marks->Reset();
   } else {
-    mutexComm.Lock(); // Must LockComm to prevent deadlock
-    mutexFlightData.Lock();
     marks->MarkLocation(Basic().Longitude, Basic().Latitude);
-    mutexFlightData.Unlock();
-    mutexComm.Unlock();
   }
 }
 
@@ -1841,22 +1837,20 @@ void InputEvents::sub_Pan(int vswitch) {
 
 
 void InputEvents::sub_PanCursor(int dx, int dy) {
-  /* JMW illegal
+  RECT MapRect = MapProjection().GetMapRect();
   int X= (MapRect.right+MapRect.left)/2;
   int Y= (MapRect.bottom+MapRect.top)/2;
   double Xstart, Ystart, Xnew, Ynew;
 
-  Screen2LonLat(X, Y, Xstart, Ystart);
+  MapProjection().Screen2LonLat(X, Y, Xstart, Ystart);
 
   X+= (MapRect.right-MapRect.left)*dx/4;
   Y+= (MapRect.bottom-MapRect.top)*dy/4;
-  Screen2LonLat(X, Y, Xnew, Ynew);
+  MapProjection().Screen2LonLat(X, Y, Xnew, Ynew);
 
   if (SettingsMap().EnablePan) {
     SetSettingsMap().PanLongitude += Xstart-Xnew;
     SetSettingsMap().PanLatitude += Ystart-Ynew;
   }
-  RefreshMap();
-  */
 }
 

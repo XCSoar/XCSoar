@@ -44,7 +44,6 @@ Copyright_License {
 extern Mutex mutexFlightData;
 extern Mutex mutexGlideComputer;
 extern Mutex mutexEventQueue;
-extern Mutex mutexNavBox;
 extern Mutex mutexComm;
 extern Mutex mutexTaskData;
 

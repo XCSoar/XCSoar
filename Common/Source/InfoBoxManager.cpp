@@ -488,8 +488,6 @@ void InfoBoxManager::DisplayInfoBox(void)
     LastFlipBoxTime = 0;
   }
 
-  mutexNavBox.Lock();
-
   // JMW note: this is updated every GPS time step
 
   for (unsigned i = 0; i < numInfoWindows; i++) {
@@ -849,8 +847,6 @@ void InfoBoxManager::DisplayInfoBox(void)
   Paint();
 
   first = false;
-
-  mutexNavBox.Unlock();
 }
 
 
@@ -862,12 +858,8 @@ void InfoBoxManager::ProcessKey(int keycode) {
 
   InputEvents::HideMenu();
 
-  mutexNavBox.Lock(); 
-  {
-    i = getType(InfoFocus);
-    Data_Options[m_min(NUMSELECTSTRINGS - 1, i)].Process(keycode);
-  }
-  mutexNavBox.Unlock();
+  i = getType(InfoFocus);
+  Data_Options[m_min(NUMSELECTSTRINGS - 1, i)].Process(keycode);
 
   InfoBoxesDirty = true;
 

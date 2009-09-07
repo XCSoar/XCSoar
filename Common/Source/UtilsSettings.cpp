@@ -84,7 +84,6 @@ void SettingsLeave() {
 
   mutexFlightData.Lock();
   mutexTaskData.Lock();
-  mutexNavBox.Lock();
 
   if(MAPFILECHANGED) {
     AIRSPACEFILECHANGED = TRUE;
@@ -146,7 +145,6 @@ void SettingsLeave() {
     XCSoarInterface::main_window.map.set_focus();
   }
 
-  mutexNavBox.Unlock();
   mutexTaskData.Unlock();
   mutexFlightData.Unlock();
 
