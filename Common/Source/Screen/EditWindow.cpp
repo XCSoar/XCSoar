@@ -66,3 +66,17 @@ EditWindow::set(ContainerWindow &parent, int left, int top,
   Window::set(&parent, TEXT("EDIT"), TEXT("\0"),
               left, top, width, height, style, ex_style);
 }
+
+void
+EditWindow::set_ro_ml(ContainerWindow &parent, int left, int top,
+                      unsigned width, unsigned height)
+{
+  DWORD style = WS_BORDER | WS_CHILD
+    | ES_CENTER | ES_MULTILINE | ES_READONLY
+    | WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
+  DWORD ex_style = 0;
+
+  Window::set(&parent, TEXT("EDIT"), TEXT("\0"),
+              left, top, width, height, style, ex_style);
+
+}
