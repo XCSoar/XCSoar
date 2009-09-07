@@ -49,10 +49,10 @@ Copyright_License {
 #include "Interface.hpp"
 #include "Components.hpp"
 #include "GlideComputer.hpp"
+#include "CalculationThread.hpp"
+
 #include <assert.h>
 
-static Trigger gpsUpdatedTriggerEvent(TEXT("gpsUpdatedTriggerEvent"));
-static Trigger dataTriggerEvent(TEXT("dataTriggerEvent"));
 static Trigger varioTriggerEvent(TEXT("varioTriggerEvent"));
 Trigger closeTriggerEvent(TEXT("mapCloseEvent"));
 Trigger drawTriggerEvent(TEXT("drawTriggerEvent"),false);
@@ -75,8 +75,8 @@ Mutex mutexTaskData;
 
 void TriggerGPSUpdate()
 {
-  gpsUpdatedTriggerEvent.trigger();
-  dataTriggerEvent.trigger();
+  calculation_thread->trigger_gps();
+  calculation_thread->trigger_data();
 }
 
 void TriggerVarioUpdate()
@@ -85,7 +85,7 @@ void TriggerVarioUpdate()
 }
 
 void TriggerAll(void) {
-  dataTriggerEvent.trigger();
+  calculation_thread->trigger_data();
   drawTriggerEvent.trigger();
   varioTriggerEvent.trigger();
 }
@@ -124,94 +124,7 @@ DWORD InstrumentThread (LPVOID lpvoid) {
 }
 
 
-DWORD CalculationThread (LPVOID lpvoid) {
-	(void)lpvoid;
-  bool need_calculations_slow;
-
-  need_calculations_slow = false;
-
-  // wait for proper startup signal
-  while (!XCSoarInterface::main_window.map.IsDisplayRunning()) {
-    Sleep(MIN_WAIT_TIME);
-  }
-
-  while (!closeTriggerEvent.test()) {
-
-    if (!dataTriggerEvent.wait(MIN_WAIT_TIME))
-      continue;
-
-    // set timer to determine latency (including calculations)
-    if (gpsUpdatedTriggerEvent.test()) {
-      //      MapWindow::UpdateTimeStats(true);
-    }
-
-    // make local copy before editing...
-    mutexFlightData.Lock();
-    if (gpsUpdatedTriggerEvent.test()) { // timeout on FLARM objects
-      device_blackboard.FLARM_RefreshSlots();
-    }
-    glide_computer.ReadBlackboard(device_blackboard.Basic());
-    glide_computer.ReadSettingsComputer(device_blackboard.SettingsComputer());
-    mutexFlightData.Unlock();
-
-    if (gpsUpdatedTriggerEvent.test()) {
-      drawTriggerEvent.trigger();
-    }
-
-    bool has_vario = glide_computer.Basic().VarioAvailable;
-
-    // Do vario first to reduce audio latency
-    if (has_vario) {
-      glide_computer.ProcessVario();
-    } else {
-      // run the function anyway, because this gives audio functions
-      // if no vario connected
-      if (gpsUpdatedTriggerEvent.test()) {
-	glide_computer.ProcessVario();
-	TriggerVarioUpdate(); // emulate vario update
-      }
-    }
-
-    if (gpsUpdatedTriggerEvent.test()) {
-      if (glide_computer.ProcessGPS()){
-        need_calculations_slow = true;
-      }
-    }
-
-    if (closeTriggerEvent.test())
-      break; // drop out on exit
-
-    if (closeTriggerEvent.test())
-      break; // drop out on exit
-
-    if (need_calculations_slow) {
-      glide_computer.ProcessIdle();
-      need_calculations_slow = false;
-    }
-
-    if (closeTriggerEvent.test())
-      break; // drop out on exit
-
-    // values changed, so copy them back now: ONLY CALCULATED INFO
-    // should be changed in DoCalculations, so we only need to write
-    // that one back (otherwise we may write over new data)
-    mutexFlightData.Lock();
-    device_blackboard.ReadBlackboard(glide_computer.Calculated());
-    glide_computer.ReadMapProjection(device_blackboard.MapProjection());
-    mutexFlightData.Unlock();
-
-    // reset triggers
-    dataTriggerEvent.reset();
-    gpsUpdatedTriggerEvent.reset();
-  }
-  return 0;
-}
-
-
 void CreateCalculationThread(void) {
-  HANDLE hCalculationThread;
-  DWORD dwCalcThreadID;
-
   device_blackboard.ReadSettingsComputer(XCSoarInterface::SettingsComputer());
 
   glide_computer.ReadBlackboard(device_blackboard.Basic());
@@ -232,16 +145,8 @@ void CreateCalculationThread(void) {
   }
 
   // Create a read thread for performing calculations
-  if ((hCalculationThread =
-      CreateThread (NULL, 0,
-        (LPTHREAD_START_ROUTINE )CalculationThread,
-         0, 0, &dwCalcThreadID)) != NULL)
-  {
-    SetThreadPriority(hCalculationThread, THREAD_PRIORITY_NORMAL);
-    CloseHandle (hCalculationThread);
-  } else {
-    assert(1);
-  }
+  calculation_thread = new CalculationThread(&glide_computer);
+  calculation_thread->start();
 
   HANDLE hInstrumentThread;
   DWORD dwInstThreadID;
