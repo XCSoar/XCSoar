@@ -313,7 +313,8 @@ MapProjectionBlackboard::ReadMapProjection
 ////
 // JMW TODO, handle gauge within own thread
 #include "Gauge/GaugeFLARM.hpp"
-#include "Components.hpp"
+#include "Interface.hpp"
+#include "MainWindow.hpp"
 
 void DeviceBlackboard::FLARM_RefreshSlots() {
   int i;
@@ -329,6 +330,7 @@ void DeviceBlackboard::FLARM_RefreshSlots() {
 	  SetBasic().FLARM_Traffic[i].ID= 0;
 	  SetBasic().FLARM_Traffic[i].Name[0] = 0;
 	} else {
+          GaugeFLARM *gauge_flarm = XCSoarInterface::main_window.flarm;
           if (gauge_flarm != NULL && Basic().FLARM_Traffic[i].AlarmLevel > 0)
             gauge_flarm->Suppress = false;
 
@@ -338,6 +340,7 @@ void DeviceBlackboard::FLARM_RefreshSlots() {
     }
   }
 
+  GaugeFLARM *gauge_flarm = XCSoarInterface::main_window.flarm;
   if (gauge_flarm != NULL)
     gauge_flarm->TrafficPresent(present);
 }

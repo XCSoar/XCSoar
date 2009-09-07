@@ -1120,3 +1120,4 @@ bool NMEAParser::PortIsFlarm(int device) {
     return false;
   };
 }
+
