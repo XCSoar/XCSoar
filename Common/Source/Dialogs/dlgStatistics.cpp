@@ -54,6 +54,7 @@ Copyright_License {
 #include "Atmosphere.h"
 #include "Blackboard.hpp"
 #include "Components.hpp"
+#include "Calculations.h"
 
 #define MAXPAGE 8
 
