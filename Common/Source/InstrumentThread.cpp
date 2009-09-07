@@ -35,12 +35,33 @@ Copyright_License {
 }
 */
 
-#include "MapWindow.h"
-#include "Interface.hpp"
-#include "Protection.hpp"
+#include "InstrumentThread.hpp"
+#include "Gauge/GaugeVario.hpp"
 #include "Screen/Blank.hpp"
+#include "Protection.hpp" /* XXX to be removed */
 
-bool MapWindowBase::IsDisplayRunning() {
-  return (globalRunningEvent.test()
-	  && !ScreenBlanked);
+InstrumentThread::InstrumentThread(GaugeVario *_vario)
+  :vario_trigger(TEXT("varioTriggerEvent"), false), vario(_vario) {}
+
+void
+InstrumentThread::run()
+{
+  // wait for proper startup signal
+  globalRunningEvent.wait();
+
+  while (!closeTriggerEvent.test()) {
+    if (!vario_trigger.wait(MIN_WAIT_TIME))
+      continue;
+
+    if (!ScreenBlanked && EnableVarioGauge && vario != NULL) {
+      mutexFlightData.Lock();
+      vario->ReadBlackboardBasic(device_blackboard.Basic());
+      vario->ReadBlackboardCalculated(device_blackboard.Calculated());
+      vario->ReadSettingsComputer(device_blackboard.SettingsComputer());
+      mutexFlightData.Unlock();
+      vario->Render();
+    }
+  }
 }
+
+

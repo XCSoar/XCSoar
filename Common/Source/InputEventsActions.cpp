@@ -284,14 +284,16 @@ void InputEvents::eventScreenModes(const TCHAR *misc) {
       short pnascrollstatus;
       pnascrollstatus=1;
       if ( InfoBoxLayout::fullscreen == true ) pnascrollstatus=3;
-      if ( map_window.isMapFullScreen() ) pnascrollstatus=4;
-      if ( EnableAuxiliaryInfo == true ) pnascrollstatus=2;
+      if (SettingsMap().FullScreen)
+        pnascrollstatus = 4;
+      if (XCSoarInterface::SettingsMap().EnableAuxiliaryInfo)
+        pnascrollstatus = 2;
 
       switch (pnascrollstatus) {
       case 1:
 	if (SettingsComputer().EnableSoundModes)
           PlayResource(TEXT("IDR_WAV_CLICK"));
-	EnableAuxiliaryInfo = true;
+        SetSettingsMap().EnableAuxiliaryInfo = true;
 	break;
       case 2:
 	//	EnableAuxiliaryInfo = false;		// Disable BigInfo until it is useful
@@ -301,13 +303,13 @@ void InputEvents::eventScreenModes(const TCHAR *misc) {
 	//	InfoBoxLayout::fullscreen = false;
 	if (SettingsComputer().EnableSoundModes)
           PlayResource(TEXT("IDR_WAV_CLICK"));
-	EnableAuxiliaryInfo = false;
-	map_window.RequestFullScreen(true);
+        SetSettingsMap().EnableAuxiliaryInfo = false;
+        SetSettingsMap().FullScreen = true;
 	break;
       case 4:
 	//	InfoBoxLayout::fullscreen = false;
-	EnableAuxiliaryInfo = false;
-	map_window.RequestFullScreen(false);
+        SetSettingsMap().EnableAuxiliaryInfo = false;
+        SetSettingsMap().FullScreen = false;
 	if (SettingsComputer().EnableSoundModes)
           PlayResource(TEXT("IDR_WAV_BELL"));
 	break;
@@ -317,20 +319,20 @@ void InputEvents::eventScreenModes(const TCHAR *misc) {
     } // not a PNA_HP31X
     else
       {
-	if (EnableAuxiliaryInfo) {
+	if (XCSoarInterface::SettingsMap().EnableAuxiliaryInfo) {
 	  if (SettingsComputer().EnableSoundModes)
             PlayResource(TEXT("IDR_WAV_CLICK"));
-	  map_window.RequestToggleFullScreen();
-	  EnableAuxiliaryInfo = false;
+          SetSettingsMap().FullScreen = !SettingsMap().FullScreen;
+          SetSettingsMap().EnableAuxiliaryInfo = false;
 	} else {
-	  if (map_window.isMapFullScreen()) {
-	    map_window.RequestToggleFullScreen();
+          if (SettingsMap().FullScreen) {
+            SetSettingsMap().FullScreen = !SettingsMap().FullScreen;
 	    if (SettingsComputer().EnableSoundModes)
               PlayResource(TEXT("IDR_WAV_BELL"));
 	  } else {
 	    if (SettingsComputer().EnableSoundModes)
               PlayResource(TEXT("IDR_WAV_CLICK"));
-	    EnableAuxiliaryInfo = true;
+            SetSettingsMap().EnableAuxiliaryInfo = true;
 	  }
 	}
       } // fallback for other PNAs
@@ -432,6 +434,10 @@ void InputEvents::eventZoom(const TCHAR* misc) {
 //	TODO feature: ???	Go to particular point
 //	TODO feature: ???	Go to waypoint (eg: next, named)
 void InputEvents::eventPan(const TCHAR *misc) {
+#if defined(PNA) || defined(FIVV)
+  MapWindow &map_window = main_window.map;
+#endif
+
   if (_tcscmp(misc, TEXT("toggle")) == 0)
     sub_Pan(-1);
   else if (_tcscmp(misc, TEXT("supertoggle")) == 0)
@@ -534,6 +540,7 @@ void InputEvents::eventFLARMRadar(const TCHAR *misc) {
 	(void)misc;
   //  if (_tcscmp(misc, TEXT("on")) == 0) {
 
+  GaugeFLARM *gauge_flarm = XCSoarInterface::main_window.flarm;
   if (gauge_flarm == NULL)
     return;
 

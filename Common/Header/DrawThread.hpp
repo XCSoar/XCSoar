@@ -49,10 +49,11 @@ class DrawThread : public Thread {
   Mutex mutexRun;
 
   MapWindow &map;
+  GaugeFLARM *flarm;
 
 public:
-  DrawThread(MapWindow &_map)
-    :map(_map) {}
+  DrawThread(MapWindow &_map, GaugeFLARM *_flarm)
+    :map(_map), flarm(_flarm) {}
 
   void suspend() {
     mutexRun.Lock();

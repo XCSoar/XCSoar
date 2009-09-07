@@ -55,6 +55,7 @@ Copyright_License {
 #include "Blackboard.hpp"
 #include "Components.hpp"
 #include "PeriodClock.hpp"
+#include "MainWindow.hpp"
 
 void 
 ProcessTimer::HeapCompact()
@@ -72,9 +73,11 @@ void
 ProcessTimer::DisplayProcessTimer()
 {
   // it's ok to do this in this thread
+  GaugeVario *gauge_vario = XCSoarInterface::main_window.vario;
   if (gauge_vario != NULL)
     gauge_vario->Show(!SettingsMap().FullScreen);
   // update FLARM display (show/hide)
+  GaugeFLARM *gauge_flarm = XCSoarInterface::main_window.flarm;
   if (gauge_flarm != NULL)
     gauge_flarm->Show();
   

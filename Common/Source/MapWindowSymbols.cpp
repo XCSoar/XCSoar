@@ -902,9 +902,9 @@ void MapWindow::DrawCDI() {
     : SettingsMap().EnableCDICruise;
 
   if (dodrawcdi) {
-    GaugeCDI::Show();
-    GaugeCDI::Update(Basic().TrackBearing, Calculated().WaypointBearing);
+    cdi->show();
+    cdi->Update(Basic().TrackBearing, Calculated().WaypointBearing);
   } else {
-    GaugeCDI::Hide();
+    cdi->hide();
   }
 }

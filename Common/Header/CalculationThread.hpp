@@ -35,28 +35,38 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_COMPONENTS_HPP
-#define XCSOAR_COMPONENTS_HPP
+#ifndef XCSOAR_CALCULATION_THREAD_HPP
+#define XCSOAR_CALCULATION_THREAD_HPP
 
-class GaugeVario;
-class GaugeFLARM;
-class Marks;
-class TopologyStore;
-class RasterTerrain;
-class RasterWeather;
+#include "Thread/Thread.hpp"
+#include "Thread/Trigger.hpp"
+
 class GlideComputer;
-class DrawThread;
-class CalculationThread;
-class InstrumentThread;
 
-// other global objects
-extern Marks *marks;
-extern TopologyStore *topology;
-extern RasterTerrain terrain;
-extern RasterWeather RASP;
-extern GlideComputer glide_computer;
-extern DrawThread *draw_thread;
-extern CalculationThread *calculation_thread;
-extern InstrumentThread *instrument_thread;
+class CalculationThread : public Thread {
+  Trigger data_trigger;
+  Trigger gps_trigger;
+
+  GlideComputer *glide_computer;
+
+public:
+  CalculationThread(GlideComputer *_glide_computer);
+
+  void trigger_data() {
+    data_trigger.trigger();
+  }
+
+  void trigger_gps() {
+    gps_trigger.trigger();
+  }
+
+  /** to be removed, see ::TriggerRedraws() */
+  bool test_gps() {
+    return gps_trigger.test();
+  }
+
+protected:
+  virtual void run();
+};
 
 #endif

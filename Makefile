@@ -501,7 +501,6 @@ OBJS	:=\
 	\
 	$(SRC)/MapWindow.o 		\
 	$(SRC)/MapWindowAirspace.o 	\
-	$(SRC)/MapWindowBase.o 		\
 	$(SRC)/MapWindowEvents.o	\
 	$(SRC)/MapWindowGlideRange.o 	\
 	$(SRC)/MapWindowLabels.o 	\
@@ -518,6 +517,8 @@ OBJS	:=\
 	$(SRC)/MapWindowWaypoints.o 	\
 	$(SRC)/MapWindow2.o 		\
 	$(SRC)/DrawThread.o \
+	$(SRC)/CalculationThread.o \
+	$(SRC)/InstrumentThread.o \
 	\
 	$(SRC)/Topology.o		\
 	$(SRC)/TopologyStore.o		\
