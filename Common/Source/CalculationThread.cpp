@@ -38,8 +38,7 @@ Copyright_License {
 #include "CalculationThread.hpp"
 #include "GlideComputer.hpp"
 #include "Protection.hpp"
-#include "Interface.hpp" /* XXX to be removed */
-#include "MainWindow.hpp" /* XXX to be removed */
+#include "Screen/Blank.hpp"
 
 CalculationThread::CalculationThread(GlideComputer *_glide_computer)
   :data_trigger(TEXT("dataTriggerEvent")),
@@ -54,9 +53,7 @@ CalculationThread::run()
   need_calculations_slow = false;
 
   // wait for proper startup signal
-  while (!XCSoarInterface::main_window.map.IsDisplayRunning()) {
-    Sleep(MIN_WAIT_TIME);
-  }
+  globalRunningEvent.wait();
 
   while (!closeTriggerEvent.test()) {
 

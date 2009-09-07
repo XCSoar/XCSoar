@@ -37,9 +37,8 @@ Copyright_License {
 
 #include "InstrumentThread.hpp"
 #include "Gauge/GaugeVario.hpp"
-#include "Interface.hpp"
-#include "MainWindow.hpp" /* XXX to be removed */
-#include "Components.hpp" /* XXX to be removed */
+#include "Screen/Blank.hpp"
+#include "Protection.hpp" /* XXX to be removed */
 
 InstrumentThread::InstrumentThread(GaugeVario *_vario)
   :vario_trigger(TEXT("varioTriggerEvent"), false), vario(_vario) {}
@@ -48,16 +47,13 @@ void
 InstrumentThread::run()
 {
   // wait for proper startup signal
-  while (!XCSoarInterface::main_window.map.IsDisplayRunning()) {
-    Sleep(MIN_WAIT_TIME);
-  }
+  globalRunningEvent.wait();
 
   while (!closeTriggerEvent.test()) {
     if (!vario_trigger.wait(MIN_WAIT_TIME))
       continue;
 
-    if (XCSoarInterface::main_window.map.IsDisplayRunning() &&
-        EnableVarioGauge && vario != NULL) {
+    if (!ScreenBlanked && EnableVarioGauge && vario != NULL) {
       mutexFlightData.Lock();
       vario->ReadBlackboardBasic(device_blackboard.Basic());
       vario->ReadBlackboardCalculated(device_blackboard.Calculated());
