@@ -41,11 +41,7 @@ Copyright_License {
 
 class ProcessTimer: public XCSoarInterface {
 public:
-#ifdef _SIM_
-  static void SIMProcess();
-#else
   static void Process    ();
-#endif
 private:
   static void CommonProcessTimer    (void);
   static int ConnectionProcessTimer(int itimeout);

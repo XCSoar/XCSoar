@@ -249,19 +249,10 @@ GaugeFLARM::GaugeFLARM(ContainerWindow &parent)
   get_canvas().set_text_color(colText);
   get_canvas().set_background_color(colTextBackgnd);
 
-  // end of new code for drawing FLARM window (see below for destruction of objects)
-
-  // turn off suppression
-  Suppress = false;
-
   install_wndproc();
-  hide();
 
   RenderBg(get_canvas());
-  commit_buffer();
 
-  Visible = false;
-  Traffic = false;
   Show();
 }
 

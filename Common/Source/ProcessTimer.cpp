@@ -54,7 +54,7 @@ Copyright_License {
 #include "Math/Earth.hpp"
 #include "Blackboard.hpp"
 #include "Components.hpp"
-
+#include "PeriodClock.hpp"
 
 void 
 ProcessTimer::HeapCompact()
@@ -173,9 +173,6 @@ int ProcessTimer::ConnectionProcessTimer(int itimeout) {
   }
 
   if(!connected_now && !connected_last) {
-    // re-draw screen every five seconds even if no GPS
-    TriggerGPSUpdate();
-
     devLinkTimeout(devAll());
 
     if(!wait_connect) {
@@ -205,19 +202,11 @@ int ProcessTimer::ConnectionProcessTimer(int itimeout) {
 }
 
 
-#ifndef _SIM_
 void ProcessTimer::Process(void)
 {
-
-  if (!Basic().Connected && DisplayTimeOutIsFresh()) {
-    // JMW 20071207
-    // re-draw screen every five seconds even if no GPS
-    // this prevents sluggish screen when inside hangar..
-    TriggerGPSUpdate();
-  }
-
   CommonProcessTimer();
 
+#ifndef _SIM_
   // now check GPS status
   devTick();
 
@@ -241,35 +230,18 @@ void ProcessTimer::Process(void)
     // check connection status every 5 seconds
     itimeout = ConnectionProcessTimer(itimeout);
   }
-}
-#endif // end processing of non-simulation mode
-
-
-#ifdef _SIM_
-#include "PeriodClock.hpp"
-
-void ProcessTimer::SIMProcess(void)
-{
-
-  CommonProcessTimer();
-
-  device_blackboard.RaiseConnection();
-
+#else /* _SIM_ */
   static PeriodClock m_clock;
-
   if (m_clock.elapsed()<0) {
     m_clock.update();
   }
-
   if (ReplayLogger::Update()) {
-    TriggerGPSUpdate();
     m_clock.update();
-  } else {
-    if (m_clock.elapsed()>=1000) {
-      m_clock.update();
-      device_blackboard.ProcessSimulation();
-      TriggerGPSUpdate();
-    }
+    TriggerGPSUpdate();
+  } else if (m_clock.elapsed()>=1000) {
+    m_clock.update();
+    device_blackboard.ProcessSimulation();
+    TriggerGPSUpdate();
   }
+#endif /* _SIM_ */
 }
-#endif

@@ -131,6 +131,13 @@ void ExpandLocalPath(TCHAR* filein) {
     _stprintf(output,TEXT("%s%s"),lpath, ptr);
     _tcscpy(filein, output);
   }
+
+#if !defined(_WIN32) || defined(__WINE__)
+  /* convert backslash to slash */
+  ptr = filein;
+  while ((ptr = _tcschr(ptr, '\\')) != NULL)
+    *ptr++ = '/';
+#endif
 }
 
 
