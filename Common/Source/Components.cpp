@@ -83,6 +83,8 @@ Copyright_License {
 #include "DrawThread.hpp"
 #include "StatusMessage.hpp"
 #include "options.h"
+#include "CalculationThread.hpp"
+#include "InstrumentThread.hpp"
 
 Marks *marks;
 TopologyStore *topology;
@@ -361,6 +363,10 @@ bool XCSoarInterface::Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
 
   // map gets initial focus
   main_window.map.set_focus();
+
+  // start threads running
+  calculation_thread->start();
+  instrument_thread->start();
 
   globalRunningEvent.trigger();
 
