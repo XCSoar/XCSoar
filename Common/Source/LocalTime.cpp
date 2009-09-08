@@ -37,7 +37,7 @@ Copyright_License {
 
 #include "LocalTime.hpp"
 #include "Device/Parser.h"
-#include "SettingsTask.hpp"
+#include "Interface.hpp"
 #include "WayPoint.hpp"
 #include <stdlib.h>
 
@@ -100,8 +100,6 @@ DetectStartTime(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated)
 }
 
 
-int UTCOffset = 0; // used for Altair
-
 long GetUTCOffset(void) {
 #ifndef GNAV
   long utcoffset=0;
@@ -118,12 +116,12 @@ long GetUTCOffset(void) {
     utcoffset -= TimeZoneInformation.DaylightBias*60;
   }
 #ifdef WINDOWSPC
-  return UTCOffset;
+  return XCSoarInterface::SettingsComputer().UTCOffset;
 #else
   return utcoffset;
 #endif
 #else
-  return UTCOffset;
+  return XCSoarInterface::SettingsComputer().UTCOffset;
 #endif
 }
 

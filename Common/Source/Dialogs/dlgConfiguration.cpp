@@ -908,8 +908,8 @@ static void OnUTCData(DataField *Sender, DataField::DataAccessKind_t Mode){
     case DataField::daPut:
     case DataField::daChange:
       ival = iround(Sender->GetAsFloat()*3600.0);
-      if (UTCOffset != ival) {
-	UTCOffset = ival;
+      if (XCSoarInterface::SettingsComputer().UTCOffset != ival) {
+	XCSoarInterface::SetSettingsComputer().UTCOffset = ival;
 	utcchanged = true;
       }
       SetLocalTime();
@@ -1397,7 +1397,7 @@ static void setVariables(void) {
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpUTCOffset"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(iround(UTCOffset/1800.0)/2.0);
+    wp->GetDataField()->SetAsFloat(iround(XCSoarInterface::SettingsComputer().UTCOffset/1800.0)/2.0);
     wp->RefreshDisplay();
   }
   SetLocalTime();
@@ -2822,11 +2822,11 @@ void dlgConfigurationShowModal(void){
   wp = (WndProperty*)wf->FindByName(TEXT("prpUTCOffset"));
   if (wp) {
     ival = iround(wp->GetDataField()->GetAsFloat()*3600.0);
-    if ((UTCOffset != ival)||(utcchanged)) {
-      UTCOffset = ival;
+    if ((XCSoarInterface::SettingsComputer().UTCOffset != ival)||(utcchanged)) {
+      XCSoarInterface::SetSettingsComputer().UTCOffset = ival;
 
       // have to do this because registry variables can't be negative!
-      int lival = UTCOffset;
+      int lival = XCSoarInterface::SettingsComputer().UTCOffset;
       if (lival<0) { lival+= 24*3600; }
       SetToRegistry(szRegistryUTCOffset, lival);
       changed = true;

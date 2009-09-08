@@ -100,6 +100,10 @@ typedef struct _SETTINGS_COMPUTER {
  bool   EnableSoundModes;
  int    SoundVolume;
  int    SoundDeadband;
+
+  // local time adjustment
+  int UTCOffset;
+
 } SETTINGS_COMPUTER;
 
 #endif

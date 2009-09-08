@@ -36,7 +36,7 @@ Copyright_License {
 
 */
 
-#include "Calculations.h"
+#include "GlideComputerTask.hpp"
 #include "XCSoar.h"
 #include "Protection.hpp"
 #include "SettingsComputer.hpp"
@@ -47,7 +47,6 @@ Copyright_License {
 #include "McReady.h"
 #include "GlideSolvers.hpp"
 #include "Message.h"
-#include "GlideComputerTask.hpp"
 
 //////////////////////////////////////////////////////////////////
 

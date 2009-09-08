@@ -69,4 +69,5 @@ SettingsComputerBlackboard::SettingsComputerBlackboard()
   settings_computer.EnableAlternate2=false;
   settings_computer.BallastTimerActive = false;
   settings_computer.BallastSecsToEmpty = 120;
+  settings_computer.UTCOffset = 0;
 }

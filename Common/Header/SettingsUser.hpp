@@ -72,9 +72,6 @@ typedef enum {
 // where using these from Calculations or MapWindow thread, should
 // protect
 
-// local time adjustment
-extern int UTCOffset;
-
 typedef struct SETTINGS_MAP_ {
   bool  CircleZoom;
   bool  ExtendedVisualGlide;
