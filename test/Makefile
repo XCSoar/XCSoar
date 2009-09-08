@@ -171,6 +171,7 @@ RUN_MAP_WINDOW_OBJS = \
 	$(SRC)/TaskVisitor.o \
 	$(SRC)/TaskFile.o \
 	$(SRC)/TerrainRenderer.o \
+	$(SRC)/Thread/Mutex.o \
 	$(SRC)/Topology.o \
 	$(SRC)/TopologyStore.o \
 	$(SRC)/Units.o \

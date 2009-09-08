@@ -291,6 +291,7 @@ OBJS	:=\
 	$(SRC)/Profile.o \
 	$(SRC)/xmlParser.o 		\
 	$(SRC)/Thread/Thread.o \
+	$(SRC)/Thread/Mutex.o \
 	\
 	$(SRC)/Math/Earth.o 		\
 	$(SRC)/Math/FastMath.o 		\
