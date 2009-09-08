@@ -60,13 +60,7 @@ InstrumentThread::run()
       vario->ReadBlackboardCalculated(device_blackboard.Calculated());
       vario->ReadSettingsComputer(device_blackboard.SettingsComputer());
       mutexBlackboard.Unlock();
-      if (!device_blackboard.SettingsMap().ScreenBlanked
-	  && device_blackboard.SettingsMap().EnableVarioGauge) {
-	vario->show();
-	vario->Render();
-      } else {
-	vario->hide();
-      }
+      vario->Render(); // TODO: only render if not hidden
     }
   }
 }

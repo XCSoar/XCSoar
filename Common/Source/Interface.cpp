@@ -298,12 +298,22 @@ bool vario_visible() {
   return false;
 }
 
+#include "Gauge/GaugeVario.hpp"
 
 void
 XCSoarInterface::DisplayModes()
 {
   SetSettingsMap().EnableVarioGauge = 
     vario_visible() && !SettingsMap().FullScreen;
+
+  if (main_window.vario) {
+    if (!SettingsMap().ScreenBlanked
+	&& SettingsMap().EnableVarioGauge) {
+      main_window.vario->show();
+    } else {
+      main_window.vario->hide();
+    }
+  }
 
   if (SettingsMap().FullScreen) {
     InfoBoxManager::Hide();
