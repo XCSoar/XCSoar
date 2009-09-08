@@ -452,9 +452,9 @@ void InputEvents::eventPan(const TCHAR *misc) {
 
 #if defined(PNA) || defined(FIVV)   // VENTA-ADDON  let pan mode scroll wheel zooming with HP31X. VENTA-TODO: make it different for other PNAs
  else if (_tcscmp(misc, TEXT("up")) == 0)
-			map_window.Event_ScaleZoom(1);
-else if (_tcscmp(misc, TEXT("down")) == 0)
-			map_window.Event_ScaleZoom(-1); // fixed v58
+   sub_ScaleZoom(1);
+ else if (_tcscmp(misc, TEXT("down")) == 0)
+   sub_ScaleZoom(-1); // fixed v58
 #else
   else if (_tcscmp(misc, TEXT("up")) == 0)
     sub_PanCursor(0,1);
