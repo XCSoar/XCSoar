@@ -521,7 +521,6 @@ OBJS	:=\
 	$(SRC)/MapWindowTraffic.o 	\
 	$(SRC)/MapWindowTrail.o 	\
 	$(SRC)/MapWindowWaypoints.o 	\
-	$(SRC)/MapWindow2.o 		\
 	$(SRC)/DrawThread.o \
 	\
 	$(SRC)/DeviceBlackboard.o 	\
