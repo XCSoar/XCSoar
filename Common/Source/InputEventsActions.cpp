@@ -286,7 +286,7 @@ void InputEvents::eventScreenModes(const TCHAR *misc) {
       if ( InfoBoxLayout::fullscreen == true ) pnascrollstatus=3;
       if (SettingsMap().FullScreen)
         pnascrollstatus = 4;
-      if (XCSoarInterface::SettingsMap().EnableAuxiliaryInfo)
+      if (SettingsMap().EnableAuxiliaryInfo)
         pnascrollstatus = 2;
 
       switch (pnascrollstatus) {
@@ -319,7 +319,7 @@ void InputEvents::eventScreenModes(const TCHAR *misc) {
     } // not a PNA_HP31X
     else
       {
-	if (XCSoarInterface::SettingsMap().EnableAuxiliaryInfo) {
+	if (SettingsMap().EnableAuxiliaryInfo) {
 	  if (SettingsComputer().EnableSoundModes)
             PlayResource(TEXT("IDR_WAV_CLICK"));
           SetSettingsMap().FullScreen = !SettingsMap().FullScreen;
@@ -355,7 +355,7 @@ void InputEvents::eventScreenModes(const TCHAR *misc) {
 
   // refresh display
   InfoBoxManager::SetDirty(true);
-  XCSoarInterface::SendSettingsMap(true);
+  SendSettingsMap(true);
 }
 
 
@@ -422,7 +422,7 @@ void InputEvents::eventZoom(const TCHAR* misc) {
     else
       Message::AddMessage(TEXT("Circling Zoom OFF"));
   }
-  XCSoarInterface::SendSettingsMap(true);
+  SendSettingsMap(true);
 }
 
 // Pan
@@ -471,7 +471,7 @@ else if (_tcscmp(misc, TEXT("down")) == 0)
     else
       Message::AddMessage(TEXT("Pan mode OFF"));
   }
-  XCSoarInterface::SendSettingsMap(true);
+  SendSettingsMap(true);
 
 }
 
@@ -500,8 +500,7 @@ void InputEvents::eventTerrainTopology(const TCHAR *misc) {
 
   else if (_tcscmp(misc, TEXT("toggle")) == 0)
     sub_TerrainTopology(-1);
-  XCSoarInterface::SendSettingsMap(true);
-
+  SendSettingsMap(true);
 }
 
 // Do clear warnings IF NONE Toggle Terrain/Topology
@@ -514,6 +513,7 @@ void InputEvents::eventClearWarningsOrTerrainTopology(const TCHAR *misc) {
   // Else toggle TerrainTopology - and show the results
   sub_TerrainTopology(-1);
   sub_TerrainTopology(0);
+  SendSettingsMap(true);
 }
 
 // ClearAirspaceWarnings
@@ -545,7 +545,7 @@ void InputEvents::eventFLARMRadar(const TCHAR *misc) {
 	(void)misc;
   //  if (_tcscmp(misc, TEXT("on")) == 0) {
 
-  GaugeFLARM *gauge_flarm = XCSoarInterface::main_window.flarm;
+  GaugeFLARM *gauge_flarm = main_window.flarm;
   if (gauge_flarm == NULL)
     return;
 

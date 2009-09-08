@@ -56,7 +56,6 @@ Copyright_License {
 #include "Message.h"
 #include "TeamCodeCalculation.h"
 #include <tchar.h>
-#include "GlideComputer.hpp"
 #include "Math/NavFunctions.hpp" // used for team code
 #ifdef NEWCLIMBAV
 #include "ClimbAverageCalculator.h" // JMW new
@@ -71,11 +70,6 @@ Copyright_License {
 #include "Airspace.h"
 #include "ConditionMonitor.hpp"
 #include "MapWindowProjection.hpp"
-
-bool ForceFinalGlide= false;
-bool EnableFAIFinishHeight = false;
-int FinishLine=1;
-DWORD FinishRadius=1000;
 
 
 ///////////////////////////////////////////////

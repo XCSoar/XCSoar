@@ -394,12 +394,12 @@ void InfoBoxManager::setTypeAll(unsigned i, unsigned j) {
 int InfoBoxManager::getType(unsigned i) {
   unsigned retval = 0;
 
-  if (XCSoarInterface::SettingsMap().EnableAuxiliaryInfo) {
+  if (SettingsMap().EnableAuxiliaryInfo) {
     retval = getType(i,3);
   } else {
-    if (DisplayMode == dmCircling)
+    if (MapProjection().GetDisplayMode() == dmCircling)
       retval = getType(i,0);
-    else if (DisplayMode == dmFinalGlide) {
+    else if (MapProjection().GetDisplayMode() == dmFinalGlide) {
       retval = getType(i,2);
     } else {
       retval = getType(i,1); // cruise
@@ -435,12 +435,12 @@ void InfoBoxManager::setType(unsigned i, char j, unsigned layer)
 
 void InfoBoxManager::setType(unsigned i, char j)
 {
-  if (XCSoarInterface::SettingsMap().EnableAuxiliaryInfo) {
+  if (SettingsMap().EnableAuxiliaryInfo) {
     setType(i, 3, j);
   } else {
-    if (DisplayMode == dmCircling) {
+    if (MapProjection().GetDisplayMode() == dmCircling) {
       setType(i, 0, j);
-    } else if (DisplayMode == dmFinalGlide) {
+    } else if (MapProjection().GetDisplayMode() == dmFinalGlide) {
       setType(i, 2, j);
     } else {
       setType(i, 1, j);

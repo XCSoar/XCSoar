@@ -434,6 +434,7 @@ VOLKS	:=\
 	$(SRC)/Device/Volkslogger/vlutils.cpp
 
 OBJS	:=\
+	$(SRC)/Globals.o 		\
 	\
 	$(SRC)/AATDistance.o 		\
 	$(SRC)/Abort.o 			\

@@ -50,7 +50,7 @@ Copyright_License {
 #include "Audio/Sound.hpp"
 #include "Math/Earth.hpp"
 #include "Abort.hpp"
-#include "GlideComputer.hpp"
+#include "GlideComputerTask.hpp"
 
 // Alternates VENTA3
 int Alternate1 = -1;

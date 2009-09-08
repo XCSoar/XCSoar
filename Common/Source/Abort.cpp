@@ -47,7 +47,7 @@ Copyright_License {
 #include "McReady.h"
 #include "GlideSolvers.hpp"
 #include "Message.h"
-#include "GlideComputer.hpp"
+#include "GlideComputerTask.hpp"
 
 //////////////////////////////////////////////////////////////////
 

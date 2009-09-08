@@ -51,6 +51,7 @@ Copyright_License {
 #include "WayPoint.hpp"
 #include <math.h>
 
+
 MapWindowProjection::MapWindowProjection():
   _origin_centered(false),
   PanLatitude ( 0.0),
@@ -62,7 +63,8 @@ MapWindowProjection::MapWindowProjection():
   _scale_meters_to_screen ( 0.0),
   DisplayAircraftAngle ( 0.0),
   ScaleListCount ( 0),
-  smart_range_active(1.0)
+  smart_range_active(1.0),
+  DisplayMode(dmCruise)
 {
 
 }

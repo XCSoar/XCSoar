@@ -77,7 +77,6 @@ Copyright_License {
 
 ///////////////////////////////// Settings
 
-DisplayMode_t DisplayMode = dmCruise;
 // 12 is number of airspace types
 int      iAirspaceBrush[AIRSPACECLASSCOUNT] =
   {2,0,0,0,3,3,3,3,0,3,2,3,3,3};

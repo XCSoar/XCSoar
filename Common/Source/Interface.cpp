@@ -93,7 +93,7 @@ void XCSoarInterface::ReceiveBlackboard() {
 }
 
 
-void XCSoarInterface::SendSettingsComputer() {
+void ActionInterface::SendSettingsComputer() {
   ScopeLock protect(mutexBlackboard);
   // send computer settings to the device because we know
   // that it won't be reading from them if we lock it, and
@@ -108,7 +108,7 @@ void XCSoarInterface::ReceiveMapProjection()
   ReadMapProjection(device_blackboard.MapProjection());
 }
 
-void XCSoarInterface::SendSettingsMap(const bool trigger_draw) {
+void ActionInterface::SendSettingsMap(const bool trigger_draw) {
   ScopeLock protect(mutexBlackboard);
   if (trigger_draw) {
     DisplayModes();
@@ -230,7 +230,7 @@ bool vario_visible() {
 #include "Gauge/GaugeVario.hpp"
 
 void
-XCSoarInterface::DisplayModes()
+ActionInterface::DisplayModes()
 {
   SetSettingsMap().EnableVarioGauge = 
     vario_visible() && !SettingsMap().FullScreen;

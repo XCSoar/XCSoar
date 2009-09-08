@@ -146,7 +146,6 @@ static WndButton *buttonPaste=NULL;
 #define NUMPAGES 22
 
 
-
 static void UpdateButtons(void) {
   TCHAR text[120];
   TCHAR val[100];
@@ -3982,4 +3981,3 @@ void dlgConfigurationShowModal(void){
   wf = NULL;
 
 }
-

@@ -67,8 +67,6 @@ typedef enum {
   dmFinalGlide
 } DisplayMode_t;
 
-extern DisplayMode_t DisplayMode;
-
 // user interface options
 
 // where using these from Calculations or MapWindow thread, should

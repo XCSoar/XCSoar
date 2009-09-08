@@ -36,11 +36,11 @@ Copyright_License {
 
 */
 
-#include "Calculations.h"
+#include "Calibration.hpp"
 #include "XCSoar.h"
 #include "Math/FastMath.h"
 #include "LogFile.hpp"
-
+#include "XCSoar.h"
 /////////////////////////////////////////////////////////////////////
 
 #define NUM_CAL_SPEED 25

@@ -103,7 +103,13 @@ class MapWindowProjection {
   void ExchangeBlackboard(const NMEA_INFO &nmea_info,
 			  const DERIVED_INFO &derived_info,
 			  const SETTINGS_MAP &settings_map);
+
+  DisplayMode_t GetDisplayMode() const {
+    return DisplayMode;
+  }
  protected:
+  DisplayMode_t DisplayMode;
+
   // helpers
   bool PointVisible(const POINT &P) const;
   bool LonLatVisible(const double &lon, const double &lat) const;

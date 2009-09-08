@@ -92,6 +92,10 @@ class ActionInterface: public CommonInterface {
 public:
   // settings
   static int  MenuTimeoutMax;
+protected:
+  static void DisplayModes();
+  static void SendSettingsComputer();
+  static void SendSettingsMap(const bool trigger_draw=false);
 public: 
   // ideally these should be protected
   static void on_key_None(int UpDown);
@@ -143,12 +147,8 @@ public:
   static BOOL SetProgressStepSize(int nSize);
 
   static void ExchangeBlackboard();
-  static void SendSettingsComputer();
-  static void SendSettingsMap(const bool trigger_draw=false);
   static void ReceiveMapProjection();
   static void ReceiveBlackboard();
-protected:
-  static void DisplayModes();
 private:
   static void PreloadInitialisation(bool ask);
   static void StartupInfo();

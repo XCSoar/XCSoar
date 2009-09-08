@@ -96,9 +96,7 @@ void CreateCalculationThread(void) {
   glide_computer.ReadSettingsComputer(device_blackboard.SettingsComputer());
   glide_computer.ProcessGPS();
 
-  XCSoarInterface::ReadBlackboardBasic(device_blackboard.Basic());
-  XCSoarInterface::ReadBlackboardCalculated(glide_computer.Calculated());
-  XCSoarInterface::SendSettingsMap();
+  XCSoarInterface::ExchangeBlackboard();
 
   device_blackboard.ReadBlackboard(glide_computer.Calculated());
 
