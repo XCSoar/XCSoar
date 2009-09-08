@@ -52,6 +52,8 @@ public:
            bool tabstop = false, bool border = false);
 
   void set_text(const TCHAR *text) {
+    assert_none_locked();
+
 #ifdef ENABLE_SDL
     // XXX
 #else /* !ENABLE_SDL */

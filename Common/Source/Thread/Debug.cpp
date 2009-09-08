@@ -41,11 +41,29 @@ Copyright_License {
 #ifndef NDEBUG
 
 #include <assert.h>
+#include <stdio.h>
 
 void
 assert_none_locked()
 {
+  /*
+  int v=0;
+  if (thread_locks_held != 0)
+    v=1;
+  */
+
+  /*
   assert(thread_locks_held == 0);
+  */
+
+  if (thread_locks_held != 0) {
+    fprintf(stderr, "LOCKS_HELD=%d\n", (int)thread_locks_held);
+  }
+
+  /*
+  if (thread_locks_held != 0)
+    DebugBreak();
+  */
 }
 
 #endif /* !NDEBUG */

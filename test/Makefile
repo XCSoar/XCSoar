@@ -84,6 +84,8 @@ RUN_CANVAS_OBJS = \
 	$(SRC)/Math/FastMath.o \
 	$(SRC)/Math/Geometry.o \
 	$(SRC)/Screen/shapelib/mapsearch.o \
+	$(SRC)/Thread/Debug.o \
+	$(SRC)/Thread/Mutex.o \
 	src/RunCanvas.o \
 	$(SRC)/compat-$(TARGET).a
 ifneq ($(ENABLE_SDL),y)
@@ -171,6 +173,7 @@ RUN_MAP_WINDOW_OBJS = \
 	$(SRC)/TaskVisitor.o \
 	$(SRC)/TaskFile.o \
 	$(SRC)/TerrainRenderer.o \
+	$(SRC)/Thread/Debug.o \
 	$(SRC)/Thread/Mutex.o \
 	$(SRC)/Topology.o \
 	$(SRC)/TopologyStore.o \
@@ -216,6 +219,8 @@ RUN_DIALOG_OBJS = \
 	$(SRC)/Screen/TopWindow.o \
 	$(SRC)/Screen/Util.o \
 	$(SRC)/Screen/shapelib/mapsearch.o \
+	$(SRC)/Thread/Debug.o \
+	$(SRC)/Thread/Mutex.o \
 	$(SRC)/DataField/Base.o \
 	$(SRC)/DataField/Boolean.o \
 	$(SRC)/DataField/ComboList.o \

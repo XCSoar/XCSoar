@@ -40,6 +40,7 @@ Copyright_License {
 #define XCSOAR_SCREEN_WINDOW_HPP
 
 #include "Screen/Font.hpp"
+#include "Thread/Debug.hpp"
 
 #ifdef ENABLE_SDL
 #include "Screen/BufferCanvas.hpp"
@@ -168,6 +169,8 @@ public:
   ContainerWindow *get_root_owner();
 
   void move(int left, int top) {
+    assert_none_locked();
+
 #ifdef ENABLE_SDL
     this->left = left;
     this->top = top;
@@ -179,6 +182,8 @@ public:
   }
 
   void move(int left, int top, unsigned width, unsigned height) {
+    assert_none_locked();
+
 #ifdef ENABLE_SDL
 #else /* !ENABLE_SDL */
     ::SetWindowPos(hWnd, NULL, left, top, width, height,
@@ -188,6 +193,8 @@ public:
   }
 
   void insert_after(HWND hWnd2, bool show=true) {
+    assert_none_locked();
+
 #ifdef ENABLE_SDL
     // XXX
 #else
@@ -197,6 +204,8 @@ public:
   }
 
   void bring_to_top() {
+    assert_none_locked();
+
 #ifdef ENABLE_SDL
     // XXX
 #else
@@ -205,6 +214,8 @@ public:
   }
 
   void set_font(const Font &font) {
+    assert_none_locked();
+
 #ifdef ENABLE_SDL
     // XXX
 #else
@@ -214,6 +225,8 @@ public:
   }
 
   void show() {
+    assert_none_locked();
+
 #ifdef ENABLE_SDL
     // XXX
 #else
@@ -222,6 +235,8 @@ public:
   }
 
   void hide() {
+    assert_none_locked();
+
 #ifdef ENABLE_SDL
     // XXX
 #else
@@ -259,6 +274,8 @@ public:
 #else /* !ENABLE_SDL */
 
   void set_focus() {
+    assert_none_locked();
+
     ::SetFocus(hWnd);
   }
 
@@ -273,6 +290,8 @@ public:
   }
 
   void set_capture() {
+    assert_none_locked();
+
 #ifdef ENABLE_SDL
     // XXX
 #else
@@ -281,6 +300,8 @@ public:
   }
 
   void release_capture() {
+    assert_none_locked();
+
 #ifdef ENABLE_SDL
     // XXX
 #else
@@ -394,6 +415,8 @@ public:
 #endif
 
   void send_command(const Window &from) {
+    assert_none_locked();
+
 #ifdef ENABLE_SDL
     // XXX
 #else /* !ENABLE_SDL */

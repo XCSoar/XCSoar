@@ -170,6 +170,8 @@ public:
   }
 
   void update() {
+    assert_none_locked();
+
 #ifdef ENABLE_SDL
     // XXX
     on_paint(get_canvas());

@@ -80,6 +80,8 @@ public:
            int left, int top, unsigned width, unsigned height);
 
   void set_active() {
+    assert_none_locked();
+
 #ifdef ENABLE_SDL
     // XXX
 #else
@@ -95,6 +97,8 @@ public:
 #endif /* ENABLE_SDL */
 
   void close() {
+    assert_none_locked();
+
 #ifdef ENABLE_SDL
     on_close();
 #else /* ENABLE_SDL */
