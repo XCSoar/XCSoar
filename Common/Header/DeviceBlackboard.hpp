@@ -71,6 +71,7 @@ public:
   void RaiseConnection(); // set to 2
   void StopReplay();
   void FLARM_RefreshSlots();
+  void FLARM_ScanTraffic();
   void SetBaroAlt(double x) {
     SetBasic().BaroAltitude = x;
   }

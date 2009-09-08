@@ -66,6 +66,8 @@ CalculationThread::run()
     if (gps_trigger.test()) { 
       // timeout on FLARM objects
       device_blackboard.FLARM_RefreshSlots();
+      // lookup known traffic
+      device_blackboard.FLARM_ScanTraffic();
 
       // inform map new data is ready
       drawTriggerEvent.trigger();

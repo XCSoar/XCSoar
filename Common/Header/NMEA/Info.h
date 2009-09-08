@@ -113,6 +113,7 @@ typedef struct _NMEA_INFO
   bool FLARM_Available;
   FLARM_TRAFFIC FLARM_Traffic[FLARM_MAX_TRAFFIC];
   bool FLARMTraffic;
+  bool NewTraffic;
   int SatelliteIDs[MAXSATELLITES];
 
   double SupplyBatteryVoltage;

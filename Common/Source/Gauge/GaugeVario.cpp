@@ -44,7 +44,6 @@ Copyright_License {
 #include "MapWindowProjection.hpp"
 #include "ReplayLogger.hpp"
 #include "Math/FastMath.h"
-#include "Blackboard.hpp"
 #include "InfoBoxLayout.h"
 #include "Screen/Graphics.hpp"
 #include "Screen/Fonts.hpp"

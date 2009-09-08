@@ -228,6 +228,7 @@ bool vario_visible() {
 }
 
 #include "Gauge/GaugeVario.hpp"
+#include "Gauge/GaugeFLARM.hpp"
 
 void
 ActionInterface::DisplayModes()
@@ -242,6 +243,13 @@ ActionInterface::DisplayModes()
     } else {
       main_window.vario->hide();
     }
+  }
+
+  if (Basic().NewTraffic) {
+    // JMW broken, currently won't work very well, needs to be reworked
+    GaugeFLARM *gauge_flarm = main_window.flarm;
+    if (gauge_flarm != NULL)
+      gauge_flarm->Suppress = false;
   }
 
   if (SettingsMap().FullScreen) {

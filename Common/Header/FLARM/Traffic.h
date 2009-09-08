@@ -38,6 +38,7 @@ Copyright_License {
 #ifndef XCSOAR_FLARM_TRAFFIC_H
 #define XCSOAR_FLARM_TRAFFIC_H
 
+#include "Sizes.h"
 #include <tchar.h>
 
 typedef struct _FLARM_TRAFFIC
@@ -53,7 +54,7 @@ typedef struct _FLARM_TRAFFIC
   double RelativeEast;
   double RelativeAltitude;
   long ID;
-  TCHAR Name[10];
+  TCHAR Name[FLARM_NAME_SIZE];
   unsigned short IDType;
   unsigned short AlarmLevel;
   double Time_Fix;

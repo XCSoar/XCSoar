@@ -38,6 +38,7 @@ Copyright_License {
 #ifndef XCSOAR_SETTINGS_TASK_HPP
 #define XCSOAR_SETTINGS_TASK_HPP
 
+#include "Sizes.h"
 #include "Task.h"
 
 // control of task/waypoints
@@ -48,9 +49,9 @@ extern int  AirfieldsHomeWaypoint; // VENTA3
 extern TCHAR LastTaskFileName[MAX_PATH];
 
 // task data
-extern START_POINT StartPoints[];
-extern TASK_POINT Task[];
-extern TASKSTATS_POINT TaskStats[];
+extern Start_t StartPoints;
+extern Task_t Task;
+extern TaskStats_t TaskStats;
 extern int ActiveWayPoint;
 extern bool TaskAborted;
 extern int SelectedWaypoint;

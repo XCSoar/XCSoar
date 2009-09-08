@@ -92,9 +92,6 @@ typedef struct _TASK_POINT
   bool   AATTargetLocked;
 }TASK_POINT;
 
-typedef TASK_POINT Task_t[MAXTASKPOINTS +1];
-typedef START_POINT Start_t[MAXSTARTPOINTS +1];
-
 typedef struct _TASKSTATS_POINT
 {
   double LengthPercent;
@@ -102,9 +99,11 @@ typedef struct _TASKSTATS_POINT
   double IsoLine_Longitude[MAXISOLINES];
   bool IsoLine_valid[MAXISOLINES];
   POINT IsoLine_Screen[MAXISOLINES];
-}TASKSTATS_POINT;
+} TASKSTATS_POINT;
 
 typedef TASKSTATS_POINT TaskStats_t[MAXTASKPOINTS +1];
+typedef TASK_POINT Task_t[MAXTASKPOINTS +1];
+typedef START_POINT Start_t[MAXSTARTPOINTS +1];
 
 void ReplaceWaypoint(int index);
 void InsertWaypoint(int index, bool append=false);

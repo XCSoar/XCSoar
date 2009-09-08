@@ -40,10 +40,14 @@ Copyright_License {
 #include "Math/Earth.hpp"
 #include "UtilsSystem.hpp"
 #include "Math/Geometry.hpp"
-
+#include "TeamCodeCalculation.h"
+#include "UtilsFLARM.hpp"
+#include "Settings.hpp"
+#include "Task.h"
 #if defined(_SIM_) && !defined(NDEBUG)
 #include "Device/Parser.h"
 #endif
+#include "WayPoint.hpp"
 
 DeviceBlackboard device_blackboard;
 
@@ -252,5 +256,58 @@ DeviceBlackboard::FLARM_RefreshSlots() {
     }
   }
   SetBasic().FLARMTraffic = present;
+  SetBasic().NewTraffic = false;
 }
 
+
+// TODO: this is a bit silly, it searches every time a target is
+// visible... going to be slow..
+// should only scan the first time it appears with that ID.
+
+// at least it is now not being done by the parser
+
+void
+DeviceBlackboard::FLARM_ScanTraffic()
+{
+  if (Basic().FLARM_Available) {
+
+    ScopeLock protect(mutexTaskData);
+
+    for (int flarm_slot=0; flarm_slot<FLARM_MAX_TRAFFIC; flarm_slot++) {
+      if (Basic().FLARM_Traffic[flarm_slot].ID>0) {
+       	
+	if (!_tcslen(Basic().FLARM_Traffic[flarm_slot].Name)) {
+	  // need to lookup name for this target
+	  const TCHAR *fname = 
+	    LookupFLARMDetails(Basic().FLARM_Traffic[flarm_slot].ID);
+	  if (fname) {
+	    _tcscpy(SetBasic().FLARM_Traffic[flarm_slot].Name,fname);
+	  } else {
+	    SetBasic().FLARM_Traffic[flarm_slot].Name[0]=0;
+	  }
+	}
+
+	// JMW TODO: this is dangerous, it uses the task!
+	// it should be done outside the parser/comms thread
+	if ((Basic().FLARM_Traffic[flarm_slot].ID == TeamFlarmIdTarget)
+	    && ValidWayPoint(SettingsComputer().TeamCodeRefWaypoint)) {
+	  double bearing;
+	  double distance;
+	  
+	  TeammateLatitude = Basic().FLARM_Traffic[flarm_slot].Latitude;
+	  TeammateLongitude = Basic().FLARM_Traffic[flarm_slot].Longitude;
+	  DistanceBearing
+	    (WayPointList[SettingsComputer().TeamCodeRefWaypoint].Latitude,
+	     WayPointList[SettingsComputer().TeamCodeRefWaypoint].Longitude,
+	     Basic().FLARM_Traffic[flarm_slot].Latitude,
+	     Basic().FLARM_Traffic[flarm_slot].Longitude,
+	     &distance,
+	     &bearing);
+
+	  GetTeamCode(TeammateCode, bearing, distance);
+	  TeammateCodeValid = true;
+	}
+      }
+    }
+  }
+}

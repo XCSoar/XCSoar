@@ -42,24 +42,16 @@ Copyright_License {
 #include "Protection.hpp"
 #include <math.h>
 #include "UtilsText.hpp"
-#include "UtilsFLARM.hpp"
+//#include "UtilsFLARM.hpp"
 #include "DeviceBlackboard.hpp"
 #include "Audio/VarioSound.h"
-#include "Gauge/GaugeFLARM.hpp"
 #include "Device/device.h"
 #include "Device/Geoid.h"
-//#include "FlarmIdFile.h"
-#include "TeamCodeCalculation.h"
 #include "Math/Geometry.hpp"
 #include "Math/Earth.hpp"
 #include "Math/Pressure.h"
 #include "Math/Units.h"
-#include "Task.h" // TODO danger!
-#include "SettingsComputer.hpp"
 #include "Settings.hpp"
-#include "Interface.hpp"
-#include "Components.hpp" // bad
-#include "MainWindow.hpp" // also bad
 
 #if defined(GNAV) && !defined(WINDOWSPC)
 #include "SettingsUser.hpp" /* for UTCOffset */
@@ -576,6 +568,8 @@ bool NMEAParser::RMC(const TCHAR *String, const TCHAR **params, size_t nparams,
     GPS_INFO->TrackBearing = AngleLimit360(StrToDouble(params[7], NULL));
   }
 
+  // JMW, this should be done outside the parser..
+
   // Altair doesn't have a battery-backed up realtime clock,
   // so as soon as we get a fix for the first time, set the
   // system clock to the GPS time.
@@ -898,10 +892,6 @@ bool NMEAParser::PFLAU(const TCHAR *String,
     // traffic has appeared..
     InputEvents::processGlideComputer(GCE_FLARM_TRAFFIC);
   }
-  if (GPS_INFO->FLARM_RX > old_flarm_rx) {
-    // re-set suppression of gauge, as new traffic has arrived
-    //    GaugeFLARM::Suppress = false;
-  }
   if ((GPS_INFO->FLARM_RX==0) && (old_flarm_rx)) {
     // traffic has disappeared..
     InputEvents::processGlideComputer(GCE_FLARM_NOTRAFFIC);
@@ -931,13 +921,10 @@ int FLARM_FindSlot(NMEA_INFO *GPS_INFO, long Id)
   for (i=0; i<FLARM_MAX_TRAFFIC; i++) {
     if (GPS_INFO->FLARM_Traffic[i].ID==0) {
       // this is a new target
-      GaugeFLARM *gauge_flarm = XCSoarInterface::main_window.flarm;
-      if (gauge_flarm != NULL)
-        gauge_flarm->Suppress = false;
+      GPS_INFO->NewTraffic = true;
       return i;
     }
   }
-
   // still not found and no empty slots left, buffer is full
   return -1;
 }
@@ -1000,37 +987,6 @@ bool NMEAParser::PFLAA(const TCHAR *String,
 				 GPS_INFO->Time,
 				 GPS_INFO->FLARM_Traffic[flarm_slot].Altitude);
 #endif
-
-  TCHAR *name = GPS_INFO->FLARM_Traffic[flarm_slot].Name;
-  if (!_tcslen(name)) {
-    // need to lookup name for this target
-    const TCHAR *fname = LookupFLARMDetails(GPS_INFO->FLARM_Traffic[flarm_slot].ID);
-    if (fname) {
-      _tcscpy(name,fname);
-    } else {
-      name[0]=0;
-    }
-  }
-
-  // JMW TODO: this is dangerous, it uses the task!
-  // it should be done outside the parser/comms thread
-  if ((GPS_INFO->FLARM_Traffic[flarm_slot].ID == TeamFlarmIdTarget)
-      && ValidWayPoint(device_blackboard.SettingsComputer().TeamCodeRefWaypoint)) {
-    double bearing;
-    double distance;
-
-    TeammateLatitude = GPS_INFO->FLARM_Traffic[flarm_slot].Latitude;
-    TeammateLongitude = GPS_INFO->FLARM_Traffic[flarm_slot].Longitude;
-    DistanceBearing(WayPointList[device_blackboard.SettingsComputer().TeamCodeRefWaypoint].Latitude,
-		    WayPointList[device_blackboard.SettingsComputer().TeamCodeRefWaypoint].Longitude,
-		    GPS_INFO->FLARM_Traffic[flarm_slot].Latitude,
-		    GPS_INFO->FLARM_Traffic[flarm_slot].Longitude,
-		    &distance,
-		    &bearing);
-
-    GetTeamCode(TeammateCode, bearing, distance);
-    TeammateCodeValid = true;
-  }
 
   return false;
 }
