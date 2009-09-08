@@ -74,4 +74,10 @@ SettingsMapBlackboard::SettingsMapBlackboard()
   settings_map.EnableFLARMMap = 1;
   settings_map.ScreenBlanked = false;
   settings_map.EnableAutoBlank = false;
+
+#if defined(GNAV) && !defined(WINDOWSPC)
+  settings_map.SetSystemTimeFromGPS = true;
+#else
+  settings_map.SetSystemTimeFromGPS = false;
+#endif
 }

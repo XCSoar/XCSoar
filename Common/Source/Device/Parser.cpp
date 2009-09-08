@@ -42,8 +42,6 @@ Copyright_License {
 #include "Protection.hpp"
 #include <math.h>
 #include "UtilsText.hpp"
-//#include "UtilsFLARM.hpp"
-#include "DeviceBlackboard.hpp"
 #include "Audio/VarioSound.h"
 #include "Device/device.h"
 #include "Device/Geoid.h"
@@ -51,11 +49,6 @@ Copyright_License {
 #include "Math/Earth.hpp"
 #include "Math/Pressure.h"
 #include "Math/Units.h"
-#include "Settings.hpp"
-
-#if defined(GNAV) && !defined(WINDOWSPC)
-#include "SettingsUser.hpp" /* for UTCOffset */
-#endif
 
 #include <ctype.h>
 #include <stdlib.h>
@@ -71,8 +64,6 @@ FlarmCalculations flarmCalculations;
 #define min(x, y)   (x < y ? x : y)
 #endif
 #endif
-
-extern bool EnableCalibration;
 
 #define MAX_NMEA_LEN	90
 #define MAX_NMEA_PARAMS 18
@@ -107,14 +98,9 @@ void NMEAParser::_Reset(void) {
 }
 
 void NMEAParser::Reset(void) {
-
   // clear status
   nmeaParser1._Reset();
   nmeaParser2._Reset();
-
-  // trigger updates
-  TriggerGPSUpdate();
-  TriggerVarioUpdate();
 }
 
 
@@ -497,7 +483,6 @@ bool NMEAParser::RMB(const TCHAR *String,
 }
 
 
-bool SetSystemTimeFromGPS = false;
 
 bool NMEAParser::RMC(const TCHAR *String, const TCHAR **params, size_t nparams,
                      NMEA_INFO *GPS_INFO)
@@ -527,10 +512,6 @@ bool NMEAParser::RMC(const TCHAR *String, const TCHAR **params, size_t nparams,
   }
 
   GPS_INFO->NAVWarning = !gpsValid;
-
-  // say we are updated every time we get this,
-  // so infoboxes get refreshed if GPS connected
-  TriggerGPSUpdate();
 
   // JMW get date info first so TimeModify is accurate
   TCHAR date_buffer[9];
@@ -568,52 +549,6 @@ bool NMEAParser::RMC(const TCHAR *String, const TCHAR **params, size_t nparams,
     GPS_INFO->TrackBearing = AngleLimit360(StrToDouble(params[7], NULL));
   }
 
-  // JMW, this should be done outside the parser..
-
-  // Altair doesn't have a battery-backed up realtime clock,
-  // so as soon as we get a fix for the first time, set the
-  // system clock to the GPS time.
-  static bool sysTimeInitialised = false;
-
-  if (!GPS_INFO->NAVWarning && (gpsValid)) {
-#if defined(GNAV) && !defined(WINDOWSPC)
-    SetSystemTimeFromGPS = true;
-#endif
-    if (SetSystemTimeFromGPS) {
-      if (!sysTimeInitialised) {
-
-        SYSTEMTIME sysTime;
-        ::GetSystemTime(&sysTime);
-        int hours = (int)GPS_INFO->Hour;
-        int mins = (int)GPS_INFO->Minute;
-        int secs = (int)GPS_INFO->Second;
-        sysTime.wYear = (unsigned short)GPS_INFO->Year;
-        sysTime.wMonth = (unsigned short)GPS_INFO->Month;
-        sysTime.wDay = (unsigned short)GPS_INFO->Day;
-        sysTime.wHour = (unsigned short)hours;
-        sysTime.wMinute = (unsigned short)mins;
-        sysTime.wSecond = (unsigned short)secs;
-        sysTime.wMilliseconds = 0;
-        sysTimeInitialised = (::SetSystemTime(&sysTime)==true);
-
-#if defined(GNAV) && !defined(WINDOWSPC)
-        TIME_ZONE_INFORMATION tzi;
-        tzi.Bias = -UTCOffset/60;
-        _tcscpy(tzi.StandardName,TEXT("Altair"));
-        tzi.StandardDate.wMonth= 0; // disable daylight savings
-        tzi.StandardBias = 0;
-        _tcscpy(tzi.DaylightName,TEXT("Altair"));
-        tzi.DaylightDate.wMonth= 0; // disable daylight savings
-        tzi.DaylightBias = 0;
-
-        SetTimeZoneInformation(&tzi);
-#endif
-        sysTimeInitialised =true;
-
-      }
-    }
-  }
-
   if (!GPS_INFO->Replay) {
     if(RMZAvailable)
       {
@@ -636,6 +571,10 @@ bool NMEAParser::RMC(const TCHAR *String, const TCHAR **params, size_t nparams,
       GPS_INFO->SatellitesUsed = -1;
     }
   }
+
+  // say we are updated every time we get this,
+  // so infoboxes get refreshed if GPS connected
+  TriggerGPSUpdate();
 
   return true;
 }
@@ -839,9 +778,6 @@ bool NMEAParser::PTAS1(const TCHAR *String,
 }
 
 
-double AccelerometerZero=100.0;
-
-
 #include "InputEvents.h"
 
 double FLARM_NorthingToLatitude = 0.0;
@@ -978,7 +914,6 @@ bool NMEAParser::PFLAA(const TCHAR *String,
   GPS_INFO->FLARM_Traffic[flarm_slot].Altitude =
     GPS_INFO->FLARM_Traffic[flarm_slot].RelativeAltitude +
     GPS_INFO->Altitude;
-
 
 #ifdef FLARM_AVERAGE
   GPS_INFO->FLARM_Traffic[flarm_slot].Average30s = 

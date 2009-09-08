@@ -72,6 +72,7 @@ public:
   void StopReplay();
   void FLARM_RefreshSlots();
   void FLARM_ScanTraffic();
+  void SetSystemTime();
   void SetBaroAlt(double x) {
     SetBasic().BaroAltitude = x;
   }

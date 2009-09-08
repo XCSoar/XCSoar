@@ -281,9 +281,9 @@ static BOOL PDVDS(PDeviceDescriptor_t d, const TCHAR *String,
   (void)d;
 
   NMEAParser::ExtractParameter(String,ctemp,0);
-  GPS_INFO->AccelX = StrToDouble(ctemp,NULL)/AccelerometerZero;
+  GPS_INFO->AccelX = StrToDouble(ctemp,NULL)/100.0;
   NMEAParser::ExtractParameter(String,ctemp,1);
-  GPS_INFO->AccelZ = StrToDouble(ctemp,NULL)/AccelerometerZero;
+  GPS_INFO->AccelZ = StrToDouble(ctemp,NULL)/100.0;
 
   int mag = isqrt4((int)((GPS_INFO->AccelX*GPS_INFO->AccelX
 			  +GPS_INFO->AccelZ*GPS_INFO->AccelZ)*10000));

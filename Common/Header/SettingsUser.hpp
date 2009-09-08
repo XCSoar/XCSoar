@@ -111,6 +111,8 @@ typedef struct SETTINGS_MAP_ {
   bool  ScreenBlanked;
   bool EnableAutoBlank;
   bool  EnableVarioGauge;
+  bool SetSystemTimeFromGPS;
+
 } SETTINGS_MAP;
 
 // display mode stuff

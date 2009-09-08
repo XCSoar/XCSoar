@@ -785,6 +785,7 @@ void ReadRegistrySettings(void)
   GetFromRegistry(szRegistryDebounceTimeout, &Temp);
   XCSoarInterface::debounceTimeout = Temp;
 
+  /* JMW broken
   Temp = 100;
   GetFromRegistry(szRegistryAccelerometerZero,&Temp);
   AccelerometerZero = Temp;
@@ -793,6 +794,7 @@ void ReadRegistrySettings(void)
     Temp = 100;
     SetToRegistry(szRegistryAccelerometerZero,Temp);
   }
+  */
 
   // new appearance variables
 
@@ -855,33 +857,23 @@ void ReadRegistrySettings(void)
     needclipping=true;
     // key transcoding for this one
     StartupStore(TEXT("Loading HP31X settings\n"));
+  } else if (GlobalModelType == MODELTYPE_PNA_PN6000 ) {
+    StartupStore(TEXT("Loading PN6000 settings\n"));
+    // key transcoding for this one
+  } else if (GlobalModelType == MODELTYPE_PNA_MIO ) {
+    StartupStore(TEXT("Loading MIO settings\n"));
+    // currently no special settings from MIO but need to handle hw keys
+  } else if (GlobalModelType == MODELTYPE_PNA_NOKIA_500 ) {
+    StartupStore(TEXT("Loading Nokia500 settings\n"));
+    // key transcoding is made
+  } else if (GlobalModelType == MODELTYPE_PNA_MEDION_P5 ) {
+    StartupStore(TEXT("Loading Medion settings\n"));
+    needclipping=true;
+  } else if (GlobalModelType == MODELTYPE_PNA_PNA ) {
+    StartupStore(TEXT("Loading default PNA settings\n"));
+  } else {
+    StartupStore(TEXT("No special regsets for this PDA\n")); // VENTA2
   }
-  else
-    if (GlobalModelType == MODELTYPE_PNA_PN6000 ) {
-      StartupStore(TEXT("Loading PN6000 settings\n"));
-      // key transcoding for this one
-    }
-    else
-      if (GlobalModelType == MODELTYPE_PNA_MIO ) {
-	StartupStore(TEXT("Loading MIO settings\n"));
-	// currently no special settings from MIO but need to handle hw keys
-      }
-      else
-	if (GlobalModelType == MODELTYPE_PNA_NOKIA_500 ) {
-	  StartupStore(TEXT("Loading Nokia500 settings\n"));
-	  // key transcoding is made
-	}
-	else
-	if (GlobalModelType == MODELTYPE_PNA_MEDION_P5 ) {
-	  StartupStore(TEXT("Loading Medion settings\n"));
-	  needclipping=true;
-	}
-	else
-	  if (GlobalModelType == MODELTYPE_PNA_PNA ) {
-	    StartupStore(TEXT("Loading default PNA settings\n"));
-	  }
-	  else
-	    StartupStore(TEXT("No special regsets for this PDA\n")); // VENTA2
 
 // VENTA-ADDON Model change
   Temp = Appearance.InfoBoxModel;
@@ -1007,9 +999,9 @@ void ReadRegistrySettings(void)
   GetFromRegistry(szRegistryBallastSecsToEmpty,&Temp);
   XCSoarInterface::SetSettingsComputer().BallastSecsToEmpty = Temp;
 
-  Temp = SetSystemTimeFromGPS;
+  Temp = XCSoarInterface::SettingsMap().SetSystemTimeFromGPS;
   GetFromRegistry(szRegistrySetSystemTimeFromGPS,&Temp);
-  SetSystemTimeFromGPS = (Temp!=0);
+  XCSoarInterface::SetSettingsMap().SetSystemTimeFromGPS = (Temp!=0);
 
   Temp = XCSoarInterface::SettingsComputer().AutoForceFinalGlide;
   GetFromRegistry(szRegistryAutoForceFinalGlide,&Temp);

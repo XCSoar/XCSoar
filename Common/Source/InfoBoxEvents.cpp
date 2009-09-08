@@ -229,14 +229,16 @@ ActionInterface::on_key_Speed(int UpDown)
 void	
 ActionInterface::on_key_Accelerometer(int UpDown)
 {
-  DWORD Temp;
   if (UpDown==0) {
+    /* JMW broken
+    DWORD Temp;
     AccelerometerZero*= Basic().Gload;
     if (AccelerometerZero<1) {
       AccelerometerZero = 100;
     }
     Temp = (int)AccelerometerZero;
     SetToRegistry(szRegistryAccelerometerZero,Temp);
+    */
   }
 }
 

@@ -259,6 +259,47 @@ DeviceBlackboard::FLARM_RefreshSlots() {
   SetBasic().NewTraffic = false;
 }
 
+void
+DeviceBlackboard::SetSystemTime() {
+  // JMW, this should be done outside the parser..
+#ifndef _SIM_
+  // Altair doesn't have a battery-backed up realtime clock,
+  // so as soon as we get a fix for the first time, set the
+  // system clock to the GPS time.
+  static bool sysTimeInitialised = false;
+
+  if (!Basic().NAVWarning && SettingsMap().SetSystemTimeFromGPS
+      && !sysTimeInitialised) {
+    SYSTEMTIME sysTime;
+    ::GetSystemTime(&sysTime);
+    int hours = (int)Basic().Hour;
+    int mins = (int)Basic().Minute;
+    int secs = (int)Basic().Second;
+    sysTime.wYear = (unsigned short)Basic().Year;
+    sysTime.wMonth = (unsigned short)Basic().Month;
+    sysTime.wDay = (unsigned short)Basic().Day;
+    sysTime.wHour = (unsigned short)hours;
+    sysTime.wMinute = (unsigned short)mins;
+    sysTime.wSecond = (unsigned short)secs;
+    sysTime.wMilliseconds = 0;
+    sysTimeInitialised = (::SetSystemTime(&sysTime)==true);
+    
+#if defined(GNAV) && !defined(WINDOWSPC)
+    TIME_ZONE_INFORMATION tzi;
+    tzi.Bias = -SettingsComputer().UTCOffset/60;
+    _tcscpy(tzi.StandardName,TEXT("Altair"));
+    tzi.StandardDate.wMonth= 0; // disable daylight savings
+    tzi.StandardBias = 0;
+    _tcscpy(tzi.DaylightName,TEXT("Altair"));
+    tzi.DaylightDate.wMonth= 0; // disable daylight savings
+    tzi.DaylightBias = 0;
+    
+    SetTimeZoneInformation(&tzi);
+#endif
+    sysTimeInitialised =true;
+  }
+#endif
+}
 
 // TODO: this is a bit silly, it searches every time a target is
 // visible... going to be slow..

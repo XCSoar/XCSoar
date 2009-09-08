@@ -108,9 +108,6 @@ class NMEAParser {
   bool PFLAA(const TCHAR *String, const TCHAR **, size_t, NMEA_INFO *GPS_INFO);
 };
 
-extern double AccelerometerZero;
-extern bool SetSystemTimeFromGPS;
-
 extern bool EnableLogNMEA;
 void LogNMEA(const TCHAR* text);
 

@@ -1758,7 +1758,7 @@ static void setVariables(void) {
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpSetSystemTimeFromGPS"));
   if (wp) {
-    wp->GetDataField()->Set(SetSystemTimeFromGPS);
+    wp->GetDataField()->Set(XCSoarInterface::SettingsMap().SetSystemTimeFromGPS);
     wp->RefreshDisplay();
   }
 
@@ -2676,9 +2676,9 @@ void dlgConfigurationShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpSetSystemTimeFromGPS"));
   if (wp) {
-    if (SetSystemTimeFromGPS != wp->GetDataField()->GetAsBoolean()) {
-      SetSystemTimeFromGPS = wp->GetDataField()->GetAsBoolean();
-      SetToRegistry(szRegistrySetSystemTimeFromGPS, SetSystemTimeFromGPS);
+    if (XCSoarInterface::SetSettingsMap().SetSystemTimeFromGPS != wp->GetDataField()->GetAsBoolean()) {
+      XCSoarInterface::SetSettingsMap().SetSystemTimeFromGPS = wp->GetDataField()->GetAsBoolean();
+      SetToRegistry(szRegistrySetSystemTimeFromGPS, XCSoarInterface::SettingsMap().SetSystemTimeFromGPS);
       changed = true;
     }
   }

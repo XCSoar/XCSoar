@@ -1,6 +1,5 @@
 
 #include "XCSoar.h"
-#include <windows.h>
 ///////////////////////////////////////////////////////
 // Junkyard of globals to be eliminated
 #include "SettingsTask.hpp"

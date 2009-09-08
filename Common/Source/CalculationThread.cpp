@@ -68,7 +68,8 @@ CalculationThread::run()
       device_blackboard.FLARM_RefreshSlots();
       // lookup known traffic
       device_blackboard.FLARM_ScanTraffic();
-
+      // set system time if necessary
+      device_blackboard.SetSystemTime();
       // inform map new data is ready
       drawTriggerEvent.trigger();
     }
