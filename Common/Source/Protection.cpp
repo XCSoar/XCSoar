@@ -36,7 +36,6 @@ Copyright_License {
 */
 
 #include "XCSoar.h"
-#include "Blackboard.hpp"
 #include "MainWindow.hpp"
 #include "MapWindow.h"
 #include "Protection.hpp"

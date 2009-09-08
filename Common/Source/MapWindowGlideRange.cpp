@@ -37,7 +37,6 @@ Copyright_License {
 
 #include "MapWindow.h"
 #include "XCSoar.h"
-#include "Blackboard.hpp"
 #include "SettingsTask.hpp"
 #include "SettingsUser.hpp"
 #include "SettingsComputer.hpp"

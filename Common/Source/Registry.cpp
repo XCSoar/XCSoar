@@ -52,7 +52,6 @@ Copyright_License {
 #include "Math/Units.h"
 #include "Logger.h"
 #include "Device/Parser.h"
-#include "Blackboard.hpp"
 #include "Settings.hpp"
 #include "SettingsComputer.hpp"
 #include "SettingsTask.hpp"

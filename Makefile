@@ -524,6 +524,12 @@ OBJS	:=\
 	$(SRC)/DrawThread.o \
 	\
 	$(SRC)/DeviceBlackboard.o 	\
+	$(SRC)/InstrumentBlackboard.o 	\
+	$(SRC)/InterfaceBlackboard.o 	\
+	$(SRC)/MapProjectionBlackboard.o 	\
+	$(SRC)/MapWindowBlackboard.o 	\
+	$(SRC)/SettingsMapBlackboard.o 	\
+	$(SRC)/SettingsComputerBlackboard.o 	\
 	$(SRC)/CalculationThread.o 	\
 	$(SRC)/InstrumentThread.o 	\
 	\

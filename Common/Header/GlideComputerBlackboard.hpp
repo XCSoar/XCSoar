@@ -39,6 +39,8 @@ Copyright_License {
 #define GLIDECOMPUTER_BLACKBOARD_HPP
 
 #include "Blackboard.hpp"
+#include "SettingsComputerBlackboard.hpp"
+#include "MapProjectionBlackboard.hpp"
 
 class GlideComputerBlackboard: 
   public BaseBlackboard,

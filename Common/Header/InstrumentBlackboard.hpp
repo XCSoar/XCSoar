@@ -35,21 +35,29 @@ Copyright_License {
 }
 */
 
-#ifndef BLACKBOARD_H
-#define BLACKBOARD_H
+#ifndef INSTRUMENT_BLACKBOARD_H
+#define INSTRUMENT_BLACKBOARD_H
 
-#include "NMEA/Info.h"
-#include "NMEA/Derived.hpp"
+#include "InterfaceBlackboard.hpp"
 
-class BaseBlackboard 
-{
-  // all blackboards can be read as const
-public:
-  const NMEA_INFO& Basic() const { return gps_info; }
-  const DERIVED_INFO& Calculated() const { return calculated_info; }
+class InstrumentBlackboard {
 protected:
-  NMEA_INFO     gps_info;
-  DERIVED_INFO  calculated_info;
+  static const NMEA_INFO& Basic() { return blackboard.Basic(); }
+  static const DERIVED_INFO& Calculated() { return blackboard.Calculated(); }
+  const SETTINGS_COMPUTER& SettingsComputer()  
+  { return blackboard.SettingsComputer(); }
+public:
+  static void ReadBlackboardBasic(const NMEA_INFO& nmea_info) {
+    blackboard.ReadBlackboardBasic(nmea_info);
+  }
+  static void ReadBlackboardCalculated(const DERIVED_INFO& derived_info) {
+    blackboard.ReadBlackboardCalculated(derived_info);
+  }
+  static void ReadSettingsComputer(const SETTINGS_COMPUTER &settings) {
+    blackboard.ReadSettingsComputer(settings);
+  }
+private:
+  static InterfaceBlackboard blackboard;
 };
 
 #endif

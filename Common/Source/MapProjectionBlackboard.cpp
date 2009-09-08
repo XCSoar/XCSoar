@@ -34,22 +34,12 @@ Copyright_License {
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
 */
+#include "MapProjectionBlackboard.hpp"
 
-#ifndef BLACKBOARD_H
-#define BLACKBOARD_H
-
-#include "NMEA/Info.h"
-#include "NMEA/Derived.hpp"
-
-class BaseBlackboard 
+void 
+MapProjectionBlackboard::ReadMapProjection
+(const MapWindowProjection &map)
 {
-  // all blackboards can be read as const
-public:
-  const NMEA_INFO& Basic() const { return gps_info; }
-  const DERIVED_INFO& Calculated() const { return calculated_info; }
-protected:
-  NMEA_INFO     gps_info;
-  DERIVED_INFO  calculated_info;
-};
+  map_projection = map;
+}
 
-#endif

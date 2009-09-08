@@ -40,7 +40,6 @@ Copyright_License {
 #include "Dialogs.h"
 #include "Language.hpp"
 #include "Units.hpp"
-#include "Blackboard.hpp"
 #include "Math/FastMath.h"
 #include "Math/Earth.hpp"
 #include "Registry.hpp"

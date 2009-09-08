@@ -35,21 +35,26 @@ Copyright_License {
 }
 */
 
-#ifndef BLACKBOARD_H
-#define BLACKBOARD_H
+#ifndef INTERFACE_BLACKBOARD_H
+#define INTERFACE_BLACKBOARD_H
 
-#include "NMEA/Info.h"
-#include "NMEA/Derived.hpp"
+#include "Blackboard.hpp"
+#include "SettingsComputerBlackboard.hpp"
+#include "SettingsMapBlackboard.hpp"
+#include "MapProjectionBlackboard.hpp"
 
-class BaseBlackboard 
+class InterfaceBlackboard: 
+  public BaseBlackboard,
+  public SettingsComputerBlackboard,
+  public SettingsMapBlackboard,
+  public MapProjectionBlackboard
 {
-  // all blackboards can be read as const
 public:
-  const NMEA_INFO& Basic() const { return gps_info; }
-  const DERIVED_INFO& Calculated() const { return calculated_info; }
-protected:
-  NMEA_INFO     gps_info;
-  DERIVED_INFO  calculated_info;
+  void ReadBlackboardBasic(const NMEA_INFO &nmea_info);
+  void ReadBlackboardCalculated(const DERIVED_INFO &derived_info);
+  SETTINGS_COMPUTER& SetSettingsComputer() { return settings_computer; }
+  SETTINGS_MAP& SetSettingsMap() { return settings_map; }
+  void ReadSettingsComputer(const SETTINGS_COMPUTER &settings);
 };
 
 #endif

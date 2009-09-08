@@ -40,7 +40,7 @@ Copyright_License {
 
 #include "Screen/BufferWindow.hpp"
 #include "Screen/Bitmap.hpp"
-#include "Blackboard.hpp"
+#include "InstrumentBlackboard.hpp"
 
 class ContainerWindow;
 
@@ -54,7 +54,10 @@ typedef struct{
   const Bitmap *lastBitMap;
 }DrawInfo_t;
 
-class GaugeVario : public BufferWindow, public InstrumentBlackboard {
+class GaugeVario: 
+  public BufferWindow, 
+  public InstrumentBlackboard 
+{
 private:
   int xoffset;
   int yoffset;

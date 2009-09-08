@@ -35,21 +35,19 @@ Copyright_License {
 }
 */
 
-#ifndef BLACKBOARD_H
-#define BLACKBOARD_H
+#ifndef SETTINGS_COMPUTER_BLACKBOARD_HPP
+#define SETTINGS_COMPUTER_BLACKBOARD_HPP
 
-#include "NMEA/Info.h"
-#include "NMEA/Derived.hpp"
+#include "Blackboard.hpp"
+#include "SettingsComputer.hpp"
 
-class BaseBlackboard 
+class SettingsComputerBlackboard 
 {
-  // all blackboards can be read as const
 public:
-  const NMEA_INFO& Basic() const { return gps_info; }
-  const DERIVED_INFO& Calculated() const { return calculated_info; }
+  const SETTINGS_COMPUTER& SettingsComputer() const 
+  { return settings_computer; }
 protected:
-  NMEA_INFO     gps_info;
-  DERIVED_INFO  calculated_info;
+  SETTINGS_COMPUTER settings_computer;
 };
 
 #endif

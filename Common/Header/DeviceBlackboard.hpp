@@ -39,6 +39,9 @@ Copyright_License {
 #define DEVICE_BLACKBOARD_H
 
 #include "Blackboard.hpp"
+#include "SettingsComputerBlackboard.hpp"
+#include "SettingsMapBlackboard.hpp"
+#include "MapProjectionBlackboard.hpp"
 
 // the deviceblackboard is used as the global ground truth-state
 // since it is accessed quickly with only one mutex (flight)

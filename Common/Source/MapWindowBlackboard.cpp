@@ -34,22 +34,27 @@ Copyright_License {
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
 */
+#include "MapWindowBlackboard.hpp"
 
-#ifndef BLACKBOARD_H
-#define BLACKBOARD_H
-
-#include "NMEA/Info.h"
-#include "NMEA/Derived.hpp"
-
-class BaseBlackboard 
+void 
+MapWindowBlackboard::ReadSettingsComputer(const SETTINGS_COMPUTER 
+					      &settings) 
 {
-  // all blackboards can be read as const
-public:
-  const NMEA_INFO& Basic() const { return gps_info; }
-  const DERIVED_INFO& Calculated() const { return calculated_info; }
-protected:
-  NMEA_INFO     gps_info;
-  DERIVED_INFO  calculated_info;
-};
+  memcpy(&settings_computer,&settings,sizeof(SETTINGS_COMPUTER));
+}
 
-#endif
+void 
+MapWindowBlackboard::ReadSettingsMap(const SETTINGS_MAP 
+				     &settings) 
+{
+  memcpy(&settings_map,&settings,sizeof(SETTINGS_MAP));
+}
+
+void 
+MapWindowBlackboard::ReadBlackboard(const NMEA_INFO &nmea_info,
+				    const DERIVED_INFO &derived_info) 
+{
+  memcpy(&gps_info,&nmea_info,sizeof(NMEA_INFO));
+  memcpy(&calculated_info,&derived_info,sizeof(DERIVED_INFO));
+}
+

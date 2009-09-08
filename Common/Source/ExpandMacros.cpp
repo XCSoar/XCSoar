@@ -43,7 +43,6 @@ Copyright_License {
 #include "ReplayLogger.hpp"
 #include "MainWindow.hpp"
 #include "Interface.hpp"
-#include "Blackboard.hpp"
 #include "Settings.hpp"
 #include "SettingsComputer.hpp"
 #include "SettingsTask.hpp"

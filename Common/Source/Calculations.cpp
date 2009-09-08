@@ -42,7 +42,6 @@ Copyright_License {
 #include "Components.hpp"
 #include "Units.hpp"
 #include "Message.h"
-#include "Blackboard.hpp"
 #include "Settings.hpp"
 #include "SettingsComputer.hpp"
 #include "SettingsTask.hpp"

@@ -40,7 +40,7 @@ Copyright_License {
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
-#include "Blackboard.hpp"
+#include "InterfaceBlackboard.hpp"
 
 class MainWindow;
 class StatusMessageList;

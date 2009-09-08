@@ -35,21 +35,19 @@ Copyright_License {
 }
 */
 
-#ifndef BLACKBOARD_H
-#define BLACKBOARD_H
+#ifndef MAP_PROJECTION_BLACKBOARD_H
+#define MAP_PROJECTION_BLACKBOARD_H
 
-#include "NMEA/Info.h"
-#include "NMEA/Derived.hpp"
+#include "MapWindowProjection.hpp"
 
-class BaseBlackboard 
+class MapProjectionBlackboard
 {
-  // all blackboards can be read as const
-public:
-  const NMEA_INFO& Basic() const { return gps_info; }
-  const DERIVED_INFO& Calculated() const { return calculated_info; }
 protected:
-  NMEA_INFO     gps_info;
-  DERIVED_INFO  calculated_info;
+  MapWindowProjection map_projection;
+public:
+  const MapWindowProjection &MapProjection() const
+  { return map_projection; };
+  void ReadMapProjection(const MapWindowProjection &map);
 };
 
 #endif

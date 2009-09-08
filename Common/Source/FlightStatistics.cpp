@@ -44,7 +44,6 @@ Copyright_License {
 #include "Math/Earth.hpp"
 #include "InfoBoxLayout.h"
 #include "RasterTerrain.h"
-#include "Blackboard.hpp"
 #include "Language.hpp"
 #include "McReady.h"
 #include "GlideComputer.hpp"

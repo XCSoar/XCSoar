@@ -46,7 +46,7 @@ Copyright_License {
 #include "Screen/MaskedPaintWindow.hpp"
 #include "Screen/LabelBlock.hpp"
 #include "Protection.hpp"
-#include "Blackboard.hpp"
+#include "MapWindowBlackboard.hpp"
 #include "PeriodClock.hpp"
 #include "DrawThread.hpp"
 

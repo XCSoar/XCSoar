@@ -55,8 +55,6 @@ Copyright_License {
 
 #include <stdlib.h>
 
-#include "Blackboard.hpp"
-
 void MapWindow::DrawCrossHairs(Canvas &canvas)
 {
   Pen dash_pen(Pen::DASH, 1, Color(50, 50, 50));
