@@ -255,7 +255,7 @@ bool XCSoarInterface::Debounce(void) {
   ResetDisplayTimeOut();
   InterfaceTimeoutReset();
 
-  if (ScreenBlanked) {
+  if (SettingsMap().ScreenBlanked) {
     // prevent key presses working if screen is blanked,
     // so a key press just triggers turning the display on again
     return false;

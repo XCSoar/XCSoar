@@ -2342,7 +2342,7 @@ static void setVariables(void) {
 #ifdef WINDOWSPC
     wp->SetVisible(false);
 #endif
-    wp->GetDataField()->Set(EnableAutoBlank);
+    wp->GetDataField()->Set(XCSoarInterface::SettingsMap().EnableAutoBlank);
     wp->RefreshDisplay();
   }
 
@@ -3703,9 +3703,9 @@ void dlgConfigurationShowModal(void){
 #ifdef HAVE_BLANK
   wp = (WndProperty*)wf->FindByName(TEXT("prpAutoBlank"));
   if (wp) {
-    if (EnableAutoBlank != (wp->GetDataField()->GetAsInteger()!=0)) {
-      EnableAutoBlank = (wp->GetDataField()->GetAsInteger() != 0);
-      SetToRegistry(szRegistryAutoBlank, EnableAutoBlank);
+    if (XCSoarInterface::SettingsMap().EnableAutoBlank != (wp->GetDataField()->GetAsInteger()!=0)) {
+      XCSoarInterface::SetSettingsMap().EnableAutoBlank = (wp->GetDataField()->GetAsInteger() != 0);
+      SetToRegistry(szRegistryAutoBlank, XCSoarInterface::SettingsMap().EnableAutoBlank);
       changed = true;
     }
   }

@@ -745,7 +745,7 @@ void ReadRegistrySettings(void)
 #ifdef HAVE_BLANK
   Temp = 0;
   GetFromRegistry(szRegistryAutoBlank,&Temp);
-  EnableAutoBlank = (Temp == 1);
+  CommonInterface::SetSettingsMap().EnableAutoBlank = (Temp == 1);
 #endif
 
   Temp = 1;

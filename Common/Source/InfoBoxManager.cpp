@@ -885,7 +885,7 @@ void InfoBoxManager::InfoBoxDrawIfDirty(void) {
   // This should save lots of battery power due to CPU usage
   // of drawing the screen
 
-  if (InfoBoxesDirty && !ScreenBlanked) {
+  if (InfoBoxesDirty && !SettingsMap().ScreenBlanked) {
     DisplayInfoBox();
     InfoBoxesDirty = false;
   }
