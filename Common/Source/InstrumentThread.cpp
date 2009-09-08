@@ -37,7 +37,6 @@ Copyright_License {
 
 #include "InstrumentThread.hpp"
 #include "Gauge/GaugeVario.hpp"
-#include "Screen/Blank.hpp"
 #include "Protection.hpp" /* XXX to be removed */
 
 InstrumentThread::InstrumentThread(GaugeVario *_vario)
