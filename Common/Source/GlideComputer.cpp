@@ -326,3 +326,4 @@ GlideComputer::OnDepartedThermal()
   GlideComputerAirData::OnDepartedThermal();
   GlideComputerStats::OnDepartedThermal();
 }
+

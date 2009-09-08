@@ -35,67 +35,82 @@ Copyright_License {
 }
 */
 
-#if !defined(XCSOAR_GLIDECOMPUTER_HPP)
-#define XCSOAR_GLIDECOMPUTER_HPP
+#if !defined(XCSOAR_GLIDECOMPUTER_AIRDATA_HPP)
+#define XCSOAR_GLIDECOMPUTER_AIRDATA_HPP
 
 #include "GlideComputerBlackboard.hpp"
-#include "Audio/VegaVoice.h"
+#include "GlideRatio.hpp"
+#include "ThermalLocator.h"
+#include "windanalyser.h"
 #include "GPSClock.hpp"
-
-#include "GlideComputerAirData.hpp"
-#include "GlideComputerStats.hpp"
-#include "GlideComputerTask.hpp"
+#include "Math/SunEphemeris.hpp"
 
 // TODO: replace copy constructors so copies of these structures
 // do not replicate the large items or items that should be singletons
 // OR: just make them static?
 
-class GlideComputer: public 
-  GlideComputerAirData,
-  GlideComputerTask,
-  GlideComputerStats
-{
-public:
-  GlideComputer();
 
-  //protected:
-  VegaVoice    vegavoice;
-  void ResetFlight(const bool full=true);
+class GlideComputerAirData: virtual public GlideComputerBlackboard {
+public:
+  GlideComputerAirData();
+  ldrotary_s           rotaryLD;
+  SunEphemeris sun;
+  virtual void ProcessIdle();
+
+  void SetWindEstimate(const double wind_speed,
+		       const double wind_bearing,
+		       const int quality=3); // JMW check
+  WindAnalyser   windanalyser; // JMW TODO, private and lock-protected
+private:
+  ThermalLocator thermallocator;
 protected:
-  virtual void StartTask(const bool do_advance,
-			 const bool do_announce);
-  void DoLogging();
-  virtual void SaveTaskSpeed(double val);
-  virtual void SetLegStart();
-  virtual void AnnounceWayPointSwitch(bool do_advance);
+
+  void ResetFlight(const bool full=true);
+  void Initialise();
+  void ProcessBasic();
+  void ProcessVertical();
+
+  virtual bool ProcessVario();
   virtual void OnTakeoff();
   virtual void OnLanding();
-  virtual void OnSwitchClimbMode(bool isclimb, bool left);
   virtual void OnDepartedThermal();
+  virtual void OnSwitchClimbMode(bool isclimb, bool left);
 
-public:
-  void Initialise();
-  bool ProcessGPS(); // returns true if idle needs processing
-  virtual void ProcessIdle();
-  virtual bool ProcessVario();
-  virtual bool InsideStartHeight(const DWORD Margin=0) const;
-  virtual bool ValidStartSpeed(const DWORD Margin=0) const;
-  virtual void IterateEffectiveMacCready();
-  virtual void ResetEnter() {
-    GlideComputerTask::ResetEnter();
-  }
-
-  // TODO: make these consts
-  SnailTrail &GetSnailTrail() { return snail_trail; };
-  OLCOptimizer &GetOLC() { return olc; };
-  FlightStatistics &GetFlightStats() { return flightstats; };
+  bool FlightTimes();
 private:
-  void CalculateTeammateBearingRange();
-  void CalculateOwnTeamCode();
+  void DoWindCirclingMode(const bool left);
+  void DoWindCirclingSample();
+  void DoWindCirclingAltitude();
+  void AverageClimbRate();
+  void Average30s();
+  void AverageThermal();
+  void MaxHeightGain();
+  void ThermalGain();
+  void LD();
+  void CruiseLD();
+  void Heading();
+  void Wind();
+  void TerrainHeight();
+  void EnergyHeightNavAltitude();
+  void Vario();
+  void SpeedToFly(const double mc_setting, 
+		  const double cruise_efficiency);
+  void NettoVario();
+  void TakeoffLanding();
+  void PredictNextPosition();
+  void AirspaceWarning();
+  void TerrainFootprint(const double max_dist);
+  void BallastDump();
+  void ThermalSources();
+  void LastThermalStats();
+  void ThermalBand();
+  void PercentCircling(const double Rate);
+  void Turning();
+  void ProcessThermalLocator();
+  void ProcessSun();
+  GPSClock airspace_clock;
+  GPSClock ballast_clock;
 };
 
-
-double FAIFinishHeight(const SETTINGS_COMPUTER &settings,
-		       const DERIVED_INFO& Calculated, int wp);
-
 #endif
+

@@ -86,44 +86,6 @@ public:
 };
 
 
-class GlideComputerBlackboard: 
-  public BaseBlackboard,
-  public SettingsComputerBlackboard,
-  public MapProjectionBlackboard
-{
-public:
-  void ReadBlackboard(const NMEA_INFO &nmea_info);
-  void ReadSettingsComputer(const SETTINGS_COMPUTER &settings);
-  const NMEA_INFO& LastBasic() const { return last_gps_info; }
-  const DERIVED_INFO& LastCalculated() const { return last_calculated_info; }
-protected:
-  bool time_advanced() {
-    return (Basic().Time-LastBasic().Time>0);
-  }
-  bool time_retreated() {
-    return _time_retreated;
-  }
-  void ResetFlight(const bool full=true);
-  void StartTask();
-  void Initialise();
-  void SaveFinish();
-  void RestoreFinish();
-
-  virtual double GetAverageThermal() const;
-  virtual void OnClimbBase(double StartAlt) = 0;
-  virtual void OnClimbCeiling() = 0;
-  virtual void OnDepartedThermal() = 0;
-
-  // only the glide computer can write to calculated
-  DERIVED_INFO& SetCalculated() { return calculated_info; }
-private:
-  DERIVED_INFO Finish_Derived_Info;
-  NMEA_INFO     last_gps_info;
-  DERIVED_INFO last_calculated_info;
-  bool _time_retreated;
-};
-
-
 // the deviceblackboard is used as the global ground truth-state
 // since it is accessed quickly with only one mutex (flight)
 class DeviceBlackboard: 

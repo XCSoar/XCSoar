@@ -36,7 +36,7 @@ Copyright_License {
 
 */
 
-#include "GlideComputer.hpp"
+#include "GlideComputerTask.hpp"
 #include "Protection.hpp"
 #include "Task.h"
 #include "Settings.hpp"

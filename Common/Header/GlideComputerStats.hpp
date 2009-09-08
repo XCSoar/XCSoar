@@ -35,67 +35,37 @@ Copyright_License {
 }
 */
 
-#if !defined(XCSOAR_GLIDECOMPUTER_HPP)
-#define XCSOAR_GLIDECOMPUTER_HPP
+#if !defined(XCSOAR_GLIDECOMPUTER_STATS_HPP)
+#define XCSOAR_GLIDECOMPUTER_STATS_HPP
 
 #include "GlideComputerBlackboard.hpp"
-#include "Audio/VegaVoice.h"
+#include "FlightStatistics.hpp"
+#include "SnailTrail.hpp"
 #include "GPSClock.hpp"
 
-#include "GlideComputerAirData.hpp"
-#include "GlideComputerStats.hpp"
-#include "GlideComputerTask.hpp"
-
-// TODO: replace copy constructors so copies of these structures
-// do not replicate the large items or items that should be singletons
-// OR: just make them static?
-
-class GlideComputer: public 
-  GlideComputerAirData,
-  GlideComputerTask,
-  GlideComputerStats
-{
+class GlideComputerStats: virtual public GlideComputerBlackboard {
 public:
-  GlideComputer();
-
-  //protected:
-  VegaVoice    vegavoice;
-  void ResetFlight(const bool full=true);
+  GlideComputerStats();
+  FlightStatistics     flightstats;
+  SnailTrail           snail_trail;
 protected:
-  virtual void StartTask(const bool do_advance,
-			 const bool do_announce);
-  void DoLogging();
+  void ResetFlight(const bool full=true);
+  void StartTask();
+  void Initialise();
+  bool DoLogging();
+  void SetFastLogging();
+  virtual double GetAverageThermal();
+protected:
   virtual void SaveTaskSpeed(double val);
   virtual void SetLegStart();
-  virtual void AnnounceWayPointSwitch(bool do_advance);
-  virtual void OnTakeoff();
-  virtual void OnLanding();
-  virtual void OnSwitchClimbMode(bool isclimb, bool left);
+  virtual void OnClimbBase(double StartAlt);
+  virtual void OnClimbCeiling();
   virtual void OnDepartedThermal();
-
-public:
-  void Initialise();
-  bool ProcessGPS(); // returns true if idle needs processing
-  virtual void ProcessIdle();
-  virtual bool ProcessVario();
-  virtual bool InsideStartHeight(const DWORD Margin=0) const;
-  virtual bool ValidStartSpeed(const DWORD Margin=0) const;
-  virtual void IterateEffectiveMacCready();
-  virtual void ResetEnter() {
-    GlideComputerTask::ResetEnter();
-  }
-
-  // TODO: make these consts
-  SnailTrail &GetSnailTrail() { return snail_trail; };
-  OLCOptimizer &GetOLC() { return olc; };
-  FlightStatistics &GetFlightStats() { return flightstats; };
 private:
-  void CalculateTeammateBearingRange();
-  void CalculateOwnTeamCode();
+  GPSClock log_clock;
+  GPSClock stats_clock;
+  unsigned FastLogNum; // number of points to log at high rate
 };
 
-
-double FAIFinishHeight(const SETTINGS_COMPUTER &settings,
-		       const DERIVED_INFO& Calculated, int wp);
-
 #endif
+

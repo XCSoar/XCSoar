@@ -36,7 +36,7 @@ Copyright_License {
 
 */
 
-#include "GlideComputer.hpp"
+#include "GlideComputerStats.hpp"
 #include "McReady.h"
 #include "Protection.hpp"
 #include "SettingsComputer.hpp"
