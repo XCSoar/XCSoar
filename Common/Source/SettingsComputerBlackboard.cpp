@@ -37,3 +37,36 @@ Copyright_License {
 
 #include "SettingsComputerBlackboard.hpp"
 
+SettingsComputerBlackboard::SettingsComputerBlackboard()
+{
+  settings_computer.AutoMacCready = false;
+  settings_computer.AutoWindMode= D_AUTOWIND_CIRCLING;
+  settings_computer.AutoMcMode = 0;
+  settings_computer.SAFETYALTITUDEARRIVAL = 500;
+  settings_computer.SAFETYALTITUDEBREAKOFF = 700;
+  settings_computer.SAFETYALTITUDETERRAIN = 200;
+  settings_computer.SAFTEYSPEED = 50.0;
+  settings_computer.EnableBlockSTF = false;
+
+  settings_computer.TeamCodeRefWaypoint = -1;
+  settings_computer.TeamFlarmTracking = false;
+  settings_computer.TeamFlarmCNTarget[0] = 0;
+
+  settings_computer.AverEffTime=0;
+  settings_computer.SoundVolume = 80;
+  settings_computer.SoundDeadband = 5;
+  settings_computer.EnableNavBaroAltitude=false;
+  settings_computer.EnableExternalTriggerCruise=false;
+  settings_computer.AutoForceFinalGlide= false;
+  settings_computer.EnableCalibration = false;
+  settings_computer.EnableThermalLocator = 1;
+  settings_computer.LoggerTimeStepCruise=5;
+  settings_computer.LoggerTimeStepCircling=1;
+  settings_computer.DisableAutoLogger = false;
+  settings_computer.LoggerShortName = false;
+  settings_computer.EnableBestAlternate=false;
+  settings_computer.EnableAlternate1=false;
+  settings_computer.EnableAlternate2=false;
+  settings_computer.BallastTimerActive = false;
+  settings_computer.BallastSecsToEmpty = 120;
+}

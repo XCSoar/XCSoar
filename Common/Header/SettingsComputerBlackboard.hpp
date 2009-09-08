@@ -44,6 +44,7 @@ Copyright_License {
 class SettingsComputerBlackboard 
 {
 public:
+  SettingsComputerBlackboard();
   const SETTINGS_COMPUTER& SettingsComputer() const 
   { return settings_computer; }
 protected:

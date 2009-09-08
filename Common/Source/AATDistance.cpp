@@ -44,7 +44,6 @@ Copyright_License {
 #include "WayPoint.hpp"
 #include "Calculations.h" // TODO danger using InAATTurnSector
 #include <math.h>
-#include "Interface.hpp"
 
 #define DISTANCETHRESHOLD 500
 

@@ -37,3 +37,41 @@ Copyright_License {
 
 #include "SettingsMapBlackboard.hpp"
 
+SettingsMapBlackboard::SettingsMapBlackboard()
+{
+  settings_map.CircleZoom = false;
+  settings_map.ExtendedVisualGlide=false;
+  settings_map.EnableTopology = false;
+  settings_map.EnableTerrain = false;
+  settings_map.DeclutterLabels = 0;
+  settings_map.EnableTrailDrift = false;
+  settings_map.EnableCDICruise = false;
+  settings_map.EnableCDICircling = false;
+  settings_map.AutoZoom = false;
+  settings_map.SnailWidthScale = 16;
+  settings_map.WindArrowStyle = 0;
+  settings_map.DisplayTextType = DISPLAYNONE;
+  settings_map.TrailActive = 1;
+  settings_map.VisualGlide = 0;
+  settings_map.bAirspaceBlackOutline = false;
+  settings_map.GliderScreenPosition = 20; // 20% from bottom
+  settings_map.DisplayOrientation = TRACKUP;
+  settings_map.TerrainContrast = 150;
+  settings_map.TerrainBrightness = 36;
+  settings_map.TerrainRamp = 0;
+  settings_map.OnAirSpace = 1;
+  settings_map.EnableAuxiliaryInfo = 0;
+  settings_map.UserForceDisplayMode = dmNone;
+  settings_map.FullScreen = false;
+  settings_map.EnablePan = false;
+  settings_map.PanLongitude = 0;
+  settings_map.PanLatitude = 0;
+  settings_map.TargetPan = false;
+  settings_map.TargetPanIndex = 0;
+  settings_map.TargetZoomDistance = 500;
+  settings_map.MapScale = 5;
+  settings_map.EnableFLARMGauge = true;
+  settings_map.EnableFLARMMap = 1;
+  settings_map.ScreenBlanked = false;
+  settings_map.EnableAutoBlank = false;
+}

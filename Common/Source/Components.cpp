@@ -216,7 +216,6 @@ bool XCSoarInterface::Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
   if (MainWindow::find(szTitle))
     return false;
 
-  DefaultSettings();
   SendSettingsMap();
 
   PaintWindow::register_class(hInst);

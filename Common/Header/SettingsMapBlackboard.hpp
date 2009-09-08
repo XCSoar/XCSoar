@@ -43,6 +43,7 @@ Copyright_License {
 class SettingsMapBlackboard 
 {
 public:
+  SettingsMapBlackboard();
   const SETTINGS_MAP& SettingsMap() const 
   { return settings_map; };
 protected:
