@@ -352,6 +352,10 @@ void InputEvents::eventScreenModes(const TCHAR *misc) {
     }
 #endif // def/undef PNA
   }
+
+  // refresh display
+  InfoBoxManager::SetDirty(true);
+  XCSoarInterface::SendSettingsMap(true);
 }
 
 

@@ -147,6 +147,8 @@ public:
   static void SendSettingsMap(const bool trigger_draw=false);
   static void ReceiveMapProjection();
   static void ReceiveBlackboard();
+protected:
+  static void DisplayModes();
 private:
   static void PreloadInitialisation(bool ask);
   static void StartupInfo();

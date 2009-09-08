@@ -48,7 +48,6 @@ Copyright_License {
 #include "Message.h"
 #include "UtilsSystem.hpp"
 #include "InfoBoxManager.h"
-#include "InfoBoxLayout.h"
 #include "MapWindow.h"
 #include "Math/Earth.hpp"
 #include "Blackboard.hpp"
@@ -68,48 +67,6 @@ ProcessTimer::HeapCompact()
   }
 }
 
-
-
-bool vario_visible() {
-  bool gaugeVarioInPortrait = false;
-  bool enable_gauge;
-#ifdef GNAV
-  gaugeVarioInPortrait = true;
-#endif
-
-// VENTA3 disable gauge vario for geometry 5 in landscape mode, use 8 box right instead
-// beside those boxes were painted and overwritten by the gauge already and gauge was
-// graphically too much stretched, requiring a restyle!
-  if (InfoBoxLayout::gnav) {
-    if ( ( InfoBoxLayout::landscape == true) && 
-	 (InfoBoxLayout::InfoBoxGeometry == 5 ) )
-	enable_gauge = false;
-      else
-      	enable_gauge = true;
-  } else {
-    enable_gauge = false;
-  }
-
- // Disable vario gauge in geometry 5 landscape mode, leave 8 boxes on
- // the right
- if ( ( InfoBoxLayout::landscape == true)
-      && ( InfoBoxLayout::InfoBoxGeometry == 5 ) ) return false; // VENTA3
-
-  if (gaugeVarioInPortrait || InfoBoxLayout::landscape) {
-    return enable_gauge;
-  }
-  return false;
-}
-
-
-void
-ProcessTimer::DisplayProcessTimer()
-{
-  SetSettingsMap().EnableVarioGauge = 
-    vario_visible() && !SettingsMap().FullScreen;
-
-  CheckDisplayTimeOut(false);
-}
 
 void
 ProcessTimer::SystemProcessTimer()
@@ -144,11 +101,14 @@ ProcessTimer::AirspaceProcessTimer()
 
 void ProcessTimer::CommonProcessTimer()
 {
+  CheckDisplayTimeOut(false);
+
+  DisplayModes();
   ExchangeBlackboard();
+
+  InfoBoxManager::ProcessTimer();
   InputEvents::ProcessTimer();
   AirspaceProcessTimer();
-  InfoBoxManager::ProcessTimer();
-  DisplayProcessTimer();
   MessageProcessTimer();
 }
 

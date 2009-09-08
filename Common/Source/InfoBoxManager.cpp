@@ -903,12 +903,6 @@ void InfoBoxManager::ProcessTimer(void) {
     SetDirty(true);
     lasttime = Basic().Time;
   }
-
-  if (SettingsMap().FullScreen) {
-    Hide();
-  } else {
-    Show();
-  }
   InfoBoxDrawIfDirty();
   LastFlipBoxTime++;
 }
