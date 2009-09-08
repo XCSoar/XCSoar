@@ -164,31 +164,12 @@ void MapWindow::ReadBlackboard(const NMEA_INFO &nmea_info,
   MapWindowBlackboard::ReadBlackboard(nmea_info, derived_info);
   ReadSettingsComputer(device_blackboard.SettingsComputer());
   ReadSettingsMap(device_blackboard.SettingsMap());
+}
 
-  DisplayMode_t lastDisplayMode = DisplayMode;
-  switch (SettingsMap().UserForceDisplayMode) {
-  case dmCircling:
-    DisplayMode = dmCircling;
-    break;
-  case dmCruise:
-    DisplayMode = dmCruise;
-    break;
-  case dmFinalGlide:
-    DisplayMode = dmFinalGlide;
-    break;
-  case dmNone:
-    if (Calculated().Circling){
-      DisplayMode = dmCircling;
-    } else if (Calculated().FinalGlide){
-      DisplayMode = dmFinalGlide;
-    } else
-      DisplayMode = dmCruise;
-    break;
-  }
-  if (lastDisplayMode != DisplayMode){
-    SwitchZoomClimb();
-  }
 
+void MapWindow::SendBlackboard(const NMEA_INFO &nmea_info,
+			       const DERIVED_INFO &derived_info) {
+  ScopeLock protect(mutexBlackboard);
   MapWindowProjection::ExchangeBlackboard(nmea_info, derived_info,
 					  SettingsMap());
   device_blackboard.ReadMapProjection(*this);
@@ -284,6 +265,8 @@ bool MapWindow::Idle(const bool do_force) {
 void MapWindow::ExchangeBlackboard(void) 
 {
   ReadBlackboard(device_blackboard.Basic(), device_blackboard.Calculated());
+  ApplyScreenSize();
+  SendBlackboard(device_blackboard.Basic(), device_blackboard.Calculated());
 }
 
 void MapWindow::DrawThreadLoop(void) {

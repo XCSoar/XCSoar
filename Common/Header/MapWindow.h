@@ -104,6 +104,8 @@ class MapWindow
 
   void     ReadBlackboard(const NMEA_INFO &nmea_info,
 			  const DERIVED_INFO &derived_info);
+  void     SendBlackboard(const NMEA_INFO &nmea_info,
+			  const DERIVED_INFO &derived_info);
 
   // display management
   void          RefreshMap();

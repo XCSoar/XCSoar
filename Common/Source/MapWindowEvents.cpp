@@ -117,12 +117,36 @@ void MapWindow::SwitchZoomClimb(void) {
 
 
 void MapWindow::ApplyScreenSize() {
-  // ok, save the state.
   FullScreen = SettingsMap().FullScreen;
+  // ok, save the state.
   if (FullScreen) {
     SetMapRect(MapRectBig);
   } else {
     SetMapRect(MapRectSmall);
+  }
+
+  DisplayMode_t lastDisplayMode = DisplayMode;
+  switch (SettingsMap().UserForceDisplayMode) {
+  case dmCircling:
+    DisplayMode = dmCircling;
+    break;
+  case dmCruise:
+    DisplayMode = dmCruise;
+    break;
+  case dmFinalGlide:
+    DisplayMode = dmFinalGlide;
+    break;
+  case dmNone:
+    if (Calculated().Circling){
+      DisplayMode = dmCircling;
+    } else if (Calculated().FinalGlide){
+      DisplayMode = dmFinalGlide;
+    } else
+      DisplayMode = dmCruise;
+    break;
+  }
+  if (lastDisplayMode != DisplayMode){
+    SwitchZoomClimb();
   }
 }
 
