@@ -44,12 +44,10 @@ Copyright_License {
 #include "Math/FastMath.h"
 #include "Dialogs.h"
 #include "Settings.hpp"
-#include "SettingsUser.hpp"
 #include "Audio/VarioSound.h"
 #include "InputEvents.h"
 #include "Screen/Graphics.hpp"
 #include "Screen/Util.hpp"
-#include "Screen/Fonts.hpp"
 #include "Screen/LabelBlock.hpp"
 #include "Compatibility/gdi.h"
 #include "TopologyStore.h"
@@ -322,54 +320,111 @@ bool MapWindow::checkLabelBlock(const RECT brect) {
   return label_block.check(brect);
 }
 
+#include "Components.hpp"
+#include "GlideComputer.hpp"
 
-/////////////////////////////////////////
+void MapWindow::ScanVisibility(rectObj *bounds_active) {
+  // received when the SetTopoBounds determines the visibility
+  // boundary has changed.
+  // This happens rarely, so it is good pre-filtering of what is visible.
+  // (saves from having to do it every screen redraw)
 
-bool MapWindow::on_resize(unsigned width, unsigned height) {
-  MaskedPaintWindow::on_resize(width, height);
+  glide_computer.GetSnailTrail().ScanVisibility(bounds_active);
 
-  draw_canvas.resize(width, height);
-  buffer_canvas.resize(width, height);
-
-  SetFontInfoAll(get_canvas());
-
-  return true;
+  ScanVisibilityWaypoints(bounds_active);
+  ScanVisibilityAirspace(bounds_active);
 }
 
-bool MapWindow::on_create()
-{
-  if (!MaskedPaintWindow::on_create())
-    return false;
 
-  draw_canvas.set(get_canvas());
-  buffer_canvas.set(get_canvas());
-  return true;
+
+
+void MapWindow::SwitchZoomClimb(void) {
+
+  static double CruiseMapScale = 10;
+  static double ClimbMapScale = 0.25;
+  static bool last_isclimb = false;
+  static bool last_targetpan = false;
+
+  bool isclimb = (DisplayMode == dmCircling);
+
+  bool my_target_pan = SettingsMap().TargetPan;
+
+  if (my_target_pan != last_targetpan) {
+    if (my_target_pan) {
+      // save starting values
+      if (isclimb) {
+        ClimbMapScale = GetMapScaleUser();
+      } else {
+        CruiseMapScale = GetMapScaleUser();
+      }
+    } else {
+      // restore scales
+      if (isclimb) {
+        RequestMapScale(ClimbMapScale, SettingsMap());
+      } else {
+        RequestMapScale(CruiseMapScale, SettingsMap());
+      }
+      BigZoom = true;
+    }
+    last_targetpan = my_target_pan;
+    return;
+  }
+
+  if (!my_target_pan && SettingsMap().CircleZoom) {
+    if (isclimb != last_isclimb) {
+      if (isclimb) {
+        // save cruise scale
+        CruiseMapScale = GetMapScaleUser();
+        // switch to climb scale
+        RequestMapScale(ClimbMapScale, SettingsMap());
+      } else {
+        // leaving climb
+        // save cruise scale
+        ClimbMapScale = GetMapScaleUser();
+        RequestMapScale(CruiseMapScale, SettingsMap());
+        // switch to climb scale
+      }
+      BigZoom = true;
+      last_isclimb = isclimb;
+    }
+  }
 }
 
-bool MapWindow::on_destroy()
-{
-  draw_canvas.reset();
-  buffer_canvas.reset();
 
-  MaskedPaintWindow::on_destroy();
-  return true;
+void MapWindow::ApplyScreenSize() {
+  FullScreen = SettingsMap().FullScreen;
+  // ok, save the state.
+  if (FullScreen) {
+    SetMapRect(MapRectBig);
+  } else {
+    SetMapRect(MapRectSmall);
+  }
+
+  DisplayMode_t lastDisplayMode = DisplayMode;
+  switch (SettingsMap().UserForceDisplayMode) {
+  case dmCircling:
+    DisplayMode = dmCircling;
+    break;
+  case dmCruise:
+    DisplayMode = dmCruise;
+    break;
+  case dmFinalGlide:
+    DisplayMode = dmFinalGlide;
+    break;
+  case dmNone:
+    if (Calculated().Circling){
+      DisplayMode = dmCircling;
+    } else if (Calculated().FinalGlide){
+      DisplayMode = dmFinalGlide;
+    } else
+      DisplayMode = dmCruise;
+    break;
+  }
+  if (lastDisplayMode != DisplayMode){
+    SwitchZoomClimb();
+  }
 }
 
-///////
-
-void MapWindow::on_paint(Canvas& _canvas) {
-  mutexBuffer.Lock();
-  _canvas.copy(draw_canvas);
-  mutexBuffer.Unlock();
-}
-
-bool
-MapWindow::on_setfocus()
-{
-  MaskedPaintWindow::on_setfocus();
-
-  return true;
-}
 
 bool MapWindow::draw_masked_bitmap_if_visible(Canvas &canvas,
 					      Bitmap &bitmap,
@@ -388,3 +443,5 @@ bool MapWindow::draw_masked_bitmap_if_visible(Canvas &canvas,
   }
   return false;
 }
+
+

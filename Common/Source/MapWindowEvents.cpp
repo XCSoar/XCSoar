@@ -55,6 +55,7 @@ Copyright_License {
 #include "McReady.h"
 #include "Math/Geometry.hpp"
 #include "Math/Earth.hpp"
+#include "Screen/Fonts.hpp"
 
 #ifdef _SIM_
 #include "DeviceBlackboard.hpp"
@@ -62,93 +63,6 @@ Copyright_License {
 #include <stdlib.h>
 
 /////////////////////////////////////////
-
-void MapWindow::SwitchZoomClimb(void) {
-
-  static double CruiseMapScale = 10;
-  static double ClimbMapScale = 0.25;
-  static bool last_isclimb = false;
-  static bool last_targetpan = false;
-
-  bool isclimb = (DisplayMode == dmCircling);
-
-  bool my_target_pan = SettingsMap().TargetPan;
-
-  if (my_target_pan != last_targetpan) {
-    if (my_target_pan) {
-      // save starting values
-      if (isclimb) {
-        ClimbMapScale = GetMapScaleUser();
-      } else {
-        CruiseMapScale = GetMapScaleUser();
-      }
-    } else {
-      // restore scales
-      if (isclimb) {
-        RequestMapScale(ClimbMapScale, SettingsMap());
-      } else {
-        RequestMapScale(CruiseMapScale, SettingsMap());
-      }
-      BigZoom = true;
-    }
-    last_targetpan = my_target_pan;
-    return;
-  }
-
-  if (!my_target_pan && SettingsMap().CircleZoom) {
-    if (isclimb != last_isclimb) {
-      if (isclimb) {
-        // save cruise scale
-        CruiseMapScale = GetMapScaleUser();
-        // switch to climb scale
-        RequestMapScale(ClimbMapScale, SettingsMap());
-      } else {
-        // leaving climb
-        // save cruise scale
-        ClimbMapScale = GetMapScaleUser();
-        RequestMapScale(CruiseMapScale, SettingsMap());
-        // switch to climb scale
-      }
-      BigZoom = true;
-      last_isclimb = isclimb;
-    }
-  }
-}
-
-
-void MapWindow::ApplyScreenSize() {
-  FullScreen = SettingsMap().FullScreen;
-  // ok, save the state.
-  if (FullScreen) {
-    SetMapRect(MapRectBig);
-  } else {
-    SetMapRect(MapRectSmall);
-  }
-
-  DisplayMode_t lastDisplayMode = DisplayMode;
-  switch (SettingsMap().UserForceDisplayMode) {
-  case dmCircling:
-    DisplayMode = dmCircling;
-    break;
-  case dmCruise:
-    DisplayMode = dmCruise;
-    break;
-  case dmFinalGlide:
-    DisplayMode = dmFinalGlide;
-    break;
-  case dmNone:
-    if (Calculated().Circling){
-      DisplayMode = dmCircling;
-    } else if (Calculated().FinalGlide){
-      DisplayMode = dmFinalGlide;
-    } else
-      DisplayMode = dmCruise;
-    break;
-  }
-  if (lastDisplayMode != DisplayMode){
-    SwitchZoomClimb();
-  }
-}
 
 
 /////////////////////////////////////////////////////////////////////////
@@ -211,8 +125,57 @@ int MapWindow::ProcessVirtualKey(int X, int Y, long keytime, short vkmode) {
 }
 
 
-////////
+//////////
 
+/////////////////////////////////////////
+
+bool MapWindow::on_resize(unsigned width, unsigned height) {
+  MaskedPaintWindow::on_resize(width, height);
+
+  draw_canvas.resize(width, height);
+  buffer_canvas.resize(width, height);
+
+  SetFontInfoAll(get_canvas());
+
+  return true;
+}
+
+bool MapWindow::on_create()
+{
+  if (!MaskedPaintWindow::on_create())
+    return false;
+
+  draw_canvas.set(get_canvas());
+  buffer_canvas.set(get_canvas());
+  return true;
+}
+
+bool MapWindow::on_destroy()
+{
+  draw_canvas.reset();
+  buffer_canvas.reset();
+
+  MaskedPaintWindow::on_destroy();
+  return true;
+}
+
+///////
+
+void MapWindow::on_paint(Canvas& _canvas) {
+  mutexBuffer.Lock();
+  _canvas.copy(draw_canvas);
+  mutexBuffer.Unlock();
+}
+
+bool
+MapWindow::on_setfocus()
+{
+  MaskedPaintWindow::on_setfocus();
+
+  return true;
+}
+
+//////////
 
 static double Xstart, Ystart;
 static int XstartScreen, YstartScreen;

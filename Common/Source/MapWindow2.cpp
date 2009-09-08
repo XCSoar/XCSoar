@@ -38,23 +38,8 @@ Copyright_License {
 #include "MapWindow.h"
 #include "XCSoar.h"
 #include "Protection.hpp"
-#include "GlideComputer.hpp"
 #include <math.h>
 #include "Math/Earth.hpp"
 #include "SettingsComputer.hpp"
 #include "SettingsUser.hpp"
-#include "Components.hpp"
-
-void MapWindow::ScanVisibility(rectObj *bounds_active) {
-  // received when the SetTopoBounds determines the visibility
-  // boundary has changed.
-  // This happens rarely, so it is good pre-filtering of what is visible.
-  // (saves from having to do it every screen redraw)
-
-  glide_computer.GetSnailTrail().ScanVisibility(bounds_active);
-
-  ScanVisibilityWaypoints(bounds_active);
-  ScanVisibilityAirspace(bounds_active);
-}
-
 

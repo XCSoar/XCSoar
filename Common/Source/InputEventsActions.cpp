@@ -437,9 +437,6 @@ void InputEvents::eventZoom(const TCHAR* misc) {
 //	TODO feature: ???	Go to particular point
 //	TODO feature: ???	Go to waypoint (eg: next, named)
 void InputEvents::eventPan(const TCHAR *misc) {
-#if defined(PNA) || defined(FIVV)
-  MapWindow &map_window = main_window.map;
-#endif
 
   if (_tcscmp(misc, TEXT("toggle")) == 0)
     sub_Pan(-1);
