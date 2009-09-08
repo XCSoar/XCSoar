@@ -292,6 +292,7 @@ OBJS	:=\
 	$(SRC)/xmlParser.o 		\
 	$(SRC)/Thread/Thread.o \
 	$(SRC)/Thread/Mutex.o \
+	$(SRC)/Thread/Debug.o \
 	\
 	$(SRC)/Math/Earth.o 		\
 	$(SRC)/Math/FastMath.o 		\
