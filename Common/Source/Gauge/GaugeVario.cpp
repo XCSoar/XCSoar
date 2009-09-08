@@ -166,30 +166,6 @@ GaugeVario::GaugeVario(ContainerWindow &parent, const RECT MapRectBig)
   hide();
 }
 
-void GaugeVario::Show(bool doshow) {
-  bool gaugeVarioInPortrait = false;
-#ifdef GNAV
-  gaugeVarioInPortrait = true;
-#endif
-
- // Disable vario gauge in geometry 5 landscape mode, leave 8 boxes on the right
- if ( ( InfoBoxLayout::landscape == true)
-      && ( InfoBoxLayout::InfoBoxGeometry == 5 ) ) return; // VENTA3
-
-  if (gaugeVarioInPortrait || InfoBoxLayout::landscape) {
-    EnableVarioGauge = doshow;
-
-    static bool lastvisible = false;
-    if (EnableVarioGauge && !lastvisible) {
-      show();
-    }
-    if (!EnableVarioGauge && lastvisible) {
-      hide();
-    }
-    lastvisible = EnableVarioGauge;
-  }
-}
-
 
 GaugeVario::~GaugeVario()
 {

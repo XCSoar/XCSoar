@@ -301,20 +301,6 @@ void InfoBoxLayout::ScreenGeometry(RECT rc) {
   } else {
     numInfoWindows = 8;
   }
-
-//
-// VENTA3 disable gauge vario for geometry 5 in landscape mode, use 8 box right instead
-// beside those boxes were painted and overwritten by the gauge already and gauge was
-// graphically too much stretched, requiring a restyle!
-  if (gnav) {
-      if ( ( landscape == true) && (InfoBoxGeometry == 5 ) )
-      	EnableVarioGauge = false;
-      else
-      	EnableVarioGauge = true;
-  } else {
-    EnableVarioGauge = false;
-  }
-
 }
 
 

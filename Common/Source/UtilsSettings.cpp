@@ -197,7 +197,6 @@ bool needclipping=false; // flag to activate extra clipping for some PNAs
 bool EnableSoundVario = true;
 bool EnableSoundModes = true;
 bool EnableSoundTask = true;
-bool EnableVarioGauge = false;
 
 // Others
 bool COMPORTCHANGED = false;

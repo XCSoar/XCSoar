@@ -41,9 +41,7 @@ Copyright_License {
 #if !defined(WINDOWSPC) && !defined(GNAV)
 #define HAVE_BLANK
 
-extern bool EnableAutoBlank;
 extern int DisplayTimeOut;
-extern bool ScreenBlanked;
 extern bool ForceShutdown;
 
 void BlankDisplay(bool doblank);

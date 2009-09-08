@@ -141,6 +141,9 @@ void XCSoarInterface::DefaultSettings()
   SetSettingsMap().MapScale = 5;
   SetSettingsMap().EnableFLARMGauge = true;
   SetSettingsMap().EnableFLARMMap = 1;
+  SetSettingsMap().ScreenBlanked = false;
+  SetSettingsMap().EnableAutoBlank = false;
+
 }
 
 

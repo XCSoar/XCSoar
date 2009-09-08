@@ -40,7 +40,6 @@ Copyright_License {
 #include "Interface.hpp"
 #include "InputEvents.h"
 #include "ReplayLogger.hpp"
-#include "Gauge/GaugeVario.hpp"
 #include "Device/device.h"
 #include "Device/Parser.h"
 #include "Dialogs.h"
@@ -49,6 +48,7 @@ Copyright_License {
 #include "Message.h"
 #include "UtilsSystem.hpp"
 #include "InfoBoxManager.h"
+#include "InfoBoxLayout.h"
 #include "MapWindow.h"
 #include "Math/Earth.hpp"
 #include "Blackboard.hpp"
@@ -68,14 +68,46 @@ ProcessTimer::HeapCompact()
   }
 }
 
+
+
+bool vario_visible() {
+  bool gaugeVarioInPortrait = false;
+  bool enable_gauge;
+#ifdef GNAV
+  gaugeVarioInPortrait = true;
+#endif
+
+// VENTA3 disable gauge vario for geometry 5 in landscape mode, use 8 box right instead
+// beside those boxes were painted and overwritten by the gauge already and gauge was
+// graphically too much stretched, requiring a restyle!
+  if (InfoBoxLayout::gnav) {
+    if ( ( InfoBoxLayout::landscape == true) && 
+	 (InfoBoxLayout::InfoBoxGeometry == 5 ) )
+	enable_gauge = false;
+      else
+      	enable_gauge = true;
+  } else {
+    enable_gauge = false;
+  }
+
+ // Disable vario gauge in geometry 5 landscape mode, leave 8 boxes on
+ // the right
+ if ( ( InfoBoxLayout::landscape == true)
+      && ( InfoBoxLayout::InfoBoxGeometry == 5 ) ) return false; // VENTA3
+
+  if (gaugeVarioInPortrait || InfoBoxLayout::landscape) {
+    return enable_gauge;
+  }
+  return false;
+}
+
+
 void
 ProcessTimer::DisplayProcessTimer()
 {
-  // it's ok to do this in this thread
-  GaugeVario *gauge_vario = XCSoarInterface::main_window.vario;
-  if (gauge_vario != NULL)
-    gauge_vario->Show(!SettingsMap().FullScreen);
-  
+  SetSettingsMap().EnableVarioGauge = 
+    vario_visible() && !SettingsMap().FullScreen;
+
   CheckDisplayTimeOut(false);
 }
 

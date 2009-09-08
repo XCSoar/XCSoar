@@ -77,8 +77,6 @@ extern DisplayMode_t DisplayMode;
 // local time adjustment
 extern int UTCOffset;
 
-extern   bool  EnableVarioGauge;
-
 typedef struct SETTINGS_MAP_ {
   bool  CircleZoom;
   bool  ExtendedVisualGlide;
@@ -115,6 +113,9 @@ typedef struct SETTINGS_MAP_ {
   double MapScale;
   bool  EnableFLARMGauge;
   DWORD EnableFLARMMap;
+  bool  ScreenBlanked;
+  bool EnableAutoBlank;
+  bool  EnableVarioGauge;
 } SETTINGS_MAP;
 
 // display mode stuff

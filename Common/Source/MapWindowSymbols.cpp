@@ -424,7 +424,7 @@ void MapWindow::DrawHorizon(Canvas &canvas, const RECT rc)
 
   Start.y = IBLSCALE(55)+rc.top;
   Start.x = rc.right - IBLSCALE(19);
-  if (EnableVarioGauge && MapRectBig.right == rc.right)
+  if (SettingsMap().EnableVarioGauge && MapRectBig.right == rc.right)
     Start.x -= InfoBoxLayout::ControlWidth;
 
   Pen hpHorizonSky(IBLSCALE(1), Color(0x40,0x40,0xff));
@@ -715,7 +715,7 @@ void MapWindow::DrawCompass(Canvas &canvas, const RECT rc)
     Start.y = IBLSCALE(19)+rc.top;
     Start.x = rc.right - IBLSCALE(19);
 
-    if (EnableVarioGauge && MapRectBig.right == rc.right)
+    if (SettingsMap().EnableVarioGauge && MapRectBig.right == rc.right)
         Start.x -= InfoBoxLayout::ControlWidth;
 
     POINT Arrow[5] = { {0,-18}, {-6,10}, {0,0}, {6,10}, {0,-18}};
@@ -749,7 +749,7 @@ void MapWindow::DrawCompass(Canvas &canvas, const RECT rc)
       Start.y = rc.top + IBLSCALE(10);
       Start.x = rc.right - IBLSCALE(11);
 
-      if (EnableVarioGauge && MapRectBig.right == rc.right) {
+      if (SettingsMap().EnableVarioGauge && MapRectBig.right == rc.right) {
         Start.x -= InfoBoxLayout::ControlWidth;
       }
 

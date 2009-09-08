@@ -97,7 +97,6 @@ private:
 
   void Render();
   void RenderBg(Canvas &canvas);
-  void Show(bool doshow);
 
  private:
   void RenderZero(Canvas &canvas);

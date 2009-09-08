@@ -67,9 +67,7 @@ typedef struct _VIDEO_POWER_MANAGEMENT {
     ULONG PowerState;
 } VIDEO_POWER_MANAGEMENT, *PVIDEO_POWER_MANAGEMENT;
 
-bool EnableAutoBlank = false;
 int DisplayTimeOut = 0;
-bool ScreenBlanked = false;
 
 void BlankDisplay(bool doblank) {
   static bool oldblank = false;
@@ -93,7 +91,7 @@ void BlankDisplay(bool doblank) {
  */
   }
 
-  if (!EnableAutoBlank) {
+  if (!XCSoarInterface::SettingsMap().EnableAutoBlank) {
     return;
   }
   if (doblank == oldblank) {
@@ -154,7 +152,7 @@ void BlankDisplay(bool doblank) {
         ExtEscape(gdc, SETPOWERMANAGEMENT, vpm.Length, (LPCSTR) &vpm,
                   0, NULL);
         oldblank = true;
-        ScreenBlanked = true;
+        XCSoarInterface::SetSettingsMap().ScreenBlanked = true;
       } else {
         ResetDisplayTimeOut();
       }
@@ -165,7 +163,7 @@ void BlankDisplay(bool doblank) {
         ExtEscape(gdc, SETPOWERMANAGEMENT, vpm.Length, (LPCSTR) &vpm,
                   0, NULL);
         oldblank = false;
-        ScreenBlanked = false;
+        XCSoarInterface::SetSettingsMap().ScreenBlanked = false;
       }
     }
 
