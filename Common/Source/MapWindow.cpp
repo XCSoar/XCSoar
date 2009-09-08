@@ -175,7 +175,6 @@ void MapWindow::ReadBlackboard(const NMEA_INFO &nmea_info,
   MapWindowBlackboard::ReadBlackboard(nmea_info, derived_info);
   ReadSettingsComputer(device_blackboard.SettingsComputer());
   ReadSettingsMap(device_blackboard.SettingsMap());
-  ApplyScreenSize();
 
   DisplayMode_t lastDisplayMode = DisplayMode;
   switch (SettingsMap().UserForceDisplayMode) {

@@ -47,6 +47,7 @@ DrawThread::run()
   // wait for start
   globalRunningEvent.wait();
 
+  map.ApplyScreenSize();
   map.ExchangeBlackboard();
 
   mutexRun.Lock(); // take control
@@ -59,6 +60,7 @@ DrawThread::run()
 
   do {
     if (drawTriggerEvent.wait(MIN_WAIT_TIME)) {
+      map.ApplyScreenSize();
       map.ExchangeBlackboard();
 
       mutexRun.Lock(); // take control

@@ -86,6 +86,8 @@ class MapWindow
     SetRect(&MapRect, 0, 0, rc.right - rc.left, rc.bottom - rc.top);
   }
 
+  void ApplyScreenSize();
+
   // input events or reused code
   void ExchangeBlackboard();
 
@@ -120,7 +122,6 @@ class MapWindow
   bool      BigZoom;
   bool      FullScreen;
   void      StoreRestoreFullscreen(bool);
-  void      ApplyScreenSize();
 
   // interface handlers
   int ProcessVirtualKey(int X, int Y, long keytime, short vkmode);
