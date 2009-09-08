@@ -45,6 +45,7 @@ extern int  AutoAdvance;
 extern bool AdvanceArmed;
 extern int  HomeWaypoint;
 extern int  AirfieldsHomeWaypoint; // VENTA3
+extern TCHAR LastTaskFileName[MAX_PATH];
 
 // task data
 extern START_POINT StartPoints[];
@@ -70,6 +71,11 @@ extern DWORD StartMaxSpeedMargin;
 extern int OLCRules;
 extern int Handicap;
 extern bool EnableOLC;
+
+extern bool EnableMultipleStartPoints;
+extern bool TaskModified;
+extern bool TargetModified;
+extern int  StartHeightRef;
 
 
 #endif

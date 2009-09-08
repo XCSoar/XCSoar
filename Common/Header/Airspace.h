@@ -133,7 +133,6 @@ void CloseAirspace(void);
 
 
 void SortAirspace(void);
-extern int AirspacePriority[AIRSPACECLASSCOUNT];
 
 bool InsideAirspaceCircle(const double &longitude,
 			  const double &latitude,

@@ -106,12 +106,6 @@ typedef struct _TASKSTATS_POINT
 
 typedef TASKSTATS_POINT TaskStats_t[MAXTASKPOINTS +1];
 
-extern bool EnableMultipleStartPoints;
-extern bool TaskModified;
-extern bool TargetModified;
-extern int StartHeightRef;
-extern TCHAR LastTaskFileName[MAX_PATH];
-
 void ReplaceWaypoint(int index);
 void InsertWaypoint(int index, bool append=false);
 void SwapWaypoint(int index);

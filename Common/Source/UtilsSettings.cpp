@@ -54,6 +54,21 @@ Copyright_License {
 #include "Components.hpp"
 #include "Interface.hpp"
 
+
+///////////////////////////////////////
+bool COMPORTCHANGED = false;
+bool MAPFILECHANGED = false;
+bool AIRSPACEFILECHANGED = false;
+bool AIRFIELDFILECHANGED = false;
+bool WAYPOINTFILECHANGED = false;
+bool TERRAINFILECHANGED = false;
+bool TOPOLOGYFILECHANGED = false;
+bool POLARFILECHANGED = false;
+bool LANGUAGEFILECHANGED = false;
+bool STATUSFILECHANGED = false;
+bool INPUTFILECHANGED = false;
+
+
 void SettingsEnter() {
   draw_thread->suspend();
   // This prevents the map and calculation threads from doing anything
@@ -168,60 +183,4 @@ void SystemConfiguration(void) {
   dlgConfigurationShowModal();
   SettingsLeave();
 }
-
-
-///////////////////////////////////////////////////////////////////////////////
-// settings
-int    AutoAdvance = 1;
-bool   AdvanceArmed = false;
-bool   TaskAborted = false;
-
-
-// Waypoint Database
-int SectorType = 1; // FAI sector
-DWORD SectorRadius = 500;
-int StartLine = 1;
-DWORD StartRadius = 3000;
-
-int HomeWaypoint = -1;
-int AirfieldsHomeWaypoint = -1; // VENTA3 force Airfields home to be HomeWaypoint if
-                                // an H flag in waypoints file is not available..
-// Specials
-double QFEAltitudeOffset = 0;
-#if defined(PNA) || defined(FIVV)
-bool needclipping=false; // flag to activate extra clipping for some PNAs
-#endif
-
-// user interface settings
-bool EnableSoundVario = true;
-bool EnableSoundModes = true;
-bool EnableSoundTask = true;
-
-// Others
-bool COMPORTCHANGED = false;
-bool MAPFILECHANGED = false;
-bool AIRSPACEFILECHANGED = false;
-bool AIRFIELDFILECHANGED = false;
-bool WAYPOINTFILECHANGED = false;
-bool TERRAINFILECHANGED = false;
-bool TOPOLOGYFILECHANGED = false;
-bool POLARFILECHANGED = false;
-bool LANGUAGEFILECHANGED = false;
-bool STATUSFILECHANGED = false;
-bool INPUTFILECHANGED = false;
-
-//Task Information
-Task_t Task = {{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0}};
-Start_t StartPoints;
-TaskStats_t TaskStats;
-int ActiveWayPoint = -1;
-
-// Assigned Area Task
-double AATTaskLength = 120;
-BOOL AATEnabled = FALSE;
-DWORD FinishMinHeight = 0;
-DWORD StartMaxHeight = 0;
-DWORD StartMaxSpeed = 0;
-DWORD StartMaxHeightMargin = 0;
-DWORD StartMaxSpeedMargin = 0;
 

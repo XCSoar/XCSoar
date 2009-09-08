@@ -75,17 +75,6 @@ Copyright_License {
 #include <wingdi.h>
 #endif
 
-///////////////////////////////// Settings
-
-// 12 is number of airspace types
-int      iAirspaceBrush[AIRSPACECLASSCOUNT] =
-  {2,0,0,0,3,3,3,3,0,3,2,3,3,3};
-int      iAirspaceColour[AIRSPACECLASSCOUNT] =
-  {5,0,0,10,0,0,10,2,0,10,9,3,7,7};
-int      iAirspaceMode[AIRSPACECLASSCOUNT] =
-  {0,0,0,0,0,0,0,0,0,0,0,1,1,0};
-
-
 ///////////////////////////////// Initialisation
 
 ScreenGraphics MapGfx;

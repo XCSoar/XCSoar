@@ -103,8 +103,6 @@ static double CenterX = 0;
 static double CenterY = 0;
 static int LineCount;
 
-int AirspacePriority[AIRSPACECLASSCOUNT];
-
 static const int k_nLineTypes = 9;
 
 static const int k_nLtAC	= 0;

@@ -54,13 +54,6 @@ Copyright_License {
 #include "Logger.h"
 #include "Interface.hpp"
 
-bool EnableMultipleStartPoints = false;
-bool TaskModified = false;
-bool TargetModified = false;
-int StartHeightRef = 0; // MSL
-int SelectedWaypoint = -1;
-
-TCHAR LastTaskFileName[MAX_PATH]= TEXT("\0");
 
 static int Task_saved[MAXTASKPOINTS+1];
 static int active_waypoint_saved= -1;
@@ -819,51 +812,6 @@ void RefreshTaskWaypoint(int i) {
     }
 }
 
-
-/* No longer required
-void ReadNewTask(HWND hDlg)
-{
-  int i;
-  int TaskSize;
-  int WayPointIndex;
-  double TaskLength = 0;
-  TCHAR szTaskLength[10];
-  TCHAR  WaypointID[WAY_POINT_ID_SIZE + 1];
-
-  ActiveWayPoint = -1;
-
-  for(i=0;i<MAXTASKPOINTS;i++)
-    {
-      Task[i].Index = -1;
-    }
-  TaskSize = SendDlgItemMessage(hDlg,IDC_TASK,LB_GETCOUNT,0,0);
-  for(i=0;i<TaskSize;i++)
-    {
-      SendDlgItemMessage(hDlg,IDC_TASK,LB_GETTEXT,i,(LPARAM)(LPCTSTR)WaypointID);
-      WayPointIndex = SendDlgItemMessage(hDlg,IDC_WAYPOINTS,LB_FINDSTRING,0,(LPARAM)(LPCTSTR)WaypointID);
-
-      if(WayPointIndex == LB_ERR)
-        break;
-      else
-        {
-          Task[i].Index = WayPointIndex;
-
-          RefreshTaskWaypoint(i);
-
-          // TODO accuracy: do this for next and previous waypoint also
-
-          TaskLength += Task[i].Leg;
-        }
-    }
-
-  RefreshTask();
-
-  _stprintf(szTaskLength,TEXT("%2.1f"), DISTANCEMODIFY * TaskLength );
-  SetDlgItemText(hDlg,IDC_TASKLENGTH,szTaskLength);
-  if(Task[0].Index != -1)
-    ActiveWayPoint = 0;
-}
-*/
 
 static int FindOrAddWaypoint(WAYPOINT *read_waypoint) {
   // this is an invalid pointer!

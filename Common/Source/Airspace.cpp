@@ -64,13 +64,6 @@ unsigned int NumberOfAirspacePoints;
 unsigned int NumberOfAirspaceAreas;
 unsigned int NumberOfAirspaceCircles;
 
-int AIRSPACEWARNINGS = TRUE;
-int WarningTime = 30;
-int AcknowledgementTime = 30;
-int AltitudeMode = ALLON;
-int ClipAltitude = 1000;
-int AltWarningMargin = 100;
-
 void DeleteAirspace() {
   NumberOfAirspacePoints = 0;
   NumberOfAirspaceAreas = 0;
@@ -216,8 +209,6 @@ bool CheckAirspaceAltitude(const double &Base, const double &Top)
     }
   return true;
 }
-
-double airspace_QNH;
 
 // hack, should be replaced with a data change notifier in the future...
 void AirspaceQnhChangeNotify(double newQNH){

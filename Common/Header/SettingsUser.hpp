@@ -116,4 +116,5 @@ typedef struct SETTINGS_MAP_ {
 // display mode stuff
 extern int  ActiveAlternate;
 
+
 #endif

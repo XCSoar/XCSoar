@@ -65,6 +65,7 @@ Copyright_License {
 extern int    iAirspaceMode[AIRSPACECLASSCOUNT];
 extern int    iAirspaceBrush[AIRSPACECLASSCOUNT];
 extern int    iAirspaceColour[AIRSPACECLASSCOUNT];
+extern int    AirspacePriority[AIRSPACECLASSCOUNT];
 
 extern int AIRSPACEWARNINGS;
 extern int WarningTime;
