@@ -43,7 +43,7 @@ Copyright_License {
 #include <math.h>
 #include "UtilsText.hpp"
 #include "UtilsFLARM.hpp"
-#include "Blackboard.hpp"
+#include "DeviceBlackboard.hpp"
 #include "Audio/VarioSound.h"
 #include "Gauge/GaugeFLARM.hpp"
 #include "Device/device.h"

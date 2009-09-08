@@ -41,7 +41,7 @@ Copyright_License {
 #include "XCSoar.h"
 #include "Protection.hpp"
 #include "LogFile.hpp"
-#include "Blackboard.hpp"
+#include "DeviceBlackboard.hpp"
 #include "Interface.hpp"
 #include "Dialogs.h"
 #include "Language.hpp"

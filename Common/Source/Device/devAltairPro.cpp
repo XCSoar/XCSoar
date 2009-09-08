@@ -102,7 +102,7 @@ BOOL atrDeclare(PDeviceDescriptor_t d, Declaration_t *decl){
 
 }
 
-#include "Blackboard.hpp"
+#include "DeviceBlackboard.hpp"
 
 BOOL atrPutQNH(DeviceDescriptor_t *d, double NewQNH){
   (void)NewQNH; // TODO code: JMW check sending QNH to Altair

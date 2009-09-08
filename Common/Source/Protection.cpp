@@ -88,6 +88,8 @@ void TriggerAll(void) {
   instrument_thread->trigger_vario();
 }
 
+#include "DeviceBlackboard.hpp"
+
 void CreateCalculationThread(void) {
   device_blackboard.ReadSettingsComputer(XCSoarInterface::SettingsComputer());
 

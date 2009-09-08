@@ -522,8 +522,10 @@ OBJS	:=\
 	$(SRC)/MapWindowWaypoints.o 	\
 	$(SRC)/MapWindow2.o 		\
 	$(SRC)/DrawThread.o \
-	$(SRC)/CalculationThread.o \
-	$(SRC)/InstrumentThread.o \
+	\
+	$(SRC)/DeviceBlackboard.o 	\
+	$(SRC)/CalculationThread.o 	\
+	$(SRC)/InstrumentThread.o 	\
 	\
 	$(SRC)/Topology.o		\
 	$(SRC)/TopologyStore.o		\

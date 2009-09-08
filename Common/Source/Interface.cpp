@@ -157,6 +157,8 @@ void XCSoarInterface::ExchangeBlackboard() {
   SendSettingsMap();
 }
 
+#include "DeviceBlackboard.hpp"
+
 void XCSoarInterface::ReceiveBlackboard() {
   ScopeLock protect(mutexBlackboard);
   ReadBlackboardBasic(device_blackboard.Basic());

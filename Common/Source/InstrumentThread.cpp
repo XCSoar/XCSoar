@@ -38,6 +38,7 @@ Copyright_License {
 #include "InstrumentThread.hpp"
 #include "Gauge/GaugeVario.hpp"
 #include "Protection.hpp" /* XXX to be removed */
+#include "DeviceBlackboard.hpp"
 
 InstrumentThread::InstrumentThread(GaugeVario *_vario)
   :vario_trigger(TEXT("varioTriggerEvent"), false), vario(_vario) {}

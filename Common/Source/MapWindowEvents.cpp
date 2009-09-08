@@ -56,6 +56,9 @@ Copyright_License {
 #include "Math/Geometry.hpp"
 #include "Math/Earth.hpp"
 
+#ifdef _SIM_
+#include "DeviceBlackboard.hpp"
+#endif
 #include <stdlib.h>
 
 /////////////////////////////////////////

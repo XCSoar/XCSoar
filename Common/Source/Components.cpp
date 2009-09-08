@@ -64,7 +64,7 @@ Copyright_License {
 #include "McReady.h"
 #include "AirfieldDetails.h"
 #include "Screen/Fonts.hpp"
-#include "Blackboard.hpp"
+#include "DeviceBlackboard.hpp"
 #include "MapWindow.h"
 #include "Marks.h"
 #include "Device/device.h"

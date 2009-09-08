@@ -168,6 +168,7 @@ void MapWindow::StoreRestoreFullscreen(bool store) {
 
 
 ///////////////////////////////////////////////////////////////////////////
+#include "DeviceBlackboard.hpp"
 
 void MapWindow::ReadBlackboard(const NMEA_INFO &nmea_info,
 			       const DERIVED_INFO &derived_info) {

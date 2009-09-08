@@ -55,8 +55,7 @@
 #include "InputEvents.h"
 #include "Compatibility/string.h"
 
-#include "Blackboard.hpp"
-#include "GlideComputer.hpp"
+#include "DeviceBlackboard.hpp"
 #include "Components.hpp"
 
 extern int NumLoggerBuffered; // from Logger

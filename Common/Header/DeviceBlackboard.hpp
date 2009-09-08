@@ -35,68 +35,48 @@ Copyright_License {
 }
 */
 
+#ifndef DEVICE_BLACKBOARD_H
+#define DEVICE_BLACKBOARD_H
 
 #include "Blackboard.hpp"
-#include "Protection.hpp"
-#include "Math/Earth.hpp"
-#include "UtilsSystem.hpp"
-#include "Math/Geometry.hpp"
 
-#if defined(_SIM_) && !defined(NDEBUG)
-#include "Device/Parser.h"
+// the deviceblackboard is used as the global ground truth-state
+// since it is accessed quickly with only one mutex (flight)
+class DeviceBlackboard: 
+  public BaseBlackboard,
+  public SettingsComputerBlackboard,
+  public SettingsMapBlackboard,
+  public MapProjectionBlackboard
+{
+public:
+  void Initialise();
+  void ReadBlackboard(const DERIVED_INFO &derived_info);
+  void ReadSettingsComputer(const SETTINGS_COMPUTER &settings);
+  void ReadSettingsMap(const SETTINGS_MAP &settings);
+
+  // only the device blackboard can write to gps
+  friend class ComPort;
+protected:
+  NMEA_INFO& SetBasic() { return gps_info; }
+public:
+  void SetStartupLocation(double lon, double lat, double alt);
+  // used by replay logger
+  void SetLocation(double lon, double lat, double speed, double bearing,
+		   double alt, double baroalt, double t);
+  void ProcessSimulation();
+  bool LowerConnection(); // decrement
+  void RaiseConnection(); // set to 2
+  void StopReplay();
+  void FLARM_RefreshSlots();
+  void SetBaroAlt(double x) {
+    SetBasic().BaroAltitude = x;
+  }
+  void SetNAVWarning(bool val);
+  void SetTrackBearing(double val);
+  void SetSpeed(double val);
+  void SetAltitude(double alt);
+};
+
+extern DeviceBlackboard device_blackboard;
+
 #endif
-
-InterfaceBlackboard InstrumentBlackboard::blackboard;
-
-
-void 
-MapWindowBlackboard::ReadSettingsComputer(const SETTINGS_COMPUTER 
-					      &settings) 
-{
-  memcpy(&settings_computer,&settings,sizeof(SETTINGS_COMPUTER));
-}
-
-void 
-MapWindowBlackboard::ReadSettingsMap(const SETTINGS_MAP 
-				     &settings) 
-{
-  memcpy(&settings_map,&settings,sizeof(SETTINGS_MAP));
-}
-
-void 
-MapWindowBlackboard::ReadBlackboard(const NMEA_INFO &nmea_info,
-				    const DERIVED_INFO &derived_info) 
-{
-  memcpy(&gps_info,&nmea_info,sizeof(NMEA_INFO));
-  memcpy(&calculated_info,&derived_info,sizeof(DERIVED_INFO));
-}
-
-
-void 
-InterfaceBlackboard::ReadBlackboardCalculated(const DERIVED_INFO &derived_info)
-{
-  memcpy(&calculated_info,&derived_info,sizeof(DERIVED_INFO));
-}
-
-void 
-InterfaceBlackboard::ReadBlackboardBasic(const NMEA_INFO &nmea_info)
-{
-  memcpy(&gps_info,&nmea_info,sizeof(NMEA_INFO));
-}
-
-void 
-InterfaceBlackboard::ReadSettingsComputer(const SETTINGS_COMPUTER 
-					  &settings) 
-{
-  memcpy(&settings_computer,&settings,sizeof(SETTINGS_COMPUTER));
-}
-
-
-void 
-MapProjectionBlackboard::ReadMapProjection
-(const MapWindowProjection &map)
-{
-  map_projection = map;
-}
-
-

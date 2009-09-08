@@ -50,7 +50,7 @@ Copyright_License {
 #include "InfoBoxManager.h"
 #include "MapWindow.h"
 #include "Math/Earth.hpp"
-#include "Blackboard.hpp"
+#include "DeviceBlackboard.hpp"
 #include "Components.hpp"
 #include "PeriodClock.hpp"
 #include "MainWindow.hpp"
@@ -113,6 +113,7 @@ void ProcessTimer::CommonProcessTimer()
 }
 
 ////////////////
+
 
 int ProcessTimer::ConnectionProcessTimer(int itimeout) {
   mutexComm.Lock();

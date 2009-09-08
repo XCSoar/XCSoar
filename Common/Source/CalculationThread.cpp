@@ -39,6 +39,7 @@ Copyright_License {
 #include "GlideComputer.hpp"
 #include "Protection.hpp"
 #include "Screen/Blank.hpp"
+#include "DeviceBlackboard.hpp"
 
 CalculationThread::CalculationThread(GlideComputer *_glide_computer)
   :data_trigger(TEXT("dataTriggerEvent")),

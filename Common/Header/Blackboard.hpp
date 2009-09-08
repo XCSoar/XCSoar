@@ -86,44 +86,6 @@ public:
 };
 
 
-// the deviceblackboard is used as the global ground truth-state
-// since it is accessed quickly with only one mutex (flight)
-class DeviceBlackboard: 
-  public BaseBlackboard,
-  public SettingsComputerBlackboard,
-  public SettingsMapBlackboard,
-  public MapProjectionBlackboard
-{
-public:
-  void Initialise();
-  void ReadBlackboard(const DERIVED_INFO &derived_info);
-  void ReadSettingsComputer(const SETTINGS_COMPUTER &settings);
-  void ReadSettingsMap(const SETTINGS_MAP &settings);
-
-  // only the device blackboard can write to gps
-  friend class ComPort;
-protected:
-  NMEA_INFO& SetBasic() { return gps_info; }
-public:
-  void SetStartupLocation(double lon, double lat, double alt);
-  // used by replay logger
-  void SetLocation(double lon, double lat, double speed, double bearing,
-		   double alt, double baroalt, double t);
-  void ProcessSimulation();
-  bool LowerConnection(); // decrement
-  void RaiseConnection(); // set to 2
-  void StopReplay();
-  void FLARM_RefreshSlots();
-  void SetBaroAlt(double x) {
-    SetBasic().BaroAltitude = x;
-  }
-  void SetNAVWarning(bool val);
-  void SetTrackBearing(double val);
-  void SetSpeed(double val);
-  void SetAltitude(double alt);
-};
-
-
 class MapWindowBlackboard: 
   public BaseBlackboard,
   public SettingsComputerBlackboard,
@@ -171,7 +133,5 @@ public:
 private:
   static InterfaceBlackboard blackboard;
 };
-
-extern DeviceBlackboard device_blackboard;
 
 #endif

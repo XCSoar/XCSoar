@@ -132,6 +132,10 @@ ActionInterface::on_key_TeamCode(int UpDown)
   }
 }
 
+#ifdef _SIM_
+#include "DeviceBlackboard.hpp"
+#endif
+
 void	
 ActionInterface::on_key_Altitude(int UpDown)
 {
