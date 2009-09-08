@@ -84,7 +84,9 @@ void PopupMessage::Resize() {
 
   if (size==0) {
     if (!hidden) {
+      Unlock();
       hide();
+      Lock();
 
       // animation
       //      GetWindowRect(hWndMessageWindow, &mRc);
@@ -131,11 +133,16 @@ void PopupMessage::Resize() {
     }
     */
 
+    Unlock();
+
     move(rthis.left, rthis.top,
          rthis.right - rthis.left,
          rthis.bottom - rthis.top);
     bring_to_top();
     show();
+
+    Lock();
+
     hidden = false;
   }
 
