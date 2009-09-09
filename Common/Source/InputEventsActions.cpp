@@ -1877,7 +1877,12 @@ void InputEvents::sub_SetZoom(double value) {
 
 
 void InputEvents::sub_ScaleZoom(int vswitch) {
-  double value = MapProjection().GetMapScaleUser();
+  double value;
+  if (SettingsMap().MapScale>0) {
+    value = SettingsMap().MapScale;
+  } else {
+    value = MapProjection().GetMapScaleUser();
+  }
   MapWindowProjection copy = MapProjection();
   if (copy.HaveScaleList()){
     value = copy.StepMapScale(-vswitch);

@@ -104,7 +104,7 @@ void ActionInterface::SendSettingsMap(const bool trigger_draw) {
   if (trigger_draw) {
     DisplayModes();
     InfoBoxManager::ProcessTimer();
-  }
+  } 
   device_blackboard.ReadSettingsMap(SettingsMap());
   if (trigger_draw) {
     drawTriggerEvent.trigger();

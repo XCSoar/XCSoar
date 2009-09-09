@@ -545,10 +545,12 @@ void MapWindowProjection::UpdateMapScale(const NMEA_INFO &DrawInfo,
   static DisplayMode_t DisplayModeLast = DisplayMode;
 
   // if there is user intervention in the scale
-  double ext_mapscale = LimitMapScale(settings_map.MapScale, settings_map);
-  if ((fabs(_RequestedMapScale-ext_mapscale)>0.05) && 
-      (ext_mapscale>0.0) && (DisplayMode==DisplayModeLast)) {
-    _RequestedMapScale = ext_mapscale;
+  if (settings_map.MapScale>0) {
+    double ext_mapscale = LimitMapScale(settings_map.MapScale, settings_map);
+    if ((fabs(_RequestedMapScale-ext_mapscale)>0.05) && 
+	(ext_mapscale>0.0) && (DisplayMode==DisplayModeLast)) {
+      _RequestedMapScale = ext_mapscale;
+    }
   }
   if(MapScale != _RequestedMapScale) {
     ModifyMapScale(settings_map);

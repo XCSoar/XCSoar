@@ -106,6 +106,9 @@ void ProcessTimer::CommonProcessTimer()
   DisplayModes();
   ExchangeBlackboard();
 
+  // send ignore command
+  SetSettingsMap().MapScale = 0;
+
   InfoBoxManager::ProcessTimer();
   InputEvents::ProcessTimer();
   AirspaceProcessTimer();
