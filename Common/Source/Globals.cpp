@@ -12,23 +12,23 @@ int   SelectedWaypoint = -1;
 bool  ForceFinalGlide= false;
 bool  EnableFAIFinishHeight = false;
 int   FinishLine=1;
-DWORD FinishRadius=1000;
+unsigned FinishRadius=1000;
 // Assigned Area Task
 double AATTaskLength = 120;
-BOOL  AATEnabled = FALSE;
-DWORD FinishMinHeight = 0;
-DWORD StartMaxHeight = 0;
-DWORD StartMaxSpeed = 0;
-DWORD StartMaxHeightMargin = 0;
-DWORD StartMaxSpeedMargin = 0;
+bool  AATEnabled = FALSE;
+unsigned FinishMinHeight = 0;
+unsigned StartMaxHeight = 0;
+unsigned StartMaxSpeed = 0;
+unsigned StartMaxHeightMargin = 0;
+unsigned StartMaxSpeedMargin = 0;
 int   ActiveWayPoint = -1;
 int   AutoAdvance = 1;
 bool  AdvanceArmed = false;
 // Waypoint Database
 int   SectorType = 1; // FAI sector
-DWORD SectorRadius = 500;
+unsigned SectorRadius = 500;
 int   StartLine = 1;
-DWORD StartRadius = 3000;
+unsigned StartRadius = 3000;
 
 //Task Information
 Task_t task_points = {{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0}};

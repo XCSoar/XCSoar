@@ -563,9 +563,10 @@ void ReadRegistrySettings(void)
   GetFromRegistry(szRegistryFAISector,&Temp);
   SectorType = Temp;
 
-  SectorRadius = 10000;
+  Temp = 10000;
   GetFromRegistry(szRegistrySectorRadius,
-		  &SectorRadius);
+		  &Temp);
+  SectorRadius = Temp;
 
   Temp = POLARID;
   GetFromRegistry(szRegistryPolarID,
@@ -1169,6 +1170,11 @@ HRESULT SetToRegistry(const TCHAR *szRegValue, bool bVal)
 
 // Set int value to registry - JG
 HRESULT SetToRegistry(const TCHAR *szRegValue, int nVal)
+{
+	return SetToRegistry(szRegValue, DWORD(nVal));
+}
+
+HRESULT SetToRegistry(const TCHAR *szRegValue, unsigned nVal)
 {
 	return SetToRegistry(szRegValue, DWORD(nVal));
 }
