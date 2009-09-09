@@ -544,7 +544,7 @@ void MapWindowProjection::UpdateMapScale(const NMEA_INFO &DrawInfo,
   double AutoZoomFactor;
   static DisplayMode_t DisplayModeLast = DisplayMode;
 
-  bool my_target_pan = settings_map.TargetPan;
+  bool my_target_pan = ;
 
   // if there is user intervention in the scale
   double ext_mapscale = LimitMapScale(settings_map.MapScale, settings_map);
@@ -558,12 +558,12 @@ void MapWindowProjection::UpdateMapScale(const NMEA_INFO &DrawInfo,
   DisplayModeLast = DisplayMode;
 
   double wpd;
-  if (my_target_pan) {
+  if (settings_map.TargetPan) {
     wpd = settings_map.TargetZoomDistance;
   } else {
     wpd = DerivedDrawInfo.ZoomDistance;
   }
-  if (my_target_pan) {
+  if (settings_map.TargetPan) {
     // set scale exactly so that waypoint distance is the zoom factor
     // across the screen
     _RequestedMapScale = LimitMapScale(wpd*DISTANCEMODIFY/4.0, settings_map);
@@ -571,90 +571,67 @@ void MapWindowProjection::UpdateMapScale(const NMEA_INFO &DrawInfo,
     return;
   }
 
-  if (settings_map.AutoZoom) {
-    if(wpd > 0) {
-      if(
-	 (((settings_map.DisplayOrientation == NORTHTRACK)
-	   &&(DisplayMode != dmCircling))
-	  ||(settings_map.DisplayOrientation == NORTHUP)
-	  ||
-	  (((settings_map.DisplayOrientation == NORTHCIRCLE)
-	    || (settings_map.DisplayOrientation == TRACKCIRCLE))
-	   && (DisplayMode == dmCircling) ))
-	 && !my_target_pan
-	 ) {
-	AutoZoomFactor = 2.5;
-      } else {
-	AutoZoomFactor = 4;
+  if (settings_map.AutoZoom && wpd>0) {
+    if((((settings_map.DisplayOrientation == NORTHTRACK)
+	 &&(DisplayMode != dmCircling))
+	||(settings_map.DisplayOrientation == NORTHUP)
+	||
+	(((settings_map.DisplayOrientation == NORTHCIRCLE)
+	  || (settings_map.DisplayOrientation == TRACKCIRCLE))
+	 && (DisplayMode == dmCircling) ))
+       && !settings_map.TargetPan
+       ) {
+      AutoZoomFactor = 2.5;
+    } else {
+      AutoZoomFactor = 4;
+    }
+    
+    if((wpd < ( AutoZoomFactor * MapScale/DISTANCEMODIFY))
+       || (StartingAutoMapScale==0.0)) {
+      // waypoint is too close, so zoom in
+      // OR just turned waypoint
+      
+      // this is the first time this waypoint has gotten close,
+      // so save original map scale
+      
+      if (StartingAutoMapScale==0.0) {
+	StartingAutoMapScale = MapScale;
       }
       
-      if(
-	 (wpd < ( AutoZoomFactor * MapScale/DISTANCEMODIFY))
-	 ||
-	 (StartingAutoMapScale==0.0)) {
-	  // waypoint is too close, so zoom in
-	  // OR just turned waypoint
-	  
-	  // this is the first time this waypoint has gotten close,
-	    // so save original map scale
-
-	if (StartingAutoMapScale==0.0) {
-	  StartingAutoMapScale = MapScale;
-	}
-	
-	// set scale exactly so that waypoint distance is the zoom factor
-	// across the screen
-	_RequestedMapScale = 
-	  LimitMapScale(wpd*DISTANCEMODIFY/ AutoZoomFactor, settings_map);
-	ModifyMapScale(settings_map);
-	
-      }
+      // set scale exactly so that waypoint distance is the zoom factor
+      // across the screen
+      _RequestedMapScale = 
+	LimitMapScale(wpd*DISTANCEMODIFY/ AutoZoomFactor, settings_map);
+      ModifyMapScale(settings_map);
+      
     }
-  } else {
-    // reset starting map scale for auto zoom if momentarily switch
-    // off autozoom
-    //    StartingAutoMapScale = RequestMapScale;
-  }
-
-  if (my_target_pan) {
-    return;
   }
 
   mutexTaskData.Lock();  // protect from extrnal task changes
-#ifdef HAVEEXCEPTIONS
-  __try{
-#endif
-    // if we aren't looking at a waypoint, see if we are now
-    if (AutoMapScaleWaypointIndex == -1) {
-      if (ValidTaskPoint(ActiveWayPoint)) {
-	AutoMapScaleWaypointIndex = Task[ActiveWayPoint].Index;
-      }
-    }
-
-    // if there is an active waypoint
+  // if we aren't looking at a waypoint, see if we are now
+  if (AutoMapScaleWaypointIndex == -1) {
     if (ValidTaskPoint(ActiveWayPoint)) {
-
-      // if the current zoom focused waypoint has changed...
-      if (AutoMapScaleWaypointIndex != Task[ActiveWayPoint].Index) {
-	AutoMapScaleWaypointIndex = Task[ActiveWayPoint].Index;
-
-	// zoom back out to where we were before
-	if (StartingAutoMapScale> 0.0) {
-	  _RequestedMapScale = StartingAutoMapScale;
-	  ModifyMapScale(settings_map);
-	}
-
-	// reset search for new starting zoom level
-	StartingAutoMapScale = 0.0;
-      }
-
+      AutoMapScaleWaypointIndex = Task[ActiveWayPoint].Index;
     }
-#ifdef HAVEEXCEPTIONS
-  }__finally
-#endif
-     {
-       mutexTaskData.Unlock();
-     }
+  }
+  // if there is an active waypoint
+  if (ValidTaskPoint(ActiveWayPoint)) {
+    // if the current zoom focused waypoint has changed...
+    if (AutoMapScaleWaypointIndex != Task[ActiveWayPoint].Index) {
+      AutoMapScaleWaypointIndex = Task[ActiveWayPoint].Index;
+      
+      // zoom back out to where we were before
+      if (StartingAutoMapScale> 0.0) {
+	_RequestedMapScale = StartingAutoMapScale;
+	ModifyMapScale(settings_map);
+      }
+      
+      // reset search for new starting zoom level
+      StartingAutoMapScale = 0.0;
+    }
+    
+  }
+  mutexTaskData.Unlock();
 }
 
 
