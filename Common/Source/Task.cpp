@@ -62,6 +62,11 @@ static bool aat_enabled_saved= false;
 static void BackupTask(void);
 bool TaskModified=false;
 bool TargetModified=false;
+bool TaskAborted = false;
+
+bool isTaskAborted() {
+  return TaskAborted;
+}
 
 bool isTaskModified() {
   return TaskModified;

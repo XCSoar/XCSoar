@@ -98,7 +98,7 @@ void GlideComputerTask::ProcessBasicTask(const double mc,
 void
 GlideComputerTask::ProcessIdle()
 {
-  if (TaskAborted) { 
+  if (isTaskAborted()) { 
     SortLandableWaypoints();
   }
   DoBestAlternateSlow();
@@ -907,7 +907,7 @@ void GlideComputerTask::LDNext(const double LegToGo) {
 void GlideComputerTask::CheckForceFinalGlide() {
   // Auto Force Final Glide forces final glide mode
   // if above final glide...
-  if (TaskAborted) {
+  if (isTaskAborted()) {
     ForceFinalGlide = false;
   } else {
     if (SettingsComputer().AutoForceFinalGlide) {

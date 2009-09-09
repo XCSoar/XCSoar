@@ -143,7 +143,7 @@ void MapWindow::RenderTrail(Canvas &canvas, const RECT rc)
 
 void MapWindow::RenderTask(Canvas &canvas, const RECT rc)
 {
-  if (TaskAborted) {
+  if (isTaskAborted()) {
     DrawAbortedTask(canvas);
   } else {
     DrawTask(canvas, rc);

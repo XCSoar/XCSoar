@@ -53,7 +53,6 @@ extern Start_t StartPoints;
 extern Task_t Task;
 extern TaskStats_t TaskStats;
 extern int ActiveWayPoint;
-extern bool TaskAborted;
 extern int SelectedWaypoint;
 extern int SectorType;
 extern DWORD SectorRadius;

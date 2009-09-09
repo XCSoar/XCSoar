@@ -161,5 +161,6 @@ bool isTaskModified();
 void SetTaskModified();
 bool isTargetModified();
 void SetTargetModified(const bool set=true);
+bool isTaskAborted();
 
 #endif

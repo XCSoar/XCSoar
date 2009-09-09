@@ -1061,7 +1061,7 @@ void InputEvents::eventAbortTask(const TCHAR *misc) {
   else if (_tcscmp(misc, TEXT("resume")) == 0)
     ResumeAbortTask(-1);
   else if (_tcscmp(misc, TEXT("show")) == 0) {
-    if (TaskAborted)
+    if (isTaskAborted())
       Message::AddMessage(TEXT("Task Aborted"));
     else if (TaskIsTemporary()) {
       Message::AddMessage(TEXT("Task Temporary"));

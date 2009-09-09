@@ -85,7 +85,7 @@ bool ButtonLabel::ExpandMacros(const TCHAR *In,
 
   if (_tcsstr(OutBuffer, TEXT("$(")) == NULL) return false;
 
-  if (TaskAborted) {
+  if (isTaskAborted()) {
     if (_tcsstr(OutBuffer, TEXT("$(WaypointNext)"))) {
       // Waypoint\nNext
       invalid = !ValidTaskPoint(ActiveWayPoint+1);
@@ -198,7 +198,7 @@ bool ButtonLabel::ExpandMacros(const TCHAR *In,
     ReplaceInString(OutBuffer, TEXT("$(CheckSettingsLockout)"), TEXT(""), Size);
   }
   if (_tcsstr(OutBuffer, TEXT("$(CheckTaskResumed)"))) {
-    if (TaskAborted) {
+    if (isTaskAborted()) {
       // TODO code: check, does this need to be set with temporary task?
       invalid = true;
     }

@@ -253,7 +253,7 @@ void MapWindow::DrawFlightMode(Canvas &canvas, const RECT rc)
 
   if (Appearance.FlightModeIcon == apFlightModeIconDefault){
     Bitmap *bmp;
-    if (TaskAborted) {
+    if (isTaskAborted()) {
       bmp = &MapGfx.hAbort;
     } else if (DisplayMode == dmCircling) {
       bmp = &MapGfx.hClimb;
@@ -317,7 +317,7 @@ void MapWindow::DrawFlightMode(Canvas &canvas, const RECT rc)
 
     }
 
-    if (TaskAborted)
+    if (isTaskAborted())
       canvas.select(MapGfx.hBrushFlyingModeAbort);
     else
       canvas.select(MapGfx.hbCompass);

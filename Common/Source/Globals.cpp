@@ -26,7 +26,6 @@ DWORD StartMaxSpeedMargin = 0;
 int   ActiveWayPoint = -1;
 int   AutoAdvance = 1;
 bool  AdvanceArmed = false;
-bool  TaskAborted = false;
 // Waypoint Database
 int   SectorType = 1; // FAI sector
 DWORD SectorRadius = 500;
