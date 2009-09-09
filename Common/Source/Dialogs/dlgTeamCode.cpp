@@ -152,12 +152,12 @@ static void OnFlarmLockClicked(WindowControl * Sender)
 		  MB_OK|MB_ICONINFORMATION);
 
       XCSoarInterface::SetSettingsComputer().TeamFlarmTracking = false;
-      TeamFlarmIdTarget = 0;
+      XCSoarInterface::SetSettingsComputer().TeamFlarmIdTarget = 0;
       XCSoarInterface::SetSettingsComputer().TeamFlarmCNTarget[0] = 0;
     }
   else
     {
-      TeamFlarmIdTarget = flarmId;
+      XCSoarInterface::SetSettingsComputer().TeamFlarmIdTarget = flarmId;
       XCSoarInterface::SetSettingsComputer().TeamFlarmTracking = true;
     }
 }

@@ -183,7 +183,7 @@ void SelectAsTeamTrack()
 	  XCSoarInterface::SetSettingsComputer().TeamFlarmCNTarget[3] = 0;
 	}
       // now tracking !
-      TeamFlarmIdTarget = XCSoarInterface::Basic().FLARM_Traffic[index].ID;
+      XCSoarInterface::SetSettingsComputer().TeamFlarmIdTarget = XCSoarInterface::Basic().FLARM_Traffic[index].ID;
       XCSoarInterface::SetSettingsComputer().TeamFlarmTracking = true;
       XCSoarInterface::SetSettingsComputer().TeammateCodeValid = false;
     }

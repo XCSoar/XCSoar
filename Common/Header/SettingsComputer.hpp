@@ -110,6 +110,7 @@ typedef struct _SETTINGS_COMPUTER {
 
   TCHAR  TeammateCode[10]; // auto-detected, see also in Info.h
   bool   TeammateCodeValid;
+  int TeamFlarmIdTarget;    // FlarmId of the glider to track
 
 } SETTINGS_COMPUTER;
 

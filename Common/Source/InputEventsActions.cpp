@@ -1206,7 +1206,7 @@ void InputEvents::eventLogger(const TCHAR *misc) {
     }
     return;
   } else if (_tcscmp(misc, TEXT("show")) == 0) {
-    if (LoggerActive) {
+    if (isLoggerActive()) {
       Message::AddMessage(TEXT("Logger ON"));
     } else {
       Message::AddMessage(TEXT("Logger OFF"));

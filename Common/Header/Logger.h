@@ -56,6 +56,7 @@ void LoggerDeviceDeclare();
 
 bool CheckDeclaration(void);
 bool isTaskDeclared();
+bool isLoggerActive();
 
 bool LoggerClearFreeSpace(const NMEA_INFO &gps_info);
 void StopLogger(const NMEA_INFO &gps_info);

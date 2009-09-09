@@ -237,7 +237,7 @@ bool ButtonLabel::ExpandMacros(const TCHAR *In,
     ReplaceInString(OutBuffer, TEXT("$(CheckAutoMc)"), TEXT(""), Size);
   }
 
-  CondReplaceInString(LoggerActive, OutBuffer, TEXT("$(LoggerActive)"), TEXT("Stop"), TEXT("Start"), Size);
+  CondReplaceInString(isLoggerActive(), OutBuffer, TEXT("$(LoggerActive)"), TEXT("Stop"), TEXT("Start"), Size);
 
   if (_tcsstr(OutBuffer, TEXT("$(SnailTrailToggleName)"))) {
     switch(SettingsMap().TrailActive) {

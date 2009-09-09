@@ -84,7 +84,7 @@ void
 ActionInterface::on_key_TeamCode(int UpDown)
 {
   int tryCount = 0;
-  int searchSlot = FindFlarmSlot(Basic(), TeamFlarmIdTarget);
+  int searchSlot = FindFlarmSlot(Basic(), SettingsComputer().TeamFlarmIdTarget);
   int newFlarmSlot = -1;
   
   while (tryCount < FLARM_MAX_TRAFFIC) {
@@ -108,7 +108,7 @@ ActionInterface::on_key_TeamCode(int UpDown)
   }
 
   if (newFlarmSlot != -1) {
-    TeamFlarmIdTarget = Basic().FLARM_Traffic[newFlarmSlot].ID;
+    SetSettingsComputer().TeamFlarmIdTarget = Basic().FLARM_Traffic[newFlarmSlot].ID;
       
     if (_tcslen(Basic().FLARM_Traffic[newFlarmSlot].Name) != 0) { 
       // copy the 3 first chars from the name to TeamFlarmCNTarget
@@ -126,7 +126,7 @@ ActionInterface::on_key_TeamCode(int UpDown)
     }
   } else {
     // no flarm traffic to select!
-    TeamFlarmIdTarget = 0;
+    SetSettingsComputer().TeamFlarmIdTarget = 0;
     SetSettingsComputer().TeamFlarmCNTarget[0] = 0;
     return;
   }

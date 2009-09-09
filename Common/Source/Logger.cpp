@@ -53,8 +53,12 @@
 #include "Compatibility/string.h"
 
 //IGC Logger
-bool LoggerActive = false;
-bool DeclaredToDevice = false;
+static bool LoggerActive = false;
+static bool DeclaredToDevice = false;
+
+bool isLoggerActive() {
+  return LoggerActive;
+}
 
 TCHAR NumToIGCChar(int n) {
   if (n<10) {

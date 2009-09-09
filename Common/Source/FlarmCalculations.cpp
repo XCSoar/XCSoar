@@ -69,7 +69,6 @@ double FlarmCalculations::Average30s(long flarmId, double curTime, double curAlt
 
 
 /////////////
-#include "Settings.hpp"
 
 int FindFlarmSlot(const NMEA_INFO &GPS_INFO, int flarmId)
 {
@@ -95,20 +94,17 @@ int FindFlarmSlot(const NMEA_INFO &GPS_INFO, TCHAR *flarmCN)
   return -1;
 }
 
-bool IsFlarmTargetCNInRange(const NMEA_INFO &GPS_INFO)
+bool IsFlarmTargetCNInRange(const NMEA_INFO &GPS_INFO, const long target_id)
 {
   bool FlarmTargetContact = false;
-  for(int z = 0; z < FLARM_MAX_TRAFFIC; z++)
-    {
-      if (GPS_INFO.FLARM_Traffic[z].ID != 0)
-	{
-	  if (GPS_INFO.FLARM_Traffic[z].ID == TeamFlarmIdTarget)
-	    {
-	      FlarmTargetContact = true;
-	      break;
-	    }
-	}
+  for(int z = 0; z < FLARM_MAX_TRAFFIC; z++) {
+    if (GPS_INFO.FLARM_Traffic[z].ID != 0) { 
+      if (GPS_INFO.FLARM_Traffic[z].ID == target_id) {
+	FlarmTargetContact = true;
+	break;
+      }
     }
+  }
   return FlarmTargetContact;
 }
 

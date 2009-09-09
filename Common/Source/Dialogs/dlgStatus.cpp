@@ -150,7 +150,7 @@ static void UpdateValuesSystem() {
   static int SatellitesUsed_last = XCSoarInterface::Basic().SatellitesUsed;
   static int VarioAvailable_last = XCSoarInterface::Basic().VarioAvailable;
   static int FLARM_Available_last = XCSoarInterface::Basic().FLARM_Available;
-  static bool LoggerActive_last = LoggerActive;
+  static bool LoggerActive_last = isLoggerActive();
   static bool DeclaredToDevice_last = isTaskDeclared();
   static double SupplyBatteryVoltage_last = XCSoarInterface::Basic().SupplyBatteryVoltage;
   static int PDABatteryPercent_last = PDABatteryPercent;
@@ -161,7 +161,7 @@ static void UpdateValuesSystem() {
       (SatellitesUsed_last != XCSoarInterface::Basic().SatellitesUsed) ||
       (VarioAvailable_last != XCSoarInterface::Basic().VarioAvailable) ||
       (FLARM_Available_last != XCSoarInterface::Basic().FLARM_Available) ||
-      (LoggerActive_last != LoggerActive) ||
+      (LoggerActive_last != isLoggerActive()) ||
       (DeclaredToDevice_last != isTaskDeclared()) ||
       (SupplyBatteryVoltage_last != XCSoarInterface::Basic().SupplyBatteryVoltage) ||
       (PDABatteryPercent_last != PDABatteryPercent)) {
@@ -172,7 +172,7 @@ static void UpdateValuesSystem() {
     SatellitesUsed_last = XCSoarInterface::Basic().SatellitesUsed;
     VarioAvailable_last = XCSoarInterface::Basic().VarioAvailable;
     FLARM_Available_last = XCSoarInterface::Basic().FLARM_Available;
-    LoggerActive_last = LoggerActive;
+    LoggerActive_last = isLoggerActive();
     DeclaredToDevice_last = isTaskDeclared();
     SupplyBatteryVoltage_last = XCSoarInterface::Basic().SupplyBatteryVoltage;
     PDABatteryPercent_last = PDABatteryPercent;
@@ -239,14 +239,14 @@ static void UpdateValuesSystem() {
   if (wp) {
     LinkGRecordDLL();
     if (LoggerGActive()) {
-      if (LoggerActive) {
+      if (isLoggerActive()) {
         wp->SetText(gettext(TEXT("ON (G)")));
       } else {
         wp->SetText(gettext(TEXT("OFF (G)")));
       }
     }
     else { // no G Record
-      if (LoggerActive) {
+      if (isLoggerActive()) {
         wp->SetText(gettext(TEXT("ON (no G)")));
       } else {
         wp->SetText(gettext(TEXT("OFF (no G)")));
