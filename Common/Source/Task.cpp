@@ -178,8 +178,7 @@ void InsertWaypoint(int index, const SETTINGS_COMPUTER &settings_computer,
     return;
 
   int i;
-
-  mutexTaskData.Lock();
+  ScopeLock protect(mutexTaskData);
   TaskModified = true;
   TargetModified = true;
 
@@ -187,8 +186,7 @@ void InsertWaypoint(int index, const SETTINGS_COMPUTER &settings_computer,
     ActiveTaskPoint = 0;
     ResetTaskWaypoint(ActiveTaskPoint);
     task_points[ActiveTaskPoint].Index = index;
-
-    mutexTaskData.Unlock();
+    RefreshTask(settings_computer);
     return;
   }
 
@@ -198,8 +196,6 @@ void InsertWaypoint(int index, const SETTINGS_COMPUTER &settings_computer,
       gettext(TEXT("Too many waypoints in task!")),
       gettext(TEXT("Insert Waypoint")),
       MB_OK|MB_ICONEXCLAMATION);
-
-    mutexTaskData.Unlock();
     return;
   }
 
@@ -224,8 +220,6 @@ void InsertWaypoint(int index, const SETTINGS_COMPUTER &settings_computer,
   }
 
   RefreshTask(settings_computer);
-  mutexTaskData.Unlock();
-
 }
 
 // Create a default task to home at startup if no task is present

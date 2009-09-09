@@ -863,6 +863,7 @@ void Profile::ReadRegistrySettings(void)
 		  SetSettingsMap().TerrainBrightness );
   GetFromRegistry(szRegistryTerrainRamp,
 		  SetSettingsMap().TerrainRamp );
+
   GetFromRegistry(szRegistryGliderScreenPosition,
 		  SetSettingsMap().GliderScreenPosition );
   GetFromRegistry(szRegistryBallastSecsToEmpty,
@@ -932,7 +933,7 @@ void Profile::ReadRegistrySettings(void)
 //
 // NOTE: all registry variables are unsigned!
 //
-long GetFromRegistryD(const TCHAR *szRegValue, DWORD &pPos)
+bool GetFromRegistryD(const TCHAR *szRegValue, DWORD &pPos)
 {  // returns 0 on SUCCESS, else the non-zero error code
   HKEY    hKey;
   DWORD    dwSize, dwType;
@@ -957,7 +958,7 @@ long GetFromRegistryD(const TCHAR *szRegValue, DWORD &pPos)
 }
 
 
-long GetFromRegistry(const TCHAR *szRegValue, int &pPos) 
+bool GetFromRegistry(const TCHAR *szRegValue, int &pPos) 
 {
   DWORD Temp = pPos;
   long res;
@@ -967,9 +968,8 @@ long GetFromRegistry(const TCHAR *szRegValue, int &pPos)
   return res;
 }
 
-long GetFromRegistry(const TCHAR *szRegValue, short &pPos) 
+bool GetFromRegistry(const TCHAR *szRegValue, short &pPos) 
 {
-  return 0;
   DWORD Temp = pPos;
   long res;
   if ((res = GetFromRegistryD(szRegValue, Temp)) == ERROR_SUCCESS) {
@@ -978,7 +978,7 @@ long GetFromRegistry(const TCHAR *szRegValue, short &pPos)
   return res;
 }
 
-long GetFromRegistry(const TCHAR *szRegValue, bool &pPos) 
+bool GetFromRegistry(const TCHAR *szRegValue, bool &pPos) 
 {
   DWORD Temp = pPos;
   long res;
@@ -988,7 +988,7 @@ long GetFromRegistry(const TCHAR *szRegValue, bool &pPos)
   return res;
 }
 
-long GetFromRegistry(const TCHAR *szRegValue, unsigned &pPos)
+bool GetFromRegistry(const TCHAR *szRegValue, unsigned &pPos)
 {
   DWORD Temp = pPos;
   long res;
@@ -998,7 +998,7 @@ long GetFromRegistry(const TCHAR *szRegValue, unsigned &pPos)
   return res;
 }
 
-long GetFromRegistry(const TCHAR *szRegValue, double &pPos)
+bool GetFromRegistry(const TCHAR *szRegValue, double &pPos)
 {
   return 0;
   DWORD Temp = pPos;
@@ -1019,10 +1019,9 @@ HRESULT SetToRegistry(const TCHAR *szRegValue, DWORD Pos)
   HRESULT hRes;
 
   hRes = RegCreateKeyEx(HKEY_CURRENT_USER, szRegistryKey, 0, NULL, 0, KEY_ALL_ACCESS, NULL, &hKey, &Disp);
-  if (hRes != ERROR_SUCCESS)
-    {
-      return FALSE;
-    }
+  if (hRes != ERROR_SUCCESS) {
+    return FALSE;
+  }
 
   hRes = RegSetValueEx(hKey, szRegValue,0,REG_DWORD, (LPBYTE)&Pos, sizeof(DWORD));
   RegCloseKey(hKey);
@@ -1259,6 +1258,7 @@ const static size_t nMaxKeyNameSize = MAX_PATH + 6;
 
 static bool LoadRegistryFromFile_inner(const TCHAR *szFile, bool wide=true)
 {
+  StartupStore(TEXT("Loading registry from %s\n"), szFile);
   bool found = false;
   FILE *fp=NULL;
   if (_tcslen(szFile)>0)
@@ -1427,7 +1427,7 @@ void SaveRegistryToFile(const TCHAR *szFile)
 
     lpstrName[nNameSize] = _T('\0'); // null terminate, just in case
 
-    if (_tcslen(lpstrName)>0) {
+    if (_tcslen(lpstrName)>1) {
 
       // type 1 text
       // type 4 integer (valuesize 4)
