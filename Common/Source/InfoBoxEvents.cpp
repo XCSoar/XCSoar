@@ -200,9 +200,9 @@ void
 ActionInterface::on_key_BestAlternate(int UpDown)
 {
    if (UpDown==0) {
-     if ( BestAlternate <0 ) return;
+     if ( Calculated().BestAlternate <0 ) return;
      mutexTaskData.Lock();
-     SelectedWaypoint = BestAlternate;
+     SelectedWaypoint = Calculated().BestAlternate;
      PopupWaypointDetails();
      mutexTaskData.Unlock();
   }

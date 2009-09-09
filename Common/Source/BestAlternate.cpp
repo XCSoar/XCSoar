@@ -99,7 +99,7 @@ GlideComputerTask::SearchBestAlternate()
     searchrange=ALTERNATE_MAXRANGE;
 
   mutexTaskData.Lock();
-  active_bestalternate_on_entry = BestAlternate;
+  active_bestalternate_on_entry = Calculated().BestAlternate;
 
   // Do preliminary fast search
   int scx_aircraft, scy_aircraft;
@@ -424,7 +424,6 @@ GlideComputerTask::SearchBestAlternate()
   } else {
     // If still invalid, i.e. not -1, then there's a big problem
     if ( !ValidWayPoint(bestalternate) ) {
-      //if (EnableSoundModes) PlayResource(TEXT("IDR_WAV_RED"));
       AlertBestAlternate(2);
       Message::AddMessage(_T("Error, invalid best alternate!"));
       // todo: immediate disable function
@@ -432,11 +431,10 @@ GlideComputerTask::SearchBestAlternate()
   }
 
   if (active_bestalternate_on_entry != bestalternate) {
-    BestAlternate = bestalternate;
+    SetCalculated().BestAlternate = bestalternate;
     if ( bestalternate >0 &&
 	 ((safecalc-WayPointList[bestalternate].Altitude) >ALTERNATE_QUIETMARGIN))
       AlertBestAlternate(1);
-    //		if (EnableSoundModes) PlayResource(TEXT("IDR_WAV_GREEN"));
   }
 
   mutexTaskData.Unlock();

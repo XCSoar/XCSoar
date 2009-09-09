@@ -202,8 +202,8 @@ void FormatterAlternate::AssignValue(int i) {
        SetSettingsComputer().EnableBestAlternate = true;	  // activate it
        Value=INVALID_GR;
      } else {
-       if ( ValidWayPoint(BestAlternate))
-	 Value=WayPointCalc[BestAlternate].GR;
+       if ( ValidWayPoint(Calculated().BestAlternate))
+	 Value=WayPointCalc[Calculated().BestAlternate].GR;
        else
 	 Value=INVALID_GR;
      }

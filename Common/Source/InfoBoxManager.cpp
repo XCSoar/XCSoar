@@ -521,7 +521,7 @@ void InfoBoxManager::DisplayInfoBox(void)
 	  if (DisplayType[i]==68)
 	    ActiveAlternate=SettingsComputer().Alternate2;
 	  else
-	    ActiveAlternate=BestAlternate;
+	    ActiveAlternate=Calculated().BestAlternate;
 
 	InfoBoxes[i]->SetSmallerFont(false);
 	if ( ActiveAlternate != -1 ) {

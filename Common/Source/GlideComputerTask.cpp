@@ -68,6 +68,7 @@ void GlideComputerTask::ResetFlight(const bool full)
     olc.ResetFlight();
     aatdistance.Reset();
   }
+  SetCalculated().BestAlternate = -1;
 }
 
 

@@ -75,5 +75,3 @@ int      iAirspaceMode[AIRSPACECLASSCOUNT] =
 TCHAR TeamFlarmCNTarget[4]; // CN of the glider to track
 bool EnableAnimation = false;
 
-// Alternates VENTA3
-int BestAlternate = -1;

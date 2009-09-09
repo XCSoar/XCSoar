@@ -41,7 +41,6 @@ Copyright_License {
 #include <tchar.h>
 
 // changed by gui or calculation thread
-extern int  BestAlternate;
 extern double QFEAltitudeOffset; // VENTA3
 extern bool   ForceFinalGlide;
 
