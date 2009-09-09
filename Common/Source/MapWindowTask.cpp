@@ -110,10 +110,10 @@ void MapWindow::DrawTask(Canvas &canvas, RECT rc)
     DrawStartSector(canvas, task_points[0].Start, task_points[0].End, task_points[0].Index);
     if (EnableMultipleStartPoints) {
       for (i=0; i<MAXSTARTPOINTS; i++) {
-        if (StartPoints[i].Active && ValidWayPoint(StartPoints[i].Index)) {
+        if (task_start_points[i].Active && ValidWayPoint(task_start_points[i].Index)) {
           DrawStartSector(canvas,
-                          StartPoints[i].Start,
-                          StartPoints[i].End, StartPoints[i].Index);
+                          task_start_points[i].Start,
+                          task_start_points[i].End, task_start_points[i].Index);
         }
       }
     }
@@ -585,11 +585,11 @@ void MapWindow::CalculateScreenPositionsTask() {
 
   if (EnableMultipleStartPoints) {
     for(i=0;i<MAXSTARTPOINTS-1;i++) {
-      if (StartPoints[i].Active && ValidWayPoint(StartPoints[i].Index)) {
-        LonLat2Screen(StartPoints[i].SectorEndLon,
-                      StartPoints[i].SectorEndLat, StartPoints[i].End);
-        LonLat2Screen(StartPoints[i].SectorStartLon,
-                      StartPoints[i].SectorStartLat, StartPoints[i].Start);
+      if (task_start_points[i].Active && ValidWayPoint(task_start_points[i].Index)) {
+        LonLat2Screen(task_start_points[i].SectorEndLon,
+                      task_start_points[i].SectorEndLat, task_start_points[i].End);
+        LonLat2Screen(task_start_points[i].SectorStartLon,
+                      task_start_points[i].SectorStartLat, task_start_points[i].Start);
       }
     }
   }

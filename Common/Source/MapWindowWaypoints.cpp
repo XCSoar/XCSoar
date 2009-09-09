@@ -294,8 +294,8 @@ void MapWindow::CalculateScreenPositionsWaypoints() {
     }
     if (EnableMultipleStartPoints) {
       for(j=0;j<MAXSTARTPOINTS-1;j++) {
-        int i = StartPoints[j].Index;
-        if (StartPoints[j].Active && (i>=0)) {
+        int i = task_start_points[j].Index;
+        if (task_start_points[j].Active && (i>=0)) {
 	  LonLat2Screen(WayPointList[i].Longitude, 
 			WayPointList[i].Latitude,
 			WayPointList[i].Screen);

@@ -605,17 +605,17 @@ bool GlideComputerTask::InStartSector(bool *CrossedStart)
 
   if (EnableMultipleStartPoints) {
     for (int i=0; i<MAXSTARTPOINTS; i++) {
-      if (StartPoints[i].Active && (StartPoints[i].Index>=0)
-          && (StartPoints[i].Index != task_points[0].Index)) {
+      if (task_start_points[i].Active && (task_start_points[i].Index>=0)
+          && (task_start_points[i].Index != task_points[0].Index)) {
 
-        retval = in_height & InStartSector_Internal(StartPoints[i].Index,
-						    StartPoints[i].OutBound,
-						    StartPoints[i].InSector);
+        retval = in_height & InStartSector_Internal(task_start_points[i].Index,
+						    task_start_points[i].OutBound,
+						    task_start_points[i].InSector);
         isInSector |= retval;
 
-        int index = StartPoints[i].Index;
-        *CrossedStart = StartPoints[i].InSector && !retval;
-        StartPoints[i].InSector = retval;
+        int index = task_start_points[i].Index;
+        *CrossedStart = task_start_points[i].InSector && !retval;
+        task_start_points[i].InSector = retval;
         if (*CrossedStart) {
           if (task_points[0].Index != index) {
             task_points[0].Index = index;

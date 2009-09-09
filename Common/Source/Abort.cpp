@@ -349,8 +349,8 @@ GlideComputerTask::SortLandableWaypoints()
 
   if (EnableMultipleStartPoints) {
     for (i=0; i<MAXSTARTPOINTS; i++) {
-      if (StartPoints[i].Active && (ValidWayPoint(StartPoints[i].Index))) {
-        WayPointList[StartPoints[i].Index].InTask = true;
+      if (task_start_points[i].Active && (ValidWayPoint(task_start_points[i].Index))) {
+        WayPointList[task_start_points[i].Index].InTask = true;
       }
     }
   }

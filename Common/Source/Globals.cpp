@@ -32,7 +32,7 @@ DWORD StartRadius = 3000;
 
 //Task Information
 Task_t task_points = {{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0}};
-Start_t StartPoints;
+Start_t task_start_points;
 TaskStats_t TaskStats;
 
 int HomeWaypoint = -1;

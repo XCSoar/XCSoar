@@ -442,8 +442,8 @@ void RefreshTask() {
     }
     if (EnableMultipleStartPoints) {
       for (i=0; i<MAXSTARTPOINTS; i++) {
-        if (ValidWayPoint(StartPoints[i].Index) && StartPoints[i].Active) {
-          WayPointList[StartPoints[i].Index].InTask = true;
+        if (ValidWayPoint(task_start_points[i].Index) && task_start_points[i].Active) {
+          WayPointList[task_start_points[i].Index].InTask = true;
         }
       }
     }
@@ -464,8 +464,8 @@ void RotateStartPoints(void) {
   int found = -1;
   int imax = 0;
   for (int i=0; i<MAXSTARTPOINTS; i++) {
-    if (StartPoints[i].Active && ValidWayPoint(StartPoints[i].Index)) {
-      if (task_points[0].Index == StartPoints[i].Index) {
+    if (task_start_points[i].Active && ValidWayPoint(task_start_points[i].Index)) {
+      if (task_points[0].Index == task_start_points[i].Index) {
         found = i;
       }
       imax = i;
@@ -475,8 +475,8 @@ void RotateStartPoints(void) {
   if (found>imax) {
     found = 0;
   }
-  if (ValidWayPoint(StartPoints[found].Index)) {
-    task_points[0].Index = StartPoints[found].Index;
+  if (ValidWayPoint(task_start_points[found].Index)) {
+    task_points[0].Index = task_start_points[found].Index;
   }
 
   RefreshTask();
@@ -493,26 +493,26 @@ void CalculateTaskSectors(void)
 
   if (EnableMultipleStartPoints) {
     for(i=0;i<MAXSTARTPOINTS-1;i++) {
-      if (StartPoints[i].Active && ValidWayPoint(StartPoints[i].Index)) {
+      if (task_start_points[i].Active && ValidWayPoint(task_start_points[i].Index)) {
 	if (StartLine==2) {
           SectorAngle = 45+90;
         } else {
           SectorAngle = 90;
         }
         SectorSize = StartRadius;
-        SectorBearing = StartPoints[i].OutBound;
+        SectorBearing = task_start_points[i].OutBound;
 
-        FindLatitudeLongitude(WayPointList[StartPoints[i].Index].Latitude,
-                              WayPointList[StartPoints[i].Index].Longitude,
+        FindLatitudeLongitude(WayPointList[task_start_points[i].Index].Latitude,
+                              WayPointList[task_start_points[i].Index].Longitude,
                               SectorBearing + SectorAngle, SectorSize,
-                              &StartPoints[i].SectorStartLat,
-                              &StartPoints[i].SectorStartLon);
+                              &task_start_points[i].SectorStartLat,
+                              &task_start_points[i].SectorStartLon);
 
-        FindLatitudeLongitude(WayPointList[StartPoints[i].Index].Latitude,
-                              WayPointList[StartPoints[i].Index].Longitude,
+        FindLatitudeLongitude(WayPointList[task_start_points[i].Index].Latitude,
+                              WayPointList[task_start_points[i].Index].Longitude,
                               SectorBearing - SectorAngle, SectorSize,
-                              &StartPoints[i].SectorEndLat,
-                              &StartPoints[i].SectorEndLon);
+                              &task_start_points[i].SectorEndLat,
+                              &task_start_points[i].SectorEndLon);
       }
     }
   }
@@ -830,12 +830,12 @@ void RefreshTaskWaypoint(int i) {
       if (i==1) {
         if (EnableMultipleStartPoints) {
           for (int j=0; j<MAXSTARTPOINTS; j++) {
-            if ((StartPoints[j].Index != -1)&&(StartPoints[j].Active)) {
-              DistanceBearing(WayPointList[StartPoints[j].Index].Latitude,
-                              WayPointList[StartPoints[j].Index].Longitude,
+            if ((task_start_points[j].Index != -1)&&(task_start_points[j].Active)) {
+              DistanceBearing(WayPointList[task_start_points[j].Index].Latitude,
+                              WayPointList[task_start_points[j].Index].Longitude,
                               WayPointList[task_points[i].Index].Latitude,
                               WayPointList[task_points[i].Index].Longitude,
-                              NULL, &StartPoints[j].OutBound);
+                              NULL, &task_start_points[j].OutBound);
             }
           }
         }
@@ -883,8 +883,8 @@ static bool LoadTaskWaypoints(FILE *file) {
     if (fread(&read_waypoint, sizeof(read_waypoint), 1, file) != 1) {
       return false;
     }
-    if (StartPoints[i].Index != -1) {
-      StartPoints[i].Index = FindOrAddWaypoint(&read_waypoint);
+    if (task_start_points[i].Index != -1) {
+      task_start_points[i].Index = FindOrAddWaypoint(&read_waypoint);
     }
   }
   // managed to load everything
@@ -993,7 +993,7 @@ void LoadNewTask(const TCHAR *szFileName)
           }
 
           if(ValidWayPoint(STemp.Index) || (STemp.Index==-1)) {
-            memcpy(&StartPoints[i],&STemp, sizeof(START_POINT));
+            memcpy(&task_start_points[i],&STemp, sizeof(START_POINT));
           } else {
 	    WaypointInvalid = true;
 	  }
@@ -1058,7 +1058,7 @@ void ClearTask(void) {
   mutexTaskData.Lock();
 
   memset( &(task_points), 0, sizeof(Task_t));
-  memset( &(StartPoints), 0, sizeof(Start_t));
+  memset( &(task_start_points), 0, sizeof(Start_t));
 
   TaskModified = true;
   TargetModified = true;
@@ -1078,7 +1078,7 @@ void ClearTask(void) {
     Task_saved[i] = task_points[i].Index;
   }
   for (i=0; i<MAXSTARTPOINTS; i++) {
-    StartPoints[i].Index = -1;
+    task_start_points[i].Index = -1;
   }
   mutexTaskData.Unlock();
 }
@@ -1128,7 +1128,7 @@ void SaveTask(const TCHAR *szFileName)
 
     fwrite(&EnableMultipleStartPoints,
            sizeof(EnableMultipleStartPoints), 1, file);
-    fwrite(&StartPoints[0], sizeof(StartPoints[0]), MAXSTARTPOINTS, file);
+    fwrite(&task_start_points[0], sizeof(task_start_points[0]), MAXSTARTPOINTS, file);
 
     // JMW added writing of waypoint data, in case it's missing
     int i;
@@ -1142,9 +1142,9 @@ void SaveTask(const TCHAR *szFileName)
       }
     }
     for(i=0;i<MAXSTARTPOINTS;i++) {
-      if (ValidWayPoint(StartPoints[i].Index)) {
-        fwrite(&WayPointList[StartPoints[i].Index],
-               sizeof(WayPointList[StartPoints[i].Index]), 1, file);
+      if (ValidWayPoint(task_start_points[i].Index)) {
+        fwrite(&WayPointList[task_start_points[i].Index],
+               sizeof(WayPointList[task_start_points[i].Index]), 1, file);
       } else {
         // dummy data..
         fwrite(&WayPointList[0], sizeof(WayPointList[0]), 1, file);

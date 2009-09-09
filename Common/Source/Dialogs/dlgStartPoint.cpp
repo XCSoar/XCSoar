@@ -68,13 +68,13 @@ OnStartPointPaintListItem(WindowControl * Sender, Canvas &canvas)
   if (DrawListIndex < MAXSTARTPOINTS){
     int i = DrawListIndex;
 
-    if ((StartPoints[i].Index != -1)&&(StartPoints[i].Active)) {
-      _tcscpy(label, WayPointList[StartPoints[i].Index].Name);
+    if ((task_start_points[i].Index != -1)&&(task_start_points[i].Active)) {
+      _tcscpy(label, WayPointList[task_start_points[i].Index].Name);
     } else {
       int j;
       int i0=0;
       for (j=MAXSTARTPOINTS-1; j>=0; j--) {
-        if ((StartPoints[j].Index!= -1)&&(StartPoints[j].Active)) {
+        if ((task_start_points[j].Index!= -1)&&(task_start_points[j].Active)) {
           i0=j+1;
           break;
         }
@@ -107,8 +107,8 @@ static void OnStartPointListEnter(WindowControl * Sender,
     if (res>=0) {
       // TODO bug: don't add it if it's already present!
       mutexTaskData.Lock();
-      StartPoints[ItemIndex].Index = res;
-      StartPoints[ItemIndex].Active = true;
+      task_start_points[ItemIndex].Index = res;
+      task_start_points[ItemIndex].Active = true;
       mutexTaskData.Unlock();
       changed = true;
     }
@@ -136,11 +136,11 @@ static void OnClearClicked(WindowControl * Sender){
 	(void)Sender;
   mutexTaskData.Lock();
   for (int i=0; i<MAXSTARTPOINTS; i++) {
-    StartPoints[i].Index = -1;
-    StartPoints[i].Active = false;
+    task_start_points[i].Index = -1;
+    task_start_points[i].Active = false;
   }
-  StartPoints[0].Index = task_points[0].Index;
-  StartPoints[0].Active = true;
+  task_start_points[0].Index = task_points[0].Index;
+  task_start_points[0].Active = true;
   changed = true;
   mutexTaskData.Unlock();
   UpdateList();
@@ -162,21 +162,21 @@ static void CheckStartPointInTask(void) {
     // ensure current start point is in task
     int index_last = 0;
     for (int i=MAXSTARTPOINTS-1; i>=0; i--) {
-      if (StartPoints[i].Index == task_points[0].Index) {
+      if (task_start_points[i].Index == task_points[0].Index) {
 	index_last = -1;
 	break;
       }
-      if ((StartPoints[i].Index>=0) && (index_last==0)) {
+      if ((task_start_points[i].Index>=0) && (index_last==0)) {
 	index_last = i;
       }
     }
     if (index_last>=0) {
-      if (StartPoints[index_last].Index>= 0) {
+      if (task_start_points[index_last].Index>= 0) {
 	index_last = min(MAXSTARTPOINTS-1,index_last+1);
       }
       // it wasn't, so make sure it's added now
-      StartPoints[index_last].Index = task_points[0].Index;
-      StartPoints[index_last].Active = true;
+      task_start_points[index_last].Index = task_points[0].Index;
+      task_start_points[index_last].Active = true;
     }
   }
   mutexTaskData.Unlock();
