@@ -250,9 +250,10 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas)
 void
 MapWindow::DrawTeammate(Canvas &canvas)
 {
-  if (TeammateCodeValid) {
+  if (SettingsComputer().TeammateCodeValid) {
     draw_masked_bitmap_if_visible(canvas, MapGfx.hBmpTeammatePosition,
-				  TeammateLongitude, TeammateLatitude,
+				  Calculated().TeammateLongitude, 
+				  Calculated().TeammateLatitude,
 				  20, 20);
   }
 }

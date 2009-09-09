@@ -104,7 +104,6 @@ bool IsFlarmTargetCNInRange(const NMEA_INFO &GPS_INFO)
 	{
 	  if (GPS_INFO.FLARM_Traffic[z].ID == TeamFlarmIdTarget)
 	    {
-	      TeamFlarmIdTarget = GPS_INFO.FLARM_Traffic[z].ID;
 	      FlarmTargetContact = true;
 	      break;
 	    }

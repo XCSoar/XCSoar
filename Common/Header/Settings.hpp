@@ -43,10 +43,6 @@ Copyright_License {
 // changed in task/flight or by calc thread /////////////////////////////////
 // or by device
 extern int TeamFlarmIdTarget;    // FlarmId of the glider to track
-extern TCHAR TeammateCode[10];
-extern double TeammateLatitude;
-extern double TeammateLongitude;
-extern bool   TeammateCodeValid;
 
 // changed by gui or calculation thread
 extern bool LoggerActive;

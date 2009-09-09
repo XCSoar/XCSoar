@@ -92,6 +92,7 @@ public:
 private:
   void CalculateTeammateBearingRange();
   void CalculateOwnTeamCode();
+  void FLARM_ScanTraffic();
 };
 
 

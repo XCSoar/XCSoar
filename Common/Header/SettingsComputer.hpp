@@ -108,6 +108,9 @@ typedef struct _SETTINGS_COMPUTER {
  unsigned Handicap;
  bool EnableOLC;
 
+  TCHAR  TeammateCode[10]; // auto-detected, see also in Info.h
+  bool   TeammateCodeValid;
+
 } SETTINGS_COMPUTER;
 
 #endif

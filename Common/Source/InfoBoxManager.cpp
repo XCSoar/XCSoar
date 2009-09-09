@@ -664,7 +664,7 @@ void InfoBoxManager::DisplayInfoBox(void)
       }
       break;
     case 55: // own team code
-      InfoBoxes[i]->SetComment(TeammateCode);
+      InfoBoxes[i]->SetComment(Calculated().TeammateCode);
       if (SettingsComputer().TeamFlarmTracking)
 	{
 	  if (IsFlarmTargetCNInRange(Basic()))

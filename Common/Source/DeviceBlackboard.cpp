@@ -327,27 +327,6 @@ DeviceBlackboard::FLARM_ScanTraffic()
 	    SetBasic().FLARM_Traffic[flarm_slot].Name[0]=0;
 	  }
 	}
-
-	// JMW TODO: this is dangerous, it uses the task!
-	// it should be done outside the parser/comms thread
-	if ((Basic().FLARM_Traffic[flarm_slot].ID == TeamFlarmIdTarget)
-	    && ValidWayPoint(SettingsComputer().TeamCodeRefWaypoint)) {
-	  double bearing;
-	  double distance;
-	  
-	  TeammateLatitude = Basic().FLARM_Traffic[flarm_slot].Latitude;
-	  TeammateLongitude = Basic().FLARM_Traffic[flarm_slot].Longitude;
-	  DistanceBearing
-	    (WayPointList[SettingsComputer().TeamCodeRefWaypoint].Latitude,
-	     WayPointList[SettingsComputer().TeamCodeRefWaypoint].Longitude,
-	     Basic().FLARM_Traffic[flarm_slot].Latitude,
-	     Basic().FLARM_Traffic[flarm_slot].Longitude,
-	     &distance,
-	     &bearing);
-
-	  GetTeamCode(TeammateCode, bearing, distance);
-	  TeammateCodeValid = true;
-	}
       }
     }
   }

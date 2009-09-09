@@ -799,13 +799,13 @@ cxx-flags	=$(DEPFLAGS) $(CXXFLAGS) $(CPPFLAGS) $(CPPFLAGS_$(dirtarget)) $(TARGET
 	@$(NQ)echo "  CC      $@"
 	$(Q)$(CC) $(cc-flags) -c $(OUTPUT_OPTION) $<
 	@sed -i '1s,^[^ :]*,$@,' $(DEPFILE)
-	@etags -a --declarations $<
+#	@etags -a --declarations $<
 
 %-$(TARGET).o: %.cpp
 	@$(NQ)echo "  CXX     $@"
 	$(Q)$(CXX) $(cxx-flags) -c $(OUTPUT_OPTION) $<
 	@sed -i '1s,^[^ :]*,$@,' $(DEPFILE)
-	@etags -a --declarations $<
+#	@etags -a --declarations $<
 
 %-$(TARGET).o: %.cxx
 	@$(NQ)echo "  CXX     $@"

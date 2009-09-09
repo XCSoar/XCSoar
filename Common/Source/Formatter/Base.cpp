@@ -303,23 +303,23 @@ void InfoBoxFormatter::AssignValue(int i) {
     Value = Calculated().TeammateBearing;
     Valid = true;
   case 58: // team range
-    if (TeammateCodeValid)
-	  {
-    Value = DISTANCEMODIFY*Calculated().TeammateRange;
-    if (Value > 100)
+    if (SettingsComputer().TeammateCodeValid)
       {
-        _tcscpy(Format, _T("%.0lf"));
+	Value = DISTANCEMODIFY*Calculated().TeammateRange;
+	if (Value > 100)
+	  {
+	    _tcscpy(Format, _T("%.0lf"));
+	  }
+	else
+	  {
+	    _tcscpy(Format, _T("%.1lf"));
+	  }
+	Valid = true;
       }
     else
       {
-        _tcscpy(Format, _T("%.1lf"));
+	Valid = false;
       }
-    Valid = true;
-	  }
-	  else
-	  {
-		  Valid = false;
-	  }
     break;
   case 59:
     Value = TASKSPEEDMODIFY*Calculated().TaskSpeedInstantaneous;

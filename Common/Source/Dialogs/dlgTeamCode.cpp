@@ -107,7 +107,7 @@ static void Update()
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpMateCode"));
   if (wp) {
-    wp->SetText(TeammateCode);
+    wp->SetText(XCSoarInterface::SettingsComputer().TeammateCode);
     wp->RefreshDisplay();
   }
 }
@@ -116,7 +116,7 @@ static void Update()
 static void OnCodeClicked(WindowControl *Sender)
 {
   TCHAR newTeammateCode[10];
-  _tcsncpy(newTeammateCode, TeammateCode, 10);
+  _tcsncpy(newTeammateCode, XCSoarInterface::SettingsComputer().TeammateCode, 10);
   dlgTextEntryShowModal(newTeammateCode, 7);
 
   int i= _tcslen(newTeammateCode)-1;
@@ -129,12 +129,10 @@ static void OnCodeClicked(WindowControl *Sender)
     i--;
   };
 
-
-  _tcsncpy(TeammateCode, newTeammateCode, 10);
-  if (_tcslen(TeammateCode)>0)
-    {
-      TeammateCodeValid = true;
-    }
+  _tcsncpy(XCSoarInterface::SetSettingsComputer().TeammateCode, newTeammateCode, 10);
+  if (_tcslen(XCSoarInterface::SettingsComputer().TeammateCode)>0) {
+    XCSoarInterface::SetSettingsComputer().TeammateCodeValid = true;
+  }
 }
 
 static void OnFlarmLockClicked(WindowControl * Sender)
@@ -143,7 +141,7 @@ static void OnFlarmLockClicked(WindowControl * Sender)
 
   dlgTextEntryShowModal(XCSoarInterface::SetSettingsComputer().TeamFlarmCNTarget, 4);
 
-  TeammateCodeValid = false;
+  XCSoarInterface::SetSettingsComputer().TeammateCodeValid = false;
 
   int flarmId = LookupFLARMDetails(XCSoarInterface::SettingsComputer().TeamFlarmCNTarget);
 

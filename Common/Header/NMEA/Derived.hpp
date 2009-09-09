@@ -200,8 +200,11 @@ typedef struct _DERIVED_INFO
   TCHAR OwnTeamCode[10];
   double TeammateBearing;
   double TeammateRange;
-  double TeammateLatetude;
+  double TeammateLatitude;
   double TeammateLongitude;
+  TCHAR  TeammateCode[10]; // auto-detected, see also in settings computer.h
+  bool   TeammateCodeValid;
+
   double FlightTime;
   double TakeOffTime;
 

@@ -72,12 +72,7 @@ int      iAirspaceMode[AIRSPACECLASSCOUNT] =
 /////////////////////////////////////////////////////
 
 // Team code info
-TCHAR TeammateCode[10];
 TCHAR TeamFlarmCNTarget[4]; // CN of the glider to track
 int TeamFlarmIdTarget;      // FlarmId of the glider to track
-double TeammateLatitude;
-double TeammateLongitude;
-bool TeammateCodeValid = false;
-
 bool EnableAnimation = false;
 

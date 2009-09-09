@@ -116,7 +116,12 @@ bool GlideComputer::ProcessGPS()
   ProcessVertical();
 
   CalculateOwnTeamCode();
+
+  SetCalculated().TeammateCodeValid = SettingsComputer().TeammateCodeValid;
+
   CalculateTeammateBearingRange();
+
+  FLARM_ScanTraffic();
 
   vegavoice.Update(&Basic(), &Calculated());
   ConditionMonitorsUpdate(*this);
@@ -231,8 +236,7 @@ GlideComputer::CalculateOwnTeamCode()
 void
 GlideComputer::CalculateTeammateBearingRange()
 {
-  // JMW TODO: locking
-
+  ScopeLock protect(mutexTaskData);
   static bool InTeamSector = false;
 
   if (!WayPointList) return;
@@ -249,49 +253,39 @@ GlideComputer::CalculateTeammateBearingRange()
                   Basic().Longitude,
                   &ownBearing, &ownDistance);
 
-  if (TeammateCodeValid)
-    {
+  if (SettingsComputer().TeammateCodeValid) {
 
-      CalcTeammateBearingRange(ownBearing, ownDistance,
-                               TeammateCode,
-                               &mateBearing, &mateDistance);
+    CalcTeammateBearingRange(ownBearing, ownDistance,
+			     Calculated().TeammateCode,
+			     &mateBearing, &mateDistance);
 
-      // TODO code ....change the result of CalcTeammateBearingRange to do this !
-      if (mateBearing > 180)
-        {
-          mateBearing -= 180;
-        }
-      else
-        {
-          mateBearing += 180;
-        }
-
-
-      SetCalculated().TeammateBearing = mateBearing;
-      SetCalculated().TeammateRange = mateDistance;
-
-      FindLatitudeLongitude(Basic().Latitude,
-                            Basic().Longitude,
-                            mateBearing,
-                            mateDistance,
-                            &TeammateLatitude,
-                            &TeammateLongitude);
-
-      if (mateDistance < 100 && InTeamSector==false)
-        {
-          InTeamSector=true;
-          InputEvents::processGlideComputer(GCE_TEAM_POS_REACHED);
-        }
-      else if (mateDistance > 300)
-        {
-          InTeamSector = false;
-        }
+    // TODO code ....change the result of CalcTeammateBearingRange to do this !
+    if (mateBearing > 180) {
+      mateBearing -= 180;
+    } else {
+      mateBearing += 180;
     }
-  else
-    {
-      SetCalculated().TeammateBearing = 0;
-      SetCalculated().TeammateRange = 0;
+
+    SetCalculated().TeammateBearing = mateBearing;
+    SetCalculated().TeammateRange = mateDistance;
+    
+    FindLatitudeLongitude(Basic().Latitude,
+			  Basic().Longitude,
+			  mateBearing,
+			  mateDistance,
+			  &SetCalculated().TeammateLatitude,
+			  &SetCalculated().TeammateLongitude);
+    
+    if (mateDistance < 100 && InTeamSector==false) {
+      InTeamSector=true;
+      InputEvents::processGlideComputer(GCE_TEAM_POS_REACHED);
+    } else if (mateDistance > 300) {
+      InTeamSector = false;
     }
+  } else {
+    SetCalculated().TeammateBearing = 0;
+    SetCalculated().TeammateRange = 0;
+  }
 }
 
 
@@ -325,4 +319,39 @@ GlideComputer::OnDepartedThermal()
 {
   GlideComputerAirData::OnDepartedThermal();
   GlideComputerStats::OnDepartedThermal();
+}
+
+
+void 
+GlideComputer::FLARM_ScanTraffic()
+{
+  if (Basic().FLARM_Available) {
+
+    ScopeLock protect(mutexTaskData);
+
+    for (int flarm_slot=0; flarm_slot<FLARM_MAX_TRAFFIC; flarm_slot++) {
+      if (Basic().FLARM_Traffic[flarm_slot].ID>0) {
+	// JMW TODO: this is dangerous, it uses the task!
+	// it should be done outside the parser/comms thread
+	if ((Basic().FLARM_Traffic[flarm_slot].ID == TeamFlarmIdTarget)
+	    && ValidWayPoint(SettingsComputer().TeamCodeRefWaypoint)) {
+	  double bearing;
+	  double distance;
+	  
+	  SetCalculated().TeammateLatitude = Basic().FLARM_Traffic[flarm_slot].Latitude;
+	  SetCalculated().TeammateLongitude = Basic().FLARM_Traffic[flarm_slot].Longitude;
+	  DistanceBearing
+	    (WayPointList[SettingsComputer().TeamCodeRefWaypoint].Latitude,
+	     WayPointList[SettingsComputer().TeamCodeRefWaypoint].Longitude,
+	     Basic().FLARM_Traffic[flarm_slot].Latitude,
+	     Basic().FLARM_Traffic[flarm_slot].Longitude,
+	     &distance,
+	     &bearing);
+
+	  GetTeamCode(SetCalculated().TeammateCode, bearing, distance);
+	  SetCalculated().TeammateCodeValid = true;
+	}
+      }
+    }
+  }
 }

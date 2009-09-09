@@ -77,4 +77,9 @@ SettingsComputerBlackboard::SettingsComputerBlackboard()
 // 1: FAI triangle
 // 2: OLC classic
   settings_computer.Handicap = 108; // LS-3
+
+  // for user-set teammate code
+  settings_computer.TeammateCode[0] = 0;
+  settings_computer.TeammateCodeValid = false;
 }
+

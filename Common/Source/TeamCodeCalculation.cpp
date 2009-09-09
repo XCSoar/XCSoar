@@ -42,9 +42,9 @@ Copyright_License {
 
 void ConvertHeadingToTeamCode(double heading, TCHAR *code);
 void NumberToTeamCode(double value, TCHAR *code, int minCiffers);
-double GetBearing(TCHAR *code );
-double GetRange(TCHAR *code );
-int GetValueFromTeamCode(TCHAR *code, int maxCount);
+double GetBearing(const TCHAR *code );
+double GetRange(const TCHAR *code );
+int GetValueFromTeamCode(const TCHAR *code, int maxCount);
 
 #define TEAMCODE_COMBINAIONS 1296
 #define DEG_TO_RAD .0174532925199432958
@@ -123,7 +123,7 @@ void NumberToTeamCode(double value, TCHAR *code, int minCiffers)
 	}
 }
 
-double GetBearing(TCHAR *code )
+double GetBearing(const TCHAR *code )
 {
 	int val = GetValueFromTeamCode(code, 2);
 
@@ -137,23 +137,23 @@ double GetBearing(TCHAR *code )
 	return bearing;
 }
 
-double GetRange(TCHAR *code )
+double GetRange(const TCHAR *code )
 {
 	int val = GetValueFromTeamCode(&code[2], 3);
 	return val*100.0;
 }
 
-double GetTeammateBearingFromRef(TCHAR *code )
+double GetTeammateBearingFromRef(const TCHAR *code )
 {
 	return GetBearing(code);
 }
 
-double GetTeammateRangeFromRef(TCHAR *code )
+double GetTeammateRangeFromRef(const TCHAR *code )
 {
 	return GetRange(code);
 }
 
-int GetValueFromTeamCode(TCHAR *code, int maxCount)
+int GetValueFromTeamCode(const TCHAR *code, int maxCount)
 {
 	int val = 0;
 	int charPos = 0;
@@ -217,7 +217,7 @@ void CalcTeamMatePos(double ownBear, double ownDist, double mateBear, double mat
 	}
 }
 
-void CalcTeammateBearingRange(double ownBear, double ownDist, TCHAR *TeamMateCode,  double *bearToMate, double *distToMate)
+void CalcTeammateBearingRange(double ownBear, double ownDist, const TCHAR *TeamMateCode,  double *bearToMate, double *distToMate)
 {
 	double calcBearing = GetBearing(TeamMateCode)/*+ 180*/;
 	double calcRange = GetRange(TeamMateCode);
