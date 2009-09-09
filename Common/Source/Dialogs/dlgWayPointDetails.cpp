@@ -259,8 +259,8 @@ static void OnNewHomeClicked(WindowControl * Sender){
 static void OnSetAlternate1Clicked(WindowControl * Sender){
 	(void)Sender;
   mutexTaskData.Lock();
-  Alternate1 = SelectedWaypoint;
-  SetToRegistry(szRegistryAlternate1, Alternate1);
+  XCSoarInterface::SetSettingsComputer().Alternate1 = SelectedWaypoint;
+  SetToRegistry(szRegistryAlternate1, XCSoarInterface::SettingsComputer().Alternate1);
   RefreshTask();
   mutexTaskData.Unlock();
   wf->SetModalResult(mrOK);
@@ -269,8 +269,8 @@ static void OnSetAlternate1Clicked(WindowControl * Sender){
 static void OnSetAlternate2Clicked(WindowControl * Sender){
 	(void)Sender;
   mutexTaskData.Lock();
-  Alternate2 = SelectedWaypoint;
-  SetToRegistry(szRegistryAlternate2, Alternate2);
+  XCSoarInterface::SetSettingsComputer().Alternate2 = SelectedWaypoint;
+  SetToRegistry(szRegistryAlternate2, XCSoarInterface::SettingsComputer().Alternate2);
   RefreshTask();
   mutexTaskData.Unlock();
   wf->SetModalResult(mrOK);
@@ -279,10 +279,12 @@ static void OnSetAlternate2Clicked(WindowControl * Sender){
 static void OnClearAlternatesClicked(WindowControl * Sender){
 	(void)Sender;
   mutexTaskData.Lock();
-  Alternate1 = -1; XCSoarInterface::SetSettingsComputer().EnableAlternate1=false;
-  Alternate2 = -1; XCSoarInterface::SetSettingsComputer().EnableAlternate2=false;
-  SetToRegistry(szRegistryAlternate1, Alternate1);
-  SetToRegistry(szRegistryAlternate2, Alternate2);
+  XCSoarInterface::SetSettingsComputer().Alternate1 = -1; 
+  XCSoarInterface::SetSettingsComputer().EnableAlternate1=false;
+  XCSoarInterface::SetSettingsComputer().Alternate2 = -1; 
+  XCSoarInterface::SetSettingsComputer().EnableAlternate2=false;
+  SetToRegistry(szRegistryAlternate1, XCSoarInterface::SettingsComputer().Alternate1);
+  SetToRegistry(szRegistryAlternate2, XCSoarInterface::SettingsComputer().Alternate2);
   RefreshTask();
   mutexTaskData.Unlock();
   wf->SetModalResult(mrOK);

@@ -176,9 +176,9 @@ void
 ActionInterface::on_key_Alternate1(int UpDown)
 {
    if (UpDown==0) {
-     if ( Alternate1 <0 ) return;
+     if ( SettingsComputer().Alternate1 <0 ) return;
      mutexTaskData.Lock();
-     SelectedWaypoint = Alternate1;
+     SelectedWaypoint = SettingsComputer().Alternate1;
      PopupWaypointDetails();
      mutexTaskData.Unlock();
   }
@@ -188,9 +188,9 @@ void
 ActionInterface::on_key_Alternate2(int UpDown)
 {
    if (UpDown==0) {
-     if ( Alternate2 <0 ) return;
+     if ( SettingsComputer().Alternate2 <0 ) return;
      mutexTaskData.Lock();
-     SelectedWaypoint = Alternate2;
+     SelectedWaypoint = SettingsComputer().Alternate2;
      PopupWaypointDetails();
      mutexTaskData.Unlock();
   }

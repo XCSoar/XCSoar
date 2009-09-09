@@ -112,6 +112,9 @@ typedef struct _SETTINGS_COMPUTER {
   bool   TeammateCodeValid;
   int TeamFlarmIdTarget;    // FlarmId of the glider to track
 
+ int  Alternate1; // VENTA3
+ int  Alternate2;
+
 } SETTINGS_COMPUTER;
 
 #endif

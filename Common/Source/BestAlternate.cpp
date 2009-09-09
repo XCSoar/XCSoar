@@ -52,10 +52,6 @@ Copyright_License {
 #include "Abort.hpp"
 #include "GlideComputerTask.hpp"
 
-// Alternates VENTA3
-int Alternate1 = -1;
-int Alternate2 = -1;
-int BestAlternate = -1;
 
 /*
  * ===========================================

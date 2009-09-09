@@ -516,10 +516,10 @@ void InfoBoxManager::DisplayInfoBox(void)
     case 69:
 
 	if (DisplayType[i]==67)
-	  ActiveAlternate=Alternate1;
+	  ActiveAlternate=SettingsComputer().Alternate1;
 	else
 	  if (DisplayType[i]==68)
-	    ActiveAlternate=Alternate2;
+	    ActiveAlternate=SettingsComputer().Alternate2;
 	  else
 	    ActiveAlternate=BestAlternate;
 

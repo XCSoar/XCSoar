@@ -590,23 +590,23 @@ void Profile::ReadRegistrySettings(void)
   GetFromRegistry(szRegistryHomeWaypoint,HomeWaypoint);
 
 // VENTA3
-  Temp = Alternate1;
+  Temp = SettingsComputer().Alternate1;
   if (GetFromRegistryD(szRegistryAlternate1,Temp)==ERROR_SUCCESS) {
-    Alternate1 = Temp;
     // TODO: for portrait no need to force alternate calculations here.
     // Infobox will trigger them on if visible..
+    SetSettingsComputer().Alternate1 = Temp;
     SetSettingsComputer().EnableAlternate1=true;
   } else {
-    Alternate1 = -1;
+    SetSettingsComputer().Alternate1 = -1;
     SetSettingsComputer().EnableAlternate1=false;
   }
 
-  Temp = Alternate2;
+  Temp = SettingsComputer().Alternate2;
   if (GetFromRegistryD(szRegistryAlternate2,Temp)==ERROR_SUCCESS) {
-    Alternate2 = Temp;
+    SetSettingsComputer().Alternate2 = Temp;
     SetSettingsComputer().EnableAlternate2=true;
   } else {
-    Alternate2 = -1;
+    SetSettingsComputer().Alternate2 = -1;
     SetSettingsComputer().EnableAlternate2=false;
   }
 

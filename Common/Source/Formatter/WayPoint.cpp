@@ -175,8 +175,10 @@ void FormatterAlternate::AssignValue(int i) {
        SetSettingsComputer().EnableAlternate1 = true;
        Value=INVALID_GR;
      } else {
-       if ( ValidWayPoint(Alternate1) ) Value=WayPointCalc[Alternate1].GR;
-       else Value=INVALID_GR;
+       if ( ValidWayPoint(SettingsComputer().Alternate1) ) 
+	 Value=WayPointCalc[SettingsComputer().Alternate1].GR;
+       else 
+	 Value=INVALID_GR;
      }
      break;
      /*
@@ -189,7 +191,8 @@ void FormatterAlternate::AssignValue(int i) {
        SetSettingsComputer().EnableAlternate2 = true;
        Value=INVALID_GR;
      } else {
-       if ( ValidWayPoint(Alternate2) ) Value=WayPointCalc[Alternate2].GR;
+       if ( ValidWayPoint(SettingsComputer().Alternate2) ) 
+	 Value=WayPointCalc[SettingsComputer().Alternate2].GR;
        else Value=INVALID_GR;
      }
      break;

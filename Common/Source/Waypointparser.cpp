@@ -738,8 +738,11 @@ void SetHome(SETTINGS_COMPUTER &settings,
     HomeWaypoint = -1;
   }
   // VENTA3 -- reset Alternates
-  if (reset || !ValidWayPoint(Alternate1) || !ValidWayPoint(Alternate2) ) {
-    Alternate1= -1; Alternate2= -1;
+  if (reset 
+      || !ValidWayPoint(XCSoarInterface::SettingsComputer().Alternate1) 
+      || !ValidWayPoint(XCSoarInterface::SettingsComputer().Alternate2) ) {
+    XCSoarInterface::SetSettingsComputer().Alternate1= -1; 
+    XCSoarInterface::SetSettingsComputer().Alternate2= -1;
   }
   // check invalid task ref waypoint or forced reset due to file change
   if (reset || !ValidWayPoint(settings.TeamCodeRefWaypoint)) {
@@ -794,8 +797,8 @@ void SetHome(SETTINGS_COMPUTER &settings,
   // VENTA3> this is probably useless, since HomeWayPoint &c were currently
   //         just loaded from registry.
   SetToRegistry(szRegistryHomeWaypoint,HomeWaypoint);
-  SetToRegistry(szRegistryAlternate1,Alternate1);
-  SetToRegistry(szRegistryAlternate2,Alternate2);
+  SetToRegistry(szRegistryAlternate1,settings.Alternate1);
+  SetToRegistry(szRegistryAlternate2,settings.Alternate2);
   SetToRegistry(szRegistryTeamcodeRefWaypoint,settings.TeamCodeRefWaypoint);
 }
 
