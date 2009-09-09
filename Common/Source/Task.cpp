@@ -891,6 +891,7 @@ static bool LoadTaskWaypoints(FILE *file) {
   return true;
 }
 
+#define  BINFILEMAGICNUMBER     0x5cf77fca
 
 // loads a new task from scratch.
 void LoadNewTask(const TCHAR *szFileName)
@@ -901,6 +902,7 @@ void LoadNewTask(const TCHAR *szFileName)
   bool TaskInvalid = false;
   bool WaypointInvalid = false;
   bool TaskLoaded = false;
+  unsigned magic = 0;
 
   mutexTaskData.Lock();
 
@@ -913,6 +915,11 @@ void LoadNewTask(const TCHAR *szFileName)
   FILE *file = _tfopen(szFileName, _T("rb"));
   if(file != NULL)
     {
+      if (fread(&magic, sizeof(magic), 1, file) != 1) {
+	TaskInvalid = true;
+      } else if (magic != BINFILEMAGICNUMBER) {
+	TaskInvalid = true;
+      } else {
 
       // Defaults
       int   old_StartLine    = StartLine;
@@ -1009,8 +1016,6 @@ void LoadNewTask(const TCHAR *szFileName)
 
       }
 
-      fclose(file);
-
       if (TaskInvalid) {
         StartLine = old_StartLine;
         SectorType = old_SectorType;
@@ -1023,6 +1028,9 @@ void LoadNewTask(const TCHAR *szFileName)
         FinishLine = old_FinishLine;
         EnableMultipleStartPoints = old_EnableMultipleStartPoints;
       }
+      }
+
+      fclose(file);
 
   } else {
     TaskInvalid = true;
@@ -1113,6 +1121,8 @@ void SaveTask(const TCHAR *szFileName)
 
   FILE *file = _tfopen(szFileName, _T("wb"));
   if (file != NULL) {
+    unsigned magic = BINFILEMAGICNUMBER;
+    fwrite(&magic, sizeof(magic), 1, file);
     fwrite(&task_points[0], sizeof(task_points[0]), MAXTASKPOINTS, file);
     fwrite(&AATEnabled, sizeof(AATEnabled), 1, file);
     fwrite(&AATTaskLength, sizeof(AATTaskLength), 1, file);
