@@ -86,14 +86,14 @@ SettingsComputerBlackboard::SettingsComputerBlackboard()
   settings_computer.Alternate1 = -1;
   settings_computer.Alternate2 = -1;
 
-  settings_computer.EnableVoiceClimbRate;
-  settings_computer.EnableVoiceTerrain;
-  settings_computer.EnableVoiceWaypointDistance;
-  settings_computer.EnableVoiceTaskAltitudeDifference;
-  settings_computer.EnableVoiceMacCready;
-  settings_computer.EnableVoiceNewWaypoint;
-  settings_computer.EnableVoiceInSector;
-  settings_computer.EnableVoiceAirspace;
+  settings_computer.EnableVoiceClimbRate = false;
+  settings_computer.EnableVoiceTerrain = false;
+  settings_computer.EnableVoiceWaypointDistance = false;
+  settings_computer.EnableVoiceTaskAltitudeDifference = false;
+  settings_computer.EnableVoiceMacCready = false;
+  settings_computer.EnableVoiceNewWaypoint = false;
+  settings_computer.EnableVoiceInSector = false;
+  settings_computer.EnableVoiceAirspace = false;
 
 }
 

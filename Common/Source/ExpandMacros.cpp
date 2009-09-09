@@ -88,8 +88,8 @@ bool ButtonLabel::ExpandMacros(const TCHAR *In,
   if (isTaskAborted()) {
     if (_tcsstr(OutBuffer, TEXT("$(WaypointNext)"))) {
       // Waypoint\nNext
-      invalid = !ValidTaskPoint(ActiveWayPoint+1);
-      CondReplaceInString(!ValidTaskPoint(ActiveWayPoint+2),
+      invalid = !ValidTaskPoint(ActiveTaskPoint+1);
+      CondReplaceInString(!ValidTaskPoint(ActiveTaskPoint+2),
                           OutBuffer,
                           TEXT("$(WaypointNext)"),
                           TEXT("Landpoint\nFurthest"),
@@ -98,8 +98,8 @@ bool ButtonLabel::ExpandMacros(const TCHAR *In,
     } else
     if (_tcsstr(OutBuffer, TEXT("$(WaypointPrevious)"))) {
       // Waypoint\nNext
-      invalid = !ValidTaskPoint(ActiveWayPoint-1);
-      CondReplaceInString(!ValidTaskPoint(ActiveWayPoint-2),
+      invalid = !ValidTaskPoint(ActiveTaskPoint-1);
+      CondReplaceInString(!ValidTaskPoint(ActiveTaskPoint-2),
                           OutBuffer,
                           TEXT("$(WaypointPrevious)"),
                           TEXT("Landpoint\nClosest"),
@@ -108,8 +108,8 @@ bool ButtonLabel::ExpandMacros(const TCHAR *In,
   } else {
     if (_tcsstr(OutBuffer, TEXT("$(WaypointNext)"))) {
       // Waypoint\nNext
-      invalid = !ValidTaskPoint(ActiveWayPoint+1);
-      CondReplaceInString(!ValidTaskPoint(ActiveWayPoint+2),
+      invalid = !ValidTaskPoint(ActiveTaskPoint+1);
+      CondReplaceInString(!ValidTaskPoint(ActiveTaskPoint+2),
                           OutBuffer,
                           TEXT("$(WaypointNext)"),
                           TEXT("Waypoint\nFinish"),
@@ -117,18 +117,18 @@ bool ButtonLabel::ExpandMacros(const TCHAR *In,
 
     } else
     if (_tcsstr(OutBuffer, TEXT("$(WaypointPrevious)"))) {
-      if (ActiveWayPoint==1) {
-        invalid = !ValidTaskPoint(ActiveWayPoint-1);
+      if (ActiveTaskPoint==1) {
+        invalid = !ValidTaskPoint(ActiveTaskPoint-1);
         ReplaceInString(OutBuffer, TEXT("$(WaypointPrevious)"),
                         TEXT("Waypoint\nStart"), Size);
       } else if (EnableMultipleStartPoints) {
         invalid = !ValidTaskPoint(0);
-        CondReplaceInString((ActiveWayPoint==0),
+        CondReplaceInString((ActiveTaskPoint==0),
                             OutBuffer,
                             TEXT("$(WaypointPrevious)"),
                             TEXT("StartPoint\nCycle"), TEXT("Waypoint\nPrevious"), Size);
       } else {
-        invalid = (ActiveWayPoint<=0);
+        invalid = (ActiveTaskPoint<=0);
         ReplaceInString(OutBuffer, TEXT("$(WaypointPrevious)"), TEXT("Waypoint\nPrevious"), Size);
       }
     }
@@ -145,8 +145,8 @@ bool ButtonLabel::ExpandMacros(const TCHAR *In,
       invalid = true;
       break;
     case 2:
-      if (ActiveWayPoint>0) {
-        if (ValidTaskPoint(ActiveWayPoint+1)) {
+      if (ActiveTaskPoint>0) {
+        if (ValidTaskPoint(ActiveTaskPoint+1)) {
           CondReplaceInString(AdvanceArmed, OutBuffer, TEXT("$(AdvanceArmed)"),
                               TEXT("Cancel"), TEXT("TURN"), Size);
         } else {
@@ -160,10 +160,10 @@ bool ButtonLabel::ExpandMacros(const TCHAR *In,
       }
       break;
     case 3:
-      if (ActiveWayPoint==0) {
+      if (ActiveTaskPoint==0) {
         CondReplaceInString(AdvanceArmed, OutBuffer, TEXT("$(AdvanceArmed)"),
                             TEXT("Cancel"), TEXT("START"), Size);
-      } else if (ActiveWayPoint==1) {
+      } else if (ActiveTaskPoint==1) {
         CondReplaceInString(AdvanceArmed, OutBuffer, TEXT("$(AdvanceArmed)"),
                             TEXT("Cancel"), TEXT("RESTART"), Size);
       } else {
@@ -205,7 +205,7 @@ bool ButtonLabel::ExpandMacros(const TCHAR *In,
     ReplaceInString(OutBuffer, TEXT("$(CheckTaskResumed)"), TEXT(""), Size);
   }
   if (_tcsstr(OutBuffer, TEXT("$(CheckTask)"))) {
-    if (!ValidTaskPoint(ActiveWayPoint)) {
+    if (!ValidTaskPoint(ActiveTaskPoint)) {
       invalid = true;
     }
     ReplaceInString(OutBuffer, TEXT("$(CheckTask)"), TEXT(""), Size);
@@ -229,7 +229,7 @@ bool ButtonLabel::ExpandMacros(const TCHAR *In,
     ReplaceInString(OutBuffer, TEXT("$(CheckTerrain)"), TEXT(""), Size);
   }
   if (_tcsstr(OutBuffer, TEXT("$(CheckAutoMc)"))) {
-    if (!ValidTaskPoint(ActiveWayPoint)
+    if (!ValidTaskPoint(ActiveTaskPoint)
         && ((SettingsComputer().AutoMcMode==0)
 	    || (SettingsComputer().AutoMcMode==2))) {
       invalid = true;

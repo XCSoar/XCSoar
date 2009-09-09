@@ -106,7 +106,7 @@ void MapWindow::DrawTask(Canvas &canvas, RECT rc)
 
   ScopeLock scopeLock(mutexTaskData); // protect from extrnal task changes
 
-  if (ValidTaskPoint(0) && ValidTaskPoint(1) && (ActiveWayPoint<2)) {
+  if (ValidTaskPoint(0) && ValidTaskPoint(1) && (ActiveTaskPoint<2)) {
     DrawStartSector(canvas, task_points[0].Start, task_points[0].End, task_points[0].Index);
     if (EnableMultipleStartPoints) {
       for (i=0; i<MAXSTARTPOINTS; i++) {
@@ -124,7 +124,7 @@ void MapWindow::DrawTask(Canvas &canvas, RECT rc)
   for(i=1;i<MAXTASKPOINTS-1;i++) {
 
     if(ValidTaskPoint(i) && !ValidTaskPoint(i+1)) { // final waypoint
-      if (ActiveWayPoint>1) {
+      if (ActiveTaskPoint>1) {
         // only draw finish line when past the first
         // waypoint.
         if(FinishLine) {
@@ -186,7 +186,7 @@ void MapWindow::DrawTask(Canvas &canvas, RECT rc)
         }
       } else {
         // JMW added iso lines
-        if ((i==ActiveWayPoint) 
+        if ((i==ActiveTaskPoint) 
 	    || (SettingsMap().TargetPan 
 		&& (i==SettingsMap().TargetPanIndex))) {
           // JMW 20080616 flash arc line if very close to target
@@ -295,7 +295,7 @@ void MapWindow::DrawTaskAAT(Canvas &canvas, const RECT rc, Canvas &buffer)
         // this color is the transparent bit
         buffer.set_background_color(whitecolor);
 
-        if (i<ActiveWayPoint) {
+        if (i<ActiveTaskPoint) {
           buffer.hollow_brush();
         } else {
           buffer.select(MapGfx.hAirspaceBrushes[iAirspaceBrush[AATASK]]);
@@ -313,7 +313,7 @@ void MapWindow::DrawTaskAAT(Canvas &canvas, const RECT rc, Canvas &buffer)
         // this color is the transparent bit
         buffer.set_background_color(whitecolor);
 
-        if (i<ActiveWayPoint) {
+        if (i<ActiveTaskPoint) {
           buffer.hollow_brush();
         } else {
           buffer.select(MapGfx.hAirspaceBrushes[iAirspaceBrush[AATASK]]);
@@ -342,7 +342,7 @@ void MapWindow::DrawBearing(Canvas &canvas, int bBearingValid)
 { /* RLD bearing is invalid if GPS not connected and in non-sim mode,
    but we can still draw targets */
 
-  if (!ValidTaskPoint(ActiveWayPoint)) {
+  if (!ValidTaskPoint(ActiveTaskPoint)) {
     return;
   }
 
@@ -353,12 +353,12 @@ void MapWindow::DrawBearing(Canvas &canvas, int bBearingValid)
   double targetLat;
   double targetLon;
 
-  if (AATEnabled && (ActiveWayPoint>0) && ValidTaskPoint(ActiveWayPoint+1)) {
-    targetLat = task_points[ActiveWayPoint].AATTargetLat;
-    targetLon = task_points[ActiveWayPoint].AATTargetLon;
+  if (AATEnabled && (ActiveTaskPoint>0) && ValidTaskPoint(ActiveTaskPoint+1)) {
+    targetLat = task_points[ActiveTaskPoint].AATTargetLat;
+    targetLon = task_points[ActiveTaskPoint].AATTargetLon;
   } else {
-    targetLat = WayPointList[task_points[ActiveWayPoint].Index].Latitude;
-    targetLon = WayPointList[task_points[ActiveWayPoint].Index].Longitude;
+    targetLat = WayPointList[task_points[ActiveTaskPoint].Index].Latitude;
+    targetLon = WayPointList[task_points[ActiveTaskPoint].Index].Longitude;
   }
   mutexTaskData.Unlock();
   if (bBearingValid) {
@@ -372,7 +372,7 @@ void MapWindow::DrawBearing(Canvas &canvas, int bBearingValid)
 
       ScopeLock scopeLock(mutexTaskData);
 
-      for (int i=ActiveWayPoint+1; i<MAXTASKPOINTS; i++) {
+      for (int i=ActiveTaskPoint+1; i<MAXTASKPOINTS; i++) {
         if (ValidTaskPoint(i)) {
 
           if (AATEnabled && ValidTaskPoint(i+1)) {
@@ -398,10 +398,10 @@ void MapWindow::DrawBearing(Canvas &canvas, int bBearingValid)
   if (AATEnabled) {
     ScopeLock scopeLock(mutexTaskData);
 
-    for (int i=ActiveWayPoint; i<MAXTASKPOINTS; i++) {
+    for (int i=ActiveTaskPoint; i<MAXTASKPOINTS; i++) {
       // RLD skip invalid targets and targets at start and finish
       if((i>0) && ValidTaskPoint(i) && ValidTaskPoint(i+1)) {
-        if (i>= ActiveWayPoint) {
+        if (i>= ActiveTaskPoint) {
 	  draw_masked_bitmap_if_visible(canvas, MapGfx.hBmpTarget, 
 					task_points[i].AATTargetLon,
 					task_points[i].AATTargetLat, 
@@ -418,7 +418,7 @@ void MapWindow::DrawBearing(Canvas &canvas, int bBearingValid)
 void
 MapWindow::DrawOffTrackIndicator(Canvas &canvas)
 {
-  if ((ActiveWayPoint<=0) || !ValidTaskPoint(ActiveWayPoint)) {
+  if ((ActiveTaskPoint<=0) || !ValidTaskPoint(ActiveTaskPoint)) {
     return;
   }
   if (fabs(Basic().TrackBearing-Calculated().WaypointBearing)<10) {
@@ -446,12 +446,12 @@ MapWindow::DrawOffTrackIndicator(Canvas &canvas)
   double targetLon;
   double dLat, dLon;
 
-  if (AATEnabled && ValidTaskPoint(ActiveWayPoint+1)) {
-    targetLat = task_points[ActiveWayPoint].AATTargetLat;
-    targetLon = task_points[ActiveWayPoint].AATTargetLon;
+  if (AATEnabled && ValidTaskPoint(ActiveTaskPoint+1)) {
+    targetLat = task_points[ActiveTaskPoint].AATTargetLat;
+    targetLon = task_points[ActiveTaskPoint].AATTargetLon;
   } else {
-    targetLat = WayPointList[task_points[ActiveWayPoint].Index].Latitude;
-    targetLon = WayPointList[task_points[ActiveWayPoint].Index].Longitude;
+    targetLat = WayPointList[task_points[ActiveTaskPoint].Index].Latitude;
+    targetLon = WayPointList[task_points[ActiveTaskPoint].Index].Longitude;
   }
   mutexTaskData.Unlock();
 
@@ -507,7 +507,7 @@ MapWindow::DrawOffTrackIndicator(Canvas &canvas)
 void
 MapWindow::DrawProjectedTrack(Canvas &canvas)
 {
-  if ((ActiveWayPoint<=0) || !ValidTaskPoint(ActiveWayPoint) || !AATEnabled) {
+  if ((ActiveTaskPoint<=0) || !ValidTaskPoint(ActiveTaskPoint) || !AATEnabled) {
     return;
   }
   if (Calculated().Circling || TaskIsTemporary()) {
@@ -525,11 +525,11 @@ MapWindow::DrawProjectedTrack(Canvas &canvas)
   double previousLat;
   double previousLon;
   if (AATEnabled) {
-    previousLat = task_points[max(0,ActiveWayPoint-1)].AATTargetLat;
-    previousLon = task_points[max(0,ActiveWayPoint-1)].AATTargetLon;
+    previousLat = task_points[max(0,ActiveTaskPoint-1)].AATTargetLat;
+    previousLon = task_points[max(0,ActiveTaskPoint-1)].AATTargetLon;
   } else {
-    previousLat = WayPointList[task_points[max(0,ActiveWayPoint-1)].Index].Latitude;
-    previousLon = WayPointList[task_points[max(0,ActiveWayPoint-1)].Index].Longitude;
+    previousLat = WayPointList[task_points[max(0,ActiveTaskPoint-1)].Index].Latitude;
+    previousLon = WayPointList[task_points[max(0,ActiveTaskPoint-1)].Index].Longitude;
   }
   mutexTaskData.Unlock();
 
@@ -619,7 +619,7 @@ void MapWindow::CalculateScreenPositionsTask() {
         LonLat2Screen(task_points[i].AATStartLon, task_points[i].AATStartLat, task_points[i].AATStart);
         LonLat2Screen(task_points[i].AATFinishLon, task_points[i].AATFinishLat, task_points[i].AATFinish);
       }
-      if (AATEnabled && (((int)i==ActiveWayPoint) ||
+      if (AATEnabled && (((int)i==ActiveTaskPoint) ||
 			 (SettingsMap().TargetPan 
 			  && ((int)i==SettingsMap().TargetPanIndex)))) {
 

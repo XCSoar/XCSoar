@@ -174,7 +174,7 @@ typedef struct _DERIVED_INFO
   bool InStartSector;
   int StartSectorWaypoint;
 
-  int ActiveWayPoint; 
+  int ActiveTaskPoint; 
   int ReadyWayPoint;
 
   // detects when glider is on ground for several seconds

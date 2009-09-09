@@ -21,7 +21,7 @@ unsigned StartMaxHeight = 0;
 unsigned StartMaxSpeed = 0;
 unsigned StartMaxHeightMargin = 0;
 unsigned StartMaxSpeedMargin = 0;
-int   ActiveWayPoint = -1;
+int   ActiveTaskPoint = -1;
 int   AutoAdvance = 1;
 bool  AdvanceArmed = false;
 // Waypoint Database

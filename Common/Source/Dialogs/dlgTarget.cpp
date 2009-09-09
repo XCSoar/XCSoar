@@ -57,7 +57,7 @@ Copyright_License {
 
 static WndForm *wf=NULL;
 static WindowControl *btnMove = NULL;
-static int ActiveWayPointOnEntry = 0;
+static int ActiveTaskPointOnEntry = 0;
 
 
 static double Range = 0;
@@ -78,7 +78,7 @@ static void MoveTarget(double adjust_angle) {
   if (target_point==0) return;
   if (!ValidTaskPoint(target_point)) return;
   if (!ValidTaskPoint(target_point+1)) return;
-  if (target_point < ActiveWayPoint) return;
+  if (target_point < ActiveTaskPoint) return;
 
   mutexTaskData.Lock();
 
@@ -100,7 +100,7 @@ static void MoveTarget(double adjust_angle) {
                          &target_longitude);
 
   if (InAATTurnSector(target_longitude, target_latitude, target_point)) {
-    if (XCSoarInterface::Calculated().IsInSector && (target_point == ActiveWayPoint)) {
+    if (XCSoarInterface::Calculated().IsInSector && (target_point == ActiveTaskPoint)) {
       // set range/radial for inside sector
       double course_bearing, target_bearing;
       DistanceBearing(task_points[target_point-1].AATTargetLat,
@@ -166,14 +166,14 @@ static void DragTarget(double target_longitude, double target_latitude) {
   if (target_point==0) return;
   if (!ValidTaskPoint(target_point)) return;
   if (!ValidTaskPoint(target_point+1)) return;
-  if (target_point < ActiveWayPoint) return;
+  if (target_point < ActiveTaskPoint) return;
 
   mutexTaskData.Lock();
 
   double distance, bearing;
 
   if (InAATTurnSector(target_longitude, target_latitude, target_point)) {
-    if (XCSoarInterface::Calculated().IsInSector && (target_point == ActiveWayPoint)) {
+    if (XCSoarInterface::Calculated().IsInSector && (target_point == ActiveTaskPoint)) {
       // set range/radial for inside sector
       double course_bearing, target_bearing;
       DistanceBearing(task_points[target_point-1].AATTargetLat,
@@ -284,7 +284,7 @@ static void RefreshCalculator(void) {
 
   RefreshTask();
   RefreshTaskStatistics();
-  target_point = max(target_point,ActiveWayPoint);
+  target_point = max(target_point,ActiveTaskPoint);
 
   bool nodisplay = !AATEnabled
     || (target_point==0)
@@ -434,7 +434,7 @@ static void OnRangeData(DataField *Sender, DataField::DataAccessKind_t Mode) {
     case DataField::daPut:
     case DataField::daChange:
       mutexTaskData.Lock();
-      if (target_point>=ActiveWayPoint) {
+      if (target_point>=ActiveTaskPoint) {
         RangeNew = Sender->GetAsFloat()/100.0;
         if (RangeNew != Range) {
           task_points[target_point].AATTargetOffsetRadius = RangeNew;
@@ -462,8 +462,8 @@ static void OnRadialData(DataField *Sender, DataField::DataAccessKind_t Mode) {
     case DataField::daPut:
     case DataField::daChange:
       mutexTaskData.Lock();
-      if (target_point>=ActiveWayPoint) {
-        if (!XCSoarInterface::Calculated().IsInSector || (target_point != ActiveWayPoint)) {
+      if (target_point>=ActiveTaskPoint) {
+        if (!XCSoarInterface::Calculated().IsInSector || (target_point != ActiveTaskPoint)) {
           dowrap = true;
         }
         RadialNew = Sender->GetAsFloat();
@@ -497,7 +497,7 @@ static void OnRadialData(DataField *Sender, DataField::DataAccessKind_t Mode) {
 
 static void RefreshTargetPoint(void) {
   mutexTaskData.Lock();
-  target_point = max(target_point, ActiveWayPoint);
+  target_point = max(target_point, ActiveTaskPoint);
   if (ValidTaskPoint(target_point)) {
     XCSoarInterface::SetSettingsMap().TargetPanIndex = target_point;
     XCSoarInterface::SetSettingsMap().TargetPan = true;
@@ -538,8 +538,8 @@ static void OnTaskPointData(DataField *Sender, DataField::DataAccessKind_t Mode)
     break;
     case DataField::daPut:
     case DataField::daChange:
-      target_point = Sender->GetAsInteger() + ActiveWayPointOnEntry;
-      target_point = max(target_point,ActiveWayPoint);
+      target_point = Sender->GetAsInteger() + ActiveTaskPointOnEntry;
+      target_point = max(target_point,ActiveTaskPoint);
       if (target_point != old_target_point) {
         RefreshTargetPoint();
       }
@@ -561,10 +561,10 @@ static CallBackTableEntry_t CallBackTable[]={
 
 void dlgTarget(void) {
 
-  if (!ValidTaskPoint(ActiveWayPoint)) {
+  if (!ValidTaskPoint(ActiveTaskPoint)) {
     return;
   }
-  ActiveWayPointOnEntry = ActiveWayPoint;
+  ActiveTaskPointOnEntry = ActiveTaskPoint;
 
   if (!InfoBoxLayout::landscape) {
     wf = dlgLoadFromXML(CallBackTable,
@@ -605,11 +605,11 @@ void dlgTarget(void) {
   TCHAR tp_short[21];
   mutexTaskData.Lock();
   if (!ValidTaskPoint(target_point)) {
-    target_point = ActiveWayPointOnEntry;
+    target_point = ActiveTaskPointOnEntry;
   } else {
-    target_point = max(target_point, ActiveWayPointOnEntry);
+    target_point = max(target_point, ActiveTaskPointOnEntry);
   }
-  for (int i=ActiveWayPointOnEntry; i<MAXTASKPOINTS; i++) {
+  for (int i=ActiveTaskPointOnEntry; i<MAXTASKPOINTS; i++) {
     if (ValidTaskPoint(i)) {
       _tcsncpy(tp_short, WayPointList[task_points[i].Index].Name, 20);
       tp_short[20] = 0;
@@ -617,11 +617,11 @@ void dlgTarget(void) {
       dfe->addEnumText(tp_label);
     } else {
       if (target_point>= i) {
-        target_point= ActiveWayPointOnEntry;
+        target_point= ActiveTaskPointOnEntry;
       }
     }
   }
-  dfe->Set(max(0,target_point-ActiveWayPointOnEntry));
+  dfe->Set(max(0,target_point-ActiveTaskPointOnEntry));
   mutexTaskData.Unlock();
   wp->RefreshDisplay();
 

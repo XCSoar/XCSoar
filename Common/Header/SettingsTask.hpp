@@ -41,18 +41,22 @@ Copyright_License {
 #include "Sizes.h"
 #include "Task.h"
 
+
+// random
+extern int  AirfieldsHomeWaypoint; // VENTA3
+
+
 // control of task/waypoints
 extern int  AutoAdvance;
 extern bool AdvanceArmed;
 extern int  HomeWaypoint;
-extern int  AirfieldsHomeWaypoint; // VENTA3
+extern int  ActiveTaskPoint;
+extern int  SelectedWaypoint;
 
 // task data
 extern Start_t task_start_points;
 extern Task_t task_points;
 extern TaskStats_t TaskStats;
-extern int ActiveWayPoint;
-extern int SelectedWaypoint;
 extern unsigned SectorType;
 extern unsigned int SectorRadius;
 extern unsigned StartLine;

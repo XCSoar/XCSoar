@@ -501,7 +501,7 @@ void InfoBoxManager::DisplayInfoBox(void)
 
     bool needupdate = ((DisplayType[i] != DisplayTypeLast[i])||first);
 
-    int theactive = ActiveWayPoint;
+    int theactive = ActiveTaskPoint;
     if (!ValidTaskPoint(theactive)) {
       theactive = -1;
     }

@@ -122,7 +122,7 @@ void FlyDirectTo(int index) {
 
   TaskModified = true;
   TargetModified = true;
-  ActiveWayPoint = -1;
+  ActiveTaskPoint = -1;
 
   AATEnabled = FALSE;
 
@@ -137,7 +137,7 @@ void FlyDirectTo(int index) {
   for (int i=1; i<=MAXTASKPOINTS; i++) {
     task_points[i].Index = -1;
   }
-  ActiveWayPoint = 0;
+  ActiveTaskPoint = 0;
   RefreshTask();
   mutexTaskData.Unlock();
 }
@@ -181,10 +181,10 @@ void InsertWaypoint(int index, bool append) {
   TaskModified = true;
   TargetModified = true;
 
-  if ((ActiveWayPoint<0) || !ValidTaskPoint(0)) {
-    ActiveWayPoint = 0;
-    ResetTaskWaypoint(ActiveWayPoint);
-    task_points[ActiveWayPoint].Index = index;
+  if ((ActiveTaskPoint<0) || !ValidTaskPoint(0)) {
+    ActiveTaskPoint = 0;
+    ResetTaskWaypoint(ActiveTaskPoint);
+    task_points[ActiveTaskPoint].Index = index;
 
     mutexTaskData.Unlock();
     return;
@@ -201,7 +201,7 @@ void InsertWaypoint(int index, bool append) {
     return;
   }
 
-  int indexInsert = max(ActiveWayPoint,0);
+  int indexInsert = max(ActiveTaskPoint,0);
   if (append) {
     for (i=indexInsert; i<MAXTASKPOINTS-2; i++) {
       if (task_points[i+1].Index<0) {
@@ -231,10 +231,10 @@ void DefaultTask(void) {
   mutexTaskData.Lock();
   TaskModified = true;
   TargetModified = true;
-  if ((task_points[0].Index == -1)||(ActiveWayPoint==-1)) {
+  if ((task_points[0].Index == -1)||(ActiveTaskPoint==-1)) {
     if (HomeWaypoint != -1) {
       task_points[0].Index = HomeWaypoint;
-      ActiveWayPoint = 0;
+      ActiveTaskPoint = 0;
     }
   }
   RefreshTask();
@@ -247,7 +247,7 @@ void DefaultTask(void) {
 // in the task_points[] array - NOT a waypoint index.
 //
 // If you call this function, you MUST deal with
-// correctly setting ActiveWayPoint yourself!
+// correctly setting ActiveTaskPoint yourself!
 void RemoveTaskPoint(int index) {
   if (!CheckDeclaration())
     return;
@@ -290,7 +290,7 @@ void RemoveWaypoint(int index) {
   if (!CheckDeclaration())
     return;
 
-  if (ActiveWayPoint<0) {
+  if (ActiveTaskPoint<0) {
     return; // No waypoint to remove
   }
 
@@ -309,7 +309,7 @@ void RemoveWaypoint(int index) {
   TargetModified = true;
 
   // Search forward first
-  i = ActiveWayPoint;
+  i = ActiveTaskPoint;
   while ((i < MAXTASKPOINTS) && (task_points[i].Index != index)) {
     ++i;
   }
@@ -318,16 +318,16 @@ void RemoveWaypoint(int index) {
     // Found WP, so remove it
     RemoveTaskPoint(i);
 
-    if (task_points[ActiveWayPoint].Index == -1) {
+    if (task_points[ActiveTaskPoint].Index == -1) {
       // We've just removed the last task point and it was
       // active at the time
-      ActiveWayPoint--;
+      ActiveTaskPoint--;
     }
 
   } else {
     // Didn't find WP, so search backwards
 
-    i = ActiveWayPoint;
+    i = ActiveTaskPoint;
     do {
       --i;
     } while (i >= 0 && task_points[i].Index != index);
@@ -335,7 +335,7 @@ void RemoveWaypoint(int index) {
     if (i >= 0) {
       // Found WP, so remove it
       RemoveTaskPoint(i);
-      ActiveWayPoint--;
+      ActiveTaskPoint--;
 
     } else {
       // WP not found, so ask user if they want to
@@ -348,11 +348,11 @@ void RemoveWaypoint(int index) {
       mutexTaskData.Lock();
 
       if (ret == IDYES) {
-        RemoveTaskPoint(ActiveWayPoint);
-        if (task_points[ActiveWayPoint].Index == -1) {
+        RemoveTaskPoint(ActiveTaskPoint);
+        if (task_points[ActiveTaskPoint].Index == -1) {
           // Active WayPoint was last in the list so is currently
           // invalid.
-          ActiveWayPoint--;
+          ActiveTaskPoint--;
         }
       }
     }
@@ -372,16 +372,16 @@ void ReplaceWaypoint(int index) {
   TargetModified = true;
 
   // ARH 26/06/05 Fixed array out-of-bounds bug
-  if (ActiveWayPoint>=0) {
-    ResetTaskWaypoint(ActiveWayPoint);
-    task_points[ActiveWayPoint].Index = index;
+  if (ActiveTaskPoint>=0) {
+    ResetTaskWaypoint(ActiveTaskPoint);
+    task_points[ActiveTaskPoint].Index = index;
   } else {
 
     // Insert a new waypoint since there's
     // nothing to replace
-    ActiveWayPoint=0;
-    ResetTaskWaypoint(ActiveWayPoint);
-    task_points[ActiveWayPoint].Index = index;
+    ActiveTaskPoint=0;
+    ResetTaskWaypoint(ActiveTaskPoint);
+    task_points[ActiveTaskPoint].Index = index;
   }
   RefreshTask();
   mutexTaskData.Unlock();
@@ -394,8 +394,8 @@ void RefreshTask() {
   int i;
 
   mutexTaskData.Lock();
-  if ((ActiveWayPoint<0)&&(task_points[0].Index>=0)) {
-    ActiveWayPoint=0;
+  if ((ActiveTaskPoint<0)&&(task_points[0].Index>=0)) {
+    ActiveTaskPoint=0;
   }
 
   // Only need to refresh info where the removal happened
@@ -456,7 +456,7 @@ void RefreshTask() {
 
 
 void RotateStartPoints(void) {
-  if (ActiveWayPoint>0) return;
+  if (ActiveTaskPoint>0) return;
   if (!EnableMultipleStartPoints) return;
 
   mutexTaskData.Lock();
@@ -589,7 +589,7 @@ void CalculateTaskSectors(void)
 double AdjustAATTargets(double desired) {
   int i, istart, inum;
   double av=0;
-  istart = max(1,ActiveWayPoint);
+  istart = max(1,ActiveTaskPoint);
   inum=0;
 
   mutexTaskData.Lock();
@@ -647,7 +647,7 @@ double AdjustAATTargets(double desired) {
 void CalculateAATTaskSectors(const NMEA_INFO &gps_info)
 {
   int i;
-  int awp = ActiveWayPoint;
+  int awp = ActiveTaskPoint;
 
   if(AATEnabled == FALSE)
     return;
@@ -906,7 +906,7 @@ void LoadNewTask(const TCHAR *szFileName)
 
   mutexTaskData.Lock();
 
-  ActiveWayPoint = -1;
+  ActiveTaskPoint = -1;
   for(i=0;i<MAXTASKPOINTS;i++)
     {
       task_points[i].Index = -1;
@@ -1043,7 +1043,7 @@ void LoadNewTask(const TCHAR *szFileName)
   RefreshTask();
 
   if (!ValidTaskPoint(0)) {
-    ActiveWayPoint = 0;
+    ActiveTaskPoint = 0;
   }
 
   mutexTaskData.Unlock();
@@ -1071,7 +1071,7 @@ void ClearTask(void) {
   TaskModified = true;
   TargetModified = true;
   LastTaskFileName[0] = _T('\0');
-  ActiveWayPoint = -1;
+  ActiveTaskPoint = -1;
   int i;
   for(i=0;i<MAXTASKPOINTS;i++) {
     task_points[i].Index = -1;
@@ -1322,7 +1322,7 @@ double DoubleLegDistance(int taskwaypoint,
 
 void CalculateAATIsoLines(void) {
   int i;
-  int awp = ActiveWayPoint;
+  int awp = ActiveTaskPoint;
   double stepsize = 25.0;
 
   if(AATEnabled == FALSE)
@@ -1364,7 +1364,7 @@ void CalculateAATIsoLines(void) {
 
       /*
       double distance_glider=0;
-      if ((i==ActiveWayPoint) && (CALCULATED_INFO.IsInSector)) {
+      if ((i==ActiveTaskPoint) && (CALCULATED_INFO.IsInSector)) {
         distance_glider = DoubleLegDistance(i, GPS_INFO.Longitude, GPS_INFO.Latitude);
       }
       */
@@ -1477,7 +1477,7 @@ static void BackupTask(void) {
   for (int i=0; i<=MAXTASKPOINTS; i++) {
     Task_saved[i]= task_points[i].Index;
   }
-  active_waypoint_saved = ActiveWayPoint;
+  active_waypoint_saved = ActiveTaskPoint;
   if (AATEnabled) {
     aat_enabled_saved = true;
   } else {
@@ -1493,7 +1493,7 @@ void ResumeAbortTask(int set) {
   bool task_temporary_on_entry = TaskIsTemporary();
 
   mutexTaskData.Lock();
-  active_waypoint_on_entry = ActiveWayPoint;
+  active_waypoint_on_entry = ActiveTaskPoint;
 
   if (set == 0) {
     if (task_temporary_on_entry && !TaskAborted) {
@@ -1513,7 +1513,7 @@ void ResumeAbortTask(int set) {
       BackupTask();
 
       // force new waypoint to be the closest
-      ActiveWayPoint = -1;
+      ActiveTaskPoint = -1;
 
       // force AAT off
       AATEnabled = false;
@@ -1531,15 +1531,15 @@ void ResumeAbortTask(int set) {
         task_points[i].Index = Task_saved[i];
 	Task_saved[i] = -1;
       }
-      ActiveWayPoint = active_waypoint_saved;
+      ActiveTaskPoint = active_waypoint_saved;
       AATEnabled = aat_enabled_saved;
 
       RefreshTask();
     }
   }
 
-  if (active_waypoint_on_entry != ActiveWayPoint){
-    SelectedWaypoint = ActiveWayPoint;
+  if (active_waypoint_on_entry != ActiveTaskPoint){
+    SelectedWaypoint = ActiveTaskPoint;
   }
 
   mutexTaskData.Unlock();
@@ -1549,7 +1549,7 @@ void ResumeAbortTask(int set) {
 
 int getFinalWaypoint() {
   int i;
-  i=max(-1,min(MAXTASKPOINTS,ActiveWayPoint));
+  i=max(-1,min(MAXTASKPOINTS,ActiveTaskPoint));
   if (TaskAborted) {
     return i;
   }
@@ -1565,14 +1565,14 @@ int getFinalWaypoint() {
 }
 
 bool ActiveIsFinalWaypoint() {
-  return (ActiveWayPoint == getFinalWaypoint());
+  return (ActiveTaskPoint == getFinalWaypoint());
 }
 
 
 bool IsFinalWaypoint(void) {
   bool retval;
   mutexTaskData.Lock();
-  if (ValidTaskPoint(ActiveWayPoint) && (task_points[ActiveWayPoint+1].Index >= 0)) {
+  if (ValidTaskPoint(ActiveTaskPoint) && (task_points[ActiveTaskPoint+1].Index >= 0)) {
     retval = false;
   } else {
     retval = true;

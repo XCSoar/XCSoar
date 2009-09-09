@@ -189,14 +189,14 @@ public:
 protected:
 
   bool CheckCondition(const GlideComputer& cmp) {
-    if (!cmp.Calculated().Flying || !ValidTaskPoint(ActiveWayPoint)) {
+    if (!cmp.Calculated().Flying || !ValidTaskPoint(ActiveTaskPoint)) {
       return false;
     }
 
     tad = cmp.Calculated().TaskAltitudeDifference*0.2+0.8*tad;
 
     bool BeforeFinalGlide =
-      (ValidTaskPoint(ActiveWayPoint+1) && !cmp.Calculated().FinalGlide);
+      (ValidTaskPoint(ActiveTaskPoint+1) && !cmp.Calculated().FinalGlide);
 
     if (BeforeFinalGlide) {
       Interval_Notification = 60*5;
@@ -253,15 +253,15 @@ protected:
   SunEphemeris sun;
 
   bool CheckCondition(const GlideComputer& cmp) {
-    if (!ValidTaskPoint(ActiveWayPoint) || !cmp.Calculated().Flying) {
+    if (!ValidTaskPoint(ActiveTaskPoint) || !cmp.Calculated().Flying) {
       return false;
     }
 
     mutexTaskData.Lock();
 
     double sunsettime = sun.CalcSunTimes
-      (WayPointList[task_points[ActiveWayPoint].Index].Longitude,
-       WayPointList[task_points[ActiveWayPoint].Index].Latitude,
+      (WayPointList[task_points[ActiveTaskPoint].Index].Longitude,
+       WayPointList[task_points[ActiveTaskPoint].Index].Latitude,
        cmp.Basic(), cmp.Calculated(), GetUTCOffset()/3600);
     double d1 = (cmp.Calculated().TaskTimeToGo
 		 +DetectCurrentTime(&cmp.Basic()))/3600;
@@ -299,12 +299,12 @@ public:
 protected:
 
   bool CheckCondition(const GlideComputer& cmp) {
-    if (!AATEnabled || !ValidTaskPoint(ActiveWayPoint) || TaskIsTemporary()
+    if (!AATEnabled || !ValidTaskPoint(ActiveTaskPoint) || TaskIsTemporary()
         || !(cmp.Calculated().ValidStart && !cmp.Calculated().ValidFinish)
         || !cmp.Calculated().Flying) {
       return false;
     }
-    bool OnFinalWaypoint = !ValidTaskPoint(ActiveWayPoint);
+    bool OnFinalWaypoint = !ValidTaskPoint(ActiveTaskPoint);
     if (OnFinalWaypoint) {
       // can't do much about it now, so don't give a warning
       return false;
@@ -337,8 +337,8 @@ public:
 protected:
 
   bool CheckCondition(const GlideComputer& cmp) {
-    if (!ValidTaskPoint(ActiveWayPoint) || !cmp.Calculated().Flying
-        || (ActiveWayPoint>0) || !ValidTaskPoint(ActiveWayPoint+1)) {
+    if (!ValidTaskPoint(ActiveTaskPoint) || !cmp.Calculated().Flying
+        || (ActiveTaskPoint>0) || !ValidTaskPoint(ActiveTaskPoint+1)) {
       return false;
     }
     if (cmp.Calculated().LegDistanceToGo>StartRadius) {
@@ -382,7 +382,7 @@ public:
 protected:
 
   bool CheckCondition(const GlideComputer& cmp) {
-    if (!cmp.Calculated().Flying || !ValidTaskPoint(ActiveWayPoint)) {
+    if (!cmp.Calculated().Flying || !ValidTaskPoint(ActiveTaskPoint)) {
       return false;
     }
 

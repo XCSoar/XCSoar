@@ -376,10 +376,10 @@ ActionInterface::on_key_Waypoint(int UpDown)
   mutexTaskData.Lock();
 
   if(UpDown>0) {
-    if(ActiveWayPoint < MAXTASKPOINTS) {
+    if(ActiveTaskPoint < MAXTASKPOINTS) {
       // Increment Waypoint
-      if(task_points[ActiveWayPoint+1].Index >= 0) {
-	if(ActiveWayPoint == 0)	{
+      if(task_points[ActiveTaskPoint+1].Index >= 0) {
+	if(ActiveTaskPoint == 0)	{
 	  // manual start
 	  // TODO bug: allow restart
 	  // TODO bug: make this work only for manual
@@ -389,7 +389,7 @@ ActionInterface::on_key_Waypoint(int UpDown)
 	  }
 	  */
 	}
-	ActiveWayPoint ++;
+	ActiveTaskPoint ++;
 	AdvanceArmed = false;
 	  /* JMW ILLEGAL
 	Calculated().LegStartTime = Basic().Time ;
@@ -399,7 +399,7 @@ ActionInterface::on_key_Waypoint(int UpDown)
       else
         if((UpDown == 2) && (task_points[0].Index >= 0)) {
           /* ****DISABLED****
-          if(ActiveWayPoint == 0)	{
+          if(ActiveTaskPoint == 0)	{
             // TODO bug: allow restart
             // TODO bug: make this work only for manual
 
@@ -411,7 +411,7 @@ ActionInterface::on_key_Waypoint(int UpDown)
           }
           */
           AdvanceArmed = false;
-          ActiveWayPoint = 0;
+          ActiveTaskPoint = 0;
 	  /* JMW illegal
           Calculated().LegStartTime = Basic().Time ;
 	  */
@@ -419,16 +419,16 @@ ActionInterface::on_key_Waypoint(int UpDown)
     }
   }
   else if (UpDown<0){
-    if(ActiveWayPoint >0) {
+    if(ActiveTaskPoint >0) {
 
-      ActiveWayPoint --;
+      ActiveTaskPoint --;
       /*
 	XXX How do we know what the last one is?
 	} else if (UpDown == -2) {
-	ActiveWayPoint = MAXTASKPOINTS;
+	ActiveTaskPoint = MAXTASKPOINTS;
       */
     } else {
-      if (ActiveWayPoint==0) {
+      if (ActiveTaskPoint==0) {
 
         RotateStartPoints();
 
@@ -439,11 +439,11 @@ ActionInterface::on_key_Waypoint(int UpDown)
     glide_computer.ResetEnter();
   }
   else if (UpDown==0) {
-    SelectedWaypoint = task_points[ActiveWayPoint].Index;
+    SelectedWaypoint = task_points[ActiveTaskPoint].Index;
     PopupWaypointDetails();
   }
-  if (ActiveWayPoint>=0) {
-    SelectedWaypoint = task_points[ActiveWayPoint].Index;
+  if (ActiveTaskPoint>=0) {
+    SelectedWaypoint = task_points[ActiveTaskPoint].Index;
   }
   mutexTaskData.Unlock();
 }

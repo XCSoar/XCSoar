@@ -454,11 +454,11 @@ static void OnRemoveClicked(WindowControl * Sender) {
   mutexTaskData.Lock();
   RemoveTaskPoint(twItemIndex);
   SetWaypointValues();
-  if (ActiveWayPoint>=twItemIndex) {
-    ActiveWayPoint--;
+  if (ActiveTaskPoint>=twItemIndex) {
+    ActiveTaskPoint--;
   }
-  if (ActiveWayPoint<0) {
-    ActiveWayPoint= -1;
+  if (ActiveTaskPoint<0) {
+    ActiveTaskPoint= -1;
   }
   mutexTaskData.Unlock();
   wf->SetModalResult(mrOK);

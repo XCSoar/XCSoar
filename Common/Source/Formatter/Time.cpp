@@ -79,7 +79,7 @@ void FormatterTime::AssignValue(int i) {
     break;
   case 46:
     SecsToDisplayTime((int)(Calculated().LegTimeToGo+DetectCurrentTime(&Basic())));
-    Valid = ValidTaskPoint(ActiveWayPoint) &&
+    Valid = ValidTaskPoint(ActiveTaskPoint) &&
       (Calculated().LegTimeToGo< 0.9*ERROR_TIME);
     break;
   default:
@@ -90,10 +90,10 @@ void FormatterTime::AssignValue(int i) {
 
 void FormatterAATTime::AssignValue(int i) {
   double dd;
-  if (AATEnabled && ValidTaskPoint(ActiveWayPoint)) {
+  if (AATEnabled && ValidTaskPoint(ActiveTaskPoint)) {
     dd = Calculated().TaskTimeToGo;
     if ((Calculated().TaskStartTime>0.0) && (Calculated().Flying)
-        &&(ActiveWayPoint>0)) {
+        &&(ActiveTaskPoint>0)) {
       dd += Basic().Time-Calculated().TaskStartTime;
     }
     dd= max(0,min(24.0*3600.0,dd))-AATTaskLength*60;
@@ -114,26 +114,26 @@ void FormatterAATTime::AssignValue(int i) {
   switch (i) {
   case 27:
     SecsToDisplayTime((int)Calculated().AATTimeToGo);
-    Valid = (ValidTaskPoint(ActiveWayPoint) && AATEnabled
+    Valid = (ValidTaskPoint(ActiveTaskPoint) && AATEnabled
 	     && (Calculated().AATTimeToGo< 0.9*ERROR_TIME));
     break;
   case 41:
     SecsToDisplayTime((int)(Calculated().TaskTimeToGo));
-    Valid = ValidTaskPoint(ActiveWayPoint)
+    Valid = ValidTaskPoint(ActiveTaskPoint)
       && (Calculated().TaskTimeToGo< 0.9*ERROR_TIME);
     break;
   case 42:
     SecsToDisplayTime((int)(Calculated().LegTimeToGo));
-    Valid = ValidTaskPoint(ActiveWayPoint)
+    Valid = ValidTaskPoint(ActiveTaskPoint)
       && (Calculated().LegTimeToGo< 0.9*ERROR_TIME);
     break;
   case 45:
     SecsToDisplayTime((int)(Calculated().TaskTimeToGo+DetectCurrentTime(&Basic())));
-    Valid = ValidTaskPoint(ActiveWayPoint)
+    Valid = ValidTaskPoint(ActiveTaskPoint)
       && (Calculated().TaskTimeToGo< 0.9*ERROR_TIME);
     break;
   case 62:
-    if (AATEnabled && ValidTaskPoint(ActiveWayPoint)) {
+    if (AATEnabled && ValidTaskPoint(ActiveTaskPoint)) {
       SecsToDisplayTime((int)dd);
       Valid = (dd< 0.9*ERROR_TIME);
     } else {

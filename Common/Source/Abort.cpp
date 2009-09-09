@@ -120,7 +120,7 @@ GlideComputerTask::SortLandableWaypoints()
 
   ScopeLock protect(mutexTaskData);
 
-  active_waypoint_on_entry = ActiveWayPoint;
+  active_waypoint_on_entry = ActiveTaskPoint;
 
   // Do preliminary fast search
   int scx_aircraft, scy_aircraft;
@@ -257,8 +257,8 @@ GlideComputerTask::SortLandableWaypoints()
   int found_active_waypoint = -1;
   int found_home_waypoint = -1;
   for (i=0; i<MAXTASKPOINTS; i++) {
-    if (ValidTaskPoint(ActiveWayPoint)) {
-      if (SortedLandableIndex[i] == task_points[ActiveWayPoint].Index) {
+    if (ValidTaskPoint(ActiveTaskPoint)) {
+      if (SortedLandableIndex[i] == task_points[ActiveTaskPoint].Index) {
         found_active_waypoint = i;
       }
     }
@@ -280,23 +280,23 @@ GlideComputerTask::SortLandableWaypoints()
   bool new_closest_waypoint = false;
 
   if (found_active_waypoint != -1) {
-    ActiveWayPoint = found_active_waypoint;
+    ActiveTaskPoint = found_active_waypoint;
   } else {
     // if not found, keep on field or set active waypoint to closest
-    if (ValidTaskPoint(ActiveWayPoint)){
+    if (ValidTaskPoint(ActiveTaskPoint)){
       arrival_altitude =
-        CalculateWaypointArrivalAltitude(task_points[ActiveWayPoint].Index);
+        CalculateWaypointArrivalAltitude(task_points[ActiveTaskPoint].Index);
     } else {
       arrival_altitude = 0;
     }
     if (arrival_altitude <= 0){   // last active is no more reachable,
                                   // switch to new closest
       new_closest_waypoint = true;
-      ActiveWayPoint = 0;
+      ActiveTaskPoint = 0;
     } else {
       // last active is reachable but not in list, add to end of
       // list (or overwrite laste one)
-      if (ActiveWayPoint>=0){
+      if (ActiveTaskPoint>=0){
         for (i=0; i<MAXTASKPOINTS-1; i++) {     // find free slot
           if (SortedLandableIndex[i] == -1)     // free slot found (if
                                                 // not, i index the
@@ -304,8 +304,8 @@ GlideComputerTask::SortLandableWaypoints()
                                                 // list)
             break;
         }
-        SortedLandableIndex[i] = task_points[ActiveWayPoint].Index;
-        ActiveWayPoint = i;
+        SortedLandableIndex[i] = task_points[ActiveTaskPoint].Index;
+        ActiveTaskPoint = i;
       }
     }
   }
@@ -355,7 +355,7 @@ GlideComputerTask::SortLandableWaypoints()
     }
   }
 
-  if (active_waypoint_on_entry != ActiveWayPoint){
-    SelectedWaypoint = ActiveWayPoint;
+  if (active_waypoint_on_entry != ActiveTaskPoint){
+    SelectedWaypoint = ActiveTaskPoint;
   }
 }

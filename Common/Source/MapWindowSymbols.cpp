@@ -516,8 +516,8 @@ void MapWindow::DrawFinalGlide(Canvas &canvas, const RECT rc)
   __try{
   #endif
 
-    if (ValidTaskPoint(ActiveWayPoint)){
-    // if (ActiveWayPoint >= 0) {
+    if (ValidTaskPoint(ActiveTaskPoint)){
+    // if (ActiveTaskPoint >= 0) {
 
       const int y0 = ( (rc.bottom - rc.top )/2)+rc.top;
 
@@ -771,10 +771,10 @@ void MapWindow::DrawCompass(Canvas &canvas, const RECT rc)
 
 void MapWindow::DrawBestCruiseTrack(Canvas &canvas)
 {
-  if (ActiveWayPoint<0) {
+  if (ActiveTaskPoint<0) {
     return; // nothing to draw..
   }
-  if (!ValidTaskPoint(ActiveWayPoint)) {
+  if (!ValidTaskPoint(ActiveTaskPoint)) {
     return;
   }
 

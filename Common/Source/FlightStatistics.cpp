@@ -137,7 +137,7 @@ void FlightStatistics::RenderSpeed(Canvas &canvas, const RECT rc)
   ScopeLock protect(mutexTaskData);
 
   if ((Task_Speed.sum_n<2)
-      || !ValidTaskPoint(ActiveWayPoint)) {
+      || !ValidTaskPoint(ActiveTaskPoint)) {
     chart.DrawNoData();
     return;
   }
@@ -487,7 +487,7 @@ void FlightStatistics::RenderTask(Canvas &canvas, const RECT rc, const bool olcm
 	  chart.DrawLabel(text, x2, y2);
 	}
 
-	if ((i==ActiveWayPoint)&&(!AATEnabled)) {
+	if ((i==ActiveTaskPoint)&&(!AATEnabled)) {
 	  lat1 = XCSoarInterface::Basic().Latitude;
 	  lon1 = XCSoarInterface::Basic().Longitude;
 	  x1 = (lon1-lon_c)*fastcosine(lat1);
@@ -515,7 +515,7 @@ void FlightStatistics::RenderTask(Canvas &canvas, const RECT rc, const bool olcm
           lon2 = task_points[i].AATTargetLon;
 
           /*
-	  if (i==ActiveWayPoint) {
+	  if (i==ActiveTaskPoint) {
 	    lat1 = XCSoarInterface::Basic().Latitude;
 	    lon1 = XCSoarInterface::Basic().Longitude;
 	  }
@@ -951,8 +951,8 @@ FlightStatistics::SetLegStart(const int activewaypoint,
 			      const double time)
 {
   Lock();
-  if (LegStartTime[ActiveWayPoint]<0) {
-    LegStartTime[ActiveWayPoint] = time;
+  if (LegStartTime[ActiveTaskPoint]<0) {
+    LegStartTime[ActiveTaskPoint] = time;
   }
   Unlock();
 }
@@ -1090,7 +1090,7 @@ FlightStatistics::CaptionTempTrace(TCHAR *sTmp)
 void
 FlightStatistics::CaptionTask(TCHAR *sTmp)
 {
-  if (!ValidTaskPoint(ActiveWayPoint)) {
+  if (!ValidTaskPoint(ActiveTaskPoint)) {
     _stprintf(sTmp, gettext(TEXT("No task")));
   } else {
     TCHAR timetext1[100];
