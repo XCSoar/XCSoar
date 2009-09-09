@@ -49,6 +49,7 @@ Copyright_License {
 #include "MapWindowBlackboard.hpp"
 #include "PeriodClock.hpp"
 #include "DrawThread.hpp"
+#include "Task.h"
 
 typedef struct _THERMAL_SOURCE_VIEW
 {
@@ -117,8 +118,10 @@ class MapWindow
   int           TargetDrag_State;
 
   POINT         Groundline[NUMTERRAINSWEEPS+1];
+  TaskScreen_t   task_screen;
+  StartScreen_t  task_start_screen;
 
- THERMAL_SOURCE_VIEW ThermalSources[MAX_THERMAL_SOURCES];
+  THERMAL_SOURCE_VIEW ThermalSources[MAX_THERMAL_SOURCES];
 
   // projection
   bool      BigZoom;

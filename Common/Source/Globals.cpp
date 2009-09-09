@@ -32,9 +32,11 @@ unsigned StartMaxHeightMargin = 0;
 unsigned StartMaxSpeedMargin = 0;
 
 //Task Information
-Task_t task_points = {{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0}};
-Start_t task_start_points;
-TaskStats_t TaskStats;
+
+Start_t        task_start_points;
+StartStats_t   task_start_stats;
+Task_t         task_points;
+TaskStats_t    task_stats;
 
 // Specials
 #if defined(PNA) || defined(FIVV)

@@ -169,8 +169,8 @@ void GlideComputerTask::DistanceToNext()
 	  && (ActiveTaskPoint>0) &&
           ValidTaskPoint(ActiveTaskPoint+1)) {
 
-        w1lat = task_points[ActiveTaskPoint].AATTargetLat;
-        w1lon = task_points[ActiveTaskPoint].AATTargetLon;
+        w1lat = task_stats[ActiveTaskPoint].AATTargetLat;
+        w1lon = task_stats[ActiveTaskPoint].AATTargetLon;
 
         DistanceBearing(Basic().Latitude, Basic().Longitude,
                         w1lat, w1lon,
@@ -191,8 +191,8 @@ void GlideComputerTask::DistanceToNext()
         // JMW set waypoint bearing to start direction if in start sector
 
         if (AATEnabled) {
-          w1lat = task_points[ActiveTaskPoint+1].AATTargetLat;
-          w1lon = task_points[ActiveTaskPoint+1].AATTargetLon;
+          w1lat = task_stats[ActiveTaskPoint+1].AATTargetLat;
+          w1lon = task_stats[ActiveTaskPoint+1].AATTargetLon;
         } else {
           w1lat = WayPointList[task_points[ActiveTaskPoint+1].Index].Latitude;
           w1lon = WayPointList[task_points[ActiveTaskPoint+1].Index].Longitude;
@@ -277,14 +277,14 @@ double GlideComputerTask::AATCloseBearing() const
 {
   // ensure waypoint goes in direction of track if very close
   double course_bearing;
-  DistanceBearing(task_points[ActiveTaskPoint-1].AATTargetLat,
-		  task_points[ActiveTaskPoint-1].AATTargetLon,
+  DistanceBearing(task_stats[ActiveTaskPoint-1].AATTargetLat,
+		  task_stats[ActiveTaskPoint-1].AATTargetLon,
 		  Basic().Latitude,
 		  Basic().Longitude,
 		  NULL, &course_bearing);
 
   course_bearing = AngleLimit360(course_bearing+
-				 task_points[ActiveTaskPoint].AATTargetOffsetRadial);
+				 task_stats[ActiveTaskPoint].AATTargetOffsetRadial);
   return course_bearing;
 }
 
@@ -607,17 +607,17 @@ bool GlideComputerTask::InStartSector(bool *CrossedStart)
 
   if (EnableMultipleStartPoints) {
     for (int i=0; i<MAXSTARTPOINTS; i++) {
-      if (task_start_points[i].Active && (task_start_points[i].Index>=0)
+      if (task_start_stats[i].Active && (task_start_points[i].Index>=0)
           && (task_start_points[i].Index != task_points[0].Index)) {
 
         retval = in_height & InStartSector_Internal(task_start_points[i].Index,
 						    task_start_points[i].OutBound,
-						    task_start_points[i].InSector);
+						    task_start_stats[i].InSector);
         isInSector |= retval;
 
         int index = task_start_points[i].Index;
-        *CrossedStart = task_start_points[i].InSector && !retval;
-        task_start_points[i].InSector = retval;
+        *CrossedStart = task_start_stats[i].InSector && !retval;
+        task_start_stats[i].InSector = retval;
         if (*CrossedStart) {
           if (task_points[0].Index != index) {
             task_points[0].Index = index;
@@ -999,8 +999,8 @@ void GlideComputerTask::TaskStatistics(const double this_maccready,
 
   if (AATEnabled && (ActiveTaskPoint>0) &&
       !TaskIsTemporary() && (ValidTaskPoint(ActiveTaskPoint+1))) {
-    w1lat = task_points[ActiveTaskPoint].AATTargetLat;
-    w1lon = task_points[ActiveTaskPoint].AATTargetLon;
+    w1lat = task_stats[ActiveTaskPoint].AATTargetLat;
+    w1lon = task_stats[ActiveTaskPoint].AATTargetLon;
   } else {
     w1lat = WayPointList[task_points[ActiveTaskPoint].Index].Latitude;
     w1lon = WayPointList[task_points[ActiveTaskPoint].Index].Longitude;
@@ -1028,8 +1028,8 @@ void GlideComputerTask::TaskStatistics(const double this_maccready,
    } else {
     if (AATEnabled) {
       // TODO accuracy: Get best range point to here...
-      w0lat = task_points[ActiveTaskPoint-1].AATTargetLat;
-      w0lon = task_points[ActiveTaskPoint-1].AATTargetLon;
+      w0lat = task_stats[ActiveTaskPoint-1].AATTargetLat;
+      w0lon = task_stats[ActiveTaskPoint-1].AATTargetLon;
     } else {
       w0lat = WayPointList[task_points[ActiveTaskPoint-1].Index].Latitude;
       w0lon = WayPointList[task_points[ActiveTaskPoint-1].Index].Longitude;
@@ -1131,10 +1131,10 @@ void GlideComputerTask::TaskStatistics(const double this_maccready,
       this_is_final = true; // JMW CHECK FGAMT
 
       if (AATEnabled) {
-	w1lat = task_points[task_index].AATTargetLat;
-	w1lon = task_points[task_index].AATTargetLon;
-	w0lat = task_points[task_index-1].AATTargetLat;
-	w0lon = task_points[task_index-1].AATTargetLon;
+	w1lat = task_stats[task_index].AATTargetLat;
+	w1lon = task_stats[task_index].AATTargetLon;
+	w0lat = task_stats[task_index-1].AATTargetLat;
+	w0lon = task_stats[task_index-1].AATTargetLon;
       } else {
 	w1lat = WayPointList[task_points[task_index].Index].Latitude;
 	w1lon = WayPointList[task_points[task_index].Index].Longitude;
@@ -1393,8 +1393,8 @@ void GlideComputerTask::AATStats_Distance()
                         &LegToGo, NULL);
 
         DistanceBearing(Basic().Latitude , Basic().Longitude ,
-                        task_points[i].AATTargetLat,
-                        task_points[i].AATTargetLon,
+                        task_stats[i].AATTargetLat,
+                        task_stats[i].AATTargetLon,
                         &TargetLegToGo, NULL);
 
         if(task_points[i].AATType == CIRCLE)
@@ -1421,10 +1421,10 @@ void GlideComputerTask::AATStats_Distance()
 			WayPointList[task_points[i-1].Index].Longitude,
 			&LegDistance, NULL);
 
-	DistanceBearing(task_points[i].AATTargetLat,
-			task_points[i].AATTargetLon,
-			task_points[i-1].AATTargetLat,
-			task_points[i-1].AATTargetLon,
+	DistanceBearing(task_stats[i].AATTargetLat,
+			task_stats[i].AATTargetLon,
+			task_stats[i-1].AATTargetLat,
+			task_stats[i-1].AATTargetLon,
 			&TargetLegDistance, NULL);
 
 	MaxDistance += LegDistance;
@@ -1599,11 +1599,11 @@ bool GlideComputerTask::TaskAltitudeRequired(double this_maccready, double *Vfin
     w0lon = WayPointList[task_points[i+1].Index].Longitude;
 
     if (AATEnabled) {
-      w1lat = task_points[i].AATTargetLat;
-      w1lon = task_points[i].AATTargetLon;
+      w1lat = task_stats[i].AATTargetLat;
+      w1lon = task_stats[i].AATTargetLon;
       if (!isfinal) {
-        w0lat = task_points[i+1].AATTargetLat;
-        w0lon = task_points[i+1].AATTargetLon;
+        w0lat = task_stats[i+1].AATTargetLat;
+        w0lon = task_stats[i+1].AATTargetLon;
       }
     }
 

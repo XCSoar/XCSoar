@@ -92,8 +92,8 @@ static void MoveTarget(double adjust_angle) {
   }
 
   bearing = AngleLimit360(XCSoarInterface::main_window.map.GetDisplayAngle() + adjust_angle);
-  FindLatitudeLongitude (task_points[target_point].AATTargetLat,
-                         task_points[target_point].AATTargetLon,
+  FindLatitudeLongitude (task_stats[target_point].AATTargetLat,
+                         task_stats[target_point].AATTargetLon,
                          bearing,
                          distance,
                          &target_latitude,
@@ -103,8 +103,8 @@ static void MoveTarget(double adjust_angle) {
     if (XCSoarInterface::Calculated().IsInSector && (target_point == ActiveTaskPoint)) {
       // set range/radial for inside sector
       double course_bearing, target_bearing;
-      DistanceBearing(task_points[target_point-1].AATTargetLat,
-                      task_points[target_point-1].AATTargetLon,
+      DistanceBearing(task_stats[target_point-1].AATTargetLat,
+                      task_stats[target_point-1].AATTargetLon,
                       XCSoarInterface::Basic().Latitude,
                       XCSoarInterface::Basic().Longitude,
                       NULL, &course_bearing);
@@ -117,29 +117,29 @@ static void MoveTarget(double adjust_angle) {
       bearing = AngleLimit180(target_bearing-course_bearing);
 
       if (fabs(bearing)<90.0) {
-        task_points[target_point].AATTargetLat = target_latitude;
-        task_points[target_point].AATTargetLon = target_longitude;
+        task_stats[target_point].AATTargetLat = target_latitude;
+        task_stats[target_point].AATTargetLon = target_longitude;
         Radial = bearing;
-        task_points[target_point].AATTargetOffsetRadial = Radial;
+        task_stats[target_point].AATTargetOffsetRadial = Radial;
         Range =
           FindInsideAATSectorRange(XCSoarInterface::Basic().Latitude,
                                    XCSoarInterface::Basic().Longitude,
                                    target_point,
                                    target_bearing,
                                    distance);
-        task_points[target_point].AATTargetOffsetRadius = Range;
+        task_stats[target_point].AATTargetOffsetRadius = Range;
         SetTargetModified();
       }
     } else {
       // OK to change it..
-      task_points[target_point].AATTargetLat = target_latitude;
-      task_points[target_point].AATTargetLon = target_longitude;
+      task_stats[target_point].AATTargetLat = target_latitude;
+      task_stats[target_point].AATTargetLon = target_longitude;
 
       // set range/radial for outside sector
       DistanceBearing(WayPointList[task_points[target_point].Index].Latitude,
                       WayPointList[task_points[target_point].Index].Longitude,
-                      task_points[target_point].AATTargetLat,
-                      task_points[target_point].AATTargetLon,
+                      task_stats[target_point].AATTargetLat,
+                      task_stats[target_point].AATTargetLon,
                       &distance, &bearing);
       bearing = AngleLimit180(bearing-task_points[target_point].Bisector);
       if(task_points[target_point].AATType == SECTOR) {
@@ -151,8 +151,8 @@ static void MoveTarget(double adjust_angle) {
         }
         Range = distance/task_points[target_point].AATCircleRadius;
       }
-      task_points[target_point].AATTargetOffsetRadius = Range;
-      task_points[target_point].AATTargetOffsetRadial = bearing;
+      task_stats[target_point].AATTargetOffsetRadius = Range;
+      task_stats[target_point].AATTargetOffsetRadial = bearing;
       Radial = bearing;
       SetTargetModified();
     }
@@ -176,8 +176,8 @@ static void DragTarget(double target_longitude, double target_latitude) {
     if (XCSoarInterface::Calculated().IsInSector && (target_point == ActiveTaskPoint)) {
       // set range/radial for inside sector
       double course_bearing, target_bearing;
-      DistanceBearing(task_points[target_point-1].AATTargetLat,
-                      task_points[target_point-1].AATTargetLon,
+      DistanceBearing(task_stats[target_point-1].AATTargetLat,
+                      task_stats[target_point-1].AATTargetLon,
                       XCSoarInterface::Basic().Latitude,
                       XCSoarInterface::Basic().Longitude,
                       NULL, &course_bearing);
@@ -190,29 +190,29 @@ static void DragTarget(double target_longitude, double target_latitude) {
       bearing = AngleLimit180(target_bearing-course_bearing);
 
       if (fabs(bearing)<90.0) {
-        task_points[target_point].AATTargetLat = target_latitude;
-        task_points[target_point].AATTargetLon = target_longitude;
+        task_stats[target_point].AATTargetLat = target_latitude;
+        task_stats[target_point].AATTargetLon = target_longitude;
         Radial = bearing;
-        task_points[target_point].AATTargetOffsetRadial = Radial;
+        task_stats[target_point].AATTargetOffsetRadial = Radial;
         Range =
           FindInsideAATSectorRange(XCSoarInterface::Basic().Latitude,
                                    XCSoarInterface::Basic().Longitude,
                                    target_point,
                                    target_bearing,
                                    distance);
-        task_points[target_point].AATTargetOffsetRadius = Range;
+        task_stats[target_point].AATTargetOffsetRadius = Range;
 	SetTargetModified();
       }
     } else {
       // OK to change it..
-      task_points[target_point].AATTargetLat = target_latitude;
-      task_points[target_point].AATTargetLon = target_longitude;
+      task_stats[target_point].AATTargetLat = target_latitude;
+      task_stats[target_point].AATTargetLon = target_longitude;
 
       // set range/radial for outside sector
       DistanceBearing(WayPointList[task_points[target_point].Index].Latitude,
                       WayPointList[task_points[target_point].Index].Longitude,
-                      task_points[target_point].AATTargetLat,
-                      task_points[target_point].AATTargetLon,
+                      task_stats[target_point].AATTargetLat,
+                      task_stats[target_point].AATTargetLon,
                       &distance, &bearing);
       bearing = AngleLimit180(bearing-task_points[target_point].Bisector);
       if(task_points[target_point].AATType == SECTOR) {
@@ -224,8 +224,8 @@ static void DragTarget(double target_longitude, double target_latitude) {
         }
         Range = distance/task_points[target_point].AATCircleRadius;
       }
-      task_points[target_point].AATTargetOffsetRadius = Range;
-      task_points[target_point].AATTargetOffsetRadial = bearing;
+      task_stats[target_point].AATTargetOffsetRadius = Range;
+      task_stats[target_point].AATTargetOffsetRadial = bearing;
       Radial = bearing;
       SetTargetModified();
     }
@@ -321,7 +321,7 @@ static void RefreshCalculator(void) {
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpAATTargetLocked"));
   if (wp) {
-    wp->GetDataField()->Set(task_points[target_point].AATTargetLocked);
+    wp->GetDataField()->Set(task_stats[target_point].AATTargetLocked);
     wp->RefreshDisplay();
     if (nodisplay) {
       wp->SetVisible(false);
@@ -437,7 +437,7 @@ static void OnRangeData(DataField *Sender, DataField::DataAccessKind_t Mode) {
       if (target_point>=ActiveTaskPoint) {
         RangeNew = Sender->GetAsFloat()/100.0;
         if (RangeNew != Range) {
-          task_points[target_point].AATTargetOffsetRadius = RangeNew;
+          task_stats[target_point].AATTargetOffsetRadius = RangeNew;
           Range = RangeNew;
           updated = true;
         }
@@ -472,8 +472,8 @@ static void OnRadialData(DataField *Sender, DataField::DataAccessKind_t Mode) {
             RadialNew = AngleLimit180(RadialNew+180);
             // flip!
             Range = -Range;
-            task_points[target_point].AATTargetOffsetRadius =
-              -task_points[target_point].AATTargetOffsetRadius;
+            task_stats[target_point].AATTargetOffsetRadius =
+              -task_stats[target_point].AATTargetOffsetRadius;
             updated = true;
           } else {
             RadialNew = max(-90,min(90,RadialNew));
@@ -481,7 +481,7 @@ static void OnRadialData(DataField *Sender, DataField::DataAccessKind_t Mode) {
           }
         }
         if (RadialNew != Radial) {
-          task_points[target_point].AATTargetOffsetRadial = RadialNew;
+          task_stats[target_point].AATTargetOffsetRadial = RadialNew;
           Radial = RadialNew;
           updated = true;
         }
@@ -501,8 +501,8 @@ static void RefreshTargetPoint(void) {
   if (ValidTaskPoint(target_point)) {
     XCSoarInterface::SetSettingsMap().TargetPanIndex = target_point;
     XCSoarInterface::SetSettingsMap().TargetPan = true;
-    Range = task_points[target_point].AATTargetOffsetRadius;
-    Radial = task_points[target_point].AATTargetOffsetRadial;
+    Range = task_stats[target_point].AATTargetOffsetRadius;
+    Radial = task_stats[target_point].AATTargetOffsetRadial;
   } else {
     Range = 0;
     Radial = 0;
@@ -520,10 +520,10 @@ static void OnLockedData(DataField *Sender, DataField::DataAccessKind_t Mode) {
     case DataField::daChange:
       bool lockedthis = Sender->GetAsBoolean();
       if (ValidTaskPoint(target_point)) {
-        if (task_points[target_point].AATTargetLocked !=
+        if (task_stats[target_point].AATTargetLocked !=
             lockedthis) {
 	  SetTargetModified();
-          task_points[target_point].AATTargetLocked = lockedthis;
+          task_stats[target_point].AATTargetLocked = lockedthis;
         }
       }
     break;

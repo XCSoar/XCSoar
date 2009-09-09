@@ -357,12 +357,12 @@ EffectiveMacCready_internal(const NMEA_INFO *Basic, const DERIVED_INFO *Calculat
     double w0lon = WayPointList[task_points[i].Index].Longitude;
     if (AATEnabled) {
       if (ValidTaskPoint(i+1)) {
-        w1lat = task_points[i+1].AATTargetLat;
-        w1lon = task_points[i+1].AATTargetLon;
+        w1lat = task_stats[i+1].AATTargetLat;
+        w1lon = task_stats[i+1].AATTargetLon;
       }
       if (i>0) {
-        w0lat = task_points[i].AATTargetLat;
-        w0lon = task_points[i].AATTargetLon;
+        w0lat = task_stats[i].AATTargetLat;
+        w0lon = task_stats[i].AATTargetLon;
       }
     }
     DistanceBearing(w0lat,

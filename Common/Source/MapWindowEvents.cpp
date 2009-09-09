@@ -207,8 +207,8 @@ bool MapWindow::on_mouse_move(int x, int y)
 			  SettingsMap().TargetPanIndex)) {
 	// update waypoints so if we drag out of the cylinder, it
 	// will remain adjacent to the edge
-	task_points[SettingsMap().TargetPanIndex].AATTargetLat = mouseMovelat;
-	task_points[SettingsMap().TargetPanIndex].AATTargetLon = mouseMovelon;
+	task_stats[SettingsMap().TargetPanIndex].AATTargetLat = mouseMovelat;
+	task_stats[SettingsMap().TargetPanIndex].AATTargetLon = mouseMovelon;
 	TargetDrag_Latitude = mouseMovelat;
 	TargetDrag_Longitude = mouseMovelon;
 	draw_masked_bitmap(get_canvas(), MapGfx.hBmpTarget, x, y, 10, 10, true);
@@ -237,8 +237,8 @@ bool MapWindow::on_mouse_down(int x, int y)
   if (AATEnabled && SettingsMap().TargetPan) {
     if (ValidTaskPoint(SettingsMap().TargetPanIndex)) {
       POINT tscreen;
-      LonLat2Screen(task_points[SettingsMap().TargetPanIndex].AATTargetLon,
-		    task_points[SettingsMap().TargetPanIndex].AATTargetLat,
+      LonLat2Screen(task_stats[SettingsMap().TargetPanIndex].AATTargetLon,
+		    task_stats[SettingsMap().TargetPanIndex].AATTargetLat,
 		    tscreen);
       double distance = isqrt4((long)((XstartScreen-tscreen.x)
 			       *(XstartScreen-tscreen.x)+

@@ -68,13 +68,14 @@ OnStartPointPaintListItem(WindowControl * Sender, Canvas &canvas)
   if (DrawListIndex < MAXSTARTPOINTS){
     int i = DrawListIndex;
 
-    if ((task_start_points[i].Index != -1)&&(task_start_points[i].Active)) {
+    if ((task_start_points[i].Index != -1)
+	&&(task_start_stats[i].Active)) {
       _tcscpy(label, WayPointList[task_start_points[i].Index].Name);
     } else {
       int j;
       int i0=0;
       for (j=MAXSTARTPOINTS-1; j>=0; j--) {
-        if ((task_start_points[j].Index!= -1)&&(task_start_points[j].Active)) {
+        if ((task_start_points[j].Index!= -1)&&(task_start_stats[j].Active)) {
           i0=j+1;
           break;
         }

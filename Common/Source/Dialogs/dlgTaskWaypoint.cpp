@@ -401,11 +401,11 @@ static void OnSelectClicked(WindowControl * Sender){
       if (CheckDeclaration()) {
         mutexTaskData.Lock();
 	task_points[twItemIndex].Index = res;
-        task_points[twItemIndex].AATTargetOffsetRadius = 0.0;
-        task_points[twItemIndex].AATTargetOffsetRadial = 0.0;
+        task_stats[twItemIndex].AATTargetOffsetRadius = 0.0;
+        task_stats[twItemIndex].AATTargetOffsetRadial = 0.0;
         task_points[twItemIndex].AATSectorRadius = SectorRadius;
         task_points[twItemIndex].AATCircleRadius = SectorRadius;
-        task_points[twItemIndex].AATTargetLocked = false;
+        task_stats[twItemIndex].AATTargetLocked = false;
         SetTaskModified();
         mutexTaskData.Unlock();
       }

@@ -55,11 +55,19 @@ typedef struct _START_POINT
   double SectorStartLon;
   double SectorEndLat;
   double SectorEndLon;
-  POINT	 Start;
-  POINT	 End;
+} START_POINT;
+
+typedef struct _START_POINT_STATS
+{
   bool Active;
   bool InSector;
-} START_POINT;
+} START_POINT_STATS;
+
+typedef struct _START_POINT_SCREEN
+{
+  POINT	 Start;
+  POINT	 End;
+} START_POINT_SCREEN;
 
 
 typedef struct _TASK_POINT
@@ -73,8 +81,6 @@ typedef struct _TASK_POINT
   double SectorStartLon;
   double SectorEndLat;
   double SectorEndLon;
-  POINT	 Start;
-  POINT	 End;
   int	 AATType;
   double AATCircleRadius;
   double AATSectorRadius;
@@ -84,28 +90,42 @@ typedef struct _TASK_POINT
   double AATStartLon;
   double AATFinishLat;
   double AATFinishLon;
+} TASK_POINT;
+
+typedef struct _TASK_POINT_SCREEN
+{
+  POINT	 Start;
+  POINT	 End;
+  POINT	 Target;
   POINT	 AATStart;
   POINT	 AATFinish;
+  POINT IsoLine_Screen[MAXISOLINES];
+} TASK_POINT_SCREEN;
+
+
+typedef struct _TASK_POINT_STATS
+{
   double AATTargetOffsetRadius;
   double AATTargetOffsetRadial;
   double AATTargetLat;
   double AATTargetLon;
-  POINT	 Target;
   bool   AATTargetLocked;
-}TASK_POINT;
-
-typedef struct _TASKSTATS_POINT
-{
   double LengthPercent;
   double IsoLine_Latitude[MAXISOLINES];
   double IsoLine_Longitude[MAXISOLINES];
   bool IsoLine_valid[MAXISOLINES];
-  POINT IsoLine_Screen[MAXISOLINES];
-} TASKSTATS_POINT;
+} TASK_POINT_STATS;
 
-typedef TASKSTATS_POINT TaskStats_t[MAXTASKPOINTS +1];
-typedef TASK_POINT Task_t[MAXTASKPOINTS +1];
-typedef START_POINT Start_t[MAXSTARTPOINTS +1];
+
+typedef TASK_POINT          Task_t        [MAXTASKPOINTS +1];
+typedef TASK_POINT_SCREEN   TaskScreen_t  [MAXTASKPOINTS +1];
+typedef TASK_POINT_STATS    TaskStats_t   [MAXTASKPOINTS +1];
+typedef START_POINT         Start_t       [MAXSTARTPOINTS +1];
+typedef START_POINT_SCREEN  StartScreen_t [MAXSTARTPOINTS +1];
+typedef START_POINT_STATS   StartStats_t  [MAXSTARTPOINTS +1];
+
+
+//////////////
 
 void ReplaceWaypoint(int index, const SETTINGS_COMPUTER &settings_computer);
 void InsertWaypoint(int index, const SETTINGS_COMPUTER &settings_computer,

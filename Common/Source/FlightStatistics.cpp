@@ -508,11 +508,11 @@ void FlightStatistics::RenderTask(Canvas &canvas, const RECT rc, const bool olcm
             lat1 = WayPointList[task_points[i-1].Index].Latitude;
             lon1 = WayPointList[task_points[i-1].Index].Longitude;
           } else {
-            lat1 = task_points[i-1].AATTargetLat;
-            lon1 = task_points[i-1].AATTargetLon;
+            lat1 = task_stats[i-1].AATTargetLat;
+            lon1 = task_stats[i-1].AATTargetLon;
           }
-          lat2 = task_points[i].AATTargetLat;
-          lon2 = task_points[i].AATTargetLon;
+          lat2 = task_stats[i].AATTargetLat;
+          lon2 = task_stats[i].AATTargetLon;
 
           /*
 	  if (i==ActiveTaskPoint) {

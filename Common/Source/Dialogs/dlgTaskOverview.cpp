@@ -327,11 +327,11 @@ static void OnTaskListEnter(WindowControl * Sender,
       if (res != -1){
         task_points[ItemIndex].Index = res;
       }
-      task_points[ItemIndex].AATTargetOffsetRadius = 0.0;
-      task_points[ItemIndex].AATTargetOffsetRadial = 0.0;
+      task_stats[ItemIndex].AATTargetOffsetRadius = 0.0;
+      task_stats[ItemIndex].AATTargetOffsetRadial = 0.0;
       task_points[ItemIndex].AATSectorRadius = SectorRadius;
       task_points[ItemIndex].AATCircleRadius = SectorRadius;
-      task_points[ItemIndex].AATTargetLocked = false;
+      task_stats[ItemIndex].AATTargetLocked = false;
       mutexTaskData.Unlock();
 
       if (ItemIndex==0) {
