@@ -343,7 +343,7 @@ void MapWindow::DrawBearing(Canvas &canvas, int bBearingValid)
 { /* RLD bearing is invalid if GPS not connected and in non-sim mode,
    but we can still draw targets */
 
-  if (!ValidTaskPoint(ActiveTaskPoint)) {
+  if (!ValidTask()) {
     return;
   }
 
@@ -419,7 +419,7 @@ void MapWindow::DrawBearing(Canvas &canvas, int bBearingValid)
 void
 MapWindow::DrawOffTrackIndicator(Canvas &canvas)
 {
-  if ((ActiveTaskPoint<=0) || !ValidTaskPoint(ActiveTaskPoint)) {
+  if ((ActiveTaskPoint<=0) || !ValidTask()) {
     return;
   }
   if (fabs(Basic().TrackBearing-Calculated().WaypointBearing)<10) {
@@ -508,7 +508,7 @@ MapWindow::DrawOffTrackIndicator(Canvas &canvas)
 void
 MapWindow::DrawProjectedTrack(Canvas &canvas)
 {
-  if ((ActiveTaskPoint<=0) || !ValidTaskPoint(ActiveTaskPoint) || !AATEnabled) {
+  if ((ActiveTaskPoint<=0) || !ValidTask() || !AATEnabled) {
     return;
   }
   if (Calculated().Circling || TaskIsTemporary()) {

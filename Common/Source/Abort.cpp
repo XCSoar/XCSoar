@@ -257,7 +257,7 @@ GlideComputerTask::SortLandableWaypoints()
   int found_active_waypoint = -1;
   int found_home_waypoint = -1;
   for (i=0; i<MAXTASKPOINTS; i++) {
-    if (ValidTaskPoint(ActiveTaskPoint)) {
+    if (ValidTask()) {
       if (SortedLandableIndex[i] == task_points[ActiveTaskPoint].Index) {
         found_active_waypoint = i;
       }
@@ -285,7 +285,7 @@ GlideComputerTask::SortLandableWaypoints()
     ActiveTaskPoint = found_active_waypoint;
   } else {
     // if not found, keep on field or set active waypoint to closest
-    if (ValidTaskPoint(ActiveTaskPoint)){
+    if (ValidTask()){
       arrival_altitude =
         CalculateWaypointArrivalAltitude(task_points[ActiveTaskPoint].Index);
     } else {

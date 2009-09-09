@@ -327,7 +327,7 @@ EffectiveMacCready_internal(const NMEA_INFO *Basic, const DERIVED_INFO *Calculat
   if (Calculated->TaskStartTime<0) return 0;
 
 
-  if (!ValidTaskPoint(ActiveTaskPoint)
+  if (!ValidTask()
       || !ValidTaskPoint(ActiveTaskPoint-1)) return 0;
   if (Calculated->TaskDistanceToGo<=0) {
     return 0;

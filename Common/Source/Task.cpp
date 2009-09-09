@@ -1103,25 +1103,27 @@ void ClearTask(void) {
 }
 
 
-bool ValidWayPoint(int i) {
-  bool retval = true;
-  mutexTaskData.Lock();
+bool ValidWayPoint(const int i) {
+  ScopeLock protect(mutexTaskData);
   if ((!WayPointList)||(i<0)||(i>=(int)NumberOfWayPoints)) {
-    retval = false;
+    return false;
+  } else {
+    return true;
   }
-  mutexTaskData.Unlock();
-  return retval;
 }
 
-bool ValidTaskPoint(int i) {
-  bool retval = true;
-  mutexTaskData.Lock();
+bool ValidTask()  {
+  return ValidTaskPoint(ActiveTaskPoint);
+}
+
+bool ValidTaskPoint(const int i) {
+  ScopeLock protect(mutexTaskData);
   if ((i<0) || (i>= MAXTASKPOINTS))
-    retval = false;
+    return false;
   else if (!ValidWayPoint(task_points[i].Index))
-    retval = false;
-  mutexTaskData.Unlock();
-  return retval;
+    return false;
+  else 
+    return true;
 }
 
 void SaveTask(const TCHAR *szFileName)
@@ -1332,8 +1334,6 @@ double DoubleLegDistance(int taskwaypoint,
 
 
 void CalculateAATIsoLines(void) {
-  int i;
-  int awp = ActiveTaskPoint;
   double stepsize = 25.0;
 
   if(AATEnabled == FALSE)
@@ -1341,7 +1341,7 @@ void CalculateAATIsoLines(void) {
 
   mutexTaskData.Lock();
 
-  for(i=1;i<MAXTASKPOINTS;i++) {
+  for(int i=1;i<MAXTASKPOINTS;i++) {
 
     if(ValidTaskPoint(i)) {
       if (!ValidTaskPoint(i+1)) {
@@ -1349,7 +1349,7 @@ void CalculateAATIsoLines(void) {
         continue;
       }
       // JMWAAT: if locked, don't move it
-      if (i<awp) {
+      if (i<ActiveTaskPoint) {
         // only update targets for current/later waypoints
         continue;
       }
@@ -1583,7 +1583,7 @@ bool ActiveIsFinalWaypoint() {
 bool IsFinalWaypoint(void) {
   bool retval;
   mutexTaskData.Lock();
-  if (ValidTaskPoint(ActiveTaskPoint) && (task_points[ActiveTaskPoint+1].Index >= 0)) {
+  if (ValidTask() && (task_points[ActiveTaskPoint+1].Index >= 0)) {
     retval = false;
   } else {
     retval = true;

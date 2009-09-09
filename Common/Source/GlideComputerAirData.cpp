@@ -646,7 +646,7 @@ GlideComputerAirData::SpeedToFly(const double mc_setting,
 
     double VOptnew;
 
-    if (!ValidTaskPoint(ActiveTaskPoint) || !Calculated().FinalGlide) {
+    if (!ValidTask() || !Calculated().FinalGlide) {
       // calculate speed as if cruising, wind has no effect on opt speed
       GlidePolar::MacCreadyAltitude(delta_mc,
                                     100.0, // dummy value

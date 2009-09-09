@@ -189,7 +189,7 @@ public:
 protected:
 
   bool CheckCondition(const GlideComputer& cmp) {
-    if (!cmp.Calculated().Flying || !ValidTaskPoint(ActiveTaskPoint)) {
+    if (!cmp.Calculated().Flying || !ValidTask()) {
       return false;
     }
 
@@ -253,7 +253,7 @@ protected:
   SunEphemeris sun;
 
   bool CheckCondition(const GlideComputer& cmp) {
-    if (!ValidTaskPoint(ActiveTaskPoint) || !cmp.Calculated().Flying) {
+    if (!ValidTask() || !cmp.Calculated().Flying) {
       return false;
     }
 
@@ -299,12 +299,12 @@ public:
 protected:
 
   bool CheckCondition(const GlideComputer& cmp) {
-    if (!AATEnabled || !ValidTaskPoint(ActiveTaskPoint) || TaskIsTemporary()
+    if (!AATEnabled || !ValidTask() || TaskIsTemporary()
         || !(cmp.Calculated().ValidStart && !cmp.Calculated().ValidFinish)
         || !cmp.Calculated().Flying) {
       return false;
     }
-    bool OnFinalWaypoint = !ValidTaskPoint(ActiveTaskPoint);
+    bool OnFinalWaypoint = !ValidTask();
     if (OnFinalWaypoint) {
       // can't do much about it now, so don't give a warning
       return false;
@@ -337,7 +337,7 @@ public:
 protected:
 
   bool CheckCondition(const GlideComputer& cmp) {
-    if (!ValidTaskPoint(ActiveTaskPoint) || !cmp.Calculated().Flying
+    if (!ValidTask() || !cmp.Calculated().Flying
         || (ActiveTaskPoint>0) || !ValidTaskPoint(ActiveTaskPoint+1)) {
       return false;
     }
@@ -382,7 +382,7 @@ public:
 protected:
 
   bool CheckCondition(const GlideComputer& cmp) {
-    if (!cmp.Calculated().Flying || !ValidTaskPoint(ActiveTaskPoint)) {
+    if (!cmp.Calculated().Flying || !ValidTask()) {
       return false;
     }
 

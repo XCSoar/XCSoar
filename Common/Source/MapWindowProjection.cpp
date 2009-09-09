@@ -610,12 +610,12 @@ void MapWindowProjection::UpdateMapScale(const NMEA_INFO &DrawInfo,
   mutexTaskData.Lock();  // protect from extrnal task changes
   // if we aren't looking at a waypoint, see if we are now
   if (AutoMapScaleWaypointIndex == -1) {
-    if (ValidTaskPoint(ActiveTaskPoint)) {
+    if (ValidTask()) {
       AutoMapScaleWaypointIndex = task_points[ActiveTaskPoint].Index;
     }
   }
   // if there is an active waypoint
-  if (ValidTaskPoint(ActiveTaskPoint)) {
+  if (ValidTask()) {
     // if the current zoom focused waypoint has changed...
     if (AutoMapScaleWaypointIndex != task_points[ActiveTaskPoint].Index) {
       AutoMapScaleWaypointIndex = task_points[ActiveTaskPoint].Index;

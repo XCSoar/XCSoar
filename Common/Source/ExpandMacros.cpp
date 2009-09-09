@@ -205,7 +205,7 @@ bool ButtonLabel::ExpandMacros(const TCHAR *In,
     ReplaceInString(OutBuffer, TEXT("$(CheckTaskResumed)"), TEXT(""), Size);
   }
   if (_tcsstr(OutBuffer, TEXT("$(CheckTask)"))) {
-    if (!ValidTaskPoint(ActiveTaskPoint)) {
+    if (!ValidTask()) {
       invalid = true;
     }
     ReplaceInString(OutBuffer, TEXT("$(CheckTask)"), TEXT(""), Size);
@@ -229,7 +229,7 @@ bool ButtonLabel::ExpandMacros(const TCHAR *In,
     ReplaceInString(OutBuffer, TEXT("$(CheckTerrain)"), TEXT(""), Size);
   }
   if (_tcsstr(OutBuffer, TEXT("$(CheckAutoMc)"))) {
-    if (!ValidTaskPoint(ActiveTaskPoint)
+    if (!ValidTask()
         && ((SettingsComputer().AutoMcMode==0)
 	    || (SettingsComputer().AutoMcMode==2))) {
       invalid = true;

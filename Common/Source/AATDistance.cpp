@@ -406,7 +406,7 @@ double AATDistance::DistanceCovered_internal(double longitude,
                                              bool insector,
 					     const double aatclosedistance) {
   double achieved;
-  if (!ValidTaskPoint(ActiveTaskPoint) || (ActiveTaskPoint==0)) {
+  if (!ValidTask() || (ActiveTaskPoint==0)) {
     //   max_achieved_distance = 0;
     return 0.0;
   }

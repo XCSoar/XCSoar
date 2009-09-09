@@ -137,7 +137,7 @@ void FlightStatistics::RenderSpeed(Canvas &canvas, const RECT rc)
   ScopeLock protect(mutexTaskData);
 
   if ((Task_Speed.sum_n<2)
-      || !ValidTaskPoint(ActiveTaskPoint)) {
+      || !ValidTask()) {
     chart.DrawNoData();
     return;
   }
@@ -1090,7 +1090,7 @@ FlightStatistics::CaptionTempTrace(TCHAR *sTmp)
 void
 FlightStatistics::CaptionTask(TCHAR *sTmp)
 {
-  if (!ValidTaskPoint(ActiveTaskPoint)) {
+  if (!ValidTask()) {
     _stprintf(sTmp, gettext(TEXT("No task")));
   } else {
     TCHAR timetext1[100];

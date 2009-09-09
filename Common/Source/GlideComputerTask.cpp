@@ -151,7 +151,7 @@ void GlideComputerTask::DistanceToNext()
 {
   ScopeLock protect(mutexTaskData);
 
-  if(ValidTaskPoint(ActiveTaskPoint))
+  if(ValidTask())
     {
       double w1lat, w1lon;
       double w0lat, w0lon;
@@ -217,7 +217,7 @@ void GlideComputerTask::AltitudeRequired(const double this_maccready,
 					 const double cruise_efficiency)
 {
   ScopeLock protect(mutexTaskData);
-  if(ValidTaskPoint(ActiveTaskPoint))
+  if(ValidTask())
     {
       double wp_alt = FAIFinishHeight(ActiveTaskPoint);
       double height_above_wp =
@@ -572,7 +572,7 @@ bool GlideComputerTask::InStartSector(bool *CrossedStart)
   bool retval=false;
 
   if (!Calculated().Flying ||
-      !ValidTaskPoint(ActiveTaskPoint) ||
+      !ValidTask() ||
       !ValidTaskPoint(0))
     return false;
 
@@ -935,7 +935,7 @@ void GlideComputerTask::TaskStatistics(const double this_maccready,
 				       const double cruise_efficiency)
 {
 
-  if (!ValidTaskPoint(ActiveTaskPoint) ||
+  if (!ValidTask() ||
       ((ActiveTaskPoint>0) && !ValidTaskPoint(ActiveTaskPoint-1))) {
 
     SetCalculated().LegSpeed = 0;
@@ -1359,7 +1359,7 @@ void GlideComputerTask::AATStats_Time() {
 				  - aat_tasktime_elapsed);
   }
 
-  if(ValidTaskPoint(ActiveTaskPoint) && (Calculated().AATTimeToGo>0)) {
+  if(ValidTask() && (Calculated().AATTimeToGo>0)) {
     SetCalculated().AATMaxSpeed =
       Calculated().AATMaxDistance / Calculated().AATTimeToGo;
     SetCalculated().AATMinSpeed =
@@ -1380,7 +1380,7 @@ void GlideComputerTask::AATStats_Distance()
   MaxDistance = 0; MinDistance = 0; TargetDistance = 0;
   // Calculate Task Distances
 
-  if(ValidTaskPoint(ActiveTaskPoint))
+  if(ValidTask())
     {
       i=ActiveTaskPoint;
 
@@ -1501,7 +1501,7 @@ void GlideComputerTask::CheckTransitionFinalGlide() {
   // update final glide mode status
   if (((ActiveTaskPoint == FinalWayPoint)
        ||(ForceFinalGlide))
-      && (ValidTaskPoint(ActiveTaskPoint))) {
+      && (ValidTask())) {
 
     if (Calculated().FinalGlide == 0)
       InputEvents::processGlideComputer(GCE_FLIGHTMODE_FINALGLIDE);
@@ -1698,7 +1698,7 @@ void GlideComputerTask::TaskSpeed(const double this_maccready,
   int ifinal;
   double TotalTime=0, TotalDistance=0, Vfinal=0;
 
-  if (!ValidTaskPoint(ActiveTaskPoint)) return;
+  if (!ValidTask()) return;
   if (TaskIsTemporary()) return;
   if (Calculated().ValidFinish) return;
   if (!Calculated().Flying) return;
@@ -2015,7 +2015,7 @@ GlideComputerTask::DoAutoMacCready(double mc_setting)
     first_mc = true;
   }
 
-  if (!ValidTaskPoint(ActiveTaskPoint)) {
+  if (!ValidTask()) {
     if (Calculated().AdjustedAverageThermal>0) {
       mc_new = Calculated().AdjustedAverageThermal;
     }

@@ -301,7 +301,7 @@ static void OnTeamCodeClicked(WindowControl * Sender){
 }
 
 
-static void OnInserInTaskClicked(WindowControl * Sender){
+static void OnInsertInTaskClicked(WindowControl * Sender){
 	(void)Sender;
   mutexTaskData.Lock();
   InsertWaypoint(SelectedWaypoint,XCSoarInterface::SettingsComputer());
@@ -573,7 +573,7 @@ void dlgWayPointDetailsShowModal(void){
 
   wb = ((WndButton *)wf->FindByName(TEXT("cmdInserInTask")));
   if (wb)
-    wb->SetOnClickNotify(OnInserInTaskClicked);
+    wb->SetOnClickNotify(OnInsertInTaskClicked);
 
   wb = ((WndButton *)wf->FindByName(TEXT("cmdAppendInTask")));
   if (wb)

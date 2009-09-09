@@ -516,7 +516,7 @@ void MapWindow::DrawFinalGlide(Canvas &canvas, const RECT rc)
   __try{
   #endif
 
-    if (ValidTaskPoint(ActiveTaskPoint)){
+    if (ValidTask()){
     // if (ActiveTaskPoint >= 0) {
 
       const int y0 = ( (rc.bottom - rc.top )/2)+rc.top;
@@ -774,7 +774,7 @@ void MapWindow::DrawBestCruiseTrack(Canvas &canvas)
   if (ActiveTaskPoint<0) {
     return; // nothing to draw..
   }
-  if (!ValidTaskPoint(ActiveTaskPoint)) {
+  if (!ValidTask()) {
     return;
   }
 

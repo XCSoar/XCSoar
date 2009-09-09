@@ -732,7 +732,7 @@ void InputEvents::eventWaypointDetails(const TCHAR *misc) {
 
   if (_tcscmp(misc, TEXT("current")) == 0) {
     mutexTaskData.Lock();
-    if (ValidTaskPoint(ActiveTaskPoint)) {
+    if (ValidTask()) {
       SelectedWaypoint = task_points[ActiveTaskPoint].Index;
     }
     mutexTaskData.Unlock();

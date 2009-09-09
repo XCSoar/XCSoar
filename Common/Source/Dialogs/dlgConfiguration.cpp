@@ -3524,7 +3524,8 @@ void dlgConfigurationShowModal(void){
     }
   }
 
-  changed |= SetValueRegistryOnChange(wf, TEXT("prpTerrainRamp"),
+  changed |= SetValueRegistryOnChange(wf, 
+				      TEXT("prpTerrainRamp"),
 				      szRegistryTerrainRamp,
 				      XCSoarInterface::SetSettingsMap().TerrainRamp);
 

@@ -146,8 +146,10 @@ void SaveTask(const TCHAR *FileName);
 void DefaultTask(const SETTINGS_COMPUTER &settings);
 void ClearTask(void);
 void RotateStartPoints(const SETTINGS_COMPUTER &settings_computer);
-bool ValidTaskPoint(int i);
-bool ValidWayPoint(int i);
+
+bool ValidTaskPoint(const int i);
+bool ValidTask();
+bool ValidWayPoint(const int i);
 
 double FindInsideAATSectorRange(double latitude,
                                 double longitude,
