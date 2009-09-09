@@ -353,7 +353,7 @@ void WindowControl::FilterAdvanced(bool advanced){
   }
 }
 
-WindowControl *WindowControl::FindByName(const TCHAR *Name){
+WindowControl *WindowControl::FindByName(const TCHAR *Name) {
   if (_tcscmp(mName, Name)==0)
     return(this);
   for (int i=0; i<mClientCount; i++){
