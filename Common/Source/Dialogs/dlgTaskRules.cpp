@@ -45,6 +45,7 @@ Copyright_License {
 #include "Math/FastMath.h"
 #include "DataField/Enum.hpp"
 #include "MainWindow.hpp"
+#include "Dialogs/dlgHelpers.hpp"
 
 static bool changed = false;
 static WndForm *wf=NULL;
@@ -158,41 +159,17 @@ bool dlgTaskRules(void){
 
   int ival;
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpFAIFinishHeight"));
-  if (wp) {
-    if (EnableFAIFinishHeight != (wp->GetDataField()->GetAsInteger()>0)) {
-      EnableFAIFinishHeight = (wp->GetDataField()->GetAsInteger()>0);
-      SetToRegistry(szRegistryFAIFinishHeight, EnableFAIFinishHeight);
-      changed = true;
-    }
-  }
-
-  wp = (WndProperty*)wf->FindByName(TEXT("prpStartHeightRef"));
-  if (wp) {
-    if (StartHeightRef != wp->GetDataField()->GetAsInteger()) {
-      StartHeightRef = wp->GetDataField()->GetAsInteger();
-      SetToRegistry(szRegistryStartHeightRef, StartHeightRef);
-      changed = true;
-    }
-  }
-
-  wp = (WndProperty*)wf->FindByName(TEXT("prpOLCRules"));
-  if (wp) {
-    if ((int)XCSoarInterface::SettingsComputer().OLCRules != wp->GetDataField()->GetAsInteger()) {
-      XCSoarInterface::SetSettingsComputer().OLCRules = wp->GetDataField()->GetAsInteger();
-      SetToRegistry(szRegistryOLCRules, XCSoarInterface::SettingsComputer().OLCRules);
-      changed = true;
-    }
-  }
-
-  wp = (WndProperty*)wf->FindByName(TEXT("prpOLCEnabled"));
-  if (wp) {
-    if (XCSoarInterface::SettingsComputer().EnableOLC != (wp->GetDataField()->GetAsInteger()==1)) {
-      XCSoarInterface::SetSettingsComputer().EnableOLC = (wp->GetDataField()->GetAsInteger()==1);
-      // note, not set to registry (why?)
-      changed = true;
-    }
-  }
+  changed |= SetValueRegistryOnChange(wf, TEXT("prpFAIFinishHeight"),
+				      szRegistryFAIFinishHeight,
+				      EnableFAIFinishHeight);
+  changed |= SetValueRegistryOnChange(wf, TEXT("prpStartHeightRef"),
+				      szRegistryStartHeightRef,
+				      StartHeightRef);
+  changed |= SetValueRegistryOnChange(wf, TEXT("prpOLCRules"),
+				      szRegistryOLCRules,
+				      XCSoarInterface::SetSettingsComputer().OLCRules);
+  changed |= SetValueOnChange(wf, TEXT("prpOLCEnabled"),
+			      XCSoarInterface::SetSettingsComputer().EnableOLC);
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpFinishMinHeight"));
   if (wp) {

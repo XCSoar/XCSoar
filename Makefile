@@ -413,6 +413,7 @@ DLGS	:=\
 	$(SRC)/Dialogs/dlgTextEntry.o \
 	$(SRC)/Dialogs/dlgTextEntry_Keyboard.o \
 	$(SRC)/Dialogs/dlgTools.o \
+	$(SRC)/Dialogs/dlgHelpers.o \
 	$(SRC)/Dialogs/dlgVegaDemo.o \
 	$(SRC)/Dialogs/dlgVoice.o \
 	$(SRC)/Dialogs/dlgWayPointDetails.o \

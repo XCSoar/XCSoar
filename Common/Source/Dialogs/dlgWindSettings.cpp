@@ -43,6 +43,7 @@ Copyright_License {
 #include "SettingsComputer.hpp"
 #include "Units.hpp"
 #include "Dialogs/dlgTools.h"
+#include "Dialogs/dlgHelpers.hpp"
 #include "Registry.hpp"
 #include "DataField/Enum.hpp"
 #include "Math/Units.h"
@@ -170,20 +171,10 @@ void dlgWindSettingsShowModal(void){
 
     wf->ShowModal();
 
-    wp = (WndProperty*)wf->FindByName(TEXT("prpAutoWind"));
-    if (wp) {
-      if (XCSoarInterface::SettingsComputer().AutoWindMode != wp->GetDataField()->GetAsInteger()) {
-	XCSoarInterface::SetSettingsComputer().AutoWindMode = wp->GetDataField()->GetAsInteger();
-	SetToRegistry(szRegistryAutoWind, XCSoarInterface::SettingsComputer().AutoWindMode);
-      }
-    }
-    wp = (WndProperty*)wf->FindByName(TEXT("prpTrailDrift"));
-    if (wp) {
-      if (XCSoarInterface::SettingsMap().EnableTrailDrift != wp->GetDataField()->GetAsBoolean()) {
-        XCSoarInterface::SetSettingsMap().EnableTrailDrift = wp->GetDataField()->GetAsBoolean();
-        // SetToRegistry(szRegistryTrailDrift, EnableTrailDrift);
-      }
-    }
+    SetValueRegistryOnChange(wf, TEXT("prpAutoWind"), szRegistryAutoWind,
+			     XCSoarInterface::SetSettingsComputer().AutoWindMode);
+    SetValueOnChange(wf, TEXT("prpTrailDrift"), 
+		     XCSoarInterface::SetSettingsMap().EnableTrailDrift);
 
     delete wf;
   }
