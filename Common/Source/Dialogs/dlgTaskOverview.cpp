@@ -147,33 +147,33 @@ OnTaskPaintListItem(WindowControl *Sender, Canvas &canvas)
   if (DrawListIndex < n){
     int i = LowLimit + DrawListIndex;
 
-    if (Task[i].Index>=0) {
+    if (task_points[i].Index>=0) {
       if (InfoBoxLayout::landscape &&
           AATEnabled && ValidTaskPoint(i+1) && (i>0)) {
-        if (Task[i].AATType==0) {
+        if (task_points[i].AATType==0) {
           _stprintf(sTmp, TEXT("%s %.1f"),
-                    WayPointList[Task[i].Index].Name,
-                    Task[i].AATCircleRadius*DISTANCEMODIFY);
+                    WayPointList[task_points[i].Index].Name,
+                    task_points[i].AATCircleRadius*DISTANCEMODIFY);
         } else {
           _stprintf(sTmp, TEXT("%s %.1f"),
-                    WayPointList[Task[i].Index].Name,
-                    Task[i].AATSectorRadius*DISTANCEMODIFY);
+                    WayPointList[task_points[i].Index].Name,
+                    task_points[i].AATSectorRadius*DISTANCEMODIFY);
         }
       } else {
         _stprintf(sTmp, TEXT("%s"),
-                  WayPointList[Task[i].Index].Name);
+                  WayPointList[task_points[i].Index].Name);
       }
 
       canvas.text_clipped(2 * InfoBoxLayout::scale, 2 * InfoBoxLayout::scale,
                           p1 - 4 * InfoBoxLayout::scale, sTmp);
 
       _stprintf(sTmp, TEXT("%.0f %s"),
-		Task[i].Leg*DISTANCEMODIFY,
+		task_points[i].Leg*DISTANCEMODIFY,
 		Units::GetDistanceName());
       canvas.text_opaque(p1 + w1 - canvas.text_width(sTmp),
                          2 * InfoBoxLayout::scale, sTmp);
 
-      _stprintf(sTmp, TEXT("%d")TEXT(DEG),  iround(Task[i].InBound));
+      _stprintf(sTmp, TEXT("%d")TEXT(DEG),  iround(task_points[i].InBound));
       canvas.text_opaque(p2 + w2 - canvas.text_width(sTmp),
                          2 * InfoBoxLayout::scale, sTmp);
     }
@@ -234,8 +234,8 @@ static void OverviewRefreshTask(void) {
   UpLimit = 0;
   lengthtotal = 0;
   for (i=0; i<MAXTASKPOINTS; i++) {
-    if (Task[i].Index != -1) {
-      lengthtotal += Task[i].Leg;
+    if (task_points[i].Index != -1) {
+      lengthtotal += task_points[i].Leg;
       UpLimit = i+1;
     }
   }
@@ -244,8 +244,8 @@ static void OverviewRefreshTask(void) {
   fai_ok = true;
   if (lengthtotal>0) {
     for (i=0; i<MAXTASKPOINTS; i++) {
-      if (Task[i].Index != -1) {
-	double lrat = Task[i].Leg/lengthtotal;
+      if (task_points[i].Index != -1) {
+	double lrat = task_points[i].Leg/lengthtotal;
 	if ((lrat>0.45)||(lrat<0.10)) {
 	  fai_ok = false;
 	}
@@ -311,12 +311,12 @@ static void OnTaskListEnter(WindowControl * Sender,
 
       mutexTaskData.Lock();
       if (ItemIndex>0) {
-	Task[ItemIndex].Index = Task[0].Index;
+	task_points[ItemIndex].Index = task_points[0].Index;
       } else {
 	if (ValidWayPoint(HomeWaypoint)) {
-	  Task[ItemIndex].Index = HomeWaypoint;
+	  task_points[ItemIndex].Index = HomeWaypoint;
 	} else {
-	  Task[ItemIndex].Index = -1;
+	  task_points[ItemIndex].Index = -1;
 	}
       }
       mutexTaskData.Unlock();
@@ -325,13 +325,13 @@ static void OnTaskListEnter(WindowControl * Sender,
       res = dlgWayPointSelect();
       mutexTaskData.Lock();
       if (res != -1){
-        Task[ItemIndex].Index = res;
+        task_points[ItemIndex].Index = res;
       }
-      Task[ItemIndex].AATTargetOffsetRadius = 0.0;
-      Task[ItemIndex].AATTargetOffsetRadial = 0.0;
-      Task[ItemIndex].AATSectorRadius = SectorRadius;
-      Task[ItemIndex].AATCircleRadius = SectorRadius;
-      Task[ItemIndex].AATTargetLocked = false;
+      task_points[ItemIndex].AATTargetOffsetRadius = 0.0;
+      task_points[ItemIndex].AATTargetOffsetRadial = 0.0;
+      task_points[ItemIndex].AATSectorRadius = SectorRadius;
+      task_points[ItemIndex].AATCircleRadius = SectorRadius;
+      task_points[ItemIndex].AATTargetLocked = false;
       mutexTaskData.Unlock();
 
       if (ItemIndex==0) {

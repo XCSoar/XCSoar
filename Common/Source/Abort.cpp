@@ -258,7 +258,7 @@ GlideComputerTask::SortLandableWaypoints()
   int found_home_waypoint = -1;
   for (i=0; i<MAXTASKPOINTS; i++) {
     if (ValidTaskPoint(ActiveWayPoint)) {
-      if (SortedLandableIndex[i] == Task[ActiveWayPoint].Index) {
+      if (SortedLandableIndex[i] == task_points[ActiveWayPoint].Index) {
         found_active_waypoint = i;
       }
     }
@@ -285,7 +285,7 @@ GlideComputerTask::SortLandableWaypoints()
     // if not found, keep on field or set active waypoint to closest
     if (ValidTaskPoint(ActiveWayPoint)){
       arrival_altitude =
-        CalculateWaypointArrivalAltitude(Task[ActiveWayPoint].Index);
+        CalculateWaypointArrivalAltitude(task_points[ActiveWayPoint].Index);
     } else {
       arrival_altitude = 0;
     }
@@ -304,7 +304,7 @@ GlideComputerTask::SortLandableWaypoints()
                                                 // list)
             break;
         }
-        SortedLandableIndex[i] = Task[ActiveWayPoint].Index;
+        SortedLandableIndex[i] = task_points[ActiveWayPoint].Index;
         ActiveWayPoint = i;
       }
     }
@@ -318,22 +318,22 @@ GlideComputerTask::SortLandableWaypoints()
 
   int last_closest_waypoint=0;
   if (new_closest_waypoint) {
-    last_closest_waypoint = Task[0].Index;
+    last_closest_waypoint = task_points[0].Index;
   }
 
   for (i=0; i<MAXTASKPOINTS; i++){
-    Task[i].Index = SortedLandableIndex[i];
+    task_points[i].Index = SortedLandableIndex[i];
     if (ValidTaskPoint(i)) {
-      WayPointList[Task[i].Index].InTask = true;
+      WayPointList[task_points[i].Index].InTask = true;
     }
   }
 
   if (new_closest_waypoint) {
-    if ((Task[0].Index != last_closest_waypoint) && ValidTaskPoint(0)) {
+    if ((task_points[0].Index != last_closest_waypoint) && ValidTaskPoint(0)) {
       double last_wp_distance= 10000.0;
       if (last_closest_waypoint>=0) {
-        DistanceBearing(WayPointList[Task[0].Index].Latitude,
-                        WayPointList[Task[0].Index].Longitude,
+        DistanceBearing(WayPointList[task_points[0].Index].Latitude,
+                        WayPointList[task_points[0].Index].Longitude,
                         WayPointList[last_closest_waypoint].Latitude,
                         WayPointList[last_closest_waypoint].Longitude,
                         &last_wp_distance, NULL);

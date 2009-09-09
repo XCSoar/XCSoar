@@ -139,7 +139,7 @@ static void OnClearClicked(WindowControl * Sender){
     StartPoints[i].Index = -1;
     StartPoints[i].Active = false;
   }
-  StartPoints[0].Index = Task[0].Index;
+  StartPoints[0].Index = task_points[0].Index;
   StartPoints[0].Active = true;
   changed = true;
   mutexTaskData.Unlock();
@@ -158,11 +158,11 @@ static CallBackTableEntry_t CallBackTable[]={
 
 static void CheckStartPointInTask(void) {
   mutexTaskData.Lock();
-  if (Task[0].Index != -1) {
+  if (task_points[0].Index != -1) {
     // ensure current start point is in task
     int index_last = 0;
     for (int i=MAXSTARTPOINTS-1; i>=0; i--) {
-      if (StartPoints[i].Index == Task[0].Index) {
+      if (StartPoints[i].Index == task_points[0].Index) {
 	index_last = -1;
 	break;
       }
@@ -175,7 +175,7 @@ static void CheckStartPointInTask(void) {
 	index_last = min(MAXSTARTPOINTS-1,index_last+1);
       }
       // it wasn't, so make sure it's added now
-      StartPoints[index_last].Index = Task[0].Index;
+      StartPoints[index_last].Index = task_points[0].Index;
       StartPoints[index_last].Active = true;
     }
   }

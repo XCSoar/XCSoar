@@ -94,14 +94,14 @@ const TCHAR* getTaskFilename() {
 }
 
 void ResetTaskWaypoint(int j) {
-  Task[j].Index = -1;
-  Task[j].AATTargetOffsetRadius = 0.0;
-  Task[j].AATTargetOffsetRadial = 0.0;
-  Task[j].AATTargetLocked = false;
-  Task[j].AATSectorRadius = SectorRadius;
-  Task[j].AATCircleRadius = SectorRadius;
-  Task[j].AATStartRadial = 0;
-  Task[j].AATFinishRadial = 360;
+  task_points[j].Index = -1;
+  task_points[j].AATTargetOffsetRadius = 0.0;
+  task_points[j].AATTargetOffsetRadial = 0.0;
+  task_points[j].AATTargetLocked = false;
+  task_points[j].AATSectorRadius = SectorRadius;
+  task_points[j].AATCircleRadius = SectorRadius;
+  task_points[j].AATStartRadial = 0;
+  task_points[j].AATFinishRadial = 360;
 }
 
 
@@ -133,9 +133,9 @@ void FlyDirectTo(int index) {
   }
   */
 
-  Task[0].Index = index;
+  task_points[0].Index = index;
   for (int i=1; i<=MAXTASKPOINTS; i++) {
-    Task[i].Index = -1;
+    task_points[i].Index = -1;
   }
   ActiveWayPoint = 0;
   RefreshTask();
@@ -157,11 +157,11 @@ void SwapWaypoint(int index) {
   if (index+1>= MAXTASKPOINTS-1) {
     return;
   }
-  if ((Task[index].Index != -1)&&(Task[index+1].Index != -1)) {
+  if ((task_points[index].Index != -1)&&(task_points[index+1].Index != -1)) {
     TASK_POINT tmpPoint;
-    tmpPoint = Task[index];
-    Task[index] = Task[index+1];
-    Task[index+1] = tmpPoint;
+    tmpPoint = task_points[index];
+    task_points[index] = task_points[index+1];
+    task_points[index+1] = tmpPoint;
   }
   RefreshTask();
   mutexTaskData.Unlock();
@@ -184,7 +184,7 @@ void InsertWaypoint(int index, bool append) {
   if ((ActiveWayPoint<0) || !ValidTaskPoint(0)) {
     ActiveWayPoint = 0;
     ResetTaskWaypoint(ActiveWayPoint);
-    Task[ActiveWayPoint].Index = index;
+    task_points[ActiveWayPoint].Index = index;
 
     mutexTaskData.Unlock();
     return;
@@ -204,9 +204,9 @@ void InsertWaypoint(int index, bool append) {
   int indexInsert = max(ActiveWayPoint,0);
   if (append) {
     for (i=indexInsert; i<MAXTASKPOINTS-2; i++) {
-      if (Task[i+1].Index<0) {
+      if (task_points[i+1].Index<0) {
 	ResetTaskWaypoint(i+1);
-	Task[i+1].Index = index;
+	task_points[i+1].Index = index;
 	break;
       }
     }
@@ -214,11 +214,11 @@ void InsertWaypoint(int index, bool append) {
     // Shuffle ActiveWaypoint and all later task points
     // to the right by one position
     for (i=MAXTASKPOINTS-1; i>indexInsert; i--) {
-      Task[i] = Task[i-1];
+      task_points[i] = task_points[i-1];
     }
     // Insert new point and update task details
     ResetTaskWaypoint(indexInsert);
-    Task[indexInsert].Index = index;
+    task_points[indexInsert].Index = index;
   }
 
   RefreshTask();
@@ -231,9 +231,9 @@ void DefaultTask(void) {
   mutexTaskData.Lock();
   TaskModified = true;
   TargetModified = true;
-  if ((Task[0].Index == -1)||(ActiveWayPoint==-1)) {
+  if ((task_points[0].Index == -1)||(ActiveWayPoint==-1)) {
     if (HomeWaypoint != -1) {
-      Task[0].Index = HomeWaypoint;
+      task_points[0].Index = HomeWaypoint;
       ActiveWayPoint = 0;
     }
   }
@@ -244,7 +244,7 @@ void DefaultTask(void) {
 
 // RemoveTaskpoint removes a single waypoint
 // from the current task.  index specifies an entry
-// in the Task[] array - NOT a waypoint index.
+// in the task_points[] array - NOT a waypoint index.
 //
 // If you call this function, you MUST deal with
 // correctly setting ActiveWayPoint yourself!
@@ -262,7 +262,7 @@ void RemoveTaskPoint(int index) {
   TaskModified = true;
   TargetModified = true;
 
-  if (Task[index].Index == -1) {
+  if (task_points[index].Index == -1) {
     mutexTaskData.Unlock();
     return; // There's no WP at this location
   }
@@ -270,10 +270,10 @@ void RemoveTaskPoint(int index) {
   // Shuffle all later taskpoints to the left to
   // fill the gap
   for (i=index; i<MAXTASKPOINTS-1; ++i) {
-    Task[i] = Task[i+1];
+    task_points[i] = task_points[i+1];
   }
-  Task[MAXTASKPOINTS-1].Index = -1;
-  Task[MAXTASKPOINTS-1].AATTargetOffsetRadius= 0.0;
+  task_points[MAXTASKPOINTS-1].Index = -1;
+  task_points[MAXTASKPOINTS-1].AATTargetOffsetRadius= 0.0;
 
   RefreshTask();
   mutexTaskData.Unlock();
@@ -310,7 +310,7 @@ void RemoveWaypoint(int index) {
 
   // Search forward first
   i = ActiveWayPoint;
-  while ((i < MAXTASKPOINTS) && (Task[i].Index != index)) {
+  while ((i < MAXTASKPOINTS) && (task_points[i].Index != index)) {
     ++i;
   }
 
@@ -318,7 +318,7 @@ void RemoveWaypoint(int index) {
     // Found WP, so remove it
     RemoveTaskPoint(i);
 
-    if (Task[ActiveWayPoint].Index == -1) {
+    if (task_points[ActiveWayPoint].Index == -1) {
       // We've just removed the last task point and it was
       // active at the time
       ActiveWayPoint--;
@@ -330,7 +330,7 @@ void RemoveWaypoint(int index) {
     i = ActiveWayPoint;
     do {
       --i;
-    } while (i >= 0 && Task[i].Index != index);
+    } while (i >= 0 && task_points[i].Index != index);
 
     if (i >= 0) {
       // Found WP, so remove it
@@ -349,7 +349,7 @@ void RemoveWaypoint(int index) {
 
       if (ret == IDYES) {
         RemoveTaskPoint(ActiveWayPoint);
-        if (Task[ActiveWayPoint].Index == -1) {
+        if (task_points[ActiveWayPoint].Index == -1) {
           // Active WayPoint was last in the list so is currently
           // invalid.
           ActiveWayPoint--;
@@ -374,14 +374,14 @@ void ReplaceWaypoint(int index) {
   // ARH 26/06/05 Fixed array out-of-bounds bug
   if (ActiveWayPoint>=0) {
     ResetTaskWaypoint(ActiveWayPoint);
-    Task[ActiveWayPoint].Index = index;
+    task_points[ActiveWayPoint].Index = index;
   } else {
 
     // Insert a new waypoint since there's
     // nothing to replace
     ActiveWayPoint=0;
     ResetTaskWaypoint(ActiveWayPoint);
-    Task[ActiveWayPoint].Index = index;
+    task_points[ActiveWayPoint].Index = index;
   }
   RefreshTask();
   mutexTaskData.Unlock();
@@ -394,7 +394,7 @@ void RefreshTask() {
   int i;
 
   mutexTaskData.Lock();
-  if ((ActiveWayPoint<0)&&(Task[0].Index>=0)) {
+  if ((ActiveWayPoint<0)&&(task_points[0].Index>=0)) {
     ActiveWayPoint=0;
   }
 
@@ -402,23 +402,23 @@ void RefreshTask() {
   // as the order of other taskpoints hasn't changed
   for (i=0; i<MAXTASKPOINTS; i++) {
     if (!ValidTaskPoint(i)) {
-      Task[i].Index = -1;
+      task_points[i].Index = -1;
     } else {
       RefreshTaskWaypoint(i);
-      lengthtotal += Task[i].Leg;
+      lengthtotal += task_points[i].Leg;
     }
   }
   if (lengthtotal>0) {
     for (i=0; i<MAXTASKPOINTS; i++) {
       if (ValidTaskPoint(i)) {
 	RefreshTaskWaypoint(i);
-	TaskStats[i].LengthPercent = Task[i].Leg/lengthtotal;
+	TaskStats[i].LengthPercent = task_points[i].Leg/lengthtotal;
 	if (!ValidTaskPoint(i+1)) {
           // this is the finish waypoint
-	  Task[i].AATTargetOffsetRadius = 0.0;
-	  Task[i].AATTargetOffsetRadial = 0.0;
-	  Task[i].AATTargetLat = WayPointList[Task[i].Index].Latitude;
-	  Task[i].AATTargetLon = WayPointList[Task[i].Index].Longitude;
+	  task_points[i].AATTargetOffsetRadius = 0.0;
+	  task_points[i].AATTargetOffsetRadial = 0.0;
+	  task_points[i].AATTargetLat = WayPointList[task_points[i].Index].Latitude;
+	  task_points[i].AATTargetLon = WayPointList[task_points[i].Index].Longitude;
 	}
       }
     }
@@ -437,7 +437,7 @@ void RefreshTask() {
     }
     for (i=0; i<MAXTASKPOINTS; i++) {
       if (ValidTaskPoint(i)) {
-        WayPointList[Task[i].Index].InTask = true;
+        WayPointList[task_points[i].Index].InTask = true;
       }
     }
     if (EnableMultipleStartPoints) {
@@ -465,7 +465,7 @@ void RotateStartPoints(void) {
   int imax = 0;
   for (int i=0; i<MAXSTARTPOINTS; i++) {
     if (StartPoints[i].Active && ValidWayPoint(StartPoints[i].Index)) {
-      if (Task[0].Index == StartPoints[i].Index) {
+      if (task_points[0].Index == StartPoints[i].Index) {
         found = i;
       }
       imax = i;
@@ -476,7 +476,7 @@ void RotateStartPoints(void) {
     found = 0;
   }
   if (ValidWayPoint(StartPoints[found].Index)) {
-    Task[0].Index = StartPoints[found].Index;
+    task_points[0].Index = StartPoints[found].Index;
   }
 
   RefreshTask();
@@ -519,9 +519,9 @@ void CalculateTaskSectors(void)
 
   for(i=0;i<=MAXTASKPOINTS-1;i++)
     {
-      if((Task[i].Index >=0))
+      if((task_points[i].Index >=0))
 	{
-	  if ((Task[i+1].Index >=0)||(i==MAXTASKPOINTS-1)) {
+	  if ((task_points[i+1].Index >=0)||(i==MAXTASKPOINTS-1)) {
 
 	    if(i == 0)
 	      {
@@ -532,7 +532,7 @@ void CalculateTaskSectors(void)
 		  SectorAngle = 90;
 		}
 		SectorSize = StartRadius;
-		SectorBearing = Task[i].OutBound;
+		SectorBearing = task_points[i].OutBound;
 	      }
 	    else
 	      {
@@ -543,7 +543,7 @@ void CalculateTaskSectors(void)
 		} else {
 		  SectorSize = SectorRadius;  // FAI sector
 		}
-		SectorBearing = Task[i].Bisector;
+		SectorBearing = task_points[i].Bisector;
 	      }
 	  } else {
 	    // finish line
@@ -553,30 +553,30 @@ void CalculateTaskSectors(void)
 	      SectorAngle = 90;
 	    }
 	    SectorSize = FinishRadius;
-	    SectorBearing = Task[i].InBound;
+	    SectorBearing = task_points[i].InBound;
 
             // no clearing of this, so default can happen with ClearTask
-            // Task[i].AATCircleRadius = 0;
-            // Task[i].AATSectorRadius = 0;
+            // task_points[i].AATCircleRadius = 0;
+            // task_points[i].AATSectorRadius = 0;
 
 	  }
 
-          FindLatitudeLongitude(WayPointList[Task[i].Index].Latitude,
-                                WayPointList[Task[i].Index].Longitude,
+          FindLatitudeLongitude(WayPointList[task_points[i].Index].Latitude,
+                                WayPointList[task_points[i].Index].Longitude,
                                 SectorBearing + SectorAngle, SectorSize,
-                                &Task[i].SectorStartLat,
-                                &Task[i].SectorStartLon);
+                                &task_points[i].SectorStartLat,
+                                &task_points[i].SectorStartLon);
 
-          FindLatitudeLongitude(WayPointList[Task[i].Index].Latitude,
-                                WayPointList[Task[i].Index].Longitude,
+          FindLatitudeLongitude(WayPointList[task_points[i].Index].Latitude,
+                                WayPointList[task_points[i].Index].Longitude,
                                 SectorBearing - SectorAngle, SectorSize,
-                                &Task[i].SectorEndLat,
-                                &Task[i].SectorEndLon);
+                                &task_points[i].SectorEndLat,
+                                &task_points[i].SectorEndLon);
 
           if (!AATEnabled) {
-            Task[i].AATStartRadial  =
+            task_points[i].AATStartRadial  =
               AngleLimit360(SectorBearing - SectorAngle);
-            Task[i].AATFinishRadial =
+            task_points[i].AATFinishRadial =
               AngleLimit360(SectorBearing + SectorAngle);
           }
 
@@ -595,11 +595,11 @@ double AdjustAATTargets(double desired) {
   mutexTaskData.Lock();
   for(i=istart;i<MAXTASKPOINTS-1;i++)
     {
-      if(ValidTaskPoint(i)&&ValidTaskPoint(i+1) && !Task[i].AATTargetLocked)
+      if(ValidTaskPoint(i)&&ValidTaskPoint(i+1) && !task_points[i].AATTargetLocked)
 	{
-          Task[i].AATTargetOffsetRadius = max(-1,min(1,
-                                          Task[i].AATTargetOffsetRadius));
-	  av += Task[i].AATTargetOffsetRadius;
+          task_points[i].AATTargetOffsetRadius = max(-1,min(1,
+                                          task_points[i].AATTargetOffsetRadius));
+	  av += task_points[i].AATTargetOffsetRadius;
 	  inum++;
 	}
     }
@@ -621,9 +621,9 @@ double AdjustAATTargets(double desired) {
 
   for(i=istart;i<MAXTASKPOINTS-1;i++)
     {
-      if((Task[i].Index >=0)&&(Task[i+1].Index >=0) && !Task[i].AATTargetLocked)
+      if((task_points[i].Index >=0)&&(task_points[i+1].Index >=0) && !task_points[i].AATTargetLocked)
 	{
-	  double d = (Task[i].AATTargetOffsetRadius+1.0)/2.0;
+	  double d = (task_points[i].AATTargetOffsetRadius+1.0)/2.0;
           // scale to 0,1
 
           if (av>0.01) {
@@ -635,7 +635,7 @@ double AdjustAATTargets(double desired) {
             d = desired;
           }
           d = min(1.0, max(d, 0))*2.0-1.0;
-          Task[i].AATTargetOffsetRadius = d;
+          task_points[i].AATTargetOffsetRadius = d;
 	}
     }
  OnExit:
@@ -657,36 +657,36 @@ void CalculateAATTaskSectors(const NMEA_INFO &gps_info)
 
   mutexTaskData.Lock();
 
-  Task[0].AATTargetOffsetRadius = 0.0;
-  Task[0].AATTargetOffsetRadial = 0.0;
-  if (Task[0].Index>=0) {
-    Task[0].AATTargetLat = WayPointList[Task[0].Index].Latitude;
-    Task[0].AATTargetLon = WayPointList[Task[0].Index].Longitude;
+  task_points[0].AATTargetOffsetRadius = 0.0;
+  task_points[0].AATTargetOffsetRadial = 0.0;
+  if (task_points[0].Index>=0) {
+    task_points[0].AATTargetLat = WayPointList[task_points[0].Index].Latitude;
+    task_points[0].AATTargetLon = WayPointList[task_points[0].Index].Longitude;
   }
 
   for(i=1;i<MAXTASKPOINTS;i++) {
     if(ValidTaskPoint(i)) {
       if (!ValidTaskPoint(i+1)) {
         // This must be the final waypoint, so it's not an AAT OZ
-        Task[i].AATTargetLat = WayPointList[Task[i].Index].Latitude;
-        Task[i].AATTargetLon = WayPointList[Task[i].Index].Longitude;
+        task_points[i].AATTargetLat = WayPointList[task_points[i].Index].Latitude;
+        task_points[i].AATTargetLon = WayPointList[task_points[i].Index].Longitude;
         continue;
       }
 
-      if(Task[i].AATType == SECTOR) {
-        FindLatitudeLongitude (WayPointList[Task[i].Index].Latitude,
-                                 WayPointList[Task[i].Index].Longitude,
-                               Task[i].AATStartRadial ,
-                               Task[i].AATSectorRadius ,
-                               &Task[i].AATStartLat,
-                               &Task[i].AATStartLon);
+      if(task_points[i].AATType == SECTOR) {
+        FindLatitudeLongitude (WayPointList[task_points[i].Index].Latitude,
+                                 WayPointList[task_points[i].Index].Longitude,
+                               task_points[i].AATStartRadial ,
+                               task_points[i].AATSectorRadius ,
+                               &task_points[i].AATStartLat,
+                               &task_points[i].AATStartLon);
 
-        FindLatitudeLongitude (WayPointList[Task[i].Index].Latitude,
-                               WayPointList[Task[i].Index].Longitude,
-                               Task[i].AATFinishRadial ,
-                               Task[i].AATSectorRadius,
-                               &Task[i].AATFinishLat,
-                               &Task[i].AATFinishLon);
+        FindLatitudeLongitude (WayPointList[task_points[i].Index].Latitude,
+                               WayPointList[task_points[i].Index].Longitude,
+                               task_points[i].AATFinishRadial ,
+                               task_points[i].AATSectorRadius,
+                               &task_points[i].AATFinishLat,
+                               &task_points[i].AATFinishLon);
       }
 
       // JMWAAT: if locked, don't move it
@@ -695,52 +695,52 @@ void CalculateAATTaskSectors(const NMEA_INFO &gps_info)
         continue;
       }
 
-      Task[i].AATTargetOffsetRadius =
-        min(1.0, max(Task[i].AATTargetOffsetRadius,-1.0));
+      task_points[i].AATTargetOffsetRadius =
+        min(1.0, max(task_points[i].AATTargetOffsetRadius,-1.0));
 
-      Task[i].AATTargetOffsetRadial =
-        min(90, max(-90, Task[i].AATTargetOffsetRadial));
+      task_points[i].AATTargetOffsetRadial =
+        min(90, max(-90, task_points[i].AATTargetOffsetRadial));
 
       double targetbearing;
       double targetrange;
 
-      targetbearing = AngleLimit360(Task[i].Bisector+Task[i].AATTargetOffsetRadial);
+      targetbearing = AngleLimit360(task_points[i].Bisector+task_points[i].AATTargetOffsetRadial);
 
-      if(Task[i].AATType == SECTOR) {
+      if(task_points[i].AATType == SECTOR) {
 
         //AATStartRadial
         //AATFinishRadial
 
-        targetrange = ((Task[i].AATTargetOffsetRadius+1.0)/2.0);
+        targetrange = ((task_points[i].AATTargetOffsetRadius+1.0)/2.0);
 
-        double aatbisector = HalfAngle(Task[i].AATStartRadial,
-                                       Task[i].AATFinishRadial);
+        double aatbisector = HalfAngle(task_points[i].AATStartRadial,
+                                       task_points[i].AATFinishRadial);
 
         if (fabs(AngleLimit180(aatbisector-targetbearing))>90) {
           // bisector is going away from sector
           targetbearing = Reciprocal(targetbearing);
           targetrange = 1.0-targetrange;
         }
-        if (!AngleInRange(Task[i].AATStartRadial,
-                          Task[i].AATFinishRadial,
+        if (!AngleInRange(task_points[i].AATStartRadial,
+                          task_points[i].AATFinishRadial,
                           targetbearing,true)) {
 
           // Bisector is not within AAT sector, so
           // choose the closest radial as the target line
 
-          if (fabs(AngleLimit180(Task[i].AATStartRadial-targetbearing))
-              <fabs(AngleLimit180(Task[i].AATFinishRadial-targetbearing))) {
-            targetbearing = Task[i].AATStartRadial;
+          if (fabs(AngleLimit180(task_points[i].AATStartRadial-targetbearing))
+              <fabs(AngleLimit180(task_points[i].AATFinishRadial-targetbearing))) {
+            targetbearing = task_points[i].AATStartRadial;
           } else {
-            targetbearing = Task[i].AATFinishRadial;
+            targetbearing = task_points[i].AATFinishRadial;
           }
         }
 
-        targetrange*= Task[i].AATSectorRadius;
+        targetrange*= task_points[i].AATSectorRadius;
 
       } else {
-        targetrange = Task[i].AATTargetOffsetRadius
-          *Task[i].AATCircleRadius;
+        targetrange = task_points[i].AATTargetOffsetRadius
+          *task_points[i].AATCircleRadius;
       }
 
       // TODO accuracy: if i=awp and in sector, range parameter needs to
@@ -748,7 +748,7 @@ void CalculateAATTaskSectors(const NMEA_INFO &gps_info)
       // out to the edge of the sector
 
       if (InAATTurnSector(longitude, latitude, i) && (awp==i) &&
-          !Task[i].AATTargetLocked) {
+          !task_points[i].AATTargetLocked) {
 
         // special case, currently in AAT sector/cylinder
 
@@ -757,15 +757,15 @@ void CalculateAATTaskSectors(const NMEA_INFO &gps_info)
         double bearing;
 
         // find bearing from last target through current aircraft position with offset
-        DistanceBearing(Task[i-1].AATTargetLat,
-                        Task[i-1].AATTargetLon,
+        DistanceBearing(task_points[i-1].AATTargetLat,
+                        task_points[i-1].AATTargetLon,
                         latitude,
                         longitude,
                         &qdist, &bearing);
 
-        bearing = AngleLimit360(bearing+Task[i].AATTargetOffsetRadial);
+        bearing = AngleLimit360(bearing+task_points[i].AATTargetOffsetRadial);
 
-        dist = ((Task[i].AATTargetOffsetRadius+1)/2.0)*
+        dist = ((task_points[i].AATTargetOffsetRadius+1)/2.0)*
           FindInsideAATSectorDistance(latitude, longitude, i, bearing);
 
         // if (dist+qdist>aatdistance.LegDistanceAchieved(awp)) {
@@ -776,8 +776,8 @@ void CalculateAATTaskSectors(const NMEA_INFO &gps_info)
                                longitude,
                                bearing,
                                dist,
-                               &Task[i].AATTargetLat,
-                               &Task[i].AATTargetLon);
+                               &task_points[i].AATTargetLat,
+                               &task_points[i].AATTargetLon);
 
         TargetModified = true;
 
@@ -785,12 +785,12 @@ void CalculateAATTaskSectors(const NMEA_INFO &gps_info)
 
       } else {
 
-        FindLatitudeLongitude (WayPointList[Task[i].Index].Latitude,
-                               WayPointList[Task[i].Index].Longitude,
+        FindLatitudeLongitude (WayPointList[task_points[i].Index].Latitude,
+                               WayPointList[task_points[i].Index].Longitude,
                                targetbearing,
                                targetrange,
-                               &Task[i].AATTargetLat,
-                               &Task[i].AATTargetLon);
+                               &task_points[i].AATTargetLat,
+                               &task_points[i].AATTargetLon);
         TargetModified = true;
 
       }
@@ -813,28 +813,28 @@ void CalculateAATTaskSectors(const NMEA_INFO &gps_info)
 void RefreshTaskWaypoint(int i) {
   if(i==0)
     {
-      Task[i].Leg = 0;
-      Task[i].InBound = 0;
+      task_points[i].Leg = 0;
+      task_points[i].InBound = 0;
     }
   else
     {
-      DistanceBearing(WayPointList[Task[i-1].Index].Latitude,
-                      WayPointList[Task[i-1].Index].Longitude,
-                      WayPointList[Task[i].Index].Latitude,
-                      WayPointList[Task[i].Index].Longitude,
-                      &Task[i].Leg,
-                      &Task[i].InBound);
+      DistanceBearing(WayPointList[task_points[i-1].Index].Latitude,
+                      WayPointList[task_points[i-1].Index].Longitude,
+                      WayPointList[task_points[i].Index].Latitude,
+                      WayPointList[task_points[i].Index].Longitude,
+                      &task_points[i].Leg,
+                      &task_points[i].InBound);
 
-      Task[i-1].OutBound = Task[i].InBound;
-      Task[i-1].Bisector = BiSector(Task[i-1].InBound,Task[i-1].OutBound);
+      task_points[i-1].OutBound = task_points[i].InBound;
+      task_points[i-1].Bisector = BiSector(task_points[i-1].InBound,task_points[i-1].OutBound);
       if (i==1) {
         if (EnableMultipleStartPoints) {
           for (int j=0; j<MAXSTARTPOINTS; j++) {
             if ((StartPoints[j].Index != -1)&&(StartPoints[j].Active)) {
               DistanceBearing(WayPointList[StartPoints[j].Index].Latitude,
                               WayPointList[StartPoints[j].Index].Longitude,
-                              WayPointList[Task[i].Index].Latitude,
-                              WayPointList[Task[i].Index].Longitude,
+                              WayPointList[task_points[i].Index].Latitude,
+                              WayPointList[task_points[i].Index].Longitude,
                               NULL, &StartPoints[j].OutBound);
             }
           }
@@ -875,8 +875,8 @@ static bool LoadTaskWaypoints(FILE *file) {
     if (fread(&read_waypoint, sizeof(read_waypoint), 1, file) != 1) {
       return false;
     }
-    if (Task[i].Index != -1) {
-      Task[i].Index = FindOrAddWaypoint(&read_waypoint);
+    if (task_points[i].Index != -1) {
+      task_points[i].Index = FindOrAddWaypoint(&read_waypoint);
     }
   }
   for(i=0;i<MAXSTARTPOINTS;i++) {
@@ -907,7 +907,7 @@ void LoadNewTask(const TCHAR *szFileName)
   ActiveWayPoint = -1;
   for(i=0;i<MAXTASKPOINTS;i++)
     {
-      Task[i].Index = -1;
+      task_points[i].Index = -1;
     }
 
   FILE *file = _tfopen(szFileName, _T("rb"));
@@ -935,7 +935,7 @@ void LoadNewTask(const TCHAR *szFileName)
               TaskInvalid = true;
               break;
             }
-	  memcpy(&Task[i],&Temp, sizeof(TASK_POINT));
+	  memcpy(&task_points[i],&Temp, sizeof(TASK_POINT));
 
           if(!ValidWayPoint(Temp.Index) && (Temp.Index != -1)) {
             // Task is only invalid here if the index is out of range
@@ -1057,7 +1057,7 @@ void LoadNewTask(const TCHAR *szFileName)
 void ClearTask(void) {
   mutexTaskData.Lock();
 
-  memset( &(Task), 0, sizeof(Task_t));
+  memset( &(task_points), 0, sizeof(Task_t));
   memset( &(StartPoints), 0, sizeof(Start_t));
 
   TaskModified = true;
@@ -1066,16 +1066,16 @@ void ClearTask(void) {
   ActiveWayPoint = -1;
   int i;
   for(i=0;i<MAXTASKPOINTS;i++) {
-    Task[i].Index = -1;
-    Task[i].AATSectorRadius = SectorRadius; // JMW added default
-    Task[i].AATCircleRadius = SectorRadius; // JMW added default
-    Task[i].AATTargetOffsetRadial = 0;
-    Task[i].AATTargetOffsetRadius = 0;
-    Task[i].AATTargetLocked = false;
+    task_points[i].Index = -1;
+    task_points[i].AATSectorRadius = SectorRadius; // JMW added default
+    task_points[i].AATCircleRadius = SectorRadius; // JMW added default
+    task_points[i].AATTargetOffsetRadial = 0;
+    task_points[i].AATTargetOffsetRadius = 0;
+    task_points[i].AATTargetLocked = false;
     for (int j=0; j<MAXISOLINES; j++) {
       TaskStats[i].IsoLine_valid[j] = false;
     }
-    Task_saved[i] = Task[i].Index;
+    Task_saved[i] = task_points[i].Index;
   }
   for (i=0; i<MAXSTARTPOINTS; i++) {
     StartPoints[i].Index = -1;
@@ -1099,7 +1099,7 @@ bool ValidTaskPoint(int i) {
   mutexTaskData.Lock();
   if ((i<0) || (i>= MAXTASKPOINTS))
     retval = false;
-  else if (!ValidWayPoint(Task[i].Index))
+  else if (!ValidWayPoint(task_points[i].Index))
     retval = false;
   mutexTaskData.Unlock();
   return retval;
@@ -1113,7 +1113,7 @@ void SaveTask(const TCHAR *szFileName)
 
   FILE *file = _tfopen(szFileName, _T("wb"));
   if (file != NULL) {
-    fwrite(&Task[0], sizeof(Task[0]), MAXTASKPOINTS, file);
+    fwrite(&task_points[0], sizeof(task_points[0]), MAXTASKPOINTS, file);
     fwrite(&AATEnabled, sizeof(AATEnabled), 1, file);
     fwrite(&AATTaskLength, sizeof(AATTaskLength), 1, file);
 
@@ -1133,9 +1133,9 @@ void SaveTask(const TCHAR *szFileName)
     // JMW added writing of waypoint data, in case it's missing
     int i;
     for(i=0;i<MAXTASKPOINTS;i++) {
-      if (ValidWayPoint(Task[i].Index)) {
-        fwrite(&WayPointList[Task[i].Index],
-               sizeof(WayPointList[Task[i].Index]), 1, file);
+      if (ValidWayPoint(task_points[i].Index)) {
+        fwrite(&WayPointList[task_points[i].Index],
+               sizeof(WayPointList[task_points[i].Index]), 1, file);
       } else {
         // dummy data..
         fwrite(&WayPointList[0], sizeof(WayPointList[0]), 1, file);
@@ -1175,10 +1175,10 @@ double FindInsideAATSectorDistance_old(double latitude,
   bool t_in_sector;
   double delta;
   double max_distance;
-  if(Task[taskwaypoint].AATType == SECTOR) {
-    max_distance = Task[taskwaypoint].AATSectorRadius*2;
+  if(task_points[taskwaypoint].AATType == SECTOR) {
+    max_distance = task_points[taskwaypoint].AATSectorRadius*2;
   } else {
-    max_distance = Task[taskwaypoint].AATCircleRadius*2;
+    max_distance = task_points[taskwaypoint].AATCircleRadius*2;
   }
   delta = max(250.0, max_distance/40.0);
 
@@ -1214,10 +1214,10 @@ double FindInsideAATSectorDistance(double latitude,
                                    double p_found) {
 
   double max_distance;
-  if(Task[taskwaypoint].AATType == SECTOR) {
-    max_distance = Task[taskwaypoint].AATSectorRadius;
+  if(task_points[taskwaypoint].AATType == SECTOR) {
+    max_distance = task_points[taskwaypoint].AATSectorRadius;
   } else {
-    max_distance = Task[taskwaypoint].AATCircleRadius;
+    max_distance = task_points[taskwaypoint].AATCircleRadius;
   }
 
   // Do binary bounds search for longest distance within sector
@@ -1270,8 +1270,8 @@ double DoubleLegDistance(int taskwaypoint,
   double d0;
   double d1;
   if (taskwaypoint>0) {
-    DistanceBearing(Task[taskwaypoint-1].AATTargetLat,
-                    Task[taskwaypoint-1].AATTargetLon,
+    DistanceBearing(task_points[taskwaypoint-1].AATTargetLat,
+                    task_points[taskwaypoint-1].AATTargetLon,
                     latitude,
                     longitude,
                     &d0, NULL);
@@ -1281,26 +1281,26 @@ double DoubleLegDistance(int taskwaypoint,
 
   DistanceBearing(latitude,
                   longitude,
-                  Task[taskwaypoint+1].AATTargetLat,
-                  Task[taskwaypoint+1].AATTargetLon,
+                  task_points[taskwaypoint+1].AATTargetLat,
+                  task_points[taskwaypoint+1].AATTargetLon,
                   &d1, NULL);
   return d0 + d1;
 
 #else
 
   if (taskwaypoint>0) {
-    return DoubleDistance(Task[taskwaypoint-1].AATTargetLat,
-			  Task[taskwaypoint-1].AATTargetLon,
+    return DoubleDistance(task_points[taskwaypoint-1].AATTargetLat,
+			  task_points[taskwaypoint-1].AATTargetLon,
 			  latitude,
 			  longitude,
-			  Task[taskwaypoint+1].AATTargetLat,
-			  Task[taskwaypoint+1].AATTargetLon);
+			  task_points[taskwaypoint+1].AATTargetLat,
+			  task_points[taskwaypoint+1].AATTargetLon);
   } else {
     double d1;
     DistanceBearing(latitude,
 		    longitude,
-		    Task[taskwaypoint+1].AATTargetLat,
-		    Task[taskwaypoint+1].AATTargetLon,
+		    task_points[taskwaypoint+1].AATTargetLat,
+		    task_points[taskwaypoint+1].AATTargetLon,
 		    &d1, NULL);
     return d1;
   }
@@ -1338,16 +1338,16 @@ void CalculateAATIsoLines(void) {
         TaskStats[i].IsoLine_valid[j] = false;
       }
 
-      double latitude = Task[i].AATTargetLat;
-      double longitude = Task[i].AATTargetLon;
+      double latitude = task_points[i].AATTargetLat;
+      double longitude = task_points[i].AATTargetLon;
       double dist_0, dist_north, dist_east;
       bool in_sector = true;
 
       double max_distance, delta;
-      if(Task[i].AATType == SECTOR) {
-        max_distance = Task[i].AATSectorRadius;
+      if(task_points[i].AATType == SECTOR) {
+        max_distance = task_points[i].AATSectorRadius;
       } else {
-        max_distance = Task[i].AATCircleRadius;
+        max_distance = task_points[i].AATCircleRadius;
       }
       delta = max_distance*2.4 / (MAXISOLINES);
       bool left = false;
@@ -1409,8 +1409,8 @@ void CalculateAATIsoLines(void) {
           j++;
           if (!left && (j<MAXISOLINES-2))  {
             left = true;
-            latitude = Task[i].AATTargetLat;
-            longitude = Task[i].AATTargetLon;
+            latitude = task_points[i].AATTargetLat;
+            longitude = task_points[i].AATTargetLon;
             in_sector = true; // cheat to prevent early exit
 
             // insert start point (again)
@@ -1452,7 +1452,7 @@ bool TaskIsTemporary(void) {
   if (TaskAborted) {
     retval = true;
   }
-  if ((Task[0].Index>=0) && (Task[1].Index== -1)
+  if ((task_points[0].Index>=0) && (task_points[1].Index== -1)
       && (Task_saved[0] >= 0)) {
     retval = true;
   };
@@ -1465,7 +1465,7 @@ bool TaskIsTemporary(void) {
 static void BackupTask(void) {
   mutexTaskData.Lock();
   for (int i=0; i<=MAXTASKPOINTS; i++) {
-    Task_saved[i]= Task[i].Index;
+    Task_saved[i]= task_points[i].Index;
   }
   active_waypoint_saved = ActiveWayPoint;
   if (AATEnabled) {
@@ -1518,7 +1518,7 @@ void ResumeAbortTask(int set) {
       // reload backup task and clear it
 
       for (i=0; i<=MAXTASKPOINTS; i++) {
-        Task[i].Index = Task_saved[i];
+        task_points[i].Index = Task_saved[i];
 	Task_saved[i] = -1;
       }
       ActiveWayPoint = active_waypoint_saved;
@@ -1546,7 +1546,7 @@ int getFinalWaypoint() {
 
   i++;
   mutexTaskData.Lock();
-  while((i<MAXTASKPOINTS) && (Task[i].Index != -1))
+  while((i<MAXTASKPOINTS) && (task_points[i].Index != -1))
     {
       i++;
     }
@@ -1562,7 +1562,7 @@ bool ActiveIsFinalWaypoint() {
 bool IsFinalWaypoint(void) {
   bool retval;
   mutexTaskData.Lock();
-  if (ValidTaskPoint(ActiveWayPoint) && (Task[ActiveWayPoint+1].Index >= 0)) {
+  if (ValidTaskPoint(ActiveWayPoint) && (task_points[ActiveWayPoint+1].Index >= 0)) {
     retval = false;
   } else {
     retval = true;
@@ -1584,19 +1584,19 @@ bool InAATTurnSector(const double longitude, const double latitude,
 
   double distance;
   mutexTaskData.Lock();
-  DistanceBearing(WayPointList[Task[the_turnpoint].Index].Latitude,
-                  WayPointList[Task[the_turnpoint].Index].Longitude,
+  DistanceBearing(WayPointList[task_points[the_turnpoint].Index].Latitude,
+                  WayPointList[task_points[the_turnpoint].Index].Longitude,
                   latitude,
                   longitude,
                   &distance, &AircraftBearing);
 
-  if(Task[the_turnpoint].AATType ==  CIRCLE) {
-    if(distance < Task[the_turnpoint].AATCircleRadius) {
+  if(task_points[the_turnpoint].AATType ==  CIRCLE) {
+    if(distance < task_points[the_turnpoint].AATCircleRadius) {
       retval = true;
     }
-  } else if(distance < Task[the_turnpoint].AATSectorRadius) {
-    if (AngleInRange(Task[the_turnpoint].AATStartRadial,
-                     Task[the_turnpoint].AATFinishRadial,
+  } else if(distance < task_points[the_turnpoint].AATSectorRadius) {
+    if (AngleInRange(task_points[the_turnpoint].AATStartRadial,
+                     task_points[the_turnpoint].AATFinishRadial,
                      AngleLimit360(AircraftBearing), true)) {
       retval = true;
     }

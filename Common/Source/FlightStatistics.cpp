@@ -305,8 +305,8 @@ void FlightStatistics::RenderTask(Canvas &canvas, const RECT rc, const bool olcm
 
   for (i=0; i<MAXTASKPOINTS; i++) {
     if (ValidTaskPoint(i)) {
-      lat1 = WayPointList[Task[i].Index].Latitude;
-      lon1 = WayPointList[Task[i].Index].Longitude;
+      lat1 = WayPointList[task_points[i].Index].Latitude;
+      lon1 = WayPointList[task_points[i].Index].Longitude;
       chart.ScaleYFromValue( lat1);
       chart.ScaleXFromValue(lon1);
       nowaypoints = false;
@@ -356,8 +356,8 @@ void FlightStatistics::RenderTask(Canvas &canvas, const RECT rc, const bool olcm
   for (i=0; i<MAXTASKPOINTS; i++) {
     if (ValidTaskPoint(i)) {
       nwps++;
-      lat1 = WayPointList[Task[i].Index].Latitude;
-      lon1 = WayPointList[Task[i].Index].Longitude;
+      lat1 = WayPointList[task_points[i].Index].Latitude;
+      lon1 = WayPointList[task_points[i].Index].Longitude;
       x1 = (lon1-lon_c)*fastcosine(lat1);
       y1 = (lat1-lat_c);
       chart.ScaleXFromValue(x1);
@@ -370,16 +370,16 @@ void FlightStatistics::RenderTask(Canvas &canvas, const RECT rc, const bool olcm
 	double radius;
 
         if (ValidTaskPoint(i+1)) {
-          if (Task[i].AATType == SECTOR) {
-            radius = Task[i].AATSectorRadius;
+          if (task_points[i].AATType == SECTOR) {
+            radius = task_points[i].AATSectorRadius;
           } else {
-            radius = Task[i].AATCircleRadius;
+            radius = task_points[i].AATCircleRadius;
           }
           for (int j=0; j<4; j++) {
             bearing = j*360.0/4;
 
-            FindLatitudeLongitude(WayPointList[Task[i].Index].Latitude,
-                                  WayPointList[Task[i].Index].Longitude,
+            FindLatitudeLongitude(WayPointList[task_points[i].Index].Latitude,
+                                  WayPointList[task_points[i].Index].Longitude,
                                   bearing, radius,
                                   &aatlat, &aatlon);
             x1 = (aatlon-lon_c)*fastcosine(aatlat);
@@ -387,7 +387,7 @@ void FlightStatistics::RenderTask(Canvas &canvas, const RECT rc, const bool olcm
             chart.ScaleXFromValue(x1);
             chart.ScaleYFromValue(y1);
             if (j==0) {
-              aatradius[i] = fabs(aatlat-WayPointList[Task[i].Index].Latitude);
+              aatradius[i] = fabs(aatlat-WayPointList[task_points[i].Index].Latitude);
             }
           }
         } else {
@@ -414,10 +414,10 @@ void FlightStatistics::RenderTask(Canvas &canvas, const RECT rc, const bool olcm
     if (AATEnabled) {
       for (i=MAXTASKPOINTS-1; i>0; i--) {
 	if (ValidTaskPoint(i)) {
-	  lat1 = WayPointList[Task[i-1].Index].Latitude;
-	  lon1 = WayPointList[Task[i-1].Index].Longitude;
-	  lat2 = WayPointList[Task[i].Index].Latitude;
-	  lon2 = WayPointList[Task[i].Index].Longitude;
+	  lat1 = WayPointList[task_points[i-1].Index].Latitude;
+	  lon1 = WayPointList[task_points[i-1].Index].Longitude;
+	  lat2 = WayPointList[task_points[i].Index].Latitude;
+	  lon2 = WayPointList[task_points[i].Index].Longitude;
 	  x1 = (lon1-lon_c)*fastcosine(lat1);
 	  y1 = (lat1-lat_c);
 	  x2 = (lon2-lon_c)*fastcosine(lat2);
@@ -425,12 +425,12 @@ void FlightStatistics::RenderTask(Canvas &canvas, const RECT rc, const bool olcm
 
           canvas.select(MapGfx.GetAirspaceBrushByClass(AATASK));
           canvas.white_pen();
-	  if (Task[i].AATType == SECTOR) {
+	  if (task_points[i].AATType == SECTOR) {
 	    canvas.segment(chart.screenX(x2), chart.screenY(y2),
                            chart.screenS(aatradius[i]),
                            rc,
-                           Task[i].AATStartRadial,
-                           Task[i].AATFinishRadial);
+                           task_points[i].AATStartRadial,
+                           task_points[i].AATFinishRadial);
 	  } else {
 	    canvas.circle(chart.screenX(x2), chart.screenY(y2),
 			  chart.screenS(aatradius[i]),
@@ -461,14 +461,14 @@ void FlightStatistics::RenderTask(Canvas &canvas, const RECT rc, const bool olcm
   if (!olcmode) {
     for (i=MAXTASKPOINTS-1; i>0; i--) {
       if (ValidTaskPoint(i) && ValidTaskPoint(i-1)) {
-        lat1 = WayPointList[Task[i-1].Index].Latitude;
-	lon1 = WayPointList[Task[i-1].Index].Longitude;
+        lat1 = WayPointList[task_points[i-1].Index].Latitude;
+	lon1 = WayPointList[task_points[i-1].Index].Longitude;
 	if (TaskIsTemporary()) {
 	  lat2 = XCSoarInterface::Basic().Latitude;
 	  lon2 = XCSoarInterface::Basic().Longitude;
 	} else {
-	  lat2 = WayPointList[Task[i].Index].Latitude;
-	  lon2 = WayPointList[Task[i].Index].Longitude;
+	  lat2 = WayPointList[task_points[i].Index].Latitude;
+	  lon2 = WayPointList[task_points[i].Index].Longitude;
 	}
 	x1 = (lon1-lon_c)*fastcosine(lat1);
 	y1 = (lat1-lat_c);
@@ -479,7 +479,7 @@ void FlightStatistics::RenderTask(Canvas &canvas, const RECT rc, const bool olcm
 		       Chart::STYLE_DASHGREEN);
 
 	TCHAR text[100];
-	if ((i==nwps-1) && (Task[i].Index == Task[0].Index)) {
+	if ((i==nwps-1) && (task_points[i].Index == task_points[0].Index)) {
 	  _stprintf(text,TEXT("%0d"),1);
 	  chart.DrawLabel(text, x2, y2);
 	} else {
@@ -505,14 +505,14 @@ void FlightStatistics::RenderTask(Canvas &canvas, const RECT rc, const bool olcm
       for (i=MAXTASKPOINTS-1; i>0; i--) {
 	if (ValidTaskPoint(i) && ValidTaskPoint(i-1)) {
           if (i==1) {
-            lat1 = WayPointList[Task[i-1].Index].Latitude;
-            lon1 = WayPointList[Task[i-1].Index].Longitude;
+            lat1 = WayPointList[task_points[i-1].Index].Latitude;
+            lon1 = WayPointList[task_points[i-1].Index].Longitude;
           } else {
-            lat1 = Task[i-1].AATTargetLat;
-            lon1 = Task[i-1].AATTargetLon;
+            lat1 = task_points[i-1].AATTargetLat;
+            lon1 = task_points[i-1].AATTargetLon;
           }
-          lat2 = Task[i].AATTargetLat;
-          lon2 = Task[i].AATTargetLon;
+          lat2 = task_points[i].AATTargetLat;
+          lon2 = task_points[i].AATTargetLon;
 
           /*
 	  if (i==ActiveWayPoint) {

@@ -154,8 +154,8 @@ void GlideComputerTask::DistanceToNext()
       double w1lat, w1lon;
       double w0lat, w0lon;
 
-      w0lat = WayPointList[Task[ActiveWayPoint].Index].Latitude;
-      w0lon = WayPointList[Task[ActiveWayPoint].Index].Longitude;
+      w0lat = WayPointList[task_points[ActiveWayPoint].Index].Latitude;
+      w0lon = WayPointList[task_points[ActiveWayPoint].Index].Longitude;
       DistanceBearing(Basic().Latitude, Basic().Longitude,
                       w0lat, w0lon,
                       &SetCalculated().WaypointDistance,
@@ -167,8 +167,8 @@ void GlideComputerTask::DistanceToNext()
 	  && (ActiveWayPoint>0) &&
           ValidTaskPoint(ActiveWayPoint+1)) {
 
-        w1lat = Task[ActiveWayPoint].AATTargetLat;
-        w1lon = Task[ActiveWayPoint].AATTargetLon;
+        w1lat = task_points[ActiveWayPoint].AATTargetLat;
+        w1lon = task_points[ActiveWayPoint].AATTargetLon;
 
         DistanceBearing(Basic().Latitude, Basic().Longitude,
                         w1lat, w1lon,
@@ -189,11 +189,11 @@ void GlideComputerTask::DistanceToNext()
         // JMW set waypoint bearing to start direction if in start sector
 
         if (AATEnabled) {
-          w1lat = Task[ActiveWayPoint+1].AATTargetLat;
-          w1lon = Task[ActiveWayPoint+1].AATTargetLon;
+          w1lat = task_points[ActiveWayPoint+1].AATTargetLat;
+          w1lon = task_points[ActiveWayPoint+1].AATTargetLon;
         } else {
-          w1lat = WayPointList[Task[ActiveWayPoint+1].Index].Latitude;
-          w1lon = WayPointList[Task[ActiveWayPoint+1].Index].Longitude;
+          w1lat = WayPointList[task_points[ActiveWayPoint+1].Index].Latitude;
+          w1lon = WayPointList[task_points[ActiveWayPoint+1].Index].Longitude;
         }
 
         DistanceBearing(Basic().Latitude, Basic().Longitude,
@@ -275,14 +275,14 @@ double GlideComputerTask::AATCloseBearing() const
 {
   // ensure waypoint goes in direction of track if very close
   double course_bearing;
-  DistanceBearing(Task[ActiveWayPoint-1].AATTargetLat,
-		  Task[ActiveWayPoint-1].AATTargetLon,
+  DistanceBearing(task_points[ActiveWayPoint-1].AATTargetLat,
+		  task_points[ActiveWayPoint-1].AATTargetLon,
 		  Basic().Latitude,
 		  Basic().Longitude,
 		  NULL, &course_bearing);
 
   course_bearing = AngleLimit360(course_bearing+
-				 Task[ActiveWayPoint].AATTargetOffsetRadial);
+				 task_points[ActiveWayPoint].AATTargetOffsetRadial);
   return course_bearing;
 }
 
@@ -297,7 +297,7 @@ FAIFinishHeight(const SETTINGS_COMPUTER &settings,
   }
   double wp_alt;
   if(ValidTaskPoint(wp)) {
-    wp_alt = WayPointList[Task[wp].Index].Altitude;
+    wp_alt = WayPointList[task_points[wp].Index].Altitude;
   } else {
     wp_alt = 0;
   }
@@ -338,14 +338,14 @@ bool GlideComputerTask::InTurnSector(const int the_turnpoint) const
   if (SectorType>0)
     {
       mutexTaskData.Lock();
-      DistanceBearing(WayPointList[Task[the_turnpoint].Index].Latitude,
-                      WayPointList[Task[the_turnpoint].Index].Longitude,
+      DistanceBearing(WayPointList[task_points[the_turnpoint].Index].Latitude,
+                      WayPointList[task_points[the_turnpoint].Index].Longitude,
                       Basic().Latitude ,
                       Basic().Longitude,
                       NULL, &AircraftBearing);
       mutexTaskData.Unlock();
 
-      AircraftBearing = AircraftBearing - Task[the_turnpoint].Bisector ;
+      AircraftBearing = AircraftBearing - task_points[the_turnpoint].Bisector ;
       while (AircraftBearing<-180) {
         AircraftBearing+= 360;
       }
@@ -409,8 +409,8 @@ bool GlideComputerTask::InFinishSector(const int i)
   // distance from aircraft to start point
   DistanceBearing(Basic().Latitude,
                   Basic().Longitude,
-                  WayPointList[Task[i].Index].Latitude,
-                  WayPointList[Task[i].Index].Longitude,
+                  WayPointList[task_points[i].Index].Latitude,
+                  WayPointList[task_points[i].Index].Longitude,
                   &FirstPointDistance,
                   &AircraftBearing);
 
@@ -429,7 +429,7 @@ bool GlideComputerTask::InFinishSector(const int i)
     }
 
   // Finish line
-  AircraftBearing = AngleLimit180(AircraftBearing - Task[i].InBound);
+  AircraftBearing = AngleLimit180(AircraftBearing - task_points[i].InBound);
 
   // JMW bugfix, was Bisector, which is invalid
 
@@ -587,14 +587,14 @@ bool GlideComputerTask::InStartSector(bool *CrossedStart)
 
   in_height = InsideStartHeight(StartMaxHeightMargin);
 
-  if ((Task[0].Index != Calculated().StartSectorWaypoint) 
+  if ((task_points[0].Index != Calculated().StartSectorWaypoint) 
       && (Calculated().StartSectorWaypoint>=0)) {
     LastInStartSector = false;
-    SetCalculated().StartSectorWaypoint = Task[0].Index;
+    SetCalculated().StartSectorWaypoint = task_points[0].Index;
   }
 
-  isInSector = in_height & InStartSector_Internal(Task[0].Index, 
-						  Task[0].OutBound,
+  isInSector = in_height & InStartSector_Internal(task_points[0].Index, 
+						  task_points[0].OutBound,
 						  LastInStartSector);
 
   *CrossedStart = LastInStartSector && !isInSector;
@@ -606,7 +606,7 @@ bool GlideComputerTask::InStartSector(bool *CrossedStart)
   if (EnableMultipleStartPoints) {
     for (int i=0; i<MAXSTARTPOINTS; i++) {
       if (StartPoints[i].Active && (StartPoints[i].Index>=0)
-          && (StartPoints[i].Index != Task[0].Index)) {
+          && (StartPoints[i].Index != task_points[0].Index)) {
 
         retval = in_height & InStartSector_Internal(StartPoints[i].Index,
 						    StartPoints[i].OutBound,
@@ -617,8 +617,8 @@ bool GlideComputerTask::InStartSector(bool *CrossedStart)
         *CrossedStart = StartPoints[i].InSector && !retval;
         StartPoints[i].InSector = retval;
         if (*CrossedStart) {
-          if (Task[0].Index != index) {
-            Task[0].Index = index;
+          if (task_points[0].Index != index) {
+            task_points[0].Index = index;
             LastInStartSector = false;
             SetCalculated().StartSectorWaypoint = index;
             RefreshTask();
@@ -997,11 +997,11 @@ void GlideComputerTask::TaskStatistics(const double this_maccready,
 
   if (AATEnabled && (ActiveWayPoint>0) &&
       !TaskIsTemporary() && (ValidTaskPoint(ActiveWayPoint+1))) {
-    w1lat = Task[ActiveWayPoint].AATTargetLat;
-    w1lon = Task[ActiveWayPoint].AATTargetLon;
+    w1lat = task_points[ActiveWayPoint].AATTargetLat;
+    w1lon = task_points[ActiveWayPoint].AATTargetLon;
   } else {
-    w1lat = WayPointList[Task[ActiveWayPoint].Index].Latitude;
-    w1lon = WayPointList[Task[ActiveWayPoint].Index].Longitude;
+    w1lat = WayPointList[task_points[ActiveWayPoint].Index].Latitude;
+    w1lon = WayPointList[task_points[ActiveWayPoint].Index].Longitude;
   }
 
   DistanceBearing(Basic().Latitude,
@@ -1026,11 +1026,11 @@ void GlideComputerTask::TaskStatistics(const double this_maccready,
    } else {
     if (AATEnabled) {
       // TODO accuracy: Get best range point to here...
-      w0lat = Task[ActiveWayPoint-1].AATTargetLat;
-      w0lon = Task[ActiveWayPoint-1].AATTargetLon;
+      w0lat = task_points[ActiveWayPoint-1].AATTargetLat;
+      w0lon = task_points[ActiveWayPoint-1].AATTargetLon;
     } else {
-      w0lat = WayPointList[Task[ActiveWayPoint-1].Index].Latitude;
-      w0lon = WayPointList[Task[ActiveWayPoint-1].Index].Longitude;
+      w0lat = WayPointList[task_points[ActiveWayPoint-1].Index].Latitude;
+      w0lon = WayPointList[task_points[ActiveWayPoint-1].Index].Longitude;
     }
 
     DistanceBearing(w1lat,
@@ -1072,10 +1072,10 @@ void GlideComputerTask::TaskStatistics(const double this_maccready,
         {
           if (!ValidTaskPoint(i) || !ValidTaskPoint(i+1)) continue;
 
-          w1lat = WayPointList[Task[i].Index].Latitude;
-          w1lon = WayPointList[Task[i].Index].Longitude;
-          w0lat = WayPointList[Task[i+1].Index].Latitude;
-          w0lon = WayPointList[Task[i+1].Index].Longitude;
+          w1lat = WayPointList[task_points[i].Index].Latitude;
+          w1lon = WayPointList[task_points[i].Index].Longitude;
+          w0lat = WayPointList[task_points[i+1].Index].Latitude;
+          w0lon = WayPointList[task_points[i+1].Index].Longitude;
 
           DistanceBearing(w1lat,
                           w1lon,
@@ -1129,15 +1129,15 @@ void GlideComputerTask::TaskStatistics(const double this_maccready,
       this_is_final = true; // JMW CHECK FGAMT
 
       if (AATEnabled) {
-	w1lat = Task[task_index].AATTargetLat;
-	w1lon = Task[task_index].AATTargetLon;
-	w0lat = Task[task_index-1].AATTargetLat;
-	w0lon = Task[task_index-1].AATTargetLon;
+	w1lat = task_points[task_index].AATTargetLat;
+	w1lon = task_points[task_index].AATTargetLon;
+	w0lat = task_points[task_index-1].AATTargetLat;
+	w0lon = task_points[task_index-1].AATTargetLon;
       } else {
-	w1lat = WayPointList[Task[task_index].Index].Latitude;
-	w1lon = WayPointList[Task[task_index].Index].Longitude;
-	w0lat = WayPointList[Task[task_index-1].Index].Latitude;
-	w0lon = WayPointList[Task[task_index-1].Index].Longitude;
+	w1lat = WayPointList[task_points[task_index].Index].Latitude;
+	w1lon = WayPointList[task_points[task_index].Index].Longitude;
+	w0lat = WayPointList[task_points[task_index-1].Index].Latitude;
+	w0lon = WayPointList[task_points[task_index-1].Index].Longitude;
       }
 
       double NextLegDistance, NextLegBearing;
@@ -1386,23 +1386,23 @@ void GlideComputerTask::AATStats_Distance()
 
       if (i > 0 ) { //RLD only include distance from glider to next leg if we've started the task
         DistanceBearing(Basic().Latitude , Basic().Longitude ,
-                        WayPointList[Task[i].Index].Latitude,
-                        WayPointList[Task[i].Index].Longitude,
+                        WayPointList[task_points[i].Index].Latitude,
+                        WayPointList[task_points[i].Index].Longitude,
                         &LegToGo, NULL);
 
         DistanceBearing(Basic().Latitude , Basic().Longitude ,
-                        Task[i].AATTargetLat,
-                        Task[i].AATTargetLon,
+                        task_points[i].AATTargetLat,
+                        task_points[i].AATTargetLon,
                         &TargetLegToGo, NULL);
 
-        if(Task[i].AATType == CIRCLE)
+        if(task_points[i].AATType == CIRCLE)
         {
-          MaxDistance = LegToGo + (Task[i].AATCircleRadius );  // ToDo: should be adjusted for angle of max target and for national rules
-          MinDistance = LegToGo - (Task[i].AATCircleRadius );
+          MaxDistance = LegToGo + (task_points[i].AATCircleRadius );  // ToDo: should be adjusted for angle of max target and for national rules
+          MinDistance = LegToGo - (task_points[i].AATCircleRadius );
         }
         else
         {
-          MaxDistance = LegToGo + (Task[i].AATSectorRadius );  // ToDo: should be adjusted for angle of max target.
+          MaxDistance = LegToGo + (task_points[i].AATSectorRadius );  // ToDo: should be adjusted for angle of max target.
           MinDistance = LegToGo;
         }
 
@@ -1413,22 +1413,22 @@ void GlideComputerTask::AATStats_Distance()
       while(ValidTaskPoint(i)) {
 	double LegDistance, TargetLegDistance;
 
-	DistanceBearing(WayPointList[Task[i].Index].Latitude,
-			WayPointList[Task[i].Index].Longitude,
-			WayPointList[Task[i-1].Index].Latitude,
-			WayPointList[Task[i-1].Index].Longitude,
+	DistanceBearing(WayPointList[task_points[i].Index].Latitude,
+			WayPointList[task_points[i].Index].Longitude,
+			WayPointList[task_points[i-1].Index].Latitude,
+			WayPointList[task_points[i-1].Index].Longitude,
 			&LegDistance, NULL);
 
-	DistanceBearing(Task[i].AATTargetLat,
-			Task[i].AATTargetLon,
-			Task[i-1].AATTargetLat,
-			Task[i-1].AATTargetLon,
+	DistanceBearing(task_points[i].AATTargetLat,
+			task_points[i].AATTargetLon,
+			task_points[i-1].AATTargetLat,
+			task_points[i-1].AATTargetLon,
 			&TargetLegDistance, NULL);
 
 	MaxDistance += LegDistance;
 	MinDistance += LegDistance;
 
-	if(Task[ActiveWayPoint].AATType == CIRCLE) {
+	if(task_points[ActiveWayPoint].AATType == CIRCLE) {
 	  // breaking out single Areas increases accuracy for start
 	  // and finish
 
@@ -1438,8 +1438,8 @@ void GlideComputerTask::AATStats_Distance()
 	    MaxDistance -= StartRadius; // e.g. Sports 2009 US Rules A116.3.2.  To Do: This should be configured multiple countries
 	    MinDistance -= StartRadius;
 	  } else { // not first leg of task
-	    MaxDistance += (Task[i-1].AATCircleRadius);  //ToDo: should be adjusted for angle of max target
-	    MinDistance -= (Task[i-1].AATCircleRadius);  //ToDo: should be adjusted for angle of max target
+	    MaxDistance += (task_points[i-1].AATCircleRadius);  //ToDo: should be adjusted for angle of max target
+	    MinDistance -= (task_points[i-1].AATCircleRadius);  //ToDo: should be adjusted for angle of max target
 	  }
 
 	  // sector at end of ith leg
@@ -1448,8 +1448,8 @@ void GlideComputerTask::AATStats_Distance()
 	    MaxDistance -= FinishRadius; // To Do: This can be configured for finish rules
 	    MinDistance -= FinishRadius;
 	  } else { // not last leg of task
-	    MaxDistance += (Task[i].AATCircleRadius);  //ToDo: should be adjusted for angle of max target
-	    MinDistance -= (Task[i].AATCircleRadius);  //ToDo: should be adjusted for angle of max target
+	    MaxDistance += (task_points[i].AATCircleRadius);  //ToDo: should be adjusted for angle of max target
+	    MinDistance -= (task_points[i].AATCircleRadius);  //ToDo: should be adjusted for angle of max target
 	  }
 	} else { // not circle (pie slice)
 	  // sector at start of (i)th leg
@@ -1457,7 +1457,7 @@ void GlideComputerTask::AATStats_Distance()
 	    // add nothing
 	    MaxDistance += 0; // To Do: This can be configured for start rules
 	  } else { // not first leg of task
-	    MaxDistance += (Task[i-1].AATCircleRadius);  //ToDo: should be adjusted for angle of max target
+	    MaxDistance += (task_points[i-1].AATCircleRadius);  //ToDo: should be adjusted for angle of max target
 	  }
 
 	  // sector at end of ith leg
@@ -1465,7 +1465,7 @@ void GlideComputerTask::AATStats_Distance()
 	    // add nothing
 	    MaxDistance += 0; // To Do: This can be configured for finish rules
 	  } else { // not last leg of task
-	    MaxDistance += (Task[i].AATCircleRadius);  //ToDo: should be adjusted for angle of max target
+	    MaxDistance += (task_points[i].AATCircleRadius);  //ToDo: should be adjusted for angle of max target
 	  }
 	}
 	TargetDistance += TargetLegDistance;
@@ -1591,17 +1591,17 @@ bool GlideComputerTask::TaskAltitudeRequired(double this_maccready, double *Vfin
 
     if (!ValidTaskPoint(i) || !ValidTaskPoint(i+1)) continue;
 
-    w1lat = WayPointList[Task[i].Index].Latitude;
-    w1lon = WayPointList[Task[i].Index].Longitude;
-    w0lat = WayPointList[Task[i+1].Index].Latitude;
-    w0lon = WayPointList[Task[i+1].Index].Longitude;
+    w1lat = WayPointList[task_points[i].Index].Latitude;
+    w1lon = WayPointList[task_points[i].Index].Longitude;
+    w0lat = WayPointList[task_points[i+1].Index].Latitude;
+    w0lon = WayPointList[task_points[i+1].Index].Longitude;
 
     if (AATEnabled) {
-      w1lat = Task[i].AATTargetLat;
-      w1lon = Task[i].AATTargetLon;
+      w1lat = task_points[i].AATTargetLat;
+      w1lon = task_points[i].AATTargetLon;
       if (!isfinal) {
-        w0lat = Task[i+1].AATTargetLat;
-        w0lon = Task[i+1].AATTargetLon;
+        w0lat = task_points[i+1].AATTargetLat;
+        w0lon = task_points[i+1].AATTargetLon;
       }
     }
 

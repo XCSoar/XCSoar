@@ -544,8 +544,6 @@ void MapWindowProjection::UpdateMapScale(const NMEA_INFO &DrawInfo,
   double AutoZoomFactor;
   static DisplayMode_t DisplayModeLast = DisplayMode;
 
-  bool my_target_pan = ;
-
   // if there is user intervention in the scale
   double ext_mapscale = LimitMapScale(settings_map.MapScale, settings_map);
   if ((fabs(_RequestedMapScale-ext_mapscale)>0.05) && 
@@ -611,14 +609,14 @@ void MapWindowProjection::UpdateMapScale(const NMEA_INFO &DrawInfo,
   // if we aren't looking at a waypoint, see if we are now
   if (AutoMapScaleWaypointIndex == -1) {
     if (ValidTaskPoint(ActiveWayPoint)) {
-      AutoMapScaleWaypointIndex = Task[ActiveWayPoint].Index;
+      AutoMapScaleWaypointIndex = task_points[ActiveWayPoint].Index;
     }
   }
   // if there is an active waypoint
   if (ValidTaskPoint(ActiveWayPoint)) {
     // if the current zoom focused waypoint has changed...
-    if (AutoMapScaleWaypointIndex != Task[ActiveWayPoint].Index) {
-      AutoMapScaleWaypointIndex = Task[ActiveWayPoint].Index;
+    if (AutoMapScaleWaypointIndex != task_points[ActiveWayPoint].Index) {
+      AutoMapScaleWaypointIndex = task_points[ActiveWayPoint].Index;
       
       // zoom back out to where we were before
       if (StartingAutoMapScale> 0.0) {

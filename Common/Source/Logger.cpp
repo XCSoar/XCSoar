@@ -743,9 +743,9 @@ void LoggerDeviceDeclare() {
   GetRegistryString(szRegistryAircraftRego, Decl.AircraftRego, 32);
 
   for (i = 0; i < MAXTASKPOINTS; i++) {
-    if (Task[i].Index == -1)
+    if (task_points[i].Index == -1)
       break;
-    Decl.waypoint[i] = &WayPointList[Task[i].Index];
+    Decl.waypoint[i] = &WayPointList[task_points[i].Index];
   }
   Decl.num_waypoints = i;
 
@@ -989,14 +989,14 @@ void guiStartLogger(const NMEA_INFO& gps_info,
     _tcscpy(TaskMessage,TEXT("Start Logger With Declaration\r\n"));
     for(i=0;i<MAXTASKPOINTS;i++)
       {
-	if(Task[i].Index == -1)
+	if(task_points[i].Index == -1)
 	  {
 	    if(i==0)
 	      _tcscat(TaskMessage,TEXT("None"));
 
 	    break;
 	  }
-	_tcscat(TaskMessage,WayPointList[ Task[i].Index ].Name);
+	_tcscat(TaskMessage,WayPointList[ task_points[i].Index ].Name);
 	_tcscat(TaskMessage,TEXT("\r\n"));
       }
 
@@ -1014,7 +1014,7 @@ void guiStartLogger(const NMEA_INFO& gps_info,
 	  int ntp=0;
 	  for(i=0;i<MAXTASKPOINTS;i++)
 	    {
-	      if(Task[i].Index == -1) {
+	      if(task_points[i].Index == -1) {
 		break;
 	      }
 	      ntp++;
@@ -1022,12 +1022,12 @@ void guiStartLogger(const NMEA_INFO& gps_info,
 	  StartDeclaration(gps_info,ntp);
 	  for(i=0;i<MAXTASKPOINTS;i++)
 	    {
-	      if(Task[i].Index == -1) {
+	      if(task_points[i].Index == -1) {
 		break;
 	      }
-	      AddDeclaration(WayPointList[Task[i].Index].Latitude,
-			     WayPointList[Task[i].Index].Longitude,
-			     WayPointList[Task[i].Index].Name );
+	      AddDeclaration(WayPointList[task_points[i].Index].Latitude,
+			     WayPointList[task_points[i].Index].Longitude,
+			     WayPointList[task_points[i].Index].Name );
 	    }
 	  EndDeclaration();
 	  ResetFRecord(); // reset timer & lastRecord string so if

@@ -351,18 +351,18 @@ EffectiveMacCready_internal(const NMEA_INFO *Basic, const DERIVED_INFO *Calculat
   double LegBearings[MAXTASKPOINTS];
 
   for (int i=0; i<ActiveWayPoint; i++) {
-    double w1lat = WayPointList[Task[i+1].Index].Latitude;
-    double w1lon = WayPointList[Task[i+1].Index].Longitude;
-    double w0lat = WayPointList[Task[i].Index].Latitude;
-    double w0lon = WayPointList[Task[i].Index].Longitude;
+    double w1lat = WayPointList[task_points[i+1].Index].Latitude;
+    double w1lon = WayPointList[task_points[i+1].Index].Longitude;
+    double w0lat = WayPointList[task_points[i].Index].Latitude;
+    double w0lon = WayPointList[task_points[i].Index].Longitude;
     if (AATEnabled) {
       if (ValidTaskPoint(i+1)) {
-        w1lat = Task[i+1].AATTargetLat;
-        w1lon = Task[i+1].AATTargetLon;
+        w1lat = task_points[i+1].AATTargetLat;
+        w1lon = task_points[i+1].AATTargetLon;
       }
       if (i>0) {
-        w0lat = Task[i].AATTargetLat;
-        w0lon = Task[i].AATTargetLon;
+        w0lat = task_points[i].AATTargetLat;
+        w0lon = task_points[i].AATTargetLon;
       }
     }
     DistanceBearing(w0lat,

@@ -51,7 +51,7 @@ const TCHAR *FormatterWaypoint::Render(int *color) {
   mutexTaskData.Lock();
   if(ValidTaskPoint(thewaypoint))
     {
-      int index = Task[thewaypoint].Index;
+      int index = task_points[thewaypoint].Index;
       if ((index>=0) && (WayPointList[index].Reachable)) {
 	*color = 2; // blue text
       } else {

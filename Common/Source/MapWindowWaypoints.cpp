@@ -284,7 +284,7 @@ void MapWindow::CalculateScreenPositionsWaypoints() {
 
   if (WayPointList) {
     for (j=0; j<MAXTASKPOINTS; j++) {
-      int i = Task[j].Index;
+      int i = task_points[j].Index;
       if (i>=0) {
 	LonLat2Screen(WayPointList[i].Longitude, 
 		      WayPointList[i].Latitude,

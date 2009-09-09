@@ -480,9 +480,9 @@ static void UpdateValuesRules(void) {
   wp = (WndProperty*)wf->FindByName(TEXT("prpStartPoint"));
 
   if (ValidTaskPoint(0)) {
-    //    start_h = WayPointList[Task[0].Index].Altitude;
+    //    start_h = WayPointList[task_points[0].Index].Altitude;
     if (wp) {
-      wp->SetText(WayPointList[Task[0].Index].Name);
+      wp->SetText(WayPointList[task_points[0].Index].Name);
     }
   } else {
     //    start_h = 0;

@@ -76,17 +76,17 @@ bool MapWindow::SetTargetPan(bool do_pan, int target_point) {
   if (do_pan) {
     mutexTaskData.Lock();
     if (ValidTaskPoint(target_point)) {
-      PanLongitude = WayPointList[Task[target_point].Index].Longitude;
-      PanLatitude = WayPointList[Task[target_point].Index].Latitude;
+      PanLongitude = WayPointList[task_points[target_point].Index].Longitude;
+      PanLatitude = WayPointList[task_points[target_point].Index].Latitude;
       if (target_point==0) {
         TargetZoomDistance = max(2e3, StartRadius*2);
       } else if (!ValidTaskPoint(target_point+1)) {
         TargetZoomDistance = max(2e3, FinishRadius*2);
       } else if (AATEnabled) {
-        if (Task[target_point].AATType == SECTOR) {
-          TargetZoomDistance = max(2e3, Task[target_point].AATSectorRadius*2);
+        if (task_points[target_point].AATType == SECTOR) {
+          TargetZoomDistance = max(2e3, task_points[target_point].AATSectorRadius*2);
         } else {
-          TargetZoomDistance = max(2e3, Task[target_point].AATCircleRadius*2);
+          TargetZoomDistance = max(2e3, task_points[target_point].AATCircleRadius*2);
         }
       } else {
         TargetZoomDistance = max(2e3, SectorRadius*2);

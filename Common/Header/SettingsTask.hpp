@@ -49,7 +49,7 @@ extern int  AirfieldsHomeWaypoint; // VENTA3
 
 // task data
 extern Start_t StartPoints;
-extern Task_t Task;
+extern Task_t task_points;
 extern TaskStats_t TaskStats;
 extern int ActiveWayPoint;
 extern int SelectedWaypoint;

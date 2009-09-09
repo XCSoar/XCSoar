@@ -75,7 +75,7 @@ static void UpdateCaption(void) {
       break;
     };
     _stprintf(sTmp, TEXT("%s: %s"), title,
-              WayPointList[Task[twItemIndex].Index].Name);
+              WayPointList[task_points[twItemIndex].Index].Name);
     wf->SetCaption(sTmp);
   } else {
     wf->SetCaption(gettext(TEXT("(invalid)")));
@@ -211,31 +211,31 @@ static void GetWaypointValues(void) {
     mutexTaskData.Lock();
     wp = (WndProperty*)wf->FindByName(TEXT("prpAATType"));
     if (wp) {
-      CHECK_CHANGED(Task[twItemIndex].AATType,
+      CHECK_CHANGED(task_points[twItemIndex].AATType,
                     wp->GetDataField()->GetAsInteger());
     }
 
     wp = (WndProperty*)wf->FindByName(TEXT("prpAATCircleRadius"));
     if (wp) {
-      CHECK_CHANGED(Task[twItemIndex].AATCircleRadius,
+      CHECK_CHANGED(task_points[twItemIndex].AATCircleRadius,
                     iround(wp->GetDataField()->GetAsFloat()/DISTANCEMODIFY));
     }
 
     wp = (WndProperty*)wf->FindByName(TEXT("prpAATSectorRadius"));
     if (wp) {
-      CHECK_CHANGED(Task[twItemIndex].AATSectorRadius,
+      CHECK_CHANGED(task_points[twItemIndex].AATSectorRadius,
                     iround(wp->GetDataField()->GetAsFloat()/DISTANCEMODIFY));
     }
 
     wp = (WndProperty*)wf->FindByName(TEXT("prpAATStartRadial"));
     if (wp) {
-      CHECK_CHANGED(Task[twItemIndex].AATStartRadial,
+      CHECK_CHANGED(task_points[twItemIndex].AATStartRadial,
                     wp->GetDataField()->GetAsInteger());
     }
 
     wp = (WndProperty*)wf->FindByName(TEXT("prpAATFinishRadial"));
     if (wp) {
-      CHECK_CHANGED(Task[twItemIndex].AATFinishRadial,
+      CHECK_CHANGED(task_points[twItemIndex].AATFinishRadial,
                     wp->GetDataField()->GetAsInteger());
     }
     if (changed) {
@@ -259,40 +259,40 @@ static void SetWaypointValues(bool first=false) {
       dfe->addEnumText(gettext(TEXT("Sector")));
     }
     dfe->SetDetachGUI(true); // disable call to OnAATEnabled
-    dfe->Set(Task[twItemIndex].AATType);
+    dfe->Set(task_points[twItemIndex].AATType);
     dfe->SetDetachGUI(false);
     wp->RefreshDisplay();
   }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpAATCircleRadius"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(lround(Task[twItemIndex].AATCircleRadius
+    wp->GetDataField()->SetAsFloat(lround(task_points[twItemIndex].AATCircleRadius
                                           *DISTANCEMODIFY*DISTANCE_ROUNDING)/DISTANCE_ROUNDING);
     wp->GetDataField()->SetUnits(Units::GetDistanceName());
-    wp->SetVisible(Task[twItemIndex].AATType==0);
+    wp->SetVisible(task_points[twItemIndex].AATType==0);
     wp->RefreshDisplay();
   }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpAATSectorRadius"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(lround(Task[twItemIndex].AATSectorRadius
+    wp->GetDataField()->SetAsFloat(lround(task_points[twItemIndex].AATSectorRadius
                                           *DISTANCEMODIFY*DISTANCE_ROUNDING)/DISTANCE_ROUNDING);
     wp->GetDataField()->SetUnits(Units::GetDistanceName());
-    wp->SetVisible(Task[twItemIndex].AATType>0);
+    wp->SetVisible(task_points[twItemIndex].AATType>0);
     wp->RefreshDisplay();
   }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpAATStartRadial"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(Task[twItemIndex].AATStartRadial);
-    wp->SetVisible(Task[twItemIndex].AATType>0);
+    wp->GetDataField()->SetAsFloat(task_points[twItemIndex].AATStartRadial);
+    wp->SetVisible(task_points[twItemIndex].AATType>0);
     wp->RefreshDisplay();
   }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpAATFinishRadial"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(Task[twItemIndex].AATFinishRadial);
-    wp->SetVisible(Task[twItemIndex].AATType>0);
+    wp->GetDataField()->SetAsFloat(task_points[twItemIndex].AATFinishRadial);
+    wp->SetVisible(task_points[twItemIndex].AATType>0);
     wp->RefreshDisplay();
   }
 
@@ -396,15 +396,15 @@ static void OnSelectClicked(WindowControl * Sender){
   res = dlgWayPointSelect();
   if (res != -1){
     SelectedWaypoint = res;
-    if (Task[twItemIndex].Index != res) {
+    if (task_points[twItemIndex].Index != res) {
       if (CheckDeclaration()) {
         mutexTaskData.Lock();
-	Task[twItemIndex].Index = res;
-        Task[twItemIndex].AATTargetOffsetRadius = 0.0;
-        Task[twItemIndex].AATTargetOffsetRadial = 0.0;
-        Task[twItemIndex].AATSectorRadius = SectorRadius;
-        Task[twItemIndex].AATCircleRadius = SectorRadius;
-        Task[twItemIndex].AATTargetLocked = false;
+	task_points[twItemIndex].Index = res;
+        task_points[twItemIndex].AATTargetOffsetRadius = 0.0;
+        task_points[twItemIndex].AATTargetOffsetRadial = 0.0;
+        task_points[twItemIndex].AATSectorRadius = SectorRadius;
+        task_points[twItemIndex].AATCircleRadius = SectorRadius;
+        task_points[twItemIndex].AATTargetLocked = false;
         SetTaskModified();
         mutexTaskData.Unlock();
       }
@@ -444,7 +444,7 @@ static void OnMoveBeforeClicked(WindowControl * Sender){
 
 static void OnDetailsClicked(WindowControl * Sender){
 	(void)Sender;
-  SelectedWaypoint = Task[twItemIndex].Index;
+  SelectedWaypoint = task_points[twItemIndex].Index;
   PopupWaypointDetails();
 }
 

@@ -609,7 +609,7 @@ void InfoBoxManager::DisplayInfoBox(void)
 
       if (theactive != -1){
         int index;
-        index = Task[theactive].Index;
+        index = task_points[theactive].Index;
         if (index>=0) {
           InfoBoxes[i]->
             SetComment(WayPointList[index].Comment);

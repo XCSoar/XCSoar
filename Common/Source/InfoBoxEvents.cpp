@@ -377,7 +377,7 @@ ActionInterface::on_key_Waypoint(int UpDown)
   if(UpDown>0) {
     if(ActiveWayPoint < MAXTASKPOINTS) {
       // Increment Waypoint
-      if(Task[ActiveWayPoint+1].Index >= 0) {
+      if(task_points[ActiveWayPoint+1].Index >= 0) {
 	if(ActiveWayPoint == 0)	{
 	  // manual start
 	  // TODO bug: allow restart
@@ -396,7 +396,7 @@ ActionInterface::on_key_Waypoint(int UpDown)
       }
       // No more, try first
       else
-        if((UpDown == 2) && (Task[0].Index >= 0)) {
+        if((UpDown == 2) && (task_points[0].Index >= 0)) {
           /* ****DISABLED****
           if(ActiveWayPoint == 0)	{
             // TODO bug: allow restart
@@ -438,11 +438,11 @@ ActionInterface::on_key_Waypoint(int UpDown)
     glide_computer.ResetEnter();
   }
   else if (UpDown==0) {
-    SelectedWaypoint = Task[ActiveWayPoint].Index;
+    SelectedWaypoint = task_points[ActiveWayPoint].Index;
     PopupWaypointDetails();
   }
   if (ActiveWayPoint>=0) {
-    SelectedWaypoint = Task[ActiveWayPoint].Index;
+    SelectedWaypoint = task_points[ActiveWayPoint].Index;
   }
   mutexTaskData.Unlock();
 }
