@@ -107,7 +107,7 @@ typedef struct SETTINGS_MAP_ {
   double TargetZoomDistance;
   double MapScale;
   bool  EnableFLARMGauge;
-  DWORD EnableFLARMMap;
+  unsigned EnableFLARMMap;
   bool  ScreenBlanked;
   bool EnableAutoBlank;
   bool  EnableVarioGauge;

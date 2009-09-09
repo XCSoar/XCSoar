@@ -1654,7 +1654,7 @@ static void setVariables(void) {
 
   ////
 
-  if(GetFromRegistry(szRegistrySpeedUnitsValue,&Speed)!=ERROR_SUCCESS) {
+  if(GetFromRegistryD(szRegistrySpeedUnitsValue,Speed)!=ERROR_SUCCESS) {
     SetToRegistry(szRegistrySpeedUnitsValue, Speed);
     changed = true;
   }
@@ -1681,7 +1681,7 @@ static void setVariables(void) {
     wp->RefreshDisplay();
   }
 
-  if(GetFromRegistry(szRegistryTaskSpeedUnitsValue,&TaskSpeed)!=ERROR_SUCCESS) {
+  if(GetFromRegistryD(szRegistryTaskSpeedUnitsValue,TaskSpeed)!=ERROR_SUCCESS) {
     SetToRegistry(szRegistryTaskSpeedUnitsValue, TaskSpeed);
     changed = true;
   }
@@ -1696,7 +1696,7 @@ static void setVariables(void) {
     wp->RefreshDisplay();
   }
 
-  if(GetFromRegistry(szRegistryDistanceUnitsValue,&Distance)!=ERROR_SUCCESS) {
+  if(GetFromRegistryD(szRegistryDistanceUnitsValue,Distance)!=ERROR_SUCCESS) {
     SetToRegistry(szRegistryDistanceUnitsValue, Distance);
     changed = true;
   }
@@ -1711,7 +1711,7 @@ static void setVariables(void) {
     wp->RefreshDisplay();
   }
 
-  if(GetFromRegistry(szRegistryAltitudeUnitsValue,&Altitude)!=ERROR_SUCCESS) {
+  if(GetFromRegistryD(szRegistryAltitudeUnitsValue,Altitude)!=ERROR_SUCCESS) {
     SetToRegistry(szRegistryAltitudeUnitsValue, Altitude);
     changed = true;
   }
@@ -1725,7 +1725,7 @@ static void setVariables(void) {
     wp->RefreshDisplay();
   }
 
-  if(GetFromRegistry(szRegistryLiftUnitsValue,&Lift)!=ERROR_SUCCESS) {
+  if(GetFromRegistryD(szRegistryLiftUnitsValue,Lift)!=ERROR_SUCCESS) {
     SetToRegistry(szRegistryLiftUnitsValue, Lift);
     changed = true;
   }

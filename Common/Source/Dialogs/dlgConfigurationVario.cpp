@@ -84,9 +84,8 @@ static bool VegaConfigurationUpdated(const TCHAR *name, bool first,
   TCHAR propname[100];
   TCHAR requesttext[100];
   DWORD updated=0;
-  long newval=0;
-  long lvalue=0;
-  DWORD dwvalue;
+  unsigned newval=0;
+  unsigned lvalue=0;
 
   WndProperty* wp;
 
@@ -125,7 +124,7 @@ static bool VegaConfigurationUpdated(const TCHAR *name, bool first,
     return true;
   }
 
-  if (!(GetFromRegistry(fullname, (DWORD*)&lvalue)==ERROR_SUCCESS)) {
+  if (!(GetFromRegistry(fullname, lvalue)==ERROR_SUCCESS)) {
     // vario hasn't set the value in the registry yet,
     // so no sensible defaults
     return false;
@@ -133,22 +132,21 @@ static bool VegaConfigurationUpdated(const TCHAR *name, bool first,
 
     // hack, fix the -1 (plug and play settings)
     if (_tcscmp(name, TEXT("HasTemperature")) == 0){
-      if (lvalue == 255)
+      if (lvalue >= 255)
         lvalue = 2;
     }
-
     if (first) {
       // at start, set from last known registry value, this
       // helps if variables haven't been modified.
       wp = (WndProperty*)wf->FindByName(propname);
       if (wp) {
-	wp->GetDataField()->Set((int)lvalue);
+	wp->GetDataField()->Set(lvalue);
 	wp->RefreshDisplay();
       }
     }
   }
 
-  if (GetFromRegistry(updatename, &updated)==ERROR_SUCCESS) {
+  if (GetFromRegistryD(updatename, updated)==ERROR_SUCCESS) {
 
     if (updated==1) {
       // value is updated externally, so set the property and can proceed
@@ -158,20 +156,17 @@ static bool VegaConfigurationUpdated(const TCHAR *name, bool first,
 
       wp = (WndProperty*)wf->FindByName(propname);
       if (wp) {
-	wp->GetDataField()->Set((int)lvalue);
+	wp->GetDataField()->Set(lvalue);
 	wp->RefreshDisplay();
       }
     } else if (updated==2) {
       wp = (WndProperty*)wf->FindByName(propname);
       if (wp) {
-	newval = (long)(wp->GetDataField()->GetAsInteger());
+	newval = (wp->GetDataField()->GetAsInteger());
 	if (newval != lvalue) {
 	  // value has changed
 	  SetToRegistry(updatename, 2);
-
-	  dwvalue = *((DWORD*)&lvalue);
-
-	  SetToRegistry(fullname, dwvalue);
+	  SetToRegistry(fullname, (DWORD)lvalue);
 
 	  changed = true;
 

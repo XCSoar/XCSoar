@@ -65,20 +65,21 @@ Copyright_License {
 #include <stdlib.h>
 
 const TCHAR szRegistryKey[] = TEXT(REGKEYNAME);
-const TCHAR *szRegistryDisplayType[MAXINFOWINDOWS] =     { TEXT("Info0"),
-				       TEXT("Info1"),
-				       TEXT("Info2"),
-				       TEXT("Info3"),
-				       TEXT("Info4"),
-				       TEXT("Info5"),
-				       TEXT("Info6"),
-				       TEXT("Info7"),
-				       TEXT("Info8"),
-				       TEXT("Info9")
-				       TEXT("Info10")
-				       TEXT("Info11")
-				       TEXT("Info12")
-				       TEXT("Info13")
+const TCHAR *szRegistryDisplayType[MAXINFOWINDOWS] =     
+  { TEXT("Info0"),
+    TEXT("Info1"),
+    TEXT("Info2"),
+    TEXT("Info3"),
+    TEXT("Info4"),
+    TEXT("Info5"),
+    TEXT("Info6"),
+    TEXT("Info7"),
+    TEXT("Info8"),
+    TEXT("Info9"),
+    TEXT("Info10"),
+    TEXT("Info11"),
+    TEXT("Info12"),
+    TEXT("Info13")
 }; // pL
 
 const TCHAR *szRegistryColour[] =     { TEXT("Colour0"),
@@ -414,7 +415,6 @@ void ReadRegistrySettings(void)
   DWORD TaskSpeed = 0;
   DWORD Lift = 0;
   DWORD Altitude = 0;
-//  DWORD DisplayUp = 0;
   DWORD Temp = 0;
   int i;
 
@@ -425,16 +425,14 @@ void ReadRegistrySettings(void)
 #endif
 
   for (i=0; i<AIRSPACECLASSCOUNT; i++) {
-    Temp=0;
-    GetFromRegistry(szRegistryAirspacePriority[i], &Temp);
-    AirspacePriority[i] = Temp;
+    GetFromRegistry(szRegistryAirspacePriority[i], AirspacePriority[i]);
   }
 
   Temp = 0;
-  GetFromRegistry(szRegistryLatLonUnits, &Temp);
+  GetFromRegistryD(szRegistryLatLonUnits, Temp);
   Units::CoordinateFormat = (CoordinateFormats_t)Temp;
 
-  GetFromRegistry(szRegistrySpeedUnitsValue,&Speed);
+  GetFromRegistryD(szRegistrySpeedUnitsValue,Speed);
   switch(Speed)
     {
     case 0 :
@@ -449,7 +447,7 @@ void ReadRegistrySettings(void)
     }
 
   TaskSpeed = 2;
-  GetFromRegistry(szRegistryTaskSpeedUnitsValue,&TaskSpeed);
+  GetFromRegistryD(szRegistryTaskSpeedUnitsValue,TaskSpeed);
   switch(TaskSpeed)
     {
     case 0 :
@@ -463,7 +461,7 @@ void ReadRegistrySettings(void)
       break;
     }
 
-  GetFromRegistry(szRegistryDistanceUnitsValue,&Distance);
+  GetFromRegistryD(szRegistryDistanceUnitsValue,Distance);
   switch(Distance)
     {
     case 0 : DISTANCEMODIFY = TOMILES; break;
@@ -471,14 +469,14 @@ void ReadRegistrySettings(void)
     case 2 : DISTANCEMODIFY = TOKILOMETER; break;
     }
 
-  GetFromRegistry(szRegistryAltitudeUnitsValue,&Altitude);
+  GetFromRegistryD(szRegistryAltitudeUnitsValue,Altitude);
   switch(Altitude)
     {
     case 0 : ALTITUDEMODIFY = TOFEET; break;
     case 1 : ALTITUDEMODIFY = TOMETER; break;
     }
 
-  GetFromRegistry(szRegistryLiftUnitsValue,&Lift);
+  GetFromRegistryD(szRegistryLiftUnitsValue,Lift);
   switch(Lift)
     {
     case 0 : LIFTMODIFY = TOKNOTS; break;
@@ -490,7 +488,7 @@ void ReadRegistrySettings(void)
   for (i=0;i<MAXINFOWINDOWS;i++)
     {
       Temp = InfoBoxManager::getTypeAll(i);
-      GetFromRegistry(szRegistryDisplayType[i],&Temp);
+      GetFromRegistryD(szRegistryDisplayType[i],Temp);
       InfoBoxManager::setTypeAll(i,Temp);
     }
 
@@ -498,7 +496,7 @@ void ReadRegistrySettings(void)
   CheckInfoTypes();
 
   Temp=0;
-  GetFromRegistry(szRegistryDisplayUpValue,&Temp);
+  GetFromRegistryD(szRegistryDisplayUpValue,Temp);
   switch(Temp)
     {
     case TRACKUP : 
@@ -514,7 +512,7 @@ void ReadRegistrySettings(void)
     }
 
   Temp=0;
-  GetFromRegistry(szRegistryDisplayText,&Temp);
+  GetFromRegistryD(szRegistryDisplayText,Temp);
   switch(Temp)
     {
     case 0 : 
@@ -531,78 +529,69 @@ void ReadRegistrySettings(void)
       XCSoarInterface::SetSettingsMap().DisplayTextType = DISPLAYNAMEIFINTASK; break;
     }
 
-  GetFromRegistry(szRegistryAltMode,&AltitudeMode);
-  GetFromRegistry(szRegistryClipAlt,&ClipAltitude);
-  GetFromRegistry(szRegistryAltMargin,&AltWarningMargin);
+  GetFromRegistry(szRegistryAltMode,AltitudeMode);
+  GetFromRegistry(szRegistryClipAlt,ClipAltitude);
+  GetFromRegistry(szRegistryAltMargin,AltWarningMargin);
   GetFromRegistry(szRegistrySafetyAltitudeArrival,
-		  &XCSoarInterface::SetSettingsComputer().SAFETYALTITUDEARRIVAL);
+		  XCSoarInterface::SetSettingsComputer().SAFETYALTITUDEARRIVAL);
   GetFromRegistry(szRegistrySafetyAltitudeBreakOff,
-		  &XCSoarInterface::SetSettingsComputer().SAFETYALTITUDEBREAKOFF);
+		  XCSoarInterface::SetSettingsComputer().SAFETYALTITUDEBREAKOFF);
   GetFromRegistry(szRegistrySafetyAltitudeTerrain,
-		  &XCSoarInterface::SetSettingsComputer().SAFETYALTITUDETERRAIN);
+		  XCSoarInterface::SetSettingsComputer().SAFETYALTITUDETERRAIN);
   GetFromRegistry(szRegistrySafteySpeed,
-		  &XCSoarInterface::SetSettingsComputer().SAFTEYSPEED);
-  GetFromRegistry(szRegistryFAISector,&SectorType);
-  GetFromRegistry(szRegistryFAISector,&SectorRadius);
-  GetFromRegistry(szRegistryPolarID,&POLARID);
+		  XCSoarInterface::SetSettingsComputer().SAFTEYSPEED);
+  GetFromRegistry(szRegistryFAISector,SectorType);
+  GetFromRegistry(szRegistrySectorRadius,SectorRadius);
+  GetFromRegistry(szRegistryPolarID,POLARID);
 
   GetRegistryString(szRegistryRegKey, strRegKey, 65);
 
-  for(i=0;i<AIRSPACECLASSCOUNT;i++)
-    {
-      iAirspaceMode[i] = GetRegistryAirspaceMode(i);
-
-      Temp= iAirspaceBrush[i];
-      if(GetFromRegistry(szRegistryBrush[i],&Temp)==ERROR_SUCCESS)
-        iAirspaceBrush[i] =			(int)Temp;
-
-      Temp= iAirspaceColour[i];
-      if(GetFromRegistry(szRegistryColour[i],&Temp)==ERROR_SUCCESS)
-        iAirspaceColour[i] =			(int)Temp;
-
-      if (iAirspaceColour[i]>= NUMAIRSPACECOLORS) {
-        iAirspaceColour[i]= 0;
-      }
-
-      if (iAirspaceBrush[i]>= NUMAIRSPACEBRUSHES) {
-        iAirspaceBrush[i]= 0;
-      }
-
+  for(i=0;i<AIRSPACECLASSCOUNT;i++) {
+    iAirspaceMode[i] = GetRegistryAirspaceMode(i);
+    
+    GetFromRegistry(szRegistryBrush[i],iAirspaceBrush[i]);
+    GetFromRegistry(szRegistryColour[i],iAirspaceColour[i]);
+    if (iAirspaceColour[i]>= NUMAIRSPACECOLORS) {
+      iAirspaceColour[i]= 0;
     }
+    if (iAirspaceBrush[i]>= NUMAIRSPACEBRUSHES) {
+      iAirspaceBrush[i]= 0;
+    }
+  }
 
   GetFromRegistry(szRegistryAirspaceBlackOutline,
-		  &XCSoarInterface::SetSettingsMap().bAirspaceBlackOutline);
+		  XCSoarInterface::SetSettingsMap().bAirspaceBlackOutline);
   GetFromRegistry(szRegistrySnailTrail,
-		  &XCSoarInterface::SetSettingsMap().TrailActive);
+		  XCSoarInterface::SetSettingsMap().TrailActive);
 
   GetFromRegistry(szRegistryTrailDrift,
-		  &XCSoarInterface::SetSettingsMap().EnableTrailDrift );
+		  XCSoarInterface::SetSettingsMap().EnableTrailDrift );
 
   GetFromRegistry(szRegistryThermalLocator,
-		  &XCSoarInterface::SetSettingsComputer().EnableThermalLocator );
+		  XCSoarInterface::SetSettingsComputer().EnableThermalLocator );
 
-  GetFromRegistry(szRegistryAnimation,&EnableAnimation );
+  GetFromRegistry(szRegistryAnimation,EnableAnimation );
 
   GetFromRegistry(szRegistryDrawTopology,
-		  &XCSoarInterface::SetSettingsMap().EnableTopology );
+		  XCSoarInterface::SetSettingsMap().EnableTopology );
 
   GetFromRegistry(szRegistryDrawTerrain,
-		  &XCSoarInterface::SetSettingsMap().EnableTerrain );
+		  XCSoarInterface::SetSettingsMap().EnableTerrain );
 
   GetFromRegistry(szRegistryFinalGlideTerrain,
-		  &XCSoarInterface::SetSettingsComputer().FinalGlideTerrain );
+		  XCSoarInterface::SetSettingsComputer().FinalGlideTerrain );
 
   GetFromRegistry(szRegistryAutoWind,
-		  &XCSoarInterface::SetSettingsComputer().AutoWindMode );
+		  XCSoarInterface::SetSettingsComputer().AutoWindMode );
 
   GetFromRegistry(szRegistryCircleZoom,
-		  &XCSoarInterface::SetSettingsMap().CircleZoom );
+		  XCSoarInterface::SetSettingsMap().CircleZoom );
 
-  GetFromRegistry(szRegistryHomeWaypoint,&HomeWaypoint);
+  GetFromRegistry(szRegistryHomeWaypoint,HomeWaypoint);
 
 // VENTA3
   Temp = Alternate1;
-  if (GetFromRegistry(szRegistryAlternate1,&Temp)==ERROR_SUCCESS) {
+  if (GetFromRegistryD(szRegistryAlternate1,Temp)==ERROR_SUCCESS) {
     Alternate1 = Temp;
     // TODO: for portrait no need to force alternate calculations here.
     // Infobox will trigger them on if visible..
@@ -613,7 +602,7 @@ void ReadRegistrySettings(void)
   }
 
   Temp = Alternate2;
-  if (GetFromRegistry(szRegistryAlternate2,&Temp)==ERROR_SUCCESS) {
+  if (GetFromRegistryD(szRegistryAlternate2,Temp)==ERROR_SUCCESS) {
     Alternate2 = Temp;
     XCSoarInterface::SetSettingsComputer().EnableAlternate2=true;
   } else {
@@ -623,46 +612,46 @@ void ReadRegistrySettings(void)
 
 
   GetFromRegistry(szRegistrySnailWidthScale,
-		  &XCSoarInterface::SetSettingsMap().SnailWidthScale );
+		  XCSoarInterface::SetSettingsMap().SnailWidthScale );
 
   GetFromRegistry(szRegistryTeamcodeRefWaypoint,
-		  &XCSoarInterface::SetSettingsComputer().TeamCodeRefWaypoint );
+		  XCSoarInterface::SetSettingsComputer().TeamCodeRefWaypoint );
 
   GetFromRegistry(szRegistryStartLine,
-		  &StartLine );
+		  StartLine );
 
   GetFromRegistry(szRegistryStartRadius,
-		  &StartRadius );
+		  StartRadius );
 
   GetFromRegistry(szRegistryFinishLine,
-		  &FinishLine );
+		  FinishLine );
 
   GetFromRegistry(szRegistryFinishRadius,
-		  &FinishRadius );
+		  FinishRadius );
 
   GetFromRegistry(szRegistryAirspaceWarning,
-		  &AIRSPACEWARNINGS );
+		  AIRSPACEWARNINGS );
 
   GetFromRegistry(szRegistryWarningTime,
-		  &WarningTime );
+		  WarningTime );
 
   GetFromRegistry(szRegistryAcknowledgementTime,
-		  &AcknowledgementTime );
+		  AcknowledgementTime );
 
   GetFromRegistry(szRegistrySoundVolume,
-		  &XCSoarInterface::SetSettingsComputer().SoundVolume );
+		  XCSoarInterface::SetSettingsComputer().SoundVolume );
 
   GetFromRegistry(szRegistrySoundDeadband,
-		  &XCSoarInterface::SetSettingsComputer().SoundDeadband );
+		  XCSoarInterface::SetSettingsComputer().SoundDeadband );
 
   GetFromRegistry(szRegistrySoundAudioVario,
-		  &XCSoarInterface::SetSettingsComputer().EnableSoundVario );
+		  XCSoarInterface::SetSettingsComputer().EnableSoundVario );
 
   GetFromRegistry(szRegistrySoundTask,
-		  &XCSoarInterface::SetSettingsComputer().EnableSoundTask );
+		  XCSoarInterface::SetSettingsComputer().EnableSoundTask );
 
   GetFromRegistry(szRegistrySoundModes,
-		  &XCSoarInterface::SetSettingsComputer().EnableSoundModes );
+		  XCSoarInterface::SetSettingsComputer().EnableSoundModes );
 
   /* no longer used
   Temp = 500;
@@ -685,26 +674,26 @@ void ReadRegistrySettings(void)
 
 #ifdef HAVE_BLANK
   GetFromRegistry(szRegistryAutoBlank,
-		  &CommonInterface::SetSettingsMap().EnableAutoBlank );
+		  CommonInterface::SetSettingsMap().EnableAutoBlank );
 #endif
 
   GetFromRegistry(szRegistryAutoBacklight,
-		  &CommonInterface::EnableAutoBacklight );
+		  CommonInterface::EnableAutoBacklight );
   GetFromRegistry(szRegistryAutoSoundVolume,
-		  &CommonInterface::EnableAutoSoundVolume );
+		  CommonInterface::EnableAutoSoundVolume );
   GetFromRegistry(szRegistryExtendedVisualGlide,
-		  &XCSoarInterface::SetSettingsMap().ExtendedVisualGlide );
+		  XCSoarInterface::SetSettingsMap().ExtendedVisualGlide );
 
 #ifdef PNA
   Temp = 1;
 #else
   Temp = 0;
 #endif
-  GetFromRegistry(szRegistryVirtualKeys,&Temp);
+  GetFromRegistryD(szRegistryVirtualKeys,Temp);
   CommonInterface::VirtualKeys = Temp;
 
   Temp = (AverEffTime_t)ae2minutes;
-  GetFromRegistry(szRegistryAverEffTime,&Temp);
+  GetFromRegistryD(szRegistryAverEffTime,Temp);
   XCSoarInterface::SetSettingsComputer().AverEffTime = Temp;
 
   /*
@@ -718,17 +707,17 @@ void ReadRegistrySettings(void)
 #else
   Temp = 250;
 #endif
-  GetFromRegistry(szRegistryDebounceTimeout, &Temp);
+  GetFromRegistryD(szRegistryDebounceTimeout, Temp);
   XCSoarInterface::debounceTimeout = Temp;
 
   /* JMW broken
   Temp = 100;
-  GetFromRegistry(szRegistryAccelerometerZero,&Temp);
+  GetFromRegistry(szRegistryAccelerometerZero, Temp);
   AccelerometerZero = Temp;
   if (AccelerometerZero==0.0) {
     AccelerometerZero= 100.0;
     Temp = 100;
-    SetToRegistry(szRegistryAccelerometerZero,Temp);
+    SetToRegistry(szRegistryAccelerometerZero, Temp);
   }
   */
 
@@ -736,35 +725,35 @@ void ReadRegistrySettings(void)
 
   //Temp = Appearance.IndFinalGlide;
   Temp=(IndFinalGlide_t)fgFinalGlideDefault; // VNT9 default
-  GetFromRegistry(szRegistryAppIndFinalGlide, &Temp);
+  GetFromRegistryD(szRegistryAppIndFinalGlide, Temp);
   Appearance.IndFinalGlide = (IndFinalGlide_t)Temp;
 
   Temp = Appearance.IndLandable;
-  GetFromRegistry(szRegistryAppIndLandable, &Temp);
+  GetFromRegistryD(szRegistryAppIndLandable, Temp);
   Appearance.IndLandable = (IndLandable_t)Temp;
 
   GetFromRegistry(szRegistryAppInverseInfoBox,
-		  &Appearance.InverseInfoBox );
+		  Appearance.InverseInfoBox );
   GetFromRegistry(szRegistryAppGaugeVarioSpeedToFly,
-		  &Appearance.GaugeVarioSpeedToFly );
+		  Appearance.GaugeVarioSpeedToFly );
   GetFromRegistry(szRegistryAppGaugeVarioAvgText,
-		  &Appearance.GaugeVarioAvgText );
+		  Appearance.GaugeVarioAvgText );
   GetFromRegistry(szRegistryAppGaugeVarioMc,
-		  &Appearance.GaugeVarioMc );
+		  Appearance.GaugeVarioMc );
   GetFromRegistry(szRegistryAppGaugeVarioBugs,
-		  &Appearance.GaugeVarioBugs );
+		  Appearance.GaugeVarioBugs );
   GetFromRegistry(szRegistryAppGaugeVarioBallast,
-		  &Appearance.GaugeVarioBallast );
+		  Appearance.GaugeVarioBallast );
   GetFromRegistry(szRegistryAppGaugeVarioGross,
-		  &Appearance.GaugeVarioGross );
+		  Appearance.GaugeVarioGross );
 
   Temp = Appearance.CompassAppearance;
-  GetFromRegistry(szRegistryAppCompassAppearance, &Temp);
+  GetFromRegistryD(szRegistryAppCompassAppearance, Temp);
   Appearance.CompassAppearance = (CompassAppearance_t)Temp;
 
   //Temp = Appearance.InfoBoxBorder;
   Temp=(InfoBoxBorderAppearance_t)apIbBox; // VNT9 default
-  GetFromRegistry(szRegistryAppInfoBoxBorder, &Temp);
+  GetFromRegistryD(szRegistryAppInfoBoxBorder, Temp);
   Appearance.InfoBoxBorder = (InfoBoxBorderAppearance_t)Temp;
 
 // VENTA2-ADDON Geometry change and PNA custom font settings
@@ -773,7 +762,7 @@ void ReadRegistrySettings(void)
 // know the screen geometry, in the registry!
 #if defined(PNA) || defined(FIVV)
   Temp = Appearance.InfoBoxGeom;
-  GetFromRegistry(szRegistryAppInfoBoxGeom, &Temp);
+  GetFromRegistryD(szRegistryAppInfoBoxGeom, &Temp);
   Appearance.InfoBoxGeom = (InfoBoxGeomAppearance_t)Temp;
 
   if (GlobalModelType == MODELTYPE_PNA_HP31X ) {
@@ -800,24 +789,24 @@ void ReadRegistrySettings(void)
 
 // VENTA-ADDON Model change
   Temp = Appearance.InfoBoxModel;
-  GetFromRegistry(szRegistryAppInfoBoxModel, &Temp);
+  GetFromRegistryD(szRegistryAppInfoBoxModel, Temp);
   Appearance.InfoBoxModel = (InfoBoxModelAppearance_t)Temp;
 #endif
 
   Temp = Appearance.StateMessageAlign;
-  GetFromRegistry(szRegistryAppStatusMessageAlignment, &Temp);
+  GetFromRegistryD(szRegistryAppStatusMessageAlignment, Temp);
   Appearance.StateMessageAlign = (StateMessageAlign_t)Temp;
 
   Temp = Appearance.TextInputStyle;
-  GetFromRegistry(szRegistryAppTextInputStyle, &Temp);
+  GetFromRegistryD(szRegistryAppTextInputStyle, Temp);
   Appearance.TextInputStyle = (TextInputStyle_t)Temp;
 
   GetFromRegistry(szRegistryAppDefaultMapWidth,
-		  &Appearance.DefaultMapWidth );
+		  Appearance.DefaultMapWidth );
   GetFromRegistry(szRegistryAppInfoBoxColors,
-		  &Appearance.InfoBoxColors );
+		  Appearance.InfoBoxColors );
   GetFromRegistry(szRegistryAppAveNeedle,
-		  &Appearance.GaugeVarioAveNeedle );
+		  Appearance.GaugeVarioAveNeedle );
 
   // StateMessageAlign : center, topleft
   // DefaultMapWidth: 206?
@@ -834,116 +823,116 @@ void ReadRegistrySettings(void)
   // IndLandable
 
   GetFromRegistry(szRegistryAutoAdvance,
-		  &AutoAdvance );
+		  AutoAdvance );
   GetFromRegistry(szRegistryAutoMcMode,
-		  &XCSoarInterface::SetSettingsComputer().AutoMcMode );
+		  XCSoarInterface::SetSettingsComputer().AutoMcMode );
   GetFromRegistry(szRegistryWaypointsOutOfRange,
-		  &WaypointsOutOfRange );
+		  WaypointsOutOfRange );
   GetFromRegistry(szRegistryOLCRules,
-		  &OLCRules );
+		  OLCRules );
   GetFromRegistry(szRegistryFAIFinishHeight,
-		  &EnableFAIFinishHeight );
+		  EnableFAIFinishHeight );
   GetFromRegistry(szRegistryHandicap,
-		  &Handicap );
+		  Handicap );
   GetFromRegistry(szRegistryEnableExternalTriggerCruise,
-		  &XCSoarInterface::SetSettingsComputer().EnableExternalTriggerCruise );
+		  XCSoarInterface::SetSettingsComputer().EnableExternalTriggerCruise );
 
   GetFromRegistry(szRegistryUTCOffset,
-		  &XCSoarInterface::SetSettingsComputer().UTCOffset );
+		  XCSoarInterface::SetSettingsComputer().UTCOffset );
   if (XCSoarInterface::SettingsComputer().UTCOffset>12*3600) {
     XCSoarInterface::SetSettingsComputer().UTCOffset-= 24*3600;
   }
 
   GetFromRegistry(szRegistryBlockSTF,
-		  &XCSoarInterface::SetSettingsComputer().EnableBlockSTF );
+		  XCSoarInterface::SetSettingsComputer().EnableBlockSTF );
   GetFromRegistry(szRegistryAutoZoom,
-		  &XCSoarInterface::SetSettingsMap().AutoZoom );
+		  XCSoarInterface::SetSettingsMap().AutoZoom );
   GetFromRegistry(szRegistryMenuTimeout,
-		  &XCSoarInterface::MenuTimeoutMax );
+		  XCSoarInterface::MenuTimeoutMax );
   GetFromRegistry(szRegistryLockSettingsInFlight,
-		  &XCSoarInterface::LockSettingsInFlight );
+		  XCSoarInterface::LockSettingsInFlight );
   GetFromRegistry(szRegistryLoggerShort,
-		  &XCSoarInterface::SetSettingsComputer().LoggerShortName );
+		  XCSoarInterface::SetSettingsComputer().LoggerShortName );
   GetFromRegistry(szRegistryEnableFLARMMap,
-		  &XCSoarInterface::SetSettingsMap().EnableFLARMMap );
+		  XCSoarInterface::SetSettingsMap().EnableFLARMMap );
   GetFromRegistry(szRegistryEnableFLARMGauge,
-		  &XCSoarInterface::SetSettingsMap().EnableFLARMGauge );
+		  XCSoarInterface::SetSettingsMap().EnableFLARMGauge );
   GetFromRegistry(szRegistryTerrainContrast,
-		  &XCSoarInterface::SetSettingsMap().TerrainContrast );
+		  XCSoarInterface::SetSettingsMap().TerrainContrast );
   GetFromRegistry(szRegistryTerrainBrightness,
-		  &XCSoarInterface::SetSettingsMap().TerrainBrightness );
+		  XCSoarInterface::SetSettingsMap().TerrainBrightness );
   GetFromRegistry(szRegistryTerrainRamp,
-		  &XCSoarInterface::SetSettingsMap().TerrainRamp );
+		  XCSoarInterface::SetSettingsMap().TerrainRamp );
   GetFromRegistry(szRegistryGliderScreenPosition,
-		  &XCSoarInterface::SetSettingsMap().GliderScreenPosition );
+		  XCSoarInterface::SetSettingsMap().GliderScreenPosition );
   GetFromRegistry(szRegistryBallastSecsToEmpty,
-		  &XCSoarInterface::SetSettingsComputer().BallastSecsToEmpty );
+		  XCSoarInterface::SetSettingsComputer().BallastSecsToEmpty );
   GetFromRegistry(szRegistrySetSystemTimeFromGPS,
-		  &XCSoarInterface::SetSettingsMap().SetSystemTimeFromGPS );
+		  XCSoarInterface::SetSettingsMap().SetSystemTimeFromGPS );
   GetFromRegistry(szRegistryAutoForceFinalGlide,
-		  &XCSoarInterface::SetSettingsComputer().AutoForceFinalGlide );
+		  XCSoarInterface::SetSettingsComputer().AutoForceFinalGlide );
   GetFromRegistry(szRegistryUseCustomFonts,
-		  &UseCustomFonts );
+		  UseCustomFonts);
   GetFromRegistry(szRegistryVoiceClimbRate,
-		  &EnableVoiceClimbRate );
+		  EnableVoiceClimbRate );
   GetFromRegistry(szRegistryVoiceTerrain,
-		  &EnableVoiceTerrain );
+		  EnableVoiceTerrain );
   GetFromRegistry(szRegistryVoiceWaypointDistance,
-		  &EnableVoiceWaypointDistance );
+		  EnableVoiceWaypointDistance );
   GetFromRegistry(szRegistryVoiceTaskAltitudeDifference,
-		  &EnableVoiceTaskAltitudeDifference );
+		  EnableVoiceTaskAltitudeDifference );
   GetFromRegistry(szRegistryVoiceMacCready,
-		  &EnableVoiceMacCready );
+		  EnableVoiceMacCready );
   GetFromRegistry(szRegistryVoiceNewWaypoint,
-		  &EnableVoiceNewWaypoint );
+		  EnableVoiceNewWaypoint );
   GetFromRegistry(szRegistryVoiceInSector,
-		  &EnableVoiceInSector );
+		  EnableVoiceInSector );
   GetFromRegistry(szRegistryVoiceAirspace,
-		  &EnableVoiceAirspace );
+		  EnableVoiceAirspace );
   GetFromRegistry(szRegistryFinishMinHeight,
-		  &FinishMinHeight );
+		  FinishMinHeight );
   GetFromRegistry(szRegistryStartHeightRef,
-		  &StartHeightRef );
+		  StartHeightRef );
   GetFromRegistry(szRegistryStartMaxHeight,
-		  &StartMaxHeight );
+		  StartMaxHeight );
   GetFromRegistry(szRegistryStartMaxHeightMargin,
-		  &StartMaxHeightMargin );
+		  StartMaxHeightMargin );
   GetFromRegistry(szRegistryStartMaxSpeed,
-		  &StartMaxSpeed );
+		  StartMaxSpeed );
   GetFromRegistry(szRegistryStartMaxSpeedMargin,
-		  &StartMaxSpeedMargin );
+		  StartMaxSpeedMargin );
   GetFromRegistry(szRegistryEnableNavBaroAltitude,
-		  &XCSoarInterface::SetSettingsComputer().EnableNavBaroAltitude );
+		  XCSoarInterface::SetSettingsComputer().EnableNavBaroAltitude );
   GetFromRegistry(szRegistryLoggerTimeStepCruise,
-		  &XCSoarInterface::SetSettingsComputer().LoggerTimeStepCruise );
+		  XCSoarInterface::SetSettingsComputer().LoggerTimeStepCruise );
   GetFromRegistry(szRegistryLoggerTimeStepCircling,
-		  &XCSoarInterface::SetSettingsComputer().LoggerTimeStepCircling );
+		  XCSoarInterface::SetSettingsComputer().LoggerTimeStepCircling );
   GetFromRegistry(szRegistryAbortSafetyUseCurrent,
-		  &GlidePolar::AbortSafetyUseCurrent );
+		  GlidePolar::AbortSafetyUseCurrent );
 
   Temp = iround(GlidePolar::SafetyMacCready*10);
-  GetFromRegistry(szRegistrySafetyMacCready,&Temp);
+  GetFromRegistryD(szRegistrySafetyMacCready,Temp);
   GlidePolar::SafetyMacCready = Temp/10.0;
 
   GetFromRegistry(szRegistryUserLevel,
-		  &XCSoarInterface::UserLevel );
+		  XCSoarInterface::UserLevel );
 
   Temp  = iround(GlidePolar::RiskGamma*10);
-  GetFromRegistry(szRegistryRiskGamma,&Temp);
+  GetFromRegistryD(szRegistryRiskGamma,Temp);
   GlidePolar::RiskGamma = Temp/10.0;
 
   Temp=(CompassAppearance_t)apCompassAltA; // VNT9 default
-  GetFromRegistry(szRegistryWindArrowStyle,&Temp);
+  GetFromRegistryD(szRegistryWindArrowStyle,Temp);
   XCSoarInterface::SetSettingsMap().WindArrowStyle = Temp;
 
   GetFromRegistry(szRegistryDisableAutoLogger,
-		  &XCSoarInterface::SetSettingsComputer().DisableAutoLogger );
+		  XCSoarInterface::SetSettingsComputer().DisableAutoLogger );
 }
 
 //
 // NOTE: all registry variables are unsigned!
 //
-long GetFromRegistry(const TCHAR *szRegValue, DWORD *pPos)
+long GetFromRegistryD(const TCHAR *szRegValue, DWORD &pPos)
 {  // returns 0 on SUCCESS, else the non-zero error code
   HKEY    hKey;
   DWORD    dwSize, dwType;
@@ -957,11 +946,13 @@ long GetFromRegistry(const TCHAR *szRegValue, DWORD *pPos)
       return hRes;
     }
 
-  defaultVal = *pPos;
+  defaultVal = pPos;
   dwSize = sizeof(DWORD);
-  hRes = RegQueryValueEx(hKey, szRegValue, 0, &dwType, (LPBYTE)pPos, &dwSize);
+  hRes = RegQueryValueEx(hKey, szRegValue, 0, &dwType, (LPBYTE)&pPos, &dwSize);
   if (hRes != ERROR_SUCCESS) {
-    *pPos = defaultVal;
+    pPos = defaultVal;
+  } else {
+    printf("%S %ld\n", szRegValue, (long)pPos);
   }
 
   RegCloseKey(hKey);
@@ -969,52 +960,54 @@ long GetFromRegistry(const TCHAR *szRegValue, DWORD *pPos)
 }
 
 
-long GetFromRegistry(const TCHAR *szRegValue, int *pPos) 
+long GetFromRegistry(const TCHAR *szRegValue, int &pPos) 
 {
-  DWORD Temp = *pPos;
+  DWORD Temp = pPos;
   long res;
-  if ((res = GetFromRegistry(szRegValue, &Temp)) == ERROR_SUCCESS) {
-    *pPos = Temp;
+  if ((res = GetFromRegistryD(szRegValue, Temp)) == ERROR_SUCCESS) {
+    pPos = Temp;
   }
   return res;
 }
 
-long GetFromRegistry(const TCHAR *szRegValue, short *pPos) 
+long GetFromRegistry(const TCHAR *szRegValue, short &pPos) 
 {
-  DWORD Temp = *pPos;
+  return 0;
+  DWORD Temp = pPos;
   long res;
-  if ((res = GetFromRegistry(szRegValue, &Temp)) == ERROR_SUCCESS) {
-    *pPos = Temp;
+  if ((res = GetFromRegistryD(szRegValue, Temp)) == ERROR_SUCCESS) {
+    pPos = Temp;
   }
   return res;
 }
 
-long GetFromRegistry(const TCHAR *szRegValue, bool *pPos) 
+long GetFromRegistry(const TCHAR *szRegValue, bool &pPos) 
 {
-  DWORD Temp = *pPos;
+  DWORD Temp = pPos;
   long res;
-  if ((res = GetFromRegistry(szRegValue, &Temp)) == ERROR_SUCCESS) {
-    *pPos = Temp>0;
+  if ((res = GetFromRegistryD(szRegValue, Temp)) == ERROR_SUCCESS) {
+    pPos = Temp>0;
   }
   return res;
 }
 
-long GetFromRegistry(const TCHAR *szRegValue, unsigned *pPos)
+long GetFromRegistry(const TCHAR *szRegValue, unsigned &pPos)
 {
-  DWORD Temp = *pPos;
+  DWORD Temp = pPos;
   long res;
-  if ((res = GetFromRegistry(szRegValue, &Temp)) == ERROR_SUCCESS) {
-    *pPos = Temp;
+  if ((res = GetFromRegistryD(szRegValue, Temp)) == ERROR_SUCCESS) {
+    pPos = Temp;
   }
   return res;
 }
 
-long GetFromRegistry(const TCHAR *szRegValue, double *pPos)
+long GetFromRegistry(const TCHAR *szRegValue, double &pPos)
 {
-  DWORD Temp = *pPos;
+  return 0;
+  DWORD Temp = pPos;
   long res;
-  if ((res = GetFromRegistry(szRegValue, &Temp)) == ERROR_SUCCESS) {
-    *pPos = Temp;
+  if ((res = GetFromRegistryD(szRegValue, Temp)) == ERROR_SUCCESS) {
+    pPos = Temp;
   }
   return res;
 }
@@ -1072,7 +1065,7 @@ BOOL GetRegistryString(const TCHAR *szRegValue, TCHAR *pPos, DWORD dwSize)
   if (hRes != ERROR_SUCCESS)
     {
       RegCloseKey(hKey);
-      return FALSE;
+      return hRes;
     }
 
   dwSize *= 2;
@@ -1105,10 +1098,10 @@ void ReadPort1Settings(DWORD *PortIndex, DWORD *SpeedIndex)
 {
   DWORD Temp=0;
 
-  if(GetFromRegistry(szRegistryPort1Index,&Temp)==ERROR_SUCCESS)
+  if(GetFromRegistryD(szRegistryPort1Index,Temp)==ERROR_SUCCESS)
     (*PortIndex) = Temp;
 
-  if(GetFromRegistry(szRegistrySpeed1Index,&Temp)==ERROR_SUCCESS)
+  if(GetFromRegistryD(szRegistrySpeed1Index,Temp)==ERROR_SUCCESS)
     (*SpeedIndex) = Temp;
 }
 
@@ -1123,10 +1116,10 @@ void ReadPort2Settings(DWORD *PortIndex, DWORD *SpeedIndex)
 {
   DWORD Temp=0;
 
-  if(GetFromRegistry(szRegistryPort2Index,&Temp)==ERROR_SUCCESS)
+  if(GetFromRegistryD(szRegistryPort2Index,Temp)==ERROR_SUCCESS)
     (*PortIndex) = Temp;
 
-  if(GetFromRegistry(szRegistrySpeed2Index,&Temp)==ERROR_SUCCESS)
+  if(GetFromRegistryD(szRegistrySpeed2Index,Temp)==ERROR_SUCCESS)
     (*SpeedIndex) = Temp;
 }
 
@@ -1141,10 +1134,10 @@ void ReadPort3Settings(DWORD *PortIndex, DWORD *SpeedIndex)
 {
   DWORD Temp=0;
 
-  if(GetFromRegistry(szRegistryPort3Index,&Temp)==ERROR_SUCCESS)
+  if(GetFromRegistryD(szRegistryPort3Index,Temp)==ERROR_SUCCESS)
     (*PortIndex) = Temp;
 
-  if(GetFromRegistry(szRegistrySpeed3Index,&Temp)==ERROR_SUCCESS)
+  if(GetFromRegistryD(szRegistrySpeed3Index,Temp)==ERROR_SUCCESS)
     (*SpeedIndex) = Temp;
 }
 
@@ -1188,7 +1181,7 @@ void SetRegistryAirspaceMode(int i)
 int GetRegistryAirspaceMode(int i) {
   DWORD Temp= 3; // display + warnings
   CheckIndex(szRegistryAirspaceMode, i);
-  GetFromRegistry(szRegistryAirspaceMode[i],&Temp);
+  GetFromRegistryD(szRegistryAirspaceMode[i],Temp);
   return Temp;
 }
 

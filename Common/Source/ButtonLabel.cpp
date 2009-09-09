@@ -69,17 +69,16 @@ void ButtonLabel::GetButtonPosition(int i, RECT rc,
   TCHAR reggeompy[50];
   TCHAR reggeomsx[50];
   TCHAR reggeomsy[50];
-  DWORD Temp=0;
 
   _stprintf(reggeompx, TEXT("ScreenButtonPosX%d"), i);
   _stprintf(reggeompy, TEXT("ScreenButtonPosY%d"), i);
   _stprintf(reggeomsx, TEXT("ScreenButtonSizeX%d"), i);
   _stprintf(reggeomsy, TEXT("ScreenButtonSizeY%d"), i);
 
-  GetFromRegistry(reggeompx,&Temp); *x = Temp;
-  GetFromRegistry(reggeompy,&Temp); *y = Temp;
-  GetFromRegistry(reggeomsx,&Temp); *sizex = Temp;
-  GetFromRegistry(reggeomsy,&Temp); *sizey = Temp;
+  GetFromRegistry(reggeompx,*x);
+  GetFromRegistry(reggeompy,*y); 
+  GetFromRegistry(reggeomsx,*sizex);
+  GetFromRegistry(reggeomsy,*sizey);
 
   bool geometrychanged = true; // JMW testing
 

@@ -53,7 +53,7 @@ bool EnableSoundTask = true;
 #include "SettingsAirspace.hpp"
 int AirspacePriority[AIRSPACECLASSCOUNT];
 
-int AIRSPACEWARNINGS = TRUE;
+int AIRSPACEWARNINGS = 0;
 int WarningTime = 30;
 int AcknowledgementTime = 30;
 int AltitudeMode = ALLON;
@@ -80,3 +80,4 @@ double TeammateLongitude;
 bool TeammateCodeValid = false;
 
 bool EnableAnimation = false;
+

@@ -89,6 +89,7 @@ class DataField{
 
   virtual void Set(bool Value){ (void)Value; };
   virtual void Set(int Value){ (void)Value;};
+  virtual void Set(unsigned Value){ Set((int)Value); };
   virtual void Set(double Value){ (void)Value; };
   virtual void Set(const TCHAR *Value){ (void)Value; };
 

@@ -101,17 +101,16 @@ void InfoBoxLayout::GetInfoBoxPosition(unsigned i, RECT rc,
   TCHAR reggeompy[50];
   TCHAR reggeomsx[50];
   TCHAR reggeomsy[50];
-  DWORD Temp=0;
 
   _stprintf(reggeompx, TEXT("InfoBoxPositionPosX%u"), i);
   _stprintf(reggeompy, TEXT("InfoBoxPositionPosY%u"), i);
   _stprintf(reggeomsx, TEXT("InfoBoxPositionSizeX%u"), i);
   _stprintf(reggeomsy, TEXT("InfoBoxPositionSizeY%u"), i);
 
-  GetFromRegistry(reggeompx,&Temp); *x = Temp;
-  GetFromRegistry(reggeompy,&Temp); *y = Temp;
-  GetFromRegistry(reggeomsx,&Temp); *sizex = Temp;
-  GetFromRegistry(reggeomsy,&Temp); *sizey = Temp;
+  GetFromRegistry(reggeompx,*x);
+  GetFromRegistry(reggeompy,*y);
+  GetFromRegistry(reggeomsx,*sizex);
+  GetFromRegistry(reggeomsy,*sizey);
 
   if (*sizey != ControlHeight) {
     geometrychanged = true;
@@ -219,9 +218,7 @@ void InfoBoxLayout::ScreenGeometry(RECT rc) {
 
   TCHAR szRegistryInfoBoxGeometry[]=  TEXT("InfoBoxGeometry");
 
-  DWORD Temp=0;
-  GetFromRegistry(szRegistryInfoBoxGeometry,&Temp);
-  InfoBoxGeometry = Temp;
+  GetFromRegistry(szRegistryInfoBoxGeometry,InfoBoxGeometry);
 
 #if defined(PNA) || defined(FIVV)
 // VENTA-ADDON GEOM
