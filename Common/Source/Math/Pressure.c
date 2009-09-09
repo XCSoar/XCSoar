@@ -40,6 +40,10 @@ Copyright_License {
 #include <math.h>
 
 double QNH = (double)1013.2;
+double QFEAltitudeOffset= 0.0;
+
+///////////
+
 
 double QNHAltitudeToStaticPressure(double alt) {
   // http://wahiduddin.net/calc/density_altitude.htm
@@ -99,3 +103,7 @@ double AirDensityRatio(double altitude) {
   double rho_rat = sqrt(1.225/rho);
   return rho_rat;
 }
+
+
+
+

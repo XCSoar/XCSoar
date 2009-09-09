@@ -276,7 +276,7 @@ void ButtonLabel::AnimateButton(int i) {
     aniRect.right = (mRc.left+mRc.right*5)/6;
     aniRect.bottom = (mRc.top+mRc.bottom*5)/6;
     SetSourceRectangle(aniRect);
-    DrawWireRects(&mRc, 5);
+    DrawWireRects(EnableAnimation, &mRc, 5);
   }
 
   SetSourceRectangle(mRc);

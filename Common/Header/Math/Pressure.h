@@ -38,7 +38,9 @@ Copyright_License {
 #ifndef XCSOAR_MATH_PRESSURE_H
 #define XCSOAR_MATH_PRESSURE_H
 
+// globals!
 extern double QNH;
+extern double QFEAltitudeOffset;
 
 #ifdef __cplusplus
 extern "C" {

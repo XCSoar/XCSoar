@@ -68,6 +68,7 @@ Copyright_License {
 
 #define TAKEOFFSPEEDTHRESHOLD (0.5*GlidePolar::Vminsink)
 
+#include "Math/Pressure.h"
 
 void
 DoAutoQNH(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated);
@@ -1458,7 +1459,6 @@ GlideComputerAirData::ThermalBand()
   SetCalculated().ThermalProfileN[index]++;
 }
 
-#include "Math/Pressure.h"
 
 void
 DoAutoQNH(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated)

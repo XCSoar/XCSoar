@@ -41,8 +41,6 @@ Copyright_License {
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
-extern bool EnableAnimation;
-
 void SetSourceRectangle(RECT fromRect);
 
 ////////////////////////////////////////////////////////////////////////////
@@ -64,6 +62,6 @@ void SetSourceRectangle(RECT fromRect);
 //  CJ Maunder  010899  1.1         Modified rectangle transition code
 //
 /////////////////////////////////////////////////////////////////////////
-RECT WINAPI DrawWireRects(LPRECT lprcTo, UINT nMilliSecSpeed);
+RECT WINAPI DrawWireRects(const bool enable, LPRECT lprcTo, UINT nMilliSecSpeed);
 
 #endif

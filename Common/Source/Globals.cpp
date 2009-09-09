@@ -39,7 +39,6 @@ int HomeWaypoint = -1;
 int AirfieldsHomeWaypoint = -1; // VENTA3 force Airfields home to be HomeWaypoint if
                                 // an H flag in waypoints file is not available..
 // Specials
-double QFEAltitudeOffset = 0;
 #if defined(PNA) || defined(FIVV)
 bool needclipping=false; // flag to activate extra clipping for some PNAs
 #endif
@@ -72,6 +71,4 @@ int      iAirspaceMode[AIRSPACECLASSCOUNT] =
 /////////////////////////////////////////////////////
 
 // Team code info
-TCHAR TeamFlarmCNTarget[4]; // CN of the glider to track
-bool EnableAnimation = false;
 

@@ -38,10 +38,4 @@ Copyright_License {
 #ifndef XCSOAR_SETTINGS_HPP
 #define XCSOAR_SETTINGS_HPP
 
-#include <tchar.h>
-
-// changed by gui or calculation thread
-extern double QFEAltitudeOffset; // VENTA3
-extern bool   ForceFinalGlide;
-
 #endif

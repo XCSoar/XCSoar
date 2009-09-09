@@ -46,6 +46,7 @@ Copyright_License {
 #include "Interface.hpp"
 #include "Settings.hpp"
 #include <stdio.h>
+#include "Math/Pressure.h"
 
 InfoBoxFormatter::InfoBoxFormatter(const TCHAR *theformat) {
   _tcscpy(Format, theformat);

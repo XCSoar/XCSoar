@@ -64,6 +64,7 @@ int ActionInterface::MenuTimeoutMax = MENUTIMEOUTMAX;
 bool CommonInterface::EnableAutoBacklight=true;
 bool CommonInterface::EnableAutoSoundVolume=true;
 int CommonInterface::ActiveAlternate = -1;
+bool CommonInterface::EnableAnimation = false;
 /////
 
 #include "LogFile.hpp"

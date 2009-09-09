@@ -69,6 +69,7 @@ extern unsigned StartMaxSpeed;
 extern unsigned StartMaxSpeedMargin;
 extern bool EnableMultipleStartPoints;
 extern int  StartHeightRef;
+extern bool   ForceFinalGlide;
 
 
 #endif

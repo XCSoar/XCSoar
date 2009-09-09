@@ -1791,7 +1791,7 @@ static void setVariables(void) {
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpAnimation"));
   if (wp) {
-    wp->GetDataField()->Set(EnableAnimation);
+    wp->GetDataField()->Set(XCSoarInterface::EnableAnimation);
     wp->RefreshDisplay();
   }
 
@@ -2685,9 +2685,9 @@ void dlgConfigurationShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpAnimation"));
   if (wp) {
-    if (EnableAnimation != wp->GetDataField()->GetAsBoolean()) {
-      EnableAnimation = wp->GetDataField()->GetAsBoolean();
-      SetToRegistry(szRegistryAnimation, EnableAnimation);
+    if (XCSoarInterface::EnableAnimation != wp->GetDataField()->GetAsBoolean()) {
+      XCSoarInterface::EnableAnimation = wp->GetDataField()->GetAsBoolean();
+      SetToRegistry(szRegistryAnimation, XCSoarInterface::EnableAnimation);
       changed = true;
     }
   }

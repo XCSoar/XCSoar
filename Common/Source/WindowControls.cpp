@@ -907,7 +907,7 @@ int WndForm::ShowModal(bool bEnableMap) {
 #endif
 
   RECT mRc = get_position();
-  DrawWireRects(&mRc, 5);
+  DrawWireRects(XCSoarInterface::EnableAnimation,&mRc, 5);
 
   SetVisible(true);
 

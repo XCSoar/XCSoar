@@ -48,9 +48,9 @@ void SetSourceRectangle(RECT fromRect) {
   AnimationRectangle = fromRect;
 }
 
-RECT WINAPI DrawWireRects(LPRECT lprcTo, UINT nMilliSecSpeed)
+RECT WINAPI DrawWireRects(const bool enable, LPRECT lprcTo, UINT nMilliSecSpeed)
 {
-  if (!EnableAnimation)
+  if (!enable)
     return AnimationRectangle;
 
   LPRECT lprcFrom = &AnimationRectangle;

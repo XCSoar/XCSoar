@@ -57,6 +57,7 @@ Copyright_License {
 #include "GlideComputer.hpp"
 #include <stdlib.h>
 #include "FlarmCalculations.h"
+#include "Math/Pressure.h"
 
 #define m_max(a,b)	(((a)>(b))?(a):(b))
 // JMW added key codes,

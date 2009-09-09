@@ -86,6 +86,7 @@ public:
   static bool EnableAutoBacklight; 
   static bool EnableAutoSoundVolume; 
   static int  ActiveAlternate;
+  static bool EnableAnimation;
 };
 
 
