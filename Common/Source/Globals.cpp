@@ -5,39 +5,39 @@
 #include "SettingsTask.hpp"
 #include "Task.h"
 
-
-bool  EnableMultipleStartPoints = false;
-int   StartHeightRef = 0; // MSL
-int   SelectedWaypoint = -1;
+// state stuff
+bool  AATEnabled = FALSE;
 bool  ForceFinalGlide= false;
+int   SelectedWaypoint = -1;
+int   ActiveTaskPoint = -1;
+bool  AdvanceArmed = false;
+
+// task parameters
+int   AutoAdvance = 1;
+bool  EnableMultipleStartPoints = false;
 bool  EnableFAIFinishHeight = false;
 unsigned int   FinishLine=1;
 unsigned FinishRadius=1000;
-// Assigned Area Task
-double AATTaskLength = 120;
-bool  AATEnabled = FALSE;
-unsigned FinishMinHeight = 0;
-unsigned StartMaxHeight = 0;
-unsigned StartMaxSpeed = 0;
-unsigned StartMaxHeightMargin = 0;
-unsigned StartMaxSpeedMargin = 0;
-int   ActiveTaskPoint = -1;
-int   AutoAdvance = 1;
-bool  AdvanceArmed = false;
-// Waypoint Database
 unsigned int   SectorType = 1; // FAI sector
 unsigned int   SectorRadius = 10000;
 unsigned int   StartLine = 1;
 unsigned StartRadius = 3000;
+// Assigned Area Task
+double AATTaskLength = 120;
+unsigned FinishMinHeight = 0;
+int      StartHeightRef = 0; // MSL
+unsigned StartMaxHeight = 0;
+unsigned StartMaxSpeed = 0;
+unsigned StartMaxHeightMargin = 0;
+unsigned StartMaxSpeedMargin = 0;
+
+int HomeWaypoint = -1;
 
 //Task Information
 Task_t task_points = {{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0}};
 Start_t task_start_points;
 TaskStats_t TaskStats;
 
-int HomeWaypoint = -1;
-int AirfieldsHomeWaypoint = -1; // VENTA3 force Airfields home to be HomeWaypoint if
-                                // an H flag in waypoints file is not available..
 // Specials
 #if defined(PNA) || defined(FIVV)
 bool needclipping=false; // flag to activate extra clipping for some PNAs

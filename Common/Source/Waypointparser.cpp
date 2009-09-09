@@ -733,7 +733,7 @@ void SetHome(SETTINGS_COMPUTER &settings,
   unsigned int i;
 
   // check invalid home waypoint or forced reset due to file change
-  // VENTA3 make AirfieldsHomeWaypoint survive a Waypoint reset
+  // VENTA3 
   if (reset || !ValidWayPoint(0) || !ValidWayPoint(HomeWaypoint) ) {
     HomeWaypoint = -1;
   }
@@ -749,12 +749,6 @@ void SetHome(SETTINGS_COMPUTER &settings,
     settings.TeamCodeRefWaypoint = -1;
   }
 
-// VENTA3 NOTE: this should be pointed out to the users, many of them
-// already used to set back manually home after a wp reset, and not
-// very happy!
-  if ( ValidWayPoint(AirfieldsHomeWaypoint) ) {
-	HomeWaypoint = AirfieldsHomeWaypoint;
-  }
   if (!ValidWayPoint(HomeWaypoint)) {
     // search for home in waypoint list, if we don't have a home
     HomeWaypoint = -1;

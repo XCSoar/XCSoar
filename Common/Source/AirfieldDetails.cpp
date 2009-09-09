@@ -146,7 +146,6 @@ void LookupAirfieldDetail(TCHAR *Name, TCHAR *Details) {
 	if ( isHome==TRUE ) {
 	  WayPointCalc[i].Preferred = TRUE;
 	  HomeWaypoint = i;
-	  AirfieldsHomeWaypoint = i; // make it survive a reset..
 	}
 	if ( isPreferred==TRUE ) {
 	  WayPointCalc[i].Preferred = TRUE;
