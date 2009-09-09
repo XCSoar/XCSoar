@@ -320,8 +320,8 @@ void FlightStatistics::RenderTask(Canvas &canvas, const RECT rc, const bool olcm
   glide_computer.GetOLC().Lock();
   glide_computer.GetOLC().SetLine();
   int nolc = glide_computer.GetOLC().getN();
-  bool olcvalid = glide_computer.GetOLC().getValid();
-  bool olcfinished = glide_computer.GetOLC().getFinished();
+  bool olcvalid = glide_computer.GetOLC().getValid(XCSoarInterface::SettingsComputer());
+  bool olcfinished = glide_computer.GetOLC().getFinished(XCSoarInterface::SettingsComputer());
 
   if (olcvalid) {
     for (i=0; i< nolc; i++) {
@@ -535,7 +535,7 @@ void FlightStatistics::RenderTask(Canvas &canvas, const RECT rc, const bool olcm
 
   if (olcmode && olcvalid) {
     for (i=0; i< 7-1; i++) {
-      switch(OLCRules) {
+      switch(XCSoarInterface::SettingsComputer().OLCRules) {
       case 0:
 	lat1 = glide_computer.GetOLC().data.solution_FAI_sprint.latitude[i];
 	lon1 = glide_computer.GetOLC().data.solution_FAI_sprint.longitude[i];

@@ -104,6 +104,10 @@ typedef struct _SETTINGS_COMPUTER {
   // local time adjustment
   int UTCOffset;
 
+ unsigned OLCRules;
+ unsigned Handicap;
+ bool EnableOLC;
+
 } SETTINGS_COMPUTER;
 
 #endif

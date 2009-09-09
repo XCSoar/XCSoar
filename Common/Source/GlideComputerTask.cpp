@@ -110,9 +110,10 @@ bool GlideComputerTask::DoLogging() {
 				Basic().Latitude,
 				Calculated().NavAltitude,
 				Calculated().WaypointBearing,
-				Basic().Time-Calculated().TakeOffTime);
+				Basic().Time-Calculated().TakeOffTime,
+				SettingsComputer());
     
-    if (restart && EnableOLC) {
+    if (restart && SettingsComputer().EnableOLC) {
       SetCalculated().ValidFinish = false;
       StartTask(false, false);
       SetCalculated().ValidStart = true;
@@ -1830,7 +1831,7 @@ void GlideComputerTask::TaskSpeed(const double this_maccready,
 
     double termikLigaPoints = 0;
     if (d1 > 0) {
-      termikLigaPoints = konst*(0.015*0.001*d1-(400.0/(0.001*d1))+12.0)*v1*3.6*100.0/(double)Handicap;
+      termikLigaPoints = konst*(0.015*0.001*d1-(400.0/(0.001*d1))+12.0)*v1*3.6*100.0/(double)SettingsComputer().Handicap;
     }
 
     SetCalculated().TermikLigaPoints = termikLigaPoints;
@@ -2021,8 +2022,8 @@ GlideComputerTask::DoAutoMacCready(double mc_setting)
 	       ||(SettingsComputer().AutoMcMode==2)) && is_final_glide) {
 
     double time_remaining = Basic().Time-Calculated().TaskStartTime-9000;
-    if (EnableOLC
-	&& (OLCRules==0)
+    if (SettingsComputer().EnableOLC
+	&& (SettingsComputer().OLCRules==0)
 	&& (Calculated().NavAltitude>Calculated().TaskStartAltitude)
 	&& (time_remaining>0)) {
 

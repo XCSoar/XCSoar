@@ -67,10 +67,6 @@ extern unsigned StartMaxHeight;
 extern unsigned StartMaxHeightMargin;
 extern unsigned StartMaxSpeed;
 extern unsigned StartMaxSpeedMargin;
-extern unsigned OLCRules;
-extern unsigned Handicap;
-extern bool EnableOLC;
-
 extern bool EnableMultipleStartPoints;
 extern int  StartHeightRef;
 

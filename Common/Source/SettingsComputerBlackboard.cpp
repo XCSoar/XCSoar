@@ -70,4 +70,11 @@ SettingsComputerBlackboard::SettingsComputerBlackboard()
   settings_computer.BallastTimerActive = false;
   settings_computer.BallastSecsToEmpty = 120;
   settings_computer.UTCOffset = 0;
+
+  settings_computer.EnableOLC = false;
+  settings_computer.OLCRules = 0;
+// 0: sprint task
+// 1: FAI triangle
+// 2: OLC classic
+  settings_computer.Handicap = 108; // LS-3
 }

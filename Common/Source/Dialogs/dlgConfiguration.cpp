@@ -1642,13 +1642,13 @@ static void setVariables(void) {
     dfe->addEnumText(gettext(TEXT("Sprint")));
     dfe->addEnumText(gettext(TEXT("Triangle")));
     dfe->addEnumText(gettext(TEXT("Classic")));
-    dfe->Set(OLCRules);
+    dfe->Set(XCSoarInterface::SettingsComputer().OLCRules);
     wp->RefreshDisplay();
   }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpHandicap"));
   if (wp) {
-    wp->GetDataField()->SetAsInteger(Handicap);
+    wp->GetDataField()->SetAsInteger(XCSoarInterface::SettingsComputer().Handicap);
     wp->RefreshDisplay();
   }
 
@@ -3128,9 +3128,9 @@ void dlgConfigurationShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpOLCRules"));
   if (wp) {
-    if ((int)OLCRules != wp->GetDataField()->GetAsInteger()) {
-      OLCRules = wp->GetDataField()->GetAsInteger();
-      SetToRegistry(szRegistryOLCRules, OLCRules);
+    if ((int)XCSoarInterface::SettingsComputer().OLCRules != wp->GetDataField()->GetAsInteger()) {
+      XCSoarInterface::SetSettingsComputer().OLCRules = wp->GetDataField()->GetAsInteger();
+      SetToRegistry(szRegistryOLCRules, XCSoarInterface::SettingsComputer().OLCRules);
       changed = true;
     }
   }
@@ -3138,9 +3138,9 @@ void dlgConfigurationShowModal(void){
   wp = (WndProperty*)wf->FindByName(TEXT("prpHandicap"));
   if (wp) {
     int val  = wp->GetDataField()->GetAsInteger();
-    if ((int)Handicap != val) {
-      Handicap = val;
-      SetToRegistry(szRegistryHandicap, Handicap);
+    if ((int)XCSoarInterface::SettingsComputer().Handicap != val) {
+      XCSoarInterface::SetSettingsComputer().Handicap = val;
+      SetToRegistry(szRegistryHandicap, XCSoarInterface::SettingsComputer().Handicap);
       changed = true;
     }
   }

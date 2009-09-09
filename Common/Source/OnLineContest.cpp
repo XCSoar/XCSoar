@@ -49,13 +49,6 @@ Copyright_License {
 #define DISTANCETHRESHOLD 1000
 #define DISTANCEUNITS 100
 
-bool EnableOLC = false;
-int OLCRules = 0;
-// 0: sprint task
-// 1: FAI triangle
-// 2: OLC classic
-int Handicap = 108; // LS-3
-
 
 /*
 
@@ -374,7 +367,8 @@ void OLCOptimizer::thin_data() {
 
 bool OLCOptimizer::addPoint(double lon, double lat, double alt,
                             double bearing,
-			    double time) {
+			    double time,
+			    const SETTINGS_COMPUTER &settings) {
   static double lonlast;
   static double latlast;
   static int alt1 = 0;
@@ -402,7 +396,7 @@ bool OLCOptimizer::addPoint(double lon, double lat, double alt,
   if ((ialt>alt1) && (alt2>alt1)) {
     isminimum = true;
   }
-  switch(OLCRules) {
+  switch(settings.OLCRules) {
   case 0: // sprint
     isminimum &= (ialt<data.altminimum);
     break;
@@ -413,7 +407,7 @@ bool OLCOptimizer::addPoint(double lon, double lat, double alt,
     isminimum &= (ialt<data.altminimum-1000);
     break;
   }
-  if (isminimum && EnableOLC) {
+  if (isminimum && settings.EnableOLC) {
     data.altminimum = min(ialt,data.altminimum);
     data.tsprintstart = (long)time;
   }
@@ -498,7 +492,7 @@ void OLCOptimizer::SetLine() {
 }
 
 
-bool OLCOptimizer::Optimize(bool isflying) {
+bool OLCOptimizer::Optimize(const SETTINGS_COMPUTER &settings, bool isflying) {
   SetLine();
 
   flying = isflying;
@@ -507,7 +501,7 @@ bool OLCOptimizer::Optimize(bool isflying) {
   DWORD tm =GetTickCount();
 #endif
 
-  bool retval = (optimize_internal() == 0);
+  bool retval = (optimize_internal(settings) == 0);
   Clear();
 
   if (retval) {
@@ -556,7 +550,7 @@ void OLCOptimizer::UpdateSolution(int dbest, int tbest,
 }
 
 
-int OLCOptimizer::optimize_internal() {
+int OLCOptimizer::optimize_internal(const SETTINGS_COMPUTER &settings) {
 
   busy = true;
 
@@ -595,15 +589,15 @@ int OLCOptimizer::optimize_internal() {
   //   points for second last leg 0.8
   //   points for last leg 0.6
 
-  switch(OLCRules) {
+  switch(settings.OLCRules) {
   case 0:
-    scan_sprint();
+    scan_sprint(settings);
     break;
   case 1:
-    scan_triangle();
+    scan_triangle(settings);
     break;
   case 2:
-    scan_classic();
+    scan_classic(settings);
     break;
   }
 
@@ -665,7 +659,7 @@ int OLCOptimizer::triangle_legal(int i1, int i2, int i3, int i4) {
 }
 
 
-int OLCOptimizer::scan_triangle() {
+int OLCOptimizer::scan_triangle(const SETTINGS_COMPUTER &settings) {
   int i2, i3, i4, i5;
   int dh, d;
 
@@ -734,7 +728,7 @@ int OLCOptimizer::scan_triangle() {
   }
 
   if (bestdist>0) {
-    double score = bestdist*100/(Handicap)/(1000.0/DISTANCEUNITS);
+    double score = bestdist*100/(settings.Handicap)/(1000.0/DISTANCEUNITS);
     int t = data.timepnts[(i5best)]-data.timepnts[(i2best)];
     if (!finished) {
       lat_proj = data.latpnts[i2];
@@ -752,7 +746,7 @@ int OLCOptimizer::scan_triangle() {
 
 
 
-int OLCOptimizer::scan_sprint_finished() {
+int OLCOptimizer::scan_sprint_finished(const SETTINGS_COMPUTER &settings) {
   int i1,i2,i3,i4,i5, d, bestdist;
   int i1best=0, i2best=0, i3best=0, i4best=0, i5best=0;
 
@@ -790,7 +784,7 @@ int OLCOptimizer::scan_sprint_finished() {
   }
 
   if (bestdist>0) {
-    double score = bestdist*100/(Handicap*2.5)/(1000.0/DISTANCEUNITS);
+    double score = bestdist*100/(settings.Handicap*2.5)/(1000.0/DISTANCEUNITS);
     int t = data.timepnts[(i5best)]-data.timepnts[(i1best)];
     UpdateSolution(bestdist, t, i1best, i2best, i3best, i4best, i5best, i5best, i5best,
 		   &data.solution_FAI_sprint, score, true);
@@ -801,20 +795,20 @@ int OLCOptimizer::scan_sprint_finished() {
 }
 
 
-int OLCOptimizer::scan_sprint() {
+int OLCOptimizer::scan_sprint(const SETTINGS_COMPUTER &settings) {
   int retval=0;
   // first scan for a finished sprint
   // then see if improvement can be made with final glide at excess altitude
 
-  retval = scan_sprint_finished();
+  retval = scan_sprint_finished(settings);
   if (flying) {
-    retval |= scan_sprint_inprogress();
+    retval |= scan_sprint_inprogress(settings);
   }
   return retval;
 }
 
 
-int OLCOptimizer::scan_sprint_inprogress() {
+int OLCOptimizer::scan_sprint_inprogress(const SETTINGS_COMPUTER &settings) {
   int i1,i2,i3,i4,i5, d, bestdist;
   int i1best=0, i2best=0, i3best=0, i4best=0, i5best=0;
 
@@ -933,7 +927,7 @@ int OLCOptimizer::scan_sprint_inprogress() {
                           &lat_proj,
                           &lon_proj);
 
-    double score = bestdist*100/(Handicap*2.5)/(1000.0/DISTANCEUNITS);
+    double score = bestdist*100/(settings.Handicap*2.5)/(1000.0/DISTANCEUNITS);
     int t = data.timepnts[(i5best)]+dt-data.timepnts[(i1best)];
     UpdateSolution(bestdist, t, i1best, i2best, i3best, i4best, i5best, i5best, i5best,
 		   &data.solution_FAI_sprint, score, false);
@@ -944,7 +938,7 @@ int OLCOptimizer::scan_sprint_inprogress() {
 }
 
 
-int OLCOptimizer::scan_classic() {
+int OLCOptimizer::scan_classic(const SETTINGS_COMPUTER &settings) {
   int i1,i2,i3,i4,i5,i6,i7, d, bestdist, dh;
   int i1best=0, i2best=0, i3best=0, i4best=0, i5best=0, i6best=0, i7best=0;
 
@@ -1012,7 +1006,7 @@ int OLCOptimizer::scan_classic() {
   }
 
   if (bestdist>0) {
-    double score = bestdist*100/Handicap/(1000.0/DISTANCEUNITS);
+    double score = bestdist*100/settings.Handicap/(1000.0/DISTANCEUNITS);
     int t = data.timepnts[(i7best)]-data.timepnts[(i1best)];
     if (!finished) {
       t += (int)(dfurtherbest*DISTANCEUNITS/GlidePolar::Vbestld);
@@ -1041,8 +1035,8 @@ int OLCOptimizer::scan_classic() {
 // Symbol on screen "ADV+" if valid for arm
 
 
-double OLCOptimizer::getDt() {
-  switch(OLCRules) {
+double OLCOptimizer::getDt(const SETTINGS_COMPUTER &settings) {
+  switch(settings.OLCRules) {
   case 0:
     return data.solution_FAI_sprint.time;
     break;
@@ -1057,8 +1051,8 @@ double OLCOptimizer::getDt() {
   }
 }
 
-double OLCOptimizer::getD() {
-  switch(OLCRules) {
+double OLCOptimizer::getD(const SETTINGS_COMPUTER &settings) {
+  switch(settings.OLCRules) {
   case 0:
     return data.solution_FAI_sprint.distance;
     break;
@@ -1073,8 +1067,8 @@ double OLCOptimizer::getD() {
   }
 }
 
-double OLCOptimizer::getValid() {
-  switch(OLCRules) {
+double OLCOptimizer::getValid(const SETTINGS_COMPUTER &settings) {
+  switch(settings.OLCRules) {
   case 0:
     return data.solution_FAI_sprint.valid;
     break;
@@ -1089,8 +1083,8 @@ double OLCOptimizer::getValid() {
   }
 }
 
-double OLCOptimizer::getScore() {
-  switch(OLCRules) {
+double OLCOptimizer::getScore(const SETTINGS_COMPUTER &settings) {
+  switch(settings.OLCRules) {
   case 0:
     return data.solution_FAI_sprint.score;
     break;
@@ -1105,8 +1099,8 @@ double OLCOptimizer::getScore() {
   }
 }
 
-double OLCOptimizer::getFinished() {
-  switch(OLCRules) {
+double OLCOptimizer::getFinished(const SETTINGS_COMPUTER &settings) {
+  switch(settings.OLCRules) {
   case 0:
     return data.solution_FAI_sprint.finished;
     break;

@@ -42,6 +42,7 @@ Copyright_License {
 #define MATSIZE (MAX_OLC_POINTS+1)*(MAX_OLC_POINTS/2) // for even MAX_OLC_POINTS
 
 #include "Thread/Mutex.hpp"
+#include "SettingsComputer.hpp"
 
 typedef struct _OLCSolution
 {
@@ -81,11 +82,11 @@ public:
   virtual ~OLCOptimizer();
   void ResetFlight();
 
-  double getDt();
-  double getD();
-  double getValid();
-  double getScore();
-  double getFinished();
+  double getDt(const SETTINGS_COMPUTER &settings);
+  double getD(const SETTINGS_COMPUTER &settings);
+  double getValid(const SETTINGS_COMPUTER &settings);
+  double getScore(const SETTINGS_COMPUTER &settings);
+  double getFinished(const SETTINGS_COMPUTER &settings);
 
 private:
 
@@ -129,11 +130,12 @@ private:
   bool busy;
 
 public:
-  bool addPoint(double lon, double lat, double alt, double time, double bearing);
+  bool addPoint(double lon, double lat, double alt, double time, double bearing,
+		const SETTINGS_COMPUTER &settings);
 
 public:
   void SetLine();
-  bool Optimize(bool isflying);
+  bool Optimize(const SETTINGS_COMPUTER &settings, bool isflying);
   int getN();
   double getLatitude(int i);
   double getLongitude(int i);
@@ -144,13 +146,13 @@ private:
 
   void thin_data();
 
-  int optimize_internal();
+  int optimize_internal(const SETTINGS_COMPUTER &settings);
   int triangle_legal(int i2, int i3, int i4, int i5);
-  int scan_triangle();
-  int scan_sprint();
-  int scan_sprint_inprogress();
-  int scan_sprint_finished();
-  int scan_classic();
+  int scan_triangle(const SETTINGS_COMPUTER &settings);
+  int scan_sprint(const SETTINGS_COMPUTER &settings);
+  int scan_sprint_inprogress(const SETTINGS_COMPUTER &settings);
+  int scan_sprint_finished(const SETTINGS_COMPUTER &settings);
+  int scan_classic(const SETTINGS_COMPUTER &settings);
   Mutex mutexOLC;
  public:
   void Lock() { mutexOLC.Lock(); }

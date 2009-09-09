@@ -215,11 +215,11 @@ static void Update(void){
     bool olcvalid; 
     bool olcfinished;
 
-    dt = glide_computer.GetOLC().getDt();
-    d = glide_computer.GetOLC().getD();
-    olcvalid = glide_computer.GetOLC().getValid();
-    score = glide_computer.GetOLC().getScore();
-    olcfinished = glide_computer.GetOLC().getFinished();
+    dt = glide_computer.GetOLC().getDt(XCSoarInterface::SettingsComputer());
+    d = glide_computer.GetOLC().getD(XCSoarInterface::SettingsComputer());
+    olcvalid = glide_computer.GetOLC().getValid(XCSoarInterface::SettingsComputer());
+    score = glide_computer.GetOLC().getScore(XCSoarInterface::SettingsComputer());
+    olcfinished = glide_computer.GetOLC().getFinished(XCSoarInterface::SettingsComputer());
 
     if (olcfinished) {
       _tcscpy(sFinished,TEXT("Finished"));
@@ -359,7 +359,7 @@ static void OnCalcClicked(WindowControl * Sender,
   }
   if (page==ANALYSIS_PAGE_OLC) {
     XCSoarInterface::StartHourglassCursor();
-    glide_computer.GetOLC().Optimize((XCSoarInterface::Calculated().Flying==1));
+    glide_computer.GetOLC().Optimize(XCSoarInterface::SettingsComputer(),(XCSoarInterface::Calculated().Flying==1));
     XCSoarInterface::StopHourglassCursor();
   }
   if (page==ANALYSIS_PAGE_AIRSPACE) {

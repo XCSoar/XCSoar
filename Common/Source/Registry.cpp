@@ -829,11 +829,11 @@ void ReadRegistrySettings(void)
   GetFromRegistry(szRegistryWaypointsOutOfRange,
 		  WaypointsOutOfRange );
   GetFromRegistry(szRegistryOLCRules,
-		  OLCRules );
+		  XCSoarInterface::SetSettingsComputer().OLCRules );
   GetFromRegistry(szRegistryFAIFinishHeight,
 		  EnableFAIFinishHeight );
   GetFromRegistry(szRegistryHandicap,
-		  Handicap );
+		  XCSoarInterface::SetSettingsComputer().Handicap );
   GetFromRegistry(szRegistryEnableExternalTriggerCruise,
 		  XCSoarInterface::SetSettingsComputer().EnableExternalTriggerCruise );
 

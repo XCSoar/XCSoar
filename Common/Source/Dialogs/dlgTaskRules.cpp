@@ -83,7 +83,7 @@ static void setVariables(void) {
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpOLCEnabled"));
   if (wp) {
-    wp->GetDataField()->Set(EnableOLC);
+    wp->GetDataField()->Set(XCSoarInterface::SettingsComputer().EnableOLC);
     wp->RefreshDisplay();
   }
 
@@ -110,7 +110,7 @@ static void setVariables(void) {
     dfe->addEnumText(gettext(TEXT("Sprint")));
     dfe->addEnumText(gettext(TEXT("Triangle")));
     dfe->addEnumText(gettext(TEXT("Classic")));
-    dfe->Set(OLCRules);
+    dfe->Set(XCSoarInterface::SettingsComputer().OLCRules);
     wp->RefreshDisplay();
   }
 
@@ -178,17 +178,18 @@ bool dlgTaskRules(void){
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpOLCRules"));
   if (wp) {
-    if ((int)OLCRules != wp->GetDataField()->GetAsInteger()) {
-      OLCRules = wp->GetDataField()->GetAsInteger();
-      SetToRegistry(szRegistryOLCRules, OLCRules);
+    if ((int)XCSoarInterface::SettingsComputer().OLCRules != wp->GetDataField()->GetAsInteger()) {
+      XCSoarInterface::SetSettingsComputer().OLCRules = wp->GetDataField()->GetAsInteger();
+      SetToRegistry(szRegistryOLCRules, XCSoarInterface::SettingsComputer().OLCRules);
       changed = true;
     }
   }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpOLCEnabled"));
   if (wp) {
-    if (EnableOLC != (wp->GetDataField()->GetAsInteger()==1)) {
-      EnableOLC = (wp->GetDataField()->GetAsInteger()==1);
+    if (XCSoarInterface::SettingsComputer().EnableOLC != (wp->GetDataField()->GetAsInteger()==1)) {
+      XCSoarInterface::SetSettingsComputer().EnableOLC = (wp->GetDataField()->GetAsInteger()==1);
+      // note, not set to registry (why?)
       changed = true;
     }
   }
