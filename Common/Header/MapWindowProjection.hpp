@@ -182,7 +182,6 @@ public:
   double InvDrawScale;
 
   double _scale_meters_to_screen; // speedup
-  double MapScaleOverDistanceModify; // speedup
   double MapScale;
   double _RequestedMapScale;
 

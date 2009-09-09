@@ -59,7 +59,6 @@ MapWindowProjection::MapWindowProjection():
   DisplayAngle ( 0.0),
   _RequestedMapScale(5),
   MapScale(5),
-  MapScaleOverDistanceModify(5/DISTANCEMODIFY),
   _scale_meters_to_screen ( 0.0),
   DisplayAircraftAngle ( 0.0),
   ScaleListCount ( 0),
@@ -529,12 +528,9 @@ void MapWindowProjection::ModifyMapScale
     LimitMapScale(_RequestedMapScale, settings_map);
   MapScale = _RequestedMapScale;
 
-  MapScaleOverDistanceModify = MapScale/DISTANCEMODIFY;
   _scale_meters_to_screen =
     GetMapResolutionFactor()*DISTANCEMODIFY/MapScale;
-  DrawScale = MapScaleOverDistanceModify;
-  DrawScale = DrawScale/111194;
-  DrawScale = GetMapResolutionFactor()/DrawScale;
+  DrawScale = 111194*_scale_meters_to_screen;
   InvDrawScale = 1.0/DrawScale;
 }
 
@@ -593,7 +589,7 @@ void MapWindowProjection::UpdateMapScale(const NMEA_INFO &DrawInfo,
       }
       
       if(
-	 (wpd < ( AutoZoomFactor * MapScaleOverDistanceModify))
+	 (wpd < ( AutoZoomFactor * MapScale/DISTANCEMODIFY))
 	 ||
 	 (StartingAutoMapScale==0.0)) {
 	  // waypoint is too close, so zoom in
