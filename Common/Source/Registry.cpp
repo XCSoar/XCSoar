@@ -531,47 +531,20 @@ void ReadRegistrySettings(void)
       XCSoarInterface::SetSettingsMap().DisplayTextType = DISPLAYNAMEIFINTASK; break;
     }
 
-  Temp=AltitudeMode;
-  if(GetFromRegistry(szRegistryAltMode,&Temp)==ERROR_SUCCESS)
-    AltitudeMode = Temp;
-
-  Temp=ClipAltitude;
-  if(GetFromRegistry(szRegistryClipAlt,&Temp)==ERROR_SUCCESS)
-    ClipAltitude = Temp;
-
-  Temp=AltWarningMargin;
-  if(GetFromRegistry(szRegistryAltMargin,&Temp)==ERROR_SUCCESS)
-    AltWarningMargin = Temp;
-
-  Temp=(DWORD)XCSoarInterface::SettingsComputer().SAFETYALTITUDEARRIVAL;
-  GetFromRegistry(szRegistrySafetyAltitudeArrival,&Temp);
-  XCSoarInterface::SetSettingsComputer().SAFETYALTITUDEARRIVAL = (double)Temp;
-
-  Temp=(DWORD)XCSoarInterface::SettingsComputer().SAFETYALTITUDEBREAKOFF;
-  GetFromRegistry(szRegistrySafetyAltitudeBreakOff,&Temp);
-  XCSoarInterface::SetSettingsComputer().SAFETYALTITUDEBREAKOFF = (double)Temp;
-
-  Temp=(DWORD)XCSoarInterface::SettingsComputer().SAFETYALTITUDETERRAIN;
-  GetFromRegistry(szRegistrySafetyAltitudeTerrain,&Temp);
-  XCSoarInterface::SetSettingsComputer().SAFETYALTITUDETERRAIN = (double)Temp;
-
-  Temp=(DWORD)XCSoarInterface::SettingsComputer().SAFTEYSPEED;
-  GetFromRegistry(szRegistrySafteySpeed,&Temp);
-  XCSoarInterface::SetSettingsComputer().SAFTEYSPEED = (double)Temp;
-
-  Temp = SectorType;
-  GetFromRegistry(szRegistryFAISector,&Temp);
-  SectorType = Temp;
-
-  Temp = 10000;
-  GetFromRegistry(szRegistrySectorRadius,
-		  &Temp);
-  SectorRadius = Temp;
-
-  Temp = POLARID;
-  GetFromRegistry(szRegistryPolarID,
-		  &Temp);
-  POLARID = Temp;
+  GetFromRegistry(szRegistryAltMode,&AltitudeMode);
+  GetFromRegistry(szRegistryClipAlt,&ClipAltitude);
+  GetFromRegistry(szRegistryAltMargin,&AltWarningMargin);
+  GetFromRegistry(szRegistrySafetyAltitudeArrival,
+		  &XCSoarInterface::SetSettingsComputer().SAFETYALTITUDEARRIVAL);
+  GetFromRegistry(szRegistrySafetyAltitudeBreakOff,
+		  &XCSoarInterface::SetSettingsComputer().SAFETYALTITUDEBREAKOFF);
+  GetFromRegistry(szRegistrySafetyAltitudeTerrain,
+		  &XCSoarInterface::SetSettingsComputer().SAFETYALTITUDETERRAIN);
+  GetFromRegistry(szRegistrySafteySpeed,
+		  &XCSoarInterface::SetSettingsComputer().SAFTEYSPEED);
+  GetFromRegistry(szRegistryFAISector,&SectorType);
+  GetFromRegistry(szRegistryFAISector,&SectorRadius);
+  GetFromRegistry(szRegistryPolarID,&POLARID);
 
   GetRegistryString(szRegistryRegKey, strRegKey, 65);
 
@@ -597,53 +570,35 @@ void ReadRegistrySettings(void)
 
     }
 
-  Temp = XCSoarInterface::SettingsMap().bAirspaceBlackOutline;
-  GetFromRegistry(szRegistryAirspaceBlackOutline,&Temp);
-  XCSoarInterface::SetSettingsMap().bAirspaceBlackOutline = (Temp == 1);
+  GetFromRegistry(szRegistryAirspaceBlackOutline,
+		  &XCSoarInterface::SetSettingsMap().bAirspaceBlackOutline);
+  GetFromRegistry(szRegistrySnailTrail,
+		  &XCSoarInterface::SetSettingsMap().TrailActive);
 
-  Temp = XCSoarInterface::SettingsMap().TrailActive;
-  GetFromRegistry(szRegistrySnailTrail,&Temp);
-  XCSoarInterface::SetSettingsMap().TrailActive = Temp;
+  GetFromRegistry(szRegistryTrailDrift,
+		  &XCSoarInterface::SetSettingsMap().EnableTrailDrift );
 
-  Temp = XCSoarInterface::SettingsMap().EnableTrailDrift;
-  GetFromRegistry(szRegistryTrailDrift,&Temp);
-  XCSoarInterface::SetSettingsMap().EnableTrailDrift = (Temp==1);
+  GetFromRegistry(szRegistryThermalLocator,
+		  &XCSoarInterface::SetSettingsComputer().EnableThermalLocator );
 
-  Temp = XCSoarInterface::SettingsComputer().EnableThermalLocator;
-  GetFromRegistry(szRegistryThermalLocator,&Temp);
-  XCSoarInterface::SetSettingsComputer().EnableThermalLocator = Temp;
+  GetFromRegistry(szRegistryAnimation,&EnableAnimation );
 
-  //Temp = EnableAnimation;
-  Temp=0; // disabled by default VNT9
-  GetFromRegistry(szRegistryAnimation,&Temp);
-  EnableAnimation = (Temp==1);
+  GetFromRegistry(szRegistryDrawTopology,
+		  &XCSoarInterface::SetSettingsMap().EnableTopology );
 
-  Temp  = XCSoarInterface::SettingsMap().EnableTopology;
-  GetFromRegistry(szRegistryDrawTopology,&Temp);
-  XCSoarInterface::SetSettingsMap().EnableTopology = (Temp == 1);
+  GetFromRegistry(szRegistryDrawTerrain,
+		  &XCSoarInterface::SetSettingsMap().EnableTerrain );
 
-  Temp  = XCSoarInterface::SettingsMap().EnableTerrain;
-  GetFromRegistry(szRegistryDrawTerrain,&Temp);
-  XCSoarInterface::SetSettingsMap().EnableTerrain = (Temp == 1);
+  GetFromRegistry(szRegistryFinalGlideTerrain,
+		  &XCSoarInterface::SetSettingsComputer().FinalGlideTerrain );
 
-  Temp  = XCSoarInterface::SettingsComputer().FinalGlideTerrain;
-  GetFromRegistry(szRegistryFinalGlideTerrain,&Temp);
-  XCSoarInterface::SetSettingsComputer().FinalGlideTerrain = Temp;
+  GetFromRegistry(szRegistryAutoWind,
+		  &XCSoarInterface::SetSettingsComputer().AutoWindMode );
 
-  Temp  = XCSoarInterface::SettingsComputer().AutoWindMode;
-  GetFromRegistry(szRegistryAutoWind,&Temp);
-  XCSoarInterface::SetSettingsComputer().AutoWindMode = Temp;
+  GetFromRegistry(szRegistryCircleZoom,
+		  &XCSoarInterface::SetSettingsMap().CircleZoom );
 
-  Temp  = XCSoarInterface::SettingsMap().CircleZoom;
-  GetFromRegistry(szRegistryCircleZoom,&Temp);
-  XCSoarInterface::SetSettingsMap().CircleZoom = (Temp == 1);
-
-  Temp = HomeWaypoint;
-  if (GetFromRegistry(szRegistryHomeWaypoint,&Temp)==ERROR_SUCCESS) {
-    HomeWaypoint = Temp;
-  } else {
-    HomeWaypoint = -1;
-  }
+  GetFromRegistry(szRegistryHomeWaypoint,&HomeWaypoint);
 
 // VENTA3
   Temp = Alternate1;
@@ -667,61 +622,47 @@ void ReadRegistrySettings(void)
   }
 
 
-  Temp = XCSoarInterface::SettingsMap().SnailWidthScale;
-  GetFromRegistry(szRegistrySnailWidthScale,&Temp);
-  XCSoarInterface::SetSettingsMap().SnailWidthScale = Temp;
+  GetFromRegistry(szRegistrySnailWidthScale,
+		  &XCSoarInterface::SetSettingsMap().SnailWidthScale );
 
-  Temp = XCSoarInterface::SettingsComputer().TeamCodeRefWaypoint;
-  GetFromRegistry(szRegistryTeamcodeRefWaypoint,&Temp);
-  XCSoarInterface::SetSettingsComputer().TeamCodeRefWaypoint = Temp;
+  GetFromRegistry(szRegistryTeamcodeRefWaypoint,
+		  &XCSoarInterface::SetSettingsComputer().TeamCodeRefWaypoint );
 
-  Temp = 1;
-  GetFromRegistry(szRegistryStartLine,&Temp);
-  StartLine = Temp;
+  GetFromRegistry(szRegistryStartLine,
+		  &StartLine );
 
-  Temp = 1000;
-  GetFromRegistry(szRegistryStartRadius,&Temp);
-  StartRadius = Temp;
+  GetFromRegistry(szRegistryStartRadius,
+		  &StartRadius );
 
-  Temp = 1;
-  GetFromRegistry(szRegistryFinishLine,&Temp);
-  FinishLine = Temp;
+  GetFromRegistry(szRegistryFinishLine,
+		  &FinishLine );
 
-  Temp = 1000;
-  GetFromRegistry(szRegistryFinishRadius,&Temp);
-  FinishRadius = Temp;
+  GetFromRegistry(szRegistryFinishRadius,
+		  &FinishRadius );
 
-  Temp = 0;
-  GetFromRegistry(szRegistryAirspaceWarning,&Temp);
-  AIRSPACEWARNINGS = Temp;
+  GetFromRegistry(szRegistryAirspaceWarning,
+		  &AIRSPACEWARNINGS );
 
-  Temp = 30;
-  GetFromRegistry(szRegistryWarningTime,&Temp);
-  WarningTime = max(10,Temp);
+  GetFromRegistry(szRegistryWarningTime,
+		  &WarningTime );
 
-  Temp = 30;
-  GetFromRegistry(szRegistryAcknowledgementTime,&Temp);
-  AcknowledgementTime = max(10,Temp);
+  GetFromRegistry(szRegistryAcknowledgementTime,
+		  &AcknowledgementTime );
 
-  Temp = 80;
-  GetFromRegistry(szRegistrySoundVolume,&Temp);
-  XCSoarInterface::SetSettingsComputer().SoundVolume = Temp;
+  GetFromRegistry(szRegistrySoundVolume,
+		  &XCSoarInterface::SetSettingsComputer().SoundVolume );
 
-  Temp = 4;
-  GetFromRegistry(szRegistrySoundDeadband,&Temp);
-  XCSoarInterface::SetSettingsComputer().SoundDeadband = Temp;
+  GetFromRegistry(szRegistrySoundDeadband,
+		  &XCSoarInterface::SetSettingsComputer().SoundDeadband );
 
-  Temp = 1;
-  GetFromRegistry(szRegistrySoundAudioVario,&Temp);
-  XCSoarInterface::SetSettingsComputer().EnableSoundVario = (Temp == 1);
+  GetFromRegistry(szRegistrySoundAudioVario,
+		  &XCSoarInterface::SetSettingsComputer().EnableSoundVario );
 
-  Temp = 1;
-  GetFromRegistry(szRegistrySoundTask,&Temp);
-  XCSoarInterface::SetSettingsComputer().EnableSoundTask = (Temp == 1);
+  GetFromRegistry(szRegistrySoundTask,
+		  &XCSoarInterface::SetSettingsComputer().EnableSoundTask );
 
-  Temp = 1;
-  GetFromRegistry(szRegistrySoundModes,&Temp);
-  XCSoarInterface::SetSettingsComputer().EnableSoundModes = (Temp == 1);
+  GetFromRegistry(szRegistrySoundModes,
+		  &XCSoarInterface::SetSettingsComputer().EnableSoundModes );
 
   /* no longer used
   Temp = 500;
@@ -743,22 +684,16 @@ void ReadRegistrySettings(void)
   */
 
 #ifdef HAVE_BLANK
-  Temp = 0;
-  GetFromRegistry(szRegistryAutoBlank,&Temp);
-  CommonInterface::SetSettingsMap().EnableAutoBlank = (Temp == 1);
+  GetFromRegistry(szRegistryAutoBlank,
+		  &CommonInterface::SetSettingsMap().EnableAutoBlank );
 #endif
 
-  Temp = 1;
-  GetFromRegistry(szRegistryAutoBacklight,&Temp); // VENTA4
-  CommonInterface::EnableAutoBacklight = (Temp == 1);
-
-  Temp = 1;
-  GetFromRegistry(szRegistryAutoSoundVolume,&Temp); // VENTA4
-  CommonInterface::EnableAutoSoundVolume = (Temp == 1);
-
-  Temp = 0;
-  GetFromRegistry(szRegistryExtendedVisualGlide,&Temp); // VENTA4
-  XCSoarInterface::SetSettingsMap().ExtendedVisualGlide = Temp;
+  GetFromRegistry(szRegistryAutoBacklight,
+		  &CommonInterface::EnableAutoBacklight );
+  GetFromRegistry(szRegistryAutoSoundVolume,
+		  &CommonInterface::EnableAutoSoundVolume );
+  GetFromRegistry(szRegistryExtendedVisualGlide,
+		  &XCSoarInterface::SetSettingsMap().ExtendedVisualGlide );
 
 #ifdef PNA
   Temp = 1;
@@ -808,33 +743,20 @@ void ReadRegistrySettings(void)
   GetFromRegistry(szRegistryAppIndLandable, &Temp);
   Appearance.IndLandable = (IndLandable_t)Temp;
 
-  Temp = Appearance.InverseInfoBox;
-  GetFromRegistry(szRegistryAppInverseInfoBox, &Temp);
-  Appearance.InverseInfoBox = (Temp != 0);
-
-  Temp = Appearance.GaugeVarioSpeedToFly;
-  GetFromRegistry(szRegistryAppGaugeVarioSpeedToFly, &Temp);
-  Appearance.GaugeVarioSpeedToFly = (Temp != 0);
-
-  Temp = Appearance.GaugeVarioAvgText;
-  GetFromRegistry(szRegistryAppGaugeVarioAvgText, &Temp);
-  Appearance.GaugeVarioAvgText = (Temp != 0);
-
-  Temp = Appearance.GaugeVarioMc;
-  GetFromRegistry(szRegistryAppGaugeVarioMc, &Temp);
-  Appearance.GaugeVarioMc = (Temp != 0);
-
-  Temp = Appearance.GaugeVarioBugs;
-  GetFromRegistry(szRegistryAppGaugeVarioBugs, &Temp);
-  Appearance.GaugeVarioBugs = (Temp != 0);
-
-  Temp = Appearance.GaugeVarioBallast;
-  GetFromRegistry(szRegistryAppGaugeVarioBallast, &Temp);
-  Appearance.GaugeVarioBallast = (Temp != 0);
-
-  Temp = Appearance.GaugeVarioGross;
-  GetFromRegistry(szRegistryAppGaugeVarioGross, &Temp);
-  Appearance.GaugeVarioGross = (Temp != 0);
+  GetFromRegistry(szRegistryAppInverseInfoBox,
+		  &Appearance.InverseInfoBox );
+  GetFromRegistry(szRegistryAppGaugeVarioSpeedToFly,
+		  &Appearance.GaugeVarioSpeedToFly );
+  GetFromRegistry(szRegistryAppGaugeVarioAvgText,
+		  &Appearance.GaugeVarioAvgText );
+  GetFromRegistry(szRegistryAppGaugeVarioMc,
+		  &Appearance.GaugeVarioMc );
+  GetFromRegistry(szRegistryAppGaugeVarioBugs,
+		  &Appearance.GaugeVarioBugs );
+  GetFromRegistry(szRegistryAppGaugeVarioBallast,
+		  &Appearance.GaugeVarioBallast );
+  GetFromRegistry(szRegistryAppGaugeVarioGross,
+		  &Appearance.GaugeVarioGross );
 
   Temp = Appearance.CompassAppearance;
   GetFromRegistry(szRegistryAppCompassAppearance, &Temp);
@@ -890,18 +812,12 @@ void ReadRegistrySettings(void)
   GetFromRegistry(szRegistryAppTextInputStyle, &Temp);
   Appearance.TextInputStyle = (TextInputStyle_t)Temp;
 
-  Temp = Appearance.DefaultMapWidth;
-  GetFromRegistry(szRegistryAppDefaultMapWidth, &Temp);
-  Appearance.DefaultMapWidth = Temp;
-
-  //Temp = Appearance.InfoBoxColors;
-  Temp=1; // true as default VNT9
-  GetFromRegistry(szRegistryAppInfoBoxColors, &Temp);
-  Appearance.InfoBoxColors = (Temp != 0);
-
-  Temp = Appearance.GaugeVarioAveNeedle;
-  GetFromRegistry(szRegistryAppAveNeedle, &Temp);
-  Appearance.GaugeVarioAveNeedle = (Temp != 0);
+  GetFromRegistry(szRegistryAppDefaultMapWidth,
+		  &Appearance.DefaultMapWidth );
+  GetFromRegistry(szRegistryAppInfoBoxColors,
+		  &Appearance.InfoBoxColors );
+  GetFromRegistry(szRegistryAppAveNeedle,
+		  &Appearance.GaugeVarioAveNeedle );
 
   // StateMessageAlign : center, topleft
   // DefaultMapWidth: 206?
@@ -917,185 +833,100 @@ void ReadRegistrySettings(void)
   // IndFinalGlide
   // IndLandable
 
-  Temp = 1;
-  GetFromRegistry(szRegistryAutoAdvance,&Temp);
-  AutoAdvance = (Temp == 1);
+  GetFromRegistry(szRegistryAutoAdvance,
+		  &AutoAdvance );
+  GetFromRegistry(szRegistryAutoMcMode,
+		  &XCSoarInterface::SetSettingsComputer().AutoMcMode );
+  GetFromRegistry(szRegistryWaypointsOutOfRange,
+		  &WaypointsOutOfRange );
+  GetFromRegistry(szRegistryOLCRules,
+		  &OLCRules );
+  GetFromRegistry(szRegistryFAIFinishHeight,
+		  &EnableFAIFinishHeight );
+  GetFromRegistry(szRegistryHandicap,
+		  &Handicap );
+  GetFromRegistry(szRegistryEnableExternalTriggerCruise,
+		  &XCSoarInterface::SetSettingsComputer().EnableExternalTriggerCruise );
 
-  Temp = XCSoarInterface::SettingsComputer().AutoMcMode;
-  GetFromRegistry(szRegistryAutoMcMode,&Temp);
-  XCSoarInterface::SetSettingsComputer().AutoMcMode = Temp;
-
-  Temp = WaypointsOutOfRange;
-  GetFromRegistry(szRegistryWaypointsOutOfRange,&Temp);
-  WaypointsOutOfRange = Temp;
-
-  Temp = OLCRules;
-  GetFromRegistry(szRegistryOLCRules,&Temp);
-  OLCRules = Temp;
-
-  Temp = EnableFAIFinishHeight;
-  GetFromRegistry(szRegistryFAIFinishHeight,&Temp);
-  EnableFAIFinishHeight = (Temp==1);
-
-  Temp = Handicap;
-  GetFromRegistry(szRegistryHandicap,&Temp);
-  Handicap = Temp;
-
-  Temp = XCSoarInterface::SettingsComputer().EnableExternalTriggerCruise;
-  GetFromRegistry(szRegistryEnableExternalTriggerCruise,&Temp);
-  XCSoarInterface::SetSettingsComputer().EnableExternalTriggerCruise = Temp;
-
-  Temp = 0;
-  GetFromRegistry(szRegistryUTCOffset,&Temp);
-  XCSoarInterface::SetSettingsComputer().UTCOffset = Temp;
+  GetFromRegistry(szRegistryUTCOffset,
+		  &XCSoarInterface::SetSettingsComputer().UTCOffset );
   if (XCSoarInterface::SettingsComputer().UTCOffset>12*3600) {
     XCSoarInterface::SetSettingsComputer().UTCOffset-= 24*3600;
   }
 
-  Temp = 0;
-  GetFromRegistry(szRegistryBlockSTF,&Temp);
-  XCSoarInterface::SetSettingsComputer().EnableBlockSTF = (Temp == 1);
-
-  Temp = 0;
-  GetFromRegistry(szRegistryAutoZoom,&Temp);
-  XCSoarInterface::SetSettingsMap().AutoZoom = (Temp == 1);
-
-  Temp = XCSoarInterface::MenuTimeoutMax;
-  GetFromRegistry(szRegistryMenuTimeout,&Temp);
-  XCSoarInterface::MenuTimeoutMax = Temp;
-
-  Temp = 1;
-  GetFromRegistry(szRegistryLockSettingsInFlight,&Temp);
-  XCSoarInterface::LockSettingsInFlight = (Temp == 1);
-
-  Temp = 0;
-  GetFromRegistry(szRegistryLoggerShort,&Temp);
-  XCSoarInterface::SetSettingsComputer().LoggerShortName = (Temp == 1);
-
-  Temp = XCSoarInterface::SettingsMap().EnableFLARMMap;
-  GetFromRegistry(szRegistryEnableFLARMMap,&Temp);
-  XCSoarInterface::SetSettingsMap().EnableFLARMMap = Temp;
-
-  Temp = XCSoarInterface::SettingsMap().EnableFLARMGauge;
-  GetFromRegistry(szRegistryEnableFLARMGauge,&Temp);
-  XCSoarInterface::SetSettingsMap().EnableFLARMGauge = (Temp==1);
-
-  Temp = XCSoarInterface::SettingsMap().TerrainContrast;
-  GetFromRegistry(szRegistryTerrainContrast,&Temp);
-  XCSoarInterface::SetSettingsMap().TerrainContrast = (short)Temp;
-
-  Temp = XCSoarInterface::SettingsMap().TerrainBrightness;
-  GetFromRegistry(szRegistryTerrainBrightness,&Temp);
-  XCSoarInterface::SetSettingsMap().TerrainBrightness = (short)Temp;
-
-  Temp = XCSoarInterface::SettingsMap().TerrainRamp;
-  GetFromRegistry(szRegistryTerrainRamp,&Temp);
-  XCSoarInterface::SetSettingsMap().TerrainRamp = (short)Temp;
-
-  Temp = XCSoarInterface::SettingsMap().GliderScreenPosition;
-  GetFromRegistry(szRegistryGliderScreenPosition,&Temp);
-  XCSoarInterface::SetSettingsMap().GliderScreenPosition = (int)Temp;
-
-  Temp = XCSoarInterface::SettingsComputer().BallastSecsToEmpty;
-  GetFromRegistry(szRegistryBallastSecsToEmpty,&Temp);
-  XCSoarInterface::SetSettingsComputer().BallastSecsToEmpty = Temp;
-
-  Temp = XCSoarInterface::SettingsMap().SetSystemTimeFromGPS;
-  GetFromRegistry(szRegistrySetSystemTimeFromGPS,&Temp);
-  XCSoarInterface::SetSettingsMap().SetSystemTimeFromGPS = (Temp!=0);
-
-  Temp = XCSoarInterface::SettingsComputer().AutoForceFinalGlide;
-  GetFromRegistry(szRegistryAutoForceFinalGlide,&Temp);
-  XCSoarInterface::SetSettingsComputer().AutoForceFinalGlide = (Temp!=0);
-
-  Temp = 0; // fonts
-  GetFromRegistry(szRegistryUseCustomFonts,&Temp);
-  UseCustomFonts = (Temp == 0 ? 0 : 1);
-  SetToRegistry(szRegistryUseCustomFonts, UseCustomFonts);
-
-
-  ////
-
-  Temp = EnableVoiceClimbRate;
-  GetFromRegistry(szRegistryVoiceClimbRate,&Temp);
-  EnableVoiceClimbRate = (Temp!=0);
-
-  Temp = EnableVoiceTerrain;
-  GetFromRegistry(szRegistryVoiceTerrain,&Temp);
-  EnableVoiceTerrain = (Temp!=0);
-
-  Temp = EnableVoiceWaypointDistance;
-  GetFromRegistry(szRegistryVoiceWaypointDistance,&Temp);
-  EnableVoiceWaypointDistance = (Temp!=0);
-
-  Temp = EnableVoiceTaskAltitudeDifference;
-  GetFromRegistry(szRegistryVoiceTaskAltitudeDifference,&Temp);
-  EnableVoiceTaskAltitudeDifference = (Temp!=0);
-
-  Temp = EnableVoiceMacCready;
-  GetFromRegistry(szRegistryVoiceMacCready,&Temp);
-  EnableVoiceMacCready = (Temp!=0);
-
-  Temp = EnableVoiceNewWaypoint;
-  GetFromRegistry(szRegistryVoiceNewWaypoint,&Temp);
-  EnableVoiceNewWaypoint = (Temp!=0);
-
-  Temp = EnableVoiceInSector;
-  GetFromRegistry(szRegistryVoiceInSector,&Temp);
-  EnableVoiceInSector = (Temp!=0);
-
-  Temp = EnableVoiceAirspace;
-  GetFromRegistry(szRegistryVoiceAirspace,&Temp);
-  EnableVoiceAirspace = (Temp!=0);
-
-  Temp = FinishMinHeight;
-  GetFromRegistry(szRegistryFinishMinHeight,&Temp);
-  FinishMinHeight = Temp;
-
-  Temp = StartHeightRef;
-  GetFromRegistry(szRegistryStartHeightRef,&Temp);
-  StartHeightRef = Temp;
-
-  Temp = StartMaxHeight;
-  GetFromRegistry(szRegistryStartMaxHeight,&Temp);
-  StartMaxHeight = Temp;
-
-  Temp = StartMaxHeightMargin;
-  GetFromRegistry(szRegistryStartMaxHeightMargin,&Temp);
-  StartMaxHeightMargin = Temp;
-
-  Temp = StartMaxSpeed;
-  GetFromRegistry(szRegistryStartMaxSpeed,&Temp);
-  StartMaxSpeed = Temp;
-
-  Temp = StartMaxSpeedMargin;
-  GetFromRegistry(szRegistryStartMaxSpeedMargin,&Temp);
-  StartMaxSpeedMargin = Temp;
-
-  Temp = XCSoarInterface::SettingsComputer().EnableNavBaroAltitude;
-  GetFromRegistry(szRegistryEnableNavBaroAltitude,&Temp);
-  XCSoarInterface::SetSettingsComputer().EnableNavBaroAltitude = (Temp!=0);
-
-
-  Temp = XCSoarInterface::SettingsComputer().LoggerTimeStepCruise;
-  GetFromRegistry(szRegistryLoggerTimeStepCruise,&Temp);
-  XCSoarInterface::SetSettingsComputer().LoggerTimeStepCruise = Temp;
-
-  Temp = XCSoarInterface::SettingsComputer().LoggerTimeStepCircling;
-  GetFromRegistry(szRegistryLoggerTimeStepCircling,&Temp);
-  XCSoarInterface::SetSettingsComputer().LoggerTimeStepCircling = Temp;
-
-  Temp = GlidePolar::AbortSafetyUseCurrent;
-  GetFromRegistry(szRegistryAbortSafetyUseCurrent, &Temp);
-  GlidePolar::AbortSafetyUseCurrent = (Temp != 0);
+  GetFromRegistry(szRegistryBlockSTF,
+		  &XCSoarInterface::SetSettingsComputer().EnableBlockSTF );
+  GetFromRegistry(szRegistryAutoZoom,
+		  &XCSoarInterface::SetSettingsMap().AutoZoom );
+  GetFromRegistry(szRegistryMenuTimeout,
+		  &XCSoarInterface::MenuTimeoutMax );
+  GetFromRegistry(szRegistryLockSettingsInFlight,
+		  &XCSoarInterface::LockSettingsInFlight );
+  GetFromRegistry(szRegistryLoggerShort,
+		  &XCSoarInterface::SetSettingsComputer().LoggerShortName );
+  GetFromRegistry(szRegistryEnableFLARMMap,
+		  &XCSoarInterface::SetSettingsMap().EnableFLARMMap );
+  GetFromRegistry(szRegistryEnableFLARMGauge,
+		  &XCSoarInterface::SetSettingsMap().EnableFLARMGauge );
+  GetFromRegistry(szRegistryTerrainContrast,
+		  &XCSoarInterface::SetSettingsMap().TerrainContrast );
+  GetFromRegistry(szRegistryTerrainBrightness,
+		  &XCSoarInterface::SetSettingsMap().TerrainBrightness );
+  GetFromRegistry(szRegistryTerrainRamp,
+		  &XCSoarInterface::SetSettingsMap().TerrainRamp );
+  GetFromRegistry(szRegistryGliderScreenPosition,
+		  &XCSoarInterface::SetSettingsMap().GliderScreenPosition );
+  GetFromRegistry(szRegistryBallastSecsToEmpty,
+		  &XCSoarInterface::SetSettingsComputer().BallastSecsToEmpty );
+  GetFromRegistry(szRegistrySetSystemTimeFromGPS,
+		  &XCSoarInterface::SetSettingsMap().SetSystemTimeFromGPS );
+  GetFromRegistry(szRegistryAutoForceFinalGlide,
+		  &XCSoarInterface::SetSettingsComputer().AutoForceFinalGlide );
+  GetFromRegistry(szRegistryUseCustomFonts,
+		  &UseCustomFonts );
+  GetFromRegistry(szRegistryVoiceClimbRate,
+		  &EnableVoiceClimbRate );
+  GetFromRegistry(szRegistryVoiceTerrain,
+		  &EnableVoiceTerrain );
+  GetFromRegistry(szRegistryVoiceWaypointDistance,
+		  &EnableVoiceWaypointDistance );
+  GetFromRegistry(szRegistryVoiceTaskAltitudeDifference,
+		  &EnableVoiceTaskAltitudeDifference );
+  GetFromRegistry(szRegistryVoiceMacCready,
+		  &EnableVoiceMacCready );
+  GetFromRegistry(szRegistryVoiceNewWaypoint,
+		  &EnableVoiceNewWaypoint );
+  GetFromRegistry(szRegistryVoiceInSector,
+		  &EnableVoiceInSector );
+  GetFromRegistry(szRegistryVoiceAirspace,
+		  &EnableVoiceAirspace );
+  GetFromRegistry(szRegistryFinishMinHeight,
+		  &FinishMinHeight );
+  GetFromRegistry(szRegistryStartHeightRef,
+		  &StartHeightRef );
+  GetFromRegistry(szRegistryStartMaxHeight,
+		  &StartMaxHeight );
+  GetFromRegistry(szRegistryStartMaxHeightMargin,
+		  &StartMaxHeightMargin );
+  GetFromRegistry(szRegistryStartMaxSpeed,
+		  &StartMaxSpeed );
+  GetFromRegistry(szRegistryStartMaxSpeedMargin,
+		  &StartMaxSpeedMargin );
+  GetFromRegistry(szRegistryEnableNavBaroAltitude,
+		  &XCSoarInterface::SetSettingsComputer().EnableNavBaroAltitude );
+  GetFromRegistry(szRegistryLoggerTimeStepCruise,
+		  &XCSoarInterface::SetSettingsComputer().LoggerTimeStepCruise );
+  GetFromRegistry(szRegistryLoggerTimeStepCircling,
+		  &XCSoarInterface::SetSettingsComputer().LoggerTimeStepCircling );
+  GetFromRegistry(szRegistryAbortSafetyUseCurrent,
+		  &GlidePolar::AbortSafetyUseCurrent );
 
   Temp = iround(GlidePolar::SafetyMacCready*10);
   GetFromRegistry(szRegistrySafetyMacCready,&Temp);
   GlidePolar::SafetyMacCready = Temp/10.0;
 
-  Temp  = XCSoarInterface::UserLevel;
-  GetFromRegistry(szRegistryUserLevel,&Temp);
-  XCSoarInterface::UserLevel = Temp;
+  GetFromRegistry(szRegistryUserLevel,
+		  &XCSoarInterface::UserLevel );
 
   Temp  = iround(GlidePolar::RiskGamma*10);
   GetFromRegistry(szRegistryRiskGamma,&Temp);
@@ -1105,18 +936,14 @@ void ReadRegistrySettings(void)
   GetFromRegistry(szRegistryWindArrowStyle,&Temp);
   XCSoarInterface::SetSettingsMap().WindArrowStyle = Temp;
 
-  Temp = XCSoarInterface::SettingsComputer().DisableAutoLogger;
-  GetFromRegistry(szRegistryDisableAutoLogger,&Temp);
-  if (Temp)
-    XCSoarInterface::SetSettingsComputer().DisableAutoLogger = true;
-  else
-    XCSoarInterface::SetSettingsComputer().DisableAutoLogger = false;
+  GetFromRegistry(szRegistryDisableAutoLogger,
+		  &XCSoarInterface::SetSettingsComputer().DisableAutoLogger );
 }
 
 //
 // NOTE: all registry variables are unsigned!
 //
-BOOL GetFromRegistry(const TCHAR *szRegValue, DWORD *pPos)
+long GetFromRegistry(const TCHAR *szRegValue, DWORD *pPos)
 {  // returns 0 on SUCCESS, else the non-zero error code
   HKEY    hKey;
   DWORD    dwSize, dwType;
@@ -1139,6 +966,57 @@ BOOL GetFromRegistry(const TCHAR *szRegValue, DWORD *pPos)
 
   RegCloseKey(hKey);
   return hRes;
+}
+
+
+long GetFromRegistry(const TCHAR *szRegValue, int *pPos) 
+{
+  DWORD Temp = *pPos;
+  long res;
+  if ((res = GetFromRegistry(szRegValue, &Temp)) == ERROR_SUCCESS) {
+    *pPos = Temp;
+  }
+  return res;
+}
+
+long GetFromRegistry(const TCHAR *szRegValue, short *pPos) 
+{
+  DWORD Temp = *pPos;
+  long res;
+  if ((res = GetFromRegistry(szRegValue, &Temp)) == ERROR_SUCCESS) {
+    *pPos = Temp;
+  }
+  return res;
+}
+
+long GetFromRegistry(const TCHAR *szRegValue, bool *pPos) 
+{
+  DWORD Temp = *pPos;
+  long res;
+  if ((res = GetFromRegistry(szRegValue, &Temp)) == ERROR_SUCCESS) {
+    *pPos = Temp>0;
+  }
+  return res;
+}
+
+long GetFromRegistry(const TCHAR *szRegValue, unsigned *pPos)
+{
+  DWORD Temp = *pPos;
+  long res;
+  if ((res = GetFromRegistry(szRegValue, &Temp)) == ERROR_SUCCESS) {
+    *pPos = Temp;
+  }
+  return res;
+}
+
+long GetFromRegistry(const TCHAR *szRegValue, double *pPos)
+{
+  DWORD Temp = *pPos;
+  long res;
+  if ((res = GetFromRegistry(szRegValue, &Temp)) == ERROR_SUCCESS) {
+    *pPos = Temp;
+  }
+  return res;
 }
 
 

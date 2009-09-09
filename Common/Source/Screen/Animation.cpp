@@ -41,7 +41,6 @@ Copyright_License {
 #define GdiFlush() do { } while (0)
 #endif
 
-bool EnableAnimation = false;
 
 static RECT AnimationRectangle = {0,0,0,0};
 

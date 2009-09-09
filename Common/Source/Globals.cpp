@@ -26,7 +26,7 @@ int   AutoAdvance = 1;
 bool  AdvanceArmed = false;
 // Waypoint Database
 int   SectorType = 1; // FAI sector
-unsigned SectorRadius = 500;
+unsigned SectorRadius = 10000;
 int   StartLine = 1;
 unsigned StartRadius = 3000;
 
@@ -78,3 +78,5 @@ int TeamFlarmIdTarget;      // FlarmId of the glider to track
 double TeammateLatitude;
 double TeammateLongitude;
 bool TeammateCodeValid = false;
+
+bool EnableAnimation = false;

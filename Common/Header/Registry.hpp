@@ -201,7 +201,12 @@ extern const TCHAR szRegistryFontCDIWindowFont[];
 extern const TCHAR szRegistryFontMapLabelFont[];
 extern const TCHAR szRegistryFontStatisticsFont[];
 
-BOOL GetFromRegistry(const TCHAR *szRegValue, DWORD *pPos);
+long GetFromRegistry(const TCHAR *szRegValue, DWORD *pPos);
+long GetFromRegistry(const TCHAR *szRegValue, int *pPos);
+long GetFromRegistry(const TCHAR *szRegValue, short *pPos);
+long GetFromRegistry(const TCHAR *szRegValue, bool *pPos);
+long GetFromRegistry(const TCHAR *szRegValue, unsigned *pPos);
+long GetFromRegistry(const TCHAR *szRegValue, double *pPos);
 
 HRESULT SetToRegistry(const TCHAR *szRegValue, DWORD Pos);
 HRESULT SetToRegistry(const TCHAR *szRegValue, bool bVal);	// JG
