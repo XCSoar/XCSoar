@@ -11,7 +11,7 @@ int   StartHeightRef = 0; // MSL
 int   SelectedWaypoint = -1;
 bool  ForceFinalGlide= false;
 bool  EnableFAIFinishHeight = false;
-int   FinishLine=1;
+unsigned int   FinishLine=1;
 unsigned FinishRadius=1000;
 // Assigned Area Task
 double AATTaskLength = 120;
@@ -25,9 +25,9 @@ int   ActiveWayPoint = -1;
 int   AutoAdvance = 1;
 bool  AdvanceArmed = false;
 // Waypoint Database
-int   SectorType = 1; // FAI sector
-unsigned SectorRadius = 10000;
-int   StartLine = 1;
+unsigned int   SectorType = 1; // FAI sector
+unsigned int   SectorRadius = 10000;
+unsigned int   StartLine = 1;
 unsigned StartRadius = 3000;
 
 //Task Information

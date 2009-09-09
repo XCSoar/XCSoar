@@ -951,10 +951,7 @@ long GetFromRegistryD(const TCHAR *szRegValue, DWORD &pPos)
   hRes = RegQueryValueEx(hKey, szRegValue, 0, &dwType, (LPBYTE)&pPos, &dwSize);
   if (hRes != ERROR_SUCCESS) {
     pPos = defaultVal;
-  } else {
-    printf("%S %ld\n", szRegValue, (long)pPos);
   }
-
   RegCloseKey(hKey);
   return hRes;
 }

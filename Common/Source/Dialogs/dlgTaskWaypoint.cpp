@@ -198,6 +198,7 @@ static void SetValues(bool first=false) {
 }
 
 #define CHECK_CHANGED(a,b) if (a != b) { changed = true; a = b; }
+#define CHECK_CHANGEDU(a,b) if ((int)a != b) { changed = true; a = b; }
 
 static void GetWaypointValues(void) {
   WndProperty* wp;
@@ -318,7 +319,7 @@ static void ReadValues(void) {
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpTaskFinishLine"));
   if (wp) {
-    CHECK_CHANGED(FinishLine,
+    CHECK_CHANGEDU(FinishLine,
                   wp->GetDataField()->GetAsInteger());
   }
 
@@ -331,7 +332,7 @@ static void ReadValues(void) {
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpTaskStartLine"));
   if (wp) {
-    CHECK_CHANGED(StartLine,
+    CHECK_CHANGEDU(StartLine,
                   wp->GetDataField()->GetAsInteger());
   }
 
@@ -344,7 +345,7 @@ static void ReadValues(void) {
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpTaskFAISector"));
   if (wp) {
-    CHECK_CHANGED(SectorType,
+    CHECK_CHANGEDU(SectorType,
                   wp->GetDataField()->GetAsInteger());
   }
 

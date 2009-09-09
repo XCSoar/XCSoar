@@ -3128,7 +3128,7 @@ void dlgConfigurationShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpOLCRules"));
   if (wp) {
-    if (OLCRules != wp->GetDataField()->GetAsInteger()) {
+    if ((int)OLCRules != wp->GetDataField()->GetAsInteger()) {
       OLCRules = wp->GetDataField()->GetAsInteger();
       SetToRegistry(szRegistryOLCRules, OLCRules);
       changed = true;
@@ -3138,7 +3138,7 @@ void dlgConfigurationShowModal(void){
   wp = (WndProperty*)wf->FindByName(TEXT("prpHandicap"));
   if (wp) {
     int val  = wp->GetDataField()->GetAsInteger();
-    if (Handicap != val) {
+    if ((int)Handicap != val) {
       Handicap = val;
       SetToRegistry(szRegistryHandicap, Handicap);
       changed = true;
@@ -3325,7 +3325,7 @@ void dlgConfigurationShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpTaskFinishLine"));
   if (wp) {
-    if (FinishLine != wp->GetDataField()->GetAsInteger()) {
+    if ((int)FinishLine != wp->GetDataField()->GetAsInteger()) {
       FinishLine = wp->GetDataField()->GetAsInteger();
       SetToRegistry(szRegistryFinishLine,FinishLine);
       changed = true;
@@ -3346,7 +3346,7 @@ void dlgConfigurationShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpTaskStartLine"));
   if (wp) {
-    if (StartLine != wp->GetDataField()->GetAsInteger()) {
+    if ((int)StartLine != wp->GetDataField()->GetAsInteger()) {
       StartLine = wp->GetDataField()->GetAsInteger();
       SetToRegistry(szRegistryStartLine,StartLine);
       changed = true;

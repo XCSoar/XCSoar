@@ -178,7 +178,7 @@ bool dlgTaskRules(void){
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpOLCRules"));
   if (wp) {
-    if (OLCRules != wp->GetDataField()->GetAsInteger()) {
+    if ((int)OLCRules != wp->GetDataField()->GetAsInteger()) {
       OLCRules = wp->GetDataField()->GetAsInteger();
       SetToRegistry(szRegistryOLCRules, OLCRules);
       changed = true;
