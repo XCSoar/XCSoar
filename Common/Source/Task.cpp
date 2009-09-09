@@ -87,6 +87,12 @@ void SetTargetModified(const bool set) {
   }
 }
 
+TCHAR LastTaskFileName[MAX_PATH]= TEXT("\0");
+
+const TCHAR* getTaskFilename() {
+  return LastTaskFileName;
+}
+
 void ResetTaskWaypoint(int j) {
   Task[j].Index = -1;
   Task[j].AATTargetOffsetRadius = 0.0;

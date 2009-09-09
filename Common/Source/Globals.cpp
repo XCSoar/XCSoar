@@ -6,8 +6,6 @@
 #include "Task.h"
 
 
-TCHAR LastTaskFileName[MAX_PATH]= TEXT("\0");
-
 bool  EnableMultipleStartPoints = false;
 int   StartHeightRef = 0; // MSL
 int   SelectedWaypoint = -1;

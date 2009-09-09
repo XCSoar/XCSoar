@@ -799,12 +799,13 @@ cxx-flags	=$(DEPFLAGS) $(CXXFLAGS) $(CPPFLAGS) $(CPPFLAGS_$(dirtarget)) $(TARGET
 	@$(NQ)echo "  CC      $@"
 	$(Q)$(CC) $(cc-flags) -c $(OUTPUT_OPTION) $<
 	@sed -i '1s,^[^ :]*,$@,' $(DEPFILE)
+	@etags -a --declarations $<
 
 %-$(TARGET).o: %.cpp
 	@$(NQ)echo "  CXX     $@"
 	$(Q)$(CXX) $(cxx-flags) -c $(OUTPUT_OPTION) $<
 	@sed -i '1s,^[^ :]*,$@,' $(DEPFILE)
-#	etags -a $<
+	@etags -a --declarations $<
 
 %-$(TARGET).o: %.cxx
 	@$(NQ)echo "  CXX     $@"
@@ -836,6 +837,7 @@ clean-%: TARGET=$(patsubst clean-%,%,$@)
 $(addprefix clean-,$(filter-out WINE,$(TARGETS))): clean-%:
 	$(RM) XCSoar-$(TARGET)$(NOSTRIP_SUFFIX)$(TARGET_EXEEXT) XCSoarSimulator-$(TARGET)$(NOSTRIP_SUFFIX)$(TARGET_EXEEXT)
 	$(RM) XCSoar-$(TARGET)$(TARGET_EXEEXT) XCSoarSimulator-$(TARGET)$(TARGET_EXEEXT)
+	$(RM) TAGS
 
 clean-: $(addprefix clean-,$(TARGETS))
 

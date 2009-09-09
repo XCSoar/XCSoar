@@ -46,7 +46,6 @@ extern int  AutoAdvance;
 extern bool AdvanceArmed;
 extern int  HomeWaypoint;
 extern int  AirfieldsHomeWaypoint; // VENTA3
-extern TCHAR LastTaskFileName[MAX_PATH];
 
 // task data
 extern Start_t StartPoints;

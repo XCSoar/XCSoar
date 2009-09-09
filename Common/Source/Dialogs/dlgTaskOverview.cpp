@@ -76,8 +76,8 @@ static void UpdateFilePointer(void) {
   if (wp) {
     DataFieldFileReader* dfe;
     dfe = (DataFieldFileReader*)wp->GetDataField();
-    if (_tcslen(LastTaskFileName)>0) {
-      dfe->Lookup(LastTaskFileName);
+    if (_tcslen(getTaskFilename())>0) {
+      dfe->Lookup(getTaskFilename());
     } else {
       dfe->Set(0);
     }
@@ -90,10 +90,10 @@ static void UpdateCaption (void) {
   TCHAR title[MAX_PATH];
   TCHAR name[MAX_PATH] = TEXT("\0");
   mutexTaskData.Lock();
-  int len = _tcslen(LastTaskFileName);
+  int len = _tcslen(getTaskFilename());
   if (len>0) {
     int index = 0;
-    TCHAR *src = LastTaskFileName;
+    const TCHAR *src = getTaskFilename();
     while ((*src != _T('\0')) && (*src != _T('.'))) {
       if ((*src == _T('\\')) || (*src == _T('/'))) {
         index = 0;
