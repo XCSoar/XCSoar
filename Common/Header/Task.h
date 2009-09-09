@@ -163,5 +163,8 @@ bool isTargetModified();
 void SetTargetModified(const bool set=true);
 bool isTaskAborted();
 const TCHAR* getTaskFilename();
+void CheckStartPointInTask(void);
+void ClearStartPoints(void);
+void SetStartPoint(const int pointnum, const int waypointnum);
 
 #endif

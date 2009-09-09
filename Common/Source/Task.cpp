@@ -1611,3 +1611,55 @@ bool WaypointInTask(const int ind) {
   if (!WayPointList || (ind<0)) return false;
   return WayPointList[ind].InTask;
 }
+
+
+void CheckStartPointInTask(void) {
+  mutexTaskData.Lock();
+  if (task_points[0].Index != -1) {
+    // ensure current start point is in task
+    int index_last = 0;
+    for (int i=MAXSTARTPOINTS-1; i>=0; i--) {
+      if (task_start_points[i].Index == task_points[0].Index) {
+	index_last = -1;
+	break;
+      }
+      if ((task_start_points[i].Index>=0) && (index_last==0)) {
+	index_last = i;
+      }
+    }
+    if (index_last>=0) {
+      if (task_start_points[index_last].Index>= 0) {
+	index_last = min(MAXSTARTPOINTS-1,index_last+1);
+      }
+      // it wasn't, so make sure it's added now
+      task_start_points[index_last].Index = task_points[0].Index;
+      task_start_points[index_last].Active = true;
+    }
+  }
+  mutexTaskData.Unlock();
+}
+
+
+void ClearStartPoints()
+{
+  mutexTaskData.Lock();
+  for (int i=0; i<MAXSTARTPOINTS; i++) {
+    task_start_points[i].Index = -1;
+    task_start_points[i].Active = false;
+  }
+  task_start_points[0].Index = task_points[0].Index;
+  task_start_points[0].Active = true;
+  mutexTaskData.Unlock();
+}
+
+void SetStartPoint(const int pointnum, const int waypointnum)
+{
+  if ((pointnum>=0) && (pointnum<MAXSTARTPOINTS)) {
+    // TODO bug: don't add it if it's already present!
+    mutexTaskData.Lock();
+    task_start_points[pointnum].Index = waypointnum;
+    task_start_points[pointnum].Active = true;
+    mutexTaskData.Unlock();
+  }
+}
+
