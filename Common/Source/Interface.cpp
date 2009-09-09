@@ -65,16 +65,9 @@ bool CommonInterface::EnableAutoBacklight=true;
 bool CommonInterface::EnableAutoSoundVolume=true;
 /////
 
-// Team code info
-TCHAR TeammateCode[10];
-TCHAR TeamFlarmCNTarget[4]; // CN of the glider to track
-int TeamFlarmIdTarget;      // FlarmId of the glider to track
-double TeammateLatitude;
-double TeammateLongitude;
-bool TeammateCodeValid = false;
-
 #include "LogFile.hpp"
 
+#include "DeviceBlackboard.hpp"
 
 void XCSoarInterface::ExchangeBlackboard() {
   ScopeLock protect(mutexBlackboard);
@@ -83,8 +76,6 @@ void XCSoarInterface::ExchangeBlackboard() {
   SendSettingsComputer();
   SendSettingsMap();
 }
-
-#include "DeviceBlackboard.hpp"
 
 void XCSoarInterface::ReceiveBlackboard() {
   ScopeLock protect(mutexBlackboard);

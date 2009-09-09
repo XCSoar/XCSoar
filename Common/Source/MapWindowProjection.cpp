@@ -514,7 +514,7 @@ double MapWindowProjection::FindMapScale(double Value){
   if (BestFitIdx != -1){
     ScaleCurrent = BestFitIdx;
     return((ScaleList[ScaleCurrent]*GetMapResolutionFactor())
-           /IBLSCALE(/*Appearance.DefaultMapWidth*/ MapRect.right));
+           /IBLSCALE(/*Appearance.DefaultMapWidth*/MapRect.right-MapRect.left));
   }
   return(Value);
 }
