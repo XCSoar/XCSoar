@@ -145,7 +145,7 @@ void LookupAirfieldDetail(TCHAR *Name, TCHAR *Details) {
 
 	if ( isHome==TRUE ) {
 	  WayPointCalc[i].Preferred = TRUE;
-	  HomeWaypoint = i;
+	  XCSoarInterface::SetSettingsComputer().HomeWaypoint = i;
 	}
 	if ( isPreferred==TRUE ) {
 	  WayPointCalc[i].Preferred = TRUE;

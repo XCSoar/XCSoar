@@ -428,7 +428,7 @@ static void OnStartPointClicked(WindowControl * Sender){
 static void OnMoveAfterClicked(WindowControl * Sender){
 	(void)Sender;
   mutexTaskData.Lock();
-  SwapWaypoint(twItemIndex);
+  SwapWaypoint(twItemIndex, XCSoarInterface::SettingsComputer());
   SetWaypointValues();
   mutexTaskData.Unlock();
   wf->SetModalResult(mrOK);
@@ -437,7 +437,7 @@ static void OnMoveAfterClicked(WindowControl * Sender){
 static void OnMoveBeforeClicked(WindowControl * Sender){
 	(void)Sender;
   mutexTaskData.Lock();
-  SwapWaypoint(twItemIndex-1);
+  SwapWaypoint(twItemIndex-1,XCSoarInterface::SettingsComputer());
   SetWaypointValues();
   mutexTaskData.Unlock();
   wf->SetModalResult(mrOK);
@@ -452,7 +452,7 @@ static void OnDetailsClicked(WindowControl * Sender){
 static void OnRemoveClicked(WindowControl * Sender) {
 	(void)Sender;
   mutexTaskData.Lock();
-  RemoveTaskPoint(twItemIndex);
+  RemoveTaskPoint(twItemIndex,XCSoarInterface::SettingsComputer());
   SetWaypointValues();
   if (ActiveTaskPoint>=twItemIndex) {
     ActiveTaskPoint--;

@@ -57,7 +57,7 @@ int FindNearestWayPoint(MapWindowProjection &map_projection,
 			double X, double Y, double MaxRange, bool exhaustive=false);
 void CloseWayPoints(void);
 int dlgWaypointOutOfTerrain(const TCHAR *Message);
-void WaypointWriteFiles(void);
+void WaypointWriteFiles(const SETTINGS_COMPUTER &settings_computer);
 void WaypointAltitudeFromTerrain(WAYPOINT* wpt);
 WAYPOINT* GrowWaypointList();
 int FindMatchingWaypoint(WAYPOINT *waypoint);

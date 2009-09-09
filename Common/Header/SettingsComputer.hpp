@@ -114,7 +114,7 @@ typedef struct _SETTINGS_COMPUTER {
 
  int  Alternate1; // VENTA3
  int  Alternate2;
-
+  int HomeWaypoint;
 /// vegavoice stuff
 
  bool EnableVoiceClimbRate;

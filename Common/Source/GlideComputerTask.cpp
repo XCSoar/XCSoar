@@ -129,14 +129,14 @@ bool GlideComputerTask::DoLogging() {
 // VENTA3 added radial
 void GlideComputerTask::DistanceToHome() {
 
-  if (!ValidWayPoint(HomeWaypoint)) {
+  if (!ValidWayPoint(SettingsComputer().HomeWaypoint)) {
     SetCalculated().HomeDistance = 0.0;
     SetCalculated().HomeRadial = 0.0; // VENTA3
     return;
   }
 
-  double w1lat = WayPointList[HomeWaypoint].Latitude;
-  double w1lon = WayPointList[HomeWaypoint].Longitude;
+  double w1lat = WayPointList[SettingsComputer().HomeWaypoint].Latitude;
+  double w1lon = WayPointList[SettingsComputer().HomeWaypoint].Longitude;
   double w0lat = Basic().Latitude;
   double w0lon = Basic().Longitude;
 
@@ -623,7 +623,7 @@ bool GlideComputerTask::InStartSector(bool *CrossedStart)
             task_points[0].Index = index;
             LastInStartSector = false;
             SetCalculated().StartSectorWaypoint = index;
-            RefreshTask();
+            RefreshTask(SettingsComputer());
           }
           goto OnExit;
         }

@@ -31,8 +31,6 @@ unsigned StartMaxSpeed = 0;
 unsigned StartMaxHeightMargin = 0;
 unsigned StartMaxSpeedMargin = 0;
 
-int HomeWaypoint = -1;
-
 //Task Information
 Task_t task_points = {{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0}};
 Start_t task_start_points;

@@ -156,14 +156,14 @@ BOOL VLDeclare(PDeviceDescriptor_t d, Declaration_t *decl){
     sprintf(temp, "%S", decl->AircraftType);
     strncpy(vl.declaration.flightinfo.competitionclass, temp, 12);
 
-    if (ValidWayPoint(HomeWaypoint)) {
-      sprintf(temp, "%S", WayPointList[HomeWaypoint].Name);
+    if (ValidWayPoint(XCSoarInterface::SettingsComputer().HomeWaypoint)) {
+      sprintf(temp, "%S", WayPointList[XCSoarInterface::SettingsComputer().HomeWaypoint].Name);
 
       strncpy(vl.declaration.flightinfo.homepoint.name, temp, 6);
       vl.declaration.flightinfo.homepoint.lon =
-        WayPointList[HomeWaypoint].Longitude;
+        WayPointList[XCSoarInterface::SettingsComputer().HomeWaypoint].Longitude;
       vl.declaration.flightinfo.homepoint.lat =
-        WayPointList[HomeWaypoint].Latitude;
+        WayPointList[XCSoarInterface::SettingsComputer().HomeWaypoint].Latitude;
     }
   }
 

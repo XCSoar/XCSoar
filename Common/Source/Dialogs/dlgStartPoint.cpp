@@ -186,7 +186,7 @@ void dlgStartPointShowModal(void) {
   if (changed) {
     mutexTaskData.Lock();
     SetTaskModified();
-    RefreshTask();
+    RefreshTask(XCSoarInterface::SettingsComputer());
     mutexTaskData.Unlock();
   };
 

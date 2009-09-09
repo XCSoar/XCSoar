@@ -83,7 +83,7 @@ static void GetCruiseEfficiency(void) {
 static void RefreshCalculator(void) {
   WndProperty* wp;
 
-  RefreshTask();
+  RefreshTask(XCSoarInterface::SettingsComputer());
   RefreshTaskStatistics();
 
   // update outputs
@@ -189,7 +189,7 @@ static void DoOptimise(void) {
   do {
     myrange = Range;
     AdjustAATTargets(Range);
-    RefreshTask();
+    RefreshTask(XCSoarInterface::SettingsComputer());
     RefreshTaskStatistics();
     double deltaT = XCSoarInterface::Calculated().TaskTimeToGo;
     if ((XCSoarInterface::Calculated().TaskStartTime>0.0)&&(XCSoarInterface::Calculated().Flying)) {

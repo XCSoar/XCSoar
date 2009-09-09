@@ -757,7 +757,7 @@ void InputEvents::eventWaypointDetails(const TCHAR *misc) {
 void InputEvents::eventGotoLookup(const TCHAR *misc) {
   int res = dlgWayPointSelect();
   if (res != -1){
-    FlyDirectTo(res);
+    FlyDirectTo(res, SettingsComputer());
   };
 }
 
@@ -1057,9 +1057,9 @@ void InputEvents::eventAdjustWaypoint(const TCHAR *misc) {
 void InputEvents::eventAbortTask(const TCHAR *misc) {
   mutexTaskData.Lock();
   if (_tcscmp(misc, TEXT("abort")) == 0)
-    ResumeAbortTask(1);
+    ResumeAbortTask(SettingsComputer(), 1);
   else if (_tcscmp(misc, TEXT("resume")) == 0)
-    ResumeAbortTask(-1);
+    ResumeAbortTask(SettingsComputer(), -1);
   else if (_tcscmp(misc, TEXT("show")) == 0) {
     if (isTaskAborted())
       Message::AddMessage(TEXT("Task Aborted"));
@@ -1069,7 +1069,7 @@ void InputEvents::eventAbortTask(const TCHAR *misc) {
       Message::AddMessage(TEXT("Task Resume"));
     }
   } else {
-    ResumeAbortTask(0);
+    ResumeAbortTask(SettingsComputer(), 0);
   }
   mutexTaskData.Unlock();
 }
@@ -1361,7 +1361,7 @@ void InputEvents::eventTaskLoad(const TCHAR *misc) {
   if (_tcslen(misc)>0) {
     mutexTaskData.Lock();
     LocalPath(buffer,misc);
-    LoadNewTask(buffer);
+    LoadNewTask(buffer, SettingsComputer());
     mutexTaskData.Unlock();
   }
 }

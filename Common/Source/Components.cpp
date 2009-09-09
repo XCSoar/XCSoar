@@ -158,7 +158,7 @@ void XCSoarInterface::AfterStartup() {
 
   // Create default task if none exists
   StartupStore(TEXT("Create default task\n"));
-  DefaultTask();
+  DefaultTask(SettingsComputer());
 
   StartupStore(TEXT("CloseProgressDialog\n"));
   CloseProgressDialog();
@@ -424,7 +424,7 @@ void XCSoarInterface::Shutdown(void) {
   CreateProgressDialog(gettext(TEXT("Shutdown, saving task...")));
   StartupStore(TEXT("Save default task\n"));
   mutexTaskData.Lock();
-  ResumeAbortTask(-1); // turn off abort if it was on.
+  ResumeAbortTask(SettingsComputer(), -1); // turn off abort if it was on.
   mutexTaskData.Unlock();
   SaveDefaultTask();
 

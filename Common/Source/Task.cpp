@@ -105,7 +105,7 @@ void ResetTaskWaypoint(int j) {
 }
 
 
-void FlyDirectTo(int index) {
+void FlyDirectTo(int index, const SETTINGS_COMPUTER &settings_computer) {
   if (!CheckDeclaration())
     return;
 
@@ -113,7 +113,7 @@ void FlyDirectTo(int index) {
 
   if (TaskAborted) {
     // in case we GOTO while already aborted
-    ResumeAbortTask(-1);
+    ResumeAbortTask(settings_computer, -1);
   }
 
   if (!TaskIsTemporary()) {
@@ -138,13 +138,14 @@ void FlyDirectTo(int index) {
     task_points[i].Index = -1;
   }
   ActiveTaskPoint = 0;
-  RefreshTask();
+  RefreshTask(settings_computer);
   mutexTaskData.Unlock();
 }
 
 
 // Swaps waypoint at current index with next one.
-void SwapWaypoint(int index) {
+void SwapWaypoint(int index,
+		  const SETTINGS_COMPUTER &settings_computer) {
   if (!CheckDeclaration())
     return;
 
@@ -163,7 +164,7 @@ void SwapWaypoint(int index) {
     task_points[index] = task_points[index+1];
     task_points[index+1] = tmpPoint;
   }
-  RefreshTask();
+  RefreshTask(settings_computer);
   mutexTaskData.Unlock();
 }
 
@@ -171,7 +172,8 @@ void SwapWaypoint(int index) {
 // Inserts a waypoint into the task, in the
 // position of the ActiveWaypoint.  If append=true, insert at end of the
 // task.
-void InsertWaypoint(int index, bool append) {
+void InsertWaypoint(int index, const SETTINGS_COMPUTER &settings_computer,
+		    bool append) {
   if (!CheckDeclaration())
     return;
 
@@ -221,23 +223,23 @@ void InsertWaypoint(int index, bool append) {
     task_points[indexInsert].Index = index;
   }
 
-  RefreshTask();
+  RefreshTask(settings_computer);
   mutexTaskData.Unlock();
 
 }
 
 // Create a default task to home at startup if no task is present
-void DefaultTask(void) {
+void DefaultTask(const SETTINGS_COMPUTER &settings_computer) {
   mutexTaskData.Lock();
   TaskModified = true;
   TargetModified = true;
   if ((task_points[0].Index == -1)||(ActiveTaskPoint==-1)) {
-    if (HomeWaypoint != -1) {
-      task_points[0].Index = HomeWaypoint;
+    if (settings_computer.HomeWaypoint != -1) {
+      task_points[0].Index = settings_computer.HomeWaypoint;
       ActiveTaskPoint = 0;
     }
   }
-  RefreshTask();
+  RefreshTask(settings_computer);
   mutexTaskData.Unlock();
 }
 
@@ -248,7 +250,8 @@ void DefaultTask(void) {
 //
 // If you call this function, you MUST deal with
 // correctly setting ActiveTaskPoint yourself!
-void RemoveTaskPoint(int index) {
+void RemoveTaskPoint(int index, 
+		     const SETTINGS_COMPUTER &settings_computer) {
   if (!CheckDeclaration())
     return;
 
@@ -275,7 +278,7 @@ void RemoveTaskPoint(int index) {
   task_points[MAXTASKPOINTS-1].Index = -1;
   task_points[MAXTASKPOINTS-1].AATTargetOffsetRadius= 0.0;
 
-  RefreshTask();
+  RefreshTask(settings_computer);
   mutexTaskData.Unlock();
 
 }
@@ -284,7 +287,8 @@ void RemoveTaskPoint(int index) {
 // Index specifies a waypoint in the WP list
 // It won't necessarily be a waypoint that's
 // in the task
-void RemoveWaypoint(int index) {
+void RemoveWaypoint(int index,
+		    const SETTINGS_COMPUTER &settings_computer) {
   int i;
 
   if (!CheckDeclaration())
@@ -316,7 +320,7 @@ void RemoveWaypoint(int index) {
 
   if (i < MAXTASKPOINTS) {
     // Found WP, so remove it
-    RemoveTaskPoint(i);
+    RemoveTaskPoint(i, settings_computer);
 
     if (task_points[ActiveTaskPoint].Index == -1) {
       // We've just removed the last task point and it was
@@ -334,7 +338,7 @@ void RemoveWaypoint(int index) {
 
     if (i >= 0) {
       // Found WP, so remove it
-      RemoveTaskPoint(i);
+      RemoveTaskPoint(i, settings_computer);
       ActiveTaskPoint--;
 
     } else {
@@ -348,7 +352,7 @@ void RemoveWaypoint(int index) {
       mutexTaskData.Lock();
 
       if (ret == IDYES) {
-        RemoveTaskPoint(ActiveTaskPoint);
+        RemoveTaskPoint(ActiveTaskPoint, settings_computer);
         if (task_points[ActiveTaskPoint].Index == -1) {
           // Active WayPoint was last in the list so is currently
           // invalid.
@@ -357,13 +361,14 @@ void RemoveWaypoint(int index) {
       }
     }
   }
-  RefreshTask();
+  RefreshTask(settings_computer);
   mutexTaskData.Unlock();
 
 }
 
 
-void ReplaceWaypoint(int index) {
+void ReplaceWaypoint(int index,
+		     const SETTINGS_COMPUTER &settings_computer) {
   if (!CheckDeclaration())
     return;
 
@@ -383,13 +388,14 @@ void ReplaceWaypoint(int index) {
     ResetTaskWaypoint(ActiveTaskPoint);
     task_points[ActiveTaskPoint].Index = index;
   }
-  RefreshTask();
+  RefreshTask(settings_computer);
   mutexTaskData.Unlock();
 }
 
 static void CalculateAATTaskSectors(const NMEA_INFO &gps_info);
 
-void RefreshTask() {
+
+void RefreshTask(const SETTINGS_COMPUTER &settings_computer) {
   double lengthtotal = 0.0;
   int i;
 
@@ -432,8 +438,8 @@ void RefreshTask() {
         WayPointList[i].InTask = true;
       }
     }
-    if (HomeWaypoint>=0) {
-      WayPointList[HomeWaypoint].InTask = true;
+    if (settings_computer.HomeWaypoint>=0) {
+      WayPointList[settings_computer.HomeWaypoint].InTask = true;
     }
     for (i=0; i<MAXTASKPOINTS; i++) {
       if (ValidTaskPoint(i)) {
@@ -455,7 +461,7 @@ void RefreshTask() {
 }
 
 
-void RotateStartPoints(void) {
+void RotateStartPoints(const SETTINGS_COMPUTER &settings_computer) {
   if (ActiveTaskPoint>0) return;
   if (!EnableMultipleStartPoints) return;
 
@@ -479,7 +485,7 @@ void RotateStartPoints(void) {
     task_points[0].Index = task_start_points[found].Index;
   }
 
-  RefreshTask();
+  RefreshTask(settings_computer);
   mutexTaskData.Unlock();
 }
 
@@ -894,7 +900,8 @@ static bool LoadTaskWaypoints(FILE *file) {
 #define  BINFILEMAGICNUMBER     0x5cf77fcb
 
 // loads a new task from scratch.
-void LoadNewTask(const TCHAR *szFileName)
+void LoadNewTask(const TCHAR *szFileName,
+		 const SETTINGS_COMPUTER &settings_computer)
 {
   TASK_POINT Temp;
   START_POINT STemp;
@@ -1040,7 +1047,7 @@ void LoadNewTask(const TCHAR *szFileName)
     ClearTask();
   }
 
-  RefreshTask();
+  RefreshTask(settings_computer);
 
   if (!ValidTaskPoint(0)) {
     ActiveTaskPoint = 0;
@@ -1487,7 +1494,7 @@ static void BackupTask(void) {
 }
 
 
-void ResumeAbortTask(int set) {
+void ResumeAbortTask(const SETTINGS_COMPUTER &settings_computer, int set) {
   int i;
   int active_waypoint_on_entry;
   bool task_temporary_on_entry = TaskIsTemporary();
@@ -1534,7 +1541,7 @@ void ResumeAbortTask(int set) {
       ActiveTaskPoint = active_waypoint_saved;
       AATEnabled = aat_enabled_saved;
 
-      RefreshTask();
+      RefreshTask(settings_computer);
     }
   }
 

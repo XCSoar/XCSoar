@@ -44,7 +44,6 @@ Copyright_License {
 // control of task/waypoints
 extern int  AutoAdvance;
 extern bool AdvanceArmed;
-extern int  HomeWaypoint;
 extern int  ActiveTaskPoint;
 extern int  SelectedWaypoint;
 extern Start_t task_start_points;

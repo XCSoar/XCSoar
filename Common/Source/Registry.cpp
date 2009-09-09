@@ -587,7 +587,7 @@ void Profile::ReadRegistrySettings(void)
   GetFromRegistry(szRegistryCircleZoom,
 		  SetSettingsMap().CircleZoom );
 
-  GetFromRegistry(szRegistryHomeWaypoint,HomeWaypoint);
+  GetFromRegistry(szRegistryHomeWaypoint,SetSettingsComputer().HomeWaypoint);
 
 // VENTA3
   Temp = SettingsComputer().Alternate1;

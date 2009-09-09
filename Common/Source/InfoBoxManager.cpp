@@ -769,7 +769,7 @@ void InfoBoxManager::DisplayInfoBox(void)
 
 	// VENTA3 radial
 	case 60:
-	  if ( HomeWaypoint == -1 ) {  // should be redundant
+	  if ( SettingsComputer().HomeWaypoint == -1 ) {  // should be redundant
 	    InfoBoxes[i]->SetComment(TEXT(""));
 	    break;
 	  }

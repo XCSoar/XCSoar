@@ -231,7 +231,7 @@ static int FormKeyDown(WindowControl * Sender, WPARAM wParam, LPARAM lParam){
 static void OnGotoClicked(WindowControl * Sender){
 	(void)Sender;
   mutexTaskData.Lock();
-  FlyDirectTo(SelectedWaypoint);
+  FlyDirectTo(SelectedWaypoint,XCSoarInterface::SettingsComputer());
   mutexTaskData.Unlock();
   wf->SetModalResult(mrOK);
 }
@@ -239,8 +239,8 @@ static void OnGotoClicked(WindowControl * Sender){
 static void OnReplaceClicked(WindowControl * Sender){
 	(void)Sender;
   mutexTaskData.Lock();
-  ReplaceWaypoint(SelectedWaypoint);
-  RefreshTask();
+  ReplaceWaypoint(SelectedWaypoint,XCSoarInterface::SettingsComputer());
+  RefreshTask(XCSoarInterface::SettingsComputer());
   mutexTaskData.Unlock();
   wf->SetModalResult(mrOK);
 }
@@ -248,9 +248,9 @@ static void OnReplaceClicked(WindowControl * Sender){
 static void OnNewHomeClicked(WindowControl * Sender){
 	(void)Sender;
   mutexTaskData.Lock();
-  HomeWaypoint = SelectedWaypoint;
-  SetToRegistry(szRegistryHomeWaypoint, HomeWaypoint);
-  RefreshTask();
+  XCSoarInterface::SetSettingsComputer().HomeWaypoint = SelectedWaypoint;
+  SetToRegistry(szRegistryHomeWaypoint, XCSoarInterface::SettingsComputer().HomeWaypoint);
+  RefreshTask(XCSoarInterface::SettingsComputer());
   mutexTaskData.Unlock();
   wf->SetModalResult(mrOK);
 }
@@ -261,7 +261,7 @@ static void OnSetAlternate1Clicked(WindowControl * Sender){
   mutexTaskData.Lock();
   XCSoarInterface::SetSettingsComputer().Alternate1 = SelectedWaypoint;
   SetToRegistry(szRegistryAlternate1, XCSoarInterface::SettingsComputer().Alternate1);
-  RefreshTask();
+  RefreshTask(XCSoarInterface::SettingsComputer());
   mutexTaskData.Unlock();
   wf->SetModalResult(mrOK);
 }
@@ -271,7 +271,7 @@ static void OnSetAlternate2Clicked(WindowControl * Sender){
   mutexTaskData.Lock();
   XCSoarInterface::SetSettingsComputer().Alternate2 = SelectedWaypoint;
   SetToRegistry(szRegistryAlternate2, XCSoarInterface::SettingsComputer().Alternate2);
-  RefreshTask();
+  RefreshTask(XCSoarInterface::SettingsComputer());
   mutexTaskData.Unlock();
   wf->SetModalResult(mrOK);
 }
@@ -285,7 +285,7 @@ static void OnClearAlternatesClicked(WindowControl * Sender){
   XCSoarInterface::SetSettingsComputer().EnableAlternate2=false;
   SetToRegistry(szRegistryAlternate1, XCSoarInterface::SettingsComputer().Alternate1);
   SetToRegistry(szRegistryAlternate2, XCSoarInterface::SettingsComputer().Alternate2);
-  RefreshTask();
+  RefreshTask(XCSoarInterface::SettingsComputer());
   mutexTaskData.Unlock();
   wf->SetModalResult(mrOK);
 }
@@ -304,8 +304,8 @@ static void OnTeamCodeClicked(WindowControl * Sender){
 static void OnInserInTaskClicked(WindowControl * Sender){
 	(void)Sender;
   mutexTaskData.Lock();
-  InsertWaypoint(SelectedWaypoint);
-  RefreshTask();
+  InsertWaypoint(SelectedWaypoint,XCSoarInterface::SettingsComputer());
+  RefreshTask(XCSoarInterface::SettingsComputer());
   mutexTaskData.Unlock();
   wf->SetModalResult(mrOK);
 }
@@ -313,8 +313,8 @@ static void OnInserInTaskClicked(WindowControl * Sender){
 static void OnAppendInTaskClicked(WindowControl * Sender){
 	(void)Sender;
   mutexTaskData.Lock();
-  InsertWaypoint(SelectedWaypoint, true);
-  RefreshTask();
+  InsertWaypoint(SelectedWaypoint, XCSoarInterface::SettingsComputer(), true);
+  RefreshTask(XCSoarInterface::SettingsComputer());
   mutexTaskData.Unlock();
   wf->SetModalResult(mrOK);
 }
@@ -323,8 +323,8 @@ static void OnAppendInTaskClicked(WindowControl * Sender){
 static void OnRemoveFromTaskClicked(WindowControl * Sender){
 	(void)Sender;
   mutexTaskData.Lock();
-  RemoveWaypoint(SelectedWaypoint);
-  RefreshTask();
+  RemoveWaypoint(SelectedWaypoint,XCSoarInterface::SettingsComputer());
+  RefreshTask(XCSoarInterface::SettingsComputer());
   mutexTaskData.Unlock();
   wf->SetModalResult(mrOK);
 }

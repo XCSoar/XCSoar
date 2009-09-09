@@ -332,8 +332,8 @@ void InfoBoxFormatter::AssignValue(int i) {
     break;
   case 60:
     Value = DISTANCEMODIFY*Calculated().HomeDistance ;
-    if (HomeWaypoint>=0) {
-      Valid = ValidWayPoint(HomeWaypoint);
+    if (SettingsComputer().HomeWaypoint>=0) {
+      Valid = ValidWayPoint(SettingsComputer().HomeWaypoint);
     } else {
       Valid = false;
     }

@@ -83,6 +83,7 @@ SettingsComputerBlackboard::SettingsComputerBlackboard()
   settings_computer.TeammateCodeValid = false;
   settings_computer.TeamFlarmIdTarget = 0;
 
+  settings_computer.HomeWaypoint = -1;
   settings_computer.Alternate1 = -1;
   settings_computer.Alternate2 = -1;
 

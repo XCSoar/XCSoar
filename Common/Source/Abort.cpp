@@ -262,18 +262,20 @@ GlideComputerTask::SortLandableWaypoints()
         found_active_waypoint = i;
       }
     }
-    if ((HomeWaypoint>=0) && (SortedLandableIndex[i] == HomeWaypoint)) {
+    if ((SettingsComputer().HomeWaypoint>=0) 
+	&& (SortedLandableIndex[i] == SettingsComputer().HomeWaypoint)) {
       found_home_waypoint = i;
     }
   }
 
-  if ((found_home_waypoint == -1)&&(HomeWaypoint>=0)) {
+  if ((found_home_waypoint == -1)&&(SettingsComputer().HomeWaypoint>=0)) {
     // home not found in top list, so see if we can sneak it in
 
-    arrival_altitude = CalculateWaypointArrivalAltitude(HomeWaypoint);
+    arrival_altitude = 
+      CalculateWaypointArrivalAltitude(SettingsComputer().HomeWaypoint);
     if (arrival_altitude>0) {
       // only put it in if reachable
-      SortedLandableIndex[MAXTASKPOINTS-2] = HomeWaypoint;
+      SortedLandableIndex[MAXTASKPOINTS-2] = SettingsComputer().HomeWaypoint;
     }
   }
 

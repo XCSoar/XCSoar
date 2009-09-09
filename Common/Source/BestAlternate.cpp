@@ -294,7 +294,8 @@ GlideComputerTask::SearchBestAlternate()
       // attempt to lock it even if we already have a valid best, even if it is preferred and even
       // if it has a better GR
 
-      if ( (HomeWaypoint >= 0) && (curwp == HomeWaypoint) ) {
+      if ( (SettingsComputer().HomeWaypoint >= 0) 
+	   && (curwp == SettingsComputer().HomeWaypoint) ) {
 	bestalternate = curwp;
 	break;
       }
@@ -418,8 +419,8 @@ GlideComputerTask::SearchBestAlternate()
    */
 
   if ( bestalternate < 0 ) {
-    if ( HomeWaypoint >= 0 ) {
-      bestalternate=HomeWaypoint;
+    if ( SettingsComputer().HomeWaypoint >= 0 ) {
+      bestalternate=SettingsComputer().HomeWaypoint;
     }
   } else {
     // If still invalid, i.e. not -1, then there's a big problem

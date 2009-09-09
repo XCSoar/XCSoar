@@ -42,6 +42,8 @@ Copyright_License {
 #include <windows.h>
 #include "Sizes.h"
 
+#include "SettingsComputer.hpp"
+
 #define CIRCLE 0
 #define SECTOR 1
 
@@ -105,23 +107,25 @@ typedef TASKSTATS_POINT TaskStats_t[MAXTASKPOINTS +1];
 typedef TASK_POINT Task_t[MAXTASKPOINTS +1];
 typedef START_POINT Start_t[MAXSTARTPOINTS +1];
 
-void ReplaceWaypoint(int index);
-void InsertWaypoint(int index, bool append=false);
-void SwapWaypoint(int index);
-void RemoveWaypoint(int index);
-void RemoveTaskPoint(int index);
-void FlyDirectTo(int index);
+void ReplaceWaypoint(int index, const SETTINGS_COMPUTER &settings_computer);
+void InsertWaypoint(int index, const SETTINGS_COMPUTER &settings_computer,
+		    bool append=false);
+void SwapWaypoint(int index, const SETTINGS_COMPUTER &settings_computer);
+void RemoveWaypoint(int index, const SETTINGS_COMPUTER &settings_computer);
+void RemoveTaskPoint(int index, const SETTINGS_COMPUTER &settings_computer);
+void FlyDirectTo(int index, const SETTINGS_COMPUTER &settings_computer);
 double AdjustAATTargets(double desired);
 void RefreshTaskWaypoint(int i);
-void RefreshTask(void);
+void RefreshTask(const SETTINGS_COMPUTER &settings_computer);
 void CalculateTaskSectors(void);
 bool WaypointInTask(const int ind);
 
-void LoadNewTask(const TCHAR *FileName);
+void LoadNewTask(const TCHAR *FileName,
+		 const SETTINGS_COMPUTER &settings_computer);
 void SaveTask(const TCHAR *FileName);
-void DefaultTask(void);
+void DefaultTask(const SETTINGS_COMPUTER &settings);
 void ClearTask(void);
-void RotateStartPoints(void);
+void RotateStartPoints(const SETTINGS_COMPUTER &settings_computer);
 bool ValidTaskPoint(int i);
 bool ValidWayPoint(int i);
 
@@ -144,7 +148,8 @@ void CalculateAATIsoLines(void);
 
 void SaveDefaultTask(void);
 
-void ResumeAbortTask(int set = 0);
+void ResumeAbortTask(const SETTINGS_COMPUTER &settings_computer,
+		     int set = 0);
 
 bool TaskIsTemporary(void);
 

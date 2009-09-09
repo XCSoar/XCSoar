@@ -734,46 +734,49 @@ void SetHome(SETTINGS_COMPUTER &settings,
 
   // check invalid home waypoint or forced reset due to file change
   // VENTA3 
-  if (reset || !ValidWayPoint(0) || !ValidWayPoint(HomeWaypoint) ) {
-    HomeWaypoint = -1;
+  if (reset || !ValidWayPoint(0) || 
+      !ValidWayPoint(settings.HomeWaypoint) ) {
+    settings.HomeWaypoint = -1;
   }
   // VENTA3 -- reset Alternates
   if (reset 
-      || !ValidWayPoint(XCSoarInterface::SettingsComputer().Alternate1) 
-      || !ValidWayPoint(XCSoarInterface::SettingsComputer().Alternate2) ) {
-    XCSoarInterface::SetSettingsComputer().Alternate1= -1; 
-    XCSoarInterface::SetSettingsComputer().Alternate2= -1;
+      || !ValidWayPoint(settings.Alternate1) 
+      || !ValidWayPoint(settings.Alternate2) ) {
+    settings.Alternate1= -1; 
+    settings.Alternate2= -1;
   }
   // check invalid task ref waypoint or forced reset due to file change
   if (reset || !ValidWayPoint(settings.TeamCodeRefWaypoint)) {
     settings.TeamCodeRefWaypoint = -1;
   }
 
-  if (!ValidWayPoint(HomeWaypoint)) {
+  if (!ValidWayPoint(settings.HomeWaypoint)) {
     // search for home in waypoint list, if we don't have a home
-    HomeWaypoint = -1;
+    settings.HomeWaypoint = -1;
     for(i=0;i<NumberOfWayPoints;i++)
       {
         if( (WayPointList[i].Flags & HOME) == HOME)
           {
-            if (HomeWaypoint== -1) {
-              HomeWaypoint = i;
+            if (settings.HomeWaypoint== -1) {
+              settings.HomeWaypoint = i;
+	      break; // only search for one
             }
           }
       }
   }
   // set team code reference waypoint if we don't have one
   if (settings.TeamCodeRefWaypoint== -1) {
-    settings.TeamCodeRefWaypoint = HomeWaypoint;
+    settings.TeamCodeRefWaypoint = 
+      settings.HomeWaypoint;
   }
 
   if (set_location) {
-    if (ValidWayPoint(HomeWaypoint)) {
+    if (ValidWayPoint(settings.HomeWaypoint)) {
       // OK, passed all checks now
       StartupStore(TEXT("Start at home waypoint\n"));
-      device_blackboard.SetStartupLocation(WayPointList[HomeWaypoint].Longitude,
-					   WayPointList[HomeWaypoint].Latitude,
-					   WayPointList[HomeWaypoint].Altitude);
+      device_blackboard.SetStartupLocation(WayPointList[settings.HomeWaypoint].Longitude,
+					   WayPointList[settings.HomeWaypoint].Latitude,
+					   WayPointList[settings.HomeWaypoint].Altitude);
     } else {
       
       // no home at all, so set it from center of terrain if available
@@ -790,7 +793,7 @@ void SetHome(SETTINGS_COMPUTER &settings,
   //
   // VENTA3> this is probably useless, since HomeWayPoint &c were currently
   //         just loaded from registry.
-  SetToRegistry(szRegistryHomeWaypoint,HomeWaypoint);
+  SetToRegistry(szRegistryHomeWaypoint,settings.HomeWaypoint);
   SetToRegistry(szRegistryAlternate1,settings.Alternate1);
   SetToRegistry(szRegistryAlternate2,settings.Alternate2);
   SetToRegistry(szRegistryTeamcodeRefWaypoint,settings.TeamCodeRefWaypoint);
@@ -984,7 +987,8 @@ void WriteWayPointFileWayPoint(FILE *fp, WAYPOINT* wpt) {
 }
 
 
-void WriteWayPointFile(FILE *fp) {
+void WriteWayPointFile(FILE *fp,
+		       const SETTINGS_COMPUTER &settings_computer) {
   int i;
 
   // remove previous home if it exists in this file
@@ -1000,7 +1004,7 @@ void WriteWayPointFile(FILE *fp) {
     if (WayPointList[i].FileNum == globalFileNum) {
 
       // set home flag if it's the home
-      if (i==HomeWaypoint) {
+      if (i==settings_computer.HomeWaypoint) {
         if ((WayPointList[i].Flags & HOME) != HOME) {
           WayPointList[i].Flags += HOME;
         }
@@ -1012,7 +1016,7 @@ void WriteWayPointFile(FILE *fp) {
 }
 
 
-void WaypointWriteFiles(void) {
+void WaypointWriteFiles(const SETTINGS_COMPUTER &settings_computer) {
   mutexTaskData.Lock();
 
   TCHAR szFile1[MAX_PATH] = TEXT("\0");
@@ -1033,7 +1037,7 @@ void WaypointWriteFiles(void) {
 
   if(fp != NULL) {
     globalFileNum = 0;
-    WriteWayPointFile(fp);
+    WriteWayPointFile(fp, settings_computer);
     fprintf(fp,"\r\n");
     fclose(fp);
     fp = NULL;
@@ -1052,7 +1056,7 @@ void WaypointWriteFiles(void) {
 
   if(fp != NULL) {
     globalFileNum = 1;
-    WriteWayPointFile(fp);
+    WriteWayPointFile(fp, settings_computer);
     fprintf(fp,"\r\n");
     fclose(fp);
     fp = NULL;
