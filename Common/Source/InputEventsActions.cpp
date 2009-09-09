@@ -1024,7 +1024,7 @@ void InputEvents::eventAudioDeadband(const TCHAR *misc) {
   /*
   VarioSound_SetVdead(SoundDeadband);
   */
-  SaveSoundSettings(); // save to registry
+  Profile::SaveSoundSettings(); // save to registry
 
   // TODO feature: send to vario if available
 

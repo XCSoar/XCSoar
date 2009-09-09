@@ -54,7 +54,4 @@ void propGetFontSettings(const TCHAR *Name, LOGFONT* lplf);
 void propGetFontSettingsFromString(const TCHAR *Buffer, LOGFONT* lplf);
 int propGetScaleList(double *List, size_t Size);
 
-void RestoreRegistry(void);
-void StoreRegistry(void);
-
 #endif

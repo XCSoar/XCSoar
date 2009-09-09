@@ -108,7 +108,7 @@ void ReadProfile(const TCHAR *szFile)
   POLARFILECHANGED = true;
 
   // assuming all is ok, we can...
-  ReadRegistrySettings();
+  Profile::ReadRegistrySettings();
 }
 
 
@@ -155,14 +155,14 @@ TCHAR startProfileFile[MAX_PATH];
 TCHAR defaultProfileFile[MAX_PATH];
 TCHAR failsafeProfileFile[MAX_PATH];
 
-void RestoreRegistry(void) {
+void Profile::RestoreRegistry(void) {
   StartupStore(TEXT("Restore registry\n"));
   // load registry backup if it exists
   LoadRegistryFromFile(failsafeProfileFile);
   LoadRegistryFromFile(startProfileFile);
 }
 
-void StoreRegistry(void) {
+void Profile::StoreRegistry(void) {
   StartupStore(TEXT("Store registry\n"));
   // save registry backup first (try a few places)
   SaveRegistryToFile(startProfileFile);

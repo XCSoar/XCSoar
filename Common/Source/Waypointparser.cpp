@@ -136,7 +136,7 @@ static bool WaypointInTerrainRange(WAYPOINT *List) {
         WaypointsOutOfRange = 1;
         SetToRegistry(szRegistryWaypointsOutOfRange,
                       WaypointsOutOfRange);
-        StoreRegistry();
+	Profile::StoreRegistry();
         return true;
       case mrCancel:
       case wpTerrainBoundsNoAll:
@@ -144,7 +144,7 @@ static bool WaypointInTerrainRange(WAYPOINT *List) {
         WaypointsOutOfRange = 2;
         SetToRegistry(szRegistryWaypointsOutOfRange,
                       WaypointsOutOfRange);
-        StoreRegistry();
+	Profile::StoreRegistry();
         return false;
       }
 

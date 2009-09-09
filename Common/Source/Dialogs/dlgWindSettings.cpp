@@ -80,9 +80,9 @@ static void UpdateWind(bool set) {
 
 
 static void OnSaveClicked(WindowControl * Sender){
-	(void)Sender;
-        UpdateWind(true);
-  SaveWindToRegistry();
+  (void)Sender;
+  UpdateWind(true);
+  Profile::SaveWindToRegistry();
   wf->SetModalResult(mrOK);
 }
 

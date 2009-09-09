@@ -3962,7 +3962,7 @@ void dlgConfigurationShowModal(void){
 #endif
 
   if (changed) {
-    StoreRegistry();
+    Profile::StoreRegistry();
 
     if (!requirerestart) {
       MessageBoxX (

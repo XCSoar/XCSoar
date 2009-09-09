@@ -113,15 +113,15 @@ void XCSoarInterface::PreloadInitialisation(bool ask) {
   // Registery (early)
 
   if (ask) {
-    RestoreRegistry();
-    ReadRegistrySettings();
+    Profile::RestoreRegistry();
+    Profile::ReadRegistrySettings();
 
     //    CreateProgressDialog(gettext(TEXT("Initialising")));
 
   } else {
     dlgStartupShowModal();
-    RestoreRegistry();
-    ReadRegistrySettings();
+    Profile::RestoreRegistry();
+    Profile::ReadRegistrySettings();
 
     CreateProgressDialog(gettext(TEXT("Initialising")));
   }
@@ -288,7 +288,7 @@ bool XCSoarInterface::Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
   PreloadInitialisation(false);
   ////////////////////////////////////////////////////////
 
-  LoadWindFromRegistry();
+  Profile::LoadWindFromRegistry();
   CalculateNewPolarCoef();
   StartupStore(TEXT("GlidePolar::UpdatePolar\n"));
   GlidePolar::UpdatePolar(false, SettingsComputer());
@@ -394,12 +394,12 @@ void XCSoarInterface::Shutdown(void) {
 
   CreateProgressDialog(gettext(TEXT("Shutdown, saving profile...")));
   // Save settings
-  StoreRegistry();
+  Profile::StoreRegistry();
 
   // Stop sound
 
   StartupStore(TEXT("SaveSoundSettings\n"));
-  SaveSoundSettings();
+  Profile::SaveSoundSettings();
 
 #ifndef DISABLEAUDIOVARIO
   //  VarioSound_EnableSound(false);

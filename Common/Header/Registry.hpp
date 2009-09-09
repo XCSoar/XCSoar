@@ -43,6 +43,8 @@ Copyright_License {
 
 #include <tchar.h>
 
+#include "Interface.hpp"
+
 void ReadPort1Settings(DWORD *PortIndex, DWORD *SpeedIndex);
 void ReadPort2Settings(DWORD *PortIndex, DWORD *SpeedIndex);
 void ReadPort3Settings(DWORD *PortIndex, DWORD *SpeedIndex);
@@ -214,7 +216,6 @@ HRESULT SetToRegistry(const TCHAR *szRegValue, int nVal);	// JG
 HRESULT SetToRegistry(const TCHAR *szRegValue, unsigned nVal);	// JG
 BOOL GetRegistryString(const TCHAR *szRegValue, TCHAR *pPos, DWORD dwSize);
 HRESULT SetRegistryString(const TCHAR *szRegValue, const TCHAR *Pos);
-void ReadRegistrySettings(void);
 void SetRegistryColour(int i, DWORD c);
 void SetRegistryBrush(int i, DWORD c);
 void SetRegistryAirspacePriority(int i);
@@ -222,13 +223,20 @@ void SetRegistryAirspaceMode(int i);
 int GetRegistryAirspaceMode(int i);
 void StoreType(int Index,int InfoType);
 
-void SaveSoundSettings();
-void SaveWindToRegistry();
-void LoadWindFromRegistry();
 void ReadDeviceSettings(const int devIdx, TCHAR *Name);
 void WriteDeviceSettings(const int devIdx, const TCHAR *Name);
 
 void SaveRegistryToFile(const TCHAR* szFile);
 void LoadRegistryFromFile(const TCHAR* szFile);
+
+class Profile: public XCSoarInterface {
+public:
+  static void ReadRegistrySettings(void);
+  static void RestoreRegistry(void);
+  static void StoreRegistry(void);
+  static void SaveSoundSettings();
+  static void SaveWindToRegistry();
+  static void LoadWindFromRegistry();
+};
 
 #endif

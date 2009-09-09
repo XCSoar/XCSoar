@@ -74,13 +74,9 @@ Copyright_License {
 
 BufferWindow InfoBoxManager::full_window;
 
-// user setting
-int ActiveAlternate = -1;
-
 static bool InfoBoxesDirty= false;
 static bool InfoBoxesHidden = false;
 static double LastFlipBoxTime = 0; // VENTA3
-
 unsigned numInfoWindows = 8;
 
 InfoBox *InfoBoxes[MAXINFOWINDOWS];

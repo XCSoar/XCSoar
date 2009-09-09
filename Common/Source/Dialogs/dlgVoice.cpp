@@ -204,7 +204,7 @@ void dlgVoiceShowModal(void){
   }
 
   if (changed) {
-    StoreRegistry();
+    Profile::StoreRegistry();
 
     MessageBoxX(gettext(TEXT("Changes to configuration saved.")),
 		 TEXT(""), MB_OK);

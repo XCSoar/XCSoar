@@ -227,7 +227,7 @@ bool dlgTaskRules(void){
   delete wf;
 
   if (changed) {
-    StoreRegistry();
+    Profile::StoreRegistry();
 
     MessageBoxX (
 		 gettext(TEXT("Changes to configuration saved.")),
