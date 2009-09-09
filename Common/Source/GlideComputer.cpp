@@ -123,7 +123,7 @@ bool GlideComputer::ProcessGPS()
 
   FLARM_ScanTraffic();
 
-  vegavoice.Update(&Basic(), &Calculated());
+  vegavoice.Update(&Basic(), &Calculated(), SettingsComputer());
   ConditionMonitorsUpdate(*this);
 
   return true;

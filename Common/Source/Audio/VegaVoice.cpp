@@ -46,15 +46,6 @@ Copyright_License {
 #include <tchar.h>
 #include <math.h>
 
-bool EnableVoiceClimbRate=true;
-bool EnableVoiceTerrain=true;
-bool EnableVoiceWaypointDistance=true;
-bool EnableVoiceTaskAltitudeDifference=true;
-bool EnableVoiceMacCready=true;
-bool EnableVoiceNewWaypoint=true;
-bool EnableVoiceInSector=true;
-bool EnableVoiceAirspace=true;
-
 
 enum {
   VWI_ZERO=20,
@@ -341,7 +332,8 @@ void VegaVoiceMessage::DoSend(double time, TCHAR *text) {
 
 bool
 VegaVoiceMessage::Update(const NMEA_INFO *Basic,
-                         const DERIVED_INFO *Calculated)
+                         const DERIVED_INFO *Calculated,
+			 const SETTINGS_COMPUTER &settings)
 {
   TCHAR text[80];
   static int LastWayPoint = -1;
@@ -352,7 +344,7 @@ VegaVoiceMessage::Update(const NMEA_INFO *Basic,
     // "INFO"
     break;
   case VV_CLIMBRATE:
-    if (!EnableVoiceClimbRate) return false;
+    if (!settings.EnableVoiceClimbRate) return false;
 
     if (Calculated->Circling && (Calculated->Average30s > 0)) {
       // Gives the average climb rate in user units every X seconds
@@ -367,7 +359,7 @@ VegaVoiceMessage::Update(const NMEA_INFO *Basic,
     }
     break;
   case VV_TERRAIN:
-    if (!EnableVoiceTerrain) return false;
+    if (!settings.EnableVoiceTerrain) return false;
     // TODO feature: final glide with terrain warning
     // CAUTION TERRAIN
     break;
@@ -388,7 +380,7 @@ VegaVoiceMessage::Update(const NMEA_INFO *Basic,
 
       if (Calculated->WaypointDistance*DISTANCEMODIFY<20.0) {
 
-	      if (!EnableVoiceWaypointDistance) return false;
+	      if (!settings.EnableVoiceWaypointDistance) return false;
 
 	      wsprintf(text,TEXT(",%d"), VWI_PLUS);
 	      TextToDigitsLarge(text, Calculated->WaypointDistance*DISTANCEMODIFY);
@@ -398,7 +390,7 @@ VegaVoiceMessage::Update(const NMEA_INFO *Basic,
 
 	      if (Calculated->FinalGlide) {
 
-	        if (!EnableVoiceTaskAltitudeDifference) return false;
+	        if (!settings.EnableVoiceTaskAltitudeDifference) return false;
 
 	        // TODO feature: BELOW FOUR HUNDRED
 	        double tad = Calculated->TaskAltitudeDifference*ALTITUDEMODIFY;
@@ -418,7 +410,7 @@ VegaVoiceMessage::Update(const NMEA_INFO *Basic,
     }
     break;
   case VV_MACCREADY:
-    if (!EnableVoiceMacCready) return false;
+    if (!settings.EnableVoiceMacCready) return false;
     // TODO feature: report when not in auto maccready mode, if
     // vario has changed in last 3 seconds but hasn't changed
     // for more than one second
@@ -427,7 +419,7 @@ VegaVoiceMessage::Update(const NMEA_INFO *Basic,
     // Later: "MACCREADY THREE DECIMAL FOUR"
     break;
   case VV_NEWWAYPOINT:
-    if (!EnableVoiceNewWaypoint) return false;
+    if (!settings.EnableVoiceNewWaypoint) return false;
     if (ActiveWayPoint != LastWayPoint) {
       LastWayPoint = ActiveWayPoint;
       // Reports that a new waypoint is active
@@ -440,7 +432,7 @@ VegaVoiceMessage::Update(const NMEA_INFO *Basic,
     }
     break;
   case VV_INSECTOR:
-    if (!EnableVoiceInSector) return false;
+    if (!settings.EnableVoiceInSector) return false;
     if (Calculated->IsInSector) {
       // Reports when the aircraft is in an AAT/task sector
       // e.g.:
@@ -452,7 +444,7 @@ VegaVoiceMessage::Update(const NMEA_INFO *Basic,
     }
     break;
   case VV_AIRSPACE:
-    if (!EnableVoiceAirspace) return false;
+    if (!settings.EnableVoiceAirspace) return false;
     if (Calculated->IsInAirspace) {
       // Reports when the aircraft is inside airspace
       // e.g.:
@@ -551,7 +543,8 @@ void VegaVoice::UnLock() {
 }
 
 void
-VegaVoice::Update(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated)
+VegaVoice::Update(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated,
+		  const SETTINGS_COMPUTER &settings)
 {
 
   if (!AirspaceNotifierInstalled){
@@ -566,7 +559,7 @@ VegaVoice::Update(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated)
   // update values in each message to determine whether
   // the message should be active
   for (int i=0; i<VV_MESSAGE_COUNT; i++) {
-    if (message[i].Update(Basic, Calculated)) {
+    if (message[i].Update(Basic, Calculated, settings)) {
       UnLock();
       return;
     }

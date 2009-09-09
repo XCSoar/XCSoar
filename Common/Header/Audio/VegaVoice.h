@@ -40,6 +40,7 @@ Copyright_License {
 
 #include "NMEA/Info.h"
 #include "NMEA/Derived.hpp"
+#include "SettingsComputer.hpp"
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
@@ -124,7 +125,9 @@ public:
 
 public:
 
-  bool Update(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated);
+  bool Update(const NMEA_INFO *Basic, 
+	      const DERIVED_INFO *Calculated,
+	      const SETTINGS_COMPUTER &settings);
 
 };
 
@@ -136,7 +139,9 @@ public:
 
   VegaVoiceMessage message[VV_MESSAGE_COUNT];
 
-  void Update(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated);
+  void Update(const NMEA_INFO *Basic, 
+	      const DERIVED_INFO *Calculated,
+	      const SETTINGS_COMPUTER &settings);
 
   // called when notified by Altair that the message has been spoken
   void MessageSpoken(int id_this, double time);

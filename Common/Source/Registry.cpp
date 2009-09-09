@@ -874,21 +874,21 @@ void Profile::ReadRegistrySettings(void)
   GetFromRegistry(szRegistryUseCustomFonts,
 		  UseCustomFonts);
   GetFromRegistry(szRegistryVoiceClimbRate,
-		  EnableVoiceClimbRate );
+		  SetSettingsComputer().EnableVoiceClimbRate );
   GetFromRegistry(szRegistryVoiceTerrain,
-		  EnableVoiceTerrain );
+		  SetSettingsComputer().EnableVoiceTerrain );
   GetFromRegistry(szRegistryVoiceWaypointDistance,
-		  EnableVoiceWaypointDistance );
+		  SetSettingsComputer().EnableVoiceWaypointDistance );
   GetFromRegistry(szRegistryVoiceTaskAltitudeDifference,
-		  EnableVoiceTaskAltitudeDifference );
+		  SetSettingsComputer().EnableVoiceTaskAltitudeDifference );
   GetFromRegistry(szRegistryVoiceMacCready,
-		  EnableVoiceMacCready );
+		  SetSettingsComputer().EnableVoiceMacCready );
   GetFromRegistry(szRegistryVoiceNewWaypoint,
-		  EnableVoiceNewWaypoint );
+		  SetSettingsComputer().EnableVoiceNewWaypoint );
   GetFromRegistry(szRegistryVoiceInSector,
-		  EnableVoiceInSector );
+		  SetSettingsComputer().EnableVoiceInSector );
   GetFromRegistry(szRegistryVoiceAirspace,
-		  EnableVoiceAirspace );
+		  SetSettingsComputer().EnableVoiceAirspace );
   GetFromRegistry(szRegistryFinishMinHeight,
 		  FinishMinHeight );
   GetFromRegistry(szRegistryStartHeightRef,

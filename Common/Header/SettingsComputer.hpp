@@ -115,6 +115,17 @@ typedef struct _SETTINGS_COMPUTER {
  int  Alternate1; // VENTA3
  int  Alternate2;
 
+/// vegavoice stuff
+
+ bool EnableVoiceClimbRate;
+ bool EnableVoiceTerrain;
+ bool EnableVoiceWaypointDistance;
+ bool EnableVoiceTaskAltitudeDifference;
+ bool EnableVoiceMacCready;
+ bool EnableVoiceNewWaypoint;
+ bool EnableVoiceInSector;
+ bool EnableVoiceAirspace;
+
 } SETTINGS_COMPUTER;
 
 #endif
