@@ -75,6 +75,7 @@ Copyright_License {
 ///////////////////////////////////////////////
 
 void RefreshTaskStatistics(void) {
+  SetTargetModified(false);
   /* JMW incomplete
   const double mc = GlidePolar::GetMacCready();
   const double ce = GlidePolar::GetCruiseEfficiency();

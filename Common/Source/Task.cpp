@@ -60,7 +60,27 @@ static int active_waypoint_saved= -1;
 static bool aat_enabled_saved= false;
 
 static void BackupTask(void);
+bool TaskModified=false;
+bool TargetModified=false;
 
+bool isTaskModified() {
+  return TaskModified;
+}
+
+void SetTaskModified() {
+  TaskModified = true;
+}
+
+bool isTargetModified() {
+  return TargetModified;
+}
+
+void SetTargetModified(const bool set) {
+  TargetModified = set;
+  if (set) {
+    SetTaskModified();
+  }
+}
 
 void ResetTaskWaypoint(int j) {
   Task[j].Index = -1;

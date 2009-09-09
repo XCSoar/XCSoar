@@ -74,8 +74,6 @@ extern int Handicap;
 extern bool EnableOLC;
 
 extern bool EnableMultipleStartPoints;
-extern bool TaskModified;
-extern bool TargetModified;
 extern int  StartHeightRef;
 
 

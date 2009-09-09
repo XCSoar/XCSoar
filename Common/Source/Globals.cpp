@@ -9,8 +9,6 @@
 TCHAR LastTaskFileName[MAX_PATH]= TEXT("\0");
 
 bool  EnableMultipleStartPoints = false;
-bool  TaskModified = false;
-bool  TargetModified = false;
 int   StartHeightRef = 0; // MSL
 int   SelectedWaypoint = -1;
 bool  ForceFinalGlide= false;

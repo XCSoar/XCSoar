@@ -51,7 +51,7 @@ Copyright_License {
 #include "GlideSolvers.hpp"
 #include "Abort.hpp"
 #include "BestAlternate.hpp"
-
+#include "Logger.h"
 #include "InputEvents.h"
 // JMW TODO: abstract up to higher layer so a base copy of this won't 
 // call any event
@@ -1821,17 +1821,17 @@ void GlideComputerTask::TaskSpeed(const double this_maccready,
     SetCalculated().TaskSpeed = v2;
 #endif
 
-    double konst = 1.1;
-    if (TaskModified)
-      {
-	konst = 1.0;
-      }
+    double konst;
+    if (isTaskDeclared()) {
+      konst = 1.0;
+    } else {
+      konst = 1.1;
+    }
 
     double termikLigaPoints = 0;
-    if (d1 > 0)
-      {
-	termikLigaPoints = konst*(0.015*0.001*d1-(400.0/(0.001*d1))+12.0)*v1*3.6*100.0/(double)Handicap;
-      }
+    if (d1 > 0) {
+      termikLigaPoints = konst*(0.015*0.001*d1-(400.0/(0.001*d1))+12.0)*v1*3.6*100.0/(double)Handicap;
+    }
 
     SetCalculated().TermikLigaPoints = termikLigaPoints;
 

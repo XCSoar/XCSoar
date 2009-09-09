@@ -116,7 +116,7 @@ static void UpdateCaption (void) {
               gettext(TEXT("Task Overview")));
   }
 
-  if (TaskModified) {
+  if (isTaskModified()) {
     _tcscat(title, TEXT(" *"));
   }
 

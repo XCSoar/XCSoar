@@ -194,8 +194,7 @@ void AATDistance::ShiftTargetOutside(double longitude, double latitude,
                           bearing, 100.0,
                           &Task[taskwaypoint].AATTargetLat,
                           &Task[taskwaypoint].AATTargetLon);
-    TargetModified = true;
-
+    SetTargetModified();
   }
 
   //JMWAAT  Task[taskwaypoint].AATTargetOffsetRadial = bearing;
@@ -241,7 +240,7 @@ void AATDistance::ShiftTargetFromInFront(double longitude, double latitude,
                         &Task[taskwaypoint].AATTargetLon);
   // JMW, distance here was 100m, now changed to speed * 2
 
-  TargetModified = true;
+  SetTargetModified();
   CalculateAATIsoLines();
 }
 
@@ -389,7 +388,7 @@ void AATDistance::ShiftTargetFromBehind(double longitude, double latitude,
                                longitude,
                                taskwaypoint, course_bearing,
                                t_distance_lower);
-    TargetModified = true;
+    SetTargetModified();
     CalculateAATIsoLines();
 
   }

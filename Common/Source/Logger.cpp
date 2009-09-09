@@ -54,6 +54,7 @@
 
 //IGC Logger
 bool LoggerActive = false;
+bool DeclaredToDevice = false;
 
 TCHAR NumToIGCChar(int n) {
   if (n<10) {
@@ -63,6 +64,9 @@ TCHAR NumToIGCChar(int n) {
   }
 }
 
+bool isTaskDeclared() {
+  return DeclaredToDevice;
+}
 
 int IGCCharToNum(TCHAR c) {
   if ((c >= _T('1')) && (c<= _T('9'))) {
@@ -466,7 +470,7 @@ StartLogger(const NMEA_INFO &gps_info,
   LocalPath(path);
 #endif
 
-  if (TaskModified) {
+  if (isTaskModified()) {
     SaveDefaultTask();
   }
 
@@ -708,8 +712,6 @@ void LoggerNote(const TCHAR *text) {
   }
 }
 
-bool DeclaredToDevice = false;
-
 
 static bool LoggerDeclare(PDeviceDescriptor_t dev, Declaration_t *decl)
 {
@@ -765,7 +767,7 @@ void LoggerDeviceDeclare() {
 
 
 bool CheckDeclaration(void) {
-  if (!DeclaredToDevice) {
+  if (!isTaskDeclared()) {
     return true;
   } else {
     if(MessageBoxX(gettext(TEXT("OK to invalidate declaration?")),

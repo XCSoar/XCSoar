@@ -157,4 +157,9 @@ bool IsFinalWaypoint(void);
 bool InAATTurnSector(const double longitude, const double latitude,
 		     const int the_turnpoint);
 
+bool isTaskModified();
+void SetTaskModified();
+bool isTargetModified();
+void SetTargetModified(const bool set=true);
+
 #endif

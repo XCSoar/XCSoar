@@ -239,7 +239,7 @@ static void GetWaypointValues(void) {
                     wp->GetDataField()->GetAsInteger());
     }
     if (changed) {
-      TaskModified = true;
+      SetTaskModified();
     }
     mutexTaskData.Unlock();
 
@@ -367,7 +367,7 @@ static void ReadValues(void) {
                   wp->GetDataField()->GetAsInteger());
   }
   if (changed) {
-    TaskModified = true;
+    SetTaskModified();
   }
 
   mutexTaskData.Unlock();
@@ -405,7 +405,7 @@ static void OnSelectClicked(WindowControl * Sender){
         Task[twItemIndex].AATSectorRadius = SectorRadius;
         Task[twItemIndex].AATCircleRadius = SectorRadius;
         Task[twItemIndex].AATTargetLocked = false;
-        TaskModified = true;
+        SetTaskModified();
         mutexTaskData.Unlock();
       }
     }
@@ -468,7 +468,7 @@ static void OnTaskRulesClicked(WindowControl * Sender){
   (void)Sender;
   wf->SetVisible(false);
   if (dlgTaskRules()) {
-    TaskModified = true;
+    SetTaskModified();
   }
   wf->SetVisible(true);
 }

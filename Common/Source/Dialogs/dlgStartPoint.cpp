@@ -223,7 +223,7 @@ void dlgStartPointShowModal(void) {
   // now retrieve back the properties...
   if (changed) {
     mutexTaskData.Lock();
-    TaskModified = true;
+    SetTaskModified();
     RefreshTask();
     mutexTaskData.Unlock();
   };

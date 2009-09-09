@@ -151,7 +151,7 @@ static void UpdateValuesSystem() {
   static int VarioAvailable_last = XCSoarInterface::Basic().VarioAvailable;
   static int FLARM_Available_last = XCSoarInterface::Basic().FLARM_Available;
   static bool LoggerActive_last = LoggerActive;
-  static bool DeclaredToDevice_last = DeclaredToDevice;
+  static bool DeclaredToDevice_last = isTaskDeclared();
   static double SupplyBatteryVoltage_last = XCSoarInterface::Basic().SupplyBatteryVoltage;
   static int PDABatteryPercent_last = PDABatteryPercent;
 
@@ -162,7 +162,7 @@ static void UpdateValuesSystem() {
       (VarioAvailable_last != XCSoarInterface::Basic().VarioAvailable) ||
       (FLARM_Available_last != XCSoarInterface::Basic().FLARM_Available) ||
       (LoggerActive_last != LoggerActive) ||
-      (DeclaredToDevice_last != DeclaredToDevice) ||
+      (DeclaredToDevice_last != isTaskDeclared()) ||
       (SupplyBatteryVoltage_last != XCSoarInterface::Basic().SupplyBatteryVoltage) ||
       (PDABatteryPercent_last != PDABatteryPercent)) {
     first = false;
@@ -173,7 +173,7 @@ static void UpdateValuesSystem() {
     VarioAvailable_last = XCSoarInterface::Basic().VarioAvailable;
     FLARM_Available_last = XCSoarInterface::Basic().FLARM_Available;
     LoggerActive_last = LoggerActive;
-    DeclaredToDevice_last = DeclaredToDevice;
+    DeclaredToDevice_last = isTaskDeclared();
     SupplyBatteryVoltage_last = XCSoarInterface::Basic().SupplyBatteryVoltage;
     PDABatteryPercent_last = PDABatteryPercent;
 
@@ -257,7 +257,7 @@ static void UpdateValuesSystem() {
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpDeclared"));
   if (wp) {
-    if (DeclaredToDevice) {
+    if (isTaskDeclared()) {
       wp->SetText(gettext(TEXT("YES")));
     } else {
       wp->SetText(gettext(TEXT("NO")));

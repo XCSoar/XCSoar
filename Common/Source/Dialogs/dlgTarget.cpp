@@ -128,8 +128,7 @@ static void MoveTarget(double adjust_angle) {
                                    target_bearing,
                                    distance);
         Task[target_point].AATTargetOffsetRadius = Range;
-        TaskModified = true;
-        TargetModified = true;
+        SetTargetModified();
       }
     } else {
       // OK to change it..
@@ -155,8 +154,7 @@ static void MoveTarget(double adjust_angle) {
       Task[target_point].AATTargetOffsetRadius = Range;
       Task[target_point].AATTargetOffsetRadial = bearing;
       Radial = bearing;
-      TaskModified = true;
-      TargetModified = true;
+      SetTargetModified();
     }
   }
   mutexTaskData.Unlock();
@@ -203,8 +201,7 @@ static void DragTarget(double target_longitude, double target_latitude) {
                                    target_bearing,
                                    distance);
         Task[target_point].AATTargetOffsetRadius = Range;
-        TaskModified = true;
-        TargetModified = true;
+	SetTargetModified();
       }
     } else {
       // OK to change it..
@@ -230,8 +227,7 @@ static void DragTarget(double target_longitude, double target_latitude) {
       Task[target_point].AATTargetOffsetRadius = Range;
       Task[target_point].AATTargetOffsetRadial = bearing;
       Radial = bearing;
-      TaskModified = true;
-      TargetModified = true;
+      SetTargetModified();
     }
   }
   mutexTaskData.Unlock();
@@ -409,9 +405,8 @@ static int OnTimerNotify(WindowControl * Sender) {
   if (XCSoarInterface::main_window.map.TargetDragged(&lon, &lat)) {
     DragTarget(lon, lat);
   }
-  if (TargetModified) {
+  if (isTargetModified()) {
     RefreshCalculator();
-    TargetModified = false;
   }
   return 0;
 }
@@ -449,9 +444,7 @@ static void OnRangeData(DataField *Sender, DataField::DataAccessKind_t Mode) {
       }
       mutexTaskData.Unlock();
       if (updated) {
-        TaskModified = true;
-        TargetModified = true;
-        // done by timer now        RefreshCalculator();
+	SetTargetModified();
       }
     break;
   }
@@ -495,9 +488,7 @@ static void OnRadialData(DataField *Sender, DataField::DataAccessKind_t Mode) {
       }
       mutexTaskData.Unlock();
       if (updated) {
-        TaskModified = true;
-        TargetModified = true;
-        // done by timer now        RefreshCalculator();
+	SetTargetModified();
       }
     break;
   }
@@ -531,8 +522,7 @@ static void OnLockedData(DataField *Sender, DataField::DataAccessKind_t Mode) {
       if (ValidTaskPoint(target_point)) {
         if (Task[target_point].AATTargetLocked !=
             lockedthis) {
-          TaskModified = true;
-          TargetModified = true;
+	  SetTargetModified();
           Task[target_point].AATTargetLocked = lockedthis;
         }
       }

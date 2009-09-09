@@ -67,7 +67,5 @@ extern bool EnableVoiceNewWaypoint;
 extern bool EnableVoiceInSector;
 extern bool EnableVoiceAirspace;
 
-extern bool DeclaredToDevice;
-
 
 #endif
