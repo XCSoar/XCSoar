@@ -814,44 +814,43 @@ void CalculateAATTaskSectors(const NMEA_INFO &gps_info)
 
 
 void RefreshTaskWaypoint(int i) {
-  if(i==0)
-    {
-      task_points[i].Leg = 0;
-      task_points[i].InBound = 0;
-    }
-  else
-    {
-      DistanceBearing(WayPointList[task_points[i-1].Index].Latitude,
-                      WayPointList[task_points[i-1].Index].Longitude,
-                      WayPointList[task_points[i].Index].Latitude,
-                      WayPointList[task_points[i].Index].Longitude,
-                      &task_points[i].Leg,
-                      &task_points[i].InBound);
-
-      task_points[i-1].OutBound = task_points[i].InBound;
-      task_points[i-1].Bisector = BiSector(task_points[i-1].InBound,task_points[i-1].OutBound);
-      if (i==1) {
-        if (EnableMultipleStartPoints) {
-          for (int j=0; j<MAXSTARTPOINTS; j++) {
-            if ((task_start_points[j].Index != -1)
-		&&(task_start_stats[j].Active)) {
-              DistanceBearing(WayPointList[task_start_points[j].Index].Latitude,
-                              WayPointList[task_start_points[j].Index].Longitude,
-                              WayPointList[task_points[i].Index].Latitude,
-                              WayPointList[task_points[i].Index].Longitude,
-                              NULL, &task_start_points[j].OutBound);
-            }
-          }
-        }
+  if(i==0) {
+    task_points[i].Leg = 0;
+    task_points[i].InBound = 0;
+  } else {
+    DistanceBearing(WayPointList[task_points[i-1].Index].Latitude,
+		    WayPointList[task_points[i-1].Index].Longitude,
+		    WayPointList[task_points[i].Index].Latitude,
+		    WayPointList[task_points[i].Index].Longitude,
+		    &task_points[i].Leg,
+		    &task_points[i].InBound);
+    
+    task_points[i-1].OutBound = task_points[i].InBound;
+    task_points[i-1].Bisector = BiSector(task_points[i-1].InBound,task_points[i-1].OutBound);
+    if (i==1) {
+      if (EnableMultipleStartPoints) {
+	for (int j=0; j<MAXSTARTPOINTS; j++) {
+	  if ((task_start_points[j].Index != -1)
+	      &&(task_start_stats[j].Active)) {
+	    DistanceBearing(WayPointList[task_start_points[j].Index].Latitude,
+			    WayPointList[task_start_points[j].Index].Longitude,
+			    WayPointList[task_points[i].Index].Latitude,
+			    WayPointList[task_points[i].Index].Longitude,
+			    NULL, &task_start_points[j].OutBound);
+	  }
+	}
       }
     }
+  }
 }
 
 
 static int FindOrAddWaypoint(WAYPOINT *read_waypoint) {
   // this is an invalid pointer!
-  read_waypoint->Details = 0;
-  read_waypoint->Name[NAME_SIZE-1] = 0; // prevent overrun if data is bogus
+  if (read_waypoint) {
+    read_waypoint->Details = 0;
+    read_waypoint->Name[NAME_SIZE-1] = 0; // prevent overrun if data is bogus
+  }
 
   int waypoint_index = FindMatchingWaypoint(read_waypoint);
   if (waypoint_index == -1) {
