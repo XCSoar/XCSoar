@@ -92,6 +92,9 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Calculations.h" // TODO danger! ClearAirspaceWarnings
 #include "Components.hpp"
 #include "Language.hpp"
+#include "Task.h"
+#include "Logger.h"
+#include "TaskFile.hpp"
 
 #ifdef PNA
 #include "Asset.hpp"
@@ -1147,8 +1150,6 @@ void InputEvents::eventBallast(const TCHAR *misc) {
   }
 }
 
-#include "Task.h"
-#include "Logger.h"
 
 
 void InputEvents::eventAutoLogger(const TCHAR *misc) {

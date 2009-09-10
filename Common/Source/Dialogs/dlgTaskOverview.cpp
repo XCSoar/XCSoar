@@ -40,6 +40,7 @@ Copyright_License {
 #include "Calculations.h" // for RefreshTaskStatistics()
 #include "Blackboard.hpp"
 #include "SettingsTask.hpp"
+#include "TaskFile.hpp"
 #include "Dialogs.h"
 #include "Language.hpp"
 #include "Logger.h"

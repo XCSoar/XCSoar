@@ -51,6 +51,7 @@
 #include "Device/device.h"
 #include "InputEvents.h"
 #include "Compatibility/string.h"
+#include "TaskFile.hpp"
 
 //IGC Logger
 static bool LoggerActive = false;

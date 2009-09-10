@@ -465,6 +465,7 @@ OBJS	:=\
 	$(SRC)/OnLineContest.o 		\
 	$(SRC)/SnailTrail.o 		\
 	$(SRC)/Task.o			\
+	$(SRC)/TaskFile.o		\
 	$(SRC)/TeamCodeCalculation.o 	\
 	$(SRC)/ThermalLocator.o 	\
 	$(SRC)/Waypointparser.o 	\

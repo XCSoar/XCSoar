@@ -140,10 +140,6 @@ void RefreshTask(const SETTINGS_COMPUTER &settings_computer);
 void CalculateTaskSectors(void);
 bool WaypointInTask(const int ind);
 
-void LoadNewTask(const TCHAR *FileName,
-		 const SETTINGS_COMPUTER &settings_computer);
-void SaveTask(const TCHAR *FileName);
-void DefaultTask(const SETTINGS_COMPUTER &settings);
 void ClearTask(void);
 void RotateStartPoints(const SETTINGS_COMPUTER &settings_computer);
 
@@ -168,28 +164,25 @@ double DoubleLegDistance(int taskwaypoint,
 
 void CalculateAATIsoLines(void);
 
-void SaveDefaultTask(void);
+void DefaultTask(const SETTINGS_COMPUTER &settings);
 
 void ResumeAbortTask(const SETTINGS_COMPUTER &settings_computer,
 		     int set = 0);
 
 bool TaskIsTemporary(void);
-
-int getFinalWaypoint(void);
-
+int  getFinalWaypoint(void);
 bool ActiveIsFinalWaypoint(void);
-
 bool IsFinalWaypoint(void);
 
 bool InAATTurnSector(const double longitude, const double latitude,
 		     const int the_turnpoint);
 
 bool isTaskModified();
-void SetTaskModified();
+void SetTaskModified(const bool set=true);
 bool isTargetModified();
 void SetTargetModified(const bool set=true);
 bool isTaskAborted();
-const TCHAR* getTaskFilename();
+
 void CheckStartPointInTask(void);
 void ClearStartPoints(void);
 void SetStartPoint(const int pointnum, const int waypointnum);
