@@ -107,6 +107,11 @@ class MapWindowProjection {
   DisplayMode_t GetDisplayMode() const {
     return DisplayMode;
   }
+
+  unsigned DistanceMetersToScreen(const double x) {
+    return iround(_scale_meters_to_screen*x);
+  }
+
  protected:
   DisplayMode_t DisplayMode;
 
@@ -138,10 +143,6 @@ class MapWindowProjection {
 			 const SETTINGS_MAP &settings_map);
 
   void      InitialiseScaleList(const SETTINGS_MAP &settings);
-
-  unsigned DistanceMetersToScreen(const double x) {
-    return iround(_scale_meters_to_screen*x);
-  }
 
   // 4 = x*30/1000
   double DistancePixelsToMeters(const double x) const {

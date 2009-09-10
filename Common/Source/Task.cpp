@@ -38,7 +38,6 @@ Copyright_License {
 #include "Task.h"
 #include "TaskFile.hpp"
 #include "Protection.hpp"
-#include "Math/Geometry.hpp"
 #include "Dialogs.h"
 #include "Language.hpp"
 #include "Settings.hpp"
@@ -46,6 +45,7 @@ Copyright_License {
 #include "SettingsTask.hpp"
 #include "Waypointparser.h"
 #include "McReady.h"
+#include "Math/Geometry.hpp"
 #include "Math/Earth.hpp"
 #include "LogFile.hpp"
 #include "Asset.hpp"
@@ -382,69 +382,15 @@ void ReplaceWaypoint(int index,
 
 static void CalculateAATTaskSectors(const NMEA_INFO &gps_info);
 
+extern void RefreshTask_Visitor(const SETTINGS_COMPUTER &settings_computer);
+
 
 void RefreshTask(const SETTINGS_COMPUTER &settings_computer) {
-  double lengthtotal = 0.0;
-  int i;
-
   mutexTaskData.Lock();
-  if ((ActiveTaskPoint<0)&&(task_points[0].Index>=0)) {
-    ActiveTaskPoint=0;
-  }
+#if 1
+  RefreshTask_Visitor(settings_computer);
+#endif
 
-  // Only need to refresh info where the removal happened
-  // as the order of other taskpoints hasn't changed
-  for (i=0; i<MAXTASKPOINTS; i++) {
-    if (!ValidTaskPoint(i)) {
-      task_points[i].Index = -1;
-    } else {
-      RefreshTaskWaypoint(i);
-      lengthtotal += task_points[i].Leg;
-    }
-  }
-  if (lengthtotal>0) {
-    for (i=0; i<MAXTASKPOINTS; i++) {
-      if (ValidTaskPoint(i)) {
-	RefreshTaskWaypoint(i);
-	task_stats[i].LengthPercent = task_points[i].Leg/lengthtotal;
-	if (!ValidTaskPoint(i+1)) {
-          // this is the finish waypoint
-	  task_stats[i].AATTargetOffsetRadius = 0.0;
-	  task_stats[i].AATTargetOffsetRadial = 0.0;
-	  task_stats[i].AATTargetLat = WayPointList[task_points[i].Index].Latitude;
-	  task_stats[i].AATTargetLon = WayPointList[task_points[i].Index].Longitude;
-	}
-      }
-    }
-  }
-
-  // Determine if a waypoint is in the task
-  if (WayPointList) {
-    for (i=0; i< (int)NumberOfWayPoints; i++) {
-      WayPointList[i].InTask = false;
-      if ((WayPointList[i].Flags & HOME) == HOME) {
-        WayPointList[i].InTask = true;
-      }
-    }
-    if (settings_computer.HomeWaypoint>=0) {
-      WayPointList[settings_computer.HomeWaypoint].InTask = true;
-    }
-    for (i=0; i<MAXTASKPOINTS; i++) {
-      if (ValidTaskPoint(i)) {
-        WayPointList[task_points[i].Index].InTask = true;
-      }
-    }
-    if (EnableMultipleStartPoints) {
-      for (i=0; i<MAXSTARTPOINTS; i++) {
-        if (ValidWayPoint(task_start_points[i].Index) 
-	    && task_start_stats[i].Active) {
-          WayPointList[task_start_points[i].Index].InTask = true;
-        }
-      }
-    }
-  }
-
-  CalculateTaskSectors();
   CalculateAATTaskSectors(XCSoarInterface::Basic());
   mutexTaskData.Unlock();
 }
@@ -475,108 +421,6 @@ void RotateStartPoints(const SETTINGS_COMPUTER &settings_computer) {
   }
 
   RefreshTask(settings_computer);
-  mutexTaskData.Unlock();
-}
-
-
-void CalculateTaskSectors(void)
-{
-  int i;
-  double SectorAngle, SectorSize, SectorBearing;
-
-  mutexTaskData.Lock();
-
-  if (EnableMultipleStartPoints) {
-    for(i=0;i<MAXSTARTPOINTS-1;i++) {
-      if (task_start_stats[i].Active && ValidWayPoint(task_start_points[i].Index)) {
-	if (StartLine==2) {
-          SectorAngle = 45+90;
-        } else {
-          SectorAngle = 90;
-        }
-        SectorSize = StartRadius;
-        SectorBearing = task_start_points[i].OutBound;
-
-        FindLatitudeLongitude(WayPointList[task_start_points[i].Index].Latitude,
-                              WayPointList[task_start_points[i].Index].Longitude,
-                              SectorBearing + SectorAngle, SectorSize,
-                              &task_start_points[i].SectorStartLat,
-                              &task_start_points[i].SectorStartLon);
-
-        FindLatitudeLongitude(WayPointList[task_start_points[i].Index].Latitude,
-                              WayPointList[task_start_points[i].Index].Longitude,
-                              SectorBearing - SectorAngle, SectorSize,
-                              &task_start_points[i].SectorEndLat,
-                              &task_start_points[i].SectorEndLon);
-      }
-    }
-  }
-
-  for(i=0;i<=MAXTASKPOINTS-1;i++)
-    {
-      if((task_points[i].Index >=0))
-	{
-	  if ((task_points[i+1].Index >=0)||(i==MAXTASKPOINTS-1)) {
-
-	    if(i == 0)
-	      {
-		// start line
-		if (StartLine==2) {
-		  SectorAngle = 45+90;
-		} else {
-		  SectorAngle = 90;
-		}
-		SectorSize = StartRadius;
-		SectorBearing = task_points[i].OutBound;
-	      }
-	    else
-	      {
-		// normal turnpoint sector
-		SectorAngle = 45;
-		if (SectorType == 2) {
-		  SectorSize = 10000; // German DAe 0.5/10
-		} else {
-		  SectorSize = SectorRadius;  // FAI sector
-		}
-		SectorBearing = task_points[i].Bisector;
-	      }
-	  } else {
-	    // finish line
-	    if (FinishLine==2) {
-	      SectorAngle = 45;
-	    } else {
-	      SectorAngle = 90;
-	    }
-	    SectorSize = FinishRadius;
-	    SectorBearing = task_points[i].InBound;
-
-            // no clearing of this, so default can happen with ClearTask
-            // task_points[i].AATCircleRadius = 0;
-            // task_points[i].AATSectorRadius = 0;
-
-	  }
-
-          FindLatitudeLongitude(WayPointList[task_points[i].Index].Latitude,
-                                WayPointList[task_points[i].Index].Longitude,
-                                SectorBearing + SectorAngle, SectorSize,
-                                &task_points[i].SectorStartLat,
-                                &task_points[i].SectorStartLon);
-
-          FindLatitudeLongitude(WayPointList[task_points[i].Index].Latitude,
-                                WayPointList[task_points[i].Index].Longitude,
-                                SectorBearing - SectorAngle, SectorSize,
-                                &task_points[i].SectorEndLat,
-                                &task_points[i].SectorEndLon);
-
-          if (!AATEnabled) {
-            task_points[i].AATStartRadial  =
-              AngleLimit360(SectorBearing - SectorAngle);
-            task_points[i].AATFinishRadial =
-              AngleLimit360(SectorBearing + SectorAngle);
-          }
-
-	}
-    }
   mutexTaskData.Unlock();
 }
 
@@ -804,41 +648,6 @@ void CalculateAATTaskSectors(const NMEA_INFO &gps_info)
 }
 
 
-//////////////
-
-
-void RefreshTaskWaypoint(int i) {
-  if(i==0) {
-    task_points[i].Leg = 0;
-    task_points[i].InBound = 0;
-  } else {
-    DistanceBearing(WayPointList[task_points[i-1].Index].Latitude,
-		    WayPointList[task_points[i-1].Index].Longitude,
-		    WayPointList[task_points[i].Index].Latitude,
-		    WayPointList[task_points[i].Index].Longitude,
-		    &task_points[i].Leg,
-		    &task_points[i].InBound);
-    
-    task_points[i-1].OutBound = task_points[i].InBound;
-    task_points[i-1].Bisector = BiSector(task_points[i-1].InBound,task_points[i-1].OutBound);
-    if (i==1) {
-      if (EnableMultipleStartPoints) {
-	for (int j=0; j<MAXSTARTPOINTS; j++) {
-	  if ((task_start_points[j].Index != -1)
-	      &&(task_start_stats[j].Active)) {
-	    DistanceBearing(WayPointList[task_start_points[j].Index].Latitude,
-			    WayPointList[task_start_points[j].Index].Longitude,
-			    WayPointList[task_points[i].Index].Latitude,
-			    WayPointList[task_points[i].Index].Longitude,
-			    NULL, &task_start_points[j].OutBound);
-	  }
-	}
-      }
-    }
-  }
-}
-
-
 void ClearTask(void) {
   mutexTaskData.Lock();
 
@@ -1035,123 +844,6 @@ double DoubleLegDistance(int taskwaypoint,
 #endif
 }
 
-
-void CalculateAATIsoLines(void) {
-  double stepsize = 25.0;
-
-  if(AATEnabled == FALSE)
-    return;
-
-  mutexTaskData.Lock();
-
-  for(int i=1;i<MAXTASKPOINTS;i++) {
-
-    if(ValidTaskPoint(i)) {
-      if (!ValidTaskPoint(i+1)) {
-        // This must be the final waypoint, so it's not an AAT OZ
-        continue;
-      }
-      // JMWAAT: if locked, don't move it
-      if (i<ActiveTaskPoint) {
-        // only update targets for current/later waypoints
-        continue;
-      }
-
-      int j;
-      for (j=0; j<MAXISOLINES; j++) {
-        task_stats[i].IsoLine_valid[j]= false;
-      }
-
-      double latitude = task_stats[i].AATTargetLat;
-      double longitude = task_stats[i].AATTargetLon;
-      double dist_0, dist_north, dist_east;
-      bool in_sector = true;
-
-      double max_distance, delta;
-      if(task_points[i].AATType == SECTOR) {
-        max_distance = task_points[i].AATSectorRadius;
-      } else {
-        max_distance = task_points[i].AATCircleRadius;
-      }
-      delta = max_distance*2.4 / (MAXISOLINES);
-      bool left = false;
-
-      /*
-      double distance_glider=0;
-      if ((i==ActiveTaskPoint) && (CALCULATED_INFO.IsInSector)) {
-        distance_glider = DoubleLegDistance(i, GPS_INFO.Longitude, GPS_INFO.Latitude);
-      }
-      */
-
-      // fill
-      j=0;
-      // insert start point
-      task_stats[i].IsoLine_Latitude[j]= latitude;
-      task_stats[i].IsoLine_Longitude[j]= longitude;
-      task_stats[i].IsoLine_valid[j]= true;
-      j++;
-
-      do {
-        dist_0 = DoubleLegDistance(i, longitude, latitude);
-
-        double latitude_north, longitude_north;
-        FindLatitudeLongitude(latitude, longitude,
-                              0, stepsize,
-                              &latitude_north,
-                              &longitude_north);
-        dist_north = DoubleLegDistance(i, longitude_north, latitude_north);
-
-        double latitude_east, longitude_east;
-        FindLatitudeLongitude(latitude, longitude,
-                              90, stepsize,
-                              &latitude_east,
-                              &longitude_east);
-        dist_east = DoubleLegDistance(i, longitude_east, latitude_east);
-
-        double angle = AngleLimit360(RAD_TO_DEG*atan2(dist_east-dist_0, dist_north-dist_0)+90);
-        if (left) {
-          angle += 180;
-        }
-
-        FindLatitudeLongitude(latitude, longitude,
-                              angle, delta,
-                              &latitude,
-                              &longitude);
-
-        in_sector = InAATTurnSector(longitude, latitude, i);
-        /*
-        if (dist_0 < distance_glider) {
-          in_sector = false;
-        }
-        */
-        if (in_sector) {
-          task_stats[i].IsoLine_Latitude[j] = latitude;
-          task_stats[i].IsoLine_Longitude[j] = longitude;
-          task_stats[i].IsoLine_valid[j] = true;
-          j++;
-        } else {
-          j++;
-          if (!left && (j<MAXISOLINES-2))  {
-            left = true;
-            latitude = task_stats[i].AATTargetLat;
-            longitude = task_stats[i].AATTargetLon;
-            in_sector = true; // cheat to prevent early exit
-
-            // insert start point (again)
-            task_stats[i].IsoLine_Latitude[j] = latitude;
-            task_stats[i].IsoLine_Longitude[j] = longitude;
-            task_stats[i].IsoLine_valid[j] = true;
-            j++;
-          }
-        }
-      } while (in_sector && (j<MAXISOLINES));
-
-    }
-  }
-  mutexTaskData.Unlock();
-}
-
-
 //////////////////////////////////////////////////////
 
 
@@ -1256,10 +948,9 @@ int getFinalWaypoint() {
 
   i++;
   mutexTaskData.Lock();
-  while((i<MAXTASKPOINTS) && (task_points[i].Index != -1))
-    {
-      i++;
-    }
+  while((i<MAXTASKPOINTS) && (task_points[i].Index != -1)) {
+    i++;
+  }
   mutexTaskData.Unlock();
   return i-1;
 }
