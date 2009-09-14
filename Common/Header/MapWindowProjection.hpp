@@ -37,13 +37,17 @@ Copyright_License {
 #if !defined(XCSOAR_MAPWINDOW_PROJECTION_H)
 #define XCSOAR_MAPWINDOW_PROJECTION_H
 
-#include "NMEA/Info.h"
-#include "NMEA/Derived.hpp"
 #include "Math/FastMath.h"
 #include "Units.hpp"
 #include "SettingsComputer.hpp"
 #include "SettingsUser.hpp"
+#include "Screen/shapelib/mapprimitive.h"
+#include "Sizes.h"
 
+#include <windef.h>
+
+struct NMEA_INFO;
+struct DERIVED_INFO;
 class Canvas;
 
 class MapWindowProjection {

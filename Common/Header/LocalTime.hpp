@@ -37,8 +37,8 @@ Copyright_License {
 #ifndef LOCALTIME_H
 #define LOCALTIME_H
 
-#include "NMEA/Info.h"
-#include "NMEA/Derived.hpp"
+struct NMEA_INFO;
+struct DERIVED_INFO;
 
 int
 DetectStartTime(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated);

@@ -38,8 +38,8 @@ Copyright_License {
 #ifndef ATMOSPHERE_H
 #define ATMOSPHERE_H
 
-#include "NMEA/Info.h"
-#include "NMEA/Derived.hpp"
+struct NMEA_INFO;
+struct DERIVED_INFO;
 
 class CuSondeLevel {
 public:

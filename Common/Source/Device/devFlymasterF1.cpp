@@ -43,6 +43,7 @@ Copyright_License {
 #include "UtilsText.hpp"
 #include "Device/Parser.h"
 #include "Device/Port.h"
+#include "NMEA/Info.h"
 
 #include <tchar.h>
 #include <math.h>

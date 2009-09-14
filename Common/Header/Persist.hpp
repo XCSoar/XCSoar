@@ -1,4 +1,3 @@
-
 /*
 Copyright_License {
 
@@ -40,8 +39,8 @@ Copyright_License {
 #ifndef XCSOAR_PERSIST_HPP
 #define XCSOAR_PERSIST_HPP
 
-#include "NMEA/Info.h"
-#include "NMEA/Derived.hpp"
+struct NMEA_INFO;
+struct DERIVED_INFO;
 
 void LoadCalculationsPersist(DERIVED_INFO *Calculated);
 void SaveCalculationsPersist(const NMEA_INFO &gps_info,

@@ -38,13 +38,13 @@ Copyright_License {
 #ifndef VEGAVOICE_H
 #define VEGAVOICE_H
 
-#include "NMEA/Info.h"
-#include "NMEA/Derived.hpp"
-
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
 #include "Thread/Mutex.hpp"
+
+struct NMEA_INFO;
+struct DERIVED_INFO;
 
 // These messages are listed in order of priotity,
 // first message to be active is spoken.

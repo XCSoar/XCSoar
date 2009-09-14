@@ -40,10 +40,12 @@ Copyright_License {
 
 #ifdef FLARM_AVERAGE
 
-#include "NMEA/Info.h"
+#include "ClimbAverageCalculator.h"
 
 #include <map>
-#include "ClimbAverageCalculator.h"
+#include <tchar.h>
+
+struct NMEA_INFO;
 
 class FlarmCalculations
 {

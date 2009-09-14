@@ -56,6 +56,8 @@ Copyright_License {
 #include "windanalyser.h"
 #include "Math/FastMath.h"
 #include "LogFile.hpp"
+#include "NMEA/Info.h"
+#include "NMEA/Derived.hpp"
 
 #include <stdlib.h>
 

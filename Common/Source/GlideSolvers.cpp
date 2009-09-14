@@ -48,6 +48,8 @@ Copyright_License {
 #include "Math/Earth.hpp"
 #include "WayPoint.hpp"
 #include "Components.hpp"
+#include "NMEA/Info.h"
+#include "NMEA/Derived.hpp"
 
 //////////////////////////////////////////////////////////
 // Final glide through terrain and footprint calculations

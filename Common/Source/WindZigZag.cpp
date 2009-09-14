@@ -40,6 +40,9 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "Math/FastMath.h"
 #include "McReady.h"
+#include "NMEA/Info.h"
+#include "NMEA/Derived.hpp"
+
 #include <math.h>
 
 
