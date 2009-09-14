@@ -51,9 +51,9 @@ Copyright_License {
 //////////////////////////////////////////////////////////////////
 
 
-void LatLon2Flat(double lon, double lat, int *scx, int *scy) {
-  *scx = (int)(lon*fastcosine(lat)*100);
-  *scy = (int)(lat*100);
+void LatLon2Flat(const GEOPOINT &location, int *scx, int *scy) {
+  *scx = (int)(location.Longitude*fastcosine(location.Latitude)*100);
+  *scy = (int)(location.Latitude*100);
 }
 
 
@@ -64,7 +64,7 @@ GlideComputerTask::CalculateWaypointApproxDistance(int scx_aircraft,
 
   // Do preliminary fast search, by converting to screen coordinates
   int sc_x, sc_y;
-  LatLon2Flat(way_point.Longitude, way_point.Latitude, &sc_x, &sc_y);
+  LatLon2Flat(way_point.Location, &sc_x, &sc_y);
   int dx, dy;
   dx = scx_aircraft-sc_x;
   dy = scy_aircraft-sc_y;
@@ -79,9 +79,7 @@ GlideComputerTask::CalculateWaypointArrivalAltitude(const WAYPOINT &way_point,
   double AltReqd;
   double wDistance, wBearing;
 
-  DistanceBearing(Basic().Latitude,
-                  Basic().Longitude,
-                  way_point.Latitude, way_point.Longitude,
+  DistanceBearing(Basic().Location, way_point.Location, 
                   &wDistance, &wBearing);
 
   AltReqd = GlidePolar::MacCreadyAltitude
@@ -122,7 +120,7 @@ GlideComputerTask::SortLandableWaypoints()
 
   // Do preliminary fast search
   int scx_aircraft, scy_aircraft;
-  LatLon2Flat(Basic().Longitude, Basic().Latitude, &scx_aircraft, &scy_aircraft);
+  LatLon2Flat(Basic().Location, &scx_aircraft, &scy_aircraft);
 
   // Clear search lists
   for (i=0; i<MAXTASKPOINTS*2; i++) {
@@ -219,15 +217,14 @@ GlideComputerTask::SortLandableWaypoints()
           {
 
             double wp_distance, wp_bearing;
-            DistanceBearing(Basic().Latitude , Basic().Longitude ,
-                            way_point.Latitude, way_point.Longitude,
+            DistanceBearing(Basic().Location , 
+                            way_point.Location,
                             &wp_distance, &wp_bearing);
 
             bool out_of_range;
             double distance_soarable =
               FinalGlideThroughTerrain(wp_bearing, &Basic(), &Calculated(),
 				       SettingsComputer(),
-                                       NULL,
                                        NULL,
                                        wp_distance,
                                        &out_of_range, NULL);
@@ -339,10 +336,8 @@ GlideComputerTask::SortLandableWaypoints()
     if ((task_points[0].Index != last_closest_waypoint) && ValidTaskPoint(0)) {
       double last_wp_distance= 10000.0;
       if (last_closest_waypoint>=0) {
-        DistanceBearing(WayPointList[task_points[0].Index].Latitude,
-                        WayPointList[task_points[0].Index].Longitude,
-                        WayPointList[last_closest_waypoint].Latitude,
-                        WayPointList[last_closest_waypoint].Longitude,
+        DistanceBearing(WayPointList[task_points[0].Index].Location,
+                        WayPointList[last_closest_waypoint].Location,
                         &last_wp_distance, NULL);
       }
       if (last_wp_distance>2000.0) {

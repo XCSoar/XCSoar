@@ -161,9 +161,9 @@ BOOL VLDeclare(PDeviceDescriptor_t d, Declaration_t *decl){
 
       strncpy(vl.declaration.flightinfo.homepoint.name, temp, 6);
       vl.declaration.flightinfo.homepoint.lon =
-        WayPointList[XCSoarInterface::SettingsComputer().HomeWaypoint].Longitude;
+        WayPointList[XCSoarInterface::SettingsComputer().HomeWaypoint].Location.Longitude;
       vl.declaration.flightinfo.homepoint.lat =
-        WayPointList[XCSoarInterface::SettingsComputer().HomeWaypoint].Latitude;
+        WayPointList[XCSoarInterface::SettingsComputer().HomeWaypoint].Location.Latitude;
     }
   }
 
@@ -270,23 +270,23 @@ BOOL VLDeclAddWayPoint(PDeviceDescriptor_t d, const WAYPOINT *wp){
   if (nturnpoints == 0) {
     strncpy(vl.declaration.task.startpoint.name, temp, 6);
     vl.declaration.task.startpoint.lon =
-      wp->Longitude;
+      wp->Location.Longitude;
     vl.declaration.task.startpoint.lat =
-      wp->Latitude;
+      wp->Location.Latitude;
     nturnpoints++;
   } else {
     strncpy(vl.declaration.task.turnpoints[nturnpoints-1].name, temp, 6);
     vl.declaration.task.turnpoints[nturnpoints-1].lon =
-      wp->Longitude;
+      wp->Location.Longitude;
     vl.declaration.task.turnpoints[nturnpoints-1].lat =
-      wp->Latitude;
+      wp->Location.Latitude;
     nturnpoints++;
   }
   strncpy(vl.declaration.task.finishpoint.name, temp, 6);
   vl.declaration.task.finishpoint.lon =
-    wp->Longitude;
+    wp->Location.Longitude;
   vl.declaration.task.finishpoint.lat =
-    wp->Latitude;
+    wp->Location.Latitude;
 
   return(TRUE);
 

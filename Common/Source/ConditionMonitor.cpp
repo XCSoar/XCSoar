@@ -260,8 +260,7 @@ protected:
     mutexTaskData.Lock();
 
     double sunsettime = sun.CalcSunTimes
-      (WayPointList[task_points[ActiveTaskPoint].Index].Longitude,
-       WayPointList[task_points[ActiveTaskPoint].Index].Latitude,
+      (WayPointList[task_points[ActiveTaskPoint].Index].Location,
        cmp.Basic(), cmp.Calculated(), GetUTCOffset()/3600);
     double d1 = (cmp.Calculated().TaskTimeToGo
 		 +DetectCurrentTime(&cmp.Basic()))/3600;
@@ -386,8 +385,8 @@ protected:
       return false;
     }
 
-    fgtt = !((cmp.Calculated().TerrainWarningLatitude == 0.0) &&
-	     (cmp.Calculated().TerrainWarningLongitude == 0.0));
+    fgtt = !((cmp.Calculated().TerrainWarningLocation.Latitude == 0.0) &&
+	     (cmp.Calculated().TerrainWarningLocation.Longitude == 0.0));
 
     if (!cmp.Calculated().FinalGlide 
 	|| (cmp.Calculated().TaskAltitudeDifference<-50)) {

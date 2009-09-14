@@ -113,8 +113,7 @@ class MapWindow
   void          SwitchZoomClimb(void);
 
   // state/localcopy/local data
-  double        TargetDrag_Latitude;
-  double        TargetDrag_Longitude;
+  GEOPOINT      TargetDrag_Location;
   int           TargetDrag_State;
 
   POINT         Groundline[NUMTERRAINSWEEPS+1];
@@ -201,8 +200,7 @@ class MapWindow
   }
   bool draw_masked_bitmap_if_visible(Canvas &canvas,
 				     Bitmap &bitmap,
-				     const double &lon,
-				     const double &lat,
+				     const GEOPOINT &loc,
 				     unsigned width,
 				     unsigned height,
 				     POINT *sc=NULL);
@@ -237,7 +235,7 @@ class MapWindow
 void DrawTerrain(Canvas &canvas, 
 		 MapWindowProjection &map_projection,
 		 const double sunazimuth, const double sunelevation,
-		 const double lon, const double lat,
+		 const GEOPOINT &loc,
 		 const bool isBigZoom,
 		 const SETTINGS_MAP &settings);
 

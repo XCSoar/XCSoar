@@ -130,7 +130,7 @@ void InputEvents::eventMarkLocation(const TCHAR *misc) {
   if (_tcscmp(misc, TEXT("reset")) == 0) {
     marks->Reset();
   } else {
-    marks->MarkLocation(Basic().Longitude, Basic().Latitude);
+    marks->MarkLocation(Basic().Location);
   }
 }
 
@@ -746,7 +746,7 @@ void InputEvents::eventWaypointDetails(const TCHAR *misc) {
     PopupWaypointDetails();
   } else
     if (_tcscmp(misc, TEXT("select")) == 0) {
-      int res = dlgWayPointSelect();
+      int res = dlgWayPointSelect(Basic().Location);
 
       if (res != -1){
 	SelectedWaypoint = res;
@@ -758,7 +758,7 @@ void InputEvents::eventWaypointDetails(const TCHAR *misc) {
 
 
 void InputEvents::eventGotoLookup(const TCHAR *misc) {
-  int res = dlgWayPointSelect();
+  int res = dlgWayPointSelect(Basic().Location);
   if (res != -1){
     FlyDirectTo(res, SettingsComputer());
   };
@@ -1259,7 +1259,7 @@ void InputEvents::eventNearestAirspaceDetails(const TCHAR *misc) {
 
   StartHourglassCursor();
   FindNearestAirspace(main_window.map,
-		      Basic().Longitude, Basic().Latitude,
+		      Basic().Location, 
 		      &nearestdistance, &nearestbearing,
 		      &foundcircle, &foundarea);
   StopHourglassCursor();
@@ -1334,14 +1334,12 @@ void InputEvents::eventNearestAirspaceDetails(const TCHAR *misc) {
 //  pan: the waypoint nearest to the pan cursor
 void InputEvents::eventNearestWaypointDetails(const TCHAR *misc) {
   if (_tcscmp(misc, TEXT("aircraft")) == 0) {
-    PopupNearestWaypointDetails(Basic().Longitude,
-				Basic().Latitude,
+    PopupNearestWaypointDetails(Basic().Location,
 				1.0e5, // big range..
 				false);
   }
   if (_tcscmp(misc, TEXT("pan")) == 0) {
-    PopupNearestWaypointDetails(Basic().Longitude,
-				Basic().Latitude,
+    PopupNearestWaypointDetails(Basic().Location,
 				1.0e5, // big range..
 				true);
   }
@@ -1657,8 +1655,7 @@ void InputEvents::eventAddWaypoint(const TCHAR *misc) {
   static int tmpWaypointNum = 0;
   WAYPOINT edit_waypoint;
   mutexTaskData.Lock();
-  edit_waypoint.Latitude = Basic().Latitude;
-  edit_waypoint.Longitude = Basic().Longitude;
+  edit_waypoint.Location = Basic().Location;
   edit_waypoint.Altitude = Calculated().TerrainAlt;
   edit_waypoint.FileNum = 2; // don't put into file
   edit_waypoint.Flags = 0;
@@ -1827,8 +1824,7 @@ void InputEvents::sub_Pan(int vswitch) {
   }
   if (SettingsMap().EnablePan != oldPan) {
     if (SettingsMap().EnablePan) {
-      SetSettingsMap().PanLongitude = Basic().Longitude;
-      SetSettingsMap().PanLatitude = Basic().Latitude;
+      SetSettingsMap().PanLocation = Basic().Location;
       setMode(MODE_PAN);
     } else
       setMode(MODE_DEFAULT);
@@ -1840,17 +1836,17 @@ void InputEvents::sub_PanCursor(int dx, int dy) {
   RECT MapRect = MapProjection().GetMapRect();
   int X= (MapRect.right+MapRect.left)/2;
   int Y= (MapRect.bottom+MapRect.top)/2;
-  double Xstart, Ystart, Xnew, Ynew;
+  GEOPOINT pstart, pnew;
 
-  MapProjection().Screen2LonLat(X, Y, Xstart, Ystart);
+  MapProjection().Screen2LonLat(X, Y, pstart);
 
   X+= (MapRect.right-MapRect.left)*dx/4;
   Y+= (MapRect.bottom-MapRect.top)*dy/4;
-  MapProjection().Screen2LonLat(X, Y, Xnew, Ynew);
+  MapProjection().Screen2LonLat(X, Y, pnew);
 
   if (SettingsMap().EnablePan) {
-    SetSettingsMap().PanLongitude += Xstart-Xnew;
-    SetSettingsMap().PanLatitude += Ystart-Ynew;
+    SetSettingsMap().PanLocation.Longitude += pstart.Longitude-pnew.Longitude;
+    SetSettingsMap().PanLocation.Latitude += pstart.Latitude-pnew.Latitude;
   }
 }
 

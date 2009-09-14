@@ -82,7 +82,7 @@ static void MoveTarget(double adjust_angle) {
 
   mutexTaskData.Lock();
 
-  double target_latitude, target_longitude;
+  GEOPOINT target_location;
   double bearing, distance;
   distance = 500;
   if(task_points[target_point].AATType == SECTOR) {
@@ -92,38 +92,30 @@ static void MoveTarget(double adjust_angle) {
   }
 
   bearing = AngleLimit360(XCSoarInterface::main_window.map.GetDisplayAngle() + adjust_angle);
-  FindLatitudeLongitude (task_stats[target_point].AATTargetLat,
-                         task_stats[target_point].AATTargetLon,
+  FindLatitudeLongitude (task_stats[target_point].AATTargetLocation,
                          bearing,
                          distance,
-                         &target_latitude,
-                         &target_longitude);
+                         &target_location);
 
-  if (InAATTurnSector(target_longitude, target_latitude, target_point)) {
+  if (InAATTurnSector(target_location, target_point)) {
     if (XCSoarInterface::Calculated().IsInSector && (target_point == ActiveTaskPoint)) {
       // set range/radial for inside sector
       double course_bearing, target_bearing;
-      DistanceBearing(task_stats[target_point-1].AATTargetLat,
-                      task_stats[target_point-1].AATTargetLon,
-                      XCSoarInterface::Basic().Latitude,
-                      XCSoarInterface::Basic().Longitude,
+      DistanceBearing(task_stats[target_point-1].AATTargetLocation,
+                      XCSoarInterface::Basic().Location,
                       NULL, &course_bearing);
 
-      DistanceBearing(XCSoarInterface::Basic().Latitude,
-                      XCSoarInterface::Basic().Longitude,
-                      target_latitude,
-                      target_longitude,
+      DistanceBearing(XCSoarInterface::Basic().Location,
+                      target_location,
                       &distance, &target_bearing);
       bearing = AngleLimit180(target_bearing-course_bearing);
 
       if (fabs(bearing)<90.0) {
-        task_stats[target_point].AATTargetLat = target_latitude;
-        task_stats[target_point].AATTargetLon = target_longitude;
+        task_stats[target_point].AATTargetLocation = target_location;
         Radial = bearing;
         task_stats[target_point].AATTargetOffsetRadial = Radial;
         Range =
-          FindInsideAATSectorRange(XCSoarInterface::Basic().Latitude,
-                                   XCSoarInterface::Basic().Longitude,
+          FindInsideAATSectorRange(XCSoarInterface::Basic().Location,
                                    target_point,
                                    target_bearing,
                                    distance);
@@ -132,14 +124,11 @@ static void MoveTarget(double adjust_angle) {
       }
     } else {
       // OK to change it..
-      task_stats[target_point].AATTargetLat = target_latitude;
-      task_stats[target_point].AATTargetLon = target_longitude;
+      task_stats[target_point].AATTargetLocation = target_location;
 
       // set range/radial for outside sector
-      DistanceBearing(WayPointList[task_points[target_point].Index].Latitude,
-                      WayPointList[task_points[target_point].Index].Longitude,
-                      task_stats[target_point].AATTargetLat,
-                      task_stats[target_point].AATTargetLon,
+      DistanceBearing(WayPointList[task_points[target_point].Index].Location,
+                      task_stats[target_point].AATTargetLocation,
                       &distance, &bearing);
       bearing = AngleLimit180(bearing-task_points[target_point].Bisector);
       if(task_points[target_point].AATType == SECTOR) {
@@ -161,7 +150,7 @@ static void MoveTarget(double adjust_angle) {
 }
 
 
-static void DragTarget(double target_longitude, double target_latitude) {
+static void DragTarget(const GEOPOINT target_location) {
   if (!AATEnabled) return;
   if (target_point==0) return;
   if (!ValidTaskPoint(target_point)) return;
@@ -172,31 +161,25 @@ static void DragTarget(double target_longitude, double target_latitude) {
 
   double distance, bearing;
 
-  if (InAATTurnSector(target_longitude, target_latitude, target_point)) {
+  if (InAATTurnSector(target_location, target_point)) {
     if (XCSoarInterface::Calculated().IsInSector && (target_point == ActiveTaskPoint)) {
       // set range/radial for inside sector
       double course_bearing, target_bearing;
-      DistanceBearing(task_stats[target_point-1].AATTargetLat,
-                      task_stats[target_point-1].AATTargetLon,
-                      XCSoarInterface::Basic().Latitude,
-                      XCSoarInterface::Basic().Longitude,
+      DistanceBearing(task_stats[target_point-1].AATTargetLocation,
+                      XCSoarInterface::Basic().Location,
                       NULL, &course_bearing);
 
-      DistanceBearing(XCSoarInterface::Basic().Latitude,
-                      XCSoarInterface::Basic().Longitude,
-                      target_latitude,
-                      target_longitude,
+      DistanceBearing(XCSoarInterface::Basic().Location,
+                      target_location,
                       &distance, &target_bearing);
       bearing = AngleLimit180(target_bearing-course_bearing);
 
       if (fabs(bearing)<90.0) {
-        task_stats[target_point].AATTargetLat = target_latitude;
-        task_stats[target_point].AATTargetLon = target_longitude;
+        task_stats[target_point].AATTargetLocation = target_location;
         Radial = bearing;
         task_stats[target_point].AATTargetOffsetRadial = Radial;
         Range =
-          FindInsideAATSectorRange(XCSoarInterface::Basic().Latitude,
-                                   XCSoarInterface::Basic().Longitude,
+          FindInsideAATSectorRange(XCSoarInterface::Basic().Location,
                                    target_point,
                                    target_bearing,
                                    distance);
@@ -205,14 +188,11 @@ static void DragTarget(double target_longitude, double target_latitude) {
       }
     } else {
       // OK to change it..
-      task_stats[target_point].AATTargetLat = target_latitude;
-      task_stats[target_point].AATTargetLon = target_longitude;
+      task_stats[target_point].AATTargetLocation = target_location;
 
       // set range/radial for outside sector
-      DistanceBearing(WayPointList[task_points[target_point].Index].Latitude,
-                      WayPointList[task_points[target_point].Index].Longitude,
-                      task_stats[target_point].AATTargetLat,
-                      task_stats[target_point].AATTargetLon,
+      DistanceBearing(WayPointList[task_points[target_point].Index].Location,
+                      task_stats[target_point].AATTargetLocation,
                       &distance, &bearing);
       bearing = AngleLimit180(bearing-task_points[target_point].Bisector);
       if(task_points[target_point].AATType == SECTOR) {
@@ -401,9 +381,9 @@ static void RefreshCalculator(void) {
 
 static int OnTimerNotify(WindowControl * Sender) {
   (void)Sender;
-  double lon, lat;
-  if (XCSoarInterface::main_window.map.TargetDragged(&lon, &lat)) {
-    DragTarget(lon, lat);
+  GEOPOINT loc;
+  if (XCSoarInterface::main_window.map.TargetDragged(&loc.Longitude, &loc.Latitude)) {
+    DragTarget(loc);
   }
   if (isTargetModified()) {
     RefreshCalculator();

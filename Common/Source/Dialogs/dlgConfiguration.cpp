@@ -984,8 +984,7 @@ static void OnWaypointNewClicked(WindowControl * Sender){
   (void)Sender;
 
   WAYPOINT edit_waypoint;
-  edit_waypoint.Latitude = XCSoarInterface::Basic().Latitude;
-  edit_waypoint.Longitude = XCSoarInterface::Basic().Longitude;
+  edit_waypoint.Location = XCSoarInterface::Basic().Location;
   edit_waypoint.FileNum = 0; // default, put into primary waypoint file
   edit_waypoint.Flags = 0;
   edit_waypoint.Comment[0] = 0;
@@ -1009,7 +1008,7 @@ static void OnWaypointNewClicked(WindowControl * Sender){
 static void OnWaypointEditClicked(WindowControl * Sender){
 	(void)Sender;
   int res;
-  res = dlgWayPointSelect();
+  res = dlgWayPointSelect(XCSoarInterface::Basic().Location);
   if (res != -1){
     dlgWaypointEditShowModal(&WayPointList[res]);
     waypointneedsave = true;
@@ -1050,7 +1049,7 @@ static void OnWaypointSaveClicked(WindowControl * Sender){
 static void OnWaypointDeleteClicked(WindowControl * Sender){
 	(void)Sender;
   int res;
-  res = dlgWayPointSelect();
+  res = dlgWayPointSelect(XCSoarInterface::Basic().Location);
   if (res != -1){
     if(MessageBoxX(WayPointList[res].Name,
                    gettext(TEXT("Delete Waypoint?")),

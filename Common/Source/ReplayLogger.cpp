@@ -173,8 +173,7 @@ double ReplayLogger::TimeScale = 1.0;
 
 typedef struct _LOGGER_INTERP_POINT
 {
-  double lat;
-  double lon;
+  GEOPOINT loc;
   double alt;
   double t;
 } LOGGER_INTERP_POINT;
@@ -204,13 +203,12 @@ public:
   void Update(double t, double lon, double lat, double alt) {
     if (num<4) { num++; }
     for (int i=0; i<3; i++) {
-      p[i].lat = p[i+1].lat;
-      p[i].lon = p[i+1].lon;
+      p[i].loc = p[i+1].loc;
       p[i].alt = p[i+1].alt;
       p[i].t   = p[i+1].t;
     }
-    p[3].lat = lat;
-    p[3].lon = lon;
+    p[3].loc.Latitude = lat;
+    p[3].loc.Longitude = lon;
     p[3].alt = alt;
     p[3].t   = t;
   }
@@ -221,12 +219,12 @@ public:
     if (Ready()) {
       double u= (time-p[1].t)/(p[2].t-p[1].t);
       double s0;
-      DistanceBearing(p[0].lat, p[0].lon,
-                      p[1].lat, p[1].lon, &s0, NULL);
+      DistanceBearing(p[0].loc,
+                      p[1].loc, &s0, NULL);
       s0/= (p[1].t-p[0].t);
       double s1;
-      DistanceBearing(p[1].lat, p[1].lon,
-                      p[2].lat, p[2].lon, &s1, NULL);
+      DistanceBearing(p[1].loc, 
+                      p[2].loc, &s1, NULL);
       s1/= (p[2].t-p[1].t);
       u = max(0.0,min(1.0,u));
       return s1*u+s0*(1.0-u);
@@ -236,8 +234,8 @@ public:
   }
   void Interpolate(double time, double *lon, double *lat, double *alt) {
     if (!Ready()) {
-      *lon = p[num].lon;
-      *lat = p[num].lat;
+      *lon = p[num].loc.Longitude;
+      *lat = p[num].loc.Latitude;
       *alt = p[num].alt;
       return;
     }
@@ -245,14 +243,14 @@ public:
     double u= (time-p[1].t)/(p[2].t-p[1].t);
 
     if (u<0.0) {
-      *lat = p[1].lat;
-      *lon = p[1].lon;
+      *lat = p[1].loc.Latitude;
+      *lon = p[1].loc.Longitude;
       *alt = p[1].alt;
       return;
     }
     if (u>1.0) {
-      *lat = p[2].lat;
-      *lon = p[2].lon;
+      *lat = p[2].loc.Latitude;
+      *lon = p[2].loc.Longitude;
       *alt = p[2].alt;
       return;
     }
@@ -270,8 +268,10 @@ public:
       -t*u2+t*u3};
     */
 
-    *lat = (p[0].lat*c[0] + p[1].lat*c[1] + p[2].lat*c[2] + p[3].lat*c[3]);
-    *lon = (p[0].lon*c[0] + p[1].lon*c[1] + p[2].lon*c[2] + p[3].lon*c[3]);
+    *lat = (p[0].loc.Latitude*c[0] + p[1].loc.Latitude*c[1] 
+            + p[2].loc.Latitude*c[2] + p[3].loc.Latitude*c[3]);
+    *lon = (p[0].loc.Longitude*c[0] + p[1].loc.Longitude*c[1] 
+            + p[2].loc.Longitude*c[2] + p[3].loc.Longitude*c[3]);
     *alt = (p[0].alt*c[0] + p[1].alt*c[1] + p[2].alt*c[2] + p[3].alt*c[3]);
 
   }
@@ -355,19 +355,20 @@ bool ReplayLogger::UpdateInternal(void) {
 
   if (!finished) {
 
-    double LatX, LonX, AltX, SpeedX, BearingX;
-    double LatX1, LonX1, AltX1;
+    double AltX, SpeedX, BearingX;
+    double AltX1;
+    GEOPOINT P0, P1;
 
-    cli.Interpolate(tthis, &LonX, &LatX, &AltX);
-    cli.Interpolate(tthis+0.1, &LonX1, &LatX1, &AltX1);
+    cli.Interpolate(tthis, &P0.Longitude, &P0.Latitude, &AltX);
+    cli.Interpolate(tthis+0.1, &P1.Longitude, &P1.Latitude, &AltX1);
 
     SpeedX = cli.GetSpeed(tthis);
-    DistanceBearing(LatX, LonX, LatX1, LonX1, NULL, &BearingX);
+    DistanceBearing(P0, P1, NULL, &BearingX);
 
-    if ((SpeedX>0) && (LatX != LatX1) && (LonX != LonX1)) {
+    if ((SpeedX>0) && ((P0.Latitude != P1.Latitude) || (P0.Longitude != P1.Longitude))) {
 
       if ((int)tthis != (int)tlast) {
-	device_blackboard.SetLocation(LonX, LatX, SpeedX, BearingX,
+	device_blackboard.SetLocation(P0, SpeedX, BearingX,
 				      AltX, AltX, tthis);
 	TriggerGPSUpdate();
       }

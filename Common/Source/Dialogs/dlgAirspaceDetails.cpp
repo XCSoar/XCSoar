@@ -130,28 +130,25 @@ static void SetValues(void) {
     top = &AirspaceArea[index_area].Top;
     base = &AirspaceArea[index_area].Base;
     name = AirspaceArea[index_area].Name;
-    inside = InsideAirspaceArea(XCSoarInterface::Basic().Longitude, XCSoarInterface::Basic().Latitude,
+    inside = InsideAirspaceArea(XCSoarInterface::Basic().Location, 
 				index_area);
-    range =
-      RangeAirspaceArea(XCSoarInterface::Basic().Longitude, XCSoarInterface::Basic().Latitude,
-			index_area, &bearing,
-			map_window);
+    range = RangeAirspaceArea(XCSoarInterface::Basic().Location, 
+                              index_area, &bearing,
+                              map_window);
   }
   if (index_circle >=0) {
     atype = AirspaceCircle[index_circle].Type;
     top = &AirspaceCircle[index_circle].Top;
     base = &AirspaceCircle[index_circle].Base;
     name = AirspaceCircle[index_circle].Name;
-    inside = InsideAirspaceCircle(XCSoarInterface::Basic().Longitude, XCSoarInterface::Basic().Latitude,
+    inside = InsideAirspaceCircle(XCSoarInterface::Basic().Location, 
 				  index_circle);
     range =
-      RangeAirspaceCircle(XCSoarInterface::Basic().Longitude, XCSoarInterface::Basic().Latitude,
+      RangeAirspaceCircle(XCSoarInterface::Basic().Location, 
 			  index_circle);
 
-    DistanceBearing(XCSoarInterface::Basic().Latitude,
-		    XCSoarInterface::Basic().Longitude,
-		    AirspaceCircle[index_circle].Latitude,
-		    AirspaceCircle[index_circle].Longitude,
+    DistanceBearing(XCSoarInterface::Basic().Location,
+		    AirspaceCircle[index_circle].Location,
 		    NULL, &bearing);
     if (inside) {
       bearing = AngleLimit360(bearing+180);

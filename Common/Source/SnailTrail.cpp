@@ -55,8 +55,8 @@ SnailTrail::AddPoint(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated)
 {
   ScopeLock protect(mutexSnail);
 
-  TrailPoints[indexNext].Latitude = (float)(Basic->Latitude);
-  TrailPoints[indexNext].Longitude = (float)(Basic->Longitude);
+  TrailPoints[indexNext].Latitude = (float)(Basic->Location.Latitude);
+  TrailPoints[indexNext].Longitude = (float)(Basic->Location.Longitude);
   TrailPoints[indexNext].Time = Basic->Time;
   TrailPoints[indexNext].FarVisible = true; // hasn't been filtered out yet.
   if (Calculated->TerrainValid) {

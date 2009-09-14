@@ -43,7 +43,7 @@ Copyright_License {
 #include "SettingsUser.hpp"
 #include "Screen/shapelib/mapprimitive.h"
 #include "Sizes.h"
-
+#include "GeoPoint.hpp"
 #include <windef.h>
 
 struct NMEA_INFO;
@@ -57,18 +57,17 @@ class MapWindowProjection {
   // used by terrain renderer, topology and airspace
 
   void    Screen2LonLat(const int &x, const int &y,
-                        double &X, double &Y) const;
+                        GEOPOINT &location) const;
 
-  void    LonLat2Screen(const double &lon, const double &lat,
+  void    LonLat2Screen(const GEOPOINT &location,
                         POINT &sc) const;
   void    LonLat2Screen(const pointObj* const ptin, POINT *ptout,
-			       const int n,
+                        const int n,
                         const int skip) const;
 
   POINT   GetOrigScreen(void) const { return Orig_Screen; }
   POINT   GetOrigAircraft(void) const { return Orig_Aircraft; }
-  double  GetPanLatitude() const { return PanLatitude; }
-  double  GetPanLongitude() const { return PanLongitude; }
+  GEOPOINT GetPanLocation() const { return PanLocation; }
   double  GetDisplayAngle() const { return DisplayAngle; }
 
   rectObj CalculateScreenBounds(double scale) const;
@@ -96,8 +95,7 @@ class MapWindowProjection {
 
   // drawing functions
   void DrawGreatCircle(Canvas &canvas,
-		       double lon_start, double lat_start,
-		       double lon_end, double lat_end);
+                       const GEOPOINT &loc_start, const GEOPOINT &loc_end);
 
   rectObj* getSmartBounds() {
     return &smart_bounds_active;
@@ -121,19 +119,18 @@ class MapWindowProjection {
 
   // helpers
   bool PointVisible(const POINT &P) const;
-  bool LonLatVisible(const double &lon, const double &lat) const;
+  bool LonLatVisible(const GEOPOINT &loc) const;
   bool PointInRect(const double &x, const double &y,
 		   const rectObj &bounds) const;
 
-  bool LonLat2ScreenIfVisible(const double &lon, const double &lat,
+  bool LonLat2ScreenIfVisible(const GEOPOINT &loc,
 			      POINT *sc) const;
 
   rectObj   screenbounds_latlon;
   RECT   MapRectSmall;
   RECT   MapRectBig;
   RECT   MapRect;
-  double PanLatitude;
-  double PanLongitude;
+  GEOPOINT PanLocation;
   POINT  Orig_Screen, Orig_Aircraft;
 
   double DisplayAngle;

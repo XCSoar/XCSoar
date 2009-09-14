@@ -43,6 +43,7 @@ Copyright_License {
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <tchar.h>
+#include "GeoPoint.hpp"
 
 #define AIRPORT				0x01
 #define TURNPOINT			0x02
@@ -61,8 +62,7 @@ Copyright_License {
 struct WAYPOINT
 {
   int Number;
-  double Latitude;
-  double Longitude;
+  GEOPOINT Location;
   double Altitude;
   int Flags;
   TCHAR Name[NAME_SIZE + 1];

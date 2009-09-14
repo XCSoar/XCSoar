@@ -137,7 +137,7 @@ bool RasterWeather::LoadItem(int item, const TCHAR* name) {
 }
 
 
-void RasterWeather::ScanAll(double lat, double lon) {
+void RasterWeather::ScanAll(const GEOPOINT &location) {
   int i;
   Lock();
   for (i=0; i<MAX_WEATHER_TIMES; i++) {
@@ -156,7 +156,7 @@ void RasterWeather::ScanAll(double lat, double lon) {
 }
 
 
-void RasterWeather::Reload(double lat, double lon) {
+void RasterWeather::Reload(const GEOPOINT &location) {
   static unsigned last_weather_time;
   bool found = false;
   bool now = false;
@@ -217,8 +217,8 @@ void RasterWeather::Reload(double lat, double lon) {
     _weather_time = 0;
   }
 
-  SetViewCenter(lat, lon);
-  ServiceFullReload(lat, lon);
+  SetViewCenter(location);
+  ServiceFullReload(location);
   Unlock();
 }
 
@@ -237,22 +237,22 @@ void RasterWeather::Close() {
 }
 
 
-void RasterWeather::SetViewCenter(double lat, double lon) {
+void RasterWeather::SetViewCenter(const GEOPOINT &location) {
   Lock();
   for (int i=0; i<MAX_WEATHER_MAP; i++) {
     if (weather_map[i]) {
-      weather_map[i]->SetViewCenter(lat, lon);
+      weather_map[i]->SetViewCenter(location);
     }
   }
   Unlock();
 }
 
 
-void RasterWeather::ServiceFullReload(double lat, double lon) {
+void RasterWeather::ServiceFullReload(const GEOPOINT &location) {
   Lock();
   for (int i=0; i<MAX_WEATHER_MAP; i++) {
     if (weather_map[i]) {
-      weather_map[i]->ServiceFullReload(lat, lon);
+      weather_map[i]->ServiceFullReload(location);
     }
   }
   Unlock();

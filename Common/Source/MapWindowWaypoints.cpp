@@ -269,10 +269,10 @@ void MapWindow::ScanVisibilityWaypoints(rectObj *bounds_active) {
     const WAYPOINT *we = WayPointList+NumberOfWayPoints;
     while (wv<we) {
       // TODO code: optimise waypoint visibility
-      wc->FarVisible = ((wv->Longitude> bounds.minx) &&
-			(wv->Longitude< bounds.maxx) &&
-			(wv->Latitude> bounds.miny) &&
-			(wv->Latitude< bounds.maxy));
+      wc->FarVisible = ((wv->Location.Longitude> bounds.minx) &&
+			(wv->Location.Longitude< bounds.maxx) &&
+			(wv->Location.Latitude> bounds.miny) &&
+			(wv->Location.Latitude< bounds.maxy));
       wv++; wc++;
     }
   }
@@ -287,8 +287,7 @@ void MapWindow::CalculateScreenPositionsWaypoints() {
     for (j=0; j<MAXTASKPOINTS; j++) {
       int i = task_points[j].Index;
       if (i>=0) {
-	LonLat2Screen(WayPointList[i].Longitude, 
-		      WayPointList[i].Latitude,
+	LonLat2Screen(WayPointList[i].Location, 
 		      WayPointCalc[i].Screen);
 	WayPointCalc[i].Visible = PointVisible(WayPointCalc[i].Screen);
       }
@@ -297,8 +296,7 @@ void MapWindow::CalculateScreenPositionsWaypoints() {
       for(j=0;j<MAXSTARTPOINTS-1;j++) {
         int i = task_start_points[j].Index;
         if (task_start_stats[j].Active && (i>=0)) {
-	  LonLat2Screen(WayPointList[i].Longitude, 
-			WayPointList[i].Latitude,
+	  LonLat2Screen(WayPointList[i].Location, 
 			WayPointCalc[i].Screen);
 	  WayPointCalc[i].Visible = PointVisible(WayPointCalc[i].Screen);
         }
@@ -310,8 +308,7 @@ void MapWindow::CalculateScreenPositionsWaypoints() {
 	WayPointCalc[i].Visible = false;
 	continue;
       } else {
-	WayPointCalc[i].Visible = LonLat2ScreenIfVisible(WayPointList[i].Longitude, 
-							 WayPointList[i].Latitude,
+	WayPointCalc[i].Visible = LonLat2ScreenIfVisible(WayPointList[i].Location, 
 							 &WayPointCalc[i].Screen);
       }
     }

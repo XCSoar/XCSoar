@@ -155,10 +155,9 @@ void RasterTerrain::Unlock(void) {
   }
 }
 
-short RasterTerrain::GetTerrainHeight(const double &Latitude,
-                                      const double &Longitude) {
+short RasterTerrain::GetTerrainHeight(const GEOPOINT &Location) {
   if (TerrainMap) {
-    return TerrainMap->GetField(Latitude, Longitude);
+    return TerrainMap->GetField(Location);
   } else {
     return TERRAIN_INVALID;
   }
@@ -196,43 +195,42 @@ void RasterTerrain::SetTerrainRounding(double x, double y) {
   }
 }
 
-void RasterTerrain::ServiceTerrainCenter(double lat, double lon) {
+void RasterTerrain::ServiceTerrainCenter(const GEOPOINT &location) {
   Lock();
   if (TerrainMap) {
-    TerrainMap->SetViewCenter(lat, lon);
+    TerrainMap->SetViewCenter(location);
   }
   Unlock();
 }
 
 
-void RasterTerrain::ServiceFullReload(double lat, double lon) {
+void RasterTerrain::ServiceFullReload(const GEOPOINT &location) {
 
   Lock();
   if (TerrainMap) {
     XCSoarInterface::CreateProgressDialog(gettext(TEXT("Loading terrain tiles...")));
-    TerrainMap->ServiceFullReload(lat, lon);
+    TerrainMap->ServiceFullReload(location);
   }
   Unlock();
 }
 
 
 int RasterTerrain::GetEffectivePixelSize(double *pixel_D,
-                                         double latitude, double longitude) {
+                                         const GEOPOINT &location) {
   if (TerrainMap) {
-    return TerrainMap->GetEffectivePixelSize(pixel_D, latitude, longitude);
+    return TerrainMap->GetEffectivePixelSize(pixel_D, location);
   } else {
     return 1;
   }
 }
 
 
-bool RasterTerrain::WaypointIsInTerrainRange(double latitude,
-                                             double longitude) {
+bool RasterTerrain::WaypointIsInTerrainRange(const GEOPOINT &location) {
   if (TerrainMap) {
-    if ((latitude<= TerrainMap->TerrainInfo.Top)&&
-        (latitude>= TerrainMap->TerrainInfo.Bottom)&&
-        (longitude<= TerrainMap->TerrainInfo.Right)&&
-        (longitude>= TerrainMap->TerrainInfo.Left)) {
+    if ((location.Latitude<= TerrainMap->TerrainInfo.Top)&&
+        (location.Latitude>= TerrainMap->TerrainInfo.Bottom)&&
+        (location.Longitude<= TerrainMap->TerrainInfo.Right)&&
+        (location.Longitude>= TerrainMap->TerrainInfo.Left)) {
       return true;
     } else {
       return false;
@@ -243,13 +241,12 @@ bool RasterTerrain::WaypointIsInTerrainRange(double latitude,
 }
 
 
-bool RasterTerrain::GetTerrainCenter(double *latitude,
-                                     double *longitude) {
+bool RasterTerrain::GetTerrainCenter(GEOPOINT *location) {
   if (TerrainMap) {
-    *latitude = (TerrainMap->TerrainInfo.Top+
-                 TerrainMap->TerrainInfo.Bottom)/2.0;
-    *longitude = (TerrainMap->TerrainInfo.Left+
-                  TerrainMap->TerrainInfo.Right)/2.0;
+    location->Latitude = (TerrainMap->TerrainInfo.Top+
+                          TerrainMap->TerrainInfo.Bottom)/2.0;
+    location->Longitude = (TerrainMap->TerrainInfo.Left+
+                           TerrainMap->TerrainInfo.Right)/2.0;
     return true;
   } else {
     return false;

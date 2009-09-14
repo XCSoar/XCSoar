@@ -394,7 +394,7 @@ static void OnAATEnabled(DataField *Sender, DataField::DataAccessKind_t Mode) {
 static void OnSelectClicked(WindowControl * Sender){
 	(void)Sender;
   int res;
-  res = dlgWayPointSelect();
+  res = dlgWayPointSelect(XCSoarInterface::Basic().Location);
   if (res != -1){
     SelectedWaypoint = res;
     if (task_points[twItemIndex].Index != res) {

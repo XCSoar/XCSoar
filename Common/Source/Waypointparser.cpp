@@ -112,8 +112,7 @@ static bool WaypointInTerrainRange(WAYPOINT *List) {
     return(true);
   }
 
-  if (terrain.WaypointIsInTerrainRange(List->Latitude,
-				       List->Longitude)) {
+  if (terrain.WaypointIsInTerrainRange(List->Location)) {
     return true;
   } else {
     if (WaypointOutOfTerrainRangeDontAskAgain == 0){
@@ -354,8 +353,7 @@ void WaypointAltitudeFromTerrain(WAYPOINT* Temp) {
   terrain.SetTerrainRounding(0.0,0.0);
 
   myalt =
-    terrain.GetTerrainHeight(Temp->Latitude,
-			     Temp->Longitude);
+    terrain.GetTerrainHeight(Temp->Location);
   if (myalt>0) {
     Temp->Altitude = myalt;
   } else {
@@ -389,9 +387,9 @@ ParseWayPointString(const TCHAR *String, WAYPOINT *Temp)
   //ExtractParameter(TempString,ctemp,1); //Latitude
   if ((pToken = strtok_r(NULL, TEXT(","), &pWClast)) == NULL)
     return FALSE;
-  Temp->Latitude = CalculateAngle(pToken);
+  Temp->Location.Latitude = CalculateAngle(pToken);
 
-  if((Temp->Latitude > 90) || (Temp->Latitude < -90))
+  if((Temp->Location.Latitude > 90) || (Temp->Location.Latitude < -90))
     {
       return FALSE;
     }
@@ -400,8 +398,8 @@ ParseWayPointString(const TCHAR *String, WAYPOINT *Temp)
   if ((pToken = strtok_r(NULL, TEXT(","), &pWClast)) == NULL)
     return FALSE;
 
-  Temp->Longitude  = CalculateAngle(pToken);
-  if((Temp->Longitude  > 180) || (Temp->Longitude  < -180))
+  Temp->Location.Longitude  = CalculateAngle(pToken);
+  if((Temp->Location.Longitude  > 180) || (Temp->Location.Longitude  < -180))
     {
       return FALSE;
     }
@@ -775,16 +773,15 @@ void SetHome(SETTINGS_COMPUTER &settings,
     if (ValidWayPoint(settings.HomeWaypoint)) {
       // OK, passed all checks now
       StartupStore(TEXT("Start at home waypoint\n"));
-      device_blackboard.SetStartupLocation(WayPointList[settings.HomeWaypoint].Longitude,
-					   WayPointList[settings.HomeWaypoint].Latitude,
+      device_blackboard.SetStartupLocation(WayPointList[settings.HomeWaypoint].Location,
 					   WayPointList[settings.HomeWaypoint].Altitude);
     } else {
       
       // no home at all, so set it from center of terrain if available
-      double lon, lat;
-      if (terrain.GetTerrainCenter(&lat, &lon)) {
+      GEOPOINT loc;
+      if (terrain.GetTerrainCenter(&loc)) {
 	StartupStore(TEXT("Start at terrain center\n"));
-	device_blackboard.SetStartupLocation(lon, lat, 0);
+	device_blackboard.SetStartupLocation(loc, 0);
       }
     }
   }
@@ -802,7 +799,8 @@ void SetHome(SETTINGS_COMPUTER &settings,
 
 
 int FindNearestWayPoint(MapWindowProjection &map_projection,
-			double X, double Y, double MaxRange,
+			const GEOPOINT &loc, 
+                        double MaxRange,
                         bool exhaustive)
 {
   unsigned int i;
@@ -823,9 +821,8 @@ int FindNearestWayPoint(MapWindowProjection &map_projection,
 
         // only look for visible waypoints
         // feature added by Samuel Gisiger
-        DistanceBearing(Y,X,
-                        WayPointList[i].Latitude,
-                        WayPointList[i].Longitude, &Dist, NULL);
+        DistanceBearing(loc,
+                        WayPointList[i].Location, &Dist, NULL);
         if(Dist < NearestDistance) {
           NearestIndex = i;
           NearestDistance = Dist;
@@ -837,9 +834,8 @@ int FindNearestWayPoint(MapWindowProjection &map_projection,
   // JMW allow exhaustive check for when looking up in status dialog
   if (exhaustive && (NearestIndex == -1)) {
     for(i=0;i<NumberOfWayPoints;i++) {
-      DistanceBearing(Y,X,
-                      WayPointList[i].Latitude,
-                      WayPointList[i].Longitude, &Dist, NULL);
+      DistanceBearing(loc,
+                      WayPointList[i].Location, &Dist, NULL);
       if(Dist < NearestDistance) {
         NearestIndex = i;
         NearestDistance = Dist;
@@ -961,9 +957,9 @@ WriteWayPointFileWayPoint(FILE *fp, WAYPOINT* wpt)
 
   Flags[0]=0;
 
-  WaypointLatitudeToString(wpt->Latitude,
+  WaypointLatitudeToString(wpt->Location.Latitude,
                            Latitude);
-  WaypointLongitudeToString(wpt->Longitude,
+  WaypointLongitudeToString(wpt->Location.Longitude,
                             Longitude);
   WaypointFlagsToString(wpt->Flags,
                         Flags);
@@ -1082,8 +1078,8 @@ int FindMatchingWaypoint(WAYPOINT *waypoint) {
   }
   // second scan, lookup by location
   for (i=0; i<NumberOfWayPoints; i++) {
-    if ((fabs(waypoint->Latitude-WayPointList[i].Latitude)<1.0e-6)
-        && (fabs(waypoint->Longitude-WayPointList[i].Longitude)<1.0e-6)) {
+    if ((fabs(waypoint->Location.Latitude-WayPointList[i].Location.Latitude)<1.0e-6)
+        && (fabs(waypoint->Location.Longitude-WayPointList[i].Location.Longitude)<1.0e-6)) {
       return i;
     }
   }

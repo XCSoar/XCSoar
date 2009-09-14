@@ -69,8 +69,8 @@ OLCOptimizer::OLCOptimizer() {
 
   busy = false;
 
-  lat_proj = 0;
-  lon_proj = 0;
+  loc_proj.Latitude = 0;
+  loc_proj.Longitude = 0;
 
   flying = true;
 
@@ -93,8 +93,8 @@ void OLCOptimizer::ResetFlight() {
   data.tsprintstart = 0;
   istart = 0;
   data.waypointbearing = 0;
-  lat_proj = 0;
-  lon_proj = 0;
+  loc_proj.Latitude = 0;
+  loc_proj.Longitude = 0;
 
   data.solution_FAI_triangle.valid = false;
   data.solution_FAI_sprint.valid = false;
@@ -148,8 +148,8 @@ int OLCOptimizer::initdmval() {
   for(i=pnts-1;i>=0;i--) {
     /* alle Punkte ins Bogenma?
        umrechnen und sin/cos Speichern */
-    lonrad[i] = data.lonpnts[i] * DEG_TO_RAD;
-    latrad = data.latpnts[i] * DEG_TO_RAD;
+    lonrad[i] = data.locpnts[i].Longitude * DEG_TO_RAD;
+    latrad = data.locpnts[i].Latitude * DEG_TO_RAD;
     sinlat[i] = sin(latrad);
     coslat[i] = cos(latrad);
     dmval[sindex(i,i)] = 0;
@@ -303,8 +303,7 @@ void OLCOptimizer::thin_data() {
         // pruning will have occurred or been checked on all points
         // going back to the start,
         double d;
-        DistanceBearing(data.latpnts[i], data.lonpnts[i],
-                        data.latpnts[i-1], data.lonpnts[i-1],
+        DistanceBearing(data.locpnts[i], data.locpnts[i-1],
                         &d, NULL);
         if (d<data.distancethreshold) {
           data.timepnts[i] = -1; // mark it for deletion
@@ -318,8 +317,8 @@ void OLCOptimizer::thin_data() {
         // in resolution from start of flight;
         // what's more, it will prune all the points in the buffer
         double d;
-        DistanceBearing(data.latpnts[i], data.lonpnts[i],
-                        data.latpnts[i-1], data.lonpnts[i-1],
+        DistanceBearing(data.locpnts[i], 
+                        data.locpnts[i-1],
                         &d, NULL);
         if (d<data.distancethreshold) {
           data.timepnts[i] = -1; // mark it for deletion
@@ -337,8 +336,7 @@ void OLCOptimizer::thin_data() {
     int altlowmerge=100000;
     while (j< data.pnts_in) {
       if (data.timepnts[j]!= -1) {
-	data.latpnts[i] = data.latpnts[j];
-	data.lonpnts[i] = data.lonpnts[j];
+	data.locpnts[i] = data.locpnts[j];
 	data.timepnts[i] = data.timepnts[j];
 	data.altpntshigh[i] = data.altpntshigh[j];
 	data.altpntslow[i] = min(data.altpntslow[j],altlowmerge);
@@ -365,20 +363,19 @@ void OLCOptimizer::thin_data() {
 }
 
 
-bool OLCOptimizer::addPoint(double lon, double lat, double alt,
+bool OLCOptimizer::addPoint(const GEOPOINT &loc,
+                            double alt,
                             double bearing,
 			    double time,
 			    const SETTINGS_COMPUTER &settings) {
-  static double lonlast;
-  static double latlast;
+  static GEOPOINT loclast;
   static int alt1 = 0;
   static int alt2 = 0;
 
   ScopeLock protect(mutexOLC);
 
   if (data.pnts_in==0) {
-    latlast = lat;
-    lonlast = lon;
+    loclast = loc;
     alt1 = 0;
     alt2 = 0;
   }
@@ -416,18 +413,16 @@ bool OLCOptimizer::addPoint(double lon, double lat, double alt,
   alt1= ialt;
 
   double tmpd;
-  DistanceBearing(lat, lon, latlast, lonlast, &tmpd, NULL);
+  DistanceBearing(loc, loclast, &tmpd, NULL);
   if ((tmpd>data.distancethreshold)
       || (data.pnts_in==0) || (isminimum)) {
 
-    latlast = lat;
-    lonlast = lon;
+    loclast = loc;
 
     i = data.pnts_in;
 
     data.timepnts[i] = (long)time;
-    data.latpnts[i] = lat;
-    data.lonpnts[i] = lon;
+    data.locpnts[i] = loc;
     data.altpntslow[i] = ialt;
     data.altpntshigh[i] = ialt;
 
@@ -473,12 +468,8 @@ double OLCOptimizer::getTime(int i) {
   return data.timepnts[i];
 }
 
-double OLCOptimizer::getLatitude(int i) {
-  return data.latpnts[i];
-}
-
-double OLCOptimizer::getLongitude(int i) {
-  return data.lonpnts[i];
+const GEOPOINT& OLCOptimizer::getLocation(int i) {
+  return data.locpnts[i];
 }
 
 
@@ -530,20 +521,13 @@ void OLCOptimizer::UpdateSolution(int dbest, int tbest,
       solution->finished = finished;
       solution->distance = dbest*DISTANCEUNITS;
       solution->score = score;
-      solution->latitude[0] = data.latpnts[(p1)];
-      solution->longitude[0] = data.lonpnts[(p1)];
-      solution->latitude[1] = data.latpnts[(p2)];
-      solution->longitude[1] = data.lonpnts[(p2)];
-      solution->latitude[2] = data.latpnts[(p3)];
-      solution->longitude[2] = data.lonpnts[(p3)];
-      solution->latitude[3] = data.latpnts[(p4)];
-      solution->longitude[3] = data.lonpnts[(p4)];
-      solution->latitude[4] = data.latpnts[(p5)];
-      solution->longitude[4] = data.lonpnts[(p5)];
-      solution->latitude[5] = data.latpnts[(p6)];
-      solution->longitude[5] = data.lonpnts[(p6)];
-      solution->latitude[6] = data.latpnts[(p7)];
-      solution->longitude[6] = data.lonpnts[(p7)];
+      solution->location[0] = data.locpnts[(p1)];
+      solution->location[1] = data.locpnts[(p2)];
+      solution->location[2] = data.locpnts[(p3)];
+      solution->location[3] = data.locpnts[(p4)];
+      solution->location[4] = data.locpnts[(p5)];
+      solution->location[5] = data.locpnts[(p6)];
+      solution->location[6] = data.locpnts[(p7)];
       solution->time = tbest;
     }
   }
@@ -731,8 +715,7 @@ int OLCOptimizer::scan_triangle(const SETTINGS_COMPUTER &settings) {
     double score = bestdist*100/(settings.Handicap)/(1000.0/DISTANCEUNITS);
     int t = data.timepnts[(i5best)]-data.timepnts[(i2best)];
     if (!finished) {
-      lat_proj = data.latpnts[i2];
-      lon_proj = data.lonpnts[i2];
+      loc_proj = data.locpnts[i2];
       t += ttogobest;
     }
     UpdateSolution(bestdist, t, i2best, i2best, i3best, i4best, i5best, i5best, i5best,
@@ -834,8 +817,7 @@ int OLCOptimizer::scan_sprint_inprogress(const SETTINGS_COMPUTER &settings) {
   i5 = pnts-1;
   i1 = istart;
 
-  double latend = data.latpnts[(i5)];
-  double lonend = data.lonpnts[(i5)];
+  GEOPOINT locend = data.locpnts[(i5)];
   int dh = data.altpntslow[(i5)]-data.altpntslow[(i1)];
   int dt = 9000-(data.timepnts[(i5)]-data.timepnts[(i1)]);
 
@@ -920,12 +902,10 @@ int OLCOptimizer::scan_sprint_inprogress(const SETTINGS_COMPUTER &settings) {
 
   if (bestdist>0) {
 
-    FindLatitudeLongitude(latend,
-                          lonend,
+    FindLatitudeLongitude(locend,
                           data.waypointbearing,
                           dfurther*DISTANCEUNITS,
-                          &lat_proj,
-                          &lon_proj);
+                          &loc_proj);
 
     double score = bestdist*100/(settings.Handicap*2.5)/(1000.0/DISTANCEUNITS);
     int t = data.timepnts[(i5best)]+dt-data.timepnts[(i1best)];
@@ -1011,11 +991,10 @@ int OLCOptimizer::scan_classic(const SETTINGS_COMPUTER &settings) {
     if (!finished) {
       t += (int)(dfurtherbest*DISTANCEUNITS/GlidePolar::Vbestld);
 
-      FindLatitudeLongitude(data.latpnts[i7best],
-                            data.lonpnts[i7best],
+      FindLatitudeLongitude(data.locpnts[i7best],
                             data.waypointbearing,
                             dfurther*DISTANCEUNITS,
-                            &lat_proj, &lon_proj);
+                            &loc_proj);
     }
     UpdateSolution(bestdist, t, i1best, i2best, i3best, i4best,
                    i5best, i6best, i7best,

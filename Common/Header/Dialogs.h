@@ -42,11 +42,12 @@ Copyright_License {
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
+#include "GeoPoint.hpp"
 
 void StartupScreen();
 
 bool dlgAirspaceWarningShowDlg(bool force);
-int dlgWayPointSelect(double lon=0.0, double lat=90.0, int type=-1, int FilterNear=0);
+int dlgWayPointSelect(const GEOPOINT &location, const int type=-1, const int FilterNear=0);
 int dlgAirspaceColoursShowModal(void);
 int dlgAirspacePatternsShowModal(void);
 void dlgAirspaceShowModal(bool colored);
@@ -85,9 +86,9 @@ void dlgNumberEntryKeyboardShowModal(int *value, int width=0);
 
 void PopupWaypointDetails();
 void PopupAnalysis();
-bool PopupNearestWaypointDetails(double lon, double lat,
+bool PopupNearestWaypointDetails(const GEOPOINT &location,
 				 double range, bool pan);
-bool PopupInteriorAirspaceDetails(double lon, double lat);
+bool PopupInteriorAirspaceDetails(const GEOPOINT &location);
 
 int
 WINAPI

@@ -177,7 +177,7 @@ MapWindow::on_setfocus()
 
 //////////
 
-static double Xstart, Ystart;
+static GEOPOINT LLstart;
 static int XstartScreen, YstartScreen;
 static bool ignorenext=true;
 
@@ -201,16 +201,14 @@ bool MapWindow::on_mouse_move(int x, int y)
     // target follows "finger" so easier to drop near edge of
     // sector
     if (TargetDrag_State == 1) {
-      double mouseMovelon, mouseMovelat;
-      Screen2LonLat((int)x, (int)y, mouseMovelon, mouseMovelat);
-      if (InAATTurnSector(mouseMovelon, mouseMovelat, 
+      GEOPOINT mouseMove;
+      Screen2LonLat((int)x, (int)y, mouseMove);
+      if (InAATTurnSector(mouseMove, 
 			  SettingsMap().TargetPanIndex)) {
 	// update waypoints so if we drag out of the cylinder, it
 	// will remain adjacent to the edge
-	task_stats[SettingsMap().TargetPanIndex].AATTargetLat = mouseMovelat;
-	task_stats[SettingsMap().TargetPanIndex].AATTargetLon = mouseMovelon;
-	TargetDrag_Latitude = mouseMovelat;
-	TargetDrag_Longitude = mouseMovelon;
+	task_stats[SettingsMap().TargetPanIndex].AATTargetLocation = mouseMove;
+	TargetDrag_Location = mouseMove;
 	draw_masked_bitmap(get_canvas(), MapGfx.hBmpTarget, x, y, 10, 10, true);
       }
     }
@@ -229,7 +227,7 @@ bool MapWindow::on_mouse_down(int x, int y)
   // TODO VNT move Screen2LonLat in LBUTTONUP after making sure we
   // really need Xstart and Ystart so we save precious
   // milliseconds waiting for BUTTONUP GetTickCount
-  Screen2LonLat(x, y, Xstart, Ystart);
+  Screen2LonLat(x, y, LLstart);
   XstartScreen = x;
   YstartScreen = y;
 
@@ -237,8 +235,7 @@ bool MapWindow::on_mouse_down(int x, int y)
   if (AATEnabled && SettingsMap().TargetPan) {
     if (ValidTaskPoint(SettingsMap().TargetPanIndex)) {
       POINT tscreen;
-      LonLat2Screen(task_stats[SettingsMap().TargetPanIndex].AATTargetLon,
-		    task_stats[SettingsMap().TargetPanIndex].AATTargetLat,
+      LonLat2Screen(task_stats[SettingsMap().TargetPanIndex].AATTargetLocation,
 		    tscreen);
       double distance = isqrt4((long)((XstartScreen-tscreen.x)
 			       *(XstartScreen-tscreen.x)+
@@ -310,16 +307,15 @@ bool MapWindow::on_mouse_up(int x, int y)
     //    return;
   }
 
-  double Xlat, Ylat;
-  Screen2LonLat(x, y, Xlat, Ylat);
+  GEOPOINT G;
+  Screen2LonLat(x, y, G);
 
   if (AATEnabled && my_target_pan && (TargetDrag_State>0)) {
     mutexTaskData.Lock();
     TargetDrag_State = 2;
-    if (InAATTurnSector(Xlat, Ylat, SettingsMap().TargetPanIndex)) {
+    if (InAATTurnSector(G, SettingsMap().TargetPanIndex)) {
       // if release mouse out of sector, don't update w/ bad coords
-      TargetDrag_Latitude = Ylat;
-      TargetDrag_Longitude = Xlat;
+      TargetDrag_Location = G;
     }
     mutexTaskData.Unlock();
     return true;
@@ -327,8 +323,8 @@ bool MapWindow::on_mouse_up(int x, int y)
  
   if (!my_target_pan && SettingsMap().EnablePan && (distance>IBLSCALE(36))) {
     // JMW broken!
-    PanLongitude += Xstart-Xlat;
-    PanLatitude  += Ystart-Ylat;
+    PanLocation.Longitude += LLstart.Longitude-G.Longitude;
+    PanLocation.Latitude  += LLstart.Latitude-G.Latitude;
     RefreshMap();
     return true;
   }
@@ -339,7 +335,7 @@ bool MapWindow::on_mouse_up(int x, int y)
     double newbearing;
     double oldbearing = XCSoarInterface::Basic().TrackBearing;
     double minspeed = 1.1*GlidePolar::Vminsink;
-    DistanceBearing(Ystart, Xstart, Ylat, Xlat, NULL, &newbearing);
+    DistanceBearing(LLstart, G, NULL, &newbearing);
     if ((fabs(AngleLimit180(newbearing-oldbearing))<30)
 	|| (XCSoarInterface::Basic().Speed<minspeed)) {
 
@@ -360,23 +356,23 @@ bool MapWindow::on_mouse_up(int x, int y)
       if(dwInterval < VKSHORTCLICK) {
 	//100ms is NOT enough for a short click since GetTickCount
 	//is OEM custom!
-	if (PopupNearestWaypointDetails(Xstart, Ystart, 
+	if (PopupNearestWaypointDetails(LLstart, 
 					DistancePixelsToMeters(IBLSCALE(10)), false)) {
 	  return true;
 	}
       } else {
-	if (PopupInteriorAirspaceDetails(Xstart, Ystart)) {
+	if (PopupInteriorAirspaceDetails(LLstart)) {
 	  return true;
 	}
       }
     } else {
       if(dwInterval < AIRSPACECLICK) { // original and untouched interval
-	if (PopupNearestWaypointDetails(Xstart, Ystart, 
+	if (PopupNearestWaypointDetails(LLstart, 
 					DistancePixelsToMeters(IBLSCALE(10)), false)) {
 	  return true;
 	}
       } else {
-	if (PopupInteriorAirspaceDetails(Xstart, Ystart)) {
+	if (PopupInteriorAirspaceDetails(LLstart)) {
 	  return true;
 	}
       }

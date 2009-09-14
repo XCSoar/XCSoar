@@ -41,6 +41,7 @@ Copyright_License {
 #include "Sizes.h"
 #include "SettingsAirspace.hpp"
 #include "Screen/shapelib/mapshape.h"
+#include "GeoPoint.hpp"
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
@@ -72,21 +73,16 @@ struct AIRSPACE_AREA
   unsigned NumPoints;
   unsigned char Visible;
   bool _NewWarnAckNoBrush;
-  double MinLatitude;
-  double MaxLatitude;
-  double MinLongitude;
-  double MaxLongitude;
+  GEOPOINT minBound;
+  GEOPOINT maxBound;
   rectObj bounds;
   AIRSPACE_ACK Ack;
   unsigned char WarningLevel; // 0= no warning, 1= predicted incursion, 2= entered
   bool FarVisible;
 };
 
-struct AIRSPACE_POINT
-{
-  double Latitude;
-  double Longitude;
-};
+#define AIRSPACE_POINT GEOPOINT
+// quick hack...
 
 struct AIRSPACE_CIRCLE
 {
@@ -94,8 +90,7 @@ struct AIRSPACE_CIRCLE
   int Type;
   AIRSPACE_ALT Base;
   AIRSPACE_ALT Top;
-  double Latitude;
-  double Longitude;
+  GEOPOINT Location;
   double Radius;
   POINT Screen;
   int ScreenR;
@@ -124,9 +119,9 @@ void DeleteAirspace();
 
 ///////////////////////////////////////
 void ReadAirspace(void);
-int FindAirspaceCircle(double Longditude,double Lattitude,
+int FindAirspaceCircle(const GEOPOINT &location,
 		       bool visibleonly=true);
-int FindAirspaceArea(double Longditude,double Lattitude,
+int FindAirspaceArea(const GEOPOINT &location,
 		     bool visibleonly=true);
 bool CheckAirspaceAltitude(const double &Base, const double &Top);
 void CloseAirspace(void);
@@ -134,15 +129,14 @@ void CloseAirspace(void);
 
 void SortAirspace(void);
 
-bool InsideAirspaceCircle(const double &longitude,
-			  const double &latitude,
-			  int i);
+bool InsideAirspaceCircle(const GEOPOINT &location,
+			  const int i);
 
-bool InsideAirspaceArea(const double &longitude,
-			const double &latitude,
-			int i);
+bool InsideAirspaceArea(const GEOPOINT &location,
+			const int i);
 
-void ScanAirspaceLine(double *lats, double *lons, double *heights,
+void ScanAirspaceLine(const GEOPOINT *locs, 
+                      const double *heights,
 		      int airspacetype[AIRSPACE_SCANSIZE_H][AIRSPACE_SCANSIZE_X]);
 
 
@@ -193,20 +187,17 @@ bool ValidAirspace(void);
 
 class MapWindowProjection;
 
-double RangeAirspaceCircle(const double &longitude,
-			   const double &latitude,
-			   int i);
+double RangeAirspaceCircle(const GEOPOINT &location,
+			   const int i);
 
-double RangeAirspaceArea(const double &longitude,
-			 const double &latitude,
-			 int i, double *bearing,
+double RangeAirspaceArea(const GEOPOINT &location,
+			 const int i, double *bearing,
 			 const MapWindowProjection &map_projection);
 
 bool CheckAirspacePoint(int Idx);
 
 void FindNearestAirspace(const MapWindowProjection &map_projection,
-			 double longitude,
-			 double latitude,
+			 const GEOPOINT &location,
 			 double *nearestdistance,
 			 double *nearestbearing,
 			 int *foundcircle,

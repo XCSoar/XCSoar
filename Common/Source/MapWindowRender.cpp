@@ -100,7 +100,7 @@ void MapWindow::RenderMapLayer(Canvas &canvas, const RECT rc)
     // TODO: implement a workaround
 
     DrawTerrain(canvas, *this, sunazimuth, sunelevation,
-		Basic().Longitude, Basic().Latitude,
+		Basic().Location,
 	        BigZoom, SettingsMap());
 
     if ((SettingsComputer().FinalGlideTerrain==2) 
@@ -253,7 +253,7 @@ TerrainRenderer *terrain_renderer = NULL;
 void DrawTerrain(Canvas &canvas, 
 		 MapWindowProjection &map_projection,
 		 const double sunazimuth, const double sunelevation,
-		 const double lon, const double lat,
+		 const GEOPOINT &loc,
 		 const bool isBigZoom,
 		 const SETTINGS_MAP &settings)
 {
@@ -271,7 +271,7 @@ void DrawTerrain(Canvas &canvas,
 				settings.TerrainBrightness);
 
   terrain_renderer->Draw(canvas, map_projection, sunazimuth, sunelevation,
-			 lon, lat, isBigZoom);
+			 loc, isBigZoom);
 }
 
 

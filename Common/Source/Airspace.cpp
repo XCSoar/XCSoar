@@ -88,20 +88,18 @@ void DeleteAirspace() {
 }
 
 
-double RangeAirspaceCircle(const double &longitude,
-			   const double &latitude,
-			   int i) {
+double RangeAirspaceCircle(const GEOPOINT &location,
+			   const int i) {
   double distance;
-  DistanceBearing(latitude,longitude,
-                  AirspaceCircle[i].Latitude,
-                  AirspaceCircle[i].Longitude,
+  DistanceBearing(location,
+                  AirspaceCircle[i].Location,
                   &distance, NULL);
   return distance-AirspaceCircle[i].Radius;
 }
 
 
 bool CheckInsideLongitude(double longitude,
-                         const double lon_min, const double lon_max) {
+                          const double lon_min, const double lon_max) {
   if (lon_min<=lon_max) {
     // normal case
     return ((longitude>lon_min) && (longitude<lon_max));
@@ -112,16 +110,16 @@ bool CheckInsideLongitude(double longitude,
 }
 
 
-bool InsideAirspaceCircle(const double &longitude,
-			    const double &latitude,
-			    int i) {
+bool InsideAirspaceCircle(const GEOPOINT &location,
+                          const int i) {
 
-  if ((latitude> AirspaceCircle[i].bounds.miny) &&
-      (latitude< AirspaceCircle[i].bounds.maxy) &&
-      CheckInsideLongitude(longitude, AirspaceCircle[i].bounds.minx,
+  if ((location.Latitude> AirspaceCircle[i].bounds.miny) &&
+      (location.Latitude< AirspaceCircle[i].bounds.maxy) &&
+      CheckInsideLongitude(location.Longitude, 
+                           AirspaceCircle[i].bounds.minx,
                            AirspaceCircle[i].bounds.maxx)) {
 
-    if (RangeAirspaceCircle(longitude, latitude, i)<0) {
+    if (RangeAirspaceCircle(location, i)<0) {
       return true;
     }
   }
@@ -129,7 +127,7 @@ bool InsideAirspaceCircle(const double &longitude,
 }
 
 
-int FindAirspaceCircle(double Longitude,double Latitude, bool visibleonly)
+int FindAirspaceCircle(const GEOPOINT &location, bool visibleonly)
 {
   unsigned i;
   double basealt;
@@ -159,7 +157,7 @@ int FindAirspaceCircle(double Longitude,double Latitude, bool visibleonly)
           topalt = AirspaceCircle[i].Top.AGL + XCSoarInterface::Calculated().TerrainAlt;
         }
       if(CheckAirspaceAltitude(basealt, topalt)) {
-        if (InsideAirspaceCircle(Longitude,Latitude,i)) {
+        if (InsideAirspaceCircle(location,i)) {
 	  return i;
         }
       }
@@ -308,18 +306,17 @@ wn_PnPoly( AIRSPACE_POINT P, AIRSPACE_POINT* V, int n )
 //===================================================================
 
 
-bool InsideAirspaceArea(const double &longitude,
-			  const double &latitude,
-			  int i) {
+bool InsideAirspaceArea(const GEOPOINT &location,
+                        const int i) {
   AIRSPACE_POINT thispoint;
-  thispoint.Longitude = longitude;
-  thispoint.Latitude = latitude;
+  thispoint.Longitude = location.Longitude;
+  thispoint.Latitude = location.Latitude;
 
   // first check if point is within bounding box
   if (
-      (latitude> AirspaceArea[i].bounds.miny)&&
-      (latitude< AirspaceArea[i].bounds.maxy)&&
-      CheckInsideLongitude(longitude,
+      (location.Latitude> AirspaceArea[i].bounds.miny)&&
+      (location.Latitude< AirspaceArea[i].bounds.maxy)&&
+      CheckInsideLongitude(location.Longitude,
                            AirspaceArea[i].bounds.minx,
                            AirspaceArea[i].bounds.maxx)) {
 
@@ -384,7 +381,7 @@ int FindAirspaceArea(double Longitude,double Latitude, bool visibleonly)
 
 
 static int
-FindNearestAirspaceCircle(double longitude, double latitude,
+FindNearestAirspaceCircle(const GEOPOINT &location,
                           double *nearestdistance,
                           double *nearestbearing,
                           double *height=NULL)
@@ -431,14 +428,12 @@ FindNearestAirspaceCircle(double longitude, double latitude,
     }
     if(altok) {
 
-      Dist = RangeAirspaceCircle(longitude, latitude, i);
+      Dist = RangeAirspaceCircle(location, i);
 
       if(Dist < *nearestdistance ) {
 	  *nearestdistance = Dist;
-          DistanceBearing(latitude,
-                          longitude,
-                          AirspaceCircle[i].Latitude,
-                          AirspaceCircle[i].Longitude,
+          DistanceBearing(location,
+                          AirspaceCircle[i].Location,
                           NULL, nearestbearing);
 	  if (Dist<0) {
 	    // no need to continue search, inside
@@ -455,32 +450,31 @@ FindNearestAirspaceCircle(double longitude, double latitude,
 // this one uses screen coordinates to avoid as many trig functions
 // as possible.. it means it is approximate but for our use it is ok.
 static double
-ScreenCrossTrackError(double lon1, double lat1,
-                      double lon2, double lat2,
-                      double lon3, double lat3,
-                      double *lon4, double *lat4,
+ScreenCrossTrackError(GEOPOINT loc1, 
+                      GEOPOINT loc2,
+                      GEOPOINT loc3,
+                      GEOPOINT *loc4,
                       const MapWindowProjection &map_projection)
 {
   POINT p1, p2, p3, p4;
 
-  map_projection.LonLat2Screen(lon1, lat1, p1);
-  map_projection.LonLat2Screen(lon2, lat2, p2);
-  map_projection.LonLat2Screen(lon3, lat3, p3);
+  map_projection.LonLat2Screen(loc1, p1);
+  map_projection.LonLat2Screen(loc2, p2);
+  map_projection.LonLat2Screen(loc3, p3);
 
   ScreenClosestPoint(p1, p2, p3, &p4, 0);
 
-  map_projection.Screen2LonLat(p4.x, p4.y, *lon4, *lat4);
+  map_projection.Screen2LonLat(p4.x, p4.y, *loc4);
 
   // compute accurate distance
   double tmpd;
-  DistanceBearing(lat3, lon3, *lat4, *lon4, &tmpd, NULL);
+  DistanceBearing(loc3, *loc4, &tmpd, NULL);
   return tmpd;
 }
 
 
-double RangeAirspaceArea(const double &longitude,
-			 const double &latitude,
-			 int i, double *bearing,
+double RangeAirspaceArea(const GEOPOINT &location,
+			 const int i, double *bearing,
 			 const MapWindowProjection &map_projection)
 {
   // find nearest distance to line segment
@@ -488,7 +482,7 @@ double RangeAirspaceArea(const double &longitude,
   double dist= 0;
   double nearestdistance = dist;
   double nearestbearing = *bearing;
-  double lon4, lat4;
+  GEOPOINT loc4;
   for (j=0; j<(int)AirspaceArea[i].NumPoints-1; j++) {
 
     int p1 = AirspaceArea[i].FirstPoint+j;
@@ -496,19 +490,15 @@ double RangeAirspaceArea(const double &longitude,
     CheckAirspacePoint(p1);
     CheckAirspacePoint(p2);
 
-    dist = ScreenCrossTrackError(
-				 AirspacePoint[p1].Longitude,
-				 AirspacePoint[p1].Latitude,
-				 AirspacePoint[p2].Longitude,
-				 AirspacePoint[p2].Latitude,
-				 longitude, latitude,
-				 &lon4, &lat4,
+    dist = ScreenCrossTrackError(AirspacePoint[p1],
+				 AirspacePoint[p2],
+				 location,
+				 &loc4,
 				 map_projection);
     if ((dist<nearestdistance)||(j==0)) {
       nearestdistance = dist;
 
-      DistanceBearing(latitude, longitude,
-                      lat4, lon4, NULL,
+      DistanceBearing(location, loc4, NULL,
                       &nearestbearing);
     }
   }
@@ -518,7 +508,7 @@ double RangeAirspaceArea(const double &longitude,
 
 static int
 FindNearestAirspaceArea(const MapWindowProjection& map_projection,
-                        double longitude, double latitude,
+                        const GEOPOINT &location,
                         double *nearestdistance, double *nearestbearing,
                         double *height=NULL)
 {
@@ -564,10 +554,10 @@ FindNearestAirspaceArea(const MapWindowProjection& map_projection,
       altok = ((*height < topalt) && (*height > basealt));
     }
     if(altok) {
-      inside = InsideAirspaceArea(longitude, latitude, i);
+      inside = InsideAirspaceArea(location, i);
       double dist, bearing;
 
-      dist = RangeAirspaceArea(longitude, latitude, i, &bearing, map_projection);
+      dist = RangeAirspaceArea(location, i, &bearing, map_projection);
 
       if (dist< *nearestdistance) {
 	*nearestdistance = dist;
@@ -602,7 +592,7 @@ FindNearestAirspaceArea(const MapWindowProjection& map_projection,
 // This only searches within a range of 100km of the target
 
 void FindNearestAirspace(const MapWindowProjection& map_projection,
-			 double longitude, double latitude,
+			 const GEOPOINT &location,
 			 double *nearestdistance, double *nearestbearing,
 			 int *foundcircle, int *foundarea,
 			 double *height)
@@ -612,12 +602,12 @@ void FindNearestAirspace(const MapWindowProjection& map_projection,
   double nearestb1 = 0;
   double nearestb2 = 0;
 
-  *foundcircle = FindNearestAirspaceCircle(longitude, latitude,
+  *foundcircle = FindNearestAirspaceCircle(location,
 					   &nearestd1, &nearestb1,
 					   height);
 
   *foundarea = FindNearestAirspaceArea(map_projection,
-				       longitude, latitude,
+				       location,
 				       &nearestd2, &nearestb2,
 				       height);
 
@@ -724,17 +714,18 @@ bool line_rect_intersection (const double x1,
 }
 
 
-void ScanAirspaceLine(double *lats, double *lons, double *heights,
+void ScanAirspaceLine(const GEOPOINT *locs,
+                      const double *heights,
 		      int airspacetype[AIRSPACE_SCANSIZE_H][AIRSPACE_SCANSIZE_X])
 {
 
   int i,j;
   unsigned int k;
-  double latitude, longitude, Dist;
-  double x1 = lons[0];
-  double dx = lons[AIRSPACE_SCANSIZE_X-1]-x1;
-  double y1 = lats[0];
-  double dy = lats[AIRSPACE_SCANSIZE_X-1]-y1;
+  double Dist;
+  double x1 = locs[0].Longitude;
+  double dx = locs[AIRSPACE_SCANSIZE_X-1].Longitude-x1;
+  double y1 = locs[0].Latitude;
+  double dy = locs[AIRSPACE_SCANSIZE_X-1].Latitude-y1;
   double h_min = heights[0];
   double h_max = heights[AIRSPACE_SCANSIZE_H-1];
 
@@ -757,17 +748,15 @@ void ScanAirspaceLine(double *lats, double *lons, double *heights,
 				  &AirspaceCircle[k].bounds)) {
 
 	for (i=0; i<AIRSPACE_SCANSIZE_X; i++) {
-	  latitude = lats[i];
-	  longitude = lons[i];
-	  if ((latitude> AirspaceCircle[k].bounds.miny)&&
-	      (latitude< AirspaceCircle[k].bounds.maxy)&&
-	      CheckInsideLongitude(longitude,
+	  if ((locs[i].Latitude> AirspaceCircle[k].bounds.miny)&&
+	      (locs[i].Latitude< AirspaceCircle[k].bounds.maxy)&&
+	      CheckInsideLongitude(locs[i].Longitude,
 				   AirspaceCircle[k].bounds.minx,
 				   AirspaceCircle[k].bounds.maxx)) {
 
-	    DistanceBearing(latitude,longitude,
-			    AirspaceCircle[k].Latitude,
-			    AirspaceCircle[k].Longitude, &Dist, NULL);
+	    DistanceBearing(locs[i],
+			    AirspaceCircle[k].Location,
+                            &Dist, NULL);
 	    Dist -= AirspaceCircle[k].Radius;
 
 	    if(Dist < 0) {
@@ -796,17 +785,13 @@ void ScanAirspaceLine(double *lats, double *lons, double *heights,
 				  &AirspaceArea[k].bounds)) {
 
 	for (i=0; i<AIRSPACE_SCANSIZE_X; i++) {
-	  latitude = lats[i];
-	  longitude = lons[i];
 
-	  if ((latitude> AirspaceArea[k].bounds.miny)&&
-	      (latitude< AirspaceArea[k].bounds.maxy)&&
-	      CheckInsideLongitude(longitude,
+	  if ((locs[i].Latitude> AirspaceArea[k].bounds.miny)&&
+	      (locs[i].Latitude< AirspaceArea[k].bounds.maxy)&&
+	      CheckInsideLongitude(locs[i].Longitude,
 				   AirspaceArea[k].bounds.minx,
 				   AirspaceArea[k].bounds.maxx)) {
-	    AIRSPACE_POINT thispoint;
-	    thispoint.Longitude = longitude;
-	    thispoint.Latitude = latitude;
+	    AIRSPACE_POINT thispoint = locs[i];
 
 	    CheckAirspacePoint(AirspaceArea[k].FirstPoint);
 
@@ -827,75 +812,3 @@ void ScanAirspaceLine(double *lats, double *lons, double *heights,
   } // finished scanning areas
 }
 
-
-#if 0
-// old...
-void ScanAirspaceLine_old(double *lats, double *lons, double *heights,
-		      int airspacetype[AIRSPACE_SCANSIZE_H][AIRSPACE_SCANSIZE_X])
-{
-
-  int i,j;
-  unsigned int k;
-  double latitude, longitude, height, Dist;
-
-  for(k=0;k<NumberOfAirspaceCircles;k++) {
-    for (i=0; i<AIRSPACE_SCANSIZE_X; i++) {
-      latitude = lats[i];
-      longitude = lons[i];
-      if ((latitude> AirspaceCircle[k].bounds.miny)&&
-	  (latitude< AirspaceCircle[k].bounds.maxy)&&
-          CheckInsideLongitude(longitude,
-                               AirspaceCircle[k].bounds.minx,
-                               AirspaceCircle[k].bounds.maxx)) {
-
-        DistanceBearing(latitude,longitude,
-                        AirspaceCircle[k].Latitude,
-                        AirspaceCircle[k].Longitude, &Dist, NULL);
-	Dist -= AirspaceCircle[k].Radius;
-
-	if(Dist < 0) {
-	  for (j=0; j<AIRSPACE_SCANSIZE_H; j++) {
-	    height = heights[j];
-	    if ((height>AirspaceCircle[k].Base.Altitude)&&
-		(height<AirspaceCircle[k].Top.Altitude)) {
-	      airspacetype[j][i] = AirspaceCircle[k].Type;
-	    } // inside height
-	  } // finished scanning height
-	} // inside
-      } // in bound
-    } // finished scanning range
-  } // finished scanning circles
-
-  for(k=0;k<NumberOfAirspaceAreas;k++) {
-    for (i=0; i<AIRSPACE_SCANSIZE_X; i++) {
-      latitude = lats[i];
-      longitude = lons[i];
-
-      if ((latitude> AirspaceArea[k].bounds.miny)&&
-	  (latitude< AirspaceArea[k].bounds.maxy)&&
-          CheckInsideLongitude(longitude,
-                               AirspaceArea[k].bounds.minx,
-                               AirspaceArea[k].bounds.maxx)) {
-	AIRSPACE_POINT thispoint;
-	thispoint.Longitude = longitude;
-	thispoint.Latitude = latitude;
-
-        CheckAirspacePoint(AirspaceArea[k].FirstPoint);
-
-	if (wn_PnPoly(thispoint,
-		      &AirspacePoint[AirspaceArea[k].FirstPoint],
-		      AirspaceArea[k].NumPoints-1) != 0) {
-	  for (j=0; j<AIRSPACE_SCANSIZE_H; j++) {
-	    height = heights[j];
-	    if ((height>AirspaceArea[k].Base.Altitude)&&
-		(height<AirspaceArea[k].Top.Altitude)) {
-	      airspacetype[j][i] = AirspaceArea[k].Type;
-	    } // inside height
-	  } // finished scanning height
-	} // inside
-      } // in bound
-    } // finished scanning range
-  } // finished scanning areas
-
-}
-#endif

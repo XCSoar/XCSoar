@@ -72,8 +72,7 @@ void MapWindow::CalculateScreenPositionsAirspaceCircle(AIRSPACE_CIRCLE &circ) {
 	  circ.Visible = 1;
 	}
 
-        LonLat2Screen(circ.Longitude,
-                      circ.Latitude,
+        LonLat2Screen(circ.Location,
                       circ.Screen);
         circ.ScreenR = DistanceMetersToScreen(circ.Radius);
       }
@@ -105,13 +104,10 @@ void MapWindow::CalculateScreenPositionsAirspaceArea(AIRSPACE_AREA &area) {
         POINT* sp= AirspaceScreenPoint+area.FirstPoint;
         while (ap < ep) {
 	  // JMW optimise!
-            LonLat2Screen(ap->Longitude,
-                          ap->Latitude,
-                          *sp);
-            ap++;
-            sp++;
+          LonLat2Screen(*ap, *sp);
+          ap++;
+          sp++;
         }
-
 	if (!area._NewWarnAckNoBrush &&
 	    !(iAirspaceBrush[area.Type] == NUMAIRSPACEBRUSHES-1)) {
 	  area.Visible = 2;

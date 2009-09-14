@@ -45,6 +45,8 @@ Copyright_License {
 
 #include <windef.h> /* for MAX_PATH */
 
+#include "GeoPoint.hpp"
+
 typedef struct _TERRAIN_INFO
 {
   double Left;
@@ -83,10 +85,9 @@ class RasterMap: public TerrainDataClient {
   short max_field_value;
   TERRAIN_INFO TerrainInfo;
 
-  virtual void SetViewCenter(const double &Latitude,
-                             const double &Longitude) {};
+  virtual void SetViewCenter(const GEOPOINT &location) {};
 
-  bool GetMapCenter(double *lon, double *lat);
+  bool GetMapCenter(GEOPOINT *loc);
 
   float GetFieldStepSize();
 
@@ -95,17 +96,16 @@ class RasterMap: public TerrainDataClient {
 
   // accurate method
   int GetEffectivePixelSize(double *pixel_D,
-                            double latitude, double longitude);
+                            const GEOPOINT &location);
 
   virtual void SetFieldRounding(double xr, double yr);
 
-  short GetField(const double &Latitude,
-                 const double &Longitude);
+  short GetField(const GEOPOINT &location);
 
   virtual bool Open(char* filename) = 0;
   virtual void Close() = 0;
   virtual void ServiceCache() {};
-  virtual void ServiceFullReload(double lat, double lon) {};
+  virtual void ServiceFullReload(const GEOPOINT &location) {};
   bool IsDirectAccess(void) { return DirectAccess; };
   bool IsPaged(void) { return Paged; };
 
@@ -200,14 +200,13 @@ class RasterMapJPG2000: public RasterMap {
   ~RasterMapJPG2000();
 
   void ReloadJPG2000(void);
-  void ReloadJPG2000Full(double latitude, double longitude);
+  void ReloadJPG2000Full(const GEOPOINT &location);
 
-  void SetViewCenter(const double &Latitude,
-                     const double &Longitude);
+  void SetViewCenter(const GEOPOINT &location);
   virtual void SetFieldRounding(double xr, double yr);
   virtual bool Open(char* filename);
   virtual void Close();
-  void ServiceFullReload(double lat, double lon);
+  void ServiceFullReload(const GEOPOINT &location);
 
  protected:
   char jp2_filename[MAX_PATH];

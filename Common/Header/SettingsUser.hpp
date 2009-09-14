@@ -41,6 +41,8 @@ Copyright_License {
 // not expected to be used by other threads
 
 #include "Appearance.hpp"
+#include "GeoPoint.hpp"
+
 extern Appearance_t Appearance;
 
 typedef enum {
@@ -100,8 +102,7 @@ typedef struct SETTINGS_MAP_ {
   DisplayMode_t UserForceDisplayMode;
   bool FullScreen;
   bool EnablePan;
-  double PanLongitude;
-  double PanLatitude;
+  GEOPOINT PanLocation;
   bool   TargetPan;
   int    TargetPanIndex;
   double TargetZoomDistance;

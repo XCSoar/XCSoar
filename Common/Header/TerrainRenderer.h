@@ -40,6 +40,7 @@ Copyright_License {
 
 #include "Protection.hpp"
 #include "Screen/Ramp.hpp"
+#include "GeoPoint.hpp"
 
 class CSTScreenBuffer;
 class Canvas;
@@ -98,7 +99,7 @@ private:
   void Slope(const int sx, const int sy, const int sz);
   void ColorTable();
   void Draw(Canvas &canvas, RECT rc);
-  bool SetMap(double lon, double lat); 
+  bool SetMap(const GEOPOINT &loc); 
 
  public:
   void SetSettings(short _TerrainRamp, 
@@ -113,7 +114,7 @@ private:
   bool Draw(Canvas &canvas, 
 	    MapWindowProjection &map_projection,
 	    const double sunazimuth, const double sunelevation,
-	    const double lon, const double lat,
+	    const GEOPOINT &loc,
 	    const bool isBigZoom);
 };
 

@@ -102,7 +102,7 @@ GlideComputerTask::SearchBestAlternate()
 
   // Do preliminary fast search
   int scx_aircraft, scy_aircraft;
-  LatLon2Flat(Basic().Longitude, Basic().Latitude, &scx_aircraft, &scy_aircraft);
+  LatLon2Flat(Basic().Location, &scx_aircraft, &scy_aircraft);
 
   // Clear search lists
   for (i=0; i<MAXBEST*2; i++) {
@@ -207,8 +207,7 @@ GlideComputerTask::SearchBestAlternate()
 	  // with same
           {
             double wp_distance, wp_bearing;
-            DistanceBearing(Basic().Latitude, Basic().Longitude,
-                            way_point.Latitude, way_point.Longitude,
+            DistanceBearing(Basic().Location, way_point.Location,
                             &wp_distance, &wp_bearing);
 
 	    WayPointCalc[SortedApproxIndex[i]].Distance = wp_distance;
@@ -219,7 +218,6 @@ GlideComputerTask::SearchBestAlternate()
               FinalGlideThroughTerrain(wp_bearing, 
 				       &Basic(), &Calculated(),
 				       SettingsComputer(),
-                                       NULL,
                                        NULL,
                                        wp_distance,
                                        &out_of_range, NULL);
@@ -509,28 +507,28 @@ GlideComputerTask::DoAlternates(int AltWaypoint)
 
   const WAYPOINT &way_point = WayPointList[AltWaypoint];
   WPCALC &way_point_calc = WayPointCalc[AltWaypoint];
-  double w1lat = way_point.Latitude;
-  double w1lon = way_point.Longitude;
-  double w0lat = Basic().Latitude;
-  double w0lon = Basic().Longitude;
+  GEOPOINT w1 = way_point.Location;
+  GEOPOINT w0 = Basic().Location;
   double *altwp_dist = &way_point_calc.Distance;
   double *altwp_gr = &way_point_calc.GR;
   double *altwp_arrival = &way_point_calc.AltArrival;
   short  *altwp_vgr = &way_point_calc.VGR;
 
-  DistanceBearing(w1lat, w1lon,
-                  w0lat, w0lon,
-                  altwp_dist, NULL);
+  DistanceBearing(w1, w0, altwp_dist, NULL);
 
   double GRsafecalc = Calculated().NavAltitude - 
     (way_point.Altitude +
      SettingsComputer().SAFETYALTITUDEARRIVAL);
 
-  if (GRsafecalc <=0) *altwp_gr = INVALID_GR;
-  else {
-	*altwp_gr = *altwp_dist / GRsafecalc;
-	if ( *altwp_gr >ALTERNATE_MAXVALIDGR || *altwp_gr <0 ) *altwp_gr = INVALID_GR;
-	else if ( *altwp_gr <1 ) *altwp_gr = 1;
+  if (GRsafecalc <=0) {
+    *altwp_gr = INVALID_GR;
+  } else {
+    *altwp_gr = *altwp_dist / GRsafecalc;
+    if ( *altwp_gr >ALTERNATE_MAXVALIDGR || *altwp_gr <0 ) {
+      *altwp_gr = INVALID_GR;
+    } else if ( *altwp_gr <1 ) {
+      *altwp_gr = 1;
+    }
   }
 
 
@@ -539,14 +537,12 @@ GlideComputerTask::DoAlternates(int AltWaypoint)
 
   *altwp_arrival = CalculateWaypointArrivalAltitude(way_point, way_point_calc);
   if ( (*altwp_arrival - ALTERNATE_OVERSAFETY) >0 ) {
-  	if ( *altwp_gr <= (GlidePolar::bestld *SAFELD_FACTOR) ) *altwp_vgr = 1; // full green vgr
-  	else
-  		if ( *altwp_gr <= GlidePolar::bestld ) *altwp_vgr = 2; // yellow vgr
-		else *altwp_vgr =3; // RED vgr
-  } else
-  {
-	*altwp_vgr = 3; // full red
+    if ( *altwp_gr <= (GlidePolar::bestld *SAFELD_FACTOR) ) {
+      *altwp_vgr = 1; // full green vgr
+    } else if ( *altwp_gr <= GlidePolar::bestld ) {
+      *altwp_vgr = 2; // yellow vgr
+    } else *altwp_vgr =3; // RED vgr
+  } else {
+    *altwp_vgr = 3; // full red
   }
-
-
 }

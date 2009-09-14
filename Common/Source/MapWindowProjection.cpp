@@ -54,8 +54,6 @@ Copyright_License {
 
 MapWindowProjection::MapWindowProjection():
   _origin_centered(false),
-  PanLatitude ( 0.0),
-  PanLongitude ( 0.0),
   DisplayAngle ( 0.0),
   _RequestedMapScale(5),
   MapScale(5),
@@ -65,7 +63,8 @@ MapWindowProjection::MapWindowProjection():
   smart_range_active(1.0),
   DisplayMode(dmCruise)
 {
-
+  PanLocation.Latitude = 0.0;
+  PanLocation.Longitude = 0.0;
 }
 
 
@@ -101,25 +100,23 @@ bool MapWindowProjection::PointInRect(const double &x,
 
 
 bool 
-MapWindowProjection::LonLatVisible(const double &lon,
-				   const double &lat) const
+MapWindowProjection::LonLatVisible(const GEOPOINT &loc) const
 {
-  if ((lon> screenbounds_latlon.minx) &&
-      (lon< screenbounds_latlon.maxx) &&
-      (lat> screenbounds_latlon.miny) &&
-      (lat< screenbounds_latlon.maxy))
+  if ((loc.Longitude> screenbounds_latlon.minx) &&
+      (loc.Longitude< screenbounds_latlon.maxx) &&
+      (loc.Latitude> screenbounds_latlon.miny) &&
+      (loc.Latitude< screenbounds_latlon.maxy))
     return true;
   else
     return false;
 }
 
 bool 
-MapWindowProjection::LonLat2ScreenIfVisible(const double &lon, 
-					    const double &lat,
+MapWindowProjection::LonLat2ScreenIfVisible(const GEOPOINT &loc, 
 					    POINT *sc) const
 {
-  if (LonLatVisible(lon, lat)) {
-    LonLat2Screen(lon, lat, *sc);
+  if (LonLatVisible(loc)) {
+    LonLat2Screen(loc, *sc);
     return PointVisible(*sc);
   } else {
     return false;
@@ -152,12 +149,10 @@ MapWindowProjection::CalculateScreenBounds(double scale) const
 
   if (scale>= 1.0) {
     POINT screen_center;
-    LonLat2Screen(PanLongitude,
-                  PanLatitude,
-                  screen_center);
+    LonLat2Screen(PanLocation,screen_center);
 
-    sb.minx = sb.maxx = PanLongitude;
-    sb.miny = sb.maxy = PanLatitude;
+    sb.minx = sb.maxx = PanLocation.Longitude;
+    sb.miny = sb.maxy = PanLocation.Latitude;
 
     int dx, dy;
     unsigned int maxsc=0;
@@ -177,46 +172,45 @@ MapWindowProjection::CalculateScreenBounds(double scale) const
     for (int i=0; i<10; i++) {
       double ang = i*360.0/10;
       POINT p;
-      double X, Y;
+      GEOPOINT g;
       p.x = screen_center.x + iround(fastcosine(ang)*maxsc*scale);
       p.y = screen_center.y + iround(fastsine(ang)*maxsc*scale);
-      Screen2LonLat(p.x, p.y, X, Y);
-      sb.minx = min(X, sb.minx);
-      sb.miny = min(Y, sb.miny);
-      sb.maxx = max(X, sb.maxx);
-      sb.maxy = max(Y, sb.maxy);
+      Screen2LonLat(p.x, p.y, g);
+      sb.minx = min(g.Longitude, sb.minx);
+      sb.miny = min(g.Latitude, sb.miny);
+      sb.maxx = max(g.Longitude, sb.maxx);
+      sb.maxy = max(g.Latitude, sb.maxy);
     }
 
   } else {
 
     double xmin, xmax, ymin, ymax;
     int x, y;
-    double X, Y;
+    GEOPOINT g;
 
     x = MapRect.left;
     y = MapRect.top;
-    Screen2LonLat(x, y, X, Y);
-    xmin = X; xmax = X;
-    ymin = Y; ymax = Y;
+    Screen2LonLat(x, y, g);
+    xmin = g.Longitude; xmax = g.Longitude;
+    ymin = g.Latitude; ymax = g.Latitude;
 
     x = MapRect.right;
     y = MapRect.top;
-    Screen2LonLat(x, y, X, Y);
-    xmin = min(xmin, X); xmax = max(xmax, X);
-    ymin = min(ymin, Y); ymax = max(ymax, Y);
+    Screen2LonLat(x, y, g);
+    xmin = min(xmin, g.Longitude); xmax = max(xmax, g.Longitude);
+    ymin = min(ymin, g.Latitude); ymax = max(ymax, g.Latitude);
 
     x = MapRect.right;
     y = MapRect.bottom;
-    Screen2LonLat(x, y, X, Y);
-    xmin = min(xmin, X); xmax = max(xmax, X);
-    ymin = min(ymin, Y); ymax = max(ymax, Y);
+    Screen2LonLat(x, y, g);
+    xmin = min(xmin, g.Longitude); xmax = max(xmax, g.Longitude);
+    ymin = min(ymin, g.Latitude); ymax = max(ymax, g.Latitude);
 
     x = MapRect.left;
     y = MapRect.bottom;
-    Screen2LonLat(x, y, X, Y);
-    xmin = min(xmin, X); xmax = max(xmax, X);
-    ymin = min(ymin, Y); ymax = max(ymax, Y);
-
+    Screen2LonLat(x, y, g);
+    xmin = min(xmin, g.Longitude); xmax = max(xmax, g.Longitude);
+    ymin = min(ymin, g.Latitude); ymax = max(ymax, g.Latitude);
 
     sb.minx = xmin;
     sb.maxx = xmax;
@@ -234,21 +228,20 @@ MapWindowProjection::CalculateScreenBounds(double scale) const
 
 void MapWindowProjection::Screen2LonLat(const int &x,
 					const int &y,
-					double &X, double &Y) const
+					GEOPOINT &g) const
 {
   int sx = x-(int)Orig_Screen.x;
   int sy = y-(int)Orig_Screen.y;
   irotate(sx, sy, DisplayAngle);
-  Y= PanLatitude  - sy*InvDrawScale;
-  X= PanLongitude + sx*invfastcosine(Y)*InvDrawScale;
+  g.Latitude= PanLocation.Latitude  - sy*InvDrawScale;
+  g.Longitude= PanLocation.Longitude + sx*invfastcosine(g.Latitude)*InvDrawScale;
 }
 
-void MapWindowProjection::LonLat2Screen(const double &lon,
-					const double &lat,
+void MapWindowProjection::LonLat2Screen(const GEOPOINT &g,
 					POINT &sc) const
 {
-  int Y = Real2Int((PanLatitude-lat)*DrawScale);
-  int X = Real2Int((PanLongitude-lon)*fastcosine(lat)*DrawScale);
+  int Y = Real2Int((PanLocation.Latitude-g.Latitude)*DrawScale);
+  int X = Real2Int((PanLocation.Longitude-g.Longitude)*fastcosine(g.Latitude)*DrawScale);
 
   irotate(X, Y, DisplayAngle);
 
@@ -275,8 +268,8 @@ void MapWindowProjection::LonLat2Screen(const pointObj* const ptin,
   const int xxs = Orig_Screen.x*1024-512;
   const int yys = Orig_Screen.y*1024+512;
   const double mDrawScale = DrawScale;
-  const double mPanLongitude = PanLongitude;
-  const double mPanLatitude = PanLatitude;
+  const double mPanLongitude = PanLocation.Longitude;
+  const double mPanLatitude = PanLocation.Latitude;
   pointObj const * p = ptin;
   const pointObj* ptend = ptin+n;
 
@@ -391,8 +384,7 @@ MapWindowProjection::CalculateOrigin
 
   //
   if (settings_map.EnablePan) {
-    PanLongitude = settings_map.PanLongitude;
-    PanLatitude = settings_map.PanLatitude;
+    PanLocation = settings_map.PanLocation;
   } else {
 
     if (IsOriginCentered()
@@ -400,41 +392,33 @@ MapWindowProjection::CalculateOrigin
         && (settings_computer.EnableThermalLocator==2)) {
 
       if (DerivedDrawInfo.ThermalEstimate_R>0) {
-        PanLongitude = DerivedDrawInfo.ThermalEstimate_Longitude;
-        PanLatitude = DerivedDrawInfo.ThermalEstimate_Latitude;
+        PanLocation = DerivedDrawInfo.ThermalEstimate_Location;
         // TODO enhancement: only pan if distance of center to
         // aircraft is smaller than one third screen width
 
         POINT screen;
-        LonLat2Screen(PanLongitude,
-                      PanLatitude,
-                      screen);
+        LonLat2Screen(PanLocation, screen);
 
-        LonLat2Screen(DrawInfo.Longitude,
-                      DrawInfo.Latitude,
-                      Orig_Aircraft);
+        LonLat2Screen(DrawInfo.Location, Orig_Aircraft);
 
         if ((fabs((double)Orig_Aircraft.x-screen.x)<(rc.right-rc.left)/3)
             && (fabs((double)Orig_Aircraft.y-screen.y)<(rc.bottom-rc.top)/3)) {
 
         } else {
           // out of bounds, center on aircraft
-          PanLongitude = DrawInfo.Longitude;
-          PanLatitude = DrawInfo.Latitude;
+          PanLocation = DrawInfo.Location;
         }
       } else {
-        PanLongitude = DrawInfo.Longitude;
-        PanLatitude = DrawInfo.Latitude;
+        // out of bounds, center on aircraft
+        PanLocation = DrawInfo.Location;
       }
     } else {
       // Pan is off
-      PanLongitude = DrawInfo.Longitude;
-      PanLatitude = DrawInfo.Latitude;
+      PanLocation = DrawInfo.Location;
     }
   }
 
-  LonLat2Screen(DrawInfo.Longitude,
-                DrawInfo.Latitude,
+  LonLat2Screen(DrawInfo.Location,
                 Orig_Aircraft);
 
   screenbounds_latlon = CalculateScreenBounds(0.0);
@@ -647,8 +631,8 @@ void MapWindowProjection::ExchangeBlackboard(const NMEA_INFO &nmea_info,
 #include "Screen/Graphics.hpp"
 
 void MapWindowProjection::DrawGreatCircle(Canvas &canvas,
-					  double startLon, double startLat,
-					  double targetLon, double targetLat) {
+					  const GEOPOINT &loc_start, 
+                                          const GEOPOINT &loc_end) {
 
 #ifdef OLD_GREAT_CIRCLE
   // TODO accuracy: this is actually wrong, it should recalculate the
@@ -657,10 +641,8 @@ void MapWindowProjection::DrawGreatCircle(Canvas &canvas,
   double distanceTotal=0;
   double Bearing;
 
-  DistanceBearing(startLat,
-                  startLon,
-                  targetLat,
-                  targetLon,
+  DistanceBearing(loc_start,
+                  loc_end,
                   &distanceTotal,
                   &Bearing);
 
@@ -676,11 +658,9 @@ void MapWindowProjection::DrawGreatCircle(Canvas &canvas,
 
   POINT StartP;
   POINT EndP;
-  LonLat2Screen(startLon,
-		startLat,
+  LonLat2Screen(loc_start,
 		StartP);
-  LonLat2Screen(targetLon,
-		targetLat,
+  LonLat2Screen(loc_end,
 		EndP);
 
   if (d_distance>distanceTotal) {
@@ -689,24 +669,18 @@ void MapWindowProjection::DrawGreatCircle(Canvas &canvas,
 
     for (int i=0; i<= 10; i++) {
 
-      double tlat1, tlon1;
+      GEOPOINT t_loc;
 
-      FindLatitudeLongitude(startLat,
-                            startLon,
+      FindLatitudeLongitude(loc_start,
                             Bearing,
                             min(distance,d_distance),
-                            &tlat1,
-                            &tlon1);
+                            &t_loc);
 
-      DistanceBearing(tlat1,
-                      tlon1,
-                      targetLat,
-                      targetLon,
+      DistanceBearing(t_loc, loc_end,
                       &distance,
                       &Bearing);
 
-      LonLat2Screen(tlon1,
-                    tlat1,
+      LonLat2Screen(t_loc,
                     EndP);
 
       canvas.line(StartP, EndP);
@@ -724,12 +698,8 @@ void MapWindowProjection::DrawGreatCircle(Canvas &canvas,
 
   canvas.select(MapGfx.hpBearing);
   POINT pt[2];
-  LonLat2Screen(startLon,
-                startLat,
-                pt[0]);
-  LonLat2Screen(targetLon,
-                targetLat,
-                pt[1]);
+  LonLat2Screen(loc_start, pt[0]);
+  LonLat2Screen(loc_end, pt[1]);
   canvas.polyline(pt, 2);
 
 #endif

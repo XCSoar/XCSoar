@@ -491,41 +491,32 @@ CalculateAATTaskSectors(const NMEA_INFO &gps_info)
   if(AATEnabled == FALSE)
     return;
 
-  double latitude = gps_info.Latitude;
-  double longitude = gps_info.Longitude;
-
   mutexTaskData.Lock();
 
   task_stats[0].AATTargetOffsetRadius = 0.0;
   task_stats[0].AATTargetOffsetRadial = 0.0;
   if (task_points[0].Index>=0) {
-    task_stats[0].AATTargetLat = WayPointList[task_points[0].Index].Latitude;
-    task_stats[0].AATTargetLon = WayPointList[task_points[0].Index].Longitude;
+    task_stats[0].AATTargetLocation = WayPointList[task_points[0].Index].Location;
   }
 
   for(i=1;i<MAXTASKPOINTS;i++) {
     if(ValidTaskPoint(i)) {
       if (!ValidTaskPoint(i+1)) {
         // This must be the final waypoint, so it's not an AAT OZ
-        task_stats[i].AATTargetLat = WayPointList[task_points[i].Index].Latitude;
-        task_stats[i].AATTargetLon = WayPointList[task_points[i].Index].Longitude;
+        task_stats[i].AATTargetLocation = WayPointList[task_points[i].Index].Location;
         continue;
       }
 
       if(task_points[i].AATType == SECTOR) {
-        FindLatitudeLongitude (WayPointList[task_points[i].Index].Latitude,
-                                 WayPointList[task_points[i].Index].Longitude,
-                               task_points[i].AATStartRadial ,
-                               task_points[i].AATSectorRadius ,
-                               &task_points[i].AATStartLat,
-                               &task_points[i].AATStartLon);
+        FindLatitudeLongitude (WayPointList[task_points[i].Index].Location,
+                               task_points[i].AATStartRadial,
+                               task_points[i].AATSectorRadius,
+                               &task_points[i].AATStart);
 
-        FindLatitudeLongitude (WayPointList[task_points[i].Index].Latitude,
-                               WayPointList[task_points[i].Index].Longitude,
+        FindLatitudeLongitude (WayPointList[task_points[i].Index].Location,
                                task_points[i].AATFinishRadial ,
                                task_points[i].AATSectorRadius,
-                               &task_points[i].AATFinishLat,
-                               &task_points[i].AATFinishLon);
+                               &task_points[i].AATFinish);
       }
 
       // JMWAAT: if locked, don't move it
@@ -586,7 +577,7 @@ CalculateAATTaskSectors(const NMEA_INFO &gps_info)
       // go from current aircraft position to projection of target
       // out to the edge of the sector
 
-      if (InAATTurnSector(longitude, latitude, i) && (awp==i) &&
+      if (InAATTurnSector(gps_info.Location, i) && (awp==i) &&
           !task_stats[i].AATTargetLocked) {
 
         // special case, currently in AAT sector/cylinder
@@ -596,27 +587,23 @@ CalculateAATTaskSectors(const NMEA_INFO &gps_info)
         double bearing;
 
         // find bearing from last target through current aircraft position with offset
-        DistanceBearing(task_stats[i-1].AATTargetLat,
-                        task_stats[i-1].AATTargetLon,
-                        latitude,
-                        longitude,
+        DistanceBearing(task_stats[i-1].AATTargetLocation,
+                        gps_info.Location,
                         &qdist, &bearing);
 
         bearing = AngleLimit360(bearing+task_stats[i].AATTargetOffsetRadial);
 
         dist = ((task_stats[i].AATTargetOffsetRadius+1)/2.0)*
-          FindInsideAATSectorDistance(latitude, longitude, i, bearing);
+          FindInsideAATSectorDistance(gps_info.Location, i, bearing);
 
         // if (dist+qdist>aatdistance.LegDistanceAchieved(awp)) {
         // JMW: don't prevent target from being closer to the aircraft
         // than the best achieved, so can properly plan arrival time
 
-        FindLatitudeLongitude (latitude,
-                               longitude,
+        FindLatitudeLongitude (gps_info.Location,
                                bearing,
                                dist,
-                               &task_stats[i].AATTargetLat,
-                               &task_stats[i].AATTargetLon);
+                               &task_stats[i].AATTargetLocation);
 
         TargetModified = true;
 
@@ -624,12 +611,10 @@ CalculateAATTaskSectors(const NMEA_INFO &gps_info)
 
       } else {
 
-        FindLatitudeLongitude (WayPointList[task_points[i].Index].Latitude,
-                               WayPointList[task_points[i].Index].Longitude,
+        FindLatitudeLongitude (WayPointList[task_points[i].Index].Location,
                                targetbearing,
                                targetrange,
-                               &task_stats[i].AATTargetLat,
-                               &task_stats[i].AATTargetLon);
+                               &task_stats[i].AATTargetLocation);
         TargetModified = true;
 
       }
@@ -700,51 +685,10 @@ bool ValidTaskPoint(const int i) {
 }
 
 
-double FindInsideAATSectorDistance_old(double latitude,
-                                       double longitude,
-                                       int taskwaypoint,
-                                       double course_bearing,
-                                       double p_found) {
-  bool t_in_sector;
-  double delta;
-  double max_distance;
-  if(task_points[taskwaypoint].AATType == SECTOR) {
-    max_distance = task_points[taskwaypoint].AATSectorRadius*2;
-  } else {
-    max_distance = task_points[taskwaypoint].AATCircleRadius*2;
-  }
-  delta = max(250.0, max_distance/40.0);
-
-  double t_distance = p_found;
-  double t_distance_inside;
-
-  do {
-    double t_lat, t_lon;
-    t_distance_inside = t_distance;
-    t_distance += delta;
-
-    FindLatitudeLongitude(latitude, longitude,
-                          course_bearing, t_distance,
-                          &t_lat,
-                          &t_lon);
-
-    t_in_sector = InAATTurnSector(t_lon,
-                                  t_lat,
-                                  taskwaypoint);
-
-  } while (t_in_sector);
-
-  return t_distance_inside;
-}
-
-/////////////////
-
-
-double FindInsideAATSectorDistance(double latitude,
-                                   double longitude,
-                                   int taskwaypoint,
-                                   double course_bearing,
-                                   double p_found) {
+double FindInsideAATSectorDistance(const GEOPOINT &location,
+                                   const int taskwaypoint,
+                                   const double course_bearing,
+                                   const double p_found) {
 
   double max_distance;
   if(task_points[taskwaypoint].AATType == SECTOR) {
@@ -761,12 +705,12 @@ double FindInsideAATSectorDistance(double latitude,
   int steps = 0;
   do {
 
-    double t_lat, t_lon;
-    FindLatitudeLongitude(latitude, longitude,
+    GEOPOINT t_loc;
+    FindLatitudeLongitude(location,
                           course_bearing, t_distance,
-                          &t_lat, &t_lon);
+                          &t_loc);
 
-    if (InAATTurnSector(t_lon, t_lat, taskwaypoint)) {
+    if (InAATTurnSector(t_loc, taskwaypoint)) {
       t_distance_lower = t_distance;
       // ok, can go further
       t_distance += delta;
@@ -780,13 +724,12 @@ double FindInsideAATSectorDistance(double latitude,
 }
 
 
-double FindInsideAATSectorRange(double latitude,
-                                double longitude,
-                                int taskwaypoint,
-                                double course_bearing,
-                                double p_found) {
+double FindInsideAATSectorRange(const GEOPOINT &location,
+                                const int taskwaypoint,
+                                const double course_bearing,
+                                const double p_found) {
 
-  double t_distance = FindInsideAATSectorDistance(latitude, longitude, taskwaypoint,
+  double t_distance = FindInsideAATSectorDistance(location, taskwaypoint,
                                                   course_bearing, p_found);
   return (p_found /
           max(1,t_distance))*2-1;
@@ -795,51 +738,19 @@ double FindInsideAATSectorRange(double latitude,
 
 /////////////////
 
-double DoubleLegDistance(int taskwaypoint,
-                         double longitude,
-                         double latitude) {
-
-#if 0
-  double d0;
-  double d1;
+double DoubleLegDistance(const int taskwaypoint,
+                         const GEOPOINT &location) {
   if (taskwaypoint>0) {
-    DistanceBearing(task_stats[taskwaypoint-1].AATTargetLat,
-                    task_stats[taskwaypoint-1].AATTargetLon,
-                    latitude,
-                    longitude,
-                    &d0, NULL);
-  } else {
-    d0 = 0;
-  }
-
-  DistanceBearing(latitude,
-                  longitude,
-                  task_stats[taskwaypoint+1].AATTargetLat,
-                  task_stats[taskwaypoint+1].AATTargetLon,
-                  &d1, NULL);
-  return d0 + d1;
-
-#else
-
-  if (taskwaypoint>0) {
-    return DoubleDistance(task_stats[taskwaypoint-1].AATTargetLat,
-			  task_stats[taskwaypoint-1].AATTargetLon,
-			  latitude,
-			  longitude,
-			  task_stats[taskwaypoint+1].AATTargetLat,
-			  task_stats[taskwaypoint+1].AATTargetLon);
+    return DoubleDistance(task_stats[taskwaypoint-1].AATTargetLocation,
+			  location,
+			  task_stats[taskwaypoint+1].AATTargetLocation);
   } else {
     double d1;
-    DistanceBearing(latitude,
-		    longitude,
-		    task_stats[taskwaypoint+1].AATTargetLat,
-		    task_stats[taskwaypoint+1].AATTargetLon,
+    DistanceBearing(location,
+		    task_stats[taskwaypoint+1].AATTargetLocation,
 		    &d1, NULL);
     return d1;
   }
-
-
-#endif
 }
 
 //////////////////////////////////////////////////////
@@ -971,7 +882,7 @@ bool IsFinalWaypoint(void) {
 }
 
 
-bool InAATTurnSector(const double longitude, const double latitude,
+bool InAATTurnSector(const GEOPOINT &location,
                     const int the_turnpoint)
 {
   double AircraftBearing;
@@ -983,11 +894,8 @@ bool InAATTurnSector(const double longitude, const double latitude,
 
   double distance;
   mutexTaskData.Lock();
-  DistanceBearing(WayPointList[task_points[the_turnpoint].Index].Latitude,
-                  WayPointList[task_points[the_turnpoint].Index].Longitude,
-                  latitude,
-                  longitude,
-                  &distance, &AircraftBearing);
+  DistanceBearing(WayPointList[task_points[the_turnpoint].Index].Location,
+                  location, &distance, &AircraftBearing);
 
   if(task_points[the_turnpoint].AATType ==  CIRCLE) {
     if(distance < task_points[the_turnpoint].AATCircleRadius) {

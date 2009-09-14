@@ -83,19 +83,19 @@ Marks::~Marks() {
 
 #include "Interface.hpp"
 
-void Marks::MarkLocation(const double lon, const double lat)
+void Marks::MarkLocation(const GEOPOINT &loc)
 {
   ScopeLock protect(*GetMutex());
 
   if (XCSoarInterface::SettingsComputer().EnableSoundModes) {
     PlayResource(TEXT("IDR_WAV_CLEAR"));
   }
-  topo_marks.addPoint(lon, lat);
+  topo_marks.addPoint(loc.Longitude, loc.Latitude);
   topo_marks.triggerUpdateCache = true;
 
   char message[160];
 
-  sprintf(message,"Lon:%f Lat:%f\r\n", lon, lat);
+  sprintf(message,"Lon:%f Lat:%f\r\n", loc.Longitude, loc.Latitude);
 
   FILE *stream;
   TCHAR fname[MAX_PATH];

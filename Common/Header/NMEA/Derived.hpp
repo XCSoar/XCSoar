@@ -42,13 +42,14 @@ Copyright_License {
 #include <windows.h>
 #include "Screen/shapelib/mapshape.h"
 
+#include "GeoPoint.hpp"
+
 #define NUMTHERMALBUCKETS 10
 #define MAX_THERMAL_SOURCES 20
 
 struct THERMAL_SOURCE_INFO
 {
-  double Latitude;
-  double Longitude;
+  GEOPOINT Location;
   double GroundHeight;
   double LiftRate;
   double Time;
@@ -70,12 +71,10 @@ struct DERIVED_INFO
   double LastThermalAverage;
   double LastThermalGain;
   double LastThermalTime;
-  double ClimbStartLat;
-  double ClimbStartLong;
+  GEOPOINT ClimbStartLocation;
   double ClimbStartAlt;
   double ClimbStartTime;
-  double CruiseStartLat;
-  double CruiseStartLong;
+  GEOPOINT CruiseStartLocation;
   double CruiseStartAlt;
   double CruiseStartTime;
   double WindSpeed;
@@ -114,8 +113,7 @@ struct DERIVED_INFO
   double LegTimeToGo;
   double LegStartTime;
   double LegSpeed;
-  double NextLatitude;
-  double NextLongitude;
+  GEOPOINT NextLocation;
   double NextAltitude;
   double NextAltitudeAGL;
   double AATMaxDistance;
@@ -127,8 +125,7 @@ struct DERIVED_INFO
   double AATMinSpeed;
   double PercentCircling;
 
-  double TerrainWarningLongitude;
-  double TerrainWarningLatitude;
+  GEOPOINT TerrainWarningLocation;
 
   // JMW moved calculated waypoint info here
 
@@ -160,8 +157,7 @@ struct DERIVED_INFO
   double SmoothedTurnRate;
 
   double TurnStartTime;
-  double TurnStartLongitude;
-  double TurnStartLatitude;
+  GEOPOINT TurnStartLocation;
   double TurnStartAltitude;
   double TurnStartEnergyHeight;
   int TurnMode;
@@ -187,8 +183,7 @@ struct DERIVED_INFO
 
   double LDvario;
 
-  double ThermalEstimate_Longitude;
-  double ThermalEstimate_Latitude;
+  GEOPOINT ThermalEstimate_Location;
   double ThermalEstimate_W;
   double ThermalEstimate_R;
 
@@ -199,8 +194,7 @@ struct DERIVED_INFO
   TCHAR OwnTeamCode[10];
   double TeammateBearing;
   double TeammateRange;
-  double TeammateLatitude;
-  double TeammateLongitude;
+  GEOPOINT TeammateLocation;
   TCHAR  TeammateCode[10]; // auto-detected, see also in settings computer.h
   bool   TeammateCodeValid;
 

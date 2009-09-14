@@ -38,6 +38,7 @@ Copyright_License {
 #ifndef XCSOAR_NMEA_INFO_H
 #define XCSOAR_NMEA_INFO_H
 
+#include "GeoPoint.hpp"
 #include "FLARM/Traffic.h"
 #include "Sizes.h"
 
@@ -62,8 +63,7 @@ struct SWITCH_INFO
 struct NMEA_INFO
 {
   unsigned Connected;
-  double Latitude;
-  double Longitude;
+  GEOPOINT Location;
   double TrackBearing;
   double Speed;
   double Altitude;

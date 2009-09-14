@@ -127,8 +127,7 @@ void SettingsLeave() {
       }
 
       //
-      terrain.ServiceFullReload(XCSoarInterface::Basic().Latitude,
-				XCSoarInterface::Basic().Longitude);
+      terrain.ServiceFullReload(XCSoarInterface::Basic().Location);
     }
 
   if (TOPOLOGYFILECHANGED)

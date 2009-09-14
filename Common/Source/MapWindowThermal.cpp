@@ -61,15 +61,13 @@ void MapWindow::CalculateScreenPositionsThermalSources() {
       }
       
       double t = -dh/Calculated().ThermalSources[i].LiftRate;
-      double lat, lon;
-      FindLatitudeLongitude(Calculated().ThermalSources[i].Latitude,
-                            Calculated().ThermalSources[i].Longitude,
+      GEOPOINT loc;
+      FindLatitudeLongitude(Calculated().ThermalSources[i].Location,
                             Calculated().WindBearing,
                             Calculated().WindSpeed*t,
-                            &lat, &lon);
+                            &loc);
       ThermalSources[i].Visible = 
-	LonLat2ScreenIfVisible(lon,lat,
-			       &ThermalSources[i].Screen);
+	LonLat2ScreenIfVisible(loc, &ThermalSources[i].Screen);
     } else {
       ThermalSources[i].Visible = false;
     }
@@ -86,8 +84,7 @@ MapWindow::DrawThermalEstimate(Canvas &canvas)
   if (DisplayMode == dmCircling) {
     if (Calculated().ThermalEstimate_R>0) {
       draw_masked_bitmap_if_visible(canvas, MapGfx.hBmpThermalSource,
-				    Calculated().ThermalEstimate_Longitude,
-				    Calculated().ThermalEstimate_Latitude,
+				    Calculated().ThermalEstimate_Location,
 				    10, 10);
     }
   } else if (GetMapScaleKM() <= 4) {

@@ -178,7 +178,7 @@ static void EWMicroRecorderWriteWayPoint(PDeviceDescriptor_t d,
   TCHAR NoS, EoW;
 
   // prepare latitude
-  tmp = wp->Latitude;
+  tmp = wp->Location.Latitude;
   NoS = _T('N');
   if (tmp < 0)
     {
@@ -190,7 +190,7 @@ static void EWMicroRecorderWriteWayPoint(PDeviceDescriptor_t d,
   MinLat = (tmp - DegLat) * 60 * 1000;
 
   // prepare long
-  tmp = wp->Longitude;
+  tmp = wp->Location.Longitude;
   EoW = _T('E');
   if (tmp < 0)
     {

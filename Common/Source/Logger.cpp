@@ -256,8 +256,8 @@ LogPointToBuffer(const NMEA_INFO &gps_info)
     NumLoggerBuffered++;
   }
 
-  LoggerBuffer[NumLoggerBuffered-1].Latitude = gps_info.Latitude;
-  LoggerBuffer[NumLoggerBuffered-1].Longitude = gps_info.Longitude;
+  LoggerBuffer[NumLoggerBuffered-1].Latitude = gps_info.Location.Latitude;
+  LoggerBuffer[NumLoggerBuffered-1].Longitude = gps_info.Location.Longitude;
   LoggerBuffer[NumLoggerBuffered-1].Altitude = gps_info.Altitude;
   LoggerBuffer[NumLoggerBuffered-1].BaroAltitude = gps_info.BaroAltitude;
   if (!gps_info.BaroAltitudeAvailable) {
@@ -290,8 +290,8 @@ void LogPointToFile(const NMEA_INFO& gps_info)
 
   if ((gps_info.Altitude<0) || (gps_info.BaroAltitude<0)) return;
 
-  DegLat = (int)gps_info.Latitude;
-  MinLat = gps_info.Latitude - DegLat;
+  DegLat = (int)gps_info.Location.Latitude;
+  MinLat = gps_info.Location.Latitude - DegLat;
   NoS = 'N';
   if((MinLat<0) || ((MinLat-DegLat==0) && (DegLat<0)))
     {
@@ -301,8 +301,8 @@ void LogPointToFile(const NMEA_INFO& gps_info)
   MinLat *= 60;
   MinLat *= 1000;
 
-  DegLon = (int)gps_info.Longitude ;
-  MinLon = gps_info.Longitude  - DegLon;
+  DegLon = (int)gps_info.Location.Longitude ;
+  MinLon = gps_info.Location.Longitude  - DegLon;
   EoW = 'E';
   if((MinLon<0) || ((MinLon-DegLon==0) && (DegLon<0)))
     {
@@ -336,8 +336,8 @@ void LogPoint(const NMEA_INFO& gps_info) {
 
     for (int i=0; i<NumLoggerBuffered; i++) {
       NMEA_INFO tmp_info;
-      tmp_info.Latitude = LoggerBuffer[i].Latitude;
-      tmp_info.Longitude = LoggerBuffer[i].Longitude;
+      tmp_info.Location.Latitude = LoggerBuffer[i].Latitude;
+      tmp_info.Location.Longitude = LoggerBuffer[i].Longitude;
       tmp_info.Altitude = LoggerBuffer[i].Altitude;
       tmp_info.BaroAltitude = LoggerBuffer[i].BaroAltitude;
       tmp_info.Hour = LoggerBuffer[i].Hour;
@@ -1030,8 +1030,8 @@ void guiStartLogger(const NMEA_INFO& gps_info,
 	      if(task_points[i].Index == -1) {
 		break;
 	      }
-	      AddDeclaration(WayPointList[task_points[i].Index].Latitude,
-			     WayPointList[task_points[i].Index].Longitude,
+	      AddDeclaration(WayPointList[task_points[i].Index].Location.Latitude,
+			     WayPointList[task_points[i].Index].Location.Longitude,
 			     WayPointList[task_points[i].Index].Name );
 	    }
 	  EndDeclaration();

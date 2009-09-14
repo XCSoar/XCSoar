@@ -40,6 +40,7 @@ Copyright_License {
 
 #include "RasterMap.h"
 #include "Protection.hpp"
+#include "GeoPoint.hpp"
 
 class RasterWeather: public MapDataClient {
 public:
@@ -61,13 +62,13 @@ public:
   void Close();
 
   void ValueToText(TCHAR* Buffer, short val);
-  void SetViewCenter(double lat, double lon);
+  void SetViewCenter(const GEOPOINT &location);
   void ItemLabel(int i, TCHAR* Buffer);
   RasterMap* GetMap();
   unsigned GetParameter();
   void SetParameter(unsigned i);
-  void Reload(double lat, double lon);
-  void ScanAll(double lat, double lon);
+  void Reload(const GEOPOINT &location);
+  void ScanAll(const GEOPOINT &location);
   bool isWeatherAvailable(unsigned t);
   unsigned GetTime();
   void SetTime(unsigned i);
@@ -78,7 +79,7 @@ public:
   RasterMap* weather_map[MAX_WEATHER_MAP];
   void RASP_filename(char* rasp_filename, const TCHAR* name);
   bool LoadItem(int item, const TCHAR* name);
-  void ServiceFullReload(double lat, double lon);
+  void ServiceFullReload(const GEOPOINT &location);
   bool weather_available[MAX_WEATHER_TIMES];
  private:
   bool bsratio;

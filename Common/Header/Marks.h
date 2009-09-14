@@ -40,6 +40,7 @@ Copyright_License {
 
 #include "Protection.hpp"
 #include "Topology.h"
+#include "GeoPoint.hpp"
 
 class Canvas;
 class MapWindow;
@@ -52,7 +53,7 @@ class Marks: public MapDataClient {
   void Initialise();
   void Close();
   void Draw(Canvas &canvas, MapWindow &m_window, const RECT rc);
-  void MarkLocation(const double lon, const double lat);
+  void MarkLocation(const GEOPOINT &loc);
   TopologyWriter* GetTopology() {
     return &topo_marks;
   }

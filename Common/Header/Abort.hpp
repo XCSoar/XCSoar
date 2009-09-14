@@ -38,7 +38,9 @@ Copyright_License {
 #ifndef XCSOAR_CALCULATIONS_ABORT_HPP
 #define XCSOAR_CALCULATIONS_ABORT_HPP
 
+#include "GeoPoint.hpp"
+
 void
-LatLon2Flat(double lon, double lat, int *scx, int *scy);
+LatLon2Flat(const GEOPOINT &location, int *scx, int *scy);
 
 #endif

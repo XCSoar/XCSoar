@@ -84,13 +84,13 @@ void ThermalLocator::Reset() {
 }
 
 
-void ThermalLocator::AddPoint(double t, 
-			      double longitude, 
-			      double latitude, double w) {
+void ThermalLocator::AddPoint(const double t, 
+			      const GEOPOINT &location,
+                              const double w) {
   ScopeLock protect(mutexThermalLocator);
 
-  points[nindex].longitude = longitude;
-  points[nindex].latitude = latitude;
+  points[nindex].longitude = location.Longitude;
+  points[nindex].latitude = location.Latitude;
   points[nindex].t = t;
   points[nindex].w = w;
   points[nindex].iw = iround(max(w,-0.1)*10);
@@ -107,8 +107,8 @@ void ThermalLocator::AddPoint(double t,
     initialised = true;
 
     // set initial estimate
-    est_longitude = longitude;
-    est_latitude = latitude;
+    est_longitude = location.Longitude;
+    est_latitude = location.Latitude;
     est_r = 0;
     est_w = 0;
     est_t = t;
@@ -116,12 +116,12 @@ void ThermalLocator::AddPoint(double t,
 
 }
 
-void ThermalLocator::Update(double t_0,
-			    double longitude_0, double latitude_0,
-			    double wind_speed, double wind_bearing,
-			    double trackbearing,
-			    double *Thermal_Longitude,
-			    double *Thermal_Latitude,
+void ThermalLocator::Update(const double t_0,
+			    const GEOPOINT &location_0,
+			    const double wind_speed, 
+                            const double wind_bearing,
+			    const double trackbearing,
+			    GEOPOINT *Thermal_Location,
 			    double *Thermal_W,
 			    double *Thermal_R) {
 
@@ -133,49 +133,47 @@ void ThermalLocator::Update(double t_0,
     return; // nothing to do.
   }
 
-  double dlat1, dlon1;
+  GEOPOINT dloc;
 
-  FindLatitudeLongitude(latitude_0,
-                        longitude_0,
+  FindLatitudeLongitude(location_0,
                         wind_bearing,
-                        wind_speed, &dlat1, &dlon1);
+                        wind_speed, &dloc);
 
-  double traildrift_lat = (latitude_0-dlat1);
-  double traildrift_lon = (longitude_0-dlon1);
+  double traildrift_lat = (location_0.Latitude-dloc.Latitude);
+  double traildrift_lon = (location_0.Longitude-dloc.Longitude);
 
   // drift estimate from previous time step
   double dt = t_0-est_t;
   est_longitude += traildrift_lon*dt;
   est_latitude += traildrift_lat*dt;
-  est_x = (est_longitude-longitude_0)*fastcosine(latitude_0);
-  est_y = (est_latitude-latitude_0);
+  est_x = (est_longitude-location_0.Longitude)*fastcosine(location_0.Latitude);
+  est_y = (est_latitude-location_0.Latitude);
 
-  double Thermal_Longitude0;
-  double Thermal_Latitude0;
+  GEOPOINT Thermal_Location0;
   double Thermal_W0;
   double Thermal_R0;
 
-  Update_Internal(t_0, longitude_0, latitude_0,
+  Update_Internal(t_0, location_0.Longitude, location_0.Latitude,
                   traildrift_lon, traildrift_lat,
                   trackbearing, 1.0,
-                  Thermal_Longitude,
-                  Thermal_Latitude,
+                  &(Thermal_Location->Longitude),
+                  &(Thermal_Location->Latitude),
                   Thermal_W,
                   Thermal_R);
 
-  Update_Internal(t_0, longitude_0, latitude_0,
+  Update_Internal(t_0, location_0.Longitude, location_0.Latitude,
                   traildrift_lon, traildrift_lat,
                   trackbearing, 2.0,
-                  &Thermal_Longitude0,
-                  &Thermal_Latitude0,
+                  &Thermal_Location0.Longitude,
+                  &Thermal_Location0.Latitude,
                   &Thermal_W0,
                   &Thermal_R0);
 
   if ((Thermal_W0>0)&&(*Thermal_W>0)) {
 
     double d;
-    DistanceBearing(*Thermal_Latitude, *Thermal_Longitude,
-                    Thermal_Latitude0, Thermal_Longitude0,
+    DistanceBearing(*Thermal_Location,
+                    Thermal_Location0, 
                     &d, NULL);
 
     //    if (d>200.0) {
@@ -285,20 +283,18 @@ void ThermalLocator::Drift(double t_0,
 }
 
 
-void ThermalLocator::EstimateThermalBase(double Thermal_Longitude,
-					 double Thermal_Latitude,
-					 double altitude,
-					 double wthermal,
-					 double wind_speed,
-					 double wind_bearing,
-					 double *ground_longitude,
-					 double *ground_latitude,
-					 double *ground_alt) {
+void ThermalLocator::EstimateThermalBase(const GEOPOINT Thermal_Location,
+                                         const double altitude,
+                                         const double wthermal,
+                                         const double wind_speed,
+                                         const double wind_bearing,
+                                         GEOPOINT *ground_location,
+                                         double *ground_alt) {
   ScopeLock protect(mutexThermalLocator);
 
-  if ((Thermal_Longitude == 0.0)||(Thermal_Latitude==0.0)||(wthermal<1.0)) {
-    *ground_longitude = 0.0;
-    *ground_latitude = 0.0;
+  if ((Thermal_Location.Longitude == 0.0)||(Thermal_Location.Latitude==0.0)||(wthermal<1.0)) {
+    ground_location->Longitude = 0.0;
+    ground_location->Latitude = 0.0;
     *ground_alt = -1.0;
     return;
   }
@@ -309,41 +305,38 @@ void ThermalLocator::EstimateThermalBase(double Thermal_Longitude,
 
   terrain.Lock();
 
-  double lat, lon;
-  FindLatitudeLongitude(Thermal_Latitude, Thermal_Longitude,
+  GEOPOINT loc;
+  FindLatitudeLongitude(Thermal_Location, 
                         wind_bearing,
                         wind_speed*dt,
-                        &lat, &lon);
-  double Xrounding = fabs(lon-Thermal_Longitude)/2;
-  double Yrounding = fabs(lat-Thermal_Latitude)/2;
+                        &loc);
+  double Xrounding = fabs(loc.Longitude-Thermal_Location.Longitude)/2;
+  double Yrounding = fabs(loc.Latitude-Thermal_Location.Latitude)/2;
   terrain.SetTerrainRounding(Xrounding, Yrounding);
 
-//  double latlast = lat;
-//  double lonlast = lon;
   double hground;
 
   for (double t = 0; t<=Tmax; t+= dt) {
 
-    FindLatitudeLongitude(Thermal_Latitude, Thermal_Longitude,
+    FindLatitudeLongitude(Thermal_Location, 
                           wind_bearing,
-                          wind_speed*t, &lat, &lon);
+                          wind_speed*t, &loc);
 
     double hthermal = altitude-wthermal*t;
-    hground = terrain.GetTerrainHeight(lat, lon);
+    hground = terrain.GetTerrainHeight(loc);
     double dh = hthermal-hground;
     if (dh<0) {
       t = t+dh/wthermal;
-      FindLatitudeLongitude(Thermal_Latitude, Thermal_Longitude,
+      FindLatitudeLongitude(Thermal_Location,
                             wind_bearing,
-                            wind_speed*t, &lat, &lon);
+                            wind_speed*t, &loc);
       break;
     }
   }
-  hground = terrain.GetTerrainHeight(lat, lon);
+  hground = terrain.GetTerrainHeight(loc);
   terrain.Unlock();
 
-  *ground_longitude = lon;
-  *ground_latitude = lat;
+  *ground_location = loc;
   *ground_alt = hground;
 
 }

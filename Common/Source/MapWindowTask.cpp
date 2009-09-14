@@ -250,16 +250,12 @@ public:
     canvas->select(dash_pen3);
     
     if (AATEnabled && !map_window->SettingsMap().TargetPan) {
-      map_window->LonLat2Screen(task_stats[index0].AATTargetLon,
-		    task_stats[index0].AATTargetLat,
+      map_window->LonLat2Screen(task_stats[index0].AATTargetLocation,
 		    sct1);
-      map_window->LonLat2Screen(task_stats[index1].AATTargetLon,
-		    task_stats[index1].AATTargetLat,
+      map_window->LonLat2Screen(task_stats[index1].AATTargetLocation,
 		    sct2);
-      DistanceBearing(task_stats[index0].AATTargetLat,
-		      task_stats[index0].AATTargetLon,
-		      task_stats[index1].AATTargetLat,
-		      task_stats[index1].AATTargetLon,
+      DistanceBearing(task_stats[index0].AATTargetLocation,
+		      task_stats[index1].AATTargetLocation,
 		      NULL, &bearing);
       
       // draw nominal track line
@@ -422,27 +418,22 @@ void MapWindow::DrawBearing(Canvas &canvas, int bBearingValid)
 
   mutexTaskData.Lock();  // protect from extrnal task changes
 
-  double startLat = Basic().Latitude;
-  double startLon = Basic().Longitude;
-  double targetLat;
-  double targetLon;
+  GEOPOINT start = Basic().Location;
+  GEOPOINT target;
 
   if (AATEnabled && (ActiveTaskPoint>0) && ValidTaskPoint(ActiveTaskPoint+1)) {
-    targetLat = task_stats[ActiveTaskPoint].AATTargetLat;
-    targetLon = task_stats[ActiveTaskPoint].AATTargetLon;
+    target = task_stats[ActiveTaskPoint].AATTargetLocation;
   } else {
-    targetLat = WayPointList[task_points[ActiveTaskPoint].Index].Latitude;
-    targetLon = WayPointList[task_points[ActiveTaskPoint].Index].Longitude;
+    target = WayPointList[task_points[ActiveTaskPoint].Index].Location;
   }
   mutexTaskData.Unlock();
   if (bBearingValid) {
-      DrawGreatCircle(canvas, startLon, startLat,  // RLD skip if bearing invalid
-		      targetLon, targetLat);// RLD bc Lat/Lon invalid
+    DrawGreatCircle(canvas, start, // RLD skip if bearing invalid
+                    target);       // RLD bc Lat/Lon invalid
 
     if (SettingsMap().TargetPan) {
       // Draw all of task if in target pan mode
-      startLat = targetLat;
-      startLon = targetLon;
+      start = target;
 
       ScopeLock scopeLock(mutexTaskData);
 
@@ -450,18 +441,14 @@ void MapWindow::DrawBearing(Canvas &canvas, int bBearingValid)
         if (ValidTaskPoint(i)) {
 
           if (AATEnabled && ValidTaskPoint(i+1)) {
-            targetLat = task_stats[i].AATTargetLat;
-            targetLon = task_stats[i].AATTargetLon;
+            target = task_stats[i].AATTargetLocation;
           } else {
-            targetLat = WayPointList[task_points[i].Index].Latitude;
-            targetLon = WayPointList[task_points[i].Index].Longitude;
+            target = WayPointList[task_points[i].Index].Location;
           }
 
-          DrawGreatCircle(canvas, startLon, startLat,
-                          targetLon, targetLat);
+          DrawGreatCircle(canvas, start, target);
 
-          startLat = targetLat;
-          startLon = targetLon;
+          start = target;
         }
       }
     } // TargetPan
@@ -479,8 +466,7 @@ void MapWindow::DrawBearing(Canvas &canvas, int bBearingValid)
         if ((i== ActiveTaskPoint)
 	    || ((SettingsMap().EnablePan || SettingsMap().TargetPan) && (i>ActiveTaskPoint))) {
 	  draw_masked_bitmap_if_visible(canvas, MapGfx.hBmpTarget, 
-					task_stats[i].AATTargetLon,
-					task_stats[i].AATTargetLat, 
+					task_stats[i].AATTargetLocation,
 					10, 10);
         }
       }
@@ -516,18 +502,14 @@ MapWindow::DrawOffTrackIndicator(Canvas &canvas)
 
   mutexTaskData.Lock();  // protect from extrnal task changes
 
-  double startLat = Basic().Latitude;
-  double startLon = Basic().Longitude;
-  double targetLat;
-  double targetLon;
-  double dLat, dLon;
+  GEOPOINT start = Basic().Location;
+  GEOPOINT target;
+  GEOPOINT dloc;
 
   if (AATEnabled && ValidTaskPoint(ActiveTaskPoint+1) && ValidTaskPoint(ActiveTaskPoint)) {
-    targetLat = task_stats[ActiveTaskPoint].AATTargetLat;
-    targetLon = task_stats[ActiveTaskPoint].AATTargetLon;
+    target = task_stats[ActiveTaskPoint].AATTargetLocation;
   } else {
-    targetLat = WayPointList[task_points[ActiveTaskPoint].Index].Latitude;
-    targetLon = WayPointList[task_points[ActiveTaskPoint].Index].Longitude;
+    target = WayPointList[task_points[ActiveTaskPoint].Index].Location;
   }
   mutexTaskData.Unlock();
 
@@ -538,17 +520,17 @@ MapWindow::DrawOffTrackIndicator(Canvas &canvas)
   for (double d=0.25; d<=1.0; d+= 0.25) {
     double distance0, distance1;
 
-    FindLatitudeLongitude(startLat, startLon,
+    FindLatitudeLongitude(start, 
 			  Basic().TrackBearing,
 			  distance_max*d,
-			  &dLat, &dLon);
+			  &dloc);
 
-    DistanceBearing(startLat, startLon,
-		    dLat, dLon,
+    DistanceBearing(start,
+		    dloc,
 		    &distance0,
 		    NULL);
-    DistanceBearing(dLat, dLon,
-		    targetLat, targetLon,
+    DistanceBearing(dloc,
+		    target,
 		    &distance1,
 		    NULL);
 
@@ -561,7 +543,7 @@ MapWindow::DrawOffTrackIndicator(Canvas &canvas)
       _stprintf(Buffer, TEXT("%d"), idist);
       POINT sc;
       RECT brect;
-      LonLat2Screen(dLon, dLat, sc);
+      LonLat2Screen(dloc, sc);
       SIZE tsize = canvas.text_size(Buffer);
 
       brect.left = sc.x-4;
@@ -574,7 +556,6 @@ MapWindow::DrawOffTrackIndicator(Canvas &canvas)
 	ilast = idist;
       }
     }
-
   }
 }
 
@@ -596,23 +577,18 @@ MapWindow::DrawProjectedTrack(Canvas &canvas)
 
   mutexTaskData.Lock();  // protect from extrnal task changes
 
-  double startLat = Basic().Latitude;
-  double startLon = Basic().Longitude;
-  double previousLat;
-  double previousLon;
+  GEOPOINT start = Basic().Location;
+  GEOPOINT previous_loc;
   unsigned previous_point = max(0,ActiveTaskPoint-1);
   if (AATEnabled) {
-    previousLat = task_stats[previous_point].AATTargetLat;
-    previousLon = task_stats[previous_point].AATTargetLon;
+    previous_loc = task_stats[previous_point].AATTargetLocation;
   } else {
-    previousLat = WayPointList[task_points[previous_point].Index].Latitude;
-    previousLon = WayPointList[task_points[previous_point].Index].Longitude;
+    previous_loc = WayPointList[task_points[previous_point].Index].Location;
   }
   mutexTaskData.Unlock();
 
   double distance_from_previous, bearing;
-  DistanceBearing(previousLat, previousLon,
-		  startLat, startLon,
+  DistanceBearing(previous_loc, start,
 		  &distance_from_previous,
 		  &bearing);
 
@@ -626,19 +602,16 @@ MapWindow::DrawProjectedTrack(Canvas &canvas)
     double flow = 0.4;
     double fhigh = 1.5;
     screen_range = max(screen_range, Calculated().WaypointDistance);
-
-    double p1Lat;
-    double p1Lon;
-    double p2Lat;
-    double p2Lon;
-    FindLatitudeLongitude(startLat, startLon,
+    
+    GEOPOINT p1, p2;
+    FindLatitudeLongitude(start, 
 			  bearing, flow*screen_range,
-			  &p1Lat, &p1Lon);
-    FindLatitudeLongitude(startLat, startLon,
+			  &p1);
+    FindLatitudeLongitude(start,
 			  bearing, fhigh*screen_range,
-			  &p2Lat, &p2Lon);
-    LonLat2Screen(p1Lon, p1Lat, pt[0]);
-    LonLat2Screen(p2Lon, p2Lat, pt[1]);
+			  &p2);
+    LonLat2Screen(p1, pt[0]);
+    LonLat2Screen(p2, pt[1]);
   } else if (fabs(bearing-Calculated().WaypointBearing)<10) {
     // too small an error to bother
     return;
@@ -667,33 +640,26 @@ public:
   {}
   void visit_start_point(START_POINT &point, const unsigned i) 
   { 
-    map->LonLat2Screen(point.SectorEndLon,
-		       point.SectorEndLat, 
+    map->LonLat2Screen(point.SectorEnd,
 		       (*task_screen)[i].End);
-    map->LonLat2Screen(point.SectorStartLon,
-		       point.SectorStartLat, 
+    map->LonLat2Screen(point.SectorStart,
 		       (*task_screen)[i].Start);
 
   };
   void visit_task_point_start(TASK_POINT &point, const unsigned i) 
   { 
     if (AATEnabled) {
-      map->LonLat2Screen(task_stats[i].AATTargetLon, 
-			 task_stats[i].AATTargetLat,
+      map->LonLat2Screen(task_stats[i].AATTargetLocation, 
 			 (*task_screen)[i].Target);
     }
-    map->LonLat2Screen(point.SectorEndLon, 
-		       point.SectorEndLat, 
+    map->LonLat2Screen(point.SectorEnd, 
 		       (*task_screen)[i].End);
-    map->LonLat2Screen(point.SectorStartLon, 
-		       point.SectorStartLat, 
+    map->LonLat2Screen(point.SectorStart, 
 		       (*task_screen)[i].Start);
     if((AATEnabled) && (point.AATType == SECTOR)) {
-      map->LonLat2Screen(point.AATStartLon, 
-			 point.AATStartLat, 
+      map->LonLat2Screen(point.AATStart, 
 			 (*task_screen)[i].AATStart);
-      map->LonLat2Screen(point.AATFinishLon, 
-			 point.AATFinishLat, 
+      map->LonLat2Screen(point.AATFinish, 
 			 (*task_screen)[i].AATFinish);
     }
 
@@ -707,8 +673,7 @@ public:
       
       for (int j=0; j<MAXISOLINES; j++) {
 	if (task_stats[i].IsoLine_valid[j]) {
-	  map->LonLat2Screen(task_stats[i].IsoLine_Longitude[j],
-			     task_stats[i].IsoLine_Latitude[j],
+	  map->LonLat2Screen(task_stats[i].IsoLine_Location[j],
 			     (*task_screen)[i].IsoLine_Screen[j]);
 	}
       }
@@ -734,11 +699,9 @@ void MapWindow::CalculateScreenPositionsTask() {
   if (EnableMultipleStartPoints) {
     for(i=0;i<MAXSTARTPOINTS-1;i++) {
       if (task_start_stats[i].Active && ValidWayPoint(task_start_points[i].Index)) {
-        LonLat2Screen(task_start_points[i].SectorEndLon,
-                      task_start_points[i].SectorEndLat, 
+        LonLat2Screen(task_start_points[i].SectorEnd,
 		      task_start_screen[i].End);
-        LonLat2Screen(task_start_points[i].SectorStartLon,
-                      task_start_points[i].SectorStartLat, 
+        LonLat2Screen(task_start_points[i].SectorStart,
 		      task_start_screen[i].Start);
       }
     }
@@ -749,36 +712,30 @@ void MapWindow::CalculateScreenPositionsTask() {
     bool this_valid = ValidTaskPoint(i);
     bool next_valid = ValidTaskPoint(i+1);
     if (AATEnabled && this_valid) {
-      LonLat2Screen(task_stats[i].AATTargetLon, task_stats[i].AATTargetLat,
+      LonLat2Screen(task_stats[i].AATTargetLocation, 
                     task_screen[i].Target);
     }
 
     if(this_valid && !next_valid)
     {
       // finish
-      LonLat2Screen(task_points[i].SectorEndLon, 
-		    task_points[i].SectorEndLat, 
+      LonLat2Screen(task_points[i].SectorEnd, 
 		    task_screen[i].End);
-      LonLat2Screen(task_points[i].SectorStartLon, 
-		    task_points[i].SectorStartLat, 
+      LonLat2Screen(task_points[i].SectorStart, 
 		    task_screen[i].Start);
     }
     if(this_valid && next_valid)
     {
-      LonLat2Screen(task_points[i].SectorEndLon, 
-		    task_points[i].SectorEndLat, 
+      LonLat2Screen(task_points[i].SectorEnd, 
 		    task_screen[i].End);
-      LonLat2Screen(task_points[i].SectorStartLon, 
-		    task_points[i].SectorStartLat, 
+      LonLat2Screen(task_points[i].SectorStart, 
 		    task_screen[i].Start);
 
       if((AATEnabled) && (task_points[i].AATType == SECTOR))
       {
-        LonLat2Screen(task_points[i].AATStartLon, 
-		      task_points[i].AATStartLat, 
+        LonLat2Screen(task_points[i].AATStart, 
 		      task_screen[i].AATStart);
-        LonLat2Screen(task_points[i].AATFinishLon, 
-		      task_points[i].AATFinishLat, 
+        LonLat2Screen(task_points[i].AATFinish, 
 		      task_screen[i].AATFinish);
       }
       if (AATEnabled && (((int)i==ActiveTaskPoint) ||
@@ -787,8 +744,7 @@ void MapWindow::CalculateScreenPositionsTask() {
 
 	for (int j=0; j<MAXISOLINES; j++) {
 	  if (task_stats[i].IsoLine_valid[j]) {
-	    LonLat2Screen(task_stats[i].IsoLine_Longitude[j],
-			  task_stats[i].IsoLine_Latitude[j],
+	    LonLat2Screen(task_stats[i].IsoLine_Location[j],
 			  task_screen[i].IsoLine_Screen[j]);
 	  }
 	}

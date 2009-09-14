@@ -81,22 +81,20 @@ double MapWindow::DrawTrail(Canvas &canvas)
 
   //////////// Trail drift calculations
 
-  double traildrift_lat = 0.0;
-  double traildrift_lon = 0.0;
+  GEOPOINT traildrift;
 
   if (SettingsMap().EnableTrailDrift && (DisplayMode == dmCircling)) {
-    double tlat1, tlon1;
+    GEOPOINT tp1;
 
-    FindLatitudeLongitude(Basic().Latitude,
-                          Basic().Longitude,
+    FindLatitudeLongitude(Basic().Location,
                           Calculated().WindBearing,
                           Calculated().WindSpeed,
-                          &tlat1, &tlon1);
-    traildrift_lat = (Basic().Latitude-tlat1);
-    traildrift_lon = (Basic().Longitude-tlon1);
+                          &tp1);
+    traildrift.Latitude = (Basic().Location.Latitude-tp1.Latitude);
+    traildrift.Longitude = (Basic().Location.Longitude-tp1.Longitude);
   } else {
-    traildrift_lat = 0.0;
-    traildrift_lon = 0.0;
+    traildrift.Latitude = 0.0;
+    traildrift.Longitude = 0.0;
   }
 
   // JMW don't draw first bit from home airport
@@ -163,10 +161,10 @@ double MapWindow::DrawTrail(Canvas &canvas)
   // this expands them by one minute
 
   rectObj bounds_thermal = screenbounds_latlon;
-  screenbounds_latlon.minx -= fabs(60.0*traildrift_lon);
-  screenbounds_latlon.maxx += fabs(60.0*traildrift_lon);
-  screenbounds_latlon.miny -= fabs(60.0*traildrift_lat);
-  screenbounds_latlon.maxy += fabs(60.0*traildrift_lat);
+  screenbounds_latlon.minx -= fabs(60.0*traildrift.Longitude);
+  screenbounds_latlon.maxx += fabs(60.0*traildrift.Longitude);
+  screenbounds_latlon.miny -= fabs(60.0*traildrift.Latitude);
+  screenbounds_latlon.maxy += fabs(60.0*traildrift.Latitude);
 
   const rectObj bounds = bounds_thermal;
 
@@ -176,8 +174,7 @@ double MapWindow::DrawTrail(Canvas &canvas)
   const int xxs = Orig_Screen.x*1024-512;
   const int yys = Orig_Screen.y*1024+512;
   const double mDrawScale = GetLonLatToScreenScale();
-  const double mPanLongitude = PanLongitude;
-  const double mPanLatitude = PanLatitude;
+  const GEOPOINT &mPanLocation = PanLocation;
 
   ////////////// Main loop
 
@@ -254,13 +251,13 @@ double MapWindow::DrawTrail(Canvas &canvas)
     // if we don't already.
 
     double dt = max(0,(display_time-P1.Time)*P1.DriftFactor);
-    double this_lon = P1.Longitude+traildrift_lon*dt;
-    double this_lat = P1.Latitude+traildrift_lat*dt;
+    double this_lon = P1.Longitude+traildrift.Longitude*dt;
+    double this_lat = P1.Latitude+traildrift.Latitude*dt;
 
 #if 1
     // this is faster since many parameters are const
-    int Y = Real2Int((mPanLatitude-this_lat)*mDrawScale);
-    int X = Real2Int((mPanLongitude-this_lon)*fastcosine(this_lat)*mDrawScale);
+    int Y = Real2Int((mPanLocation.Latitude-this_lat)*mDrawScale);
+    int X = Real2Int((mPanLocation.Longitude-this_lon)*fastcosine(this_lat)*mDrawScale);
     P1.Screen.x = (xxs-X*cost + Y*sint)/1024;
     P1.Screen.y = (Y*cost + X*sint + yys)/1024;
 #else
@@ -352,8 +349,7 @@ MapWindow::DrawTrailFromTask(Canvas &canvas, const double TrailFirstTime)
   for (i=0; i<n; i++) {
     if (glide_computer.GetOLC().getTime(i)>= mTrailFirstTime)
       break;
-    LonLat2Screen(glide_computer.GetOLC().getLongitude(i),
-                  glide_computer.GetOLC().getLatitude(i),
+    LonLat2Screen(glide_computer.GetOLC().getLocation(i),
                   ptin[j]);
     j++;
   }

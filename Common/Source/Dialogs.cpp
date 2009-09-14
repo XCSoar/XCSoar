@@ -242,9 +242,10 @@ void PopupWaypointDetails()
 #include "Interface.hpp"
 #include "MapWindow.h"
 
-bool PopupNearestWaypointDetails(double lon, double lat,
-                                             double range,
-                                             bool pan) {
+bool PopupNearestWaypointDetails(const GEOPOINT &location,
+                                 double range,
+                                 bool pan) 
+{
   /*
     if (!pan) {
     dlgWayPointSelect(lon, lat, 0, 1);
@@ -256,12 +257,12 @@ bool PopupNearestWaypointDetails(double lon, double lat,
 
   int i;
   if (!pan || !XCSoarInterface::SettingsMap().EnablePan) {
-    i=FindNearestWayPoint(map_window, lon, lat, range);
+    i=FindNearestWayPoint(map_window, location, range);
   } else {
     // nearest to center of screen if in pan mode
     i=FindNearestWayPoint(map_window, 
-			  map_window.GetPanLongitude(),
-			  map_window.GetPanLatitude(), range);
+			  map_window.GetPanLocation(),
+			  range);
   }
   if(i != -1) {
     SelectedWaypoint = i;
@@ -273,7 +274,7 @@ bool PopupNearestWaypointDetails(double lon, double lat,
 }
 
 
-bool PopupInteriorAirspaceDetails(double lon, double lat) {
+bool PopupInteriorAirspaceDetails(const GEOPOINT &location) {
   unsigned int i;
   bool found=false;
   bool inside;
@@ -282,7 +283,7 @@ bool PopupInteriorAirspaceDetails(double lon, double lat) {
     for (i=0; i<NumberOfAirspaceCircles; i++) {
       inside = false;
       if (AirspaceCircle[i].Visible) {
-        inside = InsideAirspaceCircle(lon, lat, i);
+        inside = InsideAirspaceCircle(location, i);
       }
       if (inside) {
 	dlgAirspaceDetails(i, -1);
@@ -294,7 +295,7 @@ bool PopupInteriorAirspaceDetails(double lon, double lat) {
     for (i=0; i<NumberOfAirspaceAreas; i++) {
       inside = false;
       if (AirspaceArea[i].Visible) {
-        inside = InsideAirspaceArea(lon, lat, i);
+        inside = InsideAirspaceArea(location, i);
       }
       if (inside) {
 	dlgAirspaceDetails(-1, i);

@@ -352,9 +352,9 @@ TerrainRenderer::~TerrainRenderer() {
   if (sbuf) delete sbuf;
 }
 
-bool TerrainRenderer::SetMap(double lon, double lat) {
+bool TerrainRenderer::SetMap(const GEOPOINT &loc) {
   if (RASP.GetParameter()) {
-    RASP.Reload(lat, lon);
+    RASP.Reload(loc);
   }
   interp_levels = 5;
   switch (RASP.GetParameter()) {
@@ -445,7 +445,7 @@ bool TerrainRenderer::SetMap(double lon, double lat) {
 }
 
 void TerrainRenderer::Height(MapWindowProjection &map_projection, bool isBigZoom) {
-  double X, Y;
+  GEOPOINT G,middle;
   int x, y;
   int X0 = (unsigned int)(dtquant/2);
   int Y0 = (unsigned int)(dtquant/2);
@@ -464,22 +464,20 @@ void TerrainRenderer::Height(MapWindowProjection &map_projection, bool isBigZoom
   
   x = (X0+X1)/2;
   y = (Y0+Y1)/2;
-  map_projection.Screen2LonLat(x, y, X, Y);
-  double xmiddle = X;
-  double ymiddle = Y;
+  map_projection.Screen2LonLat(x, y, middle);
   int dd = (int)lround(dtquant*rfact);
   
   x = (X0+X1)/2+dd;
   y = (Y0+Y1)/2;
-  map_projection.Screen2LonLat(x, y, X, Y);
-  float Xrounding = (float)fabs(X-xmiddle);
-  DistanceBearing(ymiddle, xmiddle, Y, X, &pixelDX, NULL);
+  map_projection.Screen2LonLat(x, y, G);
+  float Xrounding = (float)fabs(G.Longitude-middle.Longitude);
+  DistanceBearing(middle, G, &pixelDX, NULL);
   
   x = (X0+X1)/2;
   y = (Y0+Y1)/2+dd;
-  map_projection.Screen2LonLat(x, y, X, Y);
-  float Yrounding = (float)fabs(Y-ymiddle);
-  DistanceBearing(ymiddle, xmiddle, Y, X, &pixelDY, NULL);
+  map_projection.Screen2LonLat(x, y, G);
+  float Yrounding = (float)fabs(G.Latitude-middle.Latitude);
+  DistanceBearing(middle, G, &pixelDY, NULL);
   
   pixelsize_d = sqrt((pixelDX*pixelDX+pixelDY*pixelDY)/2.0);
   
@@ -496,7 +494,7 @@ void TerrainRenderer::Height(MapWindowProjection &map_projection, bool isBigZoom
   }
   
   epx = DisplayMap->GetEffectivePixelSize(&pixelsize_d,
-					  ymiddle, xmiddle);
+					  middle);
   
   if (epx> min(ixs,iys)/4) {
     do_shading = false;
@@ -581,13 +579,14 @@ void TerrainRenderer::FillHeightBuffer(MapWindowProjection &map_projection,
   
   // This code is quickest but not so readable
   
-  const double PanLatitude =  map_projection.GetPanLatitude();
-  const double PanLongitude = map_projection.GetPanLongitude();
+  const double PanLatitude =  map_projection.GetPanLocation().Latitude;
+  const double PanLongitude = map_projection.GetPanLocation().Longitude;
   const double InvDrawScale = map_projection.GetScreenScaleToLonLat()/1024.0;
   const double DisplayAngle = map_projection.GetDisplayAngle();
   const int cost = ifastcosine(DisplayAngle);
   const int sint = ifastsine(DisplayAngle);
   
+  GEOPOINT gp;
   for (int y = Y0; y<Y1; y+= dtquant) {
     int ycost = y*cost;
     int ysint = y*sint;
@@ -597,10 +596,10 @@ void TerrainRenderer::FillHeightBuffer(MapWindowProjection &map_projection,
 	  (y>= rect_visible.top) &&
 	  (y<= rect_visible.bottom)) {
 	assert(myhbuf<hBufTop);
-	
-	double Y = PanLatitude - (ycost+x*sint)*InvDrawScale;
-	double X = PanLongitude + (x*cost-ysint)*invfastcosine(Y)*InvDrawScale;
-	*myhbuf = max(0, DisplayMap->GetField(Y,X));
+
+	gp.Latitude = PanLatitude - (ycost+x*sint)*InvDrawScale;
+	gp.Longitude = PanLongitude + (x*cost-ysint)*invfastcosine(gp.Latitude)*InvDrawScale;
+	*myhbuf = max(0, DisplayMap->GetField(gp));
       } else {
 	*myhbuf = 0;
       }
@@ -809,10 +808,10 @@ void TerrainRenderer::Draw(Canvas &canvas, RECT rc) {
 bool TerrainRenderer::Draw(Canvas &canvas, 
 			   MapWindowProjection &map_projection,
 			   const double sunazimuth, const double sunelevation,
-			   const double lon, const double lat,
+			   const GEOPOINT &loc, 
 			   const bool isBigZoom)
 {
-  if (!SetMap(lon, lat)) {
+  if (!SetMap(loc)) {
     return false;
   }
   Lock();

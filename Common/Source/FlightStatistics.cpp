@@ -305,8 +305,8 @@ void FlightStatistics::RenderTask(Canvas &canvas, const RECT rc, const bool olcm
 
   for (i=0; i<MAXTASKPOINTS; i++) {
     if (ValidTaskPoint(i)) {
-      lat1 = WayPointList[task_points[i].Index].Latitude;
-      lon1 = WayPointList[task_points[i].Index].Longitude;
+      lat1 = WayPointList[task_points[i].Index].Location.Latitude;
+      lon1 = WayPointList[task_points[i].Index].Location.Longitude;
       chart.ScaleYFromValue( lat1);
       chart.ScaleXFromValue(lon1);
       nowaypoints = false;
@@ -325,14 +325,14 @@ void FlightStatistics::RenderTask(Canvas &canvas, const RECT rc, const bool olcm
 
   if (olcvalid) {
     for (i=0; i< nolc; i++) {
-      lat1 = glide_computer.GetOLC().getLatitude(i);
-      lon1 = glide_computer.GetOLC().getLongitude(i);
+      lat1 = glide_computer.GetOLC().getLocation(i).Latitude;
+      lon1 = glide_computer.GetOLC().getLocation(i).Longitude;
       chart.ScaleYFromValue( lat1);
       chart.ScaleXFromValue(lon1);
     }
     if (!olcfinished) {
-      lat1 = glide_computer.GetOLC().lat_proj;
-      lon1 = glide_computer.GetOLC().lon_proj;
+      lat1 = glide_computer.GetOLC().loc_proj.Latitude;
+      lon1 = glide_computer.GetOLC().loc_proj.Longitude;
       chart.ScaleYFromValue( lat1);
       chart.ScaleXFromValue(lon1);
     }
@@ -346,8 +346,8 @@ void FlightStatistics::RenderTask(Canvas &canvas, const RECT rc, const bool olcm
   // find scale
   chart.ResetScale();
 
-  lat1 = XCSoarInterface::Basic().Latitude;
-  lon1 = XCSoarInterface::Basic().Longitude;
+  lat1 = XCSoarInterface::Basic().Location.Latitude;
+  lon1 = XCSoarInterface::Basic().Location.Longitude;
   x1 = (lon1-lon_c)*fastcosine(lat1);
   y1 = (lat1-lat_c);
   chart.ScaleXFromValue(x1);
@@ -356,16 +356,15 @@ void FlightStatistics::RenderTask(Canvas &canvas, const RECT rc, const bool olcm
   for (i=0; i<MAXTASKPOINTS; i++) {
     if (ValidTaskPoint(i)) {
       nwps++;
-      lat1 = WayPointList[task_points[i].Index].Latitude;
-      lon1 = WayPointList[task_points[i].Index].Longitude;
+      lat1 = WayPointList[task_points[i].Index].Location.Latitude;
+      lon1 = WayPointList[task_points[i].Index].Location.Longitude;
       x1 = (lon1-lon_c)*fastcosine(lat1);
       y1 = (lat1-lat_c);
       chart.ScaleXFromValue(x1);
       chart.ScaleYFromValue(y1);
 
       if (AATEnabled) {
-	double aatlat;
-	double aatlon;
+	GEOPOINT aatloc;
 	double bearing;
 	double radius;
 
@@ -378,16 +377,16 @@ void FlightStatistics::RenderTask(Canvas &canvas, const RECT rc, const bool olcm
           for (int j=0; j<4; j++) {
             bearing = j*360.0/4;
 
-            FindLatitudeLongitude(WayPointList[task_points[i].Index].Latitude,
-                                  WayPointList[task_points[i].Index].Longitude,
+            FindLatitudeLongitude(WayPointList[task_points[i].Index].Location,
                                   bearing, radius,
-                                  &aatlat, &aatlon);
-            x1 = (aatlon-lon_c)*fastcosine(aatlat);
-            y1 = (aatlat-lat_c);
+                                  &aatloc);
+            x1 = (aatloc.Longitude-lon_c)*fastcosine(aatloc.Latitude);
+            y1 = (aatloc.Latitude-lat_c);
             chart.ScaleXFromValue(x1);
             chart.ScaleYFromValue(y1);
             if (j==0) {
-              aatradius[i] = fabs(aatlat-WayPointList[task_points[i].Index].Latitude);
+              aatradius[i] = fabs(aatloc.Latitude
+                                  -WayPointList[task_points[i].Index].Location.Latitude);
             }
           }
         } else {
@@ -397,8 +396,8 @@ void FlightStatistics::RenderTask(Canvas &canvas, const RECT rc, const bool olcm
     }
   }
   for (i=0; i< nolc; i++) {
-    lat1 = glide_computer.GetOLC().getLatitude(i);
-    lon1 = glide_computer.GetOLC().getLongitude(i);
+    lat1 = glide_computer.GetOLC().getLocation(i).Latitude;
+    lon1 = glide_computer.GetOLC().getLocation(i).Longitude;
     x1 = (lon1-lon_c)*fastcosine(lat1);
     y1 = (lat1-lat_c);
     chart.ScaleXFromValue(x1);
@@ -414,10 +413,10 @@ void FlightStatistics::RenderTask(Canvas &canvas, const RECT rc, const bool olcm
     if (AATEnabled) {
       for (i=MAXTASKPOINTS-1; i>0; i--) {
 	if (ValidTaskPoint(i)) {
-	  lat1 = WayPointList[task_points[i-1].Index].Latitude;
-	  lon1 = WayPointList[task_points[i-1].Index].Longitude;
-	  lat2 = WayPointList[task_points[i].Index].Latitude;
-	  lon2 = WayPointList[task_points[i].Index].Longitude;
+	  lat1 = WayPointList[task_points[i-1].Index].Location.Latitude;
+	  lon1 = WayPointList[task_points[i-1].Index].Location.Longitude;
+	  lat2 = WayPointList[task_points[i].Index].Location.Latitude;
+	  lon2 = WayPointList[task_points[i].Index].Location.Longitude;
 	  x1 = (lon1-lon_c)*fastcosine(lat1);
 	  y1 = (lat1-lat_c);
 	  x2 = (lon2-lon_c)*fastcosine(lat2);
@@ -444,10 +443,10 @@ void FlightStatistics::RenderTask(Canvas &canvas, const RECT rc, const bool olcm
   // draw track
 
   for (i=0; i< nolc-1; i++) {
-    lat1 = glide_computer.GetOLC().getLatitude(i);
-    lon1 = glide_computer.GetOLC().getLongitude(i);
-    lat2 = glide_computer.GetOLC().getLatitude(i+1);
-    lon2 = glide_computer.GetOLC().getLongitude(i+1);
+    lat1 = glide_computer.GetOLC().getLocation(i).Latitude;
+    lon1 = glide_computer.GetOLC().getLocation(i).Longitude;
+    lat2 = glide_computer.GetOLC().getLocation(i+1).Latitude;
+    lon2 = glide_computer.GetOLC().getLocation(i+1).Longitude;
     x1 = (lon1-lon_c)*fastcosine(lat1);
     y1 = (lat1-lat_c);
     x2 = (lon2-lon_c)*fastcosine(lat2);
@@ -461,14 +460,14 @@ void FlightStatistics::RenderTask(Canvas &canvas, const RECT rc, const bool olcm
   if (!olcmode) {
     for (i=MAXTASKPOINTS-1; i>0; i--) {
       if (ValidTaskPoint(i) && ValidTaskPoint(i-1)) {
-        lat1 = WayPointList[task_points[i-1].Index].Latitude;
-	lon1 = WayPointList[task_points[i-1].Index].Longitude;
+        lat1 = WayPointList[task_points[i-1].Index].Location.Latitude;
+	lon1 = WayPointList[task_points[i-1].Index].Location.Longitude;
 	if (TaskIsTemporary()) {
-	  lat2 = XCSoarInterface::Basic().Latitude;
-	  lon2 = XCSoarInterface::Basic().Longitude;
+	  lat2 = XCSoarInterface::Basic().Location.Latitude;
+	  lon2 = XCSoarInterface::Basic().Location.Longitude;
 	} else {
-	  lat2 = WayPointList[task_points[i].Index].Latitude;
-	  lon2 = WayPointList[task_points[i].Index].Longitude;
+	  lat2 = WayPointList[task_points[i].Index].Location.Latitude;
+	  lon2 = WayPointList[task_points[i].Index].Location.Longitude;
 	}
 	x1 = (lon1-lon_c)*fastcosine(lat1);
 	y1 = (lat1-lat_c);
@@ -488,8 +487,8 @@ void FlightStatistics::RenderTask(Canvas &canvas, const RECT rc, const bool olcm
 	}
 
 	if ((i==ActiveTaskPoint)&&(!AATEnabled)) {
-	  lat1 = XCSoarInterface::Basic().Latitude;
-	  lon1 = XCSoarInterface::Basic().Longitude;
+	  lat1 = XCSoarInterface::Basic().Location.Latitude;
+	  lon1 = XCSoarInterface::Basic().Location.Longitude;
 	  x1 = (lon1-lon_c)*fastcosine(lat1);
 	  y1 = (lat1-lat_c);
 	  chart.DrawLine(x1, y1, x2, y2,
@@ -505,19 +504,19 @@ void FlightStatistics::RenderTask(Canvas &canvas, const RECT rc, const bool olcm
       for (i=MAXTASKPOINTS-1; i>0; i--) {
 	if (ValidTaskPoint(i) && ValidTaskPoint(i-1)) {
           if (i==1) {
-            lat1 = WayPointList[task_points[i-1].Index].Latitude;
-            lon1 = WayPointList[task_points[i-1].Index].Longitude;
+            lat1 = WayPointList[task_points[i-1].Index].Location.Latitude;
+            lon1 = WayPointList[task_points[i-1].Index].Location.Longitude;
           } else {
-            lat1 = task_stats[i-1].AATTargetLat;
-            lon1 = task_stats[i-1].AATTargetLon;
+            lat1 = task_stats[i-1].AATTargetLocation.Latitude;
+            lon1 = task_stats[i-1].AATTargetLocation.Longitude;
           }
-          lat2 = task_stats[i].AATTargetLat;
-          lon2 = task_stats[i].AATTargetLon;
+          lat2 = task_stats[i].AATTargetLocation.Latitude;
+          lon2 = task_stats[i].AATTargetLocation.Longitude;
 
           /*
 	  if (i==ActiveTaskPoint) {
-	    lat1 = XCSoarInterface::Basic().Latitude;
-	    lon1 = XCSoarInterface::Basic().Longitude;
+	    lat1 = XCSoarInterface::Basic().Location.Latitude;
+	    lon1 = XCSoarInterface::Basic().Location.Longitude;
 	  }
           */
 
@@ -537,22 +536,22 @@ void FlightStatistics::RenderTask(Canvas &canvas, const RECT rc, const bool olcm
     for (i=0; i< 7-1; i++) {
       switch(XCSoarInterface::SettingsComputer().OLCRules) {
       case 0:
-	lat1 = glide_computer.GetOLC().data.solution_FAI_sprint.latitude[i];
-	lon1 = glide_computer.GetOLC().data.solution_FAI_sprint.longitude[i];
-	lat2 = glide_computer.GetOLC().data.solution_FAI_sprint.latitude[i+1];
-	lon2 = glide_computer.GetOLC().data.solution_FAI_sprint.longitude[i+1];
+	lat1 = glide_computer.GetOLC().data.solution_FAI_sprint.location[i].Latitude;
+	lon1 = glide_computer.GetOLC().data.solution_FAI_sprint.location[i].Longitude;
+	lat2 = glide_computer.GetOLC().data.solution_FAI_sprint.location[i+1].Latitude;
+	lon2 = glide_computer.GetOLC().data.solution_FAI_sprint.location[i+1].Longitude;
 	break;
       case 1:
-	lat1 = glide_computer.GetOLC().data.solution_FAI_triangle.latitude[i];
-	lon1 = glide_computer.GetOLC().data.solution_FAI_triangle.longitude[i];
-	lat2 = glide_computer.GetOLC().data.solution_FAI_triangle.latitude[i+1];
-	lon2 = glide_computer.GetOLC().data.solution_FAI_triangle.longitude[i+1];
+	lat1 = glide_computer.GetOLC().data.solution_FAI_triangle.location[i].Latitude;
+	lon1 = glide_computer.GetOLC().data.solution_FAI_triangle.location[i].Longitude;
+	lat2 = glide_computer.GetOLC().data.solution_FAI_triangle.location[i+1].Latitude;
+	lon2 = glide_computer.GetOLC().data.solution_FAI_triangle.location[i+1].Longitude;
 	break;
       case 2:
-	lat1 = glide_computer.GetOLC().data.solution_FAI_classic.latitude[i];
-	lon1 = glide_computer.GetOLC().data.solution_FAI_classic.longitude[i];
-	lat2 = glide_computer.GetOLC().data.solution_FAI_classic.latitude[i+1];
-	lon2 = glide_computer.GetOLC().data.solution_FAI_classic.longitude[i+1];
+	lat1 = glide_computer.GetOLC().data.solution_FAI_classic.location[i].Latitude;
+	lon1 = glide_computer.GetOLC().data.solution_FAI_classic.location[i].Longitude;
+	lat2 = glide_computer.GetOLC().data.solution_FAI_classic.location[i+1].Latitude;
+	lon2 = glide_computer.GetOLC().data.solution_FAI_classic.location[i+1].Longitude;
 	break;
       }
       x1 = (lon1-lon_c)*fastcosine(lat1);
@@ -563,16 +562,16 @@ void FlightStatistics::RenderTask(Canvas &canvas, const RECT rc, const bool olcm
 		     Chart::STYLE_REDTHICK);
     }
     if (!olcfinished) {
-      x1 = (glide_computer.GetOLC().lon_proj-lon_c)*fastcosine(lat1);
-      y1 = (glide_computer.GetOLC().lat_proj-lat_c);
+      x1 = (glide_computer.GetOLC().loc_proj.Longitude-lon_c)*fastcosine(lat1);
+      y1 = (glide_computer.GetOLC().loc_proj.Latitude-lat_c);
       chart.DrawLine(x1, y1, x2, y2,
 		     Chart::STYLE_BLUETHIN);
     }
   }
 
   // Draw aircraft on top
-  lat1 = XCSoarInterface::Basic().Latitude;
-  lon1 = XCSoarInterface::Basic().Longitude;
+  lat1 = XCSoarInterface::Basic().Location.Latitude;
+  lon1 = XCSoarInterface::Basic().Location.Longitude;
   x1 = (lon1-lon_c)*fastcosine(lat1);
   y1 = (lat1-lat_c);
   chart.DrawLabel(TEXT("+"), x1, y1);
@@ -745,17 +744,14 @@ void FlightStatistics::RenderWind(Canvas &canvas, const RECT rc)
 
 void FlightStatistics::RenderAirspace(Canvas &canvas, const RECT rc) {
   double range = 50.0*1000; // km
-  double aclat, aclon, ach, acb;
+  double ach, acb;
   double fj;
-  aclat = XCSoarInterface::Basic().Latitude;
-  aclon = XCSoarInterface::Basic().Longitude;
   ach = XCSoarInterface::Basic().Altitude;
   acb = XCSoarInterface::Basic().TrackBearing;
   double hmin = max(0,XCSoarInterface::Basic().Altitude-3300);
   double hmax = max(3300,XCSoarInterface::Basic().Altitude+1000);
 
-  double d_lat[AIRSPACE_SCANSIZE_X];
-  double d_lon[AIRSPACE_SCANSIZE_X];
+  GEOPOINT d_loc[AIRSPACE_SCANSIZE_X];
   double d_alt[AIRSPACE_SCANSIZE_X];
   double d_h[AIRSPACE_SCANSIZE_H];
   int d_airspace[AIRSPACE_SCANSIZE_H][AIRSPACE_SCANSIZE_X];
@@ -767,10 +763,10 @@ void FlightStatistics::RenderAirspace(Canvas &canvas, const RECT rc) {
 
   for (j=0; j< AIRSPACE_SCANSIZE_X; j++) { // scan range
     fj = j*1.0/(AIRSPACE_SCANSIZE_X-1);
-    FindLatitudeLongitude(aclat, aclon, acb, range*fj,
-                          &d_lat[j], &d_lon[j]);
-    d_alt[j] = terrain.GetTerrainHeight(d_lat[j],
-					       d_lon[j]);
+    FindLatitudeLongitude(XCSoarInterface::Basic().Location, 
+                          acb, range*fj,
+                          &d_loc[j]);
+    d_alt[j] = terrain.GetTerrainHeight(d_loc[j]);
     hmax = max(hmax, d_alt[j]);
   }
   terrain.Unlock();
@@ -795,7 +791,7 @@ void FlightStatistics::RenderAirspace(Canvas &canvas, const RECT rc) {
       d_airspace[i][j]= -1; // no airspace
     }
   }
-  ScanAirspaceLine(d_lat, d_lon, d_h, d_airspace);
+  ScanAirspaceLine(d_loc, d_h, d_airspace);
 
   int type;
 
