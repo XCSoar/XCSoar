@@ -39,10 +39,9 @@ Copyright_License {
 #ifndef AATDISTANCE_H
 #define AATDISTANCE_H
 
-#include "NMEA/Info.h"
-#include "NMEA/Derived.hpp"
 #include "Thread/Mutex.hpp"
 #include "Protection.hpp"
+#include "Sizes.h"
 
 #define MAXNUM_AATDISTANCE 50
 
