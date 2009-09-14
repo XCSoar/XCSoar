@@ -133,8 +133,10 @@ GlideComputerTask::SortLandableWaypoints()
   }
 
   for (i=0; i<(int)NumberOfWayPoints; i++) {
-    if (!(((WayPointList[i].Flags & AIRPORT) == AIRPORT) ||
-          ((WayPointList[i].Flags & LANDPOINT) == LANDPOINT))) {
+    const WAYPOINT &way_point = WayPointList[i];
+
+    if (!(((way_point.Flags & AIRPORT) == AIRPORT) ||
+          ((way_point.Flags & LANDPOINT) == LANDPOINT))) {
       continue; // ignore non-landable fields
     }
 
@@ -185,8 +187,10 @@ GlideComputerTask::SortLandableWaypoints()
         continue;
       }
 
+      const WAYPOINT &way_point = WayPointList[SortedApproxIndex[i]];
+
       if ((scan_airports_slot==0) &&
-	  ((WayPointList[SortedApproxIndex[i]].Flags & AIRPORT) != AIRPORT)) {
+	  ((way_point.Flags & AIRPORT) != AIRPORT)) {
         // we are in the first scan, looking for airports only
         continue;
       }
@@ -216,8 +220,7 @@ GlideComputerTask::SortLandableWaypoints()
 
             double wp_distance, wp_bearing;
             DistanceBearing(Basic().Latitude , Basic().Longitude ,
-                            WayPointList[SortedApproxIndex[i]].Latitude,
-                            WayPointList[SortedApproxIndex[i]].Longitude,
+                            way_point.Latitude, way_point.Longitude,
                             &wp_distance, &wp_bearing);
 
             bool out_of_range;

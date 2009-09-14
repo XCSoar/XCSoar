@@ -114,9 +114,10 @@ GlideComputerTask::SearchBestAlternate()
     SortedApproxDistance[i] = 0;
   }
   for (i=0; i<(int)NumberOfWayPoints; i++) {
+    const WAYPOINT &way_point = WayPointList[i];
 
-    if (!(((WayPointList[i].Flags & AIRPORT) == AIRPORT) ||
-          ((WayPointList[i].Flags & LANDPOINT) == LANDPOINT))) {
+    if (!(((way_point.Flags & AIRPORT) == AIRPORT) ||
+          ((way_point.Flags & LANDPOINT) == LANDPOINT))) {
       continue; // ignore non-landable fields
     }
 
@@ -170,8 +171,10 @@ GlideComputerTask::SearchBestAlternate()
         continue;
       }
 
+      const WAYPOINT &way_point = WayPointList[SortedApproxIndex[i]];
+
       if ((scan_airports_slot==0) &&
-	  ((WayPointList[SortedApproxIndex[i]].Flags & AIRPORT) != AIRPORT)) {
+	  ((way_point.Flags & AIRPORT) != AIRPORT)) {
         // we are in the first scan, looking for airports only
         continue;
       }
@@ -209,8 +212,7 @@ GlideComputerTask::SearchBestAlternate()
           {
             double wp_distance, wp_bearing;
             DistanceBearing(Basic().Latitude , Basic().Longitude ,
-                            WayPointList[SortedApproxIndex[i]].Latitude,
-                            WayPointList[SortedApproxIndex[i]].Longitude,
+                            way_point.Latitude, way_point.Longitude,
                             &wp_distance, &wp_bearing);
 
 	    WayPointCalc[SortedApproxIndex[i]].Distance = wp_distance;
@@ -509,21 +511,24 @@ GlideComputerTask::DoAlternates(int AltWaypoint)
   if (!ValidWayPoint(AltWaypoint)) {
     return;
   }
-  double w1lat = WayPointList[AltWaypoint].Latitude;
-  double w1lon = WayPointList[AltWaypoint].Longitude;
+
+  const WAYPOINT &way_point = WayPointList[AltWaypoint];
+  WPCALC &way_point_calc = WayPointCalc[AltWaypoint];
+  double w1lat = way_point.Latitude;
+  double w1lon = way_point.Longitude;
   double w0lat = Basic().Latitude;
   double w0lon = Basic().Longitude;
-  double *altwp_dist = &WayPointCalc[AltWaypoint].Distance;
-  double *altwp_gr   = &WayPointCalc[AltWaypoint].GR;
-  double *altwp_arrival = &WayPointCalc[AltWaypoint].AltArriv;
-  short  *altwp_vgr  = &WayPointCalc[AltWaypoint].VGR;
+  double *altwp_dist = &way_point_calc.Distance;
+  double *altwp_gr = &way_point_calc.GR;
+  double *altwp_arrival = &way_point_calc.AltArriv;
+  short  *altwp_vgr = &way_point_calc.VGR;
 
   DistanceBearing(w1lat, w1lon,
                   w0lat, w0lon,
                   altwp_dist, NULL);
 
   double GRsafecalc = Calculated().NavAltitude - 
-    (WayPointList[AltWaypoint].Altitude + 
+    (way_point.Altitude +
      SettingsComputer().SAFETYALTITUDEARRIVAL);
 
   if (GRsafecalc <=0) *altwp_gr = INVALID_GR;
