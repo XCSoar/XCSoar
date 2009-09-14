@@ -549,7 +549,7 @@ int UserMsgNotify(WindowControl *Sender, MSG *msg){
   }
 
   if (do_refocus) {
-    SetFocus(wAirspaceListEntry->GetHandle());
+    wAirspaceListEntry->set_focus();
   }
 
   // this is our message, we have handled it.

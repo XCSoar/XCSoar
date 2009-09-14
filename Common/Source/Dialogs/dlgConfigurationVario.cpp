@@ -693,13 +693,13 @@ static int FormKeyDown(WindowControl * Sender, WPARAM wParam, LPARAM lParam){
   switch(wParam & 0xffff){
     // JMW NO! This disables editing! ///   case VK_LEFT:
     case '6':
-      SetFocus(((WndButton *)wf->FindByName(TEXT("cmdPrev")))->GetHandle());
+      ((WndButton *)wf->FindByName(TEXT("cmdPrev")))->set_focus();
       NextPage(-1);
       //((WndButton *)wf->FindByName(TEXT("cmdPrev")))->SetFocused(true, NULL);
     return(0);
     // JMW NO! This disables editing!  ///  case VK_RIGHT:
     case '7':
-      SetFocus(((WndButton *)wf->FindByName(TEXT("cmdNext")))->GetHandle());
+      ((WndButton *)wf->FindByName(TEXT("cmdNext")))->set_focus();
       NextPage(+1);
       //((WndButton *)wf->FindByName(TEXT("cmdNext")))->SetFocused(true, NULL);
     return(0);

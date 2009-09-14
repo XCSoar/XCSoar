@@ -915,7 +915,8 @@ int WndForm::ShowModal(bool bEnableMap) {
 
   mModalResult = 0;
 
-  oldFocusHwnd = SetFocus(GetHandle());
+  oldFocusHwnd = ::GetFocus();
+  set_focus();
 
   FocusNext(NULL);
 
@@ -1353,8 +1354,7 @@ WndButton::on_mouse_up(int x, int y)
 
   if (PtInRect(GetBoundRect(), Pos)){
     if (mOnClickNotify != NULL) {
-      RECT mRc;
-      GetWindowRect(GetHandle(), &mRc);
+      RECT mRc = get_position();
       SetSourceRectangle(mRc);
       (mOnClickNotify)(this);
     }
@@ -1422,7 +1422,7 @@ WndButton::on_mouse_down(int x, int y)
   (void)x; (void)y;
   mDown = true;
   if (!GetFocused())
-    SetFocus(GetHandle());
+    set_focus();
   else {
     update(*GetBoundRect());
     update();
