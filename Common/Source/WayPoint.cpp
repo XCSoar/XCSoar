@@ -50,11 +50,11 @@ void WaypointScan::scan_forward(WaypointVisitor &visitor)
   if (!WayPointList) return;
   for (unsigned i=0; i<NumberOfWayPoints; i++) {
     if ((WayPointList[i].Flags & AIRPORT)==AIRPORT) {
-      visitor.waypoint_airport(WayPointList[i], WayPointCalc[i]);
+      visitor.waypoint_airport(WayPointList[i], WayPointCalc[i], i);
     } else if ((WayPointList[i].Flags & LANDPOINT)==LANDPOINT) {
-      visitor.waypoint_landable(WayPointList[i], WayPointCalc[i]);
+      visitor.waypoint_landable(WayPointList[i], WayPointCalc[i], i);
     } else {
-      visitor.waypoint_default(WayPointList[i], WayPointCalc[i]);
+      visitor.waypoint_default(WayPointList[i], WayPointCalc[i], i);
     }
   }
 }

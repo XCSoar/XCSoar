@@ -103,14 +103,14 @@ extern int WaypointsOutOfRange;
 
 class WaypointVisitor {
 public:
-  virtual void waypoint_default(WAYPOINT &waypoint, WPCALC &wpcalc) {};
-  virtual void waypoint_landable(WAYPOINT &waypoint, WPCALC &wpcalc) 
+  virtual void waypoint_default(WAYPOINT &waypoint, WPCALC &wpcalc, const unsigned i) {};
+  virtual void waypoint_landable(WAYPOINT &waypoint, WPCALC &wpcalc, const unsigned i) 
     {
-      waypoint_default(waypoint, wpcalc);
+      waypoint_default(waypoint, wpcalc, i);
     }
-  virtual void waypoint_airport(WAYPOINT &waypoint, WPCALC &wpcalc) 
+  virtual void waypoint_airport(WAYPOINT &waypoint, WPCALC &wpcalc, const unsigned i) 
     {
-      waypoint_default(waypoint, wpcalc);
+      waypoint_default(waypoint, wpcalc, i);
     }
 };
 

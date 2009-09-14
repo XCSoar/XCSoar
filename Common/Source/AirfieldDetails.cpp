@@ -101,77 +101,96 @@ CloseAirfieldDetails()
 }
 
 
+
+
 /*
  * VENTA3: Home and Preferred landing points for BestAlternate
  * Paolo Ventafridda
  */
-static void
-LookupAirfieldDetail(TCHAR *Name, TCHAR *Details)
-{
-  if (!WayPointList) return;
 
-  for(int i=0;i<(int)NumberOfWayPoints;i++)
+
+class WaypointNameLookup: public WaypointVisitor {
+public:
+  WaypointNameLookup(const TCHAR* _Name, const TCHAR* _Details):
+    Name(_Name), Details(_Details) 
+    {};
+
+  void waypoint_landable(WAYPOINT &waypoint, WPCALC &wpcalc, const unsigned i) 
     {
-      if (((WayPointList[i].Flags & AIRPORT) == AIRPORT) ||
-	  ((WayPointList[i].Flags & LANDPOINT) == LANDPOINT)) {
+      waypoint_airport(waypoint, wpcalc, i);
+    }
+  void waypoint_airport(WAYPOINT &waypoint, WPCALC &wpcalc, const unsigned i) 
+    {
 
-        TCHAR UName[100];
-        TCHAR NameA[100];
-        TCHAR NameB[100];
-        TCHAR NameC[100];
-        TCHAR NameD[100];
-        TCHAR TmpName[100];
+      // TODO: detect and warn on multiple matches!
 
-	_tcscpy(UName, WayPointList[i].Name);
-
-	CharUpper(UName); // WP name
-	CharUpper(Name);  // AIR name
-	                  // VENTA3 fix: If airfields name
-			  // was not uppercase it was not recon
-
-	_stprintf(NameA,TEXT("%s A/F"),Name);
-	_stprintf(NameB,TEXT("%s AF"),Name);
-	_stprintf(NameC,TEXT("%s A/D"),Name);
-	_stprintf(NameD,TEXT("%s AD"),Name);
+      TCHAR UName[100];
+      TCHAR NameA[100];
+      TCHAR NameB[100];
+      TCHAR NameC[100];
+      TCHAR NameD[100];
+      TCHAR TmpName[100];
+      
+      _tcscpy(UName, waypoint.Name);
+      
+      CharUpper(UName); // WP name
+      // VENTA3 fix: If airfields name
+      // was not uppercase it was not recon
+      
+      _stprintf(NameA,TEXT("%s A/F"),Name);
+      _stprintf(NameB,TEXT("%s AF"),Name);
+      _stprintf(NameC,TEXT("%s A/D"),Name);
+      _stprintf(NameD,TEXT("%s AD"),Name);
+      
+      bool isHome=false;
+      bool isPreferred=false;
+      
+      _stprintf(TmpName,TEXT("%s=HOME"),UName);
+      if ( (_tcscmp(Name, TmpName)==0) )  isHome=true;
+      _stprintf(TmpName,TEXT("%s=PREF"),UName);
+      if ( (_tcscmp(Name, TmpName)==0) )  isPreferred=true;
+      _stprintf(TmpName,TEXT("%s=PREFERRED"),UName);
+      if ( (_tcscmp(Name, TmpName)==0) )  isPreferred=true;
+      
+      if ( isHome==true ) {
+        wpcalc.Preferred = true;
+        XCSoarInterface::SetSettingsComputer().HomeWaypoint = i;
+      }
+      if ( isPreferred==true ) {
+        wpcalc.Preferred = true;
+      }
+      
+      if ((_tcscmp(UName, Name)==0)
+          ||(_tcscmp(UName, NameA)==0)
+          ||(_tcscmp(UName, NameB)==0)
+          ||(_tcscmp(UName, NameC)==0)
+          ||(_tcscmp(UName, NameD)==0)
+          || isHome || isPreferred )
+      {
+        // found
         
-	bool isHome=false;
-	bool isPreferred=false;
-
-	_stprintf(TmpName,TEXT("%s=HOME"),UName);
-	if ( (_tcscmp(Name, TmpName)==0) )  isHome=true;
-	_stprintf(TmpName,TEXT("%s=PREF"),UName);
-	if ( (_tcscmp(Name, TmpName)==0) )  isPreferred=true;
-	_stprintf(TmpName,TEXT("%s=PREFERRED"),UName);
-	if ( (_tcscmp(Name, TmpName)==0) )  isPreferred=true;
-
-	if ( isHome==true ) {
-	  WayPointCalc[i].Preferred = true;
-	  XCSoarInterface::SetSettingsComputer().HomeWaypoint = i;
-	}
-	if ( isPreferred==true ) {
-	  WayPointCalc[i].Preferred = true;
-	}
-
-	if ((_tcscmp(UName, Name)==0)
-	    ||(_tcscmp(UName, NameA)==0)
-	    ||(_tcscmp(UName, NameB)==0)
-	    ||(_tcscmp(UName, NameC)==0)
-	    ||(_tcscmp(UName, NameD)==0)
-	    || isHome || isPreferred )
-	  {
-            // found
-
-	    if (_tcslen(Details) >0 ) { // VENTA3 avoid setting empty details
-	      if (WayPointList[i].Details) {
-		free(WayPointList[i].Details);
-	      }
-	      WayPointList[i].Details = (TCHAR*)malloc((_tcslen(Details)+1)*sizeof(TCHAR));
-	      _tcscpy(WayPointList[i].Details, Details);
-	    }
-	    return;
-	  }
+        if (_tcslen(Details) >0 ) { // VENTA3 avoid setting empty details
+          if (waypoint.Details) {
+            free(waypoint.Details);
+          }
+          waypoint.Details = (TCHAR*)malloc((_tcslen(Details)+1)*sizeof(TCHAR));
+          _tcscpy(waypoint.Details, Details);
+        }
+        return;
       }
     }
+private:
+  const TCHAR* Name;
+  const TCHAR* Details;
+};
+
+
+static void
+LookupAirfieldDetail(TCHAR *Name, const TCHAR *Details)
+{
+  CharUpper(Name);  // AIR name
+  WaypointNameLookup wnl(Name, Details);
+  WaypointScan::scan_forward(wnl);
 }
 
 
