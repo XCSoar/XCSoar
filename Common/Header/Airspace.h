@@ -46,23 +46,23 @@ Copyright_License {
 #include <windows.h>
 #include <tchar.h>
 
-typedef struct _AIRSPACE_ACK
+struct AIRSPACE_ACK
 {
   bool AcknowledgedToday;
   double AcknowledgementTime;
-} AIRSPACE_ACK;
+};
 
 typedef enum {abUndef, abMSL, abAGL, abFL} AirspaceAltBase_t;
 
-typedef struct _AIRSPACE_ALT
+struct AIRSPACE_ALT
 {
   double Altitude;
   double FL;
   double AGL;
   AirspaceAltBase_t Base;
-} AIRSPACE_ALT;
+};
 
-typedef struct _AIRSPACE_AREA
+struct AIRSPACE_AREA
 {
   TCHAR Name[NAME_SIZE + 1];
   int Type;
@@ -80,15 +80,15 @@ typedef struct _AIRSPACE_AREA
   AIRSPACE_ACK Ack;
   unsigned char WarningLevel; // 0= no warning, 1= predicted incursion, 2= entered
   bool FarVisible;
-} AIRSPACE_AREA;
+};
 
-typedef struct _AIRSPACE_POINT
+struct AIRSPACE_POINT
 {
   double Latitude;
   double Longitude;
-} AIRSPACE_POINT;
+};
 
-typedef struct _AIRSPACE_CIRCLE
+struct AIRSPACE_CIRCLE
 {
   TCHAR Name[NAME_SIZE + 1];
   int Type;
@@ -105,7 +105,7 @@ typedef struct _AIRSPACE_CIRCLE
   rectObj bounds;
   unsigned char WarningLevel; // 0= no warning, 1= predicted incursion, 2= entered
   bool FarVisible;
-} AIRSPACE_CIRCLE;
+};
 
 /////////////////////////////////////////
 
