@@ -41,3 +41,20 @@ WAYPOINT *WayPointList = NULL;
 WPCALC *WayPointCalc = NULL; // VENTA3 additional infos calculated, parallel to WPs
 unsigned int NumberOfWayPoints = 0;
 int WaypointsOutOfRange = 1; // include
+
+
+////
+
+void WaypointScan::scan_forward(WaypointVisitor &visitor)
+{
+  if (!WayPointList) return;
+  for (unsigned i=0; i<NumberOfWayPoints; i++) {
+    if ((WayPointList[i].Flags & AIRPORT)==AIRPORT) {
+      visitor.waypoint_airport(WayPointList[i], WayPointCalc[i]);
+    } else if ((WayPointList[i].Flags & LANDPOINT)==LANDPOINT) {
+      visitor.waypoint_landable(WayPointList[i], WayPointCalc[i]);
+    } else {
+      visitor.waypoint_default(WayPointList[i], WayPointCalc[i]);
+    }
+  }
+}

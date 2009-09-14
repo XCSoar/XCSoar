@@ -101,4 +101,22 @@ extern WPCALC   *WayPointCalc; // VENTA3 additional calculated infos on WPs
 extern unsigned int NumberOfWayPoints;
 extern int WaypointsOutOfRange;
 
+class WaypointVisitor {
+public:
+  virtual void waypoint_default(WAYPOINT &waypoint, WPCALC &wpcalc) {};
+  virtual void waypoint_landable(WAYPOINT &waypoint, WPCALC &wpcalc) 
+    {
+      waypoint_default(waypoint, wpcalc);
+    }
+  virtual void waypoint_airport(WAYPOINT &waypoint, WPCALC &wpcalc) 
+    {
+      waypoint_default(waypoint, wpcalc);
+    }
+};
+
+class WaypointScan {
+public:
+  static void scan_forward(WaypointVisitor &visitor);
+};
+
 #endif
