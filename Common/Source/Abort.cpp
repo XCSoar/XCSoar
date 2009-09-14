@@ -60,12 +60,11 @@ void LatLon2Flat(double lon, double lat, int *scx, int *scy) {
 int 
 GlideComputerTask::CalculateWaypointApproxDistance(int scx_aircraft, 
 						   int scy_aircraft,
-						   int i) {
+                                                   const WAYPOINT &way_point) {
 
   // Do preliminary fast search, by converting to screen coordinates
   int sc_x, sc_y;
-  LatLon2Flat(WayPointList[i].Longitude,
-              WayPointList[i].Latitude, &sc_x, &sc_y);
+  LatLon2Flat(way_point.Longitude, way_point.Latitude, &sc_x, &sc_y);
   int dx, dy;
   dx = scx_aircraft-sc_x;
   dy = scy_aircraft-sc_y;
@@ -74,15 +73,15 @@ GlideComputerTask::CalculateWaypointApproxDistance(int scx_aircraft,
 }
 
 double
-GlideComputerTask::CalculateWaypointArrivalAltitude(int i)
+GlideComputerTask::CalculateWaypointArrivalAltitude(const WAYPOINT &way_point,
+                                                    WPCALC &calc)
 {
   double AltReqd;
   double wDistance, wBearing;
 
   DistanceBearing(Basic().Latitude,
                   Basic().Longitude,
-                  WayPointList[i].Latitude,
-                  WayPointList[i].Longitude,
+                  way_point.Latitude, way_point.Longitude,
                   &wDistance, &wBearing);
 
   AltReqd = GlidePolar::MacCreadyAltitude
@@ -96,12 +95,11 @@ GlideComputerTask::CalculateWaypointArrivalAltitude(int i)
      true,
      NULL);
 
-  WayPointCalc[i].Distance = wDistance; // VENTA3
-  WayPointCalc[i].Bearing  = wBearing; // VENTA3
-  WayPointCalc[i].AltReqd  = AltReqd;  // VENTA3
+  calc.Distance = wDistance;
+  calc.Bearing = wBearing;
+  calc.AltReqd = AltReqd;
 
-  return ((Calculated().NavAltitude) - AltReqd
-          - WayPointList[i].Altitude - 
+  return ((Calculated().NavAltitude) - AltReqd - way_point.Altitude -
 	  SettingsComputer().SAFETYALTITUDEARRIVAL);
 }
 
@@ -141,7 +139,8 @@ GlideComputerTask::SortLandableWaypoints()
     }
 
     int approx_distance =
-      CalculateWaypointApproxDistance(scx_aircraft, scy_aircraft, i);
+      CalculateWaypointApproxDistance(scx_aircraft, scy_aircraft,
+                                      WayPointList[i]);
 
     // see if this fits into slot
     for (k=0; k< MAXTASKPOINTS*2; k++)  {
@@ -196,7 +195,8 @@ GlideComputerTask::SortLandableWaypoints()
       }
 
       arrival_altitude =
-        CalculateWaypointArrivalAltitude(SortedApproxIndex[i]);
+        CalculateWaypointArrivalAltitude(WayPointList[SortedApproxIndex[i]],
+                                         WayPointCalc[SortedApproxIndex[i]]);
 
       if (scan_airports_slot==0) {
         if (arrival_altitude<0) {
@@ -273,7 +273,9 @@ GlideComputerTask::SortLandableWaypoints()
   if ((found_home_waypoint == -1)&&(HomeWaypoint>=0)) {
     // home not found in top list, so see if we can sneak it in
 
-    arrival_altitude = CalculateWaypointArrivalAltitude(HomeWaypoint);
+    arrival_altitude =
+      CalculateWaypointArrivalAltitude(WayPointList[HomeWaypoint],
+                                       WayPointCalc[HomeWaypoint]);
     if (arrival_altitude>0) {
       // only put it in if reachable
       SortedLandableIndex[MAXTASKPOINTS-2] = HomeWaypoint;
@@ -288,7 +290,8 @@ GlideComputerTask::SortLandableWaypoints()
     // if not found, keep on field or set active waypoint to closest
     if (ValidTaskPoint(ActiveWayPoint)){
       arrival_altitude =
-        CalculateWaypointArrivalAltitude(task_points[ActiveWayPoint].Index);
+        CalculateWaypointArrivalAltitude(WayPointList[ActiveWayPoint],
+                                         WayPointCalc[ActiveWayPoint]);
     } else {
       arrival_altitude = 0;
     }

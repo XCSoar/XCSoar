@@ -43,6 +43,9 @@ Copyright_License {
 #include "OnLineContest.h"
 #include "GPSClock.hpp"
 
+struct WAYPOINT;
+struct WPCALC;
+
 class GlideComputerTask: virtual public GlideComputerBlackboard {
 public:
   GlideComputerTask(): olc_clock(5.0) {};
@@ -108,8 +111,9 @@ private:
   // abort stuff
   int CalculateWaypointApproxDistance(int scx_aircraft, 
 				       int scy_aircraft,
-				       int i);
-  double CalculateWaypointArrivalAltitude(int i);
+                                      const WAYPOINT &way_point);
+  double CalculateWaypointArrivalAltitude(const WAYPOINT &way_point,
+                                          WPCALC &calc);
   // best alternate
   void AlertBestAlternate(short soundmode);
   void DoBestAlternateSlow();

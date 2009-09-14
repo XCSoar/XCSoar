@@ -122,7 +122,7 @@ GlideComputerTask::SearchBestAlternate()
     }
 
     int approx_distance =
-      CalculateWaypointApproxDistance(scx_aircraft, scy_aircraft, i);
+      CalculateWaypointApproxDistance(scx_aircraft, scy_aircraft, way_point);
 
     // Size a reasonable distance, wide enough VENTA3
     if ( approx_distance > searchrange ) continue;
@@ -179,8 +179,8 @@ GlideComputerTask::SearchBestAlternate()
         continue;
       }
 
-      arrival_altitude =
-        CalculateWaypointArrivalAltitude(SortedApproxIndex[i]);
+      arrival_altitude = CalculateWaypointArrivalAltitude(way_point,
+                                                          WayPointCalc[SortedApproxIndex[i]]);
 
       WayPointCalc[SortedApproxIndex[i]].AltArriv = arrival_altitude;
       // This is holding the real arrival value
@@ -542,7 +542,7 @@ GlideComputerTask::DoAlternates(int AltWaypoint)
   // We need to calculate arrival also for BestAlternate, since the last "reachable" could be
   // even 60 seconds old and things may have changed drastically
 
-  *altwp_arrival = CalculateWaypointArrivalAltitude(AltWaypoint);
+  *altwp_arrival = CalculateWaypointArrivalAltitude(way_point, way_point_calc);
   if ( (*altwp_arrival - ALTERNATE_OVERSAFETY) >0 ) {
   	if ( *altwp_gr <= (GlidePolar::bestld *SAFELD_FACTOR) ) *altwp_vgr = 1; // full green vgr
   	else
