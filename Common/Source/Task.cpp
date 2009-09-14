@@ -1008,7 +1008,7 @@ bool InAATTurnSector(const double longitude, const double latitude,
 
 bool WaypointInTask(const int ind) {
   if (!WayPointList || (ind<0)) return false;
-  return WayPointList[ind].InTask;
+  return WayPointCalc[ind].InTask;
 }
 
 

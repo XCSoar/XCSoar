@@ -320,7 +320,7 @@ GlideComputerTask::SortLandableWaypoints()
   // set new waypoints in task
 
   for (i=0; i<(int)NumberOfWayPoints; i++) {
-    WayPointList[i].InTask = false;
+    WayPointCalc[i].InTask = false;
   }
 
   int last_closest_waypoint=0;
@@ -331,7 +331,7 @@ GlideComputerTask::SortLandableWaypoints()
   for (i=0; i<MAXTASKPOINTS; i++){
     task_points[i].Index = SortedLandableIndex[i];
     if (ValidTaskPoint(i)) {
-      WayPointList[task_points[i].Index].InTask = true;
+      WayPointCalc[task_points[i].Index].InTask = true;
     }
   }
 
@@ -358,7 +358,7 @@ GlideComputerTask::SortLandableWaypoints()
     for (i=0; i<MAXSTARTPOINTS; i++) {
       if (task_start_stats[i].Active 
 	  && (ValidWayPoint(task_start_points[i].Index))) {
-        WayPointList[task_start_points[i].Index].InTask = true;
+        WayPointCalc[task_start_points[i].Index].InTask = true;
       }
     }
   }

@@ -2137,7 +2137,7 @@ GlideComputerTask::CalculateWaypointReachable(void)
   ScopeLock protect(mutexTaskData);
 
   for(i=0;i<NumberOfWayPoints;i++) {
-    if ((WayPointList[i].Visible &&
+    if ((WayPointCalc[i].Visible &&
 	 (
 	  ((WayPointList[i].Flags & AIRPORT) == AIRPORT) ||
 	  ((WayPointList[i].Flags & LANDPOINT) == LANDPOINT)
@@ -2163,10 +2163,10 @@ GlideComputerTask::CalculateWaypointReachable(void)
 	SettingsComputer().SAFETYALTITUDEARRIVAL
 	+ WayPointList[i].Altitude ;
       AltitudeDifference = Calculated().NavAltitude - AltitudeRequired;
-      WayPointList[i].AltArrivalAGL = AltitudeDifference;
+      WayPointCalc[i].AltArrivalAGL = AltitudeDifference;
 
       if(AltitudeDifference >=0){
-	WayPointList[i].Reachable = TRUE;
+	WayPointCalc[i].Reachable = true;
 	if (!Calculated().LandableReachable || ((int)i==ActiveTaskPoint)) {
 	  if (CheckLandableReachableTerrain(&Basic(),
 					    &Calculated(),
@@ -2175,11 +2175,11 @@ GlideComputerTask::CalculateWaypointReachable(void)
 					    WaypointBearing)) {
 	    SetCalculated().LandableReachable = true;
 	  } else if ((int)i==ActiveTaskPoint) {
-	    WayPointList[i].Reachable = FALSE;
+	    WayPointCalc[i].Reachable = false;
 	  }
 	}
       } else {
-	WayPointList[i].Reachable = FALSE;
+	WayPointCalc[i].Reachable = false;
       }
     }
   }
@@ -2190,7 +2190,7 @@ GlideComputerTask::CalculateWaypointReachable(void)
 
     for(i=0;i<NumberOfWayPoints;i++)
       {
-        if(!WayPointList[i].Visible && WayPointList[i].FarVisible)
+        if(!WayPointCalc[i].Visible && WayPointCalc[i].FarVisible)
           // visible but only at a distance (limit this to 100km radius)
           {
             if(  ((WayPointList[i].Flags & AIRPORT) == AIRPORT)
@@ -2217,10 +2217,10 @@ GlideComputerTask::CalculateWaypointReachable(void)
 		    SettingsComputer().SAFETYALTITUDEARRIVAL
                     + WayPointList[i].Altitude ;
                   AltitudeDifference = Calculated().NavAltitude - AltitudeRequired;
-                  WayPointList[i].AltArrivalAGL = AltitudeDifference;
+                  WayPointCalc[i].AltArrivalAGL = AltitudeDifference;
 
                   if(AltitudeDifference >=0){
-                    WayPointList[i].Reachable = TRUE;
+                    WayPointCalc[i].Reachable = true;
                     if (!Calculated().LandableReachable) {
                       if (CheckLandableReachableTerrain(&Basic(),
                                                         &Calculated(),
@@ -2231,7 +2231,7 @@ GlideComputerTask::CalculateWaypointReachable(void)
                       }
                     }
                   } else {
-                    WayPointList[i].Reachable = FALSE;
+                    WayPointCalc[i].Reachable = false;
                   }
                 }
               }

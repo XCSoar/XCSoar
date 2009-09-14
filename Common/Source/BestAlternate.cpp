@@ -381,7 +381,7 @@ GlideComputerTask::SearchBestAlternate()
 		  // MapWindow2 is checking for reachables separately,
 		  // se let's see if this closest is reachable
 		  if ( ValidWayPoint( SortedApproxIndex[0] )) {
-		    if ( WayPointList[SortedApproxIndex[0]].Reachable ) {
+		    if ( WayPointCalc[SortedApproxIndex[0]].Reachable ) {
 		      bestalternate = SortedApproxIndex[0];
 		    } else
 		      {
@@ -405,7 +405,7 @@ GlideComputerTask::SearchBestAlternate()
 	 */
 	if ( bestalternate >0 &&
 	     ((safecalc-WayPointList[bestalternate].Altitude) >ALTERNATE_QUIETMARGIN)) {
-	  if ( WayPointList[bestalternate].AltArrivalAGL <100 )
+	  if ( WayPointCalc[bestalternate].AltArrivalAGL <100 )
 	    AlertBestAlternate(2);
 	  //	if (EnableSoundModes) PlayResource(TEXT("IDR_WAV_RED"));
 	}

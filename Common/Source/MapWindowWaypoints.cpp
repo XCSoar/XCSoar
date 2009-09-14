@@ -83,7 +83,7 @@ void MapWindow::DrawWaypoints(Canvas &canvas)
 
   for(i=0;i<NumberOfWayPoints;i++)
     {
-      if(WayPointList[i].Visible )
+      if(WayPointCalc[i].Visible )
 	{
 
 #ifdef HAVEEXCEPTIONS
@@ -109,7 +109,7 @@ void MapWindow::DrawWaypoints(Canvas &canvas)
 	    } else if( ((WayPointList[i].Flags & AIRPORT) == AIRPORT)
 		       || ((WayPointList[i].Flags & LANDPOINT) == LANDPOINT) ) {
 	      islandable = true; // so we can always draw them
-	      if(WayPointList[i].Reachable){
+	      if(WayPointCalc[i].Reachable){
 
 		TextDisplayMode.AsFlag.Reachable = 1;
 
@@ -147,8 +147,8 @@ void MapWindow::DrawWaypoints(Canvas &canvas)
 
 	    if(irange || intask || islandable || dowrite) {
 	      draw_masked_bitmap(canvas, *wp_bmp, 
-				 WayPointList[i].Screen.x,
-				 WayPointList[i].Screen.y,
+				 WayPointCalc[i].Screen.x,
+				 WayPointCalc[i].Screen.y,
 				 20, 20);
             }
 
@@ -163,7 +163,7 @@ void MapWindow::DrawWaypoints(Canvas &canvas)
 		  if (draw_alt)
                     _stprintf(Buffer, TEXT("%s:%d%s"),
                               WayPointList[i].Name,
-                              (int)(WayPointList[i].AltArrivalAGL*ALTITUDEMODIFY),
+                              (int)(WayPointCalc[i].AltArrivalAGL*ALTITUDEMODIFY),
                               sAltUnit);
 		  else
                     _stprintf(Buffer, TEXT("%s"),WayPointList[i].Name);
@@ -174,7 +174,7 @@ void MapWindow::DrawWaypoints(Canvas &canvas)
 		if (draw_alt)
                   _stprintf(Buffer, TEXT("%s:%d%s"),
                             WayPointList[i].Name,
-                            (int)(WayPointList[i].AltArrivalAGL*ALTITUDEMODIFY),
+                            (int)(WayPointCalc[i].AltArrivalAGL*ALTITUDEMODIFY),
                             sAltUnit);
 		else
                   _stprintf(Buffer, TEXT("%s"),WayPointList[i].Name);
@@ -185,7 +185,7 @@ void MapWindow::DrawWaypoints(Canvas &canvas)
 		if (draw_alt)
                   _stprintf(Buffer, TEXT("%d:%d%s"),
                             WayPointList[i].Number,
-                            (int)(WayPointList[i].AltArrivalAGL*ALTITUDEMODIFY),
+                            (int)(WayPointCalc[i].AltArrivalAGL*ALTITUDEMODIFY),
                             sAltUnit);
 		else
                   _stprintf(Buffer, TEXT("%d"),WayPointList[i].Number);
@@ -198,7 +198,7 @@ void MapWindow::DrawWaypoints(Canvas &canvas)
 		if (draw_alt)
                   _stprintf(Buffer, TEXT("%s:%d%s"),
                             Buffer2,
-                            (int)(WayPointList[i].AltArrivalAGL*ALTITUDEMODIFY),
+                            (int)(WayPointCalc[i].AltArrivalAGL*ALTITUDEMODIFY),
                             sAltUnit);
 		else
                   _stprintf(Buffer, TEXT("%s"),Buffer2);
@@ -211,7 +211,7 @@ void MapWindow::DrawWaypoints(Canvas &canvas)
 		if (draw_alt)
                   _stprintf(Buffer, TEXT("%s:%d%s"),
                             Buffer2,
-                            (int)(WayPointList[i].AltArrivalAGL*ALTITUDEMODIFY),
+                            (int)(WayPointCalc[i].AltArrivalAGL*ALTITUDEMODIFY),
                             sAltUnit);
 		else
                   _stprintf(Buffer, TEXT("%s"),Buffer2);
@@ -221,7 +221,7 @@ void MapWindow::DrawWaypoints(Canvas &canvas)
 		dowrite = (SettingsMap().DeclutterLabels<2) || intask;
 		if (draw_alt)
                   _stprintf(Buffer, TEXT("%d%s"),
-                            (int)(WayPointList[i].AltArrivalAGL*ALTITUDEMODIFY),
+                            (int)(WayPointCalc[i].AltArrivalAGL*ALTITUDEMODIFY),
                             sAltUnit);
 		else
 		  Buffer[0]= '\0';
@@ -235,10 +235,10 @@ void MapWindow::DrawWaypoints(Canvas &canvas)
 	      if (dowrite) {
 		MapWaypointLabelAdd(
 				    Buffer,
-				    WayPointList[i].Screen.x+5,
-				    WayPointList[i].Screen.y,
+				    WayPointCalc[i].Screen.x+5,
+				    WayPointCalc[i].Screen.y,
 				    TextDisplayMode,
-				    (int)(WayPointList[i].AltArrivalAGL*ALTITUDEMODIFY),
+				    (int)(WayPointCalc[i].AltArrivalAGL*ALTITUDEMODIFY),
 				    intask,false,false,false,
 				    MapRect);
 	      }
@@ -265,14 +265,15 @@ void MapWindow::ScanVisibilityWaypoints(rectObj *bounds_active) {
 
   if (WayPointList) {
     WAYPOINT *wv = WayPointList;
+    WPCALC *wc = WayPointCalc;
     const WAYPOINT *we = WayPointList+NumberOfWayPoints;
     while (wv<we) {
       // TODO code: optimise waypoint visibility
-      wv->FarVisible = ((wv->Longitude> bounds.minx) &&
+      wc->FarVisible = ((wv->Longitude> bounds.minx) &&
 			(wv->Longitude< bounds.maxx) &&
 			(wv->Latitude> bounds.miny) &&
 			(wv->Latitude< bounds.maxy));
-      wv++;
+      wv++; wc++;
     }
   }
 }
@@ -288,8 +289,8 @@ void MapWindow::CalculateScreenPositionsWaypoints() {
       if (i>=0) {
 	LonLat2Screen(WayPointList[i].Longitude, 
 		      WayPointList[i].Latitude,
-		      WayPointList[i].Screen);
-	WayPointList[i].Visible = PointVisible(WayPointList[i].Screen);
+		      WayPointCalc[i].Screen);
+	WayPointCalc[i].Visible = PointVisible(WayPointCalc[i].Screen);
       }
     }
     if (EnableMultipleStartPoints) {
@@ -298,20 +299,20 @@ void MapWindow::CalculateScreenPositionsWaypoints() {
         if (task_start_stats[j].Active && (i>=0)) {
 	  LonLat2Screen(WayPointList[i].Longitude, 
 			WayPointList[i].Latitude,
-			WayPointList[i].Screen);
-	  WayPointList[i].Visible = PointVisible(WayPointList[i].Screen);
+			WayPointCalc[i].Screen);
+	  WayPointCalc[i].Visible = PointVisible(WayPointCalc[i].Screen);
         }
       }
     }
     // only calculate screen coordinates for waypoints that are visible
     for (unsigned i = 0; i < NumberOfWayPoints; i++) {
-      if (!WayPointList[i].FarVisible) {
-	WayPointList[i].Visible = false;
+      if (!WayPointCalc[i].FarVisible) {
+	WayPointCalc[i].Visible = false;
 	continue;
       } else {
-	WayPointList[i].Visible = LonLat2ScreenIfVisible(WayPointList[i].Longitude, 
+	WayPointCalc[i].Visible = LonLat2ScreenIfVisible(WayPointList[i].Longitude, 
 							 WayPointList[i].Latitude,
-							 &WayPointList[i].Screen);
+							 &WayPointCalc[i].Screen);
       }
     }
   }

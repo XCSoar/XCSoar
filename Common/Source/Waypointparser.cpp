@@ -252,6 +252,7 @@ WAYPOINT* GrowWaypointList() {
 
       return 0; // failed to allocate
     }
+    // TODO: initialise newly created waypointcalc
 
     if (q != WayPointCalc){
       WayPointCalc = q;
@@ -377,9 +378,6 @@ ParseWayPointString(const TCHAR *String, WAYPOINT *Temp)
   _tcscpy(TempString, String);
   // 20060513:sgi added wor on a copy of the string, do not modify the
   // source string, needed on error messages
-
-  Temp->Visible = true; // default all waypoints visible at start
-  Temp->FarVisible = true;
 
   Temp->FileNum = globalFileNum;
 
@@ -819,7 +817,7 @@ int FindNearestWayPoint(MapWindowProjection &map_projection,
   NearestDistance = MaxRange;
   for(i=0;i<NumberOfWayPoints;i++) {
 
-    if (WayPointList[i].Visible) {
+    if (WayPointCalc[i].Visible) {
 
       if (map_projection.WaypointInScaleFilter(i)) {
 

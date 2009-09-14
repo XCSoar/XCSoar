@@ -52,7 +52,7 @@ const TCHAR *FormatterWaypoint::Render(int *color) {
   if(ValidTaskPoint(thewaypoint))
     {
       int index = task_points[thewaypoint].Index;
-      if ((index>=0) && (WayPointList[index].Reachable)) {
+      if ((index>=0) && (WayPointCalc[index].Reachable)) {
 	*color = 2; // blue text
       } else {
 	*color = 0; // black text

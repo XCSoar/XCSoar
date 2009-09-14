@@ -332,18 +332,18 @@ public:
   void visit_reset() {
     if (WayPointList) {
       for (unsigned i=0; i< NumberOfWayPoints; i++) {
-	WayPointList[i].InTask = false;
+	WayPointCalc[i].InTask = false;
 	if ((WayPointList[i].Flags & HOME) == HOME) {
-	  WayPointList[i].InTask = true;
+	  WayPointCalc[i].InTask = true;
 	}
       }
       if (ValidWayPoint(settings_computer->HomeWaypoint)) {
-	WayPointList[settings_computer->HomeWaypoint].InTask = true;
+	WayPointCalc[settings_computer->HomeWaypoint].InTask = true;
       }
     }
   }
   void visit_start_point(START_POINT &point, const unsigned i) { 
-    WayPointList[task_start_points[i].Index].InTask = true;
+    WayPointCalc[task_start_points[i].Index].InTask = true;
   }
   void visit_task_point_start(TASK_POINT &point, const unsigned i) { 
     addTaskPoint(i);
@@ -357,7 +357,7 @@ public:
 private:
   const SETTINGS_COMPUTER *settings_computer;
   void addTaskPoint(const unsigned i) {
-    WayPointList[task_points[i].Index].InTask = true;
+    WayPointCalc[task_points[i].Index].InTask = true;
   }
 };
 

@@ -67,15 +67,8 @@ struct WAYPOINT
   int Flags;
   TCHAR Name[NAME_SIZE + 1];
   TCHAR Comment[COMMENT_SIZE + 1];
-
-  POINT	Screen;
-  int Zoom;
-  BOOL Reachable;
-  double AltArrivalAGL;
-  BOOL Visible;
-  bool InTask;
   TCHAR *Details;
-  bool FarVisible;
+  int Zoom;
   int FileNum; // which file it is in, or -1 to delete
 };
 
@@ -85,6 +78,13 @@ struct WAYPOINT
 // and use them like  WayPointCalc[n].Distance  for example.
 struct WPCALC
 {
+  POINT	Screen;
+  bool Reachable;
+  double AltArrivalAGL;
+  bool Visible;
+  bool InTask;
+  bool FarVisible;
+
 //  long timeslot;
   double GR;       // GR from current position
   short VGR;       // Visual GR
