@@ -207,7 +207,7 @@ GlideComputerTask::SearchBestAlternate()
 	  // with same
           {
             double wp_distance, wp_bearing;
-            DistanceBearing(Basic().Latitude , Basic().Longitude ,
+            DistanceBearing(Basic().Latitude, Basic().Longitude,
                             way_point.Latitude, way_point.Longitude,
                             &wp_distance, &wp_bearing);
 

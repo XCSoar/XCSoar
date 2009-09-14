@@ -2123,119 +2123,101 @@ static bool CheckLandableReachableTerrain(const NMEA_INFO *Basic,
 }
 
 
-void
-GlideComputerTask::CalculateWaypointReachable(void)
-{
-  unsigned int i;
-  double WaypointDistance, WaypointBearing, 
-    AltitudeRequired,AltitudeDifference;
+class WaypointReachable: public WaypointVisitor {
+public:
+  WaypointReachable(const NMEA_INFO &_gps_info,
+                    const DERIVED_INFO &_calculated_info,
+                    const SETTINGS_COMPUTER &_settings):
+    gps_info(_gps_info),
+    calculated_info(_calculated_info),
+    settings(_settings),
+    narrow(true),
+    reachable(false)
+    {};
 
-  SetCalculated().LandableReachable = false;
+  void waypoint_landable(WAYPOINT &waypoint, WPCALC &wpcalc, const unsigned i) 
+    {
+      waypoint_airport(waypoint, wpcalc, i);
+    }
+  void waypoint_airport(WAYPOINT &waypoint, WPCALC &wpcalc, const unsigned i) 
+    {
+      if (narrow) {
+        if (!wpcalc.Visible && !wpcalc.InTask) {
+          return;
+        }
+      } else {
+        if (wpcalc.Visible || !wpcalc.FarVisible) {
+          return;
+        }
+      }
+      double WaypointDistance, WaypointBearing, 
+        AltitudeRequired,AltitudeDifference;
 
-  if (!WayPointList) return;
-
-  ScopeLock protect(mutexTaskData);
-
-  for(i=0;i<NumberOfWayPoints;i++) {
-    if ((WayPointCalc[i].Visible &&
-	 (
-	  ((WayPointList[i].Flags & AIRPORT) == AIRPORT) ||
-	  ((WayPointList[i].Flags & LANDPOINT) == LANDPOINT)
-	  ))
-	|| WaypointInTask(i) ) {
-
-      DistanceBearing(Basic().Latitude,
-		      Basic().Longitude,
-		      WayPointList[i].Latitude,
-		      WayPointList[i].Longitude,
+      DistanceBearing(gps_info.Latitude,
+		      gps_info.Longitude,
+		      waypoint.Latitude,
+		      waypoint.Longitude,
 		      &WaypointDistance,
 		      &WaypointBearing);
+
+      if (!narrow && (WaypointDistance>100000.0) && !wpcalc.InTask) {
+        // already processed if in task, or too far away to calculate
+        return;
+      }
 
       AltitudeRequired =
 	GlidePolar::MacCreadyAltitude
 	(GlidePolar::SafetyMacCready,
 	 WaypointDistance,
 	 WaypointBearing,
-	 Calculated().WindSpeed,
-	 Calculated().WindBearing,
+	 calculated_info.WindSpeed,
+	 calculated_info.WindBearing,
 	 0,0,true,0);
-      AltitudeRequired = AltitudeRequired + 
-	SettingsComputer().SAFETYALTITUDEARRIVAL
-	+ WayPointList[i].Altitude ;
-      AltitudeDifference = Calculated().NavAltitude - AltitudeRequired;
-      WayPointCalc[i].AltArrivalAGL = AltitudeDifference;
+      AltitudeRequired = AltitudeRequired + settings.SAFETYALTITUDEARRIVAL
+	+ waypoint.Altitude ;
+      AltitudeDifference = calculated_info.NavAltitude - AltitudeRequired;
+      wpcalc.AltArrivalAGL = AltitudeDifference;
 
-      if(AltitudeDifference >=0){
-	WayPointCalc[i].Reachable = true;
-	if (!Calculated().LandableReachable || ((int)i==ActiveTaskPoint)) {
-	  if (CheckLandableReachableTerrain(&Basic(),
-					    &Calculated(),
-					    SettingsComputer(),
+      if(AltitudeDifference <0){
+	wpcalc.Reachable = false;
+      } else {
+	wpcalc.Reachable = true;
+	if (!reachable || wpcalc.InTask) {
+	  if (CheckLandableReachableTerrain(&gps_info,
+					    &calculated_info,
+					    settings,
 					    WaypointDistance,
 					    WaypointBearing)) {
-	    SetCalculated().LandableReachable = true;
-	  } else if ((int)i==ActiveTaskPoint) {
-	    WayPointCalc[i].Reachable = false;
+	    reachable = true;
+	  } else if (wpcalc.InTask) {
+            // non-task waypoint reachability is not calculated with
+            // respect to glide through terrain (because it is too slow)
+	    wpcalc.Reachable = false;
 	  }
 	}
-      } else {
-	WayPointCalc[i].Reachable = false;
       }
     }
-  }
+  bool narrow;
+  bool reachable;
+private:
+  const NMEA_INFO &gps_info;
+  const DERIVED_INFO &calculated_info;
+  const SETTINGS_COMPUTER &settings;
+};
 
-  if (!Calculated().LandableReachable) {
+
+void
+GlideComputerTask::CalculateWaypointReachable(void)
+{
+  WaypointReachable wrv(Basic(), Calculated(), SettingsComputer());
+  WaypointScan::scan_forward(wrv);
+
+  if (!wrv.reachable) {
+    wrv.narrow = false;
+    WaypointScan::scan_forward(wrv);
     // widen search to far visible waypoints
     // (only do this if can't see one at present)
-
-    for(i=0;i<NumberOfWayPoints;i++)
-      {
-        if(!WayPointCalc[i].Visible && WayPointCalc[i].FarVisible)
-          // visible but only at a distance (limit this to 100km radius)
-          {
-            if(  ((WayPointList[i].Flags & AIRPORT) == AIRPORT)
-                 || ((WayPointList[i].Flags & LANDPOINT) == LANDPOINT) )
-              {
-                DistanceBearing(Basic().Latitude,
-                                Basic().Longitude,
-                                WayPointList[i].Latitude,
-                                WayPointList[i].Longitude,
-                                &WaypointDistance,
-                                &WaypointBearing);
-
-                if (WaypointDistance<100000.0) {
-                  AltitudeRequired =
-                    GlidePolar::MacCreadyAltitude
-                    (GlidePolar::SafetyMacCready,
-                     WaypointDistance,
-                     WaypointBearing,
-                     Calculated().WindSpeed,
-                     Calculated().WindBearing,
-                     0,0,true,0);
-
-                  AltitudeRequired = AltitudeRequired + 
-		    SettingsComputer().SAFETYALTITUDEARRIVAL
-                    + WayPointList[i].Altitude ;
-                  AltitudeDifference = Calculated().NavAltitude - AltitudeRequired;
-                  WayPointCalc[i].AltArrivalAGL = AltitudeDifference;
-
-                  if(AltitudeDifference >=0){
-                    WayPointCalc[i].Reachable = true;
-                    if (!Calculated().LandableReachable) {
-                      if (CheckLandableReachableTerrain(&Basic(),
-                                                        &Calculated(),
-							SettingsComputer(),
-                                                        WaypointDistance,
-                                                        WaypointBearing)) {
-                        SetCalculated().LandableReachable = true;
-                      }
-                    }
-                  } else {
-                    WayPointCalc[i].Reachable = false;
-                  }
-                }
-              }
-          }
-      }
   }
+  SetCalculated().LandableReachable = wrv.reachable;
 }
+
