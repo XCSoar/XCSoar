@@ -1,6 +1,5 @@
 .phony: 
 
-# TODO better name for test to allow entry in .gitignores
 BUILDTESTS=\
 	t/01_test_tap.exe
 
