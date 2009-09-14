@@ -425,7 +425,7 @@ class WndForm:public WindowControl{
     /** from class PaintWindow */
     virtual void on_paint(Canvas &canvas);
 
-    int cbTimerID;
+    timer_t cbTimerID;
 
   public:
 

@@ -155,7 +155,7 @@ protected:
   virtual void on_paint(Canvas &canvas);
   virtual bool on_setfocus();
   virtual bool on_killfocus();
-  virtual bool on_timer(unsigned id);
+  virtual bool on_timer(timer_t id);
 };
 
 #endif

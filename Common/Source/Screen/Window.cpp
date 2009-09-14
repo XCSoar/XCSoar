@@ -202,7 +202,7 @@ Window::on_killfocus()
 }
 
 bool
-Window::on_timer(unsigned id)
+Window::on_timer(timer_t id)
 {
   return false;
 }

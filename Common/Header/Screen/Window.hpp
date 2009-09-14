@@ -48,6 +48,9 @@ class ContainerWindow;
  * into a Window, derive your class from #PaintWindow.
  */
 class Window {
+public:
+  typedef UINT_PTR timer_t;
+
 protected:
   HWND hWnd;
   WNDPROC prev_wndproc;
@@ -158,14 +161,15 @@ public:
     return (void *)get_userdata();
   }
 
-  UINT_PTR set_timer(UINT_PTR nIDEvent, UINT uElapse)
+  timer_t set_timer(unsigned id, unsigned ms)
   {
-    return ::SetTimer(hWnd, nIDEvent, uElapse, NULL);
+    ::SetTimer(hWnd, id, ms, NULL);
+    return id;
   }
 
-  void kill_timer(UINT_PTR uIDEvent)
+  void kill_timer(timer_t id)
   {
-    ::KillTimer(hWnd, uIDEvent);
+    ::KillTimer(hWnd, id);
   }
 
   const RECT get_position() const
@@ -214,7 +218,7 @@ protected:
   virtual bool on_command(HWND hWnd, unsigned id, unsigned code);
   virtual bool on_setfocus();
   virtual bool on_killfocus();
-  virtual bool on_timer(unsigned id);
+  virtual bool on_timer(timer_t id);
 
   virtual LRESULT on_message(HWND hWnd, UINT message,
                              WPARAM wParam, LPARAM lParam);

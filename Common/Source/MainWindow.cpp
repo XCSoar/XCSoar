@@ -162,8 +162,11 @@ MainWindow::on_activate()
 }
 
 bool
-MainWindow::on_timer(unsigned id)
+MainWindow::on_timer(timer_t id)
 {
+  if (id != timer_id)
+    return TopWindow::on_timer(id);
+
   if (globalRunningEvent.test()) {
     XCSoarInterface::AfterStartup();
     ProcessTimer::Process();
@@ -175,9 +178,8 @@ bool MainWindow::on_create(void)
 {
   TopWindow::on_create();
 
-  if (_timer_id == 0) {
-    _timer_id = SetTimer(hWnd,1000,500,NULL); // 2 times per second
-  }
+  timer_id = set_timer(1000, 500); // 2 times per second
+
   return true;
 }
 
@@ -185,6 +187,8 @@ void MainWindow::install_timer(void) {
 }
 
 bool MainWindow::on_destroy(void) {
+  kill_timer(timer_id);
+
   TopWindow::on_destroy();
 
   PostQuitMessage(0);
@@ -193,10 +197,6 @@ bool MainWindow::on_destroy(void) {
 
 bool MainWindow::on_close() {
   if (XCSoarInterface::CheckShutdown()) {
-    if(_timer_id) {
-      ::KillTimer(hWnd, _timer_id);
-      _timer_id = 0;
-    }
     XCSoarInterface::Shutdown();
   }
   return true;
