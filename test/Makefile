@@ -1,14 +1,15 @@
 .phony: 
 
-# XXX better name for test
+# TODO better name for test to allow entry in .gitignores
 BUILDTESTS=\
-	t/01_test_tap
+	t/01_test_tap.exe
 
-test: .phony src/01test_tap
+test: .phony $(BUILDTESTS)
 	# prove
 	perl tools/testall.pl t/*
 
-t/01test_tap: src/01test_tap.c
+# TODO generalise
+t/01_test_tap.exe: src/01_test_tap.c
 	gcc -o $@ $<
 
 clean:
