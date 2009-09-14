@@ -116,7 +116,7 @@ LookupAirfieldDetail(TCHAR *Name, TCHAR *Details)
   TCHAR NameD[100];
   TCHAR TmpName[100];
 
-  BOOL isHome, isPreferred, isAvoid;
+  bool isHome, isPreferred, isAvoid;
 
   if (!WayPointList) return;
 
@@ -136,23 +136,23 @@ LookupAirfieldDetail(TCHAR *Name, TCHAR *Details)
 	_stprintf(NameC,TEXT("%s A/D"),Name);
 	_stprintf(NameD,TEXT("%s AD"),Name);
 
-	isHome=FALSE;
-	isPreferred=FALSE;
-	isAvoid=FALSE;
+	isHome=false;
+	isPreferred=false;
+	isAvoid=false;
 
 	_stprintf(TmpName,TEXT("%s=HOME"),UName);
-	if ( (_tcscmp(Name, TmpName)==0) )  isHome=TRUE;
+	if ( (_tcscmp(Name, TmpName)==0) )  isHome=true;
 	_stprintf(TmpName,TEXT("%s=PREF"),UName);
-	if ( (_tcscmp(Name, TmpName)==0) )  isPreferred=TRUE;
+	if ( (_tcscmp(Name, TmpName)==0) )  isPreferred=true;
 	_stprintf(TmpName,TEXT("%s=PREFERRED"),UName);
-	if ( (_tcscmp(Name, TmpName)==0) )  isPreferred=TRUE;
+	if ( (_tcscmp(Name, TmpName)==0) )  isPreferred=true;
 
-	if ( isHome==TRUE ) {
-	  WayPointCalc[i].Preferred = TRUE;
+	if ( isHome==true ) {
+	  WayPointCalc[i].Preferred = true;
 	  XCSoarInterface::SetSettingsComputer().HomeWaypoint = i;
 	}
-	if ( isPreferred==TRUE ) {
-	  WayPointCalc[i].Preferred = TRUE;
+	if ( isPreferred==true ) {
+	  WayPointCalc[i].Preferred = true;
 	}
 
 	if ((_tcscmp(UName, Name)==0)
@@ -198,8 +198,8 @@ ParseAirfieldDetails()
   TempString[0]=0;
   CleanString[0]=0;
 
-  BOOL inDetails = FALSE;
-  BOOL hasDetails = FALSE; // VENTA3
+  bool inDetails = false;
+  bool hasDetails = false; // VENTA3
   int i, n;
   unsigned j;
   int k=0;
@@ -212,7 +212,7 @@ ParseAirfieldDetails()
 	  LookupAirfieldDetail(Name, Details);
 	  Details[0]= 0;
 	  Name[0]= 0;
-	  hasDetails=FALSE;
+	  hasDetails=false;
 	}
 
 	// extract name
@@ -224,7 +224,7 @@ ParseAirfieldDetails()
 	}
 	Name[i-1]= 0;
 
-	inDetails = TRUE;
+	inDetails = true;
 
         if (k % 20 == 0) {
 	  XCSoarInterface::StepProgressDialog();
@@ -235,12 +235,12 @@ ParseAirfieldDetails()
 	// VENTA3: append text to details string
 	for (j=0; j<_tcslen(TempString); j++ ) {
 	  if ( TempString[j] > 0x20 ) {
-	    hasDetails = TRUE;
+	    hasDetails = true;
 	    break;
 	  }
 	}
-	// first hasDetails set TRUE for rest of details
-	if (hasDetails==TRUE) {
+	// first hasDetails set true for rest of details
+	if (hasDetails==true) {
 
 	  // Remove carriage returns
 	  for (j=0, n=0; j<_tcslen(TempString); j++) {
