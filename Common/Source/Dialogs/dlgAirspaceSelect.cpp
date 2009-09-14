@@ -64,8 +64,7 @@ typedef struct{
   unsigned int FourChars;
 } AirspaceSelectInfo_t;
 
-static double Latitude;
-static double Longitude;
+static GEOPOINT Location;
 
 static WndForm *wf=NULL;
 static WndListFrame *wAirspaceList=NULL;
@@ -248,12 +247,10 @@ static void PrepareData(void){
     AirspaceSelectInfo[index].Index_Area = -1;
 
     AirspaceSelectInfo[index].Distance = DISTANCEMODIFY*
-      RangeAirspaceCircle(Longitude, Latitude, i);
+      RangeAirspaceCircle(Location, i);
 
-    DistanceBearing(Latitude,
-                    Longitude,
-                    AirspaceCircle[i].Latitude,
-                    AirspaceCircle[i].Longitude,
+    DistanceBearing(Location,
+                    AirspaceCircle[i].Location,
                     NULL, &AirspaceSelectInfo[index].Direction);
 
     _tcsncpy(sTmp, AirspaceCircle[i].Name, 4);
@@ -278,7 +275,7 @@ static void PrepareData(void){
     AirspaceSelectInfo[index].Index_Area = i;
 
     AirspaceSelectInfo[index].Distance = DISTANCEMODIFY*
-      RangeAirspaceArea(Longitude, Latitude, i,
+      RangeAirspaceArea(Location, i,
                         &AirspaceSelectInfo[index].Direction,
 			map_window);
 
@@ -787,8 +784,7 @@ void dlgAirspaceSelect(void) {
 
   NumberOfAirspaces = NumberOfAirspaceCircles + NumberOfAirspaceAreas;
 
-  Latitude = XCSoarInterface::Basic().Latitude;
-  Longitude = XCSoarInterface::Basic().Longitude;
+  Location = XCSoarInterface::Basic().Location;
 
   if (!InfoBoxLayout::landscape) {
     wf = dlgLoadFromXML(CallBackTable,

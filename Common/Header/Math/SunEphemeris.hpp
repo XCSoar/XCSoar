@@ -39,6 +39,7 @@ Copyright_License {
 
 struct NMEA_INFO;
 struct DERIVED_INFO;
+struct GEOPOINT;
 
 class SunEphemeris {
 
@@ -74,7 +75,7 @@ class SunEphemeris {
 
   double twam,altmax,noont,settm,riset,twpm;
 
-  int CalcSunTimes(float longit, float latit,
+  int CalcSunTimes(const GEOPOINT &location,
 		   const NMEA_INFO &GPS_INFO,
 		   const DERIVED_INFO &CALCULATED_INFO,
 		   double tzone);

@@ -61,8 +61,7 @@ typedef struct{
   unsigned int FourChars;
 } WayPointSelectInfo_t;
 
-static double Latitude;
-static double Longitude;
+static GEOPOINT Location;
 
 static WndForm *wf=NULL;
 static WndListFrame *wWayPointList=NULL;
@@ -195,10 +194,8 @@ static void PrepareData(void){
   for (int i=0; i<(int)NumberOfWayPoints; i++){
     WayPointSelectInfo[i].Index = i;
 
-    DistanceBearing(Latitude,
-                    Longitude,
-                    WayPointList[i].Latitude,
-                    WayPointList[i].Longitude,
+    DistanceBearing(Location,
+                    WayPointList[i].Location,
                     &(WayPointSelectInfo[i].Distance),
                     &(WayPointSelectInfo[i].Direction));
     WayPointSelectInfo[i].Distance *= DISTANCEMODIFY;
@@ -688,19 +685,14 @@ static CallBackTableEntry_t CallBackTable[]={
   DeclareCallBackEntry(NULL)
 };
 
-int dlgWayPointSelect(double lon, double lat, int type, int FilterNear){
+int dlgWayPointSelect(const GEOPOINT &location, const int type, const int FilterNear){
 
   UpLimit = 0;
   LowLimit = 0;
   ItemIndex = -1;
 
-  if (lon==0.0 && lat==90.0) {
-    Latitude = XCSoarInterface::Basic().Latitude;
-    Longitude = XCSoarInterface::Basic().Longitude;
-  } else {
-    Latitude = lat;
-    Longitude = lon;
-  }
+  Location = location;
+
   if (type > -1){
     TypeFilterIdx = type;
   }

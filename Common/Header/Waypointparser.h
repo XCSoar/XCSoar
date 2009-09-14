@@ -48,12 +48,14 @@ Copyright_License {
 #define wpTerrainBoundsNoAll  103
 
 class MapWindowProjection;
+struct GEOPOINT;
 
 void ReadWayPoints(void);
 void SetHome(SETTINGS_COMPUTER &settings,
 	     const bool reset, const bool set_location=false);
 int FindNearestWayPoint(MapWindowProjection &map_projection,
-			double X, double Y, double MaxRange, bool exhaustive=false);
+			const GEOPOINT &location, 
+                        double MaxRange, bool exhaustive=false);
 void CloseWayPoints(void);
 int dlgWaypointOutOfTerrain(const TCHAR *Message);
 void WaypointWriteFiles(const SETTINGS_COMPUTER &settings_computer);

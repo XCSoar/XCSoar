@@ -117,8 +117,8 @@ bool MapWindow::TargetDragged(double *longitude, double *latitude) {
   if (TargetDrag_State >0) { // always return true if we're dragging
 			     // or just stopped dragging, so screen is
 			     // updated
-    *longitude = TargetDrag_Longitude;
-    *latitude = TargetDrag_Latitude;
+    *longitude = TargetDrag_Location.Longitude;
+    *latitude = TargetDrag_Location.Latitude;
     if (TargetDrag_State == 2) {
         TargetDrag_State = 0; // mouse up/ stop dragging
     }

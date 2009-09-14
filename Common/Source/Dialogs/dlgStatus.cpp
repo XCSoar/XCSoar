@@ -356,8 +356,10 @@ static void UpdateValuesFlight(void) {
   TCHAR sLongitude[16];
   TCHAR sLatitude[16];
 
-  Units::LongitudeToString(XCSoarInterface::Basic().Longitude, sLongitude, sizeof(sLongitude)-1);
-  Units::LatitudeToString(XCSoarInterface::Basic().Latitude, sLatitude, sizeof(sLatitude)-1);
+  Units::LongitudeToString(XCSoarInterface::Basic().Location.Longitude, 
+                           sLongitude, sizeof(sLongitude)-1);
+  Units::LatitudeToString(XCSoarInterface::Basic().Location.Latitude, 
+                          sLatitude, sizeof(sLatitude)-1);
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpLongitude"));
   if (wp) {
@@ -387,10 +389,8 @@ static void UpdateValuesFlight(void) {
 
   if (nearest_waypoint>=0) {
 
-    DistanceBearing(XCSoarInterface::Basic().Latitude,
-                    XCSoarInterface::Basic().Longitude,
-                    WayPointList[nearest_waypoint].Latitude,
-                    WayPointList[nearest_waypoint].Longitude,
+    DistanceBearing(XCSoarInterface::Basic().Location,
+                    WayPointList[nearest_waypoint].Location,
                     &distance,
                     &bearing);
 
@@ -655,8 +655,7 @@ void dlgStatusShowModal(int start_page){
   }
 
   nearest_waypoint = FindNearestWayPoint(XCSoarInterface::main_window.map,
-					 XCSoarInterface::Basic().Longitude,
-                                         XCSoarInterface::Basic().Latitude,
+					 XCSoarInterface::Basic().Location,
                                          100000.0, true); // big range limit
 
   UpdateValuesSystem();

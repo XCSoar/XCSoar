@@ -769,8 +769,10 @@ static void AirspaceAGLLookup(AIRSPACE_ALT *Top, AIRSPACE_ALT *Base,
     // want most accurate rounding here
     terrain.SetTerrainRounding(0,0);
 
+    GEOPOINT p; p.Longitude = av_lon; p.Latitude = av_lat;
+
     double th =
-      terrain.GetTerrainHeight(av_lat, av_lon);
+      terrain.GetTerrainHeight(p);
 
     if (Base->Base == abAGL) {
       if (Base->AGL>=0) {
@@ -813,8 +815,8 @@ static void AddAirspaceCircle(AIRSPACE_AREA *Temp,
       NumberOfAirspaceCircles++;
 
       _tcscpy(NewCircle->Name , Temp->Name);
-      NewCircle->Latitude = aCenterY;
-      NewCircle->Longitude = aCenterX;
+      NewCircle->Location.Latitude = aCenterY;
+      NewCircle->Location.Longitude = aCenterX;
       NewCircle->Radius = aRadius;
       NewCircle->Type = Temp->Type;
       NewCircle->Top.Altitude  = Temp->Top.Altitude ;
@@ -830,8 +832,8 @@ static void AddAirspaceCircle(AIRSPACE_AREA *Temp,
       NewCircle->_NewWarnAckNoBrush = false;
 
       AirspaceAGLLookup(&NewCircle->Base, &NewCircle->Top,
-			NewCircle->Latitude,
-			NewCircle->Longitude);
+			NewCircle->Location.Latitude,
+                        NewCircle->Location.Longitude);
 
     }
 }
@@ -917,33 +919,33 @@ static void AddArea(AIRSPACE_AREA *Temp)
         CheckAirspacePoint(NewArea->FirstPoint);
 
         PointList = &AirspacePoint[NewArea->FirstPoint];
-        NewArea->MaxLatitude = -90;
-        NewArea->MinLatitude = 90;
-        NewArea->MaxLongitude  = -180;
-        NewArea->MinLongitude  = 180;
+        NewArea->maxBound.Latitude = -90;
+        NewArea->minBound.Latitude = 90;
+        NewArea->maxBound.Longitude  = -180;
+        NewArea->minBound.Longitude  = 180;
 
         for(i=0;i<Temp->NumPoints; i++)
         {
-          if(PointList[i].Latitude > NewArea->MaxLatitude)
-            NewArea->MaxLatitude = PointList[i].Latitude ;
-          if(PointList[i].Latitude < NewArea->MinLatitude)
-            NewArea->MinLatitude = PointList[i].Latitude ;
+          if(PointList[i].Latitude > NewArea->maxBound.Latitude)
+            NewArea->maxBound.Latitude = PointList[i].Latitude ;
+          if(PointList[i].Latitude < NewArea->minBound.Latitude)
+            NewArea->minBound.Latitude = PointList[i].Latitude ;
 
-          if(PointList[i].Longitude  > NewArea->MaxLongitude)
-            NewArea->MaxLongitude  = PointList[i].Longitude ;
-          if(PointList[i].Longitude  < NewArea->MinLongitude)
-            NewArea->MinLongitude  = PointList[i].Longitude ;
+          if(PointList[i].Longitude  > NewArea->maxBound.Longitude)
+            NewArea->maxBound.Longitude  = PointList[i].Longitude ;
+          if(PointList[i].Longitude  < NewArea->minBound.Longitude)
+            NewArea->minBound.Longitude  = PointList[i].Longitude ;
         }
 	AirspaceAGLLookup(&NewArea->Base, &NewArea->Top,
-			  (NewArea->MaxLatitude+NewArea->MinLatitude)/2,
-			  (NewArea->MaxLongitude+NewArea->MinLongitude)/2);
+			  (NewArea->maxBound.Latitude+NewArea->minBound.Latitude)/2,
+			  (NewArea->maxBound.Longitude+NewArea->minBound.Longitude)/2);
 
       } else {
 
-        NewArea->MaxLatitude = 0;
-        NewArea->MinLatitude = 0;
-        NewArea->MaxLongitude  = 0;
-        NewArea->MinLongitude  = 0;
+        NewArea->maxBound.Latitude = 0;
+        NewArea->minBound.Latitude = 0;
+        NewArea->maxBound.Longitude  = 0;
+        NewArea->minBound.Longitude  = 0;
 
       }
     }
@@ -1087,6 +1089,8 @@ static void CalculateSector(TCHAR *Text)
   StartBearing = (double)StrToDouble(&Stop[1], &Stop);
   EndBearing = (double)StrToDouble(&Stop[1], &Stop);
 
+  GEOPOINT c; c.Longitude = CenterX; c.Latitude = CenterY;
+
   while(fabs(EndBearing-StartBearing) > 7.5)
   {
     if(StartBearing >= 360)
@@ -1096,47 +1100,48 @@ static void CalculateSector(TCHAR *Text)
 
     //	  if (bFillMode)	// Trig calcs not needed on first pass
     {
-      FindLatitudeLongitude(CenterY, CenterX, StartBearing, Radius,
-                            &TempPoint.Latitude,
-                            &TempPoint.Longitude);
+      FindLatitudeLongitude(c, 
+                            StartBearing, Radius,
+                            &TempPoint);
     }
     AddPoint(&TempPoint, &TempArea.NumPoints);
 
     StartBearing += Rotation *5 ;
   }
 
-//  if (bFillMode)	// Trig calcs not needed on first pass
+  //  if (bFillMode)	// Trig calcs not needed on first pass
   {
-    FindLatitudeLongitude(CenterY, CenterX, EndBearing, Radius,
-                          &TempPoint.Latitude,
-                          &TempPoint.Longitude);
+    FindLatitudeLongitude(c, EndBearing, Radius,
+                          &TempPoint);
   }
   AddPoint(&TempPoint, &TempArea.NumPoints);
 }
 
 static void CalculateArc(TCHAR *Text)
 {
-  double StartLat, StartLon;
-  double EndLat, EndLon;
+  GEOPOINT Start;
+  GEOPOINT End;
   double StartBearing;
   double EndBearing;
   double Radius;
   TCHAR *Comma = NULL;
 
-  ReadCoords(&Text[3],&StartLon , &StartLat);
+  ReadCoords(&Text[3],&Start.Longitude , &Start.Latitude);
 
   Comma = _tcschr(Text,',');
   if(!Comma)
     return;
 
-  ReadCoords(&Comma[1],&EndLon , &EndLat);
+  ReadCoords(&Comma[1],&End.Longitude , &End.Latitude);
 
-  DistanceBearing(CenterY, CenterX, StartLat, StartLon,
+  GEOPOINT c; c.Longitude = CenterX; c.Latitude = CenterY;
+
+  DistanceBearing(c, Start,
                   &Radius, &StartBearing);
-  DistanceBearing(CenterY, CenterX, EndLat, EndLon,
+  DistanceBearing(c, End,
                   NULL, &EndBearing);
-  TempPoint.Latitude  = StartLat;
-  TempPoint.Longitude = StartLon;
+  TempPoint.Latitude  = Start.Latitude;
+  TempPoint.Longitude = Start.Longitude;
   AddPoint(&TempPoint, &TempArea.NumPoints);
 
   while(fabs(EndBearing-StartBearing) > 7.5)
@@ -1150,39 +1155,37 @@ static void CalculateArc(TCHAR *Text)
 
 	  if (bFillMode)	// Trig calcs not needed on first pass
 	  {
-            FindLatitudeLongitude(CenterY, CenterX, StartBearing, Radius,
-                                  &TempPoint.Latitude,
-                                  &TempPoint.Longitude);
+            GEOPOINT c; c.Longitude = CenterX; c.Latitude = CenterY;
+            FindLatitudeLongitude(c, StartBearing, Radius,
+                                  &TempPoint);
 	  }
     AddPoint(&TempPoint, &TempArea.NumPoints);
   }
-  TempPoint.Latitude  = EndLat;
-  TempPoint.Longitude = EndLon;
+  TempPoint  = End;
   AddPoint(&TempPoint, &TempArea.NumPoints);
 }
 
 
 static void ScanAirspaceCircleBounds(int i, double bearing) {
-  double lat, lon;
-  FindLatitudeLongitude(AirspaceCircle[i].Latitude,
-                        AirspaceCircle[i].Longitude,
+  GEOPOINT loc;
+  FindLatitudeLongitude(AirspaceCircle[i].Location,
                         bearing, AirspaceCircle[i].Radius,
-                        &lat, &lon);
+                        &loc);
 
-  AirspaceCircle[i].bounds.minx = min(lon, AirspaceCircle[i].bounds.minx);
-  AirspaceCircle[i].bounds.maxx = max(lon, AirspaceCircle[i].bounds.maxx);
-  AirspaceCircle[i].bounds.miny = min(lat, AirspaceCircle[i].bounds.miny);
-  AirspaceCircle[i].bounds.maxy = max(lat, AirspaceCircle[i].bounds.maxy);
+  AirspaceCircle[i].bounds.minx = min(loc.Longitude, AirspaceCircle[i].bounds.minx);
+  AirspaceCircle[i].bounds.maxx = max(loc.Longitude, AirspaceCircle[i].bounds.maxx);
+  AirspaceCircle[i].bounds.miny = min(loc.Latitude, AirspaceCircle[i].bounds.miny);
+  AirspaceCircle[i].bounds.maxy = max(loc.Latitude, AirspaceCircle[i].bounds.maxy);
 }
 
 
 static void FindAirspaceCircleBounds() {
   unsigned int i;
   for(i=0; i<NumberOfAirspaceCircles; i++) {
-    AirspaceCircle[i].bounds.minx = AirspaceCircle[i].Longitude;
-    AirspaceCircle[i].bounds.maxx = AirspaceCircle[i].Longitude;
-    AirspaceCircle[i].bounds.miny = AirspaceCircle[i].Latitude;
-    AirspaceCircle[i].bounds.maxy = AirspaceCircle[i].Latitude;
+    AirspaceCircle[i].bounds.minx = AirspaceCircle[i].Location.Longitude;
+    AirspaceCircle[i].bounds.maxx = AirspaceCircle[i].Location.Longitude;
+    AirspaceCircle[i].bounds.miny = AirspaceCircle[i].Location.Latitude;
+    AirspaceCircle[i].bounds.maxy = AirspaceCircle[i].Location.Latitude;
     ScanAirspaceCircleBounds(i,0);
     ScanAirspaceCircleBounds(i,90);
     ScanAirspaceCircleBounds(i,180);

@@ -447,8 +447,8 @@ bool NMEAParser::GLL(const TCHAR *String,
   tmplon = EastOrWest(tmplon,params[3][0]);
 
   if (!((tmplat == 0.0) && (tmplon == 0.0))) {
-    GPS_INFO->Latitude = tmplat;
-    GPS_INFO->Longitude = tmplon;
+    GPS_INFO->Location.Latitude = tmplat;
+    GPS_INFO->Location.Longitude = tmplon;
   } else {
 
   }
@@ -539,8 +539,8 @@ bool NMEAParser::RMC(const TCHAR *String, const TCHAR **params, size_t nparams,
   tmplon = EastOrWest(tmplon,params[5][0]);
 
   if (!((tmplat == 0.0) && (tmplon == 0.0))) {
-    GPS_INFO->Latitude = tmplat;
-    GPS_INFO->Longitude = tmplon;
+    GPS_INFO->Location.Latitude = tmplat;
+    GPS_INFO->Location.Longitude = tmplon;
   }
 
   GPS_INFO->Speed = KNOTSTOMETRESSECONDS * speed;
@@ -614,8 +614,8 @@ bool NMEAParser::GGA(const TCHAR *String, const TCHAR **params, size_t nparams,
   tmplon = EastOrWest(tmplon,params[4][0]);
 
   if (!((tmplat == 0.0) && (tmplon == 0.0))) {
-    GPS_INFO->Latitude = tmplat;
-    GPS_INFO->Longitude = tmplon;
+    GPS_INFO->Location.Latitude = tmplat;
+    GPS_INFO->Location.Longitude = tmplon;
   }
 
   if(RMZAvailable)
@@ -653,8 +653,8 @@ bool NMEAParser::GGA(const TCHAR *String, const TCHAR **params, size_t nparams,
     //
     if (!devIsCondor(devA())) {
       // JMW TODO really need to know the actual device..
-      GeoidSeparation = LookupGeoidSeparation(GPS_INFO->Latitude,
-					      GPS_INFO->Longitude);
+      GeoidSeparation = LookupGeoidSeparation(GPS_INFO->Location.Latitude,
+					      GPS_INFO->Location.Longitude);
       GPS_INFO->Altitude -= GeoidSeparation;
     }
   }
@@ -781,8 +781,8 @@ bool NMEAParser::PTAS1(const TCHAR *String,
 
 #include "InputEvents.h"
 
-double FLARM_NorthingToLatitude = 0.0;
-double FLARM_EastingToLongitude = 0.0;
+static double FLARM_NorthingToLatitude = 0.0;
+static double FLARM_EastingToLongitude = 0.0;
 
 
 bool NMEAParser::PFLAU(const TCHAR *String,
@@ -799,13 +799,14 @@ bool NMEAParser::PFLAU(const TCHAR *String,
   double delta_lat = 0.01;
   double delta_lon = 0.01;
 
+  GEOPOINT plat = GPS_INFO->Location; plat.Latitude+= delta_lat;
+  GEOPOINT plon = GPS_INFO->Location; plon.Longitude+= delta_lon;
+
   double dlat;
-  DistanceBearing(GPS_INFO->Latitude, GPS_INFO->Longitude,
-                  GPS_INFO->Latitude+delta_lat, GPS_INFO->Longitude,
+  DistanceBearing(GPS_INFO->Location, plat,
                   &dlat, NULL);
   double dlon;
-  DistanceBearing(GPS_INFO->Latitude, GPS_INFO->Longitude,
-                  GPS_INFO->Latitude, GPS_INFO->Longitude+delta_lon,
+  DistanceBearing(GPS_INFO->Location, plon,
                   &dlon, NULL);
 
   if ((fabs(dlat)>0.0)&&(fabs(dlon)>0.0)) {
@@ -904,13 +905,13 @@ bool NMEAParser::PFLAA(const TCHAR *String,
 	  &GPS_INFO->FLARM_Traffic[flarm_slot].ClimbRate, // double          9
 	  &GPS_INFO->FLARM_Traffic[flarm_slot].Type); // unsigned short     10
   // 1 relativenorth, meters
-  GPS_INFO->FLARM_Traffic[flarm_slot].Latitude =
+  GPS_INFO->FLARM_Traffic[flarm_slot].Location.Latitude =
     GPS_INFO->FLARM_Traffic[flarm_slot].RelativeNorth
-    *FLARM_NorthingToLatitude + GPS_INFO->Latitude;
+    *FLARM_NorthingToLatitude + GPS_INFO->Location.Latitude;
   // 2 relativeeast, meters
-  GPS_INFO->FLARM_Traffic[flarm_slot].Longitude =
+  GPS_INFO->FLARM_Traffic[flarm_slot].Location.Longitude =
     GPS_INFO->FLARM_Traffic[flarm_slot].RelativeEast
-    *FLARM_EastingToLongitude + GPS_INFO->Longitude;
+    *FLARM_EastingToLongitude + GPS_INFO->Location.Longitude;
   // alt
   GPS_INFO->FLARM_Traffic[flarm_slot].Altitude =
     GPS_INFO->FLARM_Traffic[flarm_slot].RelativeAltitude +

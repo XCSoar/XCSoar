@@ -119,7 +119,7 @@ void SunEphemeris::showhrmn(double dhr) {
   mn =(int) (dhr - (double) hr)*60;
 };
 
-int SunEphemeris::CalcSunTimes(float longit, float latit,
+int SunEphemeris::CalcSunTimes(const GEOPOINT &location,
 			       const NMEA_INFO &GPS_INFO,
 			       const DERIVED_INFO &CALCULATED_INFO,
 			       const double tzone)
@@ -162,8 +162,8 @@ int SunEphemeris::CalcSunTimes(float longit, float latit,
   LL = L - alpha;
   if (L < PI) LL += 2.0*PI;
   equation = 1440.0 * (1.0 - LL / PI/2.0);
-  ha = f0(latit,delta);
-  hb = f1(latit,delta);
+  ha = f0(location.Latitude,delta);
+  hb = f1(location.Latitude,delta);
   twx = hb - ha;  // length of twilight in radians
   twx = 12.0*twx/PI;              // length of twilight in hours
   
@@ -174,14 +174,16 @@ int SunEphemeris::CalcSunTimes(float longit, float latit,
   if (daylen<0.0001) {daylen = 0.0;}
   // arctic winter     //
   
-  riset = 12.0 - 12.0 * ha/PI + tzone - longit/15.0 + equation/60.0;
-  settm = 12.0 + 12.0 * ha/PI + tzone - longit/15.0 + equation/60.0;
+  riset = 12.0 - 12.0 * ha/PI + tzone - location.Longitude/15.0 + equation/60.0;
+  settm = 12.0 + 12.0 * ha/PI + tzone - location.Longitude/15.0 + equation/60.0;
   noont = riset + 12.0 * ha/PI;
-  altmax = 90.0 + delta * RAD_TO_DEG - latit;
+  altmax = 90.0 + delta * RAD_TO_DEG - location.Latitude;
   
   // Correction for S HS suggested by David Smith
   // to express altitude as degrees from the N horizon
-  if (latit < delta * RAD_TO_DEG) altmax = 180.0 - altmax;
+  if (location.Latitude < delta * RAD_TO_DEG) {
+    altmax = 180.0 - altmax;
+  }
   
   twam = riset - twx;     // morning twilight begin
   twpm = settm + twx;     // evening twilight end

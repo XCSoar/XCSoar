@@ -301,22 +301,17 @@ private:
   double SectorBearing;
   //
   void setStartEnd(TASK_POINT &pt) {
-    FindLatitudeLongitude(WayPointList[pt.Index].Latitude,
-			  WayPointList[pt.Index].Longitude,
+    FindLatitudeLongitude(WayPointList[pt.Index].Location,
 			  SectorBearing + SectorAngle, SectorSize,
-			  &pt.SectorStartLat,
-			  &pt.SectorStartLon);
-    FindLatitudeLongitude(WayPointList[pt.Index].Latitude,
-			  WayPointList[pt.Index].Longitude,
+			  &pt.SectorStart);
+    FindLatitudeLongitude(WayPointList[pt.Index].Location,
 			  SectorBearing - SectorAngle, SectorSize,
-			  &pt.SectorEndLat,
-			  &pt.SectorEndLon);
+			  &pt.SectorEnd);
   }
   void clearAAT(const TASK_POINT &point, const unsigned i) {
     task_stats[i].AATTargetOffsetRadius = 0.0;
     task_stats[i].AATTargetOffsetRadial = 0.0;
-    task_stats[i].AATTargetLat = WayPointList[point.Index].Latitude;
-    task_stats[i].AATTargetLon = WayPointList[point.Index].Longitude;
+    task_stats[i].AATTargetLocation = WayPointList[point.Index].Location;
   };
 };
 
@@ -383,17 +378,13 @@ public:
       point0.LegBearing=0;
       point0.InBound=0;
     }
-    DistanceBearing(WayPointList[point0.Index].Latitude,
-		    WayPointList[point0.Index].Longitude,
-		    WayPointList[point1.Index].Latitude,
-		    WayPointList[point1.Index].Longitude,
+    DistanceBearing(WayPointList[point0.Index].Location,
+		    WayPointList[point1.Index].Location,
 		    &point1.LegDistance, &point1.InBound);
 
     if (AATEnabled) {
-      DistanceBearing(task_stats[index0].AATTargetLat,
-		      task_stats[index0].AATTargetLon,
-		      task_stats[index1].AATTargetLat,
-		      task_stats[index1].AATTargetLon,
+      DistanceBearing(task_stats[index0].AATTargetLocation,
+		      task_stats[index1].AATTargetLocation,
 		      &point1.LegDistance, &point1.LegBearing);
     } else {
       point1.LegBearing = point1.InBound;
@@ -409,10 +400,8 @@ public:
   };
   void visit_leg_multistart(START_POINT &start, const unsigned index0, TASK_POINT &point)
   {
-    DistanceBearing(WayPointList[start.Index].Latitude,
-		    WayPointList[start.Index].Longitude,
-		    WayPointList[point.Index].Latitude,
-		    WayPointList[point.Index].Longitude,
+    DistanceBearing(WayPointList[start.Index].Location,
+		    WayPointList[point.Index].Location,
 		    NULL, &start.OutBound);
   };
   double total_length;
@@ -486,8 +475,7 @@ public:
     for (j=0; j<MAXISOLINES; j++) {
       task_stats[i].IsoLine_valid[j]= false;
     }
-    double latitude = task_stats[i].AATTargetLat;
-    double longitude = task_stats[i].AATTargetLon;
+    GEOPOINT location = task_stats[i].AATTargetLocation;
     double dist_0, dist_north, dist_east;
     bool in_sector = true;
     
@@ -510,60 +498,53 @@ public:
     // fill
     j=0;
     // insert start point
-    task_stats[i].IsoLine_Latitude[j]= latitude;
-    task_stats[i].IsoLine_Longitude[j]= longitude;
+    task_stats[i].IsoLine_Location[j]= location;
     task_stats[i].IsoLine_valid[j]= true;
     j++;
     
     do {
-      dist_0 = DoubleLegDistance(i, longitude, latitude);
+      dist_0 = DoubleLegDistance(i, location);
       
-      double latitude_north, longitude_north;
-      FindLatitudeLongitude(latitude, longitude,
+      GEOPOINT loc_north;
+      FindLatitudeLongitude(location,
 			    0, stepsize,
-			    &latitude_north,
-			    &longitude_north);
-      dist_north = DoubleLegDistance(i, longitude_north, latitude_north);
+			    &loc_north);
+      dist_north = DoubleLegDistance(i, loc_north);
       
-      double latitude_east, longitude_east;
-      FindLatitudeLongitude(latitude, longitude,
+      GEOPOINT loc_east;
+      FindLatitudeLongitude(location,
 			    90, stepsize,
-			    &latitude_east,
-			    &longitude_east);
-      dist_east = DoubleLegDistance(i, longitude_east, latitude_east);
+			    &loc_east);
+      dist_east = DoubleLegDistance(i, loc_east);
       
       double angle = AngleLimit360(RAD_TO_DEG*atan2(dist_east-dist_0, dist_north-dist_0)+90);
       if (left) {
 	angle += 180;
       }
       
-      FindLatitudeLongitude(latitude, longitude,
+      FindLatitudeLongitude(location,
 			    angle, delta,
-			    &latitude,
-			    &longitude);
+			    &location);
       
-      in_sector = InAATTurnSector(longitude, latitude, i);
+      in_sector = InAATTurnSector(location, i);
       /*
         if (dist_0 < distance_glider) {
 	in_sector = false;
         }
       */
       if (in_sector) {
-	task_stats[i].IsoLine_Latitude[j] = latitude;
-	task_stats[i].IsoLine_Longitude[j] = longitude;
+	task_stats[i].IsoLine_Location[j] = location;
 	task_stats[i].IsoLine_valid[j] = true;
 	j++;
       } else {
 	j++;
 	if (!left && (j<MAXISOLINES-2))  {
 	  left = true;
-	  latitude = task_stats[i].AATTargetLat;
-	  longitude = task_stats[i].AATTargetLon;
+	  location = task_stats[i].AATTargetLocation;
 	  in_sector = true; // cheat to prevent early exit
 	  
 	  // insert start point (again)
-	  task_stats[i].IsoLine_Latitude[j] = latitude;
-	  task_stats[i].IsoLine_Longitude[j] = longitude;
+	  task_stats[i].IsoLine_Location[j] = location;
 	  task_stats[i].IsoLine_valid[j] = true;
 	  j++;
 	}

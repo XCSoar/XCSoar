@@ -42,6 +42,7 @@ Copyright_License {
 #include "Thread/Mutex.hpp"
 #include "Protection.hpp"
 #include "Sizes.h"
+#include "GeoPoint.hpp"
 
 #define MAXNUM_AATDISTANCE 50
 
@@ -50,9 +51,10 @@ public:
   AATDistance();
   void Reset();
 
-  void AddPoint(double longitude, double latitude, int taskwaypoint,
+  void AddPoint(const GEOPOINT &location, int taskwaypoint,
 		const double aatclosedistance);
-  double DistanceCovered(double longitude, double latitude, int taskwaypoint,
+  double DistanceCovered(const GEOPOINT &location, 
+                         const int taskwaypoint,
 			 const double aatclosedistance);
   double LegDistanceAchieved(int taskwaypoint);
   bool HasEntered(int taskwaypoint);
@@ -60,15 +62,15 @@ public:
 
 private:
 
-  double DistanceCovered_internal(double longitude, double latitude,
-                                  bool insector,
+  double DistanceCovered_internal(const GEOPOINT &location,
+                                  const bool insector,
 				  const double aatclosedistance);
-  double DistanceCovered_inside(double longitude, double latitude,
+  double DistanceCovered_inside(const GEOPOINT &location,
 				const double aatclosedistance);
-  double DistanceCovered_outside(double longitude, double latitude,
+  double DistanceCovered_outside(const GEOPOINT &location,
 				 const double aatclosedistance);
-  double distance_achieved(int taskwaypoint, int jbest,
-                           double longitude, double latitude);
+  double distance_achieved(const int taskwaypoint, const int jbest,
+                           const GEOPOINT &location);
 
   void UpdateSearch(int taskwaypoint);
   void ThinData(int taskwaypoint);
@@ -83,16 +85,15 @@ private:
 
   double Dmax[MAXTASKPOINTS][MAXNUM_AATDISTANCE];
 
-  double lat_points[MAXTASKPOINTS][MAXNUM_AATDISTANCE];
-  double lon_points[MAXTASKPOINTS][MAXNUM_AATDISTANCE];
+  GEOPOINT loc_points[MAXTASKPOINTS][MAXNUM_AATDISTANCE];
   int best[MAXTASKPOINTS];
   int num_points[MAXTASKPOINTS];
 
-  void ShiftTargetFromBehind(double longitude, double latitude,
-                             int taskwaypoint, const double aatclosedistance);
-  void ShiftTargetFromInFront(double longitude, double latitude,
-                              int taskwaypoint, const double aatclosedistance);
-  void ShiftTargetOutside(double longitude, double latitude,
+  void ShiftTargetFromBehind(const GEOPOINT &location,
+                             const int taskwaypoint, const double aatclosedistance);
+  void ShiftTargetFromInFront(const GEOPOINT &location,
+                              const int taskwaypoint, const double aatclosedistance);
+  void ShiftTargetOutside(const GEOPOINT &location,
                           int taskwaypoint);
  private:
   Mutex mutexAAT;

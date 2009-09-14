@@ -50,6 +50,7 @@ Copyright_License {
 #include "Components.hpp"
 #include "NMEA/Info.h"
 #include "NMEA/Derived.hpp"
+#include "GeoPoint.hpp"
 
 //////////////////////////////////////////////////////////
 // Final glide through terrain and footprint calculations
@@ -59,7 +60,7 @@ FinalGlideThroughTerrain(const double this_bearing,
                          const NMEA_INFO *Basic,
                          const DERIVED_INFO *Calculated,
 			 const SETTINGS_COMPUTER &settings,
-                         double *retlat, double *retlon,
+                         GEOPOINT *retloc,
                          const double max_range,
                          bool *out_of_range,
                          double *TerrainBase)
@@ -70,11 +71,9 @@ FinalGlideThroughTerrain(const double this_bearing,
 						Calculated->WindSpeed,
 						Calculated->WindBearing,
 						0, 0, true, 0);
-  const double start_lat = Basic->Latitude;
-  const double start_lon = Basic->Longitude;
-  if (retlat && retlon) {
-    *retlat = start_lat;
-    *retlon = start_lon;
+  const GEOPOINT start_loc = Basic->Location;
+  if (retloc) {
+    *retloc = start_loc;
   }
   *out_of_range = false;
 
@@ -87,8 +86,7 @@ FinalGlideThroughTerrain(const double this_bearing,
 
   // returns distance one would arrive at altitude in straight glide
   // first estimate max range at this altitude
-  double lat, lon;
-  double last_lat, last_lon;
+  GEOPOINT loc, last_loc;
   double h=0.0, dh=0.0;
 //  int imax=0;
   double last_dh=0;
@@ -101,18 +99,17 @@ FinalGlideThroughTerrain(const double this_bearing,
 
   // calculate terrain rounding factor
 
-  FindLatitudeLongitude(start_lat, start_lon, 0,
-                        glide_max_range/NUMFINALGLIDETERRAIN, &lat, &lon);
+  FindLatitudeLongitude(start_loc, 0,
+                        glide_max_range/NUMFINALGLIDETERRAIN, &loc);
 
-  double Xrounding = fabs(lon-start_lon)/2;
-  double Yrounding = fabs(lat-start_lat)/2;
+  double Xrounding = fabs(loc.Longitude-start_loc.Longitude)/2;
+  double Yrounding = fabs(loc.Latitude-start_loc.Latitude)/2;
   terrain.SetTerrainRounding(Xrounding, Yrounding);
 
-  lat = last_lat = start_lat;
-  lon = last_lon = start_lon;
+  loc = last_loc = start_loc;
 
   altitude = Calculated->NavAltitude;
-  h =  max(0, terrain.GetTerrainHeight(lat, lon));
+  h =  max(0, terrain.GetTerrainHeight(loc));
   dh = altitude - h - settings.SAFETYALTITUDETERRAIN;
   last_dh = dh;
   if (dh<0) {
@@ -123,11 +120,11 @@ FinalGlideThroughTerrain(const double this_bearing,
   }
 
   // find grid
-  double dlat, dlon;
+  GEOPOINT dloc;
 
-  FindLatitudeLongitude(lat, lon, this_bearing, glide_max_range, &dlat, &dlon);
-  dlat -= start_lat;
-  dlon -= start_lon;
+  FindLatitudeLongitude(loc, this_bearing, glide_max_range, &dloc);
+  dloc.Latitude -= start_loc.Latitude;
+  dloc.Longitude -= start_loc.Longitude;
 
   double f_scale = 1.0/NUMFINALGLIDETERRAIN;
   if ((max_range>0) && (max_range<glide_max_range)) {
@@ -136,8 +133,8 @@ FinalGlideThroughTerrain(const double this_bearing,
 
   double delta_alt = -f_scale*Calculated->NavAltitude;
 
-  dlat *= f_scale;
-  dlon *= f_scale;
+  dloc.Latitude *= f_scale;
+  dloc.Longitude *= f_scale;
 
   for (i=1; i<=NUMFINALGLIDETERRAIN; i++) {
     double f;
@@ -160,11 +157,11 @@ FinalGlideThroughTerrain(const double this_bearing,
 
     // find lat, lon of point of interest
 
-    lat += dlat;
-    lon += dlon;
+    loc.Latitude += dloc.Latitude;
+    loc.Longitude += dloc.Longitude;
 
     // find height over terrain
-    h =  max(0,terrain.GetTerrainHeight(lat, lon));
+    h =  max(0,terrain.GetTerrainHeight(loc));
 
     dh = altitude - h - settings.SAFETYALTITUDETERRAIN;
 
@@ -194,19 +191,17 @@ FinalGlideThroughTerrain(const double this_bearing,
     }
     if (solution_found) {
       double distance;
-      lat = last_lat*(1.0-f)+lat*f;
-      lon = last_lon*(1.0-f)+lon*f;
-      if (retlat && retlon) {
-        *retlat = lat;
-        *retlon = lon;
+      loc.Latitude = last_loc.Latitude*(1.0-f)+loc.Latitude*f;
+      loc.Longitude = last_loc.Longitude*(1.0-f)+loc.Longitude*f;
+      if (retloc) {
+        *retloc = loc;
       }
-      DistanceBearing(start_lat, start_lon, lat, lon, &distance, NULL);
+      DistanceBearing(start_loc, loc, &distance, NULL);
       retval = distance;
       goto OnExit;
     }
     last_dh = dh;
-    last_lat = lat;
-    last_lon = lon;
+    last_loc = loc;
   }
 
   *out_of_range = true;
@@ -353,33 +348,21 @@ EffectiveMacCready_internal(const NMEA_INFO *Basic, const DERIVED_INFO *Calculat
   double LegBearings[MAXTASKPOINTS];
 
   for (int i=0; i<ActiveTaskPoint; i++) {
-    double w1lat = WayPointList[task_points[i+1].Index].Latitude;
-    double w1lon = WayPointList[task_points[i+1].Index].Longitude;
-    double w0lat = WayPointList[task_points[i].Index].Latitude;
-    double w0lon = WayPointList[task_points[i].Index].Longitude;
+    GEOPOINT w1 = WayPointList[task_points[i+1].Index].Location;
+    GEOPOINT w0 = WayPointList[task_points[i].Index].Location;
     if (AATEnabled) {
       if (ValidTaskPoint(i+1)) {
-        w1lat = task_stats[i+1].AATTargetLat;
-        w1lon = task_stats[i+1].AATTargetLon;
+        w1 = task_stats[i+1].AATTargetLocation;
       }
       if (i>0) {
-        w0lat = task_stats[i].AATTargetLat;
-        w0lon = task_stats[i].AATTargetLon;
+        w0 = task_stats[i].AATTargetLocation;
       }
     }
-    DistanceBearing(w0lat,
-                    w0lon,
-                    w1lat,
-                    w1lon,
+    DistanceBearing(w0, w1,
                     &LegDistances[i], &LegBearings[i]);
 
     if (i==ActiveTaskPoint-1) {
-
-      double leg_covered = ProjectedDistance(w0lon, w0lat,
-                                             w1lon, w1lat,
-                                             Basic->Longitude,
-                                             Basic->Latitude);
-      LegDistances[i] = leg_covered;
+      LegDistances[i] = ProjectedDistance(w0, w1, Basic->Location);
     }
     if ((StartLine==0) && (i==0)) {
       // Correct speed calculations for radius

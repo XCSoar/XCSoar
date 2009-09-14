@@ -58,12 +58,12 @@ Copyright_License {
 ////// Rounding control ////////////////////////////////////////////////////
 
 
-bool RasterMap::GetMapCenter(double *lon, double *lat) {
+bool RasterMap::GetMapCenter(GEOPOINT *loc) {
   if(!isMapLoaded())
     return false;
 
-  *lon = (TerrainInfo.Left + TerrainInfo.Right)/2;
-  *lat = (TerrainInfo.Top + TerrainInfo.Bottom)/2;
+  loc->Longitude = (TerrainInfo.Left + TerrainInfo.Right)/2;
+  loc->Latitude = (TerrainInfo.Top + TerrainInfo.Bottom)/2;
   return true;
 }
 
@@ -80,7 +80,7 @@ float RasterMap::GetFieldStepSize() {
 
 // accurate method
 int RasterMap::GetEffectivePixelSize(double *pixel_D,
-                                     double latitude, double longitude)
+                                     const GEOPOINT &location)
 {
   double terrain_step_x, terrain_step_y;
   double step_size = TerrainInfo.StepSize*sqrt(2.0);
@@ -89,14 +89,15 @@ int RasterMap::GetEffectivePixelSize(double *pixel_D,
     *pixel_D = 1.0;
     return 1;
   }
+  GEOPOINT dloc;
 
   // how many steps are in the pixel size
-  DistanceBearing(latitude, longitude, latitude+step_size,
-                  longitude, &terrain_step_x, NULL);
+  dloc = location; dloc.Latitude += step_size;
+  DistanceBearing(location, dloc, &terrain_step_x, NULL);
   terrain_step_x = fabs(terrain_step_x);
 
-  DistanceBearing(latitude, longitude, latitude,
-                  longitude+step_size, &terrain_step_y, NULL);
+  dloc = location; dloc.Longitude += step_size;
+  DistanceBearing(location, dloc, &terrain_step_y, NULL);
   terrain_step_y = fabs(terrain_step_y);
 
   double rfact = max(terrain_step_x,terrain_step_y)/(*pixel_D);
@@ -175,7 +176,7 @@ void RasterMapRaw::SetFieldRounding(double xr, double yr) {
 
 
 short RasterMapJPG2000::_GetFieldAtXY(unsigned int lx,
-                                          unsigned int ly) {
+                                      unsigned int ly) {
 
   return raster_tile_cache.GetField(lx,ly);
 }
@@ -238,18 +239,17 @@ short RasterMapCache::_GetFieldAtXY(unsigned int lx,
 
 // JMW rounding further reduces data as required to speed up terrain
 // display on low zoom levels
-short RasterMap::GetField(const double &Lattitude,
-                          const double &Longditude)
+short RasterMap::GetField(const GEOPOINT &location)
 {
   if(isMapLoaded()) {
     if (DirectFine) {
-      return _GetFieldAtXY((int)(Longditude*fXroundingFine)-xlleft,
-                           xlltop- (int)(Lattitude*fYroundingFine));
+      return _GetFieldAtXY((int)(location.Longitude*fXroundingFine)-xlleft,
+                           xlltop- (int)(location.Latitude*fYroundingFine));
     } else {
       unsigned int ix =
-        Real2Int((Longditude-TerrainInfo.Left)*fXrounding)*Xrounding;
+        Real2Int((location.Longitude-TerrainInfo.Left)*fXrounding)*Xrounding;
       unsigned int iy =
-        Real2Int((TerrainInfo.Top-Lattitude)*fYrounding)*Yrounding;
+        Real2Int((TerrainInfo.Top-location.Latitude)*fYrounding)*Yrounding;
 
       return _GetFieldAtXY(ix<<8, iy<<8);
     }
@@ -422,8 +422,8 @@ short RasterMapCache::LookupTerrainCache(const long &SeekPos) {
 
 //////////// JPG2000 //////////////////////////////////////////////////
 
-void RasterMapJPG2000::ServiceFullReload(double lat, double lon) {
-  ReloadJPG2000Full(lat, lon);
+void RasterMapJPG2000::ServiceFullReload(const GEOPOINT &location) {
+  ReloadJPG2000Full(location);
 }
 
 
@@ -449,12 +449,11 @@ RasterMapJPG2000::~RasterMapJPG2000() {
 int RasterMapJPG2000::ref_count = 0;
 
 
-void RasterMapJPG2000::ReloadJPG2000Full(double latitude,
-                                         double longitude) {
+void RasterMapJPG2000::ReloadJPG2000Full(const GEOPOINT &location) {
   // load all 16 tiles...
   for (int i=0; i<MAX_ACTIVE_TILES; i++) {
     TriggerJPGReload = true;
-    SetViewCenter(latitude, longitude);
+    SetViewCenter(location);
   }
 }
 
@@ -482,13 +481,13 @@ void RasterMapJPG2000::ReloadJPG2000(void) {
 }
 
 
-void RasterMapJPG2000::SetViewCenter(const double &Latitude,
-                                     const double &Longitude) {
+void RasterMapJPG2000::SetViewCenter(const GEOPOINT &location)
+{
   Lock();
   if (raster_tile_cache.GetInitialised()) {
-    int x = lround((Longitude-TerrainInfo.Left)*TerrainInfo.Columns
+    int x = lround((location.Longitude-TerrainInfo.Left)*TerrainInfo.Columns
                    /(TerrainInfo.Right-TerrainInfo.Left));
-    int y = lround((TerrainInfo.Top-Latitude)*TerrainInfo.Rows
+    int y = lround((TerrainInfo.Top-location.Latitude)*TerrainInfo.Rows
                    /(TerrainInfo.Top-TerrainInfo.Bottom));
     TriggerJPGReload |= raster_tile_cache.PollTiles(x, y);
     ReloadJPG2000();

@@ -846,7 +846,7 @@ BOOL FlarmDeclare(PDeviceDescriptor_t d, Declaration_t *decl){
     double tmp, MinLat, MinLon;
     char NoS, EoW;
 
-    tmp = decl->waypoint[i]->Latitude;
+    tmp = decl->waypoint[i]->Location.Latitude;
     NoS = 'N';
     if(tmp < 0)
       {
@@ -856,7 +856,7 @@ BOOL FlarmDeclare(PDeviceDescriptor_t d, Declaration_t *decl){
     DegLat = (int)tmp;
     MinLat = (tmp - DegLat) * 60 * 1000;
 
-    tmp = decl->waypoint[i]->Longitude;
+    tmp = decl->waypoint[i]->Location.Longitude;
     EoW = 'E';
     if(tmp < 0)
       {

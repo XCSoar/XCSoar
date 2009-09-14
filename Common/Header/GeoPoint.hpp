@@ -33,52 +33,15 @@ Copyright_License {
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
+
 */
 
-#ifndef RASTERTERRAIN_H
-#define RASTERTERRAIN_H
+#ifndef XCSOAR_GEOPOINT_HPP
+#define XCSOAR_GEOPOINT_HPP
 
-#include "Sizes.h"
-#include "GeoPoint.hpp"
-
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
-
-class RasterMap;
-
-class RasterTerrain {
-public:
-
-  RasterTerrain():
-    terrain_initialised(false),
-    TerrainMap(NULL) {
-  };
-
-   void SetViewCenter(const double &Latitude,
-                      const double &Longitude);
-   void OpenTerrain();
-   void CloseTerrain();
-   bool terrain_initialised;
-   bool isTerrainLoaded() {
-    return terrain_initialised;
-  }
-   RasterMap* TerrainMap;
-   bool CreateTerrainMap(char *zfilename);
-
- public:
-   void Lock(void); // should be protected, friend of TerrainDataClient
-   void Unlock(void); // should be protected, friend of TerrainDataClient
-
-   short GetTerrainHeight(const GEOPOINT &location);
-   bool IsDirectAccess(void);
-   bool IsPaged(void);
-   void SetTerrainRounding(double x, double y);
-   void ServiceCache();
-   void ServiceTerrainCenter(const GEOPOINT &location);
-   void ServiceFullReload(const GEOPOINT &location);
-   int GetEffectivePixelSize(double *pixel_D, const GEOPOINT &location);
-   bool WaypointIsInTerrainRange(const GEOPOINT &location);
-   bool GetTerrainCenter(GEOPOINT *location);
+struct GEOPOINT {
+  double Longitude;
+  double Latitude;
 };
 
 #endif

@@ -43,6 +43,7 @@ Copyright_License {
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <tchar.h>
+#include "GeoPoint.hpp"
 
 #define AIRPORT				0x01
 #define TURNPOINT			0x02
@@ -61,8 +62,7 @@ Copyright_License {
 struct WAYPOINT
 {
   int Number;
-  double Latitude;
-  double Longitude;
+  GEOPOINT Location;
   double Altitude;
   int Flags;
   TCHAR Name[NAME_SIZE + 1];
@@ -100,5 +100,23 @@ extern WAYPOINT *WayPointList;
 extern WPCALC   *WayPointCalc; // VENTA3 additional calculated infos on WPs
 extern unsigned int NumberOfWayPoints;
 extern int WaypointsOutOfRange;
+
+class WaypointVisitor {
+public:
+  virtual void waypoint_default(WAYPOINT &waypoint, WPCALC &wpcalc, const unsigned i) {};
+  virtual void waypoint_landable(WAYPOINT &waypoint, WPCALC &wpcalc, const unsigned i) 
+    {
+      waypoint_default(waypoint, wpcalc, i);
+    }
+  virtual void waypoint_airport(WAYPOINT &waypoint, WPCALC &wpcalc, const unsigned i) 
+    {
+      waypoint_default(waypoint, wpcalc, i);
+    }
+};
+
+class WaypointScan {
+public:
+  static void scan_forward(WaypointVisitor &visitor);
+};
 
 #endif

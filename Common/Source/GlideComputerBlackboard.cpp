@@ -103,8 +103,8 @@ void GlideComputerBlackboard::ResetFlight(const bool full) {
     calculated_info.GlideFootPrint[i].x = 0;
     calculated_info.GlideFootPrint[i].y = 0;
   }
-  calculated_info.TerrainWarningLatitude = 0.0;
-  calculated_info.TerrainWarningLongitude = 0.0;
+  calculated_info.TerrainWarningLocation.Latitude = 0.0;
+  calculated_info.TerrainWarningLocation.Longitude = 0.0;
 
   // If you load persistent values, you need at least these reset:
   calculated_info.WindBearing = 0.0; 
@@ -120,8 +120,7 @@ void GlideComputerBlackboard::StartTask() {
   calculated_info.TaskStartAltitude = calculated_info.NavAltitude;
   calculated_info.LegStartTime = gps_info.Time;
 
-  calculated_info.CruiseStartLat = gps_info.Latitude;
-  calculated_info.CruiseStartLong = gps_info.Longitude;
+  calculated_info.CruiseStartLocation = gps_info.Location;
   calculated_info.CruiseStartAlt = calculated_info.NavAltitude;
   calculated_info.CruiseStartTime = gps_info.Time;
 

@@ -43,11 +43,11 @@ Copyright_License {
 
 #include "Thread/Mutex.hpp"
 #include "SettingsComputer.hpp"
+#include "GeoPoint.hpp"
 
 typedef struct _OLCSolution
 {
-  double latitude[7];
-  double longitude[7];
+  GEOPOINT location[7];
   bool valid;
   double distance;
   int time;
@@ -62,8 +62,7 @@ class OLCData {
   OLCSolution solution_FAI_sprint;
   OLCSolution solution_FAI_classic;
 
-  double latpnts[MAX_OLC_POINTS];
-  double lonpnts[MAX_OLC_POINTS];
+  GEOPOINT locpnts[MAX_OLC_POINTS];
   int altpntslow[MAX_OLC_POINTS];
   int altpntshigh[MAX_OLC_POINTS];
   long timepnts[MAX_OLC_POINTS];
@@ -108,8 +107,7 @@ private:
 		      OLCSolution* solution, double score, bool finished);
 public:
 
-  double lat_proj;
-  double lon_proj;
+  GEOPOINT loc_proj;
 
   bool stop;
 
@@ -130,15 +128,14 @@ private:
   bool busy;
 
 public:
-  bool addPoint(double lon, double lat, double alt, double time, double bearing,
+  bool addPoint(const GEOPOINT &loc, double alt, double time, double bearing,
 		const SETTINGS_COMPUTER &settings);
 
 public:
   void SetLine();
   bool Optimize(const SETTINGS_COMPUTER &settings, bool isflying);
   int getN();
-  double getLatitude(int i);
-  double getLongitude(int i);
+  const GEOPOINT &getLocation(int i);
   double getTime(int i);
   double getAltitudeHigh(int i);
 

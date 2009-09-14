@@ -308,12 +308,11 @@ bool XCSoarInterface::Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
   // need to re-synchronise blackboards here since SetHome touches them
   ReadBlackboardBasic(device_blackboard.Basic());
 
-  terrain.ServiceFullReload(Basic().Latitude,
-			    Basic().Longitude);
+  terrain.ServiceFullReload(Basic().Location);
 
   CreateProgressDialog(gettext(TEXT("Scanning weather forecast")));
   StartupStore(TEXT("RASP load\n"));
-  RASP.ScanAll(Basic().Latitude, Basic().Longitude);
+  RASP.ScanAll(Basic().Location);
 
   ReadAirspace();
   SortAirspace();

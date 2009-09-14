@@ -104,7 +104,7 @@ static void OnStartPointListEnter(WindowControl * Sender,
   }
   if (ItemIndex>=0) {
     int res;
-    res = dlgWayPointSelect();    
+    res = dlgWayPointSelect(XCSoarInterface::Basic().Location);    
     if (res>=0) {
       SetStartPoint(ItemIndex, res);
       changed = true;

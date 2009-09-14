@@ -410,8 +410,8 @@ void GlideComputerAirData::LD()
   }
   if (time_advanced()) {
     double DistanceFlown;
-    DistanceBearing(Basic().Latitude, Basic().Longitude,
-		    LastBasic().Latitude, LastBasic().Longitude,
+    DistanceBearing(Basic().Location, 
+		    LastBasic().Location, 
 		    &DistanceFlown, NULL);
     
     SetCalculated().LD = 
@@ -441,15 +441,14 @@ void GlideComputerAirData::CruiseLD()
 {
   if(!Calculated().Circling) {
     if (Calculated().CruiseStartTime<0) {
-      SetCalculated().CruiseStartLat = Basic().Latitude;
-      SetCalculated().CruiseStartLong = Basic().Longitude;
+      SetCalculated().CruiseStartLocation = Basic().Location;
       SetCalculated().CruiseStartAlt = Calculated().NavAltitude;
       SetCalculated().CruiseStartTime = Basic().Time;
     } else {
       double DistanceFlown;
-      DistanceBearing(Basic().Latitude, Basic().Longitude,
-		      Calculated().CruiseStartLat,
-		      Calculated().CruiseStartLong, &DistanceFlown, NULL);
+      DistanceBearing(Basic().Location, 
+		      Calculated().CruiseStartLocation,
+                      &DistanceFlown, NULL);
       SetCalculated().CruiseLD =
 	UpdateLD(Calculated().CruiseLD,
 		 DistanceFlown,
@@ -547,8 +546,7 @@ void GlideComputerAirData::TerrainHeight()
   terrain.Lock();
   // want most accurate rounding here
   terrain.SetTerrainRounding(0,0);
-  Alt = terrain.GetTerrainHeight(Basic().Latitude,
-				 Basic().Longitude);
+  Alt = terrain.GetTerrainHeight(Basic().Location);
   terrain.Unlock();
 
   if(Alt<0) {
@@ -881,17 +879,14 @@ void
 GlideComputerAirData::PredictNextPosition()
 {
   if(Calculated().Circling) {
-    SetCalculated().NextLatitude = Basic().Latitude;
-    SetCalculated().NextLongitude = Basic().Longitude;
+    SetCalculated().NextLocation = Basic().Location;
     SetCalculated().NextAltitude =
       Calculated().NavAltitude + Calculated().Average30s * WarningTime;
  } else {
-    FindLatitudeLongitude(Basic().Latitude,
-			  Basic().Longitude,
+    FindLatitudeLongitude(Basic().Location,
 			  Basic().TrackBearing,
 			  Basic().Speed*WarningTime,
-			  &SetCalculated().NextLatitude,
-			  &SetCalculated().NextLongitude);
+			  &SetCalculated().NextLocation);
 
     if (Basic().BaroAltitudeAvailable) {
       SetCalculated().NextAltitude =
@@ -931,14 +926,12 @@ GlideComputerAirData::AirspaceWarning()
 
   double alt;
   double agl;
-  double lat;
-  double lon;
+  GEOPOINT loc;
 
   if (position_is_predicted) {
     alt = Calculated().NextAltitude;
     agl = Calculated().NextAltitudeAGL;
-    lat = Calculated().NextLatitude;
-    lon = Calculated().NextLongitude;
+    loc = Calculated().NextLocation;
   } else {
     if (Basic().BaroAltitudeAvailable) {
       alt = Basic().BaroAltitude;
@@ -946,8 +939,7 @@ GlideComputerAirData::AirspaceWarning()
       alt = Basic().Altitude;
     }
     agl = Calculated().AltitudeAGL;
-    lat = Basic().Latitude;
-    lon = Basic().Longitude;
+    loc = Basic().Location;
   }
 
   // JMW TODO enhancement: FindAirspaceCircle etc should sort results, return
@@ -966,7 +958,7 @@ GlideComputerAirData::AirspaceWarning()
 	       && (agl < AirspaceCircle[i].Top.AGL)))) {
 
         if ((iAirspaceMode[AirspaceCircle[i].Type] >= 2) &&
-	    InsideAirspaceCircle(lon, lat, i)) {
+	    InsideAirspaceCircle(loc, i)) {
 
           AirspaceWarnListAdd(&Basic(), &Calculated(), MapProjection(),
                               position_is_predicted, 1, i, false);
@@ -990,7 +982,7 @@ GlideComputerAirData::AirspaceWarning()
 	       && (agl < AirspaceArea[i].Top.AGL)))) {
 
         if ((iAirspaceMode[AirspaceArea[i].Type] >= 2)
-            && InsideAirspaceArea(lon, lat, i)){
+            && InsideAirspaceArea(loc, i)){
 
           AirspaceWarnListAdd(&Basic(), &Calculated(), map_projection,
                               position_is_predicted, 0, i, false);
@@ -1012,7 +1004,6 @@ GlideComputerAirData::TerrainFootprint(double screen_range)
   }
 
   double bearing, distance;
-  double lat, lon;
   bool out_of_range;
   
   // estimate max range (only interested in at most one screen
@@ -1022,24 +1013,25 @@ GlideComputerAirData::TerrainFootprint(double screen_range)
   double mymaxrange = max(20000.0, screen_range);
   
   SetCalculated().TerrainBase = Calculated().TerrainAlt;
-  
+
+  GEOPOINT loc;
   for (int i=0; i<=NUMTERRAINSWEEPS; i++) {
     bearing = (i*360.0)/NUMTERRAINSWEEPS;
     distance = FinalGlideThroughTerrain(bearing,
 					&Basic(),
 					&Calculated(), 
 					SettingsComputer(),
-					&lat, &lon,
+					&loc,
 					mymaxrange, &out_of_range,
 					&SetCalculated().TerrainBase);
     if (out_of_range) {
-      FindLatitudeLongitude(Basic().Latitude, Basic().Longitude,
+      FindLatitudeLongitude(Basic().Location,
 			    bearing,
 			    mymaxrange*20,
-			    &lat, &lon);
+			    &loc);
     }
-    SetCalculated().GlideFootPrint[i].x = lon;
-    SetCalculated().GlideFootPrint[i].y = lat;
+    SetCalculated().GlideFootPrint[i].x = loc.Longitude;
+    SetCalculated().GlideFootPrint[i].y = loc.Latitude;
   }
   SetCalculated().Experimental = Calculated().TerrainBase;
 }
@@ -1111,13 +1103,15 @@ GlideComputerAirData::ProcessThermalLocator()
     return;
   }
   if (Calculated().Circling) {
-    thermallocator.AddPoint(Basic().Time, Basic().Longitude, Basic().Latitude,
+    thermallocator.AddPoint(Basic().Time, 
+                            Basic().Location,
 			    Calculated().NettoVario);
-    thermallocator.Update(Basic().Time, Basic().Longitude, Basic().Latitude,
-			  Calculated().WindSpeed, Calculated().WindBearing,
+    thermallocator.Update(Basic().Time, 
+                          Basic().Location, 
+			  Calculated().WindSpeed, 
+                          Calculated().WindBearing,
 			  Basic().TrackBearing,
-			  &SetCalculated().ThermalEstimate_Longitude,
-			  &SetCalculated().ThermalEstimate_Latitude,
+			  &SetCalculated().ThermalEstimate_Location,
 			  &SetCalculated().ThermalEstimate_W,
 			  &SetCalculated().ThermalEstimate_R);
   } else {
@@ -1210,8 +1204,7 @@ GlideComputerAirData::Turning()
   case CRUISE:
     if((Rate >= MinTurnRate)||(forcecircling)) {
       SetCalculated().TurnStartTime = Basic().Time;
-      SetCalculated().TurnStartLongitude = Basic().Longitude;
-      SetCalculated().TurnStartLatitude  = Basic().Latitude;
+      SetCalculated().TurnStartLocation = Basic().Location;
       SetCalculated().TurnStartAltitude  = Calculated().NavAltitude;
       SetCalculated().TurnStartEnergyHeight  = Calculated().EnergyHeight;
       SetCalculated().TurnMode = WAITCLIMB;
@@ -1233,8 +1226,7 @@ GlideComputerAirData::Turning()
         SetCalculated().Circling = true;
         // JMW Transition to climb
         SetCalculated().TurnMode = CLIMB;
-        SetCalculated().ClimbStartLat = Calculated().TurnStartLatitude;
-        SetCalculated().ClimbStartLong = Calculated().TurnStartLongitude;
+        SetCalculated().ClimbStartLocation = Calculated().TurnStartLocation;
         SetCalculated().ClimbStartAlt = Calculated().TurnStartAltitude
 	  +Calculated().TurnStartEnergyHeight;
         SetCalculated().ClimbStartTime = Calculated().TurnStartTime;
@@ -1256,8 +1248,7 @@ GlideComputerAirData::Turning()
   case CLIMB:
     if((Rate < MinTurnRate)||(forcecruise)) {
       SetCalculated().TurnStartTime = Basic().Time;
-      SetCalculated().TurnStartLongitude = Basic().Longitude;
-      SetCalculated().TurnStartLatitude  = Basic().Latitude;
+      SetCalculated().TurnStartLocation = Basic().Location;
       SetCalculated().TurnStartAltitude  = Calculated().NavAltitude;
       SetCalculated().TurnStartEnergyHeight  = Calculated().EnergyHeight;
       // JMW Transition to cruise, due to not properly turning
@@ -1280,8 +1271,7 @@ GlideComputerAirData::Turning()
 
         // Transition to cruise
         SetCalculated().TurnMode = CRUISE;
-        SetCalculated().CruiseStartLat = Calculated().TurnStartLatitude;
-        SetCalculated().CruiseStartLong = Calculated().TurnStartLongitude;
+        SetCalculated().CruiseStartLocation = Calculated().TurnStartLocation;
         SetCalculated().CruiseStartAlt = Calculated().TurnStartAltitude;
         SetCalculated().CruiseStartTime = Calculated().TurnStartTime;
 
@@ -1312,19 +1302,16 @@ GlideComputerAirData::Turning()
 void 
 GlideComputerAirData::ThermalSources()
 {
-  double ground_longitude;
-  double ground_latitude;
+  GEOPOINT ground_location;
   double ground_altitude;
 
   {
-    thermallocator.EstimateThermalBase(Calculated().ThermalEstimate_Longitude,
-				       Calculated().ThermalEstimate_Latitude,
+    thermallocator.EstimateThermalBase(Calculated().ThermalEstimate_Location,
 				       Calculated().NavAltitude,
 				       Calculated().LastThermalAverage,
 				       Calculated().WindSpeed,
 				       Calculated().WindBearing,
-				       &ground_longitude,
-				       &ground_latitude,
+				       &ground_location,
 				       &ground_altitude
 				       );
   }
@@ -1344,8 +1331,7 @@ GlideComputerAirData::ThermalSources()
       }
     }
     SetCalculated().ThermalSources[ibest].LiftRate = Calculated().LastThermalAverage;
-    SetCalculated().ThermalSources[ibest].Latitude = ground_latitude;
-    SetCalculated().ThermalSources[ibest].Longitude = ground_longitude;
+    SetCalculated().ThermalSources[ibest].Location = ground_location;
     SetCalculated().ThermalSources[ibest].GroundHeight = ground_altitude;
     SetCalculated().ThermalSources[ibest].Time = Basic().Time;
   }
@@ -1498,8 +1484,7 @@ DoAutoQNH(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated)
 void 
 GlideComputerAirData::ProcessSun()
 {
-  sun.CalcSunTimes(Basic().Longitude, 
-		   Basic().Latitude, Basic(),
+  sun.CalcSunTimes(Basic().Location, Basic(),
 		   Calculated(), GetUTCOffset()/3600);
   SetCalculated().TimeSunset = sun.settm;
 }

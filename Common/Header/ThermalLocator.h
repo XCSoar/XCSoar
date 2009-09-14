@@ -43,6 +43,7 @@ Copyright_License {
 
 #include "Math/leastsqs.h"
 #include "Thread/Mutex.hpp"
+#include "GeoPoint.hpp"
 
 class ThermalLocator_Point {
  public:
@@ -74,26 +75,23 @@ class ThermalLocator {
   ThermalLocator();
 
   void Reset();
-  void AddPoint(double t, double longitude, double latitude, double w);
-  void Update(double t_0,
-	      double longitude_0, double latitude_0,
-	      double wind_speed, double wind_bearing,
-	      double trackbearing,
-	      double *Thermal_Longitude,
-	      double *Thermal_Latitude,
+  void AddPoint(const double t, const GEOPOINT &location, const double w);
+  void Update(const double t_0,
+	      const GEOPOINT &location_0,
+	      const double wind_speed, const double wind_bearing,
+	      const double trackbearing,
+	      GEOPOINT *Thermal_Location,
 	      double *Thermal_W,
 	      double *Thermal_R);
 
   //  double Estimate(double t_x, double t_y);
 
-  void EstimateThermalBase(double Thermal_Longitude,
-			   double Thermal_Latitude,
-			   double altitude,
-			   double wthermal,
-			   double wind_speed,
-			   double wind_bearing,
-			   double *ground_longitude,
-			   double *ground_latitude,
+  void EstimateThermalBase(const GEOPOINT Thermal_Location,
+			   const double altitude,
+			   const double wthermal,
+			   const double wind_speed,
+			   const double wind_bearing,
+                           GEOPOINT *ground_location,
 			   double *ground_alt);
   double est_x;
   double est_y;

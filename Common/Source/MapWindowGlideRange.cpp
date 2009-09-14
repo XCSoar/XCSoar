@@ -92,12 +92,11 @@ MapWindow::DrawGlideThroughTerrain(Canvas &canvas)
   }
 
   if (Calculated().Flying && ValidTask()) {
-    if ((Calculated().TerrainWarningLatitude != 0.0)
-        &&(Calculated().TerrainWarningLongitude != 0.0)) {
+    if ((Calculated().TerrainWarningLocation.Latitude != 0.0)
+        &&(Calculated().TerrainWarningLocation.Longitude != 0.0)) {
 
       draw_masked_bitmap_if_visible(canvas, MapGfx.hTerrainWarning,
-				    Calculated().TerrainWarningLongitude,
-				    Calculated().TerrainWarningLatitude,
+				    Calculated().TerrainWarningLocation,
 				    10, 10);
     }
   }

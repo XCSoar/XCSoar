@@ -219,10 +219,10 @@ GlideComputer::CalculateOwnTeamCode()
   double bearing = 0;
   TCHAR code[10];
 
-  LL_to_BearRange(WayPointList[SettingsComputer().TeamCodeRefWaypoint].Latitude,
-                  WayPointList[SettingsComputer().TeamCodeRefWaypoint].Longitude,
-                  Basic().Latitude,
-                  Basic().Longitude,
+  LL_to_BearRange(WayPointList[SettingsComputer().TeamCodeRefWaypoint].Location.Latitude,
+                  WayPointList[SettingsComputer().TeamCodeRefWaypoint].Location.Longitude,
+                  Basic().Location.Latitude,
+                  Basic().Location.Longitude,
                   &bearing, &distance);
 
   GetTeamCode(code, bearing, distance);
@@ -247,10 +247,10 @@ GlideComputer::CalculateTeammateBearingRange()
   double mateDistance = 0;
   double mateBearing = 0;
 
-  LL_to_BearRange(WayPointList[SettingsComputer().TeamCodeRefWaypoint].Latitude,
-                  WayPointList[SettingsComputer().TeamCodeRefWaypoint].Longitude,
-                  Basic().Latitude,
-                  Basic().Longitude,
+  LL_to_BearRange(WayPointList[SettingsComputer().TeamCodeRefWaypoint].Location.Latitude,
+                  WayPointList[SettingsComputer().TeamCodeRefWaypoint].Location.Longitude,
+                  Basic().Location.Latitude,
+                  Basic().Location.Longitude,
                   &ownBearing, &ownDistance);
 
   if (SettingsComputer().TeammateCodeValid) {
@@ -269,12 +269,10 @@ GlideComputer::CalculateTeammateBearingRange()
     SetCalculated().TeammateBearing = mateBearing;
     SetCalculated().TeammateRange = mateDistance;
     
-    FindLatitudeLongitude(Basic().Latitude,
-			  Basic().Longitude,
+    FindLatitudeLongitude(Basic().Location,
 			  mateBearing,
 			  mateDistance,
-			  &SetCalculated().TeammateLatitude,
-			  &SetCalculated().TeammateLongitude);
+			  &SetCalculated().TeammateLocation);
     
     if (mateDistance < 100 && InTeamSector==false) {
       InTeamSector=true;
@@ -338,13 +336,10 @@ GlideComputer::FLARM_ScanTraffic()
 	  double bearing;
 	  double distance;
 	  
-	  SetCalculated().TeammateLatitude = Basic().FLARM_Traffic[flarm_slot].Latitude;
-	  SetCalculated().TeammateLongitude = Basic().FLARM_Traffic[flarm_slot].Longitude;
+	  SetCalculated().TeammateLocation = Basic().FLARM_Traffic[flarm_slot].Location;
 	  DistanceBearing
-	    (WayPointList[SettingsComputer().TeamCodeRefWaypoint].Latitude,
-	     WayPointList[SettingsComputer().TeamCodeRefWaypoint].Longitude,
-	     Basic().FLARM_Traffic[flarm_slot].Latitude,
-	     Basic().FLARM_Traffic[flarm_slot].Longitude,
+	    (WayPointList[SettingsComputer().TeamCodeRefWaypoint].Location,
+	     Basic().FLARM_Traffic[flarm_slot].Location,
 	     &distance,
 	     &bearing);
 

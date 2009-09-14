@@ -94,24 +94,22 @@ DeviceBlackboard::Initialise()
 }
 
 void 
-DeviceBlackboard::SetStartupLocation(double lon, double lat, 
-				     double alt) 
+DeviceBlackboard::SetStartupLocation(const GEOPOINT &loc,
+				     const double alt) 
 {
   ScopeLock protect(mutexBlackboard);
-  SetBasic().Longitude = lon;
-  SetBasic().Latitude = lat;
+  SetBasic().Location = loc;
   SetBasic().Altitude = alt;
 }
 
 // used by replay logger
 void 
-DeviceBlackboard::SetLocation(double lon, double lat, 
-			      double speed, double bearing,
-			      double alt, double baroalt, double t) 
+DeviceBlackboard::SetLocation(const GEOPOINT &loc,
+			      const double speed, const double bearing,
+			      const double alt, const double baroalt, const double t) 
 {
   ScopeLock protect(mutexBlackboard);
-  SetBasic().Longitude = lon;
-  SetBasic().Latitude = lat;
+  SetBasic().Location = loc;
   SetBasic().Speed = speed;
   SetBasic().IndicatedAirspeed = speed; // cheat
   SetBasic().TrackBearing = bearing;
@@ -171,12 +169,10 @@ DeviceBlackboard::ProcessSimulation()
 {
   ScopeLock protect(mutexBlackboard);
   SetNAVWarning(false);
-  FindLatitudeLongitude(Basic().Latitude, 
-			Basic().Longitude,
+  FindLatitudeLongitude(Basic().Location, 
 			Basic().TrackBearing, 
 			Basic().Speed*1.0,
-			&SetBasic().Latitude,
-			&SetBasic().Longitude);
+			&SetBasic().Location);
   SetBasic().Time+= 1.0;
   long tsec = (long)Basic().Time;
   SetBasic().Hour = tsec/3600;

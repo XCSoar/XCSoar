@@ -40,11 +40,11 @@ Copyright_License {
 
 #include "Sizes.h"
 #include <tchar.h>
+#include "GeoPoint.hpp"
 
 typedef struct _FLARM_TRAFFIC
 {
-  double Latitude;
-  double Longitude;
+  GEOPOINT Location;
   double TrackBearing;
   double Speed;
   double Altitude;

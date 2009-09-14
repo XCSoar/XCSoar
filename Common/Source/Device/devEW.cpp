@@ -247,7 +247,7 @@ BOOL EWDeclAddWayPoint(PDeviceDescriptor_t d, const WAYPOINT *wp){
   #endif
 
   // prepare lat
-  tmp = wp->Latitude;
+  tmp = wp->Location.Latitude;
   NoS = 'N';
   if (tmp < 0)
     {
@@ -259,7 +259,7 @@ BOOL EWDeclAddWayPoint(PDeviceDescriptor_t d, const WAYPOINT *wp){
 
 
   // prepare long
-  tmp = wp->Longitude;
+  tmp = wp->Location.Longitude;
   EoW = 'E';
   if (tmp < 0)
     {

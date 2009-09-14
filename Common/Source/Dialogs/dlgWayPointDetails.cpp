@@ -400,11 +400,11 @@ void dlgWayPointDetailsShowModal(void){
   wp->SetText(WayPointList[SelectedWaypoint].Comment);
   wp->SetButtonSize(16);
 
-  Units::LongitudeToString(WayPointList[SelectedWaypoint].Longitude, sTmp, sizeof(sTmp)-1);
+  Units::LongitudeToString(WayPointList[SelectedWaypoint].Location.Longitude, sTmp, sizeof(sTmp)-1);
   ((WndProperty *)wf->FindByName(TEXT("prpLongitude")))
     ->SetText(sTmp);
 
-  Units::LatitudeToString(WayPointList[SelectedWaypoint].Latitude, sTmp, sizeof(sTmp)-1);
+  Units::LatitudeToString(WayPointList[SelectedWaypoint].Location.Latitude, sTmp, sizeof(sTmp)-1);
   ((WndProperty *)wf->FindByName(TEXT("prpLatitude")))
     ->SetText(sTmp);
 
@@ -414,8 +414,7 @@ void dlgWayPointDetailsShowModal(void){
   
   SunEphemeris sun;
   sunsettime = sun.CalcSunTimes
-    (WayPointList[SelectedWaypoint].Longitude,
-     WayPointList[SelectedWaypoint].Latitude,
+    (WayPointList[SelectedWaypoint].Location,
      XCSoarInterface::Basic(), XCSoarInterface::Calculated(),
      GetUTCOffset()/3600);
   sunsethours = (int)sunsettime;
@@ -426,10 +425,8 @@ void dlgWayPointDetailsShowModal(void){
     ->SetText(sTmp);
 
   double distance, bearing;
-  DistanceBearing(XCSoarInterface::Basic().Latitude,
-                  XCSoarInterface::Basic().Longitude,
-                  WayPointList[SelectedWaypoint].Latitude,
-                  WayPointList[SelectedWaypoint].Longitude,
+  DistanceBearing(XCSoarInterface::Basic().Location,
+                  WayPointList[SelectedWaypoint].Location,
                   &distance,
                   &bearing);
 

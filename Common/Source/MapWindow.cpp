@@ -84,12 +84,11 @@ MapWindow::MapWindow()
   :MapWindowProjection(),
    cdi(NULL),
    TargetDrag_State(0),
-   TargetDrag_Latitude(0),
-   TargetDrag_Longitude(0),
    BigZoom(true),
    FullScreen(false)
 {
-
+  TargetDrag_Location.Latitude = 0;
+  TargetDrag_Location.Longitude = 0;
 }
 
 MapWindow::~MapWindow()
@@ -227,8 +226,7 @@ bool MapWindow::Idle(const bool do_force) {
     }
 
     if (terrain_idle.dirty) {
-      terrain.ServiceTerrainCenter(Basic().Latitude,
-				   Basic().Longitude);
+      terrain.ServiceTerrainCenter(Basic().Location);
       terrain.ServiceCache();
       
       if (!do_force) {
@@ -239,8 +237,7 @@ bool MapWindow::Idle(const bool do_force) {
     }
 
     if (rasp_idle.dirty) {
-      RASP.SetViewCenter(Basic().Latitude,
-			 Basic().Longitude);
+      RASP.SetViewCenter(Basic().Location);
       if (!do_force) {
 	// JMW this currently isn't working with the smart bounds
 	rasp_idle.dirty = false;
@@ -428,8 +425,7 @@ void MapWindow::ApplyScreenSize() {
 
 bool MapWindow::draw_masked_bitmap_if_visible(Canvas &canvas,
 					      Bitmap &bitmap,
-					      const double &lon,
-					      const double &lat,
+					      const GEOPOINT &loc,
 					      unsigned width,
 					      unsigned height,
 					      POINT *scin)
@@ -437,7 +433,7 @@ bool MapWindow::draw_masked_bitmap_if_visible(Canvas &canvas,
   POINT sc;
   POINT *scp = (scin!=NULL)? (scin):(&sc);
 
-  if (LonLat2ScreenIfVisible(lon, lat, scp)) {
+  if (LonLat2ScreenIfVisible(loc, scp)) {
     draw_masked_bitmap(canvas, bitmap, scp->x, scp->y, width, height, true);
     return true;
   }

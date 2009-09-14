@@ -42,6 +42,7 @@ Copyright_License {
 #include <windows.h>
 #include "Sizes.h"
 
+#include "GeoPoint.hpp"
 #include "SettingsComputer.hpp"
 
 #define CIRCLE 0
@@ -51,10 +52,8 @@ typedef struct _START_POINT
 {
   int Index;
   double OutBound;
-  double SectorStartLat;
-  double SectorStartLon;
-  double SectorEndLat;
-  double SectorEndLon;
+  GEOPOINT SectorStart;
+  GEOPOINT SectorEnd;
 } START_POINT;
 
 typedef struct _START_POINT_STATS
@@ -65,8 +64,8 @@ typedef struct _START_POINT_STATS
 
 typedef struct _START_POINT_SCREEN
 {
-  POINT	 Start;
-  POINT	 End;
+  POINT	 SectorStart;
+  POINT	 SectorEnd;
 } START_POINT_SCREEN;
 
 
@@ -78,25 +77,21 @@ typedef struct _TASK_POINT
   double Bisector;
   double LegDistance;
   double LegBearing;
-  double SectorStartLat;
-  double SectorStartLon;
-  double SectorEndLat;
-  double SectorEndLon;
+  GEOPOINT SectorStart;
+  GEOPOINT SectorEnd;
   int	 AATType;
   double AATCircleRadius;
   double AATSectorRadius;
   double AATStartRadial;
   double AATFinishRadial;
-  double AATStartLat;
-  double AATStartLon;
-  double AATFinishLat;
-  double AATFinishLon;
+  GEOPOINT AATStart;
+  GEOPOINT AATFinish;
 } TASK_POINT;
 
 typedef struct _TASK_POINT_SCREEN
 {
-  POINT	 Start;
-  POINT	 End;
+  POINT	 SectorStart;
+  POINT	 SectorEnd;
   POINT	 Target;
   POINT	 AATStart;
   POINT	 AATFinish;
@@ -108,12 +103,10 @@ typedef struct _TASK_POINT_STATS
 {
   double AATTargetOffsetRadius;
   double AATTargetOffsetRadial;
-  double AATTargetLat;
-  double AATTargetLon;
+  GEOPOINT AATTargetLocation;
   bool   AATTargetLocked;
   double LengthPercent;
-  double IsoLine_Latitude[MAXISOLINES];
-  double IsoLine_Longitude[MAXISOLINES];
+  GEOPOINT IsoLine_Location[MAXISOLINES];
   bool IsoLine_valid[MAXISOLINES];
 } TASK_POINT_STATS;
 
@@ -146,20 +139,16 @@ bool ValidTaskPoint(const int i);
 bool ValidTask();
 bool ValidWayPoint(const int i);
 
-double FindInsideAATSectorRange(double latitude,
-                                double longitude,
-                                int taskwaypoint,
-                                double course_bearing,
-                                double p_found);
-double FindInsideAATSectorDistance(double latitude,
-                                double longitude,
-                                int taskwaypoint,
-                                double course_bearing,
-                                double p_found=0.0);
+double FindInsideAATSectorRange(const GEOPOINT &location,
+                                const int taskwaypoint,
+                                const double course_bearing,
+                                const double p_found);
+double FindInsideAATSectorDistance(const GEOPOINT &location,
+                                const int taskwaypoint,
+                                const double course_bearing,
+                                const double p_found=0.0);
 
-double DoubleLegDistance(int taskwaypoint,
-                         double longitude,
-                         double latitude);
+double DoubleLegDistance(const int taskwaypoint, const GEOPOINT &location);
 
 void CalculateAATIsoLines(void);
 
@@ -173,8 +162,7 @@ int  getFinalWaypoint(void);
 bool ActiveIsFinalWaypoint(void);
 bool IsFinalWaypoint(void);
 
-bool InAATTurnSector(const double longitude, const double latitude,
-		     const int the_turnpoint);
+bool InAATTurnSector(const GEOPOINT &location, const int the_turnpoint);
 
 bool isTaskModified();
 void SetTaskModified(const bool set=true);

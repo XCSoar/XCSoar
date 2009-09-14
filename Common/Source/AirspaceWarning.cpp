@@ -192,8 +192,7 @@ AirspaceWarnListCalcDistance(const NMEA_INFO *Basic,
   agl = (int)Calculated->AltitudeAGL;
 
   if (IsCircle){
-    *hDistance = (int)RangeAirspaceCircle(Basic->Longitude,
-                                          Basic->Latitude,
+    *hDistance = (int)RangeAirspaceCircle(Basic->Location,
                                           AsIdx);
     if (*hDistance < 0)
       *hDistance = 0;
@@ -209,11 +208,11 @@ AirspaceWarnListCalcDistance(const NMEA_INFO *Basic,
     }
     // EntryTime = ToDo
   } else {
-    if (!InsideAirspaceArea(Basic->Longitude, Basic->Latitude, AsIdx)){
+    if (!InsideAirspaceArea(Basic->Location, AsIdx)){
       // WARNING: RangeAirspaceArea dont return negative values if
       // inside aera -> but RangeAirspaceCircle does!
       double fBearing;
-      *hDistance = (int)RangeAirspaceArea(Basic->Longitude, Basic->Latitude,
+      *hDistance = (int)RangeAirspaceArea(Basic->Location, 
                                           AsIdx, &fBearing,
 					  map_projection);
       *Bearing = (int)fBearing;

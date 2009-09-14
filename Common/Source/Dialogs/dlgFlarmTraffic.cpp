@@ -81,10 +81,8 @@ OnPaintDetailsListItem(WindowControl *Sender, Canvas &canvas)
     double range;
     double bear;
 
-    DistanceBearing(XCSoarInterface::Basic().Latitude,
-		    XCSoarInterface::Basic().Longitude,
-		    XCSoarInterface::Basic().FLARM_Traffic[DrawListIndex].Latitude,
-		    XCSoarInterface::Basic().FLARM_Traffic[DrawListIndex].Longitude,
+    DistanceBearing(XCSoarInterface::Basic().Location,
+		    XCSoarInterface::Basic().FLARM_Traffic[DrawListIndex].Location,
 		    &range,
 		    &bear);
 

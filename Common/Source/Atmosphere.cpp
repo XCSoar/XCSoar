@@ -132,7 +132,7 @@ CuSonde::updateMeasurements(const NMEA_INFO *Basic,
 
   terrain.Lock();
   hGround =
-    terrain.GetTerrainHeight(Basic->Latitude, Basic->Longitude);
+    terrain.GetTerrainHeight(Basic->Location);
   terrain.Unlock();
 
   if (level>last_level) {

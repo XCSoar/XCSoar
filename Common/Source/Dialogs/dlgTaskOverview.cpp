@@ -323,7 +323,7 @@ static void OnTaskListEnter(WindowControl * Sender,
       mutexTaskData.Unlock();
 
       int res;
-      res = dlgWayPointSelect();
+      res = dlgWayPointSelect(XCSoarInterface::Basic().Location);
       mutexTaskData.Lock();
       if (res != -1){
         task_points[ItemIndex].Index = res;

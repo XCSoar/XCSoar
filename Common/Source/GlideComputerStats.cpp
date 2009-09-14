@@ -73,8 +73,8 @@ bool GlideComputerStats::DoLogging() {
 
   // prevent bad fixes from being logged or added to OLC store
   double distance;
-  DistanceBearing(Basic().Latitude, Basic().Longitude,
-		  LastBasic().Latitude, LastBasic().Longitude,
+  DistanceBearing(Basic().Location,
+		  LastBasic().Location, 
 		  &distance, NULL);
 
   if (distance>200.0) {

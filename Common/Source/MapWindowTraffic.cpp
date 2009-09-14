@@ -80,36 +80,27 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas)
   for (i=0; i<FLARM_MAX_TRAFFIC; i++) {
     if (Basic().FLARM_Traffic[i].ID!=0) {
 
-      double target_lon;
-      double target_lat;
-
-      target_lon = Basic().FLARM_Traffic[i].Longitude;
-      target_lat = Basic().FLARM_Traffic[i].Latitude;
+      GEOPOINT target_loc;
+      target_loc = Basic().FLARM_Traffic[i].Location;
 
       if ((SettingsMap().EnableFLARMMap==2)&&(scalefact>1.0)) {
         double distance;
         double bearing;
 
-        DistanceBearing(Basic().Latitude,
-                        Basic().Longitude,
-                        target_lat,
-                        target_lon,
+        DistanceBearing(Basic().Location,
+                        target_loc,
                         &distance,
                         &bearing);
 
-        FindLatitudeLongitude(Basic().Latitude,
-                              Basic().Longitude,
+        FindLatitudeLongitude(Basic().Location,
                               bearing,
                               distance*scalefact,
-                              &target_lat,
-                              &target_lon);
-
+                              &target_loc);
       }
 
       // TODO feature: draw direction, rel height?
       POINT sc, sc_name, sc_av;
-      if (!LonLat2ScreenIfVisible(target_lon,
-				  target_lat,
+      if (!LonLat2ScreenIfVisible(target_loc,
 				  &sc)) {
 	continue;
       }
@@ -252,8 +243,7 @@ MapWindow::DrawTeammate(Canvas &canvas)
 {
   if (SettingsComputer().TeammateCodeValid) {
     draw_masked_bitmap_if_visible(canvas, MapGfx.hBmpTeammatePosition,
-				  Calculated().TeammateLongitude, 
-				  Calculated().TeammateLatitude,
+				  Calculated().TeammateLocation, 
 				  20, 20);
   }
 }

@@ -174,7 +174,7 @@ static void SetValues(void) {
   bool sign;
   int dd,mm,ss;
 
-  Units::LongitudeToDMS(global_wpt->Longitude,
+  Units::LongitudeToDMS(global_wpt->Location.Longitude,
 			&dd, &mm, &ss, &sign);
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpLongitudeSign"));
@@ -227,7 +227,7 @@ static void SetValues(void) {
     break;
   }
 
-  Units::LatitudeToDMS(global_wpt->Latitude,
+  Units::LatitudeToDMS(global_wpt->Location.Latitude,
 		       &dd, &mm, &ss, &sign);
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpLatitudeSign"));
@@ -360,7 +360,7 @@ static void GetValues(void) {
     num = -num;
   }
 
-  global_wpt->Longitude = num;
+  global_wpt->Location.Longitude = num;
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpLatitudeSign"));
   if (wp) {
@@ -407,7 +407,7 @@ static void GetValues(void) {
     num = -num;
   }
 
-  global_wpt->Latitude = num;
+  global_wpt->Location.Latitude = num;
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpAltitude"));
   if (wp) {

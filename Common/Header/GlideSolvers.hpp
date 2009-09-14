@@ -42,13 +42,14 @@ Copyright_License {
 
 struct NMEA_INFO;
 struct DERIVED_INFO;
+struct GEOPOINT;
 
 double
 FinalGlideThroughTerrain(const double bearing, 
 			 const NMEA_INFO *Basic,
                          const DERIVED_INFO *Calculated,
 			 const SETTINGS_COMPUTER &settings,
-                         double *retlat, double *retlon,
+                         GEOPOINT *retlocation,
                          const double maxrange,
                          bool *outofrange,
                          double *TerrainBase = NULL);

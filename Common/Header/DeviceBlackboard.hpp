@@ -62,10 +62,10 @@ public:
 protected:
   NMEA_INFO& SetBasic() { return gps_info; }
 public:
-  void SetStartupLocation(double lon, double lat, double alt);
+  void SetStartupLocation(const GEOPOINT &loc, const double alt);
   // used by replay logger
-  void SetLocation(double lon, double lat, double speed, double bearing,
-		   double alt, double baroalt, double t);
+  void SetLocation(const GEOPOINT &loc, const double speed, const double bearing,
+		   const double alt, const double baroalt, const double t);
   void ProcessSimulation();
   bool LowerConnection(); // decrement
   void RaiseConnection(); // set to 2
