@@ -1842,7 +1842,8 @@ void GlideComputerTask::TaskSpeed(const double this_maccready,
 
     double termikLigaPoints = 0;
     if (d1 > 0) {
-      termikLigaPoints = konst*(0.015*0.001*d1-(400.0/(0.001*d1))+12.0)*v1*3.6*100.0/(double)SettingsComputer().Handicap;
+      termikLigaPoints = konst*(0.015*0.001*d1-(400.0/(0.001*d1))+12.0)
+        *v1*3.6*100.0/(double)SettingsComputer().Handicap;
     }
 
     SetCalculated().TermikLigaPoints = termikLigaPoints;
@@ -2162,7 +2163,7 @@ GlideComputerTask::CalculateWaypointReachable(void)
 	SettingsComputer().SAFETYALTITUDEARRIVAL
 	+ WayPointList[i].Altitude ;
       AltitudeDifference = Calculated().NavAltitude - AltitudeRequired;
-      WayPointList[i].AltArivalAGL = AltitudeDifference;
+      WayPointList[i].AltArrivalAGL = AltitudeDifference;
 
       if(AltitudeDifference >=0){
 	WayPointList[i].Reachable = TRUE;
@@ -2216,7 +2217,7 @@ GlideComputerTask::CalculateWaypointReachable(void)
 		    SettingsComputer().SAFETYALTITUDEARRIVAL
                     + WayPointList[i].Altitude ;
                   AltitudeDifference = Calculated().NavAltitude - AltitudeRequired;
-                  WayPointList[i].AltArivalAGL = AltitudeDifference;
+                  WayPointList[i].AltArrivalAGL = AltitudeDifference;
 
                   if(AltitudeDifference >=0){
                     WayPointList[i].Reachable = TRUE;

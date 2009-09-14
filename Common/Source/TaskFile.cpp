@@ -45,6 +45,7 @@ Copyright_License {
 #include "Dialogs.h"
 #include "Language.hpp"
 #include <stdio.h>
+#include <assert.h>
 
 TCHAR LastTaskFileName[MAX_PATH]= TEXT("\0");
 

@@ -812,7 +812,7 @@ void InfoBoxManager::DisplayInfoBox(void)
 				      sTmp, sizeof(sTmp)/sizeof(sTmp[0]));
 	    InfoBoxes[i]->SetComment(sTmp);
 	  } else {
-	    Units::FormatUserArrival(WayPointCalc[ActiveAlternate].AltArriv,
+	    Units::FormatUserArrival(WayPointCalc[ActiveAlternate].AltArrival,
 				     sTmp, sizeof(sTmp)/sizeof(sTmp[0]));
 	    InfoBoxes[i]->SetComment(sTmp);
 	  }

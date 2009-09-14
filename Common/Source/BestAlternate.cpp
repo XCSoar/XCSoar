@@ -178,7 +178,7 @@ GlideComputerTask::SearchBestAlternate()
       arrival_altitude = CalculateWaypointArrivalAltitude(way_point,
                                                           WayPointCalc[SortedApproxIndex[i]]);
 
-      WayPointCalc[SortedApproxIndex[i]].AltArriv = arrival_altitude;
+      WayPointCalc[SortedApproxIndex[i]].AltArrival = arrival_altitude;
       // This is holding the real arrival value
 
       /*
@@ -365,7 +365,7 @@ GlideComputerTask::SearchBestAlternate()
 	  if ( ValidWayPoint(active_bestalternate_on_entry) )
 	    {
 	      bestalternate=active_bestalternate_on_entry;
-	      if ( WayPointCalc[bestalternate].AltArriv <0 ) {
+	      if ( WayPointCalc[bestalternate].AltArrival <0 ) {
 		// Pick up the closest!
 		if ( ValidWayPoint( SortedApproxIndex[0]) ) {
 		  bestalternate=SortedApproxIndex[0];
@@ -405,7 +405,7 @@ GlideComputerTask::SearchBestAlternate()
 	 */
 	if ( bestalternate >0 &&
 	     ((safecalc-WayPointList[bestalternate].Altitude) >ALTERNATE_QUIETMARGIN)) {
-	  if ( WayPointList[bestalternate].AltArivalAGL <100 )
+	  if ( WayPointList[bestalternate].AltArrivalAGL <100 )
 	    AlertBestAlternate(2);
 	  //	if (EnableSoundModes) PlayResource(TEXT("IDR_WAV_RED"));
 	}
@@ -515,7 +515,7 @@ GlideComputerTask::DoAlternates(int AltWaypoint)
   double w0lon = Basic().Longitude;
   double *altwp_dist = &way_point_calc.Distance;
   double *altwp_gr = &way_point_calc.GR;
-  double *altwp_arrival = &way_point_calc.AltArriv;
+  double *altwp_arrival = &way_point_calc.AltArrival;
   short  *altwp_vgr = &way_point_calc.VGR;
 
   DistanceBearing(w1lat, w1lon,

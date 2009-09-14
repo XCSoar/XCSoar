@@ -1098,7 +1098,7 @@ void InitWayPointCalc() {
   for (unsigned i = 0; i < NumberOfWayPoints; i++) {
 	WayPointCalc[i].Preferred = false;
 	WayPointCalc[i].Distance=-1;
-	WayPointCalc[i].AltArriv=-1;
+	WayPointCalc[i].AltArrival=-1;
 	WayPointCalc[i].AltReqd=-1;
 	WayPointCalc[i].Bearing=-1;
 	WayPointCalc[i].GR=-1;

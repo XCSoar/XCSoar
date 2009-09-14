@@ -163,7 +163,7 @@ void MapWindow::DrawWaypoints(Canvas &canvas)
 		  if (draw_alt)
                     _stprintf(Buffer, TEXT("%s:%d%s"),
                               WayPointList[i].Name,
-                              (int)(WayPointList[i].AltArivalAGL*ALTITUDEMODIFY),
+                              (int)(WayPointList[i].AltArrivalAGL*ALTITUDEMODIFY),
                               sAltUnit);
 		  else
                     _stprintf(Buffer, TEXT("%s"),WayPointList[i].Name);
@@ -174,7 +174,7 @@ void MapWindow::DrawWaypoints(Canvas &canvas)
 		if (draw_alt)
                   _stprintf(Buffer, TEXT("%s:%d%s"),
                             WayPointList[i].Name,
-                            (int)(WayPointList[i].AltArivalAGL*ALTITUDEMODIFY),
+                            (int)(WayPointList[i].AltArrivalAGL*ALTITUDEMODIFY),
                             sAltUnit);
 		else
                   _stprintf(Buffer, TEXT("%s"),WayPointList[i].Name);
@@ -185,7 +185,7 @@ void MapWindow::DrawWaypoints(Canvas &canvas)
 		if (draw_alt)
                   _stprintf(Buffer, TEXT("%d:%d%s"),
                             WayPointList[i].Number,
-                            (int)(WayPointList[i].AltArivalAGL*ALTITUDEMODIFY),
+                            (int)(WayPointList[i].AltArrivalAGL*ALTITUDEMODIFY),
                             sAltUnit);
 		else
                   _stprintf(Buffer, TEXT("%d"),WayPointList[i].Number);
@@ -198,7 +198,7 @@ void MapWindow::DrawWaypoints(Canvas &canvas)
 		if (draw_alt)
                   _stprintf(Buffer, TEXT("%s:%d%s"),
                             Buffer2,
-                            (int)(WayPointList[i].AltArivalAGL*ALTITUDEMODIFY),
+                            (int)(WayPointList[i].AltArrivalAGL*ALTITUDEMODIFY),
                             sAltUnit);
 		else
                   _stprintf(Buffer, TEXT("%s"),Buffer2);
@@ -211,7 +211,7 @@ void MapWindow::DrawWaypoints(Canvas &canvas)
 		if (draw_alt)
                   _stprintf(Buffer, TEXT("%s:%d%s"),
                             Buffer2,
-                            (int)(WayPointList[i].AltArivalAGL*ALTITUDEMODIFY),
+                            (int)(WayPointList[i].AltArrivalAGL*ALTITUDEMODIFY),
                             sAltUnit);
 		else
                   _stprintf(Buffer, TEXT("%s"),Buffer2);
@@ -221,7 +221,7 @@ void MapWindow::DrawWaypoints(Canvas &canvas)
 		dowrite = (SettingsMap().DeclutterLabels<2) || intask;
 		if (draw_alt)
                   _stprintf(Buffer, TEXT("%d%s"),
-                            (int)(WayPointList[i].AltArivalAGL*ALTITUDEMODIFY),
+                            (int)(WayPointList[i].AltArrivalAGL*ALTITUDEMODIFY),
                             sAltUnit);
 		else
 		  Buffer[0]= '\0';
@@ -238,7 +238,7 @@ void MapWindow::DrawWaypoints(Canvas &canvas)
 				    WayPointList[i].Screen.x+5,
 				    WayPointList[i].Screen.y,
 				    TextDisplayMode,
-				    (int)(WayPointList[i].AltArivalAGL*ALTITUDEMODIFY),
+				    (int)(WayPointList[i].AltArrivalAGL*ALTITUDEMODIFY),
 				    intask,false,false,false,
 				    MapRect);
 	      }
