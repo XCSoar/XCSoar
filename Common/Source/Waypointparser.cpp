@@ -187,7 +187,9 @@ static int ParseWayPointError(int LineNumber, const TCHAR *FileName,
 }
 
 // VENTA3 added additional WP calculated list
-bool AllocateWaypointList(void) {
+static bool
+AllocateWaypointList()
+{
   if (!WayPointList) {
     NumberOfWayPoints = 0;
     WayPointList = (WAYPOINT *)LocalAlloc(LPTR, 50 * sizeof(WAYPOINT));
@@ -363,7 +365,8 @@ void WaypointAltitudeFromTerrain(WAYPOINT* Temp) {
 }
 
 
-int ParseWayPointString(const TCHAR *String,WAYPOINT *Temp)
+static int
+ParseWayPointString(const TCHAR *String, WAYPOINT *Temp)
 {
   TCHAR ctemp[80]; // must be bigger than COMMENT_SIZE!
   TCHAR *Zoom;
@@ -866,9 +869,9 @@ int FindNearestWayPoint(MapWindowProjection &map_projection,
   // Flags: T,H,A,L
 
 
-void WaypointFlagsToString(int FlagsNum,
-                           TCHAR *Flags) {
-
+static void
+WaypointFlagsToString(int FlagsNum, TCHAR *Flags)
+{
   if ((FlagsNum & AIRPORT) == AIRPORT) {
     _tcscat(Flags,TEXT("A"));
   }
@@ -898,9 +901,9 @@ void WaypointFlagsToString(int FlagsNum,
   }
 }
 
-
-void WaypointLongitudeToString(double Longitude,
-                               TCHAR *Buffer) {
+static void
+WaypointLongitudeToString(double Longitude, TCHAR *Buffer)
+{
   TCHAR EW[] = TEXT("WE");
   int dd, mm, ss;
 
@@ -925,9 +928,9 @@ void WaypointLongitudeToString(double Longitude,
   _stprintf(Buffer, TEXT("%03d:%02d:%02d%c"), dd, mm, ss, EW[sign]);
 }
 
-
-void WaypointLatitudeToString(double Latitude,
-                              TCHAR *Buffer) {
+static void
+WaypointLatitudeToString(double Latitude, TCHAR *Buffer)
+{
   TCHAR EW[] = TEXT("SN");
   int dd, mm, ss;
 
@@ -950,8 +953,9 @@ void WaypointLatitudeToString(double Latitude,
   _stprintf(Buffer, TEXT("%02d:%02d:%02d%c"), dd, mm, ss, EW[sign]);
 }
 
-
-void WriteWayPointFileWayPoint(FILE *fp, WAYPOINT* wpt) {
+static void
+WriteWayPointFileWayPoint(FILE *fp, WAYPOINT* wpt)
+{
   TCHAR Flags[MAX_PATH];
   TCHAR Latitude[MAX_PATH];
   TCHAR Longitude[MAX_PATH];
@@ -986,8 +990,9 @@ void WriteWayPointFileWayPoint(FILE *fp, WAYPOINT* wpt) {
             wpt->Comment);
 }
 
-
-void WriteWayPointFile(FILE *fp) {
+static void
+WriteWayPointFile(FILE *fp)
+{
   int i;
 
   // remove previous home if it exists in this file
