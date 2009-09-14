@@ -83,14 +83,14 @@ public:
 #endif
   }
 public:
-  virtual void Lock() {
+  void Lock() {
 #ifdef HAVE_POSIX
     pthread_mutex_lock(&mutex);
 #else
     EnterCriticalSection(&handle);
 #endif
   };
-  virtual void Unlock() {
+  void Unlock() {
 #ifdef HAVE_POSIX
     pthread_mutex_unlock(&mutex);
 #else
@@ -98,15 +98,6 @@ public:
 #endif
   }
 };
-
-class DummyMutex: public Mutex {
-public:
-  void Lock() {
-  };
-  void Unlock() {
-  }
-};
-
 
 // JMW testing an easy/clear way of handling mutexes
 class ScopeLock {
