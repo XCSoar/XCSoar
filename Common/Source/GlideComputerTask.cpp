@@ -1561,64 +1561,51 @@ void GlideComputerTask::DebugTaskCalculations()
 }
 #endif
 
+#include "TaskVisitor.hpp"
 
-bool GlideComputerTask::TaskAltitudeRequired(double this_maccready, double *Vfinal,
-					     double *TotalTime, double *TotalDistance,
-					     int *ifinal,
-					     const double cruise_efficiency)
+class TaskAltitudeRequiredVisitor: 
+  public AbsoluteTaskLegVisitor 
 {
-  int i;
-  double w1lat;
-  double w1lon;
-  double w0lat;
-  double w0lon;
-  double LegTime, LegDistance, LegBearing, LegAltitude;
-  bool retval = false;
-
-  // Calculate altitude required from start of task
-
-  bool isfinal=true;
-  LegAltitude = 0;
-  double TotalAltitude = 0;
-  *TotalTime = 0; *TotalDistance = 0;
-  *ifinal = 0;
-
-  ScopeLock protect(mutexTaskData);
-
-  double height_above_finish = FAIFinishHeight( 0)-
-    FAIFinishHeight( -1);
-
-  for(i=MAXTASKPOINTS-2;i>=0;i--) {
-
-
-    if (!ValidTaskPoint(i) || !ValidTaskPoint(i+1)) continue;
-
-    w1lat = WayPointList[task_points[i].Index].Latitude;
-    w1lon = WayPointList[task_points[i].Index].Longitude;
-    w0lat = WayPointList[task_points[i+1].Index].Latitude;
-    w0lon = WayPointList[task_points[i+1].Index].Longitude;
-
-    if (AATEnabled) {
-      w1lat = task_stats[i].AATTargetLat;
-      w1lon = task_stats[i].AATTargetLon;
-      if (!isfinal) {
-        w0lat = task_stats[i+1].AATTargetLat;
-        w0lon = task_stats[i+1].AATTargetLon;
-      }
-    }
-
-    DistanceBearing(w1lat, w1lon,
-                    w0lat, w0lon,
-                    &LegDistance, &LegBearing);
-
-    *TotalDistance += LegDistance;
-
-    LegAltitude =
-      GlidePolar::MacCreadyAltitude(this_maccready,
-                                    LegDistance,
-                                    LegBearing,
-                                    Calculated().WindSpeed,
-                                    Calculated().WindBearing,
+public:
+  TaskAltitudeRequiredVisitor(const double mc, 
+			      const double ce, 
+			      const double windspeed,
+			      const double windbearing,
+			      const double _min_start_height,
+			      const double _min_finish_height):
+    TotalAltitude(0.0),
+    TotalDistance(0.0),
+    TotalTime(0.0),
+    Vfinal(0.0),
+    maccready(mc),
+    cruise_efficiency(ce),
+    wind_speed(windspeed),
+    wind_bearing(windbearing),
+    reachable(false),
+    min_start_height(_min_start_height),
+    min_finish_height(_min_finish_height)
+  {
+    height_above_finish = min_start_height-min_finish_height;
+  }
+  void visit_single(TASK_POINT &point0, const unsigned index0) 
+  {
+    visit_leg_intermediate(point0, index0, point0, index0);
+  };
+  void visit_leg_start(TASK_POINT &point0, const unsigned index0,
+		       TASK_POINT &point1, const unsigned index1) 
+  {
+    visit_leg_intermediate(point0, index0, point1, index1);
+  };
+  void visit_leg_intermediate(TASK_POINT &point0, const unsigned index0,
+			      TASK_POINT &point1, const unsigned index1) 
+  {
+    LegTime= 0.0;
+    double LegAltitude =
+      GlidePolar::MacCreadyAltitude(maccready,
+                                    point1.LegDistance,
+                                    point1.LegBearing,
+                                    wind_speed,
+                                    wind_bearing,
                                     0,
                                     0,
                                     true,
@@ -1626,42 +1613,67 @@ bool GlideComputerTask::TaskAltitudeRequired(double this_maccready, double *Vfin
 				    height_above_finish,
 				    cruise_efficiency
                                     );
-
     // JMW CHECK FGAMT
     height_above_finish-= LegAltitude;
 
     TotalAltitude += LegAltitude;
+    TotalDistance += point1.LegDistance;
 
     if (LegTime<0) {
-      return false;
+      reachable = false;
     } else {
-      *TotalTime += LegTime;
+      TotalTime += LegTime;
     }
-    if (isfinal) {
-      *ifinal = i+1;
-      if (LegTime>0) {
-        *Vfinal = LegDistance/LegTime;
-      }
+  };
+  void visit_leg_final(TASK_POINT &point0, const unsigned index0,
+		       TASK_POINT &point1, const unsigned index1) 
+  {
+    visit_leg_intermediate(point0, index0, point1, index1);
+
+    if (reachable) {
+      Vfinal = point1.LegDistance/LegTime;
+    } else {
+      Vfinal = 0.0;
     }
-    isfinal = false;
-  }
+  };
+  double TotalAltitude;
+  double TotalDistance;
+  double TotalTime;
+  double height_above_finish;
+  double Vfinal;
+  bool reachable;
+private:
+  double maccready;
+  double cruise_efficiency;
+  double wind_speed;
+  double wind_bearing;
+  double LegTime;
+  double min_start_height;
+  double min_finish_height;
+};
 
-  if (*ifinal==0) {
-    retval = false;
-    goto OnExit;
-  }
 
-  TotalAltitude += FAIFinishHeight( -1);
 
-  if (!ValidTaskPoint(*ifinal)) {
-    SetCalculated().TaskAltitudeRequiredFromStart = TotalAltitude;
-    retval = false;
-  } else {
-    SetCalculated().TaskAltitudeRequiredFromStart = TotalAltitude;
-    retval = true;
-  }
- OnExit:
-  return retval;
+
+bool GlideComputerTask::TaskAltitudeRequired(double this_maccready, double *Vfinal,
+					     double *TotalTime, double *TotalDistance,
+					     const double cruise_efficiency)
+{
+  // Calculate altitude required from start of task
+  TaskAltitudeRequiredVisitor tarv(this_maccready, cruise_efficiency,
+				   Calculated().WindSpeed, 
+				   Calculated().WindBearing,
+				   FAIFinishHeight(0),
+				   FAIFinishHeight(-1));
+  TaskScan::scan_leg_reverse(tarv);
+
+  SetCalculated().TaskAltitudeRequiredFromStart = tarv.TotalAltitude
+    + FAIFinishHeight(-1);
+  *TotalTime = tarv.TotalTime;
+  *Vfinal = tarv.Vfinal;
+  *TotalDistance = tarv.TotalDistance;
+
+  return tarv.reachable;
 }
 
 
@@ -1695,7 +1707,6 @@ double GlideComputerTask::MacCreadyOrAvClimbRate(double this_maccready)
 void GlideComputerTask::TaskSpeed(const double this_maccready,
 				  const double cruise_efficiency)
 {
-  int ifinal;
   double TotalTime=0, TotalDistance=0, Vfinal=0;
 
   if (!ValidTask()) return;
@@ -1715,7 +1726,7 @@ void GlideComputerTask::TaskSpeed(const double this_maccready,
   ScopeLock protect(mutexTaskData);
 
   if (TaskAltitudeRequired(this_maccready, &Vfinal,
-                           &TotalTime, &TotalDistance, &ifinal, 
+                           &TotalTime, &TotalDistance,
 			   cruise_efficiency)) {
 
     double t0 = TotalTime;

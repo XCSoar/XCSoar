@@ -169,7 +169,7 @@ OnTaskPaintListItem(WindowControl *Sender, Canvas &canvas)
                           p1 - 4 * InfoBoxLayout::scale, sTmp);
 
       _stprintf(sTmp, TEXT("%.0f %s"),
-		task_points[i].Leg*DISTANCEMODIFY,
+		task_points[i].LegDistance*DISTANCEMODIFY,
 		Units::GetDistanceName());
       canvas.text_opaque(p1 + w1 - canvas.text_width(sTmp),
                          2 * InfoBoxLayout::scale, sTmp);
@@ -236,7 +236,7 @@ static void OverviewRefreshTask(void) {
   lengthtotal = 0;
   for (i=0; i<MAXTASKPOINTS; i++) {
     if (task_points[i].Index != -1) {
-      lengthtotal += task_points[i].Leg;
+      lengthtotal += task_points[i].LegDistance;
       UpLimit = i+1;
     }
   }
@@ -246,7 +246,7 @@ static void OverviewRefreshTask(void) {
   if (lengthtotal>0) {
     for (i=0; i<MAXTASKPOINTS; i++) {
       if (task_points[i].Index != -1) {
-	double lrat = task_points[i].Leg/lengthtotal;
+	double lrat = task_stats[i].LengthPercent;
 	if ((lrat>0.45)||(lrat<0.10)) {
 	  fai_ok = false;
 	}

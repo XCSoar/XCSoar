@@ -165,7 +165,6 @@ class MapWindow
   void DrawTrailFromTask(Canvas &canvas, const double TrailFirstTime);
   void DrawOffTrackIndicator(Canvas &canvas);
   void DrawProjectedTrack(Canvas &canvas);
-  void DrawStartSector(Canvas &canvas, POINT &Start, POINT &End, int Index);
   void DrawTask(Canvas &canvas, RECT rc);
   void DrawThermalEstimate(Canvas &canvas);
   void DrawTaskAAT(Canvas &canvas, const RECT rc, Canvas &buffer);

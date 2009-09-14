@@ -100,7 +100,6 @@ private:
   double SpeedHeight();
   bool TaskAltitudeRequired(double this_maccready, double *Vfinal,
 			    double *TotalTime, double *TotalDistance,
-			    int *ifinal,
 			    const double cruise_efficiency);
   double MacCreadyOrAvClimbRate(double this_maccready);
   void CheckFinalGlideThroughTerrain(double LegToGo, double LegBearing);

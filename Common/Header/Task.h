@@ -76,7 +76,8 @@ typedef struct _TASK_POINT
   double InBound;
   double OutBound;
   double Bisector;
-  double Leg;
+  double LegDistance;
+  double LegBearing;
   double SectorStartLat;
   double SectorStartLon;
   double SectorEndLat;
