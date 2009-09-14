@@ -601,16 +601,16 @@ MapWindow::DrawProjectedTrack(Canvas &canvas)
   POINT pt[2] = {{0,-75},{0,-400}};
   if (SettingsMap().TargetPan) {
     double screen_range = GetScreenDistanceMeters();
-    double flow = 0.4;
-    double fhigh = 1.5;
+    double f_low = 0.4;
+    double f_high = 1.5;
     screen_range = max(screen_range, Calculated().WaypointDistance);
     
     GEOPOINT p1, p2;
     FindLatitudeLongitude(start, 
-			  bearing, flow*screen_range,
+			  bearing, f_low*screen_range,
 			  &p1);
     FindLatitudeLongitude(start,
-			  bearing, fhigh*screen_range,
+			  bearing, f_high*screen_range,
 			  &p2);
     LonLat2Screen(p1, pt[0]);
     LonLat2Screen(p2, pt[1]);
