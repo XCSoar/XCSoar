@@ -95,7 +95,7 @@ public:
    * Copies the buffer to the specified canvas.
    */
   void commit_buffer(Canvas &dest) {
-    dest.copy(buffer);
+    dest.copy(get_canvas());
   }
 
   /**
