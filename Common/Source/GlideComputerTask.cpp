@@ -2137,6 +2137,7 @@ public:
 
   void waypoint_landable(WAYPOINT &waypoint, WPCALC &wpcalc, const unsigned i) 
     {
+      // treat landables as airports
       waypoint_airport(waypoint, wpcalc, i);
     }
   void waypoint_airport(WAYPOINT &waypoint, WPCALC &wpcalc, const unsigned i) 
