@@ -324,9 +324,9 @@ void SetModelType() {
 
   TCHAR sTmp[100];
   TCHAR szRegistryInfoBoxModel[]= TEXT("AppInfoBoxModel");
-  DWORD Temp=0;
+  int Temp = 0;
 
-  GetFromRegistry(szRegistryInfoBoxModel, &Temp);
+  GetFromRegistry(szRegistryInfoBoxModel, Temp);
 
   if ( SetModelName(Temp) != true ) {
 
