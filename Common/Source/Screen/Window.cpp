@@ -207,6 +207,12 @@ Window::on_timer(timer_t id)
   return false;
 }
 
+bool
+Window::on_user(unsigned id)
+{
+  return false;
+}
+
 LRESULT
 Window::on_message(HWND _hWnd, UINT message,
                        WPARAM wParam, LPARAM lParam)
@@ -304,6 +310,9 @@ Window::on_message(HWND _hWnd, UINT message,
       return 0;
     break;
   }
+
+  if (message >= WM_USER && message <= 0x7FFF && on_user(message - WM_USER))
+    return 0;
 
   return prev_wndproc != NULL
     ? ::CallWindowProc(prev_wndproc, _hWnd, message, wParam, lParam)

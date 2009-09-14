@@ -199,6 +199,10 @@ public:
     ::SendMessage(hWnd, WM_COMMAND, (WPARAM)0, (LPARAM)from.hWnd);
   }
 
+  void send_user(unsigned id) {
+    ::PostMessage(hWnd, WM_USER + id, (WPARAM)0, (LPARAM)0);
+  }
+
 protected:
   /**
    * @return true on success, false if the window should not be
@@ -219,6 +223,7 @@ protected:
   virtual bool on_setfocus();
   virtual bool on_killfocus();
   virtual bool on_timer(timer_t id);
+  virtual bool on_user(unsigned id);
 
   virtual LRESULT on_message(HWND hWnd, UINT message,
                              WPARAM wParam, LPARAM lParam);
