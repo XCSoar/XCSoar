@@ -38,10 +38,8 @@ Copyright_License {
 */
 
 #include "AirfieldDetails.h"
-#include "XCSoar.h"
 #include "UtilsText.hpp"
 #include "SettingsTask.hpp"
-#include "Dialogs.h"
 #include "Language.hpp"
 #include "Registry.hpp"
 #include "LocalPath.hpp"
@@ -51,6 +49,7 @@ Copyright_License {
 
 #include <zzip/lib.h>
 #include "wcecompat/ts_string.h"
+#include <stdlib.h>
 
 ZZIP_FILE* zAirfieldDetails = NULL;
 

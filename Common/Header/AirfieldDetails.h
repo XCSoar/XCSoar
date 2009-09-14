@@ -38,8 +38,6 @@ Copyright_License {
 #ifndef AIRFIELDDETAILS_H
 #define AIRFIELDDETAILS_H
 
-#include "Sizes.h"
-
 void ReadAirfieldFile();
 
 #endif
