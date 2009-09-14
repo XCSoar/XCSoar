@@ -223,7 +223,8 @@ void InfoBoxLayout::ScreenGeometry(RECT rc) {
 #if defined(PNA) || defined(FIVV)
 // VENTA-ADDON GEOM
   static const TCHAR szRegistryInfoBoxGeom[]=  TEXT("AppInfoBoxGeom");
-  GetFromRegistry(szRegistryInfoBoxGeom,&Temp);
+  unsigned Temp = 0;
+  GetFromRegistry(szRegistryInfoBoxGeom, Temp);
   if (InfoBoxGeometry != Temp) {
     StartupStore(_T("Geometry was changed in config, applying\n"));
     InfoBoxGeometry=Temp;
