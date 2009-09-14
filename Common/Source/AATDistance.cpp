@@ -42,7 +42,7 @@ Copyright_License {
 #include "SettingsTask.hpp"
 #include "Math/Earth.hpp"
 #include "WayPoint.hpp"
-#include "Calculations.h" // TODO danger using InAATTurnSector
+
 #include <math.h>
 
 #define DISTANCETHRESHOLD 500

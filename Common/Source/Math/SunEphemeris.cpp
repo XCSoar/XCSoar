@@ -40,11 +40,14 @@ Copyright_License {
 }
 */
 
+#include "Math/SunEphemeris.hpp"
+#include "NMEA/Info.h"
+#include "NMEA/Derived.hpp"
+
 #define PI 3.1415926
 #define SUN_DIAMETER 0.53     // Sunradius degrees
 #define AIR_REFRACTION 34.0/60.0 // athmospheric refraction degrees //
 
-#include "Math/SunEphemeris.hpp"
 #include <math.h>
 #include "Units.hpp"
 

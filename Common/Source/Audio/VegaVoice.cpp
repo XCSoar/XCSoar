@@ -35,6 +35,7 @@ Copyright_License {
 }
 */
 
+#include "SettingsComputer.hpp"
 #include "Audio/VegaVoice.h"
 #include "XCSoar.h"
 #include "Protection.hpp"

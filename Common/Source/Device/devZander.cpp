@@ -43,6 +43,7 @@ Copyright_License {
 #include "Device/Parser.h"
 #include "Device/Port.h"
 #include "UtilsText.hpp"
+#include "NMEA/Info.h"
 
 static BOOL PZAN1(PDeviceDescriptor_t d, const TCHAR *String,
                   NMEA_INFO *aGPS_INFO);

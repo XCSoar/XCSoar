@@ -49,7 +49,6 @@ Copyright_License {
 
 class MapWindowProjection;
 
-void ReadWayPointFile(HANDLE hFile);
 void ReadWayPoints(void);
 void SetHome(SETTINGS_COMPUTER &settings,
 	     const bool reset, const bool set_location=false);

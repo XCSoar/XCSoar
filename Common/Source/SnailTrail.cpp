@@ -36,6 +36,9 @@ Copyright_License {
 */
 
 #include "SnailTrail.hpp"
+#include "NMEA/Info.h"
+#include "NMEA/Derived.hpp"
+
 #include <math.h>
 
 

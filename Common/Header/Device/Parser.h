@@ -38,9 +38,9 @@ Copyright_License {
 #if !defined(AFX_PARSER_H__695AAC30_F401_4CFF_9BD9_FE62A2A2D0D2__INCLUDED_)
 #define AFX_PARSER_H__695AAC30_F401_4CFF_9BD9_FE62A2A2D0D2__INCLUDED_
 
-#include "NMEA/Info.h"
-
 #include <tchar.h>
+
+struct NMEA_INFO;
 
 class NMEAParser {
  public:

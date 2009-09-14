@@ -49,6 +49,7 @@ Copyright_License {
 #include "Math/Earth.hpp"
 #include "Math/Pressure.h"
 #include "Math/Units.h"
+#include "NMEA/Info.h"
 
 #include <ctype.h>
 #include <stdlib.h>

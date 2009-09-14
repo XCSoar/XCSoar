@@ -38,11 +38,13 @@ Copyright_License {
 #ifndef XCSOAR_SNAIL_TRAIL_HPP
 #define XCSOAR_SNAIL_TRAIL_HPP
 
-#include "NMEA/Info.h"
-#include "NMEA/Derived.hpp"
 #include "Screen/shapelib/mapshape.h"
 #include "GPSClock.hpp"
 #include "Thread/Mutex.hpp"
+#include "Sizes.h"
+
+struct NMEA_INFO;
+struct DERIVED_INFO;
 
 typedef struct _SNAIL_POINT
 {

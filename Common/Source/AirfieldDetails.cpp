@@ -38,10 +38,8 @@ Copyright_License {
 */
 
 #include "AirfieldDetails.h"
-#include "XCSoar.h"
 #include "UtilsText.hpp"
 #include "SettingsTask.hpp"
-#include "Dialogs.h"
 #include "Language.hpp"
 #include "Registry.hpp"
 #include "LocalPath.hpp"
@@ -51,12 +49,15 @@ Copyright_License {
 
 #include <zzip/lib.h>
 #include "wcecompat/ts_string.h"
+#include <stdlib.h>
 
 ZZIP_FILE* zAirfieldDetails = NULL;
 
 static TCHAR  szAirfieldDetailsFile[MAX_PATH] = TEXT("\0");
 
-void OpenAirfieldDetails() {
+static void
+OpenAirfieldDetails()
+{
   char zfilename[MAX_PATH] = "\0";
 
   zAirfieldDetails = NULL;
@@ -85,8 +86,9 @@ void OpenAirfieldDetails() {
   }
 }
 
-
-void CloseAirfieldDetails() {
+static void
+CloseAirfieldDetails()
+{
   if (zAirfieldDetails == NULL) {
     return;
   }
@@ -103,7 +105,9 @@ void CloseAirfieldDetails() {
  * VENTA3: Home and Preferred landing points for BestAlternate
  * Paolo Ventafridda
  */
-void LookupAirfieldDetail(TCHAR *Name, TCHAR *Details) {
+static void
+LookupAirfieldDetail(TCHAR *Name, TCHAR *Details)
+{
   int i;
   TCHAR UName[100];
   TCHAR NameA[100];
@@ -178,8 +182,9 @@ void LookupAirfieldDetail(TCHAR *Name, TCHAR *Details) {
  * VENTA3 fix: if empty lines, do not set details for the waypoint
  *        fix: remove CR from text appearing as a spurious char in waypoint details
  */
-void ParseAirfieldDetails() {
-
+static void
+ParseAirfieldDetails()
+{
   if(zAirfieldDetails == NULL)
     return;
 

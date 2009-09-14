@@ -53,6 +53,7 @@ Copyright_License {
 #include "Math/Units.h"
 #include "SettingsComputer.hpp"
 #include "McReady.h"
+#include "NMEA/Info.h"
 
 #include <windows.h>
 #include <tchar.h>

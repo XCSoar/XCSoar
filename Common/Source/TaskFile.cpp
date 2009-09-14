@@ -106,7 +106,7 @@ static bool LoadTaskWaypoints(FILE *file) {
   return true;
 }
 
-#define  BINFILEMAGICNUMBER     0x5cf77fcc
+#define  BINFILEMAGICNUMBER     0x5cf77fcd
 
 // loads a new task from scratch.
 void LoadNewTask(const TCHAR *szFileName,

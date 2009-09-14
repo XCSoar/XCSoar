@@ -38,9 +38,10 @@ Copyright_License {
 #ifndef GLIDE_SOLVERS_HPP
 #define GLIDE_SOLVERS_HPP
 
-#include "NMEA/Info.h"
-#include "NMEA/Derived.hpp"
 #include "SettingsComputer.hpp"
+
+struct NMEA_INFO;
+struct DERIVED_INFO;
 
 double
 FinalGlideThroughTerrain(const double bearing, 

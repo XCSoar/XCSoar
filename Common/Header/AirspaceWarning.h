@@ -37,9 +37,8 @@ Copyright_License {
 #ifndef AIRSPACE_WARNING_H
 #define AIRSPACE_WARNING_H
 
-#include "NMEA/Info.h"
-#include "NMEA/Derived.hpp"
-
+struct NMEA_INFO;
+struct DERIVED_INFO;
 class MapWindowProjection;
 
 extern void

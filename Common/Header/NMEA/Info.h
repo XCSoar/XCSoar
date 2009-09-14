@@ -41,7 +41,7 @@ Copyright_License {
 #include "FLARM/Traffic.h"
 #include "Sizes.h"
 
-typedef struct _SWITCH_INFO
+struct SWITCH_INFO
 {
   bool AirbrakeLocked;
   bool FlapPositive;
@@ -57,10 +57,9 @@ typedef struct _SWITCH_INFO
   bool VarioCircling;
   bool FlapLanding;
   // bool Stall;
-} SWITCH_INFO;
+};
 
-
-typedef struct _NMEA_INFO
+struct NMEA_INFO
 {
   unsigned Connected;
   double Latitude;
@@ -124,7 +123,6 @@ typedef struct _NMEA_INFO
 
   double StallRatio;
   bool Replay;
-
-} NMEA_INFO;
+};
 
 #endif

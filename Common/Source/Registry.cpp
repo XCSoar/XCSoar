@@ -762,7 +762,7 @@ void Profile::ReadRegistrySettings(void)
 // know the screen geometry, in the registry!
 #if defined(PNA) || defined(FIVV)
   Temp = Appearance.InfoBoxGeom;
-  GetFromRegistryD(szRegistryAppInfoBoxGeom, &Temp);
+  GetFromRegistryD(szRegistryAppInfoBoxGeom, Temp);
   Appearance.InfoBoxGeom = (InfoBoxGeomAppearance_t)Temp;
 
   if (GlobalModelType == MODELTYPE_PNA_HP31X ) {

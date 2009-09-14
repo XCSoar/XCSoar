@@ -38,8 +38,8 @@ Copyright_License {
 #ifndef WINDZIGZAG_H
 #define WINDZIGZAG_H
 
-#include "NMEA/Info.h"
-#include "NMEA/Derived.hpp"
+struct NMEA_INFO;
+struct DERIVED_INFO;
 
 int
 WindZigZagUpdate(const NMEA_INFO* Basic, const DERIVED_INFO* Calculated,

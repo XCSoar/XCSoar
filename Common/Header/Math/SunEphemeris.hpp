@@ -37,8 +37,8 @@ Copyright_License {
 #if !defined(SUN_EPHEMERIS_HPP)
 #define SUN_EPHEMERIS_HPP
 
-#include "NMEA/Info.h"
-#include "NMEA/Derived.hpp"
+struct NMEA_INFO;
+struct DERIVED_INFO;
 
 class SunEphemeris {
 

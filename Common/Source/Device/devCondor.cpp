@@ -46,6 +46,7 @@ Copyright_License {
 #include "Device/Port.h"
 #include "McReady.h"
 #include "SettingsComputer.hpp"
+#include "NMEA/Info.h"
 
 #include <tchar.h>
 

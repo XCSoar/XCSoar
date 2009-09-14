@@ -38,23 +38,7 @@ Copyright_License {
 #ifndef XCSOAR_CALCULATIONS_ABORT_HPP
 #define XCSOAR_CALCULATIONS_ABORT_HPP
 
-#include "NMEA/Info.h"
-#include "NMEA/Derived.hpp"
-
 void
 LatLon2Flat(double lon, double lat, int *scx, int *scy);
-
-int
-CalculateWaypointApproxDistance(int scx_aircraft, int scy_aircraft,
-                                int i);
-
-double
-CalculateWaypointArrivalAltitude(const NMEA_INFO *Basic,
-                                 const DERIVED_INFO *Calculated,
-                                 int i);
-
-void
-SortLandableWaypoints(const NMEA_INFO *Basic,
-                      const DERIVED_INFO *Calculated);
 
 #endif

@@ -45,6 +45,7 @@ Copyright_License {
 #include "Math/Pressure.h"
 #include "Device/Parser.h"
 #include "Device/Port.h"
+#include "NMEA/Info.h"
 
 #include <tchar.h>
 #include <stdio.h>

@@ -36,7 +36,7 @@ Copyright_License {
 
 */
 
-#include "BestAlternate.hpp"
+#include "GlideComputerTask.hpp"
 #include "XCSoar.h"
 #include "Protection.hpp"
 #include "WayPoint.hpp"
@@ -50,7 +50,6 @@ Copyright_License {
 #include "Audio/Sound.hpp"
 #include "Math/Earth.hpp"
 #include "Abort.hpp"
-#include "GlideComputerTask.hpp"
 
 
 /*
@@ -111,14 +110,15 @@ GlideComputerTask::SearchBestAlternate()
     SortedApproxDistance[i] = 0;
   }
   for (i=0; i<(int)NumberOfWayPoints; i++) {
+    const WAYPOINT &way_point = WayPointList[i];
 
-    if (!(((WayPointList[i].Flags & AIRPORT) == AIRPORT) ||
-          ((WayPointList[i].Flags & LANDPOINT) == LANDPOINT))) {
+    if (!(((way_point.Flags & AIRPORT) == AIRPORT) ||
+          ((way_point.Flags & LANDPOINT) == LANDPOINT))) {
       continue; // ignore non-landable fields
     }
 
     int approx_distance =
-      CalculateWaypointApproxDistance(scx_aircraft, scy_aircraft, i);
+      CalculateWaypointApproxDistance(scx_aircraft, scy_aircraft, way_point);
 
     // Size a reasonable distance, wide enough VENTA3
     if ( approx_distance > searchrange ) continue;
@@ -167,14 +167,16 @@ GlideComputerTask::SearchBestAlternate()
         continue;
       }
 
+      const WAYPOINT &way_point = WayPointList[SortedApproxIndex[i]];
+
       if ((scan_airports_slot==0) &&
-	  ((WayPointList[SortedApproxIndex[i]].Flags & AIRPORT) != AIRPORT)) {
+	  ((way_point.Flags & AIRPORT) != AIRPORT)) {
         // we are in the first scan, looking for airports only
         continue;
       }
 
-      arrival_altitude =
-        CalculateWaypointArrivalAltitude(SortedApproxIndex[i]);
+      arrival_altitude = CalculateWaypointArrivalAltitude(way_point,
+                                                          WayPointCalc[SortedApproxIndex[i]]);
 
       WayPointCalc[SortedApproxIndex[i]].AltArriv = arrival_altitude;
       // This is holding the real arrival value
@@ -206,8 +208,7 @@ GlideComputerTask::SearchBestAlternate()
           {
             double wp_distance, wp_bearing;
             DistanceBearing(Basic().Latitude , Basic().Longitude ,
-                            WayPointList[SortedApproxIndex[i]].Latitude,
-                            WayPointList[SortedApproxIndex[i]].Longitude,
+                            way_point.Latitude, way_point.Longitude,
                             &wp_distance, &wp_bearing);
 
 	    WayPointCalc[SortedApproxIndex[i]].Distance = wp_distance;
@@ -505,21 +506,24 @@ GlideComputerTask::DoAlternates(int AltWaypoint)
   if (!ValidWayPoint(AltWaypoint)) {
     return;
   }
-  double w1lat = WayPointList[AltWaypoint].Latitude;
-  double w1lon = WayPointList[AltWaypoint].Longitude;
+
+  const WAYPOINT &way_point = WayPointList[AltWaypoint];
+  WPCALC &way_point_calc = WayPointCalc[AltWaypoint];
+  double w1lat = way_point.Latitude;
+  double w1lon = way_point.Longitude;
   double w0lat = Basic().Latitude;
   double w0lon = Basic().Longitude;
-  double *altwp_dist = &WayPointCalc[AltWaypoint].Distance;
-  double *altwp_gr   = &WayPointCalc[AltWaypoint].GR;
-  double *altwp_arrival = &WayPointCalc[AltWaypoint].AltArriv;
-  short  *altwp_vgr  = &WayPointCalc[AltWaypoint].VGR;
+  double *altwp_dist = &way_point_calc.Distance;
+  double *altwp_gr = &way_point_calc.GR;
+  double *altwp_arrival = &way_point_calc.AltArriv;
+  short  *altwp_vgr = &way_point_calc.VGR;
 
   DistanceBearing(w1lat, w1lon,
                   w0lat, w0lon,
                   altwp_dist, NULL);
 
   double GRsafecalc = Calculated().NavAltitude - 
-    (WayPointList[AltWaypoint].Altitude + 
+    (way_point.Altitude +
      SettingsComputer().SAFETYALTITUDEARRIVAL);
 
   if (GRsafecalc <=0) *altwp_gr = INVALID_GR;
@@ -533,7 +537,7 @@ GlideComputerTask::DoAlternates(int AltWaypoint)
   // We need to calculate arrival also for BestAlternate, since the last "reachable" could be
   // even 60 seconds old and things may have changed drastically
 
-  *altwp_arrival = CalculateWaypointArrivalAltitude(AltWaypoint);
+  *altwp_arrival = CalculateWaypointArrivalAltitude(way_point, way_point_calc);
   if ( (*altwp_arrival - ALTERNATE_OVERSAFETY) >0 ) {
   	if ( *altwp_gr <= (GlidePolar::bestld *SAFELD_FACTOR) ) *altwp_vgr = 1; // full green vgr
   	else

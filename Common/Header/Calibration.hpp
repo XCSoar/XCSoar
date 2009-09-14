@@ -37,8 +37,9 @@ Copyright_License {
 
 #ifndef CALIBRATION_HPP
 #define CALIBRATION_HPP
-#include "NMEA/Info.h"
-#include "NMEA/Derived.hpp"
+
+struct NMEA_INFO;
+struct DERIVED_INFO;
 
 void CalibrationInit(void);
 

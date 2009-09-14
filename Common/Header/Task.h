@@ -136,9 +136,7 @@ void RemoveWaypoint(int index, const SETTINGS_COMPUTER &settings_computer);
 void RemoveTaskPoint(int index, const SETTINGS_COMPUTER &settings_computer);
 void FlyDirectTo(int index, const SETTINGS_COMPUTER &settings_computer);
 double AdjustAATTargets(double desired);
-void RefreshTaskWaypoint(int i);
 void RefreshTask(const SETTINGS_COMPUTER &settings_computer);
-void CalculateTaskSectors(void);
 bool WaypointInTask(const int ind);
 
 void ClearTask(void);

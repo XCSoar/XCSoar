@@ -40,29 +40,27 @@ Copyright_License {
 #include "Protection.hpp"
 #include "Dialogs.h"
 #include "Language.hpp"
-#include "Settings.hpp"
-#include "SettingsComputer.hpp"
 #include "SettingsTask.hpp"
 #include "Waypointparser.h"
 #include "McReady.h"
 #include "Math/Geometry.hpp"
 #include "Math/Earth.hpp"
-#include "LogFile.hpp"
-#include "Asset.hpp"
 #include "Units.hpp"
 #include <math.h>
 #include "Logger.h"
 #include "Interface.hpp"
 
+#include <stdio.h>
 
 static int Task_saved[MAXTASKPOINTS+1];
 static int active_waypoint_saved= -1;
 static bool aat_enabled_saved= false;
 
+static bool TaskModified=false;
+static bool TargetModified=false;
+static bool TaskAborted = false;
+
 static void BackupTask(void);
-bool TaskModified=false;
-bool TargetModified=false;
-bool TaskAborted = false;
 
 bool isTaskAborted() {
   return TaskAborted;
@@ -484,8 +482,8 @@ double AdjustAATTargets(double desired) {
   return av;
 }
 
-
-void CalculateAATTaskSectors(const NMEA_INFO &gps_info)
+static void
+CalculateAATTaskSectors(const NMEA_INFO &gps_info)
 {
   int i;
   int awp = ActiveTaskPoint;

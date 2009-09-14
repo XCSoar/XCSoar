@@ -50,7 +50,6 @@ Copyright_License {
 #include "GlideRatio.hpp"
 #include "GlideSolvers.hpp"
 #include "Abort.hpp"
-#include "BestAlternate.hpp"
 #include "Logger.h"
 #include "InputEvents.h"
 // JMW TODO: abstract up to higher layer so a base copy of this won't 

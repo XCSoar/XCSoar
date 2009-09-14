@@ -41,9 +41,10 @@ Copyright_License {
 #include "Sizes.h"
 #include "Port.h"
 #include "WayPoint.hpp"
-#include "NMEA/Info.h"
 
 #include <stdio.h>
+
+struct NMEA_INFO;
 
 #define DEVNAMESIZE  32
 #define	NUMDEV		 2

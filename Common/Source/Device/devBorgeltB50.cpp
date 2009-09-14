@@ -46,6 +46,7 @@ Copyright_License {
 #include "Device/Port.h"
 #include "Math/Units.h"
 #include "McReady.h"
+#include "NMEA/Info.h"
 
 #include <tchar.h>
 #include <math.h>

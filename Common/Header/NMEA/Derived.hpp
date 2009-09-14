@@ -45,17 +45,16 @@ Copyright_License {
 #define NUMTHERMALBUCKETS 10
 #define MAX_THERMAL_SOURCES 20
 
-typedef struct _THERMAL_SOURCE_INFO
+struct THERMAL_SOURCE_INFO
 {
   double Latitude;
   double Longitude;
   double GroundHeight;
   double LiftRate;
   double Time;
-} THERMAL_SOURCE_INFO;
+};
 
-
-typedef struct _DERIVED_INFO
+struct DERIVED_INFO
 {
   double Vario;
   double LD;
@@ -247,7 +246,7 @@ typedef struct _DERIVED_INFO
   double TimeSunset;
   double Experimental;
   // JMW note, new items should go at the bottom of this struct before experimental!
-} DERIVED_INFO;
+};
 
 #endif
 

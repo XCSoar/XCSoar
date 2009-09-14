@@ -19,8 +19,9 @@
 #define WINDSTORE_H
 
 #include "windmeasurementlist.h"
-#include "NMEA/Info.h"
-#include "NMEA/Derived.hpp"
+
+struct NMEA_INFO;
+struct DERIVED_INFO;
 
 /**
   * WindStore receives single windmeasurements and stores these. It uses

@@ -38,10 +38,11 @@ Copyright_License {
 #ifndef XCSOAR_GLIDE_RATIO_HPP
 #define XCSOAR_GLIDE_RATIO_HPP
 
-#include "NMEA/Info.h"
-#include "NMEA/Derived.hpp"
 #include "Defines.h"
 #include "SettingsComputer.hpp"
+
+struct NMEA_INFO;
+struct DERIVED_INFO;
 
 typedef enum{
 	ae15seconds=0,

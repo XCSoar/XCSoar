@@ -38,10 +38,10 @@ Copyright_License {
 #ifndef GAUGE_FLARM_H
 #define GAUGE_FLARM_H
 
-#include "NMEA/Info.h"
 #include "Screen/BufferWindow.hpp"
 #include "Screen/Bitmap.hpp"
 
+struct NMEA_INFO;
 class ContainerWindow;
 
 class GaugeFLARM : public BufferWindow {
