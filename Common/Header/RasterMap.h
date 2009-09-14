@@ -157,7 +157,7 @@ class RasterMapCache: public RasterMap {
   void ClearTerrainCache();
   short LookupTerrainCache(const long &SeekPos);
   short LookupTerrainCacheFile(const long &SeekPos);
-  void OptimizeCash(void);
+  void OptimiseCache(void);
 
   virtual bool Open(char* filename);
   virtual void Close();

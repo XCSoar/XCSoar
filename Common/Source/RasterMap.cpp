@@ -269,7 +269,7 @@ void RasterMapCache::ServiceCache(void) {
   Lock();
 
   if (terraincachemisses > 0){
-    OptimizeCash();
+    OptimiseCache();
   }
   SetCacheTime();
 
@@ -317,7 +317,7 @@ static int _cdecl TerrainCacheCompare(const void *elem1, const void *elem2 ){
   return (0);
 }
 
-void RasterMapCache::OptimizeCash(void){
+void RasterMapCache::OptimiseCache(void){
   qsort(&TerrainCache, MAXTERRAINCACHE,
         sizeof(_TERRAIN_CACHE), TerrainCacheCompare);
   SortThresold = MAXTERRAINCACHE-1;
