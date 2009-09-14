@@ -861,3 +861,6 @@ ifneq ($(wildcard $(SRC)/*/.*.d),)
 include $(wildcard $(SRC)/*/.*.d)
 endif
 
+test: .PHONY
+	cd test; make test
+

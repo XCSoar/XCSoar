@@ -1,0 +1,5 @@
+.phony: 
+
+test: .phony
+	prove
+
