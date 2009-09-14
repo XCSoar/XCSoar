@@ -58,7 +58,7 @@ Copyright_License {
 // Currently at 5.2.2 the whole structure is saved into the task file, so everytime we
 // change the struct all old taks files become invalid... (there's a bug, btw, in this case)
 
-typedef struct _WAYPOINT_INFO
+struct WAYPOINT
 {
   int Number;
   double Latitude;
@@ -76,13 +76,13 @@ typedef struct _WAYPOINT_INFO
   TCHAR *Details;
   bool FarVisible;
   int FileNum; // which file it is in, or -1 to delete
-} WAYPOINT;
+};
 
 // VENTA3
 // This struct is separated from _WAYPOINT_INFO and will not be used in task files.
 // It is managed by the same functions that manage WayPointList, only add variables here
 // and use them like  WayPointCalc[n].Distance  for example.
-typedef struct _WAYPOINT_CALCULATED
+struct WPCALC
 {
 //  long timeslot;
   double GR;       // GR from current position
@@ -93,7 +93,7 @@ typedef struct _WAYPOINT_CALCULATED
   double AltArriv; // Arrival Altitude
   bool Preferred;  // Flag to be used by Preferred quick selection WP page (todo) and
 		   // by BestAlternate
-} WPCALC;
+};
 
 extern WAYPOINT *WayPointList;
 extern WPCALC   *WayPointCalc; // VENTA3 additional calculated infos on WPs
