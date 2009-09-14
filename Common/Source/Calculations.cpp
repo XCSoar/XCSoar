@@ -65,7 +65,6 @@ Copyright_License {
 #include "Math/Pressure.h"
 #include "WayPoint.hpp"
 #include "LogFile.hpp"
-#include "BestAlternate.hpp"
 #include "Persist.hpp"
 #include "Airspace.h"
 #include "ConditionMonitor.hpp"

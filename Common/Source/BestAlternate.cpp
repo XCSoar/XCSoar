@@ -36,7 +36,7 @@ Copyright_License {
 
 */
 
-#include "BestAlternate.hpp"
+#include "GlideComputerTask.hpp"
 #include "XCSoar.h"
 #include "Protection.hpp"
 #include "WayPoint.hpp"
@@ -50,7 +50,6 @@ Copyright_License {
 #include "Audio/Sound.hpp"
 #include "Math/Earth.hpp"
 #include "Abort.hpp"
-#include "GlideComputerTask.hpp"
 
 // Alternates VENTA3
 int Alternate1 = -1;
