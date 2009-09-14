@@ -121,11 +121,13 @@ public:
 
   void visit_start_point(START_POINT &point, const unsigned index) 
   {
-    DrawStartSector((*start_screen)[index].Start, (*start_screen)[index].End, point.Index); 
+    DrawStartSector((*start_screen)[index].SectorStart, 
+                    (*start_screen)[index].SectorEnd, point.Index); 
   };
   void visit_task_point_start(TASK_POINT &point, const unsigned index) 
   {
-    DrawStartSector((*task_screen)[index].Start, (*task_screen)[index].End, point.Index); 
+    DrawStartSector((*task_screen)[index].SectorStart, 
+                    (*task_screen)[index].SectorEnd, point.Index); 
   };
 
 
@@ -161,9 +163,9 @@ public:
     const POINT &wp = WayPointCalc[point.Index].Screen;
 
     canvas->select(dash_pen2);
-    canvas->two_lines((*task_screen)[i].Start, 
+    canvas->two_lines((*task_screen)[i].SectorStart, 
 		      wp,
-		     (*task_screen)[i].End);
+		     (*task_screen)[i].SectorEnd);
     
     canvas->hollow_brush();
     canvas->black_pen();
@@ -210,13 +212,13 @@ public:
 
       if(FinishLine) {
 	canvas->select(dash_pen5);
-	canvas->two_lines((*task_screen)[index].Start, 
+	canvas->two_lines((*task_screen)[index].SectorStart, 
 			  wp,
-			  (*task_screen)[index].End);
+			  (*task_screen)[index].SectorEnd);
 	canvas->select(MapGfx.hpStartFinishThin);
-	canvas->two_lines((*task_screen)[index].Start, 
+	canvas->two_lines((*task_screen)[index].SectorStart, 
 			  wp,
-			  (*task_screen)[index].End);
+			  (*task_screen)[index].SectorEnd);
       } else {
 	unsigned tmp = map_window->DistanceMetersToScreen(FinishRadius);
 	canvas->hollow_brush();
@@ -641,9 +643,9 @@ public:
   void visit_start_point(START_POINT &point, const unsigned i) 
   { 
     map->LonLat2Screen(point.SectorEnd,
-		       (*task_screen)[i].End);
+		       (*task_screen)[i].SectorEnd);
     map->LonLat2Screen(point.SectorStart,
-		       (*task_screen)[i].Start);
+		       (*task_screen)[i].SectorStart);
 
   };
   void visit_task_point_start(TASK_POINT &point, const unsigned i) 
@@ -653,9 +655,9 @@ public:
 			 (*task_screen)[i].Target);
     }
     map->LonLat2Screen(point.SectorEnd, 
-		       (*task_screen)[i].End);
+		       (*task_screen)[i].SectorEnd);
     map->LonLat2Screen(point.SectorStart, 
-		       (*task_screen)[i].Start);
+		       (*task_screen)[i].SectorStart);
     if((AATEnabled) && (point.AATType == SECTOR)) {
       map->LonLat2Screen(point.AATStart, 
 			 (*task_screen)[i].AATStart);
@@ -700,9 +702,9 @@ void MapWindow::CalculateScreenPositionsTask() {
     for(i=0;i<MAXSTARTPOINTS-1;i++) {
       if (task_start_stats[i].Active && ValidWayPoint(task_start_points[i].Index)) {
         LonLat2Screen(task_start_points[i].SectorEnd,
-		      task_start_screen[i].End);
+		      task_start_screen[i].SectorEnd);
         LonLat2Screen(task_start_points[i].SectorStart,
-		      task_start_screen[i].Start);
+		      task_start_screen[i].SectorStart);
       }
     }
   }
@@ -720,16 +722,16 @@ void MapWindow::CalculateScreenPositionsTask() {
     {
       // finish
       LonLat2Screen(task_points[i].SectorEnd, 
-		    task_screen[i].End);
+		    task_screen[i].SectorEnd);
       LonLat2Screen(task_points[i].SectorStart, 
-		    task_screen[i].Start);
+		    task_screen[i].SectorStart);
     }
     if(this_valid && next_valid)
     {
       LonLat2Screen(task_points[i].SectorEnd, 
-		    task_screen[i].End);
+		    task_screen[i].SectorEnd);
       LonLat2Screen(task_points[i].SectorStart, 
-		    task_screen[i].Start);
+		    task_screen[i].SectorStart);
 
       if((AATEnabled) && (task_points[i].AATType == SECTOR))
       {

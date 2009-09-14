@@ -64,8 +64,8 @@ typedef struct _START_POINT_STATS
 
 typedef struct _START_POINT_SCREEN
 {
-  POINT	 Start;
-  POINT	 End;
+  POINT	 SectorStart;
+  POINT	 SectorEnd;
 } START_POINT_SCREEN;
 
 
@@ -90,8 +90,8 @@ typedef struct _TASK_POINT
 
 typedef struct _TASK_POINT_SCREEN
 {
-  POINT	 Start;
-  POINT	 End;
+  POINT	 SectorStart;
+  POINT	 SectorEnd;
   POINT	 Target;
   POINT	 AATStart;
   POINT	 AATFinish;
