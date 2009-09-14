@@ -41,19 +41,16 @@ Copyright_License {
 #include "LocalPath.hpp"
 #include "Dialogs.h"
 #include "Language.hpp"
-#include "Settings.hpp"
-#include "SettingsComputer.hpp"
 #include "SettingsTask.hpp"
 #include "Waypointparser.h"
 #include "McReady.h"
 #include "Math/Earth.hpp"
-#include "LogFile.hpp"
-#include "Asset.hpp"
 #include "Units.hpp"
 #include <math.h>
 #include "Logger.h"
 #include "Interface.hpp"
 
+#include <stdio.h>
 
 static int Task_saved[MAXTASKPOINTS+1];
 static int active_waypoint_saved= -1;
