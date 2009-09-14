@@ -44,10 +44,12 @@ int WaypointsOutOfRange = 1; // include
 
 
 ////
+#include "Protection.hpp"
 
 void WaypointScan::scan_forward(WaypointVisitor &visitor)
 {
   if (!WayPointList) return;
+  ScopeLock protect(mutexTaskData);
   for (unsigned i=0; i<NumberOfWayPoints; i++) {
     if ((WayPointList[i].Flags & AIRPORT)==AIRPORT) {
       visitor.waypoint_airport(WayPointList[i], WayPointCalc[i], i);
