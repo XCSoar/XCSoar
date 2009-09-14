@@ -59,10 +59,10 @@ const TCHAR* getTaskFilename() {
 
 static int FindOrAddWaypoint(WAYPOINT *read_waypoint) {
   // this is an invalid pointer!
-  if (read_waypoint) {
-    read_waypoint->Details = 0;
-    read_waypoint->Name[NAME_SIZE-1] = 0; // prevent overrun if data is bogus
-  }
+  assert(read_waypoint != NULL);
+
+  read_waypoint->Details = 0;
+  read_waypoint->Name[NAME_SIZE-1] = 0; // prevent overrun if data is bogus
 
   int waypoint_index = FindMatchingWaypoint(read_waypoint);
   if (waypoint_index == -1) {

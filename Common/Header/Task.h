@@ -118,12 +118,12 @@ typedef struct _TASK_POINT_STATS
 } TASK_POINT_STATS;
 
 
-typedef TASK_POINT          Task_t        [MAXTASKPOINTS +1];
-typedef TASK_POINT_SCREEN   TaskScreen_t  [MAXTASKPOINTS +1];
-typedef TASK_POINT_STATS    TaskStats_t   [MAXTASKPOINTS +1];
-typedef START_POINT         Start_t       [MAXSTARTPOINTS +1];
-typedef START_POINT_SCREEN  StartScreen_t [MAXSTARTPOINTS +1];
-typedef START_POINT_STATS   StartStats_t  [MAXSTARTPOINTS +1];
+typedef TASK_POINT Task_t[MAXTASKPOINTS +1];
+typedef TASK_POINT_SCREEN TaskScreen_t[MAXTASKPOINTS +1];
+typedef TASK_POINT_STATS TaskStats_t[MAXTASKPOINTS +1];
+typedef START_POINT Start_t[MAXSTARTPOINTS +1];
+typedef START_POINT_SCREEN StartScreen_t[MAXSTARTPOINTS +1];
+typedef START_POINT_STATS StartStats_t[MAXSTARTPOINTS +1];
 
 
 //////////////
