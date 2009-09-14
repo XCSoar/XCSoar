@@ -112,9 +112,7 @@ void RemoveWaypoint(int index);
 void RemoveTaskPoint(int index);
 void FlyDirectTo(int index);
 double AdjustAATTargets(double desired);
-void RefreshTaskWaypoint(int i);
 void RefreshTask(void);
-void CalculateTaskSectors(void);
 bool WaypointInTask(const int ind);
 
 void LoadNewTask(const TCHAR *FileName);

@@ -59,10 +59,11 @@ static int Task_saved[MAXTASKPOINTS+1];
 static int active_waypoint_saved= -1;
 static bool aat_enabled_saved= false;
 
+static bool TaskModified=false;
+static bool TargetModified=false;
+static bool TaskAborted = false;
+
 static void BackupTask(void);
-bool TaskModified=false;
-bool TargetModified=false;
-bool TaskAborted = false;
 
 bool isTaskAborted() {
   return TaskAborted;
@@ -387,6 +388,12 @@ void ReplaceWaypoint(int index) {
   mutexTaskData.Unlock();
 }
 
+static void
+RefreshTaskWaypoint(int i);
+
+static void
+CalculateTaskSectors();
+
 static void CalculateAATTaskSectors(const NMEA_INFO &gps_info);
 
 void RefreshTask() {
@@ -483,8 +490,8 @@ void RotateStartPoints(void) {
   mutexTaskData.Unlock();
 }
 
-
-void CalculateTaskSectors(void)
+static void
+CalculateTaskSectors()
 {
   int i;
   double SectorAngle, SectorSize, SectorBearing;
@@ -643,8 +650,8 @@ double AdjustAATTargets(double desired) {
   return av;
 }
 
-
-void CalculateAATTaskSectors(const NMEA_INFO &gps_info)
+static void
+CalculateAATTaskSectors(const NMEA_INFO &gps_info)
 {
   int i;
   int awp = ActiveWayPoint;
@@ -809,8 +816,9 @@ void CalculateAATTaskSectors(const NMEA_INFO &gps_info)
 
 //////////////
 
-
-void RefreshTaskWaypoint(int i) {
+static void
+RefreshTaskWaypoint(int i)
+{
   if(i==0)
     {
       task_points[i].Leg = 0;
