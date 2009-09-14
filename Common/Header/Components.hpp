@@ -38,8 +38,6 @@ Copyright_License {
 #ifndef XCSOAR_COMPONENTS_HPP
 #define XCSOAR_COMPONENTS_HPP
 
-class GaugeVario;
-class GaugeFLARM;
 class Marks;
 class TopologyStore;
 class RasterTerrain;
