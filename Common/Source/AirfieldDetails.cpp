@@ -108,22 +108,20 @@ CloseAirfieldDetails()
 static void
 LookupAirfieldDetail(TCHAR *Name, TCHAR *Details)
 {
-  int i;
-  TCHAR UName[100];
-  TCHAR NameA[100];
-  TCHAR NameB[100];
-  TCHAR NameC[100];
-  TCHAR NameD[100];
-  TCHAR TmpName[100];
-
-  bool isHome, isPreferred, isAvoid;
-
   if (!WayPointList) return;
 
-  for(i=0;i<(int)NumberOfWayPoints;i++)
+  for(int i=0;i<(int)NumberOfWayPoints;i++)
     {
       if (((WayPointList[i].Flags & AIRPORT) == AIRPORT) ||
 	  ((WayPointList[i].Flags & LANDPOINT) == LANDPOINT)) {
+
+        TCHAR UName[100];
+        TCHAR NameA[100];
+        TCHAR NameB[100];
+        TCHAR NameC[100];
+        TCHAR NameD[100];
+        TCHAR TmpName[100];
+
 	_tcscpy(UName, WayPointList[i].Name);
 
 	CharUpper(UName); // WP name
@@ -135,10 +133,9 @@ LookupAirfieldDetail(TCHAR *Name, TCHAR *Details)
 	_stprintf(NameB,TEXT("%s AF"),Name);
 	_stprintf(NameC,TEXT("%s A/D"),Name);
 	_stprintf(NameD,TEXT("%s AD"),Name);
-
-	isHome=false;
-	isPreferred=false;
-	isAvoid=false;
+        
+	bool isHome=false;
+	bool isPreferred=false;
 
 	_stprintf(TmpName,TEXT("%s=HOME"),UName);
 	if ( (_tcscmp(Name, TmpName)==0) )  isHome=true;
@@ -162,6 +159,8 @@ LookupAirfieldDetail(TCHAR *Name, TCHAR *Details)
 	    ||(_tcscmp(UName, NameD)==0)
 	    || isHome || isPreferred )
 	  {
+            // found
+
 	    if (_tcslen(Details) >0 ) { // VENTA3 avoid setting empty details
 	      if (WayPointList[i].Details) {
 		free(WayPointList[i].Details);
