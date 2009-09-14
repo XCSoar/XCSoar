@@ -137,8 +137,6 @@ class InfoBox : public BufferWindow {
     int GetBorderKind(void);
     int SetBorderKind(int Value);
 
-    PaintWindow &GetHandle(void);
-
     void SetColor(int Value);
     void SetColorBottom(int Value);
     void SetColorTop(int Value);

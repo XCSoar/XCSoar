@@ -300,10 +300,6 @@ void InfoBox::SetComment(const TCHAR *Value){
   }
 }
 
-PaintWindow &InfoBox::GetHandle(void){
-  return *this;
-}
-
 void InfoBox::SetSmallerFont(bool smallerFont)
 {
 	this->mSmallerFont = smallerFont;
