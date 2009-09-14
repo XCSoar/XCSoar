@@ -694,64 +694,8 @@ private:
 
 
 void MapWindow::CalculateScreenPositionsTask() {
-  unsigned int i;
 
-  ScopeLock scopeLock(mutexTaskData);
-
-  if (EnableMultipleStartPoints) {
-    for(i=0;i<MAXSTARTPOINTS-1;i++) {
-      if (task_start_stats[i].Active && ValidWayPoint(task_start_points[i].Index)) {
-        LonLat2Screen(task_start_points[i].SectorEnd,
-		      task_start_screen[i].SectorEnd);
-        LonLat2Screen(task_start_points[i].SectorStart,
-		      task_start_screen[i].SectorStart);
-      }
-    }
-  }
-
-  for(i=0;i<MAXTASKPOINTS-1;i++)
-  {
-    bool this_valid = ValidTaskPoint(i);
-    bool next_valid = ValidTaskPoint(i+1);
-    if (AATEnabled && this_valid) {
-      LonLat2Screen(task_stats[i].AATTargetLocation, 
-                    task_screen[i].Target);
-    }
-
-    if(this_valid && !next_valid)
-    {
-      // finish
-      LonLat2Screen(task_points[i].SectorEnd, 
-		    task_screen[i].SectorEnd);
-      LonLat2Screen(task_points[i].SectorStart, 
-		    task_screen[i].SectorStart);
-    }
-    if(this_valid && next_valid)
-    {
-      LonLat2Screen(task_points[i].SectorEnd, 
-		    task_screen[i].SectorEnd);
-      LonLat2Screen(task_points[i].SectorStart, 
-		    task_screen[i].SectorStart);
-
-      if((AATEnabled) && (task_points[i].AATType == SECTOR))
-      {
-        LonLat2Screen(task_points[i].AATStart, 
-		      task_screen[i].AATStart);
-        LonLat2Screen(task_points[i].AATFinish, 
-		      task_screen[i].AATFinish);
-      }
-      if (AATEnabled && (((int)i==ActiveTaskPoint) ||
-			 (SettingsMap().TargetPan 
-			  && ((int)i==SettingsMap().TargetPanIndex)))) {
-
-	for (int j=0; j<MAXISOLINES; j++) {
-	  if (task_stats[i].IsoLine_valid[j]) {
-	    LonLat2Screen(task_stats[i].IsoLine_Location[j],
-			  task_screen[i].IsoLine_Screen[j]);
-	  }
-	}
-      }
-    }
-  }
+  ScreenPositionsTaskVisitor sv(*this, task_screen, task_start_screen);
+  TaskScan::scan_point_forward(sv);
 }
 
