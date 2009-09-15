@@ -53,6 +53,8 @@ Copyright_License {
 #include "Asset.hpp"
 #endif
 
+#include <assert.h>
+
 TextWindow ButtonLabel::hWndButtonWindow[NUMBUTTONLABELS];
 bool ButtonLabel::ButtonVisible[NUMBUTTONLABELS];
 bool ButtonLabel::ButtonDisabled[NUMBUTTONLABELS];
@@ -206,13 +208,7 @@ void ButtonLabel::Destroy() {
 void
 ButtonLabel::SetLabelText(unsigned index, const TCHAR *text)
 {
-  // error! TODO enhancement: Add debugging
-  if (index>= NUMBUTTONLABELS)
-    return;
-
-  // don't try to draw if window isn't initialised
-  if (hWndButtonWindow[index] == NULL)
-    return;
+  assert(index < NUMBUTTONLABELS);
 
   if ((text==NULL) || (*text==_T('\0'))||(*text==_T(' '))) {
     hWndButtonWindow[index].hide();
@@ -264,6 +260,8 @@ bool ButtonLabel::CheckButtonPress(HWND pressedwindow) {
 void
 ButtonLabel::AnimateButton(unsigned i)
 {
+  assert(i < NUMBUTTONLABELS);
+
   RECT mRc, aniRect;
   mRc = hWndButtonWindow[i].get_position();
 
