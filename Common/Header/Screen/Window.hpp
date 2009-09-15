@@ -209,6 +209,26 @@ public:
     return (void *)get_userdata(hWnd);
   }
 
+  /**
+   * Converts a #HWND into a #Window pointer, without checking if that
+   * is legal.
+   */
+  static Window *get_unchecked(HWND hWnd) {
+    return (Window *)get_userdata_pointer(hWnd);
+  }
+
+  /**
+   * Converts a #HWND into a #Window pointer.  Returns NULL if the
+   * HWND is not a Window peer.  This only works for windows which
+   * have called install_wndproc().
+   */
+  static Window *get(HWND hWnd) {
+    WNDPROC wndproc = (WNDPROC)::GetWindowLong(hWnd, GWL_WNDPROC);
+    return wndproc == WndProc
+      ? get_unchecked(hWnd)
+      : NULL;
+  }
+
   void send_command(const Window &from) {
     ::SendMessage(hWnd, WM_COMMAND, (WPARAM)0, (LPARAM)from.hWnd);
   }
