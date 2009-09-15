@@ -207,7 +207,9 @@ LRESULT MainWindow::on_message(HWND _hWnd, UINT message,
 			       WPARAM wParam, LPARAM lParam) {
   switch (message) {
   case WM_CTLCOLORSTATIC:
-    return on_colour((HDC)wParam, get_userdata((HWND)lParam));
+    LRESULT brush = on_colour((HDC)wParam, get_userdata((HWND)lParam));
+    if (brush != 0)
+      return brush;
     break;
   };
 
