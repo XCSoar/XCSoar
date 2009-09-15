@@ -75,9 +75,6 @@ public:
   void ScanVisibility(rectObj *bounds);
   GPSClock clock;
 
-  void WriteLock() {
-    lock.writeLock();
-  }
   void ReadLock() {
     lock.readLock();
   }

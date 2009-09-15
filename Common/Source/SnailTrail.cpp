@@ -57,6 +57,7 @@ void
 SnailTrail::AddPoint(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated)
 {
   Poco::ScopedRWLock protect(lock, true);
+
   SNAIL_POINT &pt = TrailPoints[indexNext];
   pt.Latitude = (float)(Basic->Location.Latitude);
   pt.Longitude = (float)(Basic->Location.Longitude);
