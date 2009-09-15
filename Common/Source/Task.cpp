@@ -386,13 +386,9 @@ extern void RefreshTask_Visitor(const SETTINGS_COMPUTER &settings_computer);
 
 
 void RefreshTask(const SETTINGS_COMPUTER &settings_computer) {
-  mutexTaskData.Lock();
-#if 1
+  ScopeLock protect(mutexTaskData);
   RefreshTask_Visitor(settings_computer);
-#endif
-
   CalculateAATTaskSectors(XCSoarInterface::Basic());
-  mutexTaskData.Unlock();
 }
 
 

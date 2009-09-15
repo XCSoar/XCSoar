@@ -458,8 +458,6 @@ void RefreshTask_Visitor(const SETTINGS_COMPUTER &settings_computer)
 }
 
 
-
-
 class AATIsoLineVisitor: public RelativeTaskPointVisitor 
 {
 public:
