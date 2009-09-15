@@ -179,9 +179,7 @@ static void ReadWayPointFile(ZZIP_FILE *fp, const TCHAR *CurrentWpFileName)
   DWORD fSize, fPos=0;
   int nLineNumber=0;
 
-  HWND hProgress;
-
-  hProgress = XCSoarInterface::CreateProgressDialog(gettext(TEXT("Loading Waypoints File...")));
+  XCSoarInterface::CreateProgressDialog(gettext(TEXT("Loading Waypoints File...")));
 
   fSize = zzip_file_size(fp);
 
@@ -237,12 +235,6 @@ static void ReadWayPointFile(ZZIP_FILE *fp, const TCHAR *CurrentWpFileName)
     break;
 
   }
-
-  if (hProgress) {
-    wsprintf(szTemp,TEXT("100%%"));
-    SetDlgItemText(hProgress,IDC_PROGRESS,szTemp);
-  }
-
 }
 
 
