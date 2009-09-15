@@ -301,10 +301,10 @@ bool XCSoarInterface::Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
   topology->Open();
   terrain.OpenTerrain();
 
-  ReadWayPoints();
+  ReadWayPoints(way_points, terrain);
 
   ReadAirfieldFile();
-  SetHome(SetSettingsComputer(), false, true);
+  SetHome(way_points, terrain, SetSettingsComputer(), false, true);
 
   // need to re-synchronise blackboards here since SetHome touches them
   ReadBlackboardBasic(device_blackboard.Basic());

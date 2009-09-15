@@ -657,7 +657,8 @@ void dlgStatusShowModal(int start_page){
     }
   }
 
-  nearest_waypoint = FindNearestWayPoint(XCSoarInterface::main_window.map,
+  nearest_waypoint = FindNearestWayPoint(way_points,
+                                         XCSoarInterface::main_window.map,
 					 XCSoarInterface::Basic().Location,
                                          100000.0, true); // big range limit
 

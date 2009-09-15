@@ -1023,7 +1023,7 @@ static void AskWaypointSave(void) {
                    gettext(TEXT("Waypoints outside terrain")),
                    MB_YESNO|MB_ICONQUESTION) == IDYES) {
 
-      WaypointWriteFiles(XCSoarInterface::SettingsComputer());
+      WaypointWriteFiles(way_points, XCSoarInterface::SettingsComputer());
 
       WAYPOINTFILECHANGED= true;
       changed = true;
@@ -1031,7 +1031,7 @@ static void AskWaypointSave(void) {
     }
   } else {
 
-    WaypointWriteFiles(XCSoarInterface::SettingsComputer());
+    WaypointWriteFiles(way_points, XCSoarInterface::SettingsComputer());
 
     WAYPOINTFILECHANGED= true;
     changed = true;

@@ -68,7 +68,7 @@ static int FindOrAddWaypoint(WAYPOINT *read_waypoint) {
   read_waypoint->Details = 0;
   read_waypoint->Name[NAME_SIZE-1] = 0; // prevent overrun if data is bogus
 
-  int waypoint_index = FindMatchingWaypoint(read_waypoint);
+  int waypoint_index = FindMatchingWaypoint(way_points, read_waypoint);
   if (waypoint_index == -1) {
     // waypoint not found, so add it!
 

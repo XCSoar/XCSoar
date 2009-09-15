@@ -47,6 +47,7 @@ Copyright_License {
 #include "DataField/Enum.hpp"
 #include "MainWindow.hpp"
 #include "Compatibility/string.h"
+#include "Components.hpp"
 
 static WndForm *wf=NULL;
 static WAYPOINT *global_wpt=NULL;
@@ -413,7 +414,7 @@ static void GetValues(void) {
   if (wp) {
     ss = wp->GetDataField()->GetAsInteger();
     if (ss==0) {
-      WaypointAltitudeFromTerrain(global_wpt);
+      WaypointAltitudeFromTerrain(global_wpt, terrain);
     } else {
       global_wpt->Altitude = ss/ALTITUDEMODIFY;
     }

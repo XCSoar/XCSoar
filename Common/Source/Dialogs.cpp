@@ -131,9 +131,10 @@ void PopupWaypointDetails()
 #include "Interface.hpp"
 #include "MapWindow.h"
 
-bool PopupNearestWaypointDetails(const GEOPOINT &location,
-                                 double range,
-                                 bool pan) 
+bool
+PopupNearestWaypointDetails(const WayPointList &way_points,
+                            const GEOPOINT &location,
+                            double range, bool pan)
 {
   /*
     if (!pan) {
@@ -146,10 +147,10 @@ bool PopupNearestWaypointDetails(const GEOPOINT &location,
 
   int i;
   if (!pan || !XCSoarInterface::SettingsMap().EnablePan) {
-    i=FindNearestWayPoint(map_window, location, range);
+    i = FindNearestWayPoint(way_points, map_window, location, range);
   } else {
     // nearest to center of screen if in pan mode
-    i=FindNearestWayPoint(map_window, 
+    i = FindNearestWayPoint(way_points, map_window,
 			  map_window.GetPanLocation(),
 			  range);
   }

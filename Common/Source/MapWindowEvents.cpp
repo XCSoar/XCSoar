@@ -355,7 +355,7 @@ bool MapWindow::on_mouse_up(int x, int y)
       if(dwInterval < VKSHORTCLICK) {
 	//100ms is NOT enough for a short click since GetTickCount
 	//is OEM custom!
-	if (PopupNearestWaypointDetails(LLstart, 
+        if (PopupNearestWaypointDetails(way_points, LLstart,
 					DistancePixelsToMeters(IBLSCALE(10)), false)) {
 	  return true;
 	}
@@ -366,7 +366,7 @@ bool MapWindow::on_mouse_up(int x, int y)
       }
     } else {
       if(dwInterval < AIRSPACECLICK) { // original and untouched interval
-	if (PopupNearestWaypointDetails(LLstart, 
+        if (PopupNearestWaypointDetails(way_points, LLstart,
 					DistancePixelsToMeters(IBLSCALE(10)), false)) {
 	  return true;
 	}

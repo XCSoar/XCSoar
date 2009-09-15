@@ -45,22 +45,38 @@ Copyright_License {
 #define wpTerrainBoundsNo     102
 #define wpTerrainBoundsNoAll  103
 
+class WayPointList;
 class MapWindowProjection;
+class RasterTerrain;
 
 struct WAYPOINT;
 struct GEOPOINT;
 struct SETTINGS_COMPUTER;
 
-void ReadWayPoints(void);
-void SetHome(SETTINGS_COMPUTER &settings,
-	     const bool reset, const bool set_location=false);
-int FindNearestWayPoint(MapWindowProjection &map_projection,
-			const GEOPOINT &location, 
-                        double MaxRange, bool exhaustive=false);
+void
+ReadWayPoints(WayPointList &way_points, RasterTerrain &terrain);
+
+void
+SetHome(const WayPointList &way_points, RasterTerrain &terrain,
+        SETTINGS_COMPUTER &settings,
+        const bool reset, const bool set_location=false);
+
+int
+FindNearestWayPoint(const WayPointList &way_points,
+                    MapWindowProjection &map_projection,
+                    const GEOPOINT &location,
+                    double MaxRange, bool exhaustive=false);
+
 int dlgWaypointOutOfTerrain(const TCHAR *Message);
-void WaypointWriteFiles(const SETTINGS_COMPUTER &settings_computer);
-void WaypointAltitudeFromTerrain(WAYPOINT* wpt);
-int FindMatchingWaypoint(WAYPOINT *waypoint);
+
+void
+WaypointWriteFiles(WayPointList &way_points,
+                   const SETTINGS_COMPUTER &settings_computer);
+
+void
+WaypointAltitudeFromTerrain(WAYPOINT* wpt, RasterTerrain &terrain);
+
+int
+FindMatchingWaypoint(const WayPointList &way_points, WAYPOINT *waypoint);
 
 #endif
-

@@ -55,7 +55,6 @@ Copyright_License {
 #include "RasterTerrain.h"
 #include "LogFile.hpp"
 #include "Interface.hpp"
-#include "Components.hpp"
 #include "WayPointList.hpp"
 
 #include <windows.h>
@@ -71,7 +70,10 @@ static int globalFileNum = 0;
 TCHAR *strtok_r(const TCHAR *s, TCHAR *delim, TCHAR **lasts);
 
 //static void ExtractParameter(TCHAR *Source, TCHAR *Destination, int DesiredFieldNumber);
-static int ParseWayPointString(const TCHAR *mTempString,WAYPOINT *Temp);
+static int
+ParseWayPointString(const TCHAR *mTempString, WAYPOINT *Temp,
+                    RasterTerrain &terrain);
+
 static double CalculateAngle(const TCHAR *temp);
 static int CheckFlags(const TCHAR *temp);
 static double ReadAltitude(const TCHAR *temp);
@@ -82,15 +84,16 @@ static int WaypointOutOfTerrainRangeDontAskAgain = -1;
 
 
 static void
-CloseWayPoints()
+CloseWayPoints(WayPointList &way_points)
 {
   way_points.clear();
   WaypointOutOfTerrainRangeDontAskAgain = WaypointsOutOfRange;
 }
 
 
-static bool WaypointInTerrainRange(WAYPOINT *List) {
-
+static bool
+WaypointInTerrainRange(WAYPOINT *List, RasterTerrain &terrain)
+{
   if (WaypointOutOfTerrainRangeDontAskAgain == 1){
     return(true);
   }
@@ -172,7 +175,9 @@ static int ParseWayPointError(int LineNumber, const TCHAR *FileName,
   return(1);
 }
 
-static void ReadWayPointFile(ZZIP_FILE *fp, const TCHAR *CurrentWpFileName)
+static void
+ReadWayPointFile(ZZIP_FILE *fp, const TCHAR *CurrentWpFileName,
+                 WayPointList &way_points, RasterTerrain &terrain)
 {
   WAYPOINT *new_waypoint;
   TCHAR szTemp[100];
@@ -219,8 +224,8 @@ static void ReadWayPointFile(ZZIP_FILE *fp, const TCHAR *CurrentWpFileName)
 #ifdef HAVEEXCEPTIONS
     __try{
 #endif
-      if (!ParseWayPointString(TempString, new_waypoint) ||
-          !WaypointInTerrainRange(new_waypoint))
+      if (!ParseWayPointString(TempString, new_waypoint, terrain) ||
+          !WaypointInTerrainRange(new_waypoint, terrain))
         way_points.pop();
       continue;
 #ifdef HAVEEXCEPTIONS
@@ -239,7 +244,9 @@ static void ReadWayPointFile(ZZIP_FILE *fp, const TCHAR *CurrentWpFileName)
 }
 
 
-void WaypointAltitudeFromTerrain(WAYPOINT* Temp) {
+void
+WaypointAltitudeFromTerrain(WAYPOINT* Temp, RasterTerrain &terrain)
+{
   double myalt;
   terrain.Lock();
   terrain.SetTerrainRounding(0.0,0.0);
@@ -257,7 +264,8 @@ void WaypointAltitudeFromTerrain(WAYPOINT* Temp) {
 
 
 static int
-ParseWayPointString(const TCHAR *String, WAYPOINT *Temp)
+ParseWayPointString(const TCHAR *String, WAYPOINT *Temp,
+                    RasterTerrain &terrain)
 {
   TCHAR ctemp[80]; // must be bigger than COMMENT_SIZE!
   TCHAR *Zoom;
@@ -352,7 +360,7 @@ ParseWayPointString(const TCHAR *String, WAYPOINT *Temp)
   }
 
   if(Temp->Altitude <= 0) {
-    WaypointAltitudeFromTerrain(Temp);
+    WaypointAltitudeFromTerrain(Temp, terrain);
   }
 
   if (Temp->Details) {
@@ -498,7 +506,8 @@ static double ReadAltitude(const TCHAR *temp)
 
 
 
-void ReadWayPoints(void)
+void
+ReadWayPoints(WayPointList &way_points, RasterTerrain &terrain)
 {
   StartupStore(TEXT("ReadWayPoints\n"));
 
@@ -512,7 +521,7 @@ void ReadWayPoints(void)
 #endif
 
     mutexTaskData.Lock();
-    CloseWayPoints();
+    CloseWayPoints(way_points);
 
     GetRegistryString(szRegistryWayPointFile, szFile1, MAX_PATH);
 
@@ -540,7 +549,7 @@ void ReadWayPoints(void)
     if(fp != NULL)
       {
         globalFileNum = 0;
-        ReadWayPointFile(fp, szFile1);
+        ReadWayPointFile(fp, szFile1, way_points, terrain);
         zzip_fclose(fp);
         fp = 0;
         // read OK, so set the registry to the actual file name
@@ -580,7 +589,7 @@ void ReadWayPoints(void)
       fp = zzip_fopen(zfilename, "rt");
       if(fp != NULL){
         globalFileNum = 1;
-        ReadWayPointFile(fp, szFile2);
+        ReadWayPointFile(fp, szFile2, way_points, terrain);
         zzip_fclose(fp);
         fp = NULL;
         // read OK, so set the registry to the actual file name
@@ -616,8 +625,10 @@ void ReadWayPoints(void)
 }
 
 
-void SetHome(SETTINGS_COMPUTER &settings,
-	     const bool reset, const bool set_location)
+void
+SetHome(const WayPointList &way_points, RasterTerrain &terrain,
+        SETTINGS_COMPUTER &settings,
+        const bool reset, const bool set_location)
 {
   StartupStore(TEXT("SetHome\n"));
 
@@ -688,10 +699,12 @@ void SetHome(SETTINGS_COMPUTER &settings,
 }
 
 
-int FindNearestWayPoint(MapWindowProjection &map_projection,
-			const GEOPOINT &loc, 
-                        double MaxRange,
-                        bool exhaustive)
+int
+FindNearestWayPoint(const WayPointList &way_points,
+                    MapWindowProjection &map_projection,
+                    const GEOPOINT &loc,
+                    double MaxRange,
+                    bool exhaustive)
 {
   int NearestIndex = -1;
   double NearestDistance, Dist;
@@ -867,8 +880,10 @@ WriteWayPointFileWayPoint(FILE *fp, WAYPOINT* wpt)
 }
 
 
-static void WriteWayPointFile(FILE *fp,
-			      const SETTINGS_COMPUTER &settings_computer) {
+static void
+WriteWayPointFile(WayPointList &way_points, FILE *fp,
+                  const SETTINGS_COMPUTER &settings_computer)
+{
   // remove previous home if it exists in this file
   for (unsigned i = 0; way_points.verify_index(i); ++i) {
     WAYPOINT &way_point = way_points.set(i);
@@ -896,8 +911,10 @@ static void WriteWayPointFile(FILE *fp,
   }
 }
 
-
-void WaypointWriteFiles(const SETTINGS_COMPUTER &settings_computer) {
+void
+WaypointWriteFiles(WayPointList &way_points,
+                   const SETTINGS_COMPUTER &settings_computer)
+{
   mutexTaskData.Lock();
 
   TCHAR szFile1[MAX_PATH] = TEXT("\0");
@@ -918,7 +935,7 @@ void WaypointWriteFiles(const SETTINGS_COMPUTER &settings_computer) {
 
   if(fp != NULL) {
     globalFileNum = 0;
-    WriteWayPointFile(fp, settings_computer);
+    WriteWayPointFile(way_points, fp, settings_computer);
     fprintf(fp,"\r\n");
     fclose(fp);
     fp = NULL;
@@ -937,7 +954,7 @@ void WaypointWriteFiles(const SETTINGS_COMPUTER &settings_computer) {
 
   if(fp != NULL) {
     globalFileNum = 1;
-    WriteWayPointFile(fp, settings_computer);
+    WriteWayPointFile(way_points, fp, settings_computer);
     fprintf(fp,"\r\n");
     fclose(fp);
     fp = NULL;
@@ -946,8 +963,9 @@ void WaypointWriteFiles(const SETTINGS_COMPUTER &settings_computer) {
   mutexTaskData.Unlock();
 }
 
-
-int FindMatchingWaypoint(WAYPOINT *waypoint) {
+int
+FindMatchingWaypoint(const WayPointList &way_points, WAYPOINT *waypoint)
+{
   // first scan, lookup by name
   for (unsigned i = 0; way_points.verify_index(i); ++i) {
     if (_tcscmp(waypoint->Name, way_points.get(i).Name)==0) {
