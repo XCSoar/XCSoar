@@ -38,9 +38,7 @@ Copyright_License {
 #if !defined(AFX_WAYPOINTPARSER_H__695AAC30_F401_4CFF_9BD9_FE62A2A2D0D2__INCLUDED_)
 #define AFX_WAYPOINTPARSER_H__695AAC30_F401_4CFF_9BD9_FE62A2A2D0D2__INCLUDED_
 
-#include "WayPoint.hpp"
-#include "SettingsComputer.hpp"
-#include <windows.h>
+#include <tchar.h>
 
 #define wpTerrainBoundsYes    100
 #define wpTerrainBoundsYesAll 101
@@ -48,7 +46,10 @@ Copyright_License {
 #define wpTerrainBoundsNoAll  103
 
 class MapWindowProjection;
+
+struct WAYPOINT;
 struct GEOPOINT;
+struct SETTINGS_COMPUTER;
 
 void ReadWayPoints(void);
 void SetHome(SETTINGS_COMPUTER &settings,
