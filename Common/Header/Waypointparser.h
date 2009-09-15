@@ -56,7 +56,6 @@ void SetHome(SETTINGS_COMPUTER &settings,
 int FindNearestWayPoint(MapWindowProjection &map_projection,
 			const GEOPOINT &location, 
                         double MaxRange, bool exhaustive=false);
-void CloseWayPoints(void);
 int dlgWaypointOutOfTerrain(const TCHAR *Message);
 void WaypointWriteFiles(const SETTINGS_COMPUTER &settings_computer);
 void WaypointAltitudeFromTerrain(WAYPOINT* wpt);

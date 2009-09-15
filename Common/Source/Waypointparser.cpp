@@ -81,8 +81,9 @@ static TCHAR TempString[READLINE_LENGTH];
 static int WaypointOutOfTerrainRangeDontAskAgain = -1;
 
 
-void CloseWayPoints() {
-  StartupStore(TEXT("Close waypoints\n"));
+static void
+CloseWayPoints()
+{
   way_points.clear();
   WaypointOutOfTerrainRangeDontAskAgain = WaypointsOutOfRange;
 }

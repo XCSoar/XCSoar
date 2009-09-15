@@ -429,7 +429,9 @@ void XCSoarInterface::Shutdown(void) {
 
   ClearTask();
   CloseAirspace();
-  CloseWayPoints();
+
+  StartupStore(TEXT("Close waypoints\n"));
+  way_points.clear();
 
   CreateProgressDialog(gettext(TEXT("Shutdown, please wait...")));
 
