@@ -57,13 +57,14 @@ TextWindow ButtonLabel::hWndButtonWindow[NUMBUTTONLABELS];
 bool ButtonLabel::ButtonVisible[NUMBUTTONLABELS];
 bool ButtonLabel::ButtonDisabled[NUMBUTTONLABELS];
 
-int ButtonLabel::ButtonLabelGeometry = 0;
+unsigned ButtonLabel::ButtonLabelGeometry = 0;
 
 
-void ButtonLabel::GetButtonPosition(int i, RECT rc,
-				    int *x, int *y,
-				    int *sizex, int *sizey) {
-
+void
+ButtonLabel::GetButtonPosition(unsigned i, RECT rc,
+                               int *x, int *y,
+                               int *sizex, int *sizey)
+{
   TCHAR reggeompx[50];
   TCHAR reggeompy[50];
   TCHAR reggeomsx[50];
@@ -163,7 +164,6 @@ void ButtonLabel::GetButtonPosition(int i, RECT rc,
 void
 ButtonLabel::CreateButtonLabels(ContainerWindow &parent, const RECT rc)
 {
-  int i;
   int x, y, xsize, ysize;
 
   if (InfoBoxLayout::gnav) {
@@ -172,7 +172,7 @@ ButtonLabel::CreateButtonLabels(ContainerWindow &parent, const RECT rc)
     ButtonLabelGeometry = 0;
   }
 
-  for (i=0; i<NUMBUTTONLABELS; i++) {
+  for (unsigned i = 0; i < NUMBUTTONLABELS; i++) {
     GetButtonPosition(i, rc, &x, &y, &xsize, &ysize);
     hWndButtonWindow[i].set(parent, x, y, xsize, ysize,
                             true, true, false, true, true);
@@ -188,16 +188,14 @@ ButtonLabel::CreateButtonLabels(ContainerWindow &parent, const RECT rc)
 }
 
 void ButtonLabel::SetFont(const Font &Font) {
-  int i;
-  for (i=0; i<NUMBUTTONLABELS; i++) {
+  for (unsigned i = 0; i < NUMBUTTONLABELS; i++) {
     hWndButtonWindow[i].set_font(Font);
   }
 }
 
 
 void ButtonLabel::Destroy() {
-  int i;
-  for (i=0; i<NUMBUTTONLABELS; i++) {
+  for (unsigned i = 0; i < NUMBUTTONLABELS; i++) {
     hWndButtonWindow[i].reset();
     ButtonVisible[i]= false;
     ButtonDisabled[i] = true;
@@ -205,7 +203,9 @@ void ButtonLabel::Destroy() {
 }
 
 
-void ButtonLabel::SetLabelText(int index, const TCHAR *text) {
+void
+ButtonLabel::SetLabelText(unsigned index, const TCHAR *text)
+{
   // error! TODO enhancement: Add debugging
   if (index>= NUMBUTTONLABELS)
     return;
@@ -247,8 +247,7 @@ void ButtonLabel::SetLabelText(int index, const TCHAR *text) {
 #include "InputEvents.h"
 
 bool ButtonLabel::CheckButtonPress(HWND pressedwindow) {
-  int i;
-  for (i=0; i<NUMBUTTONLABELS; i++) {
+  for (unsigned i = 0; i < NUMBUTTONLABELS; i++) {
     if (hWndButtonWindow[i]== pressedwindow) {
       if (!ButtonDisabled[i]) {
         InputEvents::processButton(i);
@@ -262,8 +261,9 @@ bool ButtonLabel::CheckButtonPress(HWND pressedwindow) {
   return FALSE;
 }
 
-
-void ButtonLabel::AnimateButton(int i) {
+void
+ButtonLabel::AnimateButton(unsigned i)
+{
   RECT mRc, aniRect;
   mRc = hWndButtonWindow[i].get_position();
 

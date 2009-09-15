@@ -48,17 +48,17 @@ class ButtonLabel: public ActionInterface {
     NUMBUTTONLABELS = 16
   };
 
-  static int ButtonLabelGeometry;
+  static unsigned ButtonLabelGeometry;
   static TextWindow hWndButtonWindow[NUMBUTTONLABELS];
   static bool ButtonVisible[NUMBUTTONLABELS];
   static bool ButtonDisabled[NUMBUTTONLABELS];
   static void CreateButtonLabels(ContainerWindow &parent, const RECT rc);
-  static void AnimateButton(int i);
+  static void AnimateButton(unsigned i);
   static void SetFont(const Font &Font);
   static void Destroy();
-  static void SetLabelText(int index, const TCHAR *text);
+  static void SetLabelText(unsigned i, const TCHAR *text);
   static bool CheckButtonPress(HWND pressedwindow);
-  static void GetButtonPosition(int i, RECT rc,
+  static void GetButtonPosition(unsigned i, RECT rc,
 				int *x, int *y,
 				int *sizex, int *sizey);
 
