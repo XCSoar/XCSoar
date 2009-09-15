@@ -178,12 +178,10 @@ ButtonLabel::CreateButtonLabels(ContainerWindow &parent, const RECT rc)
     GetButtonPosition(i, rc, &x, &y, &xsize, &ysize);
     hWndButtonWindow[i].set(parent, x, y, xsize, ysize,
                             true, true, false, true, true);
-    hWndButtonWindow[i].insert_after(HWND_TOP, true);
 
-    ButtonVisible[i]= true;
+    ButtonVisible[i] = false;
     ButtonDisabled[i]= false;
 
-    SetLabelText(i,NULL);
     hWndButtonWindow[i].set_userdata(4);
   }
   //
