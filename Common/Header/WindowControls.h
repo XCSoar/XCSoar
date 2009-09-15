@@ -149,6 +149,8 @@ class WindowControl : public ContainerWindow {
     virtual void AddClient(WindowControl *Client);
 
     virtual bool on_close(void);
+  virtual bool on_key_down(unsigned key_code);
+  virtual bool on_key_up(unsigned key_code);
 
     /** from class PaintWindow */
     virtual void on_paint(Canvas &canvas);

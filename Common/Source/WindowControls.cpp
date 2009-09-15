@@ -606,6 +606,27 @@ WindowControl::on_close(void)
   return true;
 }
 
+bool
+WindowControl::on_key_down(unsigned key_code)
+{
+  // JMW: HELP
+  KeyTimer(true, key_code);
+
+  return ContainerWindow::on_key_down(key_code);
+}
+
+bool
+WindowControl::on_key_up(unsigned key_code)
+{
+  // JMW: detect long enter release
+  // VENTA4: PNAs don't have Enter, so it should be better to find an alternate solution
+  // activate tool tips if hit return for long time
+  if (KeyTimer(false, key_code) && key_code == VK_RETURN && OnHelp())
+    return true;
+
+  return ContainerWindow::on_key_up(key_code);
+}
+
 void
 WindowControl::on_paint(Canvas &canvas)
 {
@@ -712,22 +733,6 @@ WindowControl::on_message(HWND hwnd, UINT uMsg,
                           WPARAM wParam, LPARAM lParam)
 {
   switch (uMsg){
-    case WM_KEYDOWN:
-      // JMW: HELP
-      KeyTimer(true, wParam & 0xffff);
-      break;
-
-    case WM_KEYUP:
-      // JMW: detect long enter release
-      // VENTA4: PNAs don't have Enter, so it should be better to find an alternate solution
-	if (KeyTimer(false, wParam & 0xffff)) {
-	  // activate tool tips if hit return for long time
-	  if ((wParam & 0xffff) == VK_RETURN) {
-	    if (OnHelp()) return (0);
-	  }
-	}
-      break;
-
     case WM_SETFOCUS:
       SetFocused(true, (HWND) wParam);
     return(0);
