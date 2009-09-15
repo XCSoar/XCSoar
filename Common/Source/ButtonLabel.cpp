@@ -234,13 +234,9 @@ void ButtonLabel::SetLabelText(int index, const TCHAR *text) {
       hWndButtonWindow[index].hide();
       ButtonVisible[index]= false;
     } else {
+      hWndButtonWindow[index].set_text(gettext(s));
+      hWndButtonWindow[index].insert_after(HWND_TOP, true);
 
-      SetWindowText(hWndButtonWindow[index], gettext(s));
-
-      SetWindowPos(hWndButtonWindow[index], HWND_TOP, 0,0,0,0,
-                   SWP_NOMOVE | SWP_NOSIZE);
-
-      ShowWindow(hWndButtonWindow[index], SW_SHOW);
       ButtonVisible[index]= true;
     }
   }
