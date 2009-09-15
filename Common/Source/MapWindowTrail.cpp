@@ -62,22 +62,14 @@ double MapWindow::DrawTrail(Canvas &canvas)
 {
   int i, snail_index;
   SNAIL_POINT P1;
-  static BOOL last_circling = FALSE;
-  static float vario_max= 5.0;
-  static float vario_min= -5.0;
-  static bool need_colour = true;
+  POINT Screen; 
 
   double TrailFirstTime = -1;
 
   if(!SettingsMap().TrailActive)
     return -1;
 
-  glide_computer.GetSnailTrail().Lock();
-
-  if ((DisplayMode == dmCircling) != last_circling) {
-    need_colour = true;
-  }
-  last_circling = (DisplayMode == dmCircling);
+  glide_computer.GetSnailTrail().ReadLock();
 
   //////////// Trail drift calculations
 
@@ -111,14 +103,6 @@ double MapWindow::DrawTrail(Canvas &canvas)
     num_trail_max /= TRAILSHRINK;
   }
 
-  ///////////// Vario colour scaling
-
-  double MACCREADY = GlidePolar::GetMacCready();
-  float this_vario_max = (float)(1.5*min(5.0, max(MACCREADY,0.5)));
-  float this_vario_min = (float)(-1.5*min(5.0, max(MACCREADY,2.0)));
-  vario_max = this_vario_max;
-  vario_min = this_vario_min;
-
   ///////////// Snail skipping
 
   const int skip_divisor = num_trail_max/5;
@@ -148,7 +132,7 @@ double MapWindow::DrawTrail(Canvas &canvas)
   point_lastdrawn.y = 0;
 
   ///////////// Average colour display for skipped points
-  float vario_av = 0;
+  int vario_av = 0;
   int vario_av_num = 0;
 
   ///////////// Constants for speedups
@@ -258,12 +242,12 @@ double MapWindow::DrawTrail(Canvas &canvas)
     // this is faster since many parameters are const
     int Y = Real2Int((mPanLocation.Latitude-this_lat)*mDrawScale);
     int X = Real2Int((mPanLocation.Longitude-this_lon)*fastcosine(this_lat)*mDrawScale);
-    P1.Screen.x = (xxs-X*cost + Y*sint)/1024;
-    P1.Screen.y = (Y*cost + X*sint + yys)/1024;
+    Screen.x = (xxs-X*cost + Y*sint)/1024;
+    Screen.y = (Y*cost + X*sint + yys)/1024;
 #else
     LonLat2Screen(this_lon,
 		  this_lat,
-		  P1.Screen);
+		  Screen);
 #endif
 
     ////////// Determine if we should skip if close to previous point
@@ -271,9 +255,9 @@ double MapWindow::DrawTrail(Canvas &canvas)
     if (last_visible && this_visible) {
       // only average what's visible
 
-      if (abs(P1.Screen.y-point_lastdrawn.y)
-	  +abs(P1.Screen.x-point_lastdrawn.x)<IBLSCALE(4)) {
-	vario_av += P1.Vario;
+      if (abs(Screen.y-point_lastdrawn.y)
+	  +abs(Screen.x-point_lastdrawn.x)<IBLSCALE(4)) {
+	vario_av += P1.Colour;
 	vario_av_num ++;
 	continue;
 	// don't draw if very short line
@@ -281,36 +265,29 @@ double MapWindow::DrawTrail(Canvas &canvas)
     }
 
     ////////// Lookup the colour if it's not already set
-
-    if ((P1.Colour<0)||(P1.Colour>=NUMSNAILCOLORS)) {
-      float colour_vario = P1.Vario;
-      if (vario_av_num) {
-	// set color to average if skipped
-	colour_vario = (colour_vario+vario_av)/(vario_av_num+1);
-	vario_av_num= 0;
-	vario_av= 0;
-      }
-      if (colour_vario<0) {
-	colour_vario /= (-vario_min); // JMW fixed bug here
-      } else {
-	colour_vario /= vario_max;
-      }
-      P1.Colour = fSnailColour(colour_vario);
+    // JMW TODO: this should be done by the snail class itself
+    int colour_vario = P1.Colour;
+    if (vario_av_num) {
+      // set color to average if skipped
+      colour_vario = (colour_vario+vario_av)/(vario_av_num+1);
+      vario_av_num= 0;
+      vario_av= 0;
     }
-    canvas.select(MapGfx.hSnailPens[P1.Colour]);
+
+    canvas.select(MapGfx.hSnailPens[colour_vario]);
 
     if (!last_visible) { // draw set cursor at P1
 #ifndef NOLINETO
-      canvas.move_to(P1.Screen.x, P1.Screen.y);
+      canvas.move_to(Screen.x, Screen.y);
 #endif
     } else {
 #ifndef NOLINETO
-      canvas.line_to(P1.Screen.x, P1.Screen.y);
+      canvas.line_to(Screen.x, Screen.y);
 #else
       canvas.line(P1.Screen, point_lastdrawn);
 #endif
     }
-    point_lastdrawn = P1.Screen;
+    point_lastdrawn = Screen;
     last_visible = this_visible;
   }
 

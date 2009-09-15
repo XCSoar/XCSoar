@@ -40,7 +40,7 @@ Copyright_License {
 
 #include "Screen/shapelib/mapshape.h"
 #include "GPSClock.hpp"
-#include "Thread/Mutex.hpp"
+#include "Poco/RWLock.h"
 #include "Sizes.h"
 
 #include <windef.h>
@@ -54,7 +54,6 @@ typedef struct _SNAIL_POINT
   float Longitude;
   float Vario;
   double Time;
-  POINT Screen;
   short Colour;
   BOOL Circling;
   bool FarVisible;
@@ -65,24 +64,30 @@ class SnailTrail {
 public:
   SnailTrail();
   void AddPoint(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated);
-  int getIndex() {
+
+  const int getIndex() {
     return indexNext;
   }
-  SNAIL_POINT getPoint(int index) {
+  const SNAIL_POINT& getPoint(int index) {
     return TrailPoints[index];
   }
+
   void ScanVisibility(rectObj *bounds);
   GPSClock clock;
-  void Lock() {
-    mutexSnail.Lock();
+
+  void WriteLock() {
+    lock.writeLock();
+  }
+  void ReadLock() {
+    lock.readLock();
   }
   void Unlock() {
-    mutexSnail.Unlock();
+    lock.unlock();
   }
 private:
   SNAIL_POINT TrailPoints[TRAILSIZE];
   int indexNext;
-  Mutex mutexSnail;
+  Poco::RWLock lock;
 };
 
 #endif

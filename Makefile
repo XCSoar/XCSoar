@@ -437,6 +437,8 @@ VOLKS	:=\
 OBJS	:=\
 	$(SRC)/Globals.o 		\
 	\
+	$(SRC)/Poco/RWLock.o		\
+	\
 	$(SRC)/AATDistance.o 		\
 	$(SRC)/Abort.o 			\
 	$(SRC)/Airspace.o 		\

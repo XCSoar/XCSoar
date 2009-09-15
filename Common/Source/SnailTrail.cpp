@@ -42,6 +42,9 @@ Copyright_License {
 #include <math.h>
 
 
+#define fSnailColour(cv) max(0,min((short)(NUMSNAILCOLORS-1), (short)((cv+1.0)/2.0*NUMSNAILCOLORS)))
+
+
 SnailTrail::SnailTrail(): clock(2.0)
 {
   indexNext = 0;
@@ -53,26 +56,37 @@ SnailTrail::SnailTrail(): clock(2.0)
 void
 SnailTrail::AddPoint(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated)
 {
-  ScopeLock protect(mutexSnail);
-
-  TrailPoints[indexNext].Latitude = (float)(Basic->Location.Latitude);
-  TrailPoints[indexNext].Longitude = (float)(Basic->Location.Longitude);
-  TrailPoints[indexNext].Time = Basic->Time;
-  TrailPoints[indexNext].FarVisible = true; // hasn't been filtered out yet.
+  Poco::ScopedRWLock protect(lock, true);
+  SNAIL_POINT &pt = TrailPoints[indexNext];
+  pt.Latitude = (float)(Basic->Location.Latitude);
+  pt.Longitude = (float)(Basic->Location.Longitude);
+  pt.Time = Basic->Time;
+  pt.FarVisible = true; // hasn't been filtered out yet.
   if (Calculated->TerrainValid) {
     double hr = max(0,Calculated->AltitudeAGL)/100.0;
-    TrailPoints[indexNext].DriftFactor = 2.0/(1.0+exp(-hr))-1.0;
+    pt.DriftFactor = 2.0/(1.0+exp(-hr))-1.0;
   } else {
-    TrailPoints[indexNext].DriftFactor = 1.0;
+    pt.DriftFactor = 1.0;
   }
 
   if (Calculated->Circling) {
-    TrailPoints[indexNext].Vario = (float)(Calculated->NettoVario) ;
+    pt.Vario = (float)(Calculated->NettoVario) ;
   } else {
-    TrailPoints[indexNext].Vario = (float)(Calculated->NettoVario) ;
+    pt.Vario = (float)(Calculated->NettoVario) ;
   }
-  TrailPoints[indexNext].Colour = -1; // need to have colour calculated
-  TrailPoints[indexNext].Circling = Calculated->Circling;
+
+  float scale = Calculated->AdjustedAverageThermal; // just for now.. TODO replace
+  // with mc or something more consistent
+  float vario_max = (float)(1.5*min(5.0, max(scale,0.5)));
+  float vario_min = (float)(-1.5*min(5.0, max(scale,2.0)));
+  double colour_vario = pt.Vario;
+  if (pt.Vario<0) {
+    colour_vario /= (-vario_min); // JMW fixed bug here
+  } else {
+    colour_vario /= vario_max;
+  }
+  pt.Colour = fSnailColour(colour_vario);
+  pt.Circling = Calculated->Circling;
 
   indexNext ++;
   indexNext %= TRAILSIZE;
@@ -81,11 +95,12 @@ SnailTrail::AddPoint(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated)
 
 
 void SnailTrail::ScanVisibility(rectObj *bounds_active) {
-  ScopeLock protect(mutexSnail);
+  Poco::ScopedRWLock protect(lock, true);
+
   SNAIL_POINT *sv= TrailPoints;
   const rectObj bounds = *bounds_active;
-  const SNAIL_POINT *se = sv+TRAILSIZE;
-  while (sv<se) {
+  const SNAIL_POINT *s_end = sv+TRAILSIZE;
+  while (sv<s_end) {
     sv->FarVisible = ((sv->Longitude> bounds.minx) &&
 		      (sv->Longitude< bounds.maxx) &&
 		      (sv->Latitude> bounds.miny) &&
