@@ -1041,10 +1041,12 @@ HRESULT SetToRegistry(const TCHAR *szRegValue, int nVal)
 	return SetToRegistry(szRegValue, DWORD(nVal));
 }
 
+#ifndef __WINE__ /* DWORD==unsigned on WINE, would be duplicate */
 HRESULT SetToRegistry(const TCHAR *szRegValue, unsigned nVal)
 {
 	return SetToRegistry(szRegValue, DWORD(nVal));
 }
+#endif
 
 BOOL GetRegistryString(const TCHAR *szRegValue, TCHAR *pPos, DWORD dwSize)
 {
