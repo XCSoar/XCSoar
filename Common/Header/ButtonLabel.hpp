@@ -43,6 +43,16 @@ Copyright_License {
 
 class ContainerWindow;
 
+class MenuButton : public TextWindow {
+public:
+  void set(ContainerWindow &parent,
+           int left, int top, unsigned width, unsigned height,
+           bool visible) {
+    TextWindow::set(parent, left, top, width, height,
+                    true, true, visible, true, true);
+  }
+};
+
 class ButtonLabel: public ActionInterface {
  public:
   enum {
@@ -50,7 +60,7 @@ class ButtonLabel: public ActionInterface {
   };
 
   static unsigned ButtonLabelGeometry;
-  static TextWindow hWndButtonWindow[NUMBUTTONLABELS];
+  static MenuButton hWndButtonWindow[NUMBUTTONLABELS];
   static bool ButtonVisible[NUMBUTTONLABELS];
   static bool ButtonDisabled[NUMBUTTONLABELS];
 

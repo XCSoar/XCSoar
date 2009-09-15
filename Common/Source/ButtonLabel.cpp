@@ -50,7 +50,7 @@ Copyright_License {
 
 #include <assert.h>
 
-TextWindow ButtonLabel::hWndButtonWindow[NUMBUTTONLABELS];
+MenuButton ButtonLabel::hWndButtonWindow[NUMBUTTONLABELS];
 bool ButtonLabel::ButtonVisible[NUMBUTTONLABELS];
 bool ButtonLabel::ButtonDisabled[NUMBUTTONLABELS];
 
@@ -171,8 +171,7 @@ ButtonLabel::CreateButtonLabels(ContainerWindow &parent, const RECT rc)
 
   for (unsigned i = 0; i < NUMBUTTONLABELS; i++) {
     GetButtonPosition(i, rc, &x, &y, &xsize, &ysize);
-    hWndButtonWindow[i].set(parent, x, y, xsize, ysize,
-                            true, true, false, true, true);
+    hWndButtonWindow[i].set(parent, x, y, xsize, ysize, false);
 
     ButtonVisible[i] = false;
     ButtonDisabled[i]= false;
