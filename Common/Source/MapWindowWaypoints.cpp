@@ -48,6 +48,9 @@ Copyright_License {
 #include "Screen/Graphics.hpp"
 #include "McReady.h"
 #include "Compatibility/gdi.h"
+#include "WayPointList.hpp"
+#include "Components.hpp"
+
 #include <assert.h>
 
 
@@ -63,7 +66,6 @@ void MapWaypointLabelClear();
 
 void MapWindow::DrawWaypoints(Canvas &canvas)
 {
-  unsigned int i;
   TCHAR Buffer[32];
   TCHAR Buffer2[32];
   TCHAR sAltUnit[4];
@@ -75,16 +77,13 @@ void MapWindow::DrawWaypoints(Canvas &canvas)
     pDisplayTextType = DISPLAYNAME;
   }
 
-  if (!WayPointList) return;
-
   _tcscpy(sAltUnit, Units::GetAltitudeName());
 
   MapWaypointLabelClear();
 
-  for(i=0;i<NumberOfWayPoints;i++)
-    {
-      const WAYPOINT &way_point = WayPointList[i];
-      const WPCALC &wpcalc = WayPointCalc[i];
+  for (unsigned i = 0; way_points.verify_index(i); ++i) {
+    const WAYPOINT &way_point = way_points.get(i);
+    const WPCALC &wpcalc = way_points.get_calc(i);
 
       if (wpcalc.Visible) {
 
@@ -263,18 +262,15 @@ void MapWindow::ScanVisibilityWaypoints(rectObj *bounds_active) {
   // (saves from having to do it every screen redraw)
   const rectObj bounds = *bounds_active;
 
-  if (WayPointList) {
-    WAYPOINT *wv = WayPointList;
-    WPCALC *wc = WayPointCalc;
-    const WAYPOINT *we = WayPointList+NumberOfWayPoints;
-    while (wv<we) {
-      // TODO code: optimise waypoint visibility
-      wc->FarVisible = ((wv->Location.Longitude> bounds.minx) &&
-			(wv->Location.Longitude< bounds.maxx) &&
-			(wv->Location.Latitude> bounds.miny) &&
-			(wv->Location.Latitude< bounds.maxy));
-      wv++; wc++;
-    }
+  for (unsigned i = 0; way_points.verify_index(i); ++i) {
+    const WAYPOINT &way_point = way_points.get(i);
+    WPCALC &wpcalc = way_points.set_calc(i);
+
+    // TODO code: optimise waypoint visibility
+    wpcalc.FarVisible = way_point.Location.Longitude > bounds.minx &&
+      way_point.Location.Longitude < bounds.maxx &&
+      way_point.Location.Latitude > bounds.miny &&
+      way_point.Location.Latitude < bounds.maxy;
   }
 }
 
@@ -283,12 +279,11 @@ void MapWindow::CalculateScreenPositionsWaypoints() {
   unsigned int j;
   mutexTaskData.Lock();
 
-  if (WayPointList) {
     for (j=0; j<MAXTASKPOINTS; j++) {
       int i = task_points[j].Index;
       if (i>=0) {
-        WPCALC &wpcalc = WayPointCalc[i];
-	LonLat2Screen(WayPointList[i].Location, 
+        WPCALC &wpcalc = way_points.set_calc(i);
+        LonLat2Screen(way_points.get(i).Location,
                       wpcalc.Screen);
         wpcalc.Visible = PointVisible(wpcalc.Screen);
       }
@@ -297,24 +292,19 @@ void MapWindow::CalculateScreenPositionsWaypoints() {
       for(j=0;j<MAXSTARTPOINTS-1;j++) {
         int i = task_start_points[j].Index;
         if (task_start_stats[j].Active && (i>=0)) {
-          WPCALC &wpcalc = WayPointCalc[i];
-	  LonLat2Screen(WayPointList[i].Location, 
+          WPCALC &wpcalc = way_points.set_calc(i);
+          LonLat2Screen(way_points.get(i).Location,
                         wpcalc.Screen);
           wpcalc.Visible = PointVisible(wpcalc.Screen);
         }
       }
     }
     // only calculate screen coordinates for waypoints that are visible
-    for (unsigned i = 0; i < NumberOfWayPoints; i++) {
-      WPCALC &wpcalc = WayPointCalc[i];
-      if (!wpcalc.FarVisible) {
-        wpcalc.Visible = false;
-	continue;
-      } else {
-        wpcalc.Visible = LonLat2ScreenIfVisible(WayPointList[i].Location,
-                                                &wpcalc.Screen);
-      }
+    for (unsigned i = 0; way_points.verify_index(i); ++i) {
+      WPCALC &wpcalc = way_points.set_calc(i);
+      wpcalc.Visible = wpcalc.FarVisible &&
+        LonLat2ScreenIfVisible(way_points.get(i).Location, &wpcalc.Screen);
     }
-  }
+
   mutexTaskData.Unlock();
 }

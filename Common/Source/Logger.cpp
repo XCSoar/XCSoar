@@ -52,6 +52,8 @@
 #include "InputEvents.h"
 #include "Compatibility/string.h"
 #include "TaskFile.hpp"
+#include "Components.hpp"
+#include "WayPointList.hpp"
 
 //IGC Logger
 static bool LoggerActive = false;
@@ -750,7 +752,7 @@ void LoggerDeviceDeclare() {
   for (i = 0; i < MAXTASKPOINTS; i++) {
     if (task_points[i].Index == -1)
       break;
-    Decl.waypoint[i] = &WayPointList[task_points[i].Index];
+    Decl.waypoint[i] = &way_points.get(task_points[i].Index);
   }
   Decl.num_waypoints = i;
 
@@ -1001,7 +1003,7 @@ void guiStartLogger(const NMEA_INFO& gps_info,
 
 	    break;
 	  }
-	_tcscat(TaskMessage,WayPointList[ task_points[i].Index ].Name);
+        _tcscat(TaskMessage, way_points.get(task_points[i].Index).Name);
 	_tcscat(TaskMessage,TEXT("\r\n"));
       }
 
@@ -1030,9 +1032,11 @@ void guiStartLogger(const NMEA_INFO& gps_info,
 	      if(task_points[i].Index == -1) {
 		break;
 	      }
-	      AddDeclaration(WayPointList[task_points[i].Index].Location.Latitude,
-			     WayPointList[task_points[i].Index].Location.Longitude,
-			     WayPointList[task_points[i].Index].Name );
+
+              const WAYPOINT &way_point = way_points.get(task_points[i].Index);
+              AddDeclaration(way_point.Location.Latitude,
+                             way_point.Location.Longitude,
+                             way_point.Name);
 	    }
 	  EndDeclaration();
 	  ResetFRecord(); // reset timer & lastRecord string so if

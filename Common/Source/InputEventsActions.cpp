@@ -95,6 +95,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Task.h"
 #include "Logger.h"
 #include "TaskFile.hpp"
+#include "WayPointList.hpp"
 
 #ifdef PNA
 #include "Asset.hpp"
@@ -1665,15 +1666,12 @@ void InputEvents::eventAddWaypoint(const TCHAR *misc) {
   edit_waypoint.Comment[0] = 0;
   edit_waypoint.Name[0] = 0;
   edit_waypoint.Details = 0;
-  edit_waypoint.Number = NumberOfWayPoints;
+  edit_waypoint.Number = 0;
 
-  WAYPOINT *new_waypoint = GrowWaypointList();
-  if (new_waypoint) {
-    tmpWaypointNum++;
-    memcpy(new_waypoint,&edit_waypoint,sizeof(WAYPOINT));
-    _stprintf(new_waypoint->Name,TEXT("_%d"), tmpWaypointNum);
-    new_waypoint->Details= 0;
-  }
+  int i = way_points.append(edit_waypoint);
+  if (i >= 0)
+    _stprintf(way_points.set(i).Name, TEXT("_%d"), ++tmpWaypointNum);
+
   mutexTaskData.Unlock();
 }
 

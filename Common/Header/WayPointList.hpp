@@ -35,28 +35,60 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_COMPONENTS_HPP
-#define XCSOAR_COMPONENTS_HPP
+#ifndef XCSOAR_WAY_POINT_LIST_HPP
+#define XCSOAR_WAY_POINT_LIST_HPP
 
-class WayPointList;
-class Marks;
-class TopologyStore;
-class RasterTerrain;
-class RasterWeather;
-class GlideComputer;
-class DrawThread;
-class CalculationThread;
-class InstrumentThread;
+#include "WayPoint.hpp"
 
-// other global objects
-extern WayPointList way_points;
-extern Marks *marks;
-extern TopologyStore *topology;
-extern RasterTerrain terrain;
-extern RasterWeather RASP;
-extern GlideComputer glide_computer;
-extern DrawThread *draw_thread;
-extern CalculationThread *calculation_thread;
-extern InstrumentThread *instrument_thread;
+/**
+ * Container class for WAYPOINT objects.
+ */
+class WayPointList {
+  WAYPOINT *list;
+  WPCALC *calc_list;
+  unsigned count;
+
+public:
+  WayPointList();
+  ~WayPointList();
+
+  void clear();
+
+  unsigned get_count() const {
+    return count;
+  }
+
+  bool is_empty() const {
+    return count == 0;
+  }
+
+  bool verify_index(unsigned i) const {
+    return i < count;
+  }
+
+  const WAYPOINT &get(unsigned i) const {
+    return list[i];
+  }
+
+  WAYPOINT &set(unsigned i) {
+    return list[i];
+  }
+
+  const WPCALC &get_calc(unsigned i) const {
+    return calc_list[i];
+  }
+
+  WPCALC &set_calc(unsigned i) {
+    return calc_list[i];
+  }
+
+  WAYPOINT *append();
+  int append(const WAYPOINT &way_point);
+
+  void pop();
+
+private:
+  bool grow();
+};
 
 #endif

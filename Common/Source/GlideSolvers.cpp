@@ -47,6 +47,7 @@ Copyright_License {
 #include "Math/FastMath.h"
 #include "Math/Earth.hpp"
 #include "WayPoint.hpp"
+#include "WayPointList.hpp"
 #include "Components.hpp"
 #include "NMEA/Info.h"
 #include "NMEA/Derived.hpp"
@@ -348,8 +349,8 @@ EffectiveMacCready_internal(const NMEA_INFO *Basic, const DERIVED_INFO *Calculat
   double LegBearings[MAXTASKPOINTS];
 
   for (int i=0; i<ActiveTaskPoint; i++) {
-    GEOPOINT w1 = WayPointList[task_points[i+1].Index].Location;
-    GEOPOINT w0 = WayPointList[task_points[i].Index].Location;
+    GEOPOINT w1 = way_points.get(task_points[i+1].Index).Location;
+    GEOPOINT w0 = way_points.get(task_points[i].Index).Location;
     if (AATEnabled) {
       if (ValidTaskPoint(i+1)) {
         w1 = task_stats[i+1].AATTargetLocation;

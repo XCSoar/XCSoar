@@ -44,6 +44,9 @@ Copyright_License {
 #include "Protection.hpp"
 #include "Dialogs.h"
 #include "Language.hpp"
+#include "Components.hpp"
+#include "WayPointList.hpp"
+
 #include <stdio.h>
 #include <assert.h>
 
@@ -71,13 +74,11 @@ static int FindOrAddWaypoint(WAYPOINT *read_waypoint) {
 
     // TODO bug: Set WAYPOINTFILECHANGED so waypoints get saved?
 
-    WAYPOINT* new_waypoint = GrowWaypointList();
-    if (!new_waypoint) {
+    waypoint_index = way_points.append(*read_waypoint);
+    if (waypoint_index < 0) {
       // error, can't allocate!
       return false;
     }
-    memcpy(new_waypoint, read_waypoint, sizeof(WAYPOINT));
-    waypoint_index = NumberOfWayPoints-1;
   }
   return waypoint_index;
 }
@@ -281,8 +282,6 @@ void LoadNewTask(const TCHAR *szFileName,
 
 void SaveTask(const TCHAR *szFileName)
 {
-  if (!WayPointList) return; // this should never happen, but just to be safe...
-
   mutexTaskData.Lock();
 
   FILE *file = _tfopen(szFileName, _T("wb"));
@@ -309,22 +308,20 @@ void SaveTask(const TCHAR *szFileName)
     // JMW added writing of waypoint data, in case it's missing
     int i;
     for(i=0;i<MAXTASKPOINTS;i++) {
-      if (ValidWayPoint(task_points[i].Index)) {
-        fwrite(&WayPointList[task_points[i].Index],
-               sizeof(WayPointList[task_points[i].Index]), 1, file);
-      } else {
-        // dummy data..
-        fwrite(&WayPointList[0], sizeof(WayPointList[0]), 1, file);
-      }
+      const WAYPOINT &way_point =
+        way_points.get(way_points.verify_index(task_points[i].Index)
+                       ? task_points[i].Index
+                       : 0 /* dummy data */);
+
+      fwrite(&way_point, sizeof(way_point), 1, file);
     }
     for(i=0;i<MAXSTARTPOINTS;i++) {
-      if (ValidWayPoint(task_start_points[i].Index)) {
-        fwrite(&WayPointList[task_start_points[i].Index],
-               sizeof(WayPointList[task_start_points[i].Index]), 1, file);
-      } else {
-        // dummy data..
-        fwrite(&WayPointList[0], sizeof(WayPointList[0]), 1, file);
-      }
+      const WAYPOINT &way_point =
+        way_points.get(way_points.verify_index(task_start_points[i].Index)
+                       ? task_start_points[i].Index
+                       : 0 /* dummy data */);
+
+      fwrite(&way_point, sizeof(way_point), 1, file);
     }
 
     fclose(file);

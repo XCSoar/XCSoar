@@ -42,6 +42,8 @@ Copyright_License {
 #include "SettingsTask.hpp"
 #include "Math/Earth.hpp"
 #include "WayPoint.hpp"
+#include "Components.hpp"
+#include "WayPointList.hpp"
 
 #include <math.h>
 
@@ -178,7 +180,7 @@ void AATDistance::ShiftTargetOutside(const GEOPOINT &location,
 
   if (taskwaypoint>0) {
     DistanceBearing(location,
-                    WayPointList[task_points[taskwaypoint+1].Index].Location,
+                    way_points.get(task_points[taskwaypoint+1].Index).Location,
                     NULL, &bearing);
 
     FindLatitudeLongitude(location,

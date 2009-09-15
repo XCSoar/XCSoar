@@ -52,6 +52,8 @@ Copyright_License {
 #include "MainWindow.hpp"
 #include "LocalPath.hpp"
 #include "DataField/FileReader.hpp"
+#include "WayPointList.hpp"
+#include "Components.hpp"
 
 #include <assert.h>
 
@@ -153,16 +155,16 @@ OnTaskPaintListItem(WindowControl *Sender, Canvas &canvas)
           AATEnabled && ValidTaskPoint(i+1) && (i>0)) {
         if (task_points[i].AATType==0) {
           _stprintf(sTmp, TEXT("%s %.1f"),
-                    WayPointList[task_points[i].Index].Name,
+                    way_points.get(task_points[i].Index).Name,
                     task_points[i].AATCircleRadius*DISTANCEMODIFY);
         } else {
           _stprintf(sTmp, TEXT("%s %.1f"),
-                    WayPointList[task_points[i].Index].Name,
+                    way_points.get(task_points[i].Index).Name,
                     task_points[i].AATSectorRadius*DISTANCEMODIFY);
         }
       } else {
         _stprintf(sTmp, TEXT("%s"),
-                  WayPointList[task_points[i].Index].Name);
+                  way_points.get(task_points[i].Index).Name);
       }
 
       canvas.text_clipped(2 * InfoBoxLayout::scale, 2 * InfoBoxLayout::scale,

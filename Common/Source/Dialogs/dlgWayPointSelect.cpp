@@ -47,6 +47,8 @@ Copyright_License {
 #include "Compatibility/string.h"
 #include "Math/FastMath.h"
 #include "DataField/Base.hpp"
+#include "WayPointList.hpp"
+#include "Components.hpp"
 
 #include <assert.h>
 #include <stdlib.h>
@@ -187,12 +189,11 @@ static void PrepareData(void){
 
   TCHAR sTmp[5];
 
-  if (!WayPointList) return;
+  WayPointSelectInfo = (WayPointSelectInfo_t*)malloc(sizeof(WayPointSelectInfo_t) *
+                                                     way_points.get_count());
 
-  WayPointSelectInfo = (WayPointSelectInfo_t*)malloc(sizeof(WayPointSelectInfo_t) * NumberOfWayPoints);
-
-  for (int i=0; i<(int)NumberOfWayPoints; i++){
-    const WAYPOINT &way_point = WayPointList[i];
+  for (unsigned i = 0; way_points.verify_index(i); ++i) {
+    const WAYPOINT &way_point = way_points.get(i);
 
     WayPointSelectInfo[i].Index = i;
 
@@ -227,18 +228,17 @@ static void PrepareData(void){
 static void UpdateList(void){
 
 //  TCHAR sTmp[128];
-  unsigned i;
   bool distancemode = false;
 
   ItemIndex = 0;
 
-  UpLimit=NumberOfWayPoints;
+  UpLimit = way_points.get_count();
   LowLimit =0;
 
   if (TypeFilterIdx == 1){
-    qsort(WayPointSelectInfo, NumberOfWayPoints,
+    qsort(WayPointSelectInfo, way_points.get_count(),
         sizeof(WayPointSelectInfo_t), WaypointAirportCompare);
-    for (i = 0; i < NumberOfWayPoints; i++){
+    for (unsigned i = 0; way_points.verify_index(i); ++i) {
       if (!(WayPointSelectInfo[i].Type & (AIRPORT))){
         UpLimit = i;
         break;
@@ -247,9 +247,9 @@ static void UpdateList(void){
   }
 
   if (TypeFilterIdx == 2){
-    qsort(WayPointSelectInfo, NumberOfWayPoints,
+    qsort(WayPointSelectInfo, way_points.get_count(),
         sizeof(WayPointSelectInfo_t), WaypointLandableCompare);
-    for (i = 0; i < NumberOfWayPoints; i++){
+    for (unsigned i = 0; way_points.verify_index(i); ++i) {
       if (!(WayPointSelectInfo[i].Type & (AIRPORT | LANDPOINT))){
         UpLimit = i;
         break;
@@ -258,9 +258,9 @@ static void UpdateList(void){
   }
 
   if (TypeFilterIdx == 3){
-    qsort(WayPointSelectInfo, NumberOfWayPoints,
+    qsort(WayPointSelectInfo, way_points.get_count(),
         sizeof(WayPointSelectInfo_t), WaypointWayPointCompare);
-    for (i = 0; i < NumberOfWayPoints; i++){
+    for (unsigned i = 0; way_points.verify_index(i); ++i) {
       if (!(WayPointSelectInfo[i].Type & (TURNPOINT))){
         UpLimit = i;
         break;
@@ -271,9 +271,9 @@ static void UpdateList(void){
   if (TypeFilterIdx == 4 || TypeFilterIdx == 5){
     // distancemode = true;
     SelectedWayPointFileIdx = TypeFilterIdx-4;
-    qsort(WayPointSelectInfo, NumberOfWayPoints,
+    qsort(WayPointSelectInfo, way_points.get_count(),
         sizeof(WayPointSelectInfo_t), WaypointFileIdxCompare);
-    for (i = 0; i < NumberOfWayPoints; i++){
+    for (unsigned i = 0; way_points.verify_index(i); ++i) {
       if (WayPointSelectInfo[i].FileIdx != SelectedWayPointFileIdx){
         UpLimit = i;
         break;
@@ -285,7 +285,7 @@ static void UpdateList(void){
     distancemode = true;
     qsort(WayPointSelectInfo, UpLimit,
         sizeof(WayPointSelectInfo_t), WaypointDistanceCompare);
-    for (i = 0; i < UpLimit; i++){
+    for (unsigned i = 0; i < UpLimit; i++){
       if (WayPointSelectInfo[i].Distance > DistanceFilter[DistanceFilterIdx]){
         UpLimit = i;
         break;
@@ -297,7 +297,7 @@ static void UpdateList(void){
     distancemode = true;
     qsort(WayPointSelectInfo, UpLimit,
         sizeof(WayPointSelectInfo_t), WaypointDirectionCompare);
-    for (i=0; i<UpLimit; i++){
+    for (unsigned i = 0; i < UpLimit; i++){
       if (WayPointSelectInfo[i].DirectionErr > 18){
         UpLimit = i;
         break;
@@ -314,7 +314,9 @@ static void UpdateList(void){
     sTmp[1] = '\0';
     sTmp[2] = '\0';
     _tcsupr(sTmp);
-    for (i=0; i<UpLimit; i++){
+
+    unsigned i;
+    for (i = 0; i < UpLimit; i++){
       if ((BYTE)(WayPointSelectInfo[i].FourChars >> 24) >= (sTmp[0]&0xff)){
         LowLimit = i;
         break;
@@ -544,7 +546,7 @@ OnPaintListItem(WindowControl *Sender, Canvas &canvas)
   if (DrawListIndex < n){
 
     int i = LowLimit + DrawListIndex;
-    const WAYPOINT &way_point = WayPointList[WayPointSelectInfo[i].Index];
+    const WAYPOINT &way_point = way_points.get(WayPointSelectInfo[i].Index);
 
 // Sleep(100);
 

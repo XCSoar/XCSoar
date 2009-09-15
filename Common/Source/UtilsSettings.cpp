@@ -117,7 +117,6 @@ void SettingsLeave() {
 
       // re-load waypoints
       ReadWayPoints();
-      InitWayPointCalc(); // VENTA3
       ReadAirfieldFile();
 
       // re-set home

@@ -49,6 +49,8 @@ Copyright_License {
 #include <math.h>
 #include "Logger.h"
 #include "Interface.hpp"
+#include "Components.hpp"
+#include "WayPointList.hpp"
 
 #include <stdio.h>
 
@@ -496,24 +498,24 @@ CalculateAATTaskSectors(const NMEA_INFO &gps_info)
   task_stats[0].AATTargetOffsetRadius = 0.0;
   task_stats[0].AATTargetOffsetRadial = 0.0;
   if (task_points[0].Index>=0) {
-    task_stats[0].AATTargetLocation = WayPointList[task_points[0].Index].Location;
+    task_stats[0].AATTargetLocation = way_points.get(task_points[0].Index).Location;
   }
 
   for(i=1;i<MAXTASKPOINTS;i++) {
     if(ValidTaskPoint(i)) {
       if (!ValidTaskPoint(i+1)) {
         // This must be the final waypoint, so it's not an AAT OZ
-        task_stats[i].AATTargetLocation = WayPointList[task_points[i].Index].Location;
+        task_stats[i].AATTargetLocation = way_points.get(task_points[i].Index).Location;
         continue;
       }
 
       if(task_points[i].AATType == SECTOR) {
-        FindLatitudeLongitude (WayPointList[task_points[i].Index].Location,
+        FindLatitudeLongitude (way_points.get(task_points[i].Index).Location,
                                task_points[i].AATStartRadial,
                                task_points[i].AATSectorRadius,
                                &task_points[i].AATStart);
 
-        FindLatitudeLongitude (WayPointList[task_points[i].Index].Location,
+        FindLatitudeLongitude (way_points.get(task_points[i].Index).Location,
                                task_points[i].AATFinishRadial ,
                                task_points[i].AATSectorRadius,
                                &task_points[i].AATFinish);
@@ -611,7 +613,7 @@ CalculateAATTaskSectors(const NMEA_INFO &gps_info)
 
       } else {
 
-        FindLatitudeLongitude (WayPointList[task_points[i].Index].Location,
+        FindLatitudeLongitude (way_points.get(task_points[i].Index).Location,
                                targetbearing,
                                targetrange,
                                &task_stats[i].AATTargetLocation);
@@ -663,11 +665,7 @@ void ClearTask(void) {
 
 bool ValidWayPoint(const int i) {
   ScopeLock protect(mutexTaskData);
-  if ((!WayPointList)||(i<0)||(i>=(int)NumberOfWayPoints)) {
-    return false;
-  } else {
-    return true;
-  }
+  return way_points.verify_index(i);
 }
 
 bool ValidTask()  {
@@ -894,7 +892,7 @@ bool InAATTurnSector(const GEOPOINT &location,
 
   double distance;
   mutexTaskData.Lock();
-  DistanceBearing(WayPointList[task_points[the_turnpoint].Index].Location,
+  DistanceBearing(way_points.get(task_points[the_turnpoint].Index).Location,
                   location, &distance, &AircraftBearing);
 
   if(task_points[the_turnpoint].AATType ==  CIRCLE) {
@@ -915,8 +913,10 @@ bool InAATTurnSector(const GEOPOINT &location,
 
 
 bool WaypointInTask(const int ind) {
-  if (!WayPointList || (ind<0)) return false;
-  return WayPointCalc[ind].InTask;
+  if (!way_points.verify_index(ind))
+    return false;
+
+  return way_points.get_calc(ind).InTask;
 }
 
 

@@ -56,6 +56,8 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "Interface.hpp"
 #include "Components.hpp"
+#include "WayPointList.hpp"
+
 #include <windows.h>
 #include <commctrl.h>
 
@@ -81,23 +83,7 @@ static int WaypointOutOfTerrainRangeDontAskAgain = -1;
 
 void CloseWayPoints() {
   StartupStore(TEXT("Close waypoints\n"));
-  unsigned int i;
-  if (NumberOfWayPoints) {
-    for (i=0; i<NumberOfWayPoints; i++) {
-      if (WayPointList[i].Details) {
-        free(WayPointList[i].Details);
-        WayPointList[i].Details = NULL;
-      }
-    }
-  }
-  NumberOfWayPoints = 0;
-
-  if(WayPointList != NULL) {
-    LocalFree((HLOCAL)WayPointList);
-    WayPointList = NULL;
-    LocalFree((HLOCAL)WayPointCalc); // VENTA3
-    WayPointCalc = NULL;
-  }
+  way_points.clear();
   WaypointOutOfTerrainRangeDontAskAgain = WaypointsOutOfRange;
 }
 
@@ -185,85 +171,6 @@ static int ParseWayPointError(int LineNumber, const TCHAR *FileName,
   return(1);
 }
 
-// VENTA3 added additional WP calculated list
-static bool
-AllocateWaypointList()
-{
-  if (!WayPointList) {
-    NumberOfWayPoints = 0;
-    WayPointList = (WAYPOINT *)LocalAlloc(LPTR, 50 * sizeof(WAYPOINT));
-    if(WayPointList == NULL)
-      {
-        MessageBoxX(gettext(TEXT("Not Enough Memory For Waypoints")),
-                    gettext(TEXT("Error")),MB_OK|MB_ICONSTOP);
-        return 0;
-      }
-    // VENTA3
-    WayPointCalc = (WPCALC *)LocalAlloc(LPTR, 50 * sizeof(WPCALC));
-    if(WayPointCalc == NULL)
-      {
-        MessageBoxX(gettext(TEXT("Not Enough Memory For CalcWaypoints")),
-                    gettext(TEXT("Error")),MB_OK|MB_ICONSTOP);
-        return 0;
-      }
-    return true;
-  }
-  return true;
-}
-
-
-WAYPOINT* GrowWaypointList() {
-  // memory allocation
-  if (!AllocateWaypointList()) {
-    return 0;
-  }
-
-  if (((NumberOfWayPoints+1) % 50) == 0) {
-    WAYPOINT *p;
-
-    if ((p =
-         (WAYPOINT *)LocalReAlloc(WayPointList,
-                                  (((NumberOfWayPoints+1)/50)+1)
-                                  * 50 * sizeof(WAYPOINT),
-                                  LMEM_MOVEABLE | LMEM_ZEROINIT)) == NULL){
-
-      MessageBoxX(gettext(TEXT("Not Enough Memory For Waypoints")),
-                  gettext(TEXT("Error")),MB_OK|MB_ICONSTOP);
-
-      return 0; // failed to allocate
-    }
-
-    if (p != WayPointList){
-      WayPointList = p;
-    }
-
-    // Additional calculated WP values, VENTA3
-    WPCALC *q;
-
-    if ((q =
-         (WPCALC *)LocalReAlloc(WayPointCalc,
-                                  (((NumberOfWayPoints+1)/50)+1)
-                                  * 50 * sizeof(WPCALC),
-                                  LMEM_MOVEABLE | LMEM_ZEROINIT)) == NULL){
-
-      MessageBoxX(gettext(TEXT("Not Enough Memory For CalcWaypoints")),
-                  gettext(TEXT("Error")),MB_OK|MB_ICONSTOP);
-
-      return 0; // failed to allocate
-    }
-    // TODO: initialise newly created waypointcalc
-
-    if (q != WayPointCalc){
-      WayPointCalc = q;
-    }
-  }
-
-  NumberOfWayPoints++;
-  return WayPointList + NumberOfWayPoints-1;
-  // returns the newly created waypoint
-}
-
-
 static void ReadWayPointFile(ZZIP_FILE *fp, const TCHAR *CurrentWpFileName)
 {
   WAYPOINT *new_waypoint;
@@ -281,12 +188,6 @@ static void ReadWayPointFile(ZZIP_FILE *fp, const TCHAR *CurrentWpFileName)
   if (fSize == 0) {
     return;
   }
-
-  if (!AllocateWaypointList()) {
-    return;
-  }
-
-  new_waypoint = WayPointList+NumberOfWayPoints;
 
   // SetFilePointer(hFile,0,NULL,FILE_BEGIN);
   fPos = 0;
@@ -311,19 +212,17 @@ static void ReadWayPointFile(ZZIP_FILE *fp, const TCHAR *CurrentWpFileName)
     if (TempString[0] == '\0')
       continue;
 
+    new_waypoint = way_points.append();
+    if (new_waypoint == NULL)
+      return; // failed to allocate
+
     new_waypoint->Details = NULL;
 #ifdef HAVEEXCEPTIONS
     __try{
 #endif
-      if (ParseWayPointString(TempString, new_waypoint)) {
-        if (WaypointInTerrainRange(new_waypoint)) {
-          new_waypoint = GrowWaypointList();
-          if (!new_waypoint) {
-            return; // failed to allocate
-          }
-          new_waypoint++; // we want the next blank one
-	}
-      }
+      if (!ParseWayPointString(TempString, new_waypoint) ||
+          !WaypointInTerrainRange(new_waypoint))
+        way_points.pop();
       continue;
 #ifdef HAVEEXCEPTIONS
     }__except(EXCEPTION_EXECUTE_HANDLER){
@@ -729,8 +628,6 @@ void SetHome(SETTINGS_COMPUTER &settings,
 {
   StartupStore(TEXT("SetHome\n"));
 
-  unsigned int i;
-
   // check invalid home waypoint or forced reset due to file change
   // VENTA3 
   if (reset || !ValidWayPoint(0) || 
@@ -752,9 +649,9 @@ void SetHome(SETTINGS_COMPUTER &settings,
   if (!ValidWayPoint(settings.HomeWaypoint)) {
     // search for home in waypoint list, if we don't have a home
     settings.HomeWaypoint = -1;
-    for(i=0;i<NumberOfWayPoints;i++)
+    for (unsigned i = 0; way_points.verify_index(i); ++i)
       {
-        if( (WayPointList[i].Flags & HOME) == HOME)
+        if ((way_points.get(i).Flags & HOME) == HOME)
           {
             if (settings.HomeWaypoint== -1) {
               settings.HomeWaypoint = i;
@@ -773,8 +670,8 @@ void SetHome(SETTINGS_COMPUTER &settings,
     if (ValidWayPoint(settings.HomeWaypoint)) {
       // OK, passed all checks now
       StartupStore(TEXT("Start at home waypoint\n"));
-      device_blackboard.SetStartupLocation(WayPointList[settings.HomeWaypoint].Location,
-					   WayPointList[settings.HomeWaypoint].Altitude);
+      const WAYPOINT &home = way_points.get(settings.HomeWaypoint);
+      device_blackboard.SetStartupLocation(home.Location, home.Altitude);
     } else {
       
       // no home at all, so set it from center of terrain if available
@@ -803,26 +700,20 @@ int FindNearestWayPoint(MapWindowProjection &map_projection,
                         double MaxRange,
                         bool exhaustive)
 {
-  unsigned int i;
   int NearestIndex = -1;
   double NearestDistance, Dist;
 
-  if(NumberOfWayPoints ==0)
-    {
-      return -1;
-    }
-
   NearestDistance = MaxRange;
-  for(i=0;i<NumberOfWayPoints;i++) {
+  for (unsigned i = 0; way_points.verify_index(i); ++i) {
 
-    if (WayPointCalc[i].Visible) {
+    if (way_points.get_calc(i).Visible) {
 
       if (map_projection.WaypointInScaleFilter(i)) {
 
         // only look for visible waypoints
         // feature added by Samuel Gisiger
         DistanceBearing(loc,
-                        WayPointList[i].Location, &Dist, NULL);
+                        way_points.get(i).Location, &Dist, NULL);
         if(Dist < NearestDistance) {
           NearestIndex = i;
           NearestDistance = Dist;
@@ -833,9 +724,9 @@ int FindNearestWayPoint(MapWindowProjection &map_projection,
 
   // JMW allow exhaustive check for when looking up in status dialog
   if (exhaustive && (NearestIndex == -1)) {
-    for(i=0;i<NumberOfWayPoints;i++) {
+    for (unsigned i = 0; way_points.verify_index(i); ++i) {
       DistanceBearing(loc,
-                      WayPointList[i].Location, &Dist, NULL);
+                      way_points.get(i).Location, &Dist, NULL);
       if(Dist < NearestDistance) {
         NearestIndex = i;
         NearestDistance = Dist;
@@ -987,28 +878,29 @@ WriteWayPointFileWayPoint(FILE *fp, WAYPOINT* wpt)
 
 static void WriteWayPointFile(FILE *fp,
 			      const SETTINGS_COMPUTER &settings_computer) {
-  int i;
-
   // remove previous home if it exists in this file
-  for (i=0; i<(int)NumberOfWayPoints; i++) {
-    if (WayPointList[i].FileNum == globalFileNum) {
-      if ((WayPointList[i].Flags & HOME) == HOME) {
-        WayPointList[i].Flags -= HOME;
+  for (unsigned i = 0; way_points.verify_index(i); ++i) {
+    WAYPOINT &way_point = way_points.set(i);
+
+    if (way_point.FileNum == globalFileNum) {
+      if ((way_point.Flags & HOME) == HOME) {
+        way_point.Flags -= HOME;
       }
     }
   }
 
-  for (i=0; i<(int)NumberOfWayPoints; i++) {
-    if (WayPointList[i].FileNum == globalFileNum) {
+  for (unsigned i = 0; way_points.verify_index(i); ++i) {
+    WAYPOINT &way_point = way_points.set(i);
 
+    if (way_point.FileNum == globalFileNum) {
       // set home flag if it's the home
-      if (i==settings_computer.HomeWaypoint) {
-        if ((WayPointList[i].Flags & HOME) != HOME) {
-          WayPointList[i].Flags += HOME;
+      if ((int)i == settings_computer.HomeWaypoint) {
+        if ((way_point.Flags & HOME) != HOME) {
+          way_point.Flags += HOME;
         }
       }
 
-      WriteWayPointFileWayPoint(fp, &WayPointList[i]);
+      WriteWayPointFileWayPoint(fp, &way_point);
     }
   }
 }
@@ -1065,39 +957,21 @@ void WaypointWriteFiles(const SETTINGS_COMPUTER &settings_computer) {
 
 
 int FindMatchingWaypoint(WAYPOINT *waypoint) {
-  if (!WayPointList) {
-    return -1;
-  }
-  unsigned int i;
-
   // first scan, lookup by name
-  for (i=0; i<NumberOfWayPoints; i++) {
-    if (_tcscmp(waypoint->Name, WayPointList[i].Name)==0) {
+  for (unsigned i = 0; way_points.verify_index(i); ++i) {
+    if (_tcscmp(waypoint->Name, way_points.get(i).Name)==0) {
       return i;
     }
   }
   // second scan, lookup by location
-  for (i=0; i<NumberOfWayPoints; i++) {
-    if ((fabs(waypoint->Location.Latitude-WayPointList[i].Location.Latitude)<1.0e-6)
-        && (fabs(waypoint->Location.Longitude-WayPointList[i].Location.Longitude)<1.0e-6)) {
+  for (unsigned i = 0; way_points.verify_index(i); ++i) {
+    const WAYPOINT &wpi = way_points.get(i);
+
+    if ((fabs(waypoint->Location.Latitude - wpi.Location.Latitude)<1.0e-6)
+        && (fabs(waypoint->Location.Longitude - wpi.Location.Longitude)<1.0e-6)) {
       return i;
     }
   }
 
   return -1;
 }
-
-// VENTA3
-void InitWayPointCalc() {
-  for (unsigned i = 0; i < NumberOfWayPoints; i++) {
-	WayPointCalc[i].Preferred = false;
-	WayPointCalc[i].Distance=-1;
-	WayPointCalc[i].AltArrival=-1;
-	WayPointCalc[i].AltReqd=-1;
-	WayPointCalc[i].Bearing=-1;
-	WayPointCalc[i].GR=-1;
-	WayPointCalc[i].VGR=-1;
-  }
-}
-
-

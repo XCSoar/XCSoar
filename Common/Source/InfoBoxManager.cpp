@@ -67,7 +67,8 @@ Copyright_License {
 #include "MapWindow.h"
 #include "Defines.h"
 #include "options.h" /* for IBLSCALE() */
-
+#include "Components.hpp"
+#include "WayPointList.hpp"
 #include "XCSoar.h"
 
 #include <assert.h>
@@ -608,7 +609,7 @@ void InfoBoxManager::DisplayInfoBox(void)
         index = task_points[theactive].Index;
         if (index>=0) {
           InfoBoxes[i]->
-            SetComment(WayPointList[index].Comment);
+            SetComment(way_points.get(index).Comment);
         }
         break;
       }
@@ -808,11 +809,11 @@ void InfoBoxManager::DisplayInfoBox(void)
 	    break;
 	  }
 	  if (FlipBoxValue == true) {
-	    Units::FormatUserDistance(WayPointCalc[ActiveAlternate].Distance,
+            Units::FormatUserDistance(way_points.get_calc(ActiveAlternate).Distance,
 				      sTmp, sizeof(sTmp)/sizeof(sTmp[0]));
 	    InfoBoxes[i]->SetComment(sTmp);
 	  } else {
-	    Units::FormatUserArrival(WayPointCalc[ActiveAlternate].AltArrival,
+            Units::FormatUserArrival(way_points.get_calc(ActiveAlternate).AltArrival,
 				     sTmp, sizeof(sTmp)/sizeof(sTmp[0]));
 	    InfoBoxes[i]->SetComment(sTmp);
 	  }

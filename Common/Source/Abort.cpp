@@ -47,6 +47,8 @@ Copyright_License {
 #include "McReady.h"
 #include "GlideSolvers.hpp"
 #include "Message.h"
+#include "Components.hpp"
+#include "WayPointList.hpp"
 
 //////////////////////////////////////////////////////////////////
 
@@ -112,8 +114,6 @@ GlideComputerTask::SortLandableWaypoints()
   double arrival_altitude;
   int active_waypoint_on_entry;
 
-  if (!WayPointList) return;
-
   ScopeLock protect(mutexTaskData);
 
   active_waypoint_on_entry = ActiveTaskPoint;
@@ -128,8 +128,8 @@ GlideComputerTask::SortLandableWaypoints()
     SortedApproxDistance[i] = 0;
   }
 
-  for (i=0; i<(int)NumberOfWayPoints; i++) {
-    const WAYPOINT &way_point = WayPointList[i];
+  for (i = 0; way_points.verify_index(i); i++) {
+    const WAYPOINT &way_point = way_points.get(i);
 
     if (!(((way_point.Flags & AIRPORT) == AIRPORT) ||
           ((way_point.Flags & LANDPOINT) == LANDPOINT))) {
@@ -138,7 +138,7 @@ GlideComputerTask::SortLandableWaypoints()
 
     int approx_distance =
       CalculateWaypointApproxDistance(scx_aircraft, scy_aircraft,
-                                      WayPointList[i]);
+                                      way_point);
 
     // see if this fits into slot
     for (k=0; k< MAXTASKPOINTS*2; k++)  {
@@ -184,7 +184,7 @@ GlideComputerTask::SortLandableWaypoints()
         continue;
       }
 
-      const WAYPOINT &way_point = WayPointList[SortedApproxIndex[i]];
+      const WAYPOINT &way_point = way_points.get(SortedApproxIndex[i]);
 
       if ((scan_airports_slot==0) &&
 	  ((way_point.Flags & AIRPORT) != AIRPORT)) {
@@ -193,8 +193,8 @@ GlideComputerTask::SortLandableWaypoints()
       }
 
       arrival_altitude =
-        CalculateWaypointArrivalAltitude(WayPointList[SortedApproxIndex[i]],
-                                         WayPointCalc[SortedApproxIndex[i]]);
+        CalculateWaypointArrivalAltitude(way_point,
+                                         way_points.set_calc(SortedApproxIndex[i]));
 
       if (scan_airports_slot==0) {
         if (arrival_altitude<0) {
@@ -272,8 +272,8 @@ GlideComputerTask::SortLandableWaypoints()
     // home not found in top list, so see if we can sneak it in
 
     arrival_altitude =
-      CalculateWaypointArrivalAltitude(WayPointList[SettingsComputer().HomeWaypoint],
-                                       WayPointCalc[SettingsComputer().HomeWaypoint]);
+      CalculateWaypointArrivalAltitude(way_points.get(SettingsComputer().HomeWaypoint),
+                                       way_points.set_calc(SettingsComputer().HomeWaypoint));
     if (arrival_altitude>0) {
       // only put it in if reachable
       SortedLandableIndex[MAXTASKPOINTS-2] = SettingsComputer().HomeWaypoint;
@@ -288,8 +288,8 @@ GlideComputerTask::SortLandableWaypoints()
     // if not found, keep on field or set active waypoint to closest
     if (ValidTask()){
       arrival_altitude =
-        CalculateWaypointArrivalAltitude(WayPointList[task_points[ActiveTaskPoint].Index],
-                                         WayPointCalc[task_points[ActiveTaskPoint].Index]);
+        CalculateWaypointArrivalAltitude(way_points.get(task_points[ActiveTaskPoint].Index),
+                                         way_points.set_calc(task_points[ActiveTaskPoint].Index));
     } else {
       arrival_altitude = 0;
     }
@@ -316,8 +316,8 @@ GlideComputerTask::SortLandableWaypoints()
 
   // set new waypoints in task
 
-  for (i=0; i<(int)NumberOfWayPoints; i++) {
-    WayPointCalc[i].InTask = false;
+  for (i = 0; way_points.verify_index(i); i++) {
+    way_points.set_calc(i).InTask = false;
   }
 
   int last_closest_waypoint=0;
@@ -328,7 +328,7 @@ GlideComputerTask::SortLandableWaypoints()
   for (i=0; i<MAXTASKPOINTS; i++){
     task_points[i].Index = SortedLandableIndex[i];
     if (ValidTaskPoint(i)) {
-      WayPointCalc[task_points[i].Index].InTask = true;
+      way_points.set_calc(task_points[i].Index).InTask = false;
     }
   }
 
@@ -336,8 +336,8 @@ GlideComputerTask::SortLandableWaypoints()
     if ((task_points[0].Index != last_closest_waypoint) && ValidTaskPoint(0)) {
       double last_wp_distance= 10000.0;
       if (last_closest_waypoint>=0) {
-        DistanceBearing(WayPointList[task_points[0].Index].Location,
-                        WayPointList[last_closest_waypoint].Location,
+        DistanceBearing(way_points.get(task_points[0].Index).Location,
+                        way_points.get(last_closest_waypoint).Location,
                         &last_wp_distance, NULL);
       }
       if (last_wp_distance>2000.0) {
@@ -351,9 +351,9 @@ GlideComputerTask::SortLandableWaypoints()
 
   if (EnableMultipleStartPoints) {
     for (i=0; i<MAXSTARTPOINTS; i++) {
-      if (task_start_stats[i].Active 
-	  && (ValidWayPoint(task_start_points[i].Index))) {
-        WayPointCalc[task_start_points[i].Index].InTask = true;
+      if (task_start_stats[i].Active &&
+          ValidWayPoint(task_start_points[i].Index)) {
+        way_points.set_calc(task_start_points[i].Index).InTask = true;
       }
     }
   }

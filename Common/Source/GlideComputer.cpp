@@ -45,6 +45,8 @@ Copyright_License {
 #include "Persist.hpp"
 #include "ConditionMonitor.hpp"
 #include "TeamCodeCalculation.h"
+#include "Components.hpp"
+#include "WayPointList.hpp"
 
 GlideComputer::GlideComputer()
 {
@@ -208,7 +210,6 @@ static PeriodClock last_team_code_update;
 void
 GlideComputer::CalculateOwnTeamCode()
 {
-  if (!WayPointList) return;
   if (SettingsComputer().TeamCodeRefWaypoint < 0) return;
 
   if (!last_team_code_update.check_update(10000))
@@ -219,8 +220,8 @@ GlideComputer::CalculateOwnTeamCode()
   double bearing = 0;
   TCHAR code[10];
 
-  LL_to_BearRange(WayPointList[SettingsComputer().TeamCodeRefWaypoint].Location.Latitude,
-                  WayPointList[SettingsComputer().TeamCodeRefWaypoint].Location.Longitude,
+  LL_to_BearRange(way_points.get(SettingsComputer().TeamCodeRefWaypoint).Location.Latitude,
+                  way_points.get(SettingsComputer().TeamCodeRefWaypoint).Location.Longitude,
                   Basic().Location.Latitude,
                   Basic().Location.Longitude,
                   &bearing, &distance);
@@ -239,7 +240,6 @@ GlideComputer::CalculateTeammateBearingRange()
   ScopeLock protect(mutexTaskData);
   static bool InTeamSector = false;
 
-  if (!WayPointList) return;
   if (SettingsComputer().TeamCodeRefWaypoint < 0) return;
 
   double ownDistance = 0;
@@ -247,8 +247,8 @@ GlideComputer::CalculateTeammateBearingRange()
   double mateDistance = 0;
   double mateBearing = 0;
 
-  LL_to_BearRange(WayPointList[SettingsComputer().TeamCodeRefWaypoint].Location.Latitude,
-                  WayPointList[SettingsComputer().TeamCodeRefWaypoint].Location.Longitude,
+  LL_to_BearRange(way_points.get(SettingsComputer().TeamCodeRefWaypoint).Location.Latitude,
+                  way_points.get(SettingsComputer().TeamCodeRefWaypoint).Location.Longitude,
                   Basic().Location.Latitude,
                   Basic().Location.Longitude,
                   &ownBearing, &ownDistance);
@@ -338,8 +338,8 @@ GlideComputer::FLARM_ScanTraffic()
 	  
 	  SetCalculated().TeammateLocation = Basic().FLARM_Traffic[flarm_slot].Location;
 	  DistanceBearing
-	    (WayPointList[SettingsComputer().TeamCodeRefWaypoint].Location,
-	     Basic().FLARM_Traffic[flarm_slot].Location,
+            (way_points.get(SettingsComputer().TeamCodeRefWaypoint).Location,
+             Basic().FLARM_Traffic[flarm_slot].Location,
 	     &distance,
 	     &bearing);
 

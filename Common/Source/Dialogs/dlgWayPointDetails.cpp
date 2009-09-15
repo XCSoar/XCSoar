@@ -54,6 +54,8 @@ Copyright_License {
 #include "InfoBoxLayout.h"
 #include "Math/FastMath.h"
 #include "MainWindow.hpp"
+#include "WayPointList.hpp"
+#include "Components.hpp"
 
 #include <assert.h>
 
@@ -106,7 +108,7 @@ static void NextPage(int Step){
       page_ok = true;
       break;
     case 1:
-      if (!WayPointList[SelectedWaypoint].Details) {
+      if (!way_points.get(SelectedWaypoint).Details) {
         page += Step;
       } else {
         page_ok = true;
@@ -159,7 +161,7 @@ OnPaintDetailsListItem(WindowControl * Sender, Canvas &canvas)
 {
   (void)Sender;
   if (DrawListIndex < nTextLines){
-    TCHAR* text = WayPointList[SelectedWaypoint].Details;
+    TCHAR* text = way_points.get(SelectedWaypoint).Details;
     int nstart = LineOffsets[DrawListIndex];
     int nlen;
     if (DrawListIndex<nTextLines-1) {
@@ -392,7 +394,7 @@ void dlgWayPointDetailsShowModal(void){
            Directory,
            SelectedWaypoint+1);
 
-  const WAYPOINT &way_point = WayPointList[SelectedWaypoint];
+  const WAYPOINT &way_point = way_points.get(SelectedWaypoint);
 
   _stprintf(sTmp, TEXT("%s: "), wf->GetCaption());
   _tcscat(sTmp, way_point.Name);

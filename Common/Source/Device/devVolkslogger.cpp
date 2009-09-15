@@ -51,7 +51,8 @@ Copyright_License {
 #include "Math/Pressure.h"
 #include "Device/Parser.h"
 #include "Device/Port.h"
-
+#include "WayPointList.hpp"
+#include "Components.hpp"
 #include "Device/Volkslogger/vlapi2.h"
 #include "Device/Volkslogger/vlapihlp.h"
 
@@ -157,7 +158,7 @@ BOOL VLDeclare(PDeviceDescriptor_t d, Declaration_t *decl){
     strncpy(vl.declaration.flightinfo.competitionclass, temp, 12);
 
     if (ValidWayPoint(XCSoarInterface::SettingsComputer().HomeWaypoint)) {
-      const WAYPOINT &way_point = WayPointList[XCSoarInterface::SettingsComputer().HomeWaypoint];
+      const WAYPOINT &way_point = way_points.get(XCSoarInterface::SettingsComputer().HomeWaypoint);
 
       sprintf(temp, "%S", way_point.Name);
 
