@@ -608,6 +608,7 @@ OBJS	:=\
 	$(SRC)/Screen/TextWindow.o \
 	$(SRC)/Screen/EditWindow.o \
 	$(SRC)/Screen/TopWindow.o \
+	$(SRC)/Screen/Dialog.o \
 	\
 	$(SRC)/Screen/shapelib/mapbits.o 	\
 	$(SRC)/Screen/shapelib/maperror.o 	\
