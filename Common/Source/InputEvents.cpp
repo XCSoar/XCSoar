@@ -721,7 +721,7 @@ bool InputEvents::processButton(int bindex) {
       if (!Debounce()) return true;
       */
 
-      if (!ButtonLabel::ButtonDisabled[bindex]) {
+      if (ButtonLabel::hWndButtonWindow[bindex].is_enabled()) {
         ButtonLabel::AnimateButton(bindex);
         processGo(ModeLabel[thismode][i].event);
       }
@@ -798,7 +798,7 @@ bool InputEvents::processKey(int dWord) {
       }
     }
 
-    if (!ButtonLabel::ButtonDisabled[bindex]) {
+    if (ButtonLabel::hWndButtonWindow[bindex].is_enabled()) {
       InputEvents::processGo(event_id);
     }
 

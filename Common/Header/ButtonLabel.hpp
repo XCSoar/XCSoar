@@ -50,6 +50,15 @@ public:
            bool visible) {
     TextWindow::set(parent, left, top, width, height,
                     true, true, visible, true, true);
+    set_enabled(false);
+  }
+
+  bool is_enabled() const {
+    return get_userdata() == 4;
+  }
+
+  void set_enabled(bool enabled) {
+    set_userdata(enabled ? 4 : 5);
   }
 };
 
@@ -62,7 +71,6 @@ class ButtonLabel: public ActionInterface {
   static unsigned ButtonLabelGeometry;
   static MenuButton hWndButtonWindow[NUMBUTTONLABELS];
   static bool ButtonVisible[NUMBUTTONLABELS];
-  static bool ButtonDisabled[NUMBUTTONLABELS];
 
 protected:
   static void GetButtonPosition(unsigned i, RECT rc,

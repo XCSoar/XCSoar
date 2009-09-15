@@ -52,7 +52,6 @@ Copyright_License {
 
 MenuButton ButtonLabel::hWndButtonWindow[NUMBUTTONLABELS];
 bool ButtonLabel::ButtonVisible[NUMBUTTONLABELS];
-bool ButtonLabel::ButtonDisabled[NUMBUTTONLABELS];
 
 unsigned ButtonLabel::ButtonLabelGeometry = 0;
 
@@ -174,9 +173,6 @@ ButtonLabel::CreateButtonLabels(ContainerWindow &parent, const RECT rc)
     hWndButtonWindow[i].set(parent, x, y, xsize, ysize, false);
 
     ButtonVisible[i] = false;
-    ButtonDisabled[i]= false;
-
-    hWndButtonWindow[i].set_userdata(4);
   }
   //
 }
@@ -192,7 +188,6 @@ void ButtonLabel::Destroy() {
   for (unsigned i = 0; i < NUMBUTTONLABELS; i++) {
     hWndButtonWindow[i].reset();
     ButtonVisible[i]= false;
-    ButtonDisabled[i] = true;
   }
 }
 
@@ -210,14 +205,7 @@ ButtonLabel::SetLabelText(unsigned index, const TCHAR *text)
     TCHAR s[100];
 
     bool greyed = ExpandMacros(text, s, sizeof(s)/sizeof(s[0]));
-
-    if (greyed) {
-      hWndButtonWindow[index].set_userdata(5);
-      ButtonDisabled[index]= true;
-    } else {
-      hWndButtonWindow[index].set_userdata(4);
-      ButtonDisabled[index]= false;
-    }
+    hWndButtonWindow[index].set_enabled(!greyed);
 
     if ((s[0]==_T('\0'))||(s[0]==_T(' '))) {
       hWndButtonWindow[index].hide();
@@ -244,8 +232,8 @@ ButtonLabel::Find(const Window &window)
 
 bool ButtonLabel::CheckButtonPress(HWND pressedwindow) {
   for (unsigned i = 0; i < NUMBUTTONLABELS; i++) {
-    if (hWndButtonWindow[i]== pressedwindow) {
-      if (!ButtonDisabled[i]) {
+    if (hWndButtonWindow[i] == pressedwindow) {
+      if (hWndButtonWindow[i].is_enabled()) {
         InputEvents::processButton(i);
         return TRUE;
       } else {
