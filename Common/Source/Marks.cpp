@@ -56,7 +56,6 @@ Copyright_License {
 //////////////////////////////////////////////////
 
 Marks::Marks(const char* name):topo_marks(name, Color(0xD0,0xD0,0xD0)) {
-  ScopeLock protect(*GetMutex());
   StartupStore(TEXT("Initialise marks\n"));
   topo_marks.scaleThreshold = 30.0;
   topo_marks.loadBitmap(IDB_MARK);
@@ -71,13 +70,13 @@ Marks::Marks(const char* name):topo_marks(name, Color(0xD0,0xD0,0xD0)) {
 // JMW localpath does NOT work for the shapefile renderer!
 
 void Marks::Reset() {
-  ScopeLock protect(*GetMutex());
+  Poco::ScopedRWLock protect(lock, true);
   topo_marks.Reset();
 }
 
 Marks::~Marks() {
   StartupStore(TEXT("CloseMarks\n"));
-  ScopeLock protect(*GetMutex());
+  Poco::ScopedRWLock protect(lock, true);
   topo_marks.DeleteFiles();
 }
 
@@ -85,7 +84,7 @@ Marks::~Marks() {
 
 void Marks::MarkLocation(const GEOPOINT &loc)
 {
-  ScopeLock protect(*GetMutex());
+  Poco::ScopedRWLock protect(lock, true);
 
   if (XCSoarInterface::SettingsComputer().EnableSoundModes) {
     PlayResource(TEXT("IDR_WAV_CLEAR"));
@@ -110,6 +109,6 @@ void Marks::MarkLocation(const GEOPOINT &loc)
 
 void Marks::Draw(Canvas &canvas, MapWindow &m_window, const RECT rc)
 {
-  ScopeLock protect(*GetMutex());
+  Poco::ScopedRWLock protect(lock, false); // read only
   topo_marks.Paint(canvas, m_window, rc);
 }

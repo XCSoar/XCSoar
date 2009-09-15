@@ -38,14 +38,14 @@ Copyright_License {
 #ifndef MARKS_H
 #define MARKS_H
 
-#include "Protection.hpp"
 #include "Topology.h"
 #include "GeoPoint.hpp"
+#include "Poco/RWLock.h"
 
 class Canvas;
 class MapWindow;
 
-class Marks: public MapDataClient {
+class Marks {
  public:
   Marks(const char* name);
   ~Marks();
@@ -59,6 +59,7 @@ class Marks: public MapDataClient {
   }
  private:
    TopologyWriter topo_marks;
+   Poco::RWLock lock;
 };
 
 #endif
