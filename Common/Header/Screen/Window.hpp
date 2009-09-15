@@ -122,6 +122,20 @@ public:
     ::ShowWindow(hWnd, SW_HIDE);
   }
 
+  /**
+   * Can this window get user input?
+   */
+  bool is_enabled() const {
+    return ::IsWindowEnabled(hWnd);
+  }
+
+  /**
+   * Specifies whether this window can get user input.
+   */
+  void set_enabled(bool enabled) {
+    ::EnableWindow(hWnd, enabled);
+  }
+
   void set_focus() {
     ::SetFocus(hWnd);
   }
