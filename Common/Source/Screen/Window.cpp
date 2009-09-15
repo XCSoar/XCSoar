@@ -214,6 +214,15 @@ Window::on_user(unsigned id)
 }
 
 LRESULT
+Window::on_unhandled_message(HWND hWnd, UINT message,
+                             WPARAM wParam, LPARAM lParam)
+{
+  return prev_wndproc != NULL
+    ? ::CallWindowProc(prev_wndproc, hWnd, message, wParam, lParam)
+    : ::DefWindowProc(hWnd, message, wParam, lParam);
+}
+
+LRESULT
 Window::on_message(HWND _hWnd, UINT message,
                        WPARAM wParam, LPARAM lParam)
 {
@@ -314,9 +323,7 @@ Window::on_message(HWND _hWnd, UINT message,
   if (message >= WM_USER && message <= 0x7FFF && on_user(message - WM_USER))
     return 0;
 
-  return prev_wndproc != NULL
-    ? ::CallWindowProc(prev_wndproc, _hWnd, message, wParam, lParam)
-    : ::DefWindowProc(_hWnd, message, wParam, lParam);
+  return on_unhandled_message(_hWnd, message, wParam, lParam);
 }
 
 LRESULT CALLBACK
