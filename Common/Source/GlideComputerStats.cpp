@@ -72,12 +72,7 @@ void GlideComputerStats::StartTask() {
 bool GlideComputerStats::DoLogging() {
 
   // prevent bad fixes from being logged or added to OLC store
-  double distance;
-  DistanceBearing(Basic().Location,
-		  LastBasic().Location, 
-		  &distance, NULL);
-
-  if (distance>200.0) {
+  if (Distance(Basic().Location, LastBasic().Location)>200.0) {
     return false;
   }
 

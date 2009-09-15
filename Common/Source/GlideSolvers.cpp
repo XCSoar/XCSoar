@@ -191,14 +191,12 @@ FinalGlideThroughTerrain(const double this_bearing,
       solution_found = true;
     }
     if (solution_found) {
-      double distance;
       loc.Latitude = last_loc.Latitude*(1.0-f)+loc.Latitude*f;
       loc.Longitude = last_loc.Longitude*(1.0-f)+loc.Longitude*f;
       if (retloc) {
         *retloc = loc;
       }
-      DistanceBearing(start_loc, loc, &distance, NULL);
-      retval = distance;
+      retval = Distance(start_loc, loc);
       goto OnExit;
     }
     last_dh = dh;

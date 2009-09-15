@@ -409,10 +409,7 @@ void GlideComputerAirData::LD()
     SetCalculated().LD = INVALID_GR;
   }
   if (time_advanced()) {
-    double DistanceFlown;
-    DistanceBearing(Basic().Location, 
-		    LastBasic().Location, 
-		    &DistanceFlown, NULL);
+    double DistanceFlown = Distance(Basic().Location, LastBasic().Location);
     
     SetCalculated().LD = 
       UpdateLD(Calculated().LD,
@@ -445,10 +442,8 @@ void GlideComputerAirData::CruiseLD()
       SetCalculated().CruiseStartAlt = Calculated().NavAltitude;
       SetCalculated().CruiseStartTime = Basic().Time;
     } else {
-      double DistanceFlown;
-      DistanceBearing(Basic().Location, 
-		      Calculated().CruiseStartLocation,
-                      &DistanceFlown, NULL);
+      double DistanceFlown = Distance(Basic().Location, 
+                                      Calculated().CruiseStartLocation);
       SetCalculated().CruiseLD =
 	UpdateLD(Calculated().CruiseLD,
 		 DistanceFlown,
