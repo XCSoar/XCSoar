@@ -138,6 +138,13 @@ PaintWindow::on_resize(unsigned width, unsigned height)
   return true;
 }
 
+bool
+PaintWindow::on_erase(Canvas &canvas)
+{
+  // we don't need one, we just paint over the top
+  return true;
+}
+
 void
 PaintWindow::on_paint(Canvas &canvas)
 {
@@ -152,8 +159,12 @@ PaintWindow::on_message(HWND hWnd, UINT message,
 {
   switch (message) {
   case WM_ERASEBKGND:
-    // we don't need one, we just paint over the top
-    return 0;
+    {
+      Canvas canvas((HDC)wParam, get_width(), get_height());
+      if (on_erase(canvas))
+        return 0;
+    }
+    break;
 
   case WM_PAINT:
     {

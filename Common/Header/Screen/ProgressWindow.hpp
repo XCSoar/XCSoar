@@ -35,48 +35,29 @@ Copyright_License {
 }
 */
 
-#if !defined(AFX_WAYPOINTPARSER_H__695AAC30_F401_4CFF_9BD9_FE62A2A2D0D2__INCLUDED_)
-#define AFX_WAYPOINTPARSER_H__695AAC30_F401_4CFF_9BD9_FE62A2A2D0D2__INCLUDED_
+#ifndef XCSOAR_SCREEN_PROGRESS_WINDOW_HXX
+#define XCSOAR_SCREEN_PROGRESS_WINDOW_HXX
 
-#include <tchar.h>
+#include "Screen/Dialog.hpp"
 
-#define wpTerrainBoundsYes    100
-#define wpTerrainBoundsYesAll 101
-#define wpTerrainBoundsNo     102
-#define wpTerrainBoundsNoAll  103
+/**
+ * The XCSoar splash screen with a progress bar.
+ */
+class ProgressWindow : public Dialog {
+public:
+  ProgressWindow(ContainerWindow &parent);
 
-class WayPointList;
-class MapWindowProjection;
-class RasterTerrain;
+  void set_message(const TCHAR *text);
 
-struct WAYPOINT;
-struct GEOPOINT;
-struct SETTINGS_COMPUTER;
+  void set_range(unsigned min_value, unsigned max_value);
+  void set_step(unsigned size);
+  void set_pos(unsigned value);
+  void step();
 
-void
-ReadWayPoints(WayPointList &way_points, RasterTerrain &terrain);
-
-void
-SetHome(const WayPointList &way_points, RasterTerrain &terrain,
-        SETTINGS_COMPUTER &settings,
-        const bool reset, const bool set_location=false);
-
-int
-FindNearestWayPoint(const WayPointList &way_points,
-                    MapWindowProjection &map_projection,
-                    const GEOPOINT &location,
-                    double MaxRange, bool exhaustive=false);
-
-int dlgWaypointOutOfTerrain(const TCHAR *Message);
-
-void
-WaypointWriteFiles(WayPointList &way_points,
-                   const SETTINGS_COMPUTER &settings_computer);
-
-void
-WaypointAltitudeFromTerrain(WAYPOINT* wpt, RasterTerrain &terrain);
-
-int
-FindMatchingWaypoint(const WayPointList &way_points, WAYPOINT *waypoint);
+protected:
+  virtual bool on_initdialog();
+  virtual bool on_erase(Canvas &canvas);
+  virtual bool on_command(HWND hWnd, unsigned id, unsigned code);
+};
 
 #endif

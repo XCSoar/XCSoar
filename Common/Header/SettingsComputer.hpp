@@ -63,7 +63,7 @@ Copyright_License {
 // 2: Average if in climb mode, final glide in final glide mode
 
 
-typedef struct _SETTINGS_COMPUTER {
+struct SETTINGS_COMPUTER {
   bool AutoMacCready;
  int    FinalGlideTerrain;
  int    AutoMcMode;
@@ -126,7 +126,7 @@ typedef struct _SETTINGS_COMPUTER {
  bool EnableVoiceInSector;
  bool EnableVoiceAirspace;
 
-} SETTINGS_COMPUTER;
+};
 
 #endif
 

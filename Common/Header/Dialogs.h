@@ -44,6 +44,8 @@ Copyright_License {
 #include <windows.h>
 #include "GeoPoint.hpp"
 
+class WayPointList;
+
 void StartupScreen();
 
 bool dlgAirspaceWarningShowDlg(bool force);
@@ -86,8 +88,12 @@ void dlgNumberEntryKeyboardShowModal(int *value, int width=0);
 
 void PopupWaypointDetails();
 void PopupAnalysis();
-bool PopupNearestWaypointDetails(const GEOPOINT &location,
-				 double range, bool pan);
+
+bool
+PopupNearestWaypointDetails(const WayPointList &way_points,
+                            const GEOPOINT &location,
+                            double range, bool pan);
+
 bool PopupInteriorAirspaceDetails(const GEOPOINT &location);
 
 int

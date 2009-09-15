@@ -35,48 +35,63 @@ Copyright_License {
 }
 */
 
-#if !defined(AFX_WAYPOINTPARSER_H__695AAC30_F401_4CFF_9BD9_FE62A2A2D0D2__INCLUDED_)
-#define AFX_WAYPOINTPARSER_H__695AAC30_F401_4CFF_9BD9_FE62A2A2D0D2__INCLUDED_
+#include "Screen/Dialog.hpp"
+#include "Interface.hpp" /* for XCSoarInterface::hInst */
 
-#include <tchar.h>
-
-#define wpTerrainBoundsYes    100
-#define wpTerrainBoundsYesAll 101
-#define wpTerrainBoundsNo     102
-#define wpTerrainBoundsNoAll  103
-
-class WayPointList;
-class MapWindowProjection;
-class RasterTerrain;
-
-struct WAYPOINT;
-struct GEOPOINT;
-struct SETTINGS_COMPUTER;
+#include <assert.h>
 
 void
-ReadWayPoints(WayPointList &way_points, RasterTerrain &terrain);
+Dialog::set(ContainerWindow &_parent, LPCTSTR template_name)
+{
+  hWnd = ::CreateDialogParam(XCSoarInterface::hInst, template_name, _parent,
+                             DlgProc, (LPARAM)this);
+}
 
-void
-SetHome(const WayPointList &way_points, RasterTerrain &terrain,
-        SETTINGS_COMPUTER &settings,
-        const bool reset, const bool set_location=false);
+bool
+Dialog::on_initdialog()
+{
+  return true;
+}
 
-int
-FindNearestWayPoint(const WayPointList &way_points,
-                    MapWindowProjection &map_projection,
-                    const GEOPOINT &location,
-                    double MaxRange, bool exhaustive=false);
+LRESULT
+Dialog::on_unhandled_message(HWND hWnd, UINT message,
+                             WPARAM wParam, LPARAM lParam)
+{
+  return 1;
+}
 
-int dlgWaypointOutOfTerrain(const TCHAR *Message);
+LRESULT
+Dialog::on_message(HWND _hWnd, UINT message,
+                   WPARAM wParam, LPARAM lParam)
+{
+  switch (message) {
+  case WM_INITDIALOG:
+    if (on_initdialog())
+      return 0;
+    break;
+  };
 
-void
-WaypointWriteFiles(WayPointList &way_points,
-                   const SETTINGS_COMPUTER &settings_computer);
+  return ContainerWindow::on_message(_hWnd, message, wParam, lParam);
+}
 
-void
-WaypointAltitudeFromTerrain(WAYPOINT* wpt, RasterTerrain &terrain);
+INT_PTR CALLBACK
+Dialog::DlgProc(HWND hwndDlg, UINT message,
+                WPARAM wParam, LPARAM lParam)
+{
+  Dialog *dialog;
 
-int
-FindMatchingWaypoint(const WayPointList &way_points, WAYPOINT *waypoint);
+  if (message == WM_INITDIALOG) {
+    dialog = (Dialog *)lParam;
+    dialog->created(hwndDlg);
+    dialog->set_userdata((Window *)dialog);
+  } else {
+    dialog = (Dialog *)get_unchecked(hwndDlg);
 
-#endif
+    if (dialog == NULL && message == WM_SETFONT)
+      return false;
+  }
+
+  assert(dialog != NULL);
+
+  return dialog->on_message(hwndDlg, message, wParam, lParam) == 0;
+}

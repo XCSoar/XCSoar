@@ -158,6 +158,7 @@ protected:
 
   virtual bool on_resize(unsigned width, unsigned height);
 
+  virtual bool on_erase(Canvas &canvas);
   virtual void on_paint(Canvas &canvas);
 
   virtual LRESULT on_message(HWND hWnd, UINT message,

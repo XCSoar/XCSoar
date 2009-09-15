@@ -116,12 +116,12 @@ void SettingsLeave() {
       terrain.OpenTerrain();
 
       // re-load waypoints
-      ReadWayPoints();
+      ReadWayPoints(way_points, terrain);
       ReadAirfieldFile();
 
       // re-set home
       if (WAYPOINTFILECHANGED || TERRAINFILECHANGED) {
-	SetHome(XCSoarInterface::SetSettingsComputer(),
+        SetHome(way_points, terrain, XCSoarInterface::SetSettingsComputer(),
 		WAYPOINTFILECHANGED);
       }
 

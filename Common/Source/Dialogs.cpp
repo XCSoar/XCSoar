@@ -46,6 +46,7 @@ Copyright_License {
 #include "Waypointparser.h"
 #include "SettingsTask.hpp"
 #include "Airspace.h"
+#include "Screen/ProgressWindow.hpp"
 
 #include <commdlg.h>
 #include <commctrl.h>
@@ -65,45 +66,7 @@ Copyright_License {
 #include "Registry.hpp"
 #include "Interface.hpp"
 
-///////////////////////////////////
-
-LRESULT CALLBACK Progress(HWND hDlg, UINT message,
-                          WPARAM wParam, LPARAM lParam)
-{
-  PAINTSTRUCT ps;            // structure for paint info
-  HDC hDC;
-  RECT rc;
-  (void)lParam;
-  switch (message)
-    {
-    case WM_INITDIALOG:
-#ifdef WINDOWSPC
-      GetClientRect(hDlg, &rc);
-      MoveWindow(hDlg, 0, 0, rc.right-rc.left, rc.bottom-rc.top, TRUE);
-#endif
-      return TRUE;
-    case WM_ERASEBKGND:
-      hDC = BeginPaint(hDlg, &ps);
-      SelectObject(hDC, GetStockObject(WHITE_PEN));
-      SelectObject(hDC, GetStockObject(WHITE_BRUSH));
-      GetClientRect(hDlg, &rc);
-      Rectangle(hDC, rc.left,rc.top,rc.right,rc.bottom);
-      DeleteDC(hDC);
-      EndPaint(hDlg, &ps);
-      return TRUE;
-    case WM_COMMAND:
-      if (LOWORD(wParam) == IDOK)
-        {
-          EndDialog(hDlg, LOWORD(wParam));
-          return TRUE;
-        }
-      break;
-    }
-  return FALSE;
-}
-
-HWND XCSoarInterface::hProgress = NULL;
-HWND XCSoarInterface::hWndCurtain = NULL;
+ProgressWindow *XCSoarInterface::progress_window = NULL;
 
 HCURSOR ActionInterface::oldCursor = NULL;
 
@@ -124,104 +87,30 @@ void ActionInterface::StopHourglassCursor(void) {
 }
 
 void XCSoarInterface::CloseProgressDialog() {
-  if (hProgress) {
-    DestroyWindow(hProgress);
-    hProgress = NULL;
-  }
-  if (hWndCurtain) {
-    DestroyWindow(hWndCurtain);
-    hWndCurtain = NULL;
-  }
+  if (progress_window != NULL)
+    delete progress_window;
 }
 
 void XCSoarInterface::StepProgressDialog(void) {
-  if (hProgress) {
-    SendMessage(GetDlgItem(hProgress, IDC_PROGRESS1), PBM_STEPIT,
-		(WPARAM)0, (LPARAM)0);
-    UpdateWindow(hProgress);
-  }
+  if (progress_window != NULL)
+    progress_window->step();
 }
 
 BOOL XCSoarInterface::SetProgressStepSize(int nSize) {
   nSize = 5;
-  if (hProgress)
-    if (nSize < 100)
-      SendMessage(GetDlgItem(hProgress, IDC_PROGRESS1),
-		  PBM_SETSTEP, (WPARAM)nSize, (LPARAM)0);
+  if (nSize < 100 && progress_window != NULL)
+    progress_window->set_step(nSize);
   return(TRUE);
 }
 
 
-HWND XCSoarInterface::CreateProgressDialog(const TCHAR* text) {
-  if (hProgress) {
-  } else {
-    if (InfoBoxLayout::landscape) {
-      hProgress=
-	CreateDialog(hInst,
-		     (LPCTSTR)IDD_PROGRESS_LANDSCAPE,
-		     main_window,
-		     (DLGPROC)Progress);
+void
+XCSoarInterface::CreateProgressDialog(const TCHAR* text) {
+  if (progress_window == NULL)
+    progress_window = new ProgressWindow(main_window);
 
-    } else {
-      hProgress=
-	CreateDialog(hInst,
-		     (LPCTSTR)IDD_PROGRESS,
-		     main_window,
-		     (DLGPROC)Progress);
-    }
-
-    TCHAR Temp[1024];
-    _stprintf(Temp,TEXT("%s %s"),gettext(TEXT("Version")),XCSoar_Version);
-    SetWindowText(GetDlgItem(hProgress,IDC_VERSION),Temp);
-
-    RECT rc;
-    GetClientRect(main_window, &rc);
-
-#ifndef WINDOWSPC
-    hWndCurtain = CreateWindow(TEXT("STATIC"), TEXT(" "),
-			       WS_VISIBLE | WS_CHILD,
-                               0, 0, (rc.right - rc.left),
-			       (rc.bottom-rc.top),
-                               main_window, NULL, hInst, NULL);
-    SetWindowPos(hWndCurtain,HWND_TOP,0,0,0,0,
-                 SWP_NOMOVE|SWP_NOSIZE|SWP_SHOWWINDOW);
-    ShowWindow(hWndCurtain,SW_SHOW);
-    SetForegroundWindow(hWndCurtain);
-    UpdateWindow(hWndCurtain);
-#endif
-
-#ifdef WINDOWSPC
-    RECT rcp;
-    GetClientRect(hProgress, &rcp);
-    GetWindowRect(main_window, &rc);
-    SetWindowPos(hProgress,HWND_TOP,
-                 rc.left, rc.top, (rcp.right - rcp.left), (rcp.bottom-rcp.top),
-                 SWP_SHOWWINDOW);
-#else
-#ifndef GNAV
-    SHFullScreen(hProgress,
-		 SHFS_HIDETASKBAR
-		 |SHFS_HIDESIPBUTTON
-		 |SHFS_HIDESTARTICON);
-#endif
-    SetWindowPos(hProgress,HWND_TOP,0,0,0,0,
-                 SWP_NOMOVE|SWP_NOSIZE|SWP_SHOWWINDOW);
-#endif
-
-    SendMessage(GetDlgItem(hProgress, IDC_PROGRESS1),
-		PBM_SETRANGE, (WPARAM)0,
-		(LPARAM) MAKELPARAM (0, 100));
-    SendMessage(GetDlgItem(hProgress, IDC_PROGRESS1),
-		PBM_SETSTEP, (WPARAM)5, (LPARAM)0);
-
-    SetForegroundWindow(hProgress);
-    UpdateWindow(hProgress);
-  }
-
-  SetDlgItemText(hProgress,IDC_MESSAGE, text);
-  SendMessage(GetDlgItem(hProgress, IDC_PROGRESS1), PBM_SETPOS, 0, 0);
-  UpdateWindow(hProgress);
-  return hProgress;
+  progress_window->set_message(text);
+  progress_window->set_pos(0);
 }
 
 
@@ -242,9 +131,10 @@ void PopupWaypointDetails()
 #include "Interface.hpp"
 #include "MapWindow.h"
 
-bool PopupNearestWaypointDetails(const GEOPOINT &location,
-                                 double range,
-                                 bool pan) 
+bool
+PopupNearestWaypointDetails(const WayPointList &way_points,
+                            const GEOPOINT &location,
+                            double range, bool pan)
 {
   /*
     if (!pan) {
@@ -257,10 +147,10 @@ bool PopupNearestWaypointDetails(const GEOPOINT &location,
 
   int i;
   if (!pan || !XCSoarInterface::SettingsMap().EnablePan) {
-    i=FindNearestWayPoint(map_window, location, range);
+    i = FindNearestWayPoint(way_points, map_window, location, range);
   } else {
     // nearest to center of screen if in pan mode
-    i=FindNearestWayPoint(map_window, 
+    i = FindNearestWayPoint(way_points, map_window,
 			  map_window.GetPanLocation(),
 			  range);
   }

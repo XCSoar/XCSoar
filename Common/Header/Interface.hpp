@@ -44,6 +44,7 @@ Copyright_License {
 
 class MainWindow;
 class StatusMessageList;
+class ProgressWindow;
 
 class CommonInterface {
 public:
@@ -143,7 +144,7 @@ public:
   static void Shutdown();
   static bool Startup (HINSTANCE, LPTSTR lpCmdLine);
 
-  static HWND CreateProgressDialog(const TCHAR *text);
+  static void CreateProgressDialog(const TCHAR *text);
   static void CloseProgressDialog();
   static void StepProgressDialog();
   static BOOL SetProgressStepSize(int nSize);
@@ -154,8 +155,7 @@ public:
 private:
   static void PreloadInitialisation(bool ask);
   static void StartupInfo();
-  static HWND hProgress;
-  static HWND hWndCurtain;
+  static ProgressWindow *progress_window;
 };
 
 #endif

@@ -1335,12 +1335,12 @@ void InputEvents::eventNearestAirspaceDetails(const TCHAR *misc) {
 //  pan: the waypoint nearest to the pan cursor
 void InputEvents::eventNearestWaypointDetails(const TCHAR *misc) {
   if (_tcscmp(misc, TEXT("aircraft")) == 0) {
-    PopupNearestWaypointDetails(Basic().Location,
+    PopupNearestWaypointDetails(way_points, Basic().Location,
 				1.0e5, // big range..
 				false);
   }
   if (_tcscmp(misc, TEXT("pan")) == 0) {
-    PopupNearestWaypointDetails(Basic().Location,
+    PopupNearestWaypointDetails(way_points, Basic().Location,
 				1.0e5, // big range..
 				true);
   }

@@ -610,6 +610,8 @@ OBJS	:=\
 	$(SRC)/Screen/TextWindow.o \
 	$(SRC)/Screen/EditWindow.o \
 	$(SRC)/Screen/TopWindow.o \
+	$(SRC)/Screen/Dialog.o \
+	$(SRC)/Screen/ProgressWindow.o \
 	\
 	$(SRC)/Screen/shapelib/mapbits.o 	\
 	$(SRC)/Screen/shapelib/maperror.o 	\
@@ -849,11 +851,11 @@ $(addprefix clean-,$(filter-out WINE,$(TARGETS))): clean-%:
 clean-: $(addprefix clean-,$(TARGETS))
 
 clean: clean-$(TARGET) cleani FORCE
-	find . $(IGNORE) \( -name '*.[oa]' -o -name '*.rsc' -o -name '.*.d' \) \
+	find Common $(IGNORE) \( -name '*.[oa]' -o -name '*.rsc' -o -name '.*.d' \) \
 	-type f -print | xargs -r $(RM)
 
 cleani: FORCE
-	find . $(IGNORE) \( -name '*.i' \) \
+	find Common $(IGNORE) \( -name '*.i' \) \
 		-type f -print | xargs -r $(RM)
 
 .PHONY: FORCE

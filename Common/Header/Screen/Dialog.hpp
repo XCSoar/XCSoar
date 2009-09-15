@@ -35,48 +35,41 @@ Copyright_License {
 }
 */
 
-#if !defined(AFX_WAYPOINTPARSER_H__695AAC30_F401_4CFF_9BD9_FE62A2A2D0D2__INCLUDED_)
-#define AFX_WAYPOINTPARSER_H__695AAC30_F401_4CFF_9BD9_FE62A2A2D0D2__INCLUDED_
+#ifndef XCSOAR_SCREEN_DIALOG_HXX
+#define XCSOAR_SCREEN_DIALOG_HXX
 
-#include <tchar.h>
+#include "Screen/ContainerWindow.hpp"
 
-#define wpTerrainBoundsYes    100
-#define wpTerrainBoundsYesAll 101
-#define wpTerrainBoundsNo     102
-#define wpTerrainBoundsNoAll  103
+#if !defined(WINDOWSPC) && !defined(GNAV) && (UNDER_CE >= 300 || _WIN32_WCE >= 0x0300)
+#define HAVE_ACTIVATE_INFO
+#endif
 
-class WayPointList;
-class MapWindowProjection;
-class RasterTerrain;
+#ifdef HAVE_ACTIVATE_INFO
+#include <aygshell.h>
+#endif
 
-struct WAYPOINT;
-struct GEOPOINT;
-struct SETTINGS_COMPUTER;
+/**
+ * A top-level full-screen window.
+ */
+class Dialog : public ContainerWindow {
+public:
+  void set(ContainerWindow &_parent, LPCTSTR template_name);
 
-void
-ReadWayPoints(WayPointList &way_points, RasterTerrain &terrain);
+  void end(int result) {
+    ::EndDialog(hWnd, result);
+  }
 
-void
-SetHome(const WayPointList &way_points, RasterTerrain &terrain,
-        SETTINGS_COMPUTER &settings,
-        const bool reset, const bool set_location=false);
+protected:
+  virtual bool on_initdialog();
 
-int
-FindNearestWayPoint(const WayPointList &way_points,
-                    MapWindowProjection &map_projection,
-                    const GEOPOINT &location,
-                    double MaxRange, bool exhaustive=false);
+  virtual LRESULT on_unhandled_message(HWND hWnd, UINT message,
+                                       WPARAM wParam, LPARAM lParam);
 
-int dlgWaypointOutOfTerrain(const TCHAR *Message);
+  virtual LRESULT on_message(HWND _hWnd, UINT message,
+                             WPARAM wParam, LPARAM lParam);
 
-void
-WaypointWriteFiles(WayPointList &way_points,
-                   const SETTINGS_COMPUTER &settings_computer);
-
-void
-WaypointAltitudeFromTerrain(WAYPOINT* wpt, RasterTerrain &terrain);
-
-int
-FindMatchingWaypoint(const WayPointList &way_points, WAYPOINT *waypoint);
+  static INT_PTR CALLBACK DlgProc(HWND hwndDlg, UINT uMsg,
+                                  WPARAM wParam, LPARAM lParam);
+};
 
 #endif

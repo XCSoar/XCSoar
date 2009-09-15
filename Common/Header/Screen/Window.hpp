@@ -259,6 +259,15 @@ protected:
   virtual bool on_timer(timer_t id);
   virtual bool on_user(unsigned id);
 
+  /**
+   * Called by on_message() when the message was not handled by any
+   * virtual method.  Calls the default handler.  This function is
+   * virtual, because the Dialog class will have to override it -
+   * dialogs have slightly different semantics.
+   */
+  virtual LRESULT on_unhandled_message(HWND hWnd, UINT message,
+                                       WPARAM wParam, LPARAM lParam);
+
   virtual LRESULT on_message(HWND hWnd, UINT message,
                              WPARAM wParam, LPARAM lParam);
 
