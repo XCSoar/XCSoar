@@ -43,6 +43,8 @@ Copyright_License {
 #include "Thread/Mutex.hpp"
 #include "Sizes.h"
 
+#include <windef.h>
+
 struct NMEA_INFO;
 struct DERIVED_INFO;
 
