@@ -884,6 +884,15 @@ WndForm::on_timer(timer_t id)
     return WindowControl::on_timer(id);
 }
 
+bool
+WndForm::on_user(unsigned id)
+{
+  if (mOnUserMsgNotify != NULL && mOnUserMsgNotify(this, id))
+    return true;
+
+  return WindowControl::on_user(id);
+}
+
 const Font *
 WndForm::SetTitleFont(const Font &font)
 {
@@ -1204,7 +1213,9 @@ void WndForm::SetTimerNotify(int (*OnTimerNotify)(WindowControl * Sender)) {
   mOnTimerNotify = OnTimerNotify;
 }
 
-void WndForm::SetUserMsgNotify(int (*OnUserMsgNotify)(WindowControl * Sender, MSG *msg)){
+void
+WndForm::SetUserMsgNotify(bool (*OnUserMsgNotify)(WindowControl *Sender, unsigned id))
+{
   mOnUserMsgNotify = OnUserMsgNotify;
 }
 
@@ -1234,11 +1245,6 @@ int WndForm::OnUnhandledMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     msg.wParam = WA_ACTIVE;
   }*/
 
-  if (msg.message >= WM_USER && msg.message < WM_USER+100){
-    if (mOnUserMsgNotify != NULL)
-      if (!(mOnUserMsgNotify)(this, &msg))
-        return(0);
-  }
   if (msg.message == WM_KEYUP){
   }
   if (msg.message == WM_KEYDOWN){

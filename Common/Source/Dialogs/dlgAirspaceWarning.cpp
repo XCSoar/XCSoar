@@ -497,13 +497,14 @@ static bool FindFocus() {
 }
 
 
-int UserMsgNotify(WindowControl *Sender, MSG *msg){
+static bool
+UserMsgNotify(WindowControl *Sender, unsigned id){
 
-  if (msg->message != WM_USER+1)
-    return(1);
+  if (id != 1)
+    return false;
 
   if (!wf->GetVisible())
-    return(0);
+    return true;
 
   bool do_refocus = false;
 
@@ -553,7 +554,7 @@ int UserMsgNotify(WindowControl *Sender, MSG *msg){
   }
 
   // this is our message, we have handled it.
-  return(0);
+  return true;
 }
 
 
@@ -577,7 +578,7 @@ void AirspaceWarningNotify(AirspaceWarningNotifyAction_t Action,
 
   if ((Action == asaProcessEnd) && (actShow || actListSizeChange || actListChange)){
     if (fDialogOpen) {
-      PostMessage(wf->GetHandle(), WM_USER+1, 0, 0);
+      wf->send_user(1);
     }
     else {
       airspaceWarningEvent.trigger();
