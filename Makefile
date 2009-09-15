@@ -604,6 +604,7 @@ OBJS	:=\
 	$(SRC)/Screen/BufferWindow.o \
 	$(SRC)/Screen/PaintWindow.o \
 	$(SRC)/Screen/MaskedPaintWindow.o \
+	$(SRC)/Screen/ContainerWindow.o \
 	$(SRC)/Screen/TextWindow.o \
 	$(SRC)/Screen/EditWindow.o \
 	$(SRC)/Screen/TopWindow.o \

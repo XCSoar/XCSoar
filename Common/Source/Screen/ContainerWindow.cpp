@@ -35,22 +35,31 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_CONTAINER_WINDOW_HXX
-#define XCSOAR_SCREEN_CONTAINER_WINDOW_HXX
+#include "Screen/ContainerWindow.hpp"
 
-#include "Screen/PaintWindow.hpp"
+Brush *
+ContainerWindow::on_color(Window &window, Canvas &canvas)
+{
+  return NULL;
+}
 
-/**
- * A container for more #Window objects.  It is also derived from
- * #PaintWindow, because you might want to paint a border between the
- * child windows.
- */
-class ContainerWindow : public PaintWindow {
-protected:
-  virtual Brush *on_color(Window &window, Canvas &canvas);
+LRESULT
+ContainerWindow::on_message(HWND hWnd, UINT message,
+                            WPARAM wParam, LPARAM lParam)
+{
+  switch (message) {
+  case WM_CTLCOLORSTATIC:
+    Window *window = Window::get((HWND)lParam);
+    if (window == NULL)
+      break;
 
-  virtual LRESULT on_message(HWND hWnd, UINT message,
-                             WPARAM wParam, LPARAM lParam);
-};
+    Canvas canvas((HDC)wParam, 1, 1);
+    Brush *brush = on_color(*window, canvas);
+    if (brush == NULL)
+      break;
 
-#endif
+    return (LRESULT)brush->native();
+  };
+
+  return PaintWindow::on_message(hWnd, message, wParam, lParam);
+}
