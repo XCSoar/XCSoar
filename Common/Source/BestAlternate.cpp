@@ -514,7 +514,7 @@ GlideComputerTask::DoAlternates(int AltWaypoint)
   double *altwp_arrival = &way_point_calc.AltArrival;
   short  *altwp_vgr = &way_point_calc.VGR;
 
-  DistanceBearing(w1, w0, altwp_dist, NULL);
+  *altwp_dist = Distance(w1, w0);
 
   double GRsafecalc = Calculated().NavAltitude - 
     (way_point.Altitude +

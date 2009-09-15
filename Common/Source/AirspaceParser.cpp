@@ -1138,8 +1138,7 @@ static void CalculateArc(TCHAR *Text)
 
   DistanceBearing(c, Start,
                   &Radius, &StartBearing);
-  DistanceBearing(c, End,
-                  NULL, &EndBearing);
+  EndBearing = Bearing(c, End);
   TempPoint.Latitude  = Start.Latitude;
   TempPoint.Longitude = Start.Longitude;
   AddPoint(&TempPoint, &TempArea.NumPoints);

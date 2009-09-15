@@ -336,9 +336,8 @@ GlideComputerTask::SortLandableWaypoints()
     if ((task_points[0].Index != last_closest_waypoint) && ValidTaskPoint(0)) {
       double last_wp_distance= 10000.0;
       if (last_closest_waypoint>=0) {
-        DistanceBearing(WayPointList[task_points[0].Index].Location,
-                        WayPointList[last_closest_waypoint].Location,
-                        &last_wp_distance, NULL);
+        last_wp_distance = Distance(WayPointList[task_points[0].Index].Location,
+                                    WayPointList[last_closest_waypoint].Location);
       }
       if (last_wp_distance>2000.0) {
         // don't display the message unless the airfield has moved by more

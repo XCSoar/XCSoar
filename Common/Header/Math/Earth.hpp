@@ -46,6 +46,7 @@ Copyright_License {
 #define XCSOAR_MATH_EARTH_HPP
 
 #include "GeoPoint.hpp"
+#include <stdlib.h> // for NULL
 
 /**
  * Finds cross track error in meters and closest point P4 between P3
@@ -66,6 +67,21 @@ double ProjectedDistance(GEOPOINT loc1,
 void DistanceBearing(GEOPOINT loc1, 
                      GEOPOINT loc2,
                      double *Distance, double *Bearing);
+
+double Distance(GEOPOINT loc1, 
+                GEOPOINT loc2) {
+  double retval;
+  DistanceBearing(loc1, loc2, &retval, NULL);
+  return retval;
+};
+
+double Bearing(GEOPOINT loc1,
+               GEOPOINT loc2) {
+  double retval;
+  DistanceBearing(loc1, loc2, NULL, &retval);
+  return retval;
+}
+
 double DoubleDistance(GEOPOINT loc1, 
                       GEOPOINT loc2,
 		      GEOPOINT loc3);
