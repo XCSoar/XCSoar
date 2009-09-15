@@ -1792,12 +1792,6 @@ bool WndProperty::SetFocused(bool Value, HWND FromTo){
   const HWND mhEdit = edit;
   TCHAR sTmp[128];
 
-  if (Value && GetReadOnly()){  // keep focus on last control
-    if (FromTo != mhEdit)
-      SetFocus(FromTo);
-    return(false);
-  }
-
   if (!Value && (FromTo == mhEdit))
     Value = true;
 
@@ -1876,7 +1870,8 @@ WndProperty::on_mouse_down(int x, int y)
   {
 
     if (!GetFocused()){
-      set_focus();
+      if (!GetReadOnly())
+        set_focus();
       return true;
     }
 
