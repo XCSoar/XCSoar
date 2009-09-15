@@ -42,7 +42,6 @@ Copyright_License {
 #include "Dialogs.h"
 #include "Language.hpp"
 #include "Screen/Animation.hpp"
-#include "MainWindow.hpp"
 #include "Registry.hpp"
 #include "InfoBox.h"
 #include "WindowControls.h"
@@ -161,7 +160,9 @@ void ButtonLabel::GetButtonPosition(int i, RECT rc,
 }
 
 
-void ButtonLabel::CreateButtonLabels(RECT rc) {
+void
+ButtonLabel::CreateButtonLabels(ContainerWindow &parent, const RECT rc)
+{
   int i;
   int x, y, xsize, ysize;
 
@@ -173,7 +174,7 @@ void ButtonLabel::CreateButtonLabels(RECT rc) {
 
   for (i=0; i<NUMBUTTONLABELS; i++) {
     GetButtonPosition(i, rc, &x, &y, &xsize, &ysize);
-    hWndButtonWindow[i].set(main_window, x, y, xsize, ysize,
+    hWndButtonWindow[i].set(parent, x, y, xsize, ysize,
                             true, true, false, true, true);
     hWndButtonWindow[i].insert_after(HWND_TOP, true);
 

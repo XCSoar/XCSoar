@@ -40,6 +40,8 @@ Copyright_License {
 #include "Screen/TextWindow.hpp"
 #include "Interface.hpp"
 
+class ContainerWindow;
+
 class ButtonLabel: public ActionInterface {
  public:
   enum {
@@ -50,7 +52,7 @@ class ButtonLabel: public ActionInterface {
   static TextWindow hWndButtonWindow[NUMBUTTONLABELS];
   static bool ButtonVisible[NUMBUTTONLABELS];
   static bool ButtonDisabled[NUMBUTTONLABELS];
-  static void CreateButtonLabels(RECT rc);
+  static void CreateButtonLabels(ContainerWindow &parent, const RECT rc);
   static void AnimateButton(int i);
   static void SetFont(const Font &Font);
   static void Destroy();
