@@ -99,9 +99,21 @@ void MapWindow::RenderMapLayer(Canvas &canvas, const RECT rc)
     //    }
     // TODO: implement a workaround
 
-    DrawTerrain(canvas, *this, sunazimuth, sunelevation,
-		Basic().Location,
-	        BigZoom, SettingsMap());
+    if (terrain.isTerrainLoaded()) {
+      // TODO feature: sun-based rendering option
+
+      if (!terrain_renderer) {
+        // defer rendering until first draw because
+        // the buffer size, smoothing etc is set by the
+        // loaded terrain properties
+        terrain_renderer = new TerrainRenderer(MapRectBig);
+      }
+      terrain_renderer->SetSettings(SettingsMap().TerrainRamp,
+                                    SettingsMap().TerrainContrast,
+                                    SettingsMap().TerrainBrightness);
+      terrain_renderer->Draw(canvas, *this, sunazimuth,
+                             sunelevation, Basic().Location, BigZoom);
+    }
 
     if ((SettingsComputer().FinalGlideTerrain==2) 
 	&& Calculated().TerrainValid) {
@@ -166,7 +178,7 @@ void MapWindow::RenderGlide(Canvas &canvas, const RECT rc)
   */
   if ((SettingsMap().EnableTerrain && (Calculated().TerrainValid))
       || RASP.GetParameter()) {
-    DrawSpotHeights(canvas, *this, label_block);
+    DrawSpotHeights(canvas);
   }
 }
 
@@ -247,40 +259,6 @@ void MapWindow::Render(Canvas &canvas, const RECT rc)
 
 //////////////////////////////////////////////////
 
-// TODO: make this a member 
-TerrainRenderer *terrain_renderer = NULL;
-
-void DrawTerrain(Canvas &canvas, 
-		 MapWindowProjection &map_projection,
-		 const double sunazimuth, const double sunelevation,
-		 const GEOPOINT &loc,
-		 const bool isBigZoom,
-		 const SETTINGS_MAP &settings)
-{
-  // TODO feature: sun-based rendering option
-
-  if (!terrain.isTerrainLoaded()) {
-    return;
-  }
-
-  if (!terrain_renderer) {
-    terrain_renderer = new TerrainRenderer(map_projection.GetMapRectBig());
-  }
-  terrain_renderer->SetSettings(settings.TerrainRamp, 
-				settings.TerrainContrast,
-				settings.TerrainBrightness);
-
-  terrain_renderer->Draw(canvas, map_projection, sunazimuth, sunelevation,
-			 loc, isBigZoom);
-}
-
-
-void CloseTerrainRenderer() {
-  if (terrain_renderer) {
-    delete terrain_renderer;
-  }
-}
-
 
 static void DrawSpotHeight_Internal(Canvas &canvas, 
 				    MapWindowProjection &map_projection,
@@ -309,9 +287,7 @@ static void DrawSpotHeight_Internal(Canvas &canvas,
 
 #include "RasterWeather.h"
 
-void DrawSpotHeights(Canvas &canvas, 
-		     MapWindowProjection &map_projection,
-		     LabelBlock &label_block) {
+void MapWindow::DrawSpotHeights(Canvas &canvas) {
   // JMW testing, display of spot max/min
   if (!RASP.GetParameter())
     return;
@@ -323,11 +299,11 @@ void DrawSpotHeights(Canvas &canvas,
   TCHAR Buffer[20];
 
   RASP.ValueToText(Buffer, terrain_renderer->spot_max_val);
-  DrawSpotHeight_Internal(canvas, map_projection, label_block, 
+  DrawSpotHeight_Internal(canvas, *this, label_block, 
 			  Buffer, terrain_renderer->spot_max_pt);
 
   RASP.ValueToText(Buffer, terrain_renderer->spot_min_val);
-  DrawSpotHeight_Internal(canvas, map_projection, label_block,
+  DrawSpotHeight_Internal(canvas, *this, label_block,
 			  Buffer, terrain_renderer->spot_min_pt);
 }
 

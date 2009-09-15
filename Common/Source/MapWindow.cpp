@@ -53,11 +53,9 @@ Copyright_License {
 #include "TopologyStore.h"
 #include "InfoBoxLayout.h"
 #include "RasterTerrain.h"
+#include "TerrainRenderer.h"
 #include "Message.h"
-#include "Calculations.h" // TODO danger! for InAATTurnSector
 #include "RasterWeather.h"
-#include "options.h" /* for DEBUG_VIRTUALKEYS */
-#include "Defines.h" /* for DEBUG_VIRTUALKEYS */
 #include "Gauge/GaugeCDI.hpp"
 
 #ifdef PNA
@@ -95,6 +93,8 @@ MapWindow::~MapWindow()
 {
   if (cdi != NULL)
     delete cdi;
+  if (terrain_renderer != NULL)
+    delete terrain_renderer;
 }
 
 void
@@ -122,6 +122,7 @@ MapWindow::set(ContainerWindow &parent,
   get_canvas().copy(draw_canvas);
 
   cdi = new GaugeCDI(parent); /* XXX better attach to "this"? */
+
 }
 
 void MapWindow::RefreshMap() {

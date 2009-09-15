@@ -69,13 +69,13 @@ typedef struct _TERRAIN_CACHE
 
 class RasterMap: public TerrainDataClient {
  public:
-  RasterMap() {
-    terrain_valid = false;
-    max_field_value = 0;
-    DirectFine = false;
-    DirectAccess = false;
-    Paged = false;
-  }
+  RasterMap():
+    terrain_valid(false),
+    max_field_value(0),
+    DirectFine(false),
+    DirectAccess(false),
+    Paged(false)
+    {}
   virtual ~RasterMap() {};
 
   inline bool isMapLoaded() {
@@ -178,8 +178,9 @@ class RasterMapCache: public RasterMap {
 
 class RasterMapRaw: public RasterMap {
  public:
-  RasterMapRaw() {
-    TerrainMem = NULL;
+  RasterMapRaw():
+    TerrainMem(NULL)
+  {
     DirectAccess = true;
   }
   ~RasterMapRaw() {

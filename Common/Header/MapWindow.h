@@ -58,6 +58,7 @@ typedef struct _THERMAL_SOURCE_VIEW
 } THERMAL_SOURCE_VIEW;
 
 class GaugeCDI;
+class TerrainRenderer;
 
 class MapWindow
 : public MaskedPaintWindow,
@@ -68,6 +69,7 @@ class MapWindow
   PeriodClock mouse_down_clock;
 
   GaugeCDI *cdi;
+  TerrainRenderer *terrain_renderer;
 
  public:
   MapWindow();
@@ -178,6 +180,7 @@ class MapWindow
   void DrawGlideThroughTerrain(Canvas &canvas);
   void DrawTerrainAbove(Canvas &hDC, const RECT rc, Canvas &buffer);
   void DrawCDI();
+  void DrawSpotHeights(Canvas &canvas);
   //  void DrawSpeedToFly(HDC hDC, RECT rc);
   void DrawFLARMTraffic(Canvas &canvas);
   double    findMapScaleBarSize(const RECT rc);
@@ -229,19 +232,5 @@ class MapWindow
 
   friend class DrawThread;
 };
-
-
-
-void DrawTerrain(Canvas &canvas, 
-		 MapWindowProjection &map_projection,
-		 const double sunazimuth, const double sunelevation,
-		 const GEOPOINT &loc,
-		 const bool isBigZoom,
-		 const SETTINGS_MAP &settings);
-
-void DrawSpotHeights(Canvas &canvas,
-		     MapWindowProjection &map_projection,
-		     LabelBlock &label_block);
-void CloseTerrainRenderer();
 
 #endif
