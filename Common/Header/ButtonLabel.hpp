@@ -44,6 +44,8 @@ Copyright_License {
 class ContainerWindow;
 
 class MenuButton : public TextWindow {
+  bool enabled;
+
 public:
   void set(ContainerWindow &parent,
            int left, int top, unsigned width, unsigned height,
@@ -51,14 +53,15 @@ public:
     TextWindow::set(parent, left, top, width, height,
                     true, true, visible, true, true);
     set_enabled(false);
+    install_wndproc();
   }
 
   bool is_enabled() const {
-    return get_userdata() == 4;
+    return enabled;
   }
 
-  void set_enabled(bool enabled) {
-    set_userdata(enabled ? 4 : 5);
+  void set_enabled(bool _enabled) {
+    enabled = _enabled;
   }
 };
 
