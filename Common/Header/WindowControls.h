@@ -149,6 +149,8 @@ class WindowControl : public ContainerWindow {
     virtual void AddClient(WindowControl *Client);
 
     virtual bool on_close(void);
+  virtual bool on_key_down(unsigned key_code);
+  virtual bool on_key_up(unsigned key_code);
 
     /** from class PaintWindow */
     virtual void on_paint(Canvas &canvas);
@@ -417,7 +419,7 @@ class WndForm:public WindowControl{
     int (*mOnKeyDownNotify)(WindowControl * Sender, WPARAM wParam, LPARAM lParam);
     int (*mOnKeyUpNotify)(WindowControl * Sender, WPARAM wParam, LPARAM lParam);
     int (*mOnLButtonUpNotify)(WindowControl * Sender, WPARAM wParam, LPARAM lParam);
-    int (*mOnUserMsgNotify)(WindowControl * Sender, MSG *msg);
+    bool (*mOnUserMsgNotify)(WindowControl *Sender, unsigned id);
 
 
     int OnUnhandledMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
@@ -425,7 +427,7 @@ class WndForm:public WindowControl{
     /** from class PaintWindow */
     virtual void on_paint(Canvas &canvas);
 
-    int cbTimerID;
+    timer_t cbTimerID;
 
   public:
 
@@ -467,6 +469,8 @@ class WndForm:public WindowControl{
 
     /** from class Window */
     virtual bool on_command(HWND hWnd, unsigned id, unsigned code);
+    virtual bool on_timer(timer_t id);
+    virtual bool on_user(unsigned id);
 
     Color SetForeColor(Color Value);
     Color SetBackColor(Color Value);
@@ -478,7 +482,7 @@ class WndForm:public WindowControl{
 
     void SetTimerNotify(int (*OnTimerNotify)(WindowControl * Sender));
 
-    void SetUserMsgNotify(int (*OnUserMsgNotify)(WindowControl * Sender, MSG *msg));
+    void SetUserMsgNotify(bool (*OnUserMsgNotify)(WindowControl *Sender, unsigned id));
 private:
     static PeriodClock timeAnyOpenClose; // when any dlg opens or child closes
 

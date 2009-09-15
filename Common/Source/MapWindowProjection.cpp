@@ -49,6 +49,8 @@ Copyright_License {
 #include "options.h" /* for IBLSCALE() */
 #include <stdlib.h>
 #include "WayPoint.hpp"
+#include "WayPointList.hpp"
+#include "Components.hpp"
 #include <math.h>
 
 
@@ -79,8 +81,9 @@ MapWindowProjection::InitialiseScaleList
 
 bool MapWindowProjection::WaypointInScaleFilter(int i) const
 {
-  return ((WayPointList[i].Zoom >= MapScale*10)
-          || (WayPointList[i].Zoom == 0))
+  const WAYPOINT &way_point = way_points.get(i);
+
+  return ((way_point.Zoom >= MapScale*10) || (way_point.Zoom == 0))
     && (MapScale <= 10);
 }
 

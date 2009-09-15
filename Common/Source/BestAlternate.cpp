@@ -50,6 +50,8 @@ Copyright_License {
 #include "Audio/Sound.hpp"
 #include "Math/Earth.hpp"
 #include "Abort.hpp"
+#include "Components.hpp"
+#include "WayPointList.hpp"
 
 
 /*
@@ -75,8 +77,6 @@ GlideComputerTask::SearchBestAlternate()
   double arrival_altitude;
   int active_bestalternate_on_entry=-1;
   int bestalternate=-1;
-
-  if (!WayPointList) return;
 
   /*
    * VENTA3 search in range of optimum gliding capability
@@ -109,8 +109,9 @@ GlideComputerTask::SearchBestAlternate()
     SortedApproxIndex[i]= -1;
     SortedApproxDistance[i] = 0;
   }
-  for (i=0; i<(int)NumberOfWayPoints; i++) {
-    const WAYPOINT &way_point = WayPointList[i];
+
+  for (i = 0; way_points.verify_index(i); i++) {
+    const WAYPOINT &way_point = way_points.get(i);
 
     if (!(((way_point.Flags & AIRPORT) == AIRPORT) ||
           ((way_point.Flags & LANDPOINT) == LANDPOINT))) {
@@ -167,7 +168,8 @@ GlideComputerTask::SearchBestAlternate()
         continue;
       }
 
-      const WAYPOINT &way_point = WayPointList[SortedApproxIndex[i]];
+      const WAYPOINT &way_point = way_points.get(SortedApproxIndex[i]);
+      WPCALC &wpcalc = way_points.set_calc(SortedApproxIndex[i]);
 
       if ((scan_airports_slot==0) &&
 	  ((way_point.Flags & AIRPORT) != AIRPORT)) {
@@ -175,10 +177,9 @@ GlideComputerTask::SearchBestAlternate()
         continue;
       }
 
-      arrival_altitude = CalculateWaypointArrivalAltitude(way_point,
-                                                          WayPointCalc[SortedApproxIndex[i]]);
+      arrival_altitude = CalculateWaypointArrivalAltitude(way_point, wpcalc);
 
-      WayPointCalc[SortedApproxIndex[i]].AltArrival = arrival_altitude;
+      wpcalc.AltArrival = arrival_altitude;
       // This is holding the real arrival value
 
       /*
@@ -210,8 +211,8 @@ GlideComputerTask::SearchBestAlternate()
             DistanceBearing(Basic().Location, way_point.Location,
                             &wp_distance, &wp_bearing);
 
-	    WayPointCalc[SortedApproxIndex[i]].Distance = wp_distance;
-	    WayPointCalc[SortedApproxIndex[i]].Bearing = wp_bearing;
+            wpcalc.Distance = wp_distance;
+            wpcalc.Bearing = wp_bearing;
 
             bool out_of_range;
             double distance_soarable =
@@ -267,9 +268,12 @@ GlideComputerTask::SearchBestAlternate()
 	// break;  // that list is unsorted !
       }
 
+      const WAYPOINT &way_point = way_points.get(curwp);
+      WPCALC &wpcalc = way_points.set_calc(SortedApproxIndex[i]);
+
       // At the first unsafe landing, stop searching down the list and
       // use the best found or the first
-      double grsafe=safecalc - WayPointList[curwp].Altitude;
+      double grsafe = safecalc - way_point.Altitude;
       if ( grsafe <= 0 ) {
 	/*
 	 * We're under the safety altitude for this waypoint.
@@ -278,8 +282,9 @@ GlideComputerTask::SearchBestAlternate()
 	//continue;
       }
 
-      WayPointCalc[curwp].GR = WayPointCalc[curwp].Distance / grsafe; grsafe = WayPointCalc[curwp].GR;
-      curgr=WayPointCalc[curwp].GR;
+      wpcalc.GR = wpcalc.Distance / grsafe;
+      grsafe = wpcalc.GR;
+      curgr = wpcalc.GR;
 
       if ( grsafe > grpolar ) {
 	/*
@@ -301,7 +306,7 @@ GlideComputerTask::SearchBestAlternate()
 
       // If we already found a preferred, stop searching for anything but home
 
-      if ( bestalternate >= 0 && WayPointCalc[bestalternate].Preferred) {
+      if (bestalternate >= 0 && way_points.get_calc(bestalternate).Preferred) {
 	continue;
       }
 
@@ -309,7 +314,7 @@ GlideComputerTask::SearchBestAlternate()
 
       // Preferred list has priority, first found is taken (could be smarted)
 
-      if ( WayPointCalc[ curwp ].Preferred ) {
+      if (wpcalc.Preferred) {
 	bestalternate=curwp;
 	continue;
       }
@@ -318,7 +323,7 @@ GlideComputerTask::SearchBestAlternate()
       // at the end of the search no home and no preferred were found.
 
       if ( curgr < curbestgr ) {
-	if ( ( WayPointList[curwp].Flags & AIRPORT) == AIRPORT) {
+        if ((way_point.Flags & AIRPORT) == AIRPORT) {
 	  curbestairport=curwp;
 	  curbestgr=curgr; // ONLY FOR AIRPORT! NOT FOR OUTLANDINGS!!
 	}
@@ -363,7 +368,7 @@ GlideComputerTask::SearchBestAlternate()
 	  if ( ValidWayPoint(active_bestalternate_on_entry) )
 	    {
 	      bestalternate=active_bestalternate_on_entry;
-	      if ( WayPointCalc[bestalternate].AltArrival <0 ) {
+              if (way_points.get_calc(bestalternate).AltArrival < 0) {
 		// Pick up the closest!
 		if ( ValidWayPoint( SortedApproxIndex[0]) ) {
 		  bestalternate=SortedApproxIndex[0];
@@ -379,7 +384,7 @@ GlideComputerTask::SearchBestAlternate()
 		  // MapWindow2 is checking for reachables separately,
 		  // se let's see if this closest is reachable
 		  if ( ValidWayPoint( SortedApproxIndex[0] )) {
-		    if ( WayPointCalc[SortedApproxIndex[0]].Reachable ) {
+                    if (way_points.get_calc(SortedApproxIndex[0]).Reachable) {
 		      bestalternate = SortedApproxIndex[0];
 		    } else
 		      {
@@ -402,8 +407,8 @@ GlideComputerTask::SearchBestAlternate()
 	 * and now he is low..
 	 */
 	if ( bestalternate >0 &&
-	     ((safecalc-WayPointList[bestalternate].Altitude) >ALTERNATE_QUIETMARGIN)) {
-	  if ( WayPointCalc[bestalternate].AltArrivalAGL <100 )
+             ((safecalc - way_points.get(bestalternate).Altitude) > ALTERNATE_QUIETMARGIN)) {
+          if (way_points.get_calc(bestalternate).AltArrivalAGL <100 )
 	    AlertBestAlternate(2);
 	  //	if (EnableSoundModes) PlayResource(TEXT("IDR_WAV_RED"));
 	}
@@ -433,7 +438,7 @@ GlideComputerTask::SearchBestAlternate()
   if (active_bestalternate_on_entry != bestalternate) {
     SetCalculated().BestAlternate = bestalternate;
     if ( bestalternate >0 &&
-	 ((safecalc-WayPointList[bestalternate].Altitude) >ALTERNATE_QUIETMARGIN))
+         ((safecalc - way_points.get(bestalternate).Altitude) > ALTERNATE_QUIETMARGIN))
       AlertBestAlternate(1);
   }
 
@@ -505,8 +510,8 @@ GlideComputerTask::DoAlternates(int AltWaypoint)
     return;
   }
 
-  const WAYPOINT &way_point = WayPointList[AltWaypoint];
-  WPCALC &way_point_calc = WayPointCalc[AltWaypoint];
+  const WAYPOINT &way_point = way_points.get(AltWaypoint);
+  WPCALC &way_point_calc = way_points.set_calc(AltWaypoint);
   GEOPOINT w1 = way_point.Location;
   GEOPOINT w0 = Basic().Location;
   double *altwp_dist = &way_point_calc.Distance;

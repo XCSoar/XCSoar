@@ -53,6 +53,8 @@ Copyright_License {
 #include "WayPoint.hpp"
 #include "Math/SunEphemeris.hpp"
 #include "GlideComputer.hpp"
+#include "Components.hpp"
+#include "WayPointList.hpp"
 
 // JMW TODO: make this use GPSClock (code re-use)
 
@@ -260,7 +262,7 @@ protected:
     mutexTaskData.Lock();
 
     double sunsettime = sun.CalcSunTimes
-      (WayPointList[task_points[ActiveTaskPoint].Index].Location,
+      (way_points.get(task_points[ActiveTaskPoint].Index).Location,
        cmp.Basic(), cmp.Calculated(), GetUTCOffset()/3600);
     double d1 = (cmp.Calculated().TaskTimeToGo
 		 +DetectCurrentTime(&cmp.Basic()))/3600;

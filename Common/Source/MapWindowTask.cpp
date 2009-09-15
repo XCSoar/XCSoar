@@ -51,6 +51,8 @@ Copyright_License {
 #include "Math/Earth.hpp"
 #include "Compatibility/gdi.h"
 #include "options.h" /* for IBLSCALE() */
+#include "WayPointList.hpp"
+#include "Components.hpp"
 
 #include <math.h>
 
@@ -67,7 +69,7 @@ public:
 
   void visit_task_point_start(TASK_POINT &point, const unsigned index) 
   {
-    canvas->line(WayPointCalc[point.Index].Screen, orig);
+    canvas->line(way_points.get_calc(point.Index).Screen, orig);
   };
   void visit_task_point_intermediate(TASK_POINT &point, const unsigned index) 
   {
@@ -160,7 +162,7 @@ public:
 
   void visit_task_point_intermediate_non_aat(TASK_POINT &point, const unsigned i) 
   {
-    const POINT &wp = WayPointCalc[point.Index].Screen;
+    const POINT &wp = way_points.get_calc(point.Index).Screen;
 
     canvas->select(dash_pen2);
     canvas->two_lines((*task_screen)[i].SectorStart, 
@@ -208,7 +210,7 @@ public:
     if (ActiveTaskPoint>1) {
       // only draw finish line when past the first
       // waypoint.
-      const POINT &wp = WayPointCalc[point.Index].Screen;
+      const POINT &wp = way_points.get_calc(point.Index).Screen;
 
       if(FinishLine) {
 	canvas->select(dash_pen5);
@@ -261,10 +263,11 @@ public:
 		      NULL, &bearing);
       
       // draw nominal track line
-      canvas->line(WayPointCalc[imin].Screen, WayPointCalc[imax].Screen);
+      canvas->line(way_points.get_calc(imin).Screen,
+                   way_points.get_calc(imax).Screen);
     } else {
-      sct1 = WayPointCalc[point0.Index].Screen;
-      sct2 = WayPointCalc[point1.Index].Screen;
+      sct1 = way_points.get_calc(point0.Index).Screen;
+      sct2 = way_points.get_calc(point1.Index).Screen;
     }
     
     if (is_first) {
@@ -305,22 +308,23 @@ private:
       // don't draw if on second leg or beyond
       return;
     }
+
+    const WPCALC &wpcalc = way_points.get_calc(Index);
     if(StartLine) {
+
       canvas->select(MapGfx.hpStartFinishThick);
-      canvas->line(WayPointCalc[Index].Screen, Start);
-      canvas->line(WayPointCalc[Index].Screen, End);
+      canvas->line(wpcalc.Screen, Start);
+      canvas->line(wpcalc.Screen, End);
       canvas->select(MapGfx.hpStartFinishThin);
-      canvas->line(WayPointCalc[Index].Screen, Start);
-      canvas->line(WayPointCalc[Index].Screen, End);
+      canvas->line(wpcalc.Screen, Start);
+      canvas->line(wpcalc.Screen, End);
     } else {
       unsigned tmp = map_window->DistanceMetersToScreen(StartRadius);
       canvas->hollow_brush();
       canvas->select(MapGfx.hpStartFinishThick);
-      canvas->circle(WayPointCalc[Index].Screen.x, WayPointCalc[Index].Screen.y,
-		     tmp);
+      canvas->circle(wpcalc.Screen.x, wpcalc.Screen.y, tmp);
       canvas->select(MapGfx.hpStartFinishThin);
-      canvas->circle(WayPointCalc[Index].Screen.x, WayPointCalc[Index].Screen.y,
-		     tmp);
+      canvas->circle(wpcalc.Screen.x, wpcalc.Screen.y, tmp);
     }
   };
 
@@ -329,8 +333,6 @@ private:
 
 void MapWindow::DrawTask(Canvas &canvas, RECT rc)
 {
-  if (!WayPointList) return;
-
   DrawTaskVisitor dv(*this, canvas, Orig_Aircraft, task_screen, task_start_screen);
   TaskScan::scan_leg_forward(dv);
   TaskScan::scan_point_forward(dv);
@@ -344,7 +346,6 @@ void MapWindow::DrawTaskAAT(Canvas &canvas, const RECT rc, Canvas &buffer)
   int i;
   unsigned tmp;
 
-  if (!WayPointList) return;
   if (!AATEnabled) return;
 
   ScopeLock scopeLock(mutexTaskData); // protect from extrnal task changes
@@ -357,6 +358,8 @@ void MapWindow::DrawTaskAAT(Canvas &canvas, const RECT rc, Canvas &buffer)
 
   for (i = MAXTASKPOINTS - 2; i > 0; i--) {
     if(ValidTaskPoint(i) && ValidTaskPoint(i+1)) {
+      const WPCALC &wpcalc = way_points.get_calc(task_points[i].Index);
+
       if(task_points[i].AATType == CIRCLE) {
         tmp = DistanceMetersToScreen(task_points[i].AATCircleRadius);
 
@@ -373,9 +376,7 @@ void MapWindow::DrawTaskAAT(Canvas &canvas, const RECT rc, Canvas &buffer)
         }
         buffer.black_pen();
 
-        buffer.circle(WayPointCalc[task_points[i].Index].Screen.x,
-                      WayPointCalc[task_points[i].Index].Screen.y,
-                      tmp);
+        buffer.circle(wpcalc.Screen.x, wpcalc.Screen.y, tmp);
       } else {
 
         // this color is used as the black bit
@@ -393,13 +394,12 @@ void MapWindow::DrawTaskAAT(Canvas &canvas, const RECT rc, Canvas &buffer)
 
         tmp = DistanceMetersToScreen(task_points[i].AATSectorRadius);
 
-        buffer.segment(WayPointCalc[task_points[i].Index].Screen.x,
-                       WayPointCalc[task_points[i].Index].Screen.y, tmp, rc,
+        buffer.segment(wpcalc.Screen.x,
+                       wpcalc.Screen.y, tmp, rc,
                        task_points[i].AATStartRadial-DisplayAngle,
                        task_points[i].AATFinishRadial-DisplayAngle);
 
-        buffer.two_lines(task_screen[i].AATStart, 
-			 WayPointCalc[task_points[i].Index].Screen,
+        buffer.two_lines(task_screen[i].AATStart, wpcalc.Screen,
                          task_screen[i].AATFinish);
       }
 
@@ -426,7 +426,7 @@ void MapWindow::DrawBearing(Canvas &canvas, int bBearingValid)
   if (AATEnabled && (ActiveTaskPoint>0) && ValidTaskPoint(ActiveTaskPoint+1)) {
     target = task_stats[ActiveTaskPoint].AATTargetLocation;
   } else {
-    target = WayPointList[task_points[ActiveTaskPoint].Index].Location;
+    target = way_points.get(task_points[ActiveTaskPoint].Index).Location;
   }
   mutexTaskData.Unlock();
   if (bBearingValid) {
@@ -445,7 +445,7 @@ void MapWindow::DrawBearing(Canvas &canvas, int bBearingValid)
           if (AATEnabled && ValidTaskPoint(i+1)) {
             target = task_stats[i].AATTargetLocation;
           } else {
-            target = WayPointList[task_points[i].Index].Location;
+            target = way_points.get(task_points[i].Index).Location;
           }
 
           DrawGreatCircle(canvas, start, target);
@@ -511,7 +511,7 @@ MapWindow::DrawOffTrackIndicator(Canvas &canvas)
   if (AATEnabled && ValidTaskPoint(ActiveTaskPoint+1) && ValidTaskPoint(ActiveTaskPoint)) {
     target = task_stats[ActiveTaskPoint].AATTargetLocation;
   } else {
-    target = WayPointList[task_points[ActiveTaskPoint].Index].Location;
+    target = way_points.get(task_points[ActiveTaskPoint].Index).Location;
   }
   mutexTaskData.Unlock();
 
@@ -585,7 +585,7 @@ MapWindow::DrawProjectedTrack(Canvas &canvas)
   if (AATEnabled) {
     previous_loc = task_stats[previous_point].AATTargetLocation;
   } else {
-    previous_loc = WayPointList[task_points[previous_point].Index].Location;
+    previous_loc = way_points.get(task_points[previous_point].Index).Location;
   }
   mutexTaskData.Unlock();
 

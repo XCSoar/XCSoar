@@ -47,6 +47,8 @@ Copyright_License {
 #include "DataField/Enum.hpp"
 #include "MainWindow.hpp"
 #include "Compatibility/string.h"
+#include "WayPointList.hpp"
+#include "Components.hpp"
 
 #include <assert.h>
 
@@ -75,7 +77,7 @@ static void UpdateCaption(void) {
       break;
     };
     _stprintf(sTmp, TEXT("%s: %s"), title,
-              WayPointList[task_points[twItemIndex].Index].Name);
+              way_points.get(task_points[twItemIndex].Index).Name);
     wf->SetCaption(sTmp);
   } else {
     wf->SetCaption(gettext(TEXT("(invalid)")));

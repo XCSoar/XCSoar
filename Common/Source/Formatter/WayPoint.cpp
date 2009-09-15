@@ -43,6 +43,9 @@ Copyright_License {
 #include "SettingsComputer.hpp" // for auto-setting of alternates.  Dangerous!
 #include "SettingsTask.hpp"
 #include "SettingsUser.hpp"
+#include "Components.hpp"
+#include "WayPointList.hpp"
+
 #include <stdio.h>
 #include "Interface.hpp"
 
@@ -52,24 +55,26 @@ const TCHAR *FormatterWaypoint::Render(int *color) {
   if(ValidTaskPoint(thewaypoint))
     {
       int index = task_points[thewaypoint].Index;
-      if ((index>=0) && (WayPointCalc[index].Reachable)) {
+      const WAYPOINT &way_point = way_points.get(index);
+      const WPCALC &wpcalc = way_points.get_calc(index);
+
+      if (wpcalc.Reachable) {
 	*color = 2; // blue text
       } else {
 	*color = 0; // black text
       }
       if ( SettingsMap().DisplayTextType == DISPLAYFIRSTTHREE)
         {
-          _tcsncpy(Text,WayPointList[index].Name,3);
+          _tcsncpy(Text, way_point.Name,3);
           Text[3] = '\0';
         }
       else if( SettingsMap().DisplayTextType == DISPLAYNUMBER)
         {
-          _stprintf(Text,_T("%d"),
-		    WayPointList[index].Number );
+          _stprintf(Text,_T("%d"), way_point.Number );
         }
       else
         {
-          _tcsncpy(Text,WayPointList[index].Name,
+          _tcsncpy(Text, way_point.Name,
                    (sizeof(Text)/sizeof(TCHAR))-1);
           Text[(sizeof(Text)/sizeof(TCHAR))-1] = '\0';
         }
@@ -90,19 +95,20 @@ const TCHAR *FormatterAlternate::RenderTitle(int *color) {
   mutexTaskData.Lock();
   if(ValidWayPoint(ActiveAlternate))
     {
+      const WAYPOINT &way_point = way_points.get(ActiveAlternate);
+
       if ( SettingsMap().DisplayTextType == DISPLAYFIRSTTHREE)
         {
-          _tcsncpy(Text,WayPointList[ActiveAlternate].Name,3);
+          _tcsncpy(Text, way_point.Name,3);
           Text[3] = '\0';
         }
       else if( SettingsMap().DisplayTextType == DISPLAYNUMBER)
         {
-          _stprintf(Text,_T("%d"),
-		    WayPointList[ActiveAlternate].Number );
+          _stprintf(Text, _T("%d"), way_point.Number);
         }
       else
         {
-          _tcsncpy(Text,WayPointList[ActiveAlternate].Name,
+          _tcsncpy(Text, way_point.Name,
                    (sizeof(Text)/sizeof(TCHAR))-1);
           Text[(sizeof(Text)/sizeof(TCHAR))-1] = '\0';
         }
@@ -126,7 +132,9 @@ FormatterAlternate::Render(int *color)
 {
   mutexTaskData.Lock();
   if(Valid && ValidWayPoint(ActiveAlternate)) {
-    switch (WayPointCalc[ActiveAlternate].VGR ) {
+    const WPCALC &wpcalc = way_points.get_calc(ActiveAlternate);
+
+    switch (wpcalc.VGR) {
     case 0:
       // impossible, give a magenta debug color;
       *color = 5;
@@ -154,7 +162,7 @@ FormatterAlternate::Render(int *color)
       break;
     }
 
-    Value=WayPointCalc[ActiveAlternate].GR;
+    Value = wpcalc.GR;
     
     _stprintf(Text,Format,Value);
   } else {
@@ -176,7 +184,7 @@ void FormatterAlternate::AssignValue(int i) {
        Value=INVALID_GR;
      } else {
        if ( ValidWayPoint(SettingsComputer().Alternate1) ) 
-	 Value=WayPointCalc[SettingsComputer().Alternate1].GR;
+         Value = way_points.get_calc(SettingsComputer().Alternate1).GR;
        else 
 	 Value=INVALID_GR;
      }
@@ -192,7 +200,7 @@ void FormatterAlternate::AssignValue(int i) {
        Value=INVALID_GR;
      } else {
        if ( ValidWayPoint(SettingsComputer().Alternate2) ) 
-	 Value=WayPointCalc[SettingsComputer().Alternate2].GR;
+         Value = way_points.get_calc(SettingsComputer().Alternate2).GR;
        else Value=INVALID_GR;
      }
      break;
@@ -203,7 +211,7 @@ void FormatterAlternate::AssignValue(int i) {
        Value=INVALID_GR;
      } else {
        if ( ValidWayPoint(Calculated().BestAlternate))
-	 Value=WayPointCalc[Calculated().BestAlternate].GR;
+         Value = way_points.get_calc(Calculated().BestAlternate).GR;
        else
 	 Value=INVALID_GR;
      }

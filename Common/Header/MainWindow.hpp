@@ -56,6 +56,9 @@ public:
   GaugeFLARM *flarm;
   PopupMessage popup;
 
+private:
+  timer_t timer_id;
+
 public:
   MainWindow(const StatusMessageList &status_messages)
     :vario(NULL), flarm(NULL), popup(status_messages, *this) {}
@@ -80,10 +83,9 @@ protected:
                              WPARAM wParam, LPARAM lParam);
 
   LRESULT on_colour(HDC hdc, int wdata);
-  int _timer_id;
   virtual bool on_command(HWND hWnd, unsigned id, unsigned code);
   bool on_activate();
-  bool on_timer(unsigned id);
+  bool on_timer(timer_t id);
   bool on_create();
   bool on_destroy();
   bool on_close();

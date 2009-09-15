@@ -86,7 +86,9 @@ Copyright_License {
 #include "options.h"
 #include "CalculationThread.hpp"
 #include "InstrumentThread.hpp"
+#include "WayPointList.hpp"
 
+WayPointList way_points;
 Marks *marks;
 TopologyStore *topology;
 RasterTerrain terrain;
@@ -300,7 +302,6 @@ bool XCSoarInterface::Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
   terrain.OpenTerrain();
 
   ReadWayPoints();
-  InitWayPointCalc();
 
   ReadAirfieldFile();
   SetHome(SetSettingsComputer(), false, true);

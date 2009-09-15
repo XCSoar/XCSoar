@@ -606,6 +606,27 @@ WindowControl::on_close(void)
   return true;
 }
 
+bool
+WindowControl::on_key_down(unsigned key_code)
+{
+  // JMW: HELP
+  KeyTimer(true, key_code);
+
+  return ContainerWindow::on_key_down(key_code);
+}
+
+bool
+WindowControl::on_key_up(unsigned key_code)
+{
+  // JMW: detect long enter release
+  // VENTA4: PNAs don't have Enter, so it should be better to find an alternate solution
+  // activate tool tips if hit return for long time
+  if (KeyTimer(false, key_code) && key_code == VK_RETURN && OnHelp())
+    return true;
+
+  return ContainerWindow::on_key_up(key_code);
+}
+
 void
 WindowControl::on_paint(Canvas &canvas)
 {
@@ -712,22 +733,6 @@ WindowControl::on_message(HWND hwnd, UINT uMsg,
                           WPARAM wParam, LPARAM lParam)
 {
   switch (uMsg){
-    case WM_KEYDOWN:
-      // JMW: HELP
-      KeyTimer(true, wParam & 0xffff);
-      break;
-
-    case WM_KEYUP:
-      // JMW: detect long enter release
-      // VENTA4: PNAs don't have Enter, so it should be better to find an alternate solution
-	if (KeyTimer(false, wParam & 0xffff)) {
-	  // activate tool tips if hit return for long time
-	  if ((wParam & 0xffff) == VK_RETURN) {
-	    if (OnHelp()) return (0);
-	  }
-	}
-      break;
-
     case WM_SETFOCUS:
       SetFocused(true, (HWND) wParam);
     return(0);
@@ -873,6 +878,26 @@ WndForm::on_command(HWND hWnd, unsigned id, unsigned code)
 
 }
 
+bool
+WndForm::on_timer(timer_t id)
+{
+  if (id == cbTimerID) {
+    if (mOnTimerNotify)
+      mOnTimerNotify(this);
+    return true;
+  } else
+    return WindowControl::on_timer(id);
+}
+
+bool
+WndForm::on_user(unsigned id)
+{
+  if (mOnUserMsgNotify != NULL && mOnUserMsgNotify(this, id))
+    return true;
+
+  return WindowControl::on_user(id);
+}
+
 const Font *
 WndForm::SetTitleFont(const Font &font)
 {
@@ -915,7 +940,8 @@ int WndForm::ShowModal(bool bEnableMap) {
 
   mModalResult = 0;
 
-  oldFocusHwnd = SetFocus(GetHandle());
+  oldFocusHwnd = ::GetFocus();
+  set_focus();
 
   FocusNext(NULL);
 
@@ -1011,14 +1037,6 @@ int WndForm::ShowModal(bool bEnableMap) {
           if (!(mOnLButtonUpNotify)(this, msg.wParam, msg.lParam))
             continue;
 
-      }
-      if (msg.message == WM_TIMER) {
-        if (msg.hwnd == GetHandle()) {
-          if (mOnTimerNotify) {
-            mOnTimerNotify(this);
-          }
-          continue;
-        }
       }
 
       TranslateMessage(&msg);
@@ -1200,7 +1218,9 @@ void WndForm::SetTimerNotify(int (*OnTimerNotify)(WindowControl * Sender)) {
   mOnTimerNotify = OnTimerNotify;
 }
 
-void WndForm::SetUserMsgNotify(int (*OnUserMsgNotify)(WindowControl * Sender, MSG *msg)){
+void
+WndForm::SetUserMsgNotify(bool (*OnUserMsgNotify)(WindowControl *Sender, unsigned id))
+{
   mOnUserMsgNotify = OnUserMsgNotify;
 }
 
@@ -1230,11 +1250,6 @@ int WndForm::OnUnhandledMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     msg.wParam = WA_ACTIVE;
   }*/
 
-  if (msg.message >= WM_USER && msg.message < WM_USER+100){
-    if (mOnUserMsgNotify != NULL)
-      if (!(mOnUserMsgNotify)(this, &msg))
-        return(0);
-  }
   if (msg.message == WM_KEYUP){
   }
   if (msg.message == WM_KEYDOWN){
@@ -1254,14 +1269,6 @@ int WndForm::OnUnhandledMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
       if (!(mOnLButtonUpNotify)(this, msg.wParam, msg.lParam))
         return(0);
 
-  }
-  if (msg.message == WM_TIMER) {
-    if (msg.hwnd == GetHandle()) {
-      if (mOnTimerNotify) {
-        mOnTimerNotify(this);
-      }
-      return(1);
-    }
   }
 
   if (uMsg == WM_KEYDOWN){
@@ -1353,8 +1360,7 @@ WndButton::on_mouse_up(int x, int y)
 
   if (PtInRect(GetBoundRect(), Pos)){
     if (mOnClickNotify != NULL) {
-      RECT mRc;
-      GetWindowRect(GetHandle(), &mRc);
+      RECT mRc = get_position();
       SetSourceRectangle(mRc);
       (mOnClickNotify)(this);
     }
@@ -1422,7 +1428,7 @@ WndButton::on_mouse_down(int x, int y)
   (void)x; (void)y;
   mDown = true;
   if (!GetFocused())
-    SetFocus(GetHandle());
+    set_focus();
   else {
     update(*GetBoundRect());
     update();
@@ -1791,12 +1797,6 @@ bool WndProperty::SetFocused(bool Value, HWND FromTo){
   const HWND mhEdit = edit;
   TCHAR sTmp[128];
 
-  if (Value && GetReadOnly()){  // keep focus on last control
-    if (FromTo != mhEdit)
-      SetFocus(FromTo);
-    return(false);
-  }
-
   if (!Value && (FromTo == mhEdit))
     Value = true;
 
@@ -1875,7 +1875,8 @@ WndProperty::on_mouse_down(int x, int y)
   {
 
     if (!GetFocused()){
-      set_focus();
+      if (!GetReadOnly())
+        set_focus();
       return true;
     }
 

@@ -52,6 +52,9 @@ Copyright_License {
 #include "Abort.hpp"
 #include "Logger.h"
 #include "InputEvents.h"
+#include "Components.hpp"
+#include "WayPointList.hpp"
+
 // JMW TODO: abstract up to higher layer so a base copy of this won't 
 // call any event
 
@@ -131,7 +134,7 @@ void GlideComputerTask::DistanceToHome() {
     SetCalculated().HomeDistance = 0.0;
     SetCalculated().HomeRadial = 0.0; // VENTA3
   } else {
-    DistanceBearing(WayPointList[SettingsComputer().HomeWaypoint].Location,
+    DistanceBearing(way_points.get(SettingsComputer().HomeWaypoint).Location,
                     Basic().Location,
                     &SetCalculated().HomeDistance, 
                     &SetCalculated().HomeRadial);
@@ -146,7 +149,7 @@ void GlideComputerTask::DistanceToNext()
   if(ValidTask()) {
 
     DistanceBearing(Basic().Location, 
-                    WayPointList[task_points[ActiveTaskPoint].Index].Location,
+                    way_points.get(task_points[ActiveTaskPoint].Index).Location,
                     &SetCalculated().WaypointDistance,
                     &SetCalculated().WaypointBearing);
     
@@ -178,7 +181,7 @@ void GlideComputerTask::DistanceToNext()
       if (AATEnabled) {
         w1 = task_stats[ActiveTaskPoint+1].AATTargetLocation;
       } else {
-        w1 = WayPointList[task_points[ActiveTaskPoint+1].Index].Location;
+        w1 = way_points.get(task_points[ActiveTaskPoint+1].Index).Location;
       }
       
       DistanceBearing(Basic().Location, 
@@ -273,7 +276,7 @@ FAIFinishHeight(const SETTINGS_COMPUTER &settings,
   }
   double wp_alt;
   if(ValidTaskPoint(wp)) {
-    wp_alt = WayPointList[task_points[wp].Index].Altitude;
+    wp_alt = way_points.get(task_points[wp].Index).Altitude;
   } else {
     wp_alt = 0;
   }
@@ -314,7 +317,7 @@ bool GlideComputerTask::InTurnSector(const int the_turnpoint) const
   if (SectorType>0)
     {
       mutexTaskData.Lock();
-      DistanceBearing(WayPointList[task_points[the_turnpoint].Index].Location,
+      DistanceBearing(way_points.get(task_points[the_turnpoint].Index).Location,
                       Basic().Location,
                       NULL, &AircraftBearing);
       mutexTaskData.Unlock();
@@ -371,8 +374,6 @@ bool GlideComputerTask::InFinishSector(const int i)
   double FirstPointDistance;
   bool retval = false;
 
-  if (!WayPointList) return false;
-
   if (!ValidFinish()) return false;
 
   // Finish invalid
@@ -382,7 +383,7 @@ bool GlideComputerTask::InFinishSector(const int i)
 
   // distance from aircraft to start point
   DistanceBearing(Basic().Location,
-                  WayPointList[task_points[i].Index].Location,
+                  way_points.get(task_points[i].Index).Location,
                   &FirstPointDistance,
                   &AircraftBearing);
 
@@ -496,7 +497,7 @@ bool GlideComputerTask::InStartSector_Internal(int Index,
 
   // distance from aircraft to start point
   DistanceBearing(Basic().Location,
-                  WayPointList[Index].Location,
+                  way_points.get(Index).Location,
                   &FirstPointDistance,
                   &AircraftBearing);
 
@@ -963,7 +964,7 @@ void GlideComputerTask::TaskStatistics(const double this_maccready,
       !TaskIsTemporary() && (ValidTaskPoint(ActiveTaskPoint+1))) {
     w1 = task_stats[ActiveTaskPoint].AATTargetLocation;
   } else {
-    w1 = WayPointList[task_points[ActiveTaskPoint].Index].Location;
+    w1 = way_points.get(task_points[ActiveTaskPoint].Index).Location;
   }
 
   DistanceBearing(Basic().Location, w1,
@@ -987,7 +988,7 @@ void GlideComputerTask::TaskStatistics(const double this_maccready,
       // TODO accuracy: Get best range point to here...
       w0 = task_stats[ActiveTaskPoint-1].AATTargetLocation;
     } else {
-      w0 = WayPointList[task_points[ActiveTaskPoint-1].Index].Location;
+      w0 = way_points.get(task_points[ActiveTaskPoint-1].Index).Location;
     }
 
     DistanceBearing(w1, w0, &LegDistance, NULL);
@@ -1022,8 +1023,8 @@ void GlideComputerTask::TaskStatistics(const double this_maccready,
         {
           if (!ValidTaskPoint(i) || !ValidTaskPoint(i+1)) continue;
 
-          w1 = WayPointList[task_points[i].Index].Location;
-          w0 = WayPointList[task_points[i+1].Index].Location;
+          w1 = way_points.get(task_points[i].Index).Location;
+          w0 = way_points.get(task_points[i+1].Index).Location;
 
           DistanceBearing(w1, w0, &LegDistance, NULL);
           SetCalculated().TaskDistanceCovered += LegDistance;
@@ -1075,8 +1076,8 @@ void GlideComputerTask::TaskStatistics(const double this_maccready,
 	w1 = task_stats[task_index].AATTargetLocation;
 	w0 = task_stats[task_index-1].AATTargetLocation;
       } else {
-	w1 = WayPointList[task_points[task_index].Index].Location;
-	w0 = WayPointList[task_points[task_index-1].Index].Location;
+        w1 = way_points.get(task_points[task_index].Index).Location;
+        w0 = way_points.get(task_points[task_index-1].Index).Location;
       }
 
       double NextLegDistance, NextLegBearing;
@@ -1318,7 +1319,7 @@ void GlideComputerTask::AATStats_Distance()
 
       if (i > 0 ) { //RLD only include distance from glider to next leg if we've started the task
         DistanceBearing(Basic().Location, 
-                        WayPointList[task_points[i].Index].Location,
+                        way_points.get(task_points[i].Index).Location,
                         &LegToGo, NULL);
 
         DistanceBearing(Basic().Location, 
@@ -1343,8 +1344,8 @@ void GlideComputerTask::AATStats_Distance()
       while(ValidTaskPoint(i)) {
 	double LegDistance, TargetLegDistance;
 
-	DistanceBearing(WayPointList[task_points[i].Index].Location,
-			WayPointList[task_points[i-1].Index].Location,
+        DistanceBearing(way_points.get(task_points[i].Index).Location,
+                        way_points.get(task_points[i-1].Index).Location,
 			&LegDistance, NULL);
 
 	DistanceBearing(task_stats[i].AATTargetLocation,
@@ -1411,8 +1412,7 @@ void GlideComputerTask::AATStats_Distance()
 
 void GlideComputerTask::AATStats()
 {
-  if (!WayPointList
-      || !AATEnabled
+  if (!AATEnabled
       || Calculated().ValidFinish) return ;
 
   AATStats_Distance();

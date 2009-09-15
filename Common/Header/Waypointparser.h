@@ -60,9 +60,7 @@ void CloseWayPoints(void);
 int dlgWaypointOutOfTerrain(const TCHAR *Message);
 void WaypointWriteFiles(const SETTINGS_COMPUTER &settings_computer);
 void WaypointAltitudeFromTerrain(WAYPOINT* wpt);
-WAYPOINT* GrowWaypointList();
 int FindMatchingWaypoint(WAYPOINT *waypoint);
-void InitWayPointCalc(void); // VENTA3
 
 #endif
 

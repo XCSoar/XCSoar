@@ -73,6 +73,8 @@ Copyright_License {
 #include "Screen/Fonts.hpp"
 #include "Dialogs/dlgHelpers.hpp"
 #include "GlideRatio.hpp"
+#include "WayPointList.hpp"
+#include "Components.hpp"
 
 extern ldrotary_s rotaryLD;
 
@@ -873,12 +875,12 @@ static int FormKeyDown(WindowControl * Sender, WPARAM wParam, LPARAM lParam){
 	(void)Sender;
   switch(wParam & 0xffff){
     case '6':
-      SetFocus(((WndButton *)wf->FindByName(TEXT("cmdPrev")))->GetHandle());
+      ((WndButton *)wf->FindByName(TEXT("cmdPrev")))->set_focus();
       NextPage(-1);
       //((WndButton *)wf->FindByName(TEXT("cmdPrev")))->SetFocused(true, NULL);
     return(0);
     case '7':
-      SetFocus(((WndButton *)wf->FindByName(TEXT("cmdNext")))->GetHandle());
+      ((WndButton *)wf->FindByName(TEXT("cmdNext")))->set_focus();
       NextPage(+1);
       //((WndButton *)wf->FindByName(TEXT("cmdNext")))->SetFocused(true, NULL);
     return(0);
@@ -990,14 +992,13 @@ static void OnWaypointNewClicked(WindowControl * Sender){
   edit_waypoint.Comment[0] = 0;
   edit_waypoint.Name[0] = 0;
   edit_waypoint.Details = 0;
-  edit_waypoint.Number = NumberOfWayPoints;
+  edit_waypoint.Number = 0;
   dlgWaypointEditShowModal(&edit_waypoint);
   if (_tcslen(edit_waypoint.Name)>0) {
     mutexTaskData.Lock();
-    WAYPOINT *new_waypoint = GrowWaypointList();
-    if (new_waypoint) {
-      memcpy(new_waypoint,&edit_waypoint,sizeof(WAYPOINT));
-      new_waypoint->Details= 0;
+    int i = way_points.append(edit_waypoint);
+    if (i >= 0) {
+      way_points.set(i).Details = 0;
       waypointneedsave = true;
     }
     mutexTaskData.Unlock();
@@ -1010,7 +1011,7 @@ static void OnWaypointEditClicked(WindowControl * Sender){
   int res;
   res = dlgWayPointSelect(XCSoarInterface::Basic().Location);
   if (res != -1){
-    dlgWaypointEditShowModal(&WayPointList[res]);
+    dlgWaypointEditShowModal(&way_points.set(res));
     waypointneedsave = true;
   }
 }
@@ -1051,12 +1052,12 @@ static void OnWaypointDeleteClicked(WindowControl * Sender){
   int res;
   res = dlgWayPointSelect(XCSoarInterface::Basic().Location);
   if (res != -1){
-    if(MessageBoxX(WayPointList[res].Name,
+    if(MessageBoxX(way_points.get(res).Name,
                    gettext(TEXT("Delete Waypoint?")),
                    MB_YESNO|MB_ICONQUESTION) == IDYES) {
 
       mutexTaskData.Lock();
-      WayPointList[res].FileNum = -1;
+      way_points.set(res).FileNum = -1;
       mutexTaskData.Unlock();
       waypointneedsave = true;
     }

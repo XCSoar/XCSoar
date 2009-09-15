@@ -7,6 +7,8 @@
 #include <math.h>
 #include "Math/FastMath.h"
 #include "Units.hpp"
+#include "Components.hpp"
+#include "WayPointList.hpp"
 
 void TaskScan::scan_point_forward(RelativeTaskPointVisitor &visitor)
 {
@@ -301,17 +303,17 @@ private:
   double SectorBearing;
   //
   void setStartEnd(TASK_POINT &pt) {
-    FindLatitudeLongitude(WayPointList[pt.Index].Location,
+    FindLatitudeLongitude(way_points.get(pt.Index).Location,
 			  SectorBearing + SectorAngle, SectorSize,
 			  &pt.SectorStart);
-    FindLatitudeLongitude(WayPointList[pt.Index].Location,
+    FindLatitudeLongitude(way_points.get(pt.Index).Location,
 			  SectorBearing - SectorAngle, SectorSize,
 			  &pt.SectorEnd);
   }
   void clearAAT(const TASK_POINT &point, const unsigned i) {
     task_stats[i].AATTargetOffsetRadius = 0.0;
     task_stats[i].AATTargetOffsetRadial = 0.0;
-    task_stats[i].AATTargetLocation = WayPointList[point.Index].Location;
+    task_stats[i].AATTargetLocation = way_points.get(point.Index).Location;
   };
 };
 
@@ -325,20 +327,18 @@ public:
   {
   }
   void visit_reset() {
-    if (WayPointList) {
-      for (unsigned i=0; i< NumberOfWayPoints; i++) {
-	WayPointCalc[i].InTask = false;
-	if ((WayPointList[i].Flags & HOME) == HOME) {
-	  WayPointCalc[i].InTask = true;
-	}
-      }
+    if (true) {
+      for (unsigned i = 0; way_points.verify_index(i); i++)
+        way_points.set_calc(i).InTask =
+          (way_points.get(i).Flags & HOME) == HOME;
+
       if (ValidWayPoint(settings_computer->HomeWaypoint)) {
-	WayPointCalc[settings_computer->HomeWaypoint].InTask = true;
+        way_points.set_calc(settings_computer->HomeWaypoint).InTask = true;
       }
     }
   }
   void visit_start_point(START_POINT &point, const unsigned i) { 
-    WayPointCalc[task_start_points[i].Index].InTask = true;
+    way_points.set_calc(task_start_points[i].Index).InTask = true;
   }
   void visit_task_point_start(TASK_POINT &point, const unsigned i) { 
     addTaskPoint(i);
@@ -352,7 +352,7 @@ public:
 private:
   const SETTINGS_COMPUTER *settings_computer;
   void addTaskPoint(const unsigned i) {
-    WayPointCalc[task_points[i].Index].InTask = true;
+    way_points.set_calc(task_points[i].Index).InTask = true;
   }
 };
 
@@ -378,8 +378,8 @@ public:
       point0.LegBearing=0;
       point0.InBound=0;
     }
-    DistanceBearing(WayPointList[point0.Index].Location,
-		    WayPointList[point1.Index].Location,
+    DistanceBearing(way_points.get(point0.Index).Location,
+		    way_points.get(point1.Index).Location,
 		    &point1.LegDistance, &point1.InBound);
 
     if (AATEnabled) {
@@ -400,8 +400,8 @@ public:
   };
   void visit_leg_multistart(START_POINT &start, const unsigned index0, TASK_POINT &point)
   {
-    DistanceBearing(WayPointList[start.Index].Location,
-		    WayPointList[point.Index].Location,
+    DistanceBearing(way_points.get(start.Index).Location,
+                    way_points.get(point.Index).Location,
 		    NULL, &start.OutBound);
   };
   double total_length;

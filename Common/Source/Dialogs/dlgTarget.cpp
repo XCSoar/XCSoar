@@ -54,6 +54,8 @@ Copyright_License {
 #include "MainWindow.hpp"
 #include "WayPoint.hpp"
 #include "Protection.hpp"
+#include "WayPointList.hpp"
+#include "Components.hpp"
 
 static WndForm *wf=NULL;
 static WindowControl *btnMove = NULL;
@@ -127,7 +129,7 @@ static void MoveTarget(double adjust_angle) {
       task_stats[target_point].AATTargetLocation = target_location;
 
       // set range/radial for outside sector
-      DistanceBearing(WayPointList[task_points[target_point].Index].Location,
+      DistanceBearing(way_points.get(task_points[target_point].Index).Location,
                       task_stats[target_point].AATTargetLocation,
                       &distance, &bearing);
       bearing = AngleLimit180(bearing-task_points[target_point].Bisector);
@@ -191,7 +193,7 @@ static void DragTarget(const GEOPOINT target_location) {
       task_stats[target_point].AATTargetLocation = target_location;
 
       // set range/radial for outside sector
-      DistanceBearing(WayPointList[task_points[target_point].Index].Location,
+      DistanceBearing(way_points.get(task_points[target_point].Index).Location,
                       task_stats[target_point].AATTargetLocation,
                       &distance, &bearing);
       bearing = AngleLimit180(bearing-task_points[target_point].Bisector);
@@ -591,7 +593,7 @@ void dlgTarget(void) {
   }
   for (int i=ActiveTaskPointOnEntry; i<MAXTASKPOINTS; i++) {
     if (ValidTaskPoint(i)) {
-      _tcsncpy(tp_short, WayPointList[task_points[i].Index].Name, 20);
+      _tcsncpy(tp_short, way_points.get(task_points[i].Index).Name, 20);
       tp_short[20] = 0;
       _stprintf(tp_label, TEXT("%d %s"), i, tp_short);
       dfe->addEnumText(tp_label);

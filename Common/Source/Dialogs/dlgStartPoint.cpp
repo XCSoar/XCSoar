@@ -42,6 +42,8 @@ Copyright_License {
 #include "Dialogs/dlgTools.h"
 #include "InfoBoxLayout.h"
 #include "MainWindow.hpp"
+#include "WayPointList.hpp"
+#include "Components.hpp"
 
 #include <assert.h>
 
@@ -70,7 +72,7 @@ OnStartPointPaintListItem(WindowControl * Sender, Canvas &canvas)
 
     if ((task_start_points[i].Index != -1)
 	&&(task_start_stats[i].Active)) {
-      _tcscpy(label, WayPointList[task_start_points[i].Index].Name);
+      _tcscpy(label, way_points.get(task_start_points[i].Index).Name);
     } else {
       int j;
       int i0=0;

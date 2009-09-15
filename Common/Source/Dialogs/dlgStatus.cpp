@@ -53,6 +53,9 @@ Copyright_License {
 #include "Calculations.h" // TODO danger! FAIFinishHeight
 #include "MapWindow.h"
 #include "GlideComputer.hpp"
+#include "WayPointList.hpp"
+#include "Components.hpp"
+
 #include <assert.h>
 
 #include "Dialogs/dlgTools.h"
@@ -109,13 +112,13 @@ static int FormKeyDown(WindowControl * Sender, WPARAM wParam, LPARAM lParam){
   switch(wParam & 0xffff){
     case VK_LEFT:
     case '6':
-      SetFocus(((WndButton *)wf->FindByName(TEXT("cmdPrev")))->GetHandle());
+      ((WndButton *)wf->FindByName(TEXT("cmdPrev")))->set_focus();
       NextPage(-1);
       //((WndButton *)wf->FindByName(TEXT("cmdPrev")))->SetFocused(true, NULL);
     return(0);
     case VK_RIGHT:
     case '7':
-      SetFocus(((WndButton *)wf->FindByName(TEXT("cmdNext")))->GetHandle());
+      ((WndButton *)wf->FindByName(TEXT("cmdNext")))->set_focus();
       NextPage(+1);
       //((WndButton *)wf->FindByName(TEXT("cmdNext")))->SetFocused(true, NULL);
     return(0);
@@ -390,13 +393,13 @@ static void UpdateValuesFlight(void) {
   if (nearest_waypoint>=0) {
 
     DistanceBearing(XCSoarInterface::Basic().Location,
-                    WayPointList[nearest_waypoint].Location,
+                    way_points.get(nearest_waypoint).Location,
                     &distance,
                     &bearing);
 
     wp = (WndProperty*)wf->FindByName(TEXT("prpNear"));
     if (wp) {
-      wp->SetText(WayPointList[nearest_waypoint].Name);
+      wp->SetText(way_points.get(nearest_waypoint).Name);
     }
 
     wp = (WndProperty*)wf->FindByName(TEXT("prpBearing"));
@@ -482,7 +485,7 @@ static void UpdateValuesRules(void) {
   if (ValidTaskPoint(0)) {
     //    start_h = WayPointList[task_points[0].Index].Altitude;
     if (wp) {
-      wp->SetText(WayPointList[task_points[0].Index].Name);
+      wp->SetText(way_points.get(task_points[0].Index).Name);
     }
   } else {
     //    start_h = 0;

@@ -300,10 +300,6 @@ void InfoBox::SetComment(const TCHAR *Value){
   }
 }
 
-PaintWindow &InfoBox::GetHandle(void){
-  return *this;
-}
-
 void InfoBox::SetSmallerFont(bool smallerFont)
 {
 	this->mSmallerFont = smallerFont;
@@ -760,7 +756,7 @@ InfoBox::on_killfocus()
 }
 
 bool
-InfoBox::on_timer(unsigned id)
+InfoBox::on_timer(timer_t id)
 {
   if (id != focus_timer)
     return BufferWindow::on_timer(id);

@@ -96,9 +96,6 @@ struct WPCALC
 		   // by BestAlternate
 };
 
-extern WAYPOINT *WayPointList;
-extern WPCALC   *WayPointCalc; // VENTA3 additional calculated infos on WPs
-extern unsigned int NumberOfWayPoints;
 extern int WaypointsOutOfRange;
 
 class WaypointVisitor {
