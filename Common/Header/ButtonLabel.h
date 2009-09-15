@@ -52,15 +52,19 @@ class ButtonLabel: public ActionInterface {
   static TextWindow hWndButtonWindow[NUMBUTTONLABELS];
   static bool ButtonVisible[NUMBUTTONLABELS];
   static bool ButtonDisabled[NUMBUTTONLABELS];
+
+protected:
+  static void GetButtonPosition(unsigned i, RECT rc,
+				int *x, int *y,
+				int *sizex, int *sizey);
+
+public:
   static void CreateButtonLabels(ContainerWindow &parent, const RECT rc);
   static void AnimateButton(unsigned i);
   static void SetFont(const Font &Font);
   static void Destroy();
   static void SetLabelText(unsigned i, const TCHAR *text);
   static bool CheckButtonPress(HWND pressedwindow);
-  static void GetButtonPosition(unsigned i, RECT rc,
-				int *x, int *y,
-				int *sizex, int *sizey);
 
   static bool ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size);
 };
