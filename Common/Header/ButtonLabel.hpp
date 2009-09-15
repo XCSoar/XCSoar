@@ -52,6 +52,7 @@ public:
            bool visible) {
     TextWindow::set(parent, left, top, width, height,
                     true, true, visible, true, true);
+    Window::set_enabled(true);
     set_enabled(false);
     install_wndproc();
   }
@@ -63,6 +64,8 @@ public:
   void set_enabled(bool _enabled) {
     enabled = _enabled;
   }
+
+  virtual bool on_mouse_down(int x, int y);
 };
 
 class ButtonLabel: public ActionInterface {
@@ -87,7 +90,6 @@ public:
   static void Destroy();
   static void SetLabelText(unsigned i, const TCHAR *text);
   static int Find(const Window &window);
-  static bool CheckButtonPress(HWND pressedwindow);
 
   static bool ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size);
 };

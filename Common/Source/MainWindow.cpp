@@ -111,10 +111,6 @@ MainWindow::on_command(HWND wmControl, unsigned id, unsigned code)
     full_screen();
 
     popup.CheckTouch(wmControl);
-    
-    if (ButtonLabel::CheckButtonPress(wmControl)) {
-      return true; // don't continue processing..
-    }
   }
 
   return TopWindow::on_command(wmControl, id, code);

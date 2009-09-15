@@ -55,6 +55,18 @@ bool ButtonLabel::ButtonVisible[NUMBUTTONLABELS];
 
 unsigned ButtonLabel::ButtonLabelGeometry = 0;
 
+bool
+MenuButton::on_mouse_down(int x, int y)
+{
+  if (!is_enabled())
+    return true;
+
+  int i = ButtonLabel::Find(*this);
+  if (i >= 0)
+    InputEvents::processButton(i);
+
+  return true;
+}
 
 void
 ButtonLabel::GetButtonPosition(unsigned i, RECT rc,
@@ -228,21 +240,6 @@ ButtonLabel::Find(const Window &window)
       return i;
 
   return -1;
-}
-
-bool ButtonLabel::CheckButtonPress(HWND pressedwindow) {
-  for (unsigned i = 0; i < NUMBUTTONLABELS; i++) {
-    if (hWndButtonWindow[i] == pressedwindow) {
-      if (hWndButtonWindow[i].is_enabled()) {
-        InputEvents::processButton(i);
-        return TRUE;
-      } else {
-        return FALSE;
-      }
-      return FALSE;
-    }
-  }
-  return FALSE;
 }
 
 void
