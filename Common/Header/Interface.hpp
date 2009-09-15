@@ -155,7 +155,6 @@ private:
   static void PreloadInitialisation(bool ask);
   static void StartupInfo();
   static HWND hProgress;
-  static HWND hWndCurtain;
 };
 
 #endif

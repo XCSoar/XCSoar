@@ -103,7 +103,6 @@ LRESULT CALLBACK Progress(HWND hDlg, UINT message,
 }
 
 HWND XCSoarInterface::hProgress = NULL;
-HWND XCSoarInterface::hWndCurtain = NULL;
 
 HCURSOR ActionInterface::oldCursor = NULL;
 
@@ -127,10 +126,6 @@ void XCSoarInterface::CloseProgressDialog() {
   if (hProgress) {
     DestroyWindow(hProgress);
     hProgress = NULL;
-  }
-  if (hWndCurtain) {
-    DestroyWindow(hWndCurtain);
-    hWndCurtain = NULL;
   }
 }
 
@@ -176,19 +171,6 @@ HWND XCSoarInterface::CreateProgressDialog(const TCHAR* text) {
 
     RECT rc;
     GetClientRect(main_window, &rc);
-
-#ifndef WINDOWSPC
-    hWndCurtain = CreateWindow(TEXT("STATIC"), TEXT(" "),
-			       WS_VISIBLE | WS_CHILD,
-                               0, 0, (rc.right - rc.left),
-			       (rc.bottom-rc.top),
-                               main_window, NULL, hInst, NULL);
-    SetWindowPos(hWndCurtain,HWND_TOP,0,0,0,0,
-                 SWP_NOMOVE|SWP_NOSIZE|SWP_SHOWWINDOW);
-    ShowWindow(hWndCurtain,SW_SHOW);
-    SetForegroundWindow(hWndCurtain);
-    UpdateWindow(hWndCurtain);
-#endif
 
 #ifdef WINDOWSPC
     RECT rcp;
