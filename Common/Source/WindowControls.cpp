@@ -873,6 +873,17 @@ WndForm::on_command(HWND hWnd, unsigned id, unsigned code)
 
 }
 
+bool
+WndForm::on_timer(timer_t id)
+{
+  if (id == cbTimerID) {
+    if (mOnTimerNotify)
+      mOnTimerNotify(this);
+    return true;
+  } else
+    return WindowControl::on_timer(id);
+}
+
 const Font *
 WndForm::SetTitleFont(const Font &font)
 {
@@ -1012,14 +1023,6 @@ int WndForm::ShowModal(bool bEnableMap) {
           if (!(mOnLButtonUpNotify)(this, msg.wParam, msg.lParam))
             continue;
 
-      }
-      if (msg.message == WM_TIMER) {
-        if (msg.hwnd == GetHandle()) {
-          if (mOnTimerNotify) {
-            mOnTimerNotify(this);
-          }
-          continue;
-        }
       }
 
       TranslateMessage(&msg);
@@ -1255,14 +1258,6 @@ int WndForm::OnUnhandledMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
       if (!(mOnLButtonUpNotify)(this, msg.wParam, msg.lParam))
         return(0);
 
-  }
-  if (msg.message == WM_TIMER) {
-    if (msg.hwnd == GetHandle()) {
-      if (mOnTimerNotify) {
-        mOnTimerNotify(this);
-      }
-      return(1);
-    }
   }
 
   if (uMsg == WM_KEYDOWN){

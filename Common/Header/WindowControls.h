@@ -467,6 +467,7 @@ class WndForm:public WindowControl{
 
     /** from class Window */
     virtual bool on_command(HWND hWnd, unsigned id, unsigned code);
+    virtual bool on_timer(timer_t id);
 
     Color SetForeColor(Color Value);
     Color SetBackColor(Color Value);
