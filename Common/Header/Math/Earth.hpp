@@ -69,18 +69,10 @@ void DistanceBearing(GEOPOINT loc1,
                      double *Distance, double *Bearing);
 
 double Distance(GEOPOINT loc1, 
-                GEOPOINT loc2) {
-  double retval;
-  DistanceBearing(loc1, loc2, &retval, NULL);
-  return retval;
-};
+                GEOPOINT loc2);
 
 double Bearing(GEOPOINT loc1,
-               GEOPOINT loc2) {
-  double retval;
-  DistanceBearing(loc1, loc2, NULL, &retval);
-  return retval;
-}
+               GEOPOINT loc2);
 
 double DoubleDistance(GEOPOINT loc1, 
                       GEOPOINT loc2,

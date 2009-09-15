@@ -339,3 +339,19 @@ void FindLatitudeLongitude(GEOPOINT loc, double Bearing, double Distance,
   result *= RAD_TO_DEG;
   loc_out->Longitude = result;
 }
+
+
+double Distance(GEOPOINT loc1, 
+                GEOPOINT loc2) {
+  double retval;
+  DistanceBearing(loc1, loc2, &retval, NULL);
+  return retval;
+};
+
+double Bearing(GEOPOINT loc1,
+               GEOPOINT loc2) {
+  double retval;
+  DistanceBearing(loc1, loc2, NULL, &retval);
+  return retval;
+};
+
