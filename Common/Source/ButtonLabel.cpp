@@ -35,17 +35,12 @@ Copyright_License {
 }
 */
 
-#include "InfoBoxLayout.h"
-#include "XCSoar.h"
 #include "ButtonLabel.h"
-#include "LogFile.hpp"
-#include "Dialogs.h"
+#include "InfoBoxLayout.h"
 #include "Language.hpp"
 #include "Screen/Animation.hpp"
 #include "Registry.hpp"
-#include "InfoBox.h"
-#include "WindowControls.h"
-#include "Interface.hpp"
+#include "InputEvents.h"
 #include "Compatibility/string.h"
 #include "options.h" /* for IBLSCALE() */
 
@@ -237,8 +232,6 @@ ButtonLabel::SetLabelText(unsigned index, const TCHAR *text)
   }
 
 }
-
-#include "InputEvents.h"
 
 bool ButtonLabel::CheckButtonPress(HWND pressedwindow) {
   for (unsigned i = 0; i < NUMBUTTONLABELS; i++) {
