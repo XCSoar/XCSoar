@@ -392,29 +392,31 @@ void dlgWayPointDetailsShowModal(void){
            Directory,
            SelectedWaypoint+1);
 
+  const WAYPOINT &way_point = WayPointList[SelectedWaypoint];
+
   _stprintf(sTmp, TEXT("%s: "), wf->GetCaption());
-  _tcscat(sTmp, WayPointList[SelectedWaypoint].Name);
+  _tcscat(sTmp, way_point.Name);
   wf->SetCaption(sTmp);
 
   wp = ((WndProperty *)wf->FindByName(TEXT("prpWpComment")));
-  wp->SetText(WayPointList[SelectedWaypoint].Comment);
+  wp->SetText(way_point.Comment);
   wp->SetButtonSize(16);
 
-  Units::LongitudeToString(WayPointList[SelectedWaypoint].Location.Longitude, sTmp, sizeof(sTmp)-1);
+  Units::LongitudeToString(way_point.Location.Longitude, sTmp, sizeof(sTmp)-1);
   ((WndProperty *)wf->FindByName(TEXT("prpLongitude")))
     ->SetText(sTmp);
 
-  Units::LatitudeToString(WayPointList[SelectedWaypoint].Location.Latitude, sTmp, sizeof(sTmp)-1);
+  Units::LatitudeToString(way_point.Location.Latitude, sTmp, sizeof(sTmp)-1);
   ((WndProperty *)wf->FindByName(TEXT("prpLatitude")))
     ->SetText(sTmp);
 
-  Units::FormatUserAltitude(WayPointList[SelectedWaypoint].Altitude, sTmp, sizeof(sTmp)-1);
+  Units::FormatUserAltitude(way_point.Altitude, sTmp, sizeof(sTmp)-1);
   ((WndProperty *)wf->FindByName(TEXT("prpAltitude")))
     ->SetText(sTmp);
   
   SunEphemeris sun;
   sunsettime = sun.CalcSunTimes
-    (WayPointList[SelectedWaypoint].Location,
+    (way_point.Location,
      XCSoarInterface::Basic(), XCSoarInterface::Calculated(),
      GetUTCOffset()/3600);
   sunsethours = (int)sunsettime;
@@ -426,7 +428,7 @@ void dlgWayPointDetailsShowModal(void){
 
   double distance, bearing;
   DistanceBearing(XCSoarInterface::Basic().Location,
-                  WayPointList[SelectedWaypoint].Location,
+                  way_point.Location,
                   &distance,
                   &bearing);
 
@@ -452,7 +454,7 @@ void dlgWayPointDetailsShowModal(void){
 				  0, 0, true,
 				  0)
     -XCSoarInterface::SettingsComputer().SAFETYALTITUDEARRIVAL
-    -WayPointList[SelectedWaypoint].Altitude;
+    -way_point.Altitude;
 
   _stprintf(sTmp, TEXT("%.0f %s"), alt*ALTITUDEMODIFY,
 	    Units::GetAltitudeName());
@@ -471,7 +473,7 @@ void dlgWayPointDetailsShowModal(void){
 				  0, 0, true,
 				  0)
     -XCSoarInterface::SettingsComputer().SAFETYALTITUDEARRIVAL
-    -WayPointList[SelectedWaypoint].Altitude;
+    -way_point.Altitude;
 
   wp = ((WndProperty *)wf->FindByName(TEXT("prpMc1")));
   if (wp) wp->SetText(sTmp);
@@ -487,7 +489,7 @@ void dlgWayPointDetailsShowModal(void){
 				  0, 0, true,
 				  0)
     -XCSoarInterface::SettingsComputer().SAFETYALTITUDEARRIVAL
-    -WayPointList[SelectedWaypoint].Altitude;
+    -way_point.Altitude;
 
   _stprintf(sTmp, TEXT("%.0f %s"), alt*ALTITUDEMODIFY,
 	    Units::GetAltitudeName());
@@ -518,13 +520,13 @@ void dlgWayPointDetailsShowModal(void){
   assert(wDetailsEntry!=NULL);
   wDetailsEntry->SetCanFocus(true);
 
-  nTextLines = TextToLineOffsets(WayPointList[SelectedWaypoint].Details,
+  nTextLines = TextToLineOffsets(way_point.Details,
 				 LineOffsets,
 				 MAXLINES);
 
   /* TODO enhancement: wpdetails
   wp = ((WndProperty *)wf->FindByName(TEXT("prpWpDetails")));
-  wp->SetText(WayPointList[SelectedWaypoint].Details);
+  wp->SetText(way_point.Details);
   */
 
   wInfo->SetBorderKind(BORDERLEFT);

@@ -192,15 +192,17 @@ static void PrepareData(void){
   WayPointSelectInfo = (WayPointSelectInfo_t*)malloc(sizeof(WayPointSelectInfo_t) * NumberOfWayPoints);
 
   for (int i=0; i<(int)NumberOfWayPoints; i++){
+    const WAYPOINT &way_point = WayPointList[i];
+
     WayPointSelectInfo[i].Index = i;
 
     DistanceBearing(Location,
-                    WayPointList[i].Location,
+                    way_point.Location,
                     &(WayPointSelectInfo[i].Distance),
                     &(WayPointSelectInfo[i].Direction));
     WayPointSelectInfo[i].Distance *= DISTANCEMODIFY;
 
-    _tcsncpy(sTmp, WayPointList[i].Name, 4);
+    _tcsncpy(sTmp, way_point.Name, 4);
     sTmp[4] = '\0';
     _tcsupr(sTmp);
 
@@ -210,9 +212,9 @@ static void PrepareData(void){
                   + (((DWORD)sTmp[2] & 0xff) << 8)
                   + (((DWORD)sTmp[3] & 0xff) );
 
-    WayPointSelectInfo[i].Type = WayPointList[i].Flags;
+    WayPointSelectInfo[i].Type = way_point.Flags;
 
-    WayPointSelectInfo[i].FileIdx = WayPointList[i].FileNum;
+    WayPointSelectInfo[i].FileIdx = way_point.FileNum;
 
   }
 
@@ -542,6 +544,7 @@ OnPaintListItem(WindowControl *Sender, Canvas &canvas)
   if (DrawListIndex < n){
 
     int i = LowLimit + DrawListIndex;
+    const WAYPOINT &way_point = WayPointList[WayPointSelectInfo[i].Index];
 
 // Sleep(100);
 
@@ -559,23 +562,23 @@ OnPaintListItem(WindowControl *Sender, Canvas &canvas)
 
     canvas.text_clipped(2 * InfoBoxLayout::scale, 2 * InfoBoxLayout::scale,
                         x1 - InfoBoxLayout::scale * 5,
-                        WayPointList[WayPointSelectInfo[i].Index].Name);
+                        way_point.Name);
 
     sTmp[0] = '\0';
     sTmp[1] = '\0';
     sTmp[2] = '\0';
 
-    if (WayPointList[WayPointSelectInfo[i].Index].Flags & HOME){
+    if (way_point.Flags & HOME){
       sTmp[0] = 'H';
     }else
-    if (WayPointList[WayPointSelectInfo[i].Index].Flags & AIRPORT){
+    if (way_point.Flags & AIRPORT){
       sTmp[0] = 'A';
     }else
-    if (WayPointList[WayPointSelectInfo[i].Index].Flags & LANDPOINT){
+    if (way_point.Flags & LANDPOINT){
       sTmp[0] = 'L';
     }
 
-    if (WayPointList[WayPointSelectInfo[i].Index].Flags & TURNPOINT){
+    if (way_point.Flags & TURNPOINT){
       if (sTmp[0] == '\0')
         sTmp[0] = 'T';
       else

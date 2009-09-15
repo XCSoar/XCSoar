@@ -83,8 +83,10 @@ void MapWindow::DrawWaypoints(Canvas &canvas)
 
   for(i=0;i<NumberOfWayPoints;i++)
     {
-      if(WayPointCalc[i].Visible )
-	{
+      const WAYPOINT &way_point = WayPointList[i];
+      const WPCALC &wpcalc = WayPointCalc[i];
+
+      if (wpcalc.Visible) {
 
 #ifdef HAVEEXCEPTIONS
 	  __try{
@@ -106,10 +108,10 @@ void MapWindow::DrawWaypoints(Canvas &canvas)
 
 	    if(GetMapScaleKM() > 20) {
 	      wp_bmp = &MapGfx.hSmall;
-	    } else if( ((WayPointList[i].Flags & AIRPORT) == AIRPORT)
-		       || ((WayPointList[i].Flags & LANDPOINT) == LANDPOINT) ) {
+            } else if( ((way_point.Flags & AIRPORT) == AIRPORT)
+                       || ((way_point.Flags & LANDPOINT) == LANDPOINT) ) {
 	      islandable = true; // so we can always draw them
-	      if(WayPointCalc[i].Reachable){
+              if (wpcalc.Reachable) {
 
 		TextDisplayMode.AsFlag.Reachable = 1;
 
@@ -123,12 +125,12 @@ void MapWindow::DrawWaypoints(Canvas &canvas)
 		  dowrite = true;
 		}
 
-		if ((WayPointList[i].Flags & AIRPORT) == AIRPORT)
+                if ((way_point.Flags & AIRPORT) == AIRPORT)
 		  wp_bmp = &MapGfx.hBmpAirportReachable;
 		else
 		  wp_bmp = &MapGfx.hBmpFieldReachable;
 	      } else {
-		if ((WayPointList[i].Flags & AIRPORT) == AIRPORT)
+                if ((way_point.Flags & AIRPORT) == AIRPORT)
 		  wp_bmp = &MapGfx.hBmpAirportUnReachable;
 		else
 		  wp_bmp = &MapGfx.hBmpFieldUnReachable;
@@ -147,8 +149,7 @@ void MapWindow::DrawWaypoints(Canvas &canvas)
 
 	    if(irange || intask || islandable || dowrite) {
 	      draw_masked_bitmap(canvas, *wp_bmp, 
-				 WayPointCalc[i].Screen.x,
-				 WayPointCalc[i].Screen.y,
+                                 wpcalc.Screen.x, wpcalc.Screen.y,
 				 20, 20);
             }
 
@@ -162,43 +163,43 @@ void MapWindow::DrawWaypoints(Canvas &canvas)
 		if (intask) {
 		  if (draw_alt)
                     _stprintf(Buffer, TEXT("%s:%d%s"),
-                              WayPointList[i].Name,
-                              (int)(WayPointCalc[i].AltArrivalAGL*ALTITUDEMODIFY),
+                              way_point.Name,
+                              (int)(wpcalc.AltArrivalAGL*ALTITUDEMODIFY),
                               sAltUnit);
 		  else
-                    _stprintf(Buffer, TEXT("%s"),WayPointList[i].Name);
+                    _stprintf(Buffer, TEXT("%s"),way_point.Name);
 		}
 		break;
 	      case DISPLAYNAME:
 		dowrite = (SettingsMap().DeclutterLabels<2) || intask;
 		if (draw_alt)
                   _stprintf(Buffer, TEXT("%s:%d%s"),
-                            WayPointList[i].Name,
-                            (int)(WayPointCalc[i].AltArrivalAGL*ALTITUDEMODIFY),
+                            way_point.Name,
+                            (int)(wpcalc.AltArrivalAGL*ALTITUDEMODIFY),
                             sAltUnit);
 		else
-                  _stprintf(Buffer, TEXT("%s"),WayPointList[i].Name);
+                  _stprintf(Buffer, TEXT("%s"),way_point.Name);
 
 		break;
 	      case DISPLAYNUMBER:
 		dowrite = (SettingsMap().DeclutterLabels<2) || intask;
 		if (draw_alt)
                   _stprintf(Buffer, TEXT("%d:%d%s"),
-                            WayPointList[i].Number,
-                            (int)(WayPointCalc[i].AltArrivalAGL*ALTITUDEMODIFY),
+                            way_point.Number,
+                            (int)(wpcalc.AltArrivalAGL*ALTITUDEMODIFY),
                             sAltUnit);
 		else
-                  _stprintf(Buffer, TEXT("%d"),WayPointList[i].Number);
+                  _stprintf(Buffer, TEXT("%d"),way_point.Number);
 
 		break;
 	      case DISPLAYFIRSTFIVE:
 		dowrite = (SettingsMap().DeclutterLabels<2) || intask;
-		_tcsncpy(Buffer2, WayPointList[i].Name, 5);
+		_tcsncpy(Buffer2, way_point.Name, 5);
 		Buffer2[5] = '\0';
 		if (draw_alt)
                   _stprintf(Buffer, TEXT("%s:%d%s"),
                             Buffer2,
-                            (int)(WayPointCalc[i].AltArrivalAGL*ALTITUDEMODIFY),
+                            (int)(wpcalc.AltArrivalAGL*ALTITUDEMODIFY),
                             sAltUnit);
 		else
                   _stprintf(Buffer, TEXT("%s"),Buffer2);
@@ -206,12 +207,12 @@ void MapWindow::DrawWaypoints(Canvas &canvas)
 		break;
 	      case DISPLAYFIRSTTHREE:
 		dowrite = (SettingsMap().DeclutterLabels<2) || intask;
-		_tcsncpy(Buffer2, WayPointList[i].Name, 3);
+		_tcsncpy(Buffer2, way_point.Name, 3);
 		Buffer2[3] = '\0';
 		if (draw_alt)
                   _stprintf(Buffer, TEXT("%s:%d%s"),
                             Buffer2,
-                            (int)(WayPointCalc[i].AltArrivalAGL*ALTITUDEMODIFY),
+                            (int)(wpcalc.AltArrivalAGL*ALTITUDEMODIFY),
                             sAltUnit);
 		else
                   _stprintf(Buffer, TEXT("%s"),Buffer2);
@@ -221,7 +222,7 @@ void MapWindow::DrawWaypoints(Canvas &canvas)
 		dowrite = (SettingsMap().DeclutterLabels<2) || intask;
 		if (draw_alt)
                   _stprintf(Buffer, TEXT("%d%s"),
-                            (int)(WayPointCalc[i].AltArrivalAGL*ALTITUDEMODIFY),
+                            (int)(wpcalc.AltArrivalAGL*ALTITUDEMODIFY),
                             sAltUnit);
 		else
 		  Buffer[0]= '\0';
@@ -235,10 +236,9 @@ void MapWindow::DrawWaypoints(Canvas &canvas)
 	      if (dowrite) {
 		MapWaypointLabelAdd(
 				    Buffer,
-				    WayPointCalc[i].Screen.x+5,
-				    WayPointCalc[i].Screen.y,
+                                    wpcalc.Screen.x + 5, wpcalc.Screen.y,
 				    TextDisplayMode,
-				    (int)(WayPointCalc[i].AltArrivalAGL*ALTITUDEMODIFY),
+                                    (int)(wpcalc.AltArrivalAGL*ALTITUDEMODIFY),
 				    intask,false,false,false,
 				    MapRect);
 	      }
@@ -287,29 +287,32 @@ void MapWindow::CalculateScreenPositionsWaypoints() {
     for (j=0; j<MAXTASKPOINTS; j++) {
       int i = task_points[j].Index;
       if (i>=0) {
+        WPCALC &wpcalc = WayPointCalc[i];
 	LonLat2Screen(WayPointList[i].Location, 
-		      WayPointCalc[i].Screen);
-	WayPointCalc[i].Visible = PointVisible(WayPointCalc[i].Screen);
+                      wpcalc.Screen);
+        wpcalc.Visible = PointVisible(wpcalc.Screen);
       }
     }
     if (EnableMultipleStartPoints) {
       for(j=0;j<MAXSTARTPOINTS-1;j++) {
         int i = task_start_points[j].Index;
         if (task_start_stats[j].Active && (i>=0)) {
+          WPCALC &wpcalc = WayPointCalc[i];
 	  LonLat2Screen(WayPointList[i].Location, 
-			WayPointCalc[i].Screen);
-	  WayPointCalc[i].Visible = PointVisible(WayPointCalc[i].Screen);
+                        wpcalc.Screen);
+          wpcalc.Visible = PointVisible(wpcalc.Screen);
         }
       }
     }
     // only calculate screen coordinates for waypoints that are visible
     for (unsigned i = 0; i < NumberOfWayPoints; i++) {
-      if (!WayPointCalc[i].FarVisible) {
-	WayPointCalc[i].Visible = false;
+      WPCALC &wpcalc = WayPointCalc[i];
+      if (!wpcalc.FarVisible) {
+        wpcalc.Visible = false;
 	continue;
       } else {
-	WayPointCalc[i].Visible = LonLat2ScreenIfVisible(WayPointList[i].Location, 
-							 &WayPointCalc[i].Screen);
+        wpcalc.Visible = LonLat2ScreenIfVisible(WayPointList[i].Location,
+                                                &wpcalc.Screen);
       }
     }
   }

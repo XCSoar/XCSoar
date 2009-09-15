@@ -157,13 +157,13 @@ BOOL VLDeclare(PDeviceDescriptor_t d, Declaration_t *decl){
     strncpy(vl.declaration.flightinfo.competitionclass, temp, 12);
 
     if (ValidWayPoint(XCSoarInterface::SettingsComputer().HomeWaypoint)) {
-      sprintf(temp, "%S", WayPointList[XCSoarInterface::SettingsComputer().HomeWaypoint].Name);
+      const WAYPOINT &way_point = WayPointList[XCSoarInterface::SettingsComputer().HomeWaypoint];
+
+      sprintf(temp, "%S", way_point.Name);
 
       strncpy(vl.declaration.flightinfo.homepoint.name, temp, 6);
-      vl.declaration.flightinfo.homepoint.lon =
-        WayPointList[XCSoarInterface::SettingsComputer().HomeWaypoint].Location.Longitude;
-      vl.declaration.flightinfo.homepoint.lat =
-        WayPointList[XCSoarInterface::SettingsComputer().HomeWaypoint].Location.Latitude;
+      vl.declaration.flightinfo.homepoint.lon = way_point.Location.Longitude;
+      vl.declaration.flightinfo.homepoint.lat = way_point.Location.Latitude;
     }
   }
 

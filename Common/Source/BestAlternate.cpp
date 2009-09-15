@@ -168,6 +168,7 @@ GlideComputerTask::SearchBestAlternate()
       }
 
       const WAYPOINT &way_point = WayPointList[SortedApproxIndex[i]];
+      WPCALC &wpcalc = WayPointCalc[SortedApproxIndex[i]];
 
       if ((scan_airports_slot==0) &&
 	  ((way_point.Flags & AIRPORT) != AIRPORT)) {
@@ -175,10 +176,9 @@ GlideComputerTask::SearchBestAlternate()
         continue;
       }
 
-      arrival_altitude = CalculateWaypointArrivalAltitude(way_point,
-                                                          WayPointCalc[SortedApproxIndex[i]]);
+      arrival_altitude = CalculateWaypointArrivalAltitude(way_point, wpcalc);
 
-      WayPointCalc[SortedApproxIndex[i]].AltArrival = arrival_altitude;
+      wpcalc.AltArrival = arrival_altitude;
       // This is holding the real arrival value
 
       /*
@@ -210,8 +210,8 @@ GlideComputerTask::SearchBestAlternate()
             DistanceBearing(Basic().Location, way_point.Location,
                             &wp_distance, &wp_bearing);
 
-	    WayPointCalc[SortedApproxIndex[i]].Distance = wp_distance;
-	    WayPointCalc[SortedApproxIndex[i]].Bearing = wp_bearing;
+            wpcalc.Distance = wp_distance;
+            wpcalc.Bearing = wp_bearing;
 
             bool out_of_range;
             double distance_soarable =
@@ -267,9 +267,12 @@ GlideComputerTask::SearchBestAlternate()
 	// break;  // that list is unsorted !
       }
 
+      const WAYPOINT &way_point = WayPointList[curwp];
+      WPCALC &wpcalc = WayPointCalc[curwp];
+
       // At the first unsafe landing, stop searching down the list and
       // use the best found or the first
-      double grsafe=safecalc - WayPointList[curwp].Altitude;
+      double grsafe = safecalc - way_point.Altitude;
       if ( grsafe <= 0 ) {
 	/*
 	 * We're under the safety altitude for this waypoint.
@@ -278,8 +281,9 @@ GlideComputerTask::SearchBestAlternate()
 	//continue;
       }
 
-      WayPointCalc[curwp].GR = WayPointCalc[curwp].Distance / grsafe; grsafe = WayPointCalc[curwp].GR;
-      curgr=WayPointCalc[curwp].GR;
+      wpcalc.GR = wpcalc.Distance / grsafe;
+      grsafe = wpcalc.GR;
+      curgr = wpcalc.GR;
 
       if ( grsafe > grpolar ) {
 	/*
@@ -309,7 +313,7 @@ GlideComputerTask::SearchBestAlternate()
 
       // Preferred list has priority, first found is taken (could be smarted)
 
-      if ( WayPointCalc[ curwp ].Preferred ) {
+      if (wpcalc.Preferred) {
 	bestalternate=curwp;
 	continue;
       }
@@ -318,7 +322,7 @@ GlideComputerTask::SearchBestAlternate()
       // at the end of the search no home and no preferred were found.
 
       if ( curgr < curbestgr ) {
-	if ( ( WayPointList[curwp].Flags & AIRPORT) == AIRPORT) {
+        if ((way_point.Flags & AIRPORT) == AIRPORT) {
 	  curbestairport=curwp;
 	  curbestgr=curgr; // ONLY FOR AIRPORT! NOT FOR OUTLANDINGS!!
 	}
