@@ -140,6 +140,7 @@
 #define IDB_SCROLLBARBOT                326
 #define IDB_SCROLLBARFILL               327
 #define IDB_OBSTACLE                    328
+#define IDB_THERMALSOURCE2              329
 #define IDC_AAT                         1001
 #define IDC_AATTIME                     1002
 #define IDC_AATTIMESPIN                 1003
