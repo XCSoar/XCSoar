@@ -60,21 +60,6 @@ private:
   static Mutex mutexTerrainData;
 };
 
-class MapDataClient {
-protected:
-  void Lock() {
-    mutexMapData.Lock();
-  }
-  void Unlock() {
-    mutexMapData.Unlock();
-  }
-  Mutex* GetMutex() {
-    return &mutexMapData;
-  }
-private:
-  static Mutex mutexMapData;
-};
-
 
 void TriggerGPSUpdate();
 void TriggerVarioUpdate();

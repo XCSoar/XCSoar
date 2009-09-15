@@ -68,7 +68,7 @@ bool CommonInterface::EnableAnimation = false;
 /////
 
 #include "LogFile.hpp"
-
+#include "Protection.hpp"
 #include "DeviceBlackboard.hpp"
 
 void XCSoarInterface::ExchangeBlackboard() {

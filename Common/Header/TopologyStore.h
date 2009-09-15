@@ -38,7 +38,7 @@ Copyright_License {
 #ifndef TOPOLOGY_STORE_H
 #define TOPOLOGY_STORE_H
 
-#include "Protection.hpp"
+#include "Poco/RWLock.h"
 #include "Screen/shapelib/mapshape.h"
 #include "Sizes.h"
 
@@ -50,7 +50,7 @@ class MapWindowProjection;
 class Topology;
 class TopologyWriter;
 
-class TopologyStore: public MapDataClient {
+class TopologyStore {
  public:
   TopologyStore(TopologyWriter* _marks):topo_marks(_marks) {};
   bool ScanVisibility(MapWindowProjection &m_projection,
@@ -63,6 +63,7 @@ class TopologyStore: public MapDataClient {
  private:
   Topology* topology_store[MAXTOPOLOGY];
   TopologyWriter* topo_marks;
+  Poco::RWLock lock;
 };
 
 #endif

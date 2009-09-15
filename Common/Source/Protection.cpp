@@ -64,7 +64,6 @@ Mutex mutexBlackboard;
 // protect GPS_INFO, mcready etc,
 // should be fast
 Mutex TerrainDataClient::mutexTerrainData;
-Mutex MapDataClient::mutexMapData;
 Mutex mutexComm;
 Mutex mutexTaskData;
 

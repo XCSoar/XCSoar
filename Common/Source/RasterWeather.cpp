@@ -109,7 +109,6 @@ void RasterWeather::RASP_filename(char* rasp_filename,
 }
 
 bool RasterWeather::LoadItem(int item, const TCHAR* name) {
-  Poco::ScopedRWLock protect(lock, true);
   char rasp_filename[MAX_PATH];
   RASP_filename(rasp_filename, name);
   weather_map[item] = new RasterMapJPG2000();
@@ -137,7 +136,7 @@ void RasterWeather::ScanAll(const GEOPOINT &location) {
         bsratio = true;
       }
     }
-    Close();
+    _Close();
   }
   _weather_time = 0;
 }
@@ -212,6 +211,10 @@ void RasterWeather::Reload(const GEOPOINT &location) {
 
 void RasterWeather::Close() {
   Poco::ScopedRWLock protect(lock, true);
+  _Close();
+}
+
+void RasterWeather::_Close() {
   int i;
   for (i=0; i<MAX_WEATHER_MAP; i++) {
     if (weather_map[i]) {

@@ -38,6 +38,7 @@ Copyright_License {
 #include "DrawThread.hpp"
 #include "MapWindow.h"
 #include "Gauge/GaugeFLARM.hpp"
+#include "Protection.hpp"
 
 void
 DrawThread::run()

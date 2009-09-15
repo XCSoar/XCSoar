@@ -38,7 +38,6 @@ Copyright_License {
 #ifndef TERRAIN_RENDERER_H
 #define TERRAIN_RENDERER_H
 
-#include "Protection.hpp"
 #include "Screen/Ramp.hpp"
 #include "GeoPoint.hpp"
 
@@ -51,7 +50,7 @@ class LabelBlock;
 
 //////////////////////////
 
-class TerrainRenderer: public TerrainDataClient {
+class TerrainRenderer {
 public:
   TerrainRenderer(RECT rc);
   ~TerrainRenderer();

@@ -127,7 +127,6 @@ bool RasterTerrain::CreateTerrainMap(char *zfilename) {
 void RasterTerrain::CloseTerrain(void)
 {
   StartupStore(TEXT("CloseTerrain\n"));
-  // TODO code: lock it first?
 
   if (terrain_initialised) {
 
@@ -182,11 +181,9 @@ bool RasterTerrain::IsPaged(void) {
 
 
 void RasterTerrain::ServiceCache(void) {
-  Lock();
   if (TerrainMap) {
     TerrainMap->ServiceCache();
   }
-  Unlock();
 }
 
 void RasterTerrain::SetTerrainRounding(double x, double y) {
@@ -196,22 +193,17 @@ void RasterTerrain::SetTerrainRounding(double x, double y) {
 }
 
 void RasterTerrain::ServiceTerrainCenter(const GEOPOINT &location) {
-  Lock();
   if (TerrainMap) {
     TerrainMap->SetViewCenter(location);
   }
-  Unlock();
 }
 
 
 void RasterTerrain::ServiceFullReload(const GEOPOINT &location) {
-
-  Lock();
   if (TerrainMap) {
     XCSoarInterface::CreateProgressDialog(gettext(TEXT("Loading terrain tiles...")));
     TerrainMap->ServiceFullReload(location);
   }
-  Unlock();
 }
 
 

@@ -85,6 +85,7 @@ public:
  private:
   bool bsratio;
   Poco::RWLock lock;
+  void _Close();
 };
 
 #endif

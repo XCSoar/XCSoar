@@ -56,7 +56,7 @@ Copyright_License {
 //////////////////////////////////////////////////
 
 void TopologyStore::TriggerUpdateCaches(MapWindowProjection &m_projection) {
-  ScopeLock protect(*GetMutex());
+  Poco::ScopedRWLock protect(lock, true);
   for (int z=0; z<MAXTOPOLOGY; z++) {
     if (topology_store[z]) {
       topology_store[z]->triggerUpdateCache=true;
@@ -77,7 +77,7 @@ void TopologyStore::TriggerUpdateCaches(MapWindowProjection &m_projection) {
 bool TopologyStore::ScanVisibility(MapWindowProjection &m_projection,
 				   rectObj &_bounds_active,
 				   const bool force) {
-  ScopeLock protect(*GetMutex());
+  Poco::ScopedRWLock protect(lock, true);
 
   if (topo_marks && topo_marks->triggerUpdateCache) {
     topo_marks->updateCache(m_projection, _bounds_active);
@@ -109,7 +109,7 @@ bool TopologyStore::ScanVisibility(MapWindowProjection &m_projection,
 void TopologyStore::Close() 
 {
   StartupStore(TEXT("CloseTopology\n"));
-  ScopeLock protect(*GetMutex());
+  Poco::ScopedRWLock protect(lock, true);
   for (int z=0; z<MAXTOPOLOGY; z++) {
     if (topology_store[z]) {
       delete topology_store[z];
@@ -120,7 +120,7 @@ void TopologyStore::Close()
 
 void TopologyStore::Draw(Canvas &canvas, MapWindow &m_window, const RECT rc)
 {
-  ScopeLock protect(*GetMutex());
+  Poco::ScopedRWLock protect(lock, false);
   for (int z=0; z<MAXTOPOLOGY; z++) {
     if (topology_store[z]) {
       topology_store[z]->Paint(canvas,m_window,rc);
@@ -132,7 +132,7 @@ void TopologyStore::Draw(Canvas &canvas, MapWindow &m_window, const RECT rc)
 void TopologyStore::Open() {
   StartupStore(TEXT("OpenTopology\n"));
   XCSoarInterface::CreateProgressDialog(gettext(TEXT("Loading Topology File...")));
-  ScopeLock protect(*GetMutex());
+  Poco::ScopedRWLock protect(lock, true);
 
   // Start off by getting the names and paths
   static TCHAR  szOrigFile[MAX_PATH] = TEXT("\0");

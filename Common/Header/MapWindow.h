@@ -45,7 +45,6 @@ Copyright_License {
 #include "Screen/BufferCanvas.hpp"
 #include "Screen/MaskedPaintWindow.hpp"
 #include "Screen/LabelBlock.hpp"
-#include "Protection.hpp"
 #include "MapWindowBlackboard.hpp"
 #include "PeriodClock.hpp"
 #include "DrawThread.hpp"
@@ -64,8 +63,8 @@ class MapWindow
 : public MaskedPaintWindow,
   public MapWindowProjection,
   public MapWindowBlackboard,
-  public MapWindowTimer,
-  public MapDataClient {
+  public MapWindowTimer
+{
   PeriodClock mouse_down_clock;
 
   GaugeCDI *cdi;
