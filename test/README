@@ -1,0 +1,19 @@
+TAP - Testing uing TAP (Test anything protocol)
+
+	XCSoar is using TAP (see References) for unit testing.
+
+Status:
+	September 2009 - Early setup
+
+References:
+	- http://testanything.org/
+	- http://en.wikipedia.org/wiki/Test_Anything_Protocol
+
+What is in a number?
+	0*	Test the test system itself - psudo tests
+	1*	Configuration, XML and any other file format checking
+	2*	TODO
+
+TODO
+
+Ideas for testing
