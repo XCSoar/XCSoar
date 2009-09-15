@@ -41,8 +41,9 @@ Copyright_License {
 #include "RasterMap.h"
 #include "Protection.hpp"
 #include "GeoPoint.hpp"
+#include "Poco/RWLock.h"
 
-class RasterWeather: public MapDataClient {
+class RasterWeather {
 public:
   RasterWeather() {
     int i;
@@ -83,6 +84,7 @@ public:
   bool weather_available[MAX_WEATHER_TIMES];
  private:
   bool bsratio;
+  Poco::RWLock lock;
 };
 
 #endif

@@ -423,7 +423,7 @@ bool TerrainRenderer::SetMap(const GEOPOINT &loc) {
     color_ramp = &weather_colors[2][0];
     break;
   default:
-  case 0:
+  case 0: // terrain!
     interp_levels = 2;
     is_terrain = true;
     do_water = true;
