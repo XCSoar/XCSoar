@@ -138,7 +138,8 @@
 #define IDB_SCROLLBARTOP                324
 #define IDB_SCROLLBARMID                325
 #define IDB_SCROLLBARBOT                326
-#define IDB_SCROLLBARFILL               334
+#define IDB_SCROLLBARFILL               327
+#define IDB_OBSTACLE                    328
 #define IDC_AAT                         1001
 #define IDC_AATTIME                     1002
 #define IDC_AATTIMESPIN                 1003
