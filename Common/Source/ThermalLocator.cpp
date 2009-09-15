@@ -171,22 +171,20 @@ void ThermalLocator::Update(const double t_0,
 
   if ((Thermal_W0>0)&&(*Thermal_W>0)) {
 
-    double d;
-    DistanceBearing(*Thermal_Location,
-                    Thermal_Location0, 
-                    &d, NULL);
+#ifdef DEBUG_THERMAL_LOCATOR
+    double d = Distance(*Thermal_Location,
+                        Thermal_Location0);
 
     //    if (d>200.0) {
     // big shift detected
 
-#ifdef DEBUG_THERMAL_LOCATOR
     DebugStore("%f %f %f %f %f # center2 \n",
 	    *Thermal_Longitude, *Thermal_Latitude,
             Thermal_Longitude0, Thermal_Latitude0,
             d);
+    //    }
 #endif
 
-    //    }
 
   }
 

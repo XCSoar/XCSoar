@@ -400,9 +400,8 @@ public:
   };
   void visit_leg_multistart(START_POINT &start, const unsigned index0, TASK_POINT &point)
   {
-    DistanceBearing(way_points.get(start.Index).Location,
-                    way_points.get(point.Index).Location,
-		    NULL, &start.OutBound);
+    start.OutBound = Bearing(way_points.get(start.Index).Location,
+                             way_points.get(point.Index).Location);
   };
   double total_length;
 };

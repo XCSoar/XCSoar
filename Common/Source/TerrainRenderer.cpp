@@ -471,13 +471,13 @@ void TerrainRenderer::Height(MapWindowProjection &map_projection, bool isBigZoom
   y = (Y0+Y1)/2;
   map_projection.Screen2LonLat(x, y, G);
   float Xrounding = (float)fabs(G.Longitude-middle.Longitude);
-  DistanceBearing(middle, G, &pixelDX, NULL);
+  pixelDX = Distance(middle, G);
   
   x = (X0+X1)/2;
   y = (Y0+Y1)/2+dd;
   map_projection.Screen2LonLat(x, y, G);
   float Yrounding = (float)fabs(G.Latitude-middle.Latitude);
-  DistanceBearing(middle, G, &pixelDY, NULL);
+  pixelDY = Distance(middle, G);
   
   pixelsize_d = sqrt((pixelDX*pixelDX+pixelDY*pixelDY)/2.0);
   

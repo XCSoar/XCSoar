@@ -218,13 +218,9 @@ public:
   double GetSpeed(double time) {
     if (Ready()) {
       double u= (time-p[1].t)/(p[2].t-p[1].t);
-      double s0;
-      DistanceBearing(p[0].loc,
-                      p[1].loc, &s0, NULL);
+      double s0 = Distance(p[0].loc, p[1].loc);
       s0/= (p[1].t-p[0].t);
-      double s1;
-      DistanceBearing(p[1].loc, 
-                      p[2].loc, &s1, NULL);
+      double s1 = Distance(p[1].loc, p[2].loc);
       s1/= (p[2].t-p[1].t);
       u = max(0.0,min(1.0,u));
       return s1*u+s0*(1.0-u);
@@ -363,7 +359,7 @@ bool ReplayLogger::UpdateInternal(void) {
     cli.Interpolate(tthis+0.1, &P1.Longitude, &P1.Latitude, &AltX1);
 
     SpeedX = cli.GetSpeed(tthis);
-    DistanceBearing(P0, P1, NULL, &BearingX);
+    BearingX = Bearing(P0, P1);
 
     if ((SpeedX>0) && ((P0.Latitude != P1.Latitude) || (P0.Longitude != P1.Longitude))) {
 

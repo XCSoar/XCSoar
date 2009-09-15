@@ -93,12 +93,10 @@ int RasterMap::GetEffectivePixelSize(double *pixel_D,
 
   // how many steps are in the pixel size
   dloc = location; dloc.Latitude += step_size;
-  DistanceBearing(location, dloc, &terrain_step_x, NULL);
-  terrain_step_x = fabs(terrain_step_x);
+  terrain_step_x = Distance(location, dloc);
 
   dloc = location; dloc.Longitude += step_size;
-  DistanceBearing(location, dloc, &terrain_step_y, NULL);
-  terrain_step_y = fabs(terrain_step_y);
+  terrain_step_y = Distance(location, dloc);
 
   double rfact = max(terrain_step_x,terrain_step_y)/(*pixel_D);
 

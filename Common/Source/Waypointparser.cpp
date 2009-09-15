@@ -712,8 +712,7 @@ int FindNearestWayPoint(MapWindowProjection &map_projection,
 
         // only look for visible waypoints
         // feature added by Samuel Gisiger
-        DistanceBearing(loc,
-                        way_points.get(i).Location, &Dist, NULL);
+        Dist = Distance(loc, way_points.get(i).Location);
         if(Dist < NearestDistance) {
           NearestIndex = i;
           NearestDistance = Dist;
@@ -725,8 +724,7 @@ int FindNearestWayPoint(MapWindowProjection &map_projection,
   // JMW allow exhaustive check for when looking up in status dialog
   if (exhaustive && (NearestIndex == -1)) {
     for (unsigned i = 0; way_points.verify_index(i); ++i) {
-      DistanceBearing(loc,
-                      way_points.get(i).Location, &Dist, NULL);
+      Dist = Distance(loc, way_points.get(i).Location);
       if(Dist < NearestDistance) {
         NearestIndex = i;
         NearestDistance = Dist;

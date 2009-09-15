@@ -258,9 +258,8 @@ public:
 		    sct1);
       map_window->LonLat2Screen(task_stats[index1].AATTargetLocation,
 		    sct2);
-      DistanceBearing(task_stats[index0].AATTargetLocation,
-		      task_stats[index1].AATTargetLocation,
-		      NULL, &bearing);
+      bearing = Bearing(task_stats[index0].AATTargetLocation,
+                        task_stats[index1].AATTargetLocation);
       
       // draw nominal track line
       canvas->line(way_points.get_calc(imin).Screen,
@@ -520,22 +519,13 @@ MapWindow::DrawOffTrackIndicator(Canvas &canvas)
 
   int ilast = 0;
   for (double d=0.25; d<=1.0; d+= 0.25) {
-    double distance0, distance1;
-
     FindLatitudeLongitude(start, 
 			  Basic().TrackBearing,
 			  distance_max*d,
 			  &dloc);
 
-    DistanceBearing(start,
-		    dloc,
-		    &distance0,
-		    NULL);
-    DistanceBearing(dloc,
-		    target,
-		    &distance1,
-		    NULL);
-
+    double distance0 = Distance(start, dloc);
+    double distance1 = Distance(dloc, target);
     double distance = (distance0+distance1)/Calculated().WaypointDistance;
     int idist = iround((distance-1.0)*100);
 

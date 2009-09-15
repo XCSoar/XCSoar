@@ -302,9 +302,7 @@ void OLCOptimizer::thin_data() {
         // by the time the buffer fills at the current distance threshold,
         // pruning will have occurred or been checked on all points
         // going back to the start,
-        double d;
-        DistanceBearing(data.locpnts[i], data.locpnts[i-1],
-                        &d, NULL);
+        double d = Distance(data.locpnts[i], data.locpnts[i-1]);
         if (d<data.distancethreshold) {
           data.timepnts[i] = -1; // mark it for deletion
           i--;                   // but not the next one
@@ -316,10 +314,7 @@ void OLCOptimizer::thin_data() {
         // prune from start on second pass since this takes decrease
         // in resolution from start of flight;
         // what's more, it will prune all the points in the buffer
-        double d;
-        DistanceBearing(data.locpnts[i], 
-                        data.locpnts[i-1],
-                        &d, NULL);
+        double d = Distance(data.locpnts[i], data.locpnts[i-1]);
         if (d<data.distancethreshold) {
           data.timepnts[i] = -1; // mark it for deletion
           i++;                   // but not the next one
@@ -412,8 +407,7 @@ bool OLCOptimizer::addPoint(const GEOPOINT &loc,
   alt2= alt1;
   alt1= ialt;
 
-  double tmpd;
-  DistanceBearing(loc, loclast, &tmpd, NULL);
+  double tmpd = Distance(loc, loclast);
   if ((tmpd>data.distancethreshold)
       || (data.pnts_in==0) || (isminimum)) {
 

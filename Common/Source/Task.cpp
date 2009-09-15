@@ -743,11 +743,8 @@ double DoubleLegDistance(const int taskwaypoint,
 			  location,
 			  task_stats[taskwaypoint+1].AATTargetLocation);
   } else {
-    double d1;
-    DistanceBearing(location,
-		    task_stats[taskwaypoint+1].AATTargetLocation,
-		    &d1, NULL);
-    return d1;
+    return Distance(location,
+		    task_stats[taskwaypoint+1].AATTargetLocation);
   }
 }
 
