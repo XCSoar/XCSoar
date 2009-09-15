@@ -349,8 +349,6 @@ bool XCSoarInterface::Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
   StartupStore(TEXT("CreateCalculationThread\n"));
   CreateCalculationThread();
 
-  StartupStore(TEXT("AirspaceWarnListInit\n"));
-  AirspaceWarnListInit();
   StartupStore(TEXT("dlgAirspaceWarningInit\n"));
   dlgAirspaceWarningInit();
 
@@ -385,8 +383,6 @@ void XCSoarInterface::Shutdown(void) {
 
   StartupStore(TEXT("dlgAirspaceWarningDeInit\n"));
   dlgAirspaceWarningDeInit();
-  StartupStore(TEXT("AirspaceWarnListDeInit\n"));
-  AirspaceWarnListDeInit();
 
   CreateProgressDialog(gettext(TEXT("Shutdown, saving logs...")));
   // stop logger

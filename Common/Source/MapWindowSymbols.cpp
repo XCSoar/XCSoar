@@ -510,197 +510,186 @@ void MapWindow::DrawFinalGlide(Canvas &canvas, const RECT rc)
   int Offset;
   int Offset0;
   int i;
-
-  mutexTaskData.Lock();  // protect from extrnal task changes
-  #ifdef HAVEEXCEPTIONS
-  __try{
-  #endif
-
-    if (ValidTask()){
+  
+  ScopeLock protect(mutexTaskData);
+  if (ValidTask()){
     // if (ActiveTaskPoint >= 0) {
-
-      const int y0 = ( (rc.bottom - rc.top )/2)+rc.top;
-
-      // 60 units is size, div by 8 means 60*8 = 480 meters.
-
-      Offset = ((int)Calculated().TaskAltitudeDifference)/8;
-      Offset0 = ((int)Calculated().TaskAltitudeDifference0)/8;
-      // TODO feature: should be an angle if in final glide mode
-
-      if(Offset > 60) Offset = 60;
-      if(Offset < -60) Offset = -60;
-      Offset = IBLSCALE(Offset);
-      if(Offset<0) {
-        GlideBar[1].y = IBLSCALE(9);
-      }
-
-      if(Offset0 > 60) Offset0 = 60;
-      if(Offset0 < -60) Offset0 = -60;
-      Offset0 = IBLSCALE(Offset0);
-      if(Offset0<0) {
-        GlideBar0[1].y = IBLSCALE(9);
-      }
-
-      for(i=0;i<6;i++)
-        {
-          GlideBar[i].y += y0;
-          GlideBar[i].x = IBLSCALE(GlideBar[i].x)+rc.left;
-        }
-      GlideBar[0].y -= Offset;
-      GlideBar[1].y -= Offset;
-      GlideBar[2].y -= Offset;
-
-      for(i=0;i<6;i++)
-        {
-          GlideBar0[i].y += y0;
-          GlideBar0[i].x = IBLSCALE(GlideBar0[i].x)+rc.left;
-        }
-      GlideBar0[0].y -= Offset0;
-      GlideBar0[1].y -= Offset0;
-      GlideBar0[2].y -= Offset0;
-
-      if ((Offset<0)&&(Offset0<0)) {
-        // both below
-        if (Offset0!= Offset) {
-          int dy = (GlideBar0[0].y-GlideBar[0].y)
-            +(GlideBar0[0].y-GlideBar0[3].y);
-          dy = max(IBLSCALE(3), dy);
-          GlideBar[3].y = GlideBar0[0].y-dy;
-          GlideBar[4].y = GlideBar0[1].y-dy;
-          GlideBar[5].y = GlideBar0[2].y-dy;
-
-          GlideBar0[0].y = GlideBar[3].y;
-          GlideBar0[1].y = GlideBar[4].y;
-          GlideBar0[2].y = GlideBar[5].y;
-        } else {
-          Offset0 = 0;
-        }
-
-      } else if ((Offset>0)&&(Offset0>0)) {
-        // both above
-        GlideBar0[3].y = GlideBar[0].y;
-        GlideBar0[4].y = GlideBar[1].y;
-        GlideBar0[5].y = GlideBar[2].y;
-
-        if (abs(Offset0-Offset)<IBLSCALE(4)) {
-          Offset= Offset0;
-        }
-      }
-
-      // draw actual glide bar
-      if (Offset<=0) {
-        if (Calculated().LandableReachable) {
-          canvas.select(MapGfx.hpFinalGlideBelowLandable);
-          canvas.select(MapGfx.hbFinalGlideBelowLandable);
-        } else {
-          canvas.select(MapGfx.hpFinalGlideBelow);
-          canvas.select(MapGfx.hbFinalGlideBelow);
-        }
+    
+    const int y0 = ( (rc.bottom - rc.top )/2)+rc.top;
+    
+    // 60 units is size, div by 8 means 60*8 = 480 meters.
+    
+    Offset = ((int)Calculated().TaskAltitudeDifference)/8;
+    Offset0 = ((int)Calculated().TaskAltitudeDifference0)/8;
+    // TODO feature: should be an angle if in final glide mode
+    
+    if(Offset > 60) Offset = 60;
+    if(Offset < -60) Offset = -60;
+    Offset = IBLSCALE(Offset);
+    if(Offset<0) {
+      GlideBar[1].y = IBLSCALE(9);
+    }
+    
+    if(Offset0 > 60) Offset0 = 60;
+    if(Offset0 < -60) Offset0 = -60;
+    Offset0 = IBLSCALE(Offset0);
+    if(Offset0<0) {
+      GlideBar0[1].y = IBLSCALE(9);
+    }
+    
+    for(i=0;i<6;i++)
+    {
+      GlideBar[i].y += y0;
+      GlideBar[i].x = IBLSCALE(GlideBar[i].x)+rc.left;
+    }
+    GlideBar[0].y -= Offset;
+    GlideBar[1].y -= Offset;
+    GlideBar[2].y -= Offset;
+    
+    for(i=0;i<6;i++)
+    {
+      GlideBar0[i].y += y0;
+      GlideBar0[i].x = IBLSCALE(GlideBar0[i].x)+rc.left;
+    }
+    GlideBar0[0].y -= Offset0;
+    GlideBar0[1].y -= Offset0;
+    GlideBar0[2].y -= Offset0;
+    
+    if ((Offset<0)&&(Offset0<0)) {
+      // both below
+      if (Offset0!= Offset) {
+        int dy = (GlideBar0[0].y-GlideBar[0].y)
+          +(GlideBar0[0].y-GlideBar0[3].y);
+        dy = max(IBLSCALE(3), dy);
+        GlideBar[3].y = GlideBar0[0].y-dy;
+        GlideBar[4].y = GlideBar0[1].y-dy;
+        GlideBar[5].y = GlideBar0[2].y-dy;
+        
+        GlideBar0[0].y = GlideBar[3].y;
+        GlideBar0[1].y = GlideBar[4].y;
+        GlideBar0[2].y = GlideBar[5].y;
       } else {
-        canvas.select(MapGfx.hpFinalGlideAbove);
-        canvas.select(MapGfx.hbFinalGlideAbove);
+        Offset0 = 0;
       }
-      canvas.polygon(GlideBar, 6);
-
-      // draw glide bar at mc 0
-      if (Offset0<=0) {
-        if (Calculated().LandableReachable) {
-          canvas.select(MapGfx.hpFinalGlideBelowLandable);
-          canvas.hollow_brush();
-        } else {
-          canvas.select(MapGfx.hpFinalGlideBelow);
-          canvas.hollow_brush();
-        }
+      
+    } else if ((Offset>0)&&(Offset0>0)) {
+      // both above
+      GlideBar0[3].y = GlideBar[0].y;
+      GlideBar0[4].y = GlideBar[1].y;
+      GlideBar0[5].y = GlideBar[2].y;
+      
+      if (abs(Offset0-Offset)<IBLSCALE(4)) {
+        Offset= Offset0;
+      }
+    }
+    
+    // draw actual glide bar
+    if (Offset<=0) {
+      if (Calculated().LandableReachable) {
+        canvas.select(MapGfx.hpFinalGlideBelowLandable);
+        canvas.select(MapGfx.hbFinalGlideBelowLandable);
       } else {
-        canvas.select(MapGfx.hpFinalGlideAbove);
+        canvas.select(MapGfx.hpFinalGlideBelow);
+        canvas.select(MapGfx.hbFinalGlideBelow);
+      }
+    } else {
+      canvas.select(MapGfx.hpFinalGlideAbove);
+      canvas.select(MapGfx.hbFinalGlideAbove);
+    }
+    canvas.polygon(GlideBar, 6);
+    
+    // draw glide bar at mc 0
+    if (Offset0<=0) {
+      if (Calculated().LandableReachable) {
+        canvas.select(MapGfx.hpFinalGlideBelowLandable);
+        canvas.hollow_brush();
+      } else {
+        canvas.select(MapGfx.hpFinalGlideBelow);
         canvas.hollow_brush();
       }
-      if (Offset!=Offset0) {
-        canvas.polygon(GlideBar0, 6);
-      }
-
-      // JMW draw x on final glide bar if unreachable at current Mc
-      // hpAircraftBorder
-      if ((Calculated().TaskTimeToGo>0.9*ERROR_TIME)
-	  || ((GlidePolar::GetMacCready()<0.01) 
-	      && (Calculated().TaskAltitudeDifference<0))) {
-        canvas.select(MapGfx.hpAircraftBorder);
-	POINT Cross[4] = { {-5, -5},
-			   { 5,  5},
-			   {-5,  5},
-			   { 5, -5} };
-	for (i=0; i<4; i++) {
-	  Cross[i].x = IBLSCALE(Cross[i].x+9);
-	  Cross[i].y = IBLSCALE(Cross[i].y+9)+y0;
-	}
-        canvas.polygon(Cross, 2);
-        canvas.polygon(&Cross[2], 2);
-      }
-
-      if (Appearance.IndFinalGlide == fgFinalGlideDefault){
-
-        _stprintf(Value,TEXT("%1.0f "),
-                  ALTITUDEMODIFY*Calculated().TaskAltitudeDifference);
-
-        if (Offset>=0) {
-          Offset = GlideBar[2].y+Offset+IBLSCALE(5);
-        } else {
-          if (Offset0>0) {
-            Offset = GlideBar0[1].y-IBLSCALE(15);
-          } else {
-            Offset = GlideBar[2].y+Offset-IBLSCALE(15);
-          }
-        }
-
-        TextInBoxMode_t TextInBoxMode = {1|8};
-        TextInBox(canvas, Value, 0, (int)Offset, TextInBoxMode, rc);
-
-      } else
-        if (Appearance.IndFinalGlide == fgFinalGlideAltA){
-
-          SIZE  TextSize;
-          int y = GlideBar[3].y;
-          // was ((rc.bottom - rc.top )/2)-rc.top-
-          //            Appearance.MapWindowBoldFont.CapitalHeight/2-1;
-          int x = GlideBar[2].x+IBLSCALE(1);
-          const Bitmap *Bmp;
-          POINT  BmpPos;
-          POINT  BmpSize;
-
-          _stprintf(Value, TEXT("%1.0f"),
-                    Units::ToUserAltitude(Calculated().TaskAltitudeDifference));
-
-          canvas.select(MapWindowBoldFont);
-          TextSize = canvas.text_size(Value);
-
-          canvas.white_brush();
-          canvas.white_pen();
-          canvas.rectangle(x, y,
-                           x + IBLSCALE(1) + TextSize.cx,
-                           y + Appearance.MapWindowBoldFont.CapitalHeight +
-                           IBLSCALE(2));
-
-          canvas.text(x + IBLSCALE(1),
-                      y + Appearance.MapWindowBoldFont.CapitalHeight -
-                      Appearance.MapWindowBoldFont.AscentHeight +
-                      IBLSCALE(1),
-                      Value);
-
-          if (Units::GetUnitBitmap(Units::GetUserAltitudeUnit(), &Bmp, &BmpPos, &BmpSize, 0)){
-	    draw_bitmap(canvas, *Bmp, 
-			x + TextSize.cx + IBLSCALE(1), y,
-			BmpPos.x, BmpPos.y, 
-			BmpSize.x, BmpSize.y, false);
-          }
-        }
+    } else {
+      canvas.select(MapGfx.hpFinalGlideAbove);
+      canvas.hollow_brush();
     }
-#ifdef HAVEEXCEPTIONS
-  }__finally
-#endif
-     {
-       mutexTaskData.Unlock();
-     }
-
+    if (Offset!=Offset0) {
+      canvas.polygon(GlideBar0, 6);
+    }
+    
+    // JMW draw x on final glide bar if unreachable at current Mc
+    // hpAircraftBorder
+    if ((Calculated().TaskTimeToGo>0.9*ERROR_TIME)
+        || ((GlidePolar::GetMacCready()<0.01) 
+            && (Calculated().TaskAltitudeDifference<0))) {
+      canvas.select(MapGfx.hpAircraftBorder);
+      POINT Cross[4] = { {-5, -5},
+                         { 5,  5},
+                         {-5,  5},
+                         { 5, -5} };
+      for (i=0; i<4; i++) {
+        Cross[i].x = IBLSCALE(Cross[i].x+9);
+        Cross[i].y = IBLSCALE(Cross[i].y+9)+y0;
+      }
+      canvas.polygon(Cross, 2);
+      canvas.polygon(&Cross[2], 2);
+    }
+    
+    if (Appearance.IndFinalGlide == fgFinalGlideDefault){
+      
+      _stprintf(Value,TEXT("%1.0f "),
+                ALTITUDEMODIFY*Calculated().TaskAltitudeDifference);
+      
+      if (Offset>=0) {
+        Offset = GlideBar[2].y+Offset+IBLSCALE(5);
+      } else {
+        if (Offset0>0) {
+          Offset = GlideBar0[1].y-IBLSCALE(15);
+        } else {
+          Offset = GlideBar[2].y+Offset-IBLSCALE(15);
+        }
+      }
+      
+      TextInBoxMode_t TextInBoxMode = {1|8};
+      TextInBox(canvas, Value, 0, (int)Offset, TextInBoxMode, rc);
+      
+    } else
+      if (Appearance.IndFinalGlide == fgFinalGlideAltA){
+        
+        SIZE  TextSize;
+        int y = GlideBar[3].y;
+        // was ((rc.bottom - rc.top )/2)-rc.top-
+        //            Appearance.MapWindowBoldFont.CapitalHeight/2-1;
+        int x = GlideBar[2].x+IBLSCALE(1);
+        const Bitmap *Bmp;
+        POINT  BmpPos;
+        POINT  BmpSize;
+        
+        _stprintf(Value, TEXT("%1.0f"),
+                  Units::ToUserAltitude(Calculated().TaskAltitudeDifference));
+        
+        canvas.select(MapWindowBoldFont);
+        TextSize = canvas.text_size(Value);
+        
+        canvas.white_brush();
+        canvas.white_pen();
+        canvas.rectangle(x, y,
+                         x + IBLSCALE(1) + TextSize.cx,
+                         y + Appearance.MapWindowBoldFont.CapitalHeight +
+                         IBLSCALE(2));
+        
+        canvas.text(x + IBLSCALE(1),
+                    y + Appearance.MapWindowBoldFont.CapitalHeight -
+                    Appearance.MapWindowBoldFont.AscentHeight +
+                    IBLSCALE(1),
+                    Value);
+        
+        if (Units::GetUnitBitmap(Units::GetUserAltitudeUnit(), &Bmp, &BmpPos, &BmpSize, 0)){
+          draw_bitmap(canvas, *Bmp, 
+                      x + TextSize.cx + IBLSCALE(1), y,
+                      BmpPos.x, BmpPos.y, 
+                      BmpSize.x, BmpSize.y, false);
+        }
+      }
+  }
 }
 
 

@@ -180,8 +180,6 @@ int dlgAirspaceWarningDeInit(void);
 void AirspaceWarnListClear(void);
 void AirspaceWarnDoAck(int ID, int Ack);
 int AirspaceWarnFindIndexByID(int ID);
-void AirspaceWarnListInit(void);
-void AirspaceWarnListDeInit(void);
 
 bool ValidAirspace(void);
 
