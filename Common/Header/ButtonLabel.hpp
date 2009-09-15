@@ -34,8 +34,9 @@ Copyright_License {
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
 */
-#ifndef BUTTON_LABEL_H
-#define BUTTON_LABEL_H
+
+#ifndef BUTTON_LABEL_HPP
+#define BUTTON_LABEL_HPP
 
 #include "Screen/TextWindow.hpp"
 #include "Interface.hpp"

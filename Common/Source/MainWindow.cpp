@@ -4,7 +4,7 @@
 #include "InfoBoxManager.h"
 #include "Message.h"
 #include "Interface.hpp"
-#include "ButtonLabel.h"
+#include "ButtonLabel.hpp"
 #include "Screen/Graphics.hpp"
 #include "Components.hpp"
 #include "ProcessTimer.hpp"

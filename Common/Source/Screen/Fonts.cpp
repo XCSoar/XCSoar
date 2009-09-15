@@ -39,7 +39,7 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "UtilsProfile.hpp"
 #include "InfoBoxLayout.h"
-#include "ButtonLabel.h"
+#include "ButtonLabel.hpp"
 #include "Registry.hpp"
 #include "Asset.hpp"
 #include "Screen/VirtualCanvas.hpp"

@@ -35,7 +35,7 @@ Copyright_License {
 }
 */
 
-#include "ButtonLabel.h"
+#include "ButtonLabel.hpp"
 #include "XCSoar.h"
 #include "Language.hpp"
 #include "Gauge/GaugeFLARM.hpp"

@@ -66,7 +66,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Compatibility/vk.h"
 #include <commctrl.h>
 #include "InfoBoxLayout.h"
-#include "ButtonLabel.h"
+#include "ButtonLabel.hpp"
 #include "Registry.hpp"
 #include "LocalPath.hpp"
 #include "McReady.h"
