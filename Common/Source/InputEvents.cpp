@@ -82,7 +82,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #define MAX_MODE_STRING 25
 #define MAX_KEY 255
 #define MAX_EVENTS 2048
-#define MAX_LABEL NUMBUTTONLABELS
+#define MAX_LABEL ButtonLabel::NUMBUTTONLABELS
 
 /*
   TODO code - All of this input_Errors code needs to be removed and

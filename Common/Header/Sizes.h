@@ -130,8 +130,6 @@
 
 ////////////////////////
 
-#define NUMBUTTONLABELS 16
-
 #define READLINE_LENGTH 300
 
 // Size of Status message cache - Note 1000 messages may not be enough...

@@ -37,12 +37,15 @@ Copyright_License {
 #ifndef BUTTON_LABEL_H
 #define BUTTON_LABEL_H
 
-#include "Sizes.h"
 #include "Screen/TextWindow.hpp"
 #include "Interface.hpp"
 
 class ButtonLabel: public ActionInterface {
  public:
+  enum {
+    NUMBUTTONLABELS = 16
+  };
+
   static int ButtonLabelGeometry;
   static TextWindow hWndButtonWindow[NUMBUTTONLABELS];
   static bool ButtonVisible[NUMBUTTONLABELS];
