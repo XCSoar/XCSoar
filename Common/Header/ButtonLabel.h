@@ -64,6 +64,7 @@ public:
   static void SetFont(const Font &Font);
   static void Destroy();
   static void SetLabelText(unsigned i, const TCHAR *text);
+  static int Find(const Window &window);
   static bool CheckButtonPress(HWND pressedwindow);
 
   static bool ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size);

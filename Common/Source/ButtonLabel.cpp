@@ -233,6 +233,16 @@ ButtonLabel::SetLabelText(unsigned index, const TCHAR *text)
 
 }
 
+int
+ButtonLabel::Find(const Window &window)
+{
+  for (unsigned i = 0; i < NUMBUTTONLABELS; i++)
+    if (&window == (const Window *)&hWndButtonWindow[i])
+      return i;
+
+  return -1;
+}
+
 bool ButtonLabel::CheckButtonPress(HWND pressedwindow) {
   for (unsigned i = 0; i < NUMBUTTONLABELS; i++) {
     if (hWndButtonWindow[i]== pressedwindow) {
