@@ -847,11 +847,11 @@ $(addprefix clean-,$(filter-out WINE,$(TARGETS))): clean-%:
 clean-: $(addprefix clean-,$(TARGETS))
 
 clean: clean-$(TARGET) cleani FORCE
-	find . $(IGNORE) \( -name '*.[oa]' -o -name '*.rsc' -o -name '.*.d' \) \
+	find Common $(IGNORE) \( -name '*.[oa]' -o -name '*.rsc' -o -name '.*.d' \) \
 	-type f -print | xargs -r $(RM)
 
 cleani: FORCE
-	find . $(IGNORE) \( -name '*.i' \) \
+	find Common $(IGNORE) \( -name '*.i' \) \
 		-type f -print | xargs -r $(RM)
 
 .PHONY: FORCE
