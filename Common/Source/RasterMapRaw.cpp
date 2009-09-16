@@ -100,6 +100,8 @@ short RasterMapRaw::_GetFieldAtXY(unsigned int lx,
 
 
 bool RasterMapRaw::Open(char* zfilename) {
+  Poco::ScopedRWLock protect(lock, true);
+
   ZZIP_FILE *fpTerrain;
 
   max_field_value = 0;
@@ -150,7 +152,7 @@ bool RasterMapRaw::Open(char* zfilename) {
   if (!TerrainInfo.StepSize) {
     terrain_valid = false;
     zzip_fclose(fpTerrain);
-    Close();
+    _Close();
   }
   return terrain_valid;
 }
@@ -158,6 +160,10 @@ bool RasterMapRaw::Open(char* zfilename) {
 
 void RasterMapRaw::Close(void) {
   Poco::ScopedRWLock protect(lock, true);
+  _Close();
+}
+
+void RasterMapRaw::_Close(void) {
   terrain_valid = false;
   if (TerrainMem) {
     free(TerrainMem); TerrainMem = NULL;

@@ -60,6 +60,7 @@ class RasterMapRaw: public RasterMap {
  protected:
   virtual short _GetFieldAtXY(unsigned int lx,
                               unsigned int ly);
+  virtual void _Close();
 };
 
 #endif

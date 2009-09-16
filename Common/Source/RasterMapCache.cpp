@@ -235,7 +235,7 @@ short RasterMapCache::LookupTerrainCache(const long &SeekPos) {
 ///////// Specialised open/close routines ///////////////////
 
 bool RasterMapCache::Open(char* zfilename) {
-
+  Poco::ScopedRWLock protect(lock, true);
   terrain_valid = false;
   if (strlen(zfilename)<=0) {
     return false;
@@ -258,12 +258,12 @@ bool RasterMapCache::Open(char* zfilename) {
                            fpTerrain);
 
   if (dwBytesRead != sizeof(TERRAIN_INFO)) {
-    Close();
+    _Close();
     return false;
   }
 
   if (!TerrainInfo.StepSize) {
-    Close();
+    _Close();
     return false;
   }
   terrain_valid = true;
@@ -275,6 +275,10 @@ bool RasterMapCache::Open(char* zfilename) {
 
 void RasterMapCache::Close(void) {
   Poco::ScopedRWLock protect(lock, true);
+  _Close();
+}
+
+void RasterMapCache::_Close(void) {
   terrain_valid = false;
   if(fpTerrain) {
     if (ref_count==1) {

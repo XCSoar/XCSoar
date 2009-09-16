@@ -64,6 +64,8 @@ class RasterMapJPG2000: public RasterMap {
   bool TriggerJPGReload;
   static int ref_count;
   RasterTileCache raster_tile_cache;
+  virtual void _Close();
+  virtual void _ReloadJPG2000(void);
 };
 
 

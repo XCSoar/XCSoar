@@ -93,6 +93,7 @@ class RasterMapCache: public RasterMap {
   short LookupTerrainCache(const long &SeekPos);
   short LookupTerrainCacheFile(const long &SeekPos);
   //
+  virtual void _Close();
 };
 
 #endif

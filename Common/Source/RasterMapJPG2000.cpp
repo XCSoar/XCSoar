@@ -114,11 +114,8 @@ void RasterMapJPG2000::ReloadJPG2000Full(const GEOPOINT &location) {
   }
 }
 
-
-void RasterMapJPG2000::ReloadJPG2000(void) {
+void RasterMapJPG2000::_ReloadJPG2000(void) {
   if (TriggerJPGReload) {
-
-    Poco::ScopedRWLock protect(lock, true);
     TriggerJPGReload = false;
 
     raster_tile_cache.LoadJPG2000(jp2_filename);
@@ -137,31 +134,36 @@ void RasterMapJPG2000::ReloadJPG2000(void) {
 }
 
 
+void RasterMapJPG2000::ReloadJPG2000(void) {
+  Poco::ScopedRWLock protect(lock, true);
+  _ReloadJPG2000();
+}
+
+
 void RasterMapJPG2000::SetViewCenter(const GEOPOINT &location)
 {
-  {
-    Poco::ScopedRWLock protect(lock, true);
-    if (raster_tile_cache.GetInitialised()) {
-      int x = lround((location.Longitude-TerrainInfo.Left)*TerrainInfo.Columns
-                     /(TerrainInfo.Right-TerrainInfo.Left));
-      int y = lround((TerrainInfo.Top-location.Latitude)*TerrainInfo.Rows
-                     /(TerrainInfo.Top-TerrainInfo.Bottom));
-      TriggerJPGReload |= raster_tile_cache.PollTiles(x, y);
-    }
+  Poco::ScopedRWLock protect(lock, true);
+  if (raster_tile_cache.GetInitialised()) {
+    int x = lround((location.Longitude-TerrainInfo.Left)*TerrainInfo.Columns
+                   /(TerrainInfo.Right-TerrainInfo.Left));
+    int y = lround((TerrainInfo.Top-location.Latitude)*TerrainInfo.Rows
+                   /(TerrainInfo.Top-TerrainInfo.Bottom));
+    TriggerJPGReload |= raster_tile_cache.PollTiles(x, y);
   }
   if (TriggerJPGReload) {
-    ReloadJPG2000();
+    _ReloadJPG2000();
   }
 }
 
 
 
 bool RasterMapJPG2000::Open(char* zfilename) {
+  Poco::ScopedRWLock protect(lock, true);
   strcpy(jp2_filename,zfilename);
 
   // force first-time load
   TriggerJPGReload = true;
-  ReloadJPG2000();
+  _ReloadJPG2000();
 
   terrain_valid = raster_tile_cache.GetInitialised();
   if (!terrain_valid) {
@@ -176,6 +178,10 @@ bool RasterMapJPG2000::Open(char* zfilename) {
 
 void RasterMapJPG2000::Close(void) {
   Poco::ScopedRWLock protect(lock, true);
+  _Close();
+}
+
+void RasterMapJPG2000::_Close(void) {
   if (terrain_valid) {
     raster_tile_cache.Reset();
     terrain_valid = false;
