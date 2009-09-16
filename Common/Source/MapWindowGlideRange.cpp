@@ -91,7 +91,7 @@ MapWindow::DrawGlideThroughTerrain(Canvas &canvas)
     canvas.polyline(Groundline, NUMTERRAINSWEEPS + 1);
   }
 
-  if (Calculated().Flying && ValidTask()) {
+  if (Calculated().Flying && task.Valid()) {
     if ((Calculated().TerrainWarningLocation.Latitude != 0.0)
         &&(Calculated().TerrainWarningLocation.Longitude != 0.0)) {
 

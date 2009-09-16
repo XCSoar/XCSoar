@@ -78,8 +78,8 @@ static void OnOKClicked(WindowControl * Sender){
 static void MoveTarget(double adjust_angle) {
   if (!AATEnabled) return;
   if (target_point==0) return;
-  if (!ValidTaskPoint(target_point)) return;
-  if (!ValidTaskPoint(target_point+1)) return;
+  if (!task.ValidTaskPoint(target_point)) return;
+  if (!task.ValidTaskPoint(target_point+1)) return;
   if (target_point < ActiveTaskPoint) return;
 
   mutexTaskData.Lock();
@@ -99,8 +99,10 @@ static void MoveTarget(double adjust_angle) {
                          distance,
                          &target_location);
 
-  if (InAATTurnSector(target_location, target_point)) {
-    if (XCSoarInterface::Calculated().IsInSector && (target_point == ActiveTaskPoint)) {
+  if (task.InAATTurnSector(target_location, 
+                           target_point)) {
+    if (XCSoarInterface::Calculated().IsInSector 
+        && (target_point == ActiveTaskPoint)) {
       // set range/radial for inside sector
       double course_bearing, target_bearing;
       DistanceBearing(task_stats[target_point-1].AATTargetLocation,
@@ -117,12 +119,12 @@ static void MoveTarget(double adjust_angle) {
         Radial = bearing;
         task_stats[target_point].AATTargetOffsetRadial = Radial;
         Range =
-          FindInsideAATSectorRange(XCSoarInterface::Basic().Location,
-                                   target_point,
-                                   target_bearing,
-                                   distance);
+          task.FindInsideAATSectorRange(XCSoarInterface::Basic().Location,
+                                        target_point,
+                                        target_bearing,
+                                        distance);
         task_stats[target_point].AATTargetOffsetRadius = Range;
-        SetTargetModified();
+        task.SetTargetModified();
       }
     } else {
       // OK to change it..
@@ -145,7 +147,7 @@ static void MoveTarget(double adjust_angle) {
       task_stats[target_point].AATTargetOffsetRadius = Range;
       task_stats[target_point].AATTargetOffsetRadial = bearing;
       Radial = bearing;
-      SetTargetModified();
+      task.SetTargetModified();
     }
   }
   mutexTaskData.Unlock();
@@ -155,16 +157,18 @@ static void MoveTarget(double adjust_angle) {
 static void DragTarget(const GEOPOINT target_location) {
   if (!AATEnabled) return;
   if (target_point==0) return;
-  if (!ValidTaskPoint(target_point)) return;
-  if (!ValidTaskPoint(target_point+1)) return;
+  if (!task.ValidTaskPoint(target_point)) return;
+  if (!task.ValidTaskPoint(target_point+1)) return;
   if (target_point < ActiveTaskPoint) return;
 
   mutexTaskData.Lock();
 
   double distance, bearing;
 
-  if (InAATTurnSector(target_location, target_point)) {
-    if (XCSoarInterface::Calculated().IsInSector && (target_point == ActiveTaskPoint)) {
+  if (task.InAATTurnSector(target_location, 
+                           target_point)) {
+    if (XCSoarInterface::Calculated().IsInSector 
+        && (target_point == ActiveTaskPoint)) {
       // set range/radial for inside sector
       double course_bearing, target_bearing;
       DistanceBearing(task_stats[target_point-1].AATTargetLocation,
@@ -181,12 +185,12 @@ static void DragTarget(const GEOPOINT target_location) {
         Radial = bearing;
         task_stats[target_point].AATTargetOffsetRadial = Radial;
         Range =
-          FindInsideAATSectorRange(XCSoarInterface::Basic().Location,
-                                   target_point,
-                                   target_bearing,
-                                   distance);
+          task.FindInsideAATSectorRange(XCSoarInterface::Basic().Location,
+                                        target_point,
+                                        target_bearing,
+                                        distance);
         task_stats[target_point].AATTargetOffsetRadius = Range;
-	SetTargetModified();
+	task.SetTargetModified();
       }
     } else {
       // OK to change it..
@@ -209,7 +213,7 @@ static void DragTarget(const GEOPOINT target_location) {
       task_stats[target_point].AATTargetOffsetRadius = Range;
       task_stats[target_point].AATTargetOffsetRadial = bearing;
       Radial = bearing;
-      SetTargetModified();
+      task.SetTargetModified();
     }
   }
   mutexTaskData.Unlock();
@@ -264,13 +268,13 @@ static int FormKeyDown(WindowControl * Sender, WPARAM wParam, LPARAM lParam){
 static void RefreshCalculator(void) {
   WndProperty* wp;
 
-  RefreshTask(XCSoarInterface::SettingsComputer());
+  task.RefreshTask(XCSoarInterface::SettingsComputer());
   RefreshTaskStatistics();
   target_point = max(target_point,ActiveTaskPoint);
 
   bool nodisplay = !AATEnabled
     || (target_point==0)
-    || !ValidTaskPoint(target_point+1);
+    || !task.ValidTaskPoint(target_point+1);
 
   if (btnMove) {
     if (nodisplay) {
@@ -387,7 +391,7 @@ static int OnTimerNotify(WindowControl * Sender) {
   if (XCSoarInterface::main_window.map.TargetDragged(&loc.Longitude, &loc.Latitude)) {
     DragTarget(loc);
   }
-  if (isTargetModified()) {
+  if (task.isTargetModified()) {
     RefreshCalculator();
   }
   return 0;
@@ -426,7 +430,7 @@ static void OnRangeData(DataField *Sender, DataField::DataAccessKind_t Mode) {
       }
       mutexTaskData.Unlock();
       if (updated) {
-	SetTargetModified();
+	task.SetTargetModified();
       }
     break;
   }
@@ -470,7 +474,7 @@ static void OnRadialData(DataField *Sender, DataField::DataAccessKind_t Mode) {
       }
       mutexTaskData.Unlock();
       if (updated) {
-	SetTargetModified();
+	task.SetTargetModified();
       }
     break;
   }
@@ -480,7 +484,7 @@ static void OnRadialData(DataField *Sender, DataField::DataAccessKind_t Mode) {
 static void RefreshTargetPoint(void) {
   mutexTaskData.Lock();
   target_point = max(target_point, ActiveTaskPoint);
-  if (ValidTaskPoint(target_point)) {
+  if (task.ValidTaskPoint(target_point)) {
     XCSoarInterface::SetSettingsMap().TargetPanIndex = target_point;
     XCSoarInterface::SetSettingsMap().TargetPan = true;
     Range = task_stats[target_point].AATTargetOffsetRadius;
@@ -501,10 +505,10 @@ static void OnLockedData(DataField *Sender, DataField::DataAccessKind_t Mode) {
     case DataField::daPut:
     case DataField::daChange:
       bool lockedthis = Sender->GetAsBoolean();
-      if (ValidTaskPoint(target_point)) {
+      if (task.ValidTaskPoint(target_point)) {
         if (task_stats[target_point].AATTargetLocked !=
             lockedthis) {
-	  SetTargetModified();
+	  task.SetTargetModified();
           task_stats[target_point].AATTargetLocked = lockedthis;
         }
       }
@@ -543,7 +547,7 @@ static CallBackTableEntry_t CallBackTable[]={
 
 void dlgTarget(void) {
 
-  if (!ValidTaskPoint(ActiveTaskPoint)) {
+  if (!task.ValidTaskPoint(ActiveTaskPoint)) {
     return;
   }
   ActiveTaskPointOnEntry = ActiveTaskPoint;
@@ -586,13 +590,13 @@ void dlgTarget(void) {
   TCHAR tp_label[80];
   TCHAR tp_short[21];
   mutexTaskData.Lock();
-  if (!ValidTaskPoint(target_point)) {
+  if (!task.ValidTaskPoint(target_point)) {
     target_point = ActiveTaskPointOnEntry;
   } else {
     target_point = max(target_point, ActiveTaskPointOnEntry);
   }
   for (int i=ActiveTaskPointOnEntry; i<MAXTASKPOINTS; i++) {
-    if (ValidTaskPoint(i)) {
+    if (task.ValidTaskPoint(i)) {
       _tcsncpy(tp_short, way_points.get(task_points[i].Index).Name, 20);
       tp_short[20] = 0;
       _stprintf(tp_label, TEXT("%d %s"), i, tp_short);

@@ -54,6 +54,8 @@ Copyright_License {
 
 #include <stdio.h>
 
+Task task;
+
 static int Task_saved[MAXTASKPOINTS+1];
 static int active_waypoint_saved= -1;
 static bool aat_enabled_saved= false;
@@ -62,32 +64,31 @@ static bool TaskModified=false;
 static bool TargetModified=false;
 static bool TaskAborted = false;
 
-static void BackupTask(void);
 
-bool isTaskAborted() {
+bool Task::isTaskAborted() {
   return TaskAborted;
 }
 
-bool isTaskModified() {
+bool Task::isTaskModified() {
   return TaskModified;
 }
 
-void SetTaskModified(const bool set) {
+void Task::SetTaskModified(const bool set) {
   TaskModified = set;
 }
 
-bool isTargetModified() {
+bool Task::isTargetModified() {
   return TargetModified;
 }
 
-void SetTargetModified(const bool set) {
+void Task::SetTargetModified(const bool set) {
   TargetModified = set;
   if (set) {
     SetTaskModified();
   }
 }
 
-void ResetTaskWaypoint(int j) {
+void Task::ResetTaskWaypoint(int j) {
   task_points[j].Index = -1;
   task_stats[j].AATTargetOffsetRadius = 0.0;
   task_stats[j].AATTargetOffsetRadial = 0.0;
@@ -99,7 +100,8 @@ void ResetTaskWaypoint(int j) {
 }
 
 
-void FlyDirectTo(int index, const SETTINGS_COMPUTER &settings_computer) {
+void Task::FlyDirectTo(int index, 
+                       const SETTINGS_COMPUTER &settings_computer) {
   if (!CheckDeclaration())
     return;
 
@@ -138,8 +140,8 @@ void FlyDirectTo(int index, const SETTINGS_COMPUTER &settings_computer) {
 
 
 // Swaps waypoint at current index with next one.
-void SwapWaypoint(int index,
-		  const SETTINGS_COMPUTER &settings_computer) {
+void Task::SwapWaypoint(const int index,
+                        const SETTINGS_COMPUTER &settings_computer) {
   if (!CheckDeclaration())
     return;
 
@@ -166,8 +168,9 @@ void SwapWaypoint(int index,
 // Inserts a waypoint into the task, in the
 // position of the ActiveWaypoint.  If append=true, insert at end of the
 // task.
-void InsertWaypoint(int index, const SETTINGS_COMPUTER &settings_computer,
-		    bool append) {
+void Task::InsertWaypoint(const int index, 
+                          const SETTINGS_COMPUTER &settings_computer,
+                          bool append) {
   if (!CheckDeclaration())
     return;
 
@@ -217,7 +220,7 @@ void InsertWaypoint(int index, const SETTINGS_COMPUTER &settings_computer,
 }
 
 // Create a default task to home at startup if no task is present
-void DefaultTask(const SETTINGS_COMPUTER &settings_computer) {
+void Task::DefaultTask(const SETTINGS_COMPUTER &settings_computer) {
   mutexTaskData.Lock();
   TaskModified = true;
   TargetModified = true;
@@ -238,8 +241,8 @@ void DefaultTask(const SETTINGS_COMPUTER &settings_computer) {
 //
 // If you call this function, you MUST deal with
 // correctly setting ActiveTaskPoint yourself!
-void RemoveTaskPoint(int index, 
-		     const SETTINGS_COMPUTER &settings_computer) {
+void Task::RemoveTaskPoint(int index, 
+                           const SETTINGS_COMPUTER &settings_computer) {
   if (!CheckDeclaration())
     return;
 
@@ -275,8 +278,8 @@ void RemoveTaskPoint(int index,
 // Index specifies a waypoint in the WP list
 // It won't necessarily be a waypoint that's
 // in the task
-void RemoveWaypoint(int index,
-		    const SETTINGS_COMPUTER &settings_computer) {
+void Task::RemoveWaypoint(const int index,
+                          const SETTINGS_COMPUTER &settings_computer) {
   int i;
 
   if (!CheckDeclaration())
@@ -355,8 +358,8 @@ void RemoveWaypoint(int index,
 }
 
 
-void ReplaceWaypoint(int index,
-		     const SETTINGS_COMPUTER &settings_computer) {
+void Task::ReplaceWaypoint(const int index,
+                           const SETTINGS_COMPUTER &settings_computer) {
   if (!CheckDeclaration())
     return;
 
@@ -380,12 +383,9 @@ void ReplaceWaypoint(int index,
   mutexTaskData.Unlock();
 }
 
-static void CalculateAATTaskSectors(const NMEA_INFO &gps_info);
 
-extern void RefreshTask_Visitor(const SETTINGS_COMPUTER &settings_computer);
-
-
-void RefreshTask(const SETTINGS_COMPUTER &settings_computer) {
+void Task::RefreshTask(const SETTINGS_COMPUTER &settings_computer) 
+{
   ScopeLock protect(mutexTaskData);
   RefreshTask_Visitor(settings_computer);
   CalculateAATTaskSectors(XCSoarInterface::Basic());
@@ -393,7 +393,8 @@ void RefreshTask(const SETTINGS_COMPUTER &settings_computer) {
 
 
 
-void RotateStartPoints(const SETTINGS_COMPUTER &settings_computer) {
+void Task::RotateStartPoints(const SETTINGS_COMPUTER &settings_computer) 
+{
   if (ActiveTaskPoint>0) return;
   if (!EnableMultipleStartPoints) return;
 
@@ -423,7 +424,8 @@ void RotateStartPoints(const SETTINGS_COMPUTER &settings_computer) {
 }
 
 
-double AdjustAATTargets(double desired) {
+double Task::AdjustAATTargets(double desired) 
+{
   int i, istart, inum;
   double av=0;
   istart = max(1,ActiveTaskPoint);
@@ -482,8 +484,8 @@ double AdjustAATTargets(double desired) {
   return av;
 }
 
-static void
-CalculateAATTaskSectors(const NMEA_INFO &gps_info)
+void
+Task::CalculateAATTaskSectors(const NMEA_INFO &gps_info)
 {
   int i;
   int awp = ActiveTaskPoint;
@@ -631,7 +633,7 @@ CalculateAATTaskSectors(const NMEA_INFO &gps_info)
 }
 
 
-void ClearTask(void) {
+void Task::ClearTask(void) {
   mutexTaskData.Lock();
 
   memset( &(task_points), 0, sizeof(Task_t));
@@ -661,11 +663,11 @@ void ClearTask(void) {
 }
 
 
-bool ValidTask()  {
+bool Task::Valid()  {
   return ValidTaskPoint(ActiveTaskPoint);
 }
 
-bool ValidTaskPoint(const int i) {
+bool Task::ValidTaskPoint(const int i) {
   ScopeLock protect(mutexTaskData);
   if ((i<0) || (i>= MAXTASKPOINTS))
     return false;
@@ -676,7 +678,8 @@ bool ValidTaskPoint(const int i) {
 }
 
 
-double FindInsideAATSectorDistance(const GEOPOINT &location,
+double 
+Task::FindInsideAATSectorDistance(const GEOPOINT &location,
                                    const int taskwaypoint,
                                    const double course_bearing,
                                    const double p_found) {
@@ -715,10 +718,11 @@ double FindInsideAATSectorDistance(const GEOPOINT &location,
 }
 
 
-double FindInsideAATSectorRange(const GEOPOINT &location,
-                                const int taskwaypoint,
-                                const double course_bearing,
-                                const double p_found) {
+double Task::FindInsideAATSectorRange(const GEOPOINT &location,
+                                      const int taskwaypoint,
+                                      const double course_bearing,
+                                      const double p_found) 
+{
 
   double t_distance = FindInsideAATSectorDistance(location, taskwaypoint,
                                                   course_bearing, p_found);
@@ -729,8 +733,8 @@ double FindInsideAATSectorRange(const GEOPOINT &location,
 
 /////////////////
 
-double DoubleLegDistance(const int taskwaypoint,
-                         const GEOPOINT &location) {
+double Task::DoubleLegDistance(const int taskwaypoint,
+                               const GEOPOINT &location) {
   if (taskwaypoint>0) {
     return DoubleDistance(task_stats[taskwaypoint-1].AATTargetLocation,
 			  location,
@@ -745,7 +749,7 @@ double DoubleLegDistance(const int taskwaypoint,
 
 
 
-bool TaskIsTemporary(void) {
+bool Task::TaskIsTemporary(void) {
   bool retval = false;
   mutexTaskData.Lock();
   if (TaskAborted) {
@@ -761,7 +765,7 @@ bool TaskIsTemporary(void) {
 }
 
 
-static void BackupTask(void) {
+void Task::BackupTask(void) {
   mutexTaskData.Lock();
   for (int i=0; i<=MAXTASKPOINTS; i++) {
     Task_saved[i]= task_points[i].Index;
@@ -776,7 +780,10 @@ static void BackupTask(void) {
 }
 
 
-void ResumeAbortTask(const SETTINGS_COMPUTER &settings_computer, int set) {
+void 
+Task::ResumeAbortTask(const SETTINGS_COMPUTER &settings_computer, 
+                      const int set) 
+{
   int i;
   int active_waypoint_on_entry;
   bool task_temporary_on_entry = TaskIsTemporary();
@@ -836,7 +843,8 @@ void ResumeAbortTask(const SETTINGS_COMPUTER &settings_computer, int set) {
 
 
 
-int getFinalWaypoint() {
+int 
+Task::getFinalWaypoint() {
   int i;
   i=max(-1,min(MAXTASKPOINTS,ActiveTaskPoint));
   if (TaskAborted) {
@@ -852,15 +860,17 @@ int getFinalWaypoint() {
   return i-1;
 }
 
-bool ActiveIsFinalWaypoint() {
+bool 
+Task::ActiveIsFinalWaypoint() {
   return (ActiveTaskPoint == getFinalWaypoint());
 }
 
 
-bool IsFinalWaypoint(void) {
+bool 
+Task::IsFinalWaypoint(void) {
   bool retval;
   mutexTaskData.Lock();
-  if (ValidTask() && (task_points[ActiveTaskPoint+1].Index >= 0)) {
+  if (task.Valid() && (task_points[ActiveTaskPoint+1].Index >= 0)) {
     retval = false;
   } else {
     retval = true;
@@ -870,8 +880,9 @@ bool IsFinalWaypoint(void) {
 }
 
 
-bool InAATTurnSector(const GEOPOINT &location,
-                    const int the_turnpoint)
+bool 
+Task::InAATTurnSector(const GEOPOINT &location,
+                      const int the_turnpoint)
 {
   double AircraftBearing;
   bool retval = false;
@@ -902,7 +913,9 @@ bool InAATTurnSector(const GEOPOINT &location,
 }
 
 
-void CheckStartPointInTask(void) {
+void 
+Task::CheckStartPointInTask(void) 
+{
   mutexTaskData.Lock();
   if (task_points[0].Index != -1) {
     // ensure current start point is in task
@@ -929,7 +942,8 @@ void CheckStartPointInTask(void) {
 }
 
 
-void ClearStartPoints()
+void 
+Task::ClearStartPoints()
 {
   mutexTaskData.Lock();
   for (int i=0; i<MAXSTARTPOINTS; i++) {
@@ -941,7 +955,8 @@ void ClearStartPoints()
   mutexTaskData.Unlock();
 }
 
-void SetStartPoint(const int pointnum, const int waypointnum)
+void 
+Task::SetStartPoint(const int pointnum, const int waypointnum)
 {
   if ((pointnum>=0) && (pointnum<MAXSTARTPOINTS)) {
     // TODO bug: don't add it if it's already present!

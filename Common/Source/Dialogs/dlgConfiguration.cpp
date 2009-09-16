@@ -3698,7 +3698,7 @@ void dlgConfigurationShowModal(void){
   }
 
   if (taskchanged) {
-    RefreshTask(XCSoarInterface::SettingsComputer());
+    task.RefreshTask(XCSoarInterface::SettingsComputer());
   }
 
 #ifdef WINDOWSPC

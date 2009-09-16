@@ -257,7 +257,7 @@ GlideComputerTask::SortLandableWaypoints()
   int found_active_waypoint = -1;
   int found_home_waypoint = -1;
   for (i=0; i<MAXTASKPOINTS; i++) {
-    if (ValidTask()) {
+    if (task.Valid()) {
       if (SortedLandableIndex[i] == task_points[ActiveTaskPoint].Index) {
         found_active_waypoint = i;
       }
@@ -287,7 +287,7 @@ GlideComputerTask::SortLandableWaypoints()
     ActiveTaskPoint = found_active_waypoint;
   } else {
     // if not found, keep on field or set active waypoint to closest
-    if (ValidTask()){
+    if (task.Valid()){
       arrival_altitude =
         CalculateWaypointArrivalAltitude(way_points.get(task_points[ActiveTaskPoint].Index),
                                          way_points.set_calc(task_points[ActiveTaskPoint].Index));
@@ -328,13 +328,14 @@ GlideComputerTask::SortLandableWaypoints()
 
   for (i=0; i<MAXTASKPOINTS; i++){
     task_points[i].Index = SortedLandableIndex[i];
-    if (ValidTaskPoint(i)) {
+    if (task.ValidTaskPoint(i)) {
       way_points.set_calc(task_points[i].Index).InTask = false;
     }
   }
 
   if (new_closest_waypoint) {
-    if ((task_points[0].Index != last_closest_waypoint) && ValidTaskPoint(0)) {
+    if ((task_points[0].Index != last_closest_waypoint) 
+        && task.ValidTaskPoint(0)) {
       double last_wp_distance= 10000.0;
       if (last_closest_waypoint>=0) {
         last_wp_distance = Distance(way_points.get(task_points[0].Index).Location,

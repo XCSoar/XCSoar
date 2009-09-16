@@ -356,7 +356,7 @@ void MapWindow::DrawTaskAAT(Canvas &canvas, const RECT rc, Canvas &buffer)
   buffer.rectangle(rc.left, rc.top, rc.right, rc.bottom);
 
   for (i = MAXTASKPOINTS - 2; i > 0; i--) {
-    if(ValidTaskPoint(i) && ValidTaskPoint(i+1)) {
+    if(task.ValidTaskPoint(i) && task.ValidTaskPoint(i+1)) {
       const WPCALC &wpcalc = way_points.get_calc(task_points[i].Index);
 
       if(task_points[i].AATType == CIRCLE) {
@@ -413,7 +413,7 @@ void MapWindow::DrawBearing(Canvas &canvas, int bBearingValid)
 { /* RLD bearing is invalid if GPS not connected and in non-sim mode,
    but we can still draw targets */
 
-  if (!ValidTask()) {
+  if (!task.Valid()) {
     return;
   }
 
@@ -422,7 +422,8 @@ void MapWindow::DrawBearing(Canvas &canvas, int bBearingValid)
   GEOPOINT start = Basic().Location;
   GEOPOINT target;
 
-  if (AATEnabled && (ActiveTaskPoint>0) && ValidTaskPoint(ActiveTaskPoint+1)) {
+  if (AATEnabled && (ActiveTaskPoint>0) 
+      && task.ValidTaskPoint(ActiveTaskPoint+1)) {
     target = task_stats[ActiveTaskPoint].AATTargetLocation;
   } else {
     target = way_points.get(task_points[ActiveTaskPoint].Index).Location;
@@ -439,9 +440,9 @@ void MapWindow::DrawBearing(Canvas &canvas, int bBearingValid)
       ScopeLock scopeLock(mutexTaskData);
 
       for (int i=ActiveTaskPoint+1; i<MAXTASKPOINTS; i++) {
-        if (ValidTaskPoint(i)) {
+        if (task.ValidTaskPoint(i)) {
 
-          if (AATEnabled && ValidTaskPoint(i+1)) {
+          if (AATEnabled && task.ValidTaskPoint(i+1)) {
             target = task_stats[i].AATTargetLocation;
           } else {
             target = way_points.get(task_points[i].Index).Location;
@@ -463,7 +464,7 @@ void MapWindow::DrawBearing(Canvas &canvas, int bBearingValid)
 
     for (int i=ActiveTaskPoint; i<MAXTASKPOINTS; i++) {
       // RLD skip invalid targets and targets at start and finish
-      if((i>0) && ValidTaskPoint(i) && ValidTaskPoint(i+1)) {
+      if((i>0) && task.ValidTaskPoint(i) && task.ValidTaskPoint(i+1)) {
         if ((i== ActiveTaskPoint)
 	    || ((SettingsMap().EnablePan || SettingsMap().TargetPan) && (i>ActiveTaskPoint))) {
 	  draw_masked_bitmap_if_visible(canvas, MapGfx.hBmpTarget, 
@@ -481,14 +482,14 @@ void MapWindow::DrawBearing(Canvas &canvas, int bBearingValid)
 void
 MapWindow::DrawOffTrackIndicator(Canvas &canvas)
 {
-  if ((ActiveTaskPoint<=0) || !ValidTask()) {
+  if ((ActiveTaskPoint<=0) || !task.Valid()) {
     return;
   }
   if (fabs(Basic().TrackBearing-Calculated().WaypointBearing)<10) {
     // insignificant error
     return;
   }
-  if (Calculated().Circling || TaskIsTemporary() || 
+  if (Calculated().Circling || task.TaskIsTemporary() || 
       SettingsMap().TargetPan) {
     // don't display in various modes
     return;
@@ -507,7 +508,9 @@ MapWindow::DrawOffTrackIndicator(Canvas &canvas)
   GEOPOINT target;
   GEOPOINT dloc;
 
-  if (AATEnabled && ValidTaskPoint(ActiveTaskPoint+1) && ValidTaskPoint(ActiveTaskPoint)) {
+  if (AATEnabled 
+      && task.ValidTaskPoint(ActiveTaskPoint+1) 
+      && task.ValidTaskPoint(ActiveTaskPoint)) {
     target = task_stats[ActiveTaskPoint].AATTargetLocation;
   } else {
     target = way_points.get(task_points[ActiveTaskPoint].Index).Location;
@@ -556,10 +559,10 @@ MapWindow::DrawOffTrackIndicator(Canvas &canvas)
 void
 MapWindow::DrawProjectedTrack(Canvas &canvas)
 {
-  if ((ActiveTaskPoint<=0) || !ValidTask() || !AATEnabled) {
+  if ((ActiveTaskPoint<=0) || !task.Valid() || !AATEnabled) {
     return;
   }
-  if (Calculated().Circling || TaskIsTemporary()) {
+  if (Calculated().Circling || task.TaskIsTemporary()) {
     // don't display in various modes
     return;
   }

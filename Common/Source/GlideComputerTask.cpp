@@ -101,7 +101,7 @@ void GlideComputerTask::ProcessBasicTask(const double mc,
 void
 GlideComputerTask::ProcessIdle()
 {
-  if (isTaskAborted()) { 
+  if (task.isTaskAborted()) { 
     SortLandableWaypoints();
   }
   DoBestAlternateSlow();
@@ -146,7 +146,7 @@ void GlideComputerTask::DistanceToNext()
 {
   ScopeLock protect(mutexTaskData);
 
-  if(ValidTask()) {
+  if(task.Valid()) {
 
     DistanceBearing(Basic().Location, 
                     way_points.get(task_points[ActiveTaskPoint].Index).Location,
@@ -155,9 +155,9 @@ void GlideComputerTask::DistanceToNext()
     
     SetCalculated().ZoomDistance = Calculated().WaypointDistance;
     
-    if (AATEnabled && !TaskIsTemporary()
+    if (AATEnabled && !task.TaskIsTemporary()
         && (ActiveTaskPoint>0) &&
-        ValidTaskPoint(ActiveTaskPoint+1)) {
+        task.ValidTaskPoint(ActiveTaskPoint+1)) {
       
       DistanceBearing(Basic().Location, 
                       task_stats[ActiveTaskPoint].AATTargetLocation,
@@ -171,9 +171,9 @@ void GlideComputerTask::DistanceToNext()
         SetCalculated().WaypointBearing = AATCloseBearing();
       }
       
-    } else if ((ActiveTaskPoint==0) && (ValidTaskPoint(ActiveTaskPoint+1))
+    } else if ((ActiveTaskPoint==0) && (task.ValidTaskPoint(ActiveTaskPoint+1))
                && (Calculated().IsInSector) &&
-               !TaskIsTemporary()) {
+               !task.TaskIsTemporary()) {
       
       // JMW set waypoint bearing to start direction if in start sector
       
@@ -198,7 +198,7 @@ void GlideComputerTask::AltitudeRequired(const double this_maccready,
 					 const double cruise_efficiency)
 {
   ScopeLock protect(mutexTaskData);
-  if(ValidTask()) {
+  if(task.Valid()) {
     double wp_alt = FAIFinishHeight(ActiveTaskPoint);
     double height_above_wp =
       Calculated().NavAltitude + Calculated().EnergyHeight
@@ -264,18 +264,18 @@ double
 FAIFinishHeight(const SETTINGS_COMPUTER &settings,
 		const DERIVED_INFO& Calculated, int wp)
 {
-  int FinalWayPoint = getFinalWaypoint();
+  int FinalWayPoint = task.getFinalWaypoint();
   if (wp== -1) {
     wp = FinalWayPoint;
   }
   double wp_alt;
-  if(ValidTaskPoint(wp)) {
+  if(task.ValidTaskPoint(wp)) {
     wp_alt = way_points.get(task_points[wp].Index).Altitude;
   } else {
     wp_alt = 0;
   }
 
-  if (!TaskIsTemporary() && (wp==FinalWayPoint)) {
+  if (!task.TaskIsTemporary() && (wp==FinalWayPoint)) {
     if (EnableFAIFinishHeight && !AATEnabled) {
       return max(max(FinishMinHeight, 
 		     settings.SAFETYALTITUDEARRIVAL)+ wp_alt,
@@ -299,7 +299,7 @@ bool GlideComputerTask::InTurnSector(const int the_turnpoint) const
 {
   double AircraftBearing;
 
-  if (!ValidTaskPoint(the_turnpoint)) return false;
+  if (!task.ValidTaskPoint(the_turnpoint)) return false;
 
   if(SectorType==0)
     {
@@ -360,7 +360,7 @@ bool GlideComputerTask::InFinishSector(const int i)
   if (!ValidFinish()) return false;
 
   // Finish invalid
-  if (!ValidTaskPoint(i)) return false;
+  if (!task.ValidTaskPoint(i)) return false;
 
   ScopeLock protect(mutexTaskData);
 
@@ -524,8 +524,8 @@ bool GlideComputerTask::InStartSector(bool *CrossedStart)
   bool retval=false;
 
   if (!Calculated().Flying ||
-      !ValidTask() ||
-      !ValidTaskPoint(0))
+      !task.Valid() ||
+      !task.ValidTaskPoint(0))
     return false;
 
   ScopeLock protect(mutexTaskData);
@@ -533,7 +533,7 @@ bool GlideComputerTask::InStartSector(bool *CrossedStart)
   bool in_height = true;
 
   if ((ActiveTaskPoint>0)
-      && !ValidTaskPoint(ActiveTaskPoint+1)) {
+      && !task.ValidTaskPoint(ActiveTaskPoint+1)) {
     // don't detect start if finish is selected
     retval = false;
     goto OnExit;
@@ -575,7 +575,7 @@ bool GlideComputerTask::InStartSector(bool *CrossedStart)
             task_points[0].Index = index;
             LastInStartSector = false;
             SetCalculated().StartSectorWaypoint = index;
-            RefreshTask(SettingsComputer());
+            task.RefreshTask(SettingsComputer());
           }
           goto OnExit;
         }
@@ -687,7 +687,7 @@ void GlideComputerTask::CheckStart() {
   if (StartCrossed) {
     // TODO: Check whether speed and height are within the rules or
     // not (zero margin)
-    if(!IsFinalWaypoint() && ValidStartSpeed() && InsideStartHeight()) {
+    if(!task.IsFinalWaypoint() && ValidStartSpeed() && InsideStartHeight()) {
 
       // This is set whether ready to advance or not, because it will
       // appear in the flight log, so if it's valid, it's valid.
@@ -712,7 +712,7 @@ void GlideComputerTask::CheckStart() {
     } else {
 
       if ((ActiveTaskPoint<=1)
-          && !IsFinalWaypoint()
+          && !task.IsFinalWaypoint()
           && (Calculated().ValidStart==false)
           && (Calculated().Flying)) {
 
@@ -782,7 +782,7 @@ void GlideComputerTask::AddAATPoint(int taskwaypoint) {
   bool insector = false;
   if (taskwaypoint>0) {
     if (AATEnabled) {
-      insector = InAATTurnSector(Basic().Location, taskwaypoint);
+      insector = task.InAATTurnSector(Basic().Location, taskwaypoint);
     } else {
       insector = InTurnSector(taskwaypoint);
     }
@@ -827,7 +827,7 @@ void GlideComputerTask::InSector()
   if(ActiveTaskPoint == 0) {
     CheckStart();
   } else {
-    if(IsFinalWaypoint()) {
+    if(task.IsFinalWaypoint()) {
       AddAATPoint(ActiveTaskPoint-1);
       CheckFinish();
     } else {
@@ -857,7 +857,7 @@ void GlideComputerTask::LDNext(const double LegToGo) {
 void GlideComputerTask::CheckForceFinalGlide() {
   // Auto Force Final Glide forces final glide mode
   // if above final glide...
-  if (isTaskAborted()) {
+  if (task.isTaskAborted()) {
     ForceFinalGlide = false;
   } else {
     if (SettingsComputer().AutoForceFinalGlide) {
@@ -883,8 +883,8 @@ void GlideComputerTask::TaskStatistics(const double this_maccready,
 				       const double cruise_efficiency)
 {
 
-  if (!ValidTask() ||
-      ((ActiveTaskPoint>0) && !ValidTaskPoint(ActiveTaskPoint-1))) {
+  if (!task.Valid() ||
+      ((ActiveTaskPoint>0) && !task.ValidTaskPoint(ActiveTaskPoint-1))) {
 
     SetCalculated().LegSpeed = 0;
     SetCalculated().LegDistanceToGo = 0;
@@ -944,7 +944,7 @@ void GlideComputerTask::TaskStatistics(const double this_maccready,
   GEOPOINT w0;
 
   if (AATEnabled && (ActiveTaskPoint>0) &&
-      !TaskIsTemporary() && (ValidTaskPoint(ActiveTaskPoint+1))) {
+      !task.TaskIsTemporary() && (task.ValidTaskPoint(ActiveTaskPoint+1))) {
     w1 = task_stats[ActiveTaskPoint].AATTargetLocation;
   } else {
     w1 = way_points.get(task_points[ActiveTaskPoint].Index).Location;
@@ -953,17 +953,19 @@ void GlideComputerTask::TaskStatistics(const double this_maccready,
   DistanceBearing(Basic().Location, w1,
                   &LegToGo, &LegBearing);
 
-  if (AATEnabled && (ActiveTaskPoint>0) && ValidTaskPoint(ActiveTaskPoint+1)
+  if (AATEnabled && (ActiveTaskPoint>0) 
+      && task.ValidTaskPoint(ActiveTaskPoint+1)
       && Calculated().IsInSector && (this_maccready>0.1) &&
-      !TaskIsTemporary()) {
+      !task.TaskIsTemporary()) {
     calc_turning_now = true;
   } else {
     calc_turning_now = false;
   }
 
-  if ((ActiveTaskPoint<1) || TaskIsTemporary()) {
+  if ((ActiveTaskPoint<1) || task.TaskIsTemporary()) {
     LegCovered = 0;
-    if (!TaskIsTemporary()) { // RLD if task not started, exclude distance to start point
+    if (!task.TaskIsTemporary()) { // RLD if task not started, exclude
+                                   // distance to start point
       LegToGo=0;
     }
    } else {
@@ -998,12 +1000,12 @@ void GlideComputerTask::TaskStatistics(const double this_maccready,
   ///////////////////////////////////////////////////
   // Now add distances for start to previous waypoint
 
-  if (!TaskIsTemporary()) {
+  if (!task.TaskIsTemporary()) {
 
     if (!AATEnabled) {
       for(int i=0;i< ActiveTaskPoint-1; i++)
         {
-          if (!ValidTaskPoint(i) || !ValidTaskPoint(i+1)) continue;
+          if (!task.ValidTaskPoint(i) || !task.ValidTaskPoint(i+1)) continue;
 
           w1 = way_points.get(task_points[i].Index).Location;
           w0 = way_points.get(task_points[i+1].Index).Location;
@@ -1035,7 +1037,7 @@ void GlideComputerTask::TaskStatistics(const double this_maccready,
 
   // Calculate Final Glide To Finish
 
-  int FinalWayPoint = getFinalWaypoint();
+  int FinalWayPoint = task.getFinalWaypoint();
 
   double height_above_finish = Calculated().NavAltitude+
     Calculated().EnergyHeight-FAIFinishHeight(-1);
@@ -1046,8 +1048,8 @@ void GlideComputerTask::TaskStatistics(const double this_maccready,
 
   double StartBestCruiseTrack = 0;
 
-  if (!TaskIsTemporary()) {
-    while ((task_index>ActiveTaskPoint) && (ValidTaskPoint(task_index))) {
+  if (!task.TaskIsTemporary()) {
+    while ((task_index>ActiveTaskPoint) && (task.ValidTaskPoint(task_index))) {
       double this_LegTimeToGo;
       bool this_is_final = (task_index==FinalWayPoint)
 	|| ForceFinalGlide;
@@ -1137,9 +1139,9 @@ void GlideComputerTask::TaskStatistics(const double this_maccready,
 
   /////// current waypoint, do this last!
 
-  if (AATEnabled && !TaskIsTemporary()
+  if (AATEnabled && !task.TaskIsTemporary()
       && (ActiveTaskPoint>0) &&
-      ValidTaskPoint(ActiveTaskPoint+1) && Calculated().IsInSector) {
+      task.ValidTaskPoint(ActiveTaskPoint+1) && Calculated().IsInSector) {
     if (Calculated().WaypointDistance<AATCloseDistance()*3.0) {
       LegBearing = AATCloseBearing();
     }
@@ -1173,7 +1175,8 @@ void GlideComputerTask::TaskStatistics(const double this_maccready,
                                   &LegTime0, 1.0e6, cruise_efficiency
                                   );
 
-  if (Calculated().IsInSector && (ActiveTaskPoint==0) && !TaskIsTemporary()) {
+  if (Calculated().IsInSector && (ActiveTaskPoint==0) 
+      && !task.TaskIsTemporary()) {
     // set best cruise track to first leg bearing when in start sector
     SetCalculated().BestCruiseTrack = StartBestCruiseTrack;
   }
@@ -1272,7 +1275,7 @@ void GlideComputerTask::AATStats_Time() {
 				  - aat_tasktime_elapsed);
   }
 
-  if(ValidTask() && (Calculated().AATTimeToGo>0)) {
+  if(task.Valid() && (Calculated().AATTimeToGo>0)) {
     SetCalculated().AATMaxSpeed =
       Calculated().AATMaxDistance / Calculated().AATTimeToGo;
     SetCalculated().AATMinSpeed =
@@ -1293,7 +1296,7 @@ void GlideComputerTask::AATStats_Distance()
   MaxDistance = 0; MinDistance = 0; TargetDistance = 0;
   // Calculate Task Distances
 
-  if(ValidTask())
+  if(task.Valid())
     {
       i=ActiveTaskPoint;
 
@@ -1321,7 +1324,7 @@ void GlideComputerTask::AATStats_Distance()
       }
 
       i++;
-      while(ValidTaskPoint(i)) {
+      while(task.ValidTaskPoint(i)) {
 	double LegDistance, TargetLegDistance;
 
         LegDistance = Distance(way_points.get(task_points[i].Index).Location,
@@ -1348,7 +1351,7 @@ void GlideComputerTask::AATStats_Distance()
 	  }
 
 	  // sector at end of ith leg
-	  if (!ValidTaskPoint(i+1)) {// last leg of task
+	  if (!task.ValidTaskPoint(i+1)) {// last leg of task
 	    // add nothing
 	    MaxDistance -= FinishRadius; // To Do: This can be configured for finish rules
 	    MinDistance -= FinishRadius;
@@ -1366,7 +1369,7 @@ void GlideComputerTask::AATStats_Distance()
 	  }
 
 	  // sector at end of ith leg
-	  if (!ValidTaskPoint(i+1)) {// last leg of task
+	  if (!task.ValidTaskPoint(i+1)) {// last leg of task
 	    // add nothing
 	    MaxDistance += 0; // To Do: This can be configured for finish rules
 	  } else { // not last leg of task
@@ -1399,11 +1402,11 @@ void GlideComputerTask::AATStats()
 
 
 void GlideComputerTask::CheckTransitionFinalGlide() {
-  int FinalWayPoint = getFinalWaypoint();
+  int FinalWayPoint = task.getFinalWaypoint();
   // update final glide mode status
   if (((ActiveTaskPoint == FinalWayPoint)
        ||(ForceFinalGlide))
-      && (ValidTask())) {
+      && (task.Valid())) {
 
     if (Calculated().FinalGlide == 0)
       InputEvents::processGlideComputer(GCE_FLIGHTMODE_FINALGLIDE);
@@ -1611,8 +1614,8 @@ void GlideComputerTask::TaskSpeed(const double this_maccready,
 {
   double TotalTime=0, TotalDistance=0, Vfinal=0;
 
-  if (!ValidTask()) return;
-  if (TaskIsTemporary()) return;
+  if (!task.Valid()) return;
+  if (task.TaskIsTemporary()) return;
   if (Calculated().ValidFinish) return;
   if (!Calculated().Flying) return;
 
@@ -1921,13 +1924,13 @@ GlideComputerTask::DoAutoMacCready(double mc_setting)
   double mc_new = mc_setting;
   static bool first_mc = true;
 
-  if (Calculated().FinalGlide && ActiveIsFinalWaypoint()) {
+  if (Calculated().FinalGlide && task.ActiveIsFinalWaypoint()) {
     is_final_glide = true;
   } else {
     first_mc = true;
   }
 
-  if (!ValidTask()) {
+  if (!task.Valid()) {
     if (Calculated().AdjustedAverageThermal>0) {
       mc_new = Calculated().AdjustedAverageThermal;
     }

@@ -482,7 +482,7 @@ static void UpdateValuesRules(void) {
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpStartPoint"));
 
-  if (ValidTaskPoint(0)) {
+  if (task.ValidTaskPoint(0)) {
     //    start_h = WayPointList[task_points[0].Index].Altitude;
     if (wp) {
       wp->SetText(way_points.get(task_points[0].Index).Name);

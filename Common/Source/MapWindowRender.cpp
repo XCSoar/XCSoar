@@ -136,7 +136,7 @@ void MapWindow::RenderMapLayer(Canvas &canvas, const RECT rc)
 
 void MapWindow::RenderAreas(Canvas &canvas, const RECT rc)
 {
-  if (!TaskIsTemporary()) {
+  if (!task.TaskIsTemporary()) {
     DrawTaskAAT(canvas, rc, buffer_canvas);
   }
 
@@ -155,7 +155,7 @@ void MapWindow::RenderTrail(Canvas &canvas, const RECT rc)
 
 void MapWindow::RenderTask(Canvas &canvas, const RECT rc)
 {
-  if (isTaskAborted()) {
+  if (task.isTaskAborted()) {
     DrawAbortedTask(canvas);
   } else {
     DrawTask(canvas, rc);

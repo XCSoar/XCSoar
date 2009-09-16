@@ -203,8 +203,8 @@ bool MapWindow::on_mouse_move(int x, int y)
     if (TargetDrag_State == 1) {
       GEOPOINT mouseMove;
       Screen2LonLat((int)x, (int)y, mouseMove);
-      if (InAATTurnSector(mouseMove, 
-			  SettingsMap().TargetPanIndex)) {
+      if (task.InAATTurnSector(mouseMove, 
+                               SettingsMap().TargetPanIndex)) {
 	// update waypoints so if we drag out of the cylinder, it
 	// will remain adjacent to the edge
 	task_stats[SettingsMap().TargetPanIndex].AATTargetLocation = mouseMove;
@@ -233,7 +233,7 @@ bool MapWindow::on_mouse_down(int x, int y)
 
   mutexTaskData.Lock();
   if (AATEnabled && SettingsMap().TargetPan) {
-    if (ValidTaskPoint(SettingsMap().TargetPanIndex)) {
+    if (task.ValidTaskPoint(SettingsMap().TargetPanIndex)) {
       POINT tscreen;
       LonLat2Screen(task_stats[SettingsMap().TargetPanIndex].AATTargetLocation,
 		    tscreen);
@@ -313,7 +313,7 @@ bool MapWindow::on_mouse_up(int x, int y)
   if (AATEnabled && my_target_pan && (TargetDrag_State>0)) {
     mutexTaskData.Lock();
     TargetDrag_State = 2;
-    if (InAATTurnSector(G, SettingsMap().TargetPanIndex)) {
+    if (task.InAATTurnSector(G, SettingsMap().TargetPanIndex)) {
       // if release mouse out of sector, don't update w/ bad coords
       TargetDrag_Location = G;
     }

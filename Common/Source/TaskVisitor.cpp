@@ -148,7 +148,7 @@ void TaskScan::scan_leg_reverse(AbsoluteTaskLegVisitor &visitor)
     visitor.visit_single(task_points[0], 0);
     return;
   }
-  int final = getFinalWaypoint();
+  int final = task.getFinalWaypoint();
   int i= final-1;
   while (i>=0) {
     if (i==final-1) {
@@ -436,7 +436,7 @@ private:
 
 
 
-void RefreshTask_Visitor(const SETTINGS_COMPUTER &settings_computer) 
+void Task::RefreshTask_Visitor(const SETTINGS_COMPUTER &settings_computer) 
 {
   ScopeLock protect(mutexTaskData);
   if ((ActiveTaskPoint<0)&&(task_points[0].Index>=0)) {
@@ -464,7 +464,7 @@ public:
   virtual void visit_task_point_current(TASK_POINT &point, const unsigned i) 
   { 
     double stepsize = 25.0;
-    if (!ValidTaskPoint(i+1)) {
+    if (!task.ValidTaskPoint(i+1)) {
       // This must be the final waypoint, so it's not an AAT OZ
       return;
     }
@@ -500,19 +500,19 @@ public:
     j++;
     
     do {
-      dist_0 = DoubleLegDistance(i, location);
+      dist_0 = task.DoubleLegDistance(i, location);
       
       GEOPOINT loc_north;
       FindLatitudeLongitude(location,
 			    0, stepsize,
 			    &loc_north);
-      dist_north = DoubleLegDistance(i, loc_north);
+      dist_north = task.DoubleLegDistance(i, loc_north);
       
       GEOPOINT loc_east;
       FindLatitudeLongitude(location,
 			    90, stepsize,
 			    &loc_east);
-      dist_east = DoubleLegDistance(i, loc_east);
+      dist_east = task.DoubleLegDistance(i, loc_east);
       
       double angle = AngleLimit360(RAD_TO_DEG*atan2(dist_east-dist_0, dist_north-dist_0)+90);
       if (left) {
@@ -523,7 +523,7 @@ public:
 			    angle, delta,
 			    &location);
       
-      in_sector = InAATTurnSector(location, i);
+      in_sector = task.InAATTurnSector(location, i);
       /*
         if (dist_0 < distance_glider) {
 	in_sector = false;
@@ -555,7 +555,7 @@ public:
 
 
 
-void CalculateAATIsoLines(void) {
+void Task::CalculateAATIsoLines(void) {
   if(AATEnabled) {
     AATIsoLineVisitor av;
     TaskScan::scan_point_forward(av);

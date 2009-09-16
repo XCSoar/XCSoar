@@ -93,8 +93,8 @@ void SettingsLeave() {
 
   XCSoarInterface::main_window.map.set_focus();
 
-  // mutexing.Lock everything here prevents the calculation thread from running,
-  // while shared data is potentially reloaded.
+  // mutexing.Lock everything here prevents the calculation thread
+  // from running, while shared data is potentially reloaded.
 
   mutexBlackboard.Lock();
   mutexTaskData.Lock();
@@ -109,7 +109,7 @@ void SettingsLeave() {
 
   if((WAYPOINTFILECHANGED) || (TERRAINFILECHANGED) || (AIRFIELDFILECHANGED))
     {
-      ClearTask();
+      task.ClearTask();
 
       // re-load terrain
       terrain.CloseTerrain();

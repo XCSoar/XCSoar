@@ -52,11 +52,11 @@ Copyright_License {
 
 TCHAR LastTaskFileName[MAX_PATH]= TEXT("\0");
 
-void ClearTaskFileName() {
+void Task::ClearTaskFileName() {
   LastTaskFileName[0] = _T('\0');
 }
 
-const TCHAR* getTaskFilename() {
+const TCHAR* Task::getTaskFilename() {
   return LastTaskFileName;
 }
 
@@ -111,8 +111,8 @@ static bool LoadTaskWaypoints(FILE *file) {
 #define  BINFILEMAGICNUMBER     0x5cf77fcf
 
 // loads a new task from scratch.
-void LoadNewTask(const TCHAR *szFileName,
-		 const SETTINGS_COMPUTER &settings_computer)
+void Task::LoadNewTask(const TCHAR *szFileName,
+                       const SETTINGS_COMPUTER &settings_computer)
 {
   TASK_POINT Temp;
   START_POINT STemp;
@@ -280,7 +280,7 @@ void LoadNewTask(const TCHAR *szFileName,
 }
 
 
-void SaveTask(const TCHAR *szFileName)
+void Task::SaveTask(const TCHAR *szFileName)
 {
   mutexTaskData.Lock();
 
@@ -340,16 +340,16 @@ void SaveTask(const TCHAR *szFileName)
 }
 
 
-void SaveDefaultTask(void) {
+void Task::SaveDefaultTask(void) {
   mutexTaskData.Lock();
-  if (!isTaskAborted()) {
+  if (!task.isTaskAborted()) {
     TCHAR buffer[MAX_PATH];
 #ifdef GNAV
     LocalPath(buffer, TEXT("persist/Default.tsk"));
 #else
     LocalPath(buffer, TEXT("Default.tsk"));
 #endif
-    SaveTask(buffer);
+    task.SaveTask(buffer);
   }
   mutexTaskData.Unlock();
 }

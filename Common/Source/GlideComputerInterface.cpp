@@ -64,7 +64,7 @@ void GlideComputer::AnnounceWayPointSwitch(bool do_advance) {
           TempAlt, TempSpeed, TempTime);
     Message::AddMessage(TEXT("Task Start"), TempAll);
 
-  } else if (Calculated().ValidFinish && IsFinalWaypoint()) {
+  } else if (Calculated().ValidFinish && task.IsFinalWaypoint()) {
     InputEvents::processGlideComputer(GCE_TASK_FINISH);
   } else {
     InputEvents::processGlideComputer(GCE_TASK_NEXTWAYPOINT);

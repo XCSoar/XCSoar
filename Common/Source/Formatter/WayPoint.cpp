@@ -52,7 +52,7 @@ Copyright_License {
 const TCHAR *FormatterWaypoint::Render(int *color) {
   int thewaypoint = ActiveTaskPoint;
   mutexTaskData.Lock();
-  if(ValidTaskPoint(thewaypoint))
+  if(task.ValidTaskPoint(thewaypoint))
     {
       int index = task_points[thewaypoint].Index;
       const WAYPOINT &way_point = way_points.get(index);
@@ -241,7 +241,7 @@ void FormatterAlternate::AssignValue(int i) {
 
 const TCHAR *FormatterDiffBearing::Render(int *color) {
 
-  if (ValidTaskPoint(ActiveTaskPoint)
+  if (task.ValidTaskPoint(ActiveTaskPoint)
       && Calculated().WaypointDistance > 10.0) {
     Valid = true;
 

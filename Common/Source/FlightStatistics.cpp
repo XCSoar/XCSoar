@@ -96,7 +96,7 @@ void FlightStatistics::RenderBarograph(Canvas &canvas, const RECT rc)
   chart.ScaleXFromValue(Altitude.x_min);
 
   for(int j=1;j<MAXTASKPOINTS;j++) {
-    if (ValidTaskPoint(j) && (LegStartTime[j]>=0)) {
+    if (task.ValidTaskPoint(j) && (LegStartTime[j]>=0)) {
       double xx =
         (LegStartTime[j]-XCSoarInterface::Calculated().TakeOffTime)/3600.0;
       if (xx>=0) {
@@ -140,7 +140,7 @@ void FlightStatistics::RenderSpeed(Canvas &canvas, const RECT rc)
   ScopeLock protect(mutexTaskData);
 
   if ((Task_Speed.sum_n<2)
-      || !ValidTask()) {
+      || !task.Valid()) {
     chart.DrawNoData();
     return;
   }
@@ -152,7 +152,7 @@ void FlightStatistics::RenderSpeed(Canvas &canvas, const RECT rc)
   chart.ScaleXFromValue(Task_Speed.x_min);
 
   for(int j=1;j<MAXTASKPOINTS;j++) {
-    if (ValidTaskPoint(j) && (LegStartTime[j]>=0)) {
+    if (task.ValidTaskPoint(j) && (LegStartTime[j]>=0)) {
       double xx =
         (LegStartTime[j]-XCSoarInterface::Calculated().TaskStartTime)/3600.0;
       if (xx>=0) {
@@ -307,7 +307,7 @@ void FlightStatistics::RenderTask(Canvas &canvas, const RECT rc, const bool olcm
   bool nowaypoints = true;
 
   for (i=0; i<MAXTASKPOINTS; i++) {
-    if (ValidTaskPoint(i)) {
+    if (task.ValidTaskPoint(i)) {
       lat1 = way_points.get(task_points[i].Index).Location.Latitude;
       lon1 = way_points.get(task_points[i].Index).Location.Longitude;
       chart.ScaleYFromValue( lat1);
@@ -357,7 +357,7 @@ void FlightStatistics::RenderTask(Canvas &canvas, const RECT rc, const bool olcm
   chart.ScaleYFromValue(y1);
 
   for (i=0; i<MAXTASKPOINTS; i++) {
-    if (ValidTaskPoint(i)) {
+    if (task.ValidTaskPoint(i)) {
       nwps++;
       lat1 = way_points.get(task_points[i].Index).Location.Latitude;
       lon1 = way_points.get(task_points[i].Index).Location.Longitude;
@@ -371,7 +371,7 @@ void FlightStatistics::RenderTask(Canvas &canvas, const RECT rc, const bool olcm
 	double bearing;
 	double radius;
 
-        if (ValidTaskPoint(i+1)) {
+        if (task.ValidTaskPoint(i+1)) {
           if (task_points[i].AATType == SECTOR) {
             radius = task_points[i].AATSectorRadius;
           } else {
@@ -415,7 +415,7 @@ void FlightStatistics::RenderTask(Canvas &canvas, const RECT rc, const bool olcm
   if (!olcmode) {
     if (AATEnabled) {
       for (i=MAXTASKPOINTS-1; i>0; i--) {
-	if (ValidTaskPoint(i)) {
+	if (task.ValidTaskPoint(i)) {
           lat1 = way_points.get(task_points[i-1].Index).Location.Latitude;
           lon1 = way_points.get(task_points[i-1].Index).Location.Longitude;
           lat2 = way_points.get(task_points[i].Index).Location.Latitude;
@@ -462,10 +462,10 @@ void FlightStatistics::RenderTask(Canvas &canvas, const RECT rc, const bool olcm
 
   if (!olcmode) {
     for (i=MAXTASKPOINTS-1; i>0; i--) {
-      if (ValidTaskPoint(i) && ValidTaskPoint(i-1)) {
+      if (task.ValidTaskPoint(i) && task.ValidTaskPoint(i-1)) {
         lat1 = way_points.get(task_points[i-1].Index).Location.Latitude;
         lon1 = way_points.get(task_points[i-1].Index).Location.Longitude;
-	if (TaskIsTemporary()) {
+	if (task.TaskIsTemporary()) {
 	  lat2 = XCSoarInterface::Basic().Location.Latitude;
 	  lon2 = XCSoarInterface::Basic().Location.Longitude;
 	} else {
@@ -505,7 +505,7 @@ void FlightStatistics::RenderTask(Canvas &canvas, const RECT rc, const bool olcm
 
     if (AATEnabled) {
       for (i=MAXTASKPOINTS-1; i>0; i--) {
-	if (ValidTaskPoint(i) && ValidTaskPoint(i-1)) {
+	if (task.ValidTaskPoint(i) && task.ValidTaskPoint(i-1)) {
           if (i==1) {
             lat1 = way_points.get(task_points[i-1].Index).Location.Latitude;
             lon1 = way_points.get(task_points[i-1].Index).Location.Longitude;
@@ -1089,7 +1089,7 @@ FlightStatistics::CaptionTempTrace(TCHAR *sTmp)
 void
 FlightStatistics::CaptionTask(TCHAR *sTmp)
 {
-  if (!ValidTask()) {
+  if (!task.Valid()) {
     _stprintf(sTmp, gettext(TEXT("No task")));
   } else {
     TCHAR timetext1[100];

@@ -79,8 +79,8 @@ static void UpdateFilePointer(void) {
   if (wp) {
     DataFieldFileReader* dfe;
     dfe = (DataFieldFileReader*)wp->GetDataField();
-    if (_tcslen(getTaskFilename())>0) {
-      dfe->Lookup(getTaskFilename());
+    if (_tcslen(task.getTaskFilename())>0) {
+      dfe->Lookup(task.getTaskFilename());
     } else {
       dfe->Set(0);
     }
@@ -93,10 +93,10 @@ static void UpdateCaption (void) {
   TCHAR title[MAX_PATH];
   TCHAR name[MAX_PATH] = TEXT("\0");
   mutexTaskData.Lock();
-  int len = _tcslen(getTaskFilename());
+  int len = _tcslen(task.getTaskFilename());
   if (len>0) {
     int index = 0;
-    const TCHAR *src = getTaskFilename();
+    const TCHAR *src = task.getTaskFilename();
     while ((*src != _T('\0')) && (*src != _T('.'))) {
       if ((*src == _T('\\')) || (*src == _T('/'))) {
         index = 0;
@@ -119,7 +119,7 @@ static void UpdateCaption (void) {
               gettext(TEXT("Task Overview")));
   }
 
-  if (isTaskModified()) {
+  if (task.isTaskModified()) {
     _tcscat(title, TEXT(" *"));
   }
 
@@ -152,7 +152,7 @@ OnTaskPaintListItem(WindowControl *Sender, Canvas &canvas)
 
     if (task_points[i].Index>=0) {
       if (InfoBoxLayout::landscape &&
-          AATEnabled && ValidTaskPoint(i+1) && (i>0)) {
+          AATEnabled && task.ValidTaskPoint(i+1) && (i>0)) {
         if (task_points[i].AATType==0) {
           _stprintf(sTmp, TEXT("%s %.1f"),
                     way_points.get(task_points[i].Index).Name,
@@ -186,7 +186,7 @@ OnTaskPaintListItem(WindowControl *Sender, Canvas &canvas)
       _stprintf(sTmp, TEXT("  (%s)"), gettext(TEXT("add waypoint")));
       canvas.text_opaque(2 * InfoBoxLayout::scale, 2 * InfoBoxLayout::scale,
                          sTmp);
-    } else if ((DrawListIndex==n+1) && ValidTaskPoint(0)) {
+    } else if ((DrawListIndex==n+1) && task.ValidTaskPoint(0)) {
 
       if (!AATEnabled) {
 	_stprintf(sTmp, gettext(TEXT("Total:")));
@@ -229,7 +229,7 @@ OnTaskPaintListItem(WindowControl *Sender, Canvas &canvas)
 
 static void OverviewRefreshTask(void) {
   mutexTaskData.Lock();
-  RefreshTask(XCSoarInterface::SettingsComputer());
+  task.RefreshTask(XCSoarInterface::SettingsComputer());
 
   int i;
   // Only need to refresh info where the removal happened
@@ -385,7 +385,7 @@ static void OnClearClicked(WindowControl * Sender, WndListFrame::ListInfo_t *Lis
                   gettext(TEXT("Clear task")),
                   MB_YESNO|MB_ICONQUESTION) == IDYES) {
     if (CheckDeclaration()) {
-      ClearTask();
+      task.ClearTask();
       UpdateFilePointer();
       OverviewRefreshTask();
       UpdateCaption();
@@ -419,7 +419,7 @@ static void OnAnalysisClicked(WindowControl * Sender,
 static void OnDeclareClicked(WindowControl * Sender, WndListFrame::ListInfo_t *ListInfo){
 	(void)Sender;
 	(void)ListInfo;
-  RefreshTask(XCSoarInterface::SettingsComputer());
+  task.RefreshTask(XCSoarInterface::SettingsComputer());
 
   LoggerDeviceDeclare();
 
@@ -483,7 +483,7 @@ static void OnSaveClicked(WindowControl * Sender, WndListFrame::ListInfo_t *List
     }
   }
 
-  SaveTask(dfe->GetPathFile());
+  task.SaveTask(dfe->GetPathFile());
   UpdateCaption();
 }
 
@@ -500,7 +500,7 @@ static void OnLoadClicked(WindowControl * Sender, WndListFrame::ListInfo_t *List
   int file_index = dfe->GetAsInteger();
 
   if (file_index>0) {
-    LoadNewTask(dfe->GetPathFile(),XCSoarInterface::SettingsComputer());
+    task.LoadNewTask(dfe->GetPathFile(),XCSoarInterface::SettingsComputer());
     OverviewRefreshTask();
     UpdateFilePointer();
     UpdateCaption();
@@ -596,7 +596,7 @@ void dlgTaskOverviewShowModal(void){
 
   // now retrieve back the properties...
 
-  RefreshTask(XCSoarInterface::SettingsComputer());
+  task.RefreshTask(XCSoarInterface::SettingsComputer());
 
   delete wf;
 

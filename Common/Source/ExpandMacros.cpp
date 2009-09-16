@@ -87,11 +87,11 @@ bool ButtonLabel::ExpandMacros(const TCHAR *In,
 
   if (_tcsstr(OutBuffer, TEXT("$(")) == NULL) return false;
 
-  if (isTaskAborted()) {
+  if (task.isTaskAborted()) {
     if (_tcsstr(OutBuffer, TEXT("$(WaypointNext)"))) {
       // Waypoint\nNext
-      invalid = !ValidTaskPoint(ActiveTaskPoint+1);
-      CondReplaceInString(!ValidTaskPoint(ActiveTaskPoint+2),
+      invalid = !task.ValidTaskPoint(ActiveTaskPoint+1);
+      CondReplaceInString(!task.ValidTaskPoint(ActiveTaskPoint+2),
                           OutBuffer,
                           TEXT("$(WaypointNext)"),
                           TEXT("Landpoint\nFurthest"),
@@ -100,8 +100,8 @@ bool ButtonLabel::ExpandMacros(const TCHAR *In,
     } else
     if (_tcsstr(OutBuffer, TEXT("$(WaypointPrevious)"))) {
       // Waypoint\nNext
-      invalid = !ValidTaskPoint(ActiveTaskPoint-1);
-      CondReplaceInString(!ValidTaskPoint(ActiveTaskPoint-2),
+      invalid = !task.ValidTaskPoint(ActiveTaskPoint-1);
+      CondReplaceInString(!task.ValidTaskPoint(ActiveTaskPoint-2),
                           OutBuffer,
                           TEXT("$(WaypointPrevious)"),
                           TEXT("Landpoint\nClosest"),
@@ -110,8 +110,8 @@ bool ButtonLabel::ExpandMacros(const TCHAR *In,
   } else {
     if (_tcsstr(OutBuffer, TEXT("$(WaypointNext)"))) {
       // Waypoint\nNext
-      invalid = !ValidTaskPoint(ActiveTaskPoint+1);
-      CondReplaceInString(!ValidTaskPoint(ActiveTaskPoint+2),
+      invalid = !task.ValidTaskPoint(ActiveTaskPoint+1);
+      CondReplaceInString(!task.ValidTaskPoint(ActiveTaskPoint+2),
                           OutBuffer,
                           TEXT("$(WaypointNext)"),
                           TEXT("Waypoint\nFinish"),
@@ -120,11 +120,11 @@ bool ButtonLabel::ExpandMacros(const TCHAR *In,
     } else
     if (_tcsstr(OutBuffer, TEXT("$(WaypointPrevious)"))) {
       if (ActiveTaskPoint==1) {
-        invalid = !ValidTaskPoint(ActiveTaskPoint-1);
+        invalid = !task.ValidTaskPoint(ActiveTaskPoint-1);
         ReplaceInString(OutBuffer, TEXT("$(WaypointPrevious)"),
                         TEXT("Waypoint\nStart"), Size);
       } else if (EnableMultipleStartPoints) {
-        invalid = !ValidTaskPoint(0);
+        invalid = !task.ValidTaskPoint(0);
         CondReplaceInString((ActiveTaskPoint==0),
                             OutBuffer,
                             TEXT("$(WaypointPrevious)"),
@@ -148,7 +148,7 @@ bool ButtonLabel::ExpandMacros(const TCHAR *In,
       break;
     case 2:
       if (ActiveTaskPoint>0) {
-        if (ValidTaskPoint(ActiveTaskPoint+1)) {
+        if (task.ValidTaskPoint(ActiveTaskPoint+1)) {
           CondReplaceInString(AdvanceArmed, OutBuffer, TEXT("$(AdvanceArmed)"),
                               TEXT("Cancel"), TEXT("TURN"), Size);
         } else {
@@ -200,14 +200,14 @@ bool ButtonLabel::ExpandMacros(const TCHAR *In,
     ReplaceInString(OutBuffer, TEXT("$(CheckSettingsLockout)"), TEXT(""), Size);
   }
   if (_tcsstr(OutBuffer, TEXT("$(CheckTaskResumed)"))) {
-    if (isTaskAborted()) {
+    if (task.isTaskAborted()) {
       // TODO code: check, does this need to be set with temporary task?
       invalid = true;
     }
     ReplaceInString(OutBuffer, TEXT("$(CheckTaskResumed)"), TEXT(""), Size);
   }
   if (_tcsstr(OutBuffer, TEXT("$(CheckTask)"))) {
-    if (!ValidTask()) {
+    if (!task.Valid()) {
       invalid = true;
     }
     ReplaceInString(OutBuffer, TEXT("$(CheckTask)"), TEXT(""), Size);
@@ -231,7 +231,7 @@ bool ButtonLabel::ExpandMacros(const TCHAR *In,
     ReplaceInString(OutBuffer, TEXT("$(CheckTerrain)"), TEXT(""), Size);
   }
   if (_tcsstr(OutBuffer, TEXT("$(CheckAutoMc)"))) {
-    if (!ValidTask()
+    if (!task.Valid()
         && ((SettingsComputer().AutoMcMode==0)
 	    || (SettingsComputer().AutoMcMode==2))) {
       invalid = true;
@@ -314,7 +314,7 @@ bool ButtonLabel::ExpandMacros(const TCHAR *In,
 
   //////
 
-  CondReplaceInString(TaskIsTemporary(),
+  CondReplaceInString(task.TaskIsTemporary(),
 		      OutBuffer, TEXT("$(TaskAbortToggleActionName)"),
 		      TEXT("Resume"), TEXT("Abort"), Size);
 

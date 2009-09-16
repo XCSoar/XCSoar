@@ -324,8 +324,8 @@ EffectiveMacCready_internal(const NMEA_INFO *Basic, const DERIVED_INFO *Calculat
   if (Calculated->TaskStartTime<0) return 0;
 
 
-  if (!ValidTask()
-      || !ValidTaskPoint(ActiveTaskPoint-1)) return 0;
+  if (!task.Valid()
+      || !task.ValidTaskPoint(ActiveTaskPoint-1)) return 0;
   if (Calculated->TaskDistanceToGo<=0) {
     return 0;
   }
@@ -351,7 +351,7 @@ EffectiveMacCready_internal(const NMEA_INFO *Basic, const DERIVED_INFO *Calculat
     GEOPOINT w1 = way_points.get(task_points[i+1].Index).Location;
     GEOPOINT w0 = way_points.get(task_points[i].Index).Location;
     if (AATEnabled) {
-      if (ValidTaskPoint(i+1)) {
+      if (task.ValidTaskPoint(i+1)) {
         w1 = task_stats[i+1].AATTargetLocation;
       }
       if (i>0) {

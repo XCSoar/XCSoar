@@ -191,14 +191,15 @@ public:
 protected:
 
   bool CheckCondition(const GlideComputer& cmp) {
-    if (!cmp.Calculated().Flying || !ValidTask()) {
+    if (!cmp.Calculated().Flying || !task.Valid()) {
       return false;
     }
 
     tad = cmp.Calculated().TaskAltitudeDifference*0.2+0.8*tad;
 
     bool BeforeFinalGlide =
-      (ValidTaskPoint(ActiveTaskPoint+1) && !cmp.Calculated().FinalGlide);
+      (task.ValidTaskPoint(ActiveTaskPoint+1) 
+       && !cmp.Calculated().FinalGlide);
 
     if (BeforeFinalGlide) {
       Interval_Notification = 60*5;
@@ -255,7 +256,7 @@ protected:
   SunEphemeris sun;
 
   bool CheckCondition(const GlideComputer& cmp) {
-    if (!ValidTask() || !cmp.Calculated().Flying) {
+    if (!task.Valid() || !cmp.Calculated().Flying) {
       return false;
     }
 
@@ -300,12 +301,12 @@ public:
 protected:
 
   bool CheckCondition(const GlideComputer& cmp) {
-    if (!AATEnabled || !ValidTask() || TaskIsTemporary()
+    if (!AATEnabled || !task.Valid() || task.TaskIsTemporary()
         || !(cmp.Calculated().ValidStart && !cmp.Calculated().ValidFinish)
         || !cmp.Calculated().Flying) {
       return false;
     }
-    bool OnFinalWaypoint = !ValidTask();
+    bool OnFinalWaypoint = !task.Valid();
     if (OnFinalWaypoint) {
       // can't do much about it now, so don't give a warning
       return false;
@@ -338,8 +339,8 @@ public:
 protected:
 
   bool CheckCondition(const GlideComputer& cmp) {
-    if (!ValidTask() || !cmp.Calculated().Flying
-        || (ActiveTaskPoint>0) || !ValidTaskPoint(ActiveTaskPoint+1)) {
+    if (!task.Valid() || !cmp.Calculated().Flying
+        || (ActiveTaskPoint>0) || !task.ValidTaskPoint(ActiveTaskPoint+1)) {
       return false;
     }
     if (cmp.Calculated().LegDistanceToGo>StartRadius) {
@@ -383,7 +384,7 @@ public:
 protected:
 
   bool CheckCondition(const GlideComputer& cmp) {
-    if (!cmp.Calculated().Flying || !ValidTask()) {
+    if (!cmp.Calculated().Flying || !task.Valid()) {
       return false;
     }
 

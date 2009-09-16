@@ -64,7 +64,7 @@ static WndFrame *wFinish=NULL;
 static void UpdateCaption(void) {
   TCHAR sTmp[128];
   TCHAR title[128];
-  if (ValidTaskPoint(twItemIndex)) {
+  if (task.ValidTaskPoint(twItemIndex)) {
     switch (twType) {
     case 0:
       _stprintf(title, gettext(TEXT("Start")));
@@ -242,7 +242,7 @@ static void GetWaypointValues(void) {
                     wp->GetDataField()->GetAsInteger());
     }
     if (changed) {
-      SetTaskModified();
+      task.SetTaskModified();
     }
     mutexTaskData.Unlock();
 
@@ -370,7 +370,7 @@ static void ReadValues(void) {
                   wp->GetDataField()->GetAsInteger());
   }
   if (changed) {
-    SetTaskModified();
+    task.SetTaskModified();
   }
 
   mutexTaskData.Unlock();
@@ -408,7 +408,7 @@ static void OnSelectClicked(WindowControl * Sender){
         task_points[twItemIndex].AATSectorRadius = SectorRadius;
         task_points[twItemIndex].AATCircleRadius = SectorRadius;
         task_stats[twItemIndex].AATTargetLocked = false;
-        SetTaskModified();
+        task.SetTaskModified();
         mutexTaskData.Unlock();
       }
     }
@@ -430,7 +430,7 @@ static void OnStartPointClicked(WindowControl * Sender){
 static void OnMoveAfterClicked(WindowControl * Sender){
 	(void)Sender;
   mutexTaskData.Lock();
-  SwapWaypoint(twItemIndex, XCSoarInterface::SettingsComputer());
+  task.SwapWaypoint(twItemIndex, XCSoarInterface::SettingsComputer());
   SetWaypointValues();
   mutexTaskData.Unlock();
   wf->SetModalResult(mrOK);
@@ -439,7 +439,7 @@ static void OnMoveAfterClicked(WindowControl * Sender){
 static void OnMoveBeforeClicked(WindowControl * Sender){
 	(void)Sender;
   mutexTaskData.Lock();
-  SwapWaypoint(twItemIndex-1,XCSoarInterface::SettingsComputer());
+  task.SwapWaypoint(twItemIndex-1,XCSoarInterface::SettingsComputer());
   SetWaypointValues();
   mutexTaskData.Unlock();
   wf->SetModalResult(mrOK);
@@ -454,7 +454,7 @@ static void OnDetailsClicked(WindowControl * Sender){
 static void OnRemoveClicked(WindowControl * Sender) {
 	(void)Sender;
   mutexTaskData.Lock();
-  RemoveTaskPoint(twItemIndex,XCSoarInterface::SettingsComputer());
+  task.RemoveTaskPoint(twItemIndex,XCSoarInterface::SettingsComputer());
   SetWaypointValues();
   if (ActiveTaskPoint>=twItemIndex) {
     ActiveTaskPoint--;
@@ -471,7 +471,7 @@ static void OnTaskRulesClicked(WindowControl * Sender){
   (void)Sender;
   wf->SetVisible(false);
   if (dlgTaskRules()) {
-    SetTaskModified();
+    task.SetTaskModified();
   }
   wf->SetVisible(true);
 }
@@ -547,13 +547,13 @@ void dlgTaskWaypointShowModal(int itemindex, int tasktype, bool addonly){
       wb->SetVisible(false);
     }
   } else {
-    if (!ValidTaskPoint(twItemIndex-1)) {
+    if (!task.ValidTaskPoint(twItemIndex-1)) {
       wb = (WndButton *)wf->FindByName(TEXT("butUp"));
       if (wb) {
         wb->SetVisible(false);
       }
     }
-    if (!ValidTaskPoint(twItemIndex+1)) {
+    if (!task.ValidTaskPoint(twItemIndex+1)) {
       wb = (WndButton *)wf->FindByName(TEXT("butDown"));
       if (wb) {
         wb->SetVisible(false);

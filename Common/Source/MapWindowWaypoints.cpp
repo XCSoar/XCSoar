@@ -36,11 +36,8 @@ Copyright_License {
 */
 #include "MapWindow.h"
 #include "XCSoar.h"
-#include "Protection.hpp"
 #include "Settings.hpp"
 #include "SettingsComputer.hpp"
-#include "SettingsTask.hpp"
-#include "Task.h"
 #include "WayPoint.hpp"
 #include "InfoBoxLayout.h"
 #include "SettingsUser.hpp"

@@ -43,11 +43,5 @@ Copyright_License {
 
 #include "SettingsComputer.hpp"
 
-void LoadNewTask(const TCHAR *FileName,
-		 const SETTINGS_COMPUTER &settings_computer);
-void SaveTask(const TCHAR *FileName);
-void SaveDefaultTask(void);
-const TCHAR* getTaskFilename();
-void ClearTaskFileName();
 
 #endif

@@ -83,7 +83,7 @@ static void GetCruiseEfficiency(void) {
 static void RefreshCalculator(void) {
   WndProperty* wp;
 
-  RefreshTask(XCSoarInterface::SettingsComputer());
+  task.RefreshTask(XCSoarInterface::SettingsComputer());
   RefreshTaskStatistics();
 
   // update outputs
@@ -137,7 +137,7 @@ static void RefreshCalculator(void) {
   wp = (WndProperty*)wf->FindByName(TEXT("prpRange"));
   if (wp) {
     wp->RefreshDisplay();
-    if (!AATEnabled || !ValidTaskPoint(ActiveTaskPoint+1)) {
+    if (!AATEnabled || !task.ValidTaskPoint(ActiveTaskPoint+1)) {
       wp->SetVisible(false);
     } else {
       wp->SetVisible(true);
@@ -188,8 +188,8 @@ static void DoOptimise(void) {
   targetManipEvent.trigger();
   do {
     myrange = Range;
-    AdjustAATTargets(Range);
-    RefreshTask(XCSoarInterface::SettingsComputer());
+    task.AdjustAATTargets(Range);
+    task.RefreshTask(XCSoarInterface::SettingsComputer());
     RefreshTaskStatistics();
     double deltaT = XCSoarInterface::Calculated().TaskTimeToGo;
     if ((XCSoarInterface::Calculated().TaskStartTime>0.0)&&(XCSoarInterface::Calculated().Flying)) {
@@ -226,7 +226,7 @@ static void DoOptimise(void) {
   } while (steps++<25);
 
   Range = myrange;
-  AdjustAATTargets(Range);
+  task.AdjustAATTargets(Range);
   RefreshCalculator();
 
   targetManipEvent.reset();
@@ -240,7 +240,7 @@ static void OnTargetClicked(WindowControl * Sender){
   wf->SetVisible(false);
   dlgTarget();
   // find start value for range (it may have changed)
-  Range = AdjustAATTargets(2.0);
+  Range = task.AdjustAATTargets(2.0);
   RefreshCalculator();
   wf->SetVisible(true);
 }
@@ -286,7 +286,7 @@ static void OnRangeData(DataField *Sender, DataField::DataAccessKind_t Mode){
     rthis = Sender->GetAsFloat()/100.0;
     if (fabs(Range-rthis)>0.01) {
       Range = rthis;
-      AdjustAATTargets(Range);
+      task.AdjustAATTargets(Range);
       RefreshCalculator();
     }
     break;
@@ -352,14 +352,14 @@ void dlgTaskCalculatorShowModal(void){
   cruise_efficiency = CRUISE_EFFICIENCY_enter;
 
   // find start value for range
-  Range = AdjustAATTargets(2.0);
+  Range = task.AdjustAATTargets(2.0);
 
   RefreshCalculator();
 
-  if (!AATEnabled || !ValidTaskPoint(ActiveTaskPoint+1)) {
+  if (!AATEnabled || !task.ValidTaskPoint(ActiveTaskPoint+1)) {
     ((WndButton *)wf->FindByName(TEXT("Optimise")))->SetVisible(false);
   }
-  if (!ValidTaskPoint(ActiveTaskPoint)) {
+  if (!task.ValidTaskPoint(ActiveTaskPoint)) {
     ((WndButton *)wf->FindByName(TEXT("Target")))->SetVisible(false);
   }
 

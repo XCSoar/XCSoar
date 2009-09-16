@@ -477,8 +477,8 @@ StartLogger(const NMEA_INFO &gps_info,
   LocalPath(path);
 #endif
 
-  if (isTaskModified()) {
-    SaveDefaultTask();
+  if (task.isTaskModified()) {
+    task.SaveDefaultTask();
   }
 
   _stprintf(szLoggerFileName, TEXT("\\tmp.IGC"));

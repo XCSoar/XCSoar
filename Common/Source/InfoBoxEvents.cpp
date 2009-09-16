@@ -430,7 +430,7 @@ ActionInterface::on_key_Waypoint(int UpDown)
     } else {
       if (ActiveTaskPoint==0) {
 
-        RotateStartPoints(SettingsComputer());
+        task.RotateStartPoints(SettingsComputer());
 
 	// restarted task..
 	//	TODO bug: not required? Calculated().TaskStartTime = 0;

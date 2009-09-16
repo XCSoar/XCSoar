@@ -186,7 +186,7 @@ void AATDistance::ShiftTargetOutside(const GEOPOINT &location,
     FindLatitudeLongitude(location,
                           bearing, 100.0,
                           &task_stats[taskwaypoint].AATTargetLocation);
-    SetTargetModified();
+    task.SetTargetModified();
   }
 
   //JMWAAT  task_stats[taskwaypoint].AATTargetOffsetRadial = bearing;
@@ -229,8 +229,7 @@ void AATDistance::ShiftTargetFromInFront(const GEOPOINT &location,
                         &task_stats[taskwaypoint].AATTargetLocation);
   // JMW, distance here was 100m, now changed to speed * 2
 
-  SetTargetModified();
-  CalculateAATIsoLines();
+  task.SetTargetModified();
 }
 
 
@@ -250,9 +249,9 @@ void AATDistance::ShiftTargetFromBehind(const GEOPOINT &location,
   double d_total_orig;
   double d_total_this;
 
-  d_total_this = DoubleLegDistance(taskwaypoint, location);
+  d_total_this = task.DoubleLegDistance(taskwaypoint, location);
 
-  d_total_orig = DoubleLegDistance(taskwaypoint,
+  d_total_orig = task.DoubleLegDistance(taskwaypoint,
                                    task_stats[taskwaypoint].AATTargetLocation);
 
   if (d_total_this>d_total_orig-2.0*aatclosedistance) {
@@ -312,10 +311,10 @@ void AATDistance::ShiftTargetFromBehind(const GEOPOINT &location,
   }
 
   double max_distance =
-    FindInsideAATSectorDistance(location,
-                                taskwaypoint,
-                                course_bearing,
-                                0);
+    task.FindInsideAATSectorDistance(location,
+                                     taskwaypoint,
+                                     course_bearing,
+                                     0);
 
   // total distance of legs from previous through this to next target
   double delta = max_distance/2;
@@ -339,9 +338,9 @@ void AATDistance::ShiftTargetFromBehind(const GEOPOINT &location,
                           course_bearing, t_distance,
                           &t_loc);
 
-    if (InAATTurnSector(t_loc, taskwaypoint)) {
-      d_total_this = DoubleLegDistance(taskwaypoint,
-                                       t_loc);
+    if (task.InAATTurnSector(t_loc, taskwaypoint)) {
+      d_total_this = task.DoubleLegDistance(taskwaypoint,
+                                            t_loc);
       if (d_total_orig - d_total_this>0.0) {
         t_distance_lower = t_distance;
         // ok, can go further
@@ -362,12 +361,10 @@ void AATDistance::ShiftTargetFromBehind(const GEOPOINT &location,
                           &task_stats[taskwaypoint].AATTargetLocation);
 
     task_stats[taskwaypoint].AATTargetOffsetRadius =
-      FindInsideAATSectorRange(location,
-                               taskwaypoint, course_bearing,
-                               t_distance_lower);
-    SetTargetModified();
-    CalculateAATIsoLines();
-
+      task.FindInsideAATSectorRange(location,
+                                    taskwaypoint, course_bearing,
+                                    t_distance_lower);
+    task.SetTargetModified();
   }
 
   //  if ((!t_in_sector) && (d_diff_total>1.0)) {
@@ -382,7 +379,7 @@ double AATDistance::DistanceCovered_internal(const GEOPOINT &location,
                                              const bool insector,
 					     const double aatclosedistance) {
   double achieved;
-  if (!ValidTask() || (ActiveTaskPoint==0)) {
+  if (!task.Valid() || (ActiveTaskPoint==0)) {
     //   max_achieved_distance = 0;
     return 0.0;
   }
@@ -416,7 +413,7 @@ double AATDistance::DistanceCovered_inside(const GEOPOINT &location,
         kbest = k;
       }
     }
-    if (ValidTaskPoint(taskwaypoint+1)) {
+    if (task.ValidTaskPoint(taskwaypoint+1)) {
       ShiftTargetFromBehind(location, taskwaypoint, aatclosedistance);
     }
     return distance_achieved(taskwaypoint, kbest, location);

@@ -79,7 +79,7 @@ void FormatterTime::AssignValue(int i) {
     break;
   case 46:
     SecsToDisplayTime((int)(Calculated().LegTimeToGo+DetectCurrentTime(&Basic())));
-    Valid = ValidTaskPoint(ActiveTaskPoint) &&
+    Valid = task.ValidTaskPoint(ActiveTaskPoint) &&
       (Calculated().LegTimeToGo< 0.9*ERROR_TIME);
     break;
   default:
@@ -90,7 +90,7 @@ void FormatterTime::AssignValue(int i) {
 
 void FormatterAATTime::AssignValue(int i) {
   double dd;
-  if (AATEnabled && ValidTaskPoint(ActiveTaskPoint)) {
+  if (AATEnabled && task.ValidTaskPoint(ActiveTaskPoint)) {
     dd = Calculated().TaskTimeToGo;
     if ((Calculated().TaskStartTime>0.0) && (Calculated().Flying)
         &&(ActiveTaskPoint>0)) {
@@ -114,26 +114,26 @@ void FormatterAATTime::AssignValue(int i) {
   switch (i) {
   case 27:
     SecsToDisplayTime((int)Calculated().AATTimeToGo);
-    Valid = (ValidTaskPoint(ActiveTaskPoint) && AATEnabled
+    Valid = (task.ValidTaskPoint(ActiveTaskPoint) && AATEnabled
 	     && (Calculated().AATTimeToGo< 0.9*ERROR_TIME));
     break;
   case 41:
     SecsToDisplayTime((int)(Calculated().TaskTimeToGo));
-    Valid = ValidTaskPoint(ActiveTaskPoint)
+    Valid = task.ValidTaskPoint(ActiveTaskPoint)
       && (Calculated().TaskTimeToGo< 0.9*ERROR_TIME);
     break;
   case 42:
     SecsToDisplayTime((int)(Calculated().LegTimeToGo));
-    Valid = ValidTaskPoint(ActiveTaskPoint)
+    Valid = task.ValidTaskPoint(ActiveTaskPoint)
       && (Calculated().LegTimeToGo< 0.9*ERROR_TIME);
     break;
   case 45:
     SecsToDisplayTime((int)(Calculated().TaskTimeToGo+DetectCurrentTime(&Basic())));
-    Valid = ValidTaskPoint(ActiveTaskPoint)
+    Valid = task.ValidTaskPoint(ActiveTaskPoint)
       && (Calculated().TaskTimeToGo< 0.9*ERROR_TIME);
     break;
   case 62:
-    if (AATEnabled && ValidTaskPoint(ActiveTaskPoint)) {
+    if (AATEnabled && task.ValidTaskPoint(ActiveTaskPoint)) {
       SecsToDisplayTime((int)dd);
       Valid = (dd< 0.9*ERROR_TIME);
     } else {

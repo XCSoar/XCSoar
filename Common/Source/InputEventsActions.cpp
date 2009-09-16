@@ -736,7 +736,7 @@ void InputEvents::eventWaypointDetails(const TCHAR *misc) {
 
   if (_tcscmp(misc, TEXT("current")) == 0) {
     mutexTaskData.Lock();
-    if (ValidTask()) {
+    if (task.Valid()) {
       SelectedWaypoint = task_points[ActiveTaskPoint].Index;
     }
     mutexTaskData.Unlock();
@@ -761,7 +761,7 @@ void InputEvents::eventWaypointDetails(const TCHAR *misc) {
 void InputEvents::eventGotoLookup(const TCHAR *misc) {
   int res = dlgWayPointSelect(Basic().Location);
   if (res != -1){
-    FlyDirectTo(res, SettingsComputer());
+    task.FlyDirectTo(res, SettingsComputer());
   };
 }
 
@@ -1061,19 +1061,19 @@ void InputEvents::eventAdjustWaypoint(const TCHAR *misc) {
 void InputEvents::eventAbortTask(const TCHAR *misc) {
   mutexTaskData.Lock();
   if (_tcscmp(misc, TEXT("abort")) == 0)
-    ResumeAbortTask(SettingsComputer(), 1);
+    task.ResumeAbortTask(SettingsComputer(), 1);
   else if (_tcscmp(misc, TEXT("resume")) == 0)
-    ResumeAbortTask(SettingsComputer(), -1);
+    task.ResumeAbortTask(SettingsComputer(), -1);
   else if (_tcscmp(misc, TEXT("show")) == 0) {
-    if (isTaskAborted())
+    if (task.isTaskAborted())
       Message::AddMessage(TEXT("Task Aborted"));
-    else if (TaskIsTemporary()) {
+    else if (task.TaskIsTemporary()) {
       Message::AddMessage(TEXT("Task Temporary"));
     } else {
       Message::AddMessage(TEXT("Task Resume"));
     }
   } else {
-    ResumeAbortTask(SettingsComputer(), 0);
+    task.ResumeAbortTask(SettingsComputer(), 0);
   }
   mutexTaskData.Unlock();
 }
@@ -1359,10 +1359,8 @@ void InputEvents::eventNull(const TCHAR *misc) {
 void InputEvents::eventTaskLoad(const TCHAR *misc) {
   TCHAR buffer[MAX_PATH];
   if (_tcslen(misc)>0) {
-    mutexTaskData.Lock();
     LocalPath(buffer,misc);
-    LoadNewTask(buffer, SettingsComputer());
-    mutexTaskData.Unlock();
+    task.LoadNewTask(buffer, SettingsComputer());
   }
 }
 
@@ -1371,10 +1369,8 @@ void InputEvents::eventTaskLoad(const TCHAR *misc) {
 void InputEvents::eventTaskSave(const TCHAR *misc) {
   TCHAR buffer[MAX_PATH];
   if (_tcslen(misc)>0) {
-    mutexTaskData.Lock();
     LocalPath(buffer, misc);
-    SaveTask(buffer);
-    mutexTaskData.Unlock();
+    task.SaveTask(buffer);
   }
 }
 

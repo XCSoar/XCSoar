@@ -158,7 +158,7 @@ GlideComputer::ProcessIdle()
 
   CalculateWaypointReachable();
 
-  if (!TaskIsTemporary()) {
+  if (!task.TaskIsTemporary()) {
     double mc = GlidePolar::GetMacCready();
     InSector();
     DoAutoMacCready(mc);

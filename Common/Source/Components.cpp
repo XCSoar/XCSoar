@@ -161,7 +161,7 @@ void XCSoarInterface::AfterStartup() {
 
   // Create default task if none exists
   StartupStore(TEXT("Create default task\n"));
-  DefaultTask(SettingsComputer());
+  task.DefaultTask(SettingsComputer());
 
   StartupStore(TEXT("CloseProgressDialog\n"));
   CloseProgressDialog();
@@ -283,7 +283,7 @@ bool XCSoarInterface::Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
 
   // Initialise main blackboard data
 
-  ClearTask();
+  task.ClearTask();
   glide_computer.Initialise();
   LinkGRecordDLL(); // try to link DLL if it exists
   OpenGeoid();
@@ -420,14 +420,12 @@ void XCSoarInterface::Shutdown(void) {
 
   CreateProgressDialog(gettext(TEXT("Shutdown, saving task...")));
   StartupStore(TEXT("Save default task\n"));
-  mutexTaskData.Lock();
-  ResumeAbortTask(SettingsComputer(), -1); // turn off abort if it was on.
-  mutexTaskData.Unlock();
-  SaveDefaultTask();
+  task.ResumeAbortTask(SettingsComputer(), -1); // turn off abort if it was on.
+  task.SaveDefaultTask();
 
   StartupStore(TEXT("Clear task data\n"));
 
-  ClearTask();
+  task.ClearTask();
   CloseAirspace();
 
   StartupStore(TEXT("Close waypoints\n"));
