@@ -40,7 +40,6 @@ Copyright_License {
 
 #include "Sizes.h"
 #include <zzip/lib.h>
-#include "jasper/RasterTile.h"
 #include "Poco/RWLock.h"
 
 #include <windef.h> /* for MAX_PATH */
@@ -57,14 +56,6 @@ typedef struct _TERRAIN_INFO
   long Rows;
   long Columns;
 } TERRAIN_INFO;
-
-
-typedef struct _TERRAIN_CACHE
-{
-  short h;
-  long index;
-  unsigned int recency;
-} TERRAIN_CACHE;
 
 class RasterRounding;
 
@@ -127,100 +118,6 @@ class RasterMap {
   virtual short _GetFieldAtXY(unsigned int lx,
                               unsigned int ly) = 0;
 };
-
-
-class RasterMapCache: public RasterMap {
- public:
-  RasterMapCache() {
-    terraincacheefficiency=0;
-    terraincachehits = 1;
-    terraincachemisses = 1;
-    cachetime = 0;
-    DirectAccess = false;
-    if (ref_count==0) {
-      fpTerrain = NULL;
-    }
-    ref_count++;
-  }
-
-  ~RasterMapCache() {
-    ref_count--;
-  }
-
-  // shared!
-  static ZZIP_FILE *fpTerrain;
-  static int ref_count;
-
-  void ServiceCache();
-
-  virtual bool Open(char* filename);
-  virtual void Close();
-  virtual void LockRead();
-
- protected:
-  TERRAIN_CACHE TerrainCache[MAXTERRAINCACHE];
-
-  int terraincacheefficiency;
-  long terraincachehits;
-  long terraincachemisses;
-  unsigned int cachetime;
-  int SortThresold;
-
-  short _GetFieldAtXY(unsigned int lx,
-                      unsigned int ly);
-  void OptimiseCache(void);
-  void SetCacheTime();
-  void ClearTerrainCache();
-  short LookupTerrainCache(const long &SeekPos);
-  short LookupTerrainCacheFile(const long &SeekPos);
-  //
-};
-
-
-class RasterMapRaw: public RasterMap {
- public:
-  RasterMapRaw():
-    TerrainMem(NULL)
-  {
-    DirectAccess = true;
-  }
-  ~RasterMapRaw() {
-  }
-  short *TerrainMem;
-  virtual void SetFieldRounding(const double xr, const double yr,
-    RasterRounding &rounding);
-  virtual bool Open(char* filename);
-  virtual void Close();
- protected:
-  virtual short _GetFieldAtXY(unsigned int lx,
-                              unsigned int ly);
-};
-
-
-class RasterMapJPG2000: public RasterMap {
- public:
-  RasterMapJPG2000();
-  ~RasterMapJPG2000();
-
-  void ReloadJPG2000(void);
-  void ReloadJPG2000Full(const GEOPOINT &location);
-
-  void SetViewCenter(const GEOPOINT &location);
-  virtual void SetFieldRounding(const double xr, const double yr,
-    RasterRounding &rounding);
-  virtual bool Open(char* filename);
-  virtual void Close();
-  void ServiceFullReload(const GEOPOINT &location);
-
- protected:
-  char jp2_filename[MAX_PATH];
-  virtual short _GetFieldAtXY(unsigned int lx,
-                              unsigned int ly);
-  bool TriggerJPGReload;
-  static int ref_count;
-  RasterTileCache raster_tile_cache;
-};
-
 
 class RasterRounding {
 public:

@@ -47,8 +47,7 @@ Copyright_License {
 #include "LocalTime.hpp"
 #include <assert.h>
 #include "wcecompat/ts_string.h"
-
-#include "RasterTerrain.h" // JMW TODO decouple
+#include "RasterMapJPG2000.hpp"
 #include "Interface.hpp"
 
 int RasterWeather::IndexToTime(int x) {

@@ -542,6 +542,9 @@ OBJS	:=\
 	$(SRC)/Topology.o		\
 	$(SRC)/TopologyStore.o		\
 	$(SRC)/RasterMap.o 		\
+	$(SRC)/RasterMapCache.o 	\
+	$(SRC)/RasterMapJPG2000.o 	\
+	$(SRC)/RasterMapRaw.o 		\
 	$(SRC)/RasterTerrain.o 		\
 	$(SRC)/RasterWeather.o 		\
 	$(SRC)/TerrainRenderer.o	\
