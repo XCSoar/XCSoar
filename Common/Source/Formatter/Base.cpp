@@ -47,6 +47,8 @@ Copyright_License {
 #include "Settings.hpp"
 #include <stdio.h>
 #include "Math/Pressure.h"
+#include "Components.hpp"
+#include "WayPointList.hpp"
 
 InfoBoxFormatter::InfoBoxFormatter(const TCHAR *theformat) {
   _tcscpy(Format, theformat);
@@ -333,7 +335,7 @@ void InfoBoxFormatter::AssignValue(int i) {
   case 60:
     Value = DISTANCEMODIFY*Calculated().HomeDistance ;
     if (SettingsComputer().HomeWaypoint>=0) {
-      Valid = ValidWayPoint(SettingsComputer().HomeWaypoint);
+      Valid = way_points.verify_index(SettingsComputer().HomeWaypoint);
     } else {
       Valid = false;
     }

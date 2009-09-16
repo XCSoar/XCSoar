@@ -55,6 +55,8 @@ Copyright_License {
 #include "Components.hpp"
 #include "Device/Volkslogger/vlapi2.h"
 #include "Device/Volkslogger/vlapihlp.h"
+#include "Components.hpp"
+#include "WayPointList.hpp"
 
 // RMN: Volkslogger
 // Source data:
@@ -157,7 +159,7 @@ BOOL VLDeclare(PDeviceDescriptor_t d, Declaration_t *decl){
     sprintf(temp, "%S", decl->AircraftType);
     strncpy(vl.declaration.flightinfo.competitionclass, temp, 12);
 
-    if (ValidWayPoint(XCSoarInterface::SettingsComputer().HomeWaypoint)) {
+    if (way_points.verify_index(XCSoarInterface::SettingsComputer().HomeWaypoint)) {
       const WAYPOINT &way_point = way_points.get(XCSoarInterface::SettingsComputer().HomeWaypoint);
 
       sprintf(temp, "%S", way_point.Name);

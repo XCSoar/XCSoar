@@ -392,6 +392,7 @@ void RefreshTask(const SETTINGS_COMPUTER &settings_computer) {
 }
 
 
+
 void RotateStartPoints(const SETTINGS_COMPUTER &settings_computer) {
   if (ActiveTaskPoint>0) return;
   if (!EnableMultipleStartPoints) return;
@@ -401,7 +402,8 @@ void RotateStartPoints(const SETTINGS_COMPUTER &settings_computer) {
   int found = -1;
   int imax = 0;
   for (int i=0; i<MAXSTARTPOINTS; i++) {
-    if (task_start_stats[i].Active && ValidWayPoint(task_start_points[i].Index)) {
+    if (task_start_stats[i].Active 
+        && way_points.verify_index(task_start_points[i].Index)) {
       if (task_points[0].Index == task_start_points[i].Index) {
         found = i;
       }
@@ -412,7 +414,7 @@ void RotateStartPoints(const SETTINGS_COMPUTER &settings_computer) {
   if (found>imax) {
     found = 0;
   }
-  if (ValidWayPoint(task_start_points[found].Index)) {
+  if (way_points.verify_index(task_start_points[found].Index)) {
     task_points[0].Index = task_start_points[found].Index;
   }
 
@@ -659,11 +661,6 @@ void ClearTask(void) {
 }
 
 
-bool ValidWayPoint(const int i) {
-  ScopeLock protect(mutexTaskData);
-  return way_points.verify_index(i);
-}
-
 bool ValidTask()  {
   return ValidTaskPoint(ActiveTaskPoint);
 }
@@ -672,7 +669,7 @@ bool ValidTaskPoint(const int i) {
   ScopeLock protect(mutexTaskData);
   if ((i<0) || (i>= MAXTASKPOINTS))
     return false;
-  else if (!ValidWayPoint(task_points[i].Index))
+  else if (!way_points.verify_index(task_points[i].Index))
     return false;
   else 
     return true;
@@ -902,14 +899,6 @@ bool InAATTurnSector(const GEOPOINT &location,
 
   mutexTaskData.Unlock();
   return retval;
-}
-
-
-bool WaypointInTask(const int ind) {
-  if (!way_points.verify_index(ind))
-    return false;
-
-  return way_points.get_calc(ind).InTask;
 }
 
 

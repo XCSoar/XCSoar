@@ -91,9 +91,8 @@ const TCHAR *FormatterWaypoint::Render(int *color) {
 
 // VENTA3 Alternate destinations
 const TCHAR *FormatterAlternate::RenderTitle(int *color) {
-
   mutexTaskData.Lock();
-  if(ValidWayPoint(ActiveAlternate))
+  if(way_points.verify_index(ActiveAlternate))
     {
       const WAYPOINT &way_point = way_points.get(ActiveAlternate);
 
@@ -131,7 +130,7 @@ const TCHAR *
 FormatterAlternate::Render(int *color)
 {
   mutexTaskData.Lock();
-  if(Valid && ValidWayPoint(ActiveAlternate)) {
+  if(Valid && way_points.verify_index(ActiveAlternate)) {
     const WPCALC &wpcalc = way_points.get_calc(ActiveAlternate);
 
     switch (wpcalc.VGR) {
@@ -183,14 +182,14 @@ void FormatterAlternate::AssignValue(int i) {
        SetSettingsComputer().EnableAlternate1 = true;
        Value=INVALID_GR;
      } else {
-       if ( ValidWayPoint(SettingsComputer().Alternate1) ) 
+       if ( way_points.verify_index(SettingsComputer().Alternate1) ) 
          Value = way_points.get_calc(SettingsComputer().Alternate1).GR;
        else 
 	 Value=INVALID_GR;
      }
      break;
      /*
-       if ( ValidWayPoint(Alternate1) ) Value=WayPointCalc[Alternate1].GR;
+       if ( way_points.verify_index(Alternate1) ) Value=WayPointCalc[Alternate1].GR;
        else Value=INVALID_GR;
        break;
      */
@@ -199,7 +198,7 @@ void FormatterAlternate::AssignValue(int i) {
        SetSettingsComputer().EnableAlternate2 = true;
        Value=INVALID_GR;
      } else {
-       if ( ValidWayPoint(SettingsComputer().Alternate2) ) 
+       if ( way_points.verify_index(SettingsComputer().Alternate2) ) 
          Value = way_points.get_calc(SettingsComputer().Alternate2).GR;
        else Value=INVALID_GR;
      }
@@ -210,7 +209,7 @@ void FormatterAlternate::AssignValue(int i) {
        SetSettingsComputer().EnableBestAlternate = true;	  // activate it
        Value=INVALID_GR;
      } else {
-       if ( ValidWayPoint(Calculated().BestAlternate))
+       if ( way_points.verify_index(Calculated().BestAlternate))
          Value = way_points.get_calc(Calculated().BestAlternate).GR;
        else
 	 Value=INVALID_GR;

@@ -316,7 +316,7 @@ static void OnTaskListEnter(WindowControl * Sender,
       if (ItemIndex>0) {
 	task_points[ItemIndex].Index = task_points[0].Index;
       } else {
-	if (ValidWayPoint(XCSoarInterface::SettingsComputer().HomeWaypoint)) {
+	if (way_points.verify_index(XCSoarInterface::SettingsComputer().HomeWaypoint)) {
 	  task_points[ItemIndex].Index = XCSoarInterface::SettingsComputer().HomeWaypoint;
 	} else {
 	  task_points[ItemIndex].Index = -1;

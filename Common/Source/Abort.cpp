@@ -268,7 +268,8 @@ GlideComputerTask::SortLandableWaypoints()
     }
   }
 
-  if ((found_home_waypoint == -1)&&(ValidWayPoint(SettingsComputer().HomeWaypoint))) {
+  if ((found_home_waypoint == -1)
+      &&(way_points.verify_index(SettingsComputer().HomeWaypoint))) {
     // home not found in top list, so see if we can sneak it in
 
     arrival_altitude =
@@ -351,7 +352,7 @@ GlideComputerTask::SortLandableWaypoints()
   if (EnableMultipleStartPoints) {
     for (i=0; i<MAXSTARTPOINTS; i++) {
       if (task_start_stats[i].Active &&
-          ValidWayPoint(task_start_points[i].Index)) {
+          way_points.verify_index(task_start_points[i].Index)) {
         way_points.set_calc(task_start_points[i].Index).InTask = true;
       }
     }

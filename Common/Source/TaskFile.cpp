@@ -162,7 +162,7 @@ void LoadNewTask(const TCHAR *szFileName,
             }
 	  memcpy(&task_points[i],&Temp, sizeof(TASK_POINT));
 
-          if(!ValidWayPoint(Temp.Index) && (Temp.Index != -1)) {
+          if(!way_points.verify_index(Temp.Index) && (Temp.Index != -1)) {
             // Task is only invalid here if the index is out of range
             // of the waypoints and not equal to -1.
             // (Because -1 indicates a null task item)
@@ -217,7 +217,7 @@ void LoadNewTask(const TCHAR *szFileName,
             break;
           }
 
-          if(ValidWayPoint(STemp.Index) || (STemp.Index==-1)) {
+          if(way_points.verify_index(STemp.Index) || (STemp.Index==-1)) {
             memcpy(&task_start_points[i],&STemp, sizeof(START_POINT));
           } else {
 	    WaypointInvalid = true;

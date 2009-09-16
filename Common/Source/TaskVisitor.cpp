@@ -332,7 +332,7 @@ public:
         way_points.set_calc(i).InTask =
           (way_points.get(i).Flags & HOME) == HOME;
 
-      if (ValidWayPoint(settings_computer->HomeWaypoint)) {
+      if (way_points.verify_index(settings_computer->HomeWaypoint)) {
         way_points.set_calc(settings_computer->HomeWaypoint).InTask = true;
       }
     }

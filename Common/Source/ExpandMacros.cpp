@@ -46,6 +46,8 @@ Copyright_License {
 #include "Settings.hpp"
 #include "SettingsComputer.hpp"
 #include "SettingsTask.hpp"
+#include "Components.hpp"
+#include "WayPointList.hpp"
 #include "Compatibility/string.h"
 #include "InfoBoxManager.h"
 #include "SettingsUser.hpp"
@@ -184,7 +186,7 @@ bool ButtonLabel::ExpandMacros(const TCHAR *In,
   }
 
   if (_tcsstr(OutBuffer, TEXT("$(CheckWaypointFile)"))) {
-    if (!ValidWayPoint(0)) {
+    if (!way_points.verify_index(0)) {
       invalid = true;
     }
     ReplaceInString(OutBuffer, TEXT("$(CheckWaypointFile)"), TEXT(""), Size);

@@ -88,12 +88,10 @@ void MapWindow::DrawWaypoints(Canvas &canvas)
     if (wpcalc.Visible) {
 
       bool irange = false;
-      bool intask = false;
       bool islandable = false;
       bool dowrite;
 
-      intask = WaypointInTask(i);
-      dowrite = intask;
+      dowrite = wpcalc.InTask;
 
       TextDisplayMode.AsInt = 0;
 
@@ -110,9 +108,9 @@ void MapWindow::DrawWaypoints(Canvas &canvas)
 
           TextDisplayMode.AsFlag.Reachable = 1;
 
-          if ((SettingsMap().DeclutterLabels<2)||intask) {
+          if ((SettingsMap().DeclutterLabels<2)||wpcalc.InTask) {
 
-            if (intask || (SettingsMap().DeclutterLabels<1)) {
+            if (wpcalc.InTask || (SettingsMap().DeclutterLabels<1)) {
               TextDisplayMode.AsFlag.Border = 1;
             }
             // show all reachable landing fields unless we want a decluttered
@@ -138,24 +136,24 @@ void MapWindow::DrawWaypoints(Canvas &canvas)
         }
       }
 
-      if (intask) { // VNT
+      if (wpcalc.InTask) { // VNT
         TextDisplayMode.AsFlag.WhiteBold = 1;
       }
 
-      if(irange || intask || islandable || dowrite) {
+      if(irange || wpcalc.InTask || islandable || dowrite) {
         draw_masked_bitmap(canvas, *wp_bmp, 
                            wpcalc.Screen.x, wpcalc.Screen.y,
                            20, 20);
       }
 
-      if(intask || irange || dowrite) {
+      if(wpcalc.InTask || irange || dowrite) {
         bool draw_alt = TextDisplayMode.AsFlag.Reachable
-          && ((SettingsMap().DeclutterLabels<1) || intask);
+          && ((SettingsMap().DeclutterLabels<1) || wpcalc.InTask);
 
         switch(pDisplayTextType) {
         case DISPLAYNAMEIFINTASK:
-          dowrite = intask;
-          if (intask) {
+          dowrite = wpcalc.InTask;
+          if (wpcalc.InTask) {
             if (draw_alt)
               _stprintf(Buffer, TEXT("%s:%d%s"),
                         way_point.Name,
@@ -166,7 +164,7 @@ void MapWindow::DrawWaypoints(Canvas &canvas)
           }
           break;
         case DISPLAYNAME:
-          dowrite = (SettingsMap().DeclutterLabels<2) || intask;
+          dowrite = (SettingsMap().DeclutterLabels<2) || wpcalc.InTask;
           if (draw_alt)
             _stprintf(Buffer, TEXT("%s:%d%s"),
                       way_point.Name,
@@ -177,7 +175,7 @@ void MapWindow::DrawWaypoints(Canvas &canvas)
 
           break;
         case DISPLAYNUMBER:
-          dowrite = (SettingsMap().DeclutterLabels<2) || intask;
+          dowrite = (SettingsMap().DeclutterLabels<2) || wpcalc.InTask;
           if (draw_alt)
             _stprintf(Buffer, TEXT("%d:%d%s"),
                       way_point.Number,
@@ -188,7 +186,7 @@ void MapWindow::DrawWaypoints(Canvas &canvas)
 
           break;
         case DISPLAYFIRSTFIVE:
-          dowrite = (SettingsMap().DeclutterLabels<2) || intask;
+          dowrite = (SettingsMap().DeclutterLabels<2) || wpcalc.InTask;
           _tcsncpy(Buffer2, way_point.Name, 5);
           Buffer2[5] = '\0';
           if (draw_alt)
@@ -201,7 +199,7 @@ void MapWindow::DrawWaypoints(Canvas &canvas)
 
           break;
         case DISPLAYFIRSTTHREE:
-          dowrite = (SettingsMap().DeclutterLabels<2) || intask;
+          dowrite = (SettingsMap().DeclutterLabels<2) || wpcalc.InTask;
           _tcsncpy(Buffer2, way_point.Name, 3);
           Buffer2[3] = '\0';
           if (draw_alt)
@@ -214,7 +212,7 @@ void MapWindow::DrawWaypoints(Canvas &canvas)
 
           break;
         case DISPLAYNONE:
-          dowrite = (SettingsMap().DeclutterLabels<2) || intask;
+          dowrite = (SettingsMap().DeclutterLabels<2) || wpcalc.InTask;
           if (draw_alt)
             _stprintf(Buffer, TEXT("%d%s"),
                       (int)(wpcalc.AltArrivalAGL*ALTITUDEMODIFY),
@@ -232,7 +230,7 @@ void MapWindow::DrawWaypoints(Canvas &canvas)
             wpcalc.Screen.x + 5, wpcalc.Screen.y,
             TextDisplayMode,
             (int)(wpcalc.AltArrivalAGL*ALTITUDEMODIFY),
-            intask,false,false,false,
+            wpcalc.InTask,false,false,false,
             MapRect);
         }
       }
@@ -254,7 +252,8 @@ void MapWindow::ScanVisibilityWaypoints(rectObj *bounds_active) {
     WPCALC &wpcalc = way_points.set_calc(i);
 
     // TODO code: optimise waypoint visibility
-    wpcalc.FarVisible = way_point.Location.Longitude > bounds.minx &&
+    wpcalc.FarVisible = 
+      way_point.Location.Longitude > bounds.minx &&
       way_point.Location.Longitude < bounds.maxx &&
       way_point.Location.Latitude > bounds.miny &&
       way_point.Location.Latitude < bounds.maxy;
@@ -263,35 +262,10 @@ void MapWindow::ScanVisibilityWaypoints(rectObj *bounds_active) {
 
 
 void MapWindow::CalculateScreenPositionsWaypoints() {
-  unsigned int j;
-  mutexTaskData.Lock();
-
-    for (j=0; j<MAXTASKPOINTS; j++) {
-      int i = task_points[j].Index;
-      if (i>=0) {
-        WPCALC &wpcalc = way_points.set_calc(i);
-        LonLat2Screen(way_points.get(i).Location,
-                      wpcalc.Screen);
-        wpcalc.Visible = PointVisible(wpcalc.Screen);
-      }
-    }
-    if (EnableMultipleStartPoints) {
-      for(j=0;j<MAXSTARTPOINTS-1;j++) {
-        int i = task_start_points[j].Index;
-        if (task_start_stats[j].Active && (i>=0)) {
-          WPCALC &wpcalc = way_points.set_calc(i);
-          LonLat2Screen(way_points.get(i).Location,
-                        wpcalc.Screen);
-          wpcalc.Visible = PointVisible(wpcalc.Screen);
-        }
-      }
-    }
-    // only calculate screen coordinates for waypoints that are visible
-    for (unsigned i = 0; way_points.verify_index(i); ++i) {
-      WPCALC &wpcalc = way_points.set_calc(i);
-      wpcalc.Visible = wpcalc.FarVisible &&
-        LonLat2ScreenIfVisible(way_points.get(i).Location, &wpcalc.Screen);
-    }
-
-  mutexTaskData.Unlock();
+  // only calculate screen coordinates for waypoints that are visible
+  for (unsigned i = 0; way_points.verify_index(i); ++i) {
+    WPCALC &wpcalc = way_points.set_calc(i);
+    wpcalc.Visible = (wpcalc.FarVisible || wpcalc.InTask) &&
+      LonLat2ScreenIfVisible(way_points.get(i).Location, &wpcalc.Screen);
+  }
 }

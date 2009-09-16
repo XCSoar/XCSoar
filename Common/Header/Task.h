@@ -130,14 +130,12 @@ void RemoveTaskPoint(int index, const SETTINGS_COMPUTER &settings_computer);
 void FlyDirectTo(int index, const SETTINGS_COMPUTER &settings_computer);
 double AdjustAATTargets(double desired);
 void RefreshTask(const SETTINGS_COMPUTER &settings_computer);
-bool WaypointInTask(const int ind);
 
 void ClearTask(void);
 void RotateStartPoints(const SETTINGS_COMPUTER &settings_computer);
 
 bool ValidTaskPoint(const int i);
 bool ValidTask();
-bool ValidWayPoint(const int i);
 
 double FindInsideAATSectorRange(const GEOPOINT &location,
                                 const int taskwaypoint,

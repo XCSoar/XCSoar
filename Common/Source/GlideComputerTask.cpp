@@ -130,7 +130,7 @@ bool GlideComputerTask::DoLogging() {
 // VENTA3 added radial
 void GlideComputerTask::DistanceToHome() {
 
-  if (!ValidWayPoint(SettingsComputer().HomeWaypoint)) {
+  if (!way_points.verify_index(SettingsComputer().HomeWaypoint)) {
     SetCalculated().HomeDistance = 0.0;
     SetCalculated().HomeRadial = 0.0; // VENTA3
   } else {
@@ -471,7 +471,7 @@ bool GlideComputerTask::InStartSector_Internal(int Index,
 					       double OutBound,
 					       bool &LastInSector)
 {
-  if (!ValidWayPoint(Index)) return false;
+  if (!way_points.verify_index(Index)) return false;
 
   // No Task Loaded
 

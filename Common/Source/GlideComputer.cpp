@@ -332,7 +332,7 @@ GlideComputer::FLARM_ScanTraffic()
 	// JMW TODO: this is dangerous, it uses the task!
 	// it should be done outside the parser/comms thread
 	if ((Basic().FLARM_Traffic[flarm_slot].ID == SettingsComputer().TeamFlarmIdTarget)
-	    && ValidWayPoint(SettingsComputer().TeamCodeRefWaypoint)) {
+	    && way_points.verify_index(SettingsComputer().TeamCodeRefWaypoint)) {
 	  double bearing;
 	  double distance;
 	  

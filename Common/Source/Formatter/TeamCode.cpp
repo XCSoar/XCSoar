@@ -41,10 +41,12 @@ Copyright_License {
 #include "Blackboard.hpp"
 #include "Interface.hpp"
 #include "Settings.hpp"
+#include "Components.hpp"
+#include "WayPointList.hpp"
 
 const TCHAR *FormatterTeamCode::Render(int *color) {
 
-  if(ValidWayPoint(SettingsComputer().TeamCodeRefWaypoint))
+  if(way_points.verify_index(SettingsComputer().TeamCodeRefWaypoint))
     {
       *color = 0; // black text
        _tcsncpy(Text,Calculated().OwnTeamCode,5);
@@ -61,7 +63,7 @@ const TCHAR *FormatterTeamCode::Render(int *color) {
 
 const TCHAR *FormatterDiffTeamBearing::Render(int *color) {
 
-  if(ValidWayPoint(SettingsComputer().TeamCodeRefWaypoint) 
+  if(way_points.verify_index(SettingsComputer().TeamCodeRefWaypoint) 
      && SettingsComputer().TeammateCodeValid) {
     Valid = true;
 
