@@ -54,7 +54,7 @@ Copyright_License {
 
 #include <stdio.h>
 
-Task task;
+TaskSafe task;
 
 static int Task_saved[MAXTASKPOINTS+1];
 static int active_waypoint_saved= -1;
@@ -100,12 +100,10 @@ void Task::ResetTaskWaypoint(int j) {
 }
 
 
-void Task::FlyDirectTo(int index, 
+void Task::FlyDirectTo(const int index, 
                        const SETTINGS_COMPUTER &settings_computer) {
   if (!CheckDeclaration())
     return;
-
-  mutexTaskData.Lock();
 
   if (TaskAborted) {
     // in case we GOTO while already aborted
@@ -135,7 +133,6 @@ void Task::FlyDirectTo(int index,
   }
   ActiveTaskPoint = 0;
   RefreshTask(settings_computer);
-  mutexTaskData.Unlock();
 }
 
 
@@ -145,7 +142,6 @@ void Task::SwapWaypoint(const int index,
   if (!CheckDeclaration())
     return;
 
-  mutexTaskData.Lock();
   TaskModified = true;
   TargetModified = true;
   if (index<0) {
@@ -161,7 +157,6 @@ void Task::SwapWaypoint(const int index,
     task_points[index+1] = tmpPoint;
   }
   RefreshTask(settings_computer);
-  mutexTaskData.Unlock();
 }
 
 
@@ -175,7 +170,6 @@ void Task::InsertWaypoint(const int index,
     return;
 
   int i;
-  ScopeLock protect(mutexTaskData);
   TaskModified = true;
   TargetModified = true;
 
@@ -221,7 +215,6 @@ void Task::InsertWaypoint(const int index,
 
 // Create a default task to home at startup if no task is present
 void Task::DefaultTask(const SETTINGS_COMPUTER &settings_computer) {
-  mutexTaskData.Lock();
   TaskModified = true;
   TargetModified = true;
   if ((task_points[0].Index == -1)||(ActiveTaskPoint==-1)) {
@@ -231,7 +224,6 @@ void Task::DefaultTask(const SETTINGS_COMPUTER &settings_computer) {
     }
   }
   RefreshTask(settings_computer);
-  mutexTaskData.Unlock();
 }
 
 
@@ -252,12 +244,10 @@ void Task::RemoveTaskPoint(int index,
     return; // index out of bounds
   }
 
-  mutexTaskData.Lock();
   TaskModified = true;
   TargetModified = true;
 
   if (task_points[index].Index == -1) {
-    mutexTaskData.Unlock();
     return; // There's no WP at this location
   }
 
@@ -270,8 +260,6 @@ void Task::RemoveTaskPoint(int index,
   task_stats[MAXTASKPOINTS-1].AATTargetOffsetRadius= 0.0;
 
   RefreshTask(settings_computer);
-  mutexTaskData.Unlock();
-
 }
 
 
@@ -299,7 +287,6 @@ void Task::RemoveWaypoint(const int index,
   // If they're all before the active WP then just remove
   // the nearest to the active WP
 
-  mutexTaskData.Lock();
   TaskModified = true;
   TargetModified = true;
 
@@ -335,12 +322,10 @@ void Task::RemoveWaypoint(const int index,
     } else {
       // WP not found, so ask user if they want to
       // remove the active WP
-      mutexTaskData.Unlock();
       int ret = MessageBoxX(
         gettext(TEXT("Chosen Waypoint not in current task.\nRemove active WayPoint?")),
         gettext(TEXT("Remove Waypoint")),
         MB_YESNO|MB_ICONQUESTION);
-      mutexTaskData.Lock();
 
       if (ret == IDYES) {
         RemoveTaskPoint(ActiveTaskPoint, settings_computer);
@@ -353,8 +338,6 @@ void Task::RemoveWaypoint(const int index,
     }
   }
   RefreshTask(settings_computer);
-  mutexTaskData.Unlock();
-
 }
 
 
@@ -363,7 +346,6 @@ void Task::ReplaceWaypoint(const int index,
   if (!CheckDeclaration())
     return;
 
-  mutexTaskData.Lock();
   TaskModified = true;
   TargetModified = true;
 
@@ -380,13 +362,11 @@ void Task::ReplaceWaypoint(const int index,
     task_points[ActiveTaskPoint].Index = index;
   }
   RefreshTask(settings_computer);
-  mutexTaskData.Unlock();
 }
 
 
 void Task::RefreshTask(const SETTINGS_COMPUTER &settings_computer) 
 {
-  ScopeLock protect(mutexTaskData);
   RefreshTask_Visitor(settings_computer);
   CalculateAATTaskSectors(XCSoarInterface::Basic());
 }
@@ -397,8 +377,6 @@ void Task::RotateStartPoints(const SETTINGS_COMPUTER &settings_computer)
 {
   if (ActiveTaskPoint>0) return;
   if (!EnableMultipleStartPoints) return;
-
-  mutexTaskData.Lock();
 
   int found = -1;
   int imax = 0;
@@ -420,7 +398,6 @@ void Task::RotateStartPoints(const SETTINGS_COMPUTER &settings_computer)
   }
 
   RefreshTask(settings_computer);
-  mutexTaskData.Unlock();
 }
 
 
@@ -431,17 +408,16 @@ double Task::AdjustAATTargets(double desired)
   istart = max(1,ActiveTaskPoint);
   inum=0;
 
-  mutexTaskData.Lock();
-  for(i=istart;i<MAXTASKPOINTS-1;i++)
-    {
-      if(ValidTaskPoint(i)&&ValidTaskPoint(i+1) && !task_stats[i].AATTargetLocked)
-	{
-          task_stats[i].AATTargetOffsetRadius = max(-1,min(1,
-                                          task_stats[i].AATTargetOffsetRadius));
-	  av += task_stats[i].AATTargetOffsetRadius;
-	  inum++;
-	}
+  for(i=istart;i<MAXTASKPOINTS-1;i++) {
+    if(ValidTaskPoint(i)&&ValidTaskPoint(i+1) 
+       && !task_stats[i].AATTargetLocked) {
+      task_stats[i].AATTargetOffsetRadius = 
+        max(-1,min(1,
+                   task_stats[i].AATTargetOffsetRadius));
+      av += task_stats[i].AATTargetOffsetRadius;
+      inum++;
     }
+  }
   if (inum>0) {
     av/= inum;
   }
@@ -458,29 +434,29 @@ double Task::AdjustAATTargets(double desired)
   desired = (desired+1.0)/2.0; // scale to 0,1
   av = (av+1.0)/2.0; // scale to 0,1
 
-  for(i=istart;i<MAXTASKPOINTS-1;i++)
+  for(i=istart;i<MAXTASKPOINTS-1;i++) {
+    if((task_points[i].Index >=0)
+       &&(task_points[i+1].Index >=0) 
+       && !task_stats[i].AATTargetLocked)
     {
-      if((task_points[i].Index >=0)
-	 &&(task_points[i+1].Index >=0) 
-	 && !task_stats[i].AATTargetLocked)
-	{
-	  double d = (task_stats[i].AATTargetOffsetRadius+1.0)/2.0;
-          // scale to 0,1
-
-          if (av>0.01) {
-            d = desired;
-	    // 20080615 JMW
-	    // was (desired/av)*d;
-	    // now, we don't want it to be proportional
-          } else {
-            d = desired;
-          }
-          d = min(1.0, max(d, 0))*2.0-1.0;
-          task_stats[i].AATTargetOffsetRadius = d;
-	}
+      double d = (task_stats[i].AATTargetOffsetRadius+1.0)/2.0;
+      // scale to 0,1
+      
+      if (av>0.01) {
+        d = desired;
+        // 20080615 JMW
+        // was (desired/av)*d;
+        // now, we don't want it to be proportional
+      } else {
+        d = desired;
+      }
+      d = min(1.0, max(d, 0))*2.0-1.0;
+      task_stats[i].AATTargetOffsetRadius = d;
     }
+  }
+  // TODO RefreshTask ?
+
  OnExit:
-  mutexTaskData.Unlock();
   return av;
 }
 
@@ -492,8 +468,6 @@ Task::CalculateAATTaskSectors(const NMEA_INFO &gps_info)
 
   if(AATEnabled == FALSE)
     return;
-
-  mutexTaskData.Lock();
 
   task_stats[0].AATTargetOffsetRadius = 0.0;
   task_stats[0].AATTargetOffsetRadial = 0.0;
@@ -628,14 +602,10 @@ Task::CalculateAATTaskSectors(const NMEA_INFO &gps_info)
     TargetModified = false;
     // allow target dialog to detect externally changed targets
   }
-
-  mutexTaskData.Unlock();
 }
 
 
 void Task::ClearTask(void) {
-  mutexTaskData.Lock();
-
   memset( &(task_points), 0, sizeof(Task_t));
   memset( &(task_start_points), 0, sizeof(Start_t));
 
@@ -659,7 +629,6 @@ void Task::ClearTask(void) {
   for (i=0; i<MAXSTARTPOINTS; i++) {
     task_start_points[i].Index = -1;
   }
-  mutexTaskData.Unlock();
 }
 
 
@@ -668,7 +637,6 @@ bool Task::Valid()  {
 }
 
 bool Task::ValidTaskPoint(const int i) {
-  ScopeLock protect(mutexTaskData);
   if ((i<0) || (i>= MAXTASKPOINTS))
     return false;
   else if (!way_points.verify_index(task_points[i].Index))
@@ -751,7 +719,6 @@ double Task::DoubleLegDistance(const int taskwaypoint,
 
 bool Task::TaskIsTemporary(void) {
   bool retval = false;
-  mutexTaskData.Lock();
   if (TaskAborted) {
     retval = true;
   }
@@ -759,14 +726,11 @@ bool Task::TaskIsTemporary(void) {
       && (Task_saved[0] >= 0)) {
     retval = true;
   };
-
-  mutexTaskData.Unlock();
   return retval;
 }
 
 
 void Task::BackupTask(void) {
-  mutexTaskData.Lock();
   for (int i=0; i<=MAXTASKPOINTS; i++) {
     Task_saved[i]= task_points[i].Index;
   }
@@ -776,7 +740,6 @@ void Task::BackupTask(void) {
   } else {
     aat_enabled_saved = false;
   }
-  mutexTaskData.Unlock();
 }
 
 
@@ -788,7 +751,6 @@ Task::ResumeAbortTask(const SETTINGS_COMPUTER &settings_computer,
   int active_waypoint_on_entry;
   bool task_temporary_on_entry = TaskIsTemporary();
 
-  mutexTaskData.Lock();
   active_waypoint_on_entry = ActiveTaskPoint;
 
   if (set == 0) {
@@ -838,7 +800,6 @@ Task::ResumeAbortTask(const SETTINGS_COMPUTER &settings_computer,
     SelectedWaypoint = ActiveTaskPoint;
   }
 
-  mutexTaskData.Unlock();
 }
 
 
@@ -852,11 +813,9 @@ Task::getFinalWaypoint() {
   }
 
   i++;
-  mutexTaskData.Lock();
   while((i<MAXTASKPOINTS) && (task_points[i].Index != -1)) {
     i++;
   }
-  mutexTaskData.Unlock();
   return i-1;
 }
 
@@ -867,24 +826,9 @@ Task::ActiveIsFinalWaypoint() {
 
 
 bool 
-Task::IsFinalWaypoint(void) {
-  bool retval;
-  mutexTaskData.Lock();
-  if (task.Valid() && (task_points[ActiveTaskPoint+1].Index >= 0)) {
-    retval = false;
-  } else {
-    retval = true;
-  }
-  mutexTaskData.Unlock();
-  return retval;
-}
-
-
-bool 
 Task::InAATTurnSector(const GEOPOINT &location,
                       const int the_turnpoint)
 {
-  double AircraftBearing;
   bool retval = false;
 
   if (!ValidTaskPoint(the_turnpoint)) {
@@ -892,9 +836,9 @@ Task::InAATTurnSector(const GEOPOINT &location,
   }
 
   double distance;
-  mutexTaskData.Lock();
+  double bearing;
   DistanceBearing(way_points.get(task_points[the_turnpoint].Index).Location,
-                  location, &distance, &AircraftBearing);
+                  location, &distance, &bearing);
 
   if(task_points[the_turnpoint].AATType ==  CIRCLE) {
     if(distance < task_points[the_turnpoint].AATCircleRadius) {
@@ -903,12 +847,11 @@ Task::InAATTurnSector(const GEOPOINT &location,
   } else if(distance < task_points[the_turnpoint].AATSectorRadius) {
     if (AngleInRange(task_points[the_turnpoint].AATStartRadial,
                      task_points[the_turnpoint].AATFinishRadial,
-                     AngleLimit360(AircraftBearing), true)) {
+                     AngleLimit360(bearing), true)) {
       retval = true;
     }
   }
 
-  mutexTaskData.Unlock();
   return retval;
 }
 
@@ -916,7 +859,6 @@ Task::InAATTurnSector(const GEOPOINT &location,
 void 
 Task::CheckStartPointInTask(void) 
 {
-  mutexTaskData.Lock();
   if (task_points[0].Index != -1) {
     // ensure current start point is in task
     int index_last = 0;
@@ -936,34 +878,31 @@ Task::CheckStartPointInTask(void)
       // it wasn't, so make sure it's added now
       task_start_points[index_last].Index = task_points[0].Index;
       task_start_stats[index_last].Active = true;
+      // TODO: trigger refresh, modified
     }
   }
-  mutexTaskData.Unlock();
 }
 
 
 void 
 Task::ClearStartPoints()
 {
-  mutexTaskData.Lock();
   for (int i=0; i<MAXSTARTPOINTS; i++) {
     task_start_points[i].Index = -1;
     task_start_stats[i].Active = false;
   }
   task_start_points[0].Index = task_points[0].Index;
   task_start_stats[0].Active = true;
-  mutexTaskData.Unlock();
 }
+
 
 void 
 Task::SetStartPoint(const int pointnum, const int waypointnum)
 {
   if ((pointnum>=0) && (pointnum<MAXSTARTPOINTS)) {
     // TODO bug: don't add it if it's already present!
-    mutexTaskData.Lock();
     task_start_points[pointnum].Index = waypointnum;
     task_start_stats[pointnum].Active = true;
-    mutexTaskData.Unlock();
   }
 }
 

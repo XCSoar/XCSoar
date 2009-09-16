@@ -123,63 +123,64 @@ struct NMEA_INFO;
 
 class Task {
 public:
-  void RefreshTask(const SETTINGS_COMPUTER &settings_computer);
+  virtual void RefreshTask(const SETTINGS_COMPUTER &settings_computer);
 
-  void ReplaceWaypoint(const int index, 
-                       const SETTINGS_COMPUTER &settings_computer);
-  void InsertWaypoint(const int index, 
-                      const SETTINGS_COMPUTER &settings_computer,
-                      bool append=false);
-  void SwapWaypoint(int index, const SETTINGS_COMPUTER &settings_computer);
-  void RemoveWaypoint(const int index, 
-                      const SETTINGS_COMPUTER &settings_computer);
-  void RemoveTaskPoint(const int index, 
-                       const SETTINGS_COMPUTER &settings_computer);
-  void FlyDirectTo(int index, const SETTINGS_COMPUTER &settings_computer);
+  virtual void ReplaceWaypoint(const int index, 
+                               const SETTINGS_COMPUTER &settings_computer);
+  virtual void InsertWaypoint(const int index, 
+                              const SETTINGS_COMPUTER &settings_computer,
+                              bool append=false);
+  virtual void SwapWaypoint(const int index, 
+                            const SETTINGS_COMPUTER &settings_computer);
+  virtual void RemoveWaypoint(const int index, 
+                              const SETTINGS_COMPUTER &settings_computer);
+  virtual void RemoveTaskPoint(const int index, 
+                               const SETTINGS_COMPUTER &settings_computer);
+  virtual void FlyDirectTo(const int index, 
+                           const SETTINGS_COMPUTER &settings_computer);
 
-  void ClearTask(void);
-  void RotateStartPoints(const SETTINGS_COMPUTER &settings_computer);
-  void DefaultTask(const SETTINGS_COMPUTER &settings);
-  void ResumeAbortTask(const SETTINGS_COMPUTER &settings_computer,
-                       const int set = 0);
-  void CheckStartPointInTask(void);
-  void ClearStartPoints(void);
-  void SetStartPoint(const int pointnum, const int waypointnum);
+  virtual void ClearTask(void);
+  virtual void RotateStartPoints(const SETTINGS_COMPUTER &settings_computer);
+  virtual void DefaultTask(const SETTINGS_COMPUTER &settings);
+  virtual void ResumeAbortTask(const SETTINGS_COMPUTER &settings_computer,
+                               const int set = 0);
+  virtual void CheckStartPointInTask(void);
+  virtual void ClearStartPoints(void);
+  virtual void SetStartPoint(const int pointnum, const int waypointnum);
 
   // AAT functions
-  double AdjustAATTargets(double desired);
-  double FindInsideAATSectorRange(const GEOPOINT &location,
+  virtual double AdjustAATTargets(double desired);
+  virtual double FindInsideAATSectorRange(const GEOPOINT &location,
                                   const int taskwaypoint,
                                   const double course_bearing,
                                   const double p_found);
-  double FindInsideAATSectorDistance(const GEOPOINT &location,
+  virtual double FindInsideAATSectorDistance(const GEOPOINT &location,
                                      const int taskwaypoint,
                                      const double course_bearing,
                                      const double p_found=0.0);
-  bool isTaskModified();
-  void SetTaskModified(const bool set=true);
-  bool isTargetModified();
-  void SetTargetModified(const bool set=true);
-  bool InAATTurnSector(const GEOPOINT &location, const int the_turnpoint);
+  virtual bool isTaskModified();
+  virtual void SetTaskModified(const bool set=true);
+  virtual bool isTargetModified();
+  virtual void SetTargetModified(const bool set=true);
+  virtual bool InAATTurnSector(const GEOPOINT &location, const int the_turnpoint);
 
   // queries
-  bool ValidTaskPoint(const int i);
-  bool Valid();
-  double DoubleLegDistance(const int taskwaypoint, 
+  virtual bool ValidTaskPoint(const int i);
+  virtual bool Valid();
+  virtual double DoubleLegDistance(const int taskwaypoint, 
                            const GEOPOINT &location);
-  bool TaskIsTemporary(void);
-  int  getFinalWaypoint(void);
-  bool ActiveIsFinalWaypoint(void);
-  bool IsFinalWaypoint(void);
-  bool isTaskAborted();
+  virtual bool TaskIsTemporary(void);
+  virtual int  getFinalWaypoint(void);
+  virtual bool ActiveIsFinalWaypoint(void);
+  virtual bool isTaskAborted();
 
   // file load/save
-  void LoadNewTask(const TCHAR *FileName,
+  virtual void LoadNewTask(const TCHAR *FileName,
                    const SETTINGS_COMPUTER &settings_computer);
-  void SaveTask(const TCHAR *FileName);
-  void SaveDefaultTask(void);
-  const TCHAR* getTaskFilename();
-  void ClearTaskFileName();
+  virtual void SaveTask(const TCHAR *FileName);
+  virtual void SaveDefaultTask(void);
+  virtual const TCHAR* getTaskFilename();
+  virtual void ClearTaskFileName();
 
 private:
   void ResetTaskWaypoint(int j);
@@ -189,6 +190,214 @@ private:
   void CalculateAATIsoLines(void);
 };
 
-extern Task task;
+
+//////
+
+#include "Protection.hpp"
+
+class TaskSafe: private Task {
+public:
+  virtual void RefreshTask(const SETTINGS_COMPUTER &settings_computer)
+  { // write
+    ScopeLock protect(mutexTaskData);
+    Task::RefreshTask(settings_computer);
+  };
+  virtual void ReplaceWaypoint(const int index, 
+                       const SETTINGS_COMPUTER &settings_computer)
+  { // write
+    ScopeLock protect(mutexTaskData);
+    Task::ReplaceWaypoint(index, settings_computer);
+  }
+  virtual void InsertWaypoint(const int index, 
+                      const SETTINGS_COMPUTER &settings_computer,
+                      bool append=false)
+  { // write
+    ScopeLock protect(mutexTaskData);
+    Task::InsertWaypoint(index, settings_computer, append);
+  }
+  virtual void SwapWaypoint(const int index, 
+                            const SETTINGS_COMPUTER &settings_computer)
+  { // write
+    ScopeLock protect(mutexTaskData);
+    Task::SwapWaypoint(index, settings_computer);
+  }
+  virtual void RemoveWaypoint(const int index, 
+                      const SETTINGS_COMPUTER &settings_computer)
+  { // write
+    ScopeLock protect(mutexTaskData);
+    Task::RemoveWaypoint(index, settings_computer);
+  }
+  virtual void RemoveTaskPoint(const int index, 
+                       const SETTINGS_COMPUTER &settings_computer)
+  { // write
+    ScopeLock protect(mutexTaskData);
+    Task::RemoveTaskPoint(index, settings_computer);
+  }
+  virtual void FlyDirectTo(const int index, 
+                           const SETTINGS_COMPUTER &settings_computer)
+  { // write
+    ScopeLock protect(mutexTaskData);
+    Task::FlyDirectTo(index, settings_computer);
+  }
+  virtual void ClearTask(void)
+  { // write
+    ScopeLock protect(mutexTaskData);
+    Task::ClearTask();
+  }
+  virtual void RotateStartPoints(const SETTINGS_COMPUTER &settings_computer)
+  { // write
+    ScopeLock protect(mutexTaskData);
+    Task::RotateStartPoints(settings_computer);
+  }
+  virtual void DefaultTask(const SETTINGS_COMPUTER &settings)
+  { // write
+    ScopeLock protect(mutexTaskData);
+    Task::DefaultTask(settings);
+  }
+  virtual void ResumeAbortTask(const SETTINGS_COMPUTER &settings_computer,
+                       const int set = 0)
+  { // write
+    ScopeLock protect(mutexTaskData);
+    Task::ResumeAbortTask(settings_computer, set);
+  }
+
+  virtual void CheckStartPointInTask(void)
+  { // write
+    ScopeLock protect(mutexTaskData);
+    Task::CheckStartPointInTask();
+  }
+
+  virtual void ClearStartPoints(void)
+  { // write
+    ScopeLock protect(mutexTaskData);
+    Task::ClearStartPoints();
+  }
+
+  virtual void SetStartPoint(const int pointnum, const int waypointnum)
+  { // write
+    ScopeLock protect(mutexTaskData);
+    Task::SetStartPoint(pointnum, waypointnum);
+  }
+
+
+  // AAT functions
+  virtual double AdjustAATTargets(double desired) {
+    // write
+    ScopeLock protect(mutexTaskData);
+    return Task::AdjustAATTargets(desired);
+  }
+
+//////
+  virtual double FindInsideAATSectorRange(const GEOPOINT &location,
+                                          const int taskwaypoint,
+                                          const double course_bearing,
+                                          const double p_found) 
+  { // read
+    ScopeLock protect(mutexTaskData);
+    return Task::FindInsideAATSectorRange(location, taskwaypoint,
+                                          course_bearing, p_found);
+  }
+  virtual double FindInsideAATSectorDistance(const GEOPOINT &location,
+                                             const int taskwaypoint,
+                                             const double course_bearing,
+                                             const double p_found=0.0) 
+  { // read
+    ScopeLock protect(mutexTaskData);
+    return Task::FindInsideAATSectorDistance(location, taskwaypoint,
+                                             course_bearing, p_found);
+  }
+  virtual bool isTaskModified() {
+    // read
+    ScopeLock protect(mutexTaskData);
+    return Task::isTaskModified();
+  }
+
+  virtual void SetTaskModified(const bool set=true)
+  { // write
+    ScopeLock protect(mutexTaskData);
+    Task::SetTaskModified(set);
+  }
+
+  virtual bool isTargetModified() { // read
+    ScopeLock protect(mutexTaskData);
+    return Task::isTargetModified();
+  }
+  virtual void SetTargetModified(const bool set=true)
+  { // write
+    ScopeLock protect(mutexTaskData);
+    Task::SetTargetModified(set);
+  }
+
+  virtual bool InAATTurnSector(const GEOPOINT &location, 
+                               const int the_turnpoint) 
+  { // read
+    ScopeLock protect(mutexTaskData);
+    return Task::InAATTurnSector(location, the_turnpoint);
+  }
+
+  // queries
+  virtual bool ValidTaskPoint(const int i) { // read
+    ScopeLock protect(mutexTaskData);
+    return Task::ValidTaskPoint(i);
+  }
+  virtual bool Valid() { // read
+    ScopeLock protect(mutexTaskData);
+    return Task::Valid();
+  }
+  virtual double DoubleLegDistance(const int taskwaypoint, // read
+                                   const GEOPOINT &location) {
+    ScopeLock protect(mutexTaskData);
+    return Task::DoubleLegDistance(taskwaypoint, location);
+  }
+  virtual bool TaskIsTemporary(void) { // read
+    ScopeLock protect(mutexTaskData);
+    return Task::TaskIsTemporary();
+  }
+  virtual int  getFinalWaypoint(void) { // read
+    ScopeLock protect(mutexTaskData);
+    return Task::getFinalWaypoint();
+  }
+  virtual bool ActiveIsFinalWaypoint(void) { //read
+    ScopeLock protect(mutexTaskData);
+    return Task::ActiveIsFinalWaypoint();
+  }
+  virtual bool isTaskAborted() { // read
+    ScopeLock protect(mutexTaskData);
+    return Task::isTaskAborted();
+  }
+  // file load/save
+  virtual void LoadNewTask(const TCHAR *FileName,
+                           const SETTINGS_COMPUTER &settings_computer) // write
+  {
+    ScopeLock protect(mutexTaskData);
+    Task::LoadNewTask(FileName, settings_computer);
+  }
+
+  virtual void SaveTask(const TCHAR *FileName) // write
+  {
+    ScopeLock protect(mutexTaskData);
+    Task::SaveTask(FileName);
+  }
+
+  virtual void SaveDefaultTask(void) // write
+  {
+    ScopeLock protect(mutexTaskData);
+    Task::SaveDefaultTask();
+  }
+
+  virtual const TCHAR* getTaskFilename() // read
+  {
+    ScopeLock protect(mutexTaskData);
+    return Task::getTaskFilename();
+  }
+  virtual void ClearTaskFileName() // write
+  {
+    ScopeLock protect(mutexTaskData);
+    Task::ClearTaskFileName();
+  }
+};
+
+
+extern TaskSafe task;
 
 #endif

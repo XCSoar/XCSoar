@@ -687,7 +687,8 @@ void GlideComputerTask::CheckStart() {
   if (StartCrossed) {
     // TODO: Check whether speed and height are within the rules or
     // not (zero margin)
-    if(!task.IsFinalWaypoint() && ValidStartSpeed() && InsideStartHeight()) {
+    if(!task.ActiveIsFinalWaypoint() 
+       && ValidStartSpeed() && InsideStartHeight()) {
 
       // This is set whether ready to advance or not, because it will
       // appear in the flight log, so if it's valid, it's valid.
@@ -712,7 +713,7 @@ void GlideComputerTask::CheckStart() {
     } else {
 
       if ((ActiveTaskPoint<=1)
-          && !task.IsFinalWaypoint()
+          && !task.ActiveIsFinalWaypoint()
           && (Calculated().ValidStart==false)
           && (Calculated().Flying)) {
 
@@ -827,7 +828,7 @@ void GlideComputerTask::InSector()
   if(ActiveTaskPoint == 0) {
     CheckStart();
   } else {
-    if(task.IsFinalWaypoint()) {
+    if(task.ActiveIsFinalWaypoint()) {
       AddAATPoint(ActiveTaskPoint-1);
       CheckFinish();
     } else {

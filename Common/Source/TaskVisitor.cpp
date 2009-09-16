@@ -10,6 +10,11 @@
 #include "Components.hpp"
 #include "WayPointList.hpp"
 
+
+// note: if this calls any task member functions they will be locked
+// recursively
+
+
 void TaskScan::scan_point_forward(RelativeTaskPointVisitor &visitor)
 {
   ScopeLock protect(mutexTaskData);

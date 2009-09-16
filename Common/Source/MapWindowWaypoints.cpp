@@ -262,7 +262,11 @@ void MapWindow::CalculateScreenPositionsWaypoints() {
   // only calculate screen coordinates for waypoints that are visible
   for (unsigned i = 0; way_points.verify_index(i); ++i) {
     WPCALC &wpcalc = way_points.set_calc(i);
-    wpcalc.Visible = (wpcalc.FarVisible || wpcalc.InTask) &&
-      LonLat2ScreenIfVisible(way_points.get(i).Location, &wpcalc.Screen);
+    if (!wpcalc.InTask) {
+      wpcalc.Visible = wpcalc.FarVisible &&
+        LonLat2ScreenIfVisible(way_points.get(i).Location, &wpcalc.Screen);
+    } else {
+      LonLat2Screen(way_points.get(i).Location, &wpcalc.Screen);
+    }
   }
 }

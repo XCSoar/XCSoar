@@ -122,8 +122,6 @@ void Task::LoadNewTask(const TCHAR *szFileName,
   bool TaskLoaded = false;
   unsigned magic = 0;
 
-  mutexTaskData.Lock();
-
   ActiveTaskPoint = -1;
   for(i=0;i<MAXTASKPOINTS;i++)
     {
@@ -264,8 +262,6 @@ void Task::LoadNewTask(const TCHAR *szFileName,
     ActiveTaskPoint = 0;
   }
 
-  mutexTaskData.Unlock();
-
   if (TaskInvalid && TaskLoaded) {
     MessageBoxX(
       gettext(TEXT("Error in task file!")),
@@ -282,8 +278,6 @@ void Task::LoadNewTask(const TCHAR *szFileName,
 
 void Task::SaveTask(const TCHAR *szFileName)
 {
-  mutexTaskData.Lock();
-
   FILE *file = _tfopen(szFileName, _T("wb"));
   if (file != NULL) {
     unsigned magic = BINFILEMAGICNUMBER;
@@ -336,12 +330,10 @@ void Task::SaveTask(const TCHAR *szFileName)
                 gettext(TEXT("Save task")),
                 MB_OK|MB_ICONEXCLAMATION);
   }
-  mutexTaskData.Unlock();
 }
 
 
 void Task::SaveDefaultTask(void) {
-  mutexTaskData.Lock();
   if (!task.isTaskAborted()) {
     TCHAR buffer[MAX_PATH];
 #ifdef GNAV
@@ -351,7 +343,4 @@ void Task::SaveDefaultTask(void) {
 #endif
     task.SaveTask(buffer);
   }
-  mutexTaskData.Unlock();
 }
-
-
