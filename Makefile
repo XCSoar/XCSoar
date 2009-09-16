@@ -871,5 +871,5 @@ include $(wildcard $(SRC)/*/.*.d)
 endif
 
 test: .PHONY
-	cd test; make test
+	$(MAKE) -C test test
 
