@@ -42,7 +42,6 @@ Copyright_License {
 #include "Thread/Mutex.hpp"
 
 extern Mutex mutexBlackboard;
-extern Mutex mutexComm;
 extern Mutex mutexTaskData;
 
 void TriggerGPSUpdate();

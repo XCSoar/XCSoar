@@ -121,9 +121,7 @@ void ProcessTimer::CommonProcessTimer()
 
 
 int ProcessTimer::ConnectionProcessTimer(int itimeout) {
-  mutexComm.Lock();
-  NMEAParser::UpdateMonitor();
-  mutexComm.Unlock();
+  devConnectionMonitor();
 
   static bool connected_last = false;
   static bool wait_connect = false;

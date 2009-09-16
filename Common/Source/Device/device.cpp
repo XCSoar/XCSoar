@@ -39,7 +39,7 @@ Copyright_License {
 
 #include "Device/device.h"
 #include "XCSoar.h"
-#include "Protection.hpp"
+#include "Thread/Mutex.hpp"
 #include "LogFile.hpp"
 #include "DeviceBlackboard.hpp"
 #include "Interface.hpp"
@@ -67,6 +67,8 @@ Copyright_License {
 #include "Device/devXCOM760.h"
 #include "Device/devCondor.h"
 #include "options.h" /* for LOGGDEVCOMMANDLINE */
+
+static Mutex mutexComm;
 
 // A note about locking.
 //  The ComPort RX threads lock using FlightData critical section.
@@ -962,4 +964,11 @@ void devRestart() {
 
   mutexComm.Unlock();
 #endif
+}
+
+void devConnectionMonitor()
+{
+  mutexComm.Lock();
+  NMEAParser::UpdateMonitor();
+  mutexComm.Unlock();
 }
