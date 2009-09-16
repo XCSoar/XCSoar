@@ -51,6 +51,7 @@ Copyright_License {
 #include "Math/Geometry.hpp"
 #include "Math/FastMath.h"
 #include "RasterTerrain.h"
+#include "RasterMap.h"
 #include "Calibration.hpp"
 #include "Airspace.h"
 #include "AirspaceWarning.h"
@@ -540,8 +541,8 @@ void GlideComputerAirData::TerrainHeight()
 
   terrain.Lock();
   // want most accurate rounding here
-  terrain.SetTerrainRounding(0,0);
-  Alt = terrain.GetTerrainHeight(Basic().Location);
+  RasterRounding rounding(*terrain.GetMap(),0,0);
+  Alt = terrain.GetTerrainHeight(Basic().Location, rounding);
   terrain.Unlock();
 
   if(Alt<0) {

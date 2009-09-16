@@ -44,6 +44,7 @@ Copyright_License {
 #include "UtilsText.hpp"
 #include "LogFile.hpp"
 #include "RasterTerrain.h"
+#include "RasterMap.h"
 #include "Math/Earth.hpp"
 #include "Math/Units.h"
 #include "Registry.hpp"
@@ -767,12 +768,12 @@ static void AirspaceAGLLookup(AIRSPACE_ALT *Top, AIRSPACE_ALT *Base,
 
     terrain.Lock();
     // want most accurate rounding here
-    terrain.SetTerrainRounding(0,0);
+    RasterRounding rounding(*terrain.GetMap(),0,0);
 
     GEOPOINT p; p.Longitude = av_lon; p.Latitude = av_lat;
 
     double th =
-      terrain.GetTerrainHeight(p);
+      terrain.GetTerrainHeight(p, rounding);
 
     if (Base->Base == abAGL) {
       if (Base->AGL>=0) {

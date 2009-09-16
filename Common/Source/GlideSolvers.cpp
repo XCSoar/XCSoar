@@ -44,6 +44,7 @@ Copyright_License {
 #include "SettingsComputer.hpp"
 #include "SettingsTask.hpp"
 #include "RasterTerrain.h"
+#include "RasterMap.h"
 #include "Math/FastMath.h"
 #include "Math/Earth.hpp"
 #include "WayPoint.hpp"
@@ -105,12 +106,12 @@ FinalGlideThroughTerrain(const double this_bearing,
 
   double Xrounding = fabs(loc.Longitude-start_loc.Longitude)/2;
   double Yrounding = fabs(loc.Latitude-start_loc.Latitude)/2;
-  terrain.SetTerrainRounding(Xrounding, Yrounding);
+  RasterRounding rounding(*terrain.GetMap(),Xrounding,Yrounding);
 
   loc = last_loc = start_loc;
 
   altitude = Calculated->NavAltitude;
-  h =  max(0, terrain.GetTerrainHeight(loc));
+  h =  max(0, terrain.GetTerrainHeight(loc,rounding));
   dh = altitude - h - settings.SAFETYALTITUDETERRAIN;
   last_dh = dh;
   if (dh<0) {
@@ -162,7 +163,7 @@ FinalGlideThroughTerrain(const double this_bearing,
     loc.Longitude += dloc.Longitude;
 
     // find height over terrain
-    h =  max(0,terrain.GetTerrainHeight(loc));
+    h =  max(0,terrain.GetTerrainHeight(loc, rounding));
 
     dh = altitude - h - settings.SAFETYALTITUDETERRAIN;
 

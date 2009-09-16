@@ -144,7 +144,7 @@ void RasterTerrain::CloseTerrain(void)
 
 void RasterTerrain::Lock(void) {
   if (TerrainMap) {
-    TerrainMap->Lock();
+    TerrainMap->LockRead();
   }
 }
 
@@ -154,9 +154,10 @@ void RasterTerrain::Unlock(void) {
   }
 }
 
-short RasterTerrain::GetTerrainHeight(const GEOPOINT &Location) {
+short RasterTerrain::GetTerrainHeight(const GEOPOINT &Location,
+  const RasterRounding &rounding) {
   if (TerrainMap) {
-    return TerrainMap->GetField(Location);
+    return TerrainMap->GetField(Location, rounding);
   } else {
     return TERRAIN_INVALID;
   }
@@ -183,12 +184,6 @@ bool RasterTerrain::IsPaged(void) {
 void RasterTerrain::ServiceCache(void) {
   if (TerrainMap) {
     TerrainMap->ServiceCache();
-  }
-}
-
-void RasterTerrain::SetTerrainRounding(double x, double y) {
-  if (TerrainMap) {
-    TerrainMap->SetFieldRounding(x, y);
   }
 }
 

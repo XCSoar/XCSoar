@@ -344,13 +344,15 @@ TerrainRenderer::TerrainRenderer(RECT rc) {
   hBuf = (unsigned short*)malloc(sizeof(unsigned short)*ixs*iys);
   
   colorBuf = (BGRColor*)malloc(256*128*sizeof(BGRColor));
-  
+
+  rounding = new RasterRounding();
 }
 
 TerrainRenderer::~TerrainRenderer() {
   if (hBuf) free(hBuf);
   if (colorBuf) free(colorBuf);
   if (sbuf) delete sbuf;
+  if (rounding) delete rounding;
 }
 
 bool TerrainRenderer::SetMap(const GEOPOINT &loc) {
@@ -471,28 +473,28 @@ void TerrainRenderer::Height(MapWindowProjection &map_projection, bool isBigZoom
   x = (X0+X1)/2+dd;
   y = (Y0+Y1)/2;
   map_projection.Screen2LonLat(x, y, G);
-  float Xrounding = (float)fabs(G.Longitude-middle.Longitude);
+  double Xrounding = fabs(G.Longitude-middle.Longitude);
   pixelDX = Distance(middle, G);
   
   x = (X0+X1)/2;
   y = (Y0+Y1)/2+dd;
   map_projection.Screen2LonLat(x, y, G);
-  float Yrounding = (float)fabs(G.Latitude-middle.Latitude);
+  double Yrounding = fabs(G.Latitude-middle.Latitude);
   pixelDY = Distance(middle, G);
   
   pixelsize_d = sqrt((pixelDX*pixelDX+pixelDY*pixelDY)/2.0);
   
   // OK, ready to start loading height
   
-  DisplayMap->Lock();
-  
-  // set resolution
-  
+  DisplayMap->LockRead();
+    
   if (DisplayMap->IsDirectAccess()) {
-    DisplayMap->SetFieldRounding(0,0);
-  } else {
-    DisplayMap->SetFieldRounding(Xrounding,Yrounding);
+    Xrounding=0;
+    Yrounding=0;
   }
+
+  // set resolution
+  rounding->Set(*DisplayMap, Xrounding, Yrounding);
   
   epx = DisplayMap->GetEffectivePixelSize(&pixelsize_d,
 					  middle);
@@ -600,7 +602,7 @@ void TerrainRenderer::FillHeightBuffer(MapWindowProjection &map_projection,
 
 	gp.Latitude = PanLatitude - (ycost+x*sint)*InvDrawScale;
 	gp.Longitude = PanLongitude + (x*cost-ysint)*invfastcosine(gp.Latitude)*InvDrawScale;
-	*myhbuf = max(0, DisplayMap->GetField(gp));
+	*myhbuf = max(0, DisplayMap->GetField(gp, *rounding));
       } else {
 	*myhbuf = 0;
       }
@@ -613,7 +615,7 @@ void TerrainRenderer::FillHeightBuffer(MapWindowProjection &map_projection,
   for (int y = Y0; y<Y1; y+= dtquant) {
     for (int x = X0; x<X1; x+= dtquant) {
       map_projection.Screen2LonLat(x,y,X,Y);
-        *myhbuf++ = max(0, DisplayMap->GetField(Y, X));
+      *myhbuf++ = max(0, DisplayMap->GetField(Y, X, *rounding));
     }
   }
   

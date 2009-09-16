@@ -53,6 +53,7 @@ Copyright_License {
 #include "UtilsText.hpp"
 #include "MapWindowProjection.hpp"
 #include "RasterTerrain.h"
+#include "RasterMap.h"
 #include "LogFile.hpp"
 #include "Interface.hpp"
 #include "WayPointList.hpp"
@@ -180,7 +181,7 @@ ReadWayPointFile(ZZIP_FILE *fp, const TCHAR *CurrentWpFileName,
                  WayPointList &way_points, RasterTerrain &terrain)
 {
   WAYPOINT *new_waypoint;
-  TCHAR szTemp[100];
+//  TCHAR szTemp[100];
   int nTrigger=10;
   DWORD fSize, fPos=0;
   int nLineNumber=0;
@@ -249,10 +250,10 @@ WaypointAltitudeFromTerrain(WAYPOINT* Temp, RasterTerrain &terrain)
 {
   double myalt;
   terrain.Lock();
-  terrain.SetTerrainRounding(0.0,0.0);
+  RasterRounding rounding(*terrain.GetMap(),0,0);
 
   myalt =
-    terrain.GetTerrainHeight(Temp->Location);
+    terrain.GetTerrainHeight(Temp->Location, rounding);
   if (myalt>0) {
     Temp->Altitude = myalt;
   } else {

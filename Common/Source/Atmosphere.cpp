@@ -37,6 +37,7 @@ Copyright_License {
 
 #include "Atmosphere.h"
 #include "RasterTerrain.h"
+#include "RasterMap.h"
 #include "Interface.hpp"
 #include "Components.hpp"
 #include <math.h>
@@ -131,8 +132,9 @@ CuSonde::updateMeasurements(const NMEA_INFO *Basic,
   }
 
   terrain.Lock();
+  RasterRounding rounding(*terrain.GetMap(),0,0);
   hGround =
-    terrain.GetTerrainHeight(Basic->Location);
+    terrain.GetTerrainHeight(Basic->Location, rounding);
   terrain.Unlock();
 
   if (level>last_level) {

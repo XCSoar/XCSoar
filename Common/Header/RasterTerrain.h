@@ -45,6 +45,7 @@ Copyright_License {
 #include <windows.h>
 
 class RasterMap;
+class RasterRounding;
 
 class RasterTerrain {
 public:
@@ -69,10 +70,13 @@ public:
    void Lock(void); // should be protected, friend of TerrainDataClient
    void Unlock(void); // should be protected, friend of TerrainDataClient
 
-   short GetTerrainHeight(const GEOPOINT &location);
+   RasterMap* GetMap() {
+     return TerrainMap;
+   }
+   short GetTerrainHeight(const GEOPOINT &location,
+     const RasterRounding &rounding);
    bool IsDirectAccess(void);
    bool IsPaged(void);
-   void SetTerrainRounding(double x, double y);
    void ServiceCache();
    void ServiceTerrainCenter(const GEOPOINT &location);
    void ServiceFullReload(const GEOPOINT &location);

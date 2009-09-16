@@ -41,7 +41,7 @@ Copyright_License {
 #include "Sizes.h"
 #include <zzip/lib.h>
 #include "jasper/RasterTile.h"
-#include "Protection.hpp"
+#include "Poco/RWLock.h"
 
 #include <windef.h> /* for MAX_PATH */
 
@@ -66,13 +66,14 @@ typedef struct _TERRAIN_CACHE
   unsigned int recency;
 } TERRAIN_CACHE;
 
+class RasterRounding;
 
-class RasterMap: public TerrainDataClient {
+
+class RasterMap {
  public:
   RasterMap():
     terrain_valid(false),
     max_field_value(0),
-    DirectFine(false),
     DirectAccess(false),
     Paged(false)
     {}
@@ -98,9 +99,11 @@ class RasterMap: public TerrainDataClient {
   int GetEffectivePixelSize(double *pixel_D,
                             const GEOPOINT &location);
 
-  virtual void SetFieldRounding(double xr, double yr);
+  virtual void SetFieldRounding(const double xr, const double yr,
+    RasterRounding &rounding);
 
-  short GetField(const GEOPOINT &location);
+  short GetField(const GEOPOINT &location,
+    const RasterRounding &rounding);
 
   virtual bool Open(char* filename) = 0;
   virtual void Close() = 0;
@@ -110,19 +113,16 @@ class RasterMap: public TerrainDataClient {
   bool IsPaged(void) { return Paged; };
 
   // export methods to global, take care!
-  void Lock() { TerrainDataClient::Lock(); };
-  void Unlock() { TerrainDataClient::Unlock(); };
+  void LockRead() { lock.readLock(); };
+  void Unlock() { lock.unlock(); };
 
  protected:
-  int xlleft;
-  int xlltop;
+  Poco::RWLock lock;
+
   bool terrain_valid;
-  bool DirectFine;
   bool Paged;
+
   bool DirectAccess;
-  double fXrounding, fYrounding;
-  double fXroundingFine, fYroundingFine;
-  int Xrounding, Yrounding;
 
   virtual short _GetFieldAtXY(unsigned int lx,
                               unsigned int ly) = 0;
@@ -153,12 +153,6 @@ class RasterMapCache: public RasterMap {
 
   void ServiceCache();
 
-  void SetCacheTime();
-  void ClearTerrainCache();
-  short LookupTerrainCache(const long &SeekPos);
-  short LookupTerrainCacheFile(const long &SeekPos);
-  void OptimiseCache(void);
-
   virtual bool Open(char* filename);
   virtual void Close();
  protected:
@@ -172,6 +166,11 @@ class RasterMapCache: public RasterMap {
 
   short _GetFieldAtXY(unsigned int lx,
                       unsigned int ly);
+  void OptimiseCache(void);
+  void SetCacheTime();
+  void ClearTerrainCache();
+  short LookupTerrainCache(const long &SeekPos);
+  short LookupTerrainCacheFile(const long &SeekPos);
   //
 };
 
@@ -186,7 +185,8 @@ class RasterMapRaw: public RasterMap {
   ~RasterMapRaw() {
   }
   short *TerrainMem;
-  virtual void SetFieldRounding(double xr, double yr);
+  virtual void SetFieldRounding(const double xr, const double yr,
+    RasterRounding &rounding);
   virtual bool Open(char* filename);
   virtual void Close();
  protected:
@@ -204,7 +204,8 @@ class RasterMapJPG2000: public RasterMap {
   void ReloadJPG2000Full(const GEOPOINT &location);
 
   void SetViewCenter(const GEOPOINT &location);
-  virtual void SetFieldRounding(double xr, double yr);
+  virtual void SetFieldRounding(const double xr, const double yr,
+    RasterRounding &rounding);
   virtual bool Open(char* filename);
   virtual void Close();
   void ServiceFullReload(const GEOPOINT &location);
@@ -217,5 +218,32 @@ class RasterMapJPG2000: public RasterMap {
   static int ref_count;
   RasterTileCache raster_tile_cache;
 };
+
+
+class RasterRounding {
+public:
+  RasterRounding() {};
+
+  RasterRounding(RasterMap &map,
+    const double xr, const double yr):
+    DirectFine(false)
+  {
+    Set(map, xr, yr);
+  };
+  void Set(RasterMap &map,
+           const double xr, 
+           const double yr) 
+  {
+    map.SetFieldRounding(xr,yr,*this);
+  }
+
+  bool DirectFine;
+  int xlleft;
+  int xlltop;
+  double fXrounding, fYrounding;
+  double fXroundingFine, fYroundingFine;
+  int Xrounding, Yrounding;
+};
+
 
 #endif

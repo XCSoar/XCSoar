@@ -47,6 +47,7 @@ class BGRColor;
 class RasterMap;
 class MapWindowProjection;
 class LabelBlock;
+class RasterRounding;
 
 //////////////////////////
 
@@ -81,6 +82,8 @@ private:
   bool do_shading;
   bool do_water;
   RasterMap *DisplayMap;
+  RasterRounding *rounding;
+
   bool is_terrain;
   int interp_levels;
   const COLORRAMP *color_ramp;

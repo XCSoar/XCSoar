@@ -63,7 +63,6 @@ Trigger triggerClimbEvent(TEXT("triggerClimb"));
 Mutex mutexBlackboard;
 // protect GPS_INFO, mcready etc,
 // should be fast
-Mutex TerrainDataClient::mutexTerrainData;
 Mutex mutexComm;
 Mutex mutexTaskData;
 

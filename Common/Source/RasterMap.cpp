@@ -117,55 +117,64 @@ int RasterMap::GetEffectivePixelSize(double dist) {
 }
 
 
-void RasterMap::SetFieldRounding(double xr, double yr) {
+void RasterMap::SetFieldRounding(const double xr, 
+                                 const double yr,
+                                 RasterRounding &rounding) 
+{
   if (!isMapLoaded()) {
     return;
   }
 
-  Xrounding = iround(xr/TerrainInfo.StepSize);
-  Yrounding = iround(yr/TerrainInfo.StepSize);
+  rounding.Xrounding = iround(xr/TerrainInfo.StepSize);
+  rounding.Yrounding = iround(yr/TerrainInfo.StepSize);
 
-  if (Xrounding<1) {
-    Xrounding = 1;
+  if (rounding.Xrounding<1) {
+    rounding.Xrounding = 1;
   }
-  fXrounding = 1.0/(Xrounding*TerrainInfo.StepSize);
-  fXroundingFine = fXrounding*256.0;
-  if (Yrounding<1) {
-    Yrounding = 1;
+  rounding.fXrounding = 1.0/(rounding.Xrounding*TerrainInfo.StepSize);
+  rounding.fXroundingFine = rounding.fXrounding*256.0;
+  if (rounding.Yrounding<1) {
+    rounding.Yrounding = 1;
   }
-  fYrounding = 1.0/(Yrounding*TerrainInfo.StepSize);
-  fYroundingFine = fYrounding*256.0;
+  rounding.fYrounding = 1.0/(rounding.Yrounding*TerrainInfo.StepSize);
+  rounding.fYroundingFine = rounding.fYrounding*256.0;
 
-  DirectFine = false;
+  rounding.DirectFine = false;
 }
 
 
-void RasterMapJPG2000::SetFieldRounding(double xr, double yr) {
-  RasterMap::SetFieldRounding(xr, yr);
+void RasterMapJPG2000::SetFieldRounding(const double xr, 
+                                        const double yr,
+                                        RasterRounding &rounding) 
+{
+  RasterMap::SetFieldRounding(xr, yr, rounding);
   if (!isMapLoaded()) {
     return;
   }
-  if ((Xrounding==1)&&(Yrounding==1)) {
-    DirectFine = true;
-    xlleft = (int)(TerrainInfo.Left*fXroundingFine)+128;
-    xlltop  = (int)(TerrainInfo.Top*fYroundingFine)-128;
+  if ((rounding.Xrounding==1)&&(rounding.Yrounding==1)) {
+    rounding.DirectFine = true;
+    rounding.xlleft = (int)(TerrainInfo.Left*rounding.fXroundingFine)+128;
+    rounding.xlltop  = (int)(TerrainInfo.Top*rounding.fYroundingFine)-128;
   } else {
-    DirectFine = false;
+    rounding.DirectFine = false;
   }
 }
 
 
-void RasterMapRaw::SetFieldRounding(double xr, double yr) {
-  RasterMap::SetFieldRounding(xr, yr);
+void RasterMapRaw::SetFieldRounding(const double xr, 
+                                    const double yr,
+                                    RasterRounding &rounding) 
+{
+  RasterMap::SetFieldRounding(xr, yr, rounding);
   if (!isMapLoaded()) {
     return;
   }
-  if ((Xrounding==1)&&(Yrounding==1)) {
-    DirectFine = true;
-    xlleft = (int)(TerrainInfo.Left*fXroundingFine)+128;
-    xlltop  = (int)(TerrainInfo.Top*fYroundingFine)-128;
+  if ((rounding.Xrounding==1)&&(rounding.Yrounding==1)) {
+    rounding.DirectFine = true;
+    rounding.xlleft = (int)(TerrainInfo.Left*rounding.fXroundingFine)+128;
+    rounding.xlltop  = (int)(TerrainInfo.Top*rounding.fYroundingFine)-128;
   } else {
-    DirectFine = false;
+    rounding.DirectFine = false;
   }
 }
 
@@ -237,17 +246,20 @@ short RasterMapCache::_GetFieldAtXY(unsigned int lx,
 
 // JMW rounding further reduces data as required to speed up terrain
 // display on low zoom levels
-short RasterMap::GetField(const GEOPOINT &location)
+short RasterMap::GetField(const GEOPOINT &location,
+  const RasterRounding &rounding)
 {
   if(isMapLoaded()) {
-    if (DirectFine) {
-      return _GetFieldAtXY((int)(location.Longitude*fXroundingFine)-xlleft,
-                           xlltop- (int)(location.Latitude*fYroundingFine));
+    if (rounding.DirectFine) {
+      return _GetFieldAtXY((int)(location.Longitude*rounding.fXroundingFine)
+                           -rounding.xlleft,
+                           rounding.xlltop-
+                           (int)(location.Latitude*rounding.fYroundingFine));
     } else {
       unsigned int ix =
-        Real2Int((location.Longitude-TerrainInfo.Left)*fXrounding)*Xrounding;
+        Real2Int((location.Longitude-TerrainInfo.Left)*rounding.fXrounding)*rounding.Xrounding;
       unsigned int iy =
-        Real2Int((TerrainInfo.Top-location.Latitude)*fYrounding)*Yrounding;
+        Real2Int((TerrainInfo.Top-location.Latitude)*rounding.fYrounding)*rounding.Yrounding;
 
       return _GetFieldAtXY(ix<<8, iy<<8);
     }
@@ -264,14 +276,12 @@ int RasterMapCache::ref_count = 0;
 ZZIP_FILE *RasterMapCache::fpTerrain;
 
 void RasterMapCache::ServiceCache(void) {
-  Lock();
+  Poco::ScopedRWLock protect(lock, true);
 
   if (terraincachemisses > 0){
     OptimiseCache();
   }
   SetCacheTime();
-
-  Unlock();
 }
 
 
@@ -332,8 +342,6 @@ short RasterMapCache::LookupTerrainCacheFile(const long &SeekPos) {
   if(!isMapLoaded())
     return TERRAIN_INVALID;
 
-  Lock();
-
   SeekRes = zzip_seek(fpTerrain, SeekPos, SEEK_SET);
   if(SeekRes != SeekPos) {
     // error, not found!
@@ -345,7 +353,6 @@ short RasterMapCache::LookupTerrainCacheFile(const long &SeekPos) {
       Alt = max(0,NewAlt);
     }
   }
-  Unlock();
 
   return Alt;
 }
@@ -459,7 +466,7 @@ void RasterMapJPG2000::ReloadJPG2000Full(const GEOPOINT &location) {
 void RasterMapJPG2000::ReloadJPG2000(void) {
   if (TriggerJPGReload) {
 
-    Lock();
+    Poco::ScopedRWLock protect(lock, true);
     TriggerJPGReload = false;
 
     raster_tile_cache.LoadJPG2000(jp2_filename);
@@ -474,23 +481,25 @@ void RasterMapJPG2000::ReloadJPG2000(void) {
                               raster_tile_cache.lon_min)
         /raster_tile_cache.GetWidth();
     }
-    Unlock();
   }
 }
 
 
 void RasterMapJPG2000::SetViewCenter(const GEOPOINT &location)
 {
-  Lock();
-  if (raster_tile_cache.GetInitialised()) {
-    int x = lround((location.Longitude-TerrainInfo.Left)*TerrainInfo.Columns
-                   /(TerrainInfo.Right-TerrainInfo.Left));
-    int y = lround((TerrainInfo.Top-location.Latitude)*TerrainInfo.Rows
-                   /(TerrainInfo.Top-TerrainInfo.Bottom));
-    TriggerJPGReload |= raster_tile_cache.PollTiles(x, y);
+  {
+    Poco::ScopedRWLock protect(lock, true);
+    if (raster_tile_cache.GetInitialised()) {
+      int x = lround((location.Longitude-TerrainInfo.Left)*TerrainInfo.Columns
+                     /(TerrainInfo.Right-TerrainInfo.Left));
+      int y = lround((TerrainInfo.Top-location.Latitude)*TerrainInfo.Rows
+                     /(TerrainInfo.Top-TerrainInfo.Bottom));
+      TriggerJPGReload |= raster_tile_cache.PollTiles(x, y);
+    }
+  }
+  if (TriggerJPGReload) {
     ReloadJPG2000();
   }
-  Unlock();
 }
 
 
@@ -612,16 +621,16 @@ bool RasterMapJPG2000::Open(char* zfilename) {
 ///////////////// Close routines /////////////////////////////////////
 
 void RasterMapJPG2000::Close(void) {
+  Poco::ScopedRWLock protect(lock, true);
   if (terrain_valid) {
-    Lock();
     raster_tile_cache.Reset();
     terrain_valid = false;
-    Unlock();
   }
 }
 
 
 void RasterMapRaw::Close(void) {
+  Poco::ScopedRWLock protect(lock, true);
   terrain_valid = false;
   if (TerrainMem) {
     free(TerrainMem); TerrainMem = NULL;
@@ -630,6 +639,7 @@ void RasterMapRaw::Close(void) {
 
 
 void RasterMapCache::Close(void) {
+  Poco::ScopedRWLock protect(lock, true);
   terrain_valid = false;
   if(fpTerrain) {
     if (ref_count==1) {

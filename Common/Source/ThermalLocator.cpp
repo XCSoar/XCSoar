@@ -37,6 +37,7 @@ Copyright_License {
 
 #include "ThermalLocator.h"
 #include "RasterTerrain.h"
+#include "RasterMap.h"
 #include "Math/FastMath.h"
 #include "Math/Earth.hpp"
 #include "Components.hpp"
@@ -310,7 +311,7 @@ void ThermalLocator::EstimateThermalBase(const GEOPOINT Thermal_Location,
                         &loc);
   double Xrounding = fabs(loc.Longitude-Thermal_Location.Longitude)/2;
   double Yrounding = fabs(loc.Latitude-Thermal_Location.Latitude)/2;
-  terrain.SetTerrainRounding(Xrounding, Yrounding);
+  RasterRounding rounding(*terrain.GetMap(),Xrounding,Yrounding);
 
   double hground;
 
@@ -321,7 +322,7 @@ void ThermalLocator::EstimateThermalBase(const GEOPOINT Thermal_Location,
                           wind_speed*t, &loc);
 
     double hthermal = altitude-wthermal*t;
-    hground = terrain.GetTerrainHeight(loc);
+    hground = terrain.GetTerrainHeight(loc, rounding);
     double dh = hthermal-hground;
     if (dh<0) {
       t = t+dh/wthermal;
@@ -331,7 +332,7 @@ void ThermalLocator::EstimateThermalBase(const GEOPOINT Thermal_Location,
       break;
     }
   }
-  hground = terrain.GetTerrainHeight(loc);
+  hground = terrain.GetTerrainHeight(loc, rounding);
   terrain.Unlock();
 
   *ground_location = loc;

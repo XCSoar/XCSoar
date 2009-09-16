@@ -44,6 +44,7 @@ Copyright_License {
 #include "Math/Earth.hpp"
 #include "InfoBoxLayout.h"
 #include "RasterTerrain.h"
+#include "RasterMap.h"
 #include "Language.hpp"
 #include "McReady.h"
 #include "GlideComputer.hpp"
@@ -761,14 +762,14 @@ void FlightStatistics::RenderAirspace(Canvas &canvas, const RECT rc) {
 
   terrain.Lock();
   // want most accurate rounding here
-  terrain.SetTerrainRounding(0,0);
+  RasterRounding rounding(*terrain.GetMap(),0,0);
 
   for (j=0; j< AIRSPACE_SCANSIZE_X; j++) { // scan range
     fj = j*1.0/(AIRSPACE_SCANSIZE_X-1);
     FindLatitudeLongitude(XCSoarInterface::Basic().Location, 
                           acb, range*fj,
                           &d_loc[j]);
-    d_alt[j] = terrain.GetTerrainHeight(d_loc[j]);
+    d_alt[j] = terrain.GetTerrainHeight(d_loc[j], rounding);
     hmax = max(hmax, d_alt[j]);
   }
   terrain.Unlock();
