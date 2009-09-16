@@ -435,8 +435,6 @@ VOLKS	:=\
 	$(SRC)/Device/Volkslogger/vlutils.cpp
 
 OBJS	:=\
-	$(SRC)/RasterMap.o 		\
-	\
 	$(SRC)/Globals.o 		\
 	\
 	$(SRC)/Poco/RWLock.o		\

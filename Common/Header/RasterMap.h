@@ -113,8 +113,8 @@ class RasterMap {
   bool IsPaged(void) { return Paged; };
 
   // export methods to global, take care!
-  void LockRead() { lock.readLock(); };
-  void Unlock() { lock.unlock(); };
+  virtual void LockRead();
+  virtual void Unlock();
 
  protected:
   Poco::RWLock lock;
@@ -155,6 +155,8 @@ class RasterMapCache: public RasterMap {
 
   virtual bool Open(char* filename);
   virtual void Close();
+  virtual void LockRead();
+
  protected:
   TERRAIN_CACHE TerrainCache[MAXTERRAINCACHE];
 

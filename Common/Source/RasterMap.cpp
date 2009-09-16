@@ -50,12 +50,15 @@ Copyright_License {
 #include "wcecompat/ts_string.h"
 
 
-
 // static variables shared between rasterterrains because can only
 // have file opened by one reader
 
+// export methods to global, take care!
+void RasterMap::LockRead() { lock.readLock(); };
+void RasterMap::Unlock() { lock.unlock(); };
 
 ////// Rounding control ////////////////////////////////////////////////////
+
 
 
 bool RasterMap::GetMapCenter(GEOPOINT *loc) {
@@ -240,6 +243,13 @@ short RasterMapCache::_GetFieldAtXY(unsigned int lx,
                             +sizeof(TERRAIN_INFO));
 }
 
+void RasterMapCache::LockRead() 
+{ 
+  // all lookups for this class potentially change the
+  // object so must have write (exclusive) lock even 
+  // when doing terrain queries.
+  lock.writeLock(); 
+};
 
 ////////// Map general /////////////////////////////////////////////
 
