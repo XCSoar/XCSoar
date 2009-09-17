@@ -52,12 +52,22 @@ Copyright_License {
  * A top-level full-screen window.
  */
 class Dialog : public ContainerWindow {
+protected:
+  HWND get_item(int id) {
+    return ::GetDlgItem(hWnd, id);
+  }
+
 public:
   void set(ContainerWindow &_parent, LPCTSTR template_name);
 
   void end(int result) {
     ::EndDialog(hWnd, result);
   }
+
+  void set_item_text(int id, const TCHAR *text) {
+    ::SetWindowText(get_item(id), text);
+  }
+
 
 protected:
   virtual bool on_initdialog();

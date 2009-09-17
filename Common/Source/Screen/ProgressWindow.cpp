@@ -58,7 +58,7 @@ ProgressWindow::ProgressWindow(ContainerWindow &parent)
 
   TCHAR Temp[1024];
   _stprintf(Temp, _T("%s %s"), gettext(_T("Version")), XCSoar_Version);
-  ::SetWindowText(::GetDlgItem(hWnd, IDC_VERSION), Temp);
+  set_item_text(IDC_VERSION, Temp);
 
 #ifdef WINDOWSPC
   RECT rc = parent.get_client_rect();
@@ -77,20 +77,20 @@ ProgressWindow::ProgressWindow(ContainerWindow &parent)
   set_step(5);
 
   ::SetForegroundWindow(hWnd);
-  ::UpdateWindow(hWnd);
+  update();
 }
 
 void
 ProgressWindow::set_message(const TCHAR *text)
 {
-  ::SetDlgItemText(hWnd, IDC_MESSAGE, text);
-  ::UpdateWindow(hWnd);
+  set_item_text(IDC_MESSAGE, text);
+  update();
 }
 
 void
 ProgressWindow::set_range(unsigned min_value, unsigned max_value)
 {
-  ::SendMessage(::GetDlgItem(hWnd, IDC_PROGRESS1),
+  ::SendMessage(get_item(IDC_PROGRESS1),
                 PBM_SETRANGE, (WPARAM)0,
                 (LPARAM)MAKELPARAM(min_value, max_value));
 }
@@ -98,24 +98,24 @@ ProgressWindow::set_range(unsigned min_value, unsigned max_value)
 void
 ProgressWindow::set_step(unsigned size)
 {
-  ::SendMessage(::GetDlgItem(hWnd, IDC_PROGRESS1),
+  ::SendMessage(get_item(IDC_PROGRESS1),
                 PBM_SETSTEP, (WPARAM)size, (LPARAM)0);
 }
 
 void
 ProgressWindow::set_pos(unsigned value)
 {
-  ::SendMessage(::GetDlgItem(hWnd, IDC_PROGRESS1), PBM_SETPOS,
+  ::SendMessage(get_item(IDC_PROGRESS1), PBM_SETPOS,
                 value, 0);
-  ::UpdateWindow(hWnd);
+  update();
 }
 
 void
 ProgressWindow::step()
 {
-  ::SendMessage(::GetDlgItem(hWnd, IDC_PROGRESS1), PBM_STEPIT,
+  ::SendMessage(get_item(IDC_PROGRESS1), PBM_STEPIT,
                 (WPARAM)0, (LPARAM)0);
-  ::UpdateWindow(hWnd);
+  update();
 }
 
 bool
