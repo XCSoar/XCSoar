@@ -355,53 +355,50 @@ void MapWindow::DrawTaskAAT(Canvas &canvas, const RECT rc, Canvas &buffer)
   buffer.white_brush();
   buffer.rectangle(rc.left, rc.top, rc.right, rc.bottom);
 
-  for (i = MAXTASKPOINTS - 2; i > 0; i--) {
-    if(task.ValidTaskPoint(i) && task.ValidTaskPoint(i+1)) {
-      const WPCALC &wpcalc = way_points.get_calc(task_points[i].Index);
+  for (i = task.getFinalWaypoint()-1; i > 0; i--) {
+    const WPCALC &wpcalc = way_points.get_calc(task_points[i].Index);
 
-      if(task_points[i].AATType == CIRCLE) {
-        tmp = DistanceMetersToScreen(task_points[i].AATCircleRadius);
+    if(task_points[i].AATType == CIRCLE) {
+      tmp = DistanceMetersToScreen(task_points[i].AATCircleRadius);
 
-        // this color is used as the black bit
-        buffer.set_text_color(MapGfx.Colours[iAirspaceColour[AATASK]]);
+      // this color is used as the black bit
+      buffer.set_text_color(MapGfx.Colours[iAirspaceColour[AATASK]]);
 
-        // this color is the transparent bit
-        buffer.set_background_color(whitecolor);
+      // this color is the transparent bit
+      buffer.set_background_color(whitecolor);
 
-        if (i<ActiveTaskPoint) {
-          buffer.hollow_brush();
-        } else {
-          buffer.select(MapGfx.hAirspaceBrushes[iAirspaceBrush[AATASK]]);
-        }
-        buffer.black_pen();
-
-        buffer.circle(wpcalc.Screen.x, wpcalc.Screen.y, tmp);
+      if (i<ActiveTaskPoint) {
+        buffer.hollow_brush();
       } else {
-
-        // this color is used as the black bit
-        buffer.set_text_color(MapGfx.Colours[iAirspaceColour[AATASK]]);
-
-        // this color is the transparent bit
-        buffer.set_background_color(whitecolor);
-
-        if (i<ActiveTaskPoint) {
-          buffer.hollow_brush();
-        } else {
-          buffer.select(MapGfx.hAirspaceBrushes[iAirspaceBrush[AATASK]]);
-        }
-        buffer.black_pen();
-
-        tmp = DistanceMetersToScreen(task_points[i].AATSectorRadius);
-
-        buffer.segment(wpcalc.Screen.x,
-                       wpcalc.Screen.y, tmp, rc,
-                       task_points[i].AATStartRadial-DisplayAngle,
-                       task_points[i].AATFinishRadial-DisplayAngle);
-
-        buffer.two_lines(task_screen[i].AATStart, wpcalc.Screen,
-                         task_screen[i].AATFinish);
+        buffer.select(MapGfx.hAirspaceBrushes[iAirspaceBrush[AATASK]]);
       }
-
+      buffer.black_pen();
+      
+      buffer.circle(wpcalc.Screen.x, wpcalc.Screen.y, tmp);
+    } else {
+      
+      // this color is used as the black bit
+      buffer.set_text_color(MapGfx.Colours[iAirspaceColour[AATASK]]);
+      
+      // this color is the transparent bit
+      buffer.set_background_color(whitecolor);
+      
+      if (i<ActiveTaskPoint) {
+        buffer.hollow_brush();
+      } else {
+        buffer.select(MapGfx.hAirspaceBrushes[iAirspaceBrush[AATASK]]);
+      }
+      buffer.black_pen();
+      
+      tmp = DistanceMetersToScreen(task_points[i].AATSectorRadius);
+      
+      buffer.segment(wpcalc.Screen.x,
+                     wpcalc.Screen.y, tmp, rc,
+                     task_points[i].AATStartRadial-DisplayAngle,
+                     task_points[i].AATFinishRadial-DisplayAngle);
+      
+      buffer.two_lines(task_screen[i].AATStart, wpcalc.Screen,
+                       task_screen[i].AATFinish);
     }
   }
 
@@ -422,7 +419,8 @@ void MapWindow::DrawBearing(Canvas &canvas, int bBearingValid)
   GEOPOINT start = Basic().Location;
   GEOPOINT target;
 
-  if (AATEnabled && (ActiveTaskPoint>0) 
+  if (AATEnabled 
+      && (ActiveTaskPoint>0) 
       && task.ValidTaskPoint(ActiveTaskPoint+1)) {
     target = task_stats[ActiveTaskPoint].AATTargetLocation;
   } else {
@@ -439,19 +437,15 @@ void MapWindow::DrawBearing(Canvas &canvas, int bBearingValid)
 
       ScopeLock scopeLock(mutexTaskData);
 
-      for (int i=ActiveTaskPoint+1; i<MAXTASKPOINTS; i++) {
-        if (task.ValidTaskPoint(i)) {
-
-          if (AATEnabled && task.ValidTaskPoint(i+1)) {
-            target = task_stats[i].AATTargetLocation;
-          } else {
-            target = task.getTaskPointLocation(i);
-          }
-
-          DrawGreatCircle(canvas, start, target);
-
-          start = target;
+      for (int i=ActiveTaskPoint+1; task.verify_index(i); i++) {
+        if (AATEnabled) {
+          target = task_stats[i].AATTargetLocation;
+        } else {
+          target = task.getTaskPointLocation(i);
         }
+        DrawGreatCircle(canvas, start, target);
+        
+        start = target;
       }
     } // TargetPan
   } // bearing valid
@@ -462,15 +456,14 @@ void MapWindow::DrawBearing(Canvas &canvas, int bBearingValid)
   if (AATEnabled) {
     ScopeLock scopeLock(mutexTaskData);
 
-    for (int i=ActiveTaskPoint; i<MAXTASKPOINTS; i++) {
+    for (int i=max(1,ActiveTaskPoint); task.verify_index(i+1); i++) {
       // RLD skip invalid targets and targets at start and finish
-      if((i>0) && task.ValidTaskPoint(i) && task.ValidTaskPoint(i+1)) {
-        if ((i== ActiveTaskPoint)
-	    || ((SettingsMap().EnablePan || SettingsMap().TargetPan) && (i>ActiveTaskPoint))) {
-	  draw_masked_bitmap_if_visible(canvas, MapGfx.hBmpTarget, 
-					task_stats[i].AATTargetLocation,
-					10, 10);
-        }
+      if ((i== ActiveTaskPoint)
+          || ((SettingsMap().EnablePan || SettingsMap().TargetPan) 
+              && (i>ActiveTaskPoint))) {
+        draw_masked_bitmap_if_visible(canvas, MapGfx.hBmpTarget, 
+                                      task_stats[i].AATTargetLocation,
+                                      10, 10);
       }
     }
   }

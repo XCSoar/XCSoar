@@ -345,6 +345,8 @@ EffectiveMacCready_internal(const NMEA_INFO *Basic, const DERIVED_INFO *Calculat
   double LegDistances[MAXTASKPOINTS];
   double LegBearings[MAXTASKPOINTS];
 
+  // JMW TODO remove dist/bearing: this is already done inside the task!
+
   for (int i=0; i<ActiveTaskPoint; i++) {
     GEOPOINT w1 = task.getTaskPointLocation(i+1);
     GEOPOINT w0 = task.getTaskPointLocation(i);
