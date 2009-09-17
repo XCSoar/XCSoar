@@ -48,7 +48,7 @@ class Chart {
  public:
   Chart(Canvas &the_canvas, const RECT the_rc);
 
-  static const COLORREF GROUND_COLOUR;
+  static const Color GROUND_COLOUR;
 
   enum {
     STYLE_BLUETHIN,
@@ -62,8 +62,7 @@ class Chart {
 
   void DrawBarChart(LeastSquares* lsdata);
 
-  void DrawFilledLineGraph(LeastSquares* lsdata,
-			   const COLORREF thecolor);
+  void DrawFilledLineGraph(LeastSquares* lsdata, const Color thecolor);
 
   void DrawLineGraph(LeastSquares* lsdata,
 		     const int Style);
