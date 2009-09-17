@@ -18,12 +18,10 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-
-#include <memory.h>
-#include <string.h>
 #include "ts_string.h"
-#include "StdAfx.h"
 
+#include <string.h>
+#include <stdlib.h>
 
 void ascii2unicode(const char* ascii, WCHAR* unicode)
 {
