@@ -70,12 +70,17 @@ TCHAR *strtok_r(const TCHAR *s, TCHAR *delim, TCHAR **lasts);
 
 //static void ExtractParameter(TCHAR *Source, TCHAR *Destination, int DesiredFieldNumber);
 static bool
-ParseWayPointString(const TCHAR *mTempString, WAYPOINT *Temp,
+ParseWayPointString(WAYPOINT *Temp, const TCHAR *input,
                     RasterTerrain &terrain);
 
-static double CalculateAngle(const TCHAR *temp);
-static int CheckFlags(const TCHAR *temp);
-static double ReadAltitude(const TCHAR *temp);
+static bool
+ParseAngle(const TCHAR *input, double *value_r, TCHAR **endptr_r);
+
+static int
+ParseFlags(const TCHAR *input, const TCHAR **endptr_r);
+
+static bool
+ParseAltitude(const TCHAR *input, double *altitude_r, TCHAR **endptr_r);
 
 static TCHAR TempString[READLINE_LENGTH];
 
@@ -190,7 +195,7 @@ FeedWayPointLine(WayPointList &way_points, RasterTerrain &terrain,
 
   new_waypoint->Details = NULL;
 
-  if (!ParseWayPointString(TempString, new_waypoint, terrain)) {
+  if (!ParseWayPointString(new_waypoint, TempString, terrain)) {
     way_points.pop();
     return false;
   }
@@ -300,98 +305,86 @@ WaypointAltitudeFromTerrain(WAYPOINT* Temp, RasterTerrain &terrain)
 
 
 static bool
-ParseWayPointString(const TCHAR *String, WAYPOINT *Temp,
+ParseWayPointString(WAYPOINT *Temp, const TCHAR *input,
                     RasterTerrain &terrain)
 {
-  TCHAR ctemp[80]; // must be bigger than COMMENT_SIZE!
-  TCHAR *Zoom;
-  TCHAR *pWClast = NULL;
-  TCHAR *pToken;
-  TCHAR TempString[READLINE_LENGTH];
-
-  _tcscpy(TempString, String);
-  // 20060513:sgi added wor on a copy of the string, do not modify the
-  // source string, needed on error messages
+  TCHAR *endptr;
+  size_t length;
 
   Temp->FileNum = globalFileNum;
 
-  // ExtractParameter(TempString,ctemp,0);
-  if ((pToken = strtok_r(TempString, TEXT(","), &pWClast)) == NULL)
-    return false;
-  Temp->Number = _tcstol(pToken, &Zoom, 10);
-
-  //ExtractParameter(TempString,ctemp,1); //Latitude
-  if ((pToken = strtok_r(NULL, TEXT(","), &pWClast)) == NULL)
-    return false;
-  Temp->Location.Latitude = CalculateAngle(pToken);
-
-  if((Temp->Location.Latitude > 90) || (Temp->Location.Latitude < -90))
-    {
-      return false;
-    }
-
-  //ExtractParameter(TempString,ctemp,2); //Longitude
-  if ((pToken = strtok_r(NULL, TEXT(","), &pWClast)) == NULL)
+  Temp->Number = _tcstol(input, &endptr, 10);
+  if (endptr == input || *endptr != _T(','))
     return false;
 
-  Temp->Location.Longitude  = CalculateAngle(pToken);
-  if((Temp->Location.Longitude  > 180) || (Temp->Location.Longitude  < -180))
-    {
-      return false;
-    }
+  input = endptr + 1;
 
-  //ExtractParameter(TempString,ctemp,3); //Altitude
-  if ((pToken = strtok_r(NULL, TEXT(","), &pWClast)) == NULL)
-    return false;
-  Temp->Altitude = ReadAltitude(pToken);
-  if (Temp->Altitude == -9999){
-    return false;
-  }
-
-  //ExtractParameter(TempString,ctemp,4); //Flags
-  if ((pToken = strtok_r(NULL, TEXT(","), &pWClast)) == NULL)
-    return false;
-  Temp->Flags = CheckFlags(pToken);
-
-  //ExtractParameter(TempString,ctemp,5); // Name
-  if ((pToken = strtok_r(NULL, TEXT(",\n\r"), &pWClast)) == NULL)
+  if (!ParseAngle(input, &Temp->Location.Latitude, &endptr) ||
+      Temp->Location.Latitude > 90 || Temp->Location.Latitude < -90 ||
+      *endptr != _T(','))
     return false;
 
-  // guard against overrun
-  if (_tcslen(pToken)>NAME_SIZE) {
-    pToken[NAME_SIZE-1]= _T('\0');
-  }
+  input = endptr + 1;
 
-  _tcscpy(Temp->Name, pToken);
-  int i;
-  for (i=_tcslen(Temp->Name)-1; i>1; i--) {
-    if (Temp->Name[i]==' ') {
-      Temp->Name[i]=0;
+  ParseAngle(input, &Temp->Location.Longitude, &endptr);
+  if (!ParseAngle(input, &Temp->Location.Longitude, &endptr) ||
+      Temp->Location.Longitude > 180 || Temp->Location.Longitude < -180 ||
+      *endptr != _T(','))
+    return false;
+
+  input = endptr + 1;
+
+  if (!ParseAltitude(input, &Temp->Altitude, &endptr) ||
+      *endptr != _T(','))
+    return false;
+
+  input = endptr + 1;
+
+  Temp->Flags = ParseFlags(input, &input);
+  if (*input != _T(','))
+    return false;
+
+  ++input;
+
+  endptr = _tcschr(input, _T(','));
+  if (endptr != NULL)
+    length = endptr - input;
+  else
+    length = _tcslen(input);
+
+  if (length >= sizeof(Temp->Name))
+    length = sizeof(Temp->Name) - 1;
+
+  while (length > 0 && input[length - 1] == 0)
+    --length;
+
+  memcpy(Temp->Name, input, length * sizeof(input[0]));
+  Temp->Name[length] = 0;
+
+  if (endptr != NULL) {
+    input = endptr + 1;
+
+    endptr = _tcschr(input, '*');
+    if (endptr != NULL) {
+      length = endptr - input;
+
+      // if it is a home waypoint raise zoom level
+      Temp->Zoom = _tcstol(endptr + 2, NULL, 10);
     } else {
-      break;
+      length = _tcslen(input);
+      Temp->Zoom = 0;
     }
-  }
 
-  //ExtractParameter(TempString,ctemp,6); // Comment
-  if ((pToken = strtok_r(NULL, TEXT("\n\r"), &pWClast)) != NULL){
-    _tcsncpy(ctemp, pToken, COMMENT_SIZE); // JMW prevent buffer overrun
-    ctemp[COMMENT_SIZE] = '\0';
+    if (length >= sizeof(Temp->Comment))
+      length = sizeof(Temp->Comment) - 1;
 
-    Temp->Zoom = 0;
-    Zoom = _tcschr(ctemp,'*'); // if it is a home waypoint raise zoom level .. VENTA
-    if(Zoom)
-      {
-        *Zoom = '\0';
-        Zoom +=2;
-        Temp->Zoom = _tcstol(Zoom, &Zoom, 10);
-      }
+    while (length > 0 && input[length - 1] == 0)
+      --length;
 
-    // sgi, move "panic-stripping" of the comment-field after we extract
-    // the zoom factor
-    ctemp[COMMENT_SIZE] = '\0';
-    _tcscpy(Temp->Comment, ctemp);
+    memcpy(Temp->Comment, input, length * sizeof(input[0]));
+    Temp->Comment[length] = 0;
   } else {
-    Temp->Comment[0] = '\0';
+    Temp->Comment[0] = 0;
     Temp->Zoom = 0;
   }
 
@@ -445,99 +438,126 @@ void ExtractParameter(TCHAR *Source, TCHAR *Destination, int DesiredFieldNumber)
 }
 */
 
-static double CalculateAngle(const TCHAR *temp)
+static bool
+ParseAngle(const TCHAR *input, double *value_r, TCHAR **endptr_r)
 {
-  TCHAR *Colon;
-  TCHAR *Stop;
-  const TCHAR *StopC;
+  TCHAR *endptr;
   double Degrees, Mins;
 
-  Colon = _tcschr(temp,':');
+  Degrees = (double)_tcstol(input, &endptr, 10);
+  if (endptr == input || *endptr != ':')
+    return false;
 
-  if(!Colon)
-    {
-      return -9999;
-    }
+  input = endptr + 1;
+  Mins = (double)_tcstod(input, &endptr);
+  if (endptr == input)
+    return false;
 
-  *Colon = _T('\0');
-  Colon ++;
+  if (endptr[-1] == 'E')
+    /* this is a hack: strtod() stops after the "E" (east, or:
+       exponent); get it back */
+    --endptr;
 
-  Degrees = (double)_tcstol(temp, &Stop, 10);
-  Mins = (double)StrToDouble(Colon, &StopC);
-  if (*StopC == ':') {
-    Mins += ((double)_tcstol(++StopC, &Stop, 10)/60.0);
-    StopC = Stop;
+  input = endptr;
+
+  if (*input == ':') {
+    ++input;
+    Mins += ((double)_tcstol(input, &endptr, 10) / 60.0);
+    if (endptr == input)
+      return false;
   }
 
   Degrees += (Mins/60);
 
-  if((*StopC == 'N') || (*StopC == 'E'))
+  if((*endptr == 'N') || (*endptr == 'E'))
     {
     }
-  else if((*StopC == 'S') || (*StopC == 'W'))
+  else if((*endptr == 'S') || (*endptr == 'W'))
     {
       Degrees *= -1;
     }
   else
     {
-      return -9999;
+      return false;
     }
 
-  return Degrees;
+  *value_r = Degrees;
+  *endptr_r = endptr + 1;
+  return true;
 }
 
-static int CheckFlags(const TCHAR *temp)
+static int
+ParseFlags(const TCHAR *input, const TCHAR **endptr_r)
 {
   int Flags = 0;
 
-  if(_tcschr(temp,'A')) Flags += AIRPORT;
-  if(_tcschr(temp,'T')) Flags += TURNPOINT;
-  if(_tcschr(temp,'L')) Flags += LANDPOINT;
-  if(_tcschr(temp,'H')) Flags += HOME;
-  if(_tcschr(temp,'S')) Flags += START;
-  if(_tcschr(temp,'F')) Flags += FINISH;
-  if(_tcschr(temp,'R')) Flags += RESTRICTED;
-  if(_tcschr(temp,'W')) Flags += WAYPOINTFLAG;
+  while (_istalpha(*input)) {
+    switch (*input++) {
+    case 'A':
+      Flags |= AIRPORT;
+      break;
 
+    case 'T':
+      Flags |= TURNPOINT;
+      break;
+
+    case 'L':
+      Flags |= LANDPOINT;
+      break;
+
+    case 'H':
+      Flags |= HOME;
+      break;
+
+    case 'S':
+      Flags |= START;
+      break;
+
+    case 'F':
+      Flags |= FINISH;
+      break;
+
+    case 'R':
+      Flags |= RESTRICTED;
+      break;
+
+    case 'W':
+      Flags |= WAYPOINTFLAG;
+      break;
+    }
+  }
+
+  *endptr_r = input;
   return Flags;
 }
 
 
-static double ReadAltitude(const TCHAR *temp)
+static bool
+ParseAltitude(const TCHAR *input, double *altitude_r, TCHAR **endptr_r)
 {
-  const TCHAR *Stop;
-  double Altitude=-9999;
+  TCHAR *endptr;
+  double altitude;
 
+  altitude = _tcstod(input, &endptr);
+  if (endptr == input)
+    return false;
 
-  //  Altitude = (double)_tcstol(temp, &Stop, 10);
-  Altitude = StrToDouble(temp, &Stop);
+  switch (*endptr) {
+  case 'M': // meter's nothing to do
+  case 'm':
+    ++endptr;
+    break;
 
-  if (temp == Stop)                                         // error at begin
-    Altitude=-9999;
-  else {
-    if (Stop != NULL){                                      // number converted endpointer is set
-
-      switch(*Stop){
-
-        case 'M':                                           // meter's nothing to do
-        case 'm':
-        case '\0':
-        break;
-
-        case 'F':                                           // feet, convert to meter
-        case 'f':
-          Altitude = Altitude / TOFEET;
-        break;
-
-        default:                                            // anything else is a syntax error
-          Altitude = -9999;
-        break;
-
-      }
-    }
+  case 'F': // feet, convert to meter
+  case 'f':
+    altitude /= TOFEET;
+    ++endptr;
+    break;
   }
 
-  return Altitude;
+  *altitude_r = altitude;
+  *endptr_r = endptr;
+  return true;
 }
 
 bool
