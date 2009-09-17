@@ -65,6 +65,10 @@ static bool TaskModified=false;
 static bool TargetModified=false;
 static bool TaskAborted = false;
 
+Task::Task() {
+  ClearTask();
+  ClearStartPoints();
+}
 
 bool Task::isTaskAborted() {
   return TaskAborted;

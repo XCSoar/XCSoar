@@ -123,6 +123,7 @@ struct NMEA_INFO;
 
 class Task {
 public:
+  Task();
   virtual void RefreshTask(const SETTINGS_COMPUTER &settings_computer);
 
   virtual void ReplaceWaypoint(const int index, 
