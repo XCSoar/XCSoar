@@ -1138,7 +1138,7 @@ WndForm::on_paint(Canvas &canvas)
   canvas.select(GetBorderPen());
   canvas.select(GetBackBrush());
 
-  DrawEdge(canvas, &rcClient, EDGE_RAISED, BF_ADJUST | BF_FLAT | BF_RECT);
+  canvas.raised_edge(rcClient);
 
   canvas.set_text_color(GetForeColor());
   canvas.set_background_color(mColorTitle);

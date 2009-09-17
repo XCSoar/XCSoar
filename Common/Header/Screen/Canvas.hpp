@@ -212,6 +212,10 @@ public:
     ::RoundRect(dc, left, top, right, bottom, ellipse_width, ellipse_height);
   }
 
+  void raised_edge(RECT rc) {
+    ::DrawEdge(dc, &rc, EDGE_RAISED, BF_ADJUST | BF_FLAT | BF_RECT);
+  }
+
   void polyline(const POINT* lppt, unsigned cPoints) {
     ::Polyline(dc, lppt, cPoints);
   }
