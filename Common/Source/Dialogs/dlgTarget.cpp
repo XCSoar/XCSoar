@@ -131,7 +131,7 @@ static void MoveTarget(double adjust_angle) {
       task_stats[target_point].AATTargetLocation = target_location;
 
       // set range/radial for outside sector
-      DistanceBearing(way_points.get(task_points[target_point].Index).Location,
+      DistanceBearing(task.getTaskPointLocation(target_point),
                       task_stats[target_point].AATTargetLocation,
                       &distance, &bearing);
       bearing = AngleLimit180(bearing-task_points[target_point].Bisector);
@@ -197,7 +197,7 @@ static void DragTarget(const GEOPOINT target_location) {
       task_stats[target_point].AATTargetLocation = target_location;
 
       // set range/radial for outside sector
-      DistanceBearing(way_points.get(task_points[target_point].Index).Location,
+      DistanceBearing(task.getTaskPointLocation(target_point),
                       task_stats[target_point].AATTargetLocation,
                       &distance, &bearing);
       bearing = AngleLimit180(bearing-task_points[target_point].Bisector);

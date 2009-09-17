@@ -148,7 +148,7 @@ void GlideComputerTask::DistanceToNext()
   if(task.Valid()) {
 
     DistanceBearing(Basic().Location, 
-                    way_points.get(task_points[ActiveTaskPoint].Index).Location,
+                    task.getActiveLocation(),
                     &SetCalculated().WaypointDistance,
                     &SetCalculated().WaypointBearing);
     
@@ -180,7 +180,7 @@ void GlideComputerTask::DistanceToNext()
       if (AATEnabled) {
         w1 = task_stats[ActiveTaskPoint+1].AATTargetLocation;
       } else {
-        w1 = way_points.get(task_points[ActiveTaskPoint+1].Index).Location;
+        w1 = task.getTaskPointLocation(ActiveTaskPoint+1);
       }
       
       SetCalculated().WaypointBearing = Bearing(Basic().Location, w1);
@@ -309,7 +309,7 @@ bool GlideComputerTask::InTurnSector(const int the_turnpoint) const
     }
   if (SectorType>0) {
     AircraftBearing = AngleLimit180(
-      Bearing(way_points.get(task_points[the_turnpoint].Index).Location,
+      Bearing(task.getTaskPointLocation(the_turnpoint),
               Basic().Location)
       - task_points[the_turnpoint].Bisector);
     
@@ -365,7 +365,7 @@ bool GlideComputerTask::InFinishSector(const int i)
 
   // distance from aircraft to start point
   DistanceBearing(Basic().Location,
-                  way_points.get(task_points[i].Index).Location,
+                  task.getTaskPointLocation(i),
                   &FirstPointDistance,
                   &AircraftBearing);
 
@@ -947,7 +947,7 @@ void GlideComputerTask::TaskStatistics(const double this_maccready,
       !task.TaskIsTemporary() && (task.ValidTaskPoint(ActiveTaskPoint+1))) {
     w1 = task_stats[ActiveTaskPoint].AATTargetLocation;
   } else {
-    w1 = way_points.get(task_points[ActiveTaskPoint].Index).Location;
+    w1 = task.getActiveLocation();
   }
 
   DistanceBearing(Basic().Location, w1,
@@ -973,7 +973,7 @@ void GlideComputerTask::TaskStatistics(const double this_maccready,
       // TODO accuracy: Get best range point to here...
       w0 = task_stats[ActiveTaskPoint-1].AATTargetLocation;
     } else {
-      w0 = way_points.get(task_points[ActiveTaskPoint-1].Index).Location;
+      w0 = task.getTaskPointLocation(ActiveTaskPoint-1);
     }
 
     LegDistance = Distance(w1, w0);
@@ -1007,8 +1007,8 @@ void GlideComputerTask::TaskStatistics(const double this_maccready,
         {
           if (!task.ValidTaskPoint(i) || !task.ValidTaskPoint(i+1)) continue;
 
-          w1 = way_points.get(task_points[i].Index).Location;
-          w0 = way_points.get(task_points[i+1].Index).Location;
+          w1 = task.getTaskPointLocation(i);
+          w0 = task.getTaskPointLocation(i+1);
 
           LegDistance = Distance(w1, w0);
           SetCalculated().TaskDistanceCovered += LegDistance;
@@ -1060,8 +1060,8 @@ void GlideComputerTask::TaskStatistics(const double this_maccready,
 	w1 = task_stats[task_index].AATTargetLocation;
 	w0 = task_stats[task_index-1].AATTargetLocation;
       } else {
-        w1 = way_points.get(task_points[task_index].Index).Location;
-        w0 = way_points.get(task_points[task_index-1].Index).Location;
+        w1 = task.getTaskPointLocation(task_index);
+        w0 = task.getTaskPointLocation(task_index-1);
       }
 
       double NextLegDistance, NextLegBearing;
@@ -1304,7 +1304,7 @@ void GlideComputerTask::AATStats_Distance()
 
       if (i > 0 ) { //RLD only include distance from glider to next leg if we've started the task
         LegToGo = Distance(Basic().Location, 
-                           way_points.get(task_points[i].Index).Location);
+                           task.getTaskPointLocation(i));
 
         TargetLegToGo = Distance(Basic().Location, 
                                  task_stats[i].AATTargetLocation);
@@ -1327,8 +1327,8 @@ void GlideComputerTask::AATStats_Distance()
       while(task.ValidTaskPoint(i)) {
 	double LegDistance, TargetLegDistance;
 
-        LegDistance = Distance(way_points.get(task_points[i].Index).Location,
-                               way_points.get(task_points[i-1].Index).Location);
+        LegDistance = Distance(task.getTaskPointLocation(i),
+                               task.getTaskPointLocation(i-1));
 
 	TargetLegDistance = Distance(task_stats[i].AATTargetLocation,
                                      task_stats[i-1].AATTargetLocation);

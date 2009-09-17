@@ -426,7 +426,7 @@ void MapWindow::DrawBearing(Canvas &canvas, int bBearingValid)
       && task.ValidTaskPoint(ActiveTaskPoint+1)) {
     target = task_stats[ActiveTaskPoint].AATTargetLocation;
   } else {
-    target = way_points.get(task_points[ActiveTaskPoint].Index).Location;
+    target = task.getActiveLocation();
   }
   mutexTaskData.Unlock();
   if (bBearingValid) {
@@ -445,7 +445,7 @@ void MapWindow::DrawBearing(Canvas &canvas, int bBearingValid)
           if (AATEnabled && task.ValidTaskPoint(i+1)) {
             target = task_stats[i].AATTargetLocation;
           } else {
-            target = way_points.get(task_points[i].Index).Location;
+            target = task.getTaskPointLocation(i);
           }
 
           DrawGreatCircle(canvas, start, target);
@@ -513,7 +513,7 @@ MapWindow::DrawOffTrackIndicator(Canvas &canvas)
       && task.ValidTaskPoint(ActiveTaskPoint)) {
     target = task_stats[ActiveTaskPoint].AATTargetLocation;
   } else {
-    target = way_points.get(task_points[ActiveTaskPoint].Index).Location;
+    target = task.getActiveLocation();
   }
   mutexTaskData.Unlock();
 
@@ -578,7 +578,7 @@ MapWindow::DrawProjectedTrack(Canvas &canvas)
   if (AATEnabled) {
     previous_loc = task_stats[previous_point].AATTargetLocation;
   } else {
-    previous_loc = way_points.get(task_points[previous_point].Index).Location;
+    previous_loc = task.getTaskPointLocation(previous_point);
   }
   mutexTaskData.Unlock();
 

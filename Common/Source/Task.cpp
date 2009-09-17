@@ -483,24 +483,24 @@ Task::CalculateAATTaskSectors(const NMEA_INFO &gps_info)
   task_stats[0].AATTargetOffsetRadius = 0.0;
   task_stats[0].AATTargetOffsetRadial = 0.0;
   if (task_points[0].Index>=0) {
-    task_stats[0].AATTargetLocation = way_points.get(task_points[0].Index).Location;
+    task_stats[0].AATTargetLocation = getTaskPointLocation(0);
   }
 
   for(i=1;i<MAXTASKPOINTS;i++) {
     if(ValidTaskPoint(i)) {
       if (!ValidTaskPoint(i+1)) {
         // This must be the final waypoint, so it's not an AAT OZ
-        task_stats[i].AATTargetLocation = way_points.get(task_points[i].Index).Location;
+        task_stats[i].AATTargetLocation = getTaskPointLocation(i);
         continue;
       }
 
       if(task_points[i].AATType == SECTOR) {
-        FindLatitudeLongitude (way_points.get(task_points[i].Index).Location,
+        FindLatitudeLongitude (getTaskPointLocation(i),
                                task_points[i].AATStartRadial,
                                task_points[i].AATSectorRadius,
                                &task_points[i].AATStart);
 
-        FindLatitudeLongitude (way_points.get(task_points[i].Index).Location,
+        FindLatitudeLongitude (getTaskPointLocation(i),
                                task_points[i].AATFinishRadial ,
                                task_points[i].AATSectorRadius,
                                &task_points[i].AATFinish);
@@ -598,7 +598,7 @@ Task::CalculateAATTaskSectors(const NMEA_INFO &gps_info)
 
       } else {
 
-        FindLatitudeLongitude (way_points.get(task_points[i].Index).Location,
+        FindLatitudeLongitude (getTaskPointLocation(i),
                                targetbearing,
                                targetrange,
                                &task_stats[i].AATTargetLocation);
@@ -848,7 +848,7 @@ Task::InAATTurnSector(const GEOPOINT &location,
 
   double distance;
   double bearing;
-  DistanceBearing(way_points.get(task_points[the_turnpoint].Index).Location,
+  DistanceBearing(getTaskPointLocation(the_turnpoint),
                   location, &distance, &bearing);
 
   if(task_points[the_turnpoint].AATType ==  CIRCLE) {
