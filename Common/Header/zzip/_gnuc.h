@@ -42,8 +42,12 @@
 /* #undef HAVE_NDIR_H */
 
 /* Define to 1 if you have the <stdint.h> header file. */
+#ifdef WIN32
 #undef HAVE_STDINT_H
 #undef ZZIP_HAVE_STDINT_H
+#else
+#define ZZIP_HAVE_STDINT_H
+#endif
 // JMW undefed this
 
 /* Define to 1 if you have the <stdlib.h> header file. */
@@ -190,7 +194,11 @@
 
 /* Define to `_zzip_off_t' if <sys/types.h> does not define. */
 #ifndef _zzip_off64_t
+#ifdef WIN32
 #define _zzip_off64_t  __int64
+#else
+#define _zzip_off64_t int64_t
+#endif
 #endif
 
 /* Define to `long int' if <sys/types.h> does not define. */
@@ -212,8 +220,10 @@
 #define _zzip_ssize_t  int
 #endif
 
+#ifdef WIN32
 #define __int64 long long
 #define _int64 __int64
+#endif
 
 /* once: _ZZIP__MSVC_H */
 #endif
