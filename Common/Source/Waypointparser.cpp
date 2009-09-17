@@ -635,23 +635,23 @@ SetHome(const WayPointList &way_points, RasterTerrain &terrain,
 
   // check invalid home waypoint or forced reset due to file change
   // VENTA3 
-  if (reset || !ValidWayPoint(0) || 
-      !ValidWayPoint(settings.HomeWaypoint) ) {
+  if (reset || !way_points.verify_index(0) ||
+      !way_points.verify_index(settings.HomeWaypoint)) {
     settings.HomeWaypoint = -1;
   }
   // VENTA3 -- reset Alternates
   if (reset 
-      || !ValidWayPoint(settings.Alternate1) 
-      || !ValidWayPoint(settings.Alternate2) ) {
+      || !way_points.verify_index(settings.Alternate1)
+      || !way_points.verify_index(settings.Alternate2)) {
     settings.Alternate1= -1; 
     settings.Alternate2= -1;
   }
   // check invalid task ref waypoint or forced reset due to file change
-  if (reset || !ValidWayPoint(settings.TeamCodeRefWaypoint)) {
+  if (reset || !way_points.verify_index(settings.TeamCodeRefWaypoint)) {
     settings.TeamCodeRefWaypoint = -1;
   }
 
-  if (!ValidWayPoint(settings.HomeWaypoint)) {
+  if (!way_points.verify_index(settings.HomeWaypoint)) {
     // search for home in waypoint list, if we don't have a home
     settings.HomeWaypoint = -1;
     for (unsigned i = 0; way_points.verify_index(i); ++i)
@@ -672,7 +672,7 @@ SetHome(const WayPointList &way_points, RasterTerrain &terrain,
   }
 
   if (set_location) {
-    if (ValidWayPoint(settings.HomeWaypoint)) {
+    if (way_points.verify_index(settings.HomeWaypoint)) {
       // OK, passed all checks now
       StartupStore(TEXT("Start at home waypoint\n"));
       const WAYPOINT &home = way_points.get(settings.HomeWaypoint);
