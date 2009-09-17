@@ -257,6 +257,11 @@ public:
   void segment(int x, int y, unsigned radius, const RECT rc,
                double start, double end, bool horizon=false);
 
+  void draw_button(RECT rc, bool down) {
+    ::DrawFrameControl(dc, &rc, DFC_BUTTON,
+                       DFCS_BUTTONPUSH | (down ? DFCS_PUSHED : 0));
+  }
+
   const SIZE text_size(const TCHAR *text, size_t length) const;
   const SIZE text_size(const TCHAR *text) const;
   unsigned text_width(const TCHAR *text) const {

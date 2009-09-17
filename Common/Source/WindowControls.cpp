@@ -1463,11 +1463,7 @@ WndButton::on_paint(Canvas &canvas)
 
   // JMW todo: add icons?
 
-  if (mDown){
-    DrawFrameControl(canvas, &rc, DFC_BUTTON, DFCS_BUTTONPUSH | DFCS_PUSHED);
-  }else{
-    DrawFrameControl(canvas, &rc, DFC_BUTTON, DFCS_BUTTONPUSH);
-  }
+  canvas.draw_button(rc, mDown);
 
   if (mCaption != NULL && mCaption[0] != '\0'){
     canvas.set_text_color(GetForeColor());
