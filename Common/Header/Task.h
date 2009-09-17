@@ -173,6 +173,8 @@ public:
   virtual int  getFinalWaypoint(void);
   virtual bool ActiveIsFinalWaypoint(void);
   virtual bool isTaskAborted();
+  virtual const GEOPOINT &getTaskPointLocation(const unsigned i);
+  virtual const GEOPOINT &getActiveLocation();
 
   // file load/save
   virtual void LoadNewTask(const TCHAR *FileName,
@@ -365,6 +367,17 @@ public:
     ScopeLock protect(mutexTaskData);
     return Task::isTaskAborted();
   }
+
+  virtual const GEOPOINT &getTaskPointLocation(const unsigned i) {
+    ScopeLock protect(mutexTaskData);
+    return Task::getTaskPointLocation(i);
+  }
+
+  virtual const GEOPOINT &getActiveLocation() {
+    ScopeLock protect(mutexTaskData);
+    return Task::getActiveLocation();
+  }
+
   // file load/save
   virtual void LoadNewTask(const TCHAR *FileName,
                            const SETTINGS_COMPUTER &settings_computer) // write

@@ -53,6 +53,7 @@ Copyright_License {
 #include "WayPointList.hpp"
 
 #include <stdio.h>
+#include <assert.h>
 
 TaskSafe task;
 
@@ -372,6 +373,16 @@ void Task::RefreshTask(const SETTINGS_COMPUTER &settings_computer)
 }
 
 
+const GEOPOINT &Task::getActiveLocation()
+{
+  return getTaskPointLocation(ActiveTaskPoint);
+}
+
+const GEOPOINT &Task::getTaskPointLocation(const unsigned i)
+{
+  assert(ValidTaskPoint(i));
+  return way_points.get(task_points[i].Index).Location;
+}
 
 void Task::RotateStartPoints(const SETTINGS_COMPUTER &settings_computer) 
 {
