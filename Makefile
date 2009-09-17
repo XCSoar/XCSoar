@@ -19,6 +19,9 @@
 
 TARGETS = PC PPC2002 PPC2003 PPC2003X PNA WM5 ALTAIR ALTAIRPORTRAIT WINE 
 
+# These targets are built when you don't specify the TARGET variable.
+DEFAULT_TARGETS = PC PPC2002 PPC2003 PNA WM5 ALTAIR WINE
+
 #
 SRC=Common/Source
 HDR=Common/Header
@@ -702,7 +705,7 @@ endif
 all: all-$(TARGET)
 
 # if no TARGET is set, build all targets
-all-: $(addprefix call-,$(TARGETS))
+all-: $(addprefix call-,$(DEFAULT_TARGETS))
 call-%:
 	$(MAKE) TARGET=$(patsubst call-%,%,$@) DEBUG=$(DEBUG) V=$(V)
 
