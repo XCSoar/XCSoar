@@ -58,9 +58,6 @@ Copyright_License {
 #include "Interface.hpp"
 #include "WayPointList.hpp"
 
-#include <windows.h>
-#include <commctrl.h>
-
 #include <tchar.h>
 
 #include "wcecompat/ts_string.h"
