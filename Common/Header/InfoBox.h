@@ -94,7 +94,7 @@ class InfoBox : public BufferWindow {
 
     /** a timer which returns keyboard focus back to the map window
         after a while */
-    unsigned focus_timer;
+    timer_t focus_timer;
 
     RECT   recTitle;
     RECT   recValue;
