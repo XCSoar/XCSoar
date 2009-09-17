@@ -751,8 +751,17 @@ COMPAT += $(COMPATSRC)/errno.cpp
 endif
 
 ifeq ($(ENABLE_SDL),y)
-LDLIBS += -L/usr/local/i586-mingw32msvc/lib -lSDL -lSDL_gfx -lSDL_ttf
-CPPFLAGS += -DENABLE_SDL -I/usr/local/i586-mingw32msvc/include
+ifeq ($(TARGET),UNIX)
+CPPFLAGS += $(shell pkg-config --cflags sdl)
+LDLIBS += $(shell pkg-config --libs sdl)
+else
+CPPFLAGS += -I/usr/local/i586-mingw32msvc/include
+LDLIBS += -L/usr/local/i586-mingw32msvc/lib
+endif
+
+CPPFLAGS += -DENABLE_SDL
+LDLIBS += -lSDL_gfx -lSDL_ttf
+
 OBJS += $(SRC)/Screen/Timer.o
 else
 OBJS += \
