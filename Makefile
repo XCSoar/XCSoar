@@ -10,6 +10,7 @@
 #   TARGET      The name of the target platform.  See the TARGETS variable
 #               below for a list of valid target platforms.
 #
+#   ENABLE_SDL  If set to "y", the UI is drawn with libSDL.
 #
 #   DEBUG       If set to "y", the debugging version of XCSoar is built.
 #
@@ -21,6 +22,8 @@ TARGETS = PC PPC2002 PPC2003 PPC2003X PNA WM5 ALTAIR ALTAIRPORTRAIT WINE
 
 # These targets are built when you don't specify the TARGET variable.
 DEFAULT_TARGETS = PC PPC2002 PPC2003 PNA WM5 ALTAIR WINE
+
+ENABLE_SDL := n
 
 #
 SRC=Common/Source
@@ -622,9 +625,7 @@ OBJS	:=\
 	$(SRC)/Screen/Brush.o \
 	$(SRC)/Screen/Canvas.o \
 	$(SRC)/Screen/VirtualCanvas.o \
-	$(SRC)/Screen/BufferCanvas.o \
 	$(SRC)/Screen/BitmapCanvas.o \
-	$(SRC)/Screen/PaintCanvas.o \
 	$(SRC)/Screen/Font.o \
 	$(SRC)/Screen/Pen.o \
 	$(SRC)/Screen/LabelBlock.o \
@@ -720,6 +721,16 @@ COMPAT	:=\
 
 ifneq ($(CONFIG_WINE),y)
 COMPAT += $(COMPATSRC)/errno.cpp
+endif
+
+ifeq ($(ENABLE_SDL),y)
+LDLIBS += -L/usr/local/i586-mingw32msvc/lib -lSDL -lSDL_gfx -lSDL_ttf
+CPPFLAGS += -DENABLE_SDL -I/usr/local/i586-mingw32msvc/include
+OBJS += $(SRC)/Screen/Timer.o
+else
+OBJS += \
+	$(SRC)/Screen/BufferCanvas.o \
+	$(SRC)/Screen/PaintCanvas.o
 endif
 
 all: all-$(TARGET)

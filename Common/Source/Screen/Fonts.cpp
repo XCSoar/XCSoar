@@ -100,6 +100,9 @@ void InitializeOneFont(Font *theFont,
                                LOGFONT autoLogFont,
                                LOGFONT * LogFontUsed)
 {
+#ifdef ENABLE_SDL
+  // XXX
+#else /* !ENABLE_SDL */
   LOGFONT logfont;
 
   memset ((char *)&logfont, 0, sizeof (LOGFONT));
@@ -123,6 +126,7 @@ void InitializeOneFont(Font *theFont,
       }
     }
   }
+#endif /* !ENABLE_SDL */
 }
 
 void InitialiseFontsHardCoded(RECT rc,
@@ -378,6 +382,9 @@ void InitialiseFontsAuto(Canvas &canvas,
 
   // JMW algorithm to auto-size info window font.
   // this is still required in case title font property doesn't exist.
+#ifdef ENABLE_SDL
+  // XXX
+#else /* !ENABLE_SDL */
   SIZE tsize;
   do {
     HFONT TempWindowFont;
@@ -397,6 +404,7 @@ void InitialiseFontsAuto(Canvas &canvas,
     DeleteObject(TempWindowFont);
 
   } while (tsize.cx>InfoBoxLayout::ControlWidth);
+#endif /* !ENABLE_SDL */
 
   iFontHeight++;
   logfont.lfHeight = iFontHeight;
@@ -660,6 +668,17 @@ void DeleteFonts() {
 
 
 void SetFontInfo(Canvas &canvas, FontHeightInfo_t *FontHeightInfo){
+#ifdef ENABLE_SDL
+  TTF_Font *font = canvas.get_font();
+
+  FontHeightInfo->Height = TTF_FontHeight(font);
+  FontHeightInfo->AscentHeight = TTF_FontAscent(font);
+
+  int miny, maxy;
+  TTF_GlyphMetrics(font, 'M', NULL, NULL, &miny, &maxy, NULL);
+
+  FontHeightInfo->CapitalHeight = maxy - miny + 1;
+#else /* !ENABLE_SDL */
   TEXTMETRIC tm;
   int x,y=0;
   RECT  rec;
@@ -705,6 +724,7 @@ void SetFontInfo(Canvas &canvas, FontHeightInfo_t *FontHeightInfo){
 
   //  int lx = GetDeviceCaps(hDC,LOGPIXELSX);
   // dpi
+#endif /* !ENABLE_SDL */
 }
 
 void SetFontInfoAll(const Canvas &real_canvas)

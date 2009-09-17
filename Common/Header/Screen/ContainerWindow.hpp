@@ -49,8 +49,22 @@ class ContainerWindow : public PaintWindow {
 protected:
   virtual Brush *on_color(Window &window, Canvas &canvas);
 
+#ifndef ENABLE_SDL
   virtual LRESULT on_message(HWND hWnd, UINT message,
                              WPARAM wParam, LPARAM lParam);
+#endif
+
+#ifdef ENABLE_SDL
+public:
+  void update_child(const Window &child) {
+    canvas.copy(child.get_left(), child.get_top(),
+                child.get_canvas().get_width(),
+                child.get_canvas().get_height(),
+                child.get_canvas(), 0, 0);
+    canvas.update(child.get_left(), child.get_top(),
+                  canvas.get_width(), canvas.get_height());
+  }
+#endif
 };
 
 #endif

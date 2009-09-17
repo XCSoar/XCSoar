@@ -41,6 +41,10 @@ Copyright_License {
 #include "Screen/Canvas.hpp"
 #include "Screen/Window.hpp"
 
+#ifdef ENABLE_SDL
+#define WindowCanvas BufferCanvas
+#else /* !ENABLE_SDL */
+
 /**
  * A #Canvas implementation which allows you to draw into WIN32 window
  * handle (HWND).  Use #PaintCanvas instead to implement WM_PAINT.
@@ -58,6 +62,8 @@ public:
   void reset();
 };
 
+#endif /* !ENABLE_SDL */
+
 class ContainerWindow;
 
 /**
@@ -66,7 +72,9 @@ class ContainerWindow;
  */
 class PaintWindow : public Window {
 private:
+#ifndef ENABLE_SDL
   WindowCanvas canvas;
+#endif
 
 public:
   static bool register_class(HINSTANCE hInstance);
@@ -88,9 +96,11 @@ public:
 
   void reset();
 
+#ifndef ENABLE_SDL
   void resize(unsigned width, unsigned height) {
     canvas.resize(width, height);
   }
+#endif /* !ENABLE_SDL */
 
   Canvas &get_canvas() {
     return canvas;
@@ -136,15 +146,24 @@ public:
    * Ensures that the specified rectangle is updated on the physical
    * screen.
    */
+#ifdef ENABLE_SDL
+  void update(const RECT &rect);
+#else /* !ENABLE_SDL */
   void update(const RECT &rect) {
     ::InvalidateRect(hWnd, &rect, false);
   }
+#endif /* !ENABLE_SDL */
 
   void update() {
+#ifdef ENABLE_SDL
+    update(get_client_rect());
+#else /* !ENABLE_SDL */
     ::UpdateWindow(hWnd);
     // duplicate in MainWindow
+#endif /* !ENABLE_SDL */
   }
 
+#ifndef ENABLE_SDL
   HDC BeginPaint(PAINTSTRUCT *ps) {
     return ::BeginPaint(hWnd, ps);
   }
@@ -152,17 +171,22 @@ public:
   void EndPaint(PAINTSTRUCT *ps) {
     ::EndPaint(hWnd, ps);
   }
+#endif /* !ENABLE_SDL */
 
 protected:
+#ifndef ENABLE_SDL
   virtual bool on_create();
 
   virtual bool on_resize(unsigned width, unsigned height);
+#endif /* !ENABLE_SDL */
 
   virtual bool on_erase(Canvas &canvas);
   virtual void on_paint(Canvas &canvas);
 
+#ifndef ENABLE_SDL
   virtual LRESULT on_message(HWND hWnd, UINT message,
                              WPARAM wParam, LPARAM lParam);
+#endif /* !ENABLE_SDL */
 
   virtual bool register_class(HINSTANCE hInstance, const TCHAR* szWindowClass);
 };

@@ -37,6 +37,28 @@ Copyright_License {
 
 #include "Screen/Pen.hpp"
 
+#ifdef ENABLE_SDL
+
+void
+Pen::set(enum style style, unsigned _width, const Color c)
+{
+  width = _width;
+  color = c;
+}
+
+void
+Pen::set(unsigned width, const Color c)
+{
+  set(SOLID, width, c);
+}
+
+void
+Pen::reset()
+{
+}
+
+#else /* !ENABLE_SDL */
+
 void
 Pen::set(enum style style, unsigned width, const Color c)
 {
@@ -58,3 +80,5 @@ Pen::reset()
     pen = NULL;
   }
 }
+
+#endif /* !ENABLE_SDL */

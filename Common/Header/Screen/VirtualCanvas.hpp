@@ -54,7 +54,16 @@ public:
   void set(unsigned _width, unsigned _height);
   void set(const Canvas &canvas, unsigned _width, unsigned _height);
   void set(const Canvas &canvas);
+
+#ifndef ENABLE_SDL
   void reset();
+#endif
+
+#ifdef ENABLE_SDL
+  void resize(unsigned _width, unsigned _height) {
+    set(*this, _width, _height);
+  }
+#endif
 };
 
 #endif

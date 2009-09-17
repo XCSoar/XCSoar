@@ -37,6 +37,28 @@ Copyright_License {
 
 #include "Screen/Font.hpp"
 
+#ifdef ENABLE_SDL
+
+bool
+Font::set(const char *file, int ptsize)
+{
+  reset();
+
+  font = TTF_OpenFont(file, ptsize);
+  return font != NULL;
+}
+
+void
+Font::reset()
+{
+  if (font != NULL) {
+    TTF_CloseFont(font);
+    font = NULL;
+  }
+}
+
+#else /* !ENABLE_SDL */
+
 bool
 Font::set(const LOGFONT *lplf)
 {
@@ -63,4 +85,4 @@ Font::reset()
   }
 }
 
-
+#endif /* !ENABLE_SDL */

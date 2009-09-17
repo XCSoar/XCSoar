@@ -37,10 +37,30 @@ Copyright_License {
 
 #include "Screen/TopWindow.hpp"
 
+#ifdef ENABLE_SDL
+#include <wcecompat/ts_string.h>
+#else /* !ENABLE_SDL */
 #if defined(GNAV) && !defined(PCGNAV)
 #include "Interface.hpp" /* for XCSoarInterface::hInst */
 #include "resource.h" /* for IDI_XCSOARSWIFT */
 #endif
+#endif /* !ENABLE_SDL */
+
+#ifdef ENABLE_SDL
+
+void
+TopCanvas::set()
+{
+  Canvas::set(::SDL_SetVideoMode(640, 480, 0, SDL_HWSURFACE|SDL_ANYFORMAT));
+}
+
+void
+TopCanvas::full_screen()
+{
+  ::SDL_WM_ToggleFullScreen(surface);
+}
+
+#endif /* ENABLE_SDL */
 
 TopWindow::TopWindow() {
 #ifdef HAVE_ACTIVATE_INFO
@@ -52,17 +72,40 @@ TopWindow::TopWindow() {
 bool
 TopWindow::find(LPCTSTR cls, LPCTSTR text)
 {
+#ifdef ENABLE_SDL
+  return false; // XXX
+#else /* !ENABLE_SDL */
   HWND h = FindWindow(cls, text);
   if (h != NULL)
       SetForegroundWindow((HWND)((ULONG) h | 0x00000001));
 
   return h != NULL;
+#endif /* !ENABLE_SDL */
 }
 
 void
 TopWindow::set(LPCTSTR cls, LPCTSTR text,
                 int left, int top, unsigned width, unsigned height)
 {
+#ifdef ENABLE_SDL
+  int ret;
+
+  ret = ::SDL_Init(SDL_INIT_VIDEO|SDL_INIT_TIMER);
+  if (ret != 0)
+    fprintf(stderr, "SDL_Init() has failed\n");
+
+  ret = ::TTF_Init();
+  if (ret != 0)
+    fprintf(stderr, "TTF_Init() has failed: %s\n", TTF_GetError());
+
+  screen.set();
+  ContainerWindow::set(NULL, NULL, NULL,
+                       0, 0, width, height);
+
+  char text2[512];
+  unicode2ascii(text, text2);
+  ::SDL_WM_SetCaption(text2, NULL);
+#else /* !ENABLE_SDL */
   Window::set(NULL, cls, text, left, top, width, height,
               (DWORD)(WS_SYSMENU|WS_CLIPCHILDREN|WS_CLIPSIBLINGS));
 
@@ -75,11 +118,15 @@ TopWindow::set(LPCTSTR cls, LPCTSTR text,
   SendMessage(hWnd, WM_SETICON,
 	      (WPARAM)ICON_SMALL, (LPARAM)hTmp);
 #endif
+#endif /* !ENABLE_SDL */
 }
 
 void
 TopWindow::full_screen()
 {
+#ifdef ENABLE_SDL
+  screen.full_screen();
+#else /* !ENABLE_SDL */
   ::SetForegroundWindow(hWnd);
 #ifdef WINDOWSPC
   ::SetWindowPos(hWnd, HWND_TOP, 0, 0, 0, 0,
@@ -93,6 +140,7 @@ TopWindow::full_screen()
                  GetSystemMetrics(SM_CYSCREEN),
                  SWP_SHOWWINDOW);
 #endif
+#endif /* !ENABLE_SDL */
 }
 
 bool
@@ -107,6 +155,7 @@ TopWindow::on_deactivate()
   return false;
 }
 
+#ifndef ENABLE_SDL
 LRESULT TopWindow::on_message(HWND _hWnd, UINT message,
 			       WPARAM wParam, LPARAM lParam) {
   switch (message) {
@@ -127,3 +176,4 @@ LRESULT TopWindow::on_message(HWND _hWnd, UINT message,
   };
   return ContainerWindow::on_message(_hWnd, message, wParam, lParam);
 }
+#endif /* !ENABLE_SDL */

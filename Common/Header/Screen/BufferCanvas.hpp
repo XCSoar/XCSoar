@@ -40,6 +40,10 @@ Copyright_License {
 
 #include "Screen/VirtualCanvas.hpp"
 
+#ifdef ENABLE_SDL
+#define BufferCanvas VirtualCanvas
+#else /* !ENABLE_SDL */
+
 /**
  * An off-screen #Canvas implementation.  The constructor allocates
  * memory for the specified dimensions.
@@ -59,5 +63,7 @@ public:
 
   void resize(unsigned _width, unsigned _height);
 };
+
+#endif
 
 #endif

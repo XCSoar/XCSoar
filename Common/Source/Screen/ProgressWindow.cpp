@@ -76,7 +76,9 @@ ProgressWindow::ProgressWindow(ContainerWindow &parent)
   set_range(0, 100);
   set_step(5);
 
+#ifndef ENABLE_SDL
   ::SetForegroundWindow(hWnd);
+#endif /* !ENABLE_SDL */
   update();
 }
 
@@ -90,31 +92,47 @@ ProgressWindow::set_message(const TCHAR *text)
 void
 ProgressWindow::set_range(unsigned min_value, unsigned max_value)
 {
+#ifdef ENABLE_SDL
+  // XXX
+#else /* !ENABLE_SDL */
   ::SendMessage(get_item(IDC_PROGRESS1),
                 PBM_SETRANGE, (WPARAM)0,
                 (LPARAM)MAKELPARAM(min_value, max_value));
+#endif /* !ENABLE_SDL */
 }
 
 void
 ProgressWindow::set_step(unsigned size)
 {
+#ifdef ENABLE_SDL
+  // XXX
+#else /* !ENABLE_SDL */
   ::SendMessage(get_item(IDC_PROGRESS1),
                 PBM_SETSTEP, (WPARAM)size, (LPARAM)0);
+#endif /* !ENABLE_SDL */
 }
 
 void
 ProgressWindow::set_pos(unsigned value)
 {
+#ifdef ENABLE_SDL
+  // XXX
+#else /* !ENABLE_SDL */
   ::SendMessage(get_item(IDC_PROGRESS1), PBM_SETPOS,
                 value, 0);
+#endif /* !ENABLE_SDL */
   update();
 }
 
 void
 ProgressWindow::step()
 {
+#ifdef ENABLE_SDL
+  // XXX
+#else /* !ENABLE_SDL */
   ::SendMessage(get_item(IDC_PROGRESS1), PBM_STEPIT,
                 (WPARAM)0, (LPARAM)0);
+#endif /* !ENABLE_SDL */
   update();
 }
 

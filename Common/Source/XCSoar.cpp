@@ -46,12 +46,14 @@ Copyright_License {
 #include "Asset.hpp"
 #include "Interface.hpp"
 
+#ifndef ENABLE_SDL
 #include <commctrl.h>
 #ifndef WINDOWSPC
 #if !defined(CECORE) || UNDER_CE >= 300 || _WIN32_WCE >= 0x0300
 #include <aygshell.h>
 #endif
 #endif
+#endif /* !ENABLE_SDL */
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -85,7 +87,9 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 
   XCSoarGetOpts(lpCmdLine);
 
+#ifndef ENABLE_SDL
   InitCommonControls();
+#endif /* !ENABLE_SDL */
 
   StartupStore(TEXT("Initialise application instance\n"));
 

@@ -291,7 +291,9 @@ void MapWindow::DrawThreadLoop(void) {
 bool
 MapWindow::register_class(HINSTANCE hInstance)
 {
-
+#ifdef ENABLE_SDL
+  return true;
+#else /* !ENABLE_SDL */
   WNDCLASS wc;
 
   wc.hInstance = hInstance;
@@ -312,6 +314,7 @@ MapWindow::register_class(HINSTANCE hInstance)
   wc.lpszClassName = _T("XCSoarMap");
 
   return (RegisterClass(&wc)!= FALSE);
+#endif /* !ENABLE_SDL */
 }
 
 bool MapWindow::checkLabelBlock(const RECT brect) {

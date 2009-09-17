@@ -46,9 +46,12 @@ Copyright_License {
  */
 class BufferWindow : public PaintWindow {
 private:
+#ifndef ENABLE_SDL
   BufferCanvas buffer;
+#endif /* !ENABLE_SDL */
 
 public:
+#ifndef ENABLE_SDL
   void set(ContainerWindow &parent, LPCTSTR cls,
            int left, int top, unsigned width, unsigned height) {
     PaintWindow::set(parent, cls, left, top, width, height);
@@ -90,6 +93,7 @@ public:
   const Canvas &get_canvas() const {
     return buffer;
   }
+#endif /* !ENABLE_SDL */
 
   /**
    * Copies the buffer to the specified canvas.

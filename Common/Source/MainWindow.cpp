@@ -30,6 +30,9 @@ MainWindow::~MainWindow()
 bool
 MainWindow::register_class(HINSTANCE hInstance)
 {
+#ifdef ENABLE_SDL
+  return true;
+#else /* !ENABLE_SDL */
   WNDCLASS wc;
 
   wc.style                      = CS_HREDRAW | CS_VREDRAW;
@@ -54,6 +57,7 @@ MainWindow::register_class(HINSTANCE hInstance)
   wc.lpszClassName = _T("XCSoarMain");
 
   return (RegisterClass(&wc)!= FALSE);
+#endif /* !ENABLE_SDL */
 }
 
 void

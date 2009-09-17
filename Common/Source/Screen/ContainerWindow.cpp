@@ -43,6 +43,8 @@ ContainerWindow::on_color(Window &window, Canvas &canvas)
   return NULL;
 }
 
+#ifndef ENABLE_SDL
+
 LRESULT
 ContainerWindow::on_message(HWND hWnd, UINT message,
                             WPARAM wParam, LPARAM lParam)
@@ -63,3 +65,5 @@ ContainerWindow::on_message(HWND hWnd, UINT message,
 
   return PaintWindow::on_message(hWnd, message, wParam, lParam);
 }
+
+#endif /* !ENABLE_SDL */

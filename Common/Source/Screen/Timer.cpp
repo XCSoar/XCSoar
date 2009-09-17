@@ -35,78 +35,25 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_PEN_HPP
-#define XCSOAR_SCREEN_PEN_HPP
+#include "Screen/Timer.hpp"
+#include "Screen/Window.hpp"
 
-#include "Screen/Color.hpp"
+SDLTimer::SDLTimer(Window &_window, unsigned ms)
+  :window(_window), id(::SDL_AddTimer(ms, callback, this))
+{
+}
 
-/**
- * A pen draws lines and borders.
- */
-class Pen {
-public:
-#ifdef ENABLE_SDL
-  enum style {
-    SOLID,
-    DASH,
-    BLANK
-  };
-#else
-  enum style {
-    SOLID = PS_SOLID,
-    DASH = PS_DASH,
-    BLANK = PS_NULL
-  };
-#endif
+SDLTimer::~SDLTimer()
+{
+  ::SDL_RemoveTimer(id);
+}
 
-protected:
-#ifdef ENABLE_SDL
-  unsigned width;
-  Color color;
-#else
-  HPEN pen;
-#endif
+Uint32
+SDLTimer::callback(Uint32 interval, void *param)
+{
+  SDLTimer *timer = (SDLTimer *)param;
 
-public:
-#ifdef ENABLE_SDL
-  Pen():width(0) {}
-  Pen(enum style style, unsigned _width, const Color _color)
-    :width(_width), color(_color) {} // XXX style
-  Pen(unsigned _width, const Color _color)
-    :width(_width), color(_color) {}
-#else /* !ENABLE_SDL */
-  Pen():pen(NULL) {}
-  Pen(enum style style, unsigned width, const Color c):pen(NULL) {
-    set(style, width, c);
-  }
-  Pen(unsigned width, Color c):pen(NULL) {
-    set(width, c);
-  }
-#endif /* !ENABLE_SDL */
+  timer->window.on_timer(timer);
 
-  ~Pen() { reset(); }
-
-public:
-  void set(enum style style, unsigned width, const Color c);
-  void set(unsigned width, const Color c);
-  void reset();
-
-  bool defined() const {
-#ifdef ENABLE_SDL
-    return width > 0;
-#else
-    return pen != NULL;
-#endif
-  }
-
-#ifdef ENABLE_SDL
-  unsigned get_width() const { return width; }
-  const Color get_color() const { return color; }
-#else
-  HPEN native() const {
-    return pen;
-  }
-#endif
-};
-
-#endif
+  return interval;
+}

@@ -56,23 +56,43 @@ public:
                  unsigned width, unsigned height);
 
   unsigned get_row_count() const {
+#ifdef ENABLE_SDL
+    return 1; // XXX
+#else /* !ENABLE_SDL */
     return ::SendMessage(hWnd, EM_GETLINECOUNT, 0, 0);
+#endif /* !ENABLE_SDL */
   }
 
   void set_text(const TCHAR *text) {
+#ifdef ENABLE_SDL
+    // XXX
+#else /* !ENABLE_SDL */
     ::SetWindowText(hWnd, text);
+#endif /* !ENABLE_SDL */
   }
 
   void set_read_only(bool value) {
+#ifdef ENABLE_SDL
+    // XXX
+#else /* !ENABLE_SDL */
     ::SendMessage(hWnd, EM_SETREADONLY, (WPARAM)(BOOL)value, 0L);
+#endif /* !ENABLE_SDL */
   }
 
   void set_selection(int start, int end) {
+#ifdef ENABLE_SDL
+    // XXX
+#else /* !ENABLE_SDL */
     ::SendMessage(hWnd, EM_SETSEL, (WPARAM)start, (LPARAM)end);
+#endif /* !ENABLE_SDL */
   }
 
   void set_selection() {
+#ifdef ENABLE_SDL
+    // XXX
+#else /* !ENABLE_SDL */
     set_selection(0, -1);
+#endif /* !ENABLE_SDL */
   }
 };
 

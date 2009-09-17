@@ -44,13 +44,23 @@ class Bitmap;
 
 class Brush {
 protected:
+#ifdef ENABLE_SDL
+  bool hollow;
+  Color color;
+#else
   HBRUSH brush;
+#endif
 
 public:
+#ifdef ENABLE_SDL
+  Brush():hollow(true) {}
+  Brush(const Color _color):hollow(false), color(_color)  {}
+#else
   Brush():brush(NULL) {}
   Brush(const Color c):brush(NULL) {
     set(c);
   }
+#endif
   ~Brush() { reset(); }
 
 public:
@@ -59,12 +69,21 @@ public:
   void reset();
 
   bool defined() const {
+#ifdef ENABLE_SDL
+    return !hollow;
+#else
     return brush != NULL;
+#endif
   }
 
+#ifdef ENABLE_SDL
+  bool is_hollow() const { return hollow; }
+  const Color get_color() const { return color; }
+#else
   HBRUSH native() const {
     return brush;
   }
+#endif
 };
 
 #endif

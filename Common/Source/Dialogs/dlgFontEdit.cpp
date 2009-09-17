@@ -132,7 +132,11 @@ static void RedrawSampleFont(void)
     }
   }
 
+#ifdef ENABLE_SDL
+  // XXX
+#else /* !ENABLE_SDL */
   NewFont.set(&NewLogFont);
+#endif /* !ENABLE_SDL */
 
   if ( _tcscmp(OriginalFontRegKey, szRegistryFontMapWindowBoldFont) == 0 ) {
     wf->SetFont(NewFont);

@@ -727,6 +727,8 @@ WindowControl *WindowControl::FocusPrev(WindowControl *Sender){
   return(NULL);
 }
 
+#ifndef ENABLE_SDL
+
 LRESULT
 WindowControl::on_message(HWND hwnd, UINT uMsg,
                           WPARAM wParam, LPARAM lParam)
@@ -762,6 +764,7 @@ WindowControl::on_message(HWND hwnd, UINT uMsg,
   return ContainerWindow::on_message(hwnd, uMsg, wParam, lParam);
 }
 
+#endif /* !ENABLE_SDL */
 
 void InitWindowControlModule(void){
 
@@ -947,6 +950,9 @@ int WndForm::ShowModal(bool bEnableMap) {
   bool hastimed = false;
   WndForm::timeAnyOpenClose.update(); // when current dlg opens or child closes
 
+#ifdef ENABLE_SDL
+  // XXX
+#else /* !ENABLE_SDL */
   while ((mModalResult == 0) && GetMessage(&msg, NULL, 0, 0)) {
 //hack!
 
@@ -1098,6 +1104,7 @@ int WndForm::ShowModal(bool bEnableMap) {
 #endif
     }
   } // End Modal Loop
+#endif /* !ENABLE_SDL */
 
   // static.  this is current open/close or child open/close
   WndForm::timeAnyOpenClose.update();
@@ -1553,11 +1560,15 @@ WndProperty::Editor::on_key_down(unsigned key_code)
   }
 
   if (key_code == VK_UP || key_code == VK_DOWN){
+#ifdef ENABLE_SDL
+    // XXX
+#else /* !ENABLE_SDL */
     WindowControl *owner = parent->GetOwner();
     if (owner != NULL)
       // XXX what's the correct lParam value here?
       PostMessage(owner->GetClientAreaWindow(),
                   WM_KEYDOWN, key_code, 0);
+#endif /* !ENABLE_SDL */
     // pass the message to the parent window;
     return true;
   }
@@ -1585,6 +1596,9 @@ WndProperty::Editor::on_key_up(unsigned key_code)
   return false;
 }
 
+#ifdef ENABLE_SDL
+// XXX
+#else /* !ENABLE_SDL */
 LRESULT
 WndProperty::Editor::on_message(HWND hWnd, UINT message,
                                 WPARAM wParam, LPARAM lParam)
@@ -1612,6 +1626,7 @@ WndProperty::Editor::on_message(HWND hWnd, UINT message,
 
   return EditWindow::on_message(hWnd, message, wParam, lParam);
 }
+#endif /* !ENABLE_SDL */
 
 
 Bitmap WndProperty::hBmpLeft32;
@@ -1784,7 +1799,9 @@ bool WndProperty::SetReadOnly(bool Value){
 }
 
 bool WndProperty::SetFocused(bool Value, HWND FromTo){
-
+#ifdef ENABLE_SDL
+  // XXX
+#else /* !ENABLE_SDL */
   const HWND mhEdit = edit;
   TCHAR sTmp[128];
 
@@ -1809,6 +1826,7 @@ bool WndProperty::SetFocused(bool Value, HWND FromTo){
 
   if (FromTo != mhEdit)
     WindowControl::SetFocused(Value, FromTo);
+#endif /* !ENABLE_SDL */
   if (Value){
     edit.set_focus();
     edit.set_selection();

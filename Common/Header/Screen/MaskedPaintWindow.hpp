@@ -62,7 +62,9 @@ public:
 
   void reset();
 
+#ifndef ENABLE_SDL
   void resize(unsigned width, unsigned height);
+#endif /* !ENABLE_SDL */
 
   void draw_masked_bitmap(Canvas &canvas, const Bitmap &bitmap, 
 			  const int x, const int y,

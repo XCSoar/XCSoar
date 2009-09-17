@@ -38,6 +38,9 @@ Copyright_License {
 #include "Screen/Bitmap.hpp"
 #include "Interface.hpp"
 
+#include <assert.h>
+
+#ifndef ENABLE_SDL
 struct DIBINFO : public BITMAPINFO
 {
 	RGBQUAD	 arColors[255];    // Color table info - adds an extra 255 entries to palette
@@ -46,6 +49,7 @@ struct DIBINFO : public BITMAPINFO
 	operator LPBITMAPINFOHEADER()    { return &bmiHeader;          }
 	RGBQUAD* ColorTable()            { return bmiColors;           }
 };
+#endif /* !ENABLE_SDL */
 
 Bitmap::~Bitmap()
 {
@@ -56,12 +60,97 @@ void
 Bitmap::load(const TCHAR *name)
 {
   reset();
+
+#ifdef ENABLE_SDL
+  HRSRC resource = FindResource(CommonInterface::hInst, name, RT_BITMAP);
+  if (resource == NULL)
+    return;
+
+  DWORD size = ::SizeofResource(CommonInterface::hInst, resource);
+  if (size == 0)
+    return;
+
+  HGLOBAL handle = ::LoadResource(CommonInterface::hInst, resource);
+  if (handle == NULL)
+    return;
+
+  LPVOID data = ::LockResource(handle);
+  if (data == NULL)
+    return;
+
+  const BITMAPINFO *info = (const BITMAPINFO *)data;
+  if (size < sizeof(*info))
+    return;
+
+  int pitch = (((info->bmiHeader.biWidth * info->bmiHeader.biBitCount) / 8 - 1) | 3) + 1;
+  int data_size = pitch * info->bmiHeader.biHeight;
+
+  /* duplicate the BMP file and re-insert the BITMAPFILEHEADER which
+     is not included in this .EXE file */
+  BITMAPFILEHEADER *header = (BITMAPFILEHEADER *)malloc(sizeof(*header) + size);
+  if (header == NULL)
+    /* out of memory */
+    return;
+
+  /* byte order?  this constant is correct according to MSDN */
+  header->bfType = 0x4D42;
+  header->bfSize = sizeof(*header) + size;
+  header->bfReserved1 = 0;
+  header->bfReserved2 = 0;
+  header->bfOffBits = sizeof(BITMAPFILEHEADER) + size - data_size;
+  memcpy(header + 1, data, size);
+
+  SDL_RWops *rw = SDL_RWFromMem(header, sizeof(*header) + size);
+  surface = SDL_LoadBMP_RW(rw, 1);
+  SDL_FreeRW(rw);
+  free(header);
+
+  /*
+  char path[MAX_PATH];
+  unicode2ascii(name, path, sizeof(path));
+  surface = SDL_LoadBMP(path);
+  */
+#else /* !ENABLE_SDL */
   bitmap = LoadBitmap(XCSoarInterface::hInst, name);
+#endif /* !ENABLE_SDL */
 }
+
+#ifdef ENABLE_SDL
+void
+Bitmap::load(WORD id)
+{
+  // XXX
+  TCHAR name[10];
+
+  _stprintf(name, _T("%u"), (unsigned)id);
+  load(name);
+}
+#endif /* !ENABLE_SDL */
 
 void *
 Bitmap::create(unsigned width, unsigned height)
 {
+#ifdef ENABLE_SDL
+  Uint32 rmask, gmask, bmask, amask;
+
+#if SDL_BYTEORDER == SDL_BIG_ENDIAN
+  rmask = 0xff000000;
+  gmask = 0x00ff0000;
+  bmask = 0x0000ff00;
+  amask = 0x000000ff;
+#else
+  rmask = 0x000000ff;
+  gmask = 0x0000ff00;
+  bmask = 0x00ff0000;
+  amask = 0xff000000;
+#endif
+
+  surface = ::SDL_CreateRGBSurface(SDL_SWSURFACE, width, height, 24,
+                                   rmask, gmask, bmask, amask);
+  assert(!SDL_MUSTLOCK(surface));
+
+  return surface->pixels;
+#else /* !ENABLE_SDL */
   DIBINFO bmi;
 
   bmi.bmiHeader.biBitCount = 24;
@@ -86,22 +175,41 @@ Bitmap::create(unsigned width, unsigned height)
   ::ReleaseDC(NULL, hDC);
 
   return pvBits;
+#endif /* !ENABLE_SDL */
 }
 
 void
 Bitmap::reset()
 {
+#ifdef ENABLE_SDL
+  if (surface != NULL) {
+    SDL_FreeSurface(surface);
+    surface = NULL;
+  }
+#else /* !ENABLE_SDL */
   if (bitmap != NULL) {
     DeleteObject(bitmap);
     bitmap = NULL;
   }
+#endif /* !ENABLE_SDL */
 }
 
 const SIZE
 Bitmap::get_size() const
 {
+#ifdef ENABLE_SDL
+  if (surface == NULL) {
+    // XXX eliminate this case
+    const SIZE size = { 0, 0 };
+    return size;
+  }
+
+  const SIZE size = { surface->w, surface->h };
+  return size;
+#else /* !ENABLE_SDL */
   BITMAP bm;
   ::GetObject(bitmap, sizeof(bm), &bm);
   const SIZE size = { bm.bmWidth, bm.bmHeight };
   return size;
+#endif /* !ENABLE_SDL */
 }
