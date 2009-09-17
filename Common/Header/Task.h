@@ -193,6 +193,15 @@ protected:
   const TCHAR* getTaskFilename() const;
   void ClearTaskFileName();
 
+  //
+  unsigned  ActiveTaskPoint;
+  const unsigned getActiveIndex() const 
+  { return ActiveTaskPoint; }
+  void setActiveIndex(unsigned i) {
+    if (ValidTaskPoint(i)) {
+      ActiveTaskPoint = i;
+    }
+  }
 private:
   void ResetTaskWaypoint(int j);
   void CalculateAATTaskSectors(const NMEA_INFO &gps_info);
@@ -367,6 +376,17 @@ public:
   { // read
     // alias
     return ValidTaskPoint(i);
+  }
+
+  const unsigned getActiveIndex() const 
+  { // read
+    ScopeLock protect(mutexTaskData);
+    return Task::getActiveIndex();
+  }
+  void setActiveIndex(unsigned i) 
+  { // write
+    ScopeLock protect(mutexTaskData);
+    return Task::setActiveIndex(i);
   }
 
   const bool ValidTaskPoint(const int i) const

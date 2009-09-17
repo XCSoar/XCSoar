@@ -146,7 +146,7 @@ void GlideComputerStats::SaveTaskSpeed(double val)
 
 void GlideComputerStats::SetLegStart() 
 {
-  flightstats.SetLegStart(ActiveTaskPoint, Basic().Time);
+  flightstats.SetLegStart(task.getActiveIndex(), Basic().Time);
 }
 
 

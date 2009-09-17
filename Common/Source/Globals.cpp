@@ -9,7 +9,6 @@
 bool  AATEnabled = FALSE;
 bool  ForceFinalGlide= false;
 int   SelectedWaypoint = -1;
-int   ActiveTaskPoint = -1;
 bool  AdvanceArmed = false;
 
 // task parameters

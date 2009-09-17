@@ -349,45 +349,43 @@ void FlightStatistics::RenderTask(Canvas &canvas, const RECT rc, const bool olcm
   chart.ScaleXFromValue(x1);
   chart.ScaleYFromValue(y1);
 
-  for (i=0; i<MAXTASKPOINTS; i++) {
-    if (task.ValidTaskPoint(i)) {
-      nwps++;
-      lat1 = task.getTaskPointLocation(i).Latitude;
-      lon1 = task.getTaskPointLocation(i).Longitude;
-      x1 = (lon1-lon_c)*fastcosine(lat1);
-      y1 = (lat1-lat_c);
-      chart.ScaleXFromValue(x1);
-      chart.ScaleYFromValue(y1);
-
-      if (AATEnabled) {
-	GEOPOINT aatloc;
-	double bearing;
-	double radius;
-
-        if (task.ValidTaskPoint(i+1)) {
-          if (task_points[i].AATType == SECTOR) {
-            radius = task_points[i].AATSectorRadius;
-          } else {
-            radius = task_points[i].AATCircleRadius;
-          }
-          for (int j=0; j<4; j++) {
-            bearing = j*360.0/4;
-
-            FindLatitudeLongitude(task.getTaskPointLocation(i),
-                                  bearing, radius,
-                                  &aatloc);
-            x1 = (aatloc.Longitude-lon_c)*fastcosine(aatloc.Latitude);
-            y1 = (aatloc.Latitude-lat_c);
-            chart.ScaleXFromValue(x1);
-            chart.ScaleYFromValue(y1);
-            if (j==0) {
-              aatradius[i] = fabs(aatloc.Latitude -
-                                  task.getTaskPointLocation(i).Latitude);
-            }
-          }
+  for (i=0; task.ValidTaskPoint(i); i++) {
+    nwps++;
+    lat1 = task.getTaskPointLocation(i).Latitude;
+    lon1 = task.getTaskPointLocation(i).Longitude;
+    x1 = (lon1-lon_c)*fastcosine(lat1);
+    y1 = (lat1-lat_c);
+    chart.ScaleXFromValue(x1);
+    chart.ScaleYFromValue(y1);
+    
+    if (AATEnabled) {
+      GEOPOINT aatloc;
+      double bearing;
+      double radius;
+      
+      if (task.ValidTaskPoint(i+1)) {
+        if (task_points[i].AATType == SECTOR) {
+          radius = task_points[i].AATSectorRadius;
         } else {
-          aatradius[i] = 0;
+          radius = task_points[i].AATCircleRadius;
         }
+        for (int j=0; j<4; j++) {
+          bearing = j*360.0/4;
+          
+          FindLatitudeLongitude(task.getTaskPointLocation(i),
+                                bearing, radius,
+                                &aatloc);
+          x1 = (aatloc.Longitude-lon_c)*fastcosine(aatloc.Latitude);
+          y1 = (aatloc.Latitude-lat_c);
+          chart.ScaleXFromValue(x1);
+          chart.ScaleYFromValue(y1);
+          if (j==0) {
+            aatradius[i] = fabs(aatloc.Latitude -
+                                task.getTaskPointLocation(i).Latitude);
+          }
+        }
+      } else {
+        aatradius[i] = 0;
       }
     }
   }
@@ -482,7 +480,7 @@ void FlightStatistics::RenderTask(Canvas &canvas, const RECT rc, const bool olcm
 	  chart.DrawLabel(text, x2, y2);
 	}
 
-	if ((i==ActiveTaskPoint)&&(!AATEnabled)) {
+	if ((i==(int)task.getActiveIndex())&&(!AATEnabled)) {
 	  lat1 = XCSoarInterface::Basic().Location.Latitude;
 	  lon1 = XCSoarInterface::Basic().Location.Longitude;
 	  x1 = (lon1-lon_c)*fastcosine(lat1);
@@ -510,7 +508,7 @@ void FlightStatistics::RenderTask(Canvas &canvas, const RECT rc, const bool olcm
           lon2 = task_stats[i].AATTargetLocation.Longitude;
 
           /*
-	  if (i==ActiveTaskPoint) {
+	  if (i==task.getActiveIndex()) {
 	    lat1 = XCSoarInterface::Basic().Location.Latitude;
 	    lon1 = XCSoarInterface::Basic().Location.Longitude;
 	  }
@@ -943,8 +941,8 @@ FlightStatistics::SetLegStart(const int activewaypoint,
 			      const double time)
 {
   Lock();
-  if (LegStartTime[ActiveTaskPoint]<0) {
-    LegStartTime[ActiveTaskPoint] = time;
+  if (LegStartTime[task.getActiveIndex()]<0) {
+    LegStartTime[task.getActiveIndex()] = time;
   }
   Unlock();
 }

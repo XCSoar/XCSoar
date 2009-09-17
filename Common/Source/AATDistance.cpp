@@ -91,9 +91,8 @@ void AATDistance::ResetEnterTrigger(int taskwaypoint) {
 }
 
 void AATDistance::AddPoint(const GEOPOINT &location,
-                           const int taskwaypoint,
+                           const unsigned taskwaypoint,
 			   const double aatclosedistance) {
-  if (taskwaypoint<0) return;
 
   bool was_entered = has_entered[taskwaypoint];
   has_entered[taskwaypoint] = true;
@@ -165,7 +164,7 @@ void AATDistance::AddPoint(const GEOPOINT &location,
       for (int i= taskwaypoint; i<MAXTASKPOINTS-1; i++) {
         UpdateSearch(i);
       }
-      if (taskwaypoint == ActiveTaskPoint) {
+      if (taskwaypoint == task.getActiveIndex()) {
         DistanceCovered_internal(location, true, aatclosedistance);
       }
     }
@@ -379,7 +378,7 @@ double AATDistance::DistanceCovered_internal(const GEOPOINT &location,
                                              const bool insector,
 					     const double aatclosedistance) {
   double achieved;
-  if (!task.Valid() || (ActiveTaskPoint==0)) {
+  if (!task.Valid() || (task.getActiveIndex()==0)) {
     //   max_achieved_distance = 0;
     return 0.0;
   }
@@ -398,7 +397,7 @@ double AATDistance::DistanceCovered_internal(const GEOPOINT &location,
 double AATDistance::DistanceCovered_inside(const GEOPOINT &location,
                                            const double aatclosedistance) {
 
-  int taskwaypoint = ActiveTaskPoint;
+  int taskwaypoint = task.getActiveIndex();
 
   double best_achieved_distance = 0;
 
@@ -449,11 +448,11 @@ double AATDistance::distance_achieved(const int taskwaypoint,
 
 double AATDistance::DistanceCovered_outside(const GEOPOINT &location,
 					    const double aatclosedistance) {
-  if (ActiveTaskPoint<=0) {
+  if (task.getActiveIndex()<=0) {
     return 0.0;
   }
 
-  int taskwaypoint = ActiveTaskPoint;
+  int taskwaypoint = task.getActiveIndex();
 
   int nlast = num_points[taskwaypoint-1];
   int nstart = 0;

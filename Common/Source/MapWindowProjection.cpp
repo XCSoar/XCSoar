@@ -339,7 +339,7 @@ MapWindowProjection::CalculateOrientationTargetPan
   // otherwise north up.  If circling, orient towards target.
 
   _origin_centered = true;
-  if ((ActiveTaskPoint==settings.TargetPanIndex)
+  if (((int)task.getActiveIndex()==settings.TargetPanIndex)
       &&(settings.DisplayOrientation != NORTHUP)
       &&(settings.DisplayOrientation != NORTHTRACK)
       )    {
@@ -455,7 +455,7 @@ double MapWindowProjection::LimitMapScale(double value,
   minreasonable = 0.05;
 
   if (settings_map.AutoZoom && DisplayMode != dmCircling) {
-    if (AATEnabled && (ActiveTaskPoint>0)) {
+    if (AATEnabled && (task.getActiveIndex()>0)) {
       minreasonable = 0.88;
     } else {
       minreasonable = 0.44;
@@ -598,14 +598,14 @@ void MapWindowProjection::UpdateMapScale(const NMEA_INFO &DrawInfo,
   // if we aren't looking at a waypoint, see if we are now
   if (AutoMapScaleWaypointIndex == -1) {
     if (task.Valid()) {
-      AutoMapScaleWaypointIndex = task_points[ActiveTaskPoint].Index;
+      AutoMapScaleWaypointIndex = task_points[task.getActiveIndex()].Index;
     }
   }
   // if there is an active waypoint
   if (task.Valid()) {
     // if the current zoom focused waypoint has changed...
-    if (AutoMapScaleWaypointIndex != task_points[ActiveTaskPoint].Index) {
-      AutoMapScaleWaypointIndex = task_points[ActiveTaskPoint].Index;
+    if (AutoMapScaleWaypointIndex != task_points[task.getActiveIndex()].Index) {
+      AutoMapScaleWaypointIndex = task_points[task.getActiveIndex()].Index;
       
       // zoom back out to where we were before
       if (StartingAutoMapScale> 0.0) {

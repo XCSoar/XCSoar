@@ -513,7 +513,7 @@ void MapWindow::DrawFinalGlide(Canvas &canvas, const RECT rc)
   
   ScopeLock protect(mutexTaskData);
   if (task.Valid()){
-    // if (ActiveTaskPoint >= 0) {
+    // if (task.getActiveIndex() >= 0) {
     
     const int y0 = ( (rc.bottom - rc.top )/2)+rc.top;
     

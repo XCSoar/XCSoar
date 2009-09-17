@@ -21,24 +21,24 @@ void TaskScan::scan_point_forward(RelativeTaskPointVisitor &visitor)
 
   visitor.visit_reset();
   if (EnableMultipleStartPoints) {
-    for (int j=0; j<MAXSTARTPOINTS; j++) {
+    for (unsigned j=0; j<MAXSTARTPOINTS; j++) {
       if ((task_start_points[j].Index != -1) && task_start_stats[j].Active)
 	visitor.visit_start_point(task_start_points[j], j);
     }
   }
-  if ((ActiveTaskPoint<0)||(task_points[0].Index<0)) {
+  if (!task.ValidTaskPoint(0)) {
     visitor.visit_null();
     return;
   }
 
-  int i=0;
-  while (i<ActiveTaskPoint) {
+  unsigned i=0;
+  while (i<task.getActiveIndex()) {
     visitor.visit_task_point_before(task_points[i], i);
     i++;
   } 
   visitor.visit_task_point_current(task_points[i], i);
   i++;
-  while ((i<MAXTASKPOINTS) && (task_points[i].Index != -1)) {
+  while (task.ValidTaskPoint(i)) {
     visitor.visit_task_point_after(task_points[i], i);
     i++;
   }
@@ -52,17 +52,17 @@ void TaskScan::scan_point_forward(AbsoluteTaskPointVisitor &visitor)
   visitor.visit_reset();
 
   if (EnableMultipleStartPoints) {
-    for (int j=0; j<MAXSTARTPOINTS; j++) {
+    for (unsigned j=0; j<MAXSTARTPOINTS; j++) {
       if ((task_start_points[j].Index != -1) && task_start_stats[j].Active)
 	visitor.visit_start_point(task_start_points[j], j);
     }
   }
 
-  if (task_points[0].Index<0) {
+  if (!task.Valid()) {
     visitor.visit_null();
     return;
   }
-  int i=0;
+  unsigned i=0;
   while ((i+1<MAXTASKPOINTS) && (task_points[i+1].Index != -1)) {
     if (i==0) {
       visitor.visit_task_point_start(task_points[0], 0);
@@ -81,7 +81,7 @@ void TaskScan::scan_leg_forward(RelativeTaskLegVisitor &visitor)
 
   visitor.visit_reset();
 
-  if ((ActiveTaskPoint<0)||(task_points[0].Index<0)) {
+  if (!task.Valid()) {
     visitor.visit_null();
     return;
   }
@@ -89,18 +89,20 @@ void TaskScan::scan_leg_forward(RelativeTaskLegVisitor &visitor)
     visitor.visit_single(task_points[0], 0);
     return;
   }
-  int i=0;
-  while ((i+1<MAXTASKPOINTS) && (task_points[i+1].Index != -1)) {
-    if (i+1<ActiveTaskPoint) {
-      visitor.visit_leg_before(task_points[i], i,
-				task_points[i+1], i+1);
-    } else if (i+1==ActiveTaskPoint) {
-      visitor.visit_leg_current(task_points[i], i,
-				 task_points[i+1], i+1);
-    } else {
-      visitor.visit_leg_after(task_points[i], i,
-			       task_points[i+1], i+1);
-    }
+  unsigned i=0;
+  while (i+1<task.getActiveIndex()) {
+    visitor.visit_leg_before(task_points[i], i,
+                             task_points[i+1], i+1);
+    i++;
+  }
+  if (i+1==task.getActiveIndex()) {
+    visitor.visit_leg_current(task_points[i], i,
+                              task_points[i+1], i+1);
+    i++;
+  }
+  while (task.ValidTaskPoint(i+1)) {
+    visitor.visit_leg_after(task_points[i], i,
+                            task_points[i+1], i+1);
     i++;
   }
 }
@@ -114,22 +116,22 @@ void TaskScan::scan_leg_forward(AbsoluteTaskLegVisitor &visitor)
 
   visitor.visit_reset();
 
-  if (task_points[0].Index<0) {
+  if (!task.Valid()) {
     visitor.visit_null();
     return;
   }
   if (EnableMultipleStartPoints) {
-    for (int j=0; j<MAXSTARTPOINTS; j++) {
+    for (unsigned j=0; j<MAXSTARTPOINTS; j++) {
       if ((task_start_points[j].Index != -1) && task_start_stats[j].Active)
 	visitor.visit_leg_multistart(task_start_points[j], j, task_points[0]);
     }
   }
-  if (task_points[1].Index<0) {
+  if (!task.ValidTaskPoint(1)) {
     visitor.visit_single(task_points[0], 0);
     return;
   }
-  int i=0;
-  while ((i+2<MAXTASKPOINTS) && (task_points[i+2].Index != -1)) {
+  unsigned i=0;
+  while (task.ValidTaskPoint(i+2)) {
     visitor.visit_leg_intermediate(task_points[i], i,
 				   task_points[i+1], i+1);
     i++;
@@ -145,29 +147,29 @@ void TaskScan::scan_leg_reverse(AbsoluteTaskLegVisitor &visitor)
 
   visitor.visit_reset();
 
-  if (task_points[0].Index<0) {
+  if (!task.Valid()) {
     visitor.visit_null();
     return;
   }
-  if (task_points[1].Index<0) {
+  unsigned final = task.getFinalWaypoint();
+  if (final==0) {
     visitor.visit_single(task_points[0], 0);
     return;
   }
-  int final = task.getFinalWaypoint();
   int i= final-1;
   while (i>=0) {
-    if (i==final-1) {
+    if (i==(int)final-1) {
       visitor.visit_leg_final(task_points[i], i,
-			      task_points[i+1], i+1);
+                              task_points[i+1], i+1);
     } else {
       visitor.visit_leg_intermediate(task_points[i], i,
-				     task_points[i+1], i+1);
+                                     task_points[i+1], i+1);
     }
     i--;
   }
 
   if (EnableMultipleStartPoints) {
-    for (int j=0; j<MAXSTARTPOINTS; j++) {
+    for (unsigned j=0; j<MAXSTARTPOINTS; j++) {
       if ((task_start_points[j].Index != -1) && task_start_stats[j].Active)
 	visitor.visit_leg_multistart(task_start_points[j], j, task_points[0]);
     }
@@ -442,9 +444,6 @@ private:
 void Task::RefreshTask_Visitor(const SETTINGS_COMPUTER &settings_computer) 
 {
   ScopeLock protect(mutexTaskData);
-  if ((ActiveTaskPoint<0)&&(task_points[0].Index>=0)) {
-    ActiveTaskPoint=0;
-  }
 
   TaskLegGeometryVisitor geom;
   TaskScan::scan_leg_forward(geom);
@@ -471,7 +470,7 @@ public:
       // This must be the final waypoint, so it's not an AAT OZ
       return;
     }
-    int j;
+    unsigned j;
     for (j=0; j<MAXISOLINES; j++) {
       task_stats[i].IsoLine_valid[j]= false;
     }

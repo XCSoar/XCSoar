@@ -381,7 +381,7 @@ ActionInterface::on_key_Waypoint(int UpDown)
       // No more, try first
 
       /* ****DISABLED****
-         if(ActiveTaskPoint == 0)	{
+         if(task.getActiveIndex() == 0)	{
          // TODO bug: allow restart
          // TODO bug: make this work only for manual
          
@@ -392,7 +392,7 @@ ActionInterface::on_key_Waypoint(int UpDown)
          }
          }
       AdvanceArmed = false;
-      ActiveTaskPoint = 0;
+      task.getActiveIndex() = 0;
       */
       /* JMW illegal
          Calculated().LegStartTime = Basic().Time ;
@@ -400,11 +400,11 @@ ActionInterface::on_key_Waypoint(int UpDown)
   } else if (UpDown<0){
     task.retreatTaskPoint(SettingsComputer());
   } else if (UpDown==0) {
-    SelectedWaypoint = task_points[ActiveTaskPoint].Index;
+    SelectedWaypoint = task_points[task.getActiveIndex()].Index;
     PopupWaypointDetails();
   }
-  if (ActiveTaskPoint>=0) {
-    SelectedWaypoint = task_points[ActiveTaskPoint].Index;
+  if (task.Valid()>=0) {
+    SelectedWaypoint = task_points[task.getActiveIndex()].Index;
   }
   mutexTaskData.Unlock();
 }

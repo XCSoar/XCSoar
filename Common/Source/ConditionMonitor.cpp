@@ -198,7 +198,7 @@ protected:
     tad = cmp.Calculated().TaskAltitudeDifference*0.2+0.8*tad;
 
     bool BeforeFinalGlide =
-      (task.ValidTaskPoint(ActiveTaskPoint+1) 
+      (task.ValidTaskPoint(task.getActiveIndex()+1) 
        && !cmp.Calculated().FinalGlide);
 
     if (BeforeFinalGlide) {
@@ -340,7 +340,7 @@ protected:
 
   bool CheckCondition(const GlideComputer& cmp) {
     if (!task.Valid() || !cmp.Calculated().Flying
-        || (ActiveTaskPoint>0) || !task.ValidTaskPoint(ActiveTaskPoint+1)) {
+        || (task.getActiveIndex()>0) || !task.ValidTaskPoint(task.getActiveIndex()+1)) {
       return false;
     }
     if (cmp.Calculated().LegDistanceToGo>StartRadius) {

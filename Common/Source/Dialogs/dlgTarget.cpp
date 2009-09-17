@@ -64,7 +64,7 @@ static int ActiveTaskPointOnEntry = 0;
 
 static double Range = 0;
 static double Radial = 0;
-static int target_point = 0;
+static unsigned target_point = 0;
 static bool TargetMoveMode = false;
 
 static void OnOKClicked(WindowControl * Sender){
@@ -80,7 +80,7 @@ static void MoveTarget(double adjust_angle) {
   if (target_point==0) return;
   if (!task.ValidTaskPoint(target_point)) return;
   if (!task.ValidTaskPoint(target_point+1)) return;
-  if (target_point < ActiveTaskPoint) return;
+  if (target_point < task.getActiveIndex()) return;
 
   mutexTaskData.Lock();
 
@@ -102,7 +102,7 @@ static void MoveTarget(double adjust_angle) {
   if (task.InAATTurnSector(target_location, 
                            target_point)) {
     if (XCSoarInterface::Calculated().IsInSector 
-        && (target_point == ActiveTaskPoint)) {
+        && (target_point == task.getActiveIndex())) {
       // set range/radial for inside sector
       double course_bearing, target_bearing;
       DistanceBearing(task_stats[target_point-1].AATTargetLocation,
@@ -159,7 +159,7 @@ static void DragTarget(const GEOPOINT target_location) {
   if (target_point==0) return;
   if (!task.ValidTaskPoint(target_point)) return;
   if (!task.ValidTaskPoint(target_point+1)) return;
-  if (target_point < ActiveTaskPoint) return;
+  if (target_point < task.getActiveIndex()) return;
 
   mutexTaskData.Lock();
 
@@ -168,7 +168,7 @@ static void DragTarget(const GEOPOINT target_location) {
   if (task.InAATTurnSector(target_location, 
                            target_point)) {
     if (XCSoarInterface::Calculated().IsInSector 
-        && (target_point == ActiveTaskPoint)) {
+        && (target_point == task.getActiveIndex())) {
       // set range/radial for inside sector
       double course_bearing, target_bearing;
       DistanceBearing(task_stats[target_point-1].AATTargetLocation,
@@ -270,7 +270,7 @@ static void RefreshCalculator(void) {
 
   task.RefreshTask(XCSoarInterface::SettingsComputer());
   RefreshTaskStatistics();
-  target_point = max(target_point,ActiveTaskPoint);
+  target_point = max(target_point,task.getActiveIndex());
 
   bool nodisplay = !AATEnabled
     || (target_point==0)
@@ -420,7 +420,7 @@ static void OnRangeData(DataField *Sender, DataField::DataAccessKind_t Mode) {
     case DataField::daPut:
     case DataField::daChange:
       mutexTaskData.Lock();
-      if (target_point>=ActiveTaskPoint) {
+      if (target_point>=task.getActiveIndex()) {
         RangeNew = Sender->GetAsFloat()/100.0;
         if (RangeNew != Range) {
           task_stats[target_point].AATTargetOffsetRadius = RangeNew;
@@ -448,8 +448,8 @@ static void OnRadialData(DataField *Sender, DataField::DataAccessKind_t Mode) {
     case DataField::daPut:
     case DataField::daChange:
       mutexTaskData.Lock();
-      if (target_point>=ActiveTaskPoint) {
-        if (!XCSoarInterface::Calculated().IsInSector || (target_point != ActiveTaskPoint)) {
+      if (target_point>=task.getActiveIndex()) {
+        if (!XCSoarInterface::Calculated().IsInSector || (target_point != task.getActiveIndex())) {
           dowrap = true;
         }
         RadialNew = Sender->GetAsFloat();
@@ -483,7 +483,7 @@ static void OnRadialData(DataField *Sender, DataField::DataAccessKind_t Mode) {
 
 static void RefreshTargetPoint(void) {
   mutexTaskData.Lock();
-  target_point = max(target_point, ActiveTaskPoint);
+  target_point = max(target_point, task.getActiveIndex());
   if (task.ValidTaskPoint(target_point)) {
     XCSoarInterface::SetSettingsMap().TargetPanIndex = target_point;
     XCSoarInterface::SetSettingsMap().TargetPan = true;
@@ -525,7 +525,7 @@ static void OnTaskPointData(DataField *Sender, DataField::DataAccessKind_t Mode)
     case DataField::daPut:
     case DataField::daChange:
       target_point = Sender->GetAsInteger() + ActiveTaskPointOnEntry;
-      target_point = max(target_point,ActiveTaskPoint);
+      target_point = max(target_point,task.getActiveIndex());
       if (target_point != old_target_point) {
         RefreshTargetPoint();
       }
@@ -547,10 +547,10 @@ static CallBackTableEntry_t CallBackTable[]={
 
 void dlgTarget(void) {
 
-  if (!task.ValidTaskPoint(ActiveTaskPoint)) {
+  if (!task.ValidTaskPoint(task.getActiveIndex())) {
     return;
   }
-  ActiveTaskPointOnEntry = ActiveTaskPoint;
+  ActiveTaskPointOnEntry = task.getActiveIndex();
 
   if (!InfoBoxLayout::landscape) {
     wf = dlgLoadFromXML(CallBackTable,

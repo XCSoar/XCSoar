@@ -58,14 +58,16 @@ Copyright_License {
 TaskSafe task;
 
 static int Task_saved[MAXTASKPOINTS+1];
-static int active_waypoint_saved= -1;
+static unsigned active_waypoint_saved= 0;
 static bool aat_enabled_saved= false;
 
 static bool TaskModified=false;
 static bool TargetModified=false;
 static bool TaskAborted = false;
 
-Task::Task() {
+Task::Task():
+  ActiveTaskPoint(0)
+{
   ClearTask();
   ClearStartPoints();
 }
@@ -122,8 +124,6 @@ void Task::FlyDirectTo(const int index,
 
   TaskModified = true;
   TargetModified = true;
-  ActiveTaskPoint = -1;
-
   AATEnabled = FALSE;
 
   /*  JMW disabled this so task info is preserved
@@ -179,7 +179,7 @@ void Task::InsertWaypoint(const int index,
   TaskModified = true;
   TargetModified = true;
 
-  if ((ActiveTaskPoint<0) || !ValidTaskPoint(0)) {
+  if (!ValidTaskPoint(0)) {
     ActiveTaskPoint = 0;
     ResetTaskWaypoint(ActiveTaskPoint);
     task_points[ActiveTaskPoint].Index = index;
@@ -196,7 +196,7 @@ void Task::InsertWaypoint(const int index,
     return;
   }
 
-  int indexInsert = max(ActiveTaskPoint,0);
+  int indexInsert = ActiveTaskPoint;
   if (append) {
     for (i=indexInsert; i<MAXTASKPOINTS-2; i++) {
       if (task_points[i+1].Index<0) {
@@ -221,15 +221,15 @@ void Task::InsertWaypoint(const int index,
 
 // Create a default task to home at startup if no task is present
 void Task::DefaultTask(const SETTINGS_COMPUTER &settings_computer) {
-  TaskModified = true;
-  TargetModified = true;
-  if ((task_points[0].Index == -1)||(ActiveTaskPoint==-1)) {
+  if (!ValidTaskPoint(0)) {
     if (settings_computer.HomeWaypoint != -1) {
+      TaskModified = true;
+      TargetModified = true;
       task_points[0].Index = settings_computer.HomeWaypoint;
       ActiveTaskPoint = 0;
+      RefreshTask(settings_computer);
     }
   }
-  RefreshTask(settings_computer);
 }
 
 
@@ -265,6 +265,10 @@ void Task::RemoveTaskPoint(int index,
   task_points[MAXTASKPOINTS-1].Index = -1;
   task_stats[MAXTASKPOINTS-1].AATTargetOffsetRadius= 0.0;
 
+  if (ActiveTaskPoint>=(unsigned)index) {
+    ActiveTaskPoint--;
+  }
+
   RefreshTask(settings_computer);
 }
 
@@ -279,7 +283,7 @@ void Task::RemoveWaypoint(const int index,
   if (!CheckDeclaration())
     return;
 
-  if (ActiveTaskPoint<0) {
+  if (!ValidTaskPoint(0)) {
     return; // No waypoint to remove
   }
 
@@ -309,7 +313,9 @@ void Task::RemoveWaypoint(const int index,
     if (task_points[ActiveTaskPoint].Index == -1) {
       // We've just removed the last task point and it was
       // active at the time
-      ActiveTaskPoint--;
+      if (ActiveTaskPoint) {
+        ActiveTaskPoint--;
+      }
     }
 
   } else {
@@ -318,13 +324,14 @@ void Task::RemoveWaypoint(const int index,
     i = ActiveTaskPoint;
     do {
       --i;
-    } while (i >= 0 && task_points[i].Index != index);
+    } while ((i >= 0) && (task_points[i].Index != index));
 
     if (i >= 0) {
       // Found WP, so remove it
       RemoveTaskPoint(i, settings_computer);
-      ActiveTaskPoint--;
-
+      if (ActiveTaskPoint) {
+        ActiveTaskPoint--;
+      }
     } else {
       // WP not found, so ask user if they want to
       // remove the active WP
@@ -338,7 +345,9 @@ void Task::RemoveWaypoint(const int index,
         if (task_points[ActiveTaskPoint].Index == -1) {
           // Active WayPoint was last in the list so is currently
           // invalid.
-          ActiveTaskPoint--;
+          if (ActiveTaskPoint) {
+            ActiveTaskPoint--;
+          }
         }
       }
     }
@@ -352,17 +361,16 @@ void Task::ReplaceWaypoint(const int index,
   if (!CheckDeclaration())
     return;
 
-  TaskModified = true;
-  TargetModified = true;
-
-  // ARH 26/06/05 Fixed array out-of-bounds bug
-  if (ActiveTaskPoint>=0) {
+  if (ValidTaskPoint(ActiveTaskPoint)) {
+    TaskModified = true;
+    TargetModified = true;
     ResetTaskWaypoint(ActiveTaskPoint);
     task_points[ActiveTaskPoint].Index = index;
   } else {
-
     // Insert a new waypoint since there's
     // nothing to replace
+    TaskModified = true;
+    TargetModified = true;
     ActiveTaskPoint=0;
     ResetTaskWaypoint(ActiveTaskPoint);
     task_points[ActiveTaskPoint].Index = index;
@@ -630,7 +638,7 @@ void Task::ClearTask(void) {
   TaskModified = true;
   TargetModified = true;
   ClearTaskFileName();
-  ActiveTaskPoint = -1;
+  ActiveTaskPoint = 0;
   int i;
   for(i=0;i<MAXTASKPOINTS;i++) {
     task_points[i].Index = -1;
@@ -774,7 +782,7 @@ Task::ResumeAbortTask(const SETTINGS_COMPUTER &settings_computer,
                       const int set) 
 {
   int i;
-  int active_waypoint_on_entry;
+  unsigned active_waypoint_on_entry;
   bool task_temporary_on_entry = TaskIsTemporary();
 
   active_waypoint_on_entry = ActiveTaskPoint;
@@ -797,7 +805,7 @@ Task::ResumeAbortTask(const SETTINGS_COMPUTER &settings_computer,
       BackupTask();
 
       // force new waypoint to be the closest
-      ActiveTaskPoint = -1;
+      ActiveTaskPoint = 0;
 
       // force AAT off
       AATEnabled = false;
@@ -823,7 +831,7 @@ Task::ResumeAbortTask(const SETTINGS_COMPUTER &settings_computer,
   }
 
   if (active_waypoint_on_entry != ActiveTaskPoint){
-    SelectedWaypoint = ActiveTaskPoint;
+    SelectedWaypoint = task_points[ActiveTaskPoint].Index;
   }
 
 }
@@ -832,14 +840,12 @@ Task::ResumeAbortTask(const SETTINGS_COMPUTER &settings_computer,
 
 const int 
 Task::getFinalWaypoint() const {
-  int i;
-  i=max(-1,min(MAXTASKPOINTS,ActiveTaskPoint));
   if (TaskAborted) {
-    return i;
+    return ActiveTaskPoint;
   }
 
-  i++;
-  while((i<MAXTASKPOINTS) && (task_points[i].Index != -1)) {
+  unsigned i= ActiveTaskPoint+1;
+  while ((i<MAXTASKPOINTS) && (task_points[i].Index != -1)) {
     i++;
   }
   return i-1;
@@ -848,7 +854,7 @@ Task::getFinalWaypoint() const {
 const bool 
 Task::ActiveIsFinalWaypoint() const
 {
-  return (ActiveTaskPoint == getFinalWaypoint());
+  return ((int)ActiveTaskPoint == getFinalWaypoint());
 }
 
 
@@ -936,9 +942,9 @@ Task::SetStartPoint(const int pointnum, const int waypointnum)
 void
 Task::advanceTaskPoint(const SETTINGS_COMPUTER &settings_computer)
 {
-  if(ActiveTaskPoint < MAXTASKPOINTS) {
+  if(ActiveTaskPoint < MAXTASKPOINTS-1) {
     // Increment Waypoint
-    if(task_points[ActiveTaskPoint+1].Index >= 0) {
+    if (ValidTaskPoint(ActiveTaskPoint+1)) {
       if(ActiveTaskPoint == 0)	{
         // manual start
         // TODO bug: allow restart
@@ -951,6 +957,7 @@ Task::advanceTaskPoint(const SETTINGS_COMPUTER &settings_computer)
       }
       ActiveTaskPoint ++;
       AdvanceArmed = false;
+      SelectedWaypoint = task_points[ActiveTaskPoint].Index;
       /* JMW ILLEGAL
          Calculated().LegStartTime = Basic().Time ;
       */
@@ -964,6 +971,7 @@ Task::retreatTaskPoint(const SETTINGS_COMPUTER &settings_computer)
 {
   if(ActiveTaskPoint >0) {
     ActiveTaskPoint --;
+    SelectedWaypoint = task_points[ActiveTaskPoint].Index;
     /*
       XXX How do we know what the last one is?
       } else if (UpDown == -2) {
@@ -974,7 +982,9 @@ Task::retreatTaskPoint(const SETTINGS_COMPUTER &settings_computer)
       RotateStartPoints(settings_computer);
       // restarted task..
       //	TODO bug: not required? Calculated().TaskStartTime = 0;
+      SelectedWaypoint = task_points[ActiveTaskPoint].Index;
     }
   }
   //JMW illegal glide_computer.ResetEnter();
 }
+

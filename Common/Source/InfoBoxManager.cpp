@@ -503,7 +503,7 @@ void InfoBoxManager::DisplayInfoBox(void)
 
     bool needupdate = ((DisplayType[i] != DisplayTypeLast[i])||first);
 
-    int theactive = ActiveTaskPoint;
+    int theactive = task.getActiveIndex();
     if (!task.ValidTaskPoint(theactive)) {
       theactive = -1;
     }

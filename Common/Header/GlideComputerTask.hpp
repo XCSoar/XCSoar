@@ -87,7 +87,7 @@ private:
   void CheckStart();
   void CheckRestart();
   void CheckFinish();
-  void AddAATPoint(int taskwaypoint);
+  void AddAATPoint(const unsigned taskwaypoint);
   void CheckInSector();
   void TaskStatistics(const double this_maccready,
 		      const double cruise_efficiency);

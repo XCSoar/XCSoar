@@ -136,7 +136,7 @@ public:
   void visit_task_point_intermediate_aat(TASK_POINT &point, const unsigned i) 
   {
     // JMW added iso lines
-    if (((int)i==ActiveTaskPoint) 
+    if ((i==task.getActiveIndex()) 
 	|| (map_window->SettingsMap().TargetPan 
 	    && ((int)i==map_window->SettingsMap().TargetPanIndex))) {
       // JMW 20080616 flash arc line if very close to target
@@ -207,7 +207,7 @@ public:
 
   void visit_task_point_final(TASK_POINT &point, const unsigned index) { 
 
-    if (ActiveTaskPoint>1) {
+    if (task.getActiveIndex()>1) {
       // only draw finish line when past the first
       // waypoint.
       const POINT &wp = way_points.get_calc(point.Index).Screen;
@@ -303,7 +303,7 @@ private:
   void DrawStartSector(const POINT &Start, 
 		       const POINT &End, const unsigned Index)
   {
-    if (ActiveTaskPoint>=2) {
+    if (task.getActiveIndex()>=2) {
       // don't draw if on second leg or beyond
       return;
     }
@@ -342,7 +342,7 @@ void MapWindow::DrawTask(Canvas &canvas, RECT rc)
 
 void MapWindow::DrawTaskAAT(Canvas &canvas, const RECT rc, Canvas &buffer)
 {
-  int i;
+  unsigned i;
   unsigned tmp;
 
   if (!AATEnabled) return;
@@ -367,7 +367,7 @@ void MapWindow::DrawTaskAAT(Canvas &canvas, const RECT rc, Canvas &buffer)
       // this color is the transparent bit
       buffer.set_background_color(whitecolor);
 
-      if (i<ActiveTaskPoint) {
+      if (i<task.getActiveIndex()) {
         buffer.hollow_brush();
       } else {
         buffer.select(MapGfx.hAirspaceBrushes[iAirspaceBrush[AATASK]]);
@@ -383,7 +383,7 @@ void MapWindow::DrawTaskAAT(Canvas &canvas, const RECT rc, Canvas &buffer)
       // this color is the transparent bit
       buffer.set_background_color(whitecolor);
       
-      if (i<ActiveTaskPoint) {
+      if (i<task.getActiveIndex()) {
         buffer.hollow_brush();
       } else {
         buffer.select(MapGfx.hAirspaceBrushes[iAirspaceBrush[AATASK]]);
@@ -420,9 +420,9 @@ void MapWindow::DrawBearing(Canvas &canvas, int bBearingValid)
   GEOPOINT target;
 
   if (AATEnabled 
-      && (ActiveTaskPoint>0) 
-      && task.ValidTaskPoint(ActiveTaskPoint+1)) {
-    target = task_stats[ActiveTaskPoint].AATTargetLocation;
+      && (task.getActiveIndex()>0) 
+      && task.ValidTaskPoint(task.getActiveIndex()+1)) {
+    target = task_stats[task.getActiveIndex()].AATTargetLocation;
   } else {
     target = task.getActiveLocation();
   }
@@ -437,7 +437,7 @@ void MapWindow::DrawBearing(Canvas &canvas, int bBearingValid)
 
       ScopeLock scopeLock(mutexTaskData);
 
-      for (int i=ActiveTaskPoint+1; task.verify_index(i); i++) {
+      for (int i=task.getActiveIndex()+1; task.verify_index(i); i++) {
         if (AATEnabled) {
           target = task_stats[i].AATTargetLocation;
         } else {
@@ -456,18 +456,18 @@ void MapWindow::DrawBearing(Canvas &canvas, int bBearingValid)
   if (AATEnabled) {
     ScopeLock scopeLock(mutexTaskData);
 
-    for (int i=max(1,ActiveTaskPoint); task.verify_index(i+1); i++) {
+    for (unsigned i=max(1,task.getActiveIndex()); 
+         task.verify_index(i+1); i++) {
       // RLD skip invalid targets and targets at start and finish
-      if ((i== ActiveTaskPoint)
+      if ((i== task.getActiveIndex())
           || ((SettingsMap().EnablePan || SettingsMap().TargetPan) 
-              && (i>ActiveTaskPoint))) {
+              && (i>task.getActiveIndex()))) {
         draw_masked_bitmap_if_visible(canvas, MapGfx.hBmpTarget, 
                                       task_stats[i].AATTargetLocation,
                                       10, 10);
       }
     }
   }
-
 }
 
 
@@ -475,7 +475,7 @@ void MapWindow::DrawBearing(Canvas &canvas, int bBearingValid)
 void
 MapWindow::DrawOffTrackIndicator(Canvas &canvas)
 {
-  if ((ActiveTaskPoint<=0) || !task.Valid()) {
+  if ((task.getActiveIndex()<=0) || !task.Valid()) {
     return;
   }
   if (fabs(Basic().TrackBearing-Calculated().WaypointBearing)<10) {
@@ -502,9 +502,9 @@ MapWindow::DrawOffTrackIndicator(Canvas &canvas)
   GEOPOINT dloc;
 
   if (AATEnabled 
-      && task.ValidTaskPoint(ActiveTaskPoint+1) 
-      && task.ValidTaskPoint(ActiveTaskPoint)) {
-    target = task_stats[ActiveTaskPoint].AATTargetLocation;
+      && task.ValidTaskPoint(task.getActiveIndex()+1) 
+      && task.ValidTaskPoint(task.getActiveIndex())) {
+    target = task_stats[task.getActiveIndex()].AATTargetLocation;
   } else {
     target = task.getActiveLocation();
   }
@@ -552,7 +552,7 @@ MapWindow::DrawOffTrackIndicator(Canvas &canvas)
 void
 MapWindow::DrawProjectedTrack(Canvas &canvas)
 {
-  if ((ActiveTaskPoint<=0) || !task.Valid() || !AATEnabled) {
+  if ((task.getActiveIndex()==0) || !task.Valid() || !AATEnabled) {
     return;
   }
   if (Calculated().Circling || task.TaskIsTemporary()) {
@@ -567,7 +567,7 @@ MapWindow::DrawProjectedTrack(Canvas &canvas)
 
   GEOPOINT start = Basic().Location;
   GEOPOINT previous_loc;
-  unsigned previous_point = max(0,ActiveTaskPoint-1);
+  unsigned previous_point = task.getActiveIndex()-1;
   if (AATEnabled) {
     previous_loc = task_stats[previous_point].AATTargetLocation;
   } else {
@@ -655,7 +655,7 @@ public:
   void visit_task_point_intermediate(TASK_POINT &point, const unsigned i) 
   { 
     visit_task_point_start(point, i);
-    if (AATEnabled && (((int)i==ActiveTaskPoint) ||
+    if (AATEnabled && ((i==task.getActiveIndex()) ||
 		       (map->SettingsMap().TargetPan 
 			&& ((int)i==map->SettingsMap().TargetPanIndex)))) {
       

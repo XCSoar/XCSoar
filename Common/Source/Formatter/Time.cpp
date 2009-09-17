@@ -79,7 +79,7 @@ void FormatterTime::AssignValue(int i) {
     break;
   case 46:
     SecsToDisplayTime((int)(Calculated().LegTimeToGo+DetectCurrentTime(&Basic())));
-    Valid = task.ValidTaskPoint(ActiveTaskPoint) &&
+    Valid = task.ValidTaskPoint(task.getActiveIndex()) &&
       (Calculated().LegTimeToGo< 0.9*ERROR_TIME);
     break;
   default:
@@ -90,10 +90,10 @@ void FormatterTime::AssignValue(int i) {
 
 void FormatterAATTime::AssignValue(int i) {
   double dd;
-  if (AATEnabled && task.ValidTaskPoint(ActiveTaskPoint)) {
+  if (AATEnabled && task.ValidTaskPoint(task.getActiveIndex())) {
     dd = Calculated().TaskTimeToGo;
     if ((Calculated().TaskStartTime>0.0) && (Calculated().Flying)
-        &&(ActiveTaskPoint>0)) {
+        &&(task.getActiveIndex()>0)) {
       dd += Basic().Time-Calculated().TaskStartTime;
     }
     dd= max(0,min(24.0*3600.0,dd))-AATTaskLength*60;
@@ -114,26 +114,26 @@ void FormatterAATTime::AssignValue(int i) {
   switch (i) {
   case 27:
     SecsToDisplayTime((int)Calculated().AATTimeToGo);
-    Valid = (task.ValidTaskPoint(ActiveTaskPoint) && AATEnabled
+    Valid = (task.ValidTaskPoint(task.getActiveIndex()) && AATEnabled
 	     && (Calculated().AATTimeToGo< 0.9*ERROR_TIME));
     break;
   case 41:
     SecsToDisplayTime((int)(Calculated().TaskTimeToGo));
-    Valid = task.ValidTaskPoint(ActiveTaskPoint)
+    Valid = task.ValidTaskPoint(task.getActiveIndex())
       && (Calculated().TaskTimeToGo< 0.9*ERROR_TIME);
     break;
   case 42:
     SecsToDisplayTime((int)(Calculated().LegTimeToGo));
-    Valid = task.ValidTaskPoint(ActiveTaskPoint)
+    Valid = task.ValidTaskPoint(task.getActiveIndex())
       && (Calculated().LegTimeToGo< 0.9*ERROR_TIME);
     break;
   case 45:
     SecsToDisplayTime((int)(Calculated().TaskTimeToGo+DetectCurrentTime(&Basic())));
-    Valid = task.ValidTaskPoint(ActiveTaskPoint)
+    Valid = task.ValidTaskPoint(task.getActiveIndex())
       && (Calculated().TaskTimeToGo< 0.9*ERROR_TIME);
     break;
   case 62:
-    if (AATEnabled && task.ValidTaskPoint(ActiveTaskPoint)) {
+    if (AATEnabled && task.ValidTaskPoint(task.getActiveIndex())) {
       SecsToDisplayTime((int)dd);
       Valid = (dd< 0.9*ERROR_TIME);
     } else {

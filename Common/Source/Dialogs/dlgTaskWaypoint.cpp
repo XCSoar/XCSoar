@@ -52,7 +52,7 @@ Copyright_License {
 
 #include <assert.h>
 
-static int twItemIndex= 0;
+static unsigned twItemIndex= 0;
 static WndForm *wf=NULL;
 static int twType = 0; // start, turnpoint, finish
 
@@ -210,7 +210,7 @@ static void GetWaypointValues(void) {
     return;
   }
 
-  if ((twItemIndex<MAXTASKPOINTS)&&(twItemIndex>=0)) {
+  if (task.ValidTaskPoint(twItemIndex)) {
     mutexTaskData.Lock();
     wp = (WndProperty*)wf->FindByName(TEXT("prpAATType"));
     if (wp) {
@@ -456,12 +456,6 @@ static void OnRemoveClicked(WindowControl * Sender) {
   mutexTaskData.Lock();
   task.RemoveTaskPoint(twItemIndex,XCSoarInterface::SettingsComputer());
   SetWaypointValues();
-  if (ActiveTaskPoint>=twItemIndex) {
-    ActiveTaskPoint--;
-  }
-  if (ActiveTaskPoint<0) {
-    ActiveTaskPoint= -1;
-  }
   mutexTaskData.Unlock();
   wf->SetModalResult(mrOK);
 }

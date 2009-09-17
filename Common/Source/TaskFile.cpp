@@ -122,11 +122,10 @@ void Task::LoadNewTask(const TCHAR *szFileName,
   bool TaskLoaded = false;
   unsigned magic = 0;
 
-  ActiveTaskPoint = -1;
-  for(i=0;i<MAXTASKPOINTS;i++)
-    {
-      task_points[i].Index = -1;
-    }
+  ActiveTaskPoint = 0;
+  for(i=0;i<MAXTASKPOINTS;i++) {
+    task_points[i].Index = -1;
+  }
 
   FILE *file = _tfopen(szFileName, _T("rb"));
   if(file != NULL)
@@ -257,10 +256,6 @@ void Task::LoadNewTask(const TCHAR *szFileName,
   }
 
   RefreshTask(settings_computer);
-
-  if (!ValidTaskPoint(0)) {
-    ActiveTaskPoint = 0;
-  }
 
   if (TaskInvalid && TaskLoaded) {
     MessageBoxX(

@@ -90,8 +90,8 @@ bool ButtonLabel::ExpandMacros(const TCHAR *In,
   if (task.isTaskAborted()) {
     if (_tcsstr(OutBuffer, TEXT("$(WaypointNext)"))) {
       // Waypoint\nNext
-      invalid = !task.ValidTaskPoint(ActiveTaskPoint+1);
-      CondReplaceInString(!task.ValidTaskPoint(ActiveTaskPoint+2),
+      invalid = !task.ValidTaskPoint(task.getActiveIndex()+1);
+      CondReplaceInString(!task.ValidTaskPoint(task.getActiveIndex()+2),
                           OutBuffer,
                           TEXT("$(WaypointNext)"),
                           TEXT("Landpoint\nFurthest"),
@@ -100,8 +100,8 @@ bool ButtonLabel::ExpandMacros(const TCHAR *In,
     } else
     if (_tcsstr(OutBuffer, TEXT("$(WaypointPrevious)"))) {
       // Waypoint\nNext
-      invalid = !task.ValidTaskPoint(ActiveTaskPoint-1);
-      CondReplaceInString(!task.ValidTaskPoint(ActiveTaskPoint-2),
+      invalid = !task.ValidTaskPoint(task.getActiveIndex()-1);
+      CondReplaceInString(!task.ValidTaskPoint(task.getActiveIndex()-2),
                           OutBuffer,
                           TEXT("$(WaypointPrevious)"),
                           TEXT("Landpoint\nClosest"),
@@ -110,8 +110,8 @@ bool ButtonLabel::ExpandMacros(const TCHAR *In,
   } else {
     if (_tcsstr(OutBuffer, TEXT("$(WaypointNext)"))) {
       // Waypoint\nNext
-      invalid = !task.ValidTaskPoint(ActiveTaskPoint+1);
-      CondReplaceInString(!task.ValidTaskPoint(ActiveTaskPoint+2),
+      invalid = !task.ValidTaskPoint(task.getActiveIndex()+1);
+      CondReplaceInString(!task.ValidTaskPoint(task.getActiveIndex()+2),
                           OutBuffer,
                           TEXT("$(WaypointNext)"),
                           TEXT("Waypoint\nFinish"),
@@ -119,18 +119,18 @@ bool ButtonLabel::ExpandMacros(const TCHAR *In,
 
     } else
     if (_tcsstr(OutBuffer, TEXT("$(WaypointPrevious)"))) {
-      if (ActiveTaskPoint==1) {
-        invalid = !task.ValidTaskPoint(ActiveTaskPoint-1);
+      if (task.getActiveIndex()==1) {
+        invalid = !task.ValidTaskPoint(task.getActiveIndex()-1);
         ReplaceInString(OutBuffer, TEXT("$(WaypointPrevious)"),
                         TEXT("Waypoint\nStart"), Size);
       } else if (EnableMultipleStartPoints) {
         invalid = !task.ValidTaskPoint(0);
-        CondReplaceInString((ActiveTaskPoint==0),
+        CondReplaceInString((task.getActiveIndex()==0),
                             OutBuffer,
                             TEXT("$(WaypointPrevious)"),
                             TEXT("StartPoint\nCycle"), TEXT("Waypoint\nPrevious"), Size);
       } else {
-        invalid = (ActiveTaskPoint<=0);
+        invalid = (task.getActiveIndex()<=0);
         ReplaceInString(OutBuffer, TEXT("$(WaypointPrevious)"), TEXT("Waypoint\nPrevious"), Size);
       }
     }
@@ -147,8 +147,8 @@ bool ButtonLabel::ExpandMacros(const TCHAR *In,
       invalid = true;
       break;
     case 2:
-      if (ActiveTaskPoint>0) {
-        if (task.ValidTaskPoint(ActiveTaskPoint+1)) {
+      if (task.getActiveIndex()>0) {
+        if (task.ValidTaskPoint(task.getActiveIndex()+1)) {
           CondReplaceInString(AdvanceArmed, OutBuffer, TEXT("$(AdvanceArmed)"),
                               TEXT("Cancel"), TEXT("TURN"), Size);
         } else {
@@ -162,10 +162,10 @@ bool ButtonLabel::ExpandMacros(const TCHAR *In,
       }
       break;
     case 3:
-      if (ActiveTaskPoint==0) {
+      if (task.getActiveIndex()==0) {
         CondReplaceInString(AdvanceArmed, OutBuffer, TEXT("$(AdvanceArmed)"),
                             TEXT("Cancel"), TEXT("START"), Size);
-      } else if (ActiveTaskPoint==1) {
+      } else if (task.getActiveIndex()==1) {
         CondReplaceInString(AdvanceArmed, OutBuffer, TEXT("$(AdvanceArmed)"),
                             TEXT("Cancel"), TEXT("RESTART"), Size);
       } else {

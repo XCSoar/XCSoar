@@ -616,7 +616,7 @@ void InputEvents::eventArmAdvance(const TCHAR *misc) {
       }
       break;
     case 3:
-      if (ActiveTaskPoint<2) { // past start (but can re-start)
+      if (task.getActiveIndex()<2) { // past start (but can re-start)
         if (AdvanceArmed) {
           Message::AddMessage(TEXT("Auto Advance: ARMED"));
         } else {
@@ -737,7 +737,7 @@ void InputEvents::eventWaypointDetails(const TCHAR *misc) {
   if (_tcscmp(misc, TEXT("current")) == 0) {
     mutexTaskData.Lock();
     if (task.Valid()) {
-      SelectedWaypoint = task_points[ActiveTaskPoint].Index;
+      SelectedWaypoint = task_points[task.getActiveIndex()].Index;
     }
     mutexTaskData.Unlock();
     if (SelectedWaypoint<0){
@@ -825,7 +825,7 @@ void InputEvents::eventFlightMode(const TCHAR *misc) {
       Message::AddMessage(TEXT("Final glide automatic"));
     }
   }
-  if (ForceFinalGlide && ActiveTaskPoint == -1){
+  if (ForceFinalGlide && task.getActiveIndex() == -1){
     Message::AddMessage(TEXT("No Active Waypoint!"));
   }
 }

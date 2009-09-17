@@ -102,11 +102,11 @@ GlideComputerTask::SortLandableWaypoints()
   int SortedApproxIndex[MAXTASKPOINTS*2];
   int i, k, l;
   double arrival_altitude;
-  int active_waypoint_on_entry;
+  unsigned active_waypoint_on_entry;
 
   ScopeLock protect(mutexTaskData);
 
-  active_waypoint_on_entry = ActiveTaskPoint;
+  active_waypoint_on_entry = task.getActiveIndex();
 
   // Do preliminary fast search
   POINT sc_aircraft;
@@ -247,7 +247,7 @@ GlideComputerTask::SortLandableWaypoints()
   int found_home_waypoint = -1;
   for (i=0; i<MAXTASKPOINTS; i++) {
     if (task.Valid()) {
-      if (SortedLandableIndex[i] == task_points[ActiveTaskPoint].Index) {
+      if (SortedLandableIndex[i] == task_points[task.getActiveIndex()].Index) {
         found_active_waypoint = i;
       }
     }
@@ -273,34 +273,32 @@ GlideComputerTask::SortLandableWaypoints()
   bool new_closest_waypoint = false;
 
   if (found_active_waypoint != -1) {
-    ActiveTaskPoint = found_active_waypoint;
+    task.setActiveIndex(found_active_waypoint);
   } else {
     // if not found, keep on field or set active waypoint to closest
     if (task.Valid()){
       arrival_altitude =
-        CalculateWaypointArrivalAltitude(way_points.get(task_points[ActiveTaskPoint].Index),
-                                         way_points.set_calc(task_points[ActiveTaskPoint].Index));
+        CalculateWaypointArrivalAltitude(way_points.get(task_points[task.getActiveIndex()].Index),
+                                         way_points.set_calc(task_points[task.getActiveIndex()].Index));
     } else {
       arrival_altitude = 0;
     }
     if (arrival_altitude <= 0){   // last active is no more reachable,
                                   // switch to new closest
       new_closest_waypoint = true;
-      ActiveTaskPoint = 0;
+      task.setActiveIndex(0);
     } else {
       // last active is reachable but not in list, add to end of
       // list (or overwrite laste one)
-      if (ActiveTaskPoint>=0){
-        for (i=0; i<MAXTASKPOINTS-1; i++) {     // find free slot
-          if (SortedLandableIndex[i] == -1)     // free slot found (if
+      for (i=0; i<MAXTASKPOINTS-1; i++) {     // find free slot
+        if (SortedLandableIndex[i] == -1)     // free slot found (if
                                                 // not, i index the
                                                 // last entry of the
                                                 // list)
             break;
-        }
-        SortedLandableIndex[i] = task_points[ActiveTaskPoint].Index;
-        ActiveTaskPoint = i;
       }
+      SortedLandableIndex[i] = task_points[task.getActiveIndex()].Index;
+      task.setActiveIndex(i);
     }
   }
 
@@ -331,7 +329,7 @@ GlideComputerTask::SortLandableWaypoints()
 
   task.RefreshTask(SettingsComputer());
 
-  if (active_waypoint_on_entry != ActiveTaskPoint){
-    SelectedWaypoint = ActiveTaskPoint;
+  if (active_waypoint_on_entry != task.getActiveIndex()){
+    SelectedWaypoint = task.getActiveIndex();
   }
 }

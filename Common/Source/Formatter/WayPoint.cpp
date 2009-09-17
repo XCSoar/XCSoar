@@ -50,7 +50,7 @@ Copyright_License {
 #include "Interface.hpp"
 
 const TCHAR *FormatterWaypoint::Render(int *color) {
-  int thewaypoint = ActiveTaskPoint;
+  int thewaypoint = task.getActiveIndex();
   mutexTaskData.Lock();
   if(task.ValidTaskPoint(thewaypoint))
     {
@@ -241,7 +241,7 @@ void FormatterAlternate::AssignValue(int i) {
 
 const TCHAR *FormatterDiffBearing::Render(int *color) {
 
-  if (task.ValidTaskPoint(ActiveTaskPoint)
+  if (task.ValidTaskPoint(task.getActiveIndex())
       && Calculated().WaypointDistance > 10.0) {
     Valid = true;
 
