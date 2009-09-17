@@ -105,6 +105,8 @@ public:
 
   void set(const RECT _rc);
 
+  virtual bool on_mouse_down(int x, int y);
+
   void Lock() {
     mutex.Lock();
   }
@@ -130,8 +132,6 @@ public:
    * all).
    */
   bool Acknowledge(int type);
-
-  void CheckTouch(HWND wmControl);
 
   void BlockRender(bool doblock);
 
