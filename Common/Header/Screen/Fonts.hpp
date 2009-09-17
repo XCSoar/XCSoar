@@ -41,7 +41,7 @@ Copyright_License {
 #include "Screen/Canvas.hpp"
 
 void DeleteFonts();
-void InitialiseFonts(HWND hwnd, RECT rc);
+void InitialiseFonts(Canvas &canvas, RECT rc);
 
 extern Font InfoWindowFont;
 extern Font TitleWindowFont;

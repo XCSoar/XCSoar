@@ -87,7 +87,7 @@ MainWindow::set(LPCTSTR text,
   ButtonLabel::SetLabelText(0,TEXT("MODE"));
 
   StartupStore(TEXT("Initialise fonts\n"));
-  InitialiseFonts(*this, rc);
+  InitialiseFonts(get_canvas(), rc);
 
   map.set(XCSoarInterface::main_window, rcsmall, rc);
   map.set_font(MapWindowFont);
