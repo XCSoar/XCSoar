@@ -643,7 +643,7 @@ WindowControl::on_paint(Canvas &canvas)
 
   // JMW added highlighting, useful for lists
   if (!mDontPaintSelector && mCanFocus && mHasFocus){
-    Color ff = (GetBackColor()+0x00ffffff*3)/4;
+    Color ff = GetBackColor().highlight();
     Brush brush(ff);
     rc.left += 0;
     rc.right -= 2;

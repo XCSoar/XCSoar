@@ -73,6 +73,13 @@ struct Color {
   operator COLORREF() const {
     return value;
   }
+
+  /**
+   * Returns the highlighted version of this color.
+   */
+  Color highlight() const {
+    return Color((value + 0x00ffffff * 3) / 4);
+  }
 };
 
 static inline bool
