@@ -58,7 +58,6 @@ Copyright_License {
 #include "WayPointList.hpp"
 
 #include <tchar.h>
-#include <stdio.h>
 
 #include "wcecompat/ts_string.h"
 
@@ -205,45 +204,6 @@ FeedWayPointLine(WayPointList &way_points, RasterTerrain &terrain,
   }
 
   return true;
-}
-
-static void
-ReadWayPointFile(FILE *fp, const TCHAR *CurrentWpFileName,
-                 WayPointList &way_points, RasterTerrain &terrain)
-{
-//  TCHAR szTemp[100];
-  int nTrigger=10;
-  DWORD fSize, fPos=0;
-  int nLineNumber=0;
-
-  XCSoarInterface::CreateProgressDialog(gettext(TEXT("Loading Waypoints File...")));
-
-  fseek(fp, 0, SEEK_END);
-  fSize = ftell(fp);
-  fseek(fp, 0, SEEK_SET); /* no rewind() on PPC */
-
-  if (fSize == 0) {
-    return;
-  }
-
-  // SetFilePointer(hFile,0,NULL,FILE_BEGIN);
-  fPos = 0;
-  nTrigger = (fSize/10);
-
-  while(ReadStringX(fp, READLINE_LENGTH, TempString)){
-
-    nLineNumber++;
-    fPos += _tcslen(TempString);
-
-    if (nTrigger < (int)fPos){
-      nTrigger += (fSize/10);
-      XCSoarInterface::StepProgressDialog();
-    }
-
-    if (!FeedWayPointLine(way_points, terrain, TempString) &&
-        ParseWayPointError(nLineNumber, CurrentWpFileName, TempString) != 1)
-      break;
-  }
 }
 
 static void
@@ -562,23 +522,6 @@ ParseAltitude(const TCHAR *input, double *altitude_r, TCHAR **endptr_r)
 bool
 ReadWayPointFile(const TCHAR *path, WayPointList &way_points,
                  RasterTerrain &terrain)
-{
-  char path_ascii[MAX_PATH];
-  FILE *fp;
-
-  unicode2ascii(path, path_ascii, sizeof(path_ascii));
-  fp = fopen(path_ascii, "rt");
-  if (fp == NULL)
-    return false;
-
-  ReadWayPointFile(fp, path, way_points, terrain);
-  fclose(fp);
-  return true;
-}
-
-bool
-ReadWayPointZipFile(const TCHAR *path, WayPointList &way_points,
-                    RasterTerrain &terrain)
 {
   char path_ascii[MAX_PATH];
   ZZIP_FILE *fp;
