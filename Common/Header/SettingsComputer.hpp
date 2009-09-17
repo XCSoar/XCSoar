@@ -38,8 +38,6 @@ Copyright_License {
 #ifndef XCSOAR_SETTINGS_COMPUTER_HPP
 #define XCSOAR_SETTINGS_COMPUTER_HPP
 
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
 #include <tchar.h>
 
 // control of calculations, these only changed by user interface

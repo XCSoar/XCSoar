@@ -40,6 +40,8 @@ Copyright_License {
 
 #include "Screen/Font.hpp"
 
+#include <windef.h>
+
 typedef enum{
   apMsDefault=0,
   apMsNone,
