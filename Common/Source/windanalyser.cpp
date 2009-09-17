@@ -61,6 +61,11 @@ Copyright_License {
 
 #include <stdlib.h>
 
+#ifndef _MSC_VER
+#include <algorithm>
+using std::min;
+#endif
+
 /*
   About Windanalysation
 

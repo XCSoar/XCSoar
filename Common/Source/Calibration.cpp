@@ -46,6 +46,11 @@ Copyright_License {
 
 #include <tchar.h>
 
+#ifndef _MSC_VER
+#include <algorithm>
+using std::max;
+#endif
+
 #define NUM_CAL_SPEED 25
 #define NUM_CAL_VARIO 101
 #define NUM_CAL_VSPEED 50
