@@ -317,9 +317,6 @@ GlideComputerTask::SortLandableWaypoints()
 
   for (i=0; i<MAXTASKPOINTS; i++){
     task_points[i].Index = SortedLandableIndex[i];
-    if (task.ValidTaskPoint(i)) {
-      way_points.set_calc(task_points[i].Index).InTask = false;
-    }
   }
 
   if (new_closest_waypoint) {
@@ -335,18 +332,10 @@ GlideComputerTask::SortLandableWaypoints()
         // than 2 km
         Message::AddMessage(TEXT("Closest Airfield Changed!"));
       }
-
     }
   }
 
-  if (EnableMultipleStartPoints) {
-    for (i=0; i<MAXSTARTPOINTS; i++) {
-      if (task_start_stats[i].Active &&
-          way_points.verify_index(task_start_points[i].Index)) {
-        way_points.set_calc(task_start_points[i].Index).InTask = true;
-      }
-    }
-  }
+  task.RefreshTask(SettingsComputer());
 
   if (active_waypoint_on_entry != ActiveTaskPoint){
     SelectedWaypoint = ActiveTaskPoint;
