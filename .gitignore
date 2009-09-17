@@ -17,4 +17,6 @@
 *.log
 *.dmp
 *.so
-XCSoar*-WINE
+*-WINE
+*-WINE.exe.so
+*-UNIX

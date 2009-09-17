@@ -18,7 +18,7 @@
 #               0 means quiet, and 2 prints the full compiler commands.
 #
 
-TARGETS = PC PPC2002 PPC2003 PPC2003X PNA WM5 ALTAIR ALTAIRPORTRAIT WINE 
+TARGETS = PC PPC2002 PPC2003 PPC2003X PNA WM5 ALTAIR ALTAIRPORTRAIT WINE UNIX
 
 # These targets are built when you don't specify the TARGET variable.
 DEFAULT_TARGETS = PC PPC2002 PPC2003 PNA WM5 ALTAIR WINE
@@ -129,6 +129,10 @@ endif
 
 endif
 
+ifeq ($(TARGET),UNIX)
+TCPATH :=
+endif
+
 ############# platform info
 
 HAVE_POSIX := n
@@ -138,6 +142,13 @@ HAVE_MSVCRT := y
 ifeq ($(TARGET),WINE)
 HAVE_POSIX := y
 HAVE_MSVCRT := n
+endif
+
+ifeq ($(TARGET),UNIX)
+HAVE_POSIX := y
+HAVE_WIN32 := n
+HAVE_MSVCRT := n
+ENABLE_SDL := y
 endif
 
 ifeq ($(CONFIG_PPC2002),y)
@@ -198,6 +209,11 @@ TARGET_EXEEXT :=
 NOSTRIP_SUFFIX :=
 endif
 
+ifeq ($(TARGET),UNIX)
+TARGET_EXEEXT :=
+NOSTRIP_SUFFIX :=
+endif
+
 OUTPUTS 	:= XCSoar-$(TARGET)$(TARGET_EXEEXT) XCSoarSimulator-$(TARGET)$(TARGET_EXEEXT)
 ifeq ($(CONFIG_ALTAIR),y)
 OUTPUTS 	:= XCSoar-$(TARGET)$(TARGET_EXEEXT)
@@ -249,6 +265,10 @@ INCLUDES	:= -I$(HDR) -I$(SRC)
 
 ifeq ($(HAVE_POSIX),n)
 INCLUDES += -I$(HDR)/mingw32compat
+endif
+
+ifeq ($(HAVE_WIN32),n)
+INCLUDES += -I$(HDR)/unix
 endif
 
 ######## compiler flags
@@ -348,6 +368,10 @@ endif
 
 ####### compiler target
 
+ifeq ($(TARGET),UNIX)
+TARGET_ARCH :=
+else
+
 ifeq ($(CONFIG_PC),y)
 TARGET_ARCH	:=-mwindows -march=i586 -mms-bitfields
 else
@@ -362,6 +386,9 @@ WINDRESFLAGS	:=-I$(HDR) -I$(SRC) $(CE_DEFS) -D_MINGW32_
 ifeq ($(CONFIG_ALTAIR),y)
 WINDRESFLAGS	+=-DGNAV
 endif
+
+endif # UNIX
+
 MAKEFLAGS	+=-r
 
 ####### build verbosity
