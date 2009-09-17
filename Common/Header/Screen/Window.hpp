@@ -140,6 +140,10 @@ public:
     ::SetFocus(hWnd);
   }
 
+  bool has_focus() const {
+    return hWnd == ::GetFocus();
+  }
+
   void set_capture() {
     ::SetCapture(hWnd);
   }

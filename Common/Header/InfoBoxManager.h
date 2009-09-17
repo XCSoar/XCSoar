@@ -61,7 +61,7 @@ class InfoBoxManager: public ActionInterface {
   static void DisplayInfoBox(void);
   static void InfoBoxDrawIfDirty();
   static void DestroyInfoBoxFormatters();
-  static int FindInfoBox(HWND hWnd);
+  static int GetFocused();
 public:
   static void Event_Select(int i);
   static void Event_Change(int i);
