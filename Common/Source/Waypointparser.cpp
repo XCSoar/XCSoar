@@ -182,6 +182,7 @@ FeedWayPointLine(WayPointList &way_points, RasterTerrain &terrain,
                  const TCHAR *line)
 {
   if (TempString[0] == '\0' ||
+      TempString[0] == 0x1a || // dos end of file
       _tcsstr(TempString, TEXT("**")) == TempString || // Look For Comment
       _tcsstr(TempString, TEXT("*")) == TempString) // Look For SeeYou Comment
     /* nothing was parsed, return without error condition */
