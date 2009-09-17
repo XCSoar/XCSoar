@@ -1155,10 +1155,8 @@ WndForm::on_paint(Canvas &canvas)
   rcClient.top += tsize.cy;
 
   if (mClientWindow && !EqualRect(&mClientRect, &rcClient)){
-
-    SetWindowPos(mClientWindow->GetHandle(), HWND_TOP,
-      rcClient.left, rcClient.top, rcClient.right-rcClient.left, rcClient.bottom-rcClient.top,
-      0);
+    mClientWindow->move(rcClient.left, rcClient.top);
+    mClientWindow->insert_after(HWND_TOP, true);
 
     CopyRect(&mClientRect, &rcClient);
 
@@ -1409,8 +1407,7 @@ WndButton::on_key_up(unsigned key_code)
         mDown = false;
         on_paint(get_canvas());
         if (mOnClickNotify != NULL) {
-          RECT mRc;
-          GetWindowRect(GetHandle(), &mRc);
+          RECT mRc = get_position();
           SetSourceRectangle(mRc);
           (mOnClickNotify)(this);
         }
@@ -1432,7 +1429,7 @@ WndButton::on_mouse_down(int x, int y)
     update(*GetBoundRect());
     update();
   }
-  SetCapture(GetHandle());
+  set_capture();
   return true;
 }
 
@@ -1443,7 +1440,7 @@ WndButton::on_mouse_double(int x, int y)
   mDown = true;
   update(*GetBoundRect());
   update();
-  SetCapture(GetHandle());
+  set_capture();
   return true;
 }
 
@@ -2385,7 +2382,7 @@ void WndListFrame::DrawScrollBar(Canvas &canvas) {
   if (!hScrollBarBitmapFill.defined())
     hScrollBarBitmapFill.load(IDB_SCROLLBARFILL);
 
-  Brush brush(0xFFFFFF);
+  Brush brush(Color(0xff, 0xff, 0xff));
   Pen pen(DEFAULTBORDERPENWIDTH, GetForeColor());
   canvas.select(pen);
 
