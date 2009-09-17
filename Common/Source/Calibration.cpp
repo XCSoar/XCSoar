@@ -73,24 +73,24 @@ void CalibrationInit(void) {
 void CalibrationSave(void) {
   int i, j;
   double v, w = 0, wav;
-  StartupStore(TEXT("Calibration data for TE vario\n"));
+  StartupStore(_T("Calibration data for TE vario\n"));
   for (i=0; i< NUM_CAL_SPEED; i++) {
     for (j=0; j< NUM_CAL_VARIO; j++) {
       if (calibration_tevario_num[i][j]>0) {
         v = i*2.0+20.0;
         w = (j-50.0)/10.0;
         wav = calibration_tevario_val[i][j]/calibration_tevario_num[i][j];
-        StartupStore(TEXT("%g %g %g %d\n"), v, w, wav,
+        StartupStore(_T("%g %g %g %d\n"), v, w, wav,
                   calibration_tevario_num[i][j]);
       }
     }
   }
-  StartupStore(TEXT("Calibration data for ASI\n"));
+  StartupStore(_T("Calibration data for ASI\n"));
   for (i=0; i< NUM_CAL_VSPEED; i++) {
     if (calibration_speed_num[i]>0) {
       v = i+20.0;
       wav = calibration_speed_val[i]/calibration_speed_num[i];
-      StartupStore(TEXT("%g %g %g %d\n"), v, w, wav,
+      StartupStore(_T("%g %g %g %d\n"), v, w, wav,
                 calibration_speed_num[i]);
     }
   }
