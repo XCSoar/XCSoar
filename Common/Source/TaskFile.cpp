@@ -56,7 +56,7 @@ void Task::ClearTaskFileName() {
   LastTaskFileName[0] = _T('\0');
 }
 
-const TCHAR* Task::getTaskFilename() {
+const TCHAR* Task::getTaskFilename() const {
   return LastTaskFileName;
 }
 
