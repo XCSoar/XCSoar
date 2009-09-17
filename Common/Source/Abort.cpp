@@ -304,12 +304,6 @@ GlideComputerTask::SortLandableWaypoints()
     }
   }
 
-  // set new waypoints in task
-
-  for (i = 0; way_points.verify_index(i); i++) {
-    way_points.set_calc(i).InTask = false;
-  }
-
   int last_closest_waypoint=0;
   if (new_closest_waypoint) {
     last_closest_waypoint = task_points[0].Index;

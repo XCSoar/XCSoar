@@ -332,14 +332,12 @@ public:
   {
   }
   void visit_reset() {
-    if (true) {
-      for (unsigned i = 0; way_points.verify_index(i); i++)
-        way_points.set_calc(i).InTask =
-          (way_points.get(i).Flags & HOME) == HOME;
-
-      if (way_points.verify_index(settings_computer->HomeWaypoint)) {
-        way_points.set_calc(settings_computer->HomeWaypoint).InTask = true;
-      }
+    for (unsigned i = 0; way_points.verify_index(i); i++)
+      way_points.set_calc(i).InTask =
+        (way_points.get(i).Flags & HOME) == HOME;
+    
+    if (way_points.verify_index(settings_computer->HomeWaypoint)) {
+      way_points.set_calc(settings_computer->HomeWaypoint).InTask = true;
     }
   }
   void visit_start_point(START_POINT &point, const unsigned i) { 
