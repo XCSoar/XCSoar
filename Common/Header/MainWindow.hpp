@@ -79,10 +79,6 @@ public:
   }
 
 protected:
-  virtual LRESULT on_message(HWND _hWnd, UINT message,
-                             WPARAM wParam, LPARAM lParam);
-
-  LRESULT on_colour(HDC hdc, int wdata);
   virtual Brush *on_color(Window &window, Canvas &canvas);
   virtual bool on_command(HWND hWnd, unsigned id, unsigned code);
   bool on_activate();
