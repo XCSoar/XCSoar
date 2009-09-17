@@ -749,9 +749,7 @@ void LoggerDeviceDeclare() {
   GetRegistryString(szRegistryAircraftType, Decl.AircraftType, 32);
   GetRegistryString(szRegistryAircraftRego, Decl.AircraftRego, 32);
 
-  for (i = 0; i < MAXTASKPOINTS; i++) {
-    if (task_points[i].Index == -1)
-      break;
+  for (i = 0; task.verify_index(i); i++) {
     Decl.waypoint[i] = &way_points.get(task_points[i].Index);
   }
   Decl.num_waypoints = i;
@@ -994,18 +992,14 @@ void guiStartLogger(const NMEA_INFO& gps_info,
     }
     TCHAR TaskMessage[1024];
     _tcscpy(TaskMessage,TEXT("Start Logger With Declaration\r\n"));
-    for(i=0;i<MAXTASKPOINTS;i++)
-      {
-	if(task_points[i].Index == -1)
-	  {
-	    if(i==0)
-	      _tcscat(TaskMessage,TEXT("None"));
-
-	    break;
-	  }
+    if (task.Valid()) {
+      for (i = 0; task.verify_index(i); i++) {
         _tcscat(TaskMessage, way_points.get(task_points[i].Index).Name);
 	_tcscat(TaskMessage,TEXT("\r\n"));
       }
+    } else {
+      _tcscat(TaskMessage,TEXT("None"));
+    }
 
     if(noAsk ||
        (MessageBoxX(TaskMessage,gettext(TEXT("Start Logger")),
@@ -1018,27 +1012,17 @@ void guiStartLogger(const NMEA_INFO& gps_info,
 	  LoggerHeader(gps_info);
 	  LoggerActive = true; // start logger after Header is completed.  Concurrency
 
-	  int ntp=0;
-	  for(i=0;i<MAXTASKPOINTS;i++)
-	    {
-	      if(task_points[i].Index == -1) {
-		break;
-	      }
-	      ntp++;
-	    }
-	  StartDeclaration(gps_info,ntp);
-	  for(i=0;i<MAXTASKPOINTS;i++)
-	    {
-	      if(task_points[i].Index == -1) {
-		break;
-	      }
-
+          if (task.Valid()) {
+            int ntp = task.getFinalWaypoint();
+            StartDeclaration(gps_info,ntp);
+            for (i = 0; task.verify_index(i); i++) {
               const WAYPOINT &way_point = way_points.get(task_points[i].Index);
               AddDeclaration(way_point.Location.Latitude,
                              way_point.Location.Longitude,
                              way_point.Name);
-	    }
-	  EndDeclaration();
+            }
+            EndDeclaration();
+          }
 	  ResetFRecord(); // reset timer & lastRecord string so if
 			  // logger is restarted, FRec appears at top
 			  // of file

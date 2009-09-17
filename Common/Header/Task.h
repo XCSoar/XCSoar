@@ -354,6 +354,10 @@ public:
   }
 
   // queries
+  virtual bool verify_index(const int i) { // read
+    // alias
+    return ValidTaskPoint(i);
+  }
   virtual bool ValidTaskPoint(const int i) { // read
     ScopeLock protect(mutexTaskData);
     return Task::ValidTaskPoint(i);
