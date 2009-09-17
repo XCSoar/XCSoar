@@ -128,6 +128,15 @@ endif
 
 ############# platform info
 
+HAVE_POSIX := n
+HAVE_WIN32 := y
+HAVE_MSVCRT := y
+
+ifeq ($(TARGET),WINE)
+HAVE_POSIX := y
+HAVE_MSVCRT := n
+endif
+
 ifeq ($(CONFIG_PPC2002),y)
 CE_MAJOR	:=3
 CE_MINOR	:=00
@@ -219,6 +228,7 @@ endif
 
 ######## windows definitions
 
+ifeq ($(HAVE_WIN32),y)
 ifeq ($(CONFIG_PC),y)
 CE_DEFS		:=-D_WIN32_WINDOWS=$(CE_VERSION) -DWINVER=$(CE_VERSION)
 CE_DEFS		+=-D_WIN32_IE=$(CE_VERSION) -DWINDOWSPC=1
@@ -226,15 +236,16 @@ else
 CE_DEFS		:=-D_WIN32_WCE=$(CE_VERSION)
 CE_DEFS		+=-DWIN32_PLATFORM_PSPC=$(CE_PLATFORM)
 endif
+endif
 
 UNICODE		:= -DUNICODE -D_UNICODE
 
 ######## paths
 
-ifeq ($(CONFIG_WINE),y)
 INCLUDES	:= -I$(HDR) -I$(SRC)
-else
-INCLUDES	:= -I$(HDR)/mingw32compat -I$(HDR) -I$(SRC)
+
+ifeq ($(HAVE_POSIX),n)
+INCLUDES += -I$(HDR)/mingw32compat
 endif
 
 ######## compiler flags
@@ -251,10 +262,10 @@ CPPFLAGS	+= -D_WINDOWS -DWIN32 -DCECORE -DUNDER_CE=300
 CPPFLAGS	+= -D__MINGW32__ -D__WINE__
 # -mno-cygwin
   else
-CPPFLAGS	+= $(UNICODE) -D_MBCS
+CPPFLAGS += -D_MBCS
   endif
 else
-CPPFLAGS	+= -D_ARM_ $(UNICODE)
+CPPFLAGS	+= -D_ARM_
   ifeq ($(CONFIG_ALTAIR),y)
 CPPFLAGS 	+=-IPPC2005 -DGNAV
     ifeq ($(ALTAIR_PORTRAIT),y)
@@ -263,10 +274,13 @@ CPPFLAGS	+= -DFORCEPORTRAIT
   endif
 endif
 
-ifeq ($(CONFIG_WINE),y)
+ifeq ($(HAVE_POSIX),y)
 CPPFLAGS += -DHAVE_POSIX
-else
+endif
+
+ifeq ($(HAVE_MSVCRT),y)
 CPPFLAGS += -DHAVE_MSVCRT
+CPPFLAGS += $(UNICODE)
 endif
 
 ifeq ($(DEBUG),y)
@@ -299,18 +313,23 @@ CXXFLAGS += -Wno-strict-aliasing
 
 ####### linker configuration
 
+ifeq ($(HAVE_WIN32),y)
 ifneq ($(CONFIG_WINE),y)
 LDFLAGS		:=-Wl,--major-subsystem-version=$(CE_MAJOR)
 LDFLAGS		+=-Wl,--minor-subsystem-version=$(CE_MINOR)
 ifeq ($(CONFIG_PC),y)
 LDFLAGS		+=-Wl,-subsystem,windows
 endif
-else
+endif
+endif
+
+ifeq ($(HAVE_POSIX),y)
 LDFLAGS += -lpthread
 endif
 
 LDFLAGS		+=$(PROFILE)
 
+ifeq ($(HAVE_WIN32),y)
 ifeq ($(CONFIG_PC),y)
 LDLIBS		:= -lcomctl32 -lkernel32 -luser32 -lgdi32 -ladvapi32 -lwinmm -lmsimg32 -lstdc++
 else
@@ -321,6 +340,7 @@ else
       LDLIBS		+= -limgdecmp
     endif
   endif
+endif
 endif
 
 ####### compiler target
