@@ -139,6 +139,9 @@ public:
   virtual void FlyDirectTo(const int index, 
                            const SETTINGS_COMPUTER &settings_computer);
 
+  virtual void advanceTaskPoint(const SETTINGS_COMPUTER &settings_computer);
+  virtual void retreatTaskPoint(const SETTINGS_COMPUTER &settings_computer);
+
   virtual void ClearTask(void);
   virtual void RotateStartPoints(const SETTINGS_COMPUTER &settings_computer);
   virtual void DefaultTask(const SETTINGS_COMPUTER &settings);
@@ -241,6 +244,19 @@ public:
     ScopeLock protect(mutexTaskData);
     Task::FlyDirectTo(index, settings_computer);
   }
+
+  virtual void advanceTaskPoint(const SETTINGS_COMPUTER &settings_computer)
+  { // write
+    ScopeLock protect(mutexTaskData);
+    Task::advanceTaskPoint(settings_computer);
+  }
+  virtual void retreatTaskPoint(const SETTINGS_COMPUTER &settings_computer)
+  {
+    ScopeLock protect(mutexTaskData);
+    Task::retreatTaskPoint(settings_computer);
+  }
+
+
   virtual void ClearTask(void)
   { // write
     ScopeLock protect(mutexTaskData);

@@ -376,69 +376,30 @@ ActionInterface::on_key_Waypoint(int UpDown)
   mutexTaskData.Lock();
 
   if(UpDown>0) {
-    if(ActiveTaskPoint < MAXTASKPOINTS) {
-      // Increment Waypoint
-      if(task_points[ActiveTaskPoint+1].Index >= 0) {
-	if(ActiveTaskPoint == 0)	{
-	  // manual start
-	  // TODO bug: allow restart
-	  // TODO bug: make this work only for manual
-	  /* JMW ILLEGAL
-	  if (Calculated().TaskStartTime==0) {
-	    Calculated().TaskStartTime = Basic().Time;
-	  }
-	  */
-	}
-	ActiveTaskPoint ++;
-	AdvanceArmed = false;
-	  /* JMW ILLEGAL
-	Calculated().LegStartTime = Basic().Time ;
-	  */
-      }
+    task.advanceTaskPoint(SettingsComputer());
+  } else if((UpDown == 2) && (task_points[0].Index >= 0)) {
       // No more, try first
-      else
-        if((UpDown == 2) && (task_points[0].Index >= 0)) {
-          /* ****DISABLED****
-          if(ActiveTaskPoint == 0)	{
-            // TODO bug: allow restart
-            // TODO bug: make this work only for manual
 
-            // TODO bug: This should trigger reset of flight stats, but
-            // should ask first...
-            if (Calculated().TaskStartTime==0) {
-              Calculated().TaskStartTime = Basic().Time ;
-            }
-          }
-          */
-          AdvanceArmed = false;
-          ActiveTaskPoint = 0;
-	  /* JMW illegal
-          Calculated().LegStartTime = Basic().Time ;
-	  */
-        }
-    }
-  }
-  else if (UpDown<0){
-    if(ActiveTaskPoint >0) {
-
-      ActiveTaskPoint --;
-      /*
-	XXX How do we know what the last one is?
-	} else if (UpDown == -2) {
-	ActiveTaskPoint = MAXTASKPOINTS;
+      /* ****DISABLED****
+         if(ActiveTaskPoint == 0)	{
+         // TODO bug: allow restart
+         // TODO bug: make this work only for manual
+         
+         // TODO bug: This should trigger reset of flight stats, but
+         // should ask first...
+         if (Calculated().TaskStartTime==0) {
+         Calculated().TaskStartTime = Basic().Time ;
+         }
+         }
+      AdvanceArmed = false;
+      ActiveTaskPoint = 0;
       */
-    } else {
-      if (ActiveTaskPoint==0) {
-
-        task.RotateStartPoints(SettingsComputer());
-
-	// restarted task..
-	//	TODO bug: not required? Calculated().TaskStartTime = 0;
-      }
-    }
-    glide_computer.ResetEnter();
-  }
-  else if (UpDown==0) {
+      /* JMW illegal
+         Calculated().LegStartTime = Basic().Time ;
+      */
+  } else if (UpDown<0){
+    task.retreatTaskPoint(SettingsComputer());
+  } else if (UpDown==0) {
     SelectedWaypoint = task_points[ActiveTaskPoint].Index;
     PopupWaypointDetails();
   }

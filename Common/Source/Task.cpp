@@ -917,3 +917,48 @@ Task::SetStartPoint(const int pointnum, const int waypointnum)
   }
 }
 
+void
+Task::advanceTaskPoint(const SETTINGS_COMPUTER &settings_computer)
+{
+  if(ActiveTaskPoint < MAXTASKPOINTS) {
+    // Increment Waypoint
+    if(task_points[ActiveTaskPoint+1].Index >= 0) {
+      if(ActiveTaskPoint == 0)	{
+        // manual start
+        // TODO bug: allow restart
+        // TODO bug: make this work only for manual
+        /* JMW ILLEGAL
+           if (Calculated().TaskStartTime==0) {
+           Calculated().TaskStartTime = Basic().Time;
+           }
+        */
+      }
+      ActiveTaskPoint ++;
+      AdvanceArmed = false;
+      /* JMW ILLEGAL
+         Calculated().LegStartTime = Basic().Time ;
+      */
+    }
+  }
+}
+
+
+void
+Task::retreatTaskPoint(const SETTINGS_COMPUTER &settings_computer)
+{
+  if(ActiveTaskPoint >0) {
+    ActiveTaskPoint --;
+    /*
+      XXX How do we know what the last one is?
+      } else if (UpDown == -2) {
+      ActiveTaskPoint = MAXTASKPOINTS;
+    */
+  } else {
+    if (ActiveTaskPoint==0) {
+      RotateStartPoints(settings_computer);
+      // restarted task..
+      //	TODO bug: not required? Calculated().TaskStartTime = 0;
+    }
+  }
+  //JMW illegal glide_computer.ResetEnter();
+}
