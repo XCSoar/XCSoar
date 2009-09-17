@@ -173,11 +173,39 @@ static int ParseWayPointError(int LineNumber, const TCHAR *FileName,
   return(1);
 }
 
+static bool
+FeedWayPointLine(WayPointList &way_points, RasterTerrain &terrain,
+                 const TCHAR *line)
+{
+  if (TempString[0] == '\0' ||
+      _tcsstr(TempString, TEXT("**")) == TempString || // Look For Comment
+      _tcsstr(TempString, TEXT("*")) == TempString) // Look For SeeYou Comment
+    /* nothing was parsed, return without error condition */
+    return true;
+
+  WAYPOINT *new_waypoint = way_points.append();
+  if (new_waypoint == NULL)
+    return false; // failed to allocate
+
+  new_waypoint->Details = NULL;
+
+  if (!ParseWayPointString(TempString, new_waypoint, terrain)) {
+    way_points.pop();
+    return false;
+  }
+
+  if (!WaypointInTerrainRange(new_waypoint, terrain)) {
+    way_points.pop();
+    return true;
+  }
+
+  return true;
+}
+
 static void
 ReadWayPointFile(ZZIP_FILE *fp, const TCHAR *CurrentWpFileName,
                  WayPointList &way_points, RasterTerrain &terrain)
 {
-  WAYPOINT *new_waypoint;
 //  TCHAR szTemp[100];
   int nTrigger=10;
   DWORD fSize, fPos=0;
@@ -205,39 +233,9 @@ ReadWayPointFile(ZZIP_FILE *fp, const TCHAR *CurrentWpFileName,
       XCSoarInterface::StepProgressDialog();
     }
 
-    if (_tcsstr(TempString, TEXT("**")) == TempString) // Look For Comment
-      continue;
-
-    if (_tcsstr(TempString, TEXT("*")) == TempString)  // Look For SeeYou Comment
-      continue;
-
-    if (TempString[0] == '\0')
-      continue;
-
-    new_waypoint = way_points.append();
-    if (new_waypoint == NULL)
-      return; // failed to allocate
-
-    new_waypoint->Details = NULL;
-#ifdef HAVEEXCEPTIONS
-    __try{
-#endif
-      if (!ParseWayPointString(TempString, new_waypoint, terrain) ||
-          !WaypointInTerrainRange(new_waypoint, terrain))
-        way_points.pop();
-      continue;
-#ifdef HAVEEXCEPTIONS
-    }__except(EXCEPTION_EXECUTE_HANDLER){
-      if (ParseWayPointError(nLineNumber, CurrentWpFileName, TempString)==1)
-        continue;
-    }
-#endif
-
-    if (ParseWayPointError(nLineNumber, CurrentWpFileName, TempString)==1)
-      continue;
-
-    break;
-
+    if (!FeedWayPointLine(way_points, terrain, TempString) &&
+        ParseWayPointError(nLineNumber, CurrentWpFileName, TempString) != 1)
+      break;
   }
 }
 
