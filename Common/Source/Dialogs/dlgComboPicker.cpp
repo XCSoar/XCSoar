@@ -193,7 +193,11 @@ int dlgComboPicker(WndProperty* theProperty){
     wComboPopupListEntry = (WndOwnerDrawFrame*)wf->FindByName(TEXT("frmComboPopupListEntry"));
     assert(wComboPopupListEntry!=NULL);
     wComboPopupListEntry->SetCanFocus(true);
+#ifdef ENABLE_SDL
+    wComboPopupListEntry->set_focus(); // XXX
+#else /* !ENABLE_SDL */
     wComboPopupListEntry->SetFocused(true, wComboPopupWndProperty->GetHandle());
+#endif /* !ENABLE_SDL */
 
 
     ComboPopupDataField = wComboPopupWndProperty->GetDataField();

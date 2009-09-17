@@ -67,14 +67,13 @@ OnAirspaceColoursPaintListItem(WindowControl * Sender, Canvas &canvas)
     int i = DrawListIndex;
     canvas.white_brush();
     canvas.black_pen();
-    SetBkColor(canvas, Color(0xFF, 0xFF, 0xFF));
+    canvas.set_background_color(Color(0xFF, 0xFF, 0xFF));
     canvas.select(MapGfx.GetAirspaceBrush(1)); // this is the solid brush
-    SetTextColor(canvas, MapGfx.GetAirspaceColour(i));
-    Rectangle(canvas,
-              100*InfoBoxLayout::scale,
-              2*InfoBoxLayout::scale,
-              180*InfoBoxLayout::scale,
-              22*InfoBoxLayout::scale);
+    canvas.set_text_color(MapGfx.GetAirspaceColour(i));
+    canvas.rectangle(100 * InfoBoxLayout::scale,
+                     2 * InfoBoxLayout::scale,
+                     180 * InfoBoxLayout::scale,
+                     22 * InfoBoxLayout::scale);
   }
 }
 
