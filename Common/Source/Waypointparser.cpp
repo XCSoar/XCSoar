@@ -502,7 +502,22 @@ static double ReadAltitude(const TCHAR *temp)
   return Altitude;
 }
 
+bool
+ReadWayPointFile(const TCHAR *path, WayPointList &way_points,
+                 RasterTerrain &terrain)
+{
+  char path_ascii[MAX_PATH];
+  ZZIP_FILE *fp;
 
+  unicode2ascii(path, path_ascii, sizeof(path_ascii));
+  fp = zzip_fopen(path_ascii, "rt");
+  if (fp == NULL)
+    return false;
+
+  ReadWayPointFile(fp, path, way_points, terrain);
+  zzip_fclose(fp);
+  return true;
+}
 
 void
 ReadWayPoints(WayPointList &way_points, RasterTerrain &terrain)
@@ -511,9 +526,7 @@ ReadWayPoints(WayPointList &way_points, RasterTerrain &terrain)
 
   TCHAR szFile1[MAX_PATH] = TEXT("\0");
   TCHAR szFile2[MAX_PATH] = TEXT("\0");
-  char zfilename[MAX_PATH] = "\0";
 
-  ZZIP_FILE *fp=NULL;
 #ifdef HAVEEXCEPTIONS
   __try{
 #endif
@@ -529,27 +542,16 @@ ReadWayPoints(WayPointList &way_points, RasterTerrain &terrain)
 
     if (_tcslen(szFile1)>0) {
       ExpandLocalPath(szFile1);
-      unicode2ascii(szFile1, zfilename, MAX_PATH);
-      fp = zzip_fopen(zfilename, "rt");
     } else {
-      static TCHAR  szMapFile[MAX_PATH] = TEXT("\0");
-      GetRegistryString(szRegistryMapFile, szMapFile, MAX_PATH);
-      ExpandLocalPath(szMapFile);
-      _tcscat(szMapFile,TEXT("/"));
-      _tcscat(szMapFile,TEXT("waypoints.xcw"));
-      unicode2ascii(szMapFile, zfilename, MAX_PATH);
-      fp  = zzip_fopen(zfilename, "rt");
-      if (fp != NULL) {
-	StartupStore(TEXT("Waypoint file from xcm\n%s\n"), szMapFile);
-      }
+      GetRegistryString(szRegistryMapFile, szFile1, MAX_PATH);
+      ExpandLocalPath(szFile1);
+      _tcscat(szFile1, TEXT("/"));
+      _tcscat(szFile1, TEXT("waypoints.xcw"));
     }
 
-    if(fp != NULL)
+    globalFileNum = 0;
+    if (ReadWayPointFile(szFile1, way_points, terrain))
       {
-        globalFileNum = 0;
-        ReadWayPointFile(fp, szFile1, way_points, terrain);
-        zzip_fclose(fp);
-        fp = 0;
         // read OK, so set the registry to the actual file name
         #ifndef HAVEEXCEPTIONS
         ContractLocalPath(szFile1);
@@ -583,13 +585,9 @@ ReadWayPoints(WayPointList &way_points, RasterTerrain &terrain)
 
     if (_tcslen(szFile2)>0){
       ExpandLocalPath(szFile2);
-      unicode2ascii(szFile2, zfilename, MAX_PATH);
-      fp = zzip_fopen(zfilename, "rt");
-      if(fp != NULL){
-        globalFileNum = 1;
-        ReadWayPointFile(fp, szFile2, way_points, terrain);
-        zzip_fclose(fp);
-        fp = NULL;
+
+      globalFileNum = 1;
+      if (ReadWayPointFile(szFile2, way_points, terrain)) {
         // read OK, so set the registry to the actual file name
         ContractLocalPath(szFile2);
         SetRegistryString(szRegistryAdditionalWayPointFile, szFile2);
