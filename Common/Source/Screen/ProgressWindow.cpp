@@ -58,7 +58,7 @@ ProgressWindow::ProgressWindow(ContainerWindow &parent)
 
   TCHAR Temp[1024];
   _stprintf(Temp, _T("%s %s"), gettext(_T("Version")), XCSoar_Version);
-  ::SetWindowText(::GetDlgItem(hWnd, IDC_VERSION), Temp);
+  set_item_text(IDC_VERSION, Temp);
 
 #ifdef WINDOWSPC
   RECT rc = parent.get_client_rect();
@@ -76,46 +76,64 @@ ProgressWindow::ProgressWindow(ContainerWindow &parent)
   set_range(0, 100);
   set_step(5);
 
+#ifndef ENABLE_SDL
   ::SetForegroundWindow(hWnd);
-  ::UpdateWindow(hWnd);
+#endif /* !ENABLE_SDL */
+  update();
 }
 
 void
 ProgressWindow::set_message(const TCHAR *text)
 {
-  ::SetDlgItemText(hWnd, IDC_MESSAGE, text);
-  ::UpdateWindow(hWnd);
+  set_item_text(IDC_MESSAGE, text);
+  update();
 }
 
 void
 ProgressWindow::set_range(unsigned min_value, unsigned max_value)
 {
-  ::SendMessage(::GetDlgItem(hWnd, IDC_PROGRESS1),
+#ifdef ENABLE_SDL
+  // XXX
+#else /* !ENABLE_SDL */
+  ::SendMessage(get_item(IDC_PROGRESS1),
                 PBM_SETRANGE, (WPARAM)0,
                 (LPARAM)MAKELPARAM(min_value, max_value));
+#endif /* !ENABLE_SDL */
 }
 
 void
 ProgressWindow::set_step(unsigned size)
 {
-  ::SendMessage(::GetDlgItem(hWnd, IDC_PROGRESS1),
+#ifdef ENABLE_SDL
+  // XXX
+#else /* !ENABLE_SDL */
+  ::SendMessage(get_item(IDC_PROGRESS1),
                 PBM_SETSTEP, (WPARAM)size, (LPARAM)0);
+#endif /* !ENABLE_SDL */
 }
 
 void
 ProgressWindow::set_pos(unsigned value)
 {
-  ::SendMessage(::GetDlgItem(hWnd, IDC_PROGRESS1), PBM_SETPOS,
+#ifdef ENABLE_SDL
+  // XXX
+#else /* !ENABLE_SDL */
+  ::SendMessage(get_item(IDC_PROGRESS1), PBM_SETPOS,
                 value, 0);
-  ::UpdateWindow(hWnd);
+#endif /* !ENABLE_SDL */
+  update();
 }
 
 void
 ProgressWindow::step()
 {
-  ::SendMessage(::GetDlgItem(hWnd, IDC_PROGRESS1), PBM_STEPIT,
+#ifdef ENABLE_SDL
+  // XXX
+#else /* !ENABLE_SDL */
+  ::SendMessage(get_item(IDC_PROGRESS1), PBM_STEPIT,
                 (WPARAM)0, (LPARAM)0);
-  ::UpdateWindow(hWnd);
+#endif /* !ENABLE_SDL */
+  update();
 }
 
 bool

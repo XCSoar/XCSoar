@@ -10,6 +10,7 @@
 #   TARGET      The name of the target platform.  See the TARGETS variable
 #               below for a list of valid target platforms.
 #
+#   ENABLE_SDL  If set to "y", the UI is drawn with libSDL.
 #
 #   DEBUG       If set to "y", the debugging version of XCSoar is built.
 #
@@ -17,7 +18,12 @@
 #               0 means quiet, and 2 prints the full compiler commands.
 #
 
-TARGETS = PC PPC2002 PPC2003 PPC2003X PNA WM5 ALTAIR ALTAIRPORTRAIT WINE 
+TARGETS = PC PPC2002 PPC2003 PPC2003X PNA WM5 ALTAIR ALTAIRPORTRAIT WINE UNIX
+
+# These targets are built when you don't specify the TARGET variable.
+DEFAULT_TARGETS = PC PPC2002 PPC2003 PNA WM5 ALTAIR WINE
+
+ENABLE_SDL := n
 
 #
 SRC=Common/Source
@@ -123,7 +129,27 @@ endif
 
 endif
 
+ifeq ($(TARGET),UNIX)
+TCPATH :=
+endif
+
 ############# platform info
+
+HAVE_POSIX := n
+HAVE_WIN32 := y
+HAVE_MSVCRT := y
+
+ifeq ($(TARGET),WINE)
+HAVE_POSIX := y
+HAVE_MSVCRT := n
+endif
+
+ifeq ($(TARGET),UNIX)
+HAVE_POSIX := y
+HAVE_WIN32 := n
+HAVE_MSVCRT := n
+ENABLE_SDL := y
+endif
 
 ifeq ($(CONFIG_PPC2002),y)
 CE_MAJOR	:=3
@@ -183,6 +209,11 @@ TARGET_EXEEXT :=
 NOSTRIP_SUFFIX :=
 endif
 
+ifeq ($(TARGET),UNIX)
+TARGET_EXEEXT :=
+NOSTRIP_SUFFIX :=
+endif
+
 OUTPUTS 	:= XCSoar-$(TARGET)$(TARGET_EXEEXT) XCSoarSimulator-$(TARGET)$(TARGET_EXEEXT)
 ifeq ($(CONFIG_ALTAIR),y)
 OUTPUTS 	:= XCSoar-$(TARGET)$(TARGET_EXEEXT)
@@ -216,6 +247,7 @@ endif
 
 ######## windows definitions
 
+ifeq ($(HAVE_WIN32),y)
 ifeq ($(CONFIG_PC),y)
 CE_DEFS		:=-D_WIN32_WINDOWS=$(CE_VERSION) -DWINVER=$(CE_VERSION)
 CE_DEFS		+=-D_WIN32_IE=$(CE_VERSION) -DWINDOWSPC=1
@@ -223,15 +255,20 @@ else
 CE_DEFS		:=-D_WIN32_WCE=$(CE_VERSION)
 CE_DEFS		+=-DWIN32_PLATFORM_PSPC=$(CE_PLATFORM)
 endif
+endif
 
 UNICODE		:= -DUNICODE -D_UNICODE
 
 ######## paths
 
-ifeq ($(CONFIG_WINE),y)
 INCLUDES	:= -I$(HDR) -I$(SRC)
-else
-INCLUDES	:= -I$(HDR)/mingw32compat -I$(HDR) -I$(SRC)
+
+ifeq ($(HAVE_POSIX),n)
+INCLUDES += -I$(HDR)/mingw32compat
+endif
+
+ifeq ($(HAVE_WIN32),n)
+INCLUDES += -I$(HDR)/unix
 endif
 
 ######## compiler flags
@@ -248,10 +285,10 @@ CPPFLAGS	+= -D_WINDOWS -DWIN32 -DCECORE -DUNDER_CE=300
 CPPFLAGS	+= -D__MINGW32__ -D__WINE__
 # -mno-cygwin
   else
-CPPFLAGS	+= $(UNICODE) -D_MBCS
+CPPFLAGS += -D_MBCS
   endif
 else
-CPPFLAGS	+= -D_ARM_ $(UNICODE)
+CPPFLAGS	+= -D_ARM_
   ifeq ($(CONFIG_ALTAIR),y)
 CPPFLAGS 	+=-IPPC2005 -DGNAV
     ifeq ($(ALTAIR_PORTRAIT),y)
@@ -260,10 +297,13 @@ CPPFLAGS	+= -DFORCEPORTRAIT
   endif
 endif
 
-ifeq ($(CONFIG_WINE),y)
+ifeq ($(HAVE_POSIX),y)
 CPPFLAGS += -DHAVE_POSIX
-else
+endif
+
+ifeq ($(HAVE_MSVCRT),y)
 CPPFLAGS += -DHAVE_MSVCRT
+CPPFLAGS += $(UNICODE)
 endif
 
 ifeq ($(DEBUG),y)
@@ -296,18 +336,23 @@ CXXFLAGS += -Wno-strict-aliasing
 
 ####### linker configuration
 
+ifeq ($(HAVE_WIN32),y)
 ifneq ($(CONFIG_WINE),y)
 LDFLAGS		:=-Wl,--major-subsystem-version=$(CE_MAJOR)
 LDFLAGS		+=-Wl,--minor-subsystem-version=$(CE_MINOR)
 ifeq ($(CONFIG_PC),y)
 LDFLAGS		+=-Wl,-subsystem,windows
 endif
-else
+endif
+endif
+
+ifeq ($(HAVE_POSIX),y)
 LDFLAGS += -lpthread
 endif
 
 LDFLAGS		+=$(PROFILE)
 
+ifeq ($(HAVE_WIN32),y)
 ifeq ($(CONFIG_PC),y)
 LDLIBS		:= -lcomctl32 -lkernel32 -luser32 -lgdi32 -ladvapi32 -lwinmm -lmsimg32 -lstdc++
 else
@@ -319,8 +364,13 @@ else
     endif
   endif
 endif
+endif
 
 ####### compiler target
+
+ifeq ($(TARGET),UNIX)
+TARGET_ARCH :=
+else
 
 ifeq ($(CONFIG_PC),y)
 TARGET_ARCH	:=-mwindows -march=i586 -mms-bitfields
@@ -336,6 +386,9 @@ WINDRESFLAGS	:=-I$(HDR) -I$(SRC) $(CE_DEFS) -D_MINGW32_
 ifeq ($(CONFIG_ALTAIR),y)
 WINDRESFLAGS	+=-DGNAV
 endif
+
+endif # UNIX
+
 MAKEFLAGS	+=-r
 
 ####### build verbosity
@@ -599,9 +652,7 @@ OBJS	:=\
 	$(SRC)/Screen/Brush.o \
 	$(SRC)/Screen/Canvas.o \
 	$(SRC)/Screen/VirtualCanvas.o \
-	$(SRC)/Screen/BufferCanvas.o \
 	$(SRC)/Screen/BitmapCanvas.o \
-	$(SRC)/Screen/PaintCanvas.o \
 	$(SRC)/Screen/Font.o \
 	$(SRC)/Screen/Pen.o \
 	$(SRC)/Screen/LabelBlock.o \
@@ -699,10 +750,20 @@ ifneq ($(CONFIG_WINE),y)
 COMPAT += $(COMPATSRC)/errno.cpp
 endif
 
+ifeq ($(ENABLE_SDL),y)
+LDLIBS += -L/usr/local/i586-mingw32msvc/lib -lSDL -lSDL_gfx -lSDL_ttf
+CPPFLAGS += -DENABLE_SDL -I/usr/local/i586-mingw32msvc/include
+OBJS += $(SRC)/Screen/Timer.o
+else
+OBJS += \
+	$(SRC)/Screen/BufferCanvas.o \
+	$(SRC)/Screen/PaintCanvas.o
+endif
+
 all: all-$(TARGET)
 
 # if no TARGET is set, build all targets
-all-: $(addprefix call-,$(TARGETS))
+all-: $(addprefix call-,$(DEFAULT_TARGETS))
 call-%:
 	$(MAKE) TARGET=$(patsubst call-%,%,$@) DEBUG=$(DEBUG) V=$(V)
 
@@ -839,6 +900,21 @@ cxx-flags	=$(DEPFLAGS) $(CXXFLAGS) $(CPPFLAGS) $(CPPFLAGS_$(dirtarget)) $(TARGET
 	$(Q)$(CXX) $(cxx-flags) -D_SIM_ -c $(OUTPUT_OPTION) $<
 	@sed -i '1s,^[^ :]*,$@,' $(DEPFILE)
 
+RUN_WAY_POINT_PARSER_OBJS = \
+	$(SRC)/Waypointparser.o \
+	$(SRC)/WayPointList.o \
+	$(SRC)/Math/Earth.o \
+	$(SRC)/Math/FastMath.o \
+	$(SRC)/Math/Geometry.o \
+	$(SRC)/UtilsText.o \
+	$(SRC)/zzip-$(TARGET).a \
+	$(SRC)/compat-$(TARGET).a \
+	$(SRC)/LocalPath.o \
+	$(SRC)/Test/RunWayPointParser.o
+RunWayPointParser-$(TARGET)$(TARGET_EXEEXT): $(RUN_WAY_POINT_PARSER_OBJS:.o=-$(TARGET).o)
+	@$(NQ)echo "  LINK    $@"
+	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
+
 IGNORE	:= \( -name .svn -o -name CVS -o -name .git \) -prune -o
 
 clean-WINE:
@@ -871,5 +947,5 @@ include $(wildcard $(SRC)/*/.*.d)
 endif
 
 test: .PHONY
-	cd test; make test
+	$(MAKE) -C test test
 

@@ -89,10 +89,10 @@ void InsertLDRotary(const DERIVED_INFO *Calculated,
 		    int distance, int altitude) {
   static short errs=0;
 
-  if (Calculated->OnGround == TRUE) {
+  if (Calculated->OnGround) {
     return;
   }
-  if (Calculated->Circling == TRUE) {
+  if (Calculated->Circling) {
     return;
   }
   
@@ -127,7 +127,7 @@ int CalculateLDRotary(const DERIVED_INFO *Calculated, ldrotary_s *buf ) {
   int altdiff, eff;
   short bcold;
   
-  if ( Calculated->Circling == TRUE || Calculated->OnGround == TRUE) {
+  if (Calculated->Circling || Calculated->OnGround) {
     return(0);
   }
   

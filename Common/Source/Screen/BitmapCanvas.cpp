@@ -38,6 +38,8 @@ Copyright_License {
 #include "Screen/BitmapCanvas.hpp"
 #include "Screen/Bitmap.hpp"
 
+#ifndef ENABLE_SDL
+
 void
 BitmapCanvas::select(const Bitmap &bitmap, unsigned _width, unsigned _height)
 {
@@ -49,3 +51,5 @@ void BitmapCanvas::clear()
   SelectObject(dc, old);
   old = NULL;
 }
+
+#endif /* !ENABLE_SDL */

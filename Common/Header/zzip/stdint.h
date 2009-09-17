@@ -12,7 +12,7 @@
 
 #ifdef ZZIP_HAVE_STDINT_H
     /* ISO C 9X: 7.18 Integer types <stdint.h> */
-//JMW#include <stdint.h>
+#include <stdint.h>
 #elif defined ZZIP_HAVE_SYS_INT_TYPES_H /*solaris*/
 //JMW#include <sys/int_types.h>
 #elif defined ZZIP_HAVE_INTTYPES_H /*freebsd*/

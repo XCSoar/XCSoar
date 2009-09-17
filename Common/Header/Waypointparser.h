@@ -53,6 +53,14 @@ struct WAYPOINT;
 struct GEOPOINT;
 struct SETTINGS_COMPUTER;
 
+/**
+ * Reads a text file, and appends its way points to the specified
+ * WayPointList.
+ */
+bool
+ReadWayPointFile(const TCHAR *path, WayPointList &way_points,
+                 RasterTerrain &terrain);
+
 void
 ReadWayPoints(WayPointList &way_points, RasterTerrain &terrain);
 

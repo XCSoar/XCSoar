@@ -107,20 +107,15 @@ void FlightStatistics::RenderBarograph(Canvas &canvas, const RECT rc)
     }
   }
 
-  HPEN   hpHorizonGround;
-  HBRUSH hbHorizonGround;
-  hpHorizonGround = (HPEN)CreatePen(PS_SOLID, IBLSCALE(1),
-                                    Chart::GROUND_COLOUR);
-  hbHorizonGround = (HBRUSH)CreateSolidBrush(Chart::GROUND_COLOUR);
-  SelectObject(canvas, hpHorizonGround);
-  SelectObject(canvas, hbHorizonGround);
+  Pen hpHorizonGround(Pen::SOLID, IBLSCALE(1), Chart::GROUND_COLOUR);
+  Brush hbHorizonGround(Chart::GROUND_COLOUR);
+
+  canvas.select(hpHorizonGround);
+  canvas.select(hbHorizonGround);
 
   chart.DrawFilledLineGraph(&Altitude_Terrain, Chart::GROUND_COLOUR);
   canvas.white_pen();
   canvas.white_brush();
-
-  DeleteObject(hpHorizonGround);
-  DeleteObject(hbHorizonGround);
 
   chart.DrawXGrid(0.5, Altitude.x_min, Chart::STYLE_THINDASHPAPER, 0.5, true);
   chart.DrawYGrid(1000/ALTITUDEMODIFY, 0, Chart::STYLE_THINDASHPAPER, 1000, true);
@@ -798,7 +793,7 @@ void FlightStatistics::RenderAirspace(Canvas &canvas, const RECT rc) {
 
   int type;
 
-  Pen mpen(Pen::BLANK, 0, RGB(0xf0,0xf0,0xb0));
+  Pen mpen(Pen::BLANK, 0, Color(0xf0,0xf0,0xb0));
   canvas.select(mpen);
 
   RECT rcd;
@@ -854,7 +849,7 @@ void FlightStatistics::RenderAirspace(Canvas &canvas, const RECT rc) {
 
   canvas.white_pen();
   canvas.white_brush();
-  SetTextColor(canvas, RGB(0xff,0xff,0xff));
+  canvas.set_text_color(Color(0xff,0xff,0xff));
 
   chart.DrawXGrid(5.0/DISTANCEMODIFY, 0,
 		  Chart::STYLE_THINDASHPAPER, 5.0, true);
@@ -875,7 +870,7 @@ void FlightStatistics::RenderAirspace(Canvas &canvas, const RECT rc) {
   line[2].y = line[0].y-delta/2;
   line[3].x = (line[1].x+line[0].x)/2;
   line[3].y = line[0].y;
-  Polygon(canvas, line, 4);
+  canvas.polygon(line, 4);
 
   chart.DrawXLabel(TEXT("D"));
   chart.DrawYLabel(TEXT("h"));

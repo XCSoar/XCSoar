@@ -38,8 +38,12 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_FONT_HPP
 #define XCSOAR_SCREEN_FONT_HPP
 
+#ifdef ENABLE_SDL
+#include <SDL/SDL_ttf.h>
+#else
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
+#endif
 
 typedef struct{
   int Height;
@@ -52,7 +56,11 @@ typedef struct{
  */
 class Font {
 protected:
+#ifdef ENABLE_SDL
+  TTF_Font *font;
+#else
   HFONT font;
+#endif
 
 public:
   Font():font(NULL) {}
@@ -63,12 +71,22 @@ public:
     return font != NULL;
   }
 
+#ifdef ENABLE_SDL
+  bool set(const char *file, int ptsize);
+#else
   bool set(const LOGFONT *lplf);
+#endif
   void reset();
 
+#ifdef ENABLE_SDL
+  TTF_Font *native() const {
+    return font;
+  }
+#else
   HFONT native() const {
     return font;
   }
+#endif
 };
 
 #endif

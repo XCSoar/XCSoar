@@ -38,10 +38,7 @@ Copyright_License {
 #ifndef XCSOAR_NMEA_DERIVED_H
 #define XCSOAR_NMEA_DERIVED_H
 
-#define WIN32_LEAN_AND_MEAN		// Exclude rarely-used stuff from Windows headers
-#include <windows.h>
 #include "Screen/shapelib/mapshape.h"
-
 #include "GeoPoint.hpp"
 
 #define NUMTHERMALBUCKETS 10

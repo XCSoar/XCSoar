@@ -47,7 +47,7 @@ Copyright_License {
 #define BORDER_X 24
 #define BORDER_Y 19
 
-const COLORREF Chart::GROUND_COLOUR = RGB(157,101,60);
+const Color Chart::GROUND_COLOUR(157,101,60);
 
 void Chart::ResetScale() {
   unscaled_y = true;
@@ -175,19 +175,19 @@ void Chart::StyleLine(const POINT l1, const POINT l2,
 		 minwidth,
 		 l1,
 		 l2,
-		 RGB(0,50,255), rc);
+                 Color(0,50,255), rc);
     break;
   case STYLE_REDTHICK:
     canvas.clipped_dashed_line(3,
 		 l1,
 		 l2,
-		 RGB(200,50,50), rc);
+                               Color(200,50,50), rc);
     break;
   case STYLE_DASHGREEN:
     canvas.clipped_dashed_line(2,
 		 line[0],
 		 line[1],
-		 RGB(0,255,0), rc);
+                               Color(0,255,0), rc);
     break;
   case STYLE_MEDIUMBLACK:
 #ifndef GNAV
@@ -202,7 +202,7 @@ void Chart::StyleLine(const POINT l1, const POINT l2,
     canvas.clipped_dashed_line(1,
 		 l1,
 		 l2,
-		 RGB(0x60,0x60,0x60), rc);
+                               Color(0x60,0x60,0x60), rc);
     break;
 
   default:
@@ -215,8 +215,7 @@ void Chart::StyleLine(const POINT l1, const POINT l2,
 void Chart::DrawLabel(const TCHAR *text,
 		      const double xv, const double yv) {
 
-  SIZE tsize;
-  GetTextExtentPoint(canvas, text, _tcslen(text), &tsize);
+  SIZE tsize = canvas.text_size(text);
   int x = (int)((xv-x_min)*xscale)+rc.left-tsize.cx/2+BORDER_X;
   int y = (int)((y_max-yv)*yscale)+rc.top-tsize.cy/2;
   canvas.background_opaque();
@@ -227,10 +226,9 @@ void Chart::DrawLabel(const TCHAR *text,
 
 void Chart::DrawNoData() {
 
-  SIZE tsize;
   TCHAR text[80];
   _stprintf(text,TEXT("%s"), gettext(TEXT("No data")));
-  GetTextExtentPoint(canvas, text, _tcslen(text), &tsize);
+  SIZE tsize = canvas.text_size(text);
   int x = (int)(rc.left+rc.right-tsize.cx)/2;
   int y = (int)(rc.top+rc.bottom-tsize.cy)/2;
   canvas.background_opaque();
@@ -240,9 +238,8 @@ void Chart::DrawNoData() {
 
 
 void Chart::DrawXLabel(const TCHAR *text) {
-  SIZE tsize;
   canvas.select(MapLabelFont);
-  GetTextExtentPoint(canvas, text, _tcslen(text), &tsize);
+  SIZE tsize = canvas.text_size(text);
   int x = rc.right-tsize.cx-IBLSCALE(3);
   int y = rc.bottom-tsize.cy;
   canvas.text_opaque(x, y, text);
@@ -250,9 +247,8 @@ void Chart::DrawXLabel(const TCHAR *text) {
 
 
 void Chart::DrawYLabel(const TCHAR *text) {
-  SIZE tsize;
   canvas.select(MapLabelFont);
-  GetTextExtentPoint(canvas, text, _tcslen(text), &tsize);
+  SIZE tsize = canvas.text_size(text);
   int x = max(2,rc.left-tsize.cx);
   int y = rc.top;
   canvas.text_opaque(x, y, text);
@@ -345,8 +341,8 @@ void Chart::DrawBarChart(LeastSquares* lsdata) {
     return;
   }
 
-  SelectObject(canvas, GetStockObject(WHITE_PEN));
-  SelectObject(canvas, GetStockObject(WHITE_BRUSH));
+  canvas.white_pen();
+  canvas.white_brush();
 
   int xmin, ymin, xmax, ymax;
 
@@ -355,18 +351,14 @@ void Chart::DrawBarChart(LeastSquares* lsdata) {
     ymin = (int)((y_max-y_min)*yscale)+rc.top;
     xmax = (int)((i+1+0.8)*xscale)+rc.left+BORDER_X;
     ymax = (int)((y_max-lsdata->ystore[i])*yscale)+rc.top;
-    Rectangle(canvas,
-              xmin,
-              ymin,
-              xmax,
-              ymax);
+    canvas.rectangle(xmin, ymin, xmax, ymax);
   }
 }
 
 
-void Chart::DrawFilledLineGraph(LeastSquares* lsdata,
-				const COLORREF color) {
-
+void
+Chart::DrawFilledLineGraph(LeastSquares* lsdata, const Color color)
+{
   POINT line[4];
 
   for (int i=0; i<lsdata->sum_n-1; i++) {
@@ -378,7 +370,7 @@ void Chart::DrawFilledLineGraph(LeastSquares* lsdata,
     line[2].y = rc.bottom-BORDER_Y;
     line[3].x = line[0].x;
     line[3].y = rc.bottom-BORDER_Y;
-    Polygon(canvas, line, 4);
+    canvas.polygon(line, 4);
   }
 }
 

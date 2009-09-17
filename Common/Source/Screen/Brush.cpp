@@ -38,6 +38,28 @@ Copyright_License {
 #include "Screen/Brush.hpp"
 #include "Screen/Bitmap.hpp"
 
+#ifdef ENABLE_SDL
+
+void
+Brush::set(const Color c)
+{
+  hollow = false;
+  color = c;
+}
+
+void
+Brush::set(const Bitmap &bitmap)
+{
+  // XXX
+}
+
+void
+Brush::reset()
+{
+}
+
+#else /* !ENABLE_SDL */
+
 void
 Brush::set(const Color c)
 {
@@ -60,3 +82,5 @@ Brush::reset()
     brush = NULL;
   }
 }
+
+#endif /* !ENABLE_SDL */

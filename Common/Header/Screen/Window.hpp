@@ -40,6 +40,11 @@ Copyright_License {
 
 #include "Screen/Font.hpp"
 
+#ifdef ENABLE_SDL
+#include "Screen/BufferCanvas.hpp"
+#include "Screen/Timer.hpp"
+#endif /* ENABLE_SDL */
+
 class ContainerWindow;
 
 /**
@@ -49,11 +54,22 @@ class ContainerWindow;
  */
 class Window {
 public:
+#ifdef ENABLE_SDL
+  friend class SDLTimer;
+  typedef SDLTimer *timer_t;
+#else
   typedef UINT_PTR timer_t;
+#endif
 
 protected:
+#ifdef ENABLE_SDL
+  ContainerWindow *parent;
+  int left, top;
+  BufferCanvas canvas;
+#else
   HWND hWnd;
   WNDPROC prev_wndproc;
+#endif
 
 private:
   /* copy constructor not allowed */
@@ -61,19 +77,43 @@ private:
   Window &operator=(const Window &window) { return *this; }
 
 public:
+#ifdef ENABLE_SDL
+  Window():parent(NULL) {}
+#else
   Window():hWnd(NULL), prev_wndproc(NULL) {}
+#endif
   ~Window() {
     reset();
   }
 
+#ifndef ENABLE_SDL
   operator HWND() const {
     return hWnd;
   };
+#endif
 
 public:
   bool defined() const {
+#ifdef ENABLE_SDL
+    return canvas.defined();
+#else
     return hWnd != NULL;
+#endif
   }
+
+#ifdef ENABLE_SDL
+  int get_top() const {
+    return top;
+  }
+
+  int get_left() const {
+    return left;
+  }
+
+  const Canvas &get_canvas() const {
+    return canvas;
+  }
+#endif
 
   void set(ContainerWindow *parent, LPCTSTR cls, LPCTSTR text,
            int left, int top, unsigned width, unsigned height,
@@ -84,70 +124,129 @@ public:
            bool center = false, bool notify = false, bool show = true,
            bool tabstop = false, bool border = false);
 
+#ifndef ENABLE_SDL
   void created(HWND _hWnd);
+#endif
 
   void reset();
 
   void move(int left, int top) {
+#ifdef ENABLE_SDL
+    this->left = left;
+    this->top = top;
+#else
     ::SetWindowPos(hWnd, NULL, left, top, 0, 0,
                    SWP_NOSIZE | SWP_NOZORDER |
                    SWP_NOACTIVATE | SWP_NOOWNERZORDER);
+#endif
   }
 
   void move(int left, int top, unsigned width, unsigned height) {
+#ifdef ENABLE_SDL
+#else /* !ENABLE_SDL */
     ::SetWindowPos(hWnd, NULL, left, top, width, height,
                    SWP_NOZORDER | SWP_NOACTIVATE | SWP_NOOWNERZORDER);
     // XXX store new size?
+#endif
   }
 
   void insert_after(HWND hWnd2, bool show=true) {
+#ifdef ENABLE_SDL
+    // XXX
+#else
     ::SetWindowPos(hWnd, hWnd2, 0, 0, 0, 0,
                    SWP_NOMOVE|SWP_NOSIZE|(show?SWP_SHOWWINDOW:SWP_HIDEWINDOW));
+#endif
   }
 
   void bring_to_top() {
+#ifdef ENABLE_SDL
+    // XXX
+#else
     ::BringWindowToTop(hWnd);
+#endif
   }
 
   void set_font(const Font &font) {
+#ifdef ENABLE_SDL
+    // XXX
+#else
     ::SendMessage(hWnd, WM_SETFONT,
                   (WPARAM)font.native(), MAKELPARAM(TRUE,0));
+#endif
   }
 
   void show() {
+#ifdef ENABLE_SDL
+    // XXX
+#else
     ::ShowWindow(hWnd, SW_SHOW);
+#endif
   }
 
   void hide() {
+#ifdef ENABLE_SDL
+    // XXX
+#else
     ::ShowWindow(hWnd, SW_HIDE);
+#endif
   }
 
   /**
    * Can this window get user input?
    */
   bool is_enabled() const {
+#ifdef ENABLE_SDL
+    return true;
+#else
     return ::IsWindowEnabled(hWnd);
+#endif
   }
 
   /**
    * Specifies whether this window can get user input.
    */
   void set_enabled(bool enabled) {
+#ifdef ENABLE_SDL
+    // XXX
+#else
     ::EnableWindow(hWnd, enabled);
+#endif
   }
 
   void set_focus() {
+#ifdef ENABLE_SDL
+    // XXX
+#else
     ::SetFocus(hWnd);
+#endif
+  }
+
+  bool has_focus() const {
+#ifdef ENABLE_SDL
+    return true; // XXX
+#else
+    return hWnd == ::GetFocus();
+#endif
   }
 
   void set_capture() {
+#ifdef ENABLE_SDL
+    // XXX
+#else
     ::SetCapture(hWnd);
+#endif
   }
 
   void release_capture() {
+#ifdef ENABLE_SDL
+    // XXX
+#else
     ::ReleaseCapture();
+#endif
   }
 
+#ifndef ENABLE_SDL
   WNDPROC set_wndproc(WNDPROC wndproc)
   {
     return (WNDPROC)::SetWindowLong(hWnd, GWL_WNDPROC, (LONG)wndproc);
@@ -174,32 +273,50 @@ public:
     // XXX on 64 bit machines?
     return (void *)get_userdata();
   }
+#endif /* !ENABLE_SDL */
 
   timer_t set_timer(unsigned id, unsigned ms)
   {
+#ifdef ENABLE_SDL
+    return new SDLTimer(*this, ms);
+#else
     ::SetTimer(hWnd, id, ms, NULL);
     return id;
+#endif
   }
 
   void kill_timer(timer_t id)
   {
+#ifdef ENABLE_SDL
+    delete id;
+#else
     ::KillTimer(hWnd, id);
+#endif
   }
 
   const RECT get_position() const
   {
     RECT rc;
+#ifdef ENABLE_SDL
+    // XXX
+#else
     ::GetWindowRect(hWnd, &rc);
+#endif
     return rc;
   }
 
   const RECT get_client_rect() const
   {
     RECT rc;
+#ifdef ENABLE_SDL
+    // XXX
+#else
     ::GetClientRect(hWnd, &rc);
+#endif
     return rc;
   }
 
+#ifndef ENABLE_SDL
   static LONG get_userdata(HWND hWnd) {
     return ::GetWindowLong(hWnd, GWL_USERDATA);
   }
@@ -228,13 +345,28 @@ public:
       ? get_unchecked(hWnd)
       : NULL;
   }
+#endif
 
   void send_command(const Window &from) {
+#ifdef ENABLE_SDL
+    // XXX
+#else /* !ENABLE_SDL */
     ::SendMessage(hWnd, WM_COMMAND, (WPARAM)0, (LPARAM)from.hWnd);
+#endif /* !ENABLE_SDL */
   }
 
   void send_user(unsigned id) {
+#ifdef ENABLE_SDL
+    SDL_Event event;
+    event.user.type = SDL_USEREVENT + id;
+    event.user.code = 0;
+    event.user.data1 = this;
+    event.user.data2 = NULL;
+
+    ::SDL_PushEvent(&event);
+#else /* !ENABLE_SDL */
     ::PostMessage(hWnd, WM_USER + id, (WPARAM)0, (LPARAM)0);
+#endif /* !ENABLE_SDL */
   }
 
 protected:
@@ -259,6 +391,8 @@ protected:
   virtual bool on_timer(timer_t id);
   virtual bool on_user(unsigned id);
 
+
+#ifndef ENABLE_SDL
   /**
    * Called by on_message() when the message was not handled by any
    * virtual method.  Calls the default handler.  This function is
@@ -270,8 +404,14 @@ protected:
 
   virtual LRESULT on_message(HWND hWnd, UINT message,
                              WPARAM wParam, LPARAM lParam);
+#endif /* !ENABLE_SDL */
 
 public:
+#ifdef ENABLE_SDL
+  void install_wndproc() {
+    // XXX
+  }
+#else /* !ENABLE_SDL */
   /**
    * This static method reads the Window* object from GWL_USERDATA and
    * calls on_message().
@@ -287,6 +427,7 @@ public:
     set_userdata(this);
     prev_wndproc = set_wndproc(WndProc);
   }
+#endif /* !ENABLE_SDL */
 };
 
 #endif

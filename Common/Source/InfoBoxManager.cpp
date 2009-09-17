@@ -320,17 +320,18 @@ void InfoBoxManager::Show() {
   }
 }
 
-int InfoBoxManager::FindInfoBox(HWND hWnd)
+int
+InfoBoxManager::GetFocused()
 {
   for (unsigned i = 0; i < numInfoWindows; i++)
-    if (hWnd == (HWND)*InfoBoxes[i])
+    if (InfoBoxes[i]->has_focus())
       return i;
 
   return -1;
 }
 
 void InfoBoxManager::Event_Select(int i) {
-  int InfoFocus = FindInfoBox(::GetFocus());
+  int InfoFocus = GetFocused();
 
   if (InfoFocus < 0) {
     InfoFocus = i >= 0 ? 0 : numInfoWindows - 1;
@@ -449,7 +450,7 @@ void InfoBoxManager::setType(unsigned i, char j)
 void InfoBoxManager::Event_Change(int i) {
   int j=0, k;
 
-  int InfoFocus = FindInfoBox(::GetFocus());
+  int InfoFocus = GetFocused();
   if (InfoFocus<0) {
     return;
   }
@@ -850,7 +851,7 @@ void InfoBoxManager::DisplayInfoBox(void)
 void InfoBoxManager::ProcessKey(int keycode) {
   unsigned i;
 
-  int InfoFocus = FindInfoBox(::GetFocus());
+  int InfoFocus = GetFocused();
   if (InfoFocus<0) return; // paranoid
 
   InputEvents::HideMenu();
@@ -874,7 +875,7 @@ void InfoBoxManager::DestroyInfoBoxFormatters() {
 }
 
 bool InfoBoxManager::IsFocus() {
-  return FindInfoBox(::GetFocus()) >= 0;
+  return GetFocused() >= 0;
 }
 
 void InfoBoxManager::InfoBoxDrawIfDirty(void) {

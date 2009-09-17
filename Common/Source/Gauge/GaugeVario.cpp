@@ -48,7 +48,6 @@ Copyright_License {
 #include "Screen/Graphics.hpp"
 #include "Screen/Fonts.hpp"
 #include "Screen/BitmapCanvas.hpp"
-#include "Screen/PaintCanvas.hpp"
 #include "Screen/ContainerWindow.hpp"
 #include "Math/Geometry.hpp"
 #include "McReady.h"

@@ -37,11 +37,23 @@ Copyright_License {
 
 #include "Screen/VirtualCanvas.hpp"
 
+#ifdef ENABLE_SDL
+
+VirtualCanvas::VirtualCanvas(const Canvas &canvas,
+                             unsigned _width, unsigned _height)
+{
+  set(_width, _height);
+}
+
+#else /* !ENABLE_SDL */
+
 VirtualCanvas::VirtualCanvas(const Canvas &canvas,
                              unsigned _width, unsigned _height)
   :Canvas(::CreateCompatibleDC(canvas), _width, _height)
 {
 }
+
+#endif /* !ENABLE_SDL */
 
 VirtualCanvas::~VirtualCanvas()
 {
@@ -52,14 +64,43 @@ void
 VirtualCanvas::set(unsigned _width, unsigned _height)
 {
   reset();
+
+#ifdef ENABLE_SDL
+  Uint32 rmask, gmask, bmask, amask;
+  SDL_Surface *surface;
+
+  /* SDL interprets each pixel as a 32-bit number, so our masks must depend
+     on the endianness (byte order) of the machine */
+#if SDL_BYTEORDER == SDL_BIG_ENDIAN
+  rmask = 0xff000000;
+  gmask = 0x00ff0000;
+  bmask = 0x0000ff00;
+  amask = 0x000000ff;
+#else
+  rmask = 0x000000ff;
+  gmask = 0x0000ff00;
+  bmask = 0x00ff0000;
+  amask = 0xff000000;
+#endif
+
+  surface = ::SDL_CreateRGBSurface(SDL_SWSURFACE, _width, _height, 32,
+                                   rmask, gmask, bmask, amask);
+  if (surface != NULL)
+    Canvas::set(surface);
+#else /* !ENABLE_SDL */
   Canvas::set(CreateCompatibleDC(NULL), _width, _height);
+#endif /* !ENABLE_SDL */
 }
 
 void
 VirtualCanvas::set(const Canvas &canvas, unsigned _width, unsigned _height)
 {
+#ifdef ENABLE_SDL
+  set(_width, _height);
+#else /* !ENABLE_SDL */
   reset();
   Canvas::set(CreateCompatibleDC(canvas), _width, _height);
+#endif /* !ENABLE_SDL */
 }
 
 void
@@ -68,8 +109,10 @@ VirtualCanvas::set(const Canvas &canvas)
   set(canvas, canvas.get_width(), canvas.get_height());
 }
 
+#ifndef ENABLE_SDL
 void VirtualCanvas::reset()
 {
   if (dc != NULL)
     ::DeleteDC(dc);
 }
+#endif /* !ENABLE_SDL */

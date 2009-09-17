@@ -75,6 +75,16 @@ PopupMessage::set(const RECT _rc)
   set_ro_ml(parent, rc.left, rc.top,
             rc.right - rc.left, rc.bottom - rc.top);
   set_font(MapWindowBoldFont);
+  install_wndproc();
+}
+
+bool
+PopupMessage::on_mouse_down(int x, int y)
+{
+  // acknowledge with click/touch
+  Acknowledge(0);
+
+  return true;
 }
 
 void PopupMessage::Resize() {
@@ -302,15 +312,6 @@ void PopupMessage::Repeat(int type) {
 
   Unlock();
 }
-
-
-void PopupMessage::CheckTouch(HWND wmControl) {
-  if (wmControl == (HWND)window) {
-    // acknowledge with click/touch
-    Acknowledge(0);
-  }
-}
-
 
 bool PopupMessage::Acknowledge(int type) {
   ScopeLock protect(mutex);

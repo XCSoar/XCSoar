@@ -43,8 +43,12 @@ Copyright_License {
 void
 Dialog::set(ContainerWindow &_parent, LPCTSTR template_name)
 {
+#ifdef ENABLE_SDL
+  // XXX
+#else /* !ENABLE_SDL */
   hWnd = ::CreateDialogParam(XCSoarInterface::hInst, template_name, _parent,
                              DlgProc, (LPARAM)this);
+#endif /* !ENABLE_SDL */
 }
 
 bool
@@ -52,6 +56,8 @@ Dialog::on_initdialog()
 {
   return true;
 }
+
+#ifndef ENABLE_SDL
 
 LRESULT
 Dialog::on_unhandled_message(HWND hWnd, UINT message,
@@ -95,3 +101,5 @@ Dialog::DlgProc(HWND hwndDlg, UINT message,
 
   return dialog->on_message(hwndDlg, message, wParam, lParam) == 0;
 }
+
+#endif /* !ENABLE_SDL */

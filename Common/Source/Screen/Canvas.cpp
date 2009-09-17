@@ -48,6 +48,401 @@ Copyright_License {
 #include <string.h>
 #include <stdlib.h> /* for abs() */
 
+#ifdef ENABLE_SDL
+
+#include <SDL/SDL_rotozoom.h>
+#include <SDL/SDL_imageFilter.h>
+
+
+void
+Canvas::reset()
+{
+  if (surface != NULL) {
+    SDL_FreeSurface(surface);
+    surface = NULL;
+  }
+}
+
+void
+Canvas::move_to(int x, int y)
+{
+  cursor.x = x;
+  cursor.y = y;
+}
+
+void
+Canvas::line_to(int x, int y)
+{
+  line(cursor.x, cursor.y, x, y);
+  move_to(x, y);
+}
+
+void
+Canvas::arc(int x, int y, unsigned radius, const RECT rc,
+            double start, double end)
+{
+  // XXX
+  ::pieColor(surface, x, y, radius, start, end, brush.get_color().gfx_color());
+}
+
+void
+Canvas::segment(int x, int y, unsigned radius, const RECT rc,
+                double start, double end, bool horizon)
+{
+  // XXX
+  ::pieColor(surface, x, y, radius, start, end, brush.get_color().gfx_color());
+}
+
+const SIZE
+Canvas::text_size(const TCHAR *text, size_t length) const
+{
+  TCHAR *duplicated = _tcsdup(text);
+  duplicated[length] = 0;
+
+  const SIZE size = text_size(duplicated);
+  free(duplicated);
+
+  return size;
+}
+
+const SIZE
+Canvas::text_size(LPCTSTR text) const
+{
+  SIZE size = { 0, 0 };
+
+  if (font == NULL)
+    return size;
+
+  int ret, w, h;
+#ifdef UNICODE
+  ret = ::TTF_SizeUNICODE(font, (const Uint16 *)text, &w, &h);
+#else
+  ret = ::TTF_SizeText(font, text, &w, &h);
+#endif
+  if (ret == 0) {
+    size.cx = w;
+    size.cy = h;
+  }
+
+  return size;
+}
+
+void
+Canvas::text(int x, int y, LPCTSTR text)
+{
+  SDL_Surface *s;
+
+  if (font == NULL)
+    return;
+
+#ifdef UNICODE
+  s = ::TTF_RenderUNICODE_Solid(font, (const Uint16 *)text, text_color);
+#else
+  s = ::TTF_RenderText_Solid(font, text, text_color);
+#endif
+  if (s == NULL)
+    return;
+
+  SDL_Rect dest = { x, y };
+  // XXX non-opaque?
+  ::SDL_BlitSurface(s, NULL, surface, &dest);
+  ::SDL_FreeSurface(s);
+}
+
+void
+Canvas::text_opaque(int x, int y, const RECT* lprc, LPCTSTR _text)
+{
+  // XXX
+  text(x, y, _text);
+}
+
+void
+Canvas::bottom_right_text(int x, int y, LPCTSTR _text)
+{
+  SIZE size = text_size(_text);
+  text(x - size.cx, y - size.cy, _text);
+}
+
+void
+Canvas::copy(int dest_x, int dest_y,
+             unsigned dest_width, unsigned dest_height,
+             const Canvas &src, int src_x, int src_y)
+{
+  SDL_Rect src_rect = { src_x, src_y, dest_width, dest_height };
+  SDL_Rect dest_rect = { dest_x, dest_y };
+
+  ::SDL_BlitSurface(src.surface, &src_rect, surface, &dest_rect);
+}
+
+void
+Canvas::copy(const Canvas &src, int src_x, int src_y)
+{
+  copy(0, 0, src.surface->w, src.surface->h, src, src_x, src_y);
+}
+
+void
+Canvas::copy(const Canvas &src)
+{
+  copy(src, 0, 0);
+}
+
+void
+Canvas::copy_transparent_white(const Canvas &src, const RECT &rc)
+{
+  ::SDL_SetColorKey(src.surface, SDL_SRCCOLORKEY,
+                    src.map(Color(0xff, 0xff, 0xff)));
+  copy(src);
+  ::SDL_SetColorKey(src.surface, 0, 0);
+}
+
+void
+Canvas::stretch(int dest_x, int dest_y,
+                unsigned dest_width, unsigned dest_height,
+                const Canvas &src,
+                int src_x, int src_y,
+                unsigned src_width, unsigned src_height)
+{
+  SDL_Surface *zoomed =
+    ::zoomSurface(src.surface, (double)dest_width / (double)src_width,
+                  (double)dest_height / (double)src_height,
+                  SMOOTHING_OFF);
+
+  if (zoomed == NULL)
+    return;
+
+  ::SDL_SetColorKey(zoomed, 0, 0);
+
+  SDL_Rect src_rect = {
+    (src_x * dest_width) / src_width,
+    (src_y * dest_height) / src_height,
+    dest_width, dest_height
+  };
+  SDL_Rect dest_rect = { dest_x, dest_y };
+
+  ::SDL_BlitSurface(zoomed, &src_rect, surface, &dest_rect);
+  ::SDL_FreeSurface(zoomed);
+}
+
+void
+Canvas::stretch(const Canvas &src,
+                int src_x, int src_y,
+                unsigned src_width, unsigned src_height)
+{
+  // XXX
+  stretch(0, 0, get_width(), get_height(),
+          src, src_x, src_y, src_width, src_height);
+}
+
+static bool
+clip_range(int &a, unsigned a_size, int &b, unsigned b_size, unsigned &size)
+{
+  if (a < 0) {
+    b -= a;
+    size += a;
+    a = 0;
+  }
+
+  if (b < 0) {
+    a -= b;
+    size += b;
+    b = 0;
+  }
+
+  if ((int)size <= 0)
+    return false;
+
+  if (a + size > a_size)
+    size = a_size - a;
+
+  if (b + size > b_size)
+    size = b_size - b;
+
+  return (int)size > 0;
+}
+
+static void
+blit_or(SDL_Surface *dest, int dest_x, int dest_y,
+        unsigned dest_width, unsigned dest_height,
+        SDL_Surface *_src, int src_x, int src_y)
+{
+  int ret;
+
+  /* obey the dest and src surface borders */
+
+  if (!clip_range(dest_x, dest->w, src_x, _src->w, dest_width) ||
+      !clip_range(dest_y, dest->h, src_y, _src->h, dest_height))
+    return;
+
+  ret = ::SDL_LockSurface(dest);
+  if (ret != 0)
+    return;
+
+  /* convert src's pixel format */
+
+  SDL_Surface *src = ::SDL_ConvertSurface(_src, dest->format, SDL_SWSURFACE);
+  if (src == NULL) {
+    ::SDL_UnlockSurface(dest);
+    return;
+  }
+
+  ret = ::SDL_LockSurface(src);
+  if (ret != 0) {
+    ::SDL_FreeSurface(src);
+    ::SDL_UnlockSurface(dest);
+    return;
+  }
+
+  /* get pointers to the upper left dest/src pixel */
+
+  unsigned char *dest_buffer = (unsigned char *)dest->pixels;
+  dest_buffer += dest_y * dest->pitch +
+    dest_x * dest->format->BytesPerPixel;
+
+  unsigned char *src_buffer = (unsigned char *)src->pixels;
+  src_buffer += src_y * src->pitch +
+    src_x * src->format->BytesPerPixel;
+
+  /* copy line by line */
+
+  for (unsigned y = 0; y < dest_height; ++y) {
+    ::SDL_imageFilterBitOr(src_buffer, dest_buffer, dest_buffer,
+                           dest_width * dest->format->BytesPerPixel);
+    src_buffer += src->pitch;
+    dest_buffer += dest->pitch;
+  }
+
+  /* cleanup */
+
+  ::SDL_UnlockSurface(src);
+  ::SDL_FreeSurface(src);
+  ::SDL_UnlockSurface(dest);
+}
+
+static void
+blit_and(SDL_Surface *dest, int dest_x, int dest_y,
+         unsigned dest_width, unsigned dest_height,
+         SDL_Surface *_src, int src_x, int src_y)
+{
+  int ret;
+
+  /* obey the dest and src surface borders */
+
+  if (!clip_range(dest_x, dest->w, src_x, _src->w, dest_width) ||
+      !clip_range(dest_y, dest->h, src_y, _src->h, dest_height))
+    return;
+
+  ret = ::SDL_LockSurface(dest);
+  if (ret != 0)
+    return;
+
+  /* convert src's pixel format */
+
+  SDL_Surface *src = ::SDL_ConvertSurface(_src, dest->format, SDL_SWSURFACE);
+  if (src == NULL) {
+    ::SDL_UnlockSurface(dest);
+    return;
+  }
+
+  ret = ::SDL_LockSurface(src);
+  if (ret != 0) {
+    ::SDL_FreeSurface(src);
+    ::SDL_UnlockSurface(dest);
+    return;
+  }
+
+  /* get pointers to the upper left dest/src pixel */
+
+  unsigned char *dest_buffer = (unsigned char *)dest->pixels;
+  dest_buffer += dest_y * dest->pitch +
+    dest_x * dest->format->BytesPerPixel;
+
+  unsigned char *src_buffer = (unsigned char *)src->pixels;
+  src_buffer += src_y * src->pitch +
+    src_x * src->format->BytesPerPixel;
+
+  /* copy line by line */
+
+  for (unsigned y = 0; y < dest_height; ++y) {
+    ::SDL_imageFilterBitAnd(src_buffer, dest_buffer, dest_buffer,
+                            dest_width * dest->format->BytesPerPixel);
+    src_buffer += src->pitch;
+    dest_buffer += dest->pitch;
+  }
+
+  /* cleanup */
+
+  ::SDL_UnlockSurface(src);
+  ::SDL_FreeSurface(src);
+  ::SDL_UnlockSurface(dest);
+}
+
+void
+Canvas::copy_or(int dest_x, int dest_y,
+                unsigned dest_width, unsigned dest_height,
+                const Canvas &src, int src_x, int src_y)
+{
+  ::blit_or(surface, dest_x, dest_y, dest_width, dest_height,
+            src.surface, src_x, src_y);
+}
+
+void
+Canvas::copy_and(int dest_x, int dest_y,
+                 unsigned dest_width, unsigned dest_height,
+                 const Canvas &src, int src_x, int src_y)
+{
+  ::blit_and(surface, dest_x, dest_y, dest_width, dest_height,
+             src.surface, src_x, src_y);
+}
+
+void
+Canvas::stretch_or(int dest_x, int dest_y,
+                   unsigned dest_width, unsigned dest_height,
+                   const Canvas &src,
+                   int src_x, int src_y,
+                   unsigned src_width, unsigned src_height)
+{
+  SDL_Surface *zoomed =
+    ::zoomSurface(src.surface, (double)dest_width / (double)src_width,
+                  (double)dest_height / (double)src_height,
+                  SMOOTHING_OFF);
+
+  if (zoomed == NULL)
+    return;
+
+  ::SDL_SetColorKey(zoomed, 0, 0);
+
+  ::blit_or(surface, dest_x, dest_y, zoomed->w, zoomed->h,
+            zoomed,
+            (src_x * dest_width) / src_width,
+            (src_y * dest_height) / src_height);
+  ::SDL_FreeSurface(zoomed);
+}
+
+void
+Canvas::stretch_and(int dest_x, int dest_y,
+                    unsigned dest_width, unsigned dest_height,
+                    const Canvas &src,
+                    int src_x, int src_y,
+                    unsigned src_width, unsigned src_height)
+{
+  SDL_Surface *zoomed =
+    ::zoomSurface(src.surface, (double)dest_width / (double)src_width,
+                  (double)dest_height / (double)src_height,
+                  SMOOTHING_OFF);
+
+  if (zoomed == NULL)
+    return;
+
+  ::SDL_SetColorKey(zoomed, 0, 0);
+
+  ::blit_and(surface, dest_x, dest_y, zoomed->w, zoomed->h,
+             zoomed,
+             (src_x * dest_width) / src_width,
+             (src_y * dest_height) / src_height);
+  ::SDL_FreeSurface(zoomed);
+}
+
+#else /* !ENABLE_SDL */
 
 // TODO: ClipPolygon is not thread safe (uses a static array)!  
 // We need to make it so.
@@ -352,6 +747,8 @@ Canvas::stretch_and(int dest_x, int dest_y,
                src.dc, src_x, src_y, src_width, src_height,
                SRCAND);
 }
+
+#endif /* !ENABLE_SDL */
 
 void
 Canvas::scale_copy(int dest_x, int dest_y,

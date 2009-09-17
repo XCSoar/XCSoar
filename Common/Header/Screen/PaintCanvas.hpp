@@ -38,6 +38,10 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_PAINT_CANVAS_HPP
 #define XCSOAR_SCREEN_PAINT_CANVAS_HPP
 
+#ifdef ENABLE_SDL
+#error Not implemented on SDL
+#endif
+
 #include "Screen/Canvas.hpp"
 
 class PaintWindow;

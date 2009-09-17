@@ -51,7 +51,11 @@ public:
            bool tabstop = false, bool border = false);
 
   void set_text(const TCHAR *text) {
+#ifdef ENABLE_SDL
+    // XXX
+#else /* !ENABLE_SDL */
     ::SetWindowText(hWnd, text);
+#endif /* !ENABLE_SDL */
   }
 };
 

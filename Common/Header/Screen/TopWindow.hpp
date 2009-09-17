@@ -48,13 +48,26 @@ Copyright_License {
 #include <aygshell.h>
 #endif
 
+#ifdef ENABLE_SDL
+class TopCanvas : public Canvas {
+public:
+  void set();
+
+  void full_screen();
+};
+#endif
+
 /**
  * A top-level full-screen window.
  */
 class TopWindow : public ContainerWindow {
+#ifdef ENABLE_SDL
+  TopCanvas screen;
+#else /* !ENABLE_SDL */
 #ifdef HAVE_ACTIVATE_INFO
   SHACTIVATEINFO s_sai;
 #endif
+#endif /* !ENABLE_SDL */
 
 public:
   TopWindow();
@@ -65,25 +78,41 @@ public:
            int left, int top, unsigned width, unsigned height);
 
   void set_active() {
+#ifdef ENABLE_SDL
+    // XXX
+#else
     ::SetActiveWindow(hWnd);
+#endif
   }
 
   void full_screen();
 
   void update() {
+#ifdef ENABLE_SDL
+    // XXX
+    screen.copy(canvas);
+    screen.update(0, 0, screen.get_width(), screen.get_height());
+#else /* !ENABLE_SDL */
     ::UpdateWindow(hWnd);
+#endif /* !ENABLE_SDL */
   }
 
   void close() {
+#ifdef ENABLE_SDL
+    // XXX
+#else /* ENABLE_SDL */
     ::SendMessage(hWnd, WM_CLOSE, 0, 0);
+#endif
   }
 
 protected:
   virtual bool on_activate();
   virtual bool on_deactivate();
 
+#ifndef ENABLE_SDL
   virtual LRESULT on_message(HWND _hWnd, UINT message,
                              WPARAM wParam, LPARAM lParam);
+#endif /* !ENABLE_SDL */
 };
 
 #endif

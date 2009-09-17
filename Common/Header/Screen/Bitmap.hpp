@@ -38,8 +38,13 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_BITMAP_HPP
 #define XCSOAR_SCREEN_BITMAP_HPP
 
+#ifdef ENABLE_SDL
+#include <SDL/SDL_video.h>
+#include <windef.h>
+#else
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
+#endif
 
 #include <tchar.h>
 
@@ -48,9 +53,22 @@ Copyright_License {
  */
 class Bitmap {
 protected:
+#ifdef ENABLE_SDL
+  SDL_Surface *surface;
+#else
   HBITMAP bitmap;
+#endif
 
 public:
+#ifdef ENABLE_SDL
+  Bitmap():surface(NULL) {}
+  Bitmap(const TCHAR *name):surface(NULL) {
+    load(name);
+  }
+  Bitmap(WORD id):surface(NULL) {
+    load(id);
+  }
+#else
   Bitmap():bitmap(NULL) {}
   Bitmap(const TCHAR *name):bitmap(NULL) {
     load(name);
@@ -58,28 +76,43 @@ public:
   Bitmap(WORD id):bitmap(NULL) {
     load(id);
   }
+#endif
   ~Bitmap();
 
 public:
   bool defined() const {
+#ifdef ENABLE_SDL
+    return surface != NULL;
+#else
     return bitmap != NULL;
+#endif
   }
 
   void load(const TCHAR *name);
 
+#ifdef ENABLE_SDL
+  void load(WORD id);
+#else
   void load(WORD id) {
     load(MAKEINTRESOURCE(id));
   }
+#endif
 
-  void create(const BITMAPINFO *pbmi, VOID **ppvBits);
+  void *create(unsigned width, unsigned height);
 
   void reset();
 
   const SIZE get_size() const;
 
+#ifdef ENABLE_SDL
+  SDL_Surface* native() const {
+    return surface;
+  }
+#else
   HBITMAP native() const {
     return bitmap;
   }
+#endif
 };
 
 #endif

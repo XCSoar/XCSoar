@@ -30,6 +30,9 @@ MainWindow::~MainWindow()
 bool
 MainWindow::register_class(HINSTANCE hInstance)
 {
+#ifdef ENABLE_SDL
+  return true;
+#else /* !ENABLE_SDL */
   WNDCLASS wc;
 
   wc.style                      = CS_HREDRAW | CS_VREDRAW;
@@ -54,6 +57,7 @@ MainWindow::register_class(HINSTANCE hInstance)
   wc.lpszClassName = _T("XCSoarMain");
 
   return (RegisterClass(&wc)!= FALSE);
+#endif /* !ENABLE_SDL */
 }
 
 void
@@ -87,7 +91,7 @@ MainWindow::set(LPCTSTR text,
   ButtonLabel::SetLabelText(0,TEXT("MODE"));
 
   StartupStore(TEXT("Initialise fonts\n"));
-  InitialiseFonts(*this, rc);
+  InitialiseFonts(get_canvas(), rc);
 
   map.set(XCSoarInterface::main_window, rcsmall, rc);
   map.set_font(MapWindowFont);
@@ -109,45 +113,9 @@ MainWindow::on_command(HWND wmControl, unsigned id, unsigned code)
   if (wmControl && globalRunningEvent.test()) {
 
     full_screen();
-
-    popup.CheckTouch(wmControl);
   }
 
   return TopWindow::on_command(wmControl, id, code);
-}
-
-LRESULT MainWindow::on_colour(HDC hdc, int wdata)
-{
-  switch(wdata) {
-  case 0:
-    SetBkColor(hdc, MapGfx.ColorUnselected);
-    SetTextColor(hdc, MapGfx.ColorBlack);
-    return (LRESULT)MapGfx.infoUnselectedBrush.native();
-  case 1:
-    SetBkColor(hdc, MapGfx.ColorSelected);
-    SetTextColor(hdc, MapGfx.ColorBlack);
-    return (LRESULT)MapGfx.infoSelectedBrush.native();
-  case 2:
-    SetBkColor(hdc, MapGfx.ColorUnselected);
-    SetTextColor(hdc, MapGfx.ColorWarning);
-    return (LRESULT)MapGfx.infoUnselectedBrush.native();
-  case 3:
-    SetBkColor(hdc, MapGfx.ColorUnselected);
-    SetTextColor(hdc, MapGfx.ColorOK);
-    return (LRESULT)MapGfx.infoUnselectedBrush.native();
-  case 4:
-    // black on light green
-    SetBkColor(hdc, MapGfx.ColorButton);
-    SetTextColor(hdc, MapGfx.ColorBlack);
-    return (LRESULT)MapGfx.buttonBrush.native();
-  case 5:
-    // grey on light green
-    SetBkColor(hdc, MapGfx.ColorButton);
-    SetTextColor(hdc, MapGfx.ColorMidGrey);
-    return (LRESULT)MapGfx.buttonBrush.native();
-  }
-
-  return 0;
 }
 
 Brush *
@@ -211,18 +179,4 @@ bool MainWindow::on_close() {
     XCSoarInterface::Shutdown();
   }
   return true;
-}
-
-
-LRESULT MainWindow::on_message(HWND _hWnd, UINT message,
-			       WPARAM wParam, LPARAM lParam) {
-  switch (message) {
-  case WM_CTLCOLORSTATIC:
-    LRESULT brush = on_colour((HDC)wParam, get_userdata((HWND)lParam));
-    if (brush != 0)
-      return brush;
-    break;
-  };
-
-  return TopWindow::on_message(_hWnd, message, wParam, lParam);
 }

@@ -100,6 +100,9 @@ void InitializeOneFont(Font *theFont,
                                LOGFONT autoLogFont,
                                LOGFONT * LogFontUsed)
 {
+#ifdef ENABLE_SDL
+  // XXX
+#else /* !ENABLE_SDL */
   LOGFONT logfont;
 
   memset ((char *)&logfont, 0, sizeof (LOGFONT));
@@ -123,6 +126,7 @@ void InitializeOneFont(Font *theFont,
       }
     }
   }
+#endif /* !ENABLE_SDL */
 }
 
 void InitialiseFontsHardCoded(RECT rc,
@@ -310,7 +314,7 @@ short   ScreenSize=0;
 
 }
 
-void InitialiseFontsAuto(HWND hwnd,
+void InitialiseFontsAuto(Canvas &canvas,
 			 RECT rc,
                         LOGFONT * ptrautoInfoWindowLogFont,
                         LOGFONT * ptrautoTitleWindowLogFont,
@@ -378,8 +382,10 @@ void InitialiseFontsAuto(HWND hwnd,
 
   // JMW algorithm to auto-size info window font.
   // this is still required in case title font property doesn't exist.
+#ifdef ENABLE_SDL
+  // XXX
+#else /* !ENABLE_SDL */
   SIZE tsize;
-  HDC iwhdc = GetDC(hwnd);
   do {
     HFONT TempWindowFont;
     HFONT hfOld;
@@ -390,16 +396,15 @@ void InitialiseFontsAuto(HWND hwnd,
 //    SelectObject(iwhdc, InfoWindowFont);
 
     TempWindowFont = CreateFontIndirect (&logfont);
-    hfOld=(HFONT)SelectObject(iwhdc, TempWindowFont);
+    hfOld=(HFONT)SelectObject(canvas, TempWindowFont);
 
-
-    GetTextExtentPoint(iwhdc, TEXT("00:00"), 5, &tsize);
+    tsize = canvas.text_size(TEXT("00:00"));
 //    DeleteObject(InfoWindowFont);
-    SelectObject(iwhdc, hfOld); // unselect it before deleting it
+    SelectObject(canvas, hfOld); // unselect it before deleting it
     DeleteObject(TempWindowFont);
 
   } while (tsize.cx>InfoBoxLayout::ControlWidth);
-  ReleaseDC(hwnd, iwhdc);
+#endif /* !ENABLE_SDL */
 
   iFontHeight++;
   logfont.lfHeight = iFontHeight;
@@ -518,7 +523,7 @@ void InitialiseFontsAuto(HWND hwnd,
 //  TitleSmallWindowFont = CreateFontIndirect (&logfont);
 
 
-void InitialiseFonts(HWND hwnd, RECT rc)
+void InitialiseFonts(Canvas &canvas, RECT rc)
 { //this routine must be called only at start/restart of XCSoar b/c there are many pointers to these fonts
 
   InfoWindowFont.reset();
@@ -540,7 +545,7 @@ void InitialiseFonts(HWND hwnd, RECT rc)
   memset ((char *)&autoStatisticsLogFont, 0, sizeof (LOGFONT));
 
 
-  InitialiseFontsAuto(hwnd, rc,
+  InitialiseFontsAuto(canvas, rc,
                         &autoInfoWindowLogFont,
                         &autoTitleWindowLogFont,
                         &autoMapWindowLogFont,
@@ -663,6 +668,17 @@ void DeleteFonts() {
 
 
 void SetFontInfo(Canvas &canvas, FontHeightInfo_t *FontHeightInfo){
+#ifdef ENABLE_SDL
+  TTF_Font *font = canvas.get_font();
+
+  FontHeightInfo->Height = TTF_FontHeight(font);
+  FontHeightInfo->AscentHeight = TTF_FontAscent(font);
+
+  int miny, maxy;
+  TTF_GlyphMetrics(font, 'M', NULL, NULL, &miny, &maxy, NULL);
+
+  FontHeightInfo->CapitalHeight = maxy - miny + 1;
+#else /* !ENABLE_SDL */
   TEXTMETRIC tm;
   int x,y=0;
   RECT  rec;
@@ -708,6 +724,7 @@ void SetFontInfo(Canvas &canvas, FontHeightInfo_t *FontHeightInfo){
 
   //  int lx = GetDeviceCaps(hDC,LOGPIXELSX);
   // dpi
+#endif /* !ENABLE_SDL */
 }
 
 void SetFontInfoAll(const Canvas &real_canvas)

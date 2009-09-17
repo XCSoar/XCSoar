@@ -527,6 +527,9 @@ WndForm *dlgLoadFromXML(CallBackTableEntry_t *LookUpTable,
 
     if (Font != -1)
       theForm->SetFont(*FontMap[Font]);
+#ifdef ENABLE_SDL
+    // XXX
+#else /* !ENABLE_SDL */
     if (BackColor != 0xffffffff){
       BackColor = Color((BackColor>>16)&0xff,
                       (BackColor>>8)&0xff,
@@ -539,6 +542,7 @@ WndForm *dlgLoadFromXML(CallBackTableEntry_t *LookUpTable,
                       (ForeColor>>0)&0xff);
       theForm->SetForeColor(ForeColor);
     }
+#endif /* !ENABLE_SDL */
 
     LoadChildsFromXML(theForm, LookUpTable, &xNode, Font);
 
@@ -599,6 +603,9 @@ void LoadChildsFromXML(WindowControl *Parent,
     ForeColor = StringToIntDflt(childNode.getAttribute(TEXT("ForeColor")),
                                 0xffffffff);
     Visible = StringToIntDflt(childNode.getAttribute(TEXT("Visible")), 1) == 1;
+#ifdef ENABLE_SDL
+    // XXX
+#else /* !ENABLE_SDL */
     if (BackColor != 0xffffffff){
       BackColor = Color((BackColor>>16)&0xff,
                       (BackColor>>8)&0xff,
@@ -609,6 +616,8 @@ void LoadChildsFromXML(WindowControl *Parent,
                       (ForeColor>>8)&0xff,
                       (ForeColor>>0)&0xff);
     }
+#endif /* !ENABLE_SDL */
+
     Font = StringToIntDflt(childNode.getAttribute(TEXT("Font")), ParentFont);
 
     Border = StringToIntDflt(childNode.getAttribute(TEXT("Border")), 0);
@@ -831,6 +840,9 @@ void LoadChildsFromXML(WindowControl *Parent,
       if (Font != -1)
         WC->SetFont(FontMap[Font]);
 
+#ifdef ENABLE_SDL
+      // XXX
+#else /* !ENABLE_SDL */
       if (BackColor != 0xffffffff){
         WC->SetBackColor(BackColor);
       }
@@ -838,6 +850,7 @@ void LoadChildsFromXML(WindowControl *Parent,
       if (ForeColor != 0xffffffff){
         WC->SetForeColor(ForeColor);
       }
+#endif /* !ENABLE_SDL */
 
       if (!Visible){
         WC->SetVisible(Visible);

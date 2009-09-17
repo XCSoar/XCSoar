@@ -36,9 +36,18 @@ Copyright_License {
 */
 
 #include "Screen/PaintWindow.hpp"
+
+#ifndef ENABLE_SDL
 #include "Screen/PaintCanvas.hpp"
+#endif /* !ENABLE_SDL */
+
+#ifdef ENABLE_SDL
+#include "Screen/ContainerWindow.hpp"
+#endif /* ENABLE_SDL */
 
 #include <assert.h>
+
+#ifndef ENABLE_SDL
 
 WindowCanvas::WindowCanvas(HWND _wnd, unsigned width, unsigned height)
   :Canvas(::GetDC(_wnd), width, height), wnd(_wnd) {}
@@ -61,6 +70,8 @@ void WindowCanvas::reset()
   if (dc != NULL)
     ::ReleaseDC(wnd, dc);
 }
+
+#endif /* !ENABLE_SDL */
 
 bool
 PaintWindow::register_class(HINSTANCE hInstance)
@@ -98,8 +109,10 @@ PaintWindow::set(ContainerWindow *parent,
               left, top, width, height,
               center, notify, show, tabstop, border);
 
+#ifndef ENABLE_SDL
   if (!canvas.defined())
     canvas.set(hWnd, width, height);
+#endif /* !ENABLE_SDL */
 }
 
 void
@@ -118,6 +131,8 @@ PaintWindow::reset()
   canvas.reset();
   Window::reset();
 }
+
+#ifndef ENABLE_SDL
 
 bool
 PaintWindow::on_create()
@@ -138,6 +153,8 @@ PaintWindow::on_resize(unsigned width, unsigned height)
   return true;
 }
 
+#endif /* !ENABLE_SDL */
+
 bool
 PaintWindow::on_erase(Canvas &canvas)
 {
@@ -152,6 +169,8 @@ PaintWindow::on_paint(Canvas &canvas)
   /* this is not an abstract method yet until the OO transition of all
      PaintWindow users is complete */
 }
+
+#ifndef ENABLE_SDL
 
 LRESULT
 PaintWindow::on_message(HWND hWnd, UINT message,
@@ -177,7 +196,19 @@ PaintWindow::on_message(HWND hWnd, UINT message,
   return Window::on_message(hWnd, message, wParam, lParam);
 }
 
+#endif /* !ENABLE_SDL */
+
 bool PaintWindow::register_class(HINSTANCE hInstance, const TCHAR* szWindowClass) {
   // not defined!
   return false;
 }
+
+#ifdef ENABLE_SDL
+void
+PaintWindow::update(const RECT &rect)
+{
+  canvas.update(rect.left, rect.top,
+                rect.right - rect.left, rect.bottom - rect.top);
+  parent->update_child(*this);
+}
+#endif /* ENABLE_SDL */

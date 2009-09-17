@@ -54,10 +54,10 @@ Copyright_License {
 #include "InfoBoxManager.h"
 #include "UtilsSystem.hpp"
 
-static Color fgColor = RGB(0x0,0x0,0x0);
-static Color bkColor = RGB(0xff,0xff,0xff);
-static Color bkColorSel = RGB(150,0x0,0x0);
-static Color bdColor = RGB(80,80,80);
+static Color fgColor(0x0, 0x0, 0x0);
+static Color bkColor(0xff, 0xff, 0xff);
+static Color bkColorSel(150, 0x0, 0x0);
+static Color bdColor(80, 80, 80);
 static Brush hBrushDefaultBackGround;
 static Brush hBrushDefaultBackGroundSel;
 static Pen hPenDefaultBorder;

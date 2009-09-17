@@ -263,12 +263,12 @@ void TopologyStore::Open() {
 
         if (ShapeField<0) {
           Topology* newtopo;
-          newtopo = new Topology(ShapeFilename, RGB(red,green,blue));
+          newtopo = new Topology(ShapeFilename, Color(red,green,blue));
           topology_store[numtopo] = newtopo;
         } else {
           TopologyLabel *newtopol;
           newtopol = new TopologyLabel(ShapeFilename,
-                                       RGB(red,green,blue),
+                                       Color(red,green,blue),
                                        ShapeField);
           topology_store[numtopo] = newtopol;
         }

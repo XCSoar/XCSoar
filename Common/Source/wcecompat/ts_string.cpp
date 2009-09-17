@@ -18,12 +18,16 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-
-#include <memory.h>
-#include <string.h>
 #include "ts_string.h"
-#include "StdAfx.h"
 
+#include <string.h>
+#include <stdlib.h>
+
+static bool
+check_wchar_align(const void *p)
+{
+  return ((long)p & (sizeof(WCHAR) - 1)) == 0;
+}
 
 void ascii2unicode(const char* ascii, WCHAR* unicode)
 {
@@ -33,7 +37,7 @@ void ascii2unicode(const char* ascii, WCHAR* unicode)
     return;
   }
 
-	if (((unsigned int)unicode & 1) == 0)
+  if (check_wchar_align(unicode))
 	{	// word-aligned
 		while (*ascii != '\0')
 			*unicode++ = *ascii++;
@@ -61,7 +65,7 @@ void unicode2ascii(const WCHAR* unicode, char* ascii)
     return;
   }
 
-	if (((unsigned int)unicode & 1) == 0)
+  if (check_wchar_align(unicode))
 	{	// word-aligned
 		while (*unicode != '\0')
 			*ascii++ = (char)*unicode++;
@@ -85,7 +89,7 @@ void ascii2unicode(const char* ascii, WCHAR* unicode, int maxChars)
     return;
   }
 
-	if (((unsigned int)unicode & 1) == 0)
+  if (check_wchar_align(unicode))
 	{	// word-aligned
     int i;
 		for (i=0; ascii[i] != 0 && i<maxChars; i++)
@@ -115,7 +119,7 @@ void unicode2ascii(const WCHAR* unicode, char* ascii, int maxChars)
     return;
   }
 
-	if (((unsigned int)unicode & 1) == 0)
+  if (check_wchar_align(unicode))
 	{	// word-aligned
     int i;
 		for (i=0; unicode[i] != 0 && i<maxChars; i++)

@@ -47,7 +47,6 @@ Copyright_License {
 #include "Screen/Graphics.hpp"
 #include "Screen/Fonts.hpp"
 #include "Screen/BitmapCanvas.hpp"
-#include "Screen/PaintCanvas.hpp"
 #include "options.h" /* for IBLSCALE() */
 #include "NMEA/Info.h"
 

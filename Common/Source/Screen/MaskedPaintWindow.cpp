@@ -36,7 +36,6 @@ Copyright_License {
 */
 
 #include "Screen/MaskedPaintWindow.hpp"
-#include "Screen/PaintCanvas.hpp"
 #include "Screen/BitmapCanvas.hpp"
 #include "Screen/Bitmap.hpp"
 #include "Screen/Canvas.hpp"
@@ -59,12 +58,14 @@ MaskedPaintWindow::set(ContainerWindow *parent,
     mask_canvas.set(get_canvas());
 }
 
+#ifndef ENABLE_SDL
 void
 MaskedPaintWindow::resize(unsigned width, unsigned height)
 {
   PaintWindow::resize(width, height);
   mask_canvas.resize(width, height);
 }
+#endif /* !ENABLE_SDL */
 
 void
 MaskedPaintWindow::reset()

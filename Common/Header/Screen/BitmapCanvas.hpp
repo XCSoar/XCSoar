@@ -40,6 +40,38 @@ Copyright_License {
 
 #include "Screen/VirtualCanvas.hpp"
 
+#ifdef ENABLE_SDL
+
+#include "Screen/Bitmap.hpp"
+
+class BitmapCanvas : public Canvas {
+public:
+  BitmapCanvas() {}
+  BitmapCanvas(const Canvas &canvas) {}
+  BitmapCanvas(const Canvas &canvas, const Bitmap &bitmap) {
+    select(bitmap);
+  }
+
+  void set(const Canvas &canvas)
+  {
+    reset();
+  }
+
+  void reset() {
+    surface = NULL;
+  }
+
+  void select(const Bitmap &bitmap) {
+    surface = bitmap.native();
+  }
+
+  void clear() {
+    surface = NULL;
+  }
+};
+
+#else /* !ENABLE_SDL */
+
 class Bitmap;
 
 /**
@@ -78,5 +110,7 @@ public:
 
   void clear();
 };
+
+#endif /* !ENABLE_SDL */
 
 #endif

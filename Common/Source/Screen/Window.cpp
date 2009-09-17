@@ -52,10 +52,17 @@ Window::set(ContainerWindow *parent, LPCTSTR cls, LPCTSTR text,
             int left, int top, unsigned width, unsigned height,
             DWORD style, DWORD ex_style)
 {
+#ifdef ENABLE_SDL
+  this->parent = parent;
+  this->left = left;
+  this->top = top;
+  canvas.set(width, height);
+#else /* !ENABLE_SDL */
   hWnd = ::CreateWindowEx(ex_style, cls, text, style,
                           left, top, width, height,
                           parent != NULL ? parent->hWnd : NULL,
                           NULL, XCSoarInterface::hInst, this);
+#endif /* !ENABLE_SDL */
 }
 
 void
@@ -64,6 +71,12 @@ Window::set(ContainerWindow *parent, LPCTSTR cls, LPCTSTR text,
             bool center, bool notify, bool show,
             bool tabstop, bool border)
 {
+#ifdef ENABLE_SDL
+  this->parent = parent;
+  this->left = left;
+  this->top = top;
+  canvas.set(width, height);
+#else /* !ENABLE_SDL */
   DWORD ex_style = 0;
   DWORD style = WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
 
@@ -96,18 +109,25 @@ Window::set(ContainerWindow *parent, LPCTSTR cls, LPCTSTR text,
   }
 
   set(parent, cls, text, left, top, width, height, style, ex_style);
+#endif /* !ENABLE_SDL */
 }
 
+#ifndef ENABLE_SDL
 void
 Window::created(HWND _hWnd)
 {
   assert(hWnd == NULL);
   hWnd = _hWnd;
 }
+#endif /* !ENABLE_SDL */
 
 void
 Window::reset()
 {
+#ifdef ENABLE_SDL
+  on_destroy();
+  canvas.reset();
+#else /* !ENABLE_SDL */
   if (hWnd != NULL) {
     ::DestroyWindow(hWnd);
 
@@ -117,6 +137,7 @@ Window::reset()
 
     hWnd = NULL;
   }
+#endif /* !ENABLE_SDL */
 }
 
 bool
@@ -128,9 +149,12 @@ Window::on_create()
 bool
 Window::on_destroy()
 {
+#ifndef ENABLE_SDL
   assert(hWnd != NULL);
 
   hWnd = NULL;
+#endif /* !ENABLE_SDL */
+
   return true;
 }
 
@@ -212,6 +236,8 @@ Window::on_user(unsigned id)
 {
   return false;
 }
+
+#ifndef ENABLE_SDL
 
 LRESULT
 Window::on_unhandled_message(HWND hWnd, UINT message,
@@ -355,3 +381,5 @@ Window::WndProc(HWND _hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
   return window->on_message(_hWnd, message, wParam, lParam);
 }
+
+#endif /* !ENABLE_SDL */
