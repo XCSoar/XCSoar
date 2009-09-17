@@ -263,7 +263,7 @@ protected:
     mutexTaskData.Lock();
 
     double sunsettime = sun.CalcSunTimes
-      (way_points.get(task_points[ActiveTaskPoint].Index).Location,
+      (task.getActiveLocation(),
        cmp.Basic(), cmp.Calculated(), GetUTCOffset()/3600);
     double d1 = (cmp.Calculated().TaskTimeToGo
 		 +DetectCurrentTime(&cmp.Basic()))/3600;

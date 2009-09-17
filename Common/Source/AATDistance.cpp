@@ -180,7 +180,7 @@ void AATDistance::ShiftTargetOutside(const GEOPOINT &location,
 
   if (taskwaypoint>0) {
     DistanceBearing(location,
-                    way_points.get(task_points[taskwaypoint+1].Index).Location,
+                    task.getTaskPointLocation(taskwaypoint+1),
                     NULL, &bearing);
 
     FindLatitudeLongitude(location,

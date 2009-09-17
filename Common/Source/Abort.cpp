@@ -327,7 +327,7 @@ GlideComputerTask::SortLandableWaypoints()
         && task.ValidTaskPoint(0)) {
       double last_wp_distance= 10000.0;
       if (last_closest_waypoint>=0) {
-        last_wp_distance = Distance(way_points.get(task_points[0].Index).Location,
+        last_wp_distance = Distance(task.getTaskPointLocation(0),
                                     way_points.get(last_closest_waypoint).Location);
       }
       if (last_wp_distance>2000.0) {

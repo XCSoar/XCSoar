@@ -53,12 +53,10 @@ Copyright_License {
 #include "SettingsTask.hpp"
 #include "SettingsComputer.hpp"
 #include "Task.h"
-#include "WayPoint.hpp"
 #include "Units.hpp"
 #include "Components.hpp"
 #include "Interface.hpp"
 #include "options.h" /* for IBLSCALE() */
-#include "WayPointList.hpp"
 #include "Components.hpp"
 
 void FlightStatistics::Reset() {
@@ -303,8 +301,8 @@ void FlightStatistics::RenderTask(Canvas &canvas, const RECT rc, const bool olcm
 
   for (i=0; i<MAXTASKPOINTS; i++) {
     if (task.ValidTaskPoint(i)) {
-      lat1 = way_points.get(task_points[i].Index).Location.Latitude;
-      lon1 = way_points.get(task_points[i].Index).Location.Longitude;
+      lat1 = task.getTaskPointLocation(i).Latitude;
+      lon1 = task.getTaskPointLocation(i).Longitude;
       chart.ScaleYFromValue( lat1);
       chart.ScaleXFromValue(lon1);
       nowaypoints = false;
@@ -354,8 +352,8 @@ void FlightStatistics::RenderTask(Canvas &canvas, const RECT rc, const bool olcm
   for (i=0; i<MAXTASKPOINTS; i++) {
     if (task.ValidTaskPoint(i)) {
       nwps++;
-      lat1 = way_points.get(task_points[i].Index).Location.Latitude;
-      lon1 = way_points.get(task_points[i].Index).Location.Longitude;
+      lat1 = task.getTaskPointLocation(i).Latitude;
+      lon1 = task.getTaskPointLocation(i).Longitude;
       x1 = (lon1-lon_c)*fastcosine(lat1);
       y1 = (lat1-lat_c);
       chart.ScaleXFromValue(x1);
@@ -375,7 +373,7 @@ void FlightStatistics::RenderTask(Canvas &canvas, const RECT rc, const bool olcm
           for (int j=0; j<4; j++) {
             bearing = j*360.0/4;
 
-            FindLatitudeLongitude(way_points.get(task_points[i].Index).Location,
+            FindLatitudeLongitude(task.getTaskPointLocation(i),
                                   bearing, radius,
                                   &aatloc);
             x1 = (aatloc.Longitude-lon_c)*fastcosine(aatloc.Latitude);
@@ -384,7 +382,7 @@ void FlightStatistics::RenderTask(Canvas &canvas, const RECT rc, const bool olcm
             chart.ScaleYFromValue(y1);
             if (j==0) {
               aatradius[i] = fabs(aatloc.Latitude -
-                                  way_points.get(task_points[i].Index).Location.Latitude);
+                                  task.getTaskPointLocation(i).Latitude);
             }
           }
         } else {
@@ -411,10 +409,10 @@ void FlightStatistics::RenderTask(Canvas &canvas, const RECT rc, const bool olcm
     if (AATEnabled) {
       for (i=MAXTASKPOINTS-1; i>0; i--) {
 	if (task.ValidTaskPoint(i)) {
-          lat1 = way_points.get(task_points[i-1].Index).Location.Latitude;
-          lon1 = way_points.get(task_points[i-1].Index).Location.Longitude;
-          lat2 = way_points.get(task_points[i].Index).Location.Latitude;
-          lon2 = way_points.get(task_points[i].Index).Location.Longitude;
+          lat1 = task.getTaskPointLocation(i-1).Latitude;
+          lon1 = task.getTaskPointLocation(i-1).Longitude;
+          lat2 = task.getTaskPointLocation(i).Latitude;
+          lon2 = task.getTaskPointLocation(i).Longitude;
 	  x1 = (lon1-lon_c)*fastcosine(lat1);
 	  y1 = (lat1-lat_c);
 	  x2 = (lon2-lon_c)*fastcosine(lat2);
@@ -458,14 +456,14 @@ void FlightStatistics::RenderTask(Canvas &canvas, const RECT rc, const bool olcm
   if (!olcmode) {
     for (i=MAXTASKPOINTS-1; i>0; i--) {
       if (task.ValidTaskPoint(i) && task.ValidTaskPoint(i-1)) {
-        lat1 = way_points.get(task_points[i-1].Index).Location.Latitude;
-        lon1 = way_points.get(task_points[i-1].Index).Location.Longitude;
+        lat1 = task.getTaskPointLocation(i-1).Latitude;
+        lon1 = task.getTaskPointLocation(i-1).Longitude;
 	if (task.TaskIsTemporary()) {
 	  lat2 = XCSoarInterface::Basic().Location.Latitude;
 	  lon2 = XCSoarInterface::Basic().Location.Longitude;
 	} else {
-          lat2 = way_points.get(task_points[i].Index).Location.Latitude;
-          lon2 = way_points.get(task_points[i].Index).Location.Longitude;
+          lat2 = task.getTaskPointLocation(i).Latitude;
+          lon2 = task.getTaskPointLocation(i).Longitude;
 	}
 	x1 = (lon1-lon_c)*fastcosine(lat1);
 	y1 = (lat1-lat_c);
@@ -502,8 +500,8 @@ void FlightStatistics::RenderTask(Canvas &canvas, const RECT rc, const bool olcm
       for (i=MAXTASKPOINTS-1; i>0; i--) {
 	if (task.ValidTaskPoint(i) && task.ValidTaskPoint(i-1)) {
           if (i==1) {
-            lat1 = way_points.get(task_points[i-1].Index).Location.Latitude;
-            lon1 = way_points.get(task_points[i-1].Index).Location.Longitude;
+            lat1 = task.getTaskPointLocation(i-1).Latitude;
+            lon1 = task.getTaskPointLocation(i-1).Longitude;
           } else {
             lat1 = task_stats[i-1].AATTargetLocation.Latitude;
             lon1 = task_stats[i-1].AATTargetLocation.Longitude;
