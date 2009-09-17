@@ -118,7 +118,7 @@ MainWindow::on_color(Window &window, Canvas &canvas)
   int i = ButtonLabel::Find(window);
   if (i >= 0) {
     canvas.set_background_color(MapGfx.ColorButton);
-    canvas.set_text_color(ButtonLabel::hWndButtonWindow[i].is_enabled()
+    canvas.set_text_color(window.is_enabled()
                           ? MapGfx.ColorBlack
                           : MapGfx.ColorMidGrey);
     return &MapGfx.buttonBrush;

@@ -46,29 +46,13 @@ class ContainerWindow;
 
 class MenuButton: public TextWindow
 {
-  bool enabled;
-
 public:
   void
   set(ContainerWindow &parent, int left, int top, unsigned width,
       unsigned height, bool visible)
   {
     TextWindow::set(parent, left, top, width, height, true, true, visible, true, true);
-    Window::set_enabled(true);
-    set_enabled(false);
     install_wndproc();
-  }
-
-  bool
-  is_enabled() const
-  {
-    return enabled;
-  }
-
-  void
-  set_enabled(bool _enabled)
-  {
-    enabled = _enabled;
   }
 
   virtual bool on_mouse_down(int x, int y);

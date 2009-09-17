@@ -56,9 +56,6 @@ unsigned ButtonLabel::ButtonLabelGeometry = 0;
 bool
 MenuButton::on_mouse_down(int x, int y)
 {
-  if (!is_enabled())
-    return true;
-
   int i = ButtonLabel::Find(*this);
   if (i >= 0)
     InputEvents::processButton(i);
