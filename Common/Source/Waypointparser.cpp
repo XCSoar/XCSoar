@@ -68,7 +68,7 @@ static int globalFileNum = 0;
 TCHAR *strtok_r(const TCHAR *s, TCHAR *delim, TCHAR **lasts);
 
 //static void ExtractParameter(TCHAR *Source, TCHAR *Destination, int DesiredFieldNumber);
-static int
+static bool
 ParseWayPointString(const TCHAR *mTempString, WAYPOINT *Temp,
                     RasterTerrain &terrain);
 
@@ -261,7 +261,7 @@ WaypointAltitudeFromTerrain(WAYPOINT* Temp, RasterTerrain &terrain)
 }
 
 
-static int
+static bool
 ParseWayPointString(const TCHAR *String, WAYPOINT *Temp,
                     RasterTerrain &terrain)
 {
@@ -279,45 +279,45 @@ ParseWayPointString(const TCHAR *String, WAYPOINT *Temp,
 
   // ExtractParameter(TempString,ctemp,0);
   if ((pToken = strtok_r(TempString, TEXT(","), &pWClast)) == NULL)
-    return FALSE;
+    return false;
   Temp->Number = _tcstol(pToken, &Zoom, 10);
 
   //ExtractParameter(TempString,ctemp,1); //Latitude
   if ((pToken = strtok_r(NULL, TEXT(","), &pWClast)) == NULL)
-    return FALSE;
+    return false;
   Temp->Location.Latitude = CalculateAngle(pToken);
 
   if((Temp->Location.Latitude > 90) || (Temp->Location.Latitude < -90))
     {
-      return FALSE;
+      return false;
     }
 
   //ExtractParameter(TempString,ctemp,2); //Longitude
   if ((pToken = strtok_r(NULL, TEXT(","), &pWClast)) == NULL)
-    return FALSE;
+    return false;
 
   Temp->Location.Longitude  = CalculateAngle(pToken);
   if((Temp->Location.Longitude  > 180) || (Temp->Location.Longitude  < -180))
     {
-      return FALSE;
+      return false;
     }
 
   //ExtractParameter(TempString,ctemp,3); //Altitude
   if ((pToken = strtok_r(NULL, TEXT(","), &pWClast)) == NULL)
-    return FALSE;
+    return false;
   Temp->Altitude = ReadAltitude(pToken);
   if (Temp->Altitude == -9999){
-    return FALSE;
+    return false;
   }
 
   //ExtractParameter(TempString,ctemp,4); //Flags
   if ((pToken = strtok_r(NULL, TEXT(","), &pWClast)) == NULL)
-    return FALSE;
+    return false;
   Temp->Flags = CheckFlags(pToken);
 
   //ExtractParameter(TempString,ctemp,5); // Name
   if ((pToken = strtok_r(NULL, TEXT(",\n\r"), &pWClast)) == NULL)
-    return FALSE;
+    return false;
 
   // guard against overrun
   if (_tcslen(pToken)>NAME_SIZE) {
@@ -365,7 +365,7 @@ ParseWayPointString(const TCHAR *String, WAYPOINT *Temp,
     free(Temp->Details);
   }
 
-  return TRUE;
+  return true;
 }
 
   /*
