@@ -45,6 +45,8 @@ Copyright_License {
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
+#include "GeoPoint.hpp"
+
 void protate(POINT &pin, const double &angle);
 void protateshift(POINT &pin, const double &angle, const int &x, const int &y);
 
@@ -59,5 +61,11 @@ void PolygonRotateShift(POINT* poly, int n, int x, int y,
 BOOL PolygonVisible(const POINT *lpPoints, int nCount, RECT rc);
 
 bool CheckRectOverlap(RECT rc1, RECT rc2);
+
+
+void
+LatLon2Flat(const GEOPOINT &location, POINT &screen);
+
+unsigned Distance(const POINT &p1, const POINT &p2);
 
 #endif

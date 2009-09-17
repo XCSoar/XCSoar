@@ -108,8 +108,7 @@ private:
   void CheckFinalGlideThroughTerrain(double LegToGo, double LegBearing);
   // TODO: some of these can move into task class
   // abort stuff
-  int CalculateWaypointApproxDistance(int scx_aircraft, 
-				       int scy_aircraft,
+  int CalculateWaypointApproxDistance(const POINT &screen,
                                       const WAYPOINT &way_point);
   double CalculateWaypointArrivalAltitude(const WAYPOINT &way_point,
                                           WPCALC &calc);

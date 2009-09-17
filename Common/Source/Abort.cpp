@@ -44,6 +44,7 @@ Copyright_License {
 #include "Math/FastMath.h"
 #include "WayPoint.hpp"
 #include "Math/Earth.hpp"
+#include "Math/Screen.hpp"
 #include "McReady.h"
 #include "GlideSolvers.hpp"
 #include "Message.h"
@@ -53,25 +54,14 @@ Copyright_License {
 //////////////////////////////////////////////////////////////////
 
 
-void LatLon2Flat(const GEOPOINT &location, int *scx, int *scy) {
-  *scx = (int)(location.Longitude*fastcosine(location.Latitude)*100);
-  *scy = (int)(location.Latitude*100);
-}
-
-
 int 
-GlideComputerTask::CalculateWaypointApproxDistance(int scx_aircraft, 
-						   int scy_aircraft,
+GlideComputerTask::CalculateWaypointApproxDistance(const POINT &screen,
                                                    const WAYPOINT &way_point) {
 
   // Do preliminary fast search, by converting to screen coordinates
-  int sc_x, sc_y;
-  LatLon2Flat(way_point.Location, &sc_x, &sc_y);
-  int dx, dy;
-  dx = scx_aircraft-sc_x;
-  dy = scy_aircraft-sc_y;
-
-  return isqrt4(dx*dx+dy*dy);
+  POINT ws;
+  LatLon2Flat(way_point.Location, ws);
+  return Distance(ws, screen);
 }
 
 double
@@ -119,8 +109,8 @@ GlideComputerTask::SortLandableWaypoints()
   active_waypoint_on_entry = ActiveTaskPoint;
 
   // Do preliminary fast search
-  int scx_aircraft, scy_aircraft;
-  LatLon2Flat(Basic().Location, &scx_aircraft, &scy_aircraft);
+  POINT sc_aircraft;
+  LatLon2Flat(Basic().Location, sc_aircraft);
 
   // Clear search lists
   for (i=0; i<MAXTASKPOINTS*2; i++) {
@@ -137,8 +127,7 @@ GlideComputerTask::SortLandableWaypoints()
     }
 
     int approx_distance =
-      CalculateWaypointApproxDistance(scx_aircraft, scy_aircraft,
-                                      way_point);
+      CalculateWaypointApproxDistance(sc_aircraft, way_point);
 
     // see if this fits into slot
     for (k=0; k< MAXTASKPOINTS*2; k++)  {

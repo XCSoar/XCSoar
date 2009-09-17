@@ -41,6 +41,8 @@ Copyright_License {
 #include "Protection.hpp"
 #include "WayPoint.hpp"
 #include "Math/FastMath.h"
+#include "Math/Earth.hpp"
+#include "Math/Screen.hpp"
 #include "Settings.hpp"
 #include "SettingsComputer.hpp"
 #include "SettingsTask.hpp"
@@ -48,8 +50,6 @@ Copyright_License {
 #include "Message.h"
 #include "GlideSolvers.hpp"
 #include "Audio/Sound.hpp"
-#include "Math/Earth.hpp"
-#include "Abort.hpp"
 #include "Components.hpp"
 #include "WayPointList.hpp"
 
@@ -101,8 +101,8 @@ GlideComputerTask::SearchBestAlternate()
   active_bestalternate_on_entry = Calculated().BestAlternate;
 
   // Do preliminary fast search
-  int scx_aircraft, scy_aircraft;
-  LatLon2Flat(Basic().Location, &scx_aircraft, &scy_aircraft);
+  POINT sc_aircraft;
+  LatLon2Flat(Basic().Location, sc_aircraft);
 
   // Clear search lists
   for (i=0; i<MAXBEST*2; i++) {
@@ -119,7 +119,7 @@ GlideComputerTask::SearchBestAlternate()
     }
 
     int approx_distance =
-      CalculateWaypointApproxDistance(scx_aircraft, scy_aircraft, way_point);
+      CalculateWaypointApproxDistance(sc_aircraft, way_point);
 
     // Size a reasonable distance, wide enough VENTA3
     if ( approx_distance > searchrange ) continue;

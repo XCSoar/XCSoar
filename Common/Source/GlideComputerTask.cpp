@@ -49,7 +49,6 @@ Copyright_License {
 #include "McReady.h"
 #include "GlideRatio.hpp"
 #include "GlideSolvers.hpp"
-#include "Abort.hpp"
 #include "Logger.h"
 #include "InputEvents.h"
 #include "Components.hpp"

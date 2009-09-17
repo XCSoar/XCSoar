@@ -802,12 +802,8 @@ bool NMEAParser::PFLAU(const TCHAR *String,
   GEOPOINT plat = GPS_INFO->Location; plat.Latitude+= delta_lat;
   GEOPOINT plon = GPS_INFO->Location; plon.Longitude+= delta_lon;
 
-  double dlat;
-  DistanceBearing(GPS_INFO->Location, plat,
-                  &dlat, NULL);
-  double dlon;
-  DistanceBearing(GPS_INFO->Location, plon,
-                  &dlon, NULL);
+  double dlat = Distance(GPS_INFO->Location, plat);
+  double dlon = Distance(GPS_INFO->Location, plon);
 
   if ((fabs(dlat)>0.0)&&(fabs(dlon)>0.0)) {
     FLARM_NorthingToLatitude = delta_lat / dlat;
