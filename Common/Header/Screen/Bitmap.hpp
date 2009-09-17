@@ -71,7 +71,7 @@ public:
     load(MAKEINTRESOURCE(id));
   }
 
-  void create(const BITMAPINFO *pbmi, VOID **ppvBits);
+  void *create(unsigned width, unsigned height);
 
   void reset();
 

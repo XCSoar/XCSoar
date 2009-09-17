@@ -38,6 +38,15 @@ Copyright_License {
 #include "Screen/Bitmap.hpp"
 #include "Interface.hpp"
 
+struct DIBINFO : public BITMAPINFO
+{
+	RGBQUAD	 arColors[255];    // Color table info - adds an extra 255 entries to palette
+
+	operator LPBITMAPINFO()          { return (LPBITMAPINFO) this; }
+	operator LPBITMAPINFOHEADER()    { return &bmiHeader;          }
+	RGBQUAD* ColorTable()            { return bmiColors;           }
+};
+
 Bitmap::~Bitmap()
 {
   reset();
@@ -50,12 +59,33 @@ Bitmap::load(const TCHAR *name)
   bitmap = LoadBitmap(XCSoarInterface::hInst, name);
 }
 
-void
-Bitmap::create(const BITMAPINFO *pbmi, VOID **ppvBits)
+void *
+Bitmap::create(unsigned width, unsigned height)
 {
+  DIBINFO bmi;
+
+  bmi.bmiHeader.biBitCount = 24;
+  bmi.bmiHeader.biClrImportant = 0;
+  bmi.bmiHeader.biClrUsed = 0;
+  bmi.bmiHeader.biCompression = 0;
+  bmi.bmiHeader.biHeight = height;
+  bmi.bmiHeader.biPlanes = 1;
+  bmi.bmiHeader.biSize = 40;
+  bmi.bmiHeader.biSizeImage = width * height * 3;
+  bmi.bmiHeader.biWidth = width;
+  bmi.bmiHeader.biXPelsPerMeter = 3780;
+  bmi.bmiHeader.biYPelsPerMeter = 3780;
+  bmi.bmiColors[0].rgbBlue = 0;
+  bmi.bmiColors[0].rgbGreen = 0;
+  bmi.bmiColors[0].rgbRed = 0;
+  bmi.bmiColors[0].rgbReserved = 0;
+
+  VOID *pvBits;
   HDC hDC = ::GetDC(NULL);
-  bitmap = CreateDIBSection(hDC, pbmi, DIB_RGB_COLORS, ppvBits, NULL, 0);
+  bitmap = CreateDIBSection(hDC, &bmi, DIB_RGB_COLORS, &pvBits, NULL, 0);
   ::ReleaseDC(NULL, hDC);
+
+  return pvBits;
 }
 
 void

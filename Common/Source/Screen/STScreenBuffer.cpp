@@ -50,16 +50,6 @@ int CSTScreenBuffer::CorrectedWidth(int nWidth)
 	return ( ( nWidth + 3 ) / 4 ) * 4;
 }
 
-struct DIBINFO : public BITMAPINFO
-{
-	RGBQUAD	 arColors[255];    // Color table info - adds an extra 255 entries to palette
-
-	operator LPBITMAPINFO()          { return (LPBITMAPINFO) this; }
-	operator LPBITMAPINFOHEADER()    { return &bmiHeader;          }
-	RGBQUAD* ColorTable()            { return bmiColors;           }
-};
-
-
 /////////////////////////////////////////////////////////////////////////////
 // CSTScreenBuffer
 
@@ -92,25 +82,7 @@ BOOL CSTScreenBuffer::CreateBitmap(int nWidth, int nHeight)
   m_nWidth = nWidth;
   m_nHeight = nHeight;
 
-  DIBINFO  dibInfo;
-
-  dibInfo.bmiHeader.biBitCount = 24;
-  dibInfo.bmiHeader.biClrImportant = 0;
-  dibInfo.bmiHeader.biClrUsed = 0;
-  dibInfo.bmiHeader.biCompression = 0;
-  dibInfo.bmiHeader.biHeight = m_nHeight;
-  dibInfo.bmiHeader.biPlanes = 1;
-  dibInfo.bmiHeader.biSize = 40;
-  dibInfo.bmiHeader.biSizeImage = m_nCorrectedWidth*m_nHeight*3;
-  dibInfo.bmiHeader.biWidth = m_nCorrectedWidth;
-  dibInfo.bmiHeader.biXPelsPerMeter = 3780;
-  dibInfo.bmiHeader.biYPelsPerMeter = 3780;
-  dibInfo.bmiColors[0].rgbBlue = 0;
-  dibInfo.bmiColors[0].rgbGreen = 0;
-  dibInfo.bmiColors[0].rgbRed = 0;
-  dibInfo.bmiColors[0].rgbReserved = 0;
-
-  m_hBitmap.create((const BITMAPINFO*)dibInfo, (void**)&m_pBuffer);
+  m_pBuffer = (BGRColor *)m_hBitmap.create(m_nCorrectedWidth, m_nHeight);
   assert(m_hBitmap.defined());
   assert(m_pBuffer);
 
