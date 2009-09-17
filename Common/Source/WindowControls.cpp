@@ -1476,8 +1476,7 @@ WndButton::on_paint(Canvas &canvas)
       OffsetRect(&rc, 2, 2);
 
     if (mLastDrawTextHeight < 0){
-
-      DrawText(canvas, mCaption, _tcslen(mCaption), &rc,
+      canvas.formatted_text(&rc, mCaption,
           DT_CALCRECT
         | DT_EXPANDTABS
         | DT_CENTER
@@ -1496,7 +1495,7 @@ WndButton::on_paint(Canvas &canvas)
 
     rc.top += ((GetHeight()-4-mLastDrawTextHeight)/2);
 
-    DrawText(canvas, mCaption, _tcslen(mCaption), &rc,
+    canvas.formatted_text(&rc, mCaption,
         DT_EXPANDTABS
       | DT_CENTER
       | DT_NOCLIP
@@ -2149,7 +2148,7 @@ WndFrame::on_paint(Canvas &canvas)
 
 //    h = rc.bottom - rc.top;
 
-    DrawText(canvas, mCaption, _tcslen(mCaption), &rc,
+    canvas.formatted_text(&rc, mCaption,
       mCaptionStyle // | DT_CALCRECT
     );
   }
@@ -2186,7 +2185,7 @@ WndFrame::GetTextHeight()
 
   Canvas &canvas = GetCanvas();
   canvas.select(*GetFont());
-  ::DrawText(canvas, mCaption, -1, &rc, mCaptionStyle | DT_CALCRECT);
+  canvas.formatted_text(&rc, mCaption, mCaptionStyle | DT_CALCRECT);
 
   return rc.bottom - rc.top;
 }

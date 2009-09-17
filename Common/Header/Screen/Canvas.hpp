@@ -280,6 +280,10 @@ public:
 
   void bottom_right_text(int x, int y, const TCHAR *text);
 
+  void formatted_text(RECT *rc, const TCHAR *text, unsigned format) {
+    ::DrawText(dc, text, -1, rc, format);
+  }
+
   void copy(int dest_x, int dest_y,
             unsigned dest_width, unsigned dest_height,
             const Canvas &src, int src_x, int src_y);
