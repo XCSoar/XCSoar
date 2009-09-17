@@ -53,7 +53,7 @@ Copyright_License {
 #include "InputEvents.h"
 #include "Components.hpp"
 #include "WayPointList.hpp"
-
+#include <assert.h>
 // JMW TODO: abstract up to higher layer so a base copy of this won't 
 // call any event
 
@@ -88,7 +88,6 @@ void GlideComputerTask::ProcessBasicTask(const double mc,
   DistanceToHome();
   DistanceToNext();
   AltitudeRequired(mc, ce);
-
   if (!targetManipEvent.test()) {
     // don't calculate these if optimise function being invoked or
     // target is being adjusted
@@ -252,6 +251,7 @@ void GlideComputerTask::AltitudeRequired(const double this_maccready,
 double GlideComputerTask::AATCloseBearing() const
 {
   // ensure waypoint goes in direction of track if very close
+  assert(task.getActiveIndex()>0);
   double course_bearing = Bearing(task_stats[task.getActiveIndex()-1].AATTargetLocation,
                                   Basic().Location);
   course_bearing = AngleLimit360(course_bearing+
@@ -524,8 +524,7 @@ bool GlideComputerTask::InStartSector(bool *CrossedStart)
   bool retval=false;
 
   if (!Calculated().Flying ||
-      !task.Valid() ||
-      !task.ValidTaskPoint(0))
+      !task.Valid())
     return false;
 
   ScopeLock protect(mutexTaskData);
@@ -635,7 +634,7 @@ bool GlideComputerTask::ReadyToAdvance(bool reset, bool restart) {
     }
   }
   if (AutoAdvance== AUTOADVANCE_ARMSTART) {
-    if ((Calculated().ActiveTaskPoint == 0) || restart) {
+    if ((task.getActiveIndex() == 0) || restart) {
       if (!AdvanceArmed) {
         say_ready = true;
       } else if (reset) {
@@ -644,7 +643,7 @@ bool GlideComputerTask::ReadyToAdvance(bool reset, bool restart) {
       }
     } else {
       // JMW fixed 20070528
-      if (Calculated().ActiveTaskPoint >0) {
+      if (task.getActiveIndex() >0) {
         if (reset) AdvanceArmed = false;
         return true;
       }
@@ -652,14 +651,14 @@ bool GlideComputerTask::ReadyToAdvance(bool reset, bool restart) {
   }
 
   // see if we've gone back a waypoint (e.g. restart)
-  if (Calculated().ActiveTaskPoint < LastCalculated().ActiveTaskPoint) {
+  if (task.getActiveIndex() < LastCalculated().ActiveTaskPoint) {
     SetCalculated().ReadyWayPoint = -1;
   }
 
   if (say_ready) {
-    if ((int)Calculated().ActiveTaskPoint != LastCalculated().ReadyWayPoint) {
+    if ((int)task.getActiveIndex() != LastCalculated().ReadyWayPoint) {
       InputEvents::processGlideComputer(GCE_ARM_READY);
-      SetCalculated().ReadyWayPoint = Calculated().ActiveTaskPoint;
+      SetCalculated().ReadyWayPoint = task.getActiveIndex();
     }
   }
   return false;
@@ -883,7 +882,6 @@ void GlideComputerTask::CheckForceFinalGlide() {
 void GlideComputerTask::TaskStatistics(const double this_maccready,
 				       const double cruise_efficiency)
 {
-
   if (!task.Valid() ||
       ((task.getActiveIndex()>0) && !task.ValidTaskPoint(task.getActiveIndex()-1))) {
 
@@ -963,7 +961,7 @@ void GlideComputerTask::TaskStatistics(const double this_maccready,
     calc_turning_now = false;
   }
 
-  if ((task.getActiveIndex()<1) || task.TaskIsTemporary()) {
+  if ((task.getActiveIndex()==0) || task.TaskIsTemporary()) {
     LegCovered = 0;
     if (!task.TaskIsTemporary()) { // RLD if task not started, exclude
                                    // distance to start point
@@ -1004,9 +1002,7 @@ void GlideComputerTask::TaskStatistics(const double this_maccready,
   if (!task.TaskIsTemporary()) {
 
     if (!AATEnabled) {
-      for(unsigned i=0; i< task.getActiveIndex()-1; i++) {
-        if (!task.ValidTaskPoint(i) || !task.ValidTaskPoint(i+1)) continue;
-        
+      for(unsigned i=0; i+1< task.getActiveIndex(); i++) {
         w1 = task.getTaskPointLocation(i);
         w0 = task.getTaskPointLocation(i+1);
         
@@ -1571,7 +1567,7 @@ bool GlideComputerTask::TaskAltitudeRequired(double this_maccready, double *Vfin
 				   Calculated().WindBearing,
 				   FAIFinishHeight(0),
 				   FAIFinishHeight(-1));
-  TaskScan::scan_leg_reverse(tarv);
+  task.scan_leg_reverse(tarv);
 
   SetCalculated().TaskAltitudeRequiredFromStart = tarv.TotalAltitude
     + FAIFinishHeight(-1);
@@ -1837,7 +1833,7 @@ void GlideComputerTask::TaskSpeed(const double this_maccready,
       } else {
 	static double tsi_av = 0;
 	static int n_av = 0;
-        if ((Calculated().ActiveTaskPoint
+        if ((task.getActiveIndex()
              ==LastCalculated().ActiveTaskPoint)
 	    && (Calculated().LegDistanceToGo>1000.0)
 	    && (Calculated().LegDistanceCovered>1000.0)) {

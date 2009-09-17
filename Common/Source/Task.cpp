@@ -37,7 +37,6 @@ Copyright_License {
 
 #include "Task.h"
 #include "TaskFile.hpp"
-#include "Protection.hpp"
 #include "Dialogs.h"
 #include "Language.hpp"
 #include "SettingsTask.hpp"
@@ -133,11 +132,11 @@ void Task::FlyDirectTo(const int index,
   }
   */
 
+  ActiveTaskPoint = 0;
   task_points[0].Index = index;
   for (int i=1; i<=MAXTASKPOINTS; i++) {
     task_points[i].Index = -1;
   }
-  ActiveTaskPoint = 0;
   RefreshTask(settings_computer);
 }
 
@@ -385,6 +384,17 @@ void Task::RefreshTask(const SETTINGS_COMPUTER &settings_computer)
   CalculateAATTaskSectors(XCSoarInterface::Basic());
 }
 
+const GEOPOINT&
+Task::getTargetLocation(const int v) const
+{
+  int r= (v==-1)? ActiveTaskPoint:v;
+  if (AATEnabled && (r>0) && !TaskIsTemporary()
+      && ValidTaskPoint(r+1)) {
+    return task_stats[r].AATTargetLocation;
+  } else {
+    return getTaskPointLocation(r);
+  }
+}
 
 const GEOPOINT&
 Task::getActiveLocation() const
@@ -665,9 +675,11 @@ Task::Valid() const
 }
 
 const bool 
-Task::ValidTaskPoint(const int i) const 
+Task::ValidTaskPoint(const unsigned i) const 
 {
-  if ((i<0) || (i>= MAXTASKPOINTS))
+  if (i>= MAXTASKPOINTS)
+    return false;
+  else if (task_points[i].Index<0)
     return false;
   else if (!way_points.verify_index(task_points[i].Index))
     return false;

@@ -49,14 +49,4 @@ public:
 			       TASK_POINT &point1, const unsigned index1) {};
 };
 
-class TaskScan {
-public:
-  static void scan_point_forward(RelativeTaskPointVisitor &visitor);
-  static void scan_point_forward(AbsoluteTaskPointVisitor &visitor);
-  static void scan_leg_forward(RelativeTaskLegVisitor &visitor);
-  static void scan_leg_forward(AbsoluteTaskLegVisitor &visitor);
-  static void scan_leg_reverse(RelativeTaskLegVisitor &visitor);
-  static void scan_leg_reverse(AbsoluteTaskLegVisitor &visitor);
-};
-
 #endif

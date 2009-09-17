@@ -59,7 +59,7 @@ Copyright_License {
 
 static WndForm *wf=NULL;
 static WindowControl *btnMove = NULL;
-static int ActiveTaskPointOnEntry = 0;
+static unsigned ActiveTaskPointOnEntry = 0;
 
 
 static double Range = 0;
@@ -518,7 +518,7 @@ static void OnLockedData(DataField *Sender, DataField::DataAccessKind_t Mode) {
 
 
 static void OnTaskPointData(DataField *Sender, DataField::DataAccessKind_t Mode) {
-  int old_target_point = target_point;
+  unsigned old_target_point = target_point;
   switch(Mode){
     case DataField::daGet:
     break;
@@ -595,7 +595,7 @@ void dlgTarget(void) {
   } else {
     target_point = max(target_point, ActiveTaskPointOnEntry);
   }
-  for (int i=ActiveTaskPointOnEntry; i<MAXTASKPOINTS; i++) {
+  for (unsigned i=ActiveTaskPointOnEntry; i<MAXTASKPOINTS; i++) {
     if (task.ValidTaskPoint(i)) {
       _tcsncpy(tp_short, way_points.get(task_points[i].Index).Name, 20);
       tp_short[20] = 0;
@@ -607,7 +607,7 @@ void dlgTarget(void) {
       }
     }
   }
-  dfe->Set(max(0,target_point-ActiveTaskPointOnEntry));
+  dfe->Set(max(0,(int)target_point-(int)ActiveTaskPointOnEntry));
   mutexTaskData.Unlock();
   wp->RefreshDisplay();
 

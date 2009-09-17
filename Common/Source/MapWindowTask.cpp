@@ -90,7 +90,7 @@ MapWindow::DrawAbortedTask(Canvas &canvas)
   Pen dash_pen(Pen::DASH, IBLSCALE(1), MapGfx.TaskColor);
   canvas.select(dash_pen);
   DrawAbortedTaskVisitor dv(canvas, Orig_Aircraft);
-  TaskScan::scan_point_forward(dv);
+  task.scan_point_forward(dv); // read lock
 }
 
 //////////////////
@@ -106,7 +106,8 @@ public:
 		  Canvas &_canvas,
 		  POINT &_orig,
 		  TaskScreen_t &_task_screen,
-		  StartScreen_t &_start_screen):
+		  StartScreen_t &_start_screen,
+                  unsigned _activeIndex):
     map_window(&_map_window),
     canvas(&_canvas),
     orig(_orig),
@@ -116,7 +117,8 @@ public:
     penb2(Pen::SOLID, IBLSCALE(2), Color(0,0,255)),
     dash_pen3(Pen::DASH, IBLSCALE(3), MapGfx.TaskColor),
     dash_pen5(Pen::DASH, IBLSCALE(5), MapGfx.TaskColor),
-    dash_pen2(Pen::DASH, IBLSCALE(2), Color(127, 127, 127))
+    dash_pen2(Pen::DASH, IBLSCALE(2), Color(127, 127, 127)),
+    activeIndex(_activeIndex)
   {
 
   }
@@ -136,7 +138,7 @@ public:
   void visit_task_point_intermediate_aat(TASK_POINT &point, const unsigned i) 
   {
     // JMW added iso lines
-    if ((i==task.getActiveIndex()) 
+    if ((i==activeIndex) 
 	|| (map_window->SettingsMap().TargetPan 
 	    && ((int)i==map_window->SettingsMap().TargetPanIndex))) {
       // JMW 20080616 flash arc line if very close to target
@@ -207,7 +209,7 @@ public:
 
   void visit_task_point_final(TASK_POINT &point, const unsigned index) { 
 
-    if (task.getActiveIndex()>1) {
+    if (activeIndex>1) {
       // only draw finish line when past the first
       // waypoint.
       const POINT &wp = way_points.get_calc(point.Index).Screen;
@@ -299,11 +301,12 @@ private:
   const Pen dash_pen3;
   const Pen dash_pen5;
   const Pen dash_pen2;
+  unsigned activeIndex;
 
   void DrawStartSector(const POINT &Start, 
 		       const POINT &End, const unsigned Index)
   {
-    if (task.getActiveIndex()>=2) {
+    if (activeIndex>=2) {
       // don't draw if on second leg or beyond
       return;
     }
@@ -332,28 +335,29 @@ private:
 
 void MapWindow::DrawTask(Canvas &canvas, RECT rc)
 {
-  DrawTaskVisitor dv(*this, canvas, Orig_Aircraft, task_screen, task_start_screen);
-  TaskScan::scan_leg_forward(dv);
-  TaskScan::scan_point_forward(dv);
+  DrawTaskVisitor dv(*this, canvas, Orig_Aircraft, task_screen, task_start_screen,
+                     task.getActiveIndex()); // read lock
+  task.scan_leg_forward(dv);
+  task.scan_point_forward(dv);
 }
 
 ///////
 
-
+// TODO use visitor
 void MapWindow::DrawTaskAAT(Canvas &canvas, const RECT rc, Canvas &buffer)
 {
   unsigned i;
   unsigned tmp;
 
-  if (!AATEnabled) return;
-
-  ScopeLock scopeLock(mutexTaskData); // protect from extrnal task changes
+  if (!AATEnabled || !task.ValidTaskPoint(1)) return;
 
   Color whitecolor = Color(0xff,0xff, 0xff);
   buffer.set_text_color(whitecolor);
   buffer.white_pen();
   buffer.white_brush();
   buffer.rectangle(rc.left, rc.top, rc.right, rc.bottom);
+
+  ScopeLock scopeLock(mutexTaskData); // read
 
   for (i = task.getFinalWaypoint()-1; i > 0; i--) {
     const WPCALC &wpcalc = way_points.get_calc(task_points[i].Index);
@@ -406,6 +410,7 @@ void MapWindow::DrawTaskAAT(Canvas &canvas, const RECT rc, Canvas &buffer)
 }
 
 
+// TODO: use visitor
 void MapWindow::DrawBearing(Canvas &canvas, int bBearingValid)
 { /* RLD bearing is invalid if GPS not connected and in non-sim mode,
    but we can still draw targets */
@@ -414,19 +419,9 @@ void MapWindow::DrawBearing(Canvas &canvas, int bBearingValid)
     return;
   }
 
-  mutexTaskData.Lock();  // protect from extrnal task changes
-
   GEOPOINT start = Basic().Location;
-  GEOPOINT target;
+  GEOPOINT target = task.getTargetLocation();
 
-  if (AATEnabled 
-      && (task.getActiveIndex()>0) 
-      && task.ValidTaskPoint(task.getActiveIndex()+1)) {
-    target = task_stats[task.getActiveIndex()].AATTargetLocation;
-  } else {
-    target = task.getActiveLocation();
-  }
-  mutexTaskData.Unlock();
   if (bBearingValid) {
     DrawGreatCircle(canvas, start, // RLD skip if bearing invalid
                     target);       // RLD bc Lat/Lon invalid
@@ -435,16 +430,10 @@ void MapWindow::DrawBearing(Canvas &canvas, int bBearingValid)
       // Draw all of task if in target pan mode
       start = target;
 
-      ScopeLock scopeLock(mutexTaskData);
-
+      ScopeLock scopeLock(mutexTaskData); // read
       for (int i=task.getActiveIndex()+1; task.verify_index(i); i++) {
-        if (AATEnabled) {
-          target = task_stats[i].AATTargetLocation;
-        } else {
-          target = task.getTaskPointLocation(i);
-        }
+        target = task.getTargetLocation(i);
         DrawGreatCircle(canvas, start, target);
-        
         start = target;
       }
     } // TargetPan
@@ -454,8 +443,7 @@ void MapWindow::DrawBearing(Canvas &canvas, int bBearingValid)
   // RLD always draw all targets ahead so visible in pan mode
   // JMW ok then, only if in pan mode
   if (AATEnabled) {
-    ScopeLock scopeLock(mutexTaskData);
-
+    ScopeLock scopeLock(mutexTaskData); // read
     for (unsigned i=max(1,task.getActiveIndex()); 
          task.verify_index(i+1); i++) {
       // RLD skip invalid targets and targets at start and finish
@@ -495,24 +483,13 @@ MapWindow::DrawOffTrackIndicator(Canvas &canvas)
     return;
   }
 
-  mutexTaskData.Lock();  // protect from extrnal task changes
-
   GEOPOINT start = Basic().Location;
-  GEOPOINT target;
-  GEOPOINT dloc;
-
-  if (AATEnabled 
-      && task.ValidTaskPoint(task.getActiveIndex()+1) 
-      && task.ValidTaskPoint(task.getActiveIndex())) {
-    target = task_stats[task.getActiveIndex()].AATTargetLocation;
-  } else {
-    target = task.getActiveLocation();
-  }
-  mutexTaskData.Unlock();
+  GEOPOINT target = task.getTargetLocation();
 
   canvas.select(TitleWindowFont);
   canvas.set_text_color(Color(0x0, 0x0, 0x0));
 
+  GEOPOINT dloc;
   int ilast = 0;
   for (double d=0.25; d<=1.0; d+= 0.25) {
     FindLatitudeLongitude(start, 
@@ -563,17 +540,8 @@ MapWindow::DrawProjectedTrack(Canvas &canvas)
   // TODO feature: maybe have this work even if no task?
   // TODO feature: draw this also when in target pan mode
 
-  mutexTaskData.Lock();  // protect from extrnal task changes
-
   GEOPOINT start = Basic().Location;
-  GEOPOINT previous_loc;
-  unsigned previous_point = task.getActiveIndex()-1;
-  if (AATEnabled) {
-    previous_loc = task_stats[previous_point].AATTargetLocation;
-  } else {
-    previous_loc = task.getTaskPointLocation(previous_point);
-  }
-  mutexTaskData.Unlock();
+  GEOPOINT previous_loc = task.getTargetLocation(task.getActiveIndex()-1);
 
   double distance_from_previous, bearing;
   DistanceBearing(previous_loc, start,
@@ -682,6 +650,6 @@ private:
 void MapWindow::CalculateScreenPositionsTask() {
 
   ScreenPositionsTaskVisitor sv(*this, task_screen, task_start_screen);
-  TaskScan::scan_point_forward(sv);
+  task.scan_point_forward(sv);
 }
 

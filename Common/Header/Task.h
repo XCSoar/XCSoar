@@ -120,6 +120,11 @@ typedef START_POINT_SCREEN StartScreen_t[MAXSTARTPOINTS +1];
 typedef START_POINT_STATS StartStats_t[MAXSTARTPOINTS +1];
 struct NMEA_INFO;
 
+class RelativeTaskPointVisitor;
+class AbsoluteTaskPointVisitor;
+class RelativeTaskLegVisitor;
+class AbsoluteTaskLegVisitor;
+
 
 
 //////////////
@@ -174,7 +179,7 @@ protected:
                              const int the_turnpoint) const;
 
   // queries
-  const bool ValidTaskPoint(const int i) const;
+  const bool ValidTaskPoint(const unsigned i) const;
   const bool Valid() const;
   const double DoubleLegDistance(const int taskwaypoint, 
                                  const GEOPOINT &location) const;
@@ -184,6 +189,7 @@ protected:
   const bool isTaskAborted() const;
   const GEOPOINT& getTaskPointLocation(const unsigned i) const;
   const GEOPOINT& getActiveLocation() const;
+  const GEOPOINT& getTargetLocation(const int v=-1) const;
 
   // file load/save
   void LoadNewTask(const TCHAR *FileName,
@@ -202,6 +208,15 @@ protected:
       ActiveTaskPoint = i;
     }
   }
+
+  // scan routines
+  void scan_point_forward(RelativeTaskPointVisitor &visitor);
+  void scan_point_forward(AbsoluteTaskPointVisitor &visitor);
+  void scan_leg_forward(RelativeTaskLegVisitor &visitor);
+  void scan_leg_forward(AbsoluteTaskLegVisitor &visitor);
+  void scan_leg_reverse(RelativeTaskLegVisitor &visitor);
+  void scan_leg_reverse(AbsoluteTaskLegVisitor &visitor);
+
 private:
   void ResetTaskWaypoint(int j);
   void CalculateAATTaskSectors(const NMEA_INFO &gps_info);
@@ -209,7 +224,6 @@ private:
   void BackupTask(void);
   void CalculateAATIsoLines(void);
 };
-
 
 //////
 
@@ -372,7 +386,7 @@ public:
   }
 
   // queries
-  const bool verify_index(const int i) const
+  const bool verify_index(const unsigned i) const
   { // read
     // alias
     return ValidTaskPoint(i);
@@ -389,7 +403,7 @@ public:
     return Task::setActiveIndex(i);
   }
 
-  const bool ValidTaskPoint(const int i) const
+  const bool ValidTaskPoint(const unsigned i) const
   { // read
     ScopeLock protect(mutexTaskData);
     return Task::ValidTaskPoint(i);
@@ -398,6 +412,7 @@ public:
     ScopeLock protect(mutexTaskData);
     return Task::Valid();
   }
+
   const double DoubleLegDistance(const int taskwaypoint, // read
                                  const GEOPOINT &location) const {
     ScopeLock protect(mutexTaskData);
@@ -432,6 +447,11 @@ public:
     ScopeLock protect(mutexTaskData);
     return Task::getActiveLocation();
   }
+  const GEOPOINT &getTargetLocation(const int v=-1) const {
+    // read
+    ScopeLock protect(mutexTaskData);
+    return Task::getTargetLocation(v);
+  }
 
   // file load/save
   void LoadNewTask(const TCHAR *FileName,
@@ -463,6 +483,38 @@ public:
     ScopeLock protect(mutexTaskData);
     Task::ClearTaskFileName();
   }
+ 
+  // potentially write
+
+  void scan_point_forward(RelativeTaskPointVisitor &visitor) {
+    ScopeLock protect(mutexTaskData);
+    Task::scan_point_forward(visitor);
+  };
+
+  void scan_point_forward(AbsoluteTaskPointVisitor &visitor) {
+    ScopeLock protect(mutexTaskData);
+    Task::scan_point_forward(visitor);
+  };
+
+  void scan_leg_forward(RelativeTaskLegVisitor &visitor) {
+    ScopeLock protect(mutexTaskData);
+    Task::scan_leg_forward(visitor);
+  };
+
+  void scan_leg_forward(AbsoluteTaskLegVisitor &visitor) {
+    ScopeLock protect(mutexTaskData);
+    Task::scan_leg_forward(visitor);
+  };
+
+  void scan_leg_reverse(RelativeTaskLegVisitor &visitor) {
+    ScopeLock protect(mutexTaskData);
+    Task::scan_leg_reverse(visitor);
+  };
+
+  void scan_leg_reverse(AbsoluteTaskLegVisitor &visitor) {
+    ScopeLock protect(mutexTaskData);
+    Task::scan_leg_reverse(visitor);
+  };
 };
 
 

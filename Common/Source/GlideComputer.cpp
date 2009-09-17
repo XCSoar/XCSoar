@@ -104,7 +104,6 @@ void GlideComputer::DoLogging()
 
 bool GlideComputer::ProcessGPS()
 {
-
   double mc = GlidePolar::GetMacCready();
   double ce = GlidePolar::GetCruiseEfficiency();
 

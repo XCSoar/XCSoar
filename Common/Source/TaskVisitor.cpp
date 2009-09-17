@@ -1,9 +1,44 @@
+/*
+Copyright_License {
+
+  XCSoar Glide Computer - http://www.xcsoar.org/
+  Copyright (C) 2000 - 2009
+
+	M Roberts (original release)
+	Robin Birch <robinb@ruffnready.co.uk>
+	Samuel Gisiger <samuel.gisiger@triadis.ch>
+	Jeff Goodenough <jeff@enborne.f2s.com>
+	Alastair Harrison <aharrison@magic.force9.co.uk>
+	Scott Penrose <scottp@dd.com.au>
+	John Wharington <jwharington@gmail.com>
+	Lars H <lars_hn@hotmail.com>
+	Rob Dunning <rob@raspberryridgesheepfarm.com>
+	Russell King <rmk@arm.linux.org.uk>
+	Paolo Ventafridda <coolwind@email.it>
+	Tobias Lohner <tobias@lohner-net.de>
+	Mirek Jezek <mjezek@ipplc.cz>
+	Max Kellermann <max@duempel.org>
+
+  This program is free software; you can redistribute it and/or
+  modify it under the terms of the GNU General Public License
+  as published by the Free Software Foundation; either version 2
+  of the License, or (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+}
+*/
 
 #include "TaskVisitor.hpp"
 #include <stdio.h>
 #include "SettingsTask.hpp"
 #include "SettingsComputer.hpp"
-#include "Protection.hpp"
 #include <math.h>
 #include "Math/FastMath.h"
 #include "Units.hpp"
@@ -15,10 +50,8 @@
 // recursively
 
 
-void TaskScan::scan_point_forward(RelativeTaskPointVisitor &visitor)
+void Task::scan_point_forward(RelativeTaskPointVisitor &visitor)
 {
-  ScopeLock protect(mutexTaskData);
-
   visitor.visit_reset();
   if (EnableMultipleStartPoints) {
     for (unsigned j=0; j<MAXSTARTPOINTS; j++) {
@@ -26,29 +59,27 @@ void TaskScan::scan_point_forward(RelativeTaskPointVisitor &visitor)
 	visitor.visit_start_point(task_start_points[j], j);
     }
   }
-  if (!task.ValidTaskPoint(0)) {
+  if (!ValidTaskPoint(0)) {
     visitor.visit_null();
     return;
   }
 
   unsigned i=0;
-  while (i<task.getActiveIndex()) {
+  while (i<ActiveTaskPoint) {
     visitor.visit_task_point_before(task_points[i], i);
     i++;
   } 
   visitor.visit_task_point_current(task_points[i], i);
   i++;
-  while (task.ValidTaskPoint(i)) {
+  while (ValidTaskPoint(i)) {
     visitor.visit_task_point_after(task_points[i], i);
     i++;
   }
 }
 
 
-void TaskScan::scan_point_forward(AbsoluteTaskPointVisitor &visitor)
+void Task::scan_point_forward(AbsoluteTaskPointVisitor &visitor)
 {
-  ScopeLock protect(mutexTaskData);
-
   visitor.visit_reset();
 
   if (EnableMultipleStartPoints) {
@@ -58,7 +89,7 @@ void TaskScan::scan_point_forward(AbsoluteTaskPointVisitor &visitor)
     }
   }
 
-  if (!task.Valid()) {
+  if (!Valid()) {
     visitor.visit_null();
     return;
   }
@@ -75,32 +106,30 @@ void TaskScan::scan_point_forward(AbsoluteTaskPointVisitor &visitor)
 }
 
 
-void TaskScan::scan_leg_forward(RelativeTaskLegVisitor &visitor)
+void Task::scan_leg_forward(RelativeTaskLegVisitor &visitor)
 {
-  ScopeLock protect(mutexTaskData);
-
   visitor.visit_reset();
 
-  if (!task.Valid()) {
+  if (!Valid()) {
     visitor.visit_null();
     return;
   }
-  if (task_points[1].Index<0) {
+  if (!ValidTaskPoint(1)) {
     visitor.visit_single(task_points[0], 0);
     return;
   }
   unsigned i=0;
-  while (i+1<task.getActiveIndex()) {
+  while (i+1<ActiveTaskPoint) {
     visitor.visit_leg_before(task_points[i], i,
                              task_points[i+1], i+1);
     i++;
   }
-  if (i+1==task.getActiveIndex()) {
+  if (i+1==ActiveTaskPoint) {
     visitor.visit_leg_current(task_points[i], i,
                               task_points[i+1], i+1);
     i++;
   }
-  while (task.ValidTaskPoint(i+1)) {
+  while (ValidTaskPoint(i+1)) {
     visitor.visit_leg_after(task_points[i], i,
                             task_points[i+1], i+1);
     i++;
@@ -110,13 +139,11 @@ void TaskScan::scan_leg_forward(RelativeTaskLegVisitor &visitor)
 
 
 
-void TaskScan::scan_leg_forward(AbsoluteTaskLegVisitor &visitor)
+void Task::scan_leg_forward(AbsoluteTaskLegVisitor &visitor)
 {
-  ScopeLock protect(mutexTaskData);
-
   visitor.visit_reset();
 
-  if (!task.Valid()) {
+  if (!Valid()) {
     visitor.visit_null();
     return;
   }
@@ -126,12 +153,12 @@ void TaskScan::scan_leg_forward(AbsoluteTaskLegVisitor &visitor)
 	visitor.visit_leg_multistart(task_start_points[j], j, task_points[0]);
     }
   }
-  if (!task.ValidTaskPoint(1)) {
+  if (!ValidTaskPoint(1)) {
     visitor.visit_single(task_points[0], 0);
     return;
   }
   unsigned i=0;
-  while (task.ValidTaskPoint(i+2)) {
+  while (ValidTaskPoint(i+2)) {
     visitor.visit_leg_intermediate(task_points[i], i,
 				   task_points[i+1], i+1);
     i++;
@@ -141,24 +168,22 @@ void TaskScan::scan_leg_forward(AbsoluteTaskLegVisitor &visitor)
 }
 
 
-void TaskScan::scan_leg_reverse(AbsoluteTaskLegVisitor &visitor)
+void Task::scan_leg_reverse(AbsoluteTaskLegVisitor &visitor)
 {
-  ScopeLock protect(mutexTaskData);
-
   visitor.visit_reset();
 
-  if (!task.Valid()) {
+  if (!Valid()) {
     visitor.visit_null();
     return;
   }
-  unsigned final = task.getFinalWaypoint();
+  unsigned final = getFinalWaypoint();
   if (final==0) {
     visitor.visit_single(task_points[0], 0);
     return;
   }
   int i= final-1;
   while (i>=0) {
-    if (i==(int)final-1) {
+    if (i+1==(int)final) {
       visitor.visit_leg_final(task_points[i], i,
                               task_points[i+1], i+1);
     } else {
@@ -439,23 +464,19 @@ private:
 };
 
 
-
-
 void Task::RefreshTask_Visitor(const SETTINGS_COMPUTER &settings_computer) 
 {
-  ScopeLock protect(mutexTaskData);
-
   TaskLegGeometryVisitor geom;
-  TaskScan::scan_leg_forward(geom);
+  scan_leg_forward(geom);
 
   TaskLegPercentVisitor legpercent(geom);
-  TaskScan::scan_leg_forward(legpercent);
+  scan_leg_forward(legpercent);
 
   TaskSectorsVisitor sectors;
-  TaskScan::scan_point_forward(sectors);
+  scan_point_forward(sectors);
 
   WaypointsInTaskVisitor waypoint_in_task(settings_computer);
-  TaskScan::scan_point_forward(waypoint_in_task);
+  scan_point_forward(waypoint_in_task);
 
 }
 
@@ -560,6 +581,6 @@ public:
 void Task::CalculateAATIsoLines(void) {
   if(AATEnabled) {
     AATIsoLineVisitor av;
-    TaskScan::scan_point_forward(av);
+    scan_point_forward(av);
   }  
 }

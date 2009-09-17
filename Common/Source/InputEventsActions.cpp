@@ -825,7 +825,7 @@ void InputEvents::eventFlightMode(const TCHAR *misc) {
       Message::AddMessage(TEXT("Final glide automatic"));
     }
   }
-  if (ForceFinalGlide && task.getActiveIndex() == -1){
+  if (ForceFinalGlide && !task.Valid()) {
     Message::AddMessage(TEXT("No Active Waypoint!"));
   }
 }
