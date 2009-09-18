@@ -36,1020 +36,390 @@ Copyright_License {
 */
 
 #include "Task.h"
-#include "TaskFile.hpp"
-#include "Dialogs.h"
-#include "Language.hpp"
-#include "SettingsTask.hpp"
-#include "Waypointparser.h"
-#include "McReady.h"
-#include "Math/Geometry.hpp"
-#include "Math/Earth.hpp"
-#include "Units.hpp"
-#include <math.h>
-#include "Logger.h"
-#include "Interface.hpp"
-#include "Components.hpp"
-#include "WayPointList.hpp"
-
-#include <stdio.h>
-#include <assert.h>
+#include "TaskImpl.hpp"
 
 TaskSafe task;
 
-// TODO: separate out all waypoint checking, this should be done
-// outside scope of task lock
 
-static int Task_saved[MAXTASKPOINTS+1];
-static unsigned active_waypoint_saved= 0;
-static bool aat_enabled_saved= false;
+void 
+TaskSafe::RefreshTask(const SETTINGS_COMPUTER &settings_computer)
+{ // write
+  Poco::ScopedRWLock protect(lock, true);
+  _task.RefreshTask(settings_computer);
+};
 
-static bool TaskModified=false;
-static bool TargetModified=false;
-static bool TaskAborted = false;
-
-Task::Task():
-  ActiveTaskPoint(0)
-{
-  ClearTask();
-  ClearStartPoints();
+void 
+TaskSafe::ReplaceWaypoint(const int index, 
+                     const SETTINGS_COMPUTER &settings_computer)
+{ // write
+  Poco::ScopedRWLock protect(lock, true);
+  _task.ReplaceWaypoint(index, settings_computer);
 }
 
-const bool Task::isTaskAborted() const {
-  return TaskAborted;
+void 
+TaskSafe::InsertWaypoint(const int index, 
+                    const SETTINGS_COMPUTER &settings_computer,
+                    bool append)
+{ // write
+  Poco::ScopedRWLock protect(lock, true);
+  _task.InsertWaypoint(index, settings_computer, append);
 }
 
-const bool Task::isTaskModified() const {
-  return TaskModified;
+void 
+TaskSafe::SwapWaypoint(const int index, 
+                  const SETTINGS_COMPUTER &settings_computer)
+{ // write
+  Poco::ScopedRWLock protect(lock, true);
+  _task.SwapWaypoint(index, settings_computer);
 }
 
-void Task::SetTaskModified(const bool set) {
-  TaskModified = set;
+void 
+TaskSafe::RemoveWaypoint(const int index, 
+                    const SETTINGS_COMPUTER &settings_computer)
+{ // write
+  Poco::ScopedRWLock protect(lock, true);
+  _task.RemoveWaypoint(index, settings_computer);
+}
+
+void 
+TaskSafe::RemoveTaskPoint(const int index, 
+                     const SETTINGS_COMPUTER &settings_computer)
+{ // write
+  Poco::ScopedRWLock protect(lock, true);
+  _task.RemoveTaskPoint(index, settings_computer);
+}
+
+void 
+TaskSafe::FlyDirectTo(const int index, 
+                 const SETTINGS_COMPUTER &settings_computer)
+{ // write
+  Poco::ScopedRWLock protect(lock, true);
+  _task.FlyDirectTo(index, settings_computer);
+}
+
+void 
+TaskSafe::advanceTaskPoint(const SETTINGS_COMPUTER &settings_computer)
+{ // write
+  Poco::ScopedRWLock protect(lock, true);
+  _task.advanceTaskPoint(settings_computer);
+}
+
+void 
+TaskSafe::retreatTaskPoint(const SETTINGS_COMPUTER &settings_computer)
+{ // write
+  Poco::ScopedRWLock protect(lock, true);
+  _task.retreatTaskPoint(settings_computer);
+}
+
+
+void 
+TaskSafe::ClearTask(void)
+{ // write
+  Poco::ScopedRWLock protect(lock, true);
+  _task.ClearTask();
+}
+
+void 
+TaskSafe::RotateStartPoints(const SETTINGS_COMPUTER &settings_computer)
+{ // write
+  Poco::ScopedRWLock protect(lock, true);
+  _task.RotateStartPoints(settings_computer);
+}
+
+void 
+TaskSafe::DefaultTask(const SETTINGS_COMPUTER &settings)
+{ // write
+  Poco::ScopedRWLock protect(lock, true);
+  _task.DefaultTask(settings);
+}
+
+void 
+TaskSafe::ResumeAbortTask(const SETTINGS_COMPUTER &settings_computer,
+                     const int set)
+{ // write
+  Poco::ScopedRWLock protect(lock, true);
+  _task.ResumeAbortTask(settings_computer, set);
+}
+
+ 
+void 
+TaskSafe::CheckStartPointInTask(void)
+{ // write
+  Poco::ScopedRWLock protect(lock, true);
+  _task.CheckStartPointInTask();
+}
+
+void 
+TaskSafe::ClearStartPoints(void)
+{ // write
+  Poco::ScopedRWLock protect(lock, true);
+  _task.ClearStartPoints();
+}
+
+void 
+TaskSafe::SetStartPoint(const int pointnum, const int waypointnum)
+{ // write
+  Poco::ScopedRWLock protect(lock, true);
+  _task.SetStartPoint(pointnum, waypointnum);
+}
+
+
+// AAT functions
+double 
+TaskSafe::AdjustAATTargets(double desired) {
+  // write
+  Poco::ScopedRWLock protect(lock, true);
+  return _task.AdjustAATTargets(desired);
+}
+
+//////
+const double 
+TaskSafe::FindInsideAATSectorRange(const GEOPOINT &location,
+                                      const int taskwaypoint,
+                                      const double course_bearing,
+                                      const double p_found) 
+{ // read
+  Poco::ScopedRWLock protect(lock, false);
+  return _task.FindInsideAATSectorRange(location, taskwaypoint,
+                                        course_bearing, p_found);
+}
+
+const double 
+TaskSafe::FindInsideAATSectorDistance(const GEOPOINT &location,
+                                         const int taskwaypoint,
+                                         const double course_bearing,
+                                         const double p_found) 
+{ // read
+  Poco::ScopedRWLock protect(lock, false);
+  return _task.FindInsideAATSectorDistance(location, taskwaypoint,
+                                           course_bearing, p_found);
 }
 
 const bool 
-Task::isTargetModified() const {
-  return TargetModified;
-}
-
-void Task::SetTargetModified(const bool set) {
-  TargetModified = set;
-  if (set) {
-    SetTaskModified();
-  }
-}
-
-void Task::ResetTaskWaypoint(int j) {
-  task_points[j].Index = -1;
-  task_points[j].AATTargetOffsetRadius = 0.0;
-  task_points[j].AATTargetOffsetRadial = 0.0;
-  task_points[j].AATTargetLocked = false;
-  task_points[j].AATSectorRadius = SectorRadius;
-  task_points[j].AATCircleRadius = SectorRadius;
-  task_points[j].AATStartRadial = 0;
-  task_points[j].AATFinishRadial = 360;
-}
-
-
-void Task::FlyDirectTo(const int index, 
-                       const SETTINGS_COMPUTER &settings_computer) {
-  if (!CheckDeclaration())
-    return;
-
-  if (TaskAborted) {
-    // in case we GOTO while already aborted
-    ResumeAbortTask(settings_computer, -1);
-  }
-
-  if (!TaskIsTemporary()) {
-    BackupTask();
-  }
-
-  TaskModified = true;
-  TargetModified = true;
-  AATEnabled = FALSE;
-
-  /*  JMW disabled this so task info is preserved
-  for(int j=0;j<MAXTASKPOINTS;j++)
-  {
-    ResetTaskWaypoint(j);
-  }
-  */
-
-  ActiveTaskPoint = 0;
-  task_points[0].Index = index;
-  for (int i=1; i<=MAXTASKPOINTS; i++) {
-    task_points[i].Index = -1;
-  }
-  RefreshTask(settings_computer);
-}
-
-
-// Swaps waypoint at current index with next one.
-void Task::SwapWaypoint(const int index,
-                        const SETTINGS_COMPUTER &settings_computer) {
-  if (!CheckDeclaration())
-    return;
-
-  TaskModified = true;
-  TargetModified = true;
-  if (index<0) {
-    return;
-  }
-  if (index+1>= MAXTASKPOINTS-1) {
-    return;
-  }
-  if ((task_points[index].Index != -1)&&(task_points[index+1].Index != -1)) {
-    TASK_POINT tmpPoint;
-    tmpPoint = task_points[index];
-    task_points[index] = task_points[index+1];
-    task_points[index+1] = tmpPoint;
-  }
-  RefreshTask(settings_computer);
-}
-
-
-// Inserts a waypoint into the task, in the
-// position of the ActiveWaypoint.  If append=true, insert at end of the
-// task.
-void Task::InsertWaypoint(const int index, 
-                          const SETTINGS_COMPUTER &settings_computer,
-                          bool append) {
-  if (!CheckDeclaration())
-    return;
-
-  int i;
-  TaskModified = true;
-  TargetModified = true;
-
-  if (!ValidTaskPoint(0)) {
-    ActiveTaskPoint = 0;
-    ResetTaskWaypoint(ActiveTaskPoint);
-    task_points[ActiveTaskPoint].Index = index;
-    RefreshTask(settings_computer);
-    return;
-  }
-
-  if (ValidTaskPoint(MAXTASKPOINTS-1)) {
-    // No room for any more task points!
-    MessageBoxX(
-      gettext(TEXT("Too many waypoints in task!")),
-      gettext(TEXT("Insert Waypoint")),
-      MB_OK|MB_ICONEXCLAMATION);
-    return;
-  }
-
-  int indexInsert = ActiveTaskPoint;
-  if (append) {
-    for (i=indexInsert; i<MAXTASKPOINTS-2; i++) {
-      if (task_points[i+1].Index<0) {
-	ResetTaskWaypoint(i+1);
-	task_points[i+1].Index = index;
-	break;
-      }
-    }
-  } else {
-    // Shuffle ActiveWaypoint and all later task points
-    // to the right by one position
-    for (i=MAXTASKPOINTS-1; i>indexInsert; i--) {
-      task_points[i] = task_points[i-1];
-    }
-    // Insert new point and update task details
-    ResetTaskWaypoint(indexInsert);
-    task_points[indexInsert].Index = index;
-  }
-
-  RefreshTask(settings_computer);
-}
-
-// Create a default task to home at startup if no task is present
-void Task::DefaultTask(const SETTINGS_COMPUTER &settings_computer) {
-  if (!ValidTaskPoint(0)) {
-    if (settings_computer.HomeWaypoint != -1) {
-      TaskModified = true;
-      TargetModified = true;
-      task_points[0].Index = settings_computer.HomeWaypoint;
-      ActiveTaskPoint = 0;
-      RefreshTask(settings_computer);
-    }
-  }
-}
-
-
-// RemoveTaskpoint removes a single waypoint
-// from the current task.  index specifies an entry
-// in the task_points[] array - NOT a waypoint index.
-//
-// If you call this function, you MUST deal with
-// correctly setting ActiveTaskPoint yourself!
-void Task::RemoveTaskPoint(int index, 
-                           const SETTINGS_COMPUTER &settings_computer) {
-  if (!CheckDeclaration())
-    return;
-
-  int i;
-
-  if (index < 0 || index >= MAXTASKPOINTS) {
-    return; // index out of bounds
-  }
-
-  TaskModified = true;
-  TargetModified = true;
-
-  if (task_points[index].Index == -1) {
-    return; // There's no WP at this location
-  }
-
-  // Shuffle all later taskpoints to the left to
-  // fill the gap
-  for (i=index; i<MAXTASKPOINTS-1; ++i) {
-    task_points[i] = task_points[i+1];
-  }
-  task_points[MAXTASKPOINTS-1].Index = -1;
-  task_points[MAXTASKPOINTS-1].AATTargetOffsetRadius= 0.0;
-
-  if (ActiveTaskPoint>=(unsigned)index) {
-    ActiveTaskPoint--;
-  }
-
-  RefreshTask(settings_computer);
-}
-
-
-// Index specifies a waypoint in the WP list
-// It won't necessarily be a waypoint that's
-// in the task
-void Task::RemoveWaypoint(const int index,
-                          const SETTINGS_COMPUTER &settings_computer) {
-  int i;
-
-  if (!CheckDeclaration())
-    return;
-
-  if (!ValidTaskPoint(0)) {
-    return; // No waypoint to remove
-  }
-
-  // Check to see whether selected WP is actually
-  // in the task list.
-  // If not, we'll ask the user if they want to remove
-  // the currently active task point.
-  // If the WP is in the task multiple times then we'll
-  // remove the first instance after (or including) the
-  // active WP.
-  // If they're all before the active WP then just remove
-  // the nearest to the active WP
-
-  TaskModified = true;
-  TargetModified = true;
-
-  // Search forward first
-  i = ActiveTaskPoint;
-  while ((i < MAXTASKPOINTS) && (task_points[i].Index != index)) {
-    ++i;
-  }
-
-  if (i < MAXTASKPOINTS) {
-    // Found WP, so remove it
-    RemoveTaskPoint(i, settings_computer);
-
-    if (task_points[ActiveTaskPoint].Index == -1) {
-      // We've just removed the last task point and it was
-      // active at the time
-      if (ActiveTaskPoint) {
-        ActiveTaskPoint--;
-      }
-    }
-
-  } else {
-    // Didn't find WP, so search backwards
-
-    i = ActiveTaskPoint;
-    do {
-      --i;
-    } while ((i >= 0) && (task_points[i].Index != index));
-
-    if (i >= 0) {
-      // Found WP, so remove it
-      RemoveTaskPoint(i, settings_computer);
-      if (ActiveTaskPoint) {
-        ActiveTaskPoint--;
-      }
-    } else {
-      // WP not found, so ask user if they want to
-      // remove the active WP
-      int ret = MessageBoxX(
-        gettext(TEXT("Chosen Waypoint not in current task.\nRemove active WayPoint?")),
-        gettext(TEXT("Remove Waypoint")),
-        MB_YESNO|MB_ICONQUESTION);
-
-      if (ret == IDYES) {
-        RemoveTaskPoint(ActiveTaskPoint, settings_computer);
-        if (task_points[ActiveTaskPoint].Index == -1) {
-          // Active WayPoint was last in the list so is currently
-          // invalid.
-          if (ActiveTaskPoint) {
-            ActiveTaskPoint--;
-          }
-        }
-      }
-    }
-  }
-  RefreshTask(settings_computer);
-}
-
-
-void Task::ReplaceWaypoint(const int index,
-                           const SETTINGS_COMPUTER &settings_computer) {
-  if (!CheckDeclaration())
-    return;
-
-  if (ValidTaskPoint(ActiveTaskPoint)) {
-    TaskModified = true;
-    TargetModified = true;
-    ResetTaskWaypoint(ActiveTaskPoint);
-    task_points[ActiveTaskPoint].Index = index;
-  } else {
-    // Insert a new waypoint since there's
-    // nothing to replace
-    TaskModified = true;
-    TargetModified = true;
-    ActiveTaskPoint=0;
-    ResetTaskWaypoint(ActiveTaskPoint);
-    task_points[ActiveTaskPoint].Index = index;
-  }
-  RefreshTask(settings_computer);
-}
-
-
-void Task::RefreshTask(const SETTINGS_COMPUTER &settings_computer) 
+TaskSafe::isTaskModified()  
 {
-  RefreshTask_Visitor(settings_computer);
-  CalculateAATTaskSectors(XCSoarInterface::Basic());
+  // read
+  Poco::ScopedRWLock protect(lock, false);
+  return _task.isTaskModified();
 }
 
-const GEOPOINT&
-Task::getTargetLocation(const int v) const
-{
-  int r= (v==-1)? ActiveTaskPoint:v;
-  if (AATEnabled && (r>0) && !TaskIsTemporary()
-      && ValidTaskPoint(r+1)) {
-    return task_points[r].AATTargetLocation;
-  } else {
-    return getTaskPointLocation(r);
-  }
+void 
+TaskSafe::SetTaskModified(const bool set)
+{ // write
+  Poco::ScopedRWLock protect(lock, true);
+  _task.SetTaskModified(set);
 }
 
-const GEOPOINT&
-Task::getActiveLocation() const
-{
-  return getTaskPointLocation(ActiveTaskPoint);
+const bool 
+TaskSafe::isTargetModified()  
+{ // read
+  Poco::ScopedRWLock protect(lock, false);
+  return _task.isTargetModified();
 }
 
-const GEOPOINT&
-Task::getTaskPointLocation(const unsigned i) const
-{
-  assert(ValidTaskPoint(i));
-  return way_points.get(task_points[i].Index).Location;
+void 
+TaskSafe::SetTargetModified(const bool set)
+{ // write
+  Poco::ScopedRWLock protect(lock, true);
+  _task.SetTargetModified(set);
+}
+
+const bool 
+TaskSafe::InAATTurnSector(const GEOPOINT &location, 
+                           const int the_turnpoint) 
+{ // read
+  Poco::ScopedRWLock protect(lock, false);
+  return _task.InAATTurnSector(location, the_turnpoint);
+}
+
+const unsigned 
+TaskSafe::getActiveIndex()  
+{ // read
+  Poco::ScopedRWLock protect(lock, false);
+  return _task.getActiveIndex();
+}
+
+void 
+TaskSafe::setActiveIndex(unsigned i) 
+{ // write
+  Poco::ScopedRWLock protect(lock, true);
+  return _task.setActiveIndex(i);
+}
+
+const TASK_POINT& 
+TaskSafe::getTaskPoint(const int v) 
+{ // read
+  Poco::ScopedRWLock protect(lock, false);
+  return _task.getTaskPoint(v);
+}
+
+void 
+TaskSafe::setTaskPoint(const unsigned index, const TASK_POINT& tp)
+{ // write
+  Poco::ScopedRWLock protect(lock, true);
+  _task.setTaskPoint(index, tp);
+}
+
+void 
+TaskSafe::setTaskIndices(const int wpindex[MAXTASKPOINTS]) 
+{ // write
+  Poco::ScopedRWLock protect(lock, true);
+  _task.setTaskIndices(wpindex);
 }
 
 const int 
-Task::getWaypointIndex(const int v) const
-{
-  int r= (v==-1)? ActiveTaskPoint:v;
-  if (ValidTaskPoint(r)) {
-    return task_points[r].Index;
-  } else {
-    return -1;
-  }
+TaskSafe::getWaypointIndex(const int v) 
+{ // read
+  Poco::ScopedRWLock protect(lock, false);
+  return _task.getWaypointIndex(v);
 }
-
-WAYPOINT null_waypoint; // TODO
-
-const WAYPOINT&
-Task::getWaypoint(const int v) const
-{
-  int r= (v==-1)? ActiveTaskPoint:v;
-  if (ValidTaskPoint(r)) {
-    return way_points.get(task_points[r].Index);
-  } else {
-    return null_waypoint;
-  }
-}
-
-const TASK_POINT&
-Task::getTaskPoint(const int v) const
-{
-  int r= (v==-1)? ActiveTaskPoint:v;
-  assert(ValidTaskPoint(r));
-  return task_points[r];
-}
-
-
-void 
-Task::setTaskPoint(const unsigned index, const TASK_POINT& tp) 
-{
-  task_points[index]= tp;
-  // refresh task/set modified?
-}
-
-void 
-Task::setTaskIndices(const int wpindex[MAXTASKPOINTS]) 
-{
-  for (unsigned i=0; i<MAXTASKPOINTS; i++) {
-    task_points[i].Index = wpindex[i];
-  }
-  // set modified?
-}
-
-void 
-Task::RotateStartPoints(const SETTINGS_COMPUTER &settings_computer) 
-{
-  if (ActiveTaskPoint>0) return;
-  if (!EnableMultipleStartPoints) return;
-
-  int found = -1;
-  int imax = 0;
-  for (int i=0; i<MAXSTARTPOINTS; i++) {
-    if (task_start_stats[i].Active 
-        && way_points.verify_index(task_start_points[i].Index)) {
-      if (task_points[0].Index == task_start_points[i].Index) {
-        found = i;
-      }
-      imax = i;
-    }
-  }
-  found++;
-  if (found>imax) {
-    found = 0;
-  }
-  if (way_points.verify_index(task_start_points[found].Index)) {
-    task_points[0].Index = task_start_points[found].Index;
-  }
-
-  RefreshTask(settings_computer);
-}
-
-
-double Task::AdjustAATTargets(double desired) 
-{
-  int i, istart, inum;
-  double av=0;
-  istart = max(1,ActiveTaskPoint);
-  inum=0;
-
-  for(i=istart;i<MAXTASKPOINTS-1;i++) {
-    if(ValidTaskPoint(i)&&ValidTaskPoint(i+1) 
-       && !task_points[i].AATTargetLocked) {
-      task_points[i].AATTargetOffsetRadius = 
-        max(-1,min(1,
-                   task_points[i].AATTargetOffsetRadius));
-      av += task_points[i].AATTargetOffsetRadius;
-      inum++;
-    }
-  }
-  if (inum>0) {
-    av/= inum;
-  }
-  if (fabs(desired)>1.0) {
-    // don't adjust, just retrieve.
-    goto OnExit;
-  }
-
-  // TODO accuracy: Check here for true minimum distance between
-  // successive points (especially second last to final point)
-
-  // Do this with intersection tests
-
-  desired = (desired+1.0)/2.0; // scale to 0,1
-  av = (av+1.0)/2.0; // scale to 0,1
-
-  for(i=istart;i<MAXTASKPOINTS-1;i++) {
-    if((task_points[i].Index >=0)
-       &&(task_points[i+1].Index >=0) 
-       && !task_points[i].AATTargetLocked)
-    {
-      double d = (task_points[i].AATTargetOffsetRadius+1.0)/2.0;
-      // scale to 0,1
-      
-      if (av>0.01) {
-        d = desired;
-        // 20080615 JMW
-        // was (desired/av)*d;
-        // now, we don't want it to be proportional
-      } else {
-        d = desired;
-      }
-      d = min(1.0, max(d, 0))*2.0-1.0;
-      task_points[i].AATTargetOffsetRadius = d;
-    }
-  }
-  // TODO RefreshTask ?
-
- OnExit:
-  return av;
-}
-
-void
-Task::CalculateAATTaskSectors(const NMEA_INFO &gps_info)
-{
-  int i;
-  int awp = ActiveTaskPoint;
-
-  if(AATEnabled == FALSE)
-    return;
-
-  task_points[0].AATTargetOffsetRadius = 0.0;
-  task_points[0].AATTargetOffsetRadial = 0.0;
-  if (task_points[0].Index>=0) {
-    task_points[0].AATTargetLocation = getTaskPointLocation(0);
-  }
-
-  for(i=1;i<MAXTASKPOINTS;i++) {
-    if(ValidTaskPoint(i)) {
-      if (!ValidTaskPoint(i+1)) {
-        // This must be the final waypoint, so it's not an AAT OZ
-        task_points[i].AATTargetLocation = getTaskPointLocation(i);
-        continue;
-      }
-
-      if(task_points[i].AATType == SECTOR) {
-        FindLatitudeLongitude (getTaskPointLocation(i),
-                               task_points[i].AATStartRadial,
-                               task_points[i].AATSectorRadius,
-                               &task_points[i].AATStart);
-
-        FindLatitudeLongitude (getTaskPointLocation(i),
-                               task_points[i].AATFinishRadial ,
-                               task_points[i].AATSectorRadius,
-                               &task_points[i].AATFinish);
-      }
-
-      // JMWAAT: if locked, don't move it
-      if (i<awp) {
-        // only update targets for current/later waypoints
-        continue;
-      }
-
-      task_points[i].AATTargetOffsetRadius =
-        min(1.0, max(task_points[i].AATTargetOffsetRadius,-1.0));
-
-      task_points[i].AATTargetOffsetRadial =
-        min(90, max(-90, task_points[i].AATTargetOffsetRadial));
-
-      double targetbearing;
-      double targetrange;
-
-      targetbearing = AngleLimit360(task_points[i].Bisector+task_points[i].AATTargetOffsetRadial);
-
-      if(task_points[i].AATType == SECTOR) {
-
-        //AATStartRadial
-        //AATFinishRadial
-
-        targetrange = ((task_points[i].AATTargetOffsetRadius+1.0)/2.0);
-
-        double aatbisector = HalfAngle(task_points[i].AATStartRadial,
-                                       task_points[i].AATFinishRadial);
-
-        if (fabs(AngleLimit180(aatbisector-targetbearing))>90) {
-          // bisector is going away from sector
-          targetbearing = Reciprocal(targetbearing);
-          targetrange = 1.0-targetrange;
-        }
-        if (!AngleInRange(task_points[i].AATStartRadial,
-                          task_points[i].AATFinishRadial,
-                          targetbearing,true)) {
-
-          // Bisector is not within AAT sector, so
-          // choose the closest radial as the target line
-
-          if (fabs(AngleLimit180(task_points[i].AATStartRadial-targetbearing))
-              <fabs(AngleLimit180(task_points[i].AATFinishRadial-targetbearing))) {
-            targetbearing = task_points[i].AATStartRadial;
-          } else {
-            targetbearing = task_points[i].AATFinishRadial;
-          }
-        }
-
-        targetrange*= task_points[i].AATSectorRadius;
-
-      } else {
-        targetrange = task_points[i].AATTargetOffsetRadius
-          *task_points[i].AATCircleRadius;
-      }
-
-      // TODO accuracy: if i=awp and in sector, range parameter needs to
-      // go from current aircraft position to projection of target
-      // out to the edge of the sector
-
-      if (InAATTurnSector(gps_info.Location, i) && (awp==i) &&
-          !task_points[i].AATTargetLocked) {
-
-        // special case, currently in AAT sector/cylinder
-
-        double dist;
-        double qdist;
-        double bearing;
-
-        // find bearing from last target through current aircraft position with offset
-        DistanceBearing(task_points[i-1].AATTargetLocation,
-                        gps_info.Location,
-                        &qdist, &bearing);
-
-        bearing = AngleLimit360(bearing+task_points[i].AATTargetOffsetRadial);
-
-        dist = ((task_points[i].AATTargetOffsetRadius+1)/2.0)*
-          FindInsideAATSectorDistance(gps_info.Location, i, bearing);
-
-        // if (dist+qdist>aatdistance.LegDistanceAchieved(awp)) {
-        // JMW: don't prevent target from being closer to the aircraft
-        // than the best achieved, so can properly plan arrival time
-
-        FindLatitudeLongitude (gps_info.Location,
-                               bearing,
-                               dist,
-                               &task_points[i].AATTargetLocation);
-
-        TargetModified = true;
-
-        // }
-
-      } else {
-
-        FindLatitudeLongitude (getTaskPointLocation(i),
-                               targetbearing,
-                               targetrange,
-                               &task_points[i].AATTargetLocation);
-        TargetModified = true;
-
-      }
-    }
-  }
-
-  CalculateAATIsoLines();
-  if (!targetManipEvent.test()) {
-    TargetModified = false;
-    // allow target dialog to detect externally changed targets
-  }
-}
-
-
-void Task::ClearTask(void) {
-  memset( &(task_points), 0, sizeof(Task_t));
-  memset( &(task_start_points), 0, sizeof(Start_t));
-
-  TaskModified = true;
-  TargetModified = true;
-  ClearTaskFileName();
-  ActiveTaskPoint = 0;
-  int i;
-  for(i=0;i<MAXTASKPOINTS;i++) {
-    task_points[i].Index = -1;
-    task_points[i].AATSectorRadius = SectorRadius; // JMW added default
-    task_points[i].AATCircleRadius = SectorRadius; // JMW added default
-    task_points[i].AATTargetOffsetRadial = 0;
-    task_points[i].AATTargetOffsetRadius = 0;
-    task_points[i].AATTargetLocked = false;
-    for (int j=0; j<MAXISOLINES; j++) {
-      task_points[i].IsoLine_valid[j] = false;
-    }
-    Task_saved[i] = task_points[i].Index;
-  }
-  for (i=0; i<MAXSTARTPOINTS; i++) {
-    task_start_points[i].Index = -1;
-  }
-}
-
-
-const bool 
-Task::Valid() const
-{
-  return ValidTaskPoint(ActiveTaskPoint);
+const WAYPOINT& 
+TaskSafe::getWaypoint(const int v) 
+{ // read
+  Poco::ScopedRWLock protect(lock, false);
+  return _task.getWaypoint(v);
 }
 
 const bool 
-Task::ValidTaskPoint(const unsigned i) const 
-{
-  if (i>= MAXTASKPOINTS)
-    return false;
-  else if (task_points[i].Index<0)
-    return false;
-  else if (!way_points.verify_index(task_points[i].Index))
-    return false;
-  else 
-    return true;
+TaskSafe::ValidTaskPoint(const unsigned i) 
+{ // read
+  Poco::ScopedRWLock protect(lock, false);
+  return _task.ValidTaskPoint(i);
 }
-
+const bool 
+TaskSafe::Valid()  
+{ // read
+  Poco::ScopedRWLock protect(lock, false);
+  return _task.Valid();
+}
 
 const double 
-Task::FindInsideAATSectorDistance(const GEOPOINT &location,
-                                   const int taskwaypoint,
-                                   const double course_bearing,
-                                   const double p_found) const 
+TaskSafe::DoubleLegDistance(const int taskwaypoint, // read
+                               const GEOPOINT &location)  
 {
-  double max_distance;
-  if(task_points[taskwaypoint].AATType == SECTOR) {
-    max_distance = task_points[taskwaypoint].AATSectorRadius;
-  } else {
-    max_distance = task_points[taskwaypoint].AATCircleRadius;
-  }
-
-  // Do binary bounds search for longest distance within sector
-
-  double delta = max_distance;
-  double t_distance_lower = p_found;
-  double t_distance = p_found+delta*2;
-  int steps = 0;
-  do {
-
-    GEOPOINT t_loc;
-    FindLatitudeLongitude(location,
-                          course_bearing, t_distance,
-                          &t_loc);
-
-    if (InAATTurnSector(t_loc, taskwaypoint)) {
-      t_distance_lower = t_distance;
-      // ok, can go further
-      t_distance += delta;
-    } else {
-      t_distance -= delta;
-    }
-    delta /= 2.0;
-  } while ((delta>5.0)&&(steps++<20));
-
-  return t_distance_lower;
-}
-
-
-const double 
-Task::FindInsideAATSectorRange(const GEOPOINT &location,
-                               const int taskwaypoint,
-                               const double course_bearing,
-                               const double p_found) const
-{
-
-  double t_distance = FindInsideAATSectorDistance(location, taskwaypoint,
-                                                  course_bearing, p_found);
-  return (p_found /
-          max(1,t_distance))*2-1;
-}
-
-
-/////////////////
-
-const double 
-Task::DoubleLegDistance(const int taskwaypoint,
-                        const GEOPOINT &location) const
-{
-  if (taskwaypoint>0) {
-    return DoubleDistance(task_points[taskwaypoint-1].AATTargetLocation,
-			  location,
-			  task_points[taskwaypoint+1].AATTargetLocation);
-  } else {
-    return Distance(location,
-		    task_points[taskwaypoint+1].AATTargetLocation);
-  }
-}
-
-//////////////////////////////////////////////////////
-
-
-
-const bool 
-Task::TaskIsTemporary(void) const {
-  bool retval = false;
-  if (TaskAborted) {
-    retval = true;
-  }
-  if ((task_points[0].Index>=0) && (task_points[1].Index== -1)
-      && (Task_saved[0] >= 0)) {
-    retval = true;
-  };
-  return retval;
-}
-
-
-void Task::BackupTask(void) {
-  for (int i=0; i<=MAXTASKPOINTS; i++) {
-    Task_saved[i]= task_points[i].Index;
-  }
-  active_waypoint_saved = ActiveTaskPoint;
-  if (AATEnabled) {
-    aat_enabled_saved = true;
-  } else {
-    aat_enabled_saved = false;
-  }
-}
-
-
-void 
-Task::ResumeAbortTask(const SETTINGS_COMPUTER &settings_computer, 
-                      const int set) 
-{
-  int i;
-  unsigned active_waypoint_on_entry;
-  bool task_temporary_on_entry = TaskIsTemporary();
-
-  active_waypoint_on_entry = ActiveTaskPoint;
-
-  if (set == 0) {
-    if (task_temporary_on_entry && !TaskAborted) {
-      // no toggle required, we are resuming a temporary goto
-    } else {
-      TaskAborted = !TaskAborted;
-    }
-  } else if (set > 0)
-    TaskAborted = true;
-  else if (set < 0)
-    TaskAborted = false;
-
-  if (task_temporary_on_entry != TaskAborted) {
-    if (TaskAborted) {
-
-      // save current task in backup
-      BackupTask();
-
-      // force new waypoint to be the closest
-      ActiveTaskPoint = 0;
-
-      // force AAT off
-      AATEnabled = false;
-
-      // set MacCready
-      if (!GlidePolar::AbortSafetyUseCurrent)  // 20060520:sgi added
-	GlidePolar::SetMacCready(min(GlidePolar::GetMacCready(), 
-				     GlidePolar::AbortSafetyMacCready()));
-
-    } else {
-
-      // reload backup task and clear it
-
-      for (i=0; i<=MAXTASKPOINTS; i++) {
-        task_points[i].Index = Task_saved[i];
-	Task_saved[i] = -1;
-      }
-      ActiveTaskPoint = active_waypoint_saved;
-      AATEnabled = aat_enabled_saved;
-
-      RefreshTask(settings_computer);
-    }
-  }
-
-  if (active_waypoint_on_entry != ActiveTaskPoint){
-    SelectedWaypoint = task_points[ActiveTaskPoint].Index;
-  }
-
-}
-
-
-
-const int 
-Task::getFinalWaypoint() const {
-  if (TaskAborted) {
-    return ActiveTaskPoint;
-  }
-
-  unsigned i= ActiveTaskPoint+1;
-  while ((i<MAXTASKPOINTS) && (task_points[i].Index != -1)) {
-    i++;
-  }
-  return i-1;
+  Poco::ScopedRWLock protect(lock, false);
+  return _task.DoubleLegDistance(taskwaypoint, location);
 }
 
 const bool 
-Task::ActiveIsFinalWaypoint() const
-{
-  return ((int)ActiveTaskPoint == getFinalWaypoint());
+TaskSafe::TaskIsTemporary(void)  
+{ // read
+  Poco::ScopedRWLock protect(lock, false);
+  return _task.TaskIsTemporary();
 }
 
+const int  
+TaskSafe::getFinalWaypoint(void)  
+{ // read
+  Poco::ScopedRWLock protect(lock, false);
+  return _task.getFinalWaypoint();
+}
 
 const bool 
-Task::InAATTurnSector(const GEOPOINT &location,
-                      const int the_turnpoint) const
-{
-  bool retval = false;
-
-  if (!ValidTaskPoint(the_turnpoint)) {
-    return false;
-  }
-
-  double distance;
-  double bearing;
-  DistanceBearing(getTaskPointLocation(the_turnpoint),
-                  location, &distance, &bearing);
-
-  if(task_points[the_turnpoint].AATType ==  CIRCLE) {
-    if(distance < task_points[the_turnpoint].AATCircleRadius) {
-      retval = true;
-    }
-  } else if(distance < task_points[the_turnpoint].AATSectorRadius) {
-    if (AngleInRange(task_points[the_turnpoint].AATStartRadial,
-                     task_points[the_turnpoint].AATFinishRadial,
-                     AngleLimit360(bearing), true)) {
-      retval = true;
-    }
-  }
-
-  return retval;
+TaskSafe::ActiveIsFinalWaypoint(void)  
+{ //read
+  Poco::ScopedRWLock protect(lock, false);
+  return _task.ActiveIsFinalWaypoint();
 }
 
+const bool 
+TaskSafe::isTaskAborted()  
+{ // read
+  Poco::ScopedRWLock protect(lock, false);
+  return _task.isTaskAborted();
+}
+
+const GEOPOINT &
+TaskSafe::getTaskPointLocation(const unsigned i)  
+{ // read
+  Poco::ScopedRWLock protect(lock, false);
+  return _task.getTaskPointLocation(i);
+}
+
+const GEOPOINT &
+TaskSafe::getActiveLocation()  
+{ // read
+  Poco::ScopedRWLock protect(lock, false);
+  return _task.getActiveLocation();
+}
+
+const GEOPOINT &
+TaskSafe::getTargetLocation(const int v)  
+{ // read
+  Poco::ScopedRWLock protect(lock, false);
+  return _task.getTargetLocation(v);
+}
+
+// file load/save
+void 
+TaskSafe::LoadNewTask(const TCHAR *FileName,
+                 const SETTINGS_COMPUTER &settings_computer) // write
+{
+  Poco::ScopedRWLock protect(lock, true);
+  _task.LoadNewTask(FileName, settings_computer);
+}
 
 void 
-Task::CheckStartPointInTask(void) 
+TaskSafe::SaveTask(const TCHAR *FileName) // write
 {
-  if (task_points[0].Index != -1) {
-    // ensure current start point is in task
-    int index_last = 0;
-    for (int i=MAXSTARTPOINTS-1; i>=0; i--) {
-      if (task_start_points[i].Index == task_points[0].Index) {
-	index_last = -1;
-	break;
-      }
-      if ((task_start_points[i].Index>=0) && (index_last==0)) {
-	index_last = i;
-      }
-    }
-    if (index_last>=0) {
-      if (task_start_points[index_last].Index>= 0) {
-	index_last = min(MAXSTARTPOINTS-1,index_last+1);
-      }
-      // it wasn't, so make sure it's added now
-      task_start_points[index_last].Index = task_points[0].Index;
-      task_start_stats[index_last].Active = true;
-      // TODO: trigger refresh, modified
-    }
-  }
+  Poco::ScopedRWLock protect(lock, true);
+  _task.SaveTask(FileName);
 }
-
 
 void 
-Task::ClearStartPoints()
-{
-  for (int i=0; i<MAXSTARTPOINTS; i++) {
-    task_start_points[i].Index = -1;
-    task_start_stats[i].Active = false;
-  }
-  task_start_points[0].Index = task_points[0].Index;
-  task_start_stats[0].Active = true;
+TaskSafe::SaveDefaultTask(void) 
+{ // write
+  Poco::ScopedRWLock protect(lock, true);
+  _task.SaveDefaultTask();
 }
 
+const TCHAR* 
+TaskSafe::getTaskFilename()  
+{ // read
+  Poco::ScopedRWLock protect(lock, false);
+  return _task.getTaskFilename();
+}
+void 
+TaskSafe::ClearTaskFileName() // write
+{
+  Poco::ScopedRWLock protect(lock, true);
+  _task.ClearTaskFileName();
+}
+ 
+// potentially write
 
 void 
-Task::SetStartPoint(const int pointnum, const int waypointnum)
-{
-  if ((pointnum>=0) && (pointnum<MAXSTARTPOINTS)) {
-    // TODO bug: don't add it if it's already present!
-    task_start_points[pointnum].Index = waypointnum;
-    task_start_stats[pointnum].Active = true;
-  }
-}
+TaskSafe::scan_point_forward(RelativeTaskPointVisitor &visitor) {
+  Poco::ScopedRWLock protect(lock, true);
+  _task.scan_point_forward(visitor);
+};
 
-void
-Task::advanceTaskPoint(const SETTINGS_COMPUTER &settings_computer)
-{
-  if(ActiveTaskPoint < MAXTASKPOINTS-1) {
-    // Increment Waypoint
-    if (ValidTaskPoint(ActiveTaskPoint+1)) {
-      if(ActiveTaskPoint == 0)	{
-        // manual start
-        // TODO bug: allow restart
-        // TODO bug: make this work only for manual
-        /* JMW ILLEGAL
-           if (Calculated().TaskStartTime==0) {
-           Calculated().TaskStartTime = Basic().Time;
-           }
-        */
-      }
-      ActiveTaskPoint ++;
-      AdvanceArmed = false;
-      SelectedWaypoint = getWaypointIndex();
-      /* JMW ILLEGAL
-         Calculated().LegStartTime = Basic().Time ;
-      */
-    }
-  }
-}
+void 
+TaskSafe::scan_point_forward(AbsoluteTaskPointVisitor &visitor) {
+  Poco::ScopedRWLock protect(lock, true);
+  _task.scan_point_forward(visitor);
+};
 
+void 
+TaskSafe::scan_leg_forward(RelativeTaskLegVisitor &visitor) {
+  Poco::ScopedRWLock protect(lock, true);
+  _task.scan_leg_forward(visitor);
+};
 
-void
-Task::retreatTaskPoint(const SETTINGS_COMPUTER &settings_computer)
-{
-  if(ActiveTaskPoint >0) {
-    ActiveTaskPoint --;
-    SelectedWaypoint = getWaypointIndex();
-    /*
-      XXX How do we know what the last one is?
-      } else if (UpDown == -2) {
-      ActiveTaskPoint = MAXTASKPOINTS;
-    */
-  } else {
-    if (ActiveTaskPoint==0) {
-      RotateStartPoints(settings_computer);
-      // restarted task..
-      //	TODO bug: not required? Calculated().TaskStartTime = 0;
-      SelectedWaypoint = getWaypointIndex();
-    }
-  }
-  //JMW illegal glide_computer.ResetEnter();
-}
+void 
+TaskSafe::scan_leg_forward(AbsoluteTaskLegVisitor &visitor) {
+  Poco::ScopedRWLock protect(lock, true);
+  _task.scan_leg_forward(visitor);
+};
 
+void 
+TaskSafe::scan_leg_reverse(RelativeTaskLegVisitor &visitor) {
+  Poco::ScopedRWLock protect(lock, true);
+  _task.scan_leg_reverse(visitor);
+};
+
+void 
+TaskSafe::scan_leg_reverse(AbsoluteTaskLegVisitor &visitor) {
+  Poco::ScopedRWLock protect(lock, true);
+  _task.scan_leg_reverse(visitor);
+};

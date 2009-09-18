@@ -172,6 +172,7 @@ OBJS	:=\
 	$(SRC)/OnLineContest.o 		\
 	$(SRC)/SnailTrail.o 		\
 	$(SRC)/Task.o			\
+	$(SRC)/TaskImpl.o		\
 	$(SRC)/TaskFile.o		\
 	$(SRC)/TaskVisitor.o		\
 	$(SRC)/TeamCodeCalculation.o 	\

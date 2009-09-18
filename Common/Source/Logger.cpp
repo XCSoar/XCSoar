@@ -749,7 +749,7 @@ void LoggerDeviceDeclare() {
   GetRegistryString(szRegistryAircraftType, Decl.AircraftType, 32);
   GetRegistryString(szRegistryAircraftRego, Decl.AircraftRego, 32);
 
-  for (i = 0; task.verify_index(i); i++) {
+  for (i = 0; task.ValidTaskPoint(i); i++) {
     Decl.waypoint[i] = &task.getWaypoint(i);
   }
   Decl.num_waypoints = i;
@@ -993,7 +993,7 @@ void guiStartLogger(const NMEA_INFO& gps_info,
     TCHAR TaskMessage[1024];
     _tcscpy(TaskMessage,TEXT("Start Logger With Declaration\r\n"));
     if (task.Valid()) {
-      for (i = 0; task.verify_index(i); i++) {
+      for (i = 0; task.ValidTaskPoint(i); i++) {
         _tcscat(TaskMessage, task.getWaypoint(i).Name);
 	_tcscat(TaskMessage,TEXT("\r\n"));
       }
@@ -1015,7 +1015,7 @@ void guiStartLogger(const NMEA_INFO& gps_info,
           if (task.Valid()) {
             int ntp = task.getFinalWaypoint();
             StartDeclaration(gps_info,ntp);
-            for (i = 0; task.verify_index(i); i++) {
+            for (i = 0; task.ValidTaskPoint(i); i++) {
               const WAYPOINT &way_point = task.getWaypoint(i);
               AddDeclaration(way_point.Location.Latitude,
                              way_point.Location.Longitude,

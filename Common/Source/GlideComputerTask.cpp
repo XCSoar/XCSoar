@@ -1288,12 +1288,11 @@ void GlideComputerTask::AATStats_Time() {
 }
 
 
+// TODO: turn into visitor
 void GlideComputerTask::AATStats_Distance() 
 {
   int i;
   double MaxDistance, MinDistance, TargetDistance;
-
-  ScopeLock protect(mutexTaskData);
 
   MaxDistance = 0; MinDistance = 0; TargetDistance = 0;
   // Calculate Task Distances

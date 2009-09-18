@@ -593,7 +593,7 @@ void dlgTarget(void) {
   } else {
     target_point = max(target_point, ActiveTaskPointOnEntry);
   }
-  target_point = min(target_point, task.getFinalWaypoint());
+  target_point = max(0,min((int)target_point, task.getFinalWaypoint()));
 
   for (unsigned i=ActiveTaskPointOnEntry; task.ValidTaskPoint(i); i++) {
     _tcsncpy(tp_short, task.getWaypoint(i).Name, 20);
