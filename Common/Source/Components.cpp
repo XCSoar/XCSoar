@@ -406,14 +406,18 @@ void XCSoarInterface::Shutdown(void) {
   // Stop drawing
   CreateProgressDialog(gettext(TEXT("Shutdown, please wait...")));
 
-  // Stop calculating too (wake up)
-  TriggerAll();
-
   StartupStore(TEXT("CloseDrawingThread\n"));
   closeTriggerEvent.trigger();
-  drawTriggerEvent.trigger(); // wake self up
-  draw_thread->suspend();
+
+  calculation_thread->join();
+  StartupStore(TEXT("- calculation thread returned\n"));
+
+  instrument_thread->join();
+  StartupStore(TEXT("- instrument thread returned\n"));
+
   draw_thread->join();
+  StartupStore(TEXT("- draw thread returned\n"));
+
   delete draw_thread;
 
   // Clear data
