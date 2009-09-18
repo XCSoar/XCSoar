@@ -489,6 +489,7 @@ static void UpdateValuesRules(void) {
       wp->SetText(TEXT(""));
     }
   }
+  mutexTaskData.Unlock();
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpStartHeight"));
   if (wp) {
@@ -513,7 +514,6 @@ static void UpdateValuesRules(void) {
     wp->SetText(Temp);
   }
 
-  mutexTaskData.Unlock();
 }
 
 
