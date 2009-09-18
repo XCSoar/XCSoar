@@ -225,6 +225,10 @@ ifeq ($(HAVE_WIN32),n)
 TARGET_INCLUDES += -I$(HDR)/unix
 endif
 
+ifeq ($(TARGET),WINE)
+TARGET_INCLUDES += -I$(HDR)/wine
+endif
+
 ####### compiler target
 
 ifeq ($(TARGET),UNIX)
