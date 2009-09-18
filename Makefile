@@ -338,35 +338,39 @@ CXXFLAGS += -Wno-strict-aliasing
 
 ####### linker configuration
 
+TARGET_LDFLAGS =
+TARGET_LDLIBS =
+
 ifeq ($(HAVE_WIN32),y)
 ifneq ($(CONFIG_WINE),y)
-LDFLAGS		:=-Wl,--major-subsystem-version=$(CE_MAJOR)
-LDFLAGS		+=-Wl,--minor-subsystem-version=$(CE_MINOR)
+TARGET_LDFLAGS := -Wl,--major-subsystem-version=$(CE_MAJOR)
+TARGET_LDFLAGS += -Wl,--minor-subsystem-version=$(CE_MINOR)
 ifeq ($(CONFIG_PC),y)
-LDFLAGS		+=-Wl,-subsystem,windows
+TARGET_LDFLAGS += -Wl,-subsystem,windows
 endif
 endif
 endif
 
 ifeq ($(HAVE_POSIX),y)
-LDFLAGS += -lpthread
+TARGET_LDFLAGS += -lpthread
 endif
-
-LDFLAGS		+=$(PROFILE)
 
 ifeq ($(HAVE_WIN32),y)
 ifeq ($(CONFIG_PC),y)
-LDLIBS		:= -lcomctl32 -lkernel32 -luser32 -lgdi32 -ladvapi32 -lwinmm -lmsimg32 -lstdc++
+TARGET_LDLIBS := -lcomctl32 -lkernel32 -luser32 -lgdi32 -ladvapi32 -lwinmm -lmsimg32 -lstdc++
 else
-  LDLIBS		:= -lcommctrl -lstdc++
+TARGET_LDLIBS := -lcommctrl -lstdc++
   ifeq ($(MINIMAL),n)
-    LDLIBS		+= -laygshell
+TARGET_LDLIBS += -laygshell
     ifneq ($(TARGET),PNA)
-      LDLIBS		+= -limgdecmp
+TARGET_LDLIBS += -limgdecmp
     endif
   endif
 endif
 endif
+
+LDFLAGS = $(TARGET_LDFLAGS) $(PROFILE)
+LDLIBS = $(TARGET_LDLIBS)
 
 ####### compiler target
 
