@@ -124,12 +124,12 @@ public:
 
   void setTaskIndices(const int wpindex[MAXTASKPOINTS]);
 
-  void scan_point_forward(RelativeTaskPointVisitor &visitor);
-  void scan_point_forward(AbsoluteTaskPointVisitor &visitor);
-  void scan_leg_forward(RelativeTaskLegVisitor &visitor);
-  void scan_leg_forward(AbsoluteTaskLegVisitor &visitor);
-  void scan_leg_reverse(RelativeTaskLegVisitor &visitor);
-  void scan_leg_reverse(AbsoluteTaskLegVisitor &visitor);
+  void scan_point_forward(RelativeTaskPointVisitor &visitor, const bool write=true);
+  void scan_point_forward(AbsoluteTaskPointVisitor &visitor, const bool write=true);
+  void scan_leg_forward(RelativeTaskLegVisitor &visitor, const bool write=true);
+  void scan_leg_forward(AbsoluteTaskLegVisitor &visitor, const bool write=true);
+  void scan_leg_reverse(RelativeTaskLegVisitor &visitor, const bool write=true);
+  void scan_leg_reverse(AbsoluteTaskLegVisitor &visitor, const bool write=true);
 };
 
 

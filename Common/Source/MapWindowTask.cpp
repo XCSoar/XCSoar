@@ -91,7 +91,7 @@ MapWindow::DrawAbortedTask(Canvas &canvas)
   Pen dash_pen(Pen::DASH, IBLSCALE(1), MapGfx.TaskColor);
   canvas.select(dash_pen);
   DrawAbortedTaskVisitor dv(canvas, Orig_Aircraft);
-  task.scan_point_forward(dv); // read lock
+  task.scan_point_forward(dv, false); // read lock
 }
 
 //////////////////
@@ -334,9 +334,9 @@ private:
 void MapWindow::DrawTask(Canvas &canvas, RECT rc)
 {
   DrawTaskVisitor dv(*this, canvas, Orig_Aircraft, task_screen, task_start_screen,
-                     task.getActiveIndex()); // read lock
-  task.scan_leg_forward(dv);
-  task.scan_point_forward(dv);
+                     task.getActiveIndex()); 
+  task.scan_leg_forward(dv, false);   // read lock
+  task.scan_point_forward(dv, false); // read lock
 }
 
 ///////
@@ -432,7 +432,8 @@ void MapWindow::DrawTaskAAT(Canvas &canvas, const RECT rc, Canvas &buffer)
   if (AATEnabled) {
     DrawTaskAATVisitor dv(canvas, rc, buffer, task.getActiveIndex(),
                           task_screen, *this);
-    task.scan_point_forward(dv); // TODO, reverse
+    task.scan_point_forward(dv, false); // read lock
+    // TODO, reverse
     canvas.copy_transparent_white(buffer, rc);
   }
 }
@@ -502,9 +503,9 @@ void MapWindow::DrawBearing(Canvas &canvas, int bBearingValid)
    but we can still draw targets */
 
   DrawTargetVisitor tv(canvas, *this, bBearingValid);
-  task.scan_leg_forward(tv);
+  task.scan_leg_forward(tv, false); // read lock
   if (AATEnabled) {
-    task.scan_point_forward(tv);
+    task.scan_point_forward(tv, false); // read lock
   }
 }
 
@@ -703,6 +704,6 @@ void MapWindow::CalculateScreenPositionsTask() {
 
   ScreenPositionsTaskVisitor sv(*this, task_screen, task_start_screen,
     task.getActiveIndex());
-  task.scan_point_forward(sv);
+  task.scan_point_forward(sv, false); // read lock
 }
 

@@ -389,37 +389,37 @@ TaskSafe::ClearTaskFileName() // write
 // potentially write
 
 void 
-TaskSafe::scan_point_forward(RelativeTaskPointVisitor &visitor) {
-  Poco::ScopedRWLock protect(lock, true);
+TaskSafe::scan_point_forward(RelativeTaskPointVisitor &visitor, const bool write) {
+  Poco::ScopedRWLock protect(lock, write);
   _task.scan_point_forward(visitor);
 };
 
 void 
-TaskSafe::scan_point_forward(AbsoluteTaskPointVisitor &visitor) {
-  Poco::ScopedRWLock protect(lock, true);
+TaskSafe::scan_point_forward(AbsoluteTaskPointVisitor &visitor, const bool write) {
+  Poco::ScopedRWLock protect(lock, write);
   _task.scan_point_forward(visitor);
 };
 
 void 
-TaskSafe::scan_leg_forward(RelativeTaskLegVisitor &visitor) {
-  Poco::ScopedRWLock protect(lock, true);
+TaskSafe::scan_leg_forward(RelativeTaskLegVisitor &visitor, const bool write) {
+  Poco::ScopedRWLock protect(lock, write);
   _task.scan_leg_forward(visitor);
 };
 
 void 
-TaskSafe::scan_leg_forward(AbsoluteTaskLegVisitor &visitor) {
-  Poco::ScopedRWLock protect(lock, true);
+TaskSafe::scan_leg_forward(AbsoluteTaskLegVisitor &visitor, const bool write) {
+  Poco::ScopedRWLock protect(lock, write);
   _task.scan_leg_forward(visitor);
 };
 
 void 
-TaskSafe::scan_leg_reverse(RelativeTaskLegVisitor &visitor) {
-  Poco::ScopedRWLock protect(lock, true);
+TaskSafe::scan_leg_reverse(RelativeTaskLegVisitor &visitor, const bool write) {
+  Poco::ScopedRWLock protect(lock, write);
   _task.scan_leg_reverse(visitor);
 };
 
 void 
-TaskSafe::scan_leg_reverse(AbsoluteTaskLegVisitor &visitor) {
-  Poco::ScopedRWLock protect(lock, true);
+TaskSafe::scan_leg_reverse(AbsoluteTaskLegVisitor &visitor, const bool write) {
+  Poco::ScopedRWLock protect(lock, write);
   _task.scan_leg_reverse(visitor);
 };

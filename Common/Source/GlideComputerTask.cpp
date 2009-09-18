@@ -1256,7 +1256,7 @@ void GlideComputerTask::TaskStatistics(const double this_maccready,
                             final_height,
                             AATCloseDistance(),
                             AATCloseBearing());
-  task.scan_leg_reverse(tsv);
+  task.scan_leg_reverse(tsv, false); // read lock
 }
 
 
@@ -1571,7 +1571,7 @@ bool GlideComputerTask::TaskAltitudeRequired(double this_maccready, double *Vfin
 				   Calculated().WindBearing,
 				   FAIFinishHeight(0),
 				   FAIFinishHeight(-1));
-  task.scan_leg_reverse(tarv);
+  task.scan_leg_reverse(tarv, false); // read lock
 
   SetCalculated().TaskAltitudeRequiredFromStart = tarv.TotalAltitude
     + FAIFinishHeight(-1);
