@@ -107,8 +107,6 @@ DLGS	:=\
 	$(SRC)/Dialogs/dlgStartup.o \
 	$(SRC)/Dialogs/dlgStatistics.o \
 	$(SRC)/Dialogs/dlgStatus.o \
-	$(SRC)/Dialogs/dlgStatusSystem.o \
-	$(SRC)/Dialogs/dlgStatusTask.o \
 	$(SRC)/Dialogs/dlgSwitches.o \
 	$(SRC)/Dialogs/dlgTarget.o \
 	$(SRC)/Dialogs/dlgTaskCalculator.o \
