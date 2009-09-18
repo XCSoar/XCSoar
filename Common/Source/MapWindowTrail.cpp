@@ -284,7 +284,7 @@ double MapWindow::DrawTrail(Canvas &canvas)
 #ifndef NOLINETO
       canvas.line_to(Screen.x, Screen.y);
 #else
-      canvas.line(P1.Screen, point_lastdrawn);
+      canvas.line(Screen, point_lastdrawn);
 #endif
     }
     point_lastdrawn = Screen;
