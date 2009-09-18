@@ -97,7 +97,6 @@ void SettingsLeave() {
   // from running, while shared data is potentially reloaded.
 
   mutexBlackboard.Lock();
-  mutexTaskData.Lock();
 
   if(MAPFILECHANGED) {
     AIRSPACEFILECHANGED = true;
@@ -157,7 +156,6 @@ void SettingsLeave() {
     XCSoarInterface::main_window.map.set_focus();
   }
 
-  mutexTaskData.Unlock();
   mutexBlackboard.Unlock();
 
   if(COMPORTCHANGED) {
