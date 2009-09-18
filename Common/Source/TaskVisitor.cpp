@@ -207,6 +207,44 @@ void Task::scan_leg_reverse(AbsoluteTaskLegVisitor &visitor)
 }
 
 
+void Task::scan_leg_reverse(RelativeTaskLegVisitor &visitor)
+{
+  visitor.setTask(*this);
+  visitor.visit_reset();
+
+  if (!Valid()) {
+    visitor.visit_null();
+    return;
+  }
+  if (!ValidTaskPoint(1)) {
+    visitor.visit_single(task_points[0], 0);
+    return;
+  }
+
+  unsigned final = getFinalWaypoint();
+  if (final==0) {
+    visitor.visit_single(task_points[0], 0);
+    return;
+  }
+  unsigned i= final;
+  unsigned a = ActiveTaskPoint;
+  while (i>0) {
+    if (i<a) {
+      visitor.visit_leg_before(task_points[i-1], i-1,
+                               task_points[i], i);
+    } else if (i==a) {
+      visitor.visit_leg_current(task_points[i-1], i-1,
+                                task_points[i], i);
+    } else {
+      visitor.visit_leg_after(task_points[i-1], i-1,
+                              task_points[i], i);
+    }
+    i--;
+  }
+
+}
+
+
 ////////////////////////////////////////////////////////////////
 
 class RelativeTaskLegVisitorExample:

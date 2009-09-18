@@ -91,6 +91,9 @@ private:
   void CheckInSector();
   void TaskStatistics(const double this_maccready,
 		      const double cruise_efficiency);
+  void LegSpeed();
+  void TerrainWarning();
+  void DistanceCovered();
   void AATStats_Time();
   void AATStats_Distance();
   void AATStats();
@@ -98,7 +101,7 @@ private:
   void DebugTaskCalculations();
   void TaskSpeed(const double this_maccready,
 		 const double cruise_efficiency);
-  void LDNext(const double LegToGo);
+  void LDNext();
   void CheckForceFinalGlide();
   double SpeedHeight();
   bool TaskAltitudeRequired(double this_maccready, double *Vfinal,
