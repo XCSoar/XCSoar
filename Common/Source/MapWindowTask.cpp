@@ -152,8 +152,8 @@ public:
       }
       if (flip) {
 	for (int j=0; j<MAXISOLINES-1; j++) {
-	  if (task_stats[i].IsoLine_valid[j]
-	      && task_stats[i].IsoLine_valid[j+1]) {
+	  if (point.IsoLine_valid[j]
+	      && point.IsoLine_valid[j+1]) {
 	    canvas->select(penb2);
 	    canvas->line((*task_screen)[i].IsoLine_Screen[j],
 			 (*task_screen)[i].IsoLine_Screen[j + 1]);
@@ -257,12 +257,9 @@ public:
     canvas->select(dash_pen3);
     
     if (AATEnabled && !map_window->SettingsMap().TargetPan) {
-      map_window->LonLat2Screen(task_stats[index0].AATTargetLocation,
-		    sct1);
-      map_window->LonLat2Screen(task_stats[index1].AATTargetLocation,
-		    sct2);
-      bearing = Bearing(task_stats[index0].AATTargetLocation,
-                        task_stats[index1].AATTargetLocation);
+      map_window->LonLat2Screen(point0.AATTargetLocation, sct1);
+      map_window->LonLat2Screen(point1.AATTargetLocation, sct2);
+      bearing = Bearing(point0.AATTargetLocation, point1.AATTargetLocation);
       
       // draw nominal track line
       canvas->line(way_points.get_calc(imin).Screen,
@@ -458,7 +455,7 @@ public:
   {
     if (i>0) {
       map.draw_masked_bitmap_if_visible(canvas, MapGfx.hBmpTarget, 
-                                        task_stats[i].AATTargetLocation,
+                                        point.AATTargetLocation,
                                         10, 10);
     }
   };
@@ -474,7 +471,7 @@ public:
   {
     if (draw_bearing) {
       GEOPOINT start = map.Basic().Location;
-      GEOPOINT target = task.getTargetLocation(index1);
+      GEOPOINT target = _task->getTargetLocation(index1);
       map.DrawGreatCircle(canvas, start, target);
     }
   };
@@ -488,8 +485,8 @@ public:
     // Draw all of task if in target pan mode
     if (map.SettingsMap().TargetPan) {
       map.DrawGreatCircle(canvas, 
-                      task.getTargetLocation(index0),
-                      task.getTargetLocation(index1));
+                      _task->getTargetLocation(index0),
+                      _task->getTargetLocation(index1));
     }
   };
 
@@ -642,10 +639,12 @@ class ScreenPositionsTaskVisitor:
 public:
   ScreenPositionsTaskVisitor(MapWindow& _map,
 			     TaskScreen_t &_task_screen,
-			     StartScreen_t &_start_screen):
+			     StartScreen_t &_start_screen,
+                             unsigned _activeIndex):
     map(&_map),
     task_screen(&_task_screen),
-    start_screen(&_start_screen)
+    start_screen(&_start_screen),
+    activeIndex(_activeIndex)
   {}
   void visit_start_point(START_POINT &point, const unsigned i) 
   { 
@@ -658,8 +657,7 @@ public:
   void visit_task_point_start(TASK_POINT &point, const unsigned i) 
   { 
     if (AATEnabled) {
-      map->LonLat2Screen(task_stats[i].AATTargetLocation, 
-			 (*task_screen)[i].Target);
+      map->LonLat2Screen(point.AATTargetLocation, (*task_screen)[i].Target);
     }
     map->LonLat2Screen(point.SectorEnd, 
 		       (*task_screen)[i].SectorEnd);
@@ -676,13 +674,13 @@ public:
   void visit_task_point_intermediate(TASK_POINT &point, const unsigned i) 
   { 
     visit_task_point_start(point, i);
-    if (AATEnabled && ((i==task.getActiveIndex()) ||
+    if (AATEnabled && ((i==activeIndex) ||
 		       (map->SettingsMap().TargetPan 
 			&& ((int)i==map->SettingsMap().TargetPanIndex)))) {
       
       for (int j=0; j<MAXISOLINES; j++) {
-	if (task_stats[i].IsoLine_valid[j]) {
-	  map->LonLat2Screen(task_stats[i].IsoLine_Location[j],
+	if (point.IsoLine_valid[j]) {
+	  map->LonLat2Screen(point.IsoLine_Location[j],
 			     (*task_screen)[i].IsoLine_Screen[j]);
 	}
       }
@@ -696,13 +694,15 @@ private:
   MapWindow* map;
   TaskScreen_t *task_screen;
   StartScreen_t *start_screen;
+  unsigned activeIndex;
 };
 
 
 
 void MapWindow::CalculateScreenPositionsTask() {
 
-  ScreenPositionsTaskVisitor sv(*this, task_screen, task_start_screen);
+  ScreenPositionsTaskVisitor sv(*this, task_screen, task_start_screen,
+    task.getActiveIndex());
   task.scan_point_forward(sv);
 }
 

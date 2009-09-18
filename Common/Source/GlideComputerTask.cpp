@@ -240,11 +240,10 @@ double GlideComputerTask::AATCloseBearing() const
 {
   // ensure waypoint goes in direction of track if very close
   assert(task.getActiveIndex()>0);
-  double course_bearing = Bearing(task.getTargetLocation(task.getActiveIndex()-1),
-                                  Basic().Location);
-  course_bearing = AngleLimit360(course_bearing+
-				 task_stats[task.getActiveIndex()].AATTargetOffsetRadial);
-  return course_bearing;
+  TASK_POINT tp = task.getTaskPoint(); 
+  double course_bearing = Bearing(task.getActiveLocation(), Basic().Location) 
+    +tp.AATTargetOffsetRadial;
+  return AngleLimit360(course_bearing);
 }
 
 

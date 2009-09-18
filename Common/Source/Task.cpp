@@ -100,9 +100,9 @@ void Task::SetTargetModified(const bool set) {
 
 void Task::ResetTaskWaypoint(int j) {
   task_points[j].Index = -1;
-  task_stats[j].AATTargetOffsetRadius = 0.0;
-  task_stats[j].AATTargetOffsetRadial = 0.0;
-  task_stats[j].AATTargetLocked = false;
+  task_points[j].AATTargetOffsetRadius = 0.0;
+  task_points[j].AATTargetOffsetRadial = 0.0;
+  task_points[j].AATTargetLocked = false;
   task_points[j].AATSectorRadius = SectorRadius;
   task_points[j].AATCircleRadius = SectorRadius;
   task_points[j].AATStartRadial = 0;
@@ -265,7 +265,7 @@ void Task::RemoveTaskPoint(int index,
     task_points[i] = task_points[i+1];
   }
   task_points[MAXTASKPOINTS-1].Index = -1;
-  task_stats[MAXTASKPOINTS-1].AATTargetOffsetRadius= 0.0;
+  task_points[MAXTASKPOINTS-1].AATTargetOffsetRadius= 0.0;
 
   if (ActiveTaskPoint>=(unsigned)index) {
     ActiveTaskPoint--;
@@ -393,7 +393,7 @@ Task::getTargetLocation(const int v) const
   int r= (v==-1)? ActiveTaskPoint:v;
   if (AATEnabled && (r>0) && !TaskIsTemporary()
       && ValidTaskPoint(r+1)) {
-    return task_stats[r].AATTargetLocation;
+    return task_points[r].AATTargetLocation;
   } else {
     return getTaskPointLocation(r);
   }
@@ -499,11 +499,11 @@ double Task::AdjustAATTargets(double desired)
 
   for(i=istart;i<MAXTASKPOINTS-1;i++) {
     if(ValidTaskPoint(i)&&ValidTaskPoint(i+1) 
-       && !task_stats[i].AATTargetLocked) {
-      task_stats[i].AATTargetOffsetRadius = 
+       && !task_points[i].AATTargetLocked) {
+      task_points[i].AATTargetOffsetRadius = 
         max(-1,min(1,
-                   task_stats[i].AATTargetOffsetRadius));
-      av += task_stats[i].AATTargetOffsetRadius;
+                   task_points[i].AATTargetOffsetRadius));
+      av += task_points[i].AATTargetOffsetRadius;
       inum++;
     }
   }
@@ -526,9 +526,9 @@ double Task::AdjustAATTargets(double desired)
   for(i=istart;i<MAXTASKPOINTS-1;i++) {
     if((task_points[i].Index >=0)
        &&(task_points[i+1].Index >=0) 
-       && !task_stats[i].AATTargetLocked)
+       && !task_points[i].AATTargetLocked)
     {
-      double d = (task_stats[i].AATTargetOffsetRadius+1.0)/2.0;
+      double d = (task_points[i].AATTargetOffsetRadius+1.0)/2.0;
       // scale to 0,1
       
       if (av>0.01) {
@@ -540,7 +540,7 @@ double Task::AdjustAATTargets(double desired)
         d = desired;
       }
       d = min(1.0, max(d, 0))*2.0-1.0;
-      task_stats[i].AATTargetOffsetRadius = d;
+      task_points[i].AATTargetOffsetRadius = d;
     }
   }
   // TODO RefreshTask ?
@@ -558,17 +558,17 @@ Task::CalculateAATTaskSectors(const NMEA_INFO &gps_info)
   if(AATEnabled == FALSE)
     return;
 
-  task_stats[0].AATTargetOffsetRadius = 0.0;
-  task_stats[0].AATTargetOffsetRadial = 0.0;
+  task_points[0].AATTargetOffsetRadius = 0.0;
+  task_points[0].AATTargetOffsetRadial = 0.0;
   if (task_points[0].Index>=0) {
-    task_stats[0].AATTargetLocation = getTaskPointLocation(0);
+    task_points[0].AATTargetLocation = getTaskPointLocation(0);
   }
 
   for(i=1;i<MAXTASKPOINTS;i++) {
     if(ValidTaskPoint(i)) {
       if (!ValidTaskPoint(i+1)) {
         // This must be the final waypoint, so it's not an AAT OZ
-        task_stats[i].AATTargetLocation = getTaskPointLocation(i);
+        task_points[i].AATTargetLocation = getTaskPointLocation(i);
         continue;
       }
 
@@ -590,23 +590,23 @@ Task::CalculateAATTaskSectors(const NMEA_INFO &gps_info)
         continue;
       }
 
-      task_stats[i].AATTargetOffsetRadius =
-        min(1.0, max(task_stats[i].AATTargetOffsetRadius,-1.0));
+      task_points[i].AATTargetOffsetRadius =
+        min(1.0, max(task_points[i].AATTargetOffsetRadius,-1.0));
 
-      task_stats[i].AATTargetOffsetRadial =
-        min(90, max(-90, task_stats[i].AATTargetOffsetRadial));
+      task_points[i].AATTargetOffsetRadial =
+        min(90, max(-90, task_points[i].AATTargetOffsetRadial));
 
       double targetbearing;
       double targetrange;
 
-      targetbearing = AngleLimit360(task_points[i].Bisector+task_stats[i].AATTargetOffsetRadial);
+      targetbearing = AngleLimit360(task_points[i].Bisector+task_points[i].AATTargetOffsetRadial);
 
       if(task_points[i].AATType == SECTOR) {
 
         //AATStartRadial
         //AATFinishRadial
 
-        targetrange = ((task_stats[i].AATTargetOffsetRadius+1.0)/2.0);
+        targetrange = ((task_points[i].AATTargetOffsetRadius+1.0)/2.0);
 
         double aatbisector = HalfAngle(task_points[i].AATStartRadial,
                                        task_points[i].AATFinishRadial);
@@ -634,7 +634,7 @@ Task::CalculateAATTaskSectors(const NMEA_INFO &gps_info)
         targetrange*= task_points[i].AATSectorRadius;
 
       } else {
-        targetrange = task_stats[i].AATTargetOffsetRadius
+        targetrange = task_points[i].AATTargetOffsetRadius
           *task_points[i].AATCircleRadius;
       }
 
@@ -643,7 +643,7 @@ Task::CalculateAATTaskSectors(const NMEA_INFO &gps_info)
       // out to the edge of the sector
 
       if (InAATTurnSector(gps_info.Location, i) && (awp==i) &&
-          !task_stats[i].AATTargetLocked) {
+          !task_points[i].AATTargetLocked) {
 
         // special case, currently in AAT sector/cylinder
 
@@ -652,13 +652,13 @@ Task::CalculateAATTaskSectors(const NMEA_INFO &gps_info)
         double bearing;
 
         // find bearing from last target through current aircraft position with offset
-        DistanceBearing(task_stats[i-1].AATTargetLocation,
+        DistanceBearing(task_points[i-1].AATTargetLocation,
                         gps_info.Location,
                         &qdist, &bearing);
 
-        bearing = AngleLimit360(bearing+task_stats[i].AATTargetOffsetRadial);
+        bearing = AngleLimit360(bearing+task_points[i].AATTargetOffsetRadial);
 
-        dist = ((task_stats[i].AATTargetOffsetRadius+1)/2.0)*
+        dist = ((task_points[i].AATTargetOffsetRadius+1)/2.0)*
           FindInsideAATSectorDistance(gps_info.Location, i, bearing);
 
         // if (dist+qdist>aatdistance.LegDistanceAchieved(awp)) {
@@ -668,7 +668,7 @@ Task::CalculateAATTaskSectors(const NMEA_INFO &gps_info)
         FindLatitudeLongitude (gps_info.Location,
                                bearing,
                                dist,
-                               &task_stats[i].AATTargetLocation);
+                               &task_points[i].AATTargetLocation);
 
         TargetModified = true;
 
@@ -679,7 +679,7 @@ Task::CalculateAATTaskSectors(const NMEA_INFO &gps_info)
         FindLatitudeLongitude (getTaskPointLocation(i),
                                targetbearing,
                                targetrange,
-                               &task_stats[i].AATTargetLocation);
+                               &task_points[i].AATTargetLocation);
         TargetModified = true;
 
       }
@@ -707,11 +707,11 @@ void Task::ClearTask(void) {
     task_points[i].Index = -1;
     task_points[i].AATSectorRadius = SectorRadius; // JMW added default
     task_points[i].AATCircleRadius = SectorRadius; // JMW added default
-    task_stats[i].AATTargetOffsetRadial = 0;
-    task_stats[i].AATTargetOffsetRadius = 0;
-    task_stats[i].AATTargetLocked = false;
+    task_points[i].AATTargetOffsetRadial = 0;
+    task_points[i].AATTargetOffsetRadius = 0;
+    task_points[i].AATTargetLocked = false;
     for (int j=0; j<MAXISOLINES; j++) {
-      task_stats[i].IsoLine_valid[j] = false;
+      task_points[i].IsoLine_valid[j] = false;
     }
     Task_saved[i] = task_points[i].Index;
   }
@@ -802,12 +802,12 @@ Task::DoubleLegDistance(const int taskwaypoint,
                         const GEOPOINT &location) const
 {
   if (taskwaypoint>0) {
-    return DoubleDistance(task_stats[taskwaypoint-1].AATTargetLocation,
+    return DoubleDistance(task_points[taskwaypoint-1].AATTargetLocation,
 			  location,
-			  task_stats[taskwaypoint+1].AATTargetLocation);
+			  task_points[taskwaypoint+1].AATTargetLocation);
   } else {
     return Distance(location,
-		    task_stats[taskwaypoint+1].AATTargetLocation);
+		    task_points[taskwaypoint+1].AATTargetLocation);
   }
 }
 

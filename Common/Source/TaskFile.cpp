@@ -108,7 +108,7 @@ bool Task::LoadTaskWaypoints(FILE *file) {
   return true;
 }
 
-#define  BINFILEMAGICNUMBER     0x5cf77fcf
+#define  BINFILEMAGICNUMBER     0x5cf78fcf
 
 // loads a new task from scratch.
 void Task::LoadNewTask(const TCHAR *szFileName,

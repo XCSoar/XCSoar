@@ -202,15 +202,15 @@ bool MapWindow::on_mouse_move(int x, int y)
     if (TargetDrag_State == 1) {
       GEOPOINT mouseMove;
       Screen2LonLat((int)x, (int)y, mouseMove);
-      if (task.InAATTurnSector(mouseMove, 
-                               SettingsMap().TargetPanIndex)) {
+      unsigned index = SettingsMap().TargetPanIndex;
+      if (task.InAATTurnSector(mouseMove, index)) {
 	// update waypoints so if we drag out of the cylinder, it
 	// will remain adjacent to the edge
 
-        mutexTaskData.Lock();
-	task_stats[SettingsMap().TargetPanIndex].AATTargetLocation = mouseMove;
+        TASK_POINT tp = task.getTaskPoint(index);
+        tp.AATTargetLocation = mouseMove;
+        task.setTaskPoint(index, tp);
 	TargetDrag_Location = mouseMove;
-        mutexTaskData.Unlock();
 
 	draw_masked_bitmap(get_canvas(), MapGfx.hBmpTarget, x, y, 10, 10, true);
       }

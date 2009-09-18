@@ -305,7 +305,6 @@ static void ReadValues(void) {
   WndProperty* wp;
   bool changed = false;
 
-  mutexTaskData.Lock();
   wp = (WndProperty*)wf->FindByName(TEXT("prpEnableMultipleStartPoints"));
   if (wp) {
     CHECK_CHANGED(EnableMultipleStartPoints,
@@ -371,9 +370,6 @@ static void ReadValues(void) {
   if (changed) {
     task.SetTaskModified();
   }
-
-  mutexTaskData.Unlock();
-
 }
 
 static void OnAATEnabled(DataField *Sender, DataField::DataAccessKind_t Mode) {
@@ -402,17 +398,15 @@ static void OnSelectClicked(WindowControl * Sender){
     if (tp.Index != res) {
       if (CheckDeclaration()) {
 
-        mutexTaskData.Lock();
 	tp.Index = res;
         tp.AATSectorRadius = SectorRadius;
         tp.AATCircleRadius = SectorRadius;
+        tp.AATTargetOffsetRadius = 0.0;
+        tp.AATTargetOffsetRadial = 0.0;
+        tp.AATTargetLocked = false;
         task.setTaskPoint(twItemIndex, tp);
-
-        task_stats[twItemIndex].AATTargetOffsetRadius = 0.0;
-        task_stats[twItemIndex].AATTargetOffsetRadial = 0.0;
-        task_stats[twItemIndex].AATTargetLocked = false;
         task.SetTaskModified();
-        mutexTaskData.Unlock();
+
       }
     }
     UpdateCaption();

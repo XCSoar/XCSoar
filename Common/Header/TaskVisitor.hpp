@@ -3,8 +3,19 @@
 
 #include "Task.h"
 
+class BaseTaskVisitor {
+public:
+  void setTask(Task &task) {
+    _task = &task;
+  }
+protected:
+  Task* _task;
+};
 
-class RelativeTaskPointVisitor {
+
+class RelativeTaskPointVisitor: 
+  public virtual BaseTaskVisitor 
+{
 public:
   virtual void visit_reset() { };
   virtual void visit_null() { };
@@ -14,7 +25,9 @@ public:
   virtual void visit_task_point_after(TASK_POINT &point, const unsigned index) { };
 };
 
-class AbsoluteTaskPointVisitor {
+class AbsoluteTaskPointVisitor: 
+  public virtual BaseTaskVisitor 
+{
 public:
   virtual void visit_reset() { };
   virtual void visit_null() { };
@@ -24,7 +37,9 @@ public:
   virtual void visit_task_point_final(TASK_POINT &point, const unsigned index) { };
 };
 
-class RelativeTaskLegVisitor {
+class RelativeTaskLegVisitor: 
+ public virtual BaseTaskVisitor 
+{
 public:
   virtual void visit_reset() { };
   virtual void visit_null() { };
@@ -37,7 +52,9 @@ public:
 			       TASK_POINT &point1, const unsigned index1) {};
 };
 
-class AbsoluteTaskLegVisitor {
+class AbsoluteTaskLegVisitor: 
+ public virtual BaseTaskVisitor 
+{
 public:
   virtual void visit_reset() { };
   virtual void visit_null() { };

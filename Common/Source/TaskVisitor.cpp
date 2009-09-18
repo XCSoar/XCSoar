@@ -52,6 +52,7 @@ Copyright_License {
 
 void Task::scan_point_forward(RelativeTaskPointVisitor &visitor)
 {
+  visitor.setTask(*this);
   visitor.visit_reset();
   if (EnableMultipleStartPoints) {
     for (unsigned j=0; j<MAXSTARTPOINTS; j++) {
@@ -80,6 +81,7 @@ void Task::scan_point_forward(RelativeTaskPointVisitor &visitor)
 
 void Task::scan_point_forward(AbsoluteTaskPointVisitor &visitor)
 {
+  visitor.setTask(*this);
   visitor.visit_reset();
 
   if (EnableMultipleStartPoints) {
@@ -108,6 +110,7 @@ void Task::scan_point_forward(AbsoluteTaskPointVisitor &visitor)
 
 void Task::scan_leg_forward(RelativeTaskLegVisitor &visitor)
 {
+  visitor.setTask(*this);
   visitor.visit_reset();
 
   if (!Valid()) {
@@ -141,6 +144,7 @@ void Task::scan_leg_forward(RelativeTaskLegVisitor &visitor)
 
 void Task::scan_leg_forward(AbsoluteTaskLegVisitor &visitor)
 {
+  visitor.setTask(*this);
   visitor.visit_reset();
 
   if (!Valid()) {
@@ -170,6 +174,7 @@ void Task::scan_leg_forward(AbsoluteTaskLegVisitor &visitor)
 
 void Task::scan_leg_reverse(AbsoluteTaskLegVisitor &visitor)
 {
+  visitor.setTask(*this);
   visitor.visit_reset();
 
   if (!Valid()) {
@@ -342,10 +347,10 @@ private:
 			  SectorBearing - SectorAngle, SectorSize,
 			  &pt.SectorEnd);
   }
-  void clearAAT(const TASK_POINT &point, const unsigned i) {
-    task_stats[i].AATTargetOffsetRadius = 0.0;
-    task_stats[i].AATTargetOffsetRadial = 0.0;
-    task_stats[i].AATTargetLocation = way_points.get(point.Index).Location;
+  void clearAAT(TASK_POINT &point, const unsigned i) {
+    point.AATTargetOffsetRadius = 0.0;
+    point.AATTargetOffsetRadial = 0.0;
+    point.AATTargetLocation = way_points.get(point.Index).Location;
   };
 };
 
@@ -413,8 +418,8 @@ public:
 		    &point1.LegDistance, &point1.InBound);
 
     if (AATEnabled) {
-      DistanceBearing(task_stats[index0].AATTargetLocation,
-		      task_stats[index1].AATTargetLocation,
+      DistanceBearing(point0.AATTargetLocation,
+		      point1.AATTargetLocation,
 		      &point1.LegDistance, &point1.LegBearing);
     } else {
       point1.LegBearing = point1.InBound;
@@ -443,15 +448,15 @@ public:
     total_length = geom.total_length;
   }
   void visit_single(TASK_POINT &point0, const unsigned index0) {
-    task_stats[index0].LengthPercent=1.0;
+    point0.LengthPercent=1.0;
   };
   void visit_leg_intermediate(TASK_POINT &point0, const unsigned index0,
 			      TASK_POINT &point1, const unsigned index1) 
   {
     if (index0==0) {
-      task_stats[index0].LengthPercent=0;
+      point0.LengthPercent=0;
     } else {
-      task_stats[index0].LengthPercent=point0.LegDistance/total_length;
+      point0.LengthPercent=point0.LegDistance/total_length;
     }
   };
   void visit_leg_final(TASK_POINT &point0, const unsigned index0,
@@ -487,15 +492,15 @@ public:
   virtual void visit_task_point_current(TASK_POINT &point, const unsigned i) 
   { 
     double stepsize = 25.0;
-    if (!task.ValidTaskPoint(i+1)) {
+    if (!_task->ValidTaskPoint(i+1)) {
       // This must be the final waypoint, so it's not an AAT OZ
       return;
     }
     unsigned j;
     for (j=0; j<MAXISOLINES; j++) {
-      task_stats[i].IsoLine_valid[j]= false;
+      point.IsoLine_valid[j]= false;
     }
-    GEOPOINT location = task_stats[i].AATTargetLocation;
+    GEOPOINT location = point.AATTargetLocation;
     double dist_0, dist_north, dist_east;
     bool in_sector = true;
     
@@ -518,26 +523,27 @@ public:
     // fill
     j=0;
     // insert start point
-    task_stats[i].IsoLine_Location[j]= location;
-    task_stats[i].IsoLine_valid[j]= true;
+    point.IsoLine_Location[j]= location;
+    point.IsoLine_valid[j]= true;
     j++;
     
     do {
-      dist_0 = task.DoubleLegDistance(i, location);
+      dist_0 = _task->DoubleLegDistance(i, location);
       
       GEOPOINT loc_north;
       FindLatitudeLongitude(location,
 			    0, stepsize,
 			    &loc_north);
-      dist_north = task.DoubleLegDistance(i, loc_north);
+      dist_north = _task->DoubleLegDistance(i, loc_north);
       
       GEOPOINT loc_east;
       FindLatitudeLongitude(location,
 			    90, stepsize,
 			    &loc_east);
-      dist_east = task.DoubleLegDistance(i, loc_east);
+      dist_east = _task->DoubleLegDistance(i, loc_east);
       
-      double angle = AngleLimit360(RAD_TO_DEG*atan2(dist_east-dist_0, dist_north-dist_0)+90);
+      double angle = AngleLimit360(RAD_TO_DEG*atan2(dist_east-dist_0, 
+                                                    dist_north-dist_0)+90);
       if (left) {
 	angle += 180;
       }
@@ -546,26 +552,26 @@ public:
 			    angle, delta,
 			    &location);
       
-      in_sector = task.InAATTurnSector(location, i);
+      in_sector = _task->InAATTurnSector(location, i);
       /*
         if (dist_0 < distance_glider) {
 	in_sector = false;
         }
       */
       if (in_sector) {
-	task_stats[i].IsoLine_Location[j] = location;
-	task_stats[i].IsoLine_valid[j] = true;
+	point.IsoLine_Location[j] = location;
+	point.IsoLine_valid[j] = true;
 	j++;
       } else {
 	j++;
 	if (!left && (j<MAXISOLINES-2))  {
 	  left = true;
-	  location = task_stats[i].AATTargetLocation;
+	  location = point.AATTargetLocation;
 	  in_sector = true; // cheat to prevent early exit
 	  
 	  // insert start point (again)
-	  task_stats[i].IsoLine_Location[j] = location;
-	  task_stats[i].IsoLine_valid[j] = true;
+	  point.IsoLine_Location[j] = location;
+	  point.IsoLine_valid[j] = true;
 	  j++;
 	}
       }

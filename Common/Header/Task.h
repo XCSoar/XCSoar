@@ -87,6 +87,16 @@ typedef struct _TASK_POINT
   double AATFinishRadial;
   GEOPOINT AATStart;
   GEOPOINT AATFinish;
+
+  // from stats
+  double AATTargetOffsetRadius;
+  double AATTargetOffsetRadial;
+  GEOPOINT AATTargetLocation;
+  bool   AATTargetLocked;
+  double LengthPercent;
+  GEOPOINT IsoLine_Location[MAXISOLINES];
+  bool IsoLine_valid[MAXISOLINES];
+
 } TASK_POINT;
 
 typedef struct _TASK_POINT_SCREEN
@@ -100,21 +110,8 @@ typedef struct _TASK_POINT_SCREEN
 } TASK_POINT_SCREEN;
 
 
-typedef struct _TASK_POINT_STATS
-{
-  double AATTargetOffsetRadius;
-  double AATTargetOffsetRadial;
-  GEOPOINT AATTargetLocation;
-  bool   AATTargetLocked;
-  double LengthPercent;
-  GEOPOINT IsoLine_Location[MAXISOLINES];
-  bool IsoLine_valid[MAXISOLINES];
-} TASK_POINT_STATS;
-
-
 typedef TASK_POINT Task_t[MAXTASKPOINTS +1];
 typedef TASK_POINT_SCREEN TaskScreen_t[MAXTASKPOINTS +1];
-typedef TASK_POINT_STATS TaskStats_t[MAXTASKPOINTS +1];
 typedef START_POINT Start_t[MAXSTARTPOINTS +1];
 typedef START_POINT_SCREEN StartScreen_t[MAXSTARTPOINTS +1];
 typedef START_POINT_STATS StartStats_t[MAXSTARTPOINTS +1];
@@ -132,7 +129,7 @@ class AbsoluteTaskLegVisitor;
 class Task {
 public:
   Task();
-protected:
+public:
   void RefreshTask(const SETTINGS_COMPUTER &settings_computer);
 
   void ReplaceWaypoint(const int index, 
@@ -243,101 +240,103 @@ private:
 
 #include "Protection.hpp"
 
-class TaskSafe: private Task {
+class TaskSafe {
+private:
+  Task _task;
 public:
   void RefreshTask(const SETTINGS_COMPUTER &settings_computer)
   { // write
     ScopeLock protect(mutexTaskData);
-    Task::RefreshTask(settings_computer);
+    _task.RefreshTask(settings_computer);
   };
   void ReplaceWaypoint(const int index, 
                        const SETTINGS_COMPUTER &settings_computer)
   { // write
     ScopeLock protect(mutexTaskData);
-    Task::ReplaceWaypoint(index, settings_computer);
+    _task.ReplaceWaypoint(index, settings_computer);
   }
   void InsertWaypoint(const int index, 
                       const SETTINGS_COMPUTER &settings_computer,
                       bool append=false)
   { // write
     ScopeLock protect(mutexTaskData);
-    Task::InsertWaypoint(index, settings_computer, append);
+    _task.InsertWaypoint(index, settings_computer, append);
   }
   void SwapWaypoint(const int index, 
                             const SETTINGS_COMPUTER &settings_computer)
   { // write
     ScopeLock protect(mutexTaskData);
-    Task::SwapWaypoint(index, settings_computer);
+    _task.SwapWaypoint(index, settings_computer);
   }
   void RemoveWaypoint(const int index, 
                       const SETTINGS_COMPUTER &settings_computer)
   { // write
     ScopeLock protect(mutexTaskData);
-    Task::RemoveWaypoint(index, settings_computer);
+    _task.RemoveWaypoint(index, settings_computer);
   }
   void RemoveTaskPoint(const int index, 
                        const SETTINGS_COMPUTER &settings_computer)
   { // write
     ScopeLock protect(mutexTaskData);
-    Task::RemoveTaskPoint(index, settings_computer);
+    _task.RemoveTaskPoint(index, settings_computer);
   }
   void FlyDirectTo(const int index, 
                            const SETTINGS_COMPUTER &settings_computer)
   { // write
     ScopeLock protect(mutexTaskData);
-    Task::FlyDirectTo(index, settings_computer);
+    _task.FlyDirectTo(index, settings_computer);
   }
 
   void advanceTaskPoint(const SETTINGS_COMPUTER &settings_computer)
   { // write
     ScopeLock protect(mutexTaskData);
-    Task::advanceTaskPoint(settings_computer);
+    _task.advanceTaskPoint(settings_computer);
   }
   void retreatTaskPoint(const SETTINGS_COMPUTER &settings_computer)
   { // write
     ScopeLock protect(mutexTaskData);
-    Task::retreatTaskPoint(settings_computer);
+    _task.retreatTaskPoint(settings_computer);
   }
 
 
   void ClearTask(void)
   { // write
     ScopeLock protect(mutexTaskData);
-    Task::ClearTask();
+    _task.ClearTask();
   }
   void RotateStartPoints(const SETTINGS_COMPUTER &settings_computer)
   { // write
     ScopeLock protect(mutexTaskData);
-    Task::RotateStartPoints(settings_computer);
+    _task.RotateStartPoints(settings_computer);
   }
   void DefaultTask(const SETTINGS_COMPUTER &settings)
   { // write
     ScopeLock protect(mutexTaskData);
-    Task::DefaultTask(settings);
+    _task.DefaultTask(settings);
   }
   void ResumeAbortTask(const SETTINGS_COMPUTER &settings_computer,
                        const int set = 0)
   { // write
     ScopeLock protect(mutexTaskData);
-    Task::ResumeAbortTask(settings_computer, set);
+    _task.ResumeAbortTask(settings_computer, set);
   }
 
   void CheckStartPointInTask(void)
   { // write
     ScopeLock protect(mutexTaskData);
-    Task::CheckStartPointInTask();
+    _task.CheckStartPointInTask();
   }
 
   void ClearStartPoints(void)
   { // write
     ScopeLock protect(mutexTaskData);
-    Task::ClearStartPoints();
+    _task.ClearStartPoints();
   }
 
   void SetStartPoint(const int pointnum, const int waypointnum)
   { // write
     ScopeLock protect(mutexTaskData);
-    Task::SetStartPoint(pointnum, waypointnum);
+    _task.SetStartPoint(pointnum, waypointnum);
   }
 
 
@@ -345,7 +344,7 @@ public:
   double AdjustAATTargets(double desired) {
     // write
     ScopeLock protect(mutexTaskData);
-    return Task::AdjustAATTargets(desired);
+    return _task.AdjustAATTargets(desired);
   }
 
 //////
@@ -355,7 +354,7 @@ public:
                                           const double p_found) const
   { // read
     ScopeLock protect(mutexTaskData);
-    return Task::FindInsideAATSectorRange(location, taskwaypoint,
+    return _task.FindInsideAATSectorRange(location, taskwaypoint,
                                           course_bearing, p_found);
   }
   const double FindInsideAATSectorDistance(const GEOPOINT &location,
@@ -364,39 +363,39 @@ public:
                                            const double p_found=0.0) const
   { // read
     ScopeLock protect(mutexTaskData);
-    return Task::FindInsideAATSectorDistance(location, taskwaypoint,
+    return _task.FindInsideAATSectorDistance(location, taskwaypoint,
                                              course_bearing, p_found);
   }
   const bool isTaskModified() const 
   {
     // read
     ScopeLock protect(mutexTaskData);
-    return Task::isTaskModified();
+    return _task.isTaskModified();
   }
 
   void SetTaskModified(const bool set=true)
   { // write
     ScopeLock protect(mutexTaskData);
-    Task::SetTaskModified(set);
+    _task.SetTaskModified(set);
   }
 
   const bool isTargetModified() const 
   { // read
     ScopeLock protect(mutexTaskData);
-    return Task::isTargetModified();
+    return _task.isTargetModified();
   }
 
   void SetTargetModified(const bool set=true)
   { // write
     ScopeLock protect(mutexTaskData);
-    Task::SetTargetModified(set);
+    _task.SetTargetModified(set);
   }
 
   const bool InAATTurnSector(const GEOPOINT &location, 
                              const int the_turnpoint) const
   { // read
     ScopeLock protect(mutexTaskData);
-    return Task::InAATTurnSector(location, the_turnpoint);
+    return _task.InAATTurnSector(location, the_turnpoint);
   }
 
   // queries
@@ -409,96 +408,96 @@ public:
   const unsigned getActiveIndex() const 
   { // read
     ScopeLock protect(mutexTaskData);
-    return Task::getActiveIndex();
+    return _task.getActiveIndex();
   }
   void setActiveIndex(unsigned i) 
   { // write
     ScopeLock protect(mutexTaskData);
-    return Task::setActiveIndex(i);
+    return _task.setActiveIndex(i);
   }
 
   const TASK_POINT& getTaskPoint(const int v=-1) const
   { // read
     ScopeLock protect(mutexTaskData);
-    return Task::getTaskPoint(v);
+    return _task.getTaskPoint(v);
   }
 
   void setTaskPoint(const unsigned index, const TASK_POINT& tp)
   { // write
     ScopeLock protect(mutexTaskData);
-    Task::setTaskPoint(index, tp);
+    _task.setTaskPoint(index, tp);
   }
 
   void setTaskIndices(const int wpindex[MAXTASKPOINTS]) 
   { // write
     ScopeLock protect(mutexTaskData);
-    Task::setTaskIndices(wpindex);
+    _task.setTaskIndices(wpindex);
   }
 
   const int getWaypointIndex(const int v=-1) const
   { // read
     ScopeLock protect(mutexTaskData);
-    return Task::getWaypointIndex(v);
+    return _task.getWaypointIndex(v);
   }
   const WAYPOINT& getWaypoint(const int v=-1) const
   {
     ScopeLock protect(mutexTaskData);
-    return Task::getWaypoint(v);
+    return _task.getWaypoint(v);
   }
 
   const bool ValidTaskPoint(const unsigned i) const
   { // read
     ScopeLock protect(mutexTaskData);
-    return Task::ValidTaskPoint(i);
+    return _task.ValidTaskPoint(i);
   }
   const bool Valid() const 
   { // read
     ScopeLock protect(mutexTaskData);
-    return Task::Valid();
+    return _task.Valid();
   }
 
   const double DoubleLegDistance(const int taskwaypoint, // read
                                  const GEOPOINT &location) const 
   {
     ScopeLock protect(mutexTaskData);
-    return Task::DoubleLegDistance(taskwaypoint, location);
+    return _task.DoubleLegDistance(taskwaypoint, location);
   }
   const bool TaskIsTemporary(void) const 
   { // read
     ScopeLock protect(mutexTaskData);
-    return Task::TaskIsTemporary();
+    return _task.TaskIsTemporary();
   }
   const int  getFinalWaypoint(void) const 
   { // read
     ScopeLock protect(mutexTaskData);
-    return Task::getFinalWaypoint();
+    return _task.getFinalWaypoint();
   }
   const bool ActiveIsFinalWaypoint(void) const 
   { //read
     ScopeLock protect(mutexTaskData);
-    return Task::ActiveIsFinalWaypoint();
+    return _task.ActiveIsFinalWaypoint();
   }
   const bool isTaskAborted() const 
   { // read
     ScopeLock protect(mutexTaskData);
-    return Task::isTaskAborted();
+    return _task.isTaskAborted();
   }
 
   const GEOPOINT &getTaskPointLocation(const unsigned i) const 
   { // read
     ScopeLock protect(mutexTaskData);
-    return Task::getTaskPointLocation(i);
+    return _task.getTaskPointLocation(i);
   }
 
   const GEOPOINT &getActiveLocation() const 
   { // read
     ScopeLock protect(mutexTaskData);
-    return Task::getActiveLocation();
+    return _task.getActiveLocation();
   }
   const GEOPOINT &getTargetLocation(const int v=-1) const 
   { // read
     ScopeLock protect(mutexTaskData);
-    return Task::getTargetLocation(v);
+    return _task.getTargetLocation(v);
   }
 
   // file load/save
@@ -506,62 +505,62 @@ public:
                    const SETTINGS_COMPUTER &settings_computer) // write
   {
     ScopeLock protect(mutexTaskData);
-    Task::LoadNewTask(FileName, settings_computer);
+    _task.LoadNewTask(FileName, settings_computer);
   }
 
   void SaveTask(const TCHAR *FileName) // write
   {
     ScopeLock protect(mutexTaskData);
-    Task::SaveTask(FileName);
+    _task.SaveTask(FileName);
   }
 
   void SaveDefaultTask(void) 
   { // write
     ScopeLock protect(mutexTaskData);
-    Task::SaveDefaultTask();
+    _task.SaveDefaultTask();
   }
 
   const TCHAR* getTaskFilename() const 
   { // read
     ScopeLock protect(mutexTaskData);
-    return Task::getTaskFilename();
+    return _task.getTaskFilename();
   }
   void ClearTaskFileName() // write
   {
     ScopeLock protect(mutexTaskData);
-    Task::ClearTaskFileName();
+    _task.ClearTaskFileName();
   }
  
   // potentially write
 
   void scan_point_forward(RelativeTaskPointVisitor &visitor) {
     ScopeLock protect(mutexTaskData);
-    Task::scan_point_forward(visitor);
+    _task.scan_point_forward(visitor);
   };
 
   void scan_point_forward(AbsoluteTaskPointVisitor &visitor) {
     ScopeLock protect(mutexTaskData);
-    Task::scan_point_forward(visitor);
+    _task.scan_point_forward(visitor);
   };
 
   void scan_leg_forward(RelativeTaskLegVisitor &visitor) {
     ScopeLock protect(mutexTaskData);
-    Task::scan_leg_forward(visitor);
+    _task.scan_leg_forward(visitor);
   };
 
   void scan_leg_forward(AbsoluteTaskLegVisitor &visitor) {
     ScopeLock protect(mutexTaskData);
-    Task::scan_leg_forward(visitor);
+    _task.scan_leg_forward(visitor);
   };
 
   void scan_leg_reverse(RelativeTaskLegVisitor &visitor) {
     ScopeLock protect(mutexTaskData);
-    Task::scan_leg_reverse(visitor);
+    _task.scan_leg_reverse(visitor);
   };
 
   void scan_leg_reverse(AbsoluteTaskLegVisitor &visitor) {
     ScopeLock protect(mutexTaskData);
-    Task::scan_leg_reverse(visitor);
+    _task.scan_leg_reverse(visitor);
   };
 };
 

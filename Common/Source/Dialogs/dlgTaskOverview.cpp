@@ -244,7 +244,7 @@ static void OverviewRefreshTask(void) {
   fai_ok = true;
   if (lengthtotal>0) {
     for (i=0; task.ValidTaskPoint(i); i++) {
-      double lrat = task_stats[i].LengthPercent;
+      double lrat = task.getTaskPoint(i).LengthPercent;
       if ((lrat>0.45)||(lrat<0.10)) {
         fai_ok = false;
       }
@@ -329,9 +329,9 @@ static void OnTaskListEnter(WindowControl * Sender,
         if (res != -1){
           tp.Index = res;
         }
-        task_stats[ItemIndex].AATTargetOffsetRadius = 0.0;
-        task_stats[ItemIndex].AATTargetOffsetRadial = 0.0;
-        task_stats[ItemIndex].AATTargetLocked = false;
+        tp.AATTargetOffsetRadius = 0.0;
+        tp.AATTargetOffsetRadial = 0.0;
+        tp.AATTargetLocked = false;
         tp.AATSectorRadius = SectorRadius;
         tp.AATCircleRadius = SectorRadius;
         task.setTaskPoint(ItemIndex, tp);

@@ -498,27 +498,13 @@ void FlightStatistics::RenderTask(Canvas &canvas, const RECT rc, const bool olcm
     if (AATEnabled) {
       for (i=MAXTASKPOINTS-1; i>0; i--) {
 	if (task.ValidTaskPoint(i) && task.ValidTaskPoint(i-1)) {
-          if (i==1) {
-            lat1 = task.getTaskPointLocation(i-1).Latitude;
-            lon1 = task.getTaskPointLocation(i-1).Longitude;
-          } else {
-            lat1 = task_stats[i-1].AATTargetLocation.Latitude;
-            lon1 = task_stats[i-1].AATTargetLocation.Longitude;
-          }
-          lat2 = task_stats[i].AATTargetLocation.Latitude;
-          lon2 = task_stats[i].AATTargetLocation.Longitude;
+          GEOPOINT loc1 = task.getTargetLocation(i-1);
+          GEOPOINT loc2 = task.getTargetLocation(i);
 
-          /*
-	  if (i==task.getActiveIndex()) {
-	    lat1 = XCSoarInterface::Basic().Location.Latitude;
-	    lon1 = XCSoarInterface::Basic().Location.Longitude;
-	  }
-          */
-
-	  x1 = (lon1-lon_c)*fastcosine(lat1);
-	  y1 = (lat1-lat_c);
-	  x2 = (lon2-lon_c)*fastcosine(lat2);
-	  y2 = (lat2-lat_c);
+	  x1 = (loc1.Longitude-lon_c)*fastcosine(loc1.Latitude);
+	  y1 = (loc1.Latitude-lat_c);
+	  x2 = (loc2.Longitude-lon_c)*fastcosine(loc2.Latitude);
+	  y2 = (loc2.Latitude-lat_c);
 
 	  chart.DrawLine(x1, y1, x2, y2,
 			 Chart::STYLE_REDTHICK);
