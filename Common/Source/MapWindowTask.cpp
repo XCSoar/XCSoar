@@ -456,9 +456,11 @@ public:
   }
   void visit_task_point_current(TASK_POINT &point, const unsigned i) 
   {
-    map.draw_masked_bitmap_if_visible(canvas, MapGfx.hBmpTarget, 
-                                      task_stats[i].AATTargetLocation,
-                                      10, 10);
+    if (i>0) {
+      map.draw_masked_bitmap_if_visible(canvas, MapGfx.hBmpTarget, 
+                                        task_stats[i].AATTargetLocation,
+                                        10, 10);
+    }
   };
   void visit_task_point_after(TASK_POINT &point, const unsigned i) {
     // always draw all targets ahead if in pan mode
@@ -479,6 +481,10 @@ public:
   void visit_leg_after(TASK_POINT &point0, const unsigned index0,
                        TASK_POINT &point1, const unsigned index1) 
   {
+    if (index0==0) {
+      // before start
+      visit_leg_current(point0, index0, point1, index1);
+    }
     // Draw all of task if in target pan mode
     if (map.SettingsMap().TargetPan) {
       map.DrawGreatCircle(canvas, 
