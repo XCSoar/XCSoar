@@ -35,20 +35,19 @@ Copyright_License {
 }
 */
 
-#include "XCSoar.h"
+#include "Dialogs/Internal.hpp"
 #include "Protection.hpp"
-#include <math.h>
 #include "Blackboard.hpp"
 #include "SettingsTask.hpp"
 #include "SettingsComputer.hpp"
 #include "McReady.h"
 #include "Units.hpp"
 #include "Calculations.h" // TODO danger! RefreshTaskStatistics()
-#include "Dialogs/dlgTools.h"
 #include "GlideSolvers.hpp"
-#include "Dialogs.h"
 #include "DataField/Base.hpp"
 #include "MainWindow.hpp"
+
+#include <math.h>
 
 static WndForm *wf=NULL;
 

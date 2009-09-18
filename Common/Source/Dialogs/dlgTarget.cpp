@@ -35,17 +35,13 @@ Copyright_License {
 }
 */
 
-#include "Dialogs.h"
-#include "XCSoar.h"
+#include "Dialogs/Internal.hpp"
 #include "Protection.hpp"
-#include "Interface.hpp"
-#include <math.h>
 #include "Blackboard.hpp"
 #include "SettingsTask.hpp"
 #include "Units.hpp"
 #include "Math/Earth.hpp"
 #include "LogFile.hpp"
-#include "Dialogs/dlgTools.h"
 #include "Calculations.h"
 #include "MapWindow.h"
 #include "InfoBoxLayout.h"
@@ -56,6 +52,8 @@ Copyright_License {
 #include "Protection.hpp"
 #include "WayPointList.hpp"
 #include "Components.hpp"
+
+#include <math.h>
 
 static WndForm *wf=NULL;
 static WindowControl *btnMove = NULL;

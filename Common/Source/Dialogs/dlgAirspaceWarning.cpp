@@ -35,18 +35,14 @@ Copyright_License {
 }
 */
 
-
-#include "XCSoar.h"
+#include "Dialogs/Internal.hpp"
 #include "InfoBoxLayout.h"
-#include "Dialogs.h"
-#include "Language.hpp"
 #include "Units.hpp"
 #include "Airspace.h"
 #include "Protection.hpp"
 #include "Math/FastMath.h"
 #include "Math/Units.h"
 #include "MainWindow.hpp"
-#include "Dialogs/dlgTools.h"
 #include "Compatibility/vk.h"
 #include "options.h" /* for IBLSCALE() */
 

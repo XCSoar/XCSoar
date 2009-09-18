@@ -38,8 +38,10 @@ Copyright_License {
 #if !defined(__DLGTOOLS_H)
 #define __DLGTOOLS_H
 
-#include "WindowControls.h"
-#include "Interface.hpp"
+#include <tchar.h>
+
+class WndForm;
+class ContainerWindow;
 
 #define DeclareCallBackEntry(x)        {TEXT(#x), (void *)x}
 int DLGSCALE(int x);

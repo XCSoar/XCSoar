@@ -35,63 +35,21 @@ Copyright_License {
 }
 */
 
-#include "Dialogs/Internal.hpp"
-#include "Units.hpp"
-#include "InputEvents.h"
-#include "InfoBoxLayout.h"
-#include "MainWindow.hpp"
-#include "Compatibility/string.h"
+/*
+ * This header is included by all dialog sources, and includes all
+ * headers which are common to all dialog implementations.
+ *
+ */
 
-static WndForm *wf=NULL;
+#ifndef XCSOAR_DIALOGS_INTERNAL_HPP
+#define XCSOAR_DIALOGS_INTERNAL_HPP
 
-static void OnCloseClicked(WindowControl * Sender){
-	(void)Sender;
-  wf->SetModalResult(mrOK);
-}
+#include "Dialogs.h"
+#include "Dialogs/dlgTools.h"
+#include "Dialogs/dlgHelpers.hpp"
+#include "WindowControls.h"
+#include "Language.hpp"
+#include "WindowControls.h"
+#include "Interface.hpp"
 
-
-static CallBackTableEntry_t CallBackTable[]={
-  DeclareCallBackEntry(OnCloseClicked),
-  DeclareCallBackEntry(NULL)
-};
-
-
-
-void dlgHelpShowModal(const TCHAR* Caption, const TCHAR* HelpText) {
-  if (!Caption || !HelpText) {
-    return;
-  }
-
-  if (!InfoBoxLayout::landscape) {
-    wf = dlgLoadFromXML(CallBackTable,
-                        TEXT("dlgHelp_L.xml"),
-                        XCSoarInterface::main_window,
-                        TEXT("IDR_XML_HELP_L"));
-  } else {
-    wf = dlgLoadFromXML(CallBackTable,
-                        TEXT("dlgHelp.xml"),
-                        XCSoarInterface::main_window,
-                        TEXT("IDR_XML_HELP"));
-  }
-  WndProperty* wp;
-
-  if (wf) {
-
-    TCHAR fullcaption[100];
-    _stprintf(fullcaption,TEXT("Help: %s"), Caption);
-
-    wf->SetCaption(fullcaption);
-
-    wp = (WndProperty*)wf->FindByName(TEXT("prpHelpText"));
-    if (wp) {
-      wp->SetText(HelpText);
-      wp->RefreshDisplay();
-    }
-    wf->ShowModal();
-    delete wf;
-  }
-  wf = NULL;
-
-}
-
-
+#endif

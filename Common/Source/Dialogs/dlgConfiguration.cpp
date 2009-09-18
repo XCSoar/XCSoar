@@ -35,9 +35,7 @@ Copyright_License {
 }
 */
 
-#include "Dialogs.h"
-#include "Language.hpp"
-#include "XCSoar.h"
+#include "Dialogs/Internal.hpp"
 #include "Protection.hpp"
 #include "InfoBoxManager.h"
 #include "Device/Parser.h"
@@ -50,10 +48,8 @@ Copyright_License {
 #include "Gauge/GaugeFLARM.hpp"
 #include "LocalPath.hpp"
 #include "UtilsProfile.hpp"
-#include "WindowControls.h"
 #include "Logger.h"
 #include "McReady.h"
-#include "Dialogs/dlgTools.h"
 #include "Device/device.h"
 #include "Screen/Animation.hpp"
 #include "Screen/Blank.hpp"
@@ -71,7 +67,6 @@ Copyright_License {
 #include "DataField/FileReader.hpp"
 #include "Asset.hpp"
 #include "Screen/Fonts.hpp"
-#include "Dialogs/dlgHelpers.hpp"
 #include "GlideRatio.hpp"
 #include "WayPointList.hpp"
 #include "Components.hpp"

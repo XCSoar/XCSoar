@@ -35,17 +35,14 @@ Copyright_License {
 }
 */
 
-#include "XCSoar.h"
+#include "Dialogs/Internal.hpp"
 #include "Protection.hpp"
 #include "Calculations.h" // for RefreshTaskStatistics()
 #include "Blackboard.hpp"
 #include "SettingsTask.hpp"
 #include "TaskFile.hpp"
-#include "Dialogs.h"
-#include "Language.hpp"
 #include "Logger.h"
 #include "McReady.h"
-#include "Dialogs/dlgTools.h"
 #include "InfoBoxLayout.h"
 #include "Math/FastMath.h"
 #include "Screen/Util.hpp"

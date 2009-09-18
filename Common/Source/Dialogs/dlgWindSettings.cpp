@@ -35,15 +35,11 @@ Copyright_License {
 }
 */
 
-#include "Dialogs.h"
-#include "Language.hpp"
-#include "XCSoar.h"
+#include "Dialogs/Internal.hpp"
 #include "Blackboard.hpp"
 #include "SettingsUser.hpp"
 #include "SettingsComputer.hpp"
 #include "Units.hpp"
-#include "Dialogs/dlgTools.h"
-#include "Dialogs/dlgHelpers.hpp"
 #include "Registry.hpp"
 #include "DataField/Enum.hpp"
 #include "Math/Units.h"

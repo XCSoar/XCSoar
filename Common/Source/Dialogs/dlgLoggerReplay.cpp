@@ -35,11 +35,9 @@ Copyright_License {
 }
 */
 
-#include "XCSoar.h"
-#include "Interface.hpp"
+#include "Dialogs/Internal.hpp"
 #include "Units.hpp"
 #include "ReplayLogger.hpp"
-#include "Dialogs/dlgTools.h"
 #include "DataField/FileReader.hpp"
 #include "MainWindow.hpp"
 
