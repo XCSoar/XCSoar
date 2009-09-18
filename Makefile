@@ -257,8 +257,6 @@ CE_DEFS		+=-DWIN32_PLATFORM_PSPC=$(CE_PLATFORM)
 endif
 endif
 
-UNICODE		:= -DUNICODE -D_UNICODE
-
 ######## paths
 
 INCLUDES	:= -I$(HDR) -I$(SRC)
@@ -303,7 +301,7 @@ endif
 
 ifeq ($(HAVE_MSVCRT),y)
 CPPFLAGS += -DHAVE_MSVCRT
-CPPFLAGS += $(UNICODE)
+CPPFLAGS += -DUNICODE -D_UNICODE
 endif
 
 ifeq ($(DEBUG),y)
