@@ -608,7 +608,7 @@ ReadWayPoints(WayPointList &way_points, RasterTerrain &terrain)
   TCHAR szFile1[MAX_PATH] = TEXT("\0");
   TCHAR szFile2[MAX_PATH] = TEXT("\0");
 
-  ScopeLock protect(mutexTaskData);
+  // JMW TODO protect with mutex (whole waypoint list class)
 
   CloseWayPoints(way_points);
 
@@ -944,7 +944,7 @@ void
 WaypointWriteFiles(WayPointList &way_points,
                    const SETTINGS_COMPUTER &settings_computer)
 {
-  ScopeLock protect(mutexTaskData);
+  // JMW TODO protect with mutex (whole waypoint list class)
 
   TCHAR szFile1[MAX_PATH] = TEXT("\0");
   TCHAR szFile2[MAX_PATH] = TEXT("\0");

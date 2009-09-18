@@ -990,13 +990,11 @@ static void OnWaypointNewClicked(WindowControl * Sender){
   edit_waypoint.Number = 0;
   dlgWaypointEditShowModal(&edit_waypoint);
   if (_tcslen(edit_waypoint.Name)>0) {
-    mutexTaskData.Lock();
     int i = way_points.append(edit_waypoint);
     if (i >= 0) {
       way_points.set(i).Details = 0;
       waypointneedsave = true;
     }
-    mutexTaskData.Unlock();
   }
 }
 
@@ -1051,9 +1049,7 @@ static void OnWaypointDeleteClicked(WindowControl * Sender){
                    gettext(TEXT("Delete Waypoint?")),
                    MB_YESNO|MB_ICONQUESTION) == IDYES) {
 
-      mutexTaskData.Lock();
       way_points.set(res).FileNum = -1;
-      mutexTaskData.Unlock();
       waypointneedsave = true;
     }
   }

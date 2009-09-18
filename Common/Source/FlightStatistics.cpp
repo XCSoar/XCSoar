@@ -80,7 +80,6 @@ void FlightStatistics::Reset() {
 void FlightStatistics::RenderBarograph(Canvas &canvas, const RECT rc)
 {
   Chart chart(canvas, rc);
-  ScopeLock protect(mutexTaskData);
 
   if (Altitude.sum_n<2) {
     chart.DrawNoData();
@@ -93,8 +92,8 @@ void FlightStatistics::RenderBarograph(Canvas &canvas, const RECT rc)
   chart.ScaleXFromValue(Altitude.x_min+1.0); // in case no data
   chart.ScaleXFromValue(Altitude.x_min);
 
-  for(int j=1;j<MAXTASKPOINTS;j++) {
-    if (task.ValidTaskPoint(j) && (LegStartTime[j]>=0)) {
+  for(int j=1; task.ValidTaskPoint(j) ;j++) {
+    if (LegStartTime[j]>=0) {
       double xx =
         (LegStartTime[j]-XCSoarInterface::Calculated().TakeOffTime)/3600.0;
       if (xx>=0) {
@@ -130,7 +129,6 @@ void FlightStatistics::RenderBarograph(Canvas &canvas, const RECT rc)
 void FlightStatistics::RenderSpeed(Canvas &canvas, const RECT rc)
 {
   Chart chart(canvas, rc);
-  ScopeLock protect(mutexTaskData);
 
   if ((Task_Speed.sum_n<2)
       || !task.Valid()) {
@@ -144,8 +142,8 @@ void FlightStatistics::RenderSpeed(Canvas &canvas, const RECT rc)
   chart.ScaleXFromValue(Task_Speed.x_min+1.0); // in case no data
   chart.ScaleXFromValue(Task_Speed.x_min);
 
-  for(int j=1;j<MAXTASKPOINTS;j++) {
-    if (task.ValidTaskPoint(j) && (LegStartTime[j]>=0)) {
+  for(int j=1;task.ValidTaskPoint(j);j++) {
+    if (LegStartTime[j]>=0) {
       double xx =
         (LegStartTime[j]-XCSoarInterface::Calculated().TaskStartTime)/3600.0;
       if (xx>=0) {
@@ -282,7 +280,6 @@ void FlightStatistics::RenderTask(Canvas &canvas, const RECT rc, const bool olcm
 {
   int i;
   Chart chart(canvas, rc);
-  ScopeLock protect(mutexTaskData);
 
   double lat1 = 0;
   double lon1 = 0;
@@ -299,15 +296,14 @@ void FlightStatistics::RenderTask(Canvas &canvas, const RECT rc, const bool olcm
   }
   bool nowaypoints = true;
 
-  for (i=0; i<MAXTASKPOINTS; i++) {
-    if (task.ValidTaskPoint(i)) {
-      lat1 = task.getTaskPointLocation(i).Latitude;
-      lon1 = task.getTaskPointLocation(i).Longitude;
-      chart.ScaleYFromValue( lat1);
-      chart.ScaleXFromValue(lon1);
-      nowaypoints = false;
-    }
+  for (i=0; task.ValidTaskPoint(i); i++) {
+    lat1 = task.getTaskPointLocation(i).Latitude;
+    lon1 = task.getTaskPointLocation(i).Longitude;
+    chart.ScaleYFromValue( lat1);
+    chart.ScaleXFromValue(lon1);
+    nowaypoints = false;
   }
+
   if (nowaypoints && !olcmode) {
     chart.DrawNoData();
     return;
@@ -496,19 +492,17 @@ void FlightStatistics::RenderTask(Canvas &canvas, const RECT rc, const bool olcm
     // draw aat task line
 
     if (AATEnabled) {
-      for (i=MAXTASKPOINTS-1; i>0; i--) {
-	if (task.ValidTaskPoint(i) && task.ValidTaskPoint(i-1)) {
-          GEOPOINT loc1 = task.getTargetLocation(i-1);
-          GEOPOINT loc2 = task.getTargetLocation(i);
+      for (i=0; task.ValidTaskPoint(i) && task.ValidTaskPoint(i+1); i++) {
+        GEOPOINT loc1 = task.getTargetLocation(i);
+        GEOPOINT loc2 = task.getTargetLocation(i+1);
 
-	  x1 = (loc1.Longitude-lon_c)*fastcosine(loc1.Latitude);
-	  y1 = (loc1.Latitude-lat_c);
-	  x2 = (loc2.Longitude-lon_c)*fastcosine(loc2.Latitude);
-	  y2 = (loc2.Latitude-lat_c);
+        x1 = (loc1.Longitude-lon_c)*fastcosine(loc1.Latitude);
+        y1 = (loc1.Latitude-lat_c);
+        x2 = (loc2.Longitude-lon_c)*fastcosine(loc2.Latitude);
+        y2 = (loc2.Latitude-lat_c);
 
-	  chart.DrawLine(x1, y1, x2, y2,
-			 Chart::STYLE_REDTHICK);
-	}
+        chart.DrawLine(x1, y1, x2, y2,
+                       Chart::STYLE_REDTHICK);
       }
     }
   }

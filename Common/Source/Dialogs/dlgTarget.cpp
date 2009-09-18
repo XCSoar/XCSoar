@@ -92,6 +92,7 @@ static void MoveTarget(double adjust_angle) {
     distance = max(tp.AATCircleRadius/20.0,distance);
   }
 
+  // JMW illegal
   bearing = AngleLimit360(XCSoarInterface::main_window.map.GetDisplayAngle() 
                           + adjust_angle);
 
@@ -389,6 +390,7 @@ static void RefreshCalculator(void) {
 static int OnTimerNotify(WindowControl * Sender) {
   (void)Sender;
   GEOPOINT loc;
+  // JMW illegal
   if (XCSoarInterface::main_window.map.TargetDragged(&loc.Longitude, &loc.Latitude)) {
     DragTarget(loc);
   }

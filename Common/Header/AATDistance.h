@@ -99,12 +99,10 @@ private:
  private:
   Mutex mutexAAT;
   void Lock() {
-    mutexTaskData.Lock();
     mutexAAT.Lock();
   }
   void Unlock() {
     mutexAAT.Unlock();
-    mutexTaskData.Unlock();
   }
 };
 

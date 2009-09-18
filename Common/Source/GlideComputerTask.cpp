@@ -914,11 +914,10 @@ void GlideComputerTask::TaskStatistics(const double this_maccready,
     return;
   }
 
-  ScopeLock protect(mutexTaskData);
-
   ///////////////////////////////////////////////
   // Calculate Task Distances
   // First calculate distances for this waypoint
+  ScopeLock protect(mutexTaskData);
 
   double LegCovered, LegToGo=0;
   double LegDistance, LegBearing=0;
@@ -965,9 +964,10 @@ void GlideComputerTask::TaskStatistics(const double this_maccready,
   SetCalculated().TaskDistanceCovered = LegCovered;
 
   if (Basic().Time > Calculated().LegStartTime) {
-    SetLegStart();
     SetCalculated().LegSpeed = Calculated().LegDistanceCovered
       / (Basic().Time - Calculated().LegStartTime);
+  } else if (Basic().Time< Calculated().LegStartTime) {
+    SetLegStart();
   }
 
   ///////////////////////////////////////////////////
@@ -1258,7 +1258,7 @@ void GlideComputerTask::AATStats_Distance()
   int i;
   double MaxDistance, MinDistance, TargetDistance;
 
-  mutexTaskData.Lock();
+  ScopeLock protect(mutexTaskData);
 
   MaxDistance = 0; MinDistance = 0; TargetDistance = 0;
   // Calculate Task Distances
@@ -1354,7 +1354,6 @@ void GlideComputerTask::AATStats_Distance()
     SetCalculated().AATMinDistance = MinDistance;
     SetCalculated().AATTargetDistance = TargetDistance;
   }
-  mutexTaskData.Unlock();
 }
 
 
