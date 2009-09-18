@@ -279,6 +279,8 @@ TARGET_LDLIBS += -limgdecmp
     endif
   endif
 endif
+else
+TARGET_LDLIBS := -lstdc++
 endif
 
 ######## output files
