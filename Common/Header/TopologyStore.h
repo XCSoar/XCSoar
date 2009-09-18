@@ -51,8 +51,9 @@ class Topology;
 class TopologyWriter;
 
 class TopologyStore {
- public:
+public:
   TopologyStore(TopologyWriter* _marks):topo_marks(_marks) {};
+  ~TopologyStore();
   bool ScanVisibility(MapWindowProjection &m_projection,
 		      rectObj &_bounds_active,
 		      const bool force=false);

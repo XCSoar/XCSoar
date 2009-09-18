@@ -105,6 +105,10 @@ bool TopologyStore::ScanVisibility(MapWindowProjection &m_projection,
   return remaining;
 }
 
+TopologyStore::~TopologyStore()
+{
+  Close();
+}
 
 void TopologyStore::Close() 
 {

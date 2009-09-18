@@ -437,7 +437,6 @@ void XCSoarInterface::Shutdown(void) {
 
   RASP.Close();
   terrain.CloseTerrain();
-  topology->Close();
 
   delete topology;
   delete marks;
