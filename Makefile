@@ -87,6 +87,7 @@ DEVS	:=\
 	$(SRC)/Device/devZander.o
 
 DLGS	:=\
+	$(SRC)/Dialogs/XML.o \
 	$(SRC)/Dialogs/dlgAirspace.o \
 	$(SRC)/Dialogs/dlgAirspaceColours.o \
 	$(SRC)/Dialogs/dlgAirspaceDetails.o \

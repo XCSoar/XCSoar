@@ -46,6 +46,7 @@ Copyright_License {
 
 #include "Dialogs.h"
 #include "Dialogs/dlgTools.h"
+#include "Dialogs/XML.hpp"
 #include "Dialogs/dlgHelpers.hpp"
 #include "WindowControls.h"
 #include "Language.hpp"
