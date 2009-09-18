@@ -440,21 +440,6 @@ include $(topdir)/build/compat.mk
 	$(Q)$(WINDRES) $(WINDRESFLAGS) $<.tmp $@
 	@$(RM) $<.tmp
 
-RUN_WAY_POINT_PARSER_OBJS = \
-	$(SRC)/Waypointparser.o \
-	$(SRC)/WayPointList.o \
-	$(SRC)/Math/Earth.o \
-	$(SRC)/Math/FastMath.o \
-	$(SRC)/Math/Geometry.o \
-	$(SRC)/UtilsText.o \
-	$(SRC)/zzip-$(TARGET).a \
-	$(SRC)/compat-$(TARGET).a \
-	$(SRC)/LocalPath.o \
-	$(SRC)/Test/RunWayPointParser.o
-RunWayPointParser-$(TARGET)$(TARGET_EXEEXT): $(RUN_WAY_POINT_PARSER_OBJS:.o=-$(TARGET).o)
-	@$(NQ)echo "  LINK    $@"
-	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
-
 IGNORE	:= \( -name .svn -o -name CVS -o -name .git \) -prune -o
 
 clean-WINE:
