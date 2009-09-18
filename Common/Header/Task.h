@@ -198,6 +198,7 @@ protected:
   void SaveDefaultTask(void);
   const TCHAR* getTaskFilename() const;
   void ClearTaskFileName();
+  bool LoadTaskWaypoints(FILE *file);
 
   //
   unsigned  ActiveTaskPoint;
@@ -212,10 +213,12 @@ protected:
   }
 
   const TASK_POINT& getTaskPoint(const int v=-1) const;
-  void setTaskPoint(const unsigned index, const TASK_POINT& tp) const;
+  void setTaskPoint(const unsigned index, const TASK_POINT& tp);
 
   const WAYPOINT& getWaypoint(const int v=-1) const;
   const int getWaypointIndex(const int v=-1) const;
+
+  void setTaskIndices(const int wpindex[MAXTASKPOINTS]);
 
   // scan routines
   void scan_point_forward(RelativeTaskPointVisitor &visitor);
@@ -224,6 +227,9 @@ protected:
   void scan_leg_forward(AbsoluteTaskLegVisitor &visitor);
   void scan_leg_reverse(RelativeTaskLegVisitor &visitor);
   void scan_leg_reverse(AbsoluteTaskLegVisitor &visitor);
+
+protected:
+ Task_t         task_points;
 
 private:
   void ResetTaskWaypoint(int j);
@@ -412,15 +418,21 @@ public:
   }
 
   const TASK_POINT& getTaskPoint(const int v=-1) const
-  {
+  { // read
     ScopeLock protect(mutexTaskData);
     return Task::getTaskPoint(v);
   }
 
-  void setTaskPoint(const unsigned index, const TASK_POINT& tp) const
-  {
+  void setTaskPoint(const unsigned index, const TASK_POINT& tp)
+  { // write
     ScopeLock protect(mutexTaskData);
-    return Task::setTaskPoint(index, tp);
+    Task::setTaskPoint(index, tp);
+  }
+
+  void setTaskIndices(const int wpindex[MAXTASKPOINTS]) 
+  { // write
+    ScopeLock protect(mutexTaskData);
+    Task::setTaskIndices(wpindex);
   }
 
   const int getWaypointIndex(const int v=-1) const

@@ -34,7 +34,6 @@ unsigned StartMaxSpeedMargin = 0;
 
 Start_t        task_start_points;
 StartStats_t   task_start_stats;
-Task_t         task_points;
 TaskStats_t    task_stats;
 
 // Specials

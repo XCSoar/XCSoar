@@ -48,7 +48,6 @@ extern int  SelectedWaypoint;
 
 extern Start_t        task_start_points;
 extern StartStats_t   task_start_stats;
-extern Task_t         task_points;
 extern TaskStats_t    task_stats;
 
 extern unsigned SectorType;

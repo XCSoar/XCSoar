@@ -371,18 +371,18 @@ public:
     way_points.set_calc(task_start_points[i].Index).InTask = true;
   }
   void visit_task_point_start(TASK_POINT &point, const unsigned i) { 
-    addTaskPoint(i);
+    addTaskPoint(point.Index);
   }
   void visit_task_point_intermediate(TASK_POINT &point, const unsigned i) { 
-    addTaskPoint(i);
+    addTaskPoint(point.Index);
   }
   void visit_task_point_final(TASK_POINT &point, const unsigned i) { 
-    addTaskPoint(i);
+    addTaskPoint(point.Index);
   }
 private:
   const SETTINGS_COMPUTER *settings_computer;
   void addTaskPoint(const unsigned i) {
-    way_points.set_calc(task_points[i].Index).InTask = true;
+    way_points.set_calc(i).InTask = true;
   }
 };
 

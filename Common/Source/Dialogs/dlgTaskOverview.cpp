@@ -175,7 +175,7 @@ OnTaskPaintListItem(WindowControl *Sender, Canvas &canvas)
       canvas.text_opaque(p1 + w1 - canvas.text_width(sTmp),
                          2 * InfoBoxLayout::scale, sTmp);
 
-      _stprintf(sTmp, TEXT("%d")TEXT(DEG),  iround(task_points[i].InBound));
+      _stprintf(sTmp, TEXT("%d")TEXT(DEG),  iround(tp.InBound));
       canvas.text_opaque(p2 + w2 - canvas.text_width(sTmp),
                          2 * InfoBoxLayout::scale, sTmp);
     }
@@ -307,30 +307,35 @@ static void OnTaskListEnter(WindowControl * Sender,
         }
       }
 
-      mutexTaskData.Lock();
-      if (ItemIndex>0) {
-	task_points[ItemIndex].Index = task_points[0].Index;
-      } else {
-	if (way_points.verify_index(XCSoarInterface::SettingsComputer().HomeWaypoint)) {
-	  task_points[ItemIndex].Index = XCSoarInterface::SettingsComputer().HomeWaypoint;
-	} else {
-	  task_points[ItemIndex].Index = -1;
-	}
+      {
+        TASK_POINT tp = task.getTaskPoint(ItemIndex);
+
+        if (ItemIndex>0) {
+          tp.Index = task.getWaypointIndex(0);
+        } else {
+          if (way_points.verify_index(XCSoarInterface::SettingsComputer().HomeWaypoint)) {
+            tp.Index = XCSoarInterface::SettingsComputer().HomeWaypoint;
+          } else {
+            tp.Index = -1;
+          }
+        }
+        task.setTaskPoint(ItemIndex, tp);
       }
-      mutexTaskData.Unlock();
 
       int res;
       res = dlgWayPointSelect(XCSoarInterface::Basic().Location);
-      mutexTaskData.Lock();
-      if (res != -1){
-        task_points[ItemIndex].Index = res;
+      {
+        TASK_POINT tp = task.getTaskPoint(ItemIndex);
+        if (res != -1){
+          tp.Index = res;
+        }
+        task_stats[ItemIndex].AATTargetOffsetRadius = 0.0;
+        task_stats[ItemIndex].AATTargetOffsetRadial = 0.0;
+        task_stats[ItemIndex].AATTargetLocked = false;
+        tp.AATSectorRadius = SectorRadius;
+        tp.AATCircleRadius = SectorRadius;
+        task.setTaskPoint(ItemIndex, tp);
       }
-      task_stats[ItemIndex].AATTargetOffsetRadius = 0.0;
-      task_stats[ItemIndex].AATTargetOffsetRadial = 0.0;
-      task_points[ItemIndex].AATSectorRadius = SectorRadius;
-      task_points[ItemIndex].AATCircleRadius = SectorRadius;
-      task_stats[ItemIndex].AATTargetLocked = false;
-      mutexTaskData.Unlock();
 
       if (ItemIndex==0) {
 	dlgTaskWaypointShowModal(ItemIndex, 0, true); // start waypoint

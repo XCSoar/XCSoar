@@ -84,7 +84,7 @@ static int FindOrAddWaypoint(WAYPOINT *read_waypoint) {
 }
 
 
-static bool LoadTaskWaypoints(FILE *file) {
+bool Task::LoadTaskWaypoints(FILE *file) {
   WAYPOINT read_waypoint;
 
   int i;

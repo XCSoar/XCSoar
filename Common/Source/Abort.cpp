@@ -306,9 +306,8 @@ GlideComputerTask::SortLandableWaypoints()
     last_closest_waypoint = task.getWaypointIndex(0);
   }
 
-  for (i=0; i<MAXTASKPOINTS; i++){
-    task_points[i].Index = SortedLandableIndex[i];
-  }
+  task.setTaskIndices(SortedLandableIndex);
+  task.RefreshTask(SettingsComputer());
 
   if (new_closest_waypoint) {
     if ((task.getWaypointIndex(0) != last_closest_waypoint) 
@@ -325,8 +324,6 @@ GlideComputerTask::SortLandableWaypoints()
       }
     }
   }
-
-  task.RefreshTask(SettingsComputer());
 
   if (active_waypoint_on_entry != task.getActiveIndex()){
     SelectedWaypoint = task.getActiveIndex();

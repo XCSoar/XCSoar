@@ -56,6 +56,9 @@ Copyright_License {
 
 TaskSafe task;
 
+// TODO: separate out all waypoint checking, this should be done
+// outside scope of task lock
+
 static int Task_saved[MAXTASKPOINTS+1];
 static unsigned active_waypoint_saved= 0;
 static bool aat_enabled_saved= false;
@@ -443,13 +446,23 @@ Task::getTaskPoint(const int v) const
 
 
 void 
-Task::setTaskPoint(const unsigned index, const TASK_POINT& tp) const
+Task::setTaskPoint(const unsigned index, const TASK_POINT& tp) 
 {
   task_points[index]= tp;
   // refresh task/set modified?
 }
 
-void Task::RotateStartPoints(const SETTINGS_COMPUTER &settings_computer) 
+void 
+Task::setTaskIndices(const int wpindex[MAXTASKPOINTS]) 
+{
+  for (unsigned i=0; i<MAXTASKPOINTS; i++) {
+    task_points[i].Index = wpindex[i];
+  }
+  // set modified?
+}
+
+void 
+Task::RotateStartPoints(const SETTINGS_COMPUTER &settings_computer) 
 {
   if (ActiveTaskPoint>0) return;
   if (!EnableMultipleStartPoints) return;

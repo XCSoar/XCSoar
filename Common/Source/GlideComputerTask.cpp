@@ -551,11 +551,15 @@ bool GlideComputerTask::InStartSector(bool *CrossedStart)
         *CrossedStart = task_start_stats[i].InSector && !retval;
         task_start_stats[i].InSector = retval;
         if (*CrossedStart) {
-          if (task.getTaskPoint(0).Index != index) {
-            task_points[0].Index = index; // TODO: set!
+
+          TASK_POINT tp = task.getTaskPoint(0);
+          if (tp.Index != index) {
+            tp.Index = index;
+            task.setTaskPoint(0,tp);
+            task.RefreshTask(SettingsComputer());
+
             LastInStartSector = false;
             SetCalculated().StartSectorWaypoint = index;
-            task.RefreshTask(SettingsComputer());
           }
           goto OnExit;
         }
