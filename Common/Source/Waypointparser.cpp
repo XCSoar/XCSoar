@@ -607,6 +607,7 @@ ReadWayPoints(WayPointList &way_points, RasterTerrain &terrain)
 
   TCHAR szFile1[MAX_PATH] = TEXT("\0");
   TCHAR szFile2[MAX_PATH] = TEXT("\0");
+  bool file_embedded = false;
 
   // JMW TODO protect with mutex (whole waypoint list class)
 
@@ -618,6 +619,7 @@ ReadWayPoints(WayPointList &way_points, RasterTerrain &terrain)
   if (_tcslen(szFile1)>0) {
     ExpandLocalPath(szFile1);
   } else {
+    file_embedded = true;
     GetRegistryString(szRegistryMapFile, szFile1, MAX_PATH);
     ExpandLocalPath(szFile1);
     _tcscat(szFile1, TEXT("/"));
@@ -627,8 +629,11 @@ ReadWayPoints(WayPointList &way_points, RasterTerrain &terrain)
   globalFileNum = 0;
   if (ReadWayPointFile(szFile1, way_points, terrain)) {
     // read OK, so set the registry to the actual file name
-    ContractLocalPath(szFile1);
-    SetRegistryString(szRegistryWayPointFile, szFile1);
+    if (!file_embedded) {
+      printf("save\n");
+      ContractLocalPath(szFile1);
+      SetRegistryString(szRegistryWayPointFile, szFile1);
+    }
   } else {
     StartupStore(TEXT("No waypoint file 1\n"));
   }

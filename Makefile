@@ -179,7 +179,7 @@ OBJS	:=\
 	$(SRC)/ThermalLocator.o 	\
 	$(SRC)/Waypointparser.o 	\
 	$(SRC)/WayPoint.o 		\
-	$(SRC)/WayPointList.o \
+	$(SRC)/WayPointList.o 		\
 	$(SRC)/windanalyser.o 		\
 	$(SRC)/windmeasurementlist.o 	\
 	$(SRC)/windstore.o 		\

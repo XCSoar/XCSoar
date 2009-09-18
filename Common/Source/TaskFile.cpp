@@ -314,8 +314,8 @@ void Task::SaveTask(const TCHAR *szFileName)
     }
 
     fclose(file);
-    SetTaskModified(false); // task successfully saved
-    SetTargetModified(false);
+//    SetTaskModified(false); // task successfully saved
+//    SetTargetModified(false);
     _tcscpy(LastTaskFileName, szFileName);
 
   } else {
@@ -329,13 +329,13 @@ void Task::SaveTask(const TCHAR *szFileName)
 
 
 void Task::SaveDefaultTask(void) {
-  if (!task.isTaskAborted()) {
+  if (!isTaskAborted()) {
     TCHAR buffer[MAX_PATH];
 #ifdef GNAV
     LocalPath(buffer, TEXT("persist/Default.tsk"));
 #else
     LocalPath(buffer, TEXT("Default.tsk"));
 #endif
-    task.SaveTask(buffer);
+    SaveTask(buffer);
   }
 }
