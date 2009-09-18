@@ -735,11 +735,9 @@ void InputEvents::eventAnalysis(const TCHAR *misc) {
 void InputEvents::eventWaypointDetails(const TCHAR *misc) {
 
   if (_tcscmp(misc, TEXT("current")) == 0) {
-    mutexTaskData.Lock();
     if (task.Valid()) {
       SelectedWaypoint = task_points[task.getActiveIndex()].Index;
     }
-    mutexTaskData.Unlock();
     if (SelectedWaypoint<0){
       Message::AddMessage(TEXT("No Active Waypoint!"));
       return;
@@ -1059,7 +1057,6 @@ void InputEvents::eventAdjustWaypoint(const TCHAR *misc) {
 // toggle: toggles between abort and resume
 // show: displays a status message showing the task abort status
 void InputEvents::eventAbortTask(const TCHAR *misc) {
-  mutexTaskData.Lock();
   if (_tcscmp(misc, TEXT("abort")) == 0)
     task.ResumeAbortTask(SettingsComputer(), 1);
   else if (_tcscmp(misc, TEXT("resume")) == 0)
@@ -1075,7 +1072,6 @@ void InputEvents::eventAbortTask(const TCHAR *misc) {
   } else {
     task.ResumeAbortTask(SettingsComputer(), 0);
   }
-  mutexTaskData.Unlock();
 }
 
 #include "Device/device.h"
@@ -1651,7 +1647,6 @@ void InputEvents::eventAirspaceDisplayMode(const TCHAR *misc){
 void InputEvents::eventAddWaypoint(const TCHAR *misc) {
   static int tmpWaypointNum = 0;
   WAYPOINT edit_waypoint;
-  mutexTaskData.Lock();
   edit_waypoint.Location = Basic().Location;
   edit_waypoint.Altitude = Calculated().TerrainAlt;
   edit_waypoint.FileNum = 2; // don't put into file
@@ -1664,11 +1659,11 @@ void InputEvents::eventAddWaypoint(const TCHAR *misc) {
   edit_waypoint.Details = 0;
   edit_waypoint.Number = 0;
 
+  // TODO: protect inner function with lock
   int i = way_points.append(edit_waypoint);
   if (i >= 0)
     _stprintf(way_points.set(i).Name, TEXT("_%d"), ++tmpWaypointNum);
 
-  mutexTaskData.Unlock();
 }
 
 

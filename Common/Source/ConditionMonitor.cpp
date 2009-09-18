@@ -260,16 +260,12 @@ protected:
       return false;
     }
 
-    mutexTaskData.Lock();
-
     double sunsettime = sun.CalcSunTimes
       (task.getActiveLocation(),
        cmp.Basic(), cmp.Calculated(), GetUTCOffset()/3600);
     double d1 = (cmp.Calculated().TaskTimeToGo
 		 +DetectCurrentTime(&cmp.Basic()))/3600;
     double d0 = (DetectCurrentTime(&cmp.Basic()))/3600;
-
-    mutexTaskData.Unlock();
 
     bool past_sunset = (d1>sunsettime) && (d0<sunsettime);
 

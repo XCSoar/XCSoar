@@ -235,7 +235,7 @@ bool MapWindow::on_mouse_down(int x, int y)
   if (AATEnabled && SettingsMap().TargetPan) {
     if (task.ValidTaskPoint(SettingsMap().TargetPanIndex)) {
       POINT tscreen;
-      LonLat2Screen(task_stats[SettingsMap().TargetPanIndex].AATTargetLocation,
+      LonLat2Screen(task.getTargetLocation(SettingsMap().TargetPanIndex),
 		    tscreen);
       double distance = isqrt4((long)((XstartScreen-tscreen.x)
 			       *(XstartScreen-tscreen.x)+
@@ -311,13 +311,11 @@ bool MapWindow::on_mouse_up(int x, int y)
   Screen2LonLat(x, y, G);
 
   if (AATEnabled && my_target_pan && (TargetDrag_State>0)) {
-    mutexTaskData.Lock();
     TargetDrag_State = 2;
     if (task.InAATTurnSector(G, SettingsMap().TargetPanIndex)) {
       // if release mouse out of sector, don't update w/ bad coords
       TargetDrag_Location = G;
     }
-    mutexTaskData.Unlock();
     return true;
   }
  

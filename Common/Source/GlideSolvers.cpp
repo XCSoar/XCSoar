@@ -330,8 +330,6 @@ EffectiveMacCready_internal(const NMEA_INFO *Basic, const DERIVED_INFO *Calculat
 
   double mc_setting = GlidePolar::GetMacCready();
 
-  mutexTaskData.Lock();
-
   double start_speed = Calculated->TaskStartSpeed;
   double V_bestld = GlidePolar::Vbestld;
   double energy_height_start =
@@ -348,16 +346,8 @@ EffectiveMacCready_internal(const NMEA_INFO *Basic, const DERIVED_INFO *Calculat
   // JMW TODO remove dist/bearing: this is already done inside the task!
 
   for (unsigned i=0; i<task.getActiveIndex(); i++) {
-    GEOPOINT w1 = task.getTaskPointLocation(i+1);
-    GEOPOINT w0 = task.getTaskPointLocation(i);
-    if (AATEnabled) {
-      if (task.ValidTaskPoint(i+1)) {
-        w1 = task_stats[i+1].AATTargetLocation;
-      }
-      if (i>0) {
-        w0 = task_stats[i].AATTargetLocation;
-      }
-    }
+    GEOPOINT w1 = task.getTargetLocation(i+1);
+    GEOPOINT w0 = task.getTargetLocation(i);
     DistanceBearing(w0, w1,
                     &LegDistances[i], &LegBearings[i]);
 
@@ -457,8 +447,6 @@ EffectiveMacCready_internal(const NMEA_INFO *Basic, const DERIVED_INFO *Calculat
     }
 
   }
-
-  mutexTaskData.Unlock();
 
   return value_found;
 }

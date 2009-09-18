@@ -178,10 +178,8 @@ ActionInterface::on_key_Alternate1(int UpDown)
 {
    if (UpDown==0) {
      if ( SettingsComputer().Alternate1 <0 ) return;
-     mutexTaskData.Lock();
      SelectedWaypoint = SettingsComputer().Alternate1;
      PopupWaypointDetails();
-     mutexTaskData.Unlock();
   }
 }
 
@@ -190,10 +188,8 @@ ActionInterface::on_key_Alternate2(int UpDown)
 {
    if (UpDown==0) {
      if ( SettingsComputer().Alternate2 <0 ) return;
-     mutexTaskData.Lock();
      SelectedWaypoint = SettingsComputer().Alternate2;
      PopupWaypointDetails();
-     mutexTaskData.Unlock();
   }
 }
 
@@ -202,10 +198,8 @@ ActionInterface::on_key_BestAlternate(int UpDown)
 {
    if (UpDown==0) {
      if ( Calculated().BestAlternate <0 ) return;
-     mutexTaskData.Lock();
      SelectedWaypoint = Calculated().BestAlternate;
      PopupWaypointDetails();
-     mutexTaskData.Unlock();
   }
 }
 
@@ -373,7 +367,6 @@ ActionInterface::on_key_ForecastTemperature(int UpDown)
 void 
 ActionInterface::on_key_Waypoint(int UpDown)
 {
-  mutexTaskData.Lock();
 
   if(UpDown>0) {
     task.advanceTaskPoint(SettingsComputer());
@@ -406,7 +399,6 @@ ActionInterface::on_key_Waypoint(int UpDown)
   if (task.Valid()>=0) {
     SelectedWaypoint = task_points[task.getActiveIndex()].Index;
   }
-  mutexTaskData.Unlock();
 }
 
 
