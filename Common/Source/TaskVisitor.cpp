@@ -226,8 +226,8 @@ void Task::scan_leg_reverse(RelativeTaskLegVisitor &visitor)
     visitor.visit_single(task_points[0], 0);
     return;
   }
+  unsigned a= ActiveTaskPoint;
   unsigned i= final;
-  unsigned a = ActiveTaskPoint;
   while (i>0) {
     if (i<a) {
       visitor.visit_leg_before(task_points[i-1], i-1,

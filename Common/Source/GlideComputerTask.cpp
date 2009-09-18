@@ -1100,32 +1100,35 @@ public:
         addLeg(gps_info.Location,
                _task->getTargetLocation(index1), true, false);
       }
-      
-      if (calc_turning_now) {
-        calculated_info.TaskTimeToGoTurningNow +=
-          gps_info.Time-calculated_info.TaskStartTime;
-      } else {
-        calculated_info.TaskTimeToGoTurningNow = -1;
-      }
+      finish();
+    }
 
+  void finish() {
+    if (calc_turning_now) {
+      calculated_info.TaskTimeToGoTurningNow +=
+        gps_info.Time-calculated_info.TaskStartTime;
+    } else {
+      calculated_info.TaskTimeToGoTurningNow = -1;
+    }
+    
+    double total_energy_height = calculated_info.NavAltitude
+      + calculated_info.EnergyHeight;
+    
+    calculated_info.TaskAltitudeRequired = TaskAltitudeRequired + finishHeight;
+    
+    TaskAltitudeRequired0 += finishHeight;
+    
+    calculated_info.TaskAltitudeDifference = total_energy_height
+      - calculated_info.TaskAltitudeRequired;
+    
+    calculated_info.TaskAltitudeDifference0 = total_energy_height
+      - TaskAltitudeRequired0;
+    
+    calculated_info.NextAltitudeDifference0 = total_energy_height
+      - calculated_info.NextAltitudeRequired0;
+    
+  };
 
-      double total_energy_height = calculated_info.NavAltitude
-        + calculated_info.EnergyHeight;
-      
-      calculated_info.TaskAltitudeRequired = TaskAltitudeRequired + finishHeight;
-      
-      TaskAltitudeRequired0 += finishHeight;
-      
-      calculated_info.TaskAltitudeDifference = total_energy_height
-        - calculated_info.TaskAltitudeRequired;
-      
-      calculated_info.TaskAltitudeDifference0 = total_energy_height
-        - TaskAltitudeRequired0;
-      
-      calculated_info.NextAltitudeDifference0 = total_energy_height
-        - calculated_info.NextAltitudeRequired0;
-
-    };
   void visit_leg_after(TASK_POINT &point0, const unsigned index0,
                        TASK_POINT &point1, const unsigned index1) 
     {
@@ -1139,6 +1142,7 @@ public:
       if (index1==1) {
         StartBestCruiseTrack = Bearing(_task->getTargetLocation(index0),
                                        _task->getTargetLocation(index1));
+        finish();
       }
     }
 private:
