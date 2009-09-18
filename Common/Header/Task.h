@@ -211,7 +211,7 @@ protected:
     }
   }
 
-  const int getActiveWaypointIndex() const;
+  const int getWaypointIndex(const int v=-1) const;
 
   // scan routines
   void scan_point_forward(RelativeTaskPointVisitor &visitor);
@@ -407,10 +407,10 @@ public:
     return Task::setActiveIndex(i);
   }
 
-  const int getActiveWaypointIndex() const
+  const int getWaypointIndex(const int v=-1) const
   { // read
     ScopeLock protect(mutexTaskData);
-    return Task::getActiveWaypointIndex();
+    return Task::getWaypointIndex(v);
   }
 
   const bool ValidTaskPoint(const unsigned i) const

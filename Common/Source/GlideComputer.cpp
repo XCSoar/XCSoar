@@ -236,7 +236,6 @@ GlideComputer::CalculateOwnTeamCode()
 void
 GlideComputer::CalculateTeammateBearingRange()
 {
-  ScopeLock protect(mutexTaskData);
   static bool InTeamSector = false;
 
   if (SettingsComputer().TeamCodeRefWaypoint < 0) return;
@@ -323,8 +322,6 @@ void
 GlideComputer::FLARM_ScanTraffic()
 {
   if (Basic().FLARM_Available) {
-
-    ScopeLock protect(mutexTaskData);
 
     for (int flarm_slot=0; flarm_slot<FLARM_MAX_TRAFFIC; flarm_slot++) {
       if (Basic().FLARM_Traffic[flarm_slot].ID>0) {

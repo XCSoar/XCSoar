@@ -50,7 +50,7 @@ Copyright_License {
 #include "Interface.hpp"
 
 const TCHAR *FormatterWaypoint::Render(int *color) {
-  int index = task.getActiveWaypointIndex();
+  int index = task.getWaypointIndex();
   if (index>=0) {
     const WAYPOINT &way_point = way_points.get(index);
     const WPCALC &wpcalc = way_points.get_calc(index);

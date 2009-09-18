@@ -104,8 +104,6 @@ GlideComputerTask::SortLandableWaypoints()
   double arrival_altitude;
   unsigned active_waypoint_on_entry;
 
-  ScopeLock protect(mutexTaskData);
-
   active_waypoint_on_entry = task.getActiveIndex();
 
   // Do preliminary fast search
@@ -247,7 +245,7 @@ GlideComputerTask::SortLandableWaypoints()
   int found_home_waypoint = -1;
   for (i=0; i<MAXTASKPOINTS; i++) {
     if (task.Valid()) {
-      if (SortedLandableIndex[i] == task_points[task.getActiveIndex()].Index) {
+      if (SortedLandableIndex[i] == task.getWaypointIndex()) {
         found_active_waypoint = i;
       }
     }
@@ -276,10 +274,11 @@ GlideComputerTask::SortLandableWaypoints()
     task.setActiveIndex(found_active_waypoint);
   } else {
     // if not found, keep on field or set active waypoint to closest
-    if (task.Valid()){
+    int wp_index = task.getWaypointIndex();
+    if (wp_index>=0){
       arrival_altitude =
-        CalculateWaypointArrivalAltitude(way_points.get(task_points[task.getActiveIndex()].Index),
-                                         way_points.set_calc(task_points[task.getActiveIndex()].Index));
+        CalculateWaypointArrivalAltitude(way_points.get(wp_index),
+                                         way_points.set_calc(wp_index));
     } else {
       arrival_altitude = 0;
     }
@@ -297,14 +296,14 @@ GlideComputerTask::SortLandableWaypoints()
                                                 // list)
             break;
       }
-      SortedLandableIndex[i] = task_points[task.getActiveIndex()].Index;
+      SortedLandableIndex[i] = task.getWaypointIndex();
       task.setActiveIndex(i);
     }
   }
 
   int last_closest_waypoint=0;
   if (new_closest_waypoint) {
-    last_closest_waypoint = task_points[0].Index;
+    last_closest_waypoint = task.getWaypointIndex(0);
   }
 
   for (i=0; i<MAXTASKPOINTS; i++){
@@ -312,7 +311,7 @@ GlideComputerTask::SortLandableWaypoints()
   }
 
   if (new_closest_waypoint) {
-    if ((task_points[0].Index != last_closest_waypoint) 
+    if ((task.getWaypointIndex(0) != last_closest_waypoint) 
         && task.ValidTaskPoint(0)) {
       double last_wp_distance= 10000.0;
       if (last_closest_waypoint>=0) {

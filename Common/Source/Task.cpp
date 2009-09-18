@@ -410,10 +410,11 @@ Task::getTaskPointLocation(const unsigned i) const
 }
 
 const int 
-Task::getActiveWaypointIndex() const
+Task::getWaypointIndex(const int v) const
 {
-  if (ValidTaskPoint(ActiveTaskPoint)) {
-    return task_points[ActiveTaskPoint].Index;
+  int r= (v==-1)? ActiveTaskPoint:v;
+  if (ValidTaskPoint(r)) {
+    return task_points[r].Index;
   } else {
     return -1;
   }
@@ -979,7 +980,7 @@ Task::advanceTaskPoint(const SETTINGS_COMPUTER &settings_computer)
       }
       ActiveTaskPoint ++;
       AdvanceArmed = false;
-      SelectedWaypoint = task_points[ActiveTaskPoint].Index;
+      SelectedWaypoint = getWaypointIndex();
       /* JMW ILLEGAL
          Calculated().LegStartTime = Basic().Time ;
       */
@@ -993,7 +994,7 @@ Task::retreatTaskPoint(const SETTINGS_COMPUTER &settings_computer)
 {
   if(ActiveTaskPoint >0) {
     ActiveTaskPoint --;
-    SelectedWaypoint = task_points[ActiveTaskPoint].Index;
+    SelectedWaypoint = getWaypointIndex();
     /*
       XXX How do we know what the last one is?
       } else if (UpDown == -2) {
@@ -1004,7 +1005,7 @@ Task::retreatTaskPoint(const SETTINGS_COMPUTER &settings_computer)
       RotateStartPoints(settings_computer);
       // restarted task..
       //	TODO bug: not required? Calculated().TaskStartTime = 0;
-      SelectedWaypoint = task_points[ActiveTaskPoint].Index;
+      SelectedWaypoint = getWaypointIndex();
     }
   }
   //JMW illegal glide_computer.ResetEnter();

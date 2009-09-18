@@ -473,23 +473,15 @@ static void UpdateValuesRules(void) {
   }
   // StartMaxHeight, StartMaxSpeed;
 
-  //  double start_h;
-  mutexTaskData.Lock();
-
   wp = (WndProperty*)wf->FindByName(TEXT("prpStartPoint"));
-
-  if (task.ValidTaskPoint(0)) {
-    //    start_h = WayPointList[task_points[0].Index].Altitude;
-    if (wp) {
-      wp->SetText(way_points.get(task_points[0].Index).Name);
-    }
-  } else {
-    //    start_h = 0;
-    if (wp) {
+  if (wp) {
+    int wp_index = task.getWaypointIndex(0);
+    if (wp_index>=0) {
+      wp->SetText(way_points.get(wp_index).Name);
+    } else {
       wp->SetText(TEXT(""));
     }
   }
-  mutexTaskData.Unlock();
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpStartHeight"));
   if (wp) {
