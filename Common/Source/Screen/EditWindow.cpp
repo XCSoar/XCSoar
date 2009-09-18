@@ -47,6 +47,9 @@ EditWindow::set(ContainerWindow &parent, int left, int top,
                 unsigned width, unsigned height,
                 bool multiline)
 {
+#ifdef ENABLE_SDL
+  unsigned style = 0, ex_style = 0;
+#else /* !ENABLE_SDL */
   DWORD style = WS_BORDER | WS_VISIBLE | WS_CHILD
     | ES_LEFT
     | WS_CLIPCHILDREN
@@ -62,6 +65,7 @@ EditWindow::set(ContainerWindow &parent, int left, int top,
   if (GlobalModelType == MODELTYPE_PNA_HP31X)
     ex_style |= WS_EX_CLIENTEDGE;
 #endif
+#endif /* !ENABLE_SDL */
 
   Window::set(&parent, TEXT("EDIT"), TEXT("\0"),
               left, top, width, height, style, ex_style);
@@ -71,10 +75,14 @@ void
 EditWindow::set_ro_ml(ContainerWindow &parent, int left, int top,
                       unsigned width, unsigned height)
 {
+#ifdef ENABLE_SDL
+  unsigned style = 0, ex_style = 0;
+#else /* !ENABLE_SDL */
   DWORD style = WS_BORDER | WS_CHILD
     | ES_CENTER | ES_MULTILINE | ES_READONLY
     | WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
   DWORD ex_style = 0;
+#endif /* !ENABLE_SDL */
 
   Window::set(&parent, TEXT("EDIT"), TEXT("\0"),
               left, top, width, height, style, ex_style);
