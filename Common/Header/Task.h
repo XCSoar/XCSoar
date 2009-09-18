@@ -201,13 +201,17 @@ protected:
 
   //
   unsigned  ActiveTaskPoint;
+
   const unsigned getActiveIndex() const 
   { return ActiveTaskPoint; }
+
   void setActiveIndex(unsigned i) {
     if (ValidTaskPoint(i)) {
       ActiveTaskPoint = i;
     }
   }
+
+  const int getActiveWaypointIndex() const;
 
   // scan routines
   void scan_point_forward(RelativeTaskPointVisitor &visitor);
@@ -403,30 +407,41 @@ public:
     return Task::setActiveIndex(i);
   }
 
+  const int getActiveWaypointIndex() const
+  { // read
+    ScopeLock protect(mutexTaskData);
+    return Task::getActiveWaypointIndex();
+  }
+
   const bool ValidTaskPoint(const unsigned i) const
   { // read
     ScopeLock protect(mutexTaskData);
     return Task::ValidTaskPoint(i);
   }
-  const bool Valid() const { // read
+  const bool Valid() const 
+  { // read
     ScopeLock protect(mutexTaskData);
     return Task::Valid();
   }
 
   const double DoubleLegDistance(const int taskwaypoint, // read
-                                 const GEOPOINT &location) const {
+                                 const GEOPOINT &location) const 
+  {
     ScopeLock protect(mutexTaskData);
     return Task::DoubleLegDistance(taskwaypoint, location);
   }
-  const bool TaskIsTemporary(void) const { // read
+  const bool TaskIsTemporary(void) const 
+  { // read
     ScopeLock protect(mutexTaskData);
     return Task::TaskIsTemporary();
   }
-  const int  getFinalWaypoint(void) const { // read
+  const int  getFinalWaypoint(void) const 
+  { // read
     ScopeLock protect(mutexTaskData);
     return Task::getFinalWaypoint();
   }
-  const bool ActiveIsFinalWaypoint(void) const { //read
+  const bool ActiveIsFinalWaypoint(void) const 
+  { //read
     ScopeLock protect(mutexTaskData);
     return Task::ActiveIsFinalWaypoint();
   }
@@ -442,13 +457,13 @@ public:
     return Task::getTaskPointLocation(i);
   }
 
-  const GEOPOINT &getActiveLocation() const {
-    // read
+  const GEOPOINT &getActiveLocation() const 
+  { // read
     ScopeLock protect(mutexTaskData);
     return Task::getActiveLocation();
   }
-  const GEOPOINT &getTargetLocation(const int v=-1) const {
-    // read
+  const GEOPOINT &getTargetLocation(const int v=-1) const 
+  { // read
     ScopeLock protect(mutexTaskData);
     return Task::getTargetLocation(v);
   }

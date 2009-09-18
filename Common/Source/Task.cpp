@@ -409,6 +409,16 @@ Task::getTaskPointLocation(const unsigned i) const
   return way_points.get(task_points[i].Index).Location;
 }
 
+const int 
+Task::getActiveWaypointIndex() const
+{
+  if (ValidTaskPoint(ActiveTaskPoint)) {
+    return task_points[ActiveTaskPoint].Index;
+  } else {
+    return -1;
+  }
+}
+
 void Task::RotateStartPoints(const SETTINGS_COMPUTER &settings_computer) 
 {
   if (ActiveTaskPoint>0) return;
