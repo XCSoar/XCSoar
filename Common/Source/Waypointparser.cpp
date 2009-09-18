@@ -293,7 +293,6 @@ void
 WaypointAltitudeFromTerrain(WAYPOINT* Temp, RasterTerrain &terrain)
 {
   double myalt;
-  terrain.Lock();
   RasterRounding rounding(*terrain.GetMap(),0,0);
 
   myalt =
@@ -303,8 +302,6 @@ WaypointAltitudeFromTerrain(WAYPOINT* Temp, RasterTerrain &terrain)
   } else {
     // error, can't find altitude for waypoint!
   }
-  terrain.Unlock();
-
 }
 
 
@@ -611,97 +608,49 @@ ReadWayPoints(WayPointList &way_points, RasterTerrain &terrain)
   TCHAR szFile1[MAX_PATH] = TEXT("\0");
   TCHAR szFile2[MAX_PATH] = TEXT("\0");
 
-#ifdef HAVEEXCEPTIONS
-  __try{
-#endif
+  ScopeLock protect(mutexTaskData);
 
-    mutexTaskData.Lock();
-    CloseWayPoints(way_points);
+  CloseWayPoints(way_points);
 
-    GetRegistryString(szRegistryWayPointFile, szFile1, MAX_PATH);
+  GetRegistryString(szRegistryWayPointFile, szFile1, MAX_PATH);
+  SetRegistryString(szRegistryWayPointFile, TEXT("\0"));
 
-    #ifndef HAVEEXCEPTIONS
-    SetRegistryString(szRegistryWayPointFile, TEXT("\0"));
-    #endif
-
-    if (_tcslen(szFile1)>0) {
-      ExpandLocalPath(szFile1);
-    } else {
-      GetRegistryString(szRegistryMapFile, szFile1, MAX_PATH);
-      ExpandLocalPath(szFile1);
-      _tcscat(szFile1, TEXT("/"));
-      _tcscat(szFile1, TEXT("waypoints.xcw"));
-    }
-
-    globalFileNum = 0;
-    if (ReadWayPointFile(szFile1, way_points, terrain))
-      {
-        // read OK, so set the registry to the actual file name
-        #ifndef HAVEEXCEPTIONS
-        ContractLocalPath(szFile1);
-        SetRegistryString(szRegistryWayPointFile, szFile1);
-        #endif
-      } else {
-      StartupStore(TEXT("No waypoint file 1\n"));
-    }
-#ifdef HAVEEXCEPTIONS
-  }__except(EXCEPTION_EXECUTE_HANDLER){
-    CloseWayPoints();
-    MessageBoxX(gettext(TEXT("Unhandled Error in first Waypoint file\r\nNo Wp's loaded from that File!")),
-                gettext(TEXT("Error")),
-                MB_OK|MB_ICONSTOP);
-    SetRegistryString(szRegistryWayPointFile, TEXT("\0"));
+  if (_tcslen(szFile1)>0) {
+    ExpandLocalPath(szFile1);
+  } else {
+    GetRegistryString(szRegistryMapFile, szFile1, MAX_PATH);
+    ExpandLocalPath(szFile1);
+    _tcscat(szFile1, TEXT("/"));
+    _tcscat(szFile1, TEXT("waypoints.xcw"));
   }
-#endif
+
+  globalFileNum = 0;
+  if (ReadWayPointFile(szFile1, way_points, terrain)) {
+    // read OK, so set the registry to the actual file name
+    ContractLocalPath(szFile1);
+    SetRegistryString(szRegistryWayPointFile, szFile1);
+  } else {
+    StartupStore(TEXT("No waypoint file 1\n"));
+  }
 
   // read additional waypoint file
-#ifdef HAVEEXCEPTIONS
-  int NumberOfWayPointsAfterFirstFile = NumberOfWayPoints;
-#endif
 
-#ifdef HAVEEXCEPTIONS
-  __try{
-#endif
+  GetRegistryString(szRegistryAdditionalWayPointFile, szFile2, MAX_PATH);
+  
+  SetRegistryString(szRegistryAdditionalWayPointFile, TEXT("\0"));
 
-    GetRegistryString(szRegistryAdditionalWayPointFile, szFile2, MAX_PATH);
-
-    SetRegistryString(szRegistryAdditionalWayPointFile, TEXT("\0"));
-
-    if (_tcslen(szFile2)>0){
-      ExpandLocalPath(szFile2);
-
-      globalFileNum = 1;
-      if (ReadWayPointFile(szFile2, way_points, terrain)) {
-        // read OK, so set the registry to the actual file name
-        ContractLocalPath(szFile2);
-        SetRegistryString(szRegistryAdditionalWayPointFile, szFile2);
-      } else {
-	StartupStore(TEXT("No waypoint file 2\n"));
-      }
-    }
-
-#ifdef HAVEEXCEPTIONS
-  }__except(EXCEPTION_EXECUTE_HANDLER){
-
-    if (NumberOfWayPointsAfterFirstFile == 0){
-      CloseWayPoints();
+  if (_tcslen(szFile2)>0){
+    ExpandLocalPath(szFile2);
+    
+    globalFileNum = 1;
+    if (ReadWayPointFile(szFile2, way_points, terrain)) {
+      // read OK, so set the registry to the actual file name
+      ContractLocalPath(szFile2);
+      SetRegistryString(szRegistryAdditionalWayPointFile, szFile2);
     } else {
-      unsigned int i;
-      for (i=NumberOfWayPointsAfterFirstFile; i<NumberOfWayPoints; i++) {
-        if (WayPointList[i].Details) {
-          free(WayPointList[i].Details);
-        }
-      }
+      StartupStore(TEXT("No waypoint file 2\n"));
     }
-    MessageBoxX(gettext(TEXT("Unhandled Error in second Waypoint file\r\nNo Wp's loaded from that File!")),
-                gettext(TEXT("Error")),
-                MB_OK|MB_ICONSTOP);
-    SetRegistryString(szRegistryAdditionalWayPointFile, TEXT("\0"));
   }
-#endif
-
-  mutexTaskData.Unlock();
-
 }
 
 
@@ -995,7 +944,7 @@ void
 WaypointWriteFiles(WayPointList &way_points,
                    const SETTINGS_COMPUTER &settings_computer)
 {
-  mutexTaskData.Lock();
+  ScopeLock protect(mutexTaskData);
 
   TCHAR szFile1[MAX_PATH] = TEXT("\0");
   TCHAR szFile2[MAX_PATH] = TEXT("\0");
@@ -1040,7 +989,6 @@ WaypointWriteFiles(WayPointList &way_points,
     fp = NULL;
   }
 
-  mutexTaskData.Unlock();
 }
 
 int
