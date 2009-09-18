@@ -60,27 +60,35 @@ mmin(const int t1, const int t2)
   return t1 < t2 ? t1 : t2;
 }
 
-long StringToIntDflt(const TCHAR *String, long Default){
+static long
+StringToIntDflt(const TCHAR *String, long Default)
+{
   if (String == NULL || String[0] == '\0')
     return(Default);
   return(_tcstol(String, NULL, 0));
 }
 
-double StringToFloatDflt(const TCHAR *String, double Default){
+static double
+StringToFloatDflt(const TCHAR *String, double Default)
+{
   if (String == NULL || String[0] == '\0')
     return(Default);
   return(_tcstod(String, NULL));
 }
 
-const TCHAR *StringToStringDflt(const TCHAR *String, const TCHAR *Default)
+static const TCHAR *
+StringToStringDflt(const TCHAR *String, const TCHAR *Default)
 {
   if (String == NULL || String[0] == '\0')
     return(Default);
   return(String);
 }
 
-void GetDefaultWindowControlProps(XMLNode *Node, TCHAR *Name, int *X, int *Y, int *Width, int *Height, int *Font, TCHAR *Caption){
-
+static void
+GetDefaultWindowControlProps(XMLNode *Node, TCHAR *Name, int *X, int *Y,
+                             int *Width, int *Height, int *Font,
+                             TCHAR *Caption)
+{
   *X = DLGSCALE(StringToIntDflt(Node->getAttribute(TEXT("X")), 0));
   *Y = StringToIntDflt(Node->getAttribute(TEXT("Y")), 0);
   if (*Y>=0) { // not -1
@@ -100,8 +108,9 @@ void GetDefaultWindowControlProps(XMLNode *Node, TCHAR *Name, int *X, int *Y, in
 
 }
 
-void *CallBackLookup(CallBackTableEntry_t *LookUpTable, TCHAR *Name){
-
+static void *
+CallBackLookup(CallBackTableEntry_t *LookUpTable, TCHAR *Name)
+{
   int i;
 
   if (LookUpTable!=NULL && Name!=NULL && Name[0]!= '\0')
@@ -115,7 +124,9 @@ void *CallBackLookup(CallBackTableEntry_t *LookUpTable, TCHAR *Name){
 
 }
 
-void LoadChildsFromXML(WindowControl *Parent, CallBackTableEntry_t *LookUpTable, XMLNode *Node, int Font);
+static void
+LoadChildsFromXML(WindowControl *Parent, CallBackTableEntry_t *LookUpTable,
+                  XMLNode *Node, int Font);
 
 static Font *FontMap[5] = {
   &TitleWindowFont,
@@ -394,11 +405,10 @@ WndForm *dlgLoadFromXML(CallBackTableEntry_t *LookUpTable,
 
 
 
-void LoadChildsFromXML(WindowControl *Parent,
-                       CallBackTableEntry_t *LookUpTable,
-                       XMLNode *Node,
-                       int ParentFont) {
-
+static void
+LoadChildsFromXML(WindowControl *Parent, CallBackTableEntry_t *LookUpTable,
+                  XMLNode *Node, int ParentFont)
+{
   int X,Y,Width,Height,Font;
   TCHAR Caption[128];
   TCHAR Name[64];
