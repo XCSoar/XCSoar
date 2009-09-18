@@ -183,7 +183,6 @@ static void DoOptimise(void) {
 
   // should do a GUI::ExchangeBlackboard() here and use local storage
 
-  mutexTaskData.Lock();
   targetManipEvent.trigger();
   do {
     myrange = Range;
@@ -229,8 +228,6 @@ static void DoOptimise(void) {
   RefreshCalculator();
 
   targetManipEvent.reset();
-
-  mutexTaskData.Unlock();
 }
 
 

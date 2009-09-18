@@ -586,26 +586,20 @@ void dlgTarget(void) {
   dfe = (DataFieldEnum*)wp->GetDataField();
   TCHAR tp_label[80];
   TCHAR tp_short[21];
-  mutexTaskData.Lock();
   if (!task.ValidTaskPoint(target_point)) {
     target_point = ActiveTaskPointOnEntry;
   } else {
     target_point = max(target_point, ActiveTaskPointOnEntry);
   }
-  for (unsigned i=ActiveTaskPointOnEntry; i<MAXTASKPOINTS; i++) {
-    if (task.ValidTaskPoint(i)) {
-      _tcsncpy(tp_short, task.getWaypoint(i).Name, 20);
-      tp_short[20] = 0;
-      _stprintf(tp_label, TEXT("%d %s"), i, tp_short);
-      dfe->addEnumText(tp_label);
-    } else {
-      if (target_point>= i) {
-        target_point= ActiveTaskPointOnEntry;
-      }
-    }
+  target_point = min(target_point, task.getFinalWaypoint());
+
+  for (unsigned i=ActiveTaskPointOnEntry; task.ValidTaskPoint(i); i++) {
+    _tcsncpy(tp_short, task.getWaypoint(i).Name, 20);
+    tp_short[20] = 0;
+    _stprintf(tp_label, TEXT("%d %s"), i, tp_short);
+    dfe->addEnumText(tp_label);
   }
   dfe->Set(max(0,(int)target_point-(int)ActiveTaskPointOnEntry));
-  mutexTaskData.Unlock();
   wp->RefreshDisplay();
 
   RefreshTargetPoint();

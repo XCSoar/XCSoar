@@ -89,7 +89,6 @@ static void UpdateFilePointer(void) {
 static void UpdateCaption (void) {
   TCHAR title[MAX_PATH];
   TCHAR name[MAX_PATH] = TEXT("\0");
-  mutexTaskData.Lock();
   int len = _tcslen(task.getTaskFilename());
   if (len>0) {
     int index = 0;
@@ -105,7 +104,6 @@ static void UpdateCaption (void) {
     }
     name[index]= _T('\0');
   }
-  mutexTaskData.Unlock();
 
   if (_tcslen(name)>0) {
     _stprintf(title, TEXT("%s: %s"),
@@ -130,7 +128,6 @@ OnTaskPaintListItem(WindowControl *Sender, Canvas &canvas)
   (void)Sender;
   int n = UpLimit - LowLimit;
   TCHAR sTmp[120];
-  mutexTaskData.Lock();
 
   int w0;
   if (InfoBoxLayout::landscape) {
@@ -221,13 +218,10 @@ OnTaskPaintListItem(WindowControl *Sender, Canvas &canvas)
       }
     }
   }
-  mutexTaskData.Unlock();
-
 }
 
 
 static void OverviewRefreshTask(void) {
-  mutexTaskData.Lock();
   task.RefreshTask(XCSoarInterface::SettingsComputer());
 
   int i;
@@ -272,8 +266,6 @@ static void OverviewRefreshTask(void) {
   wTaskList->Redraw();
 
   UpdateCaption();
-  mutexTaskData.Unlock();
-
 }
 
 
