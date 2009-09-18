@@ -81,6 +81,7 @@ public:
 private:
   Canvas *canvas;
   POINT orig;
+  Color whitecolor; 
 };
 
 
@@ -343,27 +344,38 @@ void MapWindow::DrawTask(Canvas &canvas, RECT rc)
 
 ///////
 
-// TODO use visitor
-void MapWindow::DrawTaskAAT(Canvas &canvas, const RECT rc, Canvas &buffer)
+
+class DrawTaskAATVisitor:
+  public AbsoluteTaskPointVisitor
 {
-  unsigned i;
-  unsigned tmp;
+public:
+  DrawTaskAATVisitor(Canvas &_canvas, 
+                     const RECT _rc, 
+                     Canvas &_buffer,
+                     const unsigned _activeIndex,
+                     TaskScreen_t &_task_screen,
+                     MapWindowProjection &_map
+    ):
+    canvas(_canvas), rc(_rc), buffer(_buffer), activeIndex(_activeIndex),
+    task_screen(_task_screen), map(_map)
+  {
+    whitecolor = Color(0xff,0xff, 0xff);
+    buffer.set_text_color(whitecolor);
+    buffer.white_pen();
+    buffer.white_brush();
+    buffer.rectangle(rc.left, rc.top, rc.right, rc.bottom);
+  }
 
-  if (!AATEnabled || !task.ValidTaskPoint(1)) return;
+  void visit_task_point_start(TASK_POINT &point, const unsigned index) 
+  {
+  };
+  void visit_task_point_intermediate(TASK_POINT &point, const unsigned i) 
+  {
+    const WPCALC &wpcalc = way_points.get_calc(point.Index);
+    unsigned tmp;
 
-  Color whitecolor = Color(0xff,0xff, 0xff);
-  buffer.set_text_color(whitecolor);
-  buffer.white_pen();
-  buffer.white_brush();
-  buffer.rectangle(rc.left, rc.top, rc.right, rc.bottom);
-
-  ScopeLock scopeLock(mutexTaskData); // read
-
-  for (i = task.getFinalWaypoint()-1; i > 0; i--) {
-    const WPCALC &wpcalc = way_points.get_calc(task_points[i].Index);
-
-    if(task_points[i].AATType == CIRCLE) {
-      tmp = DistanceMetersToScreen(task_points[i].AATCircleRadius);
+    if (point.AATType == CIRCLE) {
+      tmp = map.DistanceMetersToScreen(point.AATCircleRadius);
 
       // this color is used as the black bit
       buffer.set_text_color(MapGfx.Colours[iAirspaceColour[AATASK]]);
@@ -371,7 +383,7 @@ void MapWindow::DrawTaskAAT(Canvas &canvas, const RECT rc, Canvas &buffer)
       // this color is the transparent bit
       buffer.set_background_color(whitecolor);
 
-      if (i<task.getActiveIndex()) {
+      if (i<activeIndex) {
         buffer.hollow_brush();
       } else {
         buffer.select(MapGfx.hAirspaceBrushes[iAirspaceBrush[AATASK]]);
@@ -387,74 +399,109 @@ void MapWindow::DrawTaskAAT(Canvas &canvas, const RECT rc, Canvas &buffer)
       // this color is the transparent bit
       buffer.set_background_color(whitecolor);
       
-      if (i<task.getActiveIndex()) {
+      if (i<activeIndex) {
         buffer.hollow_brush();
       } else {
         buffer.select(MapGfx.hAirspaceBrushes[iAirspaceBrush[AATASK]]);
       }
       buffer.black_pen();
       
-      tmp = DistanceMetersToScreen(task_points[i].AATSectorRadius);
+      tmp = map.DistanceMetersToScreen(point.AATSectorRadius);
       
       buffer.segment(wpcalc.Screen.x,
                      wpcalc.Screen.y, tmp, rc,
-                     task_points[i].AATStartRadial-DisplayAngle,
-                     task_points[i].AATFinishRadial-DisplayAngle);
+                     point.AATStartRadial-map.GetDisplayAngle(),
+                     point.AATFinishRadial-map.GetDisplayAngle());
       
       buffer.two_lines(task_screen[i].AATStart, wpcalc.Screen,
                        task_screen[i].AATFinish);
     }
-  }
+  };
+  void visit_task_point_final(TASK_POINT &point, const unsigned index) { 
+  };
+private:
+  MapWindowProjection &map;
+  unsigned activeIndex;
+  Canvas &canvas;
+  Canvas &buffer;
+  RECT rc;
+  Color whitecolor;
+  TaskScreen_t &task_screen;
+};
 
-  canvas.copy_transparent_white(buffer, rc);
+
+void MapWindow::DrawTaskAAT(Canvas &canvas, const RECT rc, Canvas &buffer)
+{
+  if (AATEnabled) {
+    DrawTaskAATVisitor dv(canvas, rc, buffer, task.getActiveIndex(),
+                          task_screen, *this);
+    task.scan_point_forward(dv); // TODO, reverse
+    canvas.copy_transparent_white(buffer, rc);
+  }
 }
 
+//////////////////////////////////////
 
-// TODO: use visitor
+
+class DrawTargetVisitor:
+  public RelativeTaskPointVisitor,
+  public RelativeTaskLegVisitor
+{
+public:
+  DrawTargetVisitor(Canvas &_canvas, 
+                    MapWindow &_map,
+                    bool _draw_bearing):
+    canvas(_canvas), map(_map), draw_bearing(_draw_bearing)
+  {
+  }
+  void visit_task_point_current(TASK_POINT &point, const unsigned i) 
+  {
+    map.draw_masked_bitmap_if_visible(canvas, MapGfx.hBmpTarget, 
+                                      task_stats[i].AATTargetLocation,
+                                      10, 10);
+  };
+  void visit_task_point_after(TASK_POINT &point, const unsigned i) {
+    // always draw all targets ahead if in pan mode
+    if (map.SettingsMap().EnablePan || map.SettingsMap().TargetPan) {
+      visit_task_point_current(point, i);
+    }
+  };
+  //
+  void visit_leg_current(TASK_POINT &point0, const unsigned index0,
+                         TASK_POINT &point1, const unsigned index1) 
+  {
+    if (draw_bearing) {
+      GEOPOINT start = map.Basic().Location;
+      GEOPOINT target = task.getTargetLocation(index1);
+      map.DrawGreatCircle(canvas, start, target);
+    }
+  };
+  void visit_leg_after(TASK_POINT &point0, const unsigned index0,
+                       TASK_POINT &point1, const unsigned index1) 
+  {
+    // Draw all of task if in target pan mode
+    if (map.SettingsMap().TargetPan) {
+      map.DrawGreatCircle(canvas, 
+                      task.getTargetLocation(index0),
+                      task.getTargetLocation(index1));
+    }
+  };
+
+private:
+  MapWindow &map;
+  Canvas &canvas;
+  bool draw_bearing;
+};
+
+
 void MapWindow::DrawBearing(Canvas &canvas, int bBearingValid)
 { /* RLD bearing is invalid if GPS not connected and in non-sim mode,
    but we can still draw targets */
 
-  if (!task.Valid()) {
-    return;
-  }
-
-  GEOPOINT start = Basic().Location;
-  GEOPOINT target = task.getTargetLocation();
-
-  if (bBearingValid) {
-    DrawGreatCircle(canvas, start, // RLD skip if bearing invalid
-                    target);       // RLD bc Lat/Lon invalid
-
-    if (SettingsMap().TargetPan) {
-      // Draw all of task if in target pan mode
-      start = target;
-
-      ScopeLock scopeLock(mutexTaskData); // read
-      for (int i=task.getActiveIndex()+1; task.verify_index(i); i++) {
-        target = task.getTargetLocation(i);
-        DrawGreatCircle(canvas, start, target);
-        start = target;
-      }
-    } // TargetPan
-  } // bearing valid
-
-  // JMW draw symbol at target, makes it easier to see
-  // RLD always draw all targets ahead so visible in pan mode
-  // JMW ok then, only if in pan mode
+  DrawTargetVisitor tv(canvas, *this, bBearingValid);
+  task.scan_leg_forward(tv);
   if (AATEnabled) {
-    ScopeLock scopeLock(mutexTaskData); // read
-    for (unsigned i=max(1,task.getActiveIndex()); 
-         task.verify_index(i+1); i++) {
-      // RLD skip invalid targets and targets at start and finish
-      if ((i== task.getActiveIndex())
-          || ((SettingsMap().EnablePan || SettingsMap().TargetPan) 
-              && (i>task.getActiveIndex()))) {
-        draw_masked_bitmap_if_visible(canvas, MapGfx.hBmpTarget, 
-                                      task_stats[i].AATTargetLocation,
-                                      10, 10);
-      }
-    }
+    task.scan_point_forward(tv);
   }
 }
 

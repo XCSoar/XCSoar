@@ -196,7 +196,6 @@ bool MapWindow::on_mouse_double(int x, int y)
 
 bool MapWindow::on_mouse_move(int x, int y)
 {
-  mutexTaskData.Lock();
   if (AATEnabled && SettingsMap().TargetPan && (TargetDrag_State>0)) {
     // target follows "finger" so easier to drop near edge of
     // sector
@@ -207,13 +206,16 @@ bool MapWindow::on_mouse_move(int x, int y)
                                SettingsMap().TargetPanIndex)) {
 	// update waypoints so if we drag out of the cylinder, it
 	// will remain adjacent to the edge
+
+        mutexTaskData.Lock();
 	task_stats[SettingsMap().TargetPanIndex].AATTargetLocation = mouseMove;
 	TargetDrag_Location = mouseMove;
+        mutexTaskData.Unlock();
+
 	draw_masked_bitmap(get_canvas(), MapGfx.hBmpTarget, x, y, 10, 10, true);
       }
     }
   }
-  mutexTaskData.Unlock();
   return true;
 }
 
@@ -231,7 +233,6 @@ bool MapWindow::on_mouse_down(int x, int y)
   XstartScreen = x;
   YstartScreen = y;
 
-  mutexTaskData.Lock();
   if (AATEnabled && SettingsMap().TargetPan) {
     if (task.ValidTaskPoint(SettingsMap().TargetPanIndex)) {
       POINT tscreen;
@@ -248,7 +249,6 @@ bool MapWindow::on_mouse_down(int x, int y)
       }
     }
   }
-  mutexTaskData.Unlock();
   return true;
 }
 
