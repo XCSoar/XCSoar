@@ -98,6 +98,7 @@ void SettingsLeave() {
 
   mutexBlackboard.Lock();
 
+/*
   if (MAPFILECHANGED) { printf("MAPFILECHANGED\n"); }
   if (AIRSPACEFILECHANGED) { printf("AIRSPACEFILECHANGED\n"); }
   if (AIRFIELDFILECHANGED) { printf("AIRFIELDFILECHANGED\n"); }
@@ -109,6 +110,7 @@ void SettingsLeave() {
   if (STATUSFILECHANGED) { printf("STATUSFILECHANGED\n"); }
   if (INPUTFILECHANGED) { printf("INPUTFILECHANGED\n"); }
   if (COMPORTCHANGED) { printf("COMPORTCHANGED\n"); }
+*/
 
   if(MAPFILECHANGED) {
     AIRSPACEFILECHANGED = true;
