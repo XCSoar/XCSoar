@@ -364,10 +364,10 @@ void FlightStatistics::RenderTask(Canvas &canvas, const RECT rc, const bool olcm
       double radius;
       
       if (task.ValidTaskPoint(i+1)) {
-        if (task_points[i].AATType == SECTOR) {
-          radius = task_points[i].AATSectorRadius;
+        if (task.getTaskPoint(i).AATType == SECTOR) {
+          radius = task.getTaskPoint(i).AATSectorRadius;
         } else {
-          radius = task_points[i].AATCircleRadius;
+          radius = task.getTaskPoint(i).AATCircleRadius;
         }
         for (int j=0; j<4; j++) {
           bearing = j*360.0/4;
@@ -418,12 +418,12 @@ void FlightStatistics::RenderTask(Canvas &canvas, const RECT rc, const bool olcm
 
           canvas.select(MapGfx.GetAirspaceBrushByClass(AATASK));
           canvas.white_pen();
-	  if (task_points[i].AATType == SECTOR) {
+	  if (task.getTaskPoint(i).AATType == SECTOR) {
 	    canvas.segment(chart.screenX(x2), chart.screenY(y2),
                            chart.screenS(aatradius[i]),
                            rc,
-                           task_points[i].AATStartRadial,
-                           task_points[i].AATFinishRadial);
+                           task.getTaskPoint(i).AATStartRadial,
+                           task.getTaskPoint(i).AATFinishRadial);
 	  } else {
 	    canvas.circle(chart.screenX(x2), chart.screenY(y2),
 			  chart.screenS(aatradius[i]),
@@ -472,7 +472,8 @@ void FlightStatistics::RenderTask(Canvas &canvas, const RECT rc, const bool olcm
 		       Chart::STYLE_DASHGREEN);
 
 	TCHAR text[100];
-	if ((i==nwps-1) && (task_points[i].Index == task_points[0].Index)) {
+	if ((i==nwps-1) && 
+            (task.getWaypointIndex(i) == task.getWaypointIndex(0))) {
 	  _stprintf(text,TEXT("%0d"),1);
 	  chart.DrawLabel(text, x2, y2);
 	} else {

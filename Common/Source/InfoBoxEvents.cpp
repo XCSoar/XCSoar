@@ -368,9 +368,9 @@ void
 ActionInterface::on_key_Waypoint(int UpDown)
 {
 
-  if(UpDown>0) {
+  if (UpDown>0) {
     task.advanceTaskPoint(SettingsComputer());
-  } else if((UpDown == 2) && (task_points[0].Index >= 0)) {
+  } else if ((UpDown == 2) && (task.ValidTaskPoint(0))) {
       // No more, try first
 
       /* ****DISABLED****
@@ -393,11 +393,11 @@ ActionInterface::on_key_Waypoint(int UpDown)
   } else if (UpDown<0){
     task.retreatTaskPoint(SettingsComputer());
   } else if (UpDown==0) {
-    SelectedWaypoint = task_points[task.getActiveIndex()].Index;
+    SelectedWaypoint = task.getWaypointIndex();
     PopupWaypointDetails();
   }
   if (task.Valid()>=0) {
-    SelectedWaypoint = task_points[task.getActiveIndex()].Index;
+    SelectedWaypoint = task.getWaypointIndex();
   }
 }
 

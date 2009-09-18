@@ -736,7 +736,7 @@ void InputEvents::eventWaypointDetails(const TCHAR *misc) {
 
   if (_tcscmp(misc, TEXT("current")) == 0) {
     if (task.Valid()) {
-      SelectedWaypoint = task_points[task.getActiveIndex()].Index;
+      SelectedWaypoint = task.getWaypointIndex();
     }
     if (SelectedWaypoint<0){
       Message::AddMessage(TEXT("No Active Waypoint!"));

@@ -147,28 +147,30 @@ OnTaskPaintListItem(WindowControl *Sender, Canvas &canvas)
   if (DrawListIndex < n){
     int i = LowLimit + DrawListIndex;
 
-    if (task_points[i].Index>=0) {
+    if (task.ValidTaskPoint(i)) {
+      TASK_POINT tp = task.getTaskPoint(i);
+
       if (InfoBoxLayout::landscape &&
           AATEnabled && task.ValidTaskPoint(i+1) && (i>0)) {
-        if (task_points[i].AATType==0) {
+        if (tp.AATType==0) {
           _stprintf(sTmp, TEXT("%s %.1f"),
-                    way_points.get(task_points[i].Index).Name,
-                    task_points[i].AATCircleRadius*DISTANCEMODIFY);
+                    way_points.get(tp.Index).Name,
+                    tp.AATCircleRadius*DISTANCEMODIFY);
         } else {
           _stprintf(sTmp, TEXT("%s %.1f"),
-                    way_points.get(task_points[i].Index).Name,
-                    task_points[i].AATSectorRadius*DISTANCEMODIFY);
+                    way_points.get(tp.Index).Name,
+                    tp.AATSectorRadius*DISTANCEMODIFY);
         }
       } else {
         _stprintf(sTmp, TEXT("%s"),
-                  way_points.get(task_points[i].Index).Name);
+                  way_points.get(tp.Index).Name);
       }
 
       canvas.text_clipped(2 * InfoBoxLayout::scale, 2 * InfoBoxLayout::scale,
                           p1 - 4 * InfoBoxLayout::scale, sTmp);
 
       _stprintf(sTmp, TEXT("%.0f %s"),
-		task_points[i].LegDistance*DISTANCEMODIFY,
+		tp.LegDistance*DISTANCEMODIFY,
 		Units::GetDistanceName());
       canvas.text_opaque(p1 + w1 - canvas.text_width(sTmp),
                          2 * InfoBoxLayout::scale, sTmp);
@@ -233,22 +235,18 @@ static void OverviewRefreshTask(void) {
   // as the order of other taskpoints hasn't changed
   UpLimit = 0;
   lengthtotal = 0;
-  for (i=0; i<MAXTASKPOINTS; i++) {
-    if (task_points[i].Index != -1) {
-      lengthtotal += task_points[i].LegDistance;
-      UpLimit = i+1;
-    }
-  }
 
+  for (i=0; task.ValidTaskPoint(i); i++) {
+    lengthtotal += task.getTaskPoint(i).LegDistance;
+    UpLimit = i+1;
+  }
   // Simple FAI 2004 triangle rules
   fai_ok = true;
   if (lengthtotal>0) {
-    for (i=0; i<MAXTASKPOINTS; i++) {
-      if (task_points[i].Index != -1) {
-	double lrat = task_stats[i].LengthPercent;
-	if ((lrat>0.45)||(lrat<0.10)) {
-	  fai_ok = false;
-	}
+    for (i=0; task.ValidTaskPoint(i); i++) {
+      double lrat = task_stats[i].LengthPercent;
+      if ((lrat>0.45)||(lrat<0.10)) {
+        fai_ok = false;
       }
     }
   } else {

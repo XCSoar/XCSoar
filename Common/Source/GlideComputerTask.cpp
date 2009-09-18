@@ -297,7 +297,7 @@ bool GlideComputerTask::InTurnSector(const int the_turnpoint) const
     AircraftBearing = AngleLimit180(
       Bearing(task.getTaskPointLocation(the_turnpoint),
               Basic().Location)
-      - task_points[the_turnpoint].Bisector);
+      - task.getTaskPoint(the_turnpoint).Bisector);
     
     if (SectorType==2) {
       // JMW added german rules
@@ -366,7 +366,7 @@ bool GlideComputerTask::InFinishSector(const int i)
     }
 
   // Finish line
-  AircraftBearing = AngleLimit180(AircraftBearing - task_points[i].InBound);
+  AircraftBearing = AngleLimit180(AircraftBearing - task.getTaskPoint(i).InBound);
 
   // JMW bugfix, was Bisector, which is invalid
 
@@ -528,7 +528,7 @@ bool GlideComputerTask::InStartSector(bool *CrossedStart)
   }
 
   isInSector = in_height & InStartSector_Internal(wp_index, 
-						  task_points[0].OutBound,
+						  task.getTaskPoint(0).OutBound,
 						  LastInStartSector);
 
   *CrossedStart = LastInStartSector && !isInSector;
@@ -551,7 +551,7 @@ bool GlideComputerTask::InStartSector(bool *CrossedStart)
         *CrossedStart = task_start_stats[i].InSector && !retval;
         task_start_stats[i].InSector = retval;
         if (*CrossedStart) {
-          if (task_points[0].Index != index) {
+          if (task.getTaskPoint(0).Index != index) {
             task_points[0].Index = index; // TODO: set!
             LastInStartSector = false;
             SetCalculated().StartSectorWaypoint = index;
@@ -1271,13 +1271,15 @@ void GlideComputerTask::AATStats_Distance()
                          task.getTaskPointLocation(i));
       
       TargetLegToGo = Distance(Basic().Location, 
-                               task_stats[i].AATTargetLocation);
+                               task.getTargetLocation(i));
+
+      TASK_POINT tp = task.getTaskPoint(i);
       
-      if(task_points[i].AATType == CIRCLE) {
-        MaxDistance = LegToGo + (task_points[i].AATCircleRadius );  // ToDo: should be adjusted for angle of max target and for national rules
-        MinDistance = LegToGo - (task_points[i].AATCircleRadius );
+      if(tp.AATType == CIRCLE) {
+        MaxDistance = LegToGo + (tp.AATCircleRadius );  // ToDo: should be adjusted for angle of max target and for national rules
+        MinDistance = LegToGo - (tp.AATCircleRadius );
       } else {
-        MaxDistance = LegToGo + (task_points[i].AATSectorRadius );  // ToDo: should be adjusted for angle of max target.
+        MaxDistance = LegToGo + (tp.AATSectorRadius );  // ToDo: should be adjusted for angle of max target.
         MinDistance = LegToGo;
       }
 
@@ -1287,17 +1289,18 @@ void GlideComputerTask::AATStats_Distance()
     i++;
     while(task.ValidTaskPoint(i)) {
       double LegDistance, TargetLegDistance;
+      TASK_POINT tp = task.getTaskPoint(i);
       
       LegDistance = Distance(task.getTaskPointLocation(i),
                              task.getTaskPointLocation(i-1));
       
-      TargetLegDistance = Distance(task_stats[i].AATTargetLocation,
-                                   task_stats[i-1].AATTargetLocation);
+      TargetLegDistance = Distance(task.getTargetLocation(i),
+                                   task.getTargetLocation(i-1));
       
       MaxDistance += LegDistance;
       MinDistance += LegDistance;
       
-      if(task_points[task.getActiveIndex()].AATType == CIRCLE) {
+      if (tp.AATType == CIRCLE) {
         // breaking out single Areas increases accuracy for start
         // and finish
         
@@ -1307,8 +1310,8 @@ void GlideComputerTask::AATStats_Distance()
           MaxDistance -= StartRadius; // e.g. Sports 2009 US Rules A116.3.2.  To Do: This should be configured multiple countries
           MinDistance -= StartRadius;
         } else { // not first leg of task
-          MaxDistance += (task_points[i-1].AATCircleRadius);  //ToDo: should be adjusted for angle of max target
-          MinDistance -= (task_points[i-1].AATCircleRadius);  //ToDo: should be adjusted for angle of max target
+          MaxDistance += (task.getTaskPoint(i-1).AATCircleRadius);  //ToDo: should be adjusted for angle of max target
+          MinDistance -= (task.getTaskPoint(i-1).AATCircleRadius);  //ToDo: should be adjusted for angle of max target
         }
 
         // sector at end of ith leg
@@ -1317,8 +1320,8 @@ void GlideComputerTask::AATStats_Distance()
           MaxDistance -= FinishRadius; // To Do: This can be configured for finish rules
           MinDistance -= FinishRadius;
         } else { // not last leg of task
-          MaxDistance += (task_points[i].AATCircleRadius);  //ToDo: should be adjusted for angle of max target
-          MinDistance -= (task_points[i].AATCircleRadius);  //ToDo: should be adjusted for angle of max target
+          MaxDistance += (tp.AATCircleRadius);  //ToDo: should be adjusted for angle of max target
+          MinDistance -= (tp.AATCircleRadius);  //ToDo: should be adjusted for angle of max target
         }
       } else { // not circle (pie slice)
         // sector at start of (i)th leg
@@ -1326,7 +1329,7 @@ void GlideComputerTask::AATStats_Distance()
           // add nothing
           MaxDistance += 0; // To Do: This can be configured for start rules
         } else { // not first leg of task
-          MaxDistance += (task_points[i-1].AATCircleRadius);  //ToDo: should be adjusted for angle of max target
+          MaxDistance += (task.getTaskPoint(i-1).AATCircleRadius);  //ToDo: should be adjusted for angle of max target
         }
         
         // sector at end of ith leg
@@ -1334,7 +1337,7 @@ void GlideComputerTask::AATStats_Distance()
           // add nothing
           MaxDistance += 0; // To Do: This can be configured for finish rules
         } else { // not last leg of task
-          MaxDistance += (task_points[i].AATCircleRadius);  //ToDo: should be adjusted for angle of max target
+          MaxDistance += (tp.AATCircleRadius);  //ToDo: should be adjusted for angle of max target
         }
       }
       TargetDistance += TargetLegDistance;

@@ -420,6 +420,35 @@ Task::getWaypointIndex(const int v) const
   }
 }
 
+WAYPOINT null_waypoint; // TODO
+
+const WAYPOINT&
+Task::getWaypoint(const int v) const
+{
+  int r= (v==-1)? ActiveTaskPoint:v;
+  if (ValidTaskPoint(r)) {
+    return way_points.get(task_points[r].Index);
+  } else {
+    return null_waypoint;
+  }
+}
+
+const TASK_POINT&
+Task::getTaskPoint(const int v) const
+{
+  int r= (v==-1)? ActiveTaskPoint:v;
+  assert(ValidTaskPoint(r));
+  return task_points[r];
+}
+
+
+void 
+Task::setTaskPoint(const unsigned index, const TASK_POINT& tp) const
+{
+  task_points[index]= tp;
+  // refresh task/set modified?
+}
+
 void Task::RotateStartPoints(const SETTINGS_COMPUTER &settings_computer) 
 {
   if (ActiveTaskPoint>0) return;

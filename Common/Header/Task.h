@@ -211,6 +211,10 @@ protected:
     }
   }
 
+  const TASK_POINT& getTaskPoint(const int v=-1) const;
+  void setTaskPoint(const unsigned index, const TASK_POINT& tp) const;
+
+  const WAYPOINT& getWaypoint(const int v=-1) const;
   const int getWaypointIndex(const int v=-1) const;
 
   // scan routines
@@ -407,10 +411,27 @@ public:
     return Task::setActiveIndex(i);
   }
 
+  const TASK_POINT& getTaskPoint(const int v=-1) const
+  {
+    ScopeLock protect(mutexTaskData);
+    return Task::getTaskPoint(v);
+  }
+
+  void setTaskPoint(const unsigned index, const TASK_POINT& tp) const
+  {
+    ScopeLock protect(mutexTaskData);
+    return Task::setTaskPoint(index, tp);
+  }
+
   const int getWaypointIndex(const int v=-1) const
   { // read
     ScopeLock protect(mutexTaskData);
     return Task::getWaypointIndex(v);
+  }
+  const WAYPOINT& getWaypoint(const int v=-1) const
+  {
+    ScopeLock protect(mutexTaskData);
+    return Task::getWaypoint(v);
   }
 
   const bool ValidTaskPoint(const unsigned i) const

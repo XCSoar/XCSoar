@@ -85,10 +85,10 @@ static void MoveTarget(double adjust_angle) {
   GEOPOINT target_location;
   double bearing, distance;
   distance = 500;
-  if(task_points[target_point].AATType == SECTOR) {
-    distance = max(task_points[target_point].AATSectorRadius/20.0,distance);
+  if (task.getTaskPoint(target_point).AATType == SECTOR) {
+    distance = max(task.getTaskPoint(target_point).AATSectorRadius/20.0,distance);
   } else {
-    distance = max(task_points[target_point].AATCircleRadius/20.0,distance);
+    distance = max(task.getTaskPoint(target_point).AATCircleRadius/20.0,distance);
   }
 
   bearing = AngleLimit360(XCSoarInterface::main_window.map.GetDisplayAngle() + adjust_angle);
@@ -132,15 +132,15 @@ static void MoveTarget(double adjust_angle) {
       DistanceBearing(task.getTaskPointLocation(target_point),
                       task_stats[target_point].AATTargetLocation,
                       &distance, &bearing);
-      bearing = AngleLimit180(bearing-task_points[target_point].Bisector);
-      if(task_points[target_point].AATType == SECTOR) {
-        Range = (fabs(distance)/task_points[target_point].AATSectorRadius)*2-1;
+      bearing = AngleLimit180(bearing-task.getTaskPoint(target_point).Bisector);
+      if (task.getTaskPoint(target_point).AATType == SECTOR) {
+        Range = (fabs(distance)/task.getTaskPoint(target_point).AATSectorRadius)*2-1;
       } else {
         if (fabs(bearing)>90.0) {
           distance = -distance;
           bearing = AngleLimit180(bearing+180);
         }
-        Range = distance/task_points[target_point].AATCircleRadius;
+        Range = distance/task.getTaskPoint(target_point).AATCircleRadius;
       }
       task_stats[target_point].AATTargetOffsetRadius = Range;
       task_stats[target_point].AATTargetOffsetRadial = bearing;
@@ -198,15 +198,15 @@ static void DragTarget(const GEOPOINT target_location) {
       DistanceBearing(task.getTaskPointLocation(target_point),
                       task_stats[target_point].AATTargetLocation,
                       &distance, &bearing);
-      bearing = AngleLimit180(bearing-task_points[target_point].Bisector);
-      if(task_points[target_point].AATType == SECTOR) {
-        Range = (fabs(distance)/task_points[target_point].AATSectorRadius)*2-1;
+      bearing = AngleLimit180(bearing-task.getTaskPoint(target_point).Bisector);
+      if (task.getTaskPoint(target_point).AATType == SECTOR) {
+        Range = (fabs(distance)/task.getTaskPoint(target_point).AATSectorRadius)*2-1;
       } else {
         if (fabs(bearing)>90.0) {
           distance = -distance;
           bearing = AngleLimit180(bearing+180);
         }
-        Range = distance/task_points[target_point].AATCircleRadius;
+        Range = distance/task.getTaskPoint(target_point).AATCircleRadius;
       }
       task_stats[target_point].AATTargetOffsetRadius = Range;
       task_stats[target_point].AATTargetOffsetRadial = bearing;
@@ -595,7 +595,7 @@ void dlgTarget(void) {
   }
   for (unsigned i=ActiveTaskPointOnEntry; i<MAXTASKPOINTS; i++) {
     if (task.ValidTaskPoint(i)) {
-      _tcsncpy(tp_short, way_points.get(task_points[i].Index).Name, 20);
+      _tcsncpy(tp_short, task.getWaypoint(i).Name, 20);
       tp_short[20] = 0;
       _stprintf(tp_label, TEXT("%d %s"), i, tp_short);
       dfe->addEnumText(tp_label);

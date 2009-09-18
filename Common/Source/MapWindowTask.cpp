@@ -182,8 +182,8 @@ public:
       unsigned tmp = map_window->DistanceMetersToScreen(SectorRadius);
       canvas->segment(wp.x, wp.y, tmp, 
 		      map_window->GetMapRect(),
-		      task_points[i].AATStartRadial-map_window->GetDisplayAngle(),
-		      task_points[i].AATFinishRadial-map_window->GetDisplayAngle());
+		      point.AATStartRadial-map_window->GetDisplayAngle(),
+		      point.AATFinishRadial-map_window->GetDisplayAngle());
     } else if(SectorType== 2) {
       unsigned tmp;
       tmp = map_window->DistanceMetersToScreen(500);
@@ -191,8 +191,8 @@ public:
       
       tmp = map_window->DistanceMetersToScreen(10000);
       canvas->segment(wp.x, wp.y, tmp, map_window->GetMapRect(),
-		      task_points[i].AATStartRadial-map_window->GetDisplayAngle(),
-		      task_points[i].AATFinishRadial-map_window->GetDisplayAngle());
+		      point.AATStartRadial-map_window->GetDisplayAngle(),
+		      point.AATFinishRadial-map_window->GetDisplayAngle());
     }
   }
 
@@ -483,7 +483,7 @@ public:
   {
     if (index0==0) {
       // before start
-      visit_leg_current(point0, index0, point1, index1);
+      visit_leg_current(point0, index0, point0, index0);
     }
     // Draw all of task if in target pan mode
     if (map.SettingsMap().TargetPan) {
