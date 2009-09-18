@@ -35,11 +35,8 @@ Copyright_License {
 }
 */
 
-#include "XCSoar.h"
-#include "Dialogs.h"
-#include "Language.hpp"
+#include "Dialogs/Internal.hpp"
 #include "Blackboard.hpp"
-#include "Dialogs/dlgTools.h"
 #include "InfoBoxLayout.h"
 #include "Airspace.h"
 #include "AirspaceWarning.h"

@@ -35,9 +35,8 @@ Copyright_License {
 }
 */
 
-#include "Dialogs.h"
+#include "Dialogs/Internal.hpp"
 #include "XCSoar.h"
-#include "Dialogs/dlgTools.h"
 #include "InfoBoxLayout.h"
 #include "DataField/FileReader.hpp"
 #include "LogFile.hpp"

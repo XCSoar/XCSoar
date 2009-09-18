@@ -35,10 +35,8 @@ Copyright_License {
 }
 */
 
-#include "XCSoar.h"
+#include "Dialogs/Internal.hpp"
 #include "Protection.hpp"
-#include "Dialogs.h"
-#include "Language.hpp"
 #include "Blackboard.hpp"
 #include "Settings.hpp"
 #include "SettingsTask.hpp"
@@ -57,8 +55,6 @@ Copyright_License {
 #include "Components.hpp"
 
 #include <assert.h>
-
-#include "Dialogs/dlgTools.h"
 
 static WndForm *wf=NULL;
 static bool multi_page = false;

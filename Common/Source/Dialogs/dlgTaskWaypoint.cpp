@@ -35,12 +35,9 @@ Copyright_License {
 }
 */
 
-#include "XCSoar.h"
+#include "Dialogs/Internal.hpp"
 #include "Protection.hpp"
-#include "Dialogs.h"
-#include "Language.hpp"
 #include "SettingsTask.hpp"
-#include "Dialogs/dlgTools.h"
 #include "Logger.h"
 #include "InfoBoxLayout.h"
 #include "Math/FastMath.h"

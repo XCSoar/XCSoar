@@ -59,7 +59,9 @@ protected:
   Brush brush;
   TTF_Font *font;
   Color text_color, background_color;
-  int background_mode;
+  enum {
+    OPAQUE, TRANSPARENT
+  } background_mode;
   POINT cursor;
 
 public:
@@ -178,8 +180,13 @@ public:
     rectangle(left, top, right, bottom); // XXX
   }
 
-  void raised_edge(RECT rc) {
+  void raised_edge(RECT &rc) {
     rectangle(rc.left, rc.top, rc.right, rc.bottom); // XXX
+
+    ++rc.left;
+    ++rc.top;
+    --rc.right;
+    --rc.bottom;
   }
 
   void polyline(const POINT *lppt, unsigned cPoints) {
@@ -573,7 +580,7 @@ public:
     ::RoundRect(dc, left, top, right, bottom, ellipse_width, ellipse_height);
   }
 
-  void raised_edge(RECT rc) {
+  void raised_edge(RECT &rc) {
     ::DrawEdge(dc, &rc, EDGE_RAISED, BF_ADJUST | BF_FLAT | BF_RECT);
   }
 

@@ -35,17 +35,14 @@ Copyright_License {
 }
 */
 
-#include "Dialogs.h"
-#include "Language.hpp"
+#include "Dialogs/Internal.hpp"
 #include "XCSoar.h"
 #include "SettingsTask.hpp"
 #include "UtilsProfile.hpp"
-#include "Dialogs/dlgTools.h"
 #include "Registry.hpp"
 #include "Math/FastMath.h"
 #include "DataField/Enum.hpp"
 #include "MainWindow.hpp"
-#include "Dialogs/dlgHelpers.hpp"
 
 static bool changed = false;
 static WndForm *wf=NULL;

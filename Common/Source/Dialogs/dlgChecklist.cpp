@@ -35,14 +35,12 @@ Copyright_License {
 }
 */
 
-#include "XCSoar.h"
-#include "Dialogs.h"
-#include "Language.hpp"
-#include "Dialogs/dlgTools.h"
+#include "Dialogs/Internal.hpp"
 #include "InfoBoxLayout.h"
 #include "LocalPath.hpp"
 #include "UtilsText.hpp"
 #include "MainWindow.hpp"
+#include "Defines.h"
 
 #include <assert.h>
 

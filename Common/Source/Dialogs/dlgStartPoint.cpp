@@ -35,11 +35,9 @@ Copyright_License {
 }
 */
 
-#include "XCSoar.h"
+#include "Dialogs/Internal.hpp"
 #include "Protection.hpp"
-#include "Dialogs.h"
 #include "SettingsTask.hpp"
-#include "Dialogs/dlgTools.h"
 #include "InfoBoxLayout.h"
 #include "MainWindow.hpp"
 #include "WayPointList.hpp"

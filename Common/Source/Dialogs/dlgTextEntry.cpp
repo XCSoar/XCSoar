@@ -1,4 +1,3 @@
-
 /*
 Copyright_License {
 
@@ -36,9 +35,7 @@ Copyright_License {
 }
 */
 
-#include "XCSoar.h"
-#include "Dialogs.h"
-#include "Dialogs/dlgTools.h"
+#include "Dialogs/Internal.hpp"
 #include "MainWindow.hpp"
 #include "Compatibility/string.h"
 #include "SettingsUser.hpp"

@@ -35,10 +35,8 @@ Copyright_License {
 }
 */
 
-#include "XCSoar.h"
+#include "Dialogs/Internal.hpp"
 #include "Protection.hpp"
-#include "Dialogs.h"
-#include "Language.hpp"
 #include "Math/Earth.hpp"
 #include "Registry.hpp"
 #include "LocalPath.hpp"
@@ -50,7 +48,6 @@ Copyright_License {
 #include "SettingsComputer.hpp"
 #include "SettingsTask.hpp"
 #include "McReady.h"
-#include "Dialogs/dlgTools.h"
 #include "InfoBoxLayout.h"
 #include "Math/FastMath.h"
 #include "MainWindow.hpp"

@@ -35,11 +35,9 @@ Copyright_License {
 }
 */
 
-#include "XCSoar.h"
-#include "Interface.hpp"
+#include "Dialogs/Internal.hpp"
 #include "Units.hpp"
 #include "Waypointparser.h"
-#include "Dialogs/dlgTools.h"
 #include "MainWindow.hpp"
 
 static WndForm *wf=NULL;
