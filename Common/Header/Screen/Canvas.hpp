@@ -59,7 +59,9 @@ protected:
   Brush brush;
   TTF_Font *font;
   Color text_color, background_color;
-  int background_mode;
+  enum {
+    OPAQUE, TRANSPARENT
+  } background_mode;
   POINT cursor;
 
 public:
