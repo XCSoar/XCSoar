@@ -155,7 +155,7 @@ void Task::LoadNewTask(const TCHAR *szFileName,
 
       if (!TaskInvalid) {
 
-        if (fread(&new_settings, sizeof(new_settings), 1, file) != 1) {
+        if (fread(&new_settings, sizeof(SETTINGS_TASK), 1, file) != 1) {
           TaskInvalid = true;
         }
         
