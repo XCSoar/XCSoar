@@ -46,13 +46,37 @@ typedef enum {
   AUTOADVANCE_ARMSTART
 } AutoAdvanceMode_t;
 
+typedef enum {
+  START_CIRCLE=0,
+  START_LINE,
+  START_SECTOR
+} StartSectorType_t;
+
+typedef enum {
+  FINISH_CIRCLE=0,
+  FINISH_LINE,
+  FINISH_SECTOR
+} FinishSectorType_t;
+
+typedef enum {
+  AAT_CIRCLE=0,
+  AAT_SECTOR
+} AATSectorType_t;
+
+typedef enum {
+  AST_CIRCLE=0,
+  AST_FAI,
+  AST_DAE
+} ASTSectorType_t;
+
+
 struct SETTINGS_TASK {
   AutoAdvanceMode_t AutoAdvance;
-  unsigned SectorType;
+  ASTSectorType_t SectorType;
   unsigned int SectorRadius;
-  unsigned StartLine;
+  StartSectorType_t StartType;
   unsigned StartRadius;
-  unsigned FinishLine;
+  FinishSectorType_t FinishType;
   unsigned FinishRadius;
   double AATTaskLength;
   bool AATEnabled;

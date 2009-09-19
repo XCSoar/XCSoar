@@ -438,16 +438,24 @@ void Profile::ReadRegistrySettings(void)
 		  settings_task.StartMaxSpeed );
   GetFromRegistry(szRegistryStartMaxSpeedMargin,
 		  settings_task.StartMaxSpeedMargin );
-  GetFromRegistry(szRegistryFAISector,
-                  settings_task.SectorType);
+
+  Temp = settings_task.SectorType;
+  GetFromRegistryD(szRegistryFAISector, Temp);
+  settings_task.SectorType = (ASTSectorType_t)Temp;
+
+  Temp = settings_task.StartType;
+  GetFromRegistryD(szRegistryStartLine, Temp);
+  settings_task.StartType = (StartSectorType_t)Temp;
+
+  Temp = settings_task.FinishType;
+  GetFromRegistryD(szRegistryFinishLine, Temp);
+  settings_task.FinishType = (FinishSectorType_t)Temp;
+
   GetFromRegistry(szRegistrySectorRadius,
                   settings_task.SectorRadius);
-  GetFromRegistry(szRegistryStartLine,
-		  settings_task.StartLine );
+
   GetFromRegistry(szRegistryStartRadius,
 		  settings_task.StartRadius );
-  GetFromRegistry(szRegistryFinishLine,
-		  settings_task.FinishLine );
   GetFromRegistry(szRegistryFinishRadius,
 		  settings_task.FinishRadius );
 

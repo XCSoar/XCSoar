@@ -360,7 +360,7 @@ void FlightStatistics::RenderTask(Canvas &canvas, const RECT rc, const bool olcm
       double radius;
       
       if (task.ValidTaskPoint(i+1)) {
-        if (task.getTaskPoint(i).AATType == SECTOR) {
+        if (task.getTaskPoint(i).AATType == AAT_SECTOR) {
           radius = task.getTaskPoint(i).AATSectorRadius;
         } else {
           radius = task.getTaskPoint(i).AATCircleRadius;
@@ -415,7 +415,7 @@ void FlightStatistics::RenderTask(Canvas &canvas, const RECT rc, const bool olcm
           canvas.select(MapGfx.GetAirspaceBrushByClass(AATASK,
                                                        XCSoarInterface::SettingsMap()));
           canvas.white_pen();
-	  if (task.getTaskPoint(i).AATType == SECTOR) {
+	  if (task.getTaskPoint(i).AATType == AAT_SECTOR) {
 	    canvas.segment(chart.screenX(x2), chart.screenY(y2),
                            chart.screenS(aatradius[i]),
                            rc,

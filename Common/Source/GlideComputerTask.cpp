@@ -360,7 +360,7 @@ bool GlideComputerTask::InFinishSector(const int i)
     InFinishSector = false;
   }
 
-  if(!task.getSettings().FinishLine) // Start Circle
+  if(task.getSettings().FinishType == FINISH_CIRCLE) // Start Circle
     {
       retval = inrange;
       goto OnExit;
@@ -372,7 +372,7 @@ bool GlideComputerTask::InFinishSector(const int i)
   // JMW bugfix, was Bisector, which is invalid
 
   bool approaching;
-  if(task.getSettings().FinishLine==1) { // Finish line
+  if(task.getSettings().FinishType==FINISH_LINE) { 
     approaching = ((AircraftBearing >= -90) && (AircraftBearing <= 90));
   } else {
     // FAI 90 degree
@@ -469,8 +469,7 @@ bool GlideComputerTask::InStartSector_Internal(int Index,
   bool inrange = false;
   inrange = (FirstPointDistance<task.getSettings().StartRadius);
 
-  if(task.getSettings().StartLine==0) {
-    // Start Circle
+  if(task.getSettings().StartType==START_CIRCLE) {
     return inrange;
   }
 
@@ -480,7 +479,7 @@ bool GlideComputerTask::InStartSector_Internal(int Index,
   // JMW bugfix, was Bisector, which is invalid
 
   bool approaching;
-  if(task.getSettings().StartLine==1) { // Start line
+  if(task.getSettings().StartType==START_LINE) { // Start line
     approaching = ((AircraftBearing >= -90) && (AircraftBearing <= 90));
   } else {
     // FAI 90 degree
@@ -959,7 +958,7 @@ void GlideComputerTask::DistanceCovered()
 
     LegCovered = ProjectedDistance(w0, w1, Basic().Location);
 
-    if ((task.getSettings().StartLine==0) && (task.getActiveIndex()==1)) {
+    if ((task.getSettings().StartType==START_CIRCLE) && (task.getActiveIndex()==1)) {
       // Correct speed calculations for radius
       // JMW TODO accuracy: legcovered replace this with more accurate version
       // LegDistance -= StartRadius;
@@ -1314,7 +1313,7 @@ void GlideComputerTask::AATStats_Distance()
 
       TASK_POINT tp = task.getTaskPoint(i);
       
-      if(tp.AATType == CIRCLE) {
+      if(tp.AATType == AAT_CIRCLE) {
         MaxDistance = LegToGo + (tp.AATCircleRadius );  // ToDo: should be adjusted for angle of max target and for national rules
         MinDistance = LegToGo - (tp.AATCircleRadius );
       } else {
@@ -1339,7 +1338,7 @@ void GlideComputerTask::AATStats_Distance()
       MaxDistance += LegDistance;
       MinDistance += LegDistance;
       
-      if (tp.AATType == CIRCLE) {
+      if (tp.AATType == AAT_CIRCLE) {
         // breaking out single Areas increases accuracy for start
         // and finish
         

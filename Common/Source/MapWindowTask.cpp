@@ -215,7 +215,7 @@ public:
       // waypoint.
       const POINT &wp = way_points.get_calc(point.Index).Screen;
 
-      if(_task->getSettings().FinishLine) {
+      if(_task->getSettings().FinishType != FINISH_CIRCLE) {
 	canvas->select(dash_pen5);
 	canvas->two_lines((*task_screen)[index].SectorStart, 
 			  wp,
@@ -311,7 +311,7 @@ private:
     }
 
     const WPCALC &wpcalc = way_points.get_calc(Index);
-    if(_task->getSettings().StartLine) {
+    if(_task->getSettings().StartType != START_CIRCLE) {
 
       canvas->select(MapGfx.hpStartFinishThick);
       canvas->line(wpcalc.Screen, Start);
@@ -373,7 +373,7 @@ public:
     const WPCALC &wpcalc = way_points.get_calc(point.Index);
     unsigned tmp;
 
-    if (point.AATType == CIRCLE) {
+    if (point.AATType == AAT_CIRCLE) {
       tmp = map.DistanceMetersToScreen(point.AATCircleRadius);
 
       // this color is used as the black bit
@@ -667,7 +667,7 @@ public:
 		       (*task_screen)[i].SectorEnd);
     map->LonLat2Screen(point.SectorStart, 
 		       (*task_screen)[i].SectorStart);
-    if(_task->getSettings().AATEnabled && (point.AATType == SECTOR)) {
+    if(_task->getSettings().AATEnabled && (point.AATType == AAT_SECTOR)) {
       map->LonLat2Screen(point.AATStart, 
 			 (*task_screen)[i].AATStart);
       map->LonLat2Screen(point.AATFinish, 

@@ -2366,7 +2366,7 @@ static void setVariables(void) {
     dfe->addEnumText(gettext(TEXT("Cylinder")));
     dfe->addEnumText(gettext(TEXT("Line")));
     dfe->addEnumText(gettext(TEXT("FAI Sector")));
-    dfe->Set(settings_task.FinishLine);
+    dfe->Set(settings_task.FinishType);
     wp->RefreshDisplay();
   }
 
@@ -2384,7 +2384,7 @@ static void setVariables(void) {
     dfe->addEnumText(gettext(TEXT("Cylinder")));
     dfe->addEnumText(gettext(TEXT("Line")));
     dfe->addEnumText(gettext(TEXT("FAI Sector")));
-    dfe->Set(settings_task.StartLine);
+    dfe->Set(settings_task.StartType);
     wp->RefreshDisplay();
   }
 
@@ -3132,9 +3132,9 @@ void dlgConfigurationShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpTaskFinishLine"));
   if (wp) {
-    if ((int)settings_task.FinishLine != wp->GetDataField()->GetAsInteger()) {
-      settings_task.FinishLine = wp->GetDataField()->GetAsInteger();
-      SetToRegistry(szRegistryFinishLine,settings_task.FinishLine);
+    if ((int)settings_task.FinishType != wp->GetDataField()->GetAsInteger()) {
+      settings_task.FinishType = (FinishSectorType_t)wp->GetDataField()->GetAsInteger();
+      SetToRegistry(szRegistryFinishLine,settings_task.FinishType);
       changed = true;
       taskchanged = true;
     }
@@ -3153,9 +3153,9 @@ void dlgConfigurationShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpTaskStartLine"));
   if (wp) {
-    if ((int)settings_task.StartLine != wp->GetDataField()->GetAsInteger()) {
-      settings_task.StartLine = wp->GetDataField()->GetAsInteger();
-      SetToRegistry(szRegistryStartLine,settings_task.StartLine);
+    if ((int)settings_task.StartType != wp->GetDataField()->GetAsInteger()) {
+      settings_task.StartType = (StartSectorType_t)wp->GetDataField()->GetAsInteger();
+      SetToRegistry(szRegistryStartLine,settings_task.StartType);
       changed = true;
       taskchanged = true;
     }
@@ -3175,7 +3175,7 @@ void dlgConfigurationShowModal(void){
   wp = (WndProperty*)wf->FindByName(TEXT("prpTaskFAISector"));
   if (wp) {
     if ((int)settings_task.SectorType != wp->GetDataField()->GetAsInteger()) {
-      settings_task.SectorType = wp->GetDataField()->GetAsInteger();
+      settings_task.SectorType = (ASTSectorType_t)wp->GetDataField()->GetAsInteger();
       SetToRegistry(szRegistryFAISector,settings_task.SectorType);
       changed = true;
       taskchanged = true;

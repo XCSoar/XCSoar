@@ -47,9 +47,6 @@ Copyright_License {
 #include "SettingsTask.hpp"
 #include "WayPoint.hpp"
 
-#define CIRCLE 0
-#define SECTOR 1
-
 typedef struct _START_POINT
 {
   int Index;
@@ -81,7 +78,7 @@ typedef struct _TASK_POINT
   double LegBearing;
   GEOPOINT SectorStart;
   GEOPOINT SectorEnd;
-  int	 AATType;
+  AATSectorType_t AATType;
   double AATCircleRadius;
   double AATSectorRadius;
   double AATStartRadial;

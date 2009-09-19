@@ -182,20 +182,20 @@ BOOL VLDeclare(PDeviceDescriptor_t d, Declaration_t *decl){
   const SETTINGS_TASK settings = task.getSettings();
 
   // start..
-  switch(settings.StartLine) {
-  case 0: // cylinder
+  switch(settings.StartType) {
+  case START_CIRCLE: 
     vl.declaration.task.startpoint.oztyp = VLAPI_DATA::DCLWPT::OZTYP_CYLSKT;
     vl.declaration.task.startpoint.lw = min(1500,settings.StartRadius);
     vl.declaration.task.startpoint.rz = min(1500,settings.StartRadius);
     vl.declaration.task.startpoint.rs = 0;
     break;
-  case 1: // line
+  case START_LINE: 
     vl.declaration.task.startpoint.oztyp = VLAPI_DATA::DCLWPT::OZTYP_LINE;
     vl.declaration.task.startpoint.lw = min(1500,settings.StartRadius*2);
     vl.declaration.task.startpoint.rs = 0;
     vl.declaration.task.startpoint.rz = 0;
     break;
-  case 2: // fai sector
+  case START_SECTOR: 
     vl.declaration.task.startpoint.oztyp = VLAPI_DATA::DCLWPT::OZTYP_CYLSKT;
     vl.declaration.task.startpoint.lw = min(1500,settings.StartRadius);
     vl.declaration.task.startpoint.rz = 0;
@@ -232,20 +232,20 @@ BOOL VLDeclare(PDeviceDescriptor_t d, Declaration_t *decl){
   }
 
   // Finish
-  switch(settings.FinishLine) {
-  case 0: // cylinder
+  switch(settings.FinishType) {
+  case FINISH_CIRCLE: 
     vl.declaration.task.finishpoint.oztyp = VLAPI_DATA::DCLWPT::OZTYP_CYLSKT;
     vl.declaration.task.finishpoint.lw = min(1500,settings.FinishRadius);
     vl.declaration.task.finishpoint.rz = min(1500,settings.FinishRadius);
     vl.declaration.task.finishpoint.rs = 0;
     break;
-  case 1: // line
+  case FINISH_LINE:
     vl.declaration.task.finishpoint.oztyp = VLAPI_DATA::DCLWPT::OZTYP_LINE;
     vl.declaration.task.finishpoint.lw = settings.FinishRadius*2;
     vl.declaration.task.finishpoint.rz = 0;
     vl.declaration.task.finishpoint.rs = 0;
     break;
-  case 2: // fai sector
+  case FINISH_SECTOR: 
     vl.declaration.task.finishpoint.oztyp = VLAPI_DATA::DCLWPT::OZTYP_CYLSKT;
     vl.declaration.task.finishpoint.lw = min(1500,settings.FinishRadius);
     vl.declaration.task.finishpoint.rz = 0;

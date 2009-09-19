@@ -86,7 +86,7 @@ static void MoveTarget(double adjust_angle) {
   TASK_POINT tp = task.getTaskPoint(target_point);
 
   distance = 500;
-  if (tp.AATType == SECTOR) {
+  if (tp.AATType == AAT_SECTOR) {
     distance = max(tp.AATSectorRadius/20.0,distance);
   } else {
     distance = max(tp.AATCircleRadius/20.0,distance);
@@ -137,7 +137,7 @@ static void MoveTarget(double adjust_angle) {
                       tp.AATTargetLocation,
                       &distance, &bearing);
       bearing = AngleLimit180(bearing-tp.Bisector);
-      if (tp.AATType == SECTOR) {
+      if (tp.AATType == AAT_SECTOR) {
         Range = (fabs(distance)/tp.AATSectorRadius)*2-1;
       } else {
         if (fabs(bearing)>90.0) {
@@ -203,7 +203,7 @@ static void DragTarget(const GEOPOINT target_location) {
                       tp.AATTargetLocation,
                       &distance, &bearing);
       bearing = AngleLimit180(bearing-tp.Bisector);
-      if (tp.AATType == SECTOR) {
+      if (tp.AATType == AAT_SECTOR) {
         Range = (fabs(distance)/task.getTaskPoint(target_point).AATSectorRadius)*2-1;
       } else {
         if (fabs(bearing)>90.0) {

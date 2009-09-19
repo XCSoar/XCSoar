@@ -73,11 +73,11 @@ Task::Task():
   settings.AutoAdvance = AUTOADVANCE_AUTO;
   settings.EnableMultipleStartPoints = false;
   settings.EnableFAIFinishHeight = false;
-  settings.FinishLine=1;
+  settings.FinishType= FINISH_LINE;
   settings.FinishRadius=1000;
-  settings.SectorType = 1; // FAI sector
+  settings.SectorType = AST_FAI;
   settings.SectorRadius = 10000;
-  settings.StartLine = 1;
+  settings.StartType = START_LINE;
   settings.StartRadius = 3000;
   settings.AATTaskLength = 120;
   settings.FinishMinHeight = 0;
@@ -599,7 +599,7 @@ Task::CalculateAATTaskSectors(const NMEA_INFO &gps_info)
         continue;
       }
 
-      if(task_points[i].AATType == SECTOR) {
+      if(task_points[i].AATType == AAT_SECTOR) {
         FindLatitudeLongitude (getTaskPointLocation(i),
                                task_points[i].AATStartRadial,
                                task_points[i].AATSectorRadius,
@@ -628,7 +628,7 @@ Task::CalculateAATTaskSectors(const NMEA_INFO &gps_info)
 
       targetbearing = AngleLimit360(task_points[i].Bisector+task_points[i].AATTargetOffsetRadial);
 
-      if(task_points[i].AATType == SECTOR) {
+      if(task_points[i].AATType == AAT_SECTOR) {
 
         //AATStartRadial
         //AATFinishRadial
@@ -775,7 +775,7 @@ Task::FindInsideAATSectorDistance(const GEOPOINT &location,
                                    const double p_found) const 
 {
   double max_distance;
-  if(task_points[taskwaypoint].AATType == SECTOR) {
+  if(task_points[taskwaypoint].AATType == AAT_SECTOR) {
     max_distance = task_points[taskwaypoint].AATSectorRadius;
   } else {
     max_distance = task_points[taskwaypoint].AATCircleRadius;
@@ -965,7 +965,7 @@ Task::InAATTurnSector(const GEOPOINT &location,
   DistanceBearing(getTaskPointLocation(the_turnpoint),
                   location, &distance, &bearing);
 
-  if(task_points[the_turnpoint].AATType ==  CIRCLE) {
+  if(task_points[the_turnpoint].AATType ==  AAT_CIRCLE) {
     if(distance < task_points[the_turnpoint].AATCircleRadius) {
       retval = true;
     }

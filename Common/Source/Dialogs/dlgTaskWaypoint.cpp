@@ -97,7 +97,7 @@ static void SetValues(bool first=false) {
       dfe->addEnumText(gettext(TEXT("Line")));
       dfe->addEnumText(gettext(TEXT("FAI Sector")));
     }
-    dfe->Set(settings_task.FinishLine);
+    dfe->Set(settings_task.FinishType);
     wp->RefreshDisplay();
   }
 
@@ -118,7 +118,7 @@ static void SetValues(bool first=false) {
       dfe->addEnumText(gettext(TEXT("FAI Sector")));
     }
     dfe->SetDetachGUI(true); // disable call to OnAATEnabled
-    dfe->Set(settings_task.StartLine);
+    dfe->Set(settings_task.StartType);
     dfe->SetDetachGUI(false);
     wp->RefreshDisplay();
   }
@@ -210,10 +210,14 @@ static void GetWaypointValues(void) {
   if (task.ValidTaskPoint(twItemIndex)) {
     TASK_POINT tp = task.getTaskPoint(twItemIndex);
 
+    short tmp;
+
     wp = (WndProperty*)wf->FindByName(TEXT("prpAATType"));
     if (wp) {
-      CHECK_CHANGED(tp.AATType,
+      tmp = tp.AATType;
+      CHECK_CHANGED(tmp,
                     wp->GetDataField()->GetAsInteger());
+      tp.AATType = (AATSectorType_t)tmp;
     }
 
     wp = (WndProperty*)wf->FindByName(TEXT("prpAATCircleRadius"));
@@ -320,8 +324,10 @@ static void ReadValues(void) {
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpTaskFinishLine"));
   if (wp) {
-    CHECK_CHANGEDU(settings_task.FinishLine,
+    unsigned tmp = settings_task.FinishType;
+    CHECK_CHANGEDU(tmp,
                   wp->GetDataField()->GetAsInteger());
+    settings_task.FinishType = (FinishSectorType_t)tmp;
   }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpTaskFinishRadius"));
@@ -333,8 +339,10 @@ static void ReadValues(void) {
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpTaskStartLine"));
   if (wp) {
-    CHECK_CHANGEDU(settings_task.StartLine,
+    unsigned tmp = settings_task.StartType;
+    CHECK_CHANGEDU(tmp,
                   wp->GetDataField()->GetAsInteger());
+    settings_task.StartType = (StartSectorType_t)tmp;
   }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpTaskStartRadius"));
@@ -346,8 +354,10 @@ static void ReadValues(void) {
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpTaskFAISector"));
   if (wp) {
-    CHECK_CHANGEDU(settings_task.SectorType,
+    unsigned tmp = settings_task.SectorType;
+    CHECK_CHANGEDU(tmp,
                   wp->GetDataField()->GetAsInteger());
+    settings_task.SectorType = (ASTSectorType_t)tmp;
   }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpTaskSectorRadius"));

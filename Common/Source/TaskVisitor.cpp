@@ -334,7 +334,7 @@ class TaskSectorsVisitor:
   public AbsoluteTaskPointVisitor {
 public:
   void visit_task_point_start(TASK_POINT &point, const unsigned index) { 
-    if (_task->getSettings().StartLine==2) {
+    if (_task->getSettings().StartType== START_SECTOR) {
       SectorAngle = 45+90;
     } else {
       SectorAngle = 90;
@@ -360,7 +360,7 @@ public:
   };
   void visit_task_point_final(TASK_POINT &point, const unsigned index) { 
     // finish line
-    if (_task->getSettings().FinishLine==2) {
+    if (_task->getSettings().FinishType==FINISH_SECTOR) {
       SectorAngle = 45;
     } else {
       SectorAngle = 90;
@@ -543,7 +543,7 @@ public:
     bool in_sector = true;
     
     double max_distance, delta;
-    if(point.AATType == SECTOR) {
+    if(point.AATType == AAT_SECTOR) {
       max_distance = point.AATSectorRadius;
     } else {
       max_distance = point.AATCircleRadius;
