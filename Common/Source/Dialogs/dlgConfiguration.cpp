@@ -1384,7 +1384,7 @@ static void setVariables(void) {
     dfe->addEnumText(gettext(TEXT("Clip")));
     dfe->addEnumText(gettext(TEXT("Auto")));
     dfe->addEnumText(gettext(TEXT("All below")));
-    dfe->Set(AltitudeMode);
+    dfe->Set(XCSoarInterface::SetSettingsComputer().AltitudeMode);
     wp->RefreshDisplay();
   }
   //
@@ -1398,14 +1398,14 @@ static void setVariables(void) {
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpClipAltitude"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(iround(ClipAltitude*ALTITUDEMODIFY));
+    wp->GetDataField()->SetAsFloat(iround(XCSoarInterface::SetSettingsComputer().ClipAltitude*ALTITUDEMODIFY));
     wp->GetDataField()->SetUnits(Units::GetAltitudeName());
     wp->RefreshDisplay();
   }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpAltWarningMargin"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(iround(AltWarningMargin*ALTITUDEMODIFY));
+    wp->GetDataField()->SetAsFloat(iround(XCSoarInterface::SetSettingsComputer().AltWarningMargin*ALTITUDEMODIFY));
     wp->GetDataField()->SetUnits(Units::GetAltitudeName());
     wp->RefreshDisplay();
   }
@@ -2683,7 +2683,7 @@ void dlgConfigurationShowModal(void){
 
   changed |= SetValueRegistryOnChange(wf, TEXT("prpAirspaceDisplay"),
 				      szRegistryAltMode,
-				      AltitudeMode);
+				      XCSoarInterface::SetSettingsComputer().AltitudeMode);
 
   changed |= SetValueRegistryOnChange(wf, TEXT("prpLockSettingsInFlight"),
 				      szRegistryLockSettingsInFlight,
@@ -2737,9 +2737,9 @@ void dlgConfigurationShowModal(void){
   wp = (WndProperty*)wf->FindByName(TEXT("prpClipAltitude"));
   if (wp) {
     ival = iround(wp->GetDataField()->GetAsInteger()/ALTITUDEMODIFY);
-    if (ClipAltitude != ival) {
-      ClipAltitude = ival;
-      SetToRegistry(szRegistryClipAlt,ClipAltitude);  // fixed 20060430/sgi was szRegistryAltMode
+    if ((int)XCSoarInterface::SetSettingsComputer().ClipAltitude != ival) {
+      XCSoarInterface::SetSettingsComputer().ClipAltitude = ival;
+      SetToRegistry(szRegistryClipAlt,XCSoarInterface::SetSettingsComputer().ClipAltitude);  // fixed 20060430/sgi was szRegistryAltMode
       changed = true;
     }
   }
@@ -2747,9 +2747,9 @@ void dlgConfigurationShowModal(void){
   wp = (WndProperty*)wf->FindByName(TEXT("prpAltWarningMargin"));
   if (wp) {
     ival = iround(wp->GetDataField()->GetAsInteger()/ALTITUDEMODIFY);
-    if (AltWarningMargin != ival) {
-      AltWarningMargin = ival;
-      SetToRegistry(szRegistryAltMargin,AltWarningMargin);
+    if ((int)XCSoarInterface::SetSettingsComputer().AltWarningMargin != ival) {
+      XCSoarInterface::SetSettingsComputer().AltWarningMargin = ival;
+      SetToRegistry(szRegistryAltMargin,XCSoarInterface::SetSettingsComputer().AltWarningMargin);
       changed = true;
     }
   }

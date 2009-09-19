@@ -26,9 +26,6 @@ bool EnableSoundTask = true;
 #include "SettingsAirspace.hpp"
 int AirspacePriority[AIRSPACECLASSCOUNT];
 
-int AltitudeMode = ALLON;
-int ClipAltitude = 1000;
-int AltWarningMargin = 100;
 double airspace_QNH;
 
 // 12 is number of airspace types

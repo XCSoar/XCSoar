@@ -122,7 +122,7 @@ bool InsideAirspaceCircle(const GEOPOINT &location,
   return false;
 }
 
-
+/* unused
 int FindAirspaceCircle(const GEOPOINT &location, bool visibleonly)
 {
   unsigned i;
@@ -152,7 +152,7 @@ int FindAirspaceCircle(const GEOPOINT &location, bool visibleonly)
         } else {
           topalt = AirspaceCircle[i].Top.AGL + XCSoarInterface::Calculated().TerrainAlt;
         }
-      if(CheckAirspaceAltitude(basealt, topalt)) {
+      if(CheckAirspaceAltitude(basealt, topalt, settings)) {
         if (InsideAirspaceCircle(location,i)) {
 	  return i;
         }
@@ -161,36 +161,38 @@ int FindAirspaceCircle(const GEOPOINT &location, bool visibleonly)
   }
   return -1;
 }
+*/
 
-
-bool CheckAirspaceAltitude(const double &Base, const double &Top)
+bool CheckAirspaceAltitude(const double &Base, const double &Top,
+  const SETTINGS_COMPUTER &settings)
 {
   double alt;
+  // TODO remove dependency! 
   if (XCSoarInterface::Basic().BaroAltitudeAvailable) {
     alt = XCSoarInterface::Basic().BaroAltitude;
   } else {
     alt = XCSoarInterface::Basic().Altitude;
   }
 
-  switch (AltitudeMode)
+  switch (settings.AltitudeMode)
     {
     case ALLON : return true;
 
     case CLIP :
-      if(Base < ClipAltitude)
+      if(Base < settings.ClipAltitude)
 	return true;
       else
 	return false;
 
     case AUTO:
-      if( ( alt > (Base - AltWarningMargin) )
-	  && ( alt < (Top + AltWarningMargin) ))
+      if( ( alt > (Base - settings.AltWarningMargin) )
+	  && ( alt < (Top + settings.AltWarningMargin) ))
 	return true;
       else
 	return false;
 
     case ALLBELOW:
-      if(  (Base - AltWarningMargin) < alt )
+      if(  (Base - settings.AltWarningMargin) < alt )
 	return  true;
       else
 	return false;
@@ -378,6 +380,7 @@ int FindAirspaceArea(double Longitude,double Latitude, bool visibleonly)
 
 static int
 FindNearestAirspaceCircle(const GEOPOINT &location,
+                          const SETTINGS_COMPUTER &settings,
                           double *nearestdistance,
                           double *nearestbearing,
                           double *height=NULL)
@@ -420,7 +423,7 @@ FindNearestAirspaceCircle(const GEOPOINT &location,
     if (height) {
       altok = ((*height > basealt) && (*height < topalt));
     } else {
-      altok = CheckAirspaceAltitude(basealt, topalt)==true;
+      altok = CheckAirspaceAltitude(basealt, topalt, settings)==true;
     }
     if(altok) {
 
@@ -497,8 +500,9 @@ double RangeAirspaceArea(const GEOPOINT &location,
 }
 
 static int
-FindNearestAirspaceArea(const MapWindowProjection& map_projection,
-                        const GEOPOINT &location,
+FindNearestAirspaceArea(const GEOPOINT &location,
+                        const SETTINGS_COMPUTER &settings,
+                        const MapWindowProjection& map_projection,                        
                         double *nearestdistance, double *nearestbearing,
                         double *height=NULL)
 {
@@ -539,7 +543,7 @@ FindNearestAirspaceArea(const MapWindowProjection& map_projection,
 
     bool altok;
     if (!height) {
-      altok = CheckAirspaceAltitude(basealt, topalt)==true;
+      altok = CheckAirspaceAltitude(basealt, topalt, settings)==true;
     } else {
       altok = ((*height < topalt) && (*height > basealt));
     }
@@ -581,8 +585,9 @@ FindNearestAirspaceArea(const MapWindowProjection& map_projection,
 //
 // This only searches within a range of 100km of the target
 
-void FindNearestAirspace(const MapWindowProjection& map_projection,
-			 const GEOPOINT &location,
+void FindNearestAirspace(const GEOPOINT &location,
+                         const SETTINGS_COMPUTER &settings,
+                         const MapWindowProjection& map_projection,
 			 double *nearestdistance, double *nearestbearing,
 			 int *foundcircle, int *foundarea,
 			 double *height)
@@ -593,11 +598,13 @@ void FindNearestAirspace(const MapWindowProjection& map_projection,
   double nearestb2 = 0;
 
   *foundcircle = FindNearestAirspaceCircle(location,
+                                           settings,
 					   &nearestd1, &nearestb1,
 					   height);
 
-  *foundarea = FindNearestAirspaceArea(map_projection,
-				       location,
+  *foundarea = FindNearestAirspaceArea(location,
+                                       settings,
+                                       map_projection, 
 				       &nearestd2, &nearestb2,
 				       height);
 

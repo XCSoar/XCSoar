@@ -60,6 +60,14 @@ Copyright_License {
 // 1: Set to average if in climb mode
 // 2: Average if in climb mode, final glide in final glide mode
 
+// airspace display modes
+#define ALLON 0
+#define CLIP 1
+#define AUTO 2
+#define ALLBELOW 3
+#define INSIDE 4
+#define ALLOFF 5
+
 
 struct SETTINGS_COMPUTER {
   bool AutoMacCready;
@@ -127,6 +135,10 @@ struct SETTINGS_COMPUTER {
   bool EnableAirspaceWarnings;
   unsigned WarningTime;
   unsigned AcknowledgementTime;
+
+  unsigned AltitudeMode;
+  unsigned ClipAltitude;
+  unsigned AltWarningMargin;
 
 };
 

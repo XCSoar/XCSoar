@@ -40,6 +40,7 @@ Copyright_License {
 
 #include "Sizes.h"
 #include "SettingsAirspace.hpp"
+#include "SettingsComputer.hpp"
 #include "Screen/shapelib/mapshape.h"
 #include "GeoPoint.hpp"
 
@@ -123,7 +124,8 @@ int FindAirspaceCircle(const GEOPOINT &location,
 		       bool visibleonly=true);
 int FindAirspaceArea(const GEOPOINT &location,
 		     bool visibleonly=true);
-bool CheckAirspaceAltitude(const double &Base, const double &Top);
+bool CheckAirspaceAltitude(const double &Base, const double &Top,
+  const SETTINGS_COMPUTER &settings);
 void CloseAirspace(void);
 
 
@@ -168,7 +170,15 @@ public:
 
 };
 
-typedef enum {asaNull, asaItemAdded, asaItemChanged, asaClearAll, asaItemRemoved, asaWarnLevelIncreased, asaProcessEnd, asaProcessBegin} AirspaceWarningNotifyAction_t;
+typedef enum {asaNull, 
+              asaItemAdded, 
+              asaItemChanged, 
+              asaClearAll, 
+              asaItemRemoved, 
+              asaWarnLevelIncreased, 
+              asaProcessEnd, 
+              asaProcessBegin} AirspaceWarningNotifyAction_t;
+
 typedef void (*AirspaceWarningNotifier_t)(AirspaceWarningNotifyAction_t Action, AirspaceInfo_c *AirSpace) ;
 
 void AirspaceWarnListAddNotifier(AirspaceWarningNotifier_t Notifier);
@@ -194,9 +204,10 @@ double RangeAirspaceArea(const GEOPOINT &location,
 
 bool CheckAirspacePoint(int Idx);
 
-void FindNearestAirspace(const MapWindowProjection &map_projection,
-			 const GEOPOINT &location,
-			 double *nearestdistance,
+void FindNearestAirspace(const GEOPOINT &location,
+                         const SETTINGS_COMPUTER &settings,
+                         const MapWindowProjection &map_projection,
+                         double *nearestdistance,
 			 double *nearestbearing,
 			 int *foundcircle,
 			 int *foundarea,

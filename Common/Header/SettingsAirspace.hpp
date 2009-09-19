@@ -54,20 +54,9 @@ Copyright_License {
 #define CLASSF				13
 #define AIRSPACECLASSCOUNT              14
 
-// modes
-#define ALLON 0
-#define CLIP 1
-#define AUTO 2
-#define ALLBELOW 3
-#define INSIDE 4
-#define ALLOFF 5
-
 extern int    iAirspaceMode[AIRSPACECLASSCOUNT];
 extern int    AirspacePriority[AIRSPACECLASSCOUNT];
 
-extern int AltitudeMode;
-extern int ClipAltitude;
-extern int AltWarningMargin;
 extern double airspace_QNH; 
 
 #endif

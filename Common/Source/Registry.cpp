@@ -561,9 +561,13 @@ void Profile::ReadRegistrySettings(void)
       SetSettingsMap().DisplayTextType = DISPLAYNAMEIFINTASK; break;
     }
 
-  GetFromRegistry(szRegistryAltMode,AltitudeMode);
-  GetFromRegistry(szRegistryClipAlt,ClipAltitude);
-  GetFromRegistry(szRegistryAltMargin,AltWarningMargin);
+  GetFromRegistry(szRegistryAltMode,
+                  SetSettingsComputer().AltitudeMode);
+  GetFromRegistry(szRegistryClipAlt,
+                  SetSettingsComputer().ClipAltitude);
+  GetFromRegistry(szRegistryAltMargin,
+                  SetSettingsComputer().AltWarningMargin);
+
   GetFromRegistry(szRegistrySafetyAltitudeArrival, 
 		  SetSettingsComputer().SAFETYALTITUDEARRIVAL);
   GetFromRegistry(szRegistrySafetyAltitudeBreakOff,

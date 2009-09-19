@@ -99,5 +99,10 @@ SettingsComputerBlackboard::SettingsComputerBlackboard()
   settings_computer.EnableAirspaceWarnings = true;
   settings_computer.WarningTime = 30;
   settings_computer.AcknowledgementTime = 30;
+
+  settings_computer.AltitudeMode = ALLON;
+  settings_computer.ClipAltitude = 1000;
+  settings_computer.AltWarningMargin = 100;
+
 }
 

@@ -1229,9 +1229,10 @@ void InputEvents::eventNearestAirspaceDetails(const TCHAR *misc) {
   }
 
   StartHourglassCursor();
-  FindNearestAirspace(main_window.map,
-		      Basic().Location, 
-		      &nearestdistance, &nearestbearing,
+  FindNearestAirspace(Basic().Location,
+                      SettingsComputer(),
+                      MapProjection(),
+                      &nearestdistance, &nearestbearing,
 		      &foundcircle, &foundarea);
   StopHourglassCursor();
 
@@ -1601,19 +1602,19 @@ void InputEvents::eventUserDisplayModeForce(const TCHAR *misc){
 void InputEvents::eventAirspaceDisplayMode(const TCHAR *misc){
 
   if (_tcscmp(misc, TEXT("all")) == 0){
-    AltitudeMode = ALLON;
+    SetSettingsComputer().AltitudeMode = ALLON;
   }
   else if (_tcscmp(misc, TEXT("clip")) == 0){
-    AltitudeMode = CLIP;
+    SetSettingsComputer().AltitudeMode = CLIP;
   }
   else if (_tcscmp(misc, TEXT("auto")) == 0){
-    AltitudeMode = AUTO;
+    SetSettingsComputer().AltitudeMode = AUTO;
   }
   else if (_tcscmp(misc, TEXT("below")) == 0){
-    AltitudeMode = ALLBELOW;
+    SetSettingsComputer().AltitudeMode = ALLBELOW;
   }
   else if (_tcscmp(misc, TEXT("off")) == 0){
-    AltitudeMode = ALLOFF;
+    SetSettingsComputer().AltitudeMode = ALLOFF;
   }
 }
 
