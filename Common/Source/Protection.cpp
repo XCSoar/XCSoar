@@ -42,7 +42,6 @@ Copyright_License {
 #include "SettingsUser.hpp"
 #include "Device/Parser.h"
 #include "Gauge/GaugeVario.hpp"
-#include "Logger.h"
 #include "Calculations.h"
 #include "Interface.hpp"
 #include "Components.hpp"
