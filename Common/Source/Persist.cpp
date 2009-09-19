@@ -89,7 +89,9 @@ void LoadCalculationsPersist(DERIVED_INFO *Calculated) {
 
     fread(Calculated, sizeof(*Calculated), 1, file);
     Calculated->Flying = false;
-
+    Calculated->TimeInFlight = 0;
+    Calculated->TimeOnGround = 60;
+    
     fread(&sizein, sizeof(sizein), 1, file);
     if (sizein != sizeof(glide_computer.GetFlightStats())) {
 
