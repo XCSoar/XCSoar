@@ -39,7 +39,6 @@ Copyright_License {
 #include "XCSoar.h"
 #include "WayPoint.hpp"
 #include "Protection.hpp"
-#include "Settings.hpp"
 #include "SettingsComputer.hpp" // for auto-setting of alternates.  Dangerous!
 #include "Task.h"
 #include "SettingsUser.hpp"

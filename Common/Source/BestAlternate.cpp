@@ -43,7 +43,6 @@ Copyright_License {
 #include "Math/FastMath.h"
 #include "Math/Earth.hpp"
 #include "Math/Screen.hpp"
-#include "Settings.hpp"
 #include "SettingsComputer.hpp"
 #include "SettingsTask.hpp"
 #include "McReady.h"

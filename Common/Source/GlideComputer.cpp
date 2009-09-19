@@ -199,7 +199,6 @@ GlideComputer::SetLegStart()
 #include "Math/NavFunctions.hpp" // used for team code
 #include "InputEvents.h"
 #include "SettingsComputer.hpp"
-#include "Settings.hpp"
 #include "WayPoint.hpp"
 #include "PeriodClock.hpp"
 #include "Math/Earth.hpp"

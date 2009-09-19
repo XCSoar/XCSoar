@@ -47,7 +47,6 @@ Copyright_License {
 #include "Logger.h"
 #include "Language.hpp"
 #include "McReady.h"
-#include "Settings.hpp"
 #include "SettingsTask.hpp"
 #include "SettingsUser.hpp"
 #include "SettingsComputer.hpp"

@@ -42,7 +42,6 @@ Copyright_License {
 #include "Math/Screen.hpp"
 #include "Math/Earth.hpp"
 #include "SettingsComputer.hpp"
-#include "Settings.hpp"
 #include "Screen/Graphics.hpp"
 #include "Screen/Fonts.hpp"
 #include "McReady.h"

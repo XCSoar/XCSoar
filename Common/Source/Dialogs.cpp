@@ -58,7 +58,6 @@ Copyright_License {
 #include "UtilsText.hpp"
 #include "UtilsSystem.hpp"
 #include "LocalPath.hpp"
-#include "Settings.hpp"
 #include "SettingsUser.hpp"
 #include "InfoBoxLayout.h"
 #include "InputEvents.h"

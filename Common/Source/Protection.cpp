@@ -39,7 +39,6 @@ Copyright_License {
 #include "MainWindow.hpp"
 #include "MapWindow.h"
 #include "Protection.hpp"
-#include "Settings.hpp"
 #include "SettingsUser.hpp"
 #include "Device/Parser.h"
 #include "Gauge/GaugeVario.hpp"

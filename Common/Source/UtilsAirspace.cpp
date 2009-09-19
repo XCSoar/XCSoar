@@ -38,7 +38,6 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "Dialogs.h"
 #include "Language.hpp"
-#include "Settings.hpp"
 #include "Units.hpp"
 #include "Math/Pressure.h"
 #include "Math/Units.h"

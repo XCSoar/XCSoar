@@ -37,39 +37,7 @@ Copyright_License {
 */
 
 #include "Calculations.h"
-#include "XCSoar.h"
-#include "Protection.hpp"
-#include "Components.hpp"
-#include "Units.hpp"
-#include "Message.h"
-#include "Settings.hpp"
-#include "SettingsComputer.hpp"
-#include "SettingsTask.hpp"
-#include "Calibration.hpp"
-#include "McReady.h"
-#include "Logger.h"
-#include "LocalTime.hpp"
-#include "ReplayLogger.hpp"
-#include "Math/FastMath.h"
-#include <math.h>
-#include "InputEvents.h"
-#include "Message.h"
-#include "TeamCodeCalculation.h"
-#include <tchar.h>
-#include "Math/NavFunctions.hpp" // used for team code
-#ifdef NEWCLIMBAV
-#include "ClimbAverageCalculator.h" // JMW new
-#endif
-#include "Math/Geometry.hpp"
-#include "Math/Earth.hpp"
-#include "Math/Pressure.h"
-#include "WayPoint.hpp"
-#include "LogFile.hpp"
-#include "Persist.hpp"
-#include "Airspace.h"
-#include "ConditionMonitor.hpp"
-#include "MapWindowProjection.hpp"
-
+#include "Task.h"
 
 ///////////////////////////////////////////////
 

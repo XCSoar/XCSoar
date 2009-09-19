@@ -64,7 +64,6 @@ Copyright_License {
 #include "Interface.hpp"
 #include "Atmosphere.h"
 #include "LogFile.hpp"
-#include "Settings.hpp"
 #include "GPSClock.hpp"
 
 #define TAKEOFFSPEEDTHRESHOLD (0.5*GlidePolar::Vminsink)

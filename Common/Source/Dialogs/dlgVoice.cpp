@@ -42,7 +42,6 @@ Copyright_License {
 #include "Audio/VegaVoice.h"
 #include "DataField/Base.hpp"
 #include "MainWindow.hpp"
-#include "Settings.hpp"
 
 static WndForm *wf=NULL;
 

@@ -44,7 +44,6 @@ Copyright_License {
 #include "UtilsText.hpp"
 #include "Math/SunEphemeris.hpp"
 #include "Blackboard.hpp"
-#include "Settings.hpp"
 #include "SettingsComputer.hpp"
 #include "SettingsTask.hpp"
 #include "McReady.h"

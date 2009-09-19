@@ -42,7 +42,6 @@ Copyright_License {
 #include "Math/Geometry.hpp"
 #include "TeamCodeCalculation.h"
 #include "UtilsFLARM.hpp"
-#include "Settings.hpp"
 #if defined(_SIM_) && !defined(NDEBUG)
 #include "Device/Parser.h"
 #endif

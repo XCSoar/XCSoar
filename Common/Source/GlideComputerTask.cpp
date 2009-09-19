@@ -39,7 +39,6 @@ Copyright_License {
 #include "GlideComputerTask.hpp"
 #include "Protection.hpp"
 #include "Task.h"
-#include "Settings.hpp"
 #include "SettingsTask.hpp"
 #include "WayPoint.hpp"
 #include "Math/Earth.hpp"

@@ -36,7 +36,6 @@ Copyright_License {
 */
 
 #include "MapWindow.h"
-#include "Settings.hpp"
 #include "SettingsComputer.hpp"
 #include "SettingsUser.hpp"
 #include "SettingsTask.hpp"

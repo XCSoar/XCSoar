@@ -40,7 +40,6 @@ Copyright_License {
 #include "XCSoar.h"
 #include "Protection.hpp"
 #include "McReady.h"
-#include "Settings.hpp"
 #include "SettingsComputer.hpp"
 #include "SettingsTask.hpp"
 #include "Task.h"

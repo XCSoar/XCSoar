@@ -40,7 +40,6 @@ Copyright_License {
 #include "SettingsComputer.hpp"
 #include "Blackboard.hpp"
 #include "Interface.hpp"
-#include "Settings.hpp"
 #include "Components.hpp"
 #include "WayPointList.hpp"
 

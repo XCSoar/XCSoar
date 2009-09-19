@@ -36,7 +36,6 @@ Copyright_License {
 */
 #include "MapWindow.h"
 #include "XCSoar.h"
-#include "Settings.hpp"
 #include "SettingsComputer.hpp"
 #include "WayPoint.hpp"
 #include "InfoBoxLayout.h"

@@ -39,7 +39,6 @@
 #include "Version.hpp"
 #include "Dialogs.h"
 #include "Language.hpp"
-#include "Settings.hpp"
 #include "Task.h"
 #include "Registry.hpp"
 #include "Math/Earth.hpp"

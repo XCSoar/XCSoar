@@ -37,7 +37,6 @@
 
 #include "Dialogs/Internal.hpp"
 #include "Protection.hpp"
-#include "Settings.hpp"
 #include "SettingsComputer.hpp"
 #include "Blackboard.hpp"
 #include "InfoBoxLayout.h"

@@ -38,7 +38,6 @@ Copyright_License {
 #include "InfoBoxManager.h"
 #include "Protection.hpp"
 #include "Device/Parser.h"
-#include "Settings.hpp"
 #include "SettingsComputer.hpp"
 #include "SettingsTask.hpp"
 #include "Math/FastMath.h"

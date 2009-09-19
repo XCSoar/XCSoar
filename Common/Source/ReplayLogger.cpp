@@ -41,8 +41,6 @@
 #include "Dialogs.h"
 #include "Language.hpp"
 #include "Device/Port.h"
-#include "Calculations.h" // TODO danger! for flightstats
-#include "Settings.hpp"
 #include "SettingsTask.hpp"
 #include "Registry.hpp"
 #include "Math/Earth.hpp"

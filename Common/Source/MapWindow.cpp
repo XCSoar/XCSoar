@@ -43,7 +43,6 @@ Copyright_License {
 #include "UtilsSystem.hpp"
 #include "Math/FastMath.h"
 #include "Dialogs.h"
-#include "Settings.hpp"
 #include "Audio/VarioSound.h"
 #include "InputEvents.h"
 #include "Screen/Graphics.hpp"

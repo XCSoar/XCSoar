@@ -2,7 +2,6 @@
 #include "XCSoar.h"
 ///////////////////////////////////////////////////////
 // Junkyard of globals to be eliminated
-#include "SettingsTask.hpp"
 #include "Task.h"
 
 // state stuff
