@@ -52,8 +52,13 @@ Logger::~Logger()
 void 
 Logger::LogPoint(const NMEA_INFO &gps_info)
 {
-  Poco::ScopedRWLock protect(lock, true);
-  return _logger->LogPoint(gps_info);
+  // don't hold up the calculation thread if it's locked
+  // by another process (most likely the logger gui message)
+
+  if (lock.tryWriteLock()) {
+    _logger->LogPoint(gps_info);
+    lock.unlock();
+  }
 };
 
 bool 
