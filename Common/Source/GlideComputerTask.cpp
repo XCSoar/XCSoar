@@ -1746,7 +1746,7 @@ void GlideComputerTask::TaskSpeed(const double this_maccready,
 #endif
 
     double konst;
-    if (isTaskDeclared()) {
+    if (logger.isTaskDeclared()) {
       konst = 1.0;
     } else {
       konst = 1.1;

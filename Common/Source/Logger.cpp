@@ -54,15 +54,24 @@
 #include "Components.hpp"
 #include "WayPointList.hpp"
 
-//IGC Logger
-static bool LoggerActive = false;
-static bool DeclaredToDevice = false;
+Logger::Logger():
+  LoggerActive(false),
+  DeclaredToDevice(false),
+  FRecordLastTime(0),
+  NumLoggerBuffered(0)
+{
+  szLoggerFileName[0]=0;
+  szFLoggerFileName[0]=0;
+  szFLoggerFileNameRoot[0]=0;
+  szLastFRecord[0]=0;
+}
 
-bool isLoggerActive() {
+
+const bool Logger::isLoggerActive() const {
   return LoggerActive;
 }
 
-TCHAR NumToIGCChar(int n) {
+TCHAR NumToIGCChar(int n)  {
   if (n<10) {
     return _T('1') + (n-1);
   } else {
@@ -70,11 +79,12 @@ TCHAR NumToIGCChar(int n) {
   }
 }
 
-bool isTaskDeclared() {
+const bool 
+Logger::isTaskDeclared() const {
   return DeclaredToDevice;
 }
 
-int IGCCharToNum(TCHAR c) {
+int IGCCharToNum(TCHAR c)  {
   if ((c >= _T('1')) && (c<= _T('9'))) {
     return c- _T('1') + 1;
   } else if ((c >= _T('A')) && (c<= _T('Z'))) {
@@ -103,56 +113,31 @@ HFCCLCOMPETITIONCLASS:15M
 */
 
 
-
-static TCHAR szLoggerFileName[MAX_PATH] = TEXT("\0");
-static TCHAR szFLoggerFileName[MAX_PATH] = TEXT("\0");
-static TCHAR szFLoggerFileNameRoot[MAX_PATH] = TEXT("\0");
-static double FRecordLastTime = 0;
-static char szLastFRecord[MAX_IGC_BUFF];
-
-void SetFRecordLastTime(double dTime)
+void 
+Logger::SetFRecordLastTime(double dTime)
 { FRecordLastTime=dTime; }
 
-double GetFRecordLastTime(void)
+double 
+Logger::GetFRecordLastTime(void)
 { return FRecordLastTime; }
 
-void ResetFRecord_Internal(void)
+void 
+Logger::ResetFRecord_Internal(void)
 {
-    for (int iFirst = 0; iFirst < MAX_IGC_BUFF; iFirst++)
-      szLastFRecord[iFirst]=0;
+  for (int iFirst = 0; iFirst < MAX_IGC_BUFF; iFirst++)
+    szLastFRecord[iFirst]=0;
 }
-void ResetFRecord(void)
+
+void 
+Logger::ResetFRecord(void)
 {
   SetFRecordLastTime(0);
   ResetFRecord_Internal();
 }
 
-int EW_count = 0;
-int NumLoggerBuffered = 0;
-void LoggerGInit();
 
-#define MAX_LOGGER_BUFFER 60
-
-typedef struct LoggerBuffer {
-  double Latitude;
-  double Longitude;
-  double Altitude;
-  double BaroAltitude;
-  short Day;
-  short Month;
-  short Year;
-  short Hour;
-  short Minute;
-  short Second;
-  int SatelliteIDs[MAXSATELLITES];
-} LoggerBuffer_T;
-
-LoggerBuffer_T FirstPoint;
-LoggerBuffer_T LoggerBuffer[MAX_LOGGER_BUFFER];
-
-void LoggerGStop(TCHAR*);
-
-void StopLogger(const NMEA_INFO &gps_info) {
+void 
+Logger::StopLogger(const NMEA_INFO &gps_info) {
   TCHAR szMessage[MAX_PATH] = TEXT("\0");
   int iLoggerError=0;  // see switch statement for error handler
   if (LoggerActive) {
@@ -242,8 +227,8 @@ void StopLogger(const NMEA_INFO &gps_info) {
 }
 
 
-static void
-LogPointToBuffer(const NMEA_INFO &gps_info)
+void
+Logger::LogPointToBuffer(const NMEA_INFO &gps_info)
 {
   if (NumLoggerBuffered== MAX_LOGGER_BUFFER) {
     for (int i= 0; i< NumLoggerBuffered-1; i++) {
@@ -277,7 +262,8 @@ LogPointToBuffer(const NMEA_INFO &gps_info)
 }
 
 
-void LogPointToFile(const NMEA_INFO& gps_info)
+void 
+Logger::LogPointToFile(const NMEA_INFO& gps_info)
 {
   char szBRecord[500];
 
@@ -318,7 +304,9 @@ void LogPointToFile(const NMEA_INFO& gps_info)
 }
 
 
-void LogPoint(const NMEA_INFO& gps_info) {
+void 
+Logger::LogPoint(const NMEA_INFO& gps_info) 
+{
   if (!LoggerActive) {
     if (!gps_info.NAVWarning) {
       LogPointToBuffer(gps_info);
@@ -357,8 +345,9 @@ void LogPoint(const NMEA_INFO& gps_info) {
 }
 
 bool
-LogFRecordToFile(const int SatelliteIDs[], short Hour, short Minute,
-                 short Second, bool bAlways)
+Logger::LogFRecordToFile(const int SatelliteIDs[], 
+                         short Hour, short Minute,
+                         short Second, bool bAlways)
 { // bAlways forces write when completing header for restart
   // only writes record if constallation has changed unless bAlways set
 
@@ -429,7 +418,7 @@ LogFRecordToFile(const int SatelliteIDs[], short Hour, short Minute,
 }
 
 bool
-LogFRecord(const NMEA_INFO &gps_info, bool bAlways)
+Logger::LogFRecord(const NMEA_INFO &gps_info, bool bAlways)
 {
   if (LoggerActive || bAlways)
     {
@@ -453,9 +442,9 @@ bool IsAlphaNum (TCHAR c) {
 }
 
 void 
-StartLogger(const NMEA_INFO &gps_info, 
-	    const SETTINGS_COMPUTER &settings,
-	    const TCHAR *astrAssetNumber)
+Logger::StartLogger(const NMEA_INFO &gps_info, 
+                    const SETTINGS_COMPUTER &settings,
+                    const TCHAR *astrAssetNumber)
 {
   HANDLE hFile;
   int i;
@@ -567,7 +556,8 @@ StartLogger(const NMEA_INFO &gps_info,
 }
 
 
-void LoggerHeader(const NMEA_INFO &gps_info)
+void 
+Logger::LoggerHeader(const NMEA_INFO &gps_info)
 {
   char datum[]= "HFDTM100Datum: WGS-84\r\n";
   char temp[100];
@@ -609,8 +599,9 @@ void LoggerHeader(const NMEA_INFO &gps_info)
 }
 
 
-void StartDeclaration(const NMEA_INFO &gps_info,
-		      int ntp)
+void 
+Logger::StartDeclaration(const NMEA_INFO &gps_info,
+                         const int ntp)
 {
   // TODO bug: this is causing problems with some analysis software
   // maybe it's because the date and location fields are bogus
@@ -650,7 +641,8 @@ void StartDeclaration(const NMEA_INFO &gps_info,
 }
 
 
-void EndDeclaration(void)
+void 
+Logger::EndDeclaration(void)
 {
   // TODO bug: this is causing problems with some analysis software
   // maybe it's because the date and location fields are bogus
@@ -658,7 +650,8 @@ void EndDeclaration(void)
   IGCWriteRecord(start, szLoggerFileName);
 }
 
-void AddDeclaration(double Latitude, double Longitude, const TCHAR *ID)
+void 
+Logger::AddDeclaration(double Latitude, double Longitude, const TCHAR *ID)
 {
   char szCRecord[500];
 
@@ -710,7 +703,8 @@ void AddDeclaration(double Latitude, double Longitude, const TCHAR *ID)
 // TODO code: make this thread-safe, since it could happen in the middle
 // of the calculations doing LogPoint or something else!
 
-void LoggerNote(const TCHAR *text) {
+void 
+Logger::LoggerNote(const TCHAR *text) {
   if (LoggerActive) {
     char fulltext[500];
     sprintf(fulltext, "LPLT%S\r\n", text);
@@ -719,7 +713,7 @@ void LoggerNote(const TCHAR *text) {
 }
 
 
-static bool LoggerDeclare(PDeviceDescriptor_t dev, Declaration_t *decl)
+bool Logger::LoggerDeclare(PDeviceDescriptor_t dev, Declaration_t *decl)
 {
   if (!devIsLogger(dev))
     return FALSE;
@@ -739,7 +733,8 @@ static bool LoggerDeclare(PDeviceDescriptor_t dev, Declaration_t *decl)
   return TRUE;
 }
 
-void LoggerDeviceDeclare() {
+void 
+Logger::LoggerDeviceDeclare() {
   bool found_logger = false;
   Declaration_t Decl;
   int i;
@@ -770,7 +765,9 @@ void LoggerDeviceDeclare() {
 }
 
 
-bool CheckDeclaration(void) {
+bool 
+Logger::CheckDeclaration(void) 
+{
   if (!isTaskDeclared()) {
     return true;
   } else {
@@ -927,7 +924,9 @@ TCHAR testtext6[] = TEXT("9BDX7B31.IGC");
 TCHAR testtext7[] = TEXT("2008-01-05-XXX-AAA-01.IGC");
 #endif
 
-bool LoggerClearFreeSpace(const NMEA_INFO &gps_info) {
+bool 
+Logger::LoggerClearFreeSpace(const NMEA_INFO &gps_info) 
+{
   bool found = true;
   unsigned long kbfree=0;
   TCHAR pathname[MAX_PATH];
@@ -979,9 +978,12 @@ bool LoggerClearFreeSpace(const NMEA_INFO &gps_info) {
 
 #include "Interface.hpp"
 
-void guiStartLogger(const NMEA_INFO& gps_info, 
-		    const SETTINGS_COMPUTER& settings,
-		    bool noAsk) {
+// TODO: fix scope so only gui things can start it
+
+void 
+Logger::guiStartLogger(const NMEA_INFO& gps_info, 
+                       const SETTINGS_COMPUTER& settings,
+                       bool noAsk) {
   int i;
   if (!LoggerActive) {
     if (gps_info.Replay) {
@@ -1037,8 +1039,9 @@ void guiStartLogger(const NMEA_INFO& gps_info,
 }
 
 
-void guiStopLogger(const NMEA_INFO& gps_info, 
-		   bool noAsk) {
+void 
+Logger::guiStopLogger(const NMEA_INFO& gps_info, 
+                      bool noAsk) {
   if (LoggerActive) {
     if(noAsk ||
        (MessageBoxX(gettext(TEXT("Stop Logger")),
@@ -1050,9 +1053,10 @@ void guiStopLogger(const NMEA_INFO& gps_info,
 }
 
 
-void guiToggleLogger(const NMEA_INFO& gps_info, 
-		     const SETTINGS_COMPUTER& settings,
-		     bool noAsk) {
+void 
+Logger::guiToggleLogger(const NMEA_INFO& gps_info, 
+                        const SETTINGS_COMPUTER& settings,
+                        bool noAsk) {
   if (LoggerActive) {
     guiStopLogger(gps_info, noAsk);
   } else {
@@ -1060,3 +1064,9 @@ void guiToggleLogger(const NMEA_INFO& gps_info,
   }
 }
 
+
+void 
+Logger::clearBuffer() 
+{
+  NumLoggerBuffered = 0;
+}

@@ -148,8 +148,8 @@ static void UpdateValuesSystem() {
   static int SatellitesUsed_last = XCSoarInterface::Basic().SatellitesUsed;
   static int VarioAvailable_last = XCSoarInterface::Basic().VarioAvailable;
   static int FLARM_Available_last = XCSoarInterface::Basic().FLARM_Available;
-  static bool LoggerActive_last = isLoggerActive();
-  static bool DeclaredToDevice_last = isTaskDeclared();
+  static bool LoggerActive_last = logger.isLoggerActive();
+  static bool DeclaredToDevice_last = logger.isTaskDeclared();
   static double SupplyBatteryVoltage_last = XCSoarInterface::Basic().SupplyBatteryVoltage;
   static int PDABatteryPercent_last = PDABatteryPercent;
 
@@ -159,8 +159,8 @@ static void UpdateValuesSystem() {
       (SatellitesUsed_last != XCSoarInterface::Basic().SatellitesUsed) ||
       (VarioAvailable_last != XCSoarInterface::Basic().VarioAvailable) ||
       (FLARM_Available_last != XCSoarInterface::Basic().FLARM_Available) ||
-      (LoggerActive_last != isLoggerActive()) ||
-      (DeclaredToDevice_last != isTaskDeclared()) ||
+      (LoggerActive_last != logger.isLoggerActive()) ||
+      (DeclaredToDevice_last != logger.isTaskDeclared()) ||
       (SupplyBatteryVoltage_last != XCSoarInterface::Basic().SupplyBatteryVoltage) ||
       (PDABatteryPercent_last != PDABatteryPercent)) {
     first = false;
@@ -170,8 +170,8 @@ static void UpdateValuesSystem() {
     SatellitesUsed_last = XCSoarInterface::Basic().SatellitesUsed;
     VarioAvailable_last = XCSoarInterface::Basic().VarioAvailable;
     FLARM_Available_last = XCSoarInterface::Basic().FLARM_Available;
-    LoggerActive_last = isLoggerActive();
-    DeclaredToDevice_last = isTaskDeclared();
+    LoggerActive_last = logger.isLoggerActive();
+    DeclaredToDevice_last = logger.isTaskDeclared();
     SupplyBatteryVoltage_last = XCSoarInterface::Basic().SupplyBatteryVoltage;
     PDABatteryPercent_last = PDABatteryPercent;
 
@@ -235,16 +235,16 @@ static void UpdateValuesSystem() {
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpLogger"));
   if (wp) {
-    LinkGRecordDLL();
-    if (LoggerGActive()) {
-      if (isLoggerActive()) {
+    logger.LinkGRecordDLL();
+    if (logger.LoggerGActive()) {
+      if (logger.isLoggerActive()) {
         wp->SetText(gettext(TEXT("ON (G)")));
       } else {
         wp->SetText(gettext(TEXT("OFF (G)")));
       }
     }
     else { // no G Record
-      if (isLoggerActive()) {
+      if (logger.isLoggerActive()) {
         wp->SetText(gettext(TEXT("ON (no G)")));
       } else {
         wp->SetText(gettext(TEXT("OFF (no G)")));
@@ -255,7 +255,7 @@ static void UpdateValuesSystem() {
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpDeclared"));
   if (wp) {
-    if (isTaskDeclared()) {
+    if (logger.isTaskDeclared()) {
       wp->SetText(gettext(TEXT("YES")));
     } else {
       wp->SetText(gettext(TEXT("NO")));

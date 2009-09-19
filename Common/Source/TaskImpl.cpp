@@ -139,7 +139,7 @@ void Task::ResetTaskWaypoint(int j) {
 
 void Task::FlyDirectTo(const int index, 
                        const SETTINGS_COMPUTER &settings_computer) {
-  if (!CheckDeclaration())
+  if (!logger.CheckDeclaration())
     return;
 
   if (TaskAborted) {
@@ -174,7 +174,7 @@ void Task::FlyDirectTo(const int index,
 // Swaps waypoint at current index with next one.
 void Task::SwapWaypoint(const int index,
                         const SETTINGS_COMPUTER &settings_computer) {
-  if (!CheckDeclaration())
+  if (!logger.CheckDeclaration())
     return;
 
   TaskModified = true;
@@ -201,7 +201,7 @@ void Task::SwapWaypoint(const int index,
 void Task::InsertWaypoint(const int index, 
                           const SETTINGS_COMPUTER &settings_computer,
                           bool append) {
-  if (!CheckDeclaration())
+  if (!logger.CheckDeclaration())
     return;
 
   int i;
@@ -270,7 +270,7 @@ void Task::DefaultTask(const SETTINGS_COMPUTER &settings_computer) {
 // correctly setting ActiveTaskPoint yourself!
 void Task::RemoveTaskPoint(int index, 
                            const SETTINGS_COMPUTER &settings_computer) {
-  if (!CheckDeclaration())
+  if (!logger.CheckDeclaration())
     return;
 
   int i;
@@ -309,7 +309,7 @@ void Task::RemoveWaypoint(const int index,
                           const SETTINGS_COMPUTER &settings_computer) {
   int i;
 
-  if (!CheckDeclaration())
+  if (!logger.CheckDeclaration())
     return;
 
   if (!ValidTaskPoint(0)) {
@@ -387,7 +387,7 @@ void Task::RemoveWaypoint(const int index,
 
 void Task::ReplaceWaypoint(const int index,
                            const SETTINGS_COMPUTER &settings_computer) {
-  if (!CheckDeclaration())
+  if (!logger.CheckDeclaration())
     return;
 
   if (ValidTaskPoint(ActiveTaskPoint)) {

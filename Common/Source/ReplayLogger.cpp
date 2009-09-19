@@ -56,7 +56,6 @@
 #include "DeviceBlackboard.hpp"
 #include "Components.hpp"
 
-extern int NumLoggerBuffered; // from Logger
 
 bool ReplayLogger::ReadLine(TCHAR *buffer) {
   static FILE *fp = NULL;
@@ -387,7 +386,7 @@ void ReplayLogger::Stop(void) {
   ReadLine(NULL); // close the file
   if (Enabled) {
     device_blackboard.StopReplay();
-    NumLoggerBuffered = 0;
+    logger.clearBuffer();
   }
   Enabled = false;
 }
@@ -397,7 +396,7 @@ void ReplayLogger::Start(void) {
   if (Enabled) {
     Stop();
   }
-  NumLoggerBuffered = 0;
+  logger.clearBuffer();
 
   if (!UpdateInternal()) {
     MessageBoxX(gettext(TEXT("Could not open IGC file!")),

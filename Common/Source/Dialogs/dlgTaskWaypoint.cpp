@@ -398,7 +398,7 @@ static void OnSelectClicked(WindowControl * Sender){
     task.setSelected(res);
     TASK_POINT tp = task.getTaskPoint(twItemIndex);
     if (tp.Index != res) {
-      if (CheckDeclaration()) {
+      if (logger.CheckDeclaration()) {
 
 	tp.Index = res;
         tp.AATSectorRadius = settings_task.SectorRadius;

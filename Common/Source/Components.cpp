@@ -97,6 +97,7 @@ GlideComputer glide_computer;
 DrawThread *draw_thread;
 CalculationThread *calculation_thread;
 InstrumentThread *instrument_thread;
+Logger logger; // global
 
 /////////////////////////////////////////////////////////////////////////////////
 
@@ -285,7 +286,7 @@ bool XCSoarInterface::Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
 
   task.ClearTask();
   glide_computer.Initialise();
-  LinkGRecordDLL(); // try to link DLL if it exists
+  logger.LinkGRecordDLL(); // try to link DLL if it exists
   OpenGeoid();
 
   PreloadInitialisation(false);
@@ -387,7 +388,7 @@ void XCSoarInterface::Shutdown(void) {
 
   CreateProgressDialog(gettext(TEXT("Shutdown, saving logs...")));
   // stop logger
-  guiStopLogger(Basic(),true);
+  logger.guiStopLogger(Basic(),true);
 
   CreateProgressDialog(gettext(TEXT("Shutdown, saving profile...")));
   // Save settings

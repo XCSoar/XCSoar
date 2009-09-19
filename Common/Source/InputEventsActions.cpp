@@ -1144,22 +1144,22 @@ void InputEvents::eventLogger(const TCHAR *misc) {
   // start stop toggle addnote
 
   if (_tcscmp(misc, TEXT("start ask")) == 0) {
-    guiStartLogger(Basic(),SettingsComputer());
+    logger.guiStartLogger(Basic(),SettingsComputer());
     return;
   } else if (_tcscmp(misc, TEXT("start")) == 0) {
-    guiStartLogger(Basic(),SettingsComputer(),true);
+    logger.guiStartLogger(Basic(),SettingsComputer(),true);
     return;
   } else if (_tcscmp(misc, TEXT("stop ask")) == 0) {
-    guiStopLogger(Basic());
+    logger.guiStopLogger(Basic());
     return;
   } else if (_tcscmp(misc, TEXT("stop")) == 0) {
-    guiStopLogger(Basic(),true);
+    logger.guiStopLogger(Basic(),true);
     return;
   } else if (_tcscmp(misc, TEXT("toggle ask")) == 0) {
-    guiToggleLogger(Basic(),SettingsComputer());
+    logger.guiToggleLogger(Basic(),SettingsComputer());
     return;
   } else if (_tcscmp(misc, TEXT("toggle")) == 0) {
-    guiToggleLogger(Basic(), SettingsComputer(),true);
+    logger.guiToggleLogger(Basic(), SettingsComputer(),true);
     return;
   } else if (_tcscmp(misc, TEXT("nmea")) == 0) {
     EnableLogNMEA = !EnableLogNMEA;
@@ -1170,14 +1170,14 @@ void InputEvents::eventLogger(const TCHAR *misc) {
     }
     return;
   } else if (_tcscmp(misc, TEXT("show")) == 0) {
-    if (isLoggerActive()) {
+    if (logger.isLoggerActive()) {
       Message::AddMessage(TEXT("Logger ON"));
     } else {
       Message::AddMessage(TEXT("Logger OFF"));
     }
   } else if (_tcsncmp(misc, TEXT("note"), 4)==0) {
     // add note to logger file if available..
-    LoggerNote(misc+4);
+    logger.LoggerNote(misc+4);
   }
 }
 

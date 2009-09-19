@@ -287,7 +287,7 @@ static void OnTaskListEnter(WindowControl * Sender,
       ItemIndex= UpLimit;
     }
     // add new waypoint
-    if (CheckDeclaration()) {
+    if (logger.CheckDeclaration()) {
 
       if (ItemIndex>0) {
         if (MessageBoxX(gettext(TEXT("Will this be the finish?")),
@@ -376,7 +376,7 @@ static void OnClearClicked(WindowControl * Sender, WndListFrame::ListInfo_t *Lis
   if (MessageBoxX(gettext(TEXT("Clear the task?")),
                   gettext(TEXT("Clear task")),
                   MB_YESNO|MB_ICONQUESTION) == IDYES) {
-    if (CheckDeclaration()) {
+    if (logger.CheckDeclaration()) {
       task.ClearTask();
       UpdateFilePointer();
       OverviewRefreshTask();
@@ -413,7 +413,7 @@ static void OnDeclareClicked(WindowControl * Sender, WndListFrame::ListInfo_t *L
 	(void)ListInfo;
   task.RefreshTask(XCSoarInterface::SettingsComputer());
 
-  LoggerDeviceDeclare();
+  logger.LoggerDeviceDeclare();
 
   // do something here.
 }

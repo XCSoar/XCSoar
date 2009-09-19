@@ -90,7 +90,7 @@ bool GlideComputerStats::DoLogging() {
   }
 
   if (log_clock.check_advance(Basic().Time)) {
-    LogPoint(Basic());
+    logger.LogPoint(Basic());
   }
 
   /* JMW TODO update this code incomplete

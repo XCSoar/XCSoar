@@ -38,52 +38,98 @@ Copyright_License {
 #if !defined(XCSOAR_LOGGER_H)
 #define XCSOAR_LOGGER_H
 
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
 #include <tchar.h>
 #include "SettingsComputer.hpp"
+#include "Device/device.h"
+
+#define MAX_LOGGER_BUFFER 60
 
 struct NMEA_INFO;
 
-void StartLogger(const NMEA_INFO &gps_info, 
-		 const SETTINGS_COMPUTER &settings,
-		 const TCHAR *strAssetNumber);
-void LogPoint(const NMEA_INFO &gps_info);
-void AddDeclaration(double Lattitude, double Longditude, const TCHAR *ID);
-void StartDeclaration(const NMEA_INFO &gps_info, 
-		 int numturnpoints);
-void EndDeclaration(void);
-void LoggerHeader(const NMEA_INFO &gps_info);
-void LoggerNote(const TCHAR *text);
-void LoggerDeviceDeclare();
+typedef struct LoggerBuffer {
+  double Latitude;
+  double Longitude;
+  double Altitude;
+  double BaroAltitude;
+  short Day;
+  short Month;
+  short Year;
+  short Hour;
+  short Minute;
+  short Second;
+  int SatelliteIDs[MAXSATELLITES];
+} LoggerBuffer_T;
 
-bool CheckDeclaration(void);
-bool isTaskDeclared();
-bool isLoggerActive();
+class Logger {
+public:
+  Logger(); 
 
-bool LoggerClearFreeSpace(const NMEA_INFO &gps_info);
-void StopLogger(const NMEA_INFO &gps_info);
-bool IGCWriteRecord(const char *szIn, const TCHAR *);
-void LinkGRecordDLL(void);
-bool LoggerGActive();
+public:
+  void LogPoint(const NMEA_INFO &gps_info);
+  bool CheckDeclaration(void);
+  const bool isTaskDeclared() const;
+  const bool isLoggerActive() const;
+  bool LoggerClearFreeSpace(const NMEA_INFO &gps_info);
+  void LinkGRecordDLL(void);
+  const bool LoggerGActive() const;
+  void guiStartLogger(const NMEA_INFO& gps_info, 
+                      const SETTINGS_COMPUTER& settings,
+                      bool noAsk = false);
+  void guiToggleLogger(const NMEA_INFO& gps_info, 
+                       const SETTINGS_COMPUTER& settings,
+                       bool noAsk = false);
+  void guiStopLogger(const NMEA_INFO &gps_info,
+                     bool noAsk = false);
+  void LoggerDeviceDeclare();
+  void LoggerNote(const TCHAR *text);
+  void clearBuffer();
 
-bool
-LogFRecordToFile(const int SatelliteIDs[], short Hour, short Minute,
-                 short Second, bool bAlways);
+private:
+  void StartLogger(const NMEA_INFO &gps_info, 
+                   const SETTINGS_COMPUTER &settings,
+                   const TCHAR *strAssetNumber);
 
-bool
-LogFRecord(const NMEA_INFO &gps_info, bool bAlways);
+  void AddDeclaration(double Lattitude, double Longditude, const TCHAR *ID);
+  void StartDeclaration(const NMEA_INFO &gps_info, 
+                        const int numturnpoints);
+  void EndDeclaration(void);
+  void LoggerHeader(const NMEA_INFO &gps_info);
+  
+  void StopLogger(const NMEA_INFO &gps_info);
+  bool IGCWriteRecord(const char *szIn, const TCHAR *);
+  
+  bool LogFRecordToFile(const int SatelliteIDs[], short Hour, short Minute,
+                        short Second, bool bAlways);
+  
+  bool LogFRecord(const NMEA_INFO &gps_info, bool bAlways);
+  
+  void SetFRecordLastTime(double dTime);
+  double GetFRecordLastTime(void);
+  void ResetFRecord(void);
+  
+  bool LoggerDeclare(PDeviceDescriptor_t dev, Declaration_t *decl);
+  void LoggerGInit();
+private:
+  void LogPointToFile(const NMEA_INFO& gps_info);
+  void ResetFRecord_Internal(void);
+  void LogPointToBuffer(const NMEA_INFO &gps_info);
+  void LoggerGStop(TCHAR* szLoggerFileName);
+private:
+  bool LoggerActive;
+  bool DeclaredToDevice;
+  double FRecordLastTime;
+  TCHAR szLoggerFileName[MAX_PATH];
+  TCHAR szFLoggerFileName[MAX_PATH];
+  TCHAR szFLoggerFileNameRoot[MAX_PATH];
+  char szLastFRecord[MAX_IGC_BUFF];
+  int NumLoggerBuffered;
+  LoggerBuffer_T FirstPoint;
+  LoggerBuffer_T LoggerBuffer[MAX_LOGGER_BUFFER];
+};
 
-void SetFRecordLastTime(double dTime);
-double GetFRecordLastTime(void);
-void ResetFRecord(void);
-
-void guiStartLogger(const NMEA_INFO& gps_info, 
-		    const SETTINGS_COMPUTER& settings,
-		    bool noAsk = false);
-void guiStopLogger(const NMEA_INFO &gps_info,
-		   bool noAsk = false);
-void guiToggleLogger(const NMEA_INFO& gps_info, 
-		     const SETTINGS_COMPUTER& settings,
-		     bool noAsk = false);
+extern Logger logger;
 
 #endif
 

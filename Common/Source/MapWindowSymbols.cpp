@@ -232,17 +232,17 @@ void MapWindow::DrawFlightMode(Canvas &canvas, const RECT rc)
       flip = !flip;
 
       // don't bother drawing logger if not active for more than one second
-      if ((!isLoggerActive())&&(!lastLoggerActive)) {
+      if ((!logger.isLoggerActive())&&(!lastLoggerActive)) {
         drawlogger = false;
       }
-      lastLoggerActive = isLoggerActive();
+      lastLoggerActive = logger.isLoggerActive();
     }
 
     if (drawlogger) {
       offset -= 7;
 
       draw_masked_bitmap(canvas, 
-			 (isLoggerActive() && flip)
+			 (logger.isLoggerActive() && flip)
 			 ? MapGfx.hLogger : MapGfx.hLoggerOff,
 			 rc.right + IBLSCALE(offset + Appearance.FlightModeOffset.x),
 			 rc.bottom + IBLSCALE(-7 + Appearance.FlightModeOffset.y),

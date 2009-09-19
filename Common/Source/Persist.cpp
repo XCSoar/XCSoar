@@ -154,10 +154,10 @@ void SaveCalculationsPersist(const NMEA_INFO &gps_info,
 			     const DERIVED_INFO &Calculated) {
   DWORD size;
 
-  LoggerClearFreeSpace(gps_info);
+  logger.LoggerClearFreeSpace(gps_info);
 
   if (FindFreeSpace(szCalculationsPersistDirectory)<MINFREESTORAGE) {
-    if (!LoggerClearFreeSpace(gps_info)) {
+    if (!logger.LoggerClearFreeSpace(gps_info)) {
       StartupStore(TEXT("SaveCalculationsPersist insufficient storage\n"));
       return;
     } else {
