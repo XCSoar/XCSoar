@@ -428,6 +428,3 @@ bool ReplayLogger::Update(void) {
   return Enabled;
 }
 
-
-
-///////////////////////
