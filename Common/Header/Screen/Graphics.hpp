@@ -78,8 +78,8 @@ public:
   // airspace brushes/colours
   const Color GetAirspaceColour(const int i);
   const Brush &GetAirspaceBrush(const int i);
-  const Color GetAirspaceColourByClass(const int i);
-  const Brush &GetAirspaceBrushByClass(const int i);
+  const Color GetAirspaceColourByClass(const int i,  const SETTINGS_MAP &settings);
+  const Brush &GetAirspaceBrushByClass(const int i,  const SETTINGS_MAP &settings);
 
   Brush infoSelectedBrush;
   Brush infoUnselectedBrush;

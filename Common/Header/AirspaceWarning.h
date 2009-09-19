@@ -39,10 +39,13 @@ Copyright_License {
 
 struct NMEA_INFO;
 struct DERIVED_INFO;
+struct SETTINGS_COMPUTER;
+
 class MapWindowProjection;
 
 extern void
 AirspaceWarnListAdd(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated,
+                    const SETTINGS_COMPUTER *settings,
                     const MapWindowProjection &map_projection,
                     bool Predicted, bool IsCircle, int AsIdx,
                     bool ackDay=false);
@@ -50,6 +53,7 @@ AirspaceWarnListAdd(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated,
 extern void
 AirspaceWarnListProcess(const NMEA_INFO *Basic,
                         const DERIVED_INFO *Calculated,
+                        const SETTINGS_COMPUTER *settings,
                         const MapWindowProjection &map_projection);
 
 #endif

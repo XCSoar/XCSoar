@@ -26,19 +26,12 @@ bool EnableSoundTask = true;
 #include "SettingsAirspace.hpp"
 int AirspacePriority[AIRSPACECLASSCOUNT];
 
-int AIRSPACEWARNINGS = 0;
-int WarningTime = 30;
-int AcknowledgementTime = 30;
 int AltitudeMode = ALLON;
 int ClipAltitude = 1000;
 int AltWarningMargin = 100;
 double airspace_QNH;
 
 // 12 is number of airspace types
-int      iAirspaceBrush[AIRSPACECLASSCOUNT] =
-  {2,0,0,0,3,3,3,3,0,3,2,3,3,3};
-int      iAirspaceColour[AIRSPACECLASSCOUNT] =
-  {5,0,0,10,0,0,10,2,0,10,9,3,7,7};
 int      iAirspaceMode[AIRSPACECLASSCOUNT] =
   {0,0,0,0,0,0,0,0,0,0,0,1,1,0};
 

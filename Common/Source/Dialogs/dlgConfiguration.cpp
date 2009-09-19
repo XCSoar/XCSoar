@@ -1459,20 +1459,19 @@ static void setVariables(void) {
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpAirspaceWarnings"));
   if (wp) {
-    bool aw = AIRSPACEWARNINGS != 0;
-    wp->GetDataField()->Set(aw);
+    wp->GetDataField()->Set(XCSoarInterface::SettingsComputer().EnableAirspaceWarnings);
     wp->RefreshDisplay();
   }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpWarningTime"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(WarningTime);
+    wp->GetDataField()->SetAsFloat(XCSoarInterface::SetSettingsComputer().WarningTime);
     wp->RefreshDisplay();
   }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpAcknowledgementTime"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(AcknowledgementTime);
+    wp->GetDataField()->SetAsFloat(XCSoarInterface::SetSettingsComputer().AcknowledgementTime);
     wp->RefreshDisplay();
   }
 
@@ -2755,22 +2754,17 @@ void dlgConfigurationShowModal(void){
     }
   }
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpAirspaceWarnings"));
-  if (wp) {
-    if (AIRSPACEWARNINGS != wp->GetDataField()->GetAsInteger()) {
-      AIRSPACEWARNINGS = wp->GetDataField()->GetAsInteger();
-      SetToRegistry(szRegistryAirspaceWarning,(DWORD)AIRSPACEWARNINGS);
-      changed = true;
-    }
-  }
+  changed |= SetValueRegistryOnChange(wf, TEXT("prpAirspaceWarnings"),
+				      szRegistryAirspaceWarning,
+				      XCSoarInterface::SetSettingsComputer().EnableAirspaceWarnings);
 
   changed |= SetValueRegistryOnChange(wf, TEXT("prpWarningTime"),
 				      szRegistryWarningTime,
-				      WarningTime);
+				      XCSoarInterface::SetSettingsComputer().WarningTime);
 
   changed |= SetValueRegistryOnChange(wf, TEXT("prpAcknowledgementTime"),
 				      szRegistryAcknowledgementTime,
-				      AcknowledgementTime);
+				      XCSoarInterface::SetSettingsComputer().AcknowledgementTime);
 
   changed |= SetValueRegistryOnChange(wf, TEXT("prpWaypointLabels"),
 				      szRegistryDisplayText,

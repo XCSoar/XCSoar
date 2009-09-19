@@ -352,10 +352,11 @@ public:
                      Canvas &_buffer,
                      const unsigned _activeIndex,
                      TaskScreen_t &_task_screen,
-                     MapWindowProjection &_map
+                     MapWindowProjection &_map,
+                     const SETTINGS_MAP &_settings
     ):
     canvas(_canvas), rc(_rc), buffer(_buffer), activeIndex(_activeIndex),
-    task_screen(_task_screen), map(_map)
+    task_screen(_task_screen), map(_map), settings(_settings)
   {
     whitecolor = Color(0xff,0xff, 0xff);
     buffer.set_text_color(whitecolor);
@@ -376,7 +377,7 @@ public:
       tmp = map.DistanceMetersToScreen(point.AATCircleRadius);
 
       // this color is used as the black bit
-      buffer.set_text_color(MapGfx.Colours[iAirspaceColour[AATASK]]);
+      buffer.set_text_color(MapGfx.Colours[settings.iAirspaceColour[AATASK]]);
 
       // this color is the transparent bit
       buffer.set_background_color(whitecolor);
@@ -384,7 +385,7 @@ public:
       if (i<activeIndex) {
         buffer.hollow_brush();
       } else {
-        buffer.select(MapGfx.hAirspaceBrushes[iAirspaceBrush[AATASK]]);
+        buffer.select(MapGfx.hAirspaceBrushes[settings.iAirspaceBrush[AATASK]]);
       }
       buffer.black_pen();
       
@@ -392,7 +393,7 @@ public:
     } else {
       
       // this color is used as the black bit
-      buffer.set_text_color(MapGfx.Colours[iAirspaceColour[AATASK]]);
+      buffer.set_text_color(MapGfx.Colours[settings.iAirspaceColour[AATASK]]);
       
       // this color is the transparent bit
       buffer.set_background_color(whitecolor);
@@ -400,7 +401,7 @@ public:
       if (i<activeIndex) {
         buffer.hollow_brush();
       } else {
-        buffer.select(MapGfx.hAirspaceBrushes[iAirspaceBrush[AATASK]]);
+        buffer.select(MapGfx.hAirspaceBrushes[settings.iAirspaceBrush[AATASK]]);
       }
       buffer.black_pen();
       
@@ -425,6 +426,7 @@ private:
   RECT rc;
   Color whitecolor;
   TaskScreen_t &task_screen;
+  const SETTINGS_MAP &settings;
 };
 
 
@@ -432,7 +434,7 @@ void MapWindow::DrawTaskAAT(Canvas &canvas, const RECT rc, Canvas &buffer)
 {
   if (task.getSettings().AATEnabled) {
     DrawTaskAATVisitor dv(canvas, rc, buffer, task.getActiveIndex(),
-                          task_screen, *this);
+                          task_screen, *this, SettingsMap());
     task.scan_point_forward(dv, false); // read lock
     // TODO, reverse
     canvas.copy_transparent_white(buffer, rc);

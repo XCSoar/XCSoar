@@ -124,6 +124,10 @@ struct SETTINGS_COMPUTER {
  bool EnableVoiceInSector;
  bool EnableVoiceAirspace;
 
+  bool EnableAirspaceWarnings;
+  unsigned WarningTime;
+  unsigned AcknowledgementTime;
+
 };
 
 #endif

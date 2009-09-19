@@ -134,9 +134,11 @@ OnAirspacePaintListItem(WindowControl *Sender, Canvas &canvas)
     if (colormode) {
 
       canvas.white_pen();
-      canvas.set_text_color(MapGfx.GetAirspaceColourByClass(i));
+      canvas.set_text_color(MapGfx.GetAirspaceColourByClass(i,
+                              XCSoarInterface::SettingsMap()));
       canvas.set_background_color(Color(0xFF, 0xFF, 0xFF));
-      canvas.select(MapGfx.GetAirspaceBrushByClass(i));
+      canvas.select(MapGfx.GetAirspaceBrushByClass(i,
+                      XCSoarInterface::SettingsMap()));
       canvas.rectangle(x0, 2 * InfoBoxLayout::scale,
                        w0, 22 * InfoBoxLayout::scale);
 
@@ -176,14 +178,16 @@ static void OnAirspaceListEnter(WindowControl * Sender,
     if (colormode) {
       int c = dlgAirspaceColoursShowModal();
       if (c>=0) {
-	iAirspaceColour[ItemIndex] = c;
-	SetRegistryColour(ItemIndex,iAirspaceColour[ItemIndex]);
+	XCSoarInterface::SetSettingsMap().iAirspaceColour[ItemIndex] = c;
+	SetRegistryColour(ItemIndex,
+                          XCSoarInterface::SettingsMap().iAirspaceColour[ItemIndex]);
 	changed = true;
       }
       int p = dlgAirspacePatternsShowModal();
       if (p>=0) {
-	iAirspaceBrush[ItemIndex] = p;
-	SetRegistryBrush(ItemIndex,iAirspaceBrush[ItemIndex]);
+	XCSoarInterface::SetSettingsMap().iAirspaceBrush[ItemIndex] = p;
+	SetRegistryBrush(ItemIndex,
+                         XCSoarInterface::SettingsMap().iAirspaceBrush[ItemIndex]);
 	changed = true;
       }
     } else {

@@ -66,7 +66,7 @@ void MapWindow::CalculateScreenPositionsAirspaceCircle(AIRSPACE_CIRCLE &circ) {
           || msRectContained(&screenbounds_latlon, &circ.bounds)) {
 
 	if (!circ._NewWarnAckNoBrush &&
-	    !(iAirspaceBrush[circ.Type] == NUMAIRSPACEBRUSHES-1)) {
+	    !(SettingsMap().iAirspaceBrush[circ.Type] == NUMAIRSPACEBRUSHES-1)) {
 	  circ.Visible = 2;
 	} else {
 	  circ.Visible = 1;
@@ -109,7 +109,7 @@ void MapWindow::CalculateScreenPositionsAirspaceArea(AIRSPACE_AREA &area) {
           sp++;
         }
 	if (!area._NewWarnAckNoBrush &&
-	    !(iAirspaceBrush[area.Type] == NUMAIRSPACEBRUSHES-1)) {
+	    !(SettingsMap().iAirspaceBrush[area.Type] == NUMAIRSPACEBRUSHES-1)) {
 	  area.Visible = 2;
 	} else {
 	  area.Visible = 1;
@@ -165,9 +165,9 @@ void MapWindow::DrawAirSpace(Canvas &canvas, const RECT rc, Canvas &buffer)
 	  found = true;
 	}
         // this color is used as the black bit
-        buffer.set_text_color(MapGfx.Colours[iAirspaceColour[AirspaceCircle[i].Type]]);
+        buffer.set_text_color(MapGfx.Colours[SettingsMap().iAirspaceColour[AirspaceCircle[i].Type]]);
         // get brush, can be solid or a 1bpp bitmap
-        buffer.select(MapGfx.hAirspaceBrushes[iAirspaceBrush[AirspaceCircle[i].Type]]);
+        buffer.select(MapGfx.hAirspaceBrushes[SettingsMap().iAirspaceBrush[AirspaceCircle[i].Type]]);
         buffer.circle(AirspaceCircle[i].Screen.x, AirspaceCircle[i].Screen.y,
                       AirspaceCircle[i].ScreenR);
       }
@@ -182,8 +182,8 @@ void MapWindow::DrawAirSpace(Canvas &canvas, const RECT rc, Canvas &buffer)
 	  found = true;
 	}
         // this color is used as the black bit
-        buffer.set_text_color(MapGfx.Colours[iAirspaceColour[AirspaceArea[i].Type]]);
-        buffer.select(MapGfx.hAirspaceBrushes[iAirspaceBrush[AirspaceArea[i].Type]]);
+        buffer.set_text_color(MapGfx.Colours[SettingsMap().iAirspaceColour[AirspaceArea[i].Type]]);
+        buffer.select(MapGfx.hAirspaceBrushes[SettingsMap().iAirspaceBrush[AirspaceArea[i].Type]]);
         buffer.polygon(AirspaceScreenPoint+AirspaceArea[i].FirstPoint,
                                AirspaceArea[i].NumPoints);
       }

@@ -73,12 +73,14 @@ const Brush &ScreenGraphics::GetAirspaceBrush(const int i) {
   return hAirspaceBrushes[i];
 }
 
-const Color ScreenGraphics::GetAirspaceColourByClass(const int i) {
-  return Colours[iAirspaceColour[i]];
+const Color ScreenGraphics::GetAirspaceColourByClass(const int i,
+  const SETTINGS_MAP &settings) {
+  return Colours[settings.iAirspaceColour[i]];
 }
 
-const Brush &ScreenGraphics::GetAirspaceBrushByClass(const int i) {
-  return hAirspaceBrushes[iAirspaceBrush[i]];
+const Brush &ScreenGraphics::GetAirspaceBrushByClass(const int i,
+  const SETTINGS_MAP &settings) {
+  return hAirspaceBrushes[settings.iAirspaceBrush[i]];
 }
 
 
@@ -290,7 +292,8 @@ void ScreenGraphics::Initialise(HINSTANCE hInstance,
   }
 
   for (int i=0; i<AIRSPACECLASSCOUNT; i++) {
-    hAirspacePens[i].set(IBLSCALE(2), GetAirspaceColourByClass(i));
+    hAirspacePens[i].set(IBLSCALE(2), 
+                         GetAirspaceColourByClass(i,settings_map));
   }
 
 }

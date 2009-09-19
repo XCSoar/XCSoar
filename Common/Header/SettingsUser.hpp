@@ -42,6 +42,7 @@ Copyright_License {
 
 #include "Appearance.hpp"
 #include "GeoPoint.hpp"
+#include "Airspace.h"
 
 extern Appearance_t Appearance;
 
@@ -113,6 +114,9 @@ typedef struct SETTINGS_MAP_ {
   bool EnableAutoBlank;
   bool  EnableVarioGauge;
   bool SetSystemTimeFromGPS;
+
+  int    iAirspaceBrush[AIRSPACECLASSCOUNT];
+  int    iAirspaceColour[AIRSPACECLASSCOUNT];
 
 } SETTINGS_MAP;
 

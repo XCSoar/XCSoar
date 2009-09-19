@@ -96,5 +96,8 @@ SettingsComputerBlackboard::SettingsComputerBlackboard()
   settings_computer.EnableVoiceInSector = false;
   settings_computer.EnableVoiceAirspace = false;
 
+  settings_computer.EnableAirspaceWarnings = true;
+  settings_computer.WarningTime = 30;
+  settings_computer.AcknowledgementTime = 30;
 }
 

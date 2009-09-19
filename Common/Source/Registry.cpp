@@ -579,13 +579,13 @@ void Profile::ReadRegistrySettings(void)
   for(i=0;i<AIRSPACECLASSCOUNT;i++) {
     iAirspaceMode[i] = GetRegistryAirspaceMode(i);
     
-    GetFromRegistry(szRegistryBrush[i],iAirspaceBrush[i]);
-    GetFromRegistry(szRegistryColour[i],iAirspaceColour[i]);
-    if (iAirspaceColour[i]>= NUMAIRSPACECOLORS) {
-      iAirspaceColour[i]= 0;
+    GetFromRegistry(szRegistryBrush[i],SetSettingsMap().iAirspaceBrush[i]);
+    GetFromRegistry(szRegistryColour[i],SetSettingsMap().iAirspaceColour[i]);
+    if (SettingsMap().iAirspaceColour[i]>= NUMAIRSPACECOLORS) {
+      SetSettingsMap().iAirspaceColour[i]= 0;
     }
-    if (iAirspaceBrush[i]>= NUMAIRSPACEBRUSHES) {
-      iAirspaceBrush[i]= 0;
+    if (SettingsMap().iAirspaceBrush[i]>= NUMAIRSPACEBRUSHES) {
+      SetSettingsMap().iAirspaceBrush[i]= 0;
     }
   }
 
@@ -648,13 +648,13 @@ void Profile::ReadRegistrySettings(void)
 		  SetSettingsComputer().TeamCodeRefWaypoint );
 
   GetFromRegistry(szRegistryAirspaceWarning,
-		  AIRSPACEWARNINGS );
+		  SetSettingsComputer().EnableAirspaceWarnings );
 
   GetFromRegistry(szRegistryWarningTime,
-		  WarningTime );
+		  SetSettingsComputer().WarningTime );
 
   GetFromRegistry(szRegistryAcknowledgementTime,
-		  AcknowledgementTime );
+		  SetSettingsComputer().AcknowledgementTime );
 
   GetFromRegistry(szRegistrySoundVolume,
 		  SetSettingsComputer().SoundVolume );

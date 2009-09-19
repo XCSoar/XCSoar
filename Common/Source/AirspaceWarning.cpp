@@ -36,8 +36,10 @@ Copyright_License {
 */
 
 #include "Airspace.h"
+#include "AirspaceWarning.h"
 #include "NMEA/Info.h"
 #include "NMEA/Derived.hpp"
+#include "SettingsComputer.hpp"
 #include "Dialogs.h"
 #include "Device/device.h"
 #include "SettingsAirspace.hpp"
@@ -246,6 +248,7 @@ static bool calcWarnLevel(AirspaceInfo_c *asi){
 
 void
 AirspaceWarnListAdd(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated,
+                    const SETTINGS_COMPUTER *settings,
                     const MapWindowProjection &map_projection,
                     bool Predicted, bool IsCircle, int AsIdx,
                     bool ackDay)
@@ -312,7 +315,7 @@ AirspaceWarnListAdd(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated,
         
       }
       
-      it->data.InsideAckTimeOut = AcknowledgementTime / OUTSIDE_CHECK_INTERVAL;
+      it->data.InsideAckTimeOut = settings->AcknowledgementTime / OUTSIDE_CHECK_INTERVAL;
       it->data.TimeOut = OUTSIDE_CHECK_INTERVAL;
       
       FoundInList = true;
@@ -328,7 +331,7 @@ AirspaceWarnListAdd(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated,
     
     asi.TimeOut = OUTSIDE_CHECK_INTERVAL;
     
-    asi.InsideAckTimeOut = AcknowledgementTime / OUTSIDE_CHECK_INTERVAL;
+    asi.InsideAckTimeOut = settings->AcknowledgementTime / OUTSIDE_CHECK_INTERVAL;
     
     asi.Sequence = Sequence;
     
@@ -414,6 +417,7 @@ void AirspaceWarnListSort(void){
 void
 AirspaceWarnListProcess(const NMEA_INFO *Basic,
                         const DERIVED_INFO *Calculated,
+                        const SETTINGS_COMPUTER *settings,
                         const MapWindowProjection &map_projection)
 {
 
@@ -474,7 +478,8 @@ AirspaceWarnListProcess(const NMEA_INFO *Basic,
             }
           
         } else { // very close, just update ack timer
-          it->data.InsideAckTimeOut = AcknowledgementTime / OUTSIDE_CHECK_INTERVAL;
+          it->data.InsideAckTimeOut = settings->AcknowledgementTime 
+            / OUTSIDE_CHECK_INTERVAL;
           // 20sec outside check interval prevent down ACK on circling
         }
       }

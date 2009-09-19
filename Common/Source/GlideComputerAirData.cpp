@@ -767,7 +767,8 @@ GlideComputerAirData::ProcessIdle()
 {
   BallastDump();
   TerrainFootprint(MapProjection().GetScreenDistanceMeters());
-  if (airspace_clock.check_advance(Basic().Time)) {
+  if (airspace_clock.check_advance(Basic().Time) 
+      && SettingsComputer().EnableAirspaceWarnings) {
     AirspaceWarning();
   }
 }
@@ -876,19 +877,21 @@ GlideComputerAirData::PredictNextPosition()
   if(Calculated().Circling) {
     SetCalculated().NextLocation = Basic().Location;
     SetCalculated().NextAltitude =
-      Calculated().NavAltitude + Calculated().Average30s * WarningTime;
+      Calculated().NavAltitude + Calculated().Average30s * SettingsComputer().WarningTime;
  } else {
     FindLatitudeLongitude(Basic().Location,
 			  Basic().TrackBearing,
-			  Basic().Speed*WarningTime,
+			  Basic().Speed*SettingsComputer().WarningTime,
 			  &SetCalculated().NextLocation);
 
     if (Basic().BaroAltitudeAvailable) {
       SetCalculated().NextAltitude =
-	Basic().BaroAltitude + Calculated().Average30s * WarningTime;
+	Basic().BaroAltitude + Calculated().Average30s 
+        * SettingsComputer().WarningTime;
     } else {
       SetCalculated().NextAltitude =
-	Calculated().NavAltitude + Calculated().Average30s * WarningTime;
+	Calculated().NavAltitude + Calculated().Average30s 
+        * SettingsComputer().WarningTime;
     }
   }
   // MJJ TODO Predict terrain altitude
@@ -904,9 +907,6 @@ void
 GlideComputerAirData::AirspaceWarning()
 {
   unsigned int i;
-
-  if(!AIRSPACEWARNINGS)
-      return;
 
   static bool position_is_predicted = false;
 
@@ -955,7 +955,9 @@ GlideComputerAirData::AirspaceWarning()
         if ((iAirspaceMode[AirspaceCircle[i].Type] >= 2) &&
 	    InsideAirspaceCircle(loc, i)) {
 
-          AirspaceWarnListAdd(&Basic(), &Calculated(), MapProjection(),
+          AirspaceWarnListAdd(&Basic(), &Calculated(), 
+                              &SettingsComputer(),
+                              MapProjection(),
                               position_is_predicted, 1, i, false);
         }
       }
@@ -979,14 +981,18 @@ GlideComputerAirData::AirspaceWarning()
         if ((iAirspaceMode[AirspaceArea[i].Type] >= 2)
             && InsideAirspaceArea(loc, i)){
 
-          AirspaceWarnListAdd(&Basic(), &Calculated(), map_projection,
+          AirspaceWarnListAdd(&Basic(), &Calculated(), 
+                              &SettingsComputer(),
+                              map_projection,
                               position_is_predicted, 0, i, false);
         }
       }
     }
   }
 
-  AirspaceWarnListProcess(&Basic(), &Calculated(), map_projection);
+  AirspaceWarnListProcess(&Basic(), &Calculated(), 
+                          &SettingsComputer(),
+                          map_projection);
 }
 
 

@@ -412,7 +412,8 @@ void FlightStatistics::RenderTask(Canvas &canvas, const RECT rc, const bool olcm
 	  x2 = (lon2-lon_c)*fastcosine(lat2);
 	  y2 = (lat2-lat_c);
 
-          canvas.select(MapGfx.GetAirspaceBrushByClass(AATASK));
+          canvas.select(MapGfx.GetAirspaceBrushByClass(AATASK,
+                                                       XCSoarInterface::SettingsMap()));
           canvas.white_pen();
 	  if (task.getTaskPoint(i).AATType == SECTOR) {
 	    canvas.segment(chart.screenX(x2), chart.screenY(y2),
@@ -781,8 +782,10 @@ void FlightStatistics::RenderAirspace(Canvas &canvas, const RECT rc) {
     for (j=0; j< AIRSPACE_SCANSIZE_X; j++) { // scan range
       type = d_airspace[i][j];
       if (type>=0) {
-        canvas.select(MapGfx.GetAirspaceBrushByClass(type));
-        canvas.set_text_color(MapGfx.GetAirspaceColourByClass(type));
+        canvas.select(MapGfx.GetAirspaceBrushByClass(type,
+                        XCSoarInterface::SettingsMap()));
+        canvas.set_text_color(MapGfx.GetAirspaceColourByClass(type,
+                        XCSoarInterface::SettingsMap()));
 
 	rcd.left = chart.screenX((j-0.5)*dfj*range);
 	rcd.right = chart.screenX((j+0.5)*dfj*range);

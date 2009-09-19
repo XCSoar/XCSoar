@@ -63,13 +63,8 @@ Copyright_License {
 #define ALLOFF 5
 
 extern int    iAirspaceMode[AIRSPACECLASSCOUNT];
-extern int    iAirspaceBrush[AIRSPACECLASSCOUNT];
-extern int    iAirspaceColour[AIRSPACECLASSCOUNT];
 extern int    AirspacePriority[AIRSPACECLASSCOUNT];
 
-extern int AIRSPACEWARNINGS;
-extern int WarningTime;
-extern int AcknowledgementTime;
 extern int AltitudeMode;
 extern int ClipAltitude;
 extern int AltWarningMargin;
