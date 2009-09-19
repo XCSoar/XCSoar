@@ -154,7 +154,7 @@ PopupNearestWaypointDetails(const WayPointList &way_points,
 			  range);
   }
   if(i != -1) {
-    SelectedWaypoint = i;
+    task.setSelected(i);
     PopupWaypointDetails();
     return true;
   }

@@ -395,7 +395,7 @@ static void OnSelectClicked(WindowControl * Sender){
   int res;
   res = dlgWayPointSelect(XCSoarInterface::Basic().Location);
   if (res != -1){
-    SelectedWaypoint = res;
+    task.setSelected(res);
     TASK_POINT tp = task.getTaskPoint(twItemIndex);
     if (tp.Index != res) {
       if (CheckDeclaration()) {
@@ -442,7 +442,7 @@ static void OnMoveBeforeClicked(WindowControl * Sender){
 
 static void OnDetailsClicked(WindowControl * Sender){
   (void)Sender;
-  SelectedWaypoint = task.getWaypointIndex(twItemIndex);
+  task.setSelected(task.getWaypointIndex(twItemIndex));
   PopupWaypointDetails();
 }
 

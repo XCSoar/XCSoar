@@ -222,6 +222,9 @@ public:
   const SETTINGS_TASK &getSettings() const;
   void setSettings(const SETTINGS_TASK& set);
 
+  const int getSelected() const;
+  void setSelected(const int v=-1);
+
   // scan routines
   void scan_point_forward(RelativeTaskPointVisitor &visitor);
   void scan_point_forward(AbsoluteTaskPointVisitor &visitor);
@@ -247,6 +250,9 @@ private:
   bool TargetModified;
   bool TaskAborted;
   bool AdvanceArmed;
+
+  // state stuff
+  int  SelectedWaypoint;
 
   SETTINGS_TASK settings;
 };

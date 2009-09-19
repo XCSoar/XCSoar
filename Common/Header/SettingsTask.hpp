@@ -38,8 +38,6 @@ Copyright_License {
 #ifndef XCSOAR_SETTINGS_TASK_HPP
 #define XCSOAR_SETTINGS_TASK_HPP
 
-// control of task/waypoints
-extern int  SelectedWaypoint;
 
 struct SETTINGS_TASK {
   int  AutoAdvance;

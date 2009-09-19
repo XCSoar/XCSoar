@@ -455,3 +455,17 @@ TaskSafe::setSettings(const SETTINGS_TASK& set)
   _task.setSettings(set);
 }
 
+
+const int 
+TaskSafe::getSelected() 
+{
+  Poco::ScopedRWLock protect(lock, false);
+  return _task.getSelected();
+}
+
+void 
+TaskSafe::setSelected(const int val)
+{
+  Poco::ScopedRWLock protect(lock, true);
+  _task.setSelected(val);
+}

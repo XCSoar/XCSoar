@@ -4,9 +4,6 @@
 // Junkyard of globals to be eliminated
 #include "Task.h"
 
-// state stuff
-int   SelectedWaypoint = -1;
-
 //Task Information
 
 Start_t        task_start_points;
@@ -31,8 +28,3 @@ double airspace_QNH;
 // 12 is number of airspace types
 int      iAirspaceMode[AIRSPACECLASSCOUNT] =
   {0,0,0,0,0,0,0,0,0,0,0,1,1,0};
-
-/////////////////////////////////////////////////////
-
-// Team code info
-

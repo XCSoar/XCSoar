@@ -71,6 +71,7 @@ static WndFrame *wSpecial=NULL; // VENTA3
 static WndOwnerDrawFrame *wImage=NULL;
 static BOOL hasimage1 = false;
 static BOOL hasimage2 = false;
+static int SelectedWaypoint = -1;
 
 #ifndef CECORE
 #ifndef GNAV
@@ -358,6 +359,8 @@ void dlgWayPointDetailsShowModal(void){
   nTextLines = 0;
 
   if (!wf) return;
+
+  SelectedWaypoint = task.getSelected();
 
   GetRegistryString(szRegistryWayPointFile, szWaypointFile, MAX_PATH);
   ExpandLocalPath(szWaypointFile);

@@ -326,6 +326,6 @@ GlideComputerTask::SortLandableWaypoints()
   }
 
   if (active_waypoint_on_entry != task.getActiveIndex()){
-    SelectedWaypoint = task.getActiveIndex();
+    task.setSelected();
   }
 }

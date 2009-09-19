@@ -130,6 +130,9 @@ public:
   const SETTINGS_TASK &getSettings();
   void setSettings(const SETTINGS_TASK& set);
 
+  const int getSelected();
+  void setSelected(const int v=-1);
+
   // other
 
   void setTaskIndices(const int wpindex[MAXTASKPOINTS]);

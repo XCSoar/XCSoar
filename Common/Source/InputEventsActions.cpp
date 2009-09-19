@@ -735,9 +735,9 @@ void InputEvents::eventWaypointDetails(const TCHAR *misc) {
 
   if (_tcscmp(misc, TEXT("current")) == 0) {
     if (task.Valid()) {
-      SelectedWaypoint = task.getWaypointIndex();
+      task.setSelected();
     }
-    if (SelectedWaypoint<0){
+    if (task.getSelected()<0){
       Message::AddMessage(TEXT("No Active Waypoint!"));
       return;
     }
@@ -745,9 +745,8 @@ void InputEvents::eventWaypointDetails(const TCHAR *misc) {
   } else
     if (_tcscmp(misc, TEXT("select")) == 0) {
       int res = dlgWayPointSelect(Basic().Location);
-
       if (res != -1){
-	SelectedWaypoint = res;
+	task.setSelected(res);
 	PopupWaypointDetails();
       };
 

@@ -177,7 +177,7 @@ ActionInterface::on_key_Alternate1(int UpDown)
 {
    if (UpDown==0) {
      if ( SettingsComputer().Alternate1 <0 ) return;
-     SelectedWaypoint = SettingsComputer().Alternate1;
+     task.setSelected(SettingsComputer().Alternate1);
      PopupWaypointDetails();
   }
 }
@@ -186,8 +186,9 @@ void
 ActionInterface::on_key_Alternate2(int UpDown)
 {
    if (UpDown==0) {
-     if ( SettingsComputer().Alternate2 <0 ) return;
-     SelectedWaypoint = SettingsComputer().Alternate2;
+     if ( SettingsComputer().Alternate2 <0 ) 
+       return;
+     task.setSelected(SettingsComputer().Alternate2);
      PopupWaypointDetails();
   }
 }
@@ -196,8 +197,9 @@ void
 ActionInterface::on_key_BestAlternate(int UpDown)
 {
    if (UpDown==0) {
-     if ( Calculated().BestAlternate <0 ) return;
-     SelectedWaypoint = Calculated().BestAlternate;
+     if ( Calculated().BestAlternate <0 ) 
+       return;
+     task.setSelected(Calculated().BestAlternate);
      PopupWaypointDetails();
   }
 }
@@ -392,11 +394,8 @@ ActionInterface::on_key_Waypoint(int UpDown)
   } else if (UpDown<0){
     task.retreatTaskPoint(SettingsComputer());
   } else if (UpDown==0) {
-    SelectedWaypoint = task.getWaypointIndex();
+    task.setSelected();
     PopupWaypointDetails();
-  }
-  if (task.Valid()>=0) {
-    SelectedWaypoint = task.getWaypointIndex();
   }
 }
 

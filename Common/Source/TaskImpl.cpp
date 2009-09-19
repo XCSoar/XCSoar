@@ -66,7 +66,8 @@ Task::Task():
   TaskModified(false),
   TargetModified(false),
   TaskAborted (false),
-  AdvanceArmed (false)
+  AdvanceArmed (false),
+  SelectedWaypoint(-1)
 {
   settings.AATEnabled = false;
   settings.AutoAdvance = 1;
@@ -1090,4 +1091,20 @@ Task::setSettings(const SETTINGS_TASK& set)
 {
   settings = set;
   // user must RefreshTask after this
+}
+
+const int 
+Task::getSelected() const
+{
+  return SelectedWaypoint;
+}
+
+void 
+Task::setSelected(const int v)
+{
+  if ((v==-1)&& ValidTaskPoint(ActiveTaskPoint)) {
+    SelectedWaypoint = getWaypointIndex(ActiveTaskPoint);
+  } else {
+    SelectedWaypoint = v;
+  }
 }
