@@ -1143,13 +1143,6 @@ void InputEvents::eventLogger(const TCHAR *misc) {
   // TODO feature: start logger without requiring feedback
   // start stop toggle addnote
 
-  // This StartupStore code is to track down events leading to "missing logger file" bug
-  TCHAR szMessage[MAX_PATH] = TEXT("\0");
-  _tcsncpy(szMessage, TEXT("eventLogger: "),MAX_PATH);
-  _tcsncat(szMessage, misc,MAX_PATH);
-  _tcsncat(szMessage,TEXT("\r\n"),MAX_PATH);
-  StartupStore(szMessage);
-
   if (_tcscmp(misc, TEXT("start ask")) == 0) {
     guiStartLogger(Basic(),SettingsComputer());
     return;
