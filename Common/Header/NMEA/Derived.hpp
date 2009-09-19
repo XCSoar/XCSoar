@@ -52,6 +52,14 @@ struct THERMAL_SOURCE_INFO
   double Time;
 };
 
+typedef enum {
+  CRUISE= 0,
+  WAITCLIMB,
+  CLIMB,
+  WAITCRUISE
+} CirclingMode_t;
+
+
 struct DERIVED_INFO
 {
   double Vario;
@@ -157,7 +165,7 @@ struct DERIVED_INFO
   GEOPOINT TurnStartLocation;
   double TurnStartAltitude;
   double TurnStartEnergyHeight;
-  int TurnMode;
+  CirclingMode_t TurnMode;
 
   // reflects whether aircraft is in a start/finish/aat/turn sector
   bool IsInSector;

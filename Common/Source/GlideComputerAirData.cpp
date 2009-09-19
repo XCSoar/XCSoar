@@ -74,10 +74,6 @@ void
 DoAutoQNH(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated);
 
 ////
-#define CRUISE 0
-#define WAITCLIMB 1
-#define CLIMB 2
-#define WAITCRUISE 3
 
 #define MinTurnRate  4
 #define CruiseClimbSwitch 15
