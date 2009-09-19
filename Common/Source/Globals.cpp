@@ -14,11 +14,6 @@ StartStats_t   task_start_stats;
 bool needclipping=false; // flag to activate extra clipping for some PNAs
 #endif
 
-// user interface settings
-bool EnableSoundVario = true;
-bool EnableSoundModes = true;
-bool EnableSoundTask = true;
-
 //////////////////////////////////////////////////////
 #include "SettingsAirspace.hpp"
 int AirspacePriority[AIRSPACECLASSCOUNT];

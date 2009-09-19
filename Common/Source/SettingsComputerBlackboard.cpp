@@ -104,5 +104,8 @@ SettingsComputerBlackboard::SettingsComputerBlackboard()
   settings_computer.ClipAltitude = 1000;
   settings_computer.AltWarningMargin = 100;
 
+  settings_computer.EnableSoundVario = true;
+  settings_computer.EnableSoundModes = true;
+  settings_computer.EnableSoundTask = true;
 }
 
