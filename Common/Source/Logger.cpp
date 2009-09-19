@@ -36,1037 +36,113 @@
 */
 
 #include "Logger.h"
-#include "Version.hpp"
-#include "Dialogs.h"
-#include "Language.hpp"
-#include "Task.h"
-#include "Registry.hpp"
-#include "Math/Earth.hpp"
-#include "LogFile.hpp"
-#include "Asset.hpp"
-#include "UtilsText.hpp"
-#include "UtilsSystem.hpp"
-#include "LocalPath.hpp"
-#include "Device/device.h"
-#include "InputEvents.h"
-#include "Compatibility/string.h"
-#include "TaskFile.hpp"
-#include "Components.hpp"
-#include "WayPointList.hpp"
+#include "LoggerImpl.hpp"
 
-Logger::Logger():
-  LoggerActive(false),
-  DeclaredToDevice(false),
-  FRecordLastTime(0),
-  NumLoggerBuffered(0)
+Logger::Logger()
 {
-  szLoggerFileName[0]=0;
-  szFLoggerFileName[0]=0;
-  szFLoggerFileNameRoot[0]=0;
-  szLastFRecord[0]=0;
-}
+  _logger = new LoggerImpl();
+};
 
+Logger::~Logger()
+{
+  Poco::ScopedRWLock protect(lock, true);
+  delete _logger;
+};
 
-const bool Logger::isLoggerActive() const {
-  return LoggerActive;
-}
+void 
+Logger::LogPoint(const NMEA_INFO &gps_info)
+{
+  Poco::ScopedRWLock protect(lock, true);
+  return _logger->LogPoint(gps_info);
+};
 
-TCHAR NumToIGCChar(int n)  {
-  if (n<10) {
-    return _T('1') + (n-1);
-  } else {
-    return _T('A') + (n-10);
-  }
-}
+bool 
+Logger::CheckDeclaration(void)
+{
+  Poco::ScopedRWLock protect(lock, true);
+  return _logger->CheckDeclaration();
+};
 
 const bool 
-Logger::isTaskDeclared() const {
-  return DeclaredToDevice;
-}
-
-int IGCCharToNum(TCHAR c)  {
-  if ((c >= _T('1')) && (c<= _T('9'))) {
-    return c- _T('1') + 1;
-  } else if ((c >= _T('A')) && (c<= _T('Z'))) {
-    return c- _T('A') + 10;
-  } else {
-    return 0; // Error!
-  }
-}
-
-
-/*
-
-HFDTE141203  <- should be UTC, same as time in filename
-HFFXA100
-HFPLTPILOT:JOHN WHARINGTON
-HFGTYGLIDERTYPE:LS 3
-HFGIDGLIDERID:VH-WUE
-HFDTM100GPSDATUM:WGS84
-HFRFWFIRMWAREVERSION:3.6
-HFRHWHARDWAREVERSION:3.4
-HFFTYFR TYPE:GARRECHT INGENIEURGESELLSCHAFT,VOLKSLOGGER 1.0
-HFCIDCOMPETITIONID:WUE
-HFCCLCOMPETITIONCLASS:FAI
-HFCIDCOMPETITIONID:WUE
-HFCCLCOMPETITIONCLASS:15M
-*/
-
-
-void 
-Logger::SetFRecordLastTime(double dTime)
-{ FRecordLastTime=dTime; }
-
-double 
-Logger::GetFRecordLastTime(void)
-{ return FRecordLastTime; }
-
-void 
-Logger::ResetFRecord_Internal(void)
+Logger::isTaskDeclared() 
 {
-  for (int iFirst = 0; iFirst < MAX_IGC_BUFF; iFirst++)
-    szLastFRecord[iFirst]=0;
-}
+  Poco::ScopedRWLock protect(lock, false);
+  return _logger->isTaskDeclared();
+};
 
-void 
-Logger::ResetFRecord(void)
+const bool 
+Logger::isLoggerActive() 
 {
-  SetFRecordLastTime(0);
-  ResetFRecord_Internal();
-}
-
-
-void 
-Logger::StopLogger(const NMEA_INFO &gps_info) {
-  TCHAR szMessage[MAX_PATH] = TEXT("\0");
-  int iLoggerError=0;  // see switch statement for error handler
-  if (LoggerActive) {
-    LoggerActive = false;
-    if (LoggerClearFreeSpace(gps_info)) {
-
-#ifndef _SIM_
-      if (LoggerGActive()) {
-        LoggerGStop(szLoggerFileName);
-      }
-#endif
-
-      int imCount=0;
-      const int imMax=3;
-      for (imCount=0; imCount < imMax; imCount++) {
-        // MoveFile() nonzero==Success
-        if (0 != MoveFile( szLoggerFileName, szFLoggerFileName)) {
-          iLoggerError=0;
-          break; // success
-        }
-        Sleep(750); // wait for file system cache to fix itself?
-      }
-      if (imCount == imMax) { // MoveFile() failed all attempts
-      
-        if (0 == MoveFile( szLoggerFileName, szFLoggerFileNameRoot)) { // try rename it and leave in root
-          iLoggerError=1; //Fail.  NoMoveNoRename
-        }
-        else {
-          iLoggerError=2; //NoMoveYesRename
-        }
-      }      
-    } else { // Insufficient disk space.  // MoveFile() nonzero==Success
-      if (0 == MoveFile( szLoggerFileName, szFLoggerFileNameRoot)) { // try rename it and leave in root
-        iLoggerError=3; //Fail.  Insufficient Disk Space, NoRename
-      }
-      else {
-        iLoggerError=4; //Success.  Insufficient Disk Space, YesRename
-      }
-    }
-    
-    switch (iLoggerError) { //0=Success 1=NoMoveNoRename 2=NoMoveYesRename 3=NoSpaceNoRename 4=NoSpaceYesRename
-    case 0:
-      StartupStore(TEXT("Logger file successfully moved\r\n"));
-      break;
-
-    case 1: // NoMoveNoRename
-      _tcsncpy(szMessage,TEXT("Logger file not copied.  It is in the root folder of your device and called "),MAX_PATH);
-      _tcsncat(szMessage,szLoggerFileName,MAX_PATH);
-
-      MessageBoxX(gettext(szMessage),
-		gettext(TEXT("Logger Error")), MB_OK| MB_ICONERROR);
-      _tcsncat(szMessage,TEXT("\r\n"),MAX_PATH);
-      StartupStore(szMessage);
-      break;
-
-    case 2: // NoMoveYesRename
-      _tcsncpy(szMessage,TEXT("Logger file not copied.  It is in the root folder of your device"),MAX_PATH);
-
-      MessageBoxX(gettext(szMessage),
-		gettext(TEXT("Logger Error")), MB_OK| MB_ICONERROR);
-      _tcsncat(szMessage,TEXT("\r\n"),MAX_PATH);
-      StartupStore(szMessage);
-      break;
-
-    case 3: // Insufficient Storage.  NoRename
-      _tcsncpy(szMessage,TEXT("Insuff. storage. Logger file in device's root folder, called "),MAX_PATH);
-      _tcsncat(szMessage,szLoggerFileName,MAX_PATH);
-
-      MessageBoxX(gettext(szMessage),
-		gettext(TEXT("Logger Error")), MB_OK| MB_ICONERROR);
-      _tcsncat(szMessage,TEXT("\r\n"),MAX_PATH);
-      StartupStore(szMessage);
-      break;
-
-    case 4: // Insufficient Storage.  YesRename
-      _tcsncpy(szMessage,TEXT("Insufficient storage.  Logger file is in the root folder of your device"),MAX_PATH);
-
-      MessageBoxX(gettext(szMessage),
-		gettext(TEXT("Logger Error")), MB_OK| MB_ICONERROR);
-      _tcsncat(szMessage,TEXT("\r\n"),MAX_PATH);
-      StartupStore(szMessage);
-      break;
-} // error handler
-
-    NumLoggerBuffered = 0;
-  }
-}
-
-
-void
-Logger::LogPointToBuffer(const NMEA_INFO &gps_info)
-{
-  if (NumLoggerBuffered== MAX_LOGGER_BUFFER) {
-    for (int i= 0; i< NumLoggerBuffered-1; i++) {
-      LoggerBuffer[i]= LoggerBuffer[i+1];
-    }
-  } else {
-    NumLoggerBuffered++;
-  }
-
-  LoggerBuffer[NumLoggerBuffered-1].Latitude = gps_info.Location.Latitude;
-  LoggerBuffer[NumLoggerBuffered-1].Longitude = gps_info.Location.Longitude;
-  LoggerBuffer[NumLoggerBuffered-1].Altitude = gps_info.Altitude;
-  LoggerBuffer[NumLoggerBuffered-1].BaroAltitude = gps_info.BaroAltitude;
-  if (!gps_info.BaroAltitudeAvailable) {
-    LoggerBuffer[NumLoggerBuffered-1].BaroAltitude = gps_info.Altitude;
-  }
-  LoggerBuffer[NumLoggerBuffered-1].Hour = gps_info.Hour;
-  LoggerBuffer[NumLoggerBuffered-1].Minute = gps_info.Minute;
-  LoggerBuffer[NumLoggerBuffered-1].Second = gps_info.Second;
-  LoggerBuffer[NumLoggerBuffered-1].Year = gps_info.Year;
-  LoggerBuffer[NumLoggerBuffered-1].Month = gps_info.Month;
-  LoggerBuffer[NumLoggerBuffered-1].Day = gps_info.Day;
-
-  for (int iSat=0; iSat < MAXSATELLITES; iSat++)
-    LoggerBuffer[NumLoggerBuffered-1].SatelliteIDs[iSat]=
-      gps_info.SatelliteIDs[iSat];
-
-  // This is the first point that will be output to file.
-  // Declaration must happen before this, so must save this time.
-  FirstPoint = LoggerBuffer[0];
-}
-
-
-void 
-Logger::LogPointToFile(const NMEA_INFO& gps_info)
-{
-  char szBRecord[500];
-
-  int DegLat, DegLon;
-  double MinLat, MinLon;
-  char NoS, EoW;
-
-  if ((gps_info.Altitude<0) || (gps_info.BaroAltitude<0)) return;
-
-  DegLat = (int)gps_info.Location.Latitude;
-  MinLat = gps_info.Location.Latitude - DegLat;
-  NoS = 'N';
-  if((MinLat<0) || ((MinLat-DegLat==0) && (DegLat<0)))
-    {
-      NoS = 'S';
-      DegLat *= -1; MinLat *= -1;
-    }
-  MinLat *= 60;
-  MinLat *= 1000;
-
-  DegLon = (int)gps_info.Location.Longitude ;
-  MinLon = gps_info.Location.Longitude  - DegLon;
-  EoW = 'E';
-  if((MinLon<0) || ((MinLon-DegLon==0) && (DegLon<0)))
-    {
-      EoW = 'W';
-      DegLon *= -1; MinLon *= -1;
-    }
-  MinLon *=60;
-  MinLon *= 1000;
-
-  sprintf(szBRecord,"B%02d%02d%02d%02d%05.0f%c%03d%05.0f%cA%05d%05d\r\n",
-          gps_info.Hour, gps_info.Minute, gps_info.Second,
-          DegLat, MinLat, NoS, DegLon, MinLon, EoW,
-          (int)gps_info.BaroAltitude,(int)gps_info.Altitude);
-
-  IGCWriteRecord(szBRecord, szLoggerFileName);
-}
-
-
-void 
-Logger::LogPoint(const NMEA_INFO& gps_info) 
-{
-  if (!LoggerActive) {
-    if (!gps_info.NAVWarning) {
-      LogPointToBuffer(gps_info);
-    }
-  } else if (NumLoggerBuffered) {
-
-    LogFRecordToFile(LoggerBuffer[0].SatelliteIDs,  // write FRec before cached BRecs
-                   LoggerBuffer[0].Hour,
-                   LoggerBuffer[0].Minute,
-                   LoggerBuffer[0].Second,
-                   true);
-
-    for (int i=0; i<NumLoggerBuffered; i++) {
-      NMEA_INFO tmp_info;
-      tmp_info.Location.Latitude = LoggerBuffer[i].Latitude;
-      tmp_info.Location.Longitude = LoggerBuffer[i].Longitude;
-      tmp_info.Altitude = LoggerBuffer[i].Altitude;
-      tmp_info.BaroAltitude = LoggerBuffer[i].BaroAltitude;
-      tmp_info.Hour = LoggerBuffer[i].Hour;
-      tmp_info.Minute = LoggerBuffer[i].Minute;
-      tmp_info.Second = LoggerBuffer[i].Second;
-      tmp_info.Year = LoggerBuffer[i].Year;
-      tmp_info.Month = LoggerBuffer[i].Month;
-      tmp_info.Day = LoggerBuffer[i].Day;
-
-      for (int iSat=0; iSat < MAXSATELLITES; iSat++)
-	tmp_info.SatelliteIDs[iSat] = LoggerBuffer[i].SatelliteIDs[iSat];
-    
-      LogPointToFile(tmp_info);
-    }
-    NumLoggerBuffered = 0;
-  }
-  if (LoggerActive) {
-    LogPointToFile(gps_info);
-  }
-}
-
-bool
-Logger::LogFRecordToFile(const int SatelliteIDs[], 
-                         short Hour, short Minute,
-                         short Second, bool bAlways)
-{ // bAlways forces write when completing header for restart
-  // only writes record if constallation has changed unless bAlways set
-
-#if !defined(_SIM_)
-
-  char szFRecord[MAX_IGC_BUFF];
-  static bool bFirst = true;
-  int eof=0;
-  int iNumberSatellites=0;
-  bool bRetVal = false;
-
-  if (bFirst)
-  {
-    bFirst = false;
-    ResetFRecord_Internal();
-  }
-
-
-  sprintf(szFRecord,"F%02d%02d%02d", Hour, Minute, Second);
-  eof=7;
-
-  for (int i=0; i < MAXSATELLITES; i++)
-  {
-    if (SatelliteIDs[i] > 0)
-    {
-      sprintf(szFRecord+eof, "%02d",SatelliteIDs[i]);
-      eof +=2;
-      iNumberSatellites++;
-    }
-  }
-  sprintf(szFRecord+ eof,"\r\n");
-
-  // only write F Record if it has changed since last time
-  // check every 4.5 minutes to see if it's changed.  Transient changes are not tracked.
-  if (!bAlways
-        && strcmp(szFRecord + 7, szLastFRecord + 7) == 0
-        && strlen(szFRecord) == strlen(szLastFRecord) )
-  { // constellation has not changed
-      if (iNumberSatellites >=3)
-        bRetVal=true;  // if the last FRecord had 3+ sats, then return true
-                      //  and this causes 5-minute counter to reset
-      else
-        bRetVal=false;  // non-2d fix, don't reset 5-minute counter so
-                        // we keep looking for changed constellations
-  }
-  else
-  { // constellation has changed
-    if (IGCWriteRecord(szFRecord, szLoggerFileName))
-    {
-      strcpy(szLastFRecord, szFRecord);
-      if (iNumberSatellites >=3)
-        bRetVal=true;  // if we log an FRecord with a 3+ sats, then return true
-                      //  and this causes 5-minute counter to reset
-      else
-        bRetVal=false;  // non-2d fix, log it, and don't reset 5-minute counter so
-                        // we keep looking for changed constellations
-    }
-    else
-    {  // IGCwrite failed
-      bRetVal = false;
-    }
-
-  }
-  return bRetVal;
-#else
-  return true;
-#endif
-}
-
-bool
-Logger::LogFRecord(const NMEA_INFO &gps_info, bool bAlways)
-{
-  if (LoggerActive || bAlways)
-    {
-      return LogFRecordToFile(gps_info.SatelliteIDs,
-			      gps_info.Hour, 
-			      gps_info.Minute, 
-			      gps_info.Second, bAlways);
-    }
-  else
-    return false;  // track whether we succussfully write it, else we retry
-}
-
-bool IsAlphaNum (TCHAR c) {
-  if (((c >= _T('A'))&&(c <= _T('Z')))
-      ||((c >= _T('a'))&&(c <= _T('z')))
-      ||((c >= _T('0'))&&(c <= _T('9')))) {
-    return true;
-  } else {
-    return false;
-  }
-}
-
-void 
-Logger::StartLogger(const NMEA_INFO &gps_info, 
-                    const SETTINGS_COMPUTER &settings,
-                    const TCHAR *astrAssetNumber)
-{
-  HANDLE hFile;
-  int i;
-  TCHAR path[MAX_PATH];
-  TCHAR cAsset[3];
-  for (i=0; i < 3; i++) { // chars must be legal in file names
-    cAsset[i] = IsAlphaNum(strAssetNumber[i]) ? strAssetNumber[i] : _T('A');
-  }
-
-// VENTA3 use logs subdirectory when not in main memory (true for FIVV and PNA)
-#if defined(GNAV) || defined(FIVV) || defined(PNA)
-  LocalPath(path,TEXT("logs"));
-#else
-  LocalPath(path);
-#endif
-
-  if (task.isTaskModified()) {
-    task.SaveDefaultTask();
-  }
-
-#ifdef WINDOWSPC
-  _stprintf(szLoggerFileName, TEXT("/tmp/tmp.IGC"));
-#else
-  _stprintf(szLoggerFileName, TEXT("\\tmp.IGC"));
-#endif
-  DeleteFile(szLoggerFileName);
-
-  LoggerGInit();
-
-  for(i=1;i<99;i++)
-    {
-      // 2003-12-31-XXX-987-01.IGC
-      // long filename form of IGC file.
-      // XXX represents manufacturer code
-
-      if (!settings.LoggerShortName) {
-        // Long file name
-        _stprintf(szFLoggerFileName,
-                 TEXT("%s\\%04d-%02d-%02d-XCS-%c%c%c-%02d.IGC"),
-                 path,
-                 gps_info.Year,
-                 gps_info.Month,
-                 gps_info.Day,
-                 cAsset[0],
-                 cAsset[1],
-                 cAsset[2],
-                 i);
-
-        _stprintf(szFLoggerFileNameRoot,
-                 TEXT("%s\\%04d-%02d-%02d-XCS-%c%c%c-%02d.IGC"),
-                 TEXT(""), // this creates it in root if MoveFile() fails
-                 gps_info.Year,
-                 gps_info.Month,
-                 gps_info.Day,
-                 cAsset[0],
-                 cAsset[1],
-                 cAsset[2],
-                 i);
-      } else {
-        // Short file name
-        TCHAR cyear, cmonth, cday, cflight;
-        cyear = NumToIGCChar((int)gps_info.Year % 10);
-        cmonth = NumToIGCChar(gps_info.Month);
-        cday = NumToIGCChar(gps_info.Day);
-        cflight = NumToIGCChar(i);
-        _stprintf(szFLoggerFileName,
-                 TEXT("%s\\%c%c%cX%c%c%c%c.IGC"),
-                 path,
-                 cyear,
-                 cmonth,
-                 cday,
-                 cAsset[0],
-                 cAsset[1],
-                 cAsset[2],
-                 cflight);
-
-        _stprintf(szFLoggerFileNameRoot,
-                 TEXT("%s\\%c%c%cX%c%c%c%c.IGC"),
-                 TEXT(""), // this creates it in root if MoveFile() fails
-                 cyear,
-                 cmonth,
-                 cday,
-                 cAsset[0],
-                 cAsset[1],
-                 cAsset[2],
-                 cflight);
-      } // end if
-
-      hFile = CreateFile(szFLoggerFileName, GENERIC_WRITE,
-			 FILE_SHARE_WRITE, NULL, CREATE_NEW,
-			 FILE_ATTRIBUTE_NORMAL, 0);
-      if(hFile!=INVALID_HANDLE_VALUE )
-	{
-          // file already exists
-      CloseHandle(hFile);
-      DeleteFile(szFLoggerFileName);
-      break;
-	}
-  } // end while
-
-  TCHAR szMessage[MAX_PATH] = TEXT("\0");
-
-  _tcsncpy(szMessage,TEXT("Logger Started: "),MAX_PATH);
-  _tcsncat(szMessage,szFLoggerFileName,MAX_PATH);
-  _tcsncat(szMessage,TEXT("\r\n"),MAX_PATH);
-  StartupStore(szMessage);
-
-  return;
-}
-
-
-void 
-Logger::LoggerHeader(const NMEA_INFO &gps_info)
-{
-  char datum[]= "HFDTM100Datum: WGS-84\r\n";
-  char temp[100];
-  TCHAR PilotName[100];
-  TCHAR AircraftType[100];
-  TCHAR AircraftRego[100];
-
-  // Flight recorder ID number MUST go first..
-  sprintf(temp,
-	  "AXCS%C%C%C\r\n",
-	  strAssetNumber[0],
-	  strAssetNumber[1],
-	  strAssetNumber[2]);
-  IGCWriteRecord(temp, szLoggerFileName);
-
-  sprintf(temp,"HFDTE%02d%02d%02d\r\n",
-	  gps_info.Day,
-	  gps_info.Month,
-	  gps_info.Year % 100);
-  IGCWriteRecord(temp, szLoggerFileName);
-
-  GetRegistryString(szRegistryPilotName, PilotName, 100);
-  sprintf(temp,"HFPLTPILOT:%S\r\n", PilotName);
-  IGCWriteRecord(temp, szLoggerFileName);
-
-  GetRegistryString(szRegistryAircraftType, AircraftType, 100);
-  sprintf(temp,"HFGTYGLIDERTYPE:%S\r\n", AircraftType);
-  IGCWriteRecord(temp, szLoggerFileName);
-
-  GetRegistryString(szRegistryAircraftRego, AircraftRego, 100);
-  sprintf(temp,"HFGIDGLIDERID:%S\r\n", AircraftRego);
-  IGCWriteRecord(temp, szLoggerFileName);
-
-  sprintf(temp,"HFFTYFR TYPE:XCSOAR,XCSOAR %S\r\n", XCSoar_Version);
-  IGCWriteRecord(temp, szLoggerFileName);
-
-  IGCWriteRecord(datum, szLoggerFileName);
-
-}
-
-
-void 
-Logger::StartDeclaration(const NMEA_INFO &gps_info,
-                         const int ntp)
-{
-  // TODO bug: this is causing problems with some analysis software
-  // maybe it's because the date and location fields are bogus
-  char start[] = "C0000000N00000000ETAKEOFF\r\n";
-  char temp[100];
-
-  if (NumLoggerBuffered==0) {
-    FirstPoint.Year = gps_info.Year;
-    FirstPoint.Month = gps_info.Month;
-    FirstPoint.Day = gps_info.Day;
-    FirstPoint.Hour = gps_info.Hour;
-    FirstPoint.Minute = gps_info.Minute;
-    FirstPoint.Second = gps_info.Second;
-  }
-
-  // JMW added task start declaration line
-
-  // LGCSTKF013945TAKEOFF DETECTED
-
-  // IGC GNSS specification 3.6.1
-  sprintf(temp,
-	  "C%02d%02d%02d%02d%02d%02d0000000000%02d\r\n",
-	  // DD  MM  YY  HH  MM  SS  DD  MM  YY IIII TT
-	  FirstPoint.Day,
-	  FirstPoint.Month,
-	  FirstPoint.Year % 100,
-	  FirstPoint.Hour,
-	  FirstPoint.Minute,
-	  FirstPoint.Second,
-	  ntp-2);
-
-  IGCWriteRecord(temp, szLoggerFileName);
-  // takeoff line
-  // IGC GNSS specification 3.6.3
-  IGCWriteRecord(start, szLoggerFileName);
-
-}
-
-
-void 
-Logger::EndDeclaration(void)
-{
-  // TODO bug: this is causing problems with some analysis software
-  // maybe it's because the date and location fields are bogus
-  const char start[] = "C0000000N00000000ELANDING\r\n";
-  IGCWriteRecord(start, szLoggerFileName);
-}
-
-void 
-Logger::AddDeclaration(double Latitude, double Longitude, const TCHAR *ID)
-{
-  char szCRecord[500];
-
-  char IDString[MAX_PATH];
-  int i;
-
-  int DegLat, DegLon;
-  double MinLat, MinLon;
-  char NoS, EoW;
-
-  TCHAR tmpstring[MAX_PATH];
-  _tcscpy(tmpstring, ID);
-  _tcsupr(tmpstring);
-  for(i=0;i<(int)_tcslen(tmpstring);i++)
-    {
-      IDString[i] = (char)tmpstring[i];
-    }
-  IDString[i] = '\0';
-
-  DegLat = (int)Latitude;
-  MinLat = Latitude - DegLat;
-  NoS = 'N';
-  if((MinLat<0) || ((MinLat-DegLat==0) && (DegLat<0)))
-    {
-      NoS = 'S';
-      DegLat *= -1; MinLat *= -1;
-    }
-  MinLat *= 60;
-  MinLat *= 1000;
-
-  DegLon = (int)Longitude ;
-  MinLon = Longitude  - DegLon;
-  EoW = 'E';
-  if((MinLon<0) || ((MinLon-DegLon==0) && (DegLon<0)))
-    {
-      EoW = 'W';
-      DegLon *= -1; MinLon *= -1;
-    }
-  MinLon *=60;
-  MinLon *= 1000;
-
-  sprintf(szCRecord,"C%02d%05.0f%c%03d%05.0f%c%s\r\n",
-	  DegLat, MinLat, NoS, DegLon, MinLon, EoW, IDString);
-
-  IGCWriteRecord(szCRecord, szLoggerFileName);
-}
-
-
-// TODO code: make this thread-safe, since it could happen in the middle
-// of the calculations doing LogPoint or something else!
-
-void 
-Logger::LoggerNote(const TCHAR *text) {
-  if (LoggerActive) {
-    char fulltext[500];
-    sprintf(fulltext, "LPLT%S\r\n", text);
-    IGCWriteRecord(fulltext, szLoggerFileName);
-  }
-}
-
-
-bool Logger::LoggerDeclare(PDeviceDescriptor_t dev, Declaration_t *decl)
-{
-  if (!devIsLogger(dev))
-    return FALSE;
-
-  if (MessageBoxX(gettext(TEXT("Declare Task?")),
-                  dev->Name, MB_YESNO| MB_ICONQUESTION) == IDYES) {
-    if (devDeclare(dev, decl)) {
-      MessageBoxX(gettext(TEXT("Task Declared!")),
-                  dev->Name, MB_OK| MB_ICONINFORMATION);
-      DeclaredToDevice = true;
-    } else {
-      MessageBoxX(gettext(TEXT("Error occured,\r\nTask NOT Declared!")),
-                  dev->Name, MB_OK| MB_ICONERROR);
-      DeclaredToDevice = false;
-    }
-  }
-  return TRUE;
-}
-
-void 
-Logger::LoggerDeviceDeclare() {
-  bool found_logger = false;
-  Declaration_t Decl;
-  int i;
-
-  GetRegistryString(szRegistryPilotName, Decl.PilotName, 64);
-  GetRegistryString(szRegistryAircraftType, Decl.AircraftType, 32);
-  GetRegistryString(szRegistryAircraftRego, Decl.AircraftRego, 32);
-
-  for (i = 0; task.ValidTaskPoint(i); i++) {
-    Decl.waypoint[i] = &task.getWaypoint(i);
-  }
-  Decl.num_waypoints = i;
-
-  DeclaredToDevice = false;
-
-  if (LoggerDeclare(devA(), &Decl))
-    found_logger = true;
-
-  if (LoggerDeclare(devB(), &Decl))
-    found_logger = true;
-
-  if (!found_logger) {
-    MessageBoxX(gettext(TEXT("No logger connected")),
-		devB()->Name, MB_OK| MB_ICONINFORMATION);
-    DeclaredToDevice = true; // testing only
-  }
-
-}
-
+  Poco::ScopedRWLock protect(lock, false);
+  return _logger->isLoggerActive();
+};
 
 bool 
-Logger::CheckDeclaration(void) 
+Logger::LoggerClearFreeSpace(const NMEA_INFO &gps_info)
 {
-  if (!isTaskDeclared()) {
-    return true;
-  } else {
-    if(MessageBoxX(gettext(TEXT("OK to invalidate declaration?")),
-		   gettext(TEXT("Task declared")),
-		   MB_YESNO| MB_ICONQUESTION) == IDYES){
-      DeclaredToDevice = false;
-      return true;
-    } else {
-      return false;
-    }
-  }
-}
+  Poco::ScopedRWLock protect(lock, true);
+  return _logger->LoggerClearFreeSpace(gps_info);
+};
 
-
-//////
-
-
-FILETIME LogFileDate(const NMEA_INFO &gps_info,
-		     TCHAR* filename) {
-  FILETIME ft;
-  ft.dwLowDateTime = 0;
-  ft.dwHighDateTime = 0;
-
-  TCHAR asset[MAX_PATH];
-  SYSTEMTIME st;
-  unsigned short year, month, day, num;
-  int matches;
-  // scan for long filename
-  matches = _stscanf(filename,
-                    TEXT("%hu-%hu-%hu-%7s-%hu.IGC"),
-                    &year,
-                    &month,
-                    &day,
-                    asset,
-                    &num);
-  if (matches==5) {
-    st.wYear = year;
-    st.wMonth = month;
-    st.wDay = day;
-    st.wHour = num;
-    st.wMinute = 0;
-    st.wSecond = 0;
-    st.wMilliseconds = 0;
-    SystemTimeToFileTime(&st,&ft);
-    return ft;
-  }
-
-  TCHAR cyear, cmonth, cday, cflight;
-  // scan for short filename
-  matches = _stscanf(filename,
-		     TEXT("%c%c%c%4s%c.IGC"),
-		     &cyear,
-		     &cmonth,
-		     &cday,
-		     asset,
-		     &cflight);
-  if (matches==5) {
-    int iyear = (int)gps_info.Year;
-    int syear = iyear % 10;
-    int yearzero = iyear - syear;
-    int yearthis = IGCCharToNum(cyear) + yearzero;
-    if (yearthis > iyear) {
-      yearthis -= 10;
-    }
-    st.wYear = yearthis;
-    st.wMonth = IGCCharToNum(cmonth);
-    st.wDay = IGCCharToNum(cday);
-    st.wHour = IGCCharToNum(cflight);
-    st.wMinute = 0;
-    st.wSecond = 0;
-    st.wMilliseconds = 0;
-    SystemTimeToFileTime(&st,&ft);
-    return ft;
-    /*
-      YMDCXXXF.IGC
-      Y: Year, 0 to 9 cycling every 10 years
-      M: Month, 1 to 9 then A for 10, B=11, C=12
-      D: Day, 1 to 9 then A for 10, B=....
-      C: Manuf. code = X
-      XXX: Logger ID Alphanum
-      F: Flight of day, 1 to 9 then A through Z
-    */
-  }
-  return ft;
-}
-
-
-bool LogFileIsOlder(const NMEA_INFO &gps_info,
-		    TCHAR *oldestname, TCHAR *thisname) {
-  FILETIME ftold = LogFileDate(gps_info, oldestname);
-  FILETIME ftnew = LogFileDate(gps_info, thisname);
-  return (CompareFileTime(&ftold, &ftnew)>0);
-}
-
-
-bool DeleteOldIGCFile(const NMEA_INFO &gps_info,
-		     TCHAR *pathname) {
-  HANDLE hFind;  // file handle
-  WIN32_FIND_DATA FindFileData;
-  TCHAR oldestname[MAX_PATH];
-  TCHAR searchpath[MAX_PATH];
-  TCHAR fullname[MAX_PATH];
-  _stprintf(searchpath, TEXT("%s*"),pathname);
-
-  hFind = FindFirstFile(searchpath, &FindFileData); // find the first file
-  if(hFind == INVALID_HANDLE_VALUE) {
-    return false;
-  }
-  if(!(FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
-    if (MatchesExtension(FindFileData.cFileName, TEXT(".igc")) ||
-	MatchesExtension(FindFileData.cFileName, TEXT(".IGC"))) {
-      // do something...
-      _tcscpy(oldestname, FindFileData.cFileName);
-    } else {
-      return false;
-    }
-  }
-  bool bSearch = true;
-  while(bSearch) { // until we finds an entry
-    if(FindNextFile(hFind,&FindFileData)) {
-      if(!(FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) &&
-	 (MatchesExtension(FindFileData.cFileName, TEXT(".igc")) ||
-	  (MatchesExtension(FindFileData.cFileName, TEXT(".IGC"))))) {
-	if (LogFileIsOlder(gps_info,oldestname,FindFileData.cFileName)) {
-	  _tcscpy(oldestname, FindFileData.cFileName);
-	  // we have a new oldest name
-	}
-      }
-    } else {
-      bSearch = false;
-    }
-  }
-  FindClose(hFind);  // closing file handle
-
-  // now, delete the file...
-  _stprintf(fullname, TEXT("%s%s"),pathname,oldestname);
-  DeleteFile(fullname);
-  return true; // did delete one
-}
-
-
-#define LOGGER_MINFREESTORAGE (250+MINFREESTORAGE)
-// JMW note: we want to clear up enough space to save the persistent
-// data (85 kb approx) and a new log file
-
-#ifdef DEBUG_IGCFILENAME
-TCHAR testtext1[] = TEXT("2007-11-05-XXX-AAA-01.IGC");
-TCHAR testtext2[] = TEXT("2007-11-05-XXX-AAA-02.IGC");
-TCHAR testtext3[] = TEXT("3BOA1VX2.IGC");
-TCHAR testtext4[] = TEXT("5BDX7B31.IGC");
-TCHAR testtext5[] = TEXT("3BOA1VX2.IGC");
-TCHAR testtext6[] = TEXT("9BDX7B31.IGC");
-TCHAR testtext7[] = TEXT("2008-01-05-XXX-AAA-01.IGC");
-#endif
-
-bool 
-Logger::LoggerClearFreeSpace(const NMEA_INFO &gps_info) 
+void 
+Logger::LinkGRecordDLL(void)
 {
-  bool found = true;
-  unsigned long kbfree=0;
-  TCHAR pathname[MAX_PATH];
-  TCHAR subpathname[MAX_PATH];
-  int numtries = 0;
+  Poco::ScopedRWLock protect(lock, true);
+  return _logger->LinkGRecordDLL();
+};
 
-  LocalPath(pathname);
-#ifdef GNAV
-  LocalPath(subpathname,TEXT("logs"));
-#else
-  LocalPath(subpathname);
-#endif
-
-#ifdef DEBUG_IGCFILENAME
-  bool retval;
-  retval = LogFileIsOlder(testtext1,
-                          testtext2);
-  retval = LogFileIsOlder(testtext1,
-                          testtext3);
-  retval = LogFileIsOlder(testtext4,
-                          testtext5);
-  retval = LogFileIsOlder(testtext6,
-                          testtext7);
-#endif
-
-  while (found && ((kbfree = FindFreeSpace(pathname))<LOGGER_MINFREESTORAGE)
-	 && (numtries++ <100)) {
-    /* JMW asking for deleting old files is disabled now --- system
-       automatically deletes old files as required
-    */
-
-    // search for IGC files, and delete the oldest one
-    found = DeleteOldIGCFile(gps_info, pathname);
-    if (!found) {
-      found = DeleteOldIGCFile(gps_info, subpathname);
-    }
-  }
-  if (kbfree>=LOGGER_MINFREESTORAGE) {
-    StartupStore(TEXT("LoggerFreeSpace returned: true\r\n"));
-    return true;
-  } else {
-    StartupStore(TEXT("LoggerFreeSpace returned: false\r\n"));
-    return false;
-  }
-}
-
-
-
-
-#include "Interface.hpp"
-
-// TODO: fix scope so only gui things can start it
+const bool 
+Logger::LoggerGActive() 
+{
+  Poco::ScopedRWLock protect(lock, false);
+  return _logger->LoggerGActive();
+};
 
 void 
 Logger::guiStartLogger(const NMEA_INFO& gps_info, 
-                       const SETTINGS_COMPUTER& settings,
-                       bool noAsk) {
-  int i;
-  if (!LoggerActive) {
-    if (gps_info.Replay) {
-      if (LoggerActive)
-        guiStopLogger(gps_info, true);
-      return;
-    }
-    TCHAR TaskMessage[1024];
-    _tcscpy(TaskMessage,TEXT("Start Logger With Declaration\r\n"));
-    if (task.Valid()) {
-      for (i = 0; task.ValidTaskPoint(i); i++) {
-        _tcscat(TaskMessage, task.getWaypoint(i).Name);
-	_tcscat(TaskMessage,TEXT("\r\n"));
-      }
-    } else {
-      _tcscat(TaskMessage,TEXT("None"));
-    }
-
-    if(noAsk ||
-       (MessageBoxX(TaskMessage,gettext(TEXT("Start Logger")),
-		    MB_YESNO|MB_ICONQUESTION) == IDYES))
-      {
-
-	if (LoggerClearFreeSpace(gps_info)) {
-
-	  StartLogger(gps_info, settings, strAssetNumber);
-	  LoggerHeader(gps_info);
-	  LoggerActive = true; // start logger after Header is completed.  Concurrency
-
-          if (task.Valid()) {
-            int ntp = task.getFinalWaypoint();
-            StartDeclaration(gps_info,ntp);
-            for (i = 0; task.ValidTaskPoint(i); i++) {
-              const WAYPOINT &way_point = task.getWaypoint(i);
-              AddDeclaration(way_point.Location.Latitude,
-                             way_point.Location.Longitude,
-                             way_point.Name);
-            }
-            EndDeclaration();
-          }
-	  ResetFRecord(); // reset timer & lastRecord string so if
-			  // logger is restarted, FRec appears at top
-			  // of file
-	} else {
-
-	  MessageBoxX(
-		      gettext(TEXT("Logger inactive, insufficient storage!")),
-		      gettext(TEXT("Logger Error")), MB_OK| MB_ICONERROR);
-	  StartupStore(TEXT("Logger not started: Insufficient Storage\r\n"));
-	}
-      }
-  }
-}
-
-
-void 
-Logger::guiStopLogger(const NMEA_INFO& gps_info, 
-                      bool noAsk) {
-  if (LoggerActive) {
-    if(noAsk ||
-       (MessageBoxX(gettext(TEXT("Stop Logger")),
-		    gettext(TEXT("Stop Logger")),
-		    MB_YESNO|MB_ICONQUESTION) == IDYES)) {
-      StopLogger(gps_info);
-    }
-  }
-}
-
+                    const SETTINGS_COMPUTER& settings,
+                    bool noAsk)
+{
+  Poco::ScopedRWLock protect(lock, true);
+  return _logger->guiStartLogger(gps_info,
+                                 settings, noAsk);
+};
 
 void 
 Logger::guiToggleLogger(const NMEA_INFO& gps_info, 
-                        const SETTINGS_COMPUTER& settings,
-                        bool noAsk) {
-  if (LoggerActive) {
-    guiStopLogger(gps_info, noAsk);
-  } else {
-    guiStartLogger(gps_info, settings, noAsk);
-  }
-}
-
+                     const SETTINGS_COMPUTER& settings,
+                     bool noAsk)
+{
+  Poco::ScopedRWLock protect(lock, true);
+  return _logger->guiToggleLogger(gps_info, settings, noAsk);
+};
 
 void 
-Logger::clearBuffer() 
+Logger::guiStopLogger(const NMEA_INFO &gps_info,
+                   bool noAsk)
 {
-  NumLoggerBuffered = 0;
-}
+  Poco::ScopedRWLock protect(lock, true);
+  return _logger->guiStopLogger(gps_info, noAsk);
+};
+
+void 
+Logger::LoggerDeviceDeclare()
+{
+  Poco::ScopedRWLock protect(lock, true);
+  return _logger->LoggerDeviceDeclare();
+};
+
+void 
+Logger::LoggerNote(const TCHAR *text)
+{
+  Poco::ScopedRWLock protect(lock, true);
+  return _logger->LoggerNote(text);
+};
+
+void 
+Logger::clearBuffer()
+{
+  Poco::ScopedRWLock protect(lock, true);
+  return _logger->clearBuffer();
+};
+

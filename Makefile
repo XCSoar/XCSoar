@@ -166,6 +166,7 @@ OBJS	:=\
 	$(SRC)/GlideRatio.o 		\
 	$(SRC)/GlideSolvers.o 		\
 	$(SRC)/Logger.o 		\
+	$(SRC)/LoggerImpl.o 		\
 	$(SRC)/LoggerSign.o 		\
 	$(SRC)/ReplayLogger.o 		\
 	$(SRC)/McReady.o 		\

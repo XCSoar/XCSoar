@@ -35,7 +35,7 @@
 }
 */
 
-#include "Logger.h"
+#include "LoggerImpl.hpp"
 #include "XCSoar.h"
 #include "Protection.hpp"
 #include "Dialogs.h"
@@ -123,7 +123,7 @@ char * CleanIGCRecord (char * szIn)
 }
 
 bool 
-Logger::IGCWriteRecord(const char *szIn, const TCHAR* szLoggerFileName)
+LoggerImpl::IGCWriteRecord(const char *szIn, const TCHAR* szLoggerFileName)
 {
   HANDLE hFile;
   DWORD dwBytesRead;
@@ -176,7 +176,7 @@ Logger::IGCWriteRecord(const char *szIn, const TCHAR* szLoggerFileName)
 // JMW: not sure that would work, I think dll has to be in OS
 // directory or same directory as exe
 
-void Logger::LinkGRecordDLL(void)
+void LoggerImpl::LinkGRecordDLL(void)
 {
   static bool bFirstTime = true;
   TCHAR szLoadResults [100];
@@ -329,7 +329,7 @@ void Logger::LinkGRecordDLL(void)
 }
 
 const bool 
-Logger::LoggerGActive() const
+LoggerImpl::LoggerGActive() const
 {
   if (GRecordDLLHandle)
     return true;
@@ -340,7 +340,7 @@ Logger::LoggerGActive() const
 
 
 void 
-Logger::LoggerGStop(TCHAR* szLoggerFileName) {
+LoggerImpl::LoggerGStop(TCHAR* szLoggerFileName) {
   BOOL bFileValid = true;
   TCHAR OldGRecordBuff[MAX_IGC_BUFF];
   TCHAR NewGRecordBuff[MAX_IGC_BUFF];
@@ -363,7 +363,7 @@ Logger::LoggerGStop(TCHAR* szLoggerFileName) {
 }
 
 void 
-Logger::LoggerGInit() {
+LoggerImpl::LoggerGInit() {
 #ifndef _SIM_
   LinkGRecordDLL(); // try to link DLL if it exists
   if (LoggerGActive())
