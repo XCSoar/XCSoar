@@ -53,7 +53,6 @@ Copyright_License {
 #include "McReady.h"
 #include "Interface.hpp"
 #include "Components.hpp"
-#include "GlideComputer.hpp"
 #include <stdlib.h>
 #include "FlarmCalculations.h"
 #include "Math/Pressure.h"

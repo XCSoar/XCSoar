@@ -41,7 +41,6 @@ Copyright_License {
 #include "GlideComputerBlackboard.hpp"
 #include "Audio/VegaVoice.h"
 #include "GPSClock.hpp"
-
 #include "GlideComputerAirData.hpp"
 #include "GlideComputerStats.hpp"
 #include "GlideComputerTask.hpp"
@@ -58,22 +57,7 @@ class GlideComputer: public
 public:
   GlideComputer();
 
-  //protected:
-  VegaVoice    vegavoice;
   void ResetFlight(const bool full=true);
-protected:
-  virtual void StartTask(const bool do_advance,
-			 const bool do_announce);
-  void DoLogging();
-  virtual void SaveTaskSpeed(double val);
-  virtual void SetLegStart();
-  virtual void AnnounceWayPointSwitch(bool do_advance);
-  virtual void OnTakeoff();
-  virtual void OnLanding();
-  virtual void OnSwitchClimbMode(bool isclimb, bool left);
-  virtual void OnDepartedThermal();
-
-public:
   void Initialise();
   bool ProcessGPS(); // returns true if idle needs processing
   virtual void ProcessIdle();
@@ -89,12 +73,25 @@ public:
   SnailTrail &GetSnailTrail() { return snail_trail; };
   OLCOptimizer &GetOLC() { return olc; };
   FlightStatistics &GetFlightStats() { return flightstats; };
+
+protected:
+  VegaVoice    vegavoice;
+  virtual void StartTask(const bool do_advance,
+			 const bool do_announce);
+  void DoLogging();
+  virtual void SaveTaskSpeed(double val);
+  virtual void SetLegStart();
+  virtual void AnnounceWayPointSwitch(bool do_advance);
+  virtual void OnTakeoff();
+  virtual void OnLanding();
+  virtual void OnSwitchClimbMode(bool isclimb, bool left);
+  virtual void OnDepartedThermal();
+
 private:
   void CalculateTeammateBearingRange();
   void CalculateOwnTeamCode();
   void FLARM_ScanTraffic();
 };
-
 
 double FAIFinishHeight(const SETTINGS_COMPUTER &settings,
 		       const DERIVED_INFO& Calculated, int wp);

@@ -56,6 +56,13 @@ typedef struct _THERMAL_SOURCE_VIEW
   bool Visible;
 } THERMAL_SOURCE_VIEW;
 
+struct ZoomClimb_t {
+  double CruiseMapScale;
+  double ClimbMapScale;
+  bool last_isclimb;
+  bool last_targetpan;
+};
+
 class GaugeCDI;
 class TerrainRenderer;
 
@@ -120,6 +127,7 @@ class MapWindow
   POINT         Groundline[NUMTERRAINSWEEPS+1];
   TaskScreen_t   task_screen;
   StartScreen_t  task_start_screen;
+  ZoomClimb_t    zoomclimb;
 
   THERMAL_SOURCE_VIEW ThermalSources[MAX_THERMAL_SOURCES];
 

@@ -86,6 +86,10 @@ MapWindow::MapWindow()
 {
   TargetDrag_Location.Latitude = 0;
   TargetDrag_Location.Longitude = 0;
+  zoomclimb.CruiseMapScale = 10;
+  zoomclimb.ClimbMapScale = 0.25;
+  zoomclimb.last_isclimb = false;
+  zoomclimb.last_targetpan = false;
 }
 
 MapWindow::~MapWindow()
@@ -339,53 +343,48 @@ void MapWindow::ScanVisibility(rectObj *bounds_active) {
 
 
 void MapWindow::SwitchZoomClimb(void) {
-
-  static double CruiseMapScale = 10;
-  static double ClimbMapScale = 0.25;
-  static bool last_isclimb = false;
-  static bool last_targetpan = false;
-
+  
   bool isclimb = (DisplayMode == dmCircling);
 
   bool my_target_pan = SettingsMap().TargetPan;
 
-  if (my_target_pan != last_targetpan) {
+  if (my_target_pan != zoomclimb.last_targetpan) {
     if (my_target_pan) {
       // save starting values
       if (isclimb) {
-        ClimbMapScale = GetMapScaleUser();
+        zoomclimb.ClimbMapScale = GetMapScaleUser();
       } else {
-        CruiseMapScale = GetMapScaleUser();
+        zoomclimb.CruiseMapScale = GetMapScaleUser();
       }
     } else {
       // restore scales
       if (isclimb) {
-        RequestMapScale(ClimbMapScale, SettingsMap());
+        RequestMapScale(zoomclimb.ClimbMapScale, SettingsMap());
       } else {
-        RequestMapScale(CruiseMapScale, SettingsMap());
+        RequestMapScale(zoomclimb.CruiseMapScale, SettingsMap());
       }
       BigZoom = true;
     }
-    last_targetpan = my_target_pan;
+    zoomclimb.last_targetpan = my_target_pan;
     return;
   }
 
   if (!my_target_pan && SettingsMap().CircleZoom) {
-    if (isclimb != last_isclimb) {
+    if (isclimb != zoomclimb.last_isclimb) {
       if (isclimb) {
         // save cruise scale
-        CruiseMapScale = GetMapScaleUser();
+        zoomclimb.CruiseMapScale = GetMapScaleUser();
         // switch to climb scale
-        RequestMapScale(ClimbMapScale, SettingsMap());
+        RequestMapScale(zoomclimb.ClimbMapScale, SettingsMap());
       } else {
         // leaving climb
         // save cruise scale
-        ClimbMapScale = GetMapScaleUser();
-        RequestMapScale(CruiseMapScale, SettingsMap());
+        zoomclimb.ClimbMapScale = GetMapScaleUser();
+        RequestMapScale(zoomclimb.CruiseMapScale, SettingsMap());
         // switch to climb scale
       }
       BigZoom = true;
-      last_isclimb = isclimb;
+      zoomclimb.last_isclimb = isclimb;
     }
   }
 }
