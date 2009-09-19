@@ -39,6 +39,7 @@ Copyright_License {
 #define XCSOAR_SETTINGS_COMPUTER_HPP
 
 #include <tchar.h>
+#include "SettingsAirspace.hpp"
 
 // control of calculations, these only changed by user interface
 // but are used read-only by calculations
@@ -139,7 +140,7 @@ struct SETTINGS_COMPUTER {
   unsigned AltitudeMode;
   unsigned ClipAltitude;
   unsigned AltWarningMargin;
-
+  int    iAirspaceMode[AIRSPACECLASSCOUNT];
 };
 
 #endif

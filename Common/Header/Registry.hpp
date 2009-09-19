@@ -237,6 +237,9 @@ public:
   static void SaveSoundSettings();
   static void SaveWindToRegistry();
   static void LoadWindFromRegistry();
+  static void SetRegistryAirspaceMode(int i);
+private:
+  static int GetRegistryAirspaceMode(int i);
 };
 
 #endif

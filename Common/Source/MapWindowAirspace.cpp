@@ -47,7 +47,7 @@ Copyright_License {
 void MapWindow::CalculateScreenPositionsAirspaceCircle(AIRSPACE_CIRCLE &circ) {
   circ.Visible = false;
   if (!circ.FarVisible) return;
-  if (iAirspaceMode[circ.Type]%2 == 1) {
+  if (SettingsComputer().iAirspaceMode[circ.Type]%2 == 1) {
     double basealt;
     double topalt;
     if (circ.Base.Base != abAGL) {
@@ -83,7 +83,7 @@ void MapWindow::CalculateScreenPositionsAirspaceCircle(AIRSPACE_CIRCLE &circ) {
 void MapWindow::CalculateScreenPositionsAirspaceArea(AIRSPACE_AREA &area) {
   area.Visible = false;
   if (!area.FarVisible) return;
-  if (iAirspaceMode[area.Type]%2 == 1) {
+  if (SettingsComputer().iAirspaceMode[area.Type]%2 == 1) {
     double basealt;
     double topalt;
     if (area.Base.Base != abAGL) {

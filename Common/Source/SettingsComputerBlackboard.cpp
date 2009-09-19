@@ -107,5 +107,20 @@ SettingsComputerBlackboard::SettingsComputerBlackboard()
   settings_computer.EnableSoundVario = true;
   settings_computer.EnableSoundModes = true;
   settings_computer.EnableSoundTask = true;
+
+  settings_computer.iAirspaceMode[ 0] =  0;
+  settings_computer.iAirspaceMode[ 1] =  0;
+  settings_computer.iAirspaceMode[ 2] =  0;
+  settings_computer.iAirspaceMode[ 3] =  0;
+  settings_computer.iAirspaceMode[ 4] =  0;
+  settings_computer.iAirspaceMode[ 5] =  0;
+  settings_computer.iAirspaceMode[ 6] =  0;
+  settings_computer.iAirspaceMode[ 7] =  0;
+  settings_computer.iAirspaceMode[ 8] =  0;
+  settings_computer.iAirspaceMode[ 9] =  0;
+  settings_computer.iAirspaceMode[10] =  0;
+  settings_computer.iAirspaceMode[11] =  1;
+  settings_computer.iAirspaceMode[12] =  1;
+  settings_computer.iAirspaceMode[13] =  0;
 }
 

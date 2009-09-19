@@ -952,7 +952,7 @@ GlideComputerAirData::AirspaceWarning()
            || ((AirspaceCircle[i].Top.Base == abAGL) 
 	       && (agl < AirspaceCircle[i].Top.AGL)))) {
 
-        if ((iAirspaceMode[AirspaceCircle[i].Type] >= 2) &&
+        if ((SettingsComputer().iAirspaceMode[AirspaceCircle[i].Type] >= 2) &&
 	    InsideAirspaceCircle(loc, i)) {
 
           AirspaceWarnListAdd(&Basic(), &Calculated(), 
@@ -978,7 +978,7 @@ GlideComputerAirData::AirspaceWarning()
            || ((AirspaceArea[i].Top.Base == abAGL) 
 	       && (agl < AirspaceArea[i].Top.AGL)))) {
 
-        if ((iAirspaceMode[AirspaceArea[i].Type] >= 2)
+        if ((SettingsComputer().iAirspaceMode[AirspaceArea[i].Type] >= 2)
             && InsideAirspaceArea(loc, i)){
 
           AirspaceWarnListAdd(&Basic(), &Calculated(), 

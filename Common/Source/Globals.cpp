@@ -20,6 +20,3 @@ int AirspacePriority[AIRSPACECLASSCOUNT];
 
 double airspace_QNH;
 
-// 12 is number of airspace types
-int      iAirspaceMode[AIRSPACECLASSCOUNT] =
-  {0,0,0,0,0,0,0,0,0,0,0,1,1,0};

@@ -400,8 +400,8 @@ FindNearestAirspaceCircle(const GEOPOINT &location,
     double basealt;
     double topalt;
 
-    iswarn = (iAirspaceMode[AirspaceCircle[i].Type]>=2);
-    isdisplay = ((iAirspaceMode[AirspaceCircle[i].Type]%2)>0);
+    iswarn = (settings.iAirspaceMode[AirspaceCircle[i].Type]>=2);
+    isdisplay = ((settings.iAirspaceMode[AirspaceCircle[i].Type]%2)>0);
 
     if (!isdisplay || !iswarn) {
       // don't want warnings for this one
@@ -522,8 +522,8 @@ FindNearestAirspaceArea(const GEOPOINT &location,
     double basealt;
     double topalt;
 
-    iswarn = (iAirspaceMode[AirspaceArea[i].Type]>=2);
-    isdisplay = ((iAirspaceMode[AirspaceArea[i].Type]%2)>0);
+    iswarn = (settings.iAirspaceMode[AirspaceArea[i].Type]>=2);
+    isdisplay = ((settings.iAirspaceMode[AirspaceArea[i].Type]%2)>0);
 
     if (!isdisplay || !iswarn) {
       // don't want warnings for this one

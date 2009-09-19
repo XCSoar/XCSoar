@@ -54,7 +54,6 @@ Copyright_License {
 #define CLASSF				13
 #define AIRSPACECLASSCOUNT              14
 
-extern int    iAirspaceMode[AIRSPACECLASSCOUNT];
 extern int    AirspacePriority[AIRSPACECLASSCOUNT];
 
 extern double airspace_QNH; 

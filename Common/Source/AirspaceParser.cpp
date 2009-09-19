@@ -1474,9 +1474,6 @@ void DumpAirspaceFile(void){
 ///////////////////////////////////////////////////////////////////////////////
 
 
-/////////////////////////////
-
-
 static int _cdecl SortAirspaceAreaCompare(const void *elem1, const void *elem2 )
 {
   if (AirspacePriority[((AIRSPACE_AREA *)elem1)->Type] >

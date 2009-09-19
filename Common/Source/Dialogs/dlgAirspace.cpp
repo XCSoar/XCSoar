@@ -147,8 +147,8 @@ OnAirspacePaintListItem(WindowControl *Sender, Canvas &canvas)
       bool iswarn;
       bool isdisplay;
 
-      iswarn = (iAirspaceMode[i]>=2);
-      isdisplay = ((iAirspaceMode[i]%2)>0);
+      iswarn = (XCSoarInterface::SettingsComputer().iAirspaceMode[i]>=2);
+      isdisplay = ((XCSoarInterface::SettingsComputer().iAirspaceMode[i]%2)>0);
       if (iswarn) {
         _tcscpy(label, gettext(TEXT("Warn")));
         canvas.text_opaque(w0-w1-w2, 2*InfoBoxLayout::scale, label);
@@ -191,10 +191,10 @@ static void OnAirspaceListEnter(WindowControl * Sender,
 	changed = true;
       }
     } else {
-      int v = (iAirspaceMode[ItemIndex]+1)%4;
-      iAirspaceMode[ItemIndex] = v;
+      int v = (XCSoarInterface::SettingsComputer().iAirspaceMode[ItemIndex]+1)%4;
+      XCSoarInterface::SetSettingsComputer().iAirspaceMode[ItemIndex] = v;
       //  wAirspaceList->Redraw();
-      SetRegistryAirspaceMode(ItemIndex);
+      Profile::SetRegistryAirspaceMode(ItemIndex);
       changed = true;
     }
   }

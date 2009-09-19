@@ -581,7 +581,7 @@ void Profile::ReadRegistrySettings(void)
   GetRegistryString(szRegistryRegKey, strRegKey, 65);
 
   for(i=0;i<AIRSPACECLASSCOUNT;i++) {
-    iAirspaceMode[i] = GetRegistryAirspaceMode(i);
+    SetSettingsComputer().iAirspaceMode[i] = GetRegistryAirspaceMode(i);
     
     GetFromRegistry(szRegistryBrush[i],SetSettingsMap().iAirspaceBrush[i]);
     GetFromRegistry(szRegistryColour[i],SetSettingsMap().iAirspaceColour[i]);
@@ -1172,17 +1172,17 @@ void SetRegistryBrush(int i, DWORD c)
 
 
 
-void SetRegistryAirspaceMode(int i)
+void Profile::SetRegistryAirspaceMode(int i)
 {
 
-  CheckIndex(iAirspaceMode, i);
+  CheckIndex(SetSettingsComputer().iAirspaceMode, i);
   CheckIndex(szRegistryAirspaceMode, i);
 
-  DWORD val = iAirspaceMode[i];
+  DWORD val = SettingsComputer().iAirspaceMode[i];
   SetToRegistry(szRegistryAirspaceMode[i], val);
 }
 
-int GetRegistryAirspaceMode(int i) {
+int Profile::GetRegistryAirspaceMode(int i) {
   DWORD Temp= 3; // display + warnings
   CheckIndex(szRegistryAirspaceMode, i);
   GetFromRegistryD(szRegistryAirspaceMode[i],Temp);
