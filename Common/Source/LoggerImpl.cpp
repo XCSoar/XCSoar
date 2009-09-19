@@ -48,10 +48,8 @@
 #include "UtilsSystem.hpp"
 #include "LocalPath.hpp"
 #include "Device/device.h"
-#include "InputEvents.h"
 #include "Compatibility/string.h"
 #include "TaskFile.hpp"
-#include "Components.hpp"
 #include "WayPointList.hpp"
 
 LoggerImpl::LoggerImpl():

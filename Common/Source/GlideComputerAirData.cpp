@@ -1023,7 +1023,8 @@ GlideComputerAirData::TerrainFootprint(double screen_range)
 					&Calculated(), 
 					SettingsComputer(),
 					&loc,
-					mymaxrange, &out_of_range,
+					mymaxrange, 
+                                        &out_of_range,
 					&SetCalculated().TerrainBase);
     if (out_of_range) {
       FindLatitudeLongitude(Basic().Location,

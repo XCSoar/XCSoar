@@ -212,9 +212,17 @@ bool MapWindow::Idle(const bool do_force) {
       // scan main object visibility
       if (main_idle.dirty) {
         main_idle.dirty = false;
-        ScanVisibility(getSmartBounds());        
+        ScanVisibility(getSmartBounds());
+
+        if (do_force) {
+          // exit after important object visibilities are scanned
+          // this ensures waypoints/airspace are visible after a significant
+          // shift of the map
+          return true;
+        }
+
+        break;
       }
-      break;
     case 1:
       if (topology_idle.dirty) {
         if (SettingsMap().EnableTopology) {
@@ -223,8 +231,8 @@ bool MapWindow::Idle(const bool do_force) {
         } else {
           topology_idle.dirty = false;
         }
+        break;
       }
-      break;
     case 2:
       if (terrain_idle.dirty) {
         terrain.ServiceTerrainCenter(Basic().Location);
@@ -234,8 +242,8 @@ bool MapWindow::Idle(const bool do_force) {
           // JMW this currently isn't working with the smart bounds
           terrain_idle.dirty = false;
         }
+        break;
       }
-      break;
     case 3:
       if (rasp_idle.dirty) {
         RASP.SetViewCenter(Basic().Location);
@@ -243,17 +251,10 @@ bool MapWindow::Idle(const bool do_force) {
           // JMW this currently isn't working with the smart bounds
           rasp_idle.dirty = false;
         }
+        break;
       }
-      break;
     default:
       break;
-    }
-
-    if (do_force) {
-      // exit after important object visibilities are scanned
-      // this ensures waypoints/airspace are visible after a significant
-      // shift of the map
-      return true;
     }
 
   } while (RenderTimeAvailable() && 
