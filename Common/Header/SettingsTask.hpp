@@ -39,8 +39,15 @@ Copyright_License {
 #define XCSOAR_SETTINGS_TASK_HPP
 
 
+typedef enum {
+  AUTOADVANCE_MANUAL=0,
+  AUTOADVANCE_AUTO,
+  AUTOADVANCE_ARM,
+  AUTOADVANCE_ARMSTART
+} AutoAdvanceMode_t;
+
 struct SETTINGS_TASK {
-  int  AutoAdvance;
+  AutoAdvanceMode_t AutoAdvance;
   unsigned SectorType;
   unsigned int SectorRadius;
   unsigned StartLine;

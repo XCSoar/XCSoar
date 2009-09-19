@@ -93,7 +93,6 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Language.hpp"
 #include "Task.h"
 #include "Logger.h"
-#include "TaskFile.hpp"
 #include "WayPointList.hpp"
 
 #ifdef PNA

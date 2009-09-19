@@ -57,11 +57,6 @@ Copyright_License {
 // JMW TODO: abstract up to higher layer so a base copy of this won't 
 // call any event
 
-#define AUTOADVANCE_MANUAL 0
-#define AUTOADVANCE_AUTO 1
-#define AUTOADVANCE_ARM 2
-#define AUTOADVANCE_ARMSTART 3
-
 bool  ForceFinalGlide= false;
 
 

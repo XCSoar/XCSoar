@@ -359,8 +359,10 @@ static void ReadValues(void) {
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpAutoAdvance"));
   if (wp) {
-    CHECK_CHANGED(settings_task.AutoAdvance,
+    short tmp= settings_task.AutoAdvance;
+    CHECK_CHANGED(tmp,
                   wp->GetDataField()->GetAsInteger());
+    settings_task.AutoAdvance = (AutoAdvanceMode_t)tmp;
   }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpMinTime"));

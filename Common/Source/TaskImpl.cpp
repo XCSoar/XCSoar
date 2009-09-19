@@ -70,7 +70,7 @@ Task::Task():
   SelectedWaypoint(-1)
 {
   settings.AATEnabled = false;
-  settings.AutoAdvance = 1;
+  settings.AutoAdvance = AUTOADVANCE_AUTO;
   settings.EnableMultipleStartPoints = false;
   settings.EnableFAIFinishHeight = false;
   settings.FinishLine=1;

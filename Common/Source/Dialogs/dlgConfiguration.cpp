@@ -2681,9 +2681,10 @@ void dlgConfigurationShowModal(void){
     }
   }
 
+  short tmp = XCSoarInterface::SetSettingsComputer().AltitudeMode;
   changed |= SetValueRegistryOnChange(wf, TEXT("prpAirspaceDisplay"),
-				      szRegistryAltMode,
-				      XCSoarInterface::SetSettingsComputer().AltitudeMode);
+				      szRegistryAltMode, tmp);
+  XCSoarInterface::SetSettingsComputer().AltitudeMode = (AirspaceDisplayMode_t)tmp;
 
   changed |= SetValueRegistryOnChange(wf, TEXT("prpLockSettingsInFlight"),
 				      szRegistryLockSettingsInFlight,
@@ -3583,9 +3584,11 @@ void dlgConfigurationShowModal(void){
     }
   }
 
+  tmp = settings_task.AutoAdvance;
   taskchanged |= SetValueRegistryOnChange(wf, TEXT("prpAutoAdvance"),
                                           szRegistryAutoAdvance,
-                                          settings_task.AutoAdvance);
+                                          tmp);
+  settings_task.AutoAdvance = (AutoAdvanceMode_t)tmp;
 
   changed |= SetValueRegistryOnChange(wf, TEXT("prpLoggerTimeStepCruise"),
 				      szRegistryLoggerTimeStepCruise,

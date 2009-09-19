@@ -38,21 +38,23 @@ Copyright_License {
 #if !defined(XCSOAR_SETTINGS_AIRSPACE_H)
 #define XCSOAR_SETTINGS_AIRSPACE_H
 
-#define OTHER                           0
-#define RESTRICT                        1
-#define PROHIBITED                      2
-#define DANGER                          3
-#define CLASSA				4
-#define CLASSB				5
-#define CLASSC				6
-#define CLASSD				7
-#define	NOGLIDER			8
-#define CTR                             9
-#define WAVE				10
-#define AATASK				11
-#define CLASSE				12
-#define CLASSF				13
-#define AIRSPACECLASSCOUNT              14
+typedef enum {
+  OTHER= 0,
+  RESTRICT, 
+  PROHIBITED, 
+  DANGER, 
+  CLASSA, 
+  CLASSB, 
+  CLASSC, 
+  CLASSD, 
+  NOGLIDER, 
+  CTR, 
+  WAVE,
+  AATASK,
+  CLASSE,
+  CLASSF,
+  AIRSPACECLASSCOUNT
+} AirspaceClass_t;
 
 extern int    AirspacePriority[AIRSPACECLASSCOUNT];
 

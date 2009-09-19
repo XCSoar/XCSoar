@@ -49,7 +49,6 @@
 #include "LocalPath.hpp"
 #include "Device/device.h"
 #include "Compatibility/string.h"
-#include "TaskFile.hpp"
 #include "WayPointList.hpp"
 
 LoggerImpl::LoggerImpl():

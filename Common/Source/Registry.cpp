@@ -450,8 +450,12 @@ void Profile::ReadRegistrySettings(void)
 		  settings_task.FinishLine );
   GetFromRegistry(szRegistryFinishRadius,
 		  settings_task.FinishRadius );
-  GetFromRegistry(szRegistryAutoAdvance,
-		  settings_task.AutoAdvance );
+
+  Temp = settings_task.AutoAdvance;
+  GetFromRegistryD(szRegistryAutoAdvance,
+		  Temp );
+  settings_task.AutoAdvance = (AutoAdvanceMode_t)Temp;
+
   GetFromRegistry(szRegistryFAIFinishHeight,
 		  settings_task.EnableFAIFinishHeight );
   task.setSettings(settings_task);
@@ -527,7 +531,7 @@ void Profile::ReadRegistrySettings(void)
   // check against V3 infotypes
   CheckInfoTypes();
 
-  Temp=0;
+  Temp= SetSettingsMap().DisplayOrientation;
   GetFromRegistryD(szRegistryDisplayUpValue,Temp);
   switch(Temp)
     {
@@ -543,7 +547,7 @@ void Profile::ReadRegistrySettings(void)
       SetSettingsMap().DisplayOrientation = NORTHTRACK;break;
     }
 
-  Temp=0;
+  Temp= SetSettingsMap().DisplayTextType;
   GetFromRegistryD(szRegistryDisplayText,Temp);
   switch(Temp)
     {
@@ -561,8 +565,11 @@ void Profile::ReadRegistrySettings(void)
       SetSettingsMap().DisplayTextType = DISPLAYNAMEIFINTASK; break;
     }
 
-  GetFromRegistry(szRegistryAltMode,
-                  SetSettingsComputer().AltitudeMode);
+  Temp= SetSettingsComputer().AltitudeMode;
+  GetFromRegistryD(szRegistryAltMode,
+                  Temp);
+  SetSettingsComputer().AltitudeMode= (AirspaceDisplayMode_t)Temp;
+
   GetFromRegistry(szRegistryClipAlt,
                   SetSettingsComputer().ClipAltitude);
   GetFromRegistry(szRegistryAltMargin,
