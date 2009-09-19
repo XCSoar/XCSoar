@@ -42,7 +42,6 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "Interface.hpp"
 #include "MapWindowProjection.hpp"
-#include "ReplayLogger.hpp"
 #include "Math/FastMath.h"
 #include "InfoBoxLayout.h"
 #include "Screen/Graphics.hpp"
