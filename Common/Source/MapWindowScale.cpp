@@ -50,7 +50,6 @@ Copyright_License {
 #include "options.h" /* for IBLSCALE() */
 #include "RasterTerrain.h"
 #include "RasterWeather.h"
-#include "Logger.h"
 
 double MapWindow::findMapScaleBarSize(const RECT rc) {
   double pixelsize = DistanceScreenToUser(1); // units/pixel
