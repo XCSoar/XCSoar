@@ -198,7 +198,7 @@ protected:
     tad = cmp.Calculated().TaskAltitudeDifference*0.2+0.8*tad;
 
     bool BeforeFinalGlide =
-      (task.ValidTaskPoint(ActiveTaskPoint+1) 
+      (task.ValidTaskPoint(task.getActiveIndex()+1) 
        && !cmp.Calculated().FinalGlide);
 
     if (BeforeFinalGlide) {
@@ -260,16 +260,12 @@ protected:
       return false;
     }
 
-    mutexTaskData.Lock();
-
     double sunsettime = sun.CalcSunTimes
       (task.getActiveLocation(),
        cmp.Basic(), cmp.Calculated(), GetUTCOffset()/3600);
     double d1 = (cmp.Calculated().TaskTimeToGo
 		 +DetectCurrentTime(&cmp.Basic()))/3600;
     double d0 = (DetectCurrentTime(&cmp.Basic()))/3600;
-
-    mutexTaskData.Unlock();
 
     bool past_sunset = (d1>sunsettime) && (d0<sunsettime);
 
@@ -340,7 +336,7 @@ protected:
 
   bool CheckCondition(const GlideComputer& cmp) {
     if (!task.Valid() || !cmp.Calculated().Flying
-        || (ActiveTaskPoint>0) || !task.ValidTaskPoint(ActiveTaskPoint+1)) {
+        || (task.getActiveIndex()>0) || !task.ValidTaskPoint(task.getActiveIndex()+1)) {
       return false;
     }
     if (cmp.Calculated().LegDistanceToGo>StartRadius) {

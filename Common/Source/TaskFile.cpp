@@ -56,7 +56,7 @@ void Task::ClearTaskFileName() {
   LastTaskFileName[0] = _T('\0');
 }
 
-const TCHAR* Task::getTaskFilename() {
+const TCHAR* Task::getTaskFilename() const {
   return LastTaskFileName;
 }
 
@@ -84,7 +84,7 @@ static int FindOrAddWaypoint(WAYPOINT *read_waypoint) {
 }
 
 
-static bool LoadTaskWaypoints(FILE *file) {
+bool Task::LoadTaskWaypoints(FILE *file) {
   WAYPOINT read_waypoint;
 
   int i;
@@ -108,7 +108,7 @@ static bool LoadTaskWaypoints(FILE *file) {
   return true;
 }
 
-#define  BINFILEMAGICNUMBER     0x5cf77fcf
+#define  BINFILEMAGICNUMBER     0x5cf78fcf
 
 // loads a new task from scratch.
 void Task::LoadNewTask(const TCHAR *szFileName,
@@ -122,11 +122,10 @@ void Task::LoadNewTask(const TCHAR *szFileName,
   bool TaskLoaded = false;
   unsigned magic = 0;
 
-  ActiveTaskPoint = -1;
-  for(i=0;i<MAXTASKPOINTS;i++)
-    {
-      task_points[i].Index = -1;
-    }
+  ActiveTaskPoint = 0;
+  for(i=0;i<MAXTASKPOINTS;i++) {
+    task_points[i].Index = -1;
+  }
 
   FILE *file = _tfopen(szFileName, _T("rb"));
   if(file != NULL)
@@ -258,10 +257,6 @@ void Task::LoadNewTask(const TCHAR *szFileName,
 
   RefreshTask(settings_computer);
 
-  if (!ValidTaskPoint(0)) {
-    ActiveTaskPoint = 0;
-  }
-
   if (TaskInvalid && TaskLoaded) {
     MessageBoxX(
       gettext(TEXT("Error in task file!")),
@@ -319,8 +314,8 @@ void Task::SaveTask(const TCHAR *szFileName)
     }
 
     fclose(file);
-    SetTaskModified(false); // task successfully saved
-    SetTargetModified(false);
+//    SetTaskModified(false); // task successfully saved
+//    SetTargetModified(false);
     _tcscpy(LastTaskFileName, szFileName);
 
   } else {
@@ -334,13 +329,13 @@ void Task::SaveTask(const TCHAR *szFileName)
 
 
 void Task::SaveDefaultTask(void) {
-  if (!task.isTaskAborted()) {
+  if (!isTaskAborted()) {
     TCHAR buffer[MAX_PATH];
 #ifdef GNAV
     LocalPath(buffer, TEXT("persist/Default.tsk"));
 #else
     LocalPath(buffer, TEXT("Default.tsk"));
 #endif
-    task.SaveTask(buffer);
+    SaveTask(buffer);
   }
 }

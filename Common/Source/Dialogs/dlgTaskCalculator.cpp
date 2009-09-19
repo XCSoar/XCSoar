@@ -35,20 +35,19 @@ Copyright_License {
 }
 */
 
-#include "XCSoar.h"
+#include "Dialogs/Internal.hpp"
 #include "Protection.hpp"
-#include <math.h>
 #include "Blackboard.hpp"
 #include "SettingsTask.hpp"
 #include "SettingsComputer.hpp"
 #include "McReady.h"
 #include "Units.hpp"
 #include "Calculations.h" // TODO danger! RefreshTaskStatistics()
-#include "Dialogs/dlgTools.h"
 #include "GlideSolvers.hpp"
-#include "Dialogs.h"
 #include "DataField/Base.hpp"
 #include "MainWindow.hpp"
+
+#include <math.h>
 
 static WndForm *wf=NULL;
 
@@ -137,7 +136,7 @@ static void RefreshCalculator(void) {
   wp = (WndProperty*)wf->FindByName(TEXT("prpRange"));
   if (wp) {
     wp->RefreshDisplay();
-    if (!AATEnabled || !task.ValidTaskPoint(ActiveTaskPoint+1)) {
+    if (!AATEnabled || !task.ValidTaskPoint(task.getActiveIndex()+1)) {
       wp->SetVisible(false);
     } else {
       wp->SetVisible(true);
@@ -184,7 +183,6 @@ static void DoOptimise(void) {
 
   // should do a GUI::ExchangeBlackboard() here and use local storage
 
-  mutexTaskData.Lock();
   targetManipEvent.trigger();
   do {
     myrange = Range;
@@ -230,8 +228,6 @@ static void DoOptimise(void) {
   RefreshCalculator();
 
   targetManipEvent.reset();
-
-  mutexTaskData.Unlock();
 }
 
 
@@ -356,10 +352,10 @@ void dlgTaskCalculatorShowModal(void){
 
   RefreshCalculator();
 
-  if (!AATEnabled || !task.ValidTaskPoint(ActiveTaskPoint+1)) {
+  if (!AATEnabled || !task.ValidTaskPoint(task.getActiveIndex()+1)) {
     ((WndButton *)wf->FindByName(TEXT("Optimise")))->SetVisible(false);
   }
-  if (!task.ValidTaskPoint(ActiveTaskPoint)) {
+  if (!task.ValidTaskPoint(task.getActiveIndex())) {
     ((WndButton *)wf->FindByName(TEXT("Target")))->SetVisible(false);
   }
 

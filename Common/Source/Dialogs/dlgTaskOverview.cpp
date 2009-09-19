@@ -35,17 +35,14 @@ Copyright_License {
 }
 */
 
-#include "XCSoar.h"
+#include "Dialogs/Internal.hpp"
 #include "Protection.hpp"
 #include "Calculations.h" // for RefreshTaskStatistics()
 #include "Blackboard.hpp"
 #include "SettingsTask.hpp"
 #include "TaskFile.hpp"
-#include "Dialogs.h"
-#include "Language.hpp"
 #include "Logger.h"
 #include "McReady.h"
-#include "Dialogs/dlgTools.h"
 #include "InfoBoxLayout.h"
 #include "Math/FastMath.h"
 #include "Screen/Util.hpp"
@@ -92,7 +89,6 @@ static void UpdateFilePointer(void) {
 static void UpdateCaption (void) {
   TCHAR title[MAX_PATH];
   TCHAR name[MAX_PATH] = TEXT("\0");
-  mutexTaskData.Lock();
   int len = _tcslen(task.getTaskFilename());
   if (len>0) {
     int index = 0;
@@ -108,7 +104,6 @@ static void UpdateCaption (void) {
     }
     name[index]= _T('\0');
   }
-  mutexTaskData.Unlock();
 
   if (_tcslen(name)>0) {
     _stprintf(title, TEXT("%s: %s"),
@@ -133,7 +128,6 @@ OnTaskPaintListItem(WindowControl *Sender, Canvas &canvas)
   (void)Sender;
   int n = UpLimit - LowLimit;
   TCHAR sTmp[120];
-  mutexTaskData.Lock();
 
   int w0;
   if (InfoBoxLayout::landscape) {
@@ -150,33 +144,35 @@ OnTaskPaintListItem(WindowControl *Sender, Canvas &canvas)
   if (DrawListIndex < n){
     int i = LowLimit + DrawListIndex;
 
-    if (task_points[i].Index>=0) {
+    if (task.ValidTaskPoint(i)) {
+      TASK_POINT tp = task.getTaskPoint(i);
+
       if (InfoBoxLayout::landscape &&
           AATEnabled && task.ValidTaskPoint(i+1) && (i>0)) {
-        if (task_points[i].AATType==0) {
+        if (tp.AATType==0) {
           _stprintf(sTmp, TEXT("%s %.1f"),
-                    way_points.get(task_points[i].Index).Name,
-                    task_points[i].AATCircleRadius*DISTANCEMODIFY);
+                    way_points.get(tp.Index).Name,
+                    tp.AATCircleRadius*DISTANCEMODIFY);
         } else {
           _stprintf(sTmp, TEXT("%s %.1f"),
-                    way_points.get(task_points[i].Index).Name,
-                    task_points[i].AATSectorRadius*DISTANCEMODIFY);
+                    way_points.get(tp.Index).Name,
+                    tp.AATSectorRadius*DISTANCEMODIFY);
         }
       } else {
         _stprintf(sTmp, TEXT("%s"),
-                  way_points.get(task_points[i].Index).Name);
+                  way_points.get(tp.Index).Name);
       }
 
       canvas.text_clipped(2 * InfoBoxLayout::scale, 2 * InfoBoxLayout::scale,
                           p1 - 4 * InfoBoxLayout::scale, sTmp);
 
       _stprintf(sTmp, TEXT("%.0f %s"),
-		task_points[i].LegDistance*DISTANCEMODIFY,
+		tp.LegDistance*DISTANCEMODIFY,
 		Units::GetDistanceName());
       canvas.text_opaque(p1 + w1 - canvas.text_width(sTmp),
                          2 * InfoBoxLayout::scale, sTmp);
 
-      _stprintf(sTmp, TEXT("%d")TEXT(DEG),  iround(task_points[i].InBound));
+      _stprintf(sTmp, TEXT("%d")TEXT(DEG),  iround(tp.InBound));
       canvas.text_opaque(p2 + w2 - canvas.text_width(sTmp),
                          2 * InfoBoxLayout::scale, sTmp);
     }
@@ -222,13 +218,10 @@ OnTaskPaintListItem(WindowControl *Sender, Canvas &canvas)
       }
     }
   }
-  mutexTaskData.Unlock();
-
 }
 
 
 static void OverviewRefreshTask(void) {
-  mutexTaskData.Lock();
   task.RefreshTask(XCSoarInterface::SettingsComputer());
 
   int i;
@@ -236,22 +229,18 @@ static void OverviewRefreshTask(void) {
   // as the order of other taskpoints hasn't changed
   UpLimit = 0;
   lengthtotal = 0;
-  for (i=0; i<MAXTASKPOINTS; i++) {
-    if (task_points[i].Index != -1) {
-      lengthtotal += task_points[i].LegDistance;
-      UpLimit = i+1;
-    }
-  }
 
+  for (i=0; task.ValidTaskPoint(i); i++) {
+    lengthtotal += task.getTaskPoint(i).LegDistance;
+    UpLimit = i+1;
+  }
   // Simple FAI 2004 triangle rules
   fai_ok = true;
   if (lengthtotal>0) {
-    for (i=0; i<MAXTASKPOINTS; i++) {
-      if (task_points[i].Index != -1) {
-	double lrat = task_stats[i].LengthPercent;
-	if ((lrat>0.45)||(lrat<0.10)) {
-	  fai_ok = false;
-	}
+    for (i=0; task.ValidTaskPoint(i); i++) {
+      double lrat = task.getTaskPoint(i).LengthPercent;
+      if ((lrat>0.45)||(lrat<0.10)) {
+        fai_ok = false;
       }
     }
   } else {
@@ -277,8 +266,6 @@ static void OverviewRefreshTask(void) {
   wTaskList->Redraw();
 
   UpdateCaption();
-  mutexTaskData.Unlock();
-
 }
 
 
@@ -312,30 +299,35 @@ static void OnTaskListEnter(WindowControl * Sender,
         }
       }
 
-      mutexTaskData.Lock();
-      if (ItemIndex>0) {
-	task_points[ItemIndex].Index = task_points[0].Index;
-      } else {
-	if (way_points.verify_index(XCSoarInterface::SettingsComputer().HomeWaypoint)) {
-	  task_points[ItemIndex].Index = XCSoarInterface::SettingsComputer().HomeWaypoint;
-	} else {
-	  task_points[ItemIndex].Index = -1;
-	}
+      {
+        TASK_POINT tp = task.getTaskPoint(ItemIndex);
+
+        if (ItemIndex>0) {
+          tp.Index = task.getWaypointIndex(0);
+        } else {
+          if (way_points.verify_index(XCSoarInterface::SettingsComputer().HomeWaypoint)) {
+            tp.Index = XCSoarInterface::SettingsComputer().HomeWaypoint;
+          } else {
+            tp.Index = -1;
+          }
+        }
+        task.setTaskPoint(ItemIndex, tp);
       }
-      mutexTaskData.Unlock();
 
       int res;
       res = dlgWayPointSelect(XCSoarInterface::Basic().Location);
-      mutexTaskData.Lock();
-      if (res != -1){
-        task_points[ItemIndex].Index = res;
+      {
+        TASK_POINT tp = task.getTaskPoint(ItemIndex);
+        if (res != -1){
+          tp.Index = res;
+        }
+        tp.AATTargetOffsetRadius = 0.0;
+        tp.AATTargetOffsetRadial = 0.0;
+        tp.AATTargetLocked = false;
+        tp.AATSectorRadius = SectorRadius;
+        tp.AATCircleRadius = SectorRadius;
+        task.setTaskPoint(ItemIndex, tp);
       }
-      task_stats[ItemIndex].AATTargetOffsetRadius = 0.0;
-      task_stats[ItemIndex].AATTargetOffsetRadial = 0.0;
-      task_points[ItemIndex].AATSectorRadius = SectorRadius;
-      task_points[ItemIndex].AATCircleRadius = SectorRadius;
-      task_stats[ItemIndex].AATTargetLocked = false;
-      mutexTaskData.Unlock();
 
       if (ItemIndex==0) {
 	dlgTaskWaypointShowModal(ItemIndex, 0, true); // start waypoint

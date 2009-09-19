@@ -34,14 +34,11 @@ Copyright_License {
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
 */
+
 #include "Dialogs/dlgHelpers.hpp"
 #include "Registry.hpp"
-#include "LocalPath.hpp"
 #include "WindowControls.h"
-#include "DataField/Boolean.hpp"
-#include "DataField/Enum.hpp"
-#include "DataField/FileReader.hpp"
-
+#include "DataField/Base.hpp"
 
 bool SetValueRegistryOnChange(WndForm* wfm, 
 			      const TCHAR* field,

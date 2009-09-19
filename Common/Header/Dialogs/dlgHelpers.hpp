@@ -37,11 +37,12 @@ Copyright_License {
 
 #ifndef DIALOG_HELPERS_HPP
 #define DIALOG_HELPERS_HPP
-#include "Dialogs/dlgTools.h"
-#include "SettingsAirspace.hpp"
-#include "SettingsComputer.hpp"
-#include "SettingsTask.hpp"
+
 #include "SettingsUser.hpp"
+
+#include <tchar.h>
+
+class WndForm;
 
 bool SetValueRegistryOnChange(WndForm* wfm, const TCHAR* field,
 			      const TCHAR* reg, bool &value);

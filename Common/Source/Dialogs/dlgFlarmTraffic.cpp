@@ -35,13 +35,11 @@
 }
 */
 
-#include "XCSoar.h"
+#include "Dialogs/Internal.hpp"
 #include "Protection.hpp"
 #include "Settings.hpp"
 #include "SettingsComputer.hpp"
 #include "Blackboard.hpp"
-#include "Dialogs.h"
-#include "Dialogs/dlgTools.h"
 #include "InfoBoxLayout.h"
 #include "UtilsFLARM.hpp"
 #include "Math/Earth.hpp"

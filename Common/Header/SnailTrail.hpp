@@ -65,7 +65,7 @@ public:
   SnailTrail();
   void AddPoint(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated);
 
-  const int getIndex() {
+  int getIndex() const {
     return indexNext;
   }
   const SNAIL_POINT& getPoint(int index) {

@@ -196,24 +196,26 @@ bool MapWindow::on_mouse_double(int x, int y)
 
 bool MapWindow::on_mouse_move(int x, int y)
 {
-  mutexTaskData.Lock();
   if (AATEnabled && SettingsMap().TargetPan && (TargetDrag_State>0)) {
     // target follows "finger" so easier to drop near edge of
     // sector
     if (TargetDrag_State == 1) {
       GEOPOINT mouseMove;
       Screen2LonLat((int)x, (int)y, mouseMove);
-      if (task.InAATTurnSector(mouseMove, 
-                               SettingsMap().TargetPanIndex)) {
+      unsigned index = SettingsMap().TargetPanIndex;
+      if (task.InAATTurnSector(mouseMove, index)) {
 	// update waypoints so if we drag out of the cylinder, it
 	// will remain adjacent to the edge
-	task_stats[SettingsMap().TargetPanIndex].AATTargetLocation = mouseMove;
+
+        TASK_POINT tp = task.getTaskPoint(index);
+        tp.AATTargetLocation = mouseMove;
+        task.setTaskPoint(index, tp);
 	TargetDrag_Location = mouseMove;
+
 	draw_masked_bitmap(get_canvas(), MapGfx.hBmpTarget, x, y, 10, 10, true);
       }
     }
   }
-  mutexTaskData.Unlock();
   return true;
 }
 
@@ -231,11 +233,10 @@ bool MapWindow::on_mouse_down(int x, int y)
   XstartScreen = x;
   YstartScreen = y;
 
-  mutexTaskData.Lock();
   if (AATEnabled && SettingsMap().TargetPan) {
     if (task.ValidTaskPoint(SettingsMap().TargetPanIndex)) {
       POINT tscreen;
-      LonLat2Screen(task_stats[SettingsMap().TargetPanIndex].AATTargetLocation,
+      LonLat2Screen(task.getTargetLocation(SettingsMap().TargetPanIndex),
 		    tscreen);
       double distance = isqrt4((long)((XstartScreen-tscreen.x)
 			       *(XstartScreen-tscreen.x)+
@@ -248,7 +249,6 @@ bool MapWindow::on_mouse_down(int x, int y)
       }
     }
   }
-  mutexTaskData.Unlock();
   return true;
 }
 
@@ -311,13 +311,11 @@ bool MapWindow::on_mouse_up(int x, int y)
   Screen2LonLat(x, y, G);
 
   if (AATEnabled && my_target_pan && (TargetDrag_State>0)) {
-    mutexTaskData.Lock();
     TargetDrag_State = 2;
     if (task.InAATTurnSector(G, SettingsMap().TargetPanIndex)) {
       // if release mouse out of sector, don't update w/ bad coords
       TargetDrag_Location = G;
     }
-    mutexTaskData.Unlock();
     return true;
   }
  

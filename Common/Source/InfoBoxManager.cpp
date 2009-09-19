@@ -503,7 +503,7 @@ void InfoBoxManager::DisplayInfoBox(void)
 
     bool needupdate = ((DisplayType[i] != DisplayTypeLast[i])||first);
 
-    int theactive = ActiveTaskPoint;
+    int theactive = task.getActiveIndex();
     if (!task.ValidTaskPoint(theactive)) {
       theactive = -1;
     }
@@ -606,13 +606,11 @@ void InfoBoxManager::DisplayInfoBox(void)
     case 14: // Next waypoint
 
       if (theactive != -1){
-        int index;
-        index = task_points[theactive].Index;
-        if (index>=0) {
+        int index = task.getWaypointIndex();
+        if ((index>=0)&& way_points.verify_index(index)) {
           InfoBoxes[i]->
             SetComment(way_points.get(index).Comment);
         }
-        break;
       }
       InfoBoxes[i]->SetComment(TEXT(""));
       break;

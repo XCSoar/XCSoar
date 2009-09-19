@@ -35,10 +35,8 @@ Copyright_License {
 }
 */
 
-#include "XCSoar.h"
-#include "Interface.hpp"
+#include "Dialogs/Internal.hpp"
 #include "Units.hpp"
-#include "Dialogs/dlgTools.h"
 #include "LocalTime.hpp"
 #include "MainWindow.hpp"
 

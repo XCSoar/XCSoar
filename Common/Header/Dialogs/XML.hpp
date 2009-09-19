@@ -35,13 +35,22 @@ Copyright_License {
 }
 */
 
-#include "XCSoar.h"
-#include "Units.hpp"
-#include "Waypointparser.h"
-#include "Logger.h"
-#include "Dialogs/dlgTools.h"
+#ifndef XCSOAR_DIALOGS_XML_HPP
+#define XCSOAR_DIALOGS_XML_HPP
 
-void dlgStatusSystemShowModal(void){
+#include <tchar.h>
 
+class WndForm;
+class ContainerWindow;
 
-}
+typedef struct{
+  const TCHAR *Name;
+  void *Ptr;
+}CallBackTableEntry_t;
+
+WndForm *dlgLoadFromXML(CallBackTableEntry_t *LookUpTable,
+                        const TCHAR *FileName,
+                        ContainerWindow &Parent,
+                        const TCHAR *resource=NULL);
+
+#endif

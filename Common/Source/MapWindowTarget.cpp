@@ -113,6 +113,7 @@ bool MapWindow::SetTargetPan(bool do_pan, int target_point) {
 
 bool MapWindow::TargetDragged(double *longitude, double *latitude) {
   bool retval = false;
+/* JMW illegal
   mutexTaskData.Lock();
   if (TargetDrag_State >0) { // always return true if we're dragging
 			     // or just stopped dragging, so screen is
@@ -125,6 +126,7 @@ bool MapWindow::TargetDragged(double *longitude, double *latitude) {
     retval = true;
   }
   mutexTaskData.Unlock();
+*/
   return retval;
 }
 

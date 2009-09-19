@@ -76,6 +76,9 @@ void WindowCanvas::reset()
 bool
 PaintWindow::register_class(HINSTANCE hInstance)
 {
+#ifdef ENABLE_SDL
+  return true; // XXX
+#else /* !ENABLE_SDL */
   WNDCLASS wc;
 
   wc.hInstance = hInstance;
@@ -95,6 +98,7 @@ PaintWindow::register_class(HINSTANCE hInstance)
   wc.lpszClassName = TEXT("PaintWindow");
 
   return RegisterClass(&wc) != 0;
+#endif /* !ENABLE_SDL */
 }
 
 void

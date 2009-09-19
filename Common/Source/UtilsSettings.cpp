@@ -97,7 +97,20 @@ void SettingsLeave() {
   // from running, while shared data is potentially reloaded.
 
   mutexBlackboard.Lock();
-  mutexTaskData.Lock();
+
+/*
+  if (MAPFILECHANGED) { printf("MAPFILECHANGED\n"); }
+  if (AIRSPACEFILECHANGED) { printf("AIRSPACEFILECHANGED\n"); }
+  if (AIRFIELDFILECHANGED) { printf("AIRFIELDFILECHANGED\n"); }
+  if (WAYPOINTFILECHANGED) { printf("WAYPOINTFILECHANGED\n"); }
+  if (TERRAINFILECHANGED) { printf("TERRAINFILECHANGED\n"); }
+  if (TOPOLOGYFILECHANGED) { printf("TOPOLOGYFILECHANGED\n"); }
+  if (POLARFILECHANGED) { printf("POLARFILECHANGED\n"); }
+  if (LANGUAGEFILECHANGED) { printf("LANGUAGEFILECHANGED\n"); }
+  if (STATUSFILECHANGED) { printf("STATUSFILECHANGED\n"); }
+  if (INPUTFILECHANGED) { printf("INPUTFILECHANGED\n"); }
+  if (COMPORTCHANGED) { printf("COMPORTCHANGED\n"); }
+*/
 
   if(MAPFILECHANGED) {
     AIRSPACEFILECHANGED = true;
@@ -127,6 +140,8 @@ void SettingsLeave() {
 
       //
       terrain.ServiceFullReload(XCSoarInterface::Basic().Location);
+
+      task.RefreshTask(XCSoarInterface::SetSettingsComputer());
     }
 
   if (TOPOLOGYFILECHANGED)
@@ -157,7 +172,6 @@ void SettingsLeave() {
     XCSoarInterface::main_window.map.set_focus();
   }
 
-  mutexTaskData.Unlock();
   mutexBlackboard.Unlock();
 
   if(COMPORTCHANGED) {

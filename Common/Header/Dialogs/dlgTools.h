@@ -38,20 +38,7 @@ Copyright_License {
 #if !defined(__DLGTOOLS_H)
 #define __DLGTOOLS_H
 
-#include "WindowControls.h"
-#include "Interface.hpp"
-
 #define DeclareCallBackEntry(x)        {TEXT(#x), (void *)x}
 int DLGSCALE(int x);
-
-typedef struct{
-  const TCHAR *Name;
-  void *Ptr;
-}CallBackTableEntry_t;
-
-WndForm *dlgLoadFromXML(CallBackTableEntry_t *LookUpTable,
-                        const TCHAR *FileName,
-                        ContainerWindow &Parent,
-                        const TCHAR *resource=NULL);
 
 #endif

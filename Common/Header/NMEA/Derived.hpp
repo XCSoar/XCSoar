@@ -166,7 +166,7 @@ struct DERIVED_INFO
   bool InStartSector;
   int StartSectorWaypoint;
 
-  int ActiveTaskPoint; 
+  unsigned ActiveTaskPoint; 
   int ReadyWayPoint;
 
   // detects when glider is on ground for several seconds

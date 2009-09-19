@@ -419,13 +419,13 @@ void XCSoarInterface::Shutdown(void) {
   // Clear data
 
   CreateProgressDialog(gettext(TEXT("Shutdown, saving task...")));
-  StartupStore(TEXT("Save default task\n"));
+  StartupStore(TEXT("Resume abort task\n"));
   task.ResumeAbortTask(SettingsComputer(), -1); // turn off abort if it was on.
+  StartupStore(TEXT("Save default task\n"));
   task.SaveDefaultTask();
-
   StartupStore(TEXT("Clear task data\n"));
-
   task.ClearTask();
+  StartupStore(TEXT("Close airspace\n"));
   CloseAirspace();
 
   StartupStore(TEXT("Close waypoints\n"));

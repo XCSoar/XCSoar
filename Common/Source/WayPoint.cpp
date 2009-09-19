@@ -47,7 +47,7 @@ int WaypointsOutOfRange = 1; // include
 
 void WaypointScan::scan_forward(WaypointVisitor &visitor)
 {
-  ScopeLock protect(mutexTaskData);
+  // JMW TODO protect with mutex (whole waypoint list class)
 
   for (unsigned i = 0; way_points.verify_index(i); ++i) {
     WAYPOINT &way_point = way_points.set(i);

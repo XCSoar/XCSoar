@@ -45,7 +45,7 @@ Copyright_License {
 #include "LocalTime.hpp"
 
 void GlideComputer::AnnounceWayPointSwitch(bool do_advance) {
-  if (ActiveTaskPoint == 0) {
+  if (task.getActiveIndex() == 0) {
 //    InputEvents::processGlideComputer(GCE_TASK_START);
 // JMW why commented out?
     TCHAR TempTime[40];
@@ -73,10 +73,9 @@ void GlideComputer::AnnounceWayPointSwitch(bool do_advance) {
   // JMW this should not happen here!
   // JMW Task....
   if (do_advance) {
-    ActiveTaskPoint++;
+    task.advanceTaskPoint(SettingsComputer());
     SetLegStart();
   }
-  SelectedWaypoint = ActiveTaskPoint;
   // set waypoint detail to active task WP
 
   GlideComputerStats::SetFastLogging();

@@ -102,11 +102,9 @@ GlideComputerTask::SortLandableWaypoints()
   int SortedApproxIndex[MAXTASKPOINTS*2];
   int i, k, l;
   double arrival_altitude;
-  int active_waypoint_on_entry;
+  unsigned active_waypoint_on_entry;
 
-  ScopeLock protect(mutexTaskData);
-
-  active_waypoint_on_entry = ActiveTaskPoint;
+  active_waypoint_on_entry = task.getActiveIndex();
 
   // Do preliminary fast search
   POINT sc_aircraft;
@@ -247,7 +245,7 @@ GlideComputerTask::SortLandableWaypoints()
   int found_home_waypoint = -1;
   for (i=0; i<MAXTASKPOINTS; i++) {
     if (task.Valid()) {
-      if (SortedLandableIndex[i] == task_points[ActiveTaskPoint].Index) {
+      if (SortedLandableIndex[i] == task.getWaypointIndex()) {
         found_active_waypoint = i;
       }
     }
@@ -273,57 +271,46 @@ GlideComputerTask::SortLandableWaypoints()
   bool new_closest_waypoint = false;
 
   if (found_active_waypoint != -1) {
-    ActiveTaskPoint = found_active_waypoint;
+    task.setActiveIndex(found_active_waypoint);
   } else {
     // if not found, keep on field or set active waypoint to closest
-    if (task.Valid()){
+    int wp_index = task.getWaypointIndex();
+    if (wp_index>=0){
       arrival_altitude =
-        CalculateWaypointArrivalAltitude(way_points.get(task_points[ActiveTaskPoint].Index),
-                                         way_points.set_calc(task_points[ActiveTaskPoint].Index));
+        CalculateWaypointArrivalAltitude(way_points.get(wp_index),
+                                         way_points.set_calc(wp_index));
     } else {
       arrival_altitude = 0;
     }
     if (arrival_altitude <= 0){   // last active is no more reachable,
                                   // switch to new closest
       new_closest_waypoint = true;
-      ActiveTaskPoint = 0;
+      task.setActiveIndex(0);
     } else {
       // last active is reachable but not in list, add to end of
       // list (or overwrite laste one)
-      if (ActiveTaskPoint>=0){
-        for (i=0; i<MAXTASKPOINTS-1; i++) {     // find free slot
-          if (SortedLandableIndex[i] == -1)     // free slot found (if
+      for (i=0; i<MAXTASKPOINTS-1; i++) {     // find free slot
+        if (SortedLandableIndex[i] == -1)     // free slot found (if
                                                 // not, i index the
                                                 // last entry of the
                                                 // list)
             break;
-        }
-        SortedLandableIndex[i] = task_points[ActiveTaskPoint].Index;
-        ActiveTaskPoint = i;
       }
+      SortedLandableIndex[i] = task.getWaypointIndex();
+      task.setActiveIndex(i);
     }
-  }
-
-  // set new waypoints in task
-
-  for (i = 0; way_points.verify_index(i); i++) {
-    way_points.set_calc(i).InTask = false;
   }
 
   int last_closest_waypoint=0;
   if (new_closest_waypoint) {
-    last_closest_waypoint = task_points[0].Index;
+    last_closest_waypoint = task.getWaypointIndex(0);
   }
 
-  for (i=0; i<MAXTASKPOINTS; i++){
-    task_points[i].Index = SortedLandableIndex[i];
-    if (task.ValidTaskPoint(i)) {
-      way_points.set_calc(task_points[i].Index).InTask = false;
-    }
-  }
+  task.setTaskIndices(SortedLandableIndex);
+  task.RefreshTask(SettingsComputer());
 
   if (new_closest_waypoint) {
-    if ((task_points[0].Index != last_closest_waypoint) 
+    if ((task.getWaypointIndex(0) != last_closest_waypoint) 
         && task.ValidTaskPoint(0)) {
       double last_wp_distance= 10000.0;
       if (last_closest_waypoint>=0) {
@@ -335,20 +322,10 @@ GlideComputerTask::SortLandableWaypoints()
         // than 2 km
         Message::AddMessage(TEXT("Closest Airfield Changed!"));
       }
-
     }
   }
 
-  if (EnableMultipleStartPoints) {
-    for (i=0; i<MAXSTARTPOINTS; i++) {
-      if (task_start_stats[i].Active &&
-          way_points.verify_index(task_start_points[i].Index)) {
-        way_points.set_calc(task_start_points[i].Index).InTask = true;
-      }
-    }
-  }
-
-  if (active_waypoint_on_entry != ActiveTaskPoint){
-    SelectedWaypoint = ActiveTaskPoint;
+  if (active_waypoint_on_entry != task.getActiveIndex()){
+    SelectedWaypoint = task.getActiveIndex();
   }
 }

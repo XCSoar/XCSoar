@@ -337,7 +337,7 @@ VegaVoiceMessage::Update(const NMEA_INFO *Basic,
 			 const SETTINGS_COMPUTER &settings)
 {
   TCHAR text[80];
-  static int LastWayPoint = -1;
+  static unsigned LastWayPoint = 1000;
 
   switch(id) {
   case VV_GENERAL:
@@ -366,7 +366,7 @@ VegaVoiceMessage::Update(const NMEA_INFO *Basic,
     break;
   case VV_WAYPOINTDISTANCE:
     if ((!Calculated->Circling)
-        	&& (ActiveTaskPoint>=0)) {
+        && (task.Valid())) {
 
       // Gives the distance to the active waypoint every X seconds,
       // optionally limited when at last 20 km to go?
@@ -421,8 +421,8 @@ VegaVoiceMessage::Update(const NMEA_INFO *Basic,
     break;
   case VV_NEWWAYPOINT:
     if (!settings.EnableVoiceNewWaypoint) return false;
-    if (ActiveTaskPoint != LastWayPoint) {
-      LastWayPoint = ActiveTaskPoint;
+    if (task.getActiveIndex() != LastWayPoint) {
+      LastWayPoint = task.getActiveIndex();
       // Reports that a new waypoint is active
       // e.g.:
       // Now: "INFO"

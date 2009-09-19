@@ -50,74 +50,61 @@ Copyright_License {
 #include "Interface.hpp"
 
 const TCHAR *FormatterWaypoint::Render(int *color) {
-  int thewaypoint = ActiveTaskPoint;
-  mutexTaskData.Lock();
-  if(task.ValidTaskPoint(thewaypoint))
-    {
-      int index = task_points[thewaypoint].Index;
-      const WAYPOINT &way_point = way_points.get(index);
-      const WPCALC &wpcalc = way_points.get_calc(index);
+  int index = task.getWaypointIndex();
+  if (index>=0) {
+    const WAYPOINT &way_point = way_points.get(index);
+    const WPCALC &wpcalc = way_points.get_calc(index);
 
-      if (wpcalc.Reachable) {
-	*color = 2; // blue text
-      } else {
-	*color = 0; // black text
-      }
-      if ( SettingsMap().DisplayTextType == DISPLAYFIRSTTHREE)
-        {
-          _tcsncpy(Text, way_point.Name,3);
-          Text[3] = '\0';
-        }
-      else if( SettingsMap().DisplayTextType == DISPLAYNUMBER)
-        {
-          _stprintf(Text,_T("%d"), way_point.Number );
-        }
-      else
-        {
-          _tcsncpy(Text, way_point.Name,
-                   (sizeof(Text)/sizeof(TCHAR))-1);
-          Text[(sizeof(Text)/sizeof(TCHAR))-1] = '\0';
-        }
+    if (wpcalc.Reachable) {
+      *color = 2; // blue text
+    } else {
+      *color = 0; // black text
     }
-  else
+    if ( SettingsMap().DisplayTextType == DISPLAYFIRSTTHREE)
     {
-      Valid = false;
-      RenderInvalid(color);
+      _tcsncpy(Text, way_point.Name,3);
+      Text[3] = '\0';
     }
-  mutexTaskData.Unlock();
+    else if( SettingsMap().DisplayTextType == DISPLAYNUMBER)
+    {
+      _stprintf(Text,_T("%d"), way_point.Number );
+    }
+    else
+    {
+      _tcsncpy(Text, way_point.Name,
+               (sizeof(Text)/sizeof(TCHAR))-1);
+      Text[(sizeof(Text)/sizeof(TCHAR))-1] = '\0';
+    }
+  }
+  else
+  {
+    Valid = false;
+    RenderInvalid(color);
+  }
 
   return(Text);
 }
 
 // VENTA3 Alternate destinations
 const TCHAR *FormatterAlternate::RenderTitle(int *color) {
-  mutexTaskData.Lock();
-  if(way_points.verify_index(ActiveAlternate))
+  if(way_points.verify_index(ActiveAlternate)) {
+    const WAYPOINT &way_point = way_points.get(ActiveAlternate);
+    
+    if ( SettingsMap().DisplayTextType == DISPLAYFIRSTTHREE)
     {
-      const WAYPOINT &way_point = way_points.get(ActiveAlternate);
-
-      if ( SettingsMap().DisplayTextType == DISPLAYFIRSTTHREE)
-        {
-          _tcsncpy(Text, way_point.Name,3);
-          Text[3] = '\0';
-        }
-      else if( SettingsMap().DisplayTextType == DISPLAYNUMBER)
-        {
-          _stprintf(Text, _T("%d"), way_point.Number);
-        }
-      else
-        {
-          _tcsncpy(Text, way_point.Name,
-                   (sizeof(Text)/sizeof(TCHAR))-1);
-          Text[(sizeof(Text)/sizeof(TCHAR))-1] = '\0';
-        }
+      _tcsncpy(Text, way_point.Name,3);
+      Text[3] = '\0';
+    } else if( SettingsMap().DisplayTextType == DISPLAYNUMBER) {
+      _stprintf(Text, _T("%d"), way_point.Number);
+    } else {
+      _tcsncpy(Text, way_point.Name,
+               (sizeof(Text)/sizeof(TCHAR))-1);
+      Text[(sizeof(Text)/sizeof(TCHAR))-1] = '\0';
     }
-  else
-    {
-      Valid = false;
-      RenderInvalid(color);
-    }
-  mutexTaskData.Unlock();
+  } else {
+    Valid = false;
+    RenderInvalid(color);
+  }
 
   return(Text);
 }
@@ -129,7 +116,6 @@ const TCHAR *FormatterAlternate::RenderTitle(int *color) {
 const TCHAR *
 FormatterAlternate::Render(int *color)
 {
-  mutexTaskData.Lock();
   if(Valid && way_points.verify_index(ActiveAlternate)) {
     const WPCALC &wpcalc = way_points.get_calc(ActiveAlternate);
 
@@ -168,72 +154,65 @@ FormatterAlternate::Render(int *color)
     Valid = false;
     RenderInvalid(color);
   }
-  mutexTaskData.Unlock();
   return(Text);
 }
 
 
 void FormatterAlternate::AssignValue(int i) {
-  mutexTaskData.Lock();
-   switch (i) {
-   case 67:
-     if (!SettingsComputer().EnableAlternate1) { 
-       // first run, activate calculations
-       SetSettingsComputer().EnableAlternate1 = true;
-       Value=INVALID_GR;
-     } else {
-       if ( way_points.verify_index(SettingsComputer().Alternate1) ) 
-         Value = way_points.get_calc(SettingsComputer().Alternate1).GR;
-       else 
-	 Value=INVALID_GR;
+  switch (i) {
+  case 67:
+    if (!SettingsComputer().EnableAlternate1) { 
+      // first run, activate calculations
+      SetSettingsComputer().EnableAlternate1 = true;
+      Value=INVALID_GR;
+    } else {
+      if ( way_points.verify_index(SettingsComputer().Alternate1) ) 
+        Value = way_points.get_calc(SettingsComputer().Alternate1).GR;
+      else 
+        Value=INVALID_GR;
+    }
+    break;
+    /*
+      if ( way_points.verify_index(Alternate1) ) Value=WayPointCalc[Alternate1].GR;
+      else Value=INVALID_GR;
+      break;
+    */
+  case 68:
+    if (!SettingsComputer().EnableAlternate2) { // first run, activate calculations
+      SetSettingsComputer().EnableAlternate2 = true;
+      Value=INVALID_GR;
+    } else {
+      if ( way_points.verify_index(SettingsComputer().Alternate2) ) 
+        Value = way_points.get_calc(SettingsComputer().Alternate2).GR;
+      else Value=INVALID_GR;
      }
-     break;
-     /*
-       if ( way_points.verify_index(Alternate1) ) Value=WayPointCalc[Alternate1].GR;
-       else Value=INVALID_GR;
-       break;
-     */
-   case 68:
-     if (!SettingsComputer().EnableAlternate2) { // first run, activate calculations
-       SetSettingsComputer().EnableAlternate2 = true;
-       Value=INVALID_GR;
-     } else {
-       if ( way_points.verify_index(SettingsComputer().Alternate2) ) 
-         Value = way_points.get_calc(SettingsComputer().Alternate2).GR;
-       else Value=INVALID_GR;
-     }
-     break;
-   case 69:
-     if (!SettingsComputer().EnableBestAlternate) { 
-       // first run, waiting for slowcalculation loop
-       SetSettingsComputer().EnableBestAlternate = true;	  // activate it
-       Value=INVALID_GR;
-     } else {
-       if ( way_points.verify_index(Calculated().BestAlternate))
-         Value = way_points.get_calc(Calculated().BestAlternate).GR;
-       else
-	 Value=INVALID_GR;
-     }
-     break;
-   default:
-     Value=66.6; // something evil to notice..
-     break;
-   }
+    break;
+  case 69:
+    if (!SettingsComputer().EnableBestAlternate) { 
+      // first run, waiting for slowcalculation loop
+      SetSettingsComputer().EnableBestAlternate = true;	  // activate it
+      Value=INVALID_GR;
+    } else {
+      if ( way_points.verify_index(Calculated().BestAlternate))
+        Value = way_points.get_calc(Calculated().BestAlternate).GR;
+      else
+        Value=INVALID_GR;
+    }
+    break;
+  default:
+    Value=66.6; // something evil to notice..
+    break;
+  }
 
-   Valid=false;
-   if (Value < INVALID_GR) {
-    	Valid = true;
-	if (Value >= 100 )
-	  {
-	    _tcscpy(Format, _T("%1.0f"));
-	  }
-	else
-	  {
-	    _tcscpy(Format, _T("%1.1f"));
-	  }
-   }
-
-   mutexTaskData.Unlock();
+  Valid=false;
+  if (Value < INVALID_GR) {
+    Valid = true;
+    if (Value >= 100 ) {
+      _tcscpy(Format, _T("%1.0f"));
+    } else {
+      _tcscpy(Format, _T("%1.1f"));
+    }
+  }
 }
 
 
@@ -241,8 +220,8 @@ void FormatterAlternate::AssignValue(int i) {
 
 const TCHAR *FormatterDiffBearing::Render(int *color) {
 
-  if (task.ValidTaskPoint(ActiveTaskPoint)
-      && Calculated().WaypointDistance > 10.0) {
+  if (task.Valid()
+      && (Calculated().WaypointDistance > 10.0)) {
     Valid = true;
 
     Value = Calculated().WaypointBearing -  Basic().TrackBearing;

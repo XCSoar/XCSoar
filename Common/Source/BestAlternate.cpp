@@ -97,7 +97,6 @@ GlideComputerTask::SearchBestAlternate()
   if (searchrange > ALTERNATE_MAXRANGE)
     searchrange=ALTERNATE_MAXRANGE;
 
-  mutexTaskData.Lock();
   active_bestalternate_on_entry = Calculated().BestAlternate;
 
   // Do preliminary fast search
@@ -441,8 +440,6 @@ GlideComputerTask::SearchBestAlternate()
          ((safecalc - way_points.get(bestalternate).Altitude) > ALTERNATE_QUIETMARGIN))
       AlertBestAlternate(1);
   }
-
-  mutexTaskData.Unlock();
 }
 
 /*

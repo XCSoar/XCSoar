@@ -139,31 +139,31 @@ void InfoBoxFormatter::AssignValue(int i) {
     break;
   case 11:
     Value = DISTANCEMODIFY*Calculated().WaypointDistance;
-    Valid = task.ValidTaskPoint(ActiveTaskPoint);
+    Valid = task.ValidTaskPoint(task.getActiveIndex());
     break;
   case 12:
     Value = ALTITUDEMODIFY*Calculated().NextAltitudeDifference;
-    Valid = task.ValidTaskPoint(ActiveTaskPoint);
+    Valid = task.ValidTaskPoint(task.getActiveIndex());
     break;
   case 13:
     Value = ALTITUDEMODIFY*Calculated().NextAltitudeRequired;
-    Valid = task.ValidTaskPoint(ActiveTaskPoint);
+    Valid = task.ValidTaskPoint(task.getActiveIndex());
     break;
   case 14:
     Value = 0; // Next Waypoint Text
     break;
   case 15:
     Value = ALTITUDEMODIFY*Calculated().TaskAltitudeDifference;
-    Valid = task.ValidTaskPoint(ActiveTaskPoint);
+    Valid = task.ValidTaskPoint(task.getActiveIndex());
     break;
   case 16:
     Value = ALTITUDEMODIFY*Calculated().TaskAltitudeRequired;
-    Valid = task.ValidTaskPoint(ActiveTaskPoint);
+    Valid = task.ValidTaskPoint(task.getActiveIndex());
     break;
   case 17:
     Value = TASKSPEEDMODIFY*Calculated().TaskSpeed;
-    if (ActiveTaskPoint>=1) {
-      Valid = task.ValidTaskPoint(ActiveTaskPoint);
+    if (task.getActiveIndex()>=1) {
+      Valid = task.ValidTaskPoint(task.getActiveIndex());
     } else {
       Valid = false;
     }
@@ -174,13 +174,13 @@ void InfoBoxFormatter::AssignValue(int i) {
     } else {
       Value = DISTANCEMODIFY*Calculated().TaskDistanceToGo;
     }
-    Valid = task.ValidTaskPoint(ActiveTaskPoint);
+    Valid = task.ValidTaskPoint(task.getActiveIndex());
     break;
   case 19:
     if (Calculated().LDFinish== 999) {
       Valid = false;
     } else {
-      Valid = task.ValidTaskPoint(ActiveTaskPoint);
+      Valid = task.ValidTaskPoint(task.getActiveIndex());
       if (Calculated().ValidFinish) {
         Value = 0;
       } else {
@@ -216,22 +216,22 @@ void InfoBoxFormatter::AssignValue(int i) {
     break;
   case 28:
     Value = DISTANCEMODIFY*Calculated().AATMaxDistance ;
-    Valid = task.ValidTaskPoint(ActiveTaskPoint) && AATEnabled;
+    Valid = task.ValidTaskPoint(task.getActiveIndex()) && AATEnabled;
     break;
   case 29:
     Value = DISTANCEMODIFY*Calculated().AATMinDistance ;
-    Valid = task.ValidTaskPoint(ActiveTaskPoint) && AATEnabled;
+    Valid = task.ValidTaskPoint(task.getActiveIndex()) && AATEnabled;
     break;
   case 30:
     Value = TASKSPEEDMODIFY*Calculated().AATMaxSpeed;
-    Valid = task.ValidTaskPoint(ActiveTaskPoint) && AATEnabled;
+    Valid = task.ValidTaskPoint(task.getActiveIndex()) && AATEnabled;
     if (Calculated().AATTimeToGo<1) {
       Valid = false;
     }
     break;
   case 31:
     Value = TASKSPEEDMODIFY*Calculated().AATMinSpeed;
-    Valid = task.ValidTaskPoint(ActiveTaskPoint) && AATEnabled;
+    Valid = task.ValidTaskPoint(task.getActiveIndex()) && AATEnabled;
     if (Calculated().AATTimeToGo<1) {
       Valid = false;
     }
@@ -258,7 +258,7 @@ void InfoBoxFormatter::AssignValue(int i) {
     if (Calculated().LDNext== 999) {
       Valid = false;
     } else {
-      Valid = task.ValidTaskPoint(ActiveTaskPoint);
+      Valid = task.ValidTaskPoint(task.getActiveIndex());
       Value = Calculated().LDNext;
     }
     break;
@@ -281,11 +281,11 @@ void InfoBoxFormatter::AssignValue(int i) {
     break;
   case 51:
     Value = DISTANCEMODIFY*Calculated().AATTargetDistance ;
-    Valid = task.ValidTaskPoint(ActiveTaskPoint) && AATEnabled;
+    Valid = task.ValidTaskPoint(task.getActiveIndex()) && AATEnabled;
     break;
   case 52:
     Value = TASKSPEEDMODIFY*Calculated().AATTargetSpeed;
-    Valid = task.ValidTaskPoint(ActiveTaskPoint) && AATEnabled;
+    Valid = task.ValidTaskPoint(task.getActiveIndex()) && AATEnabled;
     if (Calculated().AATTimeToGo<1) {
       Valid = false;
     }
@@ -326,8 +326,8 @@ void InfoBoxFormatter::AssignValue(int i) {
     break;
   case 59:
     Value = TASKSPEEDMODIFY*Calculated().TaskSpeedInstantaneous;
-    if (ActiveTaskPoint>=1) {
-      Valid = task.ValidTaskPoint(ActiveTaskPoint);
+    if (task.getActiveIndex()>=1) {
+      Valid = task.ValidTaskPoint(task.getActiveIndex());
     } else {
       Valid = false;
     }
@@ -342,8 +342,8 @@ void InfoBoxFormatter::AssignValue(int i) {
     break;
   case 61:
     Value = TASKSPEEDMODIFY*Calculated().TaskSpeedAchieved;
-    if (ActiveTaskPoint>=1) {
-      Valid = task.ValidTaskPoint(ActiveTaskPoint);
+    if (task.getActiveIndex()>=1) {
+      Valid = task.ValidTaskPoint(task.getActiveIndex());
     } else {
       Valid = false;
     }
@@ -360,8 +360,8 @@ void InfoBoxFormatter::AssignValue(int i) {
     break;
   case 64:
     Value = LIFTMODIFY*Calculated().DistanceVario;
-    if (ActiveTaskPoint>=1) {
-      Valid = task.ValidTaskPoint(ActiveTaskPoint);
+    if (task.getActiveIndex()>=1) {
+      Valid = task.ValidTaskPoint(task.getActiveIndex());
     } else {
       Valid = false;
     }
@@ -388,7 +388,7 @@ void InfoBoxFormatter::AssignValue(int i) {
     if (Calculated().GRFinish== 999) {
       Valid = false;
     } else {
-      Valid = task.ValidTaskPoint(ActiveTaskPoint);
+      Valid = task.ValidTaskPoint(task.getActiveIndex());
       if (Calculated().ValidFinish) {
 	Value = 0;
       } else {

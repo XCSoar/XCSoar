@@ -35,10 +35,8 @@ Copyright_License {
 }
 */
 
-#include "XCSoar.h"
+#include "Dialogs/Internal.hpp"
 #include "Protection.hpp"
-#include "Dialogs.h"
-#include "Language.hpp"
 #include "Blackboard.hpp"
 #include "Settings.hpp"
 #include "SettingsTask.hpp"
@@ -57,8 +55,6 @@ Copyright_License {
 #include "Components.hpp"
 
 #include <assert.h>
-
-#include "Dialogs/dlgTools.h"
 
 static WndForm *wf=NULL;
 static bool multi_page = false;
@@ -477,19 +473,12 @@ static void UpdateValuesRules(void) {
   }
   // StartMaxHeight, StartMaxSpeed;
 
-  //  double start_h;
-  mutexTaskData.Lock();
-
   wp = (WndProperty*)wf->FindByName(TEXT("prpStartPoint"));
-
-  if (task.ValidTaskPoint(0)) {
-    //    start_h = WayPointList[task_points[0].Index].Altitude;
-    if (wp) {
-      wp->SetText(way_points.get(task_points[0].Index).Name);
-    }
-  } else {
-    //    start_h = 0;
-    if (wp) {
+  if (wp) {
+    int wp_index = task.getWaypointIndex(0);
+    if (wp_index>=0) {
+      wp->SetText(way_points.get(wp_index).Name);
+    } else {
       wp->SetText(TEXT(""));
     }
   }
@@ -517,7 +506,6 @@ static void UpdateValuesRules(void) {
     wp->SetText(Temp);
   }
 
-  mutexTaskData.Unlock();
 }
 
 

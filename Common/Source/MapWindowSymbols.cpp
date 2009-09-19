@@ -511,9 +511,7 @@ void MapWindow::DrawFinalGlide(Canvas &canvas, const RECT rc)
   int Offset0;
   int i;
   
-  ScopeLock protect(mutexTaskData);
   if (task.Valid()){
-    // if (ActiveTaskPoint >= 0) {
     
     const int y0 = ( (rc.bottom - rc.top )/2)+rc.top;
     
@@ -682,7 +680,8 @@ void MapWindow::DrawFinalGlide(Canvas &canvas, const RECT rc)
                     IBLSCALE(1),
                     Value);
         
-        if (Units::GetUnitBitmap(Units::GetUserAltitudeUnit(), &Bmp, &BmpPos, &BmpSize, 0)){
+        if (Units::GetUnitBitmap(Units::GetUserAltitudeUnit(), 
+                                 &Bmp, &BmpPos, &BmpSize, 0)){
           draw_bitmap(canvas, *Bmp, 
                       x + TextSize.cx + IBLSCALE(1), y,
                       BmpPos.x, BmpPos.y, 
@@ -713,8 +712,8 @@ void MapWindow::DrawCompass(Canvas &canvas, const RECT rc)
     // North arrow
     PolygonRotateShift(Arrow, 5, Start.x, Start.y, -DisplayAngle);
     canvas.polygon(Arrow, 5);
-  } else
-  if (Appearance.CompassAppearance == apCompassAltA){
+
+  } else if (Appearance.CompassAppearance == apCompassAltA) {
 
     static double lastDisplayAngle = 9999.9;
     static int lastRcRight = 0;
@@ -788,7 +787,8 @@ void MapWindow::DrawBestCruiseTrack(Canvas &canvas)
   } else
   if (Appearance.BestCruiseTrack == ctBestCruiseTrackAltA){
 
-    POINT Arrow[] = { {-1,-40}, {-1,-62}, {-6,-62}, {0,-70}, {6,-62}, {1,-62}, {1,-40}, {-1,-40}};
+    POINT Arrow[] = { {-1,-40}, {-1,-62}, {-6,-62}, {0,-70}, 
+                      {6,-62}, {1,-62}, {1,-40}, {-1,-40}};
 
     PolygonRotateShift(Arrow, sizeof(Arrow)/sizeof(Arrow[0]),
                        Orig_Aircraft.x, Orig_Aircraft.y,

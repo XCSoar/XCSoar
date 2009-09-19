@@ -35,14 +35,11 @@ Copyright_License {
 }
 */
 
-#include "XCSoar.h"
-#include "Dialogs.h"
-#include "Language.hpp"
+#include "Dialogs/Internal.hpp"
 #include "Math/Earth.hpp"
 #include "Screen/Util.hpp"
 #include "MainWindow.hpp"
 #include "Blackboard.hpp"
-#include "Dialogs/dlgTools.h"
 #include "InfoBoxLayout.h"
 #include "Compatibility/string.h"
 #include "Math/FastMath.h"

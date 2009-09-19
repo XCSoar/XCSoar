@@ -35,17 +35,14 @@ Copyright_License {
 }
 */
 
-#include "XCSoar.h"
+#include "Dialogs/Internal.hpp"
 #include "McReady.h"
-#include "Dialogs.h"
-#include "Language.hpp"
-#include "Dialogs/dlgTools.h"
 #include "Device/device.h"
 #include "InfoBoxLayout.h"
 #include "Registry.hpp"
 #include "DataField/Enum.hpp"
 #include "MainWindow.hpp"
-#include "Interface.hpp"
+
 #include <assert.h>
 
 extern void dlgVegaDemoShowModal(void);

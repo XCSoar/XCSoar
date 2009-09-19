@@ -91,9 +91,8 @@ void AATDistance::ResetEnterTrigger(int taskwaypoint) {
 }
 
 void AATDistance::AddPoint(const GEOPOINT &location,
-                           const int taskwaypoint,
+                           const unsigned taskwaypoint,
 			   const double aatclosedistance) {
-  if (taskwaypoint<0) return;
 
   bool was_entered = has_entered[taskwaypoint];
   has_entered[taskwaypoint] = true;
@@ -123,16 +122,18 @@ void AATDistance::AddPoint(const GEOPOINT &location,
       new_point = true;
 
       if ((!was_entered) && (taskwaypoint>0) &&
-          !task_stats[taskwaypoint].AATTargetLocked) {
+          !task.getTaskPoint(taskwaypoint).AATTargetLocked) {
         double qdist, bearing0, bearing1;
-        DistanceBearing(task_stats[taskwaypoint-1].AATTargetLocation,
+        DistanceBearing(task.getTargetLocation(taskwaypoint-1),
                         location,
                         &qdist, &bearing0);
-        DistanceBearing(task_stats[taskwaypoint-1].AATTargetLocation,
-                        task_stats[taskwaypoint].AATTargetLocation,
+        DistanceBearing(task.getTargetLocation(taskwaypoint-1),
+                        task.getTargetLocation(taskwaypoint),
                         &qdist, &bearing1);
         // JMWAAT
-        task_stats[taskwaypoint].AATTargetOffsetRadial = 0.0;
+        TASK_POINT tp = task.getTaskPoint(taskwaypoint);
+        tp.AATTargetOffsetRadial = 0.0;
+        task.setTaskPoint(taskwaypoint,tp);
         // 20080615 JMW
 	// was AngleLimit180(bearing1-bearing0);
 	// now project along track line
@@ -165,7 +166,7 @@ void AATDistance::AddPoint(const GEOPOINT &location,
       for (int i= taskwaypoint; i<MAXTASKPOINTS-1; i++) {
         UpdateSearch(i);
       }
-      if (taskwaypoint == ActiveTaskPoint) {
+      if (taskwaypoint == task.getActiveIndex()) {
         DistanceCovered_internal(location, true, aatclosedistance);
       }
     }
@@ -183,9 +184,11 @@ void AATDistance::ShiftTargetOutside(const GEOPOINT &location,
                     task.getTaskPointLocation(taskwaypoint+1),
                     NULL, &bearing);
 
+    TASK_POINT tp = task.getTaskPoint(taskwaypoint);
     FindLatitudeLongitude(location,
                           bearing, 100.0,
-                          &task_stats[taskwaypoint].AATTargetLocation);
+                          &tp.AATTargetLocation);
+    task.setTaskPoint(taskwaypoint,tp);
     task.SetTargetModified();
   }
 
@@ -200,8 +203,6 @@ void AATDistance::ShiftTargetFromInFront(const GEOPOINT &location,
                                          const int taskwaypoint,
 					 const double aatclosedistance) {
 
-  double course_bearing;
-
   // this point is in sector and is improved
 
   // JMW, now moves target to in line with previous target whenever
@@ -209,26 +210,28 @@ void AATDistance::ShiftTargetFromInFront(const GEOPOINT &location,
 
   //JMWAAT  task_stats[taskwaypoint].AATTargetOffsetRadial = -1.0;
 
-  if (task_stats[taskwaypoint].AATTargetLocked) {
+  TASK_POINT tp = task.getTaskPoint(taskwaypoint);
+
+  if (tp.AATTargetLocked) {
     // have improved on the locked value, so unlock it in case user
     // wants to move it.
-    task_stats[taskwaypoint].AATTargetOffsetRadius = -1.0;
-    task_stats[taskwaypoint].AATTargetOffsetRadial = 0;
-    task_stats[taskwaypoint].AATTargetLocked = false;
+    tp.AATTargetOffsetRadius = -1.0;
+    tp.AATTargetOffsetRadial = 0;
+    tp.AATTargetLocked = false;
   }
 
-  DistanceBearing(task_stats[taskwaypoint-1].AATTargetLocation,
-                  location,
-                  NULL, &course_bearing);
+  double course_bearing = Bearing(task.getTargetLocation(taskwaypoint-1),
+                                  location);
 
   course_bearing = AngleLimit360(course_bearing+
-                                 task_stats[taskwaypoint].AATTargetOffsetRadial);
+                                 tp.AATTargetOffsetRadial);
 
   FindLatitudeLongitude(location,
                         course_bearing, aatclosedistance,
-                        &task_stats[taskwaypoint].AATTargetLocation);
-  // JMW, distance here was 100m, now changed to speed * 2
+                        &tp.AATTargetLocation);
 
+  // JMW, distance here was 100m, now changed to speed * 2
+  task.setTaskPoint(taskwaypoint,tp);
   task.SetTargetModified();
 }
 
@@ -252,7 +255,7 @@ void AATDistance::ShiftTargetFromBehind(const GEOPOINT &location,
   d_total_this = task.DoubleLegDistance(taskwaypoint, location);
 
   d_total_orig = task.DoubleLegDistance(taskwaypoint,
-                                   task_stats[taskwaypoint].AATTargetLocation);
+                                        task.getTargetLocation(taskwaypoint));
 
   if (d_total_this>d_total_orig-2.0*aatclosedistance) {
     // this is better than the previous best! (or very close)
@@ -261,7 +264,7 @@ void AATDistance::ShiftTargetFromBehind(const GEOPOINT &location,
   }
 
   // JMWAAT if locked, don't move it
-  if (task_stats[taskwaypoint].AATTargetLocked) {
+  if (task.getTaskPoint(taskwaypoint).AATTargetLocked) {
     // 20080615 JMW don't do this; locked stays locked
     // task_stats[taskwaypoint].AATTargetLocked = false; // JMWAAT JB
     return;
@@ -293,15 +296,13 @@ void AATDistance::ShiftTargetFromBehind(const GEOPOINT &location,
   //JMWAAT  task_stats[taskwaypoint].AATTargetOffsetRadial = course_bearing;
   */
 
-  DistanceBearing(task_stats[taskwaypoint-1].AATTargetLocation,
-                  location,
-                  NULL, &course_bearing);
+  course_bearing = Bearing(task.getTargetLocation(taskwaypoint-1),
+                           location);
   course_bearing = AngleLimit360(course_bearing+
-                                 task_stats[taskwaypoint].AATTargetOffsetRadial);
+                                 task.getTaskPoint(taskwaypoint).AATTargetOffsetRadial);
 
-  DistanceBearing(location,
-                  task_stats[taskwaypoint].AATTargetLocation,
-                  NULL, &course_bearing_orig);
+  course_bearing_orig = Bearing(location,
+                                task.getTargetLocation(taskwaypoint));
 
   if (fabs(AngleLimit180(course_bearing-course_bearing_orig))<5.0) {
     // don't update it if course deviation is less than 5 degrees,
@@ -356,14 +357,17 @@ void AATDistance::ShiftTargetFromBehind(const GEOPOINT &location,
 
   // now scan to edge of sector to find approximate range %
   if (t_distance_lower>5.0) {
+    TASK_POINT tp = task.getTaskPoint(taskwaypoint);
     FindLatitudeLongitude(location,
                           course_bearing, t_distance_lower,
-                          &task_stats[taskwaypoint].AATTargetLocation);
+                          &tp.AATTargetLocation);
 
-    task_stats[taskwaypoint].AATTargetOffsetRadius =
+    tp.AATTargetOffsetRadius =
       task.FindInsideAATSectorRange(location,
                                     taskwaypoint, course_bearing,
                                     t_distance_lower);
+    
+    task.setTaskPoint(taskwaypoint, tp);
     task.SetTargetModified();
   }
 
@@ -379,7 +383,7 @@ double AATDistance::DistanceCovered_internal(const GEOPOINT &location,
                                              const bool insector,
 					     const double aatclosedistance) {
   double achieved;
-  if (!task.Valid() || (ActiveTaskPoint==0)) {
+  if (!task.Valid() || (task.getActiveIndex()==0)) {
     //   max_achieved_distance = 0;
     return 0.0;
   }
@@ -398,7 +402,7 @@ double AATDistance::DistanceCovered_internal(const GEOPOINT &location,
 double AATDistance::DistanceCovered_inside(const GEOPOINT &location,
                                            const double aatclosedistance) {
 
-  int taskwaypoint = ActiveTaskPoint;
+  int taskwaypoint = task.getActiveIndex();
 
   double best_achieved_distance = 0;
 
@@ -438,7 +442,7 @@ double AATDistance::distance_achieved(const int taskwaypoint,
     // Calculates projected distance from P3 along line P1-P2
     legdistance_achieved[taskwaypoint] =
       ProjectedDistance(loc_points[taskwaypoint][jbest],
-                        task_stats[taskwaypoint+1].AATTargetLocation,
+                        task.getTargetLocation(taskwaypoint+1),
                         location);
     achieved += legdistance_achieved[taskwaypoint];
   }
@@ -449,11 +453,11 @@ double AATDistance::distance_achieved(const int taskwaypoint,
 
 double AATDistance::DistanceCovered_outside(const GEOPOINT &location,
 					    const double aatclosedistance) {
-  if (ActiveTaskPoint<=0) {
+  if (task.getActiveIndex()<=0) {
     return 0.0;
   }
 
-  int taskwaypoint = ActiveTaskPoint;
+  int taskwaypoint = task.getActiveIndex();
 
   int nlast = num_points[taskwaypoint-1];
   int nstart = 0;
@@ -466,7 +470,7 @@ double AATDistance::DistanceCovered_outside(const GEOPOINT &location,
       // cheat first point to the task start point if no valid start
       nstart = 0;
       nlast = 1;
-      loc_points[0][0] = task_stats[0].AATTargetLocation;
+      loc_points[0][0] = task.getTargetLocation(0);
       Dmax[0][0] = 0;
     }
   } else {
@@ -483,12 +487,9 @@ double AATDistance::DistanceCovered_outside(const GEOPOINT &location,
   int jbest = -1;
   for (int j=nstart; j<nlast; j++) {
 
-    double d0t;
-    DistanceBearing(loc_points[taskwaypoint-1][j],
-                    task_stats[taskwaypoint].AATTargetLocation,
-                    &d0t, NULL);
-
-    double doubleleg_distance = Dmax[taskwaypoint-1][j] + d0t;
+    double doubleleg_distance = Dmax[taskwaypoint-1][j] +
+      Distance(loc_points[taskwaypoint-1][j],
+               task.getTargetLocation(taskwaypoint));
 
     if (doubleleg_distance > best_doubleleg_distance) {
       best_doubleleg_distance = doubleleg_distance;
@@ -499,7 +500,12 @@ double AATDistance::DistanceCovered_outside(const GEOPOINT &location,
   if (jbest>=0) {
     // set previous target for display purposes
     best[taskwaypoint-1] = jbest;
-    task_stats[taskwaypoint-1].AATTargetLocation= loc_points[taskwaypoint-1][jbest];
+
+    TASK_POINT tp = task.getTaskPoint(taskwaypoint-1);
+    tp.AATTargetLocation= loc_points[taskwaypoint-1][jbest];
+    task.setTaskPoint(taskwaypoint-1,tp);
+    task.SetTargetModified();
+
     retval = distance_achieved(taskwaypoint-1, jbest, location);
   } else {
     retval = 0.0;
@@ -541,7 +547,7 @@ void AATDistance::UpdateSearch(int taskwaypoint) {
   if ((nlast==0) && (taskwaypoint==1)) {
     // cheat first point to the task start point if no valid start
     nlast = 1;
-    loc_points[0][0] = task_stats[0].AATTargetLocation;
+    loc_points[0][0] = task.getTargetLocation(0);
   }
 
   if ((n==0)||(nlast==0)) {

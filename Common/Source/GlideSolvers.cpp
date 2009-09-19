@@ -317,20 +317,18 @@ EffectiveMacCready_internal(const NMEA_INFO *Basic, const DERIVED_INFO *Calculat
                             bool cruise_efficiency_mode)
 {
   if (Calculated->ValidFinish) return 0;
-  if (ActiveTaskPoint<=0) return 0; // no e mc before start
+  if (task.getActiveIndex()<=0) return 0; // no e mc before start
   if (!Calculated->ValidStart) return 0;
   if (Calculated->TaskStartTime<0) return 0;
 
 
   if (!task.Valid()
-      || !task.ValidTaskPoint(ActiveTaskPoint-1)) return 0;
+      || !task.ValidTaskPoint(task.getActiveIndex()-1)) return 0;
   if (Calculated->TaskDistanceToGo<=0) {
     return 0;
   }
 
   double mc_setting = GlidePolar::GetMacCready();
-
-  mutexTaskData.Lock();
 
   double start_speed = Calculated->TaskStartSpeed;
   double V_bestld = GlidePolar::Vbestld;
@@ -345,21 +343,15 @@ EffectiveMacCready_internal(const NMEA_INFO *Basic, const DERIVED_INFO *Calculat
   double LegDistances[MAXTASKPOINTS];
   double LegBearings[MAXTASKPOINTS];
 
-  for (int i=0; i<ActiveTaskPoint; i++) {
-    GEOPOINT w1 = task.getTaskPointLocation(i+1);
-    GEOPOINT w0 = task.getTaskPointLocation(i);
-    if (AATEnabled) {
-      if (task.ValidTaskPoint(i+1)) {
-        w1 = task_stats[i+1].AATTargetLocation;
-      }
-      if (i>0) {
-        w0 = task_stats[i].AATTargetLocation;
-      }
-    }
+  // JMW TODO remove dist/bearing: this is already done inside the task!
+
+  for (unsigned i=0; i<task.getActiveIndex(); i++) {
+    GEOPOINT w1 = task.getTargetLocation(i+1);
+    GEOPOINT w0 = task.getTargetLocation(i);
     DistanceBearing(w0, w1,
                     &LegDistances[i], &LegBearings[i]);
 
-    if (i==ActiveTaskPoint-1) {
+    if (i+1==task.getActiveIndex()) {
       LegDistances[i] = ProjectedDistance(w0, w1, Basic->Location);
     }
     if ((StartLine==0) && (i==0)) {
@@ -403,7 +395,7 @@ EffectiveMacCready_internal(const NMEA_INFO *Basic, const DERIVED_INFO *Calculat
     // allowing for final glide where possible if aircraft height is below
     // start
 
-    for(int i=ActiveTaskPoint-1;i>=0; i--) {
+    for(int i=task.getActiveIndex()-1;i>=0; i--) {
 
       double time_this;
 
@@ -455,8 +447,6 @@ EffectiveMacCready_internal(const NMEA_INFO *Basic, const DERIVED_INFO *Calculat
     }
 
   }
-
-  mutexTaskData.Unlock();
 
   return value_found;
 }

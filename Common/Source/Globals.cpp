@@ -9,7 +9,6 @@
 bool  AATEnabled = FALSE;
 bool  ForceFinalGlide= false;
 int   SelectedWaypoint = -1;
-int   ActiveTaskPoint = -1;
 bool  AdvanceArmed = false;
 
 // task parameters
@@ -35,8 +34,6 @@ unsigned StartMaxSpeedMargin = 0;
 
 Start_t        task_start_points;
 StartStats_t   task_start_stats;
-Task_t         task_points;
-TaskStats_t    task_stats;
 
 // Specials
 #if defined(PNA) || defined(FIVV)

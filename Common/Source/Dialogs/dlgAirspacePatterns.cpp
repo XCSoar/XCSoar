@@ -35,10 +35,7 @@ Copyright_License {
 }
 */
 
-
-#include "XCSoar.h"
-#include "Interface.hpp"
-#include "Dialogs/dlgTools.h"
+#include "Dialogs/Internal.hpp"
 #include "InfoBoxLayout.h"
 #include "Screen/Graphics.hpp"
 #include "MainWindow.hpp"
