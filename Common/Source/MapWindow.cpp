@@ -194,8 +194,10 @@ bool MapWindow::Idle(const bool do_force) {
   static MapIdleTrigger terrain_idle;
   static MapIdleTrigger topology_idle;
   static MapIdleTrigger rasp_idle;
+  static unsigned robin = 3;
 
   if (do_force) {
+    robin = 3;
     main_idle.dirty = true;
     terrain_idle.dirty = true;
     topology_idle.dirty = true;
@@ -204,12 +206,47 @@ bool MapWindow::Idle(const bool do_force) {
   }
 
   do {
-
-    // scan main object visibility
-    if (main_idle.dirty) {
-      main_idle.dirty = false;
-      ScanVisibility(getSmartBounds());
-      continue;
+    robin = (robin+1)%4;
+    switch(robin) {
+    case 0:
+      // scan main object visibility
+      if (main_idle.dirty) {
+        main_idle.dirty = false;
+        ScanVisibility(getSmartBounds());        
+      }
+      break;
+    case 1:
+      if (topology_idle.dirty) {
+        if (SettingsMap().EnableTopology) {
+          topology_idle.dirty = 
+            topology->ScanVisibility(*this, *getSmartBounds(), do_force);
+        } else {
+          topology_idle.dirty = false;
+        }
+      }
+      break;
+    case 2:
+      if (terrain_idle.dirty) {
+        terrain.ServiceTerrainCenter(Basic().Location);
+        terrain.ServiceCache();
+        
+        if (!do_force) {
+          // JMW this currently isn't working with the smart bounds
+          terrain_idle.dirty = false;
+        }
+      }
+      break;
+    case 3:
+      if (rasp_idle.dirty) {
+        RASP.SetViewCenter(Basic().Location);
+        if (!do_force) {
+          // JMW this currently isn't working with the smart bounds
+          rasp_idle.dirty = false;
+        }
+      }
+      break;
+    default:
+      break;
     }
 
     if (do_force) {
@@ -217,36 +254,6 @@ bool MapWindow::Idle(const bool do_force) {
       // this ensures waypoints/airspace are visible after a significant
       // shift of the map
       return true;
-    }
-    
-    if (topology_idle.dirty) {
-      if (SettingsMap().EnableTopology) {
-	topology_idle.dirty = 
-	  topology->ScanVisibility(*this, *getSmartBounds(), do_force);
-      } else {
-	topology_idle.dirty = false;
-      }
-      continue;
-    }
-
-    if (terrain_idle.dirty) {
-      terrain.ServiceTerrainCenter(Basic().Location);
-      terrain.ServiceCache();
-      
-      if (!do_force) {
-	// JMW this currently isn't working with the smart bounds
-	terrain_idle.dirty = false;
-      }
-      continue;
-    }
-
-    if (rasp_idle.dirty) {
-      RASP.SetViewCenter(Basic().Location);
-      if (!do_force) {
-	// JMW this currently isn't working with the smart bounds
-	rasp_idle.dirty = false;
-      }
-      continue;
     }
 
   } while (RenderTimeAvailable() && 
