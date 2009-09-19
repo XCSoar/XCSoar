@@ -270,12 +270,13 @@ FAIFinishHeight(const SETTINGS_COMPUTER &settings,
   }
 
   if (!task.TaskIsTemporary() && (wp==FinalWayPoint)) {
-    if (EnableFAIFinishHeight && !AATEnabled) {
-      return max(max(FinishMinHeight, 
+    if (task.getSettings().EnableFAIFinishHeight 
+        && !task.getSettings().AATEnabled) {
+      return max(max(task.getSettings().FinishMinHeight, 
 		     settings.SAFETYALTITUDEARRIVAL)+ wp_alt,
                  Calculated.TaskStartAltitude-1000.0);
     } else {
-      return max(FinishMinHeight, 
+      return max(task.getSettings().FinishMinHeight, 
 		 settings.SAFETYALTITUDEARRIVAL)+wp_alt;
     }
   } else {
@@ -295,25 +296,25 @@ bool GlideComputerTask::InTurnSector(const int the_turnpoint) const
 
   if (!task.ValidTaskPoint(the_turnpoint)) return false;
 
-  if(SectorType==0) {
-    if(Calculated().WaypointDistance < SectorRadius) {
+  if(task.getSettings().SectorType==0) {
+    if(Calculated().WaypointDistance < task.getSettings().SectorRadius) {
       return true;
     }
-  } else if (SectorType>0) {
+  } else if (task.getSettings().SectorType>0) {
     AircraftBearing = AngleLimit180(
       Bearing(task.getTaskPointLocation(the_turnpoint),
               Basic().Location)
       - task.getTaskPoint(the_turnpoint).Bisector);
     
-    if (SectorType==2) {
+    if (task.getSettings().SectorType==2) {
       // JMW added german rules
       if (Calculated().WaypointDistance<500) {
         return true;
       }
     }
     if( (AircraftBearing >= -45) && (AircraftBearing <= 45)) {
-      if (SectorType==1) {
-        if(Calculated().WaypointDistance < SectorRadius) {
+      if (task.getSettings().SectorType==1) {
+        if(Calculated().WaypointDistance < task.getSettings().SectorRadius) {
           return true;
         }
       } else {
@@ -330,9 +331,9 @@ bool GlideComputerTask::InTurnSector(const int the_turnpoint) const
 
 bool GlideComputerTask::ValidFinish( ) const
 {
-  if ((FinishMinHeight>0)
+  if ((task.getSettings().FinishMinHeight>0)
       &&(Calculated().TerrainValid)
-      &&(Calculated().AltitudeAGL<FinishMinHeight)) {
+      &&(Calculated().AltitudeAGL<task.getSettings().FinishMinHeight)) {
     return false;
   } else {
     return true;
@@ -360,12 +361,12 @@ bool GlideComputerTask::InFinishSector(const int i)
   bool InFinishSector = LastCalculated().InFinishSector;
 
   bool inrange = false;
-  inrange = (FirstPointDistance<FinishRadius);
+  inrange = (FirstPointDistance<task.getSettings().FinishRadius);
   if (!inrange) {
     InFinishSector = false;
   }
 
-  if(!FinishLine) // Start Circle
+  if(!task.getSettings().FinishLine) // Start Circle
     {
       retval = inrange;
       goto OnExit;
@@ -377,7 +378,7 @@ bool GlideComputerTask::InFinishSector(const int i)
   // JMW bugfix, was Bisector, which is invalid
 
   bool approaching;
-  if(FinishLine==1) { // Finish line
+  if(task.getSettings().FinishLine==1) { // Finish line
     approaching = ((AircraftBearing >= -90) && (AircraftBearing <= 90));
   } else {
     // FAI 90 degree
@@ -426,12 +427,12 @@ bool GlideComputerTask::InFinishSector(const int i)
 bool GlideComputerTask::ValidStartSpeed(const DWORD Margin) const
 {
   bool valid = true;
-  if (StartMaxSpeed!=0) {
+  if (task.getSettings().StartMaxSpeed!=0) {
     if (Basic().AirspeedAvailable) {
-      if (Basic().IndicatedAirspeed>(StartMaxSpeed+Margin))
+      if (Basic().IndicatedAirspeed>(task.getSettings().StartMaxSpeed+Margin))
         valid = false;
     } else {
-      if (Basic().Speed>(StartMaxSpeed+Margin))
+      if (Basic().Speed>(task.getSettings().StartMaxSpeed+Margin))
         valid = false;
     }
   }
@@ -442,12 +443,12 @@ bool GlideComputerTask::ValidStartSpeed(const DWORD Margin) const
 bool GlideComputerTask::InsideStartHeight(const DWORD Margin) const
 {
   bool valid = true;
-  if ((StartMaxHeight!=0)&&(Calculated().TerrainValid)) {
-    if (StartHeightRef == 0) {
-      if (Calculated().AltitudeAGL>(StartMaxHeight+Margin))
+  if ((task.getSettings().StartMaxHeight!=0)&&(Calculated().TerrainValid)) {
+    if (task.getSettings().StartHeightRef == 0) {
+      if (Calculated().AltitudeAGL>(task.getSettings().StartMaxHeight+Margin))
 	valid = false;
     } else {
-      if (Calculated().NavAltitude>(StartMaxHeight+Margin))
+      if (Calculated().NavAltitude>(task.getSettings().StartMaxHeight+Margin))
 	valid = false;
     }
   }
@@ -472,9 +473,9 @@ bool GlideComputerTask::InStartSector_Internal(int Index,
                   &AircraftBearing);
 
   bool inrange = false;
-  inrange = (FirstPointDistance<StartRadius);
+  inrange = (FirstPointDistance<task.getSettings().StartRadius);
 
-  if(StartLine==0) {
+  if(task.getSettings().StartLine==0) {
     // Start Circle
     return inrange;
   }
@@ -485,7 +486,7 @@ bool GlideComputerTask::InStartSector_Internal(int Index,
   // JMW bugfix, was Bisector, which is invalid
 
   bool approaching;
-  if(StartLine==1) { // Start line
+  if(task.getSettings().StartLine==1) { // Start line
     approaching = ((AircraftBearing >= -90) && (AircraftBearing <= 90));
   } else {
     // FAI 90 degree
@@ -525,7 +526,7 @@ bool GlideComputerTask::InStartSector(bool *CrossedStart)
     goto OnExit;
   }
 
-  in_height = InsideStartHeight(StartMaxHeightMargin);
+  in_height = InsideStartHeight(task.getSettings().StartMaxHeightMargin);
 
   if ((wp_index != Calculated().StartSectorWaypoint) 
       && (Calculated().StartSectorWaypoint>=0)) {
@@ -543,7 +544,7 @@ bool GlideComputerTask::InStartSector(bool *CrossedStart)
     goto OnExit;
   }
 
-  if (EnableMultipleStartPoints) {
+  if (task.getSettings().EnableMultipleStartPoints) {
     for (int i=0; i<MAXSTARTPOINTS; i++) {
       if (task_start_stats[i].Active && (task_start_points[i].Index>=0)
           && (task_start_points[i].Index != wp_index)) {
@@ -584,10 +585,11 @@ bool GlideComputerTask::ReadyToStart() {
   if (!Calculated().Flying) {
     return false;
   }
-  if (AutoAdvance== AUTOADVANCE_AUTO) {
+  if (task.getSettings().AutoAdvance== AUTOADVANCE_AUTO) {
     return true;
   }
-  if ((AutoAdvance== AUTOADVANCE_ARM) || (AutoAdvance==AUTOADVANCE_ARMSTART)) {
+  if ((task.getSettings().AutoAdvance== AUTOADVANCE_ARM) 
+      || (task.getSettings().AutoAdvance==AUTOADVANCE_ARMSTART)) {
     if (task.isAdvanceArmed()) {
       return true;
     }
@@ -611,13 +613,13 @@ bool GlideComputerTask::ReadyToAdvance(bool reset, bool restart) {
     return false;
   }
 
-  if (AutoAdvance== AUTOADVANCE_AUTO) {
+  if (task.getSettings().AutoAdvance== AUTOADVANCE_AUTO) {
     if (reset) {
       task.setAdvanceArmed(false);
     }
     return true;
   }
-  if (AutoAdvance== AUTOADVANCE_ARM) {
+  if (task.getSettings().AutoAdvance== AUTOADVANCE_ARM) {
     if (task.isAdvanceArmed()) {
       if (reset) {
         task.setAdvanceArmed(false);
@@ -627,7 +629,7 @@ bool GlideComputerTask::ReadyToAdvance(bool reset, bool restart) {
       say_ready = true;
     }
   }
-  if (AutoAdvance== AUTOADVANCE_ARMSTART) {
+  if (task.getSettings().AutoAdvance== AUTOADVANCE_ARMSTART) {
     if ((task.getActiveIndex() == 0) || restart) {
       if (!task.isAdvanceArmed()) {
         say_ready = true;
@@ -674,7 +676,7 @@ void GlideComputerTask::CheckStart() {
     }
     // TODO: we are ready to start even when outside start rules but
     // within margin
-    if (ValidStartSpeed(StartMaxSpeedMargin)) {
+    if (ValidStartSpeed(task.getSettings().StartMaxSpeedMargin)) {
       ReadyToAdvance(false, true);
     }
     // TODO accuracy: monitor start speed throughout time in start sector
@@ -777,7 +779,7 @@ void GlideComputerTask::CheckFinish() {
 void GlideComputerTask::AddAATPoint(const unsigned taskwaypoint) {
   bool insector = false;
   if (taskwaypoint>0) {
-    if (AATEnabled) {
+    if (task.getSettings().AATEnabled) {
       insector = task.InAATTurnSector(Basic().Location, taskwaypoint);
     } else {
       insector = InTurnSector(taskwaypoint);
@@ -963,11 +965,11 @@ void GlideComputerTask::DistanceCovered()
 
     LegCovered = ProjectedDistance(w0, w1, Basic().Location);
 
-    if ((StartLine==0) && (task.getActiveIndex()==1)) {
+    if ((task.getSettings().StartLine==0) && (task.getActiveIndex()==1)) {
       // Correct speed calculations for radius
       // JMW TODO accuracy: legcovered replace this with more accurate version
       // LegDistance -= StartRadius;
-      LegCovered = max(0,LegCovered-StartRadius);
+      LegCovered = max(0,LegCovered-task.getSettings().StartRadius);
     }
   }
   SetCalculated().LegDistanceCovered = LegCovered;
@@ -977,7 +979,7 @@ void GlideComputerTask::DistanceCovered()
   // Now add distances for start to previous waypoint
 
   if (!task.TaskIsTemporary() && (task.getActiveIndex()>0)) {
-    if (!AATEnabled) {
+    if (!task.getSettings().AATEnabled) {
       for (unsigned i=0; i+1< task.getActiveIndex(); i++) {
         SetCalculated().TaskDistanceCovered += 
           task.getTaskPoint(i+1).LegDistance;
@@ -1020,7 +1022,7 @@ public:
   void visit_reset() 
     { 
       activeIndex = _task->getActiveIndex();
-      if (AATEnabled 
+      if (_task->getSettings().AATEnabled 
           && (_task->getActiveIndex()>0) 
           && (_task->ValidTaskPoint(activeIndex+1))
           && calculated_info.IsInSector 
@@ -1056,7 +1058,7 @@ public:
       calculated_info.LegTimeToGo = 0;
       calculated_info.TaskTimeToGo = 0;
       calculated_info.TaskTimeToGoTurningNow = -1;
-      if (!AATEnabled) {
+      if (!_task->getSettings().AATEnabled) {
         calculated_info.AATTimeToGo = 0;
       }
       
@@ -1271,7 +1273,7 @@ void GlideComputerTask::AATStats_Time() {
   // Task time to go calculations
 
   double aat_tasktime_elapsed = Basic().Time - Calculated().TaskStartTime;
-  double aat_tasklength_seconds = AATTaskLength*60;
+  double aat_tasklength_seconds = task.getSettings().AATTaskLength*60;
 
   if (task.getActiveIndex()==0) {
     if (Calculated().AATTimeToGo==0) {
@@ -1350,8 +1352,8 @@ void GlideComputerTask::AATStats_Distance()
         // sector at start of (i)th leg
         if (i-1 == 0) {// first leg of task
           // add nothing
-          MaxDistance -= StartRadius; // e.g. Sports 2009 US Rules A116.3.2.  To Do: This should be configured multiple countries
-          MinDistance -= StartRadius;
+          MaxDistance -= task.getSettings().StartRadius; // e.g. Sports 2009 US Rules A116.3.2.  To Do: This should be configured multiple countries
+          MinDistance -= task.getSettings().StartRadius;
         } else { // not first leg of task
           MaxDistance += (task.getTaskPoint(i-1).AATCircleRadius);  //ToDo: should be adjusted for angle of max target
           MinDistance -= (task.getTaskPoint(i-1).AATCircleRadius);  //ToDo: should be adjusted for angle of max target
@@ -1360,8 +1362,8 @@ void GlideComputerTask::AATStats_Distance()
         // sector at end of ith leg
         if (!task.ValidTaskPoint(i+1)) {// last leg of task
           // add nothing
-          MaxDistance -= FinishRadius; // To Do: This can be configured for finish rules
-          MinDistance -= FinishRadius;
+          MaxDistance -= task.getSettings().FinishRadius; // To Do: This can be configured for finish rules
+          MinDistance -= task.getSettings().FinishRadius;
         } else { // not last leg of task
           MaxDistance += (tp.AATCircleRadius);  //ToDo: should be adjusted for angle of max target
           MinDistance -= (tp.AATCircleRadius);  //ToDo: should be adjusted for angle of max target
@@ -1399,7 +1401,7 @@ void GlideComputerTask::AATStats_Distance()
 
 void GlideComputerTask::AATStats()
 {
-  if (!AATEnabled
+  if (!task.getSettings().AATEnabled
       || Calculated().ValidFinish) return ;
 
   AATStats_Distance();

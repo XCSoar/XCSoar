@@ -514,9 +514,9 @@ static void UpdateValuesTask(void) {
   TCHAR Temp[80];
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpTaskTime"));
-  Units::TimeToText(Temp, (int)AATTaskLength*60);
+  Units::TimeToText(Temp, (int)task.getSettings().AATTaskLength*60);
   if (wp) {
-    if (!AATEnabled) {
+    if (!task.getSettings().AATEnabled) {
       wp->SetVisible(false);
     } else {
       wp->SetText(Temp);
@@ -551,7 +551,7 @@ static void UpdateValuesTask(void) {
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpRemainingDistance"));
   if (wp) {
-    if (AATEnabled) {
+    if (task.getSettings().AATEnabled) {
       _stprintf(Temp, TEXT("%.0f %s"),
                 DISTANCEMODIFY*XCSoarInterface::Calculated().AATTargetDistance,
                 Units::GetDistanceName());

@@ -297,7 +297,7 @@ public:
 protected:
 
   bool CheckCondition(const GlideComputer& cmp) {
-    if (!AATEnabled || !task.Valid() || task.TaskIsTemporary()
+    if (!task.getSettings().AATEnabled || !task.Valid() || task.TaskIsTemporary()
         || !(cmp.Calculated().ValidStart && !cmp.Calculated().ValidFinish)
         || !cmp.Calculated().Flying) {
       return false;
@@ -339,11 +339,11 @@ protected:
         || (task.getActiveIndex()>0) || !task.ValidTaskPoint(task.getActiveIndex()+1)) {
       return false;
     }
-    if (cmp.Calculated().LegDistanceToGo>StartRadius) {
+    if (cmp.Calculated().LegDistanceToGo>task.getSettings().StartRadius) {
       return false;
     }
-    if (cmp.ValidStartSpeed(StartMaxSpeedMargin) 
-	&& cmp.InsideStartHeight(StartMaxHeightMargin))
+    if (cmp.ValidStartSpeed(task.getSettings().StartMaxSpeedMargin) 
+	&& cmp.InsideStartHeight(task.getSettings().StartMaxHeightMargin))
     {
       withinMargin = true;
     } else {

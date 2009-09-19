@@ -37,7 +37,7 @@ Copyright_License {
 
 #include "Formatter/Time.hpp"
 #include "LocalTime.hpp"
-#include "SettingsTask.hpp"
+#include "Task.h"
 #include <stdlib.h>
 #include "Interface.hpp"
 
@@ -90,17 +90,17 @@ void FormatterTime::AssignValue(int i) {
 
 void FormatterAATTime::AssignValue(int i) {
   double dd;
-  if (AATEnabled && task.ValidTaskPoint(task.getActiveIndex())) {
+  if (task.getSettings().AATEnabled && task.ValidTaskPoint(task.getActiveIndex())) {
     dd = Calculated().TaskTimeToGo;
     if ((Calculated().TaskStartTime>0.0) && (Calculated().Flying)
         &&(task.getActiveIndex()>0)) {
       dd += Basic().Time-Calculated().TaskStartTime;
     }
-    dd= max(0,min(24.0*3600.0,dd))-AATTaskLength*60;
+    dd= max(0,min(24.0*3600.0,dd))-task.getSettings().AATTaskLength*60;
     if (dd<0) {
       status = 1; // red
     } else {
-      if (Calculated().TaskTimeToGoTurningNow > (AATTaskLength+5)*60) {
+      if (Calculated().TaskTimeToGoTurningNow > (task.getSettings().AATTaskLength+5)*60) {
         status = 2; // blue
       } else {
         status = 0;  // black
@@ -114,7 +114,7 @@ void FormatterAATTime::AssignValue(int i) {
   switch (i) {
   case 27:
     SecsToDisplayTime((int)Calculated().AATTimeToGo);
-    Valid = (task.ValidTaskPoint(task.getActiveIndex()) && AATEnabled
+    Valid = (task.ValidTaskPoint(task.getActiveIndex()) && task.getSettings().AATEnabled
 	     && (Calculated().AATTimeToGo< 0.9*ERROR_TIME));
     break;
   case 41:
@@ -133,7 +133,7 @@ void FormatterAATTime::AssignValue(int i) {
       && (Calculated().TaskTimeToGo< 0.9*ERROR_TIME);
     break;
   case 62:
-    if (AATEnabled && task.ValidTaskPoint(task.getActiveIndex())) {
+    if (task.getSettings().AATEnabled && task.ValidTaskPoint(task.getActiveIndex())) {
       SecsToDisplayTime((int)dd);
       Valid = (dd< 0.9*ERROR_TIME);
     } else {

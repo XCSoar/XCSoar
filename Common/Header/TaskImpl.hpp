@@ -44,6 +44,7 @@ Copyright_License {
 
 #include "GeoPoint.hpp"
 #include "SettingsComputer.hpp"
+#include "SettingsTask.hpp"
 #include "WayPoint.hpp"
 
 #define CIRCLE 0
@@ -218,6 +219,9 @@ public:
 
   void setTaskIndices(const int wpindex[MAXTASKPOINTS]);
 
+  const SETTINGS_TASK &getSettings() const;
+  void setSettings(const SETTINGS_TASK& set);
+
   // scan routines
   void scan_point_forward(RelativeTaskPointVisitor &visitor);
   void scan_point_forward(AbsoluteTaskPointVisitor &visitor);
@@ -243,8 +247,12 @@ private:
   bool TargetModified;
   bool TaskAborted;
   bool AdvanceArmed;
+
+  SETTINGS_TASK settings;
 };
 
-//////
+// not yet incorporated into TaskImpl
+extern Start_t        task_start_points;
+extern StartStats_t   task_start_stats;
 
 #endif

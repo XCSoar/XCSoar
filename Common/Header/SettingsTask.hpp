@@ -38,34 +38,27 @@ Copyright_License {
 #ifndef XCSOAR_SETTINGS_TASK_HPP
 #define XCSOAR_SETTINGS_TASK_HPP
 
-#include "Sizes.h"
-#include "Task.h"
-
 // control of task/waypoints
-extern int  AutoAdvance;
 extern int  SelectedWaypoint;
 
-extern Start_t        task_start_points;
-extern StartStats_t   task_start_stats;
-
-extern unsigned SectorType;
-extern unsigned int SectorRadius;
-extern unsigned StartLine;
-extern unsigned StartRadius;
-extern unsigned FinishLine;
-extern unsigned FinishRadius;
-extern double AATTaskLength;
-extern bool AATEnabled;
-extern bool EnableMultipleStartPoints;
-
-// rules
-extern bool EnableFAIFinishHeight;
-extern unsigned FinishMinHeight;
-extern unsigned StartMaxHeight;
-extern unsigned StartMaxHeightMargin;
-extern unsigned StartMaxSpeed;
-extern unsigned StartMaxSpeedMargin;
-extern int  StartHeightRef;
-
+struct SETTINGS_TASK {
+  int  AutoAdvance;
+  unsigned SectorType;
+  unsigned int SectorRadius;
+  unsigned StartLine;
+  unsigned StartRadius;
+  unsigned FinishLine;
+  unsigned FinishRadius;
+  double AATTaskLength;
+  bool AATEnabled;
+  bool EnableMultipleStartPoints;
+  bool EnableFAIFinishHeight;
+  unsigned FinishMinHeight;
+  unsigned StartMaxHeight;
+  unsigned StartMaxHeightMargin;
+  unsigned StartMaxSpeed;
+  unsigned StartMaxSpeedMargin;
+  int  StartHeightRef;
+};
 
 #endif

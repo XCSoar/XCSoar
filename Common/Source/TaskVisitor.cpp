@@ -54,7 +54,7 @@ void Task::scan_point_forward(RelativeTaskPointVisitor &visitor)
 {
   visitor.setTask(*this);
   visitor.visit_reset();
-  if (EnableMultipleStartPoints) {
+  if (settings.EnableMultipleStartPoints) {
     for (unsigned j=0; j<MAXSTARTPOINTS; j++) {
       if ((task_start_points[j].Index != -1) && task_start_stats[j].Active)
 	visitor.visit_start_point(task_start_points[j], j);
@@ -84,7 +84,7 @@ void Task::scan_point_forward(AbsoluteTaskPointVisitor &visitor)
   visitor.setTask(*this);
   visitor.visit_reset();
 
-  if (EnableMultipleStartPoints) {
+  if (settings.EnableMultipleStartPoints) {
     for (unsigned j=0; j<MAXSTARTPOINTS; j++) {
       if ((task_start_points[j].Index != -1) && task_start_stats[j].Active)
 	visitor.visit_start_point(task_start_points[j], j);
@@ -151,7 +151,7 @@ void Task::scan_leg_forward(AbsoluteTaskLegVisitor &visitor)
     visitor.visit_null();
     return;
   }
-  if (EnableMultipleStartPoints) {
+  if (settings.EnableMultipleStartPoints) {
     for (unsigned j=0; j<MAXSTARTPOINTS; j++) {
       if ((task_start_points[j].Index != -1) && task_start_stats[j].Active)
 	visitor.visit_leg_multistart(task_start_points[j], j, task_points[0]);
@@ -198,7 +198,7 @@ void Task::scan_leg_reverse(AbsoluteTaskLegVisitor &visitor)
     i--;
   }
 
-  if (EnableMultipleStartPoints) {
+  if (settings.EnableMultipleStartPoints) {
     for (unsigned j=0; j<MAXSTARTPOINTS; j++) {
       if ((task_start_points[j].Index != -1) && task_start_stats[j].Active)
 	visitor.visit_leg_multistart(task_start_points[j], j, task_points[0]);
@@ -334,25 +334,25 @@ class TaskSectorsVisitor:
   public AbsoluteTaskPointVisitor {
 public:
   void visit_task_point_start(TASK_POINT &point, const unsigned index) { 
-    if (StartLine==2) {
+    if (_task->getSettings().StartLine==2) {
       SectorAngle = 45+90;
     } else {
       SectorAngle = 90;
     }
-    SectorSize = StartRadius;
+    SectorSize = _task->getSettings().StartRadius;
     SectorBearing = point.OutBound;
     setStartEnd(point);
     clearAAT(point, index);
   };
   void visit_task_point_intermediate(TASK_POINT &point, const unsigned index) { 
     SectorAngle = 45;
-    if (SectorType == 2) {
+    if (_task->getSettings().SectorType == 2) {
       SectorSize = 10000; // German DAe 0.5/10
     } else {
-      SectorSize = SectorRadius;  // FAI sector
+      SectorSize = _task->getSettings().SectorRadius;  // FAI sector
     }
     SectorBearing = point.Bisector;    
-    if (!AATEnabled) {
+    if (!_task->getSettings().AATEnabled) {
       point.AATStartRadial  = AngleLimit360(SectorBearing - SectorAngle);
       point.AATFinishRadial = AngleLimit360(SectorBearing + SectorAngle);
     }
@@ -360,12 +360,12 @@ public:
   };
   void visit_task_point_final(TASK_POINT &point, const unsigned index) { 
     // finish line
-    if (FinishLine==2) {
+    if (_task->getSettings().FinishLine==2) {
       SectorAngle = 45;
     } else {
       SectorAngle = 90;
     }
-    SectorSize = FinishRadius;
+    SectorSize = _task->getSettings().FinishRadius;
     SectorBearing = point.InBound;
     setStartEnd(point);
 
@@ -455,7 +455,7 @@ public:
 		    way_points.get(point1.Index).Location,
 		    &point1.LegDistance, &point1.InBound);
 
-    if (AATEnabled) {
+    if (_task->getSettings().AATEnabled) {
       DistanceBearing(point0.AATTargetLocation,
 		      point1.AATTargetLocation,
 		      &point1.LegDistance, &point1.LegBearing);
@@ -623,7 +623,7 @@ public:
 
 
 void Task::CalculateAATIsoLines(void) {
-  if(AATEnabled) {
+  if (settings.AATEnabled) {
     AATIsoLineVisitor av;
     scan_point_forward(av);
   }  

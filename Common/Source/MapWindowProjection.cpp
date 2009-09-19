@@ -455,7 +455,7 @@ double MapWindowProjection::LimitMapScale(double value,
   minreasonable = 0.05;
 
   if (settings_map.AutoZoom && DisplayMode != dmCircling) {
-    if (AATEnabled && (task.getActiveIndex()>0)) {
+    if (task.getSettings().AATEnabled && (task.getActiveIndex()>0)) {
       minreasonable = 0.88;
     } else {
       minreasonable = 0.44;

@@ -42,7 +42,7 @@ Copyright_License {
 #include "Blackboard.hpp"
 #include "SettingsAirspace.hpp"
 #include "SettingsComputer.hpp"
-#include "SettingsTask.hpp"
+#include "Task.h"
 #include "SettingsUser.hpp"
 #include "TerrainRenderer.h"
 #include "Gauge/GaugeFLARM.hpp"
@@ -74,6 +74,8 @@ Copyright_License {
 extern ldrotary_s rotaryLD;
 
 #include <assert.h>
+
+static SETTINGS_TASK settings_task;
 
 static Font TempInfoWindowFont;
 static Font TempTitleWindowFont;
@@ -1623,7 +1625,7 @@ static void setVariables(void) {
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpFAIFinishHeight"));
   if (wp) {
-    wp->GetDataField()->Set(EnableFAIFinishHeight);
+    wp->GetDataField()->Set(settings_task.EnableFAIFinishHeight);
     wp->RefreshDisplay();
   }
 
@@ -2365,13 +2367,13 @@ static void setVariables(void) {
     dfe->addEnumText(gettext(TEXT("Cylinder")));
     dfe->addEnumText(gettext(TEXT("Line")));
     dfe->addEnumText(gettext(TEXT("FAI Sector")));
-    dfe->Set(FinishLine);
+    dfe->Set(settings_task.FinishLine);
     wp->RefreshDisplay();
   }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpTaskFinishRadius"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(lround(FinishRadius*DISTANCEMODIFY*DISTANCE_ROUNDING)/DISTANCE_ROUNDING);
+    wp->GetDataField()->SetAsFloat(lround(settings_task.FinishRadius*DISTANCEMODIFY*DISTANCE_ROUNDING)/DISTANCE_ROUNDING);
     wp->GetDataField()->SetUnits(Units::GetDistanceName());
     wp->RefreshDisplay();
   }
@@ -2383,13 +2385,13 @@ static void setVariables(void) {
     dfe->addEnumText(gettext(TEXT("Cylinder")));
     dfe->addEnumText(gettext(TEXT("Line")));
     dfe->addEnumText(gettext(TEXT("FAI Sector")));
-    dfe->Set(StartLine);
+    dfe->Set(settings_task.StartLine);
     wp->RefreshDisplay();
   }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpTaskStartRadius"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(lround(StartRadius*DISTANCEMODIFY*DISTANCE_ROUNDING)/DISTANCE_ROUNDING);
+    wp->GetDataField()->SetAsFloat(lround(settings_task.StartRadius*DISTANCEMODIFY*DISTANCE_ROUNDING)/DISTANCE_ROUNDING);
     wp->GetDataField()->SetUnits(Units::GetDistanceName());
     wp->RefreshDisplay();
   }
@@ -2401,13 +2403,13 @@ static void setVariables(void) {
     dfe->addEnumText(gettext(TEXT("Cylinder")));
     dfe->addEnumText(gettext(TEXT("FAI Sector")));
     dfe->addEnumText(gettext(TEXT("DAe 0.5/10")));
-    dfe->Set(SectorType);
+    dfe->Set(settings_task.SectorType);
     wp->RefreshDisplay();
   }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpTaskSectorRadius"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(lround(SectorRadius*DISTANCEMODIFY*DISTANCE_ROUNDING)/DISTANCE_ROUNDING);
+    wp->GetDataField()->SetAsFloat(lround(settings_task.SectorRadius*DISTANCEMODIFY*DISTANCE_ROUNDING)/DISTANCE_ROUNDING);
     wp->GetDataField()->SetUnits(Units::GetDistanceName());
     wp->RefreshDisplay();
   }
@@ -2420,27 +2422,27 @@ static void setVariables(void) {
     dfe->addEnumText(gettext(TEXT("Auto")));
     dfe->addEnumText(gettext(TEXT("Arm")));
     dfe->addEnumText(gettext(TEXT("Arm start")));
-    dfe->Set(AutoAdvance);
+    dfe->Set(settings_task.AutoAdvance);
     wp->RefreshDisplay();
   }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpFinishMinHeight"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(iround(FinishMinHeight*ALTITUDEMODIFY));
+    wp->GetDataField()->SetAsFloat(iround(settings_task.FinishMinHeight*ALTITUDEMODIFY));
     wp->GetDataField()->SetUnits(Units::GetAltitudeName());
     wp->RefreshDisplay();
   }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpStartMaxHeight"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(iround(StartMaxHeight*ALTITUDEMODIFY));
+    wp->GetDataField()->SetAsFloat(iround(settings_task.StartMaxHeight*ALTITUDEMODIFY));
     wp->GetDataField()->SetUnits(Units::GetAltitudeName());
     wp->RefreshDisplay();
   }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpStartMaxHeightMargin"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(iround(StartMaxHeightMargin*ALTITUDEMODIFY));
+    wp->GetDataField()->SetAsFloat(iround(settings_task.StartMaxHeightMargin*ALTITUDEMODIFY));
     wp->GetDataField()->SetUnits(Units::GetAltitudeName());
     wp->RefreshDisplay();
   }
@@ -2451,20 +2453,20 @@ static void setVariables(void) {
     dfe = (DataFieldEnum*)wp->GetDataField();
     dfe->addEnumText(gettext(TEXT("AGL")));
     dfe->addEnumText(gettext(TEXT("MSL")));
-    dfe->Set(StartHeightRef);
+    dfe->Set(settings_task.StartHeightRef);
     wp->RefreshDisplay();
   }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpStartMaxSpeed"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(iround(StartMaxSpeed*SPEEDMODIFY));
+    wp->GetDataField()->SetAsFloat(iround(settings_task.StartMaxSpeed*SPEEDMODIFY));
     wp->GetDataField()->SetUnits(Units::GetHorizontalSpeedName());
     wp->RefreshDisplay();
   }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpStartMaxSpeedMargin"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(iround(StartMaxSpeedMargin*SPEEDMODIFY));
+    wp->GetDataField()->SetAsFloat(iround(settings_task.StartMaxSpeedMargin*SPEEDMODIFY));
     wp->GetDataField()->SetUnits(Units::GetHorizontalSpeedName());
     wp->RefreshDisplay();
   }
@@ -2598,6 +2600,8 @@ void dlgConfigurationShowModal(void){
   for (int item=0; item<10; item++) {
     cpyInfoBox[item] = -1;
   }
+
+  settings_task = task.getSettings();
 
   setVariables();
 
@@ -2943,10 +2947,11 @@ void dlgConfigurationShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpFAIFinishHeight"));
   if (wp) {
-    if (EnableFAIFinishHeight != (wp->GetDataField()->GetAsInteger()>0)) {
-      EnableFAIFinishHeight = (wp->GetDataField()->GetAsInteger()>0);
-      SetToRegistry(szRegistryFAIFinishHeight, EnableFAIFinishHeight);
+    if (settings_task.EnableFAIFinishHeight != (wp->GetDataField()->GetAsInteger()>0)) {
+      settings_task.EnableFAIFinishHeight = (wp->GetDataField()->GetAsInteger()>0);
+      SetToRegistry(szRegistryFAIFinishHeight, settings_task.EnableFAIFinishHeight);
       changed = true;
+      taskchanged = true;
     }
   }
 
@@ -3132,9 +3137,9 @@ void dlgConfigurationShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpTaskFinishLine"));
   if (wp) {
-    if ((int)FinishLine != wp->GetDataField()->GetAsInteger()) {
-      FinishLine = wp->GetDataField()->GetAsInteger();
-      SetToRegistry(szRegistryFinishLine,FinishLine);
+    if ((int)settings_task.FinishLine != wp->GetDataField()->GetAsInteger()) {
+      settings_task.FinishLine = wp->GetDataField()->GetAsInteger();
+      SetToRegistry(szRegistryFinishLine,settings_task.FinishLine);
       changed = true;
       taskchanged = true;
     }
@@ -3143,9 +3148,9 @@ void dlgConfigurationShowModal(void){
   wp = (WndProperty*)wf->FindByName(TEXT("prpTaskFinishRadius"));
   if (wp) {
     ival = iround(wp->GetDataField()->GetAsFloat()/DISTANCEMODIFY);
-    if ((int)FinishRadius != ival) {
-      FinishRadius = ival;
-      SetToRegistry(szRegistryFinishRadius,FinishRadius);
+    if ((int)settings_task.FinishRadius != ival) {
+      settings_task.FinishRadius = ival;
+      SetToRegistry(szRegistryFinishRadius,settings_task.FinishRadius);
       changed = true;
       taskchanged = true;
     }
@@ -3153,9 +3158,9 @@ void dlgConfigurationShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpTaskStartLine"));
   if (wp) {
-    if ((int)StartLine != wp->GetDataField()->GetAsInteger()) {
-      StartLine = wp->GetDataField()->GetAsInteger();
-      SetToRegistry(szRegistryStartLine,StartLine);
+    if ((int)settings_task.StartLine != wp->GetDataField()->GetAsInteger()) {
+      settings_task.StartLine = wp->GetDataField()->GetAsInteger();
+      SetToRegistry(szRegistryStartLine,settings_task.StartLine);
       changed = true;
       taskchanged = true;
     }
@@ -3164,9 +3169,9 @@ void dlgConfigurationShowModal(void){
   wp = (WndProperty*)wf->FindByName(TEXT("prpTaskStartRadius"));
   if (wp) {
     ival = iround(wp->GetDataField()->GetAsFloat()/DISTANCEMODIFY);
-    if ((int)StartRadius != ival) {
-      StartRadius = ival;
-      SetToRegistry(szRegistryStartRadius,StartRadius);
+    if ((int)settings_task.StartRadius != ival) {
+      settings_task.StartRadius = ival;
+      SetToRegistry(szRegistryStartRadius,settings_task.StartRadius);
       changed = true;
       taskchanged = true;
     }
@@ -3174,9 +3179,9 @@ void dlgConfigurationShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpTaskFAISector"));
   if (wp) {
-    if ((int)SectorType != wp->GetDataField()->GetAsInteger()) {
-      SectorType = wp->GetDataField()->GetAsInteger();
-      SetToRegistry(szRegistryFAISector,SectorType);
+    if ((int)settings_task.SectorType != wp->GetDataField()->GetAsInteger()) {
+      settings_task.SectorType = wp->GetDataField()->GetAsInteger();
+      SetToRegistry(szRegistryFAISector,settings_task.SectorType);
       changed = true;
       taskchanged = true;
     }
@@ -3185,9 +3190,9 @@ void dlgConfigurationShowModal(void){
   wp = (WndProperty*)wf->FindByName(TEXT("prpTaskSectorRadius"));
   if (wp) {
     ival = iround(wp->GetDataField()->GetAsFloat()/DISTANCEMODIFY);
-    if ((int)SectorRadius != ival) {
-      SectorRadius = ival;
-      SetToRegistry(szRegistrySectorRadius,SectorRadius);
+    if ((int)settings_task.SectorRadius != ival) {
+      settings_task.SectorRadius = ival;
+      SetToRegistry(szRegistrySectorRadius,settings_task.SectorRadius);
       changed = true;
       taskchanged = true;
     }
@@ -3523,64 +3528,70 @@ void dlgConfigurationShowModal(void){
   wp = (WndProperty*)wf->FindByName(TEXT("prpFinishMinHeight"));
   if (wp) {
     ival = iround(wp->GetDataField()->GetAsInteger()/ALTITUDEMODIFY);
-    if ((int)FinishMinHeight != ival) {
-      FinishMinHeight = ival;
-      SetToRegistry(szRegistryFinishMinHeight,FinishMinHeight);
+    if ((int)settings_task.FinishMinHeight != ival) {
+      settings_task.FinishMinHeight = ival;
+      SetToRegistry(szRegistryFinishMinHeight,settings_task.FinishMinHeight);
       changed = true;
+      taskchanged = true;
     }
   }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpStartMaxHeight"));
   if (wp) {
     ival = iround(wp->GetDataField()->GetAsInteger()/ALTITUDEMODIFY);
-    if ((int)StartMaxHeight != ival) {
-      StartMaxHeight = ival;
-      SetToRegistry(szRegistryStartMaxHeight,StartMaxHeight);
+    if ((int)settings_task.StartMaxHeight != ival) {
+      settings_task.StartMaxHeight = ival;
+      SetToRegistry(szRegistryStartMaxHeight,settings_task.StartMaxHeight);
       changed = true;
+      taskchanged = true;
     }
   }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpStartMaxHeightMargin"));
   if (wp) {
     ival = iround(wp->GetDataField()->GetAsInteger()/ALTITUDEMODIFY);
-    if ((int)StartMaxHeightMargin != ival) {
-      StartMaxHeightMargin = ival;
-      SetToRegistry(szRegistryStartMaxHeightMargin,StartMaxHeightMargin);
+    if ((int)settings_task.StartMaxHeightMargin != ival) {
+      settings_task.StartMaxHeightMargin = ival;
+      SetToRegistry(szRegistryStartMaxHeightMargin,settings_task.StartMaxHeightMargin);
       changed = true;
+      taskchanged = true;
     }
   }
   wp = (WndProperty*)wf->FindByName(TEXT("prpStartHeightRef"));
   if (wp) {
-    if (StartHeightRef != wp->GetDataField()->GetAsInteger()) {
-      StartHeightRef = wp->GetDataField()->GetAsInteger();
-      SetToRegistry(szRegistryStartHeightRef, StartHeightRef);
+    if (settings_task.StartHeightRef != wp->GetDataField()->GetAsInteger()) {
+      settings_task.StartHeightRef = wp->GetDataField()->GetAsInteger();
+      SetToRegistry(szRegistryStartHeightRef, settings_task.StartHeightRef);
       changed = true;
+      taskchanged = true;
     }
   }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpStartMaxSpeed"));
   if (wp) {
     ival = iround(wp->GetDataField()->GetAsInteger()/SPEEDMODIFY);
-    if ((int)StartMaxSpeed != ival) {
-      StartMaxSpeed = ival;
-      SetToRegistry(szRegistryStartMaxSpeed,StartMaxSpeed);
+    if ((int)settings_task.StartMaxSpeed != ival) {
+      settings_task.StartMaxSpeed = ival;
+      SetToRegistry(szRegistryStartMaxSpeed,settings_task.StartMaxSpeed);
       changed = true;
+      taskchanged = true;
     }
   }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpStartMaxSpeedMargin"));
   if (wp) {
     ival = iround(wp->GetDataField()->GetAsInteger()/SPEEDMODIFY);
-    if ((int)StartMaxSpeedMargin != ival) {
-      StartMaxSpeedMargin = ival;
-      SetToRegistry(szRegistryStartMaxSpeedMargin,StartMaxSpeedMargin);
+    if ((int)settings_task.StartMaxSpeedMargin != ival) {
+      settings_task.StartMaxSpeedMargin = ival;
+      SetToRegistry(szRegistryStartMaxSpeedMargin,settings_task.StartMaxSpeedMargin);
       changed = true;
+      taskchanged = true;
     }
   }
 
-  changed |= SetValueRegistryOnChange(wf, TEXT("prpAutoAdvance"),
-				      szRegistryAutoAdvance,
-				      AutoAdvance);
+  taskchanged |= SetValueRegistryOnChange(wf, TEXT("prpAutoAdvance"),
+                                          szRegistryAutoAdvance,
+                                          settings_task.AutoAdvance);
 
   changed |= SetValueRegistryOnChange(wf, TEXT("prpLoggerTimeStepCruise"),
 				      szRegistryLoggerTimeStepCruise,
@@ -3689,6 +3700,8 @@ void dlgConfigurationShowModal(void){
   }
 
   if (taskchanged) {
+    changed = true;
+    task.setSettings(settings_task);
     task.RefreshTask(XCSoarInterface::SettingsComputer());
   }
 

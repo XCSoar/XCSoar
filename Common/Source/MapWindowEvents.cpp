@@ -196,7 +196,7 @@ bool MapWindow::on_mouse_double(int x, int y)
 
 bool MapWindow::on_mouse_move(int x, int y)
 {
-  if (AATEnabled && SettingsMap().TargetPan && (TargetDrag_State>0)) {
+  if (task.getSettings().AATEnabled && SettingsMap().TargetPan && (TargetDrag_State>0)) {
     // target follows "finger" so easier to drop near edge of
     // sector
     if (TargetDrag_State == 1) {
@@ -233,7 +233,7 @@ bool MapWindow::on_mouse_down(int x, int y)
   XstartScreen = x;
   YstartScreen = y;
 
-  if (AATEnabled && SettingsMap().TargetPan) {
+  if (task.getSettings().AATEnabled && SettingsMap().TargetPan) {
     if (task.ValidTaskPoint(SettingsMap().TargetPanIndex)) {
       POINT tscreen;
       LonLat2Screen(task.getTargetLocation(SettingsMap().TargetPanIndex),
@@ -310,7 +310,7 @@ bool MapWindow::on_mouse_up(int x, int y)
   GEOPOINT G;
   Screen2LonLat(x, y, G);
 
-  if (AATEnabled && my_target_pan && (TargetDrag_State>0)) {
+  if (task.getSettings().AATEnabled && my_target_pan && (TargetDrag_State>0)) {
     TargetDrag_State = 2;
     if (task.InAATTurnSector(G, SettingsMap().TargetPanIndex)) {
       // if release mouse out of sector, don't update w/ bad coords

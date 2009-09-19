@@ -68,8 +68,28 @@ Task::Task():
   TaskAborted (false),
   AdvanceArmed (false)
 {
+  settings.AATEnabled = false;
+  settings.AutoAdvance = 1;
+  settings.EnableMultipleStartPoints = false;
+  settings.EnableFAIFinishHeight = false;
+  settings.FinishLine=1;
+  settings.FinishRadius=1000;
+  settings.SectorType = 1; // FAI sector
+  settings.SectorRadius = 10000;
+  settings.StartLine = 1;
+  settings.StartRadius = 3000;
+  settings.AATTaskLength = 120;
+  settings.FinishMinHeight = 0;
+  settings.StartHeightRef = 0; // MSL
+  settings.StartMaxHeight = 0;
+  settings.StartMaxSpeed = 0;
+  settings.StartMaxHeightMargin = 0;
+  settings.StartMaxSpeedMargin = 0;
+
   ClearTask();
   ClearStartPoints();
+
+
 }
 
 const bool Task::isAdvanceArmed() const {
@@ -109,8 +129,8 @@ void Task::ResetTaskWaypoint(int j) {
   task_points[j].AATTargetOffsetRadius = 0.0;
   task_points[j].AATTargetOffsetRadial = 0.0;
   task_points[j].AATTargetLocked = false;
-  task_points[j].AATSectorRadius = SectorRadius;
-  task_points[j].AATCircleRadius = SectorRadius;
+  task_points[j].AATSectorRadius = settings.SectorRadius;
+  task_points[j].AATCircleRadius = settings.SectorRadius;
   task_points[j].AATStartRadial = 0;
   task_points[j].AATFinishRadial = 360;
 }
@@ -132,7 +152,7 @@ void Task::FlyDirectTo(const int index,
 
   TaskModified = true;
   TargetModified = true;
-  AATEnabled = FALSE;
+  settings.AATEnabled = FALSE;
 
   /*  JMW disabled this so task info is preserved
   for(int j=0;j<MAXTASKPOINTS;j++)
@@ -397,7 +417,7 @@ const GEOPOINT&
 Task::getTargetLocation(const int v) const
 {
   int r= (v==-1)? ActiveTaskPoint:v;
-  if (AATEnabled && (r>0) && !TaskIsTemporary()
+  if (settings.AATEnabled && (r>0) && !TaskIsTemporary()
       && ValidTaskPoint(r+1)) {
     return task_points[r].AATTargetLocation;
   } else {
@@ -471,7 +491,7 @@ void
 Task::RotateStartPoints(const SETTINGS_COMPUTER &settings_computer) 
 {
   if (ActiveTaskPoint>0) return;
-  if (!EnableMultipleStartPoints) return;
+  if (!settings.EnableMultipleStartPoints) return;
 
   int found = -1;
   int imax = 0;
@@ -561,7 +581,7 @@ Task::CalculateAATTaskSectors(const NMEA_INFO &gps_info)
   int i;
   int awp = ActiveTaskPoint;
 
-  if(AATEnabled == FALSE)
+  if(!settings.AATEnabled)
     return;
 
   task_points[0].AATTargetOffsetRadius = 0.0;
@@ -711,8 +731,8 @@ void Task::ClearTask(void) {
   int i;
   for(i=0;i<MAXTASKPOINTS;i++) {
     task_points[i].Index = -1;
-    task_points[i].AATSectorRadius = SectorRadius; // JMW added default
-    task_points[i].AATCircleRadius = SectorRadius; // JMW added default
+    task_points[i].AATSectorRadius = settings.SectorRadius; // JMW added default
+    task_points[i].AATCircleRadius = settings.SectorRadius; // JMW added default
     task_points[i].AATTargetOffsetRadial = 0;
     task_points[i].AATTargetOffsetRadius = 0;
     task_points[i].AATTargetLocked = false;
@@ -840,7 +860,7 @@ void Task::BackupTask(void) {
     Task_saved[i]= task_points[i].Index;
   }
   active_waypoint_saved = ActiveTaskPoint;
-  if (AATEnabled) {
+  if (settings.AATEnabled) {
     aat_enabled_saved = true;
   } else {
     aat_enabled_saved = false;
@@ -879,7 +899,7 @@ Task::ResumeAbortTask(const SETTINGS_COMPUTER &settings_computer,
       ActiveTaskPoint = 0;
 
       // force AAT off
-      AATEnabled = false;
+      settings.AATEnabled = false;
 
       // set MacCready
       if (!GlidePolar::AbortSafetyUseCurrent)  // 20060520:sgi added
@@ -895,7 +915,7 @@ Task::ResumeAbortTask(const SETTINGS_COMPUTER &settings_computer,
 	Task_saved[i] = -1;
       }
       ActiveTaskPoint = active_waypoint_saved;
-      AATEnabled = aat_enabled_saved;
+      settings.AATEnabled = aat_enabled_saved;
 
       RefreshTask(settings_computer);
     }
@@ -1059,3 +1079,15 @@ Task::retreatTaskPoint(const SETTINGS_COMPUTER &settings_computer)
   //JMW illegal glide_computer.ResetEnter();
 }
 
+const SETTINGS_TASK &
+Task::getSettings() const
+{
+  return settings;
+}
+
+void 
+Task::setSettings(const SETTINGS_TASK& set)
+{
+  settings = set;
+  // user must RefreshTask after this
+}

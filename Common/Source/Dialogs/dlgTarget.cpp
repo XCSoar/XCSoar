@@ -74,7 +74,7 @@ static void OnOKClicked(WindowControl * Sender){
 
 
 static void MoveTarget(double adjust_angle) {
-  if (!AATEnabled) return;
+  if (!task.getSettings().AATEnabled) return;
   if (target_point==0) return;
   if (!task.ValidTaskPoint(target_point)) return;
   if (!task.ValidTaskPoint(target_point+1)) return;
@@ -157,7 +157,7 @@ static void MoveTarget(double adjust_angle) {
 
 
 static void DragTarget(const GEOPOINT target_location) {
-  if (!AATEnabled) return;
+  if (!task.getSettings().AATEnabled) return;
   if (target_point==0) return;
   if (!task.ValidTaskPoint(target_point)) return;
   if (!task.ValidTaskPoint(target_point+1)) return;
@@ -274,7 +274,7 @@ static void RefreshCalculator(void) {
   RefreshTaskStatistics();
   target_point = max(target_point,task.getActiveIndex());
 
-  bool nodisplay = !AATEnabled
+  bool nodisplay = !task.getSettings().AATEnabled
     || (target_point==0)
     || !task.ValidTaskPoint(target_point+1);
 
@@ -353,8 +353,8 @@ static void RefreshCalculator(void) {
   }
   wp = (WndProperty*)wf->FindByName(TEXT("prpAATDelta"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(dd-AATTaskLength);
-    if (AATEnabled) {
+    wp->GetDataField()->SetAsFloat(dd-task.getSettings().AATTaskLength);
+    if (task.getSettings().AATEnabled) {
       wp->SetVisible(true);
     } else {
       wp->SetVisible(false);

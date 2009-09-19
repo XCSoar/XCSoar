@@ -148,7 +148,7 @@ OnTaskPaintListItem(WindowControl *Sender, Canvas &canvas)
       TASK_POINT tp = task.getTaskPoint(i);
 
       if (InfoBoxLayout::landscape &&
-          AATEnabled && task.ValidTaskPoint(i+1) && (i>0)) {
+          task.getSettings().AATEnabled && task.ValidTaskPoint(i+1) && (i>0)) {
         if (tp.AATType==0) {
           _stprintf(sTmp, TEXT("%s %.1f"),
                     way_points.get(tp.Index).Name,
@@ -184,7 +184,7 @@ OnTaskPaintListItem(WindowControl *Sender, Canvas &canvas)
                          sTmp);
     } else if ((DrawListIndex==n+1) && task.ValidTaskPoint(0)) {
 
-      if (!AATEnabled) {
+      if (!task.getSettings().AATEnabled) {
 	_stprintf(sTmp, gettext(TEXT("Total:")));
         canvas.text_opaque(2 * InfoBoxLayout::scale, 2 * InfoBoxLayout::scale,
                            sTmp);
@@ -209,7 +209,7 @@ OnTaskPaintListItem(WindowControl *Sender, Canvas &canvas)
 
 	_stprintf(sTmp, TEXT("%s %.0f min %.0f (%.0f) %s"),
                   gettext(TEXT("Total:")),
-                  AATTaskLength*1.0,
+                  task.getSettings().AATTaskLength*1.0,
 		  DISTANCEMODIFY*lengthtotal,
 		  DISTANCEMODIFY*d1,
 		  Units::GetDistanceName());
@@ -324,8 +324,8 @@ static void OnTaskListEnter(WindowControl * Sender,
         tp.AATTargetOffsetRadius = 0.0;
         tp.AATTargetOffsetRadial = 0.0;
         tp.AATTargetLocked = false;
-        tp.AATSectorRadius = SectorRadius;
-        tp.AATCircleRadius = SectorRadius;
+        tp.AATSectorRadius = task.getSettings().SectorRadius;
+        tp.AATCircleRadius = task.getSettings().SectorRadius;
         task.setTaskPoint(ItemIndex, tp);
       }
 
@@ -334,7 +334,7 @@ static void OnTaskListEnter(WindowControl * Sender,
       } else if (isfinish) {
         dlgTaskWaypointShowModal(ItemIndex, 2, true); // finish waypoint
       } else {
-        if (AATEnabled) {
+        if (task.getSettings().AATEnabled) {
           // only need to set properties for finish
           dlgTaskWaypointShowModal(ItemIndex, 1, true); // normal waypoint
         }

@@ -589,7 +589,7 @@ void InputEvents::eventChangeInfoBoxType(const TCHAR *misc) {
 //   toggle: Toggles between armed and disarmed.
 //   show: Shows current armed state
 void InputEvents::eventArmAdvance(const TCHAR *misc) {
-  if (AutoAdvance>=2) {
+  if (task.getSettings().AutoAdvance>=2) {
     if (_tcscmp(misc, TEXT("on")) == 0) {
       task.setAdvanceArmed(true);
     }
@@ -601,7 +601,7 @@ void InputEvents::eventArmAdvance(const TCHAR *misc) {
     }
   }
   if (_tcscmp(misc, TEXT("show")) == 0) {
-    switch (AutoAdvance) {
+    switch (task.getSettings().AutoAdvance) {
     case 0:
       Message::AddMessage(TEXT("Auto Advance: Manual"));
       break;

@@ -6,27 +6,7 @@
 #include "Task.h"
 
 // state stuff
-bool  AATEnabled = FALSE;
 int   SelectedWaypoint = -1;
-
-// task parameters
-int   AutoAdvance = 1;
-bool  EnableMultipleStartPoints = false;
-bool  EnableFAIFinishHeight = false;
-unsigned int   FinishLine=1;
-unsigned FinishRadius=1000;
-unsigned int   SectorType = 1; // FAI sector
-unsigned int   SectorRadius = 10000;
-unsigned int   StartLine = 1;
-unsigned StartRadius = 3000;
-// Assigned Area Task
-double AATTaskLength = 120;
-unsigned FinishMinHeight = 0;
-int      StartHeightRef = 0; // MSL
-unsigned StartMaxHeight = 0;
-unsigned StartMaxSpeed = 0;
-unsigned StartMaxHeightMargin = 0;
-unsigned StartMaxSpeedMargin = 0;
 
 //Task Information
 

@@ -123,7 +123,7 @@ bool ButtonLabel::ExpandMacros(const TCHAR *In,
         invalid = !task.ValidTaskPoint(task.getActiveIndex()-1);
         ReplaceInString(OutBuffer, TEXT("$(WaypointPrevious)"),
                         TEXT("Waypoint\nStart"), Size);
-      } else if (EnableMultipleStartPoints) {
+      } else if (task.getSettings().EnableMultipleStartPoints) {
         invalid = !task.ValidTaskPoint(0);
         CondReplaceInString((task.getActiveIndex()==0),
                             OutBuffer,
@@ -137,7 +137,7 @@ bool ButtonLabel::ExpandMacros(const TCHAR *In,
   }
 
   if (_tcsstr(OutBuffer, TEXT("$(AdvanceArmed)"))) {
-    switch (AutoAdvance) {
+    switch (task.getSettings().AutoAdvance) {
     case 0:
       ReplaceInString(OutBuffer, TEXT("$(AdvanceArmed)"), TEXT("(manual)"), Size);
       invalid = true;

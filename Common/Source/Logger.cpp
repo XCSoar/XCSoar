@@ -40,7 +40,7 @@
 #include "Dialogs.h"
 #include "Language.hpp"
 #include "Settings.hpp"
-#include "SettingsTask.hpp"
+#include "Task.h"
 #include "Registry.hpp"
 #include "Math/Earth.hpp"
 #include "LogFile.hpp"

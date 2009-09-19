@@ -46,7 +46,7 @@ Copyright_License {
 #include "Protection.hpp"
 #include "Interface.hpp"
 #include "Language.hpp"
-#include "SettingsTask.hpp"
+#include "Task.h"
 #include "UtilsText.hpp"
 #include "Math/Pressure.h"
 #include "Device/Parser.h"
@@ -179,25 +179,27 @@ BOOL VLDeclare(PDeviceDescriptor_t d, Declaration_t *decl){
 
   vl.declaration.task.nturnpoints = max(min(nturnpoints-2, 12), 0);
 
+  const SETTINGS_TASK settings = task.getSettings();
+
   // start..
-  switch(StartLine) {
+  switch(settings.StartLine) {
   case 0: // cylinder
     vl.declaration.task.startpoint.oztyp = VLAPI_DATA::DCLWPT::OZTYP_CYLSKT;
-    vl.declaration.task.startpoint.lw = min(1500,StartRadius);
-    vl.declaration.task.startpoint.rz = min(1500,StartRadius);
+    vl.declaration.task.startpoint.lw = min(1500,settings.StartRadius);
+    vl.declaration.task.startpoint.rz = min(1500,settings.StartRadius);
     vl.declaration.task.startpoint.rs = 0;
     break;
   case 1: // line
     vl.declaration.task.startpoint.oztyp = VLAPI_DATA::DCLWPT::OZTYP_LINE;
-    vl.declaration.task.startpoint.lw = min(1500,StartRadius*2);
+    vl.declaration.task.startpoint.lw = min(1500,settings.StartRadius*2);
     vl.declaration.task.startpoint.rs = 0;
     vl.declaration.task.startpoint.rz = 0;
     break;
   case 2: // fai sector
     vl.declaration.task.startpoint.oztyp = VLAPI_DATA::DCLWPT::OZTYP_CYLSKT;
-    vl.declaration.task.startpoint.lw = min(1500,StartRadius);
+    vl.declaration.task.startpoint.lw = min(1500,settings.StartRadius);
     vl.declaration.task.startpoint.rz = 0;
-    vl.declaration.task.startpoint.rs = min(1500,StartRadius);
+    vl.declaration.task.startpoint.rs = min(1500,settings.StartRadius);
     break;
   }
   vl.declaration.task.startpoint.ws = 360;
@@ -205,10 +207,10 @@ BOOL VLDeclare(PDeviceDescriptor_t d, Declaration_t *decl){
   // rest of task...
   for (i=0; i<nturnpoints; i++) {
     // note this is for non-aat only!
-    switch (SectorType) {
+    switch (settings.SectorType) {
     case 0: // cylinder
       vl.declaration.task.turnpoints[i].oztyp = VLAPI_DATA::DCLWPT::OZTYP_CYLSKT;
-      vl.declaration.task.turnpoints[i].rz = SectorRadius;
+      vl.declaration.task.turnpoints[i].rz = settings.SectorRadius;
       vl.declaration.task.turnpoints[i].rs = 0;
       vl.declaration.task.turnpoints[i].lw = 0;
       break;
@@ -230,24 +232,24 @@ BOOL VLDeclare(PDeviceDescriptor_t d, Declaration_t *decl){
   }
 
   // Finish
-  switch(FinishLine) {
+  switch(settings.FinishLine) {
   case 0: // cylinder
     vl.declaration.task.finishpoint.oztyp = VLAPI_DATA::DCLWPT::OZTYP_CYLSKT;
-    vl.declaration.task.finishpoint.lw = min(1500,FinishRadius);
-    vl.declaration.task.finishpoint.rz = min(1500,FinishRadius);
+    vl.declaration.task.finishpoint.lw = min(1500,settings.FinishRadius);
+    vl.declaration.task.finishpoint.rz = min(1500,settings.FinishRadius);
     vl.declaration.task.finishpoint.rs = 0;
     break;
   case 1: // line
     vl.declaration.task.finishpoint.oztyp = VLAPI_DATA::DCLWPT::OZTYP_LINE;
-    vl.declaration.task.finishpoint.lw = FinishRadius*2;
+    vl.declaration.task.finishpoint.lw = settings.FinishRadius*2;
     vl.declaration.task.finishpoint.rz = 0;
     vl.declaration.task.finishpoint.rs = 0;
     break;
   case 2: // fai sector
     vl.declaration.task.finishpoint.oztyp = VLAPI_DATA::DCLWPT::OZTYP_CYLSKT;
-    vl.declaration.task.finishpoint.lw = min(1500,FinishRadius);
+    vl.declaration.task.finishpoint.lw = min(1500,settings.FinishRadius);
     vl.declaration.task.finishpoint.rz = 0;
-    vl.declaration.task.finishpoint.rs = min(1500,FinishRadius);
+    vl.declaration.task.finishpoint.rs = min(1500,settings.FinishRadius);
     break;
   }
   vl.declaration.task.finishpoint.ws = 360;

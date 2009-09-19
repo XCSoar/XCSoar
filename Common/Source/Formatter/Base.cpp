@@ -37,7 +37,7 @@ Copyright_License {
 
 #include "Formatter/Base.hpp"
 #include "XCSoar.h"
-#include "SettingsTask.hpp"
+#include "Task.h"
 #include "Math/FastMath.h"
 #include "Atmosphere.h"
 #include "Battery.h"
@@ -216,22 +216,22 @@ void InfoBoxFormatter::AssignValue(int i) {
     break;
   case 28:
     Value = DISTANCEMODIFY*Calculated().AATMaxDistance ;
-    Valid = task.ValidTaskPoint(task.getActiveIndex()) && AATEnabled;
+    Valid = task.ValidTaskPoint(task.getActiveIndex()) && task.getSettings().AATEnabled;
     break;
   case 29:
     Value = DISTANCEMODIFY*Calculated().AATMinDistance ;
-    Valid = task.ValidTaskPoint(task.getActiveIndex()) && AATEnabled;
+    Valid = task.ValidTaskPoint(task.getActiveIndex()) && task.getSettings().AATEnabled;
     break;
   case 30:
     Value = TASKSPEEDMODIFY*Calculated().AATMaxSpeed;
-    Valid = task.ValidTaskPoint(task.getActiveIndex()) && AATEnabled;
+    Valid = task.ValidTaskPoint(task.getActiveIndex()) && task.getSettings().AATEnabled;
     if (Calculated().AATTimeToGo<1) {
       Valid = false;
     }
     break;
   case 31:
     Value = TASKSPEEDMODIFY*Calculated().AATMinSpeed;
-    Valid = task.ValidTaskPoint(task.getActiveIndex()) && AATEnabled;
+    Valid = task.ValidTaskPoint(task.getActiveIndex()) && task.getSettings().AATEnabled;
     if (Calculated().AATTimeToGo<1) {
       Valid = false;
     }
@@ -281,11 +281,11 @@ void InfoBoxFormatter::AssignValue(int i) {
     break;
   case 51:
     Value = DISTANCEMODIFY*Calculated().AATTargetDistance ;
-    Valid = task.ValidTaskPoint(task.getActiveIndex()) && AATEnabled;
+    Valid = task.ValidTaskPoint(task.getActiveIndex()) && task.getSettings().AATEnabled;
     break;
   case 52:
     Value = TASKSPEEDMODIFY*Calculated().AATTargetSpeed;
-    Valid = task.ValidTaskPoint(task.getActiveIndex()) && AATEnabled;
+    Valid = task.ValidTaskPoint(task.getActiveIndex()) && task.getSettings().AATEnabled;
     if (Calculated().AATTimeToGo<1) {
       Valid = false;
     }

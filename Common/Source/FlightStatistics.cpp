@@ -354,7 +354,7 @@ void FlightStatistics::RenderTask(Canvas &canvas, const RECT rc, const bool olcm
     chart.ScaleXFromValue(x1);
     chart.ScaleYFromValue(y1);
     
-    if (AATEnabled) {
+    if (task.getSettings().AATEnabled) {
       GEOPOINT aatloc;
       double bearing;
       double radius;
@@ -400,7 +400,7 @@ void FlightStatistics::RenderTask(Canvas &canvas, const RECT rc, const bool olcm
 
   // draw aat areas
   if (!olcmode) {
-    if (AATEnabled) {
+    if (task.getSettings().AATEnabled) {
       for (i=MAXTASKPOINTS-1; i>0; i--) {
 	if (task.ValidTaskPoint(i)) {
           lat1 = task.getTaskPointLocation(i-1).Latitude;
@@ -477,7 +477,7 @@ void FlightStatistics::RenderTask(Canvas &canvas, const RECT rc, const bool olcm
 	  chart.DrawLabel(text, x2, y2);
 	}
 
-	if ((i==(int)task.getActiveIndex())&&(!AATEnabled)) {
+	if ((i==(int)task.getActiveIndex())&&(!task.getSettings().AATEnabled)) {
 	  lat1 = XCSoarInterface::Basic().Location.Latitude;
 	  lon1 = XCSoarInterface::Basic().Location.Longitude;
 	  x1 = (lon1-lon_c)*fastcosine(lat1);
@@ -491,7 +491,7 @@ void FlightStatistics::RenderTask(Canvas &canvas, const RECT rc, const bool olcm
 
     // draw aat task line
 
-    if (AATEnabled) {
+    if (task.getSettings().AATEnabled) {
       for (i=0; task.ValidTaskPoint(i) && task.ValidTaskPoint(i+1); i++) {
         GEOPOINT loc1 = task.getTargetLocation(i);
         GEOPOINT loc2 = task.getTargetLocation(i+1);
@@ -1066,7 +1066,7 @@ FlightStatistics::CaptionTask(TCHAR *sTmp)
   } else {
     TCHAR timetext1[100];
     TCHAR timetext2[100];
-    if (AATEnabled) {
+    if (task.getSettings().AATEnabled) {
       Units::TimeToText(timetext1, 
 			(int)XCSoarInterface::Calculated().TaskTimeToGo);
       Units::TimeToText(timetext2, 

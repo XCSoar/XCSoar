@@ -127,14 +127,14 @@ void MapWindow::DrawThermalBand(Canvas &canvas, const RECT rc)
   h = Calculated().NavAltitude-hoffset;
 
   bool draw_start_height = ((task.getActiveIndex()==0) && (task.ValidTaskPoint(0))
-			    && (StartMaxHeight!=0)
+			    && (task.getSettings().StartMaxHeight!=0)
 			    && (Calculated().TerrainValid));
   double hstart=0;
   if (draw_start_height) {
-    if (StartHeightRef == 0) {
-      hstart = StartMaxHeight+Calculated().TerrainAlt;
+    if (task.getSettings().StartHeightRef == 0) {
+      hstart = task.getSettings().StartMaxHeight+Calculated().TerrainAlt;
     } else {
-      hstart = StartMaxHeight;
+      hstart = task.getSettings().StartMaxHeight;
     }
     hstart -= hoffset;
   }

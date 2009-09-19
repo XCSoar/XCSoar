@@ -41,7 +41,7 @@ Copyright_License {
 #include "Protection.hpp"
 #include "Settings.hpp"
 #include "SettingsComputer.hpp" // for auto-setting of alternates.  Dangerous!
-#include "SettingsTask.hpp"
+#include "Task.h"
 #include "SettingsUser.hpp"
 #include "Components.hpp"
 #include "WayPointList.hpp"

@@ -126,6 +126,10 @@ public:
   const bool isAdvanceArmed();
   void setAdvanceArmed(const bool set);
 
+  // settings
+  const SETTINGS_TASK &getSettings();
+  void setSettings(const SETTINGS_TASK& set);
+
   // other
 
   void setTaskIndices(const int wpindex[MAXTASKPOINTS]);

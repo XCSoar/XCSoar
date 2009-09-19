@@ -43,6 +43,7 @@ Copyright_License {
 #include "Settings.hpp"
 #include "SettingsComputer.hpp"
 #include "SettingsTask.hpp"
+#include "Task.h"
 #include "RasterTerrain.h"
 #include "RasterMap.h"
 #include "Math/FastMath.h"
@@ -354,11 +355,11 @@ EffectiveMacCready_internal(const NMEA_INFO *Basic, const DERIVED_INFO *Calculat
     if (i+1==task.getActiveIndex()) {
       LegDistances[i] = ProjectedDistance(w0, w1, Basic->Location);
     }
-    if ((StartLine==0) && (i==0)) {
+    if ((task.getSettings().StartLine==0) && (i==0)) {
       // Correct speed calculations for radius
       // JMW TODO accuracy: leg distance replace this with more accurate version
       // leg_distance -= StartRadius;
-      LegDistances[0] = max(0.1,LegDistances[0]-StartRadius);
+      LegDistances[0] = max(0.1,LegDistances[0]-task.getSettings().StartRadius);
     }
   }
 

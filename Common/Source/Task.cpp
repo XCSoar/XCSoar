@@ -439,3 +439,19 @@ TaskSafe::scan_leg_reverse(AbsoluteTaskLegVisitor &visitor, const bool write) {
   Poco::ScopedRWLock protect(lock, write);
   _task.scan_leg_reverse(visitor);
 };
+
+
+const SETTINGS_TASK &
+TaskSafe::getSettings() 
+{
+  Poco::ScopedRWLock protect(lock, false);
+  return _task.getSettings();
+}
+
+void 
+TaskSafe::setSettings(const SETTINGS_TASK& set)
+{
+  Poco::ScopedRWLock protect(lock, true);
+  _task.setSettings(set);
+}
+

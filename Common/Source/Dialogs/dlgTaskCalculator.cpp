@@ -100,17 +100,17 @@ static void RefreshCalculator(void) {
   // update outputs
   wp = (WndProperty*)wf->FindByName(TEXT("prpAATTime"));
   if (wp) {
-    if (!AATEnabled) {
+    if (!task.getSettings().AATEnabled) {
       wp->SetVisible(false);
     } else {
-      wp->GetDataField()->SetAsFloat(AATTaskLength);
+      wp->GetDataField()->SetAsFloat(task.getSettings().AATTaskLength);
     }
-      wp->RefreshDisplay();
+    wp->RefreshDisplay();
   }
 
   double d1 = (XCSoarInterface::Calculated().TaskDistanceToGo
 	       +XCSoarInterface::Calculated().TaskDistanceCovered);
-  if (AATEnabled && (d1==0.0)) {
+  if (task.getSettings().AATEnabled && (d1==0.0)) {
     d1 = XCSoarInterface::Calculated().AATTargetDistance;
   }
   wp = (WndProperty*)wf->FindByName(TEXT("prpDistance"));
@@ -136,7 +136,7 @@ static void RefreshCalculator(void) {
   wp = (WndProperty*)wf->FindByName(TEXT("prpRange"));
   if (wp) {
     wp->RefreshDisplay();
-    if (!AATEnabled || !task.ValidTaskPoint(task.getActiveIndex()+1)) {
+    if (!task.getSettings().AATEnabled || !task.ValidTaskPoint(task.getActiveIndex()+1)) {
       wp->SetVisible(false);
     } else {
       wp->SetVisible(true);
@@ -179,7 +179,7 @@ static void DoOptimise(void) {
   double RangeLast= Range;
   double deltaTlast = 0;
   int steps = 0;
-  if (!AATEnabled) return;
+  if (!task.getSettings().AATEnabled) return;
 
   // should do a GUI::ExchangeBlackboard() here and use local storage
 
@@ -193,7 +193,7 @@ static void DoOptimise(void) {
     if ((XCSoarInterface::Calculated().TaskStartTime>0.0)&&(XCSoarInterface::Calculated().Flying)) {
       deltaT += XCSoarInterface::Basic().Time-XCSoarInterface::Calculated().TaskStartTime;
     }
-    deltaT= min(24.0*60.0,deltaT/60.0)-AATTaskLength-5;
+    deltaT= min(24.0*60.0,deltaT/60.0)-task.getSettings().AATTaskLength-5;
 
     double dRdT = 0.001;
     if (steps>0) {
@@ -352,7 +352,7 @@ void dlgTaskCalculatorShowModal(void){
 
   RefreshCalculator();
 
-  if (!AATEnabled || !task.ValidTaskPoint(task.getActiveIndex()+1)) {
+  if (!task.getSettings().AATEnabled || !task.ValidTaskPoint(task.getActiveIndex()+1)) {
     ((WndButton *)wf->FindByName(TEXT("Optimise")))->SetVisible(false);
   }
   if (!task.ValidTaskPoint(task.getActiveIndex())) {
