@@ -65,10 +65,19 @@ Task::Task():
   aat_enabled_saved(false),
   TaskModified(false),
   TargetModified(false),
-  TaskAborted (false)
+  TaskAborted (false),
+  AdvanceArmed (false)
 {
   ClearTask();
   ClearStartPoints();
+}
+
+const bool Task::isAdvanceArmed() const {
+  return AdvanceArmed;
+}
+
+void Task::setAdvanceArmed(const bool val) {
+  AdvanceArmed = val;
 }
 
 const bool Task::isTaskAborted() const {

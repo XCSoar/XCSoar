@@ -43,7 +43,6 @@ Copyright_License {
 
 // control of task/waypoints
 extern int  AutoAdvance;
-extern bool AdvanceArmed;
 extern int  SelectedWaypoint;
 
 extern Start_t        task_start_points;
@@ -57,15 +56,16 @@ extern unsigned FinishLine;
 extern unsigned FinishRadius;
 extern double AATTaskLength;
 extern bool AATEnabled;
+extern bool EnableMultipleStartPoints;
+
+// rules
 extern bool EnableFAIFinishHeight;
 extern unsigned FinishMinHeight;
 extern unsigned StartMaxHeight;
 extern unsigned StartMaxHeightMargin;
 extern unsigned StartMaxSpeed;
 extern unsigned StartMaxSpeedMargin;
-extern bool EnableMultipleStartPoints;
 extern int  StartHeightRef;
-extern bool   ForceFinalGlide;
 
 
 #endif

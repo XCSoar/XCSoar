@@ -122,6 +122,12 @@ public:
   const WAYPOINT& getWaypoint(const int v=-1);
   const int getWaypointIndex(const int v=-1);
 
+  // advance
+  const bool isAdvanceArmed();
+  void setAdvanceArmed(const bool set);
+
+  // other
+
   void setTaskIndices(const int wpindex[MAXTASKPOINTS]);
 
   void scan_point_forward(RelativeTaskPointVisitor &visitor, const bool write=true);

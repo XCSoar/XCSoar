@@ -7,9 +7,7 @@
 
 // state stuff
 bool  AATEnabled = FALSE;
-bool  ForceFinalGlide= false;
 int   SelectedWaypoint = -1;
-bool  AdvanceArmed = false;
 
 // task parameters
 int   AutoAdvance = 1;

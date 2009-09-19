@@ -3,7 +3,6 @@
 FILES = \
 	../../Header/InputEvents_defaults.cpp \
 	../../Header/InputEvents_altair.cpp \
-	../../Header/InputEvents_pna.cpp \
 	../../Header/InputEvents_fivv.cpp \
 	../../Header/InputEvents_pc.cpp \
 	../../Header/InputEvents_Text2Event.cpp
@@ -19,9 +18,6 @@ build: $(FILES)
 
 ../../Header/InputEvents_fivv.cpp : fivv.xci xci2cpp.pl
 	perl xci2cpp.pl fivv.xci > $@
-
-../../Header/InputEvents_pna.cpp : pna.xci xci2cpp.pl
-	perl xci2cpp.pl pna.xci > $@
 
 ../../Header/InputEvents_altair.cpp : altair.xci xci2cpp.pl
 	perl xci2cpp.pl altair.xci > $@

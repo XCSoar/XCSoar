@@ -591,13 +591,13 @@ void InputEvents::eventChangeInfoBoxType(const TCHAR *misc) {
 void InputEvents::eventArmAdvance(const TCHAR *misc) {
   if (AutoAdvance>=2) {
     if (_tcscmp(misc, TEXT("on")) == 0) {
-      AdvanceArmed = true;
+      task.setAdvanceArmed(true);
     }
     if (_tcscmp(misc, TEXT("off")) == 0) {
-      AdvanceArmed = false;
+      task.setAdvanceArmed(false);
     }
     if (_tcscmp(misc, TEXT("toggle")) == 0) {
-      AdvanceArmed = !AdvanceArmed;
+      task.setAdvanceArmed(!task.isAdvanceArmed());
     }
   }
   if (_tcscmp(misc, TEXT("show")) == 0) {
@@ -609,7 +609,7 @@ void InputEvents::eventArmAdvance(const TCHAR *misc) {
       Message::AddMessage(TEXT("Auto Advance: Automatic"));
       break;
     case 2:
-      if (AdvanceArmed) {
+      if (task.isAdvanceArmed()) {
         Message::AddMessage(TEXT("Auto Advance: ARMED"));
       } else {
         Message::AddMessage(TEXT("Auto Advance: DISARMED"));
@@ -617,7 +617,7 @@ void InputEvents::eventArmAdvance(const TCHAR *misc) {
       break;
     case 3:
       if (task.getActiveIndex()<2) { // past start (but can re-start)
-        if (AdvanceArmed) {
+        if (task.isAdvanceArmed()) {
           Message::AddMessage(TEXT("Auto Advance: ARMED"));
         } else {
           Message::AddMessage(TEXT("Auto Advance: DISARMED"));
@@ -803,31 +803,6 @@ void InputEvents::eventMacCready(const TCHAR *misc) {
     Message::AddMessage(TEXT("MacCready "), Temp);
   }
 }
-
-
-// Allows forcing of flight mode (final glide)
-void InputEvents::eventFlightMode(const TCHAR *misc) {
-  if (_tcscmp(misc, TEXT("finalglide on")) == 0) {
-    ForceFinalGlide = true;
-  }
-  if (_tcscmp(misc, TEXT("finalglide off")) == 0) {
-    ForceFinalGlide = false;
-  }
-  if (_tcscmp(misc, TEXT("finalglide toggle")) == 0) {
-    ForceFinalGlide = !ForceFinalGlide;
-  }
-  if (_tcscmp(misc, TEXT("show")) == 0) {
-    if (ForceFinalGlide) {
-      Message::AddMessage(TEXT("Final glide forced ON"));
-    } else {
-      Message::AddMessage(TEXT("Final glide automatic"));
-    }
-  }
-  if (ForceFinalGlide && !task.Valid()) {
-    Message::AddMessage(TEXT("No Active Waypoint!"));
-  }
-}
-
 
 
 // Wind

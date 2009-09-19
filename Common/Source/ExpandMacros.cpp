@@ -149,7 +149,7 @@ bool ButtonLabel::ExpandMacros(const TCHAR *In,
     case 2:
       if (task.getActiveIndex()>0) {
         if (task.ValidTaskPoint(task.getActiveIndex()+1)) {
-          CondReplaceInString(AdvanceArmed, OutBuffer, TEXT("$(AdvanceArmed)"),
+          CondReplaceInString(task.isAdvanceArmed(), OutBuffer, TEXT("$(AdvanceArmed)"),
                               TEXT("Cancel"), TEXT("TURN"), Size);
         } else {
           ReplaceInString(OutBuffer, TEXT("$(AdvanceArmed)"),
@@ -157,16 +157,16 @@ bool ButtonLabel::ExpandMacros(const TCHAR *In,
           invalid = true;
         }
       } else {
-        CondReplaceInString(AdvanceArmed, OutBuffer, TEXT("$(AdvanceArmed)"),
+        CondReplaceInString(task.isAdvanceArmed(), OutBuffer, TEXT("$(AdvanceArmed)"),
                             TEXT("Cancel"), TEXT("START"), Size);
       }
       break;
     case 3:
       if (task.getActiveIndex()==0) {
-        CondReplaceInString(AdvanceArmed, OutBuffer, TEXT("$(AdvanceArmed)"),
+        CondReplaceInString(task.isAdvanceArmed(), OutBuffer, TEXT("$(AdvanceArmed)"),
                             TEXT("Cancel"), TEXT("START"), Size);
       } else if (task.getActiveIndex()==1) {
-        CondReplaceInString(AdvanceArmed, OutBuffer, TEXT("$(AdvanceArmed)"),
+        CondReplaceInString(task.isAdvanceArmed(), OutBuffer, TEXT("$(AdvanceArmed)"),
                             TEXT("Cancel"), TEXT("RESTART"), Size);
       } else {
         ReplaceInString(OutBuffer, TEXT("$(AdvanceArmed)"), TEXT("(auto)"), Size);
@@ -317,16 +317,6 @@ bool ButtonLabel::ExpandMacros(const TCHAR *In,
   CondReplaceInString(task.TaskIsTemporary(),
 		      OutBuffer, TEXT("$(TaskAbortToggleActionName)"),
 		      TEXT("Resume"), TEXT("Abort"), Size);
-
-  if (_tcsstr(OutBuffer, TEXT("$(FinalForceToggleActionName)"))) {
-    CondReplaceInString(ForceFinalGlide, OutBuffer,
-                        TEXT("$(FinalForceToggleActionName)"),
-                        TEXT("Unforce"),
-                        TEXT("Force"), Size);
-    if (SettingsComputer().AutoForceFinalGlide) {
-      invalid = true;
-    }
-  }
 
   CondReplaceInString(SettingsMap().FullScreen, OutBuffer,
                       TEXT("$(FullScreenToggleActionName)"),

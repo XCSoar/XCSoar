@@ -591,12 +591,6 @@ makeLabel(mode_id,TEXT("Task\n$(TaskAbortToggleActionName)$(CheckWaypointFile)")
 Key2Event[mode_id]['8'] = event_id;
 
 event_id = 0;
-event_id = InputEvents::makeEvent(&eventFlightMode, TEXT("finalglide toggle"), event_id);
-mode_id = InputEvents::mode2int(TEXT("Nav2"), true);
-makeLabel(mode_id,TEXT("$(CheckTaskResumed)$(CheckTask)Final\n$(FinalForceToggleActionName)"),8,event_id);
-Key2Event[mode_id]['9'] = event_id;
-
-event_id = 0;
 event_id = InputEvents::makeEvent(&eventSetup, TEXT("Target"), event_id);
 event_id = InputEvents::makeEvent(&eventMode, TEXT("default"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Nav2"), true);

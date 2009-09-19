@@ -119,7 +119,6 @@ private:
   static void eventClearWarningsOrTerrainTopology(const TCHAR *misc);
   static void eventDLLExecute(const TCHAR *misc);
   static void eventDoInfoKey(const TCHAR *misc);
-  static void eventFlightMode(const TCHAR *misc);
   static void eventLogger(const TCHAR *misc);
   static void eventMacCready(const TCHAR *misc);
   static void eventMainMenu(const TCHAR *misc);

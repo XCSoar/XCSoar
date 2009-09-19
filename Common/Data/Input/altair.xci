@@ -486,13 +486,6 @@ location=7
 
 mode=Nav2
 type=key
-data=9
-event=FlightMode finalglide toggle
-label=$(CheckTaskResumed)$(CheckTask)Final\n$(FinalForceToggleActionName)
-location=8
-
-mode=Nav2
-type=key
 data=0
 event=Setup Target
 event=Mode default

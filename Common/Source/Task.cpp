@@ -195,6 +195,22 @@ TaskSafe::FindInsideAATSectorDistance(const GEOPOINT &location,
                                            course_bearing, p_found);
 }
 
+
+const bool 
+TaskSafe::isAdvanceArmed() 
+{
+  // read
+  Poco::ScopedRWLock protect(lock, false);
+  return _task.isAdvanceArmed();
+}
+
+void 
+TaskSafe::setAdvanceArmed(const bool set) 
+{
+  Poco::ScopedRWLock protect(lock, true);
+  _task.setAdvanceArmed(set);
+}
+
 const bool 
 TaskSafe::isTaskModified()  
 {

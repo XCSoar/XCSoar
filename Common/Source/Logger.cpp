@@ -161,11 +161,9 @@ void StopLogger(const NMEA_INFO &gps_info) {
     if (LoggerClearFreeSpace(gps_info)) {
 
 #ifndef _SIM_
-    if (LoggerGActive())
-	{
-	  LoggerGStop(szLoggerFileName);
-	}
-
+      if (LoggerGActive()) {
+        LoggerGStop(szLoggerFileName);
+      }
 #endif
 
       int imCount=0;
@@ -179,17 +177,15 @@ void StopLogger(const NMEA_INFO &gps_info) {
         Sleep(750); // wait for file system cache to fix itself?
       }
       if (imCount == imMax) { // MoveFile() failed all attempts
-
+      
         if (0 == MoveFile( szLoggerFileName, szFLoggerFileNameRoot)) { // try rename it and leave in root
           iLoggerError=1; //Fail.  NoMoveNoRename
         }
         else {
           iLoggerError=2; //NoMoveYesRename
         }
-      }
-
-    }
-    else { // Insufficient disk space.  // MoveFile() nonzero==Success
+      }      
+    } else { // Insufficient disk space.  // MoveFile() nonzero==Success
       if (0 == MoveFile( szLoggerFileName, szFLoggerFileNameRoot)) { // try rename it and leave in root
         iLoggerError=3; //Fail.  Insufficient Disk Space, NoRename
       }
@@ -197,7 +193,7 @@ void StopLogger(const NMEA_INFO &gps_info) {
         iLoggerError=4; //Success.  Insufficient Disk Space, YesRename
       }
     }
-
+    
     switch (iLoggerError) { //0=Success 1=NoMoveNoRename 2=NoMoveYesRename 3=NoSpaceNoRename 4=NoSpaceYesRename
     case 0:
       StartupStore(TEXT("Logger file successfully moved\r\n"));
@@ -481,7 +477,11 @@ StartLogger(const NMEA_INFO &gps_info,
     task.SaveDefaultTask();
   }
 
+#ifdef WINDOWSPC
+  _stprintf(szLoggerFileName, TEXT("/tmp/tmp.IGC"));
+#else
   _stprintf(szLoggerFileName, TEXT("\\tmp.IGC"));
+#endif
   DeleteFile(szLoggerFileName);
 
   LoggerGInit();

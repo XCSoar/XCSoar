@@ -212,6 +212,10 @@ public:
   const WAYPOINT& getWaypoint(const int v=-1) const;
   const int getWaypointIndex(const int v=-1) const;
 
+  // advance
+  const bool isAdvanceArmed() const;
+  void setAdvanceArmed(const bool set);
+
   void setTaskIndices(const int wpindex[MAXTASKPOINTS]);
 
   // scan routines
@@ -221,6 +225,7 @@ public:
   void scan_leg_forward(AbsoluteTaskLegVisitor &visitor);
   void scan_leg_reverse(RelativeTaskLegVisitor &visitor);
   void scan_leg_reverse(AbsoluteTaskLegVisitor &visitor);
+
 
 protected:
  Task_t         task_points;
@@ -233,11 +238,11 @@ private:
   void CalculateAATIsoLines(void);
 
  unsigned active_waypoint_saved;
- bool aat_enabled_saved;
- bool TaskModified;
- bool TargetModified;
- bool TaskAborted;
-
+  bool aat_enabled_saved;
+  bool TaskModified;
+  bool TargetModified;
+  bool TaskAborted;
+  bool AdvanceArmed;
 };
 
 //////

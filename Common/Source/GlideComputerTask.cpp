@@ -63,6 +63,8 @@ Copyright_License {
 #define AUTOADVANCE_ARM 2
 #define AUTOADVANCE_ARMSTART 3
 
+bool  ForceFinalGlide= false;
+
 
 void GlideComputerTask::ResetFlight(const bool full)
 {
@@ -586,7 +588,7 @@ bool GlideComputerTask::ReadyToStart() {
     return true;
   }
   if ((AutoAdvance== AUTOADVANCE_ARM) || (AutoAdvance==AUTOADVANCE_ARMSTART)) {
-    if (AdvanceArmed) {
+    if (task.isAdvanceArmed()) {
       return true;
     }
   }
@@ -611,13 +613,15 @@ bool GlideComputerTask::ReadyToAdvance(bool reset, bool restart) {
 
   if (AutoAdvance== AUTOADVANCE_AUTO) {
     if (reset) {
-      AdvanceArmed = false;
+      task.setAdvanceArmed(false);
     }
     return true;
   }
   if (AutoAdvance== AUTOADVANCE_ARM) {
-    if (AdvanceArmed) {
-      if (reset) AdvanceArmed = false;
+    if (task.isAdvanceArmed()) {
+      if (reset) {
+        task.setAdvanceArmed(false);
+      }
       return true;
     } else {
       say_ready = true;
@@ -625,16 +629,18 @@ bool GlideComputerTask::ReadyToAdvance(bool reset, bool restart) {
   }
   if (AutoAdvance== AUTOADVANCE_ARMSTART) {
     if ((task.getActiveIndex() == 0) || restart) {
-      if (!AdvanceArmed) {
+      if (!task.isAdvanceArmed()) {
         say_ready = true;
       } else if (reset) {
-        AdvanceArmed = false;
+        task.setAdvanceArmed(false);
         return true;
       }
     } else {
       // JMW fixed 20070528
       if (task.getActiveIndex() >0) {
-        if (reset) AdvanceArmed = false;
+        if (reset) {
+          task.setAdvanceArmed(false);
+        }
         return true;
       }
     }
@@ -885,7 +891,7 @@ void GlideComputerTask::LDNext() {
 
 
 void GlideComputerTask::CheckForceFinalGlide() {
-  // Auto Force Final Glide forces final glide mode
+  // Auto Force Final Glide forces final glide display mode
   // if above final glide...
   if (task.isTaskAborted()) {
     ForceFinalGlide = false;
