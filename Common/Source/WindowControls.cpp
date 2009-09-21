@@ -91,7 +91,6 @@ void DrawLine(Canvas &canvas, int x1, int y1, int x2, int y2) {
   canvas.line(x1, y1, x2, y2);
 }
 
-extern int dlgComboPicker(WndProperty* theProperty);
 #ifdef GNAV
 #define ENABLECOMBO false // master on/off for combo popup
 #else
@@ -561,13 +560,6 @@ void WindowControl::Redraw(void){
     update();
   }
 }
-
-
-#ifdef ALTAIRSYNC
-#else
-extern void dlgHelpShowModal(const TCHAR* Caption, const TCHAR* HelpText);
-#endif
-
 
 int WindowControl::OnHelp() {
 #ifdef ALTAIRSYNC
