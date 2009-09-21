@@ -67,7 +67,4 @@ int DrawArc(Canvas &canvas, long x, long y, int radius, RECT rc,
 	    double start,
 	    double end);
 
-void PolygonRotateShift(POINT* poly, int n, int x, int y,
-                        double angle);
-
 #endif
