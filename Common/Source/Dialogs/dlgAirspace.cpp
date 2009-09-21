@@ -41,7 +41,6 @@ Copyright_License {
 #include "InfoBoxLayout.h"
 #include "Registry.hpp"
 #include "UtilsProfile.hpp"
-#include "Screen/Util.hpp"
 #include "Screen/Graphics.hpp"
 #include "MainWindow.hpp"
 #include "SettingsAirspace.hpp"

@@ -40,7 +40,6 @@ Copyright_License {
 #include "SettingsTask.hpp"
 #include "SettingsUser.hpp"
 #include "SettingsComputer.hpp"
-#include "Screen/Util.hpp"
 #include "Screen/Graphics.hpp"
 #include "Compatibility/gdi.h"
 #include "options.h" /* for IBLSCALE() */

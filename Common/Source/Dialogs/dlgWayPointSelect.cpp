@@ -37,7 +37,6 @@ Copyright_License {
 
 #include "Dialogs/Internal.hpp"
 #include "Math/Earth.hpp"
-#include "Screen/Util.hpp"
 #include "MainWindow.hpp"
 #include "Blackboard.hpp"
 #include "InfoBoxLayout.h"

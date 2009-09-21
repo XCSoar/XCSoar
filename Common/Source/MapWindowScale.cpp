@@ -43,7 +43,6 @@ Copyright_License {
 #include "InfoBoxLayout.h"
 #include <math.h>
 #include "Math/FastMath.h"
-#include "Screen/Util.hpp"
 #include "Screen/Graphics.hpp"
 #include "Screen/Fonts.hpp"
 #include "McReady.h"

@@ -40,7 +40,6 @@ Copyright_License {
 #include "Task.h"
 #include "SettingsTask.hpp"
 #include "WayPoint.hpp"
-#include "Screen/Util.hpp"
 #include "Screen/Graphics.hpp"
 #include "Screen/Fonts.hpp"
 #include "Screen/LabelBlock.hpp"

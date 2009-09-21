@@ -40,7 +40,6 @@ Copyright_License {
 #include "Device/device.h"
 #include "InputEvents.h"
 #include "InfoBoxLayout.h"
-#include "Screen/Util.hpp"
 #include "MainWindow.hpp"
 #include "DataField/Base.hpp"
 #include "DataField/ComboList.hpp"
