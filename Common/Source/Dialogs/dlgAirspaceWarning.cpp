@@ -312,8 +312,7 @@ OnAirspaceListItemPaint(WindowControl *Sender, Canvas &canvas)
 
     if (i>=Count) return;
 
-    CopyRect(&rc, Sender->GetBoundRect());
-    CopyRect(&rcTextClip, Sender->GetBoundRect());
+    rc = rcTextClip = Sender->get_client_rect();
     rcTextClip.right = IBLSCALE(Col1Left - 2);
 
     InflateRect(&rc, IBLSCALE(-2), IBLSCALE(-2));
