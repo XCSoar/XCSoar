@@ -52,6 +52,11 @@ Copyright_License {
 
 #include <SDL/SDL_gfxPrimitives.h>
 
+/* those are WIN32 macros - undefine, or Canvas::background_mode will
+   break */
+#undef OPAQUE
+#undef TRANSPARENT
+
 class Canvas {
 protected:
   SDL_Surface *surface;
