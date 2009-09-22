@@ -44,6 +44,8 @@ Copyright_License {
 #include <windows.h>
 #include "GeoPoint.hpp"
 
+class ContainerWindow;
+class WndProperty;
 class WayPointList;
 
 void StartupScreen();
@@ -55,7 +57,11 @@ int dlgAirspacePatternsShowModal(void);
 void dlgAirspaceShowModal(bool colored);
 void dlgBasicSettingsShowModal(void);
 void dlgBrightnessShowModal(void);
-void dlgHelpShowModal(const TCHAR* Caption, const TCHAR* HelpText);
+
+void
+dlgHelpShowModal(ContainerWindow &parent,
+                 const TCHAR* Caption, const TCHAR* HelpText);
+
 void dlgChecklistShowModal(void);
 void dlgConfigurationShowModal(void);
 void dlgVegaDemoShowModal(void);
@@ -85,6 +91,9 @@ bool dlgAirspaceWarningVisible(void);
 void dlgFlarmTrafficShowModal(void);
 void dlgTextEntryKeyboardShowModal(TCHAR *text, int width=0);
 void dlgNumberEntryKeyboardShowModal(int *value, int width=0);
+
+int
+dlgComboPicker(ContainerWindow &parent, WndProperty *theProperty);
 
 void PopupWaypointDetails();
 void PopupAnalysis();

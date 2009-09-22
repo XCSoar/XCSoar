@@ -40,8 +40,6 @@ Copyright_License {
 #include "Device/device.h"
 #include "InputEvents.h"
 #include "InfoBoxLayout.h"
-#include "Screen/Util.hpp"
-#include "MainWindow.hpp"
 #include "DataField/Base.hpp"
 #include "DataField/ComboList.hpp"
 
@@ -138,14 +136,9 @@ static CallBackTableEntry_t CallBackTable[]={
   DeclareCallBackEntry(NULL)
 };
 
-
-
-
-
-
-
-int dlgComboPicker(WndProperty* theProperty){
-
+int
+dlgComboPicker(ContainerWindow &parent, WndProperty *theProperty)
+{
   static bool bInComboPicker=false;
   bool bInitialPage=true;
   bool bOpenCombo=true; // used to exit loop (optionally reruns combo with
@@ -165,12 +158,12 @@ int dlgComboPicker(WndProperty* theProperty){
     if (!InfoBoxLayout::landscape) {
       wf = dlgLoadFromXML(CallBackTable,
                           TEXT("dlgComboPicker_L.xml"),
-                          XCSoarInterface::main_window,
+                          parent,
                           TEXT("IDR_XML_COMBOPICKER_L"));
     } else {
       wf = dlgLoadFromXML(CallBackTable,
                           TEXT("dlgWayComboPicker.xml"),
-                          XCSoarInterface::main_window,
+                          parent,
                           TEXT("IDR_XML_COMBOPICKER"));
     }
 

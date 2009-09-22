@@ -93,7 +93,7 @@ MainWindow::set(LPCTSTR text,
   StartupStore(TEXT("Initialise fonts\n"));
   InitialiseFonts(get_canvas(), rc);
 
-  map.set(XCSoarInterface::main_window, rcsmall, rc);
+  map.set(*this, rcsmall, rc);
   map.set_font(MapWindowFont);
   map.SetMapRect(rcsmall);
 

@@ -43,7 +43,6 @@ Copyright_License {
 #include "Compatibility/string.h"
 #include "Math/FastMath.h"
 #include "Math/Earth.hpp"
-#include "Screen/Util.hpp"
 #include "MainWindow.hpp"
 #include "DataField/Base.hpp"
 #include "MapWindow.h"

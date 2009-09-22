@@ -63,9 +63,6 @@ static void OnCloseClicked(WindowControl * Sender){
 static void
 OnTextPaint(WindowControl *Sender, Canvas &canvas)
 {
-  RECT  rcgfx;
-
-  CopyRect(&rcgfx, Sender->GetBoundRect());
   // background is painted in the base-class
   canvas.select(*Sender->GetFont());
   canvas.background_transparent();

@@ -105,7 +105,6 @@ class WindowControl : public ContainerWindow {
     Brush mhBrushBk;
     Pen mhPenBorder;
     Pen mhPenSelector;
-    RECT mBoundRect;
     const Font *mhFont;
     TCHAR mName[64];
     TCHAR *mHelpText;
@@ -173,8 +172,6 @@ class WindowControl : public ContainerWindow {
     void SetOnHelpCallback(void(*Function)(WindowControl * Sender)){
       mOnHelpCallback = Function;
     }
-
-    RECT *GetBoundRect(void){return(&mBoundRect);};
 
     int GetWidth(void){return(mWidth);};
     int GetHeight(void){return(mHeight);};

@@ -80,9 +80,7 @@ static void SetCalcCaption(const TCHAR* caption) {
 
 static void OnAnalysisPaint(WindowControl *Sender, Canvas &canvas)
 {
-  RECT  rcgfx;
-
-  CopyRect(&rcgfx, Sender->GetBoundRect());
+  RECT rcgfx = Sender->get_client_rect();
 
   // background is painted in the base-class
 

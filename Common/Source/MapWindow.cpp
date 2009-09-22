@@ -46,7 +46,6 @@ Copyright_License {
 #include "Audio/VarioSound.h"
 #include "InputEvents.h"
 #include "Screen/Graphics.hpp"
-#include "Screen/Util.hpp"
 #include "Screen/LabelBlock.hpp"
 #include "Compatibility/gdi.h"
 #include "TopologyStore.h"

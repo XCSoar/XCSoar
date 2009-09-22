@@ -6,7 +6,7 @@ CPPFLAGS += $(shell pkg-config --cflags sdl)
 LDLIBS += $(shell pkg-config --libs sdl)
 else
 CPPFLAGS += -I/usr/local/i586-mingw32msvc/include
-LDLIBS += -L/usr/local/i586-mingw32msvc/lib
+LDLIBS += -L/usr/local/i586-mingw32msvc/lib -lSDL
 endif
 
 CPPFLAGS += -DENABLE_SDL

@@ -122,31 +122,40 @@ void OnWeatherHelp(WindowControl * Sender){
 
   switch(type) {
   case 0:
-    dlgHelpShowModal(caption, TEXT("[Terrain]\r\nDisplay terrain on map, no weather data displayed."));
+    dlgHelpShowModal(XCSoarInterface::main_window,
+                     caption, TEXT("[Terrain]\r\nDisplay terrain on map, no weather data displayed."));
     break;
   case 1:
-    dlgHelpShowModal(caption, TEXT("[Wstar]\r\nAverage dry thermal updraft strength near mid-BL height.  Subtract glider descent rate to get average vario reading for cloudless thermals.  Updraft strengths will be stronger than this forecast if convective clouds are present, since cloud condensation adds buoyancy aloft (i.e. this negects \"cloudsuck\").  W* depends upon both the surface heating and the BL depth."));
+    dlgHelpShowModal(XCSoarInterface::main_window,
+                     caption, TEXT("[Wstar]\r\nAverage dry thermal updraft strength near mid-BL height.  Subtract glider descent rate to get average vario reading for cloudless thermals.  Updraft strengths will be stronger than this forecast if convective clouds are present, since cloud condensation adds buoyancy aloft (i.e. this negects \"cloudsuck\").  W* depends upon both the surface heating and the BL depth."));
     break;
   case 2:
-    dlgHelpShowModal(caption, TEXT("[BL wind spd]\r\nThe speed and direction of the vector-averaged wind in the BL.  This prediction can be misleading if there is a large change in wind direction through the BL."));
+    dlgHelpShowModal(XCSoarInterface::main_window,
+                     caption, TEXT("[BL wind spd]\r\nThe speed and direction of the vector-averaged wind in the BL.  This prediction can be misleading if there is a large change in wind direction through the BL."));
     break;
   case 3:
-    dlgHelpShowModal(caption, TEXT("[H bl]\r\n Height of the top of the mixing layer, which for thermal convection is the average top of a dry thermal.  Over flat terrain, maximum thermalling heights will be lower due to the glider descent rate and other factors.  In the presence of clouds (which release additional buoyancy aloft, creating \"cloudsuck\") the updraft top will be above this forecast, but the maximum thermalling height will then be limited by the cloud base.  Further, when the mixing results from shear turbulence rather than thermal mixing this parameter is not useful for glider flying. "));
+    dlgHelpShowModal(XCSoarInterface::main_window,
+                     caption, TEXT("[H bl]\r\n Height of the top of the mixing layer, which for thermal convection is the average top of a dry thermal.  Over flat terrain, maximum thermalling heights will be lower due to the glider descent rate and other factors.  In the presence of clouds (which release additional buoyancy aloft, creating \"cloudsuck\") the updraft top will be above this forecast, but the maximum thermalling height will then be limited by the cloud base.  Further, when the mixing results from shear turbulence rather than thermal mixing this parameter is not useful for glider flying. "));
     break;
   case 4:
-    dlgHelpShowModal(caption, TEXT("[dwcrit]\r\n This parameter estimates the height above ground at which the average dry updraft strength drops below 225 fpm and is expected to give better quantitative numbers for the maximum cloudless thermalling height than the BL Top height, especially when mixing results from vertical wind shear rather than thermals.  (Note: the present assumptions tend to underpredict the max. thermalling height for dry consitions.) In the presence of clouds the maximum thermalling height may instead be limited by the cloud base.  Being for \"dry\" thermals, this parameter omits the effect of \"cloudsuck\"."));
+    dlgHelpShowModal(XCSoarInterface::main_window,
+                     caption, TEXT("[dwcrit]\r\n This parameter estimates the height above ground at which the average dry updraft strength drops below 225 fpm and is expected to give better quantitative numbers for the maximum cloudless thermalling height than the BL Top height, especially when mixing results from vertical wind shear rather than thermals.  (Note: the present assumptions tend to underpredict the max. thermalling height for dry consitions.) In the presence of clouds the maximum thermalling height may instead be limited by the cloud base.  Being for \"dry\" thermals, this parameter omits the effect of \"cloudsuck\"."));
     break;
   case 5:
-    dlgHelpShowModal(caption, TEXT("[bl cloudpct]\r\n This parameter provides an additional means of evaluating the formation of clouds within the BL and might be used either in conjunction with or instead of the other cloud prediction parameters.  It assumes a very simple relationship between cloud cover percentage and the maximum relative humidity within the BL.  The cloud base height is not predicted, but is expected to be below the BL Top height."));
+    dlgHelpShowModal(XCSoarInterface::main_window,
+                     caption, TEXT("[bl cloudpct]\r\n This parameter provides an additional means of evaluating the formation of clouds within the BL and might be used either in conjunction with or instead of the other cloud prediction parameters.  It assumes a very simple relationship between cloud cover percentage and the maximum relative humidity within the BL.  The cloud base height is not predicted, but is expected to be below the BL Top height."));
     break;
   case 6:
-    dlgHelpShowModal(caption, TEXT("[Sfc temp]\r\nThe temperature at a height of 2m above ground level.  This can be compared to observed surface temperatures as an indication of model simulation accuracy; e.g. if observed surface temperatures are significantly below those forecast, then soaring conditions will be poorer than forecast."));
+    dlgHelpShowModal(XCSoarInterface::main_window,
+                     caption, TEXT("[Sfc temp]\r\nThe temperature at a height of 2m above ground level.  This can be compared to observed surface temperatures as an indication of model simulation accuracy; e.g. if observed surface temperatures are significantly below those forecast, then soaring conditions will be poorer than forecast."));
     break;
   case 7:
-    dlgHelpShowModal(caption, TEXT("[hwcrit]\r\n This parameter estimates the height at which the average dry updraft strength drops below 225 fpm and is expected to give better quantitative numbers for the maximum cloudless thermalling height than the BL Top height, especially when mixing results from vertical wind shear rather than thermals.  (Note: the present assumptions tend to underpredict the max. thermalling height for dry consitions.) In the presence of clouds the maximum thermalling height may instead be limited by the cloud base.  Being for \"dry\" thermals, this parameter omits the effect of \"cloudsuck\"."));
+    dlgHelpShowModal(XCSoarInterface::main_window,
+                     caption, TEXT("[hwcrit]\r\n This parameter estimates the height at which the average dry updraft strength drops below 225 fpm and is expected to give better quantitative numbers for the maximum cloudless thermalling height than the BL Top height, especially when mixing results from vertical wind shear rather than thermals.  (Note: the present assumptions tend to underpredict the max. thermalling height for dry consitions.) In the presence of clouds the maximum thermalling height may instead be limited by the cloud base.  Being for \"dry\" thermals, this parameter omits the effect of \"cloudsuck\"."));
     break;
   case 8:
-    dlgHelpShowModal(caption, TEXT("[wblmaxmin]\r\n Maximum grid-area-averaged extensive upward or downward motion within the BL as created by horizontal wind convergence. Positive convergence is associated with local small-scale convergence lines.  Negative convergence (divergence) produces subsiding vertical motion, creating low-level inversions which limit thermalling heights."));
+    dlgHelpShowModal(XCSoarInterface::main_window,
+                     caption, TEXT("[wblmaxmin]\r\n Maximum grid-area-averaged extensive upward or downward motion within the BL as created by horizontal wind convergence. Positive convergence is associated with local small-scale convergence lines.  Negative convergence (divergence) produces subsiding vertical motion, creating low-level inversions which limit thermalling heights."));
     break;
   };
 }

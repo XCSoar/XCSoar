@@ -38,7 +38,6 @@ Copyright_License {
 #include "Screen/Graphics.hpp"
 #include "Screen/Fonts.hpp"
 #include "Screen/Ramp.hpp"
-#include "Screen/Util.hpp"
 #include "Appearance.hpp"
 #include "MapWindowProjection.hpp"
 #include "InfoBoxLayout.h"

@@ -45,7 +45,6 @@ Copyright_License {
 #include "McReady.h"
 #include "InfoBoxLayout.h"
 #include "Math/FastMath.h"
-#include "Screen/Util.hpp"
 #include "MainWindow.hpp"
 #include "LocalPath.hpp"
 #include "DataField/FileReader.hpp"
