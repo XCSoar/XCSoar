@@ -529,7 +529,7 @@ Canvas::line(int ax, int ay, int bx, int by)
 void
 Canvas::two_lines(int ax, int ay, int bx, int by, int cx, int cy)
 {
-#ifdef NOLINETO
+#ifndef NOLINETO
   ::MoveToEx(dc, ax, ay, NULL);
   ::LineTo(dc, bx, by);
   ::LineTo(dc, cx, cy);
