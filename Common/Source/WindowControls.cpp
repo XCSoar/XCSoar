@@ -855,10 +855,10 @@ WndForm::on_command(HWND hWnd, unsigned id, unsigned code)
 #endif
    if (id == VK_ESCAPE){
      mModalResult = mrCancel;
-     return(0);
+     return true;
    }
-   return(1);
 
+   return WindowControl::on_command(hWnd, id, code);
 }
 
 bool
