@@ -107,17 +107,6 @@ MainWindow::set(LPCTSTR text,
 ///////////////////////////////////////////////////////////////////////////
 // Windows event handlers
 
-bool
-MainWindow::on_command(HWND wmControl, unsigned id, unsigned code)
-{
-  if (wmControl && globalRunningEvent.test()) {
-
-    full_screen();
-  }
-
-  return TopWindow::on_command(wmControl, id, code);
-}
-
 Brush *
 MainWindow::on_color(Window &window, Canvas &canvas)
 {
