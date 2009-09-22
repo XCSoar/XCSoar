@@ -43,6 +43,7 @@
 #include <stdlib.h>
 
 class TaskLeg;
+struct GEOPOINT;
 
 class OrderedTaskPoint : public TaskPoint, public ObservationZone {
 public:
@@ -96,6 +97,25 @@ protected:
   double scan_distance_remaining(const GEOPOINT &ref);
   double scan_distance_scored(const GEOPOINT &ref);
   double scan_distance_travelled(const GEOPOINT &ref);
+public:
+
+  virtual GEOPOINT get_reference_nominal_origin();
+
+  virtual GEOPOINT get_reference_nominal_destination();
+
+  virtual GEOPOINT get_reference_scored_origin();
+
+  virtual GEOPOINT get_reference_scored_destination();
+
+  virtual GEOPOINT get_reference_travelled_origin();
+
+  virtual GEOPOINT get_reference_travelled_destination();
+
+  virtual GEOPOINT get_reference_remaining_origin();
+
+  virtual GEOPOINT get_reference_remaining_destination();
+
+protected:
 
   TaskLeg* leg_out;
   TaskLeg* leg_in;

@@ -10,7 +10,8 @@ public:
   IntermediatePoint(const WAYPOINT & wp): 
     OrderedTaskPoint(wp) 
     {};
+
+
     
-  virtual void update_geometry();
 };
 #endif //INTERMEDIATEPOINT_H

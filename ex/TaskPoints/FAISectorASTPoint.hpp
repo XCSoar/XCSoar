@@ -51,7 +51,6 @@ public:
   {
   };
   virtual void update_geometry() {
-    ASTPoint::update_geometry();
     oz.set_legs(leg_in->get_origin(), this, leg_out->get_destination());
   }
   virtual bool isInSector(const GEOPOINT &ref) const

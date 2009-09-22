@@ -33,7 +33,8 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
   }
-*/
+*/struct GEOPOINT;
+
 
 
 #ifndef AATPOINT_HPP
@@ -44,33 +45,26 @@
 
 class AATPoint : public IntermediatePoint {
 public:
-    AATPoint(const WAYPOINT & wp) : OrderedTaskPoint(wp), TargetLocked(false), TargetLocation(wp.Location),
-       has_sampled(false) {
-    };
+    AATPoint(const WAYPOINT & wp) : 
+      IntermediatePoint(wp), 
+      TargetLocked(false), 
+      TargetLocation(wp.Location),
+      has_sampled(false) {
+    }  
 
+    virtual GEOPOINT get_reference_remaining_origin();  
 
+    virtual GEOPOINT get_reference_remaining_destination();  
 
+    virtual GEOPOINT get_reference_travelled_origin();  
 
+    virtual GEOPOINT get_reference_travelled_destination();  
 
+    virtual GEOPOINT get_reference_scored_origin();  
 
-
-
-
-    // returns total distance to this point
-;
-
-
-
+    virtual GEOPOINT get_reference_scored_destination();
 
 protected:
-    const GEOPOINT & targetOrBest() {
-        if (has_sampled) {
-            return BestSample;
-        } else {
-            return TargetLocation;
-        }
-    }
-
     GEOPOINT TargetLocation;
     bool TargetLocked;
     GEOPOINT BestSample;

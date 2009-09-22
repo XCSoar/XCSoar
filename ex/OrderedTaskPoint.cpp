@@ -4,6 +4,40 @@
 #include "TaskLeg.h"
 #include <stdio.h>
 
+GEOPOINT OrderedTaskPoint::get_reference_remaining_destination()
+{
+  return getLocation();
+}
+GEOPOINT OrderedTaskPoint::get_reference_travelled_origin()
+{
+  return getLocation();
+}
+GEOPOINT OrderedTaskPoint::get_reference_scored_destination()
+{
+  return getLocation();
+}
+GEOPOINT OrderedTaskPoint::get_reference_nominal_destination()
+{
+  return getLocation();
+}
+GEOPOINT OrderedTaskPoint::get_reference_travelled_destination()
+{
+  return getLocation();
+}
+GEOPOINT OrderedTaskPoint::get_reference_scored_origin()
+{
+  return getLocation();
+}
+GEOPOINT OrderedTaskPoint::get_reference_remaining_origin()
+{
+  return getLocation();
+}
+GEOPOINT OrderedTaskPoint::get_reference_nominal_origin()
+{
+  return getLocation();
+}
+
+
 TaskLeg* OrderedTaskPoint::get_leg_in() {
   return leg_in;
 }

@@ -49,9 +49,7 @@ public:
   virtual void set_leg_out(TaskLeg* the_leg) {
     assert(the_leg == NULL);
     // should not ever have an outbound leg
-  }    
-
-  virtual void update_geometry() ;
+  }
 
 ;
 };

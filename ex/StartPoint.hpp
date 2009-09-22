@@ -53,9 +53,7 @@ public:
   virtual void set_leg_in(TaskLeg* the_leg) {
     assert(the_leg == NULL);
     // should not ever have an inbound leg
-  }    
-
-  virtual void update_geometry();
+  }
 
   // allow access to forward scan
   bool scan_active(OrderedTaskPoint* atp) {

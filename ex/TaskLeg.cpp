@@ -5,31 +5,24 @@
 #include "OrderedTaskPoint.hpp"
 #include <assert.h>
 
-//////
-
-
-
-////////
-
-
 double TaskLeg::leg_distance_scored(const GEOPOINT &ref)
 {
   switch (tp_destination->getActiveState()) {
   case OrderedTaskPoint::BEFORE_ACTIVE:
-    // todo refine
     // this leg totally included
-    return ::Distance(tp_origin->getLocation(), 
-                      tp_destination->getLocation());
+    return 
+      ::Distance(tp_origin->get_reference_scored_origin(), 
+                 tp_destination->get_reference_scored_destination());
     break;
   case OrderedTaskPoint::AFTER_ACTIVE:
     // this leg not included
     return 0.0;
   case OrderedTaskPoint::CURRENT_ACTIVE:
-    // todo refine
     // this leg partially included
-    return ::ProjectedDistance(tp_origin->getLocation(), 
-                               tp_destination->getLocation(),
-                               ref);
+    return 
+      ::ProjectedDistance(tp_origin->get_reference_scored_origin(), 
+                          tp_destination->get_reference_scored_destination(),
+                          ref);
     break;
   default:
     assert(1); // error!
@@ -42,19 +35,19 @@ double TaskLeg::leg_distance_remaining(const GEOPOINT &ref)
 {
   switch (tp_destination->getActiveState()) {
   case OrderedTaskPoint::AFTER_ACTIVE:
-    // todo refine
     // this leg totally included
-    return ::Distance(tp_origin->getLocation(), 
-                      tp_destination->getLocation());
+    return 
+      ::Distance(tp_origin->get_reference_remaining_origin(), 
+                 tp_destination->get_reference_remaining_destination());
     break;
   case OrderedTaskPoint::BEFORE_ACTIVE:
     // this leg not included
     return 0.0;
   case OrderedTaskPoint::CURRENT_ACTIVE:
-    // todo refine
     // this leg partially included
-    return ::Distance(ref, 
-                      tp_destination->getLocation());
+    return 
+      ::Distance(ref, 
+                 tp_destination->get_reference_remaining_destination());
     break;
   default:
     assert(1); // error!
@@ -66,19 +59,19 @@ double TaskLeg::leg_distance_travelled(const GEOPOINT &ref)
 {
   switch (tp_destination->getActiveState()) {
   case OrderedTaskPoint::BEFORE_ACTIVE:
-    // todo refine
     // this leg totally included
-    return ::Distance(tp_origin->getLocation(), 
-                      tp_destination->getLocation());
+    return 
+      ::Distance(tp_origin->get_reference_travelled_origin(), 
+                 tp_destination->get_reference_travelled_destination());
     break;
   case OrderedTaskPoint::AFTER_ACTIVE:
     // this leg not included
     return 0.0;
   case OrderedTaskPoint::CURRENT_ACTIVE:
-    // todo refine
     // this leg partially included
-    return ::Distance(tp_origin->getLocation(), 
-                      ref);
+    return 
+      ::Distance(tp_origin->get_reference_travelled_origin(), 
+                 ref);
     break;
   default:
     assert(1); // error!
@@ -88,8 +81,9 @@ double TaskLeg::leg_distance_travelled(const GEOPOINT &ref)
 
 double TaskLeg::leg_distance_nominal()
 {
-  return ::Distance(tp_origin->getLocation(), 
-                    tp_destination->getLocation());
+  return 
+    ::Distance(tp_origin->get_reference_nominal_origin(), 
+               tp_destination->get_reference_nominal_destination());
 }
 
 

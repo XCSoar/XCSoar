@@ -51,7 +51,6 @@ public:
   };
 
   virtual void update_geometry() {
-    FinishPoint::update_geometry();
     oz.set_legs(leg_in->get_origin(), this, NULL);
   }
 
