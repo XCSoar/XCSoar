@@ -1,3 +1,4 @@
+#include "Task.h"
 #include "TaskDijkstra.hpp"
 #include "OrderedTaskPoint.hpp"
 #include <stdio.h>
@@ -6,9 +7,25 @@
 
 #define MAX_DIST 100000
 
+
+TaskDijkstra::TaskDijkstra(Task* _task,
+                           const double _precision):
+  task(_task),
+  shortest(false),
+  precision(_precision) 
+{
+  num_taskpoints = task->tps.size();
+  solution = new unsigned[num_taskpoints];
+};
+
+TaskDijkstra::~TaskDijkstra() {
+  delete [] solution;
+};
+
 /*
  TODO: only use actual points (if any) for search on previous
 */
+
 
 void TaskDijkstra::add_edges(Dijkstra<ScanTaskPoint> &dijkstra,
                              const ScanTaskPoint& curNode) 
@@ -16,15 +33,15 @@ void TaskDijkstra::add_edges(Dijkstra<ScanTaskPoint> &dijkstra,
   ScanTaskPoint destination;
   destination.first = curNode.first+1;
 
-  unsigned n_destinations = tps[destination.first]->
+  unsigned n_destinations = task->tps[destination.first]->
     get_num_search_points();
 
   for (destination.second=0; 
        destination.second< n_destinations; destination.second++) {
 
-    GEOPOINT p1 = tps[curNode.first]->
+    GEOPOINT p1 = task->tps[curNode.first]->
       get_search_point(curNode.second).Location;
-    GEOPOINT p2 = tps[destination.first]->
+    GEOPOINT p2 = task->tps[destination.first]->
       get_search_point(destination.second).Location;
 
     double dr = Distance(p1,p2);
@@ -79,40 +96,28 @@ double TaskDijkstra::distance_opt(ScanTaskPoint start,
   return -1; // No path found
 }
 
-/*
-  only scan parts that are required, and prune out points
-  that become irrelevant (strictly under-performing) 
-
-  if in sector, prune out all default points that result in
-  lower distance than current achieved max
-
-  if searching min 
-    first search max actual up to current
-      (taking into account aircraft location?)
-    then search min after that from aircraft location
-*/
 
 double TaskDijkstra::distance(const ScanTaskPoint &curNode,
                               const GEOPOINT &currentLocation)
 {
-  return Distance(tps[curNode.first]->
+  return Distance(task->tps[curNode.first]->
                   get_search_point(curNode.second).Location,
                   currentLocation);
 }
 
 
 double 
-TaskDijkstra::distance_opt_achieved(OrderedTaskPoint* active,
-                                    const GEOPOINT &currentLocation,
+TaskDijkstra::distance_opt_achieved(const GEOPOINT &currentLocation,
                                     const bool req_shortest)
 {
   shortest = false; // internally
 
   ScanTaskPoint start(0,0);
-  ScanTaskPoint lastNode = start;
+  ScanTaskPoint lastNode(1000,1000);
   Dijkstra<ScanTaskPoint> dijkstra(start);
 
-  int activeStage = 2; // TODO hardcoded!
+  OrderedTaskPoint* active = task->getActiveTaskPoint();
+  int activeStage = task->getActiveTaskPointIndex();
 
   double min_d = MAX_DIST;
   double max_d = 0;
@@ -130,9 +135,9 @@ TaskDijkstra::distance_opt_achieved(OrderedTaskPoint* active,
     if (curNode.first != activeStage) {
       add_edges(dijkstra, curNode);
     } else {
-      tps[curNode.first]->set_index_min(curNode.second);
+      task->tps[curNode.first]->set_index_min(curNode.second);
 
-      TaskDijkstra inner_dijkstra(tps, num_taskpoints);
+      TaskDijkstra inner_dijkstra(task);
 
       double d_this = 
         distance(curNode, currentLocation);
@@ -164,19 +169,18 @@ TaskDijkstra::distance_opt_achieved(OrderedTaskPoint* active,
 
   for (unsigned j=0; j<num_taskpoints; j++) {
     if (req_shortest) {
-      tps[j]->set_index_min(solution[j]);
+      task->tps[j]->set_index_min(solution[j]);
     } else {
-      tps[j]->set_index_max(solution[j]);
+      task->tps[j]->set_index_max(solution[j]);
     }
   }
+  /*
   for (unsigned j=0; j<num_taskpoints; j++) {
-    GEOPOINT loc = tps[j]->
+    GEOPOINT loc = task->tps[j]->
       get_search_point(solution[j]).Location;
     printf("%g %g %d\n", loc.Longitude, loc.Latitude, j);
   }
-  printf("\n");
-  printf("%g %g\n\n", currentLocation.Longitude,
-         currentLocation.Latitude);
+  */
 
   if (req_shortest) {
     return min_d_actual; 
@@ -186,4 +190,18 @@ TaskDijkstra::distance_opt_achieved(OrderedTaskPoint* active,
 }
 
 
-// save solution as best is found
+/*
+  only scan parts that are required, and prune out points
+  that become irrelevant (strictly under-performing) 
+
+  if in sector, prune out all default points that result in
+  lower distance than current achieved max
+
+  if searching min 
+    first search max actual up to current
+      (taking into account aircraft location?)
+    then search min after that from aircraft location
+
+  also update saved rank for potential pruning operations
+
+*/

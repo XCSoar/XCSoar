@@ -15,11 +15,16 @@ public:
   std::vector<OrderedTaskPoint*> tps;
   std::vector<TaskLeg*> legs;
 
-  virtual void scan_distance() ;
+  virtual void scan_distance(const GEOPOINT &location);
   OrderedTaskPoint* getActiveTaskPoint();
   unsigned getActiveTaskPointIndex();
 
+  void insert(OrderedTaskPoint*, unsigned position);
+  void remove(unsigned position);
+
+  void setActiveTaskPoint(unsigned);
 private:
+  void update_geometry();
   StartPoint *ts;
   unsigned activeTaskPoint;
 };

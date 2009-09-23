@@ -8,6 +8,8 @@
 #include "TaskPoints/FAISectorASTPoint.hpp"
 #include "TaskPoints/FAISectorFinishPoint.hpp"
 
+#include <assert.h>
+
 Task::Task():
   activeTaskPoint(0)
 {
@@ -33,8 +35,15 @@ Task::Task():
   for (int i=0; i<tps.size()-1; i++) {
     legs.push_back(new TaskLeg(*tps[i],*tps[i+1]));
   }
+
+  update_geometry();
+}
+
+void
+Task::update_geometry() {
   for (int i=0; i<tps.size(); i++) {
     tps[i]->update_geometry();
+    tps[i]->clear_search_points();
     tps[i]->default_search_points();
   }
 }
@@ -44,43 +53,47 @@ Task::~Task()
 // TODO: delete legs and turnpoints
 }
 
-void Task::scan_distance() 
+void Task::setActiveTaskPoint(unsigned t)
+{
+  activeTaskPoint = t;
+}
+
+void Task::scan_distance(const GEOPOINT &location) 
 { 
   TaskDijkstra dijkstra(this);
   ScanTaskPoint start(0,0);
 
   double d;
 
-  GEOPOINT me;
-  me.Longitude=8;
-  me.Latitude=8;
-
   ts->scan_active(getActiveTaskPoint());
 
   d= ts->scan_distance_nominal();
   printf("# dist nominal %g\n", d);
 
-  d = ts->scan_distance_remaining(me);
+  d = dijkstra.distance_opt_achieved(location, true);  
+  printf("# min dist after achieving max %g\n",d);
+
+  d = dijkstra.distance_opt_achieved(location, false);
+  printf("# max dist after achieving max %g\n",d);
+
+  d = ts->scan_distance_remaining(location);
   printf("# dist remaining %g\n", d);
 
-  d = ts->scan_distance_travelled(me);
+  d = ts->scan_distance_travelled(location);
   printf("# dist travelled %g\n", d);
 
-  d = ts->scan_distance_scored(me);
+  d = ts->scan_distance_scored(location);
   printf("# dist scored %g\n", d);
 
   d = dijkstra.distance_opt(start,true);
-  printf("# min dist %g\n",d);
+  printf("# absolute min dist %g\n",d);
 
   d = dijkstra.distance_opt(start,false);
-  printf("# max dist %g\n",d);
+  printf("# absolute max dist %g\n",d);
 
-  d = dijkstra.distance_opt_achieved(me, true);  
-  printf("# min dist after achieving max %g\n",d);
-
-  d = dijkstra.distance_opt_achieved(me, false);
-  printf("# max dist after achieving max %g\n",d);
+  printf("\n");
 }
+
 
 OrderedTaskPoint* Task::getActiveTaskPoint()
 {
@@ -91,3 +104,52 @@ unsigned Task::getActiveTaskPointIndex()
 {
   return activeTaskPoint;
 }
+
+void 
+Task::insert(OrderedTaskPoint* new_tp, unsigned position)
+{
+  // remove legs first
+  assert(position>0);
+
+  if (activeTaskPoint>=position) {
+    activeTaskPoint++;
+  }
+
+  delete legs[position-1];
+  legs.erase(legs.begin()+position-1); // 0,1,2 -> 0,2
+
+  tps.insert(tps.begin()+position, new_tp); // 0,1,2 -> 0,1,N,2
+
+  legs.insert(legs.begin()+position-1,
+              new TaskLeg(*tps[position-1],*tps[position])); // 0,1N,2
+
+  legs.insert(legs.begin()+position,
+              new TaskLeg(*tps[position],*tps[position+1])); // 0,1N,N2,2
+  
+  update_geometry();
+}
+
+void
+Task::remove(unsigned position)
+{
+  assert(position>0);
+  assert(position<tps.size()-1);
+
+  if (activeTaskPoint>position) {
+    activeTaskPoint--;
+  }
+
+  delete legs[position-1]; 
+  delete legs[position];   // 01,12,23,34 -> 01,34 
+  legs.erase(legs.begin()+position-1); // 01,12,23,34 -> 01,23,34 
+  legs.erase(legs.begin()+position-1); // 01,12,23,34 -> 01,34 
+
+  delete tps[position];
+  tps.erase(tps.begin()+position); // 0,1,2,3 -> 0,1,3
+
+  legs.insert(legs.begin()+position-1,
+              new TaskLeg(*tps[position-1],*tps[position])); // 01,13,34
+
+  update_geometry();
+}
+
