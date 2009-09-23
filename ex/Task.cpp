@@ -10,6 +10,16 @@
 
 #include <assert.h>
 
+
+void print_tp(OrderedTaskPoint *tp) {
+  unsigned n= tp->get_search_points().size();
+  for (unsigned i=0; i<n; i++) {
+    GEOPOINT loc = tp->get_search_points()[i].Location;
+    printf("%g %g 1\n", loc.Longitude, loc.Latitude);
+  }
+  printf("\n");
+}
+
 Task::Task():
   activeTaskPoint(0)
 {
@@ -45,6 +55,7 @@ Task::update_geometry() {
     tps[i]->update_geometry();
     tps[i]->clear_search_points();
     tps[i]->default_search_points();
+    tps[i]->prune_search_points();
   }
 }
 
@@ -90,6 +101,23 @@ void Task::scan_distance(const GEOPOINT &location)
 
   d = dijkstra.distance_opt(start,false);
   printf("# absolute max dist %g\n",d);
+
+  for (int i=0; i<tps.size(); i++) {
+    print_tp(tps[i]);
+  }
+
+  for (int i=0; i<tps.size(); i++) {
+    OrderedTaskPoint *tp = tps[i];
+    printf("%g %g 2\n", tp->get_search_max().Location.Longitude,
+           tp->get_search_max().Location.Latitude);
+  }
+  printf("\n");
+
+  for (int i=0; i<tps.size(); i++) {
+    OrderedTaskPoint *tp = tps[i];
+    printf("%g %g 3\n", tp->get_search_min().Location.Longitude,
+           tp->get_search_min().Location.Latitude);
+  }
 
   printf("\n");
 }

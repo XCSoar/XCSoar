@@ -33,16 +33,15 @@ void TaskDijkstra::add_edges(Dijkstra<ScanTaskPoint> &dijkstra,
   ScanTaskPoint destination;
   destination.first = curNode.first+1;
 
-  unsigned n_destinations = task->tps[destination.first]->
-    get_num_search_points();
+  const std::vector<SEARCH_POINT>& destinations = task->tps[destination.first]->
+    get_search_points();
 
   for (destination.second=0; 
-       destination.second< n_destinations; destination.second++) {
+       destination.second< destinations.size(); destination.second++) {
 
     GEOPOINT p1 = task->tps[curNode.first]->
-      get_search_point(curNode.second).Location;
-    GEOPOINT p2 = task->tps[destination.first]->
-      get_search_point(destination.second).Location;
+      get_search_points()[curNode.second].Location;
+    GEOPOINT p2 = destinations[destination.second].Location;
 
     double dr = Distance(p1,p2);
     if (dr>precision) {
@@ -101,7 +100,7 @@ double TaskDijkstra::distance(const ScanTaskPoint &curNode,
                               const GEOPOINT &currentLocation)
 {
   return Distance(task->tps[curNode.first]->
-                  get_search_point(curNode.second).Location,
+                  get_search_points()[curNode.second].Location,
                   currentLocation);
 }
 
@@ -135,7 +134,8 @@ TaskDijkstra::distance_opt_achieved(const GEOPOINT &currentLocation,
     if (curNode.first != activeStage) {
       add_edges(dijkstra, curNode);
     } else {
-      task->tps[curNode.first]->set_index_min(curNode.second);
+      task->tps[curNode.first]->set_search_min(
+        task->tps[curNode.first]->get_search_points()[curNode.second]);
 
       TaskDijkstra inner_dijkstra(task);
 
@@ -169,9 +169,11 @@ TaskDijkstra::distance_opt_achieved(const GEOPOINT &currentLocation,
 
   for (unsigned j=0; j<num_taskpoints; j++) {
     if (req_shortest) {
-      task->tps[j]->set_index_min(solution[j]);
+      task->tps[j]->set_search_min(
+        task->tps[j]->get_search_points()[solution[j]]);
     } else {
-      task->tps[j]->set_index_max(solution[j]);
+      task->tps[j]->set_search_max(
+        task->tps[j]->get_search_points()[solution[j]]);
     }
   }
   /*

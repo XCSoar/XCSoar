@@ -28,23 +28,15 @@ void OrderedTaskPoint::default_search_points() {
 
 void OrderedTaskPoint::add_search_point(const SEARCH_POINT & val)
 {
-  search_points[num_search_points] = val;
-  num_search_points++;
+  search_points.push_back(val);
 }
 
 
-void OrderedTaskPoint::set_search_point(unsigned index, 
-                                        const SEARCH_POINT& val)
-{
-  search_points[index] = val;
-}
 
-
-const SEARCH_POINT& 
-OrderedTaskPoint::get_search_point(unsigned index) const 
+const std::vector<SEARCH_POINT>& 
+OrderedTaskPoint::get_search_points() const 
 {
-  assert(index< num_search_points);
-  return search_points[index];
+  return search_points;
 }
 
 GEOPOINT OrderedTaskPoint::get_reference_remaining_destination()
@@ -195,4 +187,22 @@ double OrderedTaskPoint::scan_distance_scored(const GEOPOINT &ref)
   } else {
     return distance_scored;
   }
+}
+
+#include "ConvexHull/GrahamScan.hpp"
+
+
+void OrderedTaskPoint::prune_search_points()
+{
+  std::list<SEARCH_POINT> points(search_points.begin(),
+                                 search_points.end());
+//  printf("size was %d\n", search_points.size());
+
+  GrahamScan gs(points);
+  gs.prune_interior();
+
+  search_points.clear();
+
+  std::copy(points.begin(), points.end(), std::back_inserter(search_points));
+//  printf("size now %d\n", search_points.size());
 }

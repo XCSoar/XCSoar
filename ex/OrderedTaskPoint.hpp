@@ -43,6 +43,7 @@
 #include "SearchPoint.hpp"
 #include <stdlib.h>
 #include "Util.h"
+#include <vector>
 
 class TaskLeg;
 
@@ -53,11 +54,9 @@ public:
       boundary_scored(b_scored),
       leg_in(NULL),
       leg_out(NULL),
-      active_state(NOTFOUND_ACTIVE),
-      num_search_points(0),
-      index_max(0),
-      index_min(0)
+      active_state(NOTFOUND_ACTIVE)
     {
+      clear_search_points();
     };
 
   enum ActiveState_t {
@@ -121,37 +120,33 @@ public:
 
   virtual GEOPOINT get_reference_remaining_destination();
 
-  unsigned get_num_search_points() const {
-    return num_search_points;
-  }
-
-  const SEARCH_POINT& get_search_point(unsigned index) const;
+  const std::vector<SEARCH_POINT>& get_search_points() const;
 
   void add_search_point(const SEARCH_POINT&);
-  void set_search_point(unsigned index, const SEARCH_POINT&); 
 
   virtual void default_search_points();
+  virtual void prune_search_points();
 
-  void set_index_max(unsigned i) {
-    index_max = i;
+  void set_search_max(const SEARCH_POINT &i) {
+    search_max = i;
   }
 
-  void set_index_min(unsigned i) {
-    index_min = i;
+  void set_search_min(const SEARCH_POINT &i) {
+    search_min = i;
   }
 
   const SEARCH_POINT& get_search_max() {
-    return get_search_point(index_max);
+    return search_max;
   }
 
   const SEARCH_POINT& get_search_min() {
-    return get_search_point(index_min);
+    return search_min;
   }
 
   virtual void clear_search_points() {
-    num_search_points = 0;
-    index_max = 0;
-    index_min = 0;
+    search_points.clear();
+    search_max.Location = getLocation();
+    search_min.Location = getLocation();
   };
 
 protected:
@@ -166,9 +161,9 @@ protected:
   double distance_travelled; 
 private:
   unsigned num_search_points;
-  SEARCH_POINT search_points[50];
-  unsigned index_max;
-  unsigned index_min;
+  std::vector<SEARCH_POINT> search_points;
+  SEARCH_POINT search_max;
+  SEARCH_POINT search_min;
 };
 
 

@@ -10,6 +10,8 @@ void distance_counts() {
 
 #include "Task.h"
 
+#include "ConvexHull/GrahamScan.hpp"
+
 int main() {
 
   Task test_task;
@@ -21,10 +23,8 @@ int main() {
   test_task.setActiveTaskPoint(2);
   test_task.scan_distance(location);
 
-  test_task.remove(2);
-  test_task.scan_distance(location);
+//  test_task.remove(2);
+//  test_task.scan_distance(location);
 
   return 0;
 }
-
-

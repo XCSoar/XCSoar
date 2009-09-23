@@ -8,8 +8,8 @@ GEOPOINT SectorZone::get_boundary_parametric(double t)
   // todo: should be findlocation
   GEOPOINT loc = getLocation();
   double ang = t*3.1415926*2.0;
-  loc.Longitude += Radius*cos(ang);
-  loc.Latitude += Radius*sin(ang);
+  loc.Longitude += Radius*cos(ang)*0.999;
+  loc.Latitude += Radius*sin(ang)*0.999;
   if (isInSector(loc)) {
     return loc;
   } else {
