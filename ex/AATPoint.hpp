@@ -45,30 +45,30 @@
 
 class AATPoint : public IntermediatePoint {
 public:
-    AATPoint(const WAYPOINT & wp) : 
-      IntermediatePoint(wp), 
-      TargetLocked(false), 
-      TargetLocation(wp.Location),
-      has_sampled(false) {
+  AATPoint(const WAYPOINT & wp) : 
+    IntermediatePoint(wp,true), 
+    TargetLocked(false), 
+    TargetLocation(wp.Location)
+    {
     }  
 
-    virtual GEOPOINT get_reference_remaining_origin();  
+  virtual GEOPOINT get_reference_remaining_origin();  
+  
+  virtual GEOPOINT get_reference_remaining_destination();  
+  
+  virtual GEOPOINT get_reference_travelled_origin();  
+  
+  virtual GEOPOINT get_reference_travelled_destination();  
+  
+  virtual GEOPOINT get_reference_scored_origin();  
+  
+  virtual GEOPOINT get_reference_scored_destination();
 
-    virtual GEOPOINT get_reference_remaining_destination();  
-
-    virtual GEOPOINT get_reference_travelled_origin();  
-
-    virtual GEOPOINT get_reference_travelled_destination();  
-
-    virtual GEOPOINT get_reference_scored_origin();  
-
-    virtual GEOPOINT get_reference_scored_destination();
+  virtual void default_search_points();
 
 protected:
     GEOPOINT TargetLocation;
     bool TargetLocked;
-    GEOPOINT BestSample;
-    bool has_sampled;
 };
 
 #endif

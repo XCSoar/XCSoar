@@ -44,14 +44,13 @@
 
 class FinishPoint : public OrderedTaskPoint {
 public:
-    FinishPoint(const WAYPOINT & wp) : OrderedTaskPoint(wp) { };
+    FinishPoint(const WAYPOINT & wp) : 
+      OrderedTaskPoint(wp,false) { };
 
   virtual void set_leg_out(TaskLeg* the_leg) {
     assert(the_leg == NULL);
     // should not ever have an outbound leg
   }
-
-;
 };
 
 #endif

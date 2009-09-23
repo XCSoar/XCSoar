@@ -35,7 +35,6 @@
   }
 */
 
-
 #ifndef CYLINDERZONE_HPP
 #define CYLINDERZONE_HPP
 
@@ -47,15 +46,17 @@ class CylinderZone : public ObservationZonePoint {
 public:
   CylinderZone(const GEOPOINT &loc):
     ObservationZonePoint(loc),
-    Radius(0.0)
+    Radius(1.0)
   {
   };
 
   virtual bool isInSector(const GEOPOINT &ref) const
   {
     return distance(ref)<=Radius;
-  };
-  
+  }  
+
+  GEOPOINT get_boundary_parametric(double) ;
+
 protected:
   double Radius;
 };

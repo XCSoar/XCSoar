@@ -33,7 +33,8 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
   }
-*/
+*/struct GEOPOINT;
+
 
 
 #ifndef OBSERVATIONZONE_HPP
@@ -64,7 +65,11 @@ public:
     // and last was inside
     bool transition_exit(const GEOPOINT & ref_now, const GEOPOINT & ref_last) const {
         return transition_enter(ref_last, ref_now);
-    };
+    }  
+
+    virtual GEOPOINT get_boundary_parametric(double) =0;
+
+;
 };
 
 #endif

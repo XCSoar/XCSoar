@@ -35,6 +35,7 @@
   }
 */
 
+
 #ifndef FAISECTORSTARTPOINT_HPP
 #define FAISECTORSTARTPOINT_HPP
 
@@ -60,6 +61,8 @@ public:
   {
     return oz.isInSector(ref);
   }
+
+  GEOPOINT get_boundary_parametric(double) ;
 
 ;
 protected:

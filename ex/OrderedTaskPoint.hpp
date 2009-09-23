@@ -40,18 +40,23 @@
 
 #include "Scoring/ObservationZone.hpp"
 #include "TaskPoint.hpp"
+#include "SearchPoint.hpp"
 #include <stdlib.h>
+#include "Util.h"
 
 class TaskLeg;
-struct GEOPOINT;
 
 class OrderedTaskPoint : public TaskPoint, public ObservationZone {
 public:
-    OrderedTaskPoint(const WAYPOINT & wp) : 
+  OrderedTaskPoint(const WAYPOINT & wp, bool b_scored) : 
       TaskPoint(wp), 
+      boundary_scored(b_scored),
       leg_in(NULL),
       leg_out(NULL),
-      active_state(NOTFOUND_ACTIVE)
+      active_state(NOTFOUND_ACTIVE),
+      num_search_points(0),
+      index_max(0),
+      index_min(0)
     {
     };
 
@@ -74,7 +79,7 @@ public:
   
   TaskLeg* get_leg_in();
   
-  ActiveState_t getActiveState() {
+  ActiveState_t getActiveState() const {
     return active_state;
   }
 
@@ -92,6 +97,7 @@ public:
   }    
 
 protected:
+  bool boundary_scored;
   bool scan_active(OrderedTaskPoint* atp);
   double scan_distance_nominal();
   double scan_distance_remaining(const GEOPOINT &ref);
@@ -115,6 +121,39 @@ public:
 
   virtual GEOPOINT get_reference_remaining_destination();
 
+  unsigned get_num_search_points() const {
+    return num_search_points;
+  }
+
+  const SEARCH_POINT& get_search_point(unsigned index) const;
+
+  void add_search_point(const SEARCH_POINT&);
+  void set_search_point(unsigned index, const SEARCH_POINT&); 
+
+  virtual void default_search_points();
+
+  void set_index_max(unsigned i) {
+    index_max = i;
+  }
+
+  void set_index_min(unsigned i) {
+    index_min = i;
+  }
+
+  const SEARCH_POINT& get_search_max() {
+    return get_search_point(index_max);
+  }
+
+  const SEARCH_POINT& get_search_min() {
+    return get_search_point(index_min);
+  }
+
+  virtual void clear_search_points() {
+    num_search_points = 0;
+    index_max = 0;
+    index_min = 0;
+  };
+
 protected:
 
   TaskLeg* leg_out;
@@ -125,6 +164,11 @@ protected:
   double distance_scored;    
   double distance_remaining; 
   double distance_travelled; 
+private:
+  unsigned num_search_points;
+  SEARCH_POINT search_points[50];
+  unsigned index_max;
+  unsigned index_min;
 };
 
 

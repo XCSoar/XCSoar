@@ -3,6 +3,49 @@
 #include "OrderedTaskPoint.hpp"
 #include "TaskLeg.h"
 #include <stdio.h>
+#include <assert.h>
+#include <math.h>
+
+void OrderedTaskPoint::default_search_points() { 
+  double t=0;
+  if (boundary_scored) {
+    for (t=0; t<1.0; t+= 0.05) {
+      SEARCH_POINT sp;
+      sp.Location = get_boundary_parametric(t);
+      sp.actual = false;
+      sp.saved_rank = 0;
+      add_search_point(sp);
+    }
+  } else {
+    SEARCH_POINT sp;
+    sp.Location = getLocation();
+    sp.actual = false;
+    sp.saved_rank = 0;
+    add_search_point(sp);
+  }
+}
+
+
+void OrderedTaskPoint::add_search_point(const SEARCH_POINT & val)
+{
+  search_points[num_search_points] = val;
+  num_search_points++;
+}
+
+
+void OrderedTaskPoint::set_search_point(unsigned index, 
+                                        const SEARCH_POINT& val)
+{
+  search_points[index] = val;
+}
+
+
+const SEARCH_POINT& 
+OrderedTaskPoint::get_search_point(unsigned index) const 
+{
+  assert(index< num_search_points);
+  return search_points[index];
+}
 
 GEOPOINT OrderedTaskPoint::get_reference_remaining_destination()
 {

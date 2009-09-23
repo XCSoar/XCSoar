@@ -7,11 +7,8 @@
 class IntermediatePoint: 
   public OrderedTaskPoint {
 public:    
-  IntermediatePoint(const WAYPOINT & wp): 
-    OrderedTaskPoint(wp) 
+  IntermediatePoint(const WAYPOINT & wp, bool b_scored): 
+    OrderedTaskPoint(wp, b_scored) 
     {};
-
-
-    
 };
 #endif //INTERMEDIATEPOINT_H

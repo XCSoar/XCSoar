@@ -43,12 +43,10 @@
 class FAISectorZone: 
   public SymmetricSectorZone 
 {
-;
 public:  
-
-    FAISectorZone(const GEOPOINT loc):
-        SymmetricSectorZone(loc,90.0)
-      {}
+  FAISectorZone(const GEOPOINT loc):
+    SymmetricSectorZone(loc,90.0)
+    {}
 };
 
 #endif

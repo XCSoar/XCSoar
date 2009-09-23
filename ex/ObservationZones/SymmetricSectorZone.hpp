@@ -38,6 +38,7 @@
 #ifndef SYMMETRICSECTORZONE_HPP
 #define SYMMETRICSECTORZONE_HPP
 #include "ObservationZones/SectorZone.hpp"
+#include "TaskPoint.hpp"
 
 class SymmetricSectorZone: 
   public SectorZone 
@@ -50,41 +51,10 @@ public:
 
   virtual void set_legs(const TaskPoint *previous,
                         const TaskPoint *current,
-                        const TaskPoint *next) 
-  {
-    double BiSector;
-    if (!next && previous) { 
-      // final
-      BiSector = previous->bearing(*current);
-    } else if (next && previous) {
-      // intermediate
-      BiSector = HalfAngle(current->bearing(*next), 
-			   current->bearing(*previous));
-    } else if (next && !previous) {
-      // start
-      BiSector = current->bearing(*next);
-    } else {
-      // single point
-      BiSector = 0;
-    }
-    setStartRadial(AngleLimit360(BiSector+SectorAngle/2));
-    setEndRadial(AngleLimit360(BiSector-SectorAngle/2));
-  };
+                        const TaskPoint *next);
 private:
   const double SectorAngle;
 };
 
-
-///////
-
-
-
-
-
-
-
-
-
-///////////////////////////////////////////////////////////
 
 #endif

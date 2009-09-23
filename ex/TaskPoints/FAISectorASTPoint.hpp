@@ -35,11 +35,13 @@
   }
 */
 
+
 #ifndef FAISECTORASTPOINT_HPP
 #define FAISECTORASTPOINT_HPP
 
 #include "ASTPoint.hpp"
 #include "ObservationZones/FAISectorZone.hpp"
+#include "TaskLeg.h"
 
 class FAISectorASTPoint: 
   public ASTPoint
@@ -57,6 +59,8 @@ public:
   {
     return oz.isInSector(ref);
   }
+
+  GEOPOINT get_boundary_parametric(double) ;
 
 ;
 protected:

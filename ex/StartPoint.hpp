@@ -44,7 +44,7 @@
 class StartPoint : public OrderedTaskPoint {
 public:
   StartPoint(const WAYPOINT & wp) : 
-    OrderedTaskPoint(wp), 
+    OrderedTaskPoint(wp,false), 
     enabled(true) 
     {
 
@@ -72,6 +72,9 @@ public:
   double scan_distance_scored(const GEOPOINT &ref) {
     return OrderedTaskPoint::scan_distance_scored(ref);
   };
+
+
+
 
 protected:
     bool enabled;

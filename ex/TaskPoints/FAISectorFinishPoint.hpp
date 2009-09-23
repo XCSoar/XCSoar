@@ -34,11 +34,13 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
   }
 */
+
 #ifndef FAISECTORFINISHPOINT_HPP
 #define FAISECTORFINISHPOINT_HPP
 
 #include "FinishPoint.hpp"
 #include "ObservationZones/FAISectorZone.hpp"
+#include "TaskLeg.h"
 
 class FAISectorFinishPoint: 
   public FinishPoint
@@ -57,7 +59,11 @@ public:
   virtual bool isInSector(const GEOPOINT &ref) const
   {
     return oz.isInSector(ref);
-  };
+  }
+
+  GEOPOINT get_boundary_parametric(double) ;
+
+;
 
 
 
