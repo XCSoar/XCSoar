@@ -157,30 +157,30 @@ public:
 
   // AAT functions
   double AdjustAATTargets(double desired);
-  const double FindInsideAATSectorRange(const GEOPOINT &location,
-                                        const int taskwaypoint,
-                                        const double course_bearing,
-                                        const double p_found) const;
-  const double FindInsideAATSectorDistance(const GEOPOINT &location,
-                                           const int taskwaypoint,
-                                           const double course_bearing,
-                                           const double p_found=0.0) const;
-  const bool isTaskModified() const;
+  double FindInsideAATSectorRange(const GEOPOINT &location,
+                                  const int taskwaypoint,
+                                  const double course_bearing,
+                                  const double p_found) const;
+  double FindInsideAATSectorDistance(const GEOPOINT &location,
+                                     const int taskwaypoint,
+                                     const double course_bearing,
+                                     const double p_found=0.0) const;
+  bool isTaskModified() const;
   void SetTaskModified(const bool set=true);
-  const bool isTargetModified() const;
+  bool isTargetModified() const;
   void SetTargetModified(const bool set=true);
-  const bool InAATTurnSector(const GEOPOINT &location, 
-                             const int the_turnpoint) const;
+  bool InAATTurnSector(const GEOPOINT &location,
+                       const int the_turnpoint) const;
 
   // queries
-  const bool ValidTaskPoint(const unsigned i) const;
-  const bool Valid() const;
-  const double DoubleLegDistance(const int taskwaypoint, 
-                                 const GEOPOINT &location) const;
-  const bool TaskIsTemporary(void) const;
-  const int  getFinalWaypoint(void) const;
-  const bool ActiveIsFinalWaypoint(void) const;
-  const bool isTaskAborted() const;
+  bool ValidTaskPoint(const unsigned i) const;
+  bool Valid() const;
+  double DoubleLegDistance(const int taskwaypoint, 
+                           const GEOPOINT &location) const;
+  bool TaskIsTemporary(void) const;
+  int getFinalWaypoint(void) const;
+  bool ActiveIsFinalWaypoint(void) const;
+  bool isTaskAborted() const;
   const GEOPOINT& getTaskPointLocation(const unsigned i) const;
   const GEOPOINT& getActiveLocation() const;
   const GEOPOINT& getTargetLocation(const int v=-1) const;
@@ -197,7 +197,7 @@ public:
   //
   unsigned  ActiveTaskPoint;
 
-  const unsigned getActiveIndex() const 
+  unsigned getActiveIndex() const
   { return ActiveTaskPoint; }
 
   void setActiveIndex(unsigned i) {
@@ -210,10 +210,10 @@ public:
   void setTaskPoint(const unsigned index, const TASK_POINT& tp);
 
   const WAYPOINT& getWaypoint(const int v=-1) const;
-  const int getWaypointIndex(const int v=-1) const;
+  int getWaypointIndex(const int v=-1) const;
 
   // advance
-  const bool isAdvanceArmed() const;
+  bool isAdvanceArmed() const;
   void setAdvanceArmed(const bool set);
 
   void setTaskIndices(const int wpindex[MAXTASKPOINTS]);
@@ -221,7 +221,7 @@ public:
   const SETTINGS_TASK &getSettings() const;
   void setSettings(const SETTINGS_TASK& set);
 
-  const int getSelected() const;
+  int getSelected() const;
   void setSelected(const int v=-1);
 
   // scan routines

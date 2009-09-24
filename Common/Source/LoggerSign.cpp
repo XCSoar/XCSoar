@@ -328,7 +328,7 @@ void LoggerImpl::LinkGRecordDLL(void)
     }
 }
 
-const bool 
+bool
 LoggerImpl::LoggerGActive() const
 {
   if (GRecordDLLHandle)

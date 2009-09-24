@@ -173,7 +173,7 @@ TaskSafe::AdjustAATTargets(double desired) {
 }
 
 //////
-const double 
+double
 TaskSafe::FindInsideAATSectorRange(const GEOPOINT &location,
                                       const int taskwaypoint,
                                       const double course_bearing,
@@ -184,7 +184,7 @@ TaskSafe::FindInsideAATSectorRange(const GEOPOINT &location,
                                         course_bearing, p_found);
 }
 
-const double 
+double
 TaskSafe::FindInsideAATSectorDistance(const GEOPOINT &location,
                                          const int taskwaypoint,
                                          const double course_bearing,
@@ -196,7 +196,7 @@ TaskSafe::FindInsideAATSectorDistance(const GEOPOINT &location,
 }
 
 
-const bool 
+bool
 TaskSafe::isAdvanceArmed() 
 {
   // read
@@ -211,7 +211,7 @@ TaskSafe::setAdvanceArmed(const bool set)
   _task.setAdvanceArmed(set);
 }
 
-const bool 
+bool
 TaskSafe::isTaskModified()  
 {
   // read
@@ -226,7 +226,7 @@ TaskSafe::SetTaskModified(const bool set)
   _task.SetTaskModified(set);
 }
 
-const bool 
+bool
 TaskSafe::isTargetModified()  
 { // read
   Poco::ScopedRWLock protect(lock, false);
@@ -240,7 +240,7 @@ TaskSafe::SetTargetModified(const bool set)
   _task.SetTargetModified(set);
 }
 
-const bool 
+bool
 TaskSafe::InAATTurnSector(const GEOPOINT &location, 
                            const int the_turnpoint) 
 { // read
@@ -248,7 +248,7 @@ TaskSafe::InAATTurnSector(const GEOPOINT &location,
   return _task.InAATTurnSector(location, the_turnpoint);
 }
 
-const unsigned 
+unsigned
 TaskSafe::getActiveIndex()  
 { // read
   Poco::ScopedRWLock protect(lock, false);
@@ -283,7 +283,7 @@ TaskSafe::setTaskIndices(const int wpindex[MAXTASKPOINTS])
   _task.setTaskIndices(wpindex);
 }
 
-const int 
+int
 TaskSafe::getWaypointIndex(const int v) 
 { // read
   Poco::ScopedRWLock protect(lock, false);
@@ -296,20 +296,21 @@ TaskSafe::getWaypoint(const int v)
   return _task.getWaypoint(v);
 }
 
-const bool 
+bool
 TaskSafe::ValidTaskPoint(const unsigned i) 
 { // read
   Poco::ScopedRWLock protect(lock, false);
   return _task.ValidTaskPoint(i);
 }
-const bool 
+
+bool
 TaskSafe::Valid()  
 { // read
   Poco::ScopedRWLock protect(lock, false);
   return _task.Valid();
 }
 
-const double 
+double
 TaskSafe::DoubleLegDistance(const int taskwaypoint, // read
                                const GEOPOINT &location)  
 {
@@ -317,28 +318,28 @@ TaskSafe::DoubleLegDistance(const int taskwaypoint, // read
   return _task.DoubleLegDistance(taskwaypoint, location);
 }
 
-const bool 
+bool
 TaskSafe::TaskIsTemporary(void)  
 { // read
   Poco::ScopedRWLock protect(lock, false);
   return _task.TaskIsTemporary();
 }
 
-const int  
+int
 TaskSafe::getFinalWaypoint(void)  
 { // read
   Poco::ScopedRWLock protect(lock, false);
   return _task.getFinalWaypoint();
 }
 
-const bool 
+bool
 TaskSafe::ActiveIsFinalWaypoint(void)  
 { //read
   Poco::ScopedRWLock protect(lock, false);
   return _task.ActiveIsFinalWaypoint();
 }
 
-const bool 
+bool
 TaskSafe::isTaskAborted()  
 { // read
   Poco::ScopedRWLock protect(lock, false);
@@ -455,8 +456,7 @@ TaskSafe::setSettings(const SETTINGS_TASK& set)
   _task.setSettings(set);
 }
 
-
-const int 
+int
 TaskSafe::getSelected() 
 {
   Poco::ScopedRWLock protect(lock, false);

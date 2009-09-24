@@ -64,7 +64,9 @@ LoggerImpl::LoggerImpl():
 }
 
 
-const bool LoggerImpl::isLoggerActive() const {
+bool
+LoggerImpl::isLoggerActive() const
+{
   return LoggerActive;
 }
 
@@ -76,7 +78,7 @@ TCHAR NumToIGCChar(int n)  {
   }
 }
 
-const bool 
+bool
 LoggerImpl::isTaskDeclared() const {
   return DeclaredToDevice;
 }

@@ -93,7 +93,7 @@ Task::Task():
 
 }
 
-const bool Task::isAdvanceArmed() const {
+bool Task::isAdvanceArmed() const {
   return AdvanceArmed;
 }
 
@@ -101,11 +101,11 @@ void Task::setAdvanceArmed(const bool val) {
   AdvanceArmed = val;
 }
 
-const bool Task::isTaskAborted() const {
+bool Task::isTaskAborted() const {
   return TaskAborted;
 }
 
-const bool Task::isTaskModified() const {
+bool Task::isTaskModified() const {
   return TaskModified;
 }
 
@@ -113,7 +113,7 @@ void Task::SetTaskModified(const bool set) {
   TaskModified = set;
 }
 
-const bool 
+bool
 Task::isTargetModified() const {
   return TargetModified;
 }
@@ -439,7 +439,7 @@ Task::getTaskPointLocation(const unsigned i) const
   return way_points.get(task_points[i].Index).Location;
 }
 
-const int 
+int
 Task::getWaypointIndex(const int v) const
 {
   int r= (v==-1)? ActiveTaskPoint:v;
@@ -747,14 +747,13 @@ void Task::ClearTask(void) {
   }
 }
 
-
-const bool 
+bool
 Task::Valid() const
 {
   return ValidTaskPoint(ActiveTaskPoint);
 }
 
-const bool 
+bool
 Task::ValidTaskPoint(const unsigned i) const 
 {
   if (i>= MAXTASKPOINTS)
@@ -767,8 +766,7 @@ Task::ValidTaskPoint(const unsigned i) const
     return true;
 }
 
-
-const double 
+double
 Task::FindInsideAATSectorDistance(const GEOPOINT &location,
                                    const int taskwaypoint,
                                    const double course_bearing,
@@ -807,8 +805,7 @@ Task::FindInsideAATSectorDistance(const GEOPOINT &location,
   return t_distance_lower;
 }
 
-
-const double 
+double
 Task::FindInsideAATSectorRange(const GEOPOINT &location,
                                const int taskwaypoint,
                                const double course_bearing,
@@ -824,7 +821,7 @@ Task::FindInsideAATSectorRange(const GEOPOINT &location,
 
 /////////////////
 
-const double 
+double
 Task::DoubleLegDistance(const int taskwaypoint,
                         const GEOPOINT &location) const
 {
@@ -840,9 +837,7 @@ Task::DoubleLegDistance(const int taskwaypoint,
 
 //////////////////////////////////////////////////////
 
-
-
-const bool 
+bool
 Task::TaskIsTemporary(void) const {
   bool retval = false;
   if (TaskAborted) {
@@ -928,9 +923,7 @@ Task::ResumeAbortTask(const SETTINGS_COMPUTER &settings_computer,
 
 }
 
-
-
-const int 
+int
 Task::getFinalWaypoint() const {
   if (TaskAborted) {
     return ActiveTaskPoint;
@@ -943,14 +936,13 @@ Task::getFinalWaypoint() const {
   return i-1;
 }
 
-const bool 
+bool
 Task::ActiveIsFinalWaypoint() const
 {
   return ((int)ActiveTaskPoint == getFinalWaypoint());
 }
 
-
-const bool 
+bool
 Task::InAATTurnSector(const GEOPOINT &location,
                       const int the_turnpoint) const
 {
@@ -1093,7 +1085,7 @@ Task::setSettings(const SETTINGS_TASK& set)
   // user must RefreshTask after this
 }
 
-const int 
+int
 Task::getSelected() const
 {
   return SelectedWaypoint;

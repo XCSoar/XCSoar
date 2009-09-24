@@ -68,14 +68,14 @@ Logger::CheckDeclaration(void)
   return _logger->CheckDeclaration();
 };
 
-const bool 
+bool
 Logger::isTaskDeclared() 
 {
   Poco::ScopedRWLock protect(lock, false);
   return _logger->isTaskDeclared();
 };
 
-const bool 
+bool
 Logger::isLoggerActive() 
 {
   Poco::ScopedRWLock protect(lock, false);
@@ -96,7 +96,7 @@ Logger::LinkGRecordDLL(void)
   return _logger->LinkGRecordDLL();
 };
 
-const bool 
+bool
 Logger::LoggerGActive() 
 {
   Poco::ScopedRWLock protect(lock, false);

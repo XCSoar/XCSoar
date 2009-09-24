@@ -58,11 +58,11 @@ public:
 
   void LogPoint(const NMEA_INFO &gps_info);
   bool CheckDeclaration(void);
-  const bool isTaskDeclared();
-  const bool isLoggerActive();
+  bool isTaskDeclared();
+  bool isLoggerActive();
   bool LoggerClearFreeSpace(const NMEA_INFO &gps_info);
   void LinkGRecordDLL(void);
-  const bool LoggerGActive();
+  bool LoggerGActive();
   void guiStartLogger(const NMEA_INFO& gps_info, 
                       const SETTINGS_COMPUTER& settings,
                       bool noAsk = false);
