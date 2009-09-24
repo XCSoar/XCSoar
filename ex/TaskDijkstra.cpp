@@ -147,12 +147,14 @@ TaskDijkstra::distance_opt_achieved(const GEOPOINT &currentLocation,
 
       bool best=false;
       if (req_shortest) {
+        // need to take into account distance from here to target
         if (df+d_this<min_d) {
           min_d = df+d_this; min_d_actual = df;
           best=true;
         }
       } else {
-        if (df+d_this>max_d) {
+        // here we are only interested in scored distance
+        if (df>max_d) {
           max_d = df+d_this; max_d_actual = df;
           best=true;
         }
