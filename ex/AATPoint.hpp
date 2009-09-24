@@ -64,8 +64,6 @@ public:
   
   virtual GEOPOINT get_reference_scored_destination();
 
-  virtual void default_search_points();
-
 protected:
     GEOPOINT TargetLocation;
     bool TargetLocked;

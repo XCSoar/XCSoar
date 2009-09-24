@@ -48,13 +48,3 @@ GEOPOINT AATPoint::get_reference_remaining_destination()
   }
 }
 
-void AATPoint::default_search_points() 
-{
-  SEARCH_POINT sp;
-  sp.Location = TargetLocation;
-  sp.actual = true;
-  sp.saved_rank = 0;
-  add_search_point(sp);
-  OrderedTaskPoint::default_search_points();
-}
-

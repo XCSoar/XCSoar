@@ -48,9 +48,9 @@ void
 Task::update_geometry() {
   for (int i=0; i<tps.size(); i++) {
     tps[i]->update_geometry();
-    tps[i]->clear_search_points();
-    tps[i]->default_search_points();
-    tps[i]->prune_search_points();
+    tps[i]->clear_boundary_points();
+    tps[i]->default_boundary_points();
+    tps[i]->prune_boundary_points();
   }
 }
 
@@ -74,8 +74,10 @@ void Task::scan_distance(const GEOPOINT &location)
   ts->scan_active(getActiveTaskPoint());
 
   distance_nominal = ts->scan_distance_nominal();
+
   distance_min = dijkstra.distance_opt_achieved(location, true);  
   distance_max = dijkstra.distance_opt_achieved(location, false);
+
   distance_remaining = ts->scan_distance_remaining(location);
   distance_travelled = ts->scan_distance_travelled(location);
   distance_scored = ts->scan_distance_scored(location);
@@ -140,18 +142,41 @@ Task::remove(unsigned position)
   update_geometry();
 }
 
-#define max(a,b) (a>b? a:b)
-#define min(a,b) (a<b? a:b)
+int m_max(int a, int b) {
+  if (a>b) {
+    return a;
+  } else {
+    return b;
+  }
+}
 
-bool Task::update_sample(const GEOPOINT& location)
+int m_min(int a, int b) {
+  if (a<b) {
+    return a;
+  } else {
+    return b;
+  }
+}
+
+bool Task::update_sample(const GEOPOINT& location, const GEOPOINT& last_location)
 {
   ts->scan_active(getActiveTaskPoint());
 
   int n_task = tps.size();
-  int t_min = max(0,activeTaskPoint-1);
-  int t_max = min(n_task-1, activeTaskPoint);
+  int t_min = m_max(0,activeTaskPoint-1);
+  int t_max = m_min(n_task-1, activeTaskPoint+1);
+
+//  printf("active %d, scan %d %d\n", activeTaskPoint, t_min, t_max);
 
   for (int i=t_min; i<=t_max; i++) {
+    if (tps[i]->transition_exit(location, last_location)) {
+      if (i<n_task-1) {
+        printf("transition to sector %d\n", i+1);
+        setActiveTaskPoint(i+1);
+        ts->scan_active(getActiveTaskPoint());
+        // auto advance on exit for testing
+      }
+    }
     if (tps[i]->update_sample(location)) {
     }
   }
@@ -160,12 +185,12 @@ bool Task::update_sample(const GEOPOINT& location)
   return true;
 }
 
-
+///////////////////////////////////////////////////////////////////
 
 void print_tp(OrderedTaskPoint *tp, std::ofstream& f) {
-  unsigned n= tp->get_search_points().size();
+  unsigned n= tp->get_boundary_points().size();
   for (unsigned i=0; i<n; i++) {
-    GEOPOINT loc = tp->get_search_points()[i].Location;
+    GEOPOINT loc = tp->get_boundary_points()[i].Location;
     f << loc.Longitude << " " << loc.Latitude << "\n";
   }
   f << "\n";
@@ -185,6 +210,7 @@ void Task::report(const GEOPOINT &location)
   std::ofstream f1("res-task.txt");
   std::ofstream f2("res-max.txt");
   std::ofstream f3("res-min.txt");
+  static std::ofstream f4("res-sample.txt");
 
   f1 << "#### Distances\n";
   f1 << "# dist nominal " << distance_nominal << "\n";
@@ -199,9 +225,8 @@ void Task::report(const GEOPOINT &location)
     print_tp(tps[i], f1);
   }
 
-  f1 << "### Current location\n";
-  f1 <<  location.Longitude << " " 
-     <<  location.Latitude << "\n\n";
+  f4 <<  location.Longitude << " " 
+     <<  location.Latitude << "\n";
 
   f2 << "#### Max task\n";
   for (int i=0; i<tps.size(); i++) {
@@ -217,7 +242,7 @@ void Task::report(const GEOPOINT &location)
        <<  tp->get_search_min().Location.Latitude << "\n";
   }
 
-  printf("distance tests %d\n", count_distance);
-  count_distance = 0;
+//  printf("distance tests %d\n", count_distance);
+//  count_distance = 0;
 }
 

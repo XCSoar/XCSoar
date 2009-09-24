@@ -23,7 +23,7 @@ public:
 
   void setActiveTaskPoint(unsigned);    
 
-  virtual bool update_sample(const GEOPOINT&);
+  virtual bool update_sample(const GEOPOINT&, const GEOPOINT&);
 
   double get_distance_nominal() const {
     return distance_nominal;

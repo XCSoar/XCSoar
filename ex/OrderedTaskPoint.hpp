@@ -56,7 +56,8 @@ public:
       leg_out(NULL),
       active_state(NOTFOUND_ACTIVE)
     {
-      clear_search_points();
+      clear_boundary_points();
+      clear_sample_points();
     };
 
   enum ActiveState_t {
@@ -120,12 +121,12 @@ public:
 
   virtual GEOPOINT get_reference_remaining_destination();
 
-  const std::vector<SEARCH_POINT>& get_search_points() const;
+  const std::vector<SEARCH_POINT>& get_search_points();
+  const std::vector<SEARCH_POINT>& get_boundary_points() const;
 
-  void add_search_point(const SEARCH_POINT&);
-
-  virtual void default_search_points();
-  virtual void prune_search_points();
+  virtual void default_boundary_points();
+  virtual void prune_boundary_points();
+  virtual void prune_sample_points();
 
   void set_search_max(const SEARCH_POINT &i) {
     search_max = i;
@@ -143,10 +144,13 @@ public:
     return search_min;
   }
 
-  virtual void clear_search_points() {
-    search_points.clear();
+  virtual void clear_boundary_points() {
+    boundary_points.clear();
     search_max.Location = getLocation();
     search_min.Location = getLocation();
+  }  
+  virtual void clear_sample_points() {
+    sampled_points.clear();
   }  
 
   virtual bool update_sample(const GEOPOINT&);
@@ -164,8 +168,8 @@ protected:
   double distance_remaining; 
   double distance_travelled; 
 private:
-  unsigned num_search_points;
-  std::vector<SEARCH_POINT> search_points;
+  std::vector<SEARCH_POINT> sampled_points;
+  std::vector<SEARCH_POINT> boundary_points;
   SEARCH_POINT search_max;
   SEARCH_POINT search_min;
 };

@@ -5,9 +5,11 @@
 #include <stdio.h>
 #include <assert.h>
 #include <math.h>
+#include "ConvexHull/GrahamScan.hpp"
+#include "ConvexHull/PolygonInterior.hpp"
 
 
-void OrderedTaskPoint::default_search_points() { 
+void OrderedTaskPoint::default_boundary_points() { 
   double t=0;
   if (boundary_scored) {
     for (t=0; t<1.0; t+= 0.05) {
@@ -15,29 +17,38 @@ void OrderedTaskPoint::default_search_points() {
       sp.Location = get_boundary_parametric(t);
       sp.actual = false;
       sp.saved_rank = 0;
-      add_search_point(sp);
+      boundary_points.push_back(sp);
     }
   } else {
     SEARCH_POINT sp;
     sp.Location = getLocation();
     sp.actual = false;
     sp.saved_rank = 0;
-    add_search_point(sp);
+    boundary_points.push_back(sp);
   }
 }
 
-
-void OrderedTaskPoint::add_search_point(const SEARCH_POINT & val)
+const std::vector<SEARCH_POINT>& 
+OrderedTaskPoint::get_boundary_points() const
 {
-  search_points.push_back(val);
+  return boundary_points;
 }
 
-
-
 const std::vector<SEARCH_POINT>& 
-OrderedTaskPoint::get_search_points() const 
+OrderedTaskPoint::get_search_points()  
 {
-  return search_points;
+  if (active_state== BEFORE_ACTIVE) {
+    if (!sampled_points.size()) {
+      SEARCH_POINT sp;
+      sp.Location = getLocation();
+      sp.actual = false;
+      sp.saved_rank = 0;
+      sampled_points.push_back(sp);
+    }
+    return sampled_points;
+  } else {
+    return boundary_points;
+  }
 }
 
 GEOPOINT OrderedTaskPoint::get_reference_remaining_destination()
@@ -190,18 +201,23 @@ double OrderedTaskPoint::scan_distance_scored(const GEOPOINT &ref)
   }
 }
 
-#include "ConvexHull/GrahamScan.hpp"
 
 
-void OrderedTaskPoint::prune_search_points()
+void OrderedTaskPoint::prune_boundary_points()
 {
-  std::list<SEARCH_POINT> points(search_points.begin(),
-                                 search_points.end());
-//  printf("size was %d\n", search_points.size());
+//  printf("size was %d\n", boundary_points.size());
+  GrahamScan gs(boundary_points);
+  boundary_points = gs.prune_interior();
+//  printf("size now %d\n", boundary_points.size());
+}
 
-  GrahamScan gs(search_points);
-  search_points = gs.prune_interior();
-//  printf("size now %d\n", search_points.size());
+
+void OrderedTaskPoint::prune_sample_points()
+{
+  printf("size was %d\n", sampled_points.size());
+  GrahamScan gs(sampled_points);
+  sampled_points = gs.prune_interior();
+  printf("size now %d\n", sampled_points.size());
 }
 
 
@@ -215,7 +231,20 @@ bool OrderedTaskPoint::update_sample(const GEOPOINT& location)
     //   re-compute convex hull
     //   return true; (update required)
     //
-    return true;
+    if (PolygonInterior(location, sampled_points)) {
+      // do nothing
+      printf("is interior\n");
+      return false;
+    } else {
+      SEARCH_POINT sp;
+      sp.Location = location;
+      sp.actual = true;
+      sp.saved_rank = 0;
+      sampled_points.push_back(sp);
+      prune_sample_points();
+
+      return true;
+    }
   }
   return false;
 }

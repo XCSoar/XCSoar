@@ -133,33 +133,38 @@ TaskDijkstra::distance_opt_achieved(const GEOPOINT &currentLocation,
     if (curNode.first != activeStage) {
       add_edges(dijkstra, curNode);
     } else {
-      task->tps[curNode.first]->set_search_min(
-        task->tps[curNode.first]->get_search_points()[curNode.second]);
 
-      TaskDijkstra inner_dijkstra(task);
+      // TODO: don't do inner search if on final!
 
       double d_this = 
         distance(curNode, currentLocation);
-      double df = 
-        inner_dijkstra.distance_opt(curNode, req_shortest)
-        +(MAX_DIST*curNode.first-dijkstra.dist())*precision;
+      double d_acc = (MAX_DIST*curNode.first-dijkstra.dist())*precision;
+      double df = 0;
+      TaskDijkstra inner_dijkstra(task);
+
+      if (curNode.first == num_taskpoints-1) {
+        df = 0.0;
+      } else {
+        df = inner_dijkstra.distance_opt(curNode, req_shortest);
+      }
 
       bool best=false;
       if (req_shortest) {
         // need to take into account distance from here to target
         if (df+d_this<min_d) {
-          min_d = df+d_this; min_d_actual = df;
+          min_d = df+d_this; min_d_actual = df+d_acc;
           best=true;
         }
       } else {
         // here we are only interested in scored distance
-        if (df>max_d_actual) {
-          max_d_actual = df;
+        if (df+d_acc>max_d_actual) {
+          max_d_actual = df+d_acc;
           best=true;
         }
       }
       if (best) {
-        for (int j=activeStage; j<num_taskpoints; j++) {
+        solution[activeStage] = curNode.second;
+        for (int j=activeStage+1; j<num_taskpoints; j++) {
           solution[j]= inner_dijkstra.solution[j];
         }
       }
