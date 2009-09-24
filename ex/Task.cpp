@@ -179,6 +179,7 @@ void Task::report()
   printf("# absolute max dist %g\n",d);
 */
 
+  printf("#### Distances\n");
   printf("# dist nominal %g\n", distance_nominal);
   printf("# min dist after achieving max %g\n", distance_min);
   printf("# max dist after achieving max %g\n", distance_max);
@@ -186,10 +187,12 @@ void Task::report()
   printf("# dist travelled %g\n", distance_travelled);
   printf("# dist scored %g\n", distance_scored);
 
+  printf("#### Task points\n");
   for (int i=0; i<tps.size(); i++) {
     print_tp(tps[i]);
   }
 
+  printf("#### Max task\n");
   for (int i=0; i<tps.size(); i++) {
     OrderedTaskPoint *tp = tps[i];
     printf("%g %g 2\n", tp->get_search_max().Location.Longitude,
@@ -197,6 +200,7 @@ void Task::report()
   }
   printf("\n");
 
+  printf("#### Min task\n");
   for (int i=0; i<tps.size(); i++) {
     OrderedTaskPoint *tp = tps[i];
     printf("%g %g 3\n", tp->get_search_min().Location.Longitude,
