@@ -147,7 +147,11 @@ public:
     search_points.clear();
     search_max.Location = getLocation();
     search_min.Location = getLocation();
-  };
+  }  
+
+  virtual bool update_sample(const GEOPOINT&);
+
+;
 
 protected:
 

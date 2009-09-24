@@ -9,8 +9,8 @@
 class GrahamScan
 {
 public :
-  GrahamScan(std::list<SEARCH_POINT>& sps);
-  void prune_interior();
+  GrahamScan(const std::vector<SEARCH_POINT>& sps);
+  std::vector<SEARCH_POINT> prune_interior();
 private :
   void partition_points();
   void build_hull();
@@ -20,7 +20,7 @@ private :
   double direction( const GEOPOINT& p0,
                     const GEOPOINT& p1,
                     const GEOPOINT& p2 );
-  std::list< SEARCH_POINT > &raw_points;
+  std::list< SEARCH_POINT > raw_points;
   SEARCH_POINT *left;
   SEARCH_POINT *right;
   std::vector< SEARCH_POINT* > upper_partition_points;

@@ -21,7 +21,7 @@ int main() {
   location.Latitude=8;
 
   test_task.setActiveTaskPoint(2);
-  test_task.scan_distance(location);
+  test_task.update_sample(location);
 
 //  test_task.remove(2);
 //  test_task.scan_distance(location);

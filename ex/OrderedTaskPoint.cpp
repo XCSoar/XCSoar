@@ -6,6 +6,7 @@
 #include <assert.h>
 #include <math.h>
 
+
 void OrderedTaskPoint::default_search_points() { 
   double t=0;
   if (boundary_scored) {
@@ -196,13 +197,25 @@ void OrderedTaskPoint::prune_search_points()
 {
   std::list<SEARCH_POINT> points(search_points.begin(),
                                  search_points.end());
-//  printf("size was %d\n", search_points.size());
+  printf("size was %d\n", search_points.size());
 
-  GrahamScan gs(points);
-  gs.prune_interior();
-
-  search_points.clear();
-
-  std::copy(points.begin(), points.end(), std::back_inserter(search_points));
+  GrahamScan gs(search_points);
+  search_points = gs.prune_interior();
 //  printf("size now %d\n", search_points.size());
+}
+
+
+bool OrderedTaskPoint::update_sample(const GEOPOINT& location)
+{
+  if (isInSector(location)) {
+    // if sample is inside sample polygon
+    //   return false (no update required)
+    // else
+    //   add sample to polygon
+    //   re-compute convex hull
+    //   return true; (update required)
+    //
+    return true;
+  }
+  return false;
 }

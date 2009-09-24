@@ -3,6 +3,7 @@
 #include "Task.h"
 #include "TaskDijkstra.hpp"
 #include <stdio.h>
+#include <math.h>
 
 #include "TaskPoints/FAISectorStartPoint.hpp"
 #include "TaskPoints/FAISectorASTPoint.hpp"
@@ -17,6 +18,8 @@ void print_tp(OrderedTaskPoint *tp) {
     GEOPOINT loc = tp->get_search_points()[i].Location;
     printf("%g %g 1\n", loc.Longitude, loc.Latitude);
   }
+  GEOPOINT loc = tp->get_search_points()[0].Location;
+  printf("%g %g 1\n", loc.Longitude, loc.Latitude);
   printf("\n");
 }
 
@@ -181,3 +184,24 @@ Task::remove(unsigned position)
   update_geometry();
 }
 
+#define max(a,b) (a>b? a:b)
+#define min(a,b) (a<b? a:b)
+
+bool Task::update_sample(const GEOPOINT& location)
+{
+  ts->scan_active(getActiveTaskPoint());
+
+  int n_task = tps.size();
+  int t_min = max(0,activeTaskPoint-1);
+  int t_max = min(n_task-1, activeTaskPoint);
+
+  for (int i=t_min; i<=t_max; i++) {
+    if (tps[i]->update_sample(location)) {
+    }
+  }
+
+  scan_distance(location);
+  return true;
+}
+
+  

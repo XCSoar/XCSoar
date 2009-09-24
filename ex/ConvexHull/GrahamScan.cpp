@@ -13,8 +13,8 @@ bool sortleft (const SEARCH_POINT& sp1, const SEARCH_POINT& sp2)
 }
 
 
-GrahamScan::GrahamScan(std::list<SEARCH_POINT>& sps):
-  raw_points(sps)
+GrahamScan::GrahamScan(const std::vector<SEARCH_POINT>& sps):
+  raw_points(sps.begin(), sps.end())
 {
 }
 
@@ -157,41 +157,28 @@ double GrahamScan::direction( const GEOPOINT& p0,
 }
 
 
-void GrahamScan::prune_interior()
+std::vector<SEARCH_POINT> GrahamScan::prune_interior()
 {
+  std::vector<SEARCH_POINT> res;
+
   if (raw_points.size()<3) {
-    return;
+    std::copy(raw_points.begin(), raw_points.end(),
+              std::back_inserter(res));
+    return res;
     // nothing to do
   }
 
   partition_points();
   build_hull();
 
-  for (std::list<SEARCH_POINT>::iterator i = raw_points.begin(); i != raw_points.end(); ++i) 
-    (*i).saved_rank = 0;
-
-  if ( lower_hull.size() ) {
-    for ( size_t i = 0 ; i < lower_hull.size() ; i++ ) {
-      lower_hull[i]->saved_rank = 1;
-    }
+  for ( int i = 0 ; i < lower_hull.size()-1 ; i++ ) {
+    res.push_back(*lower_hull[i]);
   }
-  if ( upper_hull.size() ) {
-    for ( size_t i = 0 ; i < upper_hull.size() ; i++ ) {
-      upper_hull[i]->saved_rank = 1;
-    }
+  for ( int i = upper_hull.size()-1; i>0 ; i-- ) {
+    res.push_back(*upper_hull[i]);
   }
 
-  left->saved_rank = 1;
-  right->saved_rank = 1;
-
-//  printf("size now %d\n", raw_points.size());
-
-  for (std::list<SEARCH_POINT>::iterator i = raw_points.begin(); i != raw_points.end(); )
-    if ((*i).saved_rank==0)
-      i = raw_points.erase(i);
-    else
-      ++i;
-
-//  printf("size now %d\n", raw_points.size());
-
+  printf("size before %d\n", raw_points.size());
+  printf("size now %d\n", res.size());
+  return res;
 }
