@@ -9,6 +9,7 @@
 
 #include "TaskPoints/FAISectorStartPoint.hpp"
 #include "TaskPoints/FAISectorASTPoint.hpp"
+#include "TaskPoints/FAICylinderASTPoint.hpp"
 #include "TaskPoints/FAISectorFinishPoint.hpp"
 
 #include <assert.h>
@@ -24,16 +25,16 @@ Task::Task():
   wp[1].Location.Latitude=10;
   wp[2].Location.Longitude=10;
   wp[2].Location.Latitude=10;
-  wp[3].Location.Longitude=10;
-  wp[3].Location.Latitude=0;
-  wp[4].Location.Longitude=20;
+  wp[3].Location.Longitude=7;
+  wp[3].Location.Latitude=5;
+  wp[4].Location.Longitude=10;
   wp[4].Location.Latitude=0;
 
   ts = new FAISectorStartPoint(wp[0]);
   tps.push_back(ts);
   tps.push_back(new FAISectorASTPoint(wp[1]));
   tps.push_back(new FAISectorASTPoint(wp[2]));
-  tps.push_back(new FAISectorASTPoint(wp[3]));
+  tps.push_back(new FAICylinderASTPoint(wp[3]));
   tps.push_back(new FAISectorFinishPoint(wp[4]));
 
   for (int i=0; i<tps.size()-1; i++) {
@@ -170,9 +171,9 @@ void print_tp(OrderedTaskPoint *tp, std::ofstream& f) {
   f << "\n";
 }
 
+extern int count_distance;
 
-
-void Task::report() 
+void Task::report(const GEOPOINT &location) 
 {
 /*
   d = dijkstra.distance_opt(start,true);
@@ -198,6 +199,10 @@ void Task::report()
     print_tp(tps[i], f1);
   }
 
+  f1 << "### Current location\n";
+  f1 <<  location.Longitude << " " 
+     <<  location.Latitude << "\n\n";
+
   f2 << "#### Max task\n";
   for (int i=0; i<tps.size(); i++) {
     OrderedTaskPoint *tp = tps[i];
@@ -211,4 +216,8 @@ void Task::report()
     f3 <<  tp->get_search_min().Location.Longitude << " " 
        <<  tp->get_search_min().Location.Latitude << "\n";
   }
+
+  printf("distance tests %d\n", count_distance);
+  count_distance = 0;
 }
+

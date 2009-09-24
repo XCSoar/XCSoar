@@ -43,7 +43,7 @@ public:
   double get_distance_scored() const {
     return distance_scored;
   };
-  void report();
+  void report(const GEOPOINT &location);
 
 private:
   double distance_nominal;
