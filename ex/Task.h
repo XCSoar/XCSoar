@@ -25,7 +25,33 @@ public:
 
   virtual bool update_sample(const GEOPOINT&);
 
+  double get_distance_nominal() const {
+    return distance_nominal;
+  };
+  double get_distance_min() const {
+    return distance_min;
+  };
+  double get_distance_max() const {
+    return distance_max;
+  };
+  double get_distance_remaining() const {
+    return distance_remaining;
+  };
+  double get_distance_travelled() const {
+    return distance_travelled;
+  };
+  double get_distance_scored() const {
+    return distance_scored;
+  };
+  void report();
+
 private:
+  double distance_nominal;
+  double distance_min;
+  double distance_max;
+  double distance_remaining;
+  double distance_travelled;
+  double distance_scored;
   virtual void scan_distance(const GEOPOINT &location);
   void update_geometry();
   StartPoint *ts;

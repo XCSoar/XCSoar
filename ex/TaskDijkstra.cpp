@@ -33,15 +33,15 @@ void TaskDijkstra::add_edges(Dijkstra<ScanTaskPoint> &dijkstra,
   ScanTaskPoint destination;
   destination.first = curNode.first+1;
 
-  const std::vector<SEARCH_POINT>& destinations = task->tps[destination.first]->
-    get_search_points();
+  const std::vector<SEARCH_POINT>& dest_list =
+    task->tps[destination.first]->get_search_points();
 
   for (destination.second=0; 
-       destination.second< destinations.size(); destination.second++) {
+       destination.second< dest_list.size(); destination.second++) {
 
     GEOPOINT p1 = task->tps[curNode.first]->
       get_search_points()[curNode.second].Location;
-    GEOPOINT p2 = destinations[destination.second].Location;
+    GEOPOINT p2 = dest_list[destination.second].Location;
 
     double dr = Distance(p1,p2);
     if (dr>precision) {
@@ -119,7 +119,6 @@ TaskDijkstra::distance_opt_achieved(const GEOPOINT &currentLocation,
   int activeStage = task->getActiveTaskPointIndex();
 
   double min_d = MAX_DIST;
-  double max_d = 0;
   double min_d_actual = MAX_DIST;
   double max_d_actual = 0;
 
@@ -154,8 +153,8 @@ TaskDijkstra::distance_opt_achieved(const GEOPOINT &currentLocation,
         }
       } else {
         // here we are only interested in scored distance
-        if (df>max_d) {
-          max_d = df+d_this; max_d_actual = df;
+        if (df>max_d_actual) {
+          max_d_actual = df;
           best=true;
         }
       }
@@ -178,13 +177,6 @@ TaskDijkstra::distance_opt_achieved(const GEOPOINT &currentLocation,
         task->tps[j]->get_search_points()[solution[j]]);
     }
   }
-  /*
-  for (unsigned j=0; j<num_taskpoints; j++) {
-    GEOPOINT loc = task->tps[j]->
-      get_search_point(solution[j]).Location;
-    printf("%g %g %d\n", loc.Longitude, loc.Latitude, j);
-  }
-  */
 
   if (req_shortest) {
     return min_d_actual; 
@@ -195,6 +187,8 @@ TaskDijkstra::distance_opt_achieved(const GEOPOINT &currentLocation,
 
 
 /*
+  TODO/incomplete 
+
   only scan parts that are required, and prune out points
   that become irrelevant (strictly under-performing) 
 

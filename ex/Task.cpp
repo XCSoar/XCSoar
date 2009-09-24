@@ -81,48 +81,12 @@ void Task::scan_distance(const GEOPOINT &location)
 
   ts->scan_active(getActiveTaskPoint());
 
-  d= ts->scan_distance_nominal();
-  printf("# dist nominal %g\n", d);
-
-  d = dijkstra.distance_opt_achieved(location, true);  
-  printf("# min dist after achieving max %g\n",d);
-
-  d = dijkstra.distance_opt_achieved(location, false);
-  printf("# max dist after achieving max %g\n",d);
-
-  d = ts->scan_distance_remaining(location);
-  printf("# dist remaining %g\n", d);
-
-  d = ts->scan_distance_travelled(location);
-  printf("# dist travelled %g\n", d);
-
-  d = ts->scan_distance_scored(location);
-  printf("# dist scored %g\n", d);
-
-  d = dijkstra.distance_opt(start,true);
-  printf("# absolute min dist %g\n",d);
-
-  d = dijkstra.distance_opt(start,false);
-  printf("# absolute max dist %g\n",d);
-
-  for (int i=0; i<tps.size(); i++) {
-    print_tp(tps[i]);
-  }
-
-  for (int i=0; i<tps.size(); i++) {
-    OrderedTaskPoint *tp = tps[i];
-    printf("%g %g 2\n", tp->get_search_max().Location.Longitude,
-           tp->get_search_max().Location.Latitude);
-  }
-  printf("\n");
-
-  for (int i=0; i<tps.size(); i++) {
-    OrderedTaskPoint *tp = tps[i];
-    printf("%g %g 3\n", tp->get_search_min().Location.Longitude,
-           tp->get_search_min().Location.Latitude);
-  }
-
-  printf("\n");
+  distance_nominal = ts->scan_distance_nominal();
+  distance_min = dijkstra.distance_opt_achieved(location, true);  
+  distance_max = dijkstra.distance_opt_achieved(location, false);
+  distance_remaining = ts->scan_distance_remaining(location);
+  distance_travelled = ts->scan_distance_travelled(location);
+  distance_scored = ts->scan_distance_scored(location);
 }
 
 
@@ -205,3 +169,39 @@ bool Task::update_sample(const GEOPOINT& location)
 }
 
   
+void Task::report() 
+{
+/*
+  d = dijkstra.distance_opt(start,true);
+  printf("# absolute min dist %g\n",d);
+
+  d = dijkstra.distance_opt(start,false);
+  printf("# absolute max dist %g\n",d);
+*/
+
+  printf("# dist nominal %g\n", distance_nominal);
+  printf("# min dist after achieving max %g\n", distance_min);
+  printf("# max dist after achieving max %g\n", distance_max);
+  printf("# dist remaining %g\n", distance_remaining);
+  printf("# dist travelled %g\n", distance_travelled);
+  printf("# dist scored %g\n", distance_scored);
+
+  for (int i=0; i<tps.size(); i++) {
+    print_tp(tps[i]);
+  }
+
+  for (int i=0; i<tps.size(); i++) {
+    OrderedTaskPoint *tp = tps[i];
+    printf("%g %g 2\n", tp->get_search_max().Location.Longitude,
+           tp->get_search_max().Location.Latitude);
+  }
+  printf("\n");
+
+  for (int i=0; i<tps.size(); i++) {
+    OrderedTaskPoint *tp = tps[i];
+    printf("%g %g 3\n", tp->get_search_min().Location.Longitude,
+           tp->get_search_min().Location.Latitude);
+  }
+
+  printf("\n");
+}

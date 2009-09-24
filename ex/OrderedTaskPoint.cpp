@@ -197,7 +197,7 @@ void OrderedTaskPoint::prune_search_points()
 {
   std::list<SEARCH_POINT> points(search_points.begin(),
                                  search_points.end());
-  printf("size was %d\n", search_points.size());
+//  printf("size was %d\n", search_points.size());
 
   GrahamScan gs(search_points);
   search_points = gs.prune_interior();

@@ -178,7 +178,7 @@ std::vector<SEARCH_POINT> GrahamScan::prune_interior()
     res.push_back(*upper_hull[i]);
   }
 
-  printf("size before %d\n", raw_points.size());
-  printf("size now %d\n", res.size());
+//  printf("size before %d\n", raw_points.size());
+//  printf("size now %d\n", res.size());
   return res;
 }

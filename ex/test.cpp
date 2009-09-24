@@ -22,6 +22,7 @@ int main() {
 
   test_task.setActiveTaskPoint(2);
   test_task.update_sample(location);
+  test_task.report();
 
 //  test_task.remove(2);
 //  test_task.scan_distance(location);
