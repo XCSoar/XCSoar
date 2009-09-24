@@ -214,10 +214,10 @@ void OrderedTaskPoint::prune_boundary_points()
 
 void OrderedTaskPoint::prune_sample_points()
 {
-  printf("size was %d\n", sampled_points.size());
+//  printf("size was %d\n", sampled_points.size());
   GrahamScan gs(sampled_points);
   sampled_points = gs.prune_interior();
-  printf("size now %d\n", sampled_points.size());
+//  printf("size now %d\n", sampled_points.size());
 }
 
 
@@ -233,7 +233,6 @@ bool OrderedTaskPoint::update_sample(const GEOPOINT& location)
     //
     if (PolygonInterior(location, sampled_points)) {
       // do nothing
-      printf("is interior\n");
       return false;
     } else {
       SEARCH_POINT sp;

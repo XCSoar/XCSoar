@@ -16,6 +16,16 @@ double small_rand() {
   return rand()*0.1/RAND_MAX;
 }
 
+int n_samples = 0;
+
+void do_exit()
+{
+  if (n_samples) {
+    printf("av distance tests %d\n", count_distance/n_samples);
+  }
+  exit(0);
+}
+
 int main() {
 
   Task test_task;
@@ -49,16 +59,16 @@ int main() {
 
       test_task.update_sample(location, location_last);
       test_task.report(location);
-
+      n_samples++;
       location_last = location;
     }
     printf("[enter to continue]\n");
     char c = getchar();
-    if (i==3) exit(0);
+    if (i==3) do_exit();
   }
 
 //  test_task.remove(2);
 //  test_task.scan_distance(location);
-
+  do_exit();
   return 0;
 }

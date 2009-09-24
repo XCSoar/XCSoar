@@ -64,7 +64,7 @@ void Task::setActiveTaskPoint(unsigned t)
   activeTaskPoint = t;
 }
 
-void Task::scan_distance(const GEOPOINT &location) 
+void Task::scan_distance(const GEOPOINT &location, bool full) 
 { 
   TaskDijkstra dijkstra(this);
   ScanTaskPoint start(0,0);
@@ -73,11 +73,12 @@ void Task::scan_distance(const GEOPOINT &location)
 
   ts->scan_active(getActiveTaskPoint());
 
-  distance_nominal = ts->scan_distance_nominal();
+  if (full) {
+    distance_nominal = ts->scan_distance_nominal();
+    distance_max = dijkstra.distance_opt_achieved(location, false);
+  }
 
-  distance_min = dijkstra.distance_opt_achieved(location, true);  
-  distance_max = dijkstra.distance_opt_achieved(location, false);
-
+  distance_min = dijkstra.distance_opt_achieved(location, true);
   distance_remaining = ts->scan_distance_remaining(location);
   distance_travelled = ts->scan_distance_travelled(location);
   distance_scored = ts->scan_distance_scored(location);
@@ -165,8 +166,7 @@ bool Task::update_sample(const GEOPOINT& location, const GEOPOINT& last_location
   int n_task = tps.size();
   int t_min = m_max(0,activeTaskPoint-1);
   int t_max = m_min(n_task-1, activeTaskPoint+1);
-
-//  printf("active %d, scan %d %d\n", activeTaskPoint, t_min, t_max);
+  bool full_update = false;
 
   for (int i=t_min; i<=t_max; i++) {
     if (tps[i]->transition_exit(location, last_location)) {
@@ -178,10 +178,11 @@ bool Task::update_sample(const GEOPOINT& location, const GEOPOINT& last_location
       }
     }
     if (tps[i]->update_sample(location)) {
+      full_update = true;
     }
   }
 
-  scan_distance(location);
+  scan_distance(location, full_update);
   return true;
 }
 

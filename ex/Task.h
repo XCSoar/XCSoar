@@ -52,7 +52,7 @@ private:
   double distance_remaining;
   double distance_travelled;
   double distance_scored;
-  virtual void scan_distance(const GEOPOINT &location);
+  virtual void scan_distance(const GEOPOINT &location, bool full);
   void update_geometry();
   StartPoint *ts;
   unsigned activeTaskPoint;
