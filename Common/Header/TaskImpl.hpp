@@ -47,6 +47,8 @@ Copyright_License {
 #include "SettingsTask.hpp"
 #include "WayPoint.hpp"
 
+#include <stdio.h>
+
 typedef struct _START_POINT
 {
   int Index;
