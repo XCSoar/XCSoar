@@ -45,10 +45,16 @@ Copyright_License {
  */
 class ButtonWindow : public Window {
 public:
-  void set(ContainerWindow &parent, const TCHAR *text,
+  void set(ContainerWindow &parent, const TCHAR *text, unsigned id,
            int left, int top, unsigned width, unsigned height) {
     Window::set(&parent, _T("BUTTON"), text,
                 left, top, width, height);
+
+#ifdef ENABLE_SDL
+    // XXX
+#else /* !ENABLE_SDL */
+    ::SetWindowLong(hWnd, GWL_ID, id);
+#endif /* !ENABLE_SDL */
   }
 };
 
