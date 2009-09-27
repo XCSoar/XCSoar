@@ -240,7 +240,6 @@ void GlideComputerTask::AltitudeRequired(const double this_maccready,
 double GlideComputerTask::AATCloseBearing() const
 {
   // ensure waypoint goes in direction of track if very close
-  assert(task.getActiveIndex()>0);
   TASK_POINT tp = task.getTaskPoint(); 
   double course_bearing = Bearing(task.getActiveLocation(), Basic().Location) 
     +tp.AATTargetOffsetRadial;
