@@ -1255,7 +1255,8 @@ void GlideComputerTask::TaskStatistics(const double this_maccready,
                             this_maccready, cruise_efficiency,
                             final_height,
                             AATCloseDistance(),
-                            AATCloseBearing());
+                            task.ValidTaskPoint(task.getActiveIndex())
+                            ? AATCloseBearing() : 0.0);
   task.scan_leg_reverse(tsv, false); // read lock
 }
 
