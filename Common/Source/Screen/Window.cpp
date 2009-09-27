@@ -208,7 +208,7 @@ Window::on_key_up(unsigned key_code)
 }
 
 bool
-Window::on_command(HWND hWnd, unsigned id, unsigned code)
+Window::on_command(unsigned id, unsigned code)
 {
   return false;
 }
@@ -323,7 +323,7 @@ Window::on_message(HWND _hWnd, UINT message,
 
   case WM_COMMAND:
     XCSoarInterface::InterfaceTimeoutReset();
-    if (on_command((HWND)lParam, LOWORD(wParam), HIWORD(wParam))) {
+    if (on_command(LOWORD(wParam), HIWORD(wParam))) {
       /* true returned: message was handled */
       ResetDisplayTimeOut();
       return 0;

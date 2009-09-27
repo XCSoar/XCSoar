@@ -57,7 +57,7 @@ public:
 protected:
   virtual bool on_initdialog();
   virtual bool on_erase(Canvas &canvas);
-  virtual bool on_command(HWND hWnd, unsigned id, unsigned code);
+  virtual bool on_command(unsigned id, unsigned code);
 };
 
 #endif

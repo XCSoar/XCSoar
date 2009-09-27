@@ -160,12 +160,12 @@ ProgressWindow::on_erase(Canvas &canvas)
 }
 
 bool
-ProgressWindow::on_command(HWND hWnd, unsigned id, unsigned code)
+ProgressWindow::on_command(unsigned id, unsigned code)
 {
   if (id == IDOK) {
     end(id);
     return true;
   }
 
-  return false;
+  return Dialog::on_command(id, code);
 }

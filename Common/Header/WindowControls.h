@@ -470,7 +470,7 @@ class WndForm:public WindowControl{
     void SetCaption(const TCHAR *Value);
 
     /** from class Window */
-    virtual bool on_command(HWND hWnd, unsigned id, unsigned code);
+    virtual bool on_command(unsigned id, unsigned code);
     virtual bool on_timer(timer_t id);
     virtual bool on_user(unsigned id);
 

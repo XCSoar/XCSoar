@@ -845,7 +845,7 @@ void WndForm::AddClient(WindowControl *Client){      // add client window
 
 
 bool
-WndForm::on_command(HWND hWnd, unsigned id, unsigned code)
+WndForm::on_command(unsigned id, unsigned code)
 {
    // VENTA- DEBUG HARDWARE KEY PRESSED
 #ifdef VENTA_DEBUG_KEY
@@ -858,7 +858,7 @@ WndForm::on_command(HWND hWnd, unsigned id, unsigned code)
      return true;
    }
 
-   return WindowControl::on_command(hWnd, id, code);
+   return WindowControl::on_command(id, code);
 }
 
 bool
