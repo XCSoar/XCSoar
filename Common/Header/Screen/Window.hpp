@@ -268,17 +268,6 @@ public:
     // XXX on 64 bit machines?
     set_userdata((LONG)(size_t)value);
   }
-
-  LONG get_userdata() const
-  {
-    return ::GetWindowLong(hWnd, GWL_USERDATA);
-  }
-
-  void *get_userdata_pointer() const
-  {
-    // XXX on 64 bit machines?
-    return (void *)get_userdata();
-  }
 #endif /* !ENABLE_SDL */
 
   timer_t set_timer(unsigned id, unsigned ms)
