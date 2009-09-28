@@ -255,7 +255,7 @@ public:
 #ifndef ENABLE_SDL
   WNDPROC set_wndproc(WNDPROC wndproc)
   {
-    return (WNDPROC)::SetWindowLong(hWnd, GWL_WNDPROC, (LONG)wndproc);
+    return (WNDPROC)::SetWindowLongPtr(hWnd, GWLP_WNDPROC, (LONG_PTR)wndproc);
   }
 
   void set_userdata(LONG value)
@@ -265,8 +265,7 @@ public:
 
   void set_userdata(void *value)
   {
-    // XXX on 64 bit machines?
-    set_userdata((LONG)(size_t)value);
+    ::SetWindowLongPtr(hWnd, GWLP_USERDATA, (LONG_PTR)value);
   }
 #endif /* !ENABLE_SDL */
 
@@ -317,8 +316,7 @@ public:
   }
 
   static void *get_userdata_pointer(HWND hWnd) {
-    // XXX on 64 bit machines?
-    return (void *)get_userdata(hWnd);
+    return (void *)::GetWindowLongPtr(hWnd, GWLP_USERDATA);
   }
 
   /**
@@ -335,7 +333,7 @@ public:
    * have called install_wndproc().
    */
   static Window *get(HWND hWnd) {
-    WNDPROC wndproc = (WNDPROC)::GetWindowLong(hWnd, GWL_WNDPROC);
+    WNDPROC wndproc = (WNDPROC)::GetWindowLongPtr(hWnd, GWLP_WNDPROC);
     return wndproc == WndProc
       ? get_unchecked(hWnd)
       : NULL;
