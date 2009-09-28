@@ -140,4 +140,21 @@ public:
   int GetEmptySlot();
 };
 
+class ScopePopupBlock {
+  PopupMessage &popup;
+
+public:
+  ScopePopupBlock(PopupMessage &_popup):popup(_popup) {
+#ifndef ALTAIRSYNC
+    popup.BlockRender(true);
+#endif
+  }
+
+  ~ScopePopupBlock() {
+#ifndef ALTAIRSYNC
+    popup.BlockRender(false);
+#endif
+  }
+};
+
 #endif
