@@ -83,6 +83,14 @@ class MapWindow
 
   static bool register_class(HINSTANCE hInstance);
 
+#ifdef WIN32
+  /**
+   * Identifies the HWND: if the handle is a MapWindow instance, this
+   * function returns true.
+   */
+  static bool identify(HWND hWnd);
+#endif
+
   void set(ContainerWindow &parent,
            const RECT _MapRectSmall, const RECT _MapRectBig);
 

@@ -964,7 +964,7 @@ int WndForm::ShowModal(bool bEnableMap) {
 #ifndef GNAV
         &&  !( // exception
               bEnableMap
-              && msg.hwnd == XCSoarInterface::main_window.map
+              && MapWindow::identify(msg.hwnd)
               && (
                 msg.message == WM_LBUTTONDOWN
                 || msg.message == WM_LBUTTONUP

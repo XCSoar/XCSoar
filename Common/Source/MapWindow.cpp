@@ -327,6 +327,17 @@ MapWindow::register_class(HINSTANCE hInstance)
 #endif /* !ENABLE_SDL */
 }
 
+#ifdef WIN32
+bool
+MapWindow::identify(HWND hWnd)
+{
+  TCHAR name[16];
+  if (::GetClassName(hWnd, name, sizeof(name)) == 0)
+    return false;
+  return _tcscmp(name, _T("XCSoarMap"));
+}
+#endif /* WIN32 */
+
 bool MapWindow::checkLabelBlock(const RECT brect) {
   return label_block.check(brect);
 }
