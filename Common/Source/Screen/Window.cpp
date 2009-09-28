@@ -140,6 +140,38 @@ Window::reset()
 #endif /* !ENABLE_SDL */
 }
 
+ContainerWindow *
+Window::get_root_owner()
+{
+#ifdef ENABLE_SDL
+  if (parent == NULL)
+    /* no parent?  We must be a ContainerWindow instance */
+    return (ContainerWindow *)this;
+
+  ContainerWindow *root = parent;
+  while (root->parent != NULL)
+    root = root->parent;
+
+  return root;
+#else /* !ENABLE_SDL */
+#ifdef WINDOWSPC
+  HWND hRoot = ::GetAncestor(hWnd, GA_ROOTOWNER);
+  if (hRoot == NULL)
+    return NULL;
+#else
+  HWND hRoot = hWnd;
+  while (true) {
+    HWND hParent = ::GetParent(hWnd);
+    if (hParent == NULL)
+      break;
+    hRoot = hParent;
+  }
+#endif
+
+  return (ContainerWindow *)get(hRoot);
+#endif /* !ENABLE_SDL */
+}
+
 bool
 Window::on_create()
 {

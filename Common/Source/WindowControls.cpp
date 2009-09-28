@@ -566,7 +566,7 @@ int WindowControl::OnHelp() {
     return(0); // undefined. return 1 if defined
 #else
     if (mHelpText) {
-      dlgHelpShowModal(XCSoarInterface::main_window, mCaption, mHelpText);
+      dlgHelpShowModal(*get_root_owner(), mCaption, mHelpText);
       return(1);
     } else {
       if (mOnHelpCallback) {
@@ -1850,7 +1850,7 @@ WndProperty::on_mouse_down(int x, int y)
   {
     if (!GetReadOnly())  // when they click on the label
     {
-      dlgComboPicker(XCSoarInterface::main_window, this);
+      dlgComboPicker(*get_root_owner(), this);
     }
     else
     {

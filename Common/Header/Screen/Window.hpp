@@ -130,6 +130,12 @@ public:
 
   void reset();
 
+  /**
+   * Determines the root owner window of this Window.  This is
+   * probably a pointer to the #MainWindow instance.
+   */
+  ContainerWindow *get_root_owner();
+
   void move(int left, int top) {
 #ifdef ENABLE_SDL
     this->left = left;
