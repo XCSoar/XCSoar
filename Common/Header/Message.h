@@ -66,10 +66,6 @@ class Message : public PopupMessage {
   static bool Acknowledge(int type) {
     return main_window.popup.Acknowledge(type);
   }
-
-  static void BlockRender(bool doblock) {
-    main_window.popup.BlockRender(doblock);
-  }
 };
 
 #endif

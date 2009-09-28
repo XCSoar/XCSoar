@@ -177,6 +177,8 @@ ActionInterface::on_key_Alternate1(int UpDown)
    if (UpDown==0) {
      if ( SettingsComputer().Alternate1 <0 ) return;
      task.setSelected(SettingsComputer().Alternate1);
+
+     ScopePopupBlock block(main_window.popup);
      PopupWaypointDetails();
   }
 }
@@ -188,6 +190,8 @@ ActionInterface::on_key_Alternate2(int UpDown)
      if ( SettingsComputer().Alternate2 <0 ) 
        return;
      task.setSelected(SettingsComputer().Alternate2);
+
+     ScopePopupBlock block(main_window.popup);
      PopupWaypointDetails();
   }
 }
@@ -199,6 +203,8 @@ ActionInterface::on_key_BestAlternate(int UpDown)
      if ( Calculated().BestAlternate <0 ) 
        return;
      task.setSelected(Calculated().BestAlternate);
+
+     ScopePopupBlock block(main_window.popup);
      PopupWaypointDetails();
   }
 }
@@ -394,6 +400,8 @@ ActionInterface::on_key_Waypoint(int UpDown)
     task.retreatTaskPoint(SettingsComputer());
   } else if (UpDown==0) {
     task.setSelected();
+
+    ScopePopupBlock block(main_window.popup);
     PopupWaypointDetails();
   }
 }

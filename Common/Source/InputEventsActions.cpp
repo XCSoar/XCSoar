@@ -675,6 +675,7 @@ void InputEvents::eventMainMenu(const TCHAR *misc) {
 //  See the checklist dialog section of the reference manual for more info.
 void InputEvents::eventChecklist(const TCHAR *misc) {
 	(void)misc;
+  ScopePopupBlock block(main_window.popup);
   dlgChecklistShowModal();
 }
 
@@ -683,6 +684,7 @@ void InputEvents::eventChecklist(const TCHAR *misc) {
 //  See the checklist dialog section of the reference manual for more info.
 void InputEvents::eventFlarmTraffic(const TCHAR *misc) {
 	(void)misc;
+  ScopePopupBlock block(main_window.popup);
   dlgFlarmTrafficShowModal();
 }
 
@@ -692,6 +694,7 @@ void InputEvents::eventFlarmTraffic(const TCHAR *misc) {
 // for more info.
 void InputEvents::eventCalculator(const TCHAR *misc) {
 	(void)misc;
+  ScopePopupBlock block(main_window.popup);
   dlgTaskCalculatorShowModal();
 }
 
@@ -703,6 +706,7 @@ void InputEvents::eventCalculator(const TCHAR *misc) {
 //  See the status dialog section of the reference manual for more info
 //  on these.
 void InputEvents::eventStatus(const TCHAR *misc) {
+  ScopePopupBlock block(main_window.popup);
   if (_tcscmp(misc, TEXT("system")) == 0) {
     dlgStatusShowModal(1);
   } else if (_tcscmp(misc, TEXT("task")) == 0) {
@@ -740,9 +744,12 @@ void InputEvents::eventWaypointDetails(const TCHAR *misc) {
       Message::AddMessage(TEXT("No Active Waypoint!"));
       return;
     }
+
+    ScopePopupBlock block(main_window.popup);
     PopupWaypointDetails();
   } else
     if (_tcscmp(misc, TEXT("select")) == 0) {
+      ScopePopupBlock block(main_window.popup);
       int res = dlgWayPointSelect(Basic().Location);
       if (res != -1){
 	task.setSelected(res);
@@ -754,6 +761,7 @@ void InputEvents::eventWaypointDetails(const TCHAR *misc) {
 
 
 void InputEvents::eventGotoLookup(const TCHAR *misc) {
+  ScopePopupBlock block(main_window.popup);
   int res = dlgWayPointSelect(Basic().Location);
   if (res != -1){
     task.FlyDirectTo(res, SettingsComputer());
@@ -942,6 +950,7 @@ void InputEvents::eventAdjustVarioFilter(const TCHAR *misc) {
     return;
   }
   if (_tcscmp(misc, TEXT("xdemo")) == 0) {
+    ScopePopupBlock block(main_window.popup);
     dlgVegaDemoShowModal();
     return;
   }
@@ -1232,6 +1241,8 @@ void InputEvents::eventNearestAirspaceDetails(const TCHAR *misc) {
     return;
   }
 
+  ScopePopupBlock block(main_window.popup);
+
   if (foundcircle != -1) {
     i = foundcircle;
 
@@ -1372,6 +1383,7 @@ void SystemConfiguration(void);
 //  Airspace: Airspace filter settings
 //  Replay: IGC replay dialog
 void InputEvents::eventSetup(const TCHAR *misc) {
+  ScopePopupBlock block(main_window.popup);
 
   if (_tcscmp(misc,TEXT("Basic"))==0){
     dlgBasicSettingsShowModal();
@@ -1562,6 +1574,7 @@ void InputEvents::eventDeclutterLabels(const TCHAR *misc) {
 
 void InputEvents::eventBrightness(const TCHAR *misc) {
 	(void)misc;
+  ScopePopupBlock block(main_window.popup);
   dlgBrightnessShowModal();
 }
 

@@ -39,7 +39,6 @@ Copyright_License {
 #include "Interface.hpp"
 #include "Dialogs/dlgTools.h"
 #ifndef ALTAIRSYNC
-#include "Message.h"
 #include "Protection.hpp"
 #include "InfoBoxLayout.h"
 #include "MainWindow.hpp"
@@ -910,10 +909,6 @@ int WndForm::ShowModal(bool bEnableMap) {
   PeriodClock enter_clock;
   enter_clock.update();
 
-#ifndef ALTAIRSYNC
-  Message::BlockRender(true);
-#endif
-
   RECT mRc = get_position();
   DrawWireRects(XCSoarInterface::EnableAnimation,&mRc, 5);
 
@@ -1103,10 +1098,6 @@ int WndForm::ShowModal(bool bEnableMap) {
   */
 
   SetFocus(oldFocusHwnd);
-
-#ifndef ALTAIRSYNC
-  Message::BlockRender(false);
-#endif
 
   return(mModalResult);
 
