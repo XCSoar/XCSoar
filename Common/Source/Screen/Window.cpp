@@ -62,6 +62,11 @@ Window::set(ContainerWindow *parent, LPCTSTR cls, LPCTSTR text,
                           left, top, width, height,
                           parent != NULL ? parent->hWnd : NULL,
                           NULL, XCSoarInterface::hInst, this);
+
+  /* this isn't good error handling, but this only happens if
+     out-of-memory (we can't do anything useful) or if we passed wrong
+     arguments - which is a bug */
+  assert(hWnd != NULL);
 #endif /* !ENABLE_SDL */
 }
 
