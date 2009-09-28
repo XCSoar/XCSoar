@@ -40,7 +40,8 @@ BUILDTESTS=\
 	t/01_test_tap.exe
 
 all: $(BUILDTESTS) RunWayPointParser-$(TARGET)$(TARGET_EXEEXT) \
-	RunPaintCanvas-$(TARGET)$(TARGET_EXEEXT)
+	RunPaintCanvas-$(TARGET)$(TARGET_EXEEXT) \
+	RunDialog-$(TARGET)$(TARGET_EXEEXT)
 
 test: .phony $(BUILDTESTS)
 	# prove
@@ -86,11 +87,56 @@ RunPaintCanvas-$(TARGET)$(TARGET_EXEEXT): $(RUN_PAINT_CANVAS_OBJS:.o=-$(TARGET).
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
+RUN_DIALOG_OBJS = \
+	$(SRC)/xmlParser.o \
+	$(SRC)/Dialogs/XML.o \
+	$(SRC)/Dialogs/dlgComboPicker.o \
+	$(SRC)/Math/FastMath.o \
+	$(SRC)/Math/Geometry.o \
+	$(SRC)/Screen/Animation.o \
+	$(SRC)/Screen/Bitmap.o \
+	$(SRC)/Screen/Brush.o \
+	$(SRC)/Screen/Canvas.o \
+	$(SRC)/Screen/VirtualCanvas.o \
+	$(SRC)/Screen/BitmapCanvas.o \
+	$(SRC)/Screen/Font.o \
+	$(SRC)/Screen/Pen.o \
+	$(SRC)/Screen/Window.o \
+	$(SRC)/Screen/BufferWindow.o \
+	$(SRC)/Screen/PaintCanvas.o \
+	$(SRC)/Screen/PaintWindow.o \
+	$(SRC)/Screen/ContainerWindow.o \
+	$(SRC)/Screen/TextWindow.o \
+	$(SRC)/Screen/EditWindow.o \
+	$(SRC)/Screen/TopWindow.o \
+	$(SRC)/Screen/Util.o \
+	$(SRC)/Screen/shapelib/mapsearch.o \
+	$(SRC)/DataField/Base.o \
+	$(SRC)/DataField/Boolean.o \
+	$(SRC)/DataField/ComboList.o \
+	$(SRC)/DataField/Enum.o \
+	$(SRC)/DataField/FileReader.o \
+	$(SRC)/DataField/Float.o \
+	$(SRC)/DataField/Integer.o \
+	$(SRC)/DataField/String.o \
+	$(SRC)/WindowControls.o \
+	$(SRC)/UtilsText.o \
+	$(SRC)/Dialogs/dlgHelp.o \
+	$(SRC)/zzip-$(TARGET).a \
+	$(SRC)/compat-$(TARGET).a \
+	$(SRC)/wcecompat/ts_string.o \
+	src/RunDialog.o
+RunDialog-$(TARGET)$(TARGET_EXEEXT): $(RUN_DIALOG_OBJS:.o=-$(TARGET).o)
+	@$(NQ)echo "  LINK    $@"
+	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
+
 include $(topdir)/build/zzip.mk
 include $(topdir)/build/compat.mk
 
 clean:
 	rm -f $(BUILDTESTS) \
 		RunWayPointParser-$(TARGET)$(TARGET_EXEEXT) \
-		RunPaintCanvas-$(TARGET)$(TARGET_EXEEXT)
+		RunPaintCanvas-$(TARGET)$(TARGET_EXEEXT) \
+		RunDialog-$(TARGET)$(TARGET_EXEEXT)
 	rm -f $(RUN_WAY_POINT_PARSER_OBJS:.o=-$(TARGET).o)
+	rm -f $(RUN_DIALOG_OBJS:.o=-$(TARGET).o)
