@@ -52,7 +52,6 @@ Copyright_License {
 #include "InfoBoxLayout.h"
 #include "RasterTerrain.h"
 #include "TerrainRenderer.h"
-#include "Message.h"
 #include "RasterWeather.h"
 #include "Gauge/GaugeCDI.hpp"
 

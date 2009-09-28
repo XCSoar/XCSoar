@@ -51,7 +51,6 @@ Copyright_License {
 #include "Airspace.h"
 #include "ButtonLabel.hpp"
 #include "SnailTrail.hpp"
-#include "Message.h"
 #include "Language.hpp"
 #include "Task.h"
 #include "Protection.hpp"

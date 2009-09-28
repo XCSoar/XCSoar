@@ -61,7 +61,6 @@ Copyright_License {
 #include "SettingsUser.hpp"
 #include "InfoBoxLayout.h"
 #include "InputEvents.h"
-#include "Message.h"
 #include "Registry.hpp"
 #include "Interface.hpp"
 

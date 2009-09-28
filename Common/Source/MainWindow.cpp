@@ -2,7 +2,6 @@
 #include "resource.h"
 #include "Protection.hpp"
 #include "InfoBoxManager.h"
-#include "Message.h"
 #include "Interface.hpp"
 #include "ButtonLabel.hpp"
 #include "Screen/Graphics.hpp"
