@@ -1,4 +1,4 @@
-TARGETS = PC PPC2002 PPC2003 PPC2003X PNA WM5 ALTAIR ALTAIRPORTRAIT WINE UNIX
+TARGETS = PC PPC2000 PPC2002 PPC2003 PPC2003X PNA WM5 ALTAIR ALTAIRPORTRAIT WINE UNIX
 
 # These targets are built when you don't specify the TARGET variable.
 DEFAULT_TARGETS = PC PPC2002 PPC2003 PNA WM5 ALTAIR WINE
@@ -95,6 +95,11 @@ CPU		:=strongarm1110
 MCPU		:= -mcpu=$(CPU)
 endif
 
+ifeq ($(TARGET),PPC2000)
+CPU := strongarm1110
+MCPU := -mcpu=$(CPU)
+endif
+
 endif
 
 endif
@@ -119,6 +124,13 @@ HAVE_POSIX := y
 HAVE_WIN32 := n
 HAVE_MSVCRT := n
 ENABLE_SDL := y
+endif
+
+ifeq ($(TARGET),PPC2000)
+CE_MAJOR := 3
+CE_MINOR := 00
+CE_PLATFORM := 300
+PCPU := ARM
 endif
 
 ifeq ($(CONFIG_PPC2002),y)
