@@ -258,11 +258,6 @@ public:
     return (WNDPROC)::SetWindowLongPtr(hWnd, GWLP_WNDPROC, (LONG_PTR)wndproc);
   }
 
-  void set_userdata(LONG value)
-  {
-    ::SetWindowLong(hWnd, GWL_USERDATA, value);
-  }
-
   void set_userdata(void *value)
   {
     ::SetWindowLongPtr(hWnd, GWLP_USERDATA, (LONG_PTR)value);
@@ -311,11 +306,7 @@ public:
   }
 
 #ifndef ENABLE_SDL
-  static LONG get_userdata(HWND hWnd) {
-    return ::GetWindowLong(hWnd, GWL_USERDATA);
-  }
-
-  static void *get_userdata_pointer(HWND hWnd) {
+  static void *get_userdata(HWND hWnd) {
     return (void *)::GetWindowLongPtr(hWnd, GWLP_USERDATA);
   }
 
@@ -324,7 +315,7 @@ public:
    * is legal.
    */
   static Window *get_unchecked(HWND hWnd) {
-    return (Window *)get_userdata_pointer(hWnd);
+    return (Window *)get_userdata(hWnd);
   }
 
   /**
