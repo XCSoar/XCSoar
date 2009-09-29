@@ -125,8 +125,8 @@ public:
   const std::vector<SEARCH_POINT>& get_boundary_points() const;
 
   virtual void default_boundary_points();
-  virtual void prune_boundary_points();
-  virtual void prune_sample_points();
+  virtual bool prune_boundary_points();
+  virtual bool prune_sample_points();
 
   void set_search_max(const SEARCH_POINT &i) {
     search_max = i;

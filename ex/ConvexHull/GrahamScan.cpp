@@ -1,6 +1,17 @@
 #include "GrahamScan.hpp"
 #include <stdio.h>
 
+bool operator==(const SEARCH_POINT& s1, const SEARCH_POINT& s2)
+{
+  if ((s1.Location.Longitude == s2.Location.Longitude)
+      &&(s1.Location.Latitude == s2.Location.Latitude)) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+
 bool sortleft (const SEARCH_POINT& sp1, const SEARCH_POINT& sp2)
 { 
   if (sp1.Location.Longitude<sp2.Location.Longitude) {
@@ -14,7 +25,7 @@ bool sortleft (const SEARCH_POINT& sp1, const SEARCH_POINT& sp2)
 
 
 GrahamScan::GrahamScan(const std::vector<SEARCH_POINT>& sps):
-  raw_points(sps.begin(), sps.end())
+  raw_points(sps.begin(), sps.end()), raw_vector(sps)
 {
 }
 
@@ -157,7 +168,7 @@ double GrahamScan::direction( const GEOPOINT& p0,
 }
 
 
-std::vector<SEARCH_POINT> GrahamScan::prune_interior()
+std::vector<SEARCH_POINT> GrahamScan::prune_interior(bool *changed)
 {
   std::vector<SEARCH_POINT> res;
 
@@ -176,6 +187,10 @@ std::vector<SEARCH_POINT> GrahamScan::prune_interior()
   }
   for ( int i = upper_hull.size()-1; i>=0 ; i-- ) {
     res.push_back(*upper_hull[i]);
+  }
+
+  if (changed) {
+    *changed = !std::equal( res.begin(), res.end(), raw_vector.begin() );
   }
 
 //  printf("size before %d\n", raw_points.size());

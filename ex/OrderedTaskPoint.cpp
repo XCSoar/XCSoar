@@ -203,21 +203,25 @@ double OrderedTaskPoint::scan_distance_scored(const GEOPOINT &ref)
 
 
 
-void OrderedTaskPoint::prune_boundary_points()
+bool OrderedTaskPoint::prune_boundary_points()
 {
 //  printf("size was %d\n", boundary_points.size());
+  bool changed=false;
   GrahamScan gs(boundary_points);
-  boundary_points = gs.prune_interior();
+  boundary_points = gs.prune_interior(&changed);
 //  printf("size now %d\n", boundary_points.size());
+  return changed;
 }
 
 
-void OrderedTaskPoint::prune_sample_points()
+bool OrderedTaskPoint::prune_sample_points()
 {
 //  printf("size was %d\n", sampled_points.size());
+  bool changed=false;
   GrahamScan gs(sampled_points);
-  sampled_points = gs.prune_interior();
+  sampled_points = gs.prune_interior(&changed);
 //  printf("size now %d\n", sampled_points.size());
+  return changed;
 }
 
 
@@ -240,9 +244,8 @@ bool OrderedTaskPoint::update_sample(const GEOPOINT& location)
       sp.actual = true;
       sp.saved_rank = 0;
       sampled_points.push_back(sp);
-      prune_sample_points();
-
-      return true;
+      // only return true if hull changed 
+      return prune_sample_points();
     }
   }
   return false;

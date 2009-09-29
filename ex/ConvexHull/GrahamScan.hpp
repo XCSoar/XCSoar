@@ -10,7 +10,7 @@ class GrahamScan
 {
 public :
   GrahamScan(const std::vector<SEARCH_POINT>& sps);
-  std::vector<SEARCH_POINT> prune_interior();
+  std::vector<SEARCH_POINT> prune_interior(bool *changed=NULL);
 private :
   void partition_points();
   void build_hull();
@@ -27,6 +27,7 @@ private :
   std::vector< SEARCH_POINT* > lower_partition_points;
   std::vector< SEARCH_POINT* > lower_hull;
   std::vector< SEARCH_POINT* > upper_hull;
+  const std::vector< SEARCH_POINT > &raw_vector;
 };
 
 
