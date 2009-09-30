@@ -15,7 +15,7 @@ TaskDijkstra::TaskDijkstra(Task* _task,
   precision(_precision) 
 {
   num_taskpoints = task->tps.size();
-  solution = new unsigned[num_taskpoints];
+  solution = new SEARCH_POINT[num_taskpoints];
 };
 
 TaskDijkstra::~TaskDijkstra() {
@@ -43,7 +43,7 @@ void TaskDijkstra::add_edges(Dijkstra<ScanTaskPoint> &dijkstra,
       get_search_points()[curNode.second].Location;
     GEOPOINT p2 = dest_list[destination.second].Location;
 
-    double dr = Distance(p1,p2);
+    double dr = ::Distance(p1,p2);
     if (dr>precision) {
       unsigned d;
       if (shortest) {
@@ -56,7 +56,7 @@ void TaskDijkstra::add_edges(Dijkstra<ScanTaskPoint> &dijkstra,
   }
 }
 
-double TaskDijkstra::distance_opt(ScanTaskPoint start,
+double TaskDijkstra::distance_opt(const ScanTaskPoint &start,
                                   const bool req_shortest)
 {
   shortest = req_shortest;
@@ -64,7 +64,9 @@ double TaskDijkstra::distance_opt(ScanTaskPoint start,
   ScanTaskPoint lastNode = start;
   Dijkstra<ScanTaskPoint> dijkstra(start);
   double d_last=0.0;
-  solution[start.first] = start.second;
+
+  solution[start.first] = task->tps[start.first]->
+    get_search_points()[start.second];
 
   while (!dijkstra.empty()) {
 
@@ -81,7 +83,8 @@ double TaskDijkstra::distance_opt(ScanTaskPoint start,
       }
       d_last = d;
 
-      solution[curNode.first] = curNode.second;
+      solution[curNode.first] = task->tps[curNode.first]->
+        get_search_points()[curNode.second];
 
       if (curNode.first == num_taskpoints-1) {
         return d;
@@ -99,7 +102,7 @@ double TaskDijkstra::distance_opt(ScanTaskPoint start,
 double TaskDijkstra::distance(const ScanTaskPoint &curNode,
                               const GEOPOINT &currentLocation)
 {
-  return Distance(task->tps[curNode.first]->
+  return ::Distance(task->tps[curNode.first]->
                   get_search_points()[curNode.second].Location,
                   currentLocation);
 }
@@ -115,8 +118,7 @@ TaskDijkstra::distance_opt_achieved(const GEOPOINT &currentLocation,
   ScanTaskPoint lastNode(1000,1000);
   Dijkstra<ScanTaskPoint> dijkstra(start);
 
-  OrderedTaskPoint* active = task->getActiveTaskPoint();
-  int activeStage = task->getActiveTaskPointIndex();
+  const int activeStage = task->getActiveTaskPointIndex();
 
   double min_d = MAX_DIST;
   double min_d_actual = MAX_DIST;
@@ -127,59 +129,61 @@ TaskDijkstra::distance_opt_achieved(const GEOPOINT &currentLocation,
     ScanTaskPoint curNode = dijkstra.pop();
 
     if (curNode.first != lastNode.first) {
-      solution[curNode.first] = curNode.second;
+      solution[curNode.first] = task->tps[curNode.first]->
+        get_search_points()[curNode.second];
+      lastNode = curNode;
     }
 
     if (curNode.first != activeStage) {
       add_edges(dijkstra, curNode);
     } else {
 
-      // TODO: don't do inner search if on final!
-
-      double d_this = 
-        distance(curNode, currentLocation);
-      double d_acc = (MAX_DIST*curNode.first-dijkstra.dist())*precision;
-      double df = 0;
+      double d_acc = (MAX_DIST*activeStage-dijkstra.dist())*precision;
+      double d_remaining = 0;
       TaskDijkstra inner_dijkstra(task);
 
       if (curNode.first == num_taskpoints-1) {
-        df = 0.0;
+        d_remaining = 0.0;
       } else {
-        df = inner_dijkstra.distance_opt(curNode, req_shortest);
+        d_remaining = inner_dijkstra.distance_opt(curNode, req_shortest);
       }
 
       bool best=false;
       if (req_shortest) {
         // need to take into account distance from here to target
-        if (df+d_this<min_d) {
-          min_d = df+d_this; min_d_actual = df+d_acc;
+
+        double d_this = ::Distance(task->tps[curNode.first]->
+                                   get_search_points()[curNode.second].Location,
+                                   currentLocation);
+
+        if (d_remaining+d_this<min_d) {
+          min_d = d_remaining+d_this; 
+          min_d_actual = d_remaining+d_acc;
           best=true;
         }
       } else {
         // here we are only interested in scored distance
-        if (df+d_acc>max_d_actual) {
-          max_d_actual = df+d_acc;
+        if (d_remaining+d_acc>max_d_actual) {
+          max_d_actual = d_remaining+d_acc;
           best=true;
         }
       }
       if (best) {
-        solution[activeStage] = curNode.second;
+        solution[curNode.first] = task->tps[curNode.first]->
+          get_search_points()[curNode.second];
+
         for (int j=activeStage+1; j<num_taskpoints; j++) {
           solution[j]= inner_dijkstra.solution[j];
         }
       }
     }
-    lastNode = curNode;
-
   }
 
   for (unsigned j=0; j<num_taskpoints; j++) {
     if (req_shortest) {
-      task->tps[j]->set_search_min(
-        task->tps[j]->get_search_points()[solution[j]]);
+      task->tps[j]->set_search_min(solution[j]);
     } else {
-      task->tps[j]->set_search_max(
-        task->tps[j]->get_search_points()[solution[j]]);
+      task->tps[j]->set_search_max(solution[j]);
     }
   }
 

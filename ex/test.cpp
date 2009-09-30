@@ -13,7 +13,7 @@ void distance_counts() {
 #include "ConvexHull/GrahamScan.hpp"
 
 double small_rand() {
-  return rand()*0.1/RAND_MAX;
+  return rand()*0.3/RAND_MAX;
 }
 
 int n_samples = 0;
@@ -39,7 +39,7 @@ void test_polygon()
 {
   for (double t=0; t<1.0; t+= 0.1) {
     SEARCH_POINT sp;
-    double ang = -t*2.0*3.1415926;
+    double ang = t*2.0*3.1415926;
     sp.Location.Longitude = cos(ang);
     sp.Location.Latitude = sin(ang);
     sp.actual = true;
@@ -51,14 +51,14 @@ void test_polygon()
   sampled_points = gs.prune_interior();
 
   GEOPOINT location;
-  location.Longitude = 0.0;
-  location.Latitude = 0.0;
+  location.Longitude = 0.4;
+  location.Latitude = 1.0;
   if (PolygonInterior(location, sampled_points)) {
     printf("inside\n");
   } else {
     printf("outside\n");
   }
-  location.Longitude = 1.1;
+  location.Longitude = 0.4;
   location.Latitude = 0.0;
 
   if (PolygonInterior(location, sampled_points)) {
@@ -108,10 +108,10 @@ int main() {
       test_task.report(location);
       n_samples++;
       location_last = location;
+      if (location.Longitude>10.5) do_exit();
     }
     printf("[enter to continue]\n");
     char c = getchar();
-    if (i==3) do_exit();
   }
 
 //  test_task.remove(2);

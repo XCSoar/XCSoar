@@ -28,17 +28,24 @@ void OrderedTaskPoint::default_boundary_points() {
   }
 }
 
+
 const std::vector<SEARCH_POINT>& 
 OrderedTaskPoint::get_boundary_points() const
 {
   return boundary_points;
 }
 
+
 const std::vector<SEARCH_POINT>& 
-OrderedTaskPoint::get_search_points()  
+OrderedTaskPoint::get_search_points()
 {
   if (active_state== BEFORE_ACTIVE) {
     if (!sampled_points.size()) {
+
+      // this adds a point in case the waypoint was skipped
+      // this is a crude way of handling the situation --- may be best
+      // to de-rate the score in some way
+
       SEARCH_POINT sp;
       sp.Location = getLocation();
       sp.actual = false;
@@ -46,10 +53,13 @@ OrderedTaskPoint::get_search_points()
       sampled_points.push_back(sp);
     }
     return sampled_points;
+  } else if ((active_state == CURRENT_ACTIVE) && (sampled_points.size()>0)) {
+    return sampled_points;
   } else {
     return boundary_points;
   }
 }
+
 
 GEOPOINT OrderedTaskPoint::get_reference_remaining_destination()
 {
@@ -205,22 +215,18 @@ double OrderedTaskPoint::scan_distance_scored(const GEOPOINT &ref)
 
 bool OrderedTaskPoint::prune_boundary_points()
 {
-//  printf("size was %d\n", boundary_points.size());
   bool changed=false;
   GrahamScan gs(boundary_points);
   boundary_points = gs.prune_interior(&changed);
-//  printf("size now %d\n", boundary_points.size());
   return changed;
 }
 
 
 bool OrderedTaskPoint::prune_sample_points()
 {
-//  printf("size was %d\n", sampled_points.size());
   bool changed=false;
   GrahamScan gs(sampled_points);
   sampled_points = gs.prune_interior(&changed);
-//  printf("size now %d\n", sampled_points.size());
   return changed;
 }
 
@@ -236,6 +242,7 @@ bool OrderedTaskPoint::update_sample(const GEOPOINT& location)
     //   return true; (update required)
     //
     if (PolygonInterior(location, sampled_points)) {
+      printf("interior\n");
       // do nothing
       return false;
     } else {
@@ -245,7 +252,7 @@ bool OrderedTaskPoint::update_sample(const GEOPOINT& location)
       sp.saved_rank = 0;
       sampled_points.push_back(sp);
       // only return true if hull changed 
-      return prune_sample_points();
+      return (prune_sample_points());
     }
   }
   return false;

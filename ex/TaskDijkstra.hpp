@@ -9,10 +9,10 @@ class Task;
 class TaskDijkstra {
 public:
   TaskDijkstra(Task* _task,
-               const double _precision=0.1);
+               const double _precision=0.01);
   ~TaskDijkstra();
 
-  double distance_opt(ScanTaskPoint start,
+  double distance_opt(const ScanTaskPoint &start,
                       bool _shortest=false);
 
   double distance_opt_achieved(const GEOPOINT &currentLocation,
@@ -25,7 +25,7 @@ private:
                   const GEOPOINT &loc);
 
   unsigned num_taskpoints;
-  unsigned *solution;
+  SEARCH_POINT *solution;
   double precision;
   bool shortest;
   Task* task;

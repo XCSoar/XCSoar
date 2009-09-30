@@ -175,6 +175,9 @@ std::vector<SEARCH_POINT> GrahamScan::prune_interior(bool *changed)
   if (raw_points.size()<3) {
     std::copy(raw_points.begin(), raw_points.end(),
               std::back_inserter(res));
+    if (changed) {
+      *changed = true;
+    }
     return res;
     // nothing to do
   }
@@ -190,7 +193,10 @@ std::vector<SEARCH_POINT> GrahamScan::prune_interior(bool *changed)
   }
 
   if (changed) {
-    *changed = !std::equal( res.begin(), res.end(), raw_vector.begin() );
+    *changed = res.size() != raw_vector.size();
+    if (!*changed) {
+      *changed = !std::equal( res.begin(), res.end(), raw_vector.begin() );
+    }
   }
 
 //  printf("size before %d\n", raw_points.size());

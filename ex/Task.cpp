@@ -75,9 +75,17 @@ void Task::scan_distance(const GEOPOINT &location, bool full)
 
   if (full) {
     distance_nominal = ts->scan_distance_nominal();
+
+    // for max calculations, since one can still travel further in the sector,
+    // we pretend we are on the previous turnpoint so the search samples will
+    // contain the full boundary
+    if (activeTaskPoint>0) {
+      ts->scan_active(tps[activeTaskPoint-1]);
+    }
     distance_max = dijkstra.distance_opt_achieved(location, false);
   }
 
+  ts->scan_active(getActiveTaskPoint());
   distance_min = dijkstra.distance_opt_achieved(location, true);
   distance_remaining = ts->scan_distance_remaining(location);
   distance_travelled = ts->scan_distance_travelled(location);
@@ -197,6 +205,16 @@ void print_tp(OrderedTaskPoint *tp, std::ofstream& f) {
   f << "\n";
 }
 
+void print_sp(OrderedTaskPoint *tp, std::ofstream& f) {
+  unsigned n= tp->get_search_points().size();
+  for (unsigned i=0; i<n; i++) {
+    GEOPOINT loc = tp->get_search_points()[i].Location;
+    f << loc.Longitude << " " << loc.Latitude << "\n";
+  }
+  f << "\n";
+}
+
+
 extern int count_distance;
 
 void Task::report(const GEOPOINT &location) 
@@ -212,6 +230,7 @@ void Task::report(const GEOPOINT &location)
   std::ofstream f2("res-max.txt");
   std::ofstream f3("res-min.txt");
   static std::ofstream f4("res-sample.txt");
+  std::ofstream f5("res-ssample.txt");
 
   f1 << "#### Distances\n";
   f1 << "# dist nominal " << distance_nominal << "\n";
@@ -224,6 +243,10 @@ void Task::report(const GEOPOINT &location)
   f1 << "#### Task points\n";
   for (int i=0; i<tps.size(); i++) {
     print_tp(tps[i], f1);
+  }
+
+  for (int i=0; i<tps.size(); i++) {
+    print_sp(tps[i], f5);
   }
 
   f4 <<  location.Longitude << " " 
