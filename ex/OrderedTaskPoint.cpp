@@ -231,9 +231,9 @@ bool OrderedTaskPoint::prune_sample_points()
 }
 
 
-bool OrderedTaskPoint::update_sample(const GEOPOINT& location)
+bool OrderedTaskPoint::update_sample(const AIRCRAFT_STATE& state)
 {
-  if (isInSector(location)) {
+  if (isInSector(state)) {
     // if sample is inside sample polygon
     //   return false (no update required)
     // else
@@ -241,13 +241,13 @@ bool OrderedTaskPoint::update_sample(const GEOPOINT& location)
     //   re-compute convex hull
     //   return true; (update required)
     //
-    if (PolygonInterior(location, sampled_points)) {
+    if (PolygonInterior(state.Location, sampled_points)) {
       printf("interior\n");
       // do nothing
       return false;
     } else {
       SEARCH_POINT sp;
-      sp.Location = location;
+      sp.Location = state.Location;
       sp.actual = true;
       sp.saved_rank = 0;
       sampled_points.push_back(sp);

@@ -77,9 +77,9 @@ int main() {
 
   Task test_task;
 
-  GEOPOINT location, location_last;
-  location.Longitude=8;
-  location.Latitude=11;  
+  AIRCRAFT_STATE state, state_last;
+  state.Location.Longitude=8;
+  state.Location.Latitude=11;  
 
   test_task.setActiveTaskPoint(0);
 
@@ -96,19 +96,20 @@ int main() {
   w[4].Longitude = 9; 
   w[4].Latitude = 1; 
 
-  location_last = w[0];
+  state_last.Location = w[0];
 
   double t;
   for (int i=0; i<num_wp-1-1; i++) {
     for (double t=0; t<1.0; t+= 0.01) {
-      location.Latitude = w[i].Latitude*(1.0-t)+w[i+1].Latitude*t+small_rand();
-      location.Longitude = w[i].Longitude*(1.0-t)+w[i+1].Longitude*t+small_rand();
+      state.Location.Latitude = w[i].Latitude*(1.0-t)+w[i+1].Latitude*t+small_rand();
+      state.Location.Longitude = w[i].Longitude*(1.0-t)+w[i+1].Longitude*t+small_rand();
 
-      test_task.update_sample(location, location_last);
-      test_task.report(location);
+      test_task.update_sample(state, state_last);
+      test_task.report(state.Location);
       n_samples++;
-      location_last = location;
-      if (location.Longitude>10.5) do_exit();
+      state_last = state;
+      if (state.Location.Longitude>10.5) do_exit();
+      state.Time += 1.0;
     }
     printf("[enter to continue]\n");
     char c = getchar();

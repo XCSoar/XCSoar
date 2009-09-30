@@ -49,7 +49,7 @@ public:
     oz(wp.Location) 
   {
   };
-  virtual bool isInSector(const GEOPOINT &ref) const
+  virtual bool isInSector(const AIRCRAFT_STATE &ref) const
   {
     return oz.isInSector(ref);
   };

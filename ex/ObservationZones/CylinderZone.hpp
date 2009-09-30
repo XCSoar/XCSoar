@@ -50,9 +50,9 @@ public:
   {
   };
 
-  virtual bool isInSector(const GEOPOINT &ref) const
+  virtual bool isInSector(const AIRCRAFT_STATE &ref) const
   {
-    return distance(ref)<=Radius;
+    return distance(ref.Location)<=Radius;
   }  
 
   GEOPOINT get_boundary_parametric(double) ;

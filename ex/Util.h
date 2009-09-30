@@ -11,7 +11,12 @@ struct WAYPOINT {
   double Altitude;
 };
 
-
+struct AIRCRAFT_STATE {
+  GEOPOINT Location;
+  double Time;
+  double Speed;
+  double Altitude;
+};
 
 double Bearing(const GEOPOINT& p1, const GEOPOINT& p2);
 double Distance(const GEOPOINT& p1, const GEOPOINT& p2);

@@ -167,7 +167,7 @@ int m_min(int a, int b) {
   }
 }
 
-bool Task::update_sample(const GEOPOINT& location, const GEOPOINT& last_location)
+bool Task::update_sample(const AIRCRAFT_STATE &state, const AIRCRAFT_STATE& state_last)
 {
   ts->scan_active(getActiveTaskPoint());
 
@@ -177,7 +177,7 @@ bool Task::update_sample(const GEOPOINT& location, const GEOPOINT& last_location
   bool full_update = false;
 
   for (int i=t_min; i<=t_max; i++) {
-    if (tps[i]->transition_exit(location, last_location)) {
+    if (tps[i]->transition_exit(state, state_last)) {
       if (i<n_task-1) {
         printf("transition to sector %d\n", i+1);
         setActiveTaskPoint(i+1);
@@ -185,12 +185,12 @@ bool Task::update_sample(const GEOPOINT& location, const GEOPOINT& last_location
         // auto advance on exit for testing
       }
     }
-    if (tps[i]->update_sample(location)) {
+    if (tps[i]->update_sample(state)) {
       full_update = true;
     }
   }
 
-  scan_distance(location, full_update);
+  scan_distance(state.Location, full_update);
   return true;
 }
 

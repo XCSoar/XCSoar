@@ -52,18 +52,18 @@ public:
 
   /** returns true if reference point is inside sector
    */
-    virtual bool isInSector(const GEOPOINT & ref) const = 0;
+    virtual bool isInSector(const AIRCRAFT_STATE & ref) const = 0;
 
   /** returns true if reference point is in inside sector
    *  and last was not
    */
-    bool transition_enter(const GEOPOINT & ref_now, const GEOPOINT & ref_last) const {
+    bool transition_enter(const AIRCRAFT_STATE & ref_now, const AIRCRAFT_STATE & ref_last) const {
         return isInSector(ref_now) && !isInSector(ref_last);
     };
 
     // returns true if reference point is in outside sector
     // and last was inside
-    bool transition_exit(const GEOPOINT & ref_now, const GEOPOINT & ref_last) const {
+    bool transition_exit(const AIRCRAFT_STATE & ref_now, const AIRCRAFT_STATE & ref_last) const {
         return transition_enter(ref_last, ref_now);
     }  
 

@@ -61,12 +61,12 @@ public:
       }
     }
 
-  virtual bool isInSector(const GEOPOINT &ref) const
+  virtual bool isInSector(const AIRCRAFT_STATE &ref) const
     {
       if (!CylinderZone::isInSector(ref)) {
         return false;
       } else {
-        return angleInSector(Reciprocal(bearing(ref)));
+        return angleInSector(Reciprocal(bearing(ref.Location)));
       }
     };
 

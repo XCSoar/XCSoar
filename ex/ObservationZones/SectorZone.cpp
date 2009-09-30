@@ -6,13 +6,15 @@
 GEOPOINT SectorZone::get_boundary_parametric(double t) 
 { 
   // todo: should be findlocation
-  GEOPOINT loc = getLocation();
+  AIRCRAFT_STATE state;
+  state.Location = getLocation();
   double ang = t*3.1415926*2.0;
-  loc.Longitude += Radius*cos(ang)*0.999;
-  loc.Latitude += Radius*sin(ang)*0.999;
-  if (isInSector(loc)) {
-    return loc;
+  state.Location.Longitude += Radius*cos(ang)*0.999;
+  state.Location.Latitude += Radius*sin(ang)*0.999;
+  if (isInSector(state)) {
+    return state.Location;
   } else {
     return getLocation();
   }
 }
+

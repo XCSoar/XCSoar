@@ -153,7 +153,7 @@ public:
     sampled_points.clear();
   }  
 
-  virtual bool update_sample(const GEOPOINT&);
+  virtual bool update_sample(const AIRCRAFT_STATE&);
 
 ;
 
