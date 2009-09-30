@@ -60,6 +60,7 @@ double TaskLeg::leg_distance_remaining(const GEOPOINT &ref)
   };
 }
 
+
 double TaskLeg::leg_distance_travelled(const GEOPOINT &ref)
 {
   switch (tp_destination->getActiveState()) {
@@ -119,3 +120,52 @@ OrderedTaskPoint* TaskLeg::get_origin() const {
   return tp_origin;
 }
 
+
+double TaskLeg::leg_bearing_remaining(const GEOPOINT &ref)
+{
+  switch (tp_destination->getActiveState()) {
+  case OrderedTaskPoint::AFTER_ACTIVE:
+    // this leg totally included
+    return 
+      ::Bearing(tp_origin->get_reference_remaining_origin(), 
+                tp_destination->get_reference_remaining_destination());
+    break;
+  case OrderedTaskPoint::BEFORE_ACTIVE:
+    // this leg not included
+    return 0.0;
+  case OrderedTaskPoint::CURRENT_ACTIVE:
+    // this leg partially included
+    return 
+      ::Bearing(ref, 
+                tp_destination->get_reference_remaining_destination());
+    break;
+  default:
+    assert(1); // error!
+    break;
+  };
+}
+
+
+double TaskLeg::leg_bearing_travelled(const GEOPOINT &ref)
+{
+  switch (tp_destination->getActiveState()) {
+  case OrderedTaskPoint::BEFORE_ACTIVE:
+    // this leg totally included
+    return 
+      ::Bearing(tp_origin->get_reference_travelled_origin(), 
+                tp_destination->get_reference_travelled_destination());
+    break;
+  case OrderedTaskPoint::AFTER_ACTIVE:
+    // this leg not included
+    return 0.0;
+  case OrderedTaskPoint::CURRENT_ACTIVE:
+    // this leg partially included
+    return 
+      ::Bearing(tp_origin->get_reference_travelled_origin(), 
+                ref);
+    break;
+  default:
+    assert(1); // error!
+    break;
+  };
+}

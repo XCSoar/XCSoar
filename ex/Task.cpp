@@ -16,6 +16,7 @@
 #include <assert.h>
 
 
+
 Task::Task():
   activeTaskPoint(0)
 {
@@ -91,6 +92,8 @@ void Task::scan_distance(const GEOPOINT &location, bool full)
   distance_remaining = ts->scan_distance_remaining(location);
   distance_travelled = ts->scan_distance_travelled(location);
   distance_scored = ts->scan_distance_scored(location);
+  ts->scan_bearing_travelled(location);
+  ts->scan_bearing_remaining(location);
 }
 
 
@@ -163,6 +166,8 @@ bool Task::update_sample(const AIRCRAFT_STATE &state, const AIRCRAFT_STATE& stat
   bool full_update = false;
 
   for (int i=t_min; i<=t_max; i++) {
+    if (tps[i]->transition_enter(state, state_last)) {
+    }
     if (tps[i]->transition_exit(state, state_last)) {
       if (i<n_task-1) {
         printf("transition to sector %d\n", i+1);
@@ -175,7 +180,6 @@ bool Task::update_sample(const AIRCRAFT_STATE &state, const AIRCRAFT_STATE& stat
       full_update = true;
     }
   }
-
   scan_distance(state.Location, full_update);
   return true;
 }
@@ -228,7 +232,10 @@ void Task::report(const GEOPOINT &location)
 
   f1 << "#### Task points\n";
   for (int i=0; i<tps.size(); i++) {
+    f1 << "## point " << i << "\n";
     print_tp(tps[i], f1);
+    tps[i]->print(f1);
+    f1 << "\n\n";
   }
 
   for (int i=0; i<tps.size(); i++) {
@@ -254,5 +261,18 @@ void Task::report(const GEOPOINT &location)
 
 //  printf("distance tests %d\n", count_distance);
 //  count_distance = 0;
+}
+
+
+double Task::get_leg_bearing(const AIRCRAFT_STATE &ref)
+{
+  return ::Bearing(ref.Location, getActiveTaskPoint()->
+                   get_reference_remaining_destination());
+}
+
+double Task::get_leg_remaining(const AIRCRAFT_STATE &ref)
+{
+  return ::Distance(ref.Location, getActiveTaskPoint()->
+                    get_reference_remaining_destination());
 }
 

@@ -65,7 +65,7 @@ OrderedTaskPoint::get_search_points()
 GEOPOINT OrderedTaskPoint::get_reference_travelled_origin()
 {
   if (state_entered.Time>=0) {
-    return state_entered.Location;
+    return search_max.Location;
   } else {
     return getLocation();
   }
@@ -74,7 +74,7 @@ GEOPOINT OrderedTaskPoint::get_reference_travelled_origin()
 GEOPOINT OrderedTaskPoint::get_reference_travelled_destination()
 {
   if (state_entered.Time>=0) {
-    return state_entered.Location;
+    return search_max.Location;
   } else {
     return getLocation();
   }
@@ -113,7 +113,12 @@ GEOPOINT OrderedTaskPoint::get_reference_remaining_origin()
 
 GEOPOINT OrderedTaskPoint::get_reference_remaining_destination()
 {
-  return getLocation();
+  // TODO: replace with target for AAT
+  if (state_entered.Time>=0) {
+    return search_min.Location;
+  } else {
+    return getLocation();
+  }
 }
 
 // -------
@@ -162,12 +167,46 @@ bool OrderedTaskPoint::scan_active(OrderedTaskPoint* atp) {
   }
 }
 
+//////////
+
+
+void OrderedTaskPoint::scan_bearing_remaining(const GEOPOINT &ref) 
+{
+  if (leg_out) {
+    leg_out->get_destination()->scan_bearing_remaining(ref);
+  } 
+  if (leg_in) {
+    bearing_remaining = leg_in->leg_bearing_remaining(ref);
+  } else {
+    bearing_remaining = 0.0;
+  }
+}
+
+void OrderedTaskPoint::scan_bearing_travelled(const GEOPOINT &ref) 
+{
+  if (leg_out) {
+    leg_out->get_destination()->scan_bearing_travelled(ref);
+  } 
+  if (leg_in) {
+    bearing_travelled = leg_in->leg_bearing_travelled(ref);
+  } else {
+    bearing_travelled = 0.0;
+  }
+}
+
+
 //////////////////
 
 double OrderedTaskPoint::scan_distance_remaining(const GEOPOINT &ref) 
 {
   // distance remaining from the given task point
   // (accumulates towards start)
+
+  if (leg_in) {
+    this_distance_remaining = leg_in->leg_distance_remaining(ref);
+  } else {
+    this_distance_remaining = 0.0;
+  }
 
   if (leg_out) {
     double d = leg_out->leg_distance_remaining(ref);
@@ -195,8 +234,7 @@ double OrderedTaskPoint::scan_distance_nominal()
   }
   if (leg_out) {
     double d = leg_out->leg_distance_nominal();
-    leg_out->get_destination()->
-      set_distance_nominal(d+distance_nominal);
+    leg_out->get_destination()->distance_nominal = d+distance_nominal;
     return leg_out->get_destination()->scan_distance_nominal();
   } else {
     // return at end
@@ -206,6 +244,13 @@ double OrderedTaskPoint::scan_distance_nominal()
 
 double OrderedTaskPoint::scan_distance_travelled(const GEOPOINT &ref) 
 {
+
+  if (leg_in) {
+    this_distance_travelled = leg_in->leg_distance_travelled(ref);
+  } else {
+    this_distance_travelled = 0.0;
+  }
+
   if (leg_in) {
     distance_travelled = leg_in->leg_distance_travelled(ref)
       +leg_in->get_origin()->distance_travelled;
@@ -266,7 +311,6 @@ bool OrderedTaskPoint::update_sample(const AIRCRAFT_STATE& state)
     //   return true; (update required)
     //
     if (PolygonInterior(state.Location, sampled_points)) {
-      printf("interior\n");
       // do nothing
       return false;
     } else {
@@ -290,6 +334,7 @@ OrderedTaskPoint::transition_enter(const AIRCRAFT_STATE & ref_now,
   bool entered = ObservationZone::transition_enter(ref_now, ref_last);
   if (entered) {
     state_entered = ref_now;
+    printf("entered at %g\n",ref_now.Time);
   }
   return entered;
 }
@@ -303,4 +348,15 @@ OrderedTaskPoint::transition_exit(const AIRCRAFT_STATE & ref_now,
     state_exited = ref_last;
   }
   return exited;
+}
+
+
+void 
+OrderedTaskPoint::print(std::ofstream& f)
+{
+  f << "# Bearing travelled " << bearing_travelled << "\n";
+  f << "# Distance travelled " << this_distance_travelled << "\n";
+  f << "# Bearing remaining " << bearing_remaining << "\n";
+  f << "# Distance remaining " << this_distance_remaining << "\n";
+  f << "# Entered " << state_entered.Time << "\n";
 }

@@ -54,6 +54,13 @@ private:
   double distance_scored;
   virtual void scan_distance(const GEOPOINT &location, bool full);
   void update_geometry();
+public:
+
+  double get_leg_bearing(const AIRCRAFT_STATE &);
+
+  double get_leg_remaining(const AIRCRAFT_STATE &);
+
+private:
   StartPoint *ts;
   unsigned activeTaskPoint;
 };

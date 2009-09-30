@@ -73,6 +73,12 @@ public:
   double scan_distance_scored(const GEOPOINT &ref) {
     return OrderedTaskPoint::scan_distance_scored(ref);
   }  
+  void scan_bearing_travelled(const GEOPOINT &ref) {
+    OrderedTaskPoint::scan_bearing_travelled(ref);
+  }
+  void scan_bearing_remaining(const GEOPOINT &ref) {
+    OrderedTaskPoint::scan_bearing_remaining(ref);
+  }
 
   virtual bool transition_exit(const AIRCRAFT_STATE & ref_now, 
                                const AIRCRAFT_STATE & ref_last);

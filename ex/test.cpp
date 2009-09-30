@@ -80,6 +80,7 @@ int main() {
   AIRCRAFT_STATE state, state_last;
   state.Location.Longitude=8;
   state.Location.Latitude=11;  
+  state.Time = 0.0;
 
   test_task.setActiveTaskPoint(0);
 

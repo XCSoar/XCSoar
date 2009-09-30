@@ -2,8 +2,8 @@
 #include "Util.h"
 
 double Bearing(const GEOPOINT& p1, const GEOPOINT& p2) {
-  return atan2(p1.Longitude-p2.Longitude,p1.Latitude-p2.Latitude)
-    *180.0/3.1415926;
+  return AngleLimit360(atan2(p2.Longitude-p1.Longitude,p2.Latitude-p1.Latitude)
+                       *180.0/3.1415926);
 }
 
 #define sqr(x) ((x)*(x))

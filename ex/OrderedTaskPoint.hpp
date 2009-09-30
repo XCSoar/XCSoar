@@ -45,6 +45,10 @@
 #include "Util.h"
 #include <vector>
 
+#include <fstream>
+#include <iostream>
+
+
 class TaskLeg;
 
 class OrderedTaskPoint : public TaskPoint, public ObservationZone {
@@ -54,7 +58,15 @@ public:
       boundary_scored(b_scored),
       leg_in(NULL),
       leg_out(NULL),
-      active_state(NOTFOUND_ACTIVE)
+      active_state(NOTFOUND_ACTIVE),
+      bearing_travelled(0.0),
+      bearing_remaining(0.0),
+      distance_nominal(0.0),   
+      distance_scored(0.0),    
+      distance_remaining(0.0), 
+      distance_travelled(0.0),
+      this_distance_travelled(0.0),
+      this_distance_remaining(0.0)
     {
       clear_boundary_points();
       clear_sample_points();
@@ -87,19 +99,6 @@ public:
     return active_state;
   }
 
-  void set_distance_remaining(double val) {
-    distance_remaining = val;
-  }
-  void set_distance_nominal(double val) {
-    distance_nominal = val;
-  }
-  void set_distance_scored(double val) {
-    distance_nominal = val;
-  }
-  void set_distance_travelled(double val) {
-    distance_nominal = val;
-  }    
-
 protected:
   bool boundary_scored;
   bool scan_active(OrderedTaskPoint* atp);
@@ -107,6 +106,9 @@ protected:
   double scan_distance_remaining(const GEOPOINT &ref);
   double scan_distance_scored(const GEOPOINT &ref);
   double scan_distance_travelled(const GEOPOINT &ref);
+
+  void scan_bearing_travelled(const GEOPOINT &ref);
+  void scan_bearing_remaining(const GEOPOINT &ref);
 public:
 
   virtual GEOPOINT get_reference_nominal_origin();
@@ -165,6 +167,8 @@ public:
   virtual bool transition_exit(const AIRCRAFT_STATE & ref_now, 
                                const AIRCRAFT_STATE & ref_last);
 
+  void print(std::ofstream& f);
+
 protected:
 
   TaskLeg* leg_out;
@@ -175,6 +179,12 @@ protected:
   double distance_scored;    
   double distance_remaining; 
   double distance_travelled; 
+
+  double bearing_travelled;
+  double bearing_remaining;
+  double this_distance_travelled;
+  double this_distance_remaining;
+
   AIRCRAFT_STATE state_entered;
   AIRCRAFT_STATE state_exited;
 private:

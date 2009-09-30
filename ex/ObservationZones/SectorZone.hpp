@@ -66,7 +66,7 @@ public:
       if (!CylinderZone::isInSector(ref)) {
         return false;
       } else {
-        return angleInSector(Reciprocal(bearing(ref.Location)));
+        return angleInSector(bearing(ref.Location));
       }
     };
 
