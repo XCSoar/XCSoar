@@ -52,7 +52,11 @@ public:
   virtual bool isInSector(const AIRCRAFT_STATE &ref) const
   {
     return oz.isInSector(ref);
-  };
+  }  
+
+  virtual double score_adjustment();
+
+;
 protected:
   SectorZone oz;
 };

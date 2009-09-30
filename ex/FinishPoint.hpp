@@ -33,7 +33,8 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
   }
-*/
+*/struct AIRCRAFT_STATE;
+
 
 #ifndef FINISHPOINT_HPP
 #define FINISHPOINT_HPP
@@ -51,6 +52,9 @@ public:
     assert(the_leg == NULL);
     // should not ever have an outbound leg
   }
+
+  virtual bool transition_enter(const AIRCRAFT_STATE & ref_now, 
+                                const AIRCRAFT_STATE & ref_last);
 };
 
 #endif

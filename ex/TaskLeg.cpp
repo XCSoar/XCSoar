@@ -4,6 +4,7 @@
 #include "Util.h"
 #include "OrderedTaskPoint.hpp"
 #include <assert.h>
+#include <algorithm>
 
 double TaskLeg::leg_distance_scored(const GEOPOINT &ref)
 {
@@ -11,8 +12,10 @@ double TaskLeg::leg_distance_scored(const GEOPOINT &ref)
   case OrderedTaskPoint::BEFORE_ACTIVE:
     // this leg totally included
     return 
-      ::Distance(tp_origin->get_reference_scored_origin(), 
-                 tp_destination->get_reference_scored_destination());
+      std::max(0.0,
+               ::Distance(tp_origin->get_reference_scored_origin(), 
+                          tp_destination->get_reference_scored_destination())
+               -tp_origin->score_adjustment()-tp_destination->score_adjustment());
     break;
   case OrderedTaskPoint::AFTER_ACTIVE:
     // this leg not included
@@ -20,9 +23,11 @@ double TaskLeg::leg_distance_scored(const GEOPOINT &ref)
   case OrderedTaskPoint::CURRENT_ACTIVE:
     // this leg partially included
     return 
-      ::ProjectedDistance(tp_origin->get_reference_scored_origin(), 
-                          tp_destination->get_reference_scored_destination(),
-                          ref);
+      std::max(0.0,
+               ::ProjectedDistance(tp_origin->get_reference_scored_origin(), 
+                                   tp_destination->get_reference_scored_destination(),
+                                   ref)
+               -tp_origin->score_adjustment()-tp_destination->score_adjustment());
     break;
   default:
     assert(1); // error!

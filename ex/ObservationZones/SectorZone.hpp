@@ -82,7 +82,9 @@ public:
       updateSector();
     }  
 
-  GEOPOINT get_boundary_parametric(double) ;
+  GEOPOINT get_boundary_parametric(double) ;  
+
+  virtual double score_adjustment();
 
 ;
 

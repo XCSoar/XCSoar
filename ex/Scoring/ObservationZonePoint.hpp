@@ -42,7 +42,8 @@
 #include "Navigation/ReferencePoint.hpp"
 #include "ObservationZone.hpp"
 
-class ObservationZonePoint : public ReferencePoint , ObservationZone 
+class ObservationZonePoint : public ReferencePoint, 
+                             public ObservationZone 
 {
 public:
 
@@ -50,12 +51,6 @@ public:
     ReferencePoint(_location) {
 
     };
-
-
-
-
-
-
 };
 
 #endif

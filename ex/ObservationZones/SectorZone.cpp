@@ -18,3 +18,7 @@ GEOPOINT SectorZone::get_boundary_parametric(double t)
   }
 }
 
+double SectorZone::score_adjustment()
+{
+  return 0.0;
+}

@@ -47,9 +47,6 @@ public:
 
     };
 
-
-
-
   /** returns true if reference point is inside sector
    */
     virtual bool isInSector(const AIRCRAFT_STATE & ref) const = 0;
@@ -57,19 +54,21 @@ public:
   /** returns true if reference point is in inside sector
    *  and last was not
    */
-    virtual bool transition_enter(const AIRCRAFT_STATE & ref_now, const AIRCRAFT_STATE & ref_last) {
+    virtual bool transition_enter(const AIRCRAFT_STATE & ref_now, 
+                                  const AIRCRAFT_STATE & ref_last) {
         return isInSector(ref_now) && !isInSector(ref_last);
     };
 
     // returns true if reference point is in outside sector
     // and last was inside
-    virtual bool transition_exit(const AIRCRAFT_STATE & ref_now, const AIRCRAFT_STATE & ref_last) {
+    virtual bool transition_exit(const AIRCRAFT_STATE & ref_now, 
+                                 const AIRCRAFT_STATE & ref_last) {
         return transition_enter(ref_last, ref_now);
     }  
 
-    virtual GEOPOINT get_boundary_parametric(double) =0;
+  virtual GEOPOINT get_boundary_parametric(double) =0;
 
-;
+  virtual double score_adjustment();
 };
 
 #endif

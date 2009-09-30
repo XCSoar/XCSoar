@@ -6,6 +6,7 @@
 #include "TaskDijkstra.hpp"
 #include <stdio.h>
 #include <math.h>
+#include <algorithm>
 
 #include "TaskPoints/FAISectorStartPoint.hpp"
 #include "TaskPoints/FAISectorASTPoint.hpp"
@@ -151,29 +152,14 @@ Task::remove(unsigned position)
   update_geometry();
 }
 
-int m_max(int a, int b) {
-  if (a>b) {
-    return a;
-  } else {
-    return b;
-  }
-}
-
-int m_min(int a, int b) {
-  if (a<b) {
-    return a;
-  } else {
-    return b;
-  }
-}
 
 bool Task::update_sample(const AIRCRAFT_STATE &state, const AIRCRAFT_STATE& state_last)
 {
   ts->scan_active(getActiveTaskPoint());
 
   int n_task = tps.size();
-  int t_min = m_max(0,activeTaskPoint-1);
-  int t_max = m_min(n_task-1, activeTaskPoint+1);
+  int t_min = std::max(0,(int)activeTaskPoint-1);
+  int t_max = std::min(n_task-1, (int)activeTaskPoint+1);
   bool full_update = false;
 
   for (int i=t_min; i<=t_max; i++) {

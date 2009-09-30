@@ -175,13 +175,13 @@ protected:
   double distance_scored;    
   double distance_remaining; 
   double distance_travelled; 
+  AIRCRAFT_STATE state_entered;
+  AIRCRAFT_STATE state_exited;
 private:
   std::vector<SEARCH_POINT> sampled_points;
   std::vector<SEARCH_POINT> boundary_points;
   SEARCH_POINT search_max;
   SEARCH_POINT search_min;
-  AIRCRAFT_STATE state_entered;
-  AIRCRAFT_STATE state_exited;
 };
 
 

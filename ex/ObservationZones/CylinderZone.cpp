@@ -4,6 +4,11 @@
 #include <math.h>
 #include "Util.h"
 
+double CylinderZone::score_adjustment()
+{
+  return Radius;
+}
+
 GEOPOINT CylinderZone::get_boundary_parametric(double t) 
 { 
   // todo: should be findlocation

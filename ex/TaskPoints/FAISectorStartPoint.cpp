@@ -2,6 +2,10 @@
 
 #include "FAISectorStartPoint.hpp"
 
+double FAISectorStartPoint::score_adjustment(){
+  return 0.0;
+}
+
 GEOPOINT FAISectorStartPoint::get_boundary_parametric(double t) 
 { 
   return oz.get_boundary_parametric(t);

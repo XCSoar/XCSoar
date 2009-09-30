@@ -33,7 +33,8 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
   }
-*/
+*/struct AIRCRAFT_STATE;
+
 
 #ifndef STARTPOINT_HPP
 #define STARTPOINT_HPP
@@ -71,10 +72,10 @@ public:
   };
   double scan_distance_scored(const GEOPOINT &ref) {
     return OrderedTaskPoint::scan_distance_scored(ref);
-  };
+  }  
 
-
-
+  virtual bool transition_exit(const AIRCRAFT_STATE & ref_now, 
+                               const AIRCRAFT_STATE & ref_last);
 
 protected:
     bool enabled;

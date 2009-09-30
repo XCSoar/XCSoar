@@ -64,6 +64,8 @@ public:
 
   GEOPOINT get_boundary_parametric(double) ;
 
+  virtual double score_adjustment();
+
 ;
 protected:
   FAISectorZone oz;
