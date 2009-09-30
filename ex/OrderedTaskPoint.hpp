@@ -58,6 +58,10 @@ public:
     {
       clear_boundary_points();
       clear_sample_points();
+
+      state_entered.Time = -1;
+      state_exited.Time = -1;
+
     };
 
   enum ActiveState_t {
@@ -155,7 +159,11 @@ public:
 
   virtual bool update_sample(const AIRCRAFT_STATE&);
 
-;
+  virtual bool transition_enter(const AIRCRAFT_STATE & ref_now, 
+                                const AIRCRAFT_STATE & ref_last);
+
+  virtual bool transition_exit(const AIRCRAFT_STATE & ref_now, 
+                               const AIRCRAFT_STATE & ref_last);
 
 protected:
 
@@ -172,6 +180,8 @@ private:
   std::vector<SEARCH_POINT> boundary_points;
   SEARCH_POINT search_max;
   SEARCH_POINT search_min;
+  AIRCRAFT_STATE state_entered;
+  AIRCRAFT_STATE state_exited;
 };
 
 
