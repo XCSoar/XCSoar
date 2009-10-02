@@ -46,11 +46,15 @@
 class TaskPoint : 
   public ReferencePoint, public Serialisable {
 public:
-    TaskPoint(const WAYPOINT & wp) : Elevation(wp.Altitude), ReferencePoint(wp.Location) { }
+    TaskPoint(const WAYPOINT & wp) : Elevation(wp.Altitude), 
+                                     ReferencePoint(wp.Location) 
+    { }
 
     double getElevation() const {
         return Elevation;
     }
+
+    virtual GEOPOINT get_reference_remaining_destination();
 
 private:
     const double Elevation;

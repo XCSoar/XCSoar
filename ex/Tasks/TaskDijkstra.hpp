@@ -3,12 +3,14 @@
 
 #include "Util.h"
 #include "Dijkstra.hpp"
+#include "SearchPoint.hpp"
+#include <stdio.h>
 
-class Task;
+class OrderedTask;
 
 class TaskDijkstra {
 public:
-  TaskDijkstra(Task* _task,
+  TaskDijkstra(OrderedTask* _task,
                const double _precision=0.01);
   ~TaskDijkstra();
 
@@ -25,10 +27,21 @@ private:
                   const GEOPOINT &loc);
 
   unsigned num_taskpoints;
+
+  /**
+   * @clientCardinality 1
+   * @supplierCardinality 0..* 
+   */
   SEARCH_POINT *solution;
+
   double precision;
+
   bool shortest;
-  Task* task;
+
+  /**
+   * @supplierCardinality 1 
+   */
+  OrderedTask* task;
 };
 
 #endif

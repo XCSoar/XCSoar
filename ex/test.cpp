@@ -8,7 +8,7 @@ void distance_counts() {
   printf("#     distance queries %d\n",count_distance); count_distance=0;
 }
 
-#include "Task.h"
+#include "Tasks/OrderedTask.h"
 
 #include "ConvexHull/GrahamScan.hpp"
 
@@ -75,7 +75,7 @@ int main() {
 
   test_polygon();
 
-  Task test_task;
+  OrderedTask test_task;
 
   AIRCRAFT_STATE state, state_last;
   state.Location.Longitude=8;

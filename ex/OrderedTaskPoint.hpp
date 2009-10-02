@@ -171,7 +171,14 @@ public:
 
 protected:
 
+  /**
+   * @supplierCardinality 0..1 
+   */
   TaskLeg* leg_out;
+
+  /**
+   * @supplierCardinality 0..1 
+   */
   TaskLeg* leg_in;
   ActiveState_t active_state;
 

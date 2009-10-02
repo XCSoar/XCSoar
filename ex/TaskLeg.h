@@ -30,7 +30,15 @@ public:
     void update_geometry();
 
 private:    
+
+    /**
+     * @supplierCardinality 1 
+     */
     OrderedTaskPoint * const tp_destination;
+
+    /**
+     * @supplierCardinality 1 
+     */
     OrderedTaskPoint * const tp_origin;
 };
 #endif //TASKLEG_H
