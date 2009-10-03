@@ -8,72 +8,80 @@
 #include "Scoring/ObservationZone.hpp"
 #include "SearchPoint.hpp"
 #include "TaskPoint.hpp"
+#include "TaskProjection.h"
 
 class SampledTaskPoint:
   public TaskPoint, 
   public ObservationZone
 {
 public:  
-  SampledTaskPoint(const WAYPOINT & wp, bool b_scored):
+  SampledTaskPoint(const TaskProjection& tp,
+                   const WAYPOINT & wp, bool b_scored):
+    task_projection(tp),
     TaskPoint(wp),
-    boundary_scored(b_scored)
+    boundary_scored(b_scored),
+    search_max(getLocation(),tp),
+    search_min(getLocation(),tp)
   {
-      clear_boundary_points();
-      clear_sample_points();
+    clear_boundary_points();
+    clear_sample_points();
   };
 
-  const std::vector<SEARCH_POINT>& get_search_points(bool cheat=false);
+  const std::vector<SearchPoint>& get_search_points(bool cheat=false);
 
-  const std::vector<SEARCH_POINT>& get_boundary_points() const;
+  const std::vector<SearchPoint>& get_boundary_points() const;
 
   virtual bool prune_boundary_points();
 
   virtual bool prune_sample_points();
 
+  virtual void update_projection();
+
   virtual void clear_boundary_points() {
     boundary_points.clear();
-    search_max.Location = getLocation();
-    search_min.Location = getLocation();
+    search_max = SearchPoint(getLocation(), task_projection);
+    search_min = SearchPoint(getLocation(), task_projection);
   }
 
   virtual void clear_sample_points() {
     sampled_points.clear();
   }
 
-  void set_search_max(const SEARCH_POINT &i) {
+  void set_search_max(const SearchPoint &i) {
     search_max = i;
   }
 
-  void set_search_min(const SEARCH_POINT &i) {
+  void set_search_min(const SearchPoint &i) {
     search_min = i;
   }
 
-  const SEARCH_POINT& get_search_max() {
+  const SearchPoint& get_search_max() {
     return search_max;
   }
 
-  const SEARCH_POINT& get_search_min() {
+  const SearchPoint& get_search_min() {
     return search_min;
   }
 
   virtual void default_boundary_points();
 
   GEOPOINT getMaxLocation() const {
-    return search_max.Location;
+    return search_max.getLocation();
   };
   GEOPOINT getMinLocation() const {
-    return search_min.Location;
+    return search_min.getLocation();
   };
 
   virtual bool update_sample(const AIRCRAFT_STATE&);
 
 protected:
   bool boundary_scored;
+  const TaskProjection& task_projection;
 
 private:
-  std::vector<SEARCH_POINT> sampled_points;
-  std::vector<SEARCH_POINT> boundary_points;
-  SEARCH_POINT search_max;
-  SEARCH_POINT search_min;
+  std::vector<SearchPoint> sampled_points;
+  std::vector<SearchPoint> boundary_points;
+  SearchPoint search_max;
+  SearchPoint search_min;
 };
 #endif //SAMPLEDOBSERVATIONZONE_H

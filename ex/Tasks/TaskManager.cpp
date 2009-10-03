@@ -28,6 +28,8 @@ TaskPoint* TaskManager::getActiveTaskPoint()
   case (MODE_ABORT):
     return task_abort.getActiveTaskPoint();
   };
+  return NULL;
+  // should never get here
 }
 
 void TaskManager::report(const GEOPOINT &location)
@@ -60,5 +62,7 @@ bool TaskManager::update_sample(const AIRCRAFT_STATE &state,
   case (MODE_ABORT):
     return task_abort.update_sample(state, state_last);
   };
+  // should never get here
+  return false;
 }
 

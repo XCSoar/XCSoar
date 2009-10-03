@@ -33,7 +33,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
   }
-*/struct AIRCRAFT_STATE;
+*/
 
 
 #ifndef FINISHPOINT_HPP
@@ -45,8 +45,9 @@
 
 class FinishPoint : public OrderedTaskPoint {
 public:
-    FinishPoint(const WAYPOINT & wp) : 
-      OrderedTaskPoint(wp,false) { };
+    FinishPoint(const TaskProjection& tp,
+                const WAYPOINT & wp) : 
+      OrderedTaskPoint(tp,wp,false) { };
 
   virtual void set_leg_out(TaskLeg* the_leg) {
     assert(the_leg == NULL);

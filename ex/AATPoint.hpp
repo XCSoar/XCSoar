@@ -33,9 +33,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
   }
-*/struct GEOPOINT;
-
-
+*/
 
 #ifndef AATPOINT_HPP
 #define AATPOINT_HPP
@@ -45,8 +43,9 @@
 
 class AATPoint : public IntermediatePoint {
 public:
-  AATPoint(const WAYPOINT & wp) : 
-    IntermediatePoint(wp,true), 
+  AATPoint(const TaskProjection& tp,
+           const WAYPOINT & wp) : 
+    IntermediatePoint(tp,wp,true), 
     TargetLocked(false), 
     TargetLocation(wp.Location)
     {

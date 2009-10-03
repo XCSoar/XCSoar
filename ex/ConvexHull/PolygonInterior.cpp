@@ -32,7 +32,7 @@ isLeft( const GEOPOINT &P0, const GEOPOINT &P1, const GEOPOINT &P2 )
 //      Return:  true if P is inside V
 
 bool
-PolygonInterior( const GEOPOINT &P, const std::vector<SEARCH_POINT>& V)
+PolygonInterior( const GEOPOINT &P, const std::vector<SearchPoint>& V)
 {
   int n = V.size()-1;
   if (n<2) {
@@ -43,14 +43,14 @@ PolygonInterior( const GEOPOINT &P, const std::vector<SEARCH_POINT>& V)
 
   // loop through all edges of the polygon
   for (int i=0; i<n; i++) {   // edge from V[i] to V[i+1]
-    if (V[i].Location.Latitude <= P.Latitude) {         // start y <= P.Latitude
-      if (V[i+1].Location.Latitude > P.Latitude)      // an upward crossing
-        if (isLeft( V[i].Location, V[i+1].Location, P) > 0)  // P left of edge
+    if (V[i].getLocation().Latitude <= P.Latitude) {         // start y <= P.Latitude
+      if (V[i+1].getLocation().Latitude > P.Latitude)      // an upward crossing
+        if (isLeft( V[i].getLocation(), V[i+1].getLocation(), P) > 0)  // P left of edge
           ++wn;            // have a valid up intersect
     }
     else {                       // start y > P.Latitude (no test needed)
-      if (V[i+1].Location.Latitude <= P.Latitude)     // a downward crossing
-        if (isLeft( V[i].Location, V[i+1].Location, P) < 0)  // P right of edge
+      if (V[i+1].getLocation().Latitude <= P.Latitude)     // a downward crossing
+        if (isLeft( V[i].getLocation(), V[i+1].getLocation(), P) < 0)  // P right of edge
           --wn;            // have a valid down intersect
     }
   }

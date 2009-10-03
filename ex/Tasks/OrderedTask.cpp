@@ -9,11 +9,19 @@
 
 void
 OrderedTask::update_geometry() {
-  for (int i=0; i<tps.size(); i++) {
+
+  task_projection.reset(tps[0]->getLocation());
+  for (unsigned i=0; i<tps.size(); i++) {
+    task_projection.scan_location(tps[i]->getLocation());
+  }
+  task_projection.report();
+
+  for (unsigned i=0; i<tps.size(); i++) {
     tps[i]->update_geometry();
     tps[i]->clear_boundary_points();
     tps[i]->default_boundary_points();
     tps[i]->prune_boundary_points();
+    tps[i]->update_projection();
   }
 }
 
@@ -21,8 +29,6 @@ void OrderedTask::scan_distance(const GEOPOINT &location, bool full)
 { 
   TaskDijkstra dijkstra(this);
   ScanTaskPoint start(0,0);
-
-  double d;
 
   ts->scan_active(tps[activeTaskPoint]);
 
@@ -51,7 +57,7 @@ void OrderedTask::scan_distance(const GEOPOINT &location, bool full)
 void print_tp(OrderedTaskPoint *tp, std::ofstream& f) {
   unsigned n= tp->get_boundary_points().size();
   for (unsigned i=0; i<n; i++) {
-    GEOPOINT loc = tp->get_boundary_points()[i].Location;
+    GEOPOINT loc = tp->get_boundary_points()[i].getLocation();
     f << loc.Longitude << " " << loc.Latitude << "\n";
   }
   f << "\n";
@@ -60,7 +66,7 @@ void print_tp(OrderedTaskPoint *tp, std::ofstream& f) {
 void print_sp(OrderedTaskPoint *tp, std::ofstream& f) {
   unsigned n= tp->get_search_points().size();
   for (unsigned i=0; i<n; i++) {
-    GEOPOINT loc = tp->get_search_points()[i].Location;
+    GEOPOINT loc = tp->get_search_points()[i].getLocation();
     f << loc.Longitude << " " << loc.Latitude << "\n";
   }
   f << "\n";
@@ -93,7 +99,7 @@ void OrderedTask::report(const GEOPOINT &location)
   f1 << "# dist scored " << distance_scored << "\n";
 
   f1 << "#### Task points\n";
-  for (int i=0; i<tps.size(); i++) {
+  for (unsigned i=0; i<tps.size(); i++) {
     f1 << "## point " << i << "\n";
     print_tp(tps[i], f1);
     tps[i]->print(f1);
@@ -101,7 +107,7 @@ void OrderedTask::report(const GEOPOINT &location)
   }
 
   f5 << "#### Task sampled points\n";
-  for (int i=0; i<tps.size(); i++) {
+  for (unsigned i=0; i<tps.size(); i++) {
     f5 << "## point " << i << "\n";
     print_sp(tps[i], f5);
   }
@@ -110,17 +116,17 @@ void OrderedTask::report(const GEOPOINT &location)
      <<  location.Latitude << "\n";
 
   f2 << "#### Max task\n";
-  for (int i=0; i<tps.size(); i++) {
+  for (unsigned i=0; i<tps.size(); i++) {
     OrderedTaskPoint *tp = tps[i];
-    f2 <<  tp->get_search_max().Location.Longitude << " " 
-       <<  tp->get_search_max().Location.Latitude << "\n";
+    f2 <<  tp->getMaxLocation().Longitude << " " 
+       <<  tp->getMaxLocation().Latitude << "\n";
   }
 
   f3 << "#### Min task\n";
-  for (int i=0; i<tps.size(); i++) {
+  for (unsigned i=0; i<tps.size(); i++) {
     OrderedTaskPoint *tp = tps[i];
-    f3 <<  tp->get_search_min().Location.Longitude << " " 
-       <<  tp->get_search_min().Location.Latitude << "\n";
+    f3 <<  tp->getMinLocation().Longitude << " " 
+       <<  tp->getMinLocation().Latitude << "\n";
   }
 
 //  printf("distance tests %d\n", count_distance);
@@ -239,14 +245,14 @@ OrderedTask::OrderedTask()
   wp[4].Location.Longitude=10;
   wp[4].Location.Latitude=0;
 
-  ts = new FAISectorStartPoint(wp[0]);
+  ts = new FAISectorStartPoint(task_projection,wp[0]);
   tps.push_back(ts);
-  tps.push_back(new FAISectorASTPoint(wp[1]));
-  tps.push_back(new FAISectorASTPoint(wp[2]));
-  tps.push_back(new FAICylinderASTPoint(wp[3]));
-  tps.push_back(new FAISectorFinishPoint(wp[4]));
+  tps.push_back(new FAISectorASTPoint(task_projection,wp[1]));
+  tps.push_back(new FAISectorASTPoint(task_projection,wp[2]));
+  tps.push_back(new FAICylinderASTPoint(task_projection,wp[3]));
+  tps.push_back(new FAISectorFinishPoint(task_projection,wp[4]));
 
-  for (int i=0; i<tps.size()-1; i++) {
+  for (unsigned i=0; i<tps.size()-1; i++) {
     legs.push_back(new TaskLeg(*tps[i],*tps[i+1]));
   }
 

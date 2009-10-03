@@ -5,6 +5,7 @@
 #include "Dijkstra.hpp"
 #include "SearchPoint.hpp"
 #include <stdio.h>
+#include <vector>
 
 class OrderedTask;
 
@@ -23,8 +24,12 @@ private:
 
   void add_edges(Dijkstra<ScanTaskPoint> &dijkstra,
                  const ScanTaskPoint &curNode);
+
   double distance(const ScanTaskPoint &sp,
                   const GEOPOINT &loc);
+
+  double distance(const ScanTaskPoint &sp1,
+                  const ScanTaskPoint &sp2);
 
   unsigned num_taskpoints;
 
@@ -32,7 +37,7 @@ private:
    * @clientCardinality 1
    * @supplierCardinality 0..* 
    */
-  SEARCH_POINT *solution;
+  std::vector<SearchPoint> solution;
 
   double precision;
 
@@ -42,6 +47,7 @@ private:
    * @supplierCardinality 1 
    */
   OrderedTask* task;
+  const SearchPoint &get_point(const ScanTaskPoint &sp) const;
 };
 
 #endif

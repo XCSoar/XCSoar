@@ -28,17 +28,18 @@ void do_exit()
 
 
 ////////////////////////////////////////////////
+/*
 #include "ConvexHull/GrahamScan.hpp"
 #include "ConvexHull/PolygonInterior.hpp"
 #include <math.h>
 
-std::vector<SEARCH_POINT> sampled_points;
+std::vector<SearchPoint> sampled_points;
 
 
 void test_polygon() 
 {
   for (double t=0; t<1.0; t+= 0.1) {
-    SEARCH_POINT sp;
+    SearchPoint sp;
     double ang = t*2.0*3.1415926;
     sp.Location.Longitude = cos(ang);
     sp.Location.Latitude = sin(ang);
@@ -68,12 +69,10 @@ void test_polygon()
   }
 
 }
-
+*/
 ////////////////////////////////////////////////
 
 int main() {
-
-  test_polygon();
 
   TaskManager test_task;
 

@@ -51,8 +51,9 @@ class OrderedTaskPoint :
   public SampledTaskPoint
 {
 public:
-  OrderedTaskPoint(const WAYPOINT & wp, bool b_scored) : 
-    SampledTaskPoint(wp, b_scored),
+  OrderedTaskPoint(const TaskProjection& tp,
+                   const WAYPOINT & wp, bool b_scored) : 
+    SampledTaskPoint(tp, wp, b_scored),
       leg_in(NULL),
       leg_out(NULL),
       active_state(NOTFOUND_ACTIVE),
@@ -128,7 +129,7 @@ public:
 
   void print(std::ofstream& f);
 
-  const std::vector<SEARCH_POINT>& get_search_points();
+  const std::vector<SearchPoint>& get_search_points();
 
 protected:
 

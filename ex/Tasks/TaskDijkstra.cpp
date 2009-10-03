@@ -9,12 +9,25 @@
 
 #define MAX_DIST 100000
 
+const SearchPoint &
+TaskDijkstra::get_point(const ScanTaskPoint &sp) const
+{
+  return task->tps[sp.first]->get_search_points()[sp.second];
+}
+
+
 double TaskDijkstra::distance(const ScanTaskPoint &curNode,
                               const GEOPOINT &currentLocation)
 {
-  return ::Distance(task->tps[curNode.first]->
-                  get_search_points()[curNode.second].Location,
-                  currentLocation);
+  return ::Distance(get_point(curNode).getLocation(),
+                    currentLocation);
+}
+
+double TaskDijkstra::distance(const ScanTaskPoint &s1,
+                              const ScanTaskPoint &s2)
+{
+  return ::Distance(get_point(s1).getLocation(),
+                    get_point(s2).getLocation());
 }
 
 void TaskDijkstra::add_edges(Dijkstra<ScanTaskPoint> &dijkstra,
@@ -23,23 +36,18 @@ void TaskDijkstra::add_edges(Dijkstra<ScanTaskPoint> &dijkstra,
   ScanTaskPoint destination;
   destination.first = curNode.first+1;
 
-  const std::vector<SEARCH_POINT>& dest_list =
-    task->tps[destination.first]->get_search_points();
+  unsigned dsize = task->tps[destination.first]->get_search_points().size();
 
   for (destination.second=0; 
-       destination.second< dest_list.size(); destination.second++) {
+       destination.second< dsize; destination.second++) {
 
-    GEOPOINT p1 = task->tps[curNode.first]->
-      get_search_points()[curNode.second].Location;
-    GEOPOINT p2 = dest_list[destination.second].Location;
-
-    double dr = ::Distance(p1,p2);
+    double dr = distance(curNode, destination);
     if (dr>precision) {
       unsigned d;
       if (shortest) {
         d = (dr/precision+0.5);
       } else {
-        d = (100000-dr/precision+0.5);
+        d = (MAX_DIST-dr/precision+0.5);
       }
       dijkstra.link(destination, d);
     }
@@ -47,23 +55,17 @@ void TaskDijkstra::add_edges(Dijkstra<ScanTaskPoint> &dijkstra,
 }
 
 TaskDijkstra::~TaskDijkstra() {
-  delete [] solution;
 }
 
 TaskDijkstra::TaskDijkstra(OrderedTask* _task,
                            const double _precision):
   task(_task),
   shortest(false),
-  precision(_precision) 
+  precision(_precision)
 {
   num_taskpoints = task->tps.size();
-  solution = new SEARCH_POINT[num_taskpoints];
+  solution.reserve(num_taskpoints);
 }
-
-
-/*
- TODO: only use actual points (if any) for search on previous
-*/
 
 double TaskDijkstra::distance_opt(const ScanTaskPoint &start,
                                   const bool req_shortest)
@@ -72,34 +74,27 @@ double TaskDijkstra::distance_opt(const ScanTaskPoint &start,
 
   ScanTaskPoint lastNode = start;
   Dijkstra<ScanTaskPoint> dijkstra(start);
-  double d_last=0.0;
 
-  solution[start.first] = task->tps[start.first]->
-    get_search_points()[start.second];
+  solution[start.first] = get_point(start);
 
   while (!dijkstra.empty()) {
 
     ScanTaskPoint curNode = dijkstra.pop();
 
     if (curNode.first != lastNode.first) {
+      solution[curNode.first] = get_point(curNode);
+      lastNode = curNode;
+    }
 
-      double d;
+    if (curNode.first == num_taskpoints-1) {
+      double d = dijkstra.dist()*(shortest? 1:-1);
       if (shortest) {
         d= dijkstra.dist()*precision;
       } else {
-        d= (MAX_DIST
-            *(curNode.first-start.first)-dijkstra.dist())*precision;
+        d= (MAX_DIST*(curNode.first-start.first)-dijkstra.dist())*precision;
       }
-      d_last = d;
-
-      solution[curNode.first] = task->tps[curNode.first]->
-        get_search_points()[curNode.second];
-
-      if (curNode.first == num_taskpoints-1) {
-        return d;
-      }
+      return d;
     }
-    lastNode = curNode;
 
     add_edges(dijkstra, curNode);
   }
@@ -117,7 +112,7 @@ TaskDijkstra::distance_opt_achieved(const GEOPOINT &currentLocation,
   ScanTaskPoint lastNode(1000,1000);
   Dijkstra<ScanTaskPoint> dijkstra(start);
 
-  const int activeStage = task->getActiveTaskPointIndex();
+  const unsigned activeStage = task->getActiveTaskPointIndex();
 
   double min_d = MAX_DIST;
   double min_d_actual = MAX_DIST;
@@ -128,8 +123,7 @@ TaskDijkstra::distance_opt_achieved(const GEOPOINT &currentLocation,
     ScanTaskPoint curNode = dijkstra.pop();
 
     if (curNode.first != lastNode.first) {
-      solution[curNode.first] = task->tps[curNode.first]->
-        get_search_points()[curNode.second];
+      solution[curNode.first] = get_point(curNode);
       lastNode = curNode;
     }
 
@@ -138,6 +132,7 @@ TaskDijkstra::distance_opt_achieved(const GEOPOINT &currentLocation,
     } else {
 
       double d_acc = (MAX_DIST*activeStage-dijkstra.dist())*precision;
+
       double d_remaining = 0;
       TaskDijkstra inner_dijkstra(task);
 
@@ -151,9 +146,7 @@ TaskDijkstra::distance_opt_achieved(const GEOPOINT &currentLocation,
       if (req_shortest) {
         // need to take into account distance from here to target
 
-        double d_this = ::Distance(task->tps[curNode.first]->
-                                   get_search_points()[curNode.second].Location,
-                                   currentLocation);
+        double d_this = distance(curNode, currentLocation);
 
         if (d_remaining+d_this<min_d) {
           min_d = d_remaining+d_this; 
@@ -168,13 +161,13 @@ TaskDijkstra::distance_opt_achieved(const GEOPOINT &currentLocation,
         }
       }
       if (best) {
-        solution[curNode.first] = task->tps[curNode.first]->
-          get_search_points()[curNode.second];
+        solution[curNode.first] = get_point(curNode);
 
-        for (int j=activeStage+1; j<num_taskpoints; j++) {
+        for (unsigned j=activeStage+1; j<num_taskpoints; j++) {
           solution[j]= inner_dijkstra.solution[j];
         }
       }
+
     }
   }
 

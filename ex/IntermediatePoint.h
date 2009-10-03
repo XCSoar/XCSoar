@@ -7,8 +7,9 @@
 class IntermediatePoint: 
   public OrderedTaskPoint {
 public:    
-  IntermediatePoint(const WAYPOINT & wp, bool b_scored): 
-    OrderedTaskPoint(wp, b_scored) 
+  IntermediatePoint(const TaskProjection& tp,
+                   const WAYPOINT & wp, bool b_scored): 
+    OrderedTaskPoint(tp, wp, b_scored) 
     {};
   virtual double getElevation();
 };

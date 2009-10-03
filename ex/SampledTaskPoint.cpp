@@ -20,13 +20,13 @@ bool SampledTaskPoint::prune_boundary_points()
   return changed;
 }
 
-const std::vector<SEARCH_POINT>& 
+const std::vector<SearchPoint>& 
 SampledTaskPoint::get_boundary_points() const
 {
   return boundary_points;
 }
 
-const std::vector<SEARCH_POINT>& 
+const std::vector<SearchPoint>& 
 SampledTaskPoint::get_search_points(bool cheat)
 {
   if (cheat && !sampled_points.size()) {
@@ -34,11 +34,9 @@ SampledTaskPoint::get_search_points(bool cheat)
     // this is a crude way of handling the situation --- may be best
     // to de-rate the score in some way
 
-    SEARCH_POINT sp;
-    sp.Location = getLocation();
-    sp.actual = false;
-    sp.saved_rank = 0;
+    SearchPoint sp(getLocation(), task_projection);
     sampled_points.push_back(sp);
+    return sampled_points;
   }
   if (sampled_points.size()>0) {
     return sampled_points;
@@ -52,17 +50,11 @@ void SampledTaskPoint::default_boundary_points() {
   double t=0;
   if (boundary_scored) {
     for (t=0; t<1.0; t+= 0.05) {
-      SEARCH_POINT sp;
-      sp.Location = get_boundary_parametric(t);
-      sp.actual = false;
-      sp.saved_rank = 0;
+      SearchPoint sp(get_boundary_parametric(t), task_projection);
       boundary_points.push_back(sp);
     }
   } else {
-    SEARCH_POINT sp;
-    sp.Location = getLocation();
-    sp.actual = false;
-    sp.saved_rank = 0;
+    SearchPoint sp(getLocation(), task_projection);
     boundary_points.push_back(sp);
   }
 }
@@ -81,10 +73,7 @@ bool SampledTaskPoint::update_sample(const AIRCRAFT_STATE& state)
       // do nothing
       return false;
     } else {
-      SEARCH_POINT sp;
-      sp.Location = state.Location;
-      sp.actual = true;
-      sp.saved_rank = 0;
+      SearchPoint sp(state.Location, task_projection, true);
       sampled_points.push_back(sp);
       // only return true if hull changed 
       return (prune_sample_points());
@@ -92,3 +81,15 @@ bool SampledTaskPoint::update_sample(const AIRCRAFT_STATE& state)
   }
   return false;
 }
+
+void 
+SampledTaskPoint::update_projection()
+{
+  for (unsigned i=0; i<sampled_points.size(); i++) {
+    sampled_points[i].project(task_projection);
+  }
+  for (unsigned i=0; i<boundary_points.size(); i++) {
+    boundary_points[i].project(task_projection);
+  }
+}
+

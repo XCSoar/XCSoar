@@ -5,7 +5,7 @@
 GEOPOINT AATPoint::get_reference_scored_origin()
 {
   if (getActiveState() == BEFORE_ACTIVE) {
-    return get_search_max().Location;
+    return getMaxLocation();
   } else {
     return TargetLocation;
   }
@@ -16,24 +16,24 @@ GEOPOINT AATPoint::get_reference_scored_destination()
   if (getActiveState() == CURRENT_ACTIVE) {
     return TargetLocation;
   } else {
-    return get_search_max().Location;
+    return getMaxLocation();
   }
 }
 
 GEOPOINT AATPoint::get_reference_travelled_destination()
 {
-  return get_search_max().Location;
+  return getMaxLocation();
 }
 
 GEOPOINT AATPoint::get_reference_travelled_origin()
 {
-  return get_search_max().Location;
+  return getMaxLocation();
 }
 
 GEOPOINT AATPoint::get_reference_remaining_origin()
 {
   if (getActiveState() == BEFORE_ACTIVE) {
-    return get_search_max().Location;
+    return getMaxLocation();
   } else {
     return TargetLocation;
   }
@@ -42,7 +42,7 @@ GEOPOINT AATPoint::get_reference_remaining_origin()
 GEOPOINT AATPoint::get_reference_remaining_destination()
 {
   if (getActiveState() == BEFORE_ACTIVE) {
-    return get_search_max().Location;
+    return getMaxLocation();
   } else {
     return TargetLocation;
   }

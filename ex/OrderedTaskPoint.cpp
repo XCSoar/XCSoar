@@ -262,7 +262,7 @@ OrderedTaskPoint::print(std::ofstream& f)
   f << "# Entered " << state_entered.Time << "\n";
 }
 
-const std::vector<SEARCH_POINT>& 
+const std::vector<SearchPoint>& 
 OrderedTaskPoint::get_search_points()
 {
   if (active_state== BEFORE_ACTIVE) {

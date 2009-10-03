@@ -4,6 +4,6 @@
 #include <vector>
 #include "SearchPoint.hpp"
 bool
-PolygonInterior( const GEOPOINT &P, const std::vector<SEARCH_POINT>& V);
+PolygonInterior( const GEOPOINT &P, const std::vector<SearchPoint>& V);
 
 #endif

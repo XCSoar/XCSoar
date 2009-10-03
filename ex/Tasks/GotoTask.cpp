@@ -20,6 +20,6 @@ void GotoTask::report(const GEOPOINT &location)
 bool GotoTask::update_sample(const AIRCRAFT_STATE &state, 
                              const AIRCRAFT_STATE& state_last)
 {
-
+  return false; // nothing to do
 }
 

@@ -62,6 +62,8 @@ private:
    * @supplierCardinality 1 
    */
   StartPoint *ts;
+
+  TaskProjection task_projection;
 };
 
 #endif //ORDEREDTASK_H

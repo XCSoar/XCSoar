@@ -46,8 +46,9 @@ class FAISectorFinishPoint:
   public FinishPoint
 {
 public:
-  FAISectorFinishPoint(const WAYPOINT& wp):
-    FinishPoint(wp),
+  FAISectorFinishPoint(const TaskProjection&tp,
+           const WAYPOINT& wp):
+    FinishPoint(tp,wp),
     oz(wp.Location) 
   {
   };

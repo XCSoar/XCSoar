@@ -44,8 +44,9 @@ class SectorAATPoint:
   public AATPoint
 {
 public:
-  SectorAATPoint(const WAYPOINT& wp):
-    AATPoint(wp),
+  SectorAATPoint(const TaskProjection&tp,
+           const WAYPOINT& wp):
+    AATPoint(tp,wp),
     oz(wp.Location) 
   {
   };

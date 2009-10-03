@@ -36,5 +36,6 @@ bool AbortTask::update_sample(const AIRCRAFT_STATE &state,
                               const AIRCRAFT_STATE& state_last)
 {
   // TODO, update aborted task list
+  return false; // nothing to do
 }
 
