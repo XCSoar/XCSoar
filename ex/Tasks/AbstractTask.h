@@ -12,11 +12,7 @@ public:
   AbstractTask(): activeTaskPoint(0) 
   {};
 
-    unsigned getActiveTaskPointIndex();    
-
-    double get_leg_bearing(const AIRCRAFT_STATE &);
-
-    double get_leg_remaining(const AIRCRAFT_STATE &);
+    unsigned getActiveTaskPointIndex();
 
 protected:
     unsigned activeTaskPoint;

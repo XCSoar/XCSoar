@@ -41,23 +41,27 @@
 
 #include "Util/Serialisable.hpp"
 #include "Navigation/ReferencePoint.hpp"
-
+#include "Util.h"
 
 class TaskPoint : 
   public ReferencePoint, public Serialisable {
 public:
-    TaskPoint(const WAYPOINT & wp) : Elevation(wp.Altitude), 
-                                     ReferencePoint(wp.Location) 
+  TaskPoint(const WAYPOINT & wp) : Elevation(wp.Altitude), 
+                                   ReferencePoint(wp.Location) 
     { }
 
-    double getElevation() const {
-        return Elevation;
-    }
+  virtual double getElevation();
 
-    virtual GEOPOINT get_reference_remaining_destination();
+  virtual GEOPOINT get_reference_remaining_destination();
+  
+  double get_bearing(const AIRCRAFT_STATE &);
 
-private:
-    const double Elevation;
+  double get_distance(const AIRCRAFT_STATE &);
+
+  double get_height_required(const AIRCRAFT_STATE &, double mc);
+
+protected:
+  const double Elevation;
 };
 
 #endif

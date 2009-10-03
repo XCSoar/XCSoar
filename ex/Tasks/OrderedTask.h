@@ -2,15 +2,17 @@
 #ifndef ORDEREDTASK_H
 #define ORDEREDTASK_H
 
+#include "Tasks/AbstractTask.h"
 #include "OrderedTaskPoint.hpp"
 #include "StartPoint.hpp"
-#include <list>
 #include <vector>
-#include "Tasks/AbstractTask.h"
 #include "TaskLeg.h"
+#include "Util/Serialisable.hpp"
 
-class OrderedTask : 
-  public AbstractTask {
+class OrderedTask:
+  public AbstractTask,
+  public Serialisable
+{
 public:
   OrderedTask();
   ~OrderedTask();
@@ -18,7 +20,7 @@ public:
   std::vector<OrderedTaskPoint*> tps;
   std::vector<TaskLeg*> legs;
 
-  OrderedTaskPoint* getActiveTaskPoint();
+  TaskPoint* getActiveTaskPoint();
   virtual void setActiveTaskPoint(unsigned);
 
   void insert(OrderedTaskPoint*, unsigned position);

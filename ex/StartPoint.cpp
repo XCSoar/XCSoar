@@ -14,3 +14,11 @@ StartPoint::transition_exit(const AIRCRAFT_STATE & ref_now,
   }
   return exited;
 }
+
+
+double
+StartPoint::getElevation()
+{
+  // no need for safety height at start?
+  return Elevation;
+}

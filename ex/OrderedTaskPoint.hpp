@@ -38,24 +38,21 @@
 #ifndef ORDEREDTASKPOINT_HPP
 #define ORDEREDTASKPOINT_HPP
 
-#include "Scoring/ObservationZone.hpp"
-#include "TaskPoint.hpp"
-#include "SearchPoint.hpp"
+#include "SampledTaskPoint.h"
 #include <stdlib.h>
 #include "Util.h"
-#include <vector>
-
 #include <fstream>
 #include <iostream>
 
 
 class TaskLeg;
 
-class OrderedTaskPoint : public TaskPoint, public ObservationZone {
+class OrderedTaskPoint : 
+  public SampledTaskPoint
+{
 public:
   OrderedTaskPoint(const WAYPOINT & wp, bool b_scored) : 
-      TaskPoint(wp), 
-      boundary_scored(b_scored),
+    SampledTaskPoint(wp, b_scored),
       leg_in(NULL),
       leg_out(NULL),
       active_state(NOTFOUND_ACTIVE),
@@ -68,9 +65,6 @@ public:
       this_distance_travelled(0.0),
       this_distance_remaining(0.0)
     {
-      clear_boundary_points();
-      clear_sample_points();
-
       state_entered.Time = -1;
       state_exited.Time = -1;
 
@@ -100,7 +94,6 @@ public:
   }
 
 protected:
-  bool boundary_scored;
   bool scan_active(OrderedTaskPoint* atp);
   double scan_distance_nominal();
   double scan_distance_remaining(const GEOPOINT &ref);
@@ -127,40 +120,6 @@ public:
 
   virtual GEOPOINT get_reference_remaining_destination();
 
-  const std::vector<SEARCH_POINT>& get_search_points();
-  const std::vector<SEARCH_POINT>& get_boundary_points() const;
-
-  virtual void default_boundary_points();
-  virtual bool prune_boundary_points();
-  virtual bool prune_sample_points();
-
-  void set_search_max(const SEARCH_POINT &i) {
-    search_max = i;
-  }
-
-  void set_search_min(const SEARCH_POINT &i) {
-    search_min = i;
-  }
-
-  const SEARCH_POINT& get_search_max() {
-    return search_max;
-  }
-
-  const SEARCH_POINT& get_search_min() {
-    return search_min;
-  }
-
-  virtual void clear_boundary_points() {
-    boundary_points.clear();
-    search_max.Location = getLocation();
-    search_min.Location = getLocation();
-  }  
-  virtual void clear_sample_points() {
-    sampled_points.clear();
-  }  
-
-  virtual bool update_sample(const AIRCRAFT_STATE&);
-
   virtual bool transition_enter(const AIRCRAFT_STATE & ref_now, 
                                 const AIRCRAFT_STATE & ref_last);
 
@@ -168,6 +127,8 @@ public:
                                const AIRCRAFT_STATE & ref_last);
 
   void print(std::ofstream& f);
+
+  const std::vector<SEARCH_POINT>& get_search_points();
 
 protected:
 
@@ -194,11 +155,7 @@ protected:
 
   AIRCRAFT_STATE state_entered;
   AIRCRAFT_STATE state_exited;
-private:
-  std::vector<SEARCH_POINT> sampled_points;
-  std::vector<SEARCH_POINT> boundary_points;
-  SEARCH_POINT search_max;
-  SEARCH_POINT search_min;
+
 };
 
 

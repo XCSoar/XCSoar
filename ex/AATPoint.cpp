@@ -48,3 +48,9 @@ GEOPOINT AATPoint::get_reference_remaining_destination()
   }
 }
 
+double 
+AATPoint::getElevation() 
+{
+  // TODO: look up elevation of target and use that instead
+  return Elevation; // + SAFETYTERRAIN
+}

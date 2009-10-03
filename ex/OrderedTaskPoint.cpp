@@ -5,67 +5,14 @@
 #include <stdio.h>
 #include <assert.h>
 #include <math.h>
-#include "ConvexHull/GrahamScan.hpp"
-#include "ConvexHull/PolygonInterior.hpp"
 
-
-void OrderedTaskPoint::default_boundary_points() { 
-  double t=0;
-  if (boundary_scored) {
-    for (t=0; t<1.0; t+= 0.05) {
-      SEARCH_POINT sp;
-      sp.Location = get_boundary_parametric(t);
-      sp.actual = false;
-      sp.saved_rank = 0;
-      boundary_points.push_back(sp);
-    }
-  } else {
-    SEARCH_POINT sp;
-    sp.Location = getLocation();
-    sp.actual = false;
-    sp.saved_rank = 0;
-    boundary_points.push_back(sp);
-  }
-}
-
-
-const std::vector<SEARCH_POINT>& 
-OrderedTaskPoint::get_boundary_points() const
-{
-  return boundary_points;
-}
-
-
-const std::vector<SEARCH_POINT>& 
-OrderedTaskPoint::get_search_points()
-{
-  if (active_state== BEFORE_ACTIVE) {
-    if (!sampled_points.size()) {
-
-      // this adds a point in case the waypoint was skipped
-      // this is a crude way of handling the situation --- may be best
-      // to de-rate the score in some way
-
-      SEARCH_POINT sp;
-      sp.Location = getLocation();
-      sp.actual = false;
-      sp.saved_rank = 0;
-      sampled_points.push_back(sp);
-    }
-    return sampled_points;
-  } else if ((active_state == CURRENT_ACTIVE) && (sampled_points.size()>0)) {
-    return sampled_points;
-  } else {
-    return boundary_points;
-  }
-}
 
 // -------
 
 GEOPOINT OrderedTaskPoint::get_reference_travelled_origin()
 {
   if (state_entered.Time>=0) {
-    return search_max.Location;
+    return getMaxLocation();
   } else {
     return getLocation();
   }
@@ -74,7 +21,7 @@ GEOPOINT OrderedTaskPoint::get_reference_travelled_origin()
 GEOPOINT OrderedTaskPoint::get_reference_travelled_destination()
 {
   if (state_entered.Time>=0) {
-    return search_max.Location;
+    return getMaxLocation();
   } else {
     return getLocation();
   }
@@ -115,7 +62,7 @@ GEOPOINT OrderedTaskPoint::get_reference_remaining_destination()
 {
   // TODO: replace with target for AAT
   if (state_entered.Time>=0) {
-    return search_min.Location;
+    return getMinLocation();
   } else {
     return getLocation();
   }
@@ -281,52 +228,6 @@ double OrderedTaskPoint::scan_distance_scored(const GEOPOINT &ref)
 }
 
 
-
-bool OrderedTaskPoint::prune_boundary_points()
-{
-  bool changed=false;
-  GrahamScan gs(boundary_points);
-  boundary_points = gs.prune_interior(&changed);
-  return changed;
-}
-
-
-bool OrderedTaskPoint::prune_sample_points()
-{
-  bool changed=false;
-  GrahamScan gs(sampled_points);
-  sampled_points = gs.prune_interior(&changed);
-  return changed;
-}
-
-
-bool OrderedTaskPoint::update_sample(const AIRCRAFT_STATE& state)
-{
-  if (isInSector(state)) {
-    // if sample is inside sample polygon
-    //   return false (no update required)
-    // else
-    //   add sample to polygon
-    //   re-compute convex hull
-    //   return true; (update required)
-    //
-    if (PolygonInterior(state.Location, sampled_points)) {
-      // do nothing
-      return false;
-    } else {
-      SEARCH_POINT sp;
-      sp.Location = state.Location;
-      sp.actual = true;
-      sp.saved_rank = 0;
-      sampled_points.push_back(sp);
-      // only return true if hull changed 
-      return (prune_sample_points());
-    }
-  }
-  return false;
-}
-
-
 bool 
 OrderedTaskPoint::transition_enter(const AIRCRAFT_STATE & ref_now, 
                                    const AIRCRAFT_STATE & ref_last)
@@ -359,4 +260,16 @@ OrderedTaskPoint::print(std::ofstream& f)
   f << "# Bearing remaining " << bearing_remaining << "\n";
   f << "# Distance remaining " << this_distance_remaining << "\n";
   f << "# Entered " << state_entered.Time << "\n";
+}
+
+const std::vector<SEARCH_POINT>& 
+OrderedTaskPoint::get_search_points()
+{
+  if (active_state== BEFORE_ACTIVE) {
+    return SampledTaskPoint::get_search_points(true);
+  } else if (active_state == CURRENT_ACTIVE) {
+    return SampledTaskPoint::get_search_points(false);
+  } else {
+    return get_boundary_points();
+  }
 }

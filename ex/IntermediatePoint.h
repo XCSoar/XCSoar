@@ -10,5 +10,6 @@ public:
   IntermediatePoint(const WAYPOINT & wp, bool b_scored): 
     OrderedTaskPoint(wp, b_scored) 
     {};
+  virtual double getElevation();
 };
 #endif //INTERMEDIATEPOINT_H

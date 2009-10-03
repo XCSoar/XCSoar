@@ -5,9 +5,22 @@
 
 #include "AbstractTask.h"
 #include "Tasks/AbstractTask.h"
+#include <vector>
 
 class AbortTask : public AbstractTask 
 {
+public:
+  AbortTask();
+  ~AbortTask();
+
+  std::vector<TaskPoint*> tps;
+
+  TaskPoint* getActiveTaskPoint();
+  void setActiveTaskPoint(unsigned index);
+
+  virtual void report(const GEOPOINT &location);
+
+  virtual bool update_sample(const AIRCRAFT_STATE &, const AIRCRAFT_STATE&);
 
 };
 

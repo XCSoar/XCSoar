@@ -211,9 +211,13 @@ void OrderedTask::setActiveTaskPoint(unsigned index)
   }
 }
 
-OrderedTaskPoint* OrderedTask::getActiveTaskPoint()
+TaskPoint* OrderedTask::getActiveTaskPoint()
 {
-  return tps[activeTaskPoint];
+  if (activeTaskPoint<tps.size()) {
+    return tps[activeTaskPoint];
+  } else {
+    return NULL;
+  }
 }
 
 OrderedTask::~OrderedTask()

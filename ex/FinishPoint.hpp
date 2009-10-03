@@ -55,6 +55,8 @@ public:
 
   virtual bool transition_enter(const AIRCRAFT_STATE & ref_now, 
                                 const AIRCRAFT_STATE & ref_last);
+
+  virtual double getElevation();
 };
 
 #endif

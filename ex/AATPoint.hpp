@@ -64,6 +64,8 @@ public:
   
   virtual GEOPOINT get_reference_scored_destination();
 
+  virtual double getElevation();
+
 protected:
     GEOPOINT TargetLocation;
     bool TargetLocked;

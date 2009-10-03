@@ -83,6 +83,8 @@ public:
   virtual bool transition_exit(const AIRCRAFT_STATE & ref_now, 
                                const AIRCRAFT_STATE & ref_last);
 
+  virtual double getElevation();
+
 protected:
     bool enabled;
 };
