@@ -11,25 +11,24 @@ class OrderedTask;
 
 class TaskDijkstra {
 public:
-  TaskDijkstra(OrderedTask* _task,
-               const double _precision=0.01);
+  TaskDijkstra(OrderedTask* _task);
   ~TaskDijkstra();
 
-  double distance_opt(const ScanTaskPoint &start,
-                      bool _shortest=false);
+  unsigned distance_opt(const ScanTaskPoint &start,
+                        bool _shortest=false);
 
-  double distance_opt_achieved(const GEOPOINT &currentLocation,
-                               bool _shortest=false);
+  unsigned distance_opt_achieved(const GEOPOINT &currentLocation,
+                                 bool _shortest=false);
 private:
 
   void add_edges(Dijkstra<ScanTaskPoint> &dijkstra,
                  const ScanTaskPoint &curNode);
 
-  double distance(const ScanTaskPoint &sp,
-                  const GEOPOINT &loc);
+  unsigned distance(const ScanTaskPoint &sp,
+                    const GEOPOINT &loc);
 
-  double distance(const ScanTaskPoint &sp1,
-                  const ScanTaskPoint &sp2);
+  unsigned distance(const ScanTaskPoint &sp1,
+                    const ScanTaskPoint &sp2);
 
   unsigned num_taskpoints;
 
@@ -38,8 +37,6 @@ private:
    * @supplierCardinality 0..* 
    */
   std::vector<SearchPoint> solution;
-
-  double precision;
 
   bool shortest;
 

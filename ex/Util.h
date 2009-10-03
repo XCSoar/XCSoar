@@ -34,4 +34,6 @@ double HalfAngle(double, double);
 double BiSector(double InBound, double OutBound);
 double Reciprocal(double InBound);
 
+unsigned int isqrt4(unsigned long val);
+
 #endif

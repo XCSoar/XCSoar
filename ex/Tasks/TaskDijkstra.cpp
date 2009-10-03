@@ -16,18 +16,17 @@ TaskDijkstra::get_point(const ScanTaskPoint &sp) const
 }
 
 
-double TaskDijkstra::distance(const ScanTaskPoint &curNode,
+unsigned TaskDijkstra::distance(const ScanTaskPoint &curNode,
                               const GEOPOINT &currentLocation)
 {
   return ::Distance(get_point(curNode).getLocation(),
-                    currentLocation);
+                    currentLocation)*10;
 }
 
-double TaskDijkstra::distance(const ScanTaskPoint &s1,
+unsigned TaskDijkstra::distance(const ScanTaskPoint &s1,
                               const ScanTaskPoint &s2)
 {
-  return ::Distance(get_point(s1).getLocation(),
-                    get_point(s2).getLocation());
+  return get_point(s1).flat_distance(get_point(s2));
 }
 
 void TaskDijkstra::add_edges(Dijkstra<ScanTaskPoint> &dijkstra,
@@ -41,34 +40,32 @@ void TaskDijkstra::add_edges(Dijkstra<ScanTaskPoint> &dijkstra,
   for (destination.second=0; 
        destination.second< dsize; destination.second++) {
 
-    double dr = distance(curNode, destination);
-    if (dr>precision) {
-      unsigned d;
-      if (shortest) {
-        d = (dr/precision+0.5);
-      } else {
-        d = (MAX_DIST-dr/precision+0.5);
+    unsigned dr = distance(curNode, destination);
+    if (dr) {
+      if (!shortest) {
+        dr = MAX_DIST-dr;
       }
-      dijkstra.link(destination, d);
+      dijkstra.link(destination, dr);
     }
   }
 }
 
+
 TaskDijkstra::~TaskDijkstra() {
 }
 
-TaskDijkstra::TaskDijkstra(OrderedTask* _task,
-                           const double _precision):
+
+TaskDijkstra::TaskDijkstra(OrderedTask* _task):
   task(_task),
-  shortest(false),
-  precision(_precision)
+  shortest(false)
 {
   num_taskpoints = task->tps.size();
   solution.reserve(num_taskpoints);
 }
 
-double TaskDijkstra::distance_opt(const ScanTaskPoint &start,
-                                  const bool req_shortest)
+
+unsigned TaskDijkstra::distance_opt(const ScanTaskPoint &start,
+                                    const bool req_shortest)
 {
   shortest = req_shortest;
 
@@ -87,11 +84,9 @@ double TaskDijkstra::distance_opt(const ScanTaskPoint &start,
     }
 
     if (curNode.first == num_taskpoints-1) {
-      double d = dijkstra.dist()*(shortest? 1:-1);
-      if (shortest) {
-        d= dijkstra.dist()*precision;
-      } else {
-        d= (MAX_DIST*(curNode.first-start.first)-dijkstra.dist())*precision;
+      unsigned d = dijkstra.dist();
+      if (!shortest) {
+        d= MAX_DIST*(curNode.first-start.first)-d;
       }
       return d;
     }
@@ -102,7 +97,7 @@ double TaskDijkstra::distance_opt(const ScanTaskPoint &start,
   return -1; // No path found
 }
 
-double 
+unsigned 
 TaskDijkstra::distance_opt_achieved(const GEOPOINT &currentLocation,
                                     const bool req_shortest)
 {
@@ -114,9 +109,9 @@ TaskDijkstra::distance_opt_achieved(const GEOPOINT &currentLocation,
 
   const unsigned activeStage = task->getActiveTaskPointIndex();
 
-  double min_d = MAX_DIST;
-  double min_d_actual = MAX_DIST;
-  double max_d_actual = 0;
+  unsigned min_d = MAX_DIST;
+  unsigned min_d_actual = MAX_DIST;
+  unsigned max_d_actual = 0;
 
   while (!dijkstra.empty()) {
 
@@ -131,13 +126,13 @@ TaskDijkstra::distance_opt_achieved(const GEOPOINT &currentLocation,
       add_edges(dijkstra, curNode);
     } else {
 
-      double d_acc = (MAX_DIST*activeStage-dijkstra.dist())*precision;
+      unsigned d_acc = MAX_DIST*activeStage-dijkstra.dist();
 
-      double d_remaining = 0;
+      unsigned d_remaining = 0;
       TaskDijkstra inner_dijkstra(task);
 
       if (curNode.first == num_taskpoints-1) {
-        d_remaining = 0.0;
+        d_remaining = 0;
       } else {
         d_remaining = inner_dijkstra.distance_opt(curNode, req_shortest);
       }
@@ -146,7 +141,7 @@ TaskDijkstra::distance_opt_achieved(const GEOPOINT &currentLocation,
       if (req_shortest) {
         // need to take into account distance from here to target
 
-        double d_this = distance(curNode, currentLocation);
+        unsigned d_this = distance(curNode, currentLocation);
 
         if (d_remaining+d_this<min_d) {
           min_d = d_remaining+d_this; 

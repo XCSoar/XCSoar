@@ -34,6 +34,8 @@ public:
   bool equals(const SearchPoint& sp) const;
   bool sort(const SearchPoint& sp) const;
 
+  unsigned flat_distance(const SearchPoint& sp) const;
+
 private:
   GEOPOINT Location;
   FLAT_GEOPOINT flatLocation;
