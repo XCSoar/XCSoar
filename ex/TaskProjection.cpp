@@ -21,8 +21,8 @@ FLAT_GEOPOINT
 TaskProjection::project(const GEOPOINT& tp) const
 {
   FLAT_GEOPOINT fp;
-  fp.Longitude = (tp.Longitude-location_mid.Longitude)*10;
-  fp.Latitude = (tp.Latitude-location_mid.Latitude)*10;
+  fp.Longitude = (tp.Longitude-location_mid.Longitude)*100;
+  fp.Latitude = (tp.Latitude-location_mid.Latitude)*100;
   return fp;
 }
 

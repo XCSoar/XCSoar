@@ -17,7 +17,7 @@ public:
   unsigned distance_opt(const ScanTaskPoint &start,
                         bool _shortest=false);
 
-  unsigned distance_opt_achieved(const GEOPOINT &currentLocation,
+  unsigned distance_opt_achieved(const SearchPoint &currentLocation,
                                  bool _shortest=false);
 private:
 
@@ -25,7 +25,7 @@ private:
                  const ScanTaskPoint &curNode);
 
   unsigned distance(const ScanTaskPoint &sp,
-                    const GEOPOINT &loc);
+                    const SearchPoint &loc);
 
   unsigned distance(const ScanTaskPoint &sp1,
                     const ScanTaskPoint &sp2);

@@ -17,10 +17,9 @@ TaskDijkstra::get_point(const ScanTaskPoint &sp) const
 
 
 unsigned TaskDijkstra::distance(const ScanTaskPoint &curNode,
-                              const GEOPOINT &currentLocation)
+                              const SearchPoint &currentLocation)
 {
-  return ::Distance(get_point(curNode).getLocation(),
-                    currentLocation)*10;
+  return get_point(curNode).flat_distance(currentLocation);
 }
 
 unsigned TaskDijkstra::distance(const ScanTaskPoint &s1,
@@ -44,6 +43,7 @@ void TaskDijkstra::add_edges(Dijkstra<ScanTaskPoint> &dijkstra,
     if (dr) {
       if (!shortest) {
         dr = MAX_DIST-dr;
+//        dr = -dr;
       }
       dijkstra.link(destination, dr);
     }
@@ -87,6 +87,7 @@ unsigned TaskDijkstra::distance_opt(const ScanTaskPoint &start,
       unsigned d = dijkstra.dist();
       if (!shortest) {
         d= MAX_DIST*(curNode.first-start.first)-d;
+//        d = -d;
       }
       return d;
     }
@@ -98,7 +99,7 @@ unsigned TaskDijkstra::distance_opt(const ScanTaskPoint &start,
 }
 
 unsigned 
-TaskDijkstra::distance_opt_achieved(const GEOPOINT &currentLocation,
+TaskDijkstra::distance_opt_achieved(const SearchPoint &currentLocation,
                                     const bool req_shortest)
 {
   shortest = false; // internally
@@ -109,8 +110,8 @@ TaskDijkstra::distance_opt_achieved(const GEOPOINT &currentLocation,
 
   const unsigned activeStage = task->getActiveTaskPointIndex();
 
-  unsigned min_d = MAX_DIST;
-  unsigned min_d_actual = MAX_DIST;
+  unsigned min_d = -1;
+  unsigned min_d_actual = -1;
   unsigned max_d_actual = 0;
 
   while (!dijkstra.empty()) {
@@ -127,6 +128,7 @@ TaskDijkstra::distance_opt_achieved(const GEOPOINT &currentLocation,
     } else {
 
       unsigned d_acc = MAX_DIST*activeStage-dijkstra.dist();
+//        -dijkstra.dist();
 
       unsigned d_remaining = 0;
       TaskDijkstra inner_dijkstra(task);

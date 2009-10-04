@@ -22,7 +22,24 @@ struct AIRCRAFT_STATE {
   double Time;
   double Speed;
   double Altitude;
+  double WindSpeed;
+  double WindDirection;
 };
+
+struct GLIDE_STATE {
+  double Distance; 
+  double Bearing; // should be average bearing
+  double McReady; // aircraft state also provided
+};
+
+struct GLIDE_RESULT {
+  double TrackBearing;
+  double CruiseTrackBearing;
+  double VOpt;
+  double HeightClimb;
+  double TimeElapsed;
+};
+
 
 double Bearing(const GEOPOINT& p1, const GEOPOINT& p2);
 double Distance(const GEOPOINT& p1, const GEOPOINT& p2);

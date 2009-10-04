@@ -30,6 +30,8 @@ void OrderedTask::scan_distance(const GEOPOINT &location, bool full)
   TaskDijkstra dijkstra(this);
   ScanTaskPoint start(0,0);
 
+  SearchPoint ac(location, task_projection);
+
   ts->scan_active(tps[activeTaskPoint]);
 
   if (full) {
@@ -41,11 +43,11 @@ void OrderedTask::scan_distance(const GEOPOINT &location, bool full)
     if (activeTaskPoint>0) {
       ts->scan_active(tps[activeTaskPoint-1]);
     }
-    distance_max = dijkstra.distance_opt_achieved(location, false);
+    distance_max = dijkstra.distance_opt_achieved(ac, false);
   }
 
   ts->scan_active(tps[activeTaskPoint]);
-  distance_min = dijkstra.distance_opt_achieved(location, true);
+  distance_min = dijkstra.distance_opt_achieved(ac, true);
   distance_remaining = ts->scan_distance_remaining(location);
   distance_travelled = ts->scan_distance_travelled(location);
   distance_scored = ts->scan_distance_scored(location);
@@ -252,7 +254,7 @@ OrderedTask::OrderedTask()
   tps.push_back(new FAICylinderASTPoint(task_projection,wp[3]));
   tps.push_back(new FAISectorFinishPoint(task_projection,wp[4]));
 
-  for (unsigned i=0; i<tps.size()-1; i++) {
+  for (unsigned i=0; i+1<tps.size(); i++) {
     legs.push_back(new TaskLeg(*tps[i],*tps[i+1]));
   }
 
