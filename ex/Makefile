@@ -21,6 +21,8 @@ OUTPUTS 	:= test
 
 INCLUDES := -I.
 
+OPTIMIZE := -g
+
 CPPFLAGS := $(INCLUDES) 
 CXXFLAGS	:=$(OPTIMIZE) -fno-exceptions $(PROFILE)
 CFLAGS		:=$(OPTIMIZE) $(PROFILE)
@@ -53,6 +55,7 @@ CXXFLAGS += -Werror
 ####### sources
 
 OBJS	:=\
+	MacCready.o \
 	AATPoint.o \
 	OrderedTaskPoint.o \
 	TaskDijkstra.o \
@@ -89,7 +92,7 @@ OBJS	:=\
 
 
 all: $(OBJS)
-	g++ -o test $(OBJS)
+	g++ $(CXXFLAGS) -o test $(OBJS)
 
 
 DEPFILE		=$(dir $@).$(notdir $@).d

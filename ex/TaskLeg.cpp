@@ -33,6 +33,8 @@ double TaskLeg::leg_distance_scored(const GEOPOINT &ref)
     assert(1); // error!
     break;
   };
+  assert(1); // error!
+  return 0.0;
 }
 
 
@@ -58,6 +60,8 @@ double TaskLeg::leg_distance_remaining(const GEOPOINT &ref)
     assert(1); // error!
     break;
   };
+  assert(1); // error!
+  return 0.0;
 }
 
 
@@ -83,6 +87,8 @@ double TaskLeg::leg_distance_travelled(const GEOPOINT &ref)
     assert(1); // error!
     break;
   };
+  assert(1); // error!
+  return 0.0;
 }
 
 double TaskLeg::leg_distance_nominal()
@@ -143,6 +149,8 @@ double TaskLeg::leg_bearing_remaining(const GEOPOINT &ref)
     assert(1); // error!
     break;
   };
+  assert(1); // error!
+  return 0.0;
 }
 
 
@@ -168,4 +176,6 @@ double TaskLeg::leg_bearing_travelled(const GEOPOINT &ref)
     assert(1); // error!
     break;
   };
+  assert(1); // error!
+  return 0.0;
 }

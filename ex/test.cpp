@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <assert.h>
+#include "MacCready.hpp"
 
 #include <stdio.h>
 
@@ -18,14 +19,34 @@ double small_rand() {
 
 int n_samples = 0;
 
-void do_exit()
-{
-  if (n_samples) {
-    printf("av distance tests %d\n", count_distance/n_samples);
-  }
-  exit(0);
-}
+////////////////////////////////////////////////
 
+void test_mc()
+{
+  MacCready mc;
+
+  AIRCRAFT_STATE ac;
+  GLIDE_STATE gs;
+  GLIDE_RESULT gr;
+
+  ac.Altitude = 10;
+  ac.WindSpeed = 1.0;
+  ac.WindDirection = 0;
+
+  gs.Distance = 100;
+  gs.Bearing = 0;
+  gs.MacCready = 1.0;
+  gs.MinHeight = 2.0;
+
+  gr = mc.solve(ac,gs);
+
+  ac.Altitude = 1;
+  gr = mc.solve(ac,gs);
+
+  ac.Altitude = 3;
+  gr = mc.solve(ac,gs);
+
+}
 
 ////////////////////////////////////////////////
 /*
@@ -74,6 +95,9 @@ void test_polygon()
 
 int main() {
 
+  test_mc();
+
+
   TaskManager test_task;
 
   AIRCRAFT_STATE state, state_last;
@@ -98,7 +122,6 @@ int main() {
 
   state_last.Location = w[0];
 
-  double t;
   for (int i=0; i<num_wp-1-1; i++) {
     for (double t=0; t<1.0; t+= 0.01) {
       state.Location.Latitude = w[i].Latitude*(1.0-t)+w[i+1].Latitude*t+small_rand();
@@ -108,15 +131,15 @@ int main() {
       test_task.report(state.Location);
       n_samples++;
       state_last = state;
-      if (state.Location.Longitude>10.5) do_exit();
+      if (state.Location.Longitude>10.5) { exit(0); }
       state.Time += 1.0;
     }
     printf("[enter to continue]\n");
     char c = getchar();
+    (void)c;
   }
 
 //  test_task.remove(2);
 //  test_task.scan_distance(location);
-  do_exit();
   return 0;
 }
