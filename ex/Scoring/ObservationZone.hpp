@@ -40,6 +40,7 @@
 #ifndef OBSERVATIONZONE_HPP
 #define OBSERVATIONZONE_HPP
 #include "Navigation/ReferencePoint.hpp"
+#include "Navigation/Aircraft.hpp"
 
 class ObservationZone {
 public:

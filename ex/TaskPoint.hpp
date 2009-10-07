@@ -41,7 +41,10 @@
 
 #include "Util/Serialisable.hpp"
 #include "Navigation/ReferencePoint.hpp"
+#include "Navigation/Waypoint.hpp"
+#include "Navigation/Aircraft.hpp"
 #include "Util.h"
+#include "GlideSolvers/MacCready.hpp"
 
 class TaskPoint : 
   public ReferencePoint, public Serialisable {
@@ -58,7 +61,12 @@ public:
 
   double get_distance(const AIRCRAFT_STATE &);
 
-  double get_height_required(const AIRCRAFT_STATE &, double mc);
+  virtual double get_distance_remaining(const AIRCRAFT_STATE &);
+  virtual double get_bearing_remaining(const AIRCRAFT_STATE &);
+
+  GLIDE_RESULT glide_solution(const AIRCRAFT_STATE &, 
+                              const double mc,
+                              const double minH=0);
 
 protected:
   const double Elevation;

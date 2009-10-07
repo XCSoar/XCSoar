@@ -161,6 +161,10 @@ bool OrderedTask::update_sample(const AIRCRAFT_STATE &state,
     }
   }
   scan_distance(state.Location, full_update);
+
+  GLIDE_RESULT gr = glide_solution_remaining(state, 1.0);
+  gr.report();
+
   return true;
 }
 
@@ -238,14 +242,19 @@ OrderedTask::OrderedTask()
   WAYPOINT wp[6];
   wp[0].Location.Longitude=0;
   wp[0].Location.Latitude=0;
+  wp[0].Altitude=1;
   wp[1].Location.Longitude=0;
   wp[1].Location.Latitude=10;
+  wp[1].Altitude=1;
   wp[2].Location.Longitude=10;
   wp[2].Location.Latitude=10;
+  wp[1].Altitude=2;
   wp[3].Location.Longitude=7;
   wp[3].Location.Latitude=5;
+  wp[3].Altitude=1;
   wp[4].Location.Longitude=10;
   wp[4].Location.Latitude=0;
+  wp[4].Altitude=1;
 
   ts = new FAISectorStartPoint(task_projection,wp[0]);
   tps.push_back(ts);
@@ -260,3 +269,124 @@ OrderedTask::OrderedTask()
 
   update_geometry();
 }
+
+
+GLIDE_RESULT 
+OrderedTask::glide_solution_remaining(const AIRCRAFT_STATE &aircraft, 
+                                      const double mc)
+{
+  GLIDE_RESULT acc_gr, gr;
+  AIRCRAFT_STATE aircraft_predict = aircraft;
+
+  double minH=0.0;
+  int ntask = tps.size()-1;
+
+  for (int i=ntask; i>=(int)activeTaskPoint; i--) {
+    minH = std::max(minH,tps[i]->getElevation());
+
+    // perform estimate, ensuring that alt is above previous taskpoint  
+    bool ok;
+    do {
+      ok = true;
+      gr = tps[i]->glide_solution(aircraft_predict, mc, minH);
+
+      if (gr.Solution != MacCready::RESULT_OK) {
+        return gr;
+      }
+      if (i>(int)activeTaskPoint) {
+        double dh = tps[i-1]->getElevation()-
+          (aircraft_predict.Altitude-gr.HeightGlide);
+        if (dh>0) {
+          ok = false;
+          minH += dh;
+        }
+      }
+
+    } while (!ok);
+
+    // update state
+    if (i==ntask) {
+      acc_gr = gr;
+    } else if (i>(int)activeTaskPoint) {
+      acc_gr.add(gr);
+    }
+    aircraft_predict.back_predict(gr);
+
+  }
+  gr.add(acc_gr);
+  return gr;
+
+  // if HeightClimb==0, on final glide, above by HeightGlide
+  // (neglecting terrain), or (aircraft.Altitude-aircraft_predict.altitude)
+  // if HeightClimb>0, below final glide
+}
+
+
+
+GLIDE_RESULT 
+OrderedTask::glide_solution_travelled(const AIRCRAFT_STATE &aircraft, 
+                                      const double mc)
+{
+  GLIDE_RESULT acc_gr, gr;
+  AIRCRAFT_STATE aircraft_predict = aircraft;
+
+  double minH=0.0;
+  int ntask = tps.size()-1;
+
+  for (int i=ntask; i>=(int)activeTaskPoint; i--) {
+    minH = std::max(minH,tps[i]->getElevation());
+
+    // perform estimate, ensuring that alt is above previous taskpoint  
+    bool ok;
+    do {
+      ok = true;
+      gr = tps[i]->glide_solution(aircraft_predict, mc, minH);
+
+      if (gr.Solution != MacCready::RESULT_OK) {
+        return gr;
+      }
+      if (i>(int)activeTaskPoint) {
+        double dh = tps[i-1]->getElevation()-
+          (aircraft_predict.Altitude-gr.HeightGlide);
+        if (dh>0) {
+          ok = false;
+          minH += dh;
+        }
+      }
+
+    } while (!ok);
+
+    // update state
+    if (i==ntask) {
+      acc_gr = gr;
+    } else if (i>(int)activeTaskPoint) {
+      acc_gr.add(gr);
+    }
+    aircraft_predict.back_predict(gr);
+
+  }
+  gr.add(acc_gr);
+  return gr;
+}
+
+
+  /*
+
+  for (unsigned i=activeTaskPoint; i<tps.size(); i++) {
+    double minH=0.0;
+    for (unsigned j=i; j<tps.size(); j++) {
+      minH = std::max(minH,tps[j]->getElevation());
+    }
+    GLIDE_RESULT gr = tps[i]->glide_solution(aircraft_predict, mc, minH);
+    if (i==activeTaskPoint) {
+      acc_gr = gr;
+    } else {
+      acc_gr.add(gr);
+    }
+    aircraft_predict.forward_predict(gr);
+    if (gr.Solution != MacCready::RESULT_OK) {
+      return acc_gr;
+    }
+  }
+  return acc_gr;
+  */

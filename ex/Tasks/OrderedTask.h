@@ -8,6 +8,7 @@
 #include <vector>
 #include "TaskLeg.h"
 #include "Util/Serialisable.hpp"
+#include "GlideSolvers/MacCready.hpp"
 
 class OrderedTask:
   public AbstractTask,
@@ -64,6 +65,11 @@ private:
   StartPoint *ts;
 
   TaskProjection task_projection;
+
+  GLIDE_RESULT glide_solution_remaining(const AIRCRAFT_STATE &, 
+                                        const double mc);
+  GLIDE_RESULT glide_solution_travelled(const AIRCRAFT_STATE &, 
+                                        const double mc);
 };
 
 #endif //ORDEREDTASK_H

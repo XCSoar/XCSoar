@@ -105,21 +105,13 @@ protected:
   void scan_bearing_remaining(const GEOPOINT &ref);
 public:
 
-  virtual GEOPOINT get_reference_nominal_origin();
+  virtual GEOPOINT get_reference_nominal();
 
-  virtual GEOPOINT get_reference_nominal_destination();
+  virtual GEOPOINT get_reference_scored();
 
-  virtual GEOPOINT get_reference_scored_origin();
+  virtual GEOPOINT get_reference_travelled();
 
-  virtual GEOPOINT get_reference_scored_destination();
-
-  virtual GEOPOINT get_reference_travelled_origin();
-
-  virtual GEOPOINT get_reference_travelled_destination();
-
-  virtual GEOPOINT get_reference_remaining_origin();
-
-  virtual GEOPOINT get_reference_remaining_destination();
+  virtual GEOPOINT get_reference_remaining();
 
   virtual bool transition_enter(const AIRCRAFT_STATE & ref_now, 
                                 const AIRCRAFT_STATE & ref_last);
@@ -130,6 +122,15 @@ public:
   void print(std::ofstream& f);
 
   const std::vector<SearchPoint>& get_search_points();
+
+  virtual double get_distance_remaining(const AIRCRAFT_STATE &);
+  virtual double get_bearing_remaining(const AIRCRAFT_STATE &);
+  virtual double get_distance_travelled() {
+    return this_distance_travelled;
+  }
+  virtual double get_bearing_travelled() {
+    return bearing_travelled;
+  }
 
 protected:
 

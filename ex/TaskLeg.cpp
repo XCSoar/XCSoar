@@ -13,8 +13,8 @@ double TaskLeg::leg_distance_scored(const GEOPOINT &ref)
     // this leg totally included
     return 
       std::max(0.0,
-               ::Distance(tp_origin->get_reference_scored_origin(), 
-                          tp_destination->get_reference_scored_destination())
+               ::Distance(tp_origin->get_reference_scored(), 
+                          tp_destination->get_reference_scored())
                -tp_origin->score_adjustment()-tp_destination->score_adjustment());
     break;
   case OrderedTaskPoint::AFTER_ACTIVE:
@@ -24,8 +24,8 @@ double TaskLeg::leg_distance_scored(const GEOPOINT &ref)
     // this leg partially included
     return 
       std::max(0.0,
-               ::ProjectedDistance(tp_origin->get_reference_scored_origin(), 
-                                   tp_destination->get_reference_scored_destination(),
+               ::ProjectedDistance(tp_origin->get_reference_scored(), 
+                                   tp_destination->get_reference_scored(),
                                    ref)
                -tp_origin->score_adjustment()-tp_destination->score_adjustment());
     break;
@@ -44,8 +44,8 @@ double TaskLeg::leg_distance_remaining(const GEOPOINT &ref)
   case OrderedTaskPoint::AFTER_ACTIVE:
     // this leg totally included
     return 
-      ::Distance(tp_origin->get_reference_remaining_origin(), 
-                 tp_destination->get_reference_remaining_destination());
+      ::Distance(tp_origin->get_reference_remaining(), 
+                 tp_destination->get_reference_remaining());
     break;
   case OrderedTaskPoint::BEFORE_ACTIVE:
     // this leg not included
@@ -54,7 +54,7 @@ double TaskLeg::leg_distance_remaining(const GEOPOINT &ref)
     // this leg partially included
     return 
       ::Distance(ref, 
-                 tp_destination->get_reference_remaining_destination());
+                 tp_destination->get_reference_remaining());
     break;
   default:
     assert(1); // error!
@@ -71,8 +71,8 @@ double TaskLeg::leg_distance_travelled(const GEOPOINT &ref)
   case OrderedTaskPoint::BEFORE_ACTIVE:
     // this leg totally included
     return 
-      ::Distance(tp_origin->get_reference_travelled_origin(), 
-                 tp_destination->get_reference_travelled_destination());
+      ::Distance(tp_origin->get_reference_travelled(), 
+                 tp_destination->get_reference_travelled());
     break;
   case OrderedTaskPoint::AFTER_ACTIVE:
     // this leg not included
@@ -80,7 +80,7 @@ double TaskLeg::leg_distance_travelled(const GEOPOINT &ref)
   case OrderedTaskPoint::CURRENT_ACTIVE:
     // this leg partially included
     return 
-      ::Distance(tp_origin->get_reference_travelled_origin(), 
+      ::Distance(tp_origin->get_reference_travelled(), 
                  ref);
     break;
   default:
@@ -94,8 +94,8 @@ double TaskLeg::leg_distance_travelled(const GEOPOINT &ref)
 double TaskLeg::leg_distance_nominal()
 {
   return 
-    ::Distance(tp_origin->get_reference_nominal_origin(), 
-               tp_destination->get_reference_nominal_destination());
+    ::Distance(tp_origin->get_reference_nominal(), 
+               tp_destination->get_reference_nominal());
 }
 
 
@@ -133,8 +133,8 @@ double TaskLeg::leg_bearing_remaining(const GEOPOINT &ref)
   case OrderedTaskPoint::AFTER_ACTIVE:
     // this leg totally included
     return 
-      ::Bearing(tp_origin->get_reference_remaining_origin(), 
-                tp_destination->get_reference_remaining_destination());
+      ::Bearing(tp_origin->get_reference_remaining(), 
+                tp_destination->get_reference_remaining());
     break;
   case OrderedTaskPoint::BEFORE_ACTIVE:
     // this leg not included
@@ -143,7 +143,7 @@ double TaskLeg::leg_bearing_remaining(const GEOPOINT &ref)
     // this leg partially included
     return 
       ::Bearing(ref, 
-                tp_destination->get_reference_remaining_destination());
+                tp_destination->get_reference_remaining());
     break;
   default:
     assert(1); // error!
@@ -160,8 +160,8 @@ double TaskLeg::leg_bearing_travelled(const GEOPOINT &ref)
   case OrderedTaskPoint::BEFORE_ACTIVE:
     // this leg totally included
     return 
-      ::Bearing(tp_origin->get_reference_travelled_origin(), 
-                tp_destination->get_reference_travelled_destination());
+      ::Bearing(tp_origin->get_reference_travelled(), 
+                tp_destination->get_reference_travelled());
     break;
   case OrderedTaskPoint::AFTER_ACTIVE:
     // this leg not included
@@ -169,7 +169,7 @@ double TaskLeg::leg_bearing_travelled(const GEOPOINT &ref)
   case OrderedTaskPoint::CURRENT_ACTIVE:
     // this leg partially included
     return 
-      ::Bearing(tp_origin->get_reference_travelled_origin(), 
+      ::Bearing(tp_origin->get_reference_travelled(), 
                 ref);
     break;
   default:

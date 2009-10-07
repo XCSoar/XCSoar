@@ -1,6 +1,6 @@
 #include <stdlib.h>
 #include <assert.h>
-#include "MacCready.hpp"
+#include "GlideSolvers/MacCready.hpp"
 
 #include <stdio.h>
 
@@ -29,8 +29,7 @@ void test_mc()
   GLIDE_STATE gs;
   GLIDE_RESULT gr;
 
-  ac.Altitude = 10;
-  ac.WindSpeed = 1.0;
+  ac.WindSpeed = 5.0;
   ac.WindDirection = 0;
 
   gs.Distance = 100;
@@ -38,13 +37,21 @@ void test_mc()
   gs.MacCready = 1.0;
   gs.MinHeight = 2.0;
 
+  ac.Altitude = 10;
+
+  printf("AC alt %g\n", ac.Altitude);
   gr = mc.solve(ac,gs);
+  gr.report();
 
   ac.Altitude = 1;
+  printf("AC alt %g\n", ac.Altitude);
   gr = mc.solve(ac,gs);
+  gr.report();
 
   ac.Altitude = 3;
+  printf("AC alt %g\n", ac.Altitude);
   gr = mc.solve(ac,gs);
+  gr.report();
 
 }
 
@@ -103,6 +110,7 @@ int main() {
   AIRCRAFT_STATE state, state_last;
   state.Location.Longitude=8;
   state.Location.Latitude=11;  
+  state.Altitude = 3.3;
   state.Time = 0.0;
 
   test_task.setActiveTaskPoint(0);

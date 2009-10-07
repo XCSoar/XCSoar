@@ -2,44 +2,26 @@
 
 #include "AATPoint.hpp"
 
-GEOPOINT AATPoint::get_reference_scored_origin()
+
+GEOPOINT AATPoint::get_reference_scored()
 {
   if (getActiveState() == BEFORE_ACTIVE) {
     return getMaxLocation();
   } else {
-    return TargetLocation;
+    return getMinLocation();
   }
 }
 
-GEOPOINT AATPoint::get_reference_scored_destination()
+GEOPOINT AATPoint::get_reference_travelled()
 {
-  if (getActiveState() == CURRENT_ACTIVE) {
-    return TargetLocation;
-  } else {
-    return getMaxLocation();
-  }
-}
-
-GEOPOINT AATPoint::get_reference_travelled_destination()
-{
-  return getMaxLocation();
-}
-
-GEOPOINT AATPoint::get_reference_travelled_origin()
-{
-  return getMaxLocation();
-}
-
-GEOPOINT AATPoint::get_reference_remaining_origin()
-{
-  if (getActiveState() == BEFORE_ACTIVE) {
+  if (state_entered.Time>=0) {
     return getMaxLocation();
   } else {
-    return TargetLocation;
+    return getMinLocation();
   }
 }
 
-GEOPOINT AATPoint::get_reference_remaining_destination()
+GEOPOINT AATPoint::get_reference_remaining()
 {
   if (getActiveState() == BEFORE_ACTIVE) {
     return getMaxLocation();

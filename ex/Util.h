@@ -1,31 +1,7 @@
 #ifndef UTIL_H
 #define UTIL_H
 
-struct GEOPOINT {
-  double Longitude;
-  double Latitude;
-};
-
-struct FLAT_GEOPOINT {
-  int Longitude;
-  int Latitude;
-};
-
-
-struct WAYPOINT {
-  GEOPOINT Location;
-  double Altitude;
-};
-
-struct AIRCRAFT_STATE {
-  GEOPOINT Location;
-  double Time;
-  double Speed;
-  double Altitude;
-  double WindSpeed;
-  double WindDirection;
-};
-
+#include "Navigation/Waypoint.hpp"
 
 
 double Bearing(const GEOPOINT& p1, const GEOPOINT& p2);

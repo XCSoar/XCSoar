@@ -9,7 +9,7 @@
 
 // -------
 
-GEOPOINT OrderedTaskPoint::get_reference_travelled_origin()
+GEOPOINT OrderedTaskPoint::get_reference_travelled()
 {
   if (state_entered.Time>=0) {
     return getMaxLocation();
@@ -18,49 +18,18 @@ GEOPOINT OrderedTaskPoint::get_reference_travelled_origin()
   }
 }
 
-GEOPOINT OrderedTaskPoint::get_reference_travelled_destination()
-{
-  if (state_entered.Time>=0) {
-    return getMaxLocation();
-  } else {
-    return getLocation();
-  }
-}
-
-// -------
-
-GEOPOINT OrderedTaskPoint::get_reference_scored_origin()
+GEOPOINT OrderedTaskPoint::get_reference_scored()
 {
   return getLocation();
 }
 
-GEOPOINT OrderedTaskPoint::get_reference_scored_destination()
+GEOPOINT OrderedTaskPoint::get_reference_nominal()
 {
   return getLocation();
 }
 
-// -------
-
-GEOPOINT OrderedTaskPoint::get_reference_nominal_origin()
+GEOPOINT OrderedTaskPoint::get_reference_remaining()
 {
-  return getLocation();
-}
-
-GEOPOINT OrderedTaskPoint::get_reference_nominal_destination()
-{
-  return getLocation();
-}
-
-// -------
-
-GEOPOINT OrderedTaskPoint::get_reference_remaining_origin()
-{
-  return getLocation();
-}
-
-GEOPOINT OrderedTaskPoint::get_reference_remaining_destination()
-{
-  // TODO: replace with target for AAT
   if (state_entered.Time>=0) {
     return getMinLocation();
   } else {
@@ -125,7 +94,7 @@ void OrderedTaskPoint::scan_bearing_remaining(const GEOPOINT &ref)
   if (leg_in) {
     bearing_remaining = leg_in->leg_bearing_remaining(ref);
   } else {
-    bearing_remaining = 0.0;
+    bearing_remaining = ::Bearing(ref, getLocation()); // bearing to start
   }
 }
 
@@ -272,4 +241,16 @@ OrderedTaskPoint::get_search_points()
   } else {
     return get_boundary_points();
   }
+}
+
+
+double OrderedTaskPoint::get_distance_remaining(const AIRCRAFT_STATE &)
+{
+  return this_distance_remaining;
+}
+
+double 
+OrderedTaskPoint::get_bearing_remaining(const AIRCRAFT_STATE &)
+{
+  return bearing_remaining;
 }

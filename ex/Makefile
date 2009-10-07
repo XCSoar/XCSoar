@@ -55,7 +55,8 @@ CXXFLAGS += -Werror
 ####### sources
 
 OBJS	:=\
-	MacCready.o \
+	GlideSolvers/MacCready.o \
+	Navigation/Aircraft.o \
 	AATPoint.o \
 	OrderedTaskPoint.o \
 	TaskDijkstra.o \

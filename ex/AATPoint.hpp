@@ -51,17 +51,11 @@ public:
     {
     }  
 
-  virtual GEOPOINT get_reference_remaining_origin();  
+  virtual GEOPOINT get_reference_remaining();  
   
-  virtual GEOPOINT get_reference_remaining_destination();  
+  virtual GEOPOINT get_reference_travelled();  
   
-  virtual GEOPOINT get_reference_travelled_origin();  
-  
-  virtual GEOPOINT get_reference_travelled_destination();  
-  
-  virtual GEOPOINT get_reference_scored_origin();  
-  
-  virtual GEOPOINT get_reference_scored_destination();
+  virtual GEOPOINT get_reference_scored();
 
   virtual double getElevation();
 
