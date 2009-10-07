@@ -37,8 +37,8 @@
 
 #ifndef SECTORAATPOINT_HPP
 #define SECTORAATPOINT_HPP
+#include "BaseTask/AATPoint.hpp"
 #include "ObservationZones/SectorZone.hpp"
-#include "AATPoint.hpp"
 
 class SectorAATPoint: 
   public AATPoint

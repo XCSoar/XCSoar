@@ -4,7 +4,7 @@
 #include <vector>
 #include <list>
 
-#include "SearchPoint.hpp"
+#include "BaseTask/SearchPoint.hpp"
 
 class GrahamScan
 {

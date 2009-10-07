@@ -39,9 +39,8 @@
 #ifndef FAICYLINDERASTPOINT_HPP
 #define FAICYLINDERASTPOINT_HPP
 
-#include "ASTPoint.hpp"
+#include "BaseTask/ASTPoint.hpp"
 #include "ObservationZones/CylinderZone.hpp"
-#include "TaskLeg.h"
 
 class FAICylinderASTPoint: 
   public ASTPoint

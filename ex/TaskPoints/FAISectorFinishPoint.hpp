@@ -38,9 +38,9 @@
 #ifndef FAISECTORFINISHPOINT_HPP
 #define FAISECTORFINISHPOINT_HPP
 
-#include "FinishPoint.hpp"
+#include "BaseTask/FinishPoint.hpp"
+#include "BaseTask/TaskLeg.h"
 #include "ObservationZones/FAISectorZone.hpp"
-#include "TaskLeg.h"
 
 class FAISectorFinishPoint: 
   public FinishPoint

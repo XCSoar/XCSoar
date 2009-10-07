@@ -2,7 +2,6 @@
 #ifndef ABSTRACTTASK_H
 #define ABSTRACTTASK_H
 
-#include "TaskPoint.hpp"
 #include "Util.h"
 #include "TaskInterface.h"
 #include "Tasks/TaskInterface.h"

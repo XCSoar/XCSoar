@@ -39,9 +39,9 @@
 #ifndef FAISECTORASTPOINT_HPP
 #define FAISECTORASTPOINT_HPP
 
-#include "ASTPoint.hpp"
+#include "BaseTask/ASTPoint.hpp"
 #include "ObservationZones/FAISectorZone.hpp"
-#include "TaskLeg.h"
+#include "BaseTask/TaskLeg.h"
 
 class FAISectorASTPoint: 
   public ASTPoint

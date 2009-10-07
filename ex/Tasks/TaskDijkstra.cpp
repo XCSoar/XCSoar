@@ -2,7 +2,6 @@
 
 #include "Tasks/TaskDijkstra.hpp"
 #include "OrderedTask.h"
-#include "OrderedTaskPoint.hpp"
 #include <stdio.h>
 
 // Example usage (nodes and edges are represented with ints)

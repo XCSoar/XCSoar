@@ -39,9 +39,9 @@
 #ifndef FAISECTORSTARTPOINT_HPP
 #define FAISECTORSTARTPOINT_HPP
 
-#include "StartPoint.hpp"
+#include "BaseTask/StartPoint.hpp"
+#include "BaseTask/TaskLeg.h"
 #include "ObservationZones/FAISectorZone.hpp"
-#include "TaskLeg.h"
 
 class FAISectorStartPoint: 
   public StartPoint

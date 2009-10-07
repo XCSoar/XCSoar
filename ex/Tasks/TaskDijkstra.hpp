@@ -3,7 +3,7 @@
 
 #include "Util.h"
 #include "Dijkstra.hpp"
-#include "SearchPoint.hpp"
+#include "BaseTask/SearchPoint.hpp"
 #include <stdio.h>
 #include <vector>
 

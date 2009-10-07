@@ -55,21 +55,20 @@ CXXFLAGS += -Werror
 ####### sources
 
 OBJS	:=\
+	test.o \
+	Util.o \
 	GlideSolvers/MacCready.o \
 	Navigation/Aircraft.o \
-	AATPoint.o \
-	OrderedTaskPoint.o \
-	TaskDijkstra.o \
-	TaskProjection.o \
-	FinishPoint.o \
-	SampledTaskPoint.o \
-	SearchPoint.o \
-	TaskLeg.o \
-	test.o \
-	IntermediatePoint.o \
-	StartPoint.o \
-	TaskPoint.o \
-	Util.o \
+	BaseTask/AATPoint.o \
+	BaseTask/OrderedTaskPoint.o \
+	BaseTask/TaskProjection.o \
+	BaseTask/FinishPoint.o \
+	BaseTask/SampledTaskPoint.o \
+	BaseTask/SearchPoint.o \
+	BaseTask/TaskLeg.o \
+	BaseTask/IntermediatePoint.o \
+	BaseTask/StartPoint.o \
+	BaseTask/TaskPoint.o \
 	ConvexHull/GrahamScan.o \
 	ConvexHull/PolygonInterior.o \
 	ObservationZones/CylinderZone.o \

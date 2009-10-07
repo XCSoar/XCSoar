@@ -3,10 +3,10 @@
 #define ORDEREDTASK_H
 
 #include "Tasks/AbstractTask.h"
-#include "OrderedTaskPoint.hpp"
-#include "StartPoint.hpp"
+#include "BaseTask/OrderedTaskPoint.hpp"
+#include "BaseTask/StartPoint.hpp"
+#include "BaseTask/TaskLeg.h"
 #include <vector>
-#include "TaskLeg.h"
 #include "Util/Serialisable.hpp"
 #include "GlideSolvers/MacCready.hpp"
 
