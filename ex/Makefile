@@ -69,19 +69,19 @@ OBJS	:=\
 	BaseTask/IntermediatePoint.o \
 	BaseTask/StartPoint.o \
 	BaseTask/TaskPoint.o \
-	ConvexHull/GrahamScan.o \
-	ConvexHull/PolygonInterior.o \
-	ObservationZones/CylinderZone.o \
-	ObservationZones/HeightLimitZone.o \
-	ObservationZones/SectorZone.o \
-	ObservationZones/SpeedLimitZone.o \
-	ObservationZones/SymmetricSectorZone.o \
+	BaseTask/ConvexHull/GrahamScan.o \
+	BaseTask/ConvexHull/PolygonInterior.o \
 	Scoring/ObservationZone.o \
 	TaskPoints/FAICylinderASTPoint.o \
 	TaskPoints/FAISectorASTPoint.o \
 	TaskPoints/FAISectorFinishPoint.o \
 	TaskPoints/FAISectorStartPoint.o \
 	TaskPoints/SectorAATPoint.o \
+	TaskPoints/ObservationZones/CylinderZone.o \
+	TaskPoints/ObservationZones/HeightLimitZone.o \
+	TaskPoints/ObservationZones/SectorZone.o \
+	TaskPoints/ObservationZones/SpeedLimitZone.o \
+	TaskPoints/ObservationZones/SymmetricSectorZone.o \
 	Tasks/AbortTask.o \
 	Tasks/AbstractTask.o \
 	Tasks/GotoTask.o \

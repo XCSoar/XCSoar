@@ -11,7 +11,7 @@ void distance_counts() {
 
 #include "Tasks/TaskManager.h"
 
-#include "ConvexHull/GrahamScan.hpp"
+#include "BaseTask/ConvexHull/GrahamScan.hpp"
 
 double small_rand() {
   return rand()*0.3/RAND_MAX;

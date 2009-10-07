@@ -11,7 +11,7 @@
 
 GEOPOINT OrderedTaskPoint::get_reference_travelled()
 {
-  if (state_entered.Time>=0) {
+  if (has_entered()) {
     return getMaxLocation();
   } else {
     return getLocation();
@@ -30,7 +30,7 @@ GEOPOINT OrderedTaskPoint::get_reference_nominal()
 
 GEOPOINT OrderedTaskPoint::get_reference_remaining()
 {
-  if (state_entered.Time>=0) {
+  if (has_entered()) {
     return getMinLocation();
   } else {
     return getLocation();

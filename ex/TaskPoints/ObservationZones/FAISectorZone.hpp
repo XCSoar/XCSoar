@@ -38,7 +38,7 @@
 #ifndef FAISECTORZONE_HPP
 #define FAISECTORZONE_HPP
 
-#include "ObservationZones/SymmetricSectorZone.hpp"
+#include "TaskPoints/ObservationZones/SymmetricSectorZone.hpp"
 
 class FAISectorZone: 
   public SymmetricSectorZone 

@@ -79,9 +79,16 @@ double TaskLeg::leg_distance_travelled(const GEOPOINT &ref)
     return 0.0;
   case OrderedTaskPoint::CURRENT_ACTIVE:
     // this leg partially included
-    return 
+    if (tp_destination->has_entered()) {
       ::Distance(tp_origin->get_reference_travelled(), 
-                 ref);
+                 tp_destination->get_reference_travelled())
+        +::Distance(tp_destination->get_reference_travelled(), 
+                    ref);
+    } else {
+      return 
+        ::Distance(tp_origin->get_reference_travelled(), 
+                   ref);
+    }
     break;
   default:
     assert(1); // error!

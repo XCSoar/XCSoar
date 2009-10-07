@@ -38,7 +38,7 @@
 #ifndef SECTORZONE_HPP
 #define SECTORZONE_HPP
 
-#include "ObservationZones/CylinderZone.hpp"
+#include "TaskPoints/ObservationZones/CylinderZone.hpp"
 #include <stdio.h>
 
 class SectorZone: 

@@ -132,6 +132,10 @@ public:
     return bearing_travelled;
   }
 
+  bool has_entered() const {
+    return state_entered.Time>0;
+  }
+
 protected:
 
   /**

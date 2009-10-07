@@ -37,8 +37,8 @@
 
 #ifndef SYMMETRICSECTORZONE_HPP
 #define SYMMETRICSECTORZONE_HPP
-#include "ObservationZones/SectorZone.hpp"
 #include "BaseTask/TaskPoint.hpp"
+#include "TaskPoints/ObservationZones/SectorZone.hpp"
 
 class SymmetricSectorZone: 
   public SectorZone 
