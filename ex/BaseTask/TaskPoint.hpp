@@ -64,9 +64,9 @@ public:
   virtual double get_distance_remaining(const AIRCRAFT_STATE &);
   virtual double get_bearing_remaining(const AIRCRAFT_STATE &);
 
-  GLIDE_RESULT glide_solution(const AIRCRAFT_STATE &, 
-                              const double mc,
-                              const double minH=0);
+  GLIDE_RESULT glide_solution_remaining(const AIRCRAFT_STATE &, 
+                                        const double mc,
+                                        const double minH=0);
 
 protected:
   const double Elevation;

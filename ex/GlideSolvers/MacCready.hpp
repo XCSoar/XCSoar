@@ -43,6 +43,8 @@ private:
   GLIDE_RESULT optimise(const AIRCRAFT_STATE &aircraft,
 			const GLIDE_STATE &task,
 			Solver_t solver);
+
+  double cruise_bearing(const double V, const double Wn, const double theta);
 };
 
 struct GLIDE_STATE {

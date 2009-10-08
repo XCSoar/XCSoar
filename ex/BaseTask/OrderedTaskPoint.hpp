@@ -135,6 +135,9 @@ public:
   bool has_entered() const {
     return state_entered.Time>0;
   }
+  GLIDE_RESULT glide_solution_travelled(const AIRCRAFT_STATE &, 
+                                        const double mc,
+                                        const double minH=0);
 
 protected:
 

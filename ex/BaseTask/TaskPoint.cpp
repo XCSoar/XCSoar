@@ -36,9 +36,9 @@ double TaskPoint::getElevation()
 }
 
 
-GLIDE_RESULT TaskPoint::glide_solution(const AIRCRAFT_STATE &ac, 
-                                       const double mc,
-                                       const double minH)
+GLIDE_RESULT TaskPoint::glide_solution_remaining(const AIRCRAFT_STATE &ac, 
+                                                 const double mc,
+                                                 const double minH)
 {
   MacCready msolv; // TODO this should be passed in as a reference
 

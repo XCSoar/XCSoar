@@ -5,6 +5,7 @@
 #include "Util/Quadratic.hpp"
 #include <stdio.h>
 #include "Navigation/Aircraft.hpp"
+#include "Util.h"
 
 bool GLIDE_RESULT::superior(const GLIDE_RESULT &s2) const 
 {
@@ -115,6 +116,23 @@ GLIDE_RESULT MacCready::solve_vertical(const AIRCRAFT_STATE &aircraft,
 }
 
 
+double MacCready::cruise_bearing(const double V, const double Wn, const double theta)
+{
+  if (Wn==0.0) {
+    return 0.0;
+  }
+  double sintheta = sin(theta);
+  if (sintheta==0.0) {
+    return 0.0;
+  }
+  // Wn/sin(alpha) = V/sin(theta)
+  //   (Wn/V)*sin(theta) = sin(alpha)
+
+  double alpha = asin(sintheta*Wn/V);
+  return alpha*180.0/3.1415926;
+}
+
+
 GLIDE_RESULT MacCready::solve_glide(const AIRCRAFT_STATE &aircraft,
                                     const GLIDE_STATE &task,
 				    const double V)
@@ -122,7 +140,7 @@ GLIDE_RESULT MacCready::solve_glide(const AIRCRAFT_STATE &aircraft,
   double S = SinkRate(V);
   double M = task.MacCready;
   double W = aircraft.WindSpeed;
-  double theta = aircraft.WindDirection;
+  double theta = aircraft.WindDirection-task.Bearing;
 
   GLIDE_RESULT result;
   result.TrackBearing = task.Bearing;
@@ -174,6 +192,8 @@ GLIDE_RESULT MacCready::solve_glide(const AIRCRAFT_STATE &aircraft,
   result.TimeElapsed = t_cr;
   result.HeightClimb = 0;
   result.HeightGlide = S*t_cr;
+  result.CruiseTrackBearing = ::AngleLimit360(result.TrackBearing+
+                                              cruise_bearing(V,W,theta));
 
   if (M>0) {
     // equivalent time to gain the height that was used
@@ -191,7 +211,7 @@ GLIDE_RESULT MacCready::solve_cruise(const AIRCRAFT_STATE &aircraft,
   double S = SinkRate(V);
   double M = task.MacCready;
   double W = aircraft.WindSpeed;
-  double theta = aircraft.WindDirection;
+  double theta = aircraft.WindDirection-task.Bearing;
 
   GLIDE_RESULT result;
   result.TrackBearing = task.Bearing;
@@ -239,6 +259,9 @@ GLIDE_RESULT MacCready::solve_cruise(const AIRCRAFT_STATE &aircraft,
 
   // equivalent time to gain the height that was used
   result.TimeVirtual = std::max(0.0,result.HeightGlide/M);
+
+  result.CruiseTrackBearing = AngleLimit360(result.TrackBearing+
+                                            cruise_bearing(V,W*(1+std::max(0.0,rho)),theta));
 
   result.Solution = RESULT_OK;
 

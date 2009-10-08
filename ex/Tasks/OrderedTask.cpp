@@ -162,8 +162,13 @@ bool OrderedTask::update_sample(const AIRCRAFT_STATE &state,
   }
   scan_distance(state.Location, full_update);
 
+  printf("remaining %g\n",distance_remaining);
   GLIDE_RESULT gr = glide_solution_remaining(state, 1.0);
   gr.report();
+
+  printf("travelled %g\n",distance_travelled);
+  GLIDE_RESULT gt = glide_solution_travelled(state, 1.0);
+  gt.report();
 
   return true;
 }
@@ -248,7 +253,7 @@ OrderedTask::OrderedTask()
   wp[1].Altitude=1;
   wp[2].Location.Longitude=10;
   wp[2].Location.Latitude=10;
-  wp[1].Altitude=2;
+  wp[2].Altitude=2;
   wp[3].Location.Longitude=7;
   wp[3].Location.Latitude=5;
   wp[3].Altitude=1;
@@ -270,103 +275,105 @@ OrderedTask::OrderedTask()
   update_geometry();
 }
 
+//////////////////////////////////////
 
 GLIDE_RESULT 
 OrderedTask::glide_solution_remaining(const AIRCRAFT_STATE &aircraft, 
                                       const double mc)
 {
-  GLIDE_RESULT acc_gr, gr;
-  AIRCRAFT_STATE aircraft_predict = aircraft;
-
-  double minH=0.0;
-  int ntask = tps.size()-1;
-
-  for (int i=ntask; i>=(int)activeTaskPoint; i--) {
-    minH = std::max(minH,tps[i]->getElevation());
-
-    // perform estimate, ensuring that alt is above previous taskpoint  
-    bool ok;
-    do {
-      ok = true;
-      gr = tps[i]->glide_solution(aircraft_predict, mc, minH);
-
-      if (gr.Solution != MacCready::RESULT_OK) {
-        return gr;
-      }
-      if (i>(int)activeTaskPoint) {
-        double dh = tps[i-1]->getElevation()-
-          (aircraft_predict.Altitude-gr.HeightGlide);
-        if (dh>0) {
-          ok = false;
-          minH += dh;
-        }
-      }
-
-    } while (!ok);
-
-    // update state
-    if (i==ntask) {
-      acc_gr = gr;
-    } else if (i>(int)activeTaskPoint) {
-      acc_gr.add(gr);
-    }
-    aircraft_predict.back_predict(gr);
-
-  }
-  gr.add(acc_gr);
-  return gr;
-
-  // if HeightClimb==0, on final glide, above by HeightGlide
-  // (neglecting terrain), or (aircraft.Altitude-aircraft_predict.altitude)
-  // if HeightClimb>0, below final glide
+  return glide_solution_general(aircraft, mc, false);
 }
-
-
 
 GLIDE_RESULT 
 OrderedTask::glide_solution_travelled(const AIRCRAFT_STATE &aircraft, 
                                       const double mc)
 {
+  return glide_solution_general(aircraft, mc, true);
+}
+
+
+GLIDE_RESULT 
+OrderedTask::glide_solution_general(const AIRCRAFT_STATE &aircraft, 
+                                    const double mc,
+                                    const bool travelled)
+{
   GLIDE_RESULT acc_gr, gr;
   AIRCRAFT_STATE aircraft_predict = aircraft;
 
   double minH=0.0;
-  int ntask = tps.size()-1;
+  int start; 
+  int finish;
 
-  for (int i=ntask; i>=(int)activeTaskPoint; i--) {
+  if (travelled) {
+    start = 1;
+    finish = activeTaskPoint;
+  } else {
+    start = activeTaskPoint;
+    finish = tps.size()-1;
+  }
+
+  GLIDE_RESULT gg[tps.size()];
+  double minHs[tps.size()];
+
+  // TODO: not yet complete for travelled (start/finish height)
+
+  for (int i=finish; i>=start; i--) {
     minH = std::max(minH,tps[i]->getElevation());
+    // minH = tps[i]->getElevation();
+    minHs[i] = minH;
+  }
+
+  for (int i=finish; i>=start; i--) {
+    minH = minHs[i];
+    if (i==finish) {
+      aircraft_predict = aircraft;
+    }
 
     // perform estimate, ensuring that alt is above previous taskpoint  
-    bool ok;
-    do {
-      ok = true;
-      gr = tps[i]->glide_solution(aircraft_predict, mc, minH);
+    if (travelled) {
+      gr = tps[i]->glide_solution_travelled(aircraft_predict, mc, minH);
+    } else {
+      gr = tps[i]->glide_solution_remaining(aircraft_predict, mc, minH);
+    }
 
-      if (gr.Solution != MacCready::RESULT_OK) {
-        return gr;
+    if (gr.Solution != MacCready::RESULT_OK) {
+      return gr;
+    }
+    if (i>start) {
+      double dh = tps[i-1]->getElevation()-
+        (aircraft_predict.Altitude-gr.HeightGlide);
+      if (dh>0) {
+        printf("---> %d %g %g %g %g\n",i,dh, minH,aircraft_predict.Altitude,gr.HeightGlide);
+//        minHs[i] += dh;
+//        i=finish+1; 
+//        continue; // re-commence search
       }
-      if (i>(int)activeTaskPoint) {
-        double dh = tps[i-1]->getElevation()-
-          (aircraft_predict.Altitude-gr.HeightGlide);
-        if (dh>0) {
-          ok = false;
-          minH += dh;
-        }
-      }
-
-    } while (!ok);
+    }
 
     // update state
-    if (i==ntask) {
+    if (i==finish) {
       acc_gr = gr;
-    } else if (i>(int)activeTaskPoint) {
+    } else if (i>start) {
       acc_gr.add(gr);
     }
-    aircraft_predict.back_predict(gr);
+    gg[i]= gr;
 
+    aircraft_predict.back_predict(gr);
+    printf("%d -- %g\n",i,aircraft_predict.Altitude);
   }
   gr.add(acc_gr);
+
+  double aa = aircraft.Altitude-gr.HeightGlide;
+  for (int i= start; i<=finish; i++) {
+    aa += -gg[i].HeightGlide;
+    printf("%d %g %g %g %g\n", i, aa, gg[i].HeightClimb, gg[i].HeightGlide, minHs[i]);
+  }
+
   return gr;
+
+  // if HeightClimb==0, on final glide, above by HeightGlide
+  // (neglecting terrain), or (aircraft.Altitude-aircraft_predict.altitude)
+  // if HeightClimb>0, below final glide
 }
 
 

@@ -105,6 +105,8 @@ void OrderedTaskPoint::scan_bearing_travelled(const GEOPOINT &ref)
   } 
   if (leg_in) {
     bearing_travelled = leg_in->leg_bearing_travelled(ref);
+  } else if (leg_out) {
+    bearing_travelled = leg_out->leg_bearing_travelled(ref);
   } else {
     bearing_travelled = 0.0;
   }
@@ -253,4 +255,20 @@ double
 OrderedTaskPoint::get_bearing_remaining(const AIRCRAFT_STATE &)
 {
   return bearing_remaining;
+}
+
+
+GLIDE_RESULT OrderedTaskPoint::glide_solution_travelled(const AIRCRAFT_STATE &ac, 
+                                                        const double mc,
+                                                        const double minH)
+{
+  MacCready msolv; // TODO this should be passed in as a reference
+
+  GLIDE_STATE gs;
+  gs.Distance = get_distance_travelled();
+  gs.Bearing = get_bearing_travelled();
+  gs.MacCready = mc;
+  gs.MinHeight = std::max(minH,getElevation());
+
+  return msolv.solve(ac,gs);
 }

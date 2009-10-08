@@ -110,8 +110,10 @@ int main() {
   AIRCRAFT_STATE state, state_last;
   state.Location.Longitude=8;
   state.Location.Latitude=11;  
-  state.Altitude = 3.3;
+  state.Altitude = 1.5;
   state.Time = 0.0;
+  state.WindSpeed = 5.0;
+  state.WindDirection = 0;
 
   test_task.setActiveTaskPoint(0);
 
