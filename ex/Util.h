@@ -3,6 +3,8 @@
 
 #include "Navigation/Waypoint.hpp"
 
+#define DEG2RAD(x) (x*3.1415926/180.0)
+#define RAD2DEG(x) (x/3.1415926*180.0)
 
 double Bearing(const GEOPOINT& p1, const GEOPOINT& p2);
 double Distance(const GEOPOINT& p1, const GEOPOINT& p2);

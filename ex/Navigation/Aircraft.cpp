@@ -4,7 +4,7 @@
 
 void AIRCRAFT_STATE::back_predict(const GLIDE_RESULT &res)
 {
-  Altitude -= res.HeightGlide;
+  Altitude += res.HeightGlide;
 }
 
 // 
