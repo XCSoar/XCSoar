@@ -25,17 +25,18 @@ bool GLIDE_RESULT::superior(const GLIDE_RESULT &s2) const
 
 void GLIDE_RESULT::report()
 {
-  if (Solution == MacCready::RESULT_OK) {
-    printf("Solution OK\n");
+  if (Solution != MacCready::RESULT_OK) {
+    printf("Solution NOT OK\n");
   }
-  printf("Distance %g\n",Distance);
-  printf("TrackBearing %g\n",TrackBearing);
-  printf("CruiseTrackBearing %g\n", CruiseTrackBearing);
-  printf("VOpt %g\n", VOpt);
-  printf("HeightClimb %g\n", HeightClimb);
-  printf("HeightGlide %g\n", HeightGlide);
-  printf("TimeElapsed %g\n", TimeElapsed);
-  printf("TimeVirtual %g\n", TimeVirtual);
+  printf("  Altitude Difference %4.2f\n",AltitudeDifference);
+  printf("  Distance            %4.2f\n",Distance);
+  printf("  TrackBearing        %4.2f\n",TrackBearing);
+  printf("  CruiseTrackBearing  %4.2f\n", CruiseTrackBearing);
+  printf("  VOpt                %4.2f\n", VOpt);
+  printf("  HeightClimb         %4.2f\n", HeightClimb);
+  printf("  HeightGlide         %4.2f\n", HeightGlide);
+  printf("  TimeElapsed         %4.2f\n", TimeElapsed);
+  printf("  TimeVirtual         %4.2f\n", TimeVirtual);
   printf("\n");
 }
 
@@ -46,6 +47,12 @@ void GLIDE_RESULT::add(const GLIDE_RESULT &s2)
   HeightClimb += s2.HeightClimb;
   Distance    += s2.Distance;
   TimeVirtual += s2.TimeVirtual;
+  if ((AltitudeDifference>0) && (s2.AltitudeDifference>0)) {
+    AltitudeDifference= std::max(AltitudeDifference, s2.AltitudeDifference);
+  } else {
+    // add differences if both under
+    AltitudeDifference+= std::min(s2.AltitudeDifference, 0.0);
+  }
 }
 
 double MacCready::SinkRate(double V) const
@@ -55,12 +62,14 @@ double MacCready::SinkRate(double V) const
 }
 
 GLIDE_RESULT MacCready::solve_vertical(const AIRCRAFT_STATE &aircraft,
-                                       const GLIDE_STATE &task,
-				       const double V)
+                                       const GLIDE_STATE &task) const
 {
-  double S = SinkRate(V);
-  double M = task.MacCready;
+  // TODO this equation needs to be checked
+
   double W = aircraft.WindSpeed;
+  double dh = task.MinHeight-aircraft.Altitude;
+  double V = VOpt;
+//  double S = SinkRate(V);
 
   GLIDE_RESULT result;
   result.TrackBearing = task.Bearing;
@@ -70,8 +79,7 @@ GLIDE_RESULT MacCready::solve_vertical(const AIRCRAFT_STATE &aircraft,
   result.HeightClimb = 0;
   result.HeightGlide = 0;
   result.TimeElapsed = 0;
-
-  double dh = task.MinHeight-aircraft.Altitude;
+  result.AltitudeDifference = -dh;
 
   // distance relation
   //   V*t_cr = W*(t_cl+t_cr)
@@ -79,10 +87,10 @@ GLIDE_RESULT MacCready::solve_vertical(const AIRCRAFT_STATE &aircraft,
   //     t_cr = (W*t_cl)/(V-W)     .... (1)
 
   // height relation
-  //   t_cl = (dh+t_cr*S)/M
-  //     t_cl*M = (dh+(W*t_cl)/(V-W))    substitute (1)
-  //     t_cl*M*(V-W)= dh*(V-W)+W*t_cl
-  //     t_cl*(M*(V-W)-W) = dh*(V-W) .... (2)
+  //   t_cl = (dh+t_cr*S)/mc
+  //     t_cl*mc = (dh+(W*t_cl)/(V-W))    substitute (1)
+  //     t_cl*mc*(V-W)= dh*(V-W)+W*t_cl
+  //     t_cl*(mc*(V-W)-W) = dh*(V-W) .... (2)
 
   if (dh<0) {
     // immediate solution
@@ -96,7 +104,7 @@ GLIDE_RESULT MacCready::solve_vertical(const AIRCRAFT_STATE &aircraft,
     return result;
   }
 
-  double denom2 = M*(V-W)-W;
+  double denom2 = mc*(V-W)-W;
   if (denom2<=0) {
     result.Solution = RESULT_MACCREADY_INSUFFICIENT;
     return result;
@@ -106,15 +114,18 @@ GLIDE_RESULT MacCready::solve_vertical(const AIRCRAFT_STATE &aircraft,
   double t_cr = (W*t_cl)/denom1; // from (1)
 
   result.TimeElapsed = t_cr+t_cl;
-  result.HeightClimb = dh+t_cr*S;
+  result.HeightClimb = dh;
   result.HeightGlide = 0;
   result.Solution = RESULT_OK;
+  result.AltitudeDifference = 0;
 
   return result;
 }
 
 
-double MacCready::cruise_bearing(const double V, const double Wn, const double theta)
+double MacCready::cruise_bearing(const double V, 
+                                 const double Wn, 
+                                 const double theta) const
 {
   if (Wn==0.0) {
     return 0.0;
@@ -133,11 +144,12 @@ double MacCready::cruise_bearing(const double V, const double Wn, const double t
 
 GLIDE_RESULT MacCready::solve_glide(const AIRCRAFT_STATE &aircraft,
                                     const GLIDE_STATE &task,
-				    const double V)
+                                    const double V) const
 {
   double S = SinkRate(V);
   double W = aircraft.WindSpeed;
   double theta = aircraft.WindDirection-task.Bearing;
+  double dh = task.MinHeight-aircraft.Altitude;
 
   GLIDE_RESULT result;
   result.TrackBearing = task.Bearing;
@@ -147,6 +159,7 @@ GLIDE_RESULT MacCready::solve_glide(const AIRCRAFT_STATE &aircraft,
   result.HeightClimb = 0;
   result.HeightGlide = 0;
   result.TimeElapsed = 0;
+  result.AltitudeDifference = -dh;
 
   // distance relation
   //   V*V=Vn*Vn+W*W-2*Vn*W*cos(theta)
@@ -165,7 +178,6 @@ GLIDE_RESULT MacCready::solve_glide(const AIRCRAFT_STATE &aircraft,
     return result;
   }
 
-  double dh = task.MinHeight-aircraft.Altitude;
   double gamma = dh/task.Distance;
 
   if (gamma*Vn+S>0) {
@@ -191,18 +203,19 @@ GLIDE_RESULT MacCready::solve_glide(const AIRCRAFT_STATE &aircraft,
   result.HeightGlide = t_cr*S;
   result.CruiseTrackBearing = ::AngleLimit360(result.TrackBearing+
                                               cruise_bearing(V,W,theta));
+  result.AltitudeDifference = -dh-result.HeightGlide;
 
   return result;
 }
 
 
 GLIDE_RESULT MacCready::solve_cruise(const AIRCRAFT_STATE &aircraft,
-                                     const GLIDE_STATE &task,
-                                     const double V)
+                                     const GLIDE_STATE &task) const
 {
+  double V = VOpt;
   double S = SinkRate(V);
-  double M = task.MacCready;
   double W = aircraft.WindSpeed;
+  double dh = task.MinHeight-aircraft.Altitude;
 
   GLIDE_RESULT result;
   result.TrackBearing = task.Bearing;
@@ -212,12 +225,12 @@ GLIDE_RESULT MacCready::solve_cruise(const AIRCRAFT_STATE &aircraft,
   result.HeightGlide = 0;
   result.TimeElapsed = 0;
   result.Distance = 0;
+  result.AltitudeDifference = -dh;
 
-  double dh = task.MinHeight-aircraft.Altitude;
   double t_cl1 = 0.0;
   double distance = task.Distance;
   if (dh>0) {
-    t_cl1 = dh/M;
+    t_cl1 = dh/mc;
     double wd = DEG2RAD(aircraft.WindDirection);
     double tb = DEG2RAD(task.Bearing);
     double dx= t_cl1*W*sin(wd)-task.Distance*sin(tb);
@@ -227,7 +240,7 @@ GLIDE_RESULT MacCready::solve_cruise(const AIRCRAFT_STATE &aircraft,
   }
 
   // distance relation
-  double rho = S/M;
+  double rho = S/mc;
   double k = (1+rho)*(1+rho);
   double theta = aircraft.WindDirection-task.Bearing;
   double costheta = cos(theta);
@@ -254,9 +267,10 @@ GLIDE_RESULT MacCready::solve_cruise(const AIRCRAFT_STATE &aircraft,
   }
 
   result.TimeElapsed = t_cr+t_cl;
-  result.HeightClimb = t_cl*M;
+  result.HeightClimb = t_cl*mc;
   result.HeightGlide = t_cr*S-result.HeightClimb;
   result.Distance = distance;
+  result.AltitudeDifference = -dh+result.HeightClimb-result.HeightGlide;
 
   result.CruiseTrackBearing = AngleLimit360(result.TrackBearing+
                                             cruise_bearing(V,W*(1+std::max(0.0,rho)),theta));
@@ -268,17 +282,17 @@ GLIDE_RESULT MacCready::solve_cruise(const AIRCRAFT_STATE &aircraft,
 
 
 GLIDE_RESULT MacCready::solve(const AIRCRAFT_STATE &aircraft,
-                              const GLIDE_STATE &task)
+                              const GLIDE_STATE &task) const
 {
   if (task.Distance==0) {
-    return optimise(aircraft, task, &MacCready::solve_vertical);
+    return solve_vertical(aircraft, task);
   } 
-  if (task.MacCready==0) {
-    return optimise(aircraft, task, &MacCready::solve_glide);
+  if (mc==0) {
+    return optimise_glide(aircraft, task);
   }
 
   // check first if can final glide
-  GLIDE_RESULT result_fg = optimise(aircraft, task, &MacCready::solve_glide);
+  GLIDE_RESULT result_fg = optimise_glide(aircraft, task);
   if (result_fg.Solution == RESULT_OK) {
     // whole task final glided
     return result_fg;
@@ -290,36 +304,87 @@ GLIDE_RESULT MacCready::solve(const AIRCRAFT_STATE &aircraft,
   sub_task.Distance -= result_fg.Distance;
   sub_task.MinHeight += result_fg.HeightGlide;
 
-  GLIDE_RESULT result_cc = optimise(aircraft, sub_task, &MacCready::solve_cruise);
+  GLIDE_RESULT result_cc = solve_cruise(aircraft, sub_task);
   result_cc.add(result_fg);
 
   return result_cc;
 }
 
 
-GLIDE_RESULT MacCready::optimise(const AIRCRAFT_STATE &aircraft,
-				 const GLIDE_STATE &task,
-				 Solver_t solver)
+
+
+
+#include "GlideSolvers/ZeroFinder.hpp"
+
+
+class MacCreadyVopt: 
+  public ZeroFinder
 {
-  GLIDE_RESULT best_result;
-  best_result.Solution = RESULT_NOSOLUTION;
-
-  for (double V=15.0; V<=50.0; V+= 0.5) {
-    GLIDE_RESULT this_result = ((this)->*solver)(aircraft, task, V);
-
-    if (task.MacCready>0) {
+public:
+  MacCreadyVopt(const AIRCRAFT_STATE &_aircraft,
+                const GLIDE_STATE &_task,
+                const MacCready &_mac):
+    ZeroFinder(15.0,50.0,0.1),
+    aircraft(_aircraft),
+    task(_task),
+    mac(_mac)
+    {
+    };
+  virtual double f(double V) {
+    res = mac.solve_glide(aircraft, task, V);
+    if (mac.get_mc()>0) {
       // equivalent time to gain the height that was used
-      this_result.TimeVirtual = std::max(this_result.HeightGlide/task.MacCready,0.0);
+      res.TimeVirtual = std::max(res.HeightGlide/mac.get_mc(),0.0);
     } else {
-      this_result.TimeVirtual = 0.0;
+      res.TimeVirtual = 0.0;
     }
-
-    if (this_result.superior(best_result)) {
-      best_result = this_result;
+    if (res.Distance>0) {
+      return (res.TimeElapsed+res.TimeVirtual)/res.Distance;
+    } else {
+      return 0.0;
     }
   }
-  return best_result;
+  virtual GLIDE_RESULT result() {
+    find_min(20.0);
+    return res;
+  }
+  GLIDE_RESULT res;
+protected:
+  const AIRCRAFT_STATE &aircraft;
+  const GLIDE_STATE &task;
+  const MacCready &mac;
+};
+
+void MacCready::set_mc(double _mc)
+{
+  mc = _mc;
+  solve_vopt();
 }
+
+void MacCready::solve_vopt()
+{
+  GLIDE_STATE task;
+  task.Distance = 1.0;
+  task.Bearing = 0;
+  task.MinHeight = 0;
+  AIRCRAFT_STATE aircraft;
+  aircraft.WindSpeed = 0;
+  aircraft.WindDirection = 0;
+  aircraft.Altitude = 10000;
+  MacCreadyVopt mcvopt(aircraft, task, *this);
+  VOpt = mcvopt.find_min(20.0);
+}
+
+
+GLIDE_RESULT MacCready::optimise_glide(const AIRCRAFT_STATE &aircraft,
+                                       const GLIDE_STATE &task) const
+{
+  MacCreadyVopt mcvopt(aircraft, task, *this);
+  return mcvopt.result();
+}
+
+
+
 
 
 /*
@@ -327,9 +392,9 @@ GLIDE_RESULT MacCready::optimise(const AIRCRAFT_STATE &aircraft,
 
   (W*(1+rho))**2+((1+rho)*Vn)**2-2*W*(1+rho)*Vn*(1+rho)*costheta-V*V
 
-subs rho=(gamma*Vn+S)/M
--> rho = S/M
-   k = 1+rho = (S+M)/M
+subs rho=(gamma*Vn+S)/mc
+-> rho = S/mc
+   k = 1+rho = (S+mc)/mc
     rho = (S+M)/M-1
 
 */

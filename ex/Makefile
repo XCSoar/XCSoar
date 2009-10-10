@@ -58,6 +58,8 @@ OBJS	:=\
 	test.o \
 	Util.o \
 	GlideSolvers/MacCready.o \
+	GlideSolvers/TaskMacCready.o \
+	GlideSolvers/ZeroFinder.o \
 	Navigation/Aircraft.o \
 	BaseTask/AATPoint.o \
 	BaseTask/OrderedTaskPoint.o \

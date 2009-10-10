@@ -70,9 +70,8 @@ private:
                                         const double mc);
   GLIDE_RESULT glide_solution_travelled(const AIRCRAFT_STATE &, 
                                         const double mc);
-  GLIDE_RESULT glide_solution_general(const AIRCRAFT_STATE &, 
-                                      const double mc,
-                                      const bool travelled=false);
+  double best_mc(const AIRCRAFT_STATE &, 
+                 const double mc);
 };
 
 #endif //ORDEREDTASK_H

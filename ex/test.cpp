@@ -29,12 +29,13 @@ void test_mc()
   GLIDE_STATE gs;
   GLIDE_RESULT gr;
 
+  mc.set_mc(1.0);
+
   ac.WindSpeed = 5.0;
   ac.WindDirection = 0;
 
   gs.Distance = 100;
   gs.Bearing = 0;
-  gs.MacCready = 1.0;
   gs.MinHeight = 2.0;
 
   ac.Altitude = 10;
@@ -110,7 +111,7 @@ int main() {
   AIRCRAFT_STATE state, state_last;
   state.Location.Longitude=8;
   state.Location.Latitude=11;  
-  state.Altitude = 1.5;
+  state.Altitude = 3.0;
   state.Time = 0.0;
   state.WindSpeed = 5.0;
   state.WindDirection = 0;
@@ -120,7 +121,7 @@ int main() {
 #define  num_wp 5
   GEOPOINT w[num_wp];
   w[0].Longitude = -0.25; 
-  w[0].Latitude = -0.25; 
+  w[0].Latitude = -1.25; 
   w[1].Longitude = -0.5; 
   w[1].Latitude = 10.5; 
   w[2].Longitude = 10.5; 

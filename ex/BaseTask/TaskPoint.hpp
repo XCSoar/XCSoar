@@ -46,6 +46,8 @@
 #include "Util.h"
 #include "GlideSolvers/MacCready.hpp"
 
+class MacCready;
+
 class TaskPoint : 
   public ReferencePoint, public Serialisable {
 public:
@@ -65,7 +67,7 @@ public:
   virtual double get_bearing_remaining(const AIRCRAFT_STATE &);
 
   GLIDE_RESULT glide_solution_remaining(const AIRCRAFT_STATE &, 
-                                        const double mc,
+                                        const MacCready &mac,
                                         const double minH=0);
 
 protected:

@@ -259,15 +259,12 @@ OrderedTaskPoint::get_bearing_remaining(const AIRCRAFT_STATE &)
 
 
 GLIDE_RESULT OrderedTaskPoint::glide_solution_travelled(const AIRCRAFT_STATE &ac, 
-                                                        const double mc,
+                                                        const MacCready &msolv,
                                                         const double minH)
 {
-  MacCready msolv; // TODO this should be passed in as a reference
-
   GLIDE_STATE gs;
   gs.Distance = get_distance_travelled();
   gs.Bearing = get_bearing_travelled();
-  gs.MacCready = mc;
   gs.MinHeight = std::max(minH,getElevation());
 
   return msolv.solve(ac,gs);

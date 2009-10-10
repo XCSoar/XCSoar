@@ -10,6 +10,9 @@ struct AIRCRAFT_STATE;
 class MacCready 
 {
 public:
+  MacCready():mc(0.0) {
+
+  }
   
   enum MacCreadyResult_t {
     RESULT_OK = 0,
@@ -20,37 +23,40 @@ public:
   };
 
   GLIDE_RESULT solve(const AIRCRAFT_STATE &aircraft,
-                     const GLIDE_STATE &task);
+                     const GLIDE_STATE &task) const;
 
-private:
-  typedef GLIDE_RESULT (MacCready::*Solver_t)(const AIRCRAFT_STATE &aircraft,
-				   const GLIDE_STATE &task,
-				   const double V);
-
-  GLIDE_RESULT solve_vertical(const AIRCRAFT_STATE &aircraft,
-                              const GLIDE_STATE &task,
-			      const double V);
   GLIDE_RESULT solve_glide(const AIRCRAFT_STATE &aircraft,
                            const GLIDE_STATE &task,
-			   const double V);
+			   const double V) const;
+  void set_mc(double _mc);
+
+  double get_mc() const {
+    return mc;
+  }
+
+private:
+  GLIDE_RESULT optimise_glide(const AIRCRAFT_STATE &aircraft,
+                              const GLIDE_STATE &task) const;
+
+  GLIDE_RESULT solve_vertical(const AIRCRAFT_STATE &aircraft,
+                              const GLIDE_STATE &task) const;
 
   GLIDE_RESULT solve_cruise(const AIRCRAFT_STATE &aircraft,
-                            const GLIDE_STATE &task,
-                            const double V);
+                            const GLIDE_STATE &task) const;
 
   double SinkRate(double V) const;
 
-  GLIDE_RESULT optimise(const AIRCRAFT_STATE &aircraft,
-			const GLIDE_STATE &task,
-			Solver_t solver);
+  double cruise_bearing(const double V, const double Wn, 
+                        const double theta) const;
 
-  double cruise_bearing(const double V, const double Wn, const double theta);
+  void solve_vopt();
+  double mc;
+  double VOpt;
 };
 
 struct GLIDE_STATE {
   double Distance; 
   double Bearing; // should be average bearing
-  double MacCready; // aircraft state also provided
   double MinHeight; 
 };
 
@@ -64,6 +70,7 @@ struct GLIDE_RESULT {
   double HeightGlide;
   double TimeElapsed;
   double TimeVirtual;
+  double AltitudeDifference;
 
   // returns true if this solution is better than s2
   bool ok_or_partial() const {

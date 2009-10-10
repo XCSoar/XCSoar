@@ -37,15 +37,12 @@ double TaskPoint::getElevation()
 
 
 GLIDE_RESULT TaskPoint::glide_solution_remaining(const AIRCRAFT_STATE &ac, 
-                                                 const double mc,
+                                                 const MacCready &msolv,
                                                  const double minH)
 {
-  MacCready msolv; // TODO this should be passed in as a reference
-
   GLIDE_STATE gs;
   gs.Distance = get_distance_remaining(ac);
   gs.Bearing = get_bearing_remaining(ac);
-  gs.MacCready = mc;
   gs.MinHeight = std::max(minH,getElevation());
 
   return msolv.solve(ac,gs);

@@ -1,0 +1,81 @@
+#ifndef TASK_MACCREADY_HPP
+#define TASK_MACCREADY_HPP
+
+#include "GlideSolvers/MacCready.hpp"
+#include "BaseTask/OrderedTaskPoint.hpp"
+#include "Navigation/Aircraft.hpp"
+#include <vector>
+
+class TaskMacCready {
+public:
+  TaskMacCready(const std::vector<OrderedTaskPoint*> &_tps,
+                const unsigned _activeTaskPoint,
+                const double _mc):
+    tps(_tps),
+    activeTaskPoint(_activeTaskPoint),
+    start(0),
+    end(tps.size()-1),
+    gs(tps.size()),
+    minHs(tps.size(),0.0)
+    {
+      msolv.set_mc(_mc);
+    };
+
+  GLIDE_RESULT glide_solution(const AIRCRAFT_STATE &aircraft);
+  void clearance_heights(const AIRCRAFT_STATE &);
+  void report(const AIRCRAFT_STATE &aircraft);
+  void set_mc(double mc) {
+    msolv.set_mc(mc);
+  };
+protected:
+  virtual double get_min_height(const AIRCRAFT_STATE &aircraft) = 0;
+  virtual GLIDE_RESULT tp_solution(const unsigned i,
+                                   const AIRCRAFT_STATE &aircraft, 
+                                   double minH) = 0;
+  virtual const AIRCRAFT_STATE get_aircraft_start(const AIRCRAFT_STATE &aircraft) = 0;
+
+  const std::vector<OrderedTaskPoint*> &tps;
+  const unsigned activeTaskPoint;
+  std::vector<double> minHs;
+  int start;
+  int end;
+  std::vector<GLIDE_RESULT> gs;
+  MacCready msolv;
+};
+
+class TaskMacCreadyRemaining: 
+  public TaskMacCready
+{
+public:
+  TaskMacCreadyRemaining(const std::vector<OrderedTaskPoint*> &_tps,
+                         const unsigned _activeTaskPoint,
+                         const double _mc);
+protected:
+  virtual GLIDE_RESULT tp_solution(const unsigned i,
+                                   const AIRCRAFT_STATE &aircraft, 
+                                   double minH);
+  virtual double get_min_height(const AIRCRAFT_STATE &aircraft) {
+    return 0.0;
+  }
+  virtual const AIRCRAFT_STATE get_aircraft_start(const AIRCRAFT_STATE &aircraft);
+
+};
+
+class TaskMacCreadyTravelled: 
+  public TaskMacCready
+{
+public:
+  TaskMacCreadyTravelled(const std::vector<OrderedTaskPoint*> &_tps,
+                         const unsigned _activeTaskPoint,
+                         const double _mc);
+protected:
+  virtual GLIDE_RESULT tp_solution(const unsigned i,
+                                   const AIRCRAFT_STATE &aircraft, 
+                                   double minH);
+  virtual double get_min_height(const AIRCRAFT_STATE &aircraft) {
+    return aircraft.Altitude;
+  }
+  virtual const AIRCRAFT_STATE get_aircraft_start(const AIRCRAFT_STATE &aircraft);
+};
+
+#endif
