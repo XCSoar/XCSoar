@@ -72,6 +72,9 @@ private:
                                         const double mc);
   double best_mc(const AIRCRAFT_STATE &, 
                  const double mc);
+  double cruise_efficiency(const AIRCRAFT_STATE &aircraft, 
+                           const double mc);
+
 };
 
 #endif //ORDEREDTASK_H

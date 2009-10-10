@@ -17,12 +17,23 @@ public:
       return false;
     }
   }
-  double find_zero(const double xstart);
-  double find_min(const double xstart);
+  double find_zero(const double xstart) {
+    double x = _find_zero(xstart);
+    return x_limited(x);
+  }
+  double find_min(const double xstart) {
+    double x = _find_min(xstart);
+    return x_limited(x);
+  }
 protected:
   const double xmin;
   const double xmax;
   const double tolerance;
+private:
+  double f_limited(double x);
+  double x_limited(double x);
+  double _find_zero(const double xstart);
+  double _find_min(const double xstart);
 };
 
 #endif

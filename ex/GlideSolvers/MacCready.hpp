@@ -10,7 +10,8 @@ struct AIRCRAFT_STATE;
 class MacCready 
 {
 public:
-  MacCready():mc(0.0) {
+  MacCready():mc(0.0),
+              cruise_efficiency(1.0) {
 
   }
   
@@ -28,10 +29,19 @@ public:
   GLIDE_RESULT solve_glide(const AIRCRAFT_STATE &aircraft,
                            const GLIDE_STATE &task,
 			   const double V) const;
+
   void set_mc(double _mc);
 
   double get_mc() const {
     return mc;
+  }
+
+  void set_cruise_efficiency(double _ef) {
+    cruise_efficiency = _ef;
+  }
+
+  double get_cruise_efficiency() const {
+    return cruise_efficiency;
   }
 
 private:
@@ -52,6 +62,7 @@ private:
   void solve_vopt();
   double mc;
   double VOpt;
+  double cruise_efficiency;
 };
 
 struct GLIDE_STATE {

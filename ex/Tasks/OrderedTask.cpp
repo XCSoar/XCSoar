@@ -163,11 +163,17 @@ bool OrderedTask::update_sample(const AIRCRAFT_STATE &state,
   }
   scan_distance(state.Location, full_update);
 
-  GLIDE_RESULT gr = glide_solution_remaining(state, 1.0);
-  GLIDE_RESULT gt = glide_solution_travelled(state, 1.0);
+  printf("Time %g\n", state.Time);
 
-  double mbest = best_mc(state, 1.0);
+  double mc = 1.0;
+  GLIDE_RESULT gr = glide_solution_remaining(state, mc);
+  GLIDE_RESULT gt = glide_solution_travelled(state, mc);
+
+  double mbest = best_mc(state, mc);
   printf("m best %g\n", mbest);
+
+  double ce = cruise_efficiency(state, mc);
+  printf("cruise efficiency %g\n", ce);
 
   return true;
 }
@@ -318,13 +324,20 @@ public:
   virtual double f(double mc) {
     tm.set_mc(mc);
     res = tm.glide_solution(aircraft);
-    printf("%g %g\n", mc, res.AltitudeDifference);
     return res.AltitudeDifference;
   }
   virtual bool valid(double mc) {
     tm.set_mc(mc);
     res = tm.glide_solution(aircraft);
     return (res.Solution== MacCready::RESULT_OK);
+  }
+  virtual double search(double mc) {
+    double a = find_zero(mc);
+    if (fabs(f(a))>tolerance*2.0) {
+      return find_min(mc);
+    } else {
+      return a;
+    }
   }
 protected:
   TaskMacCreadyRemaining tm;
@@ -338,6 +351,53 @@ OrderedTask::best_mc(const AIRCRAFT_STATE &aircraft,
                      const double mc)
 {
   TaskBestMc bmc(tps,activeTaskPoint, aircraft);
-  double res = bmc.find_zero(mc);
+  double res = bmc.search(mc);
+  return res;
+}
+
+
+
+
+class TaskCruiseEfficiency: 
+  public ZeroFinder
+{
+public:
+  TaskCruiseEfficiency(const std::vector<OrderedTaskPoint*>& tps,
+                       const unsigned activeTaskPoint,
+                       const AIRCRAFT_STATE &_aircraft,
+                       const double mc):
+    ZeroFinder(0.1,1.5,0.01),
+    tm(tps,activeTaskPoint,mc),
+    aircraft(_aircraft) 
+    {
+      dt = aircraft.Time-tps[0]->get_state_entered().Time;
+    };
+  virtual double f(double ce) {
+    tm.set_cruise_efficiency(ce);
+    res = tm.glide_solution(aircraft);
+    return fabs(res.TimeElapsed-dt);
+  }
+  virtual bool valid(double ce) {
+    tm.set_cruise_efficiency(ce);
+    res = tm.glide_solution(aircraft);
+    return (res.Solution== MacCready::RESULT_OK);
+  }
+  virtual double search(double ce) {
+    return find_min(ce);
+  }
+protected:
+  TaskMacCreadyTravelled tm;
+  GLIDE_RESULT res;
+  const AIRCRAFT_STATE &aircraft;
+  double dt;
+};
+
+
+double
+OrderedTask::cruise_efficiency(const AIRCRAFT_STATE &aircraft, 
+                               const double mc)
+{
+  TaskCruiseEfficiency bmc(tps,activeTaskPoint, aircraft, mc);
+  double res = bmc.search(1.0);
   return res;
 }

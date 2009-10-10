@@ -143,7 +143,7 @@ int main() {
       n_samples++;
       state_last = state;
       if (state.Location.Longitude>10.5) { exit(0); }
-      state.Time += 1.0;
+      state.Time += 1.0/33.0;
     }
     printf("[enter to continue]\n");
     char c = getchar();

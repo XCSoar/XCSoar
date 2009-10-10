@@ -2,29 +2,16 @@
 #include <math.h>
 #include <stdio.h>
 #include <assert.h>
+#include <algorithm>
 
-/*
-double ZeroFinder::find(const double xstart) {
-  const double dx = precision;
-  double xbest = xstart;
-  double fbest = 0;
-  bool first = true;
-
-  for (double x=xmin; x<=xmax; x+= dx) {
-    if (valid(x)) {
-      double fthis = fabs(f(x));
-      if (first || (fthis<fbest)) {
-        xbest = x;
-        fbest = fthis;
-        first = false;
-        printf("best %g f %g\n",x,fbest);
-      }
-    }
-  }  
-  return xbest;
+double ZeroFinder::x_limited(double x) {
+  x = std::min(xmax,std::max(xmin,x));
+  return x;
 }
-*/
 
+double ZeroFinder::f_limited(double x) {
+  return f(x_limited(x));
+}
 
 /*
  ************************************************************************
@@ -77,20 +64,20 @@ double ZeroFinder::find(const double xstart) {
 #define EPSILON 1.0e-16
 #define SQRT_EPSILON 1.0e-8
 
-double ZeroFinder::find_zero(const double xstart) {
+double ZeroFinder::_find_zero(const double xstart) {
   double a,b,c;				/* Abscissae, descr. see above	*/
   double fa;				/* f(a)				*/
   double fb;				/* f(b)				*/
   double fc;				/* f(c)				*/
 
   a = xmin;  
-  fa = f(a);  
+  fa = f_limited(a);  
 
   b = xmax;  
-  fb = f(b);
+  fb = f_limited(b);
 
   c = a; 
-  fc = fc;
+  fc = fa;
 
   for(;;)		/* Main iteration loop	*/
   {
@@ -112,7 +99,7 @@ double ZeroFinder::find_zero(const double xstart) {
     new_step = (c-b)/2;
 
     if( fabs(new_step) <= tol_act || fb == (double)0 ) {
-      fb = f(b); // call once more
+      fb = f_limited(b); // call once more
       return b;				/* Acceptable approx. is found	*/
     }
 
@@ -156,7 +143,9 @@ double ZeroFinder::find_zero(const double xstart) {
     }
 
     a = b;  fa = fb;			/* Save the previous approx.	*/
-    b += new_step;  fb = f(b);	        /* Do step to a new approxim.	*/
+    b += new_step;                      /* Do step to a new approxim.	*/
+
+    fb = f_limited(b);
     if( (fb > 0 && fc > 0) || (fb < 0 && fc < 0) )
     {                 			/* Adjust c for it to have a sign*/
       c = a;  fc = fa;                  /* opposite to that of b	*/
@@ -216,7 +205,7 @@ double ZeroFinder::find_zero(const double xstart) {
  *
  ************************************************************************
  */
-double ZeroFinder::find_min(const double xstart)
+double ZeroFinder::_find_min(const double xstart)
 {
   double x,v,w;				/* Abscissae, descr. see above	*/
   double fx;				/* f(x)				*/
@@ -228,7 +217,7 @@ double ZeroFinder::find_min(const double xstart)
 
   assert( tolerance > 0 && b > a );
 
-  v = b + r*(b-a);  fv = f(v); /* First step - always gold section*/
+  v = b + r*(b-a);  fv = f_limited(v); /* First step - always gold section*/
   x = v;  w = v;
   fx=fv;  fw=fv;
 
@@ -243,7 +232,7 @@ double ZeroFinder::find_min(const double xstart)
     double new_step;      		/* Step at this iteration       */
 
     if( fabs(x-middle_range) + range/2 <= 2*tol_act ) {
-      fx = f(x); // call once more
+      fx = f_limited(x); // call once more
       return x;				/* Acceptable approx. is found	*/
     }
 
@@ -289,7 +278,7 @@ double ZeroFinder::find_min(const double xstart)
 				/* Obtain the next approximation to min	*/
     {				/* and reduce the enveloping range	*/
       double t = x + new_step;	/* Tentative point for the min	*/
-      double ft = f(t);
+      double ft = f_limited(t);
       if( ft <= fx )
       {                                 /* t is a better approximation	*/
 	if( t < x )			/* Reduce the range so that	*/

@@ -24,9 +24,14 @@ public:
   GLIDE_RESULT glide_solution(const AIRCRAFT_STATE &aircraft);
   void clearance_heights(const AIRCRAFT_STATE &);
   void report(const AIRCRAFT_STATE &aircraft);
+
   void set_mc(double mc) {
     msolv.set_mc(mc);
   };
+  void set_cruise_efficiency(double ce) {
+    msolv.set_cruise_efficiency(ce);
+  };
+
 protected:
   virtual double get_min_height(const AIRCRAFT_STATE &aircraft) = 0;
   virtual GLIDE_RESULT tp_solution(const unsigned i,
