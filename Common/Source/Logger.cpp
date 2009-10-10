@@ -38,11 +38,19 @@
 #include "Logger.h"
 #include "LoggerImpl.hpp"
 
+/**
+ * Constructor of the Logger class
+ * @return
+ */
 Logger::Logger()
 {
   _logger = new LoggerImpl();
 };
 
+/**
+ * Destructor of the Logger class
+ * @return
+ */
 Logger::~Logger()
 {
   Poco::ScopedRWLock protect(lock, true);

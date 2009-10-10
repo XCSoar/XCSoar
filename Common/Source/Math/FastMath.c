@@ -48,6 +48,9 @@ double INVCOSINETABLE[4096];
 int ISINETABLE[4096];
 int ICOSTABLE[4096];
 
+/**
+ * Fills the FastSine/FastCosine table
+ */
 void InitSineTable(void)
 {
   int i;
@@ -73,7 +76,13 @@ void InitSineTable(void)
     }
 }
 
-
+/**
+ * Calculates the square root of val
+ *
+ * See http://www.azillionmonkeys.com/qed/sqroot.html
+ * @param val Value
+ * @return Rounded square root of val
+ */
 unsigned int isqrt4(unsigned long val) {
   unsigned int temp, g=0;
 
@@ -110,7 +119,3 @@ unsigned int isqrt4(unsigned long val) {
   if (val >= temp) g++;
   return g;
 }
-
-// http://www.azillionmonkeys.com/qed/sqroot.html
-
-
