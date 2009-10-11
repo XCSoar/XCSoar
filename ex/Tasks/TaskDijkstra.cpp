@@ -11,18 +11,18 @@
 const SearchPoint &
 TaskDijkstra::get_point(const ScanTaskPoint &sp) const
 {
-  return task->tps[sp.first]->get_search_points()[sp.second];
+  return task->get_tp_search_points(sp.first)[sp.second];
 }
 
 
 unsigned TaskDijkstra::distance(const ScanTaskPoint &curNode,
-                              const SearchPoint &currentLocation)
+                              const SearchPoint &currentLocation) const
 {
   return get_point(curNode).flat_distance(currentLocation);
 }
 
 unsigned TaskDijkstra::distance(const ScanTaskPoint &s1,
-                              const ScanTaskPoint &s2)
+                              const ScanTaskPoint &s2) const
 {
   return get_point(s1).flat_distance(get_point(s2));
 }
@@ -33,7 +33,7 @@ void TaskDijkstra::add_edges(Dijkstra<ScanTaskPoint> &dijkstra,
   ScanTaskPoint destination;
   destination.first = curNode.first+1;
 
-  unsigned dsize = task->tps[destination.first]->get_search_points().size();
+  const unsigned dsize = task->get_tp_search_points(destination.first).size();
 
   for (destination.second=0; 
        destination.second< dsize; destination.second++) {
@@ -54,11 +54,11 @@ TaskDijkstra::~TaskDijkstra() {
 }
 
 
-TaskDijkstra::TaskDijkstra(OrderedTask* _task):
+TaskDijkstra::TaskDijkstra(OrderedTask* _task, const unsigned task_size):
   task(_task),
-  shortest(false)
+  shortest(false),
+  num_taskpoints(task_size)
 {
-  num_taskpoints = task->tps.size();
   solution.reserve(num_taskpoints);
 }
 
@@ -130,7 +130,7 @@ TaskDijkstra::distance_opt_achieved(const SearchPoint &currentLocation,
 //        -dijkstra.dist();
 
       unsigned d_remaining = 0;
-      TaskDijkstra inner_dijkstra(task);
+      TaskDijkstra inner_dijkstra(task, num_taskpoints);
 
       if (curNode.first == num_taskpoints-1) {
         d_remaining = 0;
@@ -169,9 +169,9 @@ TaskDijkstra::distance_opt_achieved(const SearchPoint &currentLocation,
 
   for (unsigned j=0; j<num_taskpoints; j++) {
     if (req_shortest) {
-      task->tps[j]->set_search_min(solution[j]);
+      task->set_tp_search_min(j, solution[j]);
     } else {
-      task->tps[j]->set_search_max(solution[j]);
+      task->set_tp_search_max(j, solution[j]);
     }
   }
 

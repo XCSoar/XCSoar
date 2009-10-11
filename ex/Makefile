@@ -21,6 +21,7 @@ OUTPUTS 	:= test
 
 INCLUDES := -I.
 
+PROFILE := 
 OPTIMIZE := -g
 
 CPPFLAGS := $(INCLUDES) 

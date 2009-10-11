@@ -33,7 +33,7 @@ OrderedTask::update_geometry() {
 void 
 OrderedTask::scan_distance(const GEOPOINT &location, bool full) 
 { 
-  TaskDijkstra dijkstra(this);
+  TaskDijkstra dijkstra(this, tps.size());
   ScanTaskPoint start(0,0);
 
   SearchPoint ac(location, task_projection);

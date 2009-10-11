@@ -1,10 +1,11 @@
 #ifndef TASK_MACCREADY_HPP
 #define TASK_MACCREADY_HPP
 
-#include "GlideSolvers/MacCready.hpp"
-#include "BaseTask/OrderedTaskPoint.hpp"
 #include "Navigation/Aircraft.hpp"
+#include "BaseTask/OrderedTaskPoint.hpp"
+#include "GlideSolvers/MacCready.hpp"
 #include <vector>
+#include <iostream>
 
 class TaskMacCready {
 public:

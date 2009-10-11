@@ -19,7 +19,6 @@ public:
   OrderedTask();
   ~OrderedTask();
 
-  std::vector<OrderedTaskPoint*> tps;
   std::vector<TaskLeg*> legs;
 
   TaskPoint* getActiveTaskPoint();
@@ -44,8 +43,26 @@ public:
   };
   void report(const AIRCRAFT_STATE &state);
 
+  const TaskStats& get_stats() const {
+    return stats;
+  }
+  unsigned task_size() const {
+    return tps.size();
+  }
+
+  // these used by task dijkstra
+  const SearchPointVector& get_tp_search_points(unsigned tp) const {
+    return tps[tp]->get_search_points();
+  }
+  void set_tp_search_min(unsigned tp, const SearchPoint &sol) {
+    tps[tp]->set_search_min(sol);
+  }
+  void set_tp_search_max(unsigned tp, const SearchPoint &sol) {
+    tps[tp]->set_search_max(sol);
+  }
 private:
   TaskStats stats;
+  std::vector<OrderedTaskPoint*> tps;
 
   double distance_nominal;
   double distance_min;

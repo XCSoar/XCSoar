@@ -3,10 +3,9 @@
 #ifndef SAMPLEDTASKPOINT_H
 #define SAMPLEDTASKPOINT_H
 
-#include <vector>
 #include "Util.h"
+#include "SearchPointVector.hpp"
 #include "Scoring/ObservationZone.hpp"
-#include "SearchPoint.hpp"
 #include "TaskPoint.hpp"
 #include "TaskProjection.h"
 
@@ -27,9 +26,9 @@ public:
     clear_sample_points();
   };
 
-  const std::vector<SearchPoint>& get_search_points(bool cheat=false);
+  const SearchPointVector& get_search_points(bool cheat=false);
 
-  const std::vector<SearchPoint>& get_boundary_points() const;
+  const SearchPointVector& get_boundary_points() const;
 
   virtual bool prune_boundary_points();
 
@@ -37,15 +36,10 @@ public:
 
   virtual void update_projection();
 
-  virtual void clear_boundary_points() {
-    boundary_points.clear();
-    search_max = SearchPoint(getLocation(), task_projection);
-    search_min = SearchPoint(getLocation(), task_projection);
-  }
+  virtual void clear_boundary_points();
 
-  virtual void clear_sample_points() {
-    sampled_points.clear();
-  }
+  virtual void clear_sample_points();
+
   virtual void clear_sample_all_but_last(const AIRCRAFT_STATE&);
 
   void set_search_max(const SearchPoint &i) {
@@ -80,8 +74,8 @@ protected:
   const TaskProjection& task_projection;
 
 private:
-  std::vector<SearchPoint> sampled_points;
-  std::vector<SearchPoint> boundary_points;
+  SearchPointVector sampled_points;
+  SearchPointVector boundary_points;
   SearchPoint search_max;
   SearchPoint search_min;
 };

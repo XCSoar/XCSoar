@@ -3,15 +3,14 @@
 
 #include "Util.h"
 #include "Dijkstra.hpp"
-#include "BaseTask/SearchPoint.hpp"
+#include "BaseTask/SearchPointVector.hpp"
 #include <stdio.h>
-#include <vector>
 
 class OrderedTask;
 
 class TaskDijkstra {
 public:
-  TaskDijkstra(OrderedTask* _task);
+  TaskDijkstra(OrderedTask* _task, unsigned task_size);
   ~TaskDijkstra();
 
   unsigned distance_opt(const ScanTaskPoint &start,
@@ -25,18 +24,18 @@ private:
                  const ScanTaskPoint &curNode);
 
   unsigned distance(const ScanTaskPoint &sp,
-                    const SearchPoint &loc);
+                    const SearchPoint &loc) const;
 
   unsigned distance(const ScanTaskPoint &sp1,
-                    const ScanTaskPoint &sp2);
+                    const ScanTaskPoint &sp2) const;
 
-  unsigned num_taskpoints;
+  const unsigned num_taskpoints;
 
   /**
    * @clientCardinality 1
    * @supplierCardinality 0..* 
    */
-  std::vector<SearchPoint> solution;
+  SearchPointVector solution;
 
   bool shortest;
 

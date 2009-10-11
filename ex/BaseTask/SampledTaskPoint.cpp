@@ -20,13 +20,13 @@ bool SampledTaskPoint::prune_boundary_points()
   return changed;
 }
 
-const std::vector<SearchPoint>& 
+const SearchPointVector& 
 SampledTaskPoint::get_boundary_points() const
 {
   return boundary_points;
 }
 
-const std::vector<SearchPoint>& 
+const SearchPointVector& 
 SampledTaskPoint::get_search_points(bool cheat)
 {
   if (cheat && !sampled_points.size()) {
@@ -94,7 +94,8 @@ SampledTaskPoint::update_projection()
 }
 
 void 
-SampledTaskPoint::clear_sample_all_but_last(const AIRCRAFT_STATE& ref_last) {
+SampledTaskPoint::clear_sample_all_but_last(const AIRCRAFT_STATE& ref_last) 
+{
   if (sampled_points.size()) {
     sampled_points.clear();
     printf("start location %g %g\n", ref_last.Location.Longitude,
@@ -102,3 +103,18 @@ SampledTaskPoint::clear_sample_all_but_last(const AIRCRAFT_STATE& ref_last) {
     update_sample(ref_last); // add last point
   }
 }
+
+void
+SampledTaskPoint::clear_boundary_points()
+{
+  boundary_points.clear();
+  search_max = SearchPoint(getLocation(), task_projection);
+  search_min = SearchPoint(getLocation(), task_projection);
+}
+
+void 
+SampledTaskPoint::clear_sample_points() {
+  sampled_points.clear();
+}
+
+

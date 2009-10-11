@@ -55,7 +55,7 @@ private:
   GLIDE_RESULT solve_cruise(const AIRCRAFT_STATE &aircraft,
                             const GLIDE_STATE &task) const;
 
-  double SinkRate(double V) const;
+  double SinkRate(const double V) const;
 
   double cruise_bearing(const double V, const double Wn, 
                         const double theta) const;
