@@ -4,9 +4,20 @@
 #include "OrderedTask.h"
 #include <stdio.h>
 
-// Example usage (nodes and edges are represented with ints)
-
 #define MAX_DIST 100000
+
+TaskDijkstra::~TaskDijkstra() {
+}
+
+
+TaskDijkstra::TaskDijkstra(OrderedTask* _task, const unsigned task_size):
+  task(_task),
+  shortest(false),
+  num_taskpoints(task_size)
+{
+  solution.reserve(num_taskpoints);
+}
+
 
 const SearchPoint &
 TaskDijkstra::get_point(const ScanTaskPoint &sp) const
@@ -38,28 +49,11 @@ void TaskDijkstra::add_edges(Dijkstra<ScanTaskPoint> &dijkstra,
   for (destination.second=0; 
        destination.second< dsize; destination.second++) {
 
-    unsigned dr = distance(curNode, destination);
+    const unsigned dr = distance(curNode, destination);
     if (dr) {
-      if (!shortest) {
-        dr = MAX_DIST-dr;
-//        dr = -dr;
-      }
-      dijkstra.link(destination, dr);
+      dijkstra.link(destination, shortest? dr: MAX_DIST-dr);
     }
   }
-}
-
-
-TaskDijkstra::~TaskDijkstra() {
-}
-
-
-TaskDijkstra::TaskDijkstra(OrderedTask* _task, const unsigned task_size):
-  task(_task),
-  shortest(false),
-  num_taskpoints(task_size)
-{
-  solution.reserve(num_taskpoints);
 }
 
 
@@ -75,7 +69,7 @@ unsigned TaskDijkstra::distance_opt(const ScanTaskPoint &start,
 
   while (!dijkstra.empty()) {
 
-    ScanTaskPoint curNode = dijkstra.pop();
+    const ScanTaskPoint curNode = dijkstra.pop();
 
     if (curNode.first != lastNode.first) {
       solution[curNode.first] = get_point(curNode);
@@ -83,12 +77,8 @@ unsigned TaskDijkstra::distance_opt(const ScanTaskPoint &start,
     }
 
     if (curNode.first == num_taskpoints-1) {
-      unsigned d = dijkstra.dist();
-      if (!shortest) {
-        d= MAX_DIST*(curNode.first-start.first)-d;
-//        d = -d;
-      }
-      return d;
+      const unsigned d = dijkstra.dist();
+      return shortest? d: (MAX_DIST*(curNode.first-start.first)-d);
     }
 
     add_edges(dijkstra, curNode);
@@ -103,7 +93,7 @@ TaskDijkstra::distance_opt_achieved(const SearchPoint &currentLocation,
 {
   shortest = false; // internally
 
-  ScanTaskPoint start(0,0);
+  const ScanTaskPoint start(0,0);
   ScanTaskPoint lastNode(1000,1000);
   Dijkstra<ScanTaskPoint> dijkstra(start);
 
@@ -115,7 +105,7 @@ TaskDijkstra::distance_opt_achieved(const SearchPoint &currentLocation,
 
   while (!dijkstra.empty()) {
 
-    ScanTaskPoint curNode = dijkstra.pop();
+    const ScanTaskPoint curNode = dijkstra.pop();
 
     if (curNode.first != lastNode.first) {
       solution[curNode.first] = get_point(curNode);
@@ -126,11 +116,10 @@ TaskDijkstra::distance_opt_achieved(const SearchPoint &currentLocation,
       add_edges(dijkstra, curNode);
     } else {
 
-      unsigned d_acc = MAX_DIST*activeStage-dijkstra.dist();
-//        -dijkstra.dist();
+      const unsigned d_acc = MAX_DIST*activeStage-dijkstra.dist();
 
-      unsigned d_remaining = 0;
       TaskDijkstra inner_dijkstra(task, num_taskpoints);
+      unsigned d_remaining = 0;
 
       if (curNode.first == num_taskpoints-1) {
         d_remaining = 0;
@@ -142,7 +131,7 @@ TaskDijkstra::distance_opt_achieved(const SearchPoint &currentLocation,
       if (req_shortest) {
         // need to take into account distance from here to target
 
-        unsigned d_this = distance(curNode, currentLocation);
+        const unsigned d_this = distance(curNode, currentLocation);
 
         if (d_remaining+d_this<min_d) {
           min_d = d_remaining+d_this; 
