@@ -25,7 +25,7 @@ bool GLIDE_RESULT::superior(const GLIDE_RESULT &s2) const
   }
 }
 
-void GLIDE_RESULT::print(std::ostream& f)
+void GLIDE_RESULT::print(std::ostream& f) const
 {
   if (Solution != MacCready::RESULT_OK) {
     f << "#     Solution NOT OK\n";

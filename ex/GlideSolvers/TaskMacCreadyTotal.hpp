@@ -11,6 +11,7 @@ public:
                      const unsigned _activeTaskPoint,
                      const double _mc);
   double effective_distance(const double time_remaining) const;
+  double effective_leg_distance(const double time_remaining) const;
 
 protected:
   virtual GLIDE_RESULT tp_solution(const unsigned i,

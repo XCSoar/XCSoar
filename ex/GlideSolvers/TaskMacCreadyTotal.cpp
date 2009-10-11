@@ -48,3 +48,11 @@ TaskMacCreadyTotal::effective_distance(const double time_remaining) const
   }
   return d_total;
 }
+
+double 
+TaskMacCreadyTotal::effective_leg_distance(const double time_remaining) const
+{
+  double p = (time_remaining)/gs[activeTaskPoint].TimeElapsed;
+  return p*gs[activeTaskPoint].Distance;
+}
+

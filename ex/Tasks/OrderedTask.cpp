@@ -101,18 +101,18 @@ OrderedTask::update_sample(const AIRCRAFT_STATE &state,
   glide_solution_planned(state, mc);
 
   // do this last
+
+  double dt = state.Time-state_last.Time;
+
   stats.total.set_times(ts->get_state_entered().Time,
-                        state,
-                        stats.total.solution_remaining.TimeElapsed);
+                        state, dt);
 
   if (activeTaskPoint>0) {
     stats.current_leg.set_times(tps[activeTaskPoint-1]->get_state_entered().Time,
-                                state,
-                                stats.current_leg.solution_remaining.TimeElapsed);
+                                state, dt);
   } else {
     stats.current_leg.set_times(-1,
-                                state,
-                                stats.current_leg.solution_remaining.TimeElapsed);
+                                state, dt);
   }
 
   // other calcs
@@ -267,7 +267,9 @@ OrderedTask::glide_solution_planned(const AIRCRAFT_STATE &aircraft,
   stats.total.remaining_effective.
     set_distance(tm.effective_distance(stats.total.solution_remaining.TimeElapsed));
 
-  // TODO: leg remaining effective
+  stats.current_leg.remaining_effective.
+    set_distance(tm.effective_leg_distance(stats.current_leg.solution_remaining.TimeElapsed));
+
 }
 
 double
@@ -339,8 +341,8 @@ void OrderedTask::report(const AIRCRAFT_STATE &state)
   f6 << state.Time
      << " " << activeTaskPoint
      << " " << stats.mc_best
-     << " " << stats.total.remaining_effective.distance
-     << " " << stats.total.remaining.distance 
+     << " " << stats.total.remaining_effective.get_distance()
+     << " " << stats.total.remaining.get_distance() 
      << " " << stats.cruise_efficiency 
      << "\n";
   f6.flush();

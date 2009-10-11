@@ -1,11 +1,12 @@
 #ifndef TASKSTATS_HPP
 #define TASKSTATS_HPP
 
-#include "Navigation/Aircraft.hpp"
 #include "GlideSolvers/MacCready.hpp"
 #include <algorithm>
 #include <fstream>
 #include <iostream>
+
+struct AIRCRAFT_STATE;
 
 class ElementStat;
 
@@ -14,16 +15,31 @@ class DistanceStat
 public:
   DistanceStat():
     distance(0.0),
+    distance_last(0.0),
     speed(0.0) {};
 
-  double distance;
-  double speed;
   void set_distance(const double d) {
     distance = d;
   }
-  void print(std::ostream &f);
-private:
+  void print(std::ostream &f) const;
+
+  double get_speed() const {
+    return speed;
+  };
+  double get_speed_incremental() const {
+    return speed_incremental;
+  };
+  double get_distance() const {
+    return distance;
+  };
+
   virtual void calc_speed(const ElementStat* es) = 0;
+  virtual void calc_incremental_speed(const double dt);
+protected:
+  double distance;
+  double speed;
+  double speed_incremental;
+  double distance_last;
 };
 
 class DistanceRemainingStat:
@@ -45,6 +61,7 @@ class DistanceTravelledStat:
 {
 public:
   virtual void calc_speed(const ElementStat* es);
+  virtual void calc_incremental_speed(const double dt);
 };
 
 class ElementStat
@@ -73,20 +90,9 @@ public:
   GLIDE_RESULT solution_remaining;
 
   void set_times(const double ts, 
-                 const AIRCRAFT_STATE& state, 
-                 const double tr) {
-    TimeStarted = ts;
-    TimeElapsed = std::max(state.Time-ts,0.0);
-    TimeRemaining = tr;
-    TimePlanned = TimeElapsed+tr;
-
-    remaining_effective.calc_speed(this);
-    remaining.calc_speed(this);
-    planned.calc_speed(this);
-    travelled.calc_speed(this);
-  }
-
-  void print(std::ostream &f);
+                 const AIRCRAFT_STATE& state,
+                 const double dt);
+  void print(std::ostream &f) const;
 
 };
 
@@ -102,7 +108,7 @@ public:
   double cruise_efficiency;
   double mc_best;
 
-  void print(std::ostream &f);
+  void print(std::ostream &f) const;
 
 };
 

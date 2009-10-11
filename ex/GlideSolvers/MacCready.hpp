@@ -91,7 +91,7 @@ struct GLIDE_RESULT {
   }
   bool superior(const GLIDE_RESULT &s2) const;
   void add(const GLIDE_RESULT &s2);
-  void print(std::ostream& f);
+  void print(std::ostream& f) const;
 };
 
 
