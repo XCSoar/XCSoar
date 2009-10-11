@@ -70,7 +70,6 @@ public:
     {
       state_entered.Time = -1;
       state_exited.Time = -1;
-
     };
 
   enum ActiveState_t {

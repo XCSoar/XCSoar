@@ -7,6 +7,8 @@
 #include "Navigation/Aircraft.hpp"
 #include "Util.h"
 
+long count_mc = 0;
+
 bool GLIDE_RESULT::superior(const GLIDE_RESULT &s2) const 
 {
   if (Solution < s2.Solution) {
@@ -26,21 +28,20 @@ bool GLIDE_RESULT::superior(const GLIDE_RESULT &s2) const
 void GLIDE_RESULT::print(std::ostream& f)
 {
   if (Solution != MacCready::RESULT_OK) {
-    f << "# Solution NOT OK\n";
+    f << "#     Solution NOT OK\n";
   }
-  f << "#  Altitude Difference " << AltitudeDifference << "\n";
-  f << "#  Distance            " << Distance << "\n";
-  f << "#  TrackBearing        " << TrackBearing << "\n";
-  f << "#  CruiseTrackBearing  " <<  CruiseTrackBearing << "\n";
-  f << "#  VOpt                " <<  VOpt << "\n";
-  f << "#  HeightClimb         " <<  HeightClimb << "\n";
-  f << "#  HeightGlide         " <<  HeightGlide << "\n";
-  f << "#  TimeElapsed         " <<  TimeElapsed << "\n";
-  f << "#  TimeVirtual         " <<  TimeVirtual << "\n";
+  f << "#    Altitude Difference " << AltitudeDifference << "\n";
+  f << "#    Distance            " << Distance << "\n";
+  f << "#    TrackBearing        " << TrackBearing << "\n";
+  f << "#    CruiseTrackBearing  " <<  CruiseTrackBearing << "\n";
+  f << "#    VOpt                " <<  VOpt << "\n";
+  f << "#    HeightClimb         " <<  HeightClimb << "\n";
+  f << "#    HeightGlide         " <<  HeightGlide << "\n";
+  f << "#    TimeElapsed         " <<  TimeElapsed << "\n";
+  f << "#    TimeVirtual         " <<  TimeVirtual << "\n";
   if (TimeElapsed>0) {
-  f << "#  V ave               " <<  Distance/TimeElapsed << "\n";
+  f << "#    Vave remaining      " <<  Distance/TimeElapsed << "\n";
   }
-  f << "\n";
 }
 
 void GLIDE_RESULT::add(const GLIDE_RESULT &s2) 
@@ -221,6 +222,8 @@ GLIDE_RESULT MacCready::solve_cruise(const AIRCRAFT_STATE &aircraft,
   double W = aircraft.WindSpeed;
   double dh = task.MinHeight-aircraft.Altitude;
 
+  count_mc++;
+
   GLIDE_RESULT result;
   result.TrackBearing = task.Bearing;
   result.CruiseTrackBearing = task.Bearing;
@@ -289,6 +292,9 @@ GLIDE_RESULT MacCready::solve_cruise(const AIRCRAFT_STATE &aircraft,
 GLIDE_RESULT MacCready::solve(const AIRCRAFT_STATE &aircraft,
                               const GLIDE_STATE &task) const
 {
+
+  count_mc++;
+
   if (task.Distance==0) {
     return solve_vertical(aircraft, task);
   } 

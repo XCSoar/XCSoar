@@ -31,7 +31,9 @@ public:
   void set_cruise_efficiency(double ce) {
     msolv.set_cruise_efficiency(ce);
   };
-
+  const GLIDE_RESULT& get_active_solution() {
+    return gs[activeTaskPoint];
+  };
 protected:
   virtual double get_min_height(const AIRCRAFT_STATE &aircraft) const = 0;
   virtual GLIDE_RESULT tp_solution(const unsigned i,

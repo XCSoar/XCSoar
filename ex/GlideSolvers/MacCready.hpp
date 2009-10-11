@@ -1,7 +1,6 @@
 #ifndef MACCREADY_HPP
 #define MACCREADY_HPP
 
-#include <math.h>
 #include <fstream>
 #include <iostream>
 

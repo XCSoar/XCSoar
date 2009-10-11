@@ -1,12 +1,18 @@
 #include <stdlib.h>
 #include <assert.h>
 #include "GlideSolvers/MacCready.hpp"
-
+#include <math.h>
 #include <stdio.h>
 
+int n_samples = 0;
+
+
+extern long count_mc;
 extern int count_distance;
+
 void distance_counts() {
-  printf("#     distance queries %d\n",count_distance); count_distance=0;
+  printf("#     distance queries %d\n",count_distance/n_samples); 
+  printf("#     mc calcs %d\n",count_mc/n_samples); 
 }
 
 #include "Tasks/TaskManager.h"
@@ -16,8 +22,6 @@ void distance_counts() {
 double small_rand() {
   return rand()*0.005/RAND_MAX;
 }
-
-int n_samples = 0;
 
 ////////////////////////////////////////////////
 
@@ -146,13 +150,17 @@ int main() {
       test_task.report(state);
       n_samples++;
       state_last = state;
-      if (state.Location.Longitude>10.5) { exit(0); }
+      if (state.Location.Longitude>10.5) { 
+        distance_counts();
+        exit(0); 
+      }
       state.Time += d/V;
     }
     printf("[enter to continue]\n");
     char c = getchar();
     (void)c;
   }
+  distance_counts();
 
 //  test_task.remove(2);
 //  test_task.scan_distance(location);

@@ -54,10 +54,11 @@ OrderedTask::scan_distance(const GEOPOINT &location, bool full)
 
   ts->scan_active(tps[activeTaskPoint]);
   distance_min = dijkstra.distance_opt_achieved(ac, true);
-  distance_remaining = ts->scan_distance_remaining(location);
-  distance_travelled = ts->scan_distance_travelled(location);
+
+  stats.total.remaining.set_distance(ts->scan_distance_remaining(location));
+  stats.total.travelled.set_distance(ts->scan_distance_travelled(location));
   distance_scored = ts->scan_distance_scored(location);
-  distance_planned = ts->scan_distance_planned();
+  stats.total.planned.set_distance(ts->scan_distance_planned());
 }
 
 
@@ -90,22 +91,33 @@ OrderedTask::update_sample(const AIRCRAFT_STATE &state,
       full_update = true;
     }
   }
+
   scan_distance(state.Location, full_update);
 
   double mc = 1.0;
-  GLIDE_RESULT gr = glide_solution_remaining(state, mc);
-  GLIDE_RESULT gt = glide_solution_travelled(state, mc);
+  // must be done in order!
+  glide_solution_remaining(state, mc);
+  glide_solution_travelled(state, mc);
+  glide_solution_planned(state, mc);
 
-  mc_best = calc_mc_best(state, mc);
-  cruise_efficiency = calc_cruise_efficiency(state, mc);
+  // do this last
+  stats.total.set_times(ts->get_state_entered().Time,
+                        state,
+                        stats.total.solution_remaining.TimeElapsed);
 
-  TaskMacCreadyTotal tm(tps,activeTaskPoint, mc);
-  GLIDE_RESULT gp = tm.glide_solution(state);
-  std::ofstream fr("res-sol-planned.txt");
-  tm.print(fr, state);
-  gp.print(fr);
+  if (activeTaskPoint>0) {
+    stats.current_leg.set_times(tps[activeTaskPoint-1]->get_state_entered().Time,
+                                state,
+                                stats.current_leg.solution_remaining.TimeElapsed);
+  } else {
+    stats.current_leg.set_times(-1,
+                                state,
+                                stats.current_leg.solution_remaining.TimeElapsed);
+  }
 
-  distance_remaining_effective = tm.effective_distance(gr.TimeElapsed);
+  // other calcs
+  stats.mc_best = calc_mc_best(state, mc);
+  stats.cruise_efficiency = calc_cruise_efficiency(state, mc);
 
   return true;
 }
@@ -216,30 +228,47 @@ OrderedTask::OrderedTask()
 
 //////////////////////////////////////
 
-GLIDE_RESULT 
+void
 OrderedTask::glide_solution_remaining(const AIRCRAFT_STATE &aircraft, 
                                       const double mc)
 {
   TaskMacCreadyRemaining tm(tps,activeTaskPoint, mc);
-  GLIDE_RESULT res = tm.glide_solution(aircraft);
+  stats.total.solution_remaining = tm.glide_solution(aircraft);
+  stats.current_leg.solution_remaining = tm.get_active_solution();
+  stats.current_leg.remaining.set_distance(tm.get_active_solution().Distance);
+
   std::ofstream fr("res-sol-remaining.txt");
   tm.print(fr, aircraft);
-  res.print(fr);
-  return res;
 }
 
-GLIDE_RESULT 
+void
 OrderedTask::glide_solution_travelled(const AIRCRAFT_STATE &aircraft, 
                                       const double mc)
 {
   TaskMacCreadyTravelled tm(tps,activeTaskPoint, mc);
-  GLIDE_RESULT res = tm.glide_solution(aircraft);
+  stats.total.solution_travelled = tm.glide_solution(aircraft);
+  stats.current_leg.solution_travelled = tm.get_active_solution();
+  stats.current_leg.travelled.set_distance(tm.get_active_solution().Distance);
   std::ofstream fr("res-sol-travelled.txt");
   tm.print(fr, aircraft);
-  res.print(fr);
-  return res;
 }
 
+void
+OrderedTask::glide_solution_planned(const AIRCRAFT_STATE &aircraft, 
+                                    const double mc)
+{
+  TaskMacCreadyTotal tm(tps,activeTaskPoint, mc);
+  stats.total.solution_planned = tm.glide_solution(aircraft);
+  stats.current_leg.solution_planned = tm.get_active_solution();
+  stats.current_leg.planned.set_distance(tm.get_active_solution().Distance);
+  std::ofstream fr("res-sol-planned.txt");
+  tm.print(fr, aircraft);
+
+  stats.total.remaining_effective.
+    set_distance(tm.effective_distance(stats.total.solution_remaining.TimeElapsed));
+
+  // TODO: leg remaining effective
+}
 
 double
 OrderedTask::calc_mc_best(const AIRCRAFT_STATE &aircraft, 
@@ -284,7 +313,7 @@ void print_sp(OrderedTaskPoint *tp, std::ostream& f) {
 
 
 extern int count_distance;
-
+extern long count_mc;
 
 void OrderedTask::report(const AIRCRAFT_STATE &state) 
 {
@@ -309,10 +338,10 @@ void OrderedTask::report(const AIRCRAFT_STATE &state)
   }
   f6 << state.Time
      << " " << activeTaskPoint
-     << " " << mc_best
-     << " " << distance_remaining_effective 
-     << " " << distance_remaining 
-     << " " << cruise_efficiency 
+     << " " << stats.mc_best
+     << " " << stats.total.remaining_effective.distance
+     << " " << stats.total.remaining.distance 
+     << " " << stats.cruise_efficiency 
      << "\n";
   f6.flush();
 
@@ -320,11 +349,9 @@ void OrderedTask::report(const AIRCRAFT_STATE &state)
   f1 << "# dist nominal " << distance_nominal << "\n";
   f1 << "# min dist after achieving max " << distance_min << "\n";
   f1 << "# max dist after achieving max " << distance_max << "\n";
-  f1 << "# dist remaining " << distance_remaining << "\n";
-  f1 << "# dist remaining effective " << distance_remaining_effective << "\n";
-  f1 << "# dist travelled " << distance_travelled << "\n";
   f1 << "# dist scored " << distance_scored << "\n";
-  f1 << "# dist planned " << distance_planned << "\n";
+
+  stats.print(f1);
 
   f1 << "#### Task points\n";
   for (unsigned i=0; i<tps.size(); i++) {

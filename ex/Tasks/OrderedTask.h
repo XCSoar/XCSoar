@@ -3,6 +3,7 @@
 #define ORDEREDTASK_H
 
 #include "Tasks/AbstractTask.h"
+#include "Tasks/TaskStats.hpp"
 #include "BaseTask/OrderedTaskPoint.hpp"
 #include "BaseTask/StartPoint.hpp"
 #include "BaseTask/TaskLeg.h"
@@ -38,31 +39,18 @@ public:
   double get_distance_max() const {
     return distance_max;
   };
-  double get_distance_remaining() const {
-    return distance_remaining;
-  };
-  double get_distance_travelled() const {
-    return distance_travelled;
-  };
   double get_distance_scored() const {
     return distance_scored;
-  };
-  double get_distance_planned() const {
-    return distance_planned;
   };
   void report(const AIRCRAFT_STATE &state);
 
 private:
+  TaskStats stats;
+
   double distance_nominal;
   double distance_min;
   double distance_max;
-  double distance_remaining;
-  double distance_remaining_effective;
-  double distance_travelled;
   double distance_scored;
-  double distance_planned;
-  double cruise_efficiency;
-  double mc_best;
 
   virtual void scan_distance(const GEOPOINT &location, bool full);
   void update_geometry();
@@ -74,10 +62,12 @@ private:
 
   TaskProjection task_projection;
 
-  GLIDE_RESULT glide_solution_remaining(const AIRCRAFT_STATE &, 
-                                        const double mc);
-  GLIDE_RESULT glide_solution_travelled(const AIRCRAFT_STATE &, 
-                                        const double mc);
+  void glide_solution_remaining(const AIRCRAFT_STATE &, 
+                                const double mc);
+  void glide_solution_travelled(const AIRCRAFT_STATE &, 
+                                const double mc);
+  void glide_solution_planned(const AIRCRAFT_STATE &, 
+                              const double mc);
 
   double calc_mc_best(const AIRCRAFT_STATE &, 
                       const double mc);

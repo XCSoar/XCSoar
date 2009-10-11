@@ -3,6 +3,7 @@
 
 #include "TaskMacCreadyTravelled.hpp"
 #include "ZeroFinder.hpp"
+#include <math.h>
 
 class TaskCruiseEfficiency: 
   public ZeroFinder
