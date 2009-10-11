@@ -46,6 +46,7 @@ public:
   virtual void clear_sample_points() {
     sampled_points.clear();
   }
+  virtual void clear_sample_all_but_last(const AIRCRAFT_STATE&);
 
   void set_search_max(const SearchPoint &i) {
     search_max = i;

@@ -13,4 +13,36 @@ plot \
      'res-sample.txt' using 1:2 with lines ls 1 title "sample"
 pause -1
 
+set size noratio
+set autoscale
+unset xrange
+unset yrange
+set title "Remaining"
+plot \
+     'res-sol-remaining.txt' using 1:3 with filledcurve x1 title "min", \
+     'res-sol-remaining.txt' using 1:4 with linespoints ls 1 title "elev", \
+     'res-sol-remaining.txt' using 1:2 with lines ls 2 title "ac"
+pause -1
+
+set title "Planned"
+plot \
+     'res-sol-planned.txt' using 1:3 with filledcurve x1 title "min", \
+     'res-sol-planned.txt' using 1:4 with linespoints ls 1 title "elev", \
+     'res-sol-planned.txt' using 1:2 with lines ls 2 title "ac planned", \
+     'res-sol-remaining.txt' using 1:2 with lines ls 3 title "ac act"
+pause -1
+
+set title "Stats - Task Distance"
+plot \
+     'res-stats.txt' using 1:4 with lines title "dist eff rem", \
+     'res-stats.txt' using 1:5 with lines title "dist eff act"
+pause -1
+
+set title "Stats - Misc"
+plot \
+     'res-stats.txt' using 1:2 with lines title "active task point", \
+     'res-stats.txt' using 1:3 with lines title "mc_best", \
+     'res-stats.txt' using 1:6 with lines title "cruise efficiency"
+pause -1
+
 

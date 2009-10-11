@@ -14,7 +14,7 @@ void distance_counts() {
 #include "BaseTask/ConvexHull/GrahamScan.hpp"
 
 double small_rand() {
-  return rand()*0.3/RAND_MAX;
+  return rand()*0.005/RAND_MAX;
 }
 
 int n_samples = 0;
@@ -42,17 +42,17 @@ void test_mc()
 
   printf("AC alt %g\n", ac.Altitude);
   gr = mc.solve(ac,gs);
-  gr.report();
+  gr.print(std::cout);
 
   ac.Altitude = 1;
   printf("AC alt %g\n", ac.Altitude);
   gr = mc.solve(ac,gs);
-  gr.report();
+  gr.print(std::cout);
 
   ac.Altitude = 3;
   printf("AC alt %g\n", ac.Altitude);
   gr = mc.solve(ac,gs);
-  gr.report();
+  gr.print(std::cout);
 
 }
 
@@ -134,16 +134,20 @@ int main() {
   state_last.Location = w[0];
 
   for (int i=0; i<num_wp-1-1; i++) {
-    for (double t=0; t<1.0; t+= 0.01) {
+    for (double t=0; t<1.0; t+= 0.002) {
       state.Location.Latitude = w[i].Latitude*(1.0-t)+w[i+1].Latitude*t+small_rand();
       state.Location.Longitude = w[i].Longitude*(1.0-t)+w[i+1].Longitude*t+small_rand();
 
+      double dx = state.Location.Longitude-state_last.Location.Longitude;
+      double dy = state.Location.Latitude-state_last.Location.Latitude;
+      double d = sqrt(dx*dx+dy*dy);
+      double V = 7.0;
       test_task.update_sample(state, state_last);
-      test_task.report(state.Location);
+      test_task.report(state);
       n_samples++;
       state_last = state;
       if (state.Location.Longitude>10.5) { exit(0); }
-      state.Time += 1.0/33.0;
+      state.Time += d/V;
     }
     printf("[enter to continue]\n");
     char c = getchar();

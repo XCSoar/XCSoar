@@ -93,3 +93,12 @@ SampledTaskPoint::update_projection()
   }
 }
 
+void 
+SampledTaskPoint::clear_sample_all_but_last(const AIRCRAFT_STATE& ref_last) {
+  if (sampled_points.size()) {
+    sampled_points.clear();
+    printf("start location %g %g\n", ref_last.Location.Longitude,
+           ref_last.Location.Latitude);
+    update_sample(ref_last); // add last point
+  }
+}

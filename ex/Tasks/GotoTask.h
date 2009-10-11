@@ -14,7 +14,7 @@ public:
     virtual TaskPoint* getActiveTaskPoint();
     virtual void setActiveTaskPoint(unsigned index);
 
-  virtual void report(const GEOPOINT &location);
+  virtual void report(const AIRCRAFT_STATE &state);
 
   virtual bool update_sample(const AIRCRAFT_STATE &, const AIRCRAFT_STATE&);
 

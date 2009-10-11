@@ -106,6 +106,21 @@ double TaskLeg::leg_distance_nominal()
 }
 
 
+double TaskLeg::leg_distance_planned()
+{
+  return
+    ::Distance(tp_origin->get_reference_travelled(), 
+               tp_destination->get_reference_travelled());
+}
+
+double TaskLeg::leg_bearing_planned()
+{
+  return
+    ::Bearing(tp_origin->get_reference_travelled(), 
+              tp_destination->get_reference_travelled());
+}
+
+
 ///////
 
 void TaskLeg::update_geometry()

@@ -12,7 +12,7 @@ void GotoTask::setActiveTaskPoint(unsigned index)
 }
 
 
-void GotoTask::report(const GEOPOINT &location)
+void GotoTask::report(const AIRCRAFT_STATE &state)
 {
 
 }

@@ -160,9 +160,34 @@ double OrderedTaskPoint::scan_distance_nominal()
   }
 }
 
+double OrderedTaskPoint::scan_distance_planned() 
+{
+  // distance from start to the task point
+  // (accumulates towards finish)
+  if (leg_in) {
+    this_distance_planned = leg_in->leg_distance_planned();
+    bearing_planned = leg_in->leg_bearing_planned();
+  } else {
+    this_distance_planned = 0.0;
+    bearing_planned = 0.0;
+  }
+
+  if (leg_in) {
+    distance_planned = leg_in->leg_distance_planned()
+      +leg_in->get_origin()->distance_planned;
+  } else {
+    distance_planned = 0;
+  }
+  if (leg_out) {
+    return leg_out->get_destination()->scan_distance_planned();
+  } else {
+    return distance_planned;
+  }
+}
+
+
 double OrderedTaskPoint::scan_distance_travelled(const GEOPOINT &ref) 
 {
-
   if (leg_in) {
     this_distance_travelled = leg_in->leg_distance_travelled(ref);
   } else {
@@ -224,12 +249,14 @@ OrderedTaskPoint::transition_exit(const AIRCRAFT_STATE & ref_now,
 
 
 void 
-OrderedTaskPoint::print(std::ofstream& f)
+OrderedTaskPoint::print(std::ostream& f)
 {
   f << "# Bearing travelled " << bearing_travelled << "\n";
   f << "# Distance travelled " << this_distance_travelled << "\n";
   f << "# Bearing remaining " << bearing_remaining << "\n";
   f << "# Distance remaining " << this_distance_remaining << "\n";
+  f << "# Bearing planned " << bearing_planned << "\n";
+  f << "# Distance planned " << this_distance_planned << "\n";
   f << "# Entered " << state_entered.Time << "\n";
 }
 
@@ -265,6 +292,18 @@ GLIDE_RESULT OrderedTaskPoint::glide_solution_travelled(const AIRCRAFT_STATE &ac
   GLIDE_STATE gs;
   gs.Distance = get_distance_travelled();
   gs.Bearing = get_bearing_travelled();
+  gs.MinHeight = std::max(minH,getElevation());
+
+  return msolv.solve(ac,gs);
+}
+
+GLIDE_RESULT OrderedTaskPoint::glide_solution_planned(const AIRCRAFT_STATE &ac, 
+                                                      const MacCready &msolv,
+                                                      const double minH)
+{
+  GLIDE_STATE gs;
+  gs.Distance = get_distance_planned();
+  gs.Bearing = get_bearing_planned();
   gs.MinHeight = std::max(minH,getElevation());
 
   return msolv.solve(ac,gs);

@@ -1,0 +1,27 @@
+#ifndef TASKMACCREADYTOTAL_HPP
+#define TASKMACCREADYTOTAL_HPP
+
+#include "GlideSolvers/TaskMacCready.hpp"
+
+class TaskMacCreadyTotal: 
+  public TaskMacCready
+{
+public:
+  TaskMacCreadyTotal(const std::vector<OrderedTaskPoint*> &_tps,
+                     const unsigned _activeTaskPoint,
+                     const double _mc);
+  double effective_distance(const double time_remaining) const;
+
+protected:
+  virtual GLIDE_RESULT tp_solution(const unsigned i,
+                                   const AIRCRAFT_STATE &aircraft, 
+                                   double minH) const;
+  virtual double get_min_height(const AIRCRAFT_STATE &aircraft) const {
+    return 0.0;
+  }
+  virtual const AIRCRAFT_STATE get_aircraft_start(const AIRCRAFT_STATE &aircraft) const;
+
+};
+
+
+#endif

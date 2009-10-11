@@ -23,21 +23,24 @@ bool GLIDE_RESULT::superior(const GLIDE_RESULT &s2) const
   }
 }
 
-void GLIDE_RESULT::report()
+void GLIDE_RESULT::print(std::ostream& f)
 {
   if (Solution != MacCready::RESULT_OK) {
-    printf("Solution NOT OK\n");
+    f << "# Solution NOT OK\n";
   }
-  printf("  Altitude Difference %4.2f\n",AltitudeDifference);
-  printf("  Distance            %4.2f\n",Distance);
-  printf("  TrackBearing        %4.2f\n",TrackBearing);
-  printf("  CruiseTrackBearing  %4.2f\n", CruiseTrackBearing);
-  printf("  VOpt                %4.2f\n", VOpt);
-  printf("  HeightClimb         %4.2f\n", HeightClimb);
-  printf("  HeightGlide         %4.2f\n", HeightGlide);
-  printf("  TimeElapsed         %4.2f\n", TimeElapsed);
-  printf("  TimeVirtual         %4.2f\n", TimeVirtual);
-  printf("\n");
+  f << "#  Altitude Difference " << AltitudeDifference << "\n";
+  f << "#  Distance            " << Distance << "\n";
+  f << "#  TrackBearing        " << TrackBearing << "\n";
+  f << "#  CruiseTrackBearing  " <<  CruiseTrackBearing << "\n";
+  f << "#  VOpt                " <<  VOpt << "\n";
+  f << "#  HeightClimb         " <<  HeightClimb << "\n";
+  f << "#  HeightGlide         " <<  HeightGlide << "\n";
+  f << "#  TimeElapsed         " <<  TimeElapsed << "\n";
+  f << "#  TimeVirtual         " <<  TimeVirtual << "\n";
+  if (TimeElapsed>0) {
+  f << "#  V ave               " <<  Distance/TimeElapsed << "\n";
+  }
+  f << "\n";
 }
 
 void GLIDE_RESULT::add(const GLIDE_RESULT &s2) 

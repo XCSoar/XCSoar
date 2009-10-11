@@ -6,7 +6,11 @@
 #include "TaskPoints/FAISectorFinishPoint.hpp"
 #include "TaskPoints/FAISectorASTPoint.hpp"
 #include "TaskPoints/FAICylinderASTPoint.hpp"
-#include "GlideSolvers/TaskMacCready.hpp"
+#include "GlideSolvers/TaskMacCreadyTravelled.hpp"
+#include "GlideSolvers/TaskMacCreadyRemaining.hpp"
+#include "GlideSolvers/TaskMacCreadyTotal.hpp"
+#include "GlideSolvers/TaskCruiseEfficiency.hpp"
+#include "GlideSolvers/TaskBestMc.hpp"
 
 void
 OrderedTask::update_geometry() {
@@ -26,7 +30,8 @@ OrderedTask::update_geometry() {
   }
 }
 
-void OrderedTask::scan_distance(const GEOPOINT &location, bool full) 
+void 
+OrderedTask::scan_distance(const GEOPOINT &location, bool full) 
 { 
   TaskDijkstra dijkstra(this);
   ScanTaskPoint start(0,0);
@@ -52,92 +57,13 @@ void OrderedTask::scan_distance(const GEOPOINT &location, bool full)
   distance_remaining = ts->scan_distance_remaining(location);
   distance_travelled = ts->scan_distance_travelled(location);
   distance_scored = ts->scan_distance_scored(location);
-  ts->scan_bearing_travelled(location);
-  ts->scan_bearing_remaining(location);
+  distance_planned = ts->scan_distance_planned();
 }
 
 
-void print_tp(OrderedTaskPoint *tp, std::ofstream& f) {
-  unsigned n= tp->get_boundary_points().size();
-  for (unsigned i=0; i<n; i++) {
-    GEOPOINT loc = tp->get_boundary_points()[i].getLocation();
-    f << loc.Longitude << " " << loc.Latitude << "\n";
-  }
-  f << "\n";
-}
-
-void print_sp(OrderedTaskPoint *tp, std::ofstream& f) {
-  unsigned n= tp->get_search_points().size();
-  for (unsigned i=0; i<n; i++) {
-    GEOPOINT loc = tp->get_search_points()[i].getLocation();
-    f << loc.Longitude << " " << loc.Latitude << "\n";
-  }
-  f << "\n";
-}
-
-extern int count_distance;
-
-
-void OrderedTask::report(const GEOPOINT &location) 
-{
-/*
-  d = dijkstra.distance_opt(start,true);
-  printf("# absolute min dist %g\n",d);
-
-  d = dijkstra.distance_opt(start,false);
-  printf("# absolute max dist %g\n",d);
-*/
-  std::ofstream f1("res-task.txt");
-  std::ofstream f2("res-max.txt");
-  std::ofstream f3("res-min.txt");
-  static std::ofstream f4("res-sample.txt");
-  std::ofstream f5("res-ssample.txt");
-
-  f1 << "#### Distances\n";
-  f1 << "# dist nominal " << distance_nominal << "\n";
-  f1 << "# min dist after achieving max " << distance_min << "\n";
-  f1 << "# max dist after achieving max " << distance_max << "\n";
-  f1 << "# dist remaining " << distance_remaining << "\n";
-  f1 << "# dist travelled " << distance_travelled << "\n";
-  f1 << "# dist scored " << distance_scored << "\n";
-
-  f1 << "#### Task points\n";
-  for (unsigned i=0; i<tps.size(); i++) {
-    f1 << "## point " << i << "\n";
-    print_tp(tps[i], f1);
-    tps[i]->print(f1);
-    f1 << "\n\n";
-  }
-
-  f5 << "#### Task sampled points\n";
-  for (unsigned i=0; i<tps.size(); i++) {
-    f5 << "## point " << i << "\n";
-    print_sp(tps[i], f5);
-  }
-
-  f4 <<  location.Longitude << " " 
-     <<  location.Latitude << "\n";
-
-  f2 << "#### Max task\n";
-  for (unsigned i=0; i<tps.size(); i++) {
-    OrderedTaskPoint *tp = tps[i];
-    f2 <<  tp->getMaxLocation().Longitude << " " 
-       <<  tp->getMaxLocation().Latitude << "\n";
-  }
-
-  f3 << "#### Min task\n";
-  for (unsigned i=0; i<tps.size(); i++) {
-    OrderedTaskPoint *tp = tps[i];
-    f3 <<  tp->getMinLocation().Longitude << " " 
-       <<  tp->getMinLocation().Latitude << "\n";
-  }
-
-//  printf("distance tests %d\n", count_distance);
-//  count_distance = 0;
-}
-
-bool OrderedTask::update_sample(const AIRCRAFT_STATE &state, 
-                         const AIRCRAFT_STATE& state_last)
+bool 
+OrderedTask::update_sample(const AIRCRAFT_STATE &state, 
+                           const AIRCRAFT_STATE& state_last)
 {
   ts->scan_active(tps[activeTaskPoint]);
 
@@ -154,7 +80,10 @@ bool OrderedTask::update_sample(const AIRCRAFT_STATE &state,
         printf("transition to sector %d\n", i+1);
         setActiveTaskPoint(i+1);
         ts->scan_active(tps[activeTaskPoint]);
-        // auto advance on exit for testing
+
+        // on sector exit, must update samples since start sector
+        // exit transition clears samples
+        full_update = true;
       }
     }
     if (tps[i]->update_sample(state)) {
@@ -163,17 +92,20 @@ bool OrderedTask::update_sample(const AIRCRAFT_STATE &state,
   }
   scan_distance(state.Location, full_update);
 
-  printf("Time %g\n", state.Time);
-
   double mc = 1.0;
   GLIDE_RESULT gr = glide_solution_remaining(state, mc);
   GLIDE_RESULT gt = glide_solution_travelled(state, mc);
 
-  double mbest = best_mc(state, mc);
-  printf("m best %g\n", mbest);
+  mc_best = calc_mc_best(state, mc);
+  cruise_efficiency = calc_cruise_efficiency(state, mc);
 
-  double ce = cruise_efficiency(state, mc);
-  printf("cruise efficiency %g\n", ce);
+  TaskMacCreadyTotal tm(tps,activeTaskPoint, mc);
+  GLIDE_RESULT gp = tm.glide_solution(state);
+  std::ofstream fr("res-sol-planned.txt");
+  tm.print(fr, state);
+  gp.print(fr);
+
+  distance_remaining_effective = tm.effective_distance(gr.TimeElapsed);
 
   return true;
 }
@@ -249,6 +181,8 @@ OrderedTask::~OrderedTask()
 
 OrderedTask::OrderedTask()
 {
+  // TODO: default values in constructor
+
   WAYPOINT wp[6];
   wp[0].Location.Longitude=0;
   wp[0].Location.Latitude=0;
@@ -288,9 +222,9 @@ OrderedTask::glide_solution_remaining(const AIRCRAFT_STATE &aircraft,
 {
   TaskMacCreadyRemaining tm(tps,activeTaskPoint, mc);
   GLIDE_RESULT res = tm.glide_solution(aircraft);
-  printf("Solution remaining %4.2f\n",distance_remaining);
-  res.report();
-  tm.report(aircraft);
+  std::ofstream fr("res-sol-remaining.txt");
+  tm.print(fr, aircraft);
+  res.print(fr);
   return res;
 }
 
@@ -300,55 +234,16 @@ OrderedTask::glide_solution_travelled(const AIRCRAFT_STATE &aircraft,
 {
   TaskMacCreadyTravelled tm(tps,activeTaskPoint, mc);
   GLIDE_RESULT res = tm.glide_solution(aircraft);
-  printf("Solution travelled %4.2f\n",distance_travelled);
-  res.report();
-  tm.report(aircraft);
+  std::ofstream fr("res-sol-travelled.txt");
+  tm.print(fr, aircraft);
+  res.print(fr);
   return res;
 }
 
-///////////////
-#include "GlideSolvers/ZeroFinder.hpp"
-
-class TaskBestMc: 
-  public ZeroFinder
-{
-public:
-  TaskBestMc(const std::vector<OrderedTaskPoint*>& tps,
-             const unsigned activeTaskPoint,
-             const AIRCRAFT_STATE &_aircraft):
-    ZeroFinder(0.1,10.0,0.05),
-    tm(tps,activeTaskPoint,1.0),
-    aircraft(_aircraft) 
-    {
-    };
-  virtual double f(double mc) {
-    tm.set_mc(mc);
-    res = tm.glide_solution(aircraft);
-    return res.AltitudeDifference;
-  }
-  virtual bool valid(double mc) {
-    tm.set_mc(mc);
-    res = tm.glide_solution(aircraft);
-    return (res.Solution== MacCready::RESULT_OK);
-  }
-  virtual double search(double mc) {
-    double a = find_zero(mc);
-    if (fabs(f(a))>tolerance*2.0) {
-      return find_min(mc);
-    } else {
-      return a;
-    }
-  }
-protected:
-  TaskMacCreadyRemaining tm;
-  GLIDE_RESULT res;
-  const AIRCRAFT_STATE &aircraft;
-};
-
 
 double
-OrderedTask::best_mc(const AIRCRAFT_STATE &aircraft, 
-                     const double mc)
+OrderedTask::calc_mc_best(const AIRCRAFT_STATE &aircraft, 
+                          const double mc)
 {
   TaskBestMc bmc(tps,activeTaskPoint, aircraft);
   double res = bmc.search(mc);
@@ -356,48 +251,112 @@ OrderedTask::best_mc(const AIRCRAFT_STATE &aircraft,
 }
 
 
-
-
-class TaskCruiseEfficiency: 
-  public ZeroFinder
-{
-public:
-  TaskCruiseEfficiency(const std::vector<OrderedTaskPoint*>& tps,
-                       const unsigned activeTaskPoint,
-                       const AIRCRAFT_STATE &_aircraft,
-                       const double mc):
-    ZeroFinder(0.1,1.5,0.01),
-    tm(tps,activeTaskPoint,mc),
-    aircraft(_aircraft) 
-    {
-      dt = aircraft.Time-tps[0]->get_state_entered().Time;
-    };
-  virtual double f(double ce) {
-    tm.set_cruise_efficiency(ce);
-    res = tm.glide_solution(aircraft);
-    return fabs(res.TimeElapsed-dt);
-  }
-  virtual bool valid(double ce) {
-    tm.set_cruise_efficiency(ce);
-    res = tm.glide_solution(aircraft);
-    return (res.Solution== MacCready::RESULT_OK);
-  }
-  virtual double search(double ce) {
-    return find_min(ce);
-  }
-protected:
-  TaskMacCreadyTravelled tm;
-  GLIDE_RESULT res;
-  const AIRCRAFT_STATE &aircraft;
-  double dt;
-};
-
-
 double
-OrderedTask::cruise_efficiency(const AIRCRAFT_STATE &aircraft, 
-                               const double mc)
+OrderedTask::calc_cruise_efficiency(const AIRCRAFT_STATE &aircraft, 
+                                    const double mc)
 {
   TaskCruiseEfficiency bmc(tps,activeTaskPoint, aircraft, mc);
-  double res = bmc.search(1.0);
+  double res = bmc.search(mc);
   return res;
+}
+
+
+
+////////////////////////// Reporting/printing for debugging
+
+void print_tp(OrderedTaskPoint *tp, std::ostream& f) {
+  unsigned n= tp->get_boundary_points().size();
+  for (unsigned i=0; i<n; i++) {
+    GEOPOINT loc = tp->get_boundary_points()[i].getLocation();
+    f << loc.Longitude << " " << loc.Latitude << "\n";
+  }
+  f << "\n";
+}
+
+void print_sp(OrderedTaskPoint *tp, std::ostream& f) {
+  unsigned n= tp->get_search_points().size();
+  for (unsigned i=0; i<n; i++) {
+    GEOPOINT loc = tp->get_search_points()[i].getLocation();
+    f << loc.Longitude << " " << loc.Latitude << "\n";
+  }
+  f << "\n";
+}
+
+
+extern int count_distance;
+
+
+void OrderedTask::report(const AIRCRAFT_STATE &state) 
+{
+/*
+  d = dijkstra.distance_opt(start,true);
+  printf("# absolute min dist %g\n",d);
+
+  d = dijkstra.distance_opt(start,false);
+  printf("# absolute max dist %g\n",d);
+*/
+  static bool first = true;
+  std::ofstream f1("res-task.txt");
+  std::ofstream f2("res-max.txt");
+  std::ofstream f3("res-min.txt");
+  static std::ofstream f4("res-sample.txt");
+  std::ofstream f5("res-ssample.txt");
+  static std::ofstream f6("res-stats.txt");
+
+  if (first) {
+    first = false;
+    f6 << "# Time atp mc_best dist_rem_eff dist_rem cruis_eff\n";
+  }
+  f6 << state.Time
+     << " " << activeTaskPoint
+     << " " << mc_best
+     << " " << distance_remaining_effective 
+     << " " << distance_remaining 
+     << " " << cruise_efficiency 
+     << "\n";
+  f6.flush();
+
+  f1 << "#### Distances\n";
+  f1 << "# dist nominal " << distance_nominal << "\n";
+  f1 << "# min dist after achieving max " << distance_min << "\n";
+  f1 << "# max dist after achieving max " << distance_max << "\n";
+  f1 << "# dist remaining " << distance_remaining << "\n";
+  f1 << "# dist remaining effective " << distance_remaining_effective << "\n";
+  f1 << "# dist travelled " << distance_travelled << "\n";
+  f1 << "# dist scored " << distance_scored << "\n";
+  f1 << "# dist planned " << distance_planned << "\n";
+
+  f1 << "#### Task points\n";
+  for (unsigned i=0; i<tps.size(); i++) {
+    f1 << "## point " << i << "\n";
+    print_tp(tps[i], f1);
+    tps[i]->print(f1);
+    f1 << "\n\n";
+  }
+
+  f5 << "#### Task sampled points\n";
+  for (unsigned i=0; i<tps.size(); i++) {
+    f5 << "## point " << i << "\n";
+    print_sp(tps[i], f5);
+  }
+
+  f4 <<  state.Location.Longitude << " " 
+     <<  state.Location.Latitude << "\n";
+  f4.flush();
+
+  f2 << "#### Max task\n";
+  for (unsigned i=0; i<tps.size(); i++) {
+    OrderedTaskPoint *tp = tps[i];
+    f2 <<  tp->getMaxLocation().Longitude << " " 
+       <<  tp->getMaxLocation().Latitude << "\n";
+  }
+
+  f3 << "#### Min task\n";
+  for (unsigned i=0; i<tps.size(); i++) {
+    OrderedTaskPoint *tp = tps[i];
+    f3 <<  tp->getMinLocation().Longitude << " " 
+       <<  tp->getMinLocation().Latitude << "\n";
+  }
+//  printf("distance tests %d\n", count_distance);
+//  count_distance = 0;
 }

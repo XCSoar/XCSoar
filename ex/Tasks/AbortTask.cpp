@@ -27,7 +27,7 @@ TaskPoint* AbortTask::getActiveTaskPoint()
 }
 
 
-void AbortTask::report(const GEOPOINT &location)
+void AbortTask::report(const AIRCRAFT_STATE &state)
 {
 
 }

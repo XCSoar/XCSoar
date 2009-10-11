@@ -59,6 +59,9 @@ OBJS	:=\
 	Util.o \
 	GlideSolvers/MacCready.o \
 	GlideSolvers/TaskMacCready.o \
+	GlideSolvers/TaskMacCreadyTravelled.o \
+	GlideSolvers/TaskMacCreadyRemaining.o \
+	GlideSolvers/TaskMacCreadyTotal.o \
 	GlideSolvers/ZeroFinder.o \
 	Navigation/Aircraft.o \
 	BaseTask/AATPoint.o \

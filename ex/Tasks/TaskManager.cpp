@@ -32,17 +32,17 @@ TaskPoint* TaskManager::getActiveTaskPoint()
   // should never get here
 }
 
-void TaskManager::report(const GEOPOINT &location)
+void TaskManager::report(const AIRCRAFT_STATE &state)
 {
   switch(mode) {
   case (MODE_NULL):
     return;
   case (MODE_GOTO):
-    return task_goto.report(location);
+    return task_goto.report(state);
   case (MODE_ORDERED):
-    return task_ordered.report(location);
+    return task_ordered.report(state);
   case (MODE_ABORT):
-    return task_abort.report(location);
+    return task_abort.report(state);
   };
 }
 

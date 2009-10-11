@@ -23,7 +23,7 @@ public:
 
   GLIDE_RESULT glide_solution(const AIRCRAFT_STATE &aircraft);
   void clearance_heights(const AIRCRAFT_STATE &);
-  void report(const AIRCRAFT_STATE &aircraft);
+  void print(std::ostream& f, const AIRCRAFT_STATE &aircraft) const;
 
   void set_mc(double mc) {
     msolv.set_mc(mc);
@@ -33,11 +33,11 @@ public:
   };
 
 protected:
-  virtual double get_min_height(const AIRCRAFT_STATE &aircraft) = 0;
+  virtual double get_min_height(const AIRCRAFT_STATE &aircraft) const = 0;
   virtual GLIDE_RESULT tp_solution(const unsigned i,
                                    const AIRCRAFT_STATE &aircraft, 
-                                   double minH) = 0;
-  virtual const AIRCRAFT_STATE get_aircraft_start(const AIRCRAFT_STATE &aircraft) = 0;
+                                   double minH) const = 0;
+  virtual const AIRCRAFT_STATE get_aircraft_start(const AIRCRAFT_STATE &aircraft) const = 0;
 
   const std::vector<OrderedTaskPoint*> &tps;
   const unsigned activeTaskPoint;
@@ -46,41 +46,6 @@ protected:
   int end;
   std::vector<GLIDE_RESULT> gs;
   MacCready msolv;
-};
-
-class TaskMacCreadyRemaining: 
-  public TaskMacCready
-{
-public:
-  TaskMacCreadyRemaining(const std::vector<OrderedTaskPoint*> &_tps,
-                         const unsigned _activeTaskPoint,
-                         const double _mc);
-protected:
-  virtual GLIDE_RESULT tp_solution(const unsigned i,
-                                   const AIRCRAFT_STATE &aircraft, 
-                                   double minH);
-  virtual double get_min_height(const AIRCRAFT_STATE &aircraft) {
-    return 0.0;
-  }
-  virtual const AIRCRAFT_STATE get_aircraft_start(const AIRCRAFT_STATE &aircraft);
-
-};
-
-class TaskMacCreadyTravelled: 
-  public TaskMacCready
-{
-public:
-  TaskMacCreadyTravelled(const std::vector<OrderedTaskPoint*> &_tps,
-                         const unsigned _activeTaskPoint,
-                         const double _mc);
-protected:
-  virtual GLIDE_RESULT tp_solution(const unsigned i,
-                                   const AIRCRAFT_STATE &aircraft, 
-                                   double minH);
-  virtual double get_min_height(const AIRCRAFT_STATE &aircraft) {
-    return aircraft.Altitude;
-  }
-  virtual const AIRCRAFT_STATE get_aircraft_start(const AIRCRAFT_STATE &aircraft);
 };
 
 #endif

@@ -17,6 +17,8 @@ public:
 
     double leg_distance_nominal();
 
+    double leg_distance_planned();
+
     double leg_distance_scored(const GEOPOINT &ref);
 
     double leg_distance_travelled(const GEOPOINT &ref);
@@ -26,6 +28,8 @@ public:
     double leg_bearing_travelled(const GEOPOINT &ref);
 
     double leg_bearing_remaining(const GEOPOINT &ref);
+
+    double leg_bearing_planned();
 
     void update_geometry();
 

@@ -27,7 +27,7 @@ public:
     MODE_GOTO
   };
 
-  virtual void report(const GEOPOINT &location);
+  virtual void report(const AIRCRAFT_STATE &location);
 
   virtual bool update_sample(const AIRCRAFT_STATE &, const AIRCRAFT_STATE&);
   

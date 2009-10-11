@@ -47,15 +47,23 @@ public:
   double get_distance_scored() const {
     return distance_scored;
   };
-  void report(const GEOPOINT &location);
+  double get_distance_planned() const {
+    return distance_planned;
+  };
+  void report(const AIRCRAFT_STATE &state);
 
 private:
   double distance_nominal;
   double distance_min;
   double distance_max;
   double distance_remaining;
+  double distance_remaining_effective;
   double distance_travelled;
   double distance_scored;
+  double distance_planned;
+  double cruise_efficiency;
+  double mc_best;
+
   virtual void scan_distance(const GEOPOINT &location, bool full);
   void update_geometry();
 
@@ -70,10 +78,11 @@ private:
                                         const double mc);
   GLIDE_RESULT glide_solution_travelled(const AIRCRAFT_STATE &, 
                                         const double mc);
-  double best_mc(const AIRCRAFT_STATE &, 
-                 const double mc);
-  double cruise_efficiency(const AIRCRAFT_STATE &aircraft, 
-                           const double mc);
+
+  double calc_mc_best(const AIRCRAFT_STATE &, 
+                      const double mc);
+  double calc_cruise_efficiency(const AIRCRAFT_STATE &aircraft, 
+                                const double mc);
 
 };
 

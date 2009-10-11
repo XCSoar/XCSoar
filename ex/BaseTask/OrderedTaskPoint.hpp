@@ -59,7 +59,9 @@ public:
       active_state(NOTFOUND_ACTIVE),
       bearing_travelled(0.0),
       bearing_remaining(0.0),
+      bearing_planned(0.0),
       distance_nominal(0.0),   
+      distance_planned(0.0),
       distance_scored(0.0),    
       distance_remaining(0.0), 
       distance_travelled(0.0),
@@ -97,6 +99,7 @@ public:
 protected:
   bool scan_active(OrderedTaskPoint* atp);
   double scan_distance_nominal();
+  double scan_distance_planned();
   double scan_distance_remaining(const GEOPOINT &ref);
   double scan_distance_scored(const GEOPOINT &ref);
   double scan_distance_travelled(const GEOPOINT &ref);
@@ -119,17 +122,24 @@ public:
   virtual bool transition_exit(const AIRCRAFT_STATE & ref_now, 
                                const AIRCRAFT_STATE & ref_last);
 
-  void print(std::ofstream& f);
+  void print(std::ostream& f);
 
   const std::vector<SearchPoint>& get_search_points();
 
   virtual double get_distance_remaining(const AIRCRAFT_STATE &);
   virtual double get_bearing_remaining(const AIRCRAFT_STATE &);
-  virtual double get_distance_travelled() {
+
+  virtual double get_distance_travelled() const {
     return this_distance_travelled;
   }
-  virtual double get_bearing_travelled() {
+  virtual double get_bearing_travelled() const {
     return bearing_travelled;
+  }
+  virtual double get_distance_planned() const {
+    return this_distance_planned;
+  }
+  virtual double get_bearing_planned() const {
+    return bearing_planned;
   }
 
   bool has_entered() const {
@@ -141,6 +151,9 @@ public:
   GLIDE_RESULT glide_solution_travelled(const AIRCRAFT_STATE &, 
                                         const MacCready &mac,
                                         const double minH=0);
+  GLIDE_RESULT glide_solution_planned(const AIRCRAFT_STATE &, 
+                                      const MacCready &mac,
+                                      const double minH=0);
 
 protected:
 
@@ -159,9 +172,12 @@ protected:
   double distance_scored;    
   double distance_remaining; 
   double distance_travelled; 
+  double distance_planned;
 
   double bearing_travelled;
   double bearing_remaining;
+  double bearing_planned;
+  double this_distance_planned;
   double this_distance_travelled;
   double this_distance_remaining;
 

@@ -2,6 +2,8 @@
 #define MACCREADY_HPP
 
 #include <math.h>
+#include <fstream>
+#include <iostream>
 
 struct GLIDE_STATE;
 struct GLIDE_RESULT;
@@ -90,7 +92,7 @@ struct GLIDE_RESULT {
   }
   bool superior(const GLIDE_RESULT &s2) const;
   void add(const GLIDE_RESULT &s2);
-  void report();
+  void print(std::ostream& f);
 };
 
 

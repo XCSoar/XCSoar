@@ -1,58 +1,5 @@
 #include "GlideSolvers/TaskMacCready.hpp"
 
-TaskMacCreadyTravelled::TaskMacCreadyTravelled(const std::vector<OrderedTaskPoint*> &_tps,
-                                               const unsigned _activeTaskPoint,
-                                               const double _mc):
-  TaskMacCready(_tps,_activeTaskPoint, _mc)
-{
-  start = 0;
-  end = activeTaskPoint;
-}
-
-TaskMacCreadyRemaining::TaskMacCreadyRemaining(const std::vector<OrderedTaskPoint*> &_tps,
-                                               const unsigned _activeTaskPoint,
-                                               const double _mc):
-  TaskMacCready(_tps,_activeTaskPoint, _mc)
-{
-  start = activeTaskPoint;
-  end = tps.size()-1;
-}
-
-GLIDE_RESULT 
-TaskMacCreadyRemaining::tp_solution(const unsigned i,
-                                    const AIRCRAFT_STATE &aircraft, 
-                                    double minH)
-{
-  return tps[i]->glide_solution_remaining(aircraft, msolv, minH);
-}
-
-GLIDE_RESULT 
-TaskMacCreadyTravelled::tp_solution(const unsigned i,
-                                    const AIRCRAFT_STATE &aircraft, 
-                                    double minH)
-{
-  return tps[i]->glide_solution_travelled(aircraft, msolv, minH);
-}
-
-const AIRCRAFT_STATE 
-TaskMacCreadyRemaining::get_aircraft_start(const AIRCRAFT_STATE &aircraft)
-{
-  return aircraft;
-
-}
-
-const AIRCRAFT_STATE 
-TaskMacCreadyTravelled::get_aircraft_start(const AIRCRAFT_STATE &aircraft)
-{
-  if (tps[0]->has_entered()) {
-    return tps[0]->get_state_entered();
-  } else {
-    return aircraft;
-  }
-}
-
-
-///////////////
 
 void
 TaskMacCready::clearance_heights(const AIRCRAFT_STATE &aircraft)
@@ -81,7 +28,7 @@ TaskMacCready::clearance_heights(const AIRCRAFT_STATE &aircraft)
 
 
 GLIDE_RESULT 
-TaskMacCready::glide_solution(const AIRCRAFT_STATE &aircraft)
+TaskMacCready::glide_solution(const AIRCRAFT_STATE &aircraft) 
 {
   GLIDE_RESULT acc_gr, gr;
   AIRCRAFT_STATE aircraft_predict = aircraft;
@@ -89,22 +36,21 @@ TaskMacCready::glide_solution(const AIRCRAFT_STATE &aircraft)
 
   clearance_heights(aircraft);
 
-  double glide_height = 0.0;
-  glide_height = aircraft_start.Altitude-minHs[end];
+  double excess_height = 0.0;
+  excess_height = aircraft_start.Altitude-minHs[end];
 
   for (int i=end; i>=start; i--) {
-//    printf("glide_height %g\n",glide_height);
     if (i>start) {
-      aircraft_predict.Altitude = minHs[i-1]+std::max(glide_height,0.0);
+      aircraft_predict.Altitude = minHs[i-1]+std::max(excess_height,0.0);
     } else {
       aircraft_predict.Altitude = std::min(aircraft_start.Altitude,
-                                           minHs[i]+std::max(glide_height,0.0));
+                                           minHs[i]+std::max(excess_height,0.0));
     }
 
     // perform estimate, ensuring that alt is above previous taskpoint  
     gr = tp_solution(i,aircraft_predict, minHs[i]);
     gs[i] = gr;
-    glide_height -= gr.HeightGlide;
+    excess_height -= gr.HeightGlide;
 
     // update state
     if (i==end) {
@@ -118,7 +64,9 @@ TaskMacCready::glide_solution(const AIRCRAFT_STATE &aircraft)
     }
 
   }
-  gr.add(acc_gr);
+  if (end>start) {
+    gr.add(acc_gr);
+  }
 
   aircraft_predict.Altitude = aircraft_start.Altitude;
   double alt_difference = aircraft_start.Altitude-minHs[start];
@@ -135,16 +83,19 @@ TaskMacCready::glide_solution(const AIRCRAFT_STATE &aircraft)
 
 
 void
-TaskMacCready::report(const AIRCRAFT_STATE &aircraft)
+TaskMacCready::print(std::ostream &f, const AIRCRAFT_STATE &aircraft) const
 {
   AIRCRAFT_STATE aircraft_start = get_aircraft_start(aircraft);
   AIRCRAFT_STATE aircraft_predict = aircraft;
   aircraft_predict.Altitude = aircraft_start.Altitude;
-  printf("  i alt  min\n");
-  printf("  %d %4.2f\n", start, aircraft_start.Altitude);
+  f << "#  i alt  min  elev\n";
+  f << start-0.5 << " " << aircraft_start.Altitude << " " <<
+    minHs[start] << " " <<
+    tps[start]->getElevation() << "\n";
   for (int i=start; i<=end; i++) {
     aircraft_predict.Altitude -= gs[i].HeightGlide;
-    printf("  %d %4.2f %4.2f\n", i, aircraft_predict.Altitude,minHs[i]);
+    f << i << " " << aircraft_predict.Altitude << " " << minHs[i]
+      << " " << tps[i]->getElevation() << "\n";
   }
-  printf("\n");
+  f << "\n";
 }

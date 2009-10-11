@@ -18,7 +18,7 @@ public:
 
   double get_active_distance(const AIRCRAFT_STATE &);
 
-  virtual void report(const GEOPOINT &location) = 0;
+  virtual void report(const AIRCRAFT_STATE &state) = 0;
 
   virtual bool update_sample(const AIRCRAFT_STATE &, const AIRCRAFT_STATE&) = 0;
 
