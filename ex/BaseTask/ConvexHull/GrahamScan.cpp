@@ -13,7 +13,7 @@ bool sortleft (const SearchPoint& sp1, const SearchPoint& sp2)
 }
 
 
-GrahamScan::GrahamScan(const std::vector<SearchPoint>& sps):
+GrahamScan::GrahamScan(const SearchPointVector& sps):
   raw_points(sps.begin(), sps.end()), raw_vector(sps)
 {
 }
@@ -157,9 +157,9 @@ double GrahamScan::direction( const GEOPOINT& p0,
 }
 
 
-std::vector<SearchPoint> GrahamScan::prune_interior(bool *changed)
+SearchPointVector GrahamScan::prune_interior(bool *changed)
 {
-  std::vector<SearchPoint> res;
+  SearchPointVector res;
 
   if (raw_points.size()<3) {
     std::copy(raw_points.begin(), raw_points.end(),

@@ -30,7 +30,7 @@ void DistanceTravelledStat::calc_speed(const ElementStat* es)
 }
 
 void DistanceStat::calc_incremental_speed(const double dt)
-{
+{  
   speed_incremental = (distance_last-distance)/dt;
   distance_last = distance;
 }

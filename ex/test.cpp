@@ -107,8 +107,7 @@ void test_polygon()
 
 int main() {
 
-  test_mc();
-
+//  test_mc();
 
   TaskManager test_task;
 
@@ -146,15 +145,11 @@ int main() {
       double dy = state.Location.Latitude-state_last.Location.Latitude;
       double d = sqrt(dx*dx+dy*dy);
       double V = 7.0;
+      state.Time += d/V;
       test_task.update_sample(state, state_last);
       test_task.report(state);
       n_samples++;
       state_last = state;
-      if (state.Location.Longitude>10.5) { 
-        distance_counts();
-        exit(0); 
-      }
-      state.Time += d/V;
     }
     printf("[enter to continue]\n");
     char c = getchar();

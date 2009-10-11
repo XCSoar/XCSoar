@@ -46,3 +46,13 @@ plot \
 pause -1
 
 
+set yrange [0:50]
+set title "Stats - Speed"
+plot \
+     'res-stats.txt' using 1:7 with lines title "total rem sp", \
+     'res-stats.txt' using 1:8 with lines title "total rem sp inst", \
+     'res-stats.txt' using 1:9 with lines title "total eff sp", \
+     'res-stats.txt' using 1:10 with lines title "total eff sp inst"
+pause -1
+
+

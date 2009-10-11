@@ -83,6 +83,7 @@ OBJS	:=\
 	TaskPoints/FAISectorFinishPoint.o \
 	TaskPoints/FAISectorStartPoint.o \
 	TaskPoints/SectorAATPoint.o \
+	TaskPoints/CylinderAATPoint.o \
 	TaskPoints/ObservationZones/CylinderZone.o \
 	TaskPoints/ObservationZones/HeightLimitZone.o \
 	TaskPoints/ObservationZones/SectorZone.o \

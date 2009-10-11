@@ -6,6 +6,7 @@
 #include "TaskPoints/FAISectorFinishPoint.hpp"
 #include "TaskPoints/FAISectorASTPoint.hpp"
 #include "TaskPoints/FAICylinderASTPoint.hpp"
+#include "TaskPoints/CylinderAATPoint.hpp"
 #include "GlideSolvers/TaskMacCreadyTravelled.hpp"
 #include "GlideSolvers/TaskMacCreadyRemaining.hpp"
 #include "GlideSolvers/TaskMacCreadyTotal.hpp"
@@ -216,7 +217,7 @@ OrderedTask::OrderedTask()
   tps.push_back(ts);
   tps.push_back(new FAISectorASTPoint(task_projection,wp[1]));
   tps.push_back(new FAISectorASTPoint(task_projection,wp[2]));
-  tps.push_back(new FAICylinderASTPoint(task_projection,wp[3]));
+  tps.push_back(new CylinderAATPoint(task_projection,wp[3]));
   tps.push_back(new FAISectorFinishPoint(task_projection,wp[4]));
 
   for (unsigned i=0; i+1<tps.size(); i++) {
@@ -336,7 +337,7 @@ void OrderedTask::report(const AIRCRAFT_STATE &state)
 
   if (first) {
     first = false;
-    f6 << "# Time atp mc_best dist_rem_eff dist_rem cruis_eff\n";
+    f6 << "# Time atp mc_best dist_rem_eff dist_rem cruis_eff sir sire\n";
   }
   f6 << state.Time
      << " " << activeTaskPoint
@@ -344,6 +345,10 @@ void OrderedTask::report(const AIRCRAFT_STATE &state)
      << " " << stats.total.remaining_effective.get_distance()
      << " " << stats.total.remaining.get_distance() 
      << " " << stats.cruise_efficiency 
+     << " " << stats.total.remaining.get_speed() 
+     << " " << stats.total.remaining.get_speed_incremental() 
+     << " " << stats.total.remaining_effective.get_speed() 
+     << " " << stats.total.remaining_effective.get_speed_incremental() 
      << "\n";
   f6.flush();
 

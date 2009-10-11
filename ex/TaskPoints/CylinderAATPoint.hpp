@@ -35,33 +35,31 @@
   }
 */
 
-
-#ifndef FAICYLINDERASTPOINT_HPP
-#define FAICYLINDERASTPOINT_HPP
-
-#include "BaseTask/ASTPoint.hpp"
+#ifndef CYLINDERAATPOINT_HPP
+#define CYLINDERAATPOINT_HPP
+#include "BaseTask/AATPoint.hpp"
 #include "ObservationZones/CylinderZone.hpp"
 
-class FAICylinderASTPoint: 
-  public ASTPoint
+class CylinderAATPoint: 
+  public AATPoint
 {
 public:
-  FAICylinderASTPoint(const TaskProjection&tp,
+  CylinderAATPoint(const TaskProjection &tp,
            const WAYPOINT& wp):
-    ASTPoint(tp,wp),
+    AATPoint(tp,wp),
     oz(wp.Location) 
   {
   };
-  virtual void update_geometry() {
-  }
-  GEOPOINT get_boundary_parametric(double) ;
-
   virtual bool isInSector(const AIRCRAFT_STATE &ref) const
   {
     return oz.isInSector(ref);
-  }
+  }  
 
-  virtual double score_adjustment();
+  virtual double score_adjustment() { return 0.0; };
+
+  virtual void update_geometry() {
+  }
+  GEOPOINT get_boundary_parametric(double) ;
 
 protected:
   CylinderZone oz;

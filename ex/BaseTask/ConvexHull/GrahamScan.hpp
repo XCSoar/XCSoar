@@ -4,13 +4,13 @@
 #include <vector>
 #include <list>
 
-#include "BaseTask/SearchPoint.hpp"
+#include "BaseTask/SearchPointVector.hpp"
 
 class GrahamScan
 {
 public :
-  GrahamScan(const std::vector<SearchPoint>& sps);
-  std::vector<SearchPoint> prune_interior(bool *changed=NULL);
+  GrahamScan(const SearchPointVector& sps);
+  SearchPointVector prune_interior(bool *changed=NULL);
 private :
   void partition_points();
   void build_hull();
@@ -27,7 +27,7 @@ private :
   std::vector< SearchPoint* > lower_partition_points;
   std::vector< SearchPoint* > lower_hull;
   std::vector< SearchPoint* > upper_hull;
-  const std::vector< SearchPoint > &raw_vector;
+  const SearchPointVector &raw_vector;
 };
 
 
