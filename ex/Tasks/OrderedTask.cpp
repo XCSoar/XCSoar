@@ -216,8 +216,10 @@ OrderedTask::OrderedTask()
   ts = new FAISectorStartPoint(task_projection,wp[0]);
   tps.push_back(ts);
   tps.push_back(new FAISectorASTPoint(task_projection,wp[1]));
-  tps.push_back(new FAISectorASTPoint(task_projection,wp[2]));
+  tps.push_back(new CylinderAATPoint(task_projection,wp[2]));
   tps.push_back(new CylinderAATPoint(task_projection,wp[3]));
+//  tps.push_back(new FAISectorASTPoint(task_projection,wp[4]));
+//  tps.push_back(new FAISectorFinishPoint(task_projection,wp[0]));
   tps.push_back(new FAISectorFinishPoint(task_projection,wp[4]));
 
   for (unsigned i=0; i+1<tps.size(); i++) {
@@ -320,13 +322,6 @@ extern long count_mc;
 
 void OrderedTask::report(const AIRCRAFT_STATE &state) 
 {
-/*
-  d = dijkstra.distance_opt(start,true);
-  printf("# absolute min dist %g\n",d);
-
-  d = dijkstra.distance_opt(start,false);
-  printf("# absolute max dist %g\n",d);
-*/
   static bool first = true;
   std::ofstream f1("res-task.txt");
   std::ofstream f2("res-max.txt");
@@ -391,6 +386,4 @@ void OrderedTask::report(const AIRCRAFT_STATE &state)
     f3 <<  tp->getMinLocation().Longitude << " " 
        <<  tp->getMinLocation().Latitude << "\n";
   }
-//  printf("distance tests %d\n", count_distance);
-//  count_distance = 0;
 }
