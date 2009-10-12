@@ -3,7 +3,7 @@
 #include "AATPoint.hpp"
 #include "Util.h"
 
-GEOPOINT AATPoint::get_reference_scored()
+GEOPOINT AATPoint::get_reference_scored() const
 {
   if (getActiveState() == BEFORE_ACTIVE) {
     return getMaxLocation();
@@ -12,7 +12,7 @@ GEOPOINT AATPoint::get_reference_scored()
   }
 }
 
-GEOPOINT AATPoint::get_reference_travelled()
+GEOPOINT AATPoint::get_reference_travelled() const
 {
   if (state_entered.Time>=0) {
     return getMaxLocation();
@@ -21,7 +21,7 @@ GEOPOINT AATPoint::get_reference_travelled()
   }
 }
 
-GEOPOINT AATPoint::get_reference_remaining()
+GEOPOINT AATPoint::get_reference_remaining() const
 {
   if (getActiveState() == BEFORE_ACTIVE) {
     return getMaxLocation();
@@ -31,7 +31,7 @@ GEOPOINT AATPoint::get_reference_remaining()
 }
 
 double 
-AATPoint::getElevation() 
+AATPoint::getElevation() const
 {
   // TODO: look up elevation of target and use that instead
   return Elevation; // + SAFETYTERRAIN
@@ -96,4 +96,11 @@ void AATPoint::print(std::ostream& f) const
   f << "#   Target\n";
   f << "#     " << TargetLocation.Longitude << "," 
     << TargetLocation.Latitude << "\n";
+}
+
+
+void 
+AATPoint::set_range(const double p)
+{
+  TargetLocation = ::InterpolateLocation(getMinLocation(), getMaxLocation(), p);
 }

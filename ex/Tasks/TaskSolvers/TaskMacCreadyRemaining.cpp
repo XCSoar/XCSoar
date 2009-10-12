@@ -26,5 +26,10 @@ TaskMacCreadyRemaining::get_aircraft_start(const AIRCRAFT_STATE &aircraft) const
   return aircraft;
 }
 
-
-
+void 
+TaskMacCreadyRemaining::set_range(const double tp)
+{
+  for (int i=start; i<=end; i++) {
+    tps[i]->set_range(tp);
+  }
+}

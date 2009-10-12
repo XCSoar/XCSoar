@@ -153,7 +153,7 @@ public:
   GLIDE_RESULT glide_solution_planned(const AIRCRAFT_STATE &, 
                                       const MacCready &mac,
                                       const double minH=0) const;
-
+  virtual void set_range(const double p) {};
 protected:
 
   /**

@@ -98,7 +98,8 @@ OBJS	:=\
 	Tasks/TaskSolvers/TaskMacCreadyRemaining.o \
 	Tasks/TaskSolvers/TaskMacCreadyTotal.o \
 	Tasks/TaskSolvers/TaskBestMc.o \
-	Tasks/TaskSolvers/TaskCruiseEfficiency.o 
+	Tasks/TaskSolvers/TaskCruiseEfficiency.o \
+	Tasks/TaskSolvers/TaskMinTarget.o 
 
 
 all: $(OBJS)

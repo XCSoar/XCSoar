@@ -57,6 +57,7 @@ public:
                                    ReferencePoint(wp.Location) 
     { }
 
+  // not const because may need to perform lookup and save
   virtual double getElevation() const;
 
   virtual GEOPOINT get_reference_remaining() const;

@@ -99,3 +99,4 @@ TaskMacCready::print(std::ostream &f, const AIRCRAFT_STATE &aircraft) const
   }
   f << "\n";
 }
+

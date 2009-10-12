@@ -51,16 +51,18 @@ public:
     {
     }  
 
-  virtual GEOPOINT get_reference_remaining();  
+  virtual GEOPOINT get_reference_remaining() const;
   
-  virtual GEOPOINT get_reference_travelled();  
+  virtual GEOPOINT get_reference_travelled() const;
   
-  virtual GEOPOINT get_reference_scored();
+  virtual GEOPOINT get_reference_scored() const;
 
-  virtual double getElevation();
+  virtual double getElevation() const;
 
   virtual bool update_sample(const AIRCRAFT_STATE&);
   virtual void print(std::ostream& f) const;
+
+  virtual void set_range(const double p);
 
 protected:
   GEOPOINT TargetLocation;

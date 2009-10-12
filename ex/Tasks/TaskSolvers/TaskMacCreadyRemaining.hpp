@@ -10,6 +10,9 @@ public:
   TaskMacCreadyRemaining(const std::vector<OrderedTaskPoint*> &_tps,
                          const unsigned _activeTaskPoint,
                          const double _mc);
+
+  void set_range(const double tp);
+
 protected:
   virtual GLIDE_RESULT tp_solution(const unsigned i,
                                    const AIRCRAFT_STATE &aircraft, 
