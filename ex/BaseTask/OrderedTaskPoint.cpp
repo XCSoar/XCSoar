@@ -231,7 +231,6 @@ OrderedTaskPoint::transition_enter(const AIRCRAFT_STATE & ref_now,
   bool entered = ObservationZone::transition_enter(ref_now, ref_last);
   if (entered) {
     state_entered = ref_now;
-    printf("entered at %g\n",ref_now.Time);
   }
   return entered;
 }

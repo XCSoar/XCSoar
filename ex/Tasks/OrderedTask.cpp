@@ -76,10 +76,12 @@ OrderedTask::update_sample(const AIRCRAFT_STATE &state,
 
   for (int i=t_min; i<=t_max; i++) {
     if (tps[i]->transition_enter(state, state_last)) {
+      printf("  entered at %g\n",state.Time);
     }
     if (tps[i]->transition_exit(state, state_last)) {
+      printf("  exited at %g\n",state.Time);
       if (i<n_task-1) {
-        printf("transition to sector %d\n", i+1);
+        printf("  -> transition to sector %d\n", i+1);
         setActiveTaskPoint(i+1);
         ts->scan_active(tps[activeTaskPoint]);
 
