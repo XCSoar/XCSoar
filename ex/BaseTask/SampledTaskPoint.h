@@ -68,6 +68,8 @@ public:
   };
 
   virtual bool update_sample(const AIRCRAFT_STATE&);
+  virtual void print(std::ostream& f) const;
+  virtual void print_samples(std::ostream& f);
 
 protected:
   bool boundary_scored;

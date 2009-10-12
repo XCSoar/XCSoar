@@ -16,6 +16,8 @@ double HalfAngle(double, double);
 double BiSector(double InBound, double OutBound);
 double Reciprocal(double InBound);
 
+GEOPOINT InterpolateLocation(const GEOPOINT& p1,
+                             const GEOPOINT& p2, const double t);
 unsigned int isqrt4(unsigned long val);
 
 #endif

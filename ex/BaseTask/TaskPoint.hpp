@@ -45,6 +45,8 @@
 #include "Navigation/Aircraft.hpp"
 #include "Util.h"
 #include "GlideSolvers/MacCready.hpp"
+#include <iostream>
+#include <fstream>
 
 class MacCready;
 
@@ -69,7 +71,7 @@ public:
   GLIDE_RESULT glide_solution_remaining(const AIRCRAFT_STATE &, 
                                         const MacCready &mac,
                                         const double minH=0);
-
+  virtual void print(std::ostream& f) const;
 protected:
   const double Elevation;
 };

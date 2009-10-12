@@ -303,24 +303,6 @@ OrderedTask::calc_cruise_efficiency(const AIRCRAFT_STATE &aircraft,
 
 ////////////////////////// Reporting/printing for debugging
 
-void print_tp(OrderedTaskPoint *tp, std::ostream& f) {
-  unsigned n= tp->get_boundary_points().size();
-  for (unsigned i=0; i<n; i++) {
-    GEOPOINT loc = tp->get_boundary_points()[i].getLocation();
-    f << loc.Longitude << " " << loc.Latitude << "\n";
-  }
-  f << "\n";
-}
-
-void print_sp(OrderedTaskPoint *tp, std::ostream& f) {
-  unsigned n= tp->get_search_points().size();
-  for (unsigned i=0; i<n; i++) {
-    GEOPOINT loc = tp->get_search_points()[i].getLocation();
-    f << loc.Longitude << " " << loc.Latitude << "\n";
-  }
-  f << "\n";
-}
-
 
 extern int count_distance;
 extern long count_mc;
@@ -363,15 +345,13 @@ void OrderedTask::report(const AIRCRAFT_STATE &state)
   f1 << "#### Task points\n";
   for (unsigned i=0; i<tps.size(); i++) {
     f1 << "## point " << i << "\n";
-    print_tp(tps[i], f1);
     tps[i]->print(f1);
-    f1 << "\n\n";
   }
 
   f5 << "#### Task sampled points\n";
   for (unsigned i=0; i<tps.size(); i++) {
     f5 << "## point " << i << "\n";
-    print_sp(tps[i], f5);
+    tps[i]->print_samples(f5);
   }
 
   f4 <<  state.Location.Longitude << " " 

@@ -121,7 +121,7 @@ public:
   virtual bool transition_exit(const AIRCRAFT_STATE & ref_now, 
                                const AIRCRAFT_STATE & ref_last);
 
-  void print(std::ostream& f);
+  virtual void print(std::ostream& f) const;
 
   const std::vector<SearchPoint>& get_search_points();
 
@@ -182,6 +182,8 @@ protected:
 
   AIRCRAFT_STATE state_entered;
   AIRCRAFT_STATE state_exited;
+
+  double double_leg_distance(const GEOPOINT &ref) const;
 
 };
 

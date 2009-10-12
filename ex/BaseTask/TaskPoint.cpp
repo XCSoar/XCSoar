@@ -47,3 +47,11 @@ GLIDE_RESULT TaskPoint::glide_solution_remaining(const AIRCRAFT_STATE &ac,
 
   return msolv.solve(ac,gs);
 }
+
+void 
+TaskPoint::print(std::ostream& f) const
+{
+  f << "# Task point \n";
+  f << "#   Location " << getLocation().Longitude << "," <<
+    getLocation().Latitude << "\n";
+}

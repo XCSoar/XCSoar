@@ -248,8 +248,9 @@ OrderedTaskPoint::transition_exit(const AIRCRAFT_STATE & ref_now,
 
 
 void 
-OrderedTaskPoint::print(std::ostream& f)
+OrderedTaskPoint::print(std::ostream& f) const
 {
+  SampledTaskPoint::print(f);
   f << "# Bearing travelled " << bearing_travelled << "\n";
   f << "# Distance travelled " << this_distance_travelled << "\n";
   f << "# Bearing remaining " << bearing_remaining << "\n";
@@ -306,4 +307,16 @@ GLIDE_RESULT OrderedTaskPoint::glide_solution_planned(const AIRCRAFT_STATE &ac,
   gs.MinHeight = std::max(minH,getElevation());
 
   return msolv.solve(ac,gs);
+}
+
+
+double OrderedTaskPoint::double_leg_distance(const GEOPOINT &ref) const
+{
+  assert(leg_in);
+  assert(leg_out);
+  return 
+    ::Distance(leg_in->get_origin()->get_reference_remaining(), 
+               ref)+
+    ::Distance(ref,
+               leg_out->get_destination()->get_reference_remaining());
 }

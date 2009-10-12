@@ -121,3 +121,14 @@ unsigned int isqrt4(unsigned long val) {
   if (val >= temp) g++;
   return g;
 }
+
+
+GEOPOINT InterpolateLocation(const GEOPOINT& p1,
+                             const GEOPOINT& p2, 
+                             const double t) 
+{
+  GEOPOINT p = p1;
+  p.Longitude += t*(p2.Longitude-p1.Longitude);
+  p.Latitude += t*(p2.Latitude-p1.Latitude);
+  return p;
+}

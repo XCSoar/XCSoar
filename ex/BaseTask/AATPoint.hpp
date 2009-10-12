@@ -60,6 +60,7 @@ public:
   virtual double getElevation();
 
   virtual bool update_sample(const AIRCRAFT_STATE&);
+  virtual void print(std::ostream& f) const;
 
 protected:
   GEOPOINT TargetLocation;
