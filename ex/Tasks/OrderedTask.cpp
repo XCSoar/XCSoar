@@ -69,22 +69,27 @@ OrderedTask::update_sample(const AIRCRAFT_STATE &state,
 {
   ts->scan_active(tps[activeTaskPoint]);
 
-  int n_task = tps.size();
-  int t_min = std::max(0,(int)activeTaskPoint-1);
-  int t_max = std::min(n_task-1, (int)activeTaskPoint+1);
-  bool full_update = false;
+  const int n_task = tps.size();
 
+  if (!n_task) {
+    return false;
+  }
+
+  const int t_min = std::max(0,(int)activeTaskPoint-1);
+  const int t_max = std::min(n_task-1, (int)activeTaskPoint+1);
+  bool full_update = false;
+  
   for (int i=t_min; i<=t_max; i++) {
     if (tps[i]->transition_enter(state, state_last)) {
-      printf("  entered at %g\n",state.Time);
+      printf("  entered %d at %g\n", i, state.Time);
     }
     if (tps[i]->transition_exit(state, state_last)) {
-      printf("  exited at %g\n",state.Time);
-      if (i<n_task-1) {
+      printf("  exited %d at %g\n", i, state.Time);
+      if (i+1<n_task) {
         printf("  -> transition to sector %d\n", i+1);
         setActiveTaskPoint(i+1);
         ts->scan_active(tps[activeTaskPoint]);
-
+        
         // on sector exit, must update samples since start sector
         // exit transition clears samples
         full_update = true;
@@ -105,7 +110,7 @@ OrderedTask::update_sample(const AIRCRAFT_STATE &state,
 
   // do this last
 
-  double dt = state.Time-state_last.Time;
+  const double dt = state.Time-state_last.Time;
 
   stats.total.set_times(ts->get_state_entered().Time,
                         state, dt);
@@ -282,8 +287,7 @@ OrderedTask::calc_mc_best(const AIRCRAFT_STATE &aircraft,
                           const double mc)
 {
   TaskBestMc bmc(tps,activeTaskPoint, aircraft);
-  double res = bmc.search(mc);
-  return res;
+  return bmc.search(mc);
 }
 
 
@@ -292,8 +296,7 @@ OrderedTask::calc_cruise_efficiency(const AIRCRAFT_STATE &aircraft,
                                     const double mc)
 {
   TaskCruiseEfficiency bmc(tps,activeTaskPoint, aircraft, mc);
-  double res = bmc.search(mc);
-  return res;
+  return bmc.search(mc);
 }
 
 

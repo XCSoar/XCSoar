@@ -59,9 +59,14 @@ public:
 
   virtual double getElevation();
 
+  virtual bool update_sample(const AIRCRAFT_STATE&);
+
 protected:
-    GEOPOINT TargetLocation;
-    bool TargetLocked;
+  GEOPOINT TargetLocation;
+  bool TargetLocked;
+  bool check_target(const AIRCRAFT_STATE&);
+  bool check_target_inside(const AIRCRAFT_STATE&);
+  bool check_target_outside(const AIRCRAFT_STATE&);
 };
 
 #endif
