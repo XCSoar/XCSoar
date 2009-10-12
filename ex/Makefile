@@ -59,10 +59,6 @@ OBJS	:=\
 	test.o \
 	Util.o \
 	GlideSolvers/MacCready.o \
-	GlideSolvers/TaskMacCready.o \
-	GlideSolvers/TaskMacCreadyTravelled.o \
-	GlideSolvers/TaskMacCreadyRemaining.o \
-	GlideSolvers/TaskMacCreadyTotal.o \
 	GlideSolvers/ZeroFinder.o \
 	Navigation/Aircraft.o \
 	BaseTask/AATPoint.o \
@@ -97,6 +93,10 @@ OBJS	:=\
 	Tasks/TaskDijkstra.o \
 	Tasks/TaskInterface.o \
 	Tasks/TaskManager.o \
+	Tasks/TaskSolvers/TaskMacCready.o \
+	Tasks/TaskSolvers/TaskMacCreadyTravelled.o \
+	Tasks/TaskSolvers/TaskMacCreadyRemaining.o \
+	Tasks/TaskSolvers/TaskMacCreadyTotal.o \
 	Tasks/TaskSolvers/TaskBestMc.o \
 	Tasks/TaskSolvers/TaskCruiseEfficiency.o 
 

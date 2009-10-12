@@ -1,7 +1,7 @@
 #ifndef TASKMACCREADYTRAVELLED_HPP
 #define TASKMACCREADYTRAVELLED_HPP
 
-#include "GlideSolvers/TaskMacCready.hpp"
+#include "TaskMacCready.hpp"
 
 class TaskMacCreadyTravelled: 
   public TaskMacCready

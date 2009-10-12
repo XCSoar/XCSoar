@@ -9,7 +9,7 @@
 
 // -------
 
-GEOPOINT OrderedTaskPoint::get_reference_travelled()
+GEOPOINT OrderedTaskPoint::get_reference_travelled() const
 {
   if (has_entered()) {
     return getMaxLocation();
@@ -18,17 +18,17 @@ GEOPOINT OrderedTaskPoint::get_reference_travelled()
   }
 }
 
-GEOPOINT OrderedTaskPoint::get_reference_scored()
+GEOPOINT OrderedTaskPoint::get_reference_scored() const
 {
   return getLocation();
 }
 
-GEOPOINT OrderedTaskPoint::get_reference_nominal()
+GEOPOINT OrderedTaskPoint::get_reference_nominal() const
 {
   return getLocation();
 }
 
-GEOPOINT OrderedTaskPoint::get_reference_remaining()
+GEOPOINT OrderedTaskPoint::get_reference_remaining() const
 {
   if (has_entered()) {
     return getMinLocation();
@@ -40,11 +40,13 @@ GEOPOINT OrderedTaskPoint::get_reference_remaining()
 // -------
 
 
-TaskLeg* OrderedTaskPoint::get_leg_in() {
+TaskLeg* OrderedTaskPoint::get_leg_in() const
+{
   return leg_in;
 }
 
-TaskLeg* OrderedTaskPoint::get_leg_out() {
+TaskLeg* OrderedTaskPoint::get_leg_out() const
+{
   return leg_out;
 }
 
@@ -273,13 +275,13 @@ OrderedTaskPoint::get_search_points()
 }
 
 
-double OrderedTaskPoint::get_distance_remaining(const AIRCRAFT_STATE &)
+double OrderedTaskPoint::get_distance_remaining(const AIRCRAFT_STATE &) const
 {
   return this_distance_remaining;
 }
 
 double 
-OrderedTaskPoint::get_bearing_remaining(const AIRCRAFT_STATE &)
+OrderedTaskPoint::get_bearing_remaining(const AIRCRAFT_STATE &) const
 {
   return bearing_remaining;
 }
@@ -287,7 +289,7 @@ OrderedTaskPoint::get_bearing_remaining(const AIRCRAFT_STATE &)
 
 GLIDE_RESULT OrderedTaskPoint::glide_solution_travelled(const AIRCRAFT_STATE &ac, 
                                                         const MacCready &msolv,
-                                                        const double minH)
+                                                        const double minH) const
 {
   GLIDE_STATE gs;
   gs.Distance = get_distance_travelled();
@@ -299,7 +301,7 @@ GLIDE_RESULT OrderedTaskPoint::glide_solution_travelled(const AIRCRAFT_STATE &ac
 
 GLIDE_RESULT OrderedTaskPoint::glide_solution_planned(const AIRCRAFT_STATE &ac, 
                                                       const MacCready &msolv,
-                                                      const double minH)
+                                                      const double minH) const
 {
   GLIDE_STATE gs;
   gs.Distance = get_distance_planned();

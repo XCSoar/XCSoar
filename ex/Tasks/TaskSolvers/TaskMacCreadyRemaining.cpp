@@ -1,5 +1,5 @@
 
-#include "GlideSolvers/TaskMacCreadyRemaining.hpp"
+#include "TaskMacCreadyRemaining.hpp"
 
 TaskMacCreadyRemaining::TaskMacCreadyRemaining(const std::vector<OrderedTaskPoint*> &_tps,
                                                const unsigned _activeTaskPoint,

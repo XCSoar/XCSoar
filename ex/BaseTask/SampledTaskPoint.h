@@ -50,11 +50,11 @@ public:
     search_min = i;
   }
 
-  const SearchPoint& get_search_max() {
+  const SearchPoint& get_search_max() const {
     return search_max;
   }
 
-  const SearchPoint& get_search_min() {
+  const SearchPoint& get_search_min() const {
     return search_min;
   }
 

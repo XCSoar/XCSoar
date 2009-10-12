@@ -87,9 +87,9 @@ public:
 
   virtual void set_leg_in(TaskLeg*);
 
-  TaskLeg* get_leg_out();
+  TaskLeg* get_leg_out() const;
   
-  TaskLeg* get_leg_in();
+  TaskLeg* get_leg_in() const;
   
   ActiveState_t getActiveState() const {
     return active_state;
@@ -107,13 +107,13 @@ protected:
   void scan_bearing_remaining(const GEOPOINT &ref);
 public:
 
-  virtual GEOPOINT get_reference_nominal();
+  virtual GEOPOINT get_reference_nominal() const;
 
-  virtual GEOPOINT get_reference_scored();
+  virtual GEOPOINT get_reference_scored() const;
 
-  virtual GEOPOINT get_reference_travelled();
+  virtual GEOPOINT get_reference_travelled() const;
 
-  virtual GEOPOINT get_reference_remaining();
+  virtual GEOPOINT get_reference_remaining() const;
 
   virtual bool transition_enter(const AIRCRAFT_STATE & ref_now, 
                                 const AIRCRAFT_STATE & ref_last);
@@ -125,8 +125,8 @@ public:
 
   const std::vector<SearchPoint>& get_search_points();
 
-  virtual double get_distance_remaining(const AIRCRAFT_STATE &);
-  virtual double get_bearing_remaining(const AIRCRAFT_STATE &);
+  virtual double get_distance_remaining(const AIRCRAFT_STATE &) const;
+  virtual double get_bearing_remaining(const AIRCRAFT_STATE &) const;
 
   virtual double get_distance_travelled() const {
     return this_distance_travelled;
@@ -149,10 +149,10 @@ public:
   }
   GLIDE_RESULT glide_solution_travelled(const AIRCRAFT_STATE &, 
                                         const MacCready &mac,
-                                        const double minH=0);
+                                        const double minH=0) const;
   GLIDE_RESULT glide_solution_planned(const AIRCRAFT_STATE &, 
                                       const MacCready &mac,
-                                      const double minH=0);
+                                      const double minH=0) const;
 
 protected:
 

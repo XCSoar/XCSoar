@@ -1,7 +1,7 @@
 #ifndef TASKMACCREADYREMAINING_HPP
 #define TASKMACCREADYREMAINING_HPP
 
-#include "GlideSolvers/TaskMacCready.hpp"
+#include "TaskMacCready.hpp"
 
 class TaskMacCreadyRemaining: 
   public TaskMacCready

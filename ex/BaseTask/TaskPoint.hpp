@@ -57,20 +57,20 @@ public:
                                    ReferencePoint(wp.Location) 
     { }
 
-  virtual double getElevation();
+  virtual double getElevation() const;
 
-  virtual GEOPOINT get_reference_remaining_destination();
+  virtual GEOPOINT get_reference_remaining() const;
   
-  double get_bearing(const AIRCRAFT_STATE &);
+  double get_bearing(const AIRCRAFT_STATE &) const;
 
-  double get_distance(const AIRCRAFT_STATE &);
+  double get_distance(const AIRCRAFT_STATE &) const;
 
-  virtual double get_distance_remaining(const AIRCRAFT_STATE &);
-  virtual double get_bearing_remaining(const AIRCRAFT_STATE &);
+  virtual double get_distance_remaining(const AIRCRAFT_STATE &) const;
+  virtual double get_bearing_remaining(const AIRCRAFT_STATE &) const;
 
   GLIDE_RESULT glide_solution_remaining(const AIRCRAFT_STATE &, 
                                         const MacCready &mac,
-                                        const double minH=0);
+                                        const double minH=0) const;
   virtual void print(std::ostream& f) const;
 protected:
   const double Elevation;

@@ -1,4 +1,4 @@
-#include "GlideSolvers/TaskMacCreadyTravelled.hpp"
+#include "TaskMacCreadyTravelled.hpp"
 
 TaskMacCreadyTravelled::TaskMacCreadyTravelled(const std::vector<OrderedTaskPoint*> &_tps,
                                                const unsigned _activeTaskPoint,

@@ -1,7 +1,7 @@
 #ifndef TASKMACCREADYTOTAL_HPP
 #define TASKMACCREADYTOTAL_HPP
 
-#include "GlideSolvers/TaskMacCready.hpp"
+#include "TaskMacCready.hpp"
 
 class TaskMacCreadyTotal: 
   public TaskMacCready
