@@ -23,3 +23,6 @@
 *.dfPackage
 *.tpr
 *.tws
+res-*.txt
+gmon.out
+gprof.out

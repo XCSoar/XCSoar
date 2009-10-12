@@ -71,7 +71,8 @@ public:
     TimeStarted(-1.0),
     TimeElapsed(0.0),
     TimeRemaining(0.0),
-    TimePlanned(0.0)
+    TimePlanned(0.0),
+    initialised(false)
     {
     };
 
@@ -93,7 +94,8 @@ public:
                  const AIRCRAFT_STATE& state,
                  const double dt);
   void print(std::ostream &f) const;
-
+private:
+  bool initialised;
 };
 
 

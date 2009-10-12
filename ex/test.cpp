@@ -35,7 +35,7 @@ void test_mc()
 
   mc.set_mc(1.0);
 
-  ac.WindSpeed = 5.0;
+  ac.WindSpeed = 0.0;
   ac.WindDirection = 0;
 
   gs.Distance = 100;
@@ -114,9 +114,9 @@ int main() {
   AIRCRAFT_STATE state, state_last;
   state.Location.Longitude=8;
   state.Location.Latitude=11;  
-  state.Altitude = 3.0;
+  state.Altitude = 1.0;
   state.Time = 0.0;
-  state.WindSpeed = 5.0;
+  state.WindSpeed = 0.0;
   state.WindDirection = 0;
 
   test_task.setActiveTaskPoint(0);

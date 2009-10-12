@@ -334,13 +334,13 @@ public:
   MacCreadyVopt(const AIRCRAFT_STATE &_aircraft,
                 const GLIDE_STATE &_task,
                 const MacCready &_mac):
-    ZeroFinder(15.0,50.0,0.1),
+    ZeroFinder(15.0,50.0,0.01),
     aircraft(_aircraft),
     task(_task),
     mac(_mac)
     {
     };
-  virtual double f(double V) {
+  virtual double f(const double V) {
     res = mac.solve_glide(aircraft, task, V);
     if (mac.get_mc()>0) {
       // equivalent time to gain the height that was used

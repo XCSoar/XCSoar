@@ -1,13 +1,12 @@
 #include "SearchPoint.hpp"
 #include "Util.h"
-
-#include <stdio.h>
+#include <math.h>
 
 void 
 SearchPoint::project(const TaskProjection& tp) 
 {
   flatLocation = tp.project(Location);
-};
+}
 
 
 bool 
@@ -19,7 +18,7 @@ SearchPoint::equals(const SearchPoint& sp) const
   } else {
     return false;
   }
-};
+}
 
 bool 
 SearchPoint::sort(const SearchPoint& sp) const 
@@ -37,7 +36,7 @@ SearchPoint::sort(const SearchPoint& sp) const
 unsigned
 SearchPoint::flat_distance(const SearchPoint& sp) const
 {
-  unsigned long dx = flatLocation.Longitude-sp.flatLocation.Longitude;
-  unsigned long dy = flatLocation.Latitude-sp.flatLocation.Latitude;
+  const unsigned long dx = (flatLocation.Longitude-sp.flatLocation.Longitude);
+  const unsigned long dy = (flatLocation.Latitude-sp.flatLocation.Latitude);
   return isqrt4(dx*dx+dy*dy);
 }

@@ -6,6 +6,12 @@
 
 #define MAX_DIST 100000
 
+unsigned invert_distance(const unsigned d, const unsigned nlayers)
+{
+//  return nlayers*MAX_DIST-d;
+  return -d;
+}
+
 TaskDijkstra::~TaskDijkstra() {
 }
 
@@ -51,7 +57,7 @@ void TaskDijkstra::add_edges(Dijkstra<ScanTaskPoint> &dijkstra,
 
     const unsigned dr = distance(curNode, destination);
     if (dr) {
-      dijkstra.link(destination, shortest? dr: MAX_DIST-dr);
+      dijkstra.link(destination, shortest? dr: invert_distance(dr,1));
     }
   }
 }
@@ -78,7 +84,7 @@ unsigned TaskDijkstra::distance_opt(const ScanTaskPoint &start,
 
     if (curNode.first == num_taskpoints-1) {
       const unsigned d = dijkstra.dist();
-      return shortest? d: (MAX_DIST*(curNode.first-start.first)-d);
+      return shortest? d: invert_distance(d,curNode.first-start.first);
     }
 
     add_edges(dijkstra, curNode);
@@ -116,7 +122,7 @@ TaskDijkstra::distance_opt_achieved(const SearchPoint &currentLocation,
       add_edges(dijkstra, curNode);
     } else {
 
-      const unsigned d_acc = MAX_DIST*activeStage-dijkstra.dist();
+      const unsigned d_acc = invert_distance(dijkstra.dist(),activeStage);
 
       TaskDijkstra inner_dijkstra(task, num_taskpoints);
       unsigned d_remaining = 0;

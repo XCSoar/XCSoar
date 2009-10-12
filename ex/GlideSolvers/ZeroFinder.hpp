@@ -9,8 +9,8 @@ public:
     tolerance(_tolerance)
     {
     };
-  virtual double f(double x) = 0;
-  virtual bool valid(double x) {
+  virtual double f(const double x) = 0;
+  virtual bool valid(const double x) {
     if ((x<=xmax)&&(x>=xmin)) {
       return true;
     } else {

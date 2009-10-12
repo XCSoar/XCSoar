@@ -20,7 +20,7 @@ OrderedTask::update_geometry() {
   for (unsigned i=0; i<tps.size(); i++) {
     task_projection.scan_location(tps[i]->getLocation());
   }
-  task_projection.report();
+//  task_projection.report();
 
   for (unsigned i=0; i<tps.size(); i++) {
     tps[i]->update_geometry();
@@ -51,9 +51,9 @@ OrderedTask::scan_distance(const GEOPOINT &location, bool full)
       ts->scan_active(tps[activeTaskPoint-1]);
     }
     distance_max = dijkstra.distance_opt_achieved(ac, false);
+    ts->scan_active(tps[activeTaskPoint]);
   }
 
-  ts->scan_active(tps[activeTaskPoint]);
   distance_min = dijkstra.distance_opt_achieved(ac, true);
 
   stats.total.remaining.set_distance(ts->scan_distance_remaining(location));
@@ -199,19 +199,19 @@ OrderedTask::OrderedTask()
   WAYPOINT wp[6];
   wp[0].Location.Longitude=0;
   wp[0].Location.Latitude=0;
-  wp[0].Altitude=1;
+  wp[0].Altitude=0.25;
   wp[1].Location.Longitude=0;
   wp[1].Location.Latitude=10;
-  wp[1].Altitude=1;
+  wp[1].Altitude=0.25;
   wp[2].Location.Longitude=10;
   wp[2].Location.Latitude=10;
-  wp[2].Altitude=2;
-  wp[3].Location.Longitude=7;
+  wp[2].Altitude=0.5;
+  wp[3].Location.Longitude=8;
   wp[3].Location.Latitude=5;
-  wp[3].Altitude=1;
+  wp[3].Altitude=0.25;
   wp[4].Location.Longitude=10;
   wp[4].Location.Latitude=0;
-  wp[4].Altitude=1;
+  wp[4].Altitude=0.25;
 
   ts = new FAISectorStartPoint(task_projection,wp[0]);
   tps.push_back(ts);
