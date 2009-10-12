@@ -10,8 +10,8 @@
 #include "GlideSolvers/TaskMacCreadyTravelled.hpp"
 #include "GlideSolvers/TaskMacCreadyRemaining.hpp"
 #include "GlideSolvers/TaskMacCreadyTotal.hpp"
-#include "GlideSolvers/TaskCruiseEfficiency.hpp"
-#include "GlideSolvers/TaskBestMc.hpp"
+#include "Tasks/TaskSolvers/TaskCruiseEfficiency.hpp"
+#include "Tasks/TaskSolvers/TaskBestMc.hpp"
 
 void
 OrderedTask::update_geometry() {

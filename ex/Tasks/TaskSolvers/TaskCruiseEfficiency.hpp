@@ -1,8 +1,8 @@
 #ifndef TASKCRUISEEFFICIENCY_HPP
 #define TASKCRUISEEFFICIENCY_HPP
 
-#include "TaskMacCreadyTravelled.hpp"
-#include "ZeroFinder.hpp"
+#include "GlideSolvers/TaskMacCreadyTravelled.hpp"
+#include "GlideSolvers/ZeroFinder.hpp"
 #include <math.h>
 
 class TaskCruiseEfficiency: 

@@ -1,8 +1,8 @@
 #ifndef TASKBESTMC_HPP
 #define TASKBESTMC_HPP
 
-#include "TaskMacCreadyRemaining.hpp"
-#include "ZeroFinder.hpp"
+#include "GlideSolvers/TaskMacCreadyRemaining.hpp"
+#include "GlideSolvers/ZeroFinder.hpp"
 
 class TaskBestMc: 
   public ZeroFinder
