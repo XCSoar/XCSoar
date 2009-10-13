@@ -76,6 +76,16 @@ OrderedTask::update_sample(const AIRCRAFT_STATE &state,
     return false;
   }
 
+  stats.total.set_times(ts->get_state_entered().Time, state);
+
+  if (activeTaskPoint>0) {
+    stats.current_leg.set_times(tps[activeTaskPoint-1]->get_state_entered().Time,
+                                state);
+  } else {
+    stats.current_leg.set_times(-1,
+                                state);
+  }
+
   const int t_min = std::max(0,(int)activeTaskPoint-1);
   const int t_max = std::min(n_task-1, (int)activeTaskPoint+1);
   bool full_update = false;
@@ -101,35 +111,25 @@ OrderedTask::update_sample(const AIRCRAFT_STATE &state,
     }
   }
 
+  double mc = 1.0;
+  // must be done in order!
+  calc_min_target(state, mc, 3.6);
+
   scan_distance(state.Location, full_update);
 
-  double mc = 1.0;
-
-  // must be done in order!
   glide_solution_remaining(state, mc);
   glide_solution_travelled(state, mc);
   glide_solution_planned(state, mc);
 
-  // do this last
-
-  const double dt = state.Time-state_last.Time;
-
-  stats.total.set_times(ts->get_state_entered().Time,
-                        state, dt);
-
-  if (activeTaskPoint>0) {
-    stats.current_leg.set_times(tps[activeTaskPoint-1]->get_state_entered().Time,
-                                state, dt);
-  } else {
-    stats.current_leg.set_times(-1,
-                                state, dt);
-  }
-
   // other calcs
+
   stats.mc_best = calc_mc_best(state, mc);
   stats.cruise_efficiency = calc_cruise_efficiency(state, mc);
 
-  calc_min_target(state, mc, 3.3);
+  // do this last
+  const double dt = state.Time-state_last.Time;
+  stats.total.calc_speeds(dt);
+  stats.current_leg.calc_speeds(dt);
 
   return true;
 }
@@ -310,7 +310,7 @@ OrderedTask::calc_min_target(const AIRCRAFT_STATE &aircraft,
 {
   // TODO: look at max/min dist and only perform this scan if
   // change is possible
-  const double t_rem = std::max(0.0,t_target-stats.total.TimeElapsed);
+  const double t_rem = std::max(0.0, t_target-stats.total.TimeElapsed);
 
   TaskMinTarget bmt(tps, activeTaskPoint, aircraft, t_rem, ts);
   double p= bmt.search(mc);

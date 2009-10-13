@@ -65,8 +65,8 @@ bool
 AATPoint::check_target_inside(const AIRCRAFT_STATE& state) 
 {
   // target must be moved if d(p_last,t)+d(t,p_next) < d(p_last,state)+d(state,p_next)
-  if (double_leg_distance(TargetLocation) < double_leg_distance(state.Location)) {
-    printf("target short inside\n");
+  if (double_leg_distance(TargetLocation) < double_leg_distance(state.Location)) 
+  {
     const double d_in_front = 0.01;
     const double d_to_max = ::Distance(state.Location, getMaxLocation());
 

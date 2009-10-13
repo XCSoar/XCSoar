@@ -59,14 +59,16 @@ void DistanceStat::print(std::ostream &f) const
 
 
 void ElementStat::set_times(const double ts, 
-                            const AIRCRAFT_STATE& state,
-                            const double dt)
+                            const AIRCRAFT_STATE& state)
 {
   TimeStarted = ts;
   TimeElapsed = std::max(state.Time-ts,0.0);
   TimeRemaining = solution_remaining.TimeElapsed;
   TimePlanned = TimeElapsed+TimeRemaining;
-  
+}
+
+void ElementStat::calc_speeds(const double dt)
+{
   remaining_effective.calc_speed(this);
   remaining.calc_speed(this);
   planned.calc_speed(this);
@@ -85,6 +87,7 @@ void ElementStat::set_times(const double ts,
     travelled.calc_incremental_speed(dt);
   }
 }
+
 
 void ElementStat::print(std::ostream &f) const
 {

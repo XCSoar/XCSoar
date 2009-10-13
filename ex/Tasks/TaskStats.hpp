@@ -91,8 +91,8 @@ public:
   GLIDE_RESULT solution_remaining;
 
   void set_times(const double ts, 
-                 const AIRCRAFT_STATE& state,
-                 const double dt);
+                 const AIRCRAFT_STATE& state);
+  void calc_speeds(const double dt);
   void print(std::ostream &f) const;
 private:
   bool initialised;
