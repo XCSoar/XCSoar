@@ -89,9 +89,9 @@ OBJS	:=\
 	Tasks/AbstractTask.o \
 	Tasks/GotoTask.o \
 	Tasks/OrderedTask.o \
-	Tasks/TaskDijkstra.o \
 	Tasks/TaskInterface.o \
 	Tasks/TaskManager.o \
+	Tasks/PathSolvers/TaskDijkstra.o \
 	Tasks/TaskSolvers/TaskMacCready.o \
 	Tasks/TaskSolvers/TaskMacCreadyTravelled.o \
 	Tasks/TaskSolvers/TaskMacCreadyRemaining.o \
