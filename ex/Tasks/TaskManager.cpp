@@ -66,3 +66,18 @@ bool TaskManager::update(const AIRCRAFT_STATE &state,
   return false;
 }
 
+const TaskStats& TaskManager::get_stats() const
+{
+  switch(mode) {
+  case (MODE_NULL):
+    return null_stats;
+  case (MODE_GOTO):
+    return task_goto.get_stats();
+  case (MODE_ORDERED):
+    return task_ordered.get_stats();
+  case (MODE_ABORT):
+    return task_abort.get_stats();
+  };
+  // should never get here
+  return null_stats;
+}

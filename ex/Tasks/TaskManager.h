@@ -8,6 +8,7 @@
 #include "Tasks/AbortTask.h"
 #include "Tasks/GotoTask.h"
 #include "Tasks/OrderedTask.h"
+#include "Tasks/TaskStats.hpp"
 
 class TaskManager : public TaskInterface,
  public Serialisable
@@ -30,8 +31,11 @@ public:
   virtual void report(const AIRCRAFT_STATE &location);
 
   virtual bool update(const AIRCRAFT_STATE &, const AIRCRAFT_STATE&);
+
+  virtual const TaskStats& get_stats() const;
   
 private:
+  TaskStats null_stats;
 
     /** @link aggregation */
     OrderedTask task_ordered;

@@ -14,7 +14,7 @@ public:
 
     unsigned getActiveTaskPointIndex();
 
-  const TaskStats& get_stats() const {
+  virtual const TaskStats& get_stats() const {
     return stats;
   }
   bool update(const AIRCRAFT_STATE &, const AIRCRAFT_STATE&);

@@ -5,6 +5,8 @@
 
 struct AIRCRAFT_STATE;
 struct GEOPOINT;
+class TaskStats;
+
 class TaskPoint;
 
 class TaskInterface {
@@ -21,6 +23,8 @@ public:
   virtual void report(const AIRCRAFT_STATE &state) = 0;
 
   virtual bool update(const AIRCRAFT_STATE &, const AIRCRAFT_STATE&) = 0;
+
+  virtual const TaskStats& get_stats() const = 0;
 
 };
 #endif //TASKINTERFACE_H
