@@ -4,8 +4,6 @@
 #include <map>
 #include <queue>
 
-typedef std::pair<unsigned, unsigned> ScanTaskPoint;
-
 template <class Node> class Dijkstra {
 public:
   Dijkstra() {}

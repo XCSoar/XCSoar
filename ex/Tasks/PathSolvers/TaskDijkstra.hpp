@@ -1,12 +1,11 @@
 #ifndef TASK_DIJKSTRA_HPP
 #define TASK_DIJKSTRA_HPP
 
-#include "Util.h"
-#include "Dijkstra.hpp"
 #include "BaseTask/SearchPointVector.hpp"
-#include <stdio.h>
 
 class OrderedTask;
+typedef std::pair<unsigned, unsigned> ScanTaskPoint;
+template <class Node> class Dijkstra;
 
 class TaskDijkstra {
 public:
