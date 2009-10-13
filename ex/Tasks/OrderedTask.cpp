@@ -76,16 +76,6 @@ OrderedTask::update_sample(const AIRCRAFT_STATE &state,
     return false;
   }
 
-  stats.total.set_times(ts->get_state_entered().Time, state);
-
-  if (activeTaskPoint>0) {
-    stats.current_leg.set_times(tps[activeTaskPoint-1]->get_state_entered().Time,
-                                state);
-  } else {
-    stats.current_leg.set_times(-1,
-                                state);
-  }
-
   const int t_min = std::max(0,(int)activeTaskPoint-1);
   const int t_max = std::min(n_task-1, (int)activeTaskPoint+1);
   bool full_update = false;
@@ -125,11 +115,6 @@ OrderedTask::update_sample(const AIRCRAFT_STATE &state,
 
   stats.mc_best = calc_mc_best(state, mc);
   stats.cruise_efficiency = calc_cruise_efficiency(state, mc);
-
-  // do this last
-  const double dt = state.Time-state_last.Time;
-  stats.total.calc_speeds(dt);
-  stats.current_leg.calc_speeds(dt);
 
   return true;
 }
@@ -388,5 +373,21 @@ void OrderedTask::report(const AIRCRAFT_STATE &state)
     OrderedTaskPoint *tp = tps[i];
     f3 <<  tp->getMinLocation().Longitude << " " 
        <<  tp->getMinLocation().Latitude << "\n";
+  }
+}
+
+
+void
+OrderedTask::update_stats_times(const AIRCRAFT_STATE &state, 
+                                const AIRCRAFT_STATE &state_last)
+{
+  stats.total.set_times(ts->get_state_entered().Time, state);
+
+  if (activeTaskPoint>0) {
+    stats.current_leg.set_times(tps[activeTaskPoint-1]->get_state_entered().Time,
+                                state);
+  } else {
+    stats.current_leg.set_times(-1,
+                                state);
   }
 }

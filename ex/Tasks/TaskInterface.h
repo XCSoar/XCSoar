@@ -20,7 +20,7 @@ public:
 
   virtual void report(const AIRCRAFT_STATE &state) = 0;
 
-  virtual bool update_sample(const AIRCRAFT_STATE &, const AIRCRAFT_STATE&) = 0;
+  virtual bool update(const AIRCRAFT_STATE &, const AIRCRAFT_STATE&) = 0;
 
 };
 #endif //TASKINTERFACE_H

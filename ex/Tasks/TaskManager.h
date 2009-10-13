@@ -29,7 +29,7 @@ public:
 
   virtual void report(const AIRCRAFT_STATE &location);
 
-  virtual bool update_sample(const AIRCRAFT_STATE &, const AIRCRAFT_STATE&);
+  virtual bool update(const AIRCRAFT_STATE &, const AIRCRAFT_STATE&);
   
 private:
 

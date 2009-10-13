@@ -3,7 +3,6 @@
 #define ORDEREDTASK_H
 
 #include "Tasks/AbstractTask.h"
-#include "Tasks/TaskStats.hpp"
 #include "BaseTask/OrderedTaskPoint.hpp"
 #include "BaseTask/StartPoint.hpp"
 #include "BaseTask/TaskLeg.h"
@@ -43,9 +42,6 @@ public:
   };
   void report(const AIRCRAFT_STATE &state);
 
-  const TaskStats& get_stats() const {
-    return stats;
-  }
   unsigned task_size() const {
     return tps.size();
   }
@@ -61,7 +57,8 @@ public:
     tps[tp]->set_search_max(sol);
   }
 private:
-  TaskStats stats;
+  virtual void update_stats_times(const AIRCRAFT_STATE &, const AIRCRAFT_STATE&);
+
   std::vector<OrderedTaskPoint*> tps;
 
   double distance_nominal;

@@ -5,6 +5,7 @@
 #include "Util.h"
 #include "TaskInterface.h"
 #include "Tasks/TaskInterface.h"
+#include "Tasks/TaskStats.hpp"
 
 class AbstractTask : TaskInterface {
 public:
@@ -13,7 +14,18 @@ public:
 
     unsigned getActiveTaskPointIndex();
 
+  const TaskStats& get_stats() const {
+    return stats;
+  }
+  bool update(const AIRCRAFT_STATE &, const AIRCRAFT_STATE&);
+  
 protected:
-    unsigned activeTaskPoint;
+  virtual bool update_sample(const AIRCRAFT_STATE &, const AIRCRAFT_STATE&) = 0;
+  
+  unsigned activeTaskPoint;
+  TaskStats stats;
+private:
+  virtual void update_stats_times(const AIRCRAFT_STATE &, const AIRCRAFT_STATE&);
+  void update_stats_speeds(const AIRCRAFT_STATE &, const AIRCRAFT_STATE&);
 };
 #endif //ABSTRACTTASK_H

@@ -146,7 +146,7 @@ int main() {
       double d = sqrt(dx*dx+dy*dy);
       double V = 7.0;
       state.Time += d/V;
-      test_task.update_sample(state, state_last);
+      test_task.update(state, state_last);
       test_task.report(state);
       n_samples++;
       state_last = state;
