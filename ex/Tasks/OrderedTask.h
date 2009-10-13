@@ -90,7 +90,9 @@ private:
                       const double mc);
   double calc_cruise_efficiency(const AIRCRAFT_STATE &aircraft, 
                                 const double mc);
-
+  double calc_min_target(const AIRCRAFT_STATE &, 
+                         const double mc,
+                         const double t_target);
 };
 
 #endif //ORDEREDTASK_H

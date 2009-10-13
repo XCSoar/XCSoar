@@ -12,6 +12,7 @@
 #include "TaskSolvers/TaskMacCreadyTotal.hpp"
 #include "TaskSolvers/TaskCruiseEfficiency.hpp"
 #include "TaskSolvers/TaskBestMc.hpp"
+#include "TaskSolvers/TaskMinTarget.hpp"
 
 void
 OrderedTask::update_geometry() {
@@ -103,6 +104,7 @@ OrderedTask::update_sample(const AIRCRAFT_STATE &state,
   scan_distance(state.Location, full_update);
 
   double mc = 1.0;
+
   // must be done in order!
   glide_solution_remaining(state, mc);
   glide_solution_travelled(state, mc);
@@ -126,6 +128,8 @@ OrderedTask::update_sample(const AIRCRAFT_STATE &state,
   // other calcs
   stats.mc_best = calc_mc_best(state, mc);
   stats.cruise_efficiency = calc_cruise_efficiency(state, mc);
+
+  calc_min_target(state, mc, 3.3);
 
   return true;
 }
@@ -295,10 +299,24 @@ double
 OrderedTask::calc_cruise_efficiency(const AIRCRAFT_STATE &aircraft, 
                                     const double mc)
 {
-  TaskCruiseEfficiency bmc(tps,activeTaskPoint, aircraft, mc);
-  return bmc.search(mc);
+  TaskCruiseEfficiency bce(tps,activeTaskPoint, aircraft, mc);
+  return bce.search(mc);
 }
 
+double
+OrderedTask::calc_min_target(const AIRCRAFT_STATE &aircraft, 
+                             const double mc,
+                             const double t_target)
+{
+  // TODO: look at max/min dist and only perform this scan if
+  // change is possible
+  const double t_rem = std::max(0.0,t_target-stats.total.TimeElapsed);
+
+  TaskMinTarget bmt(tps, activeTaskPoint, aircraft, t_rem, ts);
+  double p= bmt.search(mc);
+  printf("target opt %g\n",p);
+  return p;
+}
 
 
 ////////////////////////// Reporting/printing for debugging
