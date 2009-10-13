@@ -4,8 +4,7 @@
 
 #include "Util.h"
 #include "TaskInterface.h"
-#include "Tasks/TaskInterface.h"
-#include "Tasks/TaskStats.hpp"
+#include "TaskStats/TaskStats.hpp"
 
 class AbstractTask : TaskInterface {
 public:

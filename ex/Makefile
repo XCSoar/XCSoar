@@ -85,7 +85,6 @@ OBJS	:=\
 	TaskPoints/ObservationZones/SectorZone.o \
 	TaskPoints/ObservationZones/SpeedLimitZone.o \
 	TaskPoints/ObservationZones/SymmetricSectorZone.o \
-	Tasks/TaskStats.o \
 	Tasks/AbortTask.o \
 	Tasks/AbstractTask.o \
 	Tasks/GotoTask.o \
@@ -99,7 +98,8 @@ OBJS	:=\
 	Tasks/TaskSolvers/TaskMacCreadyTotal.o \
 	Tasks/TaskSolvers/TaskBestMc.o \
 	Tasks/TaskSolvers/TaskCruiseEfficiency.o \
-	Tasks/TaskSolvers/TaskMinTarget.o 
+	Tasks/TaskSolvers/TaskMinTarget.o \
+	Tasks/TaskStats/TaskStats.o 
 
 
 all: $(OBJS)

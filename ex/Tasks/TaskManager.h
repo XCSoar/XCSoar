@@ -4,11 +4,11 @@
 #define TASKMANAGER_H
 
 #include "Util/Serialisable.hpp"
-#include "Tasks/TaskInterface.h"
-#include "Tasks/AbortTask.h"
-#include "Tasks/GotoTask.h"
-#include "Tasks/OrderedTask.h"
-#include "Tasks/TaskStats.hpp"
+#include "TaskInterface.h"
+#include "AbortTask.h"
+#include "GotoTask.h"
+#include "OrderedTask.h"
+#include "TaskStats/TaskStats.hpp"
 
 class TaskManager : public TaskInterface,
  public Serialisable
@@ -35,7 +35,7 @@ public:
   virtual const TaskStats& get_stats() const;
   
 private:
-  TaskStats null_stats;
+  const TaskStats null_stats;
 
     /** @link aggregation */
     OrderedTask task_ordered;
