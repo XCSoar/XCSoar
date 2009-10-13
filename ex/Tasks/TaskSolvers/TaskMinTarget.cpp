@@ -8,7 +8,7 @@ TaskMinTarget::TaskMinTarget(const std::vector<OrderedTaskPoint*>& tps,
                              const AIRCRAFT_STATE &_aircraft,
                              const double _t_remaining,
                              StartPoint *_ts):
-  ZeroFinder(0.0,1.0,0.0025),
+  ZeroFinder(0.0,1.0,0.002),
   tm(tps,activeTaskPoint,1.0),
   aircraft(_aircraft),
   t_remaining(_t_remaining),
@@ -34,7 +34,7 @@ double TaskMinTarget::f(const double p)
 bool TaskMinTarget::valid(const double tp) 
 {
   double ff = f(tp);
-  return (res.Solution== MacCready::RESULT_OK) && (ff>=-tolerance*2.0);
+  return (res.Solution== MacCready::RESULT_OK) && (fabs(ff)>=-tolerance*2.0);
 }
 
 double TaskMinTarget::search(const double tp) 
