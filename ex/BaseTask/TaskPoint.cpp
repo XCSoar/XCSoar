@@ -1,6 +1,7 @@
 
 #include "TaskPoint.hpp"
 #include "Util.h"
+#include "GlideSolvers/MacCready.hpp"
 #include <algorithm>
 
 GEOPOINT TaskPoint::get_reference_remaining() const

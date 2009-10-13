@@ -44,11 +44,11 @@
 #include "Navigation/Waypoint.hpp"
 #include "Navigation/Aircraft.hpp"
 #include "Util.h"
-#include "GlideSolvers/MacCready.hpp"
 #include <iostream>
-#include <fstream>
 
+struct GLIDE_RESULT;
 class MacCready;
+
 
 class TaskPoint : 
   public ReferencePoint, public Serialisable {
