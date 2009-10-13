@@ -13,6 +13,7 @@
 #include "TaskSolvers/TaskCruiseEfficiency.hpp"
 #include "TaskSolvers/TaskBestMc.hpp"
 #include "TaskSolvers/TaskMinTarget.hpp"
+#include <assert.h>
 
 void
 OrderedTask::update_geometry() {

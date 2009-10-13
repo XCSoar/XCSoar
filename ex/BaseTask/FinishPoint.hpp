@@ -40,8 +40,6 @@
 #define FINISHPOINT_HPP
 
 #include "OrderedTaskPoint.hpp"
-#include <stdlib.h>
-#include <assert.h>
 
 class FinishPoint : public OrderedTaskPoint {
 public:
@@ -49,10 +47,7 @@ public:
                 const WAYPOINT & wp) : 
       OrderedTaskPoint(tp,wp,false) { };
 
-  virtual void set_leg_out(TaskLeg* the_leg) {
-    assert(the_leg == NULL);
-    // should not ever have an outbound leg
-  }
+  virtual void set_leg_out(TaskLeg* the_leg);
 
   virtual bool transition_enter(const AIRCRAFT_STATE & ref_now, 
                                 const AIRCRAFT_STATE & ref_last);

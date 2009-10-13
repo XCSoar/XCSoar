@@ -33,14 +33,13 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
   }
-*/struct AIRCRAFT_STATE;
+*/
 
 
 #ifndef STARTPOINT_HPP
 #define STARTPOINT_HPP
 
 #include "OrderedTaskPoint.hpp"
-#include <assert.h>
 
 class StartPoint : public OrderedTaskPoint {
 public:
@@ -52,10 +51,7 @@ public:
 
     };
 
-  virtual void set_leg_in(TaskLeg* the_leg) {
-    assert(the_leg == NULL);
-    // should not ever have an inbound leg
-  }
+  virtual void set_leg_in(TaskLeg* the_leg);
 
   // allow access to forward scan
   bool scan_active(OrderedTaskPoint* atp) {
