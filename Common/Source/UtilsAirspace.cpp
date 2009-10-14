@@ -44,125 +44,129 @@ Copyright_License {
 #include <assert.h>
 #include "Units.hpp"
 
-
-void ConvertFlightLevels(void)
-{
+/**
+ * Converts all FlightLevel-based airspaces to MSL-based airspaces
+ * (Attention: Inaccurate!)
+ */
+void ConvertFlightLevels(void) {
   unsigned i;
 
-  // TODO accuracy: Convert flightlevels is inaccurate!
+  // TODO accuracy: ConvertFlightLevels is inaccurate!
 
-  for(i=0;i<NumberOfAirspaceCircles;i++)
-    {
-      if(AirspaceCircle[i].Base.FL  != 0)
-	{
-	  AirspaceCircle[i].Base.Altitude = (AirspaceCircle[i].Base.FL * 100) + ((QNH-1013)*30);
-	  AirspaceCircle[i].Base.Altitude = AirspaceCircle[i].Base.Altitude / TOFEET;
-	}
-      if(AirspaceCircle[i].Top.FL  != 0)
-	{
-	  AirspaceCircle[i].Top.Altitude = (AirspaceCircle[i].Top.FL * 100) + ((QNH-1013)*30);
-	  AirspaceCircle[i].Top.Altitude = AirspaceCircle[i].Top.Altitude / TOFEET;
-	}
+  for (i = 0; i < NumberOfAirspaceCircles; i++) {
+    if (AirspaceCircle[i].Base.FL != 0) {
+      AirspaceCircle[i].Base.Altitude = (AirspaceCircle[i].Base.FL * 100)
+          + ((QNH - 1013) * 30);
+      AirspaceCircle[i].Base.Altitude = AirspaceCircle[i].Base.Altitude
+          / TOFEET;
     }
-
-
-  for(i=0;i<NumberOfAirspaceAreas;i++)
-    {
-      if(AirspaceArea[i].Base.FL  != 0)
-	{
-	  AirspaceArea[i].Base.Altitude = (AirspaceArea[i].Base.FL * 100) + ((QNH-1013)*30);
-	  AirspaceArea[i].Base.Altitude = AirspaceArea[i].Base.Altitude / TOFEET;
-	}
-      if(AirspaceArea[i].Top.FL  != 0)
-	{
-	  AirspaceArea[i].Top.Altitude = (AirspaceArea[i].Top.FL * 100) + ((QNH-1013)*30);
-	  AirspaceArea[i].Top.Altitude = AirspaceArea[i].Top.Altitude / TOFEET;
-	}
+    if (AirspaceCircle[i].Top.FL != 0) {
+      AirspaceCircle[i].Top.Altitude = (AirspaceCircle[i].Top.FL * 100) + ((QNH
+          - 1013) * 30);
+      AirspaceCircle[i].Top.Altitude = AirspaceCircle[i].Top.Altitude / TOFEET;
     }
+  }
+
+  for (i = 0; i < NumberOfAirspaceAreas; i++) {
+    if (AirspaceArea[i].Base.FL != 0) {
+      AirspaceArea[i].Base.Altitude = (AirspaceArea[i].Base.FL * 100) + ((QNH
+          - 1013) * 30);
+      AirspaceArea[i].Base.Altitude = AirspaceArea[i].Base.Altitude / TOFEET;
+    }
+    if (AirspaceArea[i].Top.FL != 0) {
+      AirspaceArea[i].Top.Altitude = (AirspaceArea[i].Top.FL * 100) + ((QNH
+          - 1013) * 30);
+      AirspaceArea[i].Top.Altitude = AirspaceArea[i].Top.Altitude / TOFEET;
+    }
+  }
 }
 
-
-void FormatWarningString(int Type, const TCHAR *Name,
-                         AIRSPACE_ALT Base, AIRSPACE_ALT Top,
-                         TCHAR *szMessageBuffer, TCHAR *szTitleBuffer)
-{
+/**
+ * Fills the buffers with a formatted airspace warning
+ * string
+ * @param Type Airspace type
+ * @param Name Airspace name
+ * @param Base Airspace base
+ * @param Top Airspace top
+ * @param szMessageBuffer Pointer to the message buffer
+ * @param szTitleBuffer Pointer to the title buffer
+ */
+void FormatWarningString(int Type, const TCHAR *Name, AIRSPACE_ALT Base,
+    AIRSPACE_ALT Top, TCHAR *szMessageBuffer, TCHAR *szTitleBuffer) {
   TCHAR BaseStr[512];
   TCHAR TopStr[512];
 
-  switch (Type)
-    {
-    case RESTRICT:
-      _tcscpy(szTitleBuffer,gettext(TEXT("Restricted"))); break;
-    case PROHIBITED:
-      _tcscpy(szTitleBuffer,gettext(TEXT("Prohibited"))); break;
-    case DANGER:
-      _tcscpy(szTitleBuffer,gettext(TEXT("Danger Area"))); break;
-    case CLASSA:
-      _tcscpy(szTitleBuffer,gettext(TEXT("Class A"))); break;
-    case CLASSB:
-      _tcscpy(szTitleBuffer,gettext(TEXT("Class B"))); break;
-    case CLASSC:
-      _tcscpy(szTitleBuffer,gettext(TEXT("Class C"))); break;
-    case CLASSD:
-      _tcscpy(szTitleBuffer,gettext(TEXT("Class D"))); break;
-    case CLASSE:
-      _tcscpy(szTitleBuffer,gettext(TEXT("Class E"))); break;
-    case CLASSF:
-      _tcscpy(szTitleBuffer,gettext(TEXT("Class F"))); break;
-    case NOGLIDER:
-      _tcscpy(szTitleBuffer,gettext(TEXT("No Glider"))); break;
-    case CTR:
-      _tcscpy(szTitleBuffer,gettext(TEXT("CTR"))); break;
-    case WAVE:
-      _tcscpy(szTitleBuffer,gettext(TEXT("Wave"))); break;
-    default:
-      _tcscpy(szTitleBuffer,gettext(TEXT("Unknown")));
-    }
+  switch (Type) {
+  case RESTRICT:
+    _tcscpy(szTitleBuffer, gettext(TEXT("Restricted")));
+    break;
+  case PROHIBITED:
+    _tcscpy(szTitleBuffer, gettext(TEXT("Prohibited")));
+    break;
+  case DANGER:
+    _tcscpy(szTitleBuffer, gettext(TEXT("Danger Area")));
+    break;
+  case CLASSA:
+    _tcscpy(szTitleBuffer, gettext(TEXT("Class A")));
+    break;
+  case CLASSB:
+    _tcscpy(szTitleBuffer, gettext(TEXT("Class B")));
+    break;
+  case CLASSC:
+    _tcscpy(szTitleBuffer, gettext(TEXT("Class C")));
+    break;
+  case CLASSD:
+    _tcscpy(szTitleBuffer, gettext(TEXT("Class D")));
+    break;
+  case CLASSE:
+    _tcscpy(szTitleBuffer, gettext(TEXT("Class E")));
+    break;
+  case CLASSF:
+    _tcscpy(szTitleBuffer, gettext(TEXT("Class F")));
+    break;
+  case NOGLIDER:
+    _tcscpy(szTitleBuffer, gettext(TEXT("No Glider")));
+    break;
+  case CTR:
+    _tcscpy(szTitleBuffer, gettext(TEXT("CTR")));
+    break;
+  case WAVE:
+    _tcscpy(szTitleBuffer, gettext(TEXT("Wave")));
+    break;
+  default:
+    _tcscpy(szTitleBuffer, gettext(TEXT("Unknown")));
+  }
 
-  if(Base.FL == 0)
-    {
-      if (Base.AGL > 0) {
-        _stprintf(BaseStr,TEXT("%1.0f%s %s"),
-                  ALTITUDEMODIFY * Base.AGL,
-                  Units::GetUnitName(Units::GetUserAltitudeUnit()),
-                  gettext(TEXT("AGL")));
-      } else if (Base.Altitude > 0)
-        _stprintf(BaseStr,TEXT("%1.0f%s %s"),
-                  ALTITUDEMODIFY * Base.Altitude,
-                  Units::GetUnitName(Units::GetUserAltitudeUnit()),
-                  gettext(TEXT("MSL")));
-      else
-        _stprintf(BaseStr,gettext(TEXT("GND")));
-    }
-  else
-    {
-      _stprintf(BaseStr,TEXT("FL %1.0f"),Base.FL );
-    }
+  if (Base.FL == 0) {
+    if (Base.AGL > 0) {
+      _stprintf(BaseStr, TEXT("%1.0f%s %s"), ALTITUDEMODIFY * Base.AGL,
+          Units::GetUnitName(Units::GetUserAltitudeUnit()),
+          gettext(TEXT("AGL")));
+    } else if (Base.Altitude > 0)
+      _stprintf(BaseStr, TEXT("%1.0f%s %s"), ALTITUDEMODIFY * Base.Altitude,
+          Units::GetUnitName(Units::GetUserAltitudeUnit()),
+          gettext(TEXT("MSL")));
+    else
+      _stprintf(BaseStr, gettext(TEXT("GND")));
+  } else {
+    _stprintf(BaseStr, TEXT("FL %1.0f"), Base.FL);
+  }
 
-  if(Top.FL == 0)
-    {
-      if (Top.AGL > 0) {
-        _stprintf(TopStr,TEXT("%1.0f%s %s"),
-                  ALTITUDEMODIFY * Top.AGL,
-                  Units::GetUnitName(Units::GetUserAltitudeUnit()),
-                  gettext(TEXT("AGL")));
-      } else {
-	_stprintf(TopStr,TEXT("%1.0f%s %s"), ALTITUDEMODIFY * Top.Altitude,
-		  Units::GetUnitName(Units::GetUserAltitudeUnit()),
-		  gettext(TEXT("MSL")));
-      }
+  if (Top.FL == 0) {
+    if (Top.AGL > 0) {
+      _stprintf(TopStr, TEXT("%1.0f%s %s"), ALTITUDEMODIFY * Top.AGL,
+          Units::GetUnitName(Units::GetUserAltitudeUnit()),
+          gettext(TEXT("AGL")));
+    } else {
+      _stprintf(TopStr, TEXT("%1.0f%s %s"), ALTITUDEMODIFY * Top.Altitude,
+          Units::GetUnitName(Units::GetUserAltitudeUnit()),
+          gettext(TEXT("MSL")));
     }
-  else
-    {
-      _stprintf(TopStr,TEXT("FL %1.0f"),Top.FL );
-    }
+  } else {
+    _stprintf(TopStr, TEXT("FL %1.0f"), Top.FL);
+  }
 
-  _stprintf(szMessageBuffer,TEXT("%s: %s\r\n%s: %s\r\n%s: %s\r\n"),
-            szTitleBuffer,
-            Name,
-            gettext(TEXT("Top")),
-            TopStr,
-            gettext(TEXT("Base")),
-            BaseStr
-            );
+  _stprintf(szMessageBuffer, TEXT("%s: %s\r\n%s: %s\r\n%s: %s\r\n"),
+      szTitleBuffer, Name, gettext(TEXT("Top")), TopStr, gettext(TEXT("Base")),
+      BaseStr);
 }
