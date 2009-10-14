@@ -50,7 +50,6 @@ Copyright_License {
   double c = -1.141438761599;
 */
 
-
 //double GlidePolar::BallastFactor;
 double GlidePolar::RiskGamma = 0.0;
 double GlidePolar::polar_a;
@@ -112,6 +111,10 @@ double GlidePolar::GetAUW() {
   return retval;
 }
 
+/**
+ * Returns the chosen MacCready value
+ * @return The chosen MacCready value
+ */
 double GlidePolar::GetMacCready() {
   double retval;
   Lock();
@@ -120,6 +123,10 @@ double GlidePolar::GetMacCready() {
   return retval;
 }
 
+/**
+ * Returns the bugs factor
+ * @return The bugs factor
+ */
 double GlidePolar::GetBugs() {
   double retval;
   Lock();
@@ -136,6 +143,10 @@ double GlidePolar::GetBallast() {
   return retval;
 }
 
+/**
+ * Returns the cruise efficiency
+ * @return The cruise efficiency
+ */
 double GlidePolar::GetCruiseEfficiency() {
   double retval;
   Lock();
