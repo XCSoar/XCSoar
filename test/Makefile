@@ -67,7 +67,6 @@ RunWayPointParser-$(TARGET)$(TARGET_EXEEXT): $(RUN_WAY_POINT_PARSER_OBJS:.o=-$(T
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
 RUN_CANVAS_OBJS = \
-	$(SRC)/compat-$(TARGET).a \
 	$(SRC)/Screen/Window.o \
 	$(SRC)/Screen/PaintWindow.o \
 	$(SRC)/Screen/ContainerWindow.o \
@@ -81,6 +80,7 @@ RUN_CANVAS_OBJS = \
 	$(SRC)/Math/FastMath.o \
 	$(SRC)/Math/Geometry.o \
 	$(SRC)/Screen/shapelib/mapsearch.o \
+	$(SRC)/wcecompat/ts_string.o \
 	src/RunCanvas.o
 ifneq ($(ENABLE_SDL),y)
 RUN_CANVAS_OBJS += $(SRC)/Screen/PaintCanvas.o
