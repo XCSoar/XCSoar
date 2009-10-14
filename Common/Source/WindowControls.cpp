@@ -456,8 +456,6 @@ bool WindowControl::SetVisible(bool Value){
     */
 
     if (mVisible){
-      update(get_client_rect());
-      update();
       show();
     } else {
       hide();
