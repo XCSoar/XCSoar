@@ -56,6 +56,7 @@ Brush::set(const Bitmap &bitmap)
 void
 Brush::reset()
 {
+  hollow = true;
 }
 
 #else /* !ENABLE_SDL */
