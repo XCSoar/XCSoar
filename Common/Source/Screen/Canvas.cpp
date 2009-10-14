@@ -82,7 +82,8 @@ Canvas::arc(int x, int y, unsigned radius, const RECT rc,
             double start, double end)
 {
   // XXX
-  ::pieColor(surface, x, y, radius, start, end, brush.get_color().gfx_color());
+  ::pieColor(surface, x, y, radius, start - 90, end - 90,
+             brush.get_color().gfx_color());
 }
 
 void
@@ -90,7 +91,8 @@ Canvas::segment(int x, int y, unsigned radius, const RECT rc,
                 double start, double end, bool horizon)
 {
   // XXX
-  ::pieColor(surface, x, y, radius, start, end, brush.get_color().gfx_color());
+  ::pieColor(surface, x, y, radius, (int)start - 90, (int)end - 90,
+             brush.get_color().gfx_color());
 }
 
 const SIZE
