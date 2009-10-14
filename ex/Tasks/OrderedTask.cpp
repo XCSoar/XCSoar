@@ -34,6 +34,25 @@ OrderedTask::update_geometry() {
   }
 }
 
+////////// TIMES
+
+double 
+OrderedTask::scan_total_start_time(const AIRCRAFT_STATE &)
+{
+  return ts->get_state_entered().Time;
+}
+
+double 
+OrderedTask::scan_leg_start_time(const AIRCRAFT_STATE &)
+{
+  if (activeTaskPoint>0) {
+    return tps[activeTaskPoint-1]->get_state_entered().Time;
+  } else {
+    return -1;
+  }
+}
+
+////////// DISTANCES
 
 void
 OrderedTask::scan_distance_minmax(const GEOPOINT &location, bool full,
@@ -86,6 +105,7 @@ OrderedTask::scan_distance_planned()
   return ts->scan_distance_planned();
 }
 
+////////// TRANSITIONS
 
 bool 
 OrderedTask::check_transitions(const AIRCRAFT_STATE &state, 
@@ -129,6 +149,8 @@ OrderedTask::check_transitions(const AIRCRAFT_STATE &state,
   return full_update;
 }
 
+////////// ADDITIONAL FUNCTIONS
+
 
 bool 
 OrderedTask::update_sample(const AIRCRAFT_STATE &state, 
@@ -140,6 +162,8 @@ OrderedTask::update_sample(const AIRCRAFT_STATE &state,
 
   return true;
 }
+
+////////// TASK 
 
 void
 OrderedTask::remove(unsigned position)
@@ -189,6 +213,8 @@ OrderedTask::insert(OrderedTaskPoint* new_tp, unsigned position)
   update_geometry();
 }
 
+//////////  
+
 void OrderedTask::setActiveTaskPoint(unsigned index)
 {
   if (index<tps.size()) {
@@ -204,6 +230,8 @@ TaskPoint* OrderedTask::getActiveTaskPoint()
     return NULL;
   }
 }
+
+////////// Constructors/destructors
 
 OrderedTask::~OrderedTask()
 {
@@ -247,7 +275,7 @@ OrderedTask::OrderedTask()
   update_geometry();
 }
 
-//////////////////////////////////////
+////////// Glide functions
 
 void
 OrderedTask::glide_solution_remaining(const AIRCRAFT_STATE &aircraft, 
@@ -256,9 +284,8 @@ OrderedTask::glide_solution_remaining(const AIRCRAFT_STATE &aircraft,
                                       GLIDE_RESULT &leg)
 {
   TaskMacCreadyRemaining tm(tps,activeTaskPoint, mc);
-  stats.total.solution_remaining = tm.glide_solution(aircraft);
-  stats.current_leg.solution_remaining = tm.get_active_solution();
-  stats.current_leg.remaining.set_distance(tm.get_active_solution().Distance);
+  total = tm.glide_solution(aircraft);
+  leg = tm.get_active_solution();
 
   std::ofstream fr("res-sol-remaining.txt");
   tm.print(fr, aircraft);
@@ -282,7 +309,11 @@ void
 OrderedTask::glide_solution_planned(const AIRCRAFT_STATE &aircraft, 
                                     const double mc,
                                     GLIDE_RESULT &total,
-                                    GLIDE_RESULT &leg)
+                                    GLIDE_RESULT &leg,
+                                    DistanceRemainingStat &total_remaining_effective,
+                                    DistanceRemainingStat &leg_remaining_effective,
+                                    const double total_t_elapsed,
+                                    const double leg_t_elapsed)
 {
   TaskMacCreadyTotal tm(tps,activeTaskPoint, mc);
   total = tm.glide_solution(aircraft);
@@ -291,13 +322,15 @@ OrderedTask::glide_solution_planned(const AIRCRAFT_STATE &aircraft,
   std::ofstream fr("res-sol-planned.txt");
   tm.print(fr, aircraft);
 
-  stats.total.remaining_effective.
-    set_distance(tm.effective_distance(stats.total.solution_remaining.TimeElapsed));
+  total_remaining_effective.
+    set_distance(tm.effective_distance(total_t_elapsed));
 
-  stats.current_leg.remaining_effective.
-    set_distance(tm.effective_leg_distance(stats.current_leg.solution_remaining.TimeElapsed));
+  leg_remaining_effective.
+    set_distance(tm.effective_leg_distance(leg_t_elapsed));
 
 }
+
+////////// Auxiliary glide functions
 
 double
 OrderedTask::calc_mc_best(const AIRCRAFT_STATE &aircraft, 
@@ -332,40 +365,14 @@ OrderedTask::calc_min_target(const AIRCRAFT_STATE &aircraft,
 }
 
 
-////////////////////////// Reporting/printing for debugging
+////////// Reporting/printing for debugging
 
-
-extern int count_distance;
-extern long count_mc;
 
 void OrderedTask::report(const AIRCRAFT_STATE &state) 
 {
-  static bool first = true;
+  AbstractTask::report(state);
+
   std::ofstream f1("res-task.txt");
-  std::ofstream f2("res-max.txt");
-  std::ofstream f3("res-min.txt");
-  static std::ofstream f4("res-sample.txt");
-  std::ofstream f5("res-ssample.txt");
-  static std::ofstream f6("res-stats.txt");
-
-  if (first) {
-    first = false;
-    f6 << "# Time atp mc_best dist_rem_eff dist_rem cruis_eff sir sire\n";
-  }
-  f6 << state.Time
-     << " " << activeTaskPoint
-     << " " << stats.mc_best
-     << " " << stats.total.remaining_effective.get_distance()
-     << " " << stats.total.remaining.get_distance() 
-     << " " << stats.cruise_efficiency 
-     << " " << stats.total.remaining.get_speed() 
-     << " " << stats.total.remaining.get_speed_incremental() 
-     << " " << stats.total.remaining_effective.get_speed() 
-     << " " << stats.total.remaining_effective.get_speed_incremental() 
-     << "\n";
-  f6.flush();
-
-  stats.print(f1);
 
   f1 << "#### Task points\n";
   for (unsigned i=0; i<tps.size(); i++) {
@@ -373,16 +380,14 @@ void OrderedTask::report(const AIRCRAFT_STATE &state)
     tps[i]->print(f1);
   }
 
+  std::ofstream f5("res-ssample.txt");
   f5 << "#### Task sampled points\n";
   for (unsigned i=0; i<tps.size(); i++) {
     f5 << "## point " << i << "\n";
     tps[i]->print_samples(f5);
   }
 
-  f4 <<  state.Location.Longitude << " " 
-     <<  state.Location.Latitude << "\n";
-  f4.flush();
-
+  std::ofstream f2("res-max.txt");
   f2 << "#### Max task\n";
   for (unsigned i=0; i<tps.size(); i++) {
     OrderedTaskPoint *tp = tps[i];
@@ -390,6 +395,7 @@ void OrderedTask::report(const AIRCRAFT_STATE &state)
        <<  tp->getMaxLocation().Latitude << "\n";
   }
 
+  std::ofstream f3("res-min.txt");
   f3 << "#### Min task\n";
   for (unsigned i=0; i<tps.size(); i++) {
     OrderedTaskPoint *tp = tps[i];
@@ -398,18 +404,3 @@ void OrderedTask::report(const AIRCRAFT_STATE &state)
   }
 }
 
-
-void
-OrderedTask::update_stats_times(const AIRCRAFT_STATE &state, 
-                                const AIRCRAFT_STATE &state_last)
-{
-  stats.total.set_times(ts->get_state_entered().Time, state);
-
-  if (activeTaskPoint>0) {
-    stats.current_leg.set_times(tps[activeTaskPoint-1]->get_state_entered().Time,
-                                state);
-  } else {
-    stats.current_leg.set_times(-1,
-                                state);
-  }
-}

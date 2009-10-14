@@ -16,7 +16,9 @@ public:
     return stats;
   }
   bool update(const AIRCRAFT_STATE &, const AIRCRAFT_STATE&);
-  
+
+  virtual void report(const AIRCRAFT_STATE&);
+
 protected:
   virtual bool update_sample(const AIRCRAFT_STATE &, const bool full_update) = 0;
   virtual bool check_transitions(const AIRCRAFT_STATE &, const AIRCRAFT_STATE&) = 0;
@@ -31,6 +33,9 @@ protected:
   virtual double calc_min_target(const AIRCRAFT_STATE &, 
                                  const double mc,
                                  const double t_target) = 0;
+
+  virtual double scan_total_start_time(const AIRCRAFT_STATE &);
+  virtual double scan_leg_start_time(const AIRCRAFT_STATE &);
 
   virtual void scan_distance_minmax(const GEOPOINT &location, bool full,
                                     double *dmin, double *dmax);
@@ -51,14 +56,18 @@ protected:
   virtual void glide_solution_planned(const AIRCRAFT_STATE &, 
                                       const double mc,
                                       GLIDE_RESULT &total,
-                                      GLIDE_RESULT &leg);
+                                      GLIDE_RESULT &leg,
+                                      DistanceRemainingStat &total_remaining_effective,
+                                      DistanceRemainingStat &leg_remaining_effective,
+                                      const double total_t_elapsed,
+                                      const double leg_t_elapsed);
 
 private:
   void update_glide_solutions(const AIRCRAFT_STATE &state,
                               const double mc);
   void update_stats_distances(const GEOPOINT &location,
                               const bool full_update);
-  virtual void update_stats_times(const AIRCRAFT_STATE &, const AIRCRAFT_STATE&);
+  void update_stats_times(const AIRCRAFT_STATE &);
   void update_stats_speeds(const AIRCRAFT_STATE &, const AIRCRAFT_STATE&);
   void update_stats_glide(const AIRCRAFT_STATE &state, 
                           const double mc);

@@ -28,8 +28,6 @@ public:
 
   virtual bool update_sample(const AIRCRAFT_STATE &, const bool full_update);
 
-  void report(const AIRCRAFT_STATE &state);
-
   unsigned task_size() const {
     return tps.size();
   }
@@ -44,6 +42,8 @@ public:
   void set_tp_search_max(unsigned tp, const SearchPoint &sol) {
     tps[tp]->set_search_max(sol);
   }
+  virtual void report(const AIRCRAFT_STATE &state);
+
 protected:
   virtual bool check_transitions(const AIRCRAFT_STATE &, const AIRCRAFT_STATE&);
   double scan_distance_nominal();
@@ -55,7 +55,6 @@ protected:
                             double *dmin, double *dmax);
 
 private:
-  virtual void update_stats_times(const AIRCRAFT_STATE &, const AIRCRAFT_STATE&);
 
   std::vector<OrderedTaskPoint*> tps;
 
@@ -70,6 +69,9 @@ private:
 
 protected:
 
+  virtual double scan_total_start_time(const AIRCRAFT_STATE &);
+  virtual double scan_leg_start_time(const AIRCRAFT_STATE &);
+
   void glide_solution_remaining(const AIRCRAFT_STATE &, 
                                 const double mc,
                                 GLIDE_RESULT &total,
@@ -83,7 +85,11 @@ protected:
   void glide_solution_planned(const AIRCRAFT_STATE &, 
                               const double mc,
                               GLIDE_RESULT &total,
-                              GLIDE_RESULT &leg);
+                              GLIDE_RESULT &leg,
+                              DistanceRemainingStat &total_remaining_effective,
+                              DistanceRemainingStat &leg_remaining_effective,
+                              const double total_t_elapsed,
+                              const double leg_t_elapsed);
 
   double calc_mc_best(const AIRCRAFT_STATE &, 
                       const double mc);

@@ -4,6 +4,9 @@
 #include "Navigation/Aircraft.hpp"
 #include "BaseTask/TaskPoint.hpp"
 
+#include <iostream>
+#include <fstream>
+
 unsigned AbstractTask::getActiveTaskPointIndex() 
 {
   return activeTaskPoint;
@@ -45,7 +48,11 @@ AbstractTask::update_glide_solutions(const AIRCRAFT_STATE &state,
 
   glide_solution_planned(state, mc,
                          stats.total.solution_planned,
-                         stats.current_leg.solution_planned);
+                         stats.current_leg.solution_planned,
+                         stats.total.remaining_effective,
+                         stats.current_leg.remaining_effective,
+                         stats.total.solution_remaining.TimeElapsed,
+                         stats.current_leg.solution_remaining.TimeElapsed);
 
   stats.current_leg.remaining.set_distance(
     stats.current_leg.solution_remaining.Distance);
@@ -63,9 +70,9 @@ AbstractTask::update(const AIRCRAFT_STATE &state,
   bool retval;
   double mc=1.0;
 
-  update_stats_times(state, state_last);
-
   const bool full_update = check_transitions(state, state_last);
+
+  update_stats_times(state);
 
   update_stats_distances(state.Location, full_update);
 
@@ -97,12 +104,11 @@ AbstractTask::update_stats_glide(const AIRCRAFT_STATE &state,
 }
 
 void
-AbstractTask::update_stats_times(const AIRCRAFT_STATE &state, 
-                                 const AIRCRAFT_STATE &state_last)
+AbstractTask::update_stats_times(const AIRCRAFT_STATE &state)
 {
   // default for tasks with no start time...
-  stats.total.set_times(state.Time, state);
-  stats.current_leg.set_times(state.Time,state);
+  stats.total.set_times(scan_total_start_time(state), state);
+  stats.current_leg.set_times(scan_leg_start_time(state),state);
 }
 
 
@@ -172,9 +178,62 @@ void
 AbstractTask::glide_solution_planned(const AIRCRAFT_STATE &state, 
                                      const double mc, 
                                      GLIDE_RESULT &total,
-                                     GLIDE_RESULT &leg)
+                                     GLIDE_RESULT &leg,
+                                     DistanceRemainingStat &total_remaining_effective,
+                                     DistanceRemainingStat &leg_remaining_effective,
+                                     const double total_t_elapsed,
+                                     const double leg_t_elapsed)
 {
   GLIDE_RESULT res = stats.total.solution_remaining;
   total = res;
   leg = res;
+  total_remaining_effective.set_distance(res.Distance);
+  leg_remaining_effective.set_distance(res.Distance);
 }
+
+void
+AbstractTask::report(const AIRCRAFT_STATE &state)
+{
+  std::ofstream fs("res-stats-all.txt");
+  stats.print(fs);
+
+  static std::ofstream f4("res-sample.txt");
+  f4 <<  state.Location.Longitude << " " 
+     <<  state.Location.Latitude << "\n";
+  f4.flush();
+
+  static std::ofstream f6("res-stats.txt");
+  static bool first = true;
+
+  if (first) {
+    first = false;
+    f6 << "# Time atp mc_best dist_rem_eff dist_rem cruis_eff sir sire\n";
+  }
+  f6 << state.Time
+     << " " << activeTaskPoint
+     << " " << stats.mc_best
+     << " " << stats.total.remaining_effective.get_distance()
+     << " " << stats.total.remaining.get_distance() 
+     << " " << stats.cruise_efficiency 
+     << " " << stats.total.remaining.get_speed() 
+     << " " << stats.total.remaining.get_speed_incremental() 
+     << " " << stats.total.remaining_effective.get_speed() 
+     << " " << stats.total.remaining_effective.get_speed_incremental() 
+     << "\n";
+  f6.flush();
+
+}
+
+
+double 
+AbstractTask::scan_total_start_time(const AIRCRAFT_STATE &state)
+{
+  return state.Time;
+}
+
+double 
+AbstractTask::scan_leg_start_time(const AIRCRAFT_STATE &state)
+{
+  return state.Time;
+}
+
