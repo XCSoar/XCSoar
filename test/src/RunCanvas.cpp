@@ -277,20 +277,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   window.set(0, 0, 250, 250);
   window.show();
 
-#ifdef ENABLE_SDL
-  SDL_Event event;
-
-  while (SDL_WaitEvent(&event)) {
-    if (event.type == SDL_QUIT)
-      break;
-  }
-#else
-  MSG msg;
-  while (GetMessage(&msg, NULL, 0, 0)) {
-    TranslateMessage(&msg);
-    DispatchMessage(&msg);
-  }
-#endif
+  window.event_loop(0);
 
   return 0;
 }

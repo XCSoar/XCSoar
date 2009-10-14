@@ -109,6 +109,12 @@ protected:
   virtual LRESULT on_message(HWND _hWnd, UINT message,
                              WPARAM wParam, LPARAM lParam);
 #endif /* !ENABLE_SDL */
+
+public:
+  /**
+   * Runs the event loop until the application quits.
+   */
+  int event_loop(unsigned accelerators_id);
 };
 
 #endif

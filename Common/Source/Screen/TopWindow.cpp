@@ -40,8 +40,8 @@ Copyright_License {
 #ifdef ENABLE_SDL
 #include <wcecompat/ts_string.h>
 #else /* !ENABLE_SDL */
-#if defined(GNAV) && !defined(PCGNAV)
 #include "Interface.hpp" /* for XCSoarInterface::hInst */
+#if defined(GNAV) && !defined(PCGNAV)
 #include "resource.h" /* for IDI_XCSOARSWIFT */
 #endif
 #endif /* !ENABLE_SDL */
@@ -195,3 +195,38 @@ LRESULT TopWindow::on_message(HWND _hWnd, UINT message,
   return ContainerWindow::on_message(_hWnd, message, wParam, lParam);
 }
 #endif /* !ENABLE_SDL */
+
+int
+TopWindow::event_loop(unsigned accelerators_id)
+{
+#ifdef ENABLE_SDL
+  SDL_Event event;
+
+  update();
+
+  while (SDL_WaitEvent(&event)) {
+    if (event.type == SDL_QUIT)
+      break;
+  }
+
+  return 0;
+
+#else /* !ENABLE_SDL */
+
+  HACCEL hAccelerators = accelerators_id != 0
+    ? ::LoadAccelerators(XCSoarInterface::hInst,
+                         MAKEINTRESOURCE(accelerators_id))
+    : NULL;
+
+  MSG msg;
+  while (::GetMessage(&msg, NULL, 0, 0)) {
+    if (hAccelerators == NULL ||
+        !::TranslateAccelerator(msg.hwnd, hAccelerators, &msg)) {
+      ::TranslateMessage(&msg);
+      ::DispatchMessage(&msg);
+    }
+  }
+
+  return msg.wParam;
+#endif /* !ENABLE_SDL */
+}

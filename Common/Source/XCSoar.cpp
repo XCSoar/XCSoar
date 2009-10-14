@@ -54,24 +54,6 @@ Copyright_License {
 #endif
 #endif /* !ENABLE_SDL */
 
-///////////////////////////////////////////////////////////////////////////////
-
-// Main message loop
-WPARAM WindowsMessageLoop(HINSTANCE hInstance)
-{
-  HACCEL hAccelTable = LoadAccelerators(hInstance, (LPCTSTR)IDC_XCSOAR);
-  MSG msg;
-  while (GetMessage(&msg, NULL, 0, 0)) {
-    if (!TranslateAccelerator(msg.hwnd, hAccelTable, &msg)) {
-      TranslateMessage(&msg);
-      DispatchMessage(&msg);
-    }
-  }
-  return msg.wParam;
-}
-
-
-
 int WINAPI WinMain(     HINSTANCE hInstance,
                         HINSTANCE hPrevInstance,
                         LPTSTR    lpCmdLine,
@@ -94,7 +76,7 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 
   // Perform application initialization and run loop
   if (XCSoarInterface::Startup (hInstance, lpCmdLine)) {
-    return WindowsMessageLoop(hInstance);
+    return CommonInterface::main_window.event_loop(IDC_XCSOAR);
   } else {
     return FALSE;
   }
