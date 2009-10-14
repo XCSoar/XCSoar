@@ -184,7 +184,7 @@ class WindowControl : public ContainerWindow {
     bool GetReadOnly(void){return(mReadOnly);};
     bool SetReadOnly(bool Value);
 
-    bool SetVisible(bool Value);
+    void SetVisible(bool Value);
     bool GetVisible(void);
 
     int  GetBorderKind(void);

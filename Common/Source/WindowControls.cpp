@@ -443,8 +443,9 @@ bool WindowControl::GetFocused(void){
   return(mHasFocus);
 }
 
-bool WindowControl::SetVisible(bool Value){
-  bool res = mVisible;
+void
+WindowControl::SetVisible(bool Value)
+{
   if (mVisible != Value){
 
     mVisible = Value;
@@ -462,7 +463,6 @@ bool WindowControl::SetVisible(bool Value){
     }
 
   }
-  return(res);
 }
 
 bool WindowControl::GetVisible(void){
