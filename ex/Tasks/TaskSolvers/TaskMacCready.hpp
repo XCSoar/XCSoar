@@ -5,7 +5,6 @@
 #include "BaseTask/OrderedTaskPoint.hpp"
 #include "GlideSolvers/MacCready.hpp"
 #include <vector>
-#include <iostream>
 
 class TaskMacCready {
 public:

@@ -39,11 +39,6 @@
 #define ORDEREDTASKPOINT_HPP
 
 #include "SampledTaskPoint.h"
-#include <stdlib.h>
-#include "Util.h"
-#include <fstream>
-#include <iostream>
-
 
 class TaskLeg;
 

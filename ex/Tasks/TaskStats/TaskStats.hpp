@@ -2,8 +2,6 @@
 #define TASKSTATS_HPP
 
 #include "GlideSolvers/MacCready.hpp"
-#include <algorithm>
-#include <fstream>
 #include <iostream>
 
 struct AIRCRAFT_STATE;
@@ -103,12 +101,26 @@ private:
 class TaskStats 
 {
 public:
+  TaskStats():
+    cruise_efficiency(1.0),
+    mc_best(0.0),
+    distance_nominal(0.0),
+    distance_max(0.0),
+    distance_min(0.0),
+    distance_scored(0.0)
+    {};
+
   ElementStat total;
   ElementStat current_leg;
 
   // calculated values
   double cruise_efficiency;
   double mc_best;
+
+  double distance_nominal;
+  double distance_max;
+  double distance_min;
+  double distance_scored;
 
   void print(std::ostream &f) const;
 

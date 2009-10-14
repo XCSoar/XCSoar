@@ -14,6 +14,7 @@
 #include "TaskSolvers/TaskBestMc.hpp"
 #include "TaskSolvers/TaskMinTarget.hpp"
 #include <assert.h>
+#include <fstream>
 
 void
 OrderedTask::update_geometry() {
@@ -33,41 +34,62 @@ OrderedTask::update_geometry() {
   }
 }
 
-void 
-OrderedTask::scan_distance(const GEOPOINT &location, bool full) 
-{ 
+
+void
+OrderedTask::scan_distance_minmax(const GEOPOINT &location, bool full,
+                                  double *dmin, double *dmax)
+{
   TaskDijkstra dijkstra(this, tps.size());
   ScanTaskPoint start(0,0);
-
   SearchPoint ac(location, task_projection);
-
-  ts->scan_active(tps[activeTaskPoint]);
-
   if (full) {
-    distance_nominal = ts->scan_distance_nominal();
-
     // for max calculations, since one can still travel further in the sector,
     // we pretend we are on the previous turnpoint so the search samples will
     // contain the full boundary
     if (activeTaskPoint>0) {
       ts->scan_active(tps[activeTaskPoint-1]);
     }
-    distance_max = dijkstra.distance_opt_achieved(ac, false);
+    *dmax = dijkstra.distance_opt_achieved(ac, false);
     ts->scan_active(tps[activeTaskPoint]);
   }
+  *dmin = dijkstra.distance_opt_achieved(ac, true);
+}
 
-  distance_min = dijkstra.distance_opt_achieved(ac, true);
 
-  stats.total.remaining.set_distance(ts->scan_distance_remaining(location));
-  stats.total.travelled.set_distance(ts->scan_distance_travelled(location));
-  distance_scored = ts->scan_distance_scored(location);
-  stats.total.planned.set_distance(ts->scan_distance_planned());
+double
+OrderedTask::scan_distance_nominal()
+{
+  return ts->scan_distance_nominal();
+}
+
+double
+OrderedTask::scan_distance_scored(const GEOPOINT &location)
+{
+  return ts->scan_distance_scored(location);
+}
+
+double
+OrderedTask::scan_distance_remaining(const GEOPOINT &location)
+{
+  return ts->scan_distance_remaining(location);
+}
+
+double
+OrderedTask::scan_distance_travelled(const GEOPOINT &location)
+{
+  return ts->scan_distance_travelled(location);
+}
+
+double
+OrderedTask::scan_distance_planned()
+{
+  return ts->scan_distance_planned();
 }
 
 
 bool 
-OrderedTask::update_sample(const AIRCRAFT_STATE &state, 
-                           const AIRCRAFT_STATE& state_last)
+OrderedTask::check_transitions(const AIRCRAFT_STATE &state, 
+                               const AIRCRAFT_STATE &state_last)
 {
   ts->scan_active(tps[activeTaskPoint]);
 
@@ -102,20 +124,23 @@ OrderedTask::update_sample(const AIRCRAFT_STATE &state,
     }
   }
 
+  ts->scan_active(tps[activeTaskPoint]);
+
+  return full_update;
+}
+
+
+bool 
+OrderedTask::update_sample(const AIRCRAFT_STATE &state, 
+                           const bool full_update)
+{
   double mc = 1.0;
   // must be done in order!
   calc_min_target(state, mc, 3.6);
 
-  scan_distance(state.Location, full_update);
-
   glide_solution_remaining(state, mc);
   glide_solution_travelled(state, mc);
   glide_solution_planned(state, mc);
-
-  // other calcs
-
-  stats.mc_best = calc_mc_best(state, mc);
-  stats.cruise_efficiency = calc_cruise_efficiency(state, mc);
 
   return true;
 }
@@ -337,12 +362,6 @@ void OrderedTask::report(const AIRCRAFT_STATE &state)
      << " " << stats.total.remaining_effective.get_speed_incremental() 
      << "\n";
   f6.flush();
-
-  f1 << "#### Distances\n";
-  f1 << "# dist nominal " << distance_nominal << "\n";
-  f1 << "# min dist after achieving max " << distance_min << "\n";
-  f1 << "# max dist after achieving max " << distance_max << "\n";
-  f1 << "# dist scored " << distance_scored << "\n";
 
   stats.print(f1);
 

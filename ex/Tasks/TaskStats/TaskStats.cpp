@@ -1,5 +1,6 @@
 #include "TaskStats.hpp"
 #include "Navigation/Aircraft.hpp"
+#include <algorithm>
 
 double lpf(const double y_this, const double y_last) {
   return y_this*0.1+y_last*0.9;
@@ -110,6 +111,14 @@ void ElementStat::print(std::ostream &f) const
 
 void TaskStats::print(std::ostream &f) const
 {
+  f << "#### Task Stats\n";
+  f << "# dist nominal " << distance_nominal << "\n";
+  f << "# min dist after achieving max " << distance_min << "\n";
+  f << "# max dist after achieving max " << distance_max << "\n";
+  f << "# dist scored " << distance_scored << "\n";
+  f << "# mc best " << mc_best << "\n";
+  f << "# cruise efficiency " << cruise_efficiency << "\n";
+  f << "#\n";
   f << "# Total -- \n";
   total.print(f);
   f << "# Leg -- \n";

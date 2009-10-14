@@ -26,20 +26,8 @@ public:
   void insert(OrderedTaskPoint*, unsigned position);
   void remove(unsigned position);
 
-  virtual bool update_sample(const AIRCRAFT_STATE &, const AIRCRAFT_STATE&);
+  virtual bool update_sample(const AIRCRAFT_STATE &, const bool full_update);
 
-  double get_distance_nominal() const {
-    return distance_nominal;
-  };
-  double get_distance_min() const {
-    return distance_min;
-  };
-  double get_distance_max() const {
-    return distance_max;
-  };
-  double get_distance_scored() const {
-    return distance_scored;
-  };
   void report(const AIRCRAFT_STATE &state);
 
   unsigned task_size() const {
@@ -56,17 +44,21 @@ public:
   void set_tp_search_max(unsigned tp, const SearchPoint &sol) {
     tps[tp]->set_search_max(sol);
   }
+protected:
+  virtual bool check_transitions(const AIRCRAFT_STATE &, const AIRCRAFT_STATE&);
+  double scan_distance_nominal();
+  double scan_distance_planned();
+  double scan_distance_remaining(const GEOPOINT &location);
+  double scan_distance_scored(const GEOPOINT &location);
+  double scan_distance_travelled(const GEOPOINT &location);
+  void scan_distance_minmax(const GEOPOINT &location, bool full,
+                            double *dmin, double *dmax);
+
 private:
   virtual void update_stats_times(const AIRCRAFT_STATE &, const AIRCRAFT_STATE&);
 
   std::vector<OrderedTaskPoint*> tps;
 
-  double distance_nominal;
-  double distance_min;
-  double distance_max;
-  double distance_scored;
-
-  virtual void scan_distance(const GEOPOINT &location, bool full);
   void update_geometry();
 
   /**
@@ -82,7 +74,7 @@ private:
                                 const double mc);
   void glide_solution_planned(const AIRCRAFT_STATE &, 
                               const double mc);
-
+protected:
   double calc_mc_best(const AIRCRAFT_STATE &, 
                       const double mc);
   double calc_cruise_efficiency(const AIRCRAFT_STATE &aircraft, 

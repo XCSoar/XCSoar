@@ -41,6 +41,7 @@
 /////////////////////////////////////////////////
 /// Abstract classes
 
+#include <iostream>
 
 /** Base class for classes that can be serialised/unserialised for file storage */
 class Serialisable {

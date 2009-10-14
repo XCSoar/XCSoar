@@ -2,24 +2,63 @@
 
 #include "GotoTask.h"
 
-TaskPoint* GotoTask::getActiveTaskPoint() { 
+TaskPoint* 
+GotoTask::getActiveTaskPoint() { 
   return tp;
 }
 
-void GotoTask::setActiveTaskPoint(unsigned index)
+void 
+GotoTask::setActiveTaskPoint(unsigned index)
 {
   // nothing to do
 }
 
 
-void GotoTask::report(const AIRCRAFT_STATE &state)
+void 
+GotoTask::report(const AIRCRAFT_STATE &state)
 {
 
 }
 
-bool GotoTask::update_sample(const AIRCRAFT_STATE &state, 
-                             const AIRCRAFT_STATE& state_last)
+bool 
+GotoTask::update_sample(const AIRCRAFT_STATE &state,
+                        const bool full_update)
 {
   return false; // nothing to do
 }
 
+
+bool 
+GotoTask::check_transitions(const AIRCRAFT_STATE &, const AIRCRAFT_STATE&)
+{
+  return false; // nothing to do
+}
+
+double
+GotoTask::calc_mc_best(const AIRCRAFT_STATE &, 
+                              const double mc)
+{
+  // TODO
+  return mc;
+}
+
+double
+GotoTask::calc_cruise_efficiency(const AIRCRAFT_STATE &aircraft, 
+                                        const double mc)
+{
+  return 1.0;
+}
+
+double
+GotoTask::calc_min_target(const AIRCRAFT_STATE &, 
+                                 const double mc,
+                                 const double t_target)
+{
+  return 0.0;
+}
+
+double 
+GotoTask::scan_distance_remaining(const GEOPOINT &location)
+{
+  return 0.0; // TODO
+}

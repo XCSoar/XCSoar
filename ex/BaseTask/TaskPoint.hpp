@@ -43,8 +43,6 @@
 #include "Navigation/ReferencePoint.hpp"
 #include "Navigation/Waypoint.hpp"
 #include "Navigation/Aircraft.hpp"
-#include "Util.h"
-#include <iostream>
 
 struct GLIDE_RESULT;
 class MacCready;

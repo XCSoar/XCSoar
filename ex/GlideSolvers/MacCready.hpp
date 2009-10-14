@@ -1,7 +1,6 @@
 #ifndef MACCREADY_HPP
 #define MACCREADY_HPP
 
-#include <fstream>
 #include <iostream>
 
 struct GLIDE_STATE;

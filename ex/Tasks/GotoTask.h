@@ -16,7 +16,17 @@ public:
 
   virtual void report(const AIRCRAFT_STATE &state);
 
-  virtual bool update_sample(const AIRCRAFT_STATE &, const AIRCRAFT_STATE&);
+  virtual bool update_sample(const AIRCRAFT_STATE &, const bool full_update);
+protected:
+  virtual bool check_transitions(const AIRCRAFT_STATE &, const AIRCRAFT_STATE&);
+  virtual double calc_mc_best(const AIRCRAFT_STATE &, 
+                              const double mc);
+  virtual double calc_cruise_efficiency(const AIRCRAFT_STATE &aircraft, 
+                                        const double mc);
+  virtual double calc_min_target(const AIRCRAFT_STATE &, 
+                                 const double mc,
+                                 const double t_target);
+  virtual double scan_distance_remaining(const GEOPOINT &location);
 
 private:    
     TaskPoint* tp;

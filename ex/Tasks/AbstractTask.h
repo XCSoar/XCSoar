@@ -2,7 +2,6 @@
 #ifndef ABSTRACTTASK_H
 #define ABSTRACTTASK_H
 
-#include "Util.h"
 #include "TaskInterface.h"
 #include "TaskStats/TaskStats.hpp"
 
@@ -19,12 +18,34 @@ public:
   bool update(const AIRCRAFT_STATE &, const AIRCRAFT_STATE&);
   
 protected:
-  virtual bool update_sample(const AIRCRAFT_STATE &, const AIRCRAFT_STATE&) = 0;
+  virtual bool update_sample(const AIRCRAFT_STATE &, const bool full_update) = 0;
+  virtual bool check_transitions(const AIRCRAFT_STATE &, const AIRCRAFT_STATE&) = 0;
   
   unsigned activeTaskPoint;
   TaskStats stats;
+
+  virtual double calc_mc_best(const AIRCRAFT_STATE &, 
+                              const double mc) = 0;
+  virtual double calc_cruise_efficiency(const AIRCRAFT_STATE &aircraft, 
+                                        const double mc) = 0;
+  virtual double calc_min_target(const AIRCRAFT_STATE &, 
+                                 const double mc,
+                                 const double t_target) = 0;
+
+  virtual void scan_distance_minmax(const GEOPOINT &location, bool full,
+                                    double *dmin, double *dmax);
+  virtual double scan_distance_nominal();
+  virtual double scan_distance_planned();
+  virtual double scan_distance_scored(const GEOPOINT &location);
+  virtual double scan_distance_travelled(const GEOPOINT &location);
+  virtual double scan_distance_remaining(const GEOPOINT &location) = 0;
+
 private:
+  void update_stats_distances(const GEOPOINT &location,
+                              const bool full_update);
   virtual void update_stats_times(const AIRCRAFT_STATE &, const AIRCRAFT_STATE&);
   void update_stats_speeds(const AIRCRAFT_STATE &, const AIRCRAFT_STATE&);
+  void update_stats_glide(const AIRCRAFT_STATE &state, 
+                          const double mc);
 };
 #endif //ABSTRACTTASK_H

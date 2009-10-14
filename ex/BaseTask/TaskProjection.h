@@ -3,8 +3,7 @@
 #ifndef TASKPROJECTION_H
 #define TASKPROJECTION_H
 
-#include "Util.h"
-
+#include "Navigation/Waypoint.hpp"
 
 class TaskProjection {
 public:

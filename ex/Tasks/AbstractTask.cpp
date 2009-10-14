@@ -8,13 +8,47 @@ unsigned AbstractTask::getActiveTaskPointIndex()
   return activeTaskPoint;
 }
 
+void
+AbstractTask::update_stats_distances(const GEOPOINT &location,
+                                     const bool full_update)
+{
+
+  stats.total.remaining.set_distance(scan_distance_remaining(location));
+
+  if (full_update) {
+    stats.distance_nominal = scan_distance_nominal();
+  }
+
+  scan_distance_minmax(location, 
+                       full_update,
+                       &stats.distance_min,
+                       &stats.distance_max);
+
+  stats.total.travelled.set_distance(scan_distance_travelled(location));
+  stats.total.planned.set_distance(scan_distance_planned());
+
+  stats.distance_scored = scan_distance_scored(location);
+}
+
+
 bool
 AbstractTask::update(const AIRCRAFT_STATE &state, 
                      const AIRCRAFT_STATE &state_last)
 {
   bool retval;
   update_stats_times(state, state_last);
-  retval = update_sample(state, state_last);
+
+  const bool full_update = check_transitions(state, state_last);
+
+  update_stats_distances(state.Location, full_update);
+
+  retval = update_sample(state, full_update);
+
+  // TODO
+  double mc=1.0;
+
+  update_stats_glide(state, mc);
+
   update_stats_speeds(state, state_last);
   return retval;
 }
@@ -29,6 +63,14 @@ AbstractTask::update_stats_speeds(const AIRCRAFT_STATE &state,
 }
 
 void
+AbstractTask::update_stats_glide(const AIRCRAFT_STATE &state, 
+                                 const double mc)
+{
+  stats.mc_best = calc_mc_best(state, mc);
+  stats.cruise_efficiency = calc_cruise_efficiency(state, mc);
+}
+
+void
 AbstractTask::update_stats_times(const AIRCRAFT_STATE &state, 
                                  const AIRCRAFT_STATE &state_last)
 {
@@ -36,3 +78,37 @@ AbstractTask::update_stats_times(const AIRCRAFT_STATE &state,
   stats.total.set_times(state.Time, state);
   stats.current_leg.set_times(state.Time,state);
 }
+
+
+void 
+AbstractTask::scan_distance_minmax(const GEOPOINT &location, bool full,
+                                    double *dmin, double *dmax)
+{
+  *dmin = stats.total.remaining.get_distance();
+  *dmax = stats.total.remaining.get_distance();
+}
+
+double 
+AbstractTask::scan_distance_nominal()
+{
+  return stats.total.remaining.get_distance();
+}
+
+double 
+AbstractTask::scan_distance_planned()
+{
+  return stats.total.remaining.get_distance();
+}
+
+double 
+AbstractTask::scan_distance_scored(const GEOPOINT &location)
+{
+  return 0.0;
+}
+
+double 
+AbstractTask::scan_distance_travelled(const GEOPOINT &location)
+{
+  return 0.0;
+}
+
