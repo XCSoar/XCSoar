@@ -149,6 +149,8 @@ public:
   void invalidate() {
 #ifdef ENABLE_SDL
     // XXX
+    on_paint(get_canvas());
+    expose();
 #else /* !ENABLE_SDL */
     ::InvalidateRect(hWnd, NULL, false);
 #endif /* !ENABLE_SDL */
