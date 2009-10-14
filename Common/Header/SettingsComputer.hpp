@@ -138,8 +138,8 @@ struct SETTINGS_COMPUTER {
   bool EnableVoiceInSector;
   bool EnableVoiceAirspace;
 
-  bool EnableAirspaceWarnings;
-  unsigned WarningTime;
+  bool EnableAirspaceWarnings; /* true if airspace warnings are enabled */
+  unsigned WarningTime; /** warning time before airspace entry */
   unsigned AcknowledgementTime;
 
   // airspace
