@@ -40,7 +40,7 @@ Copyright_License {
 #include "Interface.hpp"
 #include "Device/Port.h"
 #include "DeviceBlackboard.hpp"
-#include "Dialogs.h"
+#include "Dialogs/Message.hpp"
 #include "Language.hpp"
 #include "Device/device.h"
 #include "Message.h"

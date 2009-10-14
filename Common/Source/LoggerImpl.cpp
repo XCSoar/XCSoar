@@ -37,7 +37,7 @@
 
 #include "LoggerImpl.hpp"
 #include "Version.hpp"
-#include "Dialogs.h"
+#include "Dialogs/Message.hpp"
 #include "Language.hpp"
 #include "Task.h"
 #include "Registry.hpp"

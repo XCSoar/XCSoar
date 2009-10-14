@@ -39,7 +39,7 @@ Copyright_License {
 
 #include "Airspace.h"
 #include "Interface.hpp"
-#include "Dialogs.h"
+#include "Dialogs/Message.hpp"
 #include "Language.hpp"
 #include "UtilsText.hpp"
 #include "LogFile.hpp"

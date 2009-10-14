@@ -105,15 +105,7 @@ PopupNearestWaypointDetails(const WayPointList &way_points,
 
 bool PopupInteriorAirspaceDetails(const GEOPOINT &location);
 
-int
-WINAPI
-MessageBoxX(
-    LPCTSTR lpText,
-    LPCTSTR lpCaption,
-    UINT uType);
-
 #define mrOK             2
 #define mrCancel         3
-
 
 #endif

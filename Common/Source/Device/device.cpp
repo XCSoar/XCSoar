@@ -43,7 +43,7 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "DeviceBlackboard.hpp"
 #include "Interface.hpp"
-#include "Dialogs.h"
+#include "Dialogs/Message.hpp"
 #include "Language.hpp"
 #include "Math/FastMath.h"
 #include "Device/Parser.h"

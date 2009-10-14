@@ -42,7 +42,7 @@ Copyright_License {
 #include "Waypointparser.h"
 #include "SettingsTask.hpp"
 #include "Protection.hpp"
-#include "Dialogs.h"
+#include "Dialogs/Message.hpp"
 #include "Language.hpp"
 #include "Components.hpp"
 #include "WayPointList.hpp"

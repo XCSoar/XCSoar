@@ -37,7 +37,7 @@ Copyright_License {
 
 #include "TaskImpl.hpp"
 #include "TaskFile.hpp"
-#include "Dialogs.h"
+#include "Dialogs/Message.hpp"
 #include "Language.hpp"
 #include "SettingsTask.hpp"
 #include "Waypointparser.h"

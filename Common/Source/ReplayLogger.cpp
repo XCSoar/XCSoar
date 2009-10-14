@@ -38,7 +38,7 @@
 #include "ReplayLogger.hpp"
 #include "Logger.h"
 #include "Protection.hpp"
-#include "Dialogs.h"
+#include "Dialogs/Message.hpp"
 #include "Language.hpp"
 #include "Device/Port.h"
 #include "SettingsTask.hpp"

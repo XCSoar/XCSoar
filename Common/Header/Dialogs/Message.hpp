@@ -35,23 +35,14 @@ Copyright_License {
 }
 */
 
-/*
- * This header is included by all dialog sources, and includes all
- * headers which are common to all dialog implementations.
- *
- */
+#ifndef XCSOAR_DIALOGS_MESSAGE_HPP
+#define XCSOAR_DIALOGS_MESSAGE_HPP
 
-#ifndef XCSOAR_DIALOGS_INTERNAL_HPP
-#define XCSOAR_DIALOGS_INTERNAL_HPP
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
 
-#include "Dialogs.h"
-#include "Dialogs/dlgTools.h"
-#include "Dialogs/XML.hpp"
-#include "Dialogs/dlgHelpers.hpp"
-#include "Dialogs/Message.hpp"
-#include "WindowControls.h"
-#include "Language.hpp"
-#include "WindowControls.h"
-#include "Interface.hpp"
+int
+WINAPI
+MessageBoxX(LPCTSTR lpText, LPCTSTR lpCaption, UINT uType);
 
 #endif

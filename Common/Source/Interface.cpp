@@ -38,7 +38,7 @@ Copyright_License {
 #include "Thread/Mutex.hpp"
 #include "MainWindow.hpp"
 #include "Language.hpp"
-#include "Dialogs.h"
+#include "Dialogs/Message.hpp"
 #include "StatusMessage.hpp"
 #include "InfoBoxManager.h"
 #include "InfoBoxLayout.h"

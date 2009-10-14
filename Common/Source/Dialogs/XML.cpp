@@ -37,6 +37,7 @@ Copyright_License {
 
 #include "Dialogs/XML.hpp"
 #include "Dialogs/dlgTools.h"
+#include "Dialogs/Message.hpp"
 #include "Language.hpp"
 #include "xmlParser.h"
 #include "LocalPath.hpp"

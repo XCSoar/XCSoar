@@ -36,6 +36,7 @@ Copyright_License {
 */
 
 #include "Dialogs/Internal.hpp"
+#include "Dialogs/Message.hpp"
 #include "Blackboard.hpp"
 #include "InfoBoxLayout.h"
 #include "Airspace.h"

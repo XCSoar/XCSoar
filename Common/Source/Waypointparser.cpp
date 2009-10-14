@@ -40,6 +40,7 @@ Copyright_License {
 #include "Protection.hpp"
 #include "DeviceBlackboard.hpp"
 #include "SettingsComputer.hpp"
+#include "Dialogs/Message.hpp"
 #include "Dialogs.h"
 #include "Language.hpp"
 #include "Math/FastMath.h"
