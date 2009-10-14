@@ -143,6 +143,24 @@ TopWindow::full_screen()
 #endif /* !ENABLE_SDL */
 }
 
+#ifdef ENABLE_SDL
+
+void
+TopWindow::expose(const RECT &rect) {
+  ContainerWindow::expose(rect);
+  screen.copy(canvas);
+  screen.expose();
+}
+
+void
+TopWindow::expose() {
+  ContainerWindow::expose();
+  screen.copy(canvas);
+  screen.expose();
+}
+
+#endif /* ENABLE_SDL */
+
 bool
 TopWindow::on_activate()
 {

@@ -56,15 +56,14 @@ protected:
 
 #ifdef ENABLE_SDL
 public:
-  void update_child(const Window &child) {
+  void expose_child(const Window &child) {
     canvas.copy(child.get_left(), child.get_top(),
                 child.get_canvas().get_width(),
                 child.get_canvas().get_height(),
                 child.get_canvas(), 0, 0);
-    canvas.update(child.get_left(), child.get_top(),
-                  canvas.get_width(), canvas.get_height());
+    expose(child.get_position());
   }
-#endif
+#endif /* ENABLE_SDL */
 };
 
 #endif

@@ -206,13 +206,3 @@ bool PaintWindow::register_class(HINSTANCE hInstance, const TCHAR* szWindowClass
   // not defined!
   return false;
 }
-
-#ifdef ENABLE_SDL
-void
-PaintWindow::update(const RECT &rect)
-{
-  canvas.update(rect.left, rect.top,
-                rect.right - rect.left, rect.bottom - rect.top);
-  parent->update_child(*this);
-}
-#endif /* ENABLE_SDL */

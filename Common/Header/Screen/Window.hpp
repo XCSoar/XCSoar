@@ -305,6 +305,22 @@ public:
     return rc;
   }
 
+#ifdef ENABLE_SDL
+  /**
+   * Ensures that the specified rectangle is updated on the physical
+   * screen.
+   */
+  virtual void expose(const RECT &rect);
+
+  /**
+   * Ensures that the window is updated on the physical screen.
+   */
+  virtual void expose();
+#else /* !ENABLE_SDL */
+  void expose(const RECT &rect) {}
+  void expose() {}
+#endif /* !ENABLE_SDL */
+
 #ifndef ENABLE_SDL
   static void *get_userdata(HWND hWnd) {
     return (void *)::GetWindowLongPtr(hWnd, GWLP_USERDATA);

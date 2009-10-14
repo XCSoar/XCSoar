@@ -177,6 +177,27 @@ Window::get_root_owner()
 #endif /* !ENABLE_SDL */
 }
 
+#ifdef ENABLE_SDL
+
+void
+Window::expose(const RECT &rect)
+{
+  canvas.expose(rect.left, rect.top,
+                rect.right - rect.left, rect.bottom - rect.top);
+  if (parent != NULL)
+    parent->expose_child(*this);
+}
+
+void
+Window::expose()
+{
+  canvas.expose();
+  if (parent != NULL)
+    parent->expose_child(*this);
+}
+
+#endif /* ENABLE_SDL */
+
 bool
 Window::on_create()
 {

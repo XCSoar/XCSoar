@@ -414,8 +414,18 @@ public:
               src, src_x, src_y, src_width, src_height);
   }
 
-  void update(Sint32 x, Sint32 y, Sint32 w, Sint32 h) {
+  /**
+   * Makes sure the given area is updated on the screen.
+   */
+  void expose(Sint32 x, Sint32 y, Sint32 w, Sint32 h) {
     ::SDL_UpdateRect(surface, x, y, w, h);
+  }
+
+  /**
+   * Makes sure the whole area is updated on the screen.
+   */
+  void expose() {
+    expose(0, 0, 0, 0);
   }
 };
 

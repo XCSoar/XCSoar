@@ -166,17 +166,11 @@ public:
 #endif /* !ENABLE_SDL */
   }
 
-  /**
-   * Ensures that the specified rectangle is updated on the physical
-   * screen.
-   */
-#ifdef ENABLE_SDL
-  void update(const RECT &rect);
-#endif /* !ENABLE_SDL */
-
   void update() {
 #ifdef ENABLE_SDL
-    update(get_client_rect());
+    // XXX
+    on_paint(get_canvas());
+    expose();
 #else /* !ENABLE_SDL */
     ::UpdateWindow(hWnd);
     // duplicate in MainWindow

@@ -88,15 +88,10 @@ public:
 
   void full_screen();
 
-  void update() {
 #ifdef ENABLE_SDL
-    // XXX
-    screen.copy(canvas);
-    screen.update(0, 0, screen.get_width(), screen.get_height());
-#else /* !ENABLE_SDL */
-    ::UpdateWindow(hWnd);
-#endif /* !ENABLE_SDL */
-  }
+  virtual void expose(const RECT &rect);
+  virtual void expose();
+#endif /* ENABLE_SDL */
 
   void close() {
 #ifdef ENABLE_SDL
