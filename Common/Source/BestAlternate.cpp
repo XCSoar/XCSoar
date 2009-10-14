@@ -52,19 +52,16 @@ Copyright_License {
 #include "Components.hpp"
 #include "WayPointList.hpp"
 
+#define MAXBEST 10      /** max number of reachable landing points
+                         *  searched for, among a preliminar list of
+			             *  MAXBEST * 2 - CPU HOGGING ALERT!
+			             */
 
-/*
- * ===========================================
- * VENTA3 SearchBestAlternate() beta
+/**
+ * SearchBestAlternate() beta
  * based on SortLandableWaypoints and extended
- * by Paolo Ventafridda
- * ===========================================
+ * @author Paolo Ventafridda
  */
-
-#define MAXBEST 10      // max number of reachable landing points
-			// searched for, among a preliminar list of
-			// MAXBEST * 2 - CPU HOGGING ALERT!
-
 void
 GlideComputerTask::SearchBestAlternate()
 {
@@ -441,53 +438,57 @@ GlideComputerTask::SearchBestAlternate()
   }
 }
 
+/**
+ * Plays a soundfile
+ * @param soundmode Defines the sound(s) to be played
+ */
 /*
  * Do not disturb too much. Play alert sound only once every x minutes, not more.
  */
-void
-GlideComputerTask::AlertBestAlternate(short soundmode)
-{
-  static double LastAlertTime=0;
+void GlideComputerTask::AlertBestAlternate(short soundmode) {
+  static double LastAlertTime = 0;
 
-  if ( Basic().Time > LastAlertTime + 180.0 ) {
+  if (Basic().Time > LastAlertTime + 180.0) {
     if (SettingsComputer().EnableSoundModes) {
       LastAlertTime = Basic().Time;
       switch (soundmode) {
       case 0:
-	break;
+        break;
       case 1:
-	PlayResource(TEXT("IDR_WAV_GREEN"));
-	break;
+        PlayResource(TEXT("IDR_WAV_GREEN"));
+        break;
       case 2:
-	PlayResource(TEXT("IDR_WAV_RED"));
-	break;
+        PlayResource(TEXT("IDR_WAV_RED"));
+        break;
       case 11:
-	PlayResource(TEXT("IDR_WAV_GREEN"));
-	PlayResource(TEXT("IDR_WAV_GREEN"));
-	break;
+        PlayResource(TEXT("IDR_WAV_GREEN"));
+        PlayResource(TEXT("IDR_WAV_GREEN"));
+        break;
       default:
-	break;
+        break;
       }
     }
   }
 }
 
-void
-GlideComputerTask::DoBestAlternateSlow()
-{
+/**
+ * Calls the SearchBestAlternate() method if a certain time has passed since the last call
+ * @author Paolo Ventafridda
+ */
+void GlideComputerTask::DoBestAlternateSlow() {
   static double LastSearchBestTime = 0; // VENTA3
 
- // VENTA3 best landing slow calculation
+  // VENTA3 best landing slow calculation
 #ifdef WINDOWSPC
   if ( (SettingsComputer().EnableBestAlternate) && (Basic().Time > LastSearchBestTime+10.0) ) // VENTA3
 #else
-  if ( (SettingsComputer().EnableBestAlternate) && (Basic().Time > LastSearchBestTime+BESTALTERNATEINTERVAL) ) // VENTA3
+  if ((SettingsComputer().EnableBestAlternate) && (Basic().Time
+      > LastSearchBestTime + BESTALTERNATEINTERVAL)) // VENTA3
 #endif
-    {
-      LastSearchBestTime = Basic().Time;
-      SearchBestAlternate();
-    }
-
+  {
+    LastSearchBestTime = Basic().Time;
+    SearchBestAlternate();
+  }
 }
 
 
@@ -498,10 +499,7 @@ GlideComputerTask::DoBestAlternateSlow()
  *
  * Colors VGR are disabled, but available
  */
-
-void
-GlideComputerTask::DoAlternates(int AltWaypoint)
-{
+void GlideComputerTask::DoAlternates(int AltWaypoint) {
   if (!way_points.verify_index(AltWaypoint)) {
     return;
   }
@@ -513,36 +511,35 @@ GlideComputerTask::DoAlternates(int AltWaypoint)
   double *altwp_dist = &way_point_calc.Distance;
   double *altwp_gr = &way_point_calc.GR;
   double *altwp_arrival = &way_point_calc.AltArrival;
-  short  *altwp_vgr = &way_point_calc.VGR;
+  short *altwp_vgr = &way_point_calc.VGR;
 
   *altwp_dist = Distance(w1, w0);
 
-  double GRsafecalc = Calculated().NavAltitude -
-    (way_point.Altitude +
-     SettingsComputer().SAFETYALTITUDEARRIVAL);
+  double GRsafecalc = Calculated().NavAltitude - (way_point.Altitude
+      + SettingsComputer().SAFETYALTITUDEARRIVAL);
 
-  if (GRsafecalc <=0) {
+  if (GRsafecalc <= 0) {
     *altwp_gr = INVALID_GR;
   } else {
     *altwp_gr = *altwp_dist / GRsafecalc;
-    if ( *altwp_gr >ALTERNATE_MAXVALIDGR || *altwp_gr <0 ) {
+    if (*altwp_gr > ALTERNATE_MAXVALIDGR || *altwp_gr < 0) {
       *altwp_gr = INVALID_GR;
-    } else if ( *altwp_gr <1 ) {
+    } else if (*altwp_gr < 1) {
       *altwp_gr = 1;
     }
   }
-
 
   // We need to calculate arrival also for BestAlternate, since the last "reachable" could be
   // even 60 seconds old and things may have changed drastically
 
   *altwp_arrival = CalculateWaypointArrivalAltitude(way_point, way_point_calc);
-  if ( (*altwp_arrival - ALTERNATE_OVERSAFETY) >0 ) {
-    if ( *altwp_gr <= (GlidePolar::bestld *SAFELD_FACTOR) ) {
+  if ((*altwp_arrival - ALTERNATE_OVERSAFETY) > 0) {
+    if (*altwp_gr <= (GlidePolar::bestld * SAFELD_FACTOR)) {
       *altwp_vgr = 1; // full green vgr
-    } else if ( *altwp_gr <= GlidePolar::bestld ) {
+    } else if (*altwp_gr <= GlidePolar::bestld) {
       *altwp_vgr = 2; // yellow vgr
-    } else *altwp_vgr =3; // RED vgr
+    } else
+      *altwp_vgr = 3; // RED vgr
   } else {
     *altwp_vgr = 3; // full red
   }
