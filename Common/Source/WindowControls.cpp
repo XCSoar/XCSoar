@@ -386,7 +386,7 @@ void WindowControl::SetCaption(const TCHAR *Value){
 
   if (_tcscmp(mCaption, Value) != 0){
     _tcscpy(mCaption, Value);
-    update(get_client_rect());
+    invalidate();
   }
 
 }
@@ -398,17 +398,9 @@ bool WindowControl::SetFocused(bool Value, HWND FromTo){
   if (mHasFocus != Value){
     mHasFocus = Value;
 
-    if (mCanFocus){
-      RECT rc;
-      rc.left = 0;
-      rc.top = 0;
-      rc.right = GetWidth();
-      rc.bottom = GetHeight();
-      update(rc);
+    if (mCanFocus)
       // todo, only paint the selector edges
-      // Paint(GetDeviceContext());
-    }
-
+      invalidate();
   }
 
   if (Value){
@@ -473,7 +465,7 @@ int WindowControl::SetBorderKind(int Value){
   int res = mBorderKind;
   if (mBorderKind != Value){
     mBorderKind = Value;
-    update(get_client_rect());
+    invalidate();
   }
   return(res);
 }
@@ -547,7 +539,7 @@ WindowControl::PaintSelector(Canvas &canvas)
 }
 
 void WindowControl::Redraw(void){
-  update(get_client_rect());
+  invalidate();
 }
 
 int WindowControl::OnHelp() {
@@ -1139,7 +1131,7 @@ void WndForm::SetCaption(const TCHAR *Value){
 
   if (_tcscmp(mCaption, Value) != 0){
     _tcscpy(mCaption, Value);
-    update(mTitleRect);
+    invalidate(mTitleRect);
   }
 
 }
@@ -1393,7 +1385,7 @@ WndButton::on_mouse_down(int x, int y)
   if (!GetFocused())
     set_focus();
   else
-    update(get_client_rect());
+    invalidate();
 
   set_capture();
   return true;
@@ -1404,7 +1396,7 @@ WndButton::on_mouse_double(int x, int y)
 {
   (void)x; (void)y;
   mDown = true;
-  update(get_client_rect());
+  invalidate();
   set_capture();
   return true;
 }
@@ -1732,7 +1724,7 @@ int WndProperty::SetButtonSize(int Value){
 
     edit.move(mEditPos.x, mEditPos.y, mEditSize.x, mEditSize.y);
 
-    update(get_client_rect());
+    invalidate();
   }
   return(res);
 }
@@ -1849,14 +1841,14 @@ WndProperty::on_mouse_down(int x, int y)
 
     if (mDownDown) {
       DecValue();
-      update(mHitRectDown);
+      invalidate(mHitRectDown);
     }
 
     mUpDown = (PtInRect(&mHitRectUp, Pos) != 0);
 
     if (mUpDown) {
       IncValue();
-      update(mHitRectUp);
+      invalidate(mHitRectUp);
     }
     set_capture();
   }
@@ -1881,11 +1873,11 @@ WndProperty::on_mouse_up(int x, int y)
 
     if (mDownDown){
       mDownDown = false;
-      update(mHitRectDown);
+      invalidate(mHitRectDown);
     }
     if (mUpDown){
       mUpDown = false;
-      update(mHitRectUp);
+      invalidate(mHitRectUp);
     }
 
   }
@@ -2123,7 +2115,7 @@ void WndFrame::SetCaption(const TCHAR *Value){
 
   if (_tcscmp(mCaption, Value) != 0){
     _tcscpy(mCaption, Value);  // todo size check
-    update(get_client_rect());
+    invalidate();
   }
 }
 
@@ -2131,7 +2123,7 @@ UINT WndFrame::SetCaptionStyle(UINT Value){
   UINT res = mCaptionStyle;
   if (res != Value){
     mCaptionStyle = Value;
-    update(get_client_rect());
+    invalidate();
   }
   return(res);
 }
@@ -2664,7 +2656,7 @@ WndFrame::on_mouse_down(int xPos, int yPos)
       //return(1);
     }
     //else {  // always doing this allows selected item in list to remain selected.
-      update(get_client_rect());
+      invalidate();
     //}
 
     WndListFrame* wlf = ((WndListFrame*)GetOwner());

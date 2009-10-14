@@ -143,15 +143,35 @@ public:
   }
 
   /**
+   * Invalidates the visible area and schedules a repaint (which will
+   * occur in the main thread).
+   */
+  void invalidate() {
+#ifdef ENABLE_SDL
+    // XXX
+#else /* !ENABLE_SDL */
+    ::InvalidateRect(hWnd, NULL, false);
+#endif /* !ENABLE_SDL */
+  }
+
+  /**
+   * Invalidates a part of the visible area and schedules a repaint
+   * (which will occur in the main thread).
+   */
+  void invalidate(const RECT &rect) {
+#ifdef ENABLE_SDL
+    invalidate();
+#else /* !ENABLE_SDL */
+    ::InvalidateRect(hWnd, &rect, false);
+#endif /* !ENABLE_SDL */
+  }
+
+  /**
    * Ensures that the specified rectangle is updated on the physical
    * screen.
    */
 #ifdef ENABLE_SDL
   void update(const RECT &rect);
-#else /* !ENABLE_SDL */
-  void update(const RECT &rect) {
-    ::InvalidateRect(hWnd, &rect, false);
-  }
 #endif /* !ENABLE_SDL */
 
   void update() {

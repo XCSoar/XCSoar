@@ -195,7 +195,7 @@ private:
       paint(buffer);
     }
 
-    PaintWindow::update(rc);
+    PaintWindow::invalidate();
   }
 
 protected:

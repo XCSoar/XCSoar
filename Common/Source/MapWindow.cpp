@@ -289,7 +289,7 @@ void MapWindow::DrawThreadLoop(void) {
   Render(draw_canvas, MapRect);
 
   // copy to canvas
-  update(MapRect);
+  invalidate();
 
   StopTimer();
 }
