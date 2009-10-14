@@ -224,7 +224,8 @@ public:
       vy[i] = lppt[i].y;
     }
 
-    ::filledPolygonColor(surface, vx, vy, cPoints, pen.get_color().gfx_color());
+    ::filledPolygonColor(surface, vx, vy, cPoints,
+                         brush.get_color().gfx_color());
   }
 
   void clipped_polygon(const POINT* lppt, unsigned cPoints, const RECT rc,
