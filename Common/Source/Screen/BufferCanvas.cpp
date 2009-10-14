@@ -37,6 +37,8 @@ Copyright_License {
 
 #include "Screen/BufferCanvas.hpp"
 
+#ifndef ENABLE_SDL
+
 BufferCanvas::BufferCanvas(const Canvas &canvas, unsigned _width, unsigned _height)
   :VirtualCanvas(canvas, _width, _height)
 {
@@ -77,3 +79,5 @@ void BufferCanvas::resize(unsigned _width, unsigned _height)
   bitmap = ::CreateCompatibleBitmap(dc, width, height);
   ::SelectObject(dc, bitmap);
 }
+
+#endif /* !ENABLE_SDL */
