@@ -99,13 +99,6 @@ struct Color {
   }
 
 #ifdef ENABLE_SDL
-  Color &operator =(const Color c) {
-    value.r = c.value.r;
-    value.g = c.value.g;
-    value.b = c.value.b;
-    return *this;
-  }
-
   operator const SDL_Color() const {
     return value;
   }
