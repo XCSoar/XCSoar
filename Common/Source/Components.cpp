@@ -258,10 +258,7 @@ bool XCSoarInterface::Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
   // initial show
 
   main_window.show();
-  main_window.update();
-
   main_window.map.show();
-  main_window.map.update();
 
   ///////////////////////////////////////////////////////
   // other initialisation...
