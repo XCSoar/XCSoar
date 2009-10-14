@@ -60,6 +60,7 @@ struct Color {
 #ifdef ENABLE_SDL
   Color() {
     value.r = 0; value.g = 0; value.b = 0;
+    value.unused = SDL_ALPHA_OPAQUE;
   }
   Color(int r, int g, int b) {
     value.r = r;
