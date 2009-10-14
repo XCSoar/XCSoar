@@ -41,6 +41,11 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "LocalPath.hpp"
 
+/**
+ * Constructor of the FlarmIdFile class
+ *
+ * Reads the FLARMnet.org file and fills the flarmIds map
+ */
 FlarmIdFile::FlarmIdFile(void)
 {
   //HANDLE hFile;
@@ -89,10 +94,19 @@ FlarmIdFile::FlarmIdFile(void)
   fclose(hFile);
 }
 
+/**
+ * Destructor of the FlarmIdFile class
+ */
 FlarmIdFile::~FlarmIdFile(void)
 {
 }
 
+/**
+ * Reads next FLARMnet.org file entry and saves it
+ * into the given flarmId
+ * @param hFile File handle
+ * @param flarmId Pointer to the FlarmId to be filled
+ */
 void FlarmIdFile::GetItem(HANDLE hFile, FlarmId *flarmId)
 {
   GetAsString(hFile, 6, flarmId->id);
@@ -107,19 +121,24 @@ void FlarmIdFile::GetItem(HANDLE hFile, FlarmId *flarmId)
   int i = 0;
   int maxSize = sizeof(flarmId->cn) / sizeof(TCHAR);
   while(flarmId->cn[i] != 0 && i < maxSize)
+  {
+    if (flarmId->cn[i] == 32)
     {
-      if (flarmId->cn[i] == 32)
-	{
-	  flarmId->cn[i] = 0;
-	}
-      i++;
+      flarmId->cn[i] = 0;
     }
+    i++;
+  }
 
   fseek((FILE*)hFile, 1, SEEK_CUR);
 }
 
-
-
+/**
+ * Decodes the FLARMnet.org file and puts the wanted
+ * characters into the res pointer
+ * @param hFile File handle
+ * @param charCount Number of character to decode
+ * @param res Pointer to be written in
+ */
 void FlarmIdFile::GetAsString(HANDLE hFile, int charCount, TCHAR *res)
 {
   int bytesToRead = charCount * 2;
@@ -147,6 +166,12 @@ void FlarmIdFile::GetAsString(HANDLE hFile, int charCount, TCHAR *res)
   *curChar = 0;
 
 }
+
+/**
+ * Finds a FlarmId object based on the given FLARM id
+ * @param id FLARM id
+ * @return FlarmId object
+ */
 FlarmId* FlarmIdFile::GetFlarmIdItem(long id)
 {
   FlarmIdMap::iterator iterFind = flarmIds.find(id);
@@ -158,6 +183,11 @@ FlarmId* FlarmIdFile::GetFlarmIdItem(long id)
   return NULL;
 }
 
+/**
+ * Finds a FlarmId object based on the given Callsign
+ * @param id Callsign
+ * @return FlarmId object
+ */
 FlarmId* FlarmIdFile::GetFlarmIdItem(const TCHAR *cn)
 {
   FlarmId *itemTemp = NULL;

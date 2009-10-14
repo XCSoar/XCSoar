@@ -45,22 +45,28 @@ Copyright_License {
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
+/**
+ * FLARMnet.org file entry
+ */
 class FlarmId
 {
 public:
-  TCHAR id[7];          //Id 6 bytes
-  TCHAR name[22];        //Name 15 bytes
-  TCHAR airfield[22];    //Airfield 4 bytes
-  TCHAR type[22];        //Unknown 1 byte
-  TCHAR reg[8];         //Reg 7 bytes
-  TCHAR cn[4];          //CN 3 bytes
-  TCHAR freq[8];        //Freq 6 bytes
+  TCHAR id[7];          /**< FLARM id 6 bytes */
+  TCHAR name[22];       /**< Name 15 bytes */
+  TCHAR airfield[22];   /**< Airfield 4 bytes */
+  TCHAR type[22];       /**< Aircraft type 1 byte */
+  TCHAR reg[8];         /**< Registration 7 bytes */
+  TCHAR cn[4];          /**< Callsign 3 bytes */
+  TCHAR freq[8];        /**< Radio frequency 6 bytes */
   long GetId();
 };
 
 typedef FlarmId* FlarmIdptr;
 typedef std::map< long, FlarmIdptr > FlarmIdMap;
 
+/**
+ * Handles the FLARMnet.org file
+ */
 class FlarmIdFile
 {
 private:
@@ -75,4 +81,3 @@ public:
 };
 
 #endif
-
