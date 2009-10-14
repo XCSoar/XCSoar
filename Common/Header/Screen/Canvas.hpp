@@ -84,6 +84,17 @@ public:
 
   void reset();
 
+protected:
+  /**
+   * Returns true if the outline should be drawn after the area has
+   * been filled.  As an optimization, this function returns false if
+   * brush and pen share the same color.
+   */
+  bool pen_over_brush() const {
+    return pen.defined() &&
+      (brush.is_hollow() || brush.get_color() != pen.get_color());
+  }
+
 public:
   bool defined() const {
     return surface != NULL;
@@ -158,7 +169,7 @@ public:
   void rectangle(int left, int top, int right, int bottom) {
     fill_rectangle(left, top, right, bottom, brush);
 
-    if (pen.get_width() > 0)
+    if (pen_over_brush())
       ::rectangleColor(surface, left, top, right, bottom,
                        pen.get_color().gfx_color());
   }
@@ -268,7 +279,7 @@ public:
       ::filledCircleColor(surface, x, y, radius,
                           brush.get_color().gfx_color());
 
-    if (pen.get_width() > 0)
+    if (pen_over_brush())
       ::circleColor(surface, x, y, radius, pen.get_color().gfx_color());
   }
 
