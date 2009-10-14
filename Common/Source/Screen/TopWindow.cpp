@@ -99,8 +99,7 @@ TopWindow::set(LPCTSTR cls, LPCTSTR text,
     fprintf(stderr, "TTF_Init() has failed: %s\n", TTF_GetError());
 
   screen.set();
-  ContainerWindow::set(NULL, NULL, NULL,
-                       0, 0, width, height);
+  ContainerWindow::set(NULL, 0, 0, width, height);
 
   char text2[512];
   unicode2ascii(text, text2);
