@@ -62,33 +62,33 @@ typedef enum {
 
 struct DERIVED_INFO
 {
-  double Vario;
-  double LD;
-  double CruiseLD;
-  int	 AverageLD;
-  double VMacCready;
-  double Average30s;
-  double NettoAverage30s;
+  double Vario; /**< Vertical speed */
+  double LD; /**< Instant glide ratio */
+  double CruiseLD; /**< Glide ratio while in Cruise mode */
+  int	 AverageLD; /**< Average glide ratio */
+  double VMacCready; /**< MacCready speed */
+  double Average30s; /**< Average vertical speed of 30s */
+  double NettoAverage30s; /**< average vertical speed (of the airmass) of 30s */
   double BestCruiseTrack;
-  double AverageThermal;
+  double AverageThermal; /**< Average vertical speed in the thermal */
   double AdjustedAverageThermal;
-  double ThermalGain;
-  double LastThermalAverage;
-  double LastThermalGain;
-  double LastThermalTime;
-  GEOPOINT ClimbStartLocation;
-  double ClimbStartAlt;
-  double ClimbStartTime;
-  GEOPOINT CruiseStartLocation;
-  double CruiseStartAlt;
-  double CruiseStartTime;
-  double WindSpeed;
-  double WindBearing;
+  double ThermalGain; /**< Altitude gained while in the thermal */
+  double LastThermalAverage; /**< Average vertical speed in the last thermal */
+  double LastThermalGain; /**< Altitude gained while in the last thermal */
+  double LastThermalTime; /**< Time spend in the last thermal */
+  GEOPOINT ClimbStartLocation; /**< StartLocation of the current/last climb */
+  double ClimbStartAlt; /**< StartAltitude of the current/last climb */
+  double ClimbStartTime; /**< StartTime of the current/last climb */
+  GEOPOINT CruiseStartLocation; /**< StartLocation of the current/last cruise */
+  double CruiseStartAlt; /**< StartAltitude of the current/last cruise */
+  double CruiseStartTime; /**< StartTime of the current/last cruise */
+  double WindSpeed; /**< Wind speed */
+  double WindBearing; /**< Wind bearing */
   double Bearing;
-  double TerrainAlt;
+  double TerrainAlt; /**< Terrain altitude */
   bool   TerrainValid;
   double Heading;
-  double AltitudeAGL;
+  double AltitudeAGL; /**< Altitude over terrain */
   int    Circling;
   int    FinalGlide;
   int    Flying;
@@ -104,7 +104,7 @@ struct DERIVED_INFO
   double TaskDistanceToGo;
   double TaskDistanceCovered;
   double TaskTimeToGo;
-  double TaskStartTime;
+  double TaskStartTime; /**< StartTime of the task */
   double TaskSpeed;
   double TaskSpeedInstantaneous;
   double TaskAltitudeRequired;
@@ -118,9 +118,9 @@ struct DERIVED_INFO
   double LegTimeToGo;
   double LegStartTime;
   double LegSpeed;
-  GEOPOINT NextLocation;
-  double NextAltitude;
-  double NextAltitudeAGL;
+  GEOPOINT NextLocation; /**< Predicted position after airspace warning time */
+  double NextAltitude; /**< Predicted altitude after airspace warning time */
+  double NextAltitudeAGL; /**< Predicted altitude over terrain after airspace warning time */
   double AATMaxDistance;
   double AATMinDistance;
   double AATTargetDistance;
@@ -128,7 +128,7 @@ struct DERIVED_INFO
   double AATMaxSpeed;
   double AATTargetSpeed;
   double AATMinSpeed;
-  double PercentCircling;
+  double PercentCircling; /**< Circling/Cruise ratio in percent */
 
   GEOPOINT TerrainWarningLocation;
 
@@ -177,10 +177,9 @@ struct DERIVED_INFO
   unsigned ActiveTaskPoint;
   int ReadyWayPoint;
 
-  // detects when glider is on ground for several seconds
-  bool OnGround;
+  bool OnGround; /**< Detects when glider is on ground for several seconds */
 
-  double NavAltitude;
+  double NavAltitude; /**< Altitude used for navigation (GPS or Baro) */
   bool ValidStart;
   double TaskStartSpeed;
   double TaskStartAltitude;
@@ -203,13 +202,13 @@ struct DERIVED_INFO
   TCHAR  TeammateCode[10]; // auto-detected, see also in settings computer.h
   bool   TeammateCodeValid;
 
-  double FlightTime;
-  double TakeOffTime;
+  double FlightTime; /**< Time of flight */
+  double TakeOffTime; /**< Time of takeoff */
 
   double AverageClimbRate[200];
   long AverageClimbRateN[200];
 
-  double HomeDistance;
+  double HomeDistance; /**< Distance to home airport */
   double HomeRadial;
 
 
@@ -236,7 +235,7 @@ struct DERIVED_INFO
   double GliderSinkRate;
   double Gload;
   double Essing;
-  double TerrainBase; // lowest height within glide range
+  double TerrainBase; /**< Lowest height within glide range */
   double TermikLigaPoints;
   double GRFinish;	// GRadient to final destination, 090203
 			// Note: we don't need GRNext since this value is used when going to a landing
