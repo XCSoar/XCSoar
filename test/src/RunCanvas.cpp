@@ -257,15 +257,21 @@ protected:
   }
 };
 
+#ifndef WIN32
+int main(int argc, char **argv)
+#else
 int WINAPI
 WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
         LPTSTR lpCmdLine, int nCmdShow)
+#endif
 {
   InitSineTable();
 
+#ifdef WIN32
   CommonInterface::hInst = hInstance;
 
   TestWindow::register_class(hInstance);
+#endif
 
   TestWindow window;
   window.set(0, 0, 250, 250);

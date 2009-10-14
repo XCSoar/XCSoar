@@ -130,13 +130,19 @@ Font TitleWindowFont;
 Font CDIWindowFont;
 Font InfoWindowFont;
 
+#ifndef WIN32
+int main(int argc, char **argv)
+#else
 int WINAPI
 WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
         LPTSTR lpCmdLine, int nCmdShow)
+#endif
 {
+#ifdef WIN32
   CommonInterface::hInst = hInstance;
 
   PaintWindow::register_class(hInstance);
+#endif
 
   TopWindow main_window;
   main_window.set(_T("STATIC"), _T("RunDialog"),
