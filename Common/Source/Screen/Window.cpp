@@ -295,7 +295,15 @@ Window::on_user(unsigned id)
   return false;
 }
 
-#ifndef ENABLE_SDL
+#ifdef ENABLE_SDL
+
+bool
+Window::on_event(const SDL_Event &event)
+{
+  return false;
+}
+
+#else /* !ENABLE_SDL */
 
 LRESULT
 Window::on_unhandled_message(HWND hWnd, UINT message,

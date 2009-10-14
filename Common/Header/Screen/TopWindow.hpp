@@ -105,7 +105,9 @@ protected:
   virtual bool on_activate();
   virtual bool on_deactivate();
 
-#ifndef ENABLE_SDL
+#ifdef ENABLE_SDL
+  virtual bool on_event(const SDL_Event &event);
+#else /* !ENABLE_SDL */
   virtual LRESULT on_message(HWND _hWnd, UINT message,
                              WPARAM wParam, LPARAM lParam);
 #endif /* !ENABLE_SDL */

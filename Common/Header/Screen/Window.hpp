@@ -421,8 +421,12 @@ protected:
   virtual bool on_timer(timer_t id);
   virtual bool on_user(unsigned id);
 
+#ifdef ENABLE_SDL
 
-#ifndef ENABLE_SDL
+  virtual bool on_event(const SDL_Event &event);
+  friend class TopWindow;
+
+#else /* !ENABLE_SDL */
   /**
    * Called by on_message() when the message was not handled by any
    * virtual method.  Calls the default handler.  This function is

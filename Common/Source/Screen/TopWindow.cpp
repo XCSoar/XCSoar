@@ -172,7 +172,28 @@ TopWindow::on_deactivate()
   return false;
 }
 
-#ifndef ENABLE_SDL
+#ifdef ENABLE_SDL
+
+bool
+TopWindow::on_event(const SDL_Event &event)
+{
+  switch (event.type) {
+  case SDL_MOUSEMOTION:
+    // XXX keys
+    return on_mouse_move(event.motion.x, event.motion.y, 0);
+
+  case SDL_MOUSEBUTTONDOWN:
+    return on_mouse_down(event.button.x, event.button.y);
+
+  case SDL_MOUSEBUTTONUP:
+    return on_mouse_up(event.button.x, event.button.y);
+  }
+
+  return false;
+}
+
+#else /* !ENABLE_SDL */
+
 LRESULT TopWindow::on_message(HWND _hWnd, UINT message,
 			       WPARAM wParam, LPARAM lParam) {
   switch (message) {
@@ -206,6 +227,13 @@ TopWindow::event_loop(unsigned accelerators_id)
   while (SDL_WaitEvent(&event)) {
     if (event.type == SDL_QUIT)
       break;
+
+    if (event.type >= SDL_USEREVENT && event.type <= SDL_NUMEVENTS-1 &&
+        event.user.data1 != NULL) {
+      Window *window = (Window *)event.user.data1;
+      window->on_user(event.type - SDL_USEREVENT);
+    } else
+      on_event(event);
   }
 
   return 0;
