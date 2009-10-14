@@ -61,6 +61,12 @@ DetectCurrentTime(const NMEA_INFO *Basic)
   return TimeLocal(localtime);
 }
 
+/**
+ * Saves the StartTime and calculates the time of flight
+ * @param Basic Basic NMEA Data
+ * @param Calculated Calculated Data
+ * @return Time of flight or 0
+ */
 int
 DetectStartTime(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated)
 {
