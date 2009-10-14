@@ -104,7 +104,8 @@ struct Color {
   }
 
   Uint32 gfx_color() const {
-    return *(const Uint32*)&value;
+    return ((Uint32)value.r << 24) | ((Uint32)value.g << 16) |
+      ((Uint32)value.b << 8) | (Uint32)value.unused;
   }
 #else
   Color &operator =(COLORREF c) {
