@@ -138,10 +138,6 @@ OrderedTask::update_sample(const AIRCRAFT_STATE &state,
   // must be done in order!
   calc_min_target(state, mc, 3.6);
 
-  glide_solution_remaining(state, mc);
-  glide_solution_travelled(state, mc);
-  glide_solution_planned(state, mc);
-
   return true;
 }
 
@@ -255,7 +251,9 @@ OrderedTask::OrderedTask()
 
 void
 OrderedTask::glide_solution_remaining(const AIRCRAFT_STATE &aircraft, 
-                                      const double mc)
+                                      const double mc,
+                                      GLIDE_RESULT &total,
+                                      GLIDE_RESULT &leg)
 {
   TaskMacCreadyRemaining tm(tps,activeTaskPoint, mc);
   stats.total.solution_remaining = tm.glide_solution(aircraft);
@@ -268,24 +266,28 @@ OrderedTask::glide_solution_remaining(const AIRCRAFT_STATE &aircraft,
 
 void
 OrderedTask::glide_solution_travelled(const AIRCRAFT_STATE &aircraft, 
-                                      const double mc)
+                                      const double mc,
+                                      GLIDE_RESULT &total,
+                                      GLIDE_RESULT &leg)
 {
   TaskMacCreadyTravelled tm(tps,activeTaskPoint, mc);
-  stats.total.solution_travelled = tm.glide_solution(aircraft);
-  stats.current_leg.solution_travelled = tm.get_active_solution();
-  stats.current_leg.travelled.set_distance(tm.get_active_solution().Distance);
+  total = tm.glide_solution(aircraft);
+  leg = tm.get_active_solution();
+
   std::ofstream fr("res-sol-travelled.txt");
   tm.print(fr, aircraft);
 }
 
 void
 OrderedTask::glide_solution_planned(const AIRCRAFT_STATE &aircraft, 
-                                    const double mc)
+                                    const double mc,
+                                    GLIDE_RESULT &total,
+                                    GLIDE_RESULT &leg)
 {
   TaskMacCreadyTotal tm(tps,activeTaskPoint, mc);
-  stats.total.solution_planned = tm.glide_solution(aircraft);
-  stats.current_leg.solution_planned = tm.get_active_solution();
-  stats.current_leg.planned.set_distance(tm.get_active_solution().Distance);
+  total = tm.glide_solution(aircraft);
+  leg = tm.get_active_solution();
+
   std::ofstream fr("res-sol-planned.txt");
   tm.print(fr, aircraft);
 

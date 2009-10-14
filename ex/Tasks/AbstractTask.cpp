@@ -2,6 +2,7 @@
 
 #include "AbstractTask.h"
 #include "Navigation/Aircraft.hpp"
+#include "BaseTask/TaskPoint.hpp"
 
 unsigned AbstractTask::getActiveTaskPointIndex() 
 {
@@ -30,22 +31,47 @@ AbstractTask::update_stats_distances(const GEOPOINT &location,
   stats.distance_scored = scan_distance_scored(location);
 }
 
+void
+AbstractTask::update_glide_solutions(const AIRCRAFT_STATE &state,
+                                     const double mc)
+{
+  glide_solution_remaining(state, mc,
+                           stats.total.solution_remaining,
+                           stats.current_leg.solution_remaining);
+
+  glide_solution_travelled(state, mc,
+                           stats.total.solution_travelled,
+                           stats.current_leg.solution_travelled);
+
+  glide_solution_planned(state, mc,
+                         stats.total.solution_planned,
+                         stats.current_leg.solution_planned);
+
+  stats.current_leg.remaining.set_distance(
+    stats.current_leg.solution_remaining.Distance);
+  stats.current_leg.travelled.set_distance(
+    stats.current_leg.solution_travelled.Distance);
+  stats.current_leg.planned.set_distance(
+    stats.current_leg.solution_planned.Distance);
+
+}
 
 bool
 AbstractTask::update(const AIRCRAFT_STATE &state, 
                      const AIRCRAFT_STATE &state_last)
 {
   bool retval;
+  double mc=1.0;
+
   update_stats_times(state, state_last);
 
   const bool full_update = check_transitions(state, state_last);
 
   update_stats_distances(state.Location, full_update);
 
-  retval = update_sample(state, full_update);
+  update_glide_solutions(state, mc);
 
-  // TODO
-  double mc=1.0;
+  retval = update_sample(state, full_update);
 
   update_stats_glide(state, mc);
 
@@ -112,3 +138,43 @@ AbstractTask::scan_distance_travelled(const GEOPOINT &location)
   return 0.0;
 }
 
+
+void
+AbstractTask::glide_solution_remaining(const AIRCRAFT_STATE &state, 
+                                       const double mc,
+                                       GLIDE_RESULT &total,
+                                       GLIDE_RESULT &leg)
+{
+  GLIDE_RESULT res;
+  MacCready msolv; // TODO make this common
+  msolv.set_mc(mc);
+
+  TaskPoint* tp = getActiveTaskPoint();
+  if (tp) {
+    res = tp->glide_solution_remaining(state, msolv, 0.0);
+  }
+  total = res;
+  leg = res;
+}
+
+void 
+AbstractTask::glide_solution_travelled(const AIRCRAFT_STATE &state, 
+                                       const double mc, 
+                                       GLIDE_RESULT &total,
+                                       GLIDE_RESULT &leg)
+{
+  GLIDE_RESULT null_res;
+  total = null_res;
+  leg = null_res;
+}
+
+void 
+AbstractTask::glide_solution_planned(const AIRCRAFT_STATE &state, 
+                                     const double mc, 
+                                     GLIDE_RESULT &total,
+                                     GLIDE_RESULT &leg)
+{
+  GLIDE_RESULT res = stats.total.solution_remaining;
+  total = res;
+  leg = res;
+}

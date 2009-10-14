@@ -68,17 +68,29 @@ private:
 
   TaskProjection task_projection;
 
-  void glide_solution_remaining(const AIRCRAFT_STATE &, 
-                                const double mc);
-  void glide_solution_travelled(const AIRCRAFT_STATE &, 
-                                const double mc);
-  void glide_solution_planned(const AIRCRAFT_STATE &, 
-                              const double mc);
 protected:
+
+  void glide_solution_remaining(const AIRCRAFT_STATE &, 
+                                const double mc,
+                                GLIDE_RESULT &total,
+                                GLIDE_RESULT &leg);
+
+  void glide_solution_travelled(const AIRCRAFT_STATE &, 
+                                const double mc,
+                                GLIDE_RESULT &total,
+                                GLIDE_RESULT &leg);
+
+  void glide_solution_planned(const AIRCRAFT_STATE &, 
+                              const double mc,
+                              GLIDE_RESULT &total,
+                              GLIDE_RESULT &leg);
+
   double calc_mc_best(const AIRCRAFT_STATE &, 
                       const double mc);
+
   double calc_cruise_efficiency(const AIRCRAFT_STATE &aircraft, 
                                 const double mc);
+
   double calc_min_target(const AIRCRAFT_STATE &, 
                          const double mc,
                          const double t_target);

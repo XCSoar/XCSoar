@@ -40,7 +40,22 @@ protected:
   virtual double scan_distance_travelled(const GEOPOINT &location);
   virtual double scan_distance_remaining(const GEOPOINT &location) = 0;
 
+  virtual void glide_solution_remaining(const AIRCRAFT_STATE &, 
+                                        const double mc,
+                                        GLIDE_RESULT &total,
+                                        GLIDE_RESULT &leg);
+  virtual void glide_solution_travelled(const AIRCRAFT_STATE &, 
+                                        const double mc,
+                                        GLIDE_RESULT &total,
+                                        GLIDE_RESULT &leg);
+  virtual void glide_solution_planned(const AIRCRAFT_STATE &, 
+                                      const double mc,
+                                      GLIDE_RESULT &total,
+                                      GLIDE_RESULT &leg);
+
 private:
+  void update_glide_solutions(const AIRCRAFT_STATE &state,
+                              const double mc);
   void update_stats_distances(const GEOPOINT &location,
                               const bool full_update);
   virtual void update_stats_times(const AIRCRAFT_STATE &, const AIRCRAFT_STATE&);
