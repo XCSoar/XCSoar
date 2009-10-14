@@ -289,9 +289,6 @@ void MapWindow::DrawThreadLoop(void) {
   Render(draw_canvas, MapRect);
 
   // copy to canvas
-  mutexBuffer.Lock();
-  get_canvas().copy(draw_canvas);
-  mutexBuffer.Unlock();
   update(MapRect);
 
   StopTimer();
