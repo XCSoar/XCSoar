@@ -18,6 +18,10 @@
 #include "Asset.hpp" /* for SCREENWIDTH and SCREENHEIGHT */
 #endif
 
+/**
+ * Destructor of the MainWindow-Class
+ * @return
+ */
 MainWindow::~MainWindow()
 {
   if (vario != NULL)
