@@ -73,7 +73,6 @@ RUN_CANVAS_OBJS = \
 	$(SRC)/Screen/ContainerWindow.o \
 	$(SRC)/Screen/TopWindow.o \
 	$(SRC)/Screen/Canvas.o \
-	$(SRC)/Screen/PaintCanvas.o \
 	$(SRC)/Screen/VirtualCanvas.o \
 	$(SRC)/Screen/BufferCanvas.o \
 	$(SRC)/Screen/Pen.o \
@@ -83,6 +82,9 @@ RUN_CANVAS_OBJS = \
 	$(SRC)/Math/Geometry.o \
 	$(SRC)/Screen/shapelib/mapsearch.o \
 	src/RunCanvas.o
+ifneq ($(ENABLE_SDL),y)
+RUN_CANVAS_OBJS += $(SRC)/Screen/PaintCanvas.o
+endif
 RunCanvas-$(TARGET)$(TARGET_EXEEXT): $(RUN_CANVAS_OBJS:.o=-$(TARGET).o)
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
