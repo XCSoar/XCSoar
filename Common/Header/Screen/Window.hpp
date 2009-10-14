@@ -110,6 +110,30 @@ public:
     return left;
   }
 
+  unsigned get_width() const {
+    return canvas.get_width();
+  }
+
+  unsigned get_height() const {
+    return canvas.get_height();
+  }
+
+  int get_right() const {
+    return get_left() + get_width();
+  }
+
+  int get_bottom() const {
+    return get_top() + get_height();
+  }
+
+  int get_hmiddle() const {
+    return (get_left() + get_right()) / 2;
+  }
+
+  int get_vmiddle() const {
+    return (get_top() + get_bottom()) / 2;
+  }
+
   const Canvas &get_canvas() const {
     return canvas;
   }
@@ -287,7 +311,10 @@ public:
   {
     RECT rc;
 #ifdef ENABLE_SDL
-    // XXX
+    rc.left = get_left();
+    rc.top = get_top();
+    rc.right = get_width();
+    rc.bottom = get_height();
 #else
     ::GetWindowRect(hWnd, &rc);
 #endif
@@ -298,7 +325,10 @@ public:
   {
     RECT rc;
 #ifdef ENABLE_SDL
-    // XXX
+    rc.left = 0;
+    rc.top = 0;
+    rc.right = get_width();
+    rc.bottom = get_height();
 #else
     ::GetClientRect(hWnd, &rc);
 #endif
