@@ -217,6 +217,9 @@ public:
   }
 
   void polygon(const POINT* lppt, unsigned cPoints) {
+    if (brush.is_hollow() && !pen.defined())
+      return;
+
     Sint16 vx[cPoints], vy[cPoints];
 
     for (unsigned i = 0; i < cPoints; ++i) {
@@ -224,8 +227,12 @@ public:
       vy[i] = lppt[i].y;
     }
 
-    ::filledPolygonColor(surface, vx, vy, cPoints,
-                         brush.get_color().gfx_color());
+    if (!brush.is_hollow())
+      ::filledPolygonColor(surface, vx, vy, cPoints,
+                           brush.get_color().gfx_color());
+
+    if (pen_over_brush())
+      ::polygonColor(surface, vx, vy, cPoints, pen.get_color().gfx_color());
   }
 
   void clipped_polygon(const POINT* lppt, unsigned cPoints, const RECT rc,
