@@ -227,7 +227,7 @@ class MapWindow
   virtual bool on_destroy();
   virtual bool on_resize(unsigned width, unsigned height);
   virtual bool on_mouse_double(int x, int y);
-  virtual bool on_mouse_move(int x, int y);
+  virtual bool on_mouse_move(int x, int y, unsigned keys);
   virtual bool on_mouse_down(int x, int y);
   virtual bool on_mouse_up(int x, int y);
   virtual bool on_key_down(unsigned key_code);

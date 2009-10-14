@@ -193,7 +193,8 @@ bool MapWindow::on_mouse_double(int x, int y)
   return true;
 }
 
-bool MapWindow::on_mouse_move(int x, int y)
+bool
+MapWindow::on_mouse_move(int x, int y, unsigned keys)
 {
   if (task.getSettings().AATEnabled && SettingsMap().TargetPan && (TargetDrag_State>0)) {
     // target follows "finger" so easier to drop near edge of
@@ -212,10 +213,12 @@ bool MapWindow::on_mouse_move(int x, int y)
 	TargetDrag_Location = mouseMove;
 
 	draw_masked_bitmap(get_canvas(), MapGfx.hBmpTarget, x, y, 10, 10, true);
+        return true;
       }
     }
   }
-  return true;
+
+  return MaskedPaintWindow::on_mouse_move(x, y, keys);
 }
 
 bool MapWindow::on_mouse_down(int x, int y)
