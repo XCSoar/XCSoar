@@ -40,7 +40,7 @@ BUILDTESTS=\
 	t/01_test_tap.exe
 
 all: $(BUILDTESTS) RunWayPointParser-$(TARGET)$(TARGET_EXEEXT) \
-	RunPaintCanvas-$(TARGET)$(TARGET_EXEEXT) \
+	RunCanvas-$(TARGET)$(TARGET_EXEEXT) \
 	RunDialog-$(TARGET)$(TARGET_EXEEXT)
 
 test: .phony $(BUILDTESTS)
@@ -66,7 +66,7 @@ RunWayPointParser-$(TARGET)$(TARGET_EXEEXT): $(RUN_WAY_POINT_PARSER_OBJS:.o=-$(T
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
-RUN_PAINT_CANVAS_OBJS = \
+RUN_CANVAS_OBJS = \
 	$(SRC)/compat-$(TARGET).a \
 	$(SRC)/Screen/Window.o \
 	$(SRC)/Screen/PaintWindow.o \
@@ -82,8 +82,8 @@ RUN_PAINT_CANVAS_OBJS = \
 	$(SRC)/Math/FastMath.o \
 	$(SRC)/Math/Geometry.o \
 	$(SRC)/Screen/shapelib/mapsearch.o \
-	src/RunPaintCanvas.o
-RunPaintCanvas-$(TARGET)$(TARGET_EXEEXT): $(RUN_PAINT_CANVAS_OBJS:.o=-$(TARGET).o)
+	src/RunCanvas.o
+RunCanvas-$(TARGET)$(TARGET_EXEEXT): $(RUN_CANVAS_OBJS:.o=-$(TARGET).o)
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
@@ -136,7 +136,7 @@ include $(topdir)/build/compat.mk
 clean:
 	rm -f $(BUILDTESTS) \
 		RunWayPointParser-$(TARGET)$(TARGET_EXEEXT) \
-		RunPaintCanvas-$(TARGET)$(TARGET_EXEEXT) \
+		RunCanvas-$(TARGET)$(TARGET_EXEEXT) \
 		RunDialog-$(TARGET)$(TARGET_EXEEXT)
 	rm -f $(RUN_WAY_POINT_PARSER_OBJS:.o=-$(TARGET).o)
 	rm -f $(RUN_DIALOG_OBJS:.o=-$(TARGET).o)

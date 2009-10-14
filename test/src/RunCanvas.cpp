@@ -89,14 +89,14 @@ public:
     wc.hCursor = LoadCursor(NULL, IDC_ARROW);
     wc.hbrBackground = (HBRUSH)GetStockObject(WHITE_BRUSH);
     wc.lpszMenuName = 0;
-    wc.lpszClassName = _T("RunPaintCanvas");
+    wc.lpszClassName = _T("RunCanvas");
 
     return RegisterClass(&wc);
 #endif /* !ENABLE_SDL */
   }
 
   void set(int left, int top, unsigned width, unsigned height) {
-    TopWindow::set(_T("RunPaintCanvas"), _T("RunPaintCanvas"),
+    TopWindow::set(_T("RunCanvas"), _T("RunCanvas"),
                 left, top, width, height);
 
     RECT rc = get_client_rect();
