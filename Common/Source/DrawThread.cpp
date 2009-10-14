@@ -68,7 +68,7 @@ DrawThread::run()
 	if (map.Basic().FLARM_AlarmLevel > 0) {
 	  flarm->Suppress = false;
 	}
-	flarm->TrafficPresent(map.Basic().FLARMTraffic); 
+	flarm->TrafficPresent(map.Basic().FLARMTraffic);
 	flarm->Show(map.SettingsMap().EnableFLARMGauge);
         flarm->Render(map.Basic());
       }

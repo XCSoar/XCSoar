@@ -40,7 +40,7 @@ Copyright_License {
 #include "WindowControls.h"
 #include "DataField/Base.hpp"
 
-bool SetValueRegistryOnChange(WndForm* wfm, 
+bool SetValueRegistryOnChange(WndForm* wfm,
 			      const TCHAR* field,
 			      const TCHAR* reg,
 			      bool &value) {
@@ -53,7 +53,7 @@ bool SetValueRegistryOnChange(WndForm* wfm,
 }
 
 
-bool SetValueRegistryOnChange(WndForm* wfm, 
+bool SetValueRegistryOnChange(WndForm* wfm,
 			      const TCHAR* field,
 			      const TCHAR* reg,
 			      unsigned int &value) {
@@ -66,7 +66,7 @@ bool SetValueRegistryOnChange(WndForm* wfm,
 }
 
 
-bool SetValueRegistryOnChange(WndForm* wfm, 
+bool SetValueRegistryOnChange(WndForm* wfm,
 			      const TCHAR* field,
 			      const TCHAR* reg,
 			      int &value) {
@@ -78,7 +78,7 @@ bool SetValueRegistryOnChange(WndForm* wfm,
   }
 }
 
-bool SetValueRegistryOnChange(WndForm* wfm, 
+bool SetValueRegistryOnChange(WndForm* wfm,
 			      const TCHAR* field,
 			      const TCHAR* reg,
 			      DisplayTextType_t &value) {
@@ -90,7 +90,7 @@ bool SetValueRegistryOnChange(WndForm* wfm,
   }
 }
 
-bool SetValueRegistryOnChange(WndForm* wfm, 
+bool SetValueRegistryOnChange(WndForm* wfm,
 			      const TCHAR* field,
 			      const TCHAR* reg,
 			      short &value) {
@@ -105,7 +105,7 @@ bool SetValueRegistryOnChange(WndForm* wfm,
 ////
 
 
-bool SetValueOnChange(WndForm* wfm, const TCHAR* field, bool &value) 
+bool SetValueOnChange(WndForm* wfm, const TCHAR* field, bool &value)
 {
   WndProperty* wp = (WndProperty*)wfm->FindByName(field);
   if (wp) {
@@ -118,7 +118,7 @@ bool SetValueOnChange(WndForm* wfm, const TCHAR* field, bool &value)
 }
 
 
-bool SetValueOnChange(WndForm* wfm, const TCHAR* field, unsigned int &value) 
+bool SetValueOnChange(WndForm* wfm, const TCHAR* field, unsigned int &value)
 {
   WndProperty* wp = (WndProperty*)wfm->FindByName(field);
   if (wp) {
@@ -131,7 +131,7 @@ bool SetValueOnChange(WndForm* wfm, const TCHAR* field, unsigned int &value)
 }
 
 
-bool SetValueOnChange(WndForm* wfm, const TCHAR* field, int &value) 
+bool SetValueOnChange(WndForm* wfm, const TCHAR* field, int &value)
 {
   WndProperty* wp = (WndProperty*)wfm->FindByName(field);
   if (wp) {
@@ -143,7 +143,7 @@ bool SetValueOnChange(WndForm* wfm, const TCHAR* field, int &value)
   return false;
 }
 
-bool SetValueOnChange(WndForm* wfm, const TCHAR* field, DisplayTextType_t &value) 
+bool SetValueOnChange(WndForm* wfm, const TCHAR* field, DisplayTextType_t &value)
 {
   WndProperty* wp = (WndProperty*)wfm->FindByName(field);
   if (wp) {
@@ -155,7 +155,7 @@ bool SetValueOnChange(WndForm* wfm, const TCHAR* field, DisplayTextType_t &value
   return false;
 }
 
-bool SetValueOnChange(WndForm* wfm, const TCHAR* field, short &value) 
+bool SetValueOnChange(WndForm* wfm, const TCHAR* field, short &value)
 {
   WndProperty* wp = (WndProperty*)wfm->FindByName(field);
   if (wp) {

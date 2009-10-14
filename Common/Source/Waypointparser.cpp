@@ -640,12 +640,12 @@ ReadWayPoints(WayPointList &way_points, RasterTerrain &terrain)
   // read additional waypoint file
 
   GetRegistryString(szRegistryAdditionalWayPointFile, szFile2, MAX_PATH);
-  
+
   SetRegistryString(szRegistryAdditionalWayPointFile, TEXT("\0"));
 
   if (_tcslen(szFile2)>0){
     ExpandLocalPath(szFile2);
-    
+
     globalFileNum = 1;
     if (ReadWayPointFile(szFile2, way_points, terrain)) {
       // read OK, so set the registry to the actual file name
@@ -666,16 +666,16 @@ SetHome(const WayPointList &way_points, RasterTerrain &terrain,
   StartupStore(TEXT("SetHome\n"));
 
   // check invalid home waypoint or forced reset due to file change
-  // VENTA3 
+  // VENTA3
   if (reset || !way_points.verify_index(0) ||
       !way_points.verify_index(settings.HomeWaypoint)) {
     settings.HomeWaypoint = -1;
   }
   // VENTA3 -- reset Alternates
-  if (reset 
+  if (reset
       || !way_points.verify_index(settings.Alternate1)
       || !way_points.verify_index(settings.Alternate2)) {
-    settings.Alternate1= -1; 
+    settings.Alternate1= -1;
     settings.Alternate2= -1;
   }
   // check invalid task ref waypoint or forced reset due to file change
@@ -699,7 +699,7 @@ SetHome(const WayPointList &way_points, RasterTerrain &terrain,
   }
   // set team code reference waypoint if we don't have one
   if (settings.TeamCodeRefWaypoint== -1) {
-    settings.TeamCodeRefWaypoint = 
+    settings.TeamCodeRefWaypoint =
       settings.HomeWaypoint;
   }
 
@@ -710,7 +710,7 @@ SetHome(const WayPointList &way_points, RasterTerrain &terrain,
       const WAYPOINT &home = way_points.get(settings.HomeWaypoint);
       device_blackboard.SetStartupLocation(home.Location, home.Altitude);
     } else {
-      
+
       // no home at all, so set it from center of terrain if available
       GEOPOINT loc;
       if (terrain.GetTerrainCenter(&loc)) {

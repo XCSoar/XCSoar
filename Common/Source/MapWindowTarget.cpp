@@ -55,7 +55,7 @@ bool MapWindow::SetTargetPan(bool do_pan, int target_point) {
   static bool old_pan=false;
   static bool old_fullscreen=false;
 
-  if (!SettingsMap().TargetPan 
+  if (!SettingsMap().TargetPan
       || (SettingsMap().TargetPanIndex != target_point)) {
     TargetDrag_State = 0;
   }

@@ -49,7 +49,7 @@ Logger::~Logger()
   delete _logger;
 };
 
-void 
+void
 Logger::LogPoint(const NMEA_INFO &gps_info)
 {
   // don't hold up the calculation thread if it's locked
@@ -61,7 +61,7 @@ Logger::LogPoint(const NMEA_INFO &gps_info)
   }
 };
 
-bool 
+bool
 Logger::CheckDeclaration(void)
 {
   Poco::ScopedRWLock protect(lock, true);
@@ -69,27 +69,27 @@ Logger::CheckDeclaration(void)
 };
 
 bool
-Logger::isTaskDeclared() 
+Logger::isTaskDeclared()
 {
   Poco::ScopedRWLock protect(lock, false);
   return _logger->isTaskDeclared();
 };
 
 bool
-Logger::isLoggerActive() 
+Logger::isLoggerActive()
 {
   Poco::ScopedRWLock protect(lock, false);
   return _logger->isLoggerActive();
 };
 
-bool 
+bool
 Logger::LoggerClearFreeSpace(const NMEA_INFO &gps_info)
 {
   Poco::ScopedRWLock protect(lock, true);
   return _logger->LoggerClearFreeSpace(gps_info);
 };
 
-void 
+void
 Logger::LinkGRecordDLL(void)
 {
   Poco::ScopedRWLock protect(lock, true);
@@ -97,14 +97,14 @@ Logger::LinkGRecordDLL(void)
 };
 
 bool
-Logger::LoggerGActive() 
+Logger::LoggerGActive()
 {
   Poco::ScopedRWLock protect(lock, false);
   return _logger->LoggerGActive();
 };
 
-void 
-Logger::guiStartLogger(const NMEA_INFO& gps_info, 
+void
+Logger::guiStartLogger(const NMEA_INFO& gps_info,
                     const SETTINGS_COMPUTER& settings,
                     bool noAsk)
 {
@@ -113,8 +113,8 @@ Logger::guiStartLogger(const NMEA_INFO& gps_info,
                                  settings, noAsk);
 };
 
-void 
-Logger::guiToggleLogger(const NMEA_INFO& gps_info, 
+void
+Logger::guiToggleLogger(const NMEA_INFO& gps_info,
                      const SETTINGS_COMPUTER& settings,
                      bool noAsk)
 {
@@ -122,7 +122,7 @@ Logger::guiToggleLogger(const NMEA_INFO& gps_info,
   return _logger->guiToggleLogger(gps_info, settings, noAsk);
 };
 
-void 
+void
 Logger::guiStopLogger(const NMEA_INFO &gps_info,
                    bool noAsk)
 {
@@ -130,21 +130,21 @@ Logger::guiStopLogger(const NMEA_INFO &gps_info,
   return _logger->guiStopLogger(gps_info, noAsk);
 };
 
-void 
+void
 Logger::LoggerDeviceDeclare()
 {
   Poco::ScopedRWLock protect(lock, true);
   return _logger->LoggerDeviceDeclare();
 };
 
-void 
+void
 Logger::LoggerNote(const TCHAR *text)
 {
   Poco::ScopedRWLock protect(lock, true);
   return _logger->LoggerNote(text);
 };
 
-void 
+void
 Logger::clearBuffer()
 {
   Poco::ScopedRWLock protect(lock, true);

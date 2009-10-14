@@ -164,10 +164,10 @@ void MapWindow::DrawMapScale(Canvas &canvas, const RECT rc /* the Map Rect*/,
                 rc.bottom - Appearance.MapWindowBoldFont.AscentHeight - IBLSCALE(1),
                 ScaleInfo);
 
-    draw_bitmap(canvas, MapGfx.hBmpMapScale, 
-		0, rc.bottom-Height, 
+    draw_bitmap(canvas, MapGfx.hBmpMapScale,
+		0, rc.bottom-Height,
 		0, 0, 6, 11, false);
-    draw_bitmap(canvas, MapGfx.hBmpMapScale, 
+    draw_bitmap(canvas, MapGfx.hBmpMapScale,
 		IBLSCALE(14)+TextSize.cx, rc.bottom-Height,
 		6, 0, 8, 11, false);
 
@@ -202,7 +202,7 @@ void MapWindow::DrawMapScale(Canvas &canvas, const RECT rc /* the Map Rect*/,
         _tcscat(ScaleInfo, TEXT("REPLAY "));
       }
       if (SettingsComputer().BallastTimerActive) {
-        _stprintf(TEMP,TEXT("BALLAST %3.0f LITERS"), 
+        _stprintf(TEMP,TEXT("BALLAST %3.0f LITERS"),
 		  GlidePolar::GetBallastLitres());
         _tcscat(ScaleInfo, TEMP);
       }

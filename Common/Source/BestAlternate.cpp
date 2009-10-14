@@ -214,7 +214,7 @@ GlideComputerTask::SearchBestAlternate()
 
             bool out_of_range;
             double distance_soarable =
-              FinalGlideThroughTerrain(wp_bearing, 
+              FinalGlideThroughTerrain(wp_bearing,
 				       &Basic(), &Calculated(),
 				       SettingsComputer(),
                                        NULL,
@@ -247,7 +247,7 @@ GlideComputerTask::SearchBestAlternate()
   // extended part by Paolo
 
   bestalternate=-1;  // reset the good choice
-  double safecalc = Calculated().NavAltitude - 
+  double safecalc = Calculated().NavAltitude -
     SettingsComputer().SAFETYALTITUDEARRIVAL;
   static double grpolar = GlidePolar::bestld *SAFELD_FACTOR;
   int curwp, curbestairport=-1, curbestoutlanding=-1;
@@ -296,7 +296,7 @@ GlideComputerTask::SearchBestAlternate()
       // attempt to lock it even if we already have a valid best, even if it is preferred and even
       // if it has a better GR
 
-      if ( (SettingsComputer().HomeWaypoint >= 0) 
+      if ( (SettingsComputer().HomeWaypoint >= 0)
 	   && (curwp == SettingsComputer().HomeWaypoint) ) {
 	bestalternate = curwp;
 	break;
@@ -517,7 +517,7 @@ GlideComputerTask::DoAlternates(int AltWaypoint)
 
   *altwp_dist = Distance(w1, w0);
 
-  double GRsafecalc = Calculated().NavAltitude - 
+  double GRsafecalc = Calculated().NavAltitude -
     (way_point.Altitude +
      SettingsComputer().SAFETYALTITUDEARRIVAL);
 

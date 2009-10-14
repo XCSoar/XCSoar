@@ -203,7 +203,7 @@ bool dlgTaskRules(void){
   delete wf;
 
   if (changed) {
-    
+
     task.setSettings(settings_task);
 
     Profile::StoreRegistry();

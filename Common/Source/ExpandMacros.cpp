@@ -77,7 +77,7 @@ static void CondReplaceInString(bool Condition, TCHAR *Buffer,
     ReplaceInString(Buffer, Macro, FalseText, Size);
 }
 
-bool ButtonLabel::ExpandMacros(const TCHAR *In, 
+bool ButtonLabel::ExpandMacros(const TCHAR *In,
 			       TCHAR *OutBuffer, size_t Size) {
   // ToDo, check Buffer Size
   bool invalid = false;
@@ -238,7 +238,7 @@ bool ButtonLabel::ExpandMacros(const TCHAR *In,
     ReplaceInString(OutBuffer, TEXT("$(CheckAutoMc)"), TEXT(""), Size);
   }
 
-  CondReplaceInString(logger.isLoggerActive(), OutBuffer, 
+  CondReplaceInString(logger.isLoggerActive(), OutBuffer,
                       TEXT("$(LoggerActive)"), TEXT("Stop"), TEXT("Start"), Size);
 
   if (_tcsstr(OutBuffer, TEXT("$(SnailTrailToggleName)"))) {
@@ -321,8 +321,8 @@ bool ButtonLabel::ExpandMacros(const TCHAR *In,
   CondReplaceInString(SettingsMap().FullScreen, OutBuffer,
                       TEXT("$(FullScreenToggleActionName)"),
                       TEXT("Off"), TEXT("On"), Size);
-  CondReplaceInString(SettingsMap().AutoZoom, OutBuffer, 
-		      TEXT("$(ZoomAutoToggleActionName)"), 
+  CondReplaceInString(SettingsMap().AutoZoom, OutBuffer,
+		      TEXT("$(ZoomAutoToggleActionName)"),
 		      TEXT("Manual"), TEXT("Auto"), Size);
   CondReplaceInString(SettingsMap().EnableTopology, OutBuffer, TEXT("$(TopologyToggleActionName)"), TEXT("Off"), TEXT("On"), Size);
   CondReplaceInString(SettingsMap().EnableTerrain, OutBuffer, TEXT("$(TerrainToggleActionName)"), TEXT("Off"), TEXT("On"), Size);

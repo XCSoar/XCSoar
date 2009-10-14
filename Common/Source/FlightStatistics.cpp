@@ -254,7 +254,7 @@ void FlightStatistics::RenderGlidePolar(Canvas &canvas, const RECT rc)
   ff= (sb-MACCREADY)/max(1.0, XCSoarInterface::Calculated().VMacCready);
 
   chart.DrawLine(0, MACCREADY,
-		 XCSoarInterface::SettingsComputer().SAFTEYSPEED, 
+		 XCSoarInterface::SettingsComputer().SAFTEYSPEED,
 		 MACCREADY+ff*XCSoarInterface::SettingsComputer().SAFTEYSPEED,
 		 Chart::STYLE_REDTHICK);
 
@@ -353,12 +353,12 @@ void FlightStatistics::RenderTask(Canvas &canvas, const RECT rc, const bool olcm
     y1 = (lat1-lat_c);
     chart.ScaleXFromValue(x1);
     chart.ScaleYFromValue(y1);
-    
+
     if (task.getSettings().AATEnabled) {
       GEOPOINT aatloc;
       double bearing;
       double radius;
-      
+
       if (task.ValidTaskPoint(i+1)) {
         if (task.getTaskPoint(i).AATType == AAT_SECTOR) {
           radius = task.getTaskPoint(i).AATSectorRadius;
@@ -367,7 +367,7 @@ void FlightStatistics::RenderTask(Canvas &canvas, const RECT rc, const bool olcm
         }
         for (int j=0; j<4; j++) {
           bearing = j*360.0/4;
-          
+
           FindLatitudeLongitude(task.getTaskPointLocation(i),
                                 bearing, radius,
                                 &aatloc);
@@ -469,7 +469,7 @@ void FlightStatistics::RenderTask(Canvas &canvas, const RECT rc, const bool olcm
 		       Chart::STYLE_DASHGREEN);
 
 	TCHAR text[100];
-	if ((i==nwps-1) && 
+	if ((i==nwps-1) &&
             (task.getWaypointIndex(i) == task.getWaypointIndex(0))) {
 	  _stprintf(text,TEXT("%0d"),1);
 	  chart.DrawLabel(text, x2, y2);
@@ -739,7 +739,7 @@ void FlightStatistics::RenderAirspace(Canvas &canvas, const RECT rc) {
 
   for (j=0; j< AIRSPACE_SCANSIZE_X; j++) { // scan range
     fj = j*1.0/(AIRSPACE_SCANSIZE_X-1);
-    FindLatitudeLongitude(XCSoarInterface::Basic().Location, 
+    FindLatitudeLongitude(XCSoarInterface::Basic().Location,
                           acb, range*fj,
                           &d_loc[j]);
     d_alt[j] = terrain.GetTerrainHeight(d_loc[j], rounding);
@@ -895,7 +895,7 @@ FlightStatistics::AddAltitude(const double tflight,
 double
 FlightStatistics::AverageThermalAdjusted
 (const double mc_current,
- const bool circling) 
+ const bool circling)
 {
   double mc_stats;
   Lock();
@@ -914,7 +914,7 @@ FlightStatistics::AverageThermalAdjusted
 }
 
 void
-FlightStatistics::SaveTaskSpeed(const double val) 
+FlightStatistics::SaveTaskSpeed(const double val)
 {
   Task_Speed.least_squares_update(val);
 }
@@ -939,7 +939,7 @@ FlightStatistics::AddClimbBase(const double tflight,
   if (Altitude_Ceiling.sum_n>0) {
     // only update base if have already climbed, otherwise
     // we will catch the takeoff height as the base.
-    
+
     Altitude_Base.least_squares_update(max(0,tflight)/3600.0,
 				       alt);
   }
@@ -1019,7 +1019,7 @@ FlightStatistics::CaptionClimb( TCHAR* sTmp)
 }
 
 
-void 
+void
 FlightStatistics::CaptionPolar(TCHAR *sTmp)
 {
   if (InfoBoxLayout::landscape) {
@@ -1070,11 +1070,11 @@ FlightStatistics::CaptionTask(TCHAR *sTmp)
     TCHAR timetext1[100];
     TCHAR timetext2[100];
     if (task.getSettings().AATEnabled) {
-      Units::TimeToText(timetext1, 
+      Units::TimeToText(timetext1,
 			(int)XCSoarInterface::Calculated().TaskTimeToGo);
-      Units::TimeToText(timetext2, 
+      Units::TimeToText(timetext2,
 			(int)XCSoarInterface::Calculated().AATTimeToGo);
-      
+
       if (InfoBoxLayout::landscape) {
 	_stprintf(sTmp,
 		  TEXT("%s:\r\n  %s\r\n%s:\r\n  %s\r\n%s:\r\n  %5.0f %s\r\n%s:\r\n  %5.0f %s\r\n"),

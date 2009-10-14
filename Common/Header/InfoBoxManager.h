@@ -84,7 +84,7 @@ public:
 
   static int getType(unsigned i, unsigned layer);
   static void setType(unsigned i, char j, unsigned layer);
-  
+
   static int getTypeAll(unsigned i);
   static void setTypeAll(unsigned i, unsigned j);
 

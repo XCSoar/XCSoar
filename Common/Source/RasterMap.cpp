@@ -106,9 +106,9 @@ int RasterMap::GetEffectivePixelSize(double dist) {
 }
 
 
-void RasterMap::SetFieldRounding(const double xr, 
+void RasterMap::SetFieldRounding(const double xr,
                                  const double yr,
-                                 RasterRounding &rounding) 
+                                 RasterRounding &rounding)
 {
   if (!isMapLoaded()) {
     return;

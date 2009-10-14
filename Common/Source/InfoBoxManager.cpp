@@ -60,7 +60,7 @@ Copyright_License {
 #include "SettingsComputer.hpp"
 #include "Interface.hpp"
 #include "Battery.h"
-#include "FlarmCalculations.h" 
+#include "FlarmCalculations.h"
 #include "UtilsSystem.hpp"
 #include "MainWindow.hpp"
 #include "MapWindow.h"
@@ -773,13 +773,13 @@ void InfoBoxManager::DisplayInfoBox(void)
 	    break;
 	  }
 	  if ( Calculated().HomeRadial == 0 ) {
-	    _stprintf(sTmp,_T("0%s"),_T(DEG)); 
+	    _stprintf(sTmp,_T("0%s"),_T(DEG));
 	  } else {
 	    _stprintf(sTmp,_T("%1.0d%s"),(int)Calculated().HomeRadial,_T(DEG));
 	  }
 	  InfoBoxes[i]->SetComment(sTmp);
 	  break;
-	  
+
 	// VENTA3 battery temperature under voltage. There is a good
 	// reason to see the temperature, if available: many PNA/PDA
 	// will switch OFF during flight under direct sunlight for
@@ -1021,7 +1021,7 @@ RECT InfoBoxManager::Create(RECT rc) {
     {
       InfoBoxLayout::GetInfoBoxPosition(i, rc, &xoff, &yoff, &sizex, &sizey);
 
-      InfoBoxes[i] = new InfoBox(main_window, 
+      InfoBoxes[i] = new InfoBox(main_window,
 				 xoff, yoff, sizex, sizey);
 
       int Border=0;

@@ -245,7 +245,7 @@ bool XCSoarInterface::Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
 
   device_blackboard.Initialise();
   ///////////////////////////////////////////////////////
-  /// 
+  ///
   marks = new Marks("xcsoar-marks");
   topology = new TopologyStore(marks->GetTopology());
 

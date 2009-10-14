@@ -36,21 +36,21 @@ Copyright_License {
 */
 #include "InterfaceBlackboard.hpp"
 
-void 
+void
 InterfaceBlackboard::ReadBlackboardCalculated(const DERIVED_INFO &derived_info)
 {
   memcpy(&calculated_info,&derived_info,sizeof(DERIVED_INFO));
 }
 
-void 
+void
 InterfaceBlackboard::ReadBlackboardBasic(const NMEA_INFO &nmea_info)
 {
   memcpy(&gps_info,&nmea_info,sizeof(NMEA_INFO));
 }
 
-void 
-InterfaceBlackboard::ReadSettingsComputer(const SETTINGS_COMPUTER 
-					  &settings) 
+void
+InterfaceBlackboard::ReadSettingsComputer(const SETTINGS_COMPUTER
+					  &settings)
 {
   memcpy(&settings_computer,&settings,sizeof(SETTINGS_COMPUTER));
 }

@@ -82,7 +82,7 @@ class Chart {
   void ScaleXFromValue(const double val);
   void ScaleMakeSquare();
 
-  void StyleLine(const POINT l1, const POINT l2, 
+  void StyleLine(const POINT l1, const POINT l2,
 		 const int Style);
 
   void ResetScale();
@@ -103,7 +103,7 @@ class Chart {
   void DrawLabel(const TCHAR *text,
 		 const double xv, const double yv);
 
-  void DrawArrow(const double x, const double y, 
+  void DrawArrow(const double x, const double y,
 		 const double mag, const double angle,
 		 const int Style);
 

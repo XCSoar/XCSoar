@@ -914,7 +914,7 @@ bool NMEAParser::PFLAA(const TCHAR *String,
     GPS_INFO->Altitude;
 
 #ifdef FLARM_AVERAGE
-  GPS_INFO->FLARM_Traffic[flarm_slot].Average30s = 
+  GPS_INFO->FLARM_Traffic[flarm_slot].Average30s =
     flarmCalculations.Average30s(
 				 GPS_INFO->FLARM_Traffic[flarm_slot].ID,
 				 GPS_INFO->Time,

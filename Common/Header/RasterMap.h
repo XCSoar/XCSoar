@@ -130,8 +130,8 @@ public:
     Set(map, xr, yr);
   };
   void Set(RasterMap &map,
-           const double xr, 
-           const double yr) 
+           const double xr,
+           const double yr)
   {
     map.SetFieldRounding(xr,yr,*this);
   }

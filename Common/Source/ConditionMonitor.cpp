@@ -198,7 +198,7 @@ protected:
     tad = cmp.Calculated().TaskAltitudeDifference*0.2+0.8*tad;
 
     bool BeforeFinalGlide =
-      (task.ValidTaskPoint(task.getActiveIndex()+1) 
+      (task.ValidTaskPoint(task.getActiveIndex()+1)
        && !cmp.Calculated().FinalGlide);
 
     if (BeforeFinalGlide) {
@@ -342,7 +342,7 @@ protected:
     if (cmp.Calculated().LegDistanceToGo>task.getSettings().StartRadius) {
       return false;
     }
-    if (cmp.ValidStartSpeed(task.getSettings().StartMaxSpeedMargin) 
+    if (cmp.ValidStartSpeed(task.getSettings().StartMaxSpeedMargin)
 	&& cmp.InsideStartHeight(task.getSettings().StartMaxHeightMargin))
     {
       withinMargin = true;
@@ -387,7 +387,7 @@ protected:
     fgtt = !((cmp.Calculated().TerrainWarningLocation.Latitude == 0.0) &&
 	     (cmp.Calculated().TerrainWarningLocation.Longitude == 0.0));
 
-    if (!cmp.Calculated().FinalGlide 
+    if (!cmp.Calculated().FinalGlide
 	|| (cmp.Calculated().TaskAltitudeDifference<-50)) {
       fgtt_last = false;
     } else if ((fgtt) && (!fgtt_last)) {

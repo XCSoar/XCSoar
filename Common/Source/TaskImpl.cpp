@@ -137,7 +137,7 @@ void Task::ResetTaskWaypoint(int j) {
 }
 
 
-void Task::FlyDirectTo(const int index, 
+void Task::FlyDirectTo(const int index,
                        const SETTINGS_COMPUTER &settings_computer) {
   if (!logger.CheckDeclaration())
     return;
@@ -198,7 +198,7 @@ void Task::SwapWaypoint(const int index,
 // Inserts a waypoint into the task, in the
 // position of the ActiveWaypoint.  If append=true, insert at end of the
 // task.
-void Task::InsertWaypoint(const int index, 
+void Task::InsertWaypoint(const int index,
                           const SETTINGS_COMPUTER &settings_computer,
                           bool append) {
   if (!logger.CheckDeclaration())
@@ -268,7 +268,7 @@ void Task::DefaultTask(const SETTINGS_COMPUTER &settings_computer) {
 //
 // If you call this function, you MUST deal with
 // correctly setting ActiveTaskPoint yourself!
-void Task::RemoveTaskPoint(int index, 
+void Task::RemoveTaskPoint(int index,
                            const SETTINGS_COMPUTER &settings_computer) {
   if (!logger.CheckDeclaration())
     return;
@@ -408,7 +408,7 @@ void Task::ReplaceWaypoint(const int index,
 }
 
 
-void Task::RefreshTask(const SETTINGS_COMPUTER &settings_computer) 
+void Task::RefreshTask(const SETTINGS_COMPUTER &settings_computer)
 {
   RefreshTask_Visitor(settings_computer);
   CalculateAATTaskSectors(XCSoarInterface::Basic());
@@ -472,15 +472,15 @@ Task::getTaskPoint(const int v) const
 }
 
 
-void 
-Task::setTaskPoint(const unsigned index, const TASK_POINT& tp) 
+void
+Task::setTaskPoint(const unsigned index, const TASK_POINT& tp)
 {
   task_points[index]= tp;
   // refresh task/set modified?
 }
 
-void 
-Task::setTaskIndices(const int wpindex[MAXTASKPOINTS]) 
+void
+Task::setTaskIndices(const int wpindex[MAXTASKPOINTS])
 {
   for (unsigned i=0; i<MAXTASKPOINTS; i++) {
     task_points[i].Index = wpindex[i];
@@ -488,8 +488,8 @@ Task::setTaskIndices(const int wpindex[MAXTASKPOINTS])
   // set modified?
 }
 
-void 
-Task::RotateStartPoints(const SETTINGS_COMPUTER &settings_computer) 
+void
+Task::RotateStartPoints(const SETTINGS_COMPUTER &settings_computer)
 {
   if (ActiveTaskPoint>0) return;
   if (!settings.EnableMultipleStartPoints) return;
@@ -497,7 +497,7 @@ Task::RotateStartPoints(const SETTINGS_COMPUTER &settings_computer)
   int found = -1;
   int imax = 0;
   for (int i=0; i<MAXSTARTPOINTS; i++) {
-    if (task_start_stats[i].Active 
+    if (task_start_stats[i].Active
         && way_points.verify_index(task_start_points[i].Index)) {
       if (task_points[0].Index == task_start_points[i].Index) {
         found = i;
@@ -517,7 +517,7 @@ Task::RotateStartPoints(const SETTINGS_COMPUTER &settings_computer)
 }
 
 
-double Task::AdjustAATTargets(double desired) 
+double Task::AdjustAATTargets(double desired)
 {
   int i, istart, inum;
   double av=0;
@@ -525,9 +525,9 @@ double Task::AdjustAATTargets(double desired)
   inum=0;
 
   for(i=istart;i<MAXTASKPOINTS-1;i++) {
-    if(ValidTaskPoint(i)&&ValidTaskPoint(i+1) 
+    if(ValidTaskPoint(i)&&ValidTaskPoint(i+1)
        && !task_points[i].AATTargetLocked) {
-      task_points[i].AATTargetOffsetRadius = 
+      task_points[i].AATTargetOffsetRadius =
         max(-1,min(1,
                    task_points[i].AATTargetOffsetRadius));
       av += task_points[i].AATTargetOffsetRadius;
@@ -552,12 +552,12 @@ double Task::AdjustAATTargets(double desired)
 
   for(i=istart;i<MAXTASKPOINTS-1;i++) {
     if((task_points[i].Index >=0)
-       &&(task_points[i+1].Index >=0) 
+       &&(task_points[i+1].Index >=0)
        && !task_points[i].AATTargetLocked)
     {
       double d = (task_points[i].AATTargetOffsetRadius+1.0)/2.0;
       // scale to 0,1
-      
+
       if (av>0.01) {
         d = desired;
         // 20080615 JMW
@@ -754,7 +754,7 @@ Task::Valid() const
 }
 
 bool
-Task::ValidTaskPoint(const unsigned i) const 
+Task::ValidTaskPoint(const unsigned i) const
 {
   if (i>= MAXTASKPOINTS)
     return false;
@@ -762,7 +762,7 @@ Task::ValidTaskPoint(const unsigned i) const
     return false;
   else if (!way_points.verify_index(task_points[i].Index))
     return false;
-  else 
+  else
     return true;
 }
 
@@ -770,7 +770,7 @@ double
 Task::FindInsideAATSectorDistance(const GEOPOINT &location,
                                    const int taskwaypoint,
                                    const double course_bearing,
-                                   const double p_found) const 
+                                   const double p_found) const
 {
   double max_distance;
   if(task_points[taskwaypoint].AATType == AAT_SECTOR) {
@@ -864,9 +864,9 @@ void Task::BackupTask(void) {
 }
 
 
-void 
-Task::ResumeAbortTask(const SETTINGS_COMPUTER &settings_computer, 
-                      const int set) 
+void
+Task::ResumeAbortTask(const SETTINGS_COMPUTER &settings_computer,
+                      const int set)
 {
   int i;
   unsigned active_waypoint_on_entry;
@@ -899,7 +899,7 @@ Task::ResumeAbortTask(const SETTINGS_COMPUTER &settings_computer,
 
       // set MacCready
       if (!GlidePolar::AbortSafetyUseCurrent)  // 20060520:sgi added
-	GlidePolar::SetMacCready(min(GlidePolar::GetMacCready(), 
+	GlidePolar::SetMacCready(min(GlidePolar::GetMacCready(),
 				     GlidePolar::AbortSafetyMacCready()));
 
     } else {
@@ -973,8 +973,8 @@ Task::InAATTurnSector(const GEOPOINT &location,
 }
 
 
-void 
-Task::CheckStartPointInTask(void) 
+void
+Task::CheckStartPointInTask(void)
 {
   if (task_points[0].Index != -1) {
     // ensure current start point is in task
@@ -1001,7 +1001,7 @@ Task::CheckStartPointInTask(void)
 }
 
 
-void 
+void
 Task::ClearStartPoints()
 {
   for (int i=0; i<MAXSTARTPOINTS; i++) {
@@ -1013,7 +1013,7 @@ Task::ClearStartPoints()
 }
 
 
-void 
+void
 Task::SetStartPoint(const int pointnum, const int waypointnum)
 {
   if ((pointnum>=0) && (pointnum<MAXSTARTPOINTS)) {
@@ -1078,7 +1078,7 @@ Task::getSettings() const
   return settings;
 }
 
-void 
+void
 Task::setSettings(const SETTINGS_TASK& set)
 {
   settings = set;
@@ -1091,7 +1091,7 @@ Task::getSelected() const
   return SelectedWaypoint;
 }
 
-void 
+void
 Task::setSelected(const int v)
 {
   if ((v==-1)&& ValidTaskPoint(ActiveTaskPoint)) {

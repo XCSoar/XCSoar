@@ -52,7 +52,7 @@ Copyright_License {
 
 void MapWindow::RenderStart(Canvas &canvas, const RECT rc)
 {
-  CalculateOrigin(rc, Basic(), Calculated(), 
+  CalculateOrigin(rc, Basic(), Calculated(),
 		  SettingsComputer(),
 		  SettingsMap());
   CalculateScreenPositionsWaypoints();
@@ -115,7 +115,7 @@ void MapWindow::RenderMapLayer(Canvas &canvas, const RECT rc)
                              sunelevation, Basic().Location, BigZoom);
     }
 
-    if ((SettingsComputer().FinalGlideTerrain==2) 
+    if ((SettingsComputer().FinalGlideTerrain==2)
 	&& Calculated().TerrainValid) {
       DrawTerrainAbove(canvas, rc, buffer_canvas);
     }
@@ -260,7 +260,7 @@ void MapWindow::Render(Canvas &canvas, const RECT rc)
 //////////////////////////////////////////////////
 
 
-static void DrawSpotHeight_Internal(Canvas &canvas, 
+static void DrawSpotHeight_Internal(Canvas &canvas,
 				    MapWindowProjection &map_projection,
 				    LabelBlock &label_block,
 				    TCHAR *Buffer, POINT pt) {
@@ -299,7 +299,7 @@ void MapWindow::DrawSpotHeights(Canvas &canvas) {
   TCHAR Buffer[20];
 
   RASP.ValueToText(Buffer, terrain_renderer->spot_max_val);
-  DrawSpotHeight_Internal(canvas, *this, label_block, 
+  DrawSpotHeight_Internal(canvas, *this, label_block,
 			  Buffer, terrain_renderer->spot_max_pt);
 
   RASP.ValueToText(Buffer, terrain_renderer->spot_min_val);

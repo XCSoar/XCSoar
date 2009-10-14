@@ -66,18 +66,18 @@ public:
   void resize(unsigned width, unsigned height);
 #endif /* !ENABLE_SDL */
 
-  void draw_masked_bitmap(Canvas &canvas, const Bitmap &bitmap, 
+  void draw_masked_bitmap(Canvas &canvas, const Bitmap &bitmap,
 			  const int x, const int y,
-			  const unsigned src_width, 
-			  const unsigned src_height, 
+			  const unsigned src_width,
+			  const unsigned src_height,
 			  bool centered=true);
 
-  void draw_bitmap(Canvas &canvas, const Bitmap &bitmap, 
-		   const int x, const int y, 
-		   const unsigned src_x_offset, 
-		   const unsigned src_y_offset, 
-		   const unsigned src_width, 
-		   const unsigned src_height, 
+  void draw_bitmap(Canvas &canvas, const Bitmap &bitmap,
+		   const int x, const int y,
+		   const unsigned src_x_offset,
+		   const unsigned src_y_offset,
+		   const unsigned src_width,
+		   const unsigned src_height,
 		   bool centered=true);
 
 protected:

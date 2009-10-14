@@ -137,7 +137,7 @@ bool InsideAirspaceCircle(const GEOPOINT &location,
 bool InsideAirspaceArea(const GEOPOINT &location,
 			const int i);
 
-void ScanAirspaceLine(const GEOPOINT *locs, 
+void ScanAirspaceLine(const GEOPOINT *locs,
                       const double *heights,
 		      int airspacetype[AIRSPACE_SCANSIZE_H][AIRSPACE_SCANSIZE_X]);
 
@@ -170,13 +170,13 @@ public:
 
 };
 
-typedef enum {asaNull, 
-              asaItemAdded, 
-              asaItemChanged, 
-              asaClearAll, 
-              asaItemRemoved, 
-              asaWarnLevelIncreased, 
-              asaProcessEnd, 
+typedef enum {asaNull,
+              asaItemAdded,
+              asaItemChanged,
+              asaClearAll,
+              asaItemRemoved,
+              asaWarnLevelIncreased,
+              asaProcessEnd,
               asaProcessBegin} AirspaceWarningNotifyAction_t;
 
 typedef void (*AirspaceWarningNotifier_t)(AirspaceWarningNotifyAction_t Action, AirspaceInfo_c *AirSpace) ;

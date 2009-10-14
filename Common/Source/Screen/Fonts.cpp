@@ -730,28 +730,28 @@ void SetFontInfo(Canvas &canvas, FontHeightInfo_t *FontHeightInfo){
 void SetFontInfoAll(const Canvas &real_canvas)
 {
   VirtualCanvas canvas(real_canvas, 1, 1);
-  
+
   canvas.select(TitleWindowFont);
   SetFontInfo(canvas, &Appearance.TitleWindowFont);
-  
+
   canvas.select(MapWindowFont);
   SetFontInfo(canvas, &Appearance.MapWindowFont);
-  
+
   canvas.select(MapWindowBoldFont);
   SetFontInfo(canvas, &Appearance.MapWindowBoldFont);
-  
+
   canvas.select(InfoWindowFont);
   SetFontInfo(canvas, &Appearance.InfoWindowFont);
-  
+
   canvas.select(CDIWindowFont);
   SetFontInfo(canvas, &Appearance.CDIWindowFont);
   //VENTA6
   canvas.select(StatisticsFont);
   SetFontInfo(canvas, &Appearance.StatisticsFont);
-  
+
   canvas.select(MapLabelFont);
   SetFontInfo(canvas, &Appearance.MapLabelFont);
-  
+
   canvas.select(TitleSmallWindowFont);
   SetFontInfo(canvas, &Appearance.TitleSmallWindowFont);
 

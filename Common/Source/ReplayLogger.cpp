@@ -261,9 +261,9 @@ public:
       -t*u2+t*u3};
     */
 
-    *lat = (p[0].loc.Latitude*c[0] + p[1].loc.Latitude*c[1] 
+    *lat = (p[0].loc.Latitude*c[0] + p[1].loc.Latitude*c[1]
             + p[2].loc.Latitude*c[2] + p[3].loc.Latitude*c[3]);
-    *lon = (p[0].loc.Longitude*c[0] + p[1].loc.Longitude*c[1] 
+    *lon = (p[0].loc.Longitude*c[0] + p[1].loc.Longitude*c[1]
             + p[2].loc.Longitude*c[2] + p[3].loc.Longitude*c[3]);
     *alt = (p[0].alt*c[0] + p[1].alt*c[1] + p[2].alt*c[2] + p[3].alt*c[3]);
 

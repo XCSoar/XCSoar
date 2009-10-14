@@ -64,7 +64,7 @@ typedef struct LoggerBuffer {
 
 class LoggerImpl {
 public:
-  LoggerImpl(); 
+  LoggerImpl();
 
 public:
   void LogPoint(const NMEA_INFO &gps_info);
@@ -74,10 +74,10 @@ public:
   bool LoggerClearFreeSpace(const NMEA_INFO &gps_info);
   void LinkGRecordDLL(void);
   bool LoggerGActive() const;
-  void guiStartLogger(const NMEA_INFO& gps_info, 
+  void guiStartLogger(const NMEA_INFO& gps_info,
                       const SETTINGS_COMPUTER& settings,
                       bool noAsk = false);
-  void guiToggleLogger(const NMEA_INFO& gps_info, 
+  void guiToggleLogger(const NMEA_INFO& gps_info,
                        const SETTINGS_COMPUTER& settings,
                        bool noAsk = false);
   void guiStopLogger(const NMEA_INFO &gps_info,
@@ -87,28 +87,28 @@ public:
   void clearBuffer();
 
 private:
-  void StartLogger(const NMEA_INFO &gps_info, 
+  void StartLogger(const NMEA_INFO &gps_info,
                    const SETTINGS_COMPUTER &settings,
                    const TCHAR *strAssetNumber);
 
   void AddDeclaration(double Lattitude, double Longditude, const TCHAR *ID);
-  void StartDeclaration(const NMEA_INFO &gps_info, 
+  void StartDeclaration(const NMEA_INFO &gps_info,
                         const int numturnpoints);
   void EndDeclaration(void);
   void LoggerHeader(const NMEA_INFO &gps_info);
-  
+
   void StopLogger(const NMEA_INFO &gps_info);
   bool IGCWriteRecord(const char *szIn, const TCHAR *);
-  
+
   bool LogFRecordToFile(const int SatelliteIDs[], short Hour, short Minute,
                         short Second, bool bAlways);
-  
+
   bool LogFRecord(const NMEA_INFO &gps_info, bool bAlways);
-  
+
   void SetFRecordLastTime(double dTime);
   double GetFRecordLastTime(void);
   void ResetFRecord(void);
-  
+
   bool LoggerDeclare(PDeviceDescriptor_t dev, Declaration_t *decl);
   void LoggerGInit();
 private:

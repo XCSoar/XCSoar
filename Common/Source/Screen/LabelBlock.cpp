@@ -40,13 +40,13 @@ Copyright_License {
 #include "Math/Screen.hpp"
 
 
-void LabelBlock::reset() 
+void LabelBlock::reset()
 {
   num_blocks = 0;
 }
 
 
-bool LabelBlock::check(const RECT rc) 
+bool LabelBlock::check(const RECT rc)
 {
   bool ok = true;
 

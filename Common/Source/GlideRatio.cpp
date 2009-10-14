@@ -84,8 +84,8 @@ short i, bsize;
 
 
 
-void InsertLDRotary(const DERIVED_INFO *Calculated, 
-		    ldrotary_s *buf, 
+void InsertLDRotary(const DERIVED_INFO *Calculated,
+		    ldrotary_s *buf,
 		    int distance, int altitude) {
   static short errs=0;
 
@@ -95,13 +95,13 @@ void InsertLDRotary(const DERIVED_INFO *Calculated,
   if (Calculated->Circling) {
     return;
   }
-  
+
   if (distance<3 || distance>150) { // just ignore, no need to reset rotary
     if (errs>2) {
       //      InitLDRotary(settings, buf); // bug fix
       errs=0;
       return;
-      
+
     }
     errs++;
     return;
@@ -126,36 +126,36 @@ int CalculateLDRotary(const DERIVED_INFO *Calculated, ldrotary_s *buf ) {
 
   int altdiff, eff;
   short bcold;
-  
+
   if (Calculated->Circling || Calculated->OnGround) {
     return(0);
   }
-  
+
   if ( buf->start <0) {
-    
+
     return(0);
   }
-  
+
   ldrotary_s bc;
   memcpy(&bc, buf, sizeof(ldrotary_s));
-  
+
   if (bc.valid == false ) {
     if (bc.start==0) return(0); // unavailable
     bcold=0;
   } else {
-    
+
     if (bc.start < (bc.size-1))
       bcold=bc.start+1;
     else
       bcold=0;
   }
-  
+
   altdiff= bc.altitude[bcold] - bc.altitude[bc.start];
   if (altdiff == 0 ) return(INVALID_GR); // infinitum
   eff= bc.totaldistance / altdiff;
-  
+
   if (eff>MAXEFFICIENCYSHOW) eff=INVALID_GR;
-  
+
   return(eff);
 
 }

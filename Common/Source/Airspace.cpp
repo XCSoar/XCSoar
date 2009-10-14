@@ -111,7 +111,7 @@ bool InsideAirspaceCircle(const GEOPOINT &location,
 
   if ((location.Latitude> AirspaceCircle[i].bounds.miny) &&
       (location.Latitude< AirspaceCircle[i].bounds.maxy) &&
-      CheckInsideLongitude(location.Longitude, 
+      CheckInsideLongitude(location.Longitude,
                            AirspaceCircle[i].bounds.minx,
                            AirspaceCircle[i].bounds.maxx)) {
 
@@ -167,7 +167,7 @@ bool CheckAirspaceAltitude(const double &Base, const double &Top,
   const SETTINGS_COMPUTER &settings)
 {
   double alt;
-  // TODO remove dependency! 
+  // TODO remove dependency!
   if (XCSoarInterface::Basic().BaroAltitudeAvailable) {
     alt = XCSoarInterface::Basic().BaroAltitude;
   } else {
@@ -447,7 +447,7 @@ FindNearestAirspaceCircle(const GEOPOINT &location,
 // this one uses screen coordinates to avoid as many trig functions
 // as possible.. it means it is approximate but for our use it is ok.
 static double
-ScreenCrossTrackError(GEOPOINT loc1, 
+ScreenCrossTrackError(GEOPOINT loc1,
                       GEOPOINT loc2,
                       GEOPOINT loc3,
                       GEOPOINT *loc4,
@@ -502,7 +502,7 @@ double RangeAirspaceArea(const GEOPOINT &location,
 static int
 FindNearestAirspaceArea(const GEOPOINT &location,
                         const SETTINGS_COMPUTER &settings,
-                        const MapWindowProjection& map_projection,                        
+                        const MapWindowProjection& map_projection,
                         double *nearestdistance, double *nearestbearing,
                         double *height=NULL)
 {
@@ -604,7 +604,7 @@ void FindNearestAirspace(const GEOPOINT &location,
 
   *foundarea = FindNearestAirspaceArea(location,
                                        settings,
-                                       map_projection, 
+                                       map_projection,
 				       &nearestd2, &nearestb2,
 				       height);
 

@@ -50,7 +50,7 @@ class LoggerImpl;
 
 class Logger {
 private:
-  LoggerImpl* _logger; 
+  LoggerImpl* _logger;
   Poco::RWLock lock;
 public:
   Logger();
@@ -63,10 +63,10 @@ public:
   bool LoggerClearFreeSpace(const NMEA_INFO &gps_info);
   void LinkGRecordDLL(void);
   bool LoggerGActive();
-  void guiStartLogger(const NMEA_INFO& gps_info, 
+  void guiStartLogger(const NMEA_INFO& gps_info,
                       const SETTINGS_COMPUTER& settings,
                       bool noAsk = false);
-  void guiToggleLogger(const NMEA_INFO& gps_info, 
+  void guiToggleLogger(const NMEA_INFO& gps_info,
                        const SETTINGS_COMPUTER& settings,
                        bool noAsk = false);
   void guiStopLogger(const NMEA_INFO &gps_info,

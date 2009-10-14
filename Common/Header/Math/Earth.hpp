@@ -64,17 +64,17 @@ double ProjectedDistance(GEOPOINT loc1,
                          GEOPOINT loc2,
                          GEOPOINT loc3);
 
-void DistanceBearing(GEOPOINT loc1, 
+void DistanceBearing(GEOPOINT loc1,
                      GEOPOINT loc2,
                      double *Distance, double *Bearing);
 
-double Distance(GEOPOINT loc1, 
+double Distance(GEOPOINT loc1,
                 GEOPOINT loc2);
 
 double Bearing(GEOPOINT loc1,
                GEOPOINT loc2);
 
-double DoubleDistance(GEOPOINT loc1, 
+double DoubleDistance(GEOPOINT loc1,
                       GEOPOINT loc2,
 		      GEOPOINT loc3);
 

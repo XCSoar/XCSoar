@@ -69,7 +69,7 @@ void
 ActionInterface::on_key_Airspeed(int UpDown)
 {
   if (UpDown==0) {
-    SetSettingsComputer().EnableCalibration = 
+    SetSettingsComputer().EnableCalibration =
       !SettingsComputer().EnableCalibration;
 
     if (SettingsComputer().EnableCalibration)
@@ -79,13 +79,13 @@ ActionInterface::on_key_Airspeed(int UpDown)
   }
 }
 
-void	
+void
 ActionInterface::on_key_TeamCode(int UpDown)
 {
   int tryCount = 0;
   int searchSlot = FindFlarmSlot(Basic(), SettingsComputer().TeamFlarmIdTarget);
   int newFlarmSlot = -1;
-  
+
   while (tryCount < FLARM_MAX_TRAFFIC) {
     if (UpDown == 1) {
       searchSlot++;
@@ -98,7 +98,7 @@ ActionInterface::on_key_TeamCode(int UpDown)
 	searchSlot = FLARM_MAX_TRAFFIC - 1;
       }
     }
-      
+
     if (Basic().FLARM_Traffic[searchSlot].ID != 0) {
       newFlarmSlot = searchSlot;
       break; // a new flarmSlot with a valid flarm traffic record was found !
@@ -108,12 +108,12 @@ ActionInterface::on_key_TeamCode(int UpDown)
 
   if (newFlarmSlot != -1) {
     SetSettingsComputer().TeamFlarmIdTarget = Basic().FLARM_Traffic[newFlarmSlot].ID;
-      
-    if (_tcslen(Basic().FLARM_Traffic[newFlarmSlot].Name) != 0) { 
+
+    if (_tcslen(Basic().FLARM_Traffic[newFlarmSlot].Name) != 0) {
       // copy the 3 first chars from the name to TeamFlarmCNTarget
       for (int z = 0; z < 3; z++) {
 	if (Basic().FLARM_Traffic[newFlarmSlot].Name[z] != 0) {
-	  SetSettingsComputer().TeamFlarmCNTarget[z] = 
+	  SetSettingsComputer().TeamFlarmCNTarget[z] =
 	    Basic().FLARM_Traffic[newFlarmSlot].Name[z];
 	} else {
 	  SetSettingsComputer().TeamFlarmCNTarget[z] = 32; // add space char
@@ -135,7 +135,7 @@ ActionInterface::on_key_TeamCode(int UpDown)
 #include "DeviceBlackboard.hpp"
 #endif
 
-void	
+void
 ActionInterface::on_key_Altitude(int UpDown)
 {
 #ifdef _SIM_
@@ -153,7 +153,7 @@ ActionInterface::on_key_Altitude(int UpDown)
 }
 
 // VENTA3 QFE
-void	
+void
 ActionInterface::on_key_QFEAltitude(int UpDown)
 {
   short step;
@@ -171,7 +171,7 @@ ActionInterface::on_key_QFEAltitude(int UpDown)
 }
 
 // VENTA3 Alternates processing updown
-void 
+void
 ActionInterface::on_key_Alternate1(int UpDown)
 {
    if (UpDown==0) {
@@ -183,11 +183,11 @@ ActionInterface::on_key_Alternate1(int UpDown)
   }
 }
 
-void 
+void
 ActionInterface::on_key_Alternate2(int UpDown)
 {
    if (UpDown==0) {
-     if ( SettingsComputer().Alternate2 <0 ) 
+     if ( SettingsComputer().Alternate2 <0 )
        return;
      task.setSelected(SettingsComputer().Alternate2);
 
@@ -196,11 +196,11 @@ ActionInterface::on_key_Alternate2(int UpDown)
   }
 }
 
-void 
+void
 ActionInterface::on_key_BestAlternate(int UpDown)
 {
    if (UpDown==0) {
-     if ( Calculated().BestAlternate <0 ) 
+     if ( Calculated().BestAlternate <0 )
        return;
      task.setSelected(Calculated().BestAlternate);
 
@@ -209,7 +209,7 @@ ActionInterface::on_key_BestAlternate(int UpDown)
   }
 }
 
-void	
+void
 ActionInterface::on_key_Speed(int UpDown)
 {
 #ifdef _SIM_
@@ -227,7 +227,7 @@ ActionInterface::on_key_Speed(int UpDown)
 }
 
 
-void	
+void
 ActionInterface::on_key_Accelerometer(int UpDown)
 {
   if (UpDown==0) {
@@ -243,7 +243,7 @@ ActionInterface::on_key_Accelerometer(int UpDown)
   }
 }
 
-void	
+void
 ActionInterface::on_key_WindDirection(int UpDown)
 {
 /* JMW ILLEGAL/incomplete
@@ -296,7 +296,7 @@ void	ActionInterface::on_key_WindSpeed(int UpDown)
 	return;
 }
 
-void	
+void
 ActionInterface::on_key_Direction(int UpDown)
 {
 #ifdef _SIM_
@@ -310,7 +310,7 @@ ActionInterface::on_key_Direction(int UpDown)
 }
 
 
-void	
+void
 ActionInterface::on_key_MacCready(int UpDown)
 {
   double MACCREADY = GlidePolar::GetMacCready();
@@ -330,7 +330,7 @@ ActionInterface::on_key_MacCready(int UpDown)
   }
  else if (UpDown==0)
     {
-      SetSettingsComputer().AutoMacCready 
+      SetSettingsComputer().AutoMacCready
 	= !SettingsComputer().AutoMacCready;
     }
   else if (UpDown==-2)
@@ -351,7 +351,7 @@ ActionInterface::on_key_MacCready(int UpDown)
 }
 
 
-void	
+void
 ActionInterface::on_key_ForecastTemperature(int UpDown)
 {
   if (UpDown==1) {
@@ -370,7 +370,7 @@ ActionInterface::on_key_ForecastTemperature(int UpDown)
 	2	Next waypoint with wrap around
 	-2	Previous waypoint with wrap around
 */
-void 
+void
 ActionInterface::on_key_Waypoint(int UpDown)
 {
 
@@ -383,7 +383,7 @@ ActionInterface::on_key_Waypoint(int UpDown)
          if(task.getActiveIndex() == 0)	{
          // TODO bug: allow restart
          // TODO bug: make this work only for manual
-         
+
          // TODO bug: This should trigger reset of flight stats, but
          // should ask first...
          if (Calculated().TaskStartTime==0) {
@@ -407,7 +407,7 @@ ActionInterface::on_key_Waypoint(int UpDown)
 }
 
 
-void 
+void
 ActionInterface::on_key_None(int UpDown)
 {
   (void)UpDown;

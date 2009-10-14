@@ -341,7 +341,7 @@ void FindLatitudeLongitude(GEOPOINT loc, double Bearing, double Distance,
 }
 
 
-double Distance(GEOPOINT loc1, 
+double Distance(GEOPOINT loc1,
                 GEOPOINT loc2) {
   double retval;
   DistanceBearing(loc1, loc2, &retval, NULL);

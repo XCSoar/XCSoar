@@ -45,7 +45,7 @@ struct DERIVED_INFO;
 struct GEOPOINT;
 
 double
-FinalGlideThroughTerrain(const double bearing, 
+FinalGlideThroughTerrain(const double bearing,
 			 const NMEA_INFO *Basic,
                          const DERIVED_INFO *Calculated,
 			 const SETTINGS_COMPUTER &settings,

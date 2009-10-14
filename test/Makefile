@@ -34,7 +34,7 @@ LDLIBS = $(TARGET_LDLIBS)
 
 include $(topdir)/build/sdl.mk
 
-.phony: 
+.phony:
 
 BUILDTESTS=\
 	t/01_test_tap.exe

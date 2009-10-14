@@ -388,7 +388,7 @@ static void OnUserLevel(DataField *Sender, DataField::DataAccessKind_t Mode){
     case DataField::daChange:
       wp = (WndProperty*)wf->FindByName(TEXT("prpUserLevel"));
       if (wp) {
-        if (wp->GetDataField()->GetAsInteger() != 
+        if (wp->GetDataField()->GetAsInteger() !=
 	    (int)XCSoarInterface::UserLevel) {
           XCSoarInterface::UserLevel = wp->GetDataField()->GetAsInteger();
           changed = true;
@@ -2652,14 +2652,14 @@ void dlgConfigurationShowModal(void){
     }
   }
 
-  changed |= SetValueRegistryOnChange(wf, TEXT("prpSetSystemTimeFromGPS"), 
-				      szRegistrySetSystemTimeFromGPS, 
+  changed |= SetValueRegistryOnChange(wf, TEXT("prpSetSystemTimeFromGPS"),
+				      szRegistrySetSystemTimeFromGPS,
 				      XCSoarInterface::SetSettingsMap().SetSystemTimeFromGPS);
-  changed |= SetValueRegistryOnChange(wf, TEXT("prpEnableAnimation"), 
-				      szRegistryAnimation, 
+  changed |= SetValueRegistryOnChange(wf, TEXT("prpEnableAnimation"),
+				      szRegistryAnimation,
 				      XCSoarInterface::EnableAnimation);
-  changed |= SetValueRegistryOnChange(wf, TEXT("prpTrailDrift"), 
-				      szRegistryTrailDrift, 
+  changed |= SetValueRegistryOnChange(wf, TEXT("prpTrailDrift"),
+				      szRegistryTrailDrift,
 				      XCSoarInterface::SetSettingsMap().EnableTrailDrift);
   changed |= SetValueRegistryOnChange(wf, TEXT("prpThermalLocator"),
 				      szRegistryThermalLocator,
@@ -3515,7 +3515,7 @@ void dlgConfigurationShowModal(void){
     }
   }
 
-  changed |= SetValueRegistryOnChange(wf, 
+  changed |= SetValueRegistryOnChange(wf,
 				      TEXT("prpTerrainRamp"),
 				      szRegistryTerrainRamp,
 				      XCSoarInterface::SetSettingsMap().TerrainRamp);
@@ -3660,7 +3660,7 @@ void dlgConfigurationShowModal(void){
   if (wp) {
     if (XCSoarInterface::SettingsMap().SnailWidthScale != wp->GetDataField()->GetAsInteger()) {
       XCSoarInterface::SetSettingsMap().SnailWidthScale = wp->GetDataField()->GetAsInteger();
-      SetToRegistry(szRegistrySnailWidthScale, 
+      SetToRegistry(szRegistrySnailWidthScale,
 		    XCSoarInterface::SettingsMap().SnailWidthScale);
       changed = true;
       requirerestart = true;

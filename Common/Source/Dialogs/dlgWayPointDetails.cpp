@@ -267,9 +267,9 @@ static void OnSetAlternate2Clicked(WindowControl * Sender){
 
 static void OnClearAlternatesClicked(WindowControl * Sender){
 	(void)Sender;
-  XCSoarInterface::SetSettingsComputer().Alternate1 = -1; 
+  XCSoarInterface::SetSettingsComputer().Alternate1 = -1;
   XCSoarInterface::SetSettingsComputer().EnableAlternate1=false;
-  XCSoarInterface::SetSettingsComputer().Alternate2 = -1; 
+  XCSoarInterface::SetSettingsComputer().Alternate2 = -1;
   XCSoarInterface::SetSettingsComputer().EnableAlternate2=false;
   SetToRegistry(szRegistryAlternate1, XCSoarInterface::SettingsComputer().Alternate1);
   SetToRegistry(szRegistryAlternate2, XCSoarInterface::SettingsComputer().Alternate2);
@@ -280,9 +280,9 @@ static void OnClearAlternatesClicked(WindowControl * Sender){
 
 static void OnTeamCodeClicked(WindowControl * Sender){
 	(void)Sender;
-  XCSoarInterface::SetSettingsComputer().TeamCodeRefWaypoint = 
+  XCSoarInterface::SetSettingsComputer().TeamCodeRefWaypoint =
     SelectedWaypoint;
-  SetToRegistry(szRegistryTeamcodeRefWaypoint, 
+  SetToRegistry(szRegistryTeamcodeRefWaypoint,
 		XCSoarInterface::SettingsComputer().TeamCodeRefWaypoint);
   wf->SetModalResult(mrOK);
 }
@@ -394,7 +394,7 @@ void dlgWayPointDetailsShowModal(void){
   Units::FormatUserAltitude(way_point.Altitude, sTmp, sizeof(sTmp)-1);
   ((WndProperty *)wf->FindByName(TEXT("prpAltitude")))
     ->SetText(sTmp);
-  
+
   SunEphemeris sun;
   sunsettime = sun.CalcSunTimes
     (way_point.Location,

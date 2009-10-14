@@ -93,7 +93,7 @@ private:
   void TerrainHeight();
   void EnergyHeightNavAltitude();
   void Vario();
-  void SpeedToFly(const double mc_setting, 
+  void SpeedToFly(const double mc_setting,
 		  const double cruise_efficiency);
   void NettoVario();
   void TakeoffLanding();

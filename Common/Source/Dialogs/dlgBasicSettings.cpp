@@ -189,7 +189,7 @@ static void OnBallastData(DataField *Sender, DataField::DataAccessKind_t Mode){
   switch(Mode){
   case DataField::daSpecial:
     if (BALLAST>0.01) {
-      XCSoarInterface::SetSettingsComputer().BallastTimerActive = 
+      XCSoarInterface::SetSettingsComputer().BallastTimerActive =
 	!XCSoarInterface::SettingsComputer().BallastTimerActive;
     } else {
       XCSoarInterface::SetSettingsComputer().BallastTimerActive = false;

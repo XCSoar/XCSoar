@@ -56,7 +56,7 @@ public:
   virtual bool ValidStartSpeed(const DWORD Margin=0) const;
 protected:
   void Initialise() {}
-  void ProcessBasicTask(const double mc_setting, 
+  void ProcessBasicTask(const double mc_setting,
 			const double cruise_efficiency);
   void ResetFlight(const bool full=true);
   virtual void StartTask(const bool do_advance,

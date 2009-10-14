@@ -67,12 +67,12 @@ short RasterMapCache::_GetFieldAtXY(unsigned int lx,
                             +sizeof(TERRAIN_INFO));
 }
 
-void RasterMapCache::LockRead() 
-{ 
+void RasterMapCache::LockRead()
+{
   // all lookups for this class potentially change the
-  // object so must have write (exclusive) lock even 
+  // object so must have write (exclusive) lock even
   // when doing terrain queries.
-  lock.writeLock(); 
+  lock.writeLock();
 };
 
 

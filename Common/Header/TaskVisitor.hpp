@@ -13,8 +13,8 @@ protected:
 };
 
 
-class RelativeTaskPointVisitor: 
-  public virtual BaseTaskVisitor 
+class RelativeTaskPointVisitor:
+  public virtual BaseTaskVisitor
 {
 public:
   virtual void visit_reset() { };
@@ -25,8 +25,8 @@ public:
   virtual void visit_task_point_after(TASK_POINT &point, const unsigned index) { };
 };
 
-class AbsoluteTaskPointVisitor: 
-  public virtual BaseTaskVisitor 
+class AbsoluteTaskPointVisitor:
+  public virtual BaseTaskVisitor
 {
 public:
   virtual void visit_reset() { };
@@ -37,8 +37,8 @@ public:
   virtual void visit_task_point_final(TASK_POINT &point, const unsigned index) { };
 };
 
-class RelativeTaskLegVisitor: 
- public virtual BaseTaskVisitor 
+class RelativeTaskLegVisitor:
+ public virtual BaseTaskVisitor
 {
 public:
   virtual void visit_reset() { };
@@ -52,8 +52,8 @@ public:
 			       TASK_POINT &point1, const unsigned index1) {};
 };
 
-class AbsoluteTaskLegVisitor: 
- public virtual BaseTaskVisitor 
+class AbsoluteTaskLegVisitor:
+ public virtual BaseTaskVisitor
 {
 public:
   virtual void visit_reset() { };

@@ -70,11 +70,11 @@ MapWindowProjection::MapWindowProjection():
 }
 
 
-void 
+void
 MapWindowProjection::InitialiseScaleList
-(const SETTINGS_MAP &settings_map) 
+(const SETTINGS_MAP &settings_map)
 {
-  ScaleListCount = propGetScaleList(ScaleList, 
+  ScaleListCount = propGetScaleList(ScaleList,
 				    sizeof(ScaleList)/sizeof(ScaleList[0]));
   _RequestedMapScale = LimitMapScale(_RequestedMapScale, settings_map);
 }
@@ -102,7 +102,7 @@ bool MapWindowProjection::PointInRect(const double &x,
 }
 
 
-bool 
+bool
 MapWindowProjection::LonLatVisible(const GEOPOINT &loc) const
 {
   if ((loc.Longitude> screenbounds_latlon.minx) &&
@@ -114,8 +114,8 @@ MapWindowProjection::LonLatVisible(const GEOPOINT &loc) const
     return false;
 }
 
-bool 
-MapWindowProjection::LonLat2ScreenIfVisible(const GEOPOINT &loc, 
+bool
+MapWindowProjection::LonLat2ScreenIfVisible(const GEOPOINT &loc,
 					    POINT *sc) const
 {
   if (LonLatVisible(loc)) {
@@ -289,11 +289,11 @@ void MapWindowProjection::LonLat2Screen(const pointObj* const ptin,
 ////////////////////////////////////////////////////////////////////
 
 
-void 
+void
 MapWindowProjection::CalculateOrientationNormal
 (const NMEA_INFO &DrawInfo,
  const DERIVED_INFO &DerivedDrawInfo,
- const SETTINGS_MAP &settings) 
+ const SETTINGS_MAP &settings)
 
 {
   double trackbearing = DrawInfo.TrackBearing;
@@ -328,11 +328,11 @@ MapWindowProjection::CalculateOrientationNormal
 }
 
 
-void 
+void
 MapWindowProjection::CalculateOrientationTargetPan
 (const NMEA_INFO &DrawInfo,
  const DERIVED_INFO &DerivedDrawInfo,
- const SETTINGS_MAP &settings) 
+ const SETTINGS_MAP &settings)
 
 {
   // Target pan mode, show track up when looking at current task point,
@@ -361,7 +361,7 @@ MapWindowProjection::CalculateOrientationTargetPan
 }
 
 
-void 
+void
 MapWindowProjection::CalculateOrigin
 (const RECT rc,
  const NMEA_INFO &DrawInfo,
@@ -508,10 +508,10 @@ double MapWindowProjection::FindMapScale(double Value){
 
 
 void MapWindowProjection::ModifyMapScale
-(const SETTINGS_MAP &settings_map) 
+(const SETTINGS_MAP &settings_map)
 {
   // limit zoomed in so doesn't reach silly levels
-  _RequestedMapScale = 
+  _RequestedMapScale =
     LimitMapScale(_RequestedMapScale, settings_map);
   MapScale = _RequestedMapScale;
 
@@ -534,7 +534,7 @@ void MapWindowProjection::UpdateMapScale(const NMEA_INFO &DrawInfo,
   // if there is user intervention in the scale
   if (settings_map.MapScale>0) {
     double ext_mapscale = LimitMapScale(settings_map.MapScale, settings_map);
-    if ((fabs(_RequestedMapScale-ext_mapscale)>0.05) && 
+    if ((fabs(_RequestedMapScale-ext_mapscale)>0.05) &&
 	(ext_mapscale>0.0) && (DisplayMode==DisplayModeLast)) {
       _RequestedMapScale = ext_mapscale;
     }
@@ -572,25 +572,25 @@ void MapWindowProjection::UpdateMapScale(const NMEA_INFO &DrawInfo,
     } else {
       AutoZoomFactor = 4;
     }
-    
+
     if((wpd < ( AutoZoomFactor * MapScale/DISTANCEMODIFY))
        || (StartingAutoMapScale==0.0)) {
       // waypoint is too close, so zoom in
       // OR just turned waypoint
-      
+
       // this is the first time this waypoint has gotten close,
       // so save original map scale
-      
+
       if (StartingAutoMapScale==0.0) {
 	StartingAutoMapScale = MapScale;
       }
-      
+
       // set scale exactly so that waypoint distance is the zoom factor
       // across the screen
-      _RequestedMapScale = 
+      _RequestedMapScale =
 	LimitMapScale(wpd*DISTANCEMODIFY/ AutoZoomFactor, settings_map);
       ModifyMapScale(settings_map);
-      
+
     }
   }
 
@@ -601,13 +601,13 @@ void MapWindowProjection::UpdateMapScale(const NMEA_INFO &DrawInfo,
     // if the current zoom focused waypoint has changed...
     if (AutoMapScaleWaypointIndex != task_index) {
       AutoMapScaleWaypointIndex = task_index;
-      
+
       // zoom back out to where we were before
       if (StartingAutoMapScale> 0.0) {
 	_RequestedMapScale = StartingAutoMapScale;
 	ModifyMapScale(settings_map);
       }
-      
+
       // reset search for new starting zoom level
       StartingAutoMapScale = 0.0;
     }
@@ -619,9 +619,9 @@ void MapWindowProjection::UpdateMapScale(const NMEA_INFO &DrawInfo,
 
 void MapWindowProjection::ExchangeBlackboard(const NMEA_INFO &nmea_info,
 					     const DERIVED_INFO &derived_info,
-					     const SETTINGS_MAP &settings_map) 
+					     const SETTINGS_MAP &settings_map)
 {
-  UpdateMapScale(nmea_info, derived_info, settings_map); 
+  UpdateMapScale(nmea_info, derived_info, settings_map);
   // done here to avoid double latency due to locks
 }
 
@@ -629,7 +629,7 @@ void MapWindowProjection::ExchangeBlackboard(const NMEA_INFO &nmea_info,
 #include "Screen/Graphics.hpp"
 
 void MapWindowProjection::DrawGreatCircle(Canvas &canvas,
-					  const GEOPOINT &loc_start, 
+					  const GEOPOINT &loc_start,
                                           const GEOPOINT &loc_end) {
 
 #ifdef OLD_GREAT_CIRCLE

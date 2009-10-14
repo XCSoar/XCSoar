@@ -40,15 +40,15 @@ Copyright_License {
 
 typedef enum {
   OTHER= 0,
-  RESTRICT, 
-  PROHIBITED, 
-  DANGER, 
-  CLASSA, 
-  CLASSB, 
-  CLASSC, 
-  CLASSD, 
-  NOGLIDER, 
-  CTR, 
+  RESTRICT,
+  PROHIBITED,
+  DANGER,
+  CLASSA,
+  CLASSB,
+  CLASSC,
+  CLASSD,
+  NOGLIDER,
+  CTR,
   WAVE,
   AATASK,
   CLASSE,
@@ -58,6 +58,6 @@ typedef enum {
 
 extern int    AirspacePriority[AIRSPACECLASSCOUNT];
 
-extern double airspace_QNH; 
+extern double airspace_QNH;
 
 #endif

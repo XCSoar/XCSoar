@@ -265,12 +265,12 @@ GlideComputer::CalculateTeammateBearingRange()
 
     SetCalculated().TeammateBearing = mateBearing;
     SetCalculated().TeammateRange = mateDistance;
-    
+
     FindLatitudeLongitude(Basic().Location,
 			  mateBearing,
 			  mateDistance,
 			  &SetCalculated().TeammateLocation);
-    
+
     if (mateDistance < 100 && InTeamSector==false) {
       InTeamSector=true;
       InputEvents::processGlideComputer(GCE_TEAM_POS_REACHED);
@@ -284,21 +284,21 @@ GlideComputer::CalculateTeammateBearingRange()
 }
 
 
-void 
+void
 GlideComputer::OnTakeoff()
 {
   GlideComputerAirData::OnTakeoff();
   InputEvents::processGlideComputer(GCE_TAKEOFF);
 }
 
-void 
+void
 GlideComputer::OnLanding()
 {
   GlideComputerAirData::OnLanding();
   InputEvents::processGlideComputer(GCE_LANDING);
 }
 
-void 
+void
 GlideComputer::OnSwitchClimbMode(bool isclimb, bool left)
 {
   GlideComputerAirData::OnSwitchClimbMode(isclimb, left);
@@ -317,7 +317,7 @@ GlideComputer::OnDepartedThermal()
 }
 
 
-void 
+void
 GlideComputer::FLARM_ScanTraffic()
 {
   if (Basic().FLARM_Available) {
@@ -330,7 +330,7 @@ GlideComputer::FLARM_ScanTraffic()
 	    && way_points.verify_index(SettingsComputer().TeamCodeRefWaypoint)) {
 	  double bearing;
 	  double distance;
-	  
+
 	  SetCalculated().TeammateLocation = Basic().FLARM_Traffic[flarm_slot].Location;
 	  DistanceBearing
             (way_points.get(SettingsComputer().TeamCodeRefWaypoint).Location,

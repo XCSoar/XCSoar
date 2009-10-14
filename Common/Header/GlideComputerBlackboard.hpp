@@ -42,7 +42,7 @@ Copyright_License {
 #include "SettingsComputerBlackboard.hpp"
 #include "MapProjectionBlackboard.hpp"
 
-class GlideComputerBlackboard: 
+class GlideComputerBlackboard:
   public BaseBlackboard,
   public SettingsComputerBlackboard,
   public MapProjectionBlackboard

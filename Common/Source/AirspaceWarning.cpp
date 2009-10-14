@@ -136,10 +136,10 @@ int AirspaceWarnGetItemCount(void){
 }
 
 
-static void AirspaceWarnListDoNotify(AirspaceWarningNotifyAction_t Action, 
+static void AirspaceWarnListDoNotify(AirspaceWarningNotifyAction_t Action,
                                      AirspaceInfo_c *AirSpace)
 {
-  for (List<AirspaceWarningNotifier_t>::Node* 
+  for (List<AirspaceWarningNotifier_t>::Node*
          it = AirspaceWarningNotifierList.begin(); it; it = it->next ){
     (it->data)(Action, AirSpace);
   }
@@ -186,7 +186,7 @@ AirspaceWarnListCalcDistance(const NMEA_INFO *Basic,
       // WARNING: RangeAirspaceArea dont return negative values if
       // inside aera -> but RangeAirspaceCircle does!
       double fBearing;
-      *hDistance = (int)RangeAirspaceArea(Basic->Location, 
+      *hDistance = (int)RangeAirspaceArea(Basic->Location,
                                           AsIdx, &fBearing,
 					  map_projection);
       *Bearing = (int)fBearing;
@@ -276,20 +276,20 @@ AirspaceWarnListAdd(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated,
        it; it = it->next ){
     if ((it->data.IsCircle == IsCircle)
         && (it->data.AirspaceIndex == AsIdx)){ // check if already in list
-      
+
       if ((it->data.Sequence == Sequence) && (it->data.Sequence>=0)
           && !ackDay){
         // still updated in real pos calculation
         // JMW: need to be able to override if ack day
       } else {
-        
+
         it->data.Sequence = Sequence;
         it->data.TimeOut = 3;
         it->data.hDistance = hDistance;
         it->data.vDistance = vDistance;
         it->data.Bearing = Bearing;
         it->data.PredictedEntryTime = EntryTime;
-        
+
         if (ackDay) {
           if (!Predicted) {
             it->data.Acknowledge = 4;
@@ -307,39 +307,39 @@ AirspaceWarnListAdd(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated,
           }
           it->data.Predicted = Predicted;
         }
-        
+
         if (calcWarnLevel(&it->data))
           AirspaceWarnListDoNotify(asaWarnLevelIncreased, &it->data);
         else
           AirspaceWarnListDoNotify(asaItemChanged, &it->data);
-        
+
       }
-      
+
       it->data.InsideAckTimeOut = settings->AcknowledgementTime / OUTSIDE_CHECK_INTERVAL;
       it->data.TimeOut = OUTSIDE_CHECK_INTERVAL;
-      
+
       FoundInList = true;
       break;
-      
+
     }
   }
-  
+
   if (!FoundInList && !(Predicted && ackDay)) {
     // JMW Predicted & ackDay means cancel a daily ack
-    
+
     AirspaceInfo_c asi; // not in list, add new
-    
+
     asi.TimeOut = OUTSIDE_CHECK_INTERVAL;
-    
+
     asi.InsideAckTimeOut = settings->AcknowledgementTime / OUTSIDE_CHECK_INTERVAL;
-    
+
     asi.Sequence = Sequence;
-    
+
     asi.hDistance = hDistance;
     asi.vDistance = vDistance;
     asi.Bearing = Bearing;
     asi.PredictedEntryTime = EntryTime;  // ETE, ToDo
-    
+
     if (ackDay) {
       asi.Acknowledge = 4;
       asi.Inside = 0;
@@ -354,16 +354,16 @@ AirspaceWarnListAdd(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated,
     asi.SortKey = 0;
     asi.LastListIndex = 0; // JMW initialise
     asi.WarnLevel = 0; // JMW initialise
-    
+
     calcWarnLevel(&asi);
-    
+
     asi.ID = AsIdx + (IsCircle ? 10000 : 0);
-    
+
     AirspaceWarnings.push_front(asi);
     UpdateAirspaceAckBrush(&asi, 0);
-    
+
     NewAirspaceWarnings = true;
-    
+
     AirspaceWarnListDoNotify(asaItemAdded, &AirspaceWarnings.begin()->data);
   }
 }
@@ -425,50 +425,50 @@ AirspaceWarnListProcess(const NMEA_INFO *Basic,
   for (List<AirspaceInfo_c>::Node* it = AirspaceWarnings.begin(); it;){
 
     it->data.TimeOut--;                // age the entry
-    
+
     if (it->data.TimeOut < 0){
-      
+
       it->data.Predicted = false;
       it->data.Inside = false;
       it->data.WarnLevel = 0;
-      
+
       int hDistance = 0;
       int vDistance = 0;
       int Bearing = 0;
-      
+
       AirspaceWarnListCalcDistance(Basic, Calculated,
                                    it->data.IsCircle,
                                    it->data.AirspaceIndex,
                                    &hDistance, &Bearing, &vDistance,
                                    map_projection);
-      
+
       it->data.hDistance = hDistance; // for all: update data
       it->data.vDistance = vDistance;
       it->data.Bearing = Bearing;
       it->data.TimeOut = OUTSIDE_CHECK_INTERVAL; // retrigger checktimeout
-      
+
       if (calcWarnLevel(&it->data))
         AirspaceWarnListDoNotify(asaWarnLevelIncreased, &it->data);
-      
+
       UpdateAirspaceAckBrush(&it->data, 0);
-      
+
       if (it->data.Acknowledge == 4){ // whole day achnowledged
         if (it->data.SortKey > 25000) {
           it->data.TimeOut = 60; // JMW hardwired why?
         }
         continue;
       }
-      
+
       if ((hDistance > 2500) || (abs(vDistance) > 250)){
         // far away remove from warning list
         AirspaceInfo_c asi = it->data;
-        
+
         it = AirspaceWarnings.erase(it);
         UpdateAirspaceAckBrush(&asi, -1);
         AirspaceWarnListDoNotify(asaItemRemoved, &asi);
-        
+
         continue;
-        
+
       } else {
         if ((hDistance > 500) || (abs(vDistance) > 100)){
           // close clear inside ack and auto ACK til closer
@@ -476,16 +476,16 @@ AirspaceWarnListProcess(const NMEA_INFO *Basic,
             if (--(it->data.InsideAckTimeOut) < 0){      // timeout the
               it->data.Acknowledge = 1;
             }
-          
+
         } else { // very close, just update ack timer
-          it->data.InsideAckTimeOut = settings->AcknowledgementTime 
+          it->data.InsideAckTimeOut = settings->AcknowledgementTime
             / OUTSIDE_CHECK_INTERVAL;
           // 20sec outside check interval prevent down ACK on circling
         }
       }
-      
+
       AirspaceWarnListDoNotify(asaItemChanged, &it->data);
-      
+
     }
 
 
@@ -510,19 +510,19 @@ void AirspaceWarnDoAck(int ID, int Ack){
   ScopeLock protect(mutexAirspaceWarnings);
   for (List<AirspaceInfo_c>::Node* it = AirspaceWarnings.begin(); it; it = it->next ){
     if (it->data.ID == ID){
-      
+
       if (Ack < it->data.Acknowledge)   // force data refresh on down ack
         it->data.TimeOut=0;
-      
+
       if (Ack==-1)                      // ack current warnlevel
         it->data.Acknowledge = it->data.WarnLevel;
       else                              // ack defined warnlevel
         it->data.Acknowledge = Ack;
-      
+
       UpdateAirspaceAckBrush(&it->data, 0);
-      
+
       AirspaceWarnListDoNotify(asaItemChanged, &it->data);
-      
+
     }
   }
 }

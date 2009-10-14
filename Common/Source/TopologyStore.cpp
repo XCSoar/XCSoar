@@ -81,7 +81,7 @@ bool TopologyStore::ScanVisibility(MapWindowProjection &m_projection,
 
   if (topo_marks && topo_marks->triggerUpdateCache) {
     topo_marks->updateCache(m_projection, _bounds_active);
-  } 
+  }
 
   // check if any needs to have cache updates because wasnt
   // visible previously when bounds moved
@@ -110,7 +110,7 @@ TopologyStore::~TopologyStore()
   Close();
 }
 
-void TopologyStore::Close() 
+void TopologyStore::Close()
 {
   StartupStore(TEXT("CloseTopology\n"));
   Poco::ScopedRWLock protect(lock, true);
@@ -200,7 +200,7 @@ void TopologyStore::Open() {
 
   while(ReadString(zFile,READLINE_LENGTH,TempString)) {
 
-    if((_tcslen(TempString) > 0) 
+    if((_tcslen(TempString) > 0)
        && (_tcsstr(TempString,TEXT("*")) != TempString)) // Look For Comment
       {
 

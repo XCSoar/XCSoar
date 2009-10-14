@@ -134,17 +134,17 @@ void Task::LoadNewTask(const TCHAR *szFileName,
     } else if (magic != BINFILEMAGICNUMBER) {
       TaskInvalid = true;
     } else {
-      
+
       SETTINGS_TASK new_settings = getSettings();
       TaskLoaded = true;
-      
+
       for(i=0;i<MAXTASKPOINTS;i++) {
         if (fread(&Temp, sizeof(Temp), 1, file) != 1) {
           TaskInvalid = true;
           break;
         }
         memcpy(&task_points[i],&Temp, sizeof(TASK_POINT));
-        
+
         if(!way_points.verify_index(Temp.Index) && (Temp.Index != -1)) {
           // Task is only invalid here if the index is out of range
           // of the waypoints and not equal to -1.
@@ -158,20 +158,20 @@ void Task::LoadNewTask(const TCHAR *szFileName,
         if (fread(&new_settings, sizeof(SETTINGS_TASK), 1, file) != 1) {
           TaskInvalid = true;
         }
-        
+
         for(i=0;i<MAXSTARTPOINTS;i++) {
           if (fread(&STemp, sizeof(STemp), 1, file) != 1) {
             TaskInvalid = true;
             break;
           }
-          
+
           if(way_points.verify_index(STemp.Index) || (STemp.Index==-1)) {
             memcpy(&task_start_points[i],&STemp, sizeof(START_POINT));
           } else {
 	    WaypointInvalid = true;
 	  }
         }
-        
+
         //// search for waypoints...
         if (!TaskInvalid) {
           if (!LoadTaskWaypoints(file) && WaypointInvalid) {
@@ -179,7 +179,7 @@ void Task::LoadNewTask(const TCHAR *szFileName,
             // there are invalid waypoints
             TaskInvalid = true;
           }
-        }        
+        }
       }
       fclose(file);
       if (!TaskInvalid) {
@@ -192,10 +192,10 @@ void Task::LoadNewTask(const TCHAR *szFileName,
 
   if (TaskInvalid) {
     ClearTask();
-  } 
-  
+  }
+
   RefreshTask(settings_computer);
-  
+
   if (TaskInvalid && TaskLoaded) {
     MessageBoxX(
       gettext(TEXT("Error in task file!")),

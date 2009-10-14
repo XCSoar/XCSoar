@@ -284,12 +284,12 @@ void Topology::Paint(Canvas &canvas, MapWindow &m_window, const RECT rc) {
             for (int jj=0; jj< shape->line[tt].numpoints; jj++) {
 
               POINT sc;
-              GEOPOINT l; 
+              GEOPOINT l;
               l.Longitude = shape->line[tt].point[jj].x;
               l.Latitude = shape->line[tt].point[jj].y;
 	      if (m_window.draw_masked_bitmap_if_visible(canvas, hBitmap, l,
 							 10, 10, &sc)) {
-		if (render_labels) 
+		if (render_labels)
 		  cshape->renderSpecial(canvas, *label_block, sc.x, sc.y);
 	      }
 	    }
@@ -317,7 +317,7 @@ void Topology::Paint(Canvas &canvas, MapWindow &m_window, const RECT rc) {
 	  }
 
           canvas.polyline(pt, msize);
-	  if (render_labels) 
+	  if (render_labels)
 	    cshape->renderSpecial(canvas, *label_block, minx, miny);
         }
       break;
@@ -341,7 +341,7 @@ void Topology::Paint(Canvas &canvas, MapWindow &m_window, const RECT rc) {
             }
 	  }
           canvas.polygon(pt, msize);
-	  if (render_labels) 
+	  if (render_labels)
 	    cshape->renderSpecial(canvas, *label_block, minx, miny);
         }
       break;

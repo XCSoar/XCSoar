@@ -43,7 +43,7 @@ Copyright_License {
 #include "SettingsMapBlackboard.hpp"
 #include "MapProjectionBlackboard.hpp"
 
-class InterfaceBlackboard: 
+class InterfaceBlackboard:
   public BaseBlackboard,
   public SettingsComputerBlackboard,
   public SettingsMapBlackboard,

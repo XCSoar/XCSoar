@@ -99,7 +99,7 @@ void ActionInterface::SendSettingsComputer() {
   // TODO: trigger refresh if the settings are changed
 }
 
-void XCSoarInterface::ReceiveMapProjection() 
+void XCSoarInterface::ReceiveMapProjection()
 {
   ScopeLock protect(mutexBlackboard);
   ReadMapProjection(device_blackboard.MapProjection());
@@ -110,7 +110,7 @@ void ActionInterface::SendSettingsMap(const bool trigger_draw) {
   if (trigger_draw) {
     DisplayModes();
     InfoBoxManager::ProcessTimer();
-  } 
+  }
   device_blackboard.ReadSettingsMap(SettingsMap());
   if (trigger_draw) {
     drawTriggerEvent.trigger();
@@ -204,7 +204,7 @@ bool vario_visible() {
 // by the gauge already and gauge was graphically too much stretched,
 // requiring a restyle!
   if (InfoBoxLayout::gnav) {
-    if ( ( InfoBoxLayout::landscape == true) && 
+    if ( ( InfoBoxLayout::landscape == true) &&
 	 (InfoBoxLayout::InfoBoxGeometry == 5 ) )
 	enable_gauge = false;
       else
@@ -230,7 +230,7 @@ bool vario_visible() {
 void
 ActionInterface::DisplayModes()
 {
-  SetSettingsMap().EnableVarioGauge = 
+  SetSettingsMap().EnableVarioGauge =
     vario_visible() && !SettingsMap().FullScreen;
 
   if (main_window.vario) {

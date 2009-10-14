@@ -122,7 +122,7 @@ char * CleanIGCRecord (char * szIn)
   return szIn;
 }
 
-bool 
+bool
 LoggerImpl::IGCWriteRecord(const char *szIn, const TCHAR* szLoggerFileName)
 {
   HANDLE hFile;
@@ -339,7 +339,7 @@ LoggerImpl::LoggerGActive() const
 
 
 
-void 
+void
 LoggerImpl::LoggerGStop(TCHAR* szLoggerFileName) {
   BOOL bFileValid = true;
   TCHAR OldGRecordBuff[MAX_IGC_BUFF];
@@ -362,7 +362,7 @@ LoggerImpl::LoggerGStop(TCHAR* szLoggerFileName) {
   GRecordAppendGRecordToFile(bFileValid);
 }
 
-void 
+void
 LoggerImpl::LoggerGInit() {
 #ifndef _SIM_
   LinkGRecordDLL(); // try to link DLL if it exists

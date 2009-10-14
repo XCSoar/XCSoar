@@ -242,7 +242,7 @@ MapWindow::DrawTeammate(Canvas &canvas)
 {
   if (SettingsComputer().TeammateCodeValid) {
     draw_masked_bitmap_if_visible(canvas, MapGfx.hBmpTeammatePosition,
-				  Calculated().TeammateLocation, 
+				  Calculated().TeammateLocation,
 				  20, 20);
   }
 }

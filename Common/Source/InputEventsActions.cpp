@@ -137,7 +137,7 @@ void InputEvents::eventSounds(const TCHAR *misc) {
  // bool OldEnableSoundVario = EnableSoundVario;
 
   if (_tcscmp(misc, TEXT("toggle")) == 0)
-    SetSettingsComputer().EnableSoundVario = 
+    SetSettingsComputer().EnableSoundVario =
       !SettingsComputer().EnableSoundVario;
   else if (_tcscmp(misc, TEXT("on")) == 0)
     SetSettingsComputer().EnableSoundVario = true;
@@ -190,7 +190,7 @@ void InputEvents::eventVisualGlide(const TCHAR *misc) {
 
   if (_tcscmp(misc, TEXT("toggle")) == 0) {
     SetSettingsMap().VisualGlide ++;
-    if (SettingsMap().VisualGlide==2 && 
+    if (SettingsMap().VisualGlide==2 &&
 	!SettingsMap().ExtendedVisualGlide) SetSettingsMap().VisualGlide=0;
     if (SettingsMap().VisualGlide>2) {
       SetSettingsMap().VisualGlide=0;
@@ -340,7 +340,7 @@ void InputEvents::eventScreenModes(const TCHAR *misc) {
 
 #else // UNDEFINED PNA
     if (SettingsMap().EnableAuxiliaryInfo) {
-      if (SettingsComputer().EnableSoundModes) 
+      if (SettingsComputer().EnableSoundModes)
 	PlayResource(TEXT("IDR_WAV_CLICK"));
       SetSettingsMap().FullScreen = !SettingsMap().FullScreen;
       SetSettingsMap().EnableAuxiliaryInfo = false;
@@ -549,7 +549,7 @@ void InputEvents::eventFLARMRadar(const TCHAR *misc) {
 
   if (_tcscmp(misc, TEXT("ForceToggle")) == 0) {
     gauge_flarm->ForceVisible = !gauge_flarm->ForceVisible;
-    SetSettingsMap().EnableFLARMGauge = 
+    SetSettingsMap().EnableFLARMGauge =
       gauge_flarm->ForceVisible;
   } else
     gauge_flarm->Suppress = !gauge_flarm->Suppress;

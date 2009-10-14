@@ -444,7 +444,7 @@ Canvas::stretch_and(int dest_x, int dest_y,
 
 #else /* !ENABLE_SDL */
 
-// TODO: ClipPolygon is not thread safe (uses a static array)!  
+// TODO: ClipPolygon is not thread safe (uses a static array)!
 // We need to make it so.
 
 void

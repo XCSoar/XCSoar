@@ -291,7 +291,7 @@ void ScreenGraphics::Initialise(HINSTANCE hInstance,
   }
 
   for (int i=0; i<AIRSPACECLASSCOUNT; i++) {
-    hAirspacePens[i].set(IBLSCALE(2), 
+    hAirspacePens[i].set(IBLSCALE(2),
                          GetAirspaceColourByClass(i,settings_map));
   }
 

@@ -63,7 +63,7 @@ CalculationThread::run()
 
     // update and transfer master info to glide computer
     mutexBlackboard.Lock();
-    if (gps_trigger.test()) { 
+    if (gps_trigger.test()) {
       // timeout on FLARM objects
       device_blackboard.FLARM_RefreshSlots();
       // lookup known traffic

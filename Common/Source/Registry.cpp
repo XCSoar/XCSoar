@@ -64,7 +64,7 @@ Copyright_License {
 #include <stdlib.h>
 
 const TCHAR szRegistryKey[] = TEXT(REGKEYNAME);
-const TCHAR *szRegistryDisplayType[MAXINFOWINDOWS] =     
+const TCHAR *szRegistryDisplayType[MAXINFOWINDOWS] =
   { TEXT("Info0"),
     TEXT("Info1"),
     TEXT("Info2"),
@@ -543,15 +543,15 @@ void Profile::ReadRegistrySettings(void)
   GetFromRegistryD(szRegistryDisplayUpValue,Temp);
   switch(Temp)
     {
-    case TRACKUP : 
+    case TRACKUP :
       SetSettingsMap().DisplayOrientation = TRACKUP; break;
-    case NORTHUP : 
+    case NORTHUP :
       SetSettingsMap().DisplayOrientation = NORTHUP;break;
-    case NORTHCIRCLE : 
+    case NORTHCIRCLE :
       SetSettingsMap().DisplayOrientation = NORTHCIRCLE;break;
-    case TRACKCIRCLE : 
+    case TRACKCIRCLE :
       SetSettingsMap().DisplayOrientation = TRACKCIRCLE;break;
-    case NORTHTRACK : 
+    case NORTHTRACK :
       SetSettingsMap().DisplayOrientation = NORTHTRACK;break;
     }
 
@@ -559,17 +559,17 @@ void Profile::ReadRegistrySettings(void)
   GetFromRegistryD(szRegistryDisplayText,Temp);
   switch(Temp)
     {
-    case 0 : 
+    case 0 :
       SetSettingsMap().DisplayTextType = DISPLAYNAME; break;
-    case 1 : 
+    case 1 :
       SetSettingsMap().DisplayTextType = DISPLAYNUMBER;break;
-    case 2 : 
+    case 2 :
       SetSettingsMap().DisplayTextType = DISPLAYFIRSTFIVE; break;
-    case 3 : 
+    case 3 :
       SetSettingsMap().DisplayTextType = DISPLAYNONE;break;
-    case 4 : 
+    case 4 :
       SetSettingsMap().DisplayTextType = DISPLAYFIRSTTHREE; break;
-    case 5 : 
+    case 5 :
       SetSettingsMap().DisplayTextType = DISPLAYNAMEIFINTASK; break;
     }
 
@@ -583,7 +583,7 @@ void Profile::ReadRegistrySettings(void)
   GetFromRegistry(szRegistryAltMargin,
                   SetSettingsComputer().AltWarningMargin);
 
-  GetFromRegistry(szRegistrySafetyAltitudeArrival, 
+  GetFromRegistry(szRegistrySafetyAltitudeArrival,
 		  SetSettingsComputer().SAFETYALTITUDEARRIVAL);
   GetFromRegistry(szRegistrySafetyAltitudeBreakOff,
 		  SetSettingsComputer().SAFETYALTITUDEBREAKOFF);
@@ -597,7 +597,7 @@ void Profile::ReadRegistrySettings(void)
 
   for(i=0;i<AIRSPACECLASSCOUNT;i++) {
     SetSettingsComputer().iAirspaceMode[i] = GetRegistryAirspaceMode(i);
-    
+
     GetFromRegistry(szRegistryBrush[i],SetSettingsMap().iAirspaceBrush[i]);
     GetFromRegistry(szRegistryColour[i],SetSettingsMap().iAirspaceColour[i]);
     if (SettingsMap().iAirspaceColour[i]>= NUMAIRSPACECOLORS) {
@@ -979,7 +979,7 @@ bool GetFromRegistryD(const TCHAR *szRegValue, DWORD &pPos)
 }
 
 
-bool GetFromRegistry(const TCHAR *szRegValue, int &pPos) 
+bool GetFromRegistry(const TCHAR *szRegValue, int &pPos)
 {
   DWORD Temp = pPos;
   long res;
@@ -989,7 +989,7 @@ bool GetFromRegistry(const TCHAR *szRegValue, int &pPos)
   return res;
 }
 
-bool GetFromRegistry(const TCHAR *szRegValue, short &pPos) 
+bool GetFromRegistry(const TCHAR *szRegValue, short &pPos)
 {
   DWORD Temp = pPos;
   long res;
@@ -999,7 +999,7 @@ bool GetFromRegistry(const TCHAR *szRegValue, short &pPos)
   return res;
 }
 
-bool GetFromRegistry(const TCHAR *szRegValue, bool &pPos) 
+bool GetFromRegistry(const TCHAR *szRegValue, bool &pPos)
 {
   DWORD Temp = pPos;
   long res;

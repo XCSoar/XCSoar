@@ -107,7 +107,7 @@ void GlideComputerBlackboard::ResetFlight(const bool full) {
   calculated_info.TerrainWarningLocation.Longitude = 0.0;
 
   // If you load persistent values, you need at least these reset:
-  calculated_info.WindBearing = 0.0; 
+  calculated_info.WindBearing = 0.0;
   calculated_info.LastThermalAverage=0.0;
   calculated_info.ThermalGain=0.0;
 }
@@ -162,8 +162,8 @@ double GlideComputerBlackboard::GetAverageThermal() const
 }
 
 
-void 
-GlideComputerBlackboard::ReadBlackboard(const NMEA_INFO &nmea_info) 
+void
+GlideComputerBlackboard::ReadBlackboard(const NMEA_INFO &nmea_info)
 {
   _time_retreated = false;
   if (nmea_info.Time< gps_info.Time) {
@@ -180,9 +180,9 @@ GlideComputerBlackboard::ReadBlackboard(const NMEA_INFO &nmea_info)
   // if time hasn't advanced, don't copy last calculated
 }
 
-void 
-GlideComputerBlackboard::ReadSettingsComputer(const SETTINGS_COMPUTER 
-					      &settings) 
+void
+GlideComputerBlackboard::ReadSettingsComputer(const SETTINGS_COMPUTER
+					      &settings)
 {
   memcpy(&settings_computer,&settings,sizeof(SETTINGS_COMPUTER));
 }

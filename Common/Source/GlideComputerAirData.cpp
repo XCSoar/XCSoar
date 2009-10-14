@@ -86,7 +86,7 @@ static bool WasFlying = false; // VENTA3 used by auto QFE: do not reset QFE
 			//   QFE on the ground, otherwise it turns to
 			//   zero at once!
 
-GlideComputerAirData::GlideComputerAirData(): 
+GlideComputerAirData::GlideComputerAirData():
   airspace_clock(6.0), // scan airspace every 6 seconds
   ballast_clock(5)  // only update every 5 seconds to stop flooding
 		    // the devices
@@ -98,12 +98,12 @@ GlideComputerAirData::GlideComputerAirData():
   // SetWindEstimate(Calculated().WindSpeed, Calculated().WindBearing, 1);
 }
 
-void GlideComputerAirData::ResetFlight(const bool full) 
+void GlideComputerAirData::ResetFlight(const bool full)
 {
   GlidePolar::SetCruiseEfficiency(1.0);
 }
 
-void GlideComputerAirData::Initialise() 
+void GlideComputerAirData::Initialise()
 {
   CalibrationInit();
 }
@@ -129,7 +129,7 @@ void GlideComputerAirData::ProcessVertical() {
   LastThermalStats();
   LD();
   CruiseLD();
-  SetCalculated().AverageLD= 
+  SetCalculated().AverageLD=
     CalculateLDRotary(&Calculated(), &rotaryLD); // AverageLD
   Average30s();
 
@@ -154,7 +154,7 @@ void GlideComputerAirData::Wind() {
   DoWindCirclingAltitude();
 
   // update zigzag wind
-  if (((SettingsComputer().AutoWindMode 
+  if (((SettingsComputer().AutoWindMode
 	& D_AUTOWIND_ZIGZAG)==D_AUTOWIND_ZIGZAG)
       && (!Basic().Replay)) {
     double zz_wind_speed;
@@ -169,7 +169,7 @@ void GlideComputerAirData::Wind() {
       v_wind.x = zz_wind_speed*cos(zz_wind_bearing*DEG_TO_RAD);
       v_wind.y = zz_wind_speed*sin(zz_wind_bearing*DEG_TO_RAD);
 
-      windanalyser.slot_newEstimate(&Basic(), 
+      windanalyser.slot_newEstimate(&Basic(),
 				    &SetCalculated(), v_wind, quality);
     }
   }
@@ -177,9 +177,9 @@ void GlideComputerAirData::Wind() {
 
 
 void GlideComputerAirData::DoWindCirclingMode(const bool left) {
-  if ((SettingsComputer().AutoWindMode 
+  if ((SettingsComputer().AutoWindMode
        & D_AUTOWIND_CIRCLING)==D_AUTOWIND_CIRCLING) {
-    windanalyser.slot_newFlightMode(&Basic(), 
+    windanalyser.slot_newFlightMode(&Basic(),
 				    &Calculated(),
 				    left, 0);
   }
@@ -187,9 +187,9 @@ void GlideComputerAirData::DoWindCirclingMode(const bool left) {
 
 
 void GlideComputerAirData::DoWindCirclingSample() {
-  if ((SettingsComputer().AutoWindMode 
+  if ((SettingsComputer().AutoWindMode
        & D_AUTOWIND_CIRCLING)==D_AUTOWIND_CIRCLING) {
-    windanalyser.slot_newSample(&Basic(), 
+    windanalyser.slot_newSample(&Basic(),
 				&SetCalculated());
   }
 }
@@ -197,7 +197,7 @@ void GlideComputerAirData::DoWindCirclingSample() {
 
 void GlideComputerAirData::DoWindCirclingAltitude() {
   if (SettingsComputer().AutoWindMode>0) {
-    windanalyser.slot_Altitude(&Basic(), 
+    windanalyser.slot_Altitude(&Basic(),
 			       &SetCalculated());
   }
 }
@@ -210,7 +210,7 @@ void GlideComputerAirData::SetWindEstimate(const double wind_speed,
   v_wind.x = wind_speed*cos(wind_bearing*3.1415926/180.0);
   v_wind.y = wind_speed*sin(wind_bearing*3.1415926/180.0);
   {
-    windanalyser.slot_newEstimate(&Basic(), 
+    windanalyser.slot_newEstimate(&Basic(),
 				  &SetCalculated(),
 				  v_wind, quality);
   }
@@ -222,7 +222,7 @@ void GlideComputerAirData::SetWindEstimate(const double wind_speed,
 
 void GlideComputerAirData::AverageClimbRate()
 {
-  if (Basic().AirspeedAvailable 
+  if (Basic().AirspeedAvailable
       && Basic().VarioAvailable
       && (!Calculated().Circling)) {
 
@@ -254,8 +254,8 @@ void GlideComputerAirData::AverageClimbRate()
 ClimbAverageCalculator climbAverageCalculator;
 void GlideComputerAirData::Average30s()
 {
-  Calculated().Average30s = 
-    climbAverageCalculator.GetAverage(Basic().Time, 
+  Calculated().Average30s =
+    climbAverageCalculator.GetAverage(Basic().Time,
 				      Basic().Altitude, 30);
   Calculated().NettoAverage30s = Calculated().Average30s;
 }
@@ -283,7 +283,7 @@ void GlideComputerAirData::Average30s()
     for(i=0;i<Elapsed;i++) {
       index = (long)LastTime + i;
       index %= 30;
-	
+
       Altitude[index] = Calculated().NavAltitude;
       if (Basic().NettoVarioAvailable) {
 	NettoVario[index] = Basic().NettoVario;
@@ -295,13 +295,13 @@ void GlideComputerAirData::Average30s()
       } else {
 	Vario[index] = Calculated().Vario;
       }
-      
+
       if (num_samples<30) {
 	num_samples ++;
       }
-      
+
     }
-    
+
     double Vave = 0;
     double NVave = 0;
     int j;
@@ -317,21 +317,21 @@ void GlideComputerAirData::Average30s()
       Vave /= num_samples;
       NVave /= num_samples;
     }
-    
+
     if (!Basic().VarioAvailable) {
       index = ((long)Basic().Time - 1)%30;
       Gain = Altitude[index];
-      
+
       index = ((long)Basic().Time)%30;
       Gain = Gain - Altitude[index];
-      
+
       Vave = Gain/30;
     }
     SetCalculated().Average30s =
       LowPassFilter(Calculated().Average30s,Vave,0.8);
     SetCalculated().NettoAverage30s =
       LowPassFilter(Calculated().NettoAverage30s,NVave,0.8);
-    
+
 #ifdef DEBUGAVERAGER
     if (Calculated().Flying) {
       DebugStore("%d %g %g %g # averager\r\n",
@@ -340,7 +340,7 @@ void GlideComputerAirData::Average30s()
 		 Calculated().Average30s, Calculated().NettoAverage30s);
     }
 #endif
-    
+
   } else {
     if (time_retreated()) {
       for (i=0; i<30; i++) {
@@ -375,12 +375,12 @@ void GlideComputerAirData::MaxHeightGain()
 
   if (Calculated().MinAltitude>0) {
     double height_gain = Calculated().NavAltitude - Calculated().MinAltitude;
-    SetCalculated().MaxHeightGain = max(height_gain, 
+    SetCalculated().MaxHeightGain = max(height_gain,
 					Calculated().MaxHeightGain);
   } else {
     SetCalculated().MinAltitude = Calculated().NavAltitude;
   }
-  SetCalculated().MinAltitude = min(Calculated().NavAltitude, 
+  SetCalculated().MinAltitude = min(Calculated().NavAltitude,
 				    Calculated().MinAltitude);
 }
 
@@ -406,14 +406,14 @@ void GlideComputerAirData::LD()
   }
   if (time_advanced()) {
     double DistanceFlown = Distance(Basic().Location, LastBasic().Location);
-    
-    SetCalculated().LD = 
+
+    SetCalculated().LD =
       UpdateLD(Calculated().LD,
 	       DistanceFlown,
 	       LastCalculated().NavAltitude - Calculated().NavAltitude, 0.1);
-    
-    InsertLDRotary(&Calculated(), 
-		   &rotaryLD,(int)DistanceFlown, 
+
+    InsertLDRotary(&Calculated(),
+		   &rotaryLD,(int)DistanceFlown,
 		   (int)Calculated().NavAltitude);
   }
 
@@ -438,7 +438,7 @@ void GlideComputerAirData::CruiseLD()
       SetCalculated().CruiseStartAlt = Calculated().NavAltitude;
       SetCalculated().CruiseStartTime = Basic().Time;
     } else {
-      double DistanceFlown = Distance(Basic().Location, 
+      double DistanceFlown = Distance(Basic().Location,
                                       Calculated().CruiseStartLocation);
       SetCalculated().CruiseLD =
 	UpdateLD(Calculated().CruiseLD,
@@ -469,13 +469,13 @@ void GlideComputerAirData::Heading()
     // calculate turn rate in wind coordinates
     double dT = Basic().Time-LastBasic().Time;
     if (dT>0) {
-      SetCalculated().TurnRateWind = 
+      SetCalculated().TurnRateWind =
 	AngleLimit180(Calculated().Heading
 		      -LastCalculated().Heading)/dT;
     }
 
     // calculate estimated true airspeed
-    SetCalculated().TrueAirspeedEstimated = 
+    SetCalculated().TrueAirspeedEstimated =
       isqrt4((unsigned long)(x0*x0*100+y0*y0*100))/10.0;
 
     // estimate bank angle (assuming balanced turn)
@@ -504,7 +504,7 @@ void GlideComputerAirData::Heading()
 void GlideComputerAirData::EnergyHeightNavAltitude()
 {
   // Determine which altitude to use for nav functions
-  if (SettingsComputer().EnableNavBaroAltitude 
+  if (SettingsComputer().EnableNavBaroAltitude
       && Basic().BaroAltitudeAvailable) {
     SetCalculated().NavAltitude = Basic().BaroAltitude;
   } else {
@@ -565,7 +565,7 @@ void GlideComputerAirData::Vario()
   double dT = Basic().Time-LastBasic().Time;
   if(dT>0) {
     double Gain = Calculated().NavAltitude - LastCalculated().NavAltitude;
-    double GainTE = (Calculated().EnergyHeight+Basic().Altitude) 
+    double GainTE = (Calculated().EnergyHeight+Basic().Altitude)
       - (LastCalculated().EnergyHeight+LastBasic().Altitude);
     // estimate value from GPS
     SetCalculated().GPSVario = Gain / dT;
@@ -745,7 +745,7 @@ GlideComputerAirData::FlightTimes()
     return false;
   }
   if (Basic().Replay != LastBasic().Replay) {
-    // reset flight before/after replay logger 
+    // reset flight before/after replay logger
     ResetFlight(false);
   }
   double t = DetectStartTime(&Basic(), &Calculated());
@@ -763,7 +763,7 @@ GlideComputerAirData::ProcessIdle()
 {
   BallastDump();
   TerrainFootprint(MapProjection().GetScreenDistanceMeters());
-  if (airspace_clock.check_advance(Basic().Time) 
+  if (airspace_clock.check_advance(Basic().Time)
       && SettingsComputer().EnableAirspaceWarnings) {
     AirspaceWarning();
   }
@@ -834,15 +834,15 @@ GlideComputerAirData::TakeoffLanding()
 }
 
 
-void 
+void
 GlideComputerAirData::OnLanding()
 {
   // JMWX  restore data calculated at finish so
   // user can review flight as at finish line
-  
+
   // VENTA3 TODO maybe reset WasFlying to false, so that QFE is reset
   // though users can reset by hand anyway anytime..
-  
+
   if (Calculated().ValidFinish) {
     RestoreFinish();
   }
@@ -851,16 +851,16 @@ GlideComputerAirData::OnLanding()
 
 
 
-void 
+void
 GlideComputerAirData::OnTakeoff()
 {
   SetCalculated().Flying = true;
   WasFlying=true; // VENTA3
   // reset stats on takeoff
   ResetFlight();
-  
+
   SetCalculated().TakeOffTime= Basic().Time;
-  
+
   // save stats in case we never finish
   SaveFinish();
 }
@@ -882,18 +882,18 @@ GlideComputerAirData::PredictNextPosition()
 
     if (Basic().BaroAltitudeAvailable) {
       SetCalculated().NextAltitude =
-	Basic().BaroAltitude + Calculated().Average30s 
+	Basic().BaroAltitude + Calculated().Average30s
         * SettingsComputer().WarningTime;
     } else {
       SetCalculated().NextAltitude =
-	Calculated().NavAltitude + Calculated().Average30s 
+	Calculated().NavAltitude + Calculated().Average30s
         * SettingsComputer().WarningTime;
     }
   }
   // MJJ TODO Predict terrain altitude
-  SetCalculated().NextAltitudeAGL = 
+  SetCalculated().NextAltitudeAGL =
     Calculated().NextAltitude - Calculated().TerrainAlt;
-  
+
 }
 
 bool GlobalClearAirspaceWarnings = false;
@@ -939,19 +939,19 @@ GlideComputerAirData::AirspaceWarning()
   if (AirspaceCircle) {
     for (i=0; i<NumberOfAirspaceCircles; i++) {
 
-      if ((((AirspaceCircle[i].Base.Base != abAGL) 
+      if ((((AirspaceCircle[i].Base.Base != abAGL)
 	    && (alt >= AirspaceCircle[i].Base.Altitude))
-           || ((AirspaceCircle[i].Base.Base == abAGL) 
+           || ((AirspaceCircle[i].Base.Base == abAGL)
 	       && (agl >= AirspaceCircle[i].Base.AGL)))
-          && (((AirspaceCircle[i].Top.Base != abAGL) 
+          && (((AirspaceCircle[i].Top.Base != abAGL)
 	       && (alt < AirspaceCircle[i].Top.Altitude))
-           || ((AirspaceCircle[i].Top.Base == abAGL) 
+           || ((AirspaceCircle[i].Top.Base == abAGL)
 	       && (agl < AirspaceCircle[i].Top.AGL)))) {
 
         if ((SettingsComputer().iAirspaceMode[AirspaceCircle[i].Type] >= 2) &&
 	    InsideAirspaceCircle(loc, i)) {
 
-          AirspaceWarnListAdd(&Basic(), &Calculated(), 
+          AirspaceWarnListAdd(&Basic(), &Calculated(),
                               &SettingsComputer(),
                               MapProjection(),
                               position_is_predicted, 1, i, false);
@@ -965,19 +965,19 @@ GlideComputerAirData::AirspaceWarning()
   if (AirspaceArea) {
     for (i=0; i<NumberOfAirspaceAreas; i++) {
 
-      if ((((AirspaceArea[i].Base.Base != abAGL) 
+      if ((((AirspaceArea[i].Base.Base != abAGL)
 	    && (alt >= AirspaceArea[i].Base.Altitude))
-           || ((AirspaceArea[i].Base.Base == abAGL) 
+           || ((AirspaceArea[i].Base.Base == abAGL)
 	       && (agl >= AirspaceArea[i].Base.AGL)))
-          && (((AirspaceArea[i].Top.Base != abAGL) 
+          && (((AirspaceArea[i].Top.Base != abAGL)
 	       && (alt < AirspaceArea[i].Top.Altitude))
-           || ((AirspaceArea[i].Top.Base == abAGL) 
+           || ((AirspaceArea[i].Top.Base == abAGL)
 	       && (agl < AirspaceArea[i].Top.AGL)))) {
 
         if ((SettingsComputer().iAirspaceMode[AirspaceArea[i].Type] >= 2)
             && InsideAirspaceArea(loc, i)){
 
-          AirspaceWarnListAdd(&Basic(), &Calculated(), 
+          AirspaceWarnListAdd(&Basic(), &Calculated(),
                               &SettingsComputer(),
                               map_projection,
                               position_is_predicted, 0, i, false);
@@ -986,7 +986,7 @@ GlideComputerAirData::AirspaceWarning()
     }
   }
 
-  AirspaceWarnListProcess(&Basic(), &Calculated(), 
+  AirspaceWarnListProcess(&Basic(), &Calculated(),
                           &SettingsComputer(),
                           map_projection);
 }
@@ -1002,13 +1002,13 @@ GlideComputerAirData::TerrainFootprint(double screen_range)
 
   double bearing, distance;
   bool out_of_range;
-  
+
   // estimate max range (only interested in at most one screen
   // distance away) except we need to scan for terrain base, so 20km
   // search minimum is required
-  
+
   double mymaxrange = max(20000.0, screen_range);
-  
+
   SetCalculated().TerrainBase = Calculated().TerrainAlt;
 
   GEOPOINT loc;
@@ -1016,10 +1016,10 @@ GlideComputerAirData::TerrainFootprint(double screen_range)
     bearing = (i*360.0)/NUMTERRAINSWEEPS;
     distance = FinalGlideThroughTerrain(bearing,
 					&Basic(),
-					&Calculated(), 
+					&Calculated(),
 					SettingsComputer(),
 					&loc,
-					mymaxrange, 
+					mymaxrange,
                                         &out_of_range,
 					&SetCalculated().TerrainBase);
     if (out_of_range) {
@@ -1046,7 +1046,7 @@ GlideComputerAirData::BallastDump()
 
   double BALLAST = GlidePolar::GetBallast();
   double BALLAST_last = BALLAST;
-  double percent_per_second = 1.0/max(10.0, 
+  double percent_per_second = 1.0/max(10.0,
 				      SettingsComputer().BallastSecsToEmpty);
   BALLAST -= dt*percent_per_second;
   if (BALLAST<0) {
@@ -1101,12 +1101,12 @@ GlideComputerAirData::ProcessThermalLocator()
     return;
   }
   if (Calculated().Circling) {
-    thermallocator.AddPoint(Basic().Time, 
+    thermallocator.AddPoint(Basic().Time,
                             Basic().Location,
 			    Calculated().NettoVario);
-    thermallocator.Update(Basic().Time, 
-                          Basic().Location, 
-			  Calculated().WindSpeed, 
+    thermallocator.Update(Basic().Time,
+                          Basic().Location,
+			  Calculated().WindSpeed,
                           Calculated().WindBearing,
 			  Basic().TrackBearing,
 			  &SetCalculated().ThermalEstimate_Location,
@@ -1127,7 +1127,7 @@ GlideComputerAirData::Turning()
   if (!Calculated().Flying || !time_advanced()) return;
 
   double dT = Basic().Time-LastBasic().Time;
-  SetCalculated().TurnRate = 
+  SetCalculated().TurnRate =
     AngleLimit180(Basic().TrackBearing-LastBasic().TrackBearing)/dT;
 
   if (dT<2.0) {
@@ -1172,7 +1172,7 @@ GlideComputerAirData::Turning()
 
   Rate=  LowPassFilter(LastCalculated().SmoothedTurnRate,Rate,0.3);
   SetCalculated().SmoothedTurnRate = Rate;
-  
+
   if(Rate <0) {
     if (LEFT) {
       // OK, already going left
@@ -1192,7 +1192,7 @@ GlideComputerAirData::Turning()
 
   bool forcecruise = false;
   bool forcecircling = false;
-  if (SettingsComputer().EnableExternalTriggerCruise 
+  if (SettingsComputer().EnableExternalTriggerCruise
       && !(Basic().Replay)) {
     forcecircling = triggerClimbEvent.test();
     forcecruise = !forcecircling;
@@ -1218,7 +1218,7 @@ GlideComputerAirData::Turning()
       break;
     }
     if((Rate >= MinTurnRate)||(forcecircling)) {
-      if( ((Basic().Time  - Calculated().TurnStartTime) 
+      if( ((Basic().Time  - Calculated().TurnStartTime)
 	   > CruiseClimbSwitch)|| forcecircling) {
 
         SetCalculated().Circling = true;
@@ -1263,7 +1263,7 @@ GlideComputerAirData::Turning()
       break;
     }
     if((Rate < MinTurnRate) || forcecruise) {
-      if( ((Basic().Time  - Calculated().TurnStartTime) 
+      if( ((Basic().Time  - Calculated().TurnStartTime)
 	   > ClimbCruiseSwitch) || forcecruise) {
         SetCalculated().Circling = false;
 
@@ -1297,7 +1297,7 @@ GlideComputerAirData::Turning()
 
 ///////////
 
-void 
+void
 GlideComputerAirData::ThermalSources()
 {
   GEOPOINT ground_location;
@@ -1341,20 +1341,20 @@ GlideComputerAirData::LastThermalStats()
   if((Calculated().Circling == false) && (LastCalculated().Circling == true)
      && (Calculated().ClimbStartTime>=0)) {
 
-    double ThermalTime = 
+    double ThermalTime =
       Calculated().CruiseStartTime-Calculated().ClimbStartTime;
-    
+
     if(ThermalTime >0) {
-      double ThermalGain = Calculated().CruiseStartAlt 
+      double ThermalGain = Calculated().CruiseStartAlt
 	+ Calculated().EnergyHeight
 	- Calculated().ClimbStartAlt;
 
       if ((ThermalGain>0) && (ThermalTime>THERMAL_TIME_MIN)) {
-	  
+
 	SetCalculated().LastThermalAverage = ThermalGain/ThermalTime;
 	SetCalculated().LastThermalGain = ThermalGain;
 	SetCalculated().LastThermalTime = ThermalTime;
-	
+
 	OnDepartedThermal();
       }
     }
@@ -1479,7 +1479,7 @@ DoAutoQNH(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated)
 }
 
 
-void 
+void
 GlideComputerAirData::ProcessSun()
 {
   sun.CalcSunTimes(Basic().Location, Basic(),

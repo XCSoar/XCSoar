@@ -69,7 +69,7 @@ void Task::scan_point_forward(RelativeTaskPointVisitor &visitor)
   while (i<ActiveTaskPoint) {
     visitor.visit_task_point_before(task_points[i], i);
     i++;
-  } 
+  }
   visitor.visit_task_point_current(task_points[i], i);
   i++;
   while (ValidTaskPoint(i)) {
@@ -251,50 +251,50 @@ class RelativeTaskLegVisitorExample:
   public RelativeTaskLegVisitor {
 public:
   // returns false when no more processing required
-  virtual void visit_null() 
+  virtual void visit_null()
   {
     printf("null task\n");
   };
-  virtual void visit_single(TASK_POINT &point0, const unsigned index0) 
-  { 
+  virtual void visit_single(TASK_POINT &point0, const unsigned index0)
+  {
     printf("single point %d\n", index0);
   };
   virtual void visit_leg_before(TASK_POINT &point0, const unsigned index0,
-				TASK_POINT &point1, const unsigned index1) 
+				TASK_POINT &point1, const unsigned index1)
   {
     printf("leg before %d %d\n", index0, index1);
   };
   virtual void visit_leg_current(TASK_POINT &point0, const unsigned index0,
-				 TASK_POINT &point1, const unsigned index1) 
+				 TASK_POINT &point1, const unsigned index1)
   {
     printf("leg current %d %d\n", index0, index1);
   };
   virtual void visit_leg_after(TASK_POINT &point0, const unsigned index0,
-			       TASK_POINT &point1, const unsigned index1) 
+			       TASK_POINT &point1, const unsigned index1)
   {
     printf("leg after %d %d\n", index0, index1);
   };
 };
 
 
-class RelativeTaskPointVisitorExample: 
-  public RelativeTaskPointVisitor 
+class RelativeTaskPointVisitorExample:
+  public RelativeTaskPointVisitor
 {
 public:
   // returns false when no more processing required
-  virtual void visit_null() 
+  virtual void visit_null()
   {
     printf("no task\n");
   };
-  virtual void visit_task_point_before(TASK_POINT &point, const unsigned index) 
+  virtual void visit_task_point_before(TASK_POINT &point, const unsigned index)
   {
     printf("point before %d\n",index);
   };
-  virtual void visit_task_point_current(TASK_POINT &point, const unsigned index) 
+  virtual void visit_task_point_current(TASK_POINT &point, const unsigned index)
   {
     printf("point current %d\n",index);
   };
-  virtual void visit_task_point_after(TASK_POINT &point, const unsigned index) 
+  virtual void visit_task_point_after(TASK_POINT &point, const unsigned index)
   {
     printf("point after %d\n",index);
   };
@@ -307,16 +307,16 @@ class AbsoluteTaskPointVisitorExample:
   public AbsoluteTaskPointVisitor {
 public:
   // returns false when no more processing required
-  virtual void visit_null() { 
+  virtual void visit_null() {
     val=0;
   };
-  virtual void visit_task_point_start(TASK_POINT &point, const unsigned index) { 
+  virtual void visit_task_point_start(TASK_POINT &point, const unsigned index) {
     val=1;
   };
-  virtual void visit_task_point_intermediate(TASK_POINT &point, const unsigned index) { 
+  virtual void visit_task_point_intermediate(TASK_POINT &point, const unsigned index) {
     val++;
   };
-  virtual void visit_task_point_final(TASK_POINT &point, const unsigned index) { 
+  virtual void visit_task_point_final(TASK_POINT &point, const unsigned index) {
     val++;
     printf("final there are %d points\n",val);
   };
@@ -333,7 +333,7 @@ public:
 class TaskSectorsVisitor:
   public AbsoluteTaskPointVisitor {
 public:
-  void visit_task_point_start(TASK_POINT &point, const unsigned index) { 
+  void visit_task_point_start(TASK_POINT &point, const unsigned index) {
     if (_task->getSettings().StartType== START_SECTOR) {
       SectorAngle = 45+90;
     } else {
@@ -344,21 +344,21 @@ public:
     setStartEnd(point);
     clearAAT(point, index);
   };
-  void visit_task_point_intermediate(TASK_POINT &point, const unsigned index) { 
+  void visit_task_point_intermediate(TASK_POINT &point, const unsigned index) {
     SectorAngle = 45;
     if (_task->getSettings().SectorType == 2) {
       SectorSize = 10000; // German DAe 0.5/10
     } else {
       SectorSize = _task->getSettings().SectorRadius;  // FAI sector
     }
-    SectorBearing = point.Bisector;    
+    SectorBearing = point.Bisector;
     if (!_task->getSettings().AATEnabled) {
       point.AATStartRadial  = AngleLimit360(SectorBearing - SectorAngle);
       point.AATFinishRadial = AngleLimit360(SectorBearing + SectorAngle);
     }
     setStartEnd(point);
   };
-  void visit_task_point_final(TASK_POINT &point, const unsigned index) { 
+  void visit_task_point_final(TASK_POINT &point, const unsigned index) {
     // finish line
     if (_task->getSettings().FinishType==FINISH_SECTOR) {
       SectorAngle = 45;
@@ -394,7 +394,7 @@ private:
 
 
 class WaypointsInTaskVisitor:
-  public AbsoluteTaskPointVisitor 
+  public AbsoluteTaskPointVisitor
 {
 public:
   WaypointsInTaskVisitor(const SETTINGS_COMPUTER& _settings_computer):
@@ -405,21 +405,21 @@ public:
     for (unsigned i = 0; way_points.verify_index(i); i++)
       way_points.set_calc(i).InTask =
         (way_points.get(i).Flags & HOME) == HOME;
-    
+
     if (way_points.verify_index(settings_computer->HomeWaypoint)) {
       way_points.set_calc(settings_computer->HomeWaypoint).InTask = true;
     }
   }
-  void visit_start_point(START_POINT &point, const unsigned i) { 
+  void visit_start_point(START_POINT &point, const unsigned i) {
     way_points.set_calc(task_start_points[i].Index).InTask = true;
   }
-  void visit_task_point_start(TASK_POINT &point, const unsigned i) { 
+  void visit_task_point_start(TASK_POINT &point, const unsigned i) {
     addTaskPoint(point.Index);
   }
-  void visit_task_point_intermediate(TASK_POINT &point, const unsigned i) { 
+  void visit_task_point_intermediate(TASK_POINT &point, const unsigned i) {
     addTaskPoint(point.Index);
   }
-  void visit_task_point_final(TASK_POINT &point, const unsigned i) { 
+  void visit_task_point_final(TASK_POINT &point, const unsigned i) {
     addTaskPoint(point.Index);
   }
 private:
@@ -433,8 +433,8 @@ private:
 class TaskLegGeometryVisitor:
   public AbsoluteTaskLegVisitor {
 public:
-  void visit_reset() 
-  { 
+  void visit_reset()
+  {
     total_length = 0;
   };
   void visit_single(TASK_POINT &point0, const unsigned index0) {
@@ -443,7 +443,7 @@ public:
     point0.InBound=0;
   };
   void visit_leg_intermediate(TASK_POINT &point0, const unsigned index0,
-			      TASK_POINT &point1, const unsigned index1) 
+			      TASK_POINT &point1, const unsigned index1)
   {
     if (index0==0) {
       // first leg is special
@@ -467,7 +467,7 @@ public:
     total_length += point1.LegDistance;
   };
   void visit_leg_final(TASK_POINT &point0, const unsigned index0,
-		       TASK_POINT &point1, const unsigned index1) 
+		       TASK_POINT &point1, const unsigned index1)
   {
     visit_leg_intermediate(point0, index0, point1, index1);
   };
@@ -489,7 +489,7 @@ public:
     point0.LengthPercent=1.0;
   };
   void visit_leg_intermediate(TASK_POINT &point0, const unsigned index0,
-			      TASK_POINT &point1, const unsigned index1) 
+			      TASK_POINT &point1, const unsigned index1)
   {
     if (index0==0) {
       point0.LengthPercent=0;
@@ -498,7 +498,7 @@ public:
     }
   };
   void visit_leg_final(TASK_POINT &point0, const unsigned index0,
-		       TASK_POINT &point1, const unsigned index1) 
+		       TASK_POINT &point1, const unsigned index1)
   {
     visit_leg_intermediate(point0, index0, point1, index1);
   };
@@ -507,7 +507,7 @@ private:
 };
 
 
-void Task::RefreshTask_Visitor(const SETTINGS_COMPUTER &settings_computer) 
+void Task::RefreshTask_Visitor(const SETTINGS_COMPUTER &settings_computer)
 {
   TaskLegGeometryVisitor geom;
   scan_leg_forward(geom);
@@ -524,11 +524,11 @@ void Task::RefreshTask_Visitor(const SETTINGS_COMPUTER &settings_computer)
 }
 
 
-class AATIsoLineVisitor: public RelativeTaskPointVisitor 
+class AATIsoLineVisitor: public RelativeTaskPointVisitor
 {
 public:
-  virtual void visit_task_point_current(TASK_POINT &point, const unsigned i) 
-  { 
+  virtual void visit_task_point_current(TASK_POINT &point, const unsigned i)
+  {
     double stepsize = 25.0;
     if (!_task->ValidTaskPoint(i+1)) {
       // This must be the final waypoint, so it's not an AAT OZ
@@ -541,7 +541,7 @@ public:
     GEOPOINT location = point.AATTargetLocation;
     double dist_0, dist_north, dist_east;
     bool in_sector = true;
-    
+
     double max_distance, delta;
     if(point.AATType == AAT_SECTOR) {
       max_distance = point.AATSectorRadius;
@@ -550,46 +550,46 @@ public:
     }
     delta = max_distance*2.4 / (MAXISOLINES);
     bool left = false;
-    
+
     /*
       double distance_glider=0;
       if ((i==ActiveTaskPoint) && (CALCULATED_INFO.IsInSector)) {
       distance_glider = DoubleLegDistance(i, GPS_INFO.Longitude, GPS_INFO.Latitude);
       }
     */
-    
+
     // fill
     j=0;
     // insert start point
     point.IsoLine_Location[j]= location;
     point.IsoLine_valid[j]= true;
     j++;
-    
+
     do {
       dist_0 = _task->DoubleLegDistance(i, location);
-      
+
       GEOPOINT loc_north;
       FindLatitudeLongitude(location,
 			    0, stepsize,
 			    &loc_north);
       dist_north = _task->DoubleLegDistance(i, loc_north);
-      
+
       GEOPOINT loc_east;
       FindLatitudeLongitude(location,
 			    90, stepsize,
 			    &loc_east);
       dist_east = _task->DoubleLegDistance(i, loc_east);
-      
-      double angle = AngleLimit360(RAD_TO_DEG*atan2(dist_east-dist_0, 
+
+      double angle = AngleLimit360(RAD_TO_DEG*atan2(dist_east-dist_0,
                                                     dist_north-dist_0)+90);
       if (left) {
 	angle += 180;
       }
-      
+
       FindLatitudeLongitude(location,
 			    angle, delta,
 			    &location);
-      
+
       in_sector = _task->InAATTurnSector(location, i);
       /*
         if (dist_0 < distance_glider) {
@@ -606,7 +606,7 @@ public:
 	  left = true;
 	  location = point.AATTargetLocation;
 	  in_sector = true; // cheat to prevent early exit
-	  
+
 	  // insert start point (again)
 	  point.IsoLine_Location[j] = location;
 	  point.IsoLine_valid[j] = true;
@@ -615,7 +615,7 @@ public:
       }
     } while (in_sector && (j<MAXISOLINES));
   };
-  virtual void visit_task_point_after(TASK_POINT &point, const unsigned i) { 
+  virtual void visit_task_point_after(TASK_POINT &point, const unsigned i) {
     visit_task_point_current(point, i);
   };
 };
@@ -626,5 +626,5 @@ void Task::CalculateAATIsoLines(void) {
   if (settings.AATEnabled) {
     AATIsoLineVisitor av;
     scan_point_forward(av);
-  }  
+  }
 }

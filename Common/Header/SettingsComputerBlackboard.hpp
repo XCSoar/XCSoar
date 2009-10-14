@@ -41,11 +41,11 @@ Copyright_License {
 #include "Blackboard.hpp"
 #include "SettingsComputer.hpp"
 
-class SettingsComputerBlackboard 
+class SettingsComputerBlackboard
 {
 public:
   SettingsComputerBlackboard();
-  const SETTINGS_COMPUTER& SettingsComputer() const 
+  const SETTINGS_COMPUTER& SettingsComputer() const
   { return settings_computer; }
 protected:
   SETTINGS_COMPUTER settings_computer;

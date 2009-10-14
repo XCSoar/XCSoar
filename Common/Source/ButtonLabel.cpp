@@ -84,7 +84,7 @@ ButtonLabel::GetButtonPosition(unsigned i, RECT rc,
   _stprintf(reggeomsy, TEXT("ScreenButtonSizeY%d"), i);
 
   GetFromRegistry(reggeompx,*x);
-  GetFromRegistry(reggeompy,*y); 
+  GetFromRegistry(reggeompy,*y);
   GetFromRegistry(reggeomsx,*sizex);
   GetFromRegistry(reggeomsy,*sizey);
 

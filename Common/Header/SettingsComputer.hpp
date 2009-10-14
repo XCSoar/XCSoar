@@ -68,11 +68,11 @@ typedef enum {
 
 typedef enum {
   ALLON=0,
-  CLIP, 
+  CLIP,
   AUTO,
-  ALLBELOW, 
-  INSIDE, 
-  ALLOFF 
+  ALLBELOW,
+  INSIDE,
+  ALLOFF
 } AirspaceDisplayMode_t;
 
 struct SETTINGS_COMPUTER {
@@ -101,11 +101,11 @@ struct SETTINGS_COMPUTER {
   // polar info
   int    BallastSecsToEmpty;
   bool   BallastTimerActive;
-  
+
   int    TeamCodeRefWaypoint;
   bool   TeamFlarmTracking;
   TCHAR  TeamFlarmCNTarget[4]; // CN of the glider to track
-  
+
   // sound stuff not used?
   bool   EnableSoundVario;
   bool   EnableSoundTask;
@@ -115,7 +115,7 @@ struct SETTINGS_COMPUTER {
 
   // local time adjustment
   int UTCOffset;
-  
+
   unsigned OLCRules;
   unsigned Handicap;
   bool EnableOLC;

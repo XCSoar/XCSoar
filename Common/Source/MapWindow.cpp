@@ -182,7 +182,7 @@ typedef struct {
 
 
 // This idle function allows progressive scanning of visibility etc
-// 
+//
 bool MapWindow::Idle(const bool do_force) {
   bool still_dirty=false;
 
@@ -224,7 +224,7 @@ bool MapWindow::Idle(const bool do_force) {
     case 1:
       if (topology_idle.dirty) {
         if (SettingsMap().EnableTopology) {
-          topology_idle.dirty = 
+          topology_idle.dirty =
             topology->ScanVisibility(*this, *getSmartBounds(), do_force);
         } else {
           topology_idle.dirty = false;
@@ -235,7 +235,7 @@ bool MapWindow::Idle(const bool do_force) {
       if (terrain_idle.dirty) {
         terrain.ServiceTerrainCenter(Basic().Location);
         terrain.ServiceCache();
-        
+
         if (!do_force) {
           // JMW this currently isn't working with the smart bounds
           terrain_idle.dirty = false;
@@ -255,11 +255,11 @@ bool MapWindow::Idle(const bool do_force) {
       break;
     }
 
-  } while (RenderTimeAvailable() && 
+  } while (RenderTimeAvailable() &&
 	   !drawTriggerEvent.test() &&
-	   (still_dirty = 
-	      main_idle.dirty 
-	    | terrain_idle.dirty 
+	   (still_dirty =
+	      main_idle.dirty
+	    | terrain_idle.dirty
 	    | topology_idle.dirty
 	    | rasp_idle.dirty));
 
@@ -267,7 +267,7 @@ bool MapWindow::Idle(const bool do_force) {
 }
 
 
-void MapWindow::ExchangeBlackboard(void) 
+void MapWindow::ExchangeBlackboard(void)
 {
   ReadBlackboard(device_blackboard.Basic(), device_blackboard.Calculated());
   ApplyScreenSize();
@@ -360,7 +360,7 @@ void MapWindow::ScanVisibility(rectObj *bounds_active) {
 
 
 void MapWindow::SwitchZoomClimb(void) {
-  
+
   bool isclimb = (DisplayMode == dmCircling);
 
   bool my_target_pan = SettingsMap().TargetPan;

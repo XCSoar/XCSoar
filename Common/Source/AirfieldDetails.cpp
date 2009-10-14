@@ -112,14 +112,14 @@ CloseAirfieldDetails()
 class WaypointNameLookup: public WaypointVisitor {
 public:
   WaypointNameLookup(const TCHAR* _Name, const TCHAR* _Details):
-    Name(_Name), Details(_Details) 
+    Name(_Name), Details(_Details)
     {};
 
-  void waypoint_landable(WAYPOINT &waypoint, WPCALC &wpcalc, const unsigned i) 
+  void waypoint_landable(WAYPOINT &waypoint, WPCALC &wpcalc, const unsigned i)
     {
       waypoint_airport(waypoint, wpcalc, i);
     }
-  void waypoint_airport(WAYPOINT &waypoint, WPCALC &wpcalc, const unsigned i) 
+  void waypoint_airport(WAYPOINT &waypoint, WPCALC &wpcalc, const unsigned i)
     {
 
       // TODO: detect and warn on multiple matches!
@@ -130,28 +130,28 @@ public:
       TCHAR NameC[100];
       TCHAR NameD[100];
       TCHAR TmpName[100];
-      
+
       _tcscpy(UName, waypoint.Name);
-      
+
       CharUpper(UName); // WP name
       // VENTA3 fix: If airfields name
       // was not uppercase it was not recon
-      
+
       _stprintf(NameA,TEXT("%s A/F"),Name);
       _stprintf(NameB,TEXT("%s AF"),Name);
       _stprintf(NameC,TEXT("%s A/D"),Name);
       _stprintf(NameD,TEXT("%s AD"),Name);
-      
+
       bool isHome=false;
       bool isPreferred=false;
-      
+
       _stprintf(TmpName,TEXT("%s=HOME"),UName);
       if ( (_tcscmp(Name, TmpName)==0) )  isHome=true;
       _stprintf(TmpName,TEXT("%s=PREF"),UName);
       if ( (_tcscmp(Name, TmpName)==0) )  isPreferred=true;
       _stprintf(TmpName,TEXT("%s=PREFERRED"),UName);
       if ( (_tcscmp(Name, TmpName)==0) )  isPreferred=true;
-      
+
       if ( isHome==true ) {
         wpcalc.Preferred = true;
         XCSoarInterface::SetSettingsComputer().HomeWaypoint = i;
@@ -159,7 +159,7 @@ public:
       if ( isPreferred==true ) {
         wpcalc.Preferred = true;
       }
-      
+
       if ((_tcscmp(UName, Name)==0)
           ||(_tcscmp(UName, NameA)==0)
           ||(_tcscmp(UName, NameB)==0)
@@ -168,7 +168,7 @@ public:
           || isHome || isPreferred )
       {
         // found
-        
+
         if (_tcslen(Details) >0 ) { // VENTA3 avoid setting empty details
           if (waypoint.Details) {
             free(waypoint.Details);

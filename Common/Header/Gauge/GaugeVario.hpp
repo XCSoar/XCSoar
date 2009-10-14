@@ -54,9 +54,9 @@ typedef struct{
   const Bitmap *lastBitMap;
 }DrawInfo_t;
 
-class GaugeVario: 
-  public BufferWindow, 
-  public InstrumentBlackboard 
+class GaugeVario:
+  public BufferWindow,
+  public InstrumentBlackboard
 {
 private:
   int xoffset;

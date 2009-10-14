@@ -85,7 +85,7 @@ void ThermalLocator::Reset() {
 }
 
 
-void ThermalLocator::AddPoint(const double t, 
+void ThermalLocator::AddPoint(const double t,
 			      const GEOPOINT &location,
                               const double w) {
   ScopeLock protect(mutexThermalLocator);
@@ -119,7 +119,7 @@ void ThermalLocator::AddPoint(const double t,
 
 void ThermalLocator::Update(const double t_0,
 			    const GEOPOINT &location_0,
-			    const double wind_speed, 
+			    const double wind_speed,
                             const double wind_bearing,
 			    const double trackbearing,
 			    GEOPOINT *Thermal_Location,
@@ -305,7 +305,7 @@ void ThermalLocator::EstimateThermalBase(const GEOPOINT Thermal_Location,
   terrain.Lock();
 
   GEOPOINT loc;
-  FindLatitudeLongitude(Thermal_Location, 
+  FindLatitudeLongitude(Thermal_Location,
                         wind_bearing,
                         wind_speed*dt,
                         &loc);
@@ -317,7 +317,7 @@ void ThermalLocator::EstimateThermalBase(const GEOPOINT Thermal_Location,
 
   for (double t = 0; t<=Tmax; t+= dt) {
 
-    FindLatitudeLongitude(Thermal_Location, 
+    FindLatitudeLongitude(Thermal_Location,
                           wind_bearing,
                           wind_speed*t, &loc);
 

@@ -245,13 +245,13 @@ bool CheckRectOverlap(RECT rc1, RECT rc2) {
 }
 
 
-void LatLon2Flat(const GEOPOINT &location, POINT &screen) 
+void LatLon2Flat(const GEOPOINT &location, POINT &screen)
 {
   screen.x = (location.Longitude*fastcosine(location.Latitude)*100);
   screen.y = (location.Latitude*100);
 }
 
-unsigned Distance(const POINT &p1, const POINT &p2) 
+unsigned Distance(const POINT &p1, const POINT &p2)
 {
   POINT d = p1;
   d.x-= p2.x;

@@ -137,7 +137,7 @@ void MapWindow::DrawWaypoints(Canvas &canvas)
       }
 
       if(irange || wpcalc.InTask || islandable || dowrite) {
-        draw_masked_bitmap(canvas, *wp_bmp, 
+        draw_masked_bitmap(canvas, *wp_bmp,
                            wpcalc.Screen.x, wpcalc.Screen.y,
                            20, 20);
       }
@@ -248,7 +248,7 @@ void MapWindow::ScanVisibilityWaypoints(rectObj *bounds_active) {
     WPCALC &wpcalc = way_points.set_calc(i);
 
     // TODO code: optimise waypoint visibility
-    wpcalc.FarVisible = 
+    wpcalc.FarVisible =
       way_point.Location.Longitude > bounds.minx &&
       way_point.Location.Longitude < bounds.maxx &&
       way_point.Location.Latitude > bounds.miny &&

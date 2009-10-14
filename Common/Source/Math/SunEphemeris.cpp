@@ -51,8 +51,8 @@ Copyright_License {
 #include <math.h>
 #include "Units.hpp"
 
-double 
-SunEphemeris::FNday (int y, int m, int d, float h) 
+double
+SunEphemeris::FNday (int y, int m, int d, float h)
 {
   long int luku = - 7 * (y + (m + 9)/12)/4 + 275*m/9 + d;
   // type casting necessary on PC DOS and TClite to avoid overflow
@@ -60,8 +60,8 @@ SunEphemeris::FNday (int y, int m, int d, float h)
   return (double)luku - 730531.5 + h/24.0;
 };
 
-double 
-SunEphemeris::FNrange (double x) 
+double
+SunEphemeris::FNrange (double x)
 {
   double b = 0.5*x / PI;
   double a = 2.0*PI * (b - (long)(b));
@@ -97,18 +97,18 @@ double SunEphemeris::f1(double lat, double declin) {
 //   Find the ecliptic longitude of the Sun
 
 double SunEphemeris::FNsun (double d) {
-  
+
   //   mean longitude of the Sun
-  
+
   L = FNrange(280.461 * DEG_TO_RAD + .9856474 * DEG_TO_RAD * d);
-  
+
   //   mean anomaly of the Sun
-  
+
   g = FNrange(357.528 * DEG_TO_RAD + .9856003 * DEG_TO_RAD * d);
-  
+
   //   Ecliptic longitude of the Sun
-  
-  return FNrange(L + 1.915 * DEG_TO_RAD * sin(g) 
+
+  return FNrange(L + 1.915 * DEG_TO_RAD * sin(g)
 		 + .02 * DEG_TO_RAD * sin(2 * g));
 };
 
@@ -128,34 +128,34 @@ int SunEphemeris::CalcSunTimes(const GEOPOINT &location,
   double d,lambda;
   double obliq,alpha,delta,LL,equation,ha,hb,twx;
   int y, m, day, h;
-  
+
   // testing
-  
+
   // JG Removed simulator conditional code, since GPS_INFO now set up
   // from system time.
-  
+
   m = GPS_INFO.Month;
   y = GPS_INFO.Year;
   day = GPS_INFO.Day;
   h = ((int)GPS_INFO.Time)/3600;
   h = (h % 24);
-    
+
   d = FNday(y, m, day, (float)h);
-  
+
   //   Use FNsun to find the ecliptic longitude of the
   //   Sun
-  
+
   lambda = FNsun(d);
-  
+
   //   Obliquity of the ecliptic
-  
+
   obliq = 23.439 * DEG_TO_RAD - .0000004 * DEG_TO_RAD * d;
-  
+
   //   Find the RA and DEC of the Sun
-  
+
   alpha = atan2(cos(obliq) * sin(lambda), cos(lambda));
   delta = asin(sin(obliq) * sin(lambda));
-  
+
   // Find the Equation of Time
   // in minutes
   // Correction suggested by David Smith
@@ -166,31 +166,31 @@ int SunEphemeris::CalcSunTimes(const GEOPOINT &location,
   hb = f1(location.Latitude,delta);
   twx = hb - ha;  // length of twilight in radians
   twx = 12.0*twx/PI;              // length of twilight in hours
-  
+
   //  printf("ha= %.2f   hb= %.2f \n",ha,hb);
-  
+
   // Conversion of angle to hours and minutes //
   daylen = RAD_TO_DEG*ha/7.5;
   if (daylen<0.0001) {daylen = 0.0;}
   // arctic winter     //
-  
+
   riset = 12.0 - 12.0 * ha/PI + tzone - location.Longitude/15.0 + equation/60.0;
   settm = 12.0 + 12.0 * ha/PI + tzone - location.Longitude/15.0 + equation/60.0;
   noont = riset + 12.0 * ha/PI;
   altmax = 90.0 + delta * RAD_TO_DEG - location.Latitude;
-  
+
   // Correction for S HS suggested by David Smith
   // to express altitude as degrees from the N horizon
   if (location.Latitude < delta * RAD_TO_DEG) {
     altmax = 180.0 - altmax;
   }
-  
+
   twam = riset - twx;     // morning twilight begin
   twpm = settm + twx;     // evening twilight end
-  
+
   if (riset > 24.0) riset-= 24.0;
   if (settm > 24.0) settm-= 24.0;
-  
+
   /*
       puts("\n Sunrise and set");
       puts("===============");

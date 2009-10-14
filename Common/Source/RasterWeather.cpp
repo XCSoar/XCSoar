@@ -158,10 +158,10 @@ void RasterWeather::Reload(const GEOPOINT &location) {
       _weather_time = max(_weather_time, half_hours);
       now = true;
     }
-    
+
     // limit values, for safety
     _weather_time = min(MAX_WEATHER_TIMES-1, _weather_time);
-    
+
     if (_weather_time == last_weather_time) {
       // no change, quick exit.
       if (now) {
@@ -179,7 +179,7 @@ void RasterWeather::Reload(const GEOPOINT &location) {
         _weather_time++;
       } else {
         found = true;
-        
+
         Close();
         if (bsratio) {
           LoadItem(0,TEXT("wstar_bsratio"));

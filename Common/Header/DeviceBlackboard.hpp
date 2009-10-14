@@ -45,7 +45,7 @@ Copyright_License {
 
 // the deviceblackboard is used as the global ground truth-state
 // since it is accessed quickly with only one mutex (flight)
-class DeviceBlackboard: 
+class DeviceBlackboard:
   public BaseBlackboard,
   public SettingsComputerBlackboard,
   public SettingsMapBlackboard,

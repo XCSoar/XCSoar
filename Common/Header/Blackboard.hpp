@@ -41,7 +41,7 @@ Copyright_License {
 #include "NMEA/Info.h"
 #include "NMEA/Derived.hpp"
 
-class BaseBlackboard 
+class BaseBlackboard
 {
   // all blackboards can be read as const
 public:

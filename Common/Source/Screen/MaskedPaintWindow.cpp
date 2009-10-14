@@ -87,10 +87,10 @@ MaskedPaintWindow::on_create()
 }
 
 
-void MaskedPaintWindow::draw_masked_bitmap(Canvas &canvas, const Bitmap &bitmap, 
-					   const int x, const int y, 
-					   const unsigned src_width, 
-					   const unsigned src_height, 
+void MaskedPaintWindow::draw_masked_bitmap(Canvas &canvas, const Bitmap &bitmap,
+					   const int x, const int y,
+					   const unsigned src_width,
+					   const unsigned src_height,
 					   bool centered)
 {
   int x_offset = centered? IBLSCALE(src_width)/2 : 0;
@@ -103,12 +103,12 @@ void MaskedPaintWindow::draw_masked_bitmap(Canvas &canvas, const Bitmap &bitmap,
   canvas.scale_or_and(x-x_offset, y-y_offset, mask_canvas, src_width, src_height);
 }
 
-void MaskedPaintWindow::draw_bitmap(Canvas &canvas, const Bitmap &bitmap, 
-				    const int x, const int y, 
-				    const unsigned src_x_offset, 
-				    const unsigned src_y_offset, 
-				    const unsigned src_width, 
-				    const unsigned src_height, 
+void MaskedPaintWindow::draw_bitmap(Canvas &canvas, const Bitmap &bitmap,
+				    const int x, const int y,
+				    const unsigned src_x_offset,
+				    const unsigned src_y_offset,
+				    const unsigned src_width,
+				    const unsigned src_height,
 				    bool centered)
 {
   int x_offset = centered? IBLSCALE(src_width)/2 : 0;
@@ -118,8 +118,8 @@ void MaskedPaintWindow::draw_bitmap(Canvas &canvas, const Bitmap &bitmap,
   mask_canvas.background_opaque();
   mask_canvas.set_text_color(Color(0xff,0xff, 0xff));
   mask_canvas.select(bitmap);
-  canvas.scale_copy(x-x_offset, y-y_offset, 
-		    mask_canvas, 
-		    src_x_offset, src_y_offset, 
+  canvas.scale_copy(x-x_offset, y-y_offset,
+		    mask_canvas,
+		    src_x_offset, src_y_offset,
 		    src_width, src_height);
 }

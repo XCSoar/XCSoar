@@ -41,9 +41,9 @@ Copyright_License {
 #include "UtilsSystem.hpp"
 
 
-void RasterMapRaw::SetFieldRounding(const double xr, 
+void RasterMapRaw::SetFieldRounding(const double xr,
                                     const double yr,
-                                    RasterRounding &rounding) 
+                                    RasterRounding &rounding)
 {
   RasterMap::SetFieldRounding(xr, yr, rounding);
   if (!isMapLoaded()) {

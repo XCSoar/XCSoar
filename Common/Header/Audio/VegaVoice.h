@@ -124,7 +124,7 @@ public:
 
 public:
 
-  bool Update(const NMEA_INFO *Basic, 
+  bool Update(const NMEA_INFO *Basic,
 	      const DERIVED_INFO *Calculated,
 	      const SETTINGS_COMPUTER &settings);
 
@@ -138,7 +138,7 @@ public:
 
   VegaVoiceMessage message[VV_MESSAGE_COUNT];
 
-  void Update(const NMEA_INFO *Basic, 
+  void Update(const NMEA_INFO *Basic,
 	      const DERIVED_INFO *Calculated,
 	      const SETTINGS_COMPUTER &settings);
 

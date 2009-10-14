@@ -183,19 +183,19 @@ BOOL VLDeclare(PDeviceDescriptor_t d, Declaration_t *decl){
 
   // start..
   switch(settings.StartType) {
-  case START_CIRCLE: 
+  case START_CIRCLE:
     vl.declaration.task.startpoint.oztyp = VLAPI_DATA::DCLWPT::OZTYP_CYLSKT;
     vl.declaration.task.startpoint.lw = min(1500,settings.StartRadius);
     vl.declaration.task.startpoint.rz = min(1500,settings.StartRadius);
     vl.declaration.task.startpoint.rs = 0;
     break;
-  case START_LINE: 
+  case START_LINE:
     vl.declaration.task.startpoint.oztyp = VLAPI_DATA::DCLWPT::OZTYP_LINE;
     vl.declaration.task.startpoint.lw = min(1500,settings.StartRadius*2);
     vl.declaration.task.startpoint.rs = 0;
     vl.declaration.task.startpoint.rz = 0;
     break;
-  case START_SECTOR: 
+  case START_SECTOR:
     vl.declaration.task.startpoint.oztyp = VLAPI_DATA::DCLWPT::OZTYP_CYLSKT;
     vl.declaration.task.startpoint.lw = min(1500,settings.StartRadius);
     vl.declaration.task.startpoint.rz = 0;
@@ -233,7 +233,7 @@ BOOL VLDeclare(PDeviceDescriptor_t d, Declaration_t *decl){
 
   // Finish
   switch(settings.FinishType) {
-  case FINISH_CIRCLE: 
+  case FINISH_CIRCLE:
     vl.declaration.task.finishpoint.oztyp = VLAPI_DATA::DCLWPT::OZTYP_CYLSKT;
     vl.declaration.task.finishpoint.lw = min(1500,settings.FinishRadius);
     vl.declaration.task.finishpoint.rz = min(1500,settings.FinishRadius);
@@ -245,7 +245,7 @@ BOOL VLDeclare(PDeviceDescriptor_t d, Declaration_t *decl){
     vl.declaration.task.finishpoint.rz = 0;
     vl.declaration.task.finishpoint.rs = 0;
     break;
-  case FINISH_SECTOR: 
+  case FINISH_SECTOR:
     vl.declaration.task.finishpoint.oztyp = VLAPI_DATA::DCLWPT::OZTYP_CYLSKT;
     vl.declaration.task.finishpoint.lw = min(1500,settings.FinishRadius);
     vl.declaration.task.finishpoint.rz = 0;

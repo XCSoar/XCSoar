@@ -84,8 +84,8 @@ private:
 public:
   // settings
   static bool VirtualKeys;
-  static bool EnableAutoBacklight; 
-  static bool EnableAutoSoundVolume; 
+  static bool EnableAutoBacklight;
+  static bool EnableAutoSoundVolume;
   static int  ActiveAlternate;
   static bool EnableAnimation;
 };
@@ -99,7 +99,7 @@ protected:
   static void DisplayModes();
   static void SendSettingsComputer();
   static void SendSettingsMap(const bool trigger_draw=false);
-public: 
+public:
   // ideally these should be protected
   static void on_key_None(int UpDown);
   static void on_key_WindSpeed(int UpDown);

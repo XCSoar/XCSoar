@@ -62,7 +62,7 @@ double MapWindow::DrawTrail(Canvas &canvas)
 {
   int i, snail_index;
   SNAIL_POINT P1;
-  POINT Screen; 
+  POINT Screen;
 
   double TrailFirstTime = -1;
 
@@ -311,8 +311,8 @@ MapWindow::DrawTrailFromTask(Canvas &canvas, const double TrailFirstTime)
 {
   static POINT ptin[MAXCLIPPOLYGON];
 
-  if((SettingsMap().TrailActive!=3) 
-     || (DisplayMode == dmCircling) 
+  if((SettingsMap().TrailActive!=3)
+     || (DisplayMode == dmCircling)
      || (TrailFirstTime<0))
     return;
 

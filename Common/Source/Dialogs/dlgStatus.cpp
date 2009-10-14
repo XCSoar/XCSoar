@@ -354,9 +354,9 @@ static void UpdateValuesFlight(void) {
   TCHAR sLongitude[16];
   TCHAR sLatitude[16];
 
-  Units::LongitudeToString(XCSoarInterface::Basic().Location.Longitude, 
+  Units::LongitudeToString(XCSoarInterface::Basic().Location.Longitude,
                            sLongitude, sizeof(sLongitude)-1);
-  Units::LatitudeToString(XCSoarInterface::Basic().Location.Latitude, 
+  Units::LatitudeToString(XCSoarInterface::Basic().Location.Latitude,
                           sLatitude, sizeof(sLatitude)-1);
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpLongitude"));
@@ -496,8 +496,8 @@ static void UpdateValuesRules(void) {
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpFinishAlt"));
   if (wp) {
-    double finish_min = 
-      FAIFinishHeight(XCSoarInterface::SettingsComputer(), 
+    double finish_min =
+      FAIFinishHeight(XCSoarInterface::SettingsComputer(),
 		      XCSoarInterface::Calculated(), -1);
     _stprintf(Temp, TEXT("%.0f %s"),
               finish_min*ALTITUDEMODIFY,

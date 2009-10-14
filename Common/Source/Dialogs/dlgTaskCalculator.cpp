@@ -342,7 +342,7 @@ void dlgTaskCalculatorShowModal(void){
   double MACCREADY_enter = GlidePolar::GetMacCready();
   double CRUISE_EFFICIENCY_enter = GlidePolar::GetCruiseEfficiency();
 
-  emc = EffectiveMacCready(&XCSoarInterface::Basic(), 
+  emc = EffectiveMacCready(&XCSoarInterface::Basic(),
 			   &XCSoarInterface::Calculated());
 
   cruise_efficiency = CRUISE_EFFICIENCY_enter;

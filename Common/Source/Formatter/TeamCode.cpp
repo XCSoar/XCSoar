@@ -62,7 +62,7 @@ const TCHAR *FormatterTeamCode::Render(int *color) {
 
 const TCHAR *FormatterDiffTeamBearing::Render(int *color) {
 
-  if(way_points.verify_index(SettingsComputer().TeamCodeRefWaypoint) 
+  if(way_points.verify_index(SettingsComputer().TeamCodeRefWaypoint)
      && SettingsComputer().TeammateCodeValid) {
     Valid = true;
 

@@ -36,23 +36,23 @@ Copyright_License {
 */
 #include "MapWindowBlackboard.hpp"
 
-void 
-MapWindowBlackboard::ReadSettingsComputer(const SETTINGS_COMPUTER 
-					      &settings) 
+void
+MapWindowBlackboard::ReadSettingsComputer(const SETTINGS_COMPUTER
+					      &settings)
 {
   memcpy(&settings_computer,&settings,sizeof(SETTINGS_COMPUTER));
 }
 
-void 
-MapWindowBlackboard::ReadSettingsMap(const SETTINGS_MAP 
-				     &settings) 
+void
+MapWindowBlackboard::ReadSettingsMap(const SETTINGS_MAP
+				     &settings)
 {
   memcpy(&settings_map,&settings,sizeof(SETTINGS_MAP));
 }
 
-void 
+void
 MapWindowBlackboard::ReadBlackboard(const NMEA_INFO &nmea_info,
-				    const DERIVED_INFO &derived_info) 
+				    const DERIVED_INFO &derived_info)
 {
   memcpy(&gps_info,&nmea_info,sizeof(NMEA_INFO));
   memcpy(&calculated_info,&derived_info,sizeof(DERIVED_INFO));

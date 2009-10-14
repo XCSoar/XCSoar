@@ -51,10 +51,10 @@ public:
   AATDistance();
   void Reset();
 
-  void AddPoint(const GEOPOINT &location, 
+  void AddPoint(const GEOPOINT &location,
                 const unsigned taskwaypoint,
 		const double aatclosedistance);
-  double DistanceCovered(const GEOPOINT &location, 
+  double DistanceCovered(const GEOPOINT &location,
                          const int taskwaypoint,
 			 const double aatclosedistance);
   double LegDistanceAchieved(int taskwaypoint);

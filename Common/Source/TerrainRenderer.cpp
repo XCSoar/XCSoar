@@ -308,7 +308,7 @@ TerrainRenderer::TerrainRenderer(RECT rc) {
   } else {
     // SAM: experiment with dtquant between 2 and 4
     dtquant = 2;
-    
+
     // on my PDA (600MhZ, 320x240 screen):
     // dtquant=2, latency=170 ms
     // dtquant=3, latency=136 ms
@@ -320,7 +320,7 @@ TerrainRenderer::TerrainRenderer(RECT rc) {
     oversampling = 1; // no point in oversampling, just let stretchblt
                       // do the scaling
   }
-  
+
   /*
     dtq  ovs  blur  res_x  res_y   sx  sy  terrain_loads  pixels
     1    1    0    320    240    320 240    76800        76800
@@ -329,20 +329,20 @@ TerrainRenderer::TerrainRenderer(RECT rc) {
     4    2    1    160    120     80  60     4800        19200
     5    3    2    192    144     64  48     3072        27648
   */
-  
+
   // scale dtquant so resolution is not too high on large displays
   dtquant *= InfoBoxLayout::scale;
-  
+
   int res_x = iround((rc.right-rc.left)*oversampling/dtquant);
   int res_y = iround((rc.bottom-rc.top)*oversampling/dtquant);
-  
+
   sbuf = new CSTScreenBuffer();
   sbuf->Create(res_x, res_y, Color(0xff,0xff,0xff));
   ixs = sbuf->GetCorrectedWidth()/oversampling;
   iys = sbuf->GetHeight()/oversampling;
-  
+
   hBuf = (unsigned short*)malloc(sizeof(unsigned short)*ixs*iys);
-  
+
   colorBuf = (BGRColor*)malloc(256*128*sizeof(BGRColor));
 
   rounding = new RasterRounding();
@@ -434,13 +434,13 @@ bool TerrainRenderer::SetMap(const GEOPOINT &loc) {
     color_ramp = &terrain_colors[TerrainRamp][0];
     break;
   }
-  
+
   if (is_terrain) {
     do_shading = true;
   } else {
     do_shading = false;
   }
-  
+
   if (DisplayMap)
     return true;
   else
@@ -454,40 +454,40 @@ void TerrainRenderer::Height(MapWindowProjection &map_projection, bool isBigZoom
   int Y0 = (unsigned int)(dtquant/2);
   int X1 = (unsigned int)(X0+dtquant*ixs);
   int Y1 = (unsigned int)(Y0+dtquant*iys);
-  
+
   unsigned int rfact=1;
-  
+
   if (isBigZoom && !terrain.IsDirectAccess()) {
     // first time displaying this data, so do it at half resolution
     // to avoid too many cache misses
     rfact = 2;
   }
-  
+
   double pixelDX, pixelDY;
-  
+
   x = (X0+X1)/2;
   y = (Y0+Y1)/2;
   map_projection.Screen2LonLat(x, y, middle);
   int dd = (int)lround(dtquant*rfact);
-  
+
   x = (X0+X1)/2+dd;
   y = (Y0+Y1)/2;
   map_projection.Screen2LonLat(x, y, G);
   double Xrounding = fabs(G.Longitude-middle.Longitude);
   pixelDX = Distance(middle, G);
-  
+
   x = (X0+X1)/2;
   y = (Y0+Y1)/2+dd;
   map_projection.Screen2LonLat(x, y, G);
   double Yrounding = fabs(G.Latitude-middle.Latitude);
   pixelDY = Distance(middle, G);
-  
+
   pixelsize_d = sqrt((pixelDX*pixelDX+pixelDY*pixelDY)/2.0);
-  
+
   // OK, ready to start loading height
-  
+
   DisplayMap->LockRead();
-    
+
   if (DisplayMap->IsDirectAccess()) {
     Xrounding=0;
     Yrounding=0;
@@ -495,18 +495,18 @@ void TerrainRenderer::Height(MapWindowProjection &map_projection, bool isBigZoom
 
   // set resolution
   rounding->Set(*DisplayMap, Xrounding, Yrounding);
-  
+
   epx = DisplayMap->GetEffectivePixelSize(&pixelsize_d,
 					  middle);
-  
+
   if (epx> min(ixs,iys)/4) {
     do_shading = false;
   }
-  
+
   POINT orig = map_projection.GetOrigScreen();
   RECT MapRectBig = map_projection.GetMapRectBig();
   RECT MapRect    = map_projection.GetMapRect();
-  
+
   rect_visible.left = max((long)MapRectBig.left,
 			  (long)(MapRect.left-(long)epx*dtquant))-orig.x;
   rect_visible.right = min((long)MapRectBig.right,
@@ -515,11 +515,11 @@ void TerrainRenderer::Height(MapWindowProjection &map_projection, bool isBigZoom
 			 (long)(MapRect.top-(long)epx*dtquant))-orig.y;
   rect_visible.bottom = min((long)MapRectBig.bottom,
 			    (long)(MapRect.bottom+(long)epx*dtquant))-orig.y;
-  
+
   FillHeightBuffer(map_projection, X0-orig.x, Y0-orig.y, X1-orig.x, Y1-orig.y);
-  
+
   DisplayMap->Unlock();
-  
+
   if (RASP.GetParameter()) {
     ScanSpotHeights(X0-orig.x, Y0-orig.y, X1-orig.x, Y1-orig.y);
   }
@@ -530,20 +530,20 @@ void TerrainRenderer::ScanSpotHeights(const int X0, const int Y0, const int X1, 
 #ifndef NDEBUG
   unsigned short* hBufTop = hBuf+ixs*iys;
 #endif
-  
+
   spot_max_pt.x = -1;
   spot_max_pt.y = -1;
   spot_min_pt.x = -1;
   spot_min_pt.y = -1;
   spot_max_val = -1;
   spot_min_val = 32767;
-  
+
   RECT rect_spot;
   rect_spot.left =   rect_visible.left+IBLSCALE(30);
   rect_spot.right =  rect_visible.right-IBLSCALE(30);
   rect_spot.top =    rect_visible.top+IBLSCALE(30);
   rect_spot.bottom = rect_visible.bottom-IBLSCALE(30);
-  
+
   for (int y = Y0; y<Y1; y+= dtquant) {
     for (int x = X0; x<X1; x+= dtquant, myhbuf++) {
       if ((x>= rect_spot.left) &&
@@ -551,7 +551,7 @@ void TerrainRenderer::ScanSpotHeights(const int X0, const int Y0, const int X1, 
 	  (y>= rect_spot.top) &&
 	  (y<= rect_spot.bottom)) {
 	assert(myhbuf<hBufTop);
-	
+
 	short val = *myhbuf;
 	if (val>spot_max_val) {
 	  spot_max_val = val;
@@ -569,26 +569,26 @@ void TerrainRenderer::ScanSpotHeights(const int X0, const int Y0, const int X1, 
 }
 
 void TerrainRenderer::FillHeightBuffer(MapWindowProjection &map_projection,
-				       const int X0, const int Y0, 
-				       const int X1, const int Y1) 
+				       const int X0, const int Y0,
+				       const int X1, const int Y1)
 {
   // fill the buffer
   unsigned short* myhbuf = hBuf;
 #ifndef NDEBUG
   unsigned short* hBufTop = hBuf+ixs*iys;
 #endif
-  
+
 #ifndef SLOW_STUFF
-  
+
   // This code is quickest but not so readable
-  
+
   const double PanLatitude =  map_projection.GetPanLocation().Latitude;
   const double PanLongitude = map_projection.GetPanLocation().Longitude;
   const double InvDrawScale = map_projection.GetScreenScaleToLonLat()/1024.0;
   const double DisplayAngle = map_projection.GetDisplayAngle();
   const int cost = ifastcosine(DisplayAngle);
   const int sint = ifastsine(DisplayAngle);
-  
+
   GEOPOINT gp;
   for (int y = Y0; y<Y1; y+= dtquant) {
     int ycost = y*cost;
@@ -618,7 +618,7 @@ void TerrainRenderer::FillHeightBuffer(MapWindowProjection &map_projection,
       *myhbuf++ = max(0, DisplayMap->GetField(Y, X, *rounding));
     }
   }
-  
+
 #endif
 }
 
@@ -639,13 +639,13 @@ void TerrainRenderer::Slope(const int sx, const int sy, const int sz) {
   const int hscale = max(1,(int)(pixelsize_d));
   const int tc = TerrainContrast;
   unsigned short *thBuf = hBuf;
-  
+
   const BGRColor* oColorBuf = colorBuf+64*256;
   BGRColor* imageBuf = sbuf->GetBuffer();
   if (!imageBuf) return;
-  
+
   short h;
-  
+
 #ifndef NDEBUG
   unsigned short* hBufTop = hBuf+cixs*ciys;
 #endif
@@ -657,14 +657,14 @@ void TerrainRenderer::Slope(const int sx, const int sy, const int sz) {
     bool ybottom=false;
     bool ytop=false;
     int p31, p32, p31s;
-    
+
     if (y<iysbottom) {
       p31= iepx;
       ybottom = true;
     } else {
       p31= itss_y;
     }
-    
+
     if (y >= (unsigned int) iepx) {
       p31+= iepx;
     } else {
@@ -672,17 +672,17 @@ void TerrainRenderer::Slope(const int sx, const int sy, const int sz) {
       ytop = true;
     }
     p31s = p31*hscale;
-    
+
     for (unsigned int x = 0 ; x<cixs; x++, thBuf++, imageBuf++) {
-      
+
       assert(thBuf< hBufTop);
-      
+
       if ((h = *thBuf)>0) {
 	int p20, p22;
-	
+
 	h = min(255, h>>height_scale);
 	// no need to calculate slope if undefined height or sea level
-	
+
 	if (do_shading) {
 	  if (x<ixsright) {
 	    p20= iepx;
@@ -695,7 +695,7 @@ void TerrainRenderer::Slope(const int sx, const int sy, const int sz) {
 	    assert(thBuf+itss_x< hBufTop);
 	    assert(thBuf+itss_x>= hBuf);
 	  }
-	  
+
 	  if (x >= (unsigned int)iepx) {
 	    p20+= iepx;
 	    p22-= *(thBuf-iepx);
@@ -705,7 +705,7 @@ void TerrainRenderer::Slope(const int sx, const int sy, const int sz) {
 	    p22-= *(thBuf-x);
 	    assert(thBuf-x>= hBuf);
 	  }
-	  
+
 	  if (ybottom) {
 	    p32 = *(thBuf+ixsepx);
 	    assert(thBuf+ixsepx<hBufTop);
@@ -720,12 +720,12 @@ void TerrainRenderer::Slope(const int sx, const int sy, const int sz) {
 	    p32 -= *(thBuf-ixsepx);
 	    assert(thBuf-ixsepx>=hBuf);
 	  }
-	  
+
 	  if ((p22==0) && (p32==0)) {
-	    
+
 	    // slope is zero, so just look up the color
 	    *imageBuf = oColorBuf[h];
-	    
+
 	  } else {
 
 	    // p20 and p31 are never 0... so only p22 or p32 can be zero
@@ -734,7 +734,7 @@ void TerrainRenderer::Slope(const int sx, const int sy, const int sz) {
 	    int dd0 = p22*p31;
 	    int dd1 = p20*p32;
 	    int dd2 = p20*p31s;
-	    
+
 	    while (dd2>512) {
 	      // prevent overflow of magnitude calculation
 	      dd0 /= 2;
@@ -769,7 +769,7 @@ void TerrainRenderer::ColorTable() {
     return;
   }
   lastColorRamp = color_ramp;
-  
+
   for (int i=0; i<256; i++) {
     for (int mag= -64; mag<64; mag++) {
       BYTE r, g, b;
@@ -808,10 +808,10 @@ void TerrainRenderer::Draw(Canvas &canvas, RECT rc) {
 }
 
 
-bool TerrainRenderer::Draw(Canvas &canvas, 
+bool TerrainRenderer::Draw(Canvas &canvas,
 			   MapWindowProjection &map_projection,
 			   const double sunazimuth, const double sunelevation,
-			   const GEOPOINT &loc, 
+			   const GEOPOINT &loc,
 			   const bool isBigZoom)
 {
   if (!SetMap(loc)) {

@@ -587,7 +587,7 @@ long Chart::screenS(double s) {
 }
 
 
-void Chart::DrawArrow(const double x, const double y, 
+void Chart::DrawArrow(const double x, const double y,
 		      const double mag, const double angle,
 		      const int Style) {
   POINT wv[2];
@@ -595,7 +595,7 @@ void Chart::DrawArrow(const double x, const double y,
 
   wv[0].x = screenX(x);
   wv[0].y = screenY(y);
-  
+
   dX = mag;
   dY = 0;
   rotate(dX,dY,angle);
@@ -614,6 +614,6 @@ void Chart::DrawArrow(const double x, const double y,
   dY = 3;
   rotate(dX,dY,angle);
   wv[1].x = (int)(wv[0].x + dX);
-  wv[1].y = (int)(wv[0].y + dY);  
+  wv[1].y = (int)(wv[0].y + dY);
   StyleLine(wv[0], wv[1], Style);
 }

@@ -49,7 +49,7 @@ const TCHAR* gettext(const TCHAR* text);
 
 #if defined(WINDOWSPC) && !defined(NDEBUG) && defined(_MSC_VER)
 //#define DEBUG_TRANSLATIONS
-#pragma warning( disable : 4786 ) 
+#pragma warning( disable : 4786 )
 #endif
 
 void WriteMissingTranslations(void);

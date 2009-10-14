@@ -207,7 +207,7 @@ static void Update(void){
 
     TCHAR sFinished[20];
     double dt, score;
-    bool olcvalid; 
+    bool olcvalid;
     bool olcfinished;
 
     dt = glide_computer.GetOLC().getDt(XCSoarInterface::SettingsComputer());

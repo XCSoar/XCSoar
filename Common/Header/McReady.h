@@ -119,7 +119,7 @@ class GlidePolar {
 
  private:
   static double MACCREADY; // m/s
-  static double BUGS;   
+  static double BUGS;
   static double BALLAST;
   static void Lock();
   static void Unlock();

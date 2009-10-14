@@ -36,7 +36,7 @@ Copyright_License {
 */
 #include "MapProjectionBlackboard.hpp"
 
-void 
+void
 MapProjectionBlackboard::ReadMapProjection
 (const MapWindowProjection &map)
 {

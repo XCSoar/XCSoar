@@ -260,7 +260,7 @@ void GlidePolar::UpdatePolar(bool send,
   */
 
   if (send) {
-    /* JMW 
+    /* JMW
        should call GCE_POLAR_CHANGED
     devPutBallast(devA(), BALLAST);
     devPutBallast(devB(), BALLAST);

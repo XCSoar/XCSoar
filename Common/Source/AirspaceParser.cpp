@@ -1101,7 +1101,7 @@ static void CalculateSector(TCHAR *Text)
 
     //	  if (bFillMode)	// Trig calcs not needed on first pass
     {
-      FindLatitudeLongitude(c, 
+      FindLatitudeLongitude(c,
                             StartBearing, Radius,
                             &TempPoint);
     }

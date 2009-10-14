@@ -50,18 +50,18 @@ public:
 
   void RefreshTask(const SETTINGS_COMPUTER &settings_computer);
 
-  void ReplaceWaypoint(const int index, 
+  void ReplaceWaypoint(const int index,
                                const SETTINGS_COMPUTER &settings_computer);
-  void InsertWaypoint(const int index, 
+  void InsertWaypoint(const int index,
                               const SETTINGS_COMPUTER &settings_computer,
                               bool append=false);
-  void SwapWaypoint(const int index, 
+  void SwapWaypoint(const int index,
                             const SETTINGS_COMPUTER &settings_computer);
-  void RemoveWaypoint(const int index, 
+  void RemoveWaypoint(const int index,
                               const SETTINGS_COMPUTER &settings_computer);
-  void RemoveTaskPoint(const int index, 
+  void RemoveTaskPoint(const int index,
                                const SETTINGS_COMPUTER &settings_computer);
-  void FlyDirectTo(const int index, 
+  void FlyDirectTo(const int index,
                            const SETTINGS_COMPUTER &settings_computer);
 
   void advanceTaskPoint(const SETTINGS_COMPUTER &settings_computer);

@@ -58,7 +58,7 @@ GlideComputerStats::GlideComputerStats():
 
 void GlideComputerStats::ResetFlight(const bool full)
 {
-  FastLogNum = 0; 
+  FastLogNum = 0;
   if (full) {
     flightstats.Reset();
   }
@@ -128,7 +128,7 @@ bool GlideComputerStats::DoLogging() {
 }
 
 
-double GlideComputerStats::GetAverageThermal() 
+double GlideComputerStats::GetAverageThermal()
 {
   double mc_current;
 
@@ -139,12 +139,12 @@ double GlideComputerStats::GetAverageThermal()
 
 
 
-void GlideComputerStats::SaveTaskSpeed(double val) 
+void GlideComputerStats::SaveTaskSpeed(double val)
 {
   flightstats.SaveTaskSpeed(val);
 }
 
-void GlideComputerStats::SetLegStart() 
+void GlideComputerStats::SetLegStart()
 {
   flightstats.SetLegStart(task.getActiveIndex(), Basic().Time);
 }

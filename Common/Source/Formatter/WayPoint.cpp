@@ -88,7 +88,7 @@ const TCHAR *FormatterWaypoint::Render(int *color) {
 const TCHAR *FormatterAlternate::RenderTitle(int *color) {
   if(way_points.verify_index(ActiveAlternate)) {
     const WAYPOINT &way_point = way_points.get(ActiveAlternate);
-    
+
     if ( SettingsMap().DisplayTextType == DISPLAYFIRSTTHREE)
     {
       _tcsncpy(Text, way_point.Name,3);
@@ -147,7 +147,7 @@ FormatterAlternate::Render(int *color)
     }
 
     Value = wpcalc.GR;
-    
+
     _stprintf(Text,Format,Value);
   } else {
     Valid = false;
@@ -160,14 +160,14 @@ FormatterAlternate::Render(int *color)
 void FormatterAlternate::AssignValue(int i) {
   switch (i) {
   case 67:
-    if (!SettingsComputer().EnableAlternate1) { 
+    if (!SettingsComputer().EnableAlternate1) {
       // first run, activate calculations
       SetSettingsComputer().EnableAlternate1 = true;
       Value=INVALID_GR;
     } else {
-      if ( way_points.verify_index(SettingsComputer().Alternate1) ) 
+      if ( way_points.verify_index(SettingsComputer().Alternate1) )
         Value = way_points.get_calc(SettingsComputer().Alternate1).GR;
-      else 
+      else
         Value=INVALID_GR;
     }
     break;
@@ -181,13 +181,13 @@ void FormatterAlternate::AssignValue(int i) {
       SetSettingsComputer().EnableAlternate2 = true;
       Value=INVALID_GR;
     } else {
-      if ( way_points.verify_index(SettingsComputer().Alternate2) ) 
+      if ( way_points.verify_index(SettingsComputer().Alternate2) )
         Value = way_points.get_calc(SettingsComputer().Alternate2).GR;
       else Value=INVALID_GR;
      }
     break;
   case 69:
-    if (!SettingsComputer().EnableBestAlternate) { 
+    if (!SettingsComputer().EnableBestAlternate) {
       // first run, waiting for slowcalculation loop
       SetSettingsComputer().EnableBestAlternate = true;	  // activate it
       Value=INVALID_GR;

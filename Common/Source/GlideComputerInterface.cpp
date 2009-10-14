@@ -60,7 +60,7 @@ void GlideComputer::AnnounceWayPointSwitch(bool do_advance) {
              Units::GetTaskSpeedName());
 
     TCHAR TempAll[120];
-    _stprintf(TempAll, TEXT("\r\nAltitude: %s\r\nSpeed:%s\r\nTime: %s"), 
+    _stprintf(TempAll, TEXT("\r\nAltitude: %s\r\nSpeed:%s\r\nTime: %s"),
           TempAlt, TempSpeed, TempTime);
     Message::AddMessage(TEXT("Task Start"), TempAll);
 

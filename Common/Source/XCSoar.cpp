@@ -57,7 +57,7 @@ Copyright_License {
 ///////////////////////////////////////////////////////////////////////////////
 
 // Main message loop
-WPARAM WindowsMessageLoop(HINSTANCE hInstance) 
+WPARAM WindowsMessageLoop(HINSTANCE hInstance)
 {
   HACCEL hAccelTable = LoadAccelerators(hInstance, (LPCTSTR)IDC_XCSOAR);
   MSG msg;

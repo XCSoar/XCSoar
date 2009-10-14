@@ -49,8 +49,8 @@ Copyright_License {
 
 DeviceBlackboard device_blackboard;
 
-void 
-DeviceBlackboard::Initialise() 
+void
+DeviceBlackboard::Initialise()
 {
   ScopeLock protect(mutexBlackboard);
 
@@ -91,9 +91,9 @@ DeviceBlackboard::Initialise()
 #endif
 }
 
-void 
+void
 DeviceBlackboard::SetStartupLocation(const GEOPOINT &loc,
-				     const double alt) 
+				     const double alt)
 {
   ScopeLock protect(mutexBlackboard);
   SetBasic().Location = loc;
@@ -101,10 +101,10 @@ DeviceBlackboard::SetStartupLocation(const GEOPOINT &loc,
 }
 
 // used by replay logger
-void 
+void
 DeviceBlackboard::SetLocation(const GEOPOINT &loc,
 			      const double speed, const double bearing,
-			      const double alt, const double baroalt, const double t) 
+			      const double alt, const double baroalt, const double t)
 {
   ScopeLock protect(mutexBlackboard);
   SetBasic().Location = loc;
@@ -127,7 +127,7 @@ void DeviceBlackboard::StopReplay() {
 //////////////////
 
 
-void 
+void
 DeviceBlackboard::SetNAVWarning(bool val)
 {
   ScopeLock protect(mutexBlackboard);
@@ -167,8 +167,8 @@ DeviceBlackboard::ProcessSimulation()
 {
   ScopeLock protect(mutexBlackboard);
   SetNAVWarning(false);
-  FindLatitudeLongitude(Basic().Location, 
-			Basic().TrackBearing, 
+  FindLatitudeLongitude(Basic().Location,
+			Basic().TrackBearing,
 			Basic().Speed*1.0,
 			&SetBasic().Location);
   SetBasic().Time+= 1.0;
@@ -209,27 +209,27 @@ DeviceBlackboard::SetAltitude(double val)
   SetBasic().BaroAltitude = val;
 }
 
-void 
+void
 DeviceBlackboard::ReadBlackboard(const DERIVED_INFO &derived_info)
 {
   memcpy(&calculated_info,&derived_info,sizeof(DERIVED_INFO));
 }
 
-void 
-DeviceBlackboard::ReadSettingsComputer(const SETTINGS_COMPUTER 
-					      &settings) 
+void
+DeviceBlackboard::ReadSettingsComputer(const SETTINGS_COMPUTER
+					      &settings)
 {
   memcpy(&settings_computer,&settings,sizeof(SETTINGS_COMPUTER));
 }
 
-void 
-DeviceBlackboard::ReadSettingsMap(const SETTINGS_MAP 
-				  &settings) 
+void
+DeviceBlackboard::ReadSettingsMap(const SETTINGS_MAP
+				  &settings)
 {
   memcpy(&settings_map,&settings,sizeof(SETTINGS_MAP));
 }
 
-void 
+void
 DeviceBlackboard::FLARM_RefreshSlots() {
   int i;
   bool present = false;
@@ -277,7 +277,7 @@ DeviceBlackboard::SetSystemTime() {
     sysTime.wSecond = (unsigned short)secs;
     sysTime.wMilliseconds = 0;
     sysTimeInitialised = (::SetSystemTime(&sysTime)==true);
-    
+
 #if defined(GNAV) && !defined(WINDOWSPC)
     TIME_ZONE_INFORMATION tzi;
     tzi.Bias = -SettingsComputer().UTCOffset/60;
@@ -287,7 +287,7 @@ DeviceBlackboard::SetSystemTime() {
     _tcscpy(tzi.DaylightName,TEXT("Altair"));
     tzi.DaylightDate.wMonth= 0; // disable daylight savings
     tzi.DaylightBias = 0;
-    
+
     SetTimeZoneInformation(&tzi);
 #endif
     sysTimeInitialised =true;
@@ -308,10 +308,10 @@ DeviceBlackboard::FLARM_ScanTraffic()
 
     for (int flarm_slot=0; flarm_slot<FLARM_MAX_TRAFFIC; flarm_slot++) {
       if (Basic().FLARM_Traffic[flarm_slot].ID>0) {
-       	
+
 	if (!_tcslen(Basic().FLARM_Traffic[flarm_slot].Name)) {
 	  // need to lookup name for this target
-	  const TCHAR *fname = 
+	  const TCHAR *fname =
 	    LookupFLARMDetails(Basic().FLARM_Traffic[flarm_slot].ID);
 	  if (fname) {
 	    _tcscpy(SetBasic().FLARM_Traffic[flarm_slot].Name,fname);

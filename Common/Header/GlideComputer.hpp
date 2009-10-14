@@ -49,7 +49,7 @@ Copyright_License {
 // do not replicate the large items or items that should be singletons
 // OR: just make them static?
 
-class GlideComputer: public 
+class GlideComputer: public
   GlideComputerAirData,
   GlideComputerTask,
   GlideComputerStats

@@ -51,7 +51,7 @@ void OpenGeoid(void) {
   HRSRC hResInfo;
   HGLOBAL hRes;
   int len;
-  hResInfo = FindResource (XCSoarInterface::hInst, 
+  hResInfo = FindResource (XCSoarInterface::hInst,
 			   TEXT("IDR_RASTER_EGM96S"), TEXT("RASTERDATA"));
 
   if (hResInfo == NULL) {

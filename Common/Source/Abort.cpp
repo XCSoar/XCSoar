@@ -54,7 +54,7 @@ Copyright_License {
 //////////////////////////////////////////////////////////////////
 
 
-int 
+int
 GlideComputerTask::CalculateWaypointApproxDistance(const POINT &screen,
                                                    const WAYPOINT &way_point) {
 
@@ -71,7 +71,7 @@ GlideComputerTask::CalculateWaypointArrivalAltitude(const WAYPOINT &way_point,
   double AltReqd;
   double wDistance, wBearing;
 
-  DistanceBearing(Basic().Location, way_point.Location, 
+  DistanceBearing(Basic().Location, way_point.Location,
                   &wDistance, &wBearing);
 
   AltReqd = GlidePolar::MacCreadyAltitude
@@ -204,7 +204,7 @@ GlideComputerTask::SortLandableWaypoints()
           {
 
             double wp_distance, wp_bearing;
-            DistanceBearing(Basic().Location , 
+            DistanceBearing(Basic().Location ,
                             way_point.Location,
                             &wp_distance, &wp_bearing);
 
@@ -249,7 +249,7 @@ GlideComputerTask::SortLandableWaypoints()
         found_active_waypoint = i;
       }
     }
-    if ((SettingsComputer().HomeWaypoint>=0) 
+    if ((SettingsComputer().HomeWaypoint>=0)
 	&& (SortedLandableIndex[i] == SettingsComputer().HomeWaypoint)) {
       found_home_waypoint = i;
     }
@@ -310,7 +310,7 @@ GlideComputerTask::SortLandableWaypoints()
   task.RefreshTask(SettingsComputer());
 
   if (new_closest_waypoint) {
-    if ((task.getWaypointIndex(0) != last_closest_waypoint) 
+    if ((task.getWaypointIndex(0) != last_closest_waypoint)
         && task.ValidTaskPoint(0)) {
       double last_wp_distance= 10000.0;
       if (last_closest_waypoint>=0) {

@@ -366,7 +366,7 @@ void AATDistance::ShiftTargetFromBehind(const GEOPOINT &location,
       task.FindInsideAATSectorRange(location,
                                     taskwaypoint, course_bearing,
                                     t_distance_lower);
-    
+
     task.setTaskPoint(taskwaypoint, tp);
     task.SetTargetModified();
   }
@@ -428,7 +428,7 @@ double AATDistance::DistanceCovered_inside(const GEOPOINT &location,
 }
 
 
-double AATDistance::distance_achieved(const int taskwaypoint, 
+double AATDistance::distance_achieved(const int taskwaypoint,
                                       const int jbest,
                                       const GEOPOINT &location) {
   double achieved = Dmax[taskwaypoint][jbest];

@@ -92,7 +92,7 @@ private:
   short TerrainRamp;
   short TerrainContrast;
   short TerrainBrightness;
-  
+
 private:
   void Height(MapWindowProjection &map_projection, bool isBigZoom);
   void ScanSpotHeights(const int X0, const int Y0, const int X1, const int Y1);
@@ -101,10 +101,10 @@ private:
   void Slope(const int sx, const int sy, const int sz);
   void ColorTable();
   void Draw(Canvas &canvas, RECT rc);
-  bool SetMap(const GEOPOINT &loc); 
+  bool SetMap(const GEOPOINT &loc);
 
  public:
-  void SetSettings(short _TerrainRamp, 
+  void SetSettings(short _TerrainRamp,
 		   short _TerrainContrast,
 		   short _TerrainBrightness) {
     TerrainRamp = _TerrainRamp;
@@ -113,7 +113,7 @@ private:
   }
 
  public:
-  bool Draw(Canvas &canvas, 
+  bool Draw(Canvas &canvas,
 	    MapWindowProjection &map_projection,
 	    const double sunazimuth, const double sunelevation,
 	    const GEOPOINT &loc,

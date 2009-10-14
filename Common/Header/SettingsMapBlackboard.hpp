@@ -40,11 +40,11 @@ Copyright_License {
 
 #include "SettingsUser.hpp"
 
-class SettingsMapBlackboard 
+class SettingsMapBlackboard
 {
 public:
   SettingsMapBlackboard();
-  const SETTINGS_MAP& SettingsMap() const 
+  const SETTINGS_MAP& SettingsMap() const
   { return settings_map; };
 protected:
   SETTINGS_MAP settings_map;

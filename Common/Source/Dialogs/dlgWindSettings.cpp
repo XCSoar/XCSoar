@@ -169,7 +169,7 @@ void dlgWindSettingsShowModal(void){
 
     SetValueRegistryOnChange(wf, TEXT("prpAutoWind"), szRegistryAutoWind,
 			     XCSoarInterface::SetSettingsComputer().AutoWindMode);
-    SetValueOnChange(wf, TEXT("prpTrailDrift"), 
+    SetValueOnChange(wf, TEXT("prpTrailDrift"),
 		     XCSoarInterface::SetSettingsMap().EnableTrailDrift);
 
     delete wf;

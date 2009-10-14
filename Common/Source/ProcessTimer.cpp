@@ -55,7 +55,7 @@ Copyright_License {
 #include "PeriodClock.hpp"
 #include "MainWindow.hpp"
 
-void 
+void
 ProcessTimer::HeapCompact()
 {
   static int iheapcompact = 0;
