@@ -137,6 +137,13 @@ double ProjectedDistance(GEOPOINT loc1, GEOPOINT loc2, GEOPOINT loc3)
   return tmpd;
 }
 
+/**
+ * Calculates the distance and bearing of two locations
+ * @param loc1 Location 1
+ * @param loc2 Location 2
+ * @param Distance Pointer to the distance variable
+ * @param Bearing Pointer to the bearing variable
+ */
 void DistanceBearing(GEOPOINT loc1, GEOPOINT loc2,
                      double *Distance, double *Bearing)
 {
@@ -310,6 +317,15 @@ double Bearing(double loc1.Latitude, double loc1.Longitude, double loc2.Latitude
 }
 */
 
+/**
+ * Calculates the location (loc_out) you would have, after being at
+ * a certain start location (loc) with a certain Bearing and going straight
+ * forward for a certain Distance.
+ * @param loc Current location
+ * @param Bearing Current bearing
+ * @param Distance Distance to predict
+ * @param loc_out Future location
+ */
 void FindLatitudeLongitude(GEOPOINT loc, double Bearing, double Distance,
                            GEOPOINT *loc_out)
 {
@@ -340,7 +356,12 @@ void FindLatitudeLongitude(GEOPOINT loc, double Bearing, double Distance,
   loc_out->Longitude = result;
 }
 
-
+/**
+ * Calculates the distance between two locations
+ * @param loc1 Location 1
+ * @param loc2 Location 2
+ * @return The distance
+ */
 double Distance(GEOPOINT loc1,
                 GEOPOINT loc2) {
   double retval;
@@ -348,6 +369,12 @@ double Distance(GEOPOINT loc1,
   return retval;
 };
 
+/**
+ * Calculates the bearing between two locations
+ * @param loc1 Location 1
+ * @param loc2 Location 2
+ * @return The bearing
+ */
 double Bearing(GEOPOINT loc1,
                GEOPOINT loc2) {
   double retval;
