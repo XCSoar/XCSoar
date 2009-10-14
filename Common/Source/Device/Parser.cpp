@@ -81,10 +81,17 @@ NMEAParser nmeaParser2;
 
 int NMEAParser::StartDay = -1;
 
+/**
+ * Constructor of the NMEAParser class
+ * @return NMEAParser object
+ */
 NMEAParser::NMEAParser() {
   _Reset();
 }
 
+/**
+ * Resets the NMEAParser
+ */
 void NMEAParser::_Reset(void) {
   nSatellites = 0;
   gpsValid = false;
@@ -98,13 +105,18 @@ void NMEAParser::_Reset(void) {
   LastTime = 0;
 }
 
+/**
+ * Resets both NMEAParsers (Port1 + Port2)
+ */
 void NMEAParser::Reset(void) {
   // clear status
   nmeaParser1._Reset();
   nmeaParser2._Reset();
 }
 
-
+/**
+ * Checks which port has valid GPS information and activates it
+ */
 void NMEAParser::UpdateMonitor(void)
 {
   // does anyone have GPS?
@@ -124,10 +136,15 @@ void NMEAParser::UpdateMonitor(void)
   }
 }
 
-
-bool NMEAParser::ParseNMEAString(int device,
-                                 const TCHAR *String, NMEA_INFO *GPS_INFO)
-{
+/**
+ * Redirects parsing of the String into GPS_INFO to the right device parser
+ * @param device 0 or 1, depending on the port used
+ * @param String NMEA string
+ * @param GPS_INFO GPS_INFO struct that will be updated
+ * @return Parsing success
+ */
+bool NMEAParser::ParseNMEAString(int device, const TCHAR *String,
+    NMEA_INFO *GPS_INFO) {
   switch (device) {
   case 0:
     return nmeaParser1.ParseNMEAString_Internal(String, GPS_INFO);
@@ -137,11 +154,16 @@ bool NMEAParser::ParseNMEAString(int device,
   return false;
 }
 
-
-/*
- * Copy a provided string into the supplied buffer, terminate on
- * the checksum separator, split into an array of parameters,
- * and return the number of parameters found.
+/**
+ * Copies a provided string into the supplied buffer, terminates on
+ * the checksum separator, splits into an array of parameters,
+ * and returns the number of parameters found.
+ * @param src Source string
+ * @param dst Buffer string
+ * @param arr Parameter array
+ * @param sz Parameter array size
+ * @see ValidateAndExtract
+ * @return Number of extracted parameters
  */
 size_t NMEAParser::ExtractParameters(const TCHAR *src, TCHAR *dst,
                                      const TCHAR **arr, size_t sz)
@@ -167,128 +189,142 @@ size_t NMEAParser::ExtractParameters(const TCHAR *src, TCHAR *dst,
   return i;
 }
 
-
-/*
+/**
  * Same as ExtractParameters, but also validate the length of
  * the string and the NMEA checksum.
+ * @param src Source string
+ * @param dst Buffer string
+ * @param dstsz Buffer size
+ * @param arr Parameter array
+ * @param arrsz Parameter array size
+ * @see ExtractParameters
+ * @return Number of extracted parameters
  */
-size_t NMEAParser::ValidateAndExtract(const TCHAR *src, TCHAR *dst, size_t dstsz,
-                                      const TCHAR **arr, size_t arrsz)
-{
+size_t NMEAParser::ValidateAndExtract(const TCHAR *src, TCHAR *dst,
+    size_t dstsz, const TCHAR **arr, size_t arrsz) {
+  // len = Length of the source string
   int len = _tcslen(src);
 
+  // if (len <= 6 characters  or  len >= buffer size) cancel method;
   if (len <= 6 || len >= (int) dstsz)
     return 0;
+
+  // if (checksum of the source string is incorrect) cancel method;
   if (!NMEAChecksum(src))
     return 0;
 
   return ExtractParameters(src, dst, arr, arrsz);
 }
 
-
-bool NMEAParser::ParseNMEAString_Internal(const TCHAR *String, NMEA_INFO *GPS_INFO)
-{
+/**
+ * Parses a provided NMEA String into a GPS_INFO struct
+ * @param String NMEA string
+ * @param GPS_INFO GPS_INFO output struct
+ * @return Parsing success
+ */
+bool NMEAParser::ParseNMEAString_Internal(const TCHAR *String,
+    NMEA_INFO *GPS_INFO) {
   TCHAR ctemp[MAX_NMEA_LEN];
   const TCHAR *params[MAX_NMEA_PARAMS];
   size_t n_params;
 
-  n_params = ValidateAndExtract(String, ctemp, MAX_NMEA_LEN, params, MAX_NMEA_PARAMS);
+  n_params = ValidateAndExtract(String, ctemp, MAX_NMEA_LEN, params,
+      MAX_NMEA_PARAMS);
+  // if (not enough parameters  or  first parameter invalid) cancel method;
   if (n_params < 1 || params[0][0] != '$')
     return false;
+
+  // if (logging enabled) log;
   if (EnableLogNMEA)
     LogNMEA(String);
 
-  if(params[0][1] == 'P')
-    {
-      //Proprietary String
-
-      if(_tcscmp(params[0] + 1,TEXT("PTAS1"))==0)
-        {
-          return PTAS1(&String[7], params + 1, n_params, GPS_INFO);
-        }
-
-      // FLARM sentences
-      if(_tcscmp(params[0] + 1,TEXT("PFLAA"))==0)
-        {
-          return PFLAA(&String[7], params + 1, n_params, GPS_INFO);
-        }
-
-      if(_tcscmp(params[0] + 1,TEXT("PFLAU"))==0)
-        {
-          return PFLAU(&String[7], params + 1, n_params, GPS_INFO);
-        }
-
-      if(_tcscmp(params[0] + 1,TEXT("PGRMZ"))==0)
-	{
-	  return RMZ(&String[7], params + 1, n_params, GPS_INFO);
-	}
-      return false;
+  // if (proprietary sentence) ...
+  if (params[0][1] == 'P') {
+    // Airspeed and vario sentence
+    if (_tcscmp(params[0] + 1, TEXT("PTAS1")) == 0) {
+      return PTAS1(&String[7], params + 1, n_params, GPS_INFO);
     }
 
-  if(_tcscmp(params[0] + 3,TEXT("GSA"))==0)
-    {
-      return GSA(&String[7], params + 1, n_params, GPS_INFO);
+    // FLARM sentences
+    if (_tcscmp(params[0] + 1, TEXT("PFLAA")) == 0) {
+      return PFLAA(&String[7], params + 1, n_params, GPS_INFO);
     }
-  if(_tcscmp(params[0] + 3,TEXT("GLL"))==0)
-    {
-      //    return GLL(&String[7], params + 1, n_params, GPS_INFO);
-      return false;
+
+    if (_tcscmp(params[0] + 1, TEXT("PFLAU")) == 0) {
+      return PFLAU(&String[7], params + 1, n_params, GPS_INFO);
     }
-  if(_tcscmp(params[0] + 3,TEXT("RMB"))==0)
-    {
-      //return RMB(&String[7], params + 1, n_params, GPS_INFO);
-          return false;
-      }
-  if(_tcscmp(params[0] + 3,TEXT("RMC"))==0)
-    {
-      return RMC(&String[7], params + 1, n_params, GPS_INFO);
+
+    // Garmin altitude sentence
+    if (_tcscmp(params[0] + 1, TEXT("PGRMZ")) == 0) {
+      return RMZ(&String[7], params + 1, n_params, GPS_INFO);
     }
-  if(_tcscmp(params[0] + 3,TEXT("GGA"))==0)
-    {
-      return GGA(&String[7], params + 1, n_params, GPS_INFO);
-    }
+    return false;
+  }
+
+  if (_tcscmp(params[0] + 3, TEXT("GSA")) == 0) {
+    return GSA(&String[7], params + 1, n_params, GPS_INFO);
+  }
+  if (_tcscmp(params[0] + 3, TEXT("GLL")) == 0) {
+    //    return GLL(&String[7], params + 1, n_params, GPS_INFO);
+    return false;
+  }
+  if (_tcscmp(params[0] + 3, TEXT("RMB")) == 0) {
+    //return RMB(&String[7], params + 1, n_params, GPS_INFO);
+    return false;
+  }
+  if (_tcscmp(params[0] + 3, TEXT("RMC")) == 0) {
+    return RMC(&String[7], params + 1, n_params, GPS_INFO);
+  }
+  if (_tcscmp(params[0] + 3, TEXT("GGA")) == 0) {
+    return GGA(&String[7], params + 1, n_params, GPS_INFO);
+  }
 
   return false;
 }
 
-void NMEAParser::ExtractParameter(const TCHAR *Source,
-				  TCHAR *Destination,
-				  int DesiredFieldNumber)
-{
+/**
+ * Extracts a certain parameter out of a NMEA string
+ * @param Source NMEA string
+ * @param Destination Buffer string
+ * @param DesiredFieldNumber Parameter id
+ * @see ExtractParameters
+ */
+void NMEAParser::ExtractParameter(const TCHAR *Source, TCHAR *Destination,
+    int DesiredFieldNumber) {
   int dest_index = 0;
   int CurrentFieldNumber = 0;
   int StringLength = _tcslen(Source);
   const TCHAR *sptr = Source;
-  const TCHAR *eptr = Source+StringLength;
+  const TCHAR *eptr = Source + StringLength;
 
-  if (!Destination) return;
+  if (!Destination)
+    return;
 
-  while( (CurrentFieldNumber < DesiredFieldNumber) && (sptr<eptr) )
-    {
-      if (*sptr == ',' || *sptr == '*' )
-        {
-          CurrentFieldNumber++;
-        }
-      ++sptr;
+  while ((CurrentFieldNumber < DesiredFieldNumber) && (sptr < eptr)) {
+    if (*sptr == ',' || *sptr == '*') {
+      CurrentFieldNumber++;
     }
+    ++sptr;
+  }
 
   Destination[0] = '\0'; // set to blank in case it's not found..
 
-  if ( CurrentFieldNumber == DesiredFieldNumber )
-    {
-      while( (sptr < eptr)    &&
-             (*sptr != ',') &&
-             (*sptr != '*') &&
-             (*sptr != '\0') )
-        {
-          Destination[dest_index] = *sptr;
-          ++sptr; ++dest_index;
-        }
-      Destination[dest_index] = '\0';
+  if (CurrentFieldNumber == DesiredFieldNumber) {
+    while ((sptr < eptr) && (*sptr != ',') && (*sptr != '*') && (*sptr != '\0')) {
+      Destination[dest_index] = *sptr;
+      ++sptr;
+      ++dest_index;
     }
+    Destination[dest_index] = '\0';
+  }
 }
 
-
+/**
+ * Converts a given double and 'E' and 'W' to the appropriate signed double
+ * @param in Input value
+ * @param EoW Input direction
+ * @return Signed value
+ */
 double EastOrWest(double in, TCHAR EoW)
 {
   if(EoW == 'W')
@@ -297,6 +333,12 @@ double EastOrWest(double in, TCHAR EoW)
     return in;
 }
 
+/**
+ * Converts a given double and 'N' and 'S' to the appropriate signed double
+ * @param in Input value
+ * @param EoW Input direction
+ * @return Signed value
+ */
 double NorthOrSouth(double in, TCHAR NoS)
 {
   if(NoS == 'S')
@@ -315,6 +357,11 @@ double LeftOrRight(double in, TCHAR LoR)
 }
 */
 
+/**
+ * Parses whether the given character (GPS status) should create a navigational warning
+ * @param c GPS status
+ * @return True if GPS fix not found or invalid
+ */
 int NAVWarn(TCHAR c)
 {
   if(c=='A')
@@ -323,6 +370,12 @@ int NAVWarn(TCHAR c)
     return true;
 }
 
+/**
+ * Parses an altitude into the metric system if necessary
+ * @param value Altitude value
+ * @param format Altitude unit
+ * @return Altitude in meters
+ */
 double NMEAParser::ParseAltitude(const TCHAR *value, const TCHAR *format)
 {
   double alt = StrToDouble(value, NULL);
@@ -333,6 +386,16 @@ double NMEAParser::ParseAltitude(const TCHAR *value, const TCHAR *format)
   return alt;
 }
 
+/**
+ * Converts the mixed lat/lon format to pure degrees
+ *
+ * Example:
+ * 3845.587
+ * => 38 + 45.587/60
+ * = 38.75978333 degrees
+ * @param mixed Mixed formated string
+ * @return Degrees
+ */
 double MixedFormatToDegrees(double mixed)
 {
   double mins, degrees;
@@ -343,22 +406,34 @@ double MixedFormatToDegrees(double mixed)
   return degrees+mins;
 }
 
+/**
+ * Calculates a seconds-based FixTime and corrects it
+ * in case over passing the UTC midnight mark
+ * @param FixTime NMEA format fix time (HHMMSS)
+ * @param GPS_INFO GPS_INFO struct to parse into
+ * @return Seconds-based FixTime
+ */
 double NMEAParser::TimeModify(double FixTime, NMEA_INFO* GPS_INFO)
 {
-  double hours, mins,secs;
+  double hours, mins, secs;
 
+  // Calculate Hour
   hours = FixTime / 10000;
   GPS_INFO->Hour = (int)hours;
 
+  // Calculate Minute
   mins = FixTime / 100;
   mins = mins - (GPS_INFO->Hour*100);
   GPS_INFO->Minute = (int)mins;
 
+  // Calculate Second
   secs = FixTime - (GPS_INFO->Hour*10000) - (GPS_INFO->Minute*100);
   GPS_INFO->Second = (int)secs;
 
+  // FixTime is now seconds-based instead of mixed format
   FixTime = secs + (GPS_INFO->Minute*60) + (GPS_INFO->Hour*3600);
 
+  // If (StartDay not yet set and available) set StartDate;
   if ((StartDay== -1) && (GPS_INFO->Day != 0)) {
     StartDay = GPS_INFO->Day;
   }
@@ -377,9 +452,15 @@ double NMEAParser::TimeModify(double FixTime, NMEA_INFO* GPS_INFO)
   return FixTime;
 }
 
-
+/**
+ * Checks whether time has advanced since last call and
+ * updates the GPS_info if necessary
+ * @param ThisTime Current time
+ * @param GPS_INFO GPS_INFO struct to update
+ * @return True if time has advanced since last call
+ */
 bool NMEAParser::TimeHasAdvanced(double ThisTime, NMEA_INFO *GPS_INFO) {
-  if(ThisTime< LastTime) {
+  if(ThisTime < LastTime) {
     LastTime = ThisTime;
     StartDay = -1; // reset search for the first day
     return false;
@@ -390,6 +471,30 @@ bool NMEAParser::TimeHasAdvanced(double ThisTime, NMEA_INFO *GPS_INFO) {
   }
 }
 
+/**
+ * Parses a GSA sentence
+ *
+ * $--GSA,a,a,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x.x,x.x,x.x*hh
+ *
+ * Field Number:
+ *  1) Selection mode
+ *	       M=Manual, forced to operate in 2D or 3D
+ *	       A=Automatic, 3D/2D
+ *  2) Mode (1 = no fix, 2 = 2D fix, 3 = 3D fix)
+ *  3) ID of 1st satellite used for fix
+ *  4) ID of 2nd satellite used for fix
+ *  ...
+ *  14) ID of 12th satellite used for fix
+ *  15) PDOP
+ *  16) HDOP
+ *  17) VDOP
+ *  18) checksum
+ * @param String Input string
+ * @param params Parameter array
+ * @param nparams Number of parameters
+ * @param GPS_INFO GPS_INFO struct to parse into
+ * @return Parsing success
+ */
 bool NMEAParser::GSA(const TCHAR *String,
                      const TCHAR **params, size_t nparams, NMEA_INFO *GPS_INFO)
 {
@@ -410,12 +515,30 @@ bool NMEAParser::GSA(const TCHAR *String,
     }
   }
 
-
   GSAAvailable = true;
   return true;
-
 }
 
+/**
+ * Parses a GLL sentence
+ *
+ * $--GLL,llll.ll,a,yyyyy.yy,a,hhmmss.ss,a,m,*hh
+ *
+ * Field Number:
+ *  1) Latitude
+ *  2) N or S (North or South)
+ *  3) Longitude
+ *  4) E or W (East or West)
+ *  5) Universal Time Coordinated (UTC)
+ *  6) Status A - Data Valid, V - Data Invalid
+ *  7) FAA mode indicator (NMEA 2.3 and later)
+ *  8) Checksum
+ * @param String Input string
+ * @param params Parameter array
+ * @param nparams Number of parameters
+ * @param GPS_INFO GPS_INFO struct to parse into
+ * @return Parsing success
+ */
 bool NMEAParser::GLL(const TCHAR *String,
                      const TCHAR **params, size_t nparams, NMEA_INFO *GPS_INFO)
 {
@@ -431,7 +554,6 @@ bool NMEAParser::GLL(const TCHAR *String,
 
   GPS_INFO->NAVWarning = !gpsValid;
 
-  ////
 
   double ThisTime = TimeModify(StrToDouble(params[4],NULL), GPS_INFO);
   if (!TimeHasAdvanced(ThisTime, GPS_INFO))
@@ -450,12 +572,39 @@ bool NMEAParser::GLL(const TCHAR *String,
     GPS_INFO->Location.Latitude = tmplat;
     GPS_INFO->Location.Longitude = tmplon;
   } else {
-
+	  // QUESTION TB: why conditional?
   }
   return true;
 }
 
-
+/**
+ * Parses a RMB sentence
+ * (not used anymore)
+ *
+ * $--RMB,A,x.x,a,c--c,c--c,llll.ll,a,yyyyy.yy,a,x.x,x.x,x.x,A,m,*hh
+ *
+ * Field Number:
+ *  1) Status, A= Active, V = Void
+ *  2) Cross Track error - nautical miles
+ *  3) Direction to Steer, Left or Right
+ *  4) TO Waypoint ID
+ *  5) FROM Waypoint ID
+ *  6) Destination Waypoint Latitude
+ *  7) N or S
+ *  8) Destination Waypoint Longitude
+ *  9) E or W
+ * 10) Range to destination in nautical miles
+ * 11) Bearing to destination in degrees True
+ * 12) Destination closing velocity in knots
+ * 13) Arrival Status, A = Arrival Circle Entered
+ * 14) FAA mode indicator (NMEA 2.3 and later)
+ * 15) Checksum
+ * @param String Input string
+ * @param params Parameter array
+ * @param nparams Number of parameters
+ * @param GPS_INFO GPS_INFO struct to parse into
+ * @return Parsing success
+ */
 bool NMEAParser::RMB(const TCHAR *String,
                      const TCHAR **params, size_t nparams, NMEA_INFO *GPS_INFO)
 {
@@ -463,6 +612,7 @@ bool NMEAParser::RMB(const TCHAR *String,
   (void)String;
   (void)params;
   (void)nparams;
+
   /* we calculate all this stuff now
   TCHAR ctemp[MAX_NMEA_LEN];
 
@@ -483,8 +633,31 @@ bool NMEAParser::RMB(const TCHAR *String,
   return true;
 }
 
-
-
+/**
+ * Parses a RMC sentence
+ *
+ * $--RMC,hhmmss.ss,A,llll.ll,a,yyyyy.yy,a,x.x,x.x,xxxx,x.x,a,m,*hh
+ *
+ * Field Number:
+ *  1) UTC Time
+ *  2) Status, V=Navigation receiver warning A=Valid
+ *  3) Latitude
+ *  4) N or S
+ *  5) Longitude
+ *  6) E or W
+ *  7) Speed over ground, knots
+ *  8) Track made good, degrees true
+ *  9) Date, ddmmyy
+ * 10) Magnetic Variation, degrees
+ * 11) E or W
+ * 12) FAA mode indicator (NMEA 2.3 and later)
+ * 13) Checksum
+ * @param String Input string
+ * @param params Parameter array
+ * @param nparams Number of parameters
+ * @param GPS_INFO GPS_INFO struct to parse into
+ * @return Parsing success
+ */
 bool NMEAParser::RMC(const TCHAR *String, const TCHAR **params, size_t nparams,
                      NMEA_INFO *GPS_INFO)
 {
@@ -551,21 +724,18 @@ bool NMEAParser::RMC(const TCHAR *String, const TCHAR **params, size_t nparams,
   }
 
   if (!GPS_INFO->Replay) {
-    if(RMZAvailable)
-      {
-	// JMW changed from Altitude to BaroAltitude
-	GPS_INFO->BaroAltitudeAvailable = true;
-	GPS_INFO->BaroAltitude = RMZAltitude;
-      }
-    else if(RMAAvailable)
-      {
-	// JMW changed from Altitude to BaroAltitude
-	GPS_INFO->BaroAltitudeAvailable = true;
-	GPS_INFO->BaroAltitude = RMAAltitude;
-      }
+    if (RMZAvailable) {
+      // JMW changed from Altitude to BaroAltitude
+      GPS_INFO->BaroAltitudeAvailable = true;
+      GPS_INFO->BaroAltitude = RMZAltitude;
+    } else if (RMAAvailable) {
+      // JMW changed from Altitude to BaroAltitude
+      GPS_INFO->BaroAltitudeAvailable = true;
+      GPS_INFO->BaroAltitude = RMAAltitude;
+    }
   }
   if (!GGAAvailable) {
-    // update SatInUse, some GPS receiver dont emmit GGA sentance
+    // update SatInUse, some GPS receiver don't emit GGA sentence
     if (!gpsValid) {
       GPS_INFO->SatellitesUsed = 0;
     } else {
@@ -580,6 +750,46 @@ bool NMEAParser::RMC(const TCHAR *String, const TCHAR **params, size_t nparams,
   return true;
 }
 
+/**
+ * Parses a GGA sentence
+ *
+ * $--GGA,hhmmss.ss,llll.ll,a,yyyyy.yy,a,x,xx,x.x,x.x,M,x.x,M,x.x,xxxx*hh
+ *
+ * Field Number:
+ *  1) Universal Time Coordinated (UTC)
+ *  2) Latitude
+ *  3) N or S (North or South)
+ *  4) Longitude
+ *  5) E or W (East or West)
+ *  6) GPS Quality Indicator,
+ *     0 - fix not available,
+ *     1 - GPS fix,
+ *     2 - Differential GPS fix
+ *     (values above 2 are 2.3 features)
+ *     3 = PPS fix
+ *     4 = Real Time Kinematic
+ *     5 = Float RTK
+ *     6 = estimated (dead reckoning)
+ *     7 = Manual input mode
+ *     8 = Simulation mode
+ *  7) Number of satellites in view, 00 - 12
+ *  8) Horizontal Dilution of precision (meters)
+ *  9) Antenna Altitude above/below mean-sea-level (geoid) (in meters)
+ * 10) Units of antenna altitude, meters
+ * 11) Geoidal separation, the difference between the WGS-84 earth
+ *     ellipsoid and mean-sea-level (geoid), "-" means mean-sea-level
+ *     below ellipsoid
+ * 12) Units of geoidal separation, meters
+ * 13) Age of differential GPS data, time in seconds since last SC104
+ *     type 1 or 9 update, null field when DGPS is not used
+ * 14) Differential reference station ID, 0000-1023
+ * 15) Checksum
+ * @param String Input string
+ * @param params Parameter array
+ * @param nparams Number of parameters
+ * @param GPS_INFO GPS_INFO struct to parse into
+ * @return Parsing success
+ */
 bool NMEAParser::GGA(const TCHAR *String, const TCHAR **params, size_t nparams,
                      NMEA_INFO *GPS_INFO)
 {
@@ -629,14 +839,13 @@ bool NMEAParser::GGA(const TCHAR *String, const TCHAR **params, size_t nparams,
       GPS_INFO->BaroAltitude = RMAAltitude;
     }
 
-// VENTA3 CONDOR ALTITUDE
+  // VENTA3 CONDOR ALTITUDE
   // "Altitude" should always be GPS Altitude.
   GPS_INFO->Altitude = ParseAltitude(params[8], params[9]);
 #ifdef FIVV
   GPS_INFO->Altitude += GPSAltitudeOffset;
 #endif
 
-  //
   double GeoidSeparation;
   if (_tcslen(params[10])>0) {
     // No real need to parse this value,
@@ -662,7 +871,14 @@ bool NMEAParser::GGA(const TCHAR *String, const TCHAR **params, size_t nparams,
   return true;
 }
 
-
+/**
+ * Parses a RMZ sentence
+ * @param String Input string
+ * @param params Parameter array
+ * @param nparams Number of parameters
+ * @param GPS_INFO GPS_INFO struct to parse into
+ * @return Parsing success
+ */
 bool NMEAParser::RMZ(const TCHAR *String, const TCHAR **params, size_t nparams,
                      NMEA_INFO *GPS_INFO)
 {
@@ -683,7 +899,31 @@ bool NMEAParser::RMZ(const TCHAR *String, const TCHAR **params, size_t nparams,
   return false;
 }
 
-
+/**
+ * Parses a RMA sentence
+ * (not in use and maybe faulty(?))
+ *
+ * $--RMA,A,llll.ll,a,yyyyy.yy,a,x.x,x.x,x.x,x.x,x.x,a*hh
+ *
+ * Field Number:
+ *  1) Blink Warning
+ *  2) Latitude
+ *  3) N or S
+ *  4) Longitude
+ *  5) E or W
+ *  6) Time Difference A, uS
+ *  7) Time Difference B, uS
+ *  8) Speed Over Ground, Knots
+ *  9) Track Made Good, degrees true
+ * 10) Magnetic Variation, degrees
+ * 11) E or W
+ * 12) Checksum
+ * @param String Input string
+ * @param params Parameter array
+ * @param nparams Number of parameters
+ * @param GPS_INFO GPS_INFO struct to parse into
+ * @return Parsing success
+ */
 bool NMEAParser::RMA(const TCHAR *String, const TCHAR **params, size_t nparams,
                      NMEA_INFO *GPS_INFO)
 {
@@ -705,7 +945,12 @@ bool NMEAParser::RMA(const TCHAR *String, const TCHAR **params, size_t nparams,
   return false;
 }
 
-
+/**
+ * Calculates the checksum of the provided NMEA string and
+ * compares it to the provided checksum
+ * @param String NMEA string
+ * @return True if checksum correct
+ */
 bool NMEAParser::NMEAChecksum(const TCHAR *String)
 {
   unsigned char CalcCheckSum = 0;
@@ -751,10 +996,14 @@ bool NMEAParser::NMEAChecksum(const TCHAR *String)
     return false;
 }
 
-//////
-
-
-
+/**
+ * Parses a PTAS1 sentence
+ * @param String Input string
+ * @param params Parameter array
+ * @param nparams Number of parameters
+ * @param GPS_INFO GPS_INFO struct to parse into
+ * @return Parsing success
+ */
 bool NMEAParser::PTAS1(const TCHAR *String,
                        const TCHAR **params, size_t nparams,
                        NMEA_INFO *GPS_INFO)
@@ -784,7 +1033,15 @@ bool NMEAParser::PTAS1(const TCHAR *String,
 static double FLARM_NorthingToLatitude = 0.0;
 static double FLARM_EastingToLongitude = 0.0;
 
-
+/**
+ * Parses a PFLAU sentence
+ * @param String Input string
+ * @param params Parameter array
+ * @param nparams Number of parameters
+ * @param GPS_INFO GPS_INFO struct to parse into
+ * @return Parsing success
+ * @see http://flarm.com/support/manual/FLARM_DataportManual_v4.06E.pdf
+ */
 bool NMEAParser::PFLAU(const TCHAR *String,
                        const TCHAR **params, size_t nparams,
                        NMEA_INFO *GPS_INFO)
@@ -815,10 +1072,10 @@ bool NMEAParser::PFLAU(const TCHAR *String,
 
   _stscanf(String,
 	  TEXT("%hu,%hu,%hu,%hu"),
-	  &GPS_INFO->FLARM_RX, // number of received FLARM devices
-	  &GPS_INFO->FLARM_TX, // Transmit status
-	  &GPS_INFO->FLARM_GPS, // GPS status
-	  &GPS_INFO->FLARM_AlarmLevel); // Alarm level of FLARM (0-3)
+	  &GPS_INFO->FLARM_RX,
+	  &GPS_INFO->FLARM_TX,
+	  &GPS_INFO->FLARM_GPS,
+	  &GPS_INFO->FLARM_AlarmLevel);
 
   // process flarm updates
 
@@ -837,7 +1094,12 @@ bool NMEAParser::PFLAU(const TCHAR *String,
   return false;
 }
 
-
+/**
+ * Finds existing or new slot of given FLARM id in FLARM_Traffic array
+ * @param GPS_INFO Pointer to the basic GPS info struct
+ * @param Id FLARM id
+ * @return Existing or new slot, -1 if buffer is full
+ */
 int FLARM_FindSlot(NMEA_INFO *GPS_INFO, long Id)
 {
   int i;
@@ -863,8 +1125,15 @@ int FLARM_FindSlot(NMEA_INFO *GPS_INFO, long Id)
   return -1;
 }
 
-
-
+/**
+ * Parses a PFLAA sentence
+ * @param String Input string
+ * @param params Parameter array
+ * @param nparams Number of parameters
+ * @param GPS_INFO GPS_INFO struct to parse into
+ * @return Parsing success
+ * @see http://flarm.com/support/manual/FLARM_DataportManual_v4.06E.pdf
+ */
 bool NMEAParser::PFLAA(const TCHAR *String,
                        const TCHAR **params, size_t nparams,
                        NMEA_INFO *GPS_INFO)
@@ -876,7 +1145,7 @@ bool NMEAParser::PFLAA(const TCHAR *String,
   // 5 id, 6 digit hex
   long ID;
   _stscanf(params[5],TEXT("%lx"), &ID);
-//  unsigned long uID = ID;
+  //  unsigned long uID = ID;
 
   flarm_slot = FLARM_FindSlot(GPS_INFO, ID);
   if (flarm_slot<0) {
@@ -921,12 +1190,12 @@ bool NMEAParser::PFLAA(const TCHAR *String,
 				 GPS_INFO->FLARM_Traffic[flarm_slot].Altitude);
 #endif
 
+  // QUESTION TB: never returns true?!
   return false;
 }
 
-//////
-
 void NMEAParser::TestRoutine(NMEA_INFO *GPS_INFO) {
+	// QUESTION TB: should be moved to test folder!?
 #ifndef NDEBUG
 #ifndef GNAV
   static int i=90;
@@ -947,7 +1216,7 @@ void NMEAParser::TestRoutine(NMEA_INFO *GPS_INFO) {
   QNH = FindQNH(altraw, 50.0);
   h = AltitudeToQNHAltitude(altraw);
 
-  ////
+  //
 
   i++;
 
@@ -971,11 +1240,14 @@ void NMEAParser::TestRoutine(NMEA_INFO *GPS_INFO) {
 }
 
 
-///
 
 bool EnableLogNMEA = false;
 HANDLE nmeaLogFile = INVALID_HANDLE_VALUE;
 
+/**
+ * Logs NMEA string to log file
+ * @param text
+ */
 void LogNMEA(const TCHAR* text) {
 
   if (!EnableLogNMEA) {
@@ -998,7 +1270,11 @@ void LogNMEA(const TCHAR* text) {
 	    (OVERLAPPED *)NULL);
 }
 
-
+/**
+ * Returns whether the given device is a FLARM unit
+ * @param device Device id (0 or 1)
+ * @return True if device is a FLARM unit
+ */
 bool NMEAParser::PortIsFlarm(int device) {
   switch (device) {
   case 0:
@@ -1009,4 +1285,3 @@ bool NMEAParser::PortIsFlarm(int device) {
     return false;
   };
 }
-

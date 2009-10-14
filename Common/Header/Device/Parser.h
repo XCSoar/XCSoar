@@ -100,10 +100,10 @@ class NMEAParser {
   bool WP1(const TCHAR *String, const TCHAR **, size_t, NMEA_INFO *GPS_INFO);
   bool WP2(const TCHAR *String, const TCHAR **, size_t, NMEA_INFO *GPS_INFO);
 
-  // Additional sentances
+  // Additional sentences
   bool PTAS1(const TCHAR *String, const TCHAR **, size_t, NMEA_INFO *GPS_INFO);  // RMN: Tasman instruments.  TAS, Vario, QNE-altitude
 
-  // FLARM sentances
+  // FLARM sentences
   bool PFLAU(const TCHAR *String, const TCHAR **, size_t, NMEA_INFO *GPS_INFO);
   bool PFLAA(const TCHAR *String, const TCHAR **, size_t, NMEA_INFO *GPS_INFO);
 };
