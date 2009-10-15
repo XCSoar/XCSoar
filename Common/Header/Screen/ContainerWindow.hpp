@@ -76,6 +76,11 @@ public:
     children.remove(&child);
   }
 
+  /**
+   * Locate a child window by its relative coordinates.
+   */
+  Window *child_at(int x, int y);
+
   void expose_child(const Window &child) {
     canvas.copy(child.get_left(), child.get_top(),
                 child.get_canvas().get_width(),

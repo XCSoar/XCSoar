@@ -71,6 +71,22 @@ ContainerWindow::on_paint(Canvas &canvas)
   }
 }
 
+
+Window *
+ContainerWindow::child_at(int x, int y)
+{
+  for (std::list<Window*>::const_reverse_iterator i = children.rbegin();
+       i != children.rend(); ++i) {
+    Window &child = **i;
+
+    if (x >= child.get_left() && x < child.get_right() &&
+        y >= child.get_top() && y < child.get_bottom())
+      return &child;
+  }
+
+  return NULL;
+}
+
 #else /* !ENABLE_SDL */
 
 LRESULT
