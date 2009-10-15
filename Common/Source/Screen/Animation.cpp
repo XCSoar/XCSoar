@@ -50,6 +50,7 @@ void SetSourceRectangle(RECT fromRect) {
 
 RECT WINAPI DrawWireRects(const bool enable, LPRECT lprcTo, UINT nMilliSecSpeed)
 {
+#ifndef ENABLE_SDL
   if (!enable)
     return AnimationRectangle;
 
@@ -108,4 +109,5 @@ RECT WINAPI DrawWireRects(const bool enable, LPRECT lprcTo, UINT nMilliSecSpeed)
   ::DeleteObject(hPen);
   ::ReleaseDC(NULL,hDC);
   return AnimationRectangle;
+#endif /* !ENABLE_SDL */
 }
