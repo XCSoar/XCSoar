@@ -137,6 +137,8 @@ static Font *FontMap[5] = {
   &InfoWindowFont
 };
 
+#ifdef WIN32
+
 static XMLNode
 xmlLoadFromResource(const TCHAR* lpName, LPCTSTR tag, XMLResults *pResults)
 {
@@ -267,6 +269,7 @@ static XMLNode xmlOpenResourceHelper(const TCHAR *lpszXML, LPCTSTR tag)
     return xnode;
 }
 
+#endif /* WIN32 */
 
 ///////////////////////////////////////
 
@@ -294,12 +297,14 @@ load_xml_file_or_resource(const TCHAR *name, const TCHAR* resource)
                                //fopen(<unexisting file>)
     xMainNode=XMLNode::openFileHelper(FileName ,TEXT("PMML"));
 
+#ifdef WIN32
   if (xMainNode.isEmpty()) {
     if (resource) {
       xMainNode =xmlOpenResourceHelper(resource,
                                        TEXT("PMML"));
     }
   }
+#endif /* WIN32 */
 
   return xMainNode;
 }
