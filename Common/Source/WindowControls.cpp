@@ -1641,8 +1641,8 @@ WndProperty::WndProperty(WindowControl *Parent,
   SetBackColor(GetOwner()->GetBackColor());
 
   if (InstCount == 0){
-    hBmpLeft32.load(MAKEINTRESOURCE(IDB_DLGBUTTONLEFT32));
-    hBmpRight32.load(MAKEINTRESOURCE(IDB_DLGBUTTONRIGHT32));
+    hBmpLeft32.load(IDB_DLGBUTTONLEFT32);
+    hBmpRight32.load(IDB_DLGBUTTONRIGHT32);
   }
   InstCount++;
 
