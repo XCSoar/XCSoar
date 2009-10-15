@@ -126,7 +126,6 @@ RUN_DIALOG_OBJS = \
 	$(SRC)/UtilsText.o \
 	$(SRC)/Dialogs/dlgHelp.o \
 	$(SRC)/zzip-$(TARGET).a \
-	$(SRC)/compat-$(TARGET).a \
 	$(SRC)/wcecompat/ts_string.o \
 	src/RunDialog.o
 ifeq ($(ENABLE_SDL),y)
