@@ -400,6 +400,9 @@ public:
   }
 
 protected:
+#ifdef ENABLE_SDL
+public:
+#endif /* ENABLE_SDL */
   /**
    * @return true on success, false if the window should not be
    * created
@@ -424,7 +427,6 @@ protected:
 #ifdef ENABLE_SDL
 
   virtual bool on_event(const SDL_Event &event);
-  friend class TopWindow;
 
 #else /* !ENABLE_SDL */
   /**
