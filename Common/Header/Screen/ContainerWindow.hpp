@@ -40,6 +40,10 @@ Copyright_License {
 
 #include "Screen/PaintWindow.hpp"
 
+#ifdef ENABLE_SDL
+#include <list>
+#endif /* !ENABLE_SDL */
+
 /**
  * A container for more #Window objects.  It is also derived from
  * #PaintWindow, because you might want to paint a border between the
@@ -47,15 +51,30 @@ Copyright_License {
  */
 class ContainerWindow : public PaintWindow {
 protected:
+#ifdef ENABLE_SDL
+  std::list<Window*> children;
+#endif /* !ENABLE_SDL */
+
+protected:
   virtual Brush *on_color(Window &window, Canvas &canvas);
 
-#ifndef ENABLE_SDL
+#ifdef ENABLE_SDL
+  virtual bool on_destroy();
+#else /* !ENABLE_SDL */
   virtual LRESULT on_message(HWND hWnd, UINT message,
                              WPARAM wParam, LPARAM lParam);
 #endif
 
 #ifdef ENABLE_SDL
 public:
+  void add_child(Window &child) {
+    children.push_back(&child);
+  }
+
+  void remove_child(Window &child) {
+    children.remove(&child);
+  }
+
   void expose_child(const Window &child) {
     canvas.copy(child.get_left(), child.get_top(),
                 child.get_canvas().get_width(),

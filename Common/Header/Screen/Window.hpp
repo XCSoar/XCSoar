@@ -102,6 +102,10 @@ public:
   }
 
 #ifdef ENABLE_SDL
+  void clear_parent() {
+    parent = NULL;
+  }
+
   int get_top() const {
     return top;
   }

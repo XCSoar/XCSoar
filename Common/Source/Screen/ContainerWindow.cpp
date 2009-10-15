@@ -43,7 +43,20 @@ ContainerWindow::on_color(Window &window, Canvas &canvas)
   return NULL;
 }
 
-#ifndef ENABLE_SDL
+#ifdef ENABLE_SDL
+
+bool
+ContainerWindow::on_destroy()
+{
+  for (std::list<Window*>::const_iterator i = children.begin();
+       i != children.end(); ++i)
+    (*i)->clear_parent();
+
+  PaintWindow::on_destroy();
+  return true;
+}
+
+#else /* !ENABLE_SDL */
 
 LRESULT
 ContainerWindow::on_message(HWND hWnd, UINT message,
