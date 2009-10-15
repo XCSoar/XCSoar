@@ -62,6 +62,7 @@ Bitmap::load(const TCHAR *name)
   reset();
 
 #ifdef ENABLE_SDL
+#ifdef WIN32
   HRSRC resource = FindResource(CommonInterface::hInst, name, RT_BITMAP);
   if (resource == NULL)
     return;
@@ -104,12 +105,9 @@ Bitmap::load(const TCHAR *name)
   surface = SDL_LoadBMP_RW(rw, 1);
   SDL_FreeRW(rw);
   free(header);
-
-  /*
-  char path[MAX_PATH];
-  unicode2ascii(name, path, sizeof(path));
-  surface = SDL_LoadBMP(path);
-  */
+#else
+  surface = ::SDL_LoadBMP(name);
+#endif
 #else /* !ENABLE_SDL */
   bitmap = LoadBitmap(XCSoarInterface::hInst, name);
 #endif /* !ENABLE_SDL */
