@@ -29,11 +29,7 @@
 #define __INCLUDE_XML_NODE__
 
 #include <stdlib.h>
-
-#if defined(WIN32) || defined(UNDER_CE)
-
 #include <tchar.h>
-#endif
 
 // Some common types for char set portable code
 #ifdef _UNICODE
@@ -63,10 +59,6 @@
 #ifndef TRUE
     #define TRUE 1
 #endif /* TRUE */
-
-#if !defined(WIN32) && !defined(UNDER_CE)
-#define _T(c) c
-#endif
 
 // Enumeration for XML parse errors.
 typedef enum XMLError
