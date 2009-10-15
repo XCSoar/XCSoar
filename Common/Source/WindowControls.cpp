@@ -2369,15 +2369,7 @@ void WndListFrame::DrawScrollBar(Canvas &canvas) {
     rc.top += d;
   }
 
-  unsigned long ctScroll =0;
-
   bool bTransparentUpDown = true;
-  bool bTransparentScroll = true;
-
-  if (bTransparentScroll)
-    ctScroll=SRCAND;  //Combines the colors of the source and destination rectangles by using the Boolean AND operator.
-  else
-    ctScroll=SRCCOPY;  //Copies the source rectangle directly to the destination rectangle.
 
   BitmapCanvas bitmap_canvas(canvas);
 
