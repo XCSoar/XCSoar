@@ -43,6 +43,14 @@ Copyright_License {
 #include <windows.h>
 #include <stdlib.h>
 
+#ifdef HAVE_POSIX
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <dirent.h>
+#include <unistd.h>
+#include <fnmatch.h>
+#endif
+
 bool IsDots(const TCHAR* str) {
   if(_tcscmp(str,TEXT(".")) && _tcscmp(str,TEXT(".."))) return false;
   return true;
@@ -68,6 +76,7 @@ void DataFieldFileReader::ScanDirectoryTop(const TCHAR* filter) {
   TCHAR buffer[MAX_PATH] = TEXT("\0");
   LocalPath(buffer);
   ScanDirectories(buffer,filter);
+#ifndef HAVE_POSIX
 #ifndef GNAV
 #if !defined(WINDOWSPC) && !defined(__MINGW32__)
 #ifndef OLDPPC
@@ -135,6 +144,7 @@ void DataFieldFileReader::ScanDirectoryTop(const TCHAR* filter) {
 #endif // MINGW
 #endif // NOT OLDPPC
 #endif // NOT ALTAIRSYNC
+#endif /* !HAVE_POSIX */
   Sort();
 
 }
@@ -142,6 +152,35 @@ void DataFieldFileReader::ScanDirectoryTop(const TCHAR* filter) {
 
 bool DataFieldFileReader::ScanDirectories(const TCHAR* sPath,
 					  const TCHAR* filter) {
+#ifdef HAVE_POSIX
+
+  DIR *dir = opendir(sPath);
+  if (dir == NULL)
+    return false;
+
+  TCHAR FileName[MAX_PATH];
+  _tcscpy(FileName, sPath);
+  size_t FileNameLength = _tcslen(FileName);
+  FileName[FileNameLength++] = '/';
+
+  struct dirent *ent;
+  while ((ent = readdir(dir)) != NULL) {
+    if (IsDots(ent->d_name))
+      continue;
+
+    _tcscpy(FileName + FileNameLength, ent->d_name);
+
+    struct stat st;
+    if (stat(FileName, &st) < 0)
+      continue;
+
+    if (S_ISDIR(st.st_mode))
+      ScanDirectories(FileName, filter);
+    else if (S_ISREG(st.st_mode) && fnmatch(filter, ent->d_name, 0))
+      addFile(ent->d_name, FileName);
+  }
+
+#else /* !HAVE_POSIX */
 
   HANDLE hFind;  // file handle
   WIN32_FIND_DATA FindFileData;
@@ -209,10 +248,12 @@ bool DataFieldFileReader::ScanDirectories(const TCHAR* sPath,
   }
   FindClose(hFind);  // closing file handle
 
+#endif /* !HAVE_POSIX */
+
   return true;
 }
 
-
+#ifndef HAVE_POSIX
 bool DataFieldFileReader::ScanFiles(const TCHAR* sPath,
 				    const TCHAR* filter) {
   HANDLE hFind;  // file handle
@@ -289,6 +330,7 @@ bool DataFieldFileReader::ScanFiles(const TCHAR* sPath,
 
   return true;
 }
+#endif /* !HAVE_POSIX */
 
 void DataFieldFileReader::Lookup(const TCHAR *Text) {
   int i=0;
@@ -313,7 +355,7 @@ DataFieldFileReader::GetPathFile(void) const
   return TEXT("\0");
 }
 
-
+#ifndef HAVE_POSIX /* we use fnmatch() on POSIX */
 bool DataFieldFileReader::checkFilter(const TCHAR *filename,
 				      const TCHAR *filter) {
   TCHAR *ptr;
@@ -345,7 +387,7 @@ bool DataFieldFileReader::checkFilter(const TCHAR *filename,
 
   return false;
 }
-
+#endif /* !HAVE_POSIX */
 
 void DataFieldFileReader::addFile(const TCHAR *Text,
 				  const TCHAR *PText) {
