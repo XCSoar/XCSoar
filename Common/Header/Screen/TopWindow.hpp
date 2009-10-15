@@ -95,7 +95,7 @@ public:
 
   void close() {
 #ifdef ENABLE_SDL
-    // XXX
+    on_close();
 #else /* ENABLE_SDL */
     ::SendMessage(hWnd, WM_CLOSE, 0, 0);
 #endif
