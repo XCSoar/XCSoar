@@ -108,11 +108,13 @@ PopupMessage::BlockRender(bool doblock)
 {
 }
 
+#ifndef ENABLE_SDL
 bool
 MapWindow::identify(HWND hWnd)
 {
   return false;
 }
+#endif /* !ENABLE_SDL */
 
 StatusMessageList::StatusMessageList() {}
 
@@ -142,6 +144,13 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   CommonInterface::hInst = hInstance;
 
   PaintWindow::register_class(hInstance);
+#else
+  const TCHAR *lpCmdLine = argv[1];
+
+  if (argc != 2) {
+    fprintf(stderr, "Usage: %s XMLFILE\n", argv[0]);
+    return 1;
+  }
 #endif
 
   TopWindow main_window;
