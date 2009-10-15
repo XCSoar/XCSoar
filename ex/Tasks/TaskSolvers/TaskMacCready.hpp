@@ -22,7 +22,8 @@ public:
     };
 
   GLIDE_RESULT glide_solution(const AIRCRAFT_STATE &aircraft);
-  void clearance_heights(const AIRCRAFT_STATE &);
+  GLIDE_RESULT glide_sink(const AIRCRAFT_STATE &aircraft,
+                          const double S);
   void print(std::ostream& f, const AIRCRAFT_STATE &aircraft) const;
 
   void set_mc(double mc) {
@@ -35,6 +36,7 @@ public:
     return gs[activeTaskPoint];
   };
 protected:
+  void clearance_heights(const AIRCRAFT_STATE &);
   virtual double get_min_height(const AIRCRAFT_STATE &aircraft) const = 0;
   virtual GLIDE_RESULT tp_solution(const unsigned i,
                                    const AIRCRAFT_STATE &aircraft, 
@@ -48,6 +50,9 @@ protected:
   int end;
   std::vector<GLIDE_RESULT> gs;
   MacCready msolv;
+  GLIDE_RESULT tp_sink(const unsigned i,
+                       const AIRCRAFT_STATE &aircraft, 
+                       const double S) const;
 };
 
 #endif

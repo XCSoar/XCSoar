@@ -70,6 +70,9 @@ public:
   GLIDE_RESULT glide_solution_remaining(const AIRCRAFT_STATE &, 
                                         const MacCready &mac,
                                         const double minH=0) const;
+  GLIDE_RESULT glide_solution_sink(const AIRCRAFT_STATE &, 
+                                   const MacCready &mac,
+                                   const double S) const;
   virtual void print(std::ostream& f) const;
 protected:
   const double Elevation;

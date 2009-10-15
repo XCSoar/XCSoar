@@ -30,6 +30,15 @@ public:
                            const GLIDE_STATE &task,
 			   const double V) const;
 
+  GLIDE_RESULT solve_glide(const AIRCRAFT_STATE &aircraft,
+                           const GLIDE_STATE &task,
+			   const double V,
+                           const double S) const;
+
+  GLIDE_RESULT solve_sink(const AIRCRAFT_STATE &aircraft,
+                          const GLIDE_STATE &task,
+                          const double S) const;
+
   void set_mc(double _mc);
 
   double get_mc() const {

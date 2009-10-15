@@ -150,6 +150,29 @@ GLIDE_RESULT MacCready::solve_glide(const AIRCRAFT_STATE &aircraft,
                                     const GLIDE_STATE &task,
                                     const double Vset) const
 {
+  const double S = SinkRate(Vset);
+  return solve_glide(aircraft, task, Vset, S);
+}
+
+GLIDE_RESULT MacCready::solve_sink(const AIRCRAFT_STATE &aircraft,
+                                   const GLIDE_STATE &task,
+                                   const double S) const
+{
+  const double h_offset = 1.0e6;
+  AIRCRAFT_STATE aircraft_virt = aircraft;
+  aircraft_virt.Altitude += h_offset;
+  GLIDE_RESULT res = solve_glide(aircraft_virt, task, VOpt, S);
+  res.AltitudeDifference = aircraft.Altitude
+    -res.HeightGlide-task.MinHeight;
+  return res;
+}
+
+
+GLIDE_RESULT MacCready::solve_glide(const AIRCRAFT_STATE &aircraft,
+                                    const GLIDE_STATE &task,
+                                    const double Vset,
+                                    const double S) const
+{
   // spend a lot of time in this function, so it should be quick!
 
   count_mc++;
@@ -187,7 +210,6 @@ GLIDE_RESULT MacCready::solve_glide(const AIRCRAFT_STATE &aircraft,
   }
 
   const double gamma = dh/task.Distance;
-  const double S = SinkRate(Vset);
 
   if (gamma*Vn+S>0) {
     if (gamma>0) {

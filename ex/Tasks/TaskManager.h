@@ -14,7 +14,11 @@ class TaskManager : public TaskInterface,
  public Serialisable
 {
 public:
-  TaskManager(): mode(MODE_ORDERED)
+  TaskManager(const TaskEvents &te): 
+    mode(MODE_ORDERED),
+    task_ordered(te),
+    task_goto(te),
+    task_abort(te)
   {};
 
     virtual void setActiveTaskPoint(unsigned);

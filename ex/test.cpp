@@ -18,6 +18,7 @@ void distance_counts() {
 }
 
 #include "Tasks/TaskManager.h"
+#include "Tasks/TaskEvents.hpp"
 
 #include "BaseTask/ConvexHull/GrahamScan.hpp"
 
@@ -111,7 +112,8 @@ int main() {
   ::InitSineTable();
 //  test_mc();
 
-  TaskManager test_task;
+  TaskEvents default_events;
+  TaskManager test_task(default_events);
 
   AIRCRAFT_STATE state, state_last;
   state.Location.Longitude=0.8;

@@ -3,11 +3,14 @@
 #define ABSTRACTTASK_H
 
 #include "TaskInterface.h"
+#include "TaskEvents.hpp"
 #include "TaskStats/TaskStats.hpp"
 
 class AbstractTask : TaskInterface {
 public:
-  AbstractTask(): activeTaskPoint(0) 
+  AbstractTask(const TaskEvents &te): 
+    activeTaskPoint(0),
+    task_events(te)
   {};
 
     unsigned getActiveTaskPointIndex();
@@ -22,8 +25,10 @@ public:
   virtual void report(const AIRCRAFT_STATE&);
 
 protected:
-  virtual bool update_sample(const AIRCRAFT_STATE &, const bool full_update) = 0;
-  virtual bool check_transitions(const AIRCRAFT_STATE &, const AIRCRAFT_STATE&) = 0;
+  virtual bool update_sample(const AIRCRAFT_STATE &, 
+                             const bool full_update) = 0;
+  virtual bool check_transitions(const AIRCRAFT_STATE &, 
+                                 const AIRCRAFT_STATE&) = 0;
   
   unsigned activeTaskPoint;
   TaskStats stats;
@@ -63,6 +68,9 @@ protected:
                                       DistanceRemainingStat &leg_remaining_effective,
                                       const double total_t_elapsed,
                                       const double leg_t_elapsed);
+
+protected:
+  TaskEvents task_events;
 
 private:
   void update_glide_solutions(const AIRCRAFT_STATE &state,

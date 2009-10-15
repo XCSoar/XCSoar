@@ -8,7 +8,9 @@
 
 class GotoTask : public AbstractTask {
 public:    
-  GotoTask(): tp(NULL) 
+  GotoTask(const TaskEvents &te): 
+    AbstractTask(te),
+    tp(NULL) 
   {};
 
     virtual TaskPoint* getActiveTaskPoint();

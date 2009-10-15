@@ -100,3 +100,31 @@ TaskMacCready::print(std::ostream &f, const AIRCRAFT_STATE &aircraft) const
   f << "\n";
 }
 
+
+GLIDE_RESULT 
+TaskMacCready::glide_sink(const AIRCRAFT_STATE &aircraft,
+                          const double S) 
+{
+  AIRCRAFT_STATE aircraft_predict = aircraft;
+  GLIDE_RESULT acc_gr;
+  for (int i=start; i<=end; i++) {
+    GLIDE_RESULT gr = tp_sink(i, aircraft_predict, S);
+
+    aircraft_predict.Altitude -= gr.HeightGlide;
+    if (i==start) {
+      acc_gr = gr;
+    } else {
+      acc_gr.AltitudeDifference = std::min(acc_gr.AltitudeDifference,
+                                           gr.AltitudeDifference);
+    }
+  }
+  return acc_gr;
+}
+
+GLIDE_RESULT 
+TaskMacCready::tp_sink(const unsigned i,
+                       const AIRCRAFT_STATE &aircraft, 
+                       const double S) const
+{
+  return tps[i]->glide_solution_sink(aircraft, msolv, S);
+}

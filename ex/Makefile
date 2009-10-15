@@ -92,6 +92,7 @@ OBJS	:=\
 	Tasks/OrderedTask.o \
 	Tasks/TaskInterface.o \
 	Tasks/TaskManager.o \
+	Tasks/TaskEvents.o \
 	Tasks/PathSolvers/TaskDijkstra.o \
 	Tasks/TaskSolvers/TaskMacCready.o \
 	Tasks/TaskSolvers/TaskMacCreadyTravelled.o \
@@ -100,6 +101,7 @@ OBJS	:=\
 	Tasks/TaskSolvers/TaskBestMc.o \
 	Tasks/TaskSolvers/TaskCruiseEfficiency.o \
 	Tasks/TaskSolvers/TaskMinTarget.o \
+	Tasks/TaskSolvers/TaskGlideRequired.o \
 	Tasks/TaskStats/TaskStats.o \
 	\
 	../xcsoar/Common/Source/Math/Geometry.o \

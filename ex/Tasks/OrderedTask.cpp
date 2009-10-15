@@ -13,6 +13,7 @@
 #include "TaskSolvers/TaskCruiseEfficiency.hpp"
 #include "TaskSolvers/TaskBestMc.hpp"
 #include "TaskSolvers/TaskMinTarget.hpp"
+#include "TaskSolvers/TaskGlideRequired.hpp"
 #include <assert.h>
 #include <fstream>
 
@@ -126,15 +127,16 @@ OrderedTask::check_transitions(const AIRCRAFT_STATE &state,
   
   for (int i=t_min; i<=t_max; i++) {
     if (tps[i]->transition_enter(state, state_last)) {
-      printf("  entered %d at %g\n", i, state.Time);
+      task_events.transition_enter(*tps[i]);
     }
     if (tps[i]->transition_exit(state, state_last)) {
-      printf("  exited %d at %g\n", i, state.Time);
+      task_events.transition_exit(*tps[i]);
       if (i+1<n_task) {
-        printf("  -> transition to sector %d\n", i+1);
         setActiveTaskPoint(i+1);
         ts->scan_active(tps[activeTaskPoint]);
-        
+
+        task_events.active_advanced(*tps[activeTaskPoint],i+1);
+
         // on sector exit, must update samples since start sector
         // exit transition clears samples
         full_update = true;
@@ -157,7 +159,14 @@ OrderedTask::update_idle(const AIRCRAFT_STATE& state)
 {
   double mc=2.0;
   // TODO get from above
-  calc_min_target(state, mc, 3600*5.0);
+  double p = calc_min_target(state, mc, 3600*5.0);
+
+  TaskGlideRequired bgr(tps, activeTaskPoint, state);
+  double S = bgr.search(mc);
+
+  (void)p;
+  (void)S;
+  
   return true;
 }
 
@@ -244,7 +253,8 @@ OrderedTask::~OrderedTask()
 // TODO: delete legs and turnpoints
 }
 
-OrderedTask::OrderedTask()
+OrderedTask::OrderedTask(const TaskEvents &te):
+  AbstractTask(te)
 {
   // TODO: default values in constructor
 

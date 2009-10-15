@@ -1,6 +1,7 @@
 #include "Tasks/AbortTask.h"
 
-AbortTask::AbortTask()
+AbortTask::AbortTask(const TaskEvents &te):
+  AbstractTask(te)
 {
 
 }
