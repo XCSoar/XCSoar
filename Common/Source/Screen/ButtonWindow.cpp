@@ -35,58 +35,66 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_BUTTON_WINDOW_HXX
-#define XCSOAR_SCREEN_BUTTON_WINDOW_HXX
+#include "Screen/ButtonWindow.hpp"
 
 #ifdef ENABLE_SDL
 
-#include "Screen/PaintWindow.hpp"
+#include "Screen/ContainerWindow.hpp"
+#include "Screen/Font.hpp"
 
-/**
- * A clickable button.
- */
-class ButtonWindow : public PaintWindow
+void
+ButtonWindow::set(ContainerWindow &parent, const TCHAR *text, unsigned id,
+                  int left, int top, unsigned width, unsigned height)
 {
-  const TCHAR *text;
-  unsigned id;
-  bool down;
-  Font font;
+  reset();
 
-public:
-  ButtonWindow():down(false) {}
-  ~ButtonWindow() { reset(); }
+  PaintWindow::set(&parent, left, top, width, height);
 
-public:
-  void set(ContainerWindow &parent, const TCHAR *text, unsigned id,
-           int left, int top, unsigned width, unsigned height);
-  void reset();
+  this->text = text;
+  this->id = id;
 
-protected:
-  virtual bool on_mouse_down(int x, int y);
-  virtual bool on_mouse_up(int x, int y);
-  virtual void on_paint(Canvas &canvas);
-};
+  // XXX hard coded path, relative to the "test" directory
+  font.set("../Common/Data/Fonts/DejaVuSansCondensed2.ttf", 12);
+}
 
-#else /* !ENABLE_SDL */
+void
+ButtonWindow::reset()
+{
+  PaintWindow::reset();
+}
 
-#include "Screen/Window.hpp"
+bool
+ButtonWindow::on_mouse_down(int x, int y)
+{
+  down = true;
+  invalidate();
+  return true;
+}
 
-#include <tchar.h>
+bool
+ButtonWindow::on_mouse_up(int x, int y)
+{
+  if (!down)
+    return true;
 
-/**
- * A clickable button.
- */
-class ButtonWindow : public Window {
-public:
-  void set(ContainerWindow &parent, const TCHAR *text, unsigned id,
-           int left, int top, unsigned width, unsigned height) {
-    Window::set(&parent, _T("BUTTON"), text,
-                left, top, width, height);
+  down = false;
+  invalidate();
 
-    ::SetWindowLong(hWnd, GWL_ID, id);
-  }
-};
+  if (parent != NULL)
+    parent->on_command(id, 0);
 
-#endif /* !ENABLE_SDL */
+  return true;
+}
 
-#endif
+void
+ButtonWindow::on_paint(Canvas &canvas)
+{
+  canvas.draw_button(get_client_rect(), down);
+
+  canvas.select(font);
+  SIZE size = canvas.text_size(text);
+  canvas.text((get_width() - size.cx) / 2 + down,
+              (get_height() - size.cy) / 2 + down, text);
+}
+
+#endif /* ENABLE_SDL */

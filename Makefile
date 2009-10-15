@@ -296,6 +296,7 @@ OBJS	:=\
 	\
 	$(SRC)/Screen/Animation.o 	\
 	$(SRC)/Screen/Blank.o 		\
+	$(SRC)/Screen/ButtonWindow.o \
 	$(SRC)/Screen/Chart.o 		\
 	$(SRC)/Screen/Fonts.o 		\
 	$(SRC)/Screen/Graphics.o 	\

@@ -71,11 +71,13 @@ RUN_CANVAS_OBJS = \
 	$(SRC)/Screen/PaintWindow.o \
 	$(SRC)/Screen/ContainerWindow.o \
 	$(SRC)/Screen/TopWindow.o \
+	$(SRC)/Screen/ButtonWindow.o \
 	$(SRC)/Screen/Canvas.o \
 	$(SRC)/Screen/VirtualCanvas.o \
 	$(SRC)/Screen/BufferCanvas.o \
 	$(SRC)/Screen/Pen.o \
 	$(SRC)/Screen/Brush.o \
+	$(SRC)/Screen/Font.o \
 	$(SRC)/Screen/Util.o \
 	$(SRC)/Math/FastMath.o \
 	$(SRC)/Math/Geometry.o \
