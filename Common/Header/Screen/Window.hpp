@@ -340,6 +340,10 @@ public:
   }
 
 #ifdef ENABLE_SDL
+  void paint() {
+    on_paint(canvas);
+  }
+
   /**
    * Ensures that the specified rectangle is updated on the physical
    * screen.

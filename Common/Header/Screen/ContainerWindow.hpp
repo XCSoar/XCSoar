@@ -60,6 +60,7 @@ protected:
 
 #ifdef ENABLE_SDL
   virtual bool on_destroy();
+  virtual void on_paint(Canvas &canvas);
 #else /* !ENABLE_SDL */
   virtual LRESULT on_message(HWND hWnd, UINT message,
                              WPARAM wParam, LPARAM lParam);

@@ -56,6 +56,21 @@ ContainerWindow::on_destroy()
   return true;
 }
 
+void
+ContainerWindow::on_paint(Canvas &canvas)
+{
+  for (std::list<Window*>::const_iterator i = children.begin();
+       i != children.end(); ++i) {
+    Window &child = **i;
+    child.paint();
+
+    canvas.copy(child.get_left(), child.get_top(),
+                child.get_canvas().get_width(),
+                child.get_canvas().get_height(),
+                child.get_canvas(), 0, 0);
+  }
+}
+
 #else /* !ENABLE_SDL */
 
 LRESULT

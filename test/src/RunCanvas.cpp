@@ -259,6 +259,8 @@ protected:
       paint(canvas);
     } else
       canvas.copy(buffer);
+
+    TopWindow::on_paint(canvas);
   }
 };
 
