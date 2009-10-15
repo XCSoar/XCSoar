@@ -137,9 +137,9 @@ static Font *FontMap[5] = {
   &InfoWindowFont
 };
 
-XMLNode xmlLoadFromResource(const TCHAR* lpName,
-                            LPCTSTR tag,
-                            XMLResults *pResults) {
+static XMLNode
+xmlLoadFromResource(const TCHAR* lpName, LPCTSTR tag, XMLResults *pResults)
+{
   LPTSTR lpRes;
   HRSRC hResInfo;
   HGLOBAL hRes;
