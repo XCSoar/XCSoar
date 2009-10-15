@@ -64,6 +64,12 @@ Copyright_License {
 #include <assert.h>
 #include <stdio.h>
 
+#ifndef _MSC_VER
+#include <algorithm>
+using std::min;
+using std::max;
+#endif
+
 #ifdef ALTAIRSYNC
 #define ISCALE 1
 void SetSourceRectangle(RECT fromRect) {};
@@ -2730,7 +2736,7 @@ WndListFrame::on_mouse_move(int x, int y, unsigned keys)
 
     if (mMouseDown && PtInRect(&rcScrollBar, Pos))
     {
-      int iScrollBarTop = max(1, Pos.y - mMouseScrollBarYOffset);
+      int iScrollBarTop = max(1, (int)Pos.y - mMouseScrollBarYOffset);
 
       int iScrollIndex = GetScrollIndexFromScrollBarTop(iScrollBarTop);
 
@@ -2760,7 +2766,8 @@ WndListFrame::on_mouse_down(int x, int y)
 
   if (PtInRect(&rcScrollBarButton, Pos))  // see if click is on scrollbar handle
   {
-    mMouseScrollBarYOffset = max(0, Pos.y - rcScrollBarButton.top);  // start mouse drag
+    // start mouse drag
+    mMouseScrollBarYOffset = max(0, (int)(Pos.y - rcScrollBarButton.top));
     mMouseDown=true;
 
   }
