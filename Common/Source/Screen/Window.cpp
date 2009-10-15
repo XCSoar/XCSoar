@@ -306,6 +306,14 @@ Window::on_user(unsigned id)
 
 #ifdef ENABLE_SDL
 
+void
+Window::on_paint(Canvas &canvas)
+{
+  /* to be implemented by a subclass */
+  /* this is not an abstract method yet until the OO transition of all
+     SDL Window users is complete */
+}
+
 bool
 Window::on_event(const SDL_Event &event)
 {

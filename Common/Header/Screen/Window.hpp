@@ -429,6 +429,7 @@ public:
   virtual bool on_user(unsigned id);
 
 #ifdef ENABLE_SDL
+  virtual void on_paint(Canvas &canvas);
 
   virtual bool on_event(const SDL_Event &event);
 
