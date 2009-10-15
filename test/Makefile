@@ -107,7 +107,6 @@ RUN_DIALOG_OBJS = \
 	$(SRC)/Screen/Pen.o \
 	$(SRC)/Screen/Window.o \
 	$(SRC)/Screen/BufferWindow.o \
-	$(SRC)/Screen/PaintCanvas.o \
 	$(SRC)/Screen/PaintWindow.o \
 	$(SRC)/Screen/ContainerWindow.o \
 	$(SRC)/Screen/TextWindow.o \
@@ -130,6 +129,11 @@ RUN_DIALOG_OBJS = \
 	$(SRC)/compat-$(TARGET).a \
 	$(SRC)/wcecompat/ts_string.o \
 	src/RunDialog.o
+ifeq ($(ENABLE_SDL),y)
+RUN_DIALOG_OBJS += $(SRC)/Screen/Timer.o
+else
+RUN_DIALOG_OBJS += $(SRC)/Screen/PaintCanvas.o
+endif
 RunDialog-$(TARGET)$(TARGET_EXEEXT): $(RUN_DIALOG_OBJS:.o=-$(TARGET).o)
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
