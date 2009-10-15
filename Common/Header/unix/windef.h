@@ -127,13 +127,6 @@ typedef struct _RECT {
 
 typedef RECT *LPRECT;
 
-enum {
-	DT_EXPANDTABS = 0x1,
-	DT_LEFT = 0x2,
-	DT_NOCLIP = 0x4,
-	DT_WORDBREAK = 0x8,
-};
-
 #define WINAPI
 #define _cdecl
 #define CALLBACK
@@ -173,54 +166,6 @@ typedef struct {
 	DWORD time;
 	POINT pt;
 } MSG, *PMSG;
-
-enum {
-  VK_APP1,
-  VK_APP2,
-  VK_APP3,
-  VK_APP4,
-  VK_APP5,
-  VK_APP6,
-  VK_UP,
-  VK_DOWN,
-  VK_LEFT,
-  VK_RIGHT,
-  VK_RETURN,
-  VK_F1,
-  VK_F2,
-  VK_F3,
-  VK_F4,
-  VK_F5,
-  VK_F6,
-  VK_F7,
-  VK_F8,
-  VK_F9,
-  VK_F10,
-  VK_F11,
-  VK_F12,
-  VK_ESCAPE,
-};
-
-enum {
-  WM_ERASEBKGND,
-  WM_PAINT,
-  WM_SIZE,
-  WM_WINDOWPOSCHANGED,
-  WM_CREATE,
-  WM_DESTROY,
-  WM_LBUTTONDBLCLK,
-  WM_LBUTTONDOWN,
-  WM_COMMAND,
-  WM_LBUTTONUP,
-  WM_KEYUP,
-  WM_CLOSE,
-  WM_SETFONT,
-  WM_TIMER,
-  WM_INITMENUPOPUP,
-  WM_SETFOCUS,
-  WM_ACTIVATE,
-  WM_SETTINGCHANGE,
-};
 
 typedef LRESULT CALLBACK (*WNDPROC)(
     HWND hwnd,
