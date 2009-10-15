@@ -3,9 +3,9 @@
 #include <assert.h>
 #include <algorithm>
 #include "Util/Quadratic.hpp"
-#include <stdio.h>
 #include "Navigation/Aircraft.hpp"
-#include "Util.h"
+#include "Math/Geometry.hpp"
+#include "Math/NavFunctions.hpp"
 
 long count_mc = 0;
 
@@ -61,8 +61,8 @@ void GLIDE_RESULT::add(const GLIDE_RESULT &s2)
 
 double MacCready::SinkRate(const double V) const
 {
-  const double dV = (V-20.0)/20.0;
-  return 1.0+dV*dV*4.0;
+  const double dV = (V-25.0)/25.0;
+  return 0.5+dV*dV*2.0;
 }
 
 GLIDE_RESULT MacCready::solve_vertical(const AIRCRAFT_STATE &aircraft,
@@ -142,7 +142,7 @@ double MacCready::cruise_bearing(const double V,
   //   (Wn/V)*sin(theta) = sin(alpha)
 
   const double alpha = asin(sintheta*Wn/V);
-  return RAD2DEG(alpha);
+  return RAD_TO_DEG*alpha;
 }
 
 
@@ -173,7 +173,7 @@ GLIDE_RESULT MacCready::solve_glide(const AIRCRAFT_STATE &aircraft,
   //   V*V=Vn*Vn+W*W-2*Vn*W*cos(theta)
   //     Vn*Vn-2*Vn*W*cos(theta)+W*W-V*V=0  ... (1)
 
-  const double costheta = cos(DEG2RAD(theta));
+  const double costheta = cos(DEG_TO_RAD*(theta));
   const Quadratic q(1.0,2.0*W*costheta,W*W-V*V); // from (1)
 
   if (!q.check()) {
@@ -261,12 +261,12 @@ GLIDE_RESULT MacCready::solve_cruise(const AIRCRAFT_STATE &aircraft,
   double distance = task.Distance;
   if (dh>0) {
     t_cl1 = dh/mc;
-    double wd = DEG2RAD(aircraft.WindDirection);
-    double tb = DEG2RAD(task.Bearing);
+    double wd = DEG_TO_RAD*(aircraft.WindDirection);
+    double tb = DEG_TO_RAD*(task.Bearing);
     double dx= t_cl1*W*sin(wd)-task.Distance*sin(tb);
     double dy= t_cl1*W*cos(wd)-task.Distance*cos(tb);
     distance = sqrt(dx*dx+dy*dy);
-//    task.Bearing = RAD2DEG(atan2(dx,dy));
+//    task.Bearing = RAD_TO_DEG*(atan2(dx,dy));
   }
 
   const double t_cr = distance/Vn;
@@ -334,7 +334,7 @@ public:
   MacCreadyVopt(const AIRCRAFT_STATE &_aircraft,
                 const GLIDE_STATE &_task,
                 const MacCready &_mac):
-    ZeroFinder(15.0,50.0,0.01),
+    ZeroFinder(15.0,75.0,0.01),
     aircraft(_aircraft),
     task(_task),
     mac(_mac)

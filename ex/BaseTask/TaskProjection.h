@@ -23,12 +23,14 @@ public:
     location_mid = ref;
   }
   void scan_location(const GEOPOINT &ref);
+  void update_fast();
   FLAT_GEOPOINT project(const GEOPOINT& tp) const;
   void report();
 private:
   GEOPOINT location_min;
   GEOPOINT location_max;
   GEOPOINT location_mid;
+  double cos_midloc;
 };
 
 #endif //TASKPROJECTION_H

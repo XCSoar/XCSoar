@@ -24,6 +24,7 @@ OrderedTask::update_geometry() {
     task_projection.scan_location(tps[i]->getLocation());
   }
 //  task_projection.report();
+  task_projection.update_fast();
 
   for (unsigned i=0; i<tps.size(); i++) {
     tps[i]->update_geometry();
@@ -151,15 +152,20 @@ OrderedTask::check_transitions(const AIRCRAFT_STATE &state,
 
 ////////// ADDITIONAL FUNCTIONS
 
+bool 
+OrderedTask::update_idle(const AIRCRAFT_STATE& state)
+{
+  double mc=2.0;
+  // TODO get from above
+  calc_min_target(state, mc, 3600*5.0);
+  return true;
+}
+
 
 bool 
 OrderedTask::update_sample(const AIRCRAFT_STATE &state, 
                            const bool full_update)
 {
-  double mc = 1.0;
-  // must be done in order!
-  calc_min_target(state, mc, 3.6);
-
   return true;
 }
 
@@ -247,15 +253,15 @@ OrderedTask::OrderedTask()
   wp[0].Location.Latitude=0;
   wp[0].Altitude=0.25;
   wp[1].Location.Longitude=0;
-  wp[1].Location.Latitude=10;
+  wp[1].Location.Latitude=1.0;
   wp[1].Altitude=0.25;
-  wp[2].Location.Longitude=10;
-  wp[2].Location.Latitude=10;
+  wp[2].Location.Longitude=1.0;
+  wp[2].Location.Latitude=1.0;
   wp[2].Altitude=0.5;
-  wp[3].Location.Longitude=8;
-  wp[3].Location.Latitude=5;
+  wp[3].Location.Longitude=0.8;
+  wp[3].Location.Latitude=0.5;
   wp[3].Altitude=0.25;
-  wp[4].Location.Longitude=10;
+  wp[4].Location.Longitude=1.0;
   wp[4].Location.Latitude=0;
   wp[4].Altitude=0.25;
 
@@ -360,7 +366,7 @@ OrderedTask::calc_min_target(const AIRCRAFT_STATE &aircraft,
 
   TaskMinTarget bmt(tps, activeTaskPoint, aircraft, t_rem, ts);
   double p= bmt.search(mc);
-  printf("target opt %g\n",p);
+//  printf("target opt %g\n",p);
   return p;
 }
 

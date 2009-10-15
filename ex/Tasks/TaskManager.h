@@ -31,6 +31,7 @@ public:
   virtual void report(const AIRCRAFT_STATE &location);
 
   virtual bool update(const AIRCRAFT_STATE &, const AIRCRAFT_STATE&);
+  virtual bool update_idle(const AIRCRAFT_STATE &state);
 
   virtual const TaskStats& get_stats() const;
   

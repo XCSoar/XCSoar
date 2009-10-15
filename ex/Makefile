@@ -19,7 +19,7 @@ endif
 
 OUTPUTS 	:= test
 
-INCLUDES := -I.
+INCLUDES := -I. -I../xcsoar/Common/Header
 
 PROFILE := 
 OPTIMIZE := -g
@@ -61,6 +61,7 @@ OBJS	:=\
 	GlideSolvers/MacCready.o \
 	GlideSolvers/ZeroFinder.o \
 	Navigation/Aircraft.o \
+	Navigation/ReferencePoint.o \
 	BaseTask/AATPoint.o \
 	BaseTask/OrderedTaskPoint.o \
 	BaseTask/TaskProjection.o \
@@ -99,7 +100,11 @@ OBJS	:=\
 	Tasks/TaskSolvers/TaskBestMc.o \
 	Tasks/TaskSolvers/TaskCruiseEfficiency.o \
 	Tasks/TaskSolvers/TaskMinTarget.o \
-	Tasks/TaskStats/TaskStats.o 
+	Tasks/TaskStats/TaskStats.o \
+	\
+	../xcsoar/Common/Source/Math/Geometry.o \
+	../xcsoar/Common/Source/Math/FastMath.o \
+	../xcsoar/Common/Source/Math/Earth.o 
 
 
 all: $(OBJS)

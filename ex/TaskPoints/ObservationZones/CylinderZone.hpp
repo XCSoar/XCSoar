@@ -46,7 +46,7 @@ class CylinderZone : public ObservationZonePoint {
 public:
   CylinderZone(const GEOPOINT &loc):
     ObservationZonePoint(loc),
-    Radius(1.0)
+    Radius(10000.0)
   {
   };
 

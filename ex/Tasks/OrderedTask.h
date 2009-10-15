@@ -28,6 +28,8 @@ public:
 
   virtual bool update_sample(const AIRCRAFT_STATE &, const bool full_update);
 
+  virtual bool update_idle(const AIRCRAFT_STATE&);
+
   unsigned task_size() const {
     return tps.size();
   }

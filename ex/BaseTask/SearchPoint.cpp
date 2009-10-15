@@ -1,5 +1,6 @@
 #include "SearchPoint.hpp"
 #include "Util.h"
+#include "Math/FastMath.h"
 #include <math.h>
 
 void 

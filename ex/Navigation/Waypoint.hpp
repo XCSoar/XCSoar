@@ -1,11 +1,7 @@
 #ifndef WAYPOINT_HPP
 #define WAYPOINT_HPP
 
-
-struct GEOPOINT {
-  double Longitude;
-  double Latitude;
-};
+#include "GeoPoint.hpp"
 
 struct FLAT_GEOPOINT {
   int Longitude;

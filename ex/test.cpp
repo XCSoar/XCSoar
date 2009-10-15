@@ -3,15 +3,17 @@
 #include "GlideSolvers/MacCready.hpp"
 #include <math.h>
 #include <stdio.h>
+#include "Math/FastMath.h"
+#include "Math/Earth.hpp"
 
 int n_samples = 0;
 
 
 extern long count_mc;
-extern int count_distance;
+//extern int count_distance;
 
 void distance_counts() {
-  printf("#     distance queries %d\n",count_distance/n_samples); 
+//  printf("#     distance queries %d\n",count_distance/n_samples); 
   printf("#     mc calcs %d\n",count_mc/n_samples); 
 }
 
@@ -20,7 +22,7 @@ void distance_counts() {
 #include "BaseTask/ConvexHull/GrahamScan.hpp"
 
 double small_rand() {
-  return rand()*0.005/RAND_MAX;
+  return rand()*0.001/RAND_MAX;
 }
 
 ////////////////////////////////////////////////
@@ -106,15 +108,15 @@ void test_polygon()
 ////////////////////////////////////////////////
 
 int main() {
-
+  ::InitSineTable();
 //  test_mc();
 
   TaskManager test_task;
 
   AIRCRAFT_STATE state, state_last;
-  state.Location.Longitude=8;
-  state.Location.Latitude=11;  
-  state.Altitude = 1.0;
+  state.Location.Longitude=0.8;
+  state.Location.Latitude=1.1;  
+  state.Altitude = 1500.0;
   state.Time = 0.0;
   state.WindSpeed = 0.0;
   state.WindDirection = 0;
@@ -123,30 +125,30 @@ int main() {
 
 #define  num_wp 5
   GEOPOINT w[num_wp];
-  w[0].Longitude = -0.25; 
-  w[0].Latitude = -1.25; 
-  w[1].Longitude = -0.5; 
-  w[1].Latitude = 10.5; 
-  w[2].Longitude = 10.5; 
-  w[2].Latitude = 10.5; 
-  w[3].Longitude = 7.5; 
-  w[3].Latitude = 4.5; 
-  w[4].Longitude = 9; 
-  w[4].Latitude = 1; 
+  w[0].Longitude = -0.025; 
+  w[0].Latitude = -0.125; 
+  w[1].Longitude = -0.05; 
+  w[1].Latitude = 1.05; 
+  w[2].Longitude = 1.05; 
+  w[2].Latitude = 1.05; 
+  w[3].Longitude = 0.75; 
+  w[3].Latitude = 0.45; 
+  w[4].Longitude = 0.9; 
+  w[4].Latitude = 0.1; 
 
   state_last.Location = w[0];
 
   for (int i=0; i<num_wp-1-1; i++) {
-    for (double t=0; t<1.0; t+= 0.002) {
+    for (double t=0; t<1.0; t+= 0.001) {
       state.Location.Latitude = w[i].Latitude*(1.0-t)+w[i+1].Latitude*t+small_rand();
       state.Location.Longitude = w[i].Longitude*(1.0-t)+w[i+1].Longitude*t+small_rand();
 
-      double dx = state.Location.Longitude-state_last.Location.Longitude;
-      double dy = state.Location.Latitude-state_last.Location.Latitude;
-      double d = sqrt(dx*dx+dy*dy);
-      double V = 7.0;
+      double d = ::Distance(state.Location, state_last.Location);
+      double V = 15.0;
       state.Time += d/V;
       test_task.update(state, state_last);
+
+      test_task.update_idle(state);
       test_task.report(state);
       n_samples++;
       state_last = state;

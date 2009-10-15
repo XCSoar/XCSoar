@@ -11,9 +11,5 @@ double CylinderZone::score_adjustment()
 
 GEOPOINT CylinderZone::get_boundary_parametric(double t) 
 { 
-  // todo: should be findlocation
-  GEOPOINT loc = getLocation();
-  loc.Longitude += Radius*cos(t*3.1415926*2.0);
-  loc.Latitude += Radius*sin(t*3.1415926*2.0);
-  return loc;
+  return ::FindLocation(getLocation(),t*360,Radius);
 }

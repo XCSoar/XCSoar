@@ -1,5 +1,5 @@
 #include "SymmetricSectorZone.hpp"
-#include <stdio.h>
+#include "Math/Geometry.hpp"
 
 void SymmetricSectorZone::set_legs(const TaskPoint *previous,
                                    const TaskPoint *current,
@@ -24,5 +24,7 @@ void SymmetricSectorZone::set_legs(const TaskPoint *previous,
   setStartRadial(AngleLimit360(biSector-SectorAngle/2));
   setEndRadial(AngleLimit360(biSector+SectorAngle/2));
 
-};
+}
+
+
 

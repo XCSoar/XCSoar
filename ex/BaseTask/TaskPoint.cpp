@@ -1,6 +1,6 @@
 
 #include "TaskPoint.hpp"
-#include "Util.h"
+#include "Math/Earth.hpp"
 #include "GlideSolvers/MacCready.hpp"
 #include <algorithm>
 

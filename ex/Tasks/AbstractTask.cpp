@@ -7,7 +7,16 @@
 #include <iostream>
 #include <fstream>
 
-unsigned AbstractTask::getActiveTaskPointIndex() 
+bool 
+AbstractTask::update_idle(const AIRCRAFT_STATE &state)
+{
+  // do nothing
+  return false;
+}
+
+
+unsigned 
+AbstractTask::getActiveTaskPointIndex() 
 {
   return activeTaskPoint;
 }
@@ -68,7 +77,7 @@ AbstractTask::update(const AIRCRAFT_STATE &state,
                      const AIRCRAFT_STATE &state_last)
 {
   bool retval;
-  double mc=1.0;
+  double mc= 2.0;
 
   const bool full_update = check_transitions(state, state_last);
 

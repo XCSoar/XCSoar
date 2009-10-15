@@ -5,8 +5,8 @@
 
 struct AIRCRAFT_STATE;
 struct GEOPOINT;
-class TaskStats;
 
+class TaskStats;
 class TaskPoint;
 
 class TaskInterface {
@@ -21,6 +21,8 @@ public:
   double get_active_distance(const AIRCRAFT_STATE &);
 
   virtual void report(const AIRCRAFT_STATE &state) = 0;
+
+  virtual bool update_idle(const AIRCRAFT_STATE &state) = 0;
 
   virtual bool update(const AIRCRAFT_STATE &, const AIRCRAFT_STATE&) = 0;
 

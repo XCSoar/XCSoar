@@ -39,7 +39,7 @@
 #ifndef REFERENCEPOINT_HPP
 #define REFERENCEPOINT_HPP
 
-#include "Util.h"
+#include "GeoPoint.hpp"
 
 /////////////////////////////////////////////////
 /// Abstract classes
@@ -53,27 +53,19 @@ public:
 
   /** bearing from this to the reference
    */
-    double bearing(const GEOPOINT & ref) const {
-        return::Bearing(Location, ref);
-    }
+  double bearing(const GEOPOINT & ref) const;
 
   /** distance from this to the reference
    */
-    double distance(const GEOPOINT & ref) const {
-        return::Distance(Location, ref);
-    }
+  double distance(const GEOPOINT & ref) const;
 
   /** bearing from this to the reference
    */
-    double bearing(const ReferencePoint & ref) const {
-        return::Bearing(Location, ref.getLocation());
-    }
+  double bearing(const ReferencePoint & ref) const;
 
   /** distance from this to the reference
    */
-    double distance(const ReferencePoint & ref) const {
-        return::Distance(Location, ref.getLocation());
-    }
+  double distance(const ReferencePoint & ref) const;
 
   /** The actual location
    */

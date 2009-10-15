@@ -2,6 +2,7 @@
 
 #include "AATPoint.hpp"
 #include "Util.h"
+#include "Math/Earth.hpp"
 
 GEOPOINT AATPoint::get_reference_scored() const
 {

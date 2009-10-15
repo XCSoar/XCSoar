@@ -17,6 +17,8 @@ public:
   }
   bool update(const AIRCRAFT_STATE &, const AIRCRAFT_STATE&);
 
+  virtual bool update_idle(const AIRCRAFT_STATE&);
+
   virtual void report(const AIRCRAFT_STATE&);
 
 protected:

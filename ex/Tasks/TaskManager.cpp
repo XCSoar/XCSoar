@@ -66,6 +66,23 @@ bool TaskManager::update(const AIRCRAFT_STATE &state,
   return false;
 }
 
+bool 
+TaskManager::update_idle(const AIRCRAFT_STATE& state)
+{
+  switch(mode) {
+  case (MODE_NULL):
+    return false;
+  case (MODE_GOTO):
+    return task_goto.update_idle(state);
+  case (MODE_ORDERED):
+    return task_ordered.update_idle(state);
+  case (MODE_ABORT):
+    return task_abort.update_idle(state);
+  };
+  return false;
+}
+
+
 const TaskStats& TaskManager::get_stats() const
 {
   switch(mode) {

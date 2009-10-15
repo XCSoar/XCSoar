@@ -39,7 +39,6 @@
 #define SECTORZONE_HPP
 
 #include "TaskPoints/ObservationZones/CylinderZone.hpp"
-#include <stdio.h>
 
 class SectorZone: 
   public CylinderZone 
@@ -52,35 +51,13 @@ public:
     {
     };
 
-  virtual bool angleInSector(double b) const
-    {
-      if (StartRadial<EndRadial) {
-	return ((b<=EndRadial) && (b>=StartRadial));
-      } else {
-	return ((b<=EndRadial) || (b>=StartRadial));
-      }
-    }
+  virtual bool angleInSector(double b) const;
 
-  virtual bool isInSector(const AIRCRAFT_STATE &ref) const
-    {
-      if (!CylinderZone::isInSector(ref)) {
-        return false;
-      } else {
-        return angleInSector(bearing(ref.Location));
-      }
-    };
+  virtual bool isInSector(const AIRCRAFT_STATE &ref) const;
 
-  virtual void setStartRadial(double x) 
-    {
-      StartRadial = x;
-      updateSector();
-    };
+  virtual void setStartRadial(double x); 
 
-  virtual void setEndRadial(double x) 
-    {
-      EndRadial = x;
-      updateSector();
-    }  
+  virtual void setEndRadial(double x); 
 
   GEOPOINT get_boundary_parametric(double) ;  
 
@@ -89,11 +66,7 @@ public:
 ;
 
 protected:
-  virtual void updateSector() 
-  {
-    SectorStart = FindLocation(Location, Radius, StartRadial);
-    SectorEnd = FindLocation(Location, Radius, EndRadial);
-  };
+  virtual void updateSector();
 
   GEOPOINT SectorStart;
   GEOPOINT SectorEnd;
