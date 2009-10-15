@@ -1320,7 +1320,7 @@ WndButton::on_mouse_up(int x, int y)
 
   mDown = false;
   on_paint(get_canvas());
-  ReleaseCapture();
+  release_capture();
 
   Pos.x = x;
   Pos.y = y;
