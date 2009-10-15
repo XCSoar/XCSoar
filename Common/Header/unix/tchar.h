@@ -55,6 +55,8 @@ typedef wchar_t TCHAR;
 #define _tcscpy wcscpy
 #define tcslen wcslen
 #define _tcscmp wcscmp
+#define _tcsicmp wcscasecmp
+#define _tcsnicmp wcsncasecmp
 #define _tcslen wcslen
 #define _tcsclen wcslen
 #define _tcsncpy wcsncpy
@@ -69,6 +71,7 @@ typedef wchar_t TCHAR;
 #define _tcstok wcstok
 //#define _totupper XXX
 #define _itot _itow
+#define _ttoi(x) wcstol((x), NULL, 10)
 #define _tcstol wcstol
 #define _tcstod wcstod
 
@@ -88,6 +91,8 @@ typedef char TCHAR;
 #define _tcscpy strcpy
 #define tcslen strlen
 #define _tcscmp strcmp
+#define _tcsicmp strcasecmp
+#define _tcsnicmp strncasecmp
 #define _tcslen strlen
 #define _tcsclen strlen
 #define _tcsncpy strncpy
@@ -103,6 +108,7 @@ typedef char TCHAR;
 #define _tcstok strtok
 #define _totupper toupper
 #define _itot itoa
+#define _ttoi atoi
 #define _tcstol strtol
 #define _tcstod strtod
 #define _tcscspn strcspn
