@@ -39,6 +39,7 @@ Copyright_License {
 #define WINDOWS_H
 
 #include <windef.h>
+#include <winuser.h>
 
 /* GDI */
 
