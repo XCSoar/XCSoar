@@ -39,6 +39,10 @@ Copyright_License {
 
 #include <stdlib.h>
 
+#ifndef WIN32
+#define _cdecl
+#endif
+
 DataFieldEnum::~DataFieldEnum()
 {
   for (unsigned int i=0; i<nEnums; i++) {
