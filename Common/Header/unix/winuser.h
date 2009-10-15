@@ -93,6 +93,8 @@ enum {
   DT_LEFT = 0x2,
   DT_NOCLIP = 0x4,
   DT_WORDBREAK = 0x8,
+  DT_CALCRECT = 0x10,
+  DT_CENTER = 0x20,
 };
 
 static inline void
