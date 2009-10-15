@@ -211,6 +211,9 @@ protected:
   }
 
   virtual bool on_mouse_down(int x, int y) {
+    if (TopWindow::on_mouse_down(x, y))
+      return true;
+
     page = (page + 1) % 7;
     update();
     return true;

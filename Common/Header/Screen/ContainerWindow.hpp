@@ -60,6 +60,10 @@ protected:
 
 #ifdef ENABLE_SDL
   virtual bool on_destroy();
+  virtual bool on_mouse_move(int x, int y, unsigned keys);
+  virtual bool on_mouse_down(int x, int y);
+  virtual bool on_mouse_up(int x, int y);
+  virtual bool on_mouse_double(int x, int y);
   virtual void on_paint(Canvas &canvas);
 #else /* !ENABLE_SDL */
   virtual LRESULT on_message(HWND hWnd, UINT message,

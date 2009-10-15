@@ -56,6 +56,54 @@ ContainerWindow::on_destroy()
   return true;
 }
 
+bool
+ContainerWindow::on_mouse_move(int x, int y, unsigned keys)
+{
+  Window *child = child_at(x, y);
+  if (child != NULL) {
+    child->on_mouse_move(x - child->get_left(), y - child->get_top(), keys);
+    return true;
+  }
+
+  return PaintWindow::on_mouse_move(x, y, keys);
+}
+
+bool
+ContainerWindow::on_mouse_down(int x, int y)
+{
+  Window *child = child_at(x, y);
+  if (child != NULL) {
+    child->on_mouse_down(x - child->get_left(), y - child->get_top());
+    return true;
+  }
+
+  return PaintWindow::on_mouse_down(x, y);
+}
+
+bool
+ContainerWindow::on_mouse_up(int x, int y)
+{
+  Window *child = child_at(x, y);
+  if (child != NULL) {
+    child->on_mouse_up(x - child->get_left(), y - child->get_top());
+    return true;
+  }
+
+  return PaintWindow::on_mouse_up(x, y);
+}
+
+bool
+ContainerWindow::on_mouse_double(int x, int y)
+{
+  Window *child = child_at(x, y);
+  if (child != NULL) {
+    child->on_mouse_double(x - child->get_left(), y - child->get_top());
+    return true;
+  }
+
+  return PaintWindow::on_mouse_double(x, y);
+}
+
 void
 ContainerWindow::on_paint(Canvas &canvas)
 {
