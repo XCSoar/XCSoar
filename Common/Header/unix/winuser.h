@@ -41,6 +41,7 @@ Copyright_License {
 #include <windef.h>
 
 enum {
+  VK_SPACE,
   VK_APP1,
   VK_APP2,
   VK_APP3,
@@ -64,6 +65,7 @@ enum {
   VK_F10,
   VK_F11,
   VK_F12,
+  VK_F23,
   VK_ESCAPE,
 };
 
