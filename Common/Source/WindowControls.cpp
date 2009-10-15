@@ -56,15 +56,9 @@ Copyright_License {
 #include "Asset.hpp"
 #endif
 
-#ifndef ALTAIRSYNC
-
-#ifndef GNAV
-#ifndef WINDOWSPC
-#ifndef __MINGW32__
+#if !defined(ALTAIRSYNC) && !defined(GNAV) && !defined(WINDOWSPC) && \
+  !defined(__MINGW32__) && !defined(HAVE_POSIX)
 #include <projects.h>
-#endif
-#endif
-#endif
 #endif
 
 #include <assert.h>
