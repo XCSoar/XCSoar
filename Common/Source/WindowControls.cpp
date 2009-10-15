@@ -743,10 +743,12 @@ void InitWindowControlModule(void){
 
 PeriodClock WndForm::timeAnyOpenClose;
 
+#ifndef ENABLE_SDL
 ACCEL  WndForm::mAccel[] = {
   {0, VK_ESCAPE,  VK_ESCAPE},
   {0, VK_RETURN,  VK_RETURN},
 };
+#endif /* !ENABLE_SDL */
 
 WndForm::WndForm(ContainerWindow *Parent,
                  const TCHAR *Name, const TCHAR *Caption,
@@ -760,7 +762,9 @@ WndForm::WndForm(ContainerWindow *Parent,
   mOnTimerNotify = NULL;
   bLButtonDown= false;
 
+#ifndef ENABLE_SDL
   mhAccelTable = CreateAcceleratorTable(mAccel, sizeof(mAccel)/sizeof(mAccel[0]));
+#endif /* !ENABLE_SDL */
 
   mColorTitle = clAqua;
 
@@ -799,7 +803,9 @@ void WndForm::Destroy(void){
 
   kill_timer(cbTimerID);
 
+#ifdef WIN32
   DestroyAcceleratorTable(mhAccelTable);
+#endif /* WIN32 */
 
   WindowControl::Destroy();  // delete all childs
 
@@ -884,6 +890,13 @@ int WndForm::ShowModal(void){
 }
 
 int WndForm::ShowModal(bool bEnableMap) {
+#ifdef ENABLE_SDL
+
+  // XXX
+  return 0;
+
+#else /* !ENABLE_SDL */
+
 #define OPENCLOSESUPPRESSTIME 500
   MSG msg;
   HWND oldFocusHwnd;
@@ -1083,6 +1096,7 @@ int WndForm::ShowModal(bool bEnableMap) {
 
   return(mModalResult);
 
+#endif /* !ENABLE_SDL */
 }
 
 void
