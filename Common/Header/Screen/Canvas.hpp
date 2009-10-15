@@ -306,10 +306,7 @@ public:
   void segment(int x, int y, unsigned radius, const RECT rc,
                double start, double end, bool horizon=false);
 
-  void draw_button(RECT rc, bool down) {
-    // XXX
-    raised_edge(rc);
-  }
+  void draw_button(RECT rc, bool down);
 
   const SIZE text_size(const TCHAR *text, size_t length) const;
   const SIZE text_size(LPCTSTR text) const;

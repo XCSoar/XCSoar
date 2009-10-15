@@ -101,6 +101,30 @@ Canvas::segment(int x, int y, unsigned radius, const RECT rc,
                pen.get_color().gfx_color());
 }
 
+void
+Canvas::draw_button(RECT rc, bool down)
+{
+  Brush gray(Color(192, 192, 192));
+  fill_rectangle(rc, gray);
+
+  Pen bright(1, Color(240, 240, 240));
+  Pen dark(1, Color(128, 128, 128));
+
+  select(down ? dark : bright);
+  two_lines(rc.left, rc.bottom - 2, rc.left, rc.top,
+            rc.right - 2, rc.top);
+  two_lines(rc.left + 1, rc.bottom - 3, rc.left + 1, rc.top + 1,
+            rc.right - 3, rc.top + 1);
+
+  select(down ? bright : dark);
+  two_lines(rc.left + 1, rc.bottom - 1, rc.right - 1, rc.bottom - 1,
+            rc.right - 1, rc.top + 1);
+  two_lines(rc.left + 2, rc.bottom - 2, rc.right - 2, rc.bottom - 2,
+            rc.right - 2, rc.top + 2);
+
+  white_pen();
+}
+
 const SIZE
 Canvas::text_size(const TCHAR *text, size_t length) const
 {
