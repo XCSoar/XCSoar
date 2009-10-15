@@ -42,6 +42,11 @@ Copyright_License {
 #include "Interface.hpp"
 #include "InfoBoxLayout.h"
 
+#ifndef _MSC_VER
+#include <algorithm>
+using std::min;
+#endif
+
 #ifdef HAVE_BLANK
 int DisplayTimeOut;
 #endif
