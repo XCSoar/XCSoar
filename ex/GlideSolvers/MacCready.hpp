@@ -81,6 +81,21 @@ struct GLIDE_STATE {
 };
 
 struct GLIDE_RESULT {
+  GLIDE_RESULT():
+    Solution(MacCready::RESULT_NOSOLUTION),
+    TrackBearing(0.0),
+    Distance(0.0),
+    CruiseTrackBearing(0.0),
+    VOpt(0.0),
+    HeightClimb(0.0),
+    HeightGlide(0.0),
+    TimeElapsed(0.0),
+    TimeVirtual(0.0),
+    AltitudeDifference(0.0)
+    {
+      // default is null result
+    }
+
   MacCready::MacCreadyResult_t Solution;
   double TrackBearing;
   double Distance;
