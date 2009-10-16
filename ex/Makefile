@@ -22,7 +22,7 @@ OUTPUTS 	:= test
 INCLUDES := -I. -I../xcsoar/Common/Header
 
 PROFILE := 
-OPTIMIZE := -g -O2
+OPTIMIZE := -g 
 
 CPPFLAGS := $(INCLUDES) 
 CXXFLAGS	:=$(OPTIMIZE) -fno-exceptions $(PROFILE)
