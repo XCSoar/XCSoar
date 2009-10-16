@@ -46,7 +46,7 @@ CXXFLAGS += -Wno-strict-aliasing
 
 # make warnings fatal (for perfectionists)
 CXXFLAGS += -Werror
-#CXXFLAGS += -pedantic
+CXXFLAGS += -pedantic
 #CXXFLAGS += -pedantic-errors
 
 # -Wdisabled-optimization

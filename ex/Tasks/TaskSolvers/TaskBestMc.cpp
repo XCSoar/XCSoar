@@ -10,7 +10,7 @@ TaskBestMc::TaskBestMc(const std::vector<OrderedTaskPoint*>& tps,
   tm(tps,activeTaskPoint,1.0),
   aircraft(_aircraft) 
 {
-};
+}
 
 double TaskBestMc::f(const double mc) 
 {

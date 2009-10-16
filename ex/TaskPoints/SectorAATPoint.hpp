@@ -57,7 +57,6 @@ public:
 
   virtual double score_adjustment();
 
-;
 protected:
   SectorZone oz;
 };

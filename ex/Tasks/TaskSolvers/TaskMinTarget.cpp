@@ -15,7 +15,7 @@ TaskMinTarget::TaskMinTarget(const std::vector<OrderedTaskPoint*>& tps,
   tp_start(_ts)
 {
 
-};
+}
 
 double TaskMinTarget::f(const double p) 
 {

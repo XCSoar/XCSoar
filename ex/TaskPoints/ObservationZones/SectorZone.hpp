@@ -63,8 +63,6 @@ public:
 
   virtual double score_adjustment();
 
-;
-
 protected:
   virtual void updateSector();
 

@@ -66,11 +66,6 @@ public:
 
   virtual double score_adjustment();
 
-;
-
-
-
-
 protected:
   FAISectorZone oz;
 };

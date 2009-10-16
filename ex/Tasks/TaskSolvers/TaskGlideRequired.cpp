@@ -10,7 +10,7 @@ TaskGlideRequired::TaskGlideRequired(const std::vector<OrderedTaskPoint*>& tps,
   tm(tps,activeTaskPoint,0.0), // Vopt at mc=0
   aircraft(_aircraft) 
 {
-};
+}
 
 double TaskGlideRequired::f(const double S) 
 {
