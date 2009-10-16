@@ -47,7 +47,8 @@ class OrderedTaskPoint :
 {
 public:
   OrderedTaskPoint(const TaskProjection& tp,
-                   const WAYPOINT & wp, bool b_scored) : 
+                   const WAYPOINT & wp, 
+                   const bool b_scored) : 
     SampledTaskPoint(tp, wp, b_scored),
       leg_in(NULL),
       leg_out(NULL),

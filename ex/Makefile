@@ -93,6 +93,7 @@ OBJS	:=\
 	Tasks/TaskInterface.o \
 	Tasks/TaskManager.o \
 	Tasks/TaskEvents.o \
+	Tasks/TaskAdvance.o \
 	Tasks/PathSolvers/TaskDijkstra.o \
 	Tasks/TaskSolvers/TaskMacCready.o \
 	Tasks/TaskSolvers/TaskMacCreadyTravelled.o \

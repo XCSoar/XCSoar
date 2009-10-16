@@ -14,7 +14,8 @@ class SampledTaskPoint:
 {
 public:  
   SampledTaskPoint(const TaskProjection& tp,
-                   const WAYPOINT & wp, bool b_scored):
+                   const WAYPOINT & wp, 
+                   const bool b_scored):
     task_projection(tp),
     TaskPoint(wp),
     boundary_scored(b_scored),

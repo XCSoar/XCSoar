@@ -141,7 +141,7 @@ int main() {
   state_last.Location = w[0];
 
   for (int i=0; i<num_wp-1-1; i++) {
-    for (double t=0; t<1.0; t+= 0.001) {
+    for (double t=0; t<1.0; t+= 0.0025) {
       state.Location.Latitude = w[i].Latitude*(1.0-t)+w[i+1].Latitude*t+small_rand();
       state.Location.Longitude = w[i].Longitude*(1.0-t)+w[i+1].Longitude*t+small_rand();
 

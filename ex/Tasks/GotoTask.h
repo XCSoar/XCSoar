@@ -8,8 +8,8 @@
 
 class GotoTask : public AbstractTask {
 public:    
-  GotoTask(const TaskEvents &te): 
-    AbstractTask(te),
+  GotoTask(const TaskEvents &te, TaskAdvance &ta): 
+    AbstractTask(te,ta),
     tp(NULL) 
   {};
 

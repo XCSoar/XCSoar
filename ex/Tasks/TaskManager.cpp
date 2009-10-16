@@ -1,100 +1,75 @@
 #include "Tasks/TaskManager.h"
 
-void TaskManager::setActiveTaskPoint(unsigned index)
+// uses delegate pattern
+
+void
+TaskManager::set_mode(const TaskMode_t the_mode)
 {
+  mode = the_mode;
   switch(mode) {
   case (MODE_NULL):
+    active_task = NULL;
+    return;
   case (MODE_GOTO):
-    // nothing to do
+    active_task = &task_goto;
     return;
   case (MODE_ORDERED):
-    task_ordered.setActiveTaskPoint(index);
+    active_task = &task_ordered;
     return;
   case (MODE_ABORT):
-    task_abort.setActiveTaskPoint(index);
+    active_task = &task_abort;
     return;
   };
+}
+
+void TaskManager::setActiveTaskPoint(unsigned index)
+{
+  if (active_task) active_task->setActiveTaskPoint(index);
 }
 
 TaskPoint* TaskManager::getActiveTaskPoint()
 {
-  switch(mode) {
-  case (MODE_NULL):
+  if (active_task) 
+    return active_task->getActiveTaskPoint();
+  else 
     return NULL;
-  case (MODE_GOTO):
-    return task_goto.getActiveTaskPoint();
-  case (MODE_ORDERED):
-    return task_ordered.getActiveTaskPoint();
-  case (MODE_ABORT):
-    return task_abort.getActiveTaskPoint();
-  };
-  return NULL;
-  // should never get here
 }
 
 void TaskManager::report(const AIRCRAFT_STATE &state)
 {
-  switch(mode) {
-  case (MODE_NULL):
-    return;
-  case (MODE_GOTO):
-    return task_goto.report(state);
-  case (MODE_ORDERED):
-    return task_ordered.report(state);
-  case (MODE_ABORT):
-    return task_abort.report(state);
-  };
+  if (active_task) 
+    return active_task->report(state);
 }
 
 bool TaskManager::update(const AIRCRAFT_STATE &state, 
                          const AIRCRAFT_STATE& state_last)
 {
-  // TODO: always update ordered task so even if we are temporarily
+  // always update ordered task so even if we are temporarily
   // in abort/goto mode, the task stats are still updated
 
-  switch(mode) {
-  case (MODE_NULL):
-    return false;
-  case (MODE_GOTO):
-    return task_goto.update(state, state_last);
-  case (MODE_ORDERED):
-    return task_ordered.update(state, state_last);
-  case (MODE_ABORT):
-    return task_abort.update(state, state_last);
-  };
-  // should never get here
-  return false;
+  bool retval = task_ordered.update(state, state_last);
+  if (active_task && (active_task != &task_ordered)) {
+    retval |= active_task->update(state, state_last);
+  }
+  return retval;
 }
 
 bool 
 TaskManager::update_idle(const AIRCRAFT_STATE& state)
 {
-  switch(mode) {
-  case (MODE_NULL):
+  if (active_task) {
+    return active_task->update_idle(state);
+  } else {
     return false;
-  case (MODE_GOTO):
-    return task_goto.update_idle(state);
-  case (MODE_ORDERED):
-    return task_ordered.update_idle(state);
-  case (MODE_ABORT):
-    return task_abort.update_idle(state);
-  };
-  return false;
+  }
 }
 
 
 const TaskStats& TaskManager::get_stats() const
 {
-  switch(mode) {
-  case (MODE_NULL):
+  if (active_task) {
+    return active_task->get_stats();
+  } else {
     return null_stats;
-  case (MODE_GOTO):
-    return task_goto.get_stats();
-  case (MODE_ORDERED):
-    return task_ordered.get_stats();
-  case (MODE_ABORT):
-    return task_abort.get_stats();
-  };
-  // should never get here
-  return null_stats;
+  }
 }

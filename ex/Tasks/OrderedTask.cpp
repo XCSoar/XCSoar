@@ -126,22 +126,42 @@ OrderedTask::check_transitions(const AIRCRAFT_STATE &state,
   bool full_update = false;
   
   for (int i=t_min; i<=t_max; i++) {
+    bool transition_enter = false;
     if (tps[i]->transition_enter(state, state_last)) {
+      transition_enter = true;
       task_events.transition_enter(*tps[i]);
     }
+    bool transition_exit = false;
     if (tps[i]->transition_exit(state, state_last)) {
+      transition_exit = true;
       task_events.transition_exit(*tps[i]);
+    }
+
+    if ((i==(int)activeTaskPoint) && 
+      task_advance.ready_to_advance(*tps[i],
+                                    state,
+                                    transition_enter,
+                                    transition_exit)) {
+      task_advance.set_armed(false);
+
       if (i+1<n_task) {
-        setActiveTaskPoint(i+1);
+
+        i++;
+        setActiveTaskPoint(i);
         ts->scan_active(tps[activeTaskPoint]);
 
-        task_events.active_advanced(*tps[activeTaskPoint],i+1);
+        if (tps[i]->update_sample(state)) {
+          full_update = true;
+        }
+
+        task_events.active_advanced(*tps[i],i);
 
         // on sector exit, must update samples since start sector
         // exit transition clears samples
         full_update = true;
       }
     }
+
     if (tps[i]->update_sample(state)) {
       full_update = true;
     }
@@ -159,12 +179,13 @@ OrderedTask::update_idle(const AIRCRAFT_STATE& state)
 {
   double mc=2.0;
   // TODO get from above
-  double p = calc_min_target(state, mc, 3600*5.0);
+
+//  double p = calc_min_target(state, mc, 3600*5.0);
+//  (void)p;
 
   TaskGlideRequired bgr(tps, activeTaskPoint, state);
   double S = bgr.search(mc);
 
-  (void)p;
   (void)S;
   
   return true;
@@ -253,8 +274,8 @@ OrderedTask::~OrderedTask()
 // TODO: delete legs and turnpoints
 }
 
-OrderedTask::OrderedTask(const TaskEvents &te):
-  AbstractTask(te)
+OrderedTask::OrderedTask(const TaskEvents &te, TaskAdvance &ta):
+  AbstractTask(te, ta)
 {
   // TODO: default values in constructor
 

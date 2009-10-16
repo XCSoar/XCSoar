@@ -15,7 +15,7 @@ class OrderedTask:
   public Serialisable
 {
 public:
-  OrderedTask(const TaskEvents &te);
+  OrderedTask(const TaskEvents &te, TaskAdvance &ta);
   ~OrderedTask();
 
   std::vector<TaskLeg*> legs;

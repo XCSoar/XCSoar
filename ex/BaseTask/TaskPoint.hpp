@@ -52,7 +52,7 @@ class TaskPoint :
   public ReferencePoint, public Serialisable {
 public:
   TaskPoint(const WAYPOINT & wp) : Elevation(wp.Altitude), 
-                                   ReferencePoint(wp.Location) 
+                                            ReferencePoint(wp.Location)
     { }
 
   // not const because may need to perform lookup and save
@@ -74,6 +74,7 @@ public:
                                    const MacCready &mac,
                                    const double S) const;
   virtual void print(std::ostream& f) const;
+
 protected:
   const double Elevation;
 };

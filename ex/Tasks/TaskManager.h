@@ -15,11 +15,12 @@ class TaskManager : public TaskInterface,
 {
 public:
   TaskManager(const TaskEvents &te): 
-    mode(MODE_ORDERED),
-    task_ordered(te),
-    task_goto(te),
-    task_abort(te)
-  {};
+    task_ordered(te,task_advance),
+    task_goto(te,task_advance),
+    task_abort(te,task_advance)
+  {
+    set_mode(MODE_ORDERED);
+  };
 
     virtual void setActiveTaskPoint(unsigned);
 
@@ -42,6 +43,10 @@ public:
 private:
   const TaskStats null_stats;
 
+  void set_mode(const TaskMode_t mode);
+
+  AbstractTask* active_task;
+
     /** @link aggregation */
     OrderedTask task_ordered;
 
@@ -52,5 +57,7 @@ private:
     AbortTask task_abort;
 
     TaskMode_t mode;
+
+    TaskAdvance task_advance;
 };
 #endif //TASKMANAGER_H

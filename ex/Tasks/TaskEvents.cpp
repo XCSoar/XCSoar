@@ -2,20 +2,20 @@
 #include <stdio.h>
 
 void 
-TaskEvents::transition_enter(const TaskPoint& tp)
+TaskEvents::transition_enter(const TaskPoint& tp) const
 {
   printf("- entered sector\n");
 }
 
 void 
-TaskEvents::transition_exit(const TaskPoint &tp)
+TaskEvents::transition_exit(const TaskPoint &tp) const
 {
   printf("- exited sector\n");
 }
 
 
 void 
-TaskEvents::active_advanced(const TaskPoint &tp, const int i)
+TaskEvents::active_advanced(const TaskPoint &tp, const int i) const
 {
-  printf("auto transition to sector %d\n", i);
+  printf("- advance to sector %d\n", i);
 }
