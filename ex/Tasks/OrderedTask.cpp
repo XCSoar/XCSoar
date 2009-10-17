@@ -70,10 +70,12 @@ OrderedTask::scan_distance_minmax(const GEOPOINT &location, bool full,
     if (activeTaskPoint>0) {
       ts->scan_active(tps[activeTaskPoint-1]);
     }
-    *dmax = dijkstra.distance_opt_achieved(ac, false);
+    dijkstra.distance_opt_achieved(ac, false);
     ts->scan_active(tps[activeTaskPoint]);
+    *dmax = ts->scan_distance_max();
   }
-  *dmin = dijkstra.distance_opt_achieved(ac, true);
+  dijkstra.distance_opt_achieved(ac, true);
+  *dmin = ts->scan_distance_min();
 }
 
 

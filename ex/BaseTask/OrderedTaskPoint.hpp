@@ -95,6 +95,8 @@ protected:
   bool scan_active(OrderedTaskPoint* atp);
   double scan_distance_nominal();
   double scan_distance_planned();
+  double scan_distance_max();
+  double scan_distance_min();
   double scan_distance_remaining(const GEOPOINT &ref);
   double scan_distance_scored(const GEOPOINT &ref);
   double scan_distance_travelled(const GEOPOINT &ref);

@@ -121,6 +121,21 @@ double TaskLeg::leg_bearing_planned()
 }
 
 
+double TaskLeg::leg_distance_max()
+{
+  return 
+    ::Distance(tp_origin->getMaxLocation(), 
+               tp_destination->getMaxLocation());
+}
+
+double TaskLeg::leg_distance_min()
+{
+  return 
+    ::Distance(tp_origin->getMinLocation(), 
+               tp_destination->getMinLocation());
+}
+
+
 ///////
 
 void TaskLeg::update_geometry()

@@ -58,6 +58,12 @@ public:
     return OrderedTaskPoint::scan_active(atp);
   }
 
+  double scan_distance_max() {
+    return OrderedTaskPoint::scan_distance_max();
+  };
+  double scan_distance_min() {
+    return OrderedTaskPoint::scan_distance_min();
+  };
   double scan_distance_nominal() {
     return OrderedTaskPoint::scan_distance_nominal();
   };

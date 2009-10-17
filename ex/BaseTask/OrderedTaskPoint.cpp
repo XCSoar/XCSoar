@@ -145,6 +145,27 @@ double OrderedTaskPoint::scan_distance_remaining(const GEOPOINT &ref)
 
 ////
 
+double OrderedTaskPoint::scan_distance_max() 
+{
+  if (leg_out) {   
+    double d = leg_out->leg_distance_max();
+    return leg_out->get_destination()->scan_distance_max()+d;
+  } else {
+    return 0.0;
+  }
+}
+
+double OrderedTaskPoint::scan_distance_min() 
+{
+  if (leg_out) {   
+    double d = leg_out->leg_distance_min();
+    return leg_out->get_destination()->scan_distance_min()+d;
+  } else {
+    return 0.0;
+  }
+}
+
+
 double OrderedTaskPoint::scan_distance_nominal() 
 {
   // distance from start to the task point

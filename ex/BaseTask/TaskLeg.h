@@ -25,6 +25,10 @@ public:
 
     double leg_distance_remaining(const GEOPOINT &ref);
 
+    double leg_distance_max();
+
+    double leg_distance_min();
+
     double leg_bearing_travelled(const GEOPOINT &ref);
 
     double leg_bearing_remaining(const GEOPOINT &ref);
