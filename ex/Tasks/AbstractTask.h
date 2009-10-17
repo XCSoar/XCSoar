@@ -36,12 +36,19 @@ protected:
   TaskStats stats;
 
   virtual double calc_mc_best(const AIRCRAFT_STATE &, 
-                              const double mc) = 0;
+                              const double mc);
+
+  virtual double calc_glide_required(const AIRCRAFT_STATE &aircraft);
+
   virtual double calc_cruise_efficiency(const AIRCRAFT_STATE &aircraft, 
-                                        const double mc) = 0;
+                                        const double mc) {
+    return 1.0;
+  }
   virtual double calc_min_target(const AIRCRAFT_STATE &, 
                                  const double mc,
-                                 const double t_target) = 0;
+                                 const double t_target) {
+    return 0.0;
+  };
 
   virtual double scan_total_start_time(const AIRCRAFT_STATE &);
   virtual double scan_leg_start_time(const AIRCRAFT_STATE &);
@@ -52,7 +59,7 @@ protected:
   virtual double scan_distance_planned();
   virtual double scan_distance_scored(const GEOPOINT &location);
   virtual double scan_distance_travelled(const GEOPOINT &location);
-  virtual double scan_distance_remaining(const GEOPOINT &location) = 0;
+  virtual double scan_distance_remaining(const GEOPOINT &location);
 
   virtual void glide_solution_remaining(const AIRCRAFT_STATE &, 
                                         const double mc,

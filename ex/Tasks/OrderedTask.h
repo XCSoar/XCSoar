@@ -96,6 +96,8 @@ protected:
   double calc_mc_best(const AIRCRAFT_STATE &, 
                       const double mc);
 
+  double calc_glide_required(const AIRCRAFT_STATE &aircraft);
+
   double calc_cruise_efficiency(const AIRCRAFT_STATE &aircraft, 
                                 const double mc);
 

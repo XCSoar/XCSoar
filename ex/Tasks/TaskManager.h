@@ -33,6 +33,10 @@ public:
     MODE_GOTO
   };
 
+  void abort();
+  void resume();
+  void do_goto(const WAYPOINT & wp);
+
   virtual void report(const AIRCRAFT_STATE &location);
 
   virtual bool update(const AIRCRAFT_STATE &, const AIRCRAFT_STATE&);
@@ -43,7 +47,7 @@ public:
 private:
   const TaskStats null_stats;
 
-  void set_mode(const TaskMode_t mode);
+  TaskMode_t set_mode(const TaskMode_t mode);
 
   AbstractTask* active_task;
 

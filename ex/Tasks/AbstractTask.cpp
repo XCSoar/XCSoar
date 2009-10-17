@@ -3,7 +3,8 @@
 #include "AbstractTask.h"
 #include "Navigation/Aircraft.hpp"
 #include "BaseTask/TaskPoint.hpp"
-
+#include "TaskSolvers/TaskBestMc.hpp"
+#include "TaskSolvers/TaskGlideRequired.hpp"
 #include <iostream>
 #include <fstream>
 
@@ -110,6 +111,7 @@ AbstractTask::update_stats_glide(const AIRCRAFT_STATE &state,
 {
   stats.mc_best = calc_mc_best(state, mc);
   stats.cruise_efficiency = calc_cruise_efficiency(state, mc);
+  stats.glide_required = calc_glide_required(state);
 }
 
 void
@@ -151,6 +153,16 @@ double
 AbstractTask::scan_distance_travelled(const GEOPOINT &location)
 {
   return 0.0;
+}
+
+double 
+AbstractTask::scan_distance_remaining(const GEOPOINT &location)
+{
+  TaskPoint *tp = getActiveTaskPoint();
+  if (!tp) {
+    return 0.0;
+  }
+  return tp->distance(location);
 }
 
 
@@ -246,3 +258,25 @@ AbstractTask::scan_leg_start_time(const AIRCRAFT_STATE &state)
   return state.Time;
 }
 
+double 
+AbstractTask::calc_mc_best(const AIRCRAFT_STATE &aircraft, 
+                           const double mc)
+{
+  TaskPoint *tp = getActiveTaskPoint();
+  if (!tp) {
+    return mc;
+  }
+  TaskBestMc bmc(tp, aircraft);
+  return bmc.search(mc);
+}
+
+double 
+AbstractTask::calc_glide_required(const AIRCRAFT_STATE &aircraft)
+{
+  TaskPoint *tp = getActiveTaskPoint();
+  if (!tp) {
+    return 0.0;
+  }
+  TaskGlideRequired bgr(tp, aircraft);
+  return bgr.search(0.0);
+}

@@ -103,6 +103,7 @@ class TaskStats
 public:
   TaskStats():
     cruise_efficiency(1.0),
+    glide_required(0.0),
     mc_best(0.0),
     distance_nominal(0.0),
     distance_max(0.0),
@@ -114,6 +115,7 @@ public:
   ElementStat current_leg;
 
   // calculated values
+  double glide_required;
   double cruise_efficiency;
   double mc_best;
 

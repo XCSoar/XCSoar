@@ -10,6 +10,8 @@ public:
   TaskMacCreadyRemaining(const std::vector<OrderedTaskPoint*> &_tps,
                          const unsigned _activeTaskPoint,
                          const double _mc);
+  TaskMacCreadyRemaining(TaskPoint* tp,
+                         const double _mc);
 
   void set_range(const double tp);
 

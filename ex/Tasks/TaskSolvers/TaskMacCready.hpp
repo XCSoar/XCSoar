@@ -11,12 +11,23 @@ public:
   TaskMacCready(const std::vector<OrderedTaskPoint*> &_tps,
                 const unsigned _activeTaskPoint,
                 const double _mc):
-    tps(_tps),
+    tps(_tps.begin(),_tps.end()),
     activeTaskPoint(_activeTaskPoint),
     start(0),
-    end(tps.size()-1),
-    gs(tps.size()),
-    minHs(tps.size(),0.0)
+    end(_tps.size()-1),
+    gs(_tps.size()),
+    minHs(_tps.size(),0.0)
+    {
+      msolv.set_mc(_mc);
+    };
+  TaskMacCready(TaskPoint* tp,
+                const double _mc):
+    tps(1, tp),
+    activeTaskPoint(0),
+    start(0),
+    end(0),
+    gs(1),
+    minHs(1,0.0)
     {
       msolv.set_mc(_mc);
     };
@@ -43,7 +54,7 @@ protected:
                                    double minH) const = 0;
   virtual const AIRCRAFT_STATE get_aircraft_start(const AIRCRAFT_STATE &aircraft) const = 0;
 
-  const std::vector<OrderedTaskPoint*> &tps;
+  const std::vector<TaskPoint*> tps;
   const unsigned activeTaskPoint;
   std::vector<double> minHs;
   int start;

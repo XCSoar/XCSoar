@@ -14,6 +14,7 @@ public:
                 const AIRCRAFT_STATE &_aircraft,
                 const double _t_remaining,
                 StartPoint *_ts);
+
   virtual double f(const double p);
   virtual bool valid(const double p);
   virtual double search(const double p);

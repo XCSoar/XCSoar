@@ -12,6 +12,14 @@ TaskBestMc::TaskBestMc(const std::vector<OrderedTaskPoint*>& tps,
 {
 }
 
+TaskBestMc::TaskBestMc(TaskPoint* tp,
+                       const AIRCRAFT_STATE &_aircraft):
+  ZeroFinder(0.1,10.0,0.001),
+  tm(tp,1.0),
+  aircraft(_aircraft) 
+{
+}
+
 double TaskBestMc::f(const double mc) 
 {
   tm.set_mc(mc);

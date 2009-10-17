@@ -73,7 +73,27 @@ public:
   GLIDE_RESULT glide_solution_sink(const AIRCRAFT_STATE &, 
                                    const MacCready &mac,
                                    const double S) const;
+
+  virtual GLIDE_RESULT glide_solution_travelled(const AIRCRAFT_STATE &, 
+                                                const MacCready &mac,
+                                                const double minH=0) const;
+
+  virtual GLIDE_RESULT glide_solution_planned(const AIRCRAFT_STATE &, 
+                                              const MacCready &mac,
+                                              const double minH=0) const;
+
+  virtual void set_range(const double p) {};
+
   virtual void print(std::ostream& f) const;
+
+  virtual bool has_entered() const {
+    return false;
+  }
+  virtual AIRCRAFT_STATE get_state_entered() const {
+    // this should never get called
+    AIRCRAFT_STATE null_state;
+    return null_state;
+  }
 
 protected:
   const double Elevation;

@@ -57,6 +57,23 @@ TaskPoint::glide_solution_remaining(const AIRCRAFT_STATE &ac,
 }
 
 GLIDE_RESULT 
+TaskPoint::glide_solution_planned(const AIRCRAFT_STATE &ac, 
+                                  const MacCready &msolv,
+                                  const double minH) const
+{
+  return glide_solution_remaining(ac, msolv, minH);
+}
+
+GLIDE_RESULT 
+TaskPoint::glide_solution_travelled(const AIRCRAFT_STATE &ac, 
+                                  const MacCready &msolv,
+                                  const double minH) const
+{
+  GLIDE_RESULT null_res;
+  return null_res;
+}
+
+GLIDE_RESULT 
 TaskPoint::glide_solution_sink(const AIRCRAFT_STATE &ac, 
                                const MacCready &msolv,
                                const double S) const

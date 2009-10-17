@@ -12,6 +12,15 @@ TaskGlideRequired::TaskGlideRequired(const std::vector<OrderedTaskPoint*>& tps,
 {
 }
 
+TaskGlideRequired::TaskGlideRequired(TaskPoint* tp,
+                                     const AIRCRAFT_STATE &_aircraft):
+  ZeroFinder(-10.0,10.0,0.001),
+  tm(tp,0.0), // Vopt at mc=0
+  aircraft(_aircraft) 
+{
+
+}
+
 double TaskGlideRequired::f(const double S) 
 {
   res = tm.glide_sink(aircraft, S);

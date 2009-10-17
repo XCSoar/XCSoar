@@ -118,6 +118,7 @@ void TaskStats::print(std::ostream &f) const
   f << "# dist scored " << distance_scored << " (m)\n";
   f << "# mc best " << mc_best << " (m/s)\n";
   f << "# cruise efficiency " << cruise_efficiency << "\n";
+  f << "# glide required " << glide_required << "\n";
   f << "#\n";
   f << "# Total -- \n";
   total.print(f);

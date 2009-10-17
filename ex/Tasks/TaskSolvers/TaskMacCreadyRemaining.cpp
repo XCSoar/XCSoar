@@ -10,6 +10,11 @@ TaskMacCreadyRemaining::TaskMacCreadyRemaining(const std::vector<OrderedTaskPoin
   end = tps.size()-1;
 }
 
+TaskMacCreadyRemaining::TaskMacCreadyRemaining(TaskPoint* tp,
+                                               const double _mc):
+  TaskMacCready(tp,_mc)
+{
+}
 
 GLIDE_RESULT 
 TaskMacCreadyRemaining::tp_solution(const unsigned i,

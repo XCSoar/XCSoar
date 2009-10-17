@@ -2,24 +2,32 @@
 
 // uses delegate pattern
 
-void
+TaskManager::TaskMode_t 
 TaskManager::set_mode(const TaskMode_t the_mode)
 {
-  mode = the_mode;
-  switch(mode) {
-  case (MODE_NULL):
-    active_task = NULL;
-    return;
-  case (MODE_GOTO):
-    active_task = &task_goto;
-    return;
-  case (MODE_ORDERED):
-    active_task = &task_ordered;
-    return;
+  switch(the_mode) {
   case (MODE_ABORT):
     active_task = &task_abort;
-    return;
+    mode = MODE_ABORT;
+    break;
+  case (MODE_ORDERED):
+    if (task_ordered.task_size()) {
+      active_task = &task_ordered;
+      mode = MODE_ORDERED;
+      break;
+    }
+  case (MODE_GOTO):
+    if (task_goto.getActiveTaskPoint()) {
+      active_task = &task_goto;
+      mode = MODE_GOTO;
+      break;
+    }
+  case (MODE_NULL):
+    active_task = NULL;
+    mode = MODE_NULL;
+    break;
   };
+  return mode;
 }
 
 void TaskManager::setActiveTaskPoint(unsigned index)
@@ -73,3 +81,23 @@ const TaskStats& TaskManager::get_stats() const
     return null_stats;
   }
 }
+
+void
+TaskManager::abort()
+{
+  set_mode(MODE_ABORT);
+}
+
+void
+TaskManager::resume()
+{
+  set_mode(MODE_ORDERED);
+}
+
+void
+TaskManager::do_goto(const WAYPOINT & wp)
+{
+  task_goto.do_goto(wp);
+  set_mode(MODE_GOTO);
+}
+

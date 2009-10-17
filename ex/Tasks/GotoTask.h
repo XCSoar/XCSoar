@@ -4,31 +4,24 @@
 #define GOTOTASK_H
 
 #include "Tasks/AbstractTask.h"
-#include <stdlib.h>
+struct WAYPOINT;
 
 class GotoTask : public AbstractTask {
 public:    
-  GotoTask(const TaskEvents &te, TaskAdvance &ta): 
-    AbstractTask(te,ta),
-    tp(NULL) 
-  {};
+  GotoTask(const TaskEvents &te, TaskAdvance &ta);
+  ~GotoTask();
 
-    virtual TaskPoint* getActiveTaskPoint();
-    virtual void setActiveTaskPoint(unsigned index);
+  virtual TaskPoint* getActiveTaskPoint();
+  virtual void setActiveTaskPoint(unsigned index);
+  void do_goto(const WAYPOINT & wp);
 
   virtual void report(const AIRCRAFT_STATE &state);
 
-  virtual bool update_sample(const AIRCRAFT_STATE &, const bool full_update);
+  virtual bool update_sample(const AIRCRAFT_STATE &, 
+                             const bool full_update);
 protected:
-  virtual bool check_transitions(const AIRCRAFT_STATE &, const AIRCRAFT_STATE&);
-  virtual double calc_mc_best(const AIRCRAFT_STATE &, 
-                              const double mc);
-  virtual double calc_cruise_efficiency(const AIRCRAFT_STATE &aircraft, 
-                                        const double mc);
-  virtual double calc_min_target(const AIRCRAFT_STATE &, 
-                                 const double mc,
-                                 const double t_target);
-  virtual double scan_distance_remaining(const GEOPOINT &location);
+  virtual bool check_transitions(const AIRCRAFT_STATE &, 
+                                 const AIRCRAFT_STATE&);
 
 private:    
     TaskPoint* tp;
