@@ -43,5 +43,5 @@ bool TaskGlideRequired::valid(const double S)
 double TaskGlideRequired::search(const double S) 
 {
   double a = find_zero(S);
-  return a;
+  return a/res.VOpt;
 }

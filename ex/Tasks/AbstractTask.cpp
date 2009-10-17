@@ -5,6 +5,7 @@
 #include "BaseTask/TaskPoint.hpp"
 #include "TaskSolvers/TaskBestMc.hpp"
 #include "TaskSolvers/TaskGlideRequired.hpp"
+#include "Util.h"
 #include <iostream>
 #include <fstream>
 
@@ -72,8 +73,8 @@ AbstractTask::update_glide_solutions(const AIRCRAFT_STATE &state,
   stats.current_leg.planned.set_distance(
     stats.current_leg.solution_planned.Distance);
 
-  stats.total.gradient = calc_gradient(state);
-  stats.current_leg.gradient = leg_gradient(state);
+  stats.total.gradient = ::AngleToGradient(calc_gradient(state));
+  stats.current_leg.gradient = ::AngleToGradient(leg_gradient(state));
 }
 
 bool
@@ -114,7 +115,7 @@ AbstractTask::update_stats_glide(const AIRCRAFT_STATE &state,
 {
   stats.mc_best = calc_mc_best(state, mc);
   stats.cruise_efficiency = calc_cruise_efficiency(state, mc);
-  stats.glide_required = calc_glide_required(state);
+  stats.glide_required = AngleToGradient(calc_glide_required(state));
 }
 
 void
