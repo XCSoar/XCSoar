@@ -96,6 +96,7 @@ void ElementStat::print(std::ostream &f) const
   f << "#  Time elapsed " << TimeElapsed << " (s)\n";
   f << "#  Time remaining " << TimeRemaining << " (s)\n";
   f << "#  Time planned " << TimePlanned << " (s)\n";
+  f << "#  Gradient " << gradient << "\n";
   f << "#  Remaining: \n";
   remaining.print(f);
   solution_remaining.print(f);

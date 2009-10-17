@@ -89,6 +89,7 @@ public:
   virtual bool has_entered() const {
     return false;
   }
+
   virtual AIRCRAFT_STATE get_state_entered() const {
     // this should never get called
     AIRCRAFT_STATE null_state;

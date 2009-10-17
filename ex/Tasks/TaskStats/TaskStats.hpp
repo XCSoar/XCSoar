@@ -70,6 +70,7 @@ public:
     TimeElapsed(0.0),
     TimeRemaining(0.0),
     TimePlanned(0.0),
+    gradient(0.0),
     initialised(false)
     {
     };
@@ -78,6 +79,7 @@ public:
   double TimeElapsed;
   double TimeRemaining;
   double TimePlanned;
+  double gradient;
 
   DistanceRemainingStat remaining_effective;
   DistanceRemainingStat remaining;

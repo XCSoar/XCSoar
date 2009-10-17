@@ -444,3 +444,25 @@ void OrderedTask::report(const AIRCRAFT_STATE &state)
   }
 }
 
+
+double 
+OrderedTask::calc_gradient(const AIRCRAFT_STATE &state) 
+{
+  double g_best = 0.0;
+  double d_acc = 0.0;
+  double h_this = state.Altitude;
+
+  for (unsigned i=activeTaskPoint; i< tps.size(); i++) {
+    d_acc += tps[i]->get_distance_remaining(state);
+    if (!d_acc) {
+      continue;
+    }
+    const double g_this = (h_this-tps[i]->getElevation())/d_acc;
+    if (i==activeTaskPoint) {
+      g_best = g_this;
+    } else {
+      g_best = std::min(g_best, g_this);
+    }
+  }
+  return g_best;
+}

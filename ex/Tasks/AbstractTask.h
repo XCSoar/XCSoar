@@ -78,6 +78,8 @@ protected:
                                       const double total_t_elapsed,
                                       const double leg_t_elapsed);
 
+  virtual double calc_gradient(const AIRCRAFT_STATE &state);
+
 protected:
   const TaskEvents &task_events;
   TaskAdvance &task_advance;
@@ -91,5 +93,6 @@ private:
   void update_stats_speeds(const AIRCRAFT_STATE &, const AIRCRAFT_STATE&);
   void update_stats_glide(const AIRCRAFT_STATE &state, 
                           const double mc);
+  double leg_gradient(const AIRCRAFT_STATE &state);
 };
 #endif //ABSTRACTTASK_H

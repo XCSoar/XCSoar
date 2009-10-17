@@ -42,6 +42,7 @@ AbstractTask::update_stats_distances(const GEOPOINT &location,
   stats.total.planned.set_distance(scan_distance_planned());
 
   stats.distance_scored = scan_distance_scored(location);
+
 }
 
 void
@@ -71,6 +72,8 @@ AbstractTask::update_glide_solutions(const AIRCRAFT_STATE &state,
   stats.current_leg.planned.set_distance(
     stats.current_leg.solution_planned.Distance);
 
+  stats.total.gradient = calc_gradient(state);
+  stats.current_leg.gradient = leg_gradient(state);
 }
 
 bool
@@ -279,4 +282,26 @@ AbstractTask::calc_glide_required(const AIRCRAFT_STATE &aircraft)
   }
   TaskGlideRequired bgr(tp, aircraft);
   return bgr.search(0.0);
+}
+
+
+double
+AbstractTask::leg_gradient(const AIRCRAFT_STATE &aircraft) 
+{
+  TaskPoint *tp = getActiveTaskPoint();
+  if (!tp) {
+    return 0.0;
+  }
+  const double d = tp->get_distance_remaining(aircraft);
+  if (d) {
+    return (aircraft.Altitude-tp->getElevation())/d;
+  } else {
+    return 0.0;
+  }
+}
+
+double 
+AbstractTask::calc_gradient(const AIRCRAFT_STATE &state) 
+{
+  return leg_gradient(state);
 }

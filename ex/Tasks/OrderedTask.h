@@ -104,6 +104,8 @@ protected:
   double calc_min_target(const AIRCRAFT_STATE &, 
                          const double mc,
                          const double t_target);
+  virtual double calc_gradient(const AIRCRAFT_STATE &state) ;
+
 };
 
 #endif //ORDEREDTASK_H
