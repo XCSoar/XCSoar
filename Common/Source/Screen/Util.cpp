@@ -48,13 +48,18 @@ Copyright_License {
 
 #include <tchar.h>
 
-// The "OutputToInput" function sets the resulting polygon of this
-// step up to be the input polygon for next step of the clipping
-// algorithm. As the Sutherland-Hodgman algorithm is a polygon
-// clipping algorithm, it does not handle line clipping very well. The
-// modification so that lines may be clipped as well as polygons is
-// included in this function. The code for this function is:
-
+/**
+ * The "OutputToInput" function sets the resulting polygon of this
+ * step, up to be the input polygon for next step of the clipping
+ * algorithm. As the Sutherland-Hodgman algorithm is a polygon
+ * clipping algorithm, it does not handle line clipping very well. The
+ * modification so that lines may be clipped as well as polygons is
+ * included in this function.
+ * @param inLength Length of the inVertexArray
+ * @param inVertexArray
+ * @param outLength Length of the outVertexArray
+ * @param outVertexArray
+ */
 static void OutputToInput(unsigned int *inLength,
 			  POINT *inVertexArray,
 			  unsigned int *outLength,
@@ -88,12 +93,17 @@ static void OutputToInput(unsigned int *inLength,
     }
 }
 
-// The "Inside" function returns TRUE if the vertex tested is on the
-// inside of the clipping boundary. "Inside" is defined as "to the
-// left of clipping boundary when one looks from the first vertex to
-// the second vertex of the clipping boundary". The code for this
-// function is:
-
+/*
+/**
+ * The "Inside" function returns TRUE if the vertex tested is on the
+ * inside of the clipping boundary. "Inside" is defined as "to the
+ * left of clipping boundary when one looks from the first vertex to
+ * the second vertex of the clipping boundary".
+ * @param testVertex Vertex to be tested
+ * @param clipBoundary Clipping boundary
+ * @return True if the vertex tested is on the inside of the
+ * clipping boundary
+ */
 /*
 static bool Inside (const POINT *testVertex, const POINT *clipBoundary)
 {
@@ -114,11 +124,16 @@ static bool Inside (const POINT *testVertex, const POINT *clipBoundary)
 #define INSIDE_RIGHT_EDGE(a,b)  (a->x <= b[1].x)
 #define INSIDE_TOP_EDGE(a,b)    (a->y >= b[0].y)
 
- // The "Intersect" function calculates the intersection of the polygon
- // edge (vertex s to p) with the clipping boundary. The code for this
- // function is:
-
-
+/**
+ * The "Intersect" function calculates the intersection of the polygon
+ * edge (vertex s to p) with the clipping boundary.
+ * @param first First point of the polygon edge
+ * @param second Second point of the polygon edge
+ * @param clipBoundary Clipping Boundary (2 POINTs)
+ * @param intersectPt Intersection point of the clipping boundary
+ * and the polygon edge
+ * @return True if intersection occurs, False otherwise
+ */
 static bool Intersect (const POINT &first, const POINT &second,
                        const POINT *clipBoundary,
                        POINT *intersectPt)
@@ -195,6 +210,18 @@ static bool ClipEdge(const bool &s_inside,
   return false;
 }
 
+/**
+ * Clips a polygon to the clipping boundary with the
+ * Sutherland-Hodgman algorithm
+ * @param inVertexArray Polygon to be clipped
+ * @param outVertexArray
+ * @param inLength Number of points in the inVertexArray
+ * @param clipBoundary Clipping Boundary
+ * @param fill
+ * @param mode
+ * @return
+ * @see http://en.wikipedia.org/wiki/Sutherland-Hodgman_clipping_algorithm
+ */
 static unsigned int SutherlandHodgmanPolygoClip (POINT* inVertexArray,
                                                  POINT* outVertexArray,
                                                  const unsigned int inLength,
@@ -270,6 +297,14 @@ static unsigned int SutherlandHodgmanPolygoClip (POINT* inVertexArray,
 static POINT clip_ptout[MAXCLIPPOLYGON];
 static POINT clip_ptin[MAXCLIPPOLYGON];
 
+/**
+ * Clips a polygon (m_ptin) to the given rect (rc)
+ * @param canvas
+ * @param m_ptin
+ * @param inLength
+ * @param rc
+ * @param fill
+ */
 void ClipPolygon(Canvas &canvas, const POINT *m_ptin, unsigned int inLength,
                  RECT rc, bool fill)
 {
@@ -327,6 +362,10 @@ void ClipPolygon(Canvas &canvas, const POINT *m_ptin, unsigned int inLength,
   }
 }
 
+// QUESTION TB: what about fast(co)sine?! produces the same data i think...
+/**
+ * Coordinates of the sine-function (x-Coordinates of a circle)
+ */
 static const double xcoords[64] = {
   0,			0.09801714,		0.195090322,	0.290284677,	0.382683432,	0.471396737,	0.555570233,	0.634393284,
   0.707106781,	0.773010453,	0.831469612,	0.881921264,	0.923879533,	0.956940336,	0.98078528,		0.995184727,
@@ -338,6 +377,9 @@ static const double xcoords[64] = {
   -0.707106781,	-0.634393284,	-0.555570233,	-0.471396737,	-0.382683432,	-0.290284677,	-0.195090322,	-0.09801714
 };
 
+/**
+ * Coordinates of the cosine-function (y-Coordinates of a circle)
+ */
 static const double ycoords[64] = {
   1,			0.995184727,	0.98078528,		0.956940336,	0.923879533,	0.881921264,	0.831469612,	0.773010453,
   0.707106781,	0.634393284,	0.555570233,	0.471396737,	0.382683432,	0.290284677,	0.195090322,	0.09801714,
@@ -404,6 +446,17 @@ void StartArc(HDC hdc,
 }
 #endif /* ENABLE_UNUSED_CODE */
 
+/**
+ * Paints a circle to the canvas
+ * @param canvas Painting canvas
+ * @param x x-Coordinate of the circle's center
+ * @param y y-Coordinate of the circle's center
+ * @param radius Radius of the circle
+ * @param rc Clipping bounds
+ * @param clip If True the circle will be clipped to rc
+ * @param fill (?)
+ * @return
+ */
 int
 Circle(Canvas &canvas, long x, long y, int radius, RECT rc,
        bool clip, bool fill)
@@ -632,4 +685,3 @@ int DrawArc(Canvas &canvas, long x, long y, int radius, RECT rc,
    }
 
 */
-

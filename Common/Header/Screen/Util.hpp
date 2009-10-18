@@ -35,8 +35,9 @@ Copyright_License {
 }
 */
 
-/*! \file
- * \brief Small Windows GDI helper functions
+/**
+ * @file
+ * @brief Small Windows GDI helper functions
  */
 
 #ifndef XCSOAR_SCREEN_UTIL_HPP
