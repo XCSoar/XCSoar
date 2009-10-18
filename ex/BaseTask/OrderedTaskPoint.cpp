@@ -161,7 +161,7 @@ double OrderedTaskPoint::scan_distance_max()
 {
   if (leg_out) {   
     double d = leg_out->leg_distance_max();
-    return leg_out->get_destination()->scan_distance_max()+d;
+    return get_next()->scan_distance_max()+d;
   } else {
     return 0.0;
   }
@@ -171,7 +171,7 @@ double OrderedTaskPoint::scan_distance_min()
 {
   if (leg_out) {   
     double d = leg_out->leg_distance_min();
-    return leg_out->get_destination()->scan_distance_min()+d;
+    return get_next()->scan_distance_min()+d;
   } else {
     return 0.0;
   }
@@ -189,8 +189,8 @@ double OrderedTaskPoint::scan_distance_nominal()
   }
   if (leg_out) {
     double d = leg_out->leg_distance_nominal();
-    leg_out->get_destination()->distance_nominal = d+distance_nominal;
-    return leg_out->get_destination()->scan_distance_nominal();
+    get_next()->distance_nominal = d+distance_nominal;
+    return get_next()->scan_distance_nominal();
   } else {
     // return at end
     return distance_nominal;

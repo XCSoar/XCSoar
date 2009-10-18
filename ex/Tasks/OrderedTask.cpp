@@ -61,7 +61,6 @@ OrderedTask::scan_distance_minmax(const GEOPOINT &location, bool full,
                                   double *dmin, double *dmax)
 {
   TaskDijkstra dijkstra(this, tps.size());
-  ScanTaskPoint start(0,0);
   SearchPoint ac(location, task_projection);
   if (full) {
     // for max calculations, since one can still travel further in the sector,
@@ -70,11 +69,11 @@ OrderedTask::scan_distance_minmax(const GEOPOINT &location, bool full,
     if (activeTaskPoint>0) {
       ts->scan_active(tps[activeTaskPoint-1]);
     }
-    dijkstra.distance_opt_achieved(ac, false);
+    dijkstra.distance_max();
     ts->scan_active(tps[activeTaskPoint]);
     *dmax = ts->scan_distance_max();
   }
-  dijkstra.distance_opt_achieved(ac, true);
+  dijkstra.distance_min(ac);
   *dmin = ts->scan_distance_min();
 }
 

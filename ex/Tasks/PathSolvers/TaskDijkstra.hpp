@@ -12,15 +12,19 @@ public:
   TaskDijkstra(OrderedTask* _task, unsigned task_size);
   ~TaskDijkstra();
 
-  unsigned distance_opt(const ScanTaskPoint &start,
-                        bool _shortest=false);
+  unsigned distance_max();
 
-  unsigned distance_opt_achieved(const SearchPoint &currentLocation,
-                                 bool _shortest=false);
+  unsigned distance_min(const SearchPoint &currentLocation);
+
 private:
+
+  unsigned distance_general(Dijkstra<ScanTaskPoint> &dijkstra);
 
   void add_edges(Dijkstra<ScanTaskPoint> &dijkstra,
                  const ScanTaskPoint &curNode);
+
+  void add_start_edges(Dijkstra<ScanTaskPoint> &dijkstra,
+                 const SearchPoint &loc);
 
   unsigned distance(const ScanTaskPoint &sp,
                     const SearchPoint &loc) const;
@@ -28,7 +32,13 @@ private:
   unsigned distance(const ScanTaskPoint &sp1,
                     const ScanTaskPoint &sp2) const;
 
+  void save_max();
+  void save_min();
+
   const unsigned num_taskpoints;
+  unsigned activeStage;
+
+  unsigned extremal_distance(const unsigned d);
 
   /**
    * @clientCardinality 1

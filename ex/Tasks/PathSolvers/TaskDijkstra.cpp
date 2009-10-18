@@ -4,10 +4,15 @@
 #include "Dijkstra.hpp"
 #include "Tasks/OrderedTask.h"
 #include "Util.h"
+#include <algorithm>
 
-unsigned invert_distance(const unsigned d, const unsigned nlayers)
+unsigned TaskDijkstra::extremal_distance(const unsigned d)
 {
-  return -d;
+  if (shortest) {
+    return d;
+  } else {
+    return -d;
+  }
 }
 
 TaskDijkstra::~TaskDijkstra() {
@@ -20,6 +25,7 @@ TaskDijkstra::TaskDijkstra(OrderedTask* _task, const unsigned task_size):
   num_taskpoints(task_size)
 {
   solution.reserve(num_taskpoints);
+  activeStage = task->getActiveTaskPointIndex();
 }
 
 
@@ -55,123 +61,104 @@ void TaskDijkstra::add_edges(Dijkstra<ScanTaskPoint> &dijkstra,
 
     const unsigned dr = distance(curNode, destination);
     if (dr) {
-      dijkstra.link(destination, shortest? dr: invert_distance(dr,1));
+      dijkstra.link(destination, extremal_distance(dr));
+    }
+  }
+}
+
+void TaskDijkstra::add_start_edges(Dijkstra<ScanTaskPoint> &dijkstra,
+                                   const SearchPoint &currentLocation) 
+{
+  ScanTaskPoint destination;
+  destination.first = activeStage;
+
+  dijkstra.pop(); // need to remove dummy first point
+
+  const unsigned dsize = task->get_tp_search_points(destination.first).size();
+
+  for (destination.second=0; 
+       destination.second< dsize; destination.second++) {
+
+    const unsigned dr = distance(destination, currentLocation);
+    if (dr) {
+      dijkstra.link(destination, extremal_distance(dr));
     }
   }
 }
 
 
-unsigned TaskDijkstra::distance_opt(const ScanTaskPoint &start,
-                                    const bool req_shortest)
+unsigned TaskDijkstra::distance_max()
 {
-  shortest = req_shortest;
+  shortest = false;
 
-  ScanTaskPoint lastNode = start;
+  const ScanTaskPoint start(0,0);
   Dijkstra<ScanTaskPoint> dijkstra(start);
-
   solution[start.first] = get_point(start);
 
+  unsigned d= distance_general(dijkstra);
+  printf("max %d\n",d);
+  save_max();
+  return d;
+}
+
+unsigned 
+TaskDijkstra::distance_min(const SearchPoint &currentLocation)
+{
+  shortest = true; 
+
+  const ScanTaskPoint start(std::max(0,(int)activeStage-1),0);
+  Dijkstra<ScanTaskPoint> dijkstra(start);
+  if (activeStage>0) {
+    add_start_edges(dijkstra, currentLocation);
+  } else {
+    solution[0] = get_point(start);
+  }
+  unsigned d = distance_general(dijkstra);
+  printf("min %d\n",d);
+  save_min();
+  return d;
+}
+
+unsigned 
+TaskDijkstra::distance_general(Dijkstra<ScanTaskPoint> &dijkstra)
+{
+  unsigned lastStage = -1;
   while (!dijkstra.empty()) {
 
     const ScanTaskPoint curNode = dijkstra.pop();
 
-    if (curNode.first != lastNode.first) {
+    if (curNode.first != lastStage) {
       solution[curNode.first] = get_point(curNode);
-      lastNode = curNode;
-    }
+      lastStage = curNode.first;
 
-    if (curNode.first == num_taskpoints-1) {
-      const unsigned d = dijkstra.dist();
-      return shortest? d: invert_distance(d,curNode.first-start.first);
+      if (curNode.first+1 == num_taskpoints) {
+        return extremal_distance(dijkstra.dist());
+      }
     }
-
     add_edges(dijkstra, curNode);
   }
 
   return -1; // No path found
 }
 
-unsigned 
-TaskDijkstra::distance_opt_achieved(const SearchPoint &currentLocation,
-                                    const bool req_shortest)
+
+void 
+TaskDijkstra::save_min()
 {
-  shortest = false; // internally
-
-  const ScanTaskPoint start(0,0);
-  ScanTaskPoint lastNode(1000,1000);
-  Dijkstra<ScanTaskPoint> dijkstra(start);
-
-  const unsigned activeStage = task->getActiveTaskPointIndex();
-
-  unsigned min_d = -1;
-  unsigned min_d_actual = -1;
-  unsigned max_d_actual = 0;
-
-  while (!dijkstra.empty()) {
-
-    const ScanTaskPoint curNode = dijkstra.pop();
-
-    if (curNode.first != lastNode.first) {
-      solution[curNode.first] = get_point(curNode);
-      lastNode = curNode;
-    }
-
-    if (curNode.first != activeStage) {
-      add_edges(dijkstra, curNode);
-    } else {
-
-      const unsigned d_acc = invert_distance(dijkstra.dist(),activeStage);
-
-      TaskDijkstra inner_dijkstra(task, num_taskpoints);
-      unsigned d_remaining = 0;
-
-      if (curNode.first == num_taskpoints-1) {
-        d_remaining = 0;
-      } else {
-        d_remaining = inner_dijkstra.distance_opt(curNode, req_shortest);
-      }
-
-      bool best=false;
-      if (req_shortest) {
-        // need to take into account distance from here to target
-
-        const unsigned d_this = distance(curNode, currentLocation);
-
-        if (d_remaining+d_this<min_d) {
-          min_d = d_remaining+d_this; 
-          min_d_actual = d_remaining+d_acc;
-          best=true;
-        }
-      } else {
-        // here we are only interested in scored distance
-        if (d_remaining+d_acc>max_d_actual) {
-          max_d_actual = d_remaining+d_acc;
-          best=true;
-        }
-      }
-      if (best) {
-        solution[curNode.first] = get_point(curNode);
-
-        for (unsigned j=activeStage+1; j<num_taskpoints; j++) {
-          solution[j]= inner_dijkstra.solution[j];
-        }
-      }
-
-    }
+  for (unsigned j=activeStage; j<num_taskpoints; j++) {
+    task->set_tp_search_min(j, solution[j]);
   }
+}
 
+
+void 
+TaskDijkstra::save_max()
+{
   for (unsigned j=0; j<num_taskpoints; j++) {
-    if (req_shortest) {
+    task->set_tp_search_max(j, solution[j]);
+    if (j<activeStage) {
       task->set_tp_search_min(j, solution[j]);
-    } else {
-      task->set_tp_search_max(j, solution[j]);
     }
-  }
-
-  if (req_shortest) {
-    return min_d_actual; 
-  } else {
-    return max_d_actual;
   }
 }
 
