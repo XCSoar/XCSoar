@@ -39,8 +39,6 @@ Copyright_License {
 #include "Calculations.h"
 #include "Task.h"
 
-///////////////////////////////////////////////
-
 void RefreshTaskStatistics(void) {
   task.SetTargetModified(false);
   /* JMW incomplete
@@ -53,5 +51,3 @@ void RefreshTaskStatistics(void) {
   IterateEffectiveMacCready(&GPS_INFO, &CALCULATED_INFO);
   */
 }
-
-
