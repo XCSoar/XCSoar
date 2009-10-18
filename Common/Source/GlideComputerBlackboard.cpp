@@ -46,10 +46,17 @@ Copyright_License {
 
 //#include "Persist.hpp"
 
+/**
+ * Initializes the GlideComputerBlackboard
+ */
 void GlideComputerBlackboard::Initialise()
 {
 }
 
+/**
+ * Resets the GlideComputerBlackboard
+ * @param full Reset all data?
+ */
 void GlideComputerBlackboard::ResetFlight(const bool full) {
   unsigned i;
   if (full) {
@@ -112,7 +119,9 @@ void GlideComputerBlackboard::ResetFlight(const bool full) {
   calculated_info.ThermalGain=0.0;
 }
 
-
+/**
+ * Starts the task on the GlideComputerBlackboard
+ */
 void GlideComputerBlackboard::StartTask() {
   calculated_info.ValidFinish = false;
   calculated_info.TaskStartTime = gps_info.Time ;
@@ -156,12 +165,19 @@ void GlideComputerBlackboard::RestoreFinish()
   calculated_info.TakeOffTime = takeofftime;
 }
 
+/**
+ * Returns the average vertical speed in the current thermal
+ * @return Average vertical speed in the current thermal
+ */
 double GlideComputerBlackboard::GetAverageThermal() const
 {
   return max(0.0,calculated_info.AverageThermal);
 }
 
-
+/**
+ * Retrieves GPS data from the DeviceBlackboard
+ * @param nmea_info New GPS data
+ */
 void
 GlideComputerBlackboard::ReadBlackboard(const NMEA_INFO &nmea_info)
 {
@@ -180,6 +196,10 @@ GlideComputerBlackboard::ReadBlackboard(const NMEA_INFO &nmea_info)
   // if time hasn't advanced, don't copy last calculated
 }
 
+/**
+ * Retrieves settings from the DeviceBlackboard
+ * @param settings New settings
+ */
 void
 GlideComputerBlackboard::ReadSettingsComputer(const SETTINGS_COMPUTER
 					      &settings)

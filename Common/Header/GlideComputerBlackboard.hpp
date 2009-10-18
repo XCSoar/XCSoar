@@ -56,6 +56,9 @@ protected:
   bool time_advanced() {
     return (Basic().Time-LastBasic().Time>0);
   }
+  /**
+   * @see GlideComputerBlackboard::ReadBlackboard()
+   */
   bool time_retreated() {
     return _time_retreated;
   }
