@@ -92,6 +92,7 @@ struct SETTINGS_COMPUTER {
   double SAFETYALTITUDEARRIVAL;
   double SAFETYALTITUDEBREAKOFF;
   double SAFETYALTITUDETERRAIN;
+  /** ManoeuveringSpeed */
   double SAFTEYSPEED;
   int    EnableExternalTriggerCruise;
   short  AverEffTime;
