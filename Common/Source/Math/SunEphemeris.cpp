@@ -51,8 +51,17 @@ Copyright_License {
 #include <math.h>
 #include "Units.hpp"
 
+/**
+ * Get the days to J2000
+ * FNday only works between 1901 to 2099 - see Meeus chapter 7
+ * @param y Year
+ * @param m Month
+ * @param d Day
+ * @param h UT in decimal hours
+ * @return days to J2000
+ */
 double
-SunEphemeris::FNday (int y, int m, int d, float h)
+SunEphemeris::FNday(int y, int m, int d, float h)
 {
   long int luku = - 7 * (y + (m + 9)/12)/4 + 275*m/9 + d;
   // type casting necessary on PC DOS and TClite to avoid overflow
@@ -60,17 +69,29 @@ SunEphemeris::FNday (int y, int m, int d, float h)
   return (double)luku - 730531.5 + h/24.0;
 };
 
+/**
+ * The function below returns an angle in the range 0 to 2*PI
+ * @param x Angle to be converted
+ * @return an angle in the range 0 to 2*PI
+ */
 double
 SunEphemeris::FNrange (double x)
 {
+  // QUESTION TB: DEG_TO_RAD?!
+
   double b = 0.5*x / PI;
   double a = 2.0*PI * (b - (long)(b));
   if (a < 0) a = 2.0*PI + a;
   return a;
 };
 
-// Calculating the hourangle
-//
+/**
+ * Calculating the hourangle
+ * @param lat Latitude
+ * @param declin Declination
+ * @return The hourangle
+ */
+// TODO TB: find explanations/links for this and following
 double SunEphemeris::f0(double lat, double declin) {
   double fo,dfo;
   // Correction: different sign at S HS
@@ -82,43 +103,60 @@ double SunEphemeris::f0(double lat, double declin) {
   return fo;
 };
 
-// Calculating the hourangle for twilight times
-//
+/**
+ * Calculating the hourangle for twilight times
+ * @param lat Latitude
+ * @param declin Declination
+ * @return The hourangle for twilight times
+ */
 double SunEphemeris::f1(double lat, double declin) {
   double fi,df1;
   // Correction: different sign at S HS
-  df1 = DEG_TO_RAD * 6.0; if (lat < 0.0) df1 = -df1;
-  fi = tan(declin + df1) * tan(lat*DEG_TO_RAD);
-  if (fi>0.99999) fi=1.0; // to avoid overflow //
-  fi = asin(fi) + PI/2.0;
+  df1 = DEG_TO_RAD * 6.0;
+  if (lat < 0.0)
+    df1 = -df1;
+  fi = tan(declin + df1) * tan(lat * DEG_TO_RAD);
+  if (fi > 0.99999)
+    fi = 1.0; // to avoid overflow //
+  fi = asin(fi) + PI / 2.0;
   return fi;
 };
 
-//   Find the ecliptic longitude of the Sun
-
+/**
+ * Find the ecliptic longitude of the Sun
+ * @return The ecliptic longitude of the Sun
+ */
 double SunEphemeris::FNsun (double d) {
-
   //   mean longitude of the Sun
-
   L = FNrange(280.461 * DEG_TO_RAD + .9856474 * DEG_TO_RAD * d);
 
   //   mean anomaly of the Sun
-
   g = FNrange(357.528 * DEG_TO_RAD + .9856003 * DEG_TO_RAD * d);
 
   //   Ecliptic longitude of the Sun
+  return FNrange(L + 1.915 * DEG_TO_RAD * sin(g) + .02 * DEG_TO_RAD * sin(2 * g));
+}
 
-  return FNrange(L + 1.915 * DEG_TO_RAD * sin(g)
-		 + .02 * DEG_TO_RAD * sin(2 * g));
-};
-
-// Display decimal hours in hours and minutes
+/**
+ * Display decimal hours in hours and minutes
+ * @param dhr Decimal hours
+ */
 void SunEphemeris::showhrmn(double dhr) {
   int hr,mn;
   hr=(int) dhr;
   mn =(int) (dhr - (double) hr)*60;
+  // QUESTION TB: no return?! any sense??
 };
 
+/**
+ * Calculates all sun-related important times
+ * depending on time of year and location
+ * @param location Location to be used in calculation
+ * @param GPS_INFO GPS_INFO for current date
+ * @param CALCULATED_INFO CALCULATED_INFO (not yet used)
+ * @param tzone Timezone
+ * @return Always 0
+ */
 int SunEphemeris::CalcSunTimes(const GEOPOINT &location,
 			       const NMEA_INFO &GPS_INFO,
 			       const DERIVED_INFO &CALCULATED_INFO,
@@ -140,24 +178,19 @@ int SunEphemeris::CalcSunTimes(const GEOPOINT &location,
   h = ((int)GPS_INFO.Time)/3600;
   h = (h % 24);
 
-  d = FNday(y, m, day, (float)h);
+  d = FNday(y, m, day, (float) h);
 
-  //   Use FNsun to find the ecliptic longitude of the
-  //   Sun
-
+  // Use FNsun to find the ecliptic longitude of the Sun
   lambda = FNsun(d);
 
-  //   Obliquity of the ecliptic
-
+  // Obliquity of the ecliptic
   obliq = 23.439 * DEG_TO_RAD - .0000004 * DEG_TO_RAD * d;
 
   //   Find the RA and DEC of the Sun
-
   alpha = atan2(cos(obliq) * sin(lambda), cos(lambda));
   delta = asin(sin(obliq) * sin(lambda));
 
-  // Find the Equation of Time
-  // in minutes
+  // Find the Equation of Time in minutes
   // Correction suggested by David Smith
   LL = L - alpha;
   if (L < PI) LL += 2.0*PI;
@@ -218,6 +251,7 @@ int SunEphemeris::CalcSunTimes(const GEOPOINT &location,
       printf("Civil twilight: ");
       showhrmn(twpm);  puts("\n");
   */
+  // QUESTION TB: why not just void?
+
   return 0;
 }
-
