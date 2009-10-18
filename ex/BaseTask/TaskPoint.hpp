@@ -50,10 +50,21 @@ class MacCready;
 
 class TaskPoint : 
   public ReferencePoint, public Serialisable {
+private:
+  TaskPoint(const GEOPOINT location,
+            const double altitude):Elevation(altitude),
+                                   ReferencePoint(location)
+    {}
+
 public:
-  TaskPoint(const WAYPOINT & wp) : Elevation(wp.Altitude), 
-                                            ReferencePoint(wp.Location)
+  TaskPoint(const WAYPOINT & wp) : ReferencePoint(wp.Location),
+                                   Elevation(wp.Altitude)
     { }
+
+  virtual ~TaskPoint() {};
+
+  virtual TaskPoint* clone() { return new TaskPoint(getLocation(),
+                                                    getElevation()); };
 
   // not const because may need to perform lookup and save
   virtual double getElevation() const;

@@ -26,6 +26,8 @@ public:
     clear_sample_points();
   };
 
+    virtual ~SampledTaskPoint() {};
+
   const SearchPointVector& get_search_points(bool cheat=false);
 
   const SearchPointVector& get_boundary_points() const;

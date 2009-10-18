@@ -8,6 +8,18 @@
 #include <math.h>
 #include "GlideSolvers/MacCready.hpp"
 
+OrderedTaskPoint* 
+OrderedTaskPoint::get_previous() const
+{
+  return leg_in->get_origin();
+}
+
+OrderedTaskPoint* 
+OrderedTaskPoint::get_next() const
+{
+  return leg_out->get_destination();
+}
+
 
 // -------
 
@@ -68,9 +80,9 @@ bool OrderedTaskPoint::scan_active(OrderedTaskPoint* atp) {
   if (atp == this) {
     active_state = CURRENT_ACTIVE;
   } else if (leg_in 
-             && ((leg_in->get_origin()->getActiveState() 
+             && ((get_previous()->getActiveState() 
                   == CURRENT_ACTIVE) 
-                 || (leg_in->get_origin()->getActiveState() 
+                 || (get_previous()->getActiveState() 
                      == AFTER_ACTIVE))) {
     active_state = AFTER_ACTIVE;
   } else {
@@ -79,7 +91,7 @@ bool OrderedTaskPoint::scan_active(OrderedTaskPoint* atp) {
 
   if (leg_out) { 
     // propagate to remainder of task
-    return leg_out->get_destination()->scan_active(atp);
+    return get_next()->scan_active(atp);
   } else if (active_state == BEFORE_ACTIVE) {
     return false;
   } else {
@@ -93,7 +105,7 @@ bool OrderedTaskPoint::scan_active(OrderedTaskPoint* atp) {
 void OrderedTaskPoint::scan_bearing_remaining(const GEOPOINT &ref) 
 {
   if (leg_out) {
-    leg_out->get_destination()->scan_bearing_remaining(ref);
+    get_next()->scan_bearing_remaining(ref);
   } 
   if (leg_in) {
     bearing_remaining = leg_in->leg_bearing_remaining(ref);
@@ -105,7 +117,7 @@ void OrderedTaskPoint::scan_bearing_remaining(const GEOPOINT &ref)
 void OrderedTaskPoint::scan_bearing_travelled(const GEOPOINT &ref) 
 {
   if (leg_out) {
-    leg_out->get_destination()->scan_bearing_travelled(ref);
+    get_next()->scan_bearing_travelled(ref);
   } 
   if (leg_in) {
     bearing_travelled = leg_in->leg_bearing_travelled(ref);
@@ -133,7 +145,7 @@ double OrderedTaskPoint::scan_distance_remaining(const GEOPOINT &ref)
   if (leg_out) {
     double d = leg_out->leg_distance_remaining(ref);
     distance_remaining = 
-      leg_out->get_destination()->scan_distance_remaining(ref)
+      get_next()->scan_distance_remaining(ref)
       +d;
   } else {
     // finish, reset
@@ -199,12 +211,12 @@ double OrderedTaskPoint::scan_distance_planned()
 
   if (leg_in) {
     distance_planned = leg_in->leg_distance_planned()
-      +leg_in->get_origin()->distance_planned;
+      +get_previous()->distance_planned;
   } else {
     distance_planned = 0;
   }
   if (leg_out) {
-    return leg_out->get_destination()->scan_distance_planned();
+    return get_next()->scan_distance_planned();
   } else {
     return distance_planned;
   }
@@ -221,12 +233,12 @@ double OrderedTaskPoint::scan_distance_travelled(const GEOPOINT &ref)
 
   if (leg_in) {
     distance_travelled = leg_in->leg_distance_travelled(ref)
-      +leg_in->get_origin()->distance_travelled;
+      +get_previous()->distance_travelled;
   } else {
     distance_travelled = 0;
   }
   if (leg_out) {
-    return leg_out->get_destination()->scan_distance_travelled(ref);
+    return get_next()->scan_distance_travelled(ref);
   } else {
     return distance_travelled;
   }
@@ -237,12 +249,12 @@ double OrderedTaskPoint::scan_distance_scored(const GEOPOINT &ref)
 {
   if (leg_in) {
     distance_scored = leg_in->leg_distance_scored(ref)
-      +leg_in->get_origin()->distance_scored;
+      +get_previous()->distance_scored;
   } else {
     distance_scored = 0;
   }
   if (leg_out) {
-    return leg_out->get_destination()->scan_distance_scored(ref);
+    return get_next()->scan_distance_scored(ref);
   } else {
     return distance_scored;
   }
@@ -339,9 +351,14 @@ double OrderedTaskPoint::double_leg_distance(const GEOPOINT &ref) const
 {
   assert(leg_in);
   assert(leg_out);
+/* slow
   return 
     ::Distance(leg_in->get_origin()->get_reference_remaining(), 
                ref)+
     ::Distance(ref,
                leg_out->get_destination()->get_reference_remaining());
+*/
+  GEOPOINT p1 = get_previous()->get_reference_remaining();
+  GEOPOINT p2 = get_next()->get_reference_remaining();
+  return ::DoubleDistance(p1, ref, p2);
 }

@@ -68,6 +68,8 @@ public:
       state_exited.Time = -1;
     };
 
+  virtual ~OrderedTaskPoint() {};
+
   enum ActiveState_t {
     NOTFOUND_ACTIVE = 0,
     BEFORE_ACTIVE,
@@ -86,6 +88,9 @@ public:
   TaskLeg* get_leg_out() const;
   
   TaskLeg* get_leg_in() const;
+
+  OrderedTaskPoint* get_previous() const;
+  OrderedTaskPoint* get_next() const;
   
   ActiveState_t getActiveState() const {
     return active_state;
