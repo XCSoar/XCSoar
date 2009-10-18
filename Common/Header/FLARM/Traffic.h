@@ -44,19 +44,31 @@ Copyright_License {
 
 typedef struct _FLARM_TRAFFIC
 {
+  /** Location of the FLARM target */
   GEOPOINT Location;
+  /** TrackBearing of the FLARM target */
   double TrackBearing;
+  /** Speed of the FLARM target */
   double Speed;
+  /** Altitude of the FLARM target */
   double Altitude;
+  /** Turnrate of the FLARM target */
   double TurnRate;
+  /** Climbrate of the FLARM target */
   double ClimbRate;
+  /** Latitude-based distance of the FLARM target */
   double RelativeNorth;
+  /** Longitude-based distance of the FLARM target */
   double RelativeEast;
+  /** Altidude-based distance of the FLARM target */
   double RelativeAltitude;
+  /** FLARM id of the FLARM target */
   long ID;
+  /** (if exists) Name of the FLARM target */
   TCHAR Name[FLARM_NAME_SIZE];
   unsigned short IDType;
   unsigned short AlarmLevel;
+  /** Last time the FLARM target was seen */
   double Time_Fix;
   unsigned short Type;
 #ifdef FLARM_AVERAGE
