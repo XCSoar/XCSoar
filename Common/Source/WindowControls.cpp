@@ -896,16 +896,11 @@ int WndForm::ShowModal(void){
 }
 
 int WndForm::ShowModal(bool bEnableMap) {
-#ifdef ENABLE_SDL
-
-  // XXX
-  return 0;
-
-#else /* !ENABLE_SDL */
-
 #define OPENCLOSESUPPRESSTIME 500
+#ifndef ENABLE_SDL
   MSG msg;
   HWND oldFocusHwnd;
+#endif /* !ENABLE_SDL */
 
   PeriodClock enter_clock;
   enter_clock.update();
@@ -919,16 +914,37 @@ int WndForm::ShowModal(bool bEnableMap) {
 
   mModalResult = 0;
 
+#ifndef ENABLE_SDL
   oldFocusHwnd = ::GetFocus();
+#endif /* !ENABLE_SDL */
   set_focus();
 
   FocusNext(NULL);
 
+#ifndef ENABLE_SDL
   bool hastimed = false;
+#endif /* !ENABLE_SDL */
   WndForm::timeAnyOpenClose.update(); // when current dlg opens or child closes
 
 #ifdef ENABLE_SDL
-  // XXX
+
+  update();
+
+  SDL_Event event;
+  while (SDL_WaitEvent(&event)) {
+    if (event.type == SDL_QUIT)
+      break;
+
+    if (event.type >= SDL_USEREVENT && event.type <= SDL_NUMEVENTS-1 &&
+        event.user.data1 != NULL) {
+      Window *window = (Window *)event.user.data1;
+      window->on_user(event.type - SDL_USEREVENT);
+    } else
+      parent->on_event(event);
+  }
+
+  return 0;
+
 #else /* !ENABLE_SDL */
   while ((mModalResult == 0) && GetMessage(&msg, NULL, 0, 0)) {
 //hack!
@@ -1098,11 +1114,11 @@ int WndForm::ShowModal(bool bEnableMap) {
   SetSourceRectangle(aniRect);
   */
 
+#ifndef ENABLE_SDL
   SetFocus(oldFocusHwnd);
+#endif /* !ENABLE_SDL */
 
   return(mModalResult);
-
-#endif /* !ENABLE_SDL */
 }
 
 void
