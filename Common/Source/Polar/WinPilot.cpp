@@ -43,6 +43,12 @@ Copyright_License {
 
 #include <math.h>
 
+/**
+ * Converts a WinPilot based to a XCSoar based polar
+ * @param POLARV Speed1, Speed2 and Speed3
+ * @param POLARW Sinkrate1, Sinkrate2 and Sinkrate3
+ * @param ww dry mass, maximum takeoff weight
+ */
 void PolarWinPilot2XCSoar(double POLARV[3], double POLARW[3], double ww[2]) {
   double d;
   double v1,v2,v3;
@@ -73,22 +79,26 @@ void PolarWinPilot2XCSoar(double POLARV[3], double POLARW[3], double ww[2]) {
       POLAR[1] = (w2-w3-POLAR[0]*(v2*v2-v3*v3))/d;
     }
 
-
-  WEIGHTS[0] = 70;                      // Pilot weight
-  WEIGHTS[1] = ww[0]-WEIGHTS[0];        // Glider empty weight
-  WEIGHTS[2] = ww[1];                   // Ballast weight
+  WEIGHTS[0] = 70; // Pilot weight
+  WEIGHTS[1] = ww[0] - WEIGHTS[0]; // Glider empty weight
+  WEIGHTS[2] = ww[1]; // Ballast weight
 
   POLAR[2] = (double)(w3 - POLAR[0] *v3*v3 - POLAR[1]*v3);
 
   // now scale off weight
   POLAR[0] = POLAR[0] * (double)sqrt(WEIGHTS[0] + WEIGHTS[1]);
   POLAR[2] = POLAR[2] / (double)sqrt(WEIGHTS[0] + WEIGHTS[1]);
-
 }
 
+// Example:
+// *LS-3  WinPilot POLAR file: MassDryGross[kg], MaxWaterBallast[liters], Speed1[km/h], Sink1[m/s], Speed2, Sink2, Speed3, Sink3
+// 403, 101, 115.03, -0.86, 174.04, -1.76, 212.72,  -3.4
+/**
+ * Reads the WinPilor polar file specified in the registry
+ * @return True if parsing was successful, False otherwise
+ */
 bool ReadWinPilotPolar(void) {
-
-  TCHAR	szFile[MAX_PATH] = TEXT("\0");
+  TCHAR szFile[MAX_PATH] = TEXT("\0");
   TCHAR ctemp[80];
   TCHAR TempString[READLINE_LENGTH+1];
   FILE *file;
@@ -168,6 +178,8 @@ bool ReadWinPilotPolar(void) {
 #ifdef HAVEEXCEPTIONS
       }__finally
 #endif
+
+      // QUESTION TB: why braces?!
       {
         fclose(file);
       }
@@ -180,6 +192,3 @@ bool ReadWinPilotPolar(void) {
   return(foundline);
 
 }
-
-// *LS-3	WinPilot POLAR file: MassDryGross[kg], MaxWaterBallast[liters], Speed1[km/h], Sink1[m/s], Speed2, Sink2, Speed3, Sink3
-// 403, 101, 115.03, -0.86, 174.04, -1.76, 212.72,	-3.4
