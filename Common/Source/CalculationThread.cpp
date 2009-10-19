@@ -41,11 +41,18 @@ Copyright_License {
 #include "Screen/Blank.hpp"
 #include "DeviceBlackboard.hpp"
 
+/**
+ * Constructor of the CalculationThread class
+ * @param _glide_computer The GlideComputer used for the CalculationThread
+ */
 CalculationThread::CalculationThread(GlideComputer *_glide_computer)
   :data_trigger(TEXT("dataTriggerEvent")),
    gps_trigger(TEXT("gpsUpdatedTriggerEvent")),
    glide_computer(_glide_computer) {}
 
+/**
+ * Content of the CalculationThread
+ */
 void
 CalculationThread::run()
 {
@@ -56,15 +63,19 @@ CalculationThread::run()
   // wait for proper startup signal
   globalRunningEvent.wait();
 
+  // main loop until stop signal is tested
   while (!closeTriggerEvent.test()) {
 
+    // wait until the data_trigger is triggered
+    // or MIN_WAIT_TIME has passed
     if (!data_trigger.wait(MIN_WAIT_TIME))
       continue;
 
     // update and transfer master info to glide computer
     mutexBlackboard.Lock();
+    // if (new GPS data available)
     if (gps_trigger.test()) {
-      // timeout on FLARM objects
+      // check for timeout on FLARM objects
       device_blackboard.FLARM_RefreshSlots();
       // lookup known traffic
       device_blackboard.FLARM_ScanTraffic();
@@ -73,8 +84,11 @@ CalculationThread::run()
       // inform map new data is ready
       drawTriggerEvent.trigger();
     }
+    // Copy GPS data from DeviceBlackboard to GlideComputerBlackboard
     glide_computer->ReadBlackboard(device_blackboard.Basic());
+    // Copy settings form SettingsComputerBlackboard to GlideComputerBlackboard
     glide_computer->ReadSettingsComputer(device_blackboard.SettingsComputer());
+    // Copy mapprojection from MapProjectionBlackboard to GlideComputerBlackboard
     glide_computer->ReadMapProjection(device_blackboard.MapProjection());
     mutexBlackboard.Unlock();
 
@@ -88,23 +102,29 @@ CalculationThread::run()
       // run the function anyway, because this gives audio functions
       // if no vario connected
       if (gps_trigger.test()) {
-	glide_computer->ProcessVario();
-	TriggerVarioUpdate(); // emulate vario update
-	calculations_updated = true;
+        glide_computer->ProcessVario();
+        TriggerVarioUpdate(); // emulate vario update
+        calculations_updated = true;
       }
     }
 
+    // if (new GPS data)
     if (gps_trigger.test()) {
+      // process GPS data
+      // if (time advanced)
       if (glide_computer->ProcessGPS()){
         need_calculations_slow = true;
       }
       calculations_updated = true;
     }
 
+    // drop out on exit event
     if (closeTriggerEvent.test())
-      break; // drop out on exit
+      break;
 
+    // if (time advanced and slow calculations need to be updated)
     if (need_calculations_slow) {
+      // do slow calculations
       glide_computer->ProcessIdle();
       need_calculations_slow = false;
       calculations_updated = true;
