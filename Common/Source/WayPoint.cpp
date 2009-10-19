@@ -41,8 +41,6 @@ Copyright_License {
 
 int WaypointsOutOfRange = 1; // include
 
-
-////
 #include "Protection.hpp"
 
 void WaypointScan::scan_forward(WaypointVisitor &visitor)
