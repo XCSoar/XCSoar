@@ -78,6 +78,10 @@ TCHAR NumToIGCChar(int n)  {
   }
 }
 
+/**
+ * Returns whether a task is declared to the device
+ * @return True if a task is declared to the device, False otherwise
+ */
 bool
 LoggerImpl::isTaskDeclared() const {
   return DeclaredToDevice;
@@ -93,24 +97,22 @@ int IGCCharToNum(TCHAR c)  {
   }
 }
 
-
 /*
 
-HFDTE141203  <- should be UTC, same as time in filename
-HFFXA100
-HFPLTPILOT:JOHN WHARINGTON
-HFGTYGLIDERTYPE:LS 3
-HFGIDGLIDERID:VH-WUE
-HFDTM100GPSDATUM:WGS84
-HFRFWFIRMWAREVERSION:3.6
-HFRHWHARDWAREVERSION:3.4
-HFFTYFR TYPE:GARRECHT INGENIEURGESELLSCHAFT,VOLKSLOGGER 1.0
-HFCIDCOMPETITIONID:WUE
-HFCCLCOMPETITIONCLASS:FAI
-HFCIDCOMPETITIONID:WUE
-HFCCLCOMPETITIONCLASS:15M
-*/
-
+ HFDTE141203  <- should be UTC, same as time in filename
+ HFFXA100
+ HFPLTPILOT:JOHN WHARINGTON
+ HFGTYGLIDERTYPE:LS 3
+ HFGIDGLIDERID:VH-WUE
+ HFDTM100GPSDATUM:WGS84
+ HFRFWFIRMWAREVERSION:3.6
+ HFRHWHARDWAREVERSION:3.4
+ HFFTYFR TYPE:GARRECHT INGENIEURGESELLSCHAFT,VOLKSLOGGER 1.0
+ HFCIDCOMPETITIONID:WUE
+ HFCCLCOMPETITIONCLASS:FAI
+ HFCIDCOMPETITIONID:WUE
+ HFCCLCOMPETITIONCLASS:15M
+ */
 
 void
 LoggerImpl::SetFRecordLastTime(double dTime)
@@ -698,7 +700,6 @@ LoggerImpl::AddDeclaration(double Latitude, double Longitude, const TCHAR *ID)
   IGCWriteRecord(szCRecord, szLoggerFileName);
 }
 
-
 // TODO code: make this thread-safe, since it could happen in the middle
 // of the calculations doing LogPoint or something else!
 
@@ -763,12 +764,19 @@ LoggerImpl::LoggerDeviceDeclare() {
 
 }
 
-
+/**
+ * Checks whether a Task is declared to the Logger.
+ * If so, asks whether to invalidate the declaration.
+ * @return True if a Task is NOT declared to the Logger, False otherwise
+ */
 bool
 LoggerImpl::CheckDeclaration(void)
 {
+  // if (Task is not declared)
   if (!isTaskDeclared()) {
     return true;
+
+  // else (Task is declared)
   } else {
     if(MessageBoxX(gettext(TEXT("OK to invalidate declaration?")),
 		   gettext(TEXT("Task declared")),
@@ -780,10 +788,6 @@ LoggerImpl::CheckDeclaration(void)
     }
   }
 }
-
-
-//////
-
 
 FILETIME LogFileDate(const NMEA_INFO &gps_info,
 		     TCHAR* filename) {
@@ -908,7 +912,6 @@ bool DeleteOldIGCFile(const NMEA_INFO &gps_info,
   return true; // did delete one
 }
 
-
 #define LOGGER_MINFREESTORAGE (250+MINFREESTORAGE)
 // JMW note: we want to clear up enough space to save the persistent
 // data (85 kb approx) and a new log file
@@ -971,9 +974,6 @@ LoggerImpl::LoggerClearFreeSpace(const NMEA_INFO &gps_info)
     return false;
   }
 }
-
-
-
 
 #include "Interface.hpp"
 
