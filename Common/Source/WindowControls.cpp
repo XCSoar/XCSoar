@@ -1484,6 +1484,13 @@ WndProperty::Editor::on_mouse_down(int x, int y)
     }
   } //end combopicker
 
+#ifndef ENABLE_SDL
+  if (parent->GetReadOnly())
+    /* drop this event, so the default handler doesn't obtain the
+       keyboard focus */
+    return true;
+#endif /* !ENABLE_SDL */
+
   return false;
 }
 
@@ -1553,13 +1560,8 @@ WndProperty::Editor::on_message(HWND hWnd, UINT message,
   switch (message) {
     case WM_SETFOCUS:
       KeyTimer(true, 0);
-      if (parent->GetReadOnly()) {
-        SetFocus((HWND)wParam);
-        return(0);
-      } else {
-        if ((HWND)wParam != parent->GetHandle()) {
-          parent->SetFocused(true, (HWND) wParam);
-        }
+      if ((HWND)wParam != parent->GetHandle()) {
+        parent->SetFocused(true, (HWND) wParam);
       }
     break;
 
