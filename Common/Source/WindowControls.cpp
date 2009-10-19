@@ -1195,15 +1195,6 @@ WndForm::SetUserMsgNotify(bool (*OnUserMsgNotify)(WindowControl *Sender, unsigne
 
 // normal form stuff (nonmodal)
 
-bool WndForm::SetFocused(bool Value, HWND FromTo){
-
-  bool res = WindowControl::SetFocused(Value, FromTo);
-
-  return(res);
-
-}
-
-
 int WndForm::OnUnhandledMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam){
 
   MSG msg;

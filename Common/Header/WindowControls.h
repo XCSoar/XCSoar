@@ -443,9 +443,6 @@ class WndForm:public WindowControl{
     ContainerWindow &GetClientAreaWindow(void);
     void AddClient(WindowControl *Client);
 
-    virtual bool SetFocused(bool Value, HWND FromTo);
-
-
     int OnLButtonUp(WPARAM wParam, LPARAM lParam){
 		(void)wParam; (void)lParam;
       return(0);
