@@ -163,7 +163,6 @@ TaskSafe::SetStartPoint(const int pointnum, const int waypointnum)
   _task.SetStartPoint(pointnum, waypointnum);
 }
 
-
 // AAT functions
 double
 TaskSafe::AdjustAATTargets(double desired) {
@@ -303,6 +302,10 @@ TaskSafe::ValidTaskPoint(const unsigned i)
   return _task.ValidTaskPoint(i);
 }
 
+/**
+ * Returns whether the ActiveTaskPoint is a valid TaskPoint
+ * @return True if the ActiveTaskPoint is a valid TaskPoint, False otherwise
+ */
 bool
 TaskSafe::Valid()
 { // read
@@ -440,7 +443,6 @@ TaskSafe::scan_leg_reverse(AbsoluteTaskLegVisitor &visitor, const bool write) {
   Poco::ScopedRWLock protect(lock, write);
   _task.scan_leg_reverse(visitor);
 };
-
 
 const SETTINGS_TASK &
 TaskSafe::getSettings()
