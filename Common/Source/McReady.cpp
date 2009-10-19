@@ -135,6 +135,10 @@ double GlidePolar::GetBugs() {
   return retval;
 }
 
+/**
+ * Returns the ballast percentage
+ * @return The ballast percentage
+ */
 double GlidePolar::GetBallast() {
   double retval;
   Lock();
@@ -155,6 +159,10 @@ double GlidePolar::GetCruiseEfficiency() {
   return retval;
 }
 
+/**
+ * Returns the ballast in liters
+ * @return The ballast in liters
+ */
 double GlidePolar::GetBallastLitres() {
   double retval;
   Lock();
@@ -163,42 +171,70 @@ double GlidePolar::GetBallastLitres() {
   return retval;
 }
 
+/**
+ * Sets the McCready value to val
+ * @param val The new McCready value
+ */
 void GlidePolar::SetMacCready(double val) {
   Lock();
   MACCREADY = val;
   Unlock();
 }
 
+/**
+ * Sets the bugs factor to val
+ * @param val The new bugs factor
+ */
 void GlidePolar::SetBugs(double val) {
   Lock();
   BUGS = val;
   Unlock();
 }
 
+/**
+ * Sets the cruise efficiency to val
+ * @param val The new cruise efficiency
+ */
 void GlidePolar::SetCruiseEfficiency(double val) {
   Lock();
   CRUISE_EFFICIENCY = val;
   Unlock();
 }
 
+/**
+ * Sets the ballast to val
+ * @param val The new ballast percentage
+ */
 void GlidePolar::SetBallast(double val) {
   Lock();
   BALLAST = val;
   Unlock();
 }
 
+/**
+ * Finds polar-related data (bestLD and minSinkRate)
+ * and fills the sinkratecache
+ * @param send
+ * @param settings
+ */
 void GlidePolar::UpdatePolar(bool send,
 			     const SETTINGS_COMPUTER &settings) {
 
   Lock();
   double BallastWeight;
+
+  // Calculate ballast in liters (=BallastLitres)
   BallastLitres = WEIGHTS[2] * BALLAST;
+  // Calculate total weight of the plane (=BallastWeight)
   BallastWeight = GetAUW();
+  // Calculate WingLoading if possible
   if (WingArea>0.1) {
     WingLoading = BallastWeight/WingArea;
   } else {
     WingLoading = 0;
   }
+
+  // Correct polar for BallastWeight and bugfactor
   BallastWeight = (double)sqrt(BallastWeight);
   double bugfactor = 1.0/BUGS;
   polar_a = POLAR[0] / BallastWeight*bugfactor;
@@ -206,7 +242,7 @@ void GlidePolar::UpdatePolar(bool send,
   polar_c = POLAR[2] * BallastWeight*bugfactor;
 
   // do preliminary scan to find min sink and best LD
-  // this speeds up mcready calculations because we have a reduced range
+  // this speeds up mccready calculations because we have a reduced range
   // to search across.
   // this also limits speed to fly to logical values (will never try
   // to fly slower than min sink speed)
@@ -215,6 +251,7 @@ void GlidePolar::UpdatePolar(bool send,
   bestld = 0.0;
   int i;
 
+  // Limit the processed speed to the user-specified safety speed
   if ((settings.SAFTEYSPEED==0)||(settings.SAFTEYSPEED>=MAXSAFETYSPEED)) {
     iSAFETYSPEED=MAXSAFETYSPEED-1;
   } else {
@@ -222,24 +259,31 @@ void GlidePolar::UpdatePolar(bool send,
   }
   MAXSPEED = iSAFETYSPEED;
 
+  // Iterate through the speed points on the polar
   for(i=4;i<=MAXSPEED;i++)
     {
-      double vtrack = (double)i; // TAS along bearing in cruise
+      // vtrack = TAS along bearing in cruise
+      double vtrack = (double)i;
+      // saves the sinkrate for the current speed (vtrack) without
+      // any wind or mccready
       double thesinkrate
         =  -SinkRate(polar_a,polar_b,polar_c,0,0,vtrack);
 
+      // calculate the LD
       double ld = vtrack/thesinkrate;
+      // if (LD is better then the best one found yet) save LD and speed;
       if (ld>=bestld) {
         bestld = ld;
         Vbestld = i;
       }
+      // if (sinkrate is better then the best one found yet) save sinkrate and speed;
       if (thesinkrate<= minsink) {
         minsink = thesinkrate;
         Vminsink = i;
       }
+      // save couple in cache
       sinkratecache[i] = -thesinkrate;
-
-    }
+  }
 
   /*
   int polar_ai = iround((polar_a*10)*4096);
@@ -250,10 +294,10 @@ void GlidePolar::UpdatePolar(bool send,
   int bestldi = iround(bestld*10);
   */
   Unlock();
-  /* use this instead? etc
-    devPutBugs(devA(), BUGS);
-    devPutBugs(devB(), BUGS);
-/// JMW TODO
+  // TODO JMW: use this instead? etc
+  /*
+  devPutBugs(devA(), BUGS);
+  devPutBugs(devB(), BUGS);
 
   if (GPS_INFO.VarioAvailable) {
 
@@ -270,37 +314,59 @@ void GlidePolar::UpdatePolar(bool send,
   }
   */
 
+  // TODO JMW: should call GCE_POLAR_CHANGED
+  /*
   if (send) {
-    /* JMW
-       should call GCE_POLAR_CHANGED
     devPutBallast(devA(), BALLAST);
     devPutBallast(devB(), BALLAST);
     devPutBugs(devA(), BUGS);
     devPutBugs(devB(), BUGS);
-    */
   }
+  */
 }
 
-
+/**
+ * Fetches the corresponding sinkrate from the sinkratecache
+ * and corrects it for the McCready value
+ * @param MC McCready value
+ * @param v The speed used for calculation
+ * @return The corresponding sinkrate
+ */
 inline double GlidePolar::_SinkRateFast(const double &MC, const int &v) {
+  // TODO TB: check this...
   return sinkratecache[v]-MC;
 }
 
+/**
+ * Calls _SinkRateFast with corrected speed
+ * @param MC McCready value
+ * @param v The speed used for calculation
+ * @return The corresponding sinkrate
+ */
 double GlidePolar::SinkRateFast(const double &MC, const int &v) {
   return _SinkRateFast(MC, max(4,min(iSAFETYSPEED, v)));
 }
 
-
+/**
+ * Calculates the sinkrate for the speed V
+ * @param V The speed used for calculation
+ * @return The corresponding sinkrate
+ * @see SinkRateFast
+ */
 double GlidePolar::SinkRate(double V) {
 
   return SinkRate(polar_a,polar_b,polar_c,0.0,0.0,V);
 
 }
 
-
 #define MIN_MACCREADY 0.000000000001
 
-
+/**
+ * Calculates the sinkrate for the speed V and the G load n
+ * @param V The speed used for calculation
+ * @param n G load
+ * @return The corresponding sinkrate
+ */
 double GlidePolar::SinkRate(double V, double n) {
   double w0 = SinkRate(polar_a,polar_b,polar_c,0.0,0.0,V);
   n = max(0.1,fabs(n));
@@ -309,7 +375,16 @@ double GlidePolar::SinkRate(double V, double n) {
   return w0-(V/(2*bestld))* (n*n-1)*(v2*v2);
 }
 
-
+/**
+ * Calculates the sinkrate for the given parameters
+ * @param a Polar factor A
+ * @param b Polar factor
+ * @param c Polar factor
+ * @param MC McCready value
+ * @param HW Head wind speed
+ * @param V Plane speed
+ * @return The corresponding sinkrate
+ */
 double GlidePolar::MacCreadyAltitude_internal(double emcready,
                                               double Distance,
                                               double Bearing,
@@ -468,7 +543,6 @@ double GlidePolar::MacCreadyAltitude_internal(double emcready,
   return -BestSinkRate * TimeToDestCruise;
 }
 
-
 double GlidePolar::SinkRate(double a,double b, double c,
                             double MC, double HW, double V)
 {
@@ -483,11 +557,14 @@ double GlidePolar::SinkRate(double a,double b, double c,
   return temp;
 }
 
-
-
+/**
+ * find the highest speed that provides a sink rate less than
+ * the specified sink rate
+ * @param w Sink rate limit
+ * @return highest speed that provides a sink rate less than
+ * the specified sink rate
+ */
 double GlidePolar::FindSpeedForSinkRate(double w) {
-  // find the highest speed that provides a sink rate less than
-  // the specified sink rate
   double vbest= Vminsink;
   for (int v=4; v<iSAFETYSPEED; v++) {
     double wthis = _SinkRateFast(0, v);
@@ -497,7 +574,6 @@ double GlidePolar::FindSpeedForSinkRate(double w) {
   }
   return vbest;
 }
-
 
 double GlidePolar::MacCreadyAltitude_heightadjust(double emcready,
 						  double Distance,
@@ -591,9 +667,7 @@ double GlidePolar::MacCreadyAltitude_heightadjust(double emcready,
   }
   return Altitude;
 
-
 }
-
 
 double GlidePolar::MacCreadyAltitude(double emcready,
                                      double Distance,
