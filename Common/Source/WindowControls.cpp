@@ -391,8 +391,7 @@ void WindowControl::SetCaption(const TCHAR *Value){
 
 }
 
-bool WindowControl::SetFocused(bool Value, HWND FromTo){
-  (void)FromTo;
+bool WindowControl::SetFocused(bool Value){
   bool res = mHasFocus;
 
   if (mHasFocus != Value){
@@ -688,6 +687,22 @@ WindowControl *WindowControl::FocusPrev(WindowControl *Sender){
   return(NULL);
 }
 
+bool
+WindowControl::on_setfocus()
+{
+  ContainerWindow::on_setfocus();
+  SetFocused(true);
+  return true;
+}
+
+bool
+WindowControl::on_killfocus()
+{
+  ContainerWindow::on_killfocus();
+  SetFocused(false);
+  return true;
+}
+
 #ifndef ENABLE_SDL
 
 LRESULT
@@ -695,14 +710,6 @@ WindowControl::on_message(HWND hwnd, UINT uMsg,
                           WPARAM wParam, LPARAM lParam)
 {
   switch (uMsg){
-    case WM_SETFOCUS:
-      SetFocused(true, (HWND) wParam);
-    return(0);
-
-    case WM_KILLFOCUS:
-      SetFocused(false, (HWND) wParam);
-    return(0);
-
   case WM_ERASEBKGND:
   case WM_PAINT:
   case WM_WINDOWPOSCHANGED:
@@ -1734,20 +1741,18 @@ bool WndProperty::SetReadOnly(bool Value){
   return(res);
 }
 
-bool WndProperty::SetFocused(bool Value, HWND FromTo){
-#ifdef ENABLE_SDL
-  // XXX
-#else /* !ENABLE_SDL */
-  const HWND mhEdit = edit;
+bool
+WndProperty::on_setfocus()
+{
+  edit.set_focus();
+  edit.set_selection();
+  return true;
+}
 
-  if (FromTo != mhEdit)
-    WindowControl::SetFocused(Value, FromTo);
-#endif /* !ENABLE_SDL */
-  if (Value){
-    edit.set_focus();
-    edit.set_selection();
-  }
-  return(0);
+bool
+WndProperty::on_killfocus()
+{
+  return true;
 }
 
 void
@@ -1759,7 +1764,7 @@ WndProperty::on_editor_setfocus()
   }
 
   if (!GetFocused())
-    SetFocused(true, NULL);
+    SetFocused(true);
 }
 
 void
@@ -1774,7 +1779,7 @@ WndProperty::on_editor_killfocus()
   }
 
   if (GetFocused())
-    SetFocused(false, NULL);
+    SetFocused(false);
 }
 
 bool

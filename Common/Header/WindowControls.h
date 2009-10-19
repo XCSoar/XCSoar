@@ -142,6 +142,9 @@ class WindowControl : public ContainerWindow {
   public:
     TCHAR* GetCaption(void) { return mCaption; };
 
+    virtual bool on_setfocus();
+    virtual bool on_killfocus();
+
 #ifndef ENABLE_SDL
     virtual LRESULT on_message(HWND hWnd, UINT message,
                                WPARAM wParam, LPARAM lParam);
@@ -176,7 +179,7 @@ class WindowControl : public ContainerWindow {
     int GetWidth(void){return(mWidth);};
     int GetHeight(void){return(mHeight);};
 
-    virtual bool SetFocused(bool Value, HWND FromTo);
+    bool SetFocused(bool Value);
     bool GetFocused(void);
     WindowControl *GetCanFocus(void);
     bool SetCanFocus(bool Value);
@@ -580,7 +583,8 @@ class WndProperty:public WindowControl{
     ~WndProperty(void);
     virtual void Destroy(void);
 
-    bool SetFocused(bool Value, HWND FromTo);
+    virtual bool on_setfocus();
+    virtual bool on_killfocus();
 
     void on_editor_setfocus();
     void on_editor_killfocus();

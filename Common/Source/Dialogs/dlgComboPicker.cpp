@@ -186,7 +186,7 @@ dlgComboPicker(ContainerWindow &parent, WndProperty *theProperty)
 #ifdef ENABLE_SDL
     wComboPopupListEntry->set_focus(); // XXX
 #else /* !ENABLE_SDL */
-    wComboPopupListEntry->SetFocused(true, wComboPopupWndProperty->GetHandle());
+    wComboPopupListEntry->SetFocused(true);
 #endif /* !ENABLE_SDL */
 
 
