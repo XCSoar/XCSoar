@@ -185,7 +185,7 @@ FlarmId* FlarmIdFile::GetFlarmIdItem(long id)
 
 /**
  * Finds a FlarmId object based on the given Callsign
- * @param id Callsign
+ * @param cn Callsign
  * @return FlarmId object
  */
 FlarmId* FlarmIdFile::GetFlarmIdItem(const TCHAR *cn)
