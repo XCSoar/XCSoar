@@ -2,7 +2,7 @@ COMPATSRC:=$(SRC)/wcecompat
 COMPAT	:=\
 	$(COMPATSRC)/ts_string.cpp
 
-ifneq ($(CONFIG_WINE),y)
+ifneq ($(HAVE_POSIX),y)
 COMPAT += $(COMPATSRC)/errno.cpp
 endif
 
