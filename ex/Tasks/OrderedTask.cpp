@@ -60,20 +60,25 @@ void
 OrderedTask::scan_distance_minmax(const GEOPOINT &location, bool full,
                                   double *dmin, double *dmax)
 {
-  TaskDijkstra dijkstra(this, tps.size());
   SearchPoint ac(location, task_projection);
   if (full) {
     // for max calculations, since one can still travel further in the sector,
     // we pretend we are on the previous turnpoint so the search samples will
     // contain the full boundary
+    unsigned atp = activeTaskPoint;
     if (activeTaskPoint>0) {
-      ts->scan_active(tps[activeTaskPoint-1]);
+      activeTaskPoint--;
+      ts->scan_active(tps[activeTaskPoint]);
     }
-    dijkstra.distance_max();
+    TaskDijkstra dijkstra_max(this, tps.size());
+    dijkstra_max.distance_max();
+
+    activeTaskPoint = atp;
     ts->scan_active(tps[activeTaskPoint]);
     *dmax = ts->scan_distance_max();
   }
-  dijkstra.distance_min(ac);
+  TaskDijkstra dijkstra_min(this, tps.size());
+  dijkstra_min.distance_min(ac);
   *dmin = ts->scan_distance_min();
 }
 
@@ -298,9 +303,8 @@ OrderedTask::OrderedTask(const TaskEvents &te, TaskAdvance &ta):
   tps.push_back(new FAISectorASTPoint(task_projection,wp[1]));
   tps.push_back(new CylinderAATPoint(task_projection,wp[2]));
   tps.push_back(new CylinderAATPoint(task_projection,wp[3]));
-//  tps.push_back(new FAISectorASTPoint(task_projection,wp[4]));
-//  tps.push_back(new FAISectorFinishPoint(task_projection,wp[0]));
-  tps.push_back(new FAISectorFinishPoint(task_projection,wp[4]));
+  tps.push_back(new CylinderAATPoint(task_projection,wp[4]));
+  tps.push_back(new FAISectorFinishPoint(task_projection,wp[0]));
 
   for (unsigned i=0; i+1<tps.size(); i++) {
     legs.push_back(new TaskLeg(*tps[i],*tps[i+1]));

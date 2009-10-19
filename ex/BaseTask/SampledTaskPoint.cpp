@@ -49,7 +49,7 @@ SampledTaskPoint::get_search_points(bool cheat)
 void SampledTaskPoint::default_boundary_points() { 
   double t=0;
   if (boundary_scored) {
-    for (t=0; t<1.0; t+= 0.05) {
+    for (t=0; t<=1.0; t+= 0.05) {
       SearchPoint sp(get_boundary_parametric(t), task_projection);
       boundary_points.push_back(sp);
     }

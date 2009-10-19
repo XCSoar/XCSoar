@@ -53,6 +53,7 @@ private:
    */
   OrderedTask* task;
   const SearchPoint &get_point(const ScanTaskPoint &sp) const;
+  unsigned get_size(unsigned stage) const;
 };
 
 #endif

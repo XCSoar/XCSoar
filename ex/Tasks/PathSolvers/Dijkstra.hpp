@@ -8,24 +8,26 @@ template <class Node> class Dijkstra {
 public:
   Dijkstra() {}
   Dijkstra(const Node &n, const unsigned &e=0) { 
-    push(n, e); 
+    push(n, n, e); 
   }
 
   void reset(const Node &n) {
     while (!q.empty()) {
       q.pop();
     }
-    push(n,0);
+    push(n,n,0);
   };
 
   bool empty() const { return q.empty(); }
 
-  void push(const Node &n, const unsigned &e=0) {
+  void push(const Node &n, const Node &pn, const unsigned &e=0) {
     Iter it = m.find(n);
-    if (it == m.end()) 
+    if (it == m.end()) { // first entry
       it = m.insert(make_pair(n, e)).first;
-    else if (it->second > e) {
+      set_predecessor(n, pn);
+    } else if (it->second > e) {
       it->second = e; // replace, it's bigger
+      set_predecessor(n, pn);
     } else 
       return;
     q.push(make_pair(e, it));
@@ -40,12 +42,32 @@ public:
 
   const unsigned &dist() const { return cur->second; }
 
-  void link(const Node &n, const unsigned &e=1) { 
-    push(n, cur->second + e); 
+  void link(const Node &n, const Node &pn, const unsigned &e=1) { 
+    push(n, pn, cur->second + e); 
+  }
+
+  Node get_predecessor(const Node &n) {
+    IterP it = p.find(n);
+    if (it == p.end()) { // first entry
+      return n;
+    } else {
+      return (it->second); 
+    }
   }
   
 private:
+
+  void set_predecessor(const Node &n, const Node &pn) {
+    IterP it = p.find(n);
+    if (it == p.end()) { // first entry
+      p.insert(make_pair(n, pn));
+    } else {
+      it->second = pn; 
+    }
+  }
+
   typedef typename std::map<Node, unsigned>::iterator Iter;
+  typedef typename std::map<Node, Node>::iterator IterP;
 
   typedef std::pair<unsigned, Iter> Value;
 
@@ -56,6 +78,8 @@ private:
   };
 
   std::map<Node, unsigned> m;
+
+  std::map<Node, Node> p;
 
   std::priority_queue<Value, std::vector<Value>, Rank> q;
 
