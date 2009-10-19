@@ -59,6 +59,11 @@ public:
     last = 0;
   }
 
+  /**
+   * Checks whether the GPS time was reversed
+   * @param now Current time
+   * @return True if time has been reversed, False otherwise
+   */
   bool check_reverse(const double now) {
     if (now<last) {
       last=now;
@@ -67,17 +72,31 @@ public:
       return false;
     }
   }
+
+  /**
+   * Set dt to a new value defined by _dt
+   * @param _dt The new value fot dt
+   */
   void set_dt(const double _dt) {
     dt = _dt;
   }
+
+  /**
+   * Calls check_advance(double, double) with dt
+   * as the default value for dt
+   * @param now Current time
+   * @see check_advance(double, double)
+   */
   bool check_advance(const double now) {
     return check_advance(now, dt);
   }
+
   double delta_advance(const double now) {
     double dt=now-last;
     if (check_reverse(now)) {
       return -1;
     }
+    // QUESTION TB: does that make sense?! seems to me like if(true) {...}
     if (now-last>=dt) {
       last= now;
       return dt;
@@ -87,10 +106,11 @@ public:
   }
 
   /**
-   * Checks whether the specified duration has passed since the last
-   * update.  If yes, it updates the time stamp.
-   *
-   * @param duration the duration in milliseconds
+   * Checks whether the specified duration (dt) has passed since the last
+   * update. If yes, it updates the time stamp.
+   * @param now Current time
+   * @param dt The timestep in milliseconds
+   * @return
    */
   bool check_advance(const double now, const double dt) {
     if (check_reverse(now)) {
