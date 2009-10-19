@@ -8,6 +8,7 @@
 
 int n_samples = 0;
 
+void test_ellipse();
 
 extern long count_mc;
 //extern int count_distance;
@@ -108,9 +109,17 @@ void test_polygon()
 */
 ////////////////////////////////////////////////
 
+char wait_prompt() {
+  printf("# [enter to continue]\n");
+  return getchar();
+}
+
 int main() {
   ::InitSineTable();
 //  test_mc();
+
+//  test_ellipse();
+//  exit(0);
 
   TaskEvents default_events;
   TaskManager test_task(default_events);
@@ -141,6 +150,7 @@ int main() {
   state_last.Location = w[0];
 
   for (int i=0; i<num_wp-1-1; i++) {
+    wait_prompt();
     for (double t=0; t<1.0; t+= 0.0025) {
       state.Location.Latitude = w[i].Latitude*(1.0-t)+w[i+1].Latitude*t+small_rand();
       state.Location.Longitude = w[i].Longitude*(1.0-t)+w[i+1].Longitude*t+small_rand();
@@ -154,10 +164,7 @@ int main() {
       test_task.report(state);
       n_samples++;
       state_last = state;
-    }
-    printf("[enter to continue]\n");
-    char c = getchar();
-    (void)c;
+    }    
   }
   distance_counts();
 

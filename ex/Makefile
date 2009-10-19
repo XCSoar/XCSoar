@@ -58,6 +58,7 @@ CXXFLAGS += -pedantic
 OBJS	:=\
 	test.o \
 	Util.o \
+	Util/Intersection.o \
 	GlideSolvers/MacCready.o \
 	GlideSolvers/ZeroFinder.o \
 	Navigation/Aircraft.o \
