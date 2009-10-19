@@ -37,6 +37,15 @@ Copyright_License {
 
 #include "Screen/ContainerWindow.hpp"
 
+#ifdef ENABLE_SDL
+
+ContainerWindow::ContainerWindow()
+  :active_child(NULL)
+{
+}
+
+#endif /* ENABLE_SDL */
+
 Brush *
 ContainerWindow::on_color(Window &window, Canvas &canvas)
 {
@@ -131,6 +140,35 @@ ContainerWindow::child_at(int x, int y)
         y >= child.get_top() && y < child.get_bottom())
       return &child;
   }
+
+  return NULL;
+}
+
+void
+ContainerWindow::set_active_child(Window &child)
+{
+  if (active_child == &child)
+    return;
+
+  Window *focus = get_focused_window();
+  if (focus != NULL)
+    focus->on_killfocus();
+
+  active_child = &child;
+
+  if (parent != NULL)
+    parent->set_active_child(*this);
+}
+
+Window *
+ContainerWindow::get_focused_window()
+{
+  Window *window = PaintWindow::get_focused_window();
+  if (window != NULL)
+    return window;
+
+  if (active_child != NULL)
+    return active_child->get_focused_window();
 
   return NULL;
 }

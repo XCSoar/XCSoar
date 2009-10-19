@@ -66,6 +66,8 @@ protected:
   ContainerWindow *parent;
   int left, top;
   BufferCanvas canvas;
+
+  bool focused;
 #else
   HWND hWnd;
   WNDPROC prev_wndproc;
@@ -78,7 +80,7 @@ private:
 
 public:
 #ifdef ENABLE_SDL
-  Window():parent(NULL) {}
+  Window():parent(NULL), focused(false) {}
 #else
   Window():hWnd(NULL), prev_wndproc(NULL) {}
 #endif
@@ -248,17 +250,22 @@ public:
 #endif
   }
 
-  void set_focus() {
 #ifdef ENABLE_SDL
-    // XXX
-#else
+
+  virtual Window *get_focused_window();
+  void set_focus();
+
+#else /* !ENABLE_SDL */
+
+  void set_focus() {
     ::SetFocus(hWnd);
-#endif
   }
+
+#endif /* !ENABLE_SDL */
 
   bool has_focus() const {
 #ifdef ENABLE_SDL
-    return true; // XXX
+    return focused;
 #else
     return hWnd == ::GetFocus();
 #endif

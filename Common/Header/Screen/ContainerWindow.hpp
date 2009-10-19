@@ -53,7 +53,17 @@ class ContainerWindow : public PaintWindow {
 protected:
 #ifdef ENABLE_SDL
   std::list<Window*> children;
-#endif /* !ENABLE_SDL */
+
+  /**
+   * The active child window is used to find the focused window.  If
+   * this attribute is NULL, then the focused window is not an
+   * (indirect) child window of this one.
+   */
+  Window *active_child;
+
+public:
+  ContainerWindow();
+#endif /* ENABLE_SDL */
 
 protected:
   virtual Brush *on_color(Window &window, Canvas &canvas);
@@ -78,12 +88,23 @@ public:
 
   void remove_child(Window &child) {
     children.remove(&child);
+
+    if (active_child == &child)
+      active_child = NULL;
   }
 
   /**
    * Locate a child window by its relative coordinates.
    */
   Window *child_at(int x, int y);
+
+  void set_active_child(Window &child);
+
+  /**
+   * Override the Window::get_focused_window() method, and search in
+   * the active child window.
+   */
+  virtual Window *get_focused_window();
 
   void expose_child(const Window &child) {
     canvas.copy(child.get_left(), child.get_top(),

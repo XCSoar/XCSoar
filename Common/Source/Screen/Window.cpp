@@ -185,6 +185,24 @@ Window::get_root_owner()
 
 #ifdef ENABLE_SDL
 
+Window *
+Window::get_focused_window()
+{
+  return focused ? this : NULL;
+}
+
+void
+Window::set_focus()
+{
+  if (parent != NULL)
+    parent->set_active_child(*this);
+
+  if (focused)
+    return;
+
+  on_setfocus();
+}
+
 void
 Window::expose(const RECT &rect)
 {
@@ -288,13 +306,27 @@ Window::on_command(unsigned id, unsigned code)
 bool
 Window::on_setfocus()
 {
+#ifdef ENABLE_SDL
+  assert(!focused);
+
+  focused = true;
+  return true;
+#else /* !ENABLE_SDL */
   return false;
+#endif /* !ENABLE_SDL */
 }
 
 bool
 Window::on_killfocus()
 {
+#ifdef ENABLE_SDL
+  assert(focused);
+
+  focused = false;
+  return true;
+#else /* !ENABLE_SDL */
   return false;
+#endif /* !ENABLE_SDL */
 }
 
 bool
