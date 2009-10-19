@@ -46,6 +46,10 @@ Copyright_License {
 Mutex mutexLogFile;
 
 #if !defined(NDEBUG) && !defined(GNAV)
+/**
+ * Saves the given string (Str) to the debug logfile
+ * @param Str String to be logged
+ */
 void DebugStore(const char *Str, ...)
 {
   char buf[MAX_PATH];
@@ -74,6 +78,10 @@ void DebugStore(const char *Str, ...)
 }
 #endif /* !NDEBUG */
 
+/**
+ * Saves the given string (Str) to the logfile
+ * @param Str String to be logged
+ */
 void StartupStore(const TCHAR *Str, ...)
 {
   TCHAR buf[MAX_PATH];
