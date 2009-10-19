@@ -80,7 +80,6 @@ DoAutoQNH(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated);
 #define ClimbCruiseSwitch 10
 #define THERMAL_TIME_MIN 45.0
 
-
 static bool WasFlying = false; // VENTA3 used by auto QFE: do not reset QFE
 			//   if previously in flight. So you can check
 			//   QFE on the ground, otherwise it turns to
@@ -94,7 +93,7 @@ GlideComputerAirData::GlideComputerAirData():
 {
   InitLDRotary(SettingsComputer(), &rotaryLD);
 
-  //JMW TODO enhancement: seed initial wind store with start conditions
+  // JMW TODO enhancement: seed initial wind store with start conditions
   // SetWindEstimate(Calculated().WindSpeed, Calculated().WindBearing, 1);
 }
 
@@ -108,7 +107,9 @@ void GlideComputerAirData::Initialise()
   CalibrationInit();
 }
 
-
+/**
+ * Calculates some basic values
+ */
 void GlideComputerAirData::ProcessBasic() {
   Heading();
   EnergyHeightNavAltitude();
@@ -119,9 +120,10 @@ void GlideComputerAirData::ProcessBasic() {
   SetCalculated().AdjustedAverageThermal = GetAverageThermal();
 }
 
-
+/**
+ * Calculates some other values
+ */
 void GlideComputerAirData::ProcessVertical() {
-
   Turning();
   Wind();
   ProcessThermalLocator();
@@ -132,15 +134,14 @@ void GlideComputerAirData::ProcessVertical() {
   SetCalculated().AverageLD=
     CalculateLDRotary(&Calculated(), &rotaryLD); // AverageLD
   Average30s();
-
   AverageClimbRate();
   AverageThermal();
   ThermalGain();
-
 }
 
-/////////////////////////////////////////////////////////////
-
+/**
+ * Calculates the wind
+ */
 void GlideComputerAirData::Wind() {
 
   if (!Calculated().Flying || !time_advanced()) return;
@@ -175,7 +176,9 @@ void GlideComputerAirData::Wind() {
   }
 }
 
-
+/**
+ * Passes data to the windanalyser.slot_newFlightMode method
+ */
 void GlideComputerAirData::DoWindCirclingMode(const bool left) {
   if ((SettingsComputer().AutoWindMode
        & D_AUTOWIND_CIRCLING)==D_AUTOWIND_CIRCLING) {
@@ -185,7 +188,9 @@ void GlideComputerAirData::DoWindCirclingMode(const bool left) {
   }
 }
 
-
+/**
+ * Passes data to the windanalyser.slot_newSample method
+ */
 void GlideComputerAirData::DoWindCirclingSample() {
   if ((SettingsComputer().AutoWindMode
        & D_AUTOWIND_CIRCLING)==D_AUTOWIND_CIRCLING) {
@@ -194,14 +199,15 @@ void GlideComputerAirData::DoWindCirclingSample() {
   }
 }
 
-
+/**
+ * Passes data to the windanalyser.slot_Altitude method
+ */
 void GlideComputerAirData::DoWindCirclingAltitude() {
   if (SettingsComputer().AutoWindMode>0) {
     windanalyser.slot_Altitude(&Basic(),
 			       &SetCalculated());
   }
 }
-
 
 void GlideComputerAirData::SetWindEstimate(const double wind_speed,
 					    const double wind_bearing,
@@ -215,10 +221,6 @@ void GlideComputerAirData::SetWindEstimate(const double wind_speed,
 				  v_wind, quality);
   }
 }
-
-
-////////////////////////////////////////////////////////////////////
-
 
 void GlideComputerAirData::AverageClimbRate()
 {
@@ -249,7 +251,6 @@ void GlideComputerAirData::AverageClimbRate()
   }
 }
 
-
 #ifdef NEWCLIMBAV
 ClimbAverageCalculator climbAverageCalculator;
 void GlideComputerAirData::Average30s()
@@ -273,7 +274,6 @@ void GlideComputerAirData::Average30s()
   static int num_samples = 0;
 
   if (time_advanced()) {
-
     if (Calculated().Circling != LastCalculated().Circling) {
       num_samples = 0;
       // reset!
@@ -299,7 +299,6 @@ void GlideComputerAirData::Average30s()
       if (num_samples<30) {
 	num_samples ++;
       }
-
     }
 
     double Vave = 0;
@@ -351,7 +350,6 @@ void GlideComputerAirData::Average30s()
     }
   }
 }
-
 #endif
 
 
@@ -384,7 +382,6 @@ void GlideComputerAirData::MaxHeightGain()
 				    Calculated().MinAltitude);
 }
 
-
 void GlideComputerAirData::ThermalGain()
 {
   if (Calculated().ClimbStartTime>=0) {
@@ -395,8 +392,6 @@ void GlideComputerAirData::ThermalGain()
     }
   }
 }
-
-
 
 void GlideComputerAirData::LD()
 {
@@ -429,7 +424,6 @@ void GlideComputerAirData::LD()
   }
 }
 
-
 void GlideComputerAirData::CruiseLD()
 {
   if(!Calculated().Circling) {
@@ -449,7 +443,11 @@ void GlideComputerAirData::CruiseLD()
   }
 }
 
-
+/**
+ * Calculates the heading, the turn rate of the heading,
+ * the estimated true airspeed, the estimated bank angle and
+ * the estimated pitch angle
+ */
 void GlideComputerAirData::Heading()
 {
   if ((Basic().Speed>0)||(Calculated().WindSpeed>0)) {
@@ -500,7 +498,13 @@ void GlideComputerAirData::Heading()
   }
 }
 
-
+/**
+ * 1. Determines which altitude to use (gps/baro)
+ * 2. If possible calculates true airspeed and tas/ias ratio
+ * 3. Calculates energy height on tas basis
+ *
+ * \f${m/2} \times v^2 = m \times g \times h\f$ therefore \f$h = {v^2}/{2 \times g}\f$
+ */
 void GlideComputerAirData::EnergyHeightNavAltitude()
 {
   // Determine which altitude to use for nav functions
@@ -514,6 +518,7 @@ void GlideComputerAirData::EnergyHeightNavAltitude()
   double ias_to_tas;
   double V_tas;
 
+  // Calculate true airspeed
   if (Basic().AirspeedAvailable && (Basic().IndicatedAirspeed>0)) {
     ias_to_tas = Basic().TrueAirspeed/Basic().IndicatedAirspeed;
     V_tas = Basic().TrueAirspeed;
@@ -521,6 +526,8 @@ void GlideComputerAirData::EnergyHeightNavAltitude()
     ias_to_tas = 1.0;
     V_tas = Calculated().TrueAirspeedEstimated;
   }
+
+  // Calculate energy height
   double V_bestld_tas = GlidePolar::Vbestld*ias_to_tas;
   double V_mc_tas = Calculated().VMacCready*ias_to_tas;
   V_tas = max(V_tas, V_bestld_tas);
@@ -529,7 +536,11 @@ void GlideComputerAirData::EnergyHeightNavAltitude()
     (V_tas*V_tas-V_target*V_target)/(9.81*2.0);
 }
 
-
+/**
+ * 1. Retrieves the terrain height
+ * 2. Calculates the altitude over terrain
+ * 3.
+ */
 void GlideComputerAirData::TerrainHeight()
 {
   short Alt = 0;
@@ -559,7 +570,10 @@ void GlideComputerAirData::TerrainHeight()
   }
 }
 
-
+/**
+ * 1. Calculates the vario values for gps vario, gps total energy vario and distance vario
+ * 2. Sets Vario to GPSVario or received Vario data from instrument
+ */
 void GlideComputerAirData::Vario()
 {
   double dT = Basic().Time-LastBasic().Time;
@@ -578,6 +592,7 @@ void GlideComputerAirData::Vario()
   }
 
   if (!Basic().VarioAvailable || Basic().Replay) {
+    /// TODO: why not TE?!
     SetCalculated().Vario = Calculated().GPSVario;
   } else {
     // get value from instrument
@@ -717,7 +732,6 @@ GlideComputerAirData::NettoVario()
   }
 }
 
-
 bool
 GlideComputerAirData::ProcessVario()
 {
@@ -731,12 +745,17 @@ GlideComputerAirData::ProcessVario()
   return time_advanced();
 }
 
-
+/**
+ * 1. Detects time retreat and calls ResetFlight if GPS lost
+ * 2. Detects change in replay status and calls ResetFlight if so
+ * 3. Calls DetectStartTime and saves the time of flight
+ * @return true as default, false if something is wrong in time
+ */
 bool
 GlideComputerAirData::FlightTimes()
 {
   if ((Basic().Time != 0) && time_retreated()) {
-    // 20060519:sgi added (Basic().Time != 0) dueto alwas return here
+    // 20060519:sgi added (Basic().Time != 0) due to always return here
     // if no GPS time available
     if (!Basic().NAVWarning) {
       // Reset statistics.. (probably due to being in IGC replay mode)
@@ -769,7 +788,9 @@ GlideComputerAirData::ProcessIdle()
   }
 }
 
-
+/**
+ * Detects takeoff and landing events
+ */
 void
 GlideComputerAirData::TakeoffLanding()
 {
@@ -781,7 +802,9 @@ GlideComputerAirData::TakeoffLanding()
     // stop system from shutting down if moving
     XCSoarInterface::InterfaceTimeoutReset();
   }
+  // GPS not lost
   if (!Basic().NAVWarning) {
+    // Speed too high for being on the ground
     if (Basic().Speed> TAKEOFFSPEEDTHRESHOLD) {
       SetCalculated().TimeInFlight= LastCalculated().TimeInFlight+1;
       SetCalculated().TimeOnGround= 0;
@@ -849,8 +872,6 @@ GlideComputerAirData::OnLanding()
   SetCalculated().Flying = false;
 }
 
-
-
 void
 GlideComputerAirData::OnTakeoff()
 {
@@ -865,8 +886,9 @@ GlideComputerAirData::OnTakeoff()
   SaveFinish();
 }
 
-
-// airspace stuff
+/**
+ * Predicts location and altitude after airspace warning time
+ */
 void
 GlideComputerAirData::PredictNextPosition()
 {
@@ -893,11 +915,9 @@ GlideComputerAirData::PredictNextPosition()
   // MJJ TODO Predict terrain altitude
   SetCalculated().NextAltitudeAGL =
     Calculated().NextAltitude - Calculated().TerrainAlt;
-
 }
 
 bool GlobalClearAirspaceWarnings = false;
-
 
 void
 GlideComputerAirData::AirspaceWarning()
@@ -1034,7 +1054,6 @@ GlideComputerAirData::TerrainFootprint(double screen_range)
   SetCalculated().Experimental = Calculated().TerrainBase;
 }
 
-
 void
 GlideComputerAirData::BallastDump()
 {
@@ -1058,8 +1077,6 @@ GlideComputerAirData::BallastDump()
     GlidePolar::UpdatePolar(true,SettingsComputer());
   }
 }
-
-
 
 void
 GlideComputerAirData::OnSwitchClimbMode(bool isclimb, bool left)
@@ -1092,7 +1109,6 @@ GlideComputerAirData::PercentCircling(const double Rate)
     SetCalculated().PercentCircling = 0.0;
   }
 }
-
 
 void
 GlideComputerAirData::ProcessThermalLocator()
@@ -1294,15 +1310,13 @@ GlideComputerAirData::Turning()
   }
 }
 
-
-///////////
-
 void
 GlideComputerAirData::ThermalSources()
 {
   GEOPOINT ground_location;
   double ground_altitude;
 
+  // QUESTION TB: why the braces?!
   {
     thermallocator.EstimateThermalBase(Calculated().ThermalEstimate_Location,
 				       Calculated().NavAltitude,
@@ -1477,7 +1491,6 @@ DoAutoQNH(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated)
     AirspaceQnhChangeNotify(QNH);
   }
 }
-
 
 void
 GlideComputerAirData::ProcessSun()
