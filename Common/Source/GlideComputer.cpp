@@ -33,7 +33,6 @@ Copyright_License {
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
-
 */
 
 #include "GlideComputer.hpp"
@@ -48,12 +47,19 @@ Copyright_License {
 #include "Components.hpp"
 #include "WayPointList.hpp"
 
+/**
+ * Constructor of the GlideComputer class
+ * @return
+ */
 GlideComputer::GlideComputer()
 {
 
 }
 
-
+/**
+ * Resets the GlideComputer data
+ * @param full Reset all data?
+ */
 void GlideComputer::ResetFlight(const bool full)
 {
   GlideComputerBlackboard::ResetFlight(full);
@@ -76,6 +82,9 @@ void GlideComputer::StartTask(const bool do_advance,
   }
 }
 
+/**
+ * Initializes the GlideComputer
+ */
 void GlideComputer::Initialise()
 {
   GlideComputerBlackboard::Initialise();
@@ -93,15 +102,24 @@ void GlideComputer::Initialise()
 
 }
 
-
+/**
+ * Log GPS fixes for GlideComputerStats and
+ * GlideComputerTask, if valid fix is detected
+ */
 void GlideComputer::DoLogging()
 {
+  // call Stats::DoLogging()
+  // -> returns if valid fix
+  // if (valid fix)
   if (GlideComputerStats::DoLogging()) {
+    // call Task::DoLogging()
     GlideComputerTask::DoLogging();
   }
 }
 
-
+/**
+ * Is called by the CalculationThread and processes the received GPS data in Basic()
+ */
 bool GlideComputer::ProcessGPS()
 {
   double mc = GlidePolar::GetMacCready();
@@ -110,6 +128,7 @@ bool GlideComputer::ProcessGPS()
   ProcessBasic();
   ProcessBasicTask(mc, ce);
 
+  // Check if everything is okay with the gps time and process it
   if (!FlightTimes()) {
     return false;
   }
@@ -130,19 +149,26 @@ bool GlideComputer::ProcessGPS()
   return true;
 }
 
-
+/**
+ * Calls GlideComputerAirData::ProcessVario()
+ */
 bool GlideComputer::ProcessVario()
 {
   return GlideComputerAirData::ProcessVario();
 }
 
-
+/**
+ * Calls GlideComputerStats::SaveTaskSpeed(val)
+ * @param val Task speed
+ */
 void GlideComputer::SaveTaskSpeed(double val)
 {
   GlideComputerStats::SaveTaskSpeed(val);
 }
 
-
+/**
+ * Process slow calculations. Called by the CalculationThread.
+ */
 void
 GlideComputer::ProcessIdle()
 {
@@ -153,10 +179,13 @@ GlideComputer::ProcessIdle()
   if ( EnableBestAlternate == true ) DoAlternates(Basic, Calculated,BestAlternate);
   */
 
+  // Log GPS fixes for internal usage
+  // (snail trail, stats, olc, ...)
   DoLogging();
 
   CalculateWaypointReachable();
 
+  // if (Task is not aborted and Task consists of more than one waypoint)
   if (!task.TaskIsTemporary()) {
     double mc = GlidePolar::GetMacCready();
     InSector();
@@ -166,8 +195,6 @@ GlideComputer::ProcessIdle()
 
   GlideComputerAirData::ProcessIdle();
 }
-
-
 
 bool
 GlideComputer::InsideStartHeight(const DWORD Margin) const
@@ -194,8 +221,6 @@ GlideComputer::SetLegStart()
     GlideComputerStats::SetLegStart();
 }
 
-
-/////
 #include "Math/NavFunctions.hpp" // used for team code
 #include "InputEvents.h"
 #include "SettingsComputer.hpp"
@@ -283,7 +308,6 @@ GlideComputer::CalculateTeammateBearingRange()
   }
 }
 
-
 void
 GlideComputer::OnTakeoff()
 {
@@ -316,7 +340,6 @@ GlideComputer::OnDepartedThermal()
   GlideComputerStats::OnDepartedThermal();
 }
 
-
 void
 GlideComputer::FLARM_ScanTraffic()
 {
@@ -324,23 +347,23 @@ GlideComputer::FLARM_ScanTraffic()
 
     for (int flarm_slot=0; flarm_slot<FLARM_MAX_TRAFFIC; flarm_slot++) {
       if (Basic().FLARM_Traffic[flarm_slot].ID>0) {
-	// JMW TODO: this is dangerous, it uses the task!
-	// it should be done outside the parser/comms thread
-	if ((Basic().FLARM_Traffic[flarm_slot].ID == SettingsComputer().TeamFlarmIdTarget)
-	    && way_points.verify_index(SettingsComputer().TeamCodeRefWaypoint)) {
-	  double bearing;
-	  double distance;
+        // JMW TODO: this is dangerous, it uses the task!
+        // it should be done outside the parser/comms thread
+        if ((Basic().FLARM_Traffic[flarm_slot].ID == SettingsComputer().TeamFlarmIdTarget)
+            && way_points.verify_index(SettingsComputer().TeamCodeRefWaypoint)) {
+          double bearing;
+          double distance;
 
-	  SetCalculated().TeammateLocation = Basic().FLARM_Traffic[flarm_slot].Location;
-	  DistanceBearing
-            (way_points.get(SettingsComputer().TeamCodeRefWaypoint).Location,
-             Basic().FLARM_Traffic[flarm_slot].Location,
-	     &distance,
-	     &bearing);
+          SetCalculated().TeammateLocation = Basic().FLARM_Traffic[flarm_slot].Location;
+          DistanceBearing
+                  (way_points.get(SettingsComputer().TeamCodeRefWaypoint).Location,
+                   Basic().FLARM_Traffic[flarm_slot].Location,
+             &distance,
+             &bearing);
 
-	  GetTeamCode(SetCalculated().TeammateCode, bearing, distance);
-	  SetCalculated().TeammateCodeValid = true;
-	}
+          GetTeamCode(SetCalculated().TeammateCode, bearing, distance);
+          SetCalculated().TeammateCodeValid = true;
+        }
       }
     }
   }
