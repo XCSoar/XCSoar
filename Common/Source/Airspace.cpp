@@ -742,6 +742,7 @@ void FindNearestAirspace(const GEOPOINT &location,
  * second line
  * @param u ?
  * @return 1 if lines intersect within bounds, 0 otherwise
+ * @see http://local.wasp.uwa.edu.au/~pbourke/geometry/lineline2d/
  */
 int line_line_intersection (const double x1, const double y1,
 			    const double dx, const double dy,
