@@ -336,7 +336,7 @@ double EastOrWest(double in, TCHAR EoW)
 /**
  * Converts a given double and 'N' and 'S' to the appropriate signed double
  * @param in Input value
- * @param EoW Input direction
+ * @param NoS Input direction
  * @return Signed value
  */
 double NorthOrSouth(double in, TCHAR NoS)
@@ -1104,15 +1104,13 @@ int FLARM_FindSlot(NMEA_INFO *GPS_INFO, long Id)
 {
   int i;
   for (i=0; i<FLARM_MAX_TRAFFIC; i++) {
-
     // find position in existing slot
     if (Id==GPS_INFO->FLARM_Traffic[i].ID) {
       return i;
     }
-
     // find old empty slot
-
   }
+
   // not found, so try to find an empty slot
   for (i=0; i<FLARM_MAX_TRAFFIC; i++) {
     if (GPS_INFO->FLARM_Traffic[i].ID==0) {
@@ -1121,6 +1119,7 @@ int FLARM_FindSlot(NMEA_INFO *GPS_INFO, long Id)
       return i;
     }
   }
+
   // still not found and no empty slots left, buffer is full
   return -1;
 }
@@ -1169,14 +1168,17 @@ bool NMEAParser::PFLAA(const TCHAR *String,
 	  &GPS_INFO->FLARM_Traffic[flarm_slot].Speed, // double              8
 	  &GPS_INFO->FLARM_Traffic[flarm_slot].ClimbRate, // double          9
 	  &GPS_INFO->FLARM_Traffic[flarm_slot].Type); // unsigned short     10
+
   // 1 relativenorth, meters
   GPS_INFO->FLARM_Traffic[flarm_slot].Location.Latitude =
     GPS_INFO->FLARM_Traffic[flarm_slot].RelativeNorth
     *FLARM_NorthingToLatitude + GPS_INFO->Location.Latitude;
+
   // 2 relativeeast, meters
   GPS_INFO->FLARM_Traffic[flarm_slot].Location.Longitude =
     GPS_INFO->FLARM_Traffic[flarm_slot].RelativeEast
     *FLARM_EastingToLongitude + GPS_INFO->Location.Longitude;
+
   // alt
   GPS_INFO->FLARM_Traffic[flarm_slot].Altitude =
     GPS_INFO->FLARM_Traffic[flarm_slot].RelativeAltitude +
@@ -1216,8 +1218,6 @@ void NMEAParser::TestRoutine(NMEA_INFO *GPS_INFO) {
   QNH = FindQNH(altraw, 50.0);
   h = AltitudeToQNHAltitude(altraw);
 
-  //
-
   i++;
 
   if (i>100) {
@@ -1238,8 +1238,6 @@ void NMEAParser::TestRoutine(NMEA_INFO *GPS_INFO) {
 #endif
 #endif
 }
-
-
 
 bool EnableLogNMEA = false;
 HANDLE nmeaLogFile = INVALID_HANDLE_VALUE;
