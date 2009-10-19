@@ -71,6 +71,15 @@ public:
 #endif /* !ENABLE_SDL */
   }
 
+  void get_text(TCHAR *text, size_t max_length) {
+#ifdef ENABLE_SDL
+    // XXX
+    *text = 0;
+#else /* !ENABLE_SDL */
+    ::GetWindowText(hWnd, text, max_length);
+#endif /* !ENABLE_SDL */
+  }
+
   void set_read_only(bool value) {
 #ifdef ENABLE_SDL
     // XXX
