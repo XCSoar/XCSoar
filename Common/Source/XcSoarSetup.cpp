@@ -1,4 +1,3 @@
-// XcSoarSetup.cpp : Defines the entry point for the DLL application.
 /*
 Copyright_License {
 
@@ -35,11 +34,11 @@ Copyright_License {
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
 */
-
-
-//http://www.codeguru.com/Cpp/W-P/ce/networking/article.php/c9269/
-
-
+/**
+ * Defines the entry point for the DLL application.
+ * @file XcSoarSetup.cpp
+ * @see http://www.codeguru.com/Cpp/W-P/ce/networking/article.php/c9269/
+ */
 
 #include <windows.h>
 #if (WIN32_PLATFORM_PSPC == 1)
@@ -52,15 +51,13 @@ Copyright_License {
 //#define DebugMessage(Caption, Text)    MessageBox(NULL, Text, Caption, MB_ICONINFORMATION)
 #define DebugMessage(Caption, Text)      ((void)0)
 
-///////////////////////////////////////////////////////////
-//PURPOSE : HANDLES TASKS DONE AT START OF INSTALLATION
-///////////////////////////////////////////////////////////
+/**
+ * Handles tasls done at start of installation
+ */
 codeINSTALL_INIT Install_Init(HWND hwndparent,
   BOOL ffirstcall, BOOL fpreviouslyinstalled, LPCTSTR pszinstalldir)
 {
-
   HKEY hKey = NULL;
-
 
   DebugMessage("Setup", "Install_Init Entry");
 
@@ -83,21 +80,18 @@ codeINSTALL_INIT Install_Init(HWND hwndparent,
 
   DebugMessage("Setup", "Install_Init Exit");
 
-  //return value
   return codeINSTALL_INIT_CONTINUE;
 }
 
-///////////////////////////////////////////////////////////
-//PURPOSE : HANDLES TASKS DONE AT END OF INSTALLATION
-///////////////////////////////////////////////////////////
+/**
+ * Handles tasks done at end of installation
+ */
 codeINSTALL_EXIT Install_Exit(
     HWND hwndparent,LPCTSTR pszinstalldir,
     WORD cfaileddirs,WORD cfailedfiles,WORD cfailedregkeys,
     WORD cfailedregvals,
     WORD cfailedshortcuts)
 {
-
-
   DebugMessage("Setup", "Install_Exit");
 
   SendMessage(HWND_BROADCAST, WM_WININICHANGE, 0xF2, 0);
@@ -105,13 +99,12 @@ codeINSTALL_EXIT Install_Exit(
   return codeINSTALL_EXIT_DONE;
 }
 
-///////////////////////////////////////////////////////////////
-//PURPOSE : HANDLES TASKS DONE AT BEGINNING OF UNINSTALLATION
-///////////////////////////////////////////////////////////////
+/**
+ * Handles tasks done at beginning of uninstallation
+ */
 codeUNINSTALL_INIT Uninstall_Init(
   HWND hwndparent,LPCTSTR pszinstalldir)
 {
-
   HKEY hKey = NULL;
 
   if (RegOpenKeyEx(HKEY_LOCAL_MACHINE ,
@@ -144,28 +137,23 @@ codeUNINSTALL_INIT Uninstall_Init(
 
   }
 
-  //return value
-    return codeUNINSTALL_INIT_CONTINUE;
+  return codeUNINSTALL_INIT_CONTINUE;
 }
 
-
-///////////////////////////////////////////////////////////
-//PURPOSE : HANDLES TASKS DONE AT END OF UNINSTALLATION
-///////////////////////////////////////////////////////////
+/**
+ * Handles tasks done at end of uninstallation
+ */
 codeUNINSTALL_EXIT Uninstall_Exit(HWND hwndparent)
 {
-    //do nothing
-    //return value
-    return codeUNINSTALL_EXIT_DONE;
+  //do nothing
+  //return value
+  return codeUNINSTALL_EXIT_DONE;
 }
-
-
 
 BOOL APIENTRY DllMain( HANDLE hModule,
                        DWORD  ul_reason_for_call,
                        LPVOID lpReserved
 					 )
 {
-    return TRUE;
+  return TRUE;
 }
-
