@@ -54,6 +54,9 @@ Copyright_License {
 #endif
 #endif /* !ENABLE_SDL */
 
+/**
+ * Main entry point for the whole XCSoar application
+ */
 int WINAPI WinMain(     HINSTANCE hInstance,
                         HINSTANCE hPrevInstance,
                         LPTSTR    lpCmdLine,
@@ -63,15 +66,20 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 
   InitAsset();
 
+  // Saves the current version string to XCSoar_Version
   Version();
+
+  // Write startup note + version to logfile
   StartupStore(TEXT("Starting XCSoar %s\n"), XCSoar_Version);
 
+  // Read options from the command line
   XCSoarGetOpts(lpCmdLine);
 
 #ifndef ENABLE_SDL
   InitCommonControls();
 #endif /* !ENABLE_SDL */
 
+  // Write initialization note to logfile
   StartupStore(TEXT("Initialise application instance\n"));
 
   // Perform application initialization and run loop
@@ -81,10 +89,6 @@ int WINAPI WinMain(     HINSTANCE hInstance,
     return FALSE;
   }
 }
-
-
-/////////////////////////////////////////
-
 
 /*
 #if _DEBUG
