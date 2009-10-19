@@ -197,7 +197,15 @@ public:
   }
 
   void raised_edge(RECT &rc) {
-    rectangle(rc.left, rc.top, rc.right, rc.bottom); // XXX
+    Pen bright(1, Color(240, 240, 240));
+    select(bright);
+    two_lines(rc.left, rc.bottom - 2, rc.left, rc.top,
+              rc.right - 2, rc.top);
+
+    Pen dark(1, Color(128, 128, 128));
+    select(dark);
+    two_lines(rc.left + 1, rc.bottom - 1, rc.right - 1, rc.bottom - 1,
+              rc.right - 1, rc.top + 1);
 
     ++rc.left;
     ++rc.top;
