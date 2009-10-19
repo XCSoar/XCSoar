@@ -39,6 +39,9 @@ Copyright_License {
 
 TCHAR XCSoar_Version[256] = TEXT("");
 
+/**
+ * Saves the current version string to XCSoar_Version
+ */
 void Version() {
   // Version String
 #ifdef GNAV
