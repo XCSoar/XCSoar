@@ -123,10 +123,6 @@ void DeviceBlackboard::StopReplay() {
   SetBasic().Replay = false;
 }
 
-
-//////////////////
-
-
 void
 DeviceBlackboard::SetNAVWarning(bool val)
 {
@@ -229,33 +225,48 @@ DeviceBlackboard::ReadSettingsMap(const SETTINGS_MAP
   memcpy(&settings_map,&settings,sizeof(SETTINGS_MAP));
 }
 
+/**
+ * Checks for timeout of the FLARM targets and
+ * saves the status to Basic()
+ */
 void
 DeviceBlackboard::FLARM_RefreshSlots() {
   int i;
   bool present = false;
-  if (Basic().FLARM_Available) {
 
+  // if (Flarm data is available)
+  if (Basic().FLARM_Available) {
+    // for each item in FLARM_Traffic
     for (i=0; i<FLARM_MAX_TRAFFIC; i++) {
+      // if (FLARM_Traffic[i] has data)
       if (Basic().FLARM_Traffic[i].ID>0) {
-	if ((Basic().Time> Basic().FLARM_Traffic[i].Time_Fix+2)
-	    || (Basic().Time< Basic().FLARM_Traffic[i].Time_Fix)) {
-	  // clear this slot if it is too old (2 seconds), or if
-	  // time has gone backwards (due to replay)
-	  SetBasic().FLARM_Traffic[i].ID= 0;
-	  SetBasic().FLARM_Traffic[i].Name[0] = 0;
-	} else {
-	  present = true;
-	}
+        // if (FLARM target is too old or time has gone backwards)
+        if ((Basic().Time > Basic().FLARM_Traffic[i].Time_Fix + 2)
+            || (Basic().Time < Basic().FLARM_Traffic[i].Time_Fix)) {
+          // clear this slot if it is too old (2 seconds), or if
+          // time has gone backwards (due to replay)
+          SetBasic().FLARM_Traffic[i].ID = 0;
+          SetBasic().FLARM_Traffic[i].Name[0] = 0;
+        } else {
+          // FLARM data is present
+          present = true;
+        }
       }
     }
   }
+
+  // Save the status of present into Basic()
   SetBasic().FLARMTraffic = present;
   SetBasic().NewTraffic = false;
 }
 
+/**
+ * Sets the system time to GPS time if not yet done and
+ * defined in settings
+ */
 void
 DeviceBlackboard::SetSystemTime() {
-  // JMW, this should be done outside the parser..
+  // TODO JMW: this should be done outside the parser..
 #ifndef _SIM_
   // Altair doesn't have a battery-backed up realtime clock,
   // so as soon as we get a fix for the first time, set the
@@ -266,6 +277,8 @@ DeviceBlackboard::SetSystemTime() {
       && !sysTimeInitialised) {
     SYSTEMTIME sysTime;
     ::GetSystemTime(&sysTime);
+
+    // QUESTION TB: why do we save hours, mins and secs?!
     int hours = (int)Basic().Hour;
     int mins = (int)Basic().Minute;
     int secs = (int)Basic().Second;
@@ -295,30 +308,36 @@ DeviceBlackboard::SetSystemTime() {
 #endif
 }
 
-// TODO: this is a bit silly, it searches every time a target is
-// visible... going to be slow..
-// should only scan the first time it appears with that ID.
-
-// at least it is now not being done by the parser
-
+/**
+ * Tries to find a name for every current FLARM_Traffic id
+ */
 void
 DeviceBlackboard::FLARM_ScanTraffic()
 {
+  // TODO: this is a bit silly, it searches every time a target is
+  // visible... going to be slow..
+  // should only scan the first time it appears with that ID.
+  // at least it is now not being done by the parser
+
+  // if (FLARM data is available)
   if (Basic().FLARM_Available) {
-
+    // for each item in FLARM_Traffic
     for (int flarm_slot=0; flarm_slot<FLARM_MAX_TRAFFIC; flarm_slot++) {
+      // if (FLARM_Traffic[flarm_slot] has data)
       if (Basic().FLARM_Traffic[flarm_slot].ID>0) {
+        // if (Target currently without name)
+        if (!_tcslen(Basic().FLARM_Traffic[flarm_slot].Name)) {
+          // need to lookup name for this target
+	        const TCHAR *fname =
+              LookupFLARMDetails(Basic().FLARM_Traffic[flarm_slot].ID);
 
-	if (!_tcslen(Basic().FLARM_Traffic[flarm_slot].Name)) {
-	  // need to lookup name for this target
-	  const TCHAR *fname =
-	    LookupFLARMDetails(Basic().FLARM_Traffic[flarm_slot].ID);
-	  if (fname) {
-	    _tcscpy(SetBasic().FLARM_Traffic[flarm_slot].Name,fname);
-	  } else {
-	    SetBasic().FLARM_Traffic[flarm_slot].Name[0]=0;
-	  }
-	}
+          // if (name for FLARM id found)
+          if (fname) {
+            _tcscpy(SetBasic().FLARM_Traffic[flarm_slot].Name, fname);
+          } else {
+            SetBasic().FLARM_Traffic[flarm_slot].Name[0] = 0;
+          }
+        }
       }
     }
   }
