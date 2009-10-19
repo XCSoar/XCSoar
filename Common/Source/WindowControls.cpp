@@ -591,7 +591,6 @@ WindowControl::on_key_up(unsigned key_code)
 void
 WindowControl::on_paint(Canvas &canvas)
 {
-
   RECT rc;
 
   rc.left = 0;
@@ -635,6 +634,8 @@ WindowControl::on_paint(Canvas &canvas)
   }
 
   PaintSelector(canvas);
+
+  ContainerWindow::on_paint(canvas);
 }
 
 WindowControl *WindowControl::FocusNext(WindowControl *Sender){
@@ -1100,6 +1101,8 @@ int WndForm::ShowModal(bool bEnableMap) {
 void
 WndForm::on_paint(Canvas &canvas)
 {
+  WindowControl::on_paint(canvas);
+
   RECT rcClient = get_client_rect();
 
   canvas.select(GetBorderPen());
