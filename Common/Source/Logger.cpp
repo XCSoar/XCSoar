@@ -40,7 +40,6 @@
 
 /**
  * Constructor of the Logger class
- * @return
  */
 Logger::Logger()
 {
@@ -49,7 +48,6 @@ Logger::Logger()
 
 /**
  * Destructor of the Logger class
- * @return
  */
 Logger::~Logger()
 {
@@ -69,6 +67,11 @@ Logger::LogPoint(const NMEA_INFO &gps_info)
   }
 };
 
+/**
+ * Checks whether a Task is declared to the Logger.
+ * If so, asks whether to invalidate the declaration.
+ * @return True if a Task is NOT declared to the Logger, False otherwise
+ */
 bool
 Logger::CheckDeclaration(void)
 {
@@ -158,4 +161,3 @@ Logger::clearBuffer()
   Poco::ScopedRWLock protect(lock, true);
   return _logger->clearBuffer();
 };
-
