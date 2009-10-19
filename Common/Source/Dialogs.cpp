@@ -68,6 +68,9 @@ ProgressWindow *XCSoarInterface::progress_window = NULL;
 
 HCURSOR ActionInterface::oldCursor = NULL;
 
+/**
+ * Activates the Hourglass animation
+ */
 void ActionInterface::StartHourglassCursor(void) {
   HCURSOR newc = LoadCursor(NULL, IDC_WAIT);
   oldCursor = (HCURSOR)SetCursor(newc);
@@ -76,6 +79,9 @@ void ActionInterface::StartHourglassCursor(void) {
 #endif
 }
 
+/**
+ * Deactivates the Hourglass animation
+ */
 void ActionInterface::StopHourglassCursor(void) {
   SetCursor(oldCursor);
 #ifdef GNAV
@@ -84,11 +90,17 @@ void ActionInterface::StopHourglassCursor(void) {
   oldCursor = NULL;
 }
 
+/**
+ * Closes the ProgressWindow
+ */
 void XCSoarInterface::CloseProgressDialog() {
   if (progress_window != NULL)
     delete progress_window;
 }
 
+/**
+ * Updates the ProgressWindow to go up one step
+ */
 void XCSoarInterface::StepProgressDialog(void) {
   if (progress_window != NULL)
     progress_window->step();
@@ -101,7 +113,10 @@ BOOL XCSoarInterface::SetProgressStepSize(int nSize) {
   return(TRUE);
 }
 
-
+/**
+ * Creates or updates the ProgressWindow
+ * @param text Text inside the progress bar
+ */
 void
 XCSoarInterface::CreateProgressDialog(const TCHAR* text) {
   if (progress_window == NULL)
@@ -111,15 +126,17 @@ XCSoarInterface::CreateProgressDialog(const TCHAR* text) {
   progress_window->set_pos(0);
 }
 
-
-///////////////
-
+/**
+ * Opens the Analysis window
+ */
 void PopupAnalysis()
 {
   dlgAnalysisShowModal();
 }
 
-
+/**
+ * Opens the WaypointDetails window
+ */
 void PopupWaypointDetails()
 {
   dlgWayPointDetailsShowModal();
@@ -129,6 +146,16 @@ void PopupWaypointDetails()
 #include "Interface.hpp"
 #include "MapWindow.h"
 
+/**
+ * Opens up the WaypointDetails window of the nearest
+ * waypoint to location
+ * @param way_points WayPointList including all possible
+ * waypoints for the calculation
+ * @param location Location where to search
+ * @param range Maximum range to search
+ * @param pan True if in Pan mode
+ * @return True if a waypoint was found
+ */
 bool
 PopupNearestWaypointDetails(const WayPointList &way_points,
                             const GEOPOINT &location,
@@ -160,7 +187,6 @@ PopupNearestWaypointDetails(const WayPointList &way_points,
 
   return false;
 }
-
 
 bool PopupInteriorAirspaceDetails(const GEOPOINT &location) {
   unsigned int i;
