@@ -140,7 +140,7 @@ void SaveFLARMDetails(void)
 
 /**
  * Looks up the FLARM id in the FLARM details array
- * and return the array id
+ * and returns the array id
  * @param id FLARM id
  * @return Array id if found, otherwise -1
  */
@@ -158,8 +158,8 @@ int LookupSecondaryFLARMId(int id)
 
 /**
  * Looks up the FLARM callsign in the FLARM details array
- * and return the array id
- * @param id Callsign
+ * and returns the array id
+ * @param cn Callsign
  * @return Array id if found, otherwise -1
  */
 int LookupSecondaryFLARMId(const TCHAR *cn)
