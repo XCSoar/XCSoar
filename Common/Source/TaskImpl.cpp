@@ -59,6 +59,10 @@ Copyright_License {
 
 static int Task_saved[MAXTASKPOINTS+1];
 
+/**
+ * Constructor of the Task class
+ * @return
+ */
 Task::Task():
   ActiveTaskPoint(0),
   active_waypoint_saved(0),
@@ -89,35 +93,62 @@ Task::Task():
 
   ClearTask();
   ClearStartPoints();
-
-
 }
 
+/**
+ * Returns whether AutoAdvance is armed
+ * @return True if AutoAdvance is armed, False otherwise
+ */
 bool Task::isAdvanceArmed() const {
   return AdvanceArmed;
 }
 
+/**
+ * Sets the AutoAdvance arm status
+ * @param val The new arm status
+ */
 void Task::setAdvanceArmed(const bool val) {
   AdvanceArmed = val;
 }
 
+/**
+ * Returns whether the task is aborted
+ * @return True if the task is aborted, False otherwise
+ */
 bool Task::isTaskAborted() const {
   return TaskAborted;
 }
 
+/**
+ * Returns whether the task is modified
+ * @return True if the task is modified, False otherwise
+ */
 bool Task::isTaskModified() const {
   return TaskModified;
 }
 
+/**
+ * Sets whether the task is modified or not
+ * @param set True if the task is modified, False otherwise
+ */
 void Task::SetTaskModified(const bool set) {
   TaskModified = set;
 }
 
+/**
+ * Returns whether the target is modified
+ * @return True if the target is modified, False otherwise
+ */
 bool
 Task::isTargetModified() const {
   return TargetModified;
 }
 
+/**
+ * Sets whether the target is modified or not
+ * and calls SetTaskModified() if True
+ * @param set True if the target is modified, False otherwise
+ */
 void Task::SetTargetModified(const bool set) {
   TargetModified = set;
   if (set) {
@@ -125,6 +156,10 @@ void Task::SetTargetModified(const bool set) {
   }
 }
 
+/**
+ * Resets the Waypoint in task_points defined by j
+ * @param j
+ */
 void Task::ResetTaskWaypoint(int j) {
   task_points[j].Index = -1;
   task_points[j].AATTargetOffsetRadius = 0.0;
@@ -139,6 +174,8 @@ void Task::ResetTaskWaypoint(int j) {
 
 void Task::FlyDirectTo(const int index,
                        const SETTINGS_COMPUTER &settings_computer) {
+
+  // if (a Task is declared to the Logger) leave function
   if (!logger.CheckDeclaration())
     return;
 
@@ -170,8 +207,11 @@ void Task::FlyDirectTo(const int index,
   RefreshTask(settings_computer);
 }
 
-
-// Swaps waypoint at current index with next one.
+/**
+ * Swaps waypoint at given index with next one
+ * @param index Index of the first waypoint to be swaped
+ * @param settings_computer SettingsComputer object
+ */
 void Task::SwapWaypoint(const int index,
                         const SETTINGS_COMPUTER &settings_computer) {
   if (!logger.CheckDeclaration())
@@ -193,7 +233,6 @@ void Task::SwapWaypoint(const int index,
   }
   RefreshTask(settings_computer);
 }
-
 
 // Inserts a waypoint into the task, in the
 // position of the ActiveWaypoint.  If append=true, insert at end of the
@@ -261,7 +300,6 @@ void Task::DefaultTask(const SETTINGS_COMPUTER &settings_computer) {
   }
 }
 
-
 // RemoveTaskpoint removes a single waypoint
 // from the current task.  index specifies an entry
 // in the task_points[] array - NOT a waypoint index.
@@ -300,7 +338,6 @@ void Task::RemoveTaskPoint(int index,
 
   RefreshTask(settings_computer);
 }
-
 
 // Index specifies a waypoint in the WP list
 // It won't necessarily be a waypoint that's
@@ -384,7 +421,6 @@ void Task::RemoveWaypoint(const int index,
   RefreshTask(settings_computer);
 }
 
-
 void Task::ReplaceWaypoint(const int index,
                            const SETTINGS_COMPUTER &settings_computer) {
   if (!logger.CheckDeclaration())
@@ -406,7 +442,6 @@ void Task::ReplaceWaypoint(const int index,
   }
   RefreshTask(settings_computer);
 }
-
 
 void Task::RefreshTask(const SETTINGS_COMPUTER &settings_computer)
 {
@@ -471,7 +506,6 @@ Task::getTaskPoint(const int v) const
   return task_points[r];
 }
 
-
 void
 Task::setTaskPoint(const unsigned index, const TASK_POINT& tp)
 {
@@ -515,7 +549,6 @@ Task::RotateStartPoints(const SETTINGS_COMPUTER &settings_computer)
 
   RefreshTask(settings_computer);
 }
-
 
 double Task::AdjustAATTargets(double desired)
 {
@@ -720,7 +753,6 @@ Task::CalculateAATTaskSectors(const NMEA_INFO &gps_info)
   }
 }
 
-
 void Task::ClearTask(void) {
   memset( &(task_points), 0, sizeof(Task_t));
   memset( &(task_start_points), 0, sizeof(Start_t));
@@ -747,6 +779,10 @@ void Task::ClearTask(void) {
   }
 }
 
+/**
+ * Returns whether the ActiveTaskPoint is a valid TaskPoint
+ * @return True if the ActiveTaskPoint is a valid TaskPoint, False otherwise
+ */
 bool
 Task::Valid() const
 {
@@ -818,9 +854,6 @@ Task::FindInsideAATSectorRange(const GEOPOINT &location,
           max(1,t_distance))*2-1;
 }
 
-
-/////////////////
-
 double
 Task::DoubleLegDistance(const int taskwaypoint,
                         const GEOPOINT &location) const
@@ -835,8 +868,14 @@ Task::DoubleLegDistance(const int taskwaypoint,
   }
 }
 
-//////////////////////////////////////////////////////
-
+/**
+ * Returns whether a task is temporary.
+ *
+ * Condition 1: Task is aborted -> temporary
+ * Condition 2: Task consists of just one waypoint and is not(?)
+ * saved -> temporary
+ * @return True if task is temporary, False otherwise
+ */
 bool
 Task::TaskIsTemporary(void) const {
   bool retval = false;
@@ -849,7 +888,6 @@ Task::TaskIsTemporary(void) const {
   };
   return retval;
 }
-
 
 void Task::BackupTask(void) {
   for (int i=0; i<=MAXTASKPOINTS; i++) {
