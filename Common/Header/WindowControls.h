@@ -532,10 +532,8 @@ class WndProperty:public WindowControl{
     virtual bool on_mouse_down(int x, int y);
     virtual bool on_key_down(unsigned key_code);
     virtual bool on_key_up(unsigned key_code);
-#ifndef ENABLE_SDL
-    virtual LRESULT on_message(HWND hWnd, UINT message,
-                               WPARAM wParam, LPARAM lParam);
-#endif /* !ENABLE_SDL */
+    virtual bool on_setfocus();
+    virtual bool on_killfocus();
   };
 
   private:
@@ -583,6 +581,9 @@ class WndProperty:public WindowControl{
     virtual void Destroy(void);
 
     bool SetFocused(bool Value, HWND FromTo);
+
+    void on_editor_setfocus();
+    void on_editor_killfocus();
 
     bool SetReadOnly(bool Value);
 

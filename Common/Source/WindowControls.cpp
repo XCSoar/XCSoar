@@ -1550,33 +1550,23 @@ WndProperty::Editor::on_key_up(unsigned key_code)
   return false;
 }
 
-#ifdef ENABLE_SDL
-// XXX
-#else /* !ENABLE_SDL */
-LRESULT
-WndProperty::Editor::on_message(HWND hWnd, UINT message,
-                                WPARAM wParam, LPARAM lParam)
+bool
+WndProperty::Editor::on_setfocus()
 {
-  switch (message) {
-    case WM_SETFOCUS:
-      KeyTimer(true, 0);
-      if ((HWND)wParam != parent->GetHandle()) {
-        parent->SetFocused(true, (HWND) wParam);
-      }
-    break;
-
-    case WM_KILLFOCUS:
-      KeyTimer(true, 0);
-      if ((HWND)wParam != parent->GetHandle()){
-        parent->SetFocused(false, (HWND) wParam);
-      }
-    break;
-  }
-
-  return EditWindow::on_message(hWnd, message, wParam, lParam);
+  KeyTimer(true, 0);
+  EditWindow::on_setfocus();
+  parent->on_editor_setfocus();
+  return true;
 }
-#endif /* !ENABLE_SDL */
 
+bool
+WndProperty::Editor::on_killfocus()
+{
+  KeyTimer(true, 0);
+  parent->on_editor_killfocus();
+  EditWindow::on_killfocus();
+  return true;
+}
 
 Bitmap WndProperty::hBmpLeft32;
 Bitmap WndProperty::hBmpRight32;
@@ -1749,26 +1739,6 @@ bool WndProperty::SetFocused(bool Value, HWND FromTo){
   // XXX
 #else /* !ENABLE_SDL */
   const HWND mhEdit = edit;
-  TCHAR sTmp[128];
-
-  if (!Value && (FromTo == mhEdit))
-    Value = true;
-
-    if (Value != GetFocused()){
-      if (Value){
-        if (mDataField != NULL){
-          mDataField->GetData();
-          edit.set_text(mDataField->GetAsString());
-        }
-      } else {
-        if (mDataField != NULL){
-          edit.get_text(sTmp, (sizeof(sTmp)/sizeof(TCHAR))-1);
-          mDataField->SetAsString(sTmp);
-          mDataField->SetData();
-          edit.set_text(mDataField->GetAsDisplayString());
-      }
-    }
-  }
 
   if (FromTo != mhEdit)
     WindowControl::SetFocused(Value, FromTo);
@@ -1778,6 +1748,33 @@ bool WndProperty::SetFocused(bool Value, HWND FromTo){
     edit.set_selection();
   }
   return(0);
+}
+
+void
+WndProperty::on_editor_setfocus()
+{
+  if (mDataField != NULL) {
+    mDataField->GetData();
+    edit.set_text(mDataField->GetAsString());
+  }
+
+  if (!GetFocused())
+    SetFocused(true, NULL);
+}
+
+void
+WndProperty::on_editor_killfocus()
+{
+  if (mDataField != NULL) {
+    TCHAR sTmp[128];
+    edit.get_text(sTmp, (sizeof(sTmp)/sizeof(TCHAR))-1);
+    mDataField->SetAsString(sTmp);
+    mDataField->SetData();
+    edit.set_text(mDataField->GetAsDisplayString());
+  }
+
+  if (GetFocused())
+    SetFocused(false, NULL);
 }
 
 bool
