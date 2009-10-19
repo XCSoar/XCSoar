@@ -78,6 +78,9 @@ public:
     :handle(::CreateEvent(NULL, manual_reset, false, name)) {}
 #endif
 
+  /**
+   * Kills the trigger.
+   */
   ~Trigger() {
 #ifdef HAVE_POSIX
     pthread_cond_destroy(&cond);
@@ -201,6 +204,7 @@ public:
     ::PulseEvent(handle);
 #endif
   }
+
   /**
    * Resets the trigger
    */
@@ -219,7 +223,6 @@ public:
 #endif
 #endif /* !HAVE_POSIX */
   }
-
 };
 
 #endif
