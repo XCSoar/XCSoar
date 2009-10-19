@@ -599,8 +599,6 @@ WindowControl::on_paint(Canvas &canvas)
   rc.right = 0 + mWidth+2;
   rc.bottom = 0 + mHeight+2;
 
-  if (!mVisible) return;
-
   canvas.fill_rectangle(rc, GetBackBrush());
 
   // JMW added highlighting, useful for lists
@@ -1102,10 +1100,6 @@ int WndForm::ShowModal(bool bEnableMap) {
 void
 WndForm::on_paint(Canvas &canvas)
 {
-  SIZE tsize;
-
-  if (!GetVisible()) return;
-
   RECT rcClient = get_client_rect();
 
   canvas.select(GetBorderPen());
@@ -1118,7 +1112,7 @@ WndForm::on_paint(Canvas &canvas)
   canvas.background_transparent();
 
   canvas.select(*mhTitleFont);
-  tsize = canvas.text_size(mCaption);
+  SIZE tsize = canvas.text_size(mCaption);
 
   // JMW todo add here icons?
 
@@ -1410,8 +1404,6 @@ WndButton::on_mouse_double(int x, int y)
 void
 WndButton::on_paint(Canvas &canvas)
 {
-  if (!GetVisible()) return;
-
   WindowControl::on_paint(canvas);
 
   RECT rc = get_client_rect();
@@ -1924,8 +1916,6 @@ WndProperty::on_paint(Canvas &canvas)
   SIZE tsize;
   POINT org;
 
-  if (!GetVisible()) return;
-
   WindowControl::on_paint(canvas);
 
   r.left = 0;
@@ -2049,8 +2039,6 @@ DataField *WndProperty::SetDataField(DataField *Value){
 void
 WndOwnerDrawFrame::on_paint(Canvas &canvas)
 {
-  if (!GetVisible()) return;
-
   WndFrame::on_paint(canvas);
 
   canvas.select(*GetFont());
@@ -2088,8 +2076,6 @@ WndFrame::on_key_down(unsigned key_code)
 void
 WndFrame::on_paint(Canvas &canvas)
 {
-  if (!GetVisible()) return;
-
   if (mIsListItem && GetOwner()!=NULL) {
     ((WndListFrame*)GetOwner())->PrepareItemDraw();
   }
