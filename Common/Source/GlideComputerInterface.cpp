@@ -44,13 +44,17 @@ Copyright_License {
 #include "SettingsTask.hpp"
 #include "LocalTime.hpp"
 
+/**
+ * Calls waypoint change events. Is called when waypoint is switched.
+ */
 void GlideComputer::AnnounceWayPointSwitch(bool do_advance) {
   if (task.getActiveIndex() == 0) {
-//    InputEvents::processGlideComputer(GCE_TASK_START);
-// JMW why commented out?
+    // InputEvents::processGlideComputer(GCE_TASK_START);
+    // QUESTION JMW: why commented out?
     TCHAR TempTime[40];
     TCHAR TempAlt[40];
     TCHAR TempSpeed[40];
+
     Units::TimeToText(TempTime, (int)TimeLocal((int)Calculated().TaskStartTime));
     _stprintf(TempAlt, TEXT("%.0f %s"),
               Calculated().TaskStartAltitude*ALTITUDEMODIFY,
@@ -64,14 +68,17 @@ void GlideComputer::AnnounceWayPointSwitch(bool do_advance) {
           TempAlt, TempSpeed, TempTime);
     Message::AddMessage(TEXT("Task Start"), TempAll);
 
+  // if (last waypoint and finish is valid) activate GCE_TASK_FINISH event
   } else if (Calculated().ValidFinish && task.ActiveIsFinalWaypoint()) {
     InputEvents::processGlideComputer(GCE_TASK_FINISH);
+
+  // else (= not first/not last waypoint) activate GCE_TASK_NEXTWAYPOINT event
   } else {
     InputEvents::processGlideComputer(GCE_TASK_NEXTWAYPOINT);
   }
 
-  // JMW this should not happen here!
-  // JMW Task....
+  // TODO JMW: this should not happen here!
+  // TODO JMW: Task....
   if (do_advance) {
     task.advanceTaskPoint(SettingsComputer());
     SetLegStart();
@@ -80,4 +87,3 @@ void GlideComputer::AnnounceWayPointSwitch(bool do_advance) {
 
   GlideComputerStats::SetFastLogging();
 }
-
