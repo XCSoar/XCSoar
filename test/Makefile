@@ -82,8 +82,8 @@ RUN_CANVAS_OBJS = \
 	$(SRC)/Math/FastMath.o \
 	$(SRC)/Math/Geometry.o \
 	$(SRC)/Screen/shapelib/mapsearch.o \
-	$(SRC)/wcecompat/ts_string.o \
-	src/RunCanvas.o
+	src/RunCanvas.o \
+	$(SRC)/compat-$(TARGET).a
 ifneq ($(ENABLE_SDL),y)
 RUN_CANVAS_OBJS += $(SRC)/Screen/PaintCanvas.o
 endif
@@ -126,8 +126,8 @@ RUN_DIALOG_OBJS = \
 	$(SRC)/UtilsText.o \
 	$(SRC)/Dialogs/dlgHelp.o \
 	$(SRC)/zzip-$(TARGET).a \
-	$(SRC)/wcecompat/ts_string.o \
-	src/RunDialog.o
+	src/RunDialog.o \
+	$(SRC)/compat-$(TARGET).a
 ifeq ($(ENABLE_SDL),y)
 RUN_DIALOG_OBJS += $(SRC)/Screen/Timer.o
 else
