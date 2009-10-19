@@ -41,7 +41,6 @@ Copyright_License {
 
 #include <windef.h>
 
-
 typedef struct WinPilotPolarInternal {
   TCHAR name[50];
   double ww0;
@@ -57,6 +56,12 @@ typedef struct WinPilotPolarInternal {
 
 WinPilotPolarInternal WinPilotPolars[] =
 {
+  // MassDryGross[kg], MaxWaterBallast[liters],
+  // Speed1[km/h], Sink1[m/s],
+  // Speed2[km/h], Sink2[m/s],
+  // Speed3[km/h], Sink3[m/s],
+  // Wing Area
+
   {TEXT("1-26E"), 315, 0, 82.3, -1.04, 117.73, -1.88, 156.86, -3.8, 14.87},
   {TEXT("1-34"), 354, 0, 89.82, -0.8, 143.71, -2.1, 179.64, -3.8, 14.03},
   {TEXT("1-35A"), 381, 179, 98.68, -0.74, 151.82, -1.8, 202.87, -3.9, 9.64},
@@ -151,18 +156,19 @@ WinPilotPolarInternal WinPilotPolars[] =
   // {TEXT("ASG29-15"), 340, 170,  115.03, -0.86, 174.04, -1.76, 212.72, -3.4, 0}, // BestLD50@100kph
   // {TEXT("ASW28-15"), 333, 190,  115.03, -0.86, 174.04, -1.76, 212.72, -3.4, 0}, // BestLD45@90kph
 
-// MassDryGross[kg], MaxWaterBallast[liters],
-//  Speed1[km/h], Sink1[m/s], Speed2, Sink2, Speed3, Sink3
+  // LS8, LS8-18
+  // LS6, LS6-18
+  // Mosi/H-304
 
-// LS8, LS8-18
-// LS6, LS6-18
-// Mosi/H-304
-
-
-// asg29-15 9.2 m^2 winglets, empty 290, 375 pilot, max 550kg.
-
+  // asg29-15 9.2 m^2 winglets, empty 290, 375 pilot, max 550kg.
 };
 
+/**
+ * Returns the name of the internal WinPilot polar defined
+ * by the array id i
+ * @param i Array id of the polar
+ * @return The name of the polar
+ */
 const TCHAR* GetWinPilotPolarInternalName(unsigned i)
 {
   if (i>=sizeof(WinPilotPolars)/sizeof(WinPilotPolarInternal)) {
@@ -171,6 +177,11 @@ const TCHAR* GetWinPilotPolarInternalName(unsigned i)
   return WinPilotPolars[i].name;
 }
 
+/**
+ * Reads internal WinPilot polar and passes it to
+ * the converter
+ * @param i Array id of the polar
+ */
 bool ReadWinPilotPolarInternal(unsigned i) {
   double POLARV[3];
   double POLARW[3];
@@ -191,5 +202,4 @@ bool ReadWinPilotPolarInternal(unsigned i) {
   GlidePolar::WingArea = WinPilotPolars[i].wing_area;
 
   return(TRUE);
-
 }
