@@ -62,6 +62,10 @@ struct SWITCH_INFO
 
 struct NMEA_INFO
 {
+  //############
+  //   Status
+  //############
+
   /**
    * Is a GPS unit connected?
    *
@@ -71,24 +75,79 @@ struct NMEA_INFO
    */
   unsigned Connected;
 
+  /** GPS fix not valid */
+  int NAVWarning;
+
+  /** Number of satellites used for gps fix */
+  int SatellitesUsed;
+
+  /** GPS Satellite ids */
+  int SatelliteIDs[MAXSATELLITES];
+
+  /** Is the GPS unit moving? (Speed > 2.0) */
+  bool MovementDetected;
+
+  //################
+  //   Navigation
+  //################
+
   /** Current Location (lat/lon) */
   GEOPOINT Location;
 
   /** Track angle in degrees */
   double TrackBearing;
 
-  /** Speed over ground in m/s */
+  /** not in use(?) */
+  double CrossTrackError;
+
+  //############
+  //   Speeds
+  //############
+
+  /**
+   * Speed over ground in m/s
+   * @see TrueAirspeed
+   * @see IndicatedAirspeed
+   */
   double Speed;
+
+  /**
+   * Is air speed information available?
+   * @see TrueAirspeed
+   */
+  bool AirspeedAvailable;
+  /**
+   * Indicated air speed (if available)
+   * @see Speed
+   * @see TrueAirspeed
+   * @see AirDensityRatio
+   */
+  double IndicatedAirspeed;
+  /**
+   * True air speed (if available)
+   * @see Speed
+   * @see IndicatedAirspeed
+   */
+  double TrueAirspeed;
+
+  //##############
+  //   Altitude
+  //##############
 
   /** GPS Altitude */
   double Altitude;
 
-  //  TCHAR  WaypointID[WAY_POINT_ID_SIZE + 1];
-  //  double WaypointBearing;
-  //  double WaypointDistance;
-  //  double WaypointSpeed; IGNORED NOW
-  /** not in use(?) */
-  double CrossTrackError;
+  /**
+   * Is a barometric altitude available?
+   * @see BaroAltitude
+   */
+  bool BaroAltitudeAvailable;
+  /**
+   * Barometric altitude (if available)
+   * @see BaroAltitudeAvailable
+   * @see Altitude
+   */
+  double BaroAltitude;
 
   //##########
   //   Time
@@ -109,36 +168,75 @@ struct NMEA_INFO
   /**< GPS date (year) */
   int Year;
 
-  /** GPS fix not valid */
-  int NAVWarning;
+  //###########
+  //   Vario
+  //###########
 
   /**
-   * Indicated air speed (if available)
-   * @see TrueAirspeed
-   * @see AirDensityRatio
+   * Is an external vario signal available?
+   * @see Vario
    */
-  double IndicatedAirspeed;
+  bool VarioAvailable;
   /**
-   * True air speed (if available)
-   * @see IndicatedAirspeed
+   * Vario signal of external device (if available)
+   * @see VarioAvailable
    */
-  double TrueAirspeed;
+  double Vario;
 
   /**
-   * Barometric altitude (if available)
-   * @see BaroAltitudeAvailable
-   * @see Altitude
+   * Is an external netto vario signal available?
+   * @see NettoVario
    */
-  double BaroAltitude;
+  bool NettoVarioAvailable;
+  /**
+   * Netto vario signal of external device (if available)
+   * @see NettoVarioAvailable
+   */
+  double NettoVario;
+
+  //##############
+  //   Settings
+  //##############
 
   /** MacCready value of external device (if available) */
   double MacReady;
 
+  /** Ballast information of external device (if available) */
+  double Ballast;
+
+  /** Bugs information of external device (if available) */
+  double Bugs;
+
+  //##################
+  //   Acceleration
+  //##################
+
   /**
-   * Is a barometric altitude available?
-   * @see BaroAltitude
+   * Is G-load information available?
+   * @see Gload
+   * @see AccelX
+   * @see AccelY
    */
-  bool BaroAltitudeAvailable;
+  bool AccelerationAvailable;
+  /**
+   * G-Load information of external device (if available)
+   * @see AccelerationAvailable
+   */
+  double Gload;
+  /**
+   * G-Load information of external device in X-direction (if available)
+   * @see AccelerationAvailable
+   */
+  double AccelX;
+  /**
+   * G-Load information of external device in Y-direction (if available)
+   * @see AccelerationAvailable
+   */
+  double AccelZ;
+
+  //################
+  //   Atmosphere
+  //################
 
   /**
    * Is external wind information available?
@@ -160,69 +258,6 @@ struct NMEA_INFO
   double ExternalWindDirection;
 
   /**
-   * Is an external vario signal available?
-   * @see Vario
-   */
-  bool VarioAvailable;
-  /**
-   * Is an external netto vario signal available?
-   * @see NettoVario
-   */
-  bool NettoVarioAvailable;
-
-  /**
-   * Is air speed information available?
-   * @see TrueAirspeed
-   */
-  bool AirspeedAvailable;
-
-  /**
-   * Vario signal of external device (if available)
-   * @see VarioAvailable
-   */
-  double Vario;
-  /**
-   * Netto vario signal of external device (if available)
-   * @see NettoVarioAvailable
-   */
-  double NettoVario;
-
-  /** Ballast information of external device (if available) */
-  double Ballast;
-  /** Bugs information of external device (if available) */
-  double Bugs;
-
-  /**
-   * G-Load information of external device (if available)
-   * @see AccelerationAvailable
-   */
-  double Gload;
-  /**
-   * Is G-load information available?
-   * @see Gload
-   * @see AccelX
-   * @see AccelY
-   */
-  bool AccelerationAvailable;
-  /**
-   * G-Load information of external device in X-direction (if available)
-   * @see AccelerationAvailable
-   */
-  double AccelX;
-  /**
-   * G-Load information of external device in Y-direction (if available)
-   * @see AccelerationAvailable
-   */
-  double AccelZ;
-
-  /** Number of satellites used for gps fix */
-  int SatellitesUsed;
-
-  //################
-  //   Atmosphere
-  //################
-
-  /**
    * Is temperature information available?
    * @see OutsideAirTemperatur
    */
@@ -232,6 +267,7 @@ struct NMEA_INFO
    * @see TemperatureAvailable
    */
   double OutsideAirTemperature;
+
   /**
    * Is humidity information available?
    * @see RelativeHumidity
@@ -270,8 +306,9 @@ struct NMEA_INFO
    */
   bool NewTraffic;
 
-  /** GPS Satellite information */
-  int SatelliteIDs[MAXSATELLITES];
+  //###########
+  //   Other
+  //###########
 
   /** Battery supply voltage information (if available) */
   double SupplyBatteryVoltage;
@@ -279,13 +316,15 @@ struct NMEA_INFO
   /** Switch state of the user inputs */
   SWITCH_INFO SwitchState;
 
-  /** Is the GPS unit moving? (Speed > 2.0) */
-  bool MovementDetected;
-
   double StallRatio;
 
   /** Is XCSoar in replay mode? */
   bool Replay;
+
+  //  TCHAR  WaypointID[WAY_POINT_ID_SIZE + 1];
+  //  double WaypointBearing;
+  //  double WaypointDistance;
+  //  double WaypointSpeed; IGNORED NOW
 };
 
 #endif
