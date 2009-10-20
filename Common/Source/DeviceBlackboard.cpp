@@ -49,15 +49,22 @@ Copyright_License {
 
 DeviceBlackboard device_blackboard;
 
+/**
+ * Initializes the DeviceBlackboard
+ */
 void
 DeviceBlackboard::Initialise()
 {
   ScopeLock protect(mutexBlackboard);
 
+  // Clear the gps_info and calculated_info
   memset( &gps_info, 0, sizeof(NMEA_INFO));
   memset( &calculated_info, 0, sizeof(DERIVED_INFO));
 
-  gps_info.NAVWarning = true; // default, no gps at all!
+  // Set the NAVWarning positive (assume not gps found yet)
+  gps_info.NAVWarning = true;
+
+  // Clear the SwitchStates
   gps_info.SwitchState.AirbrakeLocked = false;
   gps_info.SwitchState.FlapPositive = false;
   gps_info.SwitchState.FlapNeutral = false;
@@ -71,6 +78,7 @@ DeviceBlackboard::Initialise()
   gps_info.SwitchState.UserSwitchDown = false;
   gps_info.SwitchState.VarioCircling = false;
 
+  // Set GPS assumed time to system time
   SYSTEMTIME pda_time;
   GetSystemTime(&pda_time);
   gps_info.Time  = pda_time.wHour*3600+pda_time.wMinute*60+pda_time.wSecond;
@@ -91,6 +99,13 @@ DeviceBlackboard::Initialise()
 #endif
 }
 
+/**
+ * Sets the location and altitude to loc and alt
+ *
+ * Called at startup when no gps data available yet
+ * @param loc New location
+ * @param alt New altitude
+ */
 void
 DeviceBlackboard::SetStartupLocation(const GEOPOINT &loc,
 				     const double alt)
@@ -100,7 +115,18 @@ DeviceBlackboard::SetStartupLocation(const GEOPOINT &loc,
   SetBasic().Altitude = alt;
 }
 
-// used by replay logger
+/**
+ * Sets the location, altitude and other basic parameters
+ *
+ * Used by the ReplayLogger
+ * @param loc New location
+ * @param speed New speed
+ * @param bearing New bearing
+ * @param alt New altitude
+ * @param baroalt New barometric altitude
+ * @param t New time
+ * @see ReplayLogger::UpdateInternal()
+ */
 void
 DeviceBlackboard::SetLocation(const GEOPOINT &loc,
 			      const double speed, const double bearing,
@@ -117,23 +143,38 @@ DeviceBlackboard::SetLocation(const GEOPOINT &loc,
   SetBasic().Replay = true;
 };
 
+/**
+ * Stops the replay
+ */
 void DeviceBlackboard::StopReplay() {
   ScopeLock protect(mutexBlackboard);
   SetBasic().Speed = 0;
   SetBasic().Replay = false;
 }
 
+/**
+ * Sets the NAVWarning to val
+ * @param val New value for NAVWarning
+ */
 void
 DeviceBlackboard::SetNAVWarning(bool val)
 {
   ScopeLock protect(mutexBlackboard);
   SetBasic().NAVWarning = val;
   if (!val) {
+    // QUESTION TB: what going on here?
     // externally forced
     SetBasic().SatellitesUsed = 6;
   }
 }
 
+/**
+ * Lowers the connection status of the device
+ *
+ * Connected + Fix -> Connected + No Fix
+ * Connected + No Fix -> Not connected
+ * @return True if still connected afterwards, False otherwise
+ */
 bool
 DeviceBlackboard::LowerConnection()
 {
@@ -150,6 +191,9 @@ DeviceBlackboard::LowerConnection()
   return retval;
 }
 
+/**
+ * Raises the connection status to connected + fix
+ */
 void
 DeviceBlackboard::RaiseConnection()
 {
@@ -182,6 +226,12 @@ DeviceBlackboard::ProcessSimulation()
 }
 #endif /* _SIM_ */
 
+/**
+ * Sets the GPS speed and indicated airspeed to val
+ *
+ * not in use
+ * @param val New speed
+ */
 void
 DeviceBlackboard::SetSpeed(double val)
 {
@@ -190,6 +240,12 @@ DeviceBlackboard::SetSpeed(double val)
   SetBasic().IndicatedAirspeed = val;
 }
 
+/**
+ * Sets the TrackBearing to val
+ *
+ * not in use
+ * @param val New TrackBearing
+ */
 void
 DeviceBlackboard::SetTrackBearing(double val)
 {
@@ -197,6 +253,12 @@ DeviceBlackboard::SetTrackBearing(double val)
   SetBasic().TrackBearing = AngleLimit360(val);
 }
 
+/**
+ * Sets the altitude and barometric altitude to val
+ *
+ * not in use
+ * @param val New altitude
+ */
 void
 DeviceBlackboard::SetAltitude(double val)
 {
@@ -205,12 +267,24 @@ DeviceBlackboard::SetAltitude(double val)
   SetBasic().BaroAltitude = val;
 }
 
+/**
+ * Reads the given derived_info usually provided by the
+ * GlideComputerBlackboard and saves it to the own Blackboard
+ * @param derived_info Calculated information usually provided
+ * by the GlideComputerBlackboard
+ */
 void
 DeviceBlackboard::ReadBlackboard(const DERIVED_INFO &derived_info)
 {
   memcpy(&calculated_info,&derived_info,sizeof(DERIVED_INFO));
 }
 
+/**
+ * Reads the given settings usually provided by the InterfaceBlackboard
+ * and saves it to the own Blackboard
+ * @param settings SettingsComputer usually provided by the
+ * InterfaceBlackboard
+ */
 void
 DeviceBlackboard::ReadSettingsComputer(const SETTINGS_COMPUTER
 					      &settings)
@@ -218,6 +292,12 @@ DeviceBlackboard::ReadSettingsComputer(const SETTINGS_COMPUTER
   memcpy(&settings_computer,&settings,sizeof(SETTINGS_COMPUTER));
 }
 
+/**
+ * Reads the given settings usually provided by the InterfaceBlackboard
+ * and saves it to the own Blackboard
+ * @param settings SettingsMap usually provided by the
+ * InterfaceBlackboard
+ */
 void
 DeviceBlackboard::ReadSettingsMap(const SETTINGS_MAP
 				  &settings)
