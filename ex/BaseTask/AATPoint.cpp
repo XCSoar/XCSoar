@@ -3,7 +3,10 @@
 #include "AATPoint.hpp"
 #include "Util.h"
 #include "Math/Earth.hpp"
+#include "Math/Geometry.hpp"
 #include "AATIsolineSegment.hpp"
+#include "AATIsolineIntercept.hpp"
+#include <math.h>
 
 GEOPOINT AATPoint::get_reference_scored() const
 {
@@ -69,6 +72,7 @@ AATPoint::check_target_inside(const AIRCRAFT_STATE& state)
 {
   // target must be moved if d(p_last,t)+d(t,p_next) 
   //    < d(p_last,state)+d(state,p_next)
+
   if (double_leg_distance(TargetLocation) 
       < double_leg_distance(state.Location)) 
   {
@@ -93,7 +97,25 @@ AATPoint::check_target_inside(const AIRCRAFT_STATE& state)
 bool
 AATPoint::check_target_outside(const AIRCRAFT_STATE& state) 
 {
+  // this is optional
 
+  if (!get_previous()->isInSector(state)) {
+    double b0s = ::Bearing(get_previous()->get_reference_remaining(),
+                           state.Location);
+    double bst = ::Bearing(state.Location,
+                           TargetLocation);
+    double da = ::AngleLimit180(b0s-bst);
+    if (fabs(da)>10.0) {
+      
+      AATIsolineIntercept ai(*this);
+      GEOPOINT pi;
+      if (ai.intercept(*this, state, 0.0, pi)) {
+//        printf("intercept %g %g\n",pi.Longitude, pi.Latitude);
+        TargetLocation = pi;
+        return true;
+      }
+    }
+  }
   return false;
 }
 

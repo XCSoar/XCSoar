@@ -7,6 +7,7 @@
 #include "Math/FastMath.h"
 #include "Math/NavFunctions.hpp"
 #include "Math/Geometry.hpp"
+#include <algorithm>
 
 #define sqr(x) ((x)*(x))
 #define sgn(x) (x<0? -1:1)
@@ -126,9 +127,10 @@ FlatLine::intersect_czero(const double r,
   return true;
 }
 
-FlatEllipse::FlatEllipse(const FlatPoint &f1,
-                         const FlatPoint &f2,
-                         const FlatPoint &ap) 
+FlatEllipse::FlatEllipse(const FlatPoint &_f1,
+                         const FlatPoint &_f2,
+                         const FlatPoint &_ap):
+  f1(_f1),f2(_f2),ap(_ap)
 {
   const FlatLine f12(f1,f2);
   p = f12.ave();
@@ -193,6 +195,24 @@ FlatEllipse::intersect(const FlatLine &line,
   } else {
     return false;
   }
+}
+
+
+bool FlatEllipse::intersect_extended(const FlatPoint &p,
+                                     FlatPoint &i1,
+                                     FlatPoint &i2) const
+{
+  const FlatLine l_f1p(f1,p);
+  const FlatLine l_pf2(p,f2);
+  const double ang = l_f1p.angle();
+
+  double d = l_pf2.d()+std::max(a,b); // max line length
+
+  FlatLine e_l(p,FlatPoint(p.x+d*fastcosine(ang),
+                           p.y+d*fastsine(ang)));
+  // e_l is the line extended from p in direction of f1-p 
+  
+  return intersect(e_l, i1, i2);
 }
 
 // define an ellipse by three points,

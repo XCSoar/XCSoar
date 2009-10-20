@@ -6,19 +6,12 @@
 class AATIsolineIntercept: public AATIsoline
 {
 public:
-  AATIsolineIntercept(const AATPoint& ap,
-                      const AIRCRAFT_STATE &state);
+  AATIsolineIntercept(const AATPoint& ap);
 
-  bool intercept(const double bearing_offset,
+  bool intercept(const AATPoint& ap,
+                 const AIRCRAFT_STATE &state,
+                 const double bearing_offset,
                  GEOPOINT& ip) const;
-
-private:
-  const GEOPOINT& p_aircraft;
-  const GEOPOINT& p_previous;
-  const GEOPOINT& p_target;
-
-  /** @link dependency */
-  /*#  AATPoint lnkAATPoint; */
 };
 
 #endif

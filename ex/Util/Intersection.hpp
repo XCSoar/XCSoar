@@ -43,13 +43,20 @@ struct FlatLine
 
 struct FlatEllipse 
 {
-  FlatEllipse(const FlatPoint &f1,
-              const FlatPoint &f2,
-              const FlatPoint &ap);
+  FlatEllipse(const FlatPoint &_f1,
+              const FlatPoint &_f2,
+              const FlatPoint &_ap);
 
-  FlatEllipse():p(0.0,0.0),a(1.0),b(1.0),theta(0.0),
-                theta_initial(0.0) {
-  };
+  FlatEllipse():p(0.0,0.0),
+                a(1.0),b(1.0),theta(0.0),
+                theta_initial(0.0),
+                f1(0.0,0.0),
+                f2(0.0,0.0),
+                ap(0.0,0.0) 
+    {
+    };
+
+  FlatPoint f1, f2, ap;
 
   FlatPoint p;
   double a;
@@ -66,6 +73,10 @@ struct FlatEllipse
   bool intersect(const FlatLine &line, 
                  FlatPoint &i1, 
                  FlatPoint &i2) const;
+
+  bool intersect_extended(const FlatPoint &p,
+                          FlatPoint &i1,
+                          FlatPoint &i2) const;
 };
 
 
