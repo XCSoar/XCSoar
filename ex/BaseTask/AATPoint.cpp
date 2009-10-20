@@ -98,37 +98,6 @@ AATPoint::check_target_outside(const AIRCRAFT_STATE& state)
   return false;
 }
 
-void AATPoint::print(std::ostream& f, const int item) const
-{
-  switch(item) {
-  case 0:
-    OrderedTaskPoint::print(f);
-    f << "#   Target\n";
-    f << "#     " << TargetLocation.Longitude << "," 
-      << TargetLocation.Latitude << "\n";
-    break;
-
-  case 1:
-    FlatPoint f1 = fproject(get_previous()->getLocation());
-    FlatPoint f2 = fproject(get_next()->getLocation());
-    FlatPoint p = fproject(TargetLocation);
-    
-    FlatEllipse e(f1,f2,p);
-
-    for (double t=-0.05; t<=0.05; t+= 0.001) {
-      FlatPoint a = e.parametric(t);
-      GEOPOINT ga = funproject(a);
-      AIRCRAFT_STATE s;
-      s.Location = ga;
-      if (isInSector(s)) {
-        f << ga.Longitude << " " << ga.Latitude << "\n";
-      }
-    }
-    f << "\n";
-    break;
-  };
-}
-
 
 void 
 AATPoint::set_range(const double p)
@@ -142,38 +111,120 @@ void
 AATPoint::update_projection()
 {
   OrderedTaskPoint::update_projection();  
+
+// TODO: update ellipse if we have one saved
 }
+
+////////////////////////////////////////////
+
+#include "GlideSolvers/ZeroFinder.hpp"
+
+class GeoEllipse {
+public:
+  GeoEllipse(const GEOPOINT &f1, const GEOPOINT &f2,
+             const GEOPOINT &p,
+             const TaskProjection &_task_projection): 
+    task_projection(_task_projection)
+    {
+      ell = FlatEllipse(task_projection.fproject(f1),
+                        task_projection.fproject(f2),
+                        task_projection.fproject(p));
+    }
+  double t_initial() {
+    return ell.theta_initial/360.0;
+  }
+  GEOPOINT parametric(double t) {
+    FlatPoint p = ell.parametric(t);
+    return task_projection.funproject(p);
+  };
+private:
+  TaskProjection task_projection;
+  FlatEllipse ell;
+};
+
+
+class IsolineCrossingFinder:
+  public ZeroFinder
+{
+public:
+  IsolineCrossingFinder(const AATPoint& _aap,
+                        GeoEllipse &_ell,
+                        const double xmin, 
+                        const double xmax):
+    aap(_aap),
+    ell(_ell),
+    ZeroFinder(xmin, xmax, 0.0001) {};
+
+  double f(const double t) {
+    GEOPOINT a = ell.parametric(t);
+    AIRCRAFT_STATE s;
+    s.Location = a;
+
+    // note: use of isInSector is slow!
+    if (aap.isInSector(s)) {
+      return 1.0;
+    } else {
+      return -1.0;
+    }
+  }
+private:
+  GeoEllipse &ell;
+  const AATPoint &aap;
+};
 
 
 void 
 AATPoint::update_isoline()
 {
-  FlatPoint f1 = fproject(get_previous()->getLocation());
-  FlatPoint f2 = fproject(get_next()->getLocation());
-  FlatPoint p = fproject(TargetLocation);
-
-  FlatEllipse e(f1,f2,p);
-
-  for (double t=0; t<=1.0; t+= 0.01) {
-    FlatPoint a = e.parametric(t);
-    GEOPOINT ga = funproject(a);
-    AIRCRAFT_STATE s;
-    s.Location = ga;
-    if (isInSector(s)) {
-//      printf("%g %g\n",ga.Longitude,ga.Latitude);
-    }
-  }
 /*
-  
-  we have known point inside, corresponding to t=0, theta_initial
-  t_initial = theta_initial/360.0
+  GeoEllipse ell(get_previous()->getLocation(),
+                 get_next()->getLocation(),
+                 TargetLocation,
+                 task_projection);
 
-  use zerofinder to scan forward in range from t_initial to 1.0 
-  for zero crossing of sgn(isInSector(xx))
+  IsolineCrossingFinder icf_up(*this, ell, 0.0, 0.5);
+  IsolineCrossingFinder icf_down(*this, ell, -0.5, 0.0);
 
-  use zerofinder to scan backwards in range from t_initial to 0.0 
-
-  now we have absolute limits of ellipse
+  double t_z_up = icf_up.find_zero(0.0);
+  double t_z_down = icf_down.find_zero(0.0);
 */
-
 }
+
+
+
+
+void AATPoint::print(std::ostream& f, const int item) const
+{
+  switch(item) {
+  case 0:
+    OrderedTaskPoint::print(f);
+    f << "#   Target\n";
+    f << "#     " << TargetLocation.Longitude << "," 
+      << TargetLocation.Latitude << "\n";
+    break;
+
+  case 1:
+
+    GeoEllipse ell(get_previous()->getLocation(),
+                   get_next()->getLocation(),
+                   TargetLocation,
+                   task_projection);
+
+    IsolineCrossingFinder icf_up(*this, ell, 0.0, 0.5);
+    IsolineCrossingFinder icf_down(*this, ell, -0.5, 0.0);
+
+    const double t_z_up = icf_up.find_zero(0.0);
+    const double t_z_down = icf_down.find_zero(0.0);
+    const double dt = (t_z_up-t_z_down)/20.0;
+    
+    if (t_z_up>t_z_down) {
+      for (double t = t_z_down; t<= t_z_up; t+= dt) {
+        GEOPOINT ga = ell.parametric(t);
+        f << ga.Longitude << " " << ga.Latitude << "\n";
+      }
+      f << "\n";
+    }
+    break;
+  };
+}
+
