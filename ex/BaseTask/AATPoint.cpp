@@ -123,8 +123,10 @@ AATPoint::check_target_outside(const AIRCRAFT_STATE& state)
 void 
 AATPoint::set_range(const double p)
 {
-  TargetLocation = ::InterpolateLocation(getMinLocation(), 
-                                         getMaxLocation(), p);
+  if (getActiveState() != BEFORE_ACTIVE) {
+    TargetLocation = ::InterpolateLocation(getMinLocation(), 
+                                           getMaxLocation(), p);
+  }
 }
 
 

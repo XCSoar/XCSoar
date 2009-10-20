@@ -183,12 +183,11 @@ OrderedTask::check_transitions(const AIRCRAFT_STATE &state,
 bool 
 OrderedTask::update_idle(const AIRCRAFT_STATE& state)
 {
+  AbstractTask::update_idle(state);
 
-//  double mc=2.0;
-// TODO get from above
-//
-//  double p = calc_min_target(state, mc, 3600*5.0);
-//  (void)p;
+  double mc=2.0; // TODO hard coded!
+  double p = calc_min_target(state, mc, 3600*9.0);
+  (void)p;
   
   return true;
 }

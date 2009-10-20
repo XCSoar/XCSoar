@@ -12,6 +12,14 @@
 bool 
 AbstractTask::update_idle(const AIRCRAFT_STATE &state)
 {
+  double mc= 2.0; // TODO hard coded!
+  if (1) {
+    stats.mc_best = calc_mc_best(state, mc);
+    stats.cruise_efficiency = calc_cruise_efficiency(state, mc);
+  } else {
+    stats.mc_best = mc;
+    stats.cruise_efficiency = 1.0;
+  }
   // do nothing
   return false;
 }
@@ -82,7 +90,7 @@ AbstractTask::update(const AIRCRAFT_STATE &state,
                      const AIRCRAFT_STATE &state_last)
 {
   bool retval;
-  double mc= 2.0;
+  double mc= 2.0; // TODO hard coded!
 
   const bool full_update = check_transitions(state, state_last);
 
@@ -113,8 +121,6 @@ void
 AbstractTask::update_stats_glide(const AIRCRAFT_STATE &state, 
                                  const double mc)
 {
-  stats.mc_best = calc_mc_best(state, mc);
-  stats.cruise_efficiency = calc_cruise_efficiency(state, mc);
   stats.glide_required = AngleToGradient(calc_glide_required(state));
 }
 

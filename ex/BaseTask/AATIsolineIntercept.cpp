@@ -12,6 +12,8 @@ AATIsolineIntercept::intercept(const AATPoint &ap,
                                const double bearing_offset,
                                GEOPOINT& ip) const
 {
+  // TODO: adjust for bearing_offset
+
   AIRCRAFT_STATE s1, s2;
   if (ell.intersect_extended(state.Location,
                              s1.Location, s2.Location)) 
