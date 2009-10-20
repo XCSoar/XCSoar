@@ -64,6 +64,9 @@ OBJS	:=\
 	Navigation/Aircraft.o \
 	Navigation/ReferencePoint.o \
 	BaseTask/AATPoint.o \
+	BaseTask/AATIsoline.o \
+	BaseTask/AATIsolineSegment.o \
+	BaseTask/AATIsolineIntercept.o \
 	BaseTask/OrderedTaskPoint.o \
 	BaseTask/TaskProjection.o \
 	BaseTask/FinishPoint.o \
@@ -96,6 +99,7 @@ OBJS	:=\
 	Tasks/TaskEvents.o \
 	Tasks/TaskAdvance.o \
 	Tasks/PathSolvers/TaskDijkstra.o \
+	Tasks/PathSolvers/IsolineCrossingFinder.o \
 	Tasks/TaskSolvers/TaskMacCready.o \
 	Tasks/TaskSolvers/TaskMacCreadyTravelled.o \
 	Tasks/TaskSolvers/TaskMacCreadyRemaining.o \

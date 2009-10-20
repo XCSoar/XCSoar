@@ -46,8 +46,8 @@ double FlatPoint::d(const FlatPoint &p) const {
 FlatPoint FlatLine::ave() const {
   FlatPoint p = p1;
   p.add(p2);
-  p.x/= 2.0;
-  p.y/= 2.0;
+  p.x*= 0.5;
+  p.y*= 0.5;
   return p;
 }
 
@@ -90,7 +90,7 @@ FlatLine::add(const FlatPoint&p) {
 }
 
 double 
-FlatLine::angle() 
+FlatLine::angle() const
 {
   const double _dx = dx();
   const double _dy = dy();
@@ -126,37 +126,40 @@ FlatLine::intersect_czero(const double r,
   return true;
 }
 
-#include <stdio.h>
-
 FlatEllipse::FlatEllipse(const FlatPoint &f1,
                          const FlatPoint &f2,
                          const FlatPoint &ap) 
 {
-  FlatLine f12;
-  f12.p1 = f1;
-  f12.p2 = f2;
+  const FlatLine f12(f1,f2);
   p = f12.ave();
   theta = f12.angle();
-  const double c = f12.d()/2.0;
-  a = (f1.d(ap)+f2.d(ap))/2.0;
-  b = sqrt(a*a-c*c);
+  const double csq = f12.dsq();
+  a = (f1.d(ap)+f2.d(ap));
+  b = sqrt(a*a-csq)*0.5;
+  a *= 0.5;
 
   // a.sin(t)=ap.x
   // b.cos(t)=ap.y
 
-  FlatLine pap(p,ap);
-  theta_initial = AngleLimit360(RAD_TO_DEG*atan2(pap.dy()/b,
-                                                 pap.dx()/a)-theta);
+  FlatPoint op = ap;
+  op.sub(p);
+  op.rotate(-theta);
+  theta_initial = RAD_TO_DEG*atan2(op.y*a, op.x*b);
 }
 
 double 
-FlatEllipse::er() const {
+FlatEllipse::ab() const {
   return a/b;
+}
+
+double 
+FlatEllipse::ba() const {
+  return b/a;
 }
 
 FlatPoint 
 FlatEllipse::parametric(const double t) const {
-  const double at = AngleLimit360(360.0*t+theta_initial);
+  const double at = 360.0*t+theta_initial;
   FlatPoint res(a*fastcosine(at),b*fastsine(at));
   res.rotate(theta);
   res.add(p);
@@ -168,20 +171,21 @@ FlatEllipse::intersect(const FlatLine &line,
                        FlatPoint &i1, 
                        FlatPoint &i2) const 
 {
-  const double _er = er();
+  const double er = ab();
+  const double ier = ba();
   FlatLine s_line = line;  
   
   s_line.sub(p);
   s_line.rotate(-theta);
-  s_line.mul_y(_er);
+  s_line.mul_y(er);
   
   if (s_line.intersect_czero(a, i1, i2)) {
     
-    i1.mul_y(1.0/_er);
+    i1.mul_y(ier);
     i1.rotate(theta);
     i1.add(p);
     
-    i2.mul_y(1.0/_er);
+    i2.mul_y(ier);
     i2.rotate(theta);
     i2.add(p);
     
@@ -190,23 +194,6 @@ FlatEllipse::intersect(const FlatLine &line,
     return false;
   }
 }
-
-
-bool intersect_general_ellipse(const FlatLine &line,
-                               const FlatPoint &f1,
-                               const FlatPoint &f2,
-                               const FlatPoint &p,
-                               FlatPoint &i1,
-                               FlatPoint &i2) 
-{
-  FlatEllipse e(f1,f2,p);
-  if (e.intersect(line, i1, i2)) {
-    return true;
-  } else {
-    return false;
-  }
-}
-
 
 // define an ellipse by three points,
 // edge point, focus f1, focus f2

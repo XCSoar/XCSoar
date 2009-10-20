@@ -3,6 +3,7 @@
 #include "AATPoint.hpp"
 #include "Util.h"
 #include "Math/Earth.hpp"
+#include "AATIsolineSegment.hpp"
 
 GEOPOINT AATPoint::get_reference_scored() const
 {
@@ -45,8 +46,6 @@ AATPoint::update_sample(const AIRCRAFT_STATE& state)
   if (active_state == CURRENT_ACTIVE) {
     retval |= check_target(state);
   }
-
-  update_isoline();
 
   return retval;
 }
@@ -117,80 +116,6 @@ AATPoint::update_projection()
 
 ////////////////////////////////////////////
 
-#include "GlideSolvers/ZeroFinder.hpp"
-
-class GeoEllipse {
-public:
-  GeoEllipse(const GEOPOINT &f1, const GEOPOINT &f2,
-             const GEOPOINT &p,
-             const TaskProjection &_task_projection): 
-    task_projection(_task_projection)
-    {
-      ell = FlatEllipse(task_projection.fproject(f1),
-                        task_projection.fproject(f2),
-                        task_projection.fproject(p));
-    }
-  double t_initial() {
-    return ell.theta_initial/360.0;
-  }
-  GEOPOINT parametric(double t) {
-    FlatPoint p = ell.parametric(t);
-    return task_projection.funproject(p);
-  };
-private:
-  TaskProjection task_projection;
-  FlatEllipse ell;
-};
-
-
-class IsolineCrossingFinder:
-  public ZeroFinder
-{
-public:
-  IsolineCrossingFinder(const AATPoint& _aap,
-                        GeoEllipse &_ell,
-                        const double xmin, 
-                        const double xmax):
-    aap(_aap),
-    ell(_ell),
-    ZeroFinder(xmin, xmax, 0.0001) {};
-
-  double f(const double t) {
-    GEOPOINT a = ell.parametric(t);
-    AIRCRAFT_STATE s;
-    s.Location = a;
-
-    // note: use of isInSector is slow!
-    if (aap.isInSector(s)) {
-      return 1.0;
-    } else {
-      return -1.0;
-    }
-  }
-private:
-  GeoEllipse &ell;
-  const AATPoint &aap;
-};
-
-
-void 
-AATPoint::update_isoline()
-{
-/*
-  GeoEllipse ell(get_previous()->getLocation(),
-                 get_next()->getLocation(),
-                 TargetLocation,
-                 task_projection);
-
-  IsolineCrossingFinder icf_up(*this, ell, 0.0, 0.5);
-  IsolineCrossingFinder icf_down(*this, ell, -0.5, 0.0);
-
-  double t_z_up = icf_up.find_zero(0.0);
-  double t_z_down = icf_down.find_zero(0.0);
-*/
-}
-
-
 
 
 void AATPoint::print(std::ostream& f, const int item) const
@@ -205,26 +130,25 @@ void AATPoint::print(std::ostream& f, const int item) const
 
   case 1:
 
-    GeoEllipse ell(get_previous()->getLocation(),
-                   get_next()->getLocation(),
-                   TargetLocation,
-                   task_projection);
+    if (getActiveState() != BEFORE_ACTIVE) {
 
-    IsolineCrossingFinder icf_up(*this, ell, 0.0, 0.5);
-    IsolineCrossingFinder icf_down(*this, ell, -0.5, 0.0);
+      // note in general this will only change if 
+      // prev max or target changes
 
-    const double t_z_up = icf_up.find_zero(0.0);
-    const double t_z_down = icf_down.find_zero(0.0);
-    const double dt = (t_z_up-t_z_down)/20.0;
-    
-    if (t_z_up>t_z_down) {
-      for (double t = t_z_down; t<= t_z_up; t+= dt) {
-        GEOPOINT ga = ell.parametric(t);
+      AATIsolineSegment seg(*this);
+      
+      if (seg.valid()) {
+        for (double t = 0.0; t<=1.0; t+= 1.0/20) {
+          GEOPOINT ga = seg.parametric(t);
+          f << ga.Longitude << " " << ga.Latitude << "\n";
+        }
+      } else {
+        GEOPOINT ga = seg.parametric(0.0);
         f << ga.Longitude << " " << ga.Latitude << "\n";
       }
       f << "\n";
     }
     break;
-  };
+  }
 }
 

@@ -78,6 +78,9 @@ public:
   FlatPoint fproject(const GEOPOINT& tp) const;
   GEOPOINT funproject(const FlatPoint& tp) const;
 
+  const TaskProjection& get_task_projection() const {
+    return task_projection;
+  }
 protected:
   bool boundary_scored;
   const TaskProjection& task_projection;

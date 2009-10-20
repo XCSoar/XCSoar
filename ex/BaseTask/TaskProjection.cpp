@@ -20,8 +20,8 @@ void TaskProjection::scan_location(const GEOPOINT &ref)
 void
 TaskProjection::update_fast()
 {
-  location_mid.Longitude = (location_max.Longitude+location_min.Longitude)/2;
-  location_mid.Latitude = (location_max.Latitude+location_min.Latitude)/2;
+  location_mid.Longitude = (location_max.Longitude+location_min.Longitude)*0.5;
+  location_mid.Latitude = (location_max.Latitude+location_min.Latitude)*0.5;
   cos_midloc = fastcosine(location_mid.Latitude)*SCALE;
 }
 

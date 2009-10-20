@@ -35,7 +35,7 @@ struct FlatLine
   double dsq() const;
   void sub(const FlatPoint&p);
   void add(const FlatPoint&p);
-  double angle();
+  double angle() const;
   void rotate(const double theta);
   bool intersect_czero(const double r,
                        FlatPoint &i1, FlatPoint &i2) const;
@@ -58,7 +58,8 @@ struct FlatEllipse
 
   double theta_initial;
 
-  double er() const;
+  double ab() const;
+  double ba() const;
 
   FlatPoint parametric(const double t) const;
 
