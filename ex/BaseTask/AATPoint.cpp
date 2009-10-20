@@ -98,12 +98,35 @@ AATPoint::check_target_outside(const AIRCRAFT_STATE& state)
   return false;
 }
 
-void AATPoint::print(std::ostream& f) const
+void AATPoint::print(std::ostream& f, const int item) const
 {
-  OrderedTaskPoint::print(f);
-  f << "#   Target\n";
-  f << "#     " << TargetLocation.Longitude << "," 
-    << TargetLocation.Latitude << "\n";
+  switch(item) {
+  case 0:
+    OrderedTaskPoint::print(f);
+    f << "#   Target\n";
+    f << "#     " << TargetLocation.Longitude << "," 
+      << TargetLocation.Latitude << "\n";
+    break;
+
+  case 1:
+    FlatPoint f1 = fproject(get_previous()->getLocation());
+    FlatPoint f2 = fproject(get_next()->getLocation());
+    FlatPoint p = fproject(TargetLocation);
+    
+    FlatEllipse e(f1,f2,p);
+
+    for (double t=-0.05; t<=0.05; t+= 0.001) {
+      FlatPoint a = e.parametric(t);
+      GEOPOINT ga = funproject(a);
+      AIRCRAFT_STATE s;
+      s.Location = ga;
+      if (isInSector(s)) {
+        f << ga.Longitude << " " << ga.Latitude << "\n";
+      }
+    }
+    f << "\n";
+    break;
+  };
 }
 
 
@@ -137,8 +160,20 @@ AATPoint::update_isoline()
     AIRCRAFT_STATE s;
     s.Location = ga;
     if (isInSector(s)) {
-      printf("%g %g\n",ga.Longitude,ga.Latitude);
+//      printf("%g %g\n",ga.Longitude,ga.Latitude);
     }
   }
-  printf("\n");
+/*
+  
+  we have known point inside, corresponding to t=0, theta_initial
+  t_initial = theta_initial/360.0
+
+  use zerofinder to scan forward in range from t_initial to 1.0 
+  for zero crossing of sgn(isInSector(xx))
+
+  use zerofinder to scan backwards in range from t_initial to 0.0 
+
+  now we have absolute limits of ellipse
+*/
+
 }

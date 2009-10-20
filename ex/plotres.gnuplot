@@ -1,4 +1,4 @@
-set yrange [-0.1:1.4]
+set xrange [-0.1:1.6]
 set size ratio -1
 
 set style line 1 lt 2 lc rgb "black" lw 2

@@ -8,7 +8,6 @@
 
 int n_samples = 0;
 
-void test_ellipse();
 
 extern long count_mc;
 //extern int count_distance;
@@ -117,9 +116,6 @@ char wait_prompt() {
 int main() {
   ::InitSineTable();
 //  test_mc();
-
-//  test_ellipse();
-//  exit(0);
 
   TaskEvents default_events;
   TaskManager test_task(default_events);

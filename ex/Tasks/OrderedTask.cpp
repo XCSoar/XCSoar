@@ -417,12 +417,18 @@ void OrderedTask::report(const AIRCRAFT_STATE &state)
 {
   AbstractTask::report(state);
 
+  std::ofstream fi("res-isolines.txt");
+  for (unsigned i=0; i<tps.size(); i++) {
+    fi << "## point " << i << "\n";
+    tps[i]->print(fi,1);
+  }
+
   std::ofstream f1("res-task.txt");
 
   f1 << "#### Task points\n";
   for (unsigned i=0; i<tps.size(); i++) {
     f1 << "## point " << i << "\n";
-    tps[i]->print(f1);
+    tps[i]->print(f1,0);
   }
 
   std::ofstream f5("res-ssample.txt");

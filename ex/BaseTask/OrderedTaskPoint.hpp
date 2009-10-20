@@ -124,7 +124,7 @@ public:
   virtual bool transition_exit(const AIRCRAFT_STATE & ref_now, 
                                const AIRCRAFT_STATE & ref_last);
 
-  virtual void print(std::ostream& f) const;
+  virtual void print(std::ostream& f, const int item=0) const;
 
   const std::vector<SearchPoint>& get_search_points();
 

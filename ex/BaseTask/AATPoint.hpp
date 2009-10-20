@@ -60,7 +60,8 @@ public:
   virtual double getElevation() const;
 
   virtual bool update_sample(const AIRCRAFT_STATE&);
-  virtual void print(std::ostream& f) const;
+
+  virtual void print(std::ostream& f, const int item=0) const;
 
   virtual void set_range(const double p);
 

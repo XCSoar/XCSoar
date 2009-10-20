@@ -6,6 +6,7 @@
 #include "Intersection.hpp"
 #include "Math/FastMath.h"
 #include "Math/NavFunctions.hpp"
+#include "Math/Geometry.hpp"
 
 #define sqr(x) ((x)*(x))
 #define sgn(x) (x<0? -1:1)
@@ -93,7 +94,7 @@ FlatLine::angle()
 {
   const double _dx = dx();
   const double _dy = dy();
-  return atan2(_dy,_dx);
+  return RAD_TO_DEG*atan2(_dy,_dx);
 }
 
 void 
@@ -125,6 +126,7 @@ FlatLine::intersect_czero(const double r,
   return true;
 }
 
+#include <stdio.h>
 
 FlatEllipse::FlatEllipse(const FlatPoint &f1,
                          const FlatPoint &f2,
@@ -134,10 +136,17 @@ FlatEllipse::FlatEllipse(const FlatPoint &f1,
   f12.p1 = f1;
   f12.p2 = f2;
   p = f12.ave();
-  theta = RAD_TO_DEG*(f12.angle());
+  theta = f12.angle();
   const double c = f12.d()/2.0;
   a = (f1.d(ap)+f2.d(ap))/2.0;
   b = sqrt(a*a-c*c);
+
+  // a.sin(t)=ap.x
+  // b.cos(t)=ap.y
+
+  FlatLine pap(p,ap);
+  theta_initial = AngleLimit360(RAD_TO_DEG*atan2(pap.dy()/b,
+                                                 pap.dx()/a)-theta);
 }
 
 double 
@@ -147,7 +156,7 @@ FlatEllipse::er() const {
 
 FlatPoint 
 FlatEllipse::parametric(const double t) const {
-  const double at = 360.0*t;
+  const double at = AngleLimit360(360.0*t+theta_initial);
   FlatPoint res(a*fastcosine(at),b*fastsine(at));
   res.rotate(theta);
   res.add(p);
@@ -198,43 +207,6 @@ bool intersect_general_ellipse(const FlatLine &line,
   }
 }
 
-
-#include <stdio.h>
-
-void test_ellipse() {
-  FlatPoint f1(0.5,0.0);
-  FlatPoint f2(1.0, 0.5);
-  FlatPoint p(0.25,0.2);
-
-  FlatLine l;
-  l.p1.x = -1.5;
-  l.p1.y = 0.2;
-  l.p2.x = 1.7;
-  l.p2.y = 0.7;
-
-  FlatEllipse e(f1,f2,p);
-  for (double t=0; t<=1.0; t+= 0.01) {
-    FlatPoint a = e.parametric(t);
-    printf("%g %g\n",a.x,a.y);
-  }
-  printf("\n");
-
-  printf("%g %g\n",l.p1.x,l.p1.y);
-  printf("\n");
-  printf("%g %g\n",l.p2.x,l.p2.y);
-  printf("\n");
-  printf("%g %g\n",f1.x,f1.y);
-  printf("\n");
-  printf("%g %g\n",f2.x,f2.y);
-  printf("\n");
-
-  FlatPoint i1, i2;
-  if (e.intersect(l,i1,i2)) {
-    printf("%g %g\n",i1.x,i1.y);
-    printf("%g %g\n",i2.x,i2.y);
-    printf("\n");
-  }
-}
 
 // define an ellipse by three points,
 // edge point, focus f1, focus f2

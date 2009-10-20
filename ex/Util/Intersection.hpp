@@ -19,6 +19,10 @@ struct FlatPoint
 
 struct FlatLine 
 {
+  FlatLine(const FlatPoint _p1,
+           const FlatPoint _p2):p1(_p1),p2(_p2) {};
+  FlatLine() {};
+
   FlatPoint p1;
   FlatPoint p2;
 
@@ -43,10 +47,16 @@ struct FlatEllipse
               const FlatPoint &f2,
               const FlatPoint &ap);
 
+  FlatEllipse():p(0.0,0.0),a(1.0),b(1.0),theta(0.0),
+                theta_initial(0.0) {
+  };
+
   FlatPoint p;
   double a;
   double b;
   double theta;
+
+  double theta_initial;
 
   double er() const;
 
