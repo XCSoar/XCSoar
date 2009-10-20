@@ -62,67 +62,230 @@ struct SWITCH_INFO
 
 struct NMEA_INFO
 {
-  unsigned Connected; /**< Is a GPS unit connected? */
-  GEOPOINT Location; /**< Current Location (lat/lon) */
-  double TrackBearing; /**< Track angle in degrees */
-  double Speed; /**< Speed over ground in m/s */
-  double Altitude; /**< GPS Altitude */
+  /**
+   * Is a GPS unit connected?
+   *
+   * 0 = not connected
+   * 1 = connected, waiting for fix
+   * 2 = connected, fix found
+   */
+  unsigned Connected;
+
+  /** Current Location (lat/lon) */
+  GEOPOINT Location;
+
+  /** Track angle in degrees */
+  double TrackBearing;
+
+  /** Speed over ground in m/s */
+  double Speed;
+
+  /** GPS Altitude */
+  double Altitude;
+
   //  TCHAR  WaypointID[WAY_POINT_ID_SIZE + 1];
   //  double WaypointBearing;
   //  double WaypointDistance;
   //  double WaypointSpeed; IGNORED NOW
-  double CrossTrackError; /**< not in use(?) */
-  double Time; /**< GPS time */
-  int Hour; /**< GPS time (hours) */
-  int Minute; /**< GPS time (minutes) */
-  int Second; /**< GPS time (seconds) */
-  int Month; /**< GPS date (month) */
-  int Day; /**< GPS date (day) */
-  int Year; /**< GPS date (year) */
-  int NAVWarning; /**< GPS fix not valid */
-  double IndicatedAirspeed; /**< Indicated air speed (if available) @see TrueAirspeed @see AirDensityRatio */
-  double TrueAirspeed; /**< True air speed (if available) @see IndicatedAirspeed */
-  double BaroAltitude; /**< Barometric altitude (if available) @see BaroAltitudeAvailable @see Altitude */
-  double MacReady; /**< MacCready value of external device (if available) */
-  bool BaroAltitudeAvailable; /**< Is a barometric altitude available? @see BaroAltitude */
-  bool ExternalWindAvailalbe; /**< Is external wind information available? @see ExternalWindSpeed @see ExternalWindDirection */
-  double ExternalWindSpeed; /**< Wind speed of external device (if available) @see ExternalWindDirection @see ExternalWindAvailalbe */
-  double ExternalWindDirection; /**< Wind direction of external device (if available) @see ExternalWindSpeed @see ExternalWindAvailalbe */
-  bool VarioAvailable; /**< Is an external vario signal available? @see Vario */
-  bool NettoVarioAvailable; /**< Is an external netto vario signal available? @see NettoVario */
-  bool AirspeedAvailable; /**< Is air speed information available? @see TrueAirspeed */
-  double Vario; /**< Vario signal of external device (if available) @see VarioAvailable */
-  double NettoVario; /**< Netto vario signal of external device (if available) @see NettoVarioAvailable */
-  double Ballast; /**< Ballast information of external device (if available) */
-  double Bugs; /**< Bugs information of external device (if available) */
-  double Gload; /**< G-Load information of external device (if available) @see AccelerationAvailable */
-  bool AccelerationAvailable; /**< Is G-load information available? @see Gload @see AccelX @see AccelY */
-  double AccelX; /**< G-Load information of external device in X-direction (if available) @see AccelerationAvailable */
-  double AccelZ; /**< G-Load information of external device in Y-direction (if available) @see AccelerationAvailable */
-  int SatellitesUsed; /**< Number of satellites used for gps fix */
-  bool TemperatureAvailable; /**< Is temperature information available? @see OutsideAirTemperatur */
-  double OutsideAirTemperature; /**< Temperature of outside air (if available) @see TemperatureAvailable */
-  bool HumidityAvailable; /**< Is humidity information available? @see RelativeHumidity */
-  double RelativeHumidity; /**< Humidity of outside air (if available) @see HumidityAvailable */
+  /** not in use(?) */
+  double CrossTrackError;
 
-  unsigned short FLARM_RX; /**< Number of received FLARM devices */
-  unsigned short FLARM_TX; /**< Transmit status */
-  unsigned short FLARM_GPS; /**< GPS status */
-  unsigned short FLARM_AlarmLevel; /**< Alarm level of FLARM (0-3) */
-  bool FLARM_Available; /**< Is FLARM information available? */
-  FLARM_TRAFFIC FLARM_Traffic[FLARM_MAX_TRAFFIC]; /**< Flarm traffic information */
-  bool FLARMTraffic; /**< Is there FLARM traffic present? @see FLARM_Traffic */
-  bool NewTraffic; /**< Is there new FLARM traffic present? @see FLARM_Traffic */
-  int SatelliteIDs[MAXSATELLITES]; /**< GPS Satellite information */
+  //##########
+  //   Time
+  //##########
 
-  double SupplyBatteryVoltage; /**< Battery supply voltage information (if available) */
+  /** GPS time */
+  double Time;
+  /** GPS time (hours) */
+  int Hour;
+  /** GPS time (minutes) */
+  int Minute;
+  /**< GPS time (seconds) */
+  int Second;
+  /**< GPS date (month) */
+  int Month;
+  /**< GPS date (day) */
+  int Day;
+  /**< GPS date (year) */
+  int Year;
 
-  SWITCH_INFO SwitchState; /**< Switch state of the user inputs */
+  /** GPS fix not valid */
+  int NAVWarning;
 
-  bool MovementDetected; /**< Is the GPS unit moving? (Speed > 2.0) */
+  /**
+   * Indicated air speed (if available)
+   * @see TrueAirspeed
+   * @see AirDensityRatio
+   */
+  double IndicatedAirspeed;
+  /**
+   * True air speed (if available)
+   * @see IndicatedAirspeed
+   */
+  double TrueAirspeed;
+
+  /**
+   * Barometric altitude (if available)
+   * @see BaroAltitudeAvailable
+   * @see Altitude
+   */
+  double BaroAltitude;
+
+  /** MacCready value of external device (if available) */
+  double MacReady;
+
+  /**
+   * Is a barometric altitude available?
+   * @see BaroAltitude
+   */
+  bool BaroAltitudeAvailable;
+
+  /**
+   * Is external wind information available?
+   * @see ExternalWindSpeed
+   * @see ExternalWindDirection
+   */
+  bool ExternalWindAvailalbe;
+  /**
+   * Wind speed of external device (if available)
+   * @see ExternalWindDirection
+   * @see ExternalWindAvailalbe
+   */
+  double ExternalWindSpeed;
+  /**
+   * Wind direction of external device (if available)
+   * @see ExternalWindSpeed
+   * @see ExternalWindAvailalbe
+   */
+  double ExternalWindDirection;
+
+  /**
+   * Is an external vario signal available?
+   * @see Vario
+   */
+  bool VarioAvailable;
+  /**
+   * Is an external netto vario signal available?
+   * @see NettoVario
+   */
+  bool NettoVarioAvailable;
+
+  /**
+   * Is air speed information available?
+   * @see TrueAirspeed
+   */
+  bool AirspeedAvailable;
+
+  /**
+   * Vario signal of external device (if available)
+   * @see VarioAvailable
+   */
+  double Vario;
+  /**
+   * Netto vario signal of external device (if available)
+   * @see NettoVarioAvailable
+   */
+  double NettoVario;
+
+  /** Ballast information of external device (if available) */
+  double Ballast;
+  /** Bugs information of external device (if available) */
+  double Bugs;
+
+  /**
+   * G-Load information of external device (if available)
+   * @see AccelerationAvailable
+   */
+  double Gload;
+  /**
+   * Is G-load information available?
+   * @see Gload
+   * @see AccelX
+   * @see AccelY
+   */
+  bool AccelerationAvailable;
+  /**
+   * G-Load information of external device in X-direction (if available)
+   * @see AccelerationAvailable
+   */
+  double AccelX;
+  /**
+   * G-Load information of external device in Y-direction (if available)
+   * @see AccelerationAvailable
+   */
+  double AccelZ;
+
+  /** Number of satellites used for gps fix */
+  int SatellitesUsed;
+
+  //################
+  //   Atmosphere
+  //################
+
+  /**
+   * Is temperature information available?
+   * @see OutsideAirTemperatur
+   */
+  bool TemperatureAvailable;
+  /**
+   * Temperature of outside air (if available)
+   * @see TemperatureAvailable
+   */
+  double OutsideAirTemperature;
+  /**
+   * Is humidity information available?
+   * @see RelativeHumidity
+   */
+  bool HumidityAvailable;
+  /**
+   * Humidity of outside air (if available)
+   * @see HumidityAvailable
+   */
+  double RelativeHumidity;
+
+  //###########
+  //   FLARM
+  //###########
+
+  /** Number of received FLARM devices */
+  unsigned short FLARM_RX;
+  /** Transmit status */
+  unsigned short FLARM_TX;
+  /** GPS status */
+  unsigned short FLARM_GPS;
+  /** Alarm level of FLARM (0-3) */
+  unsigned short FLARM_AlarmLevel;
+  /** Is FLARM information available? */
+  bool FLARM_Available;
+  /** Flarm traffic information */
+  FLARM_TRAFFIC FLARM_Traffic[FLARM_MAX_TRAFFIC];
+  /**
+   * Is there FLARM traffic present?
+   * @see FLARM_Traffic
+   */
+  bool FLARMTraffic;
+  /**
+   * Is there new FLARM traffic present?
+   * @see FLARM_Traffic
+   */
+  bool NewTraffic;
+
+  /** GPS Satellite information */
+  int SatelliteIDs[MAXSATELLITES];
+
+  /** Battery supply voltage information (if available) */
+  double SupplyBatteryVoltage;
+
+  /** Switch state of the user inputs */
+  SWITCH_INFO SwitchState;
+
+  /** Is the GPS unit moving? (Speed > 2.0) */
+  bool MovementDetected;
 
   double StallRatio;
-  bool Replay; /**< Is XCSoar in replay mode? */
+
+  /** Is XCSoar in replay mode? */
+  bool Replay;
 };
 
 #endif
