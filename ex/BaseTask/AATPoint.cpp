@@ -45,6 +45,9 @@ AATPoint::update_sample(const AIRCRAFT_STATE& state)
   if (active_state == CURRENT_ACTIVE) {
     retval |= check_target(state);
   }
+
+  update_isoline();
+
   return retval;
 }
 
@@ -65,18 +68,22 @@ AATPoint::check_target(const AIRCRAFT_STATE& state)
 bool
 AATPoint::check_target_inside(const AIRCRAFT_STATE& state) 
 {
-  // target must be moved if d(p_last,t)+d(t,p_next) < d(p_last,state)+d(state,p_next)
-  if (double_leg_distance(TargetLocation) < double_leg_distance(state.Location)) 
+  // target must be moved if d(p_last,t)+d(t,p_next) 
+  //    < d(p_last,state)+d(state,p_next)
+  if (double_leg_distance(TargetLocation) 
+      < double_leg_distance(state.Location)) 
   {
     const double d_in_front = 0.01;
-    const double d_to_max = ::Distance(state.Location, getMaxLocation());
+    const double d_to_max = ::Distance(state.Location, 
+                                       getMaxLocation());
 
     if (d_to_max<d_in_front) {
       // no improvement available
       return false;
     } else {
       const double p = d_in_front/d_to_max;
-      TargetLocation = ::InterpolateLocation(state.Location, getMaxLocation(), p); 
+      TargetLocation = ::InterpolateLocation(state.Location, 
+                                             getMaxLocation(), p); 
       return true;
     }
   } else {
@@ -103,5 +110,35 @@ void AATPoint::print(std::ostream& f) const
 void 
 AATPoint::set_range(const double p)
 {
-  TargetLocation = ::InterpolateLocation(getMinLocation(), getMaxLocation(), p);
+  TargetLocation = ::InterpolateLocation(getMinLocation(), 
+                                         getMaxLocation(), p);
+}
+
+
+void 
+AATPoint::update_projection()
+{
+  OrderedTaskPoint::update_projection();  
+}
+
+
+void 
+AATPoint::update_isoline()
+{
+  FlatPoint f1 = fproject(get_previous()->getLocation());
+  FlatPoint f2 = fproject(get_next()->getLocation());
+  FlatPoint p = fproject(TargetLocation);
+
+  FlatEllipse e(f1,f2,p);
+
+  for (double t=0; t<=1.0; t+= 0.01) {
+    FlatPoint a = e.parametric(t);
+    GEOPOINT ga = funproject(a);
+    AIRCRAFT_STATE s;
+    s.Location = ga;
+    if (isInSector(s)) {
+      printf("%g %g\n",ga.Longitude,ga.Latitude);
+    }
+  }
+  printf("\n");
 }

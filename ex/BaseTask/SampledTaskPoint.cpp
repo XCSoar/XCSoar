@@ -140,3 +140,28 @@ SampledTaskPoint::print_samples(std::ostream& f)
   }
   f << "\n";
 }
+
+
+FLAT_GEOPOINT 
+SampledTaskPoint::project(const GEOPOINT& tp) const
+{
+  return task_projection.project(tp);
+}
+
+GEOPOINT 
+SampledTaskPoint::unproject(const FLAT_GEOPOINT& tp) const
+{
+  return task_projection.unproject(tp);
+}
+
+FlatPoint
+SampledTaskPoint::fproject(const GEOPOINT& tp) const
+{
+  return task_projection.fproject(tp);
+}
+
+GEOPOINT 
+SampledTaskPoint::funproject(const FlatPoint& tp) const
+{
+  return task_projection.funproject(tp);
+}

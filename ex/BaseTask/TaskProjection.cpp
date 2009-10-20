@@ -26,14 +26,40 @@ TaskProjection::update_fast()
 }
 
 
+FlatPoint
+TaskProjection::fproject(const GEOPOINT& tp) const
+{
+  FlatPoint fp((tp.Longitude-location_mid.Longitude)*cos_midloc,
+               (tp.Latitude-location_mid.Latitude)*SCALE);
+  return fp;
+}
+
+GEOPOINT 
+TaskProjection::funproject(const FlatPoint& fp) const
+{
+  GEOPOINT tp;
+  tp.Longitude = fp.x/cos_midloc+location_mid.Longitude;
+  tp.Latitude = fp.y/SCALE+location_mid.Latitude;
+  return tp;
+}
+
 FLAT_GEOPOINT 
 TaskProjection::project(const GEOPOINT& tp) const
 {
+  FlatPoint f = fproject(tp);
   FLAT_GEOPOINT fp;
-  fp.Longitude = (tp.Longitude-location_mid.Longitude)*cos_midloc+0.5;
-  fp.Latitude = (tp.Latitude-location_mid.Latitude)*SCALE+0.5;
-//  printf("%d %d\n", fp.Longitude, fp.Latitude);
+  fp.Longitude = f.x+0.5;
+  fp.Latitude = f.y+0.5;
   return fp;
+}
+
+GEOPOINT 
+TaskProjection::unproject(const FLAT_GEOPOINT& fp) const
+{
+  FlatPoint f(fp.Longitude-0.5,
+              fp.Latitude-0.5);
+  GEOPOINT tp = funproject(f);
+  return tp;
 }
 
 #include <stdio.h>

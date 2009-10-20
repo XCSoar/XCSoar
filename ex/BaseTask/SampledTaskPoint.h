@@ -73,6 +73,11 @@ public:
   virtual void print(std::ostream& f) const;
   virtual void print_samples(std::ostream& f);
 
+  FLAT_GEOPOINT project(const GEOPOINT& tp) const;
+  GEOPOINT unproject(const FLAT_GEOPOINT& tp) const;
+  FlatPoint fproject(const GEOPOINT& tp) const;
+  GEOPOINT funproject(const FlatPoint& tp) const;
+
 protected:
   bool boundary_scored;
   const TaskProjection& task_projection;

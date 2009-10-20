@@ -64,12 +64,15 @@ public:
 
   virtual void set_range(const double p);
 
+  virtual void update_projection();
+
 protected:
   GEOPOINT TargetLocation;
   bool TargetLocked;
   bool check_target(const AIRCRAFT_STATE&);
   bool check_target_inside(const AIRCRAFT_STATE&);
   bool check_target_outside(const AIRCRAFT_STATE&);
+  void update_isoline();
 };
 
 #endif

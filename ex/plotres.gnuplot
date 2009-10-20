@@ -12,7 +12,8 @@ plot \
      'res-task.txt' using 1:2 with linespoints title "OZ", \
      'res-min.txt' using 1:2 with linespoints ls 3 title "min", \
      'res-max.txt' using 1:2 with linespoints ls 2 title "max", \
-     'res-sample.txt' using 1:2 with lines ls 1 title "sample"
+     'res-sample.txt' using 1:2 with lines ls 1 title "sample", \
+     'res-isolines.txt' using 1:2 with lines title "isolines"
 pause -1
 
 set size noratio

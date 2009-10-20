@@ -4,6 +4,7 @@
 #define TASKPROJECTION_H
 
 #include "Navigation/Waypoint.hpp"
+#include "Util/Intersection.hpp"
 
 class TaskProjection {
 public:
@@ -24,7 +25,13 @@ public:
   }
   void scan_location(const GEOPOINT &ref);
   void update_fast();
+
   FLAT_GEOPOINT project(const GEOPOINT& tp) const;
+  GEOPOINT unproject(const FLAT_GEOPOINT& tp) const;
+
+  FlatPoint fproject(const GEOPOINT& tp) const;
+  GEOPOINT funproject(const FlatPoint& tp) const;
+
   void report();
 private:
   GEOPOINT location_min;

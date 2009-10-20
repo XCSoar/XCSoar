@@ -1,211 +1,220 @@
 
-// http://mathworld.wolfram.com/Circle-LineIntersection.html
+// http://mathworld.wolfram.com/Circle-FlatLineIntersection.html
 // line two points (x1,y1), (x2,y2)
 // Circle radius r at (0,0)
 
-#include <stdio.h>
+#include "Intersection.hpp"
 #include "Math/FastMath.h"
 #include "Math/NavFunctions.hpp"
 
 #define sqr(x) ((x)*(x))
 #define sgn(x) (x<0? -1:1)
 
-struct Point {
-  double x;
-  double y;
-  double cross(const Point& p2) const {
-    return x*p2.y-p2.x*y;
-  };
-  void mul_y(const double a) {
-    y*= a;
-  };
-  void sub(const Point&p2) {
-    x -= p2.x;
-    y -= p2.y;
-  };
-  void add(const Point&p2) {
-    x += p2.x;
-    y += p2.y;
-  };
-  void rotate(const double angle) {
-    const double _x = x;
-    const double _y = y;
-    const double ca = fastcosine(angle);
-    const double sa = fastsine(angle);
-    x = _x*ca-_y*sa;
-    y = _x*sa+_y*ca;
-  };
-  double d(const Point &p) const {
-    return sqrt(sqr(p.x-x)+sqr(p.y-y));
-  }
-};
+double FlatPoint::cross(const FlatPoint& p2) const {
+  return x*p2.y-p2.x*y;
+}
 
-struct Line {
-  Point p1;
-  Point p2;
+void FlatPoint::mul_y(const double a) {
+  y*= a;
+}
+ 
+void FlatPoint::sub(const FlatPoint&p2) {
+  x -= p2.x;
+  y -= p2.y;
+}
 
-  Point ave() {
-    Point p = p1;
-    p.add(p2);
-    p.x/= 2.0;
-    p.y/= 2.0;
-    return p;
-  }
-  double dx() const {
-    return p2.x-p1.x;
-  };
-  double dy() const {
-    return p2.y-p1.y;
-  };
-  double cross() const {
-    return p1.cross(p2);
-  };
-  void mul_y(const double a) {
-    p1.mul_y(a);
-    p2.mul_y(a);
-  };
-  double d() const {
-    return sqrt(dsq());
-  };
-  double dsq() const {
-    const double _dx = dx();
-    const double _dy = dy();
-    return sqr(_dx)+sqr(_dy);
-  };
-  void sub(const Point&p) {
-    p1.sub(p);
-    p2.sub(p);
-  };
-  void add(const Point&p) {
-    p1.add(p);
-    p2.add(p);
-  };
-  double angle() {
-    const double _dx = dx();
-    const double _dy = dy();
-    return atan2(_dy,_dx);
-  };
-  void rotate(const double theta) {
-    p1.rotate(theta);
-    p2.rotate(theta);
-  }
-};
+void FlatPoint::add(const FlatPoint&p2) {
+  x += p2.x;
+  y += p2.y;
+}
 
-struct Ellipse {
-  Ellipse(const Point &f1,
-          const Point &f2,
-          const Point &ap) {
+void FlatPoint::rotate(const double angle) {
+  const double _x = x;
+  const double _y = y;
+  const double ca = fastcosine(angle);
+  const double sa = fastsine(angle);
+  x = _x*ca-_y*sa;
+  y = _x*sa+_y*ca;
+}
 
-    Line f12;
-    f12.p1 = f1;
-    f12.p2 = f2;
-    p = f12.ave();
-    theta = RAD_TO_DEG*(f12.angle());
-    const double c = f12.d()/2.0;
-    a = (f1.d(ap)+f2.d(ap))/2.0;
-    b = sqrt(a*a-c*c);
-  }
-  double theta;
-  Point p;
-  double a;
-  double b;
+double FlatPoint::d(const FlatPoint &p) const {
+  return sqrt(sqr(p.x-x)+sqr(p.y-y));
+}
 
-  double er() const {
-    return a/b;
-  };
-  Point parametric(const double t) {
-    Point res;
-    const double at = 360.0*t;
-    res.x = a*fastcosine(at);
-    res.y = b*fastsine(at);
-    res.rotate(theta);
-    res.add(p);
-    return res;
-  };
-};
 
-bool intersect_czero(const Line &line, 
-                     const double r,
-                     Point &i1, Point &i2) {
+FlatPoint FlatLine::ave() const {
+  FlatPoint p = p1;
+  p.add(p2);
+  p.x/= 2.0;
+  p.y/= 2.0;
+  return p;
+}
 
-  const double dx = line.dx();
-  const double dy = line.dy();
-  const double dr = line.dsq();
-  const double D = line.cross();
+double FlatLine::dx() const {
+  return p2.x-p1.x;
+}
 
+double FlatLine::dy() const {
+  return p2.y-p1.y;
+}
+
+double FlatLine::cross() const {
+  return p1.cross(p2);
+}
+
+void FlatLine::mul_y(const double a) {
+  p1.mul_y(a);
+  p2.mul_y(a);
+}
+
+double FlatLine::d() const {
+  return sqrt(dsq());
+}
+
+double FlatLine::dsq() const {
+  const double _dx = dx();
+  const double _dy = dy();
+  return sqr(_dx)+sqr(_dy);
+}
+
+void FlatLine::sub(const FlatPoint&p) {
+  p1.sub(p);
+  p2.sub(p);
+}
+
+void 
+FlatLine::add(const FlatPoint&p) {
+  p1.add(p);
+  p2.add(p);
+}
+
+double 
+FlatLine::angle() 
+{
+  const double _dx = dx();
+  const double _dy = dy();
+  return atan2(_dy,_dx);
+}
+
+void 
+FlatLine::rotate(const double theta) 
+{
+  p1.rotate(theta);
+  p2.rotate(theta);
+}
+
+bool 
+FlatLine::intersect_czero(const double r,
+                               FlatPoint &i1, FlatPoint &i2) const 
+{
+  const double _dx = dx();
+  const double _dy = dy();
+  const double dr = dsq();
+  const double D = cross();
+  
   double det = sqr(r)*dr-D*D;
   if (det<0) {
     // no solution
     return false;
   }
   det = sqrt(det);
-  i1.x = (D*dy+sgn(dy)*dx*det)/dr;
-  i2.x = (D*dy-sgn(dy)*dx*det)/dr;
-  i1.y = (-D*dx+fabs(dy)*det)/dr;
-  i2.y = (-D*dx-fabs(dy)*det)/dr;
+  i1.x = (D*_dy+sgn(_dy)*_dx*det)/dr;
+  i2.x = (D*_dy-sgn(_dy)*_dx*det)/dr;
+  i1.y = (-D*_dx+fabs(_dy)*det)/dr;
+  i2.y = (-D*_dx-fabs(_dy)*det)/dr;
   return true;
 }
 
 
-bool intersect_ellipse(const Line &line, 
-                       const Ellipse& ell,
-                       Point &i1, Point &i2) 
+FlatEllipse::FlatEllipse(const FlatPoint &f1,
+                         const FlatPoint &f2,
+                         const FlatPoint &ap) 
 {
-  const double er = ell.er();
-  Line s_line = line;  
+  FlatLine f12;
+  f12.p1 = f1;
+  f12.p2 = f2;
+  p = f12.ave();
+  theta = RAD_TO_DEG*(f12.angle());
+  const double c = f12.d()/2.0;
+  a = (f1.d(ap)+f2.d(ap))/2.0;
+  b = sqrt(a*a-c*c);
+}
 
-  s_line.sub(ell.p);
-  s_line.rotate(-ell.theta);
-  s_line.mul_y(er);
+double 
+FlatEllipse::er() const {
+  return a/b;
+}
 
-  if (intersect_czero(s_line, ell.a, i1, i2)) {
+FlatPoint 
+FlatEllipse::parametric(const double t) const {
+  const double at = 360.0*t;
+  FlatPoint res(a*fastcosine(at),b*fastsine(at));
+  res.rotate(theta);
+  res.add(p);
+  return res;
+}
 
-    i1.mul_y(1.0/er);
-    i1.rotate(ell.theta);
-    i1.add(ell.p);
-
-    i2.mul_y(1.0/er);
-    i2.rotate(ell.theta);
-    i2.add(ell.p);
-
+bool 
+FlatEllipse::intersect(const FlatLine &line, 
+                       FlatPoint &i1, 
+                       FlatPoint &i2) const 
+{
+  const double _er = er();
+  FlatLine s_line = line;  
+  
+  s_line.sub(p);
+  s_line.rotate(-theta);
+  s_line.mul_y(_er);
+  
+  if (s_line.intersect_czero(a, i1, i2)) {
+    
+    i1.mul_y(1.0/_er);
+    i1.rotate(theta);
+    i1.add(p);
+    
+    i2.mul_y(1.0/_er);
+    i2.rotate(theta);
+    i2.add(p);
+    
     return true;
   } else {
     return false;
   }
 }
 
-bool intersect_general_ellipse(const Line &line,
-                               const Point &f1,
-                               const Point &f2,
-                               const Point &p,
-                               Point &i1,
-                               Point &i2) 
+
+bool intersect_general_ellipse(const FlatLine &line,
+                               const FlatPoint &f1,
+                               const FlatPoint &f2,
+                               const FlatPoint &p,
+                               FlatPoint &i1,
+                               FlatPoint &i2) 
 {
-  Ellipse e(f1,f2,p);
-  if (intersect_ellipse(line, e, i1, i2)) {
+  FlatEllipse e(f1,f2,p);
+  if (e.intersect(line, i1, i2)) {
     return true;
   } else {
     return false;
   }
 }
+
+
+#include <stdio.h>
 
 void test_ellipse() {
-  Point f1, f2, p;
-  f1.x = 0.5;
-  f1.y = 0.0;
-  f2.x = 1.0;
-  f2.y = 0.5;
-  p.x = 0.25;
-  p.y = 0.2;
-  Line l;
+  FlatPoint f1(0.5,0.0);
+  FlatPoint f2(1.0, 0.5);
+  FlatPoint p(0.25,0.2);
+
+  FlatLine l;
   l.p1.x = -1.5;
   l.p1.y = 0.2;
   l.p2.x = 1.7;
   l.p2.y = 0.7;
 
-  Ellipse e(f1,f2,p);
+  FlatEllipse e(f1,f2,p);
   for (double t=0; t<=1.0; t+= 0.01) {
-    Point a = e.parametric(t);
+    FlatPoint a = e.parametric(t);
     printf("%g %g\n",a.x,a.y);
   }
   printf("\n");
@@ -219,8 +228,8 @@ void test_ellipse() {
   printf("%g %g\n",f2.x,f2.y);
   printf("\n");
 
-  Point i1, i2;
-  if (intersect_ellipse(l,e,i1,i2)) {
+  FlatPoint i1, i2;
+  if (e.intersect(l,i1,i2)) {
     printf("%g %g\n",i1.x,i1.y);
     printf("%g %g\n",i2.x,i2.y);
     printf("\n");
