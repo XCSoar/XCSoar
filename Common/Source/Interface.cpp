@@ -47,7 +47,6 @@ static Mutex mutexInterfaceTimeout;
 static int interface_timeout;
 static bool doForceShutdown = false;
 static bool ShutdownRequested = false;
-///
 
 InterfaceBlackboard CommonInterface::blackboard;
 HINSTANCE CommonInterface::hInst; // The current instance
@@ -65,7 +64,6 @@ bool CommonInterface::EnableAutoBacklight=true;
 bool CommonInterface::EnableAutoSoundVolume=true;
 int CommonInterface::ActiveAlternate = -1;
 bool CommonInterface::EnableAnimation = false;
-/////
 
 #include "LogFile.hpp"
 #include "Protection.hpp"
@@ -105,13 +103,22 @@ void XCSoarInterface::ReceiveMapProjection()
   ReadMapProjection(device_blackboard.MapProjection());
 }
 
+/**
+ * Send the own SettingsMap to the DeviceBlackboard
+ * @param trigger_draw Triggers the draw event after sending if true
+ */
 void ActionInterface::SendSettingsMap(const bool trigger_draw) {
+  // QUESTION TB: what is trigger_draw?
   ScopeLock protect(mutexBlackboard);
+
   if (trigger_draw) {
     DisplayModes();
     InfoBoxManager::ProcessTimer();
   }
+
+  // Copy InterfaceBlackboard.SettingsMap to the DeviceBlackboard
   device_blackboard.ReadSettingsMap(SettingsMap());
+
   if (trigger_draw) {
     drawTriggerEvent.trigger();
   }
@@ -167,7 +174,6 @@ bool XCSoarInterface::CheckShutdown(void) {
 }
 
 
-/////////////////////
 // Debounce input buttons (does not matter which button is pressed)
 // VNT 090702 FIX Careful here: synthetic double clicks and virtual keys require some timing.
 // See Defines.h DOUBLECLICKINTERVAL . Not sure they are 100% independent.
@@ -191,32 +197,38 @@ bool XCSoarInterface::Debounce(void) {
 }
 
 
-
+/**
+ * Determine whether the vario gauge should be drawn depending on the
+ * display orientation and the infobox layout
+ * @return True if vario gauge should be drawn, False otherwise
+ */
 bool vario_visible() {
   bool gaugeVarioInPortrait = false;
   bool enable_gauge;
 #ifdef GNAV
   gaugeVarioInPortrait = true;
 #endif
+  // TODO TB: logic update...
 
 // VENTA3 disable gauge vario for geometry 5 in landscape mode, use 8
 // box right instead beside those boxes were painted and overwritten
 // by the gauge already and gauge was graphically too much stretched,
 // requiring a restyle!
+
   if (InfoBoxLayout::gnav) {
-    if ( ( InfoBoxLayout::landscape == true) &&
-	 (InfoBoxLayout::InfoBoxGeometry == 5 ) )
-	enable_gauge = false;
-      else
-      	enable_gauge = true;
+    if ((InfoBoxLayout::landscape == true) &&
+        (InfoBoxLayout::InfoBoxGeometry == 5))
+      enable_gauge = false;
+    else
+      enable_gauge = true;
   } else {
     enable_gauge = false;
   }
 
  // Disable vario gauge in geometry 5 landscape mode, leave 8 boxes on
  // the right
- if ( ( InfoBoxLayout::landscape == true)
-      && ( InfoBoxLayout::InfoBoxGeometry == 5 ) ) return false; // VENTA3
+  if ((InfoBoxLayout::landscape == true)
+      && (InfoBoxLayout::InfoBoxGeometry == 5)) return false; // VENTA3
 
   if (gaugeVarioInPortrait || InfoBoxLayout::landscape) {
     return enable_gauge;
@@ -227,15 +239,18 @@ bool vario_visible() {
 #include "Gauge/GaugeVario.hpp"
 #include "Gauge/GaugeFLARM.hpp"
 
+/**
+ * Determine whether vario gauge, FLARM radar and infoboxes should be drawn
+ */
 void
 ActionInterface::DisplayModes()
 {
+  // Determine whether the vario gauge should be drawn
   SetSettingsMap().EnableVarioGauge =
     vario_visible() && !SettingsMap().FullScreen;
 
   if (main_window.vario) {
-    if (!SettingsMap().ScreenBlanked
-	&& SettingsMap().EnableVarioGauge) {
+    if (!SettingsMap().ScreenBlanked && SettingsMap().EnableVarioGauge) {
       main_window.vario->show();
     } else {
       main_window.vario->hide();
@@ -243,7 +258,7 @@ ActionInterface::DisplayModes()
   }
 
   if (Basic().NewTraffic) {
-    // JMW broken, currently won't work very well, needs to be reworked
+    // TODO bug: JMW: broken, currently won't work very well, needs to be reworked
     GaugeFLARM *gauge_flarm = main_window.flarm;
     if (gauge_flarm != NULL)
       gauge_flarm->Suppress = false;
