@@ -37,7 +37,7 @@ Copyright_License {
 #ifndef XCSOAR_SETTINGS_USER_HPP
 #define XCSOAR_SETTINGS_USER_HPP
 
-// changed only in config or by user interface /////////////////////////////
+// changed only in config or by user interface
 // not expected to be used by other threads
 
 #include "Appearance.hpp"
@@ -76,31 +76,44 @@ typedef enum {
 // protect
 
 typedef struct SETTINGS_MAP_ {
+  /** Map zooms in on circling */
   bool  CircleZoom;
   bool  ExtendedVisualGlide;
+  /** Map will show topology */
   bool  EnableTopology;
+  /** Map will show terrain */
   bool  EnableTerrain;
   unsigned char  DeclutterLabels;
+  /** Snailtrail wind drifting in circling mode */
   bool  EnableTrailDrift;
+  /** Show compass in cruise mode */
   bool  EnableCDICruise;
+  /** Show compass in circling mode */
   bool  EnableCDICircling;
+  /** Automatic zoom when closing in on waypoint */
   bool  AutoZoom;
   int   SnailWidthScale;
   int   WindArrowStyle;
+  /** What type of text to draw next to the waypoint icon */
   DisplayTextType_t  DisplayTextType;
   int   TrailActive;
   int   VisualGlide;
+  /** Airspaces are drawn with black border (otherwise in airspace color) */
   bool  bAirspaceBlackOutline;
 
   int   GliderScreenPosition;
+  /** Orientation of the map (North up, Track up, etc.) */
   DisplayOrientation_t DisplayOrientation;
 
+  /** Terrain contrast percentage */
   short TerrainContrast;
+  /** Terrain brightness percentage */
   short TerrainBrightness;
   short TerrainRamp;
   int OnAirSpace; // VENTA3 toggle DrawAirSpace
   bool EnableAuxiliaryInfo;
   DisplayMode_t UserForceDisplayMode;
+  /** Fullscreen mode (no infoboxes) */
   bool FullScreen;
   bool EnablePan;
   GEOPOINT PanLocation;
@@ -108,17 +121,19 @@ typedef struct SETTINGS_MAP_ {
   int    TargetPanIndex;
   double TargetZoomDistance;
   double MapScale;
+  /** Show FLARM radar if traffic present */
   bool  EnableFLARMGauge;
   unsigned EnableFLARMMap;
   bool  ScreenBlanked;
   bool EnableAutoBlank;
+  /** Show vario gauge */
   bool  EnableVarioGauge;
+  /** Update system time from GPS time */
   bool SetSystemTimeFromGPS;
 
   int    iAirspaceBrush[AIRSPACECLASSCOUNT];
   int    iAirspaceColour[AIRSPACECLASSCOUNT];
 
 } SETTINGS_MAP;
-
 
 #endif
