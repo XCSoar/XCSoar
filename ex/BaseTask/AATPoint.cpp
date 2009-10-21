@@ -84,7 +84,7 @@ AATPoint::check_target_inside(const AIRCRAFT_STATE& state)
       // no improvement available
       return false;
     } else {
-      const double p = d_in_front/d_to_max;
+      const double p = std::max(0.0,std::min(1.0,d_in_front/d_to_max));
       TargetLocation = ::InterpolateLocation(state.Location, 
                                              getMaxLocation(), p); 
       return true;
@@ -110,7 +110,7 @@ AATPoint::check_target_outside(const AIRCRAFT_STATE& state)
       AATIsolineIntercept ai(*this);
       GEOPOINT pi;
       if (ai.intercept(*this, state, 0.0, pi)) {
-//        printf("intercept %g %g\n",pi.Longitude, pi.Latitude);
+        printf("intercept %g %g\n",pi.Longitude, pi.Latitude);
         TargetLocation = pi;
         return true;
       }
@@ -147,8 +147,7 @@ void AATPoint::print(std::ostream& f, const int item) const
   switch(item) {
   case 0:
     OrderedTaskPoint::print(f);
-    f << "#   Target\n";
-    f << "#     " << TargetLocation.Longitude << "," 
+    f << "#   Target " << TargetLocation.Longitude << "," 
       << TargetLocation.Latitude << "\n";
     break;
 
@@ -171,6 +170,7 @@ void AATPoint::print(std::ostream& f, const int item) const
         f << ga.Longitude << " " << ga.Latitude << "\n";
       }
       f << "\n";
+
     }
     break;
   }

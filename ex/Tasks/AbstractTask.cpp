@@ -14,7 +14,7 @@ AbstractTask::update_idle(const AIRCRAFT_STATE &state)
 {
   double mc= 2.0; // TODO hard coded!
   if (1) {
-    stats.mc_best = calc_mc_best(state, mc);
+//    stats.mc_best = calc_mc_best(state, mc);
     stats.cruise_efficiency = calc_cruise_efficiency(state, mc);
   } else {
     stats.mc_best = mc;

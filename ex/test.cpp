@@ -108,8 +108,8 @@ void test_polygon()
 */
 ////////////////////////////////////////////////
 
-char wait_prompt() {
-  printf("# [enter to continue]\n");
+char wait_prompt(const double time) {
+  printf("# %g [enter to continue]\n",time);
   return getchar();
 }
 
@@ -143,17 +143,28 @@ int main() {
   w[4].Longitude = 0.9; 
   w[4].Latitude = 0.1; 
 
+  state.Location = w[0];
   state_last.Location = w[0];
+  test_task.report(state);
 
   for (int i=0; i<num_wp-1-1; i++) {
-    wait_prompt();
+    wait_prompt(state.Time);
     for (double t=0; t<1.0; t+= 0.0025) {
-      state.Location.Latitude = w[i].Latitude*(1.0-t)+w[i+1].Latitude*t+small_rand();
-      state.Location.Longitude = w[i].Longitude*(1.0-t)+w[i+1].Longitude*t+small_rand();
+      state.Location.Latitude = 
+        w[i].Latitude*(1.0-t)+w[i+1].Latitude*t+small_rand();
+      state.Location.Longitude = 
+        w[i].Longitude*(1.0-t)+w[i+1].Longitude*t+small_rand();
 
       double d = ::Distance(state.Location, state_last.Location);
       double V = 15.0;
       state.Time += d/V;
+
+      if (state.Time>=16120.0) {
+        wait_prompt(state.Time);
+      }
+      if (state.Time>=16156.0) {
+        wait_prompt(state.Time);
+      }
       test_task.update(state, state_last);
 
       test_task.update_idle(state);

@@ -289,13 +289,13 @@ OrderedTaskPoint::print(std::ostream& f, const int item) const
 {
   if (item==0) {
     SampledTaskPoint::print(f);
+    f << "# Entered " << state_entered.Time << "\n";
     f << "# Bearing travelled " << bearing_travelled << "\n";
     f << "# Distance travelled " << this_distance_travelled << "\n";
     f << "# Bearing remaining " << bearing_remaining << "\n";
     f << "# Distance remaining " << this_distance_remaining << "\n";
     f << "# Bearing planned " << bearing_planned << "\n";
     f << "# Distance planned " << this_distance_planned << "\n";
-    f << "# Entered " << state_entered.Time << "\n";
   }
 }
 

@@ -66,9 +66,7 @@ void TaskDijkstra::add_edges(Dijkstra<ScanTaskPoint> &dijkstra,
        destination.second< dsize; destination.second++) {
 
     const unsigned dr = distance(curNode, destination);
-    if (dr) {
-      dijkstra.link(destination, curNode, extremal_distance(dr));
-    }
+    dijkstra.link(destination, curNode, extremal_distance(dr));
   }
 }
 
@@ -86,9 +84,7 @@ void TaskDijkstra::add_start_edges(Dijkstra<ScanTaskPoint> &dijkstra,
        destination.second< dsize; destination.second++) {
 
     const unsigned dr = distance(destination, currentLocation);
-    if (dr) {
-      dijkstra.link(destination, destination, extremal_distance(dr));
-    }
+    dijkstra.link(destination, destination, extremal_distance(dr));
   }
 }
 

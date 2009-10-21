@@ -420,14 +420,16 @@ void OrderedTask::report(const AIRCRAFT_STATE &state)
   for (unsigned i=0; i<tps.size(); i++) {
     fi << "## point " << i << "\n";
     tps[i]->print(fi,1);
+    fi << "\n";
   }
 
   std::ofstream f1("res-task.txt");
 
   f1 << "#### Task points\n";
   for (unsigned i=0; i<tps.size(); i++) {
-    f1 << "## point " << i << "\n";
+    f1 << "## point " << i << " ###################\n";
     tps[i]->print(f1,0);
+    f1 << "\n";
   }
 
   std::ofstream f5("res-ssample.txt");
@@ -435,6 +437,7 @@ void OrderedTask::report(const AIRCRAFT_STATE &state)
   for (unsigned i=0; i<tps.size(); i++) {
     f5 << "## point " << i << "\n";
     tps[i]->print_samples(f5);
+    f5 << "\n";
   }
 
   std::ofstream f2("res-max.txt");
