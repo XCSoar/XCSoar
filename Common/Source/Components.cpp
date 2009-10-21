@@ -97,8 +97,6 @@ CalculationThread *calculation_thread;
 InstrumentThread *instrument_thread;
 Logger logger; // global
 
-/////////////////////////////////////////////////////////////////////////////////
-
 void XCSoarInterface::PreloadInitialisation(bool ask) {
   if (ask) {
 #ifdef PNA
@@ -205,32 +203,48 @@ void XCSoarInterface::StartupInfo() {
 #endif
 }
 
-
+/**
+ * "Boots" up XCSoar
+ * @param hInstance Instance handle
+ * @param lpCmdLine Command line string
+ * @return True if bootup successful, False otherwise
+ */
 bool XCSoarInterface::Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
 {
-  TCHAR szTitle[MAX_LOADSTRING];                        // The title bar text
+  // The title bar text
+  TCHAR szTitle[MAX_LOADSTRING];
 
-  hInst = hInstance;            // Store instance handle in our global variable
+  // Store instance handle in our global variable
+  hInst = hInstance;
 
+  // QUESTION TB: what does it do?
   LoadString(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
 
   //If it is already running, then focus on the window
   if (MainWindow::find(szTitle))
     return false;
 
+  // Send the SettingsMap to the DeviceBlackboard
   SendSettingsMap();
 
+  // Register window classes
   PaintWindow::register_class(hInst);
   MainWindow::register_class(hInst);
   MapWindow::register_class(hInst);
 
-  // other startup...
+  //######################
+  //   other startup...
+  //######################
 
+  // Fill the fast(co)sine table
   InitSineTable();
+
   PreloadInitialisation(true);
 
+  // Send the SettingsMap to the DeviceBlackboard
   SendSettingsMap();
 
+  // Write to log file
   StartupStore(TEXT("Create main window\n"));
 
   RECT WindowSize = SystemWindowSize();
@@ -243,25 +257,23 @@ bool XCSoarInterface::Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
   }
   main_window.install_timer();
 
+  // Initialize DeviceBlackboard
   device_blackboard.Initialise();
-  ///////////////////////////////////////////////////////
-  ///
+
+  // Initialize Marks
   marks = new Marks("xcsoar-marks");
   topology = new TopologyStore(marks->GetTopology());
 
-  ///////////////////////////////////////////////////////
-  //// create map window
+  // create map window
 
+  // Write to log file
   StartupStore(TEXT("Create map window\n"));
 
-  ///////////////////////////////////////////////////////
   // initial show
-
   main_window.show();
   main_window.map.show();
 
-  ///////////////////////////////////////////////////////
-  // other initialisation...
+  // other initialization...
 
 #ifdef HAVE_ACTIVATE_INFO
   SHSetAppKeyWndAssoc(VK_APP1, main_window);
@@ -277,18 +289,17 @@ bool XCSoarInterface::Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
   SHSetAppKeyWndAssoc(VK_APP6, main_window);
 #endif
 
-  // Initialise main blackboard data
-
+  // Initialize main blackboard data
   task.ClearTask();
   glide_computer.Initialise();
   logger.LinkGRecordDLL(); // try to link DLL if it exists
   OpenGeoid();
 
   PreloadInitialisation(false);
-  ////////////////////////////////////////////////////////
 
   Profile::LoadWindFromRegistry();
   CalculateNewPolarCoef();
+  // Write to log file
   StartupStore(TEXT("GlidePolar::UpdatePolar\n"));
   GlidePolar::UpdatePolar(false, SettingsComputer());
 
@@ -307,6 +318,7 @@ bool XCSoarInterface::Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
 
   terrain.ServiceFullReload(Basic().Location);
 
+  // Write to log file
   CreateProgressDialog(gettext(TEXT("Scanning weather forecast")));
   StartupStore(TEXT("RASP load\n"));
   RASP.ScanAll(Basic().Location);
@@ -330,22 +342,27 @@ bool XCSoarInterface::Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
   devStartup(lpCmdLine);
 
   // re-set polar in case devices need the data
+  // Write to log file
   StartupStore(TEXT("GlidePolar::UpdatePolar\n"));
   GlidePolar::UpdatePolar(true, SettingsComputer());
 
   CreateProgressDialog(gettext(TEXT("Initialising display")));
 
   // Finally ready to go.. all structures must be present before this.
+  // Write to log file
   StartupStore(TEXT("CreateDrawingThread\n"));
   draw_thread = new DrawThread(main_window.map, main_window.flarm);
   draw_thread->start();
 
+  // Write to log file
   StartupStore(TEXT("ShowInfoBoxes\n"));
   InfoBoxManager::Show();
 
+  // Write to log file
   StartupStore(TEXT("CreateCalculationThread\n"));
   CreateCalculationThread();
 
+  // Write to log file
   StartupStore(TEXT("dlgAirspaceWarningInit\n"));
   dlgAirspaceWarningInit();
 
@@ -353,6 +370,7 @@ bool XCSoarInterface::Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
   ReadAssetNumber();
 
   // Da-da, start everything now
+  // Write to log file
   StartupStore(TEXT("ProgramStarted\n"));
 
   // map gets initial focus
