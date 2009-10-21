@@ -61,8 +61,6 @@ Trigger triggerClimbEvent(TEXT("triggerClimb"));
 Mutex mutexBlackboard;
 // protect GPS_INFO, mcready etc,
 
-//////////
-
 void TriggerGPSUpdate()
 {
   calculation_thread->trigger_gps();

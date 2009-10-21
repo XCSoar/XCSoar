@@ -48,8 +48,7 @@ void TriggerVarioUpdate();
 void TriggerAll(void);
 void CreateCalculationThread(void);
 
-///////
-// changed only in config or by user interface /////////////////////////////
+// changed only in config or by user interface
 // used in settings dialog
 extern bool COMPORTCHANGED;
 extern bool AIRSPACEFILECHANGED;
