@@ -53,8 +53,6 @@ Copyright_License {
 #include "wcecompat/ts_string.h"
 // TODO code: check ts_string does the right thing
 
-//////////////////////////////////////////////////
-
 Marks::Marks(const char* name):topo_marks(name, Color(0xD0,0xD0,0xD0)) {
   StartupStore(TEXT("Initialise marks\n"));
   topo_marks.scaleThreshold = 30.0;
