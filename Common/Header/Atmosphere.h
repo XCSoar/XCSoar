@@ -48,27 +48,48 @@ public:
     thermalHeight = -1;
     cloudBase = -1;
   }
-  double airTemp; // degrees C
-  double dewpoint; // degrees C
-  double tempDry; // degrees C
+
+  /** Environmental temperature in degrees C */
+  double airTemp;
+  /** DewPoint in degrees C */
+  double dewpoint;
+  /** Dry temperature in degrees C */
+  double tempDry;
+  /** ThermalIndex in degrees C */
   double thermalIndex;
+
   void updateTemps(double rh, double t);
   void updateThermalIndex(unsigned short level, bool newdata=true);
+
+  /** Number of measurements */
   int nmeasurements;
 
-  double thermalHeight; // as estimated by this level
-  double cloudBase; // as estimated by this level
+  /** Estimated ThermalHeight with data of this level */
+  double thermalHeight;
+  /** Estimated CloudBase with data of this level */
+  double cloudBase;
 };
 
-
-#define CUSONDE_HEIGHTSTEP 100 // meters between levels
-#define CUSONDE_NUMLEVELS 100 // number of levels
-#define DALR -0.00974 // degrees C per meter
-#define TITHRESHOLD -1.6 // thermal index threshold in degrees C
+/** Meters between levels */
+#define CUSONDE_HEIGHTSTEP 100
+/** Number of levels */
+#define CUSONDE_NUMLEVELS 100
+/**
+ * Dry adiabatic lapse rate (degrees C per meter)
+ *
+ * DALR = dT/dz = g/c_p =
+ * @see http://en.wikipedia.org/wiki/Lapse_rate#Dry_adiabatic_lapse_rate
+ * @see http://pds-atmospheres.nmsu.edu/education_and_outreach/encyclopedia/adiabatic_lapse_rate.htm
+ */
+#define DALR -0.00974
+/** ThermalIndex threshold in degrees C */
+#define TITHRESHOLD -1.6
 
 class CuSonde {
 public:
+  /** Expected temperature maximum on the ground */
   static double maxGroundTemperature;
+  /** Height of ground above MSL */
   static double hGround;
   static unsigned short last_level;
   static void updateMeasurements(const NMEA_INFO *Basic,
@@ -79,8 +100,10 @@ public:
   static void adjustForecastTemperature(double delta);
   static void setForecastTemperature(double val);
 
-  static double thermalHeight; // as estimated by this level
-  static double cloudBase; // as estimated by this level
+  /** Estimated ThermailHeight */
+  static double thermalHeight;
+  /** Estimated CloudBase */
+  static double cloudBase;
 
   static void test();
 };

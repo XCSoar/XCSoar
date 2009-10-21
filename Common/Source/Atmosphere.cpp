@@ -50,7 +50,6 @@ double CuSonde::hGround = 0;
 double CuSonde::maxGroundTemperature = 25.0;
 CuSondeLevel CuSonde::cslevels[CUSONDE_NUMLEVELS];
 
-
 // TODO accuracy: recalculate thermal index etc if maxGroundTemp changes
 
 void CuSonde::test() {
@@ -75,6 +74,10 @@ void CuSonde::test() {
   */
 }
 
+/**
+ * Sets the predicted maximum ground temperature to val
+ * @param val New predicted maximum ground temperature in degrees C
+ */
 void CuSonde::setForecastTemperature(double val) {
   maxGroundTemperature= val;
 
@@ -85,60 +88,84 @@ void CuSonde::setForecastTemperature(double val) {
   cloudBase = -1;
   thermalHeight = -1;
 
+  // iterate through all levels
   for (level=0; level<CUSONDE_NUMLEVELS; level++) {
+    // update the ThermalIndex for each level with
+    // the new maxGroundTemperature
     cslevels[level].updateThermalIndex((unsigned short)level, false);
+
+    // determine to which level measurements are available
     if (cslevels[level].nmeasurements) {
       zlevel = level;
     }
     if ((cslevels[level].nmeasurements==0)&&(zlevel)) break;
   }
+
+  // iterate through all levels with measurements
   for (level=0; level<=zlevel; level++) {
+    // calculate ThermalHeight
     findThermalHeight((unsigned short)level);
+    // calculate CloudBase
     findCloudBase((unsigned short)level);
   }
-
 }
 
+/**
+ * Adjusts the maximum ground temperature by delta
+ * @param delta Degrees C to be added to the maximum ground temperature
+ */
 void CuSonde::adjustForecastTemperature(double delta) {
   setForecastTemperature(maxGroundTemperature+delta);
 }
 
-
+/**
+ * Update the measurements if new level reached
+ * @param Basic NMEA_INFO for temperature and humidity
+ * @param Calculated DERIVED_INFO for Flying status
+ */
 void
 CuSonde::updateMeasurements(const NMEA_INFO *Basic,
                             const DERIVED_INFO *Calculated)
 {
+  // if (not flying) nothing to update...
   if (!Calculated->Flying)
-    return; // nothing to do..
+    return;
+
+  // if (no temperature or humidity available) nothing to update...
   if (!Basic->TemperatureAvailable ||
       !Basic->HumidityAvailable) {
-    return; // nothing to do..
+    return;
   }
 
-  // find appropriate level:
+  // find appropriate level
   unsigned short level = (unsigned short)(((int)(max(Basic->Altitude,0))) / CUSONDE_HEIGHTSTEP);
+  // if (level out of range) cancel update
   if (level>=CUSONDE_NUMLEVELS) {
-    return; // out of range
+    return;
   }
 
+  // if (level skipped) cancel update
   if (abs(level-last_level)>1) {
-    // error, we skipped a step
     last_level = level;
     return;
   }
+
+  // if (no level transition yet) wait for transition
   if (abs(level-last_level)==0) {
+    // QUESTION TB: no need for next line?!
     last_level = level;
-    return; // nothing to do, wait until level transition
+    return;
   }
 
+  // calculate ground height
   terrain.Lock();
   RasterRounding rounding(*terrain.GetMap(),0,0);
   hGround =
     terrain.GetTerrainHeight(Basic->Location, rounding);
   terrain.Unlock();
 
+  // if (going up)
   if (level>last_level) {
-    // going up
     cslevels[level].updateTemps(Basic->RelativeHumidity,
 				Basic->OutsideAirTemperature);
     cslevels[level].updateThermalIndex(level);
@@ -147,8 +174,10 @@ CuSonde::updateMeasurements(const NMEA_INFO *Basic,
       findThermalHeight((unsigned short)(level-1));
       findCloudBase((unsigned short)(level-1));
     }
+
+  // if (going down)
   } else {
-    // going down
+    // QUESTION TB: why level+1 and not level?
     cslevels[level+1].updateTemps(Basic->RelativeHumidity,
 				Basic->OutsideAirTemperature);
     cslevels[level+1].updateThermalIndex((unsigned short)(level+1));
@@ -160,16 +189,21 @@ CuSonde::updateMeasurements(const NMEA_INFO *Basic,
   }
 
   last_level = level;
-
 }
 
-
+/**
+ * Finds the estimated ThermalHeight based on the given level and the one
+ * above
+ * @param level Level used for calculation
+ */
 void CuSonde::findThermalHeight(unsigned short level) {
   if (cslevels[level+1].nmeasurements==0) return;
   if (cslevels[level].nmeasurements==0) return;
 
+  // Delta of ThermalIndex
   double dti = cslevels[level+1].thermalIndex - cslevels[level].thermalIndex;
 
+  // Reset estimated ThermalHeight
   cslevels[level].thermalHeight = -1;
 
   if (fabs(dti)<1.0e-3) {
@@ -183,26 +217,29 @@ void CuSonde::findThermalHeight(unsigned short level) {
   double dthermalheight = (level+dlevel)*CUSONDE_HEIGHTSTEP;
   if (dlevel>0.0) {
     if (dlevel>1.0) {
-      if ((level+2<CUSONDE_NUMLEVELS)
-	  && (cslevels[level+2].nmeasurements>0)) {
-	// estimated point should be in next level.
-	return;
+      if ((level+2<CUSONDE_NUMLEVELS) && (cslevels[level+2].nmeasurements>0)) {
+        // estimated point should be in next level.
+        return;
       }
-
     }
+
+    // set the level thermal height to the calculated value
     cslevels[level].thermalHeight = dthermalheight;
 
-    // set the overall thermal height to this value
+    // set the overall thermal height to the calculated value
     thermalHeight = dthermalheight;
 
 #ifdef DEBUG_CUSONDE
     DebugStore("%g # thermal height \r\n", thermalHeight);
 #endif
   }
-
 }
 
-
+/**
+ * Finds the estimated CloudBase based on the given level and the one
+ * above
+ * @param level Level used for calculation
+ */
 void CuSonde::findCloudBase(unsigned short level) {
   if (cslevels[level+1].nmeasurements==0) return;
   if (cslevels[level].nmeasurements==0) return;
@@ -210,6 +247,7 @@ void CuSonde::findCloudBase(unsigned short level) {
   double dti = (cslevels[level+1].tempDry-cslevels[level+1].dewpoint)
               -(cslevels[level].tempDry-cslevels[level].dewpoint);
 
+  // Reset estimated CloudBase
   cslevels[level].cloudBase = -1;
 
   if (fabs(dti)<1.0e-3) {
@@ -223,38 +261,37 @@ void CuSonde::findCloudBase(unsigned short level) {
   double dcloudbase = (level+dlevel)*CUSONDE_HEIGHTSTEP;
   if (dlevel>0.0) {
     if (dlevel>1.0) {
-      if ((level+2<CUSONDE_NUMLEVELS)
-	  && (cslevels[level+2].nmeasurements>0)) {
-	// estimated point should be in next level.
-	return;
+      if ((level+2<CUSONDE_NUMLEVELS) && (cslevels[level+2].nmeasurements>0)) {
+        // estimated point should be in next level.
+        return;
       }
     }
+
+    // set the level cloudbase to the calculated value
     cslevels[level].cloudBase = dcloudbase;
 
-    // set the overall cloudbase to this value
+    // set the overall cloudbase to the calculated value
     cloudBase = dcloudbase;
 
 #ifdef DEBUG_CUSONDE
     DebugStore("%g # cloud base \r\n", cloudBase);
 #endif
-
   }
-
 }
 
-
-
+/**
+ * Calculates the dew point and saves the measurement
+ * @param rh Humidity in percent
+ * @param t Temperature in degrees C
+ */
 void CuSondeLevel::updateTemps(double rh, double t)
-// calculate dew point
-// input:  humi [%RH]
-//         temp [degreesC]
-// output: dew point [degreesC]
 {
    double logEx, adewpoint;
 
    logEx=0.66077+7.5*t/(237.3+t)+(log10(rh)-2);
    adewpoint = (logEx - 0.66077)*237.3/(0.66077+7.5-logEx);
 
+   // QUESTION TB: if(0) ??????
    // update statistics
    if (0) {
      nmeasurements++;
@@ -273,14 +310,22 @@ void CuSondeLevel::updateTemps(double rh, double t)
    }
 }
 
-
+/**
+ * Calculates the ThermalIndex for the given height level
+ *
+ * ThermalIndex is the difference in dry temp and environmental temp
+ * at the specified altitude.
+ * @param level level = altitude / CUSONDE_HEIGHTSTEP
+ * @param newdata Function logs data to debug file if true
+ */
 void CuSondeLevel::updateThermalIndex(unsigned short level,
 				      bool newdata) {
   double hlevel = level*CUSONDE_HEIGHTSTEP;
 
+  // Calculate the dry temperature at altitude = hlevel
   tempDry = DALR*(hlevel-CuSonde::hGround)+CuSonde::maxGroundTemperature;
 
-  // thermal index is difference in dry temp and environmental temp
+  // Calculate ThermalIndex
   thermalIndex = airTemp-tempDry;
 
 #ifdef DEBUG_CUSONDE
@@ -289,18 +334,9 @@ void CuSondeLevel::updateThermalIndex(unsigned short level,
 	    hlevel, airTemp, dewpoint, thermalIndex);
   }
 #endif
-
 }
 
-
 /*
-//-----------------------------------------------------------------------------
-double calc_dewpoint(double h, double t)
-*/
-
-
- /*
-
    - read sensor values
    - calculate dewpoint
    - update statistical model:
@@ -333,4 +369,3 @@ DALR = -0.00974 degrees C per meter
 C to Kelvin = +273.15
 
  */
-
