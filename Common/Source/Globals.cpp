@@ -1,6 +1,4 @@
-
 #include "XCSoar.h"
-///////////////////////////////////////////////////////
 // Junkyard of globals to be eliminated
 #include "Task.h"
 
@@ -14,9 +12,7 @@ StartStats_t   task_start_stats;
 bool needclipping=false; // flag to activate extra clipping for some PNAs
 #endif
 
-//////////////////////////////////////////////////////
 #include "SettingsAirspace.hpp"
 int AirspacePriority[AIRSPACECLASSCOUNT];
 
 double airspace_QNH;
-
