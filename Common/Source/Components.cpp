@@ -217,7 +217,7 @@ bool XCSoarInterface::Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
   // Store instance handle in our global variable
   hInst = hInstance;
 
-  // QUESTION TB: what does it do?
+  // IDS_APP_TITLE = XCSoar (see XCSoar.rc)
   LoadString(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
 
   //If it is already running, then focus on the window
