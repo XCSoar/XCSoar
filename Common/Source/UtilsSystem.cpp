@@ -695,6 +695,10 @@ bool CheckRegistryProfile() {
 
 void SetProfileFiles(const TCHAR *ex);
 
+/**
+ * Reads and parses arguments/options from the command line
+ * @param CommandLine not in use
+ */
 void XCSoarGetOpts(LPTSTR CommandLine) {
   (void)CommandLine;
 // SaveRegistryToFile(TEXT("iPAQ File Store\xcsoar-registry.prf"));
@@ -868,6 +872,10 @@ WPARAM TranscodeKey(WPARAM wParam) {
   return wParam;
 }
 
+/**
+ * Returns the screen dimension rect to be used
+ * @return The screen dimension rect to be used
+ */
 RECT SystemWindowSize(void) {
   RECT WindowSize;
 #ifdef WINDOWSPC
