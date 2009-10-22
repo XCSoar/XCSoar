@@ -45,6 +45,8 @@ class StatusMessageList;
 
 class Message : public PopupMessage {
  public:
+  Message();
+
   static bool Render() {
     return main_window.popup.Render();
   }
