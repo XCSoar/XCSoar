@@ -106,7 +106,6 @@ GetDefaultWindowControlProps(XMLNode *Node, TCHAR *Name, int *X, int *Y,
   // TODO code: Temporary double handling to fix "const unsigned short
   // *" to "unsigned short *" problem
   _tcscpy(Caption,gettext(Caption));
-
 }
 
 static void *
@@ -122,7 +121,6 @@ CallBackLookup(CallBackTableEntry_t *LookUpTable, TCHAR *Name)
     }
 
   return(NULL);
-
 }
 
 static void
@@ -271,8 +269,6 @@ static XMLNode xmlOpenResourceHelper(const TCHAR *lpszXML, LPCTSTR tag)
 
 #endif /* WIN32 */
 
-///////////////////////////////////////
-
 static const XMLNode
 load_xml_file_or_resource(const TCHAR *name, const TCHAR* resource)
 {
@@ -317,7 +313,7 @@ WndForm *dlgLoadFromXML(CallBackTableEntry_t *LookUpTable,
   WndForm *theForm = NULL;
   //  TCHAR sFileName[128];
 
-//  assert(main_window == Parent);  // Airspace warning has MapWindow as parent,
+  // assert(main_window == Parent);  // Airspace warning has MapWindow as parent,
   // ist that ok?  JMW: No, I think that it is better to use main UI thread for
   // everything.  See changes regarding RequestAirspaceDialog in AirspaceWarning.cpp
 
@@ -327,7 +323,6 @@ WndForm *dlgLoadFromXML(CallBackTableEntry_t *LookUpTable,
 
   // TODO code: put in error checking here and get rid of exits in xmlParser
   if (xMainNode.isEmpty()) {
-
     MessageBoxX(
       gettext(TEXT("Error in loading XML dialog")),
       gettext(TEXT("Dialog error")),
@@ -335,7 +330,6 @@ WndForm *dlgLoadFromXML(CallBackTableEntry_t *LookUpTable,
 
     return NULL;
   }
-
 
   XMLNode xNode=xMainNode.getChildNode(TEXT("WndForm"));
 
@@ -395,7 +389,6 @@ WndForm *dlgLoadFromXML(CallBackTableEntry_t *LookUpTable,
       delete theForm;
       return NULL;
     }
-
   } else {
     MessageBoxX(
       gettext(TEXT("Error in loading XML dialog")),
@@ -406,10 +399,7 @@ WndForm *dlgLoadFromXML(CallBackTableEntry_t *LookUpTable,
   }
 
   return(theForm);
-
 }
-
-
 
 static void
 LoadChildsFromXML(WindowControl *Parent, CallBackTableEntry_t *LookUpTable,
@@ -458,10 +448,9 @@ LoadChildsFromXML(WindowControl *Parent, CallBackTableEntry_t *LookUpTable,
 #endif /* !ENABLE_SDL */
 
     Font = StringToIntDflt(childNode.getAttribute(TEXT("Font")), ParentFont);
-
     Border = StringToIntDflt(childNode.getAttribute(TEXT("Border")), 0);
 
-    if (_tcscmp(childNode.getName(), TEXT("WndProperty")) == 0){
+    if (_tcscmp(childNode.getName(), TEXT("WndProperty")) == 0) {
 
       WndProperty *W;
       int CaptionWidth;
@@ -514,13 +503,12 @@ LoadChildsFromXML(WindowControl *Parent, CallBackTableEntry_t *LookUpTable,
       W->SetReadOnly(ReadOnly != 0);
 
       if (childNode.nChildNode(TEXT("DataField")) > 0){
-
         TCHAR DataType[32];
         TCHAR DisplayFmt[32];
         TCHAR EditFormat[32];
         TCHAR OnDataAccess[64];
         double Min, Max, Step;
-	int Fine;
+        int Fine;
 
         XMLNode dataFieldNode =
           childNode.getChildNode(TEXT("DataField"), 0);
@@ -593,15 +581,9 @@ LoadChildsFromXML(WindowControl *Parent, CallBackTableEntry_t *LookUpTable,
               (DataField::DataAccessCallback_t) CallBackLookup(LookUpTable, OnDataAccess))
           );
         }
-
       }
-
-    }else
-
-    if (_tcscmp(childNode.getName(), TEXT("WndButton")) == 0){
-
+    } else if (_tcscmp(childNode.getName(), TEXT("WndButton")) == 0){
       TCHAR ClickCallback[128];
-
        _tcscpy(ClickCallback, StringToStringDflt(childNode.getAttribute(TEXT("OnClickNotify")), TEXT("")));
 
       WC = new WndButton(Parent, Name, Caption, X, Y, Width, Height,
@@ -609,15 +591,11 @@ LoadChildsFromXML(WindowControl *Parent, CallBackTableEntry_t *LookUpTable,
                          CallBackLookup(LookUpTable, ClickCallback));
 
       Caption[0] = '\0';
+    } else
 
-    }else
-
-
-      /////
 #ifndef ALTAIRSYNC
 
     if (_tcscmp(childNode.getName(), TEXT("WndEventButton")) == 0){
-
       TCHAR iename[100];
       TCHAR ieparameters[100];
       _tcscpy(iename,
@@ -633,49 +611,28 @@ LoadChildsFromXML(WindowControl *Parent, CallBackTableEntry_t *LookUpTable,
                               iename, ieparameters);
 
       Caption[0] = '\0';
+    } else
 
-    }else
-
-      /////
 #endif
 
-
     if (_tcscmp(childNode.getName(), TEXT("WndOwnerDrawFrame")) == 0){
-
       TCHAR PaintCallback[128];
-
       _tcscpy(PaintCallback, StringToStringDflt(childNode.getAttribute(TEXT("OnPaint")), TEXT("")));
-
       WC = new WndOwnerDrawFrame(Parent, Name, X, Y, Width, Height,
                (WndOwnerDrawFrame::OnPaintCallback_t) CallBackLookup(LookUpTable, PaintCallback));
-
-    }else
-
-    if (_tcscmp(childNode.getName(), TEXT("WndFrame")) == 0){
-
+    } else if (_tcscmp(childNode.getName(), TEXT("WndFrame")) == 0){
       WndFrame *W;
-
       WC = W = new WndFrame(Parent, Name, X, Y, Width, Height);
-
       LoadChildsFromXML(W, LookUpTable, &childNode, ParentFont);  // recursivly create dialog
-
-    }else
-
-    if (_tcscmp(childNode.getName(), TEXT("WndListFrame")) == 0){
-
+    } else if (_tcscmp(childNode.getName(), TEXT("WndListFrame")) == 0){
       TCHAR ListCallback[128];
-
       _tcscpy(ListCallback, StringToStringDflt(childNode.getAttribute(TEXT("OnListInfo")), TEXT("")));
-
       WC = new WndListFrame(Parent, Name, X, Y, Width, Height,
                (WndListFrame::OnListCallback_t) CallBackLookup(LookUpTable, ListCallback));
-
       LoadChildsFromXML(WC, LookUpTable, &childNode, ParentFont);  // recursivly create dialog
-
     }
 
     if (WC != NULL){
-
       if (Font != -1)
         WC->SetFont(FontMap[Font]);
 
@@ -702,9 +659,6 @@ LoadChildsFromXML(WindowControl *Parent, CallBackTableEntry_t *LookUpTable,
       if (Border != 0){
         WC->SetBorderKind(Border);
       }
-
     }
-
   }
-
 }
