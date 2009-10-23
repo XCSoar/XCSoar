@@ -54,7 +54,7 @@ TaskDijkstra::get_size(unsigned stage) const
   return task->get_tp_search_points(stage).size();
 }
 
-void TaskDijkstra::add_edges(Dijkstra<ScanTaskPoint> &dijkstra,
+void TaskDijkstra::add_edges(DijkstraTaskPoint &dijkstra,
                              const ScanTaskPoint& curNode) 
 {
   ScanTaskPoint destination;
@@ -70,7 +70,7 @@ void TaskDijkstra::add_edges(Dijkstra<ScanTaskPoint> &dijkstra,
   }
 }
 
-void TaskDijkstra::add_start_edges(Dijkstra<ScanTaskPoint> &dijkstra,
+void TaskDijkstra::add_start_edges(DijkstraTaskPoint &dijkstra,
                                    const SearchPoint &currentLocation) 
 {
   ScanTaskPoint destination;
@@ -94,7 +94,7 @@ unsigned TaskDijkstra::distance_max()
   shortest = false;
 
   const ScanTaskPoint start(0,0);
-  Dijkstra<ScanTaskPoint> dijkstra(start);
+  DijkstraTaskPoint dijkstra(start);
 
   unsigned d= distance_general(dijkstra);
   save_max();
@@ -107,7 +107,7 @@ TaskDijkstra::distance_min(const SearchPoint &currentLocation)
   shortest = true; 
 
   const ScanTaskPoint start(std::max(0,(int)activeStage-1),0);
-  Dijkstra<ScanTaskPoint> dijkstra(start);
+  DijkstraTaskPoint dijkstra(start);
   if (activeStage>0) {
     add_start_edges(dijkstra, currentLocation);
   }
@@ -117,7 +117,7 @@ TaskDijkstra::distance_min(const SearchPoint &currentLocation)
 }
 
 unsigned 
-TaskDijkstra::distance_general(Dijkstra<ScanTaskPoint> &dijkstra)
+TaskDijkstra::distance_general(DijkstraTaskPoint &dijkstra)
 {
   unsigned lastStage = -1;
   while (!dijkstra.empty()) {

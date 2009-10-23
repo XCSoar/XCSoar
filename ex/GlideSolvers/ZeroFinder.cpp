@@ -4,12 +4,15 @@
 #include <assert.h>
 #include <algorithm>
 
-double ZeroFinder::x_limited(double x) {
-  x = std::min(xmax,std::max(xmin,x));
-  return x;
+double 
+ZeroFinder::x_limited(const double x) const 
+{
+  return std::min(xmax,std::max(xmin,x));
 }
 
-double ZeroFinder::f_limited(double x) {
+double 
+ZeroFinder::f_limited(const double x)  
+{
   return f(x_limited(x));
 }
 
@@ -228,7 +231,7 @@ double ZeroFinder::_find_min(const double xstart)
                                        /* is seeked for		*/
     double middle_range = (a+b)/2;
     double tol_act =			/* Actual toleranceerance		*/
-		SQRT_EPSILON*fabs(x) + tolerance/3;
+      SQRT_EPSILON*fabs(x) + tolerance/3;
     double new_step;      		/* Step at this iteration       */
 
     if( fabs(x-middle_range) + range/2 <= 2*tol_act ) {
@@ -246,9 +249,8 @@ double ZeroFinder::_find_min(const double xstart)
 	double p; 		/* Interpolation step is calcula-*/
 	double q;              /* ted as p/q; division operation*/
                                         /* is delayed until last moment	*/
-	double t;
 
-	t = (x-w) * (fx-fv);
+	const double t = (x-w) * (fx-fv);
 	q = (x-v) * (fx-fw);
 	p = (x-v)*q - (x-w)*t;
 	q = 2*(q-t);
@@ -277,7 +279,7 @@ double ZeroFinder::_find_min(const double xstart)
 
 				/* Obtain the next approximation to min	*/
     {				/* and reduce the enveloping range	*/
-      double t = x + new_step;	/* Tentative point for the min	*/
+      const double t = x + new_step;	/* Tentative point for the min	*/
       double ft = f_limited(t);
       if( ft <= fx )
       {                                 /* t is a better approximation	*/

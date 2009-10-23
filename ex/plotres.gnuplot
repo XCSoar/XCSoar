@@ -5,6 +5,7 @@ set style line 1 lt 2 lc rgb "black" lw 2
 set style line 2 lt 4 lc rgb "purple" lw 1
 set style line 3 lt 4 lc rgb "orange" lw 1
 set style line 4 lt 4 lc rgb "blue" lw 2
+set style line 5 lt 4 lc rgb "grey" lw 2
 
 
 plot \
@@ -12,6 +13,7 @@ plot \
      'res-ssample.txt' using 1:2 with filledcurve title "sect samples", \
      'res-min.txt' using 1:2 with linespoints ls 3 title "min", \
      'res-max.txt' using 1:2 with linespoints ls 2 title "max", \
+     'res-rem.txt' using 1:2 with linespoints ls 5 title "remaining", \
      'res-sample.txt' using 1:2 with lines ls 1 title "sample", \
      'res-isolines.txt' using 1:2 with lines ls 4 title "isolines"
 pause -1

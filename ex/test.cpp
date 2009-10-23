@@ -139,13 +139,15 @@ int main() {
   w[2].Longitude = 1.05; 
   w[2].Latitude = 1.05; 
   w[3].Longitude = 0.75; 
-  w[3].Latitude = 0.45; 
+  w[3].Latitude = 0.5; 
   w[4].Longitude = 0.9; 
   w[4].Latitude = 0.1; 
 
   state.Location = w[0];
   state_last.Location = w[0];
   test_task.report(state);
+
+  unsigned counter=0;
 
   for (int i=0; i<num_wp-1-1; i++) {
     wait_prompt(state.Time);
@@ -159,16 +161,13 @@ int main() {
       double V = 15.0;
       state.Time += d/V;
 
-      if (state.Time>=16120.0) {
-        wait_prompt(state.Time);
-      }
-      if (state.Time>=16156.0) {
-        wait_prompt(state.Time);
-      }
       test_task.update(state, state_last);
 
       test_task.update_idle(state);
-      test_task.report(state);
+
+      if (counter++ % 10==0) {
+        test_task.report(state);
+      }
       n_samples++;
       state_last = state;
     }    

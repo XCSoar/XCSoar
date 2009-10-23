@@ -22,7 +22,7 @@ OUTPUTS 	:= test
 INCLUDES := -I. -I../xcsoar/Common/Header
 
 PROFILE := 
-OPTIMIZE := -g 
+OPTIMIZE := -g -O2
 
 CPPFLAGS := $(INCLUDES) 
 CXXFLAGS	:=$(OPTIMIZE) -fno-exceptions $(PROFILE)
@@ -107,6 +107,7 @@ OBJS	:=\
 	Tasks/TaskSolvers/TaskBestMc.o \
 	Tasks/TaskSolvers/TaskCruiseEfficiency.o \
 	Tasks/TaskSolvers/TaskMinTarget.o \
+	Tasks/TaskSolvers/TaskOptTarget.o \
 	Tasks/TaskSolvers/TaskGlideRequired.o \
 	Tasks/TaskStats/TaskStats.o \
 	\

@@ -30,6 +30,10 @@ public:
                            const GLIDE_STATE &task,
 			   const double V) const;
 
+  GLIDE_RESULT solve_glide_zerowind(const AIRCRAFT_STATE &aircraft,
+                                    const GLIDE_STATE &task,
+                                    const double V) const;
+
   GLIDE_RESULT solve_glide(const AIRCRAFT_STATE &aircraft,
                            const GLIDE_STATE &task,
 			   const double V,
@@ -84,19 +88,22 @@ struct GLIDE_RESULT {
   GLIDE_RESULT():
     Solution(MacCready::RESULT_NOSOLUTION),
     TrackBearing(0.0),
-    Distance(0.0),
     CruiseTrackBearing(0.0),
+    Distance(0.0),
     VOpt(0.0),
     HeightClimb(0.0),
     HeightGlide(0.0),
     TimeElapsed(0.0),
     TimeVirtual(0.0),
-    AltitudeDifference(0.0)
+    AltitudeDifference(0.0),
+    EffectiveWindSpeed(0.0),
+    EffectiveWindAngle(0.0)
     {
       // default is null result
     }
 
-  MacCready::MacCreadyResult_t Solution;
+  GLIDE_RESULT(const GLIDE_STATE &task, const double V);
+
   double TrackBearing;
   double Distance;
   double CruiseTrackBearing;
@@ -106,15 +113,23 @@ struct GLIDE_RESULT {
   double TimeElapsed;
   double TimeVirtual;
   double AltitudeDifference;
+  double EffectiveWindSpeed;
+  double EffectiveWindAngle;
+  MacCready::MacCreadyResult_t Solution;
+
+  void calc_cruise_bearing();
 
   // returns true if this solution is better than s2
   bool ok_or_partial() const {
     return (Solution == MacCready::RESULT_OK)
       || (Solution == MacCready::RESULT_PARTIAL);
   }
+/*
   bool superior(const GLIDE_RESULT &s2) const;
+*/
   void add(const GLIDE_RESULT &s2);
   void print(std::ostream& f) const;
+  double calc_vspeed(const double mc);
 };
 
 

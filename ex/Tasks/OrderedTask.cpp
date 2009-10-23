@@ -14,8 +14,10 @@
 #include "TaskSolvers/TaskBestMc.hpp"
 #include "TaskSolvers/TaskMinTarget.hpp"
 #include "TaskSolvers/TaskGlideRequired.hpp"
+#include "TaskSolvers/TaskOptTarget.hpp"
 #include <assert.h>
 #include <fstream>
+
 
 void
 OrderedTask::update_geometry() {
@@ -188,6 +190,14 @@ OrderedTask::update_idle(const AIRCRAFT_STATE& state)
   double mc=2.0; // TODO hard coded!
   double p = calc_min_target(state, mc, 3600*9.0);
   (void)p;
+
+  if (AATPoint* ap = dynamic_cast<AATPoint*>(tps[activeTaskPoint])) {
+    // very nasty hack
+    TaskOptTarget tot(tps, activeTaskPoint, state,
+                      *ap, ts);
+
+    tot.search(0.5);
+  }
   
   return true;
 }
@@ -380,7 +390,8 @@ double
 OrderedTask::calc_mc_best(const AIRCRAFT_STATE &aircraft, 
                           const double mc)
 {
-  TaskBestMc bmc(tps,activeTaskPoint, aircraft);
+  // note setting of lower limit on mc
+  TaskBestMc bmc(tps,activeTaskPoint, aircraft, mc);
   return bmc.search(mc);
 }
 
@@ -455,6 +466,15 @@ void OrderedTask::report(const AIRCRAFT_STATE &state)
     f3 <<  tp->getMinLocation().Longitude << " " 
        <<  tp->getMinLocation().Latitude << "\n";
   }
+
+  std::ofstream f4("res-rem.txt");
+  f4 << "#### Remaining task\n";
+  for (unsigned i=0; i<tps.size(); i++) {
+    OrderedTaskPoint *tp = tps[i];
+    f4 <<  tp->get_reference_remaining().Longitude << " " 
+       <<  tp->get_reference_remaining().Latitude << "\n";
+  }
+
 }
 
 

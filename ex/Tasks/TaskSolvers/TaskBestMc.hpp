@@ -10,7 +10,8 @@ class TaskBestMc:
 public:
   TaskBestMc(const std::vector<OrderedTaskPoint*>& tps,
              const unsigned activeTaskPoint,
-             const AIRCRAFT_STATE &_aircraft);
+             const AIRCRAFT_STATE &_aircraft,
+             const double _mc_min=0.0);
   TaskBestMc(TaskPoint* tp,
              const AIRCRAFT_STATE &_aircraft);
 

@@ -64,6 +64,7 @@ AATPoint::check_target(const AIRCRAFT_STATE& state)
   } else {
     moved = check_target_outside(state);
   }
+
   return moved;
 }
 
@@ -97,21 +98,37 @@ AATPoint::check_target_inside(const AIRCRAFT_STATE& state)
 bool
 AATPoint::check_target_outside(const AIRCRAFT_STATE& state) 
 {
-  // this is optional
+  // this is optional, to be replaced!
+  return false;
 
   if (!get_previous()->isInSector(state)) {
     double b0s = ::Bearing(get_previous()->get_reference_remaining(),
                            state.Location);
     double bst = ::Bearing(state.Location,
                            TargetLocation);
+    double dst = ::Distance(state.Location,
+                            TargetLocation);
     double da = ::AngleLimit180(b0s-bst);
-    if (fabs(da)>10.0) {
-      
+    if ((fabs(da)>10.0) && (dst>1.0)) {
+
       AATIsolineIntercept ai(*this);
-      GEOPOINT pi;
-      if (ai.intercept(*this, state, 0.0, pi)) {
-        printf("intercept %g %g\n",pi.Longitude, pi.Latitude);
-        TargetLocation = pi;
+      AIRCRAFT_STATE si;
+      if (ai.intercept(*this, state, 0.0, si.Location)
+          && isInSector(si)) {
+
+        // Note that this fights with auto-target
+
+//        printf("was %g %g %g\n",bst,b0s,dst);
+//        printf("%g intercept %g %g\n",da, 
+//               si.Location.Longitude, 
+//               si.Location.Latitude);
+        TargetLocation = si.Location;
+
+        bst = ::Bearing(state.Location,
+                        TargetLocation);
+        dst = ::Distance(state.Location,
+                         TargetLocation);
+//        printf("now %g %g %g\n",bst,b0s,dst);
         return true;
       }
     }
@@ -159,11 +176,23 @@ void AATPoint::print(std::ostream& f, const int item) const
       // prev max or target changes
 
       AATIsolineSegment seg(*this);
-      
+      double tdist = ::Distance(get_previous()->get_reference_remaining(),
+                                getMinLocation());
+      double rdist = ::Distance(get_previous()->get_reference_remaining(),
+                                getTargetLocation());
+
+      bool filter_backtrack = true;
       if (seg.valid()) {
         for (double t = 0.0; t<=1.0; t+= 1.0/20) {
           GEOPOINT ga = seg.parametric(t);
-          f << ga.Longitude << " " << ga.Latitude << "\n";
+          double dthis = ::Distance(get_previous()->get_reference_remaining(),
+                                    ga);
+          if (!filter_backtrack 
+              || (dthis>=tdist)
+              || (dthis>=rdist)) {
+            // TODO: unless double dist is better than current
+            f << ga.Longitude << " " << ga.Latitude << "\n";
+          }
         }
       } else {
         GEOPOINT ga = seg.parametric(0.0);
@@ -176,3 +205,8 @@ void AATPoint::print(std::ostream& f, const int item) const
   }
 }
 
+void 
+AATPoint::set_target(const GEOPOINT &loc)
+{
+  TargetLocation = loc;
+}

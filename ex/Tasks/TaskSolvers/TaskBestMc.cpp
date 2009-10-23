@@ -5,8 +5,9 @@
 
 TaskBestMc::TaskBestMc(const std::vector<OrderedTaskPoint*>& tps,
                        const unsigned activeTaskPoint,
-                       const AIRCRAFT_STATE &_aircraft):
-  ZeroFinder(0.1,10.0,0.001),
+                       const AIRCRAFT_STATE &_aircraft,
+                       const double _mc_min):
+  ZeroFinder(_mc_min,10.0,0.001),
   tm(tps,activeTaskPoint,1.0),
   aircraft(_aircraft) 
 {

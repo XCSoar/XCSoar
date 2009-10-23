@@ -18,20 +18,18 @@ public:
     }
   }
   double find_zero(const double xstart) {
-    double x = _find_zero(xstart);
-    return x_limited(x);
+    return x_limited(_find_zero(xstart));
   }
   double find_min(const double xstart) {
-    double x = _find_min(xstart);
-    return x_limited(x);
+    return x_limited(_find_min(xstart));
   }
 protected:
   const double xmin;
   const double xmax;
   const double tolerance;
 private:
-  double f_limited(double x);
-  double x_limited(double x);
+  double f_limited(const double x);
+  double x_limited(const double x) const;
   double _find_zero(const double xstart);
   double _find_min(const double xstart);
 };

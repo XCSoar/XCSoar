@@ -106,8 +106,6 @@ protected:
   double scan_distance_scored(const GEOPOINT &ref);
   double scan_distance_travelled(const GEOPOINT &ref);
 
-  void scan_bearing_travelled(const GEOPOINT &ref);
-  void scan_bearing_remaining(const GEOPOINT &ref);
 public:
 
   virtual GEOPOINT get_reference_nominal() const;

@@ -6,6 +6,7 @@
 class OrderedTask;
 typedef std::pair<unsigned, unsigned> ScanTaskPoint;
 template <class Node> class Dijkstra;
+typedef Dijkstra<ScanTaskPoint> DijkstraTaskPoint;
 
 class TaskDijkstra {
 public:
@@ -18,12 +19,12 @@ public:
 
 private:
 
-  unsigned distance_general(Dijkstra<ScanTaskPoint> &dijkstra);
+  unsigned distance_general(DijkstraTaskPoint &dijkstra);
 
-  void add_edges(Dijkstra<ScanTaskPoint> &dijkstra,
+  void add_edges(DijkstraTaskPoint &dijkstra,
                  const ScanTaskPoint &curNode);
 
-  void add_start_edges(Dijkstra<ScanTaskPoint> &dijkstra,
+  void add_start_edges(DijkstraTaskPoint &dijkstra,
                  const SearchPoint &loc);
 
   unsigned distance(const ScanTaskPoint &sp,

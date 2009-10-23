@@ -23,7 +23,8 @@ OrderedTaskPoint::get_next() const
 
 // -------
 
-GEOPOINT OrderedTaskPoint::get_reference_travelled() const
+GEOPOINT 
+OrderedTaskPoint::get_reference_travelled() const
 {
   if (has_entered()) {
     return getMaxLocation();
@@ -32,17 +33,20 @@ GEOPOINT OrderedTaskPoint::get_reference_travelled() const
   }
 }
 
-GEOPOINT OrderedTaskPoint::get_reference_scored() const
+GEOPOINT 
+OrderedTaskPoint::get_reference_scored() const
 {
   return getLocation();
 }
 
-GEOPOINT OrderedTaskPoint::get_reference_nominal() const
+GEOPOINT 
+OrderedTaskPoint::get_reference_nominal() const
 {
   return getLocation();
 }
 
-GEOPOINT OrderedTaskPoint::get_reference_remaining() const
+GEOPOINT 
+OrderedTaskPoint::get_reference_remaining() const
 {
   if (has_entered()) {
     return getMinLocation();
@@ -54,26 +58,33 @@ GEOPOINT OrderedTaskPoint::get_reference_remaining() const
 // -------
 
 
-TaskLeg* OrderedTaskPoint::get_leg_in() const
+TaskLeg* 
+OrderedTaskPoint::get_leg_in() const
 {
   return leg_in;
 }
 
-TaskLeg* OrderedTaskPoint::get_leg_out() const
+TaskLeg* 
+OrderedTaskPoint::get_leg_out() const
 {
   return leg_out;
 }
 
-void OrderedTaskPoint::set_leg_in(TaskLeg* the_leg)
+void 
+OrderedTaskPoint::set_leg_in(TaskLeg* the_leg)
 {
   leg_in = the_leg;
 }
 
-void OrderedTaskPoint::set_leg_out(TaskLeg* the_leg) {
+void 
+OrderedTaskPoint::set_leg_out(TaskLeg* the_leg) 
+{
   leg_out = the_leg;
 }
 
-bool OrderedTaskPoint::scan_active(OrderedTaskPoint* atp) {
+bool 
+OrderedTaskPoint::scan_active(OrderedTaskPoint* atp) 
+{
   // reset
   active_state = NOTFOUND_ACTIVE;
 
@@ -102,62 +113,36 @@ bool OrderedTaskPoint::scan_active(OrderedTaskPoint* atp) {
 //////////
 
 
-void OrderedTaskPoint::scan_bearing_remaining(const GEOPOINT &ref) 
-{
-  if (leg_out) {
-    get_next()->scan_bearing_remaining(ref);
-  } 
-  if (leg_in) {
-    bearing_remaining = leg_in->leg_bearing_remaining(ref);
-  } else {
-    bearing_remaining = ::Bearing(ref, getLocation()); // bearing to start
-  }
-}
-
-void OrderedTaskPoint::scan_bearing_travelled(const GEOPOINT &ref) 
-{
-  if (leg_out) {
-    get_next()->scan_bearing_travelled(ref);
-  } 
-  if (leg_in) {
-    bearing_travelled = leg_in->leg_bearing_travelled(ref);
-  } else if (leg_out) {
-    bearing_travelled = leg_out->leg_bearing_travelled(ref);
-  } else {
-    bearing_travelled = 0.0;
-  }
-}
-
-
-//////////////////
-
-double OrderedTaskPoint::scan_distance_remaining(const GEOPOINT &ref) 
+double 
+OrderedTaskPoint::scan_distance_remaining(const GEOPOINT &ref) 
 {
   // distance remaining from the given task point
   // (accumulates towards start)
 
   if (leg_in) {
     this_distance_remaining = leg_in->leg_distance_remaining(ref);
+    bearing_remaining = leg_in->leg_bearing_remaining(ref);
   } else {
     this_distance_remaining = 0.0;
+    bearing_remaining = ::Bearing(ref, getLocation()); // bearing to start
   }
 
   if (leg_out) {
-    double d = leg_out->leg_distance_remaining(ref);
-    distance_remaining = 
-      get_next()->scan_distance_remaining(ref)
-      +d;
+    distance_remaining = get_next()->scan_distance_remaining(ref)
+      +get_next()->this_distance_remaining;
   } else {
     // finish, reset
     distance_remaining = 0.0;
   }
+
   return distance_remaining;
 }
 
 
 ////
 
-double OrderedTaskPoint::scan_distance_max() 
+double 
+OrderedTaskPoint::scan_distance_max() 
 {
   if (leg_out) {   
     double d = leg_out->leg_distance_max();
@@ -167,7 +152,8 @@ double OrderedTaskPoint::scan_distance_max()
   }
 }
 
-double OrderedTaskPoint::scan_distance_min() 
+double 
+OrderedTaskPoint::scan_distance_min() 
 {
   if (leg_out) {   
     double d = leg_out->leg_distance_min();
@@ -178,7 +164,8 @@ double OrderedTaskPoint::scan_distance_min()
 }
 
 
-double OrderedTaskPoint::scan_distance_nominal() 
+double 
+OrderedTaskPoint::scan_distance_nominal() 
 {
   // distance from start to the task point
   // (accumulates towards finish)
@@ -197,22 +184,19 @@ double OrderedTaskPoint::scan_distance_nominal()
   }
 }
 
-double OrderedTaskPoint::scan_distance_planned() 
+double 
+OrderedTaskPoint::scan_distance_planned() 
 {
   // distance from start to the task point
   // (accumulates towards finish)
   if (leg_in) {
-    this_distance_planned = leg_in->leg_distance_planned();
     bearing_planned = leg_in->leg_bearing_planned();
+    this_distance_planned = leg_in->leg_distance_planned();
+    distance_planned = this_distance_planned
+      +get_previous()->distance_planned;
   } else {
     this_distance_planned = 0.0;
     bearing_planned = 0.0;
-  }
-
-  if (leg_in) {
-    distance_planned = leg_in->leg_distance_planned()
-      +get_previous()->distance_planned;
-  } else {
     distance_planned = 0;
   }
   if (leg_out) {
@@ -223,19 +207,22 @@ double OrderedTaskPoint::scan_distance_planned()
 }
 
 
-double OrderedTaskPoint::scan_distance_travelled(const GEOPOINT &ref) 
+double 
+OrderedTaskPoint::scan_distance_travelled(const GEOPOINT &ref) 
 {
   if (leg_in) {
+    bearing_travelled = leg_in->leg_bearing_travelled(ref);
     this_distance_travelled = leg_in->leg_distance_travelled(ref);
-  } else {
-    this_distance_travelled = 0.0;
-  }
-
-  if (leg_in) {
-    distance_travelled = leg_in->leg_distance_travelled(ref)
+    distance_travelled = this_distance_travelled
       +get_previous()->distance_travelled;
   } else {
     distance_travelled = 0;
+    this_distance_travelled = 0.0;
+    if (leg_out) {
+      bearing_travelled = leg_out->leg_bearing_travelled(ref);
+    } else {
+      bearing_travelled = 0.0;
+    }
   }
   if (leg_out) {
     return get_next()->scan_distance_travelled(ref);
@@ -245,7 +232,8 @@ double OrderedTaskPoint::scan_distance_travelled(const GEOPOINT &ref)
 }
 
 
-double OrderedTaskPoint::scan_distance_scored(const GEOPOINT &ref) 
+double 
+OrderedTaskPoint::scan_distance_scored(const GEOPOINT &ref) 
 {
   if (leg_in) {
     distance_scored = leg_in->leg_distance_scored(ref)
@@ -312,7 +300,8 @@ OrderedTaskPoint::get_search_points()
 }
 
 
-double OrderedTaskPoint::get_distance_remaining(const AIRCRAFT_STATE &) const
+double 
+OrderedTaskPoint::get_distance_remaining(const AIRCRAFT_STATE &) const
 {
   return this_distance_remaining;
 }
@@ -324,9 +313,10 @@ OrderedTaskPoint::get_bearing_remaining(const AIRCRAFT_STATE &) const
 }
 
 
-GLIDE_RESULT OrderedTaskPoint::glide_solution_travelled(const AIRCRAFT_STATE &ac, 
-                                                        const MacCready &msolv,
-                                                        const double minH) const
+GLIDE_RESULT 
+OrderedTaskPoint::glide_solution_travelled(const AIRCRAFT_STATE &ac, 
+                                           const MacCready &msolv,
+                                           const double minH) const
 {
   GLIDE_STATE gs;
   gs.Distance = get_distance_travelled();
@@ -336,9 +326,10 @@ GLIDE_RESULT OrderedTaskPoint::glide_solution_travelled(const AIRCRAFT_STATE &ac
   return msolv.solve(ac,gs);
 }
 
-GLIDE_RESULT OrderedTaskPoint::glide_solution_planned(const AIRCRAFT_STATE &ac, 
-                                                      const MacCready &msolv,
-                                                      const double minH) const
+GLIDE_RESULT 
+OrderedTaskPoint::glide_solution_planned(const AIRCRAFT_STATE &ac, 
+                                         const MacCready &msolv,
+                                         const double minH) const
 {
   GLIDE_STATE gs;
   gs.Distance = get_distance_planned();
@@ -349,7 +340,8 @@ GLIDE_RESULT OrderedTaskPoint::glide_solution_planned(const AIRCRAFT_STATE &ac,
 }
 
 
-double OrderedTaskPoint::double_leg_distance(const GEOPOINT &ref) const
+double 
+OrderedTaskPoint::double_leg_distance(const GEOPOINT &ref) const
 {
   assert(leg_in);
   assert(leg_out);

@@ -3,6 +3,11 @@
 
 class Quadratic {
 public:
+  Quadratic(const double _b, const double _c):
+    da(2),
+    b(_b),
+    denom(b*b-4.0*_c)
+    {};
   Quadratic(const double _a, const double _b, const double _c):
     da(2*_a),
     b(_b),

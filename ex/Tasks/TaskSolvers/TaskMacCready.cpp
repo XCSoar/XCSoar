@@ -78,6 +78,7 @@ TaskMacCready::glide_solution(const AIRCRAFT_STATE &aircraft)
     alt_difference = -gr.HeightClimb;
   }
   gr.AltitudeDifference = alt_difference;
+  gr.calc_cruise_bearing();
   return gr;
 }
 

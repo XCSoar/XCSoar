@@ -13,6 +13,7 @@ IsolineCrossingFinder::IsolineCrossingFinder(const AATPoint& _aap,
 
 }
 
+
 double 
 IsolineCrossingFinder::f(const double t) 
 {

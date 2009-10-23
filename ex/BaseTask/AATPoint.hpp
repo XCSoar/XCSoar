@@ -67,6 +67,8 @@ public:
 
   virtual void update_projection();
 
+  virtual void set_target(const GEOPOINT &loc);
+
   const GEOPOINT &getTargetLocation() const {
     return TargetLocation;
   }
