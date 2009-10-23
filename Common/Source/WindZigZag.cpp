@@ -51,8 +51,6 @@ using std::min;
 using std::max;
 #endif
 
-///////////
-
 #define NUM_SAMPLES 20      // number of points required, should be
                             // equivalent to a circle to prevent
                             // zigzag from dominating when used in
@@ -65,13 +63,10 @@ using std::max;
 #define UPDATE_RATE 20      // minimum number of seconds between
                             // recalculating estimate
 
-///////////
-
 #define V_SCALE 20.0            // 15 m/s = 30 knots max approx
 #define NUM_V_POINTS 41         // resolution on V search
 #define NUM_THETA_POINTS (36)   // resolution on theta search
 
-//////////
 #define DEGTORAD (M_PI/180.0)
 
 #ifndef NDEBUG
@@ -194,7 +189,6 @@ public:
   }
 
 };
-
 
 class ZigZag {
 public:
@@ -468,11 +462,6 @@ public:
 
 };
 
-
-
-
-//////////////////////////////////////////////////////////////////////
-
 ZigZag myzigzag;
 
 
@@ -528,8 +517,6 @@ void TestZigZagLoop() {
 
 #endif
 #endif
-
-
 
 static bool
 WindZigZagCheckAirData(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated)
@@ -683,7 +670,6 @@ WindZigZagUpdate(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated,
   return 0;
 }
 
-
 // UB-20060720.log 7 kts@259, 00:35:00 8 kts@ 222, 00:48:00
 //       7 kts@169 at 2:15
 //
@@ -704,27 +690,15 @@ WindZigZagUpdate(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated,
 // 35@150 2:08
 
 /*
-
-
 1524020.000000 0.5 160 0.1 217 2.200000 4 # zigzag
-
 1524040.000000 0.5 120 0.2 196 2.000000 4 # zigzag
-
 1524558.000000 10.5 190 0.2 173 1.000000 4 # zigzag
-
 1524689.000000 16.0 170 7.4 190 2.900000 4 # zigzag
-
 1524886.000000 19.0 230 13.7 174 5.500000 2 # zigzag
-
 1524907.000000 18.0 230 14.7 207 3.800000 3 # zigzag
-
 1524927.000000 17.0 230 16.1 220 3.900000 3 # zigzag
-
 1524948.000000 17.5 240 16.5 224 3.100000 1 # zigzag
-
 1524974.000000 17.5 240 16.8 227 3.700000 3 # zigzag
-
-
 
 wind builds up at 2:01:00 to 10 knots
                   2:02:00 to 15 knots
@@ -735,5 +709,6 @@ wind builds up at 2:01:00 to 10 knots
                     09:00                  29@207
                     10:00                  31@220
                     10:30                  33@227
-  wind is reset on landing?
+
+wind is reset on landing?
 */
