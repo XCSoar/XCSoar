@@ -17,21 +17,14 @@ public:
       return false;
     }
   }
-  double find_zero(const double xstart) {
-    return x_limited(_find_zero(xstart));
-  }
-  double find_min(const double xstart) {
-    return x_limited(_find_min(xstart));
-  }
+  double find_zero(const double xstart);
+  double find_min(const double xstart);
 protected:
   const double xmin;
   const double xmax;
   const double tolerance;
-private:
-  double f_limited(const double x);
-  double x_limited(const double x) const;
-  double _find_zero(const double xstart);
-  double _find_min(const double xstart);
+  static const double epsilon;
+  static const double sqrt_epsilon;
 };
 
 #endif
