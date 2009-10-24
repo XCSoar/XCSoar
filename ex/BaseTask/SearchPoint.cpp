@@ -37,7 +37,5 @@ SearchPoint::sort(const SearchPoint& sp) const
 unsigned
 SearchPoint::flat_distance(const SearchPoint& sp) const
 {
-  const long dx = (flatLocation.Longitude-sp.flatLocation.Longitude);
-  const long dy = (flatLocation.Latitude-sp.flatLocation.Latitude);
-  return isqrt4(dx*dx+dy*dy);
+  return flatLocation.distance_to(sp.flatLocation);
 }

@@ -21,7 +21,7 @@ OUTPUTS 	:= test
 
 INCLUDES := -I. -I../xcsoar/Common/Header
 
-PROFILE := 
+PROFILE := -pg
 OPTIMIZE := -g 
 
 CPPFLAGS := $(INCLUDES) 
@@ -66,6 +66,9 @@ OBJS	:=\
 	GlideSolvers/ZeroFinder.o \
 	Navigation/Aircraft.o \
 	Navigation/ReferencePoint.o \
+	Navigation/Airspaces.o \
+	Navigation/Waypoint.o \
+	Navigation/Waypoints.o \
 	BaseTask/AATPoint.o \
 	BaseTask/AATIsoline.o \
 	BaseTask/AATIsolineSegment.o \

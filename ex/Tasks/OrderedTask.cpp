@@ -425,7 +425,7 @@ void OrderedTask::report(const AIRCRAFT_STATE &state)
   std::ofstream fi("res-isolines.txt");
   for (unsigned i=0; i<tps.size(); i++) {
     fi << "## point " << i << "\n";
-    tps[i]->print(fi,1);
+    tps[i]->print(fi,state,1);
     fi << "\n";
   }
 
@@ -434,7 +434,7 @@ void OrderedTask::report(const AIRCRAFT_STATE &state)
   f1 << "#### Task points\n";
   for (unsigned i=0; i<tps.size(); i++) {
     f1 << "## point " << i << " ###################\n";
-    tps[i]->print(f1,0);
+    tps[i]->print(f1,state,0);
     f1 << "\n";
   }
 
@@ -442,7 +442,7 @@ void OrderedTask::report(const AIRCRAFT_STATE &state)
   f5 << "#### Task sampled points\n";
   for (unsigned i=0; i<tps.size(); i++) {
     f5 << "## point " << i << "\n";
-    tps[i]->print_samples(f5);
+    tps[i]->print_samples(f5,state);
     f5 << "\n";
   }
 

@@ -115,11 +115,9 @@ SampledTaskPoint::clear_sample_points() {
   sampled_points.clear();
 }
 
-
 void 
-SampledTaskPoint::print(std::ostream& f) const
+SampledTaskPoint::print_boundary(std::ostream& f, const AIRCRAFT_STATE &state) const
 {
-  TaskPoint::print(f);
   f << "#   Boundary points\n";
   const unsigned n= get_boundary_points().size();
   for (unsigned i=0; i<n; i++) {
@@ -130,7 +128,15 @@ SampledTaskPoint::print(std::ostream& f) const
 }
 
 void 
-SampledTaskPoint::print_samples(std::ostream& f) 
+SampledTaskPoint::print(std::ostream& f, const AIRCRAFT_STATE &state) const
+{
+  TaskPoint::print(f,state);
+  print_boundary(f, state);
+}
+
+void 
+SampledTaskPoint::print_samples(std::ostream& f,
+  const AIRCRAFT_STATE &state) 
 {
   const unsigned n= get_search_points().size();
   f << "#   Search points\n";

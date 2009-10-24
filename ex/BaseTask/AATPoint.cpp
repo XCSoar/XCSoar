@@ -159,11 +159,12 @@ AATPoint::update_projection()
 
 
 
-void AATPoint::print(std::ostream& f, const int item) const
+void AATPoint::print(std::ostream& f, const AIRCRAFT_STATE& state,
+                     const int item) const
 {
   switch(item) {
   case 0:
-    OrderedTaskPoint::print(f);
+    OrderedTaskPoint::print(f, state, item);
     f << "#   Target " << TargetLocation.Longitude << "," 
       << TargetLocation.Latitude << "\n";
     break;
@@ -209,4 +210,25 @@ void
 AATPoint::set_target(const GEOPOINT &loc)
 {
   TargetLocation = loc;
+}
+
+
+void 
+AATPoint::print_boundary(std::ostream& f,
+  const AIRCRAFT_STATE &state) const
+{
+  const unsigned n= get_boundary_points().size();
+  f << "#   Boundary points\n";
+  const double mind = double_leg_distance(state.Location);
+  for (unsigned i=0; i<n; i++) {
+    const GEOPOINT loc = get_boundary_points()[i].getLocation();
+
+    // TODO: this is broken
+    if (1 || double_leg_distance(loc)>mind) {
+      f << "     " << loc.Longitude << " " << loc.Latitude << "\n";
+    } else {
+      f << "     " << state.Location.Longitude << " " << state.Location.Latitude << "\n";
+    }
+  }
+  f << "\n";
 }

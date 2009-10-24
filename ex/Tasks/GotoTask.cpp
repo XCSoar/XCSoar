@@ -37,7 +37,7 @@ GotoTask::report(const AIRCRAFT_STATE &state)
 {
   if (tp) {
     std::ofstream f1("res-goto.txt");
-    tp->print(f1);
+    tp->print(f1,state);
   }
 }
 

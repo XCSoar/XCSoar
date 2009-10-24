@@ -61,8 +61,6 @@ public:
 
   virtual bool update_sample(const AIRCRAFT_STATE&);
 
-  virtual void print(std::ostream& f, const int item=0) const;
-
   virtual void set_range(const double p);
 
   virtual void update_projection();
@@ -72,6 +70,11 @@ public:
   const GEOPOINT &getTargetLocation() const {
     return TargetLocation;
   }
+
+  virtual void print(std::ostream& f, const AIRCRAFT_STATE&state, 
+                     const int item=0) const;
+  virtual void print_boundary(std::ostream& f, const AIRCRAFT_STATE&state) const;
+
 protected:
   GEOPOINT TargetLocation;
   bool TargetLocked;

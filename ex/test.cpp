@@ -1,13 +1,14 @@
 #include <stdlib.h>
 #include <assert.h>
-#include "GlideSolvers/MacCready.hpp"
 #include <math.h>
 #include <stdio.h>
 #include "Math/FastMath.h"
 #include "Math/Earth.hpp"
+#include "Navigation/Airspaces.hpp"
+#include "Tasks/TaskManager.h"
+#include "Tasks/TaskEvents.hpp"
 
 int n_samples = 0;
-
 
 extern long count_mc;
 //extern int count_distance;
@@ -18,60 +19,10 @@ void distance_counts() {
   printf("# num samples %d\n",n_samples);
 }
 
-#include "Tasks/TaskManager.h"
-#include "Tasks/TaskEvents.hpp"
-
-#include "BaseTask/ConvexHull/GrahamScan.hpp"
-
 double small_rand() {
   return rand()*0.001/RAND_MAX;
 }
 
-
-////////////////////////////////////////////////
-/*
-#include "ConvexHull/GrahamScan.hpp"
-#include "ConvexHull/PolygonInterior.hpp"
-#include <math.h>
-
-std::vector<SearchPoint> sampled_points;
-
-
-void test_polygon() 
-{
-  for (double t=0; t<1.0; t+= 0.1) {
-    SearchPoint sp;
-    double ang = t*2.0*3.1415926;
-    sp.Location.Longitude = cos(ang);
-    sp.Location.Latitude = sin(ang);
-    sp.actual = true;
-    sp.saved_rank = 0;
-    sampled_points.push_back(sp);
-  }
-
-  GrahamScan gs(sampled_points);
-  sampled_points = gs.prune_interior();
-
-  GEOPOINT location;
-  location.Longitude = 0.4;
-  location.Latitude = 1.0;
-  if (PolygonInterior(location, sampled_points)) {
-    printf("inside\n");
-  } else {
-    printf("outside\n");
-  }
-  location.Longitude = 0.4;
-  location.Latitude = 0.0;
-
-  if (PolygonInterior(location, sampled_points)) {
-    printf("inside\n");
-  } else {
-    printf("outside\n");
-  }
-
-}
-*/
-////////////////////////////////////////////////
 
 char wait_prompt(const double time) {
   printf("# %g [enter to continue]\n",time);
@@ -81,11 +32,11 @@ char wait_prompt(const double time) {
 
 int main() {
   ::InitSineTable();
-//  test_mc();
 
   TaskEvents default_events;
   GlidePolar glide_polar(2.0,0.0,0.0);
   TaskManager test_task(default_events,glide_polar);
+  Airspaces airspaces;
 
   AIRCRAFT_STATE state, state_last;
   state.Location.Longitude=0.8;
@@ -131,6 +82,12 @@ int main() {
       test_task.update(state, state_last);
 
       test_task.update_idle(state);
+
+      FLAT_GEOPOINT loc;
+      loc.Longitude = 0;
+      loc.Latitude = 0;
+      airspaces.scan_nearest(loc);
+      airspaces.scan_range(loc, 70);
 
       if (counter++ % 10==0) {
         test_task.report(state);

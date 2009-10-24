@@ -94,7 +94,7 @@ public:
 
   virtual void set_range(const double p) {};
 
-  virtual void print(std::ostream& f) const;
+  virtual void print(std::ostream& f, const AIRCRAFT_STATE &state) const;
 
   virtual bool has_entered() const {
     return false;

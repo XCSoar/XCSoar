@@ -275,10 +275,11 @@ OrderedTaskPoint::transition_exit(const AIRCRAFT_STATE & ref_now,
 
 
 void 
-OrderedTaskPoint::print(std::ostream& f, const int item) const
+OrderedTaskPoint::print(std::ostream& f, const AIRCRAFT_STATE& state,
+                        const int item) const
 {
   if (item==0) {
-    SampledTaskPoint::print(f);
+    SampledTaskPoint::print(f,state);
     f << "# Entered " << state_entered.Time << "\n";
     f << "# Bearing travelled " << bearing_travelled << "\n";
     f << "# Distance travelled " << this_distance_travelled << "\n";
