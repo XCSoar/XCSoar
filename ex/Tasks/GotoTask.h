@@ -8,7 +8,9 @@ struct WAYPOINT;
 
 class GotoTask : public AbstractTask {
 public:    
-  GotoTask(const TaskEvents &te, TaskAdvance &ta);
+  GotoTask(const TaskEvents &te, 
+           TaskAdvance &ta,
+           GlidePolar &gp);
   ~GotoTask();
 
   virtual TaskPoint* getActiveTaskPoint();

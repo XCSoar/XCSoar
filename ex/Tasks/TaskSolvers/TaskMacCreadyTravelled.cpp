@@ -2,8 +2,8 @@
 
 TaskMacCreadyTravelled::TaskMacCreadyTravelled(const std::vector<OrderedTaskPoint*> &_tps,
                                                const unsigned _activeTaskPoint,
-                                               const double _mc):
-  TaskMacCready(_tps,_activeTaskPoint, _mc)
+                                               const GlidePolar &_gp):
+  TaskMacCready(_tps,_activeTaskPoint, _gp)
 {
   start = 0;
   end = activeTaskPoint;
@@ -15,7 +15,7 @@ TaskMacCreadyTravelled::tp_solution(const unsigned i,
                                     const AIRCRAFT_STATE &aircraft, 
                                     double minH) const
 {
-  return tps[i]->glide_solution_travelled(aircraft, msolv, minH);
+  return tps[i]->glide_solution_travelled(aircraft, glide_polar, minH);
 }
 
 const AIRCRAFT_STATE 

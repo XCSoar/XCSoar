@@ -5,15 +5,14 @@
 
 struct GLIDE_STATE;
 struct GLIDE_RESULT;
+class GlidePolar;
 
 class MacCready 
 {
 public:
-  MacCready():mc(0.0),
-              cruise_efficiency(1.0) {
+  MacCready(const GlidePolar &_glide_polar,
+            const double cruise_efficiency);
 
-  }
-  
   GLIDE_RESULT solve(const GLIDE_STATE &task) const;
 
   GLIDE_RESULT solve_glide(const GLIDE_STATE &task,
@@ -29,20 +28,7 @@ public:
   GLIDE_RESULT solve_sink(const GLIDE_STATE &task,
                           const double S) const;
 
-  void set_mc(double _mc);
-
-  double get_mc() const {
-    return mc;
-  }
-
-  void set_cruise_efficiency(double _ef) {
-    cruise_efficiency = _ef;
-  }
-
-  double get_cruise_efficiency() const {
-    return cruise_efficiency;
-  }
-
+  double get_mc() const;
 private:
   GLIDE_RESULT optimise_glide(const GLIDE_STATE &task) const;
 
@@ -50,16 +36,8 @@ private:
 
   GLIDE_RESULT solve_cruise(const GLIDE_STATE &task) const;
 
-  double SinkRate(const double V) const;
-
-  double cruise_bearing(const double V, const double Wn, 
-                        const double theta) const;
-
-  void solve_vopt();
-  double mc;
-  double VOpt;
-  double SOpt;
-  double cruise_efficiency;
+  const GlidePolar &glide_polar;
+  const double cruise_efficiency;
 };
 
 

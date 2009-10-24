@@ -6,10 +6,11 @@
 TaskMinTarget::TaskMinTarget(const std::vector<OrderedTaskPoint*>& tps,
                              const unsigned activeTaskPoint,
                              const AIRCRAFT_STATE &_aircraft,
+                             const GlidePolar &_gp,
                              const double _t_remaining,
                              StartPoint *_ts):
   ZeroFinder(0.0,1.0,0.002),
-  tm(tps,activeTaskPoint,1.0),
+  tm(tps,activeTaskPoint,_gp),
   aircraft(_aircraft),
   t_remaining(_t_remaining),
   tp_start(_ts)

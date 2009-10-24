@@ -3,16 +3,16 @@
 
 TaskMacCreadyRemaining::TaskMacCreadyRemaining(const std::vector<OrderedTaskPoint*> &_tps,
                                                const unsigned _activeTaskPoint,
-                                               const double _mc):
-  TaskMacCready(_tps,_activeTaskPoint, _mc)
+                                               const GlidePolar _gp):
+  TaskMacCready(_tps,_activeTaskPoint, _gp)
 {
   start = activeTaskPoint;
   end = tps.size()-1;
 }
 
 TaskMacCreadyRemaining::TaskMacCreadyRemaining(TaskPoint* tp,
-                                               const double _mc):
-  TaskMacCready(tp,_mc)
+                                               const GlidePolar _gp):
+  TaskMacCready(tp,_gp)
 {
 }
 
@@ -21,7 +21,7 @@ TaskMacCreadyRemaining::tp_solution(const unsigned i,
                                     const AIRCRAFT_STATE &aircraft, 
                                     double minH) const
 {
-  return tps[i]->glide_solution_remaining(aircraft, msolv, minH);
+  return tps[i]->glide_solution_remaining(aircraft, glide_polar, minH);
 }
 
 

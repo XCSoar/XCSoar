@@ -12,6 +12,7 @@ public:
   TaskMinTarget(const std::vector<OrderedTaskPoint*>& tps,
                 const unsigned activeTaskPoint,
                 const AIRCRAFT_STATE &_aircraft,
+                const GlidePolar &_gp,
                 const double _t_remaining,
                 StartPoint *_ts);
 

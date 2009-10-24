@@ -6,8 +6,10 @@
 #include <stdlib.h>
 #include <fstream>
 
-GotoTask::GotoTask(const TaskEvents &te, TaskAdvance &ta): 
-  AbstractTask(te,ta),
+GotoTask::GotoTask(const TaskEvents &te, 
+                   TaskAdvance &ta,
+                   GlidePolar &gp): 
+  AbstractTask(te,ta,gp),
   tp(NULL) 
 {
 }

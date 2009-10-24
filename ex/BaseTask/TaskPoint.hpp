@@ -45,8 +45,7 @@
 #include "Navigation/Aircraft.hpp"
 
 struct GLIDE_RESULT;
-class MacCready;
-
+class GlidePolar;
 
 class TaskPoint : 
   public ReferencePoint, public Serialisable {
@@ -79,18 +78,18 @@ public:
   virtual double get_bearing_remaining(const AIRCRAFT_STATE &) const;
 
   GLIDE_RESULT glide_solution_remaining(const AIRCRAFT_STATE &, 
-                                        const MacCready &mac,
+                                        const GlidePolar &polar,
                                         const double minH=0) const;
   GLIDE_RESULT glide_solution_sink(const AIRCRAFT_STATE &, 
-                                   const MacCready &mac,
+                                   const GlidePolar &polar,
                                    const double S) const;
 
   virtual GLIDE_RESULT glide_solution_travelled(const AIRCRAFT_STATE &, 
-                                                const MacCready &mac,
+                                                const GlidePolar &polar,
                                                 const double minH=0) const;
 
   virtual GLIDE_RESULT glide_solution_planned(const AIRCRAFT_STATE &, 
-                                              const MacCready &mac,
+                                              const GlidePolar &polar,
                                               const double minH=0) const;
 
   virtual void set_range(const double p) {};

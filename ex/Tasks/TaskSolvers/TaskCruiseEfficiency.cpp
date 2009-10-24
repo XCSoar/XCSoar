@@ -3,9 +3,9 @@
 TaskCruiseEfficiency::TaskCruiseEfficiency(const std::vector<OrderedTaskPoint*>& tps,
                                            const unsigned activeTaskPoint,
                                            const AIRCRAFT_STATE &_aircraft,
-                                           const double mc):
+                                           const GlidePolar &gp):
   ZeroFinder(0.1,2.0,0.01),
-  tm(tps,activeTaskPoint,mc),
+  tm(tps,activeTaskPoint,gp),
   aircraft(_aircraft) 
 {
   dt = aircraft.Time-tps[0]->get_state_entered().Time;

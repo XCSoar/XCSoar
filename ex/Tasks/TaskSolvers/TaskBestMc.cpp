@@ -6,17 +6,19 @@
 TaskBestMc::TaskBestMc(const std::vector<OrderedTaskPoint*>& tps,
                        const unsigned activeTaskPoint,
                        const AIRCRAFT_STATE &_aircraft,
+                       const GlidePolar &_gp,
                        const double _mc_min):
   ZeroFinder(_mc_min,10.0,0.001),
-  tm(tps,activeTaskPoint,1.0),
+  tm(tps,activeTaskPoint,_gp),
   aircraft(_aircraft) 
 {
 }
 
 TaskBestMc::TaskBestMc(TaskPoint* tp,
-                       const AIRCRAFT_STATE &_aircraft):
+                       const AIRCRAFT_STATE &_aircraft,
+                       const GlidePolar &_gp):
   ZeroFinder(0.1,10.0,0.001),
-  tm(tp,1.0),
+  tm(tp,_gp),
   aircraft(_aircraft) 
 {
 }

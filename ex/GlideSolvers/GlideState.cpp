@@ -83,3 +83,20 @@ GLIDE_STATE::GLIDE_STATE(const AIRCRAFT_STATE &aircraft,
   ::DistanceBearing(aircraft.Location, target, &Distance, &Bearing);
   calc_speedups(aircraft);
 }
+
+
+double
+GLIDE_STATE::drifted_distance(const double t_cl) const
+{
+  if (EffectiveWindSpeed>0) {
+    const double aw = EffectiveWindSpeed*t_cl;
+    const double wd = DEG_TO_RAD*(WindDirection);
+    const double tb = DEG_TO_RAD*(Bearing);
+    const double dx= aw*sin(wd)-Distance*sin(tb);
+    const double dy= aw*cos(wd)-Distance*cos(tb);
+    return sqrt(dx*dx+dy*dy);
+  } else {
+    return Distance;
+  }
+ // ??   task.Bearing = RAD_TO_DEG*(atan2(dx,dy));
+}

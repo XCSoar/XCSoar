@@ -187,13 +187,12 @@ OrderedTask::update_idle(const AIRCRAFT_STATE& state)
 {
   AbstractTask::update_idle(state);
 
-  double mc=2.0; // TODO hard coded!
-  double p = calc_min_target(state, mc, 3600*9.0);
+  double p = calc_min_target(state, 3600*7.0);
   (void)p;
 
   if (AATPoint* ap = dynamic_cast<AATPoint*>(tps[activeTaskPoint])) {
     // very nasty hack
-    TaskOptTarget tot(tps, activeTaskPoint, state,
+    TaskOptTarget tot(tps, activeTaskPoint, state, glide_polar,
                       *ap, ts);
 
     tot.search(0.5);
@@ -285,8 +284,10 @@ OrderedTask::~OrderedTask()
 // TODO: delete legs and turnpoints
 }
 
-OrderedTask::OrderedTask(const TaskEvents &te, TaskAdvance &ta):
-  AbstractTask(te, ta)
+OrderedTask::OrderedTask(const TaskEvents &te, 
+                         TaskAdvance &ta,
+                         GlidePolar &gp):
+  AbstractTask(te, ta, gp)
 {
   // TODO: default values in constructor
 
@@ -326,11 +327,10 @@ OrderedTask::OrderedTask(const TaskEvents &te, TaskAdvance &ta):
 
 void
 OrderedTask::glide_solution_remaining(const AIRCRAFT_STATE &aircraft, 
-                                      const double mc,
                                       GLIDE_RESULT &total,
                                       GLIDE_RESULT &leg)
 {
-  TaskMacCreadyRemaining tm(tps,activeTaskPoint, mc);
+  TaskMacCreadyRemaining tm(tps,activeTaskPoint,glide_polar);
   total = tm.glide_solution(aircraft);
   leg = tm.get_active_solution();
 
@@ -340,11 +340,10 @@ OrderedTask::glide_solution_remaining(const AIRCRAFT_STATE &aircraft,
 
 void
 OrderedTask::glide_solution_travelled(const AIRCRAFT_STATE &aircraft, 
-                                      const double mc,
                                       GLIDE_RESULT &total,
                                       GLIDE_RESULT &leg)
 {
-  TaskMacCreadyTravelled tm(tps,activeTaskPoint, mc);
+  TaskMacCreadyTravelled tm(tps,activeTaskPoint,glide_polar);
   total = tm.glide_solution(aircraft);
   leg = tm.get_active_solution();
 
@@ -354,7 +353,6 @@ OrderedTask::glide_solution_travelled(const AIRCRAFT_STATE &aircraft,
 
 void
 OrderedTask::glide_solution_planned(const AIRCRAFT_STATE &aircraft, 
-                                    const double mc,
                                     GLIDE_RESULT &total,
                                     GLIDE_RESULT &leg,
                                     DistanceRemainingStat &total_remaining_effective,
@@ -362,7 +360,7 @@ OrderedTask::glide_solution_planned(const AIRCRAFT_STATE &aircraft,
                                     const double total_t_elapsed,
                                     const double leg_t_elapsed)
 {
-  TaskMacCreadyTotal tm(tps,activeTaskPoint, mc);
+  TaskMacCreadyTotal tm(tps,activeTaskPoint,glide_polar);
   total = tm.glide_solution(aircraft);
   leg = tm.get_active_solution();
 
@@ -382,39 +380,36 @@ OrderedTask::glide_solution_planned(const AIRCRAFT_STATE &aircraft,
 double
 OrderedTask::calc_glide_required(const AIRCRAFT_STATE &aircraft) 
 {
-  TaskGlideRequired bgr(tps, activeTaskPoint, aircraft);
+  TaskGlideRequired bgr(tps, activeTaskPoint, aircraft, glide_polar);
   return bgr.search(0.0);
 }
 
 double
-OrderedTask::calc_mc_best(const AIRCRAFT_STATE &aircraft, 
-                          const double mc)
+OrderedTask::calc_mc_best(const AIRCRAFT_STATE &aircraft)
 {
   // note setting of lower limit on mc
-  TaskBestMc bmc(tps,activeTaskPoint, aircraft, mc);
-  return bmc.search(mc);
+  TaskBestMc bmc(tps,activeTaskPoint, aircraft, glide_polar);
+  return bmc.search(glide_polar.get_mc());
 }
 
 
 double
-OrderedTask::calc_cruise_efficiency(const AIRCRAFT_STATE &aircraft, 
-                                    const double mc)
+OrderedTask::calc_cruise_efficiency(const AIRCRAFT_STATE &aircraft)
 {
-  TaskCruiseEfficiency bce(tps,activeTaskPoint, aircraft, mc);
-  return bce.search(mc);
+  TaskCruiseEfficiency bce(tps,activeTaskPoint, aircraft, glide_polar);
+  return bce.search(1.0);
 }
 
 double
 OrderedTask::calc_min_target(const AIRCRAFT_STATE &aircraft, 
-                             const double mc,
                              const double t_target)
 {
   // TODO: look at max/min dist and only perform this scan if
   // change is possible
   const double t_rem = std::max(0.0, t_target-stats.total.TimeElapsed);
 
-  TaskMinTarget bmt(tps, activeTaskPoint, aircraft, t_rem, ts);
-  double p= bmt.search(mc);
+  TaskMinTarget bmt(tps, activeTaskPoint, aircraft, glide_polar, t_rem, ts);
+  double p= bmt.search(0.0);
 //  printf("target opt %g\n",p);
   return p;
 }

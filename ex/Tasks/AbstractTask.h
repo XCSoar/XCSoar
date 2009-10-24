@@ -5,14 +5,17 @@
 #include "TaskEvents.hpp"
 #include "TaskAdvance.hpp"
 #include "TaskStats/TaskStats.hpp"
+#include "GlideSolvers/GlidePolar.hpp"
 
 class AbstractTask : public TaskInterface {
 public:
   AbstractTask(const TaskEvents &te,
-               TaskAdvance &ta): 
+               TaskAdvance &ta,
+               GlidePolar &gp): 
     activeTaskPoint(0),
     task_events(te),
-    task_advance(ta)
+    task_advance(ta),
+    glide_polar(gp)
   {};
 
     unsigned getActiveTaskPointIndex();
@@ -35,17 +38,14 @@ protected:
   unsigned activeTaskPoint;
   TaskStats stats;
 
-  virtual double calc_mc_best(const AIRCRAFT_STATE &, 
-                              const double mc);
+  virtual double calc_mc_best(const AIRCRAFT_STATE &);
 
   virtual double calc_glide_required(const AIRCRAFT_STATE &aircraft);
 
-  virtual double calc_cruise_efficiency(const AIRCRAFT_STATE &aircraft, 
-                                        const double mc) {
+  virtual double calc_cruise_efficiency(const AIRCRAFT_STATE &aircraft) {
     return 1.0;
   }
   virtual double calc_min_target(const AIRCRAFT_STATE &, 
-                                 const double mc,
                                  const double t_target) {
     return 0.0;
   };
@@ -62,15 +62,12 @@ protected:
   virtual double scan_distance_remaining(const GEOPOINT &location);
 
   virtual void glide_solution_remaining(const AIRCRAFT_STATE &, 
-                                        const double mc,
                                         GLIDE_RESULT &total,
                                         GLIDE_RESULT &leg);
   virtual void glide_solution_travelled(const AIRCRAFT_STATE &, 
-                                        const double mc,
                                         GLIDE_RESULT &total,
                                         GLIDE_RESULT &leg);
   virtual void glide_solution_planned(const AIRCRAFT_STATE &, 
-                                      const double mc,
                                       GLIDE_RESULT &total,
                                       GLIDE_RESULT &leg,
                                       DistanceRemainingStat &total_remaining_effective,
@@ -83,16 +80,15 @@ protected:
 protected:
   const TaskEvents &task_events;
   TaskAdvance &task_advance;
+  GlidePolar glide_polar;
 
 private:
-  void update_glide_solutions(const AIRCRAFT_STATE &state,
-                              const double mc);
+  void update_glide_solutions(const AIRCRAFT_STATE &state);
   void update_stats_distances(const GEOPOINT &location,
                               const bool full_update);
   void update_stats_times(const AIRCRAFT_STATE &);
   void update_stats_speeds(const AIRCRAFT_STATE &, const AIRCRAFT_STATE&);
-  void update_stats_glide(const AIRCRAFT_STATE &state, 
-                          const double mc);
+  void update_stats_glide(const AIRCRAFT_STATE &state);
   double leg_gradient(const AIRCRAFT_STATE &state);
 };
 #endif //ABSTRACTTASK_H

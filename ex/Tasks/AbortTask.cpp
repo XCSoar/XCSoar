@@ -1,7 +1,9 @@
 #include "Tasks/AbortTask.h"
 
-AbortTask::AbortTask(const TaskEvents &te, TaskAdvance &ta):
-  AbstractTask(te, ta)
+AbortTask::AbortTask(const TaskEvents &te, 
+                     TaskAdvance &ta,
+                     GlidePolar &gp):
+  AbstractTask(te, ta, gp)
 {
 
 }

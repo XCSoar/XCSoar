@@ -13,6 +13,7 @@ public:
   TaskOptTarget(const std::vector<OrderedTaskPoint*>& tps,
                 const unsigned activeTaskPoint,
                 const AIRCRAFT_STATE &_aircraft,
+                const GlidePolar &_gp,
                 AATPoint& _tp_current,
                 StartPoint *_ts);
   virtual double f(const double p);

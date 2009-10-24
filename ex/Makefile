@@ -22,7 +22,7 @@ OUTPUTS 	:= test
 INCLUDES := -I. -I../xcsoar/Common/Header
 
 PROFILE := -pg
-OPTIMIZE := -g -O2
+OPTIMIZE := -g 
 
 CPPFLAGS := $(INCLUDES) 
 CXXFLAGS	:=$(OPTIMIZE) -fno-exceptions $(PROFILE)
@@ -60,6 +60,7 @@ OBJS	:=\
 	Util.o \
 	Util/Intersection.o \
 	GlideSolvers/GlideState.o \
+	GlideSolvers/GlidePolar.o \
 	GlideSolvers/GlideResult.o \
 	GlideSolvers/MacCready.o \
 	GlideSolvers/ZeroFinder.o \

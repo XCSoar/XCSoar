@@ -9,7 +9,7 @@ class TaskMacCreadyTotal:
 public:
   TaskMacCreadyTotal(const std::vector<OrderedTaskPoint*> &_tps,
                      const unsigned _activeTaskPoint,
-                     const double _mc);
+                     const GlidePolar &_gp);
   double effective_distance(const double time_remaining) const;
   double effective_leg_distance(const double time_remaining) const;
 

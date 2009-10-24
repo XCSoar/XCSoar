@@ -30,6 +30,8 @@ struct GLIDE_STATE {
 
   double wsq_; // speedup
   double dwcostheta_; // speedup
+
+  double drifted_distance(const double t_climb) const;
 };
 
 #endif

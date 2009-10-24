@@ -6,10 +6,11 @@
 TaskOptTarget::TaskOptTarget(const std::vector<OrderedTaskPoint*>& tps,
                              const unsigned activeTaskPoint,
                              const AIRCRAFT_STATE &_aircraft,
+                             const GlidePolar &_gp,
                              AATPoint &_tp_current,
                              StartPoint *_ts):
   ZeroFinder(0.02,0.98,0.01),
-  tm(tps,activeTaskPoint,1.0),
+  tm(tps,activeTaskPoint,_gp),
   aircraft(_aircraft),
   tp_current(_tp_current),
   tp_start(_ts),

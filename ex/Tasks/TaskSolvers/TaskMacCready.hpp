@@ -3,7 +3,7 @@
 
 #include "Navigation/Aircraft.hpp"
 #include "BaseTask/OrderedTaskPoint.hpp"
-#include "GlideSolvers/MacCready.hpp"
+#include "GlideSolvers/GlidePolar.hpp"
 #include "GlideSolvers/GlideResult.hpp"
 #include <vector>
 
@@ -11,26 +11,28 @@ class TaskMacCready {
 public:
   TaskMacCready(const std::vector<OrderedTaskPoint*> &_tps,
                 const unsigned _activeTaskPoint,
-                const double _mc):
+                const GlidePolar &gp):
     tps(_tps.begin(),_tps.end()),
     activeTaskPoint(_activeTaskPoint),
     start(0),
     end(_tps.size()-1),
     gs(_tps.size()),
-    minHs(_tps.size(),0.0)
+    minHs(_tps.size(),0.0),
+    cruise_efficiency(1.0),
+    glide_polar(gp)
     {
-      msolv.set_mc(_mc);
     };
   TaskMacCready(TaskPoint* tp,
-                const double _mc):
+                const GlidePolar &gp):
     tps(1, tp),
     activeTaskPoint(0),
     start(0),
     end(0),
     gs(1),
-    minHs(1,0.0)
+    minHs(1,0.0),
+    cruise_efficiency(1.0),
+    glide_polar(gp)
     {
-      msolv.set_mc(_mc);
     };
 
   GLIDE_RESULT glide_solution(const AIRCRAFT_STATE &aircraft);
@@ -39,15 +41,16 @@ public:
   void print(std::ostream& f, const AIRCRAFT_STATE &aircraft) const;
 
   void set_mc(double mc) {
-    msolv.set_mc(mc);
+    glide_polar.set_mc(mc);
   };
   void set_cruise_efficiency(double ce) {
-    msolv.set_cruise_efficiency(ce);
+    cruise_efficiency = ce;
   };
   const GLIDE_RESULT& get_active_solution() {
     return gs[activeTaskPoint];
   };
 protected:
+  double cruise_efficiency;
   void clearance_heights(const AIRCRAFT_STATE &);
   virtual double get_min_height(const AIRCRAFT_STATE &aircraft) const = 0;
   virtual GLIDE_RESULT tp_solution(const unsigned i,
@@ -61,7 +64,7 @@ protected:
   int start;
   int end;
   std::vector<GLIDE_RESULT> gs;
-  MacCready msolv;
+  GlidePolar glide_polar;
   GLIDE_RESULT tp_sink(const unsigned i,
                        const AIRCRAFT_STATE &aircraft, 
                        const double S) const;

@@ -9,7 +9,7 @@ class TaskMacCreadyTravelled:
 public:
   TaskMacCreadyTravelled(const std::vector<OrderedTaskPoint*> &_tps,
                          const unsigned _activeTaskPoint,
-                         const double _mc);
+                         const GlidePolar &_gp);
 
 protected:
   virtual GLIDE_RESULT tp_solution(const unsigned i,

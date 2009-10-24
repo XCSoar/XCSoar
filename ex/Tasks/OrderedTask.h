@@ -15,7 +15,9 @@ class OrderedTask:
   public Serialisable
 {
 public:
-  OrderedTask(const TaskEvents &te, TaskAdvance &ta);
+  OrderedTask(const TaskEvents &te, 
+              TaskAdvance &ta,
+              GlidePolar &gp);
   ~OrderedTask();
 
   std::vector<TaskLeg*> legs;
@@ -75,17 +77,14 @@ protected:
   virtual double scan_leg_start_time(const AIRCRAFT_STATE &);
 
   void glide_solution_remaining(const AIRCRAFT_STATE &, 
-                                const double mc,
                                 GLIDE_RESULT &total,
                                 GLIDE_RESULT &leg);
 
   void glide_solution_travelled(const AIRCRAFT_STATE &, 
-                                const double mc,
                                 GLIDE_RESULT &total,
                                 GLIDE_RESULT &leg);
 
   void glide_solution_planned(const AIRCRAFT_STATE &, 
-                              const double mc,
                               GLIDE_RESULT &total,
                               GLIDE_RESULT &leg,
                               DistanceRemainingStat &total_remaining_effective,
@@ -93,16 +92,13 @@ protected:
                               const double total_t_elapsed,
                               const double leg_t_elapsed);
 
-  double calc_mc_best(const AIRCRAFT_STATE &, 
-                      const double mc);
+  double calc_mc_best(const AIRCRAFT_STATE &);
 
   double calc_glide_required(const AIRCRAFT_STATE &aircraft);
 
-  double calc_cruise_efficiency(const AIRCRAFT_STATE &aircraft, 
-                                const double mc);
+  double calc_cruise_efficiency(const AIRCRAFT_STATE &aircraft);
 
   double calc_min_target(const AIRCRAFT_STATE &, 
-                         const double mc,
                          const double t_target);
   virtual double calc_gradient(const AIRCRAFT_STATE &state) ;
 

@@ -84,7 +84,8 @@ int main() {
 //  test_mc();
 
   TaskEvents default_events;
-  TaskManager test_task(default_events);
+  GlidePolar glide_polar(2.0,0.0,0.0);
+  TaskManager test_task(default_events,glide_polar);
 
   AIRCRAFT_STATE state, state_last;
   state.Location.Longitude=0.8;
@@ -124,7 +125,7 @@ int main() {
         w[i].Longitude*(1.0-t)+w[i+1].Longitude*t+small_rand();
 
       double d = ::Distance(state.Location, state_last.Location);
-      double V = 15.0;
+      double V = 19.0;
       state.Time += d/V;
 
       test_task.update(state, state_last);

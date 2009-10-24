@@ -12,7 +12,7 @@ public:
   TaskCruiseEfficiency(const std::vector<OrderedTaskPoint*>& tps,
                        const unsigned activeTaskPoint,
                        const AIRCRAFT_STATE &_aircraft,
-                       const double mc);
+                       const GlidePolar &gp);
   virtual double f(const double ce);
   virtual bool valid(const double ce);
   virtual double search(const double ce);

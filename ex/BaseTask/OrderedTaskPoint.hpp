@@ -150,10 +150,10 @@ public:
   }
 
   GLIDE_RESULT glide_solution_travelled(const AIRCRAFT_STATE &, 
-                                        const MacCready &mac,
+                                        const GlidePolar &polar,
                                         const double minH=0) const;
   GLIDE_RESULT glide_solution_planned(const AIRCRAFT_STATE &, 
-                                      const MacCready &mac,
+                                      const GlidePolar &polar,
                                       const double minH=0) const;
 
 protected:

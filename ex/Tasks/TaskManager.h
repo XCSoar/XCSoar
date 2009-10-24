@@ -9,15 +9,17 @@
 #include "GotoTask.h"
 #include "OrderedTask.h"
 #include "TaskStats/TaskStats.hpp"
+#include "GlideSolvers/GlidePolar.hpp"
 
 class TaskManager : public TaskInterface,
  public Serialisable
 {
 public:
-  TaskManager(const TaskEvents &te): 
-    task_ordered(te,task_advance),
-    task_goto(te,task_advance),
-    task_abort(te,task_advance)
+  TaskManager(const TaskEvents &te,
+              GlidePolar &gp): 
+    task_ordered(te,task_advance,gp),
+    task_goto(te,task_advance,gp),
+    task_abort(te,task_advance,gp)
   {
     set_mode(MODE_ORDERED);
   };

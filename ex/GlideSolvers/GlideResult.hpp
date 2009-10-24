@@ -1,8 +1,9 @@
 #ifndef GLIDERESULT_HPP
 #define GLIDERESULT_HPP
 
-#include "MacCready.hpp"
 #include <iostream>
+
+struct GLIDE_STATE;
 
 struct GLIDE_RESULT {
 

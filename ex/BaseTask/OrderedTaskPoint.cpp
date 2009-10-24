@@ -7,6 +7,7 @@
 #include <assert.h>
 #include <math.h>
 #include "GlideSolvers/GlideResult.hpp"
+#include "GlideSolvers/GlidePolar.hpp"
 #include "GlideSolvers/GlideState.hpp"
 
 OrderedTaskPoint* 
@@ -316,26 +317,26 @@ OrderedTaskPoint::get_bearing_remaining(const AIRCRAFT_STATE &) const
 
 GLIDE_RESULT 
 OrderedTaskPoint::glide_solution_travelled(const AIRCRAFT_STATE &ac, 
-                                           const MacCready &msolv,
+                                           const GlidePolar &polar,
                                            const double minH) const
 {
   GLIDE_STATE gs(get_distance_travelled(),
                  get_bearing_travelled(),
                  std::max(minH,getElevation()),
                  ac);
-  return msolv.solve(gs);
+  return polar.solve(gs);
 }
 
 GLIDE_RESULT 
 OrderedTaskPoint::glide_solution_planned(const AIRCRAFT_STATE &ac, 
-                                         const MacCready &msolv,
+                                         const GlidePolar &polar,
                                          const double minH) const
 {
   GLIDE_STATE gs(get_distance_planned(),
                  get_bearing_planned(),
                  std::max(minH,getElevation()),
                  ac);
-  return msolv.solve(gs);
+  return polar.solve(gs);
 }
 
 

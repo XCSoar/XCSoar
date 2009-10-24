@@ -10,7 +10,9 @@
 class AbortTask : public AbstractTask 
 {
 public:
-  AbortTask(const TaskEvents &te, TaskAdvance &ta);
+  AbortTask(const TaskEvents &te, 
+            TaskAdvance &ta,
+            GlidePolar &gp);
   ~AbortTask();
 
   std::vector<TaskPoint*> tps;

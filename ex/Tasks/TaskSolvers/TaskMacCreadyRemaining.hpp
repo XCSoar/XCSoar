@@ -9,9 +9,9 @@ class TaskMacCreadyRemaining:
 public:
   TaskMacCreadyRemaining(const std::vector<OrderedTaskPoint*> &_tps,
                          const unsigned _activeTaskPoint,
-                         const double _mc);
+                         const GlidePolar _gp);
   TaskMacCreadyRemaining(TaskPoint* tp,
-                         const double _mc);
+                         const GlidePolar _gp);
 
   void set_range(const double tp);
 

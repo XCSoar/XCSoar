@@ -76,6 +76,22 @@ GLIDE_RESULT::add(const GLIDE_RESULT &s2)
 }
 
 
+double 
+GLIDE_RESULT::calc_vspeed(const double mc) 
+{
+  if ((mc>0.0) && (HeightGlide>0.0)) {
+    // equivalent time to gain the height that was used
+    TimeVirtual = HeightGlide/mc;
+  } else {
+    TimeVirtual = 0.0;
+  }
+  if (Distance>0.0) {
+    return (TimeElapsed+TimeVirtual)/Distance;
+  } else {
+    return 0.0;
+  }
+}
+
 
 /*
 bool GLIDE_RESULT::superior(const GLIDE_RESULT &s2) const 
@@ -94,3 +110,5 @@ bool GLIDE_RESULT::superior(const GLIDE_RESULT &s2) const
   }
 }
 */
+
+
