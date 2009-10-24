@@ -36,7 +36,7 @@ int main() {
   TaskEvents default_events;
   GlidePolar glide_polar(2.0,0.0,0.0);
   TaskManager test_task(default_events,glide_polar);
-  Airspaces airspaces;
+  Airspaces airspaces(test_task.get_task_projection());
 
   AIRCRAFT_STATE state, state_last;
   state.Location.Longitude=0.8;
@@ -83,11 +83,8 @@ int main() {
 
       test_task.update_idle(state);
 
-      FLAT_GEOPOINT loc;
-      loc.Longitude = 0;
-      loc.Latitude = 0;
-      airspaces.scan_nearest(loc);
-      airspaces.scan_range(loc, 70);
+      airspaces.scan_nearest(state.Location);
+      airspaces.scan_range(state.Location, 70);
 
       if (counter++ % 10==0) {
         test_task.report(state);

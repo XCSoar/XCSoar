@@ -3,6 +3,7 @@
 #include "Math/FastMath.h"
 #include "FlatBound.hpp"
 #include "Waypoint.hpp"
+#include "BaseTask/TaskProjection.h"
 
 struct FlatBoundingBox {
   FlatBoundingBox(const int x,
@@ -32,12 +33,21 @@ struct FlatBoundingBox {
     return isqrt4(dx*dx+dy*dy);
   };
 
-  void print(std::ostream &f) const {
-    f << bounds_x.min << " " << bounds_y.min << "\n";
-    f << bounds_x.max << " " << bounds_y.min << "\n";
-    f << bounds_x.max << " " << bounds_y.max << "\n";
-    f << bounds_x.min << " " << bounds_y.max << "\n";
-    f << bounds_x.min << " " << bounds_y.min << "\n";
+  void print(std::ostream &f, const TaskProjection &task_projection) const {
+    FLAT_GEOPOINT ll(bounds_x.min,bounds_y.min);
+    FLAT_GEOPOINT lr(bounds_x.max,bounds_y.min);
+    FLAT_GEOPOINT ur(bounds_x.max,bounds_y.max);
+    FLAT_GEOPOINT ul(bounds_x.min,bounds_y.max);
+    GEOPOINT gll = task_projection.unproject(ll);
+    GEOPOINT glr = task_projection.unproject(lr);
+    GEOPOINT gur = task_projection.unproject(ur);
+    GEOPOINT gul = task_projection.unproject(ul);
+
+    f << gll.Longitude << " " << gll.Latitude << "\n";
+    f << glr.Longitude << " " << glr.Latitude << "\n";
+    f << gur.Longitude << " " << gur.Latitude << "\n";
+    f << gul.Longitude << " " << gul.Latitude << "\n";
+    f << gll.Longitude << " " << gll.Latitude << "\n";
     f << "\n";
   }
 

@@ -45,6 +45,10 @@ public:
   virtual bool update_idle(const AIRCRAFT_STATE &state);
 
   virtual const TaskStats& get_stats() const;
+
+  const TaskProjection &get_task_projection() const {
+    return task_ordered.get_task_projection();
+  }
   
 private:
   const TaskStats null_stats;

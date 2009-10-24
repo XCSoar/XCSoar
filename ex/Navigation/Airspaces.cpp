@@ -4,26 +4,28 @@
 #include <algorithm>
 
 void 
-Airspaces::scan_nearest(const FLAT_GEOPOINT &loc) const 
+Airspaces::scan_nearest(const GEOPOINT &loc) const 
 {
-  FlatBoundingBox bb_target(loc);
+  FLAT_GEOPOINT floc = task_projection.project(loc);
+  FlatBoundingBox bb_target(floc);
   std::ofstream foutn("res-bb-nearest.txt");
   std::pair<FlatBoundingBoxTree::const_iterator, double> 
     found = airspace_tree.find_nearest(bb_target);
   if (found.first != airspace_tree.end()) {
-    (found.first)->print(foutn);
+    (found.first)->print(foutn, task_projection);
   }
 }
 
 void 
-Airspaces::scan_range(const FLAT_GEOPOINT &loc, const unsigned &range) 
+Airspaces::scan_range(const GEOPOINT &loc, const unsigned &range) 
 {
-  FlatBoundingBox bb_target(loc);
+  FLAT_GEOPOINT floc = task_projection.project(loc);
+  FlatBoundingBox bb_target(floc);
   
   { // reporting
-    FlatBoundingBox bb_rtarget(loc, range);
+    FlatBoundingBox bb_rtarget(floc, range);
     std::ofstream foutt("res-bb-target.txt");
-    bb_rtarget.print(foutt);
+    bb_rtarget.print(foutt, task_projection);
   }
   
   std::deque< FlatBoundingBox > vectors;
@@ -36,9 +38,9 @@ Airspaces::scan_range(const FLAT_GEOPOINT &loc, const unsigned &range)
          v != vectors.end(); v++) {
       
       if ((*v).distance(bb_target)<= range) {
-        (*v).print(foutr);
+        (*v).print(foutr, task_projection);
       } else {
-        (*v).print(foutf);
+        (*v).print(foutf, task_projection);
       }        
     }
   }
@@ -48,14 +50,14 @@ void
 Airspaces::fill_default() 
 {
   std::ofstream fin("res-bb-in.txt");
-  for (unsigned i=0; i<500; i++) {
-    int x = rand()%500-250;
-    int y = rand()%500-250;
-    int w = rand()%50;
-    int h = rand()%50;
+  for (unsigned i=0; i<200; i++) {
+    int x = rand()%1000-500;
+    int y = rand()%1000-500;
+    int w = rand()%100;
+    int h = rand()%100;
     FlatBoundingBox ff(x,y,x+w,y+h);
     airspace_tree.insert(ff);
-    ff.print(fin);
+    ff.print(fin, task_projection);
   }
   airspace_tree.optimise();
 }

@@ -26,8 +26,8 @@ OrderedTask::update_geometry() {
   for (unsigned i=0; i<tps.size(); i++) {
     task_projection.scan_location(tps[i]->getLocation());
   }
-//  task_projection.report();
   task_projection.update_fast();
+  task_projection.report();
 
   for (unsigned i=0; i<tps.size(); i++) {
     tps[i]->update_geometry();

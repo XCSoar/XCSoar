@@ -66,8 +66,12 @@ TaskProjection::unproject(const FLAT_GEOPOINT& fp) const
 
 void TaskProjection::report()
 {
-  printf("%g %g - %g \n", location_max.Longitude, location_min.Longitude,
-    location_mid.Longitude);
-  printf("%g %g - %g \n", location_max.Latitude, location_min.Latitude,
-    location_mid.Latitude);
+  printf("# Task projection\n");
+  printf("# deg (%g,%g),(%g,%g) \n", location_min.Longitude, location_min.Latitude,
+         location_max.Longitude,location_max.Latitude);
+  FLAT_GEOPOINT pll, pur;
+  pll = project(location_min);
+  pur = project(location_max);
+  printf("# flat (%d,%d)-(%d,%d)\n",pll.Longitude,pll.Latitude,
+         pur.Longitude,pur.Latitude);
 }
