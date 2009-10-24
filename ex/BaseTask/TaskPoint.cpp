@@ -2,6 +2,8 @@
 #include "TaskPoint.hpp"
 #include "Math/Earth.hpp"
 #include "GlideSolvers/MacCready.hpp"
+#include "GlideSolvers/GlideState.hpp"
+#include "GlideSolvers/GlideResult.hpp"
 #include <algorithm>
 
 GEOPOINT 
@@ -48,12 +50,11 @@ TaskPoint::glide_solution_remaining(const AIRCRAFT_STATE &ac,
                                     const MacCready &msolv,
                                     const double minH) const
 {
-  GLIDE_STATE gs;
-  gs.Distance = get_distance_remaining(ac);
-  gs.Bearing = get_bearing_remaining(ac);
-  gs.MinHeight = std::max(minH,getElevation());
-
-  return msolv.solve(ac,gs);
+  GLIDE_STATE gs(get_distance_remaining(ac),
+                 get_bearing_remaining(ac),
+                 std::max(minH,getElevation()),
+                 ac);
+  return msolv.solve(gs);
 }
 
 GLIDE_RESULT 
@@ -78,12 +79,8 @@ TaskPoint::glide_solution_sink(const AIRCRAFT_STATE &ac,
                                const MacCready &msolv,
                                const double S) const
 {
-  GLIDE_STATE gs;
-  gs.Distance = get_distance_remaining(ac);
-  gs.Bearing = get_bearing_remaining(ac);
-  gs.MinHeight = getElevation();
-
-  return msolv.solve_sink(ac,gs,S);
+  GLIDE_STATE gs(ac, get_reference_remaining(), getElevation());
+  return msolv.solve_sink(gs,S);
 }
 
 

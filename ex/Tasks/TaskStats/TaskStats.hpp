@@ -1,7 +1,7 @@
 #ifndef TASKSTATS_HPP
 #define TASKSTATS_HPP
 
-#include "GlideSolvers/MacCready.hpp"
+#include "GlideSolvers/GlideResult.hpp"
 #include <iostream>
 
 struct AIRCRAFT_STATE;

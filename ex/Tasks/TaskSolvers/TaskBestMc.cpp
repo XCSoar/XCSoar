@@ -38,7 +38,7 @@ double TaskBestMc::f(const double mc)
 bool TaskBestMc::valid(const double mc) 
 {
   double ff = f(mc);
-  return (res.Solution== MacCready::RESULT_OK) && (ff>=-tolerance*2.0);
+  return (res.Solution== GLIDE_RESULT::RESULT_OK) && (ff>=-tolerance*2.0);
 }
 
 double TaskBestMc::search(const double mc) 

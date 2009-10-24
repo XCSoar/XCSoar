@@ -14,7 +14,8 @@ extern long count_mc;
 
 void distance_counts() {
 //  printf("#     distance queries %d\n",count_distance/n_samples); 
-  printf("#     mc calcs %d\n",count_mc/n_samples); 
+  printf("#     mc calcs %d\n",count_mc/n_samples);
+  printf("# num samples %d\n",n_samples);
 }
 
 #include "Tasks/TaskManager.h"
@@ -26,42 +27,6 @@ double small_rand() {
   return rand()*0.001/RAND_MAX;
 }
 
-////////////////////////////////////////////////
-
-void test_mc()
-{
-  MacCready mc;
-
-  AIRCRAFT_STATE ac;
-  GLIDE_STATE gs;
-  GLIDE_RESULT gr;
-
-  mc.set_mc(1.0);
-
-  ac.WindSpeed = 0.0;
-  ac.WindDirection = 0;
-
-  gs.Distance = 100;
-  gs.Bearing = 0;
-  gs.MinHeight = 2.0;
-
-  ac.Altitude = 10;
-
-  printf("AC alt %g\n", ac.Altitude);
-  gr = mc.solve(ac,gs);
-  gr.print(std::cout);
-
-  ac.Altitude = 1;
-  printf("AC alt %g\n", ac.Altitude);
-  gr = mc.solve(ac,gs);
-  gr.print(std::cout);
-
-  ac.Altitude = 3;
-  printf("AC alt %g\n", ac.Altitude);
-  gr = mc.solve(ac,gs);
-  gr.print(std::cout);
-
-}
 
 ////////////////////////////////////////////////
 /*
@@ -110,7 +75,8 @@ void test_polygon()
 
 char wait_prompt(const double time) {
   printf("# %g [enter to continue]\n",time);
-  return getchar();
+//  return getchar();
+  return 0;
 }
 
 int main() {

@@ -16,7 +16,7 @@ double TaskCruiseEfficiency::f(const double ce)
   tm.set_cruise_efficiency(ce);
   res = tm.glide_solution(aircraft);
   double d = fabs(res.TimeElapsed-dt);
-  if (!res.Solution==MacCready::RESULT_OK) {
+  if (!res.Solution==GLIDE_RESULT::RESULT_OK) {
     d += res.TimeVirtual;
   }
   if (dt>0) {
@@ -29,7 +29,7 @@ bool TaskCruiseEfficiency::valid(const double ce)
 {
   tm.set_cruise_efficiency(ce);
   res = tm.glide_solution(aircraft);
-  return (res.Solution== MacCready::RESULT_OK);
+  return (res.Solution== GLIDE_RESULT::RESULT_OK);
 }
 
 double TaskCruiseEfficiency::search(const double ce) 

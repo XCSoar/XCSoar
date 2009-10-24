@@ -37,7 +37,7 @@ double TaskGlideRequired::f(const double S)
 bool TaskGlideRequired::valid(const double S) 
 {
   double ff = f(S);
-  return (res.Solution== MacCready::RESULT_OK) && (fabs(ff)>=-tolerance*2.0);
+  return (res.Solution== GLIDE_RESULT::RESULT_OK) && (fabs(ff)>=-tolerance*2.0);
 }
 
 double TaskGlideRequired::search(const double S) 

@@ -34,7 +34,7 @@ double TaskMinTarget::f(const double p)
 bool TaskMinTarget::valid(const double tp) 
 {
   double ff = f(tp);
-  return (res.Solution== MacCready::RESULT_OK) && (fabs(ff)>=-tolerance*2.0);
+  return (res.Solution== GLIDE_RESULT::RESULT_OK) && (fabs(ff)>=-tolerance*2.0);
 }
 
 double TaskMinTarget::search(const double tp) 

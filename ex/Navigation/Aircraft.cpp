@@ -1,5 +1,5 @@
 #include "Navigation/Aircraft.hpp"
-#include "GlideSolvers/MacCready.hpp"
+#include "GlideSolvers/GlideResult.hpp"
 #include <algorithm>
 
 void AIRCRAFT_STATE::back_predict(const GLIDE_RESULT &res)

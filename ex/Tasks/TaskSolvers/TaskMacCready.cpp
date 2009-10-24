@@ -59,7 +59,7 @@ TaskMacCready::glide_solution(const AIRCRAFT_STATE &aircraft)
       acc_gr.add(gr);
     }
 
-    if (gr.Solution != MacCready::RESULT_OK) {      
+    if (gr.Solution != GLIDE_RESULT::RESULT_OK) {      
       return gr;
     }
 

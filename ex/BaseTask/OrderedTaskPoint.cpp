@@ -6,7 +6,8 @@
 #include <stdio.h>
 #include <assert.h>
 #include <math.h>
-#include "GlideSolvers/MacCready.hpp"
+#include "GlideSolvers/GlideResult.hpp"
+#include "GlideSolvers/GlideState.hpp"
 
 OrderedTaskPoint* 
 OrderedTaskPoint::get_previous() const
@@ -318,12 +319,11 @@ OrderedTaskPoint::glide_solution_travelled(const AIRCRAFT_STATE &ac,
                                            const MacCready &msolv,
                                            const double minH) const
 {
-  GLIDE_STATE gs;
-  gs.Distance = get_distance_travelled();
-  gs.Bearing = get_bearing_travelled();
-  gs.MinHeight = std::max(minH,getElevation());
-
-  return msolv.solve(ac,gs);
+  GLIDE_STATE gs(get_distance_travelled(),
+                 get_bearing_travelled(),
+                 std::max(minH,getElevation()),
+                 ac);
+  return msolv.solve(gs);
 }
 
 GLIDE_RESULT 
@@ -331,12 +331,11 @@ OrderedTaskPoint::glide_solution_planned(const AIRCRAFT_STATE &ac,
                                          const MacCready &msolv,
                                          const double minH) const
 {
-  GLIDE_STATE gs;
-  gs.Distance = get_distance_planned();
-  gs.Bearing = get_bearing_planned();
-  gs.MinHeight = std::max(minH,getElevation());
-
-  return msolv.solve(ac,gs);
+  GLIDE_STATE gs(get_distance_planned(),
+                 get_bearing_planned(),
+                 std::max(minH,getElevation()),
+                 ac);
+  return msolv.solve(gs);
 }
 
 

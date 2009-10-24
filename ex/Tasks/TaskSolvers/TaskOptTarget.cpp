@@ -32,7 +32,7 @@ double TaskOptTarget::f(const double p)
 bool TaskOptTarget::valid(const double tp) 
 {
   f(tp);
-  return (res.Solution== MacCready::RESULT_OK);
+  return (res.Solution== GLIDE_RESULT::RESULT_OK);
 }
 
 double TaskOptTarget::search(const double tp) 

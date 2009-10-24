@@ -4,6 +4,7 @@
 #include "Navigation/Aircraft.hpp"
 #include "BaseTask/OrderedTaskPoint.hpp"
 #include "GlideSolvers/MacCready.hpp"
+#include "GlideSolvers/GlideResult.hpp"
 #include <vector>
 
 class TaskMacCready {
