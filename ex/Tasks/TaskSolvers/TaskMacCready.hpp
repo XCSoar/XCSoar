@@ -18,7 +18,6 @@ public:
     end(_tps.size()-1),
     gs(_tps.size()),
     minHs(_tps.size(),0.0),
-    cruise_efficiency(1.0),
     glide_polar(gp)
     {
     };
@@ -30,7 +29,6 @@ public:
     end(0),
     gs(1),
     minHs(1,0.0),
-    cruise_efficiency(1.0),
     glide_polar(gp)
     {
     };
@@ -44,13 +42,12 @@ public:
     glide_polar.set_mc(mc);
   };
   void set_cruise_efficiency(double ce) {
-    cruise_efficiency = ce;
+    glide_polar.set_cruise_efficiency(ce);
   };
   const GLIDE_RESULT& get_active_solution() {
     return gs[activeTaskPoint];
   };
 protected:
-  double cruise_efficiency;
   void clearance_heights(const AIRCRAFT_STATE &);
   virtual double get_min_height(const AIRCRAFT_STATE &aircraft) const = 0;
   virtual GLIDE_RESULT tp_solution(const unsigned i,

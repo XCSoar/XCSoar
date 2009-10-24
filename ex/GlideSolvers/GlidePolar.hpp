@@ -17,6 +17,9 @@ public:
   double get_SbestLD() const {
     return SbestLD;
   }
+  void set_cruise_efficiency(const double _ce) {
+    cruise_efficiency = _ce;
+  }
   void set_mc(const double _mc);
   double get_mc() const {
     return mc;
@@ -24,19 +27,17 @@ public:
   double SinkRate(const double V) const;
   double MSinkRate(const double V) const;
 
-  GLIDE_RESULT solve(const GLIDE_STATE &task,
-    const double cruise_efficiency=1.0) const;
+  GLIDE_RESULT solve(const GLIDE_STATE &task) const;
 
   GLIDE_RESULT solve_sink(const GLIDE_STATE &task,
-                          const double S,
-                          const double cruise_efficiency=1.0) const;
+                          const double S) const;
 
 private:
   void solve();
   double mc;
   double bugs;
   double ballast;
-
+  double cruise_efficiency;
   double VbestLD;
   double SbestLD;
 };

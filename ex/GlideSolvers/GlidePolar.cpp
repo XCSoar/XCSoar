@@ -9,7 +9,8 @@ GlidePolar::GlidePolar(const double _mc,
                        const double _ballast):
   mc(_mc),
   bugs(_bugs),
-  ballast(_ballast)
+  ballast(_ballast),
+  cruise_efficiency(1.0)
 {
   solve();
 }
@@ -62,8 +63,7 @@ GlidePolar::solve()
 
 
 GLIDE_RESULT 
-GlidePolar::solve(const GLIDE_STATE &task,
-  const double cruise_efficiency) const
+GlidePolar::solve(const GLIDE_STATE &task) const
 {
   MacCready mac(*this, cruise_efficiency);
   return mac.solve(task);
@@ -71,8 +71,7 @@ GlidePolar::solve(const GLIDE_STATE &task,
 
 GLIDE_RESULT 
 GlidePolar::solve_sink(const GLIDE_STATE &task,
-                       const double S,
-                       const double cruise_efficiency) const
+                       const double S) const
 {
   MacCready mac(*this, cruise_efficiency);
   return mac.solve_sink(task,S);
