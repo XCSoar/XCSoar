@@ -51,6 +51,7 @@ struct FlatBoundingBox {
     f << "\n";
   }
 
+  // used by KD
   struct kd_get_bounds {
     typedef FlatBound result_type;
     FlatBound operator() ( const FlatBoundingBox &d, const unsigned k) const {
@@ -62,17 +63,6 @@ struct FlatBoundingBox {
       };
       return FlatBound(0,0); 
     };
-  };
-
-  // used by KD
-  static inline FlatBound get_bounds( FlatBoundingBox d, unsigned k ) {
-    switch(k) {
-    case 0:
-      return d.bounds_x;
-    case 1:
-      return d.bounds_y;
-    };
-    return FlatBound(0,0); 
   };
 };
 

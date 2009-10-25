@@ -14,8 +14,10 @@ public:
       fill_default();
     };
 
-  void scan_nearest(const GEOPOINT &loc) const;
-  void scan_range(const GEOPOINT &loc, const unsigned &range);
+  void scan_nearest(const GEOPOINT &loc,
+    const bool do_report) const;
+  void scan_range(const GEOPOINT &loc, const unsigned &range,
+    const bool do_report) const;
 
 private:
   void fill_default();

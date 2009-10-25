@@ -83,10 +83,11 @@ int main() {
 
       test_task.update_idle(state);
 
-      airspaces.scan_nearest(state.Location);
-      airspaces.scan_range(state.Location, 70);
+      bool do_report = (counter++ % 100 ==0);
+      airspaces.scan_nearest(state.Location, do_report);
+      airspaces.scan_range(state.Location, 120, do_report);
 
-      if (counter++ % 10==0) {
+      if (do_report) {
         test_task.report(state);
       }
       n_samples++;
