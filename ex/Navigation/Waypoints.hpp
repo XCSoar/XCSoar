@@ -4,6 +4,7 @@
 #include <kdtree++/kdtree.hpp>
 #include "Waypoint.hpp"
 #include <iostream>
+#include <deque>
 
 class Waypoints {
 public:
@@ -24,11 +25,14 @@ public:
   std::vector< WAYPOINT >
     find_within_range_circle(const GEOPOINT &loc, const unsigned &range) const;
 
-private:
-  void fill_default();
+  void optimise();
+  void insert(const WAYPOINT& wp);
 
+private:
   WaypointTree waypoint_tree;
   TaskProjection& task_projection;
+
+  std::deque< WAYPOINT > tmp_wps;
 
   /** @link dependency */
   /*#  WAYPOINT lnkWAYPOINT; */

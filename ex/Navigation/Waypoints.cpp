@@ -1,64 +1,47 @@
 #include "Waypoints.hpp"
 #include "BaseTask/TaskProjection.h"
-#include <deque>
 #include <vector>
 #include <fstream>
 
 Waypoints::Waypoints(TaskProjection& _task_projection):
   task_projection(_task_projection)
 {
-  fill_default();
 }
 
-void 
-Waypoints::fill_default()
+void
+Waypoints::optimise()
 {
   std::ofstream fin("res-wp-in.txt");
-  WAYPOINT wp[6];
-  wp[0].id = 0;
-  wp[0].Location.Longitude=0;
-  wp[0].Location.Latitude=0;
-  wp[0].Altitude=0.25;
-  wp[1].id = 1;
-  wp[1].Location.Longitude=0;
-  wp[1].Location.Latitude=1.0;
-  wp[1].Altitude=0.25;
-  wp[2].id = 2;
-  wp[2].Location.Longitude=1.0;
-  wp[2].Location.Latitude=1.0;
-  wp[2].Altitude=0.5;
-  wp[3].id = 3;
-  wp[3].Location.Longitude=0.8;
-  wp[3].Location.Latitude=0.5;
-  wp[3].Altitude=0.25;
-  wp[4].id = 4;
-  wp[4].Location.Longitude=1.0;
-  wp[4].Location.Latitude=0;
-  wp[4].Altitude=0.25;
 
-  task_projection.reset(wp[0].Location);
-  for (unsigned i=0; i<5; i++) {
-    task_projection.scan_location(wp[i].Location);
-  }
   task_projection.update_fast();
-  task_projection.report();
 
-  for (unsigned i=0; i<5; i++) {
-    waypoint_tree.insert(wp[i]);
-  }
-
-  for (unsigned i=0; i<150; i++) {
-    int x = rand()%1200-600;
-    int y = rand()%1200-600;
-    WAYPOINT ff; ff.FlatLocation.Longitude = x; ff.FlatLocation.Latitude = y;
-    ff.Location = task_projection.unproject(ff.FlatLocation);
-    ff.id = i+4;
-    waypoint_tree.insert(ff);
-    ff.print(fin, task_projection);
+  while (!tmp_wps.empty()) {
+    WAYPOINT w = (tmp_wps.front());
+    w.FlatLocation = task_projection.project(w.Location);
+    waypoint_tree.insert(w);
+    tmp_wps.pop_front();
+    w.print(fin, task_projection);
   }
 
   waypoint_tree.optimize();
 }
+
+void
+Waypoints::insert(const WAYPOINT& wp)
+{
+  if (!tmp_wps.size() && !waypoint_tree.size()) {
+    task_projection.reset(wp.Location);
+  }
+  task_projection.scan_location(wp.Location);
+
+  tmp_wps.push_back(wp);
+
+  // TODO: if range changed, need to re-pack waypoints
+  // will have to remove all from the list, recalculate projections,
+  // then add them again!
+  // (can just insert() them all, then clear the tree, then run optimise()
+}
+
 
 
 Waypoints::WaypointTree::const_iterator 

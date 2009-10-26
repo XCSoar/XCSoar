@@ -272,6 +272,29 @@ OrderedTask::check_task() const
 }
 
 
+bool 
+OrderedTask::check_startfinish(OrderedTaskPoint* new_tp)
+{
+  if (StartPoint* ap = dynamic_cast<StartPoint*>(new_tp)) {
+    if (tps.size()) {
+      printf("Error! Already has a start point\n");
+      return false;
+    } else {
+      ts = ap;
+    }
+  }
+  if (FinishPoint* fp = dynamic_cast<FinishPoint*>(new_tp)) {
+    if (tf) {
+      printf("Error! Already has a finish point\n");
+      return false;
+    } else {
+      tf = fp;
+    }
+  }
+  return true;
+}
+
+
 bool
 OrderedTask::remove(unsigned position)
 {
@@ -294,27 +317,6 @@ OrderedTask::remove(unsigned position)
   return true;
 }
 
-bool 
-OrderedTask::check_startfinish(OrderedTaskPoint* new_tp)
-{
-  if (StartPoint* ap = dynamic_cast<StartPoint*>(new_tp)) {
-    if (tps.size()) {
-      printf("Error! Already has a start point\n");
-      return false;
-    } else {
-      ts = ap;
-    }
-  }
-  if (FinishPoint* fp = dynamic_cast<FinishPoint*>(new_tp)) {
-    if (tf) {
-      printf("Error! Already has a finish point\n");
-      return false;
-    } else {
-      tf = fp;
-    }
-  }
-  return true;
-}
 
 bool 
 OrderedTask::append(OrderedTaskPoint* new_tp)

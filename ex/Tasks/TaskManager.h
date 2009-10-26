@@ -52,6 +52,8 @@ public:
   virtual const TaskStats& get_stats() const;
 
   bool append(OrderedTaskPoint *new_tp);
+  bool insert(OrderedTaskPoint *new_tp, unsigned position);
+  bool remove(unsigned position);
   bool check_task() const;
 
 private:
