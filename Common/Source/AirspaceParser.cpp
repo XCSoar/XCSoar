@@ -145,9 +145,6 @@ static const int k_nAreaType[k_nAreaCount] = {
 					CLASSE,
 					CLASSF};
 
-/////////////////////////////
-
-
 bool CheckAirspacePoint(int Idx){
   if (Idx < 0 || Idx >= AirspacePointSize){
     return false;
@@ -156,13 +153,9 @@ bool CheckAirspacePoint(int Idx){
   return true;
 }
 
-
 bool ValidAirspace(void) {
   return (NumberOfAirspacePoints>0)||(NumberOfAirspaceAreas>0)||(NumberOfAirspaceCircles>0);
 }
-
-///////////////////////////////
-
 
 void CloseAirspace() {
   AirspaceWarnListClear();
@@ -1470,9 +1463,6 @@ void DumpAirspaceFile(void){
 
 }
 #endif
-
-///////////////////////////////////////////////////////////////////////////////
-
 
 static int _cdecl SortAirspaceAreaCompare(const void *elem1, const void *elem2 )
 {
