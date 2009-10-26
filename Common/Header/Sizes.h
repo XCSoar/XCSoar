@@ -75,9 +75,6 @@
 
 #define MENUBUTTONWIDTHRATIO 0.6
 
-
-//////////////
-
 // size of terrain cache
 #ifdef WINDOWSPC
 #define MAXTERRAINCACHE 8192*2
@@ -119,16 +116,12 @@
 // invalid value for terrain
 #define TERRAIN_INVALID -1000
 
-///////////////////////
-
 #define NUMAIRSPACECOLORS 16
 #define NUMAIRSPACEBRUSHES 8
 
 #define AIRSPACE_SCANSIZE_X 16
 #define AIRSPACE_SCANSIZE_H 16
 #define OUTSIDE_CHECK_INTERVAL 4
-
-////////////////////////
 
 #define READLINE_LENGTH 300
 
@@ -149,8 +142,6 @@
 
 // used by map window
 #define WPCIRCLESIZE        2
-
-////
 
 enum {
   MAX_IGC_BUFF = 255,
