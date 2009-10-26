@@ -41,13 +41,7 @@ Copyright_License {
 #include "WaveThread.h"
 #include "XCSoar.h"
 
-
-////////////////////////
-
-
-/////////////////////////////////////////////////////////////////////////////
 // CWaveInThread thread
-
 CWaveInThread::CWaveInThread()
 {
   m_pcbWaveIn                = NULL;
@@ -517,10 +511,7 @@ DWORD WINAPI CWaveInThread::ThreadProc(LPVOID lpParameter)
   return 0;
 }
 
-
-/////////////////////////////////////////////////////////////////////////////
 // CWaveOutThread thread
-
 CWaveOutThread::CWaveOutThread()
 {
   m_pcbWaveOut               = NULL;
