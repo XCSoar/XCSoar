@@ -10,16 +10,21 @@
 #include "OrderedTask.h"
 #include "TaskStats/TaskStats.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
+#include "BaseTask/TaskProjection.h"
+
+class Waypoints;
 
 class TaskManager : public TaskInterface,
  public Serialisable
 {
 public:
   TaskManager(const TaskEvents &te,
-              GlidePolar &gp): 
-    task_ordered(te,task_advance,gp),
+              TaskProjection &tp,
+              GlidePolar &gp,
+              const Waypoints &wps): 
+    task_ordered(te,tp,task_advance,gp),
     task_goto(te,task_advance,gp),
-    task_abort(te,task_advance,gp)
+    task_abort(te,tp,task_advance,gp,wps)
   {
     set_mode(MODE_ORDERED);
   };
@@ -45,10 +50,6 @@ public:
   virtual bool update_idle(const AIRCRAFT_STATE &state);
 
   virtual const TaskStats& get_stats() const;
-
-  const TaskProjection &get_task_projection() const {
-    return task_ordered.get_task_projection();
-  }
   
 private:
   const TaskStats null_stats;

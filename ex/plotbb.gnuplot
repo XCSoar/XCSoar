@@ -11,6 +11,14 @@ plot \
      'res-bb-nearest.txt' using 1:2 with filledcurve ls 2 title "nearest", \
      'res-bb-in.txt' using 1:2 with lines ls 3 title "in", \
      'res-bb-range.txt' using 1:2 with lines ls 4 title "range", \
-     'res-bb-target.txt' using 1:2 with linespoints ls 5 title "search", \
+     'res-bb-target.txt' using 1:2 with lines ls 5 title "search", \
+     'res-sample.txt' using 1:2 with lines ls 1 title "sample"
+pause -1
+
+plot \
+     'res-wp-in.txt' using 1:2 with points ls 3 title "in", \
+     'res-wp-nearest.txt' using 1:2 with points ls 2 title "nearest", \
+     'res-wp-range.txt' using 1:2 with points ls 4 title "range", \
+     'res-bb-target.txt' using 1:2 with lines ls 5 title "search", \
      'res-sample.txt' using 1:2 with lines ls 1 title "sample"
 pause -1

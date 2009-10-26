@@ -4,15 +4,18 @@
 #define ABORTTASK_H
 
 #include "AbstractTask.h"
-#include "Tasks/AbstractTask.h"
 #include <vector>
+#include "BaseTask/TaskProjection.h"
+#include "Navigation/Waypoints.hpp"
 
 class AbortTask : public AbstractTask 
 {
 public:
   AbortTask(const TaskEvents &te, 
+            const TaskProjection &tp,
             TaskAdvance &ta,
-            GlidePolar &gp);
+            GlidePolar &gp,
+            const Waypoints &wps);
   ~AbortTask();
 
   std::vector<TaskPoint*> tps;
@@ -24,8 +27,20 @@ public:
 
   virtual bool update_sample(const AIRCRAFT_STATE &, const bool full_update);
 protected:
+  const TaskProjection &task_projection;
   virtual bool check_transitions(const AIRCRAFT_STATE &, const AIRCRAFT_STATE&);
+  const Waypoints &waypoints;
+  void clear();
+  bool task_full() const;
 
+  int abort_range(const AIRCRAFT_STATE &location);
+
+  GlidePolar polar_safety;
+  void update_polar();
+
+  void fill_reachable(const AIRCRAFT_STATE &,
+                      std::vector < WAYPOINT > &approx_waypoints,
+                      const bool only_airfield);
 };
 
 #endif //ABORTTASK_H

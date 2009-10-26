@@ -1,5 +1,6 @@
 #include "TaskProjection.h"
 #include "Math/FastMath.h"
+#include "Math/Earth.hpp"
 #include <algorithm>
 
 
@@ -74,4 +75,20 @@ void TaskProjection::report()
   pur = project(location_max);
   printf("# flat (%d,%d)-(%d,%d)\n",pll.Longitude,pll.Latitude,
          pur.Longitude,pur.Latitude);
+}
+
+double
+TaskProjection::fproject_range(const GEOPOINT &tp, const double range) const
+{
+  GEOPOINT fr;
+  ::FindLatitudeLongitude(tp,0,range,&fr);
+  FlatPoint f = fproject(fr);
+  FlatPoint p = fproject(tp);
+  return fabs(f.y-p.y);
+}
+
+unsigned
+TaskProjection::project_range(const GEOPOINT &tp, const double range) const
+{
+  return fproject_range(tp,range)+0.5;
 }

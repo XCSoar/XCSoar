@@ -45,6 +45,9 @@ TaskPoint* TaskManager::getActiveTaskPoint()
 
 void TaskManager::report(const AIRCRAFT_STATE &state)
 {
+  // for testing only:
+  task_abort.report(state);
+
   if (active_task) 
     return active_task->report(state);
 }
@@ -59,6 +62,10 @@ bool TaskManager::update(const AIRCRAFT_STATE &state,
   if (active_task && (active_task != &task_ordered)) {
     retval |= active_task->update(state, state_last);
   }
+
+  // for testing only:
+  task_abort.update(state, state_last);
+
   return retval;
 }
 

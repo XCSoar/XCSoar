@@ -17,6 +17,9 @@ public:
   double get_SbestLD() const {
     return SbestLD;
   }
+  double get_bestLD() const {
+    return VbestLD/SbestLD;
+  }
   void set_cruise_efficiency(const double _ce) {
     cruise_efficiency = _ce;
   }

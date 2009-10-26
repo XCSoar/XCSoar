@@ -32,6 +32,9 @@ public:
   FlatPoint fproject(const GEOPOINT& tp) const;
   GEOPOINT funproject(const FlatPoint& tp) const;
 
+  unsigned project_range(const GEOPOINT &tp, const double range) const;
+  double fproject_range(const GEOPOINT &tp, const double range) const;
+
   void report();
 private:
   GEOPOINT location_min;

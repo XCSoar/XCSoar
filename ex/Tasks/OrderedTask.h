@@ -16,6 +16,7 @@ class OrderedTask:
 {
 public:
   OrderedTask(const TaskEvents &te, 
+              const TaskProjection &tp,
               TaskAdvance &ta,
               GlidePolar &gp);
   ~OrderedTask();
@@ -48,9 +49,6 @@ public:
   }
   virtual void report(const AIRCRAFT_STATE &state);
 
-  const TaskProjection &get_task_projection() const {
-    return task_projection;
-  }
 protected:
   virtual bool check_transitions(const AIRCRAFT_STATE &, const AIRCRAFT_STATE&);
   double scan_distance_nominal();
@@ -71,7 +69,7 @@ private:
    * @supplierCardinality 1 
    */
   StartPoint *ts;
-  TaskProjection task_projection;
+  const TaskProjection &task_projection;
 
 protected:
 

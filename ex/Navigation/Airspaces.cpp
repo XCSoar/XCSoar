@@ -2,25 +2,6 @@
 #include <fstream>
 #include <deque>
 
-/*
-void test_bbdist() {
-  BBDist d = 0;
-  BBDist dal(0,3);
-  BBDist dbl(1,4);
-  BBDist dau(2,1);
-  BBDist dbu(3,3);
-  d.print();
-  d += dal;
-  d += dbl;
-  d.print();
-  d += dau;
-  d += dbu;
-  d.print();
-  int x = sqrt(d);
-  printf("%d\n",x);
-}
-*/
-
 
 void 
 Airspaces::scan_nearest(const GEOPOINT &loc,
@@ -36,8 +17,17 @@ Airspaces::scan_nearest(const GEOPOINT &loc,
       std::ofstream foutn("res-bb-nearest.txt");
       (found.first)->print(foutn, task_projection);
     }
+    // also should do scan_range with range = 0 since there
+    // could be more than one with zero dist
+    if (found.second==0) {
+//      printf("inside\n");
+      scan_range(loc, 0, do_report);
+      return;
+    } 
   }
+//  printf("outside\n");
 }
+
 
 void 
 Airspaces::scan_range(const GEOPOINT &loc, const unsigned &range,
@@ -54,7 +44,7 @@ Airspaces::scan_range(const GEOPOINT &loc, const unsigned &range,
   
   std::deque< FlatBoundingBox > vectors;
   airspace_tree.find_within_range(bb_target, -range, std::back_inserter(vectors));
-  
+
   if (do_report)  { // reporting
     std::ofstream foutr("res-bb-range.txt");
     std::ofstream foutf("res-bb-filtered.txt");
@@ -73,7 +63,7 @@ void
 Airspaces::fill_default() 
 {
   std::ofstream fin("res-bb-in.txt");
-  for (unsigned i=0; i<200; i++) {
+  for (unsigned i=0; i<150; i++) {
     int x = rand()%1200-600;
     int y = rand()%1200-600;
     int w = rand()%300;

@@ -1,7 +1,6 @@
 #ifndef FLATBOUNDINGBOX_HPP
 #define FLATBOUNDINGBOX_HPP
 #include "Math/FastMath.h"
-#include "FlatBound.hpp"
 #include "Waypoint.hpp"
 #include "BaseTask/TaskProjection.h"
 #include <algorithm>
@@ -22,11 +21,7 @@ public:
     set_max(0, rhs);
     set_max(1, rhs);
     calc_d();
-//    printf("adding %d %d\n",rhs.val[0],rhs.val[1]);
     return *this;
-  }
-  void print() const {
-    printf("%d %d d:%g\n",val[0],val[1],sqrt(d));
   }
   operator double () const {
     return d;

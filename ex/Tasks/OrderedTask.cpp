@@ -21,14 +21,6 @@
 
 void
 OrderedTask::update_geometry() {
-
-  task_projection.reset(tps[0]->getLocation());
-  for (unsigned i=0; i<tps.size(); i++) {
-    task_projection.scan_location(tps[i]->getLocation());
-  }
-  task_projection.update_fast();
-  task_projection.report();
-
   for (unsigned i=0; i<tps.size(); i++) {
     tps[i]->update_geometry();
     tps[i]->clear_boundary_points();
@@ -285,9 +277,11 @@ OrderedTask::~OrderedTask()
 }
 
 OrderedTask::OrderedTask(const TaskEvents &te, 
+                         const TaskProjection &tp,
                          TaskAdvance &ta,
                          GlidePolar &gp):
-  AbstractTask(te, ta, gp)
+  AbstractTask(te, ta, gp),
+  task_projection(tp)
 {
   // TODO: default values in constructor
 

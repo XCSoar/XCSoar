@@ -5,6 +5,7 @@
 #include "Math/FastMath.h"
 #include "Math/Earth.hpp"
 #include "Navigation/Airspaces.hpp"
+#include "Navigation/Waypoints.hpp"
 #include "Tasks/TaskManager.h"
 #include "Tasks/TaskEvents.hpp"
 
@@ -12,10 +13,12 @@ int n_samples = 0;
 
 extern long count_mc;
 //extern int count_distance;
+unsigned count_intersections = 0;
 
 void distance_counts() {
 //  printf("#     distance queries %d\n",count_distance/n_samples); 
   printf("#     mc calcs %d\n",count_mc/n_samples);
+  printf("# intersections %d\n",count_intersections/n_samples);
   printf("# num samples %d\n",n_samples);
 }
 
@@ -39,8 +42,10 @@ int main() {
 
   TaskEvents default_events;
   GlidePolar glide_polar(2.0,0.0,0.0);
-  TaskManager test_task(default_events,glide_polar);
-  Airspaces airspaces(test_task.get_task_projection());
+  TaskProjection task_projection;
+  Waypoints waypoints(task_projection);
+  TaskManager test_task(default_events,task_projection,glide_polar,waypoints);
+  Airspaces airspaces(task_projection);
 
   test_task.setActiveTaskPoint(0);
 
@@ -65,7 +70,6 @@ int main() {
   state.WindSpeed = 0.0;
   state.WindDirection = 0;
 
-  test_task.report(state);
   airspaces.scan_nearest(state.Location, true);
   airspaces.scan_range(state.Location, 30, true);
 
@@ -87,7 +91,7 @@ int main() {
 
       test_task.update_idle(state);
 
-      bool do_report = (counter++ % 100 ==0);
+      bool do_report = (counter++ % 50 ==0);
       airspaces.scan_nearest(state.Location, do_report);
       airspaces.scan_range(state.Location, 30, do_report);
 

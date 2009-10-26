@@ -55,6 +55,12 @@ struct GLIDE_RESULT {
     return (Solution == RESULT_OK)
       || (Solution == RESULT_PARTIAL);
   }
+
+  bool glide_reachable() const {
+    return (Solution==RESULT_OK) &&
+      (AltitudeDifference>=0) &&
+      (HeightClimb==0);
+  }
 /*
   bool superior(const GLIDE_RESULT &s2) const;
 */
