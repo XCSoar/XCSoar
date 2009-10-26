@@ -50,7 +50,10 @@ public:
   virtual bool update_idle(const AIRCRAFT_STATE &state);
 
   virtual const TaskStats& get_stats() const;
-  
+
+  bool append(OrderedTaskPoint *new_tp);
+  bool check_task() const;
+
 private:
   const TaskStats null_stats;
 

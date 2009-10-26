@@ -4,6 +4,12 @@
 #include <vector>
 #include <fstream>
 
+Waypoints::Waypoints(TaskProjection& _task_projection):
+  task_projection(_task_projection)
+{
+  fill_default();
+}
+
 void 
 Waypoints::fill_default()
 {

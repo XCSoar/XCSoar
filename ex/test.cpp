@@ -8,6 +8,11 @@
 #include "Navigation/Waypoints.hpp"
 #include "Tasks/TaskManager.h"
 #include "Tasks/TaskEvents.hpp"
+#include "TaskPoints/FAISectorStartPoint.hpp"
+#include "TaskPoints/FAISectorFinishPoint.hpp"
+#include "TaskPoints/FAISectorASTPoint.hpp"
+#include "TaskPoints/FAICylinderASTPoint.hpp"
+#include "TaskPoints/CylinderAATPoint.hpp"
 
 int n_samples = 0;
 
@@ -46,6 +51,33 @@ int main() {
   Waypoints waypoints(task_projection);
   TaskManager task_manager(default_events,task_projection,glide_polar,waypoints);
   Airspaces airspaces(task_projection);
+
+
+  WAYPOINT wp[6];
+  wp[0].Location.Longitude=0;
+  wp[0].Location.Latitude=0;
+  wp[0].Altitude=0.25;
+  wp[1].Location.Longitude=0;
+  wp[1].Location.Latitude=1.0;
+  wp[1].Altitude=0.25;
+  wp[2].Location.Longitude=1.0;
+  wp[2].Location.Latitude=1.0;
+  wp[2].Altitude=0.5;
+  wp[3].Location.Longitude=0.8;
+  wp[3].Location.Latitude=0.5;
+  wp[3].Altitude=0.25;
+  wp[4].Location.Longitude=1.0;
+  wp[4].Location.Latitude=0;
+  wp[4].Altitude=0.25;
+
+  task_manager.append(new FAISectorStartPoint(task_projection,wp[0]));
+  task_manager.append(new FAISectorASTPoint(task_projection,wp[1]));
+  task_manager.append(new CylinderAATPoint(task_projection,wp[2]));
+  task_manager.append(new CylinderAATPoint(task_projection,wp[3]));
+  task_manager.append(new CylinderAATPoint(task_projection,wp[4]));
+  task_manager.append(new FAISectorFinishPoint(task_projection,wp[0]));
+
+  task_manager.check_task();
 
   task_manager.setActiveTaskPoint(0);
 

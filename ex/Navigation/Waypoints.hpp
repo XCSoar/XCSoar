@@ -7,11 +7,7 @@
 
 class Waypoints {
 public:
-  Waypoints(TaskProjection& _task_projection):
-    task_projection(_task_projection)
-    {
-      fill_default();
-    };
+  Waypoints(TaskProjection& _task_projection);
 
   typedef KDTree::KDTree<2, 
                          WAYPOINT, 

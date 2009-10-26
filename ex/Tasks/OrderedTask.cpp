@@ -558,8 +558,11 @@ OrderedTask::calc_gradient(const AIRCRAFT_STATE &state)
 
 OrderedTask::~OrderedTask()
 {
-  // TODO: delete turnpoints
-
+  for (std::vector<OrderedTaskPoint*>::iterator v=tps.begin();
+       v != tps.end(); ) {
+    delete *v;
+    tps.erase(v);
+  }
 }
 
 
@@ -573,44 +576,7 @@ OrderedTask::OrderedTask(const TaskEvents &te,
   tf(NULL)
 {
   // TODO: default values in constructor
-  test_task();
 }
 
 ////////////////////////
 
-#include "TaskPoints/FAISectorStartPoint.hpp"
-#include "TaskPoints/FAISectorFinishPoint.hpp"
-#include "TaskPoints/FAISectorASTPoint.hpp"
-#include "TaskPoints/FAICylinderASTPoint.hpp"
-#include "TaskPoints/CylinderAATPoint.hpp"
-
-
-void
-OrderedTask::test_task() 
-{
-  WAYPOINT wp[6];
-  wp[0].Location.Longitude=0;
-  wp[0].Location.Latitude=0;
-  wp[0].Altitude=0.25;
-  wp[1].Location.Longitude=0;
-  wp[1].Location.Latitude=1.0;
-  wp[1].Altitude=0.25;
-  wp[2].Location.Longitude=1.0;
-  wp[2].Location.Latitude=1.0;
-  wp[2].Altitude=0.5;
-  wp[3].Location.Longitude=0.8;
-  wp[3].Location.Latitude=0.5;
-  wp[3].Altitude=0.25;
-  wp[4].Location.Longitude=1.0;
-  wp[4].Location.Latitude=0;
-  wp[4].Altitude=0.25;
-
-  append(new FAISectorStartPoint(task_projection,wp[0]));
-  append(new FAISectorASTPoint(task_projection,wp[1]));
-  append(new CylinderAATPoint(task_projection,wp[2]));
-  append(new CylinderAATPoint(task_projection,wp[3]));
-  append(new CylinderAATPoint(task_projection,wp[4]));
-  append(new FAISectorFinishPoint(task_projection,wp[0]));
-
-  check_task();
-}

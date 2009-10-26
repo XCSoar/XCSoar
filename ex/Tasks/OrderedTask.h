@@ -110,7 +110,6 @@ protected:
 
 private:
   void set_neighbours(unsigned position);
-  void test_task();
   bool check_startfinish(OrderedTaskPoint* new_tp); 
 };
 

@@ -101,3 +101,14 @@ TaskManager::do_goto(const WAYPOINT & wp)
   set_mode(MODE_GOTO);
 }
 
+bool 
+TaskManager::append(OrderedTaskPoint *new_tp)
+{
+  return task_ordered.append(new_tp);
+}
+
+bool 
+TaskManager::check_task() const
+{
+  return task_ordered.check_task();
+}
