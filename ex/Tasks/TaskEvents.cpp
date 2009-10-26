@@ -1,4 +1,5 @@
 #include "TaskEvents.hpp"
+#include "BaseTask/TaskPoint.hpp"
 #include <stdio.h>
 
 void 
@@ -18,4 +19,10 @@ void
 TaskEvents::active_advanced(const TaskPoint &tp, const int i) const
 {
   printf("- advance to sector %d\n", i);
+}
+
+void 
+TaskEvents::active_changed(const TaskPoint &tp) const
+{
+  printf("- active changed to wp %d\n", tp.get_waypoint().id);
 }

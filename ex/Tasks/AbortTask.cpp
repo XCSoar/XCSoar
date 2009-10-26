@@ -27,7 +27,7 @@ void AbortTask::setActiveTaskPoint(unsigned index)
 {
   if (index<tps.size()) {
     activeTaskPoint = index;
-    active_waypoint = tps[index].get_waypoint().id;
+    active_waypoint = tps[index]->get_waypoint().id;
   }
 }
 
@@ -48,7 +48,9 @@ void AbortTask::report(const AIRCRAFT_STATE &state)
   for (unsigned i=0; i<tps.size(); i++) {
     GEOPOINT l = tps[i]->getLocation();
     f1 << "## point " << i << " ###################\n";
-    f1 << state.Location.Longitude << " " << state.Location.Latitude << "\n";
+    if (i==activeTaskPoint) {
+      f1 << state.Location.Longitude << " " << state.Location.Latitude << "\n";
+    }
     f1 << l.Longitude << " " << l.Latitude << "\n";
     f1 << "\n";
   }
@@ -120,7 +122,8 @@ AbortTask::fill_reachable(const AIRCRAFT_STATE &state,
   while (!q.empty() && !task_full()) {
     tps.push_back(new TaskPoint(q.top().first));
 
-    if (tps[tps.size()-1].get_waypoint().id == active_waypoint) {
+    const int i = tps.size()-1;
+    if (tps[i]->get_waypoint().id == active_waypoint) {
       activeTaskPoint = i;
     }
 
@@ -134,6 +137,7 @@ bool AbortTask::update_sample(const AIRCRAFT_STATE &state,
   update_polar();
   clear();
 
+  const unsigned active_waypoint_on_entry = active_waypoint;
   activeTaskPoint = 0; // default to best result if can't find user-set one 
 
   std::vector < WAYPOINT > approx_waypoints = 
@@ -163,7 +167,10 @@ bool AbortTask::update_sample(const AIRCRAFT_STATE &state,
   // TODO, check tracking of active waypoint
 
   if (tps.size()) {
-    active_waypoint = tps[activeTaskPoint].get_waypoint().id;
+    active_waypoint = tps[activeTaskPoint]->get_waypoint().id;
+    if (active_waypoint_on_entry != active_waypoint) {
+      task_events.active_changed(*tps[activeTaskPoint]);
+    }
   }
 
   return false; // nothing to do
