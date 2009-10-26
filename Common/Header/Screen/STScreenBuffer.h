@@ -1,11 +1,11 @@
 /**
  * @file STScreenBuffer.h
+ * @details Class for pixel working with images. One could get access
+ * to image bits using this library or create custom image.
  * @author Vassili Philippov (vasja@spbteam.com)
  * @date Created: June 2001
  * @date Last changed: 07 August 2001
  * @version 2.0
- * Class for pixel working with images. One could get access
- * to image bits using this library or create custom image.
  */
 
 #if !defined(AFX_STSCREENBUFFER_H__22D62F5D_32E2_4785_B3D9_2341C11F84A3__INCLUDED_)
