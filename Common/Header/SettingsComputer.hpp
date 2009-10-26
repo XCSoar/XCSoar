@@ -128,8 +128,8 @@ struct SETTINGS_COMPUTER {
   int  Alternate1; // VENTA3
   int  Alternate2;
   int HomeWaypoint;
-/// vegavoice stuff
 
+  // vegavoice stuff
   bool EnableVoiceClimbRate;
   bool EnableVoiceTerrain;
   bool EnableVoiceWaypointDistance;
