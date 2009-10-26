@@ -7,6 +7,7 @@
 #include <vector>
 #include "BaseTask/TaskProjection.h"
 #include "Navigation/Waypoints.hpp"
+#include "AbortTask.cpp"
 
 class AbortTask : public AbstractTask 
 {
@@ -38,6 +39,11 @@ protected:
   int abort_range(const AIRCRAFT_STATE &location);
 
   GlidePolar polar_safety;
+private:
+
+  /** @link dependency */
+  /*#  Rank lnkRank; */
+protected:
   void update_polar();
 
   void fill_reachable(const AIRCRAFT_STATE &,

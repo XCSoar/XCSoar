@@ -11,6 +11,7 @@
 #include "TaskStats/TaskStats.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
 #include "BaseTask/TaskProjection.h"
+#include "TaskEvents.hpp"
 
 class Waypoints;
 
@@ -75,5 +76,8 @@ private:
     TaskMode_t mode;
 
     TaskAdvance task_advance;
+
+    /** @link dependency */
+    /*#  TaskEvents lnkTaskEvents; */
 };
 #endif //TASKMANAGER_H
