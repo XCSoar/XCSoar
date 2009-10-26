@@ -43,8 +43,9 @@ uint32_t __zzip_get32(unsigned char * s)
 #endif
 }
 
-/** => __zzip_get32
- * This function does the same for a 16 bit value.
+/**
+ * This function does the same as __zzip_get32 for a 16 bit value.
+ * @see __zzip_get32
  */
 uint16_t __zzip_get16(unsigned char * s)
 {
@@ -55,8 +56,9 @@ uint16_t __zzip_get16(unsigned char * s)
 #endif
 }
 
-/** => __zzip_get32
- * This function does the same for an off64_t value.
+/**
+ * This function does the same as __zzip_get32 for an off64_t value.
+ * @see __zzip_get32
  */
 uint64_t __zzip_get64(unsigned char * s)
 {
@@ -80,8 +82,9 @@ uint64_t __zzip_get64(unsigned char * s)
 #endif
 }
 
-/** => __zzip_get32
+/**
  * This function pushes a 32bit value at the specified address
+ * @see __zzip_get32
  */
 void __zzip_set32(unsigned char * s, uint32_t v)
 {
@@ -97,8 +100,9 @@ void __zzip_set32(unsigned char * s, uint32_t v)
 #endif
 }
 
-/** => __zzip_get32
- * This function does the same for a 16 bit value.
+/**
+ * This function does the same as __zzip_set32 for a 16 bit value.
+ * @see __zzip_set32
  */
 void __zzip_set16(unsigned char * s, uint16_t v)
 {
@@ -112,8 +116,9 @@ void __zzip_set16(unsigned char * s, uint16_t v)
 #endif
 }
 
-/** => __zzip_get32
+/**
  * This function pushes a off64_t value at the specified address
+ * @see __zzip_set32
  */
 void __zzip_set64(unsigned char * s, uint64_t v)
 {
@@ -129,8 +134,6 @@ void __zzip_set64(unsigned char * s, uint64_t v)
     /* *INDENT-ON* */
 }
 
-
-///////////
 // JMW
 
 /**
@@ -143,16 +146,18 @@ uint32_t __zzip_get32b(unsigned char * s)
 	|  ((uint32_t)s[2] << 8)  | ((uint32_t)s[3]);
 }
 
-/** => __zzip_get32
- * This function does the same for a 16 bit value.
+/**
+ * This function does the same as __zzip_get32 for a 16 bit value.
+ * @see __zzip_get32
  */
 uint16_t __zzip_get16b(unsigned char * s)
 {
     return ((uint16_t)s[0] << 8) | ((uint16_t)s[1]);
 }
 
-/** => __zzip_get32
- * This function does the same for an off64_t value.
+/**
+ * This function does the same as __zzip_get32 for an off64_t value.
+ * @see __zzip_get32
  */
 uint64_t __zzip_get64b(unsigned char * s)
 {
@@ -162,8 +167,9 @@ uint64_t __zzip_get64b(unsigned char * s)
 	|  ((uint64_t)s[6] << 8)  | ((uint64_t)s[7]);
 }
 
-/** => __zzip_get32
+/**
  * This function pushes a 32bit value at the specified address
+ * @see __zzip_get32
  */
 void __zzip_set32b(unsigned char * s, uint32_t v)
 {
@@ -175,8 +181,9 @@ void __zzip_set32b(unsigned char * s, uint32_t v)
     /* *INDENT-ON* */
 }
 
-/** => __zzip_get32
- * This function does the same for a 16 bit value.
+/**
+ * This function does the same as __zzip_set32 for a 16 bit value.
+ * @see __zzip_set32
  */
 void __zzip_set16b(unsigned char * s, uint16_t v)
 {
@@ -186,8 +193,9 @@ void __zzip_set16b(unsigned char * s, uint16_t v)
     /* *INDENT-ON* */
 }
 
-/** => __zzip_get32
+/**
  * This function pushes a off64_t value at the specified address
+ * @see __zzip_set32
  */
 void __zzip_set64b(unsigned char * s, uint64_t v)
 {
