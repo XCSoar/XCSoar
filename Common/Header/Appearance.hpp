@@ -173,7 +173,6 @@ typedef struct{
   bool GaugeVarioAveNeedle;
 } Appearance_t;
 
-/////////////////////
 // Specials
 
 typedef enum{
