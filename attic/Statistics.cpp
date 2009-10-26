@@ -46,7 +46,6 @@ Copyright_License {
 
 extern HFONT                                   StatisticsFont;
 
-
 double Statistics::yscale;
 double Statistics::xscale;
 double Statistics::y_min;
@@ -55,7 +54,6 @@ double Statistics::x_max;
 double Statistics::y_max;
 bool Statistics::unscaled_x;
 bool Statistics::unscaled_y;
-
 
 void Statistics::ResetScale() {
   unscaled_y = true;
@@ -86,19 +84,18 @@ void Statistics::ScaleYFromData(RECT rc, LeastSquares* lsdata)
     y_max = max(y_max,max(y0,y1));
   }
 
-
   yscale = (y_max - y_min);
   if (yscale>0) {
     yscale = (rc.bottom-rc.top)/yscale;
   }
 }
 
-
 void Statistics::ScaleXFromData(RECT rc, LeastSquares* lsdata)
 {
   if (!lsdata->sum_n) {
     return;
   }
+
   if (unscaled_x) {
     x_min = lsdata->x_min;
     x_max = lsdata->x_max;
@@ -113,7 +110,6 @@ void Statistics::ScaleXFromData(RECT rc, LeastSquares* lsdata)
     xscale = (rc.right-rc.left)/xscale;
   }
 }
-
 
 void Statistics::ScaleYFromValue(RECT rc, double value)
 {
@@ -132,7 +128,6 @@ void Statistics::ScaleYFromValue(RECT rc, double value)
   }
 }
 
-
 void Statistics::ScaleXFromValue(RECT rc, double value)
 {
   if (unscaled_x) {
@@ -148,9 +143,7 @@ void Statistics::ScaleXFromValue(RECT rc, double value)
   if (xscale>0) {
     xscale = (rc.right-rc.left)/xscale;
   }
-
 }
-
 
 void Statistics::StyleLine(HDC hdc, POINT l1, POINT l2,
                            int Style) {
@@ -186,13 +179,10 @@ void Statistics::StyleLine(HDC hdc, POINT l1, POINT l2,
                  l2,
                  RGB(0xf0,0xf0,0xb0));
     break;
-
   default:
     break;
   }
-
 }
-
 
 void Statistics::DrawXLabel(HDC hdc, RECT rc, TCHAR *text) {
   SIZE tsize;
@@ -203,7 +193,6 @@ void Statistics::DrawXLabel(HDC hdc, RECT rc, TCHAR *text) {
   ExtTextOut(hdc, x, y, 0, NULL, text, _tcslen(text), NULL);
 }
 
-
 void Statistics::DrawYLabel(HDC hdc, RECT rc, TCHAR *text) {
   SIZE tsize;
   GetTextExtentPoint(hdc, text, _tcslen(text), &tsize);
@@ -211,7 +200,6 @@ void Statistics::DrawYLabel(HDC hdc, RECT rc, TCHAR *text) {
   int y = rc.top;
   ExtTextOut(hdc, x, y, 0, NULL, text, _tcslen(text), NULL);
 }
-
 
 void Statistics::DrawTrend(HDC hdc, RECT rc, LeastSquares* lsdata, int Style)
 {
@@ -240,9 +228,7 @@ void Statistics::DrawTrend(HDC hdc, RECT rc, LeastSquares* lsdata, int Style)
   line[1].y = (int)ymax;
 
   StyleLine(hdc, line[0], line[1], Style);
-
 }
-
 
 void Statistics::DrawTrendN(HDC hdc, RECT rc, LeastSquares* lsdata,
                             int Style)
@@ -272,9 +258,7 @@ void Statistics::DrawTrendN(HDC hdc, RECT rc, LeastSquares* lsdata,
   line[1].y = (int)ymax;
 
   StyleLine(hdc, line[0], line[1], Style);
-
 }
-
 
 void Statistics::DrawLine(HDC hdc, RECT rc, double xmin, double ymin,
                           double xmax, double ymax,
@@ -296,9 +280,7 @@ void Statistics::DrawLine(HDC hdc, RECT rc, double xmin, double ymin,
 
   // STYLE_REDTHICK
   StyleLine(hdc, line[0], line[1], Style);
-
 }
-
 
 void Statistics::DrawBarChart(HDC hdc, RECT rc, LeastSquares* lsdata) {
   int i;
@@ -323,18 +305,12 @@ void Statistics::DrawBarChart(HDC hdc, RECT rc, LeastSquares* lsdata) {
               xmax,
               ymax);
   }
-
 }
-
 
 void Statistics::DrawLineGraph(HDC hdc, RECT rc, LeastSquares* lsdata,
                                int Style) {
-
   POINT line[2];
-
   int i;
-
-
   int xmin, ymin, xmax, ymax;
 
   for (i=0; i<lsdata->sum_n-1; i++) {
@@ -356,15 +332,11 @@ void Statistics::DrawLineGraph(HDC hdc, RECT rc, LeastSquares* lsdata,
 
 void Statistics::DrawXGrid(HDC hdc, RECT rc, double ticstep, double zero,
                            int Style) {
-
   POINT line[2];
-
   double xval;
-
   int xmin, ymin, xmax, ymax;
 
   for (xval=zero; xval<= x_max; xval+= ticstep) {
-
     xmin = (int)((xval-x_min)*xscale)+rc.left;
     ymin = rc.top;
     xmax = xmin;
@@ -379,7 +351,6 @@ void Statistics::DrawXGrid(HDC hdc, RECT rc, double ticstep, double zero,
   }
 
   for (xval=zero; xval>= x_min; xval-= ticstep) {
-
     xmin = (int)((xval-x_min)*xscale)+rc.left;
     ymin = rc.top;
     xmax = xmin;
@@ -392,20 +363,15 @@ void Statistics::DrawXGrid(HDC hdc, RECT rc, double ticstep, double zero,
     // STYLE_THINDASHPAPER
     StyleLine(hdc, line[0], line[1], Style);
   }
-
 }
 
 void Statistics::DrawYGrid(HDC hdc, RECT rc, double ticstep, double zero,
                            int Style) {
-
   POINT line[2];
-
   double yval;
-
   int xmin, ymin, xmax, ymax;
 
   for (yval=zero; yval<= y_max; yval+= ticstep) {
-
     xmin = rc.left;
     ymin = (int)((y_max-yval)*yscale)+rc.top;
     xmax = rc.right;
@@ -420,7 +386,6 @@ void Statistics::DrawYGrid(HDC hdc, RECT rc, double ticstep, double zero,
   }
 
   for (yval=zero; yval>= y_min; yval-= ticstep) {
-
     xmin = rc.left;
     ymin = (int)((y_max-yval)*yscale)+rc.top;
     xmax = rc.right;
@@ -435,11 +400,6 @@ void Statistics::DrawYGrid(HDC hdc, RECT rc, double ticstep, double zero,
   }
 }
 
-
-
-/////////////////
-
-
 void Statistics::Reset() {
   ThermalAverage.Reset();
   Wind_x.Reset();
@@ -451,18 +411,14 @@ void Statistics::Reset() {
   for(int j=0;j<MAXTASKPOINTS;j++) {
     LegStartTime[j] = -1;
   }
-
 }
-
 
 void Statistics::RenderAirspace(HDC hdc, RECT rc)
 {
-
 }
 
 void Statistics::RenderBarograph(HDC hdc, RECT rc)
 {
-
   ResetScale();
   ScaleXFromData(rc, &flightstats.Altitude);
   ScaleYFromData(rc, &flightstats.Altitude);
@@ -500,9 +456,7 @@ void Statistics::RenderBarograph(HDC hdc, RECT rc)
 
   DrawXLabel(hdc, rc, TEXT("t"));
   DrawYLabel(hdc, rc, TEXT("h"));
-
 }
-
 
 void Statistics::RenderClimb(HDC hdc, RECT rc)
 {
@@ -531,13 +485,11 @@ void Statistics::RenderClimb(HDC hdc, RECT rc)
 
   DrawXLabel(hdc, rc, TEXT("n"));
   DrawYLabel(hdc, rc, TEXT("w"));
-
 }
 
 
 void Statistics::RenderGlidePolar(HDC hdc, RECT rc)
 {
-
   ResetScale();
   ScaleYFromValue(rc, 0);
   ScaleYFromValue(rc, GlidePolar::SinkRateFast(0,(int)(SAFTEYSPEED-1)));
@@ -566,7 +518,6 @@ void Statistics::RenderGlidePolar(HDC hdc, RECT rc)
   DrawXLabel(hdc, rc, TEXT("V"));
   DrawYLabel(hdc, rc, TEXT("w"));
 }
-
 
 void Statistics::RenderTemperature(HDC hdc, RECT rc)
 {
@@ -599,9 +550,8 @@ void Statistics::RenderTemperature(HDC hdc, RECT rc)
   ScaleXFromValue(rc, tmax);
 
   for (i=0; i<CUSONDE_NUMLEVELS; i++) {
-
-    if (CuSonde::cslevels[i].nmeasurements &&
-	CuSonde::cslevels[i+1].nmeasurements) {
+    if (CuSonde::cslevels[i].nmeasurements
+        && CuSonde::cslevels[i + 1].nmeasurements) {
 
       DrawLine(hdc, rc,
 	       CuSonde::cslevels[i].tempDry, i,
@@ -617,14 +567,12 @@ void Statistics::RenderTemperature(HDC hdc, RECT rc)
 	       CuSonde::cslevels[i].dewpoint, i,
 	       CuSonde::cslevels[i+1].dewpoint, i+1,
 	       STYLE_BLUETHIN);
-
     }
   }
 
   DrawXLabel(hdc, rc, TEXT("T°"));
   DrawYLabel(hdc, rc, TEXT("h"));
 }
-
 
 // from Calculations.cpp
 #include "windanalyser.h"
@@ -645,7 +593,6 @@ void Statistics::RenderWind(HDC hdc, RECT rc)
 	   -flightstats.Altitude_Base.y_min)<1) return;
 
   for (i=0; i<numsteps ; i++) {
-
     h = (flightstats.Altitude_Ceiling.y_max-flightstats.Altitude_Base.y_min)*
       i/(double)(numsteps-1)+flightstats.Altitude_Base.y_min;
 
@@ -653,10 +600,7 @@ void Statistics::RenderWind(HDC hdc, RECT rc)
     mag = sqrt(wind.x*wind.x+wind.y*wind.y);
 
     windstats_mag.least_squares_update(mag, h);
-
   }
-
-  //
 
   ResetScale();
 
@@ -719,16 +663,11 @@ void Statistics::RenderWind(HDC hdc, RECT rc)
     wv[3].y = (int)(wv[0].y + dY);
 
     StyleLine(hdc, wv[1], wv[3], STYLE_MEDIUMBLACK);
-
   }
 
   DrawXLabel(hdc, rc, TEXT("w"));
   DrawYLabel(hdc, rc, TEXT("h"));
-
 }
-
-
-////////////////
 
 LRESULT CALLBACK AnalysisProc (HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -742,8 +681,7 @@ LRESULT CALLBACK AnalysisProc (HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
   HFONT hfOld;
   HBRUSH background;
 
-  switch (message)
-    {
+  switch (message) {
     case WM_INITDIALOG:
 
       hdcScreen = GetDC(hDlg);
@@ -755,24 +693,23 @@ LRESULT CALLBACK AnalysisProc (HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
                   (WPARAM)StatisticsFont,MAKELPARAM(TRUE,0));
 
       if (!InfoBoxLayout::landscape) {
-	rcgfx = rc;
-	rcgfx.left  += 10;
-	rcgfx.right -= 10;
-	rcgfx.top = (rc.bottom-rc.top)*2/10+rc.top;
-	rcgfx.bottom = (rc.bottom-rc.top)*2/3+rc.top;
+        rcgfx = rc;
+        rcgfx.left += 10;
+        rcgfx.right -= 10;
+        rcgfx.top = (rc.bottom - rc.top) * 2 / 10 + rc.top;
+        rcgfx.bottom = (rc.bottom - rc.top) * 2 / 3 + rc.top;
       } else {
-	rcgfx = rc;
-	rcgfx.left  = long(double(rc.right-rc.left)*0.36)+rc.left;
-	rcgfx.right = rc.right-10;
-	rcgfx.top = (rc.bottom-rc.top)*2/10+rc.top;
-	rcgfx.bottom = rc.bottom;
+        rcgfx = rc;
+        rcgfx.left = long(double(rc.right - rc.left) * 0.36) + rc.left;
+        rcgfx.right = rc.right - 10;
+        rcgfx.top = (rc.bottom - rc.top) * 2 / 10 + rc.top;
+        rcgfx.bottom = rc.bottom;
       }
 
       return TRUE;
 
     case WM_COMMAND:
-      if (LOWORD(wParam) == IDOK)
-        {
+      if (LOWORD(wParam) == IDOK) {
           ::ReleaseDC(hDlg, hdcScreen);
           EndDialog(hDlg, LOWORD(wParam));
           MapWindow::RequestFastRefresh();
@@ -789,7 +726,6 @@ LRESULT CALLBACK AnalysisProc (HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
         }
       }
     case WM_PAINT:
-
       // make background white
       GetClientRect(hDlg, &rc);
       hdc = BeginPaint(hDlg, &ps);
@@ -819,8 +755,6 @@ LRESULT CALLBACK AnalysisProc (HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
         SetDlgItemText(hDlg,IDC_ANALYSISTEXT, Temp);
 
         Statistics::RenderBarograph(hdcScreen, rcgfx);
-
-
       }
       if (page==1) {
         SetDlgItemText(hDlg,IDC_ANALYSISLABEL, gettext(TEXT("Climb")));
@@ -837,7 +771,6 @@ LRESULT CALLBACK AnalysisProc (HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
         SetDlgItemText(hDlg,IDC_ANALYSISTEXT, Temp);
 
         Statistics::RenderClimb(hdcScreen, rcgfx);
-
       }
       if (page==2) {
         SetDlgItemText(hDlg,IDC_ANALYSISLABEL, gettext(TEXT("Wind at Altitude")));
@@ -847,7 +780,6 @@ LRESULT CALLBACK AnalysisProc (HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
         SetDlgItemText(hDlg,IDC_ANALYSISTEXT, Temp);
 
         Statistics::RenderWind(hdcScreen, rcgfx);
-
       }
       if (page==3) {
         SetDlgItemText(hDlg,IDC_ANALYSISLABEL, gettext(TEXT("Glide Polar")));
@@ -868,7 +800,6 @@ LRESULT CALLBACK AnalysisProc (HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
         SetDlgItemText(hDlg,IDC_ANALYSISTEXT, Temp);
 
         Statistics::RenderGlidePolar(hdcScreen, rcgfx);
-
       }
       if (page==4) {
         SetDlgItemText(hDlg,IDC_ANALYSISLABEL, gettext(TEXT("Temp trace")));
@@ -881,7 +812,6 @@ LRESULT CALLBACK AnalysisProc (HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
         SetDlgItemText(hDlg,IDC_ANALYSISTEXT, Temp);
 
         Statistics::RenderTemperature(hdcScreen, rcgfx);
-
       }
 
       SelectObject(hdcScreen, hfOld);
@@ -897,11 +827,11 @@ LRESULT CALLBACK AnalysisProc (HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
   return FALSE;
 }
 
-//
-//void Statistics::RenderTemperature(HDC hdc, RECT rc) {
-//
-//}
-//
+/*
+void Statistics::RenderTemperature(HDC hdc, RECT rc) {
+
+}
+*/
 
 void Statistics::DrawLabel(HDC hdc, RECT rc, TCHAR *text,
 			   double xv, double yv) {
@@ -912,7 +842,6 @@ void Statistics::DrawLabel(HDC hdc, RECT rc, TCHAR *text,
   ExtTextOut(hdc, x, y, 0, NULL, text, _tcslen(text), NULL);
 
 }
-
 
 void Statistics::ScaleMakeSquare(RECT rc) {
   if (y_max-y_min<=0) return;
