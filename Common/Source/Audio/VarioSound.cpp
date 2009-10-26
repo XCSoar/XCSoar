@@ -58,8 +58,6 @@ BOOL APIENTRY DllMain( HANDLE hModule,
 }
 
 
-/////////////////////
-
 #include <stdlib.h>
 
 #ifdef DEBUGAUDIO
@@ -80,10 +78,6 @@ double randomgaussian() {
   return 0.0;
 #endif
 }
-
-
-
-////////////////////
 
 #include "WaveThread.h"
 
@@ -132,15 +126,12 @@ short fpsTimeDelta = 0; // time interval between sound commands
 CRITICAL_SECTION  CritSec_VarioSound;
 CRITICAL_SECTION  CritSec_VarioSoundV;
 
-
-/////
 unsigned short audio_beepfrequency = 17;
 unsigned short audio_soundfrequency = 3276;
 unsigned short audio_altsoundfrequency = 3276;
 unsigned char audio_soundtype = 0; // start in silence
 unsigned char audio_deadband_hi = 100;
 unsigned char audio_deadband_low = 100;
-
 
 // Corrections for phase, must be global.
 unsigned char audio_phase = 0;
@@ -151,18 +142,12 @@ unsigned short audio_phase_i_new = 0;
 unsigned char audio_sintable(unsigned char c);
 unsigned char audio_sintable1(unsigned char c);
 unsigned char audio_sintable2(unsigned char c);
-//////
-
-
 
 short quantisesound(short vv) {
   return max(0,min(200,vv+100));
 }
 
-//
-//
 void audio_soundparameters(void) {
-
   // save last phase, so seamless stitching of sin waves
   // if this is not done, there will be crackles and pops when
   // the sound parameters change due to phase offsets
@@ -170,11 +155,6 @@ void audio_soundparameters(void) {
   audio_phase = audio_phase_new;
   audio_phase_i = audio_phase_i_new;
 }
-
-
-
-
-/////////////////////////////////
 
 unsigned char audio_adjust_volume(unsigned char sval) {
   short oval = ((((short)sval-0x80)*(short)audio_volume)>>3)+0x80;
@@ -1116,11 +1096,6 @@ unsigned char audio_sintable(unsigned char c) {
  return 128; // never get here
 }
 
-
-////////////////////////////////////////////////////////////////////////////
-//
-////////////////////////////////////////////////////////////////////////////
-
 unsigned short audio_frequencytable(unsigned char c) {
  switch (c) {
    case 0: return 1638;
@@ -1536,14 +1511,6 @@ unsigned short audio_delaytable(unsigned char c) {
  return 17; // never get here
 }
 
-
-
-
-
-
-//////////////////////////////////
-
-
 // Used to reset the data buffer on BUFFER_EMPTY events
 void CALLBACK variosound_waveOutEventCB(WAVE_OUT_EVENT variosound_waveOutEvent)
 {
@@ -1575,8 +1542,6 @@ void CALLBACK variosound_waveOutEventCB(WAVE_OUT_EVENT variosound_waveOutEvent)
 
 
 #define sgn(f) (f>0? 1:-1)
-
-///////////////////////////////////////////
 
 extern int iround(double i);
 
@@ -1703,10 +1668,7 @@ extern "C" {
 
 }
 
-
-
-
-/////////////////////////// Audio volume controls
+// Audio volume controls
 
 bool suppressdeadband = false;
 
@@ -1849,10 +1811,6 @@ void audio_soundmode(short vinst, short vstf) {
 
 }
 
-
-////////////////////////////////////////////////////////////////////////////////
-
-
 void VarioSound_sndparam_int() {
 
   // this is called by the wave thread when filling the buffer
@@ -1904,8 +1862,6 @@ void VarioSound_sndparam_int() {
   }
 #endif
 
-
-  ////////////////////////////////////////////////////////////////////
   // compute sound parameters
 
   audio_soundparameters();
