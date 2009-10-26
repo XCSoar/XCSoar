@@ -103,8 +103,6 @@ struct AIRSPACE_CIRCLE
   bool FarVisible;
 };
 
-/////////////////////////////////////////
-
 // Airspace Database
 extern AIRSPACE_AREA *AirspaceArea;
 extern AIRSPACE_POINT *AirspacePoint;
@@ -114,11 +112,8 @@ extern unsigned int NumberOfAirspacePoints;
 extern unsigned int NumberOfAirspaceAreas;
 extern unsigned int NumberOfAirspaceCircles;
 
-////////
-
 void DeleteAirspace();
 
-///////////////////////////////////////
 void ReadAirspace(void);
 int FindAirspaceCircle(const GEOPOINT &location,
 		       bool visibleonly=true);
@@ -127,7 +122,6 @@ int FindAirspaceArea(const GEOPOINT &location,
 bool CheckAirspaceAltitude(const double &Base, const double &Top,
   const SETTINGS_COMPUTER &settings);
 void CloseAirspace(void);
-
 
 void SortAirspace(void);
 
