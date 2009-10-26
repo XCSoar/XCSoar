@@ -108,8 +108,6 @@ class MapWindow
   // input events or reused code
   void ExchangeBlackboard();
 
-  ////////////////////////////////////////////////////////////////////
-
  private:
 
   void DrawThreadLoop ();

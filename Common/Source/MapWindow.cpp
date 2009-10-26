@@ -68,12 +68,9 @@ Copyright_License {
 #include <wingdi.h>
 #endif
 
-///////////////////////////////// Initialisation
+// Initialisation
 
 ScreenGraphics MapGfx;
-
-//////////////////////////
-
 
 MapWindow::MapWindow()
   :MapWindowProjection(),
@@ -153,8 +150,6 @@ void MapWindow::StoreRestoreFullscreen(bool store) {
   */
 }
 
-
-///////////////////////////////////////////////////////////////////////////
 #include "DeviceBlackboard.hpp"
 
 void MapWindow::ReadBlackboard(const NMEA_INFO &nmea_info,
@@ -180,9 +175,7 @@ typedef struct {
   bool dirty;
 } MapIdleTrigger;
 
-
-// This idle function allows progressive scanning of visibility etc
-//
+/** This idle function allows progressive scanning of visibility etc */
 bool MapWindow::Idle(const bool do_force) {
   bool still_dirty=false;
 
@@ -265,7 +258,6 @@ bool MapWindow::Idle(const bool do_force) {
 
   return still_dirty;
 }
-
 
 void MapWindow::ExchangeBlackboard(void)
 {
@@ -353,9 +345,6 @@ void MapWindow::ScanVisibility(rectObj *bounds_active) {
   ScanVisibilityAirspace(bounds_active);
 }
 
-
-
-
 void MapWindow::SwitchZoomClimb(void) {
 
   bool isclimb = (DisplayMode == dmCircling);
@@ -438,7 +427,6 @@ void MapWindow::ApplyScreenSize() {
   }
 }
 
-
 bool MapWindow::draw_masked_bitmap_if_visible(Canvas &canvas,
 					      Bitmap &bitmap,
 					      const GEOPOINT &loc,
@@ -455,5 +443,3 @@ bool MapWindow::draw_masked_bitmap_if_visible(Canvas &canvas,
   }
   return false;
 }
-
-
