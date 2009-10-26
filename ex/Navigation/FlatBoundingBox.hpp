@@ -4,40 +4,89 @@
 #include "FlatBound.hpp"
 #include "Waypoint.hpp"
 #include "BaseTask/TaskProjection.h"
+#include <algorithm>
+
+class BBDist {
+public:
+  BBDist(const size_t _dim, const int _val)
+    {
+      set_vals(-1);
+      val[_dim%2] = _val;
+      calc_d();
+    }
+  BBDist(const int _val) {
+    set_vals(-1);
+    d = _val;
+  }
+  BBDist& operator+=(const BBDist &rhs) {
+    set_max(0, rhs);
+    set_max(1, rhs);
+    calc_d();
+//    printf("adding %d %d\n",rhs.val[0],rhs.val[1]);
+    return *this;
+  }
+  void print() const {
+    printf("%d %d d:%g\n",val[0],val[1],sqrt(d));
+  }
+  operator double () const {
+    return d;
+  }
+private:
+  void set_max(const size_t _dim, const BBDist &rhs) {
+    val[_dim] = std::max(val[_dim],rhs.val[_dim]);
+  }
+  void calc_d() {
+    d=0;
+    for (unsigned i=0; i<2; i++) {
+      if (val[i]>0) {
+        d+= val[i]*val[i];
+      }
+    }
+  }
+  void set_vals(const int _val) {
+    val[0] = _val;
+    val[1] = _val;
+  }
+  int val[2];
+  int d;  
+};
+
 
 struct FlatBoundingBox {
   FlatBoundingBox(const int x,
                   const int y):
-    bounds_x(x,x),bounds_y(y,y) {};
+    fmin(x,y),fmax(x,y) {};
 
   FlatBoundingBox(const int xmin,
              const int ymin,
              const int xmax,
              const int ymax):
-    bounds_x(xmin,xmax),bounds_y(ymin,ymax) {};
+    fmin(xmin,ymin),fmax(xmax,ymax) {};
 
   FlatBoundingBox(const FLAT_GEOPOINT &loc,
                   const unsigned range=0):
-    bounds_x(loc.Longitude-range,loc.Longitude+range),
-    bounds_y(loc.Latitude-range,loc.Latitude+range) 
+    fmin(loc.Longitude-range,loc.Latitude-range),
+    fmax(loc.Longitude+range,loc.Latitude+range) 
   {
 
   }
 
-  FlatBound bounds_x;
-  FlatBound bounds_y;
+  FLAT_GEOPOINT fmin;
+  FLAT_GEOPOINT fmax;
 
   unsigned distance(const FlatBoundingBox &f) const {
-    long dx = bounds_x.dist(f.bounds_x);
-    long dy = bounds_y.dist(f.bounds_y);
+    long dx = std::max(0,std::min(f.fmin.Longitude-fmax.Longitude,
+                                  fmin.Longitude-f.fmax.Longitude));
+    long dy = std::max(0,std::min(f.fmin.Latitude-fmax.Latitude,
+                                  fmin.Latitude-f.fmax.Latitude));
     return isqrt4(dx*dx+dy*dy);
   };
 
   void print(std::ostream &f, const TaskProjection &task_projection) const {
-    FLAT_GEOPOINT ll(bounds_x.min,bounds_y.min);
-    FLAT_GEOPOINT lr(bounds_x.max,bounds_y.min);
-    FLAT_GEOPOINT ur(bounds_x.max,bounds_y.max);
-    FLAT_GEOPOINT ul(bounds_x.min,bounds_y.max);
+    FLAT_GEOPOINT ll(fmin.Longitude,fmin.Latitude);
+    FLAT_GEOPOINT lr(fmax.Longitude,fmin.Latitude);
+    FLAT_GEOPOINT ur(fmax.Longitude,fmax.Latitude);
+    FLAT_GEOPOINT ul(fmin.Longitude,fmax.Latitude);
     GEOPOINT gll = task_projection.unproject(ll);
     GEOPOINT glr = task_projection.unproject(lr);
     GEOPOINT gur = task_projection.unproject(ur);
@@ -53,16 +102,33 @@ struct FlatBoundingBox {
 
   // used by KD
   struct kd_get_bounds {
-    typedef FlatBound result_type;
-    FlatBound operator() ( const FlatBoundingBox &d, const unsigned k) const {
+    typedef int result_type;
+    int operator() ( const FlatBoundingBox &d, const unsigned k) const {
       switch(k) {
       case 0:
-        return d.bounds_x;
+        return d.fmin.Longitude;
       case 1:
-        return d.bounds_y;
+        return d.fmin.Latitude;
+      case 2:
+        return d.fmax.Longitude;
+      case 3:
+        return d.fmax.Latitude;
       };
-      return FlatBound(0,0); 
+      return 0; 
     };
+  };
+
+  struct kd_distance {
+    typedef BBDist distance_type;
+    distance_type operator() (const int &a, const int &b, const size_t dim) const {
+      int val = 0;
+      if (dim<2) {
+        val= std::max(b-a,0);
+      } else {
+        val= std::max(a-b,0);
+      }
+      return BBDist(dim,val);
+    }
   };
 };
 

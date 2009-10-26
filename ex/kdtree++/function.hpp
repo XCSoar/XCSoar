@@ -36,7 +36,7 @@ namespace KDTree
     typedef _Dist distance_type;
 
     distance_type
-    operator() (const _Tp& __a, const _Tp& __b) const
+    operator() (const _Tp& __a, const _Tp& __b, const size_t&  __dim) const
     {
       distance_type d=__a - __b;
       return d*d;
@@ -60,7 +60,7 @@ namespace KDTree
     { return _M_count; }
 
     distance_type
-    operator() (const _Tp& __a, const _Tp& __b) const
+    operator() (const _Tp& __a, const _Tp& __b, const size_t& __dim) const
     {
       distance_type d=__a - __b;
       ++_M_count;

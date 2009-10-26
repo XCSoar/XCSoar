@@ -510,9 +510,10 @@ namespace KDTree
 	  {
 	    std::pair<const _Node<_Val>*,
 	      std::pair<size_type, typename _Dist::distance_type> > // JMW bugfix
+              // JMW dist, sqrt
 	      best = _S_node_nearest (__K, 0, __val,
 				      _M_get_root(), &_M_header, _M_get_root(),
-				      sqrt(_S_accumulate_node_distance
+				      (_S_accumulate_node_distance
 				      (__K, _M_dist, _M_acc, _M_get_root()->_M_value, __val)),
 				      _M_cmp, _M_acc, _M_dist,
 				      always_true<value_type>());
@@ -531,7 +532,8 @@ namespace KDTree
         bool root_is_candidate = false;
 	    const _Node<_Val>* node = _M_get_root();
        { // scope to ensure we don't use 'root_dist' anywhere else
-	    distance_type root_dist = sqrt(_S_accumulate_node_distance
+         // JMW dist, sqrt
+	    distance_type root_dist = (_S_accumulate_node_distance
 	      (__K, _M_dist, _M_acc, _M_get_root()->_M_value, __val));
 	    if (root_dist <= __max)
 	      {
@@ -547,9 +549,9 @@ namespace KDTree
        // make sure we didn't just get stuck with the root node...
        if (root_is_candidate || best.first != _M_get_root())
           return std::pair<const_iterator, distance_type>
-            (best.first, best.second.second);
+            (best.first, (best.second.second));
 	  }
-	  return std::pair<const_iterator, distance_type>(end(), __max);
+        return std::pair<const_iterator, distance_type>(end(), (__max));
       }
 
       template <class SearchVal, class _Predicate>
@@ -564,7 +566,8 @@ namespace KDTree
 	    if (__p(_M_get_root()->_M_value))
 	      {
             { // scope to ensure we don't use root_dist anywhere else
-	    distance_type root_dist = sqrt(_S_accumulate_node_distance
+              // JMW dist, sqrt
+	    distance_type root_dist = (_S_accumulate_node_distance
 		  (__K, _M_dist, _M_acc, _M_get_root()->_M_value, __val));
 		if (root_dist <= __max)
 		  {

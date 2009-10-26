@@ -26,9 +26,13 @@ double small_rand() {
 
 char wait_prompt(const double time) {
   printf("# %g [enter to continue]\n",time);
-//  return getchar();
-  return 0;
+  return getchar();
+//  return 0;
 }
+
+
+
+
 
 int main() {
   ::InitSineTable();
@@ -37,14 +41,6 @@ int main() {
   GlidePolar glide_polar(2.0,0.0,0.0);
   TaskManager test_task(default_events,glide_polar);
   Airspaces airspaces(test_task.get_task_projection());
-
-  AIRCRAFT_STATE state, state_last;
-  state.Location.Longitude=0.8;
-  state.Location.Latitude=1.1;  
-  state.Altitude = 1500.0;
-  state.Time = 0.0;
-  state.WindSpeed = 0.0;
-  state.WindDirection = 0;
 
   test_task.setActiveTaskPoint(0);
 
@@ -61,9 +57,17 @@ int main() {
   w[4].Longitude = 0.9; 
   w[4].Latitude = 0.1; 
 
+  AIRCRAFT_STATE state, state_last;
   state.Location = w[0];
   state_last.Location = w[0];
+  state.Altitude = 1500.0;
+  state.Time = 0.0;
+  state.WindSpeed = 0.0;
+  state.WindDirection = 0;
+
   test_task.report(state);
+  airspaces.scan_nearest(state.Location, true);
+  airspaces.scan_range(state.Location, 30, true);
 
   unsigned counter=0;
 
@@ -85,7 +89,7 @@ int main() {
 
       bool do_report = (counter++ % 100 ==0);
       airspaces.scan_nearest(state.Location, do_report);
-      airspaces.scan_range(state.Location, 120, do_report);
+      airspaces.scan_range(state.Location, 30, do_report);
 
       if (do_report) {
         test_task.report(state);

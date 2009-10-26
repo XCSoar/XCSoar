@@ -1,6 +1,7 @@
 #ifndef AIRSPACES_HPP
 #define AIRSPACES_HPP
 
+#include <stdio.h>
 #include <kdtree++/kdtree.hpp>
 #include "FlatBoundingBox.hpp"
 #include "BaseTask/TaskProjection.h"
@@ -22,12 +23,19 @@ public:
 private:
   void fill_default();
 
+#if 1
+  typedef KDTree::KDTree<4, 
+                         FlatBoundingBox, 
+                         FlatBoundingBox::kd_get_bounds,
+                         FlatBoundingBox::kd_distance
+                         > FlatBoundingBoxTree;
+#else
   typedef KDTree::KDTree<2, 
                          FlatBoundingBox, 
                          FlatBoundingBox::kd_get_bounds,
                          FlatBound::kd_distance, 
                          FlatBound::kd_less > FlatBoundingBoxTree;
-
+#endif
   FlatBoundingBoxTree airspace_tree;
   const TaskProjection& task_projection;
 };

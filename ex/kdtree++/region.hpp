@@ -21,18 +21,20 @@ namespace KDTree
       typedef _Val value_type;
       typedef _SubVal subvalue_type;
 
+/* JMW this is never used
       // special typedef for checking against a fuzzy point (for find_nearest)
       // Note the region (first) component is not supposed to have an area, its
       // bounds should all be set to a specific point.
       typedef std::pair<_Region,_SubVal> _CenterPt;
+*/
 
       _Region(_Acc const& __acc=_Acc(), const _Cmp& __cmp=_Cmp())
-	: _M_acc(__acc), _M_cmp(__cmp) {}
+	: _M_acc(__acc), _M_cmp(__cmp), is_bb(false) {}
 
       template <typename Val>
       _Region(Val const& __V,
 	      _Acc const& __acc=_Acc(), const _Cmp& __cmp=_Cmp())
-	: _M_acc(__acc), _M_cmp(__cmp)
+	: _M_acc(__acc), _M_cmp(__cmp), is_bb(false)
       {
         for (size_t __i = 0; __i != __K; ++__i)
           {
@@ -43,15 +45,18 @@ namespace KDTree
       template <typename Val>
       _Region(Val const& __V, subvalue_type const& __R,
 	      _Acc const& __acc=_Acc(), const _Cmp& __cmp=_Cmp())
-	: _M_acc(__acc), _M_cmp(__cmp)
+	: _M_acc(__acc), _M_cmp(__cmp), is_bb(__R<=0)
       {
+        subvalue_type __aR = is_bb? -__R:__R;
+
         for (size_t __i = 0; __i != __K; ++__i)
-          {
-             _M_low_bounds[__i] = _M_acc(__V,__i) - __R;
-             _M_high_bounds[__i] = _M_acc(__V,__i) + __R;
-          }
+        {
+          _M_low_bounds[__i] = _M_acc(__V,__i) - __aR;
+          _M_high_bounds[__i] = _M_acc(__V,__i) + __aR;
+        }
       }
 
+/* JMW this is never used
       bool
       intersects_with(_CenterPt const& __THAT) const
       {
@@ -69,28 +74,45 @@ namespace KDTree
           }
         return true;
       }
+*/
 
       bool
       intersects_with(_Region const& __THAT) const
       {
-        for (size_t __i = 0; __i != __K; ++__i)
-          {
+        if (!is_bb) {
+          for (size_t __i = 0; __i != __K; ++__i)
+          { // JMW xH<L || H<xL
             if (_M_cmp(__THAT._M_high_bounds[__i], _M_low_bounds[__i])
-             || _M_cmp(_M_high_bounds[__i], __THAT._M_low_bounds[__i]))
+                || _M_cmp(_M_high_bounds[__i], __THAT._M_low_bounds[__i]))
               return false;
           }
+        } else {
+          const size_t __K2 = __K/2;
+          for (size_t __i = 0; __i != __K2; ++__i)
+            if (_M_cmp(__THAT._M_high_bounds[__K2+__i], _M_low_bounds[__i])
+                || _M_cmp(_M_high_bounds[__K2+__i], __THAT._M_low_bounds[__i]))
+              return false;
+        }
         return true;
       }
 
       bool
       encloses(value_type const& __V) const
       {
-        for (size_t __i = 0; __i != __K; ++__i)
-          {
+        if (!is_bb) {
+          for (size_t __i = 0; __i != __K; ++__i)
+          { // JMW x<L || H<x
             if (_M_cmp(_M_acc(__V, __i), _M_low_bounds[__i])
-             || _M_cmp(_M_high_bounds[__i], _M_acc(__V, __i)))
+                || _M_cmp(_M_high_bounds[__i], _M_acc(__V, __i)))
               return false;
           }
+        } else {
+          const size_t __K2 = __K/2;
+          for (size_t __i = 0; __i != __K2; ++__i)
+            if (_M_cmp(_M_acc(__V, __K2+__i), _M_low_bounds[__i])
+                || _M_cmp(_M_high_bounds[__K2+__i], _M_acc(__V, __i)))
+              return false;
+        }
         return true;
       }
 
@@ -111,6 +133,7 @@ namespace KDTree
       subvalue_type _M_low_bounds[__K], _M_high_bounds[__K];
       _Acc _M_acc;
       _Cmp _M_cmp;
+      const bool is_bb;
     };
 
 } // namespace KDTree

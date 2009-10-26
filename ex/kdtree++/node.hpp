@@ -145,7 +145,8 @@ namespace KDTree
 		    const _Dist& __dist, const _Acc& __acc,
 		    const _ValA& __a, const _ValB& __b)
   {
-    return __dist(__acc(__a, __dim), __acc(__b, __dim));
+    // JMW dist
+    return __dist(__acc(__a, __dim), __acc(__b, __dim), __dim);
   }
 
   /*! Compute the distance between two values and accumulate the result for all
@@ -164,7 +165,7 @@ namespace KDTree
   {
     typename _Dist::distance_type d = 0;
     for (size_t i=0; i<__dim; ++i)
-      d += __dist(__acc(__a, i), __acc(__b, i));
+      d += __dist(__acc(__a, i), __acc(__b, i), i);
     return d;
   }
 
@@ -215,10 +216,9 @@ namespace KDTree
       {
 	if (__p(cur->_M_value))
 	  {
-	    typename _Dist::distance_type d = 0;
-	    for (size_t i=0; i != __k; ++i)
-	      d += _S_node_distance(i, __dist, __acc, __val, cur->_M_value);
-       d = sqrt(d);
+	    typename _Dist::distance_type d = 
+              _S_accumulate_node_distance(__k, __dist, __acc, __val, cur->_M_value);
+            // JMW use function for dist, elim sqrt
 	    if (d <= __max)
           // ("bad candidate notes")
           // Changed: removed this test: || ( d == __max && cur < __best ))
@@ -250,7 +250,8 @@ namespace KDTree
       near_node = static_cast<NodePtr>(probe->_M_left);
     if (near_node
 	// only visit node's children if node's plane intersect hypersphere
-	&& (sqrt(_S_node_distance(probe_dim % __k, __dist, __acc, __val, probe->_M_value)) <= __max))
+        // JMW dist, sqrt
+	&& ((_S_node_distance(probe_dim % __k, __dist, __acc, __val, probe->_M_value)) <= __max))
       {
 	probe = near_node;
 	++probe_dim;
@@ -273,11 +274,11 @@ namespace KDTree
 	      {
 		if (__p(probe->_M_value))
 		  {
-		    typename _Dist::distance_type d = 0;
-		    for (size_t i=0; i < __k; ++i)
-		      d += _S_node_distance(i, __dist, __acc, __val, probe->_M_value);
-          d = sqrt(d);
-          if (d <= __max)  // CHANGED, see the above notes ("bad candidate notes")
+		    typename _Dist::distance_type d = 
+                      _S_accumulate_node_distance(__k, __dist, __acc, __val, 
+                                                  probe->_M_value);
+                    // JMW use function for dist
+                    if (d <= __max)  // CHANGED, see the above notes ("bad candidate notes")
 		      {
 			__best = probe;
 			__max = d;
@@ -292,7 +293,8 @@ namespace KDTree
 		  }
 		else if (far_node &&
 			 // only visit node's children if node's plane intersect hypersphere
-			 sqrt(_S_node_distance(probe_dim % __k, __dist, __acc, __val, probe->_M_value)) <= __max)
+			 (_S_node_distance(probe_dim % __k, __dist, __acc, __val, probe->_M_value)) <= __max)
+                  // JMW dist, sqrt
 		  {
 		    probe = far_node;
 		    ++probe_dim;
@@ -307,7 +309,8 @@ namespace KDTree
 	      {
 		if (pprobe == near_node && far_node
 		    // only visit node's children if node's plane intersect hypersphere
-		    && sqrt(_S_node_distance(probe_dim % __k, __dist, __acc, __val, probe->_M_value)) <= __max)
+                    // JMW dist, sqrt
+		    && (_S_node_distance(probe_dim % __k, __dist, __acc, __val, probe->_M_value)) <= __max)
 		  {
 		    pprobe = probe;
 		    probe = far_node;
@@ -335,7 +338,8 @@ namespace KDTree
 	      near_node = static_cast<NodePtr>(cur->_M_left);
 	    if (near_node
 		// only visit node's children if node's plane intersect hypersphere
-		&& (sqrt(_S_node_distance(cur_dim % __k, __dist, __acc, __val, cur->_M_value)) <= __max))
+                // JMW dist, sqrt
+		&& ((_S_node_distance(cur_dim % __k, __dist, __acc, __val, cur->_M_value)) <= __max))
 	      {
 		probe = near_node;
 		++probe_dim;
@@ -345,7 +349,7 @@ namespace KDTree
     return std::pair<NodePtr,
       std::pair<size_t, typename _Dist::distance_type> >
       (__best, std::pair<size_t, typename _Dist::distance_type>
-       (__dim, __max));
+       (__dim, sqrt(__max)));
   }
 
 

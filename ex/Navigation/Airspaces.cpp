@@ -1,7 +1,26 @@
 #include "Airspaces.hpp"
 #include <fstream>
 #include <deque>
-#include <algorithm>
+
+/*
+void test_bbdist() {
+  BBDist d = 0;
+  BBDist dal(0,3);
+  BBDist dbl(1,4);
+  BBDist dau(2,1);
+  BBDist dbu(3,3);
+  d.print();
+  d += dal;
+  d += dbl;
+  d.print();
+  d += dau;
+  d += dbu;
+  d.print();
+  int x = sqrt(d);
+  printf("%d\n",x);
+}
+*/
+
 
 void 
 Airspaces::scan_nearest(const GEOPOINT &loc,
@@ -34,7 +53,7 @@ Airspaces::scan_range(const GEOPOINT &loc, const unsigned &range,
   }
   
   std::deque< FlatBoundingBox > vectors;
-  airspace_tree.find_within_range(bb_target, range, std::back_inserter(vectors));
+  airspace_tree.find_within_range(bb_target, -range, std::back_inserter(vectors));
   
   if (do_report)  { // reporting
     std::ofstream foutr("res-bb-range.txt");
