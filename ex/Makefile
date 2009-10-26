@@ -66,6 +66,9 @@ OBJS	:=\
 	GlideSolvers/ZeroFinder.o \
 	Navigation/Aircraft.o \
 	Navigation/ReferencePoint.o \
+	Navigation/Airspace.o \
+	Navigation/AirspaceCircle.o \
+	Navigation/AirspacePolygon.o \
 	Navigation/Airspaces.o \
 	Navigation/Waypoint.o \
 	Navigation/Waypoints.o \

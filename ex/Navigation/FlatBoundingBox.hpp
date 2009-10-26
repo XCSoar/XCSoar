@@ -47,41 +47,34 @@ private:
 };
 
 
-struct FlatBoundingBox {
-  FlatBoundingBox(const int x,
-                  const int y):
-    fmin(x,y),fmax(x,y) {};
-
-  FlatBoundingBox(const int xmin,
-             const int ymin,
-             const int xmax,
-             const int ymax):
-    fmin(xmin,ymin),fmax(xmax,ymax) {};
+class FlatBoundingBox {
+public:
+  FlatBoundingBox(const FLAT_GEOPOINT &ll,
+                  const FLAT_GEOPOINT &ur):
+    bb_ll(ll.Longitude,ll.Latitude),
+    bb_ur(ur.Longitude,ur.Latitude) {};
 
   FlatBoundingBox(const FLAT_GEOPOINT &loc,
                   const unsigned range=0):
-    fmin(loc.Longitude-range,loc.Latitude-range),
-    fmax(loc.Longitude+range,loc.Latitude+range) 
+    bb_ll(loc.Longitude-range,loc.Latitude-range),
+    bb_ur(loc.Longitude+range,loc.Latitude+range) 
   {
 
   }
 
-  FLAT_GEOPOINT fmin;
-  FLAT_GEOPOINT fmax;
-
   unsigned distance(const FlatBoundingBox &f) const {
-    long dx = std::max(0,std::min(f.fmin.Longitude-fmax.Longitude,
-                                  fmin.Longitude-f.fmax.Longitude));
-    long dy = std::max(0,std::min(f.fmin.Latitude-fmax.Latitude,
-                                  fmin.Latitude-f.fmax.Latitude));
+    long dx = std::max(0,std::min(f.bb_ll.Longitude-bb_ur.Longitude,
+                                  bb_ll.Longitude-f.bb_ur.Longitude));
+    long dy = std::max(0,std::min(f.bb_ll.Latitude-bb_ur.Latitude,
+                                  bb_ll.Latitude-f.bb_ur.Latitude));
     return isqrt4(dx*dx+dy*dy);
   };
 
-  void print(std::ostream &f, const TaskProjection &task_projection) const {
-    FLAT_GEOPOINT ll(fmin.Longitude,fmin.Latitude);
-    FLAT_GEOPOINT lr(fmax.Longitude,fmin.Latitude);
-    FLAT_GEOPOINT ur(fmax.Longitude,fmax.Latitude);
-    FLAT_GEOPOINT ul(fmin.Longitude,fmax.Latitude);
+  virtual void print(std::ostream &f, const TaskProjection &task_projection) const {
+    FLAT_GEOPOINT ll(bb_ll.Longitude,bb_ll.Latitude);
+    FLAT_GEOPOINT lr(bb_ur.Longitude,bb_ll.Latitude);
+    FLAT_GEOPOINT ur(bb_ur.Longitude,bb_ur.Latitude);
+    FLAT_GEOPOINT ul(bb_ll.Longitude,bb_ur.Latitude);
     GEOPOINT gll = task_projection.unproject(ll);
     GEOPOINT glr = task_projection.unproject(lr);
     GEOPOINT gur = task_projection.unproject(ur);
@@ -101,13 +94,13 @@ struct FlatBoundingBox {
     int operator() ( const FlatBoundingBox &d, const unsigned k) const {
       switch(k) {
       case 0:
-        return d.fmin.Longitude;
+        return d.bb_ll.Longitude;
       case 1:
-        return d.fmin.Latitude;
+        return d.bb_ll.Latitude;
       case 2:
-        return d.fmax.Longitude;
+        return d.bb_ur.Longitude;
       case 3:
-        return d.fmax.Latitude;
+        return d.bb_ur.Latitude;
       };
       return 0; 
     };
@@ -125,6 +118,15 @@ struct FlatBoundingBox {
       return BBDist(dim,val);
     }
   };
+
+protected:
+  FLAT_GEOPOINT bb_ll;
+  FLAT_GEOPOINT bb_ur;
+private:
+
+  /** @link dependency */
+  /*#  BBDist lnkBBDist; */
+protected:
 };
 
 #endif

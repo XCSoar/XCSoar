@@ -17,9 +17,9 @@ unsigned count_intersections = 0;
 
 void distance_counts() {
 //  printf("#     distance queries %d\n",count_distance/n_samples); 
-  printf("#     mc calcs %d\n",count_mc/n_samples);
-  printf("# intersections %d\n",count_intersections/n_samples);
-  printf("# num samples %d\n",n_samples);
+  printf("#     mc calcs/c %d\n",count_mc/n_samples);
+  printf("#     intersections tests/c %d\n",count_intersections/n_samples);
+  printf("#     num samples %d\n",n_samples);
 }
 
 double small_rand() {
@@ -44,10 +44,10 @@ int main() {
   GlidePolar glide_polar(2.0,0.0,0.0);
   TaskProjection task_projection;
   Waypoints waypoints(task_projection);
-  TaskManager test_task(default_events,task_projection,glide_polar,waypoints);
+  TaskManager task_manager(default_events,task_projection,glide_polar,waypoints);
   Airspaces airspaces(task_projection);
 
-  test_task.setActiveTaskPoint(0);
+  task_manager.setActiveTaskPoint(0);
 
 #define  num_wp 5
   GEOPOINT w[num_wp];
@@ -70,12 +70,16 @@ int main() {
   state.WindSpeed = 0.0;
   state.WindDirection = 0;
 
-  airspaces.scan_nearest(state.Location, true);
-  airspaces.scan_range(state.Location, 30, true);
+  airspaces.scan_nearest(state, true);
+  airspaces.scan_range(state, 5000.0, true);
 
   unsigned counter=0;
 
-  for (int i=0; i<num_wp-1-1; i++) {
+  for (int i=0; i<num_wp-1; i++) {
+    if (i==num_wp-2) {
+      task_manager.abort();
+      printf("- mode abort\n");
+    }
     wait_prompt(state.Time);
     for (double t=0; t<1.0; t+= 0.0025) {
       state.Location.Latitude = 
@@ -87,24 +91,25 @@ int main() {
       double V = 19.0;
       state.Time += d/V;
 
-      test_task.update(state, state_last);
+      task_manager.update(state, state_last);
 
-      test_task.update_idle(state);
+      task_manager.update_idle(state);
 
       bool do_report = (counter++ % 50 ==0);
-      airspaces.scan_nearest(state.Location, do_report);
-      airspaces.scan_range(state.Location, 30, do_report);
+      airspaces.scan_nearest(state, do_report);
+      airspaces.scan_range(state, 5000.0, do_report);
 
       if (do_report) {
-        test_task.report(state);
+        task_manager.report(state);
       }
       n_samples++;
       state_last = state;
     }    
   }
+
   distance_counts();
 
-//  test_task.remove(2);
-//  test_task.scan_distance(location);
+//  task_manager.remove(2);
+//  task_manager.scan_distance(location);
   return 0;
 }

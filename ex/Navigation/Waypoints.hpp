@@ -34,6 +34,8 @@ private:
   WaypointTree waypoint_tree;
   TaskProjection& task_projection;
 
+  /** @link dependency */
+  /*#  WAYPOINT lnkWAYPOINT; */
 public:
   WaypointTree::const_iterator begin() const;
   WaypointTree::const_iterator end() const;

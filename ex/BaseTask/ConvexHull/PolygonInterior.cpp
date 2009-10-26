@@ -56,3 +56,5 @@ PolygonInterior( const GEOPOINT &P, const std::vector<SearchPoint>& V)
   }
   return wn != 0;
 }
+
+

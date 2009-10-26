@@ -1,10 +1,8 @@
 #ifndef AIRSPACES_HPP
 #define AIRSPACES_HPP
 
-#include <stdio.h>
 #include <kdtree++/kdtree.hpp>
-#include "FlatBoundingBox.hpp"
-#include "BaseTask/TaskProjection.h"
+#include "Airspace.hpp"
 #include <iostream>
 
 class Airspaces {
@@ -15,22 +13,25 @@ public:
       fill_default();
     };
 
-  void scan_nearest(const GEOPOINT &loc,
+  void scan_nearest(const AIRCRAFT_STATE &state,
     const bool do_report) const;
-  void scan_range(const GEOPOINT &loc, const unsigned &range,
+  void scan_range(const AIRCRAFT_STATE &state, const double &range,
     const bool do_report) const;
 
 private:
   void fill_default();
 
   typedef KDTree::KDTree<4, 
-                         FlatBoundingBox, 
+                         Airspace, 
                          FlatBoundingBox::kd_get_bounds,
                          FlatBoundingBox::kd_distance
-                         > FlatBoundingBoxTree;
+                         > AirspaceTree;
 
-  FlatBoundingBoxTree airspace_tree;
+  AirspaceTree airspace_tree;
   const TaskProjection& task_projection;
+
+  /** @link dependency */
+  /*#  Airspace lnkAirspace; */
 };
 
 #endif

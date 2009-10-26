@@ -43,6 +43,8 @@ TaskPoint* AbortTask::getActiveTaskPoint()
 
 void AbortTask::report(const AIRCRAFT_STATE &state)
 {
+  AbstractTask::report(state);
+
   std::ofstream f1("res-abort-task.txt");
   f1 << "#### Task points\n";
   for (unsigned i=0; i<tps.size(); i++) {

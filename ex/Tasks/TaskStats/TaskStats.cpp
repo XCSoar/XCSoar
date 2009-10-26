@@ -114,8 +114,8 @@ void TaskStats::print(std::ostream &f) const
 {
   f << "#### Task Stats\n";
   f << "# dist nominal " << distance_nominal << " (m)\n";
-  f << "# min dist after achieving max " << distance_min << " (?)\n";
-  f << "# max dist after achieving max " << distance_max << " (?)\n";
+  f << "# min dist after achieving max " << distance_min << " (m)\n";
+  f << "# max dist after achieving max " << distance_max << " (m)\n";
   f << "# dist scored " << distance_scored << " (m)\n";
   f << "# mc best " << mc_best << " (m/s)\n";
   f << "# cruise efficiency " << cruise_efficiency << "\n";
