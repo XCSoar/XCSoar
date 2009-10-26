@@ -27,6 +27,8 @@ public:
 
   virtual bool update_sample(const AIRCRAFT_STATE &, const bool full_update);
 protected:
+  unsigned active_waypoint;
+
   const TaskProjection &task_projection;
   virtual bool check_transitions(const AIRCRAFT_STATE &, const AIRCRAFT_STATE&);
   const Waypoints &waypoints;

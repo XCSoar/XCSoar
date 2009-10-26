@@ -12,7 +12,8 @@ AbortTask::AbortTask(const TaskEvents &te,
   AbstractTask(te, ta, gp), 
   task_projection(tp),
   waypoints(wps),
-  polar_safety(gp)
+  polar_safety(gp),
+  active_waypoint(-1)
 {
 
 }
@@ -26,6 +27,7 @@ void AbortTask::setActiveTaskPoint(unsigned index)
 {
   if (index<tps.size()) {
     activeTaskPoint = index;
+    active_waypoint = tps[index].get_waypoint().id;
   }
 }
 
@@ -109,7 +111,7 @@ AbortTask::fill_reachable(const AIRCRAFT_STATE &state,
     GLIDE_RESULT r = t.glide_solution_remaining(state, polar_safety);
     if (r.glide_reachable()) {
       q.push(std::make_pair(*v,r.TimeElapsed));
-      // remove it since it's already in the list now
+      // remove it since it's already in the list now      
       approx_waypoints.erase(v);
     } else {
       v++;
@@ -117,6 +119,11 @@ AbortTask::fill_reachable(const AIRCRAFT_STATE &state,
   }
   while (!q.empty() && !task_full()) {
     tps.push_back(new TaskPoint(q.top().first));
+
+    if (tps[tps.size()-1].get_waypoint().id == active_waypoint) {
+      activeTaskPoint = i;
+    }
+
     q.pop();
   }
 }
@@ -126,6 +133,8 @@ bool AbortTask::update_sample(const AIRCRAFT_STATE &state,
 {
   update_polar();
   clear();
+
+  activeTaskPoint = 0; // default to best result if can't find user-set one 
 
   std::vector < WAYPOINT > approx_waypoints = 
     waypoints.find_within_range_circle(state.Location, abort_range(state));
@@ -151,7 +160,12 @@ bool AbortTask::update_sample(const AIRCRAFT_STATE &state,
   fill_reachable(state, approx_waypoints, true);
   fill_reachable(state, approx_waypoints, false);
 
-  // TODO, update aborted task list
+  // TODO, check tracking of active waypoint
+
+  if (tps.size()) {
+    active_waypoint = tps[activeTaskPoint].get_waypoint().id;
+  }
+
   return false; // nothing to do
 }
 

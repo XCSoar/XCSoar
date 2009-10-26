@@ -49,21 +49,16 @@ class GlidePolar;
 
 class TaskPoint : 
   public ReferencePoint, public Serialisable {
-private:
-  TaskPoint(const GEOPOINT location,
-            const double altitude):Elevation(altitude),
-                                   ReferencePoint(location)
-    {}
 
 public:
   TaskPoint(const WAYPOINT & wp) : ReferencePoint(wp.Location),
-                                   Elevation(wp.Altitude)
+                                   Elevation(wp.Altitude),
+                                   waypoint(wp)
     { }
 
   virtual ~TaskPoint() {};
 
-  virtual TaskPoint* clone() { return new TaskPoint(getLocation(),
-                                                    getElevation()); };
+  virtual TaskPoint* clone() { return new TaskPoint(waypoint); };
 
   // not const because may need to perform lookup and save
   virtual double getElevation() const;
@@ -105,8 +100,12 @@ public:
     AIRCRAFT_STATE null_state;
     return null_state;
   }
+  const WAYPOINT& get_waypoint() const {
+    return waypoint;
+  }
 
 protected:
+  const WAYPOINT waypoint; // local copy
   const double Elevation;
 };
 
