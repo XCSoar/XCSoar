@@ -40,8 +40,6 @@ Copyright_License {
 
 #include <mmsystem.h>
 
-
-
 #define INTERNAL_WAVEOUT_BUFFER_COUNT 2   // This is one part of the wave output delay
                                           //  if you use e.g. 20ms buffers the delay
                                           //  INTERNAL_WAVEOUT_BUFFER_COUNT * 20ms
@@ -62,15 +60,12 @@ typedef enum _WAVE_OUT_EVENT
    WAVE_OUT_EVENT_BUFFER_EMPTY   = 2,
 } WAVE_OUT_EVENT;
 
-
 // Declaration of used callback functions
 typedef void (CALLBACK* cbWaveIn)(WAVE_IN_EVENT);
 typedef void (CALLBACK* cbWaveOut)(WAVE_OUT_EVENT);
 
 
-/////////////////////////////////////////////////////////////////////////////
 // CWaveInThread thread
-
 class CWaveInThread
 {
 public:
@@ -117,10 +112,7 @@ protected:
    cbWaveIn          m_pcbWaveIn;
 };
 
-
-/////////////////////////////////////////////////////////////////////////////
 // CWaveOutThread thread
-
 class CWaveOutThread
 {
 public:
