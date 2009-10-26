@@ -33,9 +33,7 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-
 #include "Poco/RWLock.h"
-
 
 #if defined(POCO_OS_FAMILY_WINDOWS)
 #include "RWLock_WIN32.cpp"
@@ -43,18 +41,13 @@
 #include "RWLock_POSIX.cpp"
 #endif
 
-
 namespace Poco {
-
-
 RWLock::RWLock()
 {
 }
 
-
 RWLock::~RWLock()
 {
 }
-
 
 } // namespace Poco

@@ -35,10 +35,8 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-
 #ifndef Foundation_RWLock_INCLUDED
 #define Foundation_RWLock_INCLUDED
-
 
 #include "Poco/Foundation.h"
 #include "Poco/Exception.h"
@@ -49,56 +47,61 @@
 #include "Poco/RWLock_POSIX.h"
 #endif
 
-
 namespace Poco {
-
 
 class ScopedRWLock;
 
-
+/**
+ * A reader writer lock allows multiple concurrent
+ * readers or one exclusive writer.
+ */
 class Foundation_API RWLock: private RWLockImpl
-	/// A reader writer lock allows multiple concurrent
-	/// readers or one exclusive writer.
 {
 public:
 	typedef ScopedRWLock ScopedLock;
 
+	/** Creates the Reader/Writer lock. */
 	RWLock();
-		/// Creates the Reader/Writer lock.
 
+	/** Destroys the Reader/Writer lock. */
 	~RWLock();
-		/// Destroys the Reader/Writer lock.
 
+	/**
+	 * Acquires a read lock. If another thread currently holds a write lock,
+	 *  waits until the write lock is released.
+	 */
 	void readLock();
-		/// Acquires a read lock. If another thread currently holds a write lock,
-		/// waits until the write lock is released.
 
+	/**
+	 * Tries to acquire a read lock. Immediately returns true if successful,
+	 * or false if another thread currently holds a write lock.
+	 */
 	bool tryReadLock();
-		/// Tries to acquire a read lock. Immediately returns true if successful, or
-		/// false if another thread currently holds a write lock.
 
+	/**
+	 * Acquires a write lock. If one or more other threads currently hold
+	 * locks, waits until all locks are released. The results are undefined
+	 * if the same thread already holds a read or write lock
+	 */
 	void writeLock();
-		/// Acquires a write lock. If one or more other threads currently hold
-		/// locks, waits until all locks are released. The results are undefined
-		/// if the same thread already holds a read or write lock
 
+	/**
+	 * Tries to acquire a write lock. Immediately returns true if successful,
+	 *  or false if one or more other threads currently hold locks. The
+	 *  result is undefined if the same thread already holds a read or write lock.
+	 */
 	bool tryWriteLock();
-		/// Tries to acquire a write lock. Immediately returns true if successful,
-		/// or false if one or more other threads currently hold
-		/// locks. The result is undefined if the same thread already
-		/// holds a read or write lock.
 
+	/** Releases the read or write lock. */
 	void unlock();
-		/// Releases the read or write lock.
 
 private:
 	RWLock(const RWLock&);
 	RWLock& operator = (const RWLock&);
 };
 
-
+/** A variant of ScopedLock for reader/writer locks. */
 class Foundation_API ScopedRWLock
-	/// A variant of ScopedLock for reader/writer locks.
 {
 public:
 	ScopedRWLock(RWLock& rwl, bool write = false);
