@@ -58,10 +58,7 @@ Copyright_License {
 
 #include <assert.h>
 
-///////////////////////////////////////////////////
-
 #define NUM_COLOR_RAMP_LEVELS 13
-
 
 const COLORRAMP weather_colors[6][NUM_COLOR_RAMP_LEVELS] = {
   { // Blue to red       // vertical speed

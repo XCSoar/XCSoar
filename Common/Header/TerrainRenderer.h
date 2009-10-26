@@ -49,8 +49,6 @@ class MapWindowProjection;
 class LabelBlock;
 class RasterRounding;
 
-//////////////////////////
-
 class TerrainRenderer {
 public:
   TerrainRenderer(RECT rc);
@@ -119,10 +117,5 @@ private:
 	    const GEOPOINT &loc,
 	    const bool isBigZoom);
 };
-
-
-//////////////////////////
-//
-//
 
 #endif
