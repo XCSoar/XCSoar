@@ -180,8 +180,6 @@ void VegaVoiceMessage::Initialise(int the_id) {
   last_messageText[0]=0;
   id_active = -1;
 
-  ///
-
   lastTime = 0.0;
   id = the_id;
   active = false;
@@ -467,9 +465,6 @@ VegaVoiceMessage::Update(const NMEA_INFO *Basic,
 
 int VegaVoiceMessage::id_active = -1;
 TCHAR VegaVoiceMessage::last_messageText[80];
-
-///////////////////////////////////////////
-
 
 static void AirspaceWarningNotify(AirspaceWarningNotifyAction_t Action, AirspaceInfo_c *AirSpace){
   (void)AirSpace;
