@@ -72,6 +72,7 @@ int main() {
 
   airspaces.scan_nearest(state, true);
   airspaces.scan_range(state, 5000.0, true);
+  airspaces.find_inside(state, true);
 
   unsigned counter=0;
 
@@ -95,9 +96,9 @@ int main() {
 
       task_manager.update_idle(state);
 
-      bool do_report = (counter++ % 50 ==0);
-      airspaces.scan_nearest(state, do_report);
+      bool do_report = (counter++ % 10 ==0);
       airspaces.scan_range(state, 5000.0, do_report);
+      airspaces.find_inside(state, do_report);
 
       if (do_report) {
         task_manager.report(state);

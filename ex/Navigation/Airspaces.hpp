@@ -18,6 +18,9 @@ public:
   void scan_range(const AIRCRAFT_STATE &state, const double &range,
     const bool do_report) const;
 
+  std::vector<Airspace> find_inside(const AIRCRAFT_STATE &state,
+    const bool do_report) const;
+
 private:
   void fill_default();
 

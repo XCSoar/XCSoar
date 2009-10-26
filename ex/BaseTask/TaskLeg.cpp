@@ -6,7 +6,9 @@
 #include <assert.h>
 #include <algorithm>
 
-double TaskLeg::leg_distance_scored(const GEOPOINT &ref)
+double TaskLeg::leg_distance_scored(const OrderedTaskPoint *tp_origin,
+                                    const OrderedTaskPoint *tp_destination,
+                                    const GEOPOINT &ref) const
 {
   switch (tp_destination->getActiveState()) {
   case OrderedTaskPoint::BEFORE_ACTIVE:
@@ -38,7 +40,9 @@ double TaskLeg::leg_distance_scored(const GEOPOINT &ref)
 }
 
 
-double TaskLeg::leg_distance_remaining(const GEOPOINT &ref)
+double TaskLeg::leg_distance_remaining(const OrderedTaskPoint *tp_origin,
+                                       const OrderedTaskPoint *tp_destination,
+                                       const GEOPOINT &ref) const
 {
   switch (tp_destination->getActiveState()) {
   case OrderedTaskPoint::AFTER_ACTIVE:
@@ -65,7 +69,9 @@ double TaskLeg::leg_distance_remaining(const GEOPOINT &ref)
 }
 
 
-double TaskLeg::leg_distance_travelled(const GEOPOINT &ref)
+double TaskLeg::leg_distance_travelled(const OrderedTaskPoint *tp_origin,
+                                       const OrderedTaskPoint *tp_destination,
+                                       const GEOPOINT &ref) const
 {
   switch (tp_destination->getActiveState()) {
   case OrderedTaskPoint::BEFORE_ACTIVE:
@@ -98,7 +104,8 @@ double TaskLeg::leg_distance_travelled(const GEOPOINT &ref)
   return 0.0;
 }
 
-double TaskLeg::leg_distance_nominal()
+double TaskLeg::leg_distance_nominal(const OrderedTaskPoint *tp_origin,
+                                     const OrderedTaskPoint *tp_destination) const
 {
   return 
     ::Distance(tp_origin->get_reference_nominal(), 
@@ -106,14 +113,16 @@ double TaskLeg::leg_distance_nominal()
 }
 
 
-double TaskLeg::leg_distance_planned()
+double TaskLeg::leg_distance_planned(const OrderedTaskPoint *tp_origin,
+                                     const OrderedTaskPoint *tp_destination) const
 {
   return
     ::Distance(tp_origin->get_reference_travelled(), 
                tp_destination->get_reference_travelled());
 }
 
-double TaskLeg::leg_bearing_planned()
+double TaskLeg::leg_bearing_planned(const OrderedTaskPoint *tp_origin,
+                                    const OrderedTaskPoint *tp_destination) const
 {
   return
     ::Bearing(tp_origin->get_reference_travelled(), 
@@ -121,14 +130,16 @@ double TaskLeg::leg_bearing_planned()
 }
 
 
-double TaskLeg::leg_distance_max()
+double TaskLeg::leg_distance_max(const OrderedTaskPoint *tp_origin,
+                                 const OrderedTaskPoint *tp_destination) const
 {
   return 
     ::Distance(tp_origin->getMaxLocation(), 
                tp_destination->getMaxLocation());
 }
 
-double TaskLeg::leg_distance_min()
+double TaskLeg::leg_distance_min(const OrderedTaskPoint *tp_origin,
+                                 const OrderedTaskPoint *tp_destination) const
 {
   return 
     ::Distance(tp_origin->getMinLocation(), 
@@ -136,35 +147,9 @@ double TaskLeg::leg_distance_min()
 }
 
 
-///////
-
-void TaskLeg::update_geometry()
-{
-  tp_origin->update_geometry();
-  tp_destination->update_geometry();
-}
-
-
-TaskLeg::TaskLeg(OrderedTaskPoint& origin,
-                 OrderedTaskPoint& destination):
-  tp_origin(&origin),
-  tp_destination(&destination)
-{
-  tp_origin->set_leg_out(this);
-  tp_destination->set_leg_in(this);
-}
-
-
-OrderedTaskPoint* TaskLeg::get_destination() const {
-  return tp_destination;
-}
-
-OrderedTaskPoint* TaskLeg::get_origin() const {
-  return tp_origin;
-}
-
-
-double TaskLeg::leg_bearing_remaining(const GEOPOINT &ref)
+double TaskLeg::leg_bearing_remaining(const OrderedTaskPoint *tp_origin,
+                                      const OrderedTaskPoint *tp_destination,
+                                      const GEOPOINT &ref) const
 {
   switch (tp_destination->getActiveState()) {
   case OrderedTaskPoint::AFTER_ACTIVE:
@@ -191,7 +176,9 @@ double TaskLeg::leg_bearing_remaining(const GEOPOINT &ref)
 }
 
 
-double TaskLeg::leg_bearing_travelled(const GEOPOINT &ref)
+double TaskLeg::leg_bearing_travelled(const OrderedTaskPoint *tp_origin,
+                                      const OrderedTaskPoint *tp_destination,
+                                      const GEOPOINT &ref) const
 {
   switch (tp_destination->getActiveState()) {
   case OrderedTaskPoint::BEFORE_ACTIVE:

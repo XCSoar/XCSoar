@@ -39,19 +39,19 @@
 #define ORDEREDTASKPOINT_HPP
 
 #include "SampledTaskPoint.h"
-
-class TaskLeg;
+#include "TaskLeg.h"
 
 class OrderedTaskPoint : 
-  public SampledTaskPoint
+  public SampledTaskPoint,
+  public TaskLeg
 {
 public:
   OrderedTaskPoint(const TaskProjection& tp,
                    const WAYPOINT & wp, 
                    const bool b_scored) : 
     SampledTaskPoint(tp, wp, b_scored),
-      leg_in(NULL),
-      leg_out(NULL),
+      tp_previous(NULL),
+      tp_next(NULL),
       active_state(NOTFOUND_ACTIVE),
       bearing_travelled(0.0),
       bearing_remaining(0.0),
@@ -81,13 +81,8 @@ public:
   // have changed
   virtual void update_geometry() = 0;
 
-  virtual void set_leg_out(TaskLeg*);
-
-  virtual void set_leg_in(TaskLeg*);
-
-  TaskLeg* get_leg_out() const;
-  
-  TaskLeg* get_leg_in() const;
+  virtual void set_neighbours(OrderedTaskPoint* prev,
+                              OrderedTaskPoint* next);
 
   OrderedTaskPoint* get_previous() const;
   OrderedTaskPoint* get_next() const;
@@ -157,17 +152,19 @@ public:
                                       const GlidePolar &polar,
                                       const double minH=0) const;
 
+private:
+
+  /**
+   * @supplierCardinality 0..1 
+   */
+  OrderedTaskPoint* tp_next;
+
+  /**
+   * @supplierCardinality 0..1 
+   */
+  OrderedTaskPoint* tp_previous;
+
 protected:
-
-  /**
-   * @supplierCardinality 0..1 
-   */
-  TaskLeg* leg_out;
-
-  /**
-   * @supplierCardinality 0..1 
-   */
-  TaskLeg* leg_in;
   ActiveState_t active_state;
 
   double distance_nominal;   

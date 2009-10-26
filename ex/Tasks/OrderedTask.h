@@ -5,7 +5,7 @@
 #include "Tasks/AbstractTask.h"
 #include "BaseTask/OrderedTaskPoint.hpp"
 #include "BaseTask/StartPoint.hpp"
-#include "BaseTask/TaskLeg.h"
+#include "BaseTask/FinishPoint.hpp"
 #include <vector>
 #include "Util/Serialisable.hpp"
 #include "GlideSolvers/MacCready.hpp"
@@ -21,13 +21,13 @@ public:
               GlidePolar &gp);
   ~OrderedTask();
 
-  std::vector<TaskLeg*> legs;
-
   TaskPoint* getActiveTaskPoint();
   virtual void setActiveTaskPoint(unsigned);
 
-  void insert(OrderedTaskPoint*, unsigned position);
-  void remove(unsigned position);
+  bool insert(OrderedTaskPoint*, unsigned position);
+  bool append(OrderedTaskPoint*);
+  bool remove(unsigned position);
+  bool check_task() const;
 
   virtual bool update_sample(const AIRCRAFT_STATE &, const bool full_update);
 
@@ -69,6 +69,12 @@ private:
    * @supplierCardinality 1 
    */
   StartPoint *ts;
+
+  /**
+   * @supplierCardinality 1 
+   */
+  FinishPoint *tf;
+
   const TaskProjection &task_projection;
 
 protected:
@@ -102,6 +108,10 @@ protected:
                          const double t_target);
   virtual double calc_gradient(const AIRCRAFT_STATE &state) ;
 
+private:
+  void set_neighbours(unsigned position);
+  void test_task();
+  bool check_startfinish(OrderedTaskPoint* new_tp); 
 };
 
 #endif //ORDEREDTASK_H

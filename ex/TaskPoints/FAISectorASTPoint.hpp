@@ -54,7 +54,7 @@ public:
   {
   };
   virtual void update_geometry() {
-    oz.set_legs(leg_in->get_origin(), this, leg_out->get_destination());
+    oz.set_legs(get_previous(), this, get_next());
   }
   virtual bool isInSector(const AIRCRAFT_STATE &ref) const
   {

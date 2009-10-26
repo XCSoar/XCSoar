@@ -40,7 +40,6 @@
 #define FAISECTORSTARTPOINT_HPP
 
 #include "BaseTask/StartPoint.hpp"
-#include "BaseTask/TaskLeg.h"
 #include "ObservationZones/FAISectorZone.hpp"
 
 class FAISectorStartPoint: 
@@ -56,7 +55,7 @@ public:
   };
 
   virtual void update_geometry() {
-    oz.set_legs(NULL, this, leg_out->get_destination());
+    oz.set_legs(NULL, this, get_next());
   }
   virtual bool isInSector(const AIRCRAFT_STATE &ref) const
   {

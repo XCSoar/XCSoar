@@ -69,7 +69,7 @@ public:
 
   virtual GEOPOINT get_boundary_parametric(double) =0;
 
-  virtual double score_adjustment();
+  virtual double score_adjustment() const;
 };
 
 #endif

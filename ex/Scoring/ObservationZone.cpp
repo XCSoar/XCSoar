@@ -2,6 +2,6 @@
 
 #include "ObservationZone.hpp"
 
-double ObservationZone::score_adjustment() {
+double ObservationZone::score_adjustment() const {
   return 0.0;
 }

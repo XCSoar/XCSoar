@@ -59,6 +59,33 @@ Airspaces::scan_range(const AIRCRAFT_STATE &state, const double &range,
   }
 }
 
+
+std::vector< Airspace >
+Airspaces::find_inside(const AIRCRAFT_STATE &state,
+  const bool do_report) const
+{
+  Airspace bb_target(state.Location, task_projection);
+
+  std::vector< Airspace > vectors;
+  airspace_tree.find_within_range(bb_target, 0, std::back_inserter(vectors));
+
+  std::ofstream foutn("res-bb-inside.txt");
+
+  for (std::vector<Airspace>::iterator v=vectors.begin();
+       v != vectors.end(); ) {
+    if (!(*v).inside(state)) {
+      vectors.erase(v);
+    } else {
+
+      (*v).print(foutn, task_projection);
+
+      v++;
+    }
+  }
+  return vectors;
+}
+
+
 void 
 Airspaces::fill_default() 
 {
@@ -84,4 +111,3 @@ Airspaces::fill_default()
   }
   airspace_tree.optimise();
 }
-
