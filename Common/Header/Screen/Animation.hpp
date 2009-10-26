@@ -43,7 +43,7 @@ Copyright_License {
 
 void SetSourceRectangle(RECT fromRect);
 
-////////////////////////////////////////////////////////////////////////////
+//########################################################################
 //
 // FUNCTION:    DrawWireRects
 //
@@ -61,7 +61,8 @@ void SetSourceRectangle(RECT fromRect);
 //  NT Almond   011199  1.0         Origin
 //  CJ Maunder  010899  1.1         Modified rectangle transition code
 //
-/////////////////////////////////////////////////////////////////////////
+//########################################################################
+
 RECT WINAPI DrawWireRects(const bool enable, LPRECT lprcTo, UINT nMilliSecSpeed);
 
 #endif
