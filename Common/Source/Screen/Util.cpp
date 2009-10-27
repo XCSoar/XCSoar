@@ -93,7 +93,6 @@ static void OutputToInput(unsigned int *inLength,
     }
 }
 
-/*
 /**
  * The "Inside" function returns TRUE if the vertex tested is on the
  * inside of the clipping boundary. "Inside" is defined as "to the
