@@ -173,8 +173,11 @@ void XCSoarInterface::AfterStartup() {
 #endif
 }
 
-
+/**
+ * Create special startup message for some devices
+ */
 void XCSoarInterface::StartupInfo() {
+  // TODO speed: TB: this slows down the bootup process because of sleep()
 #ifdef CREDITS_FIVV
   CreateProgressDialog(gettext(TEXT("Special ITA version")));
   Sleep(1000);
