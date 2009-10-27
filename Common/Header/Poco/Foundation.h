@@ -7,7 +7,9 @@
 
 // assume it's windows family for now
 // later replace with check for XCSoar's defines
+#ifndef HAVE_POSIX
 #define POCO_OS_FAMILY_WINDOWS
+#endif
 
 // don't import/export dll
 #define Foundation_API

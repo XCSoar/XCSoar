@@ -71,7 +71,11 @@ private:
 inline void RWLockImpl::readLockImpl()
 {
 	if (pthread_rwlock_rdlock(&_rwl))
+#ifdef HAVEEXCEPTIONS
 		throw SystemException("cannot lock reader/writer lock");
+#else
+	{}
+#endif
 }
 
 
@@ -82,8 +86,10 @@ inline bool RWLockImpl::tryReadLockImpl()
 		return true;
 	else if (rc == EBUSY)
 		return false;
+#ifdef HAVEEXCEPTIONS
 	else
 		throw SystemException("cannot lock reader/writer lock");
+#endif
 
 }
 
@@ -91,7 +97,12 @@ inline bool RWLockImpl::tryReadLockImpl()
 inline void RWLockImpl::writeLockImpl()
 {
 	if (pthread_rwlock_wrlock(&_rwl))
+#ifdef HAVEEXCEPTIONS
 		throw SystemException("cannot lock reader/writer lock");
+#else
+	{}
+#endif
+
 }
 
 
@@ -102,8 +113,10 @@ inline bool RWLockImpl::tryWriteLockImpl()
 		return true;
 	else if (rc == EBUSY)
 		return false;
+#ifdef HAVEEXCEPTIONS
 	else
 		throw SystemException("cannot lock reader/writer lock");
+#endif
 
 }
 
@@ -111,7 +124,11 @@ inline bool RWLockImpl::tryWriteLockImpl()
 inline void RWLockImpl::unlockImpl()
 {
 	if (pthread_rwlock_unlock(&_rwl))
+#ifdef HAVEEXCEPTIONS
 		throw SystemException("cannot unlock mutex");
+#else
+	{}
+#endif
 }
 
 
