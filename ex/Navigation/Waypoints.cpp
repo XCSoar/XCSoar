@@ -3,6 +3,9 @@
 #include <vector>
 #include <fstream>
 
+
+unsigned n_queries = 0;
+
 Waypoints::Waypoints(TaskProjection& _task_projection):
   task_projection(_task_projection)
 {
@@ -51,6 +54,9 @@ Waypoints::find_nearest(const GEOPOINT &loc) const
   WAYPOINT bb_target; bb_target.FlatLocation = floc;
   std::pair<WaypointTree::const_iterator, double> 
     found = waypoint_tree.find_nearest(bb_target);
+
+  n_queries++;
+
   return found.first;
 }
 
@@ -60,6 +66,9 @@ Waypoints::find_id(const unsigned id) const
 {
   WAYPOINT bb_target; bb_target.id = id;
   WaypointTree::const_iterator found = waypoint_tree.find_exact(bb_target);
+
+  n_queries++;
+
   return found;
 }
 
@@ -74,6 +83,8 @@ Waypoints::find_within_range(const GEOPOINT &loc,
   std::vector< WAYPOINT > vectors;
   waypoint_tree.find_within_range(bb_target, range, 
                                   std::back_inserter(vectors));
+  n_queries++;
+
   return vectors;
 }
 

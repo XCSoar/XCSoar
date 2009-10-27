@@ -21,7 +21,7 @@ OUTPUTS 	:= test
 
 INCLUDES := -I. -I../xcsoar/Common/Header
 
-PROFILE := 
+PROFILE := -pg
 OPTIMIZE := -g -O2
 
 CPPFLAGS := $(INCLUDES) 

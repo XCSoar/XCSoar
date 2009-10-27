@@ -79,16 +79,31 @@ GLIDE_RESULT::add(const GLIDE_RESULT &s2)
 double 
 GLIDE_RESULT::calc_vspeed(const double mc) 
 {
-  if ((mc>0.0) && (HeightGlide>0.0)) {
-    // equivalent time to gain the height that was used
-    TimeVirtual = HeightGlide/mc;
-  } else {
+  if (!ok_or_partial()) {
     TimeVirtual = 0.0;
+    return 1.0e6;
   }
   if (Distance>0.0) {
+    if (mc>0.0) {
+      // equivalent time to gain the height that was used
+      TimeVirtual = HeightGlide/mc;
+    } else {
+      TimeVirtual = 0.0;
+    }
     return (TimeElapsed+TimeVirtual)/Distance;
   } else {
+    TimeVirtual = 0.0;
     return 0.0;
+  }
+}
+
+double 
+GLIDE_RESULT::glide_angle_ground() const
+{
+  if (Distance>0) {
+    return HeightGlide/Distance;
+  } else {
+    return 100.0;
   }
 }
 

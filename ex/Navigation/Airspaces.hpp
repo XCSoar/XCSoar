@@ -10,7 +10,6 @@ public:
   Airspaces(const TaskProjection& _task_projection):
     task_projection(_task_projection)
     {
-      fill_default();
     };
 
   void scan_nearest(const AIRCRAFT_STATE &state,
@@ -21,8 +20,11 @@ public:
   std::vector<Airspace> find_inside(const AIRCRAFT_STATE &state,
     const bool do_report) const;
 
+  void optimise();
+
+  void insert(AbstractAirspace& asp);
+
 private:
-  void fill_default();
 
   typedef KDTree::KDTree<4, 
                          Airspace, 

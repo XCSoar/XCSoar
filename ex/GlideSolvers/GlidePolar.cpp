@@ -32,7 +32,7 @@ double
 GlidePolar::SinkRate(const double V) const
 {
   const double dV = (V-25.0)*0.056;
-  return 0.5+dV*dV;
+  return 0.5+(dV*dV+V*0.01)/2.0;
 }
 
 

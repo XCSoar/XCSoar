@@ -5,6 +5,8 @@
 #include "Math/FastMath.h"
 #include "Math/Earth.hpp"
 #include "Navigation/Airspaces.hpp"
+#include "Navigation/AirspaceCircle.hpp"
+#include "Navigation/AirspacePolygon.hpp"
 #include "Navigation/Waypoints.hpp"
 #include "Tasks/TaskManager.h"
 #include "Tasks/TaskEvents.hpp"
@@ -13,6 +15,7 @@
 #include "TaskPoints/FAISectorASTPoint.hpp"
 #include "TaskPoints/FAICylinderASTPoint.hpp"
 #include "TaskPoints/CylinderAATPoint.hpp"
+
 #include <fstream>
 
 int n_samples = 0;
@@ -20,12 +23,19 @@ int n_samples = 0;
 extern long count_mc;
 //extern int count_distance;
 unsigned count_intersections = 0;
+extern unsigned n_queries;
 
 void distance_counts() {
 //  printf("#     distance queries %d\n",count_distance/n_samples); 
   printf("#     mc calcs/c %d\n",count_mc/n_samples);
-  printf("#     intersections tests/c %d\n",count_intersections/n_samples);
   printf("#     num samples %d\n",n_samples);
+}
+
+void query_counts() {
+  printf("#     intersections tests/q %d\n",count_intersections/n_queries);
+  printf("#     num queries %d\n",n_queries);
+  count_intersections = 0;
+  n_queries = 0;
 }
 
 double small_rand() {
@@ -40,15 +50,93 @@ char wait_prompt(const double time) {
 }
 
 
+void
+test_wp(const unsigned n) 
+{
+  GEOPOINT start; start.Longitude = 0.5; start.Latitude = 0.5;
+  TaskProjection task_projection(start);
+  Waypoints waypoints(task_projection);
+  AIRCRAFT_STATE state;
 
+  count_intersections = 0;
+  n_queries = 0;
+
+  for (unsigned i=0; i<n; i++) {
+    int x = rand()%1200-100;
+    int y = rand()%1200-100;
+    WAYPOINT ff; 
+    ff.Location.Longitude = x/1000.0; 
+    ff.Location.Latitude = y/1000.0;
+    ff.id = i+4;
+    waypoints.insert(ff);
+  }
+  waypoints.optimise();
+
+  for (unsigned i=0; i<3000; i++) {
+    int x = rand()%1200-100;
+    int y = rand()%1200-100;
+    state.Location.Longitude = x/1000.0; 
+    state.Location.Latitude = y/1000.0;
+    std::vector < WAYPOINT > approx_waypoints = 
+      waypoints.find_within_range_circle(state.Location, 20);
+    (void)approx_waypoints.size();
+  }
+  printf("%d %d\n", n, count_intersections/n_queries);
+  count_intersections = 0;
+  n_queries = 0;
+  //  query_counts();
+}
+
+
+void
+test_as(const unsigned n, TaskProjection &task_projection)
+{
+  AIRCRAFT_STATE state;
+  Airspaces airspaces(task_projection);
+
+  count_intersections = 0;
+  n_queries = 0;
+
+  for (unsigned i=0; i<n; i++) {
+    AbstractAirspace* as;
+    if (rand()%3==0) {
+      GEOPOINT c;
+      c.Longitude = (rand()%1200-600)/1000.0+0.5;
+      c.Latitude = (rand()%1200-600)/1000.0+0.5;
+      double radius = 10000.0*(0.2+(rand()%12)/12.0);
+      as = new AirspaceCircle(c,radius);
+    } else {
+      as = new AirspacePolygon(task_projection);
+    }
+    airspaces.insert(*as);
+  }
+  airspaces.optimise();
+
+  for (unsigned i=0; i<500; i++) {
+    int x = rand()%1200-100;
+    int y = rand()%1200-100;
+    state.Location.Longitude = x/1000.0; 
+    state.Location.Latitude = y/1000.0;
+    airspaces.find_inside(state, false);
+  }
+  printf("%d %d\n", n, count_intersections/n_queries);
+  count_intersections = 0;
+  n_queries = 0;
+}
 
 
 int main() {
+  GEOPOINT start; start.Longitude = 0.5; start.Latitude = 0.5;
+
   ::InitSineTable();
+
+  ////////////////////////////////////////////////////////////////
 
   TaskEvents default_events;
   GlidePolar glide_polar(2.0,0.0,0.0);
-  TaskProjection task_projection;
+  TaskProjection task_projection(start);
+
+  ////////////////////////// WAYPOINTS //////
   Waypoints waypoints(task_projection);
 
   WAYPOINT wp[6];
@@ -76,10 +164,13 @@ int main() {
   for (unsigned i=0; i<5; i++) {
     waypoints.insert(wp[i]);
   }
+
   for (unsigned i=0; i<150; i++) {
     int x = rand()%1200-100;
     int y = rand()%1200-100;
-    WAYPOINT ff; ff.Location.Longitude = x/1000.0; ff.Location.Latitude = y/1000.0;
+    WAYPOINT ff; 
+    ff.Location.Longitude = x/1000.0; 
+    ff.Location.Latitude = y/1000.0;
     ff.id = i+4;
     waypoints.insert(ff);
   }
@@ -87,8 +178,45 @@ int main() {
 
   task_projection.report();
 
-  TaskManager task_manager(default_events,task_projection,glide_polar,waypoints);
+/*
+  printf("# test waypoint tree\n");
+  for (double i=5; i<20000; i*= 1.1) {
+    test_wp(i);
+  }
+  exit(0);
+*/
+
+  ////////////////////////// AIRSPACES //////
+
   Airspaces airspaces(task_projection);
+
+  printf("# test airspace tree\n");
+  for (double i=5; i<10000; i*= 1.1) {
+    test_as(i,task_projection);
+  }
+  exit(0);
+
+  std::ofstream fin("res-bb-in.txt");
+  for (unsigned i=0; i<150; i++) {
+    AbstractAirspace* as;
+    if (rand()%3==0) {
+      GEOPOINT c;
+      c.Longitude = (rand()%1200-600)/1000.0+0.5;
+      c.Latitude = (rand()%1200-600)/1000.0+0.5;
+      double radius = 10000.0*(0.2+(rand()%12)/12.0);
+      as = new AirspaceCircle(c,radius);
+    } else {
+      as = new AirspacePolygon(task_projection);
+    }
+    airspaces.insert(*as);
+    as->print(fin, task_projection);
+  }
+  airspaces.optimise();
+
+  ////////////////////////// TASK //////
+
+  TaskManager task_manager(default_events,task_projection,
+			   glide_polar,waypoints);
 
   task_manager.append(new FAISectorStartPoint(task_projection,wp[0]));
   task_manager.append(new FAISectorASTPoint(task_projection,wp[1]));
@@ -101,6 +229,8 @@ int main() {
     task_manager.setActiveTaskPoint(0);
     task_manager.resume();
   }
+
+  ////////////////////////// TEST FLIGHT //////
 
 #define  num_wp 5
   GEOPOINT w[num_wp];
@@ -162,6 +292,7 @@ int main() {
   }
 
   distance_counts();
+  query_counts();
 
 //  task_manager.remove(2);
 //  task_manager.scan_distance(location);

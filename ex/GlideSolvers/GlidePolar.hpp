@@ -43,6 +43,10 @@ private:
   double cruise_efficiency;
   double VbestLD;
   double SbestLD;
+
+  /** @link dependency */
+  /*#  MacCready lnkMacCready; */
 };
 
 #endif
+

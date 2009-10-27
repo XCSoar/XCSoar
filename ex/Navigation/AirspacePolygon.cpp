@@ -5,6 +5,9 @@
 
 AirspacePolygon::AirspacePolygon(const TaskProjection& task_projection)
 {
+  // just for testing, create a random polygon from a convex hull around
+  // random points
+
   const unsigned num = rand()%10+5;
   GEOPOINT c;
   c.Longitude = (rand()%1200-600)/1000.0+0.5;

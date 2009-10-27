@@ -4,6 +4,7 @@
 #include <fstream>
 #include <deque>
 
+extern unsigned n_queries;
 
 void 
 Airspaces::scan_nearest(const AIRCRAFT_STATE &state,
@@ -13,6 +14,9 @@ Airspaces::scan_nearest(const AIRCRAFT_STATE &state,
 
   std::pair<AirspaceTree::const_iterator, double> 
     found = airspace_tree.find_nearest(bb_target);
+
+  n_queries++;
+
   if (found.first != airspace_tree.end()) {
     if (do_report) {
       std::ofstream foutn("res-bb-nearest.txt");
@@ -46,6 +50,8 @@ Airspaces::scan_range(const AIRCRAFT_STATE &state, const double &range,
   std::deque< Airspace > vectors;
   airspace_tree.find_within_range(bb_target, -mrange, std::back_inserter(vectors));
 
+  n_queries++;
+
   if (do_report)  { // reporting
     std::ofstream foutr("res-bb-range.txt");
     for (std::deque<Airspace>::iterator v=vectors.begin();
@@ -69,6 +75,8 @@ Airspaces::find_inside(const AIRCRAFT_STATE &state,
   std::vector< Airspace > vectors;
   airspace_tree.find_within_range(bb_target, 0, std::back_inserter(vectors));
 
+  n_queries++;
+
   std::ofstream foutn("res-bb-inside.txt");
 
   for (std::vector<Airspace>::iterator v=vectors.begin();
@@ -76,38 +84,24 @@ Airspaces::find_inside(const AIRCRAFT_STATE &state,
     if (!(*v).inside(state)) {
       vectors.erase(v);
     } else {
-
       (*v).print(foutn, task_projection);
-
       v++;
     }
   }
   return vectors;
 }
 
-
 void 
-Airspaces::fill_default() 
+Airspaces::optimise()
 {
-  std::ofstream fin("res-bb-in.txt");
-  for (unsigned i=0; i<150; i++) {
-
-    if (rand()%3>0) {
-      GEOPOINT c;
-      c.Longitude = (rand()%1200-600)/1000.0+0.5;
-      c.Latitude = (rand()%1200-600)/1000.0+0.5;
-      double radius = 10000.0*(0.2+(rand()%12)/12.0);
-
-      Airspace ff(*(new AirspaceCircle(c,radius)),
-                  task_projection);
-      airspace_tree.insert(ff);
-      ff.print(fin, task_projection);
-    } else {
-      Airspace ff(*(new AirspacePolygon(task_projection)),
-                  task_projection);
-      airspace_tree.insert(ff);
-      ff.print(fin, task_projection);
-    }
-  }
   airspace_tree.optimise();
 }
+
+void 
+Airspaces::insert(AbstractAirspace& asp)
+{
+  Airspace a(asp, task_projection);
+  airspace_tree.insert(a);
+}
+
+

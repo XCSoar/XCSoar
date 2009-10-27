@@ -38,6 +38,12 @@ private:
 
   const GlidePolar &glide_polar;
   const double cruise_efficiency;
+
+  /** @link dependency */
+  /*#  MacCreadyVopt lnkMacCreadyVopt; */
+
+  /** @link dependency */
+  /*#  GlideQuadratic lnkGlideQuadratic; */
 };
 
 

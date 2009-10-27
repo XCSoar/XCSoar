@@ -53,6 +53,11 @@ private:
    * @supplierCardinality 1 
    */
   OrderedTask* task;
+
+  /** @link dependency
+   *@associates <{Dijkstra}> */
+  /*# int lnkDijkstra; */
+
   const SearchPoint &get_point(const ScanTaskPoint &sp) const;
   unsigned get_size(unsigned stage) const;
 };

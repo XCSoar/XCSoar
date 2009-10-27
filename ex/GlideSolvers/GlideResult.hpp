@@ -2,6 +2,7 @@
 #define GLIDERESULT_HPP
 
 #include <iostream>
+#include "GlidePolar.hpp"
 
 struct GLIDE_STATE;
 
@@ -67,6 +68,7 @@ struct GLIDE_RESULT {
   void add(const GLIDE_RESULT &s2);
   void print(std::ostream& f) const;
   double calc_vspeed(const double mc);
+  double glide_angle_ground() const;
 };
 
 #endif
