@@ -121,7 +121,8 @@ void SaveFLARMDetails(void)
 
   for (int z = 0; z < NumberOfFLARMNames; z++)
     {
-      wsprintf(wsline, TEXT("%lx=%s\r\n"), FLARM_Names[z].ID,FLARM_Names[z].Name);
+      _stprintf(wsline, _T("%lx=%s\r\n"),
+                FLARM_Names[z].ID, FLARM_Names[z].Name);
 
 #ifdef _UNICODE
       WideCharToMultiByte( CP_ACP, 0, wsline,

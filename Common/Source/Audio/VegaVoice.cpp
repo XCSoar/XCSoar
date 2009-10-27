@@ -86,14 +86,14 @@ void VegaVoiceMessage::TextToDigitsSmall(TCHAR *text, double number) {
   ndecimals = (int)((number-ntens*10-nones)*10);
 
   if (ntens>0) {
-    wsprintf(tdigit,TEXT(",%d"), LookupDigit(ntens));
+    _stprintf(tdigit, _T(",%d"), LookupDigit(ntens));
     _tcscat(text,tdigit);
   }
 
-  wsprintf(tdigit,TEXT(",%d"), LookupDigit(nones));
+  _stprintf(tdigit, _T(",%d"), LookupDigit(nones));
   _tcscat(text,tdigit);
 
-  wsprintf(tdigit,TEXT(",%d"), LookupDigit(ndecimals));
+  _stprintf(tdigit, _T(",%d"), LookupDigit(ndecimals));
   _tcscat(text,tdigit);
 
 }
@@ -112,14 +112,14 @@ void VegaVoiceMessage::TextToDigitsLarge(TCHAR *text, double number) {
   nones = (int)(number-ntens*10-nhundreds*100);
 
   if (nhundreds>0) {
-    wsprintf(tdigit,TEXT(",%d"), LookupDigit(nhundreds));
+    _stprintf(tdigit, _T(",%d"), LookupDigit(nhundreds));
     _tcscat(text,tdigit);
   }
   if ((nhundreds>0)||(ntens>0)) {
-    wsprintf(tdigit,TEXT(",%d"), LookupDigit(ntens));
+    _stprintf(tdigit, _T(",%d"), LookupDigit(ntens));
     _tcscat(text,tdigit);
   }
-  wsprintf(tdigit,TEXT(",%d"), LookupDigit(nones));
+  _stprintf(tdigit, _T(",%d"), LookupDigit(nones));
   _tcscat(text,tdigit);
 
 }
@@ -136,13 +136,11 @@ void VegaVoiceMessage::TextToDigitsHuge(TCHAR *text, double number) {
   nhundreds = (int)((number-nthousands*10)/100);
 
   if (nthousands>0) {
-    wsprintf(tdigit,TEXT(",%d,%d"), LookupDigit(nthousands),
-	     VWI_THOUSANDS);
+    _stprintf(tdigit, _T(",%d,%d"), LookupDigit(nthousands), VWI_THOUSANDS);
     _tcscat(text,tdigit);
   }
   if (nhundreds>0) {
-    wsprintf(tdigit,TEXT(",%d,%d"), LookupDigit(nhundreds),
-	     VWI_HUNDREDS);
+    _stprintf(tdigit, _T(",%d,%d"), LookupDigit(nhundreds), VWI_HUNDREDS);
     _tcscat(text,tdigit);
   }
 }
@@ -225,11 +223,11 @@ void VegaVoiceMessage::Initialise(int the_id) {
 }
 
 void VegaVoiceMessage::MessageHeader() {
-  wsprintf(messageText,TEXT("PDVMS,%d,%d,%d,%d"),
-	   id, // message ID
-	   alarmlevel,
-	   repeatInterval*1000,
-	   singleplay);
+  _stprintf(messageText, _T("PDVMS,%d,%d,%d,%d"),
+            id, // message ID
+            alarmlevel,
+            repeatInterval * 1000,
+            singleplay);
 }
 
 void VegaVoiceMessage::SendMessage() {
@@ -255,7 +253,7 @@ void VegaVoiceMessage::SendMessage() {
 
 void VegaVoiceMessage::SendNullMessage() {
   id_active = -1;
-  wsprintf(messageText,TEXT("PDVMS,-1"));
+  _stprintf(messageText, _T("PDVMS,-1"));
   SendMessage();
 }
 
@@ -351,7 +349,7 @@ VegaVoiceMessage::Update(const NMEA_INFO *Basic,
       // e.g. if average = 3.4 (user units)
       // Now: "CIRCLING THREE FOUR"
       // Later: "AVERAGE THREE POINT FOUR"
-      wsprintf(text,TEXT(",%d"), VWI_CIRCLING);
+      _stprintf(text, _T(",%d"), VWI_CIRCLING);
       TextToDigitsSmall(text, Calculated->Average30s*LIFTMODIFY);
       DoSend(Basic->Time, text);
       return true;
@@ -381,7 +379,7 @@ VegaVoiceMessage::Update(const NMEA_INFO *Basic,
 
 	      if (!settings.EnableVoiceWaypointDistance) return false;
 
-	      wsprintf(text,TEXT(",%d"), VWI_PLUS);
+              _stprintf(text, _T(",%d"), VWI_PLUS);
 	      TextToDigitsLarge(text, Calculated->WaypointDistance*DISTANCEMODIFY);
 	      DoSend(Basic->Time, text);
 	      return true;
@@ -395,9 +393,9 @@ VegaVoiceMessage::Update(const NMEA_INFO *Basic,
 	        double tad = Calculated->TaskAltitudeDifference*ALTITUDEMODIFY;
 	        if (fabs(tad)>100) {
 	          if (tad>0) {
-	            wsprintf(text,TEXT(",%d"), VWI_ABOVE);
+                    _stprintf(text, _T(",%d"), VWI_ABOVE);
 	          } else {
-	            wsprintf(text,TEXT(",%d"), VWI_BELOW);
+                    _stprintf(text, _T(",%d"), VWI_BELOW);
 	          }
 	          TextToDigitsHuge(text, fabs(tad));
 	          DoSend(Basic->Time, text);
@@ -425,7 +423,7 @@ VegaVoiceMessage::Update(const NMEA_INFO *Basic,
       // e.g.:
       // Now: "INFO"
       // Later: "NEW WAYPOINT"
-      wsprintf(text,TEXT(",%d"), VWI_INFO);
+      _stprintf(text, _T(",%d"), VWI_INFO);
       DoSend(Basic->Time, text);
       return true;
     }
@@ -437,7 +435,7 @@ VegaVoiceMessage::Update(const NMEA_INFO *Basic,
       // e.g.:
       // Now: INFO
       // Later: "INSIDE SECTOR"
-      wsprintf(text,TEXT(",%d"), VWI_INFO);
+      _stprintf(text, _T(",%d"), VWI_INFO);
       DoSend(Basic->Time, text);
       return true;
     }
@@ -451,7 +449,7 @@ VegaVoiceMessage::Update(const NMEA_INFO *Basic,
       //
       // Later give distance/height/direction?
       // Later: "WARNING AIRSPACE ABOVE"
-      wsprintf(text,TEXT(",%d,%d,0"), VWI_WARNING, VWI_AIRSPACE);
+      _stprintf(text, _T(",%d,%d,0"), VWI_WARNING, VWI_AIRSPACE);
       DoSend(Basic->Time, text);
       return true;
     }
