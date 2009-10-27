@@ -109,11 +109,12 @@ void PopupMessage::Resize() {
     set_text(msgText);
     SIZE tsize = parent.get_canvas().text_size(msgText);
 
-    int linecount = max((unsigned)nvisible, max(1, get_row_count()));
+    int linecount = max((unsigned)nvisible, max((unsigned)1, get_row_count()));
 
     int width =// min((rc.right-rc.left)*0.8,tsize.cx);
       (int)((rc.right-rc.left)*0.9);
-    int height = (int)min((rc.bottom-rc.top)*0.8,tsize.cy*(linecount+1));
+    int height = min((int)((rc.bottom-rc.top) * 0.8),
+                     (int)tsize.cy * (linecount + 1));
     int h1 = height/2;
     int h2 = height-h1;
 

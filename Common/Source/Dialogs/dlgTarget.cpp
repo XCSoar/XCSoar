@@ -462,7 +462,7 @@ static void OnRadialData(DataField *Sender, DataField::DataAccessKind_t Mode) {
             tp.AATTargetOffsetRadius= -tp.AATTargetOffsetRadius;
             updated = true;
           } else {
-            RadialNew = max(-90,min(90,RadialNew));
+            RadialNew = max(-90.0, min(90.0, RadialNew));
             updated = true;
           }
         }

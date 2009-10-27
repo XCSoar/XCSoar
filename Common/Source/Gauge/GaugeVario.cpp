@@ -678,7 +678,7 @@ void GaugeVario::RenderSpeedToFly(Canvas &canvas, int x, int y)
 
   #define  YOFFSET     36
   #define  DeltaVstep  4
-  #define  DeltaVlimit 16
+  #define  DeltaVlimit 16.0
 
 #ifndef _SIM_
   if (!(Basic().AirspeedAvailable && Basic().VarioAvailable)) {

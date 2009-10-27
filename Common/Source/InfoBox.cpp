@@ -351,7 +351,7 @@ void InfoBox::PaintTitle(Canvas &canvas){
 
   halftextwidth = (mWidth - tsize.cx)>>1;
 
-  x = max(1,recTitle.left + halftextwidth);
+  x = max(1, (int)recTitle.left + halftextwidth);
 
   y = recTitle.top + 1 + mpFontHeightTitle->CapitalHeight
     - mpFontHeightTitle->AscentHeight;
@@ -444,8 +444,9 @@ void InfoBox::PaintValue(Canvas &canvas){
 
   tsize = canvas.text_size(mValue);
 
-  x = max(1,recValue.left +
-          (mWidth - tsize.cx - mBitmapUnitSize.x*InfoBoxLayout::scale) / 2);
+  x = max(1, (int)recValue.left +
+          (mWidth - (int)tsize.cx
+           - (int)mBitmapUnitSize.x * InfoBoxLayout::scale) / 2);
 
   if (mBorderKind & BORDERLEFT)
     x+= DEFAULTBORDERPENWIDTH;
@@ -532,7 +533,7 @@ void InfoBox::PaintComment(Canvas &canvas){
 
   tsize = canvas.text_size(mComment);
 
-  x = max(1,recComment.left + (mWidth - tsize.cx) / 2);
+  x = max(1, (int)recComment.left + (mWidth - (int)tsize.cx) / 2);
   if (mBorderKind & BORDERLEFT)
     x+= DEFAULTBORDERPENWIDTH;
 

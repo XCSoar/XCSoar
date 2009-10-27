@@ -238,7 +238,7 @@ void InfoBoxLayout::ScreenGeometry(RECT rc) {
   maxsize = max(rc.right-rc.left,rc.bottom-rc.top);
   minsize = min(rc.right-rc.left,rc.bottom-rc.top);
 
-  dscale = max(1,minsize/240.0); // always start w/ shortest dimension
+  dscale = max(1.0, minsize / 240.0); // always start w/ shortest dimension
 
   if (maxsize == minsize)  // square should be shrunk
   {

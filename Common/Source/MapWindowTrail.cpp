@@ -234,7 +234,7 @@ double MapWindow::DrawTrail(Canvas &canvas)
     // now we know either point is visible, better get screen coords
     // if we don't already.
 
-    double dt = max(0,(display_time-P1.Time)*P1.DriftFactor);
+    double dt = max(0.0, (display_time - P1.Time) * P1.DriftFactor);
     double this_lon = P1.Longitude+traildrift.Longitude*dt;
     double this_lat = P1.Latitude+traildrift.Latitude*dt;
 
@@ -321,7 +321,7 @@ MapWindow::DrawTrailFromTask(Canvas &canvas, const double TrailFirstTime)
 
   glide_computer.GetOLC().Lock();
   glide_computer.GetOLC().SetLine();
-  int n = min(MAXCLIPPOLYGON, glide_computer.GetOLC().getN());
+  int n = min((int)MAXCLIPPOLYGON, glide_computer.GetOLC().getN());
   int i, j=0;
   for (i=0; i<n; i++) {
     if (glide_computer.GetOLC().getTime(i)>= mTrailFirstTime)

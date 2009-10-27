@@ -680,7 +680,7 @@ GlideComputerAirData::SpeedToFly(const double mc_setting,
 			     GlidePolar::Vminsink*sqrt(n));
     } else {
       SetCalculated().VOpt = max(Calculated().VOpt,
-			     GlidePolar::Vminsink);
+                                 (double)GlidePolar::Vminsink);
     }
     SetCalculated().VOpt = LowPassFilter(Calculated().VOpt,VOptnew, 0.6);
 
@@ -711,12 +711,12 @@ GlideComputerAirData::NettoVario()
 
   double glider_sink_rate;
   if (Basic().AirspeedAvailable && replay_disabled) {
-    glider_sink_rate= GlidePolar::SinkRate(max(GlidePolar::Vminsink,
+    glider_sink_rate= GlidePolar::SinkRate(max((double)GlidePolar::Vminsink,
 					       Basic().IndicatedAirspeed), n);
   } else {
     // assume zero wind (Speed=Airspeed, very bad I know)
     // JMW TODO accuracy: adjust for estimated airspeed
-    glider_sink_rate= GlidePolar::SinkRate(max(GlidePolar::Vminsink,
+    glider_sink_rate= GlidePolar::SinkRate(max((double)GlidePolar::Vminsink,
 					       Basic().Speed), n);
   }
   SetCalculated().GliderSinkRate = glider_sink_rate;
@@ -1066,7 +1066,7 @@ GlideComputerAirData::BallastDump()
   double BALLAST = GlidePolar::GetBallast();
   double BALLAST_last = BALLAST;
   double percent_per_second = 1.0/max(10.0,
-				      SettingsComputer().BallastSecsToEmpty);
+                                      (double)SettingsComputer().BallastSecsToEmpty);
   BALLAST -= dt*percent_per_second;
   if (BALLAST<0) {
     // JMW illegal	BallastTimerActive = false;
@@ -1168,7 +1168,7 @@ GlideComputerAirData::Turning()
 
   // JMW limit rate to 50 deg per second otherwise a big spike
   // will cause spurious lock on circling for a long time
-  double Rate = max(-50,min(50,Calculated().TurnRate));
+  double Rate = max(-50.0, min(50.0, Calculated().TurnRate));
 
   // average rate, to detect essing
   // TODO: use rotary buffer
@@ -1419,7 +1419,7 @@ GlideComputerAirData::ThermalBand()
     // calculate new buckets so glider is below max
     double hbuk = Calculated().MaxThermalHeight/NUMTHERMALBUCKETS;
 
-    max_thermal_height_new = max(1, Calculated().MaxThermalHeight);
+    max_thermal_height_new = max(1.0, Calculated().MaxThermalHeight);
     while (max_thermal_height_new<dheight) {
       max_thermal_height_new += hbuk;
     }

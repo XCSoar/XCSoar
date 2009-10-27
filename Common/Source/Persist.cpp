@@ -132,7 +132,7 @@ void LoadCalculationsPersist(DERIVED_INFO *Calculated) {
     //             size,&dwBytesWritten,(OVERLAPPED*)NULL);
 
     QNH = min(1113.2, max(QNH,913.2));
-    MACCREADY = min(10.0,max(MACCREADY,0));
+    MACCREADY = min(10.0, max(MACCREADY, 0.0));
     BUGS = min(1.0, max(BUGS,0.0));
     BALLAST = min(1.0, max(BALLAST,0.0));
     //   CRUISE_EFFICIENCY = min(1.5, max(CRUISE_EFFICIENCY,0.75));

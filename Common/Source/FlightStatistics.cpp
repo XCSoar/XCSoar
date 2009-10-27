@@ -191,7 +191,8 @@ void FlightStatistics::RenderClimb(Canvas &canvas, const RECT rc)
   chart.DrawLine(0, MACCREADY, ThermalAverage.sum_n,
 		 MACCREADY, Chart::STYLE_REDTHICK);
 
-  chart.DrawLabel(TEXT("MC"), max(0.5, ThermalAverage.sum_n-1), MACCREADY);
+  chart.DrawLabel(TEXT("MC"), max(0.5, (double)ThermalAverage.sum_n - 1.0),
+                  MACCREADY);
 
   chart.DrawTrendN(&ThermalAverage, Chart::STYLE_BLUETHIN);
 
@@ -569,13 +570,13 @@ void FlightStatistics::RenderTemperature(Canvas &canvas, const RECT rc)
   for (i=0; i<CUSONDE_NUMLEVELS-1; i++) {
     if (CuSonde::cslevels[i].nmeasurements) {
 
-      hmin = min(hmin, i);
-      hmax = max(hmax, i);
+      hmin = min(hmin, (float)i);
+      hmax = max(hmax, (float)i);
       tmin = min(tmin, (float)min(CuSonde::cslevels[i].tempDry,
-			   (float)min(CuSonde::cslevels[i].airTemp,
+                                  min(CuSonde::cslevels[i].airTemp,
 			       CuSonde::cslevels[i].dewpoint)));
       tmax = max(tmax, (float)max(CuSonde::cslevels[i].tempDry,
-			   (float)max(CuSonde::cslevels[i].airTemp,
+                                  (double)max(CuSonde::cslevels[i].airTemp,
 			       CuSonde::cslevels[i].dewpoint)));
     }
   }
@@ -724,8 +725,8 @@ void FlightStatistics::RenderAirspace(Canvas &canvas, const RECT rc) {
   double fj;
   ach = XCSoarInterface::Basic().Altitude;
   acb = XCSoarInterface::Basic().TrackBearing;
-  double hmin = max(0,XCSoarInterface::Basic().Altitude-3300);
-  double hmax = max(3300,XCSoarInterface::Basic().Altitude+1000);
+  double hmin = max(0.0, XCSoarInterface::Basic().Altitude - 3300);
+  double hmax = max(3300.0, XCSoarInterface::Basic().Altitude + 1000);
 
   GEOPOINT d_loc[AIRSPACE_SCANSIZE_X];
   double d_alt[AIRSPACE_SCANSIZE_X];
@@ -877,8 +878,8 @@ FlightStatistics::AddAltitudeTerrain(const double tflight,
 				     const double terrainalt)
 {
   Lock();
-  Altitude_Terrain.least_squares_update
-    (max(0,tflight/3600.0),terrainalt);
+  Altitude_Terrain.least_squares_update(max(0.0, tflight / 3600.0),
+                                        terrainalt);
   Unlock();
 }
 
@@ -887,8 +888,7 @@ FlightStatistics::AddAltitude(const double tflight,
 			      const double alt)
 {
   Lock();
-  Altitude.least_squares_update
-    (max(0,tflight/3600.0),alt);
+  Altitude.least_squares_update(max(0.0, tflight / 3600.0), alt);
   Unlock();
 }
 
@@ -940,7 +940,7 @@ FlightStatistics::AddClimbBase(const double tflight,
     // only update base if have already climbed, otherwise
     // we will catch the takeoff height as the base.
 
-    Altitude_Base.least_squares_update(max(0,tflight)/3600.0,
+    Altitude_Base.least_squares_update(max(0.0, tflight) / 3600.0,
 				       alt);
   }
   Unlock();
@@ -952,7 +952,7 @@ FlightStatistics::AddClimbCeiling(const double tflight,
 			       const double alt)
 {
   Lock();
-  Altitude_Ceiling.least_squares_update(max(0,tflight)/3600.0,
+  Altitude_Ceiling.least_squares_update(max(0.0, tflight) / 3600.0,
 					alt);
   Unlock();
 }

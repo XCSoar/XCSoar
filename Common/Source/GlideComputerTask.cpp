@@ -263,11 +263,11 @@ FAIFinishHeight(const SETTINGS_COMPUTER &settings,
   if (!task.TaskIsTemporary() && (wp==FinalWayPoint)) {
     if (task.getSettings().EnableFAIFinishHeight
         && !task.getSettings().AATEnabled) {
-      return max(max(task.getSettings().FinishMinHeight,
+      return max(max((double)task.getSettings().FinishMinHeight,
 		     settings.SAFETYALTITUDEARRIVAL)+ wp_alt,
                  Calculated.TaskStartAltitude-1000.0);
     } else {
-      return max(task.getSettings().FinishMinHeight,
+      return max((double)task.getSettings().FinishMinHeight,
 		 settings.SAFETYALTITUDEARRIVAL)+wp_alt;
     }
   } else {
@@ -944,7 +944,7 @@ void GlideComputerTask::DistanceCovered()
       // Correct speed calculations for radius
       // JMW TODO accuracy: legcovered replace this with more accurate version
       // LegDistance -= StartRadius;
-      LegCovered = max(0,LegCovered-task.getSettings().StartRadius);
+      LegCovered = max(0.0, LegCovered - task.getSettings().StartRadius);
     }
   }
   SetCalculated().LegDistanceCovered = LegCovered;
@@ -1247,7 +1247,7 @@ void GlideComputerTask::AATStats_Time() {
       SetCalculated().AATTimeToGo = aat_tasklength_seconds;
     }
   } else if (aat_tasktime_elapsed>=0) {
-    SetCalculated().AATTimeToGo = max(0,
+    SetCalculated().AATTimeToGo = max(0.0,
 				  aat_tasklength_seconds
 				  - aat_tasktime_elapsed);
   }
@@ -1625,7 +1625,7 @@ void GlideComputerTask::TaskSpeed(const double this_maccready,
     // total height required from start (takes safety arrival alt
     // and finish waypoint altitude into account)
 
-    double h1 = max(0,Calculated().NavAltitude-hf);
+    double h1 = max(0.0, Calculated().NavAltitude-hf);
     // height above target
 
     double dFinal;
@@ -1642,7 +1642,7 @@ void GlideComputerTask::TaskSpeed(const double this_maccready,
     }
 
     // JB's task speed...
-    double hx = max(0,SpeedHeight());
+    double hx = max(0.0, SpeedHeight());
     double t1mod = t1-hx/MacCreadyOrAvClimbRate(this_maccready);
     // only valid if flown for 5 minutes or more
     if (t1mod>300.0) {
@@ -1669,7 +1669,7 @@ void GlideComputerTask::TaskSpeed(const double this_maccready,
       dFinal = 0;
     }
 
-    double dc = max(0,dr-dFinal);
+    double dc = max(0.0, dr - dFinal);
     // amount of extra distance to travel in cruise/climb before final glide
 
     // equivalent distance to end of final glide
@@ -1750,13 +1750,13 @@ void GlideComputerTask::TaskSpeed(const double this_maccready,
 		      LastCalculated().LegDistanceCovered)/dt;
       vthis /= AirDensityRatio(Calculated().NavAltitude);
 
-      double ttg = max(1,Calculated().LegTimeToGo);
+      double ttg = max(1.0, Calculated().LegTimeToGo);
       //      double Vav = d0/max(1.0,t0);
       double Vrem = Calculated().LegDistanceToGo/ttg;
       double Vref = // Vav;
 	Vrem;
       double sr = -GlidePolar::SinkRate(Vstar);
-      double height_diff = max(0,-Calculated().TaskAltitudeDifference);
+      double height_diff = max(0.0, -Calculated().TaskAltitudeDifference);
 
       if (Calculated().timeCircling>30) {
 	mc_safe = max(this_maccready,
@@ -1768,11 +1768,11 @@ void GlideComputerTask::TaskSpeed(const double this_maccready,
       double time_climb = height_diff/mc_safe;
 
       // calculate amount of time in cruise/climb glide
-      double rho_c = max(0,min(1,time_climb/ttg));
+      double rho_c = max(0.0, min(1.0, time_climb / ttg));
 
       if (Calculated().FinalGlide) {
 	if (rho_climb>0) {
-	  rho_c = max(0,min(1,rho_c/rho_climb));
+	  rho_c = max(0.0, min(1.0, rho_c / rho_climb));
 	}
 	if (!Calculated().Circling) {
 	  if (Calculated().TaskAltitudeDifference>0) {
@@ -1816,7 +1816,7 @@ void GlideComputerTask::TaskSpeed(const double this_maccready,
 	    tsi_av/= n_av;
 
 	    SaveTaskSpeed(max((Basic().Time-Calculated().TaskStartTime)/3600.0,
-			      max(0,min(100.0,tsi_av))));
+			      max(0.0, min(100.0, tsi_av))));
 
 	    tsi_av = 0;
 	    n_av = 0;
