@@ -143,15 +143,6 @@ const TCHAR* gettext(const TCHAR* text) {
   return (const TCHAR*)text;
 }
 
-// Set the window text value, by passing through gettext
-// TODO code: Review if this needs to be done every time?
-void SetWindowText_gettext(HWND hDlg, int entry) {
-  TCHAR strTemp[1024];
-  GetWindowText(GetDlgItem(hDlg,entry),strTemp, 1023);
-  SetWindowText(GetDlgItem(hDlg,entry),gettext(strTemp));
-}
-
-
 void ReadLanguageFile() {
   StartupStore(TEXT("Loading language file\n"));
 

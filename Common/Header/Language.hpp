@@ -38,13 +38,10 @@ Copyright_License {
 #if !defined(XCSOAR_LANGUAGE_HPP)
 #define XCSOAR_LANGUAGE_HPP
 
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
 #include <tchar.h>
 
 void ReadLanguageFile(void);
 
-void SetWindowText_gettext(HWND hDlg, int entry);
 const TCHAR* gettext(const TCHAR* text);
 
 #if defined(WINDOWSPC) && !defined(NDEBUG) && defined(_MSC_VER)
