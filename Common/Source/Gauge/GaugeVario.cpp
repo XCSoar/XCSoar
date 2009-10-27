@@ -57,6 +57,12 @@ Copyright_License {
 #include <assert.h>
 #include <stdlib.h>
 
+#ifndef _MSC_VER
+#include <algorithm>
+using std::min;
+using std::max;
+#endif
+
 #define GAUGEXSIZE (InfoBoxLayout::ControlWidth)
 #define GAUGEYSIZE (InfoBoxLayout::ControlHeight*3)
 

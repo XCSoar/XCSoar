@@ -56,6 +56,11 @@ Copyright_License {
 #include <tchar.h>
 #include <math.h>
 
+#ifndef _MSC_VER
+#include <algorithm>
+using std::max;
+#endif
+
 #define INPUT_BIT_FLAP_POS                  0 // 1 flap pos
 #define INPUT_BIT_FLAP_ZERO                 1 // 1 flap zero
 #define INPUT_BIT_FLAP_NEG                  2 // 1 flap neg

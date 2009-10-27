@@ -54,6 +54,13 @@ Copyright_License {
 #include "WayPointList.hpp"
 #include <assert.h>
 #include "TaskVisitor.hpp"
+
+#ifndef _MSC_VER
+#include <algorithm>
+using std::min;
+using std::max;
+#endif
+
 // JMW TODO: abstract up to higher layer so a base copy of this won't
 // call any event
 

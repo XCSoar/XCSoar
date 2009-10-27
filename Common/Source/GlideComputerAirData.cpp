@@ -70,6 +70,12 @@ Copyright_License {
 
 #include "Math/Pressure.h"
 
+#ifndef _MSC_VER
+#include <algorithm>
+using std::min;
+using std::max;
+#endif
+
 void
 DoAutoQNH(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated);
 

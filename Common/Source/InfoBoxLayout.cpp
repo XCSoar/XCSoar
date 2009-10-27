@@ -45,6 +45,12 @@ Copyright_License {
 #include "WindowControls.h"
 #include <stdio.h>
 
+#ifndef _MSC_VER
+#include <algorithm>
+using std::min;
+using std::max;
+#endif
+
 // Layouts:
 // 0: default, infoboxes along top and bottom, map in middle
 // 1: both infoboxes along bottom

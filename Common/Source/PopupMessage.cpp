@@ -54,6 +54,12 @@ Copyright_License {
 #include <tchar.h>
 #include <stdio.h>
 
+#ifndef _MSC_VER
+#include <algorithm>
+using std::min;
+using std::max;
+#endif
+
 PopupMessage::PopupMessage(const StatusMessageList &_status_messages,
                            ContainerWindow &_parent)
   :startTime(::GetTickCount()), status_messages(_status_messages),

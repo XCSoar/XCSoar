@@ -55,6 +55,12 @@ Copyright_License {
 
 #include <math.h>
 
+#ifndef _MSC_VER
+#include <algorithm>
+using std::min;
+using std::max;
+#endif
+
 static WndForm *wf=NULL;
 static WindowControl *btnMove = NULL;
 static unsigned ActiveTaskPointOnEntry = 0;

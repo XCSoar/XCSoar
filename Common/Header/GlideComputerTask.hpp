@@ -43,6 +43,11 @@ Copyright_License {
 #include "OnLineContest.h"
 #include "GPSClock.hpp"
 
+#ifndef _MSC_VER
+#include <algorithm>
+using std::max;
+#endif
+
 struct WAYPOINT;
 struct WPCALC;
 

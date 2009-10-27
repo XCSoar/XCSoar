@@ -102,7 +102,11 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include <ctype.h>
 #include <tchar.h>
 
-
+#ifndef _MSC_VER
+#include <algorithm>
+using std::min;
+using std::max;
+#endif
 
 // DLL Cache
 typedef void (CALLBACK *DLLFUNC_INPUTEVENT)(TCHAR*);

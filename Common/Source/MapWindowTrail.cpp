@@ -55,6 +55,12 @@ Copyright_License {
 #include "Components.hpp"
 #include "options.h" /* for IBLSCALE() */
 
+#ifndef _MSC_VER
+#include <algorithm>
+using std::min;
+using std::max;
+#endif
+
 #define fSnailColour(cv) max(0,min((short)(NUMSNAILCOLORS-1), (short)((cv+1.0)/2.0*NUMSNAILCOLORS)))
 
 // This function is slow...

@@ -40,6 +40,11 @@ Copyright_License {
 #include "MainWindow.hpp"
 #include "Compatibility/string.h"
 
+#ifndef _MSC_VER
+#include <algorithm>
+using std::min;
+#endif
+
 static WndForm *wf=NULL;
 static WndOwnerDrawFrame *wGrid=NULL;
 

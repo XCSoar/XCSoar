@@ -54,6 +54,11 @@ Copyright_License {
 #include "InfoBoxManager.h"
 #include "UtilsSystem.hpp"
 
+#ifndef _MSC_VER
+#include <algorithm>
+using std::max;
+#endif
+
 static Color fgColor(0x0, 0x0, 0x0);
 static Color bkColor(0xff, 0xff, 0xff);
 static Color bkColorSel(150, 0x0, 0x0);

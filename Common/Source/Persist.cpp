@@ -52,6 +52,12 @@ Copyright_License {
 #include "Protection.hpp"
 #include "Components.hpp"
 
+#ifndef _MSC_VER
+#include <algorithm>
+using std::min;
+using std::max;
+#endif
+
 static TCHAR szCalculationsPersistFileName[MAX_PATH]= TEXT("\0");
 static TCHAR szCalculationsPersistDirectory[MAX_PATH]= TEXT("\0");
 

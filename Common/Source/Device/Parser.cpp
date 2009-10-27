@@ -54,6 +54,12 @@ Copyright_License {
 #include <ctype.h>
 #include <stdlib.h>
 
+#ifndef _MSC_VER
+#include <algorithm>
+using std::min;
+using std::max;
+#endif
+
 #ifdef FLARM_AVERAGE
 #include "FlarmCalculations.h"
 FlarmCalculations flarmCalculations;
