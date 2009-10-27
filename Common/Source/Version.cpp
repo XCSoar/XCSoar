@@ -45,6 +45,8 @@ Copyright_License {
 #define TARGET "PNA"
 #elif defined(WINDOWSPC)
 #define TARGET "PC"
+#elif !defined(WIN32)
+#define TARGET "UNIX"
 #else
 // TODO code: consider adding PPC, 2002, 2003 (not enough room now)
 #define TARGET "PPC"
