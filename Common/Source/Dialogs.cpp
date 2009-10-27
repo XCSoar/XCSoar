@@ -48,9 +48,6 @@ Copyright_License {
 #include "Airspace.h"
 #include "Screen/ProgressWindow.hpp"
 
-#include <commdlg.h>
-#include <commctrl.h>
-
 #ifndef WINDOWSPC
 #include "aygshell.h"
 #endif
