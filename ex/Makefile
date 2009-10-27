@@ -56,7 +56,6 @@ CXXFLAGS += -pedantic
 ####### sources
 
 OBJS	:=\
-	test.o \
 	Util.o \
 	Util/Intersection.o \
 	GlideSolvers/GlideState.o \
@@ -124,9 +123,14 @@ OBJS	:=\
 	../xcsoar/Common/Source/Math/FastMath.o \
 	../xcsoar/Common/Source/Math/Earth.o 
 
+test: $(OBJS) test.cpp
+	g++ $(CXXFLAGS) $(INCLUDES) test.cpp -o test $(OBJS)
 
-all: $(OBJS)
-	g++ $(CXXFLAGS) -o test $(OBJS)
+test_trees: $(OBJS) test_trees.cpp
+	g++ $(CXXFLAGS) $(INCLUDES) test_trees.cpp -o test_trees $(OBJS)
+
+all: $(OBJS) test test_trees
+	@echo "done"
 
 
 DEPFILE		=$(dir $@).$(notdir $@).d

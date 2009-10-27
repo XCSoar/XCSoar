@@ -26,8 +26,10 @@ StartPoint::getElevation()
 
 
 void 
-StartPoint::set_leg_in(TaskLeg* the_leg) 
+StartPoint::set_neighbours(OrderedTaskPoint* prev,
+                           OrderedTaskPoint* next)
 {
-  assert(the_leg == NULL);
+  assert(prev==NULL);
   // should not ever have an inbound leg
+  OrderedTaskPoint::set_neighbours(prev, next);
 }

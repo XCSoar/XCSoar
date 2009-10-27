@@ -23,9 +23,12 @@ FinishPoint::getElevation()
   return Elevation; // + SAFETYARRIVALHEIGHT
 }
 
+
 void 
-FinishPoint::set_leg_out(TaskLeg* the_leg) 
+FinishPoint::set_neighbours(OrderedTaskPoint* prev,
+                           OrderedTaskPoint* next)
 {
-  assert(the_leg == NULL);
+  assert(next==NULL);
   // should not ever have an outbound leg
+  OrderedTaskPoint::set_neighbours(prev, next);
 }

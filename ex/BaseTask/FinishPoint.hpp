@@ -47,7 +47,8 @@ public:
                 const WAYPOINT & wp) : 
       OrderedTaskPoint(tp,wp,false) { };
 
-  virtual void set_leg_out(TaskLeg* the_leg);
+  virtual void set_neighbours(OrderedTaskPoint* prev,
+                              OrderedTaskPoint* next);
 
   virtual bool transition_enter(const AIRCRAFT_STATE & ref_now, 
                                 const AIRCRAFT_STATE & ref_last);

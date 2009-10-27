@@ -51,7 +51,8 @@ public:
 
     };
 
-  virtual void set_leg_in(TaskLeg* the_leg);
+  virtual void set_neighbours(OrderedTaskPoint* prev,
+                              OrderedTaskPoint* next);
 
   // allow access to forward scan
   bool scan_active(OrderedTaskPoint* atp) {
