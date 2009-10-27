@@ -55,7 +55,6 @@ Copyright_License {
 #include "options.h"
 
 #include <windows.h>
-#include <commctrl.h>
 #include <math.h>
 
 #include "wcecompat/ts_string.h"
