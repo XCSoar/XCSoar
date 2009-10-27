@@ -40,14 +40,6 @@ Copyright_License {
 
 #include "Screen/ContainerWindow.hpp"
 
-#if !defined(WINDOWSPC) && !defined(GNAV) && (UNDER_CE >= 300 || _WIN32_WCE >= 0x0300)
-#define HAVE_ACTIVATE_INFO
-#endif
-
-#ifdef HAVE_ACTIVATE_INFO
-#include <aygshell.h>
-#endif
-
 /**
  * A top-level full-screen window.
  */
