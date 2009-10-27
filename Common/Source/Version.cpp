@@ -37,35 +37,24 @@ Copyright_License {
 #include "Version.hpp"
 #include "Language.hpp"
 
-TCHAR XCSoar_Version[256] = TEXT("");
+#define VERSION "5.2.5"
 
-/**
- * Saves the current version string to XCSoar_Version
- */
-void Version() {
-  // Version String
 #ifdef GNAV
-  _tcscat(XCSoar_Version, TEXT("Altair "));
+#define TARGET "Altair"
 #elif defined(PNA)
-  _tcscat(XCSoar_Version, TEXT("PNA "));
+#define TARGET "PNA"
+#elif defined(WINDOWSPC)
+#define TARGET "PC"
 #else
-#ifdef WINDOWSPC
-  _tcscat(XCSoar_Version, TEXT("PC "));
-#else
-  _tcscat(XCSoar_Version, TEXT("PPC "));
-  // TODO code: consider adding PPC, 2002, 2003 (not enough room now)
+// TODO code: consider adding PPC, 2002, 2003 (not enough room now)
+#define TARGET "PPC"
 #endif
-#endif
-
-  // experimental CVS
 
 #ifdef FIVV
-  _tcscat(XCSoar_Version, TEXT("5.2.5F "));
-#elif defined(__MINGW32__)
-  _tcscat(XCSoar_Version, TEXT("5.2.5 "));
+#define VERSION_SUFFIX "F"
 #else
-  _tcscat(XCSoar_Version, TEXT("5.2.5 "));
+#define VERSION_SUFFIX ""
 #endif
 
-  _tcscat(XCSoar_Version, TEXT(__DATE__));
-}
+const TCHAR XCSoar_Version[] = _T(TARGET " " VERSION VERSION_SUFFIX " "
+                                  __DATE__);

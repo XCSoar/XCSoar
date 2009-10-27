@@ -66,9 +66,6 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 
   InitAsset();
 
-  // Saves the current version string to XCSoar_Version
-  Version();
-
   // Write startup note + version to logfile
   StartupStore(TEXT("Starting XCSoar %s\n"), XCSoar_Version);
 

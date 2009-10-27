@@ -39,7 +39,6 @@ Copyright_License {
 
 #include <tchar.h>
 
-extern TCHAR XCSoar_Version[256];
-void Version();
+extern const TCHAR XCSoar_Version[];
 
 #endif
