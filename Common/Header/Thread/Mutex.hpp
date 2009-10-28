@@ -35,6 +35,18 @@ Copyright_License {
 }
 */
 
+/**
+ * This file is about mutexes.
+ *
+ * "A mutex lock is also known as a mutually exclusive lock. This type of lock
+ * is provided by many threading systems as a means of synchronization.
+ * Basically, it is only possible for one thread to grab a mutex at a time:
+ * if two threads try to grab a mutex, only one succeeds. The other thread
+ * has to wait until the first thread releases the lock; it can then grab the
+ * lock and continue operation."
+ * @file Mutex.hpp
+ */
+
 #ifndef XCSOAR_THREAD_MUTEX_HXX
 #define XCSOAR_THREAD_MUTEX_HXX
 
@@ -58,9 +70,7 @@ class Mutex {
 
 public:
   /**
-   * Initializes the trigger.
-   *
-   * @param name an application specific name for this trigger
+   * Initializes the Mutex
    */
   Mutex() {
 #ifdef HAVE_POSIX
@@ -75,6 +85,10 @@ public:
     ::InitializeCriticalSection(&handle);
 #endif
   }
+
+  /**
+   * Deletes the Mutex
+   */
   ~Mutex() {
 #ifdef HAVE_POSIX
     pthread_mutex_destroy(&mutex);
@@ -82,7 +96,11 @@ public:
     ::DeleteCriticalSection(&handle);
 #endif
   }
+
 public:
+  /**
+   * Locks the Mutex
+   */
   void Lock() {
 #ifdef HAVE_POSIX
     pthread_mutex_lock(&mutex);
@@ -90,6 +108,10 @@ public:
     EnterCriticalSection(&handle);
 #endif
   };
+
+  /**
+   * Unlocks the Mutex
+   */
   void Unlock() {
 #ifdef HAVE_POSIX
     pthread_mutex_unlock(&mutex);
@@ -99,7 +121,17 @@ public:
   }
 };
 
-// JMW testing an easy/clear way of handling mutexes
+/**
+ * A class for an easy and clear way of handling mutexes
+ *
+ * Creating a ScopeLock instance locks the given Mutex, while
+ * destruction of the ScopeLock leads to unlocking the Mutex.
+ *
+ * Usage: Create a ScopeLock at the beginning of a function and
+ * after function is executed the ScopeLock will destroy itself
+ * and unlock the Mutex again.
+ * @author JMW
+ */
 class ScopeLock {
 public:
   ScopeLock(Mutex& the_mutex):scope_mutex(the_mutex) {
