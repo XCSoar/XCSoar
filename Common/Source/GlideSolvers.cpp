@@ -36,6 +36,11 @@ Copyright_License {
 
 */
 
+/**
+ * Final glide through terrain and footprint calculations
+ * @file GlideSolvers.cpp
+ */
+
 #include "GlideSolvers.hpp"
 #include "XCSoar.h"
 #include "Protection.hpp"
@@ -51,9 +56,6 @@ Copyright_License {
 #include "NMEA/Info.h"
 #include "NMEA/Derived.hpp"
 #include "GeoPoint.hpp"
-
-//////////////////////////////////////////////////////////
-// Final glide through terrain and footprint calculations
 
 double
 FinalGlideThroughTerrain(const double this_bearing,
