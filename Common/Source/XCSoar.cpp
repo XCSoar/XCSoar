@@ -35,6 +35,11 @@ Copyright_License {
 }
 */
 
+/**
+ * This is the main entry point for the application
+ * @file XCSoar.cpp
+ */
+
 #include "XCSoar.h"
 #include "Version.hpp"
 #include "Protection.hpp"
