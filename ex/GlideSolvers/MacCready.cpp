@@ -65,7 +65,6 @@ MacCready::solve_vertical(const GLIDE_STATE &task) const
   result.HeightClimb = -task.AltitudeDifference;
   result.HeightGlide = 0;
   result.Solution = GLIDE_RESULT::RESULT_OK;
-  result.AltitudeDifference = 0;
 
   return result;
 }
@@ -101,7 +100,7 @@ MacCready::solve_cruise(const GLIDE_STATE &task) const
   result.TimeElapsed = t_cr+t_cl;
   result.HeightClimb = t_cl*mc;
   result.HeightGlide = t_cr*S-result.HeightClimb;
-  result.AltitudeDifference += result.HeightClimb-result.HeightGlide;
+  result.AltitudeDifference -= result.HeightClimb+result.HeightGlide;
   result.EffectiveWindSpeed *= rhoplusone;
 
   result.Solution = GLIDE_RESULT::RESULT_OK;
@@ -226,6 +225,7 @@ MacCready::solve(const GLIDE_STATE &task) const
   GLIDE_STATE sub_task = task;
   sub_task.Distance -= result_fg.Distance;
   sub_task.MinHeight += result_fg.HeightGlide;
+  sub_task.AltitudeDifference -= result_fg.HeightGlide;
 
   GLIDE_RESULT result_cc = solve_cruise(sub_task);
   result_cc.add(result_fg);

@@ -5,6 +5,7 @@
 
 
 unsigned n_queries = 0;
+unsigned count_intersections = 0;
 
 Waypoints::Waypoints(TaskProjection& _task_projection):
   task_projection(_task_projection)

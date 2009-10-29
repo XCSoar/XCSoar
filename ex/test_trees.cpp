@@ -16,11 +16,15 @@
 
 #include <fstream>
 
-unsigned count_intersections = 0;
+std::ofstream fout("res-trees.txt");
+
+extern unsigned count_intersections;
 extern unsigned n_queries;
 
+const unsigned n_test = 2000;
+
 void print_queries(unsigned n) {
-  printf("%d %d\n", n, count_intersections/n_queries);
+  fout << n << " " << count_intersections/n_queries << "\n";
   count_intersections = 0;
   n_queries = 0;
 }
@@ -47,7 +51,7 @@ test_wp(const unsigned n)
   }
   waypoints.optimise();
 
-  for (unsigned i=0; i<3000; i++) {
+  for (unsigned i=0; i<n_test; i++) {
     int x = rand()%1200-100;
     int y = rand()%1200-100;
     state.Location.Longitude = x/1000.0; 
@@ -84,7 +88,7 @@ test_as(const unsigned n, TaskProjection &task_projection)
   }
   airspaces.optimise();
 
-  for (unsigned i=0; i<500; i++) {
+  for (unsigned i=0; i<n_test; i++) {
     int x = rand()%1200-100;
     int y = rand()%1200-100;
     state.Location.Longitude = x/1000.0; 
@@ -146,17 +150,18 @@ int main() {
 
   task_projection.report();
 
-  printf("# test waypoint tree\n");
-  for (double i=5; i<20000; i*= 1.1) {
+  fout << "# test waypoint tree\n";
+  for (double i=10; i<=10000; i*= 1.1) {
     test_wp(i);
   }
-  printf("\n");
+  fout << "\n";
 
   ////////////////////////// AIRSPACES //////
 
-  printf("# test airspace tree\n");
-  for (double i=5; i<10000; i*= 1.1) {
+  fout << "# test airspace tree\n";
+  for (double i=10; i<=10000; i*= 1.1) {
     test_as(i,task_projection);
   }
+  fout << "\n";
   return 0;
 }

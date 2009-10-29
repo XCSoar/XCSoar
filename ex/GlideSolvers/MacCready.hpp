@@ -13,10 +13,17 @@ public:
   MacCready(const GlidePolar &_glide_polar,
             const double cruise_efficiency);
 
+  GLIDE_RESULT solve_sink(const GLIDE_STATE &task,
+                          const double S) const;
+
   GLIDE_RESULT solve(const GLIDE_STATE &task) const;
 
   GLIDE_RESULT solve_glide(const GLIDE_STATE &task,
 			   const double V) const;
+
+  double get_mc() const;
+
+private:
 
   GLIDE_RESULT solve_glide_zerowind(const GLIDE_STATE &task,
                                     const double V) const;
@@ -25,11 +32,6 @@ public:
 			   const double V,
                            const double S) const;
 
-  GLIDE_RESULT solve_sink(const GLIDE_STATE &task,
-                          const double S) const;
-
-  double get_mc() const;
-private:
   GLIDE_RESULT optimise_glide(const GLIDE_STATE &task) const;
 
   GLIDE_RESULT solve_vertical(const GLIDE_STATE &task) const;

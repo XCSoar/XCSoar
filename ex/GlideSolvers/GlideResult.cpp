@@ -67,11 +67,12 @@ GLIDE_RESULT::add(const GLIDE_RESULT &s2)
   HeightClimb += s2.HeightClimb;
   Distance    += s2.Distance;
   TimeVirtual += s2.TimeVirtual;
-  if ((AltitudeDifference>0) && (s2.AltitudeDifference>0)) {
-    AltitudeDifference= std::max(AltitudeDifference, s2.AltitudeDifference);
+
+  if ((AltitudeDifference<0) || (s2.AltitudeDifference<0)) {
+    AltitudeDifference= std::min(s2.AltitudeDifference+AltitudeDifference,
+      AltitudeDifference);
   } else {
-    // add differences if both under
-    AltitudeDifference+= std::min(s2.AltitudeDifference, 0.0);
+    AltitudeDifference= std::min(s2.AltitudeDifference, AltitudeDifference);
   }
 }
 
@@ -87,10 +88,12 @@ GLIDE_RESULT::calc_vspeed(const double mc)
     if (mc>0.0) {
       // equivalent time to gain the height that was used
       TimeVirtual = HeightGlide/mc;
+      return (TimeElapsed+TimeVirtual)/Distance;
     } else {
       TimeVirtual = 0.0;
+      // minimise 1.0/LD over ground 
+      return -HeightGlide/Distance;
     }
-    return (TimeElapsed+TimeVirtual)/Distance;
   } else {
     TimeVirtual = 0.0;
     return 0.0;

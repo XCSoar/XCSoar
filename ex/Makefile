@@ -19,7 +19,8 @@ endif
 
 OUTPUTS 	:= test
 
-INCLUDES := -I. -I../xcsoar/Common/Header
+SRC := .
+INCLUDES := -I$(SRC) -I$(SRC)/../xcsoar/Common/Header
 
 PROFILE := -pg
 OPTIMIZE := -g -O2
@@ -129,7 +130,10 @@ test: $(OBJS) test.cpp
 test_trees: $(OBJS) test_trees.cpp
 	g++ $(CXXFLAGS) $(INCLUDES) test_trees.cpp -o test_trees $(OBJS)
 
-all: $(OBJS) test test_trees
+test_mc: $(OBJS) test_mc.cpp
+	g++ $(CXXFLAGS) $(INCLUDES) test_mc.cpp -o test_mc $(OBJS)
+
+all: $(OBJS) test test_trees test_mc
 	@echo "done"
 
 

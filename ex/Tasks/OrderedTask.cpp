@@ -208,15 +208,17 @@ OrderedTask::update_idle(const AIRCRAFT_STATE& state)
     return false;
   }
 
-  double p = calc_min_target(state, 3600*7.0);
-  (void)p;
+  if (activeTaskPoint>0) {
+    double p = calc_min_target(state, 3600*7.0);
+    (void)p;
 
-  if (AATPoint* ap = dynamic_cast<AATPoint*>(tps[activeTaskPoint])) {
-    // very nasty hack
-    TaskOptTarget tot(tps, activeTaskPoint, state, glide_polar,
-                      *ap, ts);
-
-    tot.search(0.5);
+    if (AATPoint* ap = dynamic_cast<AATPoint*>(tps[activeTaskPoint])) {
+      // very nasty hack
+      TaskOptTarget tot(tps, activeTaskPoint, state, glide_polar,
+                        *ap, ts);
+      
+      tot.search(0.5);
+    }
   }
   
   return true;
@@ -456,8 +458,12 @@ OrderedTask::calc_mc_best(const AIRCRAFT_STATE &aircraft)
 double
 OrderedTask::calc_cruise_efficiency(const AIRCRAFT_STATE &aircraft)
 {
-  TaskCruiseEfficiency bce(tps,activeTaskPoint, aircraft, glide_polar);
-  return bce.search(1.0);
+  if (activeTaskPoint>0) {
+    TaskCruiseEfficiency bce(tps,activeTaskPoint, aircraft, glide_polar);
+    return bce.search(1.0);
+  } else {
+    return 1.0;
+  }
 }
 
 double

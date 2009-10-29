@@ -22,7 +22,7 @@ int n_samples = 0;
 
 extern long count_mc;
 //extern int count_distance;
-unsigned count_intersections = 0;
+extern unsigned count_intersections;
 extern unsigned n_queries;
 
 void distance_counts() {

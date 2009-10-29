@@ -46,7 +46,7 @@ public:
     {
     };
   double f(const double V) {
-    return polar.MSinkRate(V)/V;
+    return -V/polar.MSinkRate(V);
   }
 protected:
   const GlidePolar &polar;
