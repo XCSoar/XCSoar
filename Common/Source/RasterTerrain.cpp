@@ -102,25 +102,27 @@ bool RasterTerrain::CreateTerrainMap(char *zfilename) {
     TerrainMap = new RasterMapJPG2000();
     if (!TerrainMap)
       return false;
+
     return TerrainMap->Open(zfilename);
   }
+
   TerrainMap = new RasterMapRaw();
-  if (!TerrainMap) {
+  if (!TerrainMap)
     return false;
-  }
-  if (TerrainMap->Open(zfilename)) {
+
+  if (TerrainMap->Open(zfilename))
     return true;
-  }
+
   TerrainMap->Close();
   delete TerrainMap;
 
   TerrainMap = new RasterMapCache();
-  if (!TerrainMap) {
+  if (!TerrainMap)
     return false;
-  }
-  if (TerrainMap->Open(zfilename)) {
+
+  if (TerrainMap->Open(zfilename))
     return true;
-  }
+
   return false;
 }
 
@@ -129,7 +131,6 @@ void RasterTerrain::CloseTerrain(void)
   StartupStore(TEXT("CloseTerrain\n"));
 
   if (terrain_initialised) {
-
     if (TerrainMap) {
       TerrainMap->Close();
       delete TerrainMap;
