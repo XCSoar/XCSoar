@@ -35,6 +35,12 @@ Copyright_License {
 }
 */
 
+/**
+ * This file handles the geoid separation
+ * @file Geoid.cpp
+ * @see http://en.wikipedia.org/wiki/EGM96
+ */
+
 #include "XCSoar.h"
 #include "Math/FastMath.h"
 #include "Interface.hpp"
@@ -45,6 +51,9 @@ Copyright_License {
 
 unsigned char* egm96data= NULL;
 
+/**
+ * Load the EGM96 geoid resource into egm96data.
+ */
 void
 OpenGeoid(void)
 {
@@ -89,6 +98,9 @@ OpenGeoid(void)
   return;
 }
 
+/**
+ * Clear the EGM96 from the memory
+ */
 void
 CloseGeoid(void)
 {
@@ -98,6 +110,13 @@ CloseGeoid(void)
   }
 }
 
+/**
+ * Returns the geoid separation between the EGS96
+ * and the WGS84 at the given latitude and longitude
+ * @param lat Latitude
+ * @param lon Longitude
+ * @return The geoid separation
+ */
 double
 LookupGeoidSeparation(double lat, double lon)
 {
@@ -118,6 +137,6 @@ LookupGeoidSeparation(double lat, double lon)
   if (offset < 0)
     return 0.0;
 
-  double val = (double)(egm96data[offset])-127;
+  double val = (double)(egm96data[offset]) - 127;
   return val;
 }
