@@ -61,7 +61,7 @@ double
 FinalGlideThroughTerrain(const double this_bearing,
                          const NMEA_INFO *Basic,
                          const DERIVED_INFO *Calculated,
-			 const SETTINGS_COMPUTER &settings,
+                         const SETTINGS_COMPUTER &settings,
                          GEOPOINT *retloc,
                          const double max_range,
                          bool *out_of_range,
@@ -79,7 +79,7 @@ FinalGlideThroughTerrain(const double this_bearing,
   }
   *out_of_range = false;
 
-  if ((irange<=0.0)||(Calculated->NavAltitude<=0)) {
+  if ((irange <= 0.0) || (Calculated->NavAltitude <= 0)) {
     // can't make progress in this direction at the current windspeed/mc
     return 0;
   }
@@ -90,7 +90,7 @@ FinalGlideThroughTerrain(const double this_bearing,
   // first estimate max range at this altitude
   GEOPOINT loc, last_loc;
   double h=0.0, dh=0.0;
-//  int imax=0;
+  // int imax=0;
   double last_dh=0;
   double altitude;
 
@@ -173,21 +173,21 @@ FinalGlideThroughTerrain(const double this_bearing,
 
     if (start_under) {
       if (dh>last_dh) {
-	// better solution found, ok to continue...
-	if (dh>0) {
-	  // we've now found a terrain point above safety altitude,
-	  // so consider rest of track to search for safety altitude
-	  start_under = false;
-	}
+        // better solution found, ok to continue...
+        if (dh>0) {
+          // we've now found a terrain point above safety altitude,
+          // so consider rest of track to search for safety altitude
+          start_under = false;
+        }
       } else {
-	f= 0.0;
-	solution_found = true;
+        f= 0.0;
+        solution_found = true;
       }
     } else if (dh<=0) {
       if ((dh<last_dh) && (last_dh>0)) {
         f = max(0,min(1,(-last_dh)/(dh-last_dh)));
       } else {
-	f = 0.0;
+        f = 0.0;
       }
       solution_found = true;
     }
@@ -207,7 +207,7 @@ FinalGlideThroughTerrain(const double this_bearing,
   *out_of_range = true;
   retval = glide_max_range;
 
- OnExit:
+OnExit:
   terrain.Unlock();
   return retval;
 }
@@ -217,8 +217,8 @@ PirkerAnalysis(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated,
                const double this_bearing,
                const double GlideSlope)
 {
-//  bool maxfound = false;
-//  bool first = true;
+  // bool maxfound = false;
+  // bool first = true;
   double pirker_mc = 0.0;
   double h_target = GlideSlope;
   double h;
@@ -254,10 +254,10 @@ PirkerAnalysis(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated,
 
     if ((dh<=0)&&(last_dh>0)) {
       if (dh-last_dh < 0) {
-	double f = (-last_dh)/(dh-last_dh);
-	pirker_mc_zero = last_pirker_mc*(1.0-f)+f*pirker_mc;
+        double f = (-last_dh)/(dh-last_dh);
+        pirker_mc_zero = last_pirker_mc*(1.0-f)+f*pirker_mc;
       } else {
-	pirker_mc_zero = pirker_mc;
+        pirker_mc_zero = pirker_mc;
       }
       return pirker_mc_zero;
     }
@@ -307,7 +307,7 @@ MacCreadyTimeLimit(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated,
       double d = 1.0*p;
 
       if ((d>d_best) && (dh>=0)) {
-	mc_best = mc;
+        mc_best = mc;
       }
     }
   }
@@ -384,8 +384,7 @@ EffectiveMacCready_internal(const NMEA_INFO *Basic, const DERIVED_INFO *Calculat
     if (cruise_efficiency_mode) {
       mc_effective = mc_setting;
       if (Calculated->FinalGlide && (Calculated->timeCircling>0)) {
-	mc_effective = Calculated->TotalHeightClimb
-	  /Calculated->timeCircling;
+        mc_effective = Calculated->TotalHeightClimb / Calculated->timeCircling;
       }
       cruise_efficiency = 0.5+value_scan;
     } else {
@@ -441,13 +440,12 @@ EffectiveMacCready_internal(const NMEA_INFO *Basic, const DERIVED_INFO *Calculat
     // now check time..
     if (time_total<telapsed) {
       if (cruise_efficiency_mode) {
-	value_found = cruise_efficiency;
+        value_found = cruise_efficiency;
       } else {
-	value_found = mc_effective;
+        value_found = mc_effective;
       }
       break;
     }
-
   }
 
   return value_found;
