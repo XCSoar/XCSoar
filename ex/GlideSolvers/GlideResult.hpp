@@ -21,6 +21,7 @@ struct GLIDE_RESULT {
     TrackBearing(0.0),
     CruiseTrackBearing(0.0),
     Distance(0.0),
+    DistanceToFinal(0.0),
     VOpt(0.0),
     HeightClimb(0.0),
     HeightGlide(0.0),
@@ -38,6 +39,7 @@ struct GLIDE_RESULT {
 
   double TrackBearing;
   double Distance;
+  double DistanceToFinal;
   double CruiseTrackBearing;
   double VOpt;
   double HeightClimb;
@@ -50,6 +52,10 @@ struct GLIDE_RESULT {
   GlideResult_t Solution;
 
   void calc_cruise_bearing();
+
+  bool is_final_glide() const {
+    return (DistanceToFinal==0.0);
+  }
 
   // returns true if this solution is better than s2
   bool ok_or_partial() const {

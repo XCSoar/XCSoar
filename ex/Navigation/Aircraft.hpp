@@ -3,8 +3,6 @@
 
 #include "Navigation/Waypoint.hpp"
 
-struct GLIDE_RESULT;
-
 struct AIRCRAFT_STATE {
   GEOPOINT Location;
   double Time;
@@ -12,8 +10,6 @@ struct AIRCRAFT_STATE {
   double Altitude;
   double WindSpeed;
   double WindDirection;
-  void back_predict(const GLIDE_RESULT &res);
-  void forward_predict(const GLIDE_RESULT &res);
 };
 
 #endif

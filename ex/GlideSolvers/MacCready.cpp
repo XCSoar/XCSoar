@@ -150,6 +150,7 @@ MacCready::solve_glide(const GLIDE_STATE &task,
   result.TimeElapsed = t_cr;
   result.HeightGlide = t_cr*S;
   result.AltitudeDifference -= result.HeightGlide;
+  result.DistanceToFinal = 0;
 
   return result;
 }

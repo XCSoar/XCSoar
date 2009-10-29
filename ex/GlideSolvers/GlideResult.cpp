@@ -7,6 +7,7 @@ GLIDE_RESULT::GLIDE_RESULT(const GLIDE_STATE &task,
                            const double V):
     Solution(RESULT_NOSOLUTION),
     Distance(task.Distance),
+    DistanceToFinal(task.Distance),
     TrackBearing(task.Bearing),
     CruiseTrackBearing(task.Bearing),
     VOpt(V),
@@ -53,9 +54,13 @@ GLIDE_RESULT::print(std::ostream& f) const
   f << "#    TimeElapsed         " <<  TimeElapsed << " (s)\n";
   f << "#    TimeVirtual         " <<  TimeVirtual << " (s)\n";
   if (TimeElapsed>0) {
-  f << "#    Vave remaining      " <<  Distance/TimeElapsed << " (m/s)\n";
-  f << "#    EffectiveWindSpeed  " <<  EffectiveWindSpeed << " (m/s)\n";
-  f << "#    EffectiveWindAngle  " <<  EffectiveWindAngle << " (deg)\n";
+    f << "#    Vave remaining      " <<  Distance/TimeElapsed << " (m/s)\n";
+    f << "#    EffectiveWindSpeed  " <<  EffectiveWindSpeed << " (m/s)\n";
+    f << "#    EffectiveWindAngle  " <<  EffectiveWindAngle << " (deg)\n";
+    f << "#    DistanceToFinal     " <<  DistanceToFinal << " (m)\n";
+  }
+  if (is_final_glide()) {
+    f << "#    On final glide\n";
   }
 }
 
@@ -65,7 +70,8 @@ GLIDE_RESULT::add(const GLIDE_RESULT &s2)
   TimeElapsed += s2.TimeElapsed;
   HeightGlide += s2.HeightGlide;
   HeightClimb += s2.HeightClimb;
-  Distance    += s2.Distance;
+  Distance += s2.Distance;
+  DistanceToFinal += s2.DistanceToFinal;
   TimeVirtual += s2.TimeVirtual;
 
   if ((AltitudeDifference<0) || (s2.AltitudeDifference<0)) {
