@@ -125,7 +125,6 @@ long CheckFreeRam(void) {
   return memInfo.dwAvailPhys;
 }
 
-
 #ifdef WINDOWSPC
 #ifdef _DEBUG
 _CrtMemState memstate_s1;
@@ -140,7 +139,6 @@ void MemCheckPoint()
 #endif
 #endif
 }
-
 
 void MemLeakCheck() {
 #ifdef WINDOWSPC
@@ -159,9 +157,6 @@ void MemLeakCheck() {
 #endif
 #endif
 }
-
-
-///////////////
 
 // This is necessary to be called periodically to get rid of
 // memory defragmentation, since on pocket pc platforms there is no
@@ -203,6 +198,10 @@ unsigned long FindFreeSpace(const TCHAR *path) {
   }
 }
 
+/**
+ * Creates a new directory in the home directory, if it doesn't exist yet
+ * @param filename Name of the new directory
+ */
 void CreateDirectoryIfAbsent(const TCHAR *filename) {
   TCHAR fullname[MAX_PATH];
 
