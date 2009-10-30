@@ -83,12 +83,12 @@ MacCready::solve_cruise(const GLIDE_STATE &task) const
   const double Vn = task.calc_ave_speed(VOpt*cruise_efficiency/rhoplusone);
   if (Vn<=0.0) {
     result.Solution = GLIDE_RESULT::RESULT_WIND_EXCESSIVE;
-    result.Distance = 0;
+    result.Vector.Distance = 0;
     return result;
   }
 
   double t_cl1 = 0.0;
-  double distance = task.Distance;
+  double distance = task.Vector.Distance;
   if (task.AltitudeDifference<0) {
     t_cl1 = -task.AltitudeDifference/mc;
     distance = task.drifted_distance(t_cl1);
@@ -127,26 +127,26 @@ MacCready::solve_glide(const GLIDE_STATE &task,
   const double Vn = task.calc_ave_speed(Vset*cruise_efficiency);
   if (Vn<=0.0) {
     result.Solution = GLIDE_RESULT::RESULT_WIND_EXCESSIVE;
-    result.Distance = 0;
+    result.Vector.Distance = 0;
     return result;
   }
 
   const double Vndh = Vn*task.AltitudeDifference;
 
-  if (S*task.Distance>Vndh) { // S/Vn > dh/task.Distance
+  if (S*task.Vector.Distance>Vndh) { // S/Vn > dh/task.Distance
     if (task.AltitudeDifference<0) { 
       // insufficient height, and can't climb
-      result.Distance = 0;
+      result.Vector.Distance = 0;
       result.Solution = GLIDE_RESULT::RESULT_MACCREADY_INSUFFICIENT;
       return result;
     } else {
-      result.Distance = Vndh/S; // frac*task.Distance; 
+      result.Vector.Distance = Vndh/S; // frac*task.Distance; 
       result.Solution = GLIDE_RESULT::RESULT_PARTIAL;
     }
   } else {
     result.Solution = GLIDE_RESULT::RESULT_OK;
   }
-  const double t_cr = result.Distance/Vn;
+  const double t_cr = result.Vector.Distance/Vn;
   result.TimeElapsed = t_cr;
   result.HeightGlide = t_cr*S;
   result.AltitudeDifference -= result.HeightGlide;
@@ -191,7 +191,7 @@ MacCready::solve_glide_zerowind(const GLIDE_STATE &task,
 
   const double Vn = Vset*cruise_efficiency;
   GLIDE_RESULT result(task,Vset);
-  const double t_cr = task.Distance/Vn;
+  const double t_cr = task.Vector.Distance/Vn;
   result.Solution = GLIDE_RESULT::RESULT_OK;
   result.TimeElapsed = t_cr;
   result.HeightGlide = t_cr*glide_polar.SinkRate(Vset);
@@ -207,7 +207,7 @@ MacCready::solve(const GLIDE_STATE &task) const
 
   count_mc++;
 
-  if (task.Distance==0) {
+  if (task.Vector.Distance==0) {
     return solve_vertical(task);
   } 
   if (glide_polar.get_mc()==0) {
@@ -224,7 +224,7 @@ MacCready::solve(const GLIDE_STATE &task) const
   // climb-cruise remainder of way
 
   GLIDE_STATE sub_task = task;
-  sub_task.Distance -= result_fg.Distance;
+  sub_task.Vector.Distance -= result_fg.Vector.Distance;
   sub_task.MinHeight += result_fg.HeightGlide;
   sub_task.AltitudeDifference -= result_fg.HeightGlide;
 

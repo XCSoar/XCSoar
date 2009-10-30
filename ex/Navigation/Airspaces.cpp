@@ -10,7 +10,7 @@ void
 Airspaces::scan_nearest(const AIRCRAFT_STATE &state,
   const bool do_report) const 
 {
-  Airspace bb_target(state.Location,task_projection);
+  Airspace bb_target(state.Location,get_task_projection());
 
   std::pair<AirspaceTree::const_iterator, double> 
     found = airspace_tree.find_nearest(bb_target);
@@ -20,7 +20,7 @@ Airspaces::scan_nearest(const AIRCRAFT_STATE &state,
   if (found.first != airspace_tree.end()) {
     if (do_report) {
       std::ofstream foutn("res-bb-nearest.txt");
-      (found.first)->print(foutn, task_projection);
+      (found.first)->print(foutn, get_task_projection());
     }
     // also should do scan_range with range = 0 since there
     // could be more than one with zero dist
@@ -38,13 +38,13 @@ void
 Airspaces::scan_range(const AIRCRAFT_STATE &state, const double &range,
   const bool do_report) const
 {
-  Airspace bb_target(state.Location, task_projection);
-  int mrange = task_projection.project_range(state.Location, range);
+  Airspace bb_target(state.Location, get_task_projection());
+  int mrange = project_range(state.Location, range);
   
   if (do_report) { 
-    Airspace bb_rtarget(state.Location, task_projection, range);
+    Airspace bb_rtarget(state.Location, get_task_projection(), range);
     std::ofstream foutt("res-bb-target.txt");
-    bb_rtarget.print(foutt, task_projection);
+    bb_rtarget.print(foutt, get_task_projection());
   }
   
   std::deque< Airspace > vectors;
@@ -58,7 +58,7 @@ Airspaces::scan_range(const AIRCRAFT_STATE &state, const double &range,
          v != vectors.end(); v++) {
       if ((*v).distance(bb_target)<= range) {
         if ((*v).inside(state) || (range>0)) {
-          (*v).print(foutr, task_projection);
+          (*v).print(foutr, get_task_projection());
         }
       }        
     }
@@ -70,7 +70,7 @@ std::vector< Airspace >
 Airspaces::find_inside(const AIRCRAFT_STATE &state,
   const bool do_report) const
 {
-  Airspace bb_target(state.Location, task_projection);
+  Airspace bb_target(state.Location, get_task_projection());
 
   std::vector< Airspace > vectors;
   airspace_tree.find_within_range(bb_target, 0, std::back_inserter(vectors));
@@ -84,7 +84,7 @@ Airspaces::find_inside(const AIRCRAFT_STATE &state,
     if (!(*v).inside(state)) {
       vectors.erase(v);
     } else {
-      (*v).print(foutn, task_projection);
+      (*v).print(foutn, get_task_projection());
       v++;
     }
   }
@@ -100,7 +100,7 @@ Airspaces::optimise()
 void 
 Airspaces::insert(AbstractAirspace& asp)
 {
-  Airspace a(asp, task_projection);
+  Airspace a(asp, get_task_projection());
   airspace_tree.insert(a);
 }
 

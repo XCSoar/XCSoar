@@ -40,9 +40,9 @@ TaskMacCreadyTotal::effective_distance(const double time_remaining) const
     if (gs[i].TimeElapsed>0) {
       double p = (time_remaining-t_total)/gs[i].TimeElapsed;
       if ((p>=0.0) && (p<=1.0)) {
-        return d_total+p*gs[i].Distance;
+        return d_total+p*gs[i].Vector.Distance;
       }
-      d_total += gs[i].Distance;
+      d_total += gs[i].Vector.Distance;
       t_total += gs[i].TimeElapsed;
     }
   }
@@ -53,6 +53,6 @@ double
 TaskMacCreadyTotal::effective_leg_distance(const double time_remaining) const
 {
   double p = (time_remaining)/gs[activeTaskPoint].TimeElapsed;
-  return p*gs[activeTaskPoint].Distance;
+  return p*gs[activeTaskPoint].Vector.Distance;
 }
 

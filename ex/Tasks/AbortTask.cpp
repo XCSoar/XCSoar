@@ -5,11 +5,12 @@
 #include <queue>
 
 AbortTask::AbortTask(const TaskEvents &te, 
+                     const TaskBehaviour &tb,
                      const TaskProjection &tp,
                      TaskAdvance &ta,
                      GlidePolar &gp,
                      const Waypoints &wps):
-  AbstractTask(te, ta, gp), 
+  AbstractTask(te, tb, ta, gp), 
   task_projection(tp),
   waypoints(wps),
   polar_safety(gp),

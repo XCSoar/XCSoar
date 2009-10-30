@@ -19,7 +19,7 @@ GEOPOINT AATPoint::get_reference_scored() const
 
 GEOPOINT AATPoint::get_reference_travelled() const
 {
-  if (state_entered.Time>=0) {
+  if (has_entered()) {
     return getMaxLocation();
   } else {
     return getMinLocation();

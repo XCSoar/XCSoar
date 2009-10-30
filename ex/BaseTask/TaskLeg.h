@@ -3,46 +3,56 @@
 #ifndef TASKLEG_H
 #define TASKLEG_H
 
+#include "GeoPoint.hpp"
+#include "Navigation/GeoVector.hpp"
+#include "Navigation/DistanceMemento.hpp"
+#include "Navigation/GeoVectorMemento.hpp"
+
 class OrderedTaskPoint;
-struct GEOPOINT;
 
 class TaskLeg {
+public:
+  TaskLeg(OrderedTaskPoint &_destination);
+
+  double scan_distance_nominal();
+  double scan_distance_planned();
+  double scan_distance_max();
+  double scan_distance_min();
+  double scan_distance_remaining(const GEOPOINT &ref);
+  double scan_distance_scored(const GEOPOINT &ref);
+  double scan_distance_travelled(const GEOPOINT &ref);
+
 protected:
+  GeoVector vector_travelled;
+  GeoVector vector_remaining;
+  GeoVector vector_planned;
 
-  double leg_distance_nominal(const OrderedTaskPoint *origin,
-                              const OrderedTaskPoint *destination) const;
+private:
 
-  double leg_distance_planned(const OrderedTaskPoint *origin,
-                              const OrderedTaskPoint *destination) const;
-  
-  double leg_distance_scored(const OrderedTaskPoint *origin,
-                             const OrderedTaskPoint *destination,
-                             const GEOPOINT &ref) const;
-  
-  double leg_distance_travelled(const OrderedTaskPoint *origin,
-                                const OrderedTaskPoint *destination,
-                                const GEOPOINT &ref) const;
-  
-  double leg_distance_remaining(const OrderedTaskPoint *origin,
-                                const OrderedTaskPoint *destination,
-                                const GEOPOINT &ref) const;
-  
-  double leg_distance_max(const OrderedTaskPoint *origin,
-                          const OrderedTaskPoint *destination) const;
-  
-  double leg_distance_min(const OrderedTaskPoint *origin,
-                          const OrderedTaskPoint *destination) const;
-  
-  double leg_bearing_travelled(const OrderedTaskPoint *origin,
-                               const OrderedTaskPoint *destination,
-                               const GEOPOINT &ref) const;
-  
-  double leg_bearing_remaining(const OrderedTaskPoint *origin,
-                               const OrderedTaskPoint *destination,
-                               const GEOPOINT &ref) const;
-  
-  double leg_bearing_planned(const OrderedTaskPoint *origin,
-                             const OrderedTaskPoint *destination) const;
+  DistanceMemento memo_max;
+  DistanceMemento memo_min;
+  DistanceMemento memo_nominal;
+  GeoVectorMemento memo_planned;
+  GeoVectorMemento memo_travelled;
+  GeoVectorMemento memo_remaining;
 
+  GeoVector leg_vector_planned() const;
+  
+  GeoVector leg_vector_travelled(const GEOPOINT &ref) const;
+  
+  GeoVector leg_vector_remaining(const GEOPOINT &ref) const;
+  
+  double leg_distance_max() const;
+  
+  double leg_distance_min() const;
+
+  double leg_distance_nominal() const;
+
+  double leg_distance_scored(const GEOPOINT &ref) const;
+
+  const OrderedTaskPoint* origin() const;
+  OrderedTaskPoint* next() const;
+
+  OrderedTaskPoint& destination;
 };
 #endif //TASKLEG_H

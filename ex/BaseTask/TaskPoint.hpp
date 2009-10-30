@@ -43,6 +43,7 @@
 #include "Navigation/ReferencePoint.hpp"
 #include "Navigation/Waypoint.hpp"
 #include "Navigation/Aircraft.hpp"
+#include "Navigation/GeoVector.hpp"
 
 struct GLIDE_RESULT;
 class GlidePolar;
@@ -65,12 +66,7 @@ public:
 
   virtual GEOPOINT get_reference_remaining() const;
   
-  double get_bearing(const AIRCRAFT_STATE &) const;
-
-  double get_distance(const AIRCRAFT_STATE &) const;
-
-  virtual double get_distance_remaining(const AIRCRAFT_STATE &) const;
-  virtual double get_bearing_remaining(const AIRCRAFT_STATE &) const;
+  virtual const GeoVector get_vector_remaining(const AIRCRAFT_STATE &) const;
 
   GLIDE_RESULT glide_solution_remaining(const AIRCRAFT_STATE &, 
                                         const GlidePolar &polar,

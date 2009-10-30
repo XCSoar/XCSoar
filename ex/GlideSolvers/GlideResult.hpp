@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include "GlidePolar.hpp"
+#include "Navigation/GeoVector.hpp"
 
 struct GLIDE_STATE;
 
@@ -18,9 +19,8 @@ struct GLIDE_RESULT {
 
   GLIDE_RESULT():
     Solution(RESULT_NOSOLUTION),
-    TrackBearing(0.0),
+    Vector(0,0),
     CruiseTrackBearing(0.0),
-    Distance(0.0),
     DistanceToFinal(0.0),
     VOpt(0.0),
     HeightClimb(0.0),
@@ -37,8 +37,7 @@ struct GLIDE_RESULT {
   GLIDE_RESULT(const GLIDE_STATE &task, 
                const double V);
 
-  double TrackBearing;
-  double Distance;
+  GeoVector Vector;
   double DistanceToFinal;
   double CruiseTrackBearing;
   double VOpt;

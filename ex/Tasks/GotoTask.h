@@ -9,6 +9,7 @@ struct WAYPOINT;
 class GotoTask : public AbstractTask {
 public:    
   GotoTask(const TaskEvents &te, 
+           const TaskBehaviour &tb,
            TaskAdvance &ta,
            GlidePolar &gp);
   ~GotoTask();

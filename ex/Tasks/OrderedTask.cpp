@@ -202,26 +202,27 @@ OrderedTask::check_transitions(const AIRCRAFT_STATE &state,
 bool 
 OrderedTask::update_idle(const AIRCRAFT_STATE& state)
 {
-  AbstractTask::update_idle(state);
+  bool retval = AbstractTask::update_idle(state);
 
-  if (!ts) {
-    return false;
-  }
+  if (ts && task_behaviour.optimise_targets_range) {
+    if (activeTaskPoint>0) {
+      double p = calc_min_target(state, 3600*7.0);
+      (void)p;
 
-  if (activeTaskPoint>0) {
-    double p = calc_min_target(state, 3600*7.0);
-    (void)p;
-
-    if (AATPoint* ap = dynamic_cast<AATPoint*>(tps[activeTaskPoint])) {
-      // very nasty hack
-      TaskOptTarget tot(tps, activeTaskPoint, state, glide_polar,
-                        *ap, ts);
-      
-      tot.search(0.5);
+      if (task_behaviour.optimise_targets_bearing) {
+        if (AATPoint* ap = dynamic_cast<AATPoint*>(tps[activeTaskPoint])) {
+          // very nasty hack
+          TaskOptTarget tot(tps, activeTaskPoint, state, glide_polar,
+                            *ap, ts);
+          
+          tot.search(0.5);
+        }
+      }
     }
+    retval = true;
   }
   
-  return true;
+  return retval;
 }
 
 
@@ -547,7 +548,7 @@ OrderedTask::calc_gradient(const AIRCRAFT_STATE &state)
   double h_this = state.Altitude;
 
   for (unsigned i=activeTaskPoint; i< tps.size(); i++) {
-    d_acc += tps[i]->get_distance_remaining(state);
+    d_acc += tps[i]->get_vector_remaining(state).Distance;
     if (!d_acc) {
       continue;
     }
@@ -575,10 +576,11 @@ OrderedTask::~OrderedTask()
 
 
 OrderedTask::OrderedTask(const TaskEvents &te, 
+                         const TaskBehaviour &tb,
                          const TaskProjection &tp,
                          TaskAdvance &ta,
                          GlidePolar &gp):
-  AbstractTask(te, ta, gp),
+  AbstractTask(te, tb, ta, gp),
   task_projection(tp),
   ts(NULL),
   tf(NULL)

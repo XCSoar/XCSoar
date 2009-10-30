@@ -1,13 +1,14 @@
 #ifndef GLIDESTATE_HPP
 #define GLIDESTATE_HPP
 
+#include "Navigation/GeoVector.hpp"
+
 struct AIRCRAFT_STATE;
 struct GEOPOINT;
 
 struct GLIDE_STATE {
   // dummy task
-  GLIDE_STATE(const double distance,
-              const double bearing,
+  GLIDE_STATE(const GeoVector &vector,
               const double htarget,
               const AIRCRAFT_STATE &aircraft);
   // from target to aircraft
@@ -18,8 +19,9 @@ struct GLIDE_STATE {
   GLIDE_STATE(const AIRCRAFT_STATE &aircraft,
               const GEOPOINT& target,
               const double htarget);
-  double Distance; 
-  double Bearing; // TODO should be average bearing
+
+  GeoVector Vector; // TODO should be average bearing
+
   double MinHeight; 
   void calc_speedups(const AIRCRAFT_STATE &aircraft);
   double WindDirection;

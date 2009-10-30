@@ -12,14 +12,20 @@
 bool 
 AbstractTask::update_idle(const AIRCRAFT_STATE &state)
 {
-  if (1) {
+  bool retval = false;
+  if (task_behaviour.auto_mc) {
     stats.mc_best = calc_mc_best(state);
-    stats.cruise_efficiency = calc_cruise_efficiency(state);
+    retval = true;
   } else {
     stats.mc_best = glide_polar.get_mc();
+  }
+  if (task_behaviour.calc_cruise_efficiency) {
+    stats.cruise_efficiency = calc_cruise_efficiency(state);
+    retval = true;
+  } else {
     stats.cruise_efficiency = 1.0;
   }
-  // do nothing
+
   return false;
 }
 
@@ -73,11 +79,11 @@ AbstractTask::update_glide_solutions(const AIRCRAFT_STATE &state)
                          stats.current_leg.solution_remaining.TimeElapsed);
 
   stats.current_leg.remaining.set_distance(
-    stats.current_leg.solution_remaining.Distance);
+    stats.current_leg.solution_remaining.Vector.Distance);
   stats.current_leg.travelled.set_distance(
-    stats.current_leg.solution_travelled.Distance);
+    stats.current_leg.solution_travelled.Vector.Distance);
   stats.current_leg.planned.set_distance(
-    stats.current_leg.solution_planned.Distance);
+    stats.current_leg.solution_planned.Vector.Distance);
 
   stats.total.gradient = ::AngleToGradient(calc_gradient(state));
   stats.current_leg.gradient = ::AngleToGradient(leg_gradient(state));
@@ -212,8 +218,8 @@ AbstractTask::glide_solution_planned(const AIRCRAFT_STATE &state,
   GLIDE_RESULT res = stats.total.solution_remaining;
   total = res;
   leg = res;
-  total_remaining_effective.set_distance(res.Distance);
-  leg_remaining_effective.set_distance(res.Distance);
+  total_remaining_effective.set_distance(res.Vector.Distance);
+  leg_remaining_effective.set_distance(res.Vector.Distance);
 }
 
 void
@@ -292,7 +298,7 @@ AbstractTask::leg_gradient(const AIRCRAFT_STATE &aircraft)
   if (!tp) {
     return 0.0;
   }
-  const double d = tp->get_distance_remaining(aircraft);
+  const double d = tp->get_vector_remaining(aircraft).Distance;
   if (d) {
     return (aircraft.Altitude-tp->getElevation())/d;
   } else {

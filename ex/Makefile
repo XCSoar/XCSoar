@@ -65,11 +65,14 @@ OBJS	:=\
 	GlideSolvers/MacCready.o \
 	GlideSolvers/ZeroFinder.o \
 	Navigation/Aircraft.o \
+	Navigation/DistanceMemento.o \
+	Navigation/GeoVectorMemento.o \
 	Navigation/ReferencePoint.o \
 	Navigation/Airspace.o \
 	Navigation/AirspaceCircle.o \
 	Navigation/AirspacePolygon.o \
 	Navigation/Airspaces.o \
+	Navigation/GeoVector.o \
 	Navigation/Waypoint.o \
 	Navigation/Waypoints.o \
 	BaseTask/AATPoint.o \
@@ -77,7 +80,9 @@ OBJS	:=\
 	BaseTask/AATIsolineSegment.o \
 	BaseTask/AATIsolineIntercept.o \
 	BaseTask/OrderedTaskPoint.o \
+	BaseTask/ScoredTaskPoint.o \
 	BaseTask/TaskProjection.o \
+	BaseTask/TaskProjectionClient.o \
 	BaseTask/FinishPoint.o \
 	BaseTask/SampledTaskPoint.o \
 	BaseTask/SearchPoint.o \

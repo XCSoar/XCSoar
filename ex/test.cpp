@@ -21,21 +21,27 @@
 int n_samples = 0;
 
 extern long count_mc;
-//extern int count_distance;
 extern unsigned count_intersections;
 extern unsigned n_queries;
+extern unsigned count_distbearing;
+extern unsigned num_dijkstra;
 
 void distance_counts() {
-//  printf("#     distance queries %d\n",count_distance/n_samples); 
-  printf("#     mc calcs/c %d\n",count_mc/n_samples);
-  printf("#     num samples %d\n",n_samples);
-}
-
-void query_counts() {
-  printf("#     intersections tests/q %d\n",count_intersections/n_queries);
-  printf("#     num queries %d\n",n_queries);
+  if (n_samples) {
+    printf("# Instrumentation\n");
+    printf("#     dist+bearing calcs/c %d\n",count_distbearing/n_samples); 
+    printf("#     mc calcs/c %d\n",count_mc/n_samples);
+    printf("#     dijkstra/c %d\n",num_dijkstra/n_samples);
+    printf("#    (total cycles %d)\n\n",n_samples);
+    printf("#     intersections tests/q %d\n",count_intersections/n_queries);
+    printf("#    (total queries %d)\n\n",n_queries);
+  }
   count_intersections = 0;
   n_queries = 0;
+  n_samples = 0;
+  count_distbearing = 0;
+  count_mc = 0;
+  num_dijkstra = 0;
 }
 
 double small_rand() {
@@ -49,43 +55,9 @@ char wait_prompt(const double time) {
 //  return 0;
 }
 
+WAYPOINT wp[6];
 
-int main() {
-  GEOPOINT start; start.Longitude = 0.5; start.Latitude = 0.5;
-
-  ::InitSineTable();
-
-  ////////////////////////////////////////////////////////////////
-
-  TaskEvents default_events;
-  GlidePolar glide_polar(2.0,0.0,0.0);
-  TaskProjection task_projection(start);
-
-  ////////////////////////// WAYPOINTS //////
-  Waypoints waypoints(task_projection);
-
-  WAYPOINT wp[6];
-  wp[0].id = 0;
-  wp[0].Location.Longitude=0;
-  wp[0].Location.Latitude=0;
-  wp[0].Altitude=0.25;
-  wp[1].id = 1;
-  wp[1].Location.Longitude=0;
-  wp[1].Location.Latitude=1.0;
-  wp[1].Altitude=0.25;
-  wp[2].id = 2;
-  wp[2].Location.Longitude=1.0;
-  wp[2].Location.Latitude=1.0;
-  wp[2].Altitude=0.5;
-  wp[3].id = 3;
-  wp[3].Location.Longitude=0.8;
-  wp[3].Location.Latitude=0.5;
-  wp[3].Altitude=0.25;
-  wp[4].id = 4;
-  wp[4].Location.Longitude=1.0;
-  wp[4].Location.Latitude=0;
-  wp[4].Altitude=0.25;
-
+void setup_waypoints(Waypoints &waypoints) {
   for (unsigned i=0; i<5; i++) {
     waypoints.insert(wp[i]);
   }
@@ -100,13 +72,10 @@ int main() {
     waypoints.insert(ff);
   }
   waypoints.optimise();
+}
 
-  task_projection.report();
 
-  ////////////////////////// AIRSPACES //////
-
-  Airspaces airspaces(task_projection);
-
+void setup_airspaces(Airspaces& airspaces, TaskProjection& task_projection) {
   std::ofstream fin("res-bb-in.txt");
   for (unsigned i=0; i<150; i++) {
     AbstractAirspace* as;
@@ -123,12 +92,12 @@ int main() {
     as->print(fin, task_projection);
   }
   airspaces.optimise();
+}
 
-  ////////////////////////// TASK //////
 
-  TaskManager task_manager(default_events,task_projection,
-			   glide_polar,waypoints);
-
+void setup_task(TaskManager& task_manager,
+                TaskProjection &task_projection)
+{
   task_manager.append(new FAISectorStartPoint(task_projection,wp[0]));
   task_manager.append(new FAISectorASTPoint(task_projection,wp[1]));
   task_manager.append(new CylinderAATPoint(task_projection,wp[2]));
@@ -140,9 +109,11 @@ int main() {
     task_manager.setActiveTaskPoint(0);
     task_manager.resume();
   }
+}
 
-  ////////////////////////// TEST FLIGHT //////
-
+void test_flight(TaskManager &task_manager,
+                 Airspaces &airspaces) 
+{
 #define  num_wp 5
   GEOPOINT w[num_wp];
   w[0].Longitude = -0.025; 
@@ -201,9 +172,74 @@ int main() {
       state_last = state;
     }    
   }
+  distance_counts();
+}
+
+int main() {
+  GEOPOINT start; start.Longitude = 0.5; start.Latitude = 0.5;
+
+  ::InitSineTable();
+
+  wp[0].id = 0;
+  wp[0].Location.Longitude=0;
+  wp[0].Location.Latitude=0;
+  wp[0].Altitude=0.25;
+  wp[1].id = 1;
+  wp[1].Location.Longitude=0;
+  wp[1].Location.Latitude=1.0;
+  wp[1].Altitude=0.25;
+  wp[2].id = 2;
+  wp[2].Location.Longitude=1.0;
+  wp[2].Location.Latitude=1.0;
+  wp[2].Altitude=0.5;
+  wp[3].id = 3;
+  wp[3].Location.Longitude=0.8;
+  wp[3].Location.Latitude=0.5;
+  wp[3].Altitude=0.25;
+  wp[4].id = 4;
+  wp[4].Location.Longitude=1.0;
+  wp[4].Location.Latitude=0;
+  wp[4].Altitude=0.25;
+
+  ////////////////////////////////////////////////////////////////
+
+  TaskEvents default_events;
+  GlidePolar glide_polar(2.0,0.0,0.0);
+  TaskProjection task_projection(start);
+
+  ////////////////////////// WAYPOINTS //////
+  Waypoints waypoints(task_projection);
+  setup_waypoints(waypoints);
+  task_projection.report();
+
+  ////////////////////////// AIRSPACES //////
+  Airspaces airspaces(task_projection);
+  setup_airspaces(airspaces, task_projection);
+
+  ////////////////////////// TASK //////
+
+  TaskBehaviour task_behaviour;
 
   distance_counts();
-  query_counts();
+
+  for (unsigned i=0; i<2; i++) {
+    if (i==1) {
+      printf("ALL OFF\n");
+      task_behaviour.all_off();
+    }
+
+    TaskManager task_manager(default_events,
+                             task_behaviour,
+                             task_projection,
+                             glide_polar,waypoints);
+    
+    setup_task(task_manager, task_projection);
+    
+    ////////////////////////// TEST FLIGHT //////
+    
+    test_flight(task_manager, airspaces);
+
+  }
 
 //  task_manager.remove(2);
 //  task_manager.scan_distance(location);

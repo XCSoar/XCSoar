@@ -30,8 +30,8 @@ double TaskBestMc::f(const double mc)
   // TODO: this fails if Mc too low for wind, need to 
   // account for failed solution
   // && (fabs(res.AltitudeDifference)<tolerance)
-  if (res.Distance>0) {
-    return res.AltitudeDifference/res.Distance;
+  if (res.Vector.Distance>0) {
+    return res.AltitudeDifference/res.Vector.Distance;
   } else {
     return res.AltitudeDifference;
   }

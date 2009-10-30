@@ -6,17 +6,18 @@
 #include "SearchPointVector.hpp"
 #include "Scoring/ObservationZone.hpp"
 #include "TaskPoint.hpp"
-#include "TaskProjection.h"
+#include "TaskProjectionClient.hpp"
 
 class SampledTaskPoint:
   public TaskPoint, 
-  public ObservationZone
+  public ObservationZone,
+  public TaskProjectionClient
 {
 public:  
   SampledTaskPoint(const TaskProjection& tp,
                    const WAYPOINT & wp, 
                    const bool b_scored):
-    task_projection(tp),
+    TaskProjectionClient(tp),
     TaskPoint(wp),
     boundary_scored(b_scored),
     search_max(getLocation(),tp),
@@ -74,17 +75,8 @@ public:
   virtual void print_samples(std::ostream& f, const AIRCRAFT_STATE&state);
   virtual void print_boundary(std::ostream& f, const AIRCRAFT_STATE&state) const;
 
-  FLAT_GEOPOINT project(const GEOPOINT& tp) const;
-  GEOPOINT unproject(const FLAT_GEOPOINT& tp) const;
-  FlatPoint fproject(const GEOPOINT& tp) const;
-  GEOPOINT funproject(const FlatPoint& tp) const;
-
-  const TaskProjection& get_task_projection() const {
-    return task_projection;
-  }
 protected:
   bool boundary_scored;
-  const TaskProjection& task_projection;
 
 private:
   SearchPointVector sampled_points;

@@ -38,34 +38,23 @@
 #ifndef ORDEREDTASKPOINT_HPP
 #define ORDEREDTASKPOINT_HPP
 
-#include "SampledTaskPoint.h"
 #include "TaskLeg.h"
+#include "ScoredTaskPoint.hpp"
 
 class OrderedTaskPoint : 
-  public SampledTaskPoint,
-  public TaskLeg
+  public TaskLeg,
+  public ScoredTaskPoint
 {
 public:
   OrderedTaskPoint(const TaskProjection& tp,
                    const WAYPOINT & wp, 
                    const bool b_scored) : 
-    SampledTaskPoint(tp, wp, b_scored),
-      tp_previous(NULL),
-      tp_next(NULL),
-      active_state(NOTFOUND_ACTIVE),
-      bearing_travelled(0.0),
-      bearing_remaining(0.0),
-      bearing_planned(0.0),
-      distance_nominal(0.0),   
-      distance_planned(0.0),
-      distance_scored(0.0),    
-      distance_remaining(0.0), 
-      distance_travelled(0.0),
-      this_distance_travelled(0.0),
-      this_distance_remaining(0.0)
+    ScoredTaskPoint(tp, wp, b_scored),
+    tp_previous(NULL),
+    tp_next(NULL),
+    active_state(NOTFOUND_ACTIVE),
+    TaskLeg(*this)
     {
-      state_entered.Time = -1;
-      state_exited.Time = -1;
     };
 
   virtual ~OrderedTaskPoint() {};
@@ -91,58 +80,21 @@ public:
     return active_state;
   }
 
-protected:
   bool scan_active(OrderedTaskPoint* atp);
-  double scan_distance_nominal();
-  double scan_distance_planned();
-  double scan_distance_max();
-  double scan_distance_min();
-  double scan_distance_remaining(const GEOPOINT &ref);
-  double scan_distance_scored(const GEOPOINT &ref);
-  double scan_distance_travelled(const GEOPOINT &ref);
-
-public:
-
-  virtual GEOPOINT get_reference_nominal() const;
-
-  virtual GEOPOINT get_reference_scored() const;
-
-  virtual GEOPOINT get_reference_travelled() const;
-
-  virtual GEOPOINT get_reference_remaining() const;
-
-  virtual bool transition_enter(const AIRCRAFT_STATE & ref_now, 
-                                const AIRCRAFT_STATE & ref_last);
-
-  virtual bool transition_exit(const AIRCRAFT_STATE & ref_now, 
-                               const AIRCRAFT_STATE & ref_last);
 
   virtual void print(std::ostream& f, const AIRCRAFT_STATE& state,
                      const int item=0) const;
 
   const std::vector<SearchPoint>& get_search_points();
 
-  virtual double get_distance_remaining(const AIRCRAFT_STATE &) const;
-  virtual double get_bearing_remaining(const AIRCRAFT_STATE &) const;
-
-  virtual double get_distance_travelled() const {
-    return this_distance_travelled;
+  virtual const GeoVector get_vector_remaining(const AIRCRAFT_STATE &) const {
+    return vector_remaining;
   }
-  virtual double get_bearing_travelled() const {
-    return bearing_travelled;
+  virtual const GeoVector get_vector_travelled() const {
+    return vector_travelled;
   }
-  virtual double get_distance_planned() const {
-    return this_distance_planned;
-  }
-  virtual double get_bearing_planned() const {
-    return bearing_planned;
-  }
-
-  bool has_entered() const {
-    return state_entered.Time>0;
-  }
-  AIRCRAFT_STATE get_state_entered() const {
-    return state_entered;
+  virtual const GeoVector get_vector_planned() const {
+    return vector_planned;
   }
 
   GLIDE_RESULT glide_solution_travelled(const AIRCRAFT_STATE &, 
@@ -166,22 +118,6 @@ private:
 
 protected:
   ActiveState_t active_state;
-
-  double distance_nominal;   
-  double distance_scored;    
-  double distance_remaining; 
-  double distance_travelled; 
-  double distance_planned;
-
-  double bearing_travelled;
-  double bearing_remaining;
-  double bearing_planned;
-  double this_distance_planned;
-  double this_distance_travelled;
-  double this_distance_remaining;
-
-  AIRCRAFT_STATE state_entered;
-  AIRCRAFT_STATE state_exited;
 
   double double_leg_distance(const GEOPOINT &ref) const;
 

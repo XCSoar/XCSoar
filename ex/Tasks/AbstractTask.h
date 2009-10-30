@@ -3,6 +3,7 @@
 
 #include "TaskInterface.h"
 #include "TaskEvents.hpp"
+#include "TaskBehaviour.hpp"
 #include "TaskAdvance.hpp"
 #include "TaskStats/TaskStats.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
@@ -10,11 +11,13 @@
 class AbstractTask : public TaskInterface {
 public:
   AbstractTask(const TaskEvents &te,
+               const TaskBehaviour &tb,
                TaskAdvance &ta,
                GlidePolar &gp): 
     activeTaskPoint(0),
     task_events(te),
     task_advance(ta),
+    task_behaviour(tb),
     glide_polar(gp)
   {};
 
@@ -81,6 +84,7 @@ protected:
   const TaskEvents &task_events;
   TaskAdvance &task_advance;
   GlidePolar glide_polar;
+  const TaskBehaviour &task_behaviour;
 
 private:
   void update_glide_solutions(const AIRCRAFT_STATE &state);

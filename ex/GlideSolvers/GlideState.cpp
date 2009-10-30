@@ -3,7 +3,6 @@
 #include "Util/Quadratic.hpp"
 #include "Navigation/Aircraft.hpp"
 #include "Math/NavFunctions.hpp"
-#include "Math/Earth.hpp"
 
 class GlideQuadratic: public Quadratic
 {
@@ -34,12 +33,10 @@ GLIDE_STATE::calc_ave_speed(const double Veff) const
 }
 
 // dummy task
-GLIDE_STATE::GLIDE_STATE(const double distance,
-                         const double bearing,
+GLIDE_STATE::GLIDE_STATE(const GeoVector &vector,
                          const double htarget,
                          const AIRCRAFT_STATE &aircraft):
-  Distance(distance),
-  Bearing(bearing),
+  Vector(vector),
   MinHeight(htarget)
 {
   calc_speedups(aircraft);
@@ -51,7 +48,7 @@ void GLIDE_STATE::calc_speedups(const AIRCRAFT_STATE &aircraft)
   if (aircraft.WindSpeed>0.0) {
     WindDirection = aircraft.WindDirection;
     EffectiveWindSpeed = (aircraft.WindSpeed);
-    const double theta = aircraft.WindDirection-Bearing;
+    const double theta = aircraft.WindDirection-Vector.Bearing;
     EffectiveWindAngle = theta;
     wsq_ = aircraft.WindSpeed*aircraft.WindSpeed;
     dwcostheta_ = -2.0*aircraft.WindSpeed*cos(DEG_TO_RAD*theta);
@@ -68,9 +65,9 @@ void GLIDE_STATE::calc_speedups(const AIRCRAFT_STATE &aircraft)
 GLIDE_STATE::GLIDE_STATE(const GEOPOINT& target,
                          const AIRCRAFT_STATE &aircraft,
                          const double htarget):
+  Vector(target,aircraft.Location),
   MinHeight(htarget)
 {
-  ::DistanceBearing(target, aircraft.Location, &Distance, &Bearing);
   calc_speedups(aircraft);
 }
 
@@ -78,9 +75,9 @@ GLIDE_STATE::GLIDE_STATE(const GEOPOINT& target,
 GLIDE_STATE::GLIDE_STATE(const AIRCRAFT_STATE &aircraft,
                          const GEOPOINT& target,
                          const double htarget):
+  Vector(aircraft.Location, target),
   MinHeight(htarget)
 {
-  ::DistanceBearing(aircraft.Location, target, &Distance, &Bearing);
   calc_speedups(aircraft);
 }
 
@@ -91,12 +88,12 @@ GLIDE_STATE::drifted_distance(const double t_cl) const
   if (EffectiveWindSpeed>0) {
     const double aw = EffectiveWindSpeed*t_cl;
     const double wd = DEG_TO_RAD*(WindDirection);
-    const double tb = DEG_TO_RAD*(Bearing);
-    const double dx= aw*sin(wd)-Distance*sin(tb);
-    const double dy= aw*cos(wd)-Distance*cos(tb);
+    const double tb = DEG_TO_RAD*(Vector.Bearing);
+    const double dx= aw*sin(wd)-Vector.Distance*sin(tb);
+    const double dy= aw*cos(wd)-Vector.Distance*cos(tb);
     return sqrt(dx*dx+dy*dy);
   } else {
-    return Distance;
+    return Vector.Distance;
   }
  // ??   task.Bearing = RAD_TO_DEG*(atan2(dx,dy));
 }

@@ -5,6 +5,7 @@
 
 struct AIRCRAFT_STATE;
 struct GEOPOINT;
+struct GeoVector;
 
 class TaskStats;
 class TaskPoint;
@@ -16,9 +17,7 @@ public:
   
   virtual TaskPoint* getActiveTaskPoint() = 0;
 
-  double get_active_bearing(const AIRCRAFT_STATE &);
-
-  double get_active_distance(const AIRCRAFT_STATE &);
+  GeoVector get_active_vector(const AIRCRAFT_STATE &);
 
   virtual void report(const AIRCRAFT_STATE &state) = 0;
 

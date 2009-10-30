@@ -3,22 +3,13 @@
 #include "TaskInterface.h"
 #include "BaseTask/TaskPoint.hpp"
 
-double TaskInterface::get_active_distance(const AIRCRAFT_STATE &ref)
+GeoVector TaskInterface::get_active_vector(const AIRCRAFT_STATE &ref)
 {
   TaskPoint* tp = getActiveTaskPoint();
   if (tp) {
-    return tp->get_distance(ref);
+    return tp->get_vector_remaining(ref);
   } else {
-    return 0.0;
+    return GeoVector(0.0,0.0);
   }
 }
 
-double TaskInterface::get_active_bearing(const AIRCRAFT_STATE &ref)
-{
-  TaskPoint* tp = getActiveTaskPoint();
-  if (tp) {
-    return tp->get_bearing(ref);
-  } else {
-    return 0.0;
-  }
-}

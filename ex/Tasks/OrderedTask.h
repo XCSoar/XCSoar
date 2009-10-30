@@ -16,6 +16,7 @@ class OrderedTask:
 {
 public:
   OrderedTask(const TaskEvents &te, 
+              const TaskBehaviour &tb,
               const TaskProjection &tp,
               TaskAdvance &ta,
               GlidePolar &gp);

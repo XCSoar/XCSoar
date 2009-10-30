@@ -6,10 +6,9 @@
 GLIDE_RESULT::GLIDE_RESULT(const GLIDE_STATE &task, 
                            const double V):
     Solution(RESULT_NOSOLUTION),
-    Distance(task.Distance),
-    DistanceToFinal(task.Distance),
-    TrackBearing(task.Bearing),
-    CruiseTrackBearing(task.Bearing),
+    Vector(task.Vector),
+    DistanceToFinal(task.Vector.Distance),
+    CruiseTrackBearing(task.Vector.Bearing),
     VOpt(V),
     HeightClimb(0.0),
     HeightGlide(0.0),
@@ -25,7 +24,7 @@ GLIDE_RESULT::GLIDE_RESULT(const GLIDE_STATE &task,
 void
 GLIDE_RESULT::calc_cruise_bearing()
 {
-  CruiseTrackBearing=TrackBearing;
+  CruiseTrackBearing= Vector.Bearing;
   if (EffectiveWindSpeed>0.0) {
     const double sintheta = sin(DEG_TO_RAD*EffectiveWindAngle);
     if (sintheta==0.0) {
@@ -45,8 +44,8 @@ GLIDE_RESULT::print(std::ostream& f) const
     f << "#     Solution NOT OK\n";
   }
   f << "#    Altitude Difference " << AltitudeDifference << " (m)\n";
-  f << "#    Distance            " << Distance << " (m)\n";
-  f << "#    TrackBearing        " << TrackBearing << " (deg)\n";
+  f << "#    Distance            " << Vector.Distance << " (m)\n";
+  f << "#    TrackBearing        " << Vector.Bearing << " (deg)\n";
   f << "#    CruiseTrackBearing  " <<  CruiseTrackBearing << " (deg)\n";
   f << "#    VOpt                " <<  VOpt << " (m/s)\n";
   f << "#    HeightClimb         " <<  HeightClimb << " (m)\n";
@@ -54,7 +53,7 @@ GLIDE_RESULT::print(std::ostream& f) const
   f << "#    TimeElapsed         " <<  TimeElapsed << " (s)\n";
   f << "#    TimeVirtual         " <<  TimeVirtual << " (s)\n";
   if (TimeElapsed>0) {
-    f << "#    Vave remaining      " <<  Distance/TimeElapsed << " (m/s)\n";
+    f << "#    Vave remaining      " <<  Vector.Distance/TimeElapsed << " (m/s)\n";
     f << "#    EffectiveWindSpeed  " <<  EffectiveWindSpeed << " (m/s)\n";
     f << "#    EffectiveWindAngle  " <<  EffectiveWindAngle << " (deg)\n";
     f << "#    DistanceToFinal     " <<  DistanceToFinal << " (m)\n";
@@ -70,7 +69,7 @@ GLIDE_RESULT::add(const GLIDE_RESULT &s2)
   TimeElapsed += s2.TimeElapsed;
   HeightGlide += s2.HeightGlide;
   HeightClimb += s2.HeightClimb;
-  Distance += s2.Distance;
+  Vector.Distance += s2.Vector.Distance;
   DistanceToFinal += s2.DistanceToFinal;
   TimeVirtual += s2.TimeVirtual;
 
@@ -90,15 +89,15 @@ GLIDE_RESULT::calc_vspeed(const double mc)
     TimeVirtual = 0.0;
     return 1.0e6;
   }
-  if (Distance>0.0) {
+  if (Vector.Distance>0.0) {
     if (mc>0.0) {
       // equivalent time to gain the height that was used
       TimeVirtual = HeightGlide/mc;
-      return (TimeElapsed+TimeVirtual)/Distance;
+      return (TimeElapsed+TimeVirtual)/Vector.Distance;
     } else {
       TimeVirtual = 0.0;
       // minimise 1.0/LD over ground 
-      return -HeightGlide/Distance;
+      return -HeightGlide/Vector.Distance;
     }
   } else {
     TimeVirtual = 0.0;
@@ -109,30 +108,10 @@ GLIDE_RESULT::calc_vspeed(const double mc)
 double 
 GLIDE_RESULT::glide_angle_ground() const
 {
-  if (Distance>0) {
-    return HeightGlide/Distance;
+  if (Vector.Distance>0) {
+    return HeightGlide/Vector.Distance;
   } else {
     return 100.0;
   }
 }
-
-
-/*
-bool GLIDE_RESULT::superior(const GLIDE_RESULT &s2) const 
-{
-  if (Solution < s2.Solution) {
-    return true;
-  } else if (ok_or_partial() && (Solution == s2.Solution)) {
-    if (Distance>0) {
-      return (Distance/(TimeElapsed+TimeVirtual) > 
-              s2.Distance/(s2.TimeElapsed+s2.TimeVirtual));
-    } else {
-      return (TimeElapsed+TimeVirtual < s2.TimeElapsed+s2.TimeVirtual);
-    }
-  } else {
-    return false;
-  }
-}
-*/
-
 

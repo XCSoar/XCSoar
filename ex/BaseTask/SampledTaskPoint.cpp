@@ -34,7 +34,7 @@ SampledTaskPoint::get_search_points(bool cheat)
     // this is a crude way of handling the situation --- may be best
     // to de-rate the score in some way
 
-    SearchPoint sp(getLocation(), task_projection);
+    SearchPoint sp(getLocation(), get_task_projection());
     sampled_points.push_back(sp);
     return sampled_points;
   }
@@ -50,11 +50,11 @@ void SampledTaskPoint::default_boundary_points() {
   double t=0;
   if (boundary_scored) {
     for (t=0; t<=1.0; t+= 0.05) {
-      SearchPoint sp(get_boundary_parametric(t), task_projection);
+      SearchPoint sp(get_boundary_parametric(t), get_task_projection());
       boundary_points.push_back(sp);
     }
   } else {
-    SearchPoint sp(getLocation(), task_projection);
+    SearchPoint sp(getLocation(), get_task_projection());
     boundary_points.push_back(sp);
   }
 }
@@ -73,7 +73,7 @@ bool SampledTaskPoint::update_sample(const AIRCRAFT_STATE& state)
       // do nothing
       return false;
     } else {
-      SearchPoint sp(state.Location, task_projection, true);
+      SearchPoint sp(state.Location, get_task_projection(), true);
       sampled_points.push_back(sp);
       // only return true if hull changed 
       return (prune_sample_points());
@@ -86,10 +86,10 @@ void
 SampledTaskPoint::update_projection()
 {
   for (unsigned i=0; i<sampled_points.size(); i++) {
-    sampled_points[i].project(task_projection);
+    sampled_points[i].project(get_task_projection());
   }
   for (unsigned i=0; i<boundary_points.size(); i++) {
-    boundary_points[i].project(task_projection);
+    boundary_points[i].project(get_task_projection());
   }
 }
 
@@ -106,8 +106,8 @@ void
 SampledTaskPoint::clear_boundary_points()
 {
   boundary_points.clear();
-  search_max = SearchPoint(getLocation(), task_projection);
-  search_min = SearchPoint(getLocation(), task_projection);
+  search_max = SearchPoint(getLocation(), get_task_projection());
+  search_min = SearchPoint(getLocation(), get_task_projection());
 }
 
 void 
@@ -148,26 +148,3 @@ SampledTaskPoint::print_samples(std::ostream& f,
 }
 
 
-FLAT_GEOPOINT 
-SampledTaskPoint::project(const GEOPOINT& tp) const
-{
-  return task_projection.project(tp);
-}
-
-GEOPOINT 
-SampledTaskPoint::unproject(const FLAT_GEOPOINT& tp) const
-{
-  return task_projection.unproject(tp);
-}
-
-FlatPoint
-SampledTaskPoint::fproject(const GEOPOINT& tp) const
-{
-  return task_projection.fproject(tp);
-}
-
-GEOPOINT 
-SampledTaskPoint::funproject(const FlatPoint& tp) const
-{
-  return task_projection.funproject(tp);
-}

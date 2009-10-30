@@ -5,13 +5,13 @@
 
 bool 
 StartPoint::transition_exit(const AIRCRAFT_STATE & ref_now, 
-                                  const AIRCRAFT_STATE & ref_last)
+                            const AIRCRAFT_STATE & ref_last)
 {
   // consider entry of start zone to be same as exit point
   bool exited = OrderedTaskPoint::transition_exit(ref_now, ref_last);
   if (exited) {
     clear_sample_all_but_last(ref_last);
-    state_entered = ref_last;
+    set_state_entered(ref_last);
   }
   return exited;
 }

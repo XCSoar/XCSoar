@@ -59,7 +59,8 @@ void test_glide_alt(const double h, const double W,
   }
   ac.Altitude = h;
 
-  GLIDE_STATE gs (400.0,0.0,0.0,ac);
+  GeoVector vect(400.0,0.0);
+  GLIDE_STATE gs (vect,0.0,ac);
   GLIDE_RESULT gr = polar.solve(gs);
   hfile << h << " " 
         << gr.AltitudeDifference << " "

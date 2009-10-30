@@ -54,33 +54,6 @@ public:
   virtual void set_neighbours(OrderedTaskPoint* prev,
                               OrderedTaskPoint* next);
 
-  // allow access to forward scan
-  bool scan_active(OrderedTaskPoint* atp) {
-    return OrderedTaskPoint::scan_active(atp);
-  }
-
-  double scan_distance_max() {
-    return OrderedTaskPoint::scan_distance_max();
-  };
-  double scan_distance_min() {
-    return OrderedTaskPoint::scan_distance_min();
-  };
-  double scan_distance_nominal() {
-    return OrderedTaskPoint::scan_distance_nominal();
-  };
-  double scan_distance_planned() {
-    return OrderedTaskPoint::scan_distance_planned();
-  };
-  double scan_distance_remaining(const GEOPOINT &ref) {
-    return OrderedTaskPoint::scan_distance_remaining(ref);
-  };
-  double scan_distance_travelled(const GEOPOINT &ref) {
-    return OrderedTaskPoint::scan_distance_travelled(ref);
-  };
-  double scan_distance_scored(const GEOPOINT &ref) {
-    return OrderedTaskPoint::scan_distance_scored(ref);
-  }  
-
   virtual bool transition_exit(const AIRCRAFT_STATE & ref_now, 
                                const AIRCRAFT_STATE & ref_last);
 

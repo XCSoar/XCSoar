@@ -12,31 +12,13 @@ TaskPoint::get_reference_remaining() const
   return getLocation();
 }
 
-double 
-TaskPoint::get_bearing(const AIRCRAFT_STATE &ref) const
+
+const GeoVector 
+TaskPoint::get_vector_remaining(const AIRCRAFT_STATE &ref) const
 {
-  return ::Bearing(ref.Location, 
-                   get_reference_remaining());
+  return GeoVector(ref.Location, get_reference_remaining());
 }
 
-double 
-TaskPoint::get_distance(const AIRCRAFT_STATE &ref) const
-{
-  return ::Distance(ref.Location, 
-                   get_reference_remaining());
-}
-
-double 
-TaskPoint::get_distance_remaining(const AIRCRAFT_STATE &ref) const
-{
-  return get_distance(ref);
-}
-
-double 
-TaskPoint::get_bearing_remaining(const AIRCRAFT_STATE &ref) const
-{
-  return get_bearing(ref);
-}
 
 double 
 TaskPoint::getElevation() const
@@ -50,8 +32,7 @@ TaskPoint::glide_solution_remaining(const AIRCRAFT_STATE &ac,
                                     const GlidePolar &polar,
                                     const double minH) const
 {
-  GLIDE_STATE gs(get_distance_remaining(ac),
-                 get_bearing_remaining(ac),
+  GLIDE_STATE gs(get_vector_remaining(ac),
                  std::max(minH,getElevation()),
                  ac);
   return polar.solve(gs);

@@ -12,6 +12,7 @@
 #include "GlideSolvers/GlidePolar.hpp"
 #include "BaseTask/TaskProjection.h"
 #include "TaskEvents.hpp"
+#include "TaskBehaviour.hpp"
 
 class Waypoints;
 
@@ -20,12 +21,14 @@ class TaskManager : public TaskInterface,
 {
 public:
   TaskManager(const TaskEvents &te,
+              const TaskBehaviour &tb,
               TaskProjection &tp,
               GlidePolar &gp,
               const Waypoints &wps): 
-    task_ordered(te,tp,task_advance,gp),
-    task_goto(te,task_advance,gp),
-    task_abort(te,tp,task_advance,gp,wps)
+    task_ordered(te,tb,tp,task_advance,gp),
+    task_goto(te,tb,task_advance,gp),
+    task_abort(te,tb,tp,task_advance,gp,wps),
+    task_behaviour(tb)
   {
     set_mode(MODE_ORDERED);
   };
@@ -76,6 +79,8 @@ private:
     TaskMode_t mode;
 
     TaskAdvance task_advance;
+
+    const TaskBehaviour &task_behaviour;
 
     /** @link dependency */
     /*#  TaskEvents lnkTaskEvents; */

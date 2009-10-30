@@ -10,6 +10,7 @@ class AbortTask : public AbstractTask
 {
 public:
   AbortTask(const TaskEvents &te, 
+            const TaskBehaviour &tb,
             const TaskProjection &tp,
             TaskAdvance &ta,
             GlidePolar &gp,

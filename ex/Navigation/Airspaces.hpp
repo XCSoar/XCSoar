@@ -4,11 +4,13 @@
 #include <kdtree++/kdtree.hpp>
 #include "Airspace.hpp"
 #include <iostream>
+#include "BaseTask/TaskProjectionClient.hpp"
 
-class Airspaces {
+class Airspaces: public TaskProjectionClient 
+{
 public:
   Airspaces(const TaskProjection& _task_projection):
-    task_projection(_task_projection)
+    TaskProjectionClient(_task_projection)
     {
     };
 
@@ -33,7 +35,6 @@ private:
                          > AirspaceTree;
 
   AirspaceTree airspace_tree;
-  const TaskProjection& task_projection;
 
   /** @link dependency */
   /*#  Airspace lnkAirspace; */
