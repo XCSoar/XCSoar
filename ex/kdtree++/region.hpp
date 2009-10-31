@@ -11,7 +11,9 @@
 
 #include <kdtree++/node.hpp>
 
+#ifdef INSTRUMENT_TASK
 extern unsigned count_intersections;
+#endif
 
 namespace KDTree
 {
@@ -81,7 +83,9 @@ namespace KDTree
       bool
       intersects_with(_Region const& __THAT) const
       {
+#ifdef INSTRUMENT_TASK
         count_intersections++;
+#endif
         if (!is_bb) {
           for (size_t __i = 0; __i != __K; ++__i)
           { // JMW xH<L || H<xL
@@ -102,7 +106,9 @@ namespace KDTree
       bool
       encloses(value_type const& __V) const
       {
+#ifdef INSTRUMENT_TASK
         count_intersections++;
+#endif
         if (!is_bb) {
           for (size_t __i = 0; __i != __K; ++__i)
           { // JMW x<L || H<x

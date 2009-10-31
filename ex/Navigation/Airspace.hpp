@@ -4,7 +4,11 @@
 #include "FlatBoundingBox.hpp"
 #include "AbstractAirspace.hpp"
 
-class Airspace: public FlatBoundingBox 
+#include "AirspaceVisitor.hpp"
+
+class Airspace: 
+  public FlatBoundingBox,
+  public BaseVisitable<>
 {
 public:
 
@@ -28,7 +32,12 @@ public:
   {
   };
 
-  virtual void print(std::ostream &f, const TaskProjection &task_projection) const;
+  void Accept(BaseVisitor &v) const;
+
+#ifdef DO_PRINT
+  friend std::ostream& operator<< (std::ostream& f, 
+                                   const Airspace& ts);
+#endif
 
   bool inside(const AIRCRAFT_STATE &loc) const;
 

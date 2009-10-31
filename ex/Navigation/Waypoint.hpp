@@ -3,11 +3,20 @@
 
 #include "GeoPoint.hpp"
 #include "FlatGeoPoint.hpp"
+#ifdef DO_PRINT
 #include <iostream>
+#endif
+
+#include "WaypointVisitor.hpp"
 
 class TaskProjection;
 
-struct WAYPOINT {
+class Waypoint:
+  public BaseVisitable<>
+{
+ public:
+  DEFINE_VISITABLE()
+
   unsigned id;
   GEOPOINT Location;
   FLAT_GEOPOINT FlatLocation;
@@ -16,7 +25,7 @@ struct WAYPOINT {
   // used by kd tree
   struct kd_get_location {
     typedef int result_type;
-    int operator() ( const WAYPOINT &d, const unsigned k) const {
+    int operator() ( const Waypoint &d, const unsigned k) const {
       switch(k) {
       case 0:
         return d.FlatLocation.Longitude;
@@ -26,13 +35,14 @@ struct WAYPOINT {
       return 0; 
     };
   };
-  bool operator==(const WAYPOINT&wp) const {
+  bool operator==(const Waypoint&wp) const {
     return id == wp.id;
   }
 
+#ifdef DO_PRINT
   friend std::ostream& operator<< (std::ostream& o, 
-                                   const WAYPOINT& wp);
-
+                                   const Waypoint& wp);
+#endif
 };
 
 

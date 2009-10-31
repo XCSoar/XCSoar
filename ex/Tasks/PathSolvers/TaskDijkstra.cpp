@@ -6,7 +6,9 @@
 #include "Util.h"
 #include <algorithm>
 
+#ifdef INSTRUMENT_TASK
 unsigned num_dijkstra = 0;
+#endif
 
 unsigned TaskDijkstra::extremal_distance(const unsigned d)
 {
@@ -41,14 +43,18 @@ TaskDijkstra::get_point(const ScanTaskPoint &sp) const
 unsigned TaskDijkstra::distance(const ScanTaskPoint &curNode,
                               const SearchPoint &currentLocation) const
 {
+#ifdef INSTRUMENT_TASK
   num_dijkstra++;
+#endif
   return get_point(curNode).flat_distance(currentLocation);
 }
 
 unsigned TaskDijkstra::distance(const ScanTaskPoint &s1,
                               const ScanTaskPoint &s2) const
 {
+#ifdef INSTRUMENT_TASK
   num_dijkstra++;
+#endif
   return get_point(s1).flat_distance(get_point(s2));
 }
 

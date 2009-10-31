@@ -30,8 +30,6 @@ public:
     
     virtual bool update_idle(const AIRCRAFT_STATE&);
     
-  virtual void print(const AIRCRAFT_STATE&);
-
 protected:
   virtual bool update_sample(const AIRCRAFT_STATE &, 
                              const bool full_update) = 0;
@@ -94,5 +92,10 @@ private:
   void update_stats_speeds(const AIRCRAFT_STATE &, const AIRCRAFT_STATE&);
   void update_stats_glide(const AIRCRAFT_STATE &state);
   double leg_gradient(const AIRCRAFT_STATE &state);
+
+public:
+#ifdef DO_PRINT
+  virtual void print(const AIRCRAFT_STATE&);
+#endif
 };
 #endif //ABSTRACTTASK_H

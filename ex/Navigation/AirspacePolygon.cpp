@@ -57,4 +57,3 @@ AirspacePolygon::inside(const AIRCRAFT_STATE &loc) const
   return PolygonInterior(loc.Location, border);
 }
 
-

@@ -16,7 +16,11 @@ public:
   const std::vector<Airspace> scan_nearest(const AIRCRAFT_STATE &state) const;
 
   const std::vector<Airspace> scan_range(const AIRCRAFT_STATE &state, 
-                                         const double &range) const;
+                                         const double range) const;
+
+  void visit_within_range(const GEOPOINT &loc, 
+                          const double range,
+                          AirspaceVisitor& visitor) const;
 
   std::vector<Airspace> find_inside(const AIRCRAFT_STATE &state) const;
 

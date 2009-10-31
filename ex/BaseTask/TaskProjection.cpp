@@ -49,8 +49,8 @@ TaskProjection::project(const GEOPOINT& tp) const
 {
   FlatPoint f = fproject(tp);
   FLAT_GEOPOINT fp;
-  fp.Longitude = f.x+0.5;
-  fp.Latitude = f.y+0.5;
+  fp.Longitude = (int)(f.x+0.5);
+  fp.Latitude = (int)(f.y+0.5);
   return fp;
 }
 
@@ -77,5 +77,5 @@ TaskProjection::fproject_range(const GEOPOINT &tp, const double range) const
 unsigned
 TaskProjection::project_range(const GEOPOINT &tp, const double range) const
 {
-  return fproject_range(tp,range)+0.5;
+  return (unsigned)(fproject_range(tp,range)+0.5);
 }

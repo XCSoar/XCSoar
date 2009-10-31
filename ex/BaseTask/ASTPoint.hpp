@@ -46,7 +46,7 @@ class ASTPoint : public IntermediatePoint
 {
 public:
   ASTPoint(const TaskProjection&tp,
-           const WAYPOINT & wp) 
+           const Waypoint & wp) 
     : IntermediatePoint(tp,wp,false)  // TODO for testing
     { };
 };

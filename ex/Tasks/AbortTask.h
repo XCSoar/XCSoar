@@ -22,7 +22,9 @@ public:
   TaskPoint* getActiveTaskPoint();
   void setActiveTaskPoint(unsigned index);
 
+#ifdef DO_PRINT
   virtual void print(const AIRCRAFT_STATE &location);
+#endif
 
   virtual bool update_sample(const AIRCRAFT_STATE &, const bool full_update);
 protected:
@@ -34,7 +36,7 @@ protected:
   void clear();
   bool task_full() const;
 
-  int abort_range(const AIRCRAFT_STATE &location);
+  double abort_range(const AIRCRAFT_STATE &location);
 
   GlidePolar polar_safety;
 private:
@@ -45,7 +47,7 @@ protected:
   void update_polar();
 
   void fill_reachable(const AIRCRAFT_STATE &,
-                      std::vector < WAYPOINT > &approx_waypoints,
+                      std::vector < Waypoint > &approx_waypoints,
                       const bool only_airfield);
 };
 

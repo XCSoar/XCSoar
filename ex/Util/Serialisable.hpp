@@ -41,7 +41,9 @@
 /////////////////////////////////////////////////
 /// Abstract classes
 
+#ifdef DO_PRINT
 #include <iostream>
+#endif
 
 /** Base class for classes that can be serialised/unserialised for file storage */
 class Serialisable {

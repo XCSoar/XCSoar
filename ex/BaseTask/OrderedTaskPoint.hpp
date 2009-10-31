@@ -47,7 +47,7 @@ class OrderedTaskPoint :
 {
 public:
   OrderedTaskPoint(const TaskProjection& tp,
-                   const WAYPOINT & wp, 
+                   const Waypoint & wp, 
                    const bool b_scored) : 
     ScoredTaskPoint(tp, wp, b_scored),
     tp_previous(NULL),
@@ -82,8 +82,10 @@ public:
 
   bool scan_active(OrderedTaskPoint* atp);
 
+#ifdef DO_PRINT
   virtual void print(std::ostream& f, const AIRCRAFT_STATE& state,
                      const int item=0) const;
+#endif
 
   const std::vector<SearchPoint>& get_search_points();
 

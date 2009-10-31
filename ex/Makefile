@@ -22,7 +22,7 @@ OUTPUTS 	:= test
 SRC := .
 INCLUDES := -I$(SRC) -I$(SRC)/../xcsoar/Common/Header
 
-PROFILE := -pg
+PROFILE := 
 OPTIMIZE := -g -O2
 
 CPPFLAGS := $(INCLUDES) 
@@ -53,6 +53,7 @@ CXXFLAGS += -pedantic
 # -Wdisabled-optimization
 # -Wunused -Wshadow -Wunreachable-code
 
+CXXFLAGS += -DDO_PRINT
 
 ####### sources
 
@@ -74,9 +75,11 @@ OBJS	:=\
 	Navigation/AirspaceCircle.o \
 	Navigation/AirspacePolygon.o \
 	Navigation/Airspaces.o \
+	Navigation/AirspaceVisitor.o \
 	Navigation/GeoVector.o \
 	Navigation/Waypoint.o \
 	Navigation/Waypoints.o \
+	Navigation/WaypointVisitor.o \
 	BaseTask/AATPoint.o \
 	BaseTask/AATIsoline.o \
 	BaseTask/AATIsolineSegment.o \
@@ -191,6 +194,7 @@ clean: cleani FORCE
 	find ./ $(IGNORE) \( -name '*.[oa]' -o -name '*.rsc' -o -name '.*.d' -o -name '*.*~' \) \
 	-type f -print | xargs -r $(RM)
 	$(RM) $(TARGETS) gprof.out 
+	$(RM) $(OBJS)
 
 cleani: FORCE
 	find ./ $(IGNORE) \( -name '*.i' \) \

@@ -44,7 +44,7 @@
 class FinishPoint : public OrderedTaskPoint {
 public:
     FinishPoint(const TaskProjection& tp,
-                const WAYPOINT & wp) : 
+                const Waypoint & wp) : 
       OrderedTaskPoint(tp,wp,false) { };
 
   virtual void set_neighbours(OrderedTaskPoint* prev,

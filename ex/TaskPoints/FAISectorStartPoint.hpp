@@ -48,7 +48,7 @@ class FAISectorStartPoint:
 public:
   
   FAISectorStartPoint(const TaskProjection&tp,
-           const WAYPOINT& wp):
+           const Waypoint& wp):
     StartPoint(tp,wp),
     oz(wp.Location) 
   {

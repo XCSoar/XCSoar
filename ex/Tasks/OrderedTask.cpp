@@ -11,8 +11,6 @@
 #include "TaskSolvers/TaskGlideRequired.hpp"
 #include "TaskSolvers/TaskOptTarget.hpp"
 #include <assert.h>
-#include <fstream>
-
 
 void
 OrderedTask::update_geometry() {
@@ -264,15 +262,15 @@ bool
 OrderedTask::check_task() const
 {
   if (!tps.size()) {
-    printf("Error! Empty task\n");
+    task_events.construction_error("Error! Empty task\n");
     return false;
   }
   if (!dynamic_cast<const StartPoint*>(tps[0])) {
-    printf("Error! No start point\n");
+    task_events.construction_error("Error! No start point\n");
     return false;
   }
   if (!dynamic_cast<const FinishPoint*>(tps[tps.size()-1])) {
-    printf("Error! No finish point\n");
+    task_events.construction_error("Error! No finish point\n");
     return false;
   }
   return true;
@@ -284,7 +282,7 @@ OrderedTask::check_startfinish(OrderedTaskPoint* new_tp)
 {
   if (StartPoint* ap = dynamic_cast<StartPoint*>(new_tp)) {
     if (tps.size()) {
-      printf("Error! Already has a start point\n");
+      task_events.construction_error("Error! Already has a start point\n");
       return false;
     } else {
       ts = ap;
@@ -292,7 +290,7 @@ OrderedTask::check_startfinish(OrderedTaskPoint* new_tp)
   }
   if (FinishPoint* fp = dynamic_cast<FinishPoint*>(new_tp)) {
     if (tf) {
-      printf("Error! Already has a finish point\n");
+      task_events.construction_error("Error! Already has a finish point\n");
       return false;
     } else {
       tf = fp;
@@ -345,7 +343,7 @@ bool
 OrderedTask::insert(OrderedTaskPoint* new_tp, unsigned position)
 {
   if (position) {
-    printf("Error, can't insert at start\n");
+    task_events.construction_error("Error! can't insert at start\n");
     return false;
   }
   if (!check_startfinish(new_tp)) {
@@ -400,11 +398,6 @@ OrderedTask::glide_solution_remaining(const AIRCRAFT_STATE &aircraft,
   TaskMacCreadyRemaining tm(tps,activeTaskPoint,glide_polar);
   total = tm.glide_solution(aircraft);
   leg = tm.get_active_solution();
-
-/*
-  std::ofstream fr("res-sol-remaining.txt");
-  tm.print(fr, aircraft);
-*/
 }
 
 void
@@ -415,11 +408,6 @@ OrderedTask::glide_solution_travelled(const AIRCRAFT_STATE &aircraft,
   TaskMacCreadyTravelled tm(tps,activeTaskPoint,glide_polar);
   total = tm.glide_solution(aircraft);
   leg = tm.get_active_solution();
-
-/*
-  std::ofstream fr("res-sol-travelled.txt");
-  tm.print(fr, aircraft);
-*/
 }
 
 void
@@ -434,11 +422,6 @@ OrderedTask::glide_solution_planned(const AIRCRAFT_STATE &aircraft,
   TaskMacCreadyTotal tm(tps,activeTaskPoint,glide_polar);
   total = tm.glide_solution(aircraft);
   leg = tm.get_active_solution();
-
-/*
-  std::ofstream fr("res-sol-planned.txt");
-  tm.print(fr, aircraft);
-*/
 
   total_remaining_effective.
     set_distance(tm.effective_distance(total_t_elapsed));
@@ -486,7 +469,6 @@ OrderedTask::calc_min_target(const AIRCRAFT_STATE &aircraft,
 
   TaskMinTarget bmt(tps, activeTaskPoint, aircraft, glide_polar, t_rem, ts);
   double p= bmt.search(0.0);
-//  printf("target opt %g\n",p);
   return p;
 }
 

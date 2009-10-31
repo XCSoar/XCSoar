@@ -1,5 +1,7 @@
 #include "Math/Earth.hpp"
 #include "BaseTask/TaskProjection.h"
+
+#ifdef DO_PRINT
 #include <fstream>
 
 std::ostream& operator<< (std::ostream& o, 
@@ -104,7 +106,7 @@ std::ostream& operator<< (std::ostream& f,
 #include "Navigation/Waypoint.hpp"
 
 std::ostream& operator<< (std::ostream& f, 
-                          const WAYPOINT& wp)
+                          const Waypoint& wp)
 {
   f << wp.Location.Longitude << " " << wp.Location.Latitude << "\n";
   return f;
@@ -112,6 +114,7 @@ std::ostream& operator<< (std::ostream& f,
 
 #include "Navigation/FlatBoundingBox.hpp"
 
+/*
 void 
 FlatBoundingBox::print(std::ostream &f, const TaskProjection &task_projection) const {
   FLAT_GEOPOINT ll(bb_ll.Longitude,bb_ll.Latitude);
@@ -130,7 +133,7 @@ FlatBoundingBox::print(std::ostream &f, const TaskProjection &task_projection) c
   f << gll.Longitude << " " << gll.Latitude << "\n";
   f << "\n";
 }
-
+*/
 
 /*
 void
@@ -154,14 +157,13 @@ TaskMacCready::print(std::ostream &f, const AIRCRAFT_STATE &aircraft) const
 
 #include "Navigation/Airspace.hpp"
 
-void 
-Airspace::print(std::ostream &f, const TaskProjection &task_projection) const
+std::ostream& operator<< (std::ostream& f, 
+                          const Airspace& ts) 
 {
-  if (pimpl_airspace) {
-    f << *pimpl_airspace;
-  } else {
-    FlatBoundingBox::print(f, task_projection);
-  }
+  if (ts.pimpl_airspace) {
+    f << *(ts.pimpl_airspace);
+  } 
+  return f;
 }
 
 #include "Navigation/AirspaceCircle.hpp"
@@ -209,6 +211,7 @@ std::ostream& operator<< (std::ostream& f,
   return f;
 }
 
+///////////////////////////////////////////////////////////////////////////
 
 #include "BaseTask/TaskPoint.hpp"
 
@@ -236,7 +239,7 @@ AbstractTask::print(const AIRCRAFT_STATE &state)
     first = false;
     f6 << "# Time atp mc_best d_tot_rem_eff d_tot_rem ceff v_tot_rem v_tot_rem_inc v_tot_eff v_tot_eff_inc\n";
   }
-  f6 << state.Time
+  f6 << stats.Time
      << " " << activeTaskPoint
      << " " << stats.mc_best
      << " " << stats.total.remaining_effective.get_distance()
@@ -469,4 +472,4 @@ SampledTaskPoint::print_samples(std::ostream& f,
   f << "\n";
 }
 
-
+#endif

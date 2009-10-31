@@ -3,7 +3,9 @@
 #include "AirspacePolygon.hpp"
 #include <deque>
 
+#ifdef INSTRUMENT_TASK
 extern unsigned n_queries;
+#endif
 
 const std::vector<Airspace>
 Airspaces::scan_nearest(const AIRCRAFT_STATE &state) const 
@@ -13,7 +15,9 @@ Airspaces::scan_nearest(const AIRCRAFT_STATE &state) const
   std::pair<AirspaceTree::const_iterator, double> 
     found = airspace_tree.find_nearest(bb_target);
 
+#ifdef INSTRUMENT_TASK
   n_queries++;
+#endif
 
   std::vector<Airspace> res;
   if (found.first != airspace_tree.end()) {
@@ -28,9 +32,22 @@ Airspaces::scan_nearest(const AIRCRAFT_STATE &state) const
   return res;
 }
 
+void 
+Airspaces::visit_within_range(const GEOPOINT &loc, 
+                              const double range,
+                              AirspaceVisitor& visitor) const
+{
+  Airspace bb_target(loc, get_task_projection());
+  int mrange = project_range(loc, range);
+  
+  std::deque< Airspace > vectors;
+  airspace_tree.visit_within_range(bb_target, -mrange, visitor);
+}
+
 
 const std::vector<Airspace>
-Airspaces::scan_range(const AIRCRAFT_STATE &state, const double &range) const
+Airspaces::scan_range(const AIRCRAFT_STATE &state, 
+                      const double range) const
 {
   Airspace bb_target(state.Location, get_task_projection());
   int mrange = project_range(state.Location, range);
@@ -38,7 +55,9 @@ Airspaces::scan_range(const AIRCRAFT_STATE &state, const double &range) const
   std::deque< Airspace > vectors;
   airspace_tree.find_within_range(bb_target, -mrange, std::back_inserter(vectors));
 
+#ifdef INSTRUMENT_TASK
   n_queries++;
+#endif
 
   std::vector<Airspace> res;
 
@@ -62,7 +81,9 @@ Airspaces::find_inside(const AIRCRAFT_STATE &state) const
   std::vector< Airspace > vectors;
   airspace_tree.find_within_range(bb_target, 0, std::back_inserter(vectors));
 
+#ifdef INSTRUMENT_TASK
   n_queries++;
+#endif
 
   for (std::vector<Airspace>::iterator v=vectors.begin();
        v != vectors.end(); ) {

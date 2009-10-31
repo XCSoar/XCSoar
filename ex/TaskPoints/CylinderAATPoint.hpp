@@ -45,7 +45,7 @@ class CylinderAATPoint:
 {
 public:
   CylinderAATPoint(const TaskProjection &tp,
-           const WAYPOINT& wp):
+           const Waypoint& wp):
     AATPoint(tp,wp),
     oz(wp.Location) 
   {

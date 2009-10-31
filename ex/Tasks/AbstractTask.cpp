@@ -6,8 +6,6 @@
 #include "TaskSolvers/TaskBestMc.hpp"
 #include "TaskSolvers/TaskGlideRequired.hpp"
 #include "Util.h"
-#include <iostream>
-#include <fstream>
 
 bool 
 AbstractTask::update_idle(const AIRCRAFT_STATE &state)
@@ -132,6 +130,7 @@ void
 AbstractTask::update_stats_times(const AIRCRAFT_STATE &state)
 {
   // default for tasks with no start time...
+  stats.Time = state.Time;
   stats.total.set_times(scan_total_start_time(state), state);
   stats.current_leg.set_times(scan_leg_start_time(state),state);
 }

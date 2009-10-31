@@ -48,7 +48,10 @@ public:
   void set_tp_search_max(unsigned tp, const SearchPoint &sol) {
     tps[tp]->set_search_max(sol);
   }
+
+#ifdef DO_PRINT
   virtual void print(const AIRCRAFT_STATE &state);
+#endif
 
 protected:
   virtual bool check_transitions(const AIRCRAFT_STATE &, const AIRCRAFT_STATE&);

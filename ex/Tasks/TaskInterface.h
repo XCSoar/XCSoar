@@ -19,7 +19,9 @@ public:
 
   GeoVector get_active_vector(const AIRCRAFT_STATE &);
 
+#ifdef DO_PRINT
   virtual void print(const AIRCRAFT_STATE &state) = 0;
+#endif
 
   virtual bool update_idle(const AIRCRAFT_STATE &state) = 0;
 

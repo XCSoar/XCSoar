@@ -4,7 +4,6 @@
 #include "Navigation/Waypoint.hpp"
 #include "BaseTask/TaskPoint.hpp"
 #include <stdlib.h>
-#include <fstream>
 
 GotoTask::GotoTask(const TaskEvents &te, 
                    const TaskBehaviour &tb,
@@ -48,7 +47,7 @@ GotoTask::check_transitions(const AIRCRAFT_STATE &, const AIRCRAFT_STATE&)
 }
 
 void 
-GotoTask::do_goto(const WAYPOINT & wp)
+GotoTask::do_goto(const Waypoint & wp)
 {
   if (tp) {
     delete tp;

@@ -17,7 +17,7 @@ TaskMacCready::clearance_heights(const AIRCRAFT_STATE &aircraft)
     GLIDE_RESULT gr = tp_solution(i, aircraft_predict, minHs[i]);
     if (minHs[i]<minHs[i-1]) {
       double dh = aircraft_predict.Altitude-gr.HeightGlide;
-      if (minHs[i]<dh) {
+      if (minHs[i]+0.01<dh) {
         minHs[i] = dh;
         i--; 
         continue; // recalculate again for remainder

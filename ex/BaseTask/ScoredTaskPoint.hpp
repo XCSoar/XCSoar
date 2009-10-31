@@ -8,7 +8,7 @@ class ScoredTaskPoint:
 {
 public:
   ScoredTaskPoint(const TaskProjection& tp,
-                  const WAYPOINT & wp, 
+                  const Waypoint & wp, 
                   const bool b_scored): 
     SampledTaskPoint(tp, wp, b_scored)
   {

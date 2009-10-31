@@ -43,4 +43,3 @@ AirspaceCircle::inside(const AIRCRAFT_STATE &loc) const
   return (::Distance(loc.Location,center)<=radius);
 }
 
-

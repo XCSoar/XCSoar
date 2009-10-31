@@ -63,8 +63,6 @@ public:
 
   unsigned distance(const FlatBoundingBox &f) const;
 
-  virtual void print(std::ostream &f, const TaskProjection &task_projection) const;
-
   // used by KD
   struct kd_get_bounds {
     typedef int result_type;

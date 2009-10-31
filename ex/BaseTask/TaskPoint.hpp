@@ -52,7 +52,7 @@ class TaskPoint :
   public ReferencePoint, public Serialisable {
 
 public:
-  TaskPoint(const WAYPOINT & wp) : ReferencePoint(wp.Location),
+  TaskPoint(const Waypoint & wp) : ReferencePoint(wp.Location),
                                    Elevation(wp.Altitude),
                                    waypoint(wp)
     { }
@@ -85,7 +85,9 @@ public:
 
   virtual void set_range(const double p) {};
 
+#ifdef DO_PRINT
   virtual void print(std::ostream& f, const AIRCRAFT_STATE &state) const;
+#endif
 
   virtual bool has_entered() const {
     return false;
@@ -96,12 +98,12 @@ public:
     AIRCRAFT_STATE null_state;
     return null_state;
   }
-  const WAYPOINT& get_waypoint() const {
+  const Waypoint& get_waypoint() const {
     return waypoint;
   }
 
 protected:
-  const WAYPOINT waypoint; // local copy
+  const Waypoint waypoint; // local copy
   const double Elevation;
 };
 

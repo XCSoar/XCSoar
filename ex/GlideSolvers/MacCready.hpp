@@ -1,7 +1,9 @@
 #ifndef MACCREADY_HPP
 #define MACCREADY_HPP
 
+#ifdef DO_PRINT
 #include <iostream>
+#endif
 
 struct GLIDE_STATE;
 struct GLIDE_RESULT;

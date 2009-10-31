@@ -4,7 +4,7 @@
 #define GOTOTASK_H
 
 #include "Tasks/AbstractTask.h"
-struct WAYPOINT;
+struct Waypoint;
 
 class GotoTask : public AbstractTask {
 public:    
@@ -16,9 +16,11 @@ public:
 
   virtual TaskPoint* getActiveTaskPoint();
   virtual void setActiveTaskPoint(unsigned index);
-  void do_goto(const WAYPOINT & wp);
+  void do_goto(const Waypoint & wp);
 
+#ifdef DO_PRINT
   virtual void print(const AIRCRAFT_STATE &state);
+#endif
 
   virtual bool update_sample(const AIRCRAFT_STATE &, 
                              const bool full_update);

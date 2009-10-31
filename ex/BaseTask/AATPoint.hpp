@@ -44,7 +44,7 @@
 class AATPoint : public IntermediatePoint {
 public:
   AATPoint(const TaskProjection& tp,
-           const WAYPOINT & wp) : 
+           const Waypoint & wp) : 
     IntermediatePoint(tp,wp,true), 
     TargetLocked(false), 
     TargetLocation(wp.Location)
@@ -71,9 +71,11 @@ public:
     return TargetLocation;
   }
 
+#ifdef DO_PRINT
   virtual void print(std::ostream& f, const AIRCRAFT_STATE&state, 
                      const int item=0) const;
   virtual void print_boundary(std::ostream& f, const AIRCRAFT_STATE&state) const;
+#endif
 
 protected:
   GEOPOINT TargetLocation;

@@ -15,7 +15,7 @@ class SampledTaskPoint:
 {
 public:  
   SampledTaskPoint(const TaskProjection& tp,
-                   const WAYPOINT & wp, 
+                   const Waypoint & wp, 
                    const bool b_scored):
     TaskProjectionClient(tp),
     TaskPoint(wp),
@@ -71,9 +71,12 @@ public:
   };
 
   virtual bool update_sample(const AIRCRAFT_STATE&);
+
+#ifdef DO_PRINT
   virtual void print(std::ostream& f, const AIRCRAFT_STATE&state) const;
   virtual void print_samples(std::ostream& f, const AIRCRAFT_STATE&state);
   virtual void print_boundary(std::ostream& f, const AIRCRAFT_STATE&state) const;
+#endif
 
 protected:
   bool boundary_scored;

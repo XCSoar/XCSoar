@@ -47,7 +47,7 @@ class FAICylinderASTPoint:
 {
 public:
   FAICylinderASTPoint(const TaskProjection&tp,
-           const WAYPOINT& wp):
+           const Waypoint& wp):
     ASTPoint(tp,wp),
     oz(wp.Location) 
   {

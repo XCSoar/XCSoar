@@ -44,7 +44,7 @@
 class StartPoint : public OrderedTaskPoint {
 public:
   StartPoint(const TaskProjection& tp,
-             const WAYPOINT & wp) : 
+             const Waypoint & wp) : 
     OrderedTaskPoint(tp,wp,false), 
     enabled(true) 
     {

@@ -90,7 +90,7 @@ TaskManager::resume()
 }
 
 void
-TaskManager::do_goto(const WAYPOINT & wp)
+TaskManager::do_goto(const Waypoint & wp)
 {
   task_goto.do_goto(wp);
   set_mode(MODE_GOTO);

@@ -2,7 +2,9 @@
 #define TASKSTATS_HPP
 
 #include "GlideSolvers/GlideResult.hpp"
+#ifdef DO_PRINT
 #include <iostream>
+#endif
 
 struct AIRCRAFT_STATE;
 
@@ -111,6 +113,7 @@ class TaskStats
 {
 public:
   TaskStats():
+    Time(0.0),
     cruise_efficiency(1.0),
     glide_required(0.0),
     mc_best(0.0),
@@ -122,6 +125,8 @@ public:
 
   ElementStat total;
   ElementStat current_leg;
+
+  double Time;
 
   // calculated values
   double glide_required;

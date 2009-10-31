@@ -1,7 +1,9 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <math.h>
+#ifdef DO_PRINT
 #include <stdio.h>
+#endif
 #include "Math/FastMath.h"
 #include "Math/Earth.hpp"
 #include "Navigation/Airspaces.hpp"
@@ -16,32 +18,42 @@
 #include "TaskPoints/FAICylinderASTPoint.hpp"
 #include "TaskPoints/CylinderAATPoint.hpp"
 
+#ifdef DO_PRINT
 #include <fstream>
+#endif
 
 int n_samples = 0;
 
+#ifdef INSTRUMENT_TASK
 extern long count_mc;
 extern unsigned count_intersections;
 extern unsigned n_queries;
 extern unsigned count_distbearing;
 extern unsigned num_dijkstra;
+#endif
 
 void distance_counts() {
   if (n_samples) {
+#ifndef NEWTASK
     printf("# Instrumentation\n");
+#ifdef INSTRUMENT_TASK
     printf("#     dist+bearing calcs/c %d\n",count_distbearing/n_samples); 
     printf("#     mc calcs/c %d\n",count_mc/n_samples);
     printf("#     dijkstra/c %d\n",num_dijkstra/n_samples);
-    printf("#    (total cycles %d)\n\n",n_samples);
     printf("#     intersection tests/q %d\n",count_intersections/n_queries);
     printf("#    (total queries %d)\n\n",n_queries);
+#endif
+    printf("#    (total cycles %d)\n\n",n_samples);
+#endif
   }
+  n_samples = 0;
+#ifdef INSTRUMENT_TASK
   count_intersections = 0;
   n_queries = 0;
-  n_samples = 0;
   count_distbearing = 0;
   count_mc = 0;
   num_dijkstra = 0;
+#endif
 }
 
 double small_rand() {
@@ -50,12 +62,14 @@ double small_rand() {
 
 
 char wait_prompt(const double time) {
+#ifdef DO_PRINT
   printf("# %g [enter to continue]\n",time);
-  return getchar();
-//  return 0;
+#endif
+//  return getchar();
+  return 0;
 }
 
-WAYPOINT wp[6];
+Waypoint wp[6];
 
 void setup_waypoints(Waypoints &waypoints) {
   for (unsigned i=0; i<5; i++) {
@@ -65,18 +79,21 @@ void setup_waypoints(Waypoints &waypoints) {
   for (unsigned i=0; i<150; i++) {
     int x = rand()%1200-100;
     int y = rand()%1200-100;
-    WAYPOINT ff; 
+    Waypoint ff; 
     ff.Location.Longitude = x/1000.0; 
     ff.Location.Latitude = y/1000.0;
     ff.id = i+4;
     waypoints.insert(ff);
   }
   waypoints.optimise();
+
 }
 
 
 void setup_airspaces(Airspaces& airspaces, TaskProjection& task_projection) {
+#ifdef DO_PRINT
   std::ofstream fin("res-bb-in.txt");
+#endif
   for (unsigned i=0; i<150; i++) {
     AbstractAirspace* as;
     if (rand()%3==0) {
@@ -89,7 +106,9 @@ void setup_airspaces(Airspaces& airspaces, TaskProjection& task_projection) {
       as = new AirspacePolygon(task_projection);
     }
     airspaces.insert(*as);
+#ifdef DO_PRINT
     fin << *as;
+#endif
   }
   airspaces.optimise();
 }
@@ -111,15 +130,50 @@ void setup_task(TaskManager& task_manager,
   }
 }
 
-void report_airspaces(const char* fname,
-                      const std::vector<Airspace> &v,
-                      const TaskProjection &task_projection) {
-  std::ofstream fout(fname);
-  for (std::vector<Airspace>::const_iterator i= v.begin();
-       i!= v.end(); i++) {
-    (*i).print(fout, task_projection);
+
+class AirspaceVisitorPrint: public AirspaceVisitor {
+public:
+  AirspaceVisitorPrint(const char* fname,
+                       const bool _do_report):
+    do_report(_do_report)
+    {      
+      if (do_report) {
+#ifdef DO_PRINT
+        fout = new std::ofstream(fname);
+#endif
+      }
+    };
+  ~AirspaceVisitorPrint() {
+#ifdef DO_PRINT
+    if (do_report) {
+      delete fout;
+    }
+#endif    
   }
-}
+
+  virtual void Visit(const Airspace& as) {
+
+  }
+  virtual void Visit(const AirspaceCircle& as) {
+    if (do_report) {
+#ifdef DO_PRINT
+      *fout << as;
+#endif
+    }
+  }
+  virtual void Visit(const AirspacePolygon& as) {
+    if (do_report) {
+#ifdef DO_PRINT
+      *fout << as;
+#endif
+    }
+  }
+private:
+#ifdef DO_PRINT
+  std::ofstream *fout;
+#endif
+  const bool do_report;
+};
 
 
 void scan_airspaces(const AIRCRAFT_STATE state, 
@@ -127,22 +181,23 @@ void scan_airspaces(const AIRCRAFT_STATE state,
                     bool do_report) 
 {
   const std::vector<Airspace> vn = airspaces.scan_nearest(state);
-  if (do_report) {
-    report_airspaces("res-bb-nearest.txt", vn, airspaces.get_task_projection());
-  }
-  const std::vector<Airspace> vr = airspaces.scan_range(state, 5000.0);
-  if (do_report) {
-    report_airspaces("res-bb-range.txt", vr, airspaces.get_task_projection());
-  }
-  
+  AirspaceVisitorPrint pvn("res-bb-nearest.txt",
+                           do_report);
+  pvn.for_each(vn);
+
+  AirspaceVisitorPrint visitor("res-bb-range.txt",
+                               do_report);
+  airspaces.visit_within_range(state.Location, 5000.0, visitor);
+
   const std::vector<Airspace> vi = airspaces.find_inside(state);
-  if (do_report) {
-    report_airspaces("res-bb-inside.txt", vi, airspaces.get_task_projection());
-  }
+  AirspaceVisitorPrint pvi("res-bb-inside.txt",
+                           do_report);
+  pvi.for_each(vi);
 }
 
 void test_flight(TaskManager &task_manager,
-                 Airspaces &airspaces) 
+                 Airspaces &airspaces,
+                 int test_num) 
 {
 #define  num_wp 5
   GEOPOINT w[num_wp];
@@ -165,16 +220,25 @@ void test_flight(TaskManager &task_manager,
   state.WindSpeed = 0.0;
   state.WindDirection = 0;
 
-  scan_airspaces(state, airspaces, true);
+  if (test_num<4) {
+    scan_airspaces(state, airspaces, true);
+  }
 
+#ifdef DO_PRINT
   std::ofstream f4("res-sample.txt");
+#endif
 
   unsigned counter=0;
 
   for (int i=0; i<num_wp-1; i++) {
     if (i==num_wp-2) {
       task_manager.abort();
+#ifdef DO_PRINT
       printf("- mode abort\n");
+#endif
+    }
+    if ((test_num==1) && (n_samples>500)) {
+      return;
     }
     wait_prompt(state.Time);
     for (double t=0; t<1.0; t+= 0.0025) {
@@ -192,13 +256,17 @@ void test_flight(TaskManager &task_manager,
       task_manager.update_idle(state);
 
       bool do_print = (counter++ % 10 ==0);
-      scan_airspaces(state, airspaces, do_print);
+      if (test_num<4) {
+        scan_airspaces(state, airspaces, do_print);
+      }
 
       if (do_print) {
+#ifdef DO_PRINT
         task_manager.print(state);
         f4 <<  state.Location.Longitude << " " 
            <<  state.Location.Latitude << "\n";
         f4.flush();
+#endif
       }
       n_samples++;
       state_last = state;
@@ -207,10 +275,24 @@ void test_flight(TaskManager &task_manager,
   distance_counts();
 }
 
-int main() {
-  GEOPOINT start; start.Longitude = 0.5; start.Latitude = 0.5;
+class WaypointVisitorPrint: public WaypointVisitor {
+public:
+  WaypointVisitorPrint():count(0) {};
 
-  ::InitSineTable();
+  virtual void Visit(const Waypoint& wp) {
+    printf("visiting wp %d\n", wp.id);
+    count++;
+  }
+  void summary() {
+    printf("there are %d found\n",count);
+  }
+  unsigned count;
+};
+
+
+
+int test_newtask(int test_num) {
+  GEOPOINT start; start.Longitude = 0.5; start.Latitude = 0.5;
 
   wp[0].id = 0;
   wp[0].Location.Longitude=0;
@@ -239,10 +321,16 @@ int main() {
   GlidePolar glide_polar(2.0,0.0,0.0);
   TaskProjection task_projection(start);
 
-  ////////////////////////// WAYPOINTS //////
+  ////////////////////////// Waypoints //////
   Waypoints waypoints(task_projection);
   setup_waypoints(waypoints);
+#ifdef DO_PRINT
   std::cout << task_projection;
+#endif
+
+  WaypointVisitorPrint v;
+  waypoints.visit_within_range(wp[3].Location, 100, v);
+  v.summary();
 
   ////////////////////////// AIRSPACES //////
   Airspaces airspaces(task_projection);
@@ -254,26 +342,46 @@ int main() {
 
   distance_counts();
 
-  for (unsigned i=0; i<1; i++) {
-    if (i==1) {
-      printf("ALL OFF\n");
-      task_behaviour.all_off();
-    }
-
-    TaskManager task_manager(default_events,
-                             task_behaviour,
-                             glide_polar,
-                             waypoints);
-    
-    setup_task(task_manager, task_projection);
-    
-    ////////////////////////// TEST FLIGHT //////
-    
-    test_flight(task_manager, airspaces);
-
+  if (test_num==0) {
+    return 0;
   }
+  if (test_num==3) {
+    task_behaviour.all_off();
+  }
+
+  TaskManager task_manager(default_events,
+                           task_behaviour,
+                           glide_polar,
+                           waypoints);
+    
+  setup_task(task_manager, task_projection);
+    
+  test_flight(task_manager, airspaces, test_num);
 
 //  task_manager.remove(2);
 //  task_manager.scan_distance(location);
   return 0;
 }
+
+#ifndef NEWTASK
+int main() {
+  ::InitSineTable();
+  test_newtask(2);
+  test_newtask(3);
+}
+#endif
+
+
+/*
+  100, 1604 cycles
+  my ipaq: 
+  test 1: 27.7 seconds, 277ms/cycle
+  test 2: 117 seconds, 72ms/cycle
+  test 3: 45 seconds, 28ms/cycle
+
+  test 1  61209: 81 ms/c
+  test 2 116266: 72 ms/c
+  test 3  46122: 29 ms/c
+  test 4 111742: 70 ms/c
+
+*/

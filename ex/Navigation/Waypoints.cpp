@@ -1,11 +1,15 @@
 #include "Waypoints.hpp"
 #include "BaseTask/TaskProjection.h"
 #include <vector>
+
+#ifdef DO_PRINT
 #include <fstream>
+#endif
 
-
+#ifdef INSTRUMENT_TASK
 unsigned n_queries = 0;
 unsigned count_intersections = 0;
+#endif
 
 Waypoints::Waypoints(TaskProjection& _task_projection):
   task_projection(_task_projection)
@@ -15,23 +19,27 @@ Waypoints::Waypoints(TaskProjection& _task_projection):
 void
 Waypoints::optimise()
 {
+#ifdef DO_PRINT
   std::ofstream fin("res-wp-in.txt");
+#endif
 
   task_projection.update_fast();
 
   while (!tmp_wps.empty()) {
-    WAYPOINT w = (tmp_wps.front());
+    Waypoint w = (tmp_wps.front());
     w.FlatLocation = task_projection.project(w.Location);
     waypoint_tree.insert(w);
     tmp_wps.pop_front();
+#ifdef DO_PRINT
     fin << w;
+#endif
   }
 
   waypoint_tree.optimize();
 }
 
 void
-Waypoints::insert(const WAYPOINT& wp)
+Waypoints::insert(const Waypoint& wp)
 {
   if (!tmp_wps.size() && !waypoint_tree.size()) {
     task_projection.reset(wp.Location);
@@ -52,11 +60,13 @@ Waypoints::WaypointTree::const_iterator
 Waypoints::find_nearest(const GEOPOINT &loc) const 
 {
   FLAT_GEOPOINT floc = task_projection.project(loc);
-  WAYPOINT bb_target; bb_target.FlatLocation = floc;
+  Waypoint bb_target; bb_target.FlatLocation = floc;
   std::pair<WaypointTree::const_iterator, double> 
     found = waypoint_tree.find_nearest(bb_target);
 
+#ifdef INSTRUMENT_TASK
   n_queries++;
+#endif
 
   return found.first;
 }
@@ -65,41 +75,63 @@ Waypoints::find_nearest(const GEOPOINT &loc) const
 Waypoints::WaypointTree::const_iterator
 Waypoints::find_id(const unsigned id) const
 {
-  WAYPOINT bb_target; bb_target.id = id;
+  Waypoint bb_target; bb_target.id = id;
   WaypointTree::const_iterator found = waypoint_tree.find_exact(bb_target);
 
+#ifdef INSTRUMENT_TASK
   n_queries++;
+#endif
 
   return found;
 }
 
 
-std::vector< WAYPOINT >
+std::vector< Waypoint >
 Waypoints::find_within_range(const GEOPOINT &loc, 
-                             const unsigned &range) const
+                             const double range) const
 {
   FLAT_GEOPOINT floc = task_projection.project(loc);
-  WAYPOINT bb_target; bb_target.FlatLocation = floc;
-  
-  std::vector< WAYPOINT > vectors;
-  waypoint_tree.find_within_range(bb_target, range, 
-                                  std::back_inserter(vectors));
-  n_queries++;
+  Waypoint bb_target; bb_target.FlatLocation = floc;
+  const unsigned mrange = task_projection.project_range(loc, range);
 
+  std::vector< Waypoint > vectors;
+  waypoint_tree.find_within_range(bb_target, mrange, 
+                                  std::back_inserter(vectors));
+#ifdef INSTRUMENT_TASK
+  n_queries++;
+#endif
   return vectors;
 }
 
 
-std::vector< WAYPOINT >
-Waypoints::find_within_range_circle(const GEOPOINT &loc, 
-                                    const unsigned &range) const
+void 
+Waypoints::visit_within_range(const GEOPOINT &loc, 
+                              const double range,
+                              WaypointVisitor& visitor) const
 {
-  std::vector < WAYPOINT > vectors = find_within_range(loc, range);
+  FLAT_GEOPOINT floc = task_projection.project(loc);
+  Waypoint bb_target; bb_target.FlatLocation = floc;
+  const unsigned mrange = task_projection.project_range(loc, range);
+  
+  waypoint_tree.visit_within_range(bb_target, mrange, visitor);
+
+#ifdef INSTRUMENT_TASK
+  n_queries++;
+#endif
+}
+
+
+std::vector< Waypoint >
+Waypoints::find_within_range_circle(const GEOPOINT &loc, 
+                                    const double range) const
+{
+  const unsigned mrange = task_projection.project_range(loc, range);
+  std::vector < Waypoint > vectors = find_within_range(loc, mrange);
   FLAT_GEOPOINT floc = task_projection.project(loc);
 
-  for (std::vector< WAYPOINT >::iterator v=vectors.begin();
+  for (std::vector< Waypoint >::iterator v=vectors.begin();
        v != vectors.end(); ) {      
-    if ((*v).FlatLocation.distance_to(floc)> range) {
+    if ((*v).FlatLocation.distance_to(floc)> mrange) {
       vectors.erase(v);
     } else {
       v++;
@@ -120,3 +152,5 @@ Waypoints::end() const
 {
   return waypoint_tree.end();
 }
+
+

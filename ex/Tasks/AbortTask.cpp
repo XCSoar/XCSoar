@@ -1,7 +1,6 @@
 #include "Tasks/AbortTask.h"
 #include "Navigation/Aircraft.hpp"
 #include "BaseTask/TaskPoint.hpp"
-#include <fstream>
 #include <queue>
 
 AbortTask::AbortTask(const TaskEvents &te, 
@@ -42,7 +41,7 @@ TaskPoint* AbortTask::getActiveTaskPoint()
 }
 
 
-typedef std::pair<WAYPOINT,double> WP_ALT;
+typedef std::pair<Waypoint,double> WP_ALT;
 
 struct Rank : public std::binary_function<WP_ALT, WP_ALT, bool> {
   bool operator()(const WP_ALT& x, const WP_ALT& y) const {
@@ -59,15 +58,11 @@ void AbortTask::clear() {
 }
 
 
-int 
+double
 AbortTask::abort_range(const AIRCRAFT_STATE &state)
 {
   // always scan at least 50km or approx glide range
-  double approx_range_m = 
-    std::max(50000.0, state.Altitude*polar_safety.get_bestLD());
-
-  int approx_range = task_projection.project_range(state.Location, approx_range_m);
-  return approx_range;
+  return std::max(50000.0, state.Altitude*polar_safety.get_bestLD());
 }
 
 void
@@ -86,14 +81,14 @@ AbortTask::task_full() const
 
 void
 AbortTask::fill_reachable(const AIRCRAFT_STATE &state,
-                          std::vector < WAYPOINT > &approx_waypoints,
+                          std::vector < Waypoint > &approx_waypoints,
                           const bool only_airfield)
 {  
   if (task_full()) {
     return;
   }
   std::priority_queue<WP_ALT, std::vector<WP_ALT>, Rank> q;
-  for (std::vector < WAYPOINT >::iterator v = approx_waypoints.begin();
+  for (std::vector < Waypoint >::iterator v = approx_waypoints.begin();
        v!=approx_waypoints.end(); ) {
     TaskPoint t(*v);
     GLIDE_RESULT r = t.glide_solution_remaining(state, polar_safety);
@@ -126,7 +121,7 @@ bool AbortTask::update_sample(const AIRCRAFT_STATE &state,
   const unsigned active_waypoint_on_entry = active_waypoint;
   activeTaskPoint = 0; // default to best result if can't find user-set one 
 
-  std::vector < WAYPOINT > approx_waypoints = 
+  std::vector < Waypoint > approx_waypoints = 
     waypoints.find_within_range_circle(state.Location, abort_range(state));
 
   if (!approx_waypoints.size()) {

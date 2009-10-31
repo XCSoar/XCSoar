@@ -27,3 +27,12 @@ Airspace::inside(const AIRCRAFT_STATE &loc) const
     return false;
   }
 }
+
+void
+Airspace::Accept(BaseVisitor &visitor) const
+{
+  if (pimpl_airspace) {
+    pimpl_airspace->Accept(visitor);
+  }
+}
+

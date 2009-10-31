@@ -452,8 +452,8 @@ namespace KDTree
         }
 
       template <typename SearchVal, class Visitor>
-        Visitor
-        visit_within_range(SearchVal const& V, subvalue_type const R, Visitor visitor) const
+        Visitor&
+        visit_within_range(SearchVal const& V, subvalue_type const R, Visitor& visitor) const
         {
           if (!_M_get_root()) return visitor;
           _Region_ region(V, R, _M_acc, _M_cmp);
@@ -461,8 +461,8 @@ namespace KDTree
         }
 
       template <class Visitor>
-        Visitor
-        visit_within_range(_Region_ const& REGION, Visitor visitor) const
+        Visitor&
+        visit_within_range(_Region_ const& REGION, Visitor& visitor) const
         {
           if (_M_get_root())
             {
@@ -956,8 +956,8 @@ namespace KDTree
 
 
       template <class Visitor>
-        Visitor
-        _M_visit_within_range(Visitor visitor,
+        Visitor&
+        _M_visit_within_range(Visitor& visitor,
                              _Link_const_type N, _Region_ const& REGION,
                              _Region_ const& BOUNDS,
                              size_type const L) const

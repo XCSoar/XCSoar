@@ -48,7 +48,7 @@ class FAISectorASTPoint:
 {
 public:
   FAISectorASTPoint(const TaskProjection&tp,
-           const WAYPOINT& wp):
+           const Waypoint& wp):
     ASTPoint(tp,wp),
     oz(wp.Location) 
   {
