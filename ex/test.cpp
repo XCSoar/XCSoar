@@ -130,6 +130,8 @@ void setup_task(TaskManager& task_manager,
   }
 }
 
+#include "Navigation/AirspaceVisitor.hpp"
+#include "Navigation/WaypointVisitor.hpp"
 
 class AirspaceVisitorPrint: public AirspaceVisitor {
 public:
@@ -149,10 +151,6 @@ public:
       delete fout;
     }
 #endif    
-  }
-
-  virtual void Visit(const Airspace& as) {
-
   }
   virtual void Visit(const AirspaceCircle& as) {
     if (do_report) {
@@ -184,6 +182,9 @@ void scan_airspaces(const AIRCRAFT_STATE state,
   AirspaceVisitorPrint pvn("res-bb-nearest.txt",
                            do_report);
   pvn.for_each(vn);
+
+//  std::for_each(vn.begin(), vn.end(), pvn);
+// (will work for simple cases where visitor is stateless)
 
   AirspaceVisitorPrint visitor("res-bb-range.txt",
                                do_report);

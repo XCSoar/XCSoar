@@ -1,7 +1,7 @@
 #ifndef ABSTRACTAIRSPACE_HPP
 #define ABSTRACTAIRSPACE_HPP
 
-#include "AirspaceVisitor.hpp"
+#include "Util/GenericVisitor.hpp"
 #include "FlatBoundingBox.hpp"
 #include "Aircraft.hpp"
 

@@ -7,7 +7,7 @@
 #include <iostream>
 #endif
 
-#include "WaypointVisitor.hpp"
+#include "Util/GenericVisitor.hpp"
 
 class TaskProjection;
 

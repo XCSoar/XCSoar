@@ -5,6 +5,8 @@
 #include "Airspace.hpp"
 #include "BaseTask/TaskProjectionClient.hpp"
 
+class AirspaceVisitor;
+
 class Airspaces: public TaskProjectionClient 
 {
 public:

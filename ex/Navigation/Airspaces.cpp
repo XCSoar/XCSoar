@@ -1,6 +1,5 @@
 #include "Airspaces.hpp"
-#include "AirspaceCircle.hpp"
-#include "AirspacePolygon.hpp"
+#include "AirspaceVisitor.hpp"
 #include <deque>
 
 #ifdef INSTRUMENT_TASK

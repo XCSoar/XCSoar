@@ -8,6 +8,8 @@
 #endif
 #include <deque>
 
+class WaypointVisitor;
+
 class Waypoints {
 public:
   Waypoints(TaskProjection& _task_projection);

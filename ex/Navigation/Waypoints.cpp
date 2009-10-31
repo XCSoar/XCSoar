@@ -1,4 +1,5 @@
 #include "Waypoints.hpp"
+#include "WaypointVisitor.hpp"
 #include "BaseTask/TaskProjection.h"
 #include <vector>
 

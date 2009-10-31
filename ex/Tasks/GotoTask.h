@@ -4,7 +4,7 @@
 #define GOTOTASK_H
 
 #include "Tasks/AbstractTask.h"
-struct Waypoint;
+class Waypoint;
 
 class GotoTask : public AbstractTask {
 public:    

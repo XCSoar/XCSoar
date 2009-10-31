@@ -50,7 +50,7 @@ test_wp(const unsigned n)
   for (unsigned i=0; i<n; i++) {
     int x = rand()%1200-100;
     int y = rand()%1200-100;
-    WAYPOINT ff; 
+    Waypoint ff; 
     ff.Location.Longitude = x/1000.0; 
     ff.Location.Latitude = y/1000.0;
     ff.id = i+4;
@@ -63,7 +63,7 @@ test_wp(const unsigned n)
     int y = rand()%1200-100;
     state.Location.Longitude = x/1000.0; 
     state.Location.Latitude = y/1000.0;
-    std::vector < WAYPOINT > approx_waypoints = 
+    std::vector < Waypoint > approx_waypoints = 
       waypoints.find_within_range_circle(state.Location, 20);
     (void)approx_waypoints.size();
   }
@@ -117,10 +117,10 @@ int main() {
 
   TaskProjection task_projection(start);
 
-  ////////////////////////// WAYPOINTS //////
+  ////////////////////////// WaypointS //////
   Waypoints waypoints(task_projection);
 
-  WAYPOINT wp[6];
+  Waypoint wp[6];
   wp[0].id = 0;
   wp[0].Location.Longitude=0;
   wp[0].Location.Latitude=0;
@@ -149,7 +149,7 @@ int main() {
   for (unsigned i=0; i<150; i++) {
     int x = rand()%1200-100;
     int y = rand()%1200-100;
-    WAYPOINT ff; 
+    Waypoint ff; 
     ff.Location.Longitude = x/1000.0; 
     ff.Location.Latitude = y/1000.0;
     ff.id = i+4;

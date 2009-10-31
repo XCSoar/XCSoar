@@ -3,8 +3,7 @@
 
 #include "FlatBoundingBox.hpp"
 #include "AbstractAirspace.hpp"
-
-#include "AirspaceVisitor.hpp"
+#include "Util/GenericVisitor.hpp"
 
 class Airspace: 
   public FlatBoundingBox,
