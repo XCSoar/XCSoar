@@ -18,6 +18,10 @@ struct GeoVector {
             const bool is_average=true);
   double Distance;
   double Bearing;
+  GeoVector& operator+= (const GeoVector&g1) {
+    Distance+= g1.Distance;
+    return *this;
+  };
 };
 
 bool operator != (const GeoVector&g1, const GeoVector &g2);

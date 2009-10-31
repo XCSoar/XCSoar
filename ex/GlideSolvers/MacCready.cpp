@@ -8,8 +8,6 @@
 #include "Math/NavFunctions.hpp"
 #include "Navigation/Aircraft.hpp"
 
-long count_mc = 0;
-
 
 MacCready::MacCready(const GlidePolar &_glide_polar,
                      const double _cruise_efficiency):
@@ -116,8 +114,6 @@ MacCready::solve_glide(const GLIDE_STATE &task,
 {
   // spend a lot of time in this function, so it should be quick!
 
-  count_mc++;
-
   GLIDE_RESULT result(task,Vset);
 
   // distance relation
@@ -187,8 +183,6 @@ MacCready::solve_glide_zerowind(const GLIDE_STATE &task,
   // this is ONLY used for finding Vopt for zero wind case, so makes assumptions
   // about solution, and don't bother calculating things we don't need
 
-  count_mc++;
-
   const double Vn = Vset*cruise_efficiency;
   GLIDE_RESULT result(task,Vset);
   const double t_cr = task.Vector.Distance/Vn;
@@ -204,9 +198,6 @@ MacCready::solve_glide_zerowind(const GLIDE_STATE &task,
 GLIDE_RESULT 
 MacCready::solve(const GLIDE_STATE &task) const
 {
-
-  count_mc++;
-
   if (task.Vector.Distance==0) {
     return solve_vertical(task);
   } 

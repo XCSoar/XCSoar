@@ -94,6 +94,7 @@ public:
                  const AIRCRAFT_STATE& state);
   void calc_speeds(const double dt);
   void print(std::ostream &f) const;
+  void reset();
 private:
   bool initialised;
 };
@@ -127,7 +128,7 @@ public:
   double distance_scored;
 
   void print(std::ostream &f) const;
-
+  void reset();
 };
 
 

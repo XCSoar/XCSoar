@@ -161,7 +161,7 @@ void test_flight(TaskManager &task_manager,
 
       task_manager.update_idle(state);
 
-      bool do_report = (counter++ % 10 ==0);
+      bool do_report = (counter++ % 1 ==0);
       airspaces.scan_range(state, 5000.0, do_report);
       airspaces.find_inside(state, do_report);
 
@@ -222,7 +222,7 @@ int main() {
 
   distance_counts();
 
-  for (unsigned i=0; i<2; i++) {
+  for (unsigned i=0; i<1; i++) {
     if (i==1) {
       printf("ALL OFF\n");
       task_behaviour.all_off();
@@ -230,8 +230,8 @@ int main() {
 
     TaskManager task_manager(default_events,
                              task_behaviour,
-                             task_projection,
-                             glide_polar,waypoints);
+                             glide_polar,
+                             waypoints);
     
     setup_task(task_manager, task_projection);
     

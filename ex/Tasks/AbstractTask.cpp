@@ -238,7 +238,7 @@ AbstractTask::report(const AIRCRAFT_STATE &state)
 
   if (first) {
     first = false;
-    f6 << "# Time atp mc_best dist_rem_eff dist_rem cruis_eff sir sire\n";
+    f6 << "# Time atp mc_best d_tot_rem_eff d_tot_rem ceff v_tot_rem v_tot_rem_inc v_tot_eff v_tot_eff_inc\n";
   }
   f6 << state.Time
      << " " << activeTaskPoint

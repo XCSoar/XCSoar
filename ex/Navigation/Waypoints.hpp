@@ -28,6 +28,9 @@ public:
   void optimise();
   void insert(const WAYPOINT& wp);
 
+  const TaskProjection &get_task_projection() const {
+    return task_projection;
+  }
 private:
   WaypointTree waypoint_tree;
   TaskProjection& task_projection;

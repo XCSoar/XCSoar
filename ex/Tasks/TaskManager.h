@@ -22,12 +22,11 @@ class TaskManager : public TaskInterface,
 public:
   TaskManager(const TaskEvents &te,
               const TaskBehaviour &tb,
-              TaskProjection &tp,
               GlidePolar &gp,
               const Waypoints &wps): 
-    task_ordered(te,tb,tp,task_advance,gp),
+    task_ordered(te,tb,wps.get_task_projection(),task_advance,gp),
     task_goto(te,tb,task_advance,gp),
-    task_abort(te,tb,tp,task_advance,gp,wps),
+    task_abort(te,tb,wps.get_task_projection(),task_advance,gp,wps),
     task_behaviour(tb)
   {
     set_mode(MODE_ORDERED);

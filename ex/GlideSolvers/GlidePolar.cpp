@@ -62,9 +62,13 @@ GlidePolar::solve()
 }
 
 
+long count_mc = 0;
+
+
 GLIDE_RESULT 
 GlidePolar::solve(const GLIDE_STATE &task) const
 {
+  count_mc++;
   MacCready mac(*this, cruise_efficiency);
   return mac.solve(task);
 }
@@ -73,6 +77,7 @@ GLIDE_RESULT
 GlidePolar::solve_sink(const GLIDE_STATE &task,
                        const double S) const
 {
+  count_mc++;
   MacCready mac(*this, cruise_efficiency);
   return mac.solve_sink(task,S);
 }
