@@ -434,7 +434,7 @@ OrderedTaskPoint::print(std::ostream& f, const AIRCRAFT_STATE& state,
 }
 
 
-#include "BaseTask/SampledTaskPoint.hpp"
+#include "BaseTask/SampledTaskPoint.h"
 
 void 
 SampledTaskPoint::print_boundary(std::ostream& f, const AIRCRAFT_STATE &state) const

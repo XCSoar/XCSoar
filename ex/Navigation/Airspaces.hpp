@@ -3,7 +3,6 @@
 
 #include <kdtree++/kdtree.hpp>
 #include "Airspace.hpp"
-#include <iostream>
 #include "BaseTask/TaskProjectionClient.hpp"
 
 class Airspaces: public TaskProjectionClient 
@@ -14,13 +13,12 @@ public:
     {
     };
 
-  void scan_nearest(const AIRCRAFT_STATE &state,
-    const bool do_report) const;
-  void scan_range(const AIRCRAFT_STATE &state, const double &range,
-    const bool do_report) const;
+  const std::vector<Airspace> scan_nearest(const AIRCRAFT_STATE &state) const;
 
-  std::vector<Airspace> find_inside(const AIRCRAFT_STATE &state,
-    const bool do_report) const;
+  const std::vector<Airspace> scan_range(const AIRCRAFT_STATE &state, 
+                                         const double &range) const;
+
+  std::vector<Airspace> find_inside(const AIRCRAFT_STATE &state) const;
 
   void optimise();
 

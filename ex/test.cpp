@@ -33,7 +33,7 @@ void distance_counts() {
     printf("#     mc calcs/c %d\n",count_mc/n_samples);
     printf("#     dijkstra/c %d\n",num_dijkstra/n_samples);
     printf("#    (total cycles %d)\n\n",n_samples);
-    printf("#     intersections tests/q %d\n",count_intersections/n_queries);
+    printf("#     intersection tests/q %d\n",count_intersections/n_queries);
     printf("#    (total queries %d)\n\n",n_queries);
   }
   count_intersections = 0;
@@ -111,6 +111,36 @@ void setup_task(TaskManager& task_manager,
   }
 }
 
+void report_airspaces(const char* fname,
+                      const std::vector<Airspace> &v,
+                      const TaskProjection &task_projection) {
+  std::ofstream fout(fname);
+  for (std::vector<Airspace>::const_iterator i= v.begin();
+       i!= v.end(); i++) {
+    (*i).print(fout, task_projection);
+  }
+}
+
+
+void scan_airspaces(const AIRCRAFT_STATE state, 
+                    const Airspaces& airspaces,
+                    bool do_report) 
+{
+  const std::vector<Airspace> vn = airspaces.scan_nearest(state);
+  if (do_report) {
+    report_airspaces("res-bb-nearest.txt", vn, airspaces.get_task_projection());
+  }
+  const std::vector<Airspace> vr = airspaces.scan_range(state, 5000.0);
+  if (do_report) {
+    report_airspaces("res-bb-range.txt", vr, airspaces.get_task_projection());
+  }
+  
+  const std::vector<Airspace> vi = airspaces.find_inside(state);
+  if (do_report) {
+    report_airspaces("res-bb-inside.txt", vi, airspaces.get_task_projection());
+  }
+}
+
 void test_flight(TaskManager &task_manager,
                  Airspaces &airspaces) 
 {
@@ -135,9 +165,7 @@ void test_flight(TaskManager &task_manager,
   state.WindSpeed = 0.0;
   state.WindDirection = 0;
 
-  airspaces.scan_nearest(state, true);
-  airspaces.scan_range(state, 5000.0, true);
-  airspaces.find_inside(state, true);
+  scan_airspaces(state, airspaces, true);
 
   std::ofstream f4("res-sample.txt");
 
@@ -163,9 +191,8 @@ void test_flight(TaskManager &task_manager,
 
       task_manager.update_idle(state);
 
-      bool do_print = (counter++ % 1 ==0);
-      airspaces.scan_range(state, 5000.0, do_print);
-      airspaces.find_inside(state, do_print);
+      bool do_print = (counter++ % 10 ==0);
+      scan_airspaces(state, airspaces, do_print);
 
       if (do_print) {
         task_manager.print(state);

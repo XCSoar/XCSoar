@@ -94,7 +94,7 @@ test_as(const unsigned n, TaskProjection &task_projection)
     int y = rand()%1200-100;
     state.Location.Longitude = x/1000.0; 
     state.Location.Latitude = y/1000.0;
-    airspaces.find_inside(state, false);
+    airspaces.find_inside(state);
   }
   print_queries(n);
 }
