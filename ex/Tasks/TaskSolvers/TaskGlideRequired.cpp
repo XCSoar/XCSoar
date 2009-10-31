@@ -1,6 +1,5 @@
 #include "TaskGlideRequired.hpp"
 #include <math.h>
-#include <stdio.h>
 
 
 TaskGlideRequired::TaskGlideRequired(const std::vector<OrderedTaskPoint*>& tps,

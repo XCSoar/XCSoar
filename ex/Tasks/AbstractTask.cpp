@@ -222,39 +222,6 @@ AbstractTask::glide_solution_planned(const AIRCRAFT_STATE &state,
   leg_remaining_effective.set_distance(res.Vector.Distance);
 }
 
-void
-AbstractTask::report(const AIRCRAFT_STATE &state)
-{
-  std::ofstream fs("res-stats-all.txt");
-  stats.print(fs);
-
-  static std::ofstream f4("res-sample.txt");
-  f4 <<  state.Location.Longitude << " " 
-     <<  state.Location.Latitude << "\n";
-  f4.flush();
-
-  static std::ofstream f6("res-stats.txt");
-  static bool first = true;
-
-  if (first) {
-    first = false;
-    f6 << "# Time atp mc_best d_tot_rem_eff d_tot_rem ceff v_tot_rem v_tot_rem_inc v_tot_eff v_tot_eff_inc\n";
-  }
-  f6 << state.Time
-     << " " << activeTaskPoint
-     << " " << stats.mc_best
-     << " " << stats.total.remaining_effective.get_distance()
-     << " " << stats.total.remaining.get_distance() 
-     << " " << stats.cruise_efficiency 
-     << " " << stats.total.remaining.get_speed() 
-     << " " << stats.total.remaining.get_speed_incremental() 
-     << " " << stats.total.remaining_effective.get_speed() 
-     << " " << stats.total.remaining_effective.get_speed_incremental() 
-     << "\n";
-  f6.flush();
-
-}
-
 
 double 
 AbstractTask::scan_total_start_time(const AIRCRAFT_STATE &state)

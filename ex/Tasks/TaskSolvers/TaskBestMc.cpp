@@ -1,6 +1,5 @@
 #include "TaskBestMc.hpp"
 #include <math.h>
-#include <stdio.h>
 
 
 TaskBestMc::TaskBestMc(const std::vector<OrderedTaskPoint*>& tps,

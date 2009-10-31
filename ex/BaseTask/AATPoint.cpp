@@ -118,17 +118,12 @@ AATPoint::check_target_outside(const AIRCRAFT_STATE& state)
 
         // Note that this fights with auto-target
 
-//        printf("was %g %g %g\n",bst,b0s,dst);
-//        printf("%g intercept %g %g\n",da, 
-//               si.Location.Longitude, 
-//               si.Location.Latitude);
         TargetLocation = si.Location;
 
         bst = ::Bearing(state.Location,
                         TargetLocation);
         dst = ::Distance(state.Location,
                          TargetLocation);
-//        printf("now %g %g %g\n",bst,b0s,dst);
         return true;
       }
     }
@@ -155,56 +150,6 @@ AATPoint::update_projection()
 // TODO: update ellipse if we have one saved
 }
 
-////////////////////////////////////////////
-
-
-
-void AATPoint::print(std::ostream& f, const AIRCRAFT_STATE& state,
-                     const int item) const
-{
-  switch(item) {
-  case 0:
-    OrderedTaskPoint::print(f, state, item);
-    f << "#   Target " << TargetLocation.Longitude << "," 
-      << TargetLocation.Latitude << "\n";
-    break;
-
-  case 1:
-
-    if (getActiveState() != BEFORE_ACTIVE) {
-
-      // note in general this will only change if 
-      // prev max or target changes
-
-      AATIsolineSegment seg(*this);
-      double tdist = ::Distance(get_previous()->get_reference_remaining(),
-                                getMinLocation());
-      double rdist = ::Distance(get_previous()->get_reference_remaining(),
-                                getTargetLocation());
-
-      bool filter_backtrack = true;
-      if (seg.valid()) {
-        for (double t = 0.0; t<=1.0; t+= 1.0/20) {
-          GEOPOINT ga = seg.parametric(t);
-          double dthis = ::Distance(get_previous()->get_reference_remaining(),
-                                    ga);
-          if (!filter_backtrack 
-              || (dthis>=tdist)
-              || (dthis>=rdist)) {
-            // TODO: unless double dist is better than current
-            f << ga.Longitude << " " << ga.Latitude << "\n";
-          }
-        }
-      } else {
-        GEOPOINT ga = seg.parametric(0.0);
-        f << ga.Longitude << " " << ga.Latitude << "\n";
-      }
-      f << "\n";
-
-    }
-    break;
-  }
-}
 
 void 
 AATPoint::set_target(const GEOPOINT &loc)
@@ -213,22 +158,3 @@ AATPoint::set_target(const GEOPOINT &loc)
 }
 
 
-void 
-AATPoint::print_boundary(std::ostream& f,
-  const AIRCRAFT_STATE &state) const
-{
-  const unsigned n= get_boundary_points().size();
-  f << "#   Boundary points\n";
-  const double mind = double_leg_distance(state.Location);
-  for (unsigned i=0; i<n; i++) {
-    const GEOPOINT loc = get_boundary_points()[i].getLocation();
-
-    // TODO: this is broken
-    if (1 || double_leg_distance(loc)>mind) {
-      f << "     " << loc.Longitude << " " << loc.Latitude << "\n";
-    } else {
-      f << "     " << state.Location.Longitude << " " << state.Location.Latitude << "\n";
-    }
-  }
-  f << "\n";
-}

@@ -47,7 +47,7 @@ public:
   void resume();
   void do_goto(const WAYPOINT & wp);
 
-  virtual void report(const AIRCRAFT_STATE &location);
+  virtual void print(const AIRCRAFT_STATE &location);
 
   virtual bool update(const AIRCRAFT_STATE &, const AIRCRAFT_STATE&);
   virtual bool update_idle(const AIRCRAFT_STATE &state);
@@ -66,22 +66,25 @@ private:
 
   AbstractTask* active_task;
 
-    /** @link aggregation */
-    OrderedTask task_ordered;
+  TaskMode_t mode;
 
-    /** @link aggregation */
-    GotoTask task_goto;
 
-    /** @link aggregation */
-    AbortTask task_abort;
+  /** @link aggregation */
+  OrderedTask task_ordered;
 
-    TaskMode_t mode;
+  /** @link aggregation */
+  GotoTask task_goto;
+  
+  /** @link aggregation */
+  AbortTask task_abort;
+  
+  /** @link aggregation */
+  TaskAdvance task_advance;
+  
+  const TaskBehaviour &task_behaviour;
+  
+  /** @link dependency */
+  /*#  TaskEvents lnkTaskEvents; */
 
-    TaskAdvance task_advance;
-
-    const TaskBehaviour &task_behaviour;
-
-    /** @link dependency */
-    /*#  TaskEvents lnkTaskEvents; */
 };
 #endif //TASKMANAGER_H

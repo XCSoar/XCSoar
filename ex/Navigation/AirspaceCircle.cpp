@@ -44,14 +44,3 @@ AirspaceCircle::inside(const AIRCRAFT_STATE &loc) const
 }
 
 
-void 
-AirspaceCircle::print(std::ostream &f, const TaskProjection &task_projection) const
-{
-  f << "# circle\n";
-  for (double t=0; t<=360; t+= 30) {
-    GEOPOINT l;
-    FindLatitudeLongitude(center, t, radius, &l);
-    f << l.Longitude << " " << l.Latitude << "\n";
-  }
-  f << "\n";
-}

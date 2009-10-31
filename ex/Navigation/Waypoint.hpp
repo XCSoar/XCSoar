@@ -13,8 +13,6 @@ struct WAYPOINT {
   FLAT_GEOPOINT FlatLocation;
   double Altitude;
 
-  void print(std::ostream &f, const TaskProjection &task_projection) const;
-
   // used by kd tree
   struct kd_get_location {
     typedef int result_type;
@@ -31,6 +29,10 @@ struct WAYPOINT {
   bool operator==(const WAYPOINT&wp) const {
     return id == wp.id;
   }
+
+  friend std::ostream& operator<< (std::ostream& o, 
+                                   const WAYPOINT& wp);
+
 };
 
 

@@ -83,25 +83,6 @@ TaskMacCready::glide_solution(const AIRCRAFT_STATE &aircraft)
 }
 
 
-void
-TaskMacCready::print(std::ostream &f, const AIRCRAFT_STATE &aircraft) const
-{
-  AIRCRAFT_STATE aircraft_start = get_aircraft_start(aircraft);
-  AIRCRAFT_STATE aircraft_predict = aircraft;
-  aircraft_predict.Altitude = aircraft_start.Altitude;
-  f << "#  i alt  min  elev\n";
-  f << start-0.5 << " " << aircraft_start.Altitude << " " <<
-    minHs[start] << " " <<
-    tps[start]->getElevation() << "\n";
-  for (int i=start; i<=end; i++) {
-    aircraft_predict.Altitude -= gs[i].HeightGlide;
-    f << i << " " << aircraft_predict.Altitude << " " << minHs[i]
-      << " " << tps[i]->getElevation() << "\n";
-  }
-  f << "\n";
-}
-
-
 GLIDE_RESULT 
 TaskMacCready::glide_sink(const AIRCRAFT_STATE &aircraft,
                           const double S) 

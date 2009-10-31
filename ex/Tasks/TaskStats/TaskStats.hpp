@@ -19,7 +19,6 @@ public:
   void set_distance(const double d) {
     distance = d;
   }
-  void print(std::ostream &f) const;
 
   double get_speed() const {
     return speed;
@@ -33,6 +32,10 @@ public:
 
   virtual void calc_speed(const ElementStat* es) = 0;
   virtual void calc_incremental_speed(const double dt);
+
+  friend std::ostream& operator<< (std::ostream& o, 
+                                   const DistanceStat& ds);
+
 protected:
   double distance;
   double speed;
@@ -93,7 +96,10 @@ public:
   void set_times(const double ts, 
                  const AIRCRAFT_STATE& state);
   void calc_speeds(const double dt);
-  void print(std::ostream &f) const;
+
+  friend std::ostream& operator<< (std::ostream& o, 
+                                   const ElementStat& es);
+
   void reset();
 private:
   bool initialised;
@@ -127,8 +133,10 @@ public:
   double distance_min;
   double distance_scored;
 
-  void print(std::ostream &f) const;
   void reset();
+
+  friend std::ostream& operator<< (std::ostream& o, 
+                                   const TaskStats& ts);
 };
 
 

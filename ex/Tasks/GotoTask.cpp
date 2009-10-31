@@ -33,16 +33,6 @@ GotoTask::setActiveTaskPoint(unsigned index)
 }
 
 
-void 
-GotoTask::report(const AIRCRAFT_STATE &state)
-{
-  AbstractTask::report(state);
-  if (tp) {
-    std::ofstream f1("res-goto.txt");
-    tp->print(f1,state);
-  }
-}
-
 bool 
 GotoTask::update_sample(const AIRCRAFT_STATE &state,
                         const bool full_update)

@@ -18,7 +18,7 @@ public:
   virtual void setActiveTaskPoint(unsigned index);
   void do_goto(const WAYPOINT & wp);
 
-  virtual void report(const AIRCRAFT_STATE &state);
+  virtual void print(const AIRCRAFT_STATE &state);
 
   virtual bool update_sample(const AIRCRAFT_STATE &, 
                              const bool full_update);

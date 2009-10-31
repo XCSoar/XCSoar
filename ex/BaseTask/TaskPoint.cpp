@@ -65,11 +65,3 @@ TaskPoint::glide_solution_sink(const AIRCRAFT_STATE &ac,
 }
 
 
-void 
-TaskPoint::print(std::ostream& f, const AIRCRAFT_STATE &state) const
-{
-  f << "# Task point \n";
-  f << "#   Location " << getLocation().Longitude << "," <<
-    getLocation().Latitude << "\n";
-}
-

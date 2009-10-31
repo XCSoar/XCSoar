@@ -22,7 +22,7 @@ public:
   TaskPoint* getActiveTaskPoint();
   void setActiveTaskPoint(unsigned index);
 
-  virtual void report(const AIRCRAFT_STATE &location);
+  virtual void print(const AIRCRAFT_STATE &location);
 
   virtual bool update_sample(const AIRCRAFT_STATE &, const bool full_update);
 protected:

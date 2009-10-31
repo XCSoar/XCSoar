@@ -71,9 +71,12 @@ struct GLIDE_RESULT {
   bool superior(const GLIDE_RESULT &s2) const;
 */
   void add(const GLIDE_RESULT &s2);
-  void print(std::ostream& f) const;
   double calc_vspeed(const double mc);
   double glide_angle_ground() const;
+
+  friend std::ostream& operator<< (std::ostream& o, 
+                                   const GLIDE_RESULT& gl);
+
 };
 
 #endif

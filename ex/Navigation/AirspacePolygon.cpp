@@ -58,14 +58,3 @@ AirspacePolygon::inside(const AIRCRAFT_STATE &loc) const
 }
 
 
-void 
-AirspacePolygon::print(std::ostream &f, const TaskProjection &task_projection) const
-{
-  f << "# polygon\n";
-  for (std::vector<SearchPoint>::const_iterator v = border.begin();
-       v != border.end(); v++) {
-    GEOPOINT l = v->getLocation();
-    f << l.Longitude << " " << l.Latitude << "\n";
-  }
-  f << "\n";
-}

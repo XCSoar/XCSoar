@@ -30,7 +30,7 @@ public:
     
     virtual bool update_idle(const AIRCRAFT_STATE&);
     
-  virtual void report(const AIRCRAFT_STATE&);
+  virtual void print(const AIRCRAFT_STATE&);
 
 protected:
   virtual bool update_sample(const AIRCRAFT_STATE &, 

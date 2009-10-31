@@ -5,6 +5,7 @@
 
 #include "Navigation/Waypoint.hpp"
 #include "Util/Intersection.hpp"
+#include <iostream>
 
 class TaskProjection {
 public:
@@ -35,7 +36,9 @@ public:
   unsigned project_range(const GEOPOINT &tp, const double range) const;
   double fproject_range(const GEOPOINT &tp, const double range) const;
 
-  void report();
+  friend std::ostream& operator<< (std::ostream& o, 
+                                   const TaskProjection& task_projection);
+
 private:
   GEOPOINT location_min;
   GEOPOINT location_max;

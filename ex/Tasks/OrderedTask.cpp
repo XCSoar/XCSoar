@@ -401,8 +401,10 @@ OrderedTask::glide_solution_remaining(const AIRCRAFT_STATE &aircraft,
   total = tm.glide_solution(aircraft);
   leg = tm.get_active_solution();
 
+/*
   std::ofstream fr("res-sol-remaining.txt");
   tm.print(fr, aircraft);
+*/
 }
 
 void
@@ -414,8 +416,10 @@ OrderedTask::glide_solution_travelled(const AIRCRAFT_STATE &aircraft,
   total = tm.glide_solution(aircraft);
   leg = tm.get_active_solution();
 
+/*
   std::ofstream fr("res-sol-travelled.txt");
   tm.print(fr, aircraft);
+*/
 }
 
 void
@@ -431,8 +435,10 @@ OrderedTask::glide_solution_planned(const AIRCRAFT_STATE &aircraft,
   total = tm.glide_solution(aircraft);
   leg = tm.get_active_solution();
 
+/*
   std::ofstream fr("res-sol-planned.txt");
   tm.print(fr, aircraft);
+*/
 
   total_remaining_effective.
     set_distance(tm.effective_distance(total_t_elapsed));
@@ -482,64 +488,6 @@ OrderedTask::calc_min_target(const AIRCRAFT_STATE &aircraft,
   double p= bmt.search(0.0);
 //  printf("target opt %g\n",p);
   return p;
-}
-
-
-////////// Reporting/printing for debugging
-
-
-void OrderedTask::report(const AIRCRAFT_STATE &state) 
-{
-  AbstractTask::report(state);
-
-  std::ofstream fi("res-isolines.txt");
-  for (unsigned i=0; i<tps.size(); i++) {
-    fi << "## point " << i << "\n";
-    tps[i]->print(fi,state,1);
-    fi << "\n";
-  }
-
-  std::ofstream f1("res-task.txt");
-
-  f1 << "#### Task points\n";
-  for (unsigned i=0; i<tps.size(); i++) {
-    f1 << "## point " << i << " ###################\n";
-    tps[i]->print(f1,state,0);
-    f1 << "\n";
-  }
-
-  std::ofstream f5("res-ssample.txt");
-  f5 << "#### Task sampled points\n";
-  for (unsigned i=0; i<tps.size(); i++) {
-    f5 << "## point " << i << "\n";
-    tps[i]->print_samples(f5,state);
-    f5 << "\n";
-  }
-
-  std::ofstream f2("res-max.txt");
-  f2 << "#### Max task\n";
-  for (unsigned i=0; i<tps.size(); i++) {
-    OrderedTaskPoint *tp = tps[i];
-    f2 <<  tp->getMaxLocation().Longitude << " " 
-       <<  tp->getMaxLocation().Latitude << "\n";
-  }
-
-  std::ofstream f3("res-min.txt");
-  f3 << "#### Min task\n";
-  for (unsigned i=0; i<tps.size(); i++) {
-    OrderedTaskPoint *tp = tps[i];
-    f3 <<  tp->getMinLocation().Longitude << " " 
-       <<  tp->getMinLocation().Latitude << "\n";
-  }
-
-  std::ofstream f4("res-rem.txt");
-  f4 << "#### Remaining task\n";
-  for (unsigned i=0; i<tps.size(); i++) {
-    OrderedTaskPoint *tp = tps[i];
-    f4 <<  tp->get_reference_remaining().Longitude << " " 
-       <<  tp->get_reference_remaining().Latitude << "\n";
-  }
-
 }
 
 

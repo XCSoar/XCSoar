@@ -1,7 +1,5 @@
 #include "TaskOptTarget.hpp"
 #include <math.h>
-#include <stdio.h>
-
 
 TaskOptTarget::TaskOptTarget(const std::vector<OrderedTaskPoint*>& tps,
                              const unsigned activeTaskPoint,
@@ -26,7 +24,6 @@ double TaskOptTarget::f(const double p)
 
   res = tm.glide_solution(aircraft);
 
-//  printf(" - %g %g\n",p,res.TimeElapsed);
   return res.TimeElapsed;
 }
 
@@ -46,7 +43,6 @@ double TaskOptTarget::search(const double tp)
       tp_current.set_target(loc);
       return -1.0;
     } else {
-//      printf("%g\n",t);
       return t;
     }
   } else {
@@ -57,7 +53,6 @@ double TaskOptTarget::search(const double tp)
 void TaskOptTarget::set_target(const double p)
 {
   GEOPOINT loc = iso.parametric(std::min(xmax,std::max(xmin,p)));
-//  printf("%g %g ", loc.Longitude, loc.Latitude);
   tp_current.set_target(loc);
   tp_start->scan_distance_remaining(aircraft.Location);
 }

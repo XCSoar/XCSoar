@@ -23,10 +23,8 @@ IsolineCrossingFinder::f(const double t)
   
   // note: use of isInSector is slow!
   if (aap.isInSector(s)) {
-//    printf("%g yes\n",t);
     return 1.0;
   } else {
-//    printf("%g no\n",t);
     return -1.0;
   }
 }

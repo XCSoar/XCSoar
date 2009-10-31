@@ -25,12 +25,10 @@ Airspaces::scan_nearest(const AIRCRAFT_STATE &state,
     // also should do scan_range with range = 0 since there
     // could be more than one with zero dist
     if (found.second==0) {
-//      printf("inside\n");
       scan_range(state, 0, do_report);
       return;
     } 
   }
-//  printf("outside\n");
 }
 
 

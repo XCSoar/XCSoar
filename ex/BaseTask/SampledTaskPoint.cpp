@@ -115,36 +115,3 @@ SampledTaskPoint::clear_sample_points() {
   sampled_points.clear();
 }
 
-void 
-SampledTaskPoint::print_boundary(std::ostream& f, const AIRCRAFT_STATE &state) const
-{
-  f << "#   Boundary points\n";
-  const unsigned n= get_boundary_points().size();
-  for (unsigned i=0; i<n; i++) {
-    const GEOPOINT loc = get_boundary_points()[i].getLocation();
-    f << "     " << loc.Longitude << " " << loc.Latitude << "\n";
-  }
-  f << "\n";
-}
-
-void 
-SampledTaskPoint::print(std::ostream& f, const AIRCRAFT_STATE &state) const
-{
-  TaskPoint::print(f,state);
-  print_boundary(f, state);
-}
-
-void 
-SampledTaskPoint::print_samples(std::ostream& f,
-  const AIRCRAFT_STATE &state) 
-{
-  const unsigned n= get_search_points().size();
-  f << "#   Search points\n";
-  for (unsigned i=0; i<n; i++) {
-    const GEOPOINT loc = get_search_points()[i].getLocation();
-    f << "     " << loc.Longitude << " " << loc.Latitude << "\n";
-  }
-  f << "\n";
-}
-
-

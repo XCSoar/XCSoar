@@ -1,6 +1,5 @@
 #ifndef FLATBOUNDINGBOX_HPP
 #define FLATBOUNDINGBOX_HPP
-#include "Math/FastMath.h"
 #include "Waypoint.hpp"
 #include "BaseTask/TaskProjection.h"
 #include <algorithm>
@@ -62,31 +61,9 @@ public:
 
   }
 
-  unsigned distance(const FlatBoundingBox &f) const {
-    long dx = std::max(0,std::min(f.bb_ll.Longitude-bb_ur.Longitude,
-                                  bb_ll.Longitude-f.bb_ur.Longitude));
-    long dy = std::max(0,std::min(f.bb_ll.Latitude-bb_ur.Latitude,
-                                  bb_ll.Latitude-f.bb_ur.Latitude));
-    return isqrt4(dx*dx+dy*dy);
-  };
+  unsigned distance(const FlatBoundingBox &f) const;
 
-  virtual void print(std::ostream &f, const TaskProjection &task_projection) const {
-    FLAT_GEOPOINT ll(bb_ll.Longitude,bb_ll.Latitude);
-    FLAT_GEOPOINT lr(bb_ur.Longitude,bb_ll.Latitude);
-    FLAT_GEOPOINT ur(bb_ur.Longitude,bb_ur.Latitude);
-    FLAT_GEOPOINT ul(bb_ll.Longitude,bb_ur.Latitude);
-    GEOPOINT gll = task_projection.unproject(ll);
-    GEOPOINT glr = task_projection.unproject(lr);
-    GEOPOINT gur = task_projection.unproject(ur);
-    GEOPOINT gul = task_projection.unproject(ul);
-
-    f << gll.Longitude << " " << gll.Latitude << "\n";
-    f << glr.Longitude << " " << glr.Latitude << "\n";
-    f << gur.Longitude << " " << gur.Latitude << "\n";
-    f << gul.Longitude << " " << gul.Latitude << "\n";
-    f << gll.Longitude << " " << gll.Latitude << "\n";
-    f << "\n";
-  }
+  virtual void print(std::ostream &f, const TaskProjection &task_projection) const;
 
   // used by KD
   struct kd_get_bounds {

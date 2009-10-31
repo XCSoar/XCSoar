@@ -6,6 +6,7 @@
 #include "Navigation/AirspaceCircle.hpp"
 #include "Navigation/AirspacePolygon.hpp"
 #include "Navigation/Waypoints.hpp"
+#include "Math/FastMath.h"
 #include "Tasks/TaskManager.h"
 #include "Tasks/TaskEvents.hpp"
 #include "TaskPoints/FAISectorStartPoint.hpp"
@@ -148,7 +149,7 @@ int main() {
   }
   waypoints.optimise();
 
-  task_projection.report();
+  std::cout << task_projection;
 
   fout << "# test waypoint tree\n";
   for (double i=10; i<=10000; i*= 1.1) {

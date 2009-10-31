@@ -17,15 +17,6 @@ Airspace::Airspace(AbstractAirspace& airspace,
 
 }
 
-void 
-Airspace::print(std::ostream &f, const TaskProjection &task_projection) const
-{
-  if (pimpl_airspace) {
-    pimpl_airspace->print(f, task_projection);
-  } else {
-    FlatBoundingBox::print(f, task_projection);
-  }
-}
 
 bool 
 Airspace::inside(const AIRCRAFT_STATE &loc) const

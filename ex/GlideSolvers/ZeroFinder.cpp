@@ -1,6 +1,5 @@
 #include "ZeroFinder.hpp"
 #include <math.h>
-#include <stdio.h>
 #include <assert.h>
 #include <algorithm>
 #include <limits>
@@ -145,9 +144,7 @@ double ZeroFinder::find_zero(const double xstart) {
       c = a;  fc = fa;                  /* opposite to that of b	*/
     }
 
-    if ((b>xmax) || (b<xmin)) {
-      printf("out of range\n");
-    }
+    assert((b<=xmax) && (b>=xmin));
   }
 
 }

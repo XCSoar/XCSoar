@@ -43,11 +43,6 @@ TaskPoint* TaskManager::getActiveTaskPoint()
     return NULL;
 }
 
-void TaskManager::report(const AIRCRAFT_STATE &state)
-{
-  if (active_task) 
-    return active_task->report(state);
-}
 
 bool TaskManager::update(const AIRCRAFT_STATE &state, 
                          const AIRCRAFT_STATE& state_last)

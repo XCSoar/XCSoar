@@ -24,7 +24,7 @@ Waypoints::optimise()
     w.FlatLocation = task_projection.project(w.Location);
     waypoint_tree.insert(w);
     tmp_wps.pop_front();
-    w.print(fin, task_projection);
+    fin << w;
   }
 
   waypoint_tree.optimize();

@@ -37,31 +37,6 @@ GLIDE_RESULT::calc_cruise_bearing()
 }
 
 
-void 
-GLIDE_RESULT::print(std::ostream& f) const
-{
-  if (Solution != RESULT_OK) {
-    f << "#     Solution NOT OK\n";
-  }
-  f << "#    Altitude Difference " << AltitudeDifference << " (m)\n";
-  f << "#    Distance            " << Vector.Distance << " (m)\n";
-  f << "#    TrackBearing        " << Vector.Bearing << " (deg)\n";
-  f << "#    CruiseTrackBearing  " <<  CruiseTrackBearing << " (deg)\n";
-  f << "#    VOpt                " <<  VOpt << " (m/s)\n";
-  f << "#    HeightClimb         " <<  HeightClimb << " (m)\n";
-  f << "#    HeightGlide         " <<  HeightGlide << " (m)\n";
-  f << "#    TimeElapsed         " <<  TimeElapsed << " (s)\n";
-  f << "#    TimeVirtual         " <<  TimeVirtual << " (s)\n";
-  if (TimeElapsed>0) {
-    f << "#    Vave remaining      " <<  Vector.Distance/TimeElapsed << " (m/s)\n";
-    f << "#    EffectiveWindSpeed  " <<  EffectiveWindSpeed << " (m/s)\n";
-    f << "#    EffectiveWindAngle  " <<  EffectiveWindAngle << " (deg)\n";
-    f << "#    DistanceToFinal     " <<  DistanceToFinal << " (m)\n";
-  }
-  if (is_final_glide()) {
-    f << "#    On final glide\n";
-  }
-}
 
 void 
 GLIDE_RESULT::add(const GLIDE_RESULT &s2) 

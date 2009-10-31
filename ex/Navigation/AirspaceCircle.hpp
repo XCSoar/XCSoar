@@ -12,7 +12,8 @@ public:
 
   bool inside(const AIRCRAFT_STATE &loc) const;
 
-  virtual void print(std::ostream &f, const TaskProjection &task_projection) const;
+  friend std::ostream& operator<< (std::ostream& f, 
+                                   const AirspaceCircle& as);
 
 private:
   const GEOPOINT center;

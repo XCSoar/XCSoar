@@ -36,7 +36,6 @@ public:
   GLIDE_RESULT glide_solution(const AIRCRAFT_STATE &aircraft);
   GLIDE_RESULT glide_sink(const AIRCRAFT_STATE &aircraft,
                           const double S);
-  void print(std::ostream& f, const AIRCRAFT_STATE &aircraft) const;
 
   void set_mc(double mc) {
     glide_polar.set_mc(mc);

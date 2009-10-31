@@ -1,6 +1,5 @@
 #include "TaskMinTarget.hpp"
 #include <math.h>
-#include <stdio.h>
 
 
 TaskMinTarget::TaskMinTarget(const std::vector<OrderedTaskPoint*>& tps,

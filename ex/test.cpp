@@ -89,7 +89,7 @@ void setup_airspaces(Airspaces& airspaces, TaskProjection& task_projection) {
       as = new AirspacePolygon(task_projection);
     }
     airspaces.insert(*as);
-    as->print(fin, task_projection);
+    fin << *as;
   }
   airspaces.optimise();
 }
@@ -139,6 +139,8 @@ void test_flight(TaskManager &task_manager,
   airspaces.scan_range(state, 5000.0, true);
   airspaces.find_inside(state, true);
 
+  std::ofstream f4("res-sample.txt");
+
   unsigned counter=0;
 
   for (int i=0; i<num_wp-1; i++) {
@@ -161,12 +163,15 @@ void test_flight(TaskManager &task_manager,
 
       task_manager.update_idle(state);
 
-      bool do_report = (counter++ % 1 ==0);
-      airspaces.scan_range(state, 5000.0, do_report);
-      airspaces.find_inside(state, do_report);
+      bool do_print = (counter++ % 1 ==0);
+      airspaces.scan_range(state, 5000.0, do_print);
+      airspaces.find_inside(state, do_print);
 
-      if (do_report) {
-        task_manager.report(state);
+      if (do_print) {
+        task_manager.print(state);
+        f4 <<  state.Location.Longitude << " " 
+           <<  state.Location.Latitude << "\n";
+        f4.flush();
       }
       n_samples++;
       state_last = state;
@@ -210,7 +215,7 @@ int main() {
   ////////////////////////// WAYPOINTS //////
   Waypoints waypoints(task_projection);
   setup_waypoints(waypoints);
-  task_projection.report();
+  std::cout << task_projection;
 
   ////////////////////////// AIRSPACES //////
   Airspaces airspaces(task_projection);

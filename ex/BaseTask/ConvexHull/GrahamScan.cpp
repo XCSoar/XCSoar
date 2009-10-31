@@ -1,5 +1,4 @@
 #include "GrahamScan.hpp"
-#include <stdio.h>
 
 bool operator==(const SearchPoint& s1, const SearchPoint& s2)
 {
@@ -188,7 +187,5 @@ SearchPointVector GrahamScan::prune_interior(bool *changed)
     }
   }
 
-//  printf("size before %d\n", raw_points.size());
-//  printf("size now %d\n", res.size());
   return res;
 }

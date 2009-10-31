@@ -13,7 +13,8 @@ public:
 
   virtual bool inside(const AIRCRAFT_STATE &loc) const = 0;
 
-  virtual void print(std::ostream &f, const TaskProjection &task_projection) const {};
+  friend std::ostream& operator<< (std::ostream& f, 
+                                   const AbstractAirspace& as);
 };
 
 #endif

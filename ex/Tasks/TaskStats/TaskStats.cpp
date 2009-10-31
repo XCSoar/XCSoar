@@ -55,14 +55,6 @@ void DistanceTravelledStat::calc_incremental_speed(const double dt)
 }
 
 
-void DistanceStat::print(std::ostream &f) const
-{
-  f << "#    Distance " << distance << " (m)\n";
-  f << "#    Speed " << speed << " (m/s)\n";
-  f << "#    Speed incremental " << speed_incremental << " (m/s)\n";
-}
-
-
 void ElementStat::set_times(const double ts, 
                             const AIRCRAFT_STATE& state)
 {
@@ -99,43 +91,6 @@ void ElementStat::calc_speeds(const double dt)
   }
 }
 
-
-void ElementStat::print(std::ostream &f) const
-{
-  f << "#  Time started " << TimeStarted << " (s)\n";
-  f << "#  Time elapsed " << TimeElapsed << " (s)\n";
-  f << "#  Time remaining " << TimeRemaining << " (s)\n";
-  f << "#  Time planned " << TimePlanned << " (s)\n";
-  f << "#  Gradient " << gradient << "\n";
-  f << "#  Remaining: \n";
-  remaining.print(f);
-  solution_remaining.print(f);
-  f << "#  Remaining effective: \n";
-  remaining_effective.print(f);
-  f << "#  Planned: \n";
-  planned.print(f);
-  solution_planned.print(f);
-  f << "#  Travelled: \n";
-  travelled.print(f);
-  solution_travelled.print(f);
-}
-
-void TaskStats::print(std::ostream &f) const
-{
-  f << "#### Task Stats\n";
-  f << "# dist nominal " << distance_nominal << " (m)\n";
-  f << "# min dist after achieving max " << distance_min << " (m)\n";
-  f << "# max dist after achieving max " << distance_max << " (m)\n";
-  f << "# dist scored " << distance_scored << " (m)\n";
-  f << "# mc best " << mc_best << " (m/s)\n";
-  f << "# cruise efficiency " << cruise_efficiency << "\n";
-  f << "# glide required " << glide_required << "\n";
-  f << "#\n";
-  f << "# Total -- \n";
-  total.print(f);
-  f << "# Leg -- \n";
-  current_leg.print(f);
-}
 
 void
 TaskStats::reset()

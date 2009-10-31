@@ -42,23 +42,6 @@ TaskPoint* AbortTask::getActiveTaskPoint()
 }
 
 
-void AbortTask::report(const AIRCRAFT_STATE &state)
-{
-  AbstractTask::report(state);
-
-  std::ofstream f1("res-abort-task.txt");
-  f1 << "#### Task points\n";
-  for (unsigned i=0; i<tps.size(); i++) {
-    GEOPOINT l = tps[i]->getLocation();
-    f1 << "## point " << i << " ###################\n";
-    if (i==activeTaskPoint) {
-      f1 << state.Location.Longitude << " " << state.Location.Latitude << "\n";
-    }
-    f1 << l.Longitude << " " << l.Latitude << "\n";
-    f1 << "\n";
-  }
-}
-
 typedef std::pair<WAYPOINT,double> WP_ALT;
 
 struct Rank : public std::binary_function<WP_ALT, WP_ALT, bool> {

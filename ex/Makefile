@@ -59,6 +59,7 @@ CXXFLAGS += -pedantic
 OBJS	:=\
 	Util.o \
 	Util/Intersection.o \
+	Util/Printing.o \
 	GlideSolvers/GlideState.o \
 	GlideSolvers/GlidePolar.o \
 	GlideSolvers/GlideResult.o \
@@ -67,6 +68,7 @@ OBJS	:=\
 	Navigation/Aircraft.o \
 	Navigation/DistanceMemento.o \
 	Navigation/GeoVectorMemento.o \
+	Navigation/FlatBoundingBox.o \
 	Navigation/ReferencePoint.o \
 	Navigation/Airspace.o \
 	Navigation/AirspaceCircle.o \
@@ -138,7 +140,9 @@ test_trees: $(OBJS) test_trees.cpp
 test_mc: $(OBJS) test_mc.cpp
 	g++ $(CXXFLAGS) $(INCLUDES) test_mc.cpp -o test_mc $(OBJS)
 
-all: $(OBJS) test test_trees test_mc
+TARGETS = test test_trees test_mc
+
+all: $(TARGETS)
 	@echo "done"
 
 
@@ -184,8 +188,9 @@ cxx-flags	=$(DEPFLAGS) $(CXXFLAGS) $(CPPFLAGS) $(CPPFLAGS_$(dirtarget)) $(TARGET
 
 
 clean: cleani FORCE
-	find ./ $(IGNORE) \( -name '*.[oa]' -o -name '*.rsc' -o -name '.*.d' \) \
+	find ./ $(IGNORE) \( -name '*.[oa]' -o -name '*.rsc' -o -name '.*.d' -o -name '*.*~' \) \
 	-type f -print | xargs -r $(RM)
+	$(RM) $(TARGETS) gprof.out 
 
 cleani: FORCE
 	find ./ $(IGNORE) \( -name '*.i' \) \

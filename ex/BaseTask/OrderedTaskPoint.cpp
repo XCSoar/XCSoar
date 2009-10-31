@@ -2,7 +2,6 @@
 
 #include "OrderedTaskPoint.hpp"
 #include "Math/Earth.hpp"
-#include <stdio.h>
 #include <assert.h>
 #include <math.h>
 #include "GlideSolvers/GlideResult.hpp"
@@ -59,24 +58,6 @@ OrderedTaskPoint::scan_active(OrderedTaskPoint* atp)
   }
 }
 
-////////
-
-
-void 
-OrderedTaskPoint::print(std::ostream& f, const AIRCRAFT_STATE& state,
-                        const int item) const
-{
-  if (item==0) {
-    SampledTaskPoint::print(f,state);
-    f << "# Entered " << get_state_entered().Time << "\n";
-    f << "# Bearing travelled " << vector_travelled.Bearing << "\n";
-    f << "# Distance travelled " << vector_travelled.Distance << "\n";
-    f << "# Bearing remaining " << vector_remaining.Bearing << "\n";
-    f << "# Distance remaining " << vector_remaining.Distance << "\n";
-    f << "# Bearing planned " << vector_planned.Bearing << "\n";
-    f << "# Distance planned " << vector_planned.Distance << "\n";
-  }
-}
 
 const std::vector<SearchPoint>& 
 OrderedTaskPoint::get_search_points()
