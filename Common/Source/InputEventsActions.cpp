@@ -70,7 +70,6 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Dialogs.h"
 #include "Message.h"
 #include "Marks.h"
-#include <commctrl.h>
 #include "Airspace.h"
 #include "InfoBoxLayout.h"
 #include "InfoBoxManager.h"
