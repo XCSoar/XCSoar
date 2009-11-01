@@ -1415,6 +1415,8 @@ void InputEvents::eventSetup(const TCHAR *misc) {
 
 }
 
+static HINSTANCE
+_loadDLL(TCHAR *name);
 
 // DLLExecute
 // Runs the plugin of the specified filename
@@ -1483,7 +1485,9 @@ void InputEvents::eventDLLExecute(const TCHAR *misc) {
 // Load a DLL (only once, keep a cache of the handle)
 //	TODO code: FreeLibrary - it would be nice to call FreeLibrary
 //      before exit on each of these
-HINSTANCE _loadDLL(TCHAR *name) {
+static HINSTANCE
+_loadDLL(TCHAR *name)
+{
   int i;
   for (i = 0; i < DLLCache_Count; i++) {
     if (_tcscmp(name, DLLCache[i].text) == 0)
