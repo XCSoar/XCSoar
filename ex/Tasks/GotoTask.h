@@ -30,6 +30,9 @@ protected:
 
 private:    
     TaskPoint* tp;
+public:
+  void Accept(TaskPointVisitor& visitor) const;
+  DEFINE_VISITABLE()
 };
 
 #endif //GOTOTASK_H

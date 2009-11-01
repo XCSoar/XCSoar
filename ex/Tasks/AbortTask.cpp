@@ -2,6 +2,7 @@
 #include "Navigation/Aircraft.hpp"
 #include "BaseTask/TaskPoint.hpp"
 #include <queue>
+#include "TaskPointVisitor.hpp"
 
 AbortTask::AbortTask(const TaskEvents &te, 
                      const TaskBehaviour &tb,
@@ -164,3 +165,11 @@ AbortTask::check_transitions(const AIRCRAFT_STATE &, const AIRCRAFT_STATE&)
   return false; // nothing to do
 }
 
+void 
+AbortTask::Accept(TaskPointVisitor& visitor) const
+{
+  for (std::vector<TaskPoint*>::const_iterator 
+         i= tps.begin(); i!= tps.end(); i++) {
+    (*i)->Accept(visitor);
+  }
+}

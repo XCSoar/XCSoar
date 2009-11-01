@@ -11,6 +11,7 @@
 #include "TaskSolvers/TaskGlideRequired.hpp"
 #include "TaskSolvers/TaskOptTarget.hpp"
 #include <assert.h>
+#include "TaskPointVisitor.hpp"
 
 void
 OrderedTask::update_geometry() {
@@ -523,3 +524,11 @@ OrderedTask::OrderedTask(const TaskEvents &te,
 
 ////////////////////////
 
+void 
+OrderedTask::Accept(TaskPointVisitor& visitor) const
+{
+  for (std::vector<OrderedTaskPoint*>::const_iterator 
+         i= tps.begin(); i!= tps.end(); i++) {
+    (*i)->Accept(visitor);
+  }
+}

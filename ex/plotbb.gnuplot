@@ -11,6 +11,7 @@ plot \
      'res-bb-inside.txt' using 1:2 with filledcurve ls 2 title "inside", \
      'res-bb-in.txt' using 1:2 with lines ls 3 title "all", \
      'res-bb-range.txt' using 1:2 with lines ls 4 title "range", \
+     'res-bb-intersects.txt' using 1:2 with lines ls 5 title "intersects", \
      'res-bb-target.txt' using 1:2 with lines ls 5 title "search", \
      'res-sample.txt' using 1:2 with lines ls 1 title "sample"
 pause -1

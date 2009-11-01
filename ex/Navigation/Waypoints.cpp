@@ -127,7 +127,7 @@ Waypoints::find_within_range_circle(const GEOPOINT &loc,
                                     const double range) const
 {
   const unsigned mrange = task_projection.project_range(loc, range);
-  std::vector < Waypoint > vectors = find_within_range(loc, mrange);
+  std::vector < Waypoint > vectors = find_within_range(loc, range);
   FLAT_GEOPOINT floc = task_projection.project(loc);
 
   for (std::vector< Waypoint >::iterator v=vectors.begin();

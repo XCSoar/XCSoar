@@ -6,9 +6,9 @@
 #endif
 #include "Math/FastMath.h"
 #include "Math/Earth.hpp"
-#include "Navigation/Airspaces.hpp"
-#include "Navigation/AirspaceCircle.hpp"
-#include "Navigation/AirspacePolygon.hpp"
+#include "Airspace/Airspaces.hpp"
+#include "Airspace/AirspaceCircle.hpp"
+#include "Airspace/AirspacePolygon.hpp"
 #include "Navigation/Waypoints.hpp"
 #include "Tasks/TaskManager.h"
 #include "Tasks/TaskEvents.hpp"
@@ -113,6 +113,43 @@ void setup_airspaces(Airspaces& airspaces, TaskProjection& task_projection) {
   airspaces.optimise();
 }
 
+#include "Tasks/TaskVisitor.hpp"
+#include "Tasks/TaskPointVisitor.hpp"
+
+class TaskPointVisitorPrint: public TaskPointVisitor
+{
+public:
+  virtual void Visit(const TaskPoint& tp) {
+    printf("got a tp\n");
+  }
+  virtual void Visit(const OrderedTaskPoint& tp) {
+    printf("got an otp\n");
+  }
+  virtual void Visit(const FinishPoint& tp) {
+    printf("got an ftp\n");
+  }
+  virtual void Visit(const StartPoint& tp) {
+    printf("got an stp\n");
+  }
+};
+
+class TaskVisitorPrint: public TaskVisitor
+{
+public:
+  virtual void Visit(const AbortTask& task) {
+    TaskPointVisitorPrint tpv;
+    printf("task is abort\n");
+    task.Accept(tpv);
+  };
+  virtual void Visit(const OrderedTask& task) {
+    TaskPointVisitorPrint tpv;
+    printf("task is ordered\n");
+    task.Accept(tpv);
+  };
+  virtual void Visit(const GotoTask& task) {
+    printf("task is goto\n");
+  };
+};
 
 void setup_task(TaskManager& task_manager,
                 TaskProjection &task_projection)
@@ -130,7 +167,7 @@ void setup_task(TaskManager& task_manager,
   }
 }
 
-#include "Navigation/AirspaceVisitor.hpp"
+#include "Airspace/AirspaceVisitor.hpp"
 #include "Navigation/WaypointVisitor.hpp"
 
 class AirspaceVisitorPrint: public AirspaceVisitor {
@@ -223,6 +260,11 @@ void test_flight(TaskManager &task_manager,
 
   if (test_num<4) {
     scan_airspaces(state, airspaces, true);
+
+    AirspaceVisitorPrint visitor("res-bb-intersects.txt",
+                                 true);
+    GeoVector vec(state.Location, w[1]);
+    airspaces.visit_intersecting(state.Location, vec, visitor);
   }
 
 #ifdef DO_PRINT
@@ -230,6 +272,7 @@ void test_flight(TaskManager &task_manager,
 #endif
 
   unsigned counter=0;
+  TaskVisitorPrint tv;
 
   for (int i=0; i<num_wp-1; i++) {
     if (i==num_wp-2) {
@@ -237,7 +280,9 @@ void test_flight(TaskManager &task_manager,
 #ifdef DO_PRINT
       printf("- mode abort\n");
 #endif
-    }
+    } 
+//    task_manager.Accept(tv);
+
     if ((test_num==1) && (n_samples>500)) {
       return;
     }
@@ -262,6 +307,7 @@ void test_flight(TaskManager &task_manager,
       }
 
       if (do_print) {
+//        task_manager.Accept(tv);
 #ifdef DO_PRINT
         task_manager.print(state);
         f4 <<  state.Location.Longitude << " " 
@@ -368,7 +414,7 @@ int test_newtask(int test_num) {
 int main() {
   ::InitSineTable();
   test_newtask(2);
-  test_newtask(3);
+//  test_newtask(3);
 }
 #endif
 

@@ -22,6 +22,8 @@ struct GeoVector {
     Distance+= g1.Distance;
     return *this;
   };
+  GEOPOINT end_point(const GEOPOINT &source) const;
+  GEOPOINT mid_point(const GEOPOINT &source) const;
 };
 
 bool operator != (const GeoVector&g1, const GeoVector &g2);

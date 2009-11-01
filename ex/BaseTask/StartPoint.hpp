@@ -61,6 +61,8 @@ public:
 
 protected:
     bool enabled;
+public:
+  DEFINE_VISITABLE()
 };
 
 #endif

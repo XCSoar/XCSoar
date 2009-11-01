@@ -115,6 +115,9 @@ protected:
 private:
   void set_neighbours(unsigned position);
   bool check_startfinish(OrderedTaskPoint* new_tp); 
+public:
+  void Accept(TaskPointVisitor& visitor) const;
+  DEFINE_VISITABLE()
 };
 
 #endif //ORDEREDTASK_H

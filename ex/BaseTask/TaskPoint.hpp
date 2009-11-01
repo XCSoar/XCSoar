@@ -44,12 +44,16 @@
 #include "Navigation/Waypoint.hpp"
 #include "Navigation/Aircraft.hpp"
 #include "Navigation/GeoVector.hpp"
+#include "Util/GenericVisitor.hpp"
 
 struct GLIDE_RESULT;
 class GlidePolar;
 
 class TaskPoint : 
-  public ReferencePoint, public Serialisable {
+  public ReferencePoint, 
+  public Serialisable,
+  public BaseVisitable<>
+{
 
 public:
   TaskPoint(const Waypoint & wp) : ReferencePoint(wp.Location),
@@ -105,6 +109,8 @@ public:
 protected:
   const Waypoint waypoint; // local copy
   const double Elevation;
+public:
+  DEFINE_VISITABLE()
 };
 
 #endif

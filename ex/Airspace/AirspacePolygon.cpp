@@ -30,13 +30,14 @@ AirspacePolygon::get_bounding_box(const TaskProjection& task_projection) const
   FLAT_GEOPOINT min;
   FLAT_GEOPOINT max;
   bool empty=true;
+
   for (std::vector<SearchPoint>::const_iterator v = border.begin();
        v != border.end(); v++) {
     FLAT_GEOPOINT f = task_projection.project(v->getLocation());
     if (empty) {
       empty = false;
-      min = f;
-      max = f;
+      min = f; 
+      max = f; 
     } else {
       min.Longitude = std::min(min.Longitude, f.Longitude);
       min.Latitude = std::min(min.Latitude, f.Latitude);
@@ -45,6 +46,9 @@ AirspacePolygon::get_bounding_box(const TaskProjection& task_projection) const
     }
   }
   if (!empty) {
+    // note +/- 1 to ensure rounding keeps bb valid 
+    min.Longitude-= 1; min.Latitude-= 1;
+    max.Longitude+= 1; max.Latitude+= 1;
     return FlatBoundingBox(min,max);
   } else {
     return FlatBoundingBox(FLAT_GEOPOINT(0,0),FLAT_GEOPOINT(0,0));
@@ -57,3 +61,10 @@ AirspacePolygon::inside(const AIRCRAFT_STATE &loc) const
   return PolygonInterior(loc.Location, border);
 }
 
+
+bool 
+AirspacePolygon::intersects(const GEOPOINT& g1, const GeoVector &vec) const
+{
+  // TODO: for testing only
+  return true;
+}

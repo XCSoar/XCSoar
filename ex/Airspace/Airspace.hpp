@@ -31,14 +31,9 @@ public:
   {
   };
 
-  void Accept(BaseVisitor &v) const;
-
-#ifdef DO_PRINT
-  friend std::ostream& operator<< (std::ostream& f, 
-                                   const Airspace& ts);
-#endif
-
+  bool intersects(const FlatRay& ray) const;
   bool inside(const AIRCRAFT_STATE &loc) const;
+  bool intersects(const GEOPOINT& g1, const GeoVector &vec) const;
 
   void destroy();
 private:
@@ -47,6 +42,13 @@ private:
    * @supplierCardinality 0..1 
    */
   AbstractAirspace *pimpl_airspace;
+
+public:
+#ifdef DO_PRINT
+  friend std::ostream& operator<< (std::ostream& f, 
+                                   const Airspace& ts);
+#endif
+  void Accept(BaseVisitor &v) const;
 };
 
 #endif

@@ -12,7 +12,9 @@
 #include "TaskEvents.hpp"
 #include "TaskBehaviour.hpp"
 
+
 class Waypoints;
+class TaskVisitor;
 
 class TaskManager : public TaskInterface,
  public Serialisable
@@ -86,5 +88,7 @@ private:
   /** @link dependency */
   /*#  TaskEvents lnkTaskEvents; */
 
+public:
+  void Accept(BaseVisitor& visitor) const;
 };
 #endif //TASKMANAGER_H

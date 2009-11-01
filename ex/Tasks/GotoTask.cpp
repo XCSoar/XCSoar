@@ -4,6 +4,7 @@
 #include "Navigation/Waypoint.hpp"
 #include "BaseTask/TaskPoint.hpp"
 #include <stdlib.h>
+#include "TaskPointVisitor.hpp"
 
 GotoTask::GotoTask(const TaskEvents &te, 
                    const TaskBehaviour &tb,
@@ -55,3 +56,10 @@ GotoTask::do_goto(const Waypoint & wp)
   tp = new TaskPoint(wp);
 }
 
+void 
+GotoTask::Accept(TaskPointVisitor& visitor) const
+{
+  if (tp) {
+    tp->Accept(visitor);
+  }
+}

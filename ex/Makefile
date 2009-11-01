@@ -69,13 +69,13 @@ OBJS	:=\
 	Navigation/Aircraft.o \
 	Navigation/DistanceMemento.o \
 	Navigation/GeoVectorMemento.o \
-	Navigation/FlatBoundingBox.o \
 	Navigation/ReferencePoint.o \
-	Navigation/Airspace.o \
-	Navigation/AirspaceCircle.o \
-	Navigation/AirspacePolygon.o \
-	Navigation/Airspaces.o \
-	Navigation/AirspaceVisitor.o \
+	Airspace/FlatBoundingBox.o \
+	Airspace/Airspace.o \
+	Airspace/AirspaceCircle.o \
+	Airspace/AirspacePolygon.o \
+	Airspace/Airspaces.o \
+	Airspace/AirspaceVisitor.o \
 	Navigation/GeoVector.o \
 	Navigation/Waypoint.o \
 	Navigation/Waypoints.o \

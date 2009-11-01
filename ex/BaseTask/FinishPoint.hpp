@@ -54,6 +54,8 @@ public:
                                 const AIRCRAFT_STATE & ref_last);
 
   virtual double getElevation();
+public:
+  DEFINE_VISITABLE()
 };
 
 #endif

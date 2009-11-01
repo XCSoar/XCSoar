@@ -15,8 +15,6 @@ class Waypoint:
   public BaseVisitable<>
 {
  public:
-  DEFINE_VISITABLE()
-
   unsigned id;
   GEOPOINT Location;
   FLAT_GEOPOINT FlatLocation;
@@ -38,6 +36,9 @@ class Waypoint:
   bool operator==(const Waypoint&wp) const {
     return id == wp.id;
   }
+
+public:
+  DEFINE_VISITABLE()
 
 #ifdef DO_PRINT
   friend std::ostream& operator<< (std::ostream& o, 

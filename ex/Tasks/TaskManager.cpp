@@ -1,4 +1,5 @@
 #include "Tasks/TaskManager.h"
+#include "TaskVisitor.hpp"
 
 // uses delegate pattern
 
@@ -118,4 +119,10 @@ bool
 TaskManager::check_task() const
 {
   return task_ordered.check_task();
+}
+
+void
+TaskManager::Accept(BaseVisitor& visitor) const
+{
+  if (active_task) active_task->Accept(visitor);
 }

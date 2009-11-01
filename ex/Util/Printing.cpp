@@ -112,7 +112,7 @@ std::ostream& operator<< (std::ostream& f,
   return f;
 }
 
-#include "Navigation/FlatBoundingBox.hpp"
+#include "Airspace/FlatBoundingBox.hpp"
 
 /*
 void 
@@ -155,7 +155,7 @@ TaskMacCready::print(std::ostream &f, const AIRCRAFT_STATE &aircraft) const
 }
 */
 
-#include "Navigation/Airspace.hpp"
+#include "Airspace/Airspace.hpp"
 
 std::ostream& operator<< (std::ostream& f, 
                           const Airspace& ts) 
@@ -166,7 +166,7 @@ std::ostream& operator<< (std::ostream& f,
   return f;
 }
 
-#include "Navigation/AirspaceCircle.hpp"
+#include "Airspace/AirspaceCircle.hpp"
 
 std::ostream& operator<< (std::ostream& f, 
                           const AirspaceCircle& as)
@@ -181,7 +181,7 @@ std::ostream& operator<< (std::ostream& f,
   return f;
 }
 
-#include "Navigation/AirspacePolygon.hpp"
+#include "Airspace/AirspacePolygon.hpp"
 
 std::ostream& operator<< (std::ostream& f, 
                           const AirspacePolygon& as)
@@ -197,7 +197,7 @@ std::ostream& operator<< (std::ostream& f,
 }
 
 
-#include "Navigation/AbstractAirspace.hpp"
+#include "Airspace/AbstractAirspace.hpp"
 
 std::ostream& operator<< (std::ostream& f, 
                           const AbstractAirspace& as)

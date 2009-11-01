@@ -2,9 +2,9 @@
 #include <assert.h>
 #include <math.h>
 #include <stdio.h>
-#include "Navigation/Airspaces.hpp"
-#include "Navigation/AirspaceCircle.hpp"
-#include "Navigation/AirspacePolygon.hpp"
+#include "Airspace/Airspaces.hpp"
+#include "Airspace/AirspaceCircle.hpp"
+#include "Airspace/AirspacePolygon.hpp"
 #include "Navigation/Waypoints.hpp"
 #include "Math/FastMath.h"
 #include "Tasks/TaskManager.h"

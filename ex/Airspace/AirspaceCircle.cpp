@@ -27,14 +27,16 @@ AirspaceCircle::get_bounding_box(const TaskProjection& task_projection) const
   FLAT_GEOPOINT ful = task_projection.project(ul);
   FLAT_GEOPOINT fur = task_projection.project(ur);
 
+  // note +/- 1 to ensure rounding keeps bb valid 
+
   return FlatBoundingBox(FLAT_GEOPOINT(std::min(fll.Longitude,
-                                                ful.Longitude), 
+                                                ful.Longitude)-1, 
                                        std::min(fll.Latitude,
-                                                flr.Latitude)), 
+                                                flr.Latitude)-1), 
                          FLAT_GEOPOINT(std::max(flr.Longitude,
-                                                fur.Longitude), 
+                                                fur.Longitude)+1, 
                                        std::max(ful.Latitude,
-                                                fur.Latitude)));
+                                                fur.Latitude)+1));
 }
 
 bool 
@@ -43,3 +45,9 @@ AirspaceCircle::inside(const AIRCRAFT_STATE &loc) const
   return (::Distance(loc.Location,center)<=radius);
 }
 
+bool 
+AirspaceCircle::intersects(const GEOPOINT& g1, const GeoVector &vec) const
+{
+  // TODO: for testing only
+  return true;
+}

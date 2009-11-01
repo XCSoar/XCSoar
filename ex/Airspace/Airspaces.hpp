@@ -24,6 +24,10 @@ public:
                           const double range,
                           AirspaceVisitor& visitor) const;
 
+  void visit_intersecting(const GEOPOINT &loc, 
+                          const GeoVector &vec,
+                          AirspaceVisitor& visitor) const;
+
   std::vector<Airspace> find_inside(const AIRCRAFT_STATE &state) const;
 
   void optimise();

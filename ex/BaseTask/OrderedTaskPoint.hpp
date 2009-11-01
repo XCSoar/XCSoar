@@ -122,7 +122,8 @@ protected:
   ActiveState_t active_state;
 
   double double_leg_distance(const GEOPOINT &ref) const;
-
+public:
+  DEFINE_VISITABLE()
 };
 
 

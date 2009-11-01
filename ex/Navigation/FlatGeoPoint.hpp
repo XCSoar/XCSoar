@@ -10,6 +10,12 @@ struct FLAT_GEOPOINT {
   int Latitude;
 
   unsigned distance_to(const FLAT_GEOPOINT &sp) const;
+  FLAT_GEOPOINT operator- (const FLAT_GEOPOINT &p2) const {
+    FLAT_GEOPOINT res= *this;
+    res.Longitude -= p2.Longitude;
+    res.Latitude -= p2.Latitude;
+    return res;
+  };
 };
 
 #endif

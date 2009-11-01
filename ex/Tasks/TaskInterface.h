@@ -10,7 +10,11 @@ struct GeoVector;
 class TaskStats;
 class TaskPoint;
 
-class TaskInterface {
+#include "Util/GenericVisitor.hpp"
+
+class TaskInterface:
+  public BaseVisitable<> 
+{
 public:
 
   virtual void setActiveTaskPoint(unsigned) = 0;

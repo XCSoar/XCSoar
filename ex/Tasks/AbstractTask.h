@@ -8,6 +8,8 @@
 #include "TaskStats/TaskStats.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
 
+class TaskPointVisitor;
+
 class AbstractTask : public TaskInterface {
 public:
   AbstractTask(const TaskEvents &te,
@@ -97,5 +99,7 @@ public:
 #ifdef DO_PRINT
   virtual void print(const AIRCRAFT_STATE&);
 #endif
+  virtual void Accept(TaskPointVisitor& visitor) const = 0;
+  DEFINE_VISITABLE()
 };
 #endif //ABSTRACTTASK_H

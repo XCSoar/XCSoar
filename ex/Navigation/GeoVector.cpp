@@ -46,3 +46,18 @@ bool operator != (const GeoVector&g1, const GeoVector &g2) {
   return (g1.Distance != g2.Distance) || (g1.Bearing != g2.Bearing);
 }
 
+GEOPOINT 
+GeoVector::end_point(const GEOPOINT &source) const
+{
+  GEOPOINT p;
+  ::FindLatitudeLongitude(source, Bearing, Distance, &p);
+  return p;
+}
+
+GEOPOINT 
+GeoVector::mid_point(const GEOPOINT &source) const
+{
+  GEOPOINT p;
+  ::FindLatitudeLongitude(source, Bearing, Distance/2.0, &p);
+  return p;
+}

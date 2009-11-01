@@ -205,24 +205,28 @@ MacCready::solve(const GLIDE_STATE &task) const
     return optimise_glide(task);
   }
 
-  // check first if can final glide
-  GLIDE_RESULT result_fg = optimise_glide(task);
-  if (result_fg.Solution == GLIDE_RESULT::RESULT_OK) {
-    // whole task final glided
-    return result_fg;
+  if (task.AltitudeDifference>0) {
+    // check first if can final glide
+    GLIDE_RESULT result_fg = optimise_glide(task);
+    if (result_fg.Solution == GLIDE_RESULT::RESULT_OK) {
+      // whole task final glided
+      return result_fg;
+    }
+    
+    // climb-cruise remainder of way
+    
+    GLIDE_STATE sub_task = task;
+    sub_task.Vector.Distance -= result_fg.Vector.Distance;
+    sub_task.MinHeight += result_fg.HeightGlide;
+    sub_task.AltitudeDifference -= result_fg.HeightGlide;
+    
+    GLIDE_RESULT result_cc = solve_cruise(sub_task);
+    result_cc.add(result_fg);
+    
+    return result_cc;
+  } else {
+    return solve_cruise(task);
   }
-
-  // climb-cruise remainder of way
-
-  GLIDE_STATE sub_task = task;
-  sub_task.Vector.Distance -= result_fg.Vector.Distance;
-  sub_task.MinHeight += result_fg.HeightGlide;
-  sub_task.AltitudeDifference -= result_fg.HeightGlide;
-
-  GLIDE_RESULT result_cc = solve_cruise(sub_task);
-  result_cc.add(result_fg);
-
-  return result_cc;
 }
 
 #include "ZeroFinder.hpp"

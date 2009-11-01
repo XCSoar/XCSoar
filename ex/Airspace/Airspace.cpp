@@ -28,6 +28,24 @@ Airspace::inside(const AIRCRAFT_STATE &loc) const
   }
 }
 
+bool 
+Airspace::intersects(const FlatRay& ray) const
+{
+  return FlatBoundingBox::intersects(ray);
+}
+
+
+bool 
+Airspace::intersects(const GEOPOINT& g1, const GeoVector &vec) const
+{
+  if (pimpl_airspace) {
+    return pimpl_airspace->intersects(g1, vec);
+  } else {
+    return false;
+  }
+}
+
+
 void
 Airspace::Accept(BaseVisitor &visitor) const
 {

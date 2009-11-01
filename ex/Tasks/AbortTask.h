@@ -49,6 +49,9 @@ protected:
   void fill_reachable(const AIRCRAFT_STATE &,
                       std::vector < Waypoint > &approx_waypoints,
                       const bool only_airfield);
+public:
+  void Accept(TaskPointVisitor& visitor) const;
+  DEFINE_VISITABLE()
 };
 
 #endif //ABORTTASK_H

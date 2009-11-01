@@ -38,9 +38,36 @@ Airspaces::visit_within_range(const GEOPOINT &loc,
 {
   Airspace bb_target(loc, get_task_projection());
   int mrange = project_range(loc, range);
-  
-  std::deque< Airspace > vectors;
   airspace_tree.visit_within_range(bb_target, -mrange, visitor);
+}
+
+void 
+Airspaces::visit_intersecting(const GEOPOINT &loc, 
+                              const GeoVector &vec,
+                              AirspaceVisitor& visitor) const
+{
+  FlatRay ray(project(loc),project(vec.end_point(loc)));
+
+  std::deque< Airspace > vectors;
+  {
+    GEOPOINT c = vec.mid_point(loc);
+    Airspace bb_target(c, get_task_projection());
+    int mrange = project_range(c, vec.Distance/2.0);
+    airspace_tree.find_within_range(bb_target, -mrange, 
+                                    std::back_inserter(vectors));
+  }
+
+#ifdef INSTRUMENT_TASK
+  n_queries++;
+#endif
+  for (std::deque<Airspace>::iterator v=vectors.begin();
+       v != vectors.end(); v++) {
+    if (v->intersects(ray)) {
+      if (v->intersects(loc, vec)) {
+        visitor(*v);
+      }
+    }
+  }
 }
 
 
