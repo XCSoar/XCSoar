@@ -1555,6 +1555,7 @@ void InputEvents::eventAdjustForecastTemperature(const TCHAR *misc) {
 // Runs an external program of the specified filename.
 // Note that XCSoar will wait until this program exits.
 void InputEvents::eventRun(const TCHAR *misc) {
+#ifdef WIN32
   PROCESS_INFORMATION pi;
   if (!::CreateProcess(misc,
 		       NULL, NULL, NULL, FALSE, 0, NULL, NULL, NULL, &pi))
@@ -1562,6 +1563,10 @@ void InputEvents::eventRun(const TCHAR *misc) {
 
   // wait for program to finish!
   ::WaitForSingleObject(pi.hProcess, INFINITE);
+
+#else /* !WIN32 */
+  system(misc);
+#endif /* !WIN32 */
 }
 
 
