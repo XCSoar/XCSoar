@@ -10,7 +10,7 @@
 const double Vmin=15.0;
 const double Vmax=75.0;
 
-std::ofstream ofile("res-polar-m.txt");
+std::ofstream ofile("results/res-polar-m.txt");
 
 void polar_mc(const double mc) 
 {
@@ -21,8 +21,8 @@ void polar_mc(const double mc)
 void basic_polar(const double mc) 
 {
   char bname[100];
-  sprintf(bname,"res-polar-%02d-best.txt",(int)(mc*10));
-  std::ofstream pfile("res-polar.txt");
+  sprintf(bname,"results/res-polar-%02d-best.txt",(int)(mc*10));
+  std::ofstream pfile("results/res-polar.txt");
   std::ofstream mfile(bname);
 
   GlidePolar polar(mc,0.0,0.0);
@@ -80,28 +80,28 @@ void test_mc()
   }
 
   {
-    std::ofstream hfile("res-polar-h-00.txt");
+    std::ofstream hfile("results/res-polar-h-00.txt");
     for (double h=0.0; h<20.0; h+= 0.1) {
       test_glide_alt(h,0.0,0.0,hfile);
     }
   }
 
   {
-    std::ofstream hfile("res-polar-h-50.txt");
+    std::ofstream hfile("results/res-polar-h-50.txt");
     for (double h=0.0; h<20.0; h+= 0.1) {
       test_glide_alt(h,5.0,0.0,hfile);
     }
   }
 
   {
-    std::ofstream hfile("res-polar-w.txt");
+    std::ofstream hfile("results/res-polar-w.txt");
     for (double w=-10.0; w<=10.0; w+= 0.1) {
       test_glide_alt(50.0,w,0.0,hfile);
     }
   }
 
   {
-    std::ofstream hfile("res-polar-a.txt");
+    std::ofstream hfile("results/res-polar-a.txt");
     for (double a=0.0; a<=360.0; a+= 10) {
       test_glide_alt(50.0,10.0,a,hfile);
     }

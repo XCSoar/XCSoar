@@ -92,7 +92,7 @@ void setup_waypoints(Waypoints &waypoints) {
 
 void setup_airspaces(Airspaces& airspaces, TaskProjection& task_projection) {
 #ifdef DO_PRINT
-  std::ofstream fin("res-bb-in.txt");
+  std::ofstream fin("results/res-bb-in.txt");
 #endif
   for (unsigned i=0; i<150; i++) {
     AbstractAirspace* as;
@@ -216,19 +216,19 @@ void scan_airspaces(const AIRCRAFT_STATE state,
                     bool do_report) 
 {
   const std::vector<Airspace> vn = airspaces.scan_nearest(state);
-  AirspaceVisitorPrint pvn("res-bb-nearest.txt",
+  AirspaceVisitorPrint pvn("results/res-bb-nearest.txt",
                            do_report);
   pvn.for_each(vn);
 
 //  std::for_each(vn.begin(), vn.end(), pvn);
 // (will work for simple cases where visitor is stateless)
 
-  AirspaceVisitorPrint visitor("res-bb-range.txt",
+  AirspaceVisitorPrint visitor("results/res-bb-range.txt",
                                do_report);
   airspaces.visit_within_range(state.Location, 5000.0, visitor);
 
   const std::vector<Airspace> vi = airspaces.find_inside(state);
-  AirspaceVisitorPrint pvi("res-bb-inside.txt",
+  AirspaceVisitorPrint pvi("results/res-bb-inside.txt",
                            do_report);
   pvi.for_each(vi);
 }
@@ -261,14 +261,14 @@ void test_flight(TaskManager &task_manager,
   if (test_num<4) {
     scan_airspaces(state, airspaces, true);
 
-    AirspaceVisitorPrint visitor("res-bb-intersects.txt",
+    AirspaceVisitorPrint visitor("results/res-bb-intersects.txt",
                                  true);
     GeoVector vec(state.Location, w[1]);
     airspaces.visit_intersecting(state.Location, vec, visitor);
   }
 
 #ifdef DO_PRINT
-  std::ofstream f4("res-sample.txt");
+  std::ofstream f4("results/res-sample.txt");
 #endif
 
   unsigned counter=0;

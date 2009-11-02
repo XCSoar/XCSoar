@@ -134,16 +134,16 @@ OBJS	:=\
 	../xcsoar/Common/Source/Math/FastMath.o \
 	../xcsoar/Common/Source/Math/Earth.o 
 
-test: $(OBJS) test.cpp
-	g++ $(CXXFLAGS) $(INCLUDES) test.cpp -o test $(OBJS)
+Test/test: $(OBJS) Test/test.cpp
+	g++ $(CXXFLAGS) $(INCLUDES) $(OBJS) Test/test.cpp -o Test/test 
 
-test_trees: $(OBJS) test_trees.cpp
-	g++ $(CXXFLAGS) $(INCLUDES) test_trees.cpp -o test_trees $(OBJS)
+Test/test_trees: $(OBJS) Test/test_trees.cpp
+	g++ $(CXXFLAGS) $(INCLUDES) $(OBJS) Test/test_trees.cpp -o Test/test_trees 
 
-test_mc: $(OBJS) test_mc.cpp
-	g++ $(CXXFLAGS) $(INCLUDES) test_mc.cpp -o test_mc $(OBJS)
+Test/test_mc: $(OBJS) Test/test_mc.cpp
+	g++ $(CXXFLAGS) $(INCLUDES) $(OBJS) Test/test_mc.cpp -o Test/test_mc 
 
-TARGETS = test test_trees test_mc
+TARGETS = Test/test Test/test_trees Test/test_mc
 
 all: $(TARGETS)
 	@echo "done"

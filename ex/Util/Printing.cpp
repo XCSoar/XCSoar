@@ -229,10 +229,10 @@ TaskPoint::print(std::ostream& f, const AIRCRAFT_STATE &state) const
 void
 AbstractTask::print(const AIRCRAFT_STATE &state)
 {
-  std::ofstream fs("res-stats-all.txt");
+  std::ofstream fs("results/res-stats-all.txt");
   fs << stats;
 
-  static std::ofstream f6("res-stats.txt");
+  static std::ofstream f6("results/res-stats.txt");
   static bool first = true;
 
   if (first) {
@@ -260,7 +260,7 @@ GotoTask::print(const AIRCRAFT_STATE &state)
 {
   AbstractTask::print(state);
   if (tp) {
-    std::ofstream f1("res-goto.txt");
+    std::ofstream f1("results/res-goto.txt");
     tp->print(f1,state);
   }
 }
@@ -271,14 +271,14 @@ void OrderedTask::print(const AIRCRAFT_STATE &state)
 {
   AbstractTask::print(state);
 
-  std::ofstream fi("res-isolines.txt");
+  std::ofstream fi("results/res-isolines.txt");
   for (unsigned i=0; i<tps.size(); i++) {
     fi << "## point " << i << "\n";
     tps[i]->print(fi,state,1);
     fi << "\n";
   }
 
-  std::ofstream f1("res-task.txt");
+  std::ofstream f1("results/res-task.txt");
 
   f1 << "#### Task points\n";
   for (unsigned i=0; i<tps.size(); i++) {
@@ -287,7 +287,7 @@ void OrderedTask::print(const AIRCRAFT_STATE &state)
     f1 << "\n";
   }
 
-  std::ofstream f5("res-ssample.txt");
+  std::ofstream f5("results/res-ssample.txt");
   f5 << "#### Task sampled points\n";
   for (unsigned i=0; i<tps.size(); i++) {
     f5 << "## point " << i << "\n";
@@ -295,7 +295,7 @@ void OrderedTask::print(const AIRCRAFT_STATE &state)
     f5 << "\n";
   }
 
-  std::ofstream f2("res-max.txt");
+  std::ofstream f2("results/res-max.txt");
   f2 << "#### Max task\n";
   for (unsigned i=0; i<tps.size(); i++) {
     OrderedTaskPoint *tp = tps[i];
@@ -303,7 +303,7 @@ void OrderedTask::print(const AIRCRAFT_STATE &state)
        <<  tp->getMaxLocation().Latitude << "\n";
   }
 
-  std::ofstream f3("res-min.txt");
+  std::ofstream f3("results/res-min.txt");
   f3 << "#### Min task\n";
   for (unsigned i=0; i<tps.size(); i++) {
     OrderedTaskPoint *tp = tps[i];
@@ -311,7 +311,7 @@ void OrderedTask::print(const AIRCRAFT_STATE &state)
        <<  tp->getMinLocation().Latitude << "\n";
   }
 
-  std::ofstream f4("res-rem.txt");
+  std::ofstream f4("results/res-rem.txt");
   f4 << "#### Remaining task\n";
   for (unsigned i=0; i<tps.size(); i++) {
     OrderedTaskPoint *tp = tps[i];
@@ -327,7 +327,7 @@ void AbortTask::print(const AIRCRAFT_STATE &state)
 {
   AbstractTask::print(state);
 
-  std::ofstream f1("res-abort-task.txt");
+  std::ofstream f1("results/res-abort-task.txt");
   f1 << "#### Task points\n";
   for (unsigned i=0; i<tps.size(); i++) {
     GEOPOINT l = tps[i]->getLocation();

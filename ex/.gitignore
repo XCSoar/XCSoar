@@ -26,3 +26,6 @@
 res-*.txt
 gmon.out
 gprof.out
+Test/test
+Test/test_mc
+Test/test_trees

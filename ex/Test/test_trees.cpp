@@ -17,7 +17,7 @@
 
 #include <fstream>
 
-std::ofstream fout("res-trees.txt");
+std::ofstream fout("results/res-trees.txt");
 
 #ifdef INSTRUMENT_TASK
 extern unsigned count_intersections;

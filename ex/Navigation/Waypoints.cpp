@@ -21,7 +21,7 @@ void
 Waypoints::optimise()
 {
 #ifdef DO_PRINT
-  std::ofstream fin("res-wp-in.txt");
+  std::ofstream fin("results/res-wp-in.txt");
 #endif
 
   task_projection.update_fast();
