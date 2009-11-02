@@ -61,3 +61,5 @@ GeoVector::mid_point(const GEOPOINT &source) const
   ::FindLatitudeLongitude(source, Bearing, Distance/2.0, &p);
   return p;
 }
+
+

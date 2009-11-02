@@ -74,6 +74,7 @@ OBJS	:=\
 	Airspace/AirspaceVisitor.o \
 	Navigation/Aircraft.o \
 	Navigation/DistanceMemento.o \
+	Navigation/FlatRay.o \
 	Navigation/GeoVector.o \
 	Navigation/GeoVectorMemento.o \
 	Navigation/ReferencePoint.o \

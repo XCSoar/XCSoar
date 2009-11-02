@@ -1,23 +1,10 @@
 #ifndef FLATBOUNDINGBOX_HPP
 #define FLATBOUNDINGBOX_HPP
 #include "Navigation/FlatGeoPoint.hpp"
+#include "Navigation/FlatRay.hpp"
 #include "Navigation/TaskProjection.hpp"
 #include <algorithm>
 #include "BoundingBoxDistance.hpp"
-
-class FlatRay {
-public:
-  FlatRay(const FLAT_GEOPOINT& from,
-          const FLAT_GEOPOINT& to):
-    point(from),vector(to-from),
-    fx(vector.Longitude!=0? 1.0/vector.Longitude:0),
-    fy(vector.Latitude!=0? 1.0/vector.Latitude:0) {};
-
-  const FLAT_GEOPOINT point;
-  const FLAT_GEOPOINT vector;
-  const double fx; // speedups for box intersection test
-  const double fy;
-};
 
 class FlatBoundingBox {
 public:

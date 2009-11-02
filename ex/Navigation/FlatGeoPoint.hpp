@@ -16,6 +16,10 @@ struct FLAT_GEOPOINT {
     res.Latitude -= p2.Latitude;
     return res;
   };
+
+  int cross(const FLAT_GEOPOINT &other) const {
+    return Longitude*other.Latitude-Latitude*other.Longitude;
+  }
 };
 
 #endif
