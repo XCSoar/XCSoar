@@ -1,7 +1,7 @@
 #ifndef AIRCRAFT_HPP
 #define AIRCRAFT_HPP
 
-#include "Navigation/Waypoint.hpp"
+#include "GeoPoint.hpp"
 
 struct AIRCRAFT_STATE {
   GEOPOINT Location;

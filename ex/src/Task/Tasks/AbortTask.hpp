@@ -4,7 +4,7 @@
 #include "AbstractTask.hpp"
 #include <vector>
 #include "Navigation/TaskProjection.hpp"
-#include "Navigation/Waypoints.hpp"
+#include "Waypoint/Waypoints.hpp"
 
 class AbortTask : public AbstractTask 
 {

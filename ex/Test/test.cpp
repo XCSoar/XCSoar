@@ -9,7 +9,7 @@
 #include "Airspace/Airspaces.hpp"
 #include "Airspace/AirspaceCircle.hpp"
 #include "Airspace/AirspacePolygon.hpp"
-#include "Navigation/Waypoints.hpp"
+#include "Waypoint/Waypoints.hpp"
 #include "Task/TaskManager.hpp"
 #include "Task/TaskEvents.hpp"
 #include "Task/Tasks/TaskPoints/FAISectorStartPoint.hpp"
@@ -168,7 +168,7 @@ void setup_task(TaskManager& task_manager,
 }
 
 #include "Airspace/AirspaceVisitor.hpp"
-#include "Navigation/WaypointVisitor.hpp"
+#include "Waypoint/WaypointVisitor.hpp"
 
 class AirspaceVisitorPrint: public AirspaceVisitor {
 public:

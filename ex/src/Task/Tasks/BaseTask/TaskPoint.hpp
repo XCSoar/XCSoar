@@ -41,7 +41,7 @@
 
 #include "Util/Serialisable.hpp"
 #include "Navigation/ReferencePoint.hpp"
-#include "Navigation/Waypoint.hpp"
+#include "Waypoint/Waypoint.hpp"
 #include "Navigation/Aircraft.hpp"
 #include "Navigation/GeoVector.hpp"
 #include "Util/GenericVisitor.hpp"

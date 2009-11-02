@@ -103,7 +103,7 @@ std::ostream& operator<< (std::ostream& f,
   return f;
 }
 
-#include "Navigation/Waypoint.hpp"
+#include "Waypoint/Waypoint.hpp"
 
 std::ostream& operator<< (std::ostream& f, 
                           const Waypoint& wp)

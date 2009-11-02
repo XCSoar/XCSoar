@@ -5,7 +5,7 @@
 #include "Airspace/Airspaces.hpp"
 #include "Airspace/AirspaceCircle.hpp"
 #include "Airspace/AirspacePolygon.hpp"
-#include "Navigation/Waypoints.hpp"
+#include "Waypoint/Waypoints.hpp"
 #include "Math/FastMath.h"
 #include "Task/TaskManager.hpp"
 #include "Task/TaskEvents.hpp"

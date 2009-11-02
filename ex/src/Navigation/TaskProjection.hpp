@@ -3,7 +3,8 @@
 #ifndef TASKPROJECTION_H
 #define TASKPROJECTION_H
 
-#include "Navigation/Waypoint.hpp"
+#include "GeoPoint.hpp"
+#include "FlatGeoPoint.hpp"
 #include "Util/Intersection.hpp"
 
 #ifdef DO_PRINT

@@ -35,6 +35,6 @@ FlatRay::parametric(const double t) const
 {
   FLAT_GEOPOINT p = point;
   p.Longitude += vector.Longitude*t;
-  p.Latitude += vector.latitude*t;
+  p.Latitude += vector.Latitude*t;
   return p;
 }
