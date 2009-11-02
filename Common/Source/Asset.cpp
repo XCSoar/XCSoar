@@ -57,6 +57,9 @@ ReadCompaqID(void);
 static void
 ReadUUID(void);
 
+/**
+ * Finds the unique ID of this PDA
+ */
 void ReadAssetNumber(void)
 {
   TCHAR val[MAX_PATH];
