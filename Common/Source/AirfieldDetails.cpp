@@ -222,77 +222,67 @@ ParseAirfieldDetails()
   unsigned j;
   int k=0;
 
-  while(ReadString(zAirfieldDetails,READLINE_LENGTH,TempString))
-    {
-      if(TempString[0]=='[') { // Look for start
+  while (ReadString(zAirfieldDetails, READLINE_LENGTH, TempString)) {
+    if (TempString[0] == '[') { // Look for start
+      if (inDetails) {
+        LookupAirfieldDetail(Name, Details);
+        Details[0] = 0;
+        Name[0] = 0;
+        hasDetails = false;
+      }
 
-	if (inDetails) {
-	  LookupAirfieldDetail(Name, Details);
-	  Details[0]= 0;
-	  Name[0]= 0;
-	  hasDetails=false;
-	}
-
-	// extract name
-	for (i=1; i<200; i++) {
-	  if (TempString[i]==']') {
-	    break;
-	  }
-	  Name[i-1]= TempString[i];
-	}
-	Name[i-1]= 0;
-
-	inDetails = true;
-
-        if (k % 20 == 0) {
-	  XCSoarInterface::StepProgressDialog();
+      // extract name
+      for (i = 1; i < 200; i++) {
+        if (TempString[i] == ']') {
+          break;
         }
-        k++;
+        Name[i - 1] = TempString[i];
+      }
+      Name[i - 1] = 0;
 
-      } else {
-	// VENTA3: append text to details string
-	for (j=0; j<_tcslen(TempString); j++ ) {
-	  if ( TempString[j] > 0x20 ) {
-	    hasDetails = true;
-	    break;
-	  }
-	}
-	// first hasDetails set true for rest of details
-	if (hasDetails==true) {
+      inDetails = true;
 
-	  // Remove carriage returns
-	  for (j=0, n=0; j<_tcslen(TempString); j++) {
-	    if ( TempString[j] == 0x0d ) continue;
-	    CleanString[n++]=TempString[j];
-	  }
-	  CleanString[n]='\0';
+      if (k % 20 == 0) {
+        XCSoarInterface::StepProgressDialog();
+      }
+      k++;
+    } else {
+      // VENTA3: append text to details string
+      for (j = 0; j < _tcslen(TempString); j++) {
+        if (TempString[j] > 0x20) {
+          hasDetails = true;
+          break;
+        }
+      }
+      // first hasDetails set true for rest of details
+      if (hasDetails == true) {
+        // Remove carriage returns
+        for (j = 0, n = 0; j < _tcslen(TempString); j++) {
+          if (TempString[j] == 0x0d)
+            continue;
+          CleanString[n++] = TempString[j];
+        }
+        CleanString[n] = '\0';
 
-	  if (_tcslen(Details)+_tcslen(CleanString)+3<DETAILS_LENGTH) {
-	    _tcscat(Details,CleanString);
-	    _tcscat(Details,TEXT("\r\n"));
-	  }
-	}
+        if (_tcslen(Details) + _tcslen(CleanString) + 3 < DETAILS_LENGTH) {
+          _tcscat(Details, CleanString);
+          _tcscat(Details, TEXT("\r\n"));
+        }
       }
     }
+  }
 
   if (inDetails) {
     LookupAirfieldDetail(Name, Details);
   }
-
 }
 
 
 void ReadAirfieldFile() {
-
   StartupStore(TEXT("ReadAirfieldFile\n"));
-
   XCSoarInterface::CreateProgressDialog(gettext(TEXT("Loading Airfield Details File...")));
 
-  {
-    OpenAirfieldDetails();
-    ParseAirfieldDetails();
-    CloseAirfieldDetails();
-  }
-
+  OpenAirfieldDetails();
+  ParseAirfieldDetails();
+  CloseAirfieldDetails();
 }
-
