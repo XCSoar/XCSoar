@@ -1239,8 +1239,9 @@ static void FindAirspaceAreaBounds() {
   }
 }
 
-// ToDo add exception handler to protect parser code against chrashes
-
+/**
+ * Reads the airspace files into the memory
+ */
 void ReadAirspace(void)
 {
   TCHAR	szFile1[MAX_PATH] = TEXT("\0");
@@ -1255,15 +1256,21 @@ void ReadAirspace(void)
   FILETIME LastWriteTime2;
 #endif
 
+  // TODO bug: add exception handler to protect parser code against chrashes
+  // TODO bug: second file should be opened even if first was not okay
+
+  // Read the airspace filenames from the registry
   GetRegistryString(szRegistryAirspaceFile, szFile1, MAX_PATH);
   ExpandLocalPath(szFile1);
   GetRegistryString(szRegistryAdditionalAirspaceFile, szFile2, MAX_PATH);
   ExpandLocalPath(szFile2);
 
+  // If the first file is available try to open it
   if (_tcslen(szFile1)>0) {
     unicode2ascii(szFile1, zfilename, MAX_PATH);
     fp  = zzip_fopen(zfilename, "rt");
   } else {
+    // TODO feature: airspace in xcm files should be a feature
     /*
     static TCHAR  szMapFile[MAX_PATH] = TEXT("\0");
     GetRegistryString(szRegistryMapFile, szMapFile, MAX_PATH);
@@ -1275,20 +1282,23 @@ void ReadAirspace(void)
     */
   }
 
+  // If the second file is available try to open it
   if (_tcslen(szFile2)>0) {
     unicode2ascii(szFile2, zfilename, MAX_PATH);
     fp2 = zzip_fopen(zfilename, "rt");
   }
 
+  // Reset filenames in registry in case airspace
+  // loading crashes the application
   SetRegistryString(szRegistryAirspaceFile, TEXT("\0"));
   SetRegistryString(szRegistryAdditionalAirspaceFile, TEXT("\0"));
 
   if (fp != NULL){
-
+    // Read the first file
     ReadAirspace(fp);
     zzip_fclose(fp);
 
-    // file 1 was OK, so save it
+    // First file was OK, so save it
     ContractLocalPath(szFile1);
     SetRegistryString(szRegistryAirspaceFile, szFile1);
 
@@ -1307,9 +1317,9 @@ void ReadAirspace(void)
     StartupStore(TEXT("No airspace file 1\n"));
   }
 
+  // Calculate the airspace boundaries
   FindAirspaceAreaBounds();
   FindAirspaceCircleBounds();
-
 }
 
 
@@ -1463,6 +1473,11 @@ void DumpAirspaceFile(void){
 }
 #endif
 
+/**
+ * Compare function for AirspaceAreas (sorts by priority)
+ * @param elem1 First AirspaceArea
+ * @param elem2 Second AirspaceArea
+ */
 static int _cdecl SortAirspaceAreaCompare(const void *elem1, const void *elem2 )
 {
   if (AirspacePriority[((AIRSPACE_AREA *)elem1)->Type] >
@@ -1476,6 +1491,11 @@ static int _cdecl SortAirspaceAreaCompare(const void *elem1, const void *elem2 )
   return (0);
 }
 
+/**
+ * Compare function for AirspaceCircles (sorts by priority)
+ * @param elem1 First AirspaceCircle
+ * @param elem2 Second AirspaceCircle
+ */
 static int _cdecl SortAirspaceCircleCompare(const void *elem1, const void *elem2 )
 {
   if (AirspacePriority[((AIRSPACE_CIRCLE *)elem1)->Type] >
@@ -1489,22 +1509,19 @@ static int _cdecl SortAirspaceCircleCompare(const void *elem1, const void *elem2
   return (0);
 }
 
-
+/**
+ * Sorts the airspaces by priority
+ */
 void SortAirspace(void) {
   StartupStore(TEXT("SortAirspace\n"));
 
   // force acknowledgement before sorting
   ClearAirspaceWarnings(true, false);
 
-  qsort(AirspaceArea,
-	NumberOfAirspaceAreas,
-	sizeof(AIRSPACE_AREA),
-	SortAirspaceAreaCompare);
+  qsort(AirspaceArea, NumberOfAirspaceAreas, sizeof(AIRSPACE_AREA),
+      SortAirspaceAreaCompare);
 
-  qsort(AirspaceCircle,
-	NumberOfAirspaceCircles,
-	sizeof(AIRSPACE_CIRCLE),
-	SortAirspaceCircleCompare);
-
+  qsort(AirspaceCircle, NumberOfAirspaceCircles, sizeof(AIRSPACE_CIRCLE),
+      SortAirspaceCircleCompare);
 }
 
