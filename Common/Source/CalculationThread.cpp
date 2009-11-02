@@ -51,7 +51,7 @@ CalculationThread::CalculationThread(GlideComputer *_glide_computer)
    glide_computer(_glide_computer) {}
 
 /**
- * Content of the CalculationThread
+ * Main loop of the CalculationThread
  */
 void
 CalculationThread::run()
