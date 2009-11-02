@@ -10,7 +10,7 @@ TaskMacCreadyTravelled::TaskMacCreadyTravelled(const std::vector<OrderedTaskPoin
 }
 
 
-GLIDE_RESULT 
+GlideResult 
 TaskMacCreadyTravelled::tp_solution(const unsigned i,
                                     const AIRCRAFT_STATE &aircraft, 
                                     double minH) const

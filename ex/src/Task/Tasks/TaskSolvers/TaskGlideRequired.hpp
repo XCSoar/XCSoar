@@ -20,7 +20,7 @@ public:
   virtual double search(const double mc);
 protected:
   TaskMacCreadyRemaining tm;
-  GLIDE_RESULT res;
+  GlideResult res;
   const AIRCRAFT_STATE &aircraft;
 };
 

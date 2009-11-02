@@ -16,7 +16,7 @@ public:
   void set_range(const double tp);
 
 protected:
-  virtual GLIDE_RESULT tp_solution(const unsigned i,
+  virtual GlideResult tp_solution(const unsigned i,
                                    const AIRCRAFT_STATE &aircraft, 
                                    double minH) const;
   virtual double get_min_height(const AIRCRAFT_STATE &aircraft) const {

@@ -88,23 +88,23 @@ OrderedTaskPoint::double_leg_distance(const GEOPOINT &ref) const
 
 
 
-GLIDE_RESULT 
+GlideResult 
 OrderedTaskPoint::glide_solution_travelled(const AIRCRAFT_STATE &ac, 
                                           const GlidePolar &polar,
                                           const double minH) const
 {
-  GLIDE_STATE gs(get_vector_travelled(),
+  GlideState gs(get_vector_travelled(),
                  std::max(minH,getElevation()),
                  ac);
   return polar.solve(gs);
 }
 
-GLIDE_RESULT 
+GlideResult 
 OrderedTaskPoint::glide_solution_planned(const AIRCRAFT_STATE &ac, 
                                         const GlidePolar &polar,
                                         const double minH) const
 {
-  GLIDE_STATE gs(get_vector_planned(),
+  GlideState gs(get_vector_planned(),
                  std::max(minH,getElevation()),
                  ac);
   return polar.solve(gs);

@@ -181,10 +181,10 @@ AbstractTask::scan_distance_remaining(const GEOPOINT &location)
 
 void
 AbstractTask::glide_solution_remaining(const AIRCRAFT_STATE &state, 
-                                       GLIDE_RESULT &total,
-                                       GLIDE_RESULT &leg)
+                                       GlideResult &total,
+                                       GlideResult &leg)
 {
-  GLIDE_RESULT res;
+  GlideResult res;
 
   TaskPoint* tp = getActiveTaskPoint();
   if (tp) {
@@ -197,24 +197,24 @@ AbstractTask::glide_solution_remaining(const AIRCRAFT_STATE &state,
 
 void 
 AbstractTask::glide_solution_travelled(const AIRCRAFT_STATE &state, 
-                                       GLIDE_RESULT &total,
-                                       GLIDE_RESULT &leg)
+                                       GlideResult &total,
+                                       GlideResult &leg)
 {
-  GLIDE_RESULT null_res;
+  GlideResult null_res;
   total = null_res;
   leg = null_res;
 }
 
 void 
 AbstractTask::glide_solution_planned(const AIRCRAFT_STATE &state, 
-                                     GLIDE_RESULT &total,
-                                     GLIDE_RESULT &leg,
+                                     GlideResult &total,
+                                     GlideResult &leg,
                                      DistanceRemainingStat &total_remaining_effective,
                                      DistanceRemainingStat &leg_remaining_effective,
                                      const double total_t_elapsed,
                                      const double leg_t_elapsed)
 {
-  GLIDE_RESULT res = stats.total.solution_remaining;
+  GlideResult res = stats.total.solution_remaining;
   total = res;
   leg = res;
   total_remaining_effective.set_distance(res.Vector.Distance);

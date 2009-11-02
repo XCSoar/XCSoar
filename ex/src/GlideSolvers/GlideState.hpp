@@ -6,17 +6,17 @@
 struct AIRCRAFT_STATE;
 struct GEOPOINT;
 
-struct GLIDE_STATE {
+struct GlideState {
   // dummy task
-  GLIDE_STATE(const GeoVector &vector,
+  GlideState(const GeoVector &vector,
               const double htarget,
               const AIRCRAFT_STATE &aircraft);
   // from target to aircraft
-  GLIDE_STATE(const GEOPOINT& target,
+  GlideState(const GEOPOINT& target,
               const AIRCRAFT_STATE &aircraft,
               const double htarget);
   // from aircraft to target
-  GLIDE_STATE(const AIRCRAFT_STATE &aircraft,
+  GlideState(const AIRCRAFT_STATE &aircraft,
               const GEOPOINT& target,
               const double htarget);
 

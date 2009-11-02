@@ -99,10 +99,10 @@ public:
     return vector_planned;
   }
 
-  GLIDE_RESULT glide_solution_travelled(const AIRCRAFT_STATE &, 
+  GlideResult glide_solution_travelled(const AIRCRAFT_STATE &, 
                                         const GlidePolar &polar,
                                         const double minH=0) const;
-  GLIDE_RESULT glide_solution_planned(const AIRCRAFT_STATE &, 
+  GlideResult glide_solution_planned(const AIRCRAFT_STATE &, 
                                       const GlidePolar &polar,
                                       const double minH=0) const;
 

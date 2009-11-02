@@ -22,7 +22,7 @@ public:
 protected:
   void set_range(const double p);
   TaskMacCreadyRemaining tm;
-  GLIDE_RESULT res;
+  GlideResult res;
   const AIRCRAFT_STATE &aircraft;
   const double t_remaining;
   StartPoint *tp_start;

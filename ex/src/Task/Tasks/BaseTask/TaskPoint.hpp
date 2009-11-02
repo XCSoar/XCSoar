@@ -46,7 +46,7 @@
 #include "Navigation/GeoVector.hpp"
 #include "Util/GenericVisitor.hpp"
 
-struct GLIDE_RESULT;
+struct GlideResult;
 class GlidePolar;
 
 class TaskPoint : 
@@ -72,18 +72,18 @@ public:
   
   virtual const GeoVector get_vector_remaining(const AIRCRAFT_STATE &) const;
 
-  GLIDE_RESULT glide_solution_remaining(const AIRCRAFT_STATE &, 
+  GlideResult glide_solution_remaining(const AIRCRAFT_STATE &, 
                                         const GlidePolar &polar,
                                         const double minH=0) const;
-  GLIDE_RESULT glide_solution_sink(const AIRCRAFT_STATE &, 
+  GlideResult glide_solution_sink(const AIRCRAFT_STATE &, 
                                    const GlidePolar &polar,
                                    const double S) const;
 
-  virtual GLIDE_RESULT glide_solution_travelled(const AIRCRAFT_STATE &, 
+  virtual GlideResult glide_solution_travelled(const AIRCRAFT_STATE &, 
                                                 const GlidePolar &polar,
                                                 const double minH=0) const;
 
-  virtual GLIDE_RESULT glide_solution_planned(const AIRCRAFT_STATE &, 
+  virtual GlideResult glide_solution_planned(const AIRCRAFT_STATE &, 
                                               const GlidePolar &polar,
                                               const double minH=0) const;
 

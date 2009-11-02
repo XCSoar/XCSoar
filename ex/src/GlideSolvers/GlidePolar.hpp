@@ -1,8 +1,8 @@
 #ifndef GLIDEPOLAR_HPP
 #define GLIDEPOLAR_HPP
 
-struct GLIDE_STATE;
-struct GLIDE_RESULT;
+struct GlideState;
+struct GlideResult;
 
 class GlidePolar
 {
@@ -30,9 +30,9 @@ public:
   double SinkRate(const double V) const;
   double MSinkRate(const double V) const;
 
-  GLIDE_RESULT solve(const GLIDE_STATE &task) const;
+  GlideResult solve(const GlideState &task) const;
 
-  GLIDE_RESULT solve_sink(const GLIDE_STATE &task,
+  GlideResult solve_sink(const GlideState &task,
                           const double S) const;
 
 private:

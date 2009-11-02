@@ -59,19 +59,15 @@ CXXFLAGS += -DDO_PRINT -DINSTRUMENT_TASK
 ####### sources
 
 OBJS	:=\
-	src/Util/Gradient.o \
-	src/Util/Intersection.o \
-	src/Util/Printing.o \
-	src/Util/ZeroFinder.o \
-	src/GlideSolvers/GlideState.o \
-	src/GlideSolvers/GlidePolar.o \
-	src/GlideSolvers/GlideResult.o \
-	src/GlideSolvers/MacCready.o \
 	src/Airspace/Airspace.o \
 	src/Airspace/AirspaceCircle.o \
 	src/Airspace/AirspacePolygon.o \
 	src/Airspace/Airspaces.o \
 	src/Airspace/AirspaceVisitor.o \
+	src/GlideSolvers/GlideState.o \
+	src/GlideSolvers/GlidePolar.o \
+	src/GlideSolvers/GlideResult.o \
+	src/GlideSolvers/MacCready.o \
 	src/Navigation/Aircraft.o \
 	src/Navigation/DistanceMemento.o \
 	src/Navigation/FlatBoundingBox.o \
@@ -135,7 +131,11 @@ OBJS	:=\
 	src/Waypoint/WaypointVisitor.o \
 	src/Math/Geometry.o \
 	src/Math/FastMath.o \
-	src/Math/Earth.o 
+	src/Math/Earth.o \
+	src/Util/Gradient.o \
+	src/Util/Intersection.o \
+	src/Util/Printing.o \
+	src/Util/ZeroFinder.o \
 
 Test/test: $(OBJS) Test/test.cpp
 	g++ $(CXXFLAGS) $(INCLUDES) $(OBJS) Test/test.cpp -o Test/test 

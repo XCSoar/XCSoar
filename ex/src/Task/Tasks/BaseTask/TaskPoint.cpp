@@ -27,18 +27,18 @@ TaskPoint::getElevation() const
 }
 
 
-GLIDE_RESULT 
+GlideResult 
 TaskPoint::glide_solution_remaining(const AIRCRAFT_STATE &ac, 
                                     const GlidePolar &polar,
                                     const double minH) const
 {
-  GLIDE_STATE gs(get_vector_remaining(ac),
+  GlideState gs(get_vector_remaining(ac),
                  std::max(minH,getElevation()),
                  ac);
   return polar.solve(gs);
 }
 
-GLIDE_RESULT 
+GlideResult 
 TaskPoint::glide_solution_planned(const AIRCRAFT_STATE &ac, 
                                   const GlidePolar &polar,
                                   const double minH) const
@@ -46,21 +46,21 @@ TaskPoint::glide_solution_planned(const AIRCRAFT_STATE &ac,
   return glide_solution_remaining(ac, polar, minH);
 }
 
-GLIDE_RESULT 
+GlideResult 
 TaskPoint::glide_solution_travelled(const AIRCRAFT_STATE &ac, 
                                   const GlidePolar &polar,
                                   const double minH) const
 {
-  GLIDE_RESULT null_res;
+  GlideResult null_res;
   return null_res;
 }
 
-GLIDE_RESULT 
+GlideResult 
 TaskPoint::glide_solution_sink(const AIRCRAFT_STATE &ac, 
                                const GlidePolar &polar,
                                const double S) const
 {
-  GLIDE_STATE gs(ac, get_reference_remaining(), getElevation());
+  GlideState gs(ac, get_reference_remaining(), getElevation());
   return polar.solve_sink(gs,S);
 }
 

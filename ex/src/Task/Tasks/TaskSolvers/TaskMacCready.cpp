@@ -14,7 +14,7 @@ TaskMacCready::clearance_heights(const AIRCRAFT_STATE &aircraft)
   for (int i=start+1; i<=end; i++) {
     AIRCRAFT_STATE aircraft_predict = aircraft;
     aircraft_predict.Altitude = minHs[i-1];
-    GLIDE_RESULT gr = tp_solution(i, aircraft_predict, minHs[i]);
+    GlideResult gr = tp_solution(i, aircraft_predict, minHs[i]);
     if (minHs[i]<minHs[i-1]) {
       double dh = aircraft_predict.Altitude-gr.HeightGlide;
       if (minHs[i]+0.01<dh) {
@@ -27,10 +27,10 @@ TaskMacCready::clearance_heights(const AIRCRAFT_STATE &aircraft)
 }
 
 
-GLIDE_RESULT 
+GlideResult 
 TaskMacCready::glide_solution(const AIRCRAFT_STATE &aircraft) 
 {
-  GLIDE_RESULT acc_gr, gr;
+  GlideResult acc_gr, gr;
   AIRCRAFT_STATE aircraft_predict = aircraft;
   AIRCRAFT_STATE aircraft_start = get_aircraft_start(aircraft);
 
@@ -59,7 +59,7 @@ TaskMacCready::glide_solution(const AIRCRAFT_STATE &aircraft)
       acc_gr.add(gr);
     }
 
-    if (gr.Solution != GLIDE_RESULT::RESULT_OK) {      
+    if (gr.Solution != GlideResult::RESULT_OK) {      
       return gr;
     }
 
@@ -83,14 +83,14 @@ TaskMacCready::glide_solution(const AIRCRAFT_STATE &aircraft)
 }
 
 
-GLIDE_RESULT 
+GlideResult 
 TaskMacCready::glide_sink(const AIRCRAFT_STATE &aircraft,
                           const double S) 
 {
   AIRCRAFT_STATE aircraft_predict = aircraft;
-  GLIDE_RESULT acc_gr;
+  GlideResult acc_gr;
   for (int i=start; i<=end; i++) {
-    GLIDE_RESULT gr = tp_sink(i, aircraft_predict, S);
+    GlideResult gr = tp_sink(i, aircraft_predict, S);
 
     aircraft_predict.Altitude -= gr.HeightGlide;
     if (i==start) {
@@ -103,7 +103,7 @@ TaskMacCready::glide_sink(const AIRCRAFT_STATE &aircraft,
   return acc_gr;
 }
 
-GLIDE_RESULT 
+GlideResult 
 TaskMacCready::tp_sink(const unsigned i,
                        const AIRCRAFT_STATE &aircraft, 
                        const double S) const

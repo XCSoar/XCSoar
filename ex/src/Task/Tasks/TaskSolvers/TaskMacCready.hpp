@@ -33,8 +33,8 @@ public:
     {
     };
 
-  GLIDE_RESULT glide_solution(const AIRCRAFT_STATE &aircraft);
-  GLIDE_RESULT glide_sink(const AIRCRAFT_STATE &aircraft,
+  GlideResult glide_solution(const AIRCRAFT_STATE &aircraft);
+  GlideResult glide_sink(const AIRCRAFT_STATE &aircraft,
                           const double S);
 
   void set_mc(double mc) {
@@ -43,13 +43,13 @@ public:
   void set_cruise_efficiency(double ce) {
     glide_polar.set_cruise_efficiency(ce);
   };
-  const GLIDE_RESULT& get_active_solution() {
+  const GlideResult& get_active_solution() {
     return gs[activeTaskPoint];
   };
 protected:
   void clearance_heights(const AIRCRAFT_STATE &);
   virtual double get_min_height(const AIRCRAFT_STATE &aircraft) const = 0;
-  virtual GLIDE_RESULT tp_solution(const unsigned i,
+  virtual GlideResult tp_solution(const unsigned i,
                                    const AIRCRAFT_STATE &aircraft, 
                                    double minH) const = 0;
   virtual const AIRCRAFT_STATE get_aircraft_start(const AIRCRAFT_STATE &aircraft) const = 0;
@@ -59,9 +59,9 @@ protected:
   std::vector<double> minHs;
   int start;
   int end;
-  std::vector<GLIDE_RESULT> gs;
+  std::vector<GlideResult> gs;
   GlidePolar glide_polar;
-  GLIDE_RESULT tp_sink(const unsigned i,
+  GlideResult tp_sink(const unsigned i,
                        const AIRCRAFT_STATE &aircraft, 
                        const double S) const;
 };

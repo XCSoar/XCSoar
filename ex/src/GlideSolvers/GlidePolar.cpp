@@ -66,8 +66,8 @@ GlidePolar::solve()
 long count_mc = 0;
 #endif
 
-GLIDE_RESULT 
-GlidePolar::solve(const GLIDE_STATE &task) const
+GlideResult 
+GlidePolar::solve(const GlideState &task) const
 {
 #ifdef INSTRUMENT_TASK
   count_mc++;
@@ -76,8 +76,8 @@ GlidePolar::solve(const GLIDE_STATE &task) const
   return mac.solve(task);
 }
 
-GLIDE_RESULT 
-GlidePolar::solve_sink(const GLIDE_STATE &task,
+GlideResult 
+GlidePolar::solve_sink(const GlideState &task,
                        const double S) const
 {
 #ifdef INSTRUMENT_TASK

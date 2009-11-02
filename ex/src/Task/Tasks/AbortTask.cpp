@@ -92,7 +92,7 @@ AbortTask::fill_reachable(const AIRCRAFT_STATE &state,
   for (std::vector < Waypoint >::iterator v = approx_waypoints.begin();
        v!=approx_waypoints.end(); ) {
     TaskPoint t(*v);
-    GLIDE_RESULT r = t.glide_solution_remaining(state, polar_safety);
+    GlideResult r = t.glide_solution_remaining(state, polar_safety);
     if (r.glide_reachable()) {
       q.push(std::make_pair(*v,r.TimeElapsed));
       // remove it since it's already in the list now      

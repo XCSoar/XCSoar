@@ -5,9 +5,9 @@
 #include "GlidePolar.hpp"
 #include "Navigation/GeoVector.hpp"
 
-struct GLIDE_STATE;
+struct GlideState;
 
-struct GLIDE_RESULT {
+struct GlideResult {
 
   enum GlideResult_t {
     RESULT_OK = 0,
@@ -17,7 +17,7 @@ struct GLIDE_RESULT {
     RESULT_NOSOLUTION
   };
 
-  GLIDE_RESULT():
+  GlideResult():
     Solution(RESULT_NOSOLUTION),
     Vector(0,0),
     CruiseTrackBearing(0.0),
@@ -34,7 +34,7 @@ struct GLIDE_RESULT {
       // default is null result
     }
 
-  GLIDE_RESULT(const GLIDE_STATE &task, 
+  GlideResult(const GlideState &task, 
                const double V);
 
   GeoVector Vector;
@@ -68,14 +68,14 @@ struct GLIDE_RESULT {
       (HeightClimb==0);
   }
 /*
-  bool superior(const GLIDE_RESULT &s2) const;
+  bool superior(const GlideResult &s2) const;
 */
-  void add(const GLIDE_RESULT &s2);
+  void add(const GlideResult &s2);
   double calc_vspeed(const double mc);
   double glide_angle_ground() const;
 
   friend std::ostream& operator<< (std::ostream& o, 
-                                   const GLIDE_RESULT& gl);
+                                   const GlideResult& gl);
 
 };
 

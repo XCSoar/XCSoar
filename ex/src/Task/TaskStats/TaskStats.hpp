@@ -91,9 +91,9 @@ public:
   DistancePlannedStat planned;
   DistanceTravelledStat travelled;
 
-  GLIDE_RESULT solution_planned;
-  GLIDE_RESULT solution_travelled;
-  GLIDE_RESULT solution_remaining;
+  GlideResult solution_planned;
+  GlideResult solution_travelled;
+  GlideResult solution_remaining;
 
   void set_times(const double ts, 
                  const AIRCRAFT_STATE& state);

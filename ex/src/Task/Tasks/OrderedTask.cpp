@@ -394,8 +394,8 @@ TaskPoint* OrderedTask::getActiveTaskPoint()
 
 void
 OrderedTask::glide_solution_remaining(const AIRCRAFT_STATE &aircraft, 
-                                      GLIDE_RESULT &total,
-                                      GLIDE_RESULT &leg)
+                                      GlideResult &total,
+                                      GlideResult &leg)
 {
   TaskMacCreadyRemaining tm(tps,activeTaskPoint,glide_polar);
   total = tm.glide_solution(aircraft);
@@ -404,8 +404,8 @@ OrderedTask::glide_solution_remaining(const AIRCRAFT_STATE &aircraft,
 
 void
 OrderedTask::glide_solution_travelled(const AIRCRAFT_STATE &aircraft, 
-                                      GLIDE_RESULT &total,
-                                      GLIDE_RESULT &leg)
+                                      GlideResult &total,
+                                      GlideResult &leg)
 {
   TaskMacCreadyTravelled tm(tps,activeTaskPoint,glide_polar);
   total = tm.glide_solution(aircraft);
@@ -414,8 +414,8 @@ OrderedTask::glide_solution_travelled(const AIRCRAFT_STATE &aircraft,
 
 void
 OrderedTask::glide_solution_planned(const AIRCRAFT_STATE &aircraft, 
-                                    GLIDE_RESULT &total,
-                                    GLIDE_RESULT &leg,
+                                    GlideResult &total,
+                                    GlideResult &leg,
                                     DistanceRemainingStat &total_remaining_effective,
                                     DistanceRemainingStat &leg_remaining_effective,
                                     const double total_t_elapsed,

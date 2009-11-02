@@ -5,8 +5,8 @@
 #include <iostream>
 #endif
 
-struct GLIDE_STATE;
-struct GLIDE_RESULT;
+struct GlideState;
+struct GlideResult;
 class GlidePolar;
 
 /**
@@ -44,7 +44,7 @@ public:
    * @param S The sink rate 
    * @return Returns the glide result containing data about the optimal solution
    */
-  GLIDE_RESULT solve_sink(const GLIDE_STATE &task,
+  GlideResult solve_sink(const GlideState &task,
                           const double S) const;
 
   /** 
@@ -56,7 +56,7 @@ public:
    * @param task The task for which a solution is desired
    * @return Returns the glide result containing data about the optimal solution
    */
-  GLIDE_RESULT solve(const GLIDE_STATE &task) const;
+  GlideResult solve(const GlideState &task) const;
 
   /**
    * Calculates the glide solution for a classical MacCready theory task
@@ -67,7 +67,7 @@ public:
    * @param V The airspeed the glider will be travelling
    * @return Returns the glide result containing data about the optimal solution
    */
-  GLIDE_RESULT solve_glide(const GLIDE_STATE &task,
+  GlideResult solve_glide(const GlideState &task,
 			   const double V) const;
 
   /**
@@ -77,18 +77,18 @@ public:
 
 private:
 
-  GLIDE_RESULT solve_glide_zerowind(const GLIDE_STATE &task,
+  GlideResult solve_glide_zerowind(const GlideState &task,
                                     const double V) const;
 
-  GLIDE_RESULT solve_glide(const GLIDE_STATE &task,
+  GlideResult solve_glide(const GlideState &task,
 			   const double V,
                            const double S) const;
 
-  GLIDE_RESULT optimise_glide(const GLIDE_STATE &task) const;
+  GlideResult optimise_glide(const GlideState &task) const;
 
-  GLIDE_RESULT solve_vertical(const GLIDE_STATE &task) const;
+  GlideResult solve_vertical(const GlideState &task) const;
 
-  GLIDE_RESULT solve_cruise(const GLIDE_STATE &task) const;
+  GlideResult solve_cruise(const GlideState &task) const;
 
   const GlidePolar &glide_polar;
   const double cruise_efficiency;

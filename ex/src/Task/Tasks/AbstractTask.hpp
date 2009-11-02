@@ -65,14 +65,14 @@ protected:
   virtual double scan_distance_remaining(const GEOPOINT &location);
 
   virtual void glide_solution_remaining(const AIRCRAFT_STATE &, 
-                                        GLIDE_RESULT &total,
-                                        GLIDE_RESULT &leg);
+                                        GlideResult &total,
+                                        GlideResult &leg);
   virtual void glide_solution_travelled(const AIRCRAFT_STATE &, 
-                                        GLIDE_RESULT &total,
-                                        GLIDE_RESULT &leg);
+                                        GlideResult &total,
+                                        GlideResult &leg);
   virtual void glide_solution_planned(const AIRCRAFT_STATE &, 
-                                      GLIDE_RESULT &total,
-                                      GLIDE_RESULT &leg,
+                                      GlideResult &total,
+                                      GlideResult &leg,
                                       DistanceRemainingStat &total_remaining_effective,
                                       DistanceRemainingStat &leg_remaining_effective,
                                       const double total_t_elapsed,

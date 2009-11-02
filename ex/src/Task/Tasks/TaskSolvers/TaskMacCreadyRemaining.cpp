@@ -16,7 +16,7 @@ TaskMacCreadyRemaining::TaskMacCreadyRemaining(TaskPoint* tp,
 {
 }
 
-GLIDE_RESULT 
+GlideResult 
 TaskMacCreadyRemaining::tp_solution(const unsigned i,
                                     const AIRCRAFT_STATE &aircraft, 
                                     double minH) const

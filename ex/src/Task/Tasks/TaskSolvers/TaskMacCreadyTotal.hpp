@@ -14,7 +14,7 @@ public:
   double effective_leg_distance(const double time_remaining) const;
 
 protected:
-  virtual GLIDE_RESULT tp_solution(const unsigned i,
+  virtual GlideResult tp_solution(const unsigned i,
                                    const AIRCRAFT_STATE &aircraft, 
                                    double minH) const;
   virtual double get_min_height(const AIRCRAFT_STATE &aircraft) const {

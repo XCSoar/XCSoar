@@ -88,16 +88,16 @@ protected:
   virtual double scan_leg_start_time(const AIRCRAFT_STATE &);
 
   void glide_solution_remaining(const AIRCRAFT_STATE &, 
-                                GLIDE_RESULT &total,
-                                GLIDE_RESULT &leg);
+                                GlideResult &total,
+                                GlideResult &leg);
 
   void glide_solution_travelled(const AIRCRAFT_STATE &, 
-                                GLIDE_RESULT &total,
-                                GLIDE_RESULT &leg);
+                                GlideResult &total,
+                                GlideResult &leg);
 
   void glide_solution_planned(const AIRCRAFT_STATE &, 
-                              GLIDE_RESULT &total,
-                              GLIDE_RESULT &leg,
+                              GlideResult &total,
+                              GlideResult &leg,
                               DistanceRemainingStat &total_remaining_effective,
                               DistanceRemainingStat &leg_remaining_effective,
                               const double total_t_elapsed,

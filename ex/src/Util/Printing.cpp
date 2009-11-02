@@ -24,9 +24,9 @@ std::ostream& operator<< (std::ostream& o,
 #include "GlideSolvers/GlideResult.hpp"
 
 std::ostream& operator<< (std::ostream& f, 
-                          const GLIDE_RESULT& gl)
+                          const GlideResult& gl)
 {
-  if (gl.Solution != GLIDE_RESULT::RESULT_OK) {
+  if (gl.Solution != GlideResult::RESULT_OK) {
     f << "#     Solution NOT OK\n";
   }
   f << "#    Altitude Difference " << gl.AltitudeDifference << " (m)\n";

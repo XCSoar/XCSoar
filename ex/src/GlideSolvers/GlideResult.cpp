@@ -3,7 +3,7 @@
 #include <math.h>
 #include "Math/NavFunctions.hpp"
 
-GLIDE_RESULT::GLIDE_RESULT(const GLIDE_STATE &task, 
+GlideResult::GlideResult(const GlideState &task, 
                            const double V):
     Solution(RESULT_NOSOLUTION),
     Vector(task.Vector),
@@ -22,7 +22,7 @@ GLIDE_RESULT::GLIDE_RESULT(const GLIDE_STATE &task,
 
 
 void
-GLIDE_RESULT::calc_cruise_bearing()
+GlideResult::calc_cruise_bearing()
 {
   CruiseTrackBearing= Vector.Bearing;
   if (EffectiveWindSpeed>0.0) {
@@ -39,7 +39,7 @@ GLIDE_RESULT::calc_cruise_bearing()
 
 
 void 
-GLIDE_RESULT::add(const GLIDE_RESULT &s2) 
+GlideResult::add(const GlideResult &s2) 
 {
   TimeElapsed += s2.TimeElapsed;
   HeightGlide += s2.HeightGlide;
@@ -58,7 +58,7 @@ GLIDE_RESULT::add(const GLIDE_RESULT &s2)
 
 
 double 
-GLIDE_RESULT::calc_vspeed(const double mc) 
+GlideResult::calc_vspeed(const double mc) 
 {
   if (!ok_or_partial()) {
     TimeVirtual = 0.0;
@@ -81,7 +81,7 @@ GLIDE_RESULT::calc_vspeed(const double mc)
 }
 
 double 
-GLIDE_RESULT::glide_angle_ground() const
+GlideResult::glide_angle_ground() const
 {
   if (Vector.Distance>0) {
     return HeightGlide/Vector.Distance;

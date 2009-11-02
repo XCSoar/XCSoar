@@ -10,7 +10,7 @@ TaskMacCreadyTotal::TaskMacCreadyTotal(const std::vector<OrderedTaskPoint*> &_tp
 }
 
 
-GLIDE_RESULT 
+GlideResult 
 TaskMacCreadyTotal::tp_solution(const unsigned i,
                                 const AIRCRAFT_STATE &aircraft, 
                                 double minH) const

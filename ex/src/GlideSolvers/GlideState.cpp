@@ -7,7 +7,7 @@
 class GlideQuadratic: public Quadratic
 {
 public:
-  GlideQuadratic(const GLIDE_STATE &task, 
+  GlideQuadratic(const GlideState &task, 
                  const double V):
     Quadratic(task.dwcostheta_, task.wsq_-V*V)
     {};
@@ -21,7 +21,7 @@ public:
 };
 
 double
-GLIDE_STATE::calc_ave_speed(const double Veff) const
+GlideState::calc_ave_speed(const double Veff) const
 {
   if (EffectiveWindSpeed>0.0) {
     // only need to solve if positive wind speed
@@ -33,7 +33,7 @@ GLIDE_STATE::calc_ave_speed(const double Veff) const
 }
 
 // dummy task
-GLIDE_STATE::GLIDE_STATE(const GeoVector &vector,
+GlideState::GlideState(const GeoVector &vector,
                          const double htarget,
                          const AIRCRAFT_STATE &aircraft):
   Vector(vector),
@@ -42,7 +42,7 @@ GLIDE_STATE::GLIDE_STATE(const GeoVector &vector,
   calc_speedups(aircraft);
 }
 
-void GLIDE_STATE::calc_speedups(const AIRCRAFT_STATE &aircraft)
+void GlideState::calc_speedups(const AIRCRAFT_STATE &aircraft)
 {
   AltitudeDifference = (aircraft.Altitude-MinHeight);
   if (aircraft.WindSpeed>0.0) {
@@ -62,7 +62,7 @@ void GLIDE_STATE::calc_speedups(const AIRCRAFT_STATE &aircraft)
 }
 
 // from target to aircraft
-GLIDE_STATE::GLIDE_STATE(const GEOPOINT& target,
+GlideState::GlideState(const GEOPOINT& target,
                          const AIRCRAFT_STATE &aircraft,
                          const double htarget):
   Vector(target,aircraft.Location),
@@ -72,7 +72,7 @@ GLIDE_STATE::GLIDE_STATE(const GEOPOINT& target,
 }
 
   // from aircraft to target
-GLIDE_STATE::GLIDE_STATE(const AIRCRAFT_STATE &aircraft,
+GlideState::GlideState(const AIRCRAFT_STATE &aircraft,
                          const GEOPOINT& target,
                          const double htarget):
   Vector(aircraft.Location, target),
@@ -83,7 +83,7 @@ GLIDE_STATE::GLIDE_STATE(const AIRCRAFT_STATE &aircraft,
 
 
 double
-GLIDE_STATE::drifted_distance(const double t_cl) const
+GlideState::drifted_distance(const double t_cl) const
 {
   if (EffectiveWindSpeed>0) {
     const double aw = EffectiveWindSpeed*t_cl;
