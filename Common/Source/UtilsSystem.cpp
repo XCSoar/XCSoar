@@ -51,13 +51,18 @@ Copyright_License {
 #include "Audio/WaveThread.h"
 #endif
 
-#ifndef __MINGW32__
+#if defined(WIN32) && !defined(__MINGW32__)
 #if defined(CECORE)
 #include "winbase.h"
 #endif
 #ifndef WINDOWSPC
 #include "projects.h"
 #endif
+#endif
+
+#ifdef HAVE_POSIX
+#include <sys/statvfs.h>
+#include <sys/stat.h>
 #endif
 
 #ifdef WINDOWSPC
@@ -115,6 +120,7 @@ void MemLeakCheck() {
 // memory defragmentation, since on pocket pc platforms there is no
 // automatic defragmentation.
 void MyCompactHeaps() {
+#ifdef WIN32
 #if defined(WINDOWSPC)||(defined(GNAV) && !defined(__MINGW32__))
   HeapCompact(GetProcessHeap(),0);
 #else
@@ -132,12 +138,18 @@ void MyCompactHeaps() {
     CompactAllHeaps();
   }
 #endif
+#endif /* WIN32 */
 }
 
 
 unsigned long FindFreeSpace(const TCHAR *path) {
   // returns number of kb free on destination drive
-
+#ifdef HAVE_POSIX
+  struct statvfs s;
+  if (statvfs(path, &s) < 0)
+    return 0;
+  return s.f_bsize * s.f_bavail;
+#else /* !HAVE_POSIX */
   ULARGE_INTEGER FreeBytesAvailableToCaller;
   ULARGE_INTEGER TotalNumberOfBytes;
   ULARGE_INTEGER TotalNumberOfFreeBytes;
@@ -149,6 +161,7 @@ unsigned long FindFreeSpace(const TCHAR *path) {
   } else {
     return 0;
   }
+#endif /* !HAVE_POSIX */
 }
 
 /**
@@ -160,6 +173,9 @@ void CreateDirectoryIfAbsent(const TCHAR *filename) {
 
   LocalPath(fullname, filename);
 
+#ifdef HAVE_POSIX
+  mkdir(filename, 0777);
+#else /* !HAVE_POSIX */
   DWORD fattr = GetFileAttributes(fullname);
 
   if ((fattr != 0xFFFFFFFF) &&
@@ -168,7 +184,7 @@ void CreateDirectoryIfAbsent(const TCHAR *filename) {
   } else {
     CreateDirectory(fullname, NULL);
   }
-
+#endif /* !HAVE_POSIX */
 }
 
 
@@ -840,8 +856,14 @@ RECT SystemWindowSize(void) {
 #else
   WindowSize.left = 0;
   WindowSize.top = 0;
+#ifdef WIN32
   WindowSize.right = GetSystemMetrics(SM_CXSCREEN);
   WindowSize.bottom = GetSystemMetrics(SM_CYSCREEN);
+#else /* !WIN32 */
+  // XXX implement this properly for SDL/UNIX
+  WindowSize.right = 640;
+  WindowSize.bottom = 480;
+#endif /* !WIN32 */
 #endif
   return WindowSize;
 }
