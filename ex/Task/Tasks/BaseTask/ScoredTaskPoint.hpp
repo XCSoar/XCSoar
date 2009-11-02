@@ -1,7 +1,7 @@
 #ifndef SCOREDTASKPOINT_HPP
 #define SCOREDTASKPOINT_HPP
 
-#include "SampledTaskPoint.h"
+#include "SampledTaskPoint.hpp"
 
 class ScoredTaskPoint:
   public SampledTaskPoint

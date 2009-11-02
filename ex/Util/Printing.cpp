@@ -224,7 +224,7 @@ TaskPoint::print(std::ostream& f, const AIRCRAFT_STATE &state) const
 }
 
 
-#include "Task/Tasks/AbstractTask.h"
+#include "Task/Tasks/AbstractTask.hpp"
 
 void
 AbstractTask::print(const AIRCRAFT_STATE &state)
@@ -253,7 +253,7 @@ AbstractTask::print(const AIRCRAFT_STATE &state)
   f6.flush();
 }
 
-#include "Task/Tasks/GotoTask.h"
+#include "Task/Tasks/GotoTask.hpp"
 
 void 
 GotoTask::print(const AIRCRAFT_STATE &state)
@@ -265,7 +265,7 @@ GotoTask::print(const AIRCRAFT_STATE &state)
   }
 }
 
-#include "Task/Tasks/OrderedTask.h"
+#include "Task/Tasks/OrderedTask.hpp"
 
 void OrderedTask::print(const AIRCRAFT_STATE &state) 
 {
@@ -321,7 +321,7 @@ void OrderedTask::print(const AIRCRAFT_STATE &state)
 
 }
 
-#include "Task/Tasks/AbortTask.h"
+#include "Task/Tasks/AbortTask.hpp"
 
 void AbortTask::print(const AIRCRAFT_STATE &state)
 {
@@ -340,7 +340,7 @@ void AbortTask::print(const AIRCRAFT_STATE &state)
   }
 }
 
-#include "Task/TaskManager.h"
+#include "Task/TaskManager.hpp"
 
 void TaskManager::print(const AIRCRAFT_STATE &state)
 {
@@ -437,7 +437,7 @@ OrderedTaskPoint::print(std::ostream& f, const AIRCRAFT_STATE& state,
 }
 
 
-#include "Task/Tasks/BaseTask/SampledTaskPoint.h"
+#include "Task/Tasks/BaseTask/SampledTaskPoint.hpp"
 
 void 
 SampledTaskPoint::print_boundary(std::ostream& f, const AIRCRAFT_STATE &state) const

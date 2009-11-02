@@ -38,7 +38,7 @@
 #ifndef ORDEREDTASKPOINT_HPP
 #define ORDEREDTASKPOINT_HPP
 
-#include "TaskLeg.h"
+#include "TaskLeg.hpp"
 #include "ScoredTaskPoint.hpp"
 
 class OrderedTaskPoint : 

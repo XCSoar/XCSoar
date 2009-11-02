@@ -1,7 +1,7 @@
 #include "TaskAdvance.hpp"
 #include "Tasks/BaseTask/TaskPoint.hpp"
 #include "Tasks/BaseTask/StartPoint.hpp"
-#include "Tasks/BaseTask/IntermediatePoint.h"
+#include "Tasks/BaseTask/IntermediatePoint.hpp"
 #include "Tasks/BaseTask/AATPoint.hpp"
 #include "Navigation/Aircraft.hpp"
 

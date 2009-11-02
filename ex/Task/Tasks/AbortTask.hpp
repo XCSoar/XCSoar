@@ -1,7 +1,7 @@
 #ifndef ABORTTASK_H
 #define ABORTTASK_H
 
-#include "AbstractTask.h"
+#include "AbstractTask.hpp"
 #include <vector>
 #include "Navigation/TaskProjection.hpp"
 #include "Navigation/Waypoints.hpp"

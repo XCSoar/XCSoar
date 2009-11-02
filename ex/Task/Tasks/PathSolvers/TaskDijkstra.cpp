@@ -2,7 +2,7 @@
 
 #include "TaskDijkstra.hpp"
 #include "Dijkstra.hpp"
-#include "Task/Tasks/OrderedTask.h"
+#include "Task/Tasks/OrderedTask.hpp"
 #include "Util.h"
 #include <algorithm>
 

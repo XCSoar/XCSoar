@@ -40,7 +40,7 @@
 #define FAISECTORASTPOINT_HPP
 
 #include "Task/Tasks/BaseTask/ASTPoint.hpp"
-#include "Task/Tasks/BaseTask/TaskLeg.h"
+#include "Task/Tasks/BaseTask/TaskLeg.hpp"
 #include "ObservationZones/FAISectorZone.hpp"
 
 class FAISectorASTPoint: 

@@ -1,4 +1,4 @@
-#include "IntermediatePoint.h"
+#include "IntermediatePoint.hpp"
 
 double
 IntermediatePoint::getElevation()

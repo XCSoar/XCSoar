@@ -7,13 +7,13 @@
 #include "Airspace/AirspacePolygon.hpp"
 #include "Navigation/Waypoints.hpp"
 #include "Math/FastMath.h"
-#include "Tasks/TaskManager.h"
-#include "Tasks/TaskEvents.hpp"
-#include "TaskPoints/FAISectorStartPoint.hpp"
-#include "TaskPoints/FAISectorFinishPoint.hpp"
-#include "TaskPoints/FAISectorASTPoint.hpp"
-#include "TaskPoints/FAICylinderASTPoint.hpp"
-#include "TaskPoints/CylinderAATPoint.hpp"
+#include "Task/TaskManager.hpp"
+#include "Task/TaskEvents.hpp"
+#include "Task/Tasks/TaskPoints/FAISectorStartPoint.hpp"
+#include "Task/Tasks/TaskPoints/FAISectorFinishPoint.hpp"
+#include "Task/Tasks/TaskPoints/FAISectorASTPoint.hpp"
+#include "Task/Tasks/TaskPoints/FAICylinderASTPoint.hpp"
+#include "Task/Tasks/TaskPoints/CylinderAATPoint.hpp"
 
 #include <fstream>
 

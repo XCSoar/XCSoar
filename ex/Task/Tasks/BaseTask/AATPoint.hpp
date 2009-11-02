@@ -39,7 +39,7 @@
 #define AATPOINT_HPP
 
 #include "OrderedTaskPoint.hpp"
-#include "IntermediatePoint.h"
+#include "IntermediatePoint.hpp"
 
 class AATPoint : public IntermediatePoint {
 public:

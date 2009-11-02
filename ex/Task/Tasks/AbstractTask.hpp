@@ -1,7 +1,7 @@
 #ifndef ABSTRACTTASK_H
 #define ABSTRACTTASK_H
 
-#include "TaskInterface.h"
+#include "TaskInterface.hpp"
 #include "Task/TaskEvents.hpp"
 #include "Task/TaskBehaviour.hpp"
 #include "Task/TaskAdvance.hpp"

@@ -2,10 +2,10 @@
 #define TASKMANAGER_H
 
 #include "Util/Serialisable.hpp"
-#include "Tasks/TaskInterface.h"
-#include "Tasks/AbortTask.h"
-#include "Tasks/GotoTask.h"
-#include "Tasks/OrderedTask.h"
+#include "Tasks/TaskInterface.hpp"
+#include "Tasks/AbortTask.hpp"
+#include "Tasks/GotoTask.hpp"
+#include "Tasks/OrderedTask.hpp"
 #include "TaskStats/TaskStats.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
 #include "TaskEvents.hpp"
@@ -87,6 +87,8 @@ private:
   /** @link dependency */
   /*#  TaskEvents lnkTaskEvents; */
 
+  /** @link dependency */
+  /*#  TaskBehaviour lnkTaskBehaviour; */
 public:
   void Accept(BaseVisitor& visitor) const;
 };

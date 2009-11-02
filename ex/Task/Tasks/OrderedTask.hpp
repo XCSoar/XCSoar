@@ -2,7 +2,7 @@
 #ifndef ORDEREDTASK_H
 #define ORDEREDTASK_H
 
-#include "AbstractTask.h"
+#include "AbstractTask.hpp"
 #include "BaseTask/OrderedTaskPoint.hpp"
 #include "BaseTask/StartPoint.hpp"
 #include "BaseTask/FinishPoint.hpp"

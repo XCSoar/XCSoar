@@ -3,7 +3,7 @@
 #ifndef GOTOTASK_H
 #define GOTOTASK_H
 
-#include "AbstractTask.h"
+#include "AbstractTask.hpp"
 class Waypoint;
 
 class GotoTask : public AbstractTask {
