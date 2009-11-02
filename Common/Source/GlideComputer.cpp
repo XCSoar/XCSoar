@@ -125,7 +125,10 @@ bool GlideComputer::ProcessGPS()
   double mc = GlidePolar::GetMacCready();
   double ce = GlidePolar::GetCruiseEfficiency();
 
+  // Process basic information
   ProcessBasic();
+
+  // Process basic task information
   ProcessBasicTask(mc, ce);
 
   // Check if everything is okay with the gps time and process it
@@ -133,17 +136,24 @@ bool GlideComputer::ProcessGPS()
     return false;
   }
 
+  // Process extended information
   ProcessVertical();
 
+  // Calculate the team code
   CalculateOwnTeamCode();
 
   SetCalculated().TeammateCodeValid = SettingsComputer().TeammateCodeValid;
 
+  // Calculate the bearing and range of the teammate
   CalculateTeammateBearingRange();
 
+  // Calculate the bearing and range of the teammate
+  // (if teammate is a FLARM target)
   FLARM_ScanTraffic();
 
   vegavoice.Update(&Basic(), &Calculated(), SettingsComputer());
+
+  // Update the ConditionMonitors
   ConditionMonitorsUpdate(*this);
 
   return true;
