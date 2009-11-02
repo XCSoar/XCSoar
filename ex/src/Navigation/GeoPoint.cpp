@@ -24,3 +24,10 @@ GEOPOINT::bearing(const GEOPOINT &other) const
 {
   return ::Bearing(*this, other);
 }
+
+double 
+GEOPOINT::projected_distance(const GEOPOINT &from,
+                             const GEOPOINT &to) const
+{
+  return ::ProjectedDistance(from, to, *this);
+}

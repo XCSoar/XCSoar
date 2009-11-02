@@ -68,6 +68,9 @@ struct GEOPOINT {
   };
   double distance(const GEOPOINT &other) const;
   double bearing(const GEOPOINT &other) const;
+
+  double projected_distance(const GEOPOINT &from,
+                            const GEOPOINT &to) const;
 };
 
 #endif
