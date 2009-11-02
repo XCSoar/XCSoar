@@ -58,7 +58,6 @@ CXXFLAGS += -DDO_PRINT
 ####### sources
 
 OBJS	:=\
-	src/Util.o \
 	src/Util/Gradient.o \
 	src/Util/Intersection.o \
 	src/Util/Printing.o \

@@ -1,5 +1,4 @@
 #include "SearchPoint.hpp"
-#include "Util.h"
 #include "Math/FastMath.h"
 #include "Navigation/TaskProjection.hpp"
 #include <math.h>
