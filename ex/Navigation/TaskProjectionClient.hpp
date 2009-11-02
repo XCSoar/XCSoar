@@ -1,7 +1,7 @@
 #ifndef TASKPROJECTIONCLIENT_HPP
 #define TASKPROJECTIONCLIENT_HPP
 
-#include "TaskProjection.h"
+#include "TaskProjection.hpp"
 
 class TaskProjectionClient {
 public:

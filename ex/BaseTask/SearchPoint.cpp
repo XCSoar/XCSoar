@@ -1,7 +1,24 @@
 #include "SearchPoint.hpp"
 #include "Util.h"
 #include "Math/FastMath.h"
+#include "Navigation/TaskProjection.hpp"
 #include <math.h>
+
+SearchPoint::SearchPoint(const GEOPOINT &loc, const TaskProjection& tp,
+                         bool _actual):
+  Location(loc),
+  flatLocation(tp.project(loc)),
+  actual(_actual)
+{      
+}
+
+void 
+SearchPoint::setLocation(const GEOPOINT& loc, const TaskProjection& tp)
+{
+  Location = loc;
+  project(tp);
+}
+
 
 void 
 SearchPoint::project(const TaskProjection& tp) 

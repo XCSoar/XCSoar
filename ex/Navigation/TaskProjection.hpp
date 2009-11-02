@@ -10,6 +10,11 @@
 #include <iostream>
 #endif
 
+/**
+ * Class for performing Lambeth Conformal Conic projections from
+ * ellipsoidal Earth points to and from projected points.  Has
+ * converters for projected coordinates in integer and double types.
+ */
 class TaskProjection {
 public:
   TaskProjection(const GEOPOINT &ref)

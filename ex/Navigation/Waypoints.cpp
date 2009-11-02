@@ -1,6 +1,6 @@
 #include "Waypoints.hpp"
 #include "WaypointVisitor.hpp"
-#include "BaseTask/TaskProjection.h"
+#include "Navigation/TaskProjection.hpp"
 #include <vector>
 
 #ifdef DO_PRINT

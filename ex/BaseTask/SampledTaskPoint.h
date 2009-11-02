@@ -6,7 +6,7 @@
 #include "SearchPointVector.hpp"
 #include "Scoring/ObservationZone.hpp"
 #include "TaskPoint.hpp"
-#include "TaskProjectionClient.hpp"
+#include "Navigation/TaskProjectionClient.hpp"
 
 class SampledTaskPoint:
   public TaskPoint, 

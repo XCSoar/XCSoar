@@ -1,7 +1,10 @@
 #ifndef SEARCH_POINT_HPP
 #define SEARCH_POINT_HPP
 
-#include "TaskProjection.h"
+#include "GeoPoint.hpp"
+#include "Navigation/FlatGeoPoint.hpp"
+
+class TaskProjection;
 
 class SearchPoint {
 public:
@@ -13,18 +16,9 @@ public:
   };
 
   SearchPoint(const GEOPOINT &loc, const TaskProjection& tp,
-    bool _actual=false):
-    Location(loc),
-    flatLocation(tp.project(loc)),
-    actual(_actual)
-    {      
-    };
+    bool _actual=false);
 
-  void setLocation(const GEOPOINT& loc, const TaskProjection& tp)
-    {
-      Location = loc;
-      project(tp);
-    }
+  void setLocation(const GEOPOINT& loc, const TaskProjection& tp);
   void project(const TaskProjection& tp);
 
   const GEOPOINT& getLocation() const {

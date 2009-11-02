@@ -8,7 +8,6 @@
 #include "OrderedTask.h"
 #include "TaskStats/TaskStats.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
-#include "BaseTask/TaskProjection.h"
 #include "TaskEvents.hpp"
 #include "TaskBehaviour.hpp"
 

@@ -3,7 +3,7 @@
 
 #include "AbstractTask.h"
 #include <vector>
-#include "BaseTask/TaskProjection.h"
+#include "Navigation/TaskProjection.hpp"
 #include "Navigation/Waypoints.hpp"
 
 class AbortTask : public AbstractTask 

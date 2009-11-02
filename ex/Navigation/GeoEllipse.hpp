@@ -1,7 +1,7 @@
 #ifndef GEOELLIPSE_HPP
 #define GEOELLIPSE_HPP
 
-#include "BaseTask/TaskProjection.h"
+#include "TaskProjection.hpp"
 
 class GeoEllipse {
 public:

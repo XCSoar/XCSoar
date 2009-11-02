@@ -80,14 +80,14 @@ OBJS	:=\
 	Navigation/Waypoint.o \
 	Navigation/Waypoints.o \
 	Navigation/WaypointVisitor.o \
+	Navigation/TaskProjection.o \
+	Navigation/TaskProjectionClient.o \
 	BaseTask/AATPoint.o \
 	BaseTask/AATIsoline.o \
 	BaseTask/AATIsolineSegment.o \
 	BaseTask/AATIsolineIntercept.o \
 	BaseTask/OrderedTaskPoint.o \
 	BaseTask/ScoredTaskPoint.o \
-	BaseTask/TaskProjection.o \
-	BaseTask/TaskProjectionClient.o \
 	BaseTask/FinishPoint.o \
 	BaseTask/SampledTaskPoint.o \
 	BaseTask/SearchPoint.o \

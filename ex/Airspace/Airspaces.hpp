@@ -3,7 +3,7 @@
 
 #include <kdtree++/kdtree.hpp>
 #include "Airspace.hpp"
-#include "BaseTask/TaskProjectionClient.hpp"
+#include "Navigation/TaskProjectionClient.hpp"
 
 class AirspaceVisitor;
 

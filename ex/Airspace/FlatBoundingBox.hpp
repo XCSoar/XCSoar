@@ -1,7 +1,7 @@
 #ifndef FLATBOUNDINGBOX_HPP
 #define FLATBOUNDINGBOX_HPP
 #include "Navigation/FlatGeoPoint.hpp"
-#include "BaseTask/TaskProjection.h"
+#include "Navigation/TaskProjection.hpp"
 #include <algorithm>
 #include "BoundingBoxDistance.hpp"
 
