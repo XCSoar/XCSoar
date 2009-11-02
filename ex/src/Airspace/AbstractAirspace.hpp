@@ -14,7 +14,8 @@ public:
     get_bounding_box(const TaskProjection& task_projection) const = 0;
 
   virtual bool inside(const AIRCRAFT_STATE &loc) const = 0;
-  virtual bool intersects(const GEOPOINT& g1, const GeoVector &vec) const = 0;
+  virtual bool intersects(const GEOPOINT& g1, const GeoVector &vec,
+                          const TaskProjection& task_projection) const = 0;
 
 #ifdef DO_PRINT
   friend std::ostream& operator<< (std::ostream& f, 

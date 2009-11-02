@@ -14,7 +14,8 @@ public:
   const FlatBoundingBox get_bounding_box(const TaskProjection& task_projection) const;
 
   bool inside(const AIRCRAFT_STATE &loc) const;
-  bool intersects(const GEOPOINT& g1, const GeoVector &vec) const;
+  bool intersects(const GEOPOINT& g1, const GeoVector &vec,
+                  const TaskProjection& task_projection) const;
 
 private:
   SearchPointVector border;

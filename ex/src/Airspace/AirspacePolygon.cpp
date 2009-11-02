@@ -63,8 +63,25 @@ AirspacePolygon::inside(const AIRCRAFT_STATE &loc) const
 
 
 bool 
-AirspacePolygon::intersects(const GEOPOINT& g1, const GeoVector &vec) const
+AirspacePolygon::intersects(const GEOPOINT& start, 
+                            const GeoVector &vec,
+                            const TaskProjection& task_projection) const
 {
-  // TODO: for testing only
-  return true;
+  if (PolygonInterior(start, border)) {
+    // starts inside!
+    return true;
+  }
+
+  const GEOPOINT end = vec.end_point(start);
+  const FlatRay ray(task_projection.project(start),
+                    task_projection.project(end));
+
+  for (unsigned i=0; i+1<border.size(); i++) {
+    const FlatRay rthis(border[i].get_flatLocation(), 
+                        border[i+1].get_flatLocation());
+    if (ray.intersects(rthis)) {
+      return true;
+    }
+  }
+  return false;
 }

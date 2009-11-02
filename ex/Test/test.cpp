@@ -213,7 +213,8 @@ private:
 
 void scan_airspaces(const AIRCRAFT_STATE state, 
                     const Airspaces& airspaces,
-                    bool do_report) 
+                    bool do_report,
+                    GEOPOINT &target) 
 {
   const std::vector<Airspace> vn = airspaces.scan_nearest(state);
   AirspaceVisitorPrint pvn("results/res-bb-nearest.txt",
@@ -231,6 +232,14 @@ void scan_airspaces(const AIRCRAFT_STATE state,
   AirspaceVisitorPrint pvi("results/res-bb-inside.txt",
                            do_report);
   pvi.for_each(vi);
+  
+  {
+    AirspaceVisitorPrint ivisitor("results/res-bb-intersects.txt",
+                                  true);
+    GeoVector vec(state.Location, target);
+    airspaces.visit_intersecting(state.Location, vec, ivisitor);
+  }
+
 }
 
 void test_flight(TaskManager &task_manager,
@@ -259,12 +268,7 @@ void test_flight(TaskManager &task_manager,
   state.WindDirection = 0;
 
   if (test_num<4) {
-    scan_airspaces(state, airspaces, true);
-
-    AirspaceVisitorPrint visitor("results/res-bb-intersects.txt",
-                                 true);
-    GeoVector vec(state.Location, w[1]);
-    airspaces.visit_intersecting(state.Location, vec, visitor);
+    scan_airspaces(state, airspaces, true, w[1]);
   }
 
 #ifdef DO_PRINT
@@ -303,7 +307,7 @@ void test_flight(TaskManager &task_manager,
 
       bool do_print = (counter++ % 10 ==0);
       if (test_num<4) {
-        scan_airspaces(state, airspaces, do_print);
+        scan_airspaces(state, airspaces, do_print, w[i+1]);
       }
 
       if (do_print) {

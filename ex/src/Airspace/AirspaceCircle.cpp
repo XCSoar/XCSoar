@@ -1,5 +1,6 @@
 #include "AirspaceCircle.hpp"
 #include "Navigation/GeoVector.hpp"
+#include "Math/Earth.hpp"
 
 AirspaceCircle::AirspaceCircle(const GEOPOINT &loc, 
                                const double _radius):
@@ -42,8 +43,9 @@ AirspaceCircle::inside(const AIRCRAFT_STATE &loc) const
 }
 
 bool 
-AirspaceCircle::intersects(const GEOPOINT& g1, const GeoVector &vec) const
+AirspaceCircle::intersects(const GEOPOINT& start, const GeoVector &vec,
+                           const TaskProjection& task_projection) const
 {
-  // TODO: for testing only
-  return true;
+  const GEOPOINT end = vec.end_point(start);
+  return (::CrossTrackError(start, end, center, NULL)<=radius);
 }

@@ -30,6 +30,10 @@ public:
 
   unsigned flat_distance(const SearchPoint& sp) const;
 
+  const FLAT_GEOPOINT& get_flatLocation() const {
+    return flatLocation;
+  };
+
 private:
   GEOPOINT Location;
   FLAT_GEOPOINT flatLocation;
