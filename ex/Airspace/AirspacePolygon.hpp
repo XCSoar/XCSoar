@@ -2,7 +2,7 @@
 #define AIRSPACEPOLYGON_HPP
 
 #include "AbstractAirspace.hpp"
-#include "BaseTask/SearchPoint.hpp"
+#include "Navigation/SearchPointVector.hpp"
 #include <vector>
 
 class AirspacePolygon: public AbstractAirspace 
@@ -17,7 +17,7 @@ public:
   bool intersects(const GEOPOINT& g1, const GeoVector &vec) const;
 
 private:
-  std::vector<SearchPoint> border;
+  SearchPointVector border;
 public:
 #ifdef DO_PRINT
   friend std::ostream& operator<< (std::ostream& f, 

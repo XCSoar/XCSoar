@@ -1,10 +1,9 @@
 #ifndef GRAHAM_SCAN_HPP
 #define GRAHAM_SCAN_HPP
 
-#include <vector>
 #include <list>
 
-#include "BaseTask/SearchPointVector.hpp"
+#include "Navigation/SearchPointVector.hpp"
 
 class GrahamScan
 {

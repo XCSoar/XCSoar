@@ -66,22 +66,25 @@ OBJS	:=\
 	GlideSolvers/GlideResult.o \
 	GlideSolvers/MacCready.o \
 	GlideSolvers/ZeroFinder.o \
-	Navigation/Aircraft.o \
-	Navigation/DistanceMemento.o \
-	Navigation/GeoVectorMemento.o \
-	Navigation/ReferencePoint.o \
 	Airspace/FlatBoundingBox.o \
 	Airspace/Airspace.o \
 	Airspace/AirspaceCircle.o \
 	Airspace/AirspacePolygon.o \
 	Airspace/Airspaces.o \
 	Airspace/AirspaceVisitor.o \
+	Navigation/Aircraft.o \
+	Navigation/DistanceMemento.o \
 	Navigation/GeoVector.o \
+	Navigation/GeoVectorMemento.o \
+	Navigation/ReferencePoint.o \
+	Navigation/SearchPoint.o \
+	Navigation/TaskProjection.o \
+	Navigation/TaskProjectionClient.o \
 	Navigation/Waypoint.o \
 	Navigation/Waypoints.o \
 	Navigation/WaypointVisitor.o \
-	Navigation/TaskProjection.o \
-	Navigation/TaskProjectionClient.o \
+	Navigation/ConvexHull/GrahamScan.o \
+	Navigation/ConvexHull/PolygonInterior.o \
 	BaseTask/AATPoint.o \
 	BaseTask/AATIsoline.o \
 	BaseTask/AATIsolineSegment.o \
@@ -90,13 +93,10 @@ OBJS	:=\
 	BaseTask/ScoredTaskPoint.o \
 	BaseTask/FinishPoint.o \
 	BaseTask/SampledTaskPoint.o \
-	BaseTask/SearchPoint.o \
 	BaseTask/TaskLeg.o \
 	BaseTask/IntermediatePoint.o \
 	BaseTask/StartPoint.o \
 	BaseTask/TaskPoint.o \
-	BaseTask/ConvexHull/GrahamScan.o \
-	BaseTask/ConvexHull/PolygonInterior.o \
 	BaseTask/Scoring/ObservationZone.o \
 	TaskPoints/FAICylinderASTPoint.o \
 	TaskPoints/FAISectorASTPoint.o \

@@ -2,7 +2,7 @@
 #define POLYGON_INTERIOR_HPP
 
 #include <vector>
-#include "BaseTask/SearchPoint.hpp"
+#include "Navigation/SearchPoint.hpp"
 
 bool
 PolygonInterior( const GEOPOINT &P, const std::vector<SearchPoint>& V);

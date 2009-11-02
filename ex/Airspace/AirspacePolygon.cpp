@@ -1,7 +1,7 @@
 #include "AirspacePolygon.hpp"
 #include "Math/Earth.hpp"
-#include "BaseTask/ConvexHull/PolygonInterior.hpp"
-#include "BaseTask/ConvexHull/GrahamScan.hpp"
+#include "Navigation/ConvexHull/PolygonInterior.hpp"
+#include "Navigation/ConvexHull/GrahamScan.hpp"
 
 AirspacePolygon::AirspacePolygon(const TaskProjection& task_projection)
 {

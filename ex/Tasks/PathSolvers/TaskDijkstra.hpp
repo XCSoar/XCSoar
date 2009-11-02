@@ -1,7 +1,7 @@
 #ifndef TASK_DIJKSTRA_HPP
 #define TASK_DIJKSTRA_HPP
 
-#include "BaseTask/SearchPointVector.hpp"
+#include "Navigation/SearchPointVector.hpp"
 
 class OrderedTask;
 typedef std::pair<unsigned, unsigned> ScanTaskPoint;

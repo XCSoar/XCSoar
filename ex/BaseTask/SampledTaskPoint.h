@@ -3,7 +3,7 @@
 #ifndef SAMPLEDTASKPOINT_H
 #define SAMPLEDTASKPOINT_H
 
-#include "SearchPointVector.hpp"
+#include "Navigation/SearchPointVector.hpp"
 #include "Scoring/ObservationZone.hpp"
 #include "TaskPoint.hpp"
 #include "Navigation/TaskProjectionClient.hpp"
