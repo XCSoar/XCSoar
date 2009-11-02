@@ -55,6 +55,9 @@ ZZIP_FILE* zAirfieldDetails = NULL;
 
 static TCHAR  szAirfieldDetailsFile[MAX_PATH] = TEXT("\0");
 
+/**
+ * Opens the airfield details file handle
+ */
 static void
 OpenAirfieldDetails()
 {
@@ -86,6 +89,9 @@ OpenAirfieldDetails()
   }
 }
 
+/**
+ * Closes the airfield details file handle
+ */
 static void
 CloseAirfieldDetails()
 {
@@ -196,13 +202,17 @@ LookupAirfieldDetail(TCHAR *Name, const TCHAR *Details)
 
 #define DETAILS_LENGTH 5000
 
-/*
- * VENTA3 fix: if empty lines, do not set details for the waypoint
- *        fix: remove CR from text appearing as a spurious char in waypoint details
+/**
+ * Parses the data provided by the airfield details file handle
  */
 static void
 ParseAirfieldDetails()
 {
+  /*
+   * VENTA3 fix: if empty lines, do not set details for the waypoint
+   *        fix: remove CR from text appearing as a spurious char in waypoint details
+   */
+
   if(zAirfieldDetails == NULL)
     return;
 
@@ -254,6 +264,7 @@ ParseAirfieldDetails()
           break;
         }
       }
+
       // first hasDetails set true for rest of details
       if (hasDetails == true) {
         // Remove carriage returns
@@ -277,7 +288,9 @@ ParseAirfieldDetails()
   }
 }
 
-
+/**
+ * Opens the airfield details file and parses it
+ */
 void ReadAirfieldFile() {
   StartupStore(TEXT("ReadAirfieldFile\n"));
   XCSoarInterface::CreateProgressDialog(gettext(TEXT("Loading Airfield Details File...")));
