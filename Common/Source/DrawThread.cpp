@@ -40,6 +40,9 @@ Copyright_License {
 #include "Gauge/GaugeFLARM.hpp"
 #include "Protection.hpp"
 
+/**
+ * Main loop of the DrawThread
+ */
 void
 DrawThread::run()
 {
@@ -50,39 +53,58 @@ DrawThread::run()
 
   map.ExchangeBlackboard();
 
-  mutexRun.Lock(); // take control
-  map.DrawThreadLoop(); // first time draw
+  // take control
+  mutexRun.Lock();
+
+  // first time draw
+  map.DrawThreadLoop();
+
   bounds_dirty = map.SmartBounds(true);
   map.Idle(true);
+
   while (map.Idle(false)) {};
-  map.DrawThreadLoop(); // first time draw
-  mutexRun.Unlock(); // release control
+
+  // first time draw
+  map.DrawThreadLoop();
+
+  // release control
+  mutexRun.Unlock();
 
   do {
     if (drawTriggerEvent.wait(MIN_WAIT_TIME)) {
       map.ExchangeBlackboard();
 
-      mutexRun.Lock(); // take control
+      // take control
+      mutexRun.Lock();
 
       if (flarm != NULL) {
-	if (map.Basic().FLARM_AlarmLevel > 0) {
-	  flarm->Suppress = false;
-	}
-	flarm->TrafficPresent(map.Basic().FLARMTraffic);
-	flarm->Show(map.SettingsMap().EnableFLARMGauge);
+        if (map.Basic().FLARM_AlarmLevel > 0) {
+          flarm->Suppress = false;
+        }
+        flarm->TrafficPresent(map.Basic().FLARMTraffic);
+        flarm->Show(map.SettingsMap().EnableFLARMGauge);
         flarm->Render(map.Basic());
       }
 
       map.DrawThreadLoop();
       if (map.SmartBounds(false)) {
-        bounds_dirty = map.Idle(true); // this call is quick
+        // this call is quick
+        bounds_dirty = map.Idle(true);
       }
-      mutexRun.Unlock(); // release control
+
+      // release control
+      mutexRun.Unlock();
+
       continue;
     } else if (bounds_dirty) {
-      mutexRun.Lock(); // take control
+      // take control
+      mutexRun.Lock();
+
       bounds_dirty = map.Idle(false);
-      mutexRun.Unlock(); // release control
+
+      // release control
+      mutexRun.Unlock();
+
       continue;
     }
   } while (!closeTriggerEvent.wait(500));
