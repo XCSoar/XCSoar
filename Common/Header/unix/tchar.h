@@ -48,6 +48,7 @@ Copyright_License {
 
 typedef wchar_t TCHAR;
 #define _stprintf wsprintf
+#define _vstprintf vswprintf
 #define _sntprintf wsnprintf
 #define _ftprintf fwprintf
 #define _vftprintf vfwprintf
@@ -85,6 +86,7 @@ typedef wchar_t TCHAR;
 
 typedef char TCHAR;
 #define _stprintf sprintf
+#define _vstprintf vsprintf
 #define _sntprintf snprintf
 #define _ftprintf fprintf
 #define _vftprintf vfprintf
