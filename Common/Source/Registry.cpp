@@ -1069,6 +1069,12 @@ HRESULT SetToRegistry(const TCHAR *szRegValue, unsigned nVal)
 }
 #endif
 
+/**
+ * Reads a value from the registry file
+ * @param szRegValue Name of the value that should be read
+ * @param pPos Pointer to the output buffer
+ * @param dwSize Maximum size of the output buffer
+ */
 BOOL GetRegistryString(const TCHAR *szRegValue, TCHAR *pPos, DWORD dwSize)
 {
   HKEY    hKey;
@@ -1095,6 +1101,11 @@ BOOL GetRegistryString(const TCHAR *szRegValue, TCHAR *pPos, DWORD dwSize)
   return hRes;
 }
 
+/**
+ * Writes a value to the registry
+ * @param szRegValue Name of the value that should be written
+ * @param Pos Value that should be written
+ */
 HRESULT SetRegistryString(const TCHAR *szRegValue, const TCHAR *Pos)
 {
   HKEY    hKey;
