@@ -121,6 +121,7 @@ void ReadAssetNumber(void)
 static void
 ReadCompaqID(void)
 {
+#if defined(WIN32) && !defined(WINDOWSPC)
   PROCESS_INFORMATION pi;
 
   if(strAssetNumber[0] != '\0')
@@ -140,6 +141,7 @@ ReadCompaqID(void)
   memset(strAssetNumber, 0, 64 * sizeof(TCHAR));
   fread(&strAssetNumber, 64, 1, file);
   fclose(file);
+#endif
 }
 
 
