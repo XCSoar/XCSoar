@@ -107,9 +107,11 @@ using std::min;
 using std::max;
 #endif
 
+#ifdef WIN32
 // DLL Cache
 typedef void (CALLBACK *DLLFUNC_INPUTEVENT)(TCHAR*);
 typedef void (CALLBACK *DLLFUNC_SETHINST)(HMODULE);
+#endif /* WIN32 */
 
 
 #define MAX_DLL_CACHE 256
@@ -1415,12 +1417,15 @@ void InputEvents::eventSetup(const TCHAR *misc) {
 
 }
 
+#ifdef WIN32
 static HINSTANCE
 _loadDLL(TCHAR *name);
+#endif /* WIN32 */
 
 // DLLExecute
 // Runs the plugin of the specified filename
 void InputEvents::eventDLLExecute(const TCHAR *misc) {
+#ifdef WIN32
   // LoadLibrary(TEXT("test.dll"));
 
   StartupStore(TEXT("%s\n"), misc);
@@ -1480,8 +1485,12 @@ void InputEvents::eventDLLExecute(const TCHAR *misc) {
 #endif
     }
   }
+#else /* !WIN32 */
+  // XXX implement with dlopen()
+#endif /* !WIN32 */
 }
 
+#ifdef WIN32
 // Load a DLL (only once, keep a cache of the handle)
 //	TODO code: FreeLibrary - it would be nice to call FreeLibrary
 //      before exit on each of these
@@ -1521,6 +1530,7 @@ _loadDLL(TCHAR *name)
 
   return NULL;
 }
+#endif /* WIN32 */
 
 // AdjustForecastTemperature
 // Adjusts the maximum ground temperature used by the convection forecast
