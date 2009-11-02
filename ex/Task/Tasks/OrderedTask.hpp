@@ -3,12 +3,13 @@
 #define ORDEREDTASK_H
 
 #include "AbstractTask.hpp"
-#include "BaseTask/OrderedTaskPoint.hpp"
 #include "BaseTask/StartPoint.hpp"
 #include "BaseTask/FinishPoint.hpp"
 #include <vector>
 #include "Util/Serialisable.hpp"
 #include "GlideSolvers/MacCready.hpp"
+
+class OrderedTaskPoint;
 
 class OrderedTask:
   public AbstractTask,

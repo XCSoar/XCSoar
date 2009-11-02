@@ -6,7 +6,6 @@ class AbstractAirspace;
 class AirspacePolygon;
 class AirspaceCircle;
 #include "Util/GenericVisitor.hpp"
-#include "Airspaces.hpp"
 
 class AirspaceVisitor:
   public TreeVisitor<Airspace>,
@@ -14,9 +13,6 @@ class AirspaceVisitor:
   public Visitor<AirspaceCircle>
 {
 private:    
-
-    /** @link dependency */
-    /*#  Airspaces lnkAirspaces; */
 };
 
 #endif
