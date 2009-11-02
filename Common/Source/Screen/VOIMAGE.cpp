@@ -63,8 +63,7 @@ Copyright_License {
 
 #include "XCSoar.h"
 
-#ifndef CECORE
-#ifndef GNAV
+#if defined(WIN32) && !defined(CECORE) && !defined(GNAV)
 
 #include "Screen/VOIMAGE.h"
 
@@ -327,5 +326,4 @@ BOOL CVOResource::IsLoaded()
 	return (m_pData != NULL);
 }
 
-#endif
 #endif
