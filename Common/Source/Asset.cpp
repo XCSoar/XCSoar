@@ -48,6 +48,12 @@ Copyright_License {
 TCHAR strAssetNumber[MAX_LOADSTRING] = TEXT(""); //4G17DW31L0HY");
 TCHAR strRegKey[MAX_LOADSTRING] = TEXT("");
 
+static void
+ReadCompaqID(void);
+
+static void
+ReadUUID(void);
+
 void ReadAssetNumber(void)
 {
   TCHAR val[MAX_PATH];
@@ -112,7 +118,8 @@ void ReadAssetNumber(void)
   return;
 }
 
-void ReadCompaqID(void)
+static void
+ReadCompaqID(void)
 {
   PROCESS_INFORMATION pi;
 
@@ -136,7 +143,8 @@ void ReadCompaqID(void)
 }
 
 
-void ReadUUID(void)
+static void
+ReadUUID(void)
 {
 #if !(defined(__MINGW32__) && defined(WINDOWSPC))
   BOOL fRes;

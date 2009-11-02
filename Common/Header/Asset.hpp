@@ -44,8 +44,6 @@ extern TCHAR strAssetNumber[];
 extern TCHAR strRegKey[];
 
 void ReadAssetNumber(void);
-void ReadCompaqID(void);
-void ReadUUID(void);
 
 // model info
 
