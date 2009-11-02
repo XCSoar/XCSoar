@@ -73,11 +73,11 @@ public:
     if (Ready_Time_Check(cmp.Basic().Time, &restart)) {
       LastTime_Check = cmp.Basic().Time;
       if (CheckCondition(cmp)) {
-	if (Ready_Time_Notification(cmp.Basic().Time) && !restart) {
-	  LastTime_Notification = cmp.Basic().Time;
-	  Notify();
-	  SaveLast();
-	}
+        if (Ready_Time_Notification(cmp.Basic().Time) && !restart) {
+          LastTime_Notification = cmp.Basic().Time;
+          Notify();
+          SaveLast();
+        }
       }
       if (restart) {
         SaveLast();
