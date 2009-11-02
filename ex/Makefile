@@ -62,11 +62,11 @@ OBJS	:=\
 	src/Util/Gradient.o \
 	src/Util/Intersection.o \
 	src/Util/Printing.o \
+	src/Util/ZeroFinder.o \
 	src/GlideSolvers/GlideState.o \
 	src/GlideSolvers/GlidePolar.o \
 	src/GlideSolvers/GlideResult.o \
 	src/GlideSolvers/MacCready.o \
-	src/GlideSolvers/ZeroFinder.o \
 	src/Airspace/Airspace.o \
 	src/Airspace/AirspaceCircle.o \
 	src/Airspace/AirspacePolygon.o \
@@ -75,6 +75,7 @@ OBJS	:=\
 	src/Navigation/Aircraft.o \
 	src/Navigation/DistanceMemento.o \
 	src/Navigation/FlatBoundingBox.o \
+	src/Navigation/FlatGeoPoint.o \
 	src/Navigation/FlatRay.o \
 	src/Navigation/GeoPoint.o \
 	src/Navigation/GeoVector.o \

@@ -2,8 +2,7 @@
 #define TASKCRUISEEFFICIENCY_HPP
 
 #include "TaskMacCreadyTravelled.hpp"
-#include "GlideSolvers/ZeroFinder.hpp"
-#include <math.h>
+#include "Util/ZeroFinder.hpp"
 
 class TaskCruiseEfficiency: 
   public ZeroFinder
@@ -23,8 +22,5 @@ protected:
   const AIRCRAFT_STATE &aircraft;
   double dt;
 };
-
-
-
 
 #endif

@@ -229,7 +229,7 @@ MacCready::solve(const GLIDE_STATE &task) const
   }
 }
 
-#include "ZeroFinder.hpp"
+#include "Util/ZeroFinder.hpp"
 
 
 class MacCreadyVopt: 

@@ -6,6 +6,7 @@ struct FLAT_GEOPOINT {
   FLAT_GEOPOINT(const int x,
                 const int y):
     Longitude(x),Latitude(y) {};
+
   int Longitude;
   int Latitude;
 

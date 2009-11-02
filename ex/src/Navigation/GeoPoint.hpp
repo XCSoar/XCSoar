@@ -40,6 +40,8 @@ Copyright_License {
 #define XCSOAR_GEOPOINT_HPP
 
 struct GEOPOINT {
+  GEOPOINT():Longitude(0.0),Latitude(0.0) {}
+
   double Longitude;
   double Latitude;
 

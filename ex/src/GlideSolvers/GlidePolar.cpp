@@ -2,7 +2,7 @@
 #include "GlideState.hpp"
 #include "GlideResult.hpp"
 #include "MacCready.hpp"
-#include "ZeroFinder.hpp"
+#include "Util/ZeroFinder.hpp"
 
 GlidePolar::GlidePolar(const double _mc,
                        const double _bugs,

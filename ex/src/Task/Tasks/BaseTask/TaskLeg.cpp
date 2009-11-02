@@ -46,7 +46,7 @@ GeoVector
 TaskLeg::leg_vector_remaining(const GEOPOINT &ref) const
 {
   if (!origin()) {
-    return GeoVector(0.0, ::Bearing(ref, destination.get_reference_remaining()));
+    return GeoVector(0.0, ref.bearing(destination.get_reference_remaining()));
   }
   switch (destination.getActiveState()) {
   case OrderedTaskPoint::AFTER_ACTIVE:
@@ -72,7 +72,7 @@ GeoVector
 TaskLeg::leg_vector_travelled(const GEOPOINT &ref) const
 {
   if (!origin()) {
-    return GeoVector(0.0, ::Bearing(ref, destination.get_reference_remaining()));
+    return GeoVector(0.0, ref.bearing(destination.get_reference_remaining()));
   }
   switch (destination.getActiveState()) {
   case OrderedTaskPoint::BEFORE_ACTIVE:

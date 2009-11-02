@@ -2,7 +2,7 @@
 #define TASKOPTTARGET_HPP
 
 #include "TaskMacCreadyRemaining.hpp"
-#include "GlideSolvers/ZeroFinder.hpp"
+#include "Util/ZeroFinder.hpp"
 #include "Task/Tasks/BaseTask/StartPoint.hpp"
 #include "Task/Tasks/BaseTask/AATIsolineSegment.hpp"
 

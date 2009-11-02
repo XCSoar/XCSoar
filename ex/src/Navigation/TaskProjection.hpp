@@ -18,21 +18,10 @@
  */
 class TaskProjection {
 public:
-  TaskProjection(const GEOPOINT &ref)
-  {
-    reset(ref);
-  }
-  TaskProjection()
-  {
-    GEOPOINT zero;
-    reset(zero);
-  }
+  TaskProjection(const GEOPOINT &ref);
+  TaskProjection();
   
-  void reset(const GEOPOINT &ref) {
-    location_min = ref;
-    location_max = ref;
-    location_mid = ref;
-  }
+  void reset(const GEOPOINT &ref);
   void scan_location(const GEOPOINT &ref);
   void update_fast();
 

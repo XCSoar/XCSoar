@@ -2,7 +2,7 @@
 #define TASKGLIDEREQUIRED_HPP
 
 #include "TaskMacCreadyRemaining.hpp"
-#include "GlideSolvers/ZeroFinder.hpp"
+#include "Util/ZeroFinder.hpp"
 
 class TaskGlideRequired: 
   public ZeroFinder

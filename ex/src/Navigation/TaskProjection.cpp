@@ -6,6 +6,26 @@
 
 #define SCALE 1000.0
 
+TaskProjection::TaskProjection(const GEOPOINT &ref)
+{
+  reset(ref);
+}
+
+TaskProjection::TaskProjection()
+{
+  GEOPOINT zero;
+  reset(zero);
+}
+  
+void 
+TaskProjection::reset(const GEOPOINT &ref) 
+{
+  location_min = ref;
+  location_max = ref;
+  location_mid = ref;
+}
+
+
 void TaskProjection::scan_location(const GEOPOINT &ref) 
 {
   location_min.Longitude = std::min(ref.Longitude,
@@ -79,3 +99,4 @@ TaskProjection::project_range(const GEOPOINT &tp, const double range) const
 {
   return (unsigned)(fproject_range(tp,range)+0.5);
 }
+

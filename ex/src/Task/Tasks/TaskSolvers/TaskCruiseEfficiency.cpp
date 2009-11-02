@@ -1,4 +1,5 @@
 #include "TaskCruiseEfficiency.hpp"
+#include <math.h>
 
 TaskCruiseEfficiency::TaskCruiseEfficiency(const std::vector<OrderedTaskPoint*>& tps,
                                            const unsigned activeTaskPoint,
