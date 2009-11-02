@@ -65,53 +65,6 @@ int SCREENWIDTH=640;
 int SCREENHEIGHT=480;
 #endif
 
-#if !defined(GNAV) || defined(WINDOWSPC)
-typedef DWORD (_stdcall *GetIdleTimeProc) (void);
-GetIdleTimeProc GetIdleTime;
-#endif
-
-int MeasureCPULoad() {
-#if (!defined(GNAV) || defined(WINDOWSPC)) && !defined(__MINGW32__)
-  static bool init=false;
-  if (!init) {
-    // get the pointer to the function
-    GetIdleTime = (GetIdleTimeProc)
-      GetProcAddress(LoadLibrary(_T("coredll.dll")),
-		     _T("GetIdleTime"));
-    init=true;
-  }
-  if (!GetIdleTime) return 0;
-#endif
-
-#if defined(GNAV) && defined(__MINGW32__)
-  // JMW GetIdleTime() not defined?
-  return 100;
-#else
-  static int pi;
-  static int PercentIdle;
-  static int PercentLoad;
-  static bool start=true;
-  static DWORD dwStartTick;
-  static DWORD dwIdleSt;
-  static DWORD dwStopTick;
-  static DWORD dwIdleEd;
-  if (start) {
-    dwStartTick = GetTickCount();
-    dwIdleSt = GetIdleTime();
-  }
-  if (!start) {
-    dwStopTick = GetTickCount();
-    dwIdleEd = GetIdleTime();
-    pi = ((100 * (dwIdleEd - dwIdleSt))/(dwStopTick - dwStartTick));
-    PercentIdle = (PercentIdle+pi)/2;
-  }
-  start = !start;
-  PercentLoad = 100-PercentIdle;
-  return PercentLoad;
-#endif
-}
-
-
 long CheckFreeRam(void) {
   MEMORYSTATUS    memInfo;
   // Program memory

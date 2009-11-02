@@ -51,7 +51,6 @@ bool SetModelName(DWORD Temp);
 #endif
 
 void XCSoarGetOpts(LPTSTR CommandLine);
-int MeasureCPULoad();
 long CheckFreeRam(void);
 void MemCheckPoint();
 void MemLeakCheck();
