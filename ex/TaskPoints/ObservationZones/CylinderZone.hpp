@@ -38,8 +38,8 @@
 #ifndef CYLINDERZONE_HPP
 #define CYLINDERZONE_HPP
 
-#include "Scoring/ObservationZone.hpp"
-#include "Scoring/ObservationZonePoint.hpp"
+#include "BaseTask/Scoring/ObservationZone.hpp"
+#include "BaseTask/Scoring/ObservationZonePoint.hpp"
 
 
 class CylinderZone : public ObservationZonePoint {

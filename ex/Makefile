@@ -97,7 +97,7 @@ OBJS	:=\
 	BaseTask/TaskPoint.o \
 	BaseTask/ConvexHull/GrahamScan.o \
 	BaseTask/ConvexHull/PolygonInterior.o \
-	Scoring/ObservationZone.o \
+	BaseTask/Scoring/ObservationZone.o \
 	TaskPoints/FAICylinderASTPoint.o \
 	TaskPoints/FAISectorASTPoint.o \
 	TaskPoints/FAISectorFinishPoint.o \
