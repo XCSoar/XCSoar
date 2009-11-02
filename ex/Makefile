@@ -53,7 +53,8 @@ CXXFLAGS += -pedantic
 # -Wdisabled-optimization
 # -Wunused -Wshadow -Wunreachable-code
 
-CXXFLAGS += -DDO_PRINT
+CXXFLAGS += -DDO_PRINT -DINSTRUMENT_TASK
+# -DINSTRUMENT_TASK
 
 ####### sources
 

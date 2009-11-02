@@ -64,7 +64,8 @@ struct GEOPOINT {
     res.Latitude -= other.Latitude;
     return res;
   };
-
+  double distance(const GEOPOINT &other) const;
+  double bearing(const GEOPOINT &other) const;
 };
 
 #endif

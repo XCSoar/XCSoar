@@ -1,5 +1,5 @@
 #include "AirspaceCircle.hpp"
-#include "Math/Earth.hpp"
+#include "Navigation/GeoVector.hpp"
 
 AirspaceCircle::AirspaceCircle(const GEOPOINT &loc, 
                                const double _radius):
@@ -12,15 +12,11 @@ AirspaceCircle::AirspaceCircle(const GEOPOINT &loc,
 const FlatBoundingBox 
 AirspaceCircle::get_bounding_box(const TaskProjection& task_projection) const
 {
-  GEOPOINT ll;
-  GEOPOINT lr;
-  GEOPOINT ul;
-  GEOPOINT ur;
-
-  FindLatitudeLongitude(center, 225, radius*1.42, &ll);
-  FindLatitudeLongitude(center, 135, radius*1.42, &lr);
-  FindLatitudeLongitude(center, 45, radius*1.42, &ur);
-  FindLatitudeLongitude(center, 315, radius*1.42, &ul);
+  const double eradius = radius*1.42;
+  const GEOPOINT ll = GeoVector(eradius,225).end_point(center);
+  const GEOPOINT lr = GeoVector(eradius,135).end_point(center);
+  const GEOPOINT ur = GeoVector(eradius,45).end_point(center);
+  const GEOPOINT ul = GeoVector(eradius,315).end_point(center);
 
   FLAT_GEOPOINT fll = task_projection.project(ll);
   FLAT_GEOPOINT flr = task_projection.project(lr);
@@ -42,7 +38,7 @@ AirspaceCircle::get_bounding_box(const TaskProjection& task_projection) const
 bool 
 AirspaceCircle::inside(const AIRCRAFT_STATE &loc) const
 {
-  return (::Distance(loc.Location,center)<=radius);
+  return (loc.Location.distance(center)<=radius);
 }
 
 bool 

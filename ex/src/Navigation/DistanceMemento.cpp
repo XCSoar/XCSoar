@@ -1,5 +1,4 @@
 #include "DistanceMemento.hpp"
-#include "Math/Earth.hpp"
 
 extern unsigned count_distbearing;
 
@@ -11,7 +10,7 @@ DistanceMemento::Distance(const GEOPOINT& _origin,
     origin = _origin;
     destination = _destination;
     count_distbearing++;
-    value = ::Distance(origin,destination);
+    value = origin.distance(destination);
   };
   return value;
 }

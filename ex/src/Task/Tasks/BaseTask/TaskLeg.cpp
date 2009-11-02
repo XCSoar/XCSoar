@@ -113,16 +113,16 @@ double TaskLeg::leg_distance_scored(const GEOPOINT &ref) const
     // this leg totally included
     return 
       std::max(0.0,
-               ::Distance(origin()->get_reference_scored(), 
-                          destination.get_reference_scored())
+               origin()->get_reference_scored().distance(
+                 destination.get_reference_scored())
                -origin()->score_adjustment()-destination.score_adjustment());
     break;
   case OrderedTaskPoint::CURRENT_ACTIVE:
     // this leg partially included
     if (destination.has_entered()) {
       std::max(0.0,
-               ::Distance(origin()->get_reference_scored(), 
-                          destination.get_reference_scored())
+               origin()->get_reference_scored().distance( 
+                 destination.get_reference_scored())
                -origin()->score_adjustment()-destination.score_adjustment());
     } else {
       return 
