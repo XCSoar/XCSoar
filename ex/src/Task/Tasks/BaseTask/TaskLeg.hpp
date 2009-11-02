@@ -3,7 +3,6 @@
 #ifndef TASKLEG_H
 #define TASKLEG_H
 
-#include "GeoPoint.hpp"
 #include "Navigation/GeoVector.hpp"
 #include "Navigation/DistanceMemento.hpp"
 #include "Navigation/GeoVectorMemento.hpp"

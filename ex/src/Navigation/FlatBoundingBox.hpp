@@ -1,10 +1,10 @@
 #ifndef FLATBOUNDINGBOX_HPP
 #define FLATBOUNDINGBOX_HPP
-#include "Navigation/FlatGeoPoint.hpp"
-#include "Navigation/FlatRay.hpp"
-#include "Navigation/TaskProjection.hpp"
-#include <algorithm>
+#include "FlatGeoPoint.hpp"
+#include "FlatRay.hpp"
+#include "TaskProjection.hpp"
 #include "BoundingBoxDistance.hpp"
+#include <algorithm>
 
 class FlatBoundingBox {
 public:

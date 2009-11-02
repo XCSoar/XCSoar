@@ -112,7 +112,7 @@ std::ostream& operator<< (std::ostream& f,
   return f;
 }
 
-#include "Airspace/FlatBoundingBox.hpp"
+#include "Navigation/FlatBoundingBox.hpp"
 
 /*
 void 

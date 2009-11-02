@@ -20,7 +20,7 @@ endif
 OUTPUTS 	:= test
 
 SRC := src
-INCLUDES := -I$(SRC) -I../xcsoar/Common/Header
+INCLUDES := -I$(SRC)
 
 PROFILE := 
 OPTIMIZE := -g -O2
@@ -59,6 +59,7 @@ CXXFLAGS += -DDO_PRINT
 
 OBJS	:=\
 	src/Util.o \
+	src/Util/Gradient.o \
 	src/Util/Intersection.o \
 	src/Util/Printing.o \
 	src/GlideSolvers/GlideState.o \
@@ -66,7 +67,6 @@ OBJS	:=\
 	src/GlideSolvers/GlideResult.o \
 	src/GlideSolvers/MacCready.o \
 	src/GlideSolvers/ZeroFinder.o \
-	src/Airspace/FlatBoundingBox.o \
 	src/Airspace/Airspace.o \
 	src/Airspace/AirspaceCircle.o \
 	src/Airspace/AirspacePolygon.o \
@@ -74,7 +74,9 @@ OBJS	:=\
 	src/Airspace/AirspaceVisitor.o \
 	src/Navigation/Aircraft.o \
 	src/Navigation/DistanceMemento.o \
+	src/Navigation/FlatBoundingBox.o \
 	src/Navigation/FlatRay.o \
+	src/Navigation/GeoPoint.o \
 	src/Navigation/GeoVector.o \
 	src/Navigation/GeoVectorMemento.o \
 	src/Navigation/ReferencePoint.o \
@@ -130,10 +132,9 @@ OBJS	:=\
 	src/Waypoint/Waypoint.o \
 	src/Waypoint/Waypoints.o \
 	src/Waypoint/WaypointVisitor.o \
-	\
-	../xcsoar/Common/Source/Math/Geometry.o \
-	../xcsoar/Common/Source/Math/FastMath.o \
-	../xcsoar/Common/Source/Math/Earth.o 
+	src/Math/Geometry.o \
+	src/Math/FastMath.o \
+	src/Math/Earth.o 
 
 Test/test: $(OBJS) Test/test.cpp
 	g++ $(CXXFLAGS) $(INCLUDES) $(OBJS) Test/test.cpp -o Test/test 

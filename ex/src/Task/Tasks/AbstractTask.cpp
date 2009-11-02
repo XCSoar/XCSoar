@@ -5,7 +5,7 @@
 #include "BaseTask/TaskPoint.hpp"
 #include "TaskSolvers/TaskBestMc.hpp"
 #include "TaskSolvers/TaskGlideRequired.hpp"
-#include "Util.h"
+#include "Util/Gradient.hpp"
 
 bool 
 AbstractTask::update_idle(const AIRCRAFT_STATE &state)

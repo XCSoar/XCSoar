@@ -2,7 +2,7 @@
 #define ABSTRACTAIRSPACE_HPP
 
 #include "Util/GenericVisitor.hpp"
-#include "FlatBoundingBox.hpp"
+#include "Navigation/FlatBoundingBox.hpp"
 #include "Navigation/Aircraft.hpp"
 #include "Navigation/GeoVector.hpp"
 

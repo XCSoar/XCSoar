@@ -86,8 +86,7 @@ AATPoint::check_target_inside(const AIRCRAFT_STATE& state)
       return false;
     } else {
       const double p = std::max(0.0,std::min(1.0,d_in_front/d_to_max));
-      TargetLocation = ::InterpolateLocation(state.Location, 
-                                             getMaxLocation(), p); 
+      TargetLocation = state.Location.interpolate(getMaxLocation(), p); 
       return true;
     }
   } else {
@@ -136,8 +135,7 @@ void
 AATPoint::set_range(const double p)
 {
   if (getActiveState() != BEFORE_ACTIVE) {
-    TargetLocation = ::InterpolateLocation(getMinLocation(), 
-                                           getMaxLocation(), p);
+    TargetLocation = getMinLocation().interpolate(getMaxLocation(),p);
   }
 }
 
