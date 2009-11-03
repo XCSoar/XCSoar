@@ -336,17 +336,16 @@ void test_flight(TaskManager &task_manager,
         state.Speed = stat.solution_remaining.VOpt;
         sinkrate = glide_polar.SinkRate(state.Speed);
         bearing = state.Location.bearing(w[i+1])+small_rand();
-        if ((task_manager.get_stats().total.solution_remaining.DistanceToFinal<= state.Speed)
-            && (i>1)) {
-          printf("fg\n");
-          acstate = FinalGlide;
-        } 
         break;
       case Climb:
         state.Speed = 25.0;
         bearing += 20+small_rand();
         sinkrate = -glide_polar.get_mc();
-        if (state.Altitude>=1500) {
+        if ((task_manager.get_stats().total.solution_remaining.DistanceToFinal<= state.Speed)
+            && (i>1)) {
+          printf("fg\n");
+          acstate = FinalGlide;
+        } else if (state.Altitude>=1500) {
           acstate = Cruise;
           printf("cruise\n");
         }
