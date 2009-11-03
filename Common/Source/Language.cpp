@@ -36,7 +36,6 @@ Copyright_License {
 
 */
 
-
 #include "Language.hpp"
 #include "LocalPath.hpp"
 #include "UtilsText.hpp"
@@ -44,23 +43,24 @@ Copyright_License {
 #include "Registry.hpp"
 #include "Sizes.h"
 
+/**
+ * A struct that saves a translation (key + text)
+ */
 typedef struct {
+  /** The key describing the term in english */
 	TCHAR *key;
+	/** The translated term */
 	TCHAR *text;
 } GetTextSTRUCT;
 
+/** The array that holds all the translations */
 static GetTextSTRUCT GetTextData[MAXSTATUSMESSAGECACHE];
+/** The (real) array size of GetTextData */
 static int GetTextData_Size = 0;
-
 
 #ifdef DEBUG_TRANSLATIONS
 #include <map>
-/*
 
-  WriteMissingTranslations - write all missing translations found
-  during runtime to a lanuage file in data dir
-
-*/
 template<class _Ty>
 struct lessTCHAR: public std::binary_function<_Ty, _Ty, bool>
 {	// functor for operator<
@@ -72,6 +72,10 @@ struct lessTCHAR: public std::binary_function<_Ty, _Ty, bool>
 
 std::map<TCHAR*, TCHAR*, lessTCHAR<TCHAR*> > unusedTranslations;
 
+/**
+ * Writes all missing translations found during runtime to a language file
+ * in the data dir
+ */
 void WriteMissingTranslations() {
   std::map<TCHAR*, TCHAR*, lessTCHAR<TCHAR*> >::iterator
     s=unusedTranslations.begin(),e=unusedTranslations.end();
@@ -104,82 +108,92 @@ void WriteMissingTranslations() {
 
 #endif
 
-
-/*
-
-  gettext - look up a string of text for the current language
-
-  Currently very simple. Looks up the current string and current language
-  to find the appropriate string response. On failure will return the string itself.
-
-  NOTES CACHING:
-  	- Could load the whole file or part
-	- qsort/bsearch good idea
-	- cache misses in data structure for future use
-
-   TODO enhancement: Fast search of text strings
-
-*/
-
+/**
+ * Looks up a string of text from the current language file
+ *
+ * Currently very simple. Looks up the current string and current language
+ * to find the appropriate string response. On failure will return
+ * the string itself.
+ *
+ * NOTES CACHING:
+ * - Could load the whole file or part
+ * - qsort/bsearch good idea
+ * - cache misses in data structure for future use
+ * @param text The text to search for
+ * @return The translation if found, otherwise the text itself
+ */
 const TCHAR* gettext(const TCHAR* text) {
+  // TODO enhancement: Fast search of text strings
+
   int i;
+
   // return if nothing to do
   if (_tcscmp(text, _T("")) == 0) return (const TCHAR*)text;
 
   //find a translation
   for (i=0; i<GetTextData_Size; i++) {
-    if (!text || !GetTextData[i].key) continue;
+    // skip if key is empty
+    if (!text || !GetTextData[i].key)
+      continue;
+    // return translation if found
     if (_tcscmp(text, GetTextData[i].key) == 0)
       return GetTextData[i].text;
   }
 
-  // return untranslated text if no translation is found.
-  // Set a breakpoint here to find untranslated strings
-
 #ifdef DEBUG_TRANSLATIONS
+  // Log untranslated strings to unusedTranslations[]
   TCHAR *tmp = _tcsdup(text);
   unusedTranslations[tmp] = tmp;
 #endif
+
+  // return untranslated text if no translation is found.
   return (const TCHAR*)text;
 }
 
+/**
+ * Reads the selected LanguageFile into the cache
+ */
 void ReadLanguageFile() {
   StartupStore(TEXT("Loading language file\n"));
 
   TCHAR szFile1[MAX_PATH] = TEXT("\0");
   FILE *fp=NULL;
 
-  // Open file from registry
+  // Read the language filename from the registry
   GetRegistryString(szRegistryLanguageFile, szFile1, MAX_PATH);
   ExpandLocalPath(szFile1);
 
+  // Reset filename in registry in case language
+  // loading crashes the application
   SetRegistryString(szRegistryLanguageFile, TEXT("\0"));
 
+  // If the language file is not set use the default one
   if (_tcslen(szFile1)==0) {
-    // JMW set default language file if none present
     _tcscpy(szFile1,TEXT("default.xcl"));
   }
 
+  // Open the language file
   fp  = _tfopen(szFile1, TEXT("rt"));
 
+  // Return if file error
   if (fp == NULL)
     return;
 
   // TODO code: Safer sizes, strings etc - use C++ (can scanf restrict length?)
-  TCHAR buffer[2049];	// key from scanf
-  TCHAR key[2049];	// key from scanf
-  TCHAR value[2049];	// value from scanf
-  int found;            // Entries found from scanf
+  TCHAR buffer[2049]; // key from scanf
+  TCHAR key[2049];    // key from scanf
+  TCHAR value[2049];  // value from scanf
+  int found;          // Entries found from scanf
 
-  /* Read from the file */
-  while (
-  	 (GetTextData_Size < MAXSTATUSMESSAGECACHE)
-	 && _fgetts(buffer, 2048, fp)
-	 && ((found = _stscanf(buffer, TEXT("%[^#=]=%[^\r\n][\r\n]"), key, value)) != EOF)
-         ) {
+  // Read from the file
+  while ((GetTextData_Size < MAXSTATUSMESSAGECACHE)
+      && _fgetts(buffer, 2048, fp)
+      && ((found = _stscanf(buffer, TEXT("%[^#=]=%[^\r\n][\r\n]"), key, value)) != EOF)) {
+
     // Check valid line?
     if ((found != 2) || key[0] == 0 || value[0] == 0) continue;
 
+    // Save parsed translation to the cache
     GetTextData[GetTextData_Size].key = StringMallocParse(key);
     GetTextData[GetTextData_Size].text = StringMallocParse(value);
 
@@ -187,7 +201,7 @@ void ReadLanguageFile() {
     GetTextData_Size++;
   }
 
-  // file was OK, so save registry
+  // file was OK, so save filename to registry again
   ContractLocalPath(szFile1);
   SetRegistryString(szRegistryLanguageFile, szFile1);
 
