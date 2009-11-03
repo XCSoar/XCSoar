@@ -128,6 +128,14 @@ void ScreenClosestPoint(const POINT &p1, const POINT &p2,
   }
 }
 
+/**
+ * Shifts and rotates the given polygon
+ * @param poly Points specifying the polygon
+ * @param n Number of points of the polygon
+ * @param xs Pixels to shift in the x-direction
+ * @param ys Pixels to shift in the y-direction
+ * @param angle Angle of rotation
+ */
 void PolygonRotateShift(POINT* poly, const int n, const int xs, const int ys,
 			const double angle) {
   static double lastangle = -1;
@@ -135,10 +143,12 @@ void PolygonRotateShift(POINT* poly, const int n, const int xs, const int ys,
 
   if(angle != lastangle) {
     lastangle = angle;
+    // TODO TB: use ifastsine() here or does DEG_TO_INT take to long?
     int deg = DEG_TO_INT(AngleLimit360(angle));
     cost = ICOSTABLE[deg]*InfoBoxLayout::scale;
     sint = ISINETABLE[deg]*InfoBoxLayout::scale;
   }
+
   const int xxs = xs*1024+512;
   const int yys = ys*1024+512;
   POINT *p = poly;
@@ -243,7 +253,6 @@ bool CheckRectOverlap(RECT rc1, RECT rc2) {
   if(rc1.bottom <= rc2.top) return(false);
   return(true);
 }
-
 
 void LatLon2Flat(const GEOPOINT &location, POINT &screen)
 {
