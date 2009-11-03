@@ -92,10 +92,11 @@ MacCready::solve_cruise(const GlideState &task) const
     distance = task.drifted_distance(t_cl1);
   }
 
-  const double t_cr = distance/Vn;
+  const double t = distance/Vn;
+  const double t_cr = t/(1+rho);
   const double t_cl = t_cr*rho + (task.AltitudeDifference<0? t_cl1:0);
 
-  result.TimeElapsed = t_cr+t_cl;
+  result.TimeElapsed = t;
   result.HeightClimb = t_cl*mc;
   result.HeightGlide = t_cr*S-result.HeightClimb;
   result.AltitudeDifference -= result.HeightClimb+result.HeightGlide;

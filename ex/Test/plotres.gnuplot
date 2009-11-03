@@ -18,7 +18,7 @@ plot \
      'results/res-max.txt' using 1:2 with linespoints ls 2 title "max", \
      'results/res-rem.txt' using 1:2 with linespoints ls 5 title "remaining", \
      'results/res-abort-task.txt' using 1:2 with linespoints ls 6 title "abort", \
-     'results/res-sample.txt' using 1:2 with lines ls 1 title "sample", \
+     'results/res-sample.txt' using 2:3 with lines ls 1 title "sample", \
      'results/res-isolines.txt' using 1:2 with lines ls 4 title "isolines"
 pause -1
 
@@ -26,6 +26,12 @@ set size noratio
 set autoscale
 unset xrange
 unset yrange
+
+set title "Stats - Altitude"
+plot \
+     'results/res-sample.txt' using 1:4 with lines title "ac alt"
+pause -1
+
 
 set title "Stats - Task Distance"
 plot \

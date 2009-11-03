@@ -7,7 +7,8 @@ DistanceStat::DistanceStat():
   distance(0.0),
   distance_last(0.0),
   speed(0.0),
-  lpf(30.0)
+  counter(0),
+  lpf(60.0)
 {
 
 }
@@ -42,13 +43,16 @@ void DistanceTravelledStat::calc_speed(const ElementStat* es)
 void DistanceStat::calc_incremental_speed(const double dt)
 {  
   if (dt>0) {
-    double d = lpf.update(distance);
-    double v = (distance_last-d)/dt;    
-    distance_last = d;
-    speed_incremental = v;
+    if (counter++ % 5 == 0) {
+      double d = lpf.update(distance);
+      double v = (distance_last-d)/(5*dt);
+      distance_last = d;
+      speed_incremental = v;
+    }
   } else {
     distance_last = lpf.reset(distance);
     speed_incremental = speed;
+    counter=0;
   }
 }
 
@@ -56,13 +60,16 @@ void DistanceTravelledStat::calc_incremental_speed(const double dt)
 {
   // negative of normal
   if (dt>0) {
-    double d = lpf.update(distance);
-    double v = (d-distance_last)/dt;    
-    distance_last = d;
-    speed_incremental = v;
+    if (counter++ % 5 == 0) {
+      double d = lpf.update(distance);
+      double v = (d-distance_last)/(5*dt);
+      distance_last = d;
+      speed_incremental = v;
+    }
   } else {
     distance_last = lpf.reset(distance);
     speed_incremental = speed;
+    counter=0;
   }
 }
 

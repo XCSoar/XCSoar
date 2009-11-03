@@ -17,6 +17,7 @@
 #include "Task/Tasks/TaskPoints/FAISectorASTPoint.hpp"
 #include "Task/Tasks/TaskPoints/FAICylinderASTPoint.hpp"
 #include "Task/Tasks/TaskPoints/CylinderAATPoint.hpp"
+#include "Util/Filter.hpp"
 
 #ifdef DO_PRINT
 #include <fstream>
@@ -56,8 +57,10 @@ void distance_counts() {
 #endif
 }
 
+Filter heading_filt(8.0);
+
 double small_rand() {
-  return -5.0+rand()*10.0/RAND_MAX;
+  return heading_filt.update(-40.0+rand()*80.0/RAND_MAX);
 }
 
 
@@ -252,9 +255,10 @@ void scan_airspaces(const AIRCRAFT_STATE state,
 
 void test_flight(TaskManager &task_manager,
                  Airspaces &airspaces,
+                 GlidePolar &glide_polar,
                  int test_num) 
 {
-#define  num_wp 5
+#define  num_wp 6
   GEOPOINT w[num_wp];
   w[0].Longitude = -0.025; 
   w[0].Latitude = -0.125; 
@@ -264,8 +268,10 @@ void test_flight(TaskManager &task_manager,
   w[2].Latitude = 1.05; 
   w[3].Longitude = 0.75; 
   w[3].Latitude = 0.5; 
-  w[4].Longitude = 0.9; 
-  w[4].Latitude = 0.1; 
+  w[4].Longitude = 0.95; 
+  w[4].Latitude = 0; 
+  w[5].Longitude = -0.025; 
+  w[5].Latitude = 0.025; 
 
   AIRCRAFT_STATE state, state_last;
   state.Location = w[0];
@@ -286,25 +292,64 @@ void test_flight(TaskManager &task_manager,
   unsigned counter=0;
   TaskVisitorPrint tv;
 
+  enum AcState {
+    Climb = 0,
+    Cruise,
+    FinalGlide
+  };
+  
+  AcState acstate = Cruise;
+  double bearing = 0;
+  state.Speed = 16.0;
+
   for (int i=0; i<num_wp-1; i++) {
-    if (i==num_wp-2) {
-      task_manager.abort();
-#ifdef DO_PRINT
-      printf("- mode abort\n");
-#endif
-    } 
-//    task_manager.Accept(tv);
 
     if ((test_num==1) && (n_samples>500)) {
       return;
     }
     wait_prompt(state.Time);
 
-    while (w[i+1].distance(state.Location)>100.0) {
+    while (w[i+1].distance(state.Location)>state.Speed) {
 
-      state.Speed = 19.0;
-      double bearing = state.Location.bearing(w[i+1])+small_rand();
+// get_stats();
+      // remaining
+      const ElementStat stat = task_manager.get_stats().current_leg;
+      double sinkrate = 0.0;
+
+      switch (acstate) {
+      case Cruise:
+        state.Speed = stat.solution_remaining.VOpt;
+        sinkrate = glide_polar.SinkRate(state.Speed);        
+        bearing = state.Location.bearing(w[i+1])+small_rand();
+        if ((task_manager.get_stats().total.solution_remaining.DistanceToFinal<= state.Speed)
+            && (i>1)) {
+          printf("fg\n");
+          acstate = FinalGlide;
+        } else {
+          if (state.Altitude<=300) {
+            printf("climb\n");
+            acstate = Climb;
+          }
+        }
+        break;
+      case FinalGlide:
+        state.Speed = stat.solution_remaining.VOpt;
+        sinkrate = glide_polar.SinkRate(state.Speed);
+        bearing = state.Location.bearing(w[i+1])+small_rand();
+        break;
+      case Climb:
+        state.Speed = 25.0;
+        bearing += 20+small_rand();
+        sinkrate = -glide_polar.get_mc();
+        if (state.Altitude>=1500) {
+          acstate = Cruise;
+          printf("cruise\n");
+        }
+        break;
+      };
+
       state.Location = GeoVector(state.Speed,bearing).end_point(state.Location);
+      state.Altitude -= sinkrate;
       state.Time += 1.0;
 
       task_manager.update(state, state_last);
@@ -319,14 +364,27 @@ void test_flight(TaskManager &task_manager,
 //        task_manager.Accept(tv);
 #ifdef DO_PRINT
         task_manager.print(state);
-        f4 <<  state.Location.Longitude << " " 
-           <<  state.Location.Latitude << "\n";
+        f4 << state.Time << " " 
+           <<  state.Location.Longitude << " " 
+           <<  state.Location.Latitude << " "
+           <<  state.Altitude << "\n";
         f4.flush();
 #endif
       }
       n_samples++;
       state_last = state;
     }    
+
+/*
+    if (i==num_wp-2) {
+      task_manager.abort();
+#ifdef DO_PRINT
+      printf("- mode abort\n");
+#endif
+    } 
+//    task_manager.Accept(tv);
+*/
+
   }
   distance_counts();
 }
@@ -412,7 +470,7 @@ int test_newtask(int test_num) {
     
   setup_task(task_manager, task_projection);
     
-  test_flight(task_manager, airspaces, test_num);
+  test_flight(task_manager, airspaces, glide_polar, test_num);
 
 //  task_manager.remove(2);
 //  task_manager.scan_distance(location);

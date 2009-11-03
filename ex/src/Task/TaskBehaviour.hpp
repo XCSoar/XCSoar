@@ -9,7 +9,7 @@ public:
     optimise_targets_bearing(true),
     auto_mc(true),
     calc_cruise_efficiency(true),
-    aat_min_time(3600*7.0)
+    aat_min_time(3600*4.9)
     {}
 
   bool optimise_targets_range;

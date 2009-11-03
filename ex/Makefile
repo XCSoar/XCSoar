@@ -25,7 +25,7 @@ INCLUDES := -I$(SRC)
 PROFILE := 
 # --coverage
 
-OPTIMIZE := -g -O2
+OPTIMIZE := -g 
 
 CPPFLAGS := $(INCLUDES) 
 CXXFLAGS	:=$(OPTIMIZE) -fno-exceptions $(PROFILE)

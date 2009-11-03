@@ -23,7 +23,7 @@ public:
     task_behaviour(tb),
     glide_polar(gp),
     mc_lpf(10.0),
-    ce_lpf(10.0)
+    ce_lpf(60.0)
   {};
 
     unsigned getActiveTaskPointIndex();

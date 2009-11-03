@@ -41,6 +41,7 @@ protected:
   double distance_last;
   double speed;
   double speed_incremental;
+  int counter;
   Filter lpf;
 };
 
