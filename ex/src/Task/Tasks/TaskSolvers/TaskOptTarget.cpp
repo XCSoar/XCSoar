@@ -1,5 +1,6 @@
 #include "TaskOptTarget.hpp"
 #include <math.h>
+#include "Util/Tolerances.hpp"
 
 TaskOptTarget::TaskOptTarget(const std::vector<OrderedTaskPoint*>& tps,
                              const unsigned activeTaskPoint,
@@ -7,7 +8,7 @@ TaskOptTarget::TaskOptTarget(const std::vector<OrderedTaskPoint*>& tps,
                              const GlidePolar &_gp,
                              AATPoint &_tp_current,
                              StartPoint *_ts):
-  ZeroFinder(0.02,0.98,0.01),
+  ZeroFinder(0.02,0.98,TOLERANCE_OPT_TARGET),
   tm(tps,activeTaskPoint,_gp),
   aircraft(_aircraft),
   tp_current(_tp_current),

@@ -1,5 +1,6 @@
 #include "TaskMinTarget.hpp"
 #include <math.h>
+#include "Util/Tolerances.hpp"
 
 
 TaskMinTarget::TaskMinTarget(const std::vector<OrderedTaskPoint*>& tps,
@@ -8,7 +9,7 @@ TaskMinTarget::TaskMinTarget(const std::vector<OrderedTaskPoint*>& tps,
                              const GlidePolar &_gp,
                              const double _t_remaining,
                              StartPoint *_ts):
-  ZeroFinder(0.0,1.0,0.002),
+  ZeroFinder(0.0,1.0, TOLERANCE_MIN_TARGET),
   tm(tps,activeTaskPoint,_gp),
   aircraft(_aircraft),
   t_remaining(_t_remaining),

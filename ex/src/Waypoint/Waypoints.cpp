@@ -3,10 +3,6 @@
 #include "Navigation/TaskProjection.hpp"
 #include <vector>
 
-#ifdef DO_PRINT
-#include <fstream>
-#endif
-
 #ifdef INSTRUMENT_TASK
 unsigned n_queries = 0;
 unsigned count_intersections = 0;
@@ -20,10 +16,6 @@ Waypoints::Waypoints(TaskProjection& _task_projection):
 void
 Waypoints::optimise()
 {
-#ifdef DO_PRINT
-  std::ofstream fin("results/res-wp-in.txt");
-#endif
-
   task_projection.update_fast();
 
   while (!tmp_wps.empty()) {
@@ -31,9 +23,6 @@ Waypoints::optimise()
     w.FlatLocation = task_projection.project(w.Location);
     waypoint_tree.insert(w);
     tmp_wps.pop_front();
-#ifdef DO_PRINT
-    fin << w;
-#endif
   }
 
   waypoint_tree.optimize();

@@ -1,11 +1,12 @@
 #include "TaskCruiseEfficiency.hpp"
 #include <math.h>
+#include "Util/Tolerances.hpp"
 
 TaskCruiseEfficiency::TaskCruiseEfficiency(const std::vector<OrderedTaskPoint*>& tps,
                                            const unsigned activeTaskPoint,
                                            const AIRCRAFT_STATE &_aircraft,
                                            const GlidePolar &gp):
-  ZeroFinder(0.1,2.0,0.01),
+  ZeroFinder(0.1,2.0,TOLERANCE_CRUISE_EFFICIENCY),
   tm(tps,activeTaskPoint,gp),
   aircraft(_aircraft) 
 {

@@ -200,13 +200,16 @@ MacCready::solve(const GlideState &task) const
 {
   if (task.Vector.Distance==0) {
     return solve_vertical(task);
-  } 
-  if (glide_polar.get_mc()==0) {
+  } else if (glide_polar.get_mc()==0) {
+    // whole task must be glide
     return optimise_glide(task);
-  }
+  } else if (task.AltitudeDifference<=0) {
+    // whole task climb-cruise
+    return solve_cruise(task);
+  } else {
+    // task partial climb-cruise, partial glide
 
-  if (task.AltitudeDifference>0) {
-    // check first if can final glide
+    // calc first final glide part
     GlideResult result_fg = optimise_glide(task);
     if (result_fg.Solution == GlideResult::RESULT_OK) {
       // whole task final glided
@@ -224,13 +227,11 @@ MacCready::solve(const GlideState &task) const
     result_cc.add(result_fg);
     
     return result_cc;
-  } else {
-    return solve_cruise(task);
   }
 }
 
 #include "Util/ZeroFinder.hpp"
-
+#include "Util/Tolerances.hpp"
 
 class MacCreadyVopt: 
   public ZeroFinder
@@ -238,7 +239,7 @@ class MacCreadyVopt:
 public:
   MacCreadyVopt(const GlideState &_task,
                 const MacCready &_mac):
-    ZeroFinder(15.0,75.0,0.01),
+    ZeroFinder(15.0,75.0, TOLERANCE_MC_OPT_GLIDE),
     task(_task),
     mac(_mac),
     mc(_mac.get_mc())

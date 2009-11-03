@@ -22,8 +22,9 @@ OUTPUTS 	:= test
 SRC := src
 INCLUDES := -I$(SRC)
 
-PROFILE := 
-OPTIMIZE := -g -O2
+PROFILE := --coverage
+
+OPTIMIZE := -g 
 
 CPPFLAGS := $(INCLUDES) 
 CXXFLAGS	:=$(OPTIMIZE) -fno-exceptions $(PROFILE)
@@ -194,7 +195,14 @@ cxx-flags	=$(DEPFLAGS) $(CXXFLAGS) $(CPPFLAGS) $(CPPFLAGS_$(dirtarget)) $(TARGET
 
 
 clean: cleani FORCE
-	find ./ $(IGNORE) \( -name '*.[oa]' -o -name '*.rsc' -o -name '.*.d' -o -name '*.*~' \) \
+	find ./ $(IGNORE) \( -name '*.[oa]' -o -name '*.rsc' \
+		-o -name '.*.d' \
+		-o -name '*.bb' \
+		-o -name '*.bbg' \
+		-o -name '*.gcda' \
+		-o -name '*.gcno' \
+		-o -name '*.gcov' \
+		-o -name '*.*~' \) \
 	-type f -print | xargs -r $(RM)
 	$(RM) $(TARGETS) gprof.out 
 	$(RM) $(OBJS)

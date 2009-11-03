@@ -35,6 +35,8 @@ public:
   GlideResult solve_sink(const GlideState &task,
                           const double S) const;
 
+  bool possible_glide(const GlideState &task) const;
+
 private:
   void solve();
   double mc;

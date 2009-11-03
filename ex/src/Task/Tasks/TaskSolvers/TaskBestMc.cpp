@@ -1,5 +1,6 @@
 #include "TaskBestMc.hpp"
 #include <math.h>
+#include "Util/Tolerances.hpp"
 
 
 TaskBestMc::TaskBestMc(const std::vector<OrderedTaskPoint*>& tps,
@@ -7,7 +8,7 @@ TaskBestMc::TaskBestMc(const std::vector<OrderedTaskPoint*>& tps,
                        const AIRCRAFT_STATE &_aircraft,
                        const GlidePolar &_gp,
                        const double _mc_min):
-  ZeroFinder(_mc_min,10.0,0.001),
+  ZeroFinder(_mc_min,10.0, TOLERANCE_BEST_MC),
   tm(tps,activeTaskPoint,_gp),
   aircraft(_aircraft) 
 {

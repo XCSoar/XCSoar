@@ -3,6 +3,7 @@
 #include "GlideResult.hpp"
 #include "MacCready.hpp"
 #include "Util/ZeroFinder.hpp"
+#include "Util/Tolerances.hpp"
 
 GlidePolar::GlidePolar(const double _mc,
                        const double _bugs,
@@ -41,7 +42,7 @@ class GlidePolarVopt:
 {
 public:
   GlidePolarVopt(const GlidePolar &_polar):
-    ZeroFinder(15.0,75.0,0.01),
+    ZeroFinder(15.0, 75.0, TOLERANCE_POLAR_BESTLD),
     polar(_polar)
     {
     };
@@ -86,3 +87,20 @@ GlidePolar::solve_sink(const GlideState &task,
   MacCready mac(*this, cruise_efficiency);
   return mac.solve_sink(task,S);
 }
+
+
+bool 
+GlidePolar::possible_glide(const GlideState &task) const
+{
+  if (task.AltitudeDifference<=0) {
+    return false;
+  }
+  // broad test assuming tailwind (best case)
+  if ((VbestLD+task.EffectiveWindSpeed)*task.AltitudeDifference 
+      < task.Vector.Distance*SbestLD) {
+    return false;
+  } else {
+    return true;
+  }
+}
+

@@ -57,7 +57,7 @@ void distance_counts() {
 }
 
 double small_rand() {
-  return rand()*0.001/RAND_MAX;
+  return -5.0+rand()*10.0/RAND_MAX;
 }
 
 
@@ -72,8 +72,14 @@ char wait_prompt(const double time) {
 Waypoint wp[6];
 
 void setup_waypoints(Waypoints &waypoints) {
+#ifdef DO_PRINT
+  std::ofstream fin("results/res-wp-in.txt");
+#endif
   for (unsigned i=0; i<5; i++) {
     waypoints.insert(wp[i]);
+#ifdef DO_PRINT
+    fin << wp[i];
+#endif
   }
 
   for (unsigned i=0; i<150; i++) {
@@ -83,10 +89,12 @@ void setup_waypoints(Waypoints &waypoints) {
     ff.Location.Longitude = x/1000.0; 
     ff.Location.Latitude = y/1000.0;
     ff.id = i+4;
+#ifdef DO_PRINT
+    fin << ff;
+#endif
     waypoints.insert(ff);
   }
   waypoints.optimise();
-
 }
 
 
@@ -291,21 +299,18 @@ void test_flight(TaskManager &task_manager,
       return;
     }
     wait_prompt(state.Time);
-    for (double t=0; t<1.0; t+= 0.0025) {
-      state.Location.Latitude = 
-        w[i].Latitude*(1.0-t)+w[i+1].Latitude*t+small_rand();
-      state.Location.Longitude = 
-        w[i].Longitude*(1.0-t)+w[i+1].Longitude*t+small_rand();
 
-      double d = ::Distance(state.Location, state_last.Location);
-      double V = 19.0;
-      state.Time += d/V;
+    while (w[i+1].distance(state.Location)>100.0) {
+
+      state.Speed = 19.0;
+      double bearing = state.Location.bearing(w[i+1])+small_rand();
+      state.Location = GeoVector(state.Speed,bearing).end_point(state.Location);
+      state.Time += 1.0;
 
       task_manager.update(state, state_last);
-
       task_manager.update_idle(state);
 
-      bool do_print = (counter++ % 10 ==0);
+      bool do_print = (counter++ % 1 ==0);
       if (test_num<4) {
         scan_airspaces(state, airspaces, do_print, w[i+1]);
       }

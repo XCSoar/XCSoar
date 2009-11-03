@@ -75,15 +75,12 @@ AATPoint::check_target_inside(const AIRCRAFT_STATE& state)
   if (double_leg_distance(TargetLocation) 
       < double_leg_distance(state.Location)) 
   {
-    const double d_in_front = 0.01;
     const double d_to_max = state.Location.distance(getMaxLocation());
-
-    if (d_to_max<d_in_front) {
+    if (d_to_max<=0.0) {
       // no improvement available
       return false;
     } else {
-      const double p = std::max(0.0,std::min(1.0,d_in_front/d_to_max));
-      TargetLocation = state.Location.interpolate(getMaxLocation(), p); 
+      TargetLocation = state.Location;
       return true;
     }
   } else {

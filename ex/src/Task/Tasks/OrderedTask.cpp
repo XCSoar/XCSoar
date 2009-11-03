@@ -204,13 +204,14 @@ OrderedTask::update_idle(const AIRCRAFT_STATE& state)
 {
   bool retval = AbstractTask::update_idle(state);
 
-  if (ts && task_behaviour.optimise_targets_range 
+  if (ts 
+      && task_behaviour.optimise_targets_range 
       && (task_behaviour.aat_min_time>0.0)) {
     if (activeTaskPoint>0) {
       double p = calc_min_target(state, task_behaviour.aat_min_time);
       (void)p;
 
-      if (task_behaviour.optimise_targets_bearing) {
+      if (task_behaviour.optimise_targets_bearing && 0) {
         if (AATPoint* ap = dynamic_cast<AATPoint*>(tps[activeTaskPoint])) {
           // very nasty hack
           TaskOptTarget tot(tps, activeTaskPoint, state, glide_polar,

@@ -3,8 +3,12 @@
 #include <algorithm>
 
 double lpf(const double y_this, const double y_last) {
-  return y_this*0.1+y_last*0.9;
+  return y_this*0.02+y_last*0.98;
 }
+
+/*
+  sinc(f.x) = sin(2.pi.f.i)/(pi i)
+*/
 
 void DistanceRemainingStat::calc_speed(const ElementStat* es) 
 {
