@@ -7,6 +7,7 @@
 #include "Task/TaskAdvance.hpp"
 #include "Task/TaskStats/TaskStats.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
+#include "Util/Filter.hpp"
 
 class TaskPointVisitor;
 
@@ -20,7 +21,9 @@ public:
     task_events(te),
     task_advance(ta),
     task_behaviour(tb),
-    glide_polar(gp)
+    glide_polar(gp),
+    mc_lpf(10.0),
+    ce_lpf(10.0)
   {};
 
     unsigned getActiveTaskPointIndex();
@@ -40,6 +43,8 @@ protected:
   
   unsigned activeTaskPoint;
   TaskStats stats;
+  Filter mc_lpf;
+  Filter ce_lpf;
 
   virtual double calc_mc_best(const AIRCRAFT_STATE &);
 

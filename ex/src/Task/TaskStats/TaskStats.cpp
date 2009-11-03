@@ -2,13 +2,15 @@
 #include "Navigation/Aircraft.hpp"
 #include <algorithm>
 
-double lpf(const double y_this, const double y_last) {
-  return y_this*0.02+y_last*0.98;
-}
 
-/*
-  sinc(f.x) = sin(2.pi.f.i)/(pi i)
-*/
+DistanceStat::DistanceStat():
+  distance(0.0),
+  distance_last(0.0),
+  speed(0.0),
+  lpf(30.0)
+{
+
+}
 
 void DistanceRemainingStat::calc_speed(const ElementStat* es) 
 {
@@ -40,22 +42,28 @@ void DistanceTravelledStat::calc_speed(const ElementStat* es)
 void DistanceStat::calc_incremental_speed(const double dt)
 {  
   if (dt>0) {
-    speed_incremental = lpf((distance_last-distance)/dt,speed_incremental);
+    double d = lpf.update(distance);
+    double v = (distance_last-d)/dt;    
+    distance_last = d;
+    speed_incremental = v;
   } else {
+    distance_last = lpf.reset(distance);
     speed_incremental = speed;
   }
-  distance_last = distance;
 }
 
 void DistanceTravelledStat::calc_incremental_speed(const double dt)
 {
   // negative of normal
   if (dt>0) {
-    speed_incremental = lpf(-(distance_last-distance)/dt,speed_incremental);
+    double d = lpf.update(distance);
+    double v = (d-distance_last)/dt;    
+    distance_last = d;
+    speed_incremental = v;
   } else {
+    distance_last = lpf.reset(distance);
     speed_incremental = speed;
   }
-  distance_last = distance;
 }
 
 

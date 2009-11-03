@@ -12,16 +12,16 @@ AbstractTask::update_idle(const AIRCRAFT_STATE &state)
 {
   bool retval = false;
   if (task_behaviour.auto_mc) {
-    stats.mc_best = calc_mc_best(state);
+    stats.mc_best = mc_lpf.update(calc_mc_best(state));
     retval = true;
   } else {
-    stats.mc_best = glide_polar.get_mc();
+    stats.mc_best = mc_lpf.reset(glide_polar.get_mc());
   }
   if (task_behaviour.calc_cruise_efficiency) {
-    stats.cruise_efficiency = calc_cruise_efficiency(state);
+    stats.cruise_efficiency = ce_lpf.update(calc_cruise_efficiency(state));
     retval = true;
   } else {
-    stats.cruise_efficiency = 1.0;
+    stats.cruise_efficiency = ce_lpf.reset(1.0);
   }
 
   return false;

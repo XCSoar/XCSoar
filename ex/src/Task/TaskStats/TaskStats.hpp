@@ -5,6 +5,7 @@
 #ifdef DO_PRINT
 #include <iostream>
 #endif
+#include "Util/Filter.hpp"
 
 struct AIRCRAFT_STATE;
 
@@ -13,10 +14,7 @@ class ElementStat;
 class DistanceStat
 {
 public:
-  DistanceStat():
-    distance(0.0),
-    distance_last(0.0),
-    speed(0.0) {};
+  DistanceStat();
 
   void set_distance(const double d) {
     distance = d;
@@ -40,9 +38,10 @@ public:
 
 protected:
   double distance;
+  double distance_last;
   double speed;
   double speed_incremental;
-  double distance_last;
+  Filter lpf;
 };
 
 class DistanceRemainingStat:

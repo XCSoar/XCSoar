@@ -216,7 +216,6 @@ OrderedTask::update_idle(const AIRCRAFT_STATE& state)
           // very nasty hack
           TaskOptTarget tot(tps, activeTaskPoint, state, glide_polar,
                             *ap, ts);
-          
           tot.search(0.5);
         }
       }

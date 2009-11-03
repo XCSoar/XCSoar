@@ -22,9 +22,10 @@ OUTPUTS 	:= test
 SRC := src
 INCLUDES := -I$(SRC)
 
-PROFILE := --coverage
+PROFILE := 
+# --coverage
 
-OPTIMIZE := -g 
+OPTIMIZE := -g -O2
 
 CPPFLAGS := $(INCLUDES) 
 CXXFLAGS	:=$(OPTIMIZE) -fno-exceptions $(PROFILE)
@@ -133,6 +134,7 @@ OBJS	:=\
 	src/Math/Geometry.o \
 	src/Math/FastMath.o \
 	src/Math/Earth.o \
+	src/Util/Filter.o \
 	src/Util/Gradient.o \
 	src/Util/Intersection.o \
 	src/Util/Printing.o \
