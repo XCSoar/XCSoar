@@ -77,7 +77,8 @@ MacCready::solve_cruise(const GlideState &task) const
   const double S = glide_polar.get_SbestLD();
   const double mc = glide_polar.get_mc();
   const double rho = S/mc;
-  const double invrhoplusone = 1.0/(1.0+rho);
+  const double rhoplusone = 1.0+rho;
+  const double invrhoplusone = 1.0/rhoplusone;
   const double Vn = task.calc_ave_speed(VOpt*cruise_efficiency*invrhoplusone);
   if (Vn<=0.0) {
     result.Solution = GlideResult::RESULT_WIND_EXCESSIVE;
