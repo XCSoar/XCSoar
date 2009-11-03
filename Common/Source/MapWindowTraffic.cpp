@@ -155,19 +155,6 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas)
       _stprintf(label_name, TEXT("WUE"));
 #endif
 
-      // Determine the background color for the average climb indicator
-      float vmax = (float)(1.5*min(5.0, max(MACCREADY,0.5)));
-      float vmin = (float)(-1.5*min(5.0, max(MACCREADY,2.0)));
-
-      float cv = Basic().FLARM_Traffic[i].Average30s;
-      if (cv<0) {
-        cv /= (-vmin); // JMW fixed bug here
-      } else {
-        cv /= vmax;
-      }
-
-      int colourIndex = fSnailColour(cv);
-
       // JMW TODO enhancement: decluttering of FLARM altitudes (sort by max lift)
 
       int dx = (sc_av.x-Orig_Aircraft.x);
@@ -196,6 +183,18 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas)
           brect.top = sc_av.y+((tsize.cy+4)>>3)-2;
           brect.bottom = brect.top+3+tsize.cy-((tsize.cy+4)>>3);
 
+          // Determine the background color for the average climb indicator
+          float vmax = (float)(1.5*min(5.0, max(MACCREADY,0.5)));
+          float vmin = (float)(-1.5*min(5.0, max(MACCREADY,2.0)));
+
+          float cv = Basic().FLARM_Traffic[i].Average30s;
+          if (cv < 0) {
+            cv /= (-vmin); // JMW fixed bug here
+          } else {
+            cv /= vmax;
+          }
+
+          int colourIndex = fSnailColour(cv);
           // Select the appropriate background color determined before
           canvas.select(MapGfx.hSnailPens[colourIndex]);
           Brush hVarioBrush(MapGfx.hSnailColours[colourIndex]);
