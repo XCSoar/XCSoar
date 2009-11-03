@@ -199,7 +199,7 @@ void MapWindow::DrawAirSpace(Canvas &canvas, const RECT rc, Canvas &buffer)
     }
   }
 
-  ////////// draw it again, just the outlines
+  // draw it again, just the outlines
 
   if (found) {
     buffer.hollow_brush();
