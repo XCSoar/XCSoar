@@ -119,9 +119,9 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas)
       sc_name = sc;
       sc_name.y -= IBLSCALE(16);
 
-      // Draw the average climb value where the name is
-      // TODO bug: TB: no name when average is displayed...
-      sc_av = sc_name;
+      // Draw the average climb value above the icon
+      sc_av = sc;
+      sc_av.y += IBLSCALE(16);
 
 #ifndef FLARM_AVERAGE
       if (Basic().FLARM_Traffic[i].Name) {
