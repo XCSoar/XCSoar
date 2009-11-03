@@ -504,13 +504,21 @@ cont:
 	/* NOTREACHED */
 }
 
+/**
+ * Parses the special characters (cr, lf, back slash) in the old_string and
+ * returns the parsed new_string
+ * @param old_string The old string with (or without) special characters
+ * @return The new parsed string
+ */
 TCHAR *
 StringMallocParse(const TCHAR* old_string)
 {
   TCHAR buffer[2048];	// Note - max size of any string we cope with here !
   TCHAR* new_string;
+
   unsigned int used = 0;
   unsigned int i;
+
   for (i = 0; i < _tcslen(old_string); i++) {
     if (used < 2045) {
       if (old_string[i] == '\\' ) {
@@ -527,10 +535,11 @@ StringMallocParse(const TCHAR* old_string)
           buffer[used++] = old_string[i];
         }
       } else {
-	buffer[used++] = old_string[i];
+        buffer[used++] = old_string[i];
       }
     }
   };
+
   buffer[used++] =_T('\0');
 
   new_string = (TCHAR *)malloc((_tcslen(buffer)+1)*sizeof(TCHAR));
@@ -539,18 +548,27 @@ StringMallocParse(const TCHAR* old_string)
   return new_string;
 }
 
+/**
+ * Converts a TCHAR array to a char array
+ * @param pszDest char array (Output)
+ * @param pszSrc TCHAR array (Input)
+ */
 void ConvertTToC(char *pszDest, const TCHAR *pszSrc)
 {
 	for(unsigned int i = 0; i < _tcslen(pszSrc); i++)
 		pszDest[i] = (char) pszSrc[i];
 }
 
+/**
+ * Converts a char array to a TCHAR array
+ * @param pszDest TCHAR array (Output)
+ * @param pszSrc char array (Input)
+ */
 void ConvertCToT(TCHAR *pszDest, const char *pszSrc)
 {
 	for(unsigned int i = 0; i < strlen(pszSrc); i++)
 		pszDest[i] = (TCHAR) pszSrc[i];
 }
-
 
 int TextToLineOffsets(const TCHAR *text, int *LineOffsets, int maxLines)
 {
@@ -575,9 +593,9 @@ int TextToLineOffsets(const TCHAR *text, int *LineOffsets, int maxLines)
   return nTextLines;
 }
 
-
-/*
- * Convert to uppercase a TCHAR array
+/**
+ * Converts a TCHAR array to uppercase
+ * @param str String (TCHAR array) to convert
  */
 void ConvToUpper( TCHAR *str )
 {
@@ -591,7 +609,6 @@ void ConvToUpper( TCHAR *str )
 	return ;
 }
 
-
 bool MatchesExtension(const TCHAR *filename, const TCHAR* extension) {
   const TCHAR *ptr;
   ptr = _tcsstr(filename, extension);
@@ -601,5 +618,3 @@ bool MatchesExtension(const TCHAR *filename, const TCHAR* extension) {
     return true;
   }
 }
-
-
