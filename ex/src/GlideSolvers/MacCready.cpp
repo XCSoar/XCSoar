@@ -77,8 +77,8 @@ MacCready::solve_cruise(const GlideState &task) const
   const double S = glide_polar.get_SbestLD();
   const double mc = glide_polar.get_mc();
   const double rho = S/mc;
-  const double rhoplusone = 1.0+rho;
-  const double Vn = task.calc_ave_speed(VOpt*cruise_efficiency/rhoplusone);
+  const double invrhoplusone = 1.0/(1.0+rho);
+  const double Vn = task.calc_ave_speed(VOpt*cruise_efficiency*invrhoplusone);
   if (Vn<=0.0) {
     result.Solution = GlideResult::RESULT_WIND_EXCESSIVE;
     result.Vector.Distance = 0;
@@ -93,7 +93,7 @@ MacCready::solve_cruise(const GlideState &task) const
   }
 
   const double t = distance/Vn;
-  const double t_cr = t/(1+rho);
+  const double t_cr = t*invrhoplusone;
   const double t_cl = t_cr*rho + (task.AltitudeDifference<0? t_cl1:0);
 
   result.TimeElapsed = t;
