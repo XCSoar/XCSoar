@@ -49,7 +49,6 @@ Copyright_License {
 #include "Components.hpp"
 #include "RasterWeather.h"
 
-
 void MapWindow::RenderStart(Canvas &canvas, const RECT rc)
 {
   CalculateOrigin(rc, Basic(), Calculated(),
@@ -64,7 +63,6 @@ void MapWindow::RenderStart(Canvas &canvas, const RECT rc)
     BigZoom = false;
   }
 }
-
 
 void MapWindow::RenderBackground(Canvas &canvas, const RECT rc)
 {
@@ -133,7 +131,6 @@ void MapWindow::RenderMapLayer(Canvas &canvas, const RECT rc)
   label_block.reset();
 }
 
-
 void MapWindow::RenderAreas(Canvas &canvas, const RECT rc)
 {
   if (!task.TaskIsTemporary()) {
@@ -164,7 +161,6 @@ void MapWindow::RenderTask(Canvas &canvas, const RECT rc)
   marks->Draw(canvas, *this, rc);
 }
 
-
 void MapWindow::RenderGlide(Canvas &canvas, const RECT rc)
 {
   // draw red cross on glide through terrain marker
@@ -181,7 +177,6 @@ void MapWindow::RenderGlide(Canvas &canvas, const RECT rc)
     DrawSpotHeights(canvas);
   }
 }
-
 
 void MapWindow::RenderAirborne(Canvas &canvas, const RECT rc)
 {
@@ -256,9 +251,6 @@ void MapWindow::Render(Canvas &canvas, const RECT rc)
   RenderAirborne(canvas, rc);
   RenderSymbology_upper(canvas, rc);
 }
-
-//////////////////////////////////////////////////
-
 
 static void DrawSpotHeight_Internal(Canvas &canvas,
 				    MapWindowProjection &map_projection,
