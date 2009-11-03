@@ -517,9 +517,8 @@ StringMallocParse(const TCHAR* old_string)
   TCHAR* new_string;
 
   unsigned int used = 0;
-  unsigned int i;
 
-  for (i = 0; i < _tcslen(old_string); i++) {
+  for (unsigned int i = 0; i < _tcslen(old_string); i++) {
     if (used < 2045) {
       if (old_string[i] == '\\' ) {
         if (old_string[i + 1] == 'r') {
@@ -572,10 +571,11 @@ void ConvertCToT(TCHAR *pszDest, const char *pszSrc)
 
 int TextToLineOffsets(const TCHAR *text, int *LineOffsets, int maxLines)
 {
-  int nTextLines=0;
-  LineOffsets[0]= 0;
+  int nTextLines = 0;
+  LineOffsets[0] = 0;
+
   if (text) {
-    if (_tcslen(text)>0) {
+    if (_tcslen(text) > 0) {
       const TCHAR *p = text;
 
       while (nTextLines < maxLines) {
@@ -587,9 +587,9 @@ int TextToLineOffsets(const TCHAR *text, int *LineOffsets, int maxLines)
         p = newline + 1;
       }
       nTextLines++;
-
     }
   }
+
   return nTextLines;
 }
 
@@ -597,24 +597,23 @@ int TextToLineOffsets(const TCHAR *text, int *LineOffsets, int maxLines)
  * Converts a TCHAR array to uppercase
  * @param str String (TCHAR array) to convert
  */
-void ConvToUpper( TCHAR *str )
+void
+ConvToUpper( TCHAR *str )
 {
-	if ( str )
-	{
-		for ( ; *str; ++str )
-		*str = towupper(*str);
+  if (!str)
+    return;
 
-	}
-
-	return ;
+  for (; *str; ++str)
+    *str = towupper(*str);
 }
 
 bool MatchesExtension(const TCHAR *filename, const TCHAR* extension) {
   const TCHAR *ptr;
+
   ptr = _tcsstr(filename, extension);
-  if (ptr != filename+_tcslen(filename)-_tcslen(extension)) {
+
+  if (ptr != filename + _tcslen(filename) - _tcslen(extension))
     return false;
-  } else {
-    return true;
-  }
+
+  return true;
 }
