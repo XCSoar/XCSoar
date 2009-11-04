@@ -292,11 +292,14 @@ ReadWayPointFile(ZZIP_FILE *fp, const TCHAR *CurrentWpFileName,
 void
 WaypointAltitudeFromTerrain(WAYPOINT* Temp, RasterTerrain &terrain)
 {
-  double myalt;
-  RasterRounding rounding(*terrain.GetMap(),0,0);
+  double myalt = -1;
+  if (terrain.GetMap()) {
+    RasterRounding rounding(*terrain.GetMap(),0,0);
 
-  myalt =
-    terrain.GetTerrainHeight(Temp->Location, rounding);
+    myalt =
+      terrain.GetTerrainHeight(Temp->Location, rounding);
+  }
+
   if (myalt>0) {
     Temp->Altitude = myalt;
   } else {

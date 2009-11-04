@@ -84,6 +84,10 @@ FinalGlideThroughTerrain(const double this_bearing,
     return 0;
   }
 
+  if (!terrain.GetMap()) {
+    return 0;
+  }
+
   const double glide_max_range = Calculated->NavAltitude/irange;
 
   // returns distance one would arrive at altitude in straight glide

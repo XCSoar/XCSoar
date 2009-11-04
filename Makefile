@@ -43,12 +43,12 @@ endif
 
 ######## paths
 
-INCLUDES := $(TARGET_INCLUDES) -I$(HDR) -I$(SRC)
+INCLUDES := $(TARGET_INCLUDES) -I$(HDR) -I$(SRC) 
 
 ######## compiler flags
 
 CPPFLAGS := $(INCLUDES) $(TARGET_CPPFLAGS)
-CPPFLAGS	+= -DFLARM_AVERAGE
+CPPFLAGS	+= -DFLARM_AVERAGE 
 
 CXXFLAGS	:=$(OPTIMIZE) -fno-exceptions $(PROFILE)
 CFLAGS		:=$(OPTIMIZE) $(PROFILE)
@@ -139,6 +139,8 @@ VOLKS	:=\
 	$(SRC)/Device/Volkslogger/vlapisys_win.cpp \
 	$(SRC)/Device/Volkslogger/vlconv.cpp \
 	$(SRC)/Device/Volkslogger/vlutils.cpp
+
+
 
 OBJS	:=\
 	$(SRC)/Globals.o 		\

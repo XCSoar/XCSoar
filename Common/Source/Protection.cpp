@@ -80,6 +80,7 @@ void TriggerAll(void) {
 
 #include "DeviceBlackboard.hpp"
 
+
 void CreateCalculationThread(void) {
   device_blackboard.ReadSettingsComputer(XCSoarInterface::SettingsComputer());
 

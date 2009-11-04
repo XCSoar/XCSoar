@@ -311,9 +311,6 @@ void ThermalLocator::EstimateThermalBase(const GEOPOINT Thermal_Location,
                         &loc);
   double Xrounding = fabs(loc.Longitude-Thermal_Location.Longitude)/2;
   double Yrounding = fabs(loc.Latitude-Thermal_Location.Latitude)/2;
-  RasterRounding rounding(*terrain.GetMap(),Xrounding,Yrounding);
-
-  double hground;
 
   for (double t = 0; t<=Tmax; t+= dt) {
 
@@ -322,7 +319,12 @@ void ThermalLocator::EstimateThermalBase(const GEOPOINT Thermal_Location,
                           wind_speed*t, &loc);
 
     double hthermal = altitude-wthermal*t;
-    hground = terrain.GetTerrainHeight(loc, rounding);
+    double hground = 0;
+
+    if (terrain.GetMap()) {
+      RasterRounding rounding(*terrain.GetMap(),Xrounding,Yrounding);
+      hground = terrain.GetTerrainHeight(loc, rounding);
+    }
     double dh = hthermal-hground;
     if (dh<0) {
       t = t+dh/wthermal;
@@ -332,7 +334,13 @@ void ThermalLocator::EstimateThermalBase(const GEOPOINT Thermal_Location,
       break;
     }
   }
-  hground = terrain.GetTerrainHeight(loc, rounding);
+
+  double hground = 0;
+  if (terrain.GetMap()) {
+    RasterRounding rounding(*terrain.GetMap(),Xrounding,Yrounding);
+    hground = terrain.GetTerrainHeight(loc, rounding);
+  }
+
   terrain.Unlock();
 
   *ground_location = loc;
