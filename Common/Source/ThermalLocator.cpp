@@ -43,7 +43,6 @@ Copyright_License {
 #include "Components.hpp"
 #include <math.h>
 
-
 #define SFACT 111195
 
 void ThermalLocator_Point::Drift(double t_0,

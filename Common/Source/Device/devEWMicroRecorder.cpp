@@ -289,7 +289,8 @@ static const DeviceRegister_t ewMicroRecorderDevice = {
   NULL,				// IsLogger
   NULL,				// IsGPSSource
   NULL,				// IsBaroSource
-  NULL				// OnSysTicker
+  NULL,				// OnSysTicker
+  NULL                          // OnThermal
 };
 
 bool ewMicroRecorderRegister(void){

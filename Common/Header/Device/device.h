@@ -117,6 +117,11 @@ typedef	struct DeviceRegister {
   BOOL (*IsGPSSource)(DeviceDescriptor_t *d);
   BOOL (*IsBaroSource)(DeviceDescriptor_t *d);
   BOOL (*OnSysTicker)(DeviceDescriptor_t *d);
+  BOOL (*PutThermal)(DeviceDescriptor_t *d, 
+                     bool active, 
+                     double longitude, double latitude, 
+                     double W,
+                     double R);
 } DeviceRegister_t;
 
 
@@ -142,6 +147,9 @@ BOOL devPutBallast(PDeviceDescriptor_t d,	double Ballast);
 BOOL devPutVolume(PDeviceDescriptor_t	d, int Volume);
 BOOL devPutFreqActive(PDeviceDescriptor_t d,	double Freq);
 BOOL devPutFreqStandby(PDeviceDescriptor_t d,	double Freq);
+BOOL devPutThermal(PDeviceDescriptor_t	d, bool active, 
+                   double longitude, double latitude, double W,
+                   double R);
 BOOL devOpen(PDeviceDescriptor_t d,	int	Port);
 BOOL devClose(PDeviceDescriptor_t	d);
 BOOL devLinkTimeout(PDeviceDescriptor_t	d);

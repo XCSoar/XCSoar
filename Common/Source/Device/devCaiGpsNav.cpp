@@ -88,7 +88,8 @@ static const DeviceRegister_t caiGpsNavDevice = {
   NULL,				// IsLogger - TODO feature: CAI GPS NAV declaration
   NULL,				// IsGPSSource
   NULL,				// IsBaroSource
-  NULL				// OnSysTicker
+  NULL,				// OnSysTicker
+  NULL                          // OnThermal
 };
 
 bool caiGpsNavRegister(void){

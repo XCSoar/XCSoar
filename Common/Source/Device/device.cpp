@@ -800,6 +800,27 @@ BOOL devPutFreqStandby(PDeviceDescriptor_t d, double Freq)
 }
 
 
+BOOL devPutThermal(PDeviceDescriptor_t d, 
+                   bool active, 
+                   double longitude, double latitude, double W,
+                   double R)
+{
+  BOOL result = TRUE;
+
+#ifdef _SIM_
+  return TRUE;
+#endif
+
+  mutexComm.Lock();
+  if (d && d->Driver && d->Driver->PutThermal != NULL)
+    result = d->Driver->PutThermal(d, active, longitude, latitude,
+                                   W, R);
+  mutexComm.Unlock();
+
+  return result;
+}
+
+
 static BOOL
 FlarmDeclareSetGet(PDeviceDescriptor_t d, TCHAR *Buffer) {
   //devWriteNMEAString(d, Buffer);

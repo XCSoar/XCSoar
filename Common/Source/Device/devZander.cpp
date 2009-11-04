@@ -89,7 +89,8 @@ static const DeviceRegister_t zanderDevice = {
   NULL,				// IsLogger
   NULL,				// IsGPSSource
   NULL,				// IsBaroSource
-  NULL				// OnSysTicker
+  NULL,				// OnSysTicker
+  NULL                          // OnThermal
 };
 
 bool zanderRegister(void){

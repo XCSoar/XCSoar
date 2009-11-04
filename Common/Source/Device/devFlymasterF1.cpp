@@ -84,7 +84,8 @@ static const DeviceRegister_t flymasterf1Device = {
   NULL,				// IsLogger
   NULL,				// IsGPSSource
   NULL,				// IsBaroSource
-  NULL				// OnSysTicker
+  NULL,				// OnSysTicker
+  NULL                          // OnThermal
 };
 
 bool flymasterf1Register(void){

@@ -85,7 +85,8 @@ static const DeviceRegister_t nmoDevice = {
   NULL,				// IsLogger
   nmoIsGPSSource,		// IsGPSSource
   NULL,				// IsBaroSource
-  NULL				// OnSysTicker
+  NULL,				// OnSysTicker
+  NULL                          // OnThermal
 };
 
 bool nmoRegister(void){

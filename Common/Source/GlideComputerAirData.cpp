@@ -65,6 +65,7 @@ Copyright_License {
 #include "Atmosphere.h"
 #include "LogFile.hpp"
 #include "GPSClock.hpp"
+#include "Device/device.h"
 
 #define TAKEOFFSPEEDTHRESHOLD (0.5*GlidePolar::Vminsink)
 
@@ -1125,7 +1126,10 @@ GlideComputerAirData::ProcessThermalLocator()
   if (!SettingsComputer().EnableThermalLocator) {
     return;
   }
+  bool active = false;
+
   if (Calculated().Circling) {
+    active = true;
     thermallocator.AddPoint(Basic().Time,
                             Basic().Location,
 			    Calculated().NettoVario);
@@ -1137,11 +1141,23 @@ GlideComputerAirData::ProcessThermalLocator()
 			  &SetCalculated().ThermalEstimate_Location,
 			  &SetCalculated().ThermalEstimate_W,
 			  &SetCalculated().ThermalEstimate_R);
-  } else {
+
+  } else {    
     SetCalculated().ThermalEstimate_W = 0;
     SetCalculated().ThermalEstimate_R = -1;
     thermallocator.Reset();
   }
+
+  devPutThermal(devA(), active, 
+                Calculated().ThermalEstimate_Location.Longitude,
+                Calculated().ThermalEstimate_Location.Latitude,
+                Calculated().ThermalEstimate_W,
+                Calculated().ThermalEstimate_R);
+  devPutThermal(devB(), active, 
+                Calculated().ThermalEstimate_Location.Longitude,
+                Calculated().ThermalEstimate_Location.Latitude,
+                Calculated().ThermalEstimate_W,
+                Calculated().ThermalEstimate_R);
 }
 
 void

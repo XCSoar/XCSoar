@@ -100,7 +100,8 @@ static const DeviceRegister_t condorDevice = {
   NULL,				// IsLogger
   NULL,				// IsGPSSource
   NULL,				// IsBaroSource
-  NULL				// OnSysTicker
+  NULL,				// OnSysTicker
+  NULL                          // OnThermal
 };
 
 bool condorRegister(void){

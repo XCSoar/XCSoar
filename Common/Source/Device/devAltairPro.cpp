@@ -139,7 +139,8 @@ static const DeviceRegister_t atrDevice = {
   NULL,				// IsLogger
   NULL,				// IsGPSSource
   NULL,				// IsBaroSource
-  atrOnSysTicker		// OnSysTicker
+  atrOnSysTicker,		// OnSysTicker
+  NULL                          // OnThermal
 };
 
 bool atrRegister(void){

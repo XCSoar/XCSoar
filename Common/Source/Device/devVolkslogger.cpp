@@ -312,7 +312,8 @@ static const DeviceRegister_t vlDevice = {
   NULL,				// IsLogger
   NULL,				// IsGPSSource
   devIsFalseReturn,		// IsBaroSource: devIsTrueReturn? -- rmk
-  NULL				// OnSysTicker
+  NULL,				// OnSysTicker
+  NULL                          // OnThermal
 };
 
 bool vlRegister(void){

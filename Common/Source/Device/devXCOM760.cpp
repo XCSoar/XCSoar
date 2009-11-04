@@ -85,6 +85,7 @@ static const DeviceRegister_t xcom760Device = {
   NULL,				// IsGPSSource
   NULL,				// IsBaroSource
   NULL,				// OnSysTicker
+  NULL                          // OnThermal
 };
 
 bool xcom760Register(void){

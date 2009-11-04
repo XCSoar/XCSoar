@@ -464,6 +464,15 @@ BOOL vgaOnSysTicker(DeviceDescriptor_t *d){
 }
 
 
+BOOL vgaPutThermal(DeviceDescriptor_t *d, bool active, 
+                   double longitude, double latitude, 
+                   double W,
+                   double R)
+{
+  return(TRUE);
+}
+
+
 static const DeviceRegister_t vgaDevice = {
   TEXT("Vega"),
   drfGPS | drfBaroAlt | drfSpeed | drfVario, // drfLogger if FLARM connected
@@ -483,7 +492,8 @@ static const DeviceRegister_t vgaDevice = {
   NULL,				// IsLogger
   NULL,				// IsGPSSource: only if GPS source connected to Vega.NmeaIn
   NULL,				// IsBaroSource
-  vgaOnSysTicker		// OnSysTicker
+  vgaOnSysTicker,		// OnSysTicker
+  vgaPutThermal                  // OnThermal
 };
 
 bool vgaRegister(void){
