@@ -206,6 +206,12 @@ void XCSoarInterface::StartupInfo() {
 #endif
 }
 
+// NEWTASK
+#ifdef NEWTASK
+extern int test_newtask(int test_num);
+#endif
+
+
 /**
  * "Boots" up XCSoar
  * @param hInstance Instance handle
@@ -364,6 +370,39 @@ bool XCSoarInterface::Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
   // Write to log file
   StartupStore(TEXT("CreateCalculationThread\n"));
   CreateCalculationThread();
+
+#ifdef NEWTASK  
+  { // NEWTASK
+    PeriodClock t;
+    t.reset(); t.update();
+    CreateProgressDialog(gettext(TEXT("Running test 0")));
+    test_newtask(0);
+    StartupStore(TEXT("test 0 %d\n"),t.elapsed());
+
+    /*
+    t.update();
+    CreateProgressDialog(gettext(TEXT("Running test 1")));
+    test_newtask(1);
+    StartupStore(TEXT("test 1 %d\n"),t.elapsed());
+
+    t.update();
+    CreateProgressDialog(gettext(TEXT("Running test 2")));
+    test_newtask(2);
+    StartupStore(TEXT("test 2 %d\n"),t.elapsed());
+
+    t.update();
+    CreateProgressDialog(gettext(TEXT("Running test 3")));
+    test_newtask(3);
+    StartupStore(TEXT("test 3 %d\n"),t.elapsed());
+
+    t.update();
+    CreateProgressDialog(gettext(TEXT("Running test 4")));
+    test_newtask(4);
+    StartupStore(TEXT("test 4 %d\n"),t.elapsed());
+    */
+    CreateProgressDialog(gettext(TEXT("test complete")));
+  }
+#endif
 
   // Write to log file
   StartupStore(TEXT("dlgAirspaceWarningInit\n"));

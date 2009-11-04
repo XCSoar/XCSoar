@@ -759,13 +759,15 @@ static void AirspaceAGLLookup(AIRSPACE_ALT *Top, AIRSPACE_ALT *Base,
   if (((Base->Base == abAGL) || (Top->Base == abAGL))) {
 
     terrain.Lock();
-    // want most accurate rounding here
-    RasterRounding rounding(*terrain.GetMap(),0,0);
 
     GEOPOINT p; p.Longitude = av_lon; p.Latitude = av_lat;
 
-    double th =
-      terrain.GetTerrainHeight(p, rounding);
+    double th = -1;
+    // want most accurate rounding here
+    if (terrain.GetMap()) {
+      RasterRounding rounding(*terrain.GetMap(),0,0);
+      th = terrain.GetTerrainHeight(p, rounding);
+    }
 
     if (Base->Base == abAGL) {
       if (Base->AGL>=0) {

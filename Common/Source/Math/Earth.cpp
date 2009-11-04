@@ -40,7 +40,7 @@ Copyright_License {
 #include "Math/NavFunctions.hpp"
 
 #include <assert.h>
-#include <windef.h>
+#include <algorithm>
 
 #define M_2PI 6.28318530718
 
@@ -72,7 +72,7 @@ void IntermediatePoint(GEOPOINT loc1,
     d = 1.0e-7;
     f = 0.0;
   }
-  f = min(1.0,max(0.0,f));
+  f = std::min(1.0,std::max(0.0,f));
 
   double cosloc1Latitude = cos(loc1.Latitude);
   double cosloc2Latitude = cos(loc2.Latitude);
@@ -159,7 +159,7 @@ void DistanceBearing(GEOPOINT loc1, GEOPOINT loc2,
   if (Distance) {
     double s1 = sin((loc2.Latitude-loc1.Latitude)/2);
     double s2 = sin(dlon/2);
-    double a= max(0.0,min(1.0,s1*s1+cloc1Latitude*cloc2Latitude*s2*s2));
+    double a= std::max(0.0,std::min(1.0,s1*s1+cloc1Latitude*cloc2Latitude*s2*s2));
     *Distance = 6371000.0*2.0*atan2(sqrt(a),sqrt(1.0-a));
   }
   if (Bearing) {
@@ -190,8 +190,8 @@ double DoubleDistance(GEOPOINT loc1, GEOPOINT loc2, GEOPOINT loc3)
   double s32 = sin((loc3.Latitude-loc2.Latitude)/2);
   double sl32 = sin(dloc3Longitude2/2);
 
-  double a12 = max(0.0,min(1.0,s21*s21+cloc1Latitude*cloc2Latitude*sl21*sl21));
-  double a23 = max(0.0,min(1.0,s32*s32+cloc2Latitude*cloc3Latitude*sl32*sl32));
+  double a12 = std::max(0.0,std::min(1.0,s21*s21+cloc1Latitude*cloc2Latitude*sl21*sl21));
+  double a23 = std::max(0.0,std::min(1.0,s32*s32+cloc2Latitude*cloc3Latitude*sl32*sl32));
   return 6371000.0*2.0*(atan2(sqrt(a12),sqrt(1.0-a12))
                         +atan2(sqrt(a23),sqrt(1.0-a23)));
 
@@ -367,7 +367,7 @@ double Distance(GEOPOINT loc1,
   double retval;
   DistanceBearing(loc1, loc2, &retval, NULL);
   return retval;
-};
+}
 
 /**
  * Calculates the bearing between two locations
@@ -380,5 +380,5 @@ double Bearing(GEOPOINT loc1,
   double retval;
   DistanceBearing(loc1, loc2, NULL, &retval);
   return retval;
-};
+}
 

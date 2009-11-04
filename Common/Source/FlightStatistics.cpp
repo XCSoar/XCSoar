@@ -742,15 +742,26 @@ void FlightStatistics::RenderAirspace(Canvas &canvas, const RECT rc) {
 
   terrain.Lock();
   // want most accurate rounding here
-  RasterRounding rounding(*terrain.GetMap(),0,0);
-
-  for (j=0; j< AIRSPACE_SCANSIZE_X; j++) { // scan range
-    fj = j*1.0/(AIRSPACE_SCANSIZE_X-1);
-    FindLatitudeLongitude(XCSoarInterface::Basic().Location,
-                          acb, range*fj,
-                          &d_loc[j]);
-    d_alt[j] = terrain.GetTerrainHeight(d_loc[j], rounding);
-    hmax = max(hmax, d_alt[j]);
+  if (terrain.GetMap()) {
+    RasterRounding rounding(*terrain.GetMap(),0,0);
+    
+    for (j=0; j< AIRSPACE_SCANSIZE_X; j++) { // scan range
+      fj = j*1.0/(AIRSPACE_SCANSIZE_X-1);
+      FindLatitudeLongitude(XCSoarInterface::Basic().Location,
+                            acb, range*fj,
+                            &d_loc[j]);
+      d_alt[j] = terrain.GetTerrainHeight(d_loc[j], rounding);
+      hmax = max(hmax, d_alt[j]);
+    }
+  } else {
+    for (j=0; j< AIRSPACE_SCANSIZE_X; j++) { // scan range
+      fj = j*1.0/(AIRSPACE_SCANSIZE_X-1);
+      FindLatitudeLongitude(XCSoarInterface::Basic().Location,
+                            acb, range*fj,
+                            &d_loc[j]);
+      d_alt[j] = 0;
+      hmax = max(hmax, d_alt[j]);
+    }
   }
   terrain.Unlock();
 

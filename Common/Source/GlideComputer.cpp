@@ -134,7 +134,6 @@ bool GlideComputer::ProcessGPS()
   }
 
   ProcessVertical();
-
   CalculateOwnTeamCode();
 
   SetCalculated().TeammateCodeValid = SettingsComputer().TeammateCodeValid;

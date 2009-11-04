@@ -113,6 +113,7 @@ void GlideComputerAirData::Initialise()
   CalibrationInit();
 }
 
+
 /**
  * Calculates some basic values
  */
@@ -549,12 +550,14 @@ void GlideComputerAirData::EnergyHeightNavAltitude()
  */
 void GlideComputerAirData::TerrainHeight()
 {
-  short Alt = 0;
+  short Alt = -1;
 
   terrain.Lock();
-  // want most accurate rounding here
-  RasterRounding rounding(*terrain.GetMap(),0,0);
-  Alt = terrain.GetTerrainHeight(Basic().Location, rounding);
+  if (terrain.GetMap()) {
+    // want most accurate rounding here
+    RasterRounding rounding(*terrain.GetMap(),0,0);
+    Alt = terrain.GetTerrainHeight(Basic().Location, rounding);
+  }
   terrain.Unlock();
 
   if(Alt<0) {

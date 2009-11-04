@@ -159,9 +159,11 @@ CuSonde::updateMeasurements(const NMEA_INFO *Basic,
 
   // calculate ground height
   terrain.Lock();
-  RasterRounding rounding(*terrain.GetMap(),0,0);
-  hGround =
-    terrain.GetTerrainHeight(Basic->Location, rounding);
+  if (terrain.GetMap()) {
+    RasterRounding rounding(*terrain.GetMap(),0,0);
+    hGround =
+      terrain.GetTerrainHeight(Basic->Location, rounding);
+  }
   terrain.Unlock();
 
   // if (going up)
