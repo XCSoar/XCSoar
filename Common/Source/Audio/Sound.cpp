@@ -36,12 +36,12 @@ Copyright_License {
 */
 
 #include "Audio/Sound.hpp"
+
+#ifndef DISABLEAUDIO
 #include "Interface.hpp"
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
-
-#ifndef DISABLEAUDIO
 #include <mmsystem.h>
 #endif
 

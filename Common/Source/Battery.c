@@ -37,7 +37,7 @@ Copyright_License {
 
 #include "Battery.h"
 
-#if !defined(GNAV) && !defined(WINDOWSPC)
+#if defined(HAVE_BLANK) && !defined(GNAV) && !defined(WINDOWSPC)
 
 /** Battery percentage (default = 100%) */
 int PDABatteryPercent = 100;

@@ -70,7 +70,6 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Dialogs.h"
 #include "Message.h"
 #include "Marks.h"
-#include <commctrl.h>
 #include "Airspace.h"
 #include "InfoBoxLayout.h"
 #include "InfoBoxManager.h"
@@ -108,9 +107,11 @@ using std::min;
 using std::max;
 #endif
 
+#ifdef WIN32
 // DLL Cache
 typedef void (CALLBACK *DLLFUNC_INPUTEVENT)(TCHAR*);
 typedef void (CALLBACK *DLLFUNC_SETHINST)(HMODULE);
+#endif /* WIN32 */
 
 
 #define MAX_DLL_CACHE 256
@@ -1416,10 +1417,15 @@ void InputEvents::eventSetup(const TCHAR *misc) {
 
 }
 
+#ifdef WIN32
+static HINSTANCE
+_loadDLL(TCHAR *name);
+#endif /* WIN32 */
 
 // DLLExecute
 // Runs the plugin of the specified filename
 void InputEvents::eventDLLExecute(const TCHAR *misc) {
+#ifdef WIN32
   // LoadLibrary(TEXT("test.dll"));
 
   StartupStore(TEXT("%s\n"), misc);
@@ -1479,12 +1485,18 @@ void InputEvents::eventDLLExecute(const TCHAR *misc) {
 #endif
     }
   }
+#else /* !WIN32 */
+  // XXX implement with dlopen()
+#endif /* !WIN32 */
 }
 
+#ifdef WIN32
 // Load a DLL (only once, keep a cache of the handle)
 //	TODO code: FreeLibrary - it would be nice to call FreeLibrary
 //      before exit on each of these
-HINSTANCE _loadDLL(TCHAR *name) {
+static HINSTANCE
+_loadDLL(TCHAR *name)
+{
   int i;
   for (i = 0; i < DLLCache_Count; i++) {
     if (_tcscmp(name, DLLCache[i].text) == 0)
@@ -1518,6 +1530,7 @@ HINSTANCE _loadDLL(TCHAR *name) {
 
   return NULL;
 }
+#endif /* WIN32 */
 
 // AdjustForecastTemperature
 // Adjusts the maximum ground temperature used by the convection forecast
@@ -1542,6 +1555,7 @@ void InputEvents::eventAdjustForecastTemperature(const TCHAR *misc) {
 // Runs an external program of the specified filename.
 // Note that XCSoar will wait until this program exits.
 void InputEvents::eventRun(const TCHAR *misc) {
+#ifdef WIN32
   PROCESS_INFORMATION pi;
   if (!::CreateProcess(misc,
 		       NULL, NULL, NULL, FALSE, 0, NULL, NULL, NULL, &pi))
@@ -1549,6 +1563,10 @@ void InputEvents::eventRun(const TCHAR *misc) {
 
   // wait for program to finish!
   ::WaitForSingleObject(pi.hProcess, INFINITE);
+
+#else /* !WIN32 */
+  system(misc);
+#endif /* !WIN32 */
 }
 
 

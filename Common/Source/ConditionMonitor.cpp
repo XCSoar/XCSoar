@@ -56,7 +56,7 @@ Copyright_License {
 #include "Components.hpp"
 #include "WayPointList.hpp"
 
-// JMW TODO: make this use GPSClock (code re-use)
+// TODO: JMW: make this use GPSClock (code re-use)
 
 class ConditionMonitor {
 public:
@@ -127,10 +127,6 @@ private:
 
 };
 
-
-///////
-
-
 class ConditionMonitorWind: public ConditionMonitor {
 public:
   ConditionMonitorWind() {
@@ -180,7 +176,6 @@ private:
 
 };
 
-
 class ConditionMonitorFinalGlide: public ConditionMonitor {
 public:
   ConditionMonitorFinalGlide() {
@@ -188,8 +183,8 @@ public:
     Interval_Check = 1;
     tad = 0;
   }
-protected:
 
+protected:
   bool CheckCondition(const GlideComputer& cmp) {
     if (!cmp.Calculated().Flying || !task.Valid()) {
       return false;
@@ -218,7 +213,7 @@ protected:
         }
         if ((last_tad> 1) && (tad< -50)) {
           // dropped well below final glide, previously above
-	  last_tad = tad;
+          last_tad = tad;
           return true; // JMW this was true before
         }
       }
@@ -243,8 +238,6 @@ private:
   double tad;
   double last_tad;
 };
-
-
 
 class ConditionMonitorSunset: public ConditionMonitor {
 public:
@@ -287,7 +280,6 @@ protected:
 private:
 };
 
-
 class ConditionMonitorAATTime: public ConditionMonitor {
 public:
   ConditionMonitorAATTime() {
@@ -323,7 +315,6 @@ protected:
 
 private:
 };
-
 
 class ConditionMonitorStartRules: public ConditionMonitor {
 public:
@@ -366,7 +357,6 @@ protected:
 private:
   bool withinMargin;
 };
-
 
 class ConditionMonitorGlideTerrain: public ConditionMonitor {
 public:

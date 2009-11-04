@@ -57,29 +57,23 @@ static BOOL LXWP1(PDeviceDescriptor_t d, const TCHAR *String,
 static BOOL LXWP2(PDeviceDescriptor_t d, const TCHAR *String,
                   NMEA_INFO *GPS_INFO);
 
-
-static BOOL LXParseNMEA(PDeviceDescriptor_t d, const TCHAR *String,
-                        NMEA_INFO *GPS_INFO)
+static BOOL
+LXParseNMEA(PDeviceDescriptor_t d, const TCHAR *String, NMEA_INFO *GPS_INFO)
 {
   (void)d;
 
-  if(_tcsncmp(TEXT("$LXWP0"), String, 6)==0)
-    {
-      return LXWP0(d, &String[7], GPS_INFO);
-    }
-  if(_tcsncmp(TEXT("$LXWP1"), String, 6)==0)
-    {
-      return LXWP1(d, &String[7], GPS_INFO);
-    }
-  if(_tcsncmp(TEXT("$LXWP2"), String, 6)==0)
-    {
-      return LXWP2(d, &String[7], GPS_INFO);
-    }
+  if (_tcsncmp(TEXT("$LXWP0"), String, 6) == 0) {
+    return LXWP0(d, &String[7], GPS_INFO);
+  }
+  if (_tcsncmp(TEXT("$LXWP1"), String, 6) == 0) {
+    return LXWP1(d, &String[7], GPS_INFO);
+  }
+  if (_tcsncmp(TEXT("$LXWP2"), String, 6) == 0) {
+    return LXWP2(d, &String[7], GPS_INFO);
+  }
 
   return FALSE;
-
 }
-
 
 static const DeviceRegister_t lxDevice = {
   TEXT("LX"),
@@ -107,23 +101,19 @@ bool lxRegister(void){
   return devRegister(&lxDevice);
 }
 
-
-// *****************************************************************************
 // local stuff
 
-
-static BOOL LXWP1(PDeviceDescriptor_t d, const TCHAR *String,
-                  NMEA_INFO *GPS_INFO)
+static BOOL
+LXWP1(PDeviceDescriptor_t d, const TCHAR *String, NMEA_INFO *GPS_INFO)
 {
-  //  TCHAR ctemp[80];
+  // TCHAR ctemp[80];
   (void)GPS_INFO;
   // do nothing!
   return TRUE;
 }
 
-
-static BOOL LXWP2(PDeviceDescriptor_t d, const TCHAR *String,
-                  NMEA_INFO *GPS_INFO)
+static BOOL
+LXWP2(PDeviceDescriptor_t d, const TCHAR *String, NMEA_INFO *GPS_INFO)
 {
   TCHAR ctemp[80];
   (void)GPS_INFO;
@@ -133,9 +123,8 @@ static BOOL LXWP2(PDeviceDescriptor_t d, const TCHAR *String,
   return TRUE;
 }
 
-
-static BOOL LXWP0(PDeviceDescriptor_t d, const TCHAR *String,
-                  NMEA_INFO *GPS_INFO)
+static BOOL
+LXWP0(PDeviceDescriptor_t d, const TCHAR *String, NMEA_INFO *GPS_INFO)
 {
   TCHAR ctemp[80];
 
@@ -150,8 +139,8 @@ static BOOL LXWP0(PDeviceDescriptor_t d, const TCHAR *String,
    9 heading of plane
   10 windcourse (deg)
   11 windspeed (kph)
-
   */
+
   double alt, airspeed;
 
   NMEAParser::ExtractParameter(String,ctemp,1);

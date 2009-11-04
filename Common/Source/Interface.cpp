@@ -34,6 +34,7 @@ Copyright_License {
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
 */
+
 #include "Interface.hpp"
 #include "Thread/Mutex.hpp"
 #include "MainWindow.hpp"
@@ -87,7 +88,6 @@ void XCSoarInterface::ReceiveBlackboard() {
   }
 }
 
-
 void ActionInterface::SendSettingsComputer() {
   ScopeLock protect(mutexBlackboard);
   // send computer settings to the device because we know
@@ -125,7 +125,6 @@ void ActionInterface::SendSettingsMap(const bool trigger_draw) {
   // TODO: trigger refresh if the settings are changed
 }
 
-
 bool XCSoarInterface::InterfaceTimeoutZero(void) {
   ScopeLock protect(mutexInterfaceTimeout);
   return (interface_timeout==0);
@@ -135,7 +134,6 @@ void XCSoarInterface::InterfaceTimeoutReset(void) {
   ScopeLock protect(mutexInterfaceTimeout);
   interface_timeout = 0;
 }
-
 
 bool XCSoarInterface::InterfaceTimeoutCheck(void) {
   ScopeLock protect(mutexInterfaceTimeout);
@@ -173,7 +171,6 @@ bool XCSoarInterface::CheckShutdown(void) {
   return retval;
 }
 
-
 // Debounce input buttons (does not matter which button is pressed)
 // VNT 090702 FIX Careful here: synthetic double clicks and virtual keys require some timing.
 // See Defines.h DOUBLECLICKINTERVAL . Not sure they are 100% independent.
@@ -196,7 +193,6 @@ bool XCSoarInterface::Debounce(void) {
   return fps_last.check_update(debounceTimeout);
 }
 
-
 /**
  * Determine whether the vario gauge should be drawn depending on the
  * display orientation and the infobox layout
@@ -210,10 +206,10 @@ bool vario_visible() {
 #endif
   // TODO TB: logic update...
 
-// VENTA3 disable gauge vario for geometry 5 in landscape mode, use 8
-// box right instead beside those boxes were painted and overwritten
-// by the gauge already and gauge was graphically too much stretched,
-// requiring a restyle!
+  // VENTA3 disable gauge vario for geometry 5 in landscape mode, use 8
+  // box right instead beside those boxes were painted and overwritten
+  // by the gauge already and gauge was graphically too much stretched,
+  // requiring a restyle!
 
   if (InfoBoxLayout::gnav) {
     if ((InfoBoxLayout::landscape == true) &&

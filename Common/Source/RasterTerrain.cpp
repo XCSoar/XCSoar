@@ -48,7 +48,7 @@ Copyright_License {
 
 #include "wcecompat/ts_string.h"
 
-///////////////////// General, open/close ///////////////////////////////
+// General, open/close
 
 void RasterTerrain::OpenTerrain(void)
 {
@@ -97,41 +97,40 @@ void RasterTerrain::OpenTerrain(void)
   }
 }
 
-
 bool RasterTerrain::CreateTerrainMap(char *zfilename) {
   if (strstr(zfilename,".jp2")) {
     TerrainMap = new RasterMapJPG2000();
     if (!TerrainMap)
       return false;
+
     return TerrainMap->Open(zfilename);
   }
+
   TerrainMap = new RasterMapRaw();
-  if (!TerrainMap) {
+  if (!TerrainMap)
     return false;
-  }
-  if (TerrainMap->Open(zfilename)) {
+
+  if (TerrainMap->Open(zfilename))
     return true;
-  }
+
   TerrainMap->Close();
   delete TerrainMap;
 
   TerrainMap = new RasterMapCache();
-  if (!TerrainMap) {
+  if (!TerrainMap)
     return false;
-  }
-  if (TerrainMap->Open(zfilename)) {
+
+  if (TerrainMap->Open(zfilename))
     return true;
-  }
+
   return false;
 }
-
 
 void RasterTerrain::CloseTerrain(void)
 {
   StartupStore(TEXT("CloseTerrain\n"));
 
   if (terrain_initialised) {
-
     if (TerrainMap) {
       TerrainMap->Close();
       delete TerrainMap;
@@ -140,9 +139,6 @@ void RasterTerrain::CloseTerrain(void)
     terrain_initialised = false;
   }
 }
-
-
-////////
 
 void RasterTerrain::Lock(void) {
   if (TerrainMap) {
@@ -173,7 +169,6 @@ bool RasterTerrain::IsDirectAccess(void) {
   }
 }
 
-
 bool RasterTerrain::IsPaged(void) {
   if (TerrainMap) {
     return TerrainMap->IsPaged();
@@ -195,14 +190,12 @@ void RasterTerrain::ServiceTerrainCenter(const GEOPOINT &location) {
   }
 }
 
-
 void RasterTerrain::ServiceFullReload(const GEOPOINT &location) {
   if (TerrainMap) {
     XCSoarInterface::CreateProgressDialog(gettext(TEXT("Loading terrain tiles...")));
     TerrainMap->ServiceFullReload(location);
   }
 }
-
 
 int RasterTerrain::GetEffectivePixelSize(double *pixel_D,
                                          const GEOPOINT &location) {
@@ -212,7 +205,6 @@ int RasterTerrain::GetEffectivePixelSize(double *pixel_D,
     return 1;
   }
 }
-
 
 bool RasterTerrain::WaypointIsInTerrainRange(const GEOPOINT &location) {
   if (TerrainMap) {
@@ -229,7 +221,6 @@ bool RasterTerrain::WaypointIsInTerrainRange(const GEOPOINT &location) {
   }
 }
 
-
 bool RasterTerrain::GetTerrainCenter(GEOPOINT *location) {
   if (TerrainMap) {
     location->Latitude = (TerrainMap->TerrainInfo.Top+
@@ -241,5 +232,3 @@ bool RasterTerrain::GetTerrainCenter(GEOPOINT *location) {
     return false;
   }
 }
-
-

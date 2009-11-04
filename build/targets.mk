@@ -241,6 +241,10 @@ ifeq ($(TARGET),WINE)
 TARGET_INCLUDES += -I$(HDR)/wine
 endif
 
+ifeq ($(TARGET),UNIX)
+TARGET_CPPFLAGS += -DDISABLEAUDIO
+endif
+
 ####### compiler target
 
 ifeq ($(TARGET),UNIX)

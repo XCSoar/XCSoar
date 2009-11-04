@@ -44,7 +44,7 @@ Copyright_License {
 void RasterMap::LockRead() { lock.readLock(); };
 void RasterMap::Unlock() { lock.unlock(); };
 
-////// Rounding control ////////////////////////////////////////////////////
+// Rounding control
 
 
 bool RasterMap::GetMapCenter(GEOPOINT *loc) {
@@ -131,7 +131,7 @@ void RasterMap::SetFieldRounding(const double xr,
   rounding.DirectFine = false;
 }
 
-////////// Map general /////////////////////////////////////////////
+// Map general
 
 
 // JMW rounding further reduces data as required to speed up terrain
@@ -141,10 +141,9 @@ short RasterMap::GetField(const GEOPOINT &location,
 {
   if(isMapLoaded()) {
     if (rounding.DirectFine) {
-      return _GetFieldAtXY((int)(location.Longitude*rounding.fXroundingFine)
-                           -rounding.xlleft,
-                           rounding.xlltop-
-                           (int)(location.Latitude*rounding.fYroundingFine));
+      return _GetFieldAtXY(
+          (int)(location.Longitude*rounding.fXroundingFine) - rounding.xlleft,
+          rounding.xlltop - (int)(location.Latitude*rounding.fYroundingFine));
     } else {
       unsigned int ix =
         Real2Int((location.Longitude-TerrainInfo.Left)*rounding.fXrounding)*rounding.Xrounding;
@@ -157,4 +156,3 @@ short RasterMap::GetField(const GEOPOINT &location,
     return TERRAIN_INVALID;
   }
 }
-

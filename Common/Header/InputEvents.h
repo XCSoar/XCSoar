@@ -46,8 +46,6 @@ Copyright_License {
 
 typedef void (*pt2Event)(const TCHAR *);
 
-HINSTANCE _loadDLL(TCHAR *name);
-
 class InputEvents: public ActionInterface {
 public:
   enum mode {

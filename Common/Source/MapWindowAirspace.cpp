@@ -45,34 +45,37 @@ Copyright_License {
 
 void MapWindow::CalculateScreenPositionsAirspaceCircle(AIRSPACE_CIRCLE &circ) {
   circ.Visible = false;
-  if (!circ.FarVisible) return;
+  if (!circ.FarVisible)
+    return;
+
   if (SettingsComputer().iAirspaceMode[circ.Type]%2 == 1) {
     double basealt;
     double topalt;
+
     if (circ.Base.Base != abAGL) {
       basealt = circ.Base.Altitude;
     } else {
       basealt = circ.Base.AGL + Calculated().TerrainAlt;
     }
+
     if (circ.Top.Base != abAGL) {
       topalt = circ.Top.Altitude;
     } else {
       topalt = circ.Top.AGL + Calculated().TerrainAlt;
     }
-    if(CheckAirspaceAltitude(basealt, topalt, SettingsComputer())) {
 
+    if(CheckAirspaceAltitude(basealt, topalt, SettingsComputer())) {
       if (msRectOverlap(&circ.bounds, &screenbounds_latlon)
           || msRectContained(&screenbounds_latlon, &circ.bounds)) {
+        if (!circ._NewWarnAckNoBrush &&
+            !(SettingsMap().iAirspaceBrush[circ.Type] == NUMAIRSPACEBRUSHES-1)) {
+          circ.Visible = 2;
+        } else {
+          circ.Visible = 1;
+        }
 
-	if (!circ._NewWarnAckNoBrush &&
-	    !(SettingsMap().iAirspaceBrush[circ.Type] == NUMAIRSPACEBRUSHES-1)) {
-	  circ.Visible = 2;
-	} else {
-	  circ.Visible = 1;
-	}
+        LonLat2Screen(circ.Location, circ.Screen);
 
-        LonLat2Screen(circ.Location,
-                      circ.Screen);
         circ.ScreenR = DistanceMetersToScreen(circ.Radius);
       }
     }
@@ -81,38 +84,45 @@ void MapWindow::CalculateScreenPositionsAirspaceCircle(AIRSPACE_CIRCLE &circ) {
 
 void MapWindow::CalculateScreenPositionsAirspaceArea(AIRSPACE_AREA &area) {
   area.Visible = false;
-  if (!area.FarVisible) return;
+  if (!area.FarVisible)
+    return;
+
   if (SettingsComputer().iAirspaceMode[area.Type]%2 == 1) {
     double basealt;
     double topalt;
+
     if (area.Base.Base != abAGL) {
       basealt = area.Base.Altitude;
     } else {
       basealt = area.Base.AGL + Calculated().TerrainAlt;
     }
+
     if (area.Top.Base != abAGL) {
       topalt = area.Top.Altitude;
     } else {
       topalt = area.Top.AGL + Calculated().TerrainAlt;
     }
+
     if(CheckAirspaceAltitude(basealt, topalt, SettingsComputer())) {
       if (msRectOverlap(&area.bounds, &screenbounds_latlon)
           || msRectContained(&screenbounds_latlon, &area.bounds)) {
         AIRSPACE_POINT *ap= AirspacePoint+area.FirstPoint;
         const AIRSPACE_POINT *ep= ap+area.NumPoints;
         POINT* sp= AirspaceScreenPoint+area.FirstPoint;
+
         while (ap < ep) {
-	  // JMW optimise!
+          // JMW optimise!
           LonLat2Screen(*ap, *sp);
           ap++;
           sp++;
         }
-	if (!area._NewWarnAckNoBrush &&
-	    !(SettingsMap().iAirspaceBrush[area.Type] == NUMAIRSPACEBRUSHES-1)) {
-	  area.Visible = 2;
-	} else {
-	  area.Visible = 1;
-	}
+
+        if (!area._NewWarnAckNoBrush &&
+            !(SettingsMap().iAirspaceBrush[area.Type] == NUMAIRSPACEBRUSHES-1)) {
+          area.Visible = 2;
+        } else {
+          area.Visible = 1;
+        }
       }
     }
   }
@@ -132,7 +142,6 @@ void MapWindow::CalculateScreenPositionsAirspace() {
     }
   }
 }
-
 
 void MapWindow::ClearAirSpace(Canvas &canvas, bool fill) {
   Color whitecolor(0xff,0xff,0xff);
@@ -159,15 +168,16 @@ void MapWindow::DrawAirSpace(Canvas &canvas, const RECT rc, Canvas &buffer)
     // draw without border
     for(i=0;i<NumberOfAirspaceCircles;i++) {
       if (AirspaceCircle[i].Visible==2) {
-	if (!found) {
+        if (!found) {
           ClearAirSpace(buffer, true);
-	  found = true;
-	}
+          found = true;
+        }
         // this color is used as the black bit
         buffer.set_text_color(MapGfx.Colours[SettingsMap().iAirspaceColour[AirspaceCircle[i].Type]]);
         // get brush, can be solid or a 1bpp bitmap
         buffer.select(MapGfx.hAirspaceBrushes[SettingsMap().iAirspaceBrush[AirspaceCircle[i].Type]]);
-        buffer.circle(AirspaceCircle[i].Screen.x, AirspaceCircle[i].Screen.y,
+        buffer.circle(AirspaceCircle[i].Screen.x,
+                      AirspaceCircle[i].Screen.y,
                       AirspaceCircle[i].ScreenR);
       }
     }
@@ -176,15 +186,15 @@ void MapWindow::DrawAirSpace(Canvas &canvas, const RECT rc, Canvas &buffer)
   if (AirspaceArea) {
     for(i=0;i<NumberOfAirspaceAreas;i++) {
       if(AirspaceArea[i].Visible ==2) {
-	if (!found) {
-	  ClearAirSpace(buffer, true);
-	  found = true;
-	}
+        if (!found) {
+          ClearAirSpace(buffer, true);
+          found = true;
+        }
         // this color is used as the black bit
         buffer.set_text_color(MapGfx.Colours[SettingsMap().iAirspaceColour[AirspaceArea[i].Type]]);
         buffer.select(MapGfx.hAirspaceBrushes[SettingsMap().iAirspaceBrush[AirspaceArea[i].Type]]);
         buffer.polygon(AirspaceScreenPoint+AirspaceArea[i].FirstPoint,
-                               AirspaceArea[i].NumPoints);
+            AirspaceArea[i].NumPoints);
       }
     }
   }
@@ -199,16 +209,19 @@ void MapWindow::DrawAirSpace(Canvas &canvas, const RECT rc, Canvas &buffer)
   if (AirspaceCircle) {
     for(i=0;i<NumberOfAirspaceCircles;i++) {
       if (AirspaceCircle[i].Visible) {
-	if (!found) {
-	  ClearAirSpace(buffer, false);
-	  found = true;
-	}
+        if (!found) {
+          ClearAirSpace(buffer, false);
+          found = true;
+        }
+
         if (SettingsMap().bAirspaceBlackOutline) {
           buffer.black_pen();
         } else {
           buffer.select(MapGfx.hAirspacePens[AirspaceCircle[i].Type]);
         }
-        buffer.circle(AirspaceCircle[i].Screen.x, AirspaceCircle[i].Screen.y,
+
+        buffer.circle(AirspaceCircle[i].Screen.x,
+                      AirspaceCircle[i].Screen.y,
                       AirspaceCircle[i].ScreenR);
       }
     }
@@ -217,30 +230,30 @@ void MapWindow::DrawAirSpace(Canvas &canvas, const RECT rc, Canvas &buffer)
   if (AirspaceArea) {
     for(i=0;i<NumberOfAirspaceAreas;i++) {
       if(AirspaceArea[i].Visible) {
-	if (!found) {
-	  ClearAirSpace(buffer, false);
-	  found = true;
-	}
+        if (!found) {
+          ClearAirSpace(buffer, false);
+          found = true;
+        }
+
         if (SettingsMap().bAirspaceBlackOutline) {
           buffer.black_pen();
         } else {
           buffer.select(MapGfx.hAirspacePens[AirspaceArea[i].Type]);
         }
 
-	POINT *pstart = AirspaceScreenPoint+AirspaceArea[i].FirstPoint;
+        POINT *pstart = AirspaceScreenPoint+AirspaceArea[i].FirstPoint;
         buffer.polyline(pstart, AirspaceArea[i].NumPoints);
 
-	if (AirspaceArea[i].NumPoints>2) {
-	  // JMW close if open
-	  if ((pstart[0].x != pstart[AirspaceArea[i].NumPoints-1].x) ||
-	      (pstart[0].y != pstart[AirspaceArea[i].NumPoints-1].y)) {
-	    POINT ps[2];
-	    ps[0] = pstart[0];
-	    ps[1] = pstart[AirspaceArea[i].NumPoints-1];
+        if (AirspaceArea[i].NumPoints>2) {
+          // JMW close if open
+          if ((pstart[0].x != pstart[AirspaceArea[i].NumPoints-1].x) ||
+              (pstart[0].y != pstart[AirspaceArea[i].NumPoints-1].y)) {
+            POINT ps[2];
+            ps[0] = pstart[0];
+            ps[1] = pstart[AirspaceArea[i].NumPoints-1];
             buffer.polyline(ps, 2);
-	  }
-	}
-
+          }
+        }
       }
     }
   }
@@ -256,7 +269,6 @@ void MapWindow::DrawAirSpace(Canvas &canvas, const RECT rc, Canvas &buffer)
     buffer.background_opaque();
   }
 }
-
 
 void MapWindow::ScanVisibilityAirspace(rectObj *bounds_active) {
   // received when the SetTopoBounds determines the visibility

@@ -39,14 +39,23 @@ Copyright_License {
 #include "Registry.hpp"
 #include "UtilsText.hpp"
 #include "LogFile.hpp"
-#include "uniqueid.h"
 #include "UtilsSystem.hpp"
 #include "LocalPath.hpp"
 #include "Sizes.h"
 
+#if defined(WIN32) && !(defined(__MINGW32__) && defined(WINDOWSPC))
+#include "uniqueid.h"
+#endif
+
 // Registration Data
 TCHAR strAssetNumber[MAX_LOADSTRING] = TEXT(""); //4G17DW31L0HY");
 TCHAR strRegKey[MAX_LOADSTRING] = TEXT("");
+
+static void
+ReadCompaqID(void);
+
+static void
+ReadUUID(void);
 
 void ReadAssetNumber(void)
 {
@@ -112,8 +121,10 @@ void ReadAssetNumber(void)
   return;
 }
 
-void ReadCompaqID(void)
+static void
+ReadCompaqID(void)
 {
+#if defined(WIN32) && !defined(WINDOWSPC)
   PROCESS_INFORMATION pi;
 
   if(strAssetNumber[0] != '\0')
@@ -133,12 +144,14 @@ void ReadCompaqID(void)
   memset(strAssetNumber, 0, 64 * sizeof(TCHAR));
   fread(&strAssetNumber, 64, 1, file);
   fclose(file);
+#endif
 }
 
 
-void ReadUUID(void)
+static void
+ReadUUID(void)
 {
-#if !(defined(__MINGW32__) && defined(WINDOWSPC))
+#if defined(WIN32) && !(defined(__MINGW32__) && defined(WINDOWSPC))
   BOOL fRes;
 
 #define GUIDBuffsize 100

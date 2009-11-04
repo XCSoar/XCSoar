@@ -51,7 +51,7 @@ Copyright_License {
 #include "Audio/WaveThread.h"
 #endif
 
-#ifndef __MINGW32__
+#if defined(WIN32) && !defined(__MINGW32__)
 #if defined(CECORE)
 #include "winbase.h"
 #endif
@@ -60,57 +60,15 @@ Copyright_License {
 #endif
 #endif
 
+#ifdef HAVE_POSIX
+#include <sys/statvfs.h>
+#include <sys/stat.h>
+#endif
+
 #ifdef WINDOWSPC
 int SCREENWIDTH=640;
 int SCREENHEIGHT=480;
 #endif
-
-#if !defined(GNAV) || defined(WINDOWSPC)
-typedef DWORD (_stdcall *GetIdleTimeProc) (void);
-GetIdleTimeProc GetIdleTime;
-#endif
-
-int MeasureCPULoad() {
-#if (!defined(GNAV) || defined(WINDOWSPC)) && !defined(__MINGW32__)
-  static bool init=false;
-  if (!init) {
-    // get the pointer to the function
-    GetIdleTime = (GetIdleTimeProc)
-      GetProcAddress(LoadLibrary(_T("coredll.dll")),
-		     _T("GetIdleTime"));
-    init=true;
-  }
-  if (!GetIdleTime) return 0;
-#endif
-
-#if defined(GNAV) && defined(__MINGW32__)
-  // JMW GetIdleTime() not defined?
-  return 100;
-#else
-  static int pi;
-  static int PercentIdle;
-  static int PercentLoad;
-  static bool start=true;
-  static DWORD dwStartTick;
-  static DWORD dwIdleSt;
-  static DWORD dwStopTick;
-  static DWORD dwIdleEd;
-  if (start) {
-    dwStartTick = GetTickCount();
-    dwIdleSt = GetIdleTime();
-  }
-  if (!start) {
-    dwStopTick = GetTickCount();
-    dwIdleEd = GetIdleTime();
-    pi = ((100 * (dwIdleEd - dwIdleSt))/(dwStopTick - dwStartTick));
-    PercentIdle = (PercentIdle+pi)/2;
-  }
-  start = !start;
-  PercentLoad = 100-PercentIdle;
-  return PercentLoad;
-#endif
-}
-
 
 long CheckFreeRam(void) {
   MEMORYSTATUS    memInfo;
@@ -124,7 +82,6 @@ long CheckFreeRam(void) {
 
   return memInfo.dwAvailPhys;
 }
-
 
 #ifdef WINDOWSPC
 #ifdef _DEBUG
@@ -140,7 +97,6 @@ void MemCheckPoint()
 #endif
 #endif
 }
-
 
 void MemLeakCheck() {
 #ifdef WINDOWSPC
@@ -160,13 +116,11 @@ void MemLeakCheck() {
 #endif
 }
 
-
-///////////////
-
 // This is necessary to be called periodically to get rid of
 // memory defragmentation, since on pocket pc platforms there is no
 // automatic defragmentation.
 void MyCompactHeaps() {
+#ifdef WIN32
 #if defined(WINDOWSPC)||(defined(GNAV) && !defined(__MINGW32__))
   HeapCompact(GetProcessHeap(),0);
 #else
@@ -184,12 +138,18 @@ void MyCompactHeaps() {
     CompactAllHeaps();
   }
 #endif
+#endif /* WIN32 */
 }
 
 
 unsigned long FindFreeSpace(const TCHAR *path) {
   // returns number of kb free on destination drive
-
+#ifdef HAVE_POSIX
+  struct statvfs s;
+  if (statvfs(path, &s) < 0)
+    return 0;
+  return s.f_bsize * s.f_bavail;
+#else /* !HAVE_POSIX */
   ULARGE_INTEGER FreeBytesAvailableToCaller;
   ULARGE_INTEGER TotalNumberOfBytes;
   ULARGE_INTEGER TotalNumberOfFreeBytes;
@@ -201,13 +161,21 @@ unsigned long FindFreeSpace(const TCHAR *path) {
   } else {
     return 0;
   }
+#endif /* !HAVE_POSIX */
 }
 
+/**
+ * Creates a new directory in the home directory, if it doesn't exist yet
+ * @param filename Name of the new directory
+ */
 void CreateDirectoryIfAbsent(const TCHAR *filename) {
   TCHAR fullname[MAX_PATH];
 
   LocalPath(fullname, filename);
 
+#ifdef HAVE_POSIX
+  mkdir(filename, 0777);
+#else /* !HAVE_POSIX */
   DWORD fattr = GetFileAttributes(fullname);
 
   if ((fattr != 0xFFFFFFFF) &&
@@ -216,7 +184,7 @@ void CreateDirectoryIfAbsent(const TCHAR *filename) {
   } else {
     CreateDirectory(fullname, NULL);
   }
-
+#endif /* !HAVE_POSIX */
 }
 
 
@@ -888,8 +856,14 @@ RECT SystemWindowSize(void) {
 #else
   WindowSize.left = 0;
   WindowSize.top = 0;
+#ifdef WIN32
   WindowSize.right = GetSystemMetrics(SM_CXSCREEN);
   WindowSize.bottom = GetSystemMetrics(SM_CYSCREEN);
+#else /* !WIN32 */
+  // XXX implement this properly for SDL/UNIX
+  WindowSize.right = 640;
+  WindowSize.bottom = 480;
+#endif /* !WIN32 */
 #endif
   return WindowSize;
 }
