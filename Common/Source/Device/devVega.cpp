@@ -469,6 +469,14 @@ BOOL vgaPutThermal(DeviceDescriptor_t *d, bool active,
                    double W,
                    double R)
 {
+  TCHAR tbuf[100];
+
+  wsprintf(tbuf, TEXT("PTLOC,%d,%g,%g,%g,%g"),
+           (int)active, longitude, latitude,
+           W, R);
+
+  devWriteNMEAString(d, mcbuf);
+
   return(TRUE);
 }
 
