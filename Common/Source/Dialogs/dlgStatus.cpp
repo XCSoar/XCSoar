@@ -272,11 +272,9 @@ static void UpdateValuesSystem() {
   wp = (WndProperty*)wf->FindByName(TEXT("prpBattery"));
   if (wp) {
     _stprintf(Temp,TEXT("\0"));
-#ifndef WINDOWSPC
-#ifndef GNAV
+#if !defined(GNAV) && !defined(WINDOWSPC) && !defined(HAVE_POSIX)
     _stprintf(Temp2,TEXT("%d%% "), PDABatteryPercent);
     _tcscat(Temp, Temp2);
-#endif
 #endif
     if (XCSoarInterface::Basic().SupplyBatteryVoltage == 0) {
       _stprintf(Temp2,TEXT("\0"));
