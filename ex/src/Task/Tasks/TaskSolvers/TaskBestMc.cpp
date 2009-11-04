@@ -1,14 +1,14 @@
 #include "TaskBestMc.hpp"
 #include <math.h>
 #include "Util/Tolerances.hpp"
-
+#include <algorithm>
 
 TaskBestMc::TaskBestMc(const std::vector<OrderedTaskPoint*>& tps,
                        const unsigned activeTaskPoint,
                        const AIRCRAFT_STATE &_aircraft,
                        const GlidePolar &_gp,
                        const double _mc_min):
-  ZeroFinder(_mc_min,10.0, TOLERANCE_BEST_MC),
+  ZeroFinder(_mc_min,10.0,TOLERANCE_BEST_MC),
   tm(tps,activeTaskPoint,_gp),
   aircraft(_aircraft) 
 {
@@ -17,7 +17,7 @@ TaskBestMc::TaskBestMc(const std::vector<OrderedTaskPoint*>& tps,
 TaskBestMc::TaskBestMc(TaskPoint* tp,
                        const AIRCRAFT_STATE &_aircraft,
                        const GlidePolar &_gp):
-  ZeroFinder(0.1,10.0,0.001),
+  ZeroFinder(0.1,10.0,TOLERANCE_BEST_MC),
   tm(tp,_gp),
   aircraft(_aircraft) 
 {
@@ -25,11 +25,11 @@ TaskBestMc::TaskBestMc(TaskPoint* tp,
 
 double TaskBestMc::f(const double mc) 
 {
-  tm.set_mc(mc);
+  tm.set_mc(std::max(0.001,mc));
   res = tm.glide_solution(aircraft);
   // TODO: this fails if Mc too low for wind, need to 
   // account for failed solution
-  // && (fabs(res.AltitudeDifference)<tolerance)
+
   if (res.Vector.Distance>0) {
     return res.AltitudeDifference/res.Vector.Distance;
   } else {

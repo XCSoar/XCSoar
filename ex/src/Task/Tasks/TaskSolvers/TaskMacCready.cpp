@@ -59,8 +59,8 @@ TaskMacCready::glide_solution(const AIRCRAFT_STATE &aircraft)
       acc_gr.add(gr);
     }
 
-    if (gr.Solution != GlideResult::RESULT_OK) {      
-      return gr;
+    if (gr.Solution != GlideResult::RESULT_OK) {
+      i = start-1; // quick exit
     }
 
   }
@@ -74,9 +74,7 @@ TaskMacCready::glide_solution(const AIRCRAFT_STATE &aircraft)
     aircraft_predict.Altitude -= gs[i].HeightGlide;
     alt_difference = std::min(alt_difference, aircraft_predict.Altitude-minHs[i]);
   }
-  if (gr.HeightClimb>0) {
-    alt_difference = -gr.HeightClimb;
-  }
+  alt_difference -= gr.HeightClimb;
   gr.AltitudeDifference = alt_difference;
   gr.calc_cruise_bearing();
   return gr;

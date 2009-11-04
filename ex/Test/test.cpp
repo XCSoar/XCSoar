@@ -271,7 +271,7 @@ void test_flight(TaskManager &task_manager,
   w[4].Longitude = 0.95; 
   w[4].Latitude = 0; 
   w[5].Longitude = -0.025; 
-  w[5].Latitude = 0.025; 
+  w[5].Latitude = 0.0; 
 
   AIRCRAFT_STATE state, state_last;
   state.Location = w[0];
@@ -333,7 +333,7 @@ void test_flight(TaskManager &task_manager,
         }
         break;
       case FinalGlide:
-        state.Speed = stat.solution_remaining.VOpt;
+        state.Speed = stat.solution_remaining.VOpt*0.97;
         sinkrate = glide_polar.SinkRate(state.Speed);
         bearing = state.Location.bearing(w[i+1])+small_rand();
         break;
