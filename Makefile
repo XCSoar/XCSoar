@@ -48,7 +48,7 @@ INCLUDES := $(TARGET_INCLUDES) -I$(HDR) -I$(SRC) -I../ex_xcsoar
 ######## compiler flags
 
 CPPFLAGS := $(INCLUDES) $(TARGET_CPPFLAGS)
-CPPFLAGS	+= -DFLARM_AVERAGE -DNEWTASK
+CPPFLAGS	+= -DFLARM_AVERAGE 
 
 CXXFLAGS	:=$(OPTIMIZE) -fno-exceptions $(PROFILE)
 CFLAGS		:=$(OPTIMIZE) $(PROFILE)
@@ -67,79 +67,6 @@ MAKEFLAGS	+=-r
 ifeq ($(CONFIG_PC),n)
 #CPPFLAGS_Common_Source_ :=-Werror
 endif
-
-TASK_OBJS	:=\
-	../ex_xcsoar/test.o \
-	../ex_xcsoar/Util.o \
-	../ex_xcsoar/Util/Intersection.o \
-	../ex_xcsoar/Util/Printing.o \
-	../ex_xcsoar/GlideSolvers/GlideState.o \
-	../ex_xcsoar/GlideSolvers/GlidePolar.o \
-	../ex_xcsoar/GlideSolvers/GlideResult.o \
-	../ex_xcsoar/GlideSolvers/MacCready.o \
-	../ex_xcsoar/GlideSolvers/ZeroFinder.o \
-	../ex_xcsoar/Navigation/Aircraft.o \
-	../ex_xcsoar/Navigation/DistanceMemento.o \
-	../ex_xcsoar/Navigation/GeoVectorMemento.o \
-	../ex_xcsoar/Navigation/FlatBoundingBox.o \
-	../ex_xcsoar/Navigation/ReferencePoint.o \
-	../ex_xcsoar/Navigation/Airspace.o \
-	../ex_xcsoar/Navigation/AirspaceCircle.o \
-	../ex_xcsoar/Navigation/AirspacePolygon.o \
-	../ex_xcsoar/Navigation/Airspaces.o \
-	../ex_xcsoar/Navigation/GeoVector.o \
-	../ex_xcsoar/Navigation/Waypoint.o \
-	../ex_xcsoar/Navigation/Waypoints.o \
-	../ex_xcsoar/BaseTask/AATPoint.o \
-	../ex_xcsoar/BaseTask/AATIsoline.o \
-	../ex_xcsoar/BaseTask/AATIsolineSegment.o \
-	../ex_xcsoar/BaseTask/AATIsolineIntercept.o \
-	../ex_xcsoar/BaseTask/OrderedTaskPoint.o \
-	../ex_xcsoar/BaseTask/ScoredTaskPoint.o \
-	../ex_xcsoar/BaseTask/TaskProjection.o \
-	../ex_xcsoar/BaseTask/TaskProjectionClient.o \
-	../ex_xcsoar/BaseTask/FinishPoint.o \
-	../ex_xcsoar/BaseTask/SampledTaskPoint.o \
-	../ex_xcsoar/BaseTask/SearchPoint.o \
-	../ex_xcsoar/BaseTask/TaskLeg.o \
-	../ex_xcsoar/BaseTask/IntermediatePoint.o \
-	../ex_xcsoar/BaseTask/StartPoint.o \
-	../ex_xcsoar/BaseTask/TaskPoint.o \
-	../ex_xcsoar/BaseTask/ConvexHull/GrahamScan.o \
-	../ex_xcsoar/BaseTask/ConvexHull/PolygonInterior.o \
-	../ex_xcsoar/Scoring/ObservationZone.o \
-	../ex_xcsoar/TaskPoints/FAICylinderASTPoint.o \
-	../ex_xcsoar/TaskPoints/FAISectorASTPoint.o \
-	../ex_xcsoar/TaskPoints/FAISectorFinishPoint.o \
-	../ex_xcsoar/TaskPoints/FAISectorStartPoint.o \
-	../ex_xcsoar/TaskPoints/SectorAATPoint.o \
-	../ex_xcsoar/TaskPoints/CylinderAATPoint.o \
-	../ex_xcsoar/TaskPoints/ObservationZones/CylinderZone.o \
-	../ex_xcsoar/TaskPoints/ObservationZones/HeightLimitZone.o \
-	../ex_xcsoar/TaskPoints/ObservationZones/SectorZone.o \
-	../ex_xcsoar/TaskPoints/ObservationZones/SpeedLimitZone.o \
-	../ex_xcsoar/TaskPoints/ObservationZones/SymmetricSectorZone.o \
-	../ex_xcsoar/Tasks/AbortTask.o \
-	../ex_xcsoar/Tasks/AbstractTask.o \
-	../ex_xcsoar/Tasks/GotoTask.o \
-	../ex_xcsoar/Tasks/OrderedTask.o \
-	../ex_xcsoar/Tasks/TaskInterface.o \
-	../ex_xcsoar/Tasks/TaskManager.o \
-	../ex_xcsoar/Tasks/TaskEvents.o \
-	../ex_xcsoar/Tasks/TaskAdvance.o \
-	../ex_xcsoar/Tasks/PathSolvers/TaskDijkstra.o \
-	../ex_xcsoar/Tasks/PathSolvers/IsolineCrossingFinder.o \
-	../ex_xcsoar/Tasks/TaskSolvers/TaskMacCready.o \
-	../ex_xcsoar/Tasks/TaskSolvers/TaskMacCreadyTravelled.o \
-	../ex_xcsoar/Tasks/TaskSolvers/TaskMacCreadyRemaining.o \
-	../ex_xcsoar/Tasks/TaskSolvers/TaskMacCreadyTotal.o \
-	../ex_xcsoar/Tasks/TaskSolvers/TaskBestMc.o \
-	../ex_xcsoar/Tasks/TaskSolvers/TaskCruiseEfficiency.o \
-	../ex_xcsoar/Tasks/TaskSolvers/TaskMinTarget.o \
-	../ex_xcsoar/Tasks/TaskSolvers/TaskOptTarget.o \
-	../ex_xcsoar/Tasks/TaskSolvers/TaskGlideRequired.o \
-	../ex_xcsoar/Tasks/TaskStats/TaskStats.o 
-
 
 DEVS	:=\
 	$(SRC)/Device/devAltairPro.o \
@@ -216,7 +143,6 @@ VOLKS	:=\
 
 
 OBJS	:=\
-	$(TASK_OBJS) 			\
 	$(SRC)/Globals.o 		\
 	\
 	$(SRC)/Poco/RWLock.o		\
