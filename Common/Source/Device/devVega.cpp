@@ -475,7 +475,7 @@ BOOL vgaPutThermal(DeviceDescriptor_t *d, bool active,
            (int)active, longitude, latitude,
            W, R);
 
-  devWriteNMEAString(d, mcbuf);
+  devWriteNMEAString(d, tbuf);
 
   return(TRUE);
 }
