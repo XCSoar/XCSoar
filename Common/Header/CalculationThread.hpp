@@ -43,19 +43,29 @@ Copyright_License {
 
 class GlideComputer;
 
+/**
+ * The CalculationThread handles all expensive calculations
+ * that should not be done directly in the device thread.
+ * Data transfer is handled by a blackboard system.
+ */
 class CalculationThread : public Thread {
+  /** The data_trigger is used when new data is available (Vario + GPS) */
   Trigger data_trigger;
+  /** The gps_trigger is used only when new GPS data is available */
   Trigger gps_trigger;
 
+  /** Pointer to the GlideComputer that should be used */
   GlideComputer *glide_computer;
 
 public:
   CalculationThread(GlideComputer *_glide_computer);
 
+  /** Triggers the data_trigger */
   void trigger_data() {
     data_trigger.trigger();
   }
 
+  /** Triggers the gps_trigger */
   void trigger_gps() {
     gps_trigger.trigger();
   }
