@@ -43,22 +43,36 @@ Copyright_License {
 #include "Thread/Trigger.hpp"
 
 class MapWindow;
+
+// QUESTION TB: ehm... why??
 class GaugeFLARM;
 
+/**
+ * The DrawThread handles the rendering and drawing on the screen.
+ */
 class DrawThread : public Thread {
+  /**
+   * The Mutex gets locked externally the drawing
+   * is hold until release of the Mutex
+   */
   Mutex mutexRun;
 
+  /** Pointer to the MapWindow */
   MapWindow &map;
+
+  /** Pointer to the FLARM gauge */
   GaugeFLARM *flarm;
 
 public:
   DrawThread(MapWindow &_map, GaugeFLARM *_flarm)
     :map(_map), flarm(_flarm) {}
 
+  /** Locks the Mutex and "pauses" the drawing thread */
   void suspend() {
     mutexRun.Lock();
   }
 
+  /** Releases the Mutex and "continues" the drawing thread */
   void resume() {
     mutexRun.Unlock();
   }
