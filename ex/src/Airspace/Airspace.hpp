@@ -12,10 +12,10 @@ class Airspace:
 public:
 
   /** 
-   * Constructor for actual airspaces.  This follows envelope-letter idiom,
-   * in which the AbstractAirspace is the letter and this class Airspace
-   * is an envelope, containing bounding box information for use with
-   * high performance search structures.
+   * Constructor for actual airspaces.  This follows envelope-letter
+   * idiom, in which the AbstractAirspace is the letter and this class
+   * Airspace is an envelope, containing bounding box information for
+   * use with high performance search structures.
    * 
    * @param airspace actual concrete airspace to create an envelope for
    * @param tp task projection to be used for flat-earth representation
@@ -26,7 +26,8 @@ public:
            const TaskProjection& tp);
 
   /** 
-   * Constructor for virtual airspaces for use in range-based intersection queries
+   * Constructor for virtual airspaces for use in range-based
+   * intersection queries
    * 
    * @param loc Location about which to create a virtual airspace envelope
    * @param task_projection projection to be used for flat-earth representation
@@ -43,7 +44,8 @@ public:
   };
 
   /** 
-   * Constructor for virtual airspaces for use in bounding-box specified intersection queries
+   * Constructor for virtual airspaces for use in bounding-box
+   * specified intersection queries
    * 
    * @param ll Lower left corner of bounding box
    * @param ur Upper right corner of bounding box
@@ -61,10 +63,9 @@ public:
   };
 
   /** 
-   * Checks whether an aircraft is inside the airspace.
-   * First performs bounding box search, then if successful 
-   * refines the search by directing the query to the enclosed
-   * concrete airspace.
+   * Checks whether an aircraft is inside the airspace.  First
+   * performs bounding box search, then if successful refines the
+   * search by directing the query to the enclosed concrete airspace.
    * 
    * @param loc Location to check for enclosure
    * 
@@ -73,7 +74,8 @@ public:
   bool inside(const AIRCRAFT_STATE &loc) const;
 
   /** 
-   * Checks whether a flat-earth ray intersects with the airspace bounding box.
+   * Checks whether a flat-earth ray intersects with the airspace
+   * bounding box.
    * 
    * @param ray Flat-earth ray to check for intersection
    * 
@@ -82,8 +84,8 @@ public:
   bool intersects(const FlatRay& ray) const;
 
   /** 
-   * Checks whether a line intersects with the airspace,
-   * by directing the query to the enclosed concrete airspace.
+   * Checks whether a line intersects with the airspace, by directing
+   * the query to the enclosed concrete airspace.
    * 
    * @param g1 Location of origin of search vector
    * @param vec Line from origin
@@ -96,9 +98,9 @@ public:
 
   /** 
    * Destroys concrete airspace enclosed by this instance if present.
-   * Note that this should not be called by clients but only by the master
-   * store.  Many copies of this airspace may point to the same concrete
-   * airspace so have to be careful here.
+   * Note that this should not be called by clients but only by the
+   * master store.  Many copies of this airspace may point to the same
+   * concrete airspace so have to be careful here.
    * 
    */
   void destroy();
