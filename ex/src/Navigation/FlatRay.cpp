@@ -30,6 +30,7 @@ FlatRay::intersects (const FlatRay &oray) const
   return ((double)ua)/denom;
 }
 
+
 FLAT_GEOPOINT
 FlatRay::parametric(const double t) const
 {

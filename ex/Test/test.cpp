@@ -33,6 +33,7 @@ extern unsigned count_distbearing;
 extern unsigned num_dijkstra;
 #endif
 
+
 void distance_counts() {
   if (n_samples) {
 #ifndef NEWTASK
@@ -59,11 +60,18 @@ void distance_counts() {
 
 Filter heading_filt(8.0);
 
+
 double small_rand() {
   return heading_filt.update(-40.0+rand()*80.0/RAND_MAX);
 }
 
-
+/** 
+ * Wait-for-key prompt
+ * 
+ * @param time time of simulation
+ * 
+ * @return character received by keyboard
+ */
 char wait_prompt(const double time) {
 #ifdef DO_PRINT
   printf("# %g [enter to continue]\n",time);
@@ -74,6 +82,12 @@ char wait_prompt(const double time) {
 
 Waypoint wp[6];
 
+/** 
+ * Initialises waypoints with random and non-random waypoints
+ * for testing
+ *
+ * @param waypoints waypoints class to add waypoints to
+ */
 void setup_waypoints(Waypoints &waypoints) {
 #ifdef DO_PRINT
   std::ofstream fin("results/res-wp-in.txt");
