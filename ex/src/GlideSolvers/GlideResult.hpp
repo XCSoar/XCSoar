@@ -10,11 +10,11 @@ struct GlideState;
 struct GlideResult {
 
   enum GlideResult_t {
-    RESULT_OK = 0,
-    RESULT_PARTIAL,
-    RESULT_WIND_EXCESSIVE,
-    RESULT_MACCREADY_INSUFFICIENT,
-    RESULT_NOSOLUTION
+    RESULT_OK = 0,              /**< Solution is achievable */
+    RESULT_PARTIAL,             /**< Solution is partially achievable */
+    RESULT_WIND_EXCESSIVE,      /**< Wind is too strong to allow progress */
+    RESULT_MACCREADY_INSUFFICIENT, /**< Expected climb rate is too low to allow progress */
+    RESULT_NOSOLUTION           /**< Solution not computed or algorithm failed */
   };
 
 /** 
