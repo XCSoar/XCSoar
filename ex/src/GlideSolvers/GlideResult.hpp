@@ -17,6 +17,12 @@ struct GlideResult {
     RESULT_NOSOLUTION
   };
 
+/** 
+ * Dummy constructor for null result.  Used as default
+ * return value for failed/trivial tasks
+ * 
+ * @return Initialised null result
+ */
   GlideResult():
     Solution(RESULT_NOSOLUTION),
     Vector(0,0),
@@ -34,44 +40,82 @@ struct GlideResult {
       // default is null result
     }
 
+/** 
+ * Constructor with partial initialisation for a particular
+ * task.  This copies task information so that the resulting instance
+ * contains everything required for navigation and the GlideState 
+ * instance can be destroyed.
+ * 
+ * @param task Task for which glide result will be calculated
+ * @param V Optimal speed to fly
+ * 
+ * @return Blank glide result
+ */
   GlideResult(const GlideState &task, 
                const double V);
 
-  GeoVector Vector;
-  double DistanceToFinal;
-  double CruiseTrackBearing;
-  double VOpt;
-  double HeightClimb;
-  double HeightGlide;
-  double TimeElapsed;
-  double TimeVirtual;
-  double AltitudeDifference;
-  double EffectiveWindSpeed;
-  double EffectiveWindAngle;
-  GlideResult_t Solution;
+  GeoVector Vector;             /**< Distance/bearing of task achievable */
+  double DistanceToFinal;       /**< Distance to go before final glide (m) */
+  double CruiseTrackBearing;    /**< Track bearing in cruise for optimal drift compensation (deg true) */
+  double VOpt;                  /**< Optimal speed to fly in cruise (m/s) */
+  double HeightClimb;           /**< Height to be climbed (m) */
+  double HeightGlide;           /**< Height that will be glided (m) */
+  double TimeElapsed;           /**< Time to complete task (s) */
+  double TimeVirtual;           /**< Equivalent time to recover glided height (s) at MC */
+  double AltitudeDifference;    /**< Height above/below final glide for this task (m) */
+  double EffectiveWindSpeed;    /**< (internal) */
+  double EffectiveWindAngle;    /**< (internal) */
+  GlideResult_t Solution;       /**< Solution validity */
 
+/** 
+ * Calculate cruise track bearing from internal variables.
+ * This is expensive so is only done on demand.
+ */
   void calc_cruise_bearing();
 
+/** 
+ * Check whether aircraft can finish this task without
+ * further climb.
+ * 
+ * @return True if aircraft is at or above final glide
+ */
   bool is_final_glide() const {
     return (DistanceToFinal==0.0);
   }
 
-  // returns true if this solution is better than s2
+/** 
+ * Check whether task is partially achievable.  It will
+ * fail if the wind is excessive for the current MC value.
+ * 
+ * @return True if task is at least partially achievable
+ */
   bool ok_or_partial() const {
     return (Solution == RESULT_OK)
       || (Solution == RESULT_PARTIAL);
   }
 
+/** 
+ * Check whether task is entirely achievable on final glide.
+ * 
+ * @return True if target is reachable without further climb
+ */
   bool glide_reachable() const {
     return (Solution==RESULT_OK) &&
       (AltitudeDifference>=0) &&
       (HeightClimb==0);
   }
-/*
-  bool superior(const GlideResult &s2) const;
-*/
+
+/** 
+ * Adds another GlideResult to this.  This is used to 
+ * accumulate GlideResults for a sequence of task segments.
+ * The order is important.
+ * 
+ * @param s2 The other glide result segment
+ */
   void add(const GlideResult &s2);
+
   double calc_vspeed(const double mc);
+
   double glide_angle_ground() const;
 
   friend std::ostream& operator<< (std::ostream& o, 
