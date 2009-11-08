@@ -2,7 +2,6 @@
 #define GLIDERESULT_HPP
 
 #include <iostream>
-#include "GlidePolar.hpp"
 #include "Navigation/GeoVector.hpp"
 
 struct GlideState;
