@@ -16,6 +16,7 @@ public:
   TaskBestMc(TaskPoint* tp,
              const AIRCRAFT_STATE &_aircraft,
              const GlidePolar &_gp);
+  virtual ~TaskBestMc() {};
 
   virtual double f(const double mc);
   virtual bool valid(const double mc);

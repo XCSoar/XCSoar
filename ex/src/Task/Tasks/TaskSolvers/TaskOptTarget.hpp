@@ -16,6 +16,8 @@ public:
                 const GlidePolar &_gp,
                 AATPoint& _tp_current,
                 StartPoint *_ts);
+  virtual ~TaskOptTarget() {};
+
   virtual double f(const double p);
   virtual bool valid(const double p);
   virtual double search(const double p);

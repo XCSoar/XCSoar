@@ -15,6 +15,7 @@ public:
                 const GlidePolar &_gp,
                 const double _t_remaining,
                 StartPoint *_ts);
+  virtual ~TaskMinTarget() {};
 
   virtual double f(const double p);
   virtual bool valid(const double p);

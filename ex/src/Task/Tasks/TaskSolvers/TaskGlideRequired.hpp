@@ -15,6 +15,8 @@ public:
   TaskGlideRequired(TaskPoint* tp,
                     const AIRCRAFT_STATE &_aircraft,
                     const GlidePolar &gp);
+  virtual ~TaskGlideRequired() {};
+
   virtual double f(const double mc);
   virtual bool valid(const double mc);
   virtual double search(const double mc);

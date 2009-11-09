@@ -12,6 +12,8 @@ public:
                        const unsigned activeTaskPoint,
                        const AIRCRAFT_STATE &_aircraft,
                        const GlidePolar &gp);
+  virtual ~TaskCruiseEfficiency() {};
+
   virtual double f(const double ce);
   virtual bool valid(const double ce);
   virtual double search(const double ce);

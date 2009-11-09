@@ -33,6 +33,8 @@ public:
     {
     };
 
+  virtual ~TaskMacCready() {};
+
   GlideResult glide_solution(const AIRCRAFT_STATE &aircraft);
   GlideResult glide_sink(const AIRCRAFT_STATE &aircraft,
                           const double S);

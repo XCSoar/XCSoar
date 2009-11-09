@@ -39,7 +39,8 @@ CXXFLAGS += -Wmissing-noreturn -Wundef
 
 # disable some warnings, we're not ready for them yet
 CXXFLAGS += -Wno-unused-parameter 
-#CXXFLAGS += -Wno-format -Wno-reorder -Wno-switch
+CXXFLAGS += -Wno-reorder 
+#CXXFLAGS += -Wno-format -Wno-switch
 #CXXFLAGS += -Wno-non-virtual-dtor 
 #CXXFLAGS += -Wno-missing-field-initializers 
 # InputEvents_defaults.cpp should be fixed
@@ -50,7 +51,6 @@ CXXFLAGS += -Wno-unused-parameter
 # make warnings fatal (for perfectionists)
 CXXFLAGS += -Werror
 CXXFLAGS += -pedantic
-#CXXFLAGS += -pedantic-errors
 
 # -Wdisabled-optimization
 # -Wunused -Wshadow -Wunreachable-code

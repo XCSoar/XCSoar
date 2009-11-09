@@ -40,7 +40,7 @@ void distance_counts() {
     printf("# Instrumentation\n");
 #ifdef INSTRUMENT_TASK
     printf("#     dist+bearing calcs/c %d\n",count_distbearing/n_samples); 
-    printf("#     mc calcs/c %d\n",count_mc/n_samples);
+    printf("#     mc calcs/c %d\n",(int)(count_mc/n_samples));
     printf("#     dijkstra/c %d\n",num_dijkstra/n_samples);
     printf("#     intersection tests/q %d\n",count_intersections/n_queries);
     printf("#    (total queries %d)\n\n",n_queries);
