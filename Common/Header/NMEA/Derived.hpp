@@ -59,39 +59,93 @@ typedef enum {
   WAITCRUISE
 } CirclingMode_t;
 
-
+/**
+ * A struct that holds all the calculated values derived from the data in the
+ * NMEA_INFO struct
+ */
 struct DERIVED_INFO
 {
-  double Vario; /**< Vertical speed */
-  double LD; /**< Instant glide ratio */
-  double CruiseLD; /**< Glide ratio while in Cruise mode */
-  int	 AverageLD; /**< Average glide ratio */
-  double VMacCready; /**< MacCready speed */
-  double Average30s; /**< Average vertical speed of 30s */
-  double NettoAverage30s; /**< average vertical speed (of the airmass) of 30s */
+  /** Vertical speed */
+  double Vario;
+  /** GPS-based vario */
+  double GPSVario;
+  /** GPS-based vario including energy height */
+  double GPSVarioTE;
+
+  /** Average vertical speed of 30s */
+  double Average30s;
+  /** Average vertical speed (of the airmass) of 30s */
+  double NettoAverage30s;
+
+  /** Instant glide ratio */
+  double LD;
+  /** Glide ratio while in Cruise mode */
+  double CruiseLD;
+  /** Average glide ratio */
+  int	 AverageLD;
+
+  /** MacCready speed */
+  double VMacCready;
+
   double BestCruiseTrack;
-  double AverageThermal; /**< Average vertical speed in the thermal */
+
+  /** Average vertical speed in the thermal */
+  double AverageThermal;
+
   double AdjustedAverageThermal;
-  double ThermalGain; /**< Altitude gained while in the thermal */
-  double LastThermalAverage; /**< Average vertical speed in the last thermal */
-  double LastThermalGain; /**< Altitude gained while in the last thermal */
-  double LastThermalTime; /**< Time spend in the last thermal */
-  GEOPOINT ClimbStartLocation; /**< StartLocation of the current/last climb */
-  double ClimbStartAlt; /**< StartAltitude of the current/last climb */
-  double ClimbStartTime; /**< StartTime of the current/last climb */
-  GEOPOINT CruiseStartLocation; /**< StartLocation of the current/last cruise */
-  double CruiseStartAlt; /**< StartAltitude of the current/last cruise */
-  double CruiseStartTime; /**< StartTime of the current/last cruise */
-  double WindSpeed; /**< Wind speed */
-  double WindBearing; /**< Wind bearing */
+
+  /** Altitude gained while in the thermal */
+  double ThermalGain;
+
+  /** Average vertical speed in the last thermal */
+  double LastThermalAverage;
+
+  /** Altitude gained while in the last thermal */
+  double LastThermalGain;
+
+  /** Time spend in the last thermal */
+  double LastThermalTime;
+
+  /** StartLocation of the current/last climb */
+  GEOPOINT ClimbStartLocation;
+
+  /** StartAltitude of the current/last climb */
+  double ClimbStartAlt;
+
+  /** StartTime of the current/last climb */
+  double ClimbStartTime;
+
+  /** StartLocation of the current/last cruise */
+  GEOPOINT CruiseStartLocation;
+
+  /** StartAltitude of the current/last cruise */
+  double CruiseStartAlt;
+
+  /** StartTime of the current/last cruise */
+  double CruiseStartTime;
+
+  /** Wind speed */
+  double WindSpeed;
+
+  /** Wind bearing */
+  double WindBearing;
+
   double Bearing;
-  double TerrainAlt; /**< Terrain altitude */
+
+  /** Terrain altitude */
+  double TerrainAlt;
+
   bool   TerrainValid;
+
   double Heading;
-  double AltitudeAGL; /**< Altitude over terrain */
+
+  /** Altitude over terrain */
+  double AltitudeAGL;
+
   int    Circling;
   int    FinalGlide;
   int    Flying;
+
   int    TimeOnGround;
   int    TimeInFlight;
   bool   LandableReachable;
@@ -104,7 +158,9 @@ struct DERIVED_INFO
   double TaskDistanceToGo;
   double TaskDistanceCovered;
   double TaskTimeToGo;
-  double TaskStartTime; /**< StartTime of the task */
+
+  /** StartTime of the task */
+  double TaskStartTime;
   double TaskSpeed;
   double TaskSpeedInstantaneous;
   double TaskAltitudeRequired;
@@ -118,9 +174,16 @@ struct DERIVED_INFO
   double LegTimeToGo;
   double LegStartTime;
   double LegSpeed;
-  GEOPOINT NextLocation; /**< Predicted position after airspace warning time */
-  double NextAltitude; /**< Predicted altitude after airspace warning time */
-  double NextAltitudeAGL; /**< Predicted altitude over terrain after airspace warning time */
+
+  /** Predicted position after airspace warning time */
+  GEOPOINT NextLocation;
+
+  /** Predicted altitude after airspace warning time */
+  double NextAltitude;
+
+  /** Predicted altitude over terrain after airspace warning time */
+  double NextAltitudeAGL;
+
   double AATMaxDistance;
   double AATMinDistance;
   double AATTargetDistance;
@@ -128,12 +191,13 @@ struct DERIVED_INFO
   double AATMaxSpeed;
   double AATTargetSpeed;
   double AATMinSpeed;
-  double PercentCircling; /**< Circling/Cruise ratio in percent */
+
+  /** Circling/Cruise ratio in percent */
+  double PercentCircling;
 
   GEOPOINT TerrainWarningLocation;
 
   // JMW moved calculated waypoint info here
-
   double WaypointBearing;
   double WaypointDistance;
   double WaypointSpeed;
@@ -145,20 +209,21 @@ struct DERIVED_INFO
 
   double NettoVario;
 
-  // optimum speed to fly instantaneously
+  /** Optimum speed to fly instantaneously */
   double VOpt;
 
-  // JMW estimated track bearing at next time step
+  /** Estimated track bearing at next time step @author JMW */
   double NextTrackBearing;
 
   // whether Speed-To-Fly audio are valid or not
   bool STFMode;
 
-  // JMW energy height excess to slow to best glide speed
+  /** Energy height excess to slow to best glide speed @author JMW */
   double EnergyHeight;
 
-  // Turn rate in global coordinates
+  /** Turn rate */
   double TurnRate;
+  /** Turn rate after low pass filter */
   double SmoothedTurnRate;
 
   double TurnStartTime;
@@ -177,9 +242,11 @@ struct DERIVED_INFO
   unsigned ActiveTaskPoint;
   int ReadyWayPoint;
 
-  bool OnGround; /**< Detects when glider is on ground for several seconds */
+  /** Detects when glider is on ground for several seconds */
+  bool OnGround;
 
-  double NavAltitude; /**< Altitude used for navigation (GPS or Baro) */
+  /** Altitude used for navigation (GPS or Baro) */
+  double NavAltitude;
   bool ValidStart;
   double TaskStartSpeed;
   double TaskStartAltitude;
@@ -202,48 +269,73 @@ struct DERIVED_INFO
   TCHAR  TeammateCode[10]; // auto-detected, see also in settings computer.h
   bool   TeammateCodeValid;
 
-  double FlightTime; /**< Time of flight */
-  double TakeOffTime; /**< Time of takeoff */
+  /** Time of flight */
+  double FlightTime;
+  /** Time of takeoff */
+  double TakeOffTime;
 
   double AverageClimbRate[200];
   long AverageClimbRateN[200];
 
-  double HomeDistance; /**< Distance to home airport */
+  /** Distance to home airport */
+  double HomeDistance;
+  /** Direction to home airport */
   double HomeRadial;
-
 
   double ZoomDistance;
   double TaskSpeedAchieved;
   double TrueAirspeedEstimated;
 
+  /** Time spent in cruise mode */
   double timeCruising;
+  /** Time spent in circling mode */
   double timeCircling;
 
   double MinAltitude;
   double MaxHeightGain;
 
-  // Turn rate in wind coordinates
-  double GPSVario;
+  /** Turn rate based on heading (including wind) */
   double TurnRateWind;
+
+  /** Estimated bank angle */
   double BankAngle;
+  /** Estimated pitch angle */
   double PitchAngle;
-  double GPSVarioTE;
+
   double MacCreadyRisk;
   double TaskTimeToGoTurningNow;
   double TotalHeightClimb;
   double DistanceVario;
   double GliderSinkRate;
+
+  /** Calculated Gload (assuming balanced turn) */
   double Gload;
+
+  /**
+   * Average turn rate over 60 calculations multiplied by 100 and
+   * divided by MinTurnRate(=4)
+   *
+   * not used right now.
+   */
   double Essing;
-  double TerrainBase; /**< Lowest height within glide range */
+
+  /** Lowest height within glide range */
+  double TerrainBase;
   double TermikLigaPoints;
-  double GRFinish;	// GRadient to final destination, 090203
-			// Note: we don't need GRNext since this value is used when going to a landing
-			// point, which is always a final glide.
+
+  /**
+   * GRadient to final destination
+   *
+   * Note: we don't need GRNext since this value is used when going to a landing
+   * point, which is always a final glide.
+   */
+  double GRFinish;
+
   int    BestAlternate;
   double TimeSunset;
-  double Experimental;
+
   // JMW note, new items should go at the bottom of this struct before experimental!
+  double Experimental;
 };
 
 #endif
