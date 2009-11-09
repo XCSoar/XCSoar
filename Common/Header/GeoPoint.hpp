@@ -39,8 +39,13 @@ Copyright_License {
 #ifndef XCSOAR_GEOPOINT_HPP
 #define XCSOAR_GEOPOINT_HPP
 
+/**
+ * A struct that represents a geographic point by longitude and latitude
+ */
 struct GEOPOINT {
+  /** Geographic longitude */
   double Longitude;
+  /** Geographic latitude */
   double Latitude;
 };
 
