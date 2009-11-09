@@ -38,8 +38,9 @@ CXXFLAGS += -Wwrite-strings -Wcast-qual -Wpointer-arith -Wsign-compare
 CXXFLAGS += -Wmissing-noreturn -Wundef
 
 # disable some warnings, we're not ready for them yet
-CXXFLAGS += -Wno-unused-parameter -Wno-format -Wno-reorder -Wno-missing-field-initializers -Wno-switch
-CXXFLAGS += -Wno-non-virtual-dtor
+CXXFLAGS += -Wno-unused-parameter -Wno-format -Wno-reorder -Wno-switch
+CXXFLAGS += -Wno-non-virtual-dtor 
+#CXXFLAGS += -Wno-missing-field-initializers 
 
 # InputEvents_defaults.cpp should be fixed
 CXXFLAGS += -Wno-char-subscripts
@@ -75,6 +76,9 @@ OBJS	:=\
 	src/Navigation/FlatBoundingBox.o \
 	src/Navigation/FlatGeoPoint.o \
 	src/Navigation/FlatRay.o \
+	src/Navigation/FlatPoint.o \
+	src/Navigation/FlatLine.o \
+	src/Navigation/FlatEllipse.o \
 	src/Navigation/GeoPoint.o \
 	src/Navigation/GeoVector.o \
 	src/Navigation/GeoVectorMemento.o \
@@ -136,7 +140,6 @@ OBJS	:=\
 	src/Math/Earth.o \
 	src/Util/Filter.o \
 	src/Util/Gradient.o \
-	src/Util/Intersection.o \
 	src/Util/Printing.o \
 	src/Util/ZeroFinder.o \
 

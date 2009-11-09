@@ -14,7 +14,7 @@ AbortTask::AbortTask(const TaskEvents &te,
   task_projection(tp),
   waypoints(wps),
   polar_safety(gp),
-  active_waypoint(-1)
+  active_waypoint(0)
 {
 
 }

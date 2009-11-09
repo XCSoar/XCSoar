@@ -5,7 +5,7 @@
 
 #include "GeoPoint.hpp"
 #include "FlatGeoPoint.hpp"
-#include "Util/Intersection.hpp"
+#include "FlatPoint.hpp"
 
 #ifdef DO_PRINT
 #include <iostream>

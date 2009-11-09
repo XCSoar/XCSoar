@@ -9,6 +9,10 @@ public:
       val[_dim%2] = _val;
       calc_d();
     }
+  BBDist(const double _val) {
+    set_vals(-1);
+    d = (int)_val;
+  }
   BBDist(const int _val) {
     set_vals(-1);
     d = _val;

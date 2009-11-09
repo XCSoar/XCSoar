@@ -1,5 +1,6 @@
 #ifndef FLATBOUNDINGBOX_HPP
 #define FLATBOUNDINGBOX_HPP
+
 #include "FlatGeoPoint.hpp"
 #include "FlatRay.hpp"
 #include "TaskProjection.hpp"
