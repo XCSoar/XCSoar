@@ -804,7 +804,16 @@ void TerrainRenderer::Draw(Canvas &canvas, RECT rc) {
   sbuf->DrawStretch(canvas, rc);
 }
 
-
+/**
+ * Draws the terrain to the given canvas
+ * @param canvas The drawing canvas
+ * @param map_projection The MapWindowProjection
+ * @param sunazimuth Azimuth of the sun (for terrain shading)
+ * @param sunelevation Azimuth of the sun (for terrain shading)
+ * @param loc Current location
+ * @param isBigZoom (?)
+ * @return (?)
+ */
 bool TerrainRenderer::Draw(Canvas &canvas,
 			   MapWindowProjection &map_projection,
 			   const double sunazimuth, const double sunelevation,
