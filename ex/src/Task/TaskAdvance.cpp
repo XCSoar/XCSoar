@@ -5,6 +5,11 @@
 #include "Tasks/BaseTask/AATPoint.hpp"
 #include "Navigation/Aircraft.hpp"
 
+TaskAdvance::TaskAdvance():
+    armed(false),
+    mode(ADVANCE_AUTO)
+{
+}
 
 bool 
 TaskAdvance::ready_to_advance(const TaskPoint &tp,

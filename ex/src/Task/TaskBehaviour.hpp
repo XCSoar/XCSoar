@@ -4,6 +4,11 @@
 class TaskBehaviour 
 {
 public:
+
+/** 
+ * Constructor, sets default task behaviour
+ * 
+ */
   TaskBehaviour():
     optimise_targets_range(true),
     optimise_targets_bearing(true),
@@ -18,6 +23,10 @@ public:
   bool calc_cruise_efficiency;
   double aat_min_time;
 
+/** 
+ * Convenience function (used primarily for testing) to disable
+ * all expensive task behaviour functions.
+ */
   void all_off() {
     optimise_targets_range=false;
     optimise_targets_bearing=false;

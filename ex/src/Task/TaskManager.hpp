@@ -15,24 +15,38 @@
 class Waypoints;
 class TaskVisitor;
 
-class TaskManager : public TaskInterface,
+class TaskManager: 
+ public TaskInterface,
  public Serialisable
 {
 public:
+/** 
+ * Constructor for task manager
+ * 
+ * @param te Task events callback object
+ * @param tb Task behaviour options
+ * @param gp Glide polar used for task calculations
+ * @param wps Waypoint system for use by AbortTask
+ * 
+ * @return Initialised object
+ */
   TaskManager(const TaskEvents &te,
               const TaskBehaviour &tb,
               GlidePolar &gp,
-              const Waypoints &wps): 
-    task_ordered(te,tb,wps.get_task_projection(),task_advance,gp),
-    task_goto(te,tb,task_advance,gp),
-    task_abort(te,tb,wps.get_task_projection(),task_advance,gp,wps),
-    task_behaviour(tb)
-  {
-    set_mode(MODE_ORDERED);
-  };
+              const Waypoints &wps);
 
+/** 
+ * Sets active taskpoint sequence for active task
+ * 
+ * @param unsigned Sequence number of task point
+ */
     virtual void setActiveTaskPoint(unsigned);
 
+/** 
+ * Accessor of current task point of active task
+ * 
+ * @return TaskPoint of active task point
+ */
     virtual TaskPoint* getActiveTaskPoint();
 
   enum TaskMode_t {
@@ -42,23 +56,102 @@ public:
     MODE_GOTO
   };
 
+/** 
+ * Set active task to abort mode.
+ * 
+ */
   void abort();
+
+/** 
+ * Sets active task to ordered task (or goto if none exists) after
+ * goto or aborting.
+ * 
+ */
   void resume();
+
+/** 
+ * Sets active task to go to mode, to specified waypoint
+ * 
+ * @param wp Waypoint to go to
+ */
   void do_goto(const Waypoint & wp);
+
+/** 
+ * Updates internal state of task given new aircraft.
+ * Only essential calculations are performed here;
+ * other calculations and housekeeping may be performed
+ * by update_idle
+ * 
+ * @param state_now Current aircraft state
+ * @param state_last Aircraft state at last update 
+ * @return True if internal state changed
+ */
+  virtual bool update(const AIRCRAFT_STATE &state_now, 
+                      const AIRCRAFT_STATE &state_last);
+
+/** 
+ * Updates internal state of task to produce
+ * auxiliary information or to perform slow house-keeping
+ * functions that are non-essential.
+ * 
+ * @param state Current aircraft state
+ * 
+ * @return True if internal state changed
+ */
+  virtual bool update_idle(const AIRCRAFT_STATE &state);
+
+/** 
+ * Accessor for statistics of active task
+ * 
+ * @return Statistics of active task
+ */
+  virtual const TaskStats& get_stats() const;
+
+/** 
+ * Add taskpoint to ordered task.  It is the
+ * user's responsibility to ensure the task is
+ * valid (has a start/intermediate/finish).
+ * 
+ * @param new_tp New taskpoint to add
+ * 
+ * @return True if operation successful
+ */
+  bool append(OrderedTaskPoint *new_tp);
+
+/** 
+ * Insert taskpoint to ordered task.  It is the
+ * user's responsibility to ensure the task is
+ * valid (has a start/intermediate/finish).
+ * 
+ * @param new_tp New taskpoint to insert
+ * @param position Sequence before which to insert new task point
+ * 
+ * @return True if operation successful
+ */
+  bool insert(OrderedTaskPoint *new_tp, unsigned position);
+
+/** 
+ * Remove taskpoint from ordered task.  It is the
+ * user's responsibility to ensure the task is
+ * valid (has a start/intermediate/finish).
+ * 
+ * @param position Sequence number of taskpoint to remove
+ * 
+ * @return True if operation successful
+ */
+  bool remove(unsigned position);
+
+/** 
+ * Check whether ordered task is valid
+ * 
+ * @return True if task is valid
+ */
+  bool check_task() const;
+
 
 #ifdef DO_PRINT
   virtual void print(const AIRCRAFT_STATE &location);
 #endif
-
-  virtual bool update(const AIRCRAFT_STATE &, const AIRCRAFT_STATE&);
-  virtual bool update_idle(const AIRCRAFT_STATE &state);
-
-  virtual const TaskStats& get_stats() const;
-
-  bool append(OrderedTaskPoint *new_tp);
-  bool insert(OrderedTaskPoint *new_tp, unsigned position);
-  bool remove(unsigned position);
-  bool check_task() const;
 
 private:
   const TaskStats null_stats;

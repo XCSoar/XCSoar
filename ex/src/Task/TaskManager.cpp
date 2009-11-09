@@ -3,6 +3,18 @@
 
 // uses delegate pattern
 
+TaskManager::TaskManager(const TaskEvents &te,
+                         const TaskBehaviour &tb,
+                         GlidePolar &gp,
+                         const Waypoints &wps): 
+    task_ordered(te,tb,wps.get_task_projection(),task_advance,gp),
+    task_goto(te,tb,task_advance,gp),
+    task_abort(te,tb,wps.get_task_projection(),task_advance,gp,wps),
+    task_behaviour(tb)
+{
+    set_mode(MODE_ORDERED);
+}
+
 TaskManager::TaskMode_t 
 TaskManager::set_mode(const TaskMode_t the_mode)
 {

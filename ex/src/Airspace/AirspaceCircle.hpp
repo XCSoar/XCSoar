@@ -3,7 +3,8 @@
 
 #include "AbstractAirspace.hpp"
 
-class AirspaceCircle: public AbstractAirspace 
+class AirspaceCircle: 
+    public AbstractAirspace 
 {
 public:
 
