@@ -45,8 +45,7 @@ class SectorAATPoint:
 {
 public:
 /** 
- * Constructor.  Must be followed with update_geometry()
- * after remainder of task is defined and links established.
+ * Constructor.  
  * 
  * @param tp Projection of entire task
  * @param wp Waypoint at which to locate task point origin
@@ -71,14 +70,6 @@ public:
   {
     return oz.isInSector(ref);
   }  
-
-/** 
- * Updates sector geometry based on previous/next legs
- * 
- */  
-  virtual void update_geometry() {
-    oz.set_legs(get_previous(), this, get_next());
-  }
 
 /** 
  * Calculate distance reduction for achieved task point,

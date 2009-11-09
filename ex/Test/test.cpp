@@ -19,6 +19,11 @@
 #include "Task/Tasks/TaskPoints/CylinderAATPoint.hpp"
 #include "Util/Filter.hpp"
 
+#include "Task/Visitors/TaskVisitor.hpp"
+#include "Task/Visitors/TaskPointVisitor.hpp"
+#include "Airspace/AirspaceVisitor.hpp"
+#include "Waypoint/WaypointVisitor.hpp"
+
 #ifdef DO_PRINT
 #include <fstream>
 #endif
@@ -138,8 +143,6 @@ void setup_airspaces(Airspaces& airspaces, TaskProjection& task_projection) {
   airspaces.optimise();
 }
 
-#include "Task/Visitors/TaskVisitor.hpp"
-#include "Task/Visitors/TaskPointVisitor.hpp"
 
 class TaskPointVisitorPrint: public TaskPointVisitor
 {
@@ -191,9 +194,6 @@ void setup_task(TaskManager& task_manager,
     task_manager.resume();
   }
 }
-
-#include "Airspace/AirspaceVisitor.hpp"
-#include "Waypoint/WaypointVisitor.hpp"
 
 class AirspaceVisitorPrint: public AirspaceVisitor {
 public:

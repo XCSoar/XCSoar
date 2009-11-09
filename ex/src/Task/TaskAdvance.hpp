@@ -13,7 +13,7 @@ public:
 /** 
  * Constructor.  Sets defaults to auto-mode
  */
-  TaskAdvance()
+  TaskAdvance();
 
   enum TaskAdvanceMode_t {
     ADVANCE_MANUAL =0,          /**< No automatic advance */
