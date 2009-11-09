@@ -187,11 +187,9 @@ void GlideComputerAirData::Wind() {
  * Passes data to the windanalyser.slot_newFlightMode method
  */
 void GlideComputerAirData::DoWindCirclingMode(const bool left) {
-  if ((SettingsComputer().AutoWindMode
-       & D_AUTOWIND_CIRCLING)==D_AUTOWIND_CIRCLING) {
-    windanalyser.slot_newFlightMode(&Basic(),
-				    &Calculated(),
-				    left, 0);
+  if ((SettingsComputer().AutoWindMode & D_AUTOWIND_CIRCLING)
+      == D_AUTOWIND_CIRCLING) {
+    windanalyser.slot_newFlightMode(&Basic(), &Calculated(), left, 0);
   }
 }
 
@@ -199,10 +197,9 @@ void GlideComputerAirData::DoWindCirclingMode(const bool left) {
  * Passes data to the windanalyser.slot_newSample method
  */
 void GlideComputerAirData::DoWindCirclingSample() {
-  if ((SettingsComputer().AutoWindMode
-       & D_AUTOWIND_CIRCLING)==D_AUTOWIND_CIRCLING) {
-    windanalyser.slot_newSample(&Basic(),
-				&SetCalculated());
+  if ((SettingsComputer().AutoWindMode & D_AUTOWIND_CIRCLING)
+      == D_AUTOWIND_CIRCLING) {
+    windanalyser.slot_newSample(&Basic(), &SetCalculated());
   }
 }
 
@@ -211,8 +208,7 @@ void GlideComputerAirData::DoWindCirclingSample() {
  */
 void GlideComputerAirData::DoWindCirclingAltitude() {
   if (SettingsComputer().AutoWindMode>0) {
-    windanalyser.slot_Altitude(&Basic(),
-			       &SetCalculated());
+    windanalyser.slot_Altitude(&Basic(), &SetCalculated());
   }
 }
 
@@ -1091,29 +1087,45 @@ void
 GlideComputerAirData::OnSwitchClimbMode(bool isclimb, bool left)
 {
   InitLDRotary(SettingsComputer(), &rotaryLD);
+
+  // Tell the windanalyser of the new flight mode
   DoWindCirclingMode(left);
 }
 
+/**
+ * Calculate the circling time percentage and call the thermal band calculation
+ * @param Rate Current turn rate
+ */
 void
 GlideComputerAirData::PercentCircling(const double Rate)
 {
+  // TODO accuracy: TB: this would only work right if called every ONE second!
+
   // JMW circling % only when really circling,
   // to prevent bad stats due to flap switches and dolphin soaring
 
-  if (Calculated().Circling && (Rate>MinTurnRate)) {
-    //    timeCircling += (Basic->Time-LastTime);
-    SetCalculated().timeCircling+= 1.0;
+  // if (Circling)
+  if (Calculated().Circling && (Rate > MinTurnRate)) {
+    // Add one second to the circling time
+    // timeCircling += (Basic->Time-LastTime);
+    SetCalculated().timeCircling += 1.0;
+
+    // Add the Vario signal to the total climb height
     SetCalculated().TotalHeightClimb += Calculated().GPSVario;
+
+    // QUESTION TB: should the thermal band function really be called here
+    // instead of in the Turning() function
     ThermalBand();
   } else {
-    //    timeCruising += (Basic->Time-LastTime);
-    SetCalculated().timeCruising+= 1.0;
+    // Add one second to the cruise time
+    // timeCruising += (Basic->Time-LastTime);
+    SetCalculated().timeCruising += 1.0;
   }
 
-  if (Calculated().timeCruising+Calculated().timeCircling>1) {
-    SetCalculated().PercentCircling =
-      100.0*(Calculated().timeCircling)/(Calculated().timeCruising+
-                                        Calculated().timeCircling);
+  // Calculate the circling percentage
+  if (Calculated().timeCruising + Calculated().timeCircling > 1) {
+    SetCalculated().PercentCircling = 100.0 * (Calculated().timeCircling) /
+        (Calculated().timeCruising + Calculated().timeCircling);
   } else {
     SetCalculated().PercentCircling = 0.0;
   }
@@ -1144,34 +1156,42 @@ GlideComputerAirData::ProcessThermalLocator()
   }
 }
 
+/**
+ * Calculates the turn rate and the derived features.
+ * Determines the current flight mode (cruise/circling).
+ */
 void
 GlideComputerAirData::Turning()
 {
   static bool LEFT = false;
 
+  // You can't be circling unless you're flying
   if (!Calculated().Flying || !time_advanced()) return;
 
+  // Calculate time passed since last calculation
   double dT = Basic().Time-LastBasic().Time;
+
+  // Calculate turn rate
   SetCalculated().TurnRate =
     AngleLimit180(Basic().TrackBearing-LastBasic().TrackBearing)/dT;
 
+  // if (time passed is less then 2 seconds) time step okay
   if (dT<2.0) {
-    // time step ok
-
-    // calculate acceleration
+    // calculate turn rate acceleration (turn rate derived)
     double dRate = (Calculated().TurnRate-LastCalculated().TurnRate)/dT;
 
-    double dtlead=0.3;
     // integrate assuming constant acceleration, for one second
+    // QUESTION TB: shouldn't dtlead be = 1, for one second?!
+    double dtlead=0.3;
     SetCalculated().NextTrackBearing = Basic().TrackBearing
       + dtlead*(Calculated().TurnRate+0.5*dtlead*dRate);
-    // s = u.t+ 0.5*a*t*t
+    // b_new = b_old + Rate * t + 0.5 * dRate * t * t
 
+    // Limit the projected bearing to 360 degrees
     SetCalculated().NextTrackBearing =
       AngleLimit360(Calculated().NextTrackBearing);
-
   } else {
-    // time step too big, so just take it at last measurement
+    // Time step too big, so just take the last measurement
     SetCalculated().NextTrackBearing = Basic().TrackBearing;
   }
 
@@ -1195,10 +1215,13 @@ GlideComputerAirData::Turning()
     //    Calculated().Essing = rate_ave;
   }
 
-  Rate=  LowPassFilter(LastCalculated().SmoothedTurnRate,Rate,0.3);
+  // Make the turn rate more smooth using the LowPassFilter
+  Rate = LowPassFilter(LastCalculated().SmoothedTurnRate,Rate,0.3);
   SetCalculated().SmoothedTurnRate = Rate;
 
-  if(Rate <0) {
+  // Determine which direction we are circling
+  if(Rate < 0) {
+    // QUESTION TB: why not just LEFT = true; ?!
     if (LEFT) {
       // OK, already going left
     } else {
@@ -1213,8 +1236,10 @@ GlideComputerAirData::Turning()
     }
   }
 
+  // Calculate circling time percentage and call thermal band calculation
   PercentCircling(Rate);
 
+  // Force cruise or climb mode if external device says so
   bool forcecruise = false;
   bool forcecircling = false;
   if (SettingsComputer().EnableExternalTriggerCruise
@@ -1225,36 +1250,44 @@ GlideComputerAirData::Turning()
 
   switch(Calculated().TurnMode) {
   case CRUISE:
-    if((Rate >= MinTurnRate)||(forcecircling)) {
+    // If (in cruise mode and beginning of circling detected)
+    if ((Rate >= MinTurnRate) || (forcecircling)) {
+      // Remember the start values of the turn
       SetCalculated().TurnStartTime = Basic().Time;
       SetCalculated().TurnStartLocation = Basic().Location;
-      SetCalculated().TurnStartAltitude  = Calculated().NavAltitude;
-      SetCalculated().TurnStartEnergyHeight  = Calculated().EnergyHeight;
+      SetCalculated().TurnStartAltitude = Calculated().NavAltitude;
+      SetCalculated().TurnStartEnergyHeight = Calculated().EnergyHeight;
       SetCalculated().TurnMode = WAITCLIMB;
     }
     if (forcecircling) {
+      // QUESTION TB: this is useless/done before ?!
       SetCalculated().TurnMode = WAITCLIMB;
     } else {
       break;
     }
+
   case WAITCLIMB:
     if (forcecruise) {
       SetCalculated().TurnMode = CRUISE;
       break;
     }
-    if((Rate >= MinTurnRate)||(forcecircling)) {
-      if( ((Basic().Time  - Calculated().TurnStartTime)
-	   > CruiseClimbSwitch)|| forcecircling) {
-
+    if ((Rate >= MinTurnRate) || (forcecircling)) {
+      if (((Basic().Time - Calculated().TurnStartTime) > CruiseClimbSwitch)
+          || forcecircling) {
+        // yes, we are certain now that we are circling
         SetCalculated().Circling = true;
+
         // JMW Transition to climb
         SetCalculated().TurnMode = CLIMB;
+
+        // Remember the start values of the climbing period
         SetCalculated().ClimbStartLocation = Calculated().TurnStartLocation;
         SetCalculated().ClimbStartAlt = Calculated().TurnStartAltitude
-	  +Calculated().TurnStartEnergyHeight;
+            +Calculated().TurnStartEnergyHeight;
         SetCalculated().ClimbStartTime = Calculated().TurnStartTime;
 
-	OnClimbBase(Calculated().TurnStartAltitude);
+        // QUESTION TB: what is this?
+        OnClimbBase(Calculated().TurnStartAltitude);
 
         // consider code: InputEvents GCE - Move this to InputEvents
         // Consider a way to take the CircleZoom and other logic
@@ -1268,28 +1301,34 @@ GlideComputerAirData::Turning()
       SetCalculated().TurnMode = CRUISE;
     }
     break;
+
   case CLIMB:
-    if((Rate < MinTurnRate)||(forcecruise)) {
+    if ((Rate < MinTurnRate) || (forcecruise)) {
+      // Remember the end values of the turn
       SetCalculated().TurnStartTime = Basic().Time;
       SetCalculated().TurnStartLocation = Basic().Location;
       SetCalculated().TurnStartAltitude  = Calculated().NavAltitude;
       SetCalculated().TurnStartEnergyHeight  = Calculated().EnergyHeight;
+
       // JMW Transition to cruise, due to not properly turning
       SetCalculated().TurnMode = WAITCRUISE;
     }
     if (forcecruise) {
+      // QUESTION TB: see above
       SetCalculated().TurnMode = WAITCRUISE;
     } else {
       break;
     }
+
   case WAITCRUISE:
     if (forcecircling) {
       SetCalculated().TurnMode = CLIMB;
       break;
     }
     if((Rate < MinTurnRate) || forcecruise) {
-      if( ((Basic().Time  - Calculated().TurnStartTime)
-	   > ClimbCruiseSwitch) || forcecruise) {
+      if (((Basic().Time - Calculated().TurnStartTime) > ClimbCruiseSwitch)
+          || forcecruise) {
+        // yes, we are certain now that we are cruising again
         SetCalculated().Circling = false;
 
         // Transition to cruise
@@ -1298,7 +1337,7 @@ GlideComputerAirData::Turning()
         SetCalculated().CruiseStartAlt = Calculated().TurnStartAltitude;
         SetCalculated().CruiseStartTime = Calculated().TurnStartTime;
 
-	OnClimbCeiling();
+        OnClimbCeiling();
 
         OnSwitchClimbMode(false, LEFT);
       }
@@ -1307,8 +1346,8 @@ GlideComputerAirData::Turning()
       // reset thermal locator if changing thermal cores
       // thermallocator.Reset();
       //}
-
     } else {
+      // nope, we are circling again
       // JMW Transition back to climb, because we are turning again
       SetCalculated().TurnMode = CLIMB;
     }
