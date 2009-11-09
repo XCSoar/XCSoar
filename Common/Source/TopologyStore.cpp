@@ -121,7 +121,12 @@ void TopologyStore::Close()
   }
 }
 
-
+/**
+ * Draws the topology to the given canvas
+ * @param canvas The drawing canvas
+ * @param m_window the MapWindow
+ * @param rc The area to draw in
+ */
 void TopologyStore::Draw(Canvas &canvas, MapWindow &m_window, const RECT rc)
 {
   Poco::ScopedRWLock protect(lock, false);
