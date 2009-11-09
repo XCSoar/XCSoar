@@ -1,6 +1,8 @@
 #ifndef FLAT_GEOPOINT_HPP
 #define FLAT_GEOPOINT_HPP
 
+#include "Math/FastMath.h"
+
 struct FLAT_GEOPOINT {
   FLAT_GEOPOINT():Longitude(0),Latitude(0) {};
   FLAT_GEOPOINT(const int x,

@@ -163,7 +163,7 @@ int main() {
 
   fout << "# test waypoint tree\n";
   for (double i=10; i<=10000; i*= 1.1) {
-    test_wp(i);
+    test_wp((int)i);
   }
   fout << "\n";
 
@@ -171,7 +171,7 @@ int main() {
 
   fout << "# test airspace tree\n";
   for (double i=10; i<=10000; i*= 1.1) {
-    test_as(i,task_projection);
+      test_as((int)i,task_projection);
   }
   fout << "\n";
   return 0;

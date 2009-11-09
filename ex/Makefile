@@ -218,9 +218,9 @@ cleani: FORCE
 
 .PHONY: FORCE
 
-ifneq ($(wildcard $(SRC)/.*.d),)
-include $(wildcard $(SRC)/.*.d)
-endif
-ifneq ($(wildcard $(SRC)/*/.*.d),)
-include $(wildcard $(SRC)/*/.*.d)
-endif
+#ifneq ($(wildcard $(SRC)/.*.d),)
+#include $(wildcard $(SRC)/.*.d)
+#endif
+#ifneq ($(wildcard $(SRC)/*/.*.d),)
+#include $(wildcard $(SRC)/*/.*.d)
+#endif

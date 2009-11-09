@@ -349,7 +349,8 @@ namespace KDTree
     return std::pair<NodePtr,
       std::pair<size_t, typename _Dist::distance_type> >
       (__best, std::pair<size_t, typename _Dist::distance_type>
-       (__dim, sqrt(__max)));
+       (__dim, (typename _Dist::distance_type)sqrt(__max)));
+    // JMW this should be specialised for isqrt for int type
   }
 
 

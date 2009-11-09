@@ -2,6 +2,7 @@
 #define GEOELLIPSE_HPP
 
 #include "TaskProjection.hpp"
+#include "FlatEllipse.hpp"
 
 class GeoEllipse {
 public:

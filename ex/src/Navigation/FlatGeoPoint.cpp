@@ -1,2 +1,1 @@
 #include "FlatGeoPoint.hpp"
-

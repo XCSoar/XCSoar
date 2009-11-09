@@ -128,7 +128,7 @@ TaskDijkstra::distance_min(const SearchPoint &currentLocation)
 unsigned 
 TaskDijkstra::distance_general(DijkstraTaskPoint &dijkstra)
 {
-  unsigned lastStage = -1;
+  unsigned lastStage = 0-1;
   while (!dijkstra.empty()) {
 
     const ScanTaskPoint curNode = dijkstra.pop();
@@ -154,7 +154,7 @@ TaskDijkstra::distance_general(DijkstraTaskPoint &dijkstra)
     add_edges(dijkstra, curNode);
   }
 
-  return -1; // No path found
+  return 0-1; // No path found
 }
 
 
