@@ -257,9 +257,9 @@ public:
   }
   GlideResult res;
 protected:
-  const double mc;
   const GlideState &task;
   const MacCready &mac;
+  const double mc;
 };
 
 

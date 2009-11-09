@@ -23,10 +23,9 @@ struct GlideResult {
  * @return Initialised null result
  */
   GlideResult():
-    Solution(RESULT_NOSOLUTION),
     Vector(0,0),
-    CruiseTrackBearing(0.0),
     DistanceToFinal(0.0),
+    CruiseTrackBearing(0.0),
     VOpt(0.0),
     HeightClimb(0.0),
     HeightGlide(0.0),
@@ -34,7 +33,8 @@ struct GlideResult {
     TimeVirtual(0.0),
     AltitudeDifference(0.0),
     EffectiveWindSpeed(0.0),
-    EffectiveWindAngle(0.0)
+    EffectiveWindAngle(0.0),
+    Solution(RESULT_NOSOLUTION)
     {
       // default is null result
     }

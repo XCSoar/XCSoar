@@ -10,17 +10,16 @@ struct FlatEllipse
               const FlatPoint &_f2,
               const FlatPoint &_ap);
 
-  FlatEllipse():p(0.0,0.0),
-                a(1.0),b(1.0),theta(0.0),
-                theta_initial(0.0),
-                f1(0.0,0.0),
+  FlatEllipse():f1(0.0,0.0),
                 f2(0.0,0.0),
-                ap(0.0,0.0) 
+                ap(0.0,0.0), 
+                p(0.0,0.0),
+                a(1.0),b(1.0),theta(0.0),
+                theta_initial(0.0)
     {
     };
 
   FlatPoint f1, f2, ap;
-
   FlatPoint p;
   double a;
   double b;

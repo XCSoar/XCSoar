@@ -5,7 +5,6 @@
 
 GlideResult::GlideResult(const GlideState &task, 
                            const double V):
-    Solution(RESULT_NOSOLUTION),
     Vector(task.Vector),
     DistanceToFinal(task.Vector.Distance),
     CruiseTrackBearing(task.Vector.Bearing),
@@ -16,7 +15,8 @@ GlideResult::GlideResult(const GlideState &task,
     TimeVirtual(0.0),
     AltitudeDifference(task.AltitudeDifference),
     EffectiveWindSpeed(task.EffectiveWindSpeed),
-    EffectiveWindAngle(task.EffectiveWindAngle)
+    EffectiveWindAngle(task.EffectiveWindAngle),
+    Solution(RESULT_NOSOLUTION)
 {
 }
 
