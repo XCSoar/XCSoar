@@ -540,9 +540,7 @@ void GlideComputerAirData::EnergyHeightNavAltitude()
 }
 
 /**
- * 1. Retrieves the terrain height
- * 2. Calculates the altitude over terrain
- * 3.
+ * Reads the current terrain height and calculates the altitude over terrain
  */
 void GlideComputerAirData::TerrainHeight()
 {
@@ -556,8 +554,9 @@ void GlideComputerAirData::TerrainHeight()
   }
   terrain.Unlock();
 
-  if(Alt<0) {
+  if (Alt < 0) {
     Alt = 0;
+    // QUESTION TB: this can't work right?!
     if (Alt <= TERRAIN_INVALID) {
       SetCalculated().TerrainValid = false;
     } else {
@@ -568,6 +567,7 @@ void GlideComputerAirData::TerrainHeight()
     SetCalculated().TerrainValid = true;
     SetCalculated().TerrainAlt = Alt;
   }
+
   SetCalculated().AltitudeAGL = Calculated().NavAltitude - Calculated().TerrainAlt;
 
   if (!SettingsComputer().FinalGlideTerrain) {
