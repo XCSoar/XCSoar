@@ -225,12 +225,15 @@ MapWindowProjection::CalculateScreenBounds(double scale) const
   return sb;
 }
 
-// RETURNS Longitude, Latitude!
-
-
+/**
+ * Converts screen coordinates to a GEOPOINT
+ * @param x x-Coordinate on the screen
+ * @param y y-Coordinate on the screen
+ * @param g Output GEOPOINT
+ */
 void MapWindowProjection::Screen2LonLat(const int &x,
-					const int &y,
-					GEOPOINT &g) const
+                                        const int &y,
+                                        GEOPOINT &g) const
 {
   int sx = x-(int)Orig_Screen.x;
   int sy = y-(int)Orig_Screen.y;
@@ -239,8 +242,14 @@ void MapWindowProjection::Screen2LonLat(const int &x,
   g.Longitude= PanLocation.Longitude + sx*invfastcosine(g.Latitude)*InvDrawScale;
 }
 
-void MapWindowProjection::LonLat2Screen(const GEOPOINT &g,
-					POINT &sc) const
+/**
+ * Converts a GEOPOINT to screen coordinates
+ * @param g GEOPOINT to convert
+ * @param sc Output screen coordinate
+ */
+void
+MapWindowProjection::LonLat2Screen(const GEOPOINT &g,
+                                   POINT &sc) const
 {
   int Y = Real2Int((PanLocation.Latitude-g.Latitude)*DrawScale);
   int X = Real2Int((PanLocation.Longitude-g.Longitude)*fastcosine(g.Latitude)*DrawScale);
@@ -251,11 +260,20 @@ void MapWindowProjection::LonLat2Screen(const GEOPOINT &g,
   sc.y = Orig_Screen.y + Y;
 }
 
-// This one is optimised for long polygons
-void MapWindowProjection::LonLat2Screen(const pointObj* const ptin,
-					POINT *ptout,
-					const int n,
-					const int skip) const
+/**
+ * Converts a LatLon-based polygon to screen coordinates
+ *
+ * This one is optimised for long polygons.
+ * @param ptin Input polygon
+ * @param ptout Output polygon
+ * @param n Number of points in the polygon
+ * @param skip Number of corners to skip after a successful conversion
+ */
+void
+MapWindowProjection::LonLat2Screen(const pointObj* const ptin,
+                                   POINT *ptout,
+                                   const int n,
+                                   const int skip) const
 {
   static double lastangle = -1;
   static int cost=1024, sint=0;
