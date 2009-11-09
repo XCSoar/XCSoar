@@ -46,6 +46,15 @@ class FAISectorFinishPoint:
   public FinishPoint
 {
 public:
+/** 
+ * Constructor.  Must be followed with update_geometry()
+ * after remainder of task is defined and links established.
+ * 
+ * @param tp Projection of entire task
+ * @param wp Waypoint at which to locate task point origin
+ * 
+ * @return Partially initialised object.
+ */  
   FAISectorFinishPoint(const TaskProjection&tp,
            const Waypoint& wp):
     FinishPoint(tp,wp),
@@ -53,17 +62,41 @@ public:
   {
   };
 
+/** 
+ * Updates sector geometry based on previous/next legs
+ * 
+ */  
   virtual void update_geometry() {
     oz.set_legs(get_previous(), this, NULL);
   }
 
+/** 
+ * Test whether aircraft is inside observation zone.
+ * 
+ * @param ref Aircraft state to test
+ * 
+ * @return True if aircraft is inside observation zone
+ */
   virtual bool isInSector(const AIRCRAFT_STATE &ref) const
   {
     return oz.isInSector(ref);
   }
 
+/** 
+ * Calculate boundary point from parametric border
+ * 
+ * @param double t value (0,1) of parameter
+ * 
+ * @return Boundary point
+ */
   GEOPOINT get_boundary_parametric(double) ;
 
+/** 
+ * Calculate distance reduction for achieved task point,
+ * to calcuate scored distance.
+ * 
+ * @return Distance reduction once achieved
+ */
   virtual double score_adjustment();
 
 protected:

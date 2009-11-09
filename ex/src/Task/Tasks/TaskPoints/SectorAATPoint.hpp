@@ -44,17 +44,48 @@ class SectorAATPoint:
   public AATPoint
 {
 public:
+/** 
+ * Constructor.  Must be followed with update_geometry()
+ * after remainder of task is defined and links established.
+ * 
+ * @param tp Projection of entire task
+ * @param wp Waypoint at which to locate task point origin
+ * 
+ * @return Partially initialised object.
+ */  
   SectorAATPoint(const TaskProjection&tp,
            const Waypoint& wp):
     AATPoint(tp,wp),
     oz(wp.Location) 
   {
   };
+
+/** 
+ * Test whether aircraft is inside observation zone.
+ * 
+ * @param ref Aircraft state to test
+ * 
+ * @return True if aircraft is inside observation zone
+ */
   virtual bool isInSector(const AIRCRAFT_STATE &ref) const
   {
     return oz.isInSector(ref);
   }  
 
+/** 
+ * Updates sector geometry based on previous/next legs
+ * 
+ */  
+  virtual void update_geometry() {
+    oz.set_legs(get_previous(), this, get_next());
+  }
+
+/** 
+ * Calculate distance reduction for achieved task point,
+ * to calcuate scored distance.
+ * 
+ * @return Distance reduction once achieved
+ */
   virtual double score_adjustment();
 
 protected:

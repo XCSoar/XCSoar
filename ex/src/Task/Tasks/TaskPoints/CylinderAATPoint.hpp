@@ -44,21 +44,56 @@ class CylinderAATPoint:
   public AATPoint
 {
 public:
+/** 
+ * Constructor.  Must be followed with update_geometry()
+ * after remainder of task is defined and links established.
+ * 
+ * @param tp Projection of entire task
+ * @param wp Waypoint at which to locate task point origin
+ * 
+ * @return Partially initialised object.
+ */  
   CylinderAATPoint(const TaskProjection &tp,
            const Waypoint& wp):
     AATPoint(tp,wp),
     oz(wp.Location) 
   {
   };
+
+/** 
+ * Test whether aircraft is inside observation zone.
+ * 
+ * @param ref Aircraft state to test
+ * 
+ * @return True if aircraft is inside observation zone
+ */
   virtual bool isInSector(const AIRCRAFT_STATE &ref) const
   {
     return oz.isInSector(ref);
   }  
 
-  virtual double score_adjustment() { return 0.0; };
-
+/** 
+ * Updates sector geometry based on previous/next legs
+ * (nothing to do)
+ */  
   virtual void update_geometry() {
   }
+
+/** 
+ * Calculate distance reduction for achieved task point,
+ * to calcuate scored distance.
+ * 
+ * @return Distance reduction once achieved
+ */
+  virtual double score_adjustment() { return 0.0; };
+
+/** 
+ * Calculate boundary point from parametric border
+ * 
+ * @param double t value (0,1) of parameter
+ * 
+ * @return Boundary point
+ */
   GEOPOINT get_boundary_parametric(double) ;
 
 protected:
