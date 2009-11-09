@@ -91,12 +91,8 @@ InsertLDRotary(const DERIVED_INFO *Calculated, ldrotary_s *buf,
 {
   static short errs = 0;
 
-  if (Calculated->OnGround) {
+  if (Calculated->OnGround || Calculated->Circling)
     return;
-  }
-  if (Calculated->Circling) {
-    return;
-  }
 
   if (distance < 3 || distance > 150) { // just ignore, no need to reset rotary
     if (errs > 2) {
@@ -170,12 +166,12 @@ LimitLD(double LD)
   if (fabs(LD) > INVALID_GR) {
     return INVALID_GR;
   } else {
-    if ((LD >= 0.0) && (LD < 1.0)) {
+    if ((LD >= 0.0) && (LD < 1.0))
       LD = 1.0;
-    }
-    if ((LD < 0.0) && (LD > -1.0)) {
+
+    if ((LD < 0.0) && (LD > -1.0))
       LD = -1.0;
-    }
+
     return LD;
   }
 }
@@ -185,7 +181,7 @@ UpdateLD(double LD, double d, double h, double filter_factor)
 {
   double glideangle;
   if (LD != 0) {
-    glideangle = 1.0/LD;
+    glideangle = 1.0 / LD;
   } else {
     glideangle = 1.0;
   }
