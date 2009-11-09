@@ -131,6 +131,10 @@ public:
 class ElementStat
 {
 public:
+/** 
+ * Constructor.  Initialises all to zero.
+ * 
+ */
   ElementStat():
     TimeStarted(-1.0),
     TimeElapsed(0.0),
@@ -156,14 +160,32 @@ public:
   GlideResult solution_travelled;
   GlideResult solution_remaining;
 
+/** 
+ * Calculate element times
+ * 
+ * @param ts Start time of this element (s)
+ * @param state Aircraft state (to access time)
+ */
   void set_times(const double ts, 
                  const AIRCRAFT_STATE& state);
+
+/** 
+ * Calculate element speeds.  Incremental speeds are
+ * held at bulk speeds within first minute of elapsed time.
+ *
+ * @param dt Time step of sample (s)
+ */
   void calc_speeds(const double dt);
+
+/** 
+ * Reset to uninitialised state, to supress calculation
+ * of incremental speeds.
+ */
+  void reset();
 
   friend std::ostream& operator<< (std::ostream& o, 
                                    const ElementStat& es);
 
-  void reset();
 private:
   bool initialised;
 };
@@ -173,6 +195,10 @@ private:
 class TaskStats 
 {
 public:
+/** 
+ * Constructor.  Initialises all to zero.
+ * 
+ */
   TaskStats():
     Time(0.0),
     cruise_efficiency(1.0),
@@ -199,6 +225,10 @@ public:
   double distance_min;
   double distance_scored;
 
+/** 
+ * Reset each element (for incremental speeds).
+ * 
+ */
   void reset();
 
   friend std::ostream& operator<< (std::ostream& o, 
