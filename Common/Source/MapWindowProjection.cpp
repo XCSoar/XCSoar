@@ -225,7 +225,6 @@ MapWindowProjection::CalculateScreenBounds(double scale) const
   return sb;
 }
 
-////////////////////////////////////////////////////////////////////
 // RETURNS Longitude, Latitude!
 
 
@@ -285,9 +284,6 @@ void MapWindowProjection::LonLat2Screen(const pointObj* const ptin,
     p+= skip;
   }
 }
-
-////////////////////////////////////////////////////////////////////
-
 
 void
 MapWindowProjection::CalculateOrientationNormal
@@ -442,10 +438,6 @@ MapWindowProjection::GetMapResolutionFactor(void) const
 {
   return IBLSCALE(30);
 }
-
-
-/////
-
 
 double MapWindowProjection::LimitMapScale(double value,
 					  const SETTINGS_MAP& settings_map) {
@@ -703,10 +695,6 @@ void MapWindowProjection::DrawGreatCircle(Canvas &canvas,
 #endif
 }
 
-
-///////////
-
-
 #define MINRANGE 0.2
 
 bool RectangleIsInside(rectObj r_exterior, rectObj r_interior) {
@@ -760,6 +748,3 @@ bool MapWindowProjection::SmartBounds(const bool force) {
     return false;
   }
 }
-
-
-
