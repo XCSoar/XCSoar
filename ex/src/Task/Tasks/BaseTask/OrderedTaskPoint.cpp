@@ -9,6 +9,18 @@
 #include "GlideSolvers/GlideState.hpp"
 
 
+OrderedTaskPoint::OrderedTaskPoint(const TaskProjection& tp,
+                                   const Waypoint & wp, 
+                                   const bool b_scored): 
+    ScoredTaskPoint(tp, wp, b_scored),
+    tp_previous(NULL),
+    tp_next(NULL),
+    active_state(NOTFOUND_ACTIVE),
+    TaskLeg(*this)
+{
+}
+
+
 OrderedTaskPoint* 
 OrderedTaskPoint::get_previous() const
 {
