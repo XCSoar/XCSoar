@@ -49,6 +49,9 @@
 struct GlideResult;
 class GlidePolar;
 
+/**
+ * Base class for all task points 
+ */
 class TaskPoint : 
   public ReferencePoint, 
   public Serialisable,
@@ -56,6 +59,15 @@ class TaskPoint :
 {
 
 public:
+/** 
+ * Constructor.  Location and elevation of waypoint is used
+ * as the task point's reference values; a copy of the waypoint
+ * is also stored to facilitate user-feedback.
+ * 
+ * @param wp Waypoint to be used as task point origin
+ * 
+ * @return Initialised object
+ */
   TaskPoint(const Waypoint & wp) : ReferencePoint(wp.Location),
                                    Elevation(wp.Altitude),
                                    waypoint(wp)
@@ -65,46 +77,125 @@ public:
 
   virtual TaskPoint* clone() { return new TaskPoint(waypoint); };
 
-  // not const because may need to perform lookup and save
+/** 
+ * Retrieve elevation of taskpoint, taking into account
+ * rules and safety margins.  (TODO currently not implemented)
+ * 
+ * @return Minimum allowable elevation of task point
+ */
   virtual double getElevation() const;
 
+/** 
+ * Retrieve location to be used for remaining task
+ * (for a pure TaskPoint, this is the reference location)
+ * 
+ * @return Location 
+ */
   virtual GEOPOINT get_reference_remaining() const;
-  
+
+/** 
+ * Calculate vector from aircraft to destination
+ * 
+ * @return Vector for task leg
+ */  
   virtual const GeoVector get_vector_remaining(const AIRCRAFT_STATE &) const;
 
-  GlideResult glide_solution_remaining(const AIRCRAFT_STATE &, 
+/** 
+ * Compute optimal glide solution from aircraft to destination.
+ * 
+ * @param state Aircraft state at origin
+ * @param polar Glide polar used for computations
+ * @param minH Minimum height at destination over-ride (max of this or the task points's elevation is used)
+ * @return GlideResult of task leg
+ */
+  GlideResult glide_solution_remaining(const AIRCRAFT_STATE &state, 
                                         const GlidePolar &polar,
                                         const double minH=0) const;
-  GlideResult glide_solution_sink(const AIRCRAFT_STATE &, 
+
+/** 
+ * Compute optimal glide solution from aircraft to destination, with
+ * externally supplied sink rate.  This is used to calculate the sink
+ * rate required for glide-only solutions.
+ * 
+ * @param state Aircraft state at origin
+ * @param polar Glide polar used for computations
+ * @return GlideResult of task leg
+ */
+  GlideResult glide_solution_sink(const AIRCRAFT_STATE &state, 
                                    const GlidePolar &polar,
                                    const double S) const;
 
-  virtual GlideResult glide_solution_travelled(const AIRCRAFT_STATE &, 
+
+/** 
+ * Compute optimal glide solution from previous point to aircraft towards destination.
+ * (For pure TaskPoints, this is null)
+ * 
+ * @param state Aircraft state
+ * @param polar Glide polar used for computations
+ * @param minH Minimum height at destination over-ride (max of this or the task points's elevation is used)
+ * @return GlideResult of task leg
+ */
+  virtual GlideResult glide_solution_travelled(const AIRCRAFT_STATE &state, 
                                                 const GlidePolar &polar,
                                                 const double minH=0) const;
 
+/** 
+ * Compute optimal glide solution from aircraft to destination, or modified
+ * destination (e.g. where specialised TaskPoint has a target)
+ * 
+ * @param state Aircraft state at origin
+ * @param polar Glide polar used for computations
+ * @param minH Minimum height at destination over-ride (max of this or the task points's elevation is used)
+ * @return GlideResult of task leg
+ */
   virtual GlideResult glide_solution_planned(const AIRCRAFT_STATE &, 
                                               const GlidePolar &polar,
                                               const double minH=0) const;
 
+/** 
+ * Dummy null method.
+ * Set target to parametric value between min and max locations.
+ * 
+ * @param p Parametric range (0:1) to set target
+ */
   virtual void set_range(const double p) {};
 
-#ifdef DO_PRINT
-  virtual void print(std::ostream& f, const AIRCRAFT_STATE &state) const;
-#endif
-
+/** 
+ * Dummy method (always false for pure TaskPoints)
+ * Check whether aircraft has entered the observation zone.
+ * 
+ * @return True if observation zone has been entered
+ */
   virtual bool has_entered() const {
     return false;
   }
 
+/** 
+ * Dummy method (always null for pure TaskPoints)
+ * Recall aircraft state where it entered the observation zone.
+ * 
+ * @return State at entry, or null if never entered
+ */
   virtual AIRCRAFT_STATE get_state_entered() const {
     // this should never get called
     AIRCRAFT_STATE null_state;
     return null_state;
   }
+
+/** 
+ * Recall waypoint associated with this task point.  
+ * Can be used for user feedback (e.g. queries on details of active 
+ * task point)
+ * 
+ * @return Copy of waypoint associated with this task point
+ */
   const Waypoint& get_waypoint() const {
     return waypoint;
   }
+
+#ifdef DO_PRINT
+  virtual void print(std::ostream& f, const AIRCRAFT_STATE &state) const;
+#endif
 
 protected:
   const Waypoint waypoint; // local copy
