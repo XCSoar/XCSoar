@@ -47,6 +47,9 @@
  * but does not yet have an observation zone.
  * No taskpoints shall be present following a FinishPoint.
  *
+ * TODO
+ * - currently we don't track crossing the actual line, rather it currently
+ *   allows any border crossing
  */
 class FinishPoint : public OrderedTaskPoint {
 public:

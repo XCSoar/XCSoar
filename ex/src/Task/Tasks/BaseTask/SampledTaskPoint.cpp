@@ -4,6 +4,20 @@
 #include "Navigation/ConvexHull/GrahamScan.hpp"
 #include "Navigation/ConvexHull/PolygonInterior.hpp"
 
+SampledTaskPoint::SampledTaskPoint(const TaskProjection& tp,
+                                   const Waypoint & wp, 
+                                   const bool b_scored):
+    TaskProjectionClient(tp),
+    TaskPoint(wp),
+    boundary_scored(b_scored),
+    search_max(getLocation(),tp),
+    search_min(getLocation(),tp)
+{
+    clear_boundary_points();
+    clear_sample_points();
+}
+
+
 bool SampledTaskPoint::prune_sample_points()
 {
   bool changed=false;
