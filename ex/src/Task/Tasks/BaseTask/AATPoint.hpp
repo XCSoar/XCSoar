@@ -41,8 +41,26 @@
 #include "OrderedTaskPoint.hpp"
 #include "IntermediatePoint.hpp"
 
+/**
+ * An AATPoint is an abstract IntermediatePoint,
+ * can manage a target within the observation zone
+ * but does not yet have an observation zone.
+ *
+ * TODO:
+ * Target locking is currently not implemented.
+ * TaskBehaviour is not yet used to define how targets float.
+ */
 class AATPoint : public IntermediatePoint {
 public:
+/** 
+ * Constructor.  Initialises to unlocked target, target is
+ * initially set to origin.
+ * 
+ * @param tp Global projection 
+ * @param wp Waypoint origin of turnpoint
+ * 
+ * @return Partially-initialised object
+ */
   AATPoint(const TaskProjection& tp,
            const Waypoint & wp) : 
     IntermediatePoint(tp,wp,true), 
@@ -51,25 +69,77 @@ public:
     {
     }  
 
+/** 
+ * Retrieve location to be used for remaining task
+ * 
+ * @return Location 
+ */
   virtual GEOPOINT get_reference_remaining() const;
   
+/** 
+ * Retrieve location to be used for task travelled
+ * 
+ * @return Location 
+ */
   virtual GEOPOINT get_reference_travelled() const;
   
+/** 
+ * Retrieve location to be used for task scored
+ * 
+ * @return Location 
+ */
   virtual GEOPOINT get_reference_scored() const;
 
+/** 
+ * Retrieve elevation of taskpoint, taking into account
+ * rules and safety margins.  (TODO currently not implemented)
+ * 
+ * TODO not implemented: elevation may vary with target shift
+ *
+ * @return Minimum allowable elevation of task point
+ */
   virtual double getElevation() const;
 
+/** 
+ * Update sample, specialisation to move target for active
+ * task point based on task behaviour rules.
+ * Only does the target move checks when this task point
+ * is currently active.
+ * 
+ * @return True if internal state changed
+ */
   virtual bool update_sample(const AIRCRAFT_STATE&);
 
-  virtual void set_range(const double p);
-
-  virtual void update_projection();
-
+/** 
+ * Set target location explicitly
+ * 
+ * @param loc Location of new target
+ */
   virtual void set_target(const GEOPOINT &loc);
 
+/** 
+ * Accessor to get target location
+ * 
+ * @return Target location
+ */
   const GEOPOINT &getTargetLocation() const {
     return TargetLocation;
   }
+
+/** 
+ * Set target to parametric value between min and max locations.
+ * Min/max must have previously been scanned for.
+ * 
+ * @param p Parametric range (0:1) to set target
+ */
+  virtual void set_range(const double p);
+
+/** 
+ * Re-project internal data; must
+ * be called when global task projection changes. 
+ * 
+ */
+  virtual void update_projection();
 
 #ifdef DO_PRINT
   virtual void print(std::ostream& f, const AIRCRAFT_STATE&state, 
@@ -78,11 +148,41 @@ public:
 #endif
 
 protected:
-  GEOPOINT TargetLocation;
-  bool TargetLocked;
-  bool check_target(const AIRCRAFT_STATE&);
-  bool check_target_inside(const AIRCRAFT_STATE&);
-  bool check_target_outside(const AIRCRAFT_STATE&);
+  GEOPOINT TargetLocation;      /**< Location of target within OZ */
+  bool TargetLocked;            /**< Whether target can float (TODO) */
+
+/** 
+ * Check whether target needs to be moved and if so, to
+ * perform the move.  Makes no assumption as to whether the aircraft
+ * within or outside the observation zone.
+ * 
+ * @param state Current aircraft state
+ * 
+ * @return True if target was moved
+ */
+  bool check_target(const AIRCRAFT_STATE& state);
+
+/** 
+ * Check whether target needs to be moved and if so, to
+ * perform the move, where aircraft is inside the observation zone
+ * of the current active taskpoint.
+ * 
+ * @param state Current aircraft state
+ * 
+ * @return True if target was moved
+ */
+  bool check_target_inside(const AIRCRAFT_STATE& state);
+
+/** 
+ * Check whether target needs to be moved and if so, to
+ * perform the move, where aircraft is outside the observation zone
+ * of the current active taskpoint.
+ * 
+ * @param state Current aircraft state
+ * 
+ * @return True if target was moved
+ */
+  bool check_target_outside(const AIRCRAFT_STATE& state);
 };
 
 #endif

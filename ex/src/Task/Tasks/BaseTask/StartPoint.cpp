@@ -3,6 +3,13 @@
 #include "StartPoint.hpp"
 #include <assert.h>
 
+StartPoint::StartPoint(const TaskProjection& tp,
+                       const Waypoint & wp) : 
+    OrderedTaskPoint(tp,wp,false), 
+    enabled(true) 
+{
+}
+
 bool 
 StartPoint::transition_exit(const AIRCRAFT_STATE & ref_now, 
                             const AIRCRAFT_STATE & ref_last)

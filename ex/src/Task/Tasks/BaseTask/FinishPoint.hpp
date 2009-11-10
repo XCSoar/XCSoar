@@ -41,18 +41,58 @@
 
 #include "OrderedTaskPoint.hpp"
 
+/**
+ * A FinishPoint is an abstract OrderedTaskPoint,
+ * can manage finish transitions
+ * but does not yet have an observation zone.
+ * No taskpoints shall be present following a FinishPoint.
+ *
+ */
 class FinishPoint : public OrderedTaskPoint {
 public:
+/** 
+ * Constructor.  Sets task area to non-scorable; distances
+ * are relative to crossing point or origin.
+ * 
+ * @param tp Global projection 
+ * @param wp Waypoint origin of turnpoint
+ * 
+ * @return Partially-initialised object
+ */
     FinishPoint(const TaskProjection& tp,
                 const Waypoint & wp) : 
       OrderedTaskPoint(tp,wp,false) { };
 
+/** 
+ * Set previous/next taskpoints in sequence.
+ * Specialises base method to check next is NULL.
+ * 
+ * @param prev Previous task point 
+ * @param next Next task point (must be null!)
+ */
   virtual void set_neighbours(OrderedTaskPoint* prev,
                               OrderedTaskPoint* next);
 
+/** 
+ * Test whether aircraft has entered observation zone and
+ * was previously outside.  Only triggers on first entry
+ * since an aircraft may pass in/out of a finish zone multiple
+ * times but only the first is required.
+ * 
+ * @param ref_now State current
+ * @param ref_last State at last sample
+ * 
+ * @return True if observation zone is exited now
+ */
   virtual bool transition_enter(const AIRCRAFT_STATE & ref_now, 
                                 const AIRCRAFT_STATE & ref_last);
 
+/** 
+ * Retrieve elevation of taskpoint, taking into account
+ * rules and safety margins. (TODO currently not implemented)
+ * 
+ * @return Minimum allowable elevation of start point
+ */
   virtual double getElevation();
 public:
   DEFINE_VISITABLE()

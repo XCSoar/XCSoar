@@ -41,22 +41,56 @@
 
 #include "OrderedTaskPoint.hpp"
 
+/**
+ * A StartPoint is an abstract OrderedTaskPoint,
+ * can manage start transitions
+ * but does not yet have an observation zone.
+ * No taskpoints shall be present preceding a StartPoint.
+ *
+ */
 class StartPoint : public OrderedTaskPoint {
 public:
+/** 
+ * Constructor.  Sets task area to non-scorable; distances
+ * are relative to crossing point or origin.
+ * 
+ * @param tp Global projection 
+ * @param wp Waypoint origin of turnpoint
+ * 
+ * @return Partially-initialised object
+ */
   StartPoint(const TaskProjection& tp,
-             const Waypoint & wp) : 
-    OrderedTaskPoint(tp,wp,false), 
-    enabled(true) 
-    {
+             const Waypoint & wp);
 
-    };
-
+/** 
+ * Set previous/next taskpoints in sequence.
+ * Specialises base method to check prev is NULL.
+ * 
+ * @param prev Previous task point (must be null!)
+ * @param next Next task point in sequence
+ */
   virtual void set_neighbours(OrderedTaskPoint* prev,
                               OrderedTaskPoint* next);
 
+/** 
+ * Test whether aircraft has exited observation zone and
+ * was previously inside; also tracks this transition and
+ * clears samples inside except for last inside sample.
+ * 
+ * @param ref_now State current
+ * @param ref_last State at last sample
+ * 
+ * @return True if observation zone is exited now
+ */
   virtual bool transition_exit(const AIRCRAFT_STATE & ref_now, 
                                const AIRCRAFT_STATE & ref_last);
 
+/** 
+ * Retrieve elevation of taskpoint, taking into account
+ * rules and safety margins.  (TODO currently not implemented)
+ * 
+ * @return Minimum allowable elevation of start point
+ */
   virtual double getElevation();
 
 protected:

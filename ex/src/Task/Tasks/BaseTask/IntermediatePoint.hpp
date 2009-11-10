@@ -4,14 +4,39 @@
 #define INTERMEDIATEPOINT_H
 #include "OrderedTaskPoint.hpp"
 
+/**
+ * An IntermediatePoint is an abstract OrderedTaskPoint,
+ * does not yet have an observation zone, nor defines
+ * how scoring is performed within.
+ * All IntermediatePoints shall have a preceding and following
+ * taskpoint.
+ *
+ */
 class IntermediatePoint: 
   public OrderedTaskPoint {
 public:    
+/** 
+ * Constructor.
+ * 
+ * @param tp Global projection 
+ * @param wp Waypoint origin of turnpoint
+ * @param b_scored Whether distance within OZ is scored 
+ * 
+ * @return Partially-initialised object
+ */
+
   IntermediatePoint(const TaskProjection& tp,
                     const Waypoint & wp, 
                     const bool b_scored): 
     OrderedTaskPoint(tp, wp, b_scored) 
     {};
+
+/** 
+ * Retrieve elevation of taskpoint, taking into account
+ * rules and safety margins.  (TODO currently not implemented)
+ * 
+ * @return Minimum allowable elevation of task point
+ */
   virtual double getElevation();
 };
 #endif //INTERMEDIATEPOINT_H

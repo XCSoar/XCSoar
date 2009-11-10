@@ -42,12 +42,19 @@
 #include "OrderedTaskPoint.hpp"
 #include "IntermediatePoint.hpp"
 
+/**
+ * An ASTPoint is an abstract IntermediatePoint,
+ * in which the observation zone area is not used for
+ * scored distance calculations (the aircraft merely has
+ * to enter the observation zone)
+ * but does not yet have an observation zone.
+ */
 class ASTPoint : public IntermediatePoint 
 {
 public:
   ASTPoint(const TaskProjection&tp,
            const Waypoint & wp) 
-    : IntermediatePoint(tp,wp,false)  // TODO for testing
+    : IntermediatePoint(tp,wp,false)
     { };
 };
 
