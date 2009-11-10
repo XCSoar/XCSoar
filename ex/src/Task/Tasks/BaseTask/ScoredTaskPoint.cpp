@@ -1,5 +1,14 @@
 #include "ScoredTaskPoint.hpp"
 
+ScoredTaskPoint::ScoredTaskPoint(const TaskProjection& tp,
+                                 const Waypoint & wp, 
+                                 const bool b_scored): 
+    SampledTaskPoint(tp, wp, b_scored)
+{
+    state_entered.Time = -1;
+    state_exited.Time = -1;
+}
+
 bool 
 ScoredTaskPoint::transition_enter(const AIRCRAFT_STATE & ref_now, 
                                   const AIRCRAFT_STATE & ref_last)
