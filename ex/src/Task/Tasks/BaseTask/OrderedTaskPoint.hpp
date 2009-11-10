@@ -71,10 +71,10 @@ public:
   virtual ~OrderedTaskPoint() {};
 
   enum ActiveState_t {
-    NOTFOUND_ACTIVE = 0,
-    BEFORE_ACTIVE,
-    CURRENT_ACTIVE,
-    AFTER_ACTIVE
+    NOTFOUND_ACTIVE = 0,        /**< Active task point was not found, ERROR! */
+    BEFORE_ACTIVE,              /**< This taskpoint is before the active one */
+    CURRENT_ACTIVE,             /**< This taskpoint is currently the active one */
+    AFTER_ACTIVE                /**< This taskpoint is after the active one */
   };
 
 /** 
