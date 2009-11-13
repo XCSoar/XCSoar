@@ -43,7 +43,7 @@ TaskEvents::construction_error(const char* error) const
 {
 #ifdef DO_PRINT
   printf("Task construction error: ");
-  printf(error);
+  printf("%s",error);
   printf("\n");
 #endif
 }
