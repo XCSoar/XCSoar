@@ -37,6 +37,7 @@ Copyright_License {
 
 #include "DataField/Float.hpp"
 #include "Math/FastMath.h"
+#include "Asset.hpp"
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -140,9 +141,8 @@ void DataFieldFloat::Dec(void){
 double DataFieldFloat::SpeedUp(bool keyup){
   double res=1.0;
 
-#ifdef GNAV
-  return res;
-#endif
+  if (is_altair())
+    return res;
 
   if (GetDisableSpeedUp() == true)
     return 1;

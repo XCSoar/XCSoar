@@ -43,6 +43,7 @@ Copyright_License {
 #include "StatusMessage.hpp"
 #include "InfoBoxManager.h"
 #include "InfoBoxLayout.h"
+#include "Asset.hpp"
 
 static Mutex mutexInterfaceTimeout;
 static int interface_timeout;
@@ -199,11 +200,9 @@ bool XCSoarInterface::Debounce(void) {
  * @return True if vario gauge should be drawn, False otherwise
  */
 bool vario_visible() {
-  bool gaugeVarioInPortrait = false;
+  bool gaugeVarioInPortrait = is_altair();
   bool enable_gauge;
-#ifdef GNAV
-  gaugeVarioInPortrait = true;
-#endif
+
   // TODO TB: logic update...
 
   // VENTA3 disable gauge vario for geometry 5 in landscape mode, use 8

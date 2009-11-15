@@ -39,6 +39,7 @@ Copyright_License {
 #include "MainWindow.hpp"
 #include "Compatibility/string.h"
 #include "SettingsUser.hpp"
+#include "Asset.hpp"
 
 #ifndef _MSC_VER
 #include <algorithm>
@@ -212,17 +213,12 @@ static void dlgTextEntryHighscoreType(TCHAR *text, int width)
   }
   max_width = min(MAX_TEXTENTRY, width);
 
-#ifndef GNAV
   wf = dlgLoadFromXML(CallBackTable,
-                      TEXT("dlgTextEntry_T.xml"),
+                      is_altair() ? TEXT("dlgTextEntry_T.xml")
+                      : TEXT("dlgTextEntry.xml"),
 		      XCSoarInterface::main_window,
-		      TEXT("IDR_XML_TEXTENTRY_T"));
-#else
-  wf = dlgLoadFromXML(CallBackTable,
-                      TEXT("dlgTextEntry.xml"),
-		      XCSoarInterface::main_window,
-		      TEXT("IDR_XML_TEXTENTRY"));
-#endif
+                      is_altair() ? TEXT("IDR_XML_TEXTENTRY_T")
+                      : TEXT("IDR_XML_TEXTENTRY"));
   if (!wf) return;
 
   wGrid = (WndOwnerDrawFrame*)wf->FindByName(TEXT("frmGrid"));

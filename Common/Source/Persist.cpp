@@ -51,6 +51,7 @@ Copyright_License {
 #include "Calculations.h"
 #include "Protection.hpp"
 #include "Components.hpp"
+#include "Asset.hpp"
 
 #ifndef _MSC_VER
 #include <algorithm>
@@ -68,16 +69,16 @@ void DeleteCalculationsPersist(void) {
 void LoadCalculationsPersist(DERIVED_INFO *Calculated) {
 
   if (szCalculationsPersistFileName[0]==0) {
-#ifdef GNAV
-    LocalPath(szCalculationsPersistFileName,
-              TEXT("persist/xcsoar-persist.log"));
-    LocalPath(szCalculationsPersistDirectory,
-              TEXT("persist"));
-#else
-    LocalPath(szCalculationsPersistFileName,
-              TEXT("xcsoar-persist.log"));
-    LocalPath(szCalculationsPersistDirectory);
-#endif
+    if (is_altair()) {
+      LocalPath(szCalculationsPersistFileName,
+                TEXT("persist/xcsoar-persist.log"));
+      LocalPath(szCalculationsPersistDirectory,
+                TEXT("persist"));
+    } else {
+      LocalPath(szCalculationsPersistFileName,
+                TEXT("xcsoar-persist.log"));
+      LocalPath(szCalculationsPersistDirectory);
+    }
   }
 
   StartupStore(TEXT("LoadCalculationsPersist\n"));

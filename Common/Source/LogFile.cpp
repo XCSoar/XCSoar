@@ -39,6 +39,7 @@ Copyright_License {
 #include "Thread/Mutex.hpp"
 #include "LocalPath.hpp"
 #include "Interface.hpp"
+#include "Asset.hpp"
 
 #include <stdio.h>
 #include <stdarg.h>
@@ -96,11 +97,10 @@ void StartupStore(const TCHAR *Str, ...)
   static TCHAR szFileName[MAX_PATH];
   static bool initialised = false;
   if (!initialised) {
-#ifdef GNAV
-    LocalPath(szFileName, TEXT("persist/xcsoar-startup.log"));
-#else
-    LocalPath(szFileName, TEXT("xcsoar-startup.log"));
-#endif
+    if (is_altair())
+      LocalPath(szFileName, TEXT("persist/xcsoar-startup.log"));
+    else
+      LocalPath(szFileName, TEXT("xcsoar-startup.log"));
     startupStoreFile = _tfopen(szFileName, TEXT("wb"));
     if (startupStoreFile) {
       fclose(startupStoreFile);

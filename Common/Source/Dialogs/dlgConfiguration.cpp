@@ -2328,9 +2328,8 @@ static void setVariables(void) {
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpAutoBlank"));
   if (wp) {
-#ifdef GNAV
-    wp->SetVisible(false);
-#endif
+    if (is_altair())
+      wp->SetVisible(false);
 #ifdef WINDOWSPC
     wp->SetVisible(false);
 #endif

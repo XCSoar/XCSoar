@@ -139,6 +139,15 @@ static inline bool model_is_medion_p5()
 #endif
 }
 
+static inline bool is_altair()
+{
+#if defined(GNAV)
+  return true;
+#else
+  return false;
+#endif
+}
+
 /**
  * Flag to activate extra clipping for some PNAs.
  */

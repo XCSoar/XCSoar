@@ -49,10 +49,7 @@
 #include "Device/device.h"
 #include "InputEvents.h"
 #include "Compatibility/string.h"
-
-#ifdef GNAV
 #include "UtilsSystem.hpp" // for FileExistsW()
-#endif
 
 HINSTANCE GRecordDLLHandle = NULL;
 
@@ -187,17 +184,18 @@ void LoggerImpl::LinkGRecordDLL(void)
       bFirstTime=false;
 
       StartupStore(TEXT("Searching for GRecordDLL\n"));
-#ifdef GNAV
-      if (FileExistsW(TEXT("\\NOR Flash\\GRecordDLL.dat"))) {
-	StartupStore(TEXT("Updating GRecordDLL.DLL\n"));
-	DeleteFile(TEXT("\\NOR Flash\\GRecordDLL.DLL"));
-	MoveFile(TEXT("\\NOR Flash\\GRecordDLL.dat"),
-		 TEXT("\\NOR Flash\\GRecordDLL.DLL"));
-      }
-      GRecordDLLHandle = LoadLibrary(TEXT("\\NOR Flash\\GRecordDLL.DLL"));
-#else
-      GRecordDLLHandle = LoadLibrary(TEXT("GRecordDLL.DLL"));
-#endif
+      if (is_altair()) {
+        if (FileExistsW(TEXT("\\NOR Flash\\GRecordDLL.dat"))) {
+          StartupStore(TEXT("Updating GRecordDLL.DLL\n"));
+          DeleteFile(TEXT("\\NOR Flash\\GRecordDLL.DLL"));
+          MoveFile(TEXT("\\NOR Flash\\GRecordDLL.dat"),
+                   TEXT("\\NOR Flash\\GRecordDLL.DLL"));
+        }
+
+        GRecordDLLHandle = LoadLibrary(TEXT("\\NOR Flash\\GRecordDLL.DLL"));
+      } else
+        GRecordDLLHandle = LoadLibrary(TEXT("GRecordDLL.DLL"));
+
       if (GRecordDLLHandle != NULL)
         {
 	  BOOL bLoadOK = true;  // if any pointers don't link, disable entire library
