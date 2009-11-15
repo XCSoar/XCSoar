@@ -196,7 +196,7 @@ void Chart::StyleLine(const POINT l1, const POINT l2,
     penThinSignal.set(1, Color(50, 243, 45));
 #endif
     canvas.select(penThinSignal);
-    canvas.clipped_polyline(line, 2, rc);
+    canvas.autoclip_polyline(line, 2, rc);
     break;
   case STYLE_THINDASHPAPER:
     canvas.autoclip_dashed_line(1,

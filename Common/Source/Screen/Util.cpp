@@ -497,10 +497,7 @@ Circle(Canvas &canvas, long x, long y, int radius, RECT rc,
       else
         canvas.polygon(pt, step + 1);
     } else {
-      if (need_clipping())
-        canvas.clipped_polyline(pt, step + 1, rc);
-      else
-        canvas.polyline(pt, step + 1);
+      canvas.autoclip_polyline(pt, step + 1, rc);
     }
   }
   return TRUE;
