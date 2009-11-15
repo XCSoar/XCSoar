@@ -118,25 +118,76 @@ public:
 
 protected:
 
+/** 
+ * Pure virtual method to retrieve the absolute minimum height of
+ * aircraft for entire task.
+ * This is used to provide alternate methods for different perspectives
+ * on the task, e.g. planned/remaining/travelled
+ * 
+ * @param state Aircraft state
+ * 
+ * @return Min height (m) of entire task
+ */
   virtual double get_min_height(const AIRCRAFT_STATE &state) const = 0;
-  virtual GlideResult tp_solution(const unsigned i,
+
+/** 
+ * Pure virtual method to calculate glide solution for specified index, given
+ * aircraft state and height constraint.
+ * This is used to provide alternate methods for different perspectives
+ * on the task, e.g. planned/remaining/travelled
+ * 
+ * @param index Index of task point
+ * @param state Aircraft state at origin
+ * @param minH Minimum height at destination
+ * 
+ * @return Glide result for segment
+ */
+  virtual GlideResult tp_solution(const unsigned index,
                                    const AIRCRAFT_STATE &state, 
                                    double minH) const = 0;
 
-  virtual const AIRCRAFT_STATE 
-  get_aircraft_start(const AIRCRAFT_STATE &state) const = 0;
-
-  void clearance_heights(const AIRCRAFT_STATE &state);
-  GlideResult tp_sink(const unsigned i,
+/** 
+ * Calculate glide solution for specified index, given
+ * aircraft state and virtual sink rate.
+ * 
+ * @param index Index of task point
+ * @param state Aircraft state at origin
+ * @param minH Minimum height at destination
+ * 
+ * @return Glide result for segment
+ */
+  GlideResult tp_sink(const unsigned index,
                        const AIRCRAFT_STATE &aircraft, 
                        const double S) const;
 
+/** 
+ * Pure virtual method to obtain aircraft state at start of task.
+ * This is used to provide alternate methods for different perspectives
+ * on the task, e.g. planned/remaining/travelled
+ * 
+ * @param state Actual aircraft state
+ * 
+ * @return Aircraft state at start of task
+ */
+  virtual const AIRCRAFT_STATE 
+  get_aircraft_start(const AIRCRAFT_STATE &state) const = 0;
+
+/** 
+ * Calculate clearance heights for all turnpoints, given the
+ * glide polar.  This is the absolute minimum height the aircraft
+ * can be at for solutions along the task.
+ * 
+ * @param state Aircraft state
+ */
+  void clearance_heights(const AIRCRAFT_STATE &state);
+
+
   const std::vector<TaskPoint*> tps;
-  const unsigned activeTaskPoint;
+  std::vector<GlideResult> gs;
   std::vector<double> minHs;
+  const unsigned activeTaskPoint;
   int start;
   int end;
-  std::vector<GlideResult> gs;
   GlidePolar glide_polar;
 };
 
