@@ -8,12 +8,27 @@ typedef std::pair<unsigned, unsigned> ScanTaskPoint;
 template <class Node> class Dijkstra;
 typedef Dijkstra<ScanTaskPoint> DijkstraTaskPoint;
 
-class TaskDijkstra {
+/**
+ * Class used to scan an OrderedTask for maximum/minimum distance
+ * points, sensitive to active task point.
+ *
+ * Uses flat-projected integer representation of search points for
+ * speed, but this also makes the system approximate.
+ *
+ * This uses a Dijkstra search and so is O(N log(N)).
+ */
+class TaskDijkstra 
+{
 public:
   TaskDijkstra(OrderedTask* _task, unsigned task_size);
   ~TaskDijkstra();
 
-  unsigned distance_max();
+/** 
+ * Search 
+ * 
+ * 
+ * @return Approximate flat-earth distance of maximum task
+ */  unsigned distance_max();
 
   unsigned distance_min(const SearchPoint &currentLocation);
 

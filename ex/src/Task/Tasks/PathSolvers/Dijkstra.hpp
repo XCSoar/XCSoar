@@ -4,6 +4,10 @@
 #include <map>
 #include <queue>
 
+/**
+ * Dijkstra search algorithm.
+ * From (TODO REF) with modifications by John Wharington to track optimal solution 
+ */
 template <class Node> class Dijkstra {
 public:
   Dijkstra() {}
