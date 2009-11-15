@@ -11,6 +11,14 @@
 
 class OrderedTaskPoint;
 
+/**
+ * A task comprising an ordered sequence of task points, each with
+ * observation zones.  A valid OrderedTask has a StartPoint, zero or more
+ * IntermediatePoints and a FinishPoint.
+ *
+ * TODO:
+ * - better handling of removal of start/finish point
+ */
 class OrderedTask:
   public AbstractTask,
   public Serialisable
@@ -37,8 +45,37 @@ public:
  */
   virtual void setActiveTaskPoint(unsigned desired);
 
+/** 
+ * Insert taskpoint before specified index in task.  May fail if the candidate
+ * is the wrong type (e.g. if it is a StartPoint and the task already
+ * has one).
+ * 
+ * @param tp Taskpoint to insert
+ * @param position Index in task sequence, before which to insert
+ * 
+ * @return True on success
+ */
   bool insert(OrderedTaskPoint* tp, unsigned position);
+
+/** 
+ * Append taskpoint to end of task.  May fail if the candidate
+ * is the wrong type (e.g. if it is a StartPoint and the task already
+ * has one).
+ * 
+ * @param tp Taskpoint to append to task
+ * 
+ * @return True on success
+ */
   bool append(OrderedTaskPoint* tp);
+
+/** 
+ * Remove task point at specified position.  Note that
+ * currently start/finish points can't be removed.
+ * 
+ * @param position Index in task sequence of task point to remove
+ * 
+ * @return True on success
+ */
   bool remove(unsigned position);
 
 /** 
@@ -70,17 +107,43 @@ public:
  */
   virtual bool update_idle(const AIRCRAFT_STATE& state_now);
 
+/** 
+ * Return size of task
+ * 
+ * @return Number of task points in task
+ */
   unsigned task_size() const {
     return tps.size();
   }
 
-  // these used by task dijkstra
+/** 
+ * Retrieve vector of search points to be used in max/min distance
+ * scans (by TaskDijkstra).
+ * 
+ * @param tp Index of task point of query
+ * 
+ * @return Vector of search point candidates
+ */
   const SearchPointVector& get_tp_search_points(unsigned tp) const {
     return tps[tp]->get_search_points();
   }
+
+/** 
+ * Set task point's minimum distance value (by TaskDijkstra).
+ * 
+ * @param tp Index of task point to set min
+ * @param sol Search point found to be minimum distance
+ */
   void set_tp_search_min(unsigned tp, const SearchPoint &sol) {
     tps[tp]->set_search_min(sol);
   }
+
+/** 
+ * Set task point's maximum distance value (by TaskDijkstra).
+ * 
+ * @param tp Index of task point to set max
+ * @param sol Search point found to be maximum distance
+ */
   void set_tp_search_max(unsigned tp, const SearchPoint &sol) {
     tps[tp]->set_search_max(sol);
   }
@@ -279,8 +342,30 @@ protected:
   virtual double calc_gradient(const AIRCRAFT_STATE &state);
 
 private:
+/** 
+ * Sets previous/next taskpoint pointers for task point at specified
+ * index in sequence.
+ * 
+ * @param position Index of task point
+ */
   void set_neighbours(unsigned position);
+
+/** 
+ * Checks whether a new task point is suitable to add to the
+ * task based on type of task point and whether task already
+ * has a start/finish point.
+ * 
+ * @param new_tp Candidate task point to add
+ * 
+ * @return True if ok to add to task
+ */
   bool check_startfinish(OrderedTaskPoint* new_tp); 
+
+/** 
+ * Update internal geometric state of task points. 
+ * Typically called after task geometry or observation zones are modified.
+ * 
+ */
   void update_geometry();
 
   std::vector<OrderedTaskPoint*> tps;
