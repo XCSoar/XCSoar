@@ -23,17 +23,52 @@ public:
               GlidePolar &gp);
   ~OrderedTask();
 
+/** 
+ * Retrieves the active task point sequence.
+ * 
+ * @return Index of active task point sequence
+ */
   TaskPoint* getActiveTaskPoint();
-  virtual void setActiveTaskPoint(unsigned);
 
-  bool insert(OrderedTaskPoint*, unsigned position);
-  bool append(OrderedTaskPoint*);
+/** 
+ * Set active task point index
+ * 
+ * @param desired Desired active index of task sequence
+ */
+  virtual void setActiveTaskPoint(unsigned desired);
+
+  bool insert(OrderedTaskPoint* tp, unsigned position);
+  bool append(OrderedTaskPoint* tp);
   bool remove(unsigned position);
+
+/** 
+ * Check if task is valid.  Calls task_event methods on failure.
+ * 
+ * @return True if task is valid
+ */
   bool check_task() const;
 
-  virtual bool update_sample(const AIRCRAFT_STATE &, const bool full_update);
+/** 
+ * Update internal states when aircraft state advances.
+ * 
+ * @param state_now Aircraft state at this time step
+ * @param full_update Force update due to task state change
+ *
+ * @return True if internal state changes
+ */
+  virtual bool update_sample(const AIRCRAFT_STATE &state_now, 
+                             const bool full_update);
 
-  virtual bool update_idle(const AIRCRAFT_STATE&);
+
+/** 
+ * Update internal states (non-essential) for housework, or where functions are slow
+ * and would cause loss to real-time performance.
+ * 
+ * @param state_now Aircraft state at this time step
+ * 
+ * @return True if internal state changed
+ */
+  virtual bool update_idle(const AIRCRAFT_STATE& state_now);
 
   unsigned task_size() const {
     return tps.size();
@@ -50,20 +85,79 @@ public:
     tps[tp]->set_search_max(sol);
   }
 
-#ifdef DO_PRINT
-  virtual void print(const AIRCRAFT_STATE &state);
-#endif
-
 protected:
+/** 
+ * Test whether (and how) transitioning into/out of task points should occur, typically
+ * according to task_advance mechanism.  This also may call the task_event callbacks.
+ * 
+ * @param state_now Aircraft state at this time step
+ * @param state_last Aircraft state at previous time step
+ * 
+ * @return True if transition occurred
+ */
   virtual bool check_transitions(const AIRCRAFT_STATE &state_now, 
                                  const AIRCRAFT_STATE &state_last);
 
+/** 
+ * Calculate distance of nominal task (sum of distances from each
+ * leg's consecutive reference point to reference point for entire task).
+ * 
+ * @return Distance (m) of nominal task
+ */ 
   double scan_distance_nominal();
+
+/** 
+ * Calculate distance of planned task (sum of distances from each leg's
+ * achieved/scored reference points respectively for prior task points,
+ * and targets or reference points for active and later task points).
+ * 
+ * @return Distance (m) of planned task
+ */
   double scan_distance_planned();
-  double scan_distance_remaining(const GEOPOINT &location);
-  double scan_distance_scored(const GEOPOINT &location);
-  double scan_distance_travelled(const GEOPOINT &location);
-  void scan_distance_minmax(const GEOPOINT &location, bool full,
+
+/** 
+ * Calculate distance of planned task (sum of distances from aircraft to
+ * current target/reference and for later task points from each leg's
+ * targets or reference points).
+ * 
+ * @param ref Location of aircraft
+ * 
+ * @return Distance (m) remaining in the planned task
+ */ 
+  double scan_distance_remaining(const GEOPOINT &ref);
+
+/** 
+ * Calculate scored distance of achieved part of task.
+ * 
+ * @param ref Location of aircraft
+ * 
+ * @return Distance (m) achieved adjusted for scoring
+ */
+  double scan_distance_scored(const GEOPOINT &ref);
+
+/** 
+ * Calculate distance of achieved part of task.
+ * For previous taskpoints, the sum of distances of maximum distance
+ * points; for current, the distance from previous max distance point to
+ * the aircraft.
+ * 
+ * @param ref Location of aircraft
+ * 
+ * @return Distance (m) achieved
+ */
+  double scan_distance_travelled(const GEOPOINT &ref);
+
+/** 
+ * Calculate maximum and minimum distances for task, achievable
+ * from the current aircraft state (assuming active taskpoint does not retreat). 
+ * 
+ * @param ref Aircraft location
+ * @param full Perform full search (if task state has changed)
+ * @param dmin Minimum distance (m) achievable of task
+ * @param dmax Maximum distance (m) achievable of task
+ */
+  void scan_distance_minmax(const GEOPOINT &ref, 
+                            bool full,
                             double *dmin, double *dmax);
 
 /** 
@@ -204,6 +298,11 @@ private:
   const TaskProjection &task_projection;
 
 public:
+
+#ifdef DO_PRINT
+  virtual void print(const AIRCRAFT_STATE &state);
+#endif
+
   void Accept(TaskPointVisitor& visitor) const;
   DEFINE_VISITABLE()
 };

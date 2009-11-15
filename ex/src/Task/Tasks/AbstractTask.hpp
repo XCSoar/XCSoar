@@ -86,9 +86,12 @@ protected:
  * Pure abstract method to be defined for concrete task classes to update internal
  * states when aircraft state advances.
  * 
+ * @param state_now Aircraft state at this time step
+ * @param full_update Force update due to task state change
+ *
  * @return True if internal state changes
  */
-  virtual bool update_sample(const AIRCRAFT_STATE &, 
+  virtual bool update_sample(const AIRCRAFT_STATE &state_now, 
                              const bool full_update) = 0;
 
 /** 
@@ -240,12 +243,13 @@ protected:
  * Calculate maximum and minimum distances for task, achievable
  * from the current aircraft state (assuming active taskpoint does not retreat). 
  * 
- * @param location Aircraft state
+ * @param ref Aircraft location
  * @param full Perform full search (if task state has changed)
  * @param dmin Minimum distance (m) achievable of task
  * @param dmax Maximum distance (m) achievable of task
  */
-  virtual void scan_distance_minmax(const GEOPOINT &location, bool full,
+  virtual void scan_distance_minmax(const GEOPOINT &ref, 
+                                    bool full,
                                     double *dmin, double *dmax);
 
 /** 
