@@ -139,6 +139,14 @@ static inline bool model_is_medion_p5()
 #endif
 }
 
+/**
+ * Flag to activate extra clipping for some PNAs.
+ */
+static inline bool need_clipping()
+{
+  return model_is_hp31x() || model_is_medion_p5();
+}
+
 // This could be also used for PDA in landscape..
 typedef enum{
   ssnone=0,
@@ -157,10 +165,6 @@ typedef enum{
 #ifdef WINDOWSPC
 extern int SCREENWIDTH;
 extern int SCREENHEIGHT;
-#endif
-
-#if defined(PNA) || defined(FIVV)
-extern bool needclipping;
 #endif
 
 void InitAsset();

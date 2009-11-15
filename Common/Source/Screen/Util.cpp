@@ -41,10 +41,7 @@ Copyright_License {
 #include "Math/FastMath.h"
 #include "Screen/shapelib/mapprimitive.h"
 #include "InfoBoxLayout.h"
-
-#ifdef PNA
 #include "Asset.hpp" // for needclipping
-#endif
 
 #include <tchar.h>
 
@@ -495,24 +492,15 @@ Circle(Canvas &canvas, long x, long y, int radius, RECT rc,
     canvas.clipped_polygon(pt, step + 1, rc, fill);
   } else {
     if (fill) {
-#ifdef PNA
-      if (needclipping==true)
+      if (need_clipping())
         canvas.clipped_polygon(pt, step + 1, rc, false); // VENTA4: CHECK FIX AIRSPACE CLIPPING PROBLEM
       else
         canvas.polygon(pt, step + 1);
-#else
-      canvas.polygon(pt, step + 1);
-#endif
     } else {
-// VENTA3 FIX HP clipping bug
-#ifdef PNA
-      if (needclipping==true)
+      if (need_clipping())
         canvas.clipped_polyline(pt, step + 1, rc);
       else
         canvas.polyline(pt, step + 1);
-#else
-      canvas.polyline(pt, step + 1);
-#endif
     }
   }
   return TRUE;

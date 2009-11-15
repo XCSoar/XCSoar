@@ -40,10 +40,7 @@ Copyright_License {
 #include "InfoBoxLayout.h"
 #include "Compatibility/gdi.h"
 #include "options.h" /* for IBLSCALE() */
-
-#ifdef PNA
 #include "Asset.hpp" /* for needclipping */
-#endif
 
 #include <string.h>
 #include <stdlib.h> /* for abs() */
@@ -489,18 +486,10 @@ Canvas::clipped_polygon(const POINT* lppt, unsigned cPoints, const RECT rc,
 void
 Canvas::clipped_polyline(const POINT* lppt, unsigned cPoints, const RECT rc)
 {
-#ifdef BUG_IN_CLIPPING
-  ::ClipPolygon(dc, lppt, cPoints, rc, false);
-  //VENTA2
-#elif defined(PNA)
-  // if (GlobalModelType == MODELTYPE_PNA_HP31X)
-  if (needclipping)
+  if (need_clipping())
     ::ClipPolygon(*this, lppt, cPoints, rc, false);
   else
     polyline(lppt, cPoints);
-#else
-  polyline(lppt, cPoints);
-#endif
 }
 
 void
