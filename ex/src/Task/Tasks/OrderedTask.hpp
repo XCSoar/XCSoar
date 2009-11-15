@@ -230,7 +230,7 @@ protected:
  * 
  * @return Time (s) of start of task
  */
-  virtual double scan_total_start_time(const AIRCRAFT_STATE &);
+  virtual double scan_total_start_time(const AIRCRAFT_STATE &state_now);
 
 /** 
  * Calculate leg start time.
@@ -239,7 +239,7 @@ protected:
  * 
  * @return Time (s) of start of leg
  */
-  virtual double scan_leg_start_time(const AIRCRAFT_STATE &);
+  virtual double scan_leg_start_time(const AIRCRAFT_STATE &state_now);
 
 
 /** 
@@ -305,7 +305,7 @@ protected:
  * 
  * @return Sink rate of aircraft (m/s)
  */
-  double calc_glide_required(const AIRCRAFT_STATE &aircraft);
+  double calc_glide_required(const AIRCRAFT_STATE &state_now);
 
 /** 
  * Calculate cruise efficiency for the travelled part of the task.
@@ -316,7 +316,7 @@ protected:
  * 
  * @return Cruise efficiency (0-1)
  */
-  double calc_cruise_efficiency(const AIRCRAFT_STATE &aircraft);
+  double calc_cruise_efficiency(const AIRCRAFT_STATE &state_now);
 
 /** 
  * Optimise target ranges (for adjustable tasks) to produce an estimated
@@ -328,7 +328,7 @@ protected:
  * 
  * @return Target range parameter (0-1)
  */
-  double calc_min_target(const AIRCRAFT_STATE &, 
+  double calc_min_target(const AIRCRAFT_STATE &state_now, 
                          const double t_target);
 
 /** 
@@ -339,7 +339,7 @@ protected:
  * 
  * @return Minimum gradient angle of remainder of task
  */
-  virtual double calc_gradient(const AIRCRAFT_STATE &state);
+  virtual double calc_gradient(const AIRCRAFT_STATE &state_now);
 
 private:
 /** 

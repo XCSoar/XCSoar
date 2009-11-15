@@ -24,7 +24,7 @@ public:
 /** 
  * Set active task point index
  * 
- * @param desired Desired active index of task sequence
+ * @param index Desired active index of task sequence
  */
   virtual void setActiveTaskPoint(unsigned index);
 

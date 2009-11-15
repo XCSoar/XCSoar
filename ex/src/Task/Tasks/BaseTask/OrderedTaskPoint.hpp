@@ -139,6 +139,8 @@ public:
  * Calculate vector remaining from aircraft state.
  * If this task point is after active, uses the planned reference points
  * 
+ * (This uses memento values)
+ *
  * @param state Aircraft state
  * @return Vector remaining to this taskpoint (or next planned)
  */
@@ -150,8 +152,10 @@ public:
  * Calculate vector from this task point to the aircraft.
  * If this task point is after active, returns null;
  * if this task point is before active, uses scored/best points.
+ *
+ * (This uses memento values)
+ *
  * 
- * @param state Aircraft state
  * @return Vector from this taskpoint to aircraft (or next planned)
  */
   virtual const GeoVector get_vector_travelled() const {
@@ -175,7 +179,7 @@ public:
  * @param minH Minimum height at origin over-ride (max of this or the task points's elevation is used)
  * @return GlideResult of task leg
  */
-  GlideResult glide_solution_travelled(const AIRCRAFT_STATE &, 
+  GlideResult glide_solution_travelled(const AIRCRAFT_STATE &state, 
                                         const GlidePolar &polar,
                                         const double minH=0) const;
 
@@ -187,7 +191,7 @@ public:
  * @param minH Minimum height at origin over-ride (max of this or the task points's elevation is used)
  * @return GlideResult of task leg
  */
-  GlideResult glide_solution_planned(const AIRCRAFT_STATE &, 
+  GlideResult glide_solution_planned(const AIRCRAFT_STATE &state, 
                                       const GlidePolar &polar,
                                       const double minH=0) const;
 

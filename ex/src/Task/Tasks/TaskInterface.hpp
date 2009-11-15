@@ -60,7 +60,8 @@ public:
  * 
  * @return True if internal state changed
  */
-  virtual bool update(const AIRCRAFT_STATE &, const AIRCRAFT_STATE&) = 0;
+  virtual bool update(const AIRCRAFT_STATE& state_now, 
+                      const AIRCRAFT_STATE& state_last) = 0;
 
 /** 
  * Update internal states (non-essential) for housework, or where functions are slow
@@ -70,7 +71,7 @@ public:
  * 
  * @return True if internal state changed
  */
-  virtual bool update_idle(const AIRCRAFT_STATE &state) = 0;
+  virtual bool update_idle(const AIRCRAFT_STATE &state_now) = 0;
 
 #ifdef DO_PRINT
   virtual void print(const AIRCRAFT_STATE &state) = 0;

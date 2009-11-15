@@ -27,7 +27,7 @@ public:
 /** 
  * Set active task point index
  * 
- * @param desired Desired active index of task sequence
+ * @param index Desired active index of task sequence
  */
   void setActiveTaskPoint(unsigned index);
 
@@ -105,8 +105,6 @@ private:
   const Waypoints &waypoints;
   GlidePolar polar_safety;
 
-  /** @link dependency */
-  /*#  Rank lnkRank; */
 public:
 #ifdef DO_PRINT
   virtual void print(const AIRCRAFT_STATE &location);

@@ -81,6 +81,7 @@ public:
  * Calculate glide solution for externally specified aircraft sink rate
  * 
  * @param aircraft Aircraft state
+ * @param S Sink rate (m/s, positive down)
  * 
  * @return Glide result for entire task with virtual sink rate
  */
@@ -143,7 +144,7 @@ protected:
  * @return Glide result for segment
  */
   virtual GlideResult tp_solution(const unsigned index,
-                                   const AIRCRAFT_STATE &state, 
+                                   const AIRCRAFT_STATE& state, 
                                    double minH) const = 0;
 
 /** 
@@ -152,12 +153,12 @@ protected:
  * 
  * @param index Index of task point
  * @param state Aircraft state at origin
- * @param minH Minimum height at destination
+ * @param S Sink rate (m/s, positive down)
  * 
  * @return Glide result for segment
  */
   GlideResult tp_sink(const unsigned index,
-                       const AIRCRAFT_STATE &aircraft, 
+                       const AIRCRAFT_STATE &state, 
                        const double S) const;
 
 /** 

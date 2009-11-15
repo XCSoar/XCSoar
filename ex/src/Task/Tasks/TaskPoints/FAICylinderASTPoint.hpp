@@ -72,11 +72,11 @@ public:
 /** 
  * Calculate boundary point from parametric border
  * 
- * @param double t value (0,1) of parameter
+ * @param t t value (0,1) of parameter
  * 
  * @return Boundary point
  */
-  GEOPOINT get_boundary_parametric(double) ;
+  GEOPOINT get_boundary_parametric(double t);
 
 /** 
  * Test whether aircraft is inside observation zone.

@@ -119,6 +119,7 @@ public:
  * 
  * @param state Aircraft state at origin
  * @param polar Glide polar used for computations
+ * @param S Sink rate (m/s, positive down)
  * @return GlideResult of task leg
  */
   GlideResult glide_solution_sink(const AIRCRAFT_STATE &state, 
@@ -148,7 +149,7 @@ public:
  * @param minH Minimum height at destination over-ride (max of this or the task points's elevation is used)
  * @return GlideResult of task leg
  */
-  virtual GlideResult glide_solution_planned(const AIRCRAFT_STATE &, 
+  virtual GlideResult glide_solution_planned(const AIRCRAFT_STATE &state, 
                                               const GlidePolar &polar,
                                               const double minH=0) const;
 

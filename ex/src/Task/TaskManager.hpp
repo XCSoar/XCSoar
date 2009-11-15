@@ -38,9 +38,9 @@ public:
 /** 
  * Sets active taskpoint sequence for active task
  * 
- * @param unsigned Sequence number of task point
+ * @param index Sequence number of task point
  */
-    virtual void setActiveTaskPoint(unsigned);
+    virtual void setActiveTaskPoint(unsigned index);
 
 /** 
  * Accessor of current task point of active task
@@ -177,11 +177,6 @@ private:
   
   const TaskBehaviour &task_behaviour;
   
-  /** @link dependency */
-  /*#  TaskEvents lnkTaskEvents; */
-
-  /** @link dependency */
-  /*#  TaskBehaviour lnkTaskBehaviour; */
 public:
   void Accept(BaseVisitor& visitor) const;
 };

@@ -27,7 +27,7 @@ public:
 /** 
  * Search for cruise efficiency value.
  * 
- * @param mc Default cruise efficiency value
+ * @param ce Default cruise efficiency value
  * 
  * @return Solution value of cruise efficiency
  */

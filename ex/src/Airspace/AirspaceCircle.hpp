@@ -48,8 +48,9 @@ public:
    * 
    * @return true if the line intersects the airspace
    */
-  bool intersects(const GEOPOINT& g1, const GeoVector &vec,
-                  const TaskProjection& task_projection) const;
+  bool intersects(const GEOPOINT& g1, 
+                  const GeoVector &vec,
+                  const TaskProjection& tp) const;
 
 private:
   const GEOPOINT center;

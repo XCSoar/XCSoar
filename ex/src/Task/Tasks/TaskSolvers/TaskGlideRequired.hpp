@@ -29,7 +29,7 @@ public:
 /** 
  * Search for sink rate to produce final glide solution
  * 
- * @param mc Default sink rate value (m/s)
+ * @param s Default sink rate value (m/s)
  * 
  * @return Solution sink rate (m/s, down positive)
  */
