@@ -14,23 +14,57 @@ public:
            GlidePolar &gp);
   ~GotoTask();
 
+/** 
+ * Retrieves the active task point sequence.
+ * 
+ * @return Index of active task point sequence
+ */
   virtual TaskPoint* getActiveTaskPoint();
-  virtual void setActiveTaskPoint(unsigned index);
-  void do_goto(const Waypoint & wp);
 
+/** 
+ * Set active task point index
+ * 
+ * @param desired Desired active index of task sequence
+ */
+  virtual void setActiveTaskPoint(unsigned index);
+
+/** 
+ * Sets go to task point to specified waypoint. 
+ * 
+ * @param wp Waypoint to Go To
+ */
+  void do_goto(const Waypoint& wp);
+
+/** 
+ * Update internal states when aircraft state advances.
+ * 
+ * @param state_now Aircraft state at this time step
+ * @param full_update Force update due to task state change
+ *
+ * @return True if internal state changes
+ */
+  virtual bool update_sample(const AIRCRAFT_STATE &state_now, 
+                             const bool full_update);
+protected:
+/** 
+ * Test whether (and how) transitioning into/out of task points should occur, typically
+ * according to task_advance mechanism.  This also may call the task_event callbacks.
+ * 
+ * @param state_now Aircraft state at this time step
+ * @param state_last Aircraft state at previous time step
+ * 
+ * @return True if transition occurred
+ */
+  virtual bool check_transitions(const AIRCRAFT_STATE& state_now, 
+                                 const AIRCRAFT_STATE& state_last);
+
+private:    
+  TaskPoint* tp;
+public:
 #ifdef DO_PRINT
   virtual void print(const AIRCRAFT_STATE &state);
 #endif
 
-  virtual bool update_sample(const AIRCRAFT_STATE &, 
-                             const bool full_update);
-protected:
-  virtual bool check_transitions(const AIRCRAFT_STATE &, 
-                                 const AIRCRAFT_STATE&);
-
-private:    
-    TaskPoint* tp;
-public:
   void Accept(TaskPointVisitor& visitor) const;
   DEFINE_VISITABLE()
 };
