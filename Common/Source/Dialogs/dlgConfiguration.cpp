@@ -2341,10 +2341,8 @@ static void setVariables(void) {
   wp = (WndProperty*)wf->FindByName(TEXT("prpAutoBacklight")); // VENTA4
   if (wp) {
     wp->SetVisible(false);
-#ifdef PNA
-    if (GlobalModelType == MODELTYPE_PNA_HP31X )
+    if (model_is_hp31x())
     	wp->SetVisible(true);
-#endif
     wp->GetDataField()->Set(CommonInterface::EnableAutoBacklight);
     wp->RefreshDisplay();
   }

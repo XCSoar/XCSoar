@@ -39,10 +39,10 @@ Copyright_License {
 #include "Screen/ContainerWindow.hpp"
 #include "Screen/Blank.hpp"
 #include "Interface.hpp"
+#include "Asset.hpp"
 
 #ifdef PNA
 #include "Appearance.hpp" // for GlobalModelType
-#include "Asset.hpp" // for MODELTYPE_*
 #endif
 
 #include <assert.h>
@@ -111,12 +111,10 @@ Window::set(ContainerWindow *parent, LPCTSTR cls, LPCTSTR text,
   if (border) {
     style |= WS_BORDER;
 
-#ifdef PNA // VENTA3 FIX  better borders
-    if (GlobalModelType == MODELTYPE_PNA_HP31X) {
+    if (model_is_hp31x()) {
       ex_style |= WS_EX_CLIENTEDGE;
       style |= WS_THICKFRAME;
     }
-#endif
   }
 
   set(parent, cls, text, left, top, width, height, style, ex_style);

@@ -112,6 +112,33 @@ extern void		ConvToUpper( TCHAR *);
 
 #endif
 
+static inline bool is_pna()
+{
+#if defined(PNA)
+  return true;
+#else
+  return false;
+#endif
+}
+
+static inline bool model_is_hp31x()
+{
+#if defined(PNA) || defined(FIVV)
+  return GlobalModelType == MODELTYPE_PNA_HP31X;
+#else
+  return false;
+#endif
+}
+
+static inline bool model_is_medion_p5()
+{
+#if defined(PNA) || defined(FIVV)
+  return GlobalModelType == MODELTYPE_PNA_MEDION_P5;
+#else
+  return false;
+#endif
+}
+
 // This could be also used for PDA in landscape..
 typedef enum{
   ssnone=0,
