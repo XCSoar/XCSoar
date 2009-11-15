@@ -12,7 +12,7 @@
  * Targets are adjusted along line from min to max linearly; only
  * current and later task points are adjusted.
  *
- * TODO:
+ * \todo
  * - Allow for other schemes or weightings in how much to adjust each
  *   target.
  */

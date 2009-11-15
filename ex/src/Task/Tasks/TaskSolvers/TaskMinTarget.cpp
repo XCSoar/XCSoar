@@ -45,9 +45,6 @@ double TaskMinTarget::search(const double tp)
 
 void TaskMinTarget::set_range(const double p)
 {
-  // TODO: have various schemes for feeding in p dependent on number of stages
-  // from current
-
   tm.set_range(p);
   tp_start->scan_distance_remaining(aircraft.Location);
 }

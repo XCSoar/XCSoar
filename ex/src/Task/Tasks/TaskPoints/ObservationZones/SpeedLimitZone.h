@@ -2,8 +2,13 @@
 
 #ifndef SPEEDLIMITZONE_H
 #define SPEEDLIMITZONE_H
-class SpeedLimitZone {
-    
+
+/**
+ * \todo
+ * - not yet used/implemented
+ */
+class SpeedLimitZone 
+{
 public:
 
     bool isInLimit();

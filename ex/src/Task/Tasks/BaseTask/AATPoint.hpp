@@ -46,9 +46,9 @@
  * can manage a target within the observation zone
  * but does not yet have an observation zone.
  *
- * TODO:
- * Target locking is currently not implemented.
- * TaskBehaviour is not yet used to define how targets float.
+ * \todo
+ * - Target locking is currently not implemented.
+ * - TaskBehaviour is not yet used to define how targets float.
  */
 class AATPoint : public IntermediatePoint {
 public:
@@ -92,9 +92,10 @@ public:
 
 /** 
  * Retrieve elevation of taskpoint, taking into account
- * rules and safety margins.  (TODO currently not implemented)
+ * rules and safety margins.  
  * 
- * TODO not implemented: elevation may vary with target shift
+ * \todo
+ * - not implemented: elevation may vary with target shift
  *
  * @return Minimum allowable elevation of task point
  */
@@ -149,7 +150,7 @@ public:
 
 protected:
   GEOPOINT TargetLocation;      /**< Location of target within OZ */
-  bool TargetLocked;            /**< Whether target can float (TODO) */
+  bool TargetLocked;            /**< Whether target can float */
 
 /** 
  * Check whether target needs to be moved and if so, to

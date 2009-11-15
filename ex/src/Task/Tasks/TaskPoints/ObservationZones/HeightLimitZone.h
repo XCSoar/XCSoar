@@ -2,6 +2,11 @@
 
 #ifndef HEIGHTLIMITZONE_H
 #define HEIGHTLIMITZONE_H
+
+/**
+ * \todo
+ * - not yet used/implemented
+ */
 class HeightLimitZone {
     
 public:

@@ -6,7 +6,9 @@
 
 /**
  * Dijkstra search algorithm.
- * From (TODO REF) with modifications by John Wharington to track optimal solution 
+ * From ??? with modifications by John Wharington to track optimal solution 
+ * \todo
+ * - Reference original source code
  */
 template <class Node> class Dijkstra {
 public:

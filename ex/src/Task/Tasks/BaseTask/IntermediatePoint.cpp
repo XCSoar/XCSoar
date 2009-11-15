@@ -3,6 +3,5 @@
 double
 IntermediatePoint::getElevation()
 {
-  // TODO
   return Elevation; // + SAFETYTERRAIN
 }

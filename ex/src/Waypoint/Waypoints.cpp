@@ -38,10 +38,13 @@ Waypoints::insert(const Waypoint& wp)
 
   tmp_wps.push_back(wp);
 
-  // TODO: if range changed, need to re-pack waypoints
-  // will have to remove all from the list, recalculate projections,
-  // then add them again!
-  // (can just insert() them all, then clear the tree, then run optimise()
+  /**
+   * \todo
+   * if range changed, need to re-pack waypoints
+   * will have to remove all from the list, recalculate projections,
+   * then add them again!
+   * (can just insert() them all, then clear the tree, then run optimise()
+   */
 }
 
 

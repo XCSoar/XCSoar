@@ -9,6 +9,9 @@
  *  block MacCready speeds with this sink rate would result in
  *  a solution perfectly on final glide.
  *  
+ * \todo
+ * - f() fails if Mc too low for wind, need to account for failed solution
+ *
  */
 class TaskGlideRequired: 
   public ZeroFinder

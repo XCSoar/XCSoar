@@ -10,7 +10,7 @@
  * and provides methods to retrieve various reference locations used
  * in scoring calculations.
  *
- * TODO: 
+ * \todo 
  * - implement reset() method
  * - better documentation of this class!
  */

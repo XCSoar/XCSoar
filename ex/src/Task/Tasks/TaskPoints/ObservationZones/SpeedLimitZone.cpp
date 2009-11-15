@@ -2,7 +2,7 @@
 
 #include "SpeedLimitZone.h"
 
-bool SpeedLimitZone::isInLimit(){
+bool SpeedLimitZone::isInLimit()
+{
   return true;
-  // TODO
 }

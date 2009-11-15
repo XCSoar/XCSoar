@@ -14,7 +14,7 @@
  * observation zone, as well as provide methods to scan for potential
  * paths to border locations.
  *
- * TODO
+ * \todo
  * - Currently undefined as to what happens to interior samples if observation 
  *   zone is modified (e.g. due to previous/next taskpoint moving)
  * - implement reset() method

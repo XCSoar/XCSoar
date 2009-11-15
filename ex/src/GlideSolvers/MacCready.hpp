@@ -77,17 +77,64 @@ public:
 
 private:
 
+  /**
+   * Calculates the glide solution for a classical MacCready theory task
+   * with no climb component (pure glide), and no wind.
+   * This is used internally to determine the optimum speed for 
+   * cruise segments.
+   *
+   * @param task The task for which a solution is desired
+   * @param V The airspeed the glider will be travelling
+   * @return Returns the glide result containing data about the optimal solution
+   */
   GlideResult solve_glide_zerowind(const GlideState &task,
                                     const double V) const;
 
+  /**
+   * Calculates the glide solution for a classical MacCready theory task
+   * with no climb component (pure glide).  This is used internally to
+   * determine the optimum speed for this glide component.
+   *
+   * @param task The task for which a solution is desired
+   * @param V The airspeed the glider will be travelling
+   * @param S The sinkrate of the glider in cruise
+   * @return Returns the glide result containing data about the optimal solution
+   */
   GlideResult solve_glide(const GlideState &task,
 			   const double V,
                            const double S) const;
 
+/** 
+ * Solve a task which is known to be pure glide,
+ * seeking optimal speed to fly. 
+ * 
+ * @param task Task to solve for
+ * 
+ * @return Solution
+ */
   GlideResult optimise_glide(const GlideState &task) const;
 
+/** 
+ * Solve a task which is known to be pure climb (no distance 
+ * to travel other than that due to drift).
+ *
+ * \todo
+ * - Check equations
+ * 
+ * @param task Task to solve for
+ * 
+ * @return Solution
+ */
   GlideResult solve_vertical(const GlideState &task) const;
 
+/** 
+ * Solve a task which is known to be pure climb-cruise 
+ * (zero height difference)
+ *
+ * @param task Task to solve for
+ * 
+ * @return Solution
+ */
   GlideResult solve_cruise(const GlideState &task) const;
 
   const GlidePolar &glide_polar;

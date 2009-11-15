@@ -9,6 +9,7 @@ bool operator != (const GEOPOINT&g1, const GEOPOINT &g2);
  * A constant bearing vector in lat/lon coordinates.  
  * Should later be extended to handle
  * separately constant bearing and minimum-distance paths. 
+ *
  */
 struct GeoVector {
   /**
@@ -33,6 +34,9 @@ struct GeoVector {
   /**
    * Constructor given start and end location.  
    * Computes Distance/Bearing internally. 
+   *
+   * \todo
+   * - handle is_average
    */
   GeoVector(const GEOPOINT &source, const GEOPOINT &target,
             const bool is_average=true);

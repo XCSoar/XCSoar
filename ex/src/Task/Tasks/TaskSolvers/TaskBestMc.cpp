@@ -27,8 +27,6 @@ double TaskBestMc::f(const double mc)
 {
   tm.set_mc(std::max(0.001,mc));
   res = tm.glide_solution(aircraft);
-  // TODO: this fails if Mc too low for wind, need to 
-  // account for failed solution
 
   if (res.Vector.Distance>0) {
     return res.AltitudeDifference/res.Vector.Distance;

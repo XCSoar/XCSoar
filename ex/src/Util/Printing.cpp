@@ -383,7 +383,7 @@ void AATPoint::print(std::ostream& f, const AIRCRAFT_STATE& state,
           if (!filter_backtrack 
               || (dthis>=tdist)
               || (dthis>=rdist)) {
-            // TODO: unless double dist is better than current
+            /// \todo unless double dist is better than current
             f << ga.Longitude << " " << ga.Latitude << "\n";
           }
         }
@@ -408,7 +408,7 @@ AATPoint::print_boundary(std::ostream& f,
   for (unsigned i=0; i<n; i++) {
     const GEOPOINT loc = get_boundary_points()[i].getLocation();
 
-    // TODO: this is broken
+    /// \todo this is broken
     if (1 || double_leg_distance(loc)>mind) {
       f << "     " << loc.Longitude << " " << loc.Latitude << "\n";
     } else {

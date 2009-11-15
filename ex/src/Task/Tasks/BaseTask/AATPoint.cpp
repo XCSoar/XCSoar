@@ -36,7 +36,6 @@ GEOPOINT AATPoint::get_reference_remaining() const
 double 
 AATPoint::getElevation() const
 {
-  // TODO: look up elevation of target and use that instead
   return Elevation; // + SAFETYTERRAIN
 }
 
@@ -132,7 +131,7 @@ AATPoint::update_projection()
 {
   OrderedTaskPoint::update_projection();  
 
-// TODO: update ellipse if we have one saved
+  /// \todo update ellipse if we have one saved
 }
 
 

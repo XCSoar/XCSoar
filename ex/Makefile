@@ -156,6 +156,8 @@ TARGETS = Test/test Test/test_trees Test/test_mc
 all: $(TARGETS)
 	@echo "done"
 
+doco: 
+	doxygen doxygen/Doxyfile
 
 DEPFILE		=$(dir $@).$(notdir $@).d
 DEPFLAGS	=-Wp,-MD,$(DEPFILE)

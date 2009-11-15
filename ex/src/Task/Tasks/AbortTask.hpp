@@ -35,6 +35,9 @@ public:
  * Update internal states when aircraft state advances.
  * This performs a scan of reachable waypoints.
  * 
+ * \todo
+ * - check tracking of active waypoint
+ *
  * @param state_now Aircraft state at this time step
  * @param full_update Force update due to task state change
  *

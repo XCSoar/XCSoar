@@ -19,7 +19,6 @@ FinishPoint::transition_enter(const AIRCRAFT_STATE & ref_now,
 double
 FinishPoint::getElevation()
 {
-  // TODO: adjustments in FAI finish for min finish height
   return Elevation; // + SAFETYARRIVALHEIGHT
 }
 

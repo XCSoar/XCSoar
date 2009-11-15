@@ -51,7 +51,11 @@ class GlidePolar;
 
 /**
  * Base class for all task points 
+ *
+ * \todo
+ * - Safety heights, lookup terrain height?
  */
+
 class TaskPoint : 
   public ReferencePoint, 
   public Serialisable,
@@ -79,7 +83,7 @@ public:
 
 /** 
  * Retrieve elevation of taskpoint, taking into account
- * rules and safety margins.  (TODO currently not implemented)
+ * rules and safety margins.  
  * 
  * @return Minimum allowable elevation of task point
  */

@@ -24,6 +24,9 @@ public:
  * Calculate intercept location.  Test line bearing is from previous
  * max/achieved point, through aircraft, adjusted by bearing_offset.
  * 
+ * \todo
+ * - adjust for bearing_offset (currently not implemented)
+ *
  * @param ap AAT point associated with the isoline
  * @param state Aircraft state from which intercept line originates
  * @param bearing_offset Offset of desired bearing between cruise track from previous and intercept line

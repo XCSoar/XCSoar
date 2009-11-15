@@ -21,7 +21,6 @@ MacCready::MacCready(const GlidePolar &_glide_polar,
 GlideResult 
 MacCready::solve_vertical(const GlideState &task) const
 {
-  // TODO this equation needs to be checked
 
 //  double S = SinkRate(VOpt);
 

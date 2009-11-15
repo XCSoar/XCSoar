@@ -465,8 +465,6 @@ double
 OrderedTask::calc_min_target(const AIRCRAFT_STATE &aircraft, 
                              const double t_target)
 {
-  // TODO: look at max/min dist and only perform this scan if
-  // change is possible
   const double t_rem = std::max(0.0, t_target-stats.total.TimeElapsed);
 
   TaskMinTarget bmt(tps, activeTaskPoint, aircraft, glide_polar, t_rem, ts);
@@ -520,7 +518,6 @@ OrderedTask::OrderedTask(const TaskEvents &te,
   ts(NULL),
   tf(NULL)
 {
-  // TODO: default values in constructor
 }
 
 ////////////////////////

@@ -47,9 +47,11 @@
  * but does not yet have an observation zone.
  * No taskpoints shall be present following a FinishPoint.
  *
- * TODO
+ * \todo
  * - currently we don't track crossing the actual line, rather it currently
  *   allows any border crossing
+ * - safety heights
+ * - adjustments in FAI finish for min finish height
  */
 class FinishPoint : public OrderedTaskPoint {
 public:
@@ -92,7 +94,7 @@ public:
 
 /** 
  * Retrieve elevation of taskpoint, taking into account
- * rules and safety margins. (TODO currently not implemented)
+ * rules and safety margins.
  * 
  * @return Minimum allowable elevation of start point
  */

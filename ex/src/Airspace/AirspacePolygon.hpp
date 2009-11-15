@@ -5,14 +5,17 @@
 #include "Navigation/SearchPointVector.hpp"
 #include <vector>
 
+/**
+ * \todo
+ * - Should take in vector of GEOPOINTs in constructor.
+ *
+ */
 class AirspacePolygon: public AbstractAirspace 
 {
 public:
   /** 
    * Constructor.  Currently a dummy one, that initialises 
    * the boundary randomly.  
-   *
-   * TODO Should take in vector of GEOPOINTs in constructor.
    * 
    * @param task_projection Projection used for flat-earth representation of border
    * 

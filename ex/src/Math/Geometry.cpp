@@ -247,6 +247,9 @@ bool AngleInRange(double Angle0, double Angle1, double x, bool is_signed) {
 /**
  * Calculates the HalfAngle between the to given angles
  *
+ * \todo
+ * - Check calculations in all usage scenarios
+ *
  * !! Use only for AAT bisector calculations !!
  * @param Angle0 Input angle 1
  * @param Angle1 Input angle 2
@@ -256,7 +259,6 @@ double HalfAngle(double Angle0, double Angle1) {
   Angle0 = AngleLimit360(Angle0);
   Angle1 = AngleLimit360(Angle1);
 
-  // TODO code: check/test this? thankfully only occurs in one spot in AAT
   if (Angle1>= Angle0) {
     return (Angle0+Angle1)/2;
   } else {

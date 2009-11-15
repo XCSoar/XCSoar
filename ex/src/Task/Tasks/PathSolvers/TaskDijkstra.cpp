@@ -179,20 +179,18 @@ TaskDijkstra::save_max()
 }
 
 
-/*
-  TODO/incomplete 
-
-  only scan parts that are required, and prune out points
-  that become irrelevant (strictly under-performing) 
-
-  if in sector, prune out all default points that result in
-  lower distance than current achieved max
-
-  if searching min 
-    first search max actual up to current
-      (taking into account aircraft location?)
-    then search min after that from aircraft location
-
-  also update saved rank for potential pruning operations
-
-*/
+/**
+ * \todo 
+ * - only scan parts that are required, and prune out points
+ *   that become irrelevant (strictly under-performing) 
+ * - if in sector, prune out all default points that result in
+ *   lower distance than current achieved max
+ *
+ * - if searching min 
+ *   first search max actual up to current
+ *     (taking into account aircraft location?)
+ *   then search min after that from aircraft location
+ *
+ * - also update saved rank for potential pruning operations
+ *
+ */

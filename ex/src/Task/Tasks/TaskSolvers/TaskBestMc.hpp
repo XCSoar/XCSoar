@@ -8,6 +8,9 @@
  *  Class to solve for MacCready value, being the highest MC value to produce a
  *  pure glide solution for the remainder of the task.
  *  
+ * \todo
+ * - f() fails if Mc too low for wind, need to account for failed solution
+ *
  */
 class TaskBestMc: 
   public ZeroFinder
@@ -24,6 +27,7 @@ public:
   virtual ~TaskBestMc() {};
 
   virtual double f(const double mc);
+
   virtual bool valid(const double mc);
 
 /** 

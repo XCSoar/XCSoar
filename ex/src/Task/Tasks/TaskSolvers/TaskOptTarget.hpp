@@ -10,7 +10,7 @@
  * Adjust target lateral offset for active task point to minimise
  * elapsed time.
  *
- * TODO:
+ * \todo
  * - Merge with TaskMinTarget?
  */
 

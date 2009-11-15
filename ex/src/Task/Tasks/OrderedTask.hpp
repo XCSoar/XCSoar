@@ -16,7 +16,7 @@ class OrderedTaskPoint;
  * observation zones.  A valid OrderedTask has a StartPoint, zero or more
  * IntermediatePoints and a FinishPoint.
  *
- * TODO:
+ * \todo
  * - better handling of removal of start/finish point
  */
 class OrderedTask:
@@ -24,6 +24,21 @@ class OrderedTask:
   public Serialisable
 {
 public:
+  /** 
+   * Constructor.
+   *
+   * \todo
+   * - default values in constructor
+   * - remove dependency on external task projection
+   * 
+   * @param te Task events
+   * @param tb Task behaviour
+   * @param tp Task projection
+   * @param ta Task advance
+   * @param gp Glide Polar
+   * 
+   * @return Initialised object
+   */
   OrderedTask(const TaskEvents &te, 
               const TaskBehaviour &tb,
               const TaskProjection &tp,
@@ -323,6 +338,9 @@ protected:
  * time remaining with the current glide polar equal to a target value.
  * This adjusts the target locations for the remainder of the task.
  * 
+ * \todo
+ * - look at max/min dist and only perform this scan if change is possible
+ *
  * @param state_now Aircraft state
  * @param t_target Desired time for remainder of task (s)
  * 

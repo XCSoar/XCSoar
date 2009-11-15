@@ -126,7 +126,10 @@ bool AbortTask::update_sample(const AIRCRAFT_STATE &state,
     waypoints.find_within_range_circle(state.Location, abort_range(state));
 
   if (!approx_waypoints.size()) {
-    // TODO: increase range
+    /**
+     * \todo
+     * - increase range
+     */
   }
 
   // sort by alt difference
@@ -145,8 +148,6 @@ bool AbortTask::update_sample(const AIRCRAFT_STATE &state,
   fake.Altitude += 10000.0;
   fill_reachable(state, approx_waypoints, true);
   fill_reachable(state, approx_waypoints, false);
-
-  // TODO, check tracking of active waypoint
 
   if (tps.size()) {
     active_waypoint = tps[activeTaskPoint]->get_waypoint().id;

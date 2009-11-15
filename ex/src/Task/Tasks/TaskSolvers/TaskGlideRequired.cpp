@@ -28,8 +28,6 @@ TaskGlideRequired::TaskGlideRequired(TaskPoint* tp,
 double TaskGlideRequired::f(const double S) 
 {
   res = tm.glide_sink(aircraft, S);
-  // TODO: this fails if Mc too low for wind, need to 
-  // account for failed solution
   // && (fabs(res.AltitudeDifference)<tolerance)
   if (res.Vector.Distance>0) {
     return res.AltitudeDifference/res.Vector.Distance;

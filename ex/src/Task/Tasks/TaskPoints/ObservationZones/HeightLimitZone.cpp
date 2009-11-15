@@ -3,7 +3,6 @@
 #include "HeightLimitZone.h"
 
 bool HeightLimitZone::isInLimit(){
-  // TODO
   return true;
 }
 

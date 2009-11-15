@@ -35,7 +35,6 @@ GeoVector::GeoVector(const GEOPOINT &source, const GEOPOINT &target,
 
   Bearing = (x==0 && y==0) ? 0:AngleLimit360(atan2(y,x)*RAD_TO_DEG);
 
-  // TODO: handle is_average
 }
 
 bool operator != (const GEOPOINT&g1, const GEOPOINT &g2) {
