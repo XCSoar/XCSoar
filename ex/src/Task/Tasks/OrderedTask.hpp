@@ -55,7 +55,9 @@ public:
 #endif
 
 protected:
-  virtual bool check_transitions(const AIRCRAFT_STATE &, const AIRCRAFT_STATE&);
+  virtual bool check_transitions(const AIRCRAFT_STATE &state_now, 
+                                 const AIRCRAFT_STATE &state_last);
+
   double scan_distance_nominal();
   double scan_distance_planned();
   double scan_distance_remaining(const GEOPOINT &location);
@@ -64,11 +66,130 @@ protected:
   void scan_distance_minmax(const GEOPOINT &location, bool full,
                             double *dmin, double *dmax);
 
+/** 
+ * Calculate task start time.
+ * 
+ * @param state_now Aircraft state
+ * 
+ * @return Time (s) of start of task
+ */
+  virtual double scan_total_start_time(const AIRCRAFT_STATE &);
+
+/** 
+ * Calculate leg start time.
+ * 
+ * @param state_now Aircraft state
+ * 
+ * @return Time (s) of start of leg
+ */
+  virtual double scan_leg_start_time(const AIRCRAFT_STATE &);
+
+
+/** 
+ * Calculate glide result for remainder of task
+ * 
+ * @param state_now Aircraft state
+ * @param total Glide result accumulated for total remaining task
+ * @param leg Glide result for current leg of task
+ */
+  void glide_solution_remaining(const AIRCRAFT_STATE &state_now, 
+                                GlideResult &total,
+                                GlideResult &leg);
+
+/** 
+ * Calculate glide result from start of task to current state
+ * 
+ * @param state_now Aircraft state
+ * @param total Glide result accumulated for total travelled task
+ * @param leg Glide result for current leg of task
+ */
+  void glide_solution_travelled(const AIRCRAFT_STATE &state_now, 
+                                GlideResult &total,
+                                GlideResult &leg);
+
+/** 
+ * Calculate glide result from start of task to finish, and from this
+ * calculate the effective position of the aircraft along the task based
+ * on the remaining time.  This system therefore allows effective speeds
+ * to be calculated which take into account the time value of height.
+ * 
+ * @param state_now Aircraft state
+ * @param total Glide result accumulated for total task
+ * @param leg Glide result for current leg of task
+ * @param total_remaining_effective 
+ * @param leg_remaining_effective 
+ * @param total_t_elapsed Total planned task time (s)
+ * @param leg_t_elapsed Leg planned task time (s)
+ */
+  void glide_solution_planned(const AIRCRAFT_STATE &state_now, 
+                              GlideResult &total,
+                              GlideResult &leg,
+                              DistanceRemainingStat &total_remaining_effective,
+                              DistanceRemainingStat &leg_remaining_effective,
+                              const double total_t_elapsed,
+                              const double leg_t_elapsed);
+
+/** 
+ * Calculate/search for best MC, being the highest MC value to produce a
+ * pure glide solution for the remainder of the task.
+ * 
+ * @param state_now Aircraft state
+ * 
+ * @return Best MC value found (m/s)
+ */
+  double calc_mc_best(const AIRCRAFT_STATE &state_now);
+
+/** 
+ * Calculate virtual sink rate of aircraft that allows a pure glide solution
+ * for the remainder of the task.  Glide is performed according to Mc theory
+ * speed with the current glide polar, neglecting effect of virtual sink rate.
+ * 
+ * @param state_now Aircraft state
+ * 
+ * @return Sink rate of aircraft (m/s)
+ */
+  double calc_glide_required(const AIRCRAFT_STATE &aircraft);
+
+/** 
+ * Calculate cruise efficiency for the travelled part of the task.
+ * This is the ratio of the achieved inter-thermal cruise speed to that
+ * predicted by MacCready theory with the current glide polar.
+ * 
+ * @param state_now Aircraft state
+ * 
+ * @return Cruise efficiency (0-1)
+ */
+  double calc_cruise_efficiency(const AIRCRAFT_STATE &aircraft);
+
+/** 
+ * Optimise target ranges (for adjustable tasks) to produce an estimated
+ * time remaining with the current glide polar equal to a target value.
+ * This adjusts the target locations for the remainder of the task.
+ * 
+ * @param state_now Aircraft state
+ * @param t_target Desired time for remainder of task (s)
+ * 
+ * @return Target range parameter (0-1)
+ */
+  double calc_min_target(const AIRCRAFT_STATE &, 
+                         const double t_target);
+
+/** 
+ * Calculate angle from aircraft to remainder of task (minimum of leg
+ * heights above turnpoints divided by distance to go for each leg).  
+ * 
+ * @param state_now Aircraft state
+ * 
+ * @return Minimum gradient angle of remainder of task
+ */
+  virtual double calc_gradient(const AIRCRAFT_STATE &state);
+
 private:
+  void set_neighbours(unsigned position);
+  bool check_startfinish(OrderedTaskPoint* new_tp); 
+  void update_geometry();
 
   std::vector<OrderedTaskPoint*> tps;
-
-  void update_geometry();
 
   /**
    * @supplierCardinality 1 
@@ -82,40 +203,6 @@ private:
 
   const TaskProjection &task_projection;
 
-protected:
-
-  virtual double scan_total_start_time(const AIRCRAFT_STATE &);
-  virtual double scan_leg_start_time(const AIRCRAFT_STATE &);
-
-  void glide_solution_remaining(const AIRCRAFT_STATE &, 
-                                GlideResult &total,
-                                GlideResult &leg);
-
-  void glide_solution_travelled(const AIRCRAFT_STATE &, 
-                                GlideResult &total,
-                                GlideResult &leg);
-
-  void glide_solution_planned(const AIRCRAFT_STATE &, 
-                              GlideResult &total,
-                              GlideResult &leg,
-                              DistanceRemainingStat &total_remaining_effective,
-                              DistanceRemainingStat &leg_remaining_effective,
-                              const double total_t_elapsed,
-                              const double leg_t_elapsed);
-
-  double calc_mc_best(const AIRCRAFT_STATE &);
-
-  double calc_glide_required(const AIRCRAFT_STATE &aircraft);
-
-  double calc_cruise_efficiency(const AIRCRAFT_STATE &aircraft);
-
-  double calc_min_target(const AIRCRAFT_STATE &, 
-                         const double t_target);
-  virtual double calc_gradient(const AIRCRAFT_STATE &state) ;
-
-private:
-  void set_neighbours(unsigned position);
-  bool check_startfinish(OrderedTaskPoint* new_tp); 
 public:
   void Accept(TaskPointVisitor& visitor) const;
   DEFINE_VISITABLE()

@@ -104,21 +104,87 @@ protected:
   virtual bool check_transitions(const AIRCRAFT_STATE& state_now, 
                                  const AIRCRAFT_STATE& state_last) = 0;
   
-
+/** 
+ * Calculate/search for best MC, being the highest MC value to produce a
+ * pure glide solution for the remainder of the task.
+ * 
+ * @param state_now Aircraft state
+ * 
+ * @return Best MC value found (m/s)
+ */
   virtual double calc_mc_best(const AIRCRAFT_STATE &state_now);
 
+/** 
+ * Calculate virtual sink rate of aircraft that allows a pure glide solution
+ * for the remainder of the task.  Glide is performed according to Mc theory
+ * speed with the current glide polar, neglecting effect of virtual sink rate.
+ * 
+ * @param state_now Aircraft state
+ * 
+ * @return Sink rate of aircraft (m/s)
+ */
   virtual double calc_glide_required(const AIRCRAFT_STATE &state_now);
 
+/** 
+ * Calculate cruise efficiency for the travelled part of the task.
+ * This is the ratio of the achieved inter-thermal cruise speed to that
+ * predicted by MacCready theory with the current glide polar.
+ * 
+ * Defaults to 1.0 for non-ordered tasks, since non-ordered tasks have no
+ * task start time.
+ *
+ * @param state_now Aircraft state
+ * 
+ * @return Cruise efficiency (0-1)
+ */
   virtual double calc_cruise_efficiency(const AIRCRAFT_STATE &state_now) {
     return 1.0;
   }
+
+/** 
+ * Optimise target ranges (for adjustable tasks) to produce an estimated
+ * time remaining with the current glide polar equal to a target value.
+ *
+ * For non-ordered tasks, this doesn't do anything and returns 0.0
+ * 
+ * @param state_now Aircraft state
+ * @param t_target Desired time for remainder of task (s)
+ * 
+ * @return Target range parameter (0-1)
+ */
   virtual double calc_min_target(const AIRCRAFT_STATE &state_now, 
                                  const double t_target) {
     return 0.0;
   };
 
+/** 
+ * Calculate angle from aircraft to remainder of task (height above finish divided
+ * by distance to go).  
+ * 
+ * @param state_now Aircraft state
+ * 
+ * @return Gradient angle of remainder of task
+ */
+  virtual double calc_gradient(const AIRCRAFT_STATE &state_now);
 
+/** 
+ * Calculate task start time.  Default behaviour is current time, to be used
+ * for non-ordered tasks.
+ * 
+ * @param state_now Aircraft state
+ * 
+ * @return Time (s) of start of task
+ */
   virtual double scan_total_start_time(const AIRCRAFT_STATE &state_now);
+
+/** 
+ * Calculate leg start time.  Default behaviour is current time, to be used
+ * for non-ordered tasks.
+ * 
+ * @param state_now Aircraft state
+ * 
+ * @return Time (s) of start of leg
+ */
   virtual double scan_leg_start_time(const AIRCRAFT_STATE &state_now);
 
 /** 
@@ -204,6 +270,20 @@ protected:
                                         GlideResult &total,
                                         GlideResult &leg);
 
+/** 
+ * Calculate glide result from start of task to finish, and from this
+ * calculate the effective position of the aircraft along the task based
+ * on the remaining time.  This system therefore allows effective speeds
+ * to be calculated which take into account the time value of height.
+ * 
+ * @param state_now Aircraft state
+ * @param total Glide result accumulated for total task
+ * @param leg Glide result for current leg of task
+ * @param total_remaining_effective 
+ * @param leg_remaining_effective 
+ * @param total_t_elapsed Total planned task time (s)
+ * @param leg_t_elapsed Leg planned task time (s)
+ */
   virtual void glide_solution_planned(const AIRCRAFT_STATE &state_now,
                                       GlideResult &total,
                                       GlideResult &leg,
@@ -212,18 +292,13 @@ protected:
                                       const double total_t_elapsed,
                                       const double leg_t_elapsed);
 
-  virtual double calc_gradient(const AIRCRAFT_STATE &state_now);
-
 protected:
 
   unsigned activeTaskPoint;
   TaskStats stats;
-  Filter mc_lpf;
-  Filter ce_lpf;
-
-  const TaskEvents &task_events;
   TaskAdvance &task_advance;
   GlidePolar glide_polar;
+  const TaskEvents &task_events;
   const TaskBehaviour &task_behaviour;
 
 private:
@@ -234,6 +309,9 @@ private:
   void update_stats_speeds(const AIRCRAFT_STATE &, const AIRCRAFT_STATE&);
   void update_stats_glide(const AIRCRAFT_STATE &state);
   double leg_gradient(const AIRCRAFT_STATE &state);
+
+  Filter mc_lpf;
+  Filter ce_lpf;
 
 public:
 #ifdef DO_PRINT
