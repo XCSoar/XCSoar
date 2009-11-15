@@ -41,10 +41,16 @@ Copyright_License {
 #include "Screen/BufferCanvas.hpp"
 #include "Interface.hpp"
 #include "InfoBoxLayout.h"
+#include "Asset.hpp"
 
 #ifndef _MSC_VER
 #include <algorithm>
 using std::min;
+#endif
+
+#if defined(PNA) || defined(FIVV)
+int GlobalModelType = MODELTYPE_UNKNOWN;
+bool needclipping = false;
 #endif
 
 #ifdef HAVE_BLANK
