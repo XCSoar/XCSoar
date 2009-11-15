@@ -7,8 +7,34 @@
 #include "GlideSolvers/GlideResult.hpp"
 #include <vector>
 
+/**
+ * Abstract class for calculation of glide solutions with respect
+ * to ordered tasks.  This class handles high intermediate turnpoints
+ * whereby the aircraft's glide angle after achieving a turnpoint at minimum
+ * height may be higher than final glide beyond that.
+ *
+ * An assumption is made that final glide is made at the latest part of the
+ * task, and climbs are made as early as possible.
+ *
+ * Therefore, this system performs a scan to calculate effective minimum
+ * heights for each task point which may be higher than the actual task point's
+ * true minimum height.
+ *
+ * This system also uses a local copy of the glide polar so it can be used
+ * for algorithms that adjust glide polar parameters.  
+ *
+ * The class is not intended to be used directly, but to be specialised.
+ *
+ */
 class TaskMacCready {
 public:
+/** 
+ * Constructor for ordered task points
+ * 
+ * @param _tps Vector of ordered task points comprising the task
+ * @param _activeTaskPoint Current active task point in sequence
+ * @param gp Glide polar to copy for calculations
+ */
   TaskMacCready(const std::vector<OrderedTaskPoint*> &_tps,
                 const unsigned _activeTaskPoint,
                 const GlidePolar &gp):
@@ -21,6 +47,13 @@ public:
     glide_polar(gp)
     {
     };
+
+/** 
+ * Constructor for single task points (non-ordered ones)
+ * 
+ * @param tp Task point comprising the task
+ * @param gp Glide polar to copy for calculations
+ */
   TaskMacCready(TaskPoint* tp,
                 const GlidePolar &gp):
     tps(1, tp),
@@ -35,26 +68,68 @@ public:
 
   virtual ~TaskMacCready() {};
 
+/** 
+ * Calculate glide solution
+ * 
+ * @param aircraft Aircraft state
+ * 
+ * @return Glide result for entire task
+ */
   GlideResult glide_solution(const AIRCRAFT_STATE &aircraft);
+
+/** 
+ * Calculate glide solution for externally specified aircraft sink rate
+ * 
+ * @param aircraft Aircraft state
+ * 
+ * @return Glide result for entire task with virtual sink rate
+ */
   GlideResult glide_sink(const AIRCRAFT_STATE &aircraft,
                           const double S);
 
+/** 
+ * Adjust MacCready value of internal glide polar
+ * 
+ * @param mc MacCready value (m/s)
+ */
   void set_mc(double mc) {
     glide_polar.set_mc(mc);
   };
+
+/** 
+ * Adjust cruise efficiency of internal glide polar
+ * 
+ * @param ce Cruise efficiency
+ */
   void set_cruise_efficiency(double ce) {
     glide_polar.set_cruise_efficiency(ce);
   };
+
+/** 
+ * Return glide solution for current leg.
+ * This method is provided since glide_solution() and
+ * glide_sink() both return the solutions for the entire task.
+ * 
+ * @return Glide solution of current leg
+ */
   const GlideResult& get_active_solution() {
     return gs[activeTaskPoint];
   };
+
 protected:
-  void clearance_heights(const AIRCRAFT_STATE &);
-  virtual double get_min_height(const AIRCRAFT_STATE &aircraft) const = 0;
+
+  virtual double get_min_height(const AIRCRAFT_STATE &state) const = 0;
   virtual GlideResult tp_solution(const unsigned i,
-                                   const AIRCRAFT_STATE &aircraft, 
+                                   const AIRCRAFT_STATE &state, 
                                    double minH) const = 0;
-  virtual const AIRCRAFT_STATE get_aircraft_start(const AIRCRAFT_STATE &aircraft) const = 0;
+
+  virtual const AIRCRAFT_STATE 
+  get_aircraft_start(const AIRCRAFT_STATE &state) const = 0;
+
+  void clearance_heights(const AIRCRAFT_STATE &state);
+  GlideResult tp_sink(const unsigned i,
+                       const AIRCRAFT_STATE &aircraft, 
+                       const double S) const;
 
   const std::vector<TaskPoint*> tps;
   const unsigned activeTaskPoint;
@@ -63,9 +138,6 @@ protected:
   int end;
   std::vector<GlideResult> gs;
   GlidePolar glide_polar;
-  GlideResult tp_sink(const unsigned i,
-                       const AIRCRAFT_STATE &aircraft, 
-                       const double S) const;
 };
 
 #endif
