@@ -536,6 +536,24 @@ Canvas::clipped_dashed_line(int width, const POINT a, const POINT b,
 }
 
 void
+Canvas::dashed_line(int width, const POINT a, const POINT b, const Color color)
+{
+  Pen pen(Pen::DASH, width, color);
+  select(pen);
+  line(a, b);
+}
+
+void
+Canvas::autoclip_dashed_line(int width, const POINT a, const POINT b,
+                             const Color color, const RECT rc)
+{
+  if (need_clipping())
+    clipped_dashed_line(width, a, b, color, rc);
+  else
+    dashed_line(width, a, b, color);
+}
+
+void
 Canvas::line(int ax, int ay, int bx, int by)
 {
 #ifndef NOLINETO

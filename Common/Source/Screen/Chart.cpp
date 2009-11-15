@@ -171,20 +171,20 @@ void Chart::StyleLine(const POINT l1, const POINT l2,
   line[1] = l2;
   switch (Style) {
   case STYLE_BLUETHIN:
-    canvas.clipped_dashed_line(
+    canvas.autoclip_dashed_line(
 		 minwidth,
 		 l1,
 		 l2,
                  Color(0,50,255), rc);
     break;
   case STYLE_REDTHICK:
-    canvas.clipped_dashed_line(3,
+    canvas.autoclip_dashed_line(3,
 		 l1,
 		 l2,
                                Color(200,50,50), rc);
     break;
   case STYLE_DASHGREEN:
-    canvas.clipped_dashed_line(2,
+    canvas.autoclip_dashed_line(2,
 		 line[0],
 		 line[1],
                                Color(0,255,0), rc);
@@ -199,7 +199,7 @@ void Chart::StyleLine(const POINT l1, const POINT l2,
     canvas.clipped_polyline(line, 2, rc);
     break;
   case STYLE_THINDASHPAPER:
-    canvas.clipped_dashed_line(1,
+    canvas.autoclip_dashed_line(1,
 		 l1,
 		 l2,
                                Color(0x60,0x60,0x60), rc);
