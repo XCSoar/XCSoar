@@ -493,13 +493,6 @@ Canvas::clipped_polyline(const POINT* lppt, unsigned cPoints, const RECT rc)
 }
 
 void
-Canvas::clipped_line(const POINT a, const POINT b, const RECT rc)
-{
-  POINT p[2] = {{a.x, a.y}, {b.x, b.y}};
-  clipped_polyline(p, 2, rc);
-}
-
-void
 Canvas::clipped_dashed_line(int width, const POINT a, const POINT b,
                             const Color color, const RECT rc)
 {
