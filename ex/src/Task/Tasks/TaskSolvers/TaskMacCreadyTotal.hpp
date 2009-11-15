@@ -3,6 +3,9 @@
 
 #include "TaskMacCready.hpp"
 
+/** 
+ * Specialisation of TaskMacCready for total task
+ */
 class TaskMacCreadyTotal: 
   public TaskMacCready
 {

@@ -6,6 +6,14 @@
 #include "Task/Tasks/BaseTask/StartPoint.hpp"
 #include "Task/Tasks/BaseTask/AATIsolineSegment.hpp"
 
+/**
+ * Adjust target lateral offset for active task point to minimise
+ * elapsed time.
+ *
+ * TODO:
+ * - Merge with TaskMinTarget?
+ */
+
 class TaskOptTarget: 
   public ZeroFinder
 {
@@ -20,7 +28,19 @@ public:
 
   virtual double f(const double p);
   virtual bool valid(const double p);
+
+/** 
+ * Search for active task point's target isoline to minimise elapsed time
+ * to finish.
+ *
+ * Running this adjusts the target values for the active task point. 
+ * 
+ * @param p Default isoline value (0-1)
+ * 
+ * @return Isoline value for solution
+ */
   virtual double search(const double p);
+
 protected:
   void set_target(const double p);
   TaskMacCreadyRemaining tm;

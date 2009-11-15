@@ -3,6 +3,9 @@
 
 #include "TaskMacCready.hpp"
 
+/** 
+ * Specialisation of TaskMacCready for task remaining
+ */
 class TaskMacCreadyRemaining: 
   public TaskMacCready
 {

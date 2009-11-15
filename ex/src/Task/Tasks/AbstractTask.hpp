@@ -146,7 +146,7 @@ protected:
 
 /** 
  * Optimise target ranges (for adjustable tasks) to produce an estimated
- * time remaining with the current glide polar equal to a target value.
+ * time remaining with the current glide polar, equal to a target value.
  *
  * For non-ordered tasks, this doesn't do anything and returns 0.0
  * 
