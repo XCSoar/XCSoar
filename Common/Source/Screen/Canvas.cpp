@@ -490,6 +490,15 @@ Canvas::clipped_polyline(const POINT* lppt, unsigned cPoints, const RECT rc)
 }
 
 void
+Canvas::autoclip_polygon(const POINT* lppt, unsigned cPoints, const RECT rc)
+{
+  if (need_clipping())
+    clipped_polygon(lppt, cPoints, rc, true);
+  else
+    polygon(lppt, cPoints);
+}
+
+void
 Canvas::autoclip_polyline(const POINT* lppt, unsigned cPoints, const RECT rc)
 {
   if (need_clipping())

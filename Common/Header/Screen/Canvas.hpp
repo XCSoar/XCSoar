@@ -258,6 +258,11 @@ public:
     polyline(lppt, cPoints);
   }
 
+  void autoclip_polygon(const POINT* lppt, unsigned cPoints, const RECT rc) {
+    // XXX clip
+    polygon(lppt, cPoints);
+  }
+
   void autoclip_polyline(const POINT* lppt, unsigned cPoints, const RECT rc) {
     // XXX clip
     polyline(lppt, cPoints);
@@ -635,6 +640,7 @@ public:
                        bool fill=true);
   void clipped_polyline(const POINT* lppt, unsigned cPoints, const RECT rc);
 
+  void autoclip_polygon(const POINT *lppt, unsigned cPoints, const RECT rc);
   void autoclip_polyline(const POINT *lppt, unsigned cPoints, const RECT rc);
 
 private:

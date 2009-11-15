@@ -492,10 +492,7 @@ Circle(Canvas &canvas, long x, long y, int radius, RECT rc,
     canvas.clipped_polygon(pt, step + 1, rc, fill);
   } else {
     if (fill) {
-      if (need_clipping())
-        canvas.clipped_polygon(pt, step + 1, rc, false); // VENTA4: CHECK FIX AIRSPACE CLIPPING PROBLEM
-      else
-        canvas.polygon(pt, step + 1);
+      canvas.autoclip_polygon(pt, step + 1, rc);
     } else {
       canvas.autoclip_polyline(pt, step + 1, rc);
     }
