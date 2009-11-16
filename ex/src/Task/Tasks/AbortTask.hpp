@@ -3,7 +3,6 @@
 
 #include "AbstractTask.hpp"
 #include <vector>
-#include "Navigation/TaskProjection.hpp"
 #include "Waypoint/Waypoints.hpp"
 
 class AbortTask : public AbstractTask 
@@ -11,7 +10,6 @@ class AbortTask : public AbstractTask
 public:
   AbortTask(const TaskEvents &te, 
             const TaskBehaviour &tb,
-            const TaskProjection &tp,
             TaskAdvance &ta,
             GlidePolar &gp,
             const Waypoints &wps);
@@ -103,7 +101,6 @@ private:
                       const bool only_airfield);
 
   std::vector<TaskPoint*> tps;
-  const TaskProjection &task_projection;
   unsigned active_waypoint;
   const Waypoints &waypoints;
   GlidePolar polar_safety;

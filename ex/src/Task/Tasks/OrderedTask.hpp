@@ -33,7 +33,6 @@ public:
    * 
    * @param te Task events
    * @param tb Task behaviour
-   * @param tp Task projection
    * @param ta Task advance
    * @param gp Glide Polar
    * 
@@ -41,7 +40,6 @@ public:
    */
   OrderedTask(const TaskEvents &te, 
               const TaskBehaviour &tb,
-              const TaskProjection &tp,
               TaskAdvance &ta,
               GlidePolar &gp);
   ~OrderedTask();
@@ -398,7 +396,7 @@ private:
    */
   FinishPoint *tf;
 
-  const TaskProjection &task_projection;
+  TaskProjection task_projection;
 
 public:
 

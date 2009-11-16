@@ -105,17 +105,6 @@ public:
   void optimise();
 
 /** 
- * Access task projection calculated from mid-point of waypoints
- * inserted in the store, for use by other systems requiring
- * knowledge of a reasonable center point for flat-earth projections.
- * 
- * @return Task projection used by internal store
- */
-  const TaskProjection &get_task_projection() const {
-    return task_projection;
-  }
-
-/** 
  * Access first waypoint in store, for use in iterators.
  * 
  * @return First waypoint in store
