@@ -67,6 +67,7 @@ Copyright_License {
 #include "Device/devXCOM760.h"
 #include "Device/devCondor.h"
 #include "options.h" /* for LOGGDEVCOMMANDLINE */
+#include "Asset.hpp"
 
 static Mutex mutexComm;
 
@@ -199,9 +200,8 @@ BOOL devInitOne(PDeviceDescriptor_t dev, int index, const TCHAR *port,
 {
   TCHAR DeviceName[DEVNAMESIZE];
 
-#ifdef _SIM_
+  if (is_simulator())
     return FALSE;
-#endif
 
   ReadDeviceSettings(index, DeviceName);
 
@@ -415,9 +415,8 @@ BOOL devPutMacCready(PDeviceDescriptor_t d, double MacCready)
 {
   BOOL result = TRUE;
 
-#ifdef _SIM_
-  return TRUE;
-#endif
+  if (is_simulator())
+    return true;
 
   mutexComm.Lock();
   if (d && d->Driver && d->Driver->PutMacCready)
@@ -431,9 +430,8 @@ BOOL devPutBugs(PDeviceDescriptor_t d, double Bugs)
 {
   BOOL result = TRUE;
 
-#ifdef _SIM_
-  return TRUE;
-#endif
+  if (is_simulator())
+    return true;
 
   mutexComm.Lock();
   if (d && d->Driver && d->Driver->PutBugs)
@@ -447,9 +445,8 @@ BOOL devPutBallast(PDeviceDescriptor_t d, double Ballast)
 {
   BOOL result = TRUE;
 
-#ifdef _SIM_
-  return TRUE;
-#endif
+  if (is_simulator())
+    return true;
 
   mutexComm.Lock();
   if (d && d->Driver && d->Driver->PutBallast)
@@ -498,9 +495,8 @@ BOOL devLinkTimeout(PDeviceDescriptor_t d)
 {
   BOOL result = FALSE;
 
-#ifdef _SIM_
-  return TRUE;
-#endif
+  if (is_simulator())
+    return true;
 
   mutexComm.Lock();
   if (d == NULL){
@@ -524,9 +520,8 @@ BOOL devPutVoice(PDeviceDescriptor_t d, TCHAR *Sentence)
 {
   BOOL result = FALSE;
 
-#ifdef _SIM_
-  return TRUE;
-#endif
+  if (is_simulator())
+    return true;
 
   mutexComm.Lock();
   if (d == NULL){
@@ -549,9 +544,8 @@ BOOL devDeclare(PDeviceDescriptor_t d, Declaration_t *decl)
 {
   BOOL result = FALSE;
 
-#ifdef _SIM_
-  return TRUE;
-#endif
+  if (is_simulator())
+    return true;
 
   mutexComm.Lock();
   if (d) {
@@ -665,9 +659,8 @@ BOOL devPutQNH(DeviceDescriptor_t *d, double NewQNH)
 {
   BOOL result = FALSE;
 
-#ifdef _SIM_
-  return TRUE;
-#endif
+  if (is_simulator())
+    return true;
 
   mutexComm.Lock();
   if (d == NULL){
@@ -755,9 +748,8 @@ BOOL devPutVolume(PDeviceDescriptor_t d, int Volume)
 {
   BOOL result = TRUE;
 
-#ifdef _SIM_
-  return TRUE;
-#endif
+  if (is_simulator())
+    return true;
 
   mutexComm.Lock();
   if (d && d->Driver && d->Driver->PutVolume != NULL)
@@ -771,9 +763,8 @@ BOOL devPutFreqActive(PDeviceDescriptor_t d, double Freq)
 {
   BOOL result = TRUE;
 
-#ifdef _SIM_
-  return TRUE;
-#endif
+  if (is_simulator())
+    return true;
 
   mutexComm.Lock();
   if (d && d->Driver && d->Driver->PutFreqActive != NULL)
@@ -787,9 +778,8 @@ BOOL devPutFreqStandby(PDeviceDescriptor_t d, double Freq)
 {
   BOOL result = TRUE;
 
-#ifdef _SIM_
-  return TRUE;
-#endif
+  if (is_simulator())
+    return true;
 
   mutexComm.Lock();
   if (d && d->Driver && d->Driver->PutFreqStandby != NULL)
@@ -942,7 +932,9 @@ void devShutdown()
 
 ////////////////////////////////////////////////////////////////////////
 void devRestart() {
-#ifndef _SIM_
+  if (is_simulator())
+    return;
+
   /*
 #ifdef WINDOWSPC
   static bool first = true;
@@ -963,7 +955,6 @@ void devRestart() {
   devInit(TEXT(""));
 
   mutexComm.Unlock();
-#endif
 }
 
 void devConnectionMonitor()

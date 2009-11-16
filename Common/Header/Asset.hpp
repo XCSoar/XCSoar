@@ -148,6 +148,15 @@ static inline bool is_altair()
 #endif
 }
 
+static inline bool is_simulator()
+{
+#ifdef _SIM_
+  return true;
+#else
+  return false;
+#endif
+}
+
 /**
  * Flag to activate extra clipping for some PNAs.
  */

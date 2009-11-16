@@ -149,13 +149,14 @@ void XCSoarInterface::AfterStartup() {
   StartupLogFreeRamAndStorage();
 
   status_messages.Startup(true);
-#ifdef _SIM_
-  StartupStore(TEXT("GCE_STARTUP_SIMULATOR\n"));
-  InputEvents::processGlideComputer(GCE_STARTUP_SIMULATOR);
-#else
-  StartupStore(TEXT("GCE_STARTUP_REAL\n"));
-  InputEvents::processGlideComputer(GCE_STARTUP_REAL);
-#endif
+
+  if (is_simulator()) {
+    StartupStore(TEXT("GCE_STARTUP_SIMULATOR\n"));
+    InputEvents::processGlideComputer(GCE_STARTUP_SIMULATOR);
+  } else {
+    StartupStore(TEXT("GCE_STARTUP_REAL\n"));
+    InputEvents::processGlideComputer(GCE_STARTUP_REAL);
+  }
 
   // Create default task if none exists
   StartupStore(TEXT("Create default task\n"));
@@ -188,9 +189,12 @@ void XCSoarInterface::StartupInfo() {
   _stprintf(sTmp, TEXT("PNA MODEL=%s (%d)"), GlobalModelName, GlobalModelType);
   CreateProgressDialog(sTmp); Sleep(3000);
 #endif // non PNA
-#ifdef _SIM_
-  CreateProgressDialog(TEXT("SIMULATION")); Sleep(2000);
-#endif
+
+  if (is_simulator()) {
+    CreateProgressDialog(TEXT("SIMULATION"));
+    Sleep(2000);
+  }
+
 #ifdef PNA
   if ( SetBacklight() == true )
     CreateProgressDialog(TEXT("AUTOMATIC BACKLIGHT CONTROL"));

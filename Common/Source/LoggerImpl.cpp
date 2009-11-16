@@ -145,11 +145,8 @@ LoggerImpl::StopLogger(const NMEA_INFO &gps_info) {
     LoggerActive = false;
     if (LoggerClearFreeSpace(gps_info)) {
 
-#ifndef _SIM_
-      if (LoggerGActive()) {
+      if (!is_simulator() && LoggerGActive())
         LoggerGStop(szLoggerFileName);
-      }
-#endif
 
       int imCount=0;
       const int imMax=3;
@@ -352,7 +349,8 @@ LoggerImpl::LogFRecordToFile(const int SatelliteIDs[],
 { // bAlways forces write when completing header for restart
   // only writes record if constallation has changed unless bAlways set
 
-#if !defined(_SIM_)
+  if (is_simulator())
+    return true;
 
   char szFRecord[MAX_IGC_BUFF];
   static bool bFirst = true;
@@ -413,9 +411,6 @@ LoggerImpl::LogFRecordToFile(const int SatelliteIDs[],
 
   }
   return bRetVal;
-#else
-  return true;
-#endif
 }
 
 bool

@@ -53,6 +53,7 @@ Copyright_License {
 #include "TopologyStore.h"
 #include "Components.hpp"
 #include "Interface.hpp"
+#include "Asset.hpp"
 
 bool COMPORTCHANGED = false;
 bool MAPFILECHANGED = false;
@@ -176,13 +177,12 @@ void SettingsLeave() {
 
 
 void SystemConfiguration(void) {
-#ifndef _SIM_
-  if (XCSoarInterface::LockSettingsInFlight
+  if (!is_simulator() && XCSoarInterface::LockSettingsInFlight
       && XCSoarInterface::Calculated().Flying) {
     Message::AddMessage(TEXT("Settings locked in flight"));
     return;
   }
-#endif
+
   SettingsEnter();
   dlgConfigurationShowModal();
   SettingsLeave();

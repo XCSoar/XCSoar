@@ -151,10 +151,8 @@ LoggerImpl::IGCWriteRecord(const char *szIn, const TCHAR* szLoggerFileName)
       for (i = 0; (i <= iLen) && (i < MAX_IGC_BUFF); i++)
 	buffer[i] = (TCHAR)charbuffer[i];
 
-#ifndef _SIM_
-      if (LoggerGActive())
+      if (!is_simulator() && LoggerGActive())
 	GRecordAppendRecordToBuffer(pbuffer);
-#endif
 
       FlushFileBuffers(hFile);
       CloseHandle(hFile);
@@ -362,9 +360,10 @@ LoggerImpl::LoggerGStop(TCHAR* szLoggerFileName) {
 
 void
 LoggerImpl::LoggerGInit() {
-#ifndef _SIM_
+  if (is_simulator())
+    return;
+
   LinkGRecordDLL(); // try to link DLL if it exists
   if (LoggerGActive())
     GRecordInit();
-#endif
 }
