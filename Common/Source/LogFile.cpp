@@ -44,7 +44,7 @@ Copyright_License {
 #include <stdio.h>
 #include <stdarg.h>
 
-Mutex mutexLogFile;
+static Mutex mutexLogFile;
 
 #if !defined(NDEBUG) && !defined(GNAV)
 /**
