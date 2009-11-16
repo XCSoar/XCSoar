@@ -16,7 +16,6 @@ public:
     calc_cruise_efficiency(true),
     aat_min_time(3600*4.9),
     safety_height_terrain(150.0),
-    safety_height_finish(150.0),
     safety_height_arrival(300.0)
     {}
 
@@ -26,7 +25,6 @@ public:
   bool calc_cruise_efficiency;
   double aat_min_time;
   double safety_height_terrain;
-  double safety_height_finish;
   double safety_height_arrival;
 
 /** 

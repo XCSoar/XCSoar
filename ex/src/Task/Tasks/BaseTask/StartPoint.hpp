@@ -50,7 +50,6 @@
  * \todo
  * - currently we don't track crossing the actual line, rather it currently
  *   allows any border crossing
- * - safety heights
  * - max start height, speed
  */
 class StartPoint : public OrderedTaskPoint {

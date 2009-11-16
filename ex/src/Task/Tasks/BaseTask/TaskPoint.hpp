@@ -54,7 +54,7 @@ class GlidePolar;
  * Base class for all task points 
  *
  * \todo
- * - Safety heights, lookup terrain height?
+ * - Lookup terrain height?
  */
 
 class TaskPoint : 

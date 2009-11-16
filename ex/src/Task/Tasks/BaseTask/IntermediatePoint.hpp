@@ -11,8 +11,6 @@
  * All IntermediatePoints shall have a preceding and following
  * taskpoint.
  *
- * \todo
- * - safety heights
  */
 class IntermediatePoint: 
   public OrderedTaskPoint {
