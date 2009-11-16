@@ -46,7 +46,7 @@ Copyright_License {
 
 #include "Device/devCAI302.h"
 #include "Device/Internal.hpp"
-#include "Device/device.h"
+#include "WayPoint.hpp"
 #include "XCSoar.h"
 #include "Protection.hpp"
 #include "UtilsText.hpp"
@@ -131,6 +131,23 @@ typedef struct{
 
 #pragma pack(pop)
 
+class CAI302Device : public AbstractDevice {
+private:
+  ComPort *port;
+
+public:
+  CAI302Device(ComPort *_port):port(_port) {}
+
+public:
+  virtual bool Open();
+  virtual bool ParseNMEA(const TCHAR *line, struct NMEA_INFO *info,
+                         bool enable_baro);
+  virtual bool PutMcCready(double mc_cready);
+  virtual bool PutBugs(double bugs);
+  virtual bool PutBallast(double ballast);
+  virtual bool Declare(const struct Declaration *declaration);
+};
+
 //static cai302_Wdata_t cai302_Wdata;
 static cai302_OdataNoArgs_t cai302_OdataNoArgs;
 static cai302_OdataPilot_t cai302_OdataPilot;
@@ -151,9 +168,9 @@ static int  MacCreadyUpdateTimeout = 0;
 static int  BugsUpdateTimeout = 0;
 static int  BallastUpdateTimeout = 0;
 
-static bool
-cai302ParseNMEA(struct DeviceDescriptor *d, const TCHAR *String,
-                NMEA_INFO *GPS_INFO, bool enable_baro)
+bool
+CAI302Device::ParseNMEA(const TCHAR *String, NMEA_INFO *GPS_INFO,
+                        bool enable_baro)
 {
   if (!NMEAParser::NMEAChecksum(String) || (GPS_INFO == NULL)){
     return false;
@@ -174,42 +191,42 @@ cai302ParseNMEA(struct DeviceDescriptor *d, const TCHAR *String,
   return false;
 }
 
-static bool
-cai302PutMacCready(struct DeviceDescriptor *d, double MacCready)
+bool
+CAI302Device::PutMcCready(double MacCready)
 {
   TCHAR  szTmp[32];
 
   _stprintf(szTmp, _T("!g,m%d\r\n"), int(((MacCready * 10) / KNOTSTOMETRESSECONDS) + 0.5));
 
-  d->Com->WriteString(szTmp);
+  port->WriteString(szTmp);
 
   MacCreadyUpdateTimeout = 2;
 
   return true;
 }
 
-static bool
-cai302PutBugs(struct DeviceDescriptor *d, double Bugs)
+bool
+CAI302Device::PutBugs(double Bugs)
 {
   TCHAR  szTmp[32];
 
   _stprintf(szTmp, _T("!g,u%d\r\n"), int((Bugs * 100) + 0.5));
 
-  d->Com->WriteString(szTmp);
+  port->WriteString(szTmp);
 
   BugsUpdateTimeout = 2;
 
   return true;
 }
 
-static bool
-cai302PutBallast(struct DeviceDescriptor *d, double Ballast)
+bool
+CAI302Device::PutBallast(double Ballast)
 {
   TCHAR  szTmp[32];
 
   _stprintf(szTmp, _T("!g,b%d\r\n"), int((Ballast * 10) + 0.5));
 
-  d->Com->WriteString(szTmp);
+  port->WriteString(szTmp);
 
   BallastUpdateTimeout = 2;
 
@@ -261,13 +278,13 @@ void test(void){
 
 }
 
-static bool
-cai302Open(struct DeviceDescriptor *d, int Port)
+bool
+CAI302Device::Open()
 {
 //test();
 
-  d->Com->WriteString(_T("\x03"));
-  d->Com->WriteString(_T("LOG 0\r"));
+  port->WriteString(_T("\x03"));
+  port->WriteString(_T("LOG 0\r"));
 
   return true;
 }
@@ -278,8 +295,8 @@ static int nDeclErrorCode;
 static bool
 cai302DeclAddWayPoint(ComPort *port, const WAYPOINT *wp);
 
-static bool
-cai302Declare(struct DeviceDescriptor *d, const struct Declaration *decl)
+bool
+CAI302Device::Declare(const struct Declaration *decl)
 {
   TCHAR PilotName[25];
   TCHAR GliderType[13];
@@ -287,39 +304,39 @@ cai302Declare(struct DeviceDescriptor *d, const struct Declaration *decl)
   TCHAR szTmp[255];
   nDeclErrorCode = 0;
 
-  d->Com->StopRxThread();
+  port->StopRxThread();
 
-  d->Com->SetRxTimeout(500);
-  d->Com->WriteString(_T("\x03"));
-  ExpectString(d->Com, _T("$$$"));  // empty rx buffer (searching for
+  port->SetRxTimeout(500);
+  port->WriteString(_T("\x03"));
+  ExpectString(port, _T("$$$"));  // empty rx buffer (searching for
                                  // pattern that never occure)
 
-  d->Com->WriteString(_T("\x03"));
-  if (!ExpectString(d->Com, _T("cmd>"))){
+  port->WriteString(_T("\x03"));
+  if (!ExpectString(port, _T("cmd>"))){
     nDeclErrorCode = 1;
     return false;
   }
 
-  d->Com->WriteString(_T("upl 1\r"));
-  if (!ExpectString(d->Com, _T("up>"))){
+  port->WriteString(_T("upl 1\r"));
+  if (!ExpectString(port, _T("up>"))){
     nDeclErrorCode = 1;
     return false;
   }
 
-  ExpectString(d->Com, _T("$$$"));
+  ExpectString(port, _T("$$$"));
 
-  d->Com->WriteString(_T("O\r"));
-  d->Com->Read(&cai302_OdataNoArgs, sizeof(cai302_OdataNoArgs));
-  if (!ExpectString(d->Com, _T("up>"))){
+  port->WriteString(_T("O\r"));
+  port->Read(&cai302_OdataNoArgs, sizeof(cai302_OdataNoArgs));
+  if (!ExpectString(port, _T("up>"))){
     nDeclErrorCode = 1;
     return false;
   }
 
-  d->Com->WriteString(_T("O 0\r"));  // 0=active pilot
+  port->WriteString(_T("O 0\r"));  // 0=active pilot
   Sleep(1000); // some params come up 0 if we don't wait!
-  d->Com->Read(&cai302_OdataPilot, min(sizeof(cai302_OdataPilot),
+  port->Read(&cai302_OdataPilot, min(sizeof(cai302_OdataPilot),
                                        (size_t)cai302_OdataNoArgs.PilotRecordSize+3));
-  if (!ExpectString(d->Com, _T("up>"))){
+  if (!ExpectString(port, _T("up>"))){
     nDeclErrorCode = 1;
     return false;
   }
@@ -333,17 +350,17 @@ cai302Declare(struct DeviceDescriptor *d, const struct Declaration *decl)
   swap(cai302_OdataPilot.UnitWord);
   swap(cai302_OdataPilot.MarginHeight);
 
-  d->Com->WriteString(_T("G\r"));
-  d->Com->Read(&cai302_GdataNoArgs, sizeof(cai302_GdataNoArgs));
-  if (!ExpectString(d->Com, _T("up>"))){
+  port->WriteString(_T("G\r"));
+  port->Read(&cai302_GdataNoArgs, sizeof(cai302_GdataNoArgs));
+  if (!ExpectString(port, _T("up>"))){
     nDeclErrorCode = 1;
     return false;
   }
 
-  d->Com->WriteString(_T("G 0\r"));
+  port->WriteString(_T("G 0\r"));
   Sleep(1000);
-  d->Com->Read(&cai302_Gdata, cai302_GdataNoArgs.GliderRecordSize + 3);
-  if (!ExpectString(d->Com, _T("up>"))){
+  port->Read(&cai302_Gdata, cai302_GdataNoArgs.GliderRecordSize + 3);
+  if (!ExpectString(port, _T("up>"))){
     nDeclErrorCode = 1;
     return false;
   }
@@ -353,16 +370,16 @@ cai302Declare(struct DeviceDescriptor *d, const struct Declaration *decl)
   swap(cai302_Gdata.ConfigWord);
   swap(cai302_Gdata.WingArea);
 
-  d->Com->SetRxTimeout(1500);
+  port->SetRxTimeout(1500);
 
-  d->Com->WriteString(_T("\x03"));
-  if (!ExpectString(d->Com, _T("cmd>"))){
+  port->WriteString(_T("\x03"));
+  if (!ExpectString(port, _T("cmd>"))){
     nDeclErrorCode = 1;
     return false;
   }
 
-  d->Com->WriteString(_T("dow 1\r"));
-  if (!ExpectString(d->Com, _T("dn>"))){
+  port->WriteString(_T("dow 1\r"));
+  if (!ExpectString(port, _T("dn>"))){
     nDeclErrorCode = 1;
     return false;
   }
@@ -395,8 +412,8 @@ cai302Declare(struct DeviceDescriptor *d, const struct Declaration *decl)
   );
 
 
-  d->Com->WriteString(szTmp);
-  if (!ExpectString(d->Com, _T("dn>"))){
+  port->WriteString(szTmp);
+  if (!ExpectString(port, _T("dn>"))){
     nDeclErrorCode = 1;
     return false;
   }
@@ -414,8 +431,8 @@ cai302Declare(struct DeviceDescriptor *d, const struct Declaration *decl)
     cai302_Gdata.WingArea
   );
 
-  d->Com->WriteString(szTmp);
-  if (!ExpectString(d->Com, _T("dn>"))){
+  port->WriteString(szTmp);
+  if (!ExpectString(port, _T("dn>"))){
     nDeclErrorCode = 1;
     return false;
   }
@@ -423,31 +440,31 @@ cai302Declare(struct DeviceDescriptor *d, const struct Declaration *decl)
   DeclIndex = 128;
 
   for (int i = 0; i < decl->num_waypoints; i++)
-    cai302DeclAddWayPoint(d->Com, decl->waypoint[i]);
+    cai302DeclAddWayPoint(port, decl->waypoint[i]);
 
   if (nDeclErrorCode == 0){
 
     _stprintf(szTmp, _T("D,%d\r"), 255 /* end of declaration */);
-    d->Com->WriteString(szTmp);
+    port->WriteString(szTmp);
 
-    d->Com->SetRxTimeout(1500);            // D,255 takes more than 800ms
+    port->SetRxTimeout(1500);            // D,255 takes more than 800ms
 
-    if (!ExpectString(d->Com, _T("dn>"))){
+    if (!ExpectString(port, _T("dn>"))){
       nDeclErrorCode = 1;
     }
 
     // todo error checking
   }
 
-  d->Com->SetRxTimeout(500);
+  port->SetRxTimeout(500);
 
-  d->Com->WriteString(_T("\x03"));
-  ExpectString(d->Com, _T("cmd>"));
+  port->WriteString(_T("\x03"));
+  ExpectString(port, _T("cmd>"));
 
-  d->Com->WriteString(_T("LOG 0\r"));
+  port->WriteString(_T("LOG 0\r"));
 
-  d->Com->SetRxTimeout(0);
-  d->Com->StartRxThread();
+  port->SetRxTimeout(0);
+  port->StartRxThread();
 
   return(nDeclErrorCode == 0);
 
@@ -509,26 +526,16 @@ cai302DeclAddWayPoint(ComPort *port, const WAYPOINT *wp)
   return true;
 }
 
+static Device *
+CAI302CreateOnComPort(ComPort *com_port)
+{
+  return new CAI302Device(com_port);
+}
+
 const struct DeviceRegister cai302Device = {
   _T("CAI 302"),
   drfGPS | drfLogger | drfSpeed | drfVario | drfWind, /* XXX: drfBaroAlt? */
-  cai302ParseNMEA,		// ParseNMEA
-  cai302PutMacCready,		// PutMacCready
-  cai302PutBugs,		// PutBugs
-  cai302PutBallast,		// PutBallast
-  NULL,				// PutQNH
-  NULL,				// PutVoice
-  NULL,				// PutVolume
-  NULL,				// PutFreqActive
-  NULL,				// PutFreqStandby
-  cai302Open,			// Open
-  NULL,				// Close
-  NULL,				// LinkTimeout
-  cai302Declare,		// Declare
-  NULL,				// IsLogger
-  NULL,				// IsGPSSource
-  NULL, // IsBaroSource
-  NULL				// OnSysTicker
+  CAI302CreateOnComPort,
 };
 
 // local stuff

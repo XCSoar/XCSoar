@@ -51,6 +51,12 @@ Copyright_License {
 
 #include <tchar.h>
 
+class CondorDevice : public AbstractDevice {
+public:
+  virtual bool ParseNMEA(const TCHAR *line, struct NMEA_INFO *info,
+                         bool enable_baro);
+};
+
 static bool
 cLXWP0(const TCHAR *String, NMEA_INFO *GPS_INFO, bool enable_baro);
 
@@ -60,12 +66,10 @@ cLXWP1(const TCHAR *String, NMEA_INFO *GPS_INFO);
 static bool
 cLXWP2(const TCHAR *String, NMEA_INFO *GPS_INFO);
 
-static bool
-CondorParseNMEA(struct DeviceDescriptor *d, const TCHAR *String,
-                NMEA_INFO *GPS_INFO, bool enable_baro)
+bool
+CondorDevice::ParseNMEA(const TCHAR *String, NMEA_INFO *GPS_INFO,
+                        bool enable_baro)
 {
-  (void)d;
-
   if(_tcsncmp(_T("$LXWP0"), String, 6)==0)
     {
       return cLXWP0(&String[7], GPS_INFO, enable_baro);
@@ -82,26 +86,16 @@ CondorParseNMEA(struct DeviceDescriptor *d, const TCHAR *String,
   return false;
 }
 
+static Device *
+CondorCreateOnComPort(ComPort *com_port)
+{
+  return new CondorDevice();
+}
+
 const struct DeviceRegister condorDevice = {
   _T("Condor"),
   drfGPS | drfBaroAlt | drfSpeed | drfVario | drfCondor,
-  CondorParseNMEA,		// ParseNMEA
-  NULL,				// PutMacCready
-  NULL,				// PutBugs
-  NULL,				// PutBallast
-  NULL,				// PutQNH
-  NULL,				// PutVoice
-  NULL,				// PutVolume
-  NULL,				// PutFreqActive
-  NULL,				// PutFreqStandby
-  NULL,				// Open
-  NULL,				// Close
-  NULL,				// LinkTimeout
-  NULL,				// Declare
-  NULL,				// IsLogger
-  NULL,				// IsGPSSource
-  NULL,				// IsBaroSource
-  NULL				// OnSysTicker
+  CondorCreateOnComPort,
 };
 
 // *****************************************************************************

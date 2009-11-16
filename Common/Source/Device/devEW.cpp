@@ -43,20 +43,38 @@ Copyright_License {
 
 #include "Device/devEW.h"
 #include "Device/Internal.hpp"
-#include "Device/device.h"
 #include "Device/Port.h"
 #include "NMEA/Checksum.h"
+#include "WayPoint.hpp"
 
 #include <tchar.h>
+#include <stdio.h>
 
 #define  USESHORTTPNAME   1       // hack, soulf be configurable
 
 // Additional sentance for EW support
 
-static bool fDeclarationPending = false;
-static unsigned long lLastBaudrate = 0;
-static int nDeclErrorCode = 0;
-static int ewDecelTpIndex = 0;
+class EWDevice : public AbstractDevice {
+protected:
+  ComPort *port;
+  bool fDeclarationPending;
+  unsigned long lLastBaudrate;
+  int nDeclErrorCode;
+  int ewDecelTpIndex;
+
+public:
+  EWDevice(ComPort *_port)
+    :port(_port), fDeclarationPending(false),
+     lLastBaudrate(0), nDeclErrorCode(0), ewDecelTpIndex(0) {}
+
+protected:
+  bool TryConnect();
+  bool AddWayPoint(const WAYPOINT *wp);
+
+public:
+  virtual void LinkTimeout();
+  virtual bool Declare(const struct Declaration *declaration);
+};
 
 void appendCheckSum(TCHAR *String){
   TCHAR sTmp[4];
@@ -66,28 +84,25 @@ void appendCheckSum(TCHAR *String){
 
 }
 
-static bool
-EWTryConnect(struct DeviceDescriptor *d)
+bool
+EWDevice::TryConnect()
 {
   int retries=10;
   while (--retries){
 
-    d->Com->WriteString(_T("##\r\n"));         // send IO Mode command
-    if (ExpectString(d->Com, _T("IO Mode.\r")))
+    port->WriteString(_T("##\r\n"));         // send IO Mode command
+    if (ExpectString(port, _T("IO Mode.\r")))
       return true;
 
-    ExpectString(d->Com, _T("$$$"));                 // empty imput buffer
+    ExpectString(port, _T("$$$"));                 // empty imput buffer
   }
 
   nDeclErrorCode = 1;
   return false;
 }
 
-static bool
-EWDeclAddWayPoint(struct DeviceDescriptor *d, const WAYPOINT *wp);
-
-static bool
-EWDeclare(struct DeviceDescriptor *d, const struct Declaration *decl)
+bool
+EWDevice::Declare(const struct Declaration *decl)
 {
   TCHAR sTmp[72];
   TCHAR sPilot[13];
@@ -98,19 +113,18 @@ EWDeclare(struct DeviceDescriptor *d, const struct Declaration *decl)
   ewDecelTpIndex = 0;
   fDeclarationPending = true;
 
-  d->Com->StopRxThread();
+  port->StopRxThread();
 
-  lLastBaudrate = d->Com->SetBaudrate(9600L);    // change to IO Mode baudrate
+  lLastBaudrate = port->SetBaudrate(9600L);    // change to IO Mode baudrate
 
-  d->Com->SetRxTimeout(500);                     // set RX timeout to 500[ms]
+  port->SetRxTimeout(500);                     // set RX timeout to 500[ms]
 
-  if (!EWTryConnect(d)) {
+  if (!TryConnect())
     return false;
-  }
 
   _stprintf(sTmp, _T("#SPI"));                  // send SetPilotInfo
   appendCheckSum(sTmp);
-  d->Com->WriteString(sTmp);
+  port->WriteString(sTmp);
   Sleep(50);
 
   _tcsncpy(sPilot, decl->PilotName, 12);               // copy and strip fields
@@ -132,9 +146,9 @@ EWDeclare(struct DeviceDescriptor *d, const struct Declaration *decl)
                                                   // left blank (GPS
                                                   // has a RTC)
   );
-  d->Com->WriteString(sTmp);
+  port->WriteString(sTmp);
 
-  if (!ExpectString(d->Com, _T("OK\r"))){
+  if (!ExpectString(port, _T("OK\r"))){
     nDeclErrorCode = 1;
     return false;
   };
@@ -143,36 +157,36 @@ EWDeclare(struct DeviceDescriptor *d, const struct Declaration *decl)
   /*
   _stprintf(sTmp, _T("#SUI%02d"), 0);           // send pilot name
   appendCheckSum(sTmp);
-  d->Com->WriteString(sTmp);
+  port->WriteString(sTmp);
   Sleep(50);
-  d->Com->WriteString(PilotsName);
-  d->Com->WriteString(_T("\r"));
+  port->WriteString(PilotsName);
+  port->WriteString(_T("\r"));
 
-  if (!ExpectString(d->Com, _T("OK\r"))){
+  if (!ExpectString(port, _T("OK\r"))){
     nDeclErrorCode = 1;
     return false;
   };
 
   _stprintf(sTmp, _T("#SUI%02d"), 1);           // send type of aircraft
   appendCheckSum(sTmp);
-  d->Com->WriteString(sTmp);
+  port->WriteString(sTmp);
   Sleep(50);
-  d->Com->WriteString(Class);
-  d->Com->WriteString(_T("\r"));
+  port->WriteString(Class);
+  port->WriteString(_T("\r"));
 
-  if (!ExpectString(d->Com, _T("OK\r"))){
+  if (!ExpectString(port, _T("OK\r"))){
     nDeclErrorCode = 1;
     return false;
   };
 
   _stprintf(sTmp, _T("#SUI%02d"), 2);           // send aircraft ID
   appendCheckSum(sTmp);
-  d->Com->WriteString(sTmp);
+  port->WriteString(sTmp);
   Sleep(50);
-  d->Com->WriteString(ID);
-  d->Com->WriteString(_T("\r"));
+  port->WriteString(ID);
+  port->WriteString(_T("\r"));
 
-  if (!ExpectString(d->Com, _T("OK\r"))){
+  if (!ExpectString(port, _T("OK\r"))){
     nDeclErrorCode = 1;
     return false;
   };
@@ -181,22 +195,22 @@ EWDeclare(struct DeviceDescriptor *d, const struct Declaration *decl)
   for (int i=0; i<6; i++){                        // clear all 6 TP's
     _stprintf(sTmp, _T("#CTP%02d"), i);
     appendCheckSum(sTmp);
-    d->Com->WriteString(sTmp);
-    if (!ExpectString(d->Com, _T("OK\r"))){
+    port->WriteString(sTmp);
+    if (!ExpectString(port, _T("OK\r"))){
       nDeclErrorCode = 1;
       return false;
     };
   }
 
   for (int j = 0; j < decl->num_waypoints; j++)
-    EWDeclAddWayPoint(d, decl->waypoint[j]);
+    AddWayPoint(decl->waypoint[j]);
 
-  d->Com->WriteString(_T("NMEA\r\n"));         // switch to NMEA mode
+  port->WriteString(_T("NMEA\r\n"));         // switch to NMEA mode
 
-  d->Com->SetBaudrate(lLastBaudrate);            // restore baudrate
+  port->SetBaudrate(lLastBaudrate);            // restore baudrate
 
-  d->Com->SetRxTimeout(0);                       // clear timeout
-  d->Com->StartRxThread();                       // restart RX thread
+  port->SetRxTimeout(0);                       // clear timeout
+  port->StartRxThread();                       // restart RX thread
 
   fDeclarationPending = false;                    // clear decl pending flag
 
@@ -204,8 +218,8 @@ EWDeclare(struct DeviceDescriptor *d, const struct Declaration *decl)
 
 }
 
-static bool
-EWDeclAddWayPoint(struct DeviceDescriptor *d, const WAYPOINT *wp)
+bool
+EWDevice::AddWayPoint(const WAYPOINT *wp)
 {
   TCHAR EWRecord[100];
   TCHAR IDString[12];
@@ -294,9 +308,9 @@ EWDeclAddWayPoint(struct DeviceDescriptor *d, const WAYPOINT *wp)
 
   appendCheckSum(EWRecord);                       // complete package with CS and CRLF
 
-  d->Com->WriteString(EWRecord);                 // put it to the logger
+  port->WriteString(EWRecord);                 // put it to the logger
 
-  if (!ExpectString(d->Com, _T("OK\r"))){            // wait for response
+  if (!ExpectString(port, _T("OK\r"))){            // wait for response
     nDeclErrorCode = 1;
     return false;
   }
@@ -306,34 +320,21 @@ EWDeclAddWayPoint(struct DeviceDescriptor *d, const WAYPOINT *wp)
   return true;
 }
 
-static bool
-EWLinkTimeout(struct DeviceDescriptor *d)
+void
+EWDevice::LinkTimeout()
 {
-  (void)d;
   if (!fDeclarationPending)
-    d->Com->WriteString(_T("NMEA\r\n"));
+    port->WriteString(_T("NMEA\r\n"));
+}
 
-  return true;
+static Device *
+EWCreateOnComPort(ComPort *com_port)
+{
+  return new EWDevice(com_port);
 }
 
 const struct DeviceRegister ewDevice = {
   _T("EW Logger"),
   drfGPS | drfLogger,
-  NULL, // ParseNMEA
-  NULL,				// PutMacCready
-  NULL,				// PutBugs
-  NULL,				// PutBallast
-  NULL,				// PutQNH
-  NULL,				// PutVoice
-  NULL,				// PutVolume
-  NULL,				// PutFreqActive
-  NULL,				// PutFreqStandby
-  NULL,				// Open
-  NULL,				// Close
-  EWLinkTimeout,		// LinkTimeout
-  EWDeclare,			// Declare
-  NULL,				// IsLogger
-  NULL,				// IsGPSSource
-  NULL,				// IsBaroSource
-  NULL				// OnSysTicker
+  EWCreateOnComPort,
 };

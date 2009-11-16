@@ -39,24 +39,17 @@ Copyright_License {
 #include "Device/devGeneric.h"
 #include "Device/Internal.hpp"
 
+class GenericDevice : public AbstractDevice {
+};
+
+static Device *
+GenericCreateOnComPort(ComPort *com_port)
+{
+  return new GenericDevice();
+}
+
 const struct DeviceRegister genDevice = {
   _T("Generic"),
   drfGPS,
-  NULL,				// ParseNMEA
-  NULL,				// PutMacCready
-  NULL,				// PutBugs
-  NULL,				// PutBallast
-  NULL,				// PutQNH
-  NULL,				// PutVoice
-  NULL,				// PutVolume
-  NULL,				// PutFreqActive
-  NULL,				// PutFreqStandby
-  NULL,				// Open
-  NULL,				// Close
-  NULL,				// LinkTimeout
-  NULL,				// Declare
-  NULL,				// IsLogger
-  NULL,				// IsGPSSource
-  NULL,				// IsBaroSource
-  NULL				// OnSysTicker
+  GenericCreateOnComPort,
 };

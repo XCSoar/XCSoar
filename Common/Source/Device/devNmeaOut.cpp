@@ -42,22 +42,6 @@ Copyright_License {
 const struct DeviceRegister nmoDevice = {
   _T("NmeaOut"),
   drfNmeaOut,
-  NULL, // ParseNMEA
-  NULL,				// PutMacCready
-  NULL,				// PutBugs
-  NULL,				// PutBallast
-  NULL, // PutQNH
-  NULL, // PutVoice
-  NULL,				// PutVolume
-  NULL,				// PutFreqActive
-  NULL,				// PutFreqStandby
-  NULL,				// Open
-  NULL,				// Close
-  NULL,				// LinkTimeout
-  NULL,				// Declare
-  NULL,				// IsLogger
-  NULL, // IsGPSSource
-  NULL,				// IsBaroSource
-  NULL				// OnSysTicker
+  NULL,
 };
 

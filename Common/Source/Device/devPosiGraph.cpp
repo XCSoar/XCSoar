@@ -56,14 +56,19 @@ Copyright_License {
 
 #include <tchar.h>
 
+class PGDevice : public AbstractDevice {
+public:
+  virtual bool ParseNMEA(const TCHAR *line, struct NMEA_INFO *info,
+                         bool enable_baro);
+  virtual bool Declare(const struct Declaration *declaration);
+};
+
 static bool
 GPWIN(const TCHAR *String, NMEA_INFO *GPS_INFO, bool enable_baro);
 
 bool
-PGParseNMEA(struct DeviceDescriptor *d, const TCHAR *String,
-            NMEA_INFO *GPS_INFO, bool enable_baro)
+PGDevice::ParseNMEA(const TCHAR *String, NMEA_INFO *GPS_INFO, bool enable_baro)
 {
-  (void)d;
   (void)String;
   (void)GPS_INFO;
 
@@ -79,35 +84,23 @@ PGParseNMEA(struct DeviceDescriptor *d, const TCHAR *String,
 }
 
 bool
-PGDeclare(struct DeviceDescriptor *d, const struct Declaration *decl)
+PGDevice::Declare(const struct Declaration *decl)
 {
-
-  (void)d;
   (void)decl;
 
   return true;
 }
 
+static Device *
+PGCreateOnComPort(ComPort *com_port)
+{
+  return new PGDevice();
+}
+
 const struct DeviceRegister pgDevice = {
   _T("PosiGraph Logger"),
   drfGPS | drfBaroAlt | drfLogger,
-  PGParseNMEA,			// ParseNMEA
-  NULL,				// PutMacCready
-  NULL,				// PutBugs
-  NULL,				// PutBallast
-  NULL,				// PutQNH
-  NULL,				// PutVoice
-  NULL,				// PutVolume
-  NULL,				// PutFreqActive
-  NULL,				// PutFreqStandby
-  NULL,				// Open
-  NULL,				// Close
-  NULL,				// LinkTimeout
-  PGDeclare,			// Declare
-  NULL,				// IsLogger
-  NULL,				// IsGPSSource
-  NULL,				// IsBaroSource
-  NULL				// OnSysTicker
+  PGCreateOnComPort,
 };
 
 // *****************************************************************************

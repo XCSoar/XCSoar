@@ -46,6 +46,7 @@ Copyright_License {
 #include <stdio.h>
 
 struct NMEA_INFO;
+class Device;
 
 #define DEVNAMESIZE  32
 #define	NUMDEV		 2
@@ -62,6 +63,9 @@ struct DeviceDescriptor {
   TCHAR	Name[DEVNAMESIZE+1];
   struct DeviceDescriptor *pDevPipeTo;
   const struct DeviceRegister *Driver;
+
+  Device *device;
+
   bool ticker;
 
   /* Warning: the following methods do not lock mutexComm */

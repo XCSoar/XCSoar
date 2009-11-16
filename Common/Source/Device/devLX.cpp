@@ -51,6 +51,12 @@ Copyright_License {
 
 #include <tchar.h>
 
+class LXDevice : public AbstractDevice {
+public:
+  virtual bool ParseNMEA(const TCHAR *line, struct NMEA_INFO *info,
+                         bool enable_baro);
+};
+
 static bool
 LXWP0(const TCHAR *String, NMEA_INFO *GPS_INFO, bool enable_baro);
 
@@ -60,12 +66,9 @@ LXWP1(const TCHAR *String, NMEA_INFO *GPS_INFO);
 static bool
 LXWP2(const TCHAR *String, NMEA_INFO *GPS_INFO);
 
-static bool
-LXParseNMEA(struct DeviceDescriptor *d, const TCHAR *String,
-            NMEA_INFO *GPS_INFO, bool enable_baro)
+bool
+LXDevice::ParseNMEA(const TCHAR *String, NMEA_INFO *GPS_INFO, bool enable_baro)
 {
-  (void)d;
-
   if (_tcsncmp(_T("$LXWP0"), String, 6) == 0) {
     return LXWP0(&String[7], GPS_INFO, enable_baro);
   }
@@ -79,26 +82,16 @@ LXParseNMEA(struct DeviceDescriptor *d, const TCHAR *String,
   return false;
 }
 
+static Device *
+LXCreateOnComPort(ComPort *com_port)
+{
+  return new LXDevice();
+}
+
 const struct DeviceRegister lxDevice = {
   _T("LX"),
   drfGPS | drfBaroAlt | drfSpeed | drfVario,
-  LXParseNMEA,			// ParseNMEA
-  NULL,				// PutMacCready
-  NULL,				// PutBugs
-  NULL,				// PutBallast
-  NULL,				// PutQNH
-  NULL,				// PutVoice
-  NULL,				// PutVolume
-  NULL,				// PutFreqActive
-  NULL,				// PutFreqStandby
-  NULL,				// Open
-  NULL,				// Close
-  NULL,				// LinkTimeout
-  NULL,				// Declare
-  NULL,				// IsLogger
-  NULL, // IsGPSSource
-  NULL,				// IsBaroSource
-  NULL				// OnSysTicker
+  LXCreateOnComPort,
 };
 
 // local stuff

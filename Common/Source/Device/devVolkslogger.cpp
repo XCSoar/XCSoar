@@ -43,7 +43,6 @@ Copyright_License {
 
 #include "Device/devVolkslogger.h"
 #include "Device/Internal.hpp"
-#include "Device/device.h"
 #include "XCSoar.h"
 #include "Protection.hpp"
 #include "Interface.hpp"
@@ -59,6 +58,19 @@ Copyright_License {
 #include "Device/Volkslogger/vlapihlp.h"
 #include "Components.hpp"
 #include "WayPointList.hpp"
+
+class VolksloggerDevice : public AbstractDevice {
+private:
+  ComPort *port;
+
+public:
+  VolksloggerDevice(ComPort *_port):port(_port) {}
+
+public:
+  virtual bool ParseNMEA(const TCHAR *line, struct NMEA_INFO *info,
+                         bool enable_baro);
+  virtual bool Declare(const struct Declaration *declaration);
+};
 
 // RMN: Volkslogger
 // Source data:
@@ -105,13 +117,10 @@ vl_PGCS1(const TCHAR *String, NMEA_INFO *GPS_INFO, bool enable_baro)
   return false;
 }
 
-
 bool
-VLParseNMEA(struct DeviceDescriptor *d, const TCHAR *String,
-            NMEA_INFO *GPS_INFO, bool enable_baro)
+VolksloggerDevice::ParseNMEA(const TCHAR *String, NMEA_INFO *GPS_INFO,
+                             bool enable_baro)
 {
-  (void)d;
-
   if (!NMEAParser::NMEAChecksum(String) || (GPS_INFO == NULL)){
     return false;
   }
@@ -132,11 +141,11 @@ static bool
 VLDeclAddWayPoint(const WAYPOINT *wp);
 
 bool
-VLDeclare(struct DeviceDescriptor *d, const struct Declaration *decl)
+VolksloggerDevice::Declare(const struct Declaration *decl)
 {
   XCSoarInterface::CreateProgressDialog(gettext(_T("Comms with Volkslogger")));
 
-  vl.set_port(d->Com);
+  vl.set_port(port);
   nturnpoints = 0;
 
   int err;
@@ -297,24 +306,14 @@ VLDeclAddWayPoint(const WAYPOINT *wp)
 
 }
 
+static Device *
+VolksloggerCreateOnComPort(ComPort *com_port)
+{
+  return new VolksloggerDevice(com_port);
+}
+
 const struct DeviceRegister vlDevice = {
   _T("Device/Volkslogger"),
   drfGPS | drfLogger, /* XXX: drfBaroAlt? */
-  VLParseNMEA,			// ParseNMEA
-  NULL,				// PutMacCready
-  NULL,				// PutBugs
-  NULL,				// PutBallast
-  NULL,				// PutQNH
-  NULL,				// PutVoice
-  NULL,				// PutVolume
-  NULL,				// PutFreqActive
-  NULL,				// PutFreqStandby
-  NULL,				// Open
-  NULL,				// Close
-  NULL,				// LinkTimeout
-  VLDeclare,			// Declare
-  NULL,				// IsLogger
-  NULL,				// IsGPSSource
-  NULL, // IsBaroSource
-  NULL				// OnSysTicker
+  VolksloggerCreateOnComPort,
 };

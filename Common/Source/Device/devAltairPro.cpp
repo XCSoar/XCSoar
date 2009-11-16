@@ -46,12 +46,25 @@ Copyright_License {
 
 #include <tchar.h>
 
-static double lastAlt = 0;
-static bool last_enable_baro;
+class AltairProDevice : public AbstractDevice {
+private:
+  double lastAlt;
+  bool last_enable_baro;
+
+public:
+  AltairProDevice():lastAlt(0), last_enable_baro(false) {}
+
+public:
+  virtual bool ParseNMEA(const TCHAR *line, struct NMEA_INFO *info,
+                         bool enable_baro);
+  virtual bool PutQNH(double qnh);
+  virtual bool Declare(const struct Declaration *declaration);
+  virtual void OnSysTicker();
+};
 
 bool
-atrParseNMEA(struct DeviceDescriptor *d, const TCHAR *String,
-             NMEA_INFO *GPS_INFO, bool enable_baro)
+AltairProDevice::ParseNMEA(const TCHAR *String, NMEA_INFO *GPS_INFO,
+                           bool enable_baro)
 {
 
   // no propriatary sentence
@@ -95,9 +108,8 @@ atrParseNMEA(struct DeviceDescriptor *d, const TCHAR *String,
 }
 
 bool
-atrDeclare(struct DeviceDescriptor *d, const struct Declaration *decl)
+AltairProDevice::Declare(const struct Declaration *decl)
 {
-  (void) d;
   (void) decl;
 
   // TODO feature: Altair declaration
@@ -108,7 +120,7 @@ atrDeclare(struct DeviceDescriptor *d, const struct Declaration *decl)
 #include "DeviceBlackboard.hpp"
 
 bool
-atrPutQNH(struct DeviceDescriptor *d, double NewQNH)
+AltairProDevice::PutQNH(double NewQNH)
 {
   (void)NewQNH; // TODO code: JMW check sending QNH to Altair
   if (last_enable_baro)
@@ -117,33 +129,20 @@ atrPutQNH(struct DeviceDescriptor *d, double NewQNH)
   return true;
 }
 
-bool
-atrOnSysTicker(struct DeviceDescriptor *d)
+void
+AltairProDevice::OnSysTicker()
 {
-  (void)d;
   // Do To get IO data like temp, humid, etc
+}
 
-  return true;
+static Device *
+AltairProCreateOnComPort(ComPort *com_port)
+{
+  return new AltairProDevice();
 }
 
 const struct DeviceRegister atrDevice = {
   _T("Altair Pro"),
   drfGPS | drfBaroAlt, // drfLogger - ToDo
-  atrParseNMEA,			// ParseNMEA
-  NULL,				// PutMacCready
-  NULL,				// PutBugs
-  NULL,				// PutBallast
-  atrPutQNH,			// PutQNH
-  NULL,				// PutVoice
-  NULL,				// PutVolume
-  NULL,				// PutFreqActive
-  NULL,				// PutFreqStandby
-  NULL,				// Open
-  NULL,				// Close
-  NULL,				// LinkTimeout
-  atrDeclare,			// Declare
-  NULL,				// IsLogger
-  NULL,				// IsGPSSource
-  NULL,				// IsBaroSource
-  atrOnSysTicker		// OnSysTicker
+  AltairProCreateOnComPort,
 };

@@ -43,7 +43,7 @@ Copyright_License {
 
 #include "Device/devEWMicroRecorder.h"
 #include "Device/Internal.hpp"
-#include "Device/device.h"
+#include "WayPoint.hpp"
 #include "Math/Pressure.h"
 #include "Device/Parser.h"
 #include "Device/Port.h"
@@ -56,9 +56,26 @@ Copyright_License {
 
 // Additional sentance for EW support
 
-static int nDeclErrorCode = 0;
-static unsigned user_size = 0;
-static TCHAR user_data[2500];
+class EWMicroRecorderDevice : public AbstractDevice {
+protected:
+  ComPort *port;
+
+  int nDeclErrorCode;
+  unsigned user_size;
+  TCHAR user_data[2500];
+
+public:
+  EWMicroRecorderDevice(ComPort *_port)
+    :port(_port), nDeclErrorCode(0), user_size(0) {}
+
+protected:
+  bool TryConnect();
+
+public:
+  virtual bool ParseNMEA(const TCHAR *line, struct NMEA_INFO *info,
+                         bool enable_baro);
+  virtual bool Declare(const struct Declaration *declaration);
+};
 
 static bool
 ExpectStringWait(ComPort *port, const TCHAR *token)
@@ -89,9 +106,9 @@ ExpectStringWait(ComPort *port, const TCHAR *token)
   return false;
 }
 
-static bool
-EWMicroRecorderParseNMEA(struct DeviceDescriptor *d, const TCHAR *String,
-                         NMEA_INFO *GPS_INFO, bool enable_baro)
+bool
+EWMicroRecorderDevice::ParseNMEA(const TCHAR *String, NMEA_INFO *GPS_INFO,
+                                 bool enable_baro)
 {
   TCHAR ctemp[80];
   const TCHAR *params[5];
@@ -113,8 +130,8 @@ EWMicroRecorderParseNMEA(struct DeviceDescriptor *d, const TCHAR *String,
   return false;
 }
 
-static bool
-EWMicroRecorderTryConnect(ComPort *port)
+bool
+EWMicroRecorderDevice::TryConnect()
 {
   int retries=10;
   TCHAR ch;
@@ -207,11 +224,9 @@ EWMicroRecorderWriteWayPoint(ComPort *port,
             wp->Name);
 }
 
-static bool
-EWMicroRecorderDeclare(struct DeviceDescriptor *d,
-                       const struct Declaration *decl)
+bool
+EWMicroRecorderDevice::Declare(const struct Declaration *decl)
 {
-  ComPort *port = d->Com;
   const WAYPOINT *wp;
   nDeclErrorCode = 0;
 
@@ -223,9 +238,8 @@ EWMicroRecorderDeclare(struct DeviceDescriptor *d,
 
   port->SetRxTimeout(500);                     // set RX timeout to 500[ms]
 
-  if (!EWMicroRecorderTryConnect(port)) {
+  if (!TryConnect())
     return false;
-  }
 
   port->WriteString(_T("\x18"));         // start to upload file
   port->WriteString(user_data);
@@ -268,24 +282,14 @@ EWMicroRecorderDeclare(struct DeviceDescriptor *d,
   return nDeclErrorCode == 0; // return true on success
 }
 
+static Device *
+EWMicroRecorderCreateOnComPort(ComPort *com_port)
+{
+  return new EWMicroRecorderDevice(com_port);
+}
+
 const struct DeviceRegister ewMicroRecorderDevice = {
   _T("EW MicroRecorder"),
   drfGPS | drfLogger | drfBaroAlt,
-  EWMicroRecorderParseNMEA,	// ParseNMEA
-  NULL,				// PutMacCready
-  NULL,				// PutBugs
-  NULL,				// PutBallast
-  NULL,				// PutQNH
-  NULL,				// PutVoice
-  NULL,				// PutVolume
-  NULL,				// PutFreqActive
-  NULL,				// PutFreqStandby
-  NULL,				// Open
-  NULL,				// Close
-  NULL,				// LinkTimeout
-  EWMicroRecorderDeclare,	// Declare
-  NULL,				// IsLogger
-  NULL,				// IsGPSSource
-  NULL,				// IsBaroSource
-  NULL				// OnSysTicker
+  EWMicroRecorderCreateOnComPort,
 };

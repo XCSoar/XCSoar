@@ -1,4 +1,3 @@
-
 /*
 Copyright_License {
 
@@ -37,57 +36,101 @@ Copyright_License {
 }
 */
 
-//
+#include "Device/Driver.hpp"
 
-
-// CAUTION!
-// caiGpsNavParseNMEA is called from com port read thread
-// all other functions are called from windows message loop thread
-
-#include "Device/devCaiGpsNav.h"
-#include "Device/Internal.hpp"
-#include "Device/Port.h"
-
-#include <windows.h>
-#include <tchar.h>
-
-#define  CtrlC  0x03
-#define  swap(x)      x = ((((x<<8) & 0xff00) | ((x>>8) & 0x00ff)) & 0xffff)
-
-class CaiGpsNavDevice : public AbstractDevice {
-private:
-  ComPort *port;
-
-public:
-  CaiGpsNavDevice(ComPort *_port):port(_port) {}
-
-public:
-  virtual bool Open();
-};
+Device::~Device() {}
 
 bool
-CaiGpsNavDevice::Open()
+AbstractDevice::Open()
 {
-  port->WriteString(_T("\x03"));
-  Sleep(50);
-  port->WriteString(_T("NMEA\r"));
-
-  // This is for a slightly different mode, that
-  // apparently outputs pressure info too...
-  //(d->Com.WriteString)(_T("PNP\r\n"));
-  //(d->Com.WriteString)(_T("LOG 0\r\n"));
-
   return true;
 }
 
-static Device *
-CaiGpsNavCreateOnComPort(ComPort *com_port)
+void
+AbstractDevice::LinkTimeout()
 {
-  return new CaiGpsNavDevice(com_port);
 }
 
-const struct DeviceRegister caiGpsNavDevice = {
-  _T("CAI GPS-NAV"),
-  drfGPS,
-  CaiGpsNavCreateOnComPort,
-};
+bool
+AbstractDevice::IsLogger()
+{
+  return false;
+}
+
+bool
+AbstractDevice::IsGPSSource()
+{
+  return false;
+}
+
+bool
+AbstractDevice::IsBaroSource()
+{
+  return false;
+}
+
+bool
+AbstractDevice::ParseNMEA(const TCHAR *line, struct NMEA_INFO *info,
+                          bool enable_baro)
+{
+  return false;
+}
+
+bool
+AbstractDevice::PutMcCready(double mc_cready)
+{
+  return true;
+}
+
+bool
+AbstractDevice::PutBugs(double bugs)
+{
+  return true;
+}
+
+bool
+AbstractDevice::PutBallast(double ballast)
+{
+  return true;
+}
+
+bool
+AbstractDevice::PutQNH(double qnh)
+{
+  return true;
+}
+
+bool
+AbstractDevice::PutVoice(const TCHAR *sentence)
+{
+  return true;
+}
+
+bool
+AbstractDevice::PutVolume(int volume)
+{
+  return true;
+}
+
+bool
+AbstractDevice::PutActiveFrequency(double frequency)
+{
+  return true;
+}
+
+bool
+AbstractDevice::PutStandbyFrequency(double frequency)
+{
+  return true;
+}
+
+bool
+AbstractDevice::Declare(const struct Declaration *declaration)
+{
+  return false;
+}
+
+void
+AbstractDevice::OnSysTicker()
+{
+}

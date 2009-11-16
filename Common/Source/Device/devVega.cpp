@@ -38,7 +38,6 @@ Copyright_License {
 
 #include "Device/devVega.h"
 #include "Device/Internal.hpp"
-#include "Device/device.h"
 #include "XCSoar.h"
 #include "Protection.hpp"
 #include "Message.h"
@@ -78,6 +77,22 @@ using std::max;
 #define INPUT_BIT_USERSWDOWN                25
 #define OUTPUT_BIT_CIRCLING                 0  // 1 if circling
 #define OUTPUT_BIT_FLAP_LANDING             7  // 1 if positive flap
+
+class VegaDevice : public AbstractDevice {
+private:
+  ComPort *port;
+
+public:
+  VegaDevice(ComPort *_port):port(_port) {}
+
+public:
+  virtual bool ParseNMEA(const TCHAR *line, struct NMEA_INFO *info,
+                         bool enable_baro);
+  virtual bool PutQNH(double qnh);
+  virtual bool PutVoice(const TCHAR *sentence);
+  virtual bool Declare(const struct Declaration *declaration);
+  virtual void OnSysTicker();
+};
 
 static bool
 PDSWC(const TCHAR *String, NMEA_INFO *GPS_INFO)
@@ -361,8 +376,8 @@ PDTSM(const TCHAR *String, NMEA_INFO *GPS_INFO)
 }
 
 bool
-vgaParseNMEA(struct DeviceDescriptor *d, const TCHAR *String,
-             NMEA_INFO *GPS_INFO, bool enable_baro)
+VegaDevice::ParseNMEA(const TCHAR *String, NMEA_INFO *GPS_INFO,
+                      bool enable_baro)
 {
   if(_tcsncmp(_T("$PDSWC"), String, 6)==0)
     return PDSWC(&String[7], GPS_INFO);
@@ -404,9 +419,8 @@ vgaParseNMEA(struct DeviceDescriptor *d, const TCHAR *String,
 }
 
 bool
-vgaDeclare(struct DeviceDescriptor *d, const struct Declaration *decl)
+VegaDevice::Declare(const struct Declaration *decl)
 {
-  (void) d;
   (void) decl;
 
   // ToDo
@@ -415,9 +429,9 @@ vgaDeclare(struct DeviceDescriptor *d, const struct Declaration *decl)
 }
 
 bool
-vgaPutVoice(struct DeviceDescriptor *d, const TCHAR *Sentence)
+VegaDevice::PutVoice(const TCHAR *Sentence)
 {
-  PortWriteNMEA(d->Com, Sentence);
+  PortWriteNMEA(port, Sentence);
   return true;
 }
 
@@ -440,45 +454,32 @@ _VarioWriteSettings(ComPort *port)
     PortWriteNMEA(port, mcbuf);
 }
 
-
 bool
-vgaPutQNH(struct DeviceDescriptor *d, double NewQNH)
+VegaDevice::PutQNH(double NewQNH)
 {
   (void)NewQNH;
   // NewQNH is already stored in QNH
 
-  _VarioWriteSettings(d->Com);
+  _VarioWriteSettings(port);
 
   return true;
 }
 
-bool
-vgaOnSysTicker(struct DeviceDescriptor *d)
+void
+VegaDevice::OnSysTicker()
 {
   if (device_blackboard.Basic().VarioAvailable)
-    _VarioWriteSettings(d->Com);
+    _VarioWriteSettings(port);
+}
 
-  return true;
+static Device *
+VegaCreateOnComPort(ComPort *com_port)
+{
+  return new VegaDevice(com_port);
 }
 
 const struct DeviceRegister vgaDevice = {
   _T("Vega"),
   drfGPS | drfBaroAlt | drfSpeed | drfVario, // drfLogger if FLARM connected
-  vgaParseNMEA,			// ParseNMEA
-  NULL,				// PutMacCready
-  NULL,				// PutBugs
-  NULL,				// PutBallast
-  vgaPutQNH,			// PutQNH
-  vgaPutVoice,			// PutVoice
-  NULL,				// PutVolume
-  NULL,				// PutFreqActive
-  NULL,				// PutFreqStandby
-  NULL,				// Open
-  NULL,				// Close
-  NULL,				// LinkTimeout
-  vgaDeclare,			// Declare
-  NULL,				// IsLogger
-  NULL,				// IsGPSSource: only if GPS source connected to Vega.NmeaIn
-  NULL,				// IsBaroSource
-  vgaOnSysTicker		// OnSysTicker
+  VegaCreateOnComPort,
 };

@@ -344,6 +344,7 @@ OBJS	:=\
 	$(SRC)/Components.o 		\
 	$(SRC)/XCSoar.o 		\
 	\
+	$(SRC)/Device/Driver.o \
 	$(SRC)/Device/device.o 		\
 	$(SRC)/Device/Geoid.o 		\
 	$(SRC)/Device/Parser.o		\

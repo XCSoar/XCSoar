@@ -49,15 +49,19 @@ Copyright_License {
 #include <tchar.h>
 #include <math.h>
 
+class FlymasterF1Device : public AbstractDevice {
+public:
+  virtual bool ParseNMEA(const TCHAR *line, struct NMEA_INFO *info,
+                         bool enable_baro);
+};
+
 static bool
 VARIO(const TCHAR *String, NMEA_INFO *GPS_INFO);
 
-static bool
-FlymasterF1ParseNMEA(struct DeviceDescriptor *d, const TCHAR *String,
-                     NMEA_INFO *GPS_INFO, bool enable_baro)
+bool
+FlymasterF1Device::ParseNMEA(const TCHAR *String, NMEA_INFO *GPS_INFO,
+                             bool enable_baro)
 {
-  (void)d;
-
   if(_tcsncmp(_T("$VARIO"), String, 6)==0)
     {
       return VARIO(&String[7], GPS_INFO);
@@ -66,26 +70,16 @@ FlymasterF1ParseNMEA(struct DeviceDescriptor *d, const TCHAR *String,
   return false;
 }
 
+static Device *
+FlymasterF1CreateOnComPort(ComPort *com_port)
+{
+  return new FlymasterF1Device();
+}
+
 const struct DeviceRegister flymasterf1Device = {
   _T("FlymasterF1"),
   drfGPS | drfBaroAlt | drfVario,
-  FlymasterF1ParseNMEA,		// ParseNMEA
-  NULL,				// PutMacCready
-  NULL,				// PutBugs
-  NULL,				// PutBallast
-  NULL,				// PutQNH
-  NULL,				// PutVoice
-  NULL,				// PutVolume
-  NULL,				// PutFreqActive
-  NULL,				// PutFreqStandby
-  NULL,				// Open
-  NULL,				// Close
-  NULL,				// LinkTimeout
-  NULL,				// Declare
-  NULL,				// IsLogger
-  NULL,				// IsGPSSource
-  NULL,				// IsBaroSource
-  NULL				// OnSysTicker
+  FlymasterF1CreateOnComPort,
 };
 
 // *****************************************************************************

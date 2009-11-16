@@ -52,13 +52,15 @@ PZAN1(const TCHAR *String, NMEA_INFO *aGPS_INFO);
 static bool
 PZAN2(const TCHAR *String, NMEA_INFO *aGPS_INFO);
 
+class ZanderDevice : public AbstractDevice {
+  virtual bool ParseNMEA(const TCHAR *line, struct NMEA_INFO *info,
+                         bool enable_baro);
+};
 
-static bool
-ZanderParseNMEA(struct DeviceDescriptor *d, const TCHAR *String,
-                NMEA_INFO *aGPS_INFO, bool enable_baro)
+bool
+ZanderDevice::ParseNMEA(const TCHAR *String, NMEA_INFO *aGPS_INFO,
+                        bool enable_baro)
 {
-  (void)d;
-
   if(_tcsncmp(_T("$PZAN1"), String, 6)==0)
     {
       return PZAN1(&String[7], aGPS_INFO);
@@ -72,26 +74,16 @@ ZanderParseNMEA(struct DeviceDescriptor *d, const TCHAR *String,
 
 }
 
+static Device *
+ZanderCreateOnComPort(ComPort *com_port)
+{
+  return new ZanderDevice();
+}
+
 const struct DeviceRegister zanderDevice = {
   _T("Zander"),
   drfGPS | drfBaroAlt | drfSpeed | drfVario,
-  ZanderParseNMEA,		// ParseNMEA
-  NULL,				// PutMacCready
-  NULL,				// PutBugs
-  NULL,				// PutBallast
-  NULL,				// PutQNH
-  NULL,				// PutVoice
-  NULL,				// PutVolume
-  NULL,				// PutFreqActive
-  NULL,				// PutFreqStandby
-  NULL,				// Open
-  NULL,				// Close
-  NULL,				// LinkTimeout
-  NULL,				// Declare
-  NULL,				// IsLogger
-  NULL,				// IsGPSSource
-  NULL,				// IsBaroSource
-  NULL				// OnSysTicker
+  ZanderCreateOnComPort,
 };
 
 // *****************************************************************************

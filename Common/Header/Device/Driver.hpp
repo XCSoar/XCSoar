@@ -44,6 +44,69 @@ Copyright_License {
 #include <tchar.h>
 
 struct NMEA_INFO;
+struct ComPort;
+
+/**
+ * This is the interface for a device driver.
+ */
+class Device {
+public:
+  virtual ~Device();
+
+  virtual bool Open() = 0;
+
+  virtual void LinkTimeout() = 0;
+
+  virtual bool IsLogger() = 0;
+  virtual bool IsGPSSource() = 0;
+  virtual bool IsBaroSource() = 0;
+
+  virtual bool ParseNMEA(const TCHAR *line, struct NMEA_INFO *info,
+                         bool enable_baro) = 0;
+
+  virtual bool PutMcCready(double mc_cready) = 0;
+  virtual bool PutBugs(double bugs) = 0;
+  virtual bool PutBallast(double ballast) = 0;
+  virtual bool PutQNH(double qnh) = 0;
+  virtual bool PutVoice(const TCHAR *sentence) = 0;
+  virtual bool PutVolume(int volume) = 0;
+  virtual bool PutActiveFrequency(double frequency) = 0;
+  virtual bool PutStandbyFrequency(double frequency) = 0;
+
+  virtual bool Declare(const struct Declaration *declaration) = 0;
+
+  virtual void OnSysTicker() = 0;
+};
+
+/**
+ * This class implements all #Device methods.  You may use it as a
+ * base class for specific device drivers.
+ */
+class AbstractDevice : public Device {
+  virtual bool Open();
+
+  virtual void LinkTimeout();
+
+  virtual bool IsLogger();
+  virtual bool IsGPSSource();
+  virtual bool IsBaroSource();
+
+  virtual bool ParseNMEA(const TCHAR *line, struct NMEA_INFO *info,
+                         bool enable_baro);
+
+  virtual bool PutMcCready(double mc_cready);
+  virtual bool PutBugs(double bugs);
+  virtual bool PutBallast(double ballast);
+  virtual bool PutQNH(double qnh);
+  virtual bool PutVoice(const TCHAR *sentence);
+  virtual bool PutVolume(int volume);
+  virtual bool PutActiveFrequency(double frequency);
+  virtual bool PutStandbyFrequency(double frequency);
+
+  virtual bool Declare(const struct Declaration *declaration);
+
+  virtual void OnSysTicker();
+};
 
 typedef	enum {dfGPS, dfLogger, dfSpeed,	dfVario, dfBaroAlt,	dfWind, dfVoice, dfNmeaOut, dfRadio, dfCondor } DeviceFlags_t;
 
@@ -64,24 +127,7 @@ typedef	enum {dfGPS, dfLogger, dfSpeed,	dfVario, dfBaroAlt,	dfWind, dfVoice, dfN
 struct DeviceRegister {
   const TCHAR *Name;
   unsigned int Flags;
-  bool (*ParseNMEA)(struct DeviceDescriptor *d, const TCHAR *String,
-                    struct NMEA_INFO *info, bool enable_baro);
-  bool (*PutMacCready)(struct DeviceDescriptor *d, double McReady);
-  bool (*PutBugs)(struct DeviceDescriptor *d, double Bugs);
-  bool (*PutBallast)(struct DeviceDescriptor *d, double Ballast);
-  bool (*PutQNH)(struct DeviceDescriptor *d, double NewQNH);
-  bool (*PutVoice)(struct DeviceDescriptor *d, const TCHAR *Sentence);
-  bool (*PutVolume)(struct DeviceDescriptor *d, int Volume);
-  bool (*PutFreqActive)(struct DeviceDescriptor *d, double Freq);
-  bool (*PutFreqStandby)(struct DeviceDescriptor *d, double Standby);
-  bool (*Open)(struct DeviceDescriptor *d, int Port);
-  bool (*Close)(struct DeviceDescriptor *d);
-  bool (*LinkTimeout)(struct DeviceDescriptor *d);
-  bool (*Declare)(struct DeviceDescriptor *d, const struct Declaration *decl);
-  bool (*IsLogger)(const struct DeviceDescriptor *d);
-  bool (*IsGPSSource)(const struct DeviceDescriptor *d);
-  bool (*IsBaroSource)(const struct DeviceDescriptor *d);
-  bool (*OnSysTicker)(struct DeviceDescriptor *d);
+  Device *(*CreateOnComPort)(ComPort *com_port);
 };
 
 #endif

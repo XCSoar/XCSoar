@@ -38,58 +38,61 @@ Copyright_License {
 
 #include "Device/devXCOM760.h"
 #include "Device/Internal.hpp"
-#include "Device/device.h"
 #include "Device/Port.h"
 
 #include <tchar.h>
+#include <stdio.h>
 
-static bool
-XCOM760PutVolume(struct DeviceDescriptor *d, int Volume)
+class XCOM760Device : public AbstractDevice {
+private:
+  ComPort *port;
+
+public:
+  XCOM760Device(ComPort *_port):port(_port) {}
+
+public:
+  virtual bool PutVolume(int volume);
+  virtual bool PutActiveFrequency(double frequency);
+  virtual bool PutStandbyFrequency(double frequency);
+};
+
+bool
+XCOM760Device::PutVolume(int Volume)
 {
   TCHAR  szTmp[32];
   _stprintf(szTmp, _T("$RVOL=%d\r\n"), Volume);
-  d->Com->WriteString(szTmp);
+  port->WriteString(szTmp);
   return true;
 }
 
-static bool
-XCOM760PutFreqActive(struct DeviceDescriptor *d, double Freq)
+bool
+XCOM760Device::PutActiveFrequency(double Freq)
 {
   TCHAR  szTmp[32];
   _stprintf(szTmp, _T("$TXAF=%.3f\r\n"), Freq);
-  d->Com->WriteString(szTmp);
+  port->WriteString(szTmp);
   return true;
 }
 
-static bool
-XCOM760PutFreqStandby(struct DeviceDescriptor *d, double Freq)
+bool
+XCOM760Device::PutStandbyFrequency(double Freq)
 {
   TCHAR  szTmp[32];
   _stprintf(szTmp, _T("$TXSF=%.3f\r\n"), Freq);
-  d->Com->WriteString(szTmp);
+  port->WriteString(szTmp);
   return true;
+}
+
+static Device *
+XCOM760CreateOnComPort(ComPort *com_port)
+{
+  return new XCOM760Device(com_port);
 }
 
 const struct DeviceRegister xcom760Device = {
   _T("XCOM760"),
   drfRadio,
-  NULL,				// ParseNMEA
-  NULL,				// PutMacCready
-  NULL,				// PutBugs
-  NULL,				// PutBallast
-  NULL,				// PutQNH
-  NULL,				// PutVoice
-  XCOM760PutVolume,		// PutVolume
-  XCOM760PutFreqActive,		// PutFreqActive
-  XCOM760PutFreqStandby,	// PutFreqStandby
-  NULL,				// Open
-  NULL,				// Close
-  NULL,				// LinkTimeout
-  NULL,				// Declare
-  NULL,				// IsLogger
-  NULL,				// IsGPSSource
-  NULL,				// IsBaroSource
-  NULL,				// OnSysTicker
+  XCOM760CreateOnComPort,
 };
 
 /* Commands

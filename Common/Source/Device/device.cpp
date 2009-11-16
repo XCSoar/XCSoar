@@ -390,9 +390,8 @@ DeviceDescriptor::ParseNMEA(const TCHAR *String, NMEA_INFO *GPS_INFO)
     pDevPipeTo->Com->WriteString(String);
   }
 
-  if (Driver != NULL && Driver->ParseNMEA != NULL &&
-      Driver->ParseNMEA(this, String, GPS_INFO,
-                        this == pDevPrimaryBaroSource)) {
+  if (device != NULL && device->ParseNMEA(String, GPS_INFO,
+                                          this == pDevPrimaryBaroSource)) {
     GPS_INFO->Connected = 2;
     return true;
   }
@@ -412,16 +411,28 @@ DeviceDescriptor::Open(int _port)
 {
   Port = _port;
 
-  return Driver != NULL && Driver->Open != NULL
-    ? Driver->Open(this, Port)
-    : true;
+  if (Driver == NULL)
+    return false;
+
+  assert(Driver->CreateOnComPort != NULL);
+
+  device = Driver->CreateOnComPort(Com);
+  if (!device->Open()) {
+    delete device;
+    device = NULL;
+    return false;
+  }
+
+  return true;
 }
 
 void
 DeviceDescriptor::Close()
 {
-  if (Driver != NULL && Driver->Close != NULL)
-    Driver->Close(this);
+  if (device != NULL) {
+    delete device;
+    device = NULL;
+  }
 
   ComPort *OldCom = Com;
   Com = NULL;
@@ -436,9 +447,8 @@ bool
 DeviceDescriptor::IsLogger() const
 {
   return Driver != NULL &&
-    ((Driver->IsLogger != NULL
-      ? Driver->IsLogger(this)
-      : (Driver->Flags & drfLogger) != 0) ||
+    ((Driver->Flags & drfLogger) != 0 ||
+     (device != NULL && device->IsLogger()) ||
      NMEAParser::PortIsFlarm(Port));
 }
 
@@ -446,125 +456,94 @@ bool
 DeviceDescriptor::IsGPSSource() const
 {
   return Driver != NULL &&
-    (Driver->IsGPSSource != NULL
-     ? Driver->IsGPSSource(this)
-     : (Driver->Flags & drfGPS) != 0);
+    ((Driver->Flags & drfGPS) != 0 ||
+     (device != NULL && device->IsGPSSource()));
 }
 
 bool
 DeviceDescriptor::IsBaroSource() const
 {
   return Driver != NULL &&
-    (Driver->IsBaroSource != NULL
-     ? Driver->IsBaroSource(this)
-     : (Driver->Flags & drfBaroAlt) != 0);
+    ((Driver->Flags & drfBaroAlt) != 0 ||
+     (device != NULL && device->IsBaroSource()));
 }
 
 bool
 DeviceDescriptor::PutMcCready(double mc_cready)
 {
-  bool result = true;
-
-  if (Driver != NULL && Driver->PutMacCready != NULL)
-    result = Driver->PutMacCready(this, mc_cready);
-
-  return result;
+  return device != NULL
+    ? device->PutMcCready(mc_cready)
+    : true;
 }
 
 bool
 DeviceDescriptor::PutBugs(double bugs)
 {
-  bool result = true;
-
-  if (Driver != NULL && Driver->PutBugs != NULL)
-    result = Driver->PutBugs(this, bugs);
-
-  return result;
+  return device != NULL
+    ? device->PutBugs(bugs)
+    : true;
 }
 
 bool
 DeviceDescriptor::PutBallast(double ballast)
 {
-  bool result = true;
-
-  if (Driver != NULL && Driver->PutBallast != NULL)
-    result = Driver->PutBallast(this, ballast);
-
-  return result;
+  return device != NULL
+    ? device->PutBallast(ballast)
+    : true;
 }
 
 bool
 DeviceDescriptor::PutVolume(int volume)
 {
-  bool result = true;
-
-  if (Driver != NULL && Driver->PutVolume != NULL)
-    result = Driver->PutVolume(this, volume);
-
-  return result;
+  return device != NULL
+    ? device->PutVolume(volume)
+    : true;
 }
 
 bool
 DeviceDescriptor::PutActiveFrequency(double frequency)
 {
-  bool result = true;
-
-  if (Driver != NULL && Driver->PutFreqActive != NULL)
-    result = Driver->PutFreqActive(this, frequency);
-
-  return result;
+  return device != NULL
+    ? device->PutActiveFrequency(frequency)
+    : true;
 }
 
 bool
 DeviceDescriptor::PutStandbyFrequency(double frequency)
 {
-  bool result = true;
-
-  if (Driver != NULL && Driver->PutFreqStandby != NULL)
-    result = Driver->PutFreqStandby(this, frequency);
-
-  return result;
+  return device != NULL
+    ? device->PutStandbyFrequency(frequency)
+    : true;
 }
 
 bool
 DeviceDescriptor::PutQNH(double qnh)
 {
-  bool result = true;
-
-  if (Driver != NULL && Driver->PutQNH != NULL)
-    result = Driver->PutQNH(this, qnh);
-
-  return result;
+  return device != NULL
+    ? device->PutQNH(qnh)
+    : true;
 }
 
 bool
 DeviceDescriptor::PutVoice(const TCHAR *sentence)
 {
-  bool result = true;
-
-  assert(sentence != NULL);
-
-  if (Driver != NULL && Driver->PutVoice != NULL)
-    result = Driver->PutVoice(this, sentence);
-
-  return result;
+  return device != NULL
+    ? device->PutVoice(sentence)
+    : true;
 }
 
 void
 DeviceDescriptor::LinkTimeout()
 {
-  if (Driver != NULL && Driver->LinkTimeout != NULL)
-    Driver->LinkTimeout(this);
+  if (device != NULL)
+    device->LinkTimeout();
 }
 
 bool
 DeviceDescriptor::Declare(const struct Declaration *declaration)
 {
-  if (Driver == NULL)
-    return false;
-
-  bool result = Driver->Declare != NULL &&
-    Driver->Declare(this, declaration);
+  bool result = device != NULL &&
+    device->Declare(declaration);
 
   if (NMEAParser::PortIsFlarm(Port))
     result = FlarmDeclare(Com, declaration) || result;
@@ -575,14 +554,13 @@ DeviceDescriptor::Declare(const struct Declaration *declaration)
 void
 DeviceDescriptor::OnSysTicker()
 {
-    if (Driver == NULL)
-      return;
+  if (device == NULL)
+    return;
 
-    ticker = !ticker;
-
+  ticker = !ticker;
+  if (ticker)
     // write settings to vario every second
-    if (ticker && Driver->OnSysTicker != NULL)
-      Driver->OnSysTicker(this);
+    device->OnSysTicker();
 }
 
 bool
