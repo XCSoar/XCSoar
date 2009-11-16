@@ -3,10 +3,11 @@
 #include "StartPoint.hpp"
 #include <assert.h>
 
-StartPoint::StartPoint(const TaskProjection& tp,
+StartPoint::StartPoint(ObservationZonePoint* _oz,
+                       const TaskProjection& tp,
                        const Waypoint & wp,
                        const TaskBehaviour& tb) : 
-  OrderedTaskPoint(tp,wp,tb,false), 
+  OrderedTaskPoint(_oz,tp,wp,tb,false), 
   enabled(true) 
 {
 }

@@ -9,10 +9,12 @@
 #include "GlideSolvers/GlideState.hpp"
 
 
-OrderedTaskPoint::OrderedTaskPoint(const TaskProjection& tp,
+OrderedTaskPoint::OrderedTaskPoint(ObservationZonePoint* _oz,
+                                   const TaskProjection& tp,
                                    const Waypoint & wp, 
                                    const TaskBehaviour &tb,
                                    const bool b_scored): 
+  oz(_oz),
   ScoredTaskPoint(tp, wp, tb, b_scored),
   tp_previous(NULL),
   tp_next(NULL),
@@ -41,6 +43,9 @@ OrderedTaskPoint::set_neighbours(OrderedTaskPoint* prev,
 {
   tp_previous = prev;
   tp_next = next;
+
+  oz->set_legs(prev,this,next);
+
 }
 
 bool 

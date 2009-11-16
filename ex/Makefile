@@ -109,13 +109,6 @@ OBJS	:=\
 	src/Task/Tasks/BaseTask/StartPoint.o \
 	src/Task/Tasks/BaseTask/TaskPoint.o \
 	src/Task/Tasks/BaseTask/Scoring/ObservationZone.o \
-	src/Task/Tasks/TaskPoints/FAICylinderASTPoint.o \
-	src/Task/Tasks/TaskPoints/FAISectorASTPoint.o \
-	src/Task/Tasks/TaskPoints/FAISectorFinishPoint.o \
-	src/Task/Tasks/TaskPoints/FAISectorStartPoint.o \
-	src/Task/Tasks/TaskPoints/LineStartPoint.o \
-	src/Task/Tasks/TaskPoints/SectorAATPoint.o \
-	src/Task/Tasks/TaskPoints/CylinderAATPoint.o \
 	src/Task/Tasks/TaskPoints/ObservationZones/CylinderZone.o \
 	src/Task/Tasks/TaskPoints/ObservationZones/HeightLimitZone.o \
 	src/Task/Tasks/TaskPoints/ObservationZones/SectorZone.o \
@@ -142,7 +135,7 @@ OBJS	:=\
 	src/Util/Filter.o \
 	src/Util/Gradient.o \
 	src/Util/Printing.o \
-	src/Util/ZeroFinder.o \
+	src/Util/ZeroFinder.o 
 
 Test/test: $(OBJS) Test/test.cpp
 	g++ $(CXXFLAGS) $(INCLUDES) $(OBJS) Test/test.cpp -o Test/test 

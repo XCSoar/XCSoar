@@ -37,6 +37,7 @@
 
 #ifndef SYMMETRICSECTORZONE_HPP
 #define SYMMETRICSECTORZONE_HPP
+
 #include "Task/Tasks/BaseTask/TaskPoint.hpp"
 #include "SectorZone.hpp"
 

@@ -33,14 +33,15 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
   }
-*/struct GEOPOINT;
-
-
+*/
 
 #ifndef OBSERVATIONZONEPOINT_HPP
 #define OBSERVATIONZONEPOINT_HPP
 #include "Navigation/ReferencePoint.hpp"
 #include "ObservationZone.hpp"
+
+struct GEOPOINT;
+class TaskPoint;
 
 class ObservationZonePoint : public ReferencePoint, 
                              public ObservationZone 
@@ -51,6 +52,10 @@ public:
     ReferencePoint(_location) {
 
     };
+  virtual void set_legs(const TaskPoint *previous,
+                        const TaskPoint *current,
+                        const TaskPoint *next) {};
+
 };
 
 #endif

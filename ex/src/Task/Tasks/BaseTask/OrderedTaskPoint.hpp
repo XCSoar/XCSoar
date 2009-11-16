@@ -40,6 +40,7 @@
 
 #include "TaskLeg.hpp"
 #include "ScoredTaskPoint.hpp"
+#include "Scoring/ObservationZonePoint.hpp"
 
 /**
  *  Abstract compound specialisation of TaskLeg and ScoredTaskPoint,
@@ -57,7 +58,9 @@ class OrderedTaskPoint :
 public:
 /** 
  * Constructor.
+ * Ownership of oz is transferred to this object
  * 
+ * @param _oz Observation zone for this task point
  * @param tp Projection used for internal representations
  * @param wp Waypoint associated with this task point
  * @param tb Task Behaviour defining options (esp safety heights)
@@ -65,12 +68,15 @@ public:
  * 
  * @return Partially initialised object 
  */
-  OrderedTaskPoint(const TaskProjection& tp,
+  OrderedTaskPoint(ObservationZonePoint* _oz,
+                   const TaskProjection& tp,
                    const Waypoint & wp, 
                    const TaskBehaviour &tb,
                    const bool b_scored);
 
-  virtual ~OrderedTaskPoint() {};
+  virtual ~OrderedTaskPoint() {
+    delete oz;
+  };
 
   enum ActiveState_t {
     NOTFOUND_ACTIVE = 0,        /**< Active task point was not found, ERROR! */
@@ -83,7 +89,9 @@ public:
  * Update observation zone geometry (or other internal data) when
  * previous/next turnpoint changes.
  */
-  virtual void update_geometry() = 0;
+  virtual void update_geometry() {
+    oz->set_legs(tp_previous, this, tp_next);
+  };
 
 /** 
  * Set previous/next task points.
@@ -202,17 +210,52 @@ public:
                      const int item=0) const;
 #endif
 
-private:
+/** 
+ * Test whether aircraft is inside observation zone.
+ * 
+ * @param ref Aircraft state to test
+ * 
+ * @return True if aircraft is inside observation zone
+ */
+  virtual bool isInSector(const AIRCRAFT_STATE &ref) const
+  {
+    return oz->isInSector(ref);
+  }
 
-  /**
-   * @supplierCardinality 0..1 
-   */
-  OrderedTaskPoint* tp_next;
+/** 
+ * Calculate boundary point from parametric border
+ * 
+ * @param t t value (0,1) of parameter
+ * 
+ * @return Boundary point
+ */
+  GEOPOINT get_boundary_parametric(double t)
+  {
+    return oz->get_boundary_parametric(t);
+  }
 
-  /**
-   * @supplierCardinality 0..1 
-   */
-  OrderedTaskPoint* tp_previous;
+/** 
+ * Calculate distance reduction for achieved task point,
+ * to calcuate scored distance.
+ * 
+ * @return Distance reduction once achieved
+ */
+  virtual double score_adjustment() const {
+    return oz->score_adjustment();
+  }
+
+/** 
+ * Check transition constraints 
+ * 
+ * @param ref_now Current aircraft state
+ * @param ref_last Previous aircraft state
+ * 
+ * @return True if constraints are satisfied
+ */
+  virtual bool transition_constraint(const AIRCRAFT_STATE & ref_now, 
+                                     const AIRCRAFT_STATE & ref_last) {
+    return oz->transition_constraint(ref_now, ref_last);
+  }
 
 protected:
   ActiveState_t active_state;
@@ -228,6 +271,21 @@ protected:
  * @return Distance (m)
  */
   double double_leg_distance(const GEOPOINT &ref) const;
+
+private:
+
+  /**
+   * @supplierCardinality 0..1 
+   */
+  OrderedTaskPoint* tp_next;
+
+  /**
+   * @supplierCardinality 0..1 
+   */
+  OrderedTaskPoint* tp_previous;
+
+  ObservationZonePoint* oz;
+
 public:
   DEFINE_VISITABLE()
 };

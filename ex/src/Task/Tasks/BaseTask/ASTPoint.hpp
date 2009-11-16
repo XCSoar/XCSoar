@@ -52,10 +52,11 @@
 class ASTPoint : public IntermediatePoint 
 {
 public:
-  ASTPoint(const TaskProjection&tp,
+  ASTPoint(ObservationZonePoint* _oz,
+           const TaskProjection&tp,
            const Waypoint & wp,
            const TaskBehaviour &tb) 
-    : IntermediatePoint(tp,wp,tb,false)
+    : IntermediatePoint(_oz,tp,wp,tb,false)
     { };
 };
 

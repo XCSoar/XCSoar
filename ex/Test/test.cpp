@@ -12,12 +12,14 @@
 #include "Waypoint/Waypoints.hpp"
 #include "Task/TaskManager.hpp"
 #include "Task/TaskEvents.hpp"
-#include "Task/Tasks/TaskPoints/LineStartPoint.hpp"
-#include "Task/Tasks/TaskPoints/FAISectorStartPoint.hpp"
-#include "Task/Tasks/TaskPoints/FAISectorFinishPoint.hpp"
-#include "Task/Tasks/TaskPoints/FAISectorASTPoint.hpp"
-#include "Task/Tasks/TaskPoints/FAICylinderASTPoint.hpp"
-#include "Task/Tasks/TaskPoints/CylinderAATPoint.hpp"
+
+#include "Task/Tasks/BaseTask/AATPoint.hpp"
+#include "Task/Tasks/BaseTask/ASTPoint.hpp"
+
+#include "Task/Tasks/TaskPoints/ObservationZones/LineSectorZone.hpp"
+#include "Task/Tasks/TaskPoints/ObservationZones/FAISectorZone.hpp"
+#include "Task/Tasks/TaskPoints/ObservationZones/CylinderZone.hpp"
+
 #include "Util/Filter.hpp"
 
 #include "Task/Visitors/TaskVisitor.hpp"
@@ -184,12 +186,25 @@ void setup_task(TaskManager& task_manager,
                 TaskProjection &task_projection,
                 TaskBehaviour &tb)
 {
-  task_manager.append(new LineStartPoint(task_projection,wp[0],tb));
-  task_manager.append(new FAISectorASTPoint(task_projection,wp[1],tb));
-  task_manager.append(new CylinderAATPoint(task_projection,wp[2],tb));
-  task_manager.append(new CylinderAATPoint(task_projection,wp[3],tb));
-  task_manager.append(new CylinderAATPoint(task_projection,wp[4],tb));
-  task_manager.append(new FAISectorFinishPoint(task_projection,wp[0],tb));
+
+  task_manager.append(new StartPoint(
+                        new LineSectorZone(wp[0].Location),
+                        task_projection,wp[0],tb));
+  task_manager.append(new ASTPoint(
+                        new FAISectorZone(wp[1].Location),
+                        task_projection,wp[1],tb));
+  task_manager.append(new AATPoint(
+                        new CylinderZone(wp[2].Location),
+                        task_projection,wp[2],tb));
+  task_manager.append(new AATPoint(
+                        new CylinderZone(wp[3].Location),
+                        task_projection,wp[3],tb));
+  task_manager.append(new AATPoint(
+                        new CylinderZone(wp[4].Location),
+                        task_projection,wp[4],tb));
+  task_manager.append(new FinishPoint(
+                        new FAISectorZone(wp[0].Location),
+                        task_projection,wp[0],tb));
 
   if (task_manager.check_task()) {
     task_manager.setActiveTaskPoint(0);

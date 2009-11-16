@@ -58,16 +58,18 @@ public:
  * Constructor.  Sets task area to non-scorable; distances
  * are relative to crossing point or origin.
  * 
+ * @param _oz Observation zone for this task point
  * @param tp Global projection 
  * @param wp Waypoint origin of turnpoint
  * @param tb Task Behaviour defining options (esp safety heights)
  * 
  * @return Partially-initialised object
  */
-    FinishPoint(const TaskProjection& tp,
+    FinishPoint(ObservationZonePoint* _oz,
+                const TaskProjection& tp,
                 const Waypoint & wp,
                 const TaskBehaviour& tb) : 
-      OrderedTaskPoint(tp,wp,tb,false) { };
+      OrderedTaskPoint(_oz,tp,wp,tb,false) { };
 
 /** 
  * Set previous/next taskpoints in sequence.

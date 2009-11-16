@@ -56,16 +56,18 @@ public:
  * Constructor.  Initialises to unlocked target, target is
  * initially set to origin.
  * 
+ * @param _oz Observation zone for this task point
  * @param tp Global projection 
  * @param wp Waypoint origin of turnpoint
  * @param tb Task Behaviour defining options (esp safety heights)
  * 
  * @return Partially-initialised object
  */
-  AATPoint(const TaskProjection& tp,
+  AATPoint(ObservationZonePoint* _oz,
+           const TaskProjection& tp,
            const Waypoint & wp,
            const TaskBehaviour &tb) : 
-    IntermediatePoint(tp,wp,tb,true), 
+    IntermediatePoint(_oz,tp,wp,tb,true), 
     TargetLocked(false), 
     TargetLocation(wp.Location)
     {

@@ -27,11 +27,12 @@ public:
  * @return Partially-initialised object
  */
 
-  IntermediatePoint(const TaskProjection& tp,
+  IntermediatePoint(ObservationZonePoint* _oz,
+                    const TaskProjection& tp,
                     const Waypoint & wp, 
                     const TaskBehaviour& tb,
                     const bool b_scored): 
-    OrderedTaskPoint(tp, wp, tb, b_scored) 
+    OrderedTaskPoint(_oz, tp, wp, tb, b_scored) 
     {};
 
 /** 
