@@ -68,9 +68,9 @@ OrderedTask::scan_distance_minmax(const GEOPOINT &location, bool full,
   }
   SearchPoint ac(location, task_projection);
   if (full) {
-    // for max calculations, since one can still travel further in the sector,
-    // we pretend we are on the previous turnpoint so the search samples will
-    // contain the full boundary
+    // for max calculations, since one can still travel further in the
+    // sector, we pretend we are on the previous turnpoint so the
+    // search samples will contain the full boundary
     unsigned atp = activeTaskPoint;
     if (activeTaskPoint>0) {
       activeTaskPoint--;
@@ -475,11 +475,16 @@ double
 OrderedTask::calc_min_target(const AIRCRAFT_STATE &aircraft, 
                              const double t_target)
 {
-  const double t_rem = std::max(0.0, t_target-stats.total.TimeElapsed);
-
-  TaskMinTarget bmt(tps, activeTaskPoint, aircraft, glide_polar, t_rem, ts);
-  double p= bmt.search(0.0);
-  return p;
+  if (stats.distance_max>stats.distance_min) {
+    // only perform scan if modification is possible
+    const double t_rem = std::max(0.0, t_target-stats.total.TimeElapsed);
+    
+    TaskMinTarget bmt(tps, activeTaskPoint, aircraft, glide_polar, t_rem, ts);
+    double p= bmt.search(0.0);
+    return p;
+  } else {
+    return 0.0;
+  }
 }
 
 

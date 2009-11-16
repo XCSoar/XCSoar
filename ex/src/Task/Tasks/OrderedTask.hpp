@@ -29,7 +29,6 @@ public:
    *
    * \todo
    * - default values in constructor
-   * - remove dependency on external task projection
    * 
    * @param te Task events
    * @param tb Task behaviour
@@ -336,9 +335,6 @@ protected:
  * time remaining with the current glide polar equal to a target value.
  * This adjusts the target locations for the remainder of the task.
  * 
- * \todo
- * - look at max/min dist and only perform this scan if change is possible
- *
  * @param state_now Aircraft state
  * @param t_target Desired time for remainder of task (s)
  * 
