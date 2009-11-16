@@ -65,8 +65,7 @@ BOOL nmoPutQNH(DeviceDescriptor_t *d, double NewQNH){
   return(FALSE);
 }
 
-
-static const DeviceRegister_t nmoDevice = {
+const struct DeviceRegister nmoDevice = {
   TEXT("NmeaOut"),
   drfNmeaOut,
   nmoParseNMEA,			// ParseNMEA
@@ -87,8 +86,4 @@ static const DeviceRegister_t nmoDevice = {
   NULL,				// IsBaroSource
   NULL				// OnSysTicker
 };
-
-bool nmoRegister(void){
-  return devRegister(&nmoDevice);
-}
 

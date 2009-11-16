@@ -38,6 +38,6 @@ Copyright_License {
 #ifndef	DEVVEGA_H
 #define	DEVVEGA_H
 
-bool vgaRegister(void);
+extern const struct DeviceRegister vgaDevice;
 
 #endif

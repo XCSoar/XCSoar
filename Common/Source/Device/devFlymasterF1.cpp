@@ -64,8 +64,7 @@ static BOOL FlymasterF1ParseNMEA(PDeviceDescriptor_t d, const TCHAR *String,
 
 }
 
-
-static const DeviceRegister_t flymasterf1Device = {
+const struct DeviceRegister flymasterf1Device = {
   TEXT("FlymasterF1"),
   drfGPS | drfBaroAlt | drfVario,
   FlymasterF1ParseNMEA,		// ParseNMEA
@@ -86,11 +85,6 @@ static const DeviceRegister_t flymasterf1Device = {
   NULL,				// IsBaroSource
   NULL				// OnSysTicker
 };
-
-bool flymasterf1Register(void){
-  return devRegister(&flymasterf1Device);
-}
-
 
 // *****************************************************************************
 // local stuff

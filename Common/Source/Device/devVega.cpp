@@ -463,8 +463,7 @@ BOOL vgaOnSysTicker(DeviceDescriptor_t *d){
   return(TRUE);
 }
 
-
-static const DeviceRegister_t vgaDevice = {
+const struct DeviceRegister vgaDevice = {
   TEXT("Vega"),
   drfGPS | drfBaroAlt | drfSpeed | drfVario, // drfLogger if FLARM connected
   vgaParseNMEA,			// ParseNMEA
@@ -485,8 +484,3 @@ static const DeviceRegister_t vgaDevice = {
   NULL,				// IsBaroSource
   vgaOnSysTicker		// OnSysTicker
 };
-
-bool vgaRegister(void){
-  return devRegister(&vgaDevice);
-}
-

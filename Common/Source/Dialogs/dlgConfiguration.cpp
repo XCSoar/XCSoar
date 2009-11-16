@@ -1305,7 +1305,7 @@ static void setVariables(void) {
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    for (int i = 0; i < DeviceRegisterCount; i++) {
+    for (int i = 0; DeviceRegister[i] != NULL; i++) {
       devRegisterGetName(i, DeviceName);
       dfe->addEnumText((DeviceName));
 #ifndef _SIM_
@@ -1352,7 +1352,7 @@ static void setVariables(void) {
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    for (int i = 0; i < DeviceRegisterCount; i++) {
+    for (int i = 0; DeviceRegister[i] != NULL; i++) {
       devRegisterGetName(i, DeviceName);
       dfe->addEnumText((DeviceName));
 #ifndef _SIM_

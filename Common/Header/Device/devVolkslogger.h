@@ -38,6 +38,6 @@ Copyright_License {
 #ifndef	DEVVL_H
 #define	DEVVL_H
 
-bool vlRegister(void);
+extern const struct DeviceRegister vlDevice;
 
 #endif

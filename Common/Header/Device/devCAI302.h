@@ -38,6 +38,6 @@ Copyright_License {
 #ifndef	DEVCAI302_H
 #define	DEVCAI302_H
 
-bool cai302Register(void);
+extern const struct DeviceRegister cai302Device;
 
 #endif

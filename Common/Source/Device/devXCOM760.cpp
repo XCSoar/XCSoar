@@ -64,8 +64,7 @@ static BOOL XCOM760PutFreqStandby(PDeviceDescriptor_t d, double Freq) {
   return(TRUE);
 }
 
-
-static const DeviceRegister_t xcom760Device = {
+const struct DeviceRegister xcom760Device = {
   TEXT("XCOM760"),
   drfRadio,
   NULL,				// ParseNMEA
@@ -86,11 +85,6 @@ static const DeviceRegister_t xcom760Device = {
   NULL,				// IsBaroSource
   NULL,				// OnSysTicker
 };
-
-bool xcom760Register(void){
-  return devRegister(&xcom760Device);
-}
-
 
 /* Commands
 

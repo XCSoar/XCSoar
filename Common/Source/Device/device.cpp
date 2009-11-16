@@ -87,14 +87,35 @@ static Mutex mutexComm;
 static  const TCHAR *COMMPort[] = {TEXT("COM1:"),TEXT("COM2:"),TEXT("COM3:"),TEXT("COM4:"),TEXT("COM5:"),TEXT("COM6:"),TEXT("COM7:"),TEXT("COM8:"),TEXT("COM9:"),TEXT("COM10:"),TEXT("COM0:")};
 static  const DWORD   dwSpeed[] = {1200,2400,4800,9600,19200,38400,57600,115200};
 
+const struct DeviceRegister *const DeviceRegister[] = {
+  // IMPORTANT: ADD NEW ONES TO BOTTOM OF THIS LIST
+  &genDevice, // MUST BE FIRST
+  &cai302Device,
+  &ewDevice,
+  &atrDevice,
+  &vgaDevice,
+  &caiGpsNavDevice,
+  &nmoDevice,
+  &pgDevice,
+  &b50Device,
+  &vlDevice,
+  &ewMicroRecorderDevice,
+  &lxDevice,
+  &zanderDevice,
+  &flymasterf1Device,
+  &xcom760Device,
+  &condorDevice,
+  NULL
+};
 
-DeviceRegister_t   DeviceRegister[NUMREGDEV];
+enum {
+  DeviceRegisterCount = sizeof(DeviceRegister) / sizeof(DeviceRegister[0]) - 1
+};
+
 DeviceDescriptor_t DeviceList[NUMDEV];
 
 DeviceDescriptor_t *pDevPrimaryBaroSource=NULL;
 DeviceDescriptor_t *pDevSecondaryBaroSource=NULL;
-
-int DeviceRegisterCount = 0;
 
 static BOOL FlarmDeclare(PDeviceDescriptor_t d, Declaration_t *decl);
 
@@ -155,20 +176,11 @@ BOOL ExpectString(PDeviceDescriptor_t d, const TCHAR *token){
 
 }
 
-
-BOOL devRegister(const DeviceRegister_t *devReg) {
-  if (DeviceRegisterCount >= NUMREGDEV)
-    return(FALSE);
-  DeviceRegister[DeviceRegisterCount] = *devReg;
-  DeviceRegisterCount++;
-  return(TRUE);
-}
-
 BOOL devRegisterGetName(int Index, TCHAR *Name){
   Name[0] = '\0';
   if (Index < 0 || Index >= DeviceRegisterCount)
     return (FALSE);
-  _tcscpy(Name, DeviceRegister[Index].Name);
+  _tcscpy(Name, DeviceRegister[Index]->Name);
   return(TRUE);
 }
 
@@ -189,8 +201,8 @@ devGetDriver(const TCHAR *DevName)
   int i;
 
   for (i = DeviceRegisterCount - 1; i >= 0; i--)
-    if (_tcscmp(DeviceRegister[i].Name, DevName) == 0 || i == 0)
-      return &DeviceRegister[i];
+    if (_tcscmp(DeviceRegister[i]->Name, DevName) == 0 || i == 0)
+      return DeviceRegister[i];
 
   return NULL;
 }
@@ -907,25 +919,6 @@ BOOL FlarmDeclare(PDeviceDescriptor_t d, Declaration_t *decl){
 void devStartup(LPTSTR lpCmdLine)
 {
   StartupStore(TEXT("Register serial devices\n"));
-
-  // ... register all supported devices
-  // IMPORTANT: ADD NEW ONES TO BOTTOM OF THIS LIST
-  genRegister(); // MUST BE FIRST
-  cai302Register();
-  ewRegister();
-  atrRegister();
-  vgaRegister();
-  caiGpsNavRegister();
-  nmoRegister();
-  pgRegister();
-  b50Register();
-  vlRegister();
-  ewMicroRecorderRegister();
-  lxRegister();
-  zanderRegister();
-  flymasterf1Register();
-  xcom760Register();
-  condorRegister();
 
   devInit(lpCmdLine);
 }

@@ -38,7 +38,7 @@ Copyright_License {
 #ifndef DEVCONDOR_H
 #define DEVCONDOR_H
 
-bool condorRegister(void);
+extern const struct DeviceRegister condorDevice;
 
 #endif
 

@@ -80,8 +80,7 @@ static BOOL CondorParseNMEA(PDeviceDescriptor_t d, const TCHAR *String,
 
 }
 
-
-static const DeviceRegister_t condorDevice = {
+const struct DeviceRegister condorDevice = {
   TEXT("Condor"),
   drfGPS | drfBaroAlt | drfSpeed | drfVario | drfCondor,
   CondorParseNMEA,		// ParseNMEA
@@ -102,11 +101,6 @@ static const DeviceRegister_t condorDevice = {
   NULL,				// IsBaroSource
   NULL				// OnSysTicker
 };
-
-bool condorRegister(void){
-  return devRegister(&condorDevice);
-}
-
 
 // *****************************************************************************
 // local stuff

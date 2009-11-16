@@ -48,7 +48,6 @@ struct NMEA_INFO;
 
 #define DEVNAMESIZE  32
 #define	NUMDEV		 2
-#define	NUMREGDEV	 20
 
 #define	devA()	    (&DeviceList[0])
 #define	devB()	    (&DeviceList[1])
@@ -122,12 +121,15 @@ typedef	struct DeviceRegister {
 
 
 extern DeviceDescriptor_t	DeviceList[NUMDEV];
-extern DeviceRegister_t   DeviceRegister[NUMREGDEV];
-extern int DeviceRegisterCount;
+
+/**
+ * NULL terminated array of available device drivers.
+ */
+extern const struct DeviceRegister *const DeviceRegister[];
+
 extern DeviceDescriptor_t *pDevPrimaryBaroSource;
 extern DeviceDescriptor_t *pDevSecondaryBaroSource;
 
-BOOL devRegister(const DeviceRegister_t *devReg);
 BOOL devRegisterGetName(int Index, TCHAR *Name);
 
 BOOL ExpectString(PDeviceDescriptor_t d, const TCHAR *token);

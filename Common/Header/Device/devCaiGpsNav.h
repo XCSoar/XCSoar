@@ -38,7 +38,7 @@ Copyright_License {
 #ifndef	DEVCAIGPSNAV_H
 #define	DEVCAIGPSNAV_H
 
-bool caiGpsNavRegister(void);
+extern const struct DeviceRegister caiGpsNavDevice;
 
 #endif
 
