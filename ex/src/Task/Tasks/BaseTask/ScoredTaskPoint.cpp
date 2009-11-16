@@ -2,8 +2,9 @@
 
 ScoredTaskPoint::ScoredTaskPoint(const TaskProjection& tp,
                                  const Waypoint & wp, 
+                                 const TaskBehaviour &tb,
                                  const bool b_scored): 
-    SampledTaskPoint(tp, wp, b_scored)
+  SampledTaskPoint(tp, wp, tb, b_scored)
 {
     state_entered.Time = -1;
     state_exited.Time = -1;

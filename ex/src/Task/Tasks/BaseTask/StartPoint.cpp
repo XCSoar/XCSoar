@@ -4,9 +4,10 @@
 #include <assert.h>
 
 StartPoint::StartPoint(const TaskProjection& tp,
-                       const Waypoint & wp) : 
-    OrderedTaskPoint(tp,wp,false), 
-    enabled(true) 
+                       const Waypoint & wp,
+                       const TaskBehaviour& tb) : 
+  OrderedTaskPoint(tp,wp,tb,false), 
+  enabled(true) 
 {
 }
 

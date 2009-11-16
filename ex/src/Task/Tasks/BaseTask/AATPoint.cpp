@@ -36,7 +36,8 @@ GEOPOINT AATPoint::get_reference_remaining() const
 double 
 AATPoint::getElevation() const
 {
-  return Elevation; // + SAFETYTERRAIN
+  // for now, just use default value
+  return IntermediatePoint::getElevation();
 }
 
 bool 

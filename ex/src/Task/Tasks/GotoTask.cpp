@@ -52,7 +52,7 @@ GotoTask::do_goto(const Waypoint & wp)
   if (tp) {
     delete tp;
   }
-  tp = new TaskPoint(wp);
+  tp = new TaskPoint(wp, task_behaviour);
 }
 
 void 

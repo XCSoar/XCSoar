@@ -45,6 +45,7 @@
 #include "Navigation/Aircraft.hpp"
 #include "Navigation/GeoVector.hpp"
 #include "Util/GenericVisitor.hpp"
+#include "Task/TaskBehaviour.hpp"
 
 struct GlideResult;
 class GlidePolar;
@@ -69,17 +70,21 @@ public:
  * is also stored to facilitate user-feedback.
  * 
  * @param wp Waypoint to be used as task point origin
+ * @param tb Task Behaviour defining options (esp safety heights)
  * 
  * @return Initialised object
  */
-  TaskPoint(const Waypoint & wp) : ReferencePoint(wp.Location),
-                                   Elevation(wp.Altitude),
-                                   waypoint(wp)
+  TaskPoint(const Waypoint & wp,
+            const TaskBehaviour &tb) : ReferencePoint(wp.Location),
+                                       Elevation(wp.Altitude),
+                                       waypoint(wp),
+                                       task_behaviour(tb)
     { }
 
   virtual ~TaskPoint() {};
 
-  virtual TaskPoint* clone() { return new TaskPoint(waypoint); };
+  virtual TaskPoint* clone() { return new TaskPoint(waypoint,
+                                                    task_behaviour); };
 
 /** 
  * Retrieve elevation of taskpoint, taking into account
@@ -205,6 +210,7 @@ public:
 protected:
   const Waypoint waypoint; // local copy
   const double Elevation;
+  const TaskBehaviour &task_behaviour;
 public:
   DEFINE_VISITABLE()
 };

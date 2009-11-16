@@ -1,7 +1,7 @@
 #include "IntermediatePoint.hpp"
 
 double
-IntermediatePoint::getElevation()
+IntermediatePoint::getElevation() const
 {
-  return Elevation; // + SAFETYTERRAIN
+  return Elevation+task_behaviour.safety_height_terrain;
 }

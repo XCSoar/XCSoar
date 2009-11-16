@@ -11,12 +11,13 @@
 
 OrderedTaskPoint::OrderedTaskPoint(const TaskProjection& tp,
                                    const Waypoint & wp, 
+                                   const TaskBehaviour &tb,
                                    const bool b_scored): 
-    ScoredTaskPoint(tp, wp, b_scored),
-    tp_previous(NULL),
-    tp_next(NULL),
-    active_state(NOTFOUND_ACTIVE),
-    TaskLeg(*this)
+  ScoredTaskPoint(tp, wp, tb, b_scored),
+  tp_previous(NULL),
+  tp_next(NULL),
+  active_state(NOTFOUND_ACTIVE),
+  TaskLeg(*this)
 {
 }
 

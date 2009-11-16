@@ -61,12 +61,14 @@ public:
  * 
  * @param tp Global projection 
  * @param wp Waypoint origin of turnpoint
+ * @param tb Task Behaviour defining options (esp safety heights)
  * 
  * @return Partially-initialised object
  */
     FinishPoint(const TaskProjection& tp,
-                const Waypoint & wp) : 
-      OrderedTaskPoint(tp,wp,false) { };
+                const Waypoint & wp,
+                const TaskBehaviour& tb) : 
+      OrderedTaskPoint(tp,wp,tb,false) { };
 
 /** 
  * Set previous/next taskpoints in sequence.

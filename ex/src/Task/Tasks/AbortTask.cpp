@@ -91,7 +91,7 @@ AbortTask::fill_reachable(const AIRCRAFT_STATE &state,
   std::priority_queue<WP_ALT, std::vector<WP_ALT>, Rank> q;
   for (std::vector < Waypoint >::iterator v = approx_waypoints.begin();
        v!=approx_waypoints.end(); ) {
-    TaskPoint t(*v);
+    TaskPoint t(*v, task_behaviour);
     GlideResult r = t.glide_solution_remaining(state, polar_safety);
     if (r.glide_reachable()) {
       q.push(std::make_pair(*v,r.TimeElapsed));
@@ -102,7 +102,7 @@ AbortTask::fill_reachable(const AIRCRAFT_STATE &state,
     }
   }
   while (!q.empty() && !task_full()) {
-    tps.push_back(new TaskPoint(q.top().first));
+    tps.push_back(new TaskPoint(q.top().first, task_behaviour));
 
     const int i = tps.size()-1;
     if (tps[i]->get_waypoint().id == active_waypoint) {

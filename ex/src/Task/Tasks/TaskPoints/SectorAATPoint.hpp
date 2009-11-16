@@ -49,12 +49,14 @@ public:
  * 
  * @param tp Projection of entire task
  * @param wp Waypoint at which to locate task point origin
+ * @param tb Task Behaviour defining options (esp safety heights)
  * 
  * @return Partially initialised object.
  */  
   SectorAATPoint(const TaskProjection&tp,
-           const Waypoint& wp):
-    AATPoint(tp,wp),
+                 const Waypoint& wp,
+                 const TaskBehaviour &tb):
+    AATPoint(tp,wp,tb),
     oz(wp.Location) 
   {
   };

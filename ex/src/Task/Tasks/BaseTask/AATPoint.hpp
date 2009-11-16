@@ -58,16 +58,18 @@ public:
  * 
  * @param tp Global projection 
  * @param wp Waypoint origin of turnpoint
+ * @param tb Task Behaviour defining options (esp safety heights)
  * 
  * @return Partially-initialised object
  */
   AATPoint(const TaskProjection& tp,
-           const Waypoint & wp) : 
-    IntermediatePoint(tp,wp,true), 
+           const Waypoint & wp,
+           const TaskBehaviour &tb) : 
+    IntermediatePoint(tp,wp,tb,true), 
     TargetLocked(false), 
     TargetLocation(wp.Location)
     {
-    }  
+    }
 
 /** 
  * Retrieve location to be used for remaining task

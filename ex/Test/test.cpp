@@ -180,14 +180,15 @@ public:
 };
 
 void setup_task(TaskManager& task_manager,
-                TaskProjection &task_projection)
+                TaskProjection &task_projection,
+                TaskBehaviour &tb)
 {
-  task_manager.append(new FAISectorStartPoint(task_projection,wp[0]));
-  task_manager.append(new FAISectorASTPoint(task_projection,wp[1]));
-  task_manager.append(new CylinderAATPoint(task_projection,wp[2]));
-  task_manager.append(new CylinderAATPoint(task_projection,wp[3]));
-  task_manager.append(new CylinderAATPoint(task_projection,wp[4]));
-  task_manager.append(new FAISectorFinishPoint(task_projection,wp[0]));
+  task_manager.append(new FAISectorStartPoint(task_projection,wp[0],tb));
+  task_manager.append(new FAISectorASTPoint(task_projection,wp[1],tb));
+  task_manager.append(new CylinderAATPoint(task_projection,wp[2],tb));
+  task_manager.append(new CylinderAATPoint(task_projection,wp[3],tb));
+  task_manager.append(new CylinderAATPoint(task_projection,wp[4],tb));
+  task_manager.append(new FAISectorFinishPoint(task_projection,wp[0],tb));
 
   if (task_manager.check_task()) {
     task_manager.setActiveTaskPoint(0);
@@ -486,7 +487,7 @@ int test_newtask(int test_num) {
                            glide_polar,
                            waypoints);
     
-  setup_task(task_manager, task_projection);
+  setup_task(task_manager, task_projection, task_behaviour);
     
   test_flight(task_manager, airspaces, glide_polar, test_num);
 

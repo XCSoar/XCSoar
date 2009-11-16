@@ -60,12 +60,14 @@ public:
  * 
  * @param tp Projection used for internal representations
  * @param wp Waypoint associated with this task point
+ * @param tb Task Behaviour defining options (esp safety heights)
  * @param b_scored Whether distance within OZ is scored 
  * 
  * @return Partially initialised object 
  */
   OrderedTaskPoint(const TaskProjection& tp,
                    const Waypoint & wp, 
+                   const TaskBehaviour &tb,
                    const bool b_scored);
 
   virtual ~OrderedTaskPoint() {};

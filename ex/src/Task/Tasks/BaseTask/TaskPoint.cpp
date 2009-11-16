@@ -23,7 +23,7 @@ TaskPoint::get_vector_remaining(const AIRCRAFT_STATE &ref) const
 double 
 TaskPoint::getElevation() const
 {
-  return Elevation; // + SAFETYARRIVALHEIGHT
+  return Elevation+task_behaviour.safety_height_arrival;
 }
 
 

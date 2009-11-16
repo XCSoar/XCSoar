@@ -5,10 +5,11 @@
 #include "Navigation/ConvexHull/PolygonInterior.hpp"
 
 SampledTaskPoint::SampledTaskPoint(const TaskProjection& tp,
-                                   const Waypoint & wp, 
+                                   const Waypoint & wp,
+                                   const TaskBehaviour &tb,
                                    const bool b_scored):
     TaskProjectionClient(tp),
-    TaskPoint(wp),
+    TaskPoint(wp,tb),
     boundary_scored(b_scored),
     search_max(getLocation(),tp),
     search_min(getLocation(),tp)
