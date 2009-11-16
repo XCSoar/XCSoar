@@ -83,7 +83,7 @@ typedef	struct DeviceDescriptor_t{
   ComPort *Com;
   TCHAR	Name[DEVNAMESIZE+1];
   DeviceDescriptor_t *pDevPipeTo;
-  struct DeviceRegister *Driver;
+  const struct DeviceRegister *Driver;
   bool ticker;
 }DeviceDescriptor_t;
 

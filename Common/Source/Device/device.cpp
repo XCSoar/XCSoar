@@ -183,7 +183,7 @@ BOOL devIsTrueReturn(PDeviceDescriptor_t d){
   return TRUE;
 }
 
-static DeviceRegister_t *
+static const struct DeviceRegister *
 devGetDriver(const TCHAR *DevName)
 {
   int i;
@@ -212,7 +212,7 @@ devInitOne(PDeviceDescriptor_t dev, int index, const TCHAR *port,
 
   ReadDeviceSettings(index, DeviceName);
 
-  DeviceRegister_t *Driver = devGetDriver(DeviceName);
+  const struct DeviceRegister *Driver = devGetDriver(DeviceName);
 
   if (Driver) {
     ComPort *Com = new ComPort(dev);
