@@ -52,22 +52,45 @@ public:
    */
     virtual bool isInSector(const AIRCRAFT_STATE & ref) const = 0;
 
-  /** returns true if reference point is in inside sector
-   *  and last was not
+/** 
+ * Check transition constraints
+ * 
+ * @param ref_now Current aircraft state
+ * @param ref_last Previous aircraft state
+ * 
+ * @return True if constraints are satisfied
+ */
+  virtual bool transition_constraint(const AIRCRAFT_STATE & ref_now, 
+                                     const AIRCRAFT_STATE & ref_last) = 0;
+
+  /** 
+   * Check if aircraft has transitioned to inside sector
+   * 
+   * @param ref_now Current aircraft state
+   * @param ref_last Previous aircraft state
+   *
+   * @return True if aircraft now inside (and was outside)
    */
     virtual bool transition_enter(const AIRCRAFT_STATE & ref_now, 
                                   const AIRCRAFT_STATE & ref_last) {
-        return isInSector(ref_now) && !isInSector(ref_last);
+        return isInSector(ref_now) && !isInSector(ref_last)
+          && transition_constraint(ref_now, ref_last);
     };
 
-    // returns true if reference point is in outside sector
-    // and last was inside
+  /** 
+   * Check if aircraft has transitioned to outside sector
+   * 
+   * @param ref_now Current aircraft state
+   * @param ref_last Previous aircraft state
+   *
+   * @return True if aircraft now outside (and was inside)
+   */
     virtual bool transition_exit(const AIRCRAFT_STATE & ref_now, 
                                  const AIRCRAFT_STATE & ref_last) {
         return transition_enter(ref_last, ref_now);
     }  
 
-  virtual GEOPOINT get_boundary_parametric(double) =0;
+  virtual GEOPOINT get_boundary_parametric(double t) =0;
 
   virtual double score_adjustment() const;
 };

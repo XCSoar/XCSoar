@@ -113,11 +113,13 @@ OBJS	:=\
 	src/Task/Tasks/TaskPoints/FAISectorASTPoint.o \
 	src/Task/Tasks/TaskPoints/FAISectorFinishPoint.o \
 	src/Task/Tasks/TaskPoints/FAISectorStartPoint.o \
+	src/Task/Tasks/TaskPoints/LineStartPoint.o \
 	src/Task/Tasks/TaskPoints/SectorAATPoint.o \
 	src/Task/Tasks/TaskPoints/CylinderAATPoint.o \
 	src/Task/Tasks/TaskPoints/ObservationZones/CylinderZone.o \
 	src/Task/Tasks/TaskPoints/ObservationZones/HeightLimitZone.o \
 	src/Task/Tasks/TaskPoints/ObservationZones/SectorZone.o \
+	src/Task/Tasks/TaskPoints/ObservationZones/LineSectorZone.o \
 	src/Task/Tasks/TaskPoints/ObservationZones/SymmetricSectorZone.o \
 	src/Task/Tasks/PathSolvers/TaskDijkstra.o \
 	src/Task/Tasks/PathSolvers/IsolineCrossingFinder.o \

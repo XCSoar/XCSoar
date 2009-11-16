@@ -86,6 +86,19 @@ public:
   }
 
 /** 
+ * Check transition constraints 
+ * 
+ * @param ref_now Current aircraft state
+ * @param ref_last Previous aircraft state
+ * 
+ * @return True if constraints are satisfied
+ */
+  virtual bool transition_constraint(const AIRCRAFT_STATE & ref_now, 
+                                     const AIRCRAFT_STATE & ref_last) {
+    return oz.transition_constraint(ref_now, ref_last);
+  }
+
+/** 
  * Calculate boundary point from parametric border
  * 
  * @param t t value (0,1) of parameter

@@ -35,15 +35,15 @@
   }
 */
 
-#ifndef FAISECTORFINISHPOINT_HPP
-#define FAISECTORFINISHPOINT_HPP
 
-#include "Task/Tasks/BaseTask/FinishPoint.hpp"
-#include "Task/Tasks/BaseTask/TaskLeg.hpp"
-#include "ObservationZones/FAISectorZone.hpp"
+#ifndef FAISECTORSTARTPOINT_HPP
+#define FAISECTORSTARTPOINT_HPP
 
-class FAISectorFinishPoint: 
-  public FinishPoint
+#include "Task/Tasks/BaseTask/StartPoint.hpp"
+#include "ObservationZones/LineSectorZone.hpp"
+
+class LineStartPoint: 
+  public StartPoint
 {
 public:
 /** 
@@ -56,10 +56,10 @@ public:
  * 
  * @return Partially initialised object.
  */  
-  FAISectorFinishPoint(const TaskProjection&tp,
-                       const Waypoint& wp,
-                       const TaskBehaviour &tb):
-    FinishPoint(tp,wp,tb),
+  LineStartPoint(const TaskProjection&tp,
+                 const Waypoint& wp,
+                 const TaskBehaviour &tb):
+    StartPoint(tp,wp,tb),
     oz(wp.Location) 
   {
   };
@@ -69,7 +69,7 @@ public:
  * 
  */  
   virtual void update_geometry() {
-    oz.set_legs(get_previous(), this, NULL);
+    oz.set_legs(NULL, this, get_next());
   }
 
 /** 
@@ -91,7 +91,7 @@ public:
  * 
  * @return Boundary point
  */
-  GEOPOINT get_boundary_parametric(double t);
+  GEOPOINT get_boundary_parametric(double t) ;
 
 /** 
  * Calculate distance reduction for achieved task point,
@@ -115,9 +115,8 @@ public:
   }
 
 protected:
-  FAISectorZone oz;
+  LineSectorZone oz;
 };
 
-///////////////////////////////////////////////////////////
 
 #endif

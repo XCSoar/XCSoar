@@ -37,7 +37,7 @@
 
 #ifndef LINESECTORZONE_HPP
 #define LINESECTORZONE_HPP
-#include "ObservationZones/SymmetricSectorZone.hpp"
+#include "SymmetricSectorZone.hpp"
 
 class LineSectorZone: 
   public SymmetricSectorZone 
@@ -46,19 +46,25 @@ public:
   LineSectorZone(const GEOPOINT loc):
     SymmetricSectorZone(loc,180.0)
   {};
+
+/** 
+ * Check transition constraints -- for lines, both points have to
+ * be within radius of OZ (otherwise it is a circumference border crossing)
+ * 
+ * @param ref_now Current aircraft state
+ * @param ref_last Previous aircraft state
+ * 
+ * @return True if constraints are satisfied
+ */
+  virtual bool transition_constraint(const AIRCRAFT_STATE & ref_now, 
+                                     const AIRCRAFT_STATE & ref_last) {
+    return CylinderZone::isInSector(ref_now) && CylinderZone::isInSector(ref_last);
+  }
+
+  GEOPOINT get_boundary_parametric(double) ;  
+
+  virtual double score_adjustment();
+
 };
-
-
-///////
-
-
-
-
-
-
-
-
-
-///////////////////////////////////////////////////////////
 
 #endif

@@ -12,6 +12,7 @@
 #include "Waypoint/Waypoints.hpp"
 #include "Task/TaskManager.hpp"
 #include "Task/TaskEvents.hpp"
+#include "Task/Tasks/TaskPoints/LineStartPoint.hpp"
 #include "Task/Tasks/TaskPoints/FAISectorStartPoint.hpp"
 #include "Task/Tasks/TaskPoints/FAISectorFinishPoint.hpp"
 #include "Task/Tasks/TaskPoints/FAISectorASTPoint.hpp"
@@ -183,7 +184,7 @@ void setup_task(TaskManager& task_manager,
                 TaskProjection &task_projection,
                 TaskBehaviour &tb)
 {
-  task_manager.append(new FAISectorStartPoint(task_projection,wp[0],tb));
+  task_manager.append(new LineStartPoint(task_projection,wp[0],tb));
   task_manager.append(new FAISectorASTPoint(task_projection,wp[1],tb));
   task_manager.append(new CylinderAATPoint(task_projection,wp[2],tb));
   task_manager.append(new CylinderAATPoint(task_projection,wp[3],tb));

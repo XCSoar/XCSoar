@@ -13,7 +13,8 @@
  *
  */
 class IntermediatePoint: 
-  public OrderedTaskPoint {
+  public OrderedTaskPoint 
+{
 public:    
 /** 
  * Constructor.
@@ -40,5 +41,6 @@ public:
  * @return Minimum allowable elevation of task point
  */
   virtual double getElevation() const;
+
 };
 #endif //INTERMEDIATEPOINT_H

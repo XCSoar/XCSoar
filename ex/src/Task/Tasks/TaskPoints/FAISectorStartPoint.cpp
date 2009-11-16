@@ -2,7 +2,7 @@
 
 #include "FAISectorStartPoint.hpp"
 
-double FAISectorStartPoint::score_adjustment(){
+double FAISectorStartPoint::score_adjustment() {
   return 0.0;
 }
 
