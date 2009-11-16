@@ -183,8 +183,8 @@ BOOL devIsTrueReturn(PDeviceDescriptor_t d){
   return TRUE;
 }
 
-
-DeviceRegister_t *devGetDriver(const TCHAR *DevName)
+static DeviceRegister_t *
+devGetDriver(const TCHAR *DevName)
 {
   int i;
 
@@ -195,8 +195,15 @@ DeviceRegister_t *devGetDriver(const TCHAR *DevName)
   return NULL;
 }
 
-BOOL devInitOne(PDeviceDescriptor_t dev, int index, const TCHAR *port,
-		DWORD speed, PDeviceDescriptor_t &nmeaout)
+static bool
+devOpen(PDeviceDescriptor_t d, int Port);
+
+static bool
+devOpenLog(PDeviceDescriptor_t d, const TCHAR *FileName);
+
+static bool
+devInitOne(PDeviceDescriptor_t dev, int index, const TCHAR *port,
+           DWORD speed, PDeviceDescriptor_t &nmeaout)
 {
   TCHAR DeviceName[DEVNAMESIZE];
 
@@ -237,7 +244,9 @@ BOOL devInitOne(PDeviceDescriptor_t dev, int index, const TCHAR *port,
   return TRUE;
 }
 
-BOOL devInit(LPCTSTR CommandLine){
+static BOOL
+devInit(LPCTSTR CommandLine)
+{
   int i;
   PDeviceDescriptor_t pDevNmeaOut = NULL;
 
@@ -458,7 +467,9 @@ BOOL devPutBallast(PDeviceDescriptor_t d, double Ballast)
 
 // Only called from devInit() above which
 // is in turn called with mutexComm.Lock
-BOOL devOpen(PDeviceDescriptor_t d, int Port){
+static bool
+devOpen(PDeviceDescriptor_t d, int Port)
+{
   BOOL res = TRUE;
 
   if (d && d->Driver && d->Driver->Open)
@@ -473,7 +484,8 @@ BOOL devOpen(PDeviceDescriptor_t d, int Port){
 // Tear down methods should always succeed.
 // Called from devInit() above under LockComm
 // Also called when shutting down via devShutdown()
-BOOL devClose(PDeviceDescriptor_t d)
+static bool
+devClose(PDeviceDescriptor_t d)
 {
   if (d != NULL) {
     if (d->Driver && d->Driver->Close)
@@ -637,9 +649,9 @@ BOOL devIsCondor(PDeviceDescriptor_t d)
   return result;
 }
 
-
-
-BOOL devOpenLog(PDeviceDescriptor_t d, const TCHAR *FileName){
+static bool
+devOpenLog(PDeviceDescriptor_t d, const TCHAR *FileName)
+{
   if (d != NULL){
     d->fhLogFile = _tfopen(FileName, TEXT("a+b"));
     return(d->fhLogFile != NULL);
@@ -647,7 +659,9 @@ BOOL devOpenLog(PDeviceDescriptor_t d, const TCHAR *FileName){
     return(FALSE);
 }
 
-BOOL devCloseLog(PDeviceDescriptor_t d){
+static bool
+devCloseLog(PDeviceDescriptor_t d)
+{
   if (d != NULL && d->fhLogFile != NULL){
     fclose(d->fhLogFile);
     return(TRUE);

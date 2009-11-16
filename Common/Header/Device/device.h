@@ -130,7 +130,6 @@ extern DeviceDescriptor_t *pDevSecondaryBaroSource;
 BOOL devRegister(const DeviceRegister_t *devReg);
 BOOL devRegisterGetName(int Index, TCHAR *Name);
 
-BOOL devInit(LPCTSTR CommandLine);
 BOOL ExpectString(PDeviceDescriptor_t d, const TCHAR *token);
 BOOL devHasBaroSource(void);
 
@@ -142,8 +141,6 @@ BOOL devPutBallast(PDeviceDescriptor_t d,	double Ballast);
 BOOL devPutVolume(PDeviceDescriptor_t	d, int Volume);
 BOOL devPutFreqActive(PDeviceDescriptor_t d,	double Freq);
 BOOL devPutFreqStandby(PDeviceDescriptor_t d,	double Freq);
-BOOL devOpen(PDeviceDescriptor_t d,	int	Port);
-BOOL devClose(PDeviceDescriptor_t	d);
 BOOL devLinkTimeout(PDeviceDescriptor_t	d);
 BOOL devDeclare(PDeviceDescriptor_t	d, Declaration_t *decl);
 BOOL devIsLogger(PDeviceDescriptor_t d);
@@ -151,8 +148,6 @@ BOOL devIsGPSSource(PDeviceDescriptor_t	d);
 BOOL devIsBaroSource(PDeviceDescriptor_t d);
 BOOL devIsRadio(PDeviceDescriptor_t d);
 BOOL devIsCondor(PDeviceDescriptor_t d);
-BOOL devOpenLog(PDeviceDescriptor_t d, const TCHAR *FileName);
-BOOL devCloseLog(PDeviceDescriptor_t d);
 
 BOOL devPutQNH(DeviceDescriptor_t *d, double NewQNH);
 void devTick(void);
