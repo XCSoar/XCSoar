@@ -47,3 +47,11 @@ TaskEvents::construction_error(const char* error) const
   printf("\n");
 #endif
 }
+
+void 
+TaskEvents::warning_start_speed() const
+{
+#ifdef DO_PRINT
+  printf("- warning speed excessive\n");
+#endif
+}

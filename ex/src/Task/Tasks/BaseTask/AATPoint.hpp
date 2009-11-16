@@ -108,10 +108,14 @@ public:
  * task point based on task behaviour rules.
  * Only does the target move checks when this task point
  * is currently active.
+ *
+ * @param state Aircraft state
+ * @param task_events Callback class for feedback
  * 
  * @return True if internal state changed
  */
-  virtual bool update_sample(const AIRCRAFT_STATE&);
+  virtual bool update_sample(const AIRCRAFT_STATE& state,
+                             const TaskEvents &task_events);
 
 /** 
  * Set target location explicitly

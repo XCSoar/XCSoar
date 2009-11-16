@@ -87,9 +87,10 @@ OBJS	:=\
 	src/Navigation/TaskProjectionClient.o \
 	src/Navigation/ConvexHull/GrahamScan.o \
 	src/Navigation/ConvexHull/PolygonInterior.o \
-	src/Task/TaskManager.o \
-	src/Task/TaskEvents.o \
 	src/Task/TaskAdvance.o \
+	src/Task/TaskBehaviour.o \
+	src/Task/TaskEvents.o \
+	src/Task/TaskManager.o \
 	src/Task/Tasks/TaskInterface.o \
 	src/Task/Tasks/AbortTask.o \
 	src/Task/Tasks/AbstractTask.o \

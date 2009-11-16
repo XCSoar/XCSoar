@@ -92,6 +92,17 @@ public:
                                const AIRCRAFT_STATE & ref_last);
 
 /** 
+ * Update sample, specialisation to check start speed/height
+ *
+ * @param state Aircraft state
+ * @param task_events Callback class for feedback
+ * 
+ * @return True if internal state changed
+ */
+  virtual bool update_sample(const AIRCRAFT_STATE& state,
+                             const TaskEvents &task_events);
+
+/** 
  * Retrieve elevation of taskpoint, taking into account
  * rules and safety margins. 
  * 

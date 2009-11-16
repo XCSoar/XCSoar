@@ -41,3 +41,16 @@ StartPoint::set_neighbours(OrderedTaskPoint* prev,
   // should not ever have an inbound leg
   OrderedTaskPoint::set_neighbours(prev, next);
 }
+
+
+bool 
+StartPoint::update_sample(const AIRCRAFT_STATE& state,
+                          const TaskEvents &task_events)
+{
+  if (isInSector(state)) {
+    if (!task_behaviour.check_start_speed(state)) {
+      task_events.warning_start_speed();
+    }
+  }
+  return OrderedTaskPoint::update_sample(state, task_events);
+}

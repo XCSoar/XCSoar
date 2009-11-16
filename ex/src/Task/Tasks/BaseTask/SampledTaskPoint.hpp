@@ -7,6 +7,9 @@
 #include "Scoring/ObservationZone.hpp"
 #include "TaskPoint.hpp"
 #include "Navigation/TaskProjectionClient.hpp"
+#include "Task/TaskEvents.hpp"
+
+class TaskEvents;
 
 /**
  * Abstract specialisation of TaskPoint which has an observation zone
@@ -174,9 +177,12 @@ public:
  * update the interior sample polygon.
  * 
  * @param state Aircraft state
+ * @param task_events Callback class for feedback
+ *
  * @return True if internal state changed
  */
-  virtual bool update_sample(const AIRCRAFT_STATE& state);
+  virtual bool update_sample(const AIRCRAFT_STATE& state,
+                             const TaskEvents &task_events);
 
 #ifdef DO_PRINT
   virtual void print(std::ostream& f, const AIRCRAFT_STATE&state) const;

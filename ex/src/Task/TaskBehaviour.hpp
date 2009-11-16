@@ -9,15 +9,22 @@ public:
  * Constructor, sets default task behaviour
  * 
  */
-  TaskBehaviour():
-    optimise_targets_range(true),
-    optimise_targets_bearing(true),
-    auto_mc(true),
-    calc_cruise_efficiency(true),
-    aat_min_time(3600*4.9),
-    safety_height_terrain(150.0),
-    safety_height_arrival(300.0)
-    {}
+  TaskBehaviour();
+
+/** 
+ * Convenience function (used primarily for testing) to disable
+ * all expensive task behaviour functions.
+ */
+  void all_off();
+
+/** 
+ * Check whether aircraft speed is within start speed limits
+ * 
+ * @param state Aircraft state
+ * 
+ * @return True if within limits
+ */
+  bool check_start_speed(const AIRCRAFT_STATE &state) const;
 
   bool optimise_targets_range;
   bool optimise_targets_bearing;
@@ -26,17 +33,7 @@ public:
   double aat_min_time;
   double safety_height_terrain;
   double safety_height_arrival;
-
-/** 
- * Convenience function (used primarily for testing) to disable
- * all expensive task behaviour functions.
- */
-  void all_off() {
-    optimise_targets_range=false;
-    optimise_targets_bearing=false;
-    auto_mc=false;
-    calc_cruise_efficiency=false;
-  };
+  double start_max_speed;
 
 };
 

@@ -185,10 +185,6 @@ OrderedTask::check_transitions(const AIRCRAFT_STATE &state,
         setActiveTaskPoint(i);
         ts->scan_active(tps[activeTaskPoint]);
 
-        if (tps[i]->update_sample(state)) {
-          full_update = true;
-        }
-
         task_events.active_advanced(*tps[i],i);
 
         // on sector exit, must update samples since start sector
@@ -197,7 +193,7 @@ OrderedTask::check_transitions(const AIRCRAFT_STATE &state,
       }
     }
 
-    if (tps[i]->update_sample(state)) {
+    if (tps[i]->update_sample(state, task_events)) {
       full_update = true;
     }
   }

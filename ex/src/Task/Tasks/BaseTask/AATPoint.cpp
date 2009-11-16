@@ -41,17 +41,16 @@ AATPoint::getElevation() const
 }
 
 bool 
-AATPoint::update_sample(const AIRCRAFT_STATE& state) 
+AATPoint::update_sample(const AIRCRAFT_STATE& state,
+                        const TaskEvents &task_events) 
 {
-  bool retval = OrderedTaskPoint::update_sample(state);
+  bool retval = OrderedTaskPoint::update_sample(state,task_events);
   if (active_state == CURRENT_ACTIVE) {
     retval |= check_target(state);
   }
 
   return retval;
 }
-
-// target handling
 
 bool
 AATPoint::check_target(const AIRCRAFT_STATE& state) 

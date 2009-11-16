@@ -19,7 +19,8 @@ SampledTaskPoint::SampledTaskPoint(const TaskProjection& tp,
 }
 
 
-bool SampledTaskPoint::prune_sample_points()
+bool 
+SampledTaskPoint::prune_sample_points()
 {
   bool changed=false;
   GrahamScan gs(sampled_points);
@@ -27,7 +28,8 @@ bool SampledTaskPoint::prune_sample_points()
   return changed;
 }
 
-bool SampledTaskPoint::prune_boundary_points()
+bool 
+SampledTaskPoint::prune_boundary_points()
 {
   bool changed=false;
   GrahamScan gs(boundary_points);
@@ -61,7 +63,9 @@ SampledTaskPoint::get_search_points(bool cheat)
 }
 
 
-void SampledTaskPoint::default_boundary_points() { 
+void 
+SampledTaskPoint::default_boundary_points() 
+{ 
   double t=0;
   if (boundary_scored) {
     for (t=0; t<=1.0; t+= 0.05) {
@@ -74,7 +78,9 @@ void SampledTaskPoint::default_boundary_points() {
   }
 }
 
-bool SampledTaskPoint::update_sample(const AIRCRAFT_STATE& state)
+bool 
+SampledTaskPoint::update_sample(const AIRCRAFT_STATE& state,
+                                const TaskEvents &task_events)
 {
   if (isInSector(state)) {
     // if sample is inside sample polygon
@@ -113,7 +119,8 @@ SampledTaskPoint::clear_sample_all_but_last(const AIRCRAFT_STATE& ref_last)
 {
   if (sampled_points.size()) {
     sampled_points.clear();
-    update_sample(ref_last); // add last point
+    SearchPoint sp(ref_last.Location, get_task_projection(), true);
+    sampled_points.push_back(sp);
   }
 }
 

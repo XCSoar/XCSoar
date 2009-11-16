@@ -40,6 +40,13 @@ public:
   virtual void active_changed(const TaskPoint &tp) const;
 
 /** 
+ * Called when aircraft speed is higher than set limit
+ * according to task rules
+ * 
+ */
+  virtual void warning_start_speed() const;
+  
+/** 
  * Called when a task is invalid due to improper construction
  * (e.g. no finish point etc) 
  * 
