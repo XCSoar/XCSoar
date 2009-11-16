@@ -1,14 +1,10 @@
 //
-// RWLock.cpp
+// RWLock_Mutex.hpp
 //
-// $Id: //poco/1.3/Foundation/src/RWLock.cpp#1 $
+// Definition of the RWLockImpl class for Windows Mobile (which does
+// not support WaitForMultipleObjects(fWaitAll=true)).
 //
-// Library: Foundation
-// Package: Threading
-// Module:  RWLock
-//
-// Copyright (c) 2004-2006, Applied Informatics Software Engineering GmbH.
-// and Contributors.
+// Copyright (c) 2009 Max Kellermann <max@duempel.org>
 //
 // Permission is hereby granted, free of charge, to any person or organization
 // obtaining a copy of the software and accompanying documentation covered by
@@ -33,23 +29,53 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-#include "Poco/RWLock.h"
 
-#ifndef _WIN32_WCE
-#if defined(POCO_OS_FAMILY_WINDOWS)
-#include "RWLock_WIN32.cpp"
-#else
-#include "RWLock_POSIX.cpp"
-#endif
-#endif /* !_WIN32_WCE */
+#ifndef Foundation_RWLock_Mutex_INCLUDED
+#define Foundation_RWLock_Mutex_INCLUDED
+
+
+#include "Poco/Foundation.h"
+#include "Poco/Exception.h"
+#include "Poco/UnWindows.h"
+#include "Thread/Mutex.hpp"
+
 
 namespace Poco {
-RWLock::RWLock()
-{
-}
 
-RWLock::~RWLock()
+
+class Foundation_API RWLockImpl : private Mutex
 {
-}
+protected:
+	RWLockImpl() {}
+	~RWLockImpl() {}
+
+	void readLockImpl() {
+		Lock();
+	}
+
+	bool tryReadLockImpl() {
+		// XXX we have no Mutex::TryLock()
+		Lock();
+		return true;
+	}
+
+	void writeLockImpl() {
+		Lock();
+	}
+
+	bool tryWriteLockImpl() {
+		// XXX we have no Mutex::TryLock()
+		Lock();
+		return true;
+	}
+
+	void unlockImpl() {
+		Unlock();
+	}
+};
+
 
 } // namespace Poco
+
+
+#endif // Foundation_RWLock_Mutex_INCLUDED
