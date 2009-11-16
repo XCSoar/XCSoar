@@ -118,7 +118,6 @@ OBJS	:=\
 	src/Task/Tasks/TaskPoints/ObservationZones/CylinderZone.o \
 	src/Task/Tasks/TaskPoints/ObservationZones/HeightLimitZone.o \
 	src/Task/Tasks/TaskPoints/ObservationZones/SectorZone.o \
-	src/Task/Tasks/TaskPoints/ObservationZones/SpeedLimitZone.o \
 	src/Task/Tasks/TaskPoints/ObservationZones/SymmetricSectorZone.o \
 	src/Task/Tasks/PathSolvers/TaskDijkstra.o \
 	src/Task/Tasks/PathSolvers/IsolineCrossingFinder.o \
