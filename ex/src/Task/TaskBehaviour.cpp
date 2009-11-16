@@ -1,6 +1,8 @@
 #include "Navigation/Aircraft.hpp"
 #include "TaskBehaviour.hpp"
 
+#include <stdio.h>
+
 void
 TaskBehaviour::all_off()
 {
@@ -28,7 +30,7 @@ TaskBehaviour::TaskBehaviour():
     aat_min_time(3600*4.9),
     safety_height_terrain(150.0),
     safety_height_arrival(300.0),
-    start_max_speed(30.0)
+    start_max_speed(50.0)
 {
 }
 

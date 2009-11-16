@@ -6,9 +6,8 @@
 
 /**
  * Dijkstra search algorithm.
- * From ??? with modifications by John Wharington to track optimal solution 
- * \todo
- * - Reference original source code
+ * From http://en.giswiki.net/wiki/Dijkstra%27s_algorithm
+ * with modifications by John Wharington to track optimal solution 
  */
 template <class Node> class Dijkstra {
 public:
