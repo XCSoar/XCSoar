@@ -169,7 +169,6 @@ int DataField::CreateComboListStepping(void) { // for DataFieldInteger and DataF
   fCurrent=ComboListInitValue;
   fLast=ComboListInitValue;
 
-  ////////////////////////////////////////
   fCurrent=GetAsFloat();
   mComboList.ComboPopupItemCount=0;
 
