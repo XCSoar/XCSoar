@@ -368,7 +368,7 @@ GlideComputerTask::SearchBestAlternate()
 		if ( way_points.verify_index( SortedApproxIndex[0]) ) {
 		  bestalternate=SortedApproxIndex[0];
 		} else {
-		  /// CRITIC POINT
+		  // CRITIC POINT
 		  // Otherwise .. nothing, either keep the old best or
 		  // set it empty
 		  // Put here "PULL-UP! PULL-UP! Boeing
@@ -390,7 +390,7 @@ GlideComputerTask::SearchBestAlternate()
 		}
 	    } else
 	    {
-	      /// CRITIC POINT
+	      // CRITIC POINT
 	    }
 	}
 	/*
