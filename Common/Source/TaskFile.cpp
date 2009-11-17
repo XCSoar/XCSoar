@@ -172,7 +172,7 @@ void Task::LoadNewTask(const TCHAR *szFileName,
 	  }
         }
 
-        //// search for waypoints...
+        // search for waypoints...
         if (!TaskInvalid) {
           if (!LoadTaskWaypoints(file) && WaypointInvalid) {
             // couldn't lookup the waypoints in the file and we know
