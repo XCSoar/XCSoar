@@ -1234,7 +1234,6 @@ static void setVariables(void) {
 
   UpdateButtons();
 
-  //////////
   /*
   config_page = 0;
 
@@ -1249,8 +1248,6 @@ static void setVariables(void) {
   return;
   */
 
-  ///////////////////
-
   wp = (WndProperty*)wf->FindByName(TEXT("prpUserLevel"));
   if (wp) {
     DataFieldEnum* dfe;
@@ -1260,8 +1257,6 @@ static void setVariables(void) {
     dfe->Set(XCSoarInterface::UserLevel);
     wp->RefreshDisplay();
   }
-
-  ///////////////////
 
     const TCHAR *COMMPort[] = {TEXT("COM1"),TEXT("COM2"),TEXT("COM3"),TEXT("COM4"),
 			       TEXT("COM5"),TEXT("COM6"),TEXT("COM7"),TEXT("COM8"),
@@ -1614,8 +1609,6 @@ static void setVariables(void) {
     wp->RefreshDisplay();
   }
 
-  ////
-
   wp = (WndProperty*)wf->FindByName(TEXT("prpFAIFinishHeight"));
   if (wp) {
     wp->GetDataField()->Set(settings_task.EnableFAIFinishHeight);
@@ -1638,8 +1631,6 @@ static void setVariables(void) {
     wp->GetDataField()->SetAsInteger(XCSoarInterface::SettingsComputer().Handicap);
     wp->RefreshDisplay();
   }
-
-  ////
 
   if(GetFromRegistryD(szRegistrySpeedUnitsValue,Speed)!=ERROR_SUCCESS) {
     SetToRegistry(szRegistrySpeedUnitsValue, Speed);
@@ -2488,8 +2479,6 @@ static void setVariables(void) {
   }
 #endif
 
-
-  ////
   for (unsigned i = 0; i < 4; i++) {
     for (unsigned j=0; j<numInfoWindows; j++) {
       SetInfoBoxSelector(j, i);

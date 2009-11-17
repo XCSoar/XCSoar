@@ -205,7 +205,7 @@ void LoadChecklist(void) {
     {
       return;
     }
-  /////
+
   TCHAR TempString[MAXTITLE];
   TCHAR Details[MAXDETAILS];
   TCHAR Name[100];
@@ -260,9 +260,7 @@ void LoadChecklist(void) {
     addChecklist(Name, Details);
   }
 
-  /////
   fclose(file);
-
 }
 
 

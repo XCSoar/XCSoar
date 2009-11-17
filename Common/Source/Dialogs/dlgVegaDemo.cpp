@@ -157,8 +157,6 @@ void dlgVegaDemoShowModal(void){
     wp->RefreshDisplay();
   }
 
-  //////
-
   wf->ShowModal();
 
   // deactivate demo.

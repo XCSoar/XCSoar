@@ -232,7 +232,7 @@ dlgComboPicker(ContainerWindow &parent, WndProperty *theProperty)
     { // if we've detached the GUI during the load, then there is nothing to do here
       assert(iSavedInitialDataIndex >=0);
       if (iSavedInitialDataIndex >=0) {
-        /// use statics here - saved from first page if multiple were used
+        // use statics here - saved from first page if multiple were used
         ComboPopupDataField->SetFromCombo(iSavedInitialDataIndex, sSavedInitialValue);
       }
     }

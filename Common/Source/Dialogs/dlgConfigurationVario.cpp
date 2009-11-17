@@ -691,13 +691,13 @@ static void OnSchemeZanderClicked(WindowControl * Sender){
 static int FormKeyDown(WindowControl * Sender, WPARAM wParam, LPARAM lParam){
 	(void)lParam; (void)Sender;
   switch(wParam & 0xffff){
-    // JMW NO! This disables editing! ///   case VK_LEFT:
+    // JMW NO! This disables editing! //   case VK_LEFT:
     case '6':
       ((WndButton *)wf->FindByName(TEXT("cmdPrev")))->set_focus();
       NextPage(-1);
       //((WndButton *)wf->FindByName(TEXT("cmdPrev")))->SetFocused(true, NULL);
     return(0);
-    // JMW NO! This disables editing!  ///  case VK_RIGHT:
+    // JMW NO! This disables editing!  //  case VK_RIGHT:
     case '7':
       ((WndButton *)wf->FindByName(TEXT("cmdNext")))->set_focus();
       NextPage(+1);
@@ -1065,11 +1065,9 @@ bool dlgConfigurationVarioShowModal(void){
   assert(wConfig18!=NULL);
   assert(wConfig19!=NULL);
 
-  //// populate enums
+  // populate enums
 
   FillEnums();
-
-  /////////
 
   XCSoarInterface::CreateProgressDialog(gettext(TEXT("Reading vario settings...")));
   // Need step size finer than default 10
@@ -1078,8 +1076,6 @@ bool dlgConfigurationVarioShowModal(void){
   UpdateParameters(true);
 
   XCSoarInterface::CloseProgressDialog();
-
-  /////////
 
   page = 0;
 

@@ -478,8 +478,6 @@ void dlgWayPointDetailsShowModal(void){
   wp = ((WndProperty *)wf->FindByName(TEXT("prpMc2")));
   if (wp) wp->SetText(sTmp);
 
-  /////
-
   wf->SetKeyDownNotify(FormKeyDown);
 
   ((WndButton *)wf->FindByName(TEXT("cmdClose")))->SetOnClickNotify(OnCloseClicked);

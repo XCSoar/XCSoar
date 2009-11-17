@@ -137,9 +137,6 @@ static void OnPrevClicked(WindowControl * Sender){
   NextPage(-1);
 }
 
-
-//////////////
-
 static CallBackTableEntry_t CallBackTable[]={
   DeclareCallBackEntry(OnNextClicked),
   DeclareCallBackEntry(OnPrevClicked),
@@ -595,9 +592,6 @@ static int OnTimerNotify(WindowControl * Sender) {
 
   return 0;
 }
-
-
-//////////////
 
 void dlgStatusShowModal(int start_page){
 

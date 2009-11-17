@@ -102,9 +102,6 @@ bool SetValueRegistryOnChange(WndForm* wfm,
   }
 }
 
-////
-
-
 bool SetValueOnChange(WndForm* wfm, const TCHAR* field, bool &value)
 {
   WndProperty* wp = (WndProperty*)wfm->FindByName(field);

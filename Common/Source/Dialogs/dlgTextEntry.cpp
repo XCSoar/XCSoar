@@ -74,7 +74,6 @@ OnTextPaint(WindowControl *Sender, Canvas &canvas)
   canvas.background_transparent();
   canvas.set_text_color(Sender->GetForeColor());
 
-  ////
   // Do the actual painting of the text
 
   SIZE tsize = canvas.text_size(edittext);
