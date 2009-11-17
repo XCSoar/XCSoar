@@ -202,7 +202,6 @@ void ScreenGraphics::Initialise(HINSTANCE hInstance,
   hbFinalGlideBelowLandable.set(Color(0xFF,180,0x00));
   hbFinalGlideAbove.set(Color(0x00,0xFF,0x00));
 
-  /////////////////////////////////////////////////////////////////
   // all below depend on settings!
 
   BYTE Red,Green,Blue;
