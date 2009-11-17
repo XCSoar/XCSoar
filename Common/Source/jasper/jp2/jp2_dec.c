@@ -247,7 +247,7 @@ jas_image_t *jp2_decode(jas_stream_t *in, const char *optstr)
 	      h = dec->ihdr->data.ihdr.height;
 	    }
 	  //fprintf(stdout, "\nW=%d H=%d\n", w, h);
-	  /////	  printGTIFFromMemBufA( aux_buf.buf, aux_buf.size, w, h );
+	  //	  printGTIFFromMemBufA( aux_buf.buf, aux_buf.size, w, h );
 	  //return NULL;
 	  exit(0);
 	}
