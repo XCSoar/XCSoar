@@ -609,8 +609,6 @@ void InitialiseFonts(Canvas &canvas, RECT rc)
   if (!IsNullLogFont(hardStatisticsLogFont))
     autoStatisticsLogFont = hardStatisticsLogFont;
 
-/////////////////////////////////////////////////////////
-
   InitializeOneFont (&InfoWindowFont,
                         szRegistryFontInfoWindowFont,
                         autoInfoWindowLogFont,
