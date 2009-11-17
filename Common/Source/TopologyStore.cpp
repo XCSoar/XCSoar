@@ -53,8 +53,6 @@ Copyright_License {
 #include "wcecompat/ts_string.h"
 // TODO code: check ts_string does the right thing
 
-//////////////////////////////////////////////////
-
 void TopologyStore::TriggerUpdateCaches(MapWindowProjection &m_projection) {
   Poco::ScopedRWLock protect(lock, true);
   for (int z=0; z<MAXTOPOLOGY; z++) {
