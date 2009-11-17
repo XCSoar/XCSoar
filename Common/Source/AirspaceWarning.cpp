@@ -554,7 +554,6 @@ int AirspaceWarnFindIndexByID(int ID){
   return(-1);
 }
 
-///////
 #include "Message.h"
 #include "Interface.hpp"
 extern bool GlobalClearAirspaceWarnings;
