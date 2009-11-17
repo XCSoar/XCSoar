@@ -43,7 +43,7 @@ Copyright_License {
 #include "WayPoint.hpp"
 
 
-//////////////////////// TARGET STUFF /////////
+// TARGET STUFF
 
 // JMW to be used for target preview
   /* This whole thing needs rework now that stuff is being passed in
