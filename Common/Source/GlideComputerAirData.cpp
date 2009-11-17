@@ -79,8 +79,6 @@ using std::max;
 void
 DoAutoQNH(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated);
 
-////
-
 #define MinTurnRate  4
 #define CruiseClimbSwitch 15
 #define ClimbCruiseSwitch 10
@@ -597,7 +595,7 @@ void GlideComputerAirData::Vario()
   }
 
   if (!Basic().VarioAvailable || Basic().Replay) {
-    /// TODO: why not TE?!
+    // TODO: why not TE?!
     SetCalculated().Vario = Calculated().GPSVario;
   } else {
     // get value from instrument
