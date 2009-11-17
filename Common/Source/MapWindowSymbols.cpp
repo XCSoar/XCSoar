@@ -410,10 +410,6 @@ void MapWindow::DrawWindAtAircraft2(Canvas &canvas, const POINT Orig, const RECT
   }
 }
 
-
-/////////////////
-
-
 void MapWindow::DrawHorizon(Canvas &canvas, const RECT rc)
 {
   POINT Start;
