@@ -77,7 +77,7 @@ double MapWindow::DrawTrail(Canvas &canvas)
 
   glide_computer.GetSnailTrail().ReadLock();
 
-  //////////// Trail drift calculations
+  // Trail drift calculations
 
   GEOPOINT traildrift;
 
@@ -97,7 +97,7 @@ double MapWindow::DrawTrail(Canvas &canvas)
 
   // JMW don't draw first bit from home airport
 
-  /////////////  Trail size
+  //  Trail size
 
   int num_trail_max;
   if (SettingsMap().TrailActive!=2) {
@@ -109,7 +109,7 @@ double MapWindow::DrawTrail(Canvas &canvas)
     num_trail_max /= TRAILSHRINK;
   }
 
-  ///////////// Snail skipping
+  // Snail skipping
 
   const int skip_divisor = num_trail_max/5;
   int skip_border = skip_divisor;
@@ -129,7 +129,7 @@ double MapWindow::DrawTrail(Canvas &canvas)
 
   // TODO code: Divide by time step cruise/circling for zero_offset
 
-  ///////////// Keep track of what's drawn
+  // Keep track of what's drawn
 
   bool this_visible = true;
   bool last_visible = false;
@@ -137,11 +137,11 @@ double MapWindow::DrawTrail(Canvas &canvas)
   point_lastdrawn.x = 0;
   point_lastdrawn.y = 0;
 
-  ///////////// Average colour display for skipped points
+  // Average colour display for skipped points
   int vario_av = 0;
   int vario_av_num = 0;
 
-  ///////////// Constants for speedups
+  // Constants for speedups
 
   const bool display_circling = DisplayMode == dmCircling;
   const double display_time = Basic().Time;
@@ -166,11 +166,11 @@ double MapWindow::DrawTrail(Canvas &canvas)
   const double mDrawScale = GetLonLatToScreenScale();
   const GEOPOINT &mPanLocation = PanLocation;
 
-  ////////////// Main loop
+  // Main loop
 
   for(i=1;i< num_trail_max; ++i)
   {
-    ///// Handle skipping
+    // Handle skipping
 
     if (i>=skip_border) {
       skip_level= max(1,skip_level-1);
@@ -185,7 +185,7 @@ double MapWindow::DrawTrail(Canvas &canvas)
       index_skip=0;
     }
 
-    ////// Find the snail point
+    // Find the snail point
 
     snail_index = snail_offset+i;
     while (snail_index>=TRAILSIZE) {
@@ -194,13 +194,13 @@ double MapWindow::DrawTrail(Canvas &canvas)
 
     P1 = glide_computer.GetSnailTrail().getPoint(snail_index);
 
-    /////// Mark first time of display point
+    // Mark first time of display point
 
     if (((TrailFirstTime<0) || (P1.Time<TrailFirstTime)) && (P1.Time>=0)) {
       TrailFirstTime = P1.Time;
     }
 
-    //////// Ignoring display elements for modes
+    // Ignoring display elements for modes
 
     if (display_circling) {
       if ((!P1.Circling)&&( i<num_trail_max-60 )) {
@@ -216,14 +216,14 @@ double MapWindow::DrawTrail(Canvas &canvas)
       //      }
     }
 
-    ///////// Filter if far visible
+    // Filter if far visible
 
     if (!P1.FarVisible) {
       last_visible = false;
       continue;
     }
 
-    ///////// Determine if this is visible
+    // Determine if this is visible
 
     this_visible =   ((P1.Longitude> bounds.minx) &&
 		     (P1.Longitude< bounds.maxx) &&
@@ -235,7 +235,7 @@ double MapWindow::DrawTrail(Canvas &canvas)
       continue;
     }
 
-    ////////// Find coordinates on screen after applying trail drift
+    // Find coordinates on screen after applying trail drift
 
     // now we know either point is visible, better get screen coords
     // if we don't already.
@@ -256,7 +256,7 @@ double MapWindow::DrawTrail(Canvas &canvas)
 		  Screen);
 #endif
 
-    ////////// Determine if we should skip if close to previous point
+    // Determine if we should skip if close to previous point
 
     if (last_visible && this_visible) {
       // only average what's visible
@@ -270,7 +270,7 @@ double MapWindow::DrawTrail(Canvas &canvas)
       }
     }
 
-    ////////// Lookup the colour if it's not already set
+    // Lookup the colour if it's not already set
     // JMW TODO: this should be done by the snail class itself
     int colour_vario = P1.Colour;
     if (vario_av_num) {
