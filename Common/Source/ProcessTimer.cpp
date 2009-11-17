@@ -117,9 +117,6 @@ void ProcessTimer::CommonProcessTimer()
   MessageProcessTimer();
 }
 
-////////////////
-
-
 int ProcessTimer::ConnectionProcessTimer(int itimeout) {
   devConnectionMonitor();
 
