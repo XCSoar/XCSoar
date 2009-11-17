@@ -244,9 +244,6 @@ void Task::scan_leg_reverse(RelativeTaskLegVisitor &visitor)
 
 }
 
-
-////////////////////////////////////////////////////////////////
-
 class RelativeTaskLegVisitorExample:
   public RelativeTaskLegVisitor {
 public:
@@ -300,9 +297,6 @@ public:
   };
 };
 
-
-/////////////////////////
-
 class AbsoluteTaskPointVisitorExample:
   public AbsoluteTaskPointVisitor {
 public:
@@ -322,9 +316,6 @@ public:
   };
   int val;
 };
-
-////////////////////////////
-
 
 #include "Math/Geometry.hpp"
 #include "Math/Earth.hpp"
