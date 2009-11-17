@@ -112,6 +112,10 @@ extern void		ConvToUpper( TCHAR *);
 
 #endif
 
+/**
+ * Returns whether the application is running on a PNA
+ * @return True if host hardware is a PNA, False otherwise
+ */
 static inline bool is_pna()
 {
 #if defined(PNA)
@@ -121,6 +125,10 @@ static inline bool is_pna()
 #endif
 }
 
+/**
+ * Returns whether the application is running on a HP31x
+ * @return True if host hardware is a HP31x, False otherwise
+ */
 static inline bool model_is_hp31x()
 {
 #if defined(PNA) || defined(FIVV)
@@ -130,6 +138,10 @@ static inline bool model_is_hp31x()
 #endif
 }
 
+/**
+ * Returns whether the application is running on a Medion P5
+ * @return True if host hardware is a Medion P5, False otherwise
+ */
 static inline bool model_is_medion_p5()
 {
 #if defined(PNA) || defined(FIVV)
@@ -139,6 +151,10 @@ static inline bool model_is_medion_p5()
 #endif
 }
 
+/**
+ * Returns whether the application is running on an altair
+ * @return True if host hardware is altair, False otherwise
+ */
 static inline bool is_altair()
 {
 #if defined(GNAV)
@@ -148,6 +164,10 @@ static inline bool is_altair()
 #endif
 }
 
+/**
+ * Returns whether the simulator application is running
+ * @return True if simulator, False if fly application
+ */
 static inline bool is_simulator()
 {
 #ifdef _SIM_
