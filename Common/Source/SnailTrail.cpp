@@ -109,6 +109,3 @@ void SnailTrail::ScanVisibility(rectObj *bounds_active) {
     sv++;
   }
 }
-
-////
-
