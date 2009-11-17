@@ -49,7 +49,6 @@ Copyright_License {
 #include "jasper/jpc_rtc.h"
 #include "wcecompat/ts_string.h"
 
-
 void RasterMapJPG2000::SetFieldRounding(const double xr,
                                         const double yr,
                                         RasterRounding &rounding)
@@ -67,22 +66,16 @@ void RasterMapJPG2000::SetFieldRounding(const double xr,
   }
 }
 
-
-////// Field access ////////////////////////////////////////////////////
-
-
+// Field access
 short RasterMapJPG2000::_GetFieldAtXY(unsigned int lx,
                                       unsigned int ly) {
 
   return raster_tile_cache.GetField(lx,ly);
 }
 
-
-
 void RasterMapJPG2000::ServiceFullReload(const GEOPOINT &location) {
   ReloadJPG2000Full(location);
 }
-
 
 RasterMapJPG2000::RasterMapJPG2000() {
   TriggerJPGReload = false;
@@ -102,9 +95,7 @@ RasterMapJPG2000::~RasterMapJPG2000() {
   }
 }
 
-
 int RasterMapJPG2000::ref_count = 0;
-
 
 void RasterMapJPG2000::ReloadJPG2000Full(const GEOPOINT &location) {
   // load all 16 tiles...
@@ -133,12 +124,10 @@ void RasterMapJPG2000::_ReloadJPG2000(void) {
   }
 }
 
-
 void RasterMapJPG2000::ReloadJPG2000(void) {
   Poco::ScopedRWLock protect(lock, true);
   _ReloadJPG2000();
 }
-
 
 void RasterMapJPG2000::SetViewCenter(const GEOPOINT &location)
 {
@@ -154,8 +143,6 @@ void RasterMapJPG2000::SetViewCenter(const GEOPOINT &location)
     _ReloadJPG2000();
   }
 }
-
-
 
 bool RasterMapJPG2000::Open(char* zfilename) {
   Poco::ScopedRWLock protect(lock, true);
@@ -175,7 +162,6 @@ bool RasterMapJPG2000::Open(char* zfilename) {
   return terrain_valid;
 }
 
-
 void RasterMapJPG2000::Close(void) {
   Poco::ScopedRWLock protect(lock, true);
   _Close();
@@ -187,4 +173,3 @@ void RasterMapJPG2000::_Close(void) {
     terrain_valid = false;
   }
 }
-
