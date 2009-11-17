@@ -76,8 +76,8 @@ void RasterMapCache::LockRead()
 };
 
 
-//////////// Cached load on demand ////////////////////////////////
-//////////// Cache map ////////////////////////////////////////////////
+// Cached load on demand
+// Cache map
 int RasterMapCache::ref_count = 0;
 
 ZZIP_FILE *RasterMapCache::fpTerrain;
@@ -231,9 +231,7 @@ short RasterMapCache::LookupTerrainCache(const long &SeekPos) {
   return (Alt);
 }
 
-
-///////// Specialised open/close routines ///////////////////
-
+// Specialised open/close routines
 bool RasterMapCache::Open(char* zfilename) {
   Poco::ScopedRWLock protect(lock, true);
   terrain_valid = false;
@@ -271,8 +269,7 @@ bool RasterMapCache::Open(char* zfilename) {
   return terrain_valid;
 }
 
-///////////////// Close routines /////////////////////////////////////
-
+// Close routines
 void RasterMapCache::Close(void) {
   Poco::ScopedRWLock protect(lock, true);
   _Close();
