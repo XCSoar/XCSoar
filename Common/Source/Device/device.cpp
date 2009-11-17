@@ -936,8 +936,6 @@ void devShutdown()
   }
 }
 
-
-////////////////////////////////////////////////////////////////////////
 void devRestart() {
   if (is_simulator())
     return;
