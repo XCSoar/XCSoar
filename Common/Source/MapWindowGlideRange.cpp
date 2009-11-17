@@ -52,7 +52,13 @@ void MapWindow::CalculateScreenPositionsGroundline(void) {
   }
 }
 
-
+/**
+ * Draw the final glide groundline (and shading) to the buffer
+ * and copy the transparent buffer to the canvas
+ * @param canvas The drawing canvas
+ * @param rc The area to draw in
+ * @param buffer The drawing buffer
+ */
 void MapWindow::DrawTerrainAbove(Canvas &canvas, const RECT rc, Canvas &buffer) {
 
   if (!Calculated().Flying) return;
