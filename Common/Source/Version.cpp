@@ -41,23 +41,22 @@ Copyright_License {
 #define VERSION "5.2.5"
 
 #ifdef GNAV
-#define TARGET "Altair"
+  #define TARGET "Altair"
 #elif defined(PNA)
-#define TARGET "PNA"
+  #define TARGET "PNA"
 #elif defined(WINDOWSPC)
-#define TARGET "PC"
+  #define TARGET "PC"
 #elif !defined(WIN32)
-#define TARGET "UNIX"
+  #define TARGET "UNIX"
 #else
-// TODO code: consider adding PPC, 2002, 2003 (not enough room now)
-#define TARGET "PPC"
+  // TODO code: consider adding PPC, 2002, 2003 (not enough room now)
+  #define TARGET "PPC"
 #endif
 
 #ifdef FIVV
-#define VERSION_SUFFIX "F"
+  #define VERSION_SUFFIX "F"
 #else
-#define VERSION_SUFFIX ""
+  #define VERSION_SUFFIX ""
 #endif
 
-const TCHAR XCSoar_Version[] = _T(TARGET " " VERSION VERSION_SUFFIX " "
-                                  __DATE__);
+const TCHAR XCSoar_Version[] = _T(TARGET " " VERSION VERSION_SUFFIX " " __DATE__);
