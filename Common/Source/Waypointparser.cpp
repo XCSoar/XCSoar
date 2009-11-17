@@ -781,19 +781,11 @@ FindNearestWayPoint(const WayPointList &way_points,
     return -1;
 }
 
-
-
-
-
-///////
-
-
-  // Number,Latitude,Longitude,Altitude,Flags,Name,Comment(,Zoom))
-  // Number starts at 1
-  // Lat/long expressed as D:M:S[N/S/E/W]
-  // Altitude as XXXM
-  // Flags: T,H,A,L
-
+// Number,Latitude,Longitude,Altitude,Flags,Name,Comment(,Zoom))
+// Number starts at 1
+// Lat/long expressed as D:M:S[N/S/E/W]
+// Altitude as XXXM
+// Flags: T,H,A,L
 
 static void
 WaypointFlagsToString(int FlagsNum, TCHAR *Flags)
