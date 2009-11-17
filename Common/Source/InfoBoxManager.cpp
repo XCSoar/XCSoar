@@ -350,9 +350,6 @@ void InfoBoxManager::Event_Select(int i) {
   }
 }
 
-
-////////////////////////////////////
-
 int InfoBoxManager::getType(unsigned i, unsigned layer) {
   assert(i < MAXINFOWINDOWS);
   assert(layer < 4);
@@ -930,13 +927,8 @@ const TCHAR *InfoBoxManager::GetTypeDescription(unsigned i) {
   return Data_Options[i].Description;
 }
 
-
-/////////////////////////////////////////////////////////////////////////////////
-//
 // TODO: this should go into the manager
-
 extern InfoBox *InfoBoxes[MAXINFOWINDOWS];
-
 
 void InfoBoxManager::Paint(void) {
   unsigned i;
