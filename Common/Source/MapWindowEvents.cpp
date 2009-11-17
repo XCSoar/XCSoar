@@ -68,12 +68,7 @@ using std::min;
 using std::max;
 #endif
 
-/////////////////////////////////////////
-
-
-/////////////////////////////////////////////////////////////////////////
 // Interface/touchscreen callbacks
-//
 
 /*
 	Virtual Key Manager by Paolo Ventafridda
@@ -130,11 +125,6 @@ int MapWindow::ProcessVirtualKey(int X, int Y, long keytime, short vkmode) {
   return 0;
 }
 
-
-//////////
-
-/////////////////////////////////////////
-
 bool MapWindow::on_resize(unsigned width, unsigned height) {
   MaskedPaintWindow::on_resize(width, height);
 
@@ -165,8 +155,6 @@ bool MapWindow::on_destroy()
   return true;
 }
 
-///////
-
 void MapWindow::on_paint(Canvas& _canvas) {
   mutexBuffer.Lock();
   _canvas.copy(draw_canvas);
@@ -180,8 +168,6 @@ MapWindow::on_setfocus()
 
   return true;
 }
-
-//////////
 
 static GEOPOINT LLstart;
 static int XstartScreen, YstartScreen;
