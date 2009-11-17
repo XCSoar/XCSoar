@@ -61,13 +61,10 @@ VLA_ERROR VLA_SYS::serial_open_port()
   device->Com->StopRxThread();    // JMW
   device->Com->SetRxTimeout(500); // set RX timeout to 500 [ms]
 
-  ////////////////////////////////////////////////////////////////////////
-  //
   // port-configuration
-  //
 
   lLastBaudrate = device->Com->SetBaudrate(9600L); // change to IO
-                                                    // Mode baudrate
+                                                   // Mode baudrate
 
   XCSoarInterface::SetProgressStepSize(1);
 
