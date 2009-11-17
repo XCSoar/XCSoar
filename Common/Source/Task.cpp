@@ -171,7 +171,6 @@ TaskSafe::AdjustAATTargets(double desired) {
   return _task.AdjustAATTargets(desired);
 }
 
-//////
 double
 TaskSafe::FindInsideAATSectorRange(const GEOPOINT &location,
                                       const int taskwaypoint,
