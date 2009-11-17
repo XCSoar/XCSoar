@@ -1259,7 +1259,7 @@ void InputEvents::eventNearestAirspaceDetails(const TCHAR *misc) {
     */
   }
 
-  return; /// JMW testing only
+  return; // JMW testing only
 
   if (nearestdistance<0) {
     inside = true;
@@ -1723,7 +1723,7 @@ eventSounds			- Include Task and Modes sounds along with Vario
 
 
 
-////// helpers
+// helpers
 
 
 
