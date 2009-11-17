@@ -974,9 +974,6 @@ void InputEvents::processGo(int eventid) {
   return;
 }
 
-
-///////////
-
 #include "SettingsUser.hpp"
 #include "Screen/Blank.hpp"
 
