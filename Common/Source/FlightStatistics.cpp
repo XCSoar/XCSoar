@@ -874,9 +874,6 @@ void FlightStatistics::RenderAirspace(Canvas &canvas, const RECT rc) {
   chart.DrawYLabel(TEXT("h"));
 }
 
-
-//////
-
 void
 FlightStatistics::StartTask(double starttime)
 {
@@ -981,9 +978,6 @@ FlightStatistics::AddThermalAverage(const double v)
   ThermalAverage.least_squares_update(v);
   Unlock();
 }
-
-
-///
 
 void
 FlightStatistics::CaptionBarograph(TCHAR *sTmp)
