@@ -158,9 +158,16 @@ void MapWindow::ClearAirSpace(Canvas &canvas, bool fill) {
   }
 }
 
-// TODO code: optimise airspace drawing
-void MapWindow::DrawAirSpace(Canvas &canvas, const RECT rc, Canvas &buffer)
+/**
+ * Draws the airspace to the given canvas
+ * @param canvas The drawing canvas
+ * @param rc The area to draw in
+ * @param buffer The drawing buffer
+ */
+void
+MapWindow::DrawAirSpace(Canvas &canvas, const RECT rc, Canvas &buffer)
 {
+  // TODO code: optimise airspace drawing
   unsigned int i;
 
   bool found = false;
