@@ -95,9 +95,7 @@ short RasterMapRaw::_GetFieldAtXY(unsigned int lx,
   }
 }
 
-
-///////// Specialised open/close routines ///////////////////
-
+// Specialised open/close routines
 
 bool RasterMapRaw::Open(char* zfilename) {
   Poco::ScopedRWLock protect(lock, true);
