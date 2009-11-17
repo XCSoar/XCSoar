@@ -423,8 +423,6 @@ void Profile::ReadRegistrySettings(void)
   DefaultRegistrySettingsAltair();
 #endif
 
-  ////////////////////////
-
   SETTINGS_TASK settings_task = task.getSettings();
   GetFromRegistry(szRegistryFinishMinHeight,
 		  settings_task.FinishMinHeight );
@@ -1279,9 +1277,7 @@ void WriteDeviceSettings(const int devIdx, const TCHAR *Name){
     SetRegistryString(szRegistryDeviceC , Name);
 }
 
-//////////////////////////
 // Registry file handling
-/////////////////
 
 const static size_t nMaxValueNameSize = MAX_PATH + 6; //255 + 1 + /r/n
 const static size_t nMaxValueValueSize = MAX_PATH * 2 + 6; // max regkey name is 256 chars + " = "
