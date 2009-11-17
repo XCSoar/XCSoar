@@ -313,8 +313,6 @@ bool ButtonLabel::ExpandMacros(const TCHAR *In,
     }
   }
 
-  //////
-
   CondReplaceInString(task.TaskIsTemporary(),
 		      OutBuffer, TEXT("$(TaskAbortToggleActionName)"),
 		      TEXT("Resume"), TEXT("Abort"), Size);
