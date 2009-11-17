@@ -76,11 +76,11 @@ void ReadAssetNumber(void)
 #endif
 
   GetRegistryString(szRegistryLoggerID, val, 100);
-  int ifound=0;
+  int ifound = 0;
   int len = _tcslen(val);
-  for (int i=0; i< len; i++) {
-    if (((val[i] >= _T('A'))&&(val[i] <= _T('Z')))
-        ||((val[i] >= _T('0'))&&(val[i] <= _T('9')))) {
+  for (int i = 0; i < len; i++) {
+    if (((val[i] >= _T('A')) && (val[i] <= _T('Z')))
+        ||((val[i] >= _T('0')) && (val[i] <= _T('9')))) {
       strAssetNumber[ifound]= val[i];
       ifound++;
     }
@@ -91,28 +91,25 @@ void ReadAssetNumber(void)
     }
   }
 
-  if(strAssetNumber[0] != '\0')
-    {
-      StartupStore(strAssetNumber);
-      StartupStore(TEXT(" (?)\n"));
-      return;
-    }
+  if(strAssetNumber[0] != '\0') {
+    StartupStore(strAssetNumber);
+    StartupStore(TEXT(" (?)\n"));
+    return;
+  }
 
   ReadCompaqID();
-  if(strAssetNumber[0] != '\0')
-    {
-      StartupStore(strAssetNumber);
-      StartupStore(TEXT(" (compaq)\n"));
-      return;
-    }
+  if(strAssetNumber[0] != '\0') {
+    StartupStore(strAssetNumber);
+    StartupStore(TEXT(" (compaq)\n"));
+    return;
+  }
 
   ReadUUID();
-  if(strAssetNumber[0] != '\0')
-    {
-      StartupStore(strAssetNumber);
-      StartupStore(TEXT(" (uuid)\n"));
-      return;
-    }
+  if(strAssetNumber[0] != '\0') {
+    StartupStore(strAssetNumber);
+    StartupStore(TEXT(" (uuid)\n"));
+    return;
+  }
 
   strAssetNumber[0]= _T('A');
   strAssetNumber[1]= _T('A');
@@ -130,26 +127,23 @@ ReadCompaqID(void)
 #if defined(WIN32) && !defined(WINDOWSPC)
   PROCESS_INFORMATION pi;
 
-  if(strAssetNumber[0] != '\0')
-    {
-      return;
-    }
+  if(strAssetNumber[0] != '\0') {
+    return;
+  }
 
   CreateProcess(TEXT("\\windows\\CreateAssetFile.exe"), NULL, NULL, NULL, FALSE, 0, NULL, NULL, NULL, &pi);
 
   FILE *file = _tfopen(TEXT("\\windows\\cpqAssetData.dat"), TEXT("rb"));
-  if (file == NULL)
-    {
-      // MessageBoxX(hWnd, TEXT("Unable to open asset data file."), TEXT("Error!"), MB_OK);
-      return;
-    }
+  if (file == NULL) {
+    // MessageBoxX(hWnd, TEXT("Unable to open asset data file."), TEXT("Error!"), MB_OK);
+    return;
+  }
   fseek(file, 976, SEEK_SET);
   memset(strAssetNumber, 0, 64 * sizeof(TCHAR));
   fread(&strAssetNumber, 64, 1, file);
   fclose(file);
 #endif
 }
-
 
 static void
 ReadUUID(void)
@@ -243,7 +237,6 @@ ReadUUID(void)
   return;
 }
 
-
 #if 0
 void ReadUUIDold(void)
 {
@@ -316,7 +309,6 @@ void ReadUUIDold(void)
 }
 #endif
 
-
 void InitAsset() {
 #ifdef GNAV
 #ifdef FORCEPORTRAIT
@@ -372,5 +364,4 @@ void InitAsset() {
 #endif
 
   StartupLogFreeRamAndStorage();
-
 }
