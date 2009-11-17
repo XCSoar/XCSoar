@@ -539,3 +539,14 @@ OrderedTask::Accept(TaskPointVisitor& visitor) const
     (*i)->Accept(visitor);
   }
 }
+
+
+void
+OrderedTask::reset()
+{
+  /// \todo also reset data in this class
+  for (std::vector<OrderedTaskPoint*>::const_iterator 
+         i= tps.begin(); i!= tps.end(); i++) {
+    (*i)->reset();
+  }
+}

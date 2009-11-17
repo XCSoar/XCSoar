@@ -138,3 +138,9 @@ TaskManager::Accept(BaseVisitor& visitor) const
 {
   if (active_task) active_task->Accept(visitor);
 }
+
+void
+TaskManager::reset()
+{
+  task_ordered.reset();
+}

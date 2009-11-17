@@ -35,6 +35,12 @@ public:
 
   virtual ~ScoredTaskPoint() {};
 
+  /** 
+   * Reset the task (as if never flown)
+   * 
+   */
+  virtual void reset();
+
 /** 
  * Test whether aircraft has entered the OZ
  * 

@@ -9,11 +9,6 @@
 #include "Math/FastMath.h"
 #include "Task/TaskManager.hpp"
 #include "Task/TaskEvents.hpp"
-#include "Task/Tasks/TaskPoints/FAISectorStartPoint.hpp"
-#include "Task/Tasks/TaskPoints/FAISectorFinishPoint.hpp"
-#include "Task/Tasks/TaskPoints/FAISectorASTPoint.hpp"
-#include "Task/Tasks/TaskPoints/FAICylinderASTPoint.hpp"
-#include "Task/Tasks/TaskPoints/CylinderAATPoint.hpp"
 
 #include <fstream>
 

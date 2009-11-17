@@ -15,7 +15,6 @@
 
 #include "Task/Tasks/BaseTask/AATPoint.hpp"
 #include "Task/Tasks/BaseTask/ASTPoint.hpp"
-
 #include "Task/Tasks/TaskPoints/ObservationZones/LineSectorZone.hpp"
 #include "Task/Tasks/TaskPoints/ObservationZones/FAISectorZone.hpp"
 #include "Task/Tasks/TaskPoints/ObservationZones/CylinderZone.hpp"
@@ -207,6 +206,7 @@ void setup_task(TaskManager& task_manager,
                         task_projection,wp[0],tb));
 
   if (task_manager.check_task()) {
+    task_manager.reset();
     task_manager.setActiveTaskPoint(0);
     task_manager.resume();
   }

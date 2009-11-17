@@ -133,7 +133,13 @@ SampledTaskPoint::clear_boundary_points()
 }
 
 void 
-SampledTaskPoint::clear_sample_points() {
+SampledTaskPoint::clear_sample_points() 
+{
   sampled_points.clear();
 }
 
+void
+SampledTaskPoint::reset() 
+{
+  clear_sample_points();
+}

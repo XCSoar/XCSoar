@@ -56,6 +56,12 @@ public:
     MODE_GOTO
   };
 
+  /** 
+   * Reset the ordered task (as if never flown)
+   * 
+   */
+  void reset();
+
 /** 
  * Set active task to abort mode.
  * 

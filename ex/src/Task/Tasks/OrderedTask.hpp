@@ -43,6 +43,12 @@ public:
               GlidePolar &gp);
   ~OrderedTask();
 
+  /** 
+   * Reset the task (as if never flown)
+   * 
+   */
+  void reset();
+
 /** 
  * Retrieves the active task point sequence.
  * 

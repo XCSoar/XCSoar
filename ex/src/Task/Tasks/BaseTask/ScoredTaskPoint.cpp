@@ -6,8 +6,7 @@ ScoredTaskPoint::ScoredTaskPoint(const TaskProjection& tp,
                                  const bool b_scored): 
   SampledTaskPoint(tp, wp, tb, b_scored)
 {
-    state_entered.Time = -1;
-    state_exited.Time = -1;
+  reset();
 }
 
 bool 
@@ -66,3 +65,10 @@ ScoredTaskPoint::get_reference_remaining() const
 }
 
 
+void 
+ScoredTaskPoint::reset()
+{
+  SampledTaskPoint::reset();
+  state_entered.Time = -1;
+  state_exited.Time = -1;
+}

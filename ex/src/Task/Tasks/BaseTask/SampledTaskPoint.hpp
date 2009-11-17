@@ -20,7 +20,6 @@ class TaskEvents;
  * \todo
  * - Currently undefined as to what happens to interior samples if observation 
  *   zone is modified (e.g. due to previous/next taskpoint moving)
- * - implement reset() method
  */
 class SampledTaskPoint:
   public TaskPoint, 
@@ -46,6 +45,12 @@ public:
                    const bool b_scored);
 
   virtual ~SampledTaskPoint() {};
+
+  /** 
+   * Reset the task (as if never flown)
+   * 
+   */
+  virtual void reset();
 
 /** 
  * Retrieve interior sample polygon.
@@ -191,7 +196,7 @@ public:
 #endif
 
 protected:
-  bool boundary_scored;
+  const bool boundary_scored;
 
 private:
   SearchPointVector sampled_points;
