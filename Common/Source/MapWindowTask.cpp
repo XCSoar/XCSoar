@@ -439,7 +439,12 @@ private:
   const SETTINGS_MAP &settings;
 };
 
-
+/**
+ * Draw the AAT areas to the buffer and copy the buffer to the drawing canvas
+ * @param canvas The drawing canvas
+ * @param rc The area to draw in
+ * @param buffer The drawing buffer
+ */
 void
 MapWindow::DrawTaskAAT(Canvas &canvas, const RECT rc, Canvas &buffer)
 {
