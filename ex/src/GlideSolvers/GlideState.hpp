@@ -1,7 +1,7 @@
 #ifndef GLIDESTATE_HPP
 #define GLIDESTATE_HPP
 
-#include "Navigation/GeoVector.hpp"
+#include "Navigation/Geometry/GeoVector.hpp"
 
 struct AIRCRAFT_STATE;
 struct GEOPOINT;

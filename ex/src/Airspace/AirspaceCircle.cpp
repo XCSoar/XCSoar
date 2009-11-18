@@ -1,5 +1,5 @@
 #include "AirspaceCircle.hpp"
-#include "Navigation/GeoVector.hpp"
+#include "Navigation/Geometry/GeoVector.hpp"
 #include "Math/Earth.hpp"
 
 AirspaceCircle::AirspaceCircle(const GEOPOINT &loc, 

@@ -1,8 +1,8 @@
 #ifndef GEOELLIPSE_HPP
 #define GEOELLIPSE_HPP
 
-#include "TaskProjection.hpp"
-#include "FlatEllipse.hpp"
+#include "Navigation/TaskProjection.hpp"
+#include "Navigation/Flat/FlatEllipse.hpp"
 
 class GeoEllipse {
 public:

@@ -2,7 +2,7 @@
 #define WAYPOINT_HPP
 
 #include "Navigation/GeoPoint.hpp"
-#include "Navigation/FlatGeoPoint.hpp"
+#include "Navigation/Flat/FlatGeoPoint.hpp"
 #ifdef DO_PRINT
 #include <iostream>
 #endif

@@ -2,9 +2,9 @@
 #define ABSTRACTAIRSPACE_HPP
 
 #include "Util/GenericVisitor.hpp"
-#include "Navigation/FlatBoundingBox.hpp"
+#include "Navigation/Flat/FlatBoundingBox.hpp"
 #include "Navigation/Aircraft.hpp"
-#include "Navigation/GeoVector.hpp"
+#include "Navigation/Geometry/GeoVector.hpp"
 
 class AbstractAirspace:
   public BaseVisitable<>

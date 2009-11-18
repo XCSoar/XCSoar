@@ -4,8 +4,8 @@
 #define TASKPROJECTION_H
 
 #include "GeoPoint.hpp"
-#include "FlatGeoPoint.hpp"
-#include "FlatPoint.hpp"
+#include "Flat/FlatGeoPoint.hpp"
+#include "Flat/FlatPoint.hpp"
 
 #ifdef DO_PRINT
 #include <iostream>

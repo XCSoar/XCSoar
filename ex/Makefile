@@ -71,22 +71,22 @@ OBJS	:=\
 	src/GlideSolvers/GlideResult.o \
 	src/GlideSolvers/MacCready.o \
 	src/Navigation/Aircraft.o \
-	src/Navigation/DistanceMemento.o \
-	src/Navigation/FlatBoundingBox.o \
-	src/Navigation/FlatGeoPoint.o \
-	src/Navigation/FlatRay.o \
-	src/Navigation/FlatPoint.o \
-	src/Navigation/FlatLine.o \
-	src/Navigation/FlatEllipse.o \
 	src/Navigation/GeoPoint.o \
-	src/Navigation/GeoVector.o \
-	src/Navigation/GeoVectorMemento.o \
 	src/Navigation/ReferencePoint.o \
 	src/Navigation/SearchPoint.o \
 	src/Navigation/TaskProjection.o \
 	src/Navigation/TaskProjectionClient.o \
 	src/Navigation/ConvexHull/GrahamScan.o \
 	src/Navigation/ConvexHull/PolygonInterior.o \
+	src/Navigation/Memento/DistanceMemento.o \
+	src/Navigation/Memento/GeoVectorMemento.o \
+	src/Navigation/Geometry/GeoVector.o \
+	src/Navigation/Flat/FlatBoundingBox.o \
+	src/Navigation/Flat/FlatGeoPoint.o \
+	src/Navigation/Flat/FlatRay.o \
+	src/Navigation/Flat/FlatPoint.o \
+	src/Navigation/Flat/FlatLine.o \
+	src/Navigation/Flat/FlatEllipse.o \
 	src/Task/TaskAdvance.o \
 	src/Task/TaskBehaviour.o \
 	src/Task/TaskEvents.o \
@@ -155,7 +155,7 @@ doco:
 	doxygen doxygen/Doxyfile
 
 DEPFILE		=$(dir $@).$(notdir $@).d
-DEPFLAGS	=-Wp,-MD,$(DEPFILE)
+DEPFLAGS	=-Wp,-MM,-MF,$(DEPFILE)
 dirtarget	=$(subst \\,_,$(subst /,_,$(dir $@)))
 cc-flags	=$(DEPFLAGS) $(CFLAGS) $(CPPFLAGS) $(CPPFLAGS_$(dirtarget)) $(TARGET_ARCH)
 cxx-flags	=$(DEPFLAGS) $(CXXFLAGS) $(CPPFLAGS) $(CPPFLAGS_$(dirtarget)) $(TARGET_ARCH)

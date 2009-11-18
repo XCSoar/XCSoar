@@ -3,9 +3,9 @@
 #ifndef TASKLEG_H
 #define TASKLEG_H
 
-#include "Navigation/GeoVector.hpp"
-#include "Navigation/DistanceMemento.hpp"
-#include "Navigation/GeoVectorMemento.hpp"
+#include "Navigation/Geometry/GeoVector.hpp"
+#include "Navigation/Memento/DistanceMemento.hpp"
+#include "Navigation/Memento/GeoVectorMemento.hpp"
 
 class OrderedTaskPoint;
 

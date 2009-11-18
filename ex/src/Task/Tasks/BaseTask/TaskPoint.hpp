@@ -43,12 +43,13 @@
 #include "Navigation/ReferencePoint.hpp"
 #include "Waypoint/Waypoint.hpp"
 #include "Navigation/Aircraft.hpp"
-#include "Navigation/GeoVector.hpp"
+#include "Navigation/Geometry/GeoVector.hpp"
 #include "Util/GenericVisitor.hpp"
 #include "Task/TaskBehaviour.hpp"
 
 struct GlideResult;
 class GlidePolar;
+struct GeoVector;
 
 /**
  * Base class for all task points 

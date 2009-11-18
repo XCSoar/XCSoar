@@ -1,8 +1,8 @@
 #ifndef GEOVECTOR_MEMENTO_HPP
 #define GEOVECTOR_MEMENTO_HPP
 
-#include "GeoPoint.hpp"
-#include "GeoVector.hpp"
+#include "Navigation/GeoPoint.hpp"
+#include "Navigation/Geometry/GeoVector.hpp"
 
 /**
  * Memento object to store results of previous GeoVector constructors. 

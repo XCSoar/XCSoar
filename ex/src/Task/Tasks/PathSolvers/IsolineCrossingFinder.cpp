@@ -1,5 +1,5 @@
 #include "IsolineCrossingFinder.hpp"
-#include "Navigation/GeoEllipse.hpp"
+#include "Navigation/Geometry/GeoEllipse.hpp"
 #include "Task/TaskPoints/AATPoint.hpp"
 #include "Util/Tolerances.hpp"
 

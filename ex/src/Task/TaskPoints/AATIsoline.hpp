@@ -1,7 +1,7 @@
 #ifndef AATISOLINE_HPP
 #define AATISOLINE_HPP
 
-#include "Navigation/GeoEllipse.hpp"
+#include "Navigation/Geometry/GeoEllipse.hpp"
 #include "AATPoint.hpp"
 
 /**

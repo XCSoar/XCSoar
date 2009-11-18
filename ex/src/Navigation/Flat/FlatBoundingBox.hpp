@@ -3,8 +3,8 @@
 
 #include "FlatGeoPoint.hpp"
 #include "FlatRay.hpp"
-#include "TaskProjection.hpp"
-#include "BoundingBoxDistance.hpp"
+#include "Navigation/TaskProjection.hpp"
+#include "Navigation/Geometry/BoundingBoxDistance.hpp"
 #include <algorithm>
 
 class FlatBoundingBox {

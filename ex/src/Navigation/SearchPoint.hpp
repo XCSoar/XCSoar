@@ -2,7 +2,7 @@
 #define SEARCH_POINT_HPP
 
 #include "GeoPoint.hpp"
-#include "Navigation/FlatGeoPoint.hpp"
+#include "Navigation/Flat/FlatGeoPoint.hpp"
 
 class TaskProjection;
 

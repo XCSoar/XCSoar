@@ -1,5 +1,5 @@
 #include "LineSectorZone.hpp"
-#include "Navigation/GeoVector.hpp"
+#include "Navigation/Geometry/GeoVector.hpp"
 
 GEOPOINT LineSectorZone::get_boundary_parametric(double t) 
 { 
