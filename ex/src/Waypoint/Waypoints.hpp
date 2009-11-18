@@ -8,6 +8,8 @@
 #endif
 #include <deque>
 
+#include "Navigation/TaskProjection.hpp"
+
 class WaypointVisitor;
 
 class Waypoints {
@@ -21,7 +23,7 @@ public:
  * 
  * @param _task_projection projection used for flat-earth representation
  */
-  Waypoints(TaskProjection& _task_projection);
+  Waypoints();
 
   typedef KDTree::KDTree<2, 
                          Waypoint, 
@@ -120,7 +122,7 @@ public:
 
 private:
   WaypointTree waypoint_tree;
-  TaskProjection& task_projection;
+  TaskProjection task_projection;
 
   std::deque< Waypoint > tmp_wps;
 

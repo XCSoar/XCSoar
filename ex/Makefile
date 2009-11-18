@@ -91,6 +91,10 @@ OBJS	:=\
 	src/Task/TaskBehaviour.o \
 	src/Task/TaskEvents.o \
 	src/Task/TaskManager.o \
+	src/Task/Factory/AbstractTaskFactory.o \
+	src/Task/Factory/FAITaskFactory.o \
+	src/Task/Factory/AATTaskFactory.o \
+	src/Task/Factory/MixedTaskFactory.o \
 	src/Task/Tasks/TaskInterface.o \
 	src/Task/Tasks/AbortTask.o \
 	src/Task/Tasks/AbstractTask.o \

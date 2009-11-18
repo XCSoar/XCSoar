@@ -12,13 +12,6 @@
 #include "Waypoint/Waypoints.hpp"
 #include "Task/TaskManager.hpp"
 #include "Task/TaskEvents.hpp"
-
-#include "Task/TaskPoints/AATPoint.hpp"
-#include "Task/TaskPoints/ASTPoint.hpp"
-#include "Task/ObservationZones/LineSectorZone.hpp"
-#include "Task/ObservationZones/FAISectorZone.hpp"
-#include "Task/ObservationZones/CylinderZone.hpp"
-
 #include "Util/Filter.hpp"
 
 #include "Task/Visitors/TaskVisitor.hpp"
@@ -181,29 +174,31 @@ public:
   };
 };
 
-void setup_task(TaskManager& task_manager,
-                TaskProjection &task_projection,
-                TaskBehaviour &tb)
+void setup_task(TaskManager& task_manager)
 {
+  AbstractTaskFactory *fact;
+  OrderedTaskPoint *tp;
 
-  task_manager.append(new StartPoint(
-                        new LineSectorZone(wp[0].Location),
-                        task_projection,wp[0],tb));
-  task_manager.append(new ASTPoint(
-                        new FAISectorZone(wp[1].Location),
-                        task_projection,wp[1],tb));
-  task_manager.append(new AATPoint(
-                        new CylinderZone(wp[2].Location),
-                        task_projection,wp[2],tb));
-  task_manager.append(new AATPoint(
-                        new CylinderZone(wp[3].Location),
-                        task_projection,wp[3],tb));
-  task_manager.append(new AATPoint(
-                        new CylinderZone(wp[4].Location),
-                        task_projection,wp[4],tb));
-  task_manager.append(new FinishPoint(
-                        new FAISectorZone(wp[0].Location),
-                        task_projection,wp[0],tb));
+  task_manager.set_factory(TaskManager::FACTORY_MIXED);
+  fact = task_manager.get_factory();
+
+  tp = fact->createStart(AbstractTaskFactory::START_LINE,wp[0]);
+  task_manager.append(tp);
+
+  tp = fact->createIntermediate(AbstractTaskFactory::FAI_SECTOR,wp[1]);
+  task_manager.append(tp);
+
+  tp = fact->createIntermediate(AbstractTaskFactory::AAT_CYLINDER,wp[2]);
+  task_manager.append(tp);
+
+  tp = fact->createIntermediate(AbstractTaskFactory::AAT_CYLINDER,wp[3]);
+  task_manager.append(tp);
+
+  tp = fact->createIntermediate(AbstractTaskFactory::AAT_CYLINDER,wp[4]);
+  task_manager.append(tp);
+
+  tp = fact->createFinish(AbstractTaskFactory::FINISH_SECTOR,wp[0]);
+  task_manager.append(tp);
 
   if (task_manager.check_task()) {
     task_manager.reset();
@@ -468,20 +463,17 @@ int test_newtask(int test_num) {
 
   TaskEvents default_events;
   GlidePolar glide_polar(2.0,0.0,0.0);
-  TaskProjection task_projection(start);
 
   ////////////////////////// Waypoints //////
-  Waypoints waypoints(task_projection);
+  Waypoints waypoints;
   setup_waypoints(waypoints);
-#ifdef DO_PRINT
-  std::cout << task_projection;
-#endif
 
   WaypointVisitorPrint v;
   waypoints.visit_within_range(wp[3].Location, 100, v);
   v.summary();
 
   ////////////////////////// AIRSPACES //////
+  TaskProjection task_projection(start);
   Airspaces airspaces(task_projection);
   setup_airspaces(airspaces, task_projection);
 
@@ -503,7 +495,7 @@ int test_newtask(int test_num) {
                            glide_polar,
                            waypoints);
     
-  setup_task(task_manager, task_projection, task_behaviour);
+  setup_task(task_manager);
     
   test_flight(task_manager, airspaces, glide_polar, test_num);
 

@@ -11,6 +11,9 @@
 #include "TaskEvents.hpp"
 #include "TaskBehaviour.hpp"
 
+#include "Factory/FAITaskFactory.hpp"
+#include "Factory/AATTaskFactory.hpp"
+#include "Factory/MixedTaskFactory.hpp"
 
 class Waypoints;
 class TaskVisitor;
@@ -54,6 +57,12 @@ public:
     MODE_ORDERED,
     MODE_ABORT,
     MODE_GOTO
+  };
+
+  enum Factory_t {
+    FACTORY_FAI=0,
+    FACTORY_AAT,
+    FACTORY_MIXED
   };
 
   /** 
@@ -159,15 +168,43 @@ public:
   virtual void print(const AIRCRAFT_STATE &location);
 #endif
 
+/** 
+ * Accessor for factory system for constructing tasks
+ * 
+ * @return Factory
+ */
+  AbstractTaskFactory* get_factory() const {
+    return active_factory;
+  }
+
+/** 
+ * Set type of task factory to be used for constructing tasks
+ * 
+ * @param _factory Type of task
+ * 
+ * @return Type of task
+ */
+  Factory_t set_factory(const Factory_t _factory);
+
 private:
   const TaskStats null_stats;
 
   TaskMode_t set_mode(const TaskMode_t mode);
 
   AbstractTask* active_task;
+  AbstractTaskFactory* active_factory;
 
   TaskMode_t mode;
+  Factory_t factory_mode;
 
+  /** @link aggregation */
+  FAITaskFactory factory_fai;
+
+  /** @link aggregation */
+  AATTaskFactory factory_aat;
+
+  /** @link aggregation */
+  MixedTaskFactory factory_mixed;
 
   /** @link aggregation */
   OrderedTask task_ordered;

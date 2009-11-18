@@ -166,6 +166,15 @@ public:
     tps[tp]->set_search_max(sol);
   }
 
+/** 
+ * Accessor for task projection, for use when creating task points
+ * 
+ * @return Task global projection
+ */
+  TaskProjection& get_task_projection() {
+    return task_projection;
+  }
+
 protected:
 /** 
  * Test whether (and how) transitioning into/out of task points should occur, typically

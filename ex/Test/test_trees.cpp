@@ -34,7 +34,7 @@ test_wp(const unsigned n)
 {
   GEOPOINT start; start.Longitude = 0.5; start.Latitude = 0.5;
   TaskProjection task_projection(start);
-  Waypoints waypoints(task_projection);
+  Waypoints waypoints;
   AIRCRAFT_STATE state;
 
 #ifdef INSTRUMENT_TASK
@@ -113,7 +113,7 @@ int main() {
   TaskProjection task_projection(start);
 
   ////////////////////////// WaypointS //////
-  Waypoints waypoints(task_projection);
+  Waypoints waypoints;
 
   Waypoint wp[6];
   wp[0].id = 0;

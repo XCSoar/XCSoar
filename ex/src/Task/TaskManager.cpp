@@ -10,9 +10,13 @@ TaskManager::TaskManager(const TaskEvents &te,
     task_ordered(te,tb,task_advance,gp),
     task_goto(te,tb,task_advance,gp),
     task_abort(te,tb,task_advance,gp,wps),
-    task_behaviour(tb)
+    task_behaviour(tb),
+    factory_fai(task_ordered,tb),
+    factory_aat(task_ordered,tb),
+    factory_mixed(task_ordered,tb)
 {
     set_mode(MODE_ORDERED);
+    set_factory(FACTORY_FAI);
 }
 
 TaskManager::TaskMode_t 
@@ -143,4 +147,28 @@ void
 TaskManager::reset()
 {
   task_ordered.reset();
+}
+
+TaskManager::Factory_t 
+TaskManager::set_factory(const Factory_t the_factory)
+{
+  if ((the_factory != factory_mode) && (the_factory != FACTORY_MIXED)) {
+    // can switch from anything to mixed, otherwise need reset
+    task_ordered.reset();
+
+    /// \todo call into task_events to ask if reset is desired on factory change
+  }
+  factory_mode = the_factory;
+  switch (factory_mode) {
+  case FACTORY_FAI:
+    active_factory = &factory_fai;
+    break;
+  case FACTORY_AAT:
+    active_factory = &factory_aat;
+    break;
+  case FACTORY_MIXED:
+    active_factory = &factory_mixed;
+    break;
+  };
+  return factory_mode;
 }
