@@ -129,7 +129,22 @@ void setup_airspaces(Airspaces& airspaces) {
       double radius = 10000.0*(0.2+(rand()%12)/12.0);
       as = new AirspaceCircle(c,radius);
     } else {
-      as = new AirspacePolygon();
+
+      // just for testing, create a random polygon from a convex hull around
+      // random points
+      const unsigned num = rand()%10+5;
+      GEOPOINT c;
+      c.Longitude = (rand()%1200-600)/1000.0+0.5;
+      c.Latitude = (rand()%1200-600)/1000.0+0.5;
+      
+      std::vector<GEOPOINT> pts;
+      for (unsigned i=0; i<num; i++) {
+        GEOPOINT p=c;
+        p.Longitude += (rand()%200)/1000.0;
+        p.Latitude += (rand()%200)/1000.0;
+        pts.push_back(p);
+      }
+      as = new AirspacePolygon(pts);
     }
     airspaces.insert(*as);
 #ifdef DO_PRINT

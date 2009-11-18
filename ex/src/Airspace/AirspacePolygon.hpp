@@ -6,20 +6,22 @@
 #include <vector>
 
 /**
- * \todo
- * - Should take in vector of GEOPOINTs in constructor.
+ * General polygon form airspace
  *
  */
 class AirspacePolygon: public AbstractAirspace 
 {
 public:
   /** 
-   * Constructor.  Currently a dummy one, that initialises 
-   * the boundary randomly.  
-   * 
+   * Constructor.  For testing, pts vector is a cloud of points,
+   * and the airspace polygon becomes the convex hull border.
+   * \todo remove convex hack for testing
+   *
+   * @param pts Vector representing border
+   *
    * @return Initialised airspace object
    */
-  AirspacePolygon();
+  AirspacePolygon(const std::vector<GEOPOINT>& pts);
 
   /** 
    * Compute bounding box enclosing the airspace.  Rounds up/down
