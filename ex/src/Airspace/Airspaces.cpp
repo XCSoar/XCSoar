@@ -154,3 +154,13 @@ Airspaces::insert(AbstractAirspace& asp)
    * (can just insert() them all, then clear the tree, then run optimise()
    */
 }
+
+
+Airspaces::~Airspaces()
+{
+  for (AirspaceTree::iterator v = airspace_tree.begin();
+       v != airspace_tree.end(); v++) {
+    Airspace a = *v;
+    a.destroy();
+  }
+}

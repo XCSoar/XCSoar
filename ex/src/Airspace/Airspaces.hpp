@@ -22,6 +22,13 @@ public:
     {
     };
 
+/** 
+ * Destructor.
+ * This also destroys Airspace objects contained in the tree or temporary buffer
+ * 
+ */
+  ~Airspaces();
+
   /** 
    * Search for airspaces nearest to the aircraft.
    * Note: altitude not used yet
@@ -89,7 +96,7 @@ public:
 
   /** 
    * Add airspace to the internal airspace tree.  
-   * The airspace is copied.
+   * The airspace is not copied; ownership is transferred to this class.
    * 
    * @param asp New airspace to be added.
    */

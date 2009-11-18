@@ -33,7 +33,6 @@ void
 test_wp(const unsigned n) 
 {
   GEOPOINT start; start.Longitude = 0.5; start.Latitude = 0.5;
-  TaskProjection task_projection(start);
   Waypoints waypoints;
   AIRCRAFT_STATE state;
 
@@ -67,10 +66,10 @@ test_wp(const unsigned n)
 
 
 void
-test_as(const unsigned n, TaskProjection &task_projection)
+test_as(const unsigned n)
 {
   AIRCRAFT_STATE state;
-  Airspaces airspaces(task_projection);
+  Airspaces airspaces;
 
 #ifdef INSTRUMENT_TASK
   count_intersections = 0;
@@ -86,7 +85,22 @@ test_as(const unsigned n, TaskProjection &task_projection)
       double radius = 10000.0*(0.2+(rand()%12)/12.0);
       as = new AirspaceCircle(c,radius);
     } else {
-      as = new AirspacePolygon(task_projection);
+
+      // just for testing, create a random polygon from a convex hull around
+      // random points
+      const unsigned num = rand()%10+5;
+      GEOPOINT c;
+      c.Longitude = (rand()%1200-600)/1000.0+0.5;
+      c.Latitude = (rand()%1200-600)/1000.0+0.5;
+      
+      std::vector<GEOPOINT> pts;
+      for (unsigned i=0; i<num; i++) {
+        GEOPOINT p=c;
+        p.Longitude += (rand()%200)/1000.0;
+        p.Latitude += (rand()%200)/1000.0;
+        pts.push_back(p);
+      }
+      as = new AirspacePolygon(pts);
     }
     airspaces.insert(*as);
   }
@@ -109,8 +123,6 @@ int main() {
   ::InitSineTable();
 
   ////////////////////////////////////////////////////////////////
-
-  TaskProjection task_projection(start);
 
   ////////////////////////// WaypointS //////
   Waypoints waypoints;
@@ -152,10 +164,6 @@ int main() {
   }
   waypoints.optimise();
 
-#ifdef DO_PRINT
-  std::cout << task_projection;
-#endif
-
   fout << "# test waypoint tree\n";
   for (double i=10; i<=10000; i*= 1.1) {
     test_wp((int)i);
@@ -166,7 +174,7 @@ int main() {
 
   fout << "# test airspace tree\n";
   for (double i=10; i<=10000; i*= 1.1) {
-      test_as((int)i,task_projection);
+      test_as((int)i);
   }
   fout << "\n";
   return 0;
