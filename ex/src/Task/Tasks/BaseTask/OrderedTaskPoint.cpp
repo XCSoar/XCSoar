@@ -128,5 +128,13 @@ OrderedTaskPoint::glide_solution_planned(const AIRCRAFT_STATE &ac,
   return polar.solve(gs);
 }
 
-
-////////////
+void
+OrderedTaskPoint::update_oz()
+{
+  /// \todo also clear search points?
+  update_geometry();
+  clear_boundary_points();
+  default_boundary_points();
+  prune_boundary_points();
+  update_projection();
+}

@@ -5,11 +5,17 @@
 #include "Task/ObservationZones/LineSectorZone.hpp"
 #include "Task/ObservationZones/FAISectorZone.hpp"
 #include "Task/ObservationZones/CylinderZone.hpp"
+#include <algorithm>
 
 StartPoint* 
 AbstractTaskFactory::createStart(const LegalStartType_t type,
                                  const Waypoint &wp) const
 {
+  if (std::find(start_types.begin(), start_types.end(),type) 
+      == start_types.end()) {
+    // error, invalid type!
+    return NULL;
+  }
   switch (type) {
   case START_SECTOR:
     return new StartPoint(new FAISectorZone(wp.Location),
@@ -33,6 +39,10 @@ IntermediatePoint*
 AbstractTaskFactory::createIntermediate(const LegalIntermediateType_t type,
                                         const Waypoint &wp) const
 {
+  if (std::find(intermediate_types.begin(), intermediate_types.end(),type) 
+      == intermediate_types.end()) {
+    return NULL;
+  }
   switch (type) {
   case FAI_SECTOR:
     return new ASTPoint(new FAISectorZone(wp.Location),
@@ -60,6 +70,10 @@ FinishPoint*
 AbstractTaskFactory::createFinish(const LegalFinishType_t type,
                                  const Waypoint &wp) const
 {
+  if (std::find(finish_types.begin(), finish_types.end(),type) 
+      == finish_types.end()) {
+    return NULL;
+  }
   switch (type) {
   case FINISH_SECTOR:
     return new FinishPoint(new FAISectorZone(wp.Location),

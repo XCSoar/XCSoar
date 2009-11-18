@@ -14,6 +14,8 @@
 #include "Task/TaskEvents.hpp"
 #include "Util/Filter.hpp"
 
+#include "Task/ObservationZones/CylinderZone.hpp"
+
 #include "Task/Visitors/TaskVisitor.hpp"
 #include "Task/Visitors/TaskPointVisitor.hpp"
 #include "Airspace/AirspaceVisitor.hpp"
@@ -183,22 +185,26 @@ void setup_task(TaskManager& task_manager)
   fact = task_manager.get_factory();
 
   tp = fact->createStart(AbstractTaskFactory::START_LINE,wp[0]);
-  task_manager.append(tp);
+  if (tp) task_manager.append(tp);
 
   tp = fact->createIntermediate(AbstractTaskFactory::FAI_SECTOR,wp[1]);
-  task_manager.append(tp);
+  if (tp) task_manager.append(tp);
 
   tp = fact->createIntermediate(AbstractTaskFactory::AAT_CYLINDER,wp[2]);
-  task_manager.append(tp);
+  if (CylinderZone* cz = dynamic_cast<CylinderZone*>(tp->get_oz())) {
+    cz->setRadius(20000.0);
+    tp->update_oz();
+  }
+  if (tp) task_manager.append(tp);
 
   tp = fact->createIntermediate(AbstractTaskFactory::AAT_CYLINDER,wp[3]);
-  task_manager.append(tp);
+  if (tp) task_manager.append(tp);
 
   tp = fact->createIntermediate(AbstractTaskFactory::AAT_CYLINDER,wp[4]);
   task_manager.append(tp);
 
   tp = fact->createFinish(AbstractTaskFactory::FINISH_SECTOR,wp[0]);
-  task_manager.append(tp);
+  if (tp) task_manager.append(tp);
 
   if (task_manager.check_task()) {
     task_manager.reset();

@@ -85,6 +85,21 @@ public:
     AFTER_ACTIVE                /**< This taskpoint is after the active one */
   };
 
+  /** 
+   * Call this when any geometry or OZ parameters are changed
+   * 
+   */
+  void update_oz();
+
+/** 
+ * Accessor for OZ (for modifying parameters etc)
+ *
+ * @return Observation zone
+ */
+  ObservationZonePoint* get_oz() {
+    return oz;
+  }
+
 /** 
  * Update observation zone geometry (or other internal data) when
  * previous/next turnpoint changes.

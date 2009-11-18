@@ -27,11 +27,7 @@ OrderedTask::update_geometry() {
   task_projection.update_fast();
 
   for (unsigned i=0; i<tps.size(); i++) {
-    tps[i]->update_geometry();
-    tps[i]->clear_boundary_points();
-    tps[i]->default_boundary_points();
-    tps[i]->prune_boundary_points();
-    tps[i]->update_projection();
+    tps[i]->update_oz();
   }
 }
 
