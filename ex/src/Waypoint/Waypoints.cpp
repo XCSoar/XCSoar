@@ -30,7 +30,7 @@ Waypoints::optimise()
 void
 Waypoints::insert(const Waypoint& wp)
 {
-  if (!tmp_wps.size() && !waypoint_tree.size()) {
+  if (tmp_wps.empty() && !waypoint_tree.size()) {
     task_projection.reset(wp.Location);
   }
   task_projection.scan_location(wp.Location);
