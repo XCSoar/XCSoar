@@ -8,14 +8,14 @@ void SymmetricSectorZone::set_legs(const TaskPoint *previous,
   double biSector;
   if (!next && previous) { 
     // final
-    biSector = previous->bearing(*current);
+    biSector = previous->bearing(current->getLocation());
   } else if (next && previous) {
     // intermediate
-    biSector = BiSector(previous->bearing(*current),
-                        current->bearing(*next));
+    biSector = BiSector(previous->bearing(current->getLocation()),
+                        current->bearing(next->getLocation()));
   } else if (next && !previous) {
     // start
-    biSector = next->bearing(*current);
+    biSector = next->bearing(current->getLocation());
   } else {
     // single point
     biSector = 0;

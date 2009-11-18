@@ -41,10 +41,6 @@
 
 #include "GeoPoint.hpp"
 
-/////////////////////////////////////////////////
-/// Abstract classes
-
-
 /** Entity for objects that may be used as reference points for navigation */
 class ReferencePoint {
 public:
@@ -59,14 +55,6 @@ public:
    */
   double distance(const GEOPOINT & ref) const;
 
-  /** bearing from this to the reference
-   */
-  double bearing(const ReferencePoint & ref) const;
-
-  /** distance from this to the reference
-   */
-  double distance(const ReferencePoint & ref) const;
-
   /** The actual location
    */
     const GEOPOINT & getLocation() const {
@@ -76,29 +64,5 @@ public:
 protected:
     const GEOPOINT Location;
 };
-
-
-/////////////////////////////////////////////////
-/// Abstract classes, types of task points
-
-
-
-
-
-
-
-
-
-
-/////////////////////////////////////////////////
-/// Concrete observation zones
-
-
-
-///////
-
-
-
-///////////////////////////////////////////////////////////
 
 #endif

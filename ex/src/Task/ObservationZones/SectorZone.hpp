@@ -47,17 +47,55 @@ public:
   SectorZone(const GEOPOINT &loc):
     CylinderZone(loc),
     StartRadial(0.0),
-    EndRadial(0.0) 
+    EndRadial(360.0) 
     {
     };
+
+/** 
+ * Set start angle (most counter-clockwise) of sector
+ * 
+ * @param x Angle (deg) of radial
+ */
+  virtual void setStartRadial(double x); 
+
+/** 
+ * Set end angle (most clockwise) of sector
+ * 
+ * @param x Angle (deg) of radial
+ */
+  virtual void setEndRadial(double x); 
+
+/** 
+ * Get start radial property value
+ * 
+ * @return Angle (deg) of radial
+ */
+  double getStartRadial() const {
+    return StartRadial;
+  }
+
+/** 
+ * Get end radial property value
+ * 
+ * @return Angle (deg) of radial
+ */
+  double getEndRadial() const {
+    return EndRadial;
+  }
+
+/** 
+ * Set radius property
+ * 
+ * @param new_radius Radius (m) of cylinder
+ */
+  virtual void setRadius(double new_radius) {
+    CylinderZone::setRadius(new_radius);
+    updateSector();
+  }
 
   virtual bool angleInSector(double b) const;
 
   virtual bool isInSector(const AIRCRAFT_STATE &ref) const;
-
-  virtual void setStartRadial(double x); 
-
-  virtual void setEndRadial(double x); 
 
   GEOPOINT get_boundary_parametric(double) ;  
 

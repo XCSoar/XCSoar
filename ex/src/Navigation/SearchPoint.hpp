@@ -18,7 +18,6 @@ public:
   SearchPoint(const GEOPOINT &loc, const TaskProjection& tp,
     bool _actual=false);
 
-  void setLocation(const GEOPOINT& loc, const TaskProjection& tp);
   void project(const TaskProjection& tp);
 
   const GEOPOINT& getLocation() const {

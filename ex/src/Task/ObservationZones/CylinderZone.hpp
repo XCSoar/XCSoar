@@ -39,7 +39,7 @@
 #define CYLINDERZONE_HPP
 
 #include "Task/Tasks/BaseTask/ObservationZonePoint.hpp"
-
+#include <assert.h>
 
 class CylinderZone : public ObservationZonePoint {
 public:
@@ -69,6 +69,25 @@ public:
   virtual bool transition_constraint(const AIRCRAFT_STATE & ref_now, 
                                      const AIRCRAFT_STATE & ref_last) {
     return true;
+  }
+
+/** 
+ * Set radius property
+ * 
+ * @param new_radius Radius (m) of cylinder
+ */
+  virtual void setRadius(double new_radius) {
+    assert(new_radius>0);
+    Radius = new_radius;
+  }
+
+/** 
+ * Get radius property value
+ * 
+ * @return Radius (m) of cylinder
+ */
+  double getRadius() const {
+    return Radius;
   }
 
 protected:

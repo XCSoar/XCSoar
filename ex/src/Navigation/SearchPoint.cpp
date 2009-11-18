@@ -11,13 +11,6 @@ SearchPoint::SearchPoint(const GEOPOINT &loc, const TaskProjection& tp,
 {      
 }
 
-void 
-SearchPoint::setLocation(const GEOPOINT& loc, const TaskProjection& tp)
-{
-  Location = loc;
-  project(tp);
-}
-
 
 void 
 SearchPoint::project(const TaskProjection& tp) 

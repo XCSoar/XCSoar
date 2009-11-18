@@ -65,6 +65,24 @@ public:
 
   virtual double score_adjustment();
 
+/** 
+ * Set length property
+ * 
+ * @param new_length Length (m) of line
+ */
+  virtual void setLength(double new_length) {
+    setRadius(new_length/2.0);
+  }
+  
+/** 
+ * Get length property value
+ * 
+ * @return Length (m) of line
+ */
+  double getLength() const {
+    return getRadius()*2.0;
+  }
+
 };
 
 #endif
