@@ -100,7 +100,7 @@ public:
    * 
    * @param asp New airspace to be added.
    */
-  void insert(AbstractAirspace& asp);
+  void insert(AbstractAirspace* asp);
 
 private:
 

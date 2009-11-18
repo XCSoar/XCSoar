@@ -146,7 +146,7 @@ void setup_airspaces(Airspaces& airspaces) {
       }
       as = new AirspacePolygon(pts);
     }
-    airspaces.insert(*as);
+    airspaces.insert(as);
 #ifdef DO_PRINT
     fin << *as;
 #endif

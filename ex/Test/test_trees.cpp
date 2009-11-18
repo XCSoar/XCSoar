@@ -102,7 +102,7 @@ test_as(const unsigned n)
       }
       as = new AirspacePolygon(pts);
     }
-    airspaces.insert(*as);
+    airspaces.insert(as);
   }
   airspaces.optimise();
 
