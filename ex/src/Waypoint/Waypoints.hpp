@@ -21,7 +21,6 @@ public:
  * 
  * See below for usage notes --- further work is required.
  * 
- * @param _task_projection projection used for flat-earth representation
  */
   Waypoints();
 

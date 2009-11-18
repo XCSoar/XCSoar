@@ -17,11 +17,9 @@ public:
    * Constructor.  Currently a dummy one, that initialises 
    * the boundary randomly.  
    * 
-   * @param task_projection Projection used for flat-earth representation of border
-   * 
    * @return Initialised airspace object
    */
-  AirspacePolygon(const TaskProjection& task_projection);
+  AirspacePolygon();
 
   /** 
    * Compute bounding box enclosing the airspace.  Rounds up/down
@@ -31,7 +29,15 @@ public:
    * 
    * @return Enclosing bounding box
    */
-  const FlatBoundingBox get_bounding_box(const TaskProjection& task_projection) const;
+  const FlatBoundingBox get_bounding_box(const TaskProjection& task_projection);
+
+/** 
+ * Get arbitrary center or reference point for use in determining
+ * overall center location of all airspaces
+ * 
+ * @return Location of reference point
+ */
+  const GEOPOINT get_center();
 
   /** 
    * Checks whether an aircraft is inside the airspace.
@@ -59,6 +65,12 @@ public:
 
 private:
   SearchPointVector border;
+
+/** 
+ * Project border.
+ */
+  virtual void project(const TaskProjection& tp);
+
 public:
 #ifdef DO_PRINT
   friend std::ostream& operator<< (std::ostream& f, 

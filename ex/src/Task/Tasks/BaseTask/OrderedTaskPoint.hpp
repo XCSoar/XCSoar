@@ -300,9 +300,6 @@ private:
   OrderedTaskPoint* tp_previous;
 
   ObservationZonePoint* oz;
-
-public:
-  DEFINE_VISITABLE()
 };
 
 

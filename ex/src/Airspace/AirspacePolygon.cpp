@@ -3,10 +3,12 @@
 #include "Navigation/ConvexHull/PolygonInterior.hpp"
 #include "Navigation/ConvexHull/GrahamScan.hpp"
 
-AirspacePolygon::AirspacePolygon(const TaskProjection& task_projection)
+AirspacePolygon::AirspacePolygon()
 {
   // just for testing, create a random polygon from a convex hull around
   // random points
+
+  TaskProjection task_projection;
 
   const unsigned num = rand()%10+5;
   GEOPOINT c;
@@ -19,17 +21,26 @@ AirspacePolygon::AirspacePolygon(const TaskProjection& task_projection)
     p.Latitude += (rand()%200)/1000.0;
     border.push_back(SearchPoint(p,task_projection));
   }
-  // random shape generator
   GrahamScan gs(border);
   border = gs.prune_interior();
 }
 
+
+const GEOPOINT 
+AirspacePolygon::get_center()
+{
+  return border[0].getLocation();
+}
+
+
 const FlatBoundingBox 
-AirspacePolygon::get_bounding_box(const TaskProjection& task_projection) const
+AirspacePolygon::get_bounding_box(const TaskProjection& task_projection)
 {
   FLAT_GEOPOINT min;
   FLAT_GEOPOINT max;
   bool empty=true;
+
+  project(task_projection);
 
   for (std::vector<SearchPoint>::const_iterator v = border.begin();
        v != border.end(); v++) {
@@ -84,4 +95,12 @@ AirspacePolygon::intersects(const GEOPOINT& start,
     }
   }
   return false;
+}
+
+void
+AirspacePolygon::project(const TaskProjection &task_projection)
+{
+  for (unsigned i=0; i<border.size(); i++) {
+    border[i].project(task_projection);
+  }
 }

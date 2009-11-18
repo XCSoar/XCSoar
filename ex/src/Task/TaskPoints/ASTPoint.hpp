@@ -57,6 +57,10 @@ public:
            const TaskBehaviour &tb) 
     : IntermediatePoint(_oz,tp,wp,tb,false)
     { };
+
+public:
+  DEFINE_VISITABLE()
+
 };
 
 #endif

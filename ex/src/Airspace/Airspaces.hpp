@@ -3,11 +3,12 @@
 
 #include <kdtree++/kdtree.hpp>
 #include "Airspace.hpp"
-#include "Navigation/TaskProjectionClient.hpp"
+#include "Navigation/TaskProjection.hpp"
+#include <deque>
 
 class AirspaceVisitor;
 
-class Airspaces: public TaskProjectionClient 
+class Airspaces
 {
 public:
   /** 
@@ -15,12 +16,9 @@ public:
    * Note this class can't safely be copied (yet)
    * Note: altitude not used yet, this is a 2-D representation currently
    * 
-   * @param _task_projection Projection for flat-earth internal representation
-   * 
    * @return empty Airspaces class.
    */
-  Airspaces(const TaskProjection& _task_projection):
-    TaskProjectionClient(_task_projection)
+  Airspaces()
     {
     };
 
@@ -106,6 +104,9 @@ private:
                          > AirspaceTree;
 
   AirspaceTree airspace_tree;
+  TaskProjection task_projection;
+
+  std::deque< AbstractAirspace* > tmp_as;
 
   /** @link dependency */
   /*#  Airspace lnkAirspace; */

@@ -191,6 +191,9 @@ protected:
  * @return True if target was moved
  */
   bool check_target_outside(const AIRCRAFT_STATE& state);
+
+public:
+  DEFINE_VISITABLE()
 };
 
 #endif

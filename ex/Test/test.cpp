@@ -11,15 +11,14 @@
 #include "Airspace/AirspacePolygon.hpp"
 #include "Waypoint/Waypoints.hpp"
 #include "Task/TaskManager.hpp"
-#include "Task/TaskEvents.hpp"
 #include "Util/Filter.hpp"
 
 #include "Task/ObservationZones/CylinderZone.hpp"
 
-#include "Task/Visitors/TaskVisitor.hpp"
-#include "Task/Visitors/TaskPointVisitor.hpp"
 #include "Airspace/AirspaceVisitor.hpp"
 #include "Waypoint/WaypointVisitor.hpp"
+#include "Task/Visitors/TaskVisitor.hpp"
+#include "Task/Visitors/TaskPointVisitor.hpp"
 
 #ifdef DO_PRINT
 #include <fstream>
@@ -117,7 +116,7 @@ void setup_waypoints(Waypoints &waypoints) {
 }
 
 
-void setup_airspaces(Airspaces& airspaces, TaskProjection& task_projection) {
+void setup_airspaces(Airspaces& airspaces) {
 #ifdef DO_PRINT
   std::ofstream fin("results/res-bb-in.txt");
 #endif
@@ -130,7 +129,7 @@ void setup_airspaces(Airspaces& airspaces, TaskProjection& task_projection) {
       double radius = 10000.0*(0.2+(rand()%12)/12.0);
       as = new AirspaceCircle(c,radius);
     } else {
-      as = new AirspacePolygon(task_projection);
+      as = new AirspacePolygon();
     }
     airspaces.insert(*as);
 #ifdef DO_PRINT
@@ -155,6 +154,12 @@ public:
   }
   virtual void Visit(const StartPoint& tp) {
     printf("got an stp\n");
+  }
+  virtual void Visit(const AATPoint& tp) {
+    printf("got an aat\n");
+  }
+  virtual void Visit(const ASTPoint& tp) {
+    printf("got an ast\n");
   }
 };
 
@@ -334,6 +339,8 @@ void test_flight(TaskManager &task_manager,
   double bearing = 0;
   state.Speed = 16.0;
 
+  task_manager.Accept(tv);
+
   for (int i=0; i<num_wp-1; i++) {
 
     if ((test_num==1) && (n_samples>500)) {
@@ -479,9 +486,8 @@ int test_newtask(int test_num) {
   v.summary();
 
   ////////////////////////// AIRSPACES //////
-  TaskProjection task_projection(start);
-  Airspaces airspaces(task_projection);
-  setup_airspaces(airspaces, task_projection);
+  Airspaces airspaces;
+  setup_airspaces(airspaces);
 
   ////////////////////////// TASK //////
 

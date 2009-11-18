@@ -10,8 +10,15 @@ AirspaceCircle::AirspaceCircle(const GEOPOINT &loc,
 
 }
 
+const GEOPOINT 
+AirspaceCircle::get_center()
+{
+  return center;
+}
+
+
 const FlatBoundingBox 
-AirspaceCircle::get_bounding_box(const TaskProjection& task_projection) const
+AirspaceCircle::get_bounding_box(const TaskProjection& task_projection) 
 {
   const double eradius = radius*1.42;
   const GEOPOINT ll = GeoVector(eradius,225).end_point(center);

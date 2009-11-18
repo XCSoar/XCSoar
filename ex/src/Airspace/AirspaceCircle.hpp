@@ -26,7 +26,15 @@ public:
    * 
    * @return Enclosing bounding box
    */
-  const FlatBoundingBox get_bounding_box(const TaskProjection& task_projection) const;
+  const FlatBoundingBox get_bounding_box(const TaskProjection& task_projection);
+
+/** 
+ * Get arbitrary center or reference point for use in determining
+ * overall center location of all airspaces
+ * 
+ * @return Location of reference point
+ */
+  const GEOPOINT get_center();
 
   /** 
    * Checks whether an aircraft is inside the airspace.

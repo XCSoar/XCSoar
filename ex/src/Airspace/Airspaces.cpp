@@ -9,7 +9,7 @@ extern unsigned n_queries;
 const std::vector<Airspace>
 Airspaces::scan_nearest(const AIRCRAFT_STATE &state) const 
 {
-  Airspace bb_target(state.Location,get_task_projection());
+  Airspace bb_target(state.Location, task_projection);
 
   std::pair<AirspaceTree::const_iterator, double> 
     found = airspace_tree.find_nearest(bb_target);
@@ -36,8 +36,8 @@ Airspaces::visit_within_range(const GEOPOINT &loc,
                               const double range,
                               AirspaceVisitor& visitor) const
 {
-  Airspace bb_target(loc, get_task_projection());
-  int mrange = project_range(loc, range);
+  Airspace bb_target(loc, task_projection);
+  int mrange = task_projection.project_range(loc, range);
   airspace_tree.visit_within_range(bb_target, -mrange, visitor);
 }
 
@@ -46,13 +46,14 @@ Airspaces::visit_intersecting(const GEOPOINT &loc,
                               const GeoVector &vec,
                               AirspaceVisitor& visitor) const
 {
-  FlatRay ray(project(loc),project(vec.end_point(loc)));
+  FlatRay ray(task_projection.project(loc), 
+              task_projection.project(vec.end_point(loc)));
 
   std::deque< Airspace > vectors;
   {
     GEOPOINT c = vec.mid_point(loc);
-    Airspace bb_target(c, get_task_projection());
-    int mrange = project_range(c, vec.Distance/2.0);
+    Airspace bb_target(c, task_projection);
+    int mrange = task_projection.project_range(c, vec.Distance/2.0);
     airspace_tree.find_within_range(bb_target, -mrange, 
                                     std::back_inserter(vectors));
   }
@@ -63,7 +64,7 @@ Airspaces::visit_intersecting(const GEOPOINT &loc,
   for (std::deque<Airspace>::iterator v=vectors.begin();
        v != vectors.end(); v++) {
     if (v->intersects(ray)) {
-      if (v->intersects(loc, vec, get_task_projection())) {
+      if (v->intersects(loc, vec, task_projection)) {
         visitor(*v);
       }
     }
@@ -75,8 +76,8 @@ const std::vector<Airspace>
 Airspaces::scan_range(const AIRCRAFT_STATE &state, 
                       const double range) const
 {
-  Airspace bb_target(state.Location, get_task_projection());
-  int mrange = project_range(state.Location, range);
+  Airspace bb_target(state.Location, task_projection);
+  int mrange = task_projection.project_range(state.Location, range);
   
   std::deque< Airspace > vectors;
   airspace_tree.find_within_range(bb_target, -mrange, std::back_inserter(vectors));
@@ -102,7 +103,7 @@ Airspaces::scan_range(const AIRCRAFT_STATE &state,
 std::vector< Airspace >
 Airspaces::find_inside(const AIRCRAFT_STATE &state) const
 {
-  Airspace bb_target(state.Location, get_task_projection());
+  Airspace bb_target(state.Location, task_projection);
 
   std::vector< Airspace > vectors;
   airspace_tree.find_within_range(bb_target, 0, std::back_inserter(vectors));
@@ -125,14 +126,31 @@ Airspaces::find_inside(const AIRCRAFT_STATE &state) const
 void 
 Airspaces::optimise()
 {
+  task_projection.update_fast();
+
+  while (!tmp_as.empty()) {
+    Airspace as(*tmp_as.front(), task_projection);
+    airspace_tree.insert(as);
+    tmp_as.pop_front();
+  }
   airspace_tree.optimise();
 }
 
 void 
 Airspaces::insert(AbstractAirspace& asp)
 {
-  Airspace a(asp, get_task_projection());
-  airspace_tree.insert(a);
+  if (!tmp_as.size() && !airspace_tree.size()) {
+    task_projection.reset(asp.get_center());
+  }
+  task_projection.scan_location(asp.get_center());
+
+  tmp_as.push_back(&asp);
+
+  /**
+   * \todo
+   * if range changed, need to re-pack airspace
+   * will have to remove all from the list, recalculate projections,
+   * then add them again!
+   * (can just insert() them all, then clear the tree, then run optimise()
+   */
 }
-
-
