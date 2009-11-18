@@ -158,9 +158,28 @@ Airspaces::insert(AbstractAirspace* asp)
 
 Airspaces::~Airspaces()
 {
+  clear();
+}
+
+
+void
+Airspaces::clear()
+{
+
+  // delete temporaries in case they were added without an optimise() call
+  while (!tmp_as.empty()) {
+    AbstractAirspace *aa = tmp_as.front();
+    delete aa;
+    tmp_as.pop_front();
+  }
+
+  // delete items in the tree
   for (AirspaceTree::iterator v = airspace_tree.begin();
        v != airspace_tree.end(); v++) {
     Airspace a = *v;
     a.destroy();
   }
+
+  // then delete the tree
+  airspace_tree.clear();
 }

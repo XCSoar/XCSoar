@@ -102,6 +102,12 @@ public:
    */
   void insert(AbstractAirspace* asp);
 
+/** 
+ * Clear the airspace store
+ * 
+ */
+  void clear();
+
 private:
 
   typedef KDTree::KDTree<4, 

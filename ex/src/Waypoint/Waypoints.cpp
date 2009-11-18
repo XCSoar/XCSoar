@@ -146,3 +146,9 @@ Waypoints::end() const
 }
 
 
+
+void
+Waypoints::clear()
+{
+  waypoint_tree.clear();
+}

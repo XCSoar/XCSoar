@@ -119,6 +119,12 @@ public:
  */
   WaypointTree::const_iterator end() const;
 
+/** 
+ * Clear the waypoint store
+ * 
+ */
+  void clear();
+
 private:
   WaypointTree waypoint_tree;
   TaskProjection task_projection;
