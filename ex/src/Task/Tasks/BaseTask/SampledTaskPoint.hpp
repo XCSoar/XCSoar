@@ -7,7 +7,6 @@
 #include "ObservationZone.hpp"
 #include "TaskPoint.hpp"
 #include "Navigation/TaskProjectionClient.hpp"
-#include "Task/TaskEvents.hpp"
 
 class TaskEvents;
 
@@ -115,20 +114,20 @@ public:
  * Set the location of the sample/boundary polygon node
  * that produces the maximum task distance.
  * 
- * @param i Location of max distance node 
+ * @param locmax Location of max distance node 
  */
-  void set_search_max(const SearchPoint &i) {
-    search_max = i;
+  void set_search_max(const SearchPoint &locmax) {
+    search_max = locmax;
   }
 
 /** 
  * Set the location of the sample/boundary polygon node
  * that produces the minimum task distance.
  * 
- * @param i Location of min distance node 
+ * @param locmin Location of min distance node 
  */
-  void set_search_min(const SearchPoint &i) {
-    search_min = i;
+  void set_search_min(const SearchPoint &locmin) {
+    search_min = locmin;
   }
 
 /** 

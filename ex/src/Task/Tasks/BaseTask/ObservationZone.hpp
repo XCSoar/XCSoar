@@ -40,7 +40,6 @@
 #define OBSERVATIONZONE_HPP
 
 struct GEOPOINT;
-#include "Navigation/ReferencePoint.hpp"
 #include "Navigation/Aircraft.hpp"
 
 class ObservationZone {
