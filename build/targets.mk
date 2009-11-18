@@ -33,30 +33,30 @@ else
         else
           ifeq ($(TARGET),ALTAIR)
             CONFIG_ALTAIR :=y
-	    MINIMAL :=y
-	    XSCALE :=y
+      	    MINIMAL :=y
+      	    XSCALE :=y
           endif
           ifeq ($(TARGET),ALTAIRPORTRAIT)
             CONFIG_ALTAIR :=y
-	    ALTAIR_PORTRAIT :=y
-	    MINIMAL       :=y
-	    XSCALE	:=y
+      	    ALTAIR_PORTRAIT :=y
+      	    MINIMAL       :=y
+      	    XSCALE	:=y
           endif
-	  ifeq ($(TARGET),PNA)
-	    CONFIG_PNA := y
-	    CONFIG_PPC2003 := y
-	    MINIMAL       :=n
-	  endif
-	  ifeq ($(TARGET),WM5)
-	    CONFIG_WM5 := y
-	    MINIMAL := n
-	  endif
-	  ifeq ($(TARGET),WM5X)
-	    CONFIG_WM5 := y
-	    MINIMAL := n
-	    XSCALE := y
-	  endif
-	endif
+      	  ifeq ($(TARGET),PNA)
+      	    CONFIG_PNA := y
+      	    CONFIG_PPC2003 := y
+      	    MINIMAL       :=n
+      	  endif
+      	  ifeq ($(TARGET),WM5)
+      	    CONFIG_WM5 := y
+      	    MINIMAL := n
+      	  endif
+      	  ifeq ($(TARGET),WM5X)
+      	    CONFIG_WM5 := y
+      	    MINIMAL := n
+      	    XSCALE := y
+      	  endif
+      	endif
       endif
     endif
   endif
@@ -65,47 +65,47 @@ endif
 ############# build and CPU info
 
 ifeq ($(CONFIG_PC),y)
-TCPATH		:=i586-mingw32msvc-
-CPU		:=i586
-MCPU		:= -mcpu=$(CPU)
+  TCPATH		:=i586-mingw32msvc-
+  CPU		:=i586
+  MCPU		:= -mcpu=$(CPU)
 else
 
-ifeq ($(CONFIG_WINE),y)
-TCPATH		:=wine
-CPU		:=i586
-MCPU		:= -mcpu=$(CPU)
-else
+  ifeq ($(CONFIG_WINE),y)
+    TCPATH		:=wine
+    CPU		:=i586
+    MCPU		:= -mcpu=$(CPU)
+  else
+		TCPATH		:=arm-mingw32ce-
 
-TCPATH		:=arm-mingw32ce-
-
-ifeq ($(XSCALE),y)
-CPU		:=xscale
-MCPU		:= -mcpu=$(CPU)
-else
-CPU		:=
-MCPU		:=
-endif
-
-ifeq ($(TARGET),PNA)
-CPU		:=arm1136j-s
-MCPU		:=
-endif
-ifeq ($(CONFIG_PPC2002),y)
-CPU		:=strongarm1110
-MCPU		:= -mcpu=$(CPU)
-endif
-
-ifeq ($(TARGET),PPC2000)
-CPU := strongarm1110
-MCPU := -mcpu=$(CPU)
-endif
-
-endif
+    ifeq ($(XSCALE),y)
+      CPU		:=xscale
+      MCPU		:= -mcpu=$(CPU)
+    else
+      CPU		:=
+      MCPU		:=
+    endif
+    
+    ifeq ($(TARGET),PNA)
+      CPU		:=arm1136j-s
+      MCPU		:=
+    endif
+    
+    ifeq ($(CONFIG_PPC2002),y)
+      CPU		:=strongarm1110
+      MCPU		:= -mcpu=$(CPU)
+    endif
+    
+    ifeq ($(TARGET),PPC2000)
+      CPU := strongarm1110
+      MCPU := -mcpu=$(CPU)
+    endif
+    
+  endif
 
 endif
 
 ifeq ($(TARGET),UNIX)
-TCPATH :=
+	TCPATH :=
 endif
 
 ############# platform info
@@ -115,70 +115,71 @@ HAVE_WIN32 := y
 HAVE_MSVCRT := y
 
 ifeq ($(TARGET),WINE)
-HAVE_POSIX := y
-HAVE_MSVCRT := n
+  HAVE_POSIX := y
+  HAVE_MSVCRT := n
 endif
 
 ifeq ($(TARGET),UNIX)
-HAVE_POSIX := y
-HAVE_WIN32 := n
-HAVE_MSVCRT := n
-ENABLE_SDL := y
+  HAVE_POSIX := y
+  HAVE_WIN32 := n
+  HAVE_MSVCRT := n
+  ENABLE_SDL := y
 endif
 
 ifeq ($(TARGET),PPC2000)
-CE_MAJOR := 3
-CE_MINOR := 00
-CE_PLATFORM := 300
-PCPU := ARM
+  CE_MAJOR := 3
+  CE_MINOR := 00
+  CE_PLATFORM := 300
+  PCPU := ARM
 endif
 
 ifeq ($(CONFIG_PPC2002),y)
-CE_MAJOR	:=3
-CE_MINOR	:=00
-CE_PLATFORM	:=310
-TARGET		:=PPC2002
-PCPU		:=ARM
+  CE_MAJOR	:=3
+  CE_MINOR	:=00
+  CE_PLATFORM	:=310
+  TARGET		:=PPC2002
+  PCPU		:=ARM
 endif
 ifeq ($(CONFIG_PPC2003),y)
-CE_MAJOR	:=4
-CE_MINOR	:=00
-CE_PLATFORM	:=400
-PCPU		:=ARMV4
+  CE_MAJOR	:=4
+  CE_MINOR	:=00
+  CE_PLATFORM	:=400
+  PCPU		:=ARMV4
 endif
 
 ifeq ($(CONFIG_WM5),y)
-CE_MAJOR := 5
-CE_MINOR := 00
-CE_PLATFORM := 500
-PCPU := ARMV4
+  CE_MAJOR := 5
+  CE_MINOR := 00
+  CE_PLATFORM := 500
+  PCPU := ARMV4
 endif
 
 # armv4i
 ifeq ($(CONFIG_ALTAIR),y)
-CE_MAJOR	:=5
-CE_MINOR	:=00
-CE_PLATFORM	:=500
-TARGET		:=ALTAIR
-ifeq ($(ALTAIR_PORTRAIT),y)
-TARGET          :=ALTAIRPORTRAIT
-endif
+  CE_MAJOR	:=5
+  CE_MINOR	:=00
+  CE_PLATFORM	:=500
+  TARGET		:=ALTAIR
+  ifeq ($(ALTAIR_PORTRAIT),y)
+  	TARGET          :=ALTAIRPORTRAIT
+	endif
 endif
 
 ifeq ($(CONFIG_PC),y)
-# armv4i
-CE_MAJOR	:=5
-CE_MINOR	:=00
-CE_PLATFORM	:=500
-TARGET		:=PC
+  # armv4i
+  CE_MAJOR	:=5
+  CE_MINOR	:=00
+  CE_PLATFORM	:=500
+  TARGET		:=PC
 endif
+
 ifeq ($(CONFIG_WINE),y)
-# armv4i
-CE_MAJOR	:=5
-CE_MINOR	:=00
-CE_PLATFORM	:=500
-TARGET		:=WINE
-CONFIG_PC	:=y
+  # armv4i
+  CE_MAJOR	:=5
+  CE_MINOR	:=00
+  CE_PLATFORM	:=500
+  TARGET		:=WINE
+  CONFIG_PC	:=y
 endif
 
 CE_VERSION	:=0x0$(CE_MAJOR)$(CE_MINOR)
@@ -189,82 +190,82 @@ TARGET_CPPFLAGS =
 TARGET_INCLUDES =
 
 ifeq ($(HAVE_WIN32),y)
-ifeq ($(CONFIG_PC),y)
-TARGET_CPPFLAGS += -D_WIN32_WINDOWS=$(CE_VERSION) -DWINVER=$(CE_VERSION) 
-TARGET_CPPFLAGS += -D_WIN32_IE=$(CE_VERSION) -DWINDOWSPC=1
-else
-TARGET_CPPFLAGS += -D_WIN32_WCE=$(CE_VERSION)
-TARGET_CPPFLAGS += -DWIN32_PLATFORM_PSPC=$(CE_PLATFORM)
-endif
+  ifeq ($(CONFIG_PC),y)
+    TARGET_CPPFLAGS += -D_WIN32_WINDOWS=$(CE_VERSION) -DWINVER=$(CE_VERSION) 
+    TARGET_CPPFLAGS += -D_WIN32_IE=$(CE_VERSION) -DWINDOWSPC=1
+  else
+    TARGET_CPPFLAGS += -D_WIN32_WCE=$(CE_VERSION)
+    TARGET_CPPFLAGS += -DWIN32_PLATFORM_PSPC=$(CE_PLATFORM)
+  endif
 endif
 
 ifeq ($(CONFIG_PNA),y)
-TARGET_CPPFLAGS += -DBIGDISPLAY -DCECORE -DPNA
+	TARGET_CPPFLAGS += -DBIGDISPLAY -DCECORE -DPNA
 endif
 
 ifeq ($(CONFIG_PC),y)
-TARGET_CPPFLAGS += -D_WINDOWS -DWIN32 -DCECORE -DUNDER_CE=300
+	TARGET_CPPFLAGS += -D_WINDOWS -DWIN32 -DCECORE -DUNDER_CE=300
   ifeq ($(CONFIG_WINE),y)
-TARGET_CPPFLAGS += -D__MINGW32__ -D__WINE__
-# -mno-cygwin
+    TARGET_CPPFLAGS += -D__MINGW32__ -D__WINE__
+    # -mno-cygwin
   else
-TARGET_CPPFLAGS += -D_MBCS
+		TARGET_CPPFLAGS += -D_MBCS
   endif
 else
-TARGET_CPPFLAGS += -D_ARM_
+	TARGET_CPPFLAGS += -D_ARM_
   ifeq ($(CONFIG_ALTAIR),y)
-TARGET_CPPFLAGS +=-IPPC2005 -DGNAV
+		TARGET_CPPFLAGS +=-IPPC2005 -DGNAV
     ifeq ($(ALTAIR_PORTRAIT),y)
-TARGET_CPPFLAGS += -DFORCEPORTRAIT
+			TARGET_CPPFLAGS += -DFORCEPORTRAIT
     endif
   endif
 endif
 
 ifeq ($(HAVE_POSIX),y)
-TARGET_CPPFLAGS += -DHAVE_POSIX
+	TARGET_CPPFLAGS += -DHAVE_POSIX
 endif
 
 ifeq ($(HAVE_MSVCRT),y)
-TARGET_CPPFLAGS += -DHAVE_MSVCRT
-TARGET_CPPFLAGS += -DUNICODE -D_UNICODE
+  TARGET_CPPFLAGS += -DHAVE_MSVCRT
+  TARGET_CPPFLAGS += -DUNICODE -D_UNICODE
 endif
 
 ifeq ($(HAVE_POSIX),n)
-TARGET_INCLUDES += -I$(HDR)/mingw32compat
+	TARGET_INCLUDES += -I$(HDR)/mingw32compat
 endif
 
 ifeq ($(HAVE_WIN32),n)
-TARGET_INCLUDES += -I$(HDR)/unix
+	TARGET_INCLUDES += -I$(HDR)/unix
 endif
 
 ifeq ($(TARGET),WINE)
-TARGET_INCLUDES += -I$(HDR)/wine
+	TARGET_INCLUDES += -I$(HDR)/wine
 endif
 
 ifeq ($(TARGET),UNIX)
-TARGET_CPPFLAGS += -DDISABLEAUDIO
+	TARGET_CPPFLAGS += -DDISABLEAUDIO
 endif
 
 ####### compiler target
 
 ifeq ($(TARGET),UNIX)
-TARGET_ARCH :=
+	TARGET_ARCH :=
 else
 
-ifeq ($(CONFIG_PC),y)
-TARGET_ARCH	:=-mwindows -march=i586 -mms-bitfields
-else
-
-TARGET_ARCH	:=-mwin32 $(MCPU)
-ifeq ($(TARGET),PNA)
-TARGET_ARCH	:=-mwin32
-endif
-
-endif
-WINDRESFLAGS	:=-I$(HDR) -I$(SRC) $(TARGET_CPPFLAGS) -D_MINGW32_
-ifeq ($(CONFIG_ALTAIR),y)
-WINDRESFLAGS	+=-DGNAV
-endif
+  ifeq ($(CONFIG_PC),y)
+  	TARGET_ARCH	:=-mwindows -march=i586 -mms-bitfields
+  else
+  
+    TARGET_ARCH	:=-mwin32 $(MCPU)
+    ifeq ($(TARGET),PNA)
+    	TARGET_ARCH	:=-mwin32
+    endif
+  
+  endif
+  WINDRESFLAGS	:=-I$(HDR) -I$(SRC) $(TARGET_CPPFLAGS) -D_MINGW32_
+  ifeq ($(CONFIG_ALTAIR),y)
+  	WINDRESFLAGS	+=-DGNAV
+  endif
 
 endif # UNIX
 
@@ -274,33 +275,33 @@ TARGET_LDFLAGS =
 TARGET_LDLIBS =
 
 ifeq ($(HAVE_WIN32),y)
-ifneq ($(CONFIG_WINE),y)
-TARGET_LDFLAGS := -Wl,--major-subsystem-version=$(CE_MAJOR)
-TARGET_LDFLAGS += -Wl,--minor-subsystem-version=$(CE_MINOR)
-ifeq ($(CONFIG_PC),y)
-TARGET_LDFLAGS += -Wl,-subsystem,windows
-endif
-endif
-endif
-
-ifeq ($(HAVE_POSIX),y)
-TARGET_LDFLAGS += -lpthread
-endif
-
-ifeq ($(HAVE_WIN32),y)
-ifeq ($(CONFIG_PC),y)
-TARGET_LDLIBS := -lcomctl32 -lkernel32 -luser32 -lgdi32 -ladvapi32 -lwinmm -lmsimg32 -lstdc++
-else
-TARGET_LDLIBS := -lcommctrl -lstdc++
-  ifeq ($(MINIMAL),n)
-TARGET_LDLIBS += -laygshell
-    ifneq ($(TARGET),PNA)
-TARGET_LDLIBS += -limgdecmp
+  ifneq ($(CONFIG_WINE),y)
+    TARGET_LDFLAGS := -Wl,--major-subsystem-version=$(CE_MAJOR)
+    TARGET_LDFLAGS += -Wl,--minor-subsystem-version=$(CE_MINOR)
+    ifeq ($(CONFIG_PC),y)
+    	TARGET_LDFLAGS += -Wl,-subsystem,windows
     endif
   endif
 endif
+
+ifeq ($(HAVE_POSIX),y)
+	TARGET_LDFLAGS += -lpthread
+endif
+
+ifeq ($(HAVE_WIN32),y)
+  ifeq ($(CONFIG_PC),y)
+  	TARGET_LDLIBS := -lcomctl32 -lkernel32 -luser32 -lgdi32 -ladvapi32 -lwinmm -lmsimg32 -lstdc++
+  else
+		TARGET_LDLIBS := -lcommctrl -lstdc++
+    ifeq ($(MINIMAL),n)
+			TARGET_LDLIBS += -laygshell
+      ifneq ($(TARGET),PNA)
+  			TARGET_LDLIBS += -limgdecmp
+      endif
+    endif
+  endif
 else
-TARGET_LDLIBS := -lstdc++
+  TARGET_LDLIBS := -lstdc++
 endif
 
 ######## output files
@@ -309,11 +310,11 @@ TARGET_EXEEXT = .exe
 NOSTRIP_SUFFIX = -ns
 
 ifeq ($(CONFIG_WINE),y)
-TARGET_EXEEXT :=
-NOSTRIP_SUFFIX :=
+  TARGET_EXEEXT :=
+  NOSTRIP_SUFFIX :=
 endif
 
 ifeq ($(TARGET),UNIX)
-TARGET_EXEEXT :=
-NOSTRIP_SUFFIX :=
+  TARGET_EXEEXT :=
+  NOSTRIP_SUFFIX :=
 endif
