@@ -1,8 +1,8 @@
 #include "TaskAdvance.hpp"
 #include "Tasks/BaseTask/TaskPoint.hpp"
-#include "Tasks/BaseTask/StartPoint.hpp"
+#include "TaskPoints/StartPoint.hpp"
+#include "TaskPoints/AATPoint.hpp"
 #include "Tasks/BaseTask/IntermediatePoint.hpp"
-#include "Tasks/BaseTask/AATPoint.hpp"
 #include "Navigation/Aircraft.hpp"
 
 TaskAdvance::TaskAdvance():

@@ -35,29 +35,44 @@
   }
 */
 
+#ifndef CYLINDERZONE_HPP
+#define CYLINDERZONE_HPP
 
-#ifndef ASTPOINT_HPP
-#define ASTPOINT_HPP
+#include "Task/Tasks/BaseTask/ObservationZonePoint.hpp"
 
-#include "OrderedTaskPoint.hpp"
-#include "IntermediatePoint.hpp"
 
-/**
- * An ASTPoint is an abstract IntermediatePoint,
- * in which the observation zone area is not used for
- * scored distance calculations (the aircraft merely has
- * to enter the observation zone)
- * but does not yet have an observation zone.
- */
-class ASTPoint : public IntermediatePoint 
-{
+class CylinderZone : public ObservationZonePoint {
 public:
-  ASTPoint(ObservationZonePoint* _oz,
-           const TaskProjection&tp,
-           const Waypoint & wp,
-           const TaskBehaviour &tb) 
-    : IntermediatePoint(_oz,tp,wp,tb,false)
-    { };
+  CylinderZone(const GEOPOINT &loc):
+    ObservationZonePoint(loc),
+    Radius(10000.0)
+  {
+  };
+
+  virtual bool isInSector(const AIRCRAFT_STATE &ref) const
+  {
+    return distance(ref.Location)<=Radius;
+  }  
+
+  GEOPOINT get_boundary_parametric(double) ;
+
+  virtual double score_adjustment();
+
+/** 
+ * Check transition constraints (always true for cylinders)
+ * 
+ * @param ref_now Current aircraft state
+ * @param ref_last Previous aircraft state
+ * 
+ * @return True if constraints are satisfied
+ */
+  virtual bool transition_constraint(const AIRCRAFT_STATE & ref_now, 
+                                     const AIRCRAFT_STATE & ref_last) {
+    return true;
+  }
+
+protected:
+  double Radius;
 };
 
 #endif

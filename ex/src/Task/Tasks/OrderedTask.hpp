@@ -3,8 +3,8 @@
 #define ORDEREDTASK_H
 
 #include "AbstractTask.hpp"
-#include "BaseTask/StartPoint.hpp"
-#include "BaseTask/FinishPoint.hpp"
+#include "Task/TaskPoints/StartPoint.hpp"
+#include "Task/TaskPoints/FinishPoint.hpp"
 #include <vector>
 #include "Util/Serialisable.hpp"
 #include "GlideSolvers/MacCready.hpp"

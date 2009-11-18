@@ -40,7 +40,7 @@
 
 #include "TaskLeg.hpp"
 #include "ScoredTaskPoint.hpp"
-#include "Scoring/ObservationZonePoint.hpp"
+#include "ObservationZonePoint.hpp"
 
 /**
  *  Abstract compound specialisation of TaskLeg and ScoredTaskPoint,

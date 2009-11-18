@@ -3,7 +3,7 @@
 
 #include "TaskMacCreadyRemaining.hpp"
 #include "Util/ZeroFinder.hpp"
-#include "Task/Tasks/BaseTask/StartPoint.hpp"
+#include "Task/TaskPoints/StartPoint.hpp"
 
 /**
  * Optimise target ranges (for adjustable tasks) to produce an estimated

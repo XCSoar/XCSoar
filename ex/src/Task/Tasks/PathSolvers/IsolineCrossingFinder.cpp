@@ -1,6 +1,6 @@
 #include "IsolineCrossingFinder.hpp"
 #include "Navigation/GeoEllipse.hpp"
-#include "Task/Tasks/BaseTask/AATPoint.hpp"
+#include "Task/TaskPoints/AATPoint.hpp"
 #include "Util/Tolerances.hpp"
 
 IsolineCrossingFinder::IsolineCrossingFinder(const AATPoint& _aap,

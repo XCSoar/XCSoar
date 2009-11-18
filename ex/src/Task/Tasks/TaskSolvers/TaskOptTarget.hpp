@@ -3,8 +3,8 @@
 
 #include "TaskMacCreadyRemaining.hpp"
 #include "Util/ZeroFinder.hpp"
-#include "Task/Tasks/BaseTask/StartPoint.hpp"
-#include "Task/Tasks/BaseTask/AATIsolineSegment.hpp"
+#include "Task/TaskPoints/StartPoint.hpp"
+#include "Task/TaskPoints/AATIsolineSegment.hpp"
 
 /**
  * Adjust target lateral offset for active task point to minimise

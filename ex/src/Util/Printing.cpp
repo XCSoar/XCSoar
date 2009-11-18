@@ -348,8 +348,8 @@ void TaskManager::print(const AIRCRAFT_STATE &state)
     return active_task->print(state);
 }
 
-#include "Task/Tasks/BaseTask/AATPoint.hpp"
-#include "Task/Tasks/BaseTask/AATIsolineSegment.hpp"
+#include "Task/TaskPoints/AATPoint.hpp"
+#include "Task/TaskPoints/AATIsolineSegment.hpp"
 
 void AATPoint::print(std::ostream& f, const AIRCRAFT_STATE& state,
                      const int item) const

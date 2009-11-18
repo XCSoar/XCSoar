@@ -96,24 +96,24 @@ OBJS	:=\
 	src/Task/Tasks/AbstractTask.o \
 	src/Task/Tasks/GotoTask.o \
 	src/Task/Tasks/OrderedTask.o \
-	src/Task/Tasks/BaseTask/AATPoint.o \
-	src/Task/Tasks/BaseTask/AATIsoline.o \
-	src/Task/Tasks/BaseTask/AATIsolineSegment.o \
-	src/Task/Tasks/BaseTask/AATIsolineIntercept.o \
 	src/Task/Tasks/BaseTask/OrderedTaskPoint.o \
 	src/Task/Tasks/BaseTask/ScoredTaskPoint.o \
-	src/Task/Tasks/BaseTask/FinishPoint.o \
 	src/Task/Tasks/BaseTask/SampledTaskPoint.o \
 	src/Task/Tasks/BaseTask/TaskLeg.o \
-	src/Task/Tasks/BaseTask/IntermediatePoint.o \
-	src/Task/Tasks/BaseTask/StartPoint.o \
 	src/Task/Tasks/BaseTask/TaskPoint.o \
-	src/Task/Tasks/BaseTask/Scoring/ObservationZone.o \
-	src/Task/Tasks/TaskPoints/ObservationZones/CylinderZone.o \
-	src/Task/Tasks/TaskPoints/ObservationZones/HeightLimitZone.o \
-	src/Task/Tasks/TaskPoints/ObservationZones/SectorZone.o \
-	src/Task/Tasks/TaskPoints/ObservationZones/LineSectorZone.o \
-	src/Task/Tasks/TaskPoints/ObservationZones/SymmetricSectorZone.o \
+	src/Task/Tasks/BaseTask/IntermediatePoint.o \
+	src/Task/Tasks/BaseTask/ObservationZone.o \
+	src/Task/TaskPoints/StartPoint.o \
+	src/Task/TaskPoints/FinishPoint.o \
+	src/Task/TaskPoints/AATPoint.o \
+	src/Task/TaskPoints/AATIsoline.o \
+	src/Task/TaskPoints/AATIsolineSegment.o \
+	src/Task/TaskPoints/AATIsolineIntercept.o \
+	src/Task/ObservationZones/CylinderZone.o \
+	src/Task/ObservationZones/HeightLimitZone.o \
+	src/Task/ObservationZones/SectorZone.o \
+	src/Task/ObservationZones/LineSectorZone.o \
+	src/Task/ObservationZones/SymmetricSectorZone.o \
 	src/Task/Tasks/PathSolvers/TaskDijkstra.o \
 	src/Task/Tasks/PathSolvers/IsolineCrossingFinder.o \
 	src/Task/Tasks/TaskSolvers/TaskMacCready.o \

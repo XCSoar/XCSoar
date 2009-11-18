@@ -13,11 +13,11 @@
 #include "Task/TaskManager.hpp"
 #include "Task/TaskEvents.hpp"
 
-#include "Task/Tasks/BaseTask/AATPoint.hpp"
-#include "Task/Tasks/BaseTask/ASTPoint.hpp"
-#include "Task/Tasks/TaskPoints/ObservationZones/LineSectorZone.hpp"
-#include "Task/Tasks/TaskPoints/ObservationZones/FAISectorZone.hpp"
-#include "Task/Tasks/TaskPoints/ObservationZones/CylinderZone.hpp"
+#include "Task/TaskPoints/AATPoint.hpp"
+#include "Task/TaskPoints/ASTPoint.hpp"
+#include "Task/ObservationZones/LineSectorZone.hpp"
+#include "Task/ObservationZones/FAISectorZone.hpp"
+#include "Task/ObservationZones/CylinderZone.hpp"
 
 #include "Util/Filter.hpp"
 

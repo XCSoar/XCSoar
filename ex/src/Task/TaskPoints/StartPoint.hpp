@@ -36,23 +36,23 @@
 */
 
 
-#ifndef FINISHPOINT_HPP
-#define FINISHPOINT_HPP
+#ifndef STARTPOINT_HPP
+#define STARTPOINT_HPP
 
-#include "OrderedTaskPoint.hpp"
+#include "Task/Tasks/BaseTask/OrderedTaskPoint.hpp"
 
 /**
- * A FinishPoint is an abstract OrderedTaskPoint,
- * can manage finish transitions
+ * A StartPoint is an abstract OrderedTaskPoint,
+ * can manage start transitions
  * but does not yet have an observation zone.
- * No taskpoints shall be present following a FinishPoint.
+ * No taskpoints shall be present preceding a StartPoint.
  *
  * \todo
  * - currently we don't track crossing the actual line, rather it currently
  *   allows any border crossing
- * - adjustments in FAI finish for min finish height
+ * - max start height, speed
  */
-class FinishPoint : public OrderedTaskPoint {
+class StartPoint : public OrderedTaskPoint {
 public:
 /** 
  * Constructor.  Sets task area to non-scorable; distances
@@ -65,43 +65,55 @@ public:
  * 
  * @return Partially-initialised object
  */
-    FinishPoint(ObservationZonePoint* _oz,
-                const TaskProjection& tp,
-                const Waypoint & wp,
-                const TaskBehaviour& tb) : 
-      OrderedTaskPoint(_oz,tp,wp,tb,false) { };
+  StartPoint(ObservationZonePoint* _oz,
+             const TaskProjection& tp,
+             const Waypoint & wp,
+             const TaskBehaviour& tb);
 
 /** 
  * Set previous/next taskpoints in sequence.
- * Specialises base method to check next is NULL.
+ * Specialises base method to check prev is NULL.
  * 
- * @param prev Previous task point 
- * @param next Next task point (must be null!)
+ * @param prev Previous task point (must be null!)
+ * @param next Next task point in sequence
  */
   virtual void set_neighbours(OrderedTaskPoint* prev,
                               OrderedTaskPoint* next);
 
 /** 
- * Test whether aircraft has entered observation zone and
- * was previously outside.  Only triggers on first entry
- * since an aircraft may pass in/out of a finish zone multiple
- * times but only the first is required.
+ * Test whether aircraft has exited observation zone and
+ * was previously inside; also tracks this transition and
+ * clears samples inside except for last inside sample.
  * 
  * @param ref_now State current
  * @param ref_last State at last sample
  * 
  * @return True if observation zone is exited now
  */
-  virtual bool transition_enter(const AIRCRAFT_STATE & ref_now, 
-                                const AIRCRAFT_STATE & ref_last);
+  virtual bool transition_exit(const AIRCRAFT_STATE & ref_now, 
+                               const AIRCRAFT_STATE & ref_last);
+
+/** 
+ * Update sample, specialisation to check start speed/height
+ *
+ * @param state Aircraft state
+ * @param task_events Callback class for feedback
+ * 
+ * @return True if internal state changed
+ */
+  virtual bool update_sample(const AIRCRAFT_STATE& state,
+                             const TaskEvents &task_events);
 
 /** 
  * Retrieve elevation of taskpoint, taking into account
- * rules and safety margins.
+ * rules and safety margins. 
  * 
  * @return Minimum allowable elevation of start point
  */
   virtual double getElevation();
+
+protected:
+    bool enabled;
 public:
   DEFINE_VISITABLE()
 };

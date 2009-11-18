@@ -38,8 +38,7 @@
 #ifndef AATPOINT_HPP
 #define AATPOINT_HPP
 
-#include "OrderedTaskPoint.hpp"
-#include "IntermediatePoint.hpp"
+#include "Task/Tasks/BaseTask/IntermediatePoint.hpp"
 
 /**
  * An AATPoint is an abstract IntermediatePoint,

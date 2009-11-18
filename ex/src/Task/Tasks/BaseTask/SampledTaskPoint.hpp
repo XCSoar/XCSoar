@@ -4,7 +4,7 @@
 #define SAMPLEDTASKPOINT_H
 
 #include "Navigation/SearchPointVector.hpp"
-#include "Scoring/ObservationZone.hpp"
+#include "ObservationZone.hpp"
 #include "TaskPoint.hpp"
 #include "Navigation/TaskProjectionClient.hpp"
 #include "Task/TaskEvents.hpp"
