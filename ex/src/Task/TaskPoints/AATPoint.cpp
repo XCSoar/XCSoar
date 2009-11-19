@@ -142,3 +142,12 @@ AATPoint::set_target(const GEOPOINT &loc)
 }
 
 
+bool
+AATPoint::equals(const OrderedTaskPoint* other) const
+{
+  if (dynamic_cast<const AATPoint*>(other)) {
+    return OrderedTaskPoint::equals(other);
+  } else {
+    return false;
+  }
+}

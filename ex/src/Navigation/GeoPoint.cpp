@@ -31,3 +31,9 @@ GEOPOINT::projected_distance(const GEOPOINT &from,
 {
   return ::ProjectedDistance(from, to, *this);
 }
+
+bool 
+GEOPOINT::equals(const GEOPOINT &other) const
+{
+  return (Longitude == other.Longitude) && (Latitude == other.Latitude);
+}

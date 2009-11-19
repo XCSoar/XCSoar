@@ -96,7 +96,7 @@ public:
  *
  * @return Observation zone
  */
-  ObservationZonePoint* get_oz() {
+  ObservationZonePoint* get_oz() const {
     return oz;
   }
 
@@ -271,6 +271,17 @@ public:
                                      const AIRCRAFT_STATE & ref_last) {
     return oz->transition_constraint(ref_now, ref_last);
   }
+
+/** 
+ * Test whether a taskpoint is equivalent to this one
+ * 
+ * For this abstract orderedtaskpoint, only compare OZ and WP
+ *
+ * @param other Taskpoint to compare to
+ * 
+ * @return True if same WP, type and OZ
+ */
+  virtual bool equals(const OrderedTaskPoint* other) const;
 
 protected:
   ActiveState_t active_state;

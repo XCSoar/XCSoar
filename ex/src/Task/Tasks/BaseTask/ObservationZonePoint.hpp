@@ -56,6 +56,15 @@ public:
                         const TaskPoint *current,
                         const TaskPoint *next) {};
 
+/** 
+ * Test whether an OZ is equivalent to this one
+ * 
+ * @param other OZ to compare to
+ * 
+ * @return True if same location and OZ
+ */
+
+  virtual bool equals(const ObservationZonePoint* other) const;
 };
 
 #endif

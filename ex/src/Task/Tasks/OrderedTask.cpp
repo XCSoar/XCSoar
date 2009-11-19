@@ -305,9 +305,11 @@ OrderedTask::check_startfinish(OrderedTaskPoint* new_tp)
 
 
 bool
-OrderedTask::remove(unsigned position)
+OrderedTask::remove(const unsigned position)
 {
   // for now, don't allow removing start/finish
+  /// \todo allow removing start/finish
+
   assert(position>0);
   assert(position+1<tps.size());
 
@@ -344,7 +346,7 @@ OrderedTask::append(OrderedTaskPoint* new_tp)
 }
 
 bool 
-OrderedTask::insert(OrderedTaskPoint* new_tp, unsigned position)
+OrderedTask::insert(OrderedTaskPoint* new_tp, const unsigned position)
 {
   if (position) {
     task_events.construction_error("Error! can't insert at start\n");
@@ -373,6 +375,46 @@ OrderedTask::insert(OrderedTaskPoint* new_tp, unsigned position)
   update_geometry();
   return true;
 }
+
+bool 
+OrderedTask::replace(OrderedTaskPoint* new_tp, const unsigned position)
+{
+  if ((!position) || (position>=tps.size())) {
+    return false;
+  }
+  if (tps[position]->equals(new_tp)) {
+    // nothing to do
+    return true;
+  }
+
+  if (position==0) {
+    if (StartPoint* ap = dynamic_cast<StartPoint*>(new_tp)) {
+      ts = ap;
+    } else {
+      return false;
+    }
+  }
+  if (tps.size() && (position+1 == tps.size())) {
+    if (FinishPoint* ap = dynamic_cast<FinishPoint*>(new_tp)) {
+      tf = ap;
+    } else {
+      return false;
+    }
+  }
+
+  /// \todo check start/finish type
+
+  delete tps[position];
+  tps[position] = new_tp;
+
+  set_neighbours(position-1);
+  set_neighbours(position);
+  set_neighbours(position+1);
+
+  update_geometry();
+  return true;
+}
+
 
 //////////  
 

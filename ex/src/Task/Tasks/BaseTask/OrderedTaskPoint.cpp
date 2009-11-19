@@ -138,3 +138,11 @@ OrderedTaskPoint::update_oz()
   prune_boundary_points();
   update_projection();
 }
+
+bool 
+OrderedTaskPoint::equals(const OrderedTaskPoint* other) const
+{
+  return (get_waypoint() == other->get_waypoint()) &&
+    (oz->equals(other->get_oz()));
+}
+

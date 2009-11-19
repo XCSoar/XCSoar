@@ -19,6 +19,7 @@ public:
 /** 
  * Constructor.
  * 
+ * @param _oz Observation zone attached to this point
  * @param tp Global projection 
  * @param wp Waypoint origin of turnpoint
  * @param tb Task Behaviour defining options (esp safety heights)

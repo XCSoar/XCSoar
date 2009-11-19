@@ -12,3 +12,14 @@ GEOPOINT CylinderZone::get_boundary_parametric(double t)
 { 
   return GeoVector(Radius, t*360).end_point(getLocation());
 }
+
+bool
+CylinderZone::equals(const ObservationZonePoint* other) const
+{
+  if (ObservationZonePoint::equals(other)) {
+    if (const CylinderZone* z = dynamic_cast<const CylinderZone*>(other)) {
+      return Radius == z->getRadius();
+    }
+  }
+  return false;
+}

@@ -71,6 +71,8 @@ struct GEOPOINT {
 
   double projected_distance(const GEOPOINT &from,
                             const GEOPOINT &to) const;
+
+  bool equals(const GEOPOINT &other) const;
 };
 
 #endif

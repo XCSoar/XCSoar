@@ -53,6 +53,20 @@ public:
   virtual void set_legs(const TaskPoint *previous,
                         const TaskPoint *current,
                         const TaskPoint *next);
+
+/** 
+ * Test whether an OZ is equivalent to this one
+ * 
+ * @param other OZ to compare to
+ * 
+ * @return True if same type and OZ parameters
+ */
+
+  virtual bool equals(const ObservationZonePoint* other) const;
+
+  double getSectorAngle() const {
+    return SectorAngle;
+  }
 private:
   const double SectorAngle;
 };

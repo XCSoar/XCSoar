@@ -58,6 +58,15 @@ public:
     : IntermediatePoint(_oz,tp,wp,tb,false)
     { };
 
+/** 
+ * Test whether a taskpoint is equivalent to this one
+ * 
+ * @param other Taskpoint to compare to
+ * 
+ * @return True if same WP, type and OZ
+ */
+  virtual bool equals(const OrderedTaskPoint* other) const;
+
 public:
   DEFINE_VISITABLE()
 

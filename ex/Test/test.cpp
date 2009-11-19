@@ -305,44 +305,147 @@ void scan_airspaces(const AIRCRAFT_STATE state,
 
 }
 
-void test_flight(TaskManager &task_manager,
-                 Airspaces &airspaces,
-                 GlidePolar &glide_polar,
-                 int test_num) 
-{
 #define  num_wp 6
-  GEOPOINT w[num_wp];
-  w[0].Longitude = -0.025; 
-  w[0].Latitude = -0.125; 
-  w[1].Longitude = -0.05; 
-  w[1].Latitude = 1.05; 
-  w[2].Longitude = 1.05; 
-  w[2].Latitude = 1.05; 
-  w[3].Longitude = 0.75; 
-  w[3].Latitude = 0.5; 
-  w[4].Longitude = 0.95; 
-  w[4].Latitude = 0; 
-  w[5].Longitude = -0.025; 
-  w[5].Latitude = 0.0; 
 
-  AIRCRAFT_STATE state, state_last;
-  state.Location = w[0];
-  state_last.Location = w[0];
-  state.Altitude = 1500.0;
-  state.Time = 0.0;
-  state.WindSpeed = 0.0;
-  state.WindDirection = 0;
+class AircraftSim {
+public:
+  AircraftSim(int _test_num):
+    test_num(_test_num)
+  {
+    w[0].Longitude = -0.025; 
+    w[0].Latitude = -0.125; 
+    w[1].Longitude = -0.05; 
+    w[1].Latitude = 1.05; 
+    w[2].Longitude = 1.05; 
+    w[2].Latitude = 1.05; 
+    w[3].Longitude = 0.75; 
+    w[3].Latitude = 0.5; 
+    w[4].Longitude = 0.95; 
+    w[4].Latitude = 0; 
+    w[5].Longitude = -0.025; 
+    w[5].Latitude = 0.0; 
 
-  if (test_num<4) {
-    scan_airspaces(state, airspaces, true, w[1]);
+    state.Location = w[0];
+    state_last.Location = w[0];
+    state.Altitude = 1500.0;
+    state.Time = 0.0;
+    state.WindSpeed = 0.0;
+    state.WindDirection = 0;
+    state.Speed = 16.0;
+
+    bearing = 0;
+    sinkrate = 0;
+    awp= 0;
+  
+    acstate = Cruise;
+  };
+
+  const AIRCRAFT_STATE& get_state() {
+    return state;
+  }
+
+  void scan_airspaces(Airspaces &airspaces, bool do_print) {
+    ::scan_airspaces(state, airspaces, do_print, w[awp+1]);
+  }
+
+  bool far() {
+    return (w[awp+1].distance(state.Location)>state.Speed);
+  }
+
+  void update_state(TaskManager &task_manager,
+                    GlidePolar &glide_polar)  {
+
+    const ElementStat stat = task_manager.get_stats().current_leg;
+
+    switch (acstate) {
+    case Cruise:
+      state.Speed = stat.solution_remaining.VOpt;
+      sinkrate = glide_polar.SinkRate(state.Speed);        
+      bearing = state.Location.bearing(w[awp+1])+small_rand();
+      if ((task_manager.get_stats().total.solution_remaining.DistanceToFinal<= state.Speed)
+          && (awp>1)) {
+        printf("fg\n");
+        acstate = FinalGlide;
+      } else {
+        if (state.Altitude<=300) {
+          printf("climb\n");
+          acstate = Climb;
+        }
+      }
+      break;
+    case FinalGlide:
+      state.Speed = stat.solution_remaining.VOpt*0.97;
+      sinkrate = glide_polar.SinkRate(state.Speed);
+      bearing = state.Location.bearing(w[awp+1])+small_rand();
+      break;
+    case Climb:
+      state.Speed = 25.0;
+      bearing += 20+small_rand();
+      sinkrate = -glide_polar.get_mc();
+      if ((task_manager.get_stats().total.solution_remaining.DistanceToFinal<= state.Speed)
+          && (awp>1)) {
+        printf("fg\n");
+        acstate = FinalGlide;
+      } else if (state.Altitude>=1500) {
+        acstate = Cruise;
+        printf("cruise\n");
+      }
+      break;
+    };
+  }
+
+  void integrate() {
+    state.Location = GeoVector(state.Speed,bearing).end_point(state.Location);
+    state.Altitude -= sinkrate;
+    state.Time += 1.0;
+  }
+
+  bool advance(TaskManager &task_manager,
+               GlidePolar &glide_polar)  {
+
+    update_state(task_manager, glide_polar);
+
+    integrate();
+    
+    task_manager.update(state, state_last);
+    task_manager.update_idle(state);
+
+    state_last = state;
+
+    if (!far()) {
+
+      if ((test_num==1) && (n_samples>500)) {
+        return false;
+      }
+      wait_prompt(time());
+
+      awp++;
+      if (awp+1==num_wp) {
+        return false;
+      }
+    }
+    return true;
   }
 
 #ifdef DO_PRINT
-  std::ofstream f4("results/res-sample.txt");
+  void print(std::ostream &f4) {
+    f4 << state.Time << " " 
+       <<  state.Location.Longitude << " " 
+       <<  state.Location.Latitude << " "
+       <<  state.Altitude << "\n";
+  }
 #endif
 
-  unsigned counter=0;
-  TaskVisitorPrint tv;
+  double time() {
+    return state.Time;
+  }
+private:
+  AIRCRAFT_STATE state, state_last;
+  GEOPOINT w[num_wp];
+  double bearing;
+  double sinkrate;
+  int awp;
+  int test_num;
 
   enum AcState {
     Climb = 0,
@@ -350,101 +453,43 @@ void test_flight(TaskManager &task_manager,
     FinalGlide
   };
   
-  AcState acstate = Cruise;
-  double bearing = 0;
-  state.Speed = 16.0;
+  AcState acstate; 
 
-  task_manager.Accept(tv);
+};
 
-  for (int i=0; i<num_wp-1; i++) {
 
-    if ((test_num==1) && (n_samples>500)) {
-      return;
+bool test_flight(TaskManager &task_manager,
+                 Airspaces &airspaces,
+                 GlidePolar &glide_polar,
+                 int test_num) 
+{
+  AircraftSim ac(test_num);
+  unsigned print_counter=0;
+
+#ifdef DO_PRINT
+  std::ofstream f4("results/res-sample.txt");
+#endif
+
+  bool do_print;
+
+  do {
+    do_print = (print_counter++ % 1 ==0);
+
+    if (do_print) {
+      // task_manager.Accept(tv);
+#ifdef DO_PRINT
+      task_manager.print(ac.get_state());
+      ac.print(f4);
+      f4.flush();
+#endif
     }
-    wait_prompt(state.Time);
+    n_samples++;
 
-    while (w[i+1].distance(state.Location)>state.Speed) {
+    ac.scan_airspaces(airspaces, do_print);
+  } while (ac.advance(task_manager, glide_polar));
 
-// get_stats();
-      // remaining
-      const ElementStat stat = task_manager.get_stats().current_leg;
-      double sinkrate = 0.0;
-
-      switch (acstate) {
-      case Cruise:
-        state.Speed = stat.solution_remaining.VOpt;
-        sinkrate = glide_polar.SinkRate(state.Speed);        
-        bearing = state.Location.bearing(w[i+1])+small_rand();
-        if ((task_manager.get_stats().total.solution_remaining.DistanceToFinal<= state.Speed)
-            && (i>1)) {
-          printf("fg\n");
-          acstate = FinalGlide;
-        } else {
-          if (state.Altitude<=300) {
-            printf("climb\n");
-            acstate = Climb;
-          }
-        }
-        break;
-      case FinalGlide:
-        state.Speed = stat.solution_remaining.VOpt*0.97;
-        sinkrate = glide_polar.SinkRate(state.Speed);
-        bearing = state.Location.bearing(w[i+1])+small_rand();
-        break;
-      case Climb:
-        state.Speed = 25.0;
-        bearing += 20+small_rand();
-        sinkrate = -glide_polar.get_mc();
-        if ((task_manager.get_stats().total.solution_remaining.DistanceToFinal<= state.Speed)
-            && (i>1)) {
-          printf("fg\n");
-          acstate = FinalGlide;
-        } else if (state.Altitude>=1500) {
-          acstate = Cruise;
-          printf("cruise\n");
-        }
-        break;
-      };
-
-      state.Location = GeoVector(state.Speed,bearing).end_point(state.Location);
-      state.Altitude -= sinkrate;
-      state.Time += 1.0;
-
-      task_manager.update(state, state_last);
-      task_manager.update_idle(state);
-
-      bool do_print = (counter++ % 1 ==0);
-      if (test_num<4) {
-        scan_airspaces(state, airspaces, do_print, w[i+1]);
-      }
-
-      if (do_print) {
-//        task_manager.Accept(tv);
-#ifdef DO_PRINT
-        task_manager.print(state);
-        f4 << state.Time << " " 
-           <<  state.Location.Longitude << " " 
-           <<  state.Location.Latitude << " "
-           <<  state.Altitude << "\n";
-        f4.flush();
-#endif
-      }
-      n_samples++;
-      state_last = state;
-    }    
-
-/*
-    if (i==num_wp-2) {
-      task_manager.abort();
-#ifdef DO_PRINT
-      printf("- mode abort\n");
-#endif
-    } 
-//    task_manager.Accept(tv);
-*/
-
-  }
   distance_counts();
+  return true;
 }
 
 class WaypointVisitorPrint: public WaypointVisitor {
@@ -524,10 +569,11 @@ int test_newtask(int test_num) {
     
   setup_task(task_manager);
     
+  TaskVisitorPrint tv;
+  task_manager.Accept(tv);
+
   test_flight(task_manager, airspaces, glide_polar, test_num);
 
-//  task_manager.remove(2);
-//  task_manager.scan_distance(location);
   return 0;
 }
 

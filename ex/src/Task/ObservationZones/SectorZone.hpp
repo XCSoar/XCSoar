@@ -101,6 +101,16 @@ public:
 
   virtual double score_adjustment();
 
+/** 
+ * Test whether an OZ is equivalent to this one
+ * 
+ * @param other OZ to compare to
+ * 
+ * @return True if same type and OZ parameters
+ */
+
+  virtual bool equals(const ObservationZonePoint* other) const;
+
 protected:
   virtual void updateSector();
 

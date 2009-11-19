@@ -13,3 +13,15 @@ LineSectorZone::score_adjustment()
 {
   return 0.0;
 }
+
+bool
+LineSectorZone::equals(const ObservationZonePoint* other) const
+{
+  if (SymmetricSectorZone::equals(other)) {
+    if (dynamic_cast<const LineSectorZone*>(other)) {
+      return true;
+    }
+  }
+  return false;
+}
+

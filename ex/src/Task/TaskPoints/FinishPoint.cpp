@@ -31,3 +31,13 @@ FinishPoint::set_neighbours(OrderedTaskPoint* prev,
   // should not ever have an outbound leg
   OrderedTaskPoint::set_neighbours(prev, next);
 }
+
+bool 
+FinishPoint::equals(const OrderedTaskPoint* other) const
+{
+  if (dynamic_cast<const FinishPoint*>(other)) {
+    return OrderedTaskPoint::equals(other);
+  } else {
+    return false;
+  }
+}

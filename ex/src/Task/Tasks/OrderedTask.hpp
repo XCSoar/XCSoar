@@ -66,19 +66,34 @@ public:
 /** 
  * Insert taskpoint before specified index in task.  May fail if the candidate
  * is the wrong type (e.g. if it is a StartPoint and the task already
- * has one).
+ * has one).  
+ * Ownership is transferred to this object.
  * 
  * @param tp Taskpoint to insert
  * @param position Index in task sequence, before which to insert
  * 
  * @return True on success
  */
-  bool insert(OrderedTaskPoint* tp, unsigned position);
+  bool insert(OrderedTaskPoint* tp, const unsigned position);
+
+/** 
+ * Replace taskpoint.
+ * May fail if the candidate is the wrong type.
+ * Does nothing (but returns true) if replacement is equivalent
+ * Ownership is transferred to this object.
+ * 
+ * @param tp Taskpoint to become replacement
+ * @param position Index in task sequence of task point to replace
+ * 
+ * @return True on success
+ */
+  bool replace(OrderedTaskPoint* tp, const unsigned position);
 
 /** 
  * Append taskpoint to end of task.  May fail if the candidate
  * is the wrong type (e.g. if it is a StartPoint and the task already
  * has one).
+ * Ownership is transferred to this object.
  * 
  * @param tp Taskpoint to append to task
  * 
@@ -94,7 +109,7 @@ public:
  * 
  * @return True on success
  */
-  bool remove(unsigned position);
+  bool remove(const unsigned position);
 
 /** 
  * Check if task is valid.  Calls task_event methods on failure.
