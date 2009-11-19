@@ -15,6 +15,7 @@ class Waypoint:
   public BaseVisitable<>
 {
  public:
+
   unsigned id;
   GEOPOINT Location;
   FLAT_GEOPOINT FlatLocation;

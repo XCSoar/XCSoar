@@ -49,6 +49,16 @@ public:
  */
   WaypointTree::const_iterator find_id(const unsigned id) const;
 
+
+/** 
+ * Look up waypoint by ID.
+ * 
+ * @param id Id of waypoint to find in internal tree
+ * 
+ * @return Pointer to waypoint if found (or NULL if not)
+ */
+  const Waypoint* lookup_id(const unsigned id) const;
+
 /** 
  * Find waypoints within approximate range (square range box)
  * to search location.  Possible use by screen display functions.
@@ -125,6 +135,13 @@ public:
  */
   void clear();
 
+/** 
+ * Size of waypoints (in tree, not in temporary store) ---
+ * must call optimise() before this for it to be accurate.
+ * 
+ * @return Number of waypoints in tree
+ */
+  unsigned size() const;
 private:
   WaypointTree waypoint_tree;
   TaskProjection task_projection;

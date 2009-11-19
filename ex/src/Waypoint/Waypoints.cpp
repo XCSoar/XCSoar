@@ -63,13 +63,30 @@ Waypoints::find_nearest(const GEOPOINT &loc) const
   return found.first;
 }
 
+const Waypoint*
+Waypoints::lookup_id(const unsigned id) const
+{
+  WaypointTree::const_iterator found = waypoint_tree.begin();
+  while (found != waypoint_tree.end()) {
+    if ((*found).id == id) {
+      return &(*found);
+    }
+    found++;
+  }
+  return NULL;
+}
+
 
 Waypoints::WaypointTree::const_iterator
 Waypoints::find_id(const unsigned id) const
 {
-  Waypoint bb_target; bb_target.id = id;
-  WaypointTree::const_iterator found = waypoint_tree.find_exact(bb_target);
-
+  WaypointTree::const_iterator found = waypoint_tree.begin();
+  while (found != waypoint_tree.end()) {
+    if ((*found).id == id) {
+      break;
+    }
+    found++;
+  }
 #ifdef INSTRUMENT_TASK
   n_queries++;
 #endif
@@ -151,4 +168,10 @@ void
 Waypoints::clear()
 {
   waypoint_tree.clear();
+}
+
+unsigned
+Waypoints::size() const
+{
+  return waypoint_tree.size();
 }

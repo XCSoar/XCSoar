@@ -10,24 +10,14 @@
 #include "Task/TaskManager.hpp"
 #include "Task/TaskEvents.hpp"
 
+#include "test_debug.hpp"
+
 #include <fstream>
 
 std::ofstream fout("results/res-trees.txt");
 
-#ifdef INSTRUMENT_TASK
-extern unsigned count_intersections;
-extern unsigned n_queries;
-#endif
-
 const unsigned n_test = 2000;
 
-void print_queries(unsigned n) {
-#ifdef INSTRUMENT_TASK
-  fout << n << " " << count_intersections/n_queries << "\n";
-  count_intersections = 0;
-  n_queries = 0;
-#endif
-}
 
 void
 test_wp(const unsigned n) 
@@ -61,7 +51,7 @@ test_wp(const unsigned n)
       waypoints.find_within_range_circle(state.Location, 20);
     (void)approx_waypoints.size();
   }
-  print_queries(n);
+  print_queries(n,fout);
 }
 
 

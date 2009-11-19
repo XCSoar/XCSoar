@@ -144,14 +144,20 @@ OBJS	:=\
 	src/Util/Printing.o \
 	src/Util/ZeroFinder.o 
 
-Test/test: $(OBJS) Test/test.cpp
-	g++ $(CXXFLAGS) $(INCLUDES) $(OBJS) Test/test.cpp -o Test/test 
+TESTOBJS = Test/test_debug.o \
+	Test/test_aircraft.o \
+	Test/test_airspace.o \
+	Test/test_waypoints.o \
+	Test/test_task.o
 
-Test/test_trees: $(OBJS) Test/test_trees.cpp
-	g++ $(CXXFLAGS) $(INCLUDES) $(OBJS) Test/test_trees.cpp -o Test/test_trees 
+Test/test: $(OBJS) $(TESTOBJS) Test/test.cpp
+	g++ $(CXXFLAGS) $(INCLUDES) $(OBJS) $(TESTOBJS) Test/test.cpp -o Test/test 
 
-Test/test_mc: $(OBJS) Test/test_mc.cpp
-	g++ $(CXXFLAGS) $(INCLUDES) $(OBJS) Test/test_mc.cpp -o Test/test_mc 
+Test/test_trees: $(OBJS) $(TESTOBJS) Test/test_trees.cpp
+	g++ $(CXXFLAGS) $(INCLUDES) $(OBJS) $(TESTOBJS) Test/test_trees.cpp -o Test/test_trees 
+
+Test/test_mc: $(OBJS) $(TESTOBJS) Test/test_mc.cpp
+	g++ $(CXXFLAGS) $(INCLUDES) $(OBJS) $(TESTOBJS) Test/test_mc.cpp -o Test/test_mc 
 
 TARGETS = Test/test Test/test_trees Test/test_mc
 
