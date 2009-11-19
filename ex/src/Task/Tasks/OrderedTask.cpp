@@ -409,7 +409,7 @@ OrderedTask::append(OrderedTaskPoint* new_tp)
 bool 
 OrderedTask::insert(OrderedTaskPoint* new_tp, const unsigned position)
 {
-  if (position) {
+  if (!position) {
     task_events.construction_error("Error! can't insert at start\n");
     return false;
   }

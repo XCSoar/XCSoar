@@ -52,7 +52,7 @@ public:
 bool test_task(TaskManager& task_manager, const Waypoints &waypoints)
 {
   AIRCRAFT_STATE ac;
-//  AbstractTaskFactory *fact = task_manager.get_factory();
+  AbstractTaskFactory *fact = task_manager.get_factory();
 
   TaskVisitorPrint tv;
 
@@ -76,6 +76,26 @@ bool test_task(TaskManager& task_manager, const Waypoints &waypoints)
   }
   task_manager.Accept(tv);
   task_manager.print(ac);
+
+  OrderedTaskPoint *tp;
+
+  printf("inserting at 3\n");
+  wait_prompt(0);
+  const Waypoint *wp = waypoints.lookup_id(3);
+  if (wp) {
+    tp = fact->createIntermediate(AbstractTaskFactory::AST_CYLINDER,*wp);
+    if (tp) task_manager.insert(tp,3); else return false;
+  }
+  task_manager.Accept(tv);
+  task_manager.print(ac);
+
+  if (task_manager.check_task()) {
+    task_manager.reset();
+    task_manager.setActiveTaskPoint(0);
+    task_manager.resume();
+  } else {
+    return false;
+  }
 
   return true;
 }
