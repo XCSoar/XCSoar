@@ -123,6 +123,19 @@ public:
   virtual const TaskStats& get_stats() const;
 
 /** 
+ * Replace taskpoint in ordered task.
+ * May fail if the candidate is the wrong type.
+ * Does nothing (but returns true) if replacement is equivalent
+ * Ownership is transferred to this object.
+ * 
+ * @param tp Taskpoint to become replacement
+ * @param position Index in task sequence of task point to replace
+ * 
+ * @return True on success
+ */
+  bool replace(OrderedTaskPoint* tp, const unsigned position);
+
+/** 
  * Add taskpoint to ordered task.  It is the
  * user's responsibility to ensure the task is
  * valid (has a start/intermediate/finish).
@@ -143,7 +156,7 @@ public:
  * 
  * @return True if operation successful
  */
-  bool insert(OrderedTaskPoint *new_tp, unsigned position);
+  bool insert(OrderedTaskPoint *new_tp, const unsigned position);
 
 /** 
  * Remove taskpoint from ordered task.  It is the
@@ -154,7 +167,7 @@ public:
  * 
  * @return True if operation successful
  */
-  bool remove(unsigned position);
+  bool remove(const unsigned position);
 
 /** 
  * Check whether ordered task is valid

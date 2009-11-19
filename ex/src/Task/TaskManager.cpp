@@ -120,13 +120,19 @@ TaskManager::append(OrderedTaskPoint *new_tp)
 }
 
 bool 
-TaskManager::insert(OrderedTaskPoint *new_tp, unsigned position)
+TaskManager::replace(OrderedTaskPoint *new_tp, const unsigned position)
+{
+  return task_ordered.replace(new_tp, position);
+}
+
+bool 
+TaskManager::insert(OrderedTaskPoint *new_tp, const unsigned position)
 {
   return task_ordered.insert(new_tp, position);
 }
 
 bool 
-TaskManager::remove(unsigned position)
+TaskManager::remove(const unsigned position)
 {
   return task_ordered.remove(position);
 }
