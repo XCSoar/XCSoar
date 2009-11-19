@@ -60,8 +60,7 @@ char wait_prompt(const double time) {
 #ifdef DO_PRINT
   printf("# %g [enter to continue]\n",time);
 #endif
-//  return getchar();
-  return 0;
+  return getchar();
 }
 
 

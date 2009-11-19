@@ -15,7 +15,12 @@
 #include "Task/Visitors/TaskPointVisitor.hpp"
 
 void
-OrderedTask::update_geometry() {
+OrderedTask::update_geometry() 
+{
+
+  if (!ts || !tps[0]) {
+    return;
+  }
 
   for (unsigned i=0; i<tps.size(); i++) {
     if (i==0) {
@@ -247,6 +252,11 @@ OrderedTask::set_neighbours(unsigned position)
   OrderedTaskPoint* prev=NULL;
   OrderedTaskPoint* next=NULL;
 
+  if (!tps[position]) {
+    // nothing to do if this is deleted
+    return;
+  }
+
   if (position>=tps.size()) {
     // nothing to do
     return;
@@ -320,6 +330,9 @@ OrderedTask::remove(const unsigned position)
 
     if (tps.size()==1) {
       ts = NULL;
+      delete tps[position]; tps[position] = NULL;
+
+      tps.erase(tps.begin()+position); // 0,1,2,3 -> 0,1,3
     } else {
       // create new start point from next point
       ObservationZonePoint *oz = tps[0]->get_oz()->clone(tps[1]->getLocation());
@@ -327,11 +340,17 @@ OrderedTask::remove(const unsigned position)
                                       task_projection,
                                       tps[1]->get_waypoint(),
                                       task_behaviour);
+
+      delete tps[0]; tps[position] = NULL;
+
       if (!replace(sp, 1)) {
         // this will leave task in bad state!
         return false;
       }
       ts = sp;
+
+      tps.erase(tps.begin()+position); // 0,1,2,3 -> 0,1,3
+
     }
   } else if (tf && (position+1 == tps.size()) && (position>0)) {
     // special case, have a finish and want to remove it
@@ -344,15 +363,23 @@ OrderedTask::remove(const unsigned position)
                                       task_projection,
                                       tps[position-1]->get_waypoint(),
                                       task_behaviour);
+
+    delete tps[position]; tps[position] = NULL;
+
     if (!replace(fp, position-1)) {
       // this will leave task in bad state!
       return false;
     }
     tf = fp;
-  }
 
-  delete tps[position];
-  tps.erase(tps.begin()+position); // 0,1,2,3 -> 0,1,3
+    tps.erase(tps.begin()+position); // 0,1,2,3 -> 0,1,3
+
+  } else {
+
+    delete tps[position]; tps[position] = NULL;
+    tps.erase(tps.begin()+position); // 0,1,2,3 -> 0,1,3
+
+  }
 
   set_neighbours(position);
   if (position) {
@@ -441,7 +468,9 @@ OrderedTask::replace(OrderedTaskPoint* new_tp, const unsigned position)
   delete tps[position];
   tps[position] = new_tp;
 
-  set_neighbours(position-1);
+  if (position) {
+    set_neighbours(position-1);
+  }
   set_neighbours(position);
   set_neighbours(position+1);
 

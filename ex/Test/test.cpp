@@ -85,6 +85,8 @@ bool test_all(int test_num) {
     return false;
   }
 
+  test_task(task_manager, waypoints);
+
   test_flight(task_manager, airspaces, glide_polar, test_num);
 
   return 0;

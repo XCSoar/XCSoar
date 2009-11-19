@@ -1,4 +1,5 @@
 #include "test_task.hpp"
+#include "test_debug.hpp"
 
 #include "Task/ObservationZones/CylinderZone.hpp"
 #include "Task/Visitors/TaskVisitor.hpp"
@@ -47,6 +48,37 @@ public:
   };
 };
 
+
+bool test_task(TaskManager& task_manager, const Waypoints &waypoints)
+{
+  AIRCRAFT_STATE ac;
+//  AbstractTaskFactory *fact = task_manager.get_factory();
+
+  TaskVisitorPrint tv;
+
+  task_manager.Accept(tv);
+  task_manager.print(ac);
+
+  printf("removing tp 2\n");
+  wait_prompt(0);
+  if (!task_manager.remove(2)) {
+    printf("can't remove 2\n");
+    return false;
+  }
+  task_manager.Accept(tv);
+  task_manager.print(ac);
+
+  printf("removing tp 0\n");
+  wait_prompt(0);
+  if (!task_manager.remove(0)) {
+    printf("can't remove 0\n");
+    return false;
+  }
+  task_manager.Accept(tv);
+  task_manager.print(ac);
+
+  return true;
+}
 
 bool setup_task(TaskManager& task_manager, const Waypoints& waypoints)
 {

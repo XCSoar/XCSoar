@@ -6,4 +6,6 @@
 bool setup_task(TaskManager& task_manager, 
                 const Waypoints& waypoints);
 
+bool test_task(TaskManager& task_manager, const Waypoints &waypoints);
+
 #endif
