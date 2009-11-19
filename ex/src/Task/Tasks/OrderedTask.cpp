@@ -307,14 +307,48 @@ OrderedTask::check_startfinish(OrderedTaskPoint* new_tp)
 bool
 OrderedTask::remove(const unsigned position)
 {
-  // for now, don't allow removing start/finish
-  /// \todo allow removing start/finish
-
-  assert(position>0);
-  assert(position+1<tps.size());
+  if (position>= tps.size()) {
+    return false;
+  }
 
   if (activeTaskPoint>position) {
     activeTaskPoint--;
+  }
+
+  if (position==0) {
+    // special case, remove start point..
+
+    if (tps.size()==1) {
+      ts = NULL;
+    } else {
+      // create new start point from next point
+      ObservationZonePoint *oz = tps[0]->get_oz()->clone(tps[1]->getLocation());
+      StartPoint* sp = new StartPoint(oz,
+                                      task_projection,
+                                      tps[1]->get_waypoint(),
+                                      task_behaviour);
+      if (!replace(sp, 1)) {
+        // this will leave task in bad state!
+        return false;
+      }
+      ts = sp;
+    }
+  } else if (tf && (position+1 == tps.size()) && (position>0)) {
+    // special case, have a finish and want to remove it
+
+    // create new finish point from previous point
+    ObservationZonePoint *oz = 
+      tps[position]->get_oz()->clone(tps[position-1]->getLocation());
+
+    FinishPoint* fp = new FinishPoint(oz,
+                                      task_projection,
+                                      tps[position-1]->get_waypoint(),
+                                      task_behaviour);
+    if (!replace(fp, position-1)) {
+      // this will leave task in bad state!
+      return false;
+    }
+    tf = fp;
   }
 
   delete tps[position];

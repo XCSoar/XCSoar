@@ -45,8 +45,20 @@ class FAISectorZone:
 {
 public:  
   FAISectorZone(const GEOPOINT loc):
-    SymmetricSectorZone(loc,90.0)
+    SymmetricSectorZone(loc,10000.0,90.0)
     {}
+
+/** 
+ * Clone with shift (for use when we want to create a new taskpoint
+ * retaining the OZ type of another) 
+ * 
+ * @param _location Location of copy
+ * 
+ * @return New object
+ */
+  virtual FAISectorZone* clone(const GEOPOINT &_location) {
+    return new FAISectorZone(_location);
+  }
 
 /** 
  * Test whether an OZ is equivalent to this one

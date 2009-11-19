@@ -43,9 +43,21 @@ class LineSectorZone:
   public SymmetricSectorZone 
 {
 public:
-  LineSectorZone(const GEOPOINT loc):
-    SymmetricSectorZone(loc,180.0)
+  LineSectorZone(const GEOPOINT loc, const double radius=1000.0):
+    SymmetricSectorZone(loc,radius,180.0)
   {};
+
+/** 
+ * Clone with shift (for use when we want to create a new taskpoint
+ * retaining the OZ type of another) 
+ * 
+ * @param _location Location of copy
+ * 
+ * @return New object
+ */
+  virtual LineSectorZone* clone(const GEOPOINT &_location) {
+    return new LineSectorZone(_location,getRadius());
+  }
 
 /** 
  * Check transition constraints -- for lines, both points have to

@@ -44,12 +44,27 @@ class SectorZone:
   public CylinderZone 
 {
 public:
-  SectorZone(const GEOPOINT &loc):
-    CylinderZone(loc),
-    StartRadial(0.0),
-    EndRadial(360.0) 
+  SectorZone(const GEOPOINT &loc, 
+             const double _radius=10000.0,
+             const double _startRadial=0.0, 
+             const double _endRadial=360.0):
+    CylinderZone(loc,_radius),
+    StartRadial(_startRadial),
+    EndRadial(_endRadial) 
     {
     };
+
+/** 
+ * Clone with shift (for use when we want to create a new taskpoint
+ * retaining the OZ type of another) 
+ * 
+ * @param _location Location of copy
+ * 
+ * @return New object
+ */
+  virtual SectorZone* clone(const GEOPOINT &_location) {
+    return new SectorZone(_location, Radius, StartRadial, EndRadial);
+  }
 
 /** 
  * Set start angle (most counter-clockwise) of sector

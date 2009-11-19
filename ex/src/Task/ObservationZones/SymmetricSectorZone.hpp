@@ -46,9 +46,22 @@ class SymmetricSectorZone:
 {
 public:
   SymmetricSectorZone(const GEOPOINT &loc,
-		      const double angle):
-    SectorZone(loc),
+                      const double radius=10000.0,
+		      const double angle=90.0):
+    SectorZone(loc,radius),
     SectorAngle(angle) {}
+
+/** 
+ * Clone with shift (for use when we want to create a new taskpoint
+ * retaining the OZ type of another) 
+ * 
+ * @param _location Location of copy
+ * 
+ * @return New object
+ */
+  virtual SymmetricSectorZone* clone(const GEOPOINT &_location) {
+    return new SymmetricSectorZone(_location, getRadius(), SectorAngle);
+  }
 
   virtual void set_legs(const TaskPoint *previous,
                         const TaskPoint *current,

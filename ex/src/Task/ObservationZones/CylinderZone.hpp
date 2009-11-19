@@ -43,11 +43,23 @@
 
 class CylinderZone : public ObservationZonePoint {
 public:
-  CylinderZone(const GEOPOINT &loc):
+  CylinderZone(const GEOPOINT &loc, const double _radius=10000.0):
     ObservationZonePoint(loc),
-    Radius(10000.0)
+    Radius(_radius)
   {
   };
+
+/** 
+ * Clone with shift (for use when we want to create a new taskpoint
+ * retaining the OZ type of another) 
+ * 
+ * @param _location Location of copy
+ * 
+ * @return New object
+ */
+  virtual CylinderZone* clone(const GEOPOINT &_location) {
+    return new CylinderZone(_location, Radius);
+  }
 
   virtual bool isInSector(const AIRCRAFT_STATE &ref) const
   {

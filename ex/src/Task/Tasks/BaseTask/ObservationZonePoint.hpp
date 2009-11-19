@@ -52,6 +52,17 @@ public:
     ReferencePoint(_location) {
 
     };
+
+/** 
+ * Clone with shift (for use when we want to create a new taskpoint
+ * retaining the OZ type of another) 
+ * 
+ * @param _location Location of copy
+ * 
+ * @return New object
+ */
+  virtual ObservationZonePoint* clone(const GEOPOINT &_location) = 0;
+
   virtual void set_legs(const TaskPoint *previous,
                         const TaskPoint *current,
                         const TaskPoint *next) {};
