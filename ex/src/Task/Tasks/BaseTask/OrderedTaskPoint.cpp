@@ -133,9 +133,7 @@ OrderedTaskPoint::update_oz()
 {
   /// \todo also clear search points?
   update_geometry();
-  clear_boundary_points();
-  default_boundary_points();
-  prune_boundary_points();
+  initialise_boundary_points();
   update_projection();
 }
 

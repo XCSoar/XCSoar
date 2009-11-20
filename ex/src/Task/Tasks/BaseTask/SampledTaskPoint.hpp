@@ -71,31 +71,11 @@ public:
   const SearchPointVector& get_boundary_points() const;
 
 /** 
- * Convert boundary points to convex hull
- * 
- * @return True if boundary points were trimmed
- */
-  virtual bool prune_boundary_points();
-
-/** 
- * Convert interior sample points to convex hull
- * 
- * @return True if interior sample points were trimmed
- */
-  virtual bool prune_sample_points();
-
-/** 
  * Re-project boundary and interior sample polygons.
  * Must be called if task_projection changes.
  * 
  */
   virtual void update_projection();
-
-/** 
- * Clear all boundary points.
- * 
- */
-  virtual void clear_boundary_points();
 
 /** 
  * Clear all sample points.
@@ -174,7 +154,7 @@ public:
  * Construct boundary polygon from internal representation of observation zone.
  * 
  */
-  virtual void default_boundary_points();
+  virtual void initialise_boundary_points();
 
 /** 
  * Check if aircraft is within observation zone, and if so,
@@ -198,6 +178,27 @@ protected:
   const bool boundary_scored;
 
 private:
+
+/** 
+ * Convert interior sample points to convex hull
+ * 
+ * @return True if interior sample points were trimmed
+ */
+  virtual bool prune_sample_points();
+
+/** 
+ * Convert boundary points to convex hull
+ * 
+ * @return True if boundary points were trimmed
+ */
+  virtual bool prune_boundary_points();
+
+/** 
+ * Clear all boundary points.
+ * 
+ */
+  virtual void clear_boundary_points();
+
   SearchPointVector sampled_points;
   SearchPointVector boundary_points;
   SearchPoint search_max;

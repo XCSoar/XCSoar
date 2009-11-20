@@ -64,11 +64,11 @@ SampledTaskPoint::get_search_points(bool cheat)
 
 
 void 
-SampledTaskPoint::default_boundary_points() 
+SampledTaskPoint::initialise_boundary_points() 
 { 
-  double t=0;
+  clear_boundary_points();
   if (boundary_scored) {
-    for (t=0; t<=1.0; t+= 0.05) {
+    for (double t=0; t<=1.0; t+= 0.05) {
       SearchPoint sp(get_boundary_parametric(t), get_task_projection());
       boundary_points.push_back(sp);
     }
@@ -76,6 +76,7 @@ SampledTaskPoint::default_boundary_points()
     SearchPoint sp(getLocation(), get_task_projection());
     boundary_points.push_back(sp);
   }
+  prune_boundary_points();
 }
 
 bool 

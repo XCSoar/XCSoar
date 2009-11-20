@@ -9,6 +9,10 @@
 
 #include <vector>
 
+/**
+ * \todo move orderedtask manipulation methods (insert, replace, append, remove) to here?
+ *
+ */
 class AbstractTaskFactory
 {
 public:
@@ -65,15 +69,44 @@ public:
     return finish_types;
   }
 
+/** 
+ * Create start point of specified type
+ * 
+ * @param type Type of start point
+ * @param wp Waypoint reference
+ * 
+ * @return Initialised StartPoint if valid, otherwise NULL
+ */
   virtual StartPoint* createStart(const LegalStartType_t type,
                                  const Waypoint &wp) const;
 
+/** 
+ * Create intermediate point of specified type
+ * 
+ * @param type Type of intermediate point
+ * @param wp Waypoint reference
+ * 
+ * @return Initialised IntermediatePoint if valid, otherwise NULL
+ */
   virtual IntermediatePoint* createIntermediate(const LegalIntermediateType_t type,
                                  const Waypoint &wp) const;
 
+/** 
+ * Create finish point of specified type
+ * 
+ * @param type Type of finish point
+ * @param wp Waypoint reference
+ * 
+ * @return Initialised FinishPoint if valid, otherwise NULL
+ */
   virtual FinishPoint* createFinish(const LegalFinishType_t type,
                                  const Waypoint &wp) const;
 
+/** 
+ * Check whether task is complete and valid according to factory rules
+ * 
+ * @return True if task is valid according to factory rules
+ */
   virtual bool validate() = 0;
 
 protected:

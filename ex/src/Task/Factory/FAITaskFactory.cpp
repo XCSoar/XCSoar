@@ -20,5 +20,23 @@ FAITaskFactory::validate()
    * - do checks for closure and triangle leg distances etc
    * - adjustment to finish height if FAI finish height is on
    */
+
+
+/* From kflog
+bool FlightTask::isFAI(double d_wp, double d1, double d2, double d3)
+{
+  if( ( d_wp < 500.0 ) &&
+      ( d1 >= 0.28 * d_wp && d2 >= 0.28 * d_wp && d3 >= 0.28 * d_wp ) )
+    // small FAI
+    return true;
+  else if( d_wp >= 500.0 &&
+           ( d1 > 0.25 * d_wp && d2 > 0.25 * d_wp && d3 > 0.25 * d_wp ) &&
+           ( d1 <= 0.45 * d_wp && d2 <= 0.45 * d_wp && d3 <= 0.45 * d_wp ) )
+    // large FAI
+    return true;
+
+  return false;
+}
+*/
   return true;
 }
