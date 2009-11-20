@@ -2,8 +2,6 @@
 #include "test_aircraft.hpp"
 #include "test_debug.hpp"
 
-#define  num_wp 6
-
 /*
   void scan_airspaces(Airspaces &airspaces, bool do_print) {
   }
@@ -13,22 +11,13 @@ GEOPOINT AircraftSim::get_next() const {
   return w[awp+1];
 }
 
-AircraftSim::AircraftSim(int _test_num):
+AircraftSim::AircraftSim(int _test_num, const TaskManager& task_manager):
   test_num(_test_num),
   heading_filt(8.0)
 {
-  w[0].Longitude = -0.025; 
-  w[0].Latitude = -0.125; 
-  w[1].Longitude = -0.05; 
-  w[1].Latitude = 1.05; 
-  w[2].Longitude = 1.05; 
-  w[2].Latitude = 1.05; 
-  w[3].Longitude = 0.75; 
-  w[3].Latitude = 0.5; 
-  w[4].Longitude = 0.95; 
-  w[4].Latitude = 0; 
-  w[5].Longitude = -0.025; 
-  w[5].Latitude = 0.0; 
+  for (unsigned i=0; i<task_manager.get_task_size(); i++) {
+    w.push_back(task_manager.random_point_in_task(i));
+  }
   
   state.Location = w[0];
   state_last.Location = w[0];
@@ -121,7 +110,7 @@ bool AircraftSim::advance(TaskManager &task_manager,
     wait_prompt(time());
     
     awp++;
-    if (awp+1==num_wp) {
+    if (awp+1== w.size()) {
       return false;
     }
   }

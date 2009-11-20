@@ -100,6 +100,9 @@ bool test_task_mixed(const Waypoints &waypoints)
   task_manager.Accept(tv);
   task_manager.print(ac);
 
+  printf("checking task..\n");
+  wait_prompt(0);
+
   if (task_manager.check_task()) {
     task_manager.reset();
     task_manager.setActiveTaskPoint(0);
@@ -183,6 +186,9 @@ bool test_task_fai(const Waypoints &waypoints)
   }
   task_manager.Accept(tv);
   task_manager.print(ac);
+
+  printf("checking task..\n");
+  wait_prompt(0);
 
   if (!fact->validate()) {
     printf("can't validate task\n");
@@ -269,6 +275,9 @@ bool test_task_aat(const Waypoints &waypoints)
   }
   task_manager.Accept(tv);
   task_manager.print(ac);
+
+  printf("checking task..\n");
+  wait_prompt(0);
 
   if (!fact->validate()) {
     printf("can't validate task\n");

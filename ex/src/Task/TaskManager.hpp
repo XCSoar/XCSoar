@@ -50,7 +50,16 @@ public:
  * 
  * @return TaskPoint of active task point
  */
-    virtual TaskPoint* getActiveTaskPoint();
+  virtual TaskPoint* getActiveTaskPoint();
+
+/** 
+ * Get a random point in the task OZ (for testing simulation route)
+ * 
+ * @param index Index sequence of task point
+ * 
+ * @return Location of point
+ */
+  GEOPOINT random_point_in_task(const unsigned index) const;
 
   enum TaskMode_t {
     MODE_NULL=0,
@@ -121,6 +130,13 @@ public:
  * @return Statistics of active task
  */
   virtual const TaskStats& get_stats() const;
+
+/** 
+ * Size of OrderedTask
+ * 
+ * @return Number of taskpoints in OrderedTask
+ */
+  unsigned get_task_size() const;
 
 /** 
  * Replace taskpoint in ordered task.

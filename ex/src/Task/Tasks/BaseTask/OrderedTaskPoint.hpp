@@ -220,11 +220,6 @@ public:
                                       const GlidePolar &polar,
                                       const double minH=0) const;
 
-#ifdef DO_PRINT
-  virtual void print(std::ostream& f, const AIRCRAFT_STATE& state,
-                     const int item=0) const;
-#endif
-
 /** 
  * Test whether aircraft is inside observation zone.
  * 
@@ -235,6 +230,15 @@ public:
   virtual bool isInSector(const AIRCRAFT_STATE &ref) const
   {
     return oz->isInSector(ref);
+  }
+
+/** 
+ * Generate a random location inside the OZ (to be used for testing)
+ * 
+ * @return Location of point
+ */
+  GEOPOINT randomPointInSector() const {
+    return oz->randomPointInSector();
   }
 
 /** 
@@ -257,6 +261,12 @@ public:
  * @return True if same WP, type and OZ
  */
   virtual bool equals(const OrderedTaskPoint* other) const;
+
+#ifdef DO_PRINT
+  virtual void print(std::ostream& f, const AIRCRAFT_STATE& state,
+                     const int item=0) const;
+#endif
+
 
 protected:
   ActiveState_t active_state;

@@ -16,7 +16,7 @@ bool test_flight(TaskManager &task_manager,
                  GlidePolar &glide_polar,
                  int test_num) 
 {
-  AircraftSim ac(test_num);
+  AircraftSim ac(test_num, task_manager);
   unsigned print_counter=0;
 
 #ifdef DO_PRINT

@@ -5,3 +5,4 @@ ObservationZonePoint::equals(const ObservationZonePoint* other) const
 {
   return getLocation().equals(other->getLocation());
 }
+

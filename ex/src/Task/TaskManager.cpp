@@ -178,3 +178,21 @@ TaskManager::set_factory(const Factory_t the_factory)
   };
   return factory_mode;
 }
+
+
+unsigned 
+TaskManager::get_task_size() const
+{
+  return task_ordered.task_size();
+}
+
+GEOPOINT 
+TaskManager::random_point_in_task(const unsigned index) const
+{
+  
+  if (index< get_task_size()) {
+    return task_ordered.getTaskPoint(index)->randomPointInSector();
+  }
+  GEOPOINT null_location;
+  return null_location;
+}

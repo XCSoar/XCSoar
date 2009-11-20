@@ -76,6 +76,14 @@ public:
  */
 
   virtual bool equals(const ObservationZonePoint* other) const;
+
+/** 
+ * Generate a random location inside the OZ (to be used for testing)
+ * 
+ * @return Location of point
+ */
+  virtual GEOPOINT randomPointInSector() const = 0;
+
 };
 
 #endif

@@ -2,15 +2,14 @@
 #define TEST_AIRCRAFT_HPP
 
 #include "test_aircraft.hpp"
-
-#define  num_wp 6
+#include <vector>
 
 #include "Task/TaskManager.hpp"
 
 
 class AircraftSim {
 public:
-  AircraftSim(int _test_num);
+  AircraftSim(int _test_num, const TaskManager& task_manager);
 
   const AIRCRAFT_STATE& get_state() {
     return state;
@@ -33,10 +32,10 @@ public:
 
 private:
   AIRCRAFT_STATE state, state_last;
-  GEOPOINT w[num_wp];
+  std::vector<GEOPOINT> w;
   double bearing;
   double sinkrate;
-  int awp;
+  unsigned awp;
   int test_num;
   Filter heading_filt;
 
