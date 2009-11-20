@@ -17,7 +17,7 @@
 std::ofstream fout("results/res-trees.txt");
 
 const unsigned n_test = 2000;
-
+extern unsigned n_queries;
 
 void
 test_wp(const unsigned n) 
@@ -103,7 +103,7 @@ test_as(const unsigned n)
     state.Location.Latitude = y/1000.0;
     airspaces.find_inside(state);
   }
-  print_queries(n);
+  print_queries(n, std::cout);
 }
 
 

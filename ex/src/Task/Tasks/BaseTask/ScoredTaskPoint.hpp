@@ -60,15 +60,6 @@ public:
   }
 
 /** 
- * Set OZ entry state
- * 
- * @param state State at entry
- */
-  void set_state_entered(const AIRCRAFT_STATE& state) {
-    state_entered = state;
-  }
-
-/** 
  * Test whether aircraft has entered observation zone and
  * was previously outside; records this transition.
  * 
@@ -123,6 +114,17 @@ public:
  * @return Location 
  */
   virtual GEOPOINT get_reference_remaining() const;
+
+protected:
+
+/** 
+ * Set OZ entry state
+ * 
+ * @param state State at entry
+ */
+  void set_state_entered(const AIRCRAFT_STATE& state) {
+    state_entered = state;
+  }
 
 private:
   AIRCRAFT_STATE state_entered;
