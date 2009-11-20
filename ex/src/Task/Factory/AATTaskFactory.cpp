@@ -21,6 +21,10 @@ AATTaskFactory::validate()
   if (!task.has_start_and_finish()) {
     return false;
   }
+  if (task.task_size()<3) {
+    // not enough turnpoints!
+    return false;
+  }
 
   return true;
 }

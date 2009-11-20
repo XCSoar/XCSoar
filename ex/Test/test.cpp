@@ -63,6 +63,8 @@ bool test_all(int test_num) {
 
   ////////////////////////// TASK //////
 
+  test_task(waypoints);
+
   distance_counts();
 
   TaskBehaviour task_behaviour;
@@ -84,8 +86,6 @@ bool test_all(int test_num) {
   if (!setup_task(task_manager, waypoints)) {
     return false;
   }
-
-  test_task(task_manager, waypoints);
 
   test_flight(task_manager, airspaces, glide_polar, test_num);
 

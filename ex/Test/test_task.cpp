@@ -48,14 +48,25 @@ public:
   };
 };
 
-
-bool test_task(TaskManager& task_manager, const Waypoints &waypoints)
+bool test_task_mixed(const Waypoints &waypoints)
 {
-  AIRCRAFT_STATE ac;
+  printf("test mixed task\n");
+
+  TaskBehaviour task_behaviour;
+  TaskEvents default_events;
+  GlidePolar glide_polar(2.0,0.0,0.0);
+  TaskManager task_manager(default_events,
+                           task_behaviour,
+                           glide_polar,
+                           waypoints);
+
+  if (!setup_task(task_manager, waypoints)) {
+    return false;
+  }
   AbstractTaskFactory *fact = task_manager.get_factory();
 
+  AIRCRAFT_STATE ac;
   TaskVisitorPrint tv;
-
   task_manager.Accept(tv);
   task_manager.print(ac);
 
@@ -94,9 +105,196 @@ bool test_task(TaskManager& task_manager, const Waypoints &waypoints)
     task_manager.setActiveTaskPoint(0);
     task_manager.resume();
   } else {
+    printf("check task failed\n");
+    return false;
+  }
+  return true;
+}
+
+
+bool test_task_fai(const Waypoints &waypoints)
+{
+  printf("test fai task\n");
+  TaskBehaviour task_behaviour;
+  TaskEvents default_events;
+  GlidePolar glide_polar(2.0,0.0,0.0);
+  TaskManager task_manager(default_events,
+                           task_behaviour,
+                           glide_polar,
+                           waypoints);
+
+  task_manager.set_factory(TaskManager::FACTORY_FAI);
+  AbstractTaskFactory *fact = task_manager.get_factory();
+  const Waypoint *wp;
+
+  AIRCRAFT_STATE ac;
+  TaskVisitorPrint tv;
+  task_manager.Accept(tv);
+  task_manager.print(ac);
+
+  printf("adding start\n");
+  wait_prompt(0);
+  wp = waypoints.lookup_id(1);
+  if (wp) {
+    if (!task_manager.append(fact->createStart(*wp))) {
+      printf("can't add start\n");
+      return false;
+    }
+  }
+
+  task_manager.setActiveTaskPoint(0);
+  task_manager.resume();
+
+  task_manager.Accept(tv);
+  task_manager.print(ac);
+
+  printf("adding intermediate\n");
+  wait_prompt(0);
+  wp = waypoints.lookup_id(2);
+  if (wp) {
+    if (!task_manager.append(fact->createIntermediate(*wp))) {
+      printf("can't add intermediate\n");
+      return false;
+    }
+  }
+  task_manager.Accept(tv);
+  task_manager.print(ac);
+
+  printf("adding intermediate\n");
+  wait_prompt(0);
+  wp = waypoints.lookup_id(3);
+  if (wp) {
+    if (!task_manager.append(fact->createIntermediate(*wp))) {
+      printf("can't add intermediate\n");
+      return false;
+    }
+  }
+  task_manager.Accept(tv);
+  task_manager.print(ac);
+
+  printf("adding finish\n");
+  wait_prompt(0);
+  wp = waypoints.lookup_id(1);
+  if (wp) {
+    if (!task_manager.append(fact->createFinish(*wp))) {
+      printf("can't add finish\n");
+      return false;
+    }
+  }
+  task_manager.Accept(tv);
+  task_manager.print(ac);
+
+  if (!fact->validate()) {
+    printf("can't validate task\n");
     return false;
   }
 
+  if (!task_manager.check_task()) {
+    printf("check task failed\n");
+  } else {
+    return false;
+  }
+  return true;
+}
+
+
+bool test_task_aat(const Waypoints &waypoints)
+{
+  printf("test aat task\n");
+  TaskBehaviour task_behaviour;
+  TaskEvents default_events;
+  GlidePolar glide_polar(2.0,0.0,0.0);
+  TaskManager task_manager(default_events,
+                           task_behaviour,
+                           glide_polar,
+                           waypoints);
+
+  task_manager.set_factory(TaskManager::FACTORY_AAT);
+  AbstractTaskFactory *fact = task_manager.get_factory();
+  const Waypoint *wp;
+
+  AIRCRAFT_STATE ac;
+  TaskVisitorPrint tv;
+  task_manager.Accept(tv);
+  task_manager.print(ac);
+
+  printf("adding start\n");
+  wait_prompt(0);
+  wp = waypoints.lookup_id(1);
+  if (wp) {
+    if (!task_manager.append(fact->createStart(*wp))) {
+      printf("can't add start\n");
+      return false;
+    }
+  }
+
+  task_manager.setActiveTaskPoint(0);
+  task_manager.resume();
+
+  task_manager.Accept(tv);
+  task_manager.print(ac);
+
+  printf("adding intermediate\n");
+  wait_prompt(0);
+  wp = waypoints.lookup_id(2);
+  if (wp) {
+    if (!task_manager.append(fact->createIntermediate(*wp))) {
+      printf("can't add intermediate\n");
+      return false;
+    }
+  }
+  task_manager.Accept(tv);
+  task_manager.print(ac);
+
+  printf("adding intermediate\n");
+  wait_prompt(0);
+  wp = waypoints.lookup_id(3);
+  if (wp) {
+    if (!task_manager.append(fact->createIntermediate(*wp))) {
+      printf("can't add intermediate\n");
+      return false;
+    }
+  }
+  task_manager.Accept(tv);
+  task_manager.print(ac);
+
+  printf("adding finish\n");
+  wait_prompt(0);
+  wp = waypoints.lookup_id(1);
+  if (wp) {
+    if (!task_manager.append(fact->createFinish(*wp))) {
+      printf("can't add finish\n");
+      return false;
+    }
+  }
+  task_manager.Accept(tv);
+  task_manager.print(ac);
+
+  if (!fact->validate()) {
+    printf("can't validate task\n");
+    return false;
+  }
+
+  if (!task_manager.check_task()) {
+    printf("check task failed\n");
+  } else {
+    return false;
+  }
+  return true;
+}
+
+
+bool test_task(const Waypoints &waypoints)
+{
+  if (!test_task_mixed(waypoints)) {
+    return false;
+  }
+  if (!test_task_fai(waypoints)) {
+    return false;
+  }
+  if (!test_task_aat(waypoints)) {
+    return false;
+  }
   return true;
 }
 

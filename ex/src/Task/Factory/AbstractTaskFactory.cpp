@@ -10,7 +10,8 @@
 StartPoint* 
 AbstractTaskFactory::createStart(const Waypoint &wp) const
 {
-  return createStart(*start_types.begin(), wp);
+  const LegalStartType_t type = *start_types.begin();
+  return createStart(type, wp);
 }
 
 IntermediatePoint* 

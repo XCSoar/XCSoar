@@ -363,7 +363,7 @@ void AATPoint::print(std::ostream& f, const AIRCRAFT_STATE& state,
 
   case 1:
 
-    if (getActiveState() != BEFORE_ACTIVE) {
+    if ((get_next()!= NULL) && (getActiveState() != BEFORE_ACTIVE)) {
 
       // note in general this will only change if 
       // prev max or target changes
@@ -404,12 +404,12 @@ AATPoint::print_boundary(std::ostream& f,
 {
   const unsigned n= get_boundary_points().size();
   f << "#   Boundary points\n";
-  const double mind = double_leg_distance(state.Location);
+//  const double mind = double_leg_distance(state.Location);
   for (unsigned i=0; i<n; i++) {
     const GEOPOINT loc = get_boundary_points()[i].getLocation();
 
     /// \todo this is broken
-    if (1 || double_leg_distance(loc)>mind) {
+    if (1) { // || double_leg_distance(loc)>mind) 
       f << "     " << loc.Longitude << " " << loc.Latitude << "\n";
     } else {
       f << "     " << state.Location.Longitude << " " << state.Location.Latitude << "\n";
