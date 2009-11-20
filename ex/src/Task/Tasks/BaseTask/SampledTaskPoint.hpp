@@ -78,19 +78,6 @@ public:
   virtual void update_projection();
 
 /** 
- * Clear all sample points.
- * 
- */
-  virtual void clear_sample_points();
-
-/** 
- * Clear all sample points and add the current state as a sample.
- * This is used, for exmaple, for StartPoints to only remember the last sample
- * prior to crossing the start.
- */  
-  virtual void clear_sample_all_but_last(const AIRCRAFT_STATE& state);
-
-/** 
  * Set the location of the sample/boundary polygon node
  * that produces the maximum task distance.
  * 
@@ -176,6 +163,19 @@ public:
 
 protected:
   const bool boundary_scored;
+
+/** 
+ * Clear all sample points.
+ * 
+ */
+  virtual void clear_sample_points();
+
+/** 
+ * Clear all sample points and add the current state as a sample.
+ * This is used, for exmaple, for StartPoints to only remember the last sample
+ * prior to crossing the start.
+ */  
+  virtual void clear_sample_all_but_last(const AIRCRAFT_STATE& state);
 
 private:
 
