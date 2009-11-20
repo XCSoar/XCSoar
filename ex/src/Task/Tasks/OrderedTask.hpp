@@ -57,6 +57,22 @@ public:
   TaskPoint* getActiveTaskPoint();
 
 /** 
+ * Retrieve task point by sequence index
+ * 
+ * @param index Index of task point sequence
+ * 
+ * @return OrderedTaskPoint at index (or NULL if out of range)
+ */
+  const OrderedTaskPoint* getTaskPoint(const unsigned index) const;
+
+/** 
+ * Check if task has a single StartPoint and FinishPoint
+ * 
+ * @return True if task has start/finish
+ */
+  virtual bool has_start_and_finish() const;
+
+/** 
  * Set active task point index
  * 
  * @param desired Desired active index of task sequence
@@ -407,6 +423,9 @@ private:
  * Update internal geometric state of task points. 
  * Typically called after task geometry or observation zones are modified.
  * 
+ *
+ * This also updates planned/nominal distances so clients can use that
+ * data during task construction.
  */
   void update_geometry();
 

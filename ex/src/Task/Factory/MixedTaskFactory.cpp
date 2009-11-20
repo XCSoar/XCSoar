@@ -23,5 +23,10 @@ MixedTaskFactory::validate()
    * \todo
    * maybe warn on overlap?
    */
+
+  if (!task.has_start_and_finish()) {
+    return false;
+  }
+
   return true;
 }

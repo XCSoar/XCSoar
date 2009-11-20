@@ -34,6 +34,12 @@ OrderedTask::update_geometry()
   for (unsigned i=0; i<tps.size(); i++) {
     tps[i]->update_oz();
   }
+
+  if (has_start_and_finish()) {
+    // update stats so data can be used during task construction
+    scan_distance_planned();
+    scan_distance_nominal();
+  }
 }
 
 ////////// TIMES
@@ -649,5 +655,28 @@ OrderedTask::reset()
   for (std::vector<OrderedTaskPoint*>::const_iterator 
          i= tps.begin(); i!= tps.end(); i++) {
     (*i)->reset();
+  }
+}
+
+
+const OrderedTaskPoint* 
+OrderedTask::getTaskPoint(const unsigned index) const
+{
+  if (index>=tps.size()) {
+    return NULL;
+  }
+  return tps[index];
+}
+
+
+bool 
+OrderedTask::has_start_and_finish() const
+{
+  /// \todo to be paranoid, check only single ts and tf?
+
+  if ((ts==NULL) || (tf==NULL)) {
+    return false;
+  } else {
+    return true;
   }
 }
