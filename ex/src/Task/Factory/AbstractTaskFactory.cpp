@@ -8,6 +8,24 @@
 #include <algorithm>
 
 StartPoint* 
+AbstractTaskFactory::createStart(const Waypoint &wp) const
+{
+  return createStart(*start_types.begin(), wp);
+}
+
+IntermediatePoint* 
+AbstractTaskFactory::createIntermediate(const Waypoint &wp) const
+{
+  return createIntermediate(*intermediate_types.begin(), wp);
+}
+
+FinishPoint* 
+AbstractTaskFactory::createFinish(const Waypoint &wp) const
+{
+  return createFinish(*finish_types.begin(), wp);
+}
+
+StartPoint* 
 AbstractTaskFactory::createStart(const LegalStartType_t type,
                                  const Waypoint &wp) const
 {

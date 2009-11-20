@@ -18,6 +18,7 @@ class OrderedTaskPoint;
  *
  * \todo
  * - better handling of removal of start/finish point
+ * - allow for TakeOffPoint and LandingPoint
  */
 class OrderedTask:
   public AbstractTask,

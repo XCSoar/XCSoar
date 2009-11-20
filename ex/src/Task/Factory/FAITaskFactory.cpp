@@ -17,7 +17,6 @@ FAITaskFactory::validate()
 {
   /**
    * \todo
-   * - do checks for closure and triangle leg distances etc
    * - adjustment to finish height if FAI finish height is on
    */
 
@@ -38,7 +37,15 @@ FAITaskFactory::validate()
     const double d3 = task.getTaskPoint(3)->get_vector_planned().Distance/1000.0;
     const double d_wp = d1+d2+d3;
 
-    // From kflog
+
+    /**
+     * From kflog:
+     * A triangle is a valig FAI-triangle, if no side is less than
+     * 28% of the total length (totallength less than 500 km), or no
+     * side is less than 25% or larger than 45% of the total length
+     * (totallength >= 500km).
+     */
+ 
     if( ( d_wp < 500.0 ) &&
         ( d1 >= 0.28 * d_wp && d2 >= 0.28 * d_wp && d3 >= 0.28 * d_wp ) )
       // small FAI
@@ -49,6 +56,7 @@ FAITaskFactory::validate()
       // large FAI
       return true;
 
+    // distances out of limits
     return false;
   }
 

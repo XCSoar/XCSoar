@@ -10,7 +10,17 @@
 #include <vector>
 
 /**
- * \todo move orderedtask manipulation methods (insert, replace, append, remove) to here?
+ * AbstractTaskFactory is a class used as a sort of wizard
+ * to assist clients to create valid tasks of particular types.
+ *
+ * This serves to constrain the TaskPoint types to valid ones
+ * and also contains a method to validate a constructed or partially
+ * constructed task according to rules.
+ *
+ * \todo 
+ * - maybe move orderedtask manipulation methods (insert, replace, append, remove) here
+ * - add descriptor field so validate() methods can return feedback about
+ *   validity of task etc.  This can also be added to saved files.
  *
  */
 class AbstractTaskFactory
@@ -101,6 +111,33 @@ public:
  */
   virtual FinishPoint* createFinish(const LegalFinishType_t type,
                                  const Waypoint &wp) const;
+
+/** 
+ * Create start point of default type
+ * 
+ * @param wp Waypoint reference
+ * 
+ * @return Initialised StartPoint if valid, otherwise NULL
+ */
+  virtual StartPoint* createStart(const Waypoint &wp) const;
+
+/** 
+ * Create intermediate point of default type
+ * 
+ * @param wp Waypoint reference
+ * 
+ * @return Initialised IntermediatePoint if valid, otherwise NULL
+ */
+  virtual IntermediatePoint* createIntermediate(const Waypoint &wp) const;
+
+/** 
+ * Create finish point of default type
+ * 
+ * @param wp Waypoint reference
+ * 
+ * @return Initialised FinishPoint if valid, otherwise NULL
+ */
+  virtual FinishPoint* createFinish(const Waypoint &wp) const;
 
 /** 
  * Check whether task is complete and valid according to factory rules
