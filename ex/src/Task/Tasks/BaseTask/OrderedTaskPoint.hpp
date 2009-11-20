@@ -238,18 +238,6 @@ public:
   }
 
 /** 
- * Calculate boundary point from parametric border
- * 
- * @param t t value (0,1) of parameter
- * 
- * @return Boundary point
- */
-  GEOPOINT get_boundary_parametric(double t)
-  {
-    return oz->get_boundary_parametric(t);
-  }
-
-/** 
  * Calculate distance reduction for achieved task point,
  * to calcuate scored distance.
  * 
@@ -257,19 +245,6 @@ public:
  */
   virtual double score_adjustment() const {
     return oz->score_adjustment();
-  }
-
-/** 
- * Check transition constraints 
- * 
- * @param ref_now Current aircraft state
- * @param ref_last Previous aircraft state
- * 
- * @return True if constraints are satisfied
- */
-  virtual bool transition_constraint(const AIRCRAFT_STATE & ref_now, 
-                                     const AIRCRAFT_STATE & ref_last) {
-    return oz->transition_constraint(ref_now, ref_last);
   }
 
 /** 
@@ -285,6 +260,32 @@ public:
 
 protected:
   ActiveState_t active_state;
+
+protected:
+/** 
+ * Calculate boundary point from parametric border
+ * 
+ * @param t t value (0,1) of parameter
+ * 
+ * @return Boundary point
+ */
+  GEOPOINT get_boundary_parametric(double t)
+  {
+    return oz->get_boundary_parametric(t);
+  }
+
+/** 
+ * Check transition constraints 
+ * 
+ * @param ref_now Current aircraft state
+ * @param ref_last Previous aircraft state
+ * 
+ * @return True if constraints are satisfied
+ */
+  virtual bool transition_constraint(const AIRCRAFT_STATE & ref_now, 
+                                     const AIRCRAFT_STATE & ref_last) {
+    return oz->transition_constraint(ref_now, ref_last);
+  }
 
 /** 
  * Calculate distance from previous remaining/planned location to a point,
