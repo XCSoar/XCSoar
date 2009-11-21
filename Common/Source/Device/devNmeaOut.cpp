@@ -38,49 +38,16 @@ Copyright_License {
 
 #include "Device/devNmeaOut.h"
 #include "Device/Internal.hpp"
-#include "Device/Port.h"
-
-bool
-nmoParseNMEA(struct DeviceDescriptor *d, const TCHAR *String,
-             NMEA_INFO *GPS_INFO)
-{
-  (void) d;
-  (void) String;
-  (void) GPS_INFO;
-
-  return false;
-
-}
-
-bool
-nmoIsGPSSource(const struct DeviceDescriptor *d)
-{
-  (void)d;
-  return false;  // this is only true if GPS source is connected on VEGA.NmeaIn
-}
-
-bool
-nmoPutVoice(struct DeviceDescriptor *d, const TCHAR *Sentence)
-{
-  return false;
-}
-
-bool
-nmoPutQNH(struct DeviceDescriptor *d, double NewQNH)
-{
-  (void)NewQNH;
-  return false;
-}
 
 const struct DeviceRegister nmoDevice = {
   _T("NmeaOut"),
   drfNmeaOut,
-  nmoParseNMEA,			// ParseNMEA
+  NULL, // ParseNMEA
   NULL,				// PutMacCready
   NULL,				// PutBugs
   NULL,				// PutBallast
-  nmoPutQNH,			// PutQNH
-  nmoPutVoice,			// PutVoice
+  NULL, // PutQNH
+  NULL, // PutVoice
   NULL,				// PutVolume
   NULL,				// PutFreqActive
   NULL,				// PutFreqStandby
@@ -89,7 +56,7 @@ const struct DeviceRegister nmoDevice = {
   NULL,				// LinkTimeout
   NULL,				// Declare
   NULL,				// IsLogger
-  nmoIsGPSSource,		// IsGPSSource
+  NULL, // IsGPSSource
   NULL,				// IsBaroSource
   NULL				// OnSysTicker
 };
