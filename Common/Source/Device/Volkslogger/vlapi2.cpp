@@ -35,9 +35,9 @@ const int VLAPI_DBB_MEMSIZE = 16384;
 const int32 VLAPI_LOG_MEMSIZE = 81920L;
 
 void
-VLAPI::set_device(struct DeviceDescriptor *d)
+VLAPI::set_port(ComPort *_port)
 {
-  device = d;
+  port = _port;
 }
 
 // ------------------------------------------------------------

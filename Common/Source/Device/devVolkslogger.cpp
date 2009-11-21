@@ -43,6 +43,7 @@ Copyright_License {
 
 #include "Device/devVolkslogger.h"
 #include "Device/Internal.hpp"
+#include "Device/device.h"
 #include "XCSoar.h"
 #include "Protection.hpp"
 #include "Interface.hpp"
@@ -135,7 +136,7 @@ VLDeclare(struct DeviceDescriptor *d, const struct Declaration *decl)
 {
   XCSoarInterface::CreateProgressDialog(gettext(_T("Comms with Volkslogger")));
 
-  vl.set_device(d);
+  vl.set_port(d->Com);
   nturnpoints = 0;
 
   int err;
