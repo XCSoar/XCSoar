@@ -118,24 +118,24 @@ struct DeviceDescriptor *devVarioFindVega(void);
 struct DeviceRegister {
   const TCHAR	*Name;
   unsigned int	Flags;
-  BOOL (*ParseNMEA)(struct DeviceDescriptor *d, const TCHAR *String,
+  bool (*ParseNMEA)(struct DeviceDescriptor *d, const TCHAR *String,
                     NMEA_INFO *GPS_INFO);
-  BOOL (*PutMacCready)(struct DeviceDescriptor *d, double McReady);
-  BOOL (*PutBugs)(struct DeviceDescriptor *d, double Bugs);
-  BOOL (*PutBallast)(struct DeviceDescriptor *d, double Ballast);
-  BOOL (*PutQNH)(struct DeviceDescriptor *d, double NewQNH);
-  BOOL (*PutVoice)(struct DeviceDescriptor *d, const TCHAR *Sentence);
-  BOOL (*PutVolume)(struct DeviceDescriptor *d, int Volume);
-  BOOL (*PutFreqActive)(struct DeviceDescriptor *d, double Freq);
-  BOOL (*PutFreqStandby)(struct DeviceDescriptor *d, double Standby);
-  BOOL (*Open)(struct DeviceDescriptor *d, int Port);
-  BOOL (*Close)(struct DeviceDescriptor *d);
-  BOOL (*LinkTimeout)(struct DeviceDescriptor *d);
-  BOOL (*Declare)(struct DeviceDescriptor *d, const struct Declaration *decl);
-  BOOL (*IsLogger)(const struct DeviceDescriptor *d);
-  BOOL (*IsGPSSource)(const struct DeviceDescriptor *d);
-  BOOL (*IsBaroSource)(const struct DeviceDescriptor *d);
-  BOOL (*OnSysTicker)(struct DeviceDescriptor *d);
+  bool (*PutMacCready)(struct DeviceDescriptor *d, double McReady);
+  bool (*PutBugs)(struct DeviceDescriptor *d, double Bugs);
+  bool (*PutBallast)(struct DeviceDescriptor *d, double Ballast);
+  bool (*PutQNH)(struct DeviceDescriptor *d, double NewQNH);
+  bool (*PutVoice)(struct DeviceDescriptor *d, const TCHAR *Sentence);
+  bool (*PutVolume)(struct DeviceDescriptor *d, int Volume);
+  bool (*PutFreqActive)(struct DeviceDescriptor *d, double Freq);
+  bool (*PutFreqStandby)(struct DeviceDescriptor *d, double Standby);
+  bool (*Open)(struct DeviceDescriptor *d, int Port);
+  bool (*Close)(struct DeviceDescriptor *d);
+  bool (*LinkTimeout)(struct DeviceDescriptor *d);
+  bool (*Declare)(struct DeviceDescriptor *d, const struct Declaration *decl);
+  bool (*IsLogger)(const struct DeviceDescriptor *d);
+  bool (*IsGPSSource)(const struct DeviceDescriptor *d);
+  bool (*IsBaroSource)(const struct DeviceDescriptor *d);
+  bool (*OnSysTicker)(struct DeviceDescriptor *d);
 };
 
 
@@ -150,26 +150,41 @@ extern const struct DeviceRegister *const DeviceRegister[];
 extern struct DeviceDescriptor *pDevPrimaryBaroSource;
 extern struct DeviceDescriptor *pDevSecondaryBaroSource;
 
-BOOL devRegisterGetName(int Index, TCHAR *Name);
+bool
+devRegisterGetName(int Index, TCHAR *Name);
 
-BOOL ExpectString(struct DeviceDescriptor *d, const TCHAR *token);
-BOOL devHasBaroSource(void);
+bool
+ExpectString(struct DeviceDescriptor *d, const TCHAR *token);
 
-BOOL devParseNMEA(struct DeviceDescriptor *d, const TCHAR *String,
-                  NMEA_INFO *GPS_INFO);
+bool
+devHasBaroSource(void);
+
+bool
+devParseNMEA(struct DeviceDescriptor *d, const TCHAR *String,
+             NMEA_INFO *GPS_INFO);
 
 bool
 devDeclare(struct DeviceDescriptor *d, const struct Declaration *decl);
 
-BOOL devIsLogger(const struct DeviceDescriptor *d);
-BOOL devIsGPSSource(const struct DeviceDescriptor *d);
-BOOL devIsBaroSource(const struct DeviceDescriptor *d);
-BOOL devIsRadio(const struct DeviceDescriptor *d);
-BOOL devIsCondor(const struct DeviceDescriptor *d);
+bool
+devIsLogger(const struct DeviceDescriptor *d);
+
+bool
+devIsGPSSource(const struct DeviceDescriptor *d);
+
+bool
+devIsBaroSource(const struct DeviceDescriptor *d);
+
+bool
+devIsRadio(const struct DeviceDescriptor *d);
+
+bool
+devIsCondor(const struct DeviceDescriptor *d);
 
 void devTick(void);
 
-BOOL devGetBaroAltitude(double *Value);
+bool
+devGetBaroAltitude(double *Value);
 
 void AllDevicesPutMcCready(double mc_cready);
 void AllDevicesPutBugs(double bugs);
@@ -182,8 +197,11 @@ void AllDevicesPutVoice(const TCHAR *sentence);
 
 void AllDevicesLinkTimeout();
 
-BOOL devIsFalseReturn(const struct DeviceDescriptor *d);
-BOOL devIsTrueReturn(const struct DeviceDescriptor *d);
+bool
+devIsFalseReturn(const struct DeviceDescriptor *d);
+
+bool
+devIsTrueReturn(const struct DeviceDescriptor *d);
 
 void devStartup(LPTSTR lpCmdLine);
 void devShutdown();

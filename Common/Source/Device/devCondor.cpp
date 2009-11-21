@@ -60,7 +60,7 @@ cLXWP1(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INFO);
 static bool
 cLXWP2(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INFO);
 
-static BOOL
+static bool
 CondorParseNMEA(struct DeviceDescriptor *d, const TCHAR *String,
                 NMEA_INFO *GPS_INFO)
 {
@@ -79,8 +79,7 @@ CondorParseNMEA(struct DeviceDescriptor *d, const TCHAR *String,
       return cLXWP2(d, &String[7], GPS_INFO);
     }
 
-  return FALSE;
-
+  return false;
 }
 
 const struct DeviceRegister condorDevice = {
@@ -114,7 +113,7 @@ cLXWP1(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INFO)
   //  TCHAR ctemp[80];
   (void)GPS_INFO;
   // do nothing!
-  return TRUE;
+  return true;
 }
 
 
@@ -126,7 +125,7 @@ cLXWP2(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INFO)
 
   NMEAParser::ExtractParameter(String,ctemp,0);
   GlidePolar::SetMacCready(StrToDouble(ctemp,NULL));
-  return TRUE;
+  return true;
 }
 
 
@@ -160,17 +159,17 @@ cLXWP0(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INFO)
   GPS_INFO->TrueAirspeed = airspeed;
 
   if (d == pDevPrimaryBaroSource){
-    GPS_INFO->BaroAltitudeAvailable = TRUE;
+    GPS_INFO->BaroAltitudeAvailable = true;
     GPS_INFO->BaroAltitude = alt;    // ToDo check if QNH correction is needed!
   }
 
   NMEAParser::ExtractParameter(String,ctemp,3);
   GPS_INFO->Vario = StrToDouble(ctemp,NULL);
 
-  GPS_INFO->AirspeedAvailable = TRUE;
-  GPS_INFO->VarioAvailable = TRUE;
+  GPS_INFO->AirspeedAvailable = true;
+  GPS_INFO->VarioAvailable = true;
 
   TriggerVarioUpdate();
 
-  return TRUE;
+  return true;
 }

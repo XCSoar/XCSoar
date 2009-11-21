@@ -59,7 +59,7 @@ Copyright_License {
 static bool
 GPWIN(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INFO);
 
-BOOL
+bool
 PGParseNMEA(struct DeviceDescriptor *d, const TCHAR *String,
             NMEA_INFO *GPS_INFO)
 {
@@ -74,19 +74,18 @@ PGParseNMEA(struct DeviceDescriptor *d, const TCHAR *String,
       return GPWIN(d, &String[7], GPS_INFO);
     }
 
-  return FALSE;
+  return false;
 
 }
 
-
-BOOL
+bool
 PGDeclare(struct DeviceDescriptor *d, const struct Declaration *decl)
 {
 
   (void)d;
   (void)decl;
 
-  return(TRUE);
+  return true;
 }
 
 const struct DeviceRegister pgDevice = {
@@ -124,10 +123,9 @@ GPWIN(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INFO)
   NMEAParser::ExtractParameter(String, ctemp, 2);
 
   if (d == pDevPrimaryBaroSource){
-    GPS_INFO->BaroAltitudeAvailable = TRUE;
+    GPS_INFO->BaroAltitudeAvailable = true;
     GPS_INFO->BaroAltitude = AltitudeToQNHAltitude(iround(StrToDouble(ctemp, NULL)/10));
   }
 
-  return FALSE;
-
+  return false;
 }

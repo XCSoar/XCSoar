@@ -126,23 +126,21 @@ FlarmDeclare(struct DeviceDescriptor *d, const struct Declaration *decl);
 
 // This function is used to determine whether a generic
 // baro source needs to be used if available
-BOOL devHasBaroSource(void) {
-  if (pDevPrimaryBaroSource || pDevSecondaryBaroSource) {
-    return TRUE;
-  } else {
-    return FALSE;
-  }
+bool
+devHasBaroSource(void)
+{
+  return pDevPrimaryBaroSource || pDevSecondaryBaroSource;
 }
 
-
-
-BOOL devGetBaroAltitude(double *Value){
+bool
+devGetBaroAltitude(double *Value)
+{
   // hack, just return GPS_INFO->BaroAltitude
   if (Value == NULL)
-    return(FALSE);
+    return false;
   if (device_blackboard.Basic().BaroAltitudeAvailable)
     *Value = device_blackboard.Basic().BaroAltitude;
-  return(TRUE);
+  return true;
 
   // ToDo
   // more than one baro source may be available
@@ -154,15 +152,16 @@ BOOL devGetBaroAltitude(double *Value){
 
 }
 
-BOOL ExpectString(struct DeviceDescriptor *d, const TCHAR *token){
-
+bool
+ExpectString(struct DeviceDescriptor *d, const TCHAR *token)
+{
   int i=0, ch;
 
   assert(d != NULL);
   assert(token != NULL);
 
   if (!d->Com)
-    return FALSE;
+    return false;
 
   while ((ch = d->Com->GetChar()) != EOF){
 
@@ -172,37 +171,38 @@ BOOL ExpectString(struct DeviceDescriptor *d, const TCHAR *token){
       i=0;
 
     if ((unsigned)i == _tcslen(token))
-      return(TRUE);
+      return true;
 
   }
 
   #if debugIGNORERESPONCE > 0
-  return(TRUE);
+  return true;
   #endif
-  return(FALSE);
-
+  return false;
 }
 
-BOOL devRegisterGetName(int Index, TCHAR *Name){
+bool
+devRegisterGetName(int Index, TCHAR *Name)
+{
   Name[0] = '\0';
   if (Index < 0 || Index >= DeviceRegisterCount)
-    return (FALSE);
+    return false;
   _tcscpy(Name, DeviceRegister[Index]->Name);
-  return(TRUE);
+  return true;
 }
 
-BOOL
+bool
 devIsFalseReturn(const struct DeviceDescriptor *d)
 {
   (void)d;
-  return FALSE;
+  return false;
 }
 
-BOOL
+bool
 devIsTrueReturn(const struct DeviceDescriptor *d)
 {
   (void)d;
-  return TRUE;
+  return true;
 }
 
 static const struct DeviceRegister *
@@ -229,7 +229,7 @@ devInitOne(struct DeviceDescriptor *dev, int index, const TCHAR *port,
   assert(dev != NULL);
 
   if (is_simulator())
-    return FALSE;
+    return false;
 
   ReadDeviceSettings(index, DeviceName);
 
@@ -239,7 +239,7 @@ devInitOne(struct DeviceDescriptor *dev, int index, const TCHAR *port,
     ComPort *Com = new ComPort(dev);
 
     if (!Com->Initialize(port, speed))
-      return FALSE;
+      return false;
 
     memset(dev->Name, 0, sizeof(dev->Name));
     _tcsncpy(dev->Name, Driver->Name, DEVNAMESIZE);
@@ -262,10 +262,10 @@ devInitOne(struct DeviceDescriptor *dev, int index, const TCHAR *port,
       nmeaout = dev;
     }
   }
-  return TRUE;
+  return true;
 }
 
-static BOOL
+static bool
 devInit(LPCTSTR CommandLine)
 {
   int i;
@@ -382,11 +382,10 @@ devInit(LPCTSTR CommandLine)
     }
   }
 
-  return(TRUE);
+  return true;
 }
 
-
-BOOL
+bool
 devParseNMEA(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INFO)
 {
   assert(d != NULL);
@@ -429,18 +428,17 @@ devParseNMEA(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INF
   if (d->Driver && d->Driver->ParseNMEA)
     if ((d->Driver->ParseNMEA)(d, String, GPS_INFO)) {
       GPS_INFO->Connected = 2;
-      return(TRUE);
+      return true;
     }
 
   if(String[0]=='$') {  // Additional "if" to find GPS strings
     if(NMEAParser::ParseNMEAString(d->Port, String, GPS_INFO)) {
       GPS_INFO->Connected = 2;
-      return(TRUE);
+      return true;
     }
   }
 
-  return(FALSE);
-
+  return false;
 }
 
 bool
@@ -499,7 +497,7 @@ DeviceDescriptor::IsBaroSource() const
 bool
 DeviceDescriptor::PutMcCready(double mc_cready)
 {
-  BOOL result = TRUE;
+  bool result = true;
 
   if (Driver != NULL && Driver->PutMacCready != NULL)
     result = Driver->PutMacCready(this, mc_cready);
@@ -510,7 +508,7 @@ DeviceDescriptor::PutMcCready(double mc_cready)
 bool
 DeviceDescriptor::PutBugs(double bugs)
 {
-  BOOL result = TRUE;
+  bool result = true;
 
   if (Driver != NULL && Driver->PutBugs != NULL)
     result = Driver->PutBugs(this, bugs);
@@ -521,7 +519,7 @@ DeviceDescriptor::PutBugs(double bugs)
 bool
 DeviceDescriptor::PutBallast(double ballast)
 {
-  BOOL result = TRUE;
+  bool result = true;
 
   if (Driver != NULL && Driver->PutBallast != NULL)
     result = Driver->PutBallast(this, ballast);
@@ -532,7 +530,7 @@ DeviceDescriptor::PutBallast(double ballast)
 bool
 DeviceDescriptor::PutVolume(int volume)
 {
-  BOOL result = TRUE;
+  bool result = true;
 
   if (Driver != NULL && Driver->PutVolume != NULL)
     result = Driver->PutVolume(this, volume);
@@ -543,7 +541,7 @@ DeviceDescriptor::PutVolume(int volume)
 bool
 DeviceDescriptor::PutActiveFrequency(double frequency)
 {
-  BOOL result = TRUE;
+  bool result = true;
 
   if (Driver != NULL && Driver->PutFreqActive != NULL)
     result = Driver->PutFreqActive(this, frequency);
@@ -554,7 +552,7 @@ DeviceDescriptor::PutActiveFrequency(double frequency)
 bool
 DeviceDescriptor::PutStandbyFrequency(double frequency)
 {
-  BOOL result = TRUE;
+  bool result = true;
 
   if (Driver != NULL && Driver->PutFreqStandby != NULL)
     result = Driver->PutFreqStandby(this, frequency);
@@ -565,7 +563,7 @@ DeviceDescriptor::PutStandbyFrequency(double frequency)
 bool
 DeviceDescriptor::PutQNH(double qnh)
 {
-  BOOL result = TRUE;
+  bool result = true;
 
   if (Driver != NULL && Driver->PutQNH != NULL)
     result = Driver->PutQNH(this, qnh);
@@ -576,7 +574,7 @@ DeviceDescriptor::PutQNH(double qnh)
 bool
 DeviceDescriptor::PutVoice(const TCHAR *sentence)
 {
-  BOOL result = TRUE;
+  bool result = true;
 
   assert(sentence != NULL);
 
@@ -624,7 +622,7 @@ DeviceDescriptor::OnSysTicker()
 bool
 devDeclare(struct DeviceDescriptor *d, const struct Declaration *decl)
 {
-  BOOL result = FALSE;
+  bool result = false;
 
   assert(d != NULL);
 
@@ -639,7 +637,8 @@ devDeclare(struct DeviceDescriptor *d, const struct Declaration *decl)
   return result;
 }
 
-BOOL devIsLogger(const struct DeviceDescriptor *d)
+bool
+devIsLogger(const struct DeviceDescriptor *d)
 {
   bool result = false;
 
@@ -653,9 +652,10 @@ BOOL devIsLogger(const struct DeviceDescriptor *d)
   return result;
 }
 
-BOOL devIsGPSSource(const struct DeviceDescriptor *d)
+bool
+devIsGPSSource(const struct DeviceDescriptor *d)
 {
-  BOOL result = FALSE;
+  bool result = false;
 
   assert(d != NULL);
 
@@ -667,9 +667,10 @@ BOOL devIsGPSSource(const struct DeviceDescriptor *d)
   return result;
 }
 
-BOOL devIsBaroSource(const struct DeviceDescriptor *d)
+bool
+devIsBaroSource(const struct DeviceDescriptor *d)
 {
-  BOOL result = FALSE;
+  bool result = false;
 
   assert(d != NULL);
 
@@ -681,31 +682,32 @@ BOOL devIsBaroSource(const struct DeviceDescriptor *d)
   return result;
 }
 
-BOOL devIsRadio(const struct DeviceDescriptor *d)
+bool
+devIsRadio(const struct DeviceDescriptor *d)
 {
-  BOOL result = FALSE;
+  bool result = false;
 
   assert(d != NULL);
 
   mutexComm.Lock();
   if (d && d->Driver) {
-    result = d->Driver->Flags & drfRadio ? TRUE : FALSE;
+    result = (d->Driver->Flags & drfRadio) != 0;
   }
   mutexComm.Unlock();
 
   return result;
 }
 
-
-BOOL devIsCondor(const struct DeviceDescriptor *d)
+bool
+devIsCondor(const struct DeviceDescriptor *d)
 {
-  BOOL result = FALSE;
+  bool result = false;
 
   assert(d != NULL);
 
   mutexComm.Lock();
   if (d && d->Driver) {
-    result = d->Driver->Flags & drfCondor ? TRUE : FALSE;
+    result = (d->Driver->Flags & drfCondor) != 0;
   }
   mutexComm.Unlock();
 
@@ -728,9 +730,9 @@ devCloseLog(struct DeviceDescriptor *d)
 
   if (d->fhLogFile != NULL){
     fclose(d->fhLogFile);
-    return(TRUE);
+    return true;
   } else
-    return(FALSE);
+    return false;
 }
 
 void devTick()
@@ -792,7 +794,7 @@ struct DeviceDescriptor *devVarioFindVega(void)
   return NULL;
 }
 
-static BOOL
+static bool
 FlarmDeclareSetGet(struct DeviceDescriptor *d, TCHAR *Buffer) {
   assert(d != NULL);
 
@@ -806,11 +808,7 @@ FlarmDeclareSetGet(struct DeviceDescriptor *d, TCHAR *Buffer) {
     d->Com->WriteString(tmp);
 
   Buffer[6]= _T('A');
-  if (!ExpectString(d, Buffer)){
-    return FALSE;
-  } else {
-    return TRUE;
-  }
+  return ExpectString(d, Buffer);
 }
 
 
@@ -819,7 +817,7 @@ FlarmDeclare(struct DeviceDescriptor *d, const struct Declaration *decl)
 {
   assert(d != NULL);
 
-  BOOL result = TRUE;
+  bool result = true;
 
   TCHAR Buffer[256];
 
@@ -827,19 +825,24 @@ FlarmDeclare(struct DeviceDescriptor *d, const struct Declaration *decl)
   d->Com->SetRxTimeout(500);                     // set RX timeout to 500[ms]
 
   _stprintf(Buffer,TEXT("PFLAC,S,PILOT,%s"),decl->PilotName);
-  if (!FlarmDeclareSetGet(d,Buffer)) result = FALSE;
+  if (!FlarmDeclareSetGet(d,Buffer))
+    result = false;
 
   _stprintf(Buffer,TEXT("PFLAC,S,GLIDERID,%s"),decl->AircraftRego);
-  if (!FlarmDeclareSetGet(d,Buffer)) result = FALSE;
+  if (!FlarmDeclareSetGet(d,Buffer))
+    result = false;
 
   _stprintf(Buffer,TEXT("PFLAC,S,GLIDERTYPE,%s"),decl->AircraftType);
-  if (!FlarmDeclareSetGet(d,Buffer)) result = FALSE;
+  if (!FlarmDeclareSetGet(d,Buffer))
+    result = false;
 
   _stprintf(Buffer,TEXT("PFLAC,S,NEWTASK,Task"));
-  if (!FlarmDeclareSetGet(d,Buffer)) result = FALSE;
+  if (!FlarmDeclareSetGet(d,Buffer))
+    result = false;
 
   _stprintf(Buffer,TEXT("PFLAC,S,ADDWP,0000000N,00000000E,TAKEOFF"));
-  if (!FlarmDeclareSetGet(d,Buffer)) result = FALSE;
+  if (!FlarmDeclareSetGet(d,Buffer))
+    result = false;
 
   for (int i = 0; i < decl->num_waypoints; i++) {
     int DegLat, DegLon;
@@ -870,11 +873,13 @@ FlarmDeclare(struct DeviceDescriptor *d, const struct Declaration *decl)
 	      TEXT("PFLAC,S,ADDWP,%02d%05.0f%c,%03d%05.0f%c,%s"),
 	      DegLat, MinLat, NoS, DegLon, MinLon, EoW,
 	      decl->waypoint[i]->Name);
-    if (!FlarmDeclareSetGet(d,Buffer)) result = FALSE;
+    if (!FlarmDeclareSetGet(d,Buffer))
+      result = false;
   }
 
   _stprintf(Buffer,TEXT("PFLAC,S,ADDWP,0000000N,00000000E,LANDING"));
-  if (!FlarmDeclareSetGet(d,Buffer)) result = FALSE;
+  if (!FlarmDeclareSetGet(d,Buffer))
+    result = false;
 
   // PFLAC,S,KEY,VALUE
   // Expect

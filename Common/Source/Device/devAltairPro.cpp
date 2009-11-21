@@ -48,7 +48,7 @@ Copyright_License {
 
 static double lastAlt = 0;
 
-BOOL
+bool
 atrParseNMEA(struct DeviceDescriptor *d, const TCHAR *String,
              NMEA_INFO *GPS_INFO)
 {
@@ -60,7 +60,7 @@ atrParseNMEA(struct DeviceDescriptor *d, const TCHAR *String,
 
     String = _tcschr(String + 6, ',');
     if (String == NULL)
-      return FALSE;
+      return false;
 
     ++String;
 
@@ -70,7 +70,7 @@ atrParseNMEA(struct DeviceDescriptor *d, const TCHAR *String,
 
     String = _tcschr(String, ',');
     if (String == NULL)
-      return FALSE;
+      return false;
 
     ++String;
 
@@ -81,18 +81,18 @@ atrParseNMEA(struct DeviceDescriptor *d, const TCHAR *String,
 
 
     if (d == pDevPrimaryBaroSource){
-      GPS_INFO->BaroAltitudeAvailable = TRUE;
+      GPS_INFO->BaroAltitudeAvailable = true;
       GPS_INFO->BaroAltitude = AltitudeToQNHAltitude(lastAlt);
     }
 
-    return(TRUE);
+    return true;
   }
 
-  return FALSE;
+  return false;
 
 }
 
-BOOL
+bool
 atrDeclare(struct DeviceDescriptor *d, const struct Declaration *decl)
 {
   (void) d;
@@ -100,13 +100,12 @@ atrDeclare(struct DeviceDescriptor *d, const struct Declaration *decl)
 
   // TODO feature: Altair declaration
 
-  return(TRUE);
-
+  return true;
 }
 
 #include "DeviceBlackboard.hpp"
 
-BOOL
+bool
 atrPutQNH(struct DeviceDescriptor *d, double NewQNH)
 {
   (void)NewQNH; // TODO code: JMW check sending QNH to Altair
@@ -114,16 +113,16 @@ atrPutQNH(struct DeviceDescriptor *d, double NewQNH)
     device_blackboard.SetBaroAlt(AltitudeToQNHAltitude(lastAlt));
   }
 
-  return(TRUE);
+  return true;
 }
 
-BOOL
+bool
 atrOnSysTicker(struct DeviceDescriptor *d)
 {
   (void)d;
   // Do To get IO data like temp, humid, etc
 
-  return(TRUE);
+  return true;
 }
 
 const struct DeviceRegister atrDevice = {

@@ -67,7 +67,7 @@ ExpectStringWait(struct DeviceDescriptor *d, const TCHAR *token)
   int j=0;
 
   if (!d->Com)
-    return FALSE;
+    return false;
 
   while (j<500) {
 
@@ -81,19 +81,18 @@ ExpectStringWait(struct DeviceDescriptor *d, const TCHAR *token)
         i=0;
 
       if ((unsigned)i == _tcslen(token))
-        return(TRUE);
+        return true;
     }
     j++;
   }
 
   #if debugIGNORERESPONCE > 0
-  return(TRUE);
+  return true;
   #endif
-  return(FALSE);
-
+  return false;
 }
 
-static BOOL
+static bool
 EWMicroRecorderParseNMEA(struct DeviceDescriptor *d,
                          const TCHAR *String, NMEA_INFO *GPS_INFO)
 {
@@ -101,7 +100,7 @@ EWMicroRecorderParseNMEA(struct DeviceDescriptor *d,
   const TCHAR *params[5];
   int nparams = NMEAParser::ValidateAndExtract(String, ctemp, 80, params, 5);
   if (nparams < 1)
-    return FALSE;
+    return false;
 
   if (!_tcscmp(params[0], TEXT("$PGRMZ")) && nparams >= 3) {
     if (d == pDevPrimaryBaroSource) {
@@ -111,10 +110,10 @@ EWMicroRecorderParseNMEA(struct DeviceDescriptor *d,
       GPS_INFO->BaroAltitudeAvailable = true;
     }
 
-    return TRUE;
+    return true;
   }
 
-  return FALSE;
+  return false;
 }
 
 static bool
@@ -141,7 +140,7 @@ EWMicroRecorderTryConnect(struct DeviceDescriptor *d)
           d->Com->WriteString(TEXT("\x16"));
           user_data[user_size] = 0;
           // found end of file
-          return TRUE;
+          return true;
         } else {
           if (user_size<MAX_USER_SIZE-1) {
             user_data[user_size] = ch;
@@ -154,7 +153,7 @@ EWMicroRecorderTryConnect(struct DeviceDescriptor *d)
   }
 
   nDeclErrorCode = 1;
-  return(FALSE);
+  return false;
 }
 
 
@@ -211,7 +210,7 @@ EWMicroRecorderWriteWayPoint(struct DeviceDescriptor *d,
             wp->Name);
 }
 
-static BOOL
+static bool
 EWMicroRecorderDeclare(struct DeviceDescriptor *d,
                        const struct Declaration *decl)
 {
@@ -220,14 +219,14 @@ EWMicroRecorderDeclare(struct DeviceDescriptor *d,
 
   // Must have at least two, max 12 waypoints
   if (decl->num_waypoints < 2 || decl->num_waypoints > 12)
-    return FALSE;
+    return false;
 
   d->Com->StopRxThread();
 
   d->Com->SetRxTimeout(500);                     // set RX timeout to 500[ms]
 
   if (!EWMicroRecorderTryConnect(d)) {
-    return FALSE;
+    return false;
   }
 
   d->Com->WriteString(TEXT("\x18"));         // start to upload file
@@ -268,7 +267,7 @@ EWMicroRecorderDeclare(struct DeviceDescriptor *d,
   d->Com->SetRxTimeout(0);                       // clear timeout
   d->Com->StartRxThread();                       // restart RX thread
 
-  return(nDeclErrorCode == 0);                    // return() TRUE on success
+  return nDeclErrorCode == 0; // return true on success
 }
 
 const struct DeviceRegister ewMicroRecorderDevice = {

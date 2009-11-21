@@ -51,13 +51,12 @@ Copyright_License {
 
 // Additional sentance for EW support
 
-static BOOL fDeclarationPending = FALSE;
+static bool fDeclarationPending = false;
 static unsigned long lLastBaudrate = 0;
 static int nDeclErrorCode = 0;
 static int ewDecelTpIndex = 0;
 
-
-BOOL
+static bool
 EWParseNMEA(struct DeviceDescriptor *d, const TCHAR *String,
             NMEA_INFO *GPS_INFO)
 {
@@ -66,8 +65,7 @@ EWParseNMEA(struct DeviceDescriptor *d, const TCHAR *String,
   (void)GPS_INFO;
   // no propriatary sentence
 
-  return FALSE;
-
+  return false;
 }
 
 
@@ -85,7 +83,7 @@ void appendCheckSum(TCHAR *String){
 
 }
 
-BOOL
+static bool
 EWTryConnect(struct DeviceDescriptor *d)
 {
   int retries=10;
@@ -93,19 +91,19 @@ EWTryConnect(struct DeviceDescriptor *d)
 
     d->Com->WriteString(TEXT("##\r\n"));         // send IO Mode command
     if (ExpectString(d, TEXT("IO Mode.\r")))
-      return TRUE;
+      return true;
 
     ExpectString(d, TEXT("$$$"));                 // empty imput buffer
   }
 
   nDeclErrorCode = 1;
-  return(FALSE);
+  return false;
 }
 
-BOOL
+static bool
 EWDeclAddWayPoint(struct DeviceDescriptor *d, const WAYPOINT *wp);
 
-BOOL
+static bool
 EWDeclare(struct DeviceDescriptor *d, const struct Declaration *decl)
 {
   TCHAR sTmp[72];
@@ -115,7 +113,7 @@ EWDeclare(struct DeviceDescriptor *d, const struct Declaration *decl)
 
   nDeclErrorCode = 0;
   ewDecelTpIndex = 0;
-  fDeclarationPending = TRUE;
+  fDeclarationPending = true;
 
   d->Com->StopRxThread();
 
@@ -124,7 +122,7 @@ EWDeclare(struct DeviceDescriptor *d, const struct Declaration *decl)
   d->Com->SetRxTimeout(500);                     // set RX timeout to 500[ms]
 
   if (!EWTryConnect(d)) {
-    return FALSE;
+    return false;
   }
 
   _stprintf(sTmp, TEXT("#SPI"));                  // send SetPilotInfo
@@ -155,7 +153,7 @@ EWDeclare(struct DeviceDescriptor *d, const struct Declaration *decl)
 
   if (!ExpectString(d, TEXT("OK\r"))){
     nDeclErrorCode = 1;
-    return(FALSE);
+    return false;
   };
 
 
@@ -169,7 +167,7 @@ EWDeclare(struct DeviceDescriptor *d, const struct Declaration *decl)
 
   if (!ExpectString(d, TEXT("OK\r"))){
     nDeclErrorCode = 1;
-    return(FALSE);
+    return false;
   };
 
   _stprintf(sTmp, TEXT("#SUI%02d"), 1);           // send type of aircraft
@@ -181,7 +179,7 @@ EWDeclare(struct DeviceDescriptor *d, const struct Declaration *decl)
 
   if (!ExpectString(d, TEXT("OK\r"))){
     nDeclErrorCode = 1;
-    return(FALSE);
+    return false;
   };
 
   _stprintf(sTmp, TEXT("#SUI%02d"), 2);           // send aircraft ID
@@ -193,7 +191,7 @@ EWDeclare(struct DeviceDescriptor *d, const struct Declaration *decl)
 
   if (!ExpectString(d, TEXT("OK\r"))){
     nDeclErrorCode = 1;
-    return(FALSE);
+    return false;
   };
   */
 
@@ -203,7 +201,7 @@ EWDeclare(struct DeviceDescriptor *d, const struct Declaration *decl)
     d->Com->WriteString(sTmp);
     if (!ExpectString(d, TEXT("OK\r"))){
       nDeclErrorCode = 1;
-      return(FALSE);
+      return false;
     };
   }
 
@@ -217,14 +215,13 @@ EWDeclare(struct DeviceDescriptor *d, const struct Declaration *decl)
   d->Com->SetRxTimeout(0);                       // clear timeout
   d->Com->StartRxThread();                       // restart RX thread
 
-  fDeclarationPending = FALSE;                    // clear decl pending flag
+  fDeclarationPending = false;                    // clear decl pending flag
 
-  return(nDeclErrorCode == 0);                    // return() TRUE on success
+  return nDeclErrorCode == 0; // return true on success
 
 }
 
-
-BOOL
+static bool
 EWDeclAddWayPoint(struct DeviceDescriptor *d, const WAYPOINT *wp)
 {
   TCHAR EWRecord[100];
@@ -235,10 +232,10 @@ EWDeclAddWayPoint(struct DeviceDescriptor *d, const WAYPOINT *wp)
   short EoW_Flag, NoS_Flag, EW_Flags;
 
   if (nDeclErrorCode != 0)                        // check for error
-    return(FALSE);
+    return false;
 
   if (ewDecelTpIndex > 6){                        // check for max 6 TP's
-    return(FALSE);
+    return false;
   }
 
   _tcsncpy(IDString, wp->Name, 6);                // copy at least 6 chars
@@ -318,23 +315,22 @@ EWDeclAddWayPoint(struct DeviceDescriptor *d, const WAYPOINT *wp)
 
   if (!ExpectString(d, TEXT("OK\r"))){            // wait for response
     nDeclErrorCode = 1;
-    return(FALSE);
+    return false;
   }
 
   ewDecelTpIndex = ewDecelTpIndex + 1;            // increase TP index
 
-  return(TRUE);
-
+  return true;
 }
 
-BOOL
+static bool
 EWLinkTimeout(struct DeviceDescriptor *d)
 {
   (void)d;
   if (!fDeclarationPending)
     d->Com->WriteString(TEXT("NMEA\r\n"));
 
-  return(TRUE);
+  return true;
 }
 
 const struct DeviceRegister ewDevice = {

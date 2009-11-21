@@ -63,7 +63,7 @@ Copyright_License {
 // Source data:
 // $PGCS,1,0EC0,FFF9,0C6E,02*61
 // $PGCS,1,0EC0,FFFA,0C6E,03*18
-BOOL
+bool
 vl_PGCS1(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INFO)
 {
 
@@ -87,7 +87,7 @@ vl_PGCS1(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INFO)
     // typo corrected 21.04.07
     // Else the altitude is good enough.
 
-    GPS_INFO->BaroAltitudeAvailable = TRUE;
+    GPS_INFO->BaroAltitudeAvailable = true;
   }
 
   // ExtractParameter(String,ctemp,3);
@@ -102,25 +102,25 @@ vl_PGCS1(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INFO)
     // measurements.
   }
 
-  return FALSE;
+  return false;
 }
 
 
-BOOL
+bool
 VLParseNMEA(struct DeviceDescriptor *d, const TCHAR *String,
             NMEA_INFO *GPS_INFO)
 {
   (void)d;
 
   if (!NMEAParser::NMEAChecksum(String) || (GPS_INFO == NULL)){
-    return FALSE;
+    return false;
   }
 
   if(_tcsstr(String,TEXT("$PGCS,")) == String){
     return vl_PGCS1(d, &String[6], GPS_INFO);
   }
 
-  return FALSE;
+  return false;
 
 }
 
@@ -129,10 +129,10 @@ VLAPI vl;
 
 static int nturnpoints = 0;
 
-BOOL
+bool
 VLDeclAddWayPoint(struct DeviceDescriptor *d, const WAYPOINT *wp);
 
-BOOL
+bool
 VLDeclare(struct DeviceDescriptor *d, const struct Declaration *decl)
 {
   XCSoarInterface::CreateProgressDialog(gettext(TEXT("Comms with Volkslogger")));
@@ -175,7 +175,7 @@ VLDeclare(struct DeviceDescriptor *d, const struct Declaration *decl)
   }
 
   if (err != VLA_ERR_NOERR)
-    return FALSE;
+    return false;
 
   int i;
   for (i = 0; i < decl->num_waypoints; i++)
@@ -258,7 +258,7 @@ VLDeclare(struct DeviceDescriptor *d, const struct Declaration *decl)
   }
   vl.declaration.task.finishpoint.ws = 360;
 
-  BOOL ok = (vl.write_db_and_declaration() == VLA_ERR_NOERR);
+  bool ok = (vl.write_db_and_declaration() == VLA_ERR_NOERR);
 
   vl.close(1);
 
@@ -268,7 +268,7 @@ VLDeclare(struct DeviceDescriptor *d, const struct Declaration *decl)
 }
 
 
-BOOL
+bool
 VLDeclAddWayPoint(struct DeviceDescriptor *d, const WAYPOINT *wp)
 {
   char temp[100];
@@ -295,7 +295,7 @@ VLDeclAddWayPoint(struct DeviceDescriptor *d, const WAYPOINT *wp)
   vl.declaration.task.finishpoint.lat =
     wp->Location.Latitude;
 
-  return(TRUE);
+  return true;
 
 }
 

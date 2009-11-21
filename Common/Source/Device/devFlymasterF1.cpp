@@ -52,7 +52,7 @@ Copyright_License {
 static bool
 VARIO(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INFO);
 
-static BOOL
+static bool
 FlymasterF1ParseNMEA(struct DeviceDescriptor *d, const TCHAR *String,
                      NMEA_INFO *GPS_INFO)
 {
@@ -63,8 +63,7 @@ FlymasterF1ParseNMEA(struct DeviceDescriptor *d, const TCHAR *String,
       return VARIO(d, &String[7], GPS_INFO);
     }
 
-  return FALSE;
-
+  return false;
 }
 
 const struct DeviceRegister flymasterf1Device = {
@@ -105,10 +104,10 @@ VARIO(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INFO)
   GPS_INFO->Vario = StrToDouble(ctemp,NULL)/10.0;
   // JMW vario is in dm/s
 
-  GPS_INFO->VarioAvailable = TRUE;
-  GPS_INFO->BaroAltitudeAvailable = TRUE;
+  GPS_INFO->VarioAvailable = true;
+  GPS_INFO->BaroAltitudeAvailable = true;
 
   TriggerVarioUpdate();
 
-  return TRUE;
+  return true;
 }

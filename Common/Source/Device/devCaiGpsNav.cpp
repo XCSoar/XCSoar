@@ -54,7 +54,7 @@ Copyright_License {
 #define  CtrlC  0x03
 #define  swap(x)      x = ((((x<<8) & 0xff00) | ((x>>8) & 0x00ff)) & 0xffff)
 
-BOOL
+static bool
 caiGpsNavOpen(struct DeviceDescriptor *d, int Port)
 {
   d->Com->WriteString(TEXT("\x03"));
@@ -66,7 +66,7 @@ caiGpsNavOpen(struct DeviceDescriptor *d, int Port)
   //(d->Com.WriteString)(TEXT("PNP\r\n"));
   //(d->Com.WriteString)(TEXT("LOG 0\r\n"));
 
-  return(TRUE);
+  return true;
 }
 
 const struct DeviceRegister caiGpsNavDevice = {

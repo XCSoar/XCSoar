@@ -42,31 +42,31 @@ Copyright_License {
 
 #include <tchar.h>
 
-static BOOL
+static bool
 XCOM760PutVolume(struct DeviceDescriptor *d, int Volume)
 {
   TCHAR  szTmp[32];
   _stprintf(szTmp, TEXT("$RVOL=%d\r\n"), Volume);
   d->Com->WriteString(szTmp);
-  return(TRUE);
+  return true;
 }
 
-static BOOL
+static bool
 XCOM760PutFreqActive(struct DeviceDescriptor *d, double Freq)
 {
   TCHAR  szTmp[32];
   _stprintf(szTmp, TEXT("$TXAF=%.3f\r\n"), Freq);
   d->Com->WriteString(szTmp);
-  return(TRUE);
+  return true;
 }
 
-static BOOL
+static bool
 XCOM760PutFreqStandby(struct DeviceDescriptor *d, double Freq)
 {
   TCHAR  szTmp[32];
   _stprintf(szTmp, TEXT("$TXSF=%.3f\r\n"), Freq);
   d->Com->WriteString(szTmp);
-  return(TRUE);
+  return true;
 }
 
 const struct DeviceRegister xcom760Device = {

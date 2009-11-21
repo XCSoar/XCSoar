@@ -51,9 +51,10 @@ Copyright_License {
 #include <tchar.h>
 #include <math.h>
 
-BOOL PBB50(const TCHAR *String, NMEA_INFO *GPS_INFO);
+static bool
+PBB50(const TCHAR *String, NMEA_INFO *GPS_INFO);
 
-BOOL
+static bool
 B50ParseNMEA(struct DeviceDescriptor *d, const TCHAR *String,
              NMEA_INFO *GPS_INFO)
 {
@@ -64,8 +65,7 @@ B50ParseNMEA(struct DeviceDescriptor *d, const TCHAR *String,
       return PBB50(&String[7], GPS_INFO);
     }
 
-  return FALSE;
-
+  return false;
 }
 
 const struct DeviceRegister b50Device = {
@@ -121,7 +121,8 @@ CHK = standard NMEA checksum
 
 */
 
-BOOL PBB50(const TCHAR *String, NMEA_INFO *GPS_INFO)
+static bool
+PBB50(const TCHAR *String, NMEA_INFO *GPS_INFO)
 {
   // $PBB50,100,0,10,1,10000,0,1,0,20*4A..
   // $PBB50,0,.0,.0,0,0,1.07,0,-228*58
@@ -183,13 +184,13 @@ BOOL PBB50(const TCHAR *String, NMEA_INFO *GPS_INFO)
     triggerClimbEvent.reset();
   }
 
-  GPS_INFO->AirspeedAvailable = TRUE;
+  GPS_INFO->AirspeedAvailable = true;
   GPS_INFO->IndicatedAirspeed = vias;
   GPS_INFO->TrueAirspeed = vtas;
-  GPS_INFO->VarioAvailable = TRUE;
+  GPS_INFO->VarioAvailable = true;
   GPS_INFO->Vario = wnet;
 
   TriggerVarioUpdate();
 
-  return FALSE;
+  return false;
 }

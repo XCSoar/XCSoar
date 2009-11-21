@@ -40,7 +40,7 @@ Copyright_License {
 #include "Device/device.h"
 #include "Device/Port.h"
 
-BOOL
+bool
 nmoParseNMEA(struct DeviceDescriptor *d, const TCHAR *String,
              NMEA_INFO *GPS_INFO)
 {
@@ -48,28 +48,28 @@ nmoParseNMEA(struct DeviceDescriptor *d, const TCHAR *String,
   (void) String;
   (void) GPS_INFO;
 
-  return FALSE;
+  return false;
 
 }
 
-BOOL
+bool
 nmoIsGPSSource(const struct DeviceDescriptor *d)
 {
   (void)d;
-  return(FALSE);  // this is only true if GPS source is connected on VEGA.NmeaIn
+  return false;  // this is only true if GPS source is connected on VEGA.NmeaIn
 }
 
-BOOL
+bool
 nmoPutVoice(struct DeviceDescriptor *d, const TCHAR *Sentence)
 {
-  return(FALSE);
+  return false;
 }
 
-BOOL
+bool
 nmoPutQNH(struct DeviceDescriptor *d, double NewQNH)
 {
   (void)NewQNH;
-  return(FALSE);
+  return false;
 }
 
 const struct DeviceRegister nmoDevice = {

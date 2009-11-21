@@ -179,7 +179,7 @@ PDSWC(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INFO)
   last_switchinputs = switchinputs;
   last_switchoutputs = switchoutputs;
 
-  return TRUE;
+  return true;
 }
 
 //#include "Audio/VarioSound.h"
@@ -200,7 +200,7 @@ PDAAV(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INFO)
   // Temporarily commented out - function as yet undefined
   //  audio_setconfig(beepfrequency, soundfrequency, soundtype);
 
-  return TRUE;
+  return true;
 }
 
 static bool
@@ -216,7 +216,7 @@ PDVSC(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INFO)
 
   if (_tcscmp(name, TEXT("ERROR")) == 0){
     // ignore error responses...
-    return TRUE;
+    return true;
   }
 
   NMEAParser::ExtractParameter(String,ctemp,2);
@@ -237,7 +237,7 @@ PDVSC(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INFO)
   dwvalue = *((DWORD*)&value);
   SetToRegistry(regname, dwvalue);
 
-  return TRUE;
+  return true;
 }
 
 
@@ -259,13 +259,13 @@ PDVDV(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INFO)
   GPS_INFO->TrueAirspeed = StrToDouble(ctemp,NULL)*GPS_INFO->IndicatedAirspeed/1024.0;
 
   //hasVega = true;
-  GPS_INFO->VarioAvailable = TRUE;
-  GPS_INFO->AirspeedAvailable = TRUE;
+  GPS_INFO->VarioAvailable = true;
+  GPS_INFO->AirspeedAvailable = true;
 
   if (d == pDevPrimaryBaroSource){
     NMEAParser::ExtractParameter(String,ctemp,3);
     alt = StrToDouble(ctemp,NULL);
-    GPS_INFO->BaroAltitudeAvailable = TRUE;
+    GPS_INFO->BaroAltitudeAvailable = true;
     GPS_INFO->BaroAltitude = // JMW 20080716 bug
       AltitudeToQNHAltitude(alt);
       // was alt;    // ToDo check if QNH correction is needed!
@@ -273,7 +273,7 @@ PDVDV(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INFO)
 
   TriggerVarioUpdate();
 
-  return TRUE;
+  return true;
 }
 
 
@@ -293,7 +293,7 @@ PDVDS(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INFO)
   int mag = isqrt4((int)((GPS_INFO->AccelX*GPS_INFO->AccelX
 			  +GPS_INFO->AccelZ*GPS_INFO->AccelZ)*10000));
   GPS_INFO->Gload = mag/100.0;
-  GPS_INFO->AccelerationAvailable = TRUE;
+  GPS_INFO->AccelerationAvailable = true;
 
   NMEAParser::ExtractParameter(String,ctemp,2);
   flap = StrToDouble(ctemp,NULL);
@@ -303,10 +303,10 @@ PDVDS(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INFO)
 
   NMEAParser::ExtractParameter(String,ctemp,4);
   if (ctemp[0] != '\0') {
-    GPS_INFO->NettoVarioAvailable = TRUE;
+    GPS_INFO->NettoVarioAvailable = true;
     GPS_INFO->NettoVario = StrToDouble(ctemp,NULL)/10.0;
   } else {
-    GPS_INFO->NettoVarioAvailable = FALSE;
+    GPS_INFO->NettoVarioAvailable = false;
   }
 
   if (device_blackboard.SettingsComputer().EnableCalibration) {
@@ -318,10 +318,10 @@ PDVDS(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INFO)
 	    GPS_INFO->AccelX,
 	    GPS_INFO->AccelZ);
   }
-  GPS_INFO->VarioAvailable = TRUE;
+  GPS_INFO->VarioAvailable = true;
   //hasVega = true;
 
-  return TRUE;
+  return true;
 }
 
 static bool
@@ -331,13 +331,13 @@ PDVVT(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INFO)
   (void)d;
   NMEAParser::ExtractParameter(String,ctemp,0);
   GPS_INFO->OutsideAirTemperature = StrToDouble(ctemp,NULL)/10.0-273.0;
-  GPS_INFO->TemperatureAvailable = TRUE;
+  GPS_INFO->TemperatureAvailable = true;
 
   NMEAParser::ExtractParameter(String,ctemp,1);
   GPS_INFO->RelativeHumidity = StrToDouble(ctemp,NULL); // %
-  GPS_INFO->HumidityAvailable = TRUE;
+  GPS_INFO->HumidityAvailable = true;
 
-  return TRUE;
+  return true;
 }
 
 // PDTSM,duration_ms,"free text"
@@ -352,17 +352,16 @@ PDTSM(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INFO)
 
   String = _tcschr(String, ',');
   if (String == NULL)
-    return FALSE;
+    return false;
   ++String;
 
   // todo duration handling
   Message::AddMessage(TEXT("VEGA:"), String);
 
-  return TRUE;
-
+  return true;
 }
 
-BOOL
+bool
 vgaParseNMEA(struct DeviceDescriptor *d, const TCHAR *String,
              NMEA_INFO *GPS_INFO)
 {
@@ -400,18 +399,18 @@ vgaParseNMEA(struct DeviceDescriptor *d, const TCHAR *String,
       // 		(then you can assign time and sound to Vario Message)
       // 	or	Message::AddMessage
       Message::AddMessage(cptext);
-      return FALSE;
+      return false;
     }
   if(_tcsncmp(TEXT("$PDTSM"), String, 6)==0)
     {
       return PDTSM(d, &String[7], GPS_INFO);
     }
 
-  return FALSE;
+  return false;
 
 }
 
-BOOL
+bool
 vgaDeclare(struct DeviceDescriptor *d, const struct Declaration *decl)
 {
   (void) d;
@@ -419,15 +418,14 @@ vgaDeclare(struct DeviceDescriptor *d, const struct Declaration *decl)
 
   // ToDo
 
-  return(TRUE);
-
+  return true;
 }
 
-BOOL
+bool
 vgaPutVoice(struct DeviceDescriptor *d, const TCHAR *Sentence)
 {
   devWriteNMEAString(d, Sentence);
-  return(TRUE);
+  return true;
 }
 
 #include "Blackboard.hpp"
@@ -450,7 +448,7 @@ _VarioWriteSettings(struct DeviceDescriptor *d)
 }
 
 
-BOOL
+bool
 vgaPutQNH(struct DeviceDescriptor *d, double NewQNH)
 {
   (void)NewQNH;
@@ -458,16 +456,16 @@ vgaPutQNH(struct DeviceDescriptor *d, double NewQNH)
 
   _VarioWriteSettings(d);
 
-  return(TRUE);
+  return true;
 }
 
-BOOL
+bool
 vgaOnSysTicker(struct DeviceDescriptor *d)
 {
   if (device_blackboard.Basic().VarioAvailable)
     _VarioWriteSettings(d);
 
-  return(TRUE);
+  return true;
 }
 
 const struct DeviceRegister vgaDevice = {

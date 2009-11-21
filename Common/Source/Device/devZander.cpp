@@ -46,13 +46,14 @@ Copyright_License {
 #include "UtilsText.hpp"
 #include "NMEA/Info.h"
 
-static BOOL PZAN1(struct DeviceDescriptor *d, const TCHAR *String,
-                  NMEA_INFO *aGPS_INFO);
-static BOOL PZAN2(struct DeviceDescriptor *d, const TCHAR *String,
-                  NMEA_INFO *aGPS_INFO);
+static bool
+PZAN1(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *aGPS_INFO);
+
+static bool
+PZAN2(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *aGPS_INFO);
 
 
-static BOOL
+static bool
 ZanderParseNMEA(struct DeviceDescriptor *d, const TCHAR *String,
                 NMEA_INFO *aGPS_INFO)
 {
@@ -67,7 +68,7 @@ ZanderParseNMEA(struct DeviceDescriptor *d, const TCHAR *String,
       return PZAN2(d, &String[7], aGPS_INFO);
     }
 
-  return FALSE;
+  return false;
 
 }
 
@@ -96,18 +97,18 @@ const struct DeviceRegister zanderDevice = {
 // *****************************************************************************
 // local stuff
 
-static BOOL
+static bool
 PZAN1(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *aGPS_INFO)
 {
   TCHAR ctemp[80];
-  aGPS_INFO->BaroAltitudeAvailable = TRUE;
+  aGPS_INFO->BaroAltitudeAvailable = true;
   NMEAParser::ExtractParameter(String,ctemp,0);
   aGPS_INFO->BaroAltitude = AltitudeToQNHAltitude(StrToDouble(ctemp,NULL));
-  return TRUE;
+  return true;
 }
 
 
-static BOOL
+static bool
 PZAN2(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *aGPS_INFO)
 {
   TCHAR ctemp[80];
@@ -127,12 +128,12 @@ PZAN2(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *aGPS_INFO)
     vias = 0.0;
   }
 
-  aGPS_INFO->AirspeedAvailable = TRUE;
+  aGPS_INFO->AirspeedAvailable = true;
   aGPS_INFO->TrueAirspeed = vtas;
   aGPS_INFO->IndicatedAirspeed = vias;
-  aGPS_INFO->VarioAvailable = TRUE;
+  aGPS_INFO->VarioAvailable = true;
 
   TriggerVarioUpdate();
 
-  return TRUE;
+  return true;
 }

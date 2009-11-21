@@ -141,20 +141,22 @@ static bool
 cai_w(struct DeviceDescriptor *d, const TCHAR *String,
       NMEA_INFO *GPS_INFO);
 
-static BOOL cai_PCAIB(const TCHAR *String, NMEA_INFO *GPS_INFO);
-static BOOL cai_PCAID(const TCHAR *String, NMEA_INFO *GPS_INFO);
+static bool
+cai_PCAIB(const TCHAR *String, NMEA_INFO *GPS_INFO);
+
+static bool
+cai_PCAID(const TCHAR *String, NMEA_INFO *GPS_INFO);
 
 static int  MacCreadyUpdateTimeout = 0;
 static int  BugsUpdateTimeout = 0;
 static int  BallastUpdateTimeout = 0;
 
-
-BOOL
+static bool
 cai302ParseNMEA(struct DeviceDescriptor *d, const TCHAR *String,
                 NMEA_INFO *GPS_INFO)
 {
   if (!NMEAParser::NMEAChecksum(String) || (GPS_INFO == NULL)){
-    return FALSE;
+    return false;
   }
 
   if(_tcsstr(String,TEXT("$PCAIB")) == String){
@@ -169,12 +171,10 @@ cai302ParseNMEA(struct DeviceDescriptor *d, const TCHAR *String,
     return cai_w(d, &String[3], GPS_INFO);
   }
 
-  return FALSE;
-
+  return false;
 }
 
-
-BOOL
+static bool
 cai302PutMacCready(struct DeviceDescriptor *d, double MacCready)
 {
   TCHAR  szTmp[32];
@@ -185,12 +185,10 @@ cai302PutMacCready(struct DeviceDescriptor *d, double MacCready)
 
   MacCreadyUpdateTimeout = 2;
 
-  return(TRUE);
-
+  return true;
 }
 
-
-BOOL
+static bool
 cai302PutBugs(struct DeviceDescriptor *d, double Bugs)
 {
   TCHAR  szTmp[32];
@@ -201,12 +199,10 @@ cai302PutBugs(struct DeviceDescriptor *d, double Bugs)
 
   BugsUpdateTimeout = 2;
 
-  return(TRUE);
-
+  return true;
 }
 
-
-BOOL
+static bool
 cai302PutBallast(struct DeviceDescriptor *d, double Ballast)
 {
   TCHAR  szTmp[32];
@@ -217,8 +213,7 @@ cai302PutBallast(struct DeviceDescriptor *d, double Ballast)
 
   BallastUpdateTimeout = 2;
 
-  return(TRUE);
-
+  return true;
 }
 
 void test(void){
@@ -266,8 +261,7 @@ void test(void){
 
 }
 
-
-BOOL
+static bool
 cai302Open(struct DeviceDescriptor *d, int Port)
 {
 //test();
@@ -275,16 +269,16 @@ cai302Open(struct DeviceDescriptor *d, int Port)
   d->Com->WriteString(TEXT("\x03"));
   d->Com->WriteString(TEXT("LOG 0\r"));
 
-  return(TRUE);
+  return true;
 }
 
 static int DeclIndex = 128;
 static int nDeclErrorCode;
 
-BOOL
+static bool
 cai302DeclAddWayPoint(struct DeviceDescriptor *d, const WAYPOINT *wp);
 
-BOOL
+static bool
 cai302Declare(struct DeviceDescriptor *d, const struct Declaration *decl)
 {
   TCHAR PilotName[25];
@@ -303,13 +297,13 @@ cai302Declare(struct DeviceDescriptor *d, const struct Declaration *decl)
   d->Com->WriteString(TEXT("\x03"));
   if (!ExpectString(d, TEXT("cmd>"))){
     nDeclErrorCode = 1;
-    return(FALSE);
+    return false;
   }
 
   d->Com->WriteString(TEXT("upl 1\r"));
   if (!ExpectString(d, TEXT("up>"))){
     nDeclErrorCode = 1;
-    return(FALSE);
+    return false;
   }
 
   ExpectString(d, TEXT("$$$"));
@@ -318,7 +312,7 @@ cai302Declare(struct DeviceDescriptor *d, const struct Declaration *decl)
   d->Com->Read(&cai302_OdataNoArgs, sizeof(cai302_OdataNoArgs));
   if (!ExpectString(d, TEXT("up>"))){
     nDeclErrorCode = 1;
-    return(FALSE);
+    return false;
   }
 
   d->Com->WriteString(TEXT("O 0\r"));  // 0=active pilot
@@ -327,7 +321,7 @@ cai302Declare(struct DeviceDescriptor *d, const struct Declaration *decl)
                                        (size_t)cai302_OdataNoArgs.PilotRecordSize+3));
   if (!ExpectString(d, TEXT("up>"))){
     nDeclErrorCode = 1;
-    return(FALSE);
+    return false;
   }
 
   swap(cai302_OdataPilot.ApproachRadius);
@@ -343,7 +337,7 @@ cai302Declare(struct DeviceDescriptor *d, const struct Declaration *decl)
   d->Com->Read(&cai302_GdataNoArgs, sizeof(cai302_GdataNoArgs));
   if (!ExpectString(d, TEXT("up>"))){
     nDeclErrorCode = 1;
-    return(FALSE);
+    return false;
   }
 
   d->Com->WriteString(TEXT("G 0\r"));
@@ -351,7 +345,7 @@ cai302Declare(struct DeviceDescriptor *d, const struct Declaration *decl)
   d->Com->Read(&cai302_Gdata, cai302_GdataNoArgs.GliderRecordSize + 3);
   if (!ExpectString(d, TEXT("up>"))){
     nDeclErrorCode = 1;
-    return(FALSE);
+    return false;
   }
 
   swap(cai302_Gdata.WeightInLiters);
@@ -364,13 +358,13 @@ cai302Declare(struct DeviceDescriptor *d, const struct Declaration *decl)
   d->Com->WriteString(TEXT("\x03"));
   if (!ExpectString(d, TEXT("cmd>"))){
     nDeclErrorCode = 1;
-    return(FALSE);
+    return false;
   }
 
   d->Com->WriteString(TEXT("dow 1\r"));
   if (!ExpectString(d, TEXT("dn>"))){
     nDeclErrorCode = 1;
-    return(FALSE);
+    return false;
   }
 
   _tcsncpy(PilotName, decl->PilotName, 24);
@@ -404,7 +398,7 @@ cai302Declare(struct DeviceDescriptor *d, const struct Declaration *decl)
   d->Com->WriteString(szTmp);
   if (!ExpectString(d, TEXT("dn>"))){
     nDeclErrorCode = 1;
-    return(FALSE);
+    return false;
   }
 
   _stprintf(szTmp, TEXT("G,%-12s,%-12s,%d,%d,%d,%d,%d,%d,%d,%d\r"),
@@ -423,7 +417,7 @@ cai302Declare(struct DeviceDescriptor *d, const struct Declaration *decl)
   d->Com->WriteString(szTmp);
   if (!ExpectString(d, TEXT("dn>"))){
     nDeclErrorCode = 1;
-    return(FALSE);
+    return false;
   }
 
   DeclIndex = 128;
@@ -459,7 +453,7 @@ cai302Declare(struct DeviceDescriptor *d, const struct Declaration *decl)
 
 }
 
-BOOL
+static bool
 cai302DeclAddWayPoint(struct DeviceDescriptor *d, const WAYPOINT *wp)
 {
   TCHAR Name[13];
@@ -469,7 +463,7 @@ cai302DeclAddWayPoint(struct DeviceDescriptor *d, const WAYPOINT *wp)
   char NoS, EoW;
 
   if (nDeclErrorCode != 0)
-    return(FALSE);
+    return false;
 
   _tcsncpy(Name, wp->Name, 12);
   Name[12] = '\0';
@@ -509,11 +503,10 @@ cai302DeclAddWayPoint(struct DeviceDescriptor *d, const WAYPOINT *wp)
 
   if (!ExpectString(d, TEXT("dn>"))){
     nDeclErrorCode = 1;
-    return(FALSE);
+    return false;
   }
 
-  return(TRUE);
-
+  return true;
 }
 
 const struct DeviceRegister cai302Device = {
@@ -546,13 +539,13 @@ $PCAIB,<1>,<2>,<CR><LF>
 <2> Destination Navpoint attribute word, format XXXXX (leading zeros will be transmitted)
 */
 
-BOOL cai_PCAIB(const TCHAR *String, NMEA_INFO *GPS_INFO)
+static bool
+cai_PCAIB(const TCHAR *String, NMEA_INFO *GPS_INFO)
 {
   (void)GPS_INFO;
   (void)String;
-  return TRUE;
+  return true;
 }
-
 
 /*
 $PCAID,<1>,<2>,<3>,<4>*hh<CR><LF>
@@ -563,11 +556,12 @@ $PCAID,<1>,<2>,<3>,<4>*hh<CR><LF>
 *hh Checksum, XOR of all bytes of the sentence after the ‘$’ and before the ‘*’
 */
 
-BOOL cai_PCAID(const TCHAR *String, NMEA_INFO *GPS_INFO)
+static bool
+cai_PCAID(const TCHAR *String, NMEA_INFO *GPS_INFO)
 {
 	(void)GPS_INFO;
 	(void)String;
-  return TRUE;
+  return true;
 }
 
 /*
@@ -596,7 +590,7 @@ cai_w(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INFO)
 
 
   NMEAParser::ExtractParameter(String,ctemp,1);
-  GPS_INFO->ExternalWindAvailalbe = TRUE;
+  GPS_INFO->ExternalWindAvailalbe = true;
   GPS_INFO->ExternalWindSpeed = (StrToDouble(ctemp,NULL) / 10.0);
   NMEAParser::ExtractParameter(String,ctemp,0);
   GPS_INFO->ExternalWindDirection = StrToDouble(ctemp,NULL);
@@ -606,7 +600,7 @@ cai_w(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INFO)
 
   if (d == pDevPrimaryBaroSource){
 
-    GPS_INFO->BaroAltitudeAvailable = TRUE;
+    GPS_INFO->BaroAltitudeAvailable = true;
     GPS_INFO->BaroAltitude = StrToDouble(ctemp, NULL) - 1000;
 
   }
@@ -615,11 +609,11 @@ cai_w(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INFO)
 //  GPS_INFO->QNH = StrToDouble(ctemp, NULL) - 1000;
 
   NMEAParser::ExtractParameter(String,ctemp,6);
-  GPS_INFO->AirspeedAvailable = TRUE;
+  GPS_INFO->AirspeedAvailable = true;
   GPS_INFO->TrueAirspeed = (StrToDouble(ctemp,NULL) / 100.0);
 
   NMEAParser::ExtractParameter(String,ctemp,7);
-  GPS_INFO->VarioAvailable = TRUE;
+  GPS_INFO->VarioAvailable = true;
   GPS_INFO->Vario = ((StrToDouble(ctemp,NULL) - 200.0) / 10.0) * KNOTSTOMETRESSECONDS;
 
   NMEAParser::ExtractParameter(String,ctemp,10);
@@ -646,7 +640,6 @@ cai_w(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INFO)
   // JMW update audio functions etc.
   TriggerVarioUpdate();
 
-  return TRUE;
-
+  return true;
 }
 
