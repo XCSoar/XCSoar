@@ -56,14 +56,14 @@ public:
   void WriteString(const TCHAR *);
   void Flush();
 
-  BOOL Initialize(LPCTSTR, DWORD);
-  BOOL Close();
+  bool Initialize(LPCTSTR, DWORD);
+  bool Close();
 
   int SetRxTimeout(int);
   unsigned long SetBaudrate(unsigned long);
 
-  BOOL StopRxThread();
-  BOOL StartRxThread();
+  bool StopRxThread();
+  bool StartRxThread();
   void ProcessChar(char);
 
   int GetChar();
@@ -77,8 +77,8 @@ private:
   HANDLE hReadThread;
   DWORD dwMask;
   TCHAR sPortName[8];
-  BOOL CloseThread;
-  BOOL fRxThreadTerminated;
+  bool CloseThread;
+  bool fRxThreadTerminated;
 
   TCHAR BuildingString[NMEA_BUF_SIZE];
   int bi;

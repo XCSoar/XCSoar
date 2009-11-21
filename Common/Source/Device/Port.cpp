@@ -71,7 +71,7 @@ ComPort::ComPort(struct DeviceDescriptor *d)
 {
   hReadThread = NULL;
   CloseThread = 0;
-  fRxThreadTerminated = TRUE;
+  fRxThreadTerminated = true;
   dwMask = 0;
   hPort = INVALID_HANDLE_VALUE;
   BuildingString[0] = 0;
@@ -79,7 +79,8 @@ ComPort::ComPort(struct DeviceDescriptor *d)
   dev = d;
 }
 
-BOOL ComPort::Initialize(LPCTSTR lpszPortName, DWORD dwPortSpeed)
+bool
+ComPort::Initialize(LPCTSTR lpszPortName, DWORD dwPortSpeed)
 {
   DWORD dwError;
   DCB PortDCB;
@@ -99,7 +100,7 @@ BOOL ComPort::Initialize(LPCTSTR lpszPortName, DWORD dwPortSpeed)
                       NULL);        // Handle to port with attribute
                                     // to copy
 
-  // If it fails to open the port, return FALSE.
+  // If it fails to open the port, return false.
   if (hPort == INVALID_HANDLE_VALUE) {
     dwError = GetLastError();
 
@@ -108,7 +109,7 @@ BOOL ComPort::Initialize(LPCTSTR lpszPortName, DWORD dwPortSpeed)
     // gettext(), port added on new line
     ComPort_StatusMessage(MB_OK|MB_ICONINFORMATION, NULL, TEXT("%s %s"),
               gettext(TEXT("Unable to open port")), sPortName);
-    return FALSE;
+    return false;
   }
 
   PortDCB.DCBlength = sizeof(DCB);
@@ -118,23 +119,23 @@ BOOL ComPort::Initialize(LPCTSTR lpszPortName, DWORD dwPortSpeed)
 
   // Change the DCB structure settings.
   PortDCB.BaudRate = dwPortSpeed;       // Current baud
-  PortDCB.fBinary = TRUE;               // Binary mode; no EOF check
-  PortDCB.fParity = TRUE;               // Enable parity checking
-  PortDCB.fOutxCtsFlow = FALSE;         // No CTS output flow control
-  PortDCB.fOutxDsrFlow = FALSE;         // No DSR output flow control
+  PortDCB.fBinary = true;               // Binary mode; no EOF check
+  PortDCB.fParity = true;               // Enable parity checking
+  PortDCB.fOutxCtsFlow = false;         // No CTS output flow control
+  PortDCB.fOutxDsrFlow = false;         // No DSR output flow control
   PortDCB.fDtrControl = DTR_CONTROL_ENABLE;
                                         // DTR flow control type
-  PortDCB.fDsrSensitivity = FALSE;      // DSR sensitivity
-  PortDCB.fTXContinueOnXoff = TRUE;     // XOFF continues Tx
-  PortDCB.fOutX = FALSE;                // No XON/XOFF out flow control
-  PortDCB.fInX = FALSE;                 // No XON/XOFF in flow control
-  PortDCB.fErrorChar = FALSE;           // Disable error replacement
-  PortDCB.fNull = FALSE;                // Disable null removal
+  PortDCB.fDsrSensitivity = false;      // DSR sensitivity
+  PortDCB.fTXContinueOnXoff = true;     // XOFF continues Tx
+  PortDCB.fOutX = false;                // No XON/XOFF out flow control
+  PortDCB.fInX = false;                 // No XON/XOFF in flow control
+  PortDCB.fErrorChar = false;           // Disable error replacement
+  PortDCB.fNull = false;                // Disable null removal
   PortDCB.fRtsControl = RTS_CONTROL_ENABLE;
                                         // RTS flow control
 
-  PortDCB.fAbortOnError = TRUE;         // JMW abort reads/writes on
-                                        // error, was FALSE
+  PortDCB.fAbortOnError = true;         // JMW abort reads/writes on
+                                        // error, was false
 
   PortDCB.ByteSize = 8;                 // Number of bits/byte, 4-8
   PortDCB.Parity = NOPARITY;            // 0-4=no,odd,even,mark,space
@@ -156,7 +157,7 @@ BOOL ComPort::Initialize(LPCTSTR lpszPortName, DWORD dwPortSpeed)
     ComPort_StatusMessage(MB_OK, TEXT("Error"), TEXT("%s %s"),
               gettext(TEXT("Unable to Change Settings on Port")), sPortName);
     dwError = GetLastError();
-    return FALSE;
+    return false;
   }
 
   //  SetRxTimeout(10); // JMW20070515 wait a maximum of 10ms
@@ -176,10 +177,10 @@ BOOL ComPort::Initialize(LPCTSTR lpszPortName, DWORD dwPortSpeed)
 #ifdef WINDOWSPC
     Sleep(2000); // needed for windows bug
 #endif
-    return FALSE;
+    return false;
   }
 
-  return TRUE;
+  return true;
 }
 
 
@@ -242,7 +243,7 @@ DWORD ComPort::ReadThread()
   SetCommMask(hPort, dwMask);
 #endif
 
-  fRxThreadTerminated = FALSE;
+  fRxThreadTerminated = false;
 
   while ((hPort != INVALID_HANDLE_VALUE) &&
          (!closeTriggerEvent.test()) && (!CloseThread))
@@ -299,7 +300,7 @@ DWORD ComPort::ReadThread()
 
   Flush();
 
-  fRxThreadTerminated = TRUE;
+  fRxThreadTerminated = true;
 
   return 0;
 }
@@ -310,7 +311,8 @@ DWORD ComPort::ReadThread()
   PortClose()
 
 ***********************************************************************/
-BOOL ComPort::Close()
+bool
+ComPort::Close()
 {
   DWORD dwError;
 
@@ -323,17 +325,17 @@ BOOL ComPort::Close()
     // Close the communication port.
     if (!CloseHandle(hPort)) {
       dwError = GetLastError();
-      return FALSE;
+      return false;
     } else {
 #ifdef WINDOWSPC
       Sleep(2000); // needed for windows bug
 #endif
       hPort = INVALID_HANDLE_VALUE;
-      return TRUE;
+      return true;
     }
   }
 
-  return FALSE;
+  return false;
 }
 
 
@@ -363,15 +365,16 @@ void ComPort::WriteString(const TCHAR *Text)
 
 
 // Stop Rx Thread
-// return: TRUE on success, FALSE on error
-BOOL ComPort::StopRxThread()
+// return: true on success, false on error
+bool
+ComPort::StopRxThread()
 {
   if (hPort == INVALID_HANDLE_VALUE)
-    return FALSE;
+    return false;
   if (fRxThreadTerminated)
-    return TRUE;
+    return true;
 
-  CloseThread = TRUE;
+  CloseThread = true;
 
   DWORD tm = GetTickCount()+20000l;
 #ifdef WINDOWSPC
@@ -408,15 +411,16 @@ BOOL ComPort::StopRxThread()
 }
 
 // Restart Rx Thread
-// return: TRUE on success, FALSE on error
-BOOL ComPort::StartRxThread(void)
+// return: true on success, false on error
+bool
+ComPort::StartRxThread(void)
 {
   DWORD dwThreadID, dwError;
 
   if (hPort == INVALID_HANDLE_VALUE)
-    return FALSE;
+    return false;
 
-  CloseThread = FALSE;
+  CloseThread = false;
 
   // Create a read thread for reading data from the communication port.
   if ((hReadThread = CreateThread
@@ -430,10 +434,10 @@ BOOL ComPort::StartRxThread(void)
     ComPort_StatusMessage(MB_OK, TEXT("Error"), TEXT("%s %s"),
               gettext(TEXT("Unable to Start RX Thread on Port")), sPortName);
     dwError = GetLastError();
-    return FALSE;
+    return false;
   }
 
-  return TRUE;
+  return true;
 }
 
                                         // Get a single Byte
