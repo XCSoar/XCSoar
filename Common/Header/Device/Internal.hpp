@@ -57,10 +57,4 @@ extern struct DeviceDescriptor *pDevSecondaryBaroSource;
 bool
 ExpectString(ComPort *port, const TCHAR *token);
 
-bool
-devIsFalseReturn(const struct DeviceDescriptor *d);
-
-bool
-devIsTrueReturn(const struct DeviceDescriptor *d);
-
 #endif

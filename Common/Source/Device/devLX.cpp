@@ -94,7 +94,7 @@ const struct DeviceRegister lxDevice = {
   NULL,				// LinkTimeout
   NULL,				// Declare
   NULL,				// IsLogger
-  devIsTrueReturn,		// IsGPSSource: ? is this true
+  NULL, // IsGPSSource
   NULL,				// IsBaroSource
   NULL				// OnSysTicker
 };

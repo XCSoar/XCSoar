@@ -301,7 +301,7 @@ VLDeclAddWayPoint(struct DeviceDescriptor *d, const WAYPOINT *wp)
 
 const struct DeviceRegister vlDevice = {
   _T("Device/Volkslogger"),
-  drfGPS | drfBaroAlt | drfLogger,
+  drfGPS | drfLogger, /* XXX: drfBaroAlt? */
   VLParseNMEA,			// ParseNMEA
   NULL,				// PutMacCready
   NULL,				// PutBugs
@@ -317,6 +317,6 @@ const struct DeviceRegister vlDevice = {
   VLDeclare,			// Declare
   NULL,				// IsLogger
   NULL,				// IsGPSSource
-  devIsFalseReturn,		// IsBaroSource: devIsTrueReturn? -- rmk
+  NULL, // IsBaroSource
   NULL				// OnSysTicker
 };

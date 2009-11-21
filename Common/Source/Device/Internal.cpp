@@ -70,17 +70,3 @@ ExpectString(ComPort *port, const TCHAR *token)
   #endif
   return false;
 }
-
-bool
-devIsFalseReturn(const struct DeviceDescriptor *d)
-{
-  (void)d;
-  return false;
-}
-
-bool
-devIsTrueReturn(const struct DeviceDescriptor *d)
-{
-  (void)d;
-  return true;
-}

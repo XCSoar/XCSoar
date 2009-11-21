@@ -512,7 +512,7 @@ cai302DeclAddWayPoint(struct DeviceDescriptor *d, const WAYPOINT *wp)
 
 const struct DeviceRegister cai302Device = {
   _T("CAI 302"),
-  drfGPS | drfLogger | drfSpeed | drfVario | drfBaroAlt | drfWind,
+  drfGPS | drfLogger | drfSpeed | drfVario | drfWind, /* XXX: drfBaroAlt? */
   cai302ParseNMEA,		// ParseNMEA
   cai302PutMacCready,		// PutMacCready
   cai302PutBugs,		// PutBugs
@@ -528,7 +528,7 @@ const struct DeviceRegister cai302Device = {
   cai302Declare,		// Declare
   NULL,				// IsLogger
   NULL,				// IsGPSSource
-  devIsFalseReturn,		// IsBaroSource: shouldn't this be true? --rmk
+  NULL, // IsBaroSource
   NULL				// OnSysTicker
 };
 
