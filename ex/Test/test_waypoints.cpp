@@ -9,11 +9,11 @@ public:
   WaypointVisitorPrint():count(0) {};
 
   virtual void Visit(const Waypoint& wp) {
-    printf("visiting wp %d\n", wp.id);
+    printf("# visiting wp %d\n", wp.id);
     count++;
   }
   void summary() {
-    printf("there are %d found\n",count);
+    printf("# there are %d wps found\n",count);
   }
   unsigned count;
 };

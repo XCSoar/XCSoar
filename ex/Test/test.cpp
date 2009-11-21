@@ -82,8 +82,15 @@ bool test_all(int test_num) {
                            task_behaviour,
                            glide_polar,
                            waypoints);
-    
+
+  /*
   if (!setup_task(task_manager, waypoints)) {
+    return false;
+  }
+  */
+
+  if (!test_task_aat(task_manager, waypoints)) {
+    printf("# task construction failed\n");
     return false;
   }
 

@@ -54,11 +54,11 @@ void AircraftSim::update_state(TaskManager &task_manager,
     bearing = state.Location.bearing(w[awp+1])+small_rand();
     if ((task_manager.get_stats().total.solution_remaining.DistanceToFinal<= state.Speed)
         && (awp>1)) {
-      printf("fg\n");
+      printf("# mode fg\n");
       acstate = FinalGlide;
     } else {
       if (state.Altitude<=300) {
-        printf("climb\n");
+        printf("# mode climb\n");
         acstate = Climb;
       }
     }
@@ -74,11 +74,11 @@ void AircraftSim::update_state(TaskManager &task_manager,
     sinkrate = -glide_polar.get_mc();
     if ((task_manager.get_stats().total.solution_remaining.DistanceToFinal<= state.Speed)
         && (awp>1)) {
-      printf("fg\n");
+      printf("# mode fg\n");
       acstate = FinalGlide;
     } else if (state.Altitude>=1500) {
       acstate = Cruise;
-      printf("cruise\n");
+      printf("# mode cruise\n");
     }
     break;
   };
