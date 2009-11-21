@@ -245,7 +245,7 @@ DWORD ComPort::ReadThread()
   fRxThreadTerminated = FALSE;
 
   while ((hPort != INVALID_HANDLE_VALUE) &&
-	 (!closeTriggerEvent.test()) && (!CloseThread))
+         (!closeTriggerEvent.test()) && (!CloseThread))
   {
 
 #ifdef WINDOWSPC
@@ -272,11 +272,11 @@ DWORD ComPort::ReadThread()
         dwBytesTransferred = 0;
               // Read the data from the serial port.
         if (ReadFile(hPort, inbuf, 1024, &dwBytesTransferred,
-		     (OVERLAPPED *)NULL)) {
-	  if (globalRunningEvent.test())  // ignore everything until started
-	    for (unsigned int j = 0; j < dwBytesTransferred; j++) {
-	      ProcessChar(inbuf[j]);
-	    }
+                     (OVERLAPPED *)NULL)) {
+          if (globalRunningEvent.test())  // ignore everything until started
+            for (unsigned int j = 0; j < dwBytesTransferred; j++) {
+              ProcessChar(inbuf[j]);
+            }
         } else {
           dwBytesTransferred = 0;
         }
@@ -285,8 +285,8 @@ DWORD ComPort::ReadThread()
                    // fill... prevents ReadFile from causing the
                    // thread to take up too much CPU
 
-	if (CloseThread)
-	  dwBytesTransferred = 0;
+        if (CloseThread)
+          dwBytesTransferred = 0;
       } while (dwBytesTransferred != 0);
     }
 
@@ -397,7 +397,7 @@ BOOL ComPort::StopRxThread()
   if (!fRxThreadTerminated) {
 //#if COMMDEBUG > 0
     ComPort_StatusMessage(MB_OK, TEXT("Error"), TEXT("%s %s"), sPortName,
-		 gettext(TEXT("RX Thread not Terminated!")));
+                          gettext(TEXT("RX Thread not Terminated!")));
 //#endif
   } else {
     CloseHandle(hReadThread);
