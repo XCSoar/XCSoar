@@ -39,6 +39,7 @@ bool test_lookup(const Waypoints& waypoints)
 int main()
 {
   interactive = false;
+  ::InitSineTable();
 
   plan_tests(4);
 
@@ -46,7 +47,7 @@ int main()
 
   ok(setup_waypoints(waypoints),"waypoint setup",0);
   ok(test_lookup(waypoints),"waypoint lookup",0);
-  ok(test_range(waypoints,100)==2,"waypoint range 100m",0);
+  ok(test_range(waypoints,100)==1,"waypoint range 100m",0);
   ok(test_range(waypoints,500000)== waypoints.size(),"waypoint range 500000m",0);
   return exit_status();
 }

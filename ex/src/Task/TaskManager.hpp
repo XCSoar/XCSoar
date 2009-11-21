@@ -63,10 +63,11 @@ public:
  * Get a random point in the task OZ (for testing simulation route)
  * 
  * @param index Index sequence of task point
+ * @param mag proportional magnitude of error from center (0-1)
  * 
  * @return Location of point
  */
-  GEOPOINT random_point_in_task(const unsigned index) const;
+  GEOPOINT random_point_in_task(const unsigned index, const double mag=1.0) const;
 
   enum TaskMode_t {
     MODE_NULL=0,

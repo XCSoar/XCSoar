@@ -8,50 +8,62 @@
 void 
 TaskEvents::transition_enter(const TaskPoint& tp) const
 {
+  if (verbose) {
 #ifdef DO_PRINT
-  printf("#- entered sector\n");
+    printf("#- entered sector\n");
 #endif
+  }
 }
 
 void 
 TaskEvents::transition_exit(const TaskPoint &tp) const
 {
+  if (verbose) {
 #ifdef DO_PRINT
-  printf("#- exited sector\n");
+    printf("#- exited sector\n");
 #endif
+  }
 }
 
 
 void 
 TaskEvents::active_advanced(const TaskPoint &tp, const int i) const
 {
+  if (verbose) {
 #ifdef DO_PRINT
-  printf("#- advance to sector %d\n", i);
+    printf("#- advance to sector %d\n", i);
 #endif
+  }
 }
 
 void 
 TaskEvents::active_changed(const TaskPoint &tp) const
 {
+  if (verbose) {
 #ifdef DO_PRINT
-  printf("#- active changed to wp %d\n", tp.get_waypoint().id);
+    printf("#- active changed to wp %d\n", tp.get_waypoint().id);
 #endif
+  }
 }
 
 void 
 TaskEvents::construction_error(const char* error) const
 {
+  if (verbose) {
 #ifdef DO_PRINT
-  printf("#Task construction error: ");
-  printf("#%s",error);
-  printf("\n");
+    printf("#Task construction error: ");
+    printf("#%s",error);
+    printf("\n");
 #endif
+  }
 }
 
 void 
 TaskEvents::warning_start_speed() const
 {
+  if (verbose) {
 #ifdef DO_PRINT
-  printf("#- warning speed excessive\n");
+    printf("#- warning speed excessive\n");
 #endif
+  }
 }

@@ -32,14 +32,14 @@ TaskMacCreadyRemaining::get_aircraft_start(const AIRCRAFT_STATE &aircraft) const
 }
 
 void 
-TaskMacCreadyRemaining::set_range(const double tp)
+TaskMacCreadyRemaining::set_range(const double tp, const bool force_current)
 {
-  // first try to modify targets without regard to current inside
-  bool modified = false;
+  // first try to modify targets without regard to current inside (unless forced)
+  bool modified = force_current;
   for (int i=start; i<=end; i++) {
     modified |= tps[i]->set_range(tp,false);
   }
-  if (!modified) {
+  if (!force_current && !modified) {
     // couldn't modify remaining targets, so force move even if inside
     for (int i=start; i<=end; i++) {
       if (tps[i]->set_range(tp,true)) {

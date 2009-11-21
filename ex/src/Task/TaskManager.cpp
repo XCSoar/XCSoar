@@ -201,11 +201,11 @@ TaskManager::get_task_size() const
 }
 
 GEOPOINT 
-TaskManager::random_point_in_task(const unsigned index) const
+TaskManager::random_point_in_task(const unsigned index, const double mag) const
 {
   
   if (index< get_task_size()) {
-    return task_ordered.getTaskPoint(index)->randomPointInSector();
+    return task_ordered.getTaskPoint(index)->randomPointInSector(mag);
   }
   GEOPOINT null_location;
   return null_location;

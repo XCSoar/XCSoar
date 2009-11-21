@@ -16,7 +16,7 @@ public:
   TaskMacCreadyRemaining(TaskPoint* tp,
                          const GlidePolar _gp);
 
-  void set_range(const double tp);
+  void set_range(const double tp, const bool force_current);
 
 protected:
   virtual GlideResult tp_solution(const unsigned i,

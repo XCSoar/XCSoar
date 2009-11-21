@@ -49,6 +49,7 @@ protected:
   const AIRCRAFT_STATE &aircraft;
   const double t_remaining;
   StartPoint *tp_start;
+  bool force_current;
 };
 
 #endif

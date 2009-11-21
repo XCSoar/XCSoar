@@ -12,5 +12,6 @@ void distance_counts();
 void print_queries(unsigned n, std::ostream &fout);
 char wait_prompt(const double time);
 extern bool interactive;
+extern bool verbose;
 
 #endif

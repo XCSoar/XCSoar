@@ -9,7 +9,8 @@
 class AircraftSim {
 public:
   AircraftSim(int _test_num, const TaskManager& task_manager,
-    bool _goto_target=false);
+              double random_mag,
+              bool _goto_target=false);
 
   const AIRCRAFT_STATE& get_state() {
     return state;
@@ -19,6 +20,8 @@ public:
   bool far(TaskManager &task_manager);
   double small_rand();
   void update_state(TaskManager &task_manager,
+                    GlidePolar &glide_polar);
+  void update_mode(TaskManager &task_manager,
                     GlidePolar &glide_polar);
   void integrate();
 

@@ -7,6 +7,7 @@
 
 int n_samples = 0;
 bool interactive = true;
+bool verbose = false;
 
 #ifdef INSTRUMENT_TASK
 extern long count_mc;
@@ -25,8 +26,10 @@ void distance_counts() {
     printf("#     dist+bearing calcs/c %d\n",count_distbearing/n_samples); 
     printf("#     mc calcs/c %d\n",(int)(count_mc/n_samples));
     printf("#     dijkstra/c %d\n",num_dijkstra/n_samples);
-    printf("#     intersection tests/q %d\n",count_intersections/n_queries);
-    printf("#    (total queries %d)\n\n",n_queries);
+    if (n_queries>0) {
+      printf("#     intersection tests/q %d\n",count_intersections/n_queries);
+      printf("#    (total queries %d)\n\n",n_queries);
+    }
 #endif
     printf("#    (total cycles %d)\n\n",n_samples);
 #endif
@@ -43,7 +46,9 @@ void distance_counts() {
 
 void print_queries(unsigned n, std::ostream &fout) {
 #ifdef INSTRUMENT_TASK
-  fout << n << " " << count_intersections/n_queries << "\n";
+  if (n_queries>0) {
+    fout << n << " " << count_intersections/n_queries << "\n";
+  }
   count_intersections = 0;
   n_queries = 0;
 #endif

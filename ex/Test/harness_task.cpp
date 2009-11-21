@@ -51,8 +51,11 @@ public:
 void task_report(TaskManager& task_manager, const char* text)
 {
   AIRCRAFT_STATE ac;
-  TaskVisitorPrint tv;
-  task_manager.Accept(tv);
+  if (verbose) {
+    printf("%s",text);
+    TaskVisitorPrint tv;
+    task_manager.Accept(tv);
+  }
   task_manager.print(ac);
   wait_prompt(0);
 }
@@ -60,8 +63,6 @@ void task_report(TaskManager& task_manager, const char* text)
 bool test_task_mixed(TaskManager& task_manager,
                      const Waypoints &waypoints)
 {
-  printf("# test mixed task\n");
-
   if (!setup_task(task_manager, waypoints)) {
     return false;
   }
@@ -101,8 +102,6 @@ bool test_task_mixed(TaskManager& task_manager,
 bool test_task_fai(TaskManager& task_manager,
                    const Waypoints &waypoints)
 {
-  printf("# test fai task\n");
-
   task_manager.set_factory(TaskManager::FACTORY_FAI);
   AbstractTaskFactory *fact = task_manager.get_factory();
   const Waypoint *wp;
@@ -157,8 +156,6 @@ bool test_task_fai(TaskManager& task_manager,
 bool test_task_aat(TaskManager& task_manager,
                    const Waypoints &waypoints)
 {
-  printf("# test aat task\n");
-
   task_manager.set_factory(TaskManager::FACTORY_AAT);
   AbstractTaskFactory *fact = task_manager.get_factory();
   const Waypoint *wp;
@@ -207,6 +204,96 @@ bool test_task_aat(TaskManager& task_manager,
     return false;
   }
   return true;
+}
+
+
+bool test_task_or(TaskManager& task_manager,
+                     const Waypoints &waypoints)
+{
+  AbstractTaskFactory *fact;
+  const Waypoint *wp;
+
+  task_manager.set_factory(TaskManager::FACTORY_MIXED);
+  fact = task_manager.get_factory();
+
+  task_report(task_manager, "# adding start\n");
+  wp = waypoints.lookup_id(1);
+  if (wp) {
+    if (!task_manager.append(fact->createStart(*wp))) {
+      return false;
+    }
+  }
+
+  task_manager.setActiveTaskPoint(0);
+  task_manager.resume();
+
+  task_report(task_manager, "# adding intermediate\n");
+  wp = waypoints.lookup_id(2);
+  if (wp) {
+    if (!task_manager.append(fact->createIntermediate(*wp))) {
+      return false;
+    }
+  }
+
+  task_report(task_manager, "# adding finish\n");
+  wp = waypoints.lookup_id(1);
+  if (wp) {
+    if (!task_manager.append(fact->createFinish(*wp))) {
+      return false;
+    }
+  }
+
+  task_report(task_manager, "# checking task..\n");
+  if (!fact->validate()) {
+    return false;
+  }
+
+  if (!task_manager.check_task()) {
+    return false;
+  }
+  return true;
+
+}
+
+
+bool test_task_dash(TaskManager& task_manager,
+                    const Waypoints &waypoints)
+{
+  AbstractTaskFactory *fact;
+  const Waypoint *wp;
+
+  task_manager.set_factory(TaskManager::FACTORY_MIXED);
+  fact = task_manager.get_factory();
+
+  task_report(task_manager, "# adding start\n");
+  wp = waypoints.lookup_id(1);
+  if (wp) {
+    if (!task_manager.append(fact->createStart(*wp))) {
+      return false;
+    }
+  }
+
+  task_manager.setActiveTaskPoint(0);
+  task_manager.resume();
+
+  task_report(task_manager, "# adding finish\n");
+  wp = waypoints.lookup_id(2);
+  if (wp) {
+    if (!task_manager.append(fact->createFinish(*wp))) {
+      return false;
+    }
+  }
+
+  task_report(task_manager, "# checking task..\n");
+  if (!fact->validate()) {
+    return false;
+  }
+
+  if (!task_manager.check_task()) {
+    return false;
+  }
+  return true;
+
 }
 
 
@@ -273,8 +360,10 @@ bool setup_task(TaskManager& task_manager, const Waypoints& waypoints)
     return false;
   }
 
-  TaskVisitorPrint tv;
-  task_manager.Accept(tv);
+  if (verbose) {
+    TaskVisitorPrint tv;
+    task_manager.Accept(tv);
+  }
   AIRCRAFT_STATE ac;
   task_manager.print(ac);
 

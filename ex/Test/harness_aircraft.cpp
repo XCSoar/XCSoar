@@ -7,18 +7,25 @@
   }
 */
 
+void print_mode(const char* mode) {
+  if (verbose) {
+    printf("%s",mode);
+  }
+}
+
 GEOPOINT AircraftSim::get_next() const {
   return w[awp+1];
 }
 
 AircraftSim::AircraftSim(int _test_num, const TaskManager& task_manager,
-  bool _goto_target):
+                         double random_mag,
+                         bool _goto_target):
   test_num(_test_num),
   heading_filt(8.0),
   goto_target(_goto_target)
 {
   for (unsigned i=0; i<task_manager.get_task_size(); i++) {
-    w.push_back(task_manager.random_point_in_task(i));
+    w.push_back(task_manager.random_point_in_task(i, random_mag));
   }
   
   state.Location = w[0];
@@ -49,7 +56,7 @@ bool AircraftSim::far(TaskManager &task_manager) {
     const ElementStat stat = task_manager.get_stats().current_leg;
     return stat.remaining.get_distance()>100.0;
   } else {
-    return (w[awp+1].distance(state.Location)>state.Speed);
+    return (w[awp+1].distance(state.Location)>state.Speed*2);
   }
 }
 
@@ -76,19 +83,13 @@ void AircraftSim::update_state(TaskManager &task_manager,
     state.Speed = stat.solution_remaining.VOpt;
     sinkrate = glide_polar.SinkRate(state.Speed);        
     update_bearing(task_manager);
-    if ((task_manager.get_stats().total.solution_remaining.DistanceToFinal<= state.Speed)
-        && (awp>1)) {
-      printf("# mode fg\n");
-      acstate = FinalGlide;
-    } else {
-      if (state.Altitude<=300) {
-        printf("# mode climb\n");
-        acstate = Climb;
-      }
-    }
     break;
   case FinalGlide:
-    state.Speed = stat.solution_remaining.VOpt*0.97;
+    if ((task_manager.get_stats().total.solution_remaining.DistanceToFinal<= state.Speed)) {
+      state.Speed = stat.solution_remaining.VOpt;
+    } else {
+      state.Speed = stat.solution_remaining.VOpt*0.9;
+    }
     sinkrate = glide_polar.SinkRate(state.Speed);
     update_bearing(task_manager);
     break;
@@ -96,13 +97,37 @@ void AircraftSim::update_state(TaskManager &task_manager,
     state.Speed = 25.0;
     bearing += 20+small_rand();
     sinkrate = -glide_polar.get_mc();
-    if ((task_manager.get_stats().total.solution_remaining.DistanceToFinal<= state.Speed)
-        && (awp>1)) {
-      printf("# mode fg\n");
+    break;
+  };
+}
+
+void AircraftSim::update_mode(TaskManager &task_manager,
+                               GlidePolar &glide_polar)  {
+  
+  const ElementStat stat = task_manager.get_stats().current_leg;
+  
+  switch (acstate) {
+  case Cruise:
+    if ((task_manager.get_stats().total.solution_remaining.DistanceToFinal<= state.Speed)) {
+      print_mode("# mode fg\n");
+      acstate = FinalGlide;
+    } else {
+      if (state.Altitude<=300) {
+        print_mode("# mode climb\n");
+        acstate = Climb;
+      }
+    }
+    break;
+  case FinalGlide:
+
+    break;
+  case Climb:
+    if ((task_manager.get_stats().total.solution_remaining.DistanceToFinal<= state.Speed)) {
+      print_mode("# mode fg\n");
       acstate = FinalGlide;
     } else if (state.Altitude>=1500) {
       acstate = Cruise;
-      printf("# mode cruise\n");
+      print_mode("# mode cruise\n");
     }
     break;
   };
@@ -123,26 +148,24 @@ bool AircraftSim::advance(TaskManager &task_manager,
   
   task_manager.update(state, state_last);
   task_manager.update_idle(state);
+
+  update_mode(task_manager, glide_polar);
   
   state_last = state;
   
   if (!far(task_manager)) {
-    
-    if ((test_num==1) && (n_samples>500)) {
-      return false;
-    }
     wait_prompt(time());
     
     awp++;
     if (awp== w.size()) {
       return false;
-    } else {
-      if (goto_target) {
-        if (task_manager.getActiveTaskPointIndex() != awp) {
-          // manual advance
-          task_manager.setActiveTaskPoint(awp);
-        }
-      }
+    } 
+  }
+
+  if (goto_target) {
+    if (task_manager.getActiveTaskPointIndex() < awp) {
+      // manual advance
+      task_manager.setActiveTaskPoint(awp);
     }
   }
   return true;

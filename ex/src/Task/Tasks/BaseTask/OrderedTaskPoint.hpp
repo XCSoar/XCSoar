@@ -235,10 +235,12 @@ public:
 /** 
  * Generate a random location inside the OZ (to be used for testing)
  * 
+ * @param mag proportional magnitude of error from center (0-1)
+ *
  * @return Location of point
  */
-  GEOPOINT randomPointInSector() const {
-    return oz->randomPointInSector();
+  GEOPOINT randomPointInSector(const double mag) const {
+    return oz->randomPointInSector(mag);
   }
 
 /** 

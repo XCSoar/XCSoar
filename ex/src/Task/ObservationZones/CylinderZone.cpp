@@ -3,6 +3,7 @@
 #include "CylinderZone.hpp"
 #include "Navigation/Geometry/GeoVector.hpp"
 #include <stdlib.h>
+#include <algorithm>
 
 double CylinderZone::score_adjustment()
 {
@@ -26,13 +27,14 @@ CylinderZone::equals(const ObservationZonePoint* other) const
 }
 
 GEOPOINT
-CylinderZone::randomPointInSector() const
+CylinderZone::randomPointInSector(const double mag) const
 {
   AIRCRAFT_STATE ac;  
   do {
 
     double dir = rand()%360;
-    double dis = (rand()%100)/100.0*Radius;
+    double dmag = std::max(std::min(Radius,100.0), Radius*mag);
+    double dis = (rand()%100)/100.0*dmag;
     GeoVector vec(dis,dir);
     ac.Location = vec.end_point(Location);
   } while (!isInSector(ac));

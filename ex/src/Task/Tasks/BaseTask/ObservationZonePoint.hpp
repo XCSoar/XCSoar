@@ -43,6 +43,10 @@
 struct GEOPOINT;
 class TaskPoint;
 
+/**
+ * \todo 
+ * - add arc type for future use
+ */
 class ObservationZonePoint : public ReferencePoint, 
                              public ObservationZone 
 {
@@ -80,9 +84,11 @@ public:
 /** 
  * Generate a random location inside the OZ (to be used for testing)
  * 
+ * @param mag proportional magnitude of error from center (0-1)
+ *
  * @return Location of point
  */
-  virtual GEOPOINT randomPointInSector() const = 0;
+  virtual GEOPOINT randomPointInSector(const double mag) const = 0;
 
 };
 

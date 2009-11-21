@@ -5,8 +5,9 @@
 int main()
 {
   interactive = false;
+  ::InitSineTable();
 
-  plan_tests(3);
+  plan_tests(5);
 
   TaskBehaviour task_behaviour;
   TaskEvents default_events;
@@ -35,6 +36,20 @@ int main()
                            waypoints);
 
   ok (test_task_aat(task_manager3, waypoints),"aat task construction",0);
+
+  TaskManager task_manager4(default_events,
+                           task_behaviour,
+                           glide_polar,
+                           waypoints);
+
+  ok (test_task_or(task_manager4, waypoints),"or task construction",0);
+
+  TaskManager task_manager5(default_events,
+                           task_behaviour,
+                           glide_polar,
+                           waypoints);
+
+  ok (test_task_dash(task_manager5, waypoints),"dash task construction",0);
 
   return exit_status();
 }

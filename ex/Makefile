@@ -152,7 +152,13 @@ TESTOBJS = Test/test_debug.o \
 	Test/harness_task.o \
 	Test/tap.o
 
-TARGETS = Test/test Test/test_task Test/test_trees Test/test_mc Test/test_waypoints
+TESTS = Test/test_task \
+	Test/test_trees \
+	Test/test_mc \
+	Test/test_waypoints \
+	Test/test_flight
+
+TARGETS = Test/test $(TESTS)
 
 all: $(TARGETS)
 	@echo "done"
@@ -160,6 +166,7 @@ all: $(TARGETS)
 test:	$(TARGETS)
 	Test/test_task
 	Test/test_waypoints
+	Test/test_flight
 
 
 Test/test: $(OBJS) $(TESTOBJS) Test/test.cpp
@@ -170,6 +177,9 @@ Test/test_task: $(OBJS) $(TESTOBJS) Test/test_task.cpp
 
 Test/test_waypoints: $(OBJS) $(TESTOBJS) Test/test_waypoints.cpp
 	g++ $(CXXFLAGS) $(INCLUDES) $(OBJS) $(TESTOBJS) Test/test_waypoints.cpp -o Test/test_waypoints
+
+Test/test_flight: $(OBJS) $(TESTOBJS) Test/test_flight.cpp
+	g++ $(CXXFLAGS) $(INCLUDES) $(OBJS) $(TESTOBJS) Test/test_flight.cpp -o Test/test_flight
 
 Test/test_trees: $(OBJS) $(TESTOBJS) Test/test_trees.cpp
 	g++ $(CXXFLAGS) $(INCLUDES) $(OBJS) $(TESTOBJS) Test/test_trees.cpp -o Test/test_trees 

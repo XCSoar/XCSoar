@@ -6,6 +6,8 @@ class TaskPoint;
 class TaskEvents 
 {
 public:
+  TaskEvents(): verbose(false) {};
+
 /** 
  * Called when the aircraft enters a turnpoint observation zone
  * 
@@ -54,6 +56,7 @@ public:
  */
   virtual void construction_error(const char* error) const;
 
+  bool verbose;
 };
 
 #endif
