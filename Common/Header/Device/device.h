@@ -39,9 +39,9 @@ Copyright_License {
 #ifndef	DEVICE_H
 #define	DEVICE_H
 
-#include "Sizes.h"
 #include "Port.h"
 #include "WayPoint.hpp"
+#include "Device/Declaration.hpp"
 
 #include <stdio.h>
 
@@ -52,14 +52,6 @@ struct NMEA_INFO;
 
 #define	devA()	    (&DeviceList[0])
 #define	devB()	    (&DeviceList[1])
-
-struct Declaration {
-  TCHAR PilotName[64];
-  TCHAR AircraftType[32];
-  TCHAR AircraftRego[32];
-  int num_waypoints;
-  const WAYPOINT *waypoint[MAXTASKPOINTS];
-};
 
 struct DeviceRegister;
 

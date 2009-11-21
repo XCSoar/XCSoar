@@ -39,10 +39,11 @@ Copyright_License {
 #ifndef XCSOAR_DEVICE_DRIVER_HPP
 #define XCSOAR_DEVICE_DRIVER_HPP
 
+#include "Device/Declaration.hpp"
+
 #include <tchar.h>
 
 struct NMEA_INFO;
-struct Declaration;
 
 typedef	enum {dfGPS, dfLogger, dfSpeed,	dfVario, dfBaroAlt,	dfWind, dfVoice, dfNmeaOut, dfRadio, dfCondor } DeviceFlags_t;
 
