@@ -27,7 +27,7 @@ TaskBehaviour::TaskBehaviour():
     optimise_targets_bearing(true),
     auto_mc(true),
     calc_cruise_efficiency(true),
-    aat_min_time(3600*4.9),
+    aat_min_time(3600*4.7),
     safety_height_terrain(150.0),
     safety_height_arrival(300.0),
     start_max_speed(50.0)

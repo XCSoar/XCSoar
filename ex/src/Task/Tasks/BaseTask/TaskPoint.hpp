@@ -166,10 +166,17 @@ public:
 /** 
  * Dummy null method.
  * Set target to parametric value between min and max locations.
+ * Targets are only moved for current or after taskpoints, unless
+ * force_if_current is true.
  * 
  * @param p Parametric range (0:1) to set target
+ * @param force_if_current If current active, force range move (otherwise ignored)
+ *
+ * @return True if target was moved
  */
-  virtual void set_range(const double p) {};
+  virtual bool set_range(const double p, const bool force_if_current) {
+    return false;
+  };
 
 /** 
  * Dummy method (always false for pure TaskPoints)

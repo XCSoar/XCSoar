@@ -8,11 +8,12 @@ set style line 4 lt 4 lc rgb "blue" lw 2
 set style line 5 lt 4 lc rgb "grey" lw 2
 set style line 6 lt 4 lc rgb "green" lw 1
 set style line 7 lt 4 lc rgb "cyan" lw 1
+set style line 8 lt 2 lc rgb "red" lw 2
 
 
 plot \
-     'results/res-task.txt' using 1:2 with filledcurve title "OZ", \
-     'results/res-ssample.txt' using 1:2 with filledcurve title "sect samples", \
+     'results/res-task.txt' using 1:2 with lines ls 6 title "OZ", \
+     'results/res-ssample.txt' using 1:2 with filledcurve ls 8 title "sect samples", \
      'results/res-bb-inside.txt' using 1:2 with lines ls 7 title "airspace", \
      'results/res-min.txt' using 1:2 with linespoints ls 3 title "min", \
      'results/res-max.txt' using 1:2 with linespoints ls 2 title "max", \

@@ -3,7 +3,7 @@
 #include "SectorZone.hpp"
 #include "Navigation/Geometry/GeoVector.hpp"
 
-GEOPOINT SectorZone::get_boundary_parametric(double t) 
+GEOPOINT SectorZone::get_boundary_parametric(double t) const
 { 
   AIRCRAFT_STATE state;
   state.Location = GeoVector(Radius*0.999, t*360).end_point(getLocation());

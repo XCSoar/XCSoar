@@ -398,26 +398,6 @@ void AATPoint::print(std::ostream& f, const AIRCRAFT_STATE& state,
   }
 }
 
-void 
-AATPoint::print_boundary(std::ostream& f,
-  const AIRCRAFT_STATE &state) const
-{
-  const unsigned n= get_boundary_points().size();
-  f << "#   Boundary points\n";
-//  const double mind = double_leg_distance(state.Location);
-  for (unsigned i=0; i<n; i++) {
-    const GEOPOINT loc = get_boundary_points()[i].getLocation();
-
-    /// \todo this is broken
-    if (1) { // || double_leg_distance(loc)>mind) 
-      f << "     " << loc.Longitude << " " << loc.Latitude << "\n";
-    } else {
-      f << "     " << state.Location.Longitude << " " << state.Location.Latitude << "\n";
-    }
-  }
-  f << "\n";
-}
-
 #include "Task/Tasks/BaseTask/OrderedTaskPoint.hpp"
 
 void 
@@ -426,6 +406,7 @@ OrderedTaskPoint::print(std::ostream& f, const AIRCRAFT_STATE& state,
 {
   if (item==0) {
     SampledTaskPoint::print(f,state);
+    print_boundary(f, state);
     f << "# Entered " << get_state_entered().Time << "\n";
     f << "# Bearing travelled " << vector_travelled.Bearing << "\n";
     f << "# Distance travelled " << vector_travelled.Distance << "\n";
@@ -436,27 +417,27 @@ OrderedTaskPoint::print(std::ostream& f, const AIRCRAFT_STATE& state,
   }
 }
 
-
-#include "Task/Tasks/BaseTask/SampledTaskPoint.hpp"
-
 void 
-SampledTaskPoint::print_boundary(std::ostream& f, const AIRCRAFT_STATE &state) const
+OrderedTaskPoint::print_boundary(std::ostream& f, const AIRCRAFT_STATE &state) const
 {
   f << "#   Boundary points\n";
-  const unsigned n= get_boundary_points().size();
-  for (unsigned i=0; i<n; i++) {
-    const GEOPOINT loc = get_boundary_points()[i].getLocation();
+  for (double t=0; t<= 1.0; t+= 0.05) {
+    GEOPOINT loc = get_boundary_parametric(t);
     f << "     " << loc.Longitude << " " << loc.Latitude << "\n";
   }
+  GEOPOINT loc = get_boundary_parametric(0);
+  f << "     " << loc.Longitude << " " << loc.Latitude << "\n";
   f << "\n";
 }
+
+
+#include "Task/Tasks/BaseTask/SampledTaskPoint.hpp"
 
 
 void 
 SampledTaskPoint::print(std::ostream& f, const AIRCRAFT_STATE &state) const
 {
   TaskPoint::print(f,state);
-  print_boundary(f, state);
 }
 
 void 

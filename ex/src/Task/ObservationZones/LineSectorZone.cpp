@@ -1,7 +1,7 @@
 #include "LineSectorZone.hpp"
 #include "Navigation/Geometry/GeoVector.hpp"
 
-GEOPOINT LineSectorZone::get_boundary_parametric(double t) 
+GEOPOINT LineSectorZone::get_boundary_parametric(double t) const
 { 
   GEOPOINT loc;
   loc = SectorStart.interpolate(SectorEnd,t);

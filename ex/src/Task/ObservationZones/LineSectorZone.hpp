@@ -73,7 +73,7 @@ public:
     return CylinderZone::isInSector(ref_now) && CylinderZone::isInSector(ref_last);
   }
 
-  GEOPOINT get_boundary_parametric(double) ;  
+  GEOPOINT get_boundary_parametric(double) const;  
 
   virtual double score_adjustment();
 

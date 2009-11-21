@@ -158,7 +158,6 @@ public:
 #ifdef DO_PRINT
   virtual void print(std::ostream& f, const AIRCRAFT_STATE&state) const;
   virtual void print_samples(std::ostream& f, const AIRCRAFT_STATE&state);
-  virtual void print_boundary(std::ostream& f, const AIRCRAFT_STATE&state) const;
 #endif
 
 protected:

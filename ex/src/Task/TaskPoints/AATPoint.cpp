@@ -117,12 +117,25 @@ AATPoint::check_target_outside(const AIRCRAFT_STATE& state)
 }
 
 
-void 
-AATPoint::set_range(const double p)
+bool
+AATPoint::set_range(const double p, const bool force_if_current)
 {
-  if (getActiveState() != BEFORE_ACTIVE) {
-    TargetLocation = getMinLocation().interpolate(getMaxLocation(),p);
+  switch (getActiveState()) {
+  case CURRENT_ACTIVE:
+    if (!has_entered() || force_if_current) {
+      TargetLocation = getMinLocation().interpolate(getMaxLocation(),p);
+      return true;
+    }
+    return false;
+  case AFTER_ACTIVE:
+    if (getActiveState() == AFTER_ACTIVE) {
+      TargetLocation = getMinLocation().interpolate(getMaxLocation(),p);
+      return true;
+    }
+  default:
+    return false;
   }
+  return false;
 }
 
 

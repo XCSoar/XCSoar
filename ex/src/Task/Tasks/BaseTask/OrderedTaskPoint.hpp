@@ -265,6 +265,8 @@ public:
 #ifdef DO_PRINT
   virtual void print(std::ostream& f, const AIRCRAFT_STATE& state,
                      const int item=0) const;
+  virtual void print_boundary(std::ostream& f, const AIRCRAFT_STATE &state) const;
+
 #endif
 
 
@@ -279,7 +281,7 @@ protected:
  * 
  * @return Boundary point
  */
-  GEOPOINT get_boundary_parametric(double t)
+  GEOPOINT get_boundary_parametric(double t) const
   {
     return oz->get_boundary_parametric(t);
   }

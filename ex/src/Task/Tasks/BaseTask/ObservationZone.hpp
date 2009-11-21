@@ -90,7 +90,7 @@ public:
         return transition_enter(ref_last, ref_now);
     }  
 
-  virtual GEOPOINT get_boundary_parametric(double t) =0;
+  virtual GEOPOINT get_boundary_parametric(double t) const =0;
 
   virtual double score_adjustment() const;
 };

@@ -66,7 +66,7 @@ public:
     return distance(ref.Location)<=Radius;
   }  
 
-  GEOPOINT get_boundary_parametric(double) ;
+  GEOPOINT get_boundary_parametric(double) const;
 
   virtual double score_adjustment();
 

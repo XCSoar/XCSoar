@@ -9,7 +9,7 @@ double CylinderZone::score_adjustment()
   return Radius;
 }
 
-GEOPOINT CylinderZone::get_boundary_parametric(double t) 
+GEOPOINT CylinderZone::get_boundary_parametric(double t) const
 { 
   return GeoVector(Radius, t*360).end_point(getLocation());
 }

@@ -112,7 +112,7 @@ public:
 
   virtual bool isInSector(const AIRCRAFT_STATE &ref) const;
 
-  GEOPOINT get_boundary_parametric(double) ;  
+  GEOPOINT get_boundary_parametric(double) const;  
 
   virtual double score_adjustment();
 
