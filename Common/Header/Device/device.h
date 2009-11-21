@@ -87,6 +87,13 @@ struct DeviceDescriptor {
   bool ticker;
 
   /* Warning: the following methods do not lock mutexComm */
+  bool Open(int Port);
+  void Close();
+
+  bool IsLogger() const;
+  bool IsGPSSource() const;
+  bool IsBaroSource() const;
+
   bool PutMcCready(double mc_cready);
   bool PutBugs(double bugs);
   bool PutBallast(double ballast);
@@ -97,6 +104,9 @@ struct DeviceDescriptor {
   bool PutVoice(const TCHAR *sentence);
 
   void LinkTimeout();
+  bool Declare(const struct Declaration *declaration);
+
+  void OnSysTicker();
 };
 
 #define Port1WriteNMEA(s)	devWriteNMEAString(devA(), s)

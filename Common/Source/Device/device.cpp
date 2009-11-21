@@ -215,9 +215,6 @@ devGetDriver(const TCHAR *DevName)
 }
 
 static bool
-devOpen(struct DeviceDescriptor *d, int Port);
-
-static bool
 devOpenLog(struct DeviceDescriptor *d, const TCHAR *FileName);
 
 static bool
@@ -246,7 +243,7 @@ devInitOne(struct DeviceDescriptor *dev, int index, const TCHAR *port,
 
     dev->Com = Com;
 
-    devOpen(dev, index);
+    dev->Open(index);
 
     if (devIsBaroSource(dev)) {
       if (pDevPrimaryBaroSource == NULL) {
@@ -439,6 +436,59 @@ devParseNMEA(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INF
 }
 
 bool
+DeviceDescriptor::Open(int _port)
+{
+  Port = _port;
+
+  return Driver != NULL && Driver->Open != NULL
+    ? Driver->Open(this, Port)
+    : true;
+}
+
+void
+DeviceDescriptor::Close()
+{
+  if (Driver != NULL && Driver->Close != NULL)
+    Driver->Close(this);
+
+  ComPort *OldCom = Com;
+  Com = NULL;
+
+  if (OldCom != NULL) {
+    OldCom->Close();
+    delete OldCom;
+  }
+}
+
+bool
+DeviceDescriptor::IsLogger() const
+{
+  return Driver != NULL &&
+    ((Driver->IsLogger != NULL
+      ? Driver->IsLogger(this)
+      : (Driver->Flags & drfLogger) != 0) ||
+     NMEAParser::PortIsFlarm(Port));
+}
+
+bool
+DeviceDescriptor::IsGPSSource() const
+{
+  return Driver != NULL &&
+    (Driver->IsGPSSource != NULL
+     ? Driver->IsGPSSource(this)
+     : (Driver->Flags & drfGPS) != 0);
+}
+
+bool
+DeviceDescriptor::IsBaroSource() const
+{
+  return Driver != NULL &&
+    (Driver->IsBaroSource != NULL
+     ? Driver->IsBaroSource(this)
+     : (Driver->Flags & drfBaroAlt) != 0);
+}
+
+bool
 DeviceDescriptor::PutMcCready(double mc_cready)
 {
   BOOL result = TRUE;
@@ -535,42 +585,32 @@ DeviceDescriptor::LinkTimeout()
     Driver->LinkTimeout(this);
 }
 
-// Only called from devInit() above which
-// is in turn called with mutexComm.Lock
-static bool
-devOpen(struct DeviceDescriptor *d, int Port)
+bool
+DeviceDescriptor::Declare(const struct Declaration *declaration)
 {
-  BOOL res = TRUE;
+  if (Driver == NULL)
+    return false;
 
-  if (d && d->Driver && d->Driver->Open)
-    res = d->Driver->Open(d, Port);
+  bool result = Driver->Declare != NULL &&
+    Driver->Declare(this, declaration);
 
-  if (res == TRUE)
-    d->Port = Port;
+  if (NMEAParser::PortIsFlarm(Port))
+    result = FlarmDeclare(this, declaration) || result;
 
-  return res;
+  return result;
 }
 
-// Tear down methods should always succeed.
-// Called from devInit() above under LockComm
-// Also called when shutting down via devShutdown()
-static bool
-devClose(struct DeviceDescriptor *d)
+void
+DeviceDescriptor::OnSysTicker()
 {
-  if (d != NULL) {
-    if (d->Driver && d->Driver->Close)
-      d->Driver->Close(d);
+    if (Driver == NULL)
+      return;
 
-    ComPort *Com = d->Com;
-    d->Com = NULL;
+    ticker = !ticker;
 
-    if (Com) {
-      Com->Close();
-      delete Com;
-    }
-  }
-
-  return TRUE;
+    // write settings to vario every second
+    if (ticker && Driver->OnSysTicker != NULL)
+      Driver->OnSysTicker(this);
 }
 
 bool
@@ -582,13 +622,8 @@ devDeclare(struct DeviceDescriptor *d, const struct Declaration *decl)
     return true;
 
   mutexComm.Lock();
-  if (d) {
-    if ((d->Driver) && (d->Driver->Declare != NULL))
-      result = d->Driver->Declare(d, decl);
-
-    if (NMEAParser::PortIsFlarm(d->Port))
-      result |= FlarmDeclare(d, decl);
-  }
+  if (d != NULL)
+    d->Declare(decl);
   mutexComm.Unlock();
 
   return result;
@@ -599,14 +634,8 @@ BOOL devIsLogger(const struct DeviceDescriptor *d)
   bool result = false;
 
   mutexComm.Lock();
-  if (d && d->Driver) {
-    if (d->Driver->IsLogger)
-      result = d->Driver->IsLogger(d);
-    else
-      result = d->Driver->Flags & drfLogger ? TRUE : FALSE;
-    if (!result)
-      result |= NMEAParser::PortIsFlarm(d->Port);
-  }
+  if (d != NULL)
+    result = d->IsLogger();
   mutexComm.Unlock();
 
   return result;
@@ -617,12 +646,8 @@ BOOL devIsGPSSource(const struct DeviceDescriptor *d)
   BOOL result = FALSE;
 
   mutexComm.Lock();
-  if (d && d->Driver) {
-    if (d->Driver->IsGPSSource)
-      result = d->Driver->IsGPSSource(d);
-    else
-      result = d->Driver->Flags & drfGPS ? TRUE : FALSE;
-  }
+  if (d != NULL)
+    result = d->IsGPSSource();
   mutexComm.Unlock();
 
   return result;
@@ -633,12 +658,8 @@ BOOL devIsBaroSource(const struct DeviceDescriptor *d)
   BOOL result = FALSE;
 
   mutexComm.Lock();
-  if (d && d->Driver) {
-    if (d->Driver->IsBaroSource)
-      result = d->Driver->IsBaroSource(d);
-    else
-      result = d->Driver->Flags & drfBaroAlt ? TRUE : FALSE;
-  }
+  if (d != NULL)
+    result = d->IsBaroSource();
   mutexComm.Unlock();
 
   return result;
@@ -698,14 +719,7 @@ void devTick()
   mutexComm.Lock();
   for (i = 0; i < NUMDEV; i++) {
     struct DeviceDescriptor *d = &DeviceList[i];
-    if (!d->Driver)
-      continue;
-
-    d->ticker = !d->ticker;
-
-    // write settings to vario every second
-    if (d->ticker && d->Driver->OnSysTicker)
-      d->Driver->OnSysTicker(d);
+    d->OnSysTicker();
   }
   mutexComm.Unlock();
 }
@@ -971,7 +985,7 @@ void devShutdown()
   StartupStore(TEXT("Stop COM devices\n"));
 
   for (i=0; i<NUMDEV; i++){
-    devClose(&DeviceList[i]);
+    DeviceList[i].Close();
     devCloseLog(&DeviceList[i]);
   }
 }
