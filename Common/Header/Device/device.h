@@ -111,9 +111,9 @@ struct DeviceRegister {
   BOOL (*Close)(struct DeviceDescriptor *d);
   BOOL (*LinkTimeout)(struct DeviceDescriptor *d);
   BOOL (*Declare)(struct DeviceDescriptor *d, struct Declaration *decl);
-  BOOL (*IsLogger)(struct DeviceDescriptor *d);
-  BOOL (*IsGPSSource)(struct DeviceDescriptor *d);
-  BOOL (*IsBaroSource)(struct DeviceDescriptor *d);
+  BOOL (*IsLogger)(const struct DeviceDescriptor *d);
+  BOOL (*IsGPSSource)(const struct DeviceDescriptor *d);
+  BOOL (*IsBaroSource)(const struct DeviceDescriptor *d);
   BOOL (*OnSysTicker)(struct DeviceDescriptor *d);
 };
 
@@ -144,11 +144,11 @@ BOOL devPutFreqActive(struct DeviceDescriptor *d, double Freq);
 BOOL devPutFreqStandby(struct DeviceDescriptor *d, double Freq);
 BOOL devLinkTimeout(struct DeviceDescriptor *d);
 BOOL devDeclare(struct DeviceDescriptor *d, struct Declaration *decl);
-BOOL devIsLogger(struct DeviceDescriptor *d);
-BOOL devIsGPSSource(struct DeviceDescriptor *d);
-BOOL devIsBaroSource(struct DeviceDescriptor *d);
-BOOL devIsRadio(struct DeviceDescriptor *d);
-BOOL devIsCondor(struct DeviceDescriptor *d);
+BOOL devIsLogger(const struct DeviceDescriptor *d);
+BOOL devIsGPSSource(const struct DeviceDescriptor *d);
+BOOL devIsBaroSource(const struct DeviceDescriptor *d);
+BOOL devIsRadio(const struct DeviceDescriptor *d);
+BOOL devIsCondor(const struct DeviceDescriptor *d);
 
 BOOL devPutQNH(struct DeviceDescriptor *d, double NewQNH);
 void devTick(void);
@@ -158,8 +158,8 @@ BOOL devGetBaroAltitude(double *Value);
 BOOL devPutVoice(struct DeviceDescriptor *d, const TCHAR *Sentence);
 
 
-BOOL devIsFalseReturn(struct DeviceDescriptor *d);
-BOOL devIsTrueReturn(struct DeviceDescriptor *d);
+BOOL devIsFalseReturn(const struct DeviceDescriptor *d);
+BOOL devIsTrueReturn(const struct DeviceDescriptor *d);
 
 void devStartup(LPTSTR lpCmdLine);
 void devShutdown();

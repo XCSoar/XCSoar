@@ -53,7 +53,7 @@ nmoParseNMEA(struct DeviceDescriptor *d, const TCHAR *String,
 }
 
 BOOL
-nmoIsGPSSource(struct DeviceDescriptor *d)
+nmoIsGPSSource(const struct DeviceDescriptor *d)
 {
   (void)d;
   return(FALSE);  // this is only true if GPS source is connected on VEGA.NmeaIn

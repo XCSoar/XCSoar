@@ -185,13 +185,16 @@ BOOL devRegisterGetName(int Index, TCHAR *Name){
   return(TRUE);
 }
 
-
-BOOL devIsFalseReturn(struct DeviceDescriptor *d){
+BOOL
+devIsFalseReturn(const struct DeviceDescriptor *d)
+{
   (void)d;
   return FALSE;
 }
 
-BOOL devIsTrueReturn(struct DeviceDescriptor *d){
+BOOL
+devIsTrueReturn(const struct DeviceDescriptor *d)
+{
   (void)d;
   return TRUE;
 }
@@ -585,7 +588,7 @@ BOOL devDeclare(struct DeviceDescriptor *d, struct Declaration *decl)
   return result;
 }
 
-BOOL devIsLogger(struct DeviceDescriptor *d)
+BOOL devIsLogger(const struct DeviceDescriptor *d)
 {
   bool result = false;
 
@@ -603,7 +606,7 @@ BOOL devIsLogger(struct DeviceDescriptor *d)
   return result;
 }
 
-BOOL devIsGPSSource(struct DeviceDescriptor *d)
+BOOL devIsGPSSource(const struct DeviceDescriptor *d)
 {
   BOOL result = FALSE;
 
@@ -619,7 +622,7 @@ BOOL devIsGPSSource(struct DeviceDescriptor *d)
   return result;
 }
 
-BOOL devIsBaroSource(struct DeviceDescriptor *d)
+BOOL devIsBaroSource(const struct DeviceDescriptor *d)
 {
   BOOL result = FALSE;
 
@@ -635,7 +638,7 @@ BOOL devIsBaroSource(struct DeviceDescriptor *d)
   return result;
 }
 
-BOOL devIsRadio(struct DeviceDescriptor *d)
+BOOL devIsRadio(const struct DeviceDescriptor *d)
 {
   BOOL result = FALSE;
 
@@ -649,7 +652,7 @@ BOOL devIsRadio(struct DeviceDescriptor *d)
 }
 
 
-BOOL devIsCondor(struct DeviceDescriptor *d)
+BOOL devIsCondor(const struct DeviceDescriptor *d)
 {
   BOOL result = FALSE;
 
