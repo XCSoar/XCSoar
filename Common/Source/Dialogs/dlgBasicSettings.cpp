@@ -83,7 +83,7 @@ static void OnQnhData(DataField *Sender, DataField::DataAccessKind_t Mode){
       INHg = (int)QNH;
       INHg = INHg*29.91/1013.2;
 
-      devPutQNH(devAll(), QNH);
+      AllDevicesPutQNH(QNH);
       AirspaceQnhChangeNotify(QNH);
 
       // VarioWriteSettings();

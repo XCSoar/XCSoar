@@ -70,6 +70,8 @@ Copyright_License {
 #include "options.h" /* for LOGGDEVCOMMANDLINE */
 #include "Asset.hpp"
 
+#include <assert.h>
+
 static Mutex mutexComm;
 
 // A note about locking.
@@ -436,50 +438,101 @@ devParseNMEA(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INF
 
 }
 
-
-BOOL devPutMacCready(struct DeviceDescriptor *d, double MacCready)
+bool
+DeviceDescriptor::PutMcCready(double mc_cready)
 {
   BOOL result = TRUE;
 
-  if (is_simulator())
-    return true;
-
-  mutexComm.Lock();
-  if (d && d->Driver && d->Driver->PutMacCready)
-    result = d->Driver->PutMacCready(d, MacCready);
-  mutexComm.Unlock();
+  if (Driver != NULL && Driver->PutMacCready != NULL)
+    result = Driver->PutMacCready(this, mc_cready);
 
   return result;
 }
 
-BOOL devPutBugs(struct DeviceDescriptor *d, double Bugs)
+bool
+DeviceDescriptor::PutBugs(double bugs)
 {
   BOOL result = TRUE;
 
-  if (is_simulator())
-    return true;
-
-  mutexComm.Lock();
-  if (d && d->Driver && d->Driver->PutBugs)
-    result = d->Driver->PutBugs(d, Bugs);
-  mutexComm.Unlock();
+  if (Driver != NULL && Driver->PutBugs != NULL)
+    result = Driver->PutBugs(this, bugs);
 
   return result;
 }
 
-BOOL devPutBallast(struct DeviceDescriptor *d, double Ballast)
+bool
+DeviceDescriptor::PutBallast(double ballast)
 {
   BOOL result = TRUE;
 
-  if (is_simulator())
-    return true;
-
-  mutexComm.Lock();
-  if (d && d->Driver && d->Driver->PutBallast)
-    result = d->Driver->PutBallast(d, Ballast);
-  mutexComm.Unlock();
+  if (Driver != NULL && Driver->PutBallast != NULL)
+    result = Driver->PutBallast(this, ballast);
 
   return result;
+}
+
+bool
+DeviceDescriptor::PutVolume(int volume)
+{
+  BOOL result = TRUE;
+
+  if (Driver != NULL && Driver->PutVolume != NULL)
+    result = Driver->PutVolume(this, volume);
+
+  return result;
+}
+
+bool
+DeviceDescriptor::PutActiveFrequency(double frequency)
+{
+  BOOL result = TRUE;
+
+  if (Driver != NULL && Driver->PutFreqActive != NULL)
+    result = Driver->PutFreqActive(this, frequency);
+
+  return result;
+}
+
+bool
+DeviceDescriptor::PutStandbyFrequency(double frequency)
+{
+  BOOL result = TRUE;
+
+  if (Driver != NULL && Driver->PutFreqStandby != NULL)
+    result = Driver->PutFreqStandby(this, frequency);
+
+  return result;
+}
+
+bool
+DeviceDescriptor::PutQNH(double qnh)
+{
+  BOOL result = TRUE;
+
+  if (Driver != NULL && Driver->PutQNH != NULL)
+    result = Driver->PutQNH(this, qnh);
+
+  return result;
+}
+
+bool
+DeviceDescriptor::PutVoice(const TCHAR *sentence)
+{
+  BOOL result = TRUE;
+
+  assert(sentence != NULL);
+
+  if (Driver != NULL && Driver->PutVoice != NULL)
+    result = Driver->PutVoice(this, sentence);
+
+  return result;
+}
+
+void
+DeviceDescriptor::LinkTimeout()
+{
+  if (Driver != NULL && Driver->LinkTimeout != NULL)
+    Driver->LinkTimeout(this);
 }
 
 // Only called from devInit() above which
@@ -518,55 +571,6 @@ devClose(struct DeviceDescriptor *d)
   }
 
   return TRUE;
-}
-
-BOOL devLinkTimeout(struct DeviceDescriptor *d)
-{
-  BOOL result = FALSE;
-
-  if (is_simulator())
-    return true;
-
-  mutexComm.Lock();
-  if (d == NULL){
-    for (int i=0; i<NUMDEV; i++){
-      d = &DeviceList[i];
-      if (d->Driver && d->Driver->LinkTimeout != NULL)
-        (d->Driver->LinkTimeout)(d);
-    }
-    result = TRUE;
-  } else {
-    if (d->Driver && d->Driver->LinkTimeout != NULL)
-      result = d->Driver->LinkTimeout(d);
-  }
-  mutexComm.Unlock();
-
-  return FALSE;
-}
-
-
-BOOL devPutVoice(struct DeviceDescriptor *d, TCHAR *Sentence)
-{
-  BOOL result = FALSE;
-
-  if (is_simulator())
-    return true;
-
-  mutexComm.Lock();
-  if (d == NULL){
-    for (int i=0; i<NUMDEV; i++){
-      d = &DeviceList[i];
-      if (d->Driver && d->Driver->PutVoice)
-        d->Driver->PutVoice(d, Sentence);
-    }
-    result = TRUE;
-  } else {
-    if (d->Driver && d->Driver->PutVoice)
-      result = d->Driver->PutVoice(d, Sentence);
-  }
-  mutexComm.Unlock();
-
-  return FALSE;
 }
 
 bool
@@ -687,30 +691,6 @@ devCloseLog(struct DeviceDescriptor *d)
     return(FALSE);
 }
 
-BOOL devPutQNH(struct DeviceDescriptor *d, double NewQNH)
-{
-  BOOL result = FALSE;
-
-  if (is_simulator())
-    return true;
-
-  mutexComm.Lock();
-  if (d == NULL){
-    for (int i=0; i<NUMDEV; i++){
-      d = &DeviceList[i];
-      if (d->Driver && d->Driver->PutQNH)
-        d->Driver->PutQNH(d, NewQNH);
-    }
-    result = TRUE;
-  } else {
-    if (d->Driver && d->Driver->PutQNH)
-      result = d->Driver->PutQNH(d, NewQNH);
-  }
-  mutexComm.Unlock();
-
-  return FALSE;
-}
-
 void devTick()
 {
   int i;
@@ -774,53 +754,6 @@ struct DeviceDescriptor *devVarioFindVega(void)
       return &DeviceList[i];
   return NULL;
 }
-
-
-BOOL devPutVolume(struct DeviceDescriptor *d, int Volume)
-{
-  BOOL result = TRUE;
-
-  if (is_simulator())
-    return true;
-
-  mutexComm.Lock();
-  if (d && d->Driver && d->Driver->PutVolume != NULL)
-    result = d->Driver->PutVolume(d, Volume);
-  mutexComm.Unlock();
-
-  return result;
-}
-
-BOOL devPutFreqActive(struct DeviceDescriptor *d, double Freq)
-{
-  BOOL result = TRUE;
-
-  if (is_simulator())
-    return true;
-
-  mutexComm.Lock();
-  if (d && d->Driver && d->Driver->PutFreqActive != NULL)
-    result = d->Driver->PutFreqActive(d, Freq);
-  mutexComm.Unlock();
-
-  return result;
-}
-
-BOOL devPutFreqStandby(struct DeviceDescriptor *d, double Freq)
-{
-  BOOL result = TRUE;
-
-  if (is_simulator())
-    return true;
-
-  mutexComm.Lock();
-  if (d && d->Driver && d->Driver->PutFreqStandby != NULL)
-    result = d->Driver->PutFreqStandby(d, Freq);
-  mutexComm.Unlock();
-
-  return result;
-}
-
 
 static BOOL
 FlarmDeclareSetGet(struct DeviceDescriptor *d, TCHAR *Buffer) {
@@ -922,6 +855,105 @@ FlarmDeclare(struct DeviceDescriptor *d, const struct Declaration *decl)
   d->Com->StartRxThread();                       // restart RX thread
 
   return result;
+}
+
+void AllDevicesPutMcCready(double mc_cready)
+{
+  if (is_simulator())
+    return;
+
+  ScopeLock protect(mutexComm);
+
+  for (unsigned i = 0; i < NUMDEV; ++i)
+    DeviceList[i].PutMcCready(mc_cready);
+}
+
+void AllDevicesPutBugs(double bugs)
+{
+  if (is_simulator())
+    return;
+
+  ScopeLock protect(mutexComm);
+
+  for (unsigned i = 0; i < NUMDEV; ++i)
+    DeviceList[i].PutBugs(bugs);
+}
+
+void AllDevicesPutBallast(double ballast)
+{
+  if (is_simulator())
+    return;
+
+  ScopeLock protect(mutexComm);
+
+  for (unsigned i = 0; i < NUMDEV; ++i)
+    DeviceList[i].PutBallast(ballast);
+}
+
+void AllDevicesPutVolume(int volume)
+{
+  if (is_simulator())
+    return;
+
+  ScopeLock protect(mutexComm);
+
+  for (unsigned i = 0; i < NUMDEV; ++i)
+    DeviceList[i].PutBallast(volume);
+}
+
+void AllDevicesPutActiveFrequency(double frequency)
+{
+  if (is_simulator())
+    return;
+
+  ScopeLock protect(mutexComm);
+
+  for (unsigned i = 0; i < NUMDEV; ++i)
+    DeviceList[i].PutActiveFrequency(frequency);
+}
+
+void AllDevicesPutStandbyFrequency(double frequency)
+{
+  if (is_simulator())
+    return;
+
+  ScopeLock protect(mutexComm);
+
+  for (unsigned i = 0; i < NUMDEV; ++i)
+    DeviceList[i].PutStandbyFrequency(frequency);
+}
+
+void AllDevicesPutQNH(double qnh)
+{
+  if (is_simulator())
+    return;
+
+  ScopeLock protect(mutexComm);
+
+  for (unsigned i = 0; i < NUMDEV; ++i)
+    DeviceList[i].PutQNH(qnh);
+}
+
+void AllDevicesPutVoice(const TCHAR *sentence)
+{
+  if (is_simulator())
+    return;
+
+  ScopeLock protect(mutexComm);
+
+  for (unsigned i = 0; i < NUMDEV; ++i)
+    DeviceList[i].PutVoice(sentence);
+}
+
+void AllDevicesLinkTimeout()
+{
+  if (is_simulator())
+    return;
+
+  ScopeLock protect(mutexComm);
+
+  for (unsigned i = 0; i < NUMDEV; ++i)
+    DeviceList[i].LinkTimeout();
 }
 
 void devStartup(LPTSTR lpCmdLine)

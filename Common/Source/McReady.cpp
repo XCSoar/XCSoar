@@ -297,8 +297,7 @@ void GlidePolar::UpdatePolar(bool send,
   Unlock();
   // TODO JMW: use this instead? etc
   /*
-  devPutBugs(devA(), BUGS);
-  devPutBugs(devB(), BUGS);
+  AllDevicesPutBugs(BUGS);
 
   if (GPS_INFO.VarioAvailable) {
 
@@ -318,10 +317,8 @@ void GlidePolar::UpdatePolar(bool send,
   // TODO JMW: should call GCE_POLAR_CHANGED
   /*
   if (send) {
-    devPutBallast(devA(), BALLAST);
-    devPutBallast(devB(), BALLAST);
-    devPutBugs(devA(), BUGS);
-    devPutBugs(devB(), BUGS);
+    AllDevicesPutBallast(BALLAST);
+    AllDevicesPutBugs(BUGS);
   }
   */
 }

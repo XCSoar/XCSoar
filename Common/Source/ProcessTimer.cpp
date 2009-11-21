@@ -165,7 +165,7 @@ int ProcessTimer::ConnectionProcessTimer(int itimeout) {
   }
 
   if(!connected_now && !connected_last) {
-    devLinkTimeout(devAll());
+    AllDevicesLinkTimeout();
 
     if(!wait_connect) {
       // gps is waiting for connection first time

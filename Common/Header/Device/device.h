@@ -85,6 +85,18 @@ struct DeviceDescriptor {
   struct DeviceDescriptor *pDevPipeTo;
   const struct DeviceRegister *Driver;
   bool ticker;
+
+  /* Warning: the following methods do not lock mutexComm */
+  bool PutMcCready(double mc_cready);
+  bool PutBugs(double bugs);
+  bool PutBallast(double ballast);
+  bool PutVolume(int volume);
+  bool PutActiveFrequency(double frequency);
+  bool PutStandbyFrequency(double frequency);
+  bool PutQNH(double qnh);
+  bool PutVoice(const TCHAR *sentence);
+
+  void LinkTimeout();
 };
 
 #define Port1WriteNMEA(s)	devWriteNMEAString(devA(), s)
@@ -136,13 +148,6 @@ BOOL devHasBaroSource(void);
 
 BOOL devParseNMEA(struct DeviceDescriptor *d, const TCHAR *String,
                   NMEA_INFO *GPS_INFO);
-BOOL devPutMacCready(struct DeviceDescriptor *d, double MacCready);
-BOOL devPutBugs(struct DeviceDescriptor *d, double Bugs);
-BOOL devPutBallast(struct DeviceDescriptor *d, double Ballast);
-BOOL devPutVolume(struct DeviceDescriptor *d, int Volume);
-BOOL devPutFreqActive(struct DeviceDescriptor *d, double Freq);
-BOOL devPutFreqStandby(struct DeviceDescriptor *d, double Freq);
-BOOL devLinkTimeout(struct DeviceDescriptor *d);
 
 bool
 devDeclare(struct DeviceDescriptor *d, const struct Declaration *decl);
@@ -153,13 +158,20 @@ BOOL devIsBaroSource(const struct DeviceDescriptor *d);
 BOOL devIsRadio(const struct DeviceDescriptor *d);
 BOOL devIsCondor(const struct DeviceDescriptor *d);
 
-BOOL devPutQNH(struct DeviceDescriptor *d, double NewQNH);
 void devTick(void);
 
 BOOL devGetBaroAltitude(double *Value);
 
-BOOL devPutVoice(struct DeviceDescriptor *d, const TCHAR *Sentence);
+void AllDevicesPutMcCready(double mc_cready);
+void AllDevicesPutBugs(double bugs);
+void AllDevicesPutBallast(double ballast);
+void AllDevicesPutVolume(int volume);
+void AllDevicesPutActiveFrequency(double frequency);
+void AllDevicesPutStandbyFrequency(double frequency);
+void AllDevicesPutQNH(double qnh);
+void AllDevicesPutVoice(const TCHAR *sentence);
 
+void AllDevicesLinkTimeout();
 
 BOOL devIsFalseReturn(const struct DeviceDescriptor *d);
 BOOL devIsTrueReturn(const struct DeviceDescriptor *d);
