@@ -352,13 +352,12 @@ devInit(LPCTSTR CommandLine)
 }
 
 bool
-devParseNMEA(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INFO)
+DeviceDescriptor::ParseNMEA(const TCHAR *String, NMEA_INFO *GPS_INFO)
 {
-  assert(d != NULL);
   assert(String != NULL);
   assert(GPS_INFO != NULL);
 
-  if ((d->fhLogFile != NULL) &&
+  if (fhLogFile != NULL &&
       (String != NULL) && (_tcslen(String) > 0)) {
     char  sTmp[500];  // temp multibyte buffer
     const TCHAR *pWC = String;
@@ -380,25 +379,24 @@ devParseNMEA(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INF
     *pC++ = '\n';
     *pC++ = '\0';
 
-    fputs(sTmp, d->fhLogFile);
-
+    fputs(sTmp, fhLogFile);
   }
 
 
-  if (d->pDevPipeTo && d->pDevPipeTo->Com) {
+  if (pDevPipeTo && pDevPipeTo->Com) {
     // stream pipe, pass nmea to other device (NmeaOut)
     // TODO code: check TX buffer usage and skip it if buffer is full (outbaudrate < inbaudrate)
-    d->pDevPipeTo->Com->WriteString(String);
+    pDevPipeTo->Com->WriteString(String);
   }
 
-  if (d->Driver && d->Driver->ParseNMEA)
-    if ((d->Driver->ParseNMEA)(d, String, GPS_INFO)) {
-      GPS_INFO->Connected = 2;
-      return true;
-    }
+  if (Driver != NULL && Driver->ParseNMEA != NULL &&
+      Driver->ParseNMEA(this, String, GPS_INFO)) {
+    GPS_INFO->Connected = 2;
+    return true;
+  }
 
   if(String[0]=='$') {  // Additional "if" to find GPS strings
-    if(NMEAParser::ParseNMEAString(d->Port, String, GPS_INFO)) {
+    if(NMEAParser::ParseNMEAString(Port, String, GPS_INFO)) {
       GPS_INFO->Connected = 2;
       return true;
     }

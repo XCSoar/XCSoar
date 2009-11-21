@@ -80,6 +80,8 @@ struct DeviceDescriptor {
   bool IsGPSSource() const;
   bool IsBaroSource() const;
 
+  bool ParseNMEA(const TCHAR *line, struct NMEA_INFO *info);
+
   bool PutMcCready(double mc_cready);
   bool PutBugs(double bugs);
   bool PutBallast(double ballast);
@@ -114,10 +116,6 @@ devRegisterGetName(int Index, TCHAR *Name);
 
 bool
 devHasBaroSource(void);
-
-bool
-devParseNMEA(struct DeviceDescriptor *d, const TCHAR *String,
-             NMEA_INFO *GPS_INFO);
 
 bool
 devDeclare(struct DeviceDescriptor *d, const struct Declaration *decl);
