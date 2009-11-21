@@ -348,6 +348,7 @@ OBJS	:=\
 	$(SRC)/Device/Geoid.o 		\
 	$(SRC)/Device/Parser.o		\
 	$(SRC)/Device/Port.o 		\
+	$(SRC)/Device/FLARM.o \
 	$(DEVS) 			\
 	\
 	$(DLGS:.cpp=.o) 		\
