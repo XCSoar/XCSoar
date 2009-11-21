@@ -137,8 +137,10 @@ static cai302_GdataNoArgs_t cai302_GdataNoArgs;
 static cai302_Gdata_t cai302_Gdata;
 
 // Additional sentance for CAI302 support
-static BOOL cai_w(PDeviceDescriptor_t d, const TCHAR *String,
-                  NMEA_INFO *GPS_INFO);
+static bool
+cai_w(struct DeviceDescriptor *d, const TCHAR *String,
+      NMEA_INFO *GPS_INFO);
+
 static BOOL cai_PCAIB(const TCHAR *String, NMEA_INFO *GPS_INFO);
 static BOOL cai_PCAID(const TCHAR *String, NMEA_INFO *GPS_INFO);
 
@@ -147,8 +149,9 @@ static int  BugsUpdateTimeout = 0;
 static int  BallastUpdateTimeout = 0;
 
 
-BOOL cai302ParseNMEA(PDeviceDescriptor_t d, const TCHAR *String,
-                     NMEA_INFO *GPS_INFO)
+BOOL
+cai302ParseNMEA(struct DeviceDescriptor *d, const TCHAR *String,
+                NMEA_INFO *GPS_INFO)
 {
   if (!NMEAParser::NMEAChecksum(String) || (GPS_INFO == NULL)){
     return FALSE;
@@ -171,8 +174,9 @@ BOOL cai302ParseNMEA(PDeviceDescriptor_t d, const TCHAR *String,
 }
 
 
-BOOL cai302PutMacCready(PDeviceDescriptor_t d, double MacCready){
-
+BOOL
+cai302PutMacCready(struct DeviceDescriptor *d, double MacCready)
+{
   TCHAR  szTmp[32];
 
   _stprintf(szTmp, TEXT("!g,m%d\r\n"), int(((MacCready * 10) / KNOTSTOMETRESSECONDS) + 0.5));
@@ -186,8 +190,9 @@ BOOL cai302PutMacCready(PDeviceDescriptor_t d, double MacCready){
 }
 
 
-BOOL cai302PutBugs(PDeviceDescriptor_t d, double Bugs){
-
+BOOL
+cai302PutBugs(struct DeviceDescriptor *d, double Bugs)
+{
   TCHAR  szTmp[32];
 
   _stprintf(szTmp, TEXT("!g,u%d\r\n"), int((Bugs * 100) + 0.5));
@@ -201,8 +206,9 @@ BOOL cai302PutBugs(PDeviceDescriptor_t d, double Bugs){
 }
 
 
-BOOL cai302PutBallast(PDeviceDescriptor_t d, double Ballast){
-
+BOOL
+cai302PutBallast(struct DeviceDescriptor *d, double Ballast)
+{
   TCHAR  szTmp[32];
 
   _stprintf(szTmp, TEXT("!g,b%d\r\n"), int((Ballast * 10) + 0.5));
@@ -261,8 +267,9 @@ void test(void){
 }
 
 
-BOOL cai302Open(PDeviceDescriptor_t d, int Port){
-
+BOOL
+cai302Open(struct DeviceDescriptor *d, int Port)
+{
 //test();
 
   d->Com->WriteString(TEXT("\x03"));
@@ -274,12 +281,12 @@ BOOL cai302Open(PDeviceDescriptor_t d, int Port){
 static int DeclIndex = 128;
 static int nDeclErrorCode;
 
+BOOL
+cai302DeclAddWayPoint(struct DeviceDescriptor *d, const WAYPOINT *wp);
 
-BOOL cai302DeclAddWayPoint(PDeviceDescriptor_t d, const WAYPOINT *wp);
-
-
-BOOL cai302Declare(PDeviceDescriptor_t d, Declaration_t *decl){
-
+BOOL
+cai302Declare(struct DeviceDescriptor *d, Declaration_t *decl)
+{
   TCHAR PilotName[25];
   TCHAR GliderType[13];
   TCHAR GliderID[13];
@@ -452,9 +459,9 @@ BOOL cai302Declare(PDeviceDescriptor_t d, Declaration_t *decl){
 
 }
 
-
-BOOL cai302DeclAddWayPoint(PDeviceDescriptor_t d, const WAYPOINT *wp){
-
+BOOL
+cai302DeclAddWayPoint(struct DeviceDescriptor *d, const WAYPOINT *wp)
+{
   TCHAR Name[13];
   TCHAR  szTmp[128];
   int DegLat, DegLon;
@@ -581,7 +588,8 @@ BOOL cai_PCAID(const TCHAR *String, NMEA_INFO *GPS_INFO)
 *hh  Checksum, XOR of all bytes
 */
 
-BOOL cai_w(PDeviceDescriptor_t d, const TCHAR *String, NMEA_INFO *GPS_INFO)
+bool
+cai_w(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INFO)
 {
 
   TCHAR ctemp[80];

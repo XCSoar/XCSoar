@@ -53,9 +53,9 @@ Copyright_License {
 
 BOOL PBB50(const TCHAR *String, NMEA_INFO *GPS_INFO);
 
-
-BOOL B50ParseNMEA(PDeviceDescriptor_t d, const TCHAR *String,
-                  NMEA_INFO *GPS_INFO)
+BOOL
+B50ParseNMEA(struct DeviceDescriptor *d, const TCHAR *String,
+             NMEA_INFO *GPS_INFO)
 {
   (void)d;
 

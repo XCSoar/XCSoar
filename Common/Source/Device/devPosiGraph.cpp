@@ -56,11 +56,12 @@ Copyright_License {
 
 #include <tchar.h>
 
-static BOOL GPWIN(PDeviceDescriptor_t d, const TCHAR *String,
-                  NMEA_INFO *GPS_INFO);
+static bool
+GPWIN(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INFO);
 
-BOOL PGParseNMEA(PDeviceDescriptor_t d, const TCHAR *String,
-                 NMEA_INFO *GPS_INFO)
+BOOL
+PGParseNMEA(struct DeviceDescriptor *d, const TCHAR *String,
+            NMEA_INFO *GPS_INFO)
 {
   (void)d;
   (void)String;
@@ -78,7 +79,9 @@ BOOL PGParseNMEA(PDeviceDescriptor_t d, const TCHAR *String,
 }
 
 
-BOOL PGDeclare(PDeviceDescriptor_t d, Declaration_t *decl){
+BOOL
+PGDeclare(struct DeviceDescriptor *d, Declaration_t *decl)
+{
 
   (void)d;
   (void)decl;
@@ -111,8 +114,8 @@ const struct DeviceRegister pgDevice = {
 // *****************************************************************************
 // local stuff
 
-static BOOL GPWIN(PDeviceDescriptor_t d, const TCHAR *String,
-                  NMEA_INFO *GPS_INFO)
+static bool
+GPWIN(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INFO)
 {
   TCHAR ctemp[80];
   (void)GPS_INFO;

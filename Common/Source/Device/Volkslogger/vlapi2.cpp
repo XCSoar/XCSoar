@@ -34,11 +34,11 @@ extern int noninteractive;
 const int VLAPI_DBB_MEMSIZE = 16384;
 const int32 VLAPI_LOG_MEMSIZE = 81920L;
 
-
-void VLAPI::set_device(PDeviceDescriptor_t	d) {
+void
+VLAPI::set_device(struct DeviceDescriptor *d)
+{
   device = d;
 }
-
 
 // ------------------------------------------------------------
 //                        VLA_XFR

@@ -67,7 +67,7 @@ static void ComPort_StatusMessage(UINT type, const TCHAR *caption, const TCHAR *
     Message::AddMessage(tmp);
 }
 
-ComPort::ComPort(struct DeviceDescriptor_t *d)
+ComPort::ComPort(struct DeviceDescriptor *d)
 {
   hReadThread = NULL;
   CloseThread = 0;

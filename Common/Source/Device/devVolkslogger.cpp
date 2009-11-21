@@ -63,7 +63,8 @@ Copyright_License {
 // Source data:
 // $PGCS,1,0EC0,FFF9,0C6E,02*61
 // $PGCS,1,0EC0,FFFA,0C6E,03*18
-BOOL vl_PGCS1(PDeviceDescriptor_t d, const TCHAR *String, NMEA_INFO *GPS_INFO)
+BOOL
+vl_PGCS1(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INFO)
 {
 
   TCHAR ctemp[80];
@@ -105,8 +106,9 @@ BOOL vl_PGCS1(PDeviceDescriptor_t d, const TCHAR *String, NMEA_INFO *GPS_INFO)
 }
 
 
-BOOL VLParseNMEA(PDeviceDescriptor_t d, const TCHAR *String,
-                 NMEA_INFO *GPS_INFO)
+BOOL
+VLParseNMEA(struct DeviceDescriptor *d, const TCHAR *String,
+            NMEA_INFO *GPS_INFO)
 {
   (void)d;
 
@@ -127,11 +129,12 @@ VLAPI vl;
 
 static int nturnpoints = 0;
 
-BOOL VLDeclAddWayPoint(PDeviceDescriptor_t d, const WAYPOINT *wp);
+BOOL
+VLDeclAddWayPoint(struct DeviceDescriptor *d, const WAYPOINT *wp);
 
-
-BOOL VLDeclare(PDeviceDescriptor_t d, Declaration_t *decl){
-
+BOOL
+VLDeclare(struct DeviceDescriptor *d, Declaration_t *decl)
+{
   XCSoarInterface::CreateProgressDialog(gettext(TEXT("Comms with Volkslogger")));
 
   vl.set_device(d);
@@ -265,7 +268,9 @@ BOOL VLDeclare(PDeviceDescriptor_t d, Declaration_t *decl){
 }
 
 
-BOOL VLDeclAddWayPoint(PDeviceDescriptor_t d, const WAYPOINT *wp){
+BOOL
+VLDeclAddWayPoint(struct DeviceDescriptor *d, const WAYPOINT *wp)
+{
   char temp[100];
   sprintf(temp, "%S", wp->Name);
 

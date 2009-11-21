@@ -78,8 +78,8 @@ using std::max;
 #define OUTPUT_BIT_CIRCLING                 0  // 1 if circling
 #define OUTPUT_BIT_FLAP_LANDING             7  // 1 if positive flap
 
-static BOOL PDSWC(PDeviceDescriptor_t d, const TCHAR *String,
-                  NMEA_INFO *GPS_INFO)
+static bool
+PDSWC(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INFO)
 {
   static long last_switchinputs;
   static long last_switchoutputs;
@@ -184,8 +184,8 @@ static BOOL PDSWC(PDeviceDescriptor_t d, const TCHAR *String,
 
 //#include "Audio/VarioSound.h"
 
-static BOOL PDAAV(PDeviceDescriptor_t d, const TCHAR *String,
-                  NMEA_INFO *GPS_INFO)
+static bool
+PDAAV(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INFO)
 {
   TCHAR ctemp[80];
   (void)GPS_INFO;
@@ -203,8 +203,8 @@ static BOOL PDAAV(PDeviceDescriptor_t d, const TCHAR *String,
   return TRUE;
 }
 
-static BOOL PDVSC(PDeviceDescriptor_t d, const TCHAR *String,
-                  NMEA_INFO *GPS_INFO)
+static bool
+PDVSC(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INFO)
 {
   TCHAR ctemp[80];
   TCHAR name[80];
@@ -243,8 +243,8 @@ static BOOL PDVSC(PDeviceDescriptor_t d, const TCHAR *String,
 
 // $PDVDV,vario,ias,densityratio,altitude,staticpressure
 
-static BOOL PDVDV(PDeviceDescriptor_t d, const TCHAR *String,
-                  NMEA_INFO *GPS_INFO)
+static bool
+PDVDV(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INFO)
 {
   TCHAR ctemp[80];
   double alt;
@@ -278,8 +278,8 @@ static BOOL PDVDV(PDeviceDescriptor_t d, const TCHAR *String,
 
 
 // $PDVDS,nx,nz,flap,stallratio,netto
-static BOOL PDVDS(PDeviceDescriptor_t d, const TCHAR *String,
-                  NMEA_INFO *GPS_INFO)
+static bool
+PDVDS(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INFO)
 {
   double flap;
   TCHAR ctemp[80];
@@ -324,7 +324,8 @@ static BOOL PDVDS(PDeviceDescriptor_t d, const TCHAR *String,
   return TRUE;
 }
 
-static BOOL PDVVT(PDeviceDescriptor_t d, const TCHAR *String, NMEA_INFO *GPS_INFO)
+static bool
+PDVVT(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INFO)
 {
   TCHAR ctemp[80];
   (void)d;
@@ -340,8 +341,8 @@ static BOOL PDVVT(PDeviceDescriptor_t d, const TCHAR *String, NMEA_INFO *GPS_INF
 }
 
 // PDTSM,duration_ms,"free text"
-static BOOL PDTSM(PDeviceDescriptor_t d, const TCHAR *String,
-                  NMEA_INFO *GPS_INFO)
+static bool
+PDTSM(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INFO)
 {
   int   duration;
   (void)GPS_INFO;
@@ -361,10 +362,9 @@ static BOOL PDTSM(PDeviceDescriptor_t d, const TCHAR *String,
 
 }
 
-
-
-BOOL vgaParseNMEA(PDeviceDescriptor_t d, const TCHAR *String,
-                  NMEA_INFO *GPS_INFO)
+BOOL
+vgaParseNMEA(struct DeviceDescriptor *d, const TCHAR *String,
+             NMEA_INFO *GPS_INFO)
 {
   if(_tcsncmp(TEXT("$PDSWC"), String, 6)==0)
     {
@@ -411,8 +411,9 @@ BOOL vgaParseNMEA(PDeviceDescriptor_t d, const TCHAR *String,
 
 }
 
-
-BOOL vgaDeclare(PDeviceDescriptor_t d, Declaration_t *decl){
+BOOL
+vgaDeclare(struct DeviceDescriptor *d, Declaration_t *decl)
+{
   (void) d;
   (void) decl;
 
@@ -422,8 +423,8 @@ BOOL vgaDeclare(PDeviceDescriptor_t d, Declaration_t *decl){
 
 }
 
-
-BOOL vgaPutVoice(PDeviceDescriptor_t d, const TCHAR *Sentence)
+BOOL
+vgaPutVoice(struct DeviceDescriptor *d, const TCHAR *Sentence)
 {
   devWriteNMEAString(d, Sentence);
   return(TRUE);
@@ -431,7 +432,9 @@ BOOL vgaPutVoice(PDeviceDescriptor_t d, const TCHAR *Sentence)
 
 #include "Blackboard.hpp"
 
-static void _VarioWriteSettings(DeviceDescriptor_t *d) {
+static void
+_VarioWriteSettings(struct DeviceDescriptor *d)
+{
 
     TCHAR mcbuf[100];
 
@@ -447,7 +450,9 @@ static void _VarioWriteSettings(DeviceDescriptor_t *d) {
 }
 
 
-BOOL vgaPutQNH(DeviceDescriptor_t *d, double NewQNH){
+BOOL
+vgaPutQNH(struct DeviceDescriptor *d, double NewQNH)
+{
   (void)NewQNH;
   // NewQNH is already stored in QNH
 
@@ -456,8 +461,9 @@ BOOL vgaPutQNH(DeviceDescriptor_t *d, double NewQNH){
   return(TRUE);
 }
 
-BOOL vgaOnSysTicker(DeviceDescriptor_t *d){
-
+BOOL
+vgaOnSysTicker(struct DeviceDescriptor *d)
+{
   if (device_blackboard.Basic().VarioAvailable)
     _VarioWriteSettings(d);
 

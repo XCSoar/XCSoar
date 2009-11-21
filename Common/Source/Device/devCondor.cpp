@@ -51,16 +51,18 @@ Copyright_License {
 
 #include <tchar.h>
 
-static BOOL cLXWP0(PDeviceDescriptor_t d, const TCHAR *String,
-                   NMEA_INFO *GPS_INFO);
-static BOOL cLXWP1(PDeviceDescriptor_t d, const TCHAR *String,
-                   NMEA_INFO *GPS_INFO);
-static BOOL cLXWP2(PDeviceDescriptor_t d, const TCHAR *String,
-                   NMEA_INFO *GPS_INFO);
+static bool
+cLXWP0(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INFO);
 
+static bool
+cLXWP1(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INFO);
 
-static BOOL CondorParseNMEA(PDeviceDescriptor_t d, const TCHAR *String,
-                            NMEA_INFO *GPS_INFO)
+static bool
+cLXWP2(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INFO);
+
+static BOOL
+CondorParseNMEA(struct DeviceDescriptor *d, const TCHAR *String,
+                NMEA_INFO *GPS_INFO)
 {
   (void)d;
 
@@ -106,9 +108,8 @@ const struct DeviceRegister condorDevice = {
 // *****************************************************************************
 // local stuff
 
-
-static BOOL cLXWP1(PDeviceDescriptor_t d, const TCHAR *String,
-                   NMEA_INFO *GPS_INFO)
+static bool
+cLXWP1(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INFO)
 {
   //  TCHAR ctemp[80];
   (void)GPS_INFO;
@@ -117,8 +118,8 @@ static BOOL cLXWP1(PDeviceDescriptor_t d, const TCHAR *String,
 }
 
 
-static BOOL cLXWP2(PDeviceDescriptor_t d, const TCHAR *String,
-                   NMEA_INFO *GPS_INFO)
+static bool
+cLXWP2(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INFO)
 {
   TCHAR ctemp[80];
   (void)GPS_INFO;
@@ -129,8 +130,9 @@ static BOOL cLXWP2(PDeviceDescriptor_t d, const TCHAR *String,
 }
 
 
-static BOOL cLXWP0(PDeviceDescriptor_t d, const TCHAR *String,
-                   NMEA_INFO *GPS_INFO) {
+static bool
+cLXWP0(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INFO)
+{
   TCHAR ctemp[80];
 
   /*

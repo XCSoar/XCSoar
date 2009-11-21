@@ -42,23 +42,27 @@ Copyright_License {
 
 #include <tchar.h>
 
-static BOOL XCOM760PutVolume(PDeviceDescriptor_t d, int Volume) {
+static BOOL
+XCOM760PutVolume(struct DeviceDescriptor *d, int Volume)
+{
   TCHAR  szTmp[32];
   _stprintf(szTmp, TEXT("$RVOL=%d\r\n"), Volume);
   d->Com->WriteString(szTmp);
   return(TRUE);
 }
 
-
-static BOOL XCOM760PutFreqActive(PDeviceDescriptor_t d, double Freq) {
+static BOOL
+XCOM760PutFreqActive(struct DeviceDescriptor *d, double Freq)
+{
   TCHAR  szTmp[32];
   _stprintf(szTmp, TEXT("$TXAF=%.3f\r\n"), Freq);
   d->Com->WriteString(szTmp);
   return(TRUE);
 }
 
-
-static BOOL XCOM760PutFreqStandby(PDeviceDescriptor_t d, double Freq) {
+static BOOL
+XCOM760PutFreqStandby(struct DeviceDescriptor *d, double Freq)
+{
   TCHAR  szTmp[32];
   _stprintf(szTmp, TEXT("$TXSF=%.3f\r\n"), Freq);
   d->Com->WriteString(szTmp);

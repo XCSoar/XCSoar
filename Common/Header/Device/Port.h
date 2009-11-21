@@ -45,11 +45,11 @@ Copyright_License {
 #define NMEA_BUF_SIZE 100
 
 // Forward declaration
-struct DeviceDescriptor_t;
+struct DeviceDescriptor;
 
 class ComPort {
  public:
-	ComPort(struct DeviceDescriptor_t *d);
+	ComPort(struct DeviceDescriptor *d);
 	~ComPort() { };
 
 	void PutChar(BYTE);
@@ -82,7 +82,7 @@ class ComPort {
 
 	TCHAR BuildingString[NMEA_BUF_SIZE];
 	int bi;
-	struct DeviceDescriptor_t *dev;
+        struct DeviceDescriptor *dev;
 };
 
 #endif

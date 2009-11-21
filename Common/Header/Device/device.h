@@ -77,91 +77,89 @@ typedef struct Declaration {
 
 struct DeviceRegister;
 
-typedef	struct DeviceDescriptor_t{
+struct DeviceDescriptor {
   int	Port;
   FILE  *fhLogFile;
   ComPort *Com;
   TCHAR	Name[DEVNAMESIZE+1];
-  DeviceDescriptor_t *pDevPipeTo;
+  struct DeviceDescriptor *pDevPipeTo;
   const struct DeviceRegister *Driver;
   bool ticker;
-}DeviceDescriptor_t;
-
-typedef	DeviceDescriptor_t *PDeviceDescriptor_t;
+};
 
 #define Port1WriteNMEA(s)	devWriteNMEAString(devA(), s)
 #define Port2WriteNMEA(s)	devWriteNMEAString(devB(), s)
 
-void devWriteNMEAString(PDeviceDescriptor_t d, const TCHAR *Text);
+void devWriteNMEAString(struct DeviceDescriptor *d, const TCHAR *Text);
 void VarioWriteNMEA(const TCHAR *Text);
-PDeviceDescriptor_t devVarioFindVega(void);
+struct DeviceDescriptor *devVarioFindVega(void);
 
 struct DeviceRegister {
   const TCHAR	*Name;
   unsigned int	Flags;
-  BOOL (*ParseNMEA)(DeviceDescriptor_t *d, const TCHAR *String,
+  BOOL (*ParseNMEA)(struct DeviceDescriptor *d, const TCHAR *String,
                     NMEA_INFO *GPS_INFO);
-  BOOL (*PutMacCready)(DeviceDescriptor_t *d, double McReady);
-  BOOL (*PutBugs)(DeviceDescriptor_t *d, double	Bugs);
-  BOOL (*PutBallast)(DeviceDescriptor_t	*d, double Ballast);
-  BOOL (*PutQNH)(DeviceDescriptor_t *d, double NewQNH);
-  BOOL (*PutVoice)(DeviceDescriptor_t *d, const TCHAR *Sentence);
-  BOOL (*PutVolume)(DeviceDescriptor_t *d, int Volume);
-  BOOL (*PutFreqActive)(DeviceDescriptor_t *d, double Freq);
-  BOOL (*PutFreqStandby)(DeviceDescriptor_t *d, double Standby);
-  BOOL (*Open)(DeviceDescriptor_t *d, int Port);
-  BOOL (*Close)(DeviceDescriptor_t *d);
-  BOOL (*LinkTimeout)(DeviceDescriptor_t *d);
-  BOOL (*Declare)(DeviceDescriptor_t *d, Declaration_t *decl);
-  BOOL (*IsLogger)(DeviceDescriptor_t *d);
-  BOOL (*IsGPSSource)(DeviceDescriptor_t *d);
-  BOOL (*IsBaroSource)(DeviceDescriptor_t *d);
-  BOOL (*OnSysTicker)(DeviceDescriptor_t *d);
+  BOOL (*PutMacCready)(struct DeviceDescriptor *d, double McReady);
+  BOOL (*PutBugs)(struct DeviceDescriptor *d, double Bugs);
+  BOOL (*PutBallast)(struct DeviceDescriptor *d, double Ballast);
+  BOOL (*PutQNH)(struct DeviceDescriptor *d, double NewQNH);
+  BOOL (*PutVoice)(struct DeviceDescriptor *d, const TCHAR *Sentence);
+  BOOL (*PutVolume)(struct DeviceDescriptor *d, int Volume);
+  BOOL (*PutFreqActive)(struct DeviceDescriptor *d, double Freq);
+  BOOL (*PutFreqStandby)(struct DeviceDescriptor *d, double Standby);
+  BOOL (*Open)(struct DeviceDescriptor *d, int Port);
+  BOOL (*Close)(struct DeviceDescriptor *d);
+  BOOL (*LinkTimeout)(struct DeviceDescriptor *d);
+  BOOL (*Declare)(struct DeviceDescriptor *d, Declaration_t *decl);
+  BOOL (*IsLogger)(struct DeviceDescriptor *d);
+  BOOL (*IsGPSSource)(struct DeviceDescriptor *d);
+  BOOL (*IsBaroSource)(struct DeviceDescriptor *d);
+  BOOL (*OnSysTicker)(struct DeviceDescriptor *d);
 };
 
 
 
-extern DeviceDescriptor_t	DeviceList[NUMDEV];
+extern struct DeviceDescriptor DeviceList[NUMDEV];
 
 /**
  * NULL terminated array of available device drivers.
  */
 extern const struct DeviceRegister *const DeviceRegister[];
 
-extern DeviceDescriptor_t *pDevPrimaryBaroSource;
-extern DeviceDescriptor_t *pDevSecondaryBaroSource;
+extern struct DeviceDescriptor *pDevPrimaryBaroSource;
+extern struct DeviceDescriptor *pDevSecondaryBaroSource;
 
 BOOL devRegisterGetName(int Index, TCHAR *Name);
 
-BOOL ExpectString(PDeviceDescriptor_t d, const TCHAR *token);
+BOOL ExpectString(struct DeviceDescriptor *d, const TCHAR *token);
 BOOL devHasBaroSource(void);
 
-BOOL devParseNMEA(PDeviceDescriptor_t d, const TCHAR *String,
+BOOL devParseNMEA(struct DeviceDescriptor *d, const TCHAR *String,
                   NMEA_INFO *GPS_INFO);
-BOOL devPutMacCready(PDeviceDescriptor_t d,	double MacCready);
-BOOL devPutBugs(PDeviceDescriptor_t	d, double	Bugs);
-BOOL devPutBallast(PDeviceDescriptor_t d,	double Ballast);
-BOOL devPutVolume(PDeviceDescriptor_t	d, int Volume);
-BOOL devPutFreqActive(PDeviceDescriptor_t d,	double Freq);
-BOOL devPutFreqStandby(PDeviceDescriptor_t d,	double Freq);
-BOOL devLinkTimeout(PDeviceDescriptor_t	d);
-BOOL devDeclare(PDeviceDescriptor_t	d, Declaration_t *decl);
-BOOL devIsLogger(PDeviceDescriptor_t d);
-BOOL devIsGPSSource(PDeviceDescriptor_t	d);
-BOOL devIsBaroSource(PDeviceDescriptor_t d);
-BOOL devIsRadio(PDeviceDescriptor_t d);
-BOOL devIsCondor(PDeviceDescriptor_t d);
+BOOL devPutMacCready(struct DeviceDescriptor *d, double MacCready);
+BOOL devPutBugs(struct DeviceDescriptor *d, double Bugs);
+BOOL devPutBallast(struct DeviceDescriptor *d, double Ballast);
+BOOL devPutVolume(struct DeviceDescriptor *d, int Volume);
+BOOL devPutFreqActive(struct DeviceDescriptor *d, double Freq);
+BOOL devPutFreqStandby(struct DeviceDescriptor *d, double Freq);
+BOOL devLinkTimeout(struct DeviceDescriptor *d);
+BOOL devDeclare(struct DeviceDescriptor *d, Declaration_t *decl);
+BOOL devIsLogger(struct DeviceDescriptor *d);
+BOOL devIsGPSSource(struct DeviceDescriptor *d);
+BOOL devIsBaroSource(struct DeviceDescriptor *d);
+BOOL devIsRadio(struct DeviceDescriptor *d);
+BOOL devIsCondor(struct DeviceDescriptor *d);
 
-BOOL devPutQNH(DeviceDescriptor_t *d, double NewQNH);
+BOOL devPutQNH(struct DeviceDescriptor *d, double NewQNH);
 void devTick(void);
 
 BOOL devGetBaroAltitude(double *Value);
 
-BOOL devPutVoice(PDeviceDescriptor_t d, const TCHAR *Sentence);
+BOOL devPutVoice(struct DeviceDescriptor *d, const TCHAR *Sentence);
 
 
-BOOL devIsFalseReturn(PDeviceDescriptor_t d);
-BOOL devIsTrueReturn(PDeviceDescriptor_t d);
+BOOL devIsFalseReturn(struct DeviceDescriptor *d);
+BOOL devIsTrueReturn(struct DeviceDescriptor *d);
 
 void devStartup(LPTSTR lpCmdLine);
 void devShutdown();

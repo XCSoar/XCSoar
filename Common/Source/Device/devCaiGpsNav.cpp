@@ -54,9 +54,9 @@ Copyright_License {
 #define  CtrlC  0x03
 #define  swap(x)      x = ((((x<<8) & 0xff00) | ((x>>8) & 0x00ff)) & 0xffff)
 
-
-BOOL caiGpsNavOpen(PDeviceDescriptor_t d, int Port){
-
+BOOL
+caiGpsNavOpen(struct DeviceDescriptor *d, int Port)
+{
   d->Com->WriteString(TEXT("\x03"));
   Sleep(50);
   d->Com->WriteString(TEXT("NMEA\r"));

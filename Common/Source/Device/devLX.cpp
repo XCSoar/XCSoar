@@ -51,15 +51,16 @@ Copyright_License {
 
 #include <tchar.h>
 
-static BOOL LXWP0(PDeviceDescriptor_t d, const TCHAR *String,
-                  NMEA_INFO *GPS_INFO);
-static BOOL LXWP1(PDeviceDescriptor_t d, const TCHAR *String,
-                  NMEA_INFO *GPS_INFO);
-static BOOL LXWP2(PDeviceDescriptor_t d, const TCHAR *String,
-                  NMEA_INFO *GPS_INFO);
+static bool
+LXWP0(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INFO);
+static bool
+LXWP1(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INFO);
+static bool
+LXWP2(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INFO);
 
 static BOOL
-LXParseNMEA(PDeviceDescriptor_t d, const TCHAR *String, NMEA_INFO *GPS_INFO)
+LXParseNMEA(struct DeviceDescriptor *d, const TCHAR *String,
+            NMEA_INFO *GPS_INFO)
 {
   (void)d;
 
@@ -100,8 +101,8 @@ const struct DeviceRegister lxDevice = {
 
 // local stuff
 
-static BOOL
-LXWP1(PDeviceDescriptor_t d, const TCHAR *String, NMEA_INFO *GPS_INFO)
+static bool
+LXWP1(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INFO)
 {
   // TCHAR ctemp[80];
   (void)GPS_INFO;
@@ -109,8 +110,8 @@ LXWP1(PDeviceDescriptor_t d, const TCHAR *String, NMEA_INFO *GPS_INFO)
   return TRUE;
 }
 
-static BOOL
-LXWP2(PDeviceDescriptor_t d, const TCHAR *String, NMEA_INFO *GPS_INFO)
+static bool
+LXWP2(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INFO)
 {
   TCHAR ctemp[80];
   (void)GPS_INFO;
@@ -120,8 +121,8 @@ LXWP2(PDeviceDescriptor_t d, const TCHAR *String, NMEA_INFO *GPS_INFO)
   return TRUE;
 }
 
-static BOOL
-LXWP0(PDeviceDescriptor_t d, const TCHAR *String, NMEA_INFO *GPS_INFO)
+static bool
+LXWP0(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INFO)
 {
   TCHAR ctemp[80];
 

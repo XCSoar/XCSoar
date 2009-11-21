@@ -113,12 +113,12 @@ enum {
   DeviceRegisterCount = sizeof(DeviceRegister) / sizeof(DeviceRegister[0]) - 1
 };
 
-DeviceDescriptor_t DeviceList[NUMDEV];
+struct DeviceDescriptor DeviceList[NUMDEV];
 
-DeviceDescriptor_t *pDevPrimaryBaroSource=NULL;
-DeviceDescriptor_t *pDevSecondaryBaroSource=NULL;
+struct DeviceDescriptor *pDevPrimaryBaroSource;
+struct DeviceDescriptor *pDevSecondaryBaroSource;
 
-static BOOL FlarmDeclare(PDeviceDescriptor_t d, Declaration_t *decl);
+static BOOL FlarmDeclare(struct DeviceDescriptor *d, Declaration_t *decl);
 
 
 // This function is used to determine whether a generic
@@ -151,7 +151,7 @@ BOOL devGetBaroAltitude(double *Value){
 
 }
 
-BOOL ExpectString(PDeviceDescriptor_t d, const TCHAR *token){
+BOOL ExpectString(struct DeviceDescriptor *d, const TCHAR *token){
 
   int i=0, ch;
 
@@ -186,12 +186,12 @@ BOOL devRegisterGetName(int Index, TCHAR *Name){
 }
 
 
-BOOL devIsFalseReturn(PDeviceDescriptor_t d){
+BOOL devIsFalseReturn(struct DeviceDescriptor *d){
   (void)d;
   return FALSE;
 }
 
-BOOL devIsTrueReturn(PDeviceDescriptor_t d){
+BOOL devIsTrueReturn(struct DeviceDescriptor *d){
   (void)d;
   return TRUE;
 }
@@ -209,14 +209,14 @@ devGetDriver(const TCHAR *DevName)
 }
 
 static bool
-devOpen(PDeviceDescriptor_t d, int Port);
+devOpen(struct DeviceDescriptor *d, int Port);
 
 static bool
-devOpenLog(PDeviceDescriptor_t d, const TCHAR *FileName);
+devOpenLog(struct DeviceDescriptor *d, const TCHAR *FileName);
 
 static bool
-devInitOne(PDeviceDescriptor_t dev, int index, const TCHAR *port,
-           DWORD speed, PDeviceDescriptor_t &nmeaout)
+devInitOne(struct DeviceDescriptor *dev, int index, const TCHAR *port,
+           DWORD speed, struct DeviceDescriptor *&nmeaout)
 {
   TCHAR DeviceName[DEVNAMESIZE];
 
@@ -261,7 +261,7 @@ static BOOL
 devInit(LPCTSTR CommandLine)
 {
   int i;
-  PDeviceDescriptor_t pDevNmeaOut = NULL;
+  struct DeviceDescriptor *pDevNmeaOut = NULL;
 
   for (i=0; i<NUMDEV; i++){
     DeviceList[i].Port = -1;
@@ -379,7 +379,7 @@ devInit(LPCTSTR CommandLine)
 
 
 BOOL
-devParseNMEA(PDeviceDescriptor_t d, const TCHAR *String, NMEA_INFO *GPS_INFO)
+devParseNMEA(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INFO)
 {
 
   if ((d->fhLogFile != NULL) &&
@@ -433,7 +433,7 @@ devParseNMEA(PDeviceDescriptor_t d, const TCHAR *String, NMEA_INFO *GPS_INFO)
 }
 
 
-BOOL devPutMacCready(PDeviceDescriptor_t d, double MacCready)
+BOOL devPutMacCready(struct DeviceDescriptor *d, double MacCready)
 {
   BOOL result = TRUE;
 
@@ -448,7 +448,7 @@ BOOL devPutMacCready(PDeviceDescriptor_t d, double MacCready)
   return result;
 }
 
-BOOL devPutBugs(PDeviceDescriptor_t d, double Bugs)
+BOOL devPutBugs(struct DeviceDescriptor *d, double Bugs)
 {
   BOOL result = TRUE;
 
@@ -463,7 +463,7 @@ BOOL devPutBugs(PDeviceDescriptor_t d, double Bugs)
   return result;
 }
 
-BOOL devPutBallast(PDeviceDescriptor_t d, double Ballast)
+BOOL devPutBallast(struct DeviceDescriptor *d, double Ballast)
 {
   BOOL result = TRUE;
 
@@ -481,7 +481,7 @@ BOOL devPutBallast(PDeviceDescriptor_t d, double Ballast)
 // Only called from devInit() above which
 // is in turn called with mutexComm.Lock
 static bool
-devOpen(PDeviceDescriptor_t d, int Port)
+devOpen(struct DeviceDescriptor *d, int Port)
 {
   BOOL res = TRUE;
 
@@ -498,7 +498,7 @@ devOpen(PDeviceDescriptor_t d, int Port)
 // Called from devInit() above under LockComm
 // Also called when shutting down via devShutdown()
 static bool
-devClose(PDeviceDescriptor_t d)
+devClose(struct DeviceDescriptor *d)
 {
   if (d != NULL) {
     if (d->Driver && d->Driver->Close)
@@ -516,7 +516,7 @@ devClose(PDeviceDescriptor_t d)
   return TRUE;
 }
 
-BOOL devLinkTimeout(PDeviceDescriptor_t d)
+BOOL devLinkTimeout(struct DeviceDescriptor *d)
 {
   BOOL result = FALSE;
 
@@ -541,7 +541,7 @@ BOOL devLinkTimeout(PDeviceDescriptor_t d)
 }
 
 
-BOOL devPutVoice(PDeviceDescriptor_t d, TCHAR *Sentence)
+BOOL devPutVoice(struct DeviceDescriptor *d, TCHAR *Sentence)
 {
   BOOL result = FALSE;
 
@@ -565,7 +565,7 @@ BOOL devPutVoice(PDeviceDescriptor_t d, TCHAR *Sentence)
   return FALSE;
 }
 
-BOOL devDeclare(PDeviceDescriptor_t d, Declaration_t *decl)
+BOOL devDeclare(struct DeviceDescriptor *d, Declaration_t *decl)
 {
   BOOL result = FALSE;
 
@@ -585,7 +585,7 @@ BOOL devDeclare(PDeviceDescriptor_t d, Declaration_t *decl)
   return result;
 }
 
-BOOL devIsLogger(PDeviceDescriptor_t d)
+BOOL devIsLogger(struct DeviceDescriptor *d)
 {
   bool result = false;
 
@@ -603,7 +603,7 @@ BOOL devIsLogger(PDeviceDescriptor_t d)
   return result;
 }
 
-BOOL devIsGPSSource(PDeviceDescriptor_t d)
+BOOL devIsGPSSource(struct DeviceDescriptor *d)
 {
   BOOL result = FALSE;
 
@@ -619,7 +619,7 @@ BOOL devIsGPSSource(PDeviceDescriptor_t d)
   return result;
 }
 
-BOOL devIsBaroSource(PDeviceDescriptor_t d)
+BOOL devIsBaroSource(struct DeviceDescriptor *d)
 {
   BOOL result = FALSE;
 
@@ -635,7 +635,7 @@ BOOL devIsBaroSource(PDeviceDescriptor_t d)
   return result;
 }
 
-BOOL devIsRadio(PDeviceDescriptor_t d)
+BOOL devIsRadio(struct DeviceDescriptor *d)
 {
   BOOL result = FALSE;
 
@@ -649,7 +649,7 @@ BOOL devIsRadio(PDeviceDescriptor_t d)
 }
 
 
-BOOL devIsCondor(PDeviceDescriptor_t d)
+BOOL devIsCondor(struct DeviceDescriptor *d)
 {
   BOOL result = FALSE;
 
@@ -663,7 +663,7 @@ BOOL devIsCondor(PDeviceDescriptor_t d)
 }
 
 static bool
-devOpenLog(PDeviceDescriptor_t d, const TCHAR *FileName)
+devOpenLog(struct DeviceDescriptor *d, const TCHAR *FileName)
 {
   if (d != NULL){
     d->fhLogFile = _tfopen(FileName, TEXT("a+b"));
@@ -673,7 +673,7 @@ devOpenLog(PDeviceDescriptor_t d, const TCHAR *FileName)
 }
 
 static bool
-devCloseLog(PDeviceDescriptor_t d)
+devCloseLog(struct DeviceDescriptor *d)
 {
   if (d != NULL && d->fhLogFile != NULL){
     fclose(d->fhLogFile);
@@ -682,7 +682,7 @@ devCloseLog(PDeviceDescriptor_t d)
     return(FALSE);
 }
 
-BOOL devPutQNH(DeviceDescriptor_t *d, double NewQNH)
+BOOL devPutQNH(struct DeviceDescriptor *d, double NewQNH)
 {
   BOOL result = FALSE;
 
@@ -712,7 +712,7 @@ void devTick()
 
   mutexComm.Lock();
   for (i = 0; i < NUMDEV; i++) {
-    DeviceDescriptor_t *d = &DeviceList[i];
+    struct DeviceDescriptor *d = &DeviceList[i];
     if (!d->Driver)
       continue;
 
@@ -736,7 +736,7 @@ static void devFormatNMEAString(TCHAR *dst, size_t sz, const TCHAR *text)
   _sntprintf(dst, sz, TEXT("$%s*%02X\r\n"), text, chk);
 }
 
-void devWriteNMEAString(PDeviceDescriptor_t d, const TCHAR *text)
+void devWriteNMEAString(struct DeviceDescriptor *d, const TCHAR *text)
 {
   TCHAR tmp[512];
 
@@ -762,7 +762,7 @@ void VarioWriteNMEA(const TCHAR *text)
   mutexComm.Unlock();
 }
 
-PDeviceDescriptor_t devVarioFindVega(void)
+struct DeviceDescriptor *devVarioFindVega(void)
 {
   for (int i = 0; i < NUMDEV; i++)
     if (_tcscmp(DeviceList[i].Name, TEXT("Vega")) == 0)
@@ -771,7 +771,7 @@ PDeviceDescriptor_t devVarioFindVega(void)
 }
 
 
-BOOL devPutVolume(PDeviceDescriptor_t d, int Volume)
+BOOL devPutVolume(struct DeviceDescriptor *d, int Volume)
 {
   BOOL result = TRUE;
 
@@ -786,7 +786,7 @@ BOOL devPutVolume(PDeviceDescriptor_t d, int Volume)
   return result;
 }
 
-BOOL devPutFreqActive(PDeviceDescriptor_t d, double Freq)
+BOOL devPutFreqActive(struct DeviceDescriptor *d, double Freq)
 {
   BOOL result = TRUE;
 
@@ -801,7 +801,7 @@ BOOL devPutFreqActive(PDeviceDescriptor_t d, double Freq)
   return result;
 }
 
-BOOL devPutFreqStandby(PDeviceDescriptor_t d, double Freq)
+BOOL devPutFreqStandby(struct DeviceDescriptor *d, double Freq)
 {
   BOOL result = TRUE;
 
@@ -818,7 +818,7 @@ BOOL devPutFreqStandby(PDeviceDescriptor_t d, double Freq)
 
 
 static BOOL
-FlarmDeclareSetGet(PDeviceDescriptor_t d, TCHAR *Buffer) {
+FlarmDeclareSetGet(struct DeviceDescriptor *d, TCHAR *Buffer) {
   //devWriteNMEAString(d, Buffer);
 
   TCHAR tmp[512];
@@ -837,7 +837,8 @@ FlarmDeclareSetGet(PDeviceDescriptor_t d, TCHAR *Buffer) {
 }
 
 
-BOOL FlarmDeclare(PDeviceDescriptor_t d, Declaration_t *decl){
+BOOL FlarmDeclare(struct DeviceDescriptor *d, Declaration_t *decl)
+{
   BOOL result = TRUE;
 
   TCHAR Buffer[256];

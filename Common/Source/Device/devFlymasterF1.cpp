@@ -49,11 +49,13 @@ Copyright_License {
 #include <tchar.h>
 #include <math.h>
 
-static BOOL VARIO(PDeviceDescriptor_t d, const TCHAR *String,
-                  NMEA_INFO *GPS_INFO);
+static bool
+VARIO(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INFO);
 
-static BOOL FlymasterF1ParseNMEA(PDeviceDescriptor_t d, const TCHAR *String,
-                                 NMEA_INFO *GPS_INFO){
+static BOOL
+FlymasterF1ParseNMEA(struct DeviceDescriptor *d, const TCHAR *String,
+                     NMEA_INFO *GPS_INFO)
+{
   (void)d;
 
   if(_tcsncmp(TEXT("$VARIO"), String, 6)==0)
@@ -90,8 +92,8 @@ const struct DeviceRegister flymasterf1Device = {
 // *****************************************************************************
 // local stuff
 
-static BOOL VARIO(PDeviceDescriptor_t d, const TCHAR *String,
-                  NMEA_INFO *GPS_INFO)
+static bool
+VARIO(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INFO)
 {
   // $VARIO,fPressure,fVario,Bat1Volts,Bat2Volts,BatBank,TempSensor1,TempSensor2*CS
 

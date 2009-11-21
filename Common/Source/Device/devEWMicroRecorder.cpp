@@ -61,7 +61,7 @@ static int user_size = 0;
 static TCHAR user_data[MAX_USER_SIZE];
 
 static bool
-ExpectStringWait(PDeviceDescriptor_t d, const TCHAR *token)
+ExpectStringWait(struct DeviceDescriptor *d, const TCHAR *token)
 {
   int i=0, ch;
   int j=0;
@@ -94,7 +94,7 @@ ExpectStringWait(PDeviceDescriptor_t d, const TCHAR *token)
 }
 
 static BOOL
-EWMicroRecorderParseNMEA(PDeviceDescriptor_t d,
+EWMicroRecorderParseNMEA(struct DeviceDescriptor *d,
                          const TCHAR *String, NMEA_INFO *GPS_INFO)
 {
   TCHAR ctemp[80];
@@ -118,7 +118,7 @@ EWMicroRecorderParseNMEA(PDeviceDescriptor_t d,
 }
 
 static bool
-EWMicroRecorderTryConnect(PDeviceDescriptor_t d)
+EWMicroRecorderTryConnect(struct DeviceDescriptor *d)
 {
   int retries=10;
   TCHAR ch;
@@ -158,7 +158,8 @@ EWMicroRecorderTryConnect(PDeviceDescriptor_t d)
 }
 
 
-static void EWMicroRecorderPrintf(PDeviceDescriptor_t d, const TCHAR *fmt, ...)
+static void
+EWMicroRecorderPrintf(struct DeviceDescriptor *d, const TCHAR *fmt, ...)
 {
   TCHAR EWStr[128];
   va_list ap;
@@ -170,9 +171,9 @@ static void EWMicroRecorderPrintf(PDeviceDescriptor_t d, const TCHAR *fmt, ...)
   d->Com->WriteString(EWStr);
 }
 
-static void EWMicroRecorderWriteWayPoint(PDeviceDescriptor_t d,
-                                         const WAYPOINT *wp,
-                                         const TCHAR* EWType)
+static void
+EWMicroRecorderWriteWayPoint(struct DeviceDescriptor *d,
+                             const WAYPOINT *wp, const TCHAR *EWType)
 {
   int DegLat, DegLon;
   double tmp, MinLat, MinLon;
@@ -211,7 +212,7 @@ static void EWMicroRecorderWriteWayPoint(PDeviceDescriptor_t d,
 }
 
 static BOOL
-EWMicroRecorderDeclare(PDeviceDescriptor_t d, Declaration_t *decl)
+EWMicroRecorderDeclare(struct DeviceDescriptor *d, Declaration_t *decl)
 {
   const WAYPOINT *wp;
   nDeclErrorCode = 0;

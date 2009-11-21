@@ -48,9 +48,9 @@ Copyright_License {
 
 static double lastAlt = 0;
 
-
-BOOL atrParseNMEA(PDeviceDescriptor_t d, const TCHAR *String,
-                  NMEA_INFO *GPS_INFO)
+BOOL
+atrParseNMEA(struct DeviceDescriptor *d, const TCHAR *String,
+             NMEA_INFO *GPS_INFO)
 {
 
   // no propriatary sentence
@@ -92,8 +92,9 @@ BOOL atrParseNMEA(PDeviceDescriptor_t d, const TCHAR *String,
 
 }
 
-
-BOOL atrDeclare(PDeviceDescriptor_t d, Declaration_t *decl){
+BOOL
+atrDeclare(struct DeviceDescriptor *d, Declaration_t *decl)
+{
   (void) d;
   (void) decl;
 
@@ -105,7 +106,9 @@ BOOL atrDeclare(PDeviceDescriptor_t d, Declaration_t *decl){
 
 #include "DeviceBlackboard.hpp"
 
-BOOL atrPutQNH(DeviceDescriptor_t *d, double NewQNH){
+BOOL
+atrPutQNH(struct DeviceDescriptor *d, double NewQNH)
+{
   (void)NewQNH; // TODO code: JMW check sending QNH to Altair
   if (d == pDevPrimaryBaroSource){
     device_blackboard.SetBaroAlt(AltitudeToQNHAltitude(lastAlt));
@@ -114,7 +117,9 @@ BOOL atrPutQNH(DeviceDescriptor_t *d, double NewQNH){
   return(TRUE);
 }
 
-BOOL atrOnSysTicker(DeviceDescriptor_t *d){
+BOOL
+atrOnSysTicker(struct DeviceDescriptor *d)
+{
   (void)d;
   // Do To get IO data like temp, humid, etc
 

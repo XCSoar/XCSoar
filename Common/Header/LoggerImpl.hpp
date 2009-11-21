@@ -110,7 +110,7 @@ private:
   double GetFRecordLastTime(void);
   void ResetFRecord(void);
 
-  bool LoggerDeclare(PDeviceDescriptor_t dev, Declaration_t *decl);
+  bool LoggerDeclare(struct DeviceDescriptor *dev, Declaration_t *decl);
   void LoggerGInit();
 private:
   void LogPointToFile(const NMEA_INFO& gps_info);

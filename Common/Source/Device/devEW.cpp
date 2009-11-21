@@ -57,8 +57,9 @@ static int nDeclErrorCode = 0;
 static int ewDecelTpIndex = 0;
 
 
-BOOL EWParseNMEA(PDeviceDescriptor_t d, const TCHAR *String,
-                 NMEA_INFO *GPS_INFO)
+BOOL
+EWParseNMEA(struct DeviceDescriptor *d, const TCHAR *String,
+            NMEA_INFO *GPS_INFO)
 {
   (void)d;
   (void)String;
@@ -84,8 +85,9 @@ void appendCheckSum(TCHAR *String){
 
 }
 
-
-BOOL EWTryConnect(PDeviceDescriptor_t d) {
+BOOL
+EWTryConnect(struct DeviceDescriptor *d)
+{
   int retries=10;
   while (--retries){
 
@@ -100,12 +102,12 @@ BOOL EWTryConnect(PDeviceDescriptor_t d) {
   return(FALSE);
 }
 
+BOOL
+EWDeclAddWayPoint(struct DeviceDescriptor *d, const WAYPOINT *wp);
 
-BOOL EWDeclAddWayPoint(PDeviceDescriptor_t d, const WAYPOINT *wp);
-
-
-BOOL EWDeclare(PDeviceDescriptor_t d, Declaration_t *decl){
-
+BOOL
+EWDeclare(struct DeviceDescriptor *d, Declaration_t *decl)
+{
   TCHAR sTmp[72];
   TCHAR sPilot[13];
   TCHAR sGliderType[9];
@@ -222,8 +224,9 @@ BOOL EWDeclare(PDeviceDescriptor_t d, Declaration_t *decl){
 }
 
 
-BOOL EWDeclAddWayPoint(PDeviceDescriptor_t d, const WAYPOINT *wp){
-
+BOOL
+EWDeclAddWayPoint(struct DeviceDescriptor *d, const WAYPOINT *wp)
+{
   TCHAR EWRecord[100];
   TCHAR IDString[12];
   int DegLat, DegLon;
@@ -324,8 +327,9 @@ BOOL EWDeclAddWayPoint(PDeviceDescriptor_t d, const WAYPOINT *wp){
 
 }
 
-
-BOOL EWLinkTimeout(PDeviceDescriptor_t d){
+BOOL
+EWLinkTimeout(struct DeviceDescriptor *d)
+{
   (void)d;
   if (!fDeclarationPending)
     d->Com->WriteString(TEXT("NMEA\r\n"));

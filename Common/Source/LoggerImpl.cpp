@@ -709,7 +709,8 @@ LoggerImpl::LoggerNote(const TCHAR *text) {
 }
 
 
-bool LoggerImpl::LoggerDeclare(PDeviceDescriptor_t dev, Declaration_t *decl)
+bool
+LoggerImpl::LoggerDeclare(struct DeviceDescriptor *dev, Declaration_t *decl)
 {
   if (!devIsLogger(dev))
     return FALSE;

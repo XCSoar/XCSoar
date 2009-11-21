@@ -46,14 +46,15 @@ Copyright_License {
 #include "UtilsText.hpp"
 #include "NMEA/Info.h"
 
-static BOOL PZAN1(PDeviceDescriptor_t d, const TCHAR *String,
+static BOOL PZAN1(struct DeviceDescriptor *d, const TCHAR *String,
                   NMEA_INFO *aGPS_INFO);
-static BOOL PZAN2(PDeviceDescriptor_t d, const TCHAR *String,
+static BOOL PZAN2(struct DeviceDescriptor *d, const TCHAR *String,
                   NMEA_INFO *aGPS_INFO);
 
 
-static BOOL ZanderParseNMEA(PDeviceDescriptor_t d, const TCHAR *String,
-                            NMEA_INFO *aGPS_INFO)
+static BOOL
+ZanderParseNMEA(struct DeviceDescriptor *d, const TCHAR *String,
+                NMEA_INFO *aGPS_INFO)
 {
   (void)d;
 
@@ -95,8 +96,8 @@ const struct DeviceRegister zanderDevice = {
 // *****************************************************************************
 // local stuff
 
-static BOOL PZAN1(PDeviceDescriptor_t d, const TCHAR *String,
-                  NMEA_INFO *aGPS_INFO)
+static BOOL
+PZAN1(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *aGPS_INFO)
 {
   TCHAR ctemp[80];
   aGPS_INFO->BaroAltitudeAvailable = TRUE;
@@ -106,8 +107,8 @@ static BOOL PZAN1(PDeviceDescriptor_t d, const TCHAR *String,
 }
 
 
-static BOOL PZAN2(PDeviceDescriptor_t d, const TCHAR *String,
-                  NMEA_INFO *aGPS_INFO)
+static BOOL
+PZAN2(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *aGPS_INFO)
 {
   TCHAR ctemp[80];
   double vtas, wnet, vias;
