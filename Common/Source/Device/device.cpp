@@ -158,6 +158,9 @@ BOOL ExpectString(struct DeviceDescriptor *d, const TCHAR *token){
 
   int i=0, ch;
 
+  assert(d != NULL);
+  assert(token != NULL);
+
   if (!d->Com)
     return FALSE;
 
@@ -222,6 +225,8 @@ devInitOne(struct DeviceDescriptor *dev, int index, const TCHAR *port,
            DWORD speed, struct DeviceDescriptor *&nmeaout)
 {
   TCHAR DeviceName[DEVNAMESIZE];
+
+  assert(dev != NULL);
 
   if (is_simulator())
     return FALSE;
@@ -384,6 +389,9 @@ devInit(LPCTSTR CommandLine)
 BOOL
 devParseNMEA(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INFO)
 {
+  assert(d != NULL);
+  assert(String != NULL);
+  assert(GPS_INFO != NULL);
 
   if ((d->fhLogFile != NULL) &&
       (String != NULL) && (_tcslen(String) > 0)) {
@@ -618,6 +626,8 @@ devDeclare(struct DeviceDescriptor *d, const struct Declaration *decl)
 {
   BOOL result = FALSE;
 
+  assert(d != NULL);
+
   if (is_simulator())
     return true;
 
@@ -633,6 +643,8 @@ BOOL devIsLogger(const struct DeviceDescriptor *d)
 {
   bool result = false;
 
+  assert(d != NULL);
+
   mutexComm.Lock();
   if (d != NULL)
     result = d->IsLogger();
@@ -644,6 +656,8 @@ BOOL devIsLogger(const struct DeviceDescriptor *d)
 BOOL devIsGPSSource(const struct DeviceDescriptor *d)
 {
   BOOL result = FALSE;
+
+  assert(d != NULL);
 
   mutexComm.Lock();
   if (d != NULL)
@@ -657,6 +671,8 @@ BOOL devIsBaroSource(const struct DeviceDescriptor *d)
 {
   BOOL result = FALSE;
 
+  assert(d != NULL);
+
   mutexComm.Lock();
   if (d != NULL)
     result = d->IsBaroSource();
@@ -668,6 +684,8 @@ BOOL devIsBaroSource(const struct DeviceDescriptor *d)
 BOOL devIsRadio(const struct DeviceDescriptor *d)
 {
   BOOL result = FALSE;
+
+  assert(d != NULL);
 
   mutexComm.Lock();
   if (d && d->Driver) {
@@ -683,6 +701,8 @@ BOOL devIsCondor(const struct DeviceDescriptor *d)
 {
   BOOL result = FALSE;
 
+  assert(d != NULL);
+
   mutexComm.Lock();
   if (d && d->Driver) {
     result = d->Driver->Flags & drfCondor ? TRUE : FALSE;
@@ -695,17 +715,18 @@ BOOL devIsCondor(const struct DeviceDescriptor *d)
 static bool
 devOpenLog(struct DeviceDescriptor *d, const TCHAR *FileName)
 {
-  if (d != NULL){
-    d->fhLogFile = _tfopen(FileName, TEXT("a+b"));
-    return(d->fhLogFile != NULL);
-  } else
-    return(FALSE);
+  assert(d != NULL);
+
+  d->fhLogFile = _tfopen(FileName, TEXT("a+b"));
+  return d->fhLogFile != NULL;
 }
 
 static bool
 devCloseLog(struct DeviceDescriptor *d)
 {
-  if (d != NULL && d->fhLogFile != NULL){
+  assert(d != NULL);
+
+  if (d->fhLogFile != NULL){
     fclose(d->fhLogFile);
     return(TRUE);
   } else
@@ -739,6 +760,8 @@ void devWriteNMEAString(struct DeviceDescriptor *d, const TCHAR *text)
 {
   TCHAR tmp[512];
 
+  assert(d != NULL);
+
   devFormatNMEAString(tmp, 512, text);
 
   mutexComm.Lock();
@@ -771,6 +794,8 @@ struct DeviceDescriptor *devVarioFindVega(void)
 
 static BOOL
 FlarmDeclareSetGet(struct DeviceDescriptor *d, TCHAR *Buffer) {
+  assert(d != NULL);
+
   //devWriteNMEAString(d, Buffer);
 
   TCHAR tmp[512];
@@ -792,6 +817,8 @@ FlarmDeclareSetGet(struct DeviceDescriptor *d, TCHAR *Buffer) {
 bool
 FlarmDeclare(struct DeviceDescriptor *d, const struct Declaration *decl)
 {
+  assert(d != NULL);
+
   BOOL result = TRUE;
 
   TCHAR Buffer[256];
