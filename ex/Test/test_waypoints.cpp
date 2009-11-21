@@ -1,6 +1,5 @@
-#include "test_waypoints.hpp"
-#include <fstream>
-#include <iostream>
+#include "harness_waypoints.hpp"
+#include "test_debug.hpp"
 
 #include "Waypoint/WaypointVisitor.hpp"
 
@@ -18,74 +17,36 @@ public:
   unsigned count;
 };
 
-
-/** 
- * Initialises waypoints with random and non-random waypoints
- * for testing
- *
- * @param waypoints waypoints class to add waypoints to
- */
-void setup_waypoints(Waypoints &waypoints) {
-#ifdef DO_PRINT
-  std::ofstream fin("results/res-wp-in.txt");
-#endif
-
-  Waypoint wp;
-
-  wp.id = 1;
-  wp.Location.Longitude=0;
-  wp.Location.Latitude=0;
-  wp.Altitude=0.25;
-  waypoints.insert(wp);
-
-  wp.id++;
-  wp.Location.Longitude=0;
-  wp.Location.Latitude=1.0;
-  wp.Altitude=0.25;
-  waypoints.insert(wp);
-
-  wp.id++;
-  wp.Location.Longitude=1.0;
-  wp.Location.Latitude=1.0;
-  wp.Altitude=0.5;
-  waypoints.insert(wp);
-
-  wp.id++;
-  wp.Location.Longitude=0.8;
-  wp.Location.Latitude=0.5;
-  wp.Altitude=0.25;
-  waypoints.insert(wp);
-
-  wp.id++;
-  wp.Location.Longitude=1.0;
-  wp.Location.Latitude=0;
-  wp.Altitude=0.25;
-  waypoints.insert(wp);
-
-  for (unsigned i=0; i<150; i++) {
-    int x = rand()%1200-100;
-    int y = rand()%1200-100;
-    wp.id++;
-    wp.Location.Longitude = x/1000.0; 
-    wp.Location.Latitude = y/1000.0;
-    waypoints.insert(wp);
-  }
-  waypoints.optimise();
-
-  for (unsigned i=1; i<=waypoints.size(); i++) {
-    Waypoints::WaypointTree::const_iterator it = waypoints.find_id(i);
-    if (it != waypoints.end()) {
-#ifdef DO_PRINT
-      fin << *it;
-#endif
-    }
-  }
-
+bool test_range(const Waypoints& waypoints)
+{
   const Waypoint *r = waypoints.lookup_id(3);
   if (r) {
     WaypointVisitorPrint v;
     waypoints.visit_within_range(r->Location, 100, v);
     v.summary();
+    return (v.count==2);
+  } else {
+    return false;
   }
 }
 
+bool test_lookup(const Waypoints& waypoints)
+{
+  const Waypoint* wp;
+  wp = waypoints.lookup_id(2);
+  return (wp!= NULL);
+}
+
+int main()
+{
+  interactive = false;
+
+  plan_tests(3);
+
+  Waypoints waypoints;
+
+  ok(setup_waypoints(waypoints),"waypoint setup",0);
+  ok(test_lookup(waypoints),"waypoint lookup",0);
+  ok(test_range(waypoints),"waypoint range",0);
+  return exit_status();
+}

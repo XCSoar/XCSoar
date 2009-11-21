@@ -6,10 +6,10 @@
 #include "Math/FastMath.h"
 
 #include "test_debug.hpp"
-#include "test_aircraft.hpp"
-#include "test_airspace.hpp"
-#include "test_waypoints.hpp"
-#include "test_task.hpp"
+#include "harness_aircraft.hpp"
+#include "harness_airspace.hpp"
+#include "harness_waypoints.hpp"
+#include "harness_task.hpp"
 
 bool test_flight(TaskManager &task_manager,
                  Airspaces &airspaces,
@@ -62,8 +62,6 @@ bool test_all(int test_num) {
   setup_airspaces(airspaces);
 
   ////////////////////////// TASK //////
-
-  test_task(waypoints);
 
   distance_counts();
 

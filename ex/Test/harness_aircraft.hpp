@@ -1,7 +1,6 @@
 #ifndef TEST_AIRCRAFT_HPP
 #define TEST_AIRCRAFT_HPP
 
-#include "test_aircraft.hpp"
 #include <vector>
 
 #include "Task/TaskManager.hpp"

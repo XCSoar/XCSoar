@@ -36,6 +36,7 @@ MAKEFLAGS	+=-r
 CXXFLAGS += -Wall -Wextra
 CXXFLAGS += -Wwrite-strings -Wcast-qual -Wpointer-arith -Wsign-compare
 CXXFLAGS += -Wmissing-noreturn -Wundef
+CXXFLAGS += -Wno-variadic-macros
 
 # disable some warnings, we're not ready for them yet
 CXXFLAGS += -Wno-unused-parameter 
@@ -145,24 +146,36 @@ OBJS	:=\
 	src/Util/ZeroFinder.o 
 
 TESTOBJS = Test/test_debug.o \
-	Test/test_aircraft.o \
-	Test/test_airspace.o \
-	Test/test_waypoints.o \
-	Test/test_task.o
+	Test/harness_aircraft.o \
+	Test/harness_airspace.o \
+	Test/harness_waypoints.o \
+	Test/harness_task.o \
+	Test/tap.o
+
+TARGETS = Test/test Test/test_task Test/test_trees Test/test_mc Test/test_waypoints
+
+all: $(TARGETS)
+	@echo "done"
+
+test:	$(TARGETS)
+	Test/test_task
+	Test/test_waypoints
+
 
 Test/test: $(OBJS) $(TESTOBJS) Test/test.cpp
 	g++ $(CXXFLAGS) $(INCLUDES) $(OBJS) $(TESTOBJS) Test/test.cpp -o Test/test 
+
+Test/test_task: $(OBJS) $(TESTOBJS) Test/test_task.cpp
+	g++ $(CXXFLAGS) $(INCLUDES) $(OBJS) $(TESTOBJS) Test/test_task.cpp -o Test/test_task
+
+Test/test_waypoints: $(OBJS) $(TESTOBJS) Test/test_waypoints.cpp
+	g++ $(CXXFLAGS) $(INCLUDES) $(OBJS) $(TESTOBJS) Test/test_waypoints.cpp -o Test/test_waypoints
 
 Test/test_trees: $(OBJS) $(TESTOBJS) Test/test_trees.cpp
 	g++ $(CXXFLAGS) $(INCLUDES) $(OBJS) $(TESTOBJS) Test/test_trees.cpp -o Test/test_trees 
 
 Test/test_mc: $(OBJS) $(TESTOBJS) Test/test_mc.cpp
 	g++ $(CXXFLAGS) $(INCLUDES) $(OBJS) $(TESTOBJS) Test/test_mc.cpp -o Test/test_mc 
-
-TARGETS = Test/test Test/test_trees Test/test_mc
-
-all: $(TARGETS)
-	@echo "done"
 
 doco: 
 	doxygen doxygen/Doxyfile

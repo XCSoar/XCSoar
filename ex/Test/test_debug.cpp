@@ -6,7 +6,7 @@
 #endif
 
 int n_samples = 0;
-
+bool interactive = true;
 
 #ifdef INSTRUMENT_TASK
 extern long count_mc;
@@ -57,10 +57,14 @@ void print_queries(unsigned n, std::ostream &fout) {
  * @return character received by keyboard
  */
 char wait_prompt(const double time) {
+  if (interactive) {
 #ifdef DO_PRINT
-  printf("# %g [enter to continue]\n",time);
+    printf("# %g [enter to continue]\n",time);
 #endif
-  return getchar();
+    return getchar();
+  } else {
+    return 0;
+  }
 }
 
 

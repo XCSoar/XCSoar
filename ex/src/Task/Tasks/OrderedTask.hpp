@@ -20,6 +20,7 @@ class OrderedTaskPoint;
  * - better handling of removal of start/finish point
  * - allow for TakeOffPoint and LandingPoint
  * - have a method to check if a potential taskpoint is distinct from its neighbours?
+ * - multiple start points
  */
 class OrderedTask:
   public AbstractTask,

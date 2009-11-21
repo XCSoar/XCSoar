@@ -4,6 +4,6 @@
 #include "Waypoint/Waypoints.hpp"
 
 const Waypoint* lookup_waypoint(const Waypoints& waypoints, unsigned id);
-void setup_waypoints(Waypoints &waypoints);
+bool setup_waypoints(Waypoints &waypoints);
 
 #endif
