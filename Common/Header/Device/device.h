@@ -52,7 +52,6 @@ struct NMEA_INFO;
 
 #define	devA()	    (&DeviceList[0])
 #define	devB()	    (&DeviceList[1])
-#define devAll()    (NULL)
 
 typedef	enum {dfGPS, dfLogger, dfSpeed,	dfVario, dfBaroAlt,	dfWind, dfVoice, dfNmeaOut, dfRadio, dfCondor } DeviceFlags_t;
 
