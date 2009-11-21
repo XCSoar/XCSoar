@@ -57,9 +57,8 @@ Copyright_License {
 // Additional sentance for EW support
 
 static int nDeclErrorCode = 0;
-#define MAX_USER_SIZE 2500
-static int user_size = 0;
-static TCHAR user_data[MAX_USER_SIZE];
+static unsigned user_size = 0;
+static TCHAR user_data[2500];
 
 static bool
 ExpectStringWait(ComPort *port, const TCHAR *token)
@@ -140,7 +139,7 @@ EWMicroRecorderTryConnect(ComPort *port)
           // found end of file
           return true;
         } else {
-          if (user_size<MAX_USER_SIZE-1) {
+          if (user_size < sizeof(user_data) - 1) {
             user_data[user_size] = ch;
             user_size++;
           }
