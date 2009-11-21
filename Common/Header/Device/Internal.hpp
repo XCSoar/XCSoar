@@ -46,13 +46,14 @@ Copyright_License {
 
 #include <tchar.h>
 
+class ComPort;
 struct DeviceDescriptor;
 
 extern struct DeviceDescriptor *pDevPrimaryBaroSource;
 extern struct DeviceDescriptor *pDevSecondaryBaroSource;
 
 bool
-ExpectString(struct DeviceDescriptor *d, const TCHAR *token);
+ExpectString(ComPort *port, const TCHAR *token);
 
 bool
 devIsFalseReturn(const struct DeviceDescriptor *d);

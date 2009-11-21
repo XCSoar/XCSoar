@@ -91,10 +91,10 @@ EWTryConnect(struct DeviceDescriptor *d)
   while (--retries){
 
     d->Com->WriteString(_T("##\r\n"));         // send IO Mode command
-    if (ExpectString(d, _T("IO Mode.\r")))
+    if (ExpectString(d->Com, _T("IO Mode.\r")))
       return true;
 
-    ExpectString(d, _T("$$$"));                 // empty imput buffer
+    ExpectString(d->Com, _T("$$$"));                 // empty imput buffer
   }
 
   nDeclErrorCode = 1;
@@ -152,7 +152,7 @@ EWDeclare(struct DeviceDescriptor *d, const struct Declaration *decl)
   );
   d->Com->WriteString(sTmp);
 
-  if (!ExpectString(d, _T("OK\r"))){
+  if (!ExpectString(d->Com, _T("OK\r"))){
     nDeclErrorCode = 1;
     return false;
   };
@@ -166,7 +166,7 @@ EWDeclare(struct DeviceDescriptor *d, const struct Declaration *decl)
   d->Com->WriteString(PilotsName);
   d->Com->WriteString(_T("\r"));
 
-  if (!ExpectString(d, _T("OK\r"))){
+  if (!ExpectString(d->Com, _T("OK\r"))){
     nDeclErrorCode = 1;
     return false;
   };
@@ -178,7 +178,7 @@ EWDeclare(struct DeviceDescriptor *d, const struct Declaration *decl)
   d->Com->WriteString(Class);
   d->Com->WriteString(_T("\r"));
 
-  if (!ExpectString(d, _T("OK\r"))){
+  if (!ExpectString(d->Com, _T("OK\r"))){
     nDeclErrorCode = 1;
     return false;
   };
@@ -190,7 +190,7 @@ EWDeclare(struct DeviceDescriptor *d, const struct Declaration *decl)
   d->Com->WriteString(ID);
   d->Com->WriteString(_T("\r"));
 
-  if (!ExpectString(d, _T("OK\r"))){
+  if (!ExpectString(d->Com, _T("OK\r"))){
     nDeclErrorCode = 1;
     return false;
   };
@@ -200,7 +200,7 @@ EWDeclare(struct DeviceDescriptor *d, const struct Declaration *decl)
     _stprintf(sTmp, _T("#CTP%02d"), i);
     appendCheckSum(sTmp);
     d->Com->WriteString(sTmp);
-    if (!ExpectString(d, _T("OK\r"))){
+    if (!ExpectString(d->Com, _T("OK\r"))){
       nDeclErrorCode = 1;
       return false;
     };
@@ -314,7 +314,7 @@ EWDeclAddWayPoint(struct DeviceDescriptor *d, const WAYPOINT *wp)
 
   d->Com->WriteString(EWRecord);                 // put it to the logger
 
-  if (!ExpectString(d, _T("OK\r"))){            // wait for response
+  if (!ExpectString(d->Com, _T("OK\r"))){            // wait for response
     nDeclErrorCode = 1;
     return false;
   }

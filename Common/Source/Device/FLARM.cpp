@@ -57,7 +57,7 @@ FlarmDeclareSetGet(struct DeviceDescriptor *d, TCHAR *Buffer) {
     d->Com->WriteString(tmp);
 
   Buffer[6]= _T('A');
-  return ExpectString(d, Buffer);
+  return ExpectString(d->Com, Buffer);
 }
 
 bool

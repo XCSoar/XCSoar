@@ -44,17 +44,16 @@ Copyright_License {
 #define debugIGNORERESPONCE 0
 
 bool
-ExpectString(struct DeviceDescriptor *d, const TCHAR *token)
+ExpectString(ComPort *port, const TCHAR *token)
 {
   int i=0, ch;
 
-  assert(d != NULL);
   assert(token != NULL);
 
-  if (!d->Com)
+  if (port == NULL)
     return false;
 
-  while ((ch = d->Com->GetChar()) != EOF){
+  while ((ch = port->GetChar()) != EOF){
 
     if (token[i] == ch)
       i++;

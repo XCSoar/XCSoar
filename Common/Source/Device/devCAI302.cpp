@@ -292,26 +292,26 @@ cai302Declare(struct DeviceDescriptor *d, const struct Declaration *decl)
 
   d->Com->SetRxTimeout(500);
   d->Com->WriteString(_T("\x03"));
-  ExpectString(d, _T("$$$"));  // empty rx buffer (searching for
+  ExpectString(d->Com, _T("$$$"));  // empty rx buffer (searching for
                                  // pattern that never occure)
 
   d->Com->WriteString(_T("\x03"));
-  if (!ExpectString(d, _T("cmd>"))){
+  if (!ExpectString(d->Com, _T("cmd>"))){
     nDeclErrorCode = 1;
     return false;
   }
 
   d->Com->WriteString(_T("upl 1\r"));
-  if (!ExpectString(d, _T("up>"))){
+  if (!ExpectString(d->Com, _T("up>"))){
     nDeclErrorCode = 1;
     return false;
   }
 
-  ExpectString(d, _T("$$$"));
+  ExpectString(d->Com, _T("$$$"));
 
   d->Com->WriteString(_T("O\r"));
   d->Com->Read(&cai302_OdataNoArgs, sizeof(cai302_OdataNoArgs));
-  if (!ExpectString(d, _T("up>"))){
+  if (!ExpectString(d->Com, _T("up>"))){
     nDeclErrorCode = 1;
     return false;
   }
@@ -320,7 +320,7 @@ cai302Declare(struct DeviceDescriptor *d, const struct Declaration *decl)
   Sleep(1000); // some params come up 0 if we don't wait!
   d->Com->Read(&cai302_OdataPilot, min(sizeof(cai302_OdataPilot),
                                        (size_t)cai302_OdataNoArgs.PilotRecordSize+3));
-  if (!ExpectString(d, _T("up>"))){
+  if (!ExpectString(d->Com, _T("up>"))){
     nDeclErrorCode = 1;
     return false;
   }
@@ -336,7 +336,7 @@ cai302Declare(struct DeviceDescriptor *d, const struct Declaration *decl)
 
   d->Com->WriteString(_T("G\r"));
   d->Com->Read(&cai302_GdataNoArgs, sizeof(cai302_GdataNoArgs));
-  if (!ExpectString(d, _T("up>"))){
+  if (!ExpectString(d->Com, _T("up>"))){
     nDeclErrorCode = 1;
     return false;
   }
@@ -344,7 +344,7 @@ cai302Declare(struct DeviceDescriptor *d, const struct Declaration *decl)
   d->Com->WriteString(_T("G 0\r"));
   Sleep(1000);
   d->Com->Read(&cai302_Gdata, cai302_GdataNoArgs.GliderRecordSize + 3);
-  if (!ExpectString(d, _T("up>"))){
+  if (!ExpectString(d->Com, _T("up>"))){
     nDeclErrorCode = 1;
     return false;
   }
@@ -357,13 +357,13 @@ cai302Declare(struct DeviceDescriptor *d, const struct Declaration *decl)
   d->Com->SetRxTimeout(1500);
 
   d->Com->WriteString(_T("\x03"));
-  if (!ExpectString(d, _T("cmd>"))){
+  if (!ExpectString(d->Com, _T("cmd>"))){
     nDeclErrorCode = 1;
     return false;
   }
 
   d->Com->WriteString(_T("dow 1\r"));
-  if (!ExpectString(d, _T("dn>"))){
+  if (!ExpectString(d->Com, _T("dn>"))){
     nDeclErrorCode = 1;
     return false;
   }
@@ -397,7 +397,7 @@ cai302Declare(struct DeviceDescriptor *d, const struct Declaration *decl)
 
 
   d->Com->WriteString(szTmp);
-  if (!ExpectString(d, _T("dn>"))){
+  if (!ExpectString(d->Com, _T("dn>"))){
     nDeclErrorCode = 1;
     return false;
   }
@@ -416,7 +416,7 @@ cai302Declare(struct DeviceDescriptor *d, const struct Declaration *decl)
   );
 
   d->Com->WriteString(szTmp);
-  if (!ExpectString(d, _T("dn>"))){
+  if (!ExpectString(d->Com, _T("dn>"))){
     nDeclErrorCode = 1;
     return false;
   }
@@ -433,7 +433,7 @@ cai302Declare(struct DeviceDescriptor *d, const struct Declaration *decl)
 
     d->Com->SetRxTimeout(1500);            // D,255 takes more than 800ms
 
-    if (!ExpectString(d, _T("dn>"))){
+    if (!ExpectString(d->Com, _T("dn>"))){
       nDeclErrorCode = 1;
     }
 
@@ -443,7 +443,7 @@ cai302Declare(struct DeviceDescriptor *d, const struct Declaration *decl)
   d->Com->SetRxTimeout(500);
 
   d->Com->WriteString(_T("\x03"));
-  ExpectString(d, _T("cmd>"));
+  ExpectString(d->Com, _T("cmd>"));
 
   d->Com->WriteString(_T("LOG 0\r"));
 
@@ -502,7 +502,7 @@ cai302DeclAddWayPoint(struct DeviceDescriptor *d, const WAYPOINT *wp)
 
   d->Com->WriteString(szTmp);
 
-  if (!ExpectString(d, _T("dn>"))){
+  if (!ExpectString(d->Com, _T("dn>"))){
     nDeclErrorCode = 1;
     return false;
   }
