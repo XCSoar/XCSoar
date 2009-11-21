@@ -139,8 +139,7 @@ static cai302_Gdata_t cai302_Gdata;
 
 // Additional sentance for CAI302 support
 static bool
-cai_w(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INFO,
-      bool enable_baro);
+cai_w(const TCHAR *String, NMEA_INFO *GPS_INFO, bool enable_baro);
 
 static bool
 cai_PCAIB(const TCHAR *String, NMEA_INFO *GPS_INFO);
@@ -169,7 +168,7 @@ cai302ParseNMEA(struct DeviceDescriptor *d, const TCHAR *String,
   }
 
   if(_tcsstr(String, _T("!w")) == String){
-    return cai_w(d, &String[3], GPS_INFO, enable_baro);
+    return cai_w(&String[3], GPS_INFO, enable_baro);
   }
 
   return false;
@@ -277,7 +276,7 @@ static int DeclIndex = 128;
 static int nDeclErrorCode;
 
 static bool
-cai302DeclAddWayPoint(struct DeviceDescriptor *d, const WAYPOINT *wp);
+cai302DeclAddWayPoint(ComPort *port, const WAYPOINT *wp);
 
 static bool
 cai302Declare(struct DeviceDescriptor *d, const struct Declaration *decl)
@@ -424,7 +423,7 @@ cai302Declare(struct DeviceDescriptor *d, const struct Declaration *decl)
   DeclIndex = 128;
 
   for (int i = 0; i < decl->num_waypoints; i++)
-    cai302DeclAddWayPoint(d, decl->waypoint[i]);
+    cai302DeclAddWayPoint(d->Com, decl->waypoint[i]);
 
   if (nDeclErrorCode == 0){
 
@@ -455,7 +454,7 @@ cai302Declare(struct DeviceDescriptor *d, const struct Declaration *decl)
 }
 
 static bool
-cai302DeclAddWayPoint(struct DeviceDescriptor *d, const WAYPOINT *wp)
+cai302DeclAddWayPoint(ComPort *port, const WAYPOINT *wp)
 {
   TCHAR Name[13];
   TCHAR  szTmp[128];
@@ -500,9 +499,9 @@ cai302DeclAddWayPoint(struct DeviceDescriptor *d, const WAYPOINT *wp)
 
   DeclIndex++;
 
-  d->Com->WriteString(szTmp);
+  port->WriteString(szTmp);
 
-  if (!ExpectString(d->Com, _T("dn>"))){
+  if (!ExpectString(port, _T("dn>"))){
     nDeclErrorCode = 1;
     return false;
   }
@@ -584,7 +583,7 @@ cai_PCAID(const TCHAR *String, NMEA_INFO *GPS_INFO)
 */
 
 static bool
-cai_w(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INFO,
+cai_w(const TCHAR *String, NMEA_INFO *GPS_INFO,
       bool enable_baro)
 {
 
