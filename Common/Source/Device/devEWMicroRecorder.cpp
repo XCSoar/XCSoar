@@ -62,17 +62,14 @@ static int user_size = 0;
 static TCHAR user_data[MAX_USER_SIZE];
 
 static bool
-ExpectStringWait(struct DeviceDescriptor *d, const TCHAR *token)
+ExpectStringWait(ComPort *port, const TCHAR *token)
 {
   int i=0, ch;
   int j=0;
 
-  if (!d->Com)
-    return false;
-
   while (j<500) {
 
-    ch = d->Com->GetChar();
+    ch = port->GetChar();
 
     if (ch != EOF) {
 
@@ -118,19 +115,19 @@ EWMicroRecorderParseNMEA(struct DeviceDescriptor *d, const TCHAR *String,
 }
 
 static bool
-EWMicroRecorderTryConnect(struct DeviceDescriptor *d)
+EWMicroRecorderTryConnect(ComPort *port)
 {
   int retries=10;
   TCHAR ch;
 
   while (--retries){
 
-    d->Com->WriteString(_T("\x02"));         // send IO Mode command
+    port->WriteString(_T("\x02"));         // send IO Mode command
 
     user_size = 0;
     bool started = false;
 
-    while ((ch = d->Com->GetChar()) != _TEOF) {
+    while ((ch = port->GetChar()) != _TEOF) {
       if (!started) {
         if (ch == _T('-')) {
           started = true;
@@ -138,7 +135,7 @@ EWMicroRecorderTryConnect(struct DeviceDescriptor *d)
       }
       if (started) {
         if (ch == 0x13) {
-          d->Com->WriteString(_T("\x16"));
+          port->WriteString(_T("\x16"));
           user_data[user_size] = 0;
           // found end of file
           return true;
@@ -159,7 +156,7 @@ EWMicroRecorderTryConnect(struct DeviceDescriptor *d)
 
 
 static void
-EWMicroRecorderPrintf(struct DeviceDescriptor *d, const TCHAR *fmt, ...)
+EWMicroRecorderPrintf(ComPort *port, const TCHAR *fmt, ...)
 {
   TCHAR EWStr[128];
   va_list ap;
@@ -168,11 +165,11 @@ EWMicroRecorderPrintf(struct DeviceDescriptor *d, const TCHAR *fmt, ...)
   _vstprintf(EWStr, fmt, ap);
   va_end(ap);
 
-  d->Com->WriteString(EWStr);
+  port->WriteString(EWStr);
 }
 
 static void
-EWMicroRecorderWriteWayPoint(struct DeviceDescriptor *d,
+EWMicroRecorderWriteWayPoint(ComPort *port,
                              const WAYPOINT *wp, const TCHAR *EWType)
 {
   int DegLat, DegLon;
@@ -203,7 +200,7 @@ EWMicroRecorderWriteWayPoint(struct DeviceDescriptor *d,
   DegLon = (int)tmp;
   MinLon = (tmp - DegLon) * 60 * 1000;
 
-  EWMicroRecorderPrintf(d,
+  EWMicroRecorderPrintf(port,
             _T("%-17s %02d%05d%c%03d%05d%c %s\r\n"),
             EWType,
             DegLat, (int)MinLat, NoS,
@@ -215,6 +212,7 @@ static bool
 EWMicroRecorderDeclare(struct DeviceDescriptor *d,
                        const struct Declaration *decl)
 {
+  ComPort *port = d->Com;
   const WAYPOINT *wp;
   nDeclErrorCode = 0;
 
@@ -222,51 +220,51 @@ EWMicroRecorderDeclare(struct DeviceDescriptor *d,
   if (decl->num_waypoints < 2 || decl->num_waypoints > 12)
     return false;
 
-  d->Com->StopRxThread();
+  port->StopRxThread();
 
-  d->Com->SetRxTimeout(500);                     // set RX timeout to 500[ms]
+  port->SetRxTimeout(500);                     // set RX timeout to 500[ms]
 
-  if (!EWMicroRecorderTryConnect(d)) {
+  if (!EWMicroRecorderTryConnect(port)) {
     return false;
   }
 
-  d->Com->WriteString(_T("\x18"));         // start to upload file
-  d->Com->WriteString(user_data);
-  EWMicroRecorderPrintf(d, _T("%-15s %s\r\n"),
+  port->WriteString(_T("\x18"));         // start to upload file
+  port->WriteString(user_data);
+  EWMicroRecorderPrintf(port, _T("%-15s %s\r\n"),
                _T("Pilot Name:"), decl->PilotName);
-  EWMicroRecorderPrintf(d, _T("%-15s %s\r\n"),
+  EWMicroRecorderPrintf(port, _T("%-15s %s\r\n"),
                _T("Competition ID:"), decl->AircraftRego);
-  EWMicroRecorderPrintf(d, _T("%-15s %s\r\n"),
+  EWMicroRecorderPrintf(port, _T("%-15s %s\r\n"),
                _T("Aircraft Type:"), decl->AircraftType);
-  d->Com->WriteString(_T("Description:      Declaration\r\n"));
+  port->WriteString(_T("Description:      Declaration\r\n"));
 
   for (int i = 0; i < 11; i++) {
     wp = decl->waypoint[i];
     if (i == 0) {
-      EWMicroRecorderWriteWayPoint(d, wp, _T("Take Off LatLong:"));
-      EWMicroRecorderWriteWayPoint(d, wp, _T("Start LatLon:"));
+      EWMicroRecorderWriteWayPoint(port, wp, _T("Take Off LatLong:"));
+      EWMicroRecorderWriteWayPoint(port, wp, _T("Start LatLon:"));
     } else if (i + 1 < decl->num_waypoints) {
-      EWMicroRecorderWriteWayPoint(d, wp, _T("TP LatLon:"));
+      EWMicroRecorderWriteWayPoint(port, wp, _T("TP LatLon:"));
     } else {
-      EWMicroRecorderPrintf(d, _T("%-17s %s\r\n"),
+      EWMicroRecorderPrintf(port, _T("%-17s %s\r\n"),
                _T("TP LatLon:"), _T("0000000N00000000E TURN POINT\r\n"));
     }
   }
 
   wp = decl->waypoint[decl->num_waypoints - 1];
-  EWMicroRecorderWriteWayPoint(d, wp, _T("Finish LatLon:"));
-  EWMicroRecorderWriteWayPoint(d, wp, _T("Land LatLon:"));
+  EWMicroRecorderWriteWayPoint(port, wp, _T("Finish LatLon:"));
+  EWMicroRecorderWriteWayPoint(port, wp, _T("Land LatLon:"));
 
-  d->Com->WriteString(_T("\x03"));         // finish sending user file
+  port->WriteString(_T("\x03"));         // finish sending user file
 
-  if (!ExpectStringWait(d, _T("uploaded successfully"))) {
+  if (!ExpectStringWait(port, _T("uploaded successfully"))) {
     // error!
     nDeclErrorCode = 1;
   }
-  d->Com->WriteString(_T("!!\r\n"));         // go back to NMEA mode
+  port->WriteString(_T("!!\r\n"));         // go back to NMEA mode
 
-  d->Com->SetRxTimeout(0);                       // clear timeout
-  d->Com->StartRxThread();                       // restart RX thread
+  port->SetRxTimeout(0);                       // clear timeout
+  port->StartRxThread();                       // restart RX thread
 
   return nDeclErrorCode == 0; // return true on success
 }
